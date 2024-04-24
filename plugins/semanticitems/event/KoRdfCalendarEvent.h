@@ -9,7 +9,7 @@
 
 #include "KoRdfSemanticItem.h"
 
-#include <kdatetime.h>
+#include <QDateTime>
 // calendars
 #ifdef KDEPIMLIBS_FOUND
 #include <kcalcore/event.h>

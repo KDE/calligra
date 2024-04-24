@@ -13,7 +13,7 @@
 
 #include <kfilewidget.h>
 #include <kjobuidelegate.h>
-#include <KIO/Job>
+#include <KIO/StoredTransferJob>
 
 #include <QGridLayout>
 #include <QImageReader>
@@ -78,11 +78,11 @@ void PictureShapeConfigWidget::open(KoShape *shape)
     m_fileWidget = new KFileWidget(QUrl(/* QT5TODO:"kfiledialog:///OpenDialog"*/), this);
     m_fileWidget->setMode(KFile::Files | KFile::ExistingOnly);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
-    QStringList imageFilters;
-    foreach(const QByteArray &mimeType, QImageReader::supportedMimeTypes()) {
-        imageFilters << QLatin1String(mimeType);
+    QList<KFileFilter> imageFilters;
+    for(const QByteArray &mimeType : QImageReader::supportedMimeTypes()) {
+        imageFilters.append(KFileFilter::fromMimeType(QLatin1String(mimeType)));
     }
-    m_fileWidget->setMimeFilter(imageFilters);
+    m_fileWidget->setFilters(imageFilters);
     layout->addWidget(m_fileWidget);
     setLayout(layout);
     connect(m_fileWidget, &KFileWidget::accepted, this, &PictureShapeConfigWidget::slotAccept);

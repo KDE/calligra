@@ -46,7 +46,7 @@ class KoFontFamilyAction::KoFontFamilyActionPrivate
                 return;
 
             q->setFont(font.family());
-            q->triggered(font.family());
+            q->textTriggered(font.family());
 
             debugTextShape << "\tslotFontChanged done";
         }
@@ -59,8 +59,7 @@ class KoFontFamilyAction::KoFontFamilyActionPrivate
 KoFontFamilyAction::KoFontFamilyAction(uint fontListCriteria, QObject *parent)
   : KSelectAction(parent), d(new KoFontFamilyActionPrivate(this))
 {
-    QStringList list;
-    KFontChooser::getFontList( list, fontListCriteria );
+    QStringList list = KFontChooser::createFontList(fontListCriteria);
     KSelectAction::setItems( list );
     setEditable( true );
 }
@@ -68,8 +67,7 @@ KoFontFamilyAction::KoFontFamilyAction(uint fontListCriteria, QObject *parent)
 KoFontFamilyAction::KoFontFamilyAction(QObject *parent)
   : KSelectAction(parent), d(new KoFontFamilyActionPrivate(this))
 {
-    QStringList list;
-    KFontChooser::getFontList( list, 0 );
+    QStringList list = KFontChooser::createFontList(0);
     KSelectAction::setItems( list );
     setEditable( true );
 }
@@ -77,8 +75,7 @@ KoFontFamilyAction::KoFontFamilyAction(QObject *parent)
 KoFontFamilyAction::KoFontFamilyAction(const QString & text, QObject *parent)
   : KSelectAction(text, parent), d(new KoFontFamilyActionPrivate(this))
 {
-    QStringList list;
-    KFontChooser::getFontList( list, 0 );
+    QStringList list = KFontChooser::createFontList(0);
     KSelectAction::setItems( list );
     setEditable( true );
 }
@@ -86,8 +83,7 @@ KoFontFamilyAction::KoFontFamilyAction(const QString & text, QObject *parent)
 KoFontFamilyAction::KoFontFamilyAction(const QIcon &icon, const QString &text, QObject *parent)
   : KSelectAction(icon, text, parent), d(new KoFontFamilyActionPrivate(this))
 {
-    QStringList list;
-    KFontChooser::getFontList( list, 0 );
+    QStringList list = KFontChooser::createFontList(0);
     KSelectAction::setItems( list );
     setEditable( true );
 }

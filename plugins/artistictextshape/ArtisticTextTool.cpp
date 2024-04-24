@@ -37,6 +37,7 @@
 #include <QDebug>
 
 #include <QGridLayout>
+#include <QActionGroup>
 #include <QToolButton>
 #include <QCheckBox>
 #include <QPainter>

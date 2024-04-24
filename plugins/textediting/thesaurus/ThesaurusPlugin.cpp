@@ -8,7 +8,6 @@
 #include "ThesaurusFactory.h"
 
 #include <kpluginfactory.h>
-#include <kpluginloader.h>
 
 #include <KoTextEditingRegistry.h>
 

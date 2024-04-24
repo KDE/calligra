@@ -39,7 +39,7 @@ UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable,
     nameEdit->setObjectName(QLatin1String("nameEdit"));
     nameEdit->setMinimumContentsLength(10);
     nameLabel->setBuddy(nameEdit);
-    connect(nameEdit, QOverload<const QString&>::of(&QComboBox::currentIndexChanged),
+    connect(nameEdit, &QComboBox::currentIndexChanged,
             this, &UserVariableOptionsWidget::nameChanged);
     nameLayout->addWidget(nameEdit);
 
@@ -70,7 +70,7 @@ UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable,
     typeEdit->addItem(i18n("Formula"), QLatin1String("formula"));
     typeEdit->addItem(i18n("Void"), QLatin1String("void"));
     typeEdit->setCurrentIndex(qMax(0, typeEdit->findData(variableManager()->userType(userVariable->name()))));
-    connect(typeEdit, QOverload<const QString&>::of(&QComboBox::currentIndexChanged), this, &UserVariableOptionsWidget::typeChanged);
+    connect(typeEdit, &QComboBox::currentIndexChanged, this, &UserVariableOptionsWidget::typeChanged);
     layout->addWidget(typeEdit, 1, 1);
 
     QLabel *valueLabel = new QLabel(i18n("Value:"), this);
@@ -164,7 +164,7 @@ void UserVariableOptionsWidget::deleteClicked()
     if (KMessageBox::questionTwoActions(this,
             i18n("Delete variable <b>%1</b>?", userVariable->name()),
             i18n("Delete Variable"),
-            KStandardGuiItem::yes(),
+            KStandardGuiItem::del(),
             KStandardGuiItem::cancel(),
             QString(),
             KMessageBox::Dangerous | KMessageBox::Notify) != KMessageBox::PrimaryAction) {

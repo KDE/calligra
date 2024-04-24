@@ -7,6 +7,7 @@
 #define ABSTRACTMUSICACTION_H
 
 #include <QAction>
+#include <QKeyEvent>
 
 class SimpleEntryTool;
 class MusicCursor;

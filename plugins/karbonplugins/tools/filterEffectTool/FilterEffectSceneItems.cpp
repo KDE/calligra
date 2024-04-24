@@ -142,7 +142,7 @@ void EffectItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     QDrag *drag = new QDrag(event->widget());
     drag->setMimeData(data);
-    drag->start();
+    drag->exec();
 }
 
 void EffectItemBase::dragMoveEvent(QGraphicsSceneDragDropEvent * event)

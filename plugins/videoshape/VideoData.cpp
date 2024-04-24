@@ -25,6 +25,7 @@
 #include <QAtomicInt>
 #include <QFile>
 #include <QUrl>
+#include <QRegularExpression>
 
 class VideoDataPrivate
 {
@@ -77,9 +78,10 @@ VideoDataPrivate::~VideoDataPrivate()
 
 void VideoDataPrivate::setSuffix(const QString &name)
 {
-    QRegExp rx("\\.([^/]+$)"); // TODO does this work on windows or do we have to use \ instead of / for a path separator?
-    if (rx.indexIn(name) != -1) {
-        suffix = rx.cap(1);
+    QRegularExpression rx("\\.([^/]+$)"); // TODO does this work on windows or do we have to use \ instead of / for a path separator?
+    QRegularExpressionMatch match;
+    if (name.indexOf(rx, 0, &match) != -1) {
+        suffix = match.captured(1);
     }
 }
 

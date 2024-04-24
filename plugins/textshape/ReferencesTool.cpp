@@ -38,6 +38,8 @@
 #include <QMenu>
 #include <QWidgetAction>
 
+LabeledWidget::~LabeledWidget() = default;
+
 LabeledWidget::LabeledWidget(QAction *action, const QString &label, LabelPosition lb, bool warningLabelRequired)
     : QWidget()
     , m_action(action)
@@ -65,7 +67,7 @@ LabeledWidget::LabeledWidget(QAction *action, const QString &label, LabelPositio
         layout->addWidget(m_warningLabel[0]);
         layout->addWidget(m_warningLabel[1]);
     }
-    layout->setMargin(0);
+    layout->setContentsMargins({});
     setLayout(layout);
     connect(m_lineEdit, &QLineEdit::returnPressed, this, &LabeledWidget::returnPressed);
     connect(m_lineEdit, &QLineEdit::textChanged, this, &LabeledWidget::lineEditChanged);
@@ -73,10 +75,10 @@ LabeledWidget::LabeledWidget(QAction *action, const QString &label, LabelPositio
 
 void LabeledWidget::returnPressed()
 {
-    emit triggered(m_lineEdit->text());
+    emit textTriggered(m_lineEdit->text());
 }
 
-void LabeledWidget::enterEvent(QEvent *event)
+void LabeledWidget::enterEvent(QEnterEvent *event)
 {
     m_action->activate(QAction::Hover);
     QWidget::enterEvent(event);
@@ -133,7 +135,7 @@ void ReferencesTool::createActions()
     LabeledWidget *w = new LabeledWidget(wAction, i18n("Insert with label:"), LabeledWidget::INLINE, false);
     wAction->setDefaultWidget(w);
     addAction("insert_labeledfootnote", wAction);
-    connect(w, &LabeledWidget::triggered, this, &ReferencesTool::insertLabeledFootNote);
+    connect(w, &LabeledWidget::textTriggered, this, &ReferencesTool::insertLabeledFootNote);
 
     action = new QAction(i18n("Insert endnote with auto number"),this);
     addAction("insert_autoendnote",action);
@@ -144,7 +146,7 @@ void ReferencesTool::createActions()
     w = new LabeledWidget(wAction, i18n("Insert with label:"), LabeledWidget::INLINE, false);
     wAction->setDefaultWidget(w);
     addAction("insert_labeledendnote", wAction);
-    connect(w, &LabeledWidget::triggered, this, &ReferencesTool::insertLabeledEndNote);
+    connect(w, &LabeledWidget::textTriggered, this, &ReferencesTool::insertLabeledEndNote);
 
     action = new QAction(koIcon("configure"), i18n("Settings..."), this);
     addAction("format_footnotes",action);
@@ -183,7 +185,7 @@ void ReferencesTool::createActions()
     connect(m_bmark, &LabeledWidget::lineEditChanged, this, &ReferencesTool::validateBookmark);
     wAction->setDefaultWidget(m_bmark);
     addAction("insert_bookmark", wAction);
-    connect(m_bmark, &LabeledWidget::triggered, this, &ReferencesTool::insertBookmark);
+    connect(m_bmark, &LabeledWidget::textTriggered, this, &ReferencesTool::insertBookmark);
     wAction->setToolTip(i18n("Insert a Bookmark. This is useful to create links that point to areas within the document"));
 
     action = new QAction(i18n("Bookmarks"), this);

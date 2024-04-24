@@ -74,8 +74,8 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
 
     connect(m_type, QOverload<int>::of(&KComboBox::currentIndexChanged), m_stack, &QStackedWidget::setCurrentIndex);
     connect(m_type, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &ColorMatrixEffectConfigWidget::typeChanged);
-    connect(m_saturate, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ColorMatrixEffectConfigWidget::saturateChanged);
-    connect(m_hueRotate, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ColorMatrixEffectConfigWidget::hueRotateChanged);
+    connect(m_saturate, &QDoubleSpinBox::valueChanged, this, &ColorMatrixEffectConfigWidget::saturateChanged);
+    connect(m_hueRotate, &QDoubleSpinBox::valueChanged, this, &ColorMatrixEffectConfigWidget::hueRotateChanged);
     connect(m_matrixModel, &QAbstractItemModel::dataChanged, this, &ColorMatrixEffectConfigWidget::matrixChanged);
 }
 

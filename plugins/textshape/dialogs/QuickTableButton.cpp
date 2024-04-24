@@ -25,7 +25,7 @@ class SizeChooserGrid : public QFrame
         SizeChooserGrid(QuickTableButton *button, QAction *action);
         QSize sizeHint() const override;
         void mouseMoveEvent (QMouseEvent *ev) override;
-        void enterEvent(QEvent *ev) override;
+        void enterEvent(QEnterEvent *ev) override;
         void leaveEvent(QEvent *ev) override;
         void mouseReleaseEvent (QMouseEvent *ev) override;
         void paintEvent(QPaintEvent * event) override;
@@ -78,7 +78,7 @@ void SizeChooserGrid::mouseMoveEvent(QMouseEvent *ev)
     repaint();
 }
 
-void SizeChooserGrid::enterEvent(QEvent *event)
+void SizeChooserGrid::enterEvent(QEnterEvent *event)
 {
     m_action->activate(QAction::Hover);
     QFrame::enterEvent(event);

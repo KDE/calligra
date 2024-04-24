@@ -478,25 +478,25 @@ QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
 
     d->posX = new QDoubleSpinBox(filterRegionWidget);
     d->posX->setSuffix("%");
-    connect(d->posX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KarbonFilterEffectsTool::regionXChanged);
+    connect(d->posX, &QDoubleSpinBox::valueChanged, this, &KarbonFilterEffectsTool::regionXChanged);
     filterRegionLayout->addWidget(new QLabel(i18n("X:")), 0, 0);
     filterRegionLayout->addWidget(d->posX, 0, 1);
 
     d->posY = new QDoubleSpinBox(filterRegionWidget);
     d->posY->setSuffix("%");
-    connect(d->posY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KarbonFilterEffectsTool::regionYChanged);
+    connect(d->posY, &QDoubleSpinBox::valueChanged, this, &KarbonFilterEffectsTool::regionYChanged);
     filterRegionLayout->addWidget(new QLabel(i18n("Y:")), 1, 0);
     filterRegionLayout->addWidget(d->posY, 1, 1);
 
     d->posW = new QDoubleSpinBox(filterRegionWidget);
     d->posW->setSuffix("%");
-    connect(d->posW, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KarbonFilterEffectsTool::regionWidthChanged);
+    connect(d->posW, &QDoubleSpinBox::valueChanged, this, &KarbonFilterEffectsTool::regionWidthChanged);
     filterRegionLayout->addWidget(new QLabel(i18n("W:")), 0, 2);
     filterRegionLayout->addWidget(d->posW, 0, 3);
 
     d->posH = new QDoubleSpinBox(filterRegionWidget);
     d->posH->setSuffix("%");
-    connect(d->posH, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KarbonFilterEffectsTool::regionHeightChanged);
+    connect(d->posH, &QDoubleSpinBox::valueChanged, this, &KarbonFilterEffectsTool::regionHeightChanged);
     filterRegionLayout->addWidget(new QLabel(i18n("H:")), 1, 2);
     filterRegionLayout->addWidget(d->posH, 1, 3);
     filterRegionLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding), 2, 0);

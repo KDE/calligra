@@ -293,7 +293,7 @@ PlotAreaConfigWidget::PlotAreaConfigWidget()
     connect(d->ui.threeDLook, &QAbstractButton::toggled,
             this,             &PlotAreaConfigWidget::setThreeDMode);
 
-    connect(d->ui.chartOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PlotAreaConfigWidget::ui_chartOrientationChanged);
+    connect(d->ui.chartOrientation, &QComboBox::currentIndexChanged, this, &PlotAreaConfigWidget::ui_chartOrientationChanged);
 
     setupDialogs();
     createActions();
@@ -702,7 +702,7 @@ void PlotAreaConfigWidget::slotShowTableEditor()
 //                             this, SLOT(ui_dataSetCustomDataRegionChanged(QString)));
                     connect(d->cellRegionDialog->categoryDataRegion, &QLineEdit::editingFinished,
                             this, &PlotAreaConfigWidget::ui_dataSetCategoryDataRegionChanged);
-                    connect(d->cellRegionDialog->dataSets, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                    connect(d->cellRegionDialog->dataSets, &QComboBox::currentIndexChanged,
                             this, &PlotAreaConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog);
                 }
                 d->cellRegionDialog->show();

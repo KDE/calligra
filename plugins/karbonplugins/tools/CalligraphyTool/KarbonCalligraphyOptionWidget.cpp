@@ -272,7 +272,7 @@ void KarbonCalligraphyOptionWidget::decreaseAngle()
 
 void KarbonCalligraphyOptionWidget::createConnections()
 {
-    connect(m_comboBox, QOverload<const QString &>::of(&KComboBox::currentIndexChanged),
+    connect(m_comboBox, &KComboBox::currentTextChanged,
             this, &KarbonCalligraphyOptionWidget::loadProfile);
 
 
@@ -286,25 +286,25 @@ void KarbonCalligraphyOptionWidget::createConnections()
     connect(m_useAngle, &QAbstractButton::toggled,
             this, &KarbonCalligraphyOptionWidget::useAngleChanged);
 
-    connect(m_widthBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+    connect(m_widthBox, &QDoubleSpinBox::valueChanged,
             this, &KarbonCalligraphyOptionWidget::widthChanged);
 
-    connect(m_thinningBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+    connect(m_thinningBox, &QDoubleSpinBox::valueChanged,
             this, &KarbonCalligraphyOptionWidget::thinningChanged);
 
-    connect(m_angleBox, QOverload<int>::of(&QSpinBox::valueChanged),
+    connect(m_angleBox, &QSpinBox::valueChanged,
             this, &KarbonCalligraphyOptionWidget::angleChanged);
 
-    connect(m_fixationBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+    connect(m_fixationBox, &QDoubleSpinBox::valueChanged,
             this, &KarbonCalligraphyOptionWidget::fixationChanged);
 
-    connect(m_capsBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+    connect(m_capsBox, &QDoubleSpinBox::valueChanged,
             this, &KarbonCalligraphyOptionWidget::capsChanged);
 
-    connect(m_massBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+    connect(m_massBox, &QDoubleSpinBox::valueChanged,
             this, &KarbonCalligraphyOptionWidget::massChanged);
 
-    connect(m_dragBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+    connect(m_dragBox, &QDoubleSpinBox::valueChanged,
             this, &KarbonCalligraphyOptionWidget::dragChanged);
 
 
@@ -318,25 +318,25 @@ void KarbonCalligraphyOptionWidget::createConnections()
     connect(m_useAngle, &QAbstractButton::toggled,
             this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_widthBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+    connect(m_widthBox, &QDoubleSpinBox::valueChanged,
             this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_thinningBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+    connect(m_thinningBox, &QDoubleSpinBox::valueChanged,
             this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_angleBox, QOverload<int>::of(&QSpinBox::valueChanged),
+    connect(m_angleBox, &QSpinBox::valueChanged,
             this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_fixationBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+    connect(m_fixationBox, &QDoubleSpinBox::valueChanged,
             this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_capsBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+    connect(m_capsBox, &QDoubleSpinBox::valueChanged,
             this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_massBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+    connect(m_massBox, &QDoubleSpinBox::valueChanged,
             this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_dragBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+    connect(m_dragBox, &QDoubleSpinBox::valueChanged,
             this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
 

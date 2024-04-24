@@ -18,7 +18,6 @@ class QAction;
 
 class QPainter;
 class QKeyEvent;
-template <class T> class QVector;
 /// This tool allows to manipulate the tracked changes of a document. You can accept or reject changes.
 
 #include <TextTool.h>

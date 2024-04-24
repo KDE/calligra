@@ -63,7 +63,6 @@
 //#include <ResizeTableCommand.h>
 #include <KoIcon.h>
 
-#include <krun.h>
 #include <kstandardshortcut.h>
 #include <kactionmenu.h>
 #include <kstandardaction.h>
@@ -73,6 +72,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QAction>
+#include <QActionGroup>
 #include <QTextTable>
 #include <QTextList>
 #include <QTabWidget>
@@ -85,6 +85,7 @@
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
 #include <QDropEvent>
+#include <QDesktopServices>
 
 #include "AnnotationTextShape.h"
 #define AnnotationShape_SHAPEID "AnnotationTextShapeID"
@@ -212,24 +213,24 @@ void TextTool::createActions()
 
     m_actionPasteAsText  = new QAction(koIcon("edit-paste"), i18n("Paste As Text"), this);
     addAction("edit_paste_text", m_actionPasteAsText);
-    m_actionPasteAsText->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
+    m_actionPasteAsText->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_V);
     connect(m_actionPasteAsText, &QAction::triggered, this, &TextTool::pasteAsText);
 
     m_actionFormatBold  = new QAction(koIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
-    m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
+    m_actionFormatBold->setShortcut(Qt::CTRL | Qt::Key_B);
     m_actionFormatBold->setCheckable(true);
     connect(m_actionFormatBold, &QAction::triggered, this, &TextTool::bold);
 
     m_actionFormatItalic  = new QAction(koIcon("format-text-italic"), i18n("Italic"), this);
     addAction("format_italic", m_actionFormatItalic);
-    m_actionFormatItalic->setShortcut(Qt::CTRL + Qt::Key_I);
+    m_actionFormatItalic->setShortcut(Qt::CTRL | Qt::Key_I);
     m_actionFormatItalic->setCheckable(true);
     connect(m_actionFormatItalic, &QAction::triggered, this, &TextTool::italic);
 
     m_actionFormatUnderline  = new QAction(koIcon("format-text-underline"), i18nc("Text formatting", "Underline"), this);
     addAction("format_underline", m_actionFormatUnderline);
-    m_actionFormatUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
+    m_actionFormatUnderline->setShortcut(Qt::CTRL | Qt::Key_U);
     m_actionFormatUnderline->setCheckable(true);
     connect(m_actionFormatUnderline, &QAction::triggered, this, &TextTool::underline);
 
@@ -241,21 +242,21 @@ void TextTool::createActions()
     QActionGroup *alignmentGroup = new QActionGroup(this);
     m_actionAlignLeft  = new QAction(koIcon("format-justify-left"), i18n("Align Left"), this);
     addAction("format_alignleft", m_actionAlignLeft);
-    m_actionAlignLeft->setShortcut(Qt::CTRL + Qt::Key_L);
+    m_actionAlignLeft->setShortcut(Qt::CTRL | Qt::Key_L);
     m_actionAlignLeft->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignLeft);
     connect(m_actionAlignLeft, &QAction::triggered, this, &TextTool::alignLeft);
 
     m_actionAlignRight  = new QAction(koIcon("format-justify-right"), i18n("Align Right"), this);
     addAction("format_alignright", m_actionAlignRight);
-    m_actionAlignRight->setShortcut(Qt::CTRL + Qt::Key_R);
+    m_actionAlignRight->setShortcut(Qt::CTRL | Qt::Key_R);
     m_actionAlignRight->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignRight);
     connect(m_actionAlignRight, &QAction::triggered, this, &TextTool::alignRight);
 
     m_actionAlignCenter  = new QAction(koIcon("format-justify-center"), i18n("Align Center"), this);
     addAction("format_aligncenter", m_actionAlignCenter);
-    m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::Key_E);
+    m_actionAlignCenter->setShortcut(Qt::CTRL | Qt::Key_E);
     m_actionAlignCenter->setCheckable(true);
 
     alignmentGroup->addAction(m_actionAlignCenter);
@@ -263,7 +264,7 @@ void TextTool::createActions()
 
     m_actionAlignBlock  = new QAction(koIcon("format-justify-fill"), i18n("Align Block"), this);
     addAction("format_alignblock", m_actionAlignBlock);
-    m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::Key_J);
+    m_actionAlignBlock->setShortcut(Qt::CTRL | Qt::Key_J);
     m_actionAlignBlock->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignBlock);
     connect(m_actionAlignBlock, &QAction::triggered, this, &TextTool::alignBlock);
@@ -271,19 +272,19 @@ void TextTool::createActions()
     m_actionChangeDirection = new QAction(koIcon("format-text-direction-rtl"), i18n("Change text direction"), this);
     addAction("change_text_direction", m_actionChangeDirection);
     m_actionChangeDirection->setToolTip(i18n("Change writing direction"));
-    m_actionChangeDirection->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
+    m_actionChangeDirection->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_D);
     m_actionChangeDirection->setCheckable(true);
     connect(m_actionChangeDirection, &QAction::triggered, this, &TextTool::textDirectionChanged);
 
 
     m_actionFormatSuper = new QAction(koIcon("format-text-superscript"), i18n("Superscript"), this);
-    m_actionFormatSuper->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
+    m_actionFormatSuper->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_P);
     addAction("format_super", m_actionFormatSuper);
     m_actionFormatSuper->setCheckable(true);
     connect(m_actionFormatSuper, &QAction::triggered, this, &TextTool::superScript);
 
     m_actionFormatSub = new QAction(koIcon("format-text-subscript"), i18n("Subscript"), this);
-    m_actionFormatSub->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_B);
+    m_actionFormatSub->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_B);
     addAction("format_sub", m_actionFormatSub);
     m_actionFormatSub->setCheckable(true);
     connect(m_actionFormatSub, &QAction::triggered, this, &TextTool::subScript);
@@ -308,19 +309,19 @@ void TextTool::createActions()
     addAction("format_list", action);
 
     action = new QAction(i18n("Increase Font Size"), this);
-    action->setShortcut(Qt::CTRL + Qt::Key_Greater);
+    action->setShortcut(Qt::CTRL | Qt::Key_Greater);
     addAction("fontsizeup", action);
     connect(action, &QAction::triggered, this, &TextTool::increaseFontSize);
 
     action = new QAction(i18n("Decrease Font Size"), this);
-    action->setShortcut(Qt::CTRL + Qt::Key_Less);
+    action->setShortcut(Qt::CTRL | Qt::Key_Less);
     addAction("fontsizedown", action);
     connect(action, &QAction::triggered, this, &TextTool::decreaseFontSize);
 
     m_actionFormatFontFamily = new KoFontFamilyAction(this);
     m_actionFormatFontFamily->setText(i18n("Font Family"));
     addAction("format_fontfamily", m_actionFormatFontFamily);
-    connect(m_actionFormatFontFamily, QOverload<const QString &>::of(&KoFontFamilyAction::triggered),
+    connect(m_actionFormatFontFamily, &KoFontFamilyAction::textTriggered,
             this, &TextTool::setFontFamily);
 
     m_variableMenu = new KActionMenu(i18n("Variable"), this);
@@ -329,16 +330,16 @@ void TextTool::createActions()
     // ------------------- Actions with a key binding and no GUI item
     action  = new QAction(i18n("Insert Non-Breaking Space"), this);
     addAction("nonbreaking_space", action);
-    action->setShortcut(Qt::CTRL + Qt::Key_Space);
+    action->setShortcut(Qt::CTRL | Qt::Key_Space);
     connect(action, &QAction::triggered, this, &TextTool::nonbreakingSpace);
 
     action  = new QAction(i18n("Insert Non-Breaking Hyphen"), this);
     addAction("nonbreaking_hyphen", action);
-    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Minus);
+    action->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_Minus);
     connect(action, &QAction::triggered, this, &TextTool::nonbreakingHyphen);
 
     action  = new QAction(i18n("Insert Index"), this);
-    action->setShortcut(Qt::CTRL + Qt::Key_T);
+    action->setShortcut(Qt::CTRL| Qt::Key_T);
     addAction("insert_index", action);
     connect(action, &QAction::triggered, this, &TextTool::insertIndexMarker);
 
@@ -350,12 +351,12 @@ void TextTool::createActions()
     if (useAdvancedText) {
         action  = new QAction(i18n("Line Break"), this);
         addAction("line_break", action);
-        action->setShortcut(Qt::SHIFT + Qt::Key_Return);
+        action->setShortcut(Qt::SHIFT | Qt::Key_Return);
         connect(action, &QAction::triggered, this, &TextTool::lineBreak);
 
         action  = new QAction(koIcon("insert-page-break"), i18n("Page Break"), this);
         addAction("insert_framebreak", action);
-        action->setShortcut(Qt::CTRL + Qt::Key_Return);
+        action->setShortcut(Qt::CTRL | Qt::Key_Return);
         connect(action, &QAction::triggered, this, &TextTool::insertFrameBreak);
         action->setToolTip(i18n("Insert a page break"));
         action->setWhatsThis(i18n("All text after this point will be moved into the next page."));
@@ -363,7 +364,7 @@ void TextTool::createActions()
 
     action  = new QAction(i18n("Font..."), this);
     addAction("format_font", action);
-    action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_F);
+    action->setShortcut(Qt::ALT | Qt::CTRL | Qt::Key_F);
     action->setToolTip(i18n("Change character size, font, boldface, italics etc."));
     action->setWhatsThis(i18n("Change the attributes of the currently selected characters."));
     connect(action, &QAction::triggered, this, &TextTool::selectFont);
@@ -457,13 +458,13 @@ void TextTool::createActions()
 
     action = new QAction(i18n("Paragraph..."), this);
     addAction("format_paragraph", action);
-    action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
+    action->setShortcut(Qt::ALT | Qt::CTRL | Qt::Key_P);
     action->setToolTip(i18n("Change paragraph margins, text flow, borders, bullets, numbering etc."));
     action->setWhatsThis(i18n("<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</p><p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.</p><p>If no text is selected, the paragraph where the cursor is located will be changed.</p>"));
     connect(action, &QAction::triggered, this, &TextTool::formatParagraph);
 
     action = new QAction(i18n("Style Manager..."), this);
-    action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_S);
+    action->setShortcut(Qt::ALT | Qt::CTRL | Qt::Key_S);
     action->setToolTip(i18n("Change attributes of styles"));
     action->setWhatsThis(i18n("<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can be changed using the dialog box.</p>"));
     addAction("format_stylist", action);
@@ -474,7 +475,7 @@ void TextTool::createActions()
 
     action = new QAction(i18n("Special Character..."), this);
     action->setIcon(koIcon("character-set"));
-    action->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_C);
+    action->setShortcut(Qt::ALT | Qt::SHIFT | Qt::Key_C);
     addAction("insert_specialchar", action);
     action->setToolTip(i18n("Insert one or more symbols or characters not found on the keyboard"));
     action->setWhatsThis(i18n("Insert one or more symbols or characters not found on the keyboard."));
@@ -487,16 +488,16 @@ void TextTool::createActions()
 
     action = new QAction(i18n("Insert Comment"), this);
     addAction("insert_annotation", action);
-    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
+    action->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_C);
     connect(action, &QAction::triggered, this, &TextTool::insertAnnotation);
 
 #ifndef NDEBUG
     action = new QAction("Paragraph Debug", this); // do NOT add i18n!
-    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_P);
+    action->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::ALT | Qt::Key_P);
     addAction("detailed_debug_paragraphs", action);
     connect(action, &QAction::triggered, this, &TextTool::debugTextDocument);
     action = new QAction("Styles Debug", this); // do NOT add i18n!
-    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_S);
+    action->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::ALT | Qt::Key_S);
     addAction("detailed_debug_styles", action);
     connect(action, &QAction::triggered, this, &TextTool::debugTextStyles);
 #endif
@@ -915,7 +916,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
 
         if ((event->button() == Qt::LeftButton) && !shiftPressed && m_textEditor.data()->hasSelection() && m_textEditor.data()->isWithinSelection(pointedAt.position)) {
             m_clickWithinSelection = true;
-            m_draggingOrigin = event->pos(); //we store the pixel pos
+            m_draggingOrigin = event->position(); //we store the pixel pos
         } else if (! (event->button() == Qt::RightButton && m_textEditor.data()->hasSelection() && m_textEditor.data()->isWithinSelection(pointedAt.position))) {
             m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
             useCursor(Qt::IBeamCursor);
@@ -1325,7 +1326,7 @@ void TextTool::mouseTripleClickEvent(KoPointerEvent *event)
 
 void TextTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    m_editTipPos = event->globalPos();
+    m_editTipPos = event->globalPosition().toPoint();
 
     if (event->buttons()) {
         updateSelectedShape(event->point, true);
@@ -1485,7 +1486,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
         } else if (m_tablePenMode) {
             // do nothing
         } else if (m_clickWithinSelection) {
-            if (!m_drag && (event->pos() - m_draggingOrigin).manhattanLength()
+            if (!m_drag && (event->position() - m_draggingOrigin).manhattanLength()
           >= QApplication::startDragDistance()) {
                 QMimeData *mimeData = generateMimeData();
                 if (mimeData) {
@@ -2923,23 +2924,25 @@ void TextTool::runUrl(KoPointerEvent *event, QString &url)
 {
     QUrl _url = QUrl::fromLocalFile(url);
     if (_url.isLocalFile()) {
-        QMimeDatabase db;
-        QString type = db.mimeTypeForUrl(_url).name();
+        return;
 
-        if (KRun::isExecutableFile(_url, type)) {
-            const QString question = i18n("This link points to the program or script '%1'.\n"
-                                    "Malicious programs can harm your computer. "
-                                    "Are you sure that you want to run this program?", url);
-            // this will also start local programs, so adding a "don't warn again"
-            // checkbox will probably be too dangerous
-            int choice = KMessageBox::warningTwoActions(nullptr, question, i18n("Open Link?"), KStandardGuiItem::open(), KStandardGuiItem::cancel());
-            if (choice != KMessageBox::PrimaryAction)
-                return;
-        }
+        //QMimeDatabase db;
+        //QString type = db.mimeTypeForUrl(_url).name();
+
+        //if (KRun::isExecutableFile(_url, type)) {
+        //    const QString question = i18n("This link points to the program or script '%1'.\n"
+        //                            "Malicious programs can harm your computer. "
+        //                            "Are you sure that you want to run this program?", url);
+        //    // this will also start local programs, so adding a "don't warn again"
+        //    // checkbox will probably be too dangerous
+        //    int choice = KMessageBox::warningTwoActions(nullptr, question, i18n("Open Link?"), KStandardGuiItem::open(), KStandardGuiItem::cancel());
+        //    if (choice != KMessageBox::PrimaryAction)
+        //        return;
+        //}
     }
 
     event->accept();
-    new KRun(_url, 0);
+    QDesktopServices::openUrl(_url);
 }
 
 void TextTool::debugTextDocument()

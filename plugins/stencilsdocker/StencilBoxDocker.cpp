@@ -30,12 +30,13 @@
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
+#include <KStatefulBrush>
 
 #include <QStandardPaths>
 #include <QVBoxLayout>
 #include <QListView>
 #include <QStandardItemModel>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSortFilterProxyModel>
 #include <QList>
 #include <QSize>
@@ -192,7 +193,7 @@ void StencilBoxDocker::locationChanged(Qt::DockWidgetArea area)
 
 void StencilBoxDocker::reapplyFilter()
 {
-    QRegExp regExp(m_filterLineEdit->originalText(), Qt::CaseInsensitive, QRegExp::RegExp2);
+    QRegularExpression regExp(m_filterLineEdit->originalText(), QRegularExpression::CaseInsensitiveOption);
     m_treeWidget->setFilter(regExp);
 }
 
@@ -235,8 +236,8 @@ bool StencilBoxDockerLoader::addCollection(const QString& path)
 
     KStatefulBrush brushForeground(KColorScheme::Window, KColorScheme::NormalText);
     KStatefulBrush brushBackground(KColorScheme::Window, KColorScheme::NormalBackground);
-    const QColor blackColor = brushForeground.brush(q).color();
-    const QColor whiteColor = brushBackground.brush(q).color();
+    const QColor blackColor = brushForeground.brush(q->palette()).color();
+    const QColor whiteColor = brushBackground.brush(q->palette()).color();
 
     foreach(const QString & stencil, stencils) {
         if(stencil == "collection.desktop")

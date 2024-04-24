@@ -27,7 +27,7 @@
 
 #include <QMimeData>
 #include <QIODevice>
-#include <KArchive/kcompressiondevice.h>
+#include <KCompressionDevice>
 
 StencilShapeFactory::
 StencilShapeFactory(const QString& id,

@@ -16,12 +16,12 @@
 #include <QCache>
 #include <QSize>
 #include <QRunnable>
+#include <QObject>
 #include <QMutex>
 
 // Calligra
 #include <KoShape.h>
 #include <KoFrameShape.h>
-
 
 #define DEBUG_VECTORSHAPE 0
 

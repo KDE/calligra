@@ -13,6 +13,7 @@
 #include <QXmlStreamReader>
 #include <QInputDialog>
 #include <QAction>
+#include <QActionGroup>
 #include <QFileDialog>
 #include <QUrl>
 

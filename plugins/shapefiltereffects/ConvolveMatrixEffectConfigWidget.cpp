@@ -69,12 +69,12 @@ ConvolveMatrixEffectConfigWidget::ConvolveMatrixEffectConfigWidget(QWidget *pare
     setLayout(g);
 
     connect(m_edgeMode, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &ConvolveMatrixEffectConfigWidget::edgeModeChanged);
-    connect(m_orderX, QOverload<int>::of(&QSpinBox::valueChanged), this, &ConvolveMatrixEffectConfigWidget::orderChanged);
-    connect(m_orderY, QOverload<int>::of(&QSpinBox::valueChanged), this, &ConvolveMatrixEffectConfigWidget::orderChanged);
-    connect(m_targetX, QOverload<int>::of(&QSpinBox::valueChanged), this, &ConvolveMatrixEffectConfigWidget::targetChanged);
-    connect(m_targetY, QOverload<int>::of(&QSpinBox::valueChanged), this, &ConvolveMatrixEffectConfigWidget::targetChanged);
-    connect(m_divisor, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ConvolveMatrixEffectConfigWidget::divisorChanged);
-    connect(m_bias, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ConvolveMatrixEffectConfigWidget::biasChanged);
+    connect(m_orderX, &QSpinBox::valueChanged, this, &ConvolveMatrixEffectConfigWidget::orderChanged);
+    connect(m_orderY, &QSpinBox::valueChanged, this, &ConvolveMatrixEffectConfigWidget::orderChanged);
+    connect(m_targetX, &QSpinBox::valueChanged, this, &ConvolveMatrixEffectConfigWidget::targetChanged);
+    connect(m_targetY, &QSpinBox::valueChanged, this, &ConvolveMatrixEffectConfigWidget::targetChanged);
+    connect(m_divisor, &QDoubleSpinBox::valueChanged, this, &ConvolveMatrixEffectConfigWidget::divisorChanged);
+    connect(m_bias, &QDoubleSpinBox::valueChanged, this, &ConvolveMatrixEffectConfigWidget::biasChanged);
     connect(kernelButton, &QAbstractButton::clicked, this, &ConvolveMatrixEffectConfigWidget::editKernel);
     connect(m_preserveAlpha, &QAbstractButton::toggled, this, &ConvolveMatrixEffectConfigWidget::preserveAlphaChanged);
 

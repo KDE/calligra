@@ -17,7 +17,7 @@ InsertCharacter::InsertCharacter(QWidget *parent)
 {
     QWidget *specialCharacterWidget = new QWidget();
     QGridLayout *lay = new QGridLayout(specialCharacterWidget);
-    lay->setMargin(6);
+    lay->setContentsMargins(6, 6, 6, 6);
     m_charSelector = new KCharSelect(specialCharacterWidget,
                                      0,
                                      KCharSelect::SearchLine | KCharSelect::FontCombo | KCharSelect::BlockCombos |

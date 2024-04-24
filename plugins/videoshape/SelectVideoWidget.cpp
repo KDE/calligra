@@ -21,7 +21,7 @@ SelectVideoWidget::SelectVideoWidget(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(this);
     m_fileWidget = new KFileWidget(QUrl(/*QT5TODO:"kfiledialog:///OpenVideoDialog"*/), this);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
-    m_fileWidget->setMimeFilter(Phonon::BackendCapabilities::availableMimeTypes());
+    m_fileWidget->setFilters(KFileFilter::fromMimeTypes(Phonon::BackendCapabilities::availableMimeTypes()));
     layout->addWidget(m_fileWidget);
 
     m_saveEmbedded = new QCheckBox(i18n("Save as part of document"));

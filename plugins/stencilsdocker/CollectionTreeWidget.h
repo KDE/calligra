@@ -39,7 +39,7 @@ public:
     ~CollectionTreeWidget() override;
     void setFamilyMap(QMap<QString, CollectionItemModel*> map);
     void regenerateFilteredMap();
-    void setFilter(QRegExp regExp);
+    void setFilter(QRegularExpression regExp);
 
 protected:
     void contextMenuEvent(QContextMenuEvent* e) override;

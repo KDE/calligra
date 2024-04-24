@@ -202,7 +202,7 @@ QVector<QPointF> ArtisticTextShape::calculateAbstractCharacterPositions()
             // save character position of current character
             charPositions[globalCharIndex] = charPos;
             // advance character position
-            advance = QPointF(metrics.width(textRange[localCharIndex])+letterSpacing, 0.0);
+            advance = QPointF(metrics.boundingRect(textRange[localCharIndex]).width() + letterSpacing, 0.0);
 
             charPos.ry() -= baselineShift;
         }
@@ -236,7 +236,7 @@ void ArtisticTextShape::createOutline()
         qreal totalTextWidth = 0.0;
         foreach (const ArtisticTextRange &range, m_ranges) {
             QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
-            totalTextWidth += metrics.width(range.text());
+            totalTextWidth += metrics.boundingRect(range.text()).width();
         }
         // adjust starting character position to anchor point
         if( m_textAnchor == AnchorMiddle )
@@ -260,7 +260,7 @@ void ArtisticTextShape::createOutline()
                 // apply advance along baseline
                 charOffset = startCharOffset + charPos.x();
 
-                const qreal charMidPoint = charOffset + 0.5 * metrics.width(localText[localCharIndex]);
+                const qreal charMidPoint = charOffset + 0.5 * metrics.boundingRect(localText[localCharIndex]).width();
                 // get the normalized position of the middle of the character
                 const qreal midT = m_baseline.percentAtLength(charMidPoint);
                 // is the character midpoint beyond the baseline ends?
@@ -501,7 +501,7 @@ void ArtisticTextShape::setTextAnchor( TextAnchor anchor )
     qreal totalTextWidth = 0.0;
     foreach (const ArtisticTextRange &range, m_ranges) {
         QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
-        totalTextWidth += metrics.width(range.text());
+        totalTextWidth += metrics.boundingRect(range.text()).width();
     }
 
     qreal oldOffset = 0.0;
@@ -872,7 +872,7 @@ QRectF ArtisticTextShape::charExtentsAt(int charIndex) const
     if (charPos.first < m_ranges.size()) {
         const ArtisticTextRange &range = m_ranges.at(charPos.first);
         QFontMetrics metrics(range.font());
-        int w = metrics.charWidth(range.text(), charPos.second);
+        int w = metrics.boundingRect(range.text()[charPos.second]).width();
         return QRectF( 0, 0, w, metrics.height() );
     }
 

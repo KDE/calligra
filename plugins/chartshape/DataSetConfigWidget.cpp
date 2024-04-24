@@ -281,8 +281,8 @@ DataSetConfigWidget::Private::Private(DataSetConfigWidget *parent)
     // connect(ui.datasetShowSymbol, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowSymbolChanged(bool)));
 
 
-    connect(ui.dataSets, QOverload<int>::of(&QComboBox::currentIndexChanged), parent, &DataSetConfigWidget::ui_dataSetSelectionChanged);
-    connect(ui.dataSetAxes, QOverload<int>::of(&QComboBox::currentIndexChanged), parent, &DataSetConfigWidget::ui_dataSetAxisSelectionChanged);
+    connect(ui.dataSets, &QComboBox::currentIndexChanged, parent, &DataSetConfigWidget::ui_dataSetSelectionChanged);
+    connect(ui.dataSetAxes, &QComboBox::currentIndexChanged, parent, &DataSetConfigWidget::ui_dataSetAxisSelectionChanged);
 }
 
 DataSetConfigWidget::Private::~Private()

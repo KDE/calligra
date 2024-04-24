@@ -22,9 +22,9 @@ FormatErrorBarDialog::FormatErrorBarDialog(QWidget *parent)
     connect(widget.posAndNegIndicator, &QAbstractButton::toggled, this, &FormatErrorBarDialog::errorIndicatorChanged);
     connect(widget.sameValueForBoth, &QCheckBox::toggled,
             this, QOverload<bool>::of(&FormatErrorBarDialog::setSameErrorValueForBoth));
-    connect(widget.positiveValue, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+    connect(widget.positiveValue, &QDoubleSpinBox::valueChanged,
             this, QOverload<double>::of(&FormatErrorBarDialog::setSameErrorValueForBoth));
-    connect(widget.errorType, QOverload<int>::of(&QComboBox::currentIndexChanged),
+    connect(widget.errorType, &QComboBox::currentIndexChanged,
             this, &FormatErrorBarDialog::errorTypeChanged);
 }
 

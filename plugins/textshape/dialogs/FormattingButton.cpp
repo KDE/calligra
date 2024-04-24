@@ -66,7 +66,7 @@ ItemChooserAction::ItemChooserAction(int columns)
     QFrame *ow = new ContentWidget;
     QGridLayout *l = new QGridLayout();
     l->setSpacing(0);
-    l->setMargin(0);
+    l->setContentsMargins({});
     l->setSizeConstraint(QLayout::SetMinAndMaxSize);
     ow->setLayout(l);
 

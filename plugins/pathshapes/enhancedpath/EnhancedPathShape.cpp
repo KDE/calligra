@@ -171,7 +171,7 @@ qreal EnhancedPathShape::evaluateReference(const QString &reference)
     // referenced modifier
     case '$': {
         bool success = false;
-        int modifierIndex = reference.midRef(1).toInt(&success);
+        int modifierIndex = QStringView{reference}.mid(1).toInt(&success);
         res = m_modifiers.value(modifierIndex);
         break;
     }
@@ -220,7 +220,7 @@ void EnhancedPathShape::modifyReference(const QString &reference, qreal value)
 
     if (c == '$') {
         bool success = false;
-        int modifierIndex = reference.midRef(1).toInt(&success);
+        int modifierIndex = QStringView{reference}.mid(1).toInt(&success);
         if (modifierIndex >= 0 && modifierIndex < m_modifiers.count())
             m_modifiers[modifierIndex] = value;
     }

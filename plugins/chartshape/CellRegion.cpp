@@ -239,10 +239,10 @@ bool Parser::parseRegion2()
     {
         m_currentToken = parseToken();
         if (m_currentToken.m_type == Token::Identifier)
-        {            
-            QRegExp regEx(QString::fromLatin1("([$]*)([A-Z]+)([$]*)([0-9]+)"));
-            regEx.exactMatch(m_currentToken.m_identifier);
-            m_currentPoint = QPoint(CellRegion::rangeStringToInt(regEx.cap(2)), regEx.cap(4).toInt());
+        {
+            static QRegularExpression regEx(QString::fromLatin1("^([$]*)([A-Z]+)([$]*)([0-9]+)$"));
+            auto match = regEx.match(m_currentToken.m_identifier);
+            m_currentPoint = QPoint(CellRegion::rangeStringToInt(match.captured(2)), match.captured(4).toInt());
             //debugChart << "FUN" << regEx.cap(2) << " " << regEx.cap(4);
             setTableName(firstIdentifier);
         }
@@ -251,10 +251,10 @@ bool Parser::parseRegion2()
     }
     else
     {
-        QRegExp regEx(QString::fromLatin1("([$]*)([A-Z]+)([$]*)([0-9]+)"));
-        regEx.exactMatch(firstIdentifier);
+        QRegularExpression regEx(QString::fromLatin1("^([$]*)([A-Z]+)([$]*)([0-9]+)$"));
+        auto match = regEx.match(firstIdentifier);
         //debugChart << "FUN" << regEx.cap(2) << " " << regEx.cap(4);
-        m_currentPoint = QPoint(CellRegion::rangeStringToInt(regEx.cap(2)), regEx.cap(4).toInt());
+        m_currentPoint = QPoint(CellRegion::rangeStringToInt(match.captured(2)), match.captured(4).toInt());
     }
     //debugChart << "TableName "<< m_tableName;
     //debugChart << firstIdentifier;

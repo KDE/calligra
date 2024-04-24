@@ -19,7 +19,7 @@ CitationInsertionDialog::CitationInsertionDialog(KoTextEditor *editor ,QWidget *
 {
     dialog.setupUi(this);
     connect(dialog.buttonBox, &QDialogButtonBox::accepted, this, &CitationInsertionDialog::insert);
-    connect(dialog.existingCites, QOverload<const QString &>::of(&KComboBox::currentIndexChanged),
+    connect(dialog.existingCites, &KComboBox::currentTextChanged,
             this, &CitationInsertionDialog::selectionChangedFromExistingCites);
 
     QStringList existingCites(i18n("Select"));
@@ -40,10 +40,11 @@ void CitationInsertionDialog::insert()
             int ret = QMessageBox::warning(this,i18n("Warning"),i18n("The document already contains the bibliography entry with different data.\n"
                                  "Do you want to adjust existing entries?"),QMessageBox::Yes | QMessageBox::No);
             if ( ret == QMessageBox::Yes) {
-                for (KoInlineCite *existingCite: m_cites.values(dialog.shortName->text())) {
-                    *existingCite = *toCite();                       //update all cites with new values
-                    existingCite->setType(KoInlineCite::ClonedCitation);    //change type to ClonedCitation
-                }
+                // to port kf6
+                //for (KoInlineCite *existingCite: m_cites.values(dialog.shortName->text())) {
+                //    *existingCite = *toCite();                       //update all cites with new values
+                //    existingCite->setType(KoInlineCite::ClonedCitation);    //change type to ClonedCitation
+                //}
                 emit accept();
             } else return;
         }

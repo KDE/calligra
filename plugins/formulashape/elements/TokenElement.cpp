@@ -74,7 +74,7 @@ void TokenElement::layout( const AttributeManager* am )
     if(m_glyphs.isEmpty()) {//optimize for the common case
         boundingrect = renderToPath(m_rawString, m_contentPath);
         for (int j = 0; j < m_rawString.length(); ++j) {
-                m_offsets.append(fm.width(m_rawString.left(j+1)));
+                m_offsets.append(fm.boundingRect(m_rawString.left(j+1)).width());
         }
      } else {
         // replace all the object replacement characters with glyphs
@@ -92,7 +92,7 @@ void TokenElement::layout( const AttributeManager* am )
                 boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
                 qreal glyphoffset = m_offsets.last();
                 for (int j = 0; j < chunk.length(); ++j) {
-                    m_offsets << fm.width(chunk.left(j+1)) + glyphoffset;
+                    m_offsets << fm.boundingRect(chunk.left(j+1)).width() + glyphoffset;
                 }
                 m_contentPath.moveTo(boundingrect.right(), 0);
                 newbox = m_glyphs[ counter ]->renderToPath( QString(), m_contentPath );
@@ -112,7 +112,7 @@ void TokenElement::layout( const AttributeManager* am )
             boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
 //             qreal glyphoffset = m_offsets.last();
             for (int j = 0; j < chunk.length(); ++j) {
-                m_offsets << fm.width(chunk.left(j+1)) + m_offsets.last();
+                m_offsets << fm.boundingRect(chunk.left(j+1)).width() + m_offsets.last();
             }
         }
     }

@@ -124,12 +124,12 @@ ComponentTransferEffectConfigWidget::ComponentTransferEffectConfigWidget(QWidget
     connect(m_function, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &ComponentTransferEffectConfigWidget::functionChanged);
     connect(m_tableValues, &QLineEdit::editingFinished, this, &ComponentTransferEffectConfigWidget::tableValuesChanged);
     connect(m_discreteValues, &QLineEdit::editingFinished, this, &ComponentTransferEffectConfigWidget::discreteValuesChanged);
-    connect(m_slope, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ComponentTransferEffectConfigWidget::slopeChanged);
-    connect(m_intercept, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ComponentTransferEffectConfigWidget::interceptChanged);
-    connect(m_amplitude, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ComponentTransferEffectConfigWidget::amplitudeChanged);
-    connect(m_exponent, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ComponentTransferEffectConfigWidget::exponentChanged);
-    connect(m_offset, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ComponentTransferEffectConfigWidget::offsetChanged);
-    connect(group, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &ComponentTransferEffectConfigWidget::channelSelected);
+    connect(m_slope, &QDoubleSpinBox::valueChanged, this, &ComponentTransferEffectConfigWidget::slopeChanged);
+    connect(m_intercept, &QDoubleSpinBox::valueChanged, this, &ComponentTransferEffectConfigWidget::interceptChanged);
+    connect(m_amplitude, &QDoubleSpinBox::valueChanged, this, &ComponentTransferEffectConfigWidget::amplitudeChanged);
+    connect(m_exponent, &QDoubleSpinBox::valueChanged, this, &ComponentTransferEffectConfigWidget::exponentChanged);
+    connect(m_offset, &QDoubleSpinBox::valueChanged, this, &ComponentTransferEffectConfigWidget::offsetChanged);
+    connect(group, &QButtonGroup::idClicked, this, &ComponentTransferEffectConfigWidget::channelSelected);
 }
 
 void ComponentTransferEffectConfigWidget::updateControls()

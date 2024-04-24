@@ -15,7 +15,7 @@
 #include <QFileDialog>
 
 #include <klocalizedstring.h>
-#include <KIO/Job>
+#include <KIO/StoredTransferJob>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>

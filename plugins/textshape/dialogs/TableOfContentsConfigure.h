@@ -62,5 +62,4 @@ private:
     void init();
 };
 
-Q_DECLARE_METATYPE(QTextBlock)
 #endif // TABLEOFCONTENTSCONFIGURE_H

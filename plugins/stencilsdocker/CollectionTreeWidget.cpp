@@ -94,8 +94,7 @@ void SheetDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
 
         // draw text
         QRect textrect = QRect(r.left() + i * 2, r.top(), r.width() - ((5 * i) / 2), r.height());
-        QString text = elidedText(option.fontMetrics, textrect.width(), Qt::ElideMiddle,
-                                  model->data(index, Qt::DisplayRole).toString());
+        QString text = option.fontMetrics.elidedText(model->data(index, Qt::DisplayRole).toString(), Qt::ElideMiddle, textrect.width());
         m_view->style()->drawItemText(painter, textrect, Qt::AlignCenter,
                                       option.palette, m_view->isEnabled(), text);
 
@@ -254,12 +253,12 @@ void CollectionTreeWidget::adjustStencilListSize(QTreeWidgetItem* cat_item)
     embedItem->setSizeHint(0, QSize(-1, height - 1));
 }
 
-void CollectionTreeWidget::setFilter(QRegExp regExp)
+void CollectionTreeWidget::setFilter(QRegularExpression regExp)
 {
     QMapIterator<QString, QSortFilterProxyModel*> j(m_filteredMap);
     while (j.hasNext()) {
         j.next();
-        j.value()->setFilterRegExp(regExp);
+        j.value()->setFilterRegularExpression(regExp);
         j.value()->setFilterRole(Qt::UserRole + 1);
     }
     for (int i = 0; i < topLevelItemCount(); i++) {

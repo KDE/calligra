@@ -23,7 +23,7 @@ GuidesToolOptionWidget::GuidesToolOptionWidget(QWidget *parent)
 
     widget.position->setUnit(m_unit);
 
-    connect(widget.orientation, QOverload<int>::of(&QComboBox::currentIndexChanged),
+    connect(widget.orientation, &QComboBox::currentIndexChanged,
              this, &GuidesToolOptionWidget::updateList);
     connect(widget.positionList, &QListWidget::currentRowChanged,
              this, &GuidesToolOptionWidget::updatePosition);
@@ -70,7 +70,7 @@ Qt::Orientation GuidesToolOptionWidget::orientation() const
 
 void GuidesToolOptionWidget::setOrientation(Qt::Orientation orientation)
 {
-    widget.orientation->setCurrentIndex(orientation-1);
+    widget.orientation->setCurrentIndex((int)orientation - 1);
 }
 
 void GuidesToolOptionWidget::selectGuideLine(Qt::Orientation orientation, int index)
@@ -78,7 +78,7 @@ void GuidesToolOptionWidget::selectGuideLine(Qt::Orientation orientation, int in
     widget.orientation->blockSignals(true);
     widget.positionList->blockSignals(true);
 
-    widget.orientation->setCurrentIndex(orientation-1);
+    widget.orientation->setCurrentIndex((int)orientation - 1);
     updateList(widget.orientation->currentIndex());
     widget.positionList->setCurrentRow(index);
     updatePosition(index);
@@ -90,7 +90,7 @@ void GuidesToolOptionWidget::selectGuideLine(Qt::Orientation orientation, int in
 void GuidesToolOptionWidget::updateList(int orientation)
 {
     widget.positionList->clear();
-    if (orientation == Qt::Horizontal-1) {
+    if (orientation == (int)Qt::Horizontal-1) {
         foreach(qreal p, m_hGuides)
             widget.positionList->addItem(m_unit.toUserStringValue(p));
     } else {

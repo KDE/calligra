@@ -277,14 +277,14 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     titles->setWindowTitle(i18n("Titles"));
     widgets.append(titles);
     connect(titles->ui.showTitle, &QAbstractButton::toggled, this, &ChartTool::setShowTitle);
-    connect(titles->ui.titlePositioning, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ChartTool::setTitlePositioning);
-    connect(titles->ui.titleResize, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ChartTool::setTitleResize);
+    connect(titles->ui.titlePositioning, &QComboBox::currentIndexChanged, this, &ChartTool::setTitlePositioning);
+    connect(titles->ui.titleResize, &QComboBox::currentIndexChanged, this, &ChartTool::setTitleResize);
     connect(titles->ui.showSubTitle, &QAbstractButton::toggled, this, &ChartTool::setShowSubTitle);
-    connect(titles->ui.subtitlePositioning, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ChartTool::setSubTitlePositioning);
-    connect(titles->ui.subtitleResize, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ChartTool::setSubTitleResize);
+    connect(titles->ui.subtitlePositioning, &QComboBox::currentIndexChanged, this, &ChartTool::setSubTitlePositioning);
+    connect(titles->ui.subtitleResize, &QComboBox::currentIndexChanged, this, &ChartTool::setSubTitleResize);
     connect(titles->ui.showFooter, &QAbstractButton::toggled, this, &ChartTool::setShowFooter);
-    connect(titles->ui.footerPositioning, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ChartTool::setFooterPositioning);
-    connect(titles->ui.footerResize, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ChartTool::setFooterResize);
+    connect(titles->ui.footerPositioning, &QComboBox::currentIndexChanged, this, &ChartTool::setFooterPositioning);
+    connect(titles->ui.footerResize, &QComboBox::currentIndexChanged, this, &ChartTool::setFooterResize);
 
     connect(d->shape, &KoChart::ChartShape::updateConfigWidget, titles, QOverload<>::of(&TitlesConfigWidget::updateData));
 

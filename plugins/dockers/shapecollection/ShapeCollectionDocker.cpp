@@ -112,7 +112,7 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
 
     QWidget* mainWidget = new QWidget(this);
     m_layout = new QGridLayout(mainWidget);
-    m_layout->setMargin(0);
+    m_layout->setContentsMargins({});
     m_layout->setHorizontalSpacing(0);
     m_layout->setVerticalSpacing(0);
     m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
@@ -154,7 +154,7 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     m_moreShapes->setMenu(m_moreShapesContainer);
     m_moreShapes->setPopupMode(QToolButton::InstantPopup);
     QGridLayout *containerLayout = new QGridLayout(m_moreShapesContainer);
-    containerLayout->setMargin(4);
+    containerLayout->setContentsMargins(4, 4, 4, 4);
 
     m_collectionChooser = new QListWidget (m_moreShapesContainer);
     containerLayout->addWidget(m_collectionChooser, 0, 0, 1, 2);

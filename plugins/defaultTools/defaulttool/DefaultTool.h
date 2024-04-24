@@ -17,6 +17,7 @@
 
 #include <QPolygonF>
 #include <QTime>
+#include <QCursor>
 
 class KoInteractionStrategy;
 class KoShapeMoveCommand;

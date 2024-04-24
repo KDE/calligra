@@ -11,6 +11,7 @@
 #include <QString>
 #include <QPointF>
 #include <QFont>
+#include <QList>
 
 /// Represents a range of characters with the same text properties
 class ArtisticTextRange

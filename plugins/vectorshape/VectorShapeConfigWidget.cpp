@@ -11,7 +11,7 @@
 #include "VectorDebug.h"
 // KF5
 #include <kfilewidget.h>
-#include <KIO/Job>
+#include <KIO/StoredTransferJob>
 // Qt
 #include <QVBoxLayout>
 #include <QUrl>
@@ -52,12 +52,13 @@ void VectorShapeConfigWidget::open(KoShape *shape)
     QVBoxLayout *layout = new QVBoxLayout(this);
     m_fileWidget = new KFileWidget(QUrl(/*QT5TODO:"kfiledialog:///OpenDialog"*/), this);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
-    const QStringList mimetypes = QStringList()
-        << QLatin1String("image/x-wmf")
-        << QLatin1String("image/x-emf")
-        << QLatin1String("image/x-svm")
-        << QLatin1String("image/svg+xml");
-    m_fileWidget->setMimeFilter(mimetypes);
+    const QList<KFileFilter> mimetypes {
+        KFileFilter::fromMimeType(QLatin1String("image/x-wmf")),
+        KFileFilter::fromMimeType(QLatin1String("image/x-emf")),
+        KFileFilter::fromMimeType(QLatin1String("image/x-svm")),
+        KFileFilter::fromMimeType(QLatin1String("image/svg+xml")),
+    };
+    m_fileWidget->setFilters(mimetypes);
     layout->addWidget(m_fileWidget);
     setLayout(layout);
     connect(m_fileWidget, &KFileWidget::accepted, this, &KoShapeConfigWidgetBase::accept);

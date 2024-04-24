@@ -247,39 +247,40 @@ void DateVariable::adjustTime(const QString & value)
         if (parts.size() > 1) {
             timePart = parts[1];
         }
-        QRegExp rx("([0-9]+)([DHMSY])");
+        QRegularExpression rx("([0-9]+)([DHMSY])");
+        QRegularExpressionMatch match;
         int value;
         bool valueOk;
         if (!timePart.isEmpty()) {
             int pos = 0;
-            while ((pos = rx.indexIn(timePart, pos)) != -1) {
-                value = rx.cap(1).toInt(&valueOk);
+            while ((pos = timePart.indexOf(rx, pos, &match)) != -1) {
+                value = match.captured(1).toInt(&valueOk);
                 if (valueOk) {
-                    if (rx.cap(2) == "H") {
+                    if (match.captured(2) == "H") {
                         m_secsOffset += multiplier * 3600 * value;
-                    } else if (rx.cap(2) == "M") {
+                    } else if (match.captured(2) == "M") {
                         m_secsOffset += multiplier * 60 * value;
-                    } else if (rx.cap(2) == "S") {
+                    } else if (match.captured(2) == "S") {
                         m_secsOffset += multiplier * value;
                     }
                 }
-                pos += rx.matchedLength();
+                pos += match.capturedLength();
             }
         }
         if (!datePart.isEmpty()) {
             int pos = 0;
-            while ((pos = rx.indexIn(datePart, pos)) != -1) {
-                value = rx.cap(1).toInt(&valueOk);
+            while ((pos = datePart.indexOf(rx, pos, &match)) != -1) {
+                value = match.captured(1).toInt(&valueOk);
                 if (valueOk) {
-                    if (rx.cap(2) == "Y") {
+                    if (match.captured(2) == "Y") {
                         m_yearsOffset += multiplier * value;
-                    } else if (rx.cap(2) == "M") {
+                    } else if (match.captured(2) == "M") {
                         m_monthsOffset += multiplier * value;
-                    } else if (rx.cap(2) == "D") {
+                    } else if (match.captured(2) == "D") {
                         m_daysOffset += multiplier * value;
                     }
                 }
-                pos += rx.matchedLength();
+                pos += match.capturedLength();
             }
         }
     }

@@ -12,7 +12,7 @@ StarShapeConfigWidget::StarShapeConfigWidget()
 {
     widget.setupUi(this);
 
-    connect(widget.corners, QOverload<int>::of(&QSpinBox::valueChanged), this, &KoShapeConfigWidgetBase::propertyChanged);
+    connect(widget.corners, &QSpinBox::valueChanged, this, &KoShapeConfigWidgetBase::propertyChanged);
     connect(widget.innerRadius, &QAbstractSpinBox::editingFinished, this, &KoShapeConfigWidgetBase::propertyChanged);
     connect(widget.outerRadius, &QAbstractSpinBox::editingFinished, this, &KoShapeConfigWidgetBase::propertyChanged);
     connect(widget.convex, &QCheckBox::stateChanged, this, &KoShapeConfigWidgetBase::propertyChanged);

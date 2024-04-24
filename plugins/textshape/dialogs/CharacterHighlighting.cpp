@@ -31,9 +31,9 @@ CharacterHighlighting::CharacterHighlighting(QWidget* parent)
 {
     widget.setupUi(this);
 
-    QStringList list;
-    KFontChooser::getFontList(list, KFontChooser::ScalableFonts);
-    m_fontChooser = new KFontChooser(this, KFontChooser::ShowDifferences, list, false);
+    QStringList list = KFontChooser::createFontList(KFontChooser::ScalableFonts);
+    m_fontChooser = new KFontChooser(KFontChooser::ShowDifferences, this);
+    m_fontChooser->setFontListItems(list);
     m_fontChooser->setSampleBoxVisible(false);
     widget.fontLayout->addWidget(m_fontChooser);
 
@@ -46,17 +46,17 @@ CharacterHighlighting::CharacterHighlighting(QWidget* parent)
     widget.strikethroughType->addItems(KoText::underlineTypeList()); //TODO make KoText consistent: either add strikethroughTypeList, or change from underlineTypeList to lineTypeList
     widget.strikethroughLineStyle->addItems(KoText::underlineStyleList()); //TODO idem
 
-    connect(widget.underlineStyle, QOverload<int>::of(&QComboBox::activated), this, &CharacterHighlighting::underlineTypeChanged);
-    connect(widget.underlineLineStyle, QOverload<int>::of(&QComboBox::activated), this, &CharacterHighlighting::underlineStyleChanged);
+    connect(widget.underlineStyle, &QComboBox::activated, this, &CharacterHighlighting::underlineTypeChanged);
+    connect(widget.underlineLineStyle, &QComboBox::activated, this, &CharacterHighlighting::underlineStyleChanged);
     connect(widget.underlineColor, &KColorButton::changed, this, &CharacterHighlighting::underlineColorChanged);
 
-    connect(widget.strikethroughType, QOverload<int>::of(&QComboBox::activated), this, &CharacterHighlighting::strikethroughTypeChanged);
-    connect(widget.strikethroughLineStyle, QOverload<int>::of(&QComboBox::activated), this, &CharacterHighlighting::strikethroughStyleChanged);
+    connect(widget.strikethroughType, &QComboBox::activated, this, &CharacterHighlighting::strikethroughTypeChanged);
+    connect(widget.strikethroughLineStyle, &QComboBox::activated, this, &CharacterHighlighting::strikethroughStyleChanged);
     connect(widget.strikethroughColor, &KColorButton::changed, this, &CharacterHighlighting::strikethroughColorChanged);
 
-    connect(widget.capitalizationList, QOverload<int>::of(&QComboBox::activated), this, &CharacterHighlighting::capitalisationChanged);
+    connect(widget.capitalizationList, &QComboBox::activated, this, &CharacterHighlighting::capitalisationChanged);
 
-    connect(widget.positionList, QOverload<int>::of(&QComboBox::activated), this, &CharacterHighlighting::positionChanged);
+    connect(widget.positionList, &QComboBox::activated, this, &CharacterHighlighting::positionChanged);
 
     connect(m_fontChooser, &KFontChooser::fontSelected, this, &CharacterHighlighting::fontChanged);
     connect(m_fontChooser, &KFontChooser::fontSelected, this, &CharacterHighlighting::charStyleChanged);

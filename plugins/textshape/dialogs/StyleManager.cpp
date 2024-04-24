@@ -34,7 +34,7 @@ StyleManager::StyleManager(QWidget *parent)
         , m_unappliedStyleChanges(false)
 {
     widget.setupUi(this);
-    layout()->setMargin(0);
+    layout()->setContentsMargins({});
     widget.bNew->setToolTip(i18n("Create a new style inheriting the current style"));
 
     // Force "Base" background of the style listviews to white, so the background

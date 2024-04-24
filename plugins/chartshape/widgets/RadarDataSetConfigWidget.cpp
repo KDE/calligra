@@ -115,7 +115,7 @@ RadarDataSetConfigWidget::Private::Private(RadarDataSetConfigWidget *parent)
     // connect(ui.datasetShowSymbol, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowSymbolChanged(bool)));
 
 
-    connect(ui.dataSets, QOverload<int>::of(&QComboBox::currentIndexChanged), parent, &RadarDataSetConfigWidget::ui_dataSetSelectionChanged);
+    connect(ui.dataSets, &QComboBox::currentIndexChanged, parent, &RadarDataSetConfigWidget::ui_dataSetSelectionChanged);
 
 }
 

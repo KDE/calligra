@@ -204,7 +204,7 @@ bool ColorMatrixEffect::load(const KoXmlElement &element, const KoFilterEffectLo
 
     if (typeStr == "matrix") {
         // values are separated by whitespace and/or comma
-        QStringList values = valueStr.trimmed().split(QRegExp("(\\s+|,)"), Qt::SkipEmptyParts);
+        QStringList values = valueStr.trimmed().split(QRegularExpression("(\\s+|,)"), Qt::SkipEmptyParts);
         if (values.count() == MatrixSize) {
             for (int i = 0; i < MatrixSize; ++i) {
                 m_matrix[i] = values[i].toDouble();

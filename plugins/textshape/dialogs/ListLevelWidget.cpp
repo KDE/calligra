@@ -80,10 +80,10 @@ ListLevelWidget::ListLevelWidget(QWidget* parent)
 
     widget.geometryGrid->addWidget(m_label = new LabelDrawingWidget, 4, 0);
 
-    connect(widget.format, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ListLevelWidget::numberFormatChanged);
+    connect(widget.format, &QComboBox::currentIndexChanged, this, &ListLevelWidget::numberFormatChanged);
     connect(widget.addTabStop, &QAbstractButton::toggled, widget.relativeTabStop, &QWidget::setEnabled);
-    connect(widget.labelFollowedBy, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ListLevelWidget::labelFollowedByChanged);
-    connect(widget.alignment, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ListLevelWidget::alignmentChanged);
+    connect(widget.labelFollowedBy, &QComboBox::currentIndexChanged, this, &ListLevelWidget::labelFollowedByChanged);
+    connect(widget.alignment, &QComboBox::currentIndexChanged, this, &ListLevelWidget::alignmentChanged);
 }
 
 void ListLevelWidget::paintEvent(QPaintEvent *ev)

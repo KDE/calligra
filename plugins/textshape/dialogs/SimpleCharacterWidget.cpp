@@ -66,15 +66,15 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     QComboBox *family = fontFamilyAction ? qobject_cast<QComboBox*> (fontFamilyAction->requestWidget(this)) : 0;
     if (family) { // kdelibs 4.1 didn't return anything here.
         widget.fontsFrame->addWidget(family,0,0);
-        connect(family, QOverload<int>::of(&QComboBox::activated), this, &SimpleCharacterWidget::doneWithFocus);
-        connect(family, QOverload<int>::of(&QComboBox::activated), this, &SimpleCharacterWidget::fontFamilyActivated);
+        connect(family, &QComboBox::activated, this, &SimpleCharacterWidget::doneWithFocus);
+        connect(family, &QComboBox::activated, this, &SimpleCharacterWidget::fontFamilyActivated);
     }
     QWidgetAction *fontSizeAction = qobject_cast<QWidgetAction *>(tool->action("format_fontsize"));
     QComboBox *size = fontSizeAction ? qobject_cast<QComboBox*> (fontSizeAction->requestWidget(this)) : 0;
     if (size) { // kdelibs 4.1 didn't return anything here.
         widget.fontsFrame->addWidget(size,0,1);
-        connect(size, QOverload<int>::of(&QComboBox::activated), this, &SimpleCharacterWidget::doneWithFocus);
-        connect(size, QOverload<int>::of(&QComboBox::activated), this, &SimpleCharacterWidget::fontSizeActivated);
+        connect(size, &QComboBox::activated, this, &SimpleCharacterWidget::doneWithFocus);
+        connect(size, &QComboBox::activated, this, &SimpleCharacterWidget::fontSizeActivated);
         QDoubleValidator* validator = new QDoubleValidator(2, 999, 1, size);
         size->setValidator(validator);
     }

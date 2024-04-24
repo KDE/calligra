@@ -49,11 +49,11 @@ LegendConfigWidget::LegendConfigWidget()
 
     connect(d->ui.legendTitle, &QLineEdit::textChanged,
             this, &LegendConfigWidget::legendTitleChanged);
-    connect(d->ui.legendOrientation, QOverload<int>::of(&QComboBox::activated),
+    connect(d->ui.legendOrientation, &QComboBox::activated,
             this, &LegendConfigWidget::setLegendOrientation);
-    connect(d->ui.legendPosition, QOverload<int>::of(&QComboBox::activated),
+    connect(d->ui.legendPosition, &QComboBox::activated,
             this, &LegendConfigWidget::setLegendPosition);
-    connect(d->ui.legendAlignment, QOverload<int>::of(&QComboBox::activated),
+    connect(d->ui.legendAlignment, &QComboBox::activated,
             this, &LegendConfigWidget::setLegendAlignment);
 
     createActions();

@@ -10,6 +10,7 @@
 #include "KoRdfCalendarEventTreeWidgetItem.h"
 #include <QUuid>
 #include <QTemporaryFile>
+#include <QRegularExpression>
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
@@ -35,7 +36,7 @@ KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *rdf
     m_endTimespec = KSystemTimeZones::local();
 }
 
-static KDateTime VEventDateTimeToKDateTime(const QString &s, KDateTime::Spec &tz)
+static QDateTime VEventDateTimeToKDateTime(const QString &s, QDateTime::Spec &tz)
 {
     kDebug(30015) << "top... tz.offset:" << tz.timeZone().currentOffset();
 
@@ -45,11 +46,11 @@ static KDateTime VEventDateTimeToKDateTime(const QString &s, KDateTime::Spec &tz
         kDebug(30015) << "new date string:" << s;
     }
 
-    KDateTime ret = KDateTime::fromString(s, "yyyyMMddTHHmmss");
+    QDateTime ret = QDateTime::fromString(s, "yyyyMMddTHHmmss");
     if (!ret.isValid()) {
         // "2003-01-08T13:00:00"
         kDebug(30015) << "parsing dateThh:mm format...from input:" << s;
-        ret = KDateTime::fromString(s, KDateTime::ISODate);
+        ret = QDateTime::fromString(s, QDateTime::ISODate);
     }
 
     //
@@ -75,7 +76,7 @@ static KDateTime VEventDateTimeToKDateTime(const QString &s, KDateTime::Spec &tz
 static KTimeZone toKTimeZone(Soprano::Node n)
 {
     QString dt = n.dataType().toString();
-    dt.remove(QRegExp("#tz$"));
+    dt.remove(QRegularExpression("#tz$"));
     int idx = dt.lastIndexOf('/');
     if (idx > 0) {
         idx = dt.lastIndexOf('/', idx - 1);

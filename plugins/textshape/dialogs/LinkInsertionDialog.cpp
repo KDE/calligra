@@ -203,7 +203,7 @@ void LinkInsertionDialog::sendRequest()
     m_timeoutTimer.start();
     connect(&m_timeoutTimer, &QTimer::timeout, this, &LinkInsertionDialog::fetchTitleTimeout);
     connect(m_reply, &QNetworkReply::finished, this, &LinkInsertionDialog::replyFinished);
-    connect(m_reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), this, &LinkInsertionDialog::fetchTitleError);
+    connect(m_reply, &QNetworkReply::errorOccurred, this, &LinkInsertionDialog::fetchTitleError);
     connect(m_reply, &QNetworkReply::downloadProgress, this, &LinkInsertionDialog::updateTitleDownloadProgress);
 }
 
@@ -234,11 +234,11 @@ void LinkInsertionDialog::replyFinished()
         return;
     }
     const QString res = m_reply->readAll();
-    static QRegExp titleStart("<title");//title tag can have attributes, so can't search for <title>
-    static QRegExp titleEnd("</title>");
-    int start = titleStart.indexIn(res);
+    static QRegularExpression titleStart("<title");//title tag can have attributes, so can't search for <title>
+    static QRegularExpression titleEnd("</title>");
+    int start = res.indexOf(titleStart);
     if (start == -1) { //perhaps TITLE?, rare but possible
-        start = QRegExp("<TITLE").indexIn(res);
+        start = res.indexOf(QRegularExpression("<TITLE"));
         if (start == -1) {
             displayInlineWarning("Error fetching title", dlg.weblinkStatusLabel);
             return;
@@ -249,15 +249,15 @@ void LinkInsertionDialog::replyFinished()
         start++;
     }
     start++; //eat the '>'
-    int end = titleEnd.indexIn(res);
+    int end = res.indexOf(titleEnd);
     if (end == -1) {
-        end = QRegExp("</TITLE>").indexIn(res);
+        end = res.indexOf(QRegularExpression("</TITLE>"));
         if (end == -1) {
             displayInlineWarning("Error fetching title", dlg.weblinkStatusLabel);
             return;
         }
     }
-    dlg.hyperlinkText->setText(QStringRef(&res, start, end - start).toString());
+    dlg.hyperlinkText->setText(QStringView(res).mid(start, end - start).toString());
     dlg.weblinkStatusLabel->setText("");
 }
 

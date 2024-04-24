@@ -16,7 +16,7 @@
 #include <QImageReader>
 
 #include <klocalizedstring.h>
-#include <KIO/Job>
+#include <KIO/StoredTransferJob>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
@@ -101,11 +101,11 @@ QWidget *PictureTool::createOptionWidget()
     updateControlElements();
 
     connect(m_pictureToolUI->bnImageFile, &QAbstractButton::clicked, this, &PictureTool::changeUrlPressed);
-    connect(m_pictureToolUI->cmbColorMode, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PictureTool::colorModeChanged);
-    connect(m_pictureToolUI->leftDoubleSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &PictureTool::cropEditFieldsChanged);
-    connect(m_pictureToolUI->rightDoubleSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &PictureTool::cropEditFieldsChanged);
-    connect(m_pictureToolUI->topDoubleSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &PictureTool::cropEditFieldsChanged);
-    connect(m_pictureToolUI->bottomDoubleSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &PictureTool::cropEditFieldsChanged);
+    connect(m_pictureToolUI->cmbColorMode, &QComboBox::currentIndexChanged, this, &PictureTool::colorModeChanged);
+    connect(m_pictureToolUI->leftDoubleSpinBox, &QDoubleSpinBox::valueChanged, this, &PictureTool::cropEditFieldsChanged);
+    connect(m_pictureToolUI->rightDoubleSpinBox, &QDoubleSpinBox::valueChanged, this, &PictureTool::cropEditFieldsChanged);
+    connect(m_pictureToolUI->topDoubleSpinBox, &QDoubleSpinBox::valueChanged, this, &PictureTool::cropEditFieldsChanged);
+    connect(m_pictureToolUI->bottomDoubleSpinBox, &QDoubleSpinBox::valueChanged, this, &PictureTool::cropEditFieldsChanged);
     connect(m_pictureToolUI->cbAspect, &QAbstractButton::toggled, this, &PictureTool::aspectCheckBoxChanged);
     connect(m_pictureToolUI->bnFill, &QAbstractButton::pressed, this, &PictureTool::fillButtonPressed);
     connect(m_pictureToolUI->cbContour, &QAbstractButton::toggled, this, &PictureTool::contourCheckBoxChanged);

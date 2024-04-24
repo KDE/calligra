@@ -64,10 +64,10 @@ void PieConfigWidget::init()
     setObjectName("PieConfigWidget");
     m_ui.setupUi(this);
 
-    connect(m_ui.dataPoints, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PieConfigWidget::dataPointSelectionChanged);
+    connect(m_ui.dataPoints, &QComboBox::currentIndexChanged, this, &PieConfigWidget::dataPointSelectionChanged);
     connect(m_ui.dataPointBrush, &KColorButton::changed, this, QOverload<const QColor &>::of(&PieConfigWidget::brushChanged));
     connect(m_ui.dataPointPen, &KColorButton::changed, this, QOverload<const QColor &>::of(&PieConfigWidget::penChanged));
-    connect(m_ui.explodeFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, QOverload<int>::of(&PieConfigWidget::explodeFactorChanged));
+    connect(m_ui.explodeFactor, &QSpinBox::valueChanged, this, QOverload<int>::of(&PieConfigWidget::explodeFactorChanged));
     connect(m_ui.dataPointShowCategory, &QCheckBox::toggled, this, QOverload<bool>::of(&PieConfigWidget::showCategoryChanged));
     connect(m_ui.dataPointShowNumber, &QCheckBox::toggled, this, QOverload<bool>::of(&PieConfigWidget::showNumberChanged));
     connect(m_ui.dataPointShowPercent, &QCheckBox::toggled, this, QOverload<bool>::of(&PieConfigWidget::showPercentChanged));

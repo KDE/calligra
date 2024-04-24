@@ -13,6 +13,7 @@
 #include <QPixmap>
 #include <QImage>
 #include <QRunnable>
+#include <QObject>
 
 #include <KoTosContainer.h>
 #include <KoFrameShape.h>

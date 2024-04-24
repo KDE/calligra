@@ -49,7 +49,7 @@ protected Q_SLOTS:
     /**
      * This function is called whenever an action from the selections is triggered.
      */
-    void actionTriggered(QAction* action) override;
+    void slotActionTriggered(QAction* action) override;
 
 private:
     class Private;

@@ -50,13 +50,13 @@ NOT TODO:
 #include <QFileDialog>
 #include <QPushButton>
 #include <QTabWidget>
+#include <QDesktopServices>
 
 #include <KSharedConfig>
 #include <kprocess.h>
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
 #include <khistorycombobox.h>
-#include <krun.h>
 #include <kcombobox.h>
 #include <kstandardguiitem.h>
 
@@ -92,7 +92,9 @@ Thesaurus::Thesaurus()
     editLabel.setBuddy(m_edit);
 
     m_search = new QPushButton(i18n("S&earch"), page);
-    connect(m_search, &QPushButton::clicked, this, QOverload<>::of(&Thesaurus::slotFindTerm));
+    connect(m_search, &QPushButton::clicked, this, [this](bool) {
+        slotFindTerm();
+    });
     row1->addWidget(&editLabel, 0);
     row1->addWidget(m_edit, 1);
     row1->addWidget(m_search, 0);
@@ -174,7 +176,7 @@ Thesaurus::Thesaurus()
     m_wnComboBox = new KComboBox(wnWidget);
     m_wnComboBox->setEditable(false);
     wnLayout->addWidget(m_wnComboBox);
-    connect(m_wnComboBox, QOverload<int>::of(&QComboBox::activated), this, QOverload<>::of(&Thesaurus::slotFindTerm));
+    connect(m_wnComboBox, &QComboBox::activated, this, QOverload<>::of(&Thesaurus::slotFindTerm));
 
     m_resultTextBrowser = new QTextBrowser(wnWidget);
     m_resultTextBrowser->setReadOnly(true);
@@ -183,7 +185,9 @@ Thesaurus::Thesaurus()
 
     // Connect for the history box
     m_edit->setTrapReturnKey(true);        // Do not use Return as default key...
-    connect(m_edit, QOverload<>::of(&KHistoryComboBox::returnPressed), this, QOverload<>::of(&Thesaurus::slotFindTerm));
+    connect(m_edit, &KHistoryComboBox::returnPressed, this, [this]() {
+        slotFindTerm();
+    });
     connect(m_edit, QOverload<int>::of(&KHistoryComboBox::activated), this, &Thesaurus::slotGotoHistory);
 
     QHBoxLayout *row2 = new QHBoxLayout( /*m_top_layout*/ );
@@ -386,7 +390,7 @@ void Thesaurus::slotFindTerm(const QString &term, bool addToHistory)
 {
     // slotSetReplaceTerm(term);
     if (term.startsWith(QLatin1String("http://"))) {
-        (void) new KRun(QUrl::fromUserInput(term),0L);
+        QDesktopServices::openUrl(QUrl::fromUserInput(term));
     }
     else {
         if (addToHistory && m_edit->itemText(0) != term) {
@@ -641,12 +645,11 @@ void Thesaurus::findTermWordnet(const QString &term)
         // TODO in Qt > 3.01: try without the following line (it's necessary to ensure the
         // first column is really always quite small):
         result += "<tr><td width=\"10%\"></td><td width=\"90%\"></td></tr>\n";
-        uint ct = 0;
         for (QStringList::ConstIterator it = lines.begin(); it != lines.end(); ++it) {
             QString l = (*it);
             // Remove some lines:
-            QRegExp re("^\\d+( of \\d+)? senses? of \\w+");
-            if (re.indexIn(l) != -1) {
+            QRegularExpression re("^\\d+( of \\d+)? senses? of \\w+");
+            if (l.indexOf(re) != -1) {
                 continue;
             }
             // Escape XML:
@@ -668,7 +671,6 @@ void Thesaurus::findTermWordnet(const QString &term)
                 result += "<td colspan=\"2\">" + l + "</td>";
             }
             result += "</tr>\n";
-            ct++;
         }
         result += "\n</table></qt>\n";
         m_resultTextBrowser->setHtml(result);
@@ -687,17 +689,19 @@ QString Thesaurus::formatLine(const QString &line) const
     if (l == "--------------")
         return QString("<hr>");
 
-    QRegExp re;
+    QRegularExpression re;
+    QRegularExpressionMatch match;
 
     re.setPattern("^(\\d+\\.)(.*)$");
-    if (re.indexIn(l) != -1) {
-        l = "<b>" +re.cap(1)+ "</b>" +re.cap(2);
+
+    if (l.indexOf(re, 0, &match) != -1) {
+        l = "<b>" + match.captured(1)+ "</b>" + match.captured(2);
         return l;
     }
 
     re.setPattern("^.* of (noun|verb|adj|adv) .*");
-    if (re.indexIn(l) != -1) {
-        l = "<font size=\"5\">" +re.cap()+ "</font>\n\n";
+    if (l.indexOf(re, 0, &match) != -1) {
+        l = "<font size=\"5\">" + match.captured() + "</font>\n\n";
         return l;
     }
 
@@ -707,37 +711,37 @@ QString Thesaurus::formatLine(const QString &line) const
     }
 
     re.setPattern("^(Sense \\d+)");
-    if (re.indexIn(l) != -1) {
-        l = "<b>" +re.cap()+ "</b>\n";
+    if (l.indexOf(re, 0, &match) != -1) {
+        l = "<b>" + match.captured()+ "</b>\n";
         return l;
     }
 
     re.setPattern("(.*)(Also See-&gt;)(.*)");
     // Example: first sense of verb "keep"
-    if (re.indexIn(l) != -1) {
-        l = re.cap(1);
-        l += re.cap(2);
-        const QStringList links = re.cap(3).split(QChar(';'), Qt::SkipEmptyParts);
+    if (l.indexOf(re, 0, &match) != -1) {
+        l = match.captured(1);
+        l += match.captured(2);
+        const QStringList links = match.captured(3).split(QChar(';'), Qt::SkipEmptyParts);
         for (QStringList::ConstIterator it = links.begin(); it != links.end(); ++it) {
             QString link = (*it);
             if (it != links.begin()) {
                 l += ", ";
             }
             link = link.trimmed();
-            link.remove(QRegExp("#\\d+"));
+            link.remove(QRegularExpression("#\\d+"));
             l += "<a href=\"" + link + "\">" + link + "</a>";
         }
         l.prepend (' ');        // indent in table
     }
 
     re.setPattern("(.*)(=&gt;|HAS \\w+:|PART OF:)(.*) --");
-    re.setMinimal(true);    // non-greedy
-    if (re.indexIn(l) != -1) {
+    re.setPatternOptions(QRegularExpression::InvertedGreedinessOption);    // non-greedy
+    if (l.indexOf(re, 0, &match) != -1) {
         int dash_pos = l.indexOf("--");
         QString line_end = l.mid(dash_pos+2, l.length()-dash_pos);
-        l = re.cap(1);
-        l += re.cap(2) + ' ';
-        const QStringList links = re.cap(3).split(QChar(','), Qt::SkipEmptyParts);
+        l = match.captured(1);
+        l += match.captured(2) + ' ';
+        const QStringList links = match.captured(3).split(QChar(','), Qt::SkipEmptyParts);
         for (QStringList::ConstIterator it = links.begin(); it != links.end(); ++it) {
             QString link = (*it);
             if (it != links.begin()) {
@@ -750,7 +754,6 @@ QString Thesaurus::formatLine(const QString &line) const
         l.prepend(' ');        // indent in table
         return l;
     }
-    re.setMinimal(false);    // greedy again
 
     return l;
 }

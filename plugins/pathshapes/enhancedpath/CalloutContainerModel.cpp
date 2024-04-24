@@ -48,7 +48,7 @@ void decompose(const QTransform &m, qreal &scaleX, qreal &scaleY, qreal &rotatio
         scaleX = 0.0;
         scaleY = 0.0;
     }
-    debugCallout<<"decomposed:"<<m<<endl<<'\t'<<scaleX<<scaleY<<qRadiansToDegrees(rotation)<<qRadiansToDegrees(skewX)<<qRadiansToDegrees(skewY)<<transX<<transY;
+    debugCallout<<"decomposed:"<<m<<Qt::endl<<'\t'<<scaleX<<scaleY<<qRadiansToDegrees(rotation)<<qRadiansToDegrees(skewX)<<qRadiansToDegrees(skewY)<<transX<<transY;
 }
 
 QTransform normalize(const QTransform &m)

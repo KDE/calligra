@@ -88,7 +88,7 @@ FullScreenPlayer::FullScreenPlayer(const QUrl &url)
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(m_videoWidget);
     layout->addLayout(playbackControls);
-    layout->setMargin(0);
+    layout->setContentsMargins({});
     setLayout(layout);
     show();
     setWindowState(Qt::WindowFullScreen);

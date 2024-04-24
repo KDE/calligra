@@ -134,7 +134,7 @@ QPainterPath ArtisticTextToolSelection::outline()
             if (hasYOffset || atRangeEnd || atSelectionEnd) {
                 if (hasYOffset || atRangeEnd) {
                     const QChar c = currentRange.text().at(charPos.second-1);
-                    const qreal w = metrics.width(c);
+                    const qreal w = metrics.boundingRect(c).width();
                     polygon.prepend(charTransform.map(QPointF(w, -metrics.ascent())));
                     polygon.append(charTransform.map(QPointF(w, metrics.descent())));
                 } else {

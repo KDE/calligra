@@ -46,12 +46,12 @@ KarbonPatternOptionsWidget::KarbonPatternOptionsWidget(QWidget * parent)
     connect(d->widget.patternRepeat, QOverload<int>::of(&KComboBox::activated), this, &KarbonPatternOptionsWidget::patternChanged);
     connect(d->widget.patternRepeat, QOverload<int>::of(&KComboBox::activated), this, &KarbonPatternOptionsWidget::updateControls);
     connect(d->widget.referencePoint, QOverload<int>::of(&KComboBox::activated), this, &KarbonPatternOptionsWidget::patternChanged);
-    connect(d->widget.refPointOffsetX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KarbonPatternOptionsWidget::patternChanged);
-    connect(d->widget.refPointOffsetY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KarbonPatternOptionsWidget::patternChanged);
-    connect(d->widget.tileOffsetX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KarbonPatternOptionsWidget::patternChanged);
-    connect(d->widget.tileOffsetY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KarbonPatternOptionsWidget::patternChanged);
-    connect(d->widget.patternWidth, QOverload<int>::of(&QSpinBox::valueChanged), this, &KarbonPatternOptionsWidget::patternChanged);
-    connect(d->widget.patternHeight, QOverload<int>::of(&QSpinBox::valueChanged), this, &KarbonPatternOptionsWidget::patternChanged);
+    connect(d->widget.refPointOffsetX, &QDoubleSpinBox::valueChanged, this, &KarbonPatternOptionsWidget::patternChanged);
+    connect(d->widget.refPointOffsetY, &QDoubleSpinBox::valueChanged, this, &KarbonPatternOptionsWidget::patternChanged);
+    connect(d->widget.tileOffsetX, &QDoubleSpinBox::valueChanged, this, &KarbonPatternOptionsWidget::patternChanged);
+    connect(d->widget.tileOffsetY, &QDoubleSpinBox::valueChanged, this, &KarbonPatternOptionsWidget::patternChanged);
+    connect(d->widget.patternWidth, &QSpinBox::valueChanged, this, &KarbonPatternOptionsWidget::patternChanged);
+    connect(d->widget.patternHeight, &QSpinBox::valueChanged, this, &KarbonPatternOptionsWidget::patternChanged);
 }
 
 KarbonPatternOptionsWidget::~KarbonPatternOptionsWidget()

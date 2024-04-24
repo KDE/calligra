@@ -10,6 +10,7 @@
 
 #include "TextTool.h"
 #include <signal.h>
+#include <QWidget>
 
 class KoCanvasBase;
 class TableOfContentsConfigure;
@@ -100,17 +101,18 @@ class LabeledWidget : public QWidget
 public:
     enum LabelPosition {INLINE, ABOVE};
     LabeledWidget(QAction *action, const QString &label, LabelPosition pos, bool warningLabelRequired);
+    virtual ~LabeledWidget();
     void setWarningText(int pos, const QString &warning);
     void clearLineEdit();
 Q_SIGNALS:
-    void triggered(const QString &label);
+    void textTriggered(const QString &label);
     void lineEditChanged(const QString &);
 
 private Q_SLOTS:
     void returnPressed();
 
 protected:
-    void enterEvent(QEvent *event) override;
+    void enterEvent(QEnterEvent *event) override;
 
 private :
     QLineEdit *m_lineEdit;

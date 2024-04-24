@@ -35,10 +35,10 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
     connect(widget.right, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::rightMarginValueChanged);
     connect(widget.after, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::bottomMarginValueChanged);
     connect(widget.before, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::topMarginValueChanged);
-    connect(widget.lineSpacing, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ParagraphIndentSpacing::lineSpacingChanged);
+    connect(widget.lineSpacing, &QComboBox::currentIndexChanged, this, &ParagraphIndentSpacing::lineSpacingChanged);
     connect(widget.useFont, &QAbstractButton::toggled, this, &ParagraphIndentSpacing::useFontMetrices);
     connect(widget.autoTextIndent, &QCheckBox::stateChanged, this, &ParagraphIndentSpacing::autoTextIndentChanged);
-    connect(widget.proportional, QOverload<int>::of(&QSpinBox::valueChanged), this, &ParagraphIndentSpacing::spacingPercentChanged);
+    connect(widget.proportional, &QSpinBox::valueChanged, this, &ParagraphIndentSpacing::spacingPercentChanged);
     connect(widget.custom, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::spacingValueChanged);
     lineSpacingChanged(0);
 }

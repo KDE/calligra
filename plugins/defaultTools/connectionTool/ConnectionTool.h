@@ -16,6 +16,7 @@
 #include <KoSnapGuide.h>
 #include <KoConnectionShape.h>
 #include <QCursor>
+#include <QActionGroup>
 
 class QAction;
 class QActionGroup;
