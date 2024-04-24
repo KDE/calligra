@@ -20,10 +20,10 @@
 void processEvents()
 {
     int i = 100;
-    while (QCoreApplication::eventDispatcher()->hasPendingEvents() && i > 0) {
-        --i;
-        QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-    }
+    //while (QCoreApplication::eventDispatcher()->hasPendingEvents() && i > 0) {
+    //    --i;
+    //    QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+    //}
 }
 
 CSThumbProviderKarbon::CSThumbProviderKarbon(KarbonDocument *doc)

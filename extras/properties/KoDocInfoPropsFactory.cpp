@@ -10,7 +10,7 @@
 
 #include <kpluginfactory.h>
 
-static QObject* createDocInfoPropsPage(QWidget* w, QObject* parent, const QVariantList& args)
+static QObject* createDocInfoPropsPage(QWidget* w, QObject* parent, const KPluginMetaData &data, const QVariantList& args)
 {
     Q_UNUSED(w);
     KPropertiesDialog* props = qobject_cast<KPropertiesDialog *>(parent);
@@ -18,6 +18,6 @@ static QObject* createDocInfoPropsPage(QWidget* w, QObject* parent, const QVaria
     return new KoDocumentInfoPropsPage(props, args);
 }
 
-K_PLUGIN_FACTORY_WITH_JSON(PropsDlgFactory, "calligradocinfopropspage.json", registerPlugin<KoDocumentInfoPropsPage>(QString(), createDocInfoPropsPage);)
+K_PLUGIN_FACTORY_WITH_JSON(PropsDlgFactory, "calligradocinfopropspage.json", registerPlugin<KoDocumentInfoPropsPage>(createDocInfoPropsPage);)
 
 #include <KoDocInfoPropsFactory.moc>

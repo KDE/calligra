@@ -21,17 +21,10 @@
 static const int minThumbnailSize = 400;
 static const int timeoutTime = 5000; // in msec
 
-extern "C"
-{
-    Q_DECL_EXPORT ThumbCreator *new_creator()
-    {
-        return new CalligraCreator;
-    }
-}
-
-CalligraCreator::CalligraCreator()
-    : m_part(0)
-    , m_doc(0)
+CalligraCreator::CalligraCreator(QObject *parent, const QVariantList &args)
+    : KIO::ThumbnailCreator(parent, args)
+    , m_part(nullptr)
+    , m_doc(nullptr)
 {
 }
 
@@ -40,14 +33,14 @@ CalligraCreator::~CalligraCreator()
     delete m_doc;
 }
 
-bool CalligraCreator::create(const QString &path, int width, int height, QImage &image)
+KIO::ThumbnailResult CalligraCreator::create(const KIO::ThumbnailRequest &request)
 {
+    QImage image;
     // try to use any embedded thumbnail
-    KoStore *store = KoStore::createStore(path, KoStore::Read);
+    auto store = std::unique_ptr<KoStore>(KoStore::createStore(request.url().toLocalFile(), KoStore::Read));
     if (store && store->isEncrypted()) {
         // Trying to open an encrypted file will trigger a password dialog
-        delete store;
-        return false;
+        return KIO::ThumbnailResult::fail();
     }
     if (store &&
          // ODF thumbnail?
@@ -61,27 +54,25 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
 
         QImage thumbnail;
         if (thumbnail.loadFromData(thumbnailData) &&
-            thumbnail.width() >= width && thumbnail.height() >= height) {
+            thumbnail.width() >= request.targetSize().width() && thumbnail.height() >= request.targetSize().height()) {
             // put a white background behind the thumbnail
             // as lots of old(?) OOo files have thumbnails with transparent background
             image = QImage(thumbnail.size(), QImage::Format_RGB32);
             image.fill(QColor(Qt::white).rgb());
             QPainter p(&image);
             p.drawImage(QPoint(0, 0), thumbnail);
-            delete store;
-            return true;
+            return KIO::ThumbnailResult::pass(image);
         }
     }
-    delete store;
 
     // load document and render the thumbnail ourselves
-    const QString mimetype = QMimeDatabase().mimeTypeForFile(path).name();
+    const QString mimetype = request.mimeType();
     QString error;
     KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
     m_part = documentEntry.createKoPart(&error);
 
 
-    if (!m_part) return false;
+    if (!m_part) return KIO::ThumbnailResult::fail();
 
     m_doc = m_part->document();
 
@@ -93,11 +84,9 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
     // load the document content
     m_loadingCompleted = false;
 
-    const QUrl url = QUrl::fromLocalFile(path);
-    if (!m_doc->openUrl(url)) {
+    if (!m_doc->openUrl(request.url())) {
         delete m_doc;
-        m_doc = 0;
-        return false;
+        return KIO::ThumbnailResult::fail();
     }
 
     if (! m_loadingCompleted) {
@@ -111,8 +100,8 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
     if (m_loadingCompleted) {
         // render the page on a bigger pixmap and use smoothScale,
         // looks better than directly scaling with the QPainter (malte)
-        const bool usePassedSize = (width > minThumbnailSize && height > minThumbnailSize);
-        const QSize size = usePassedSize ? QSize(width, height) : QSize(minThumbnailSize, minThumbnailSize);
+        const bool usePassedSize = (request.targetSize().width() > minThumbnailSize && request.targetSize().height() > minThumbnailSize);
+        const QSize size = usePassedSize ? QSize(request.targetSize().width(), request.targetSize().height()) : QSize(minThumbnailSize, minThumbnailSize);
         image = m_doc->generatePreview(size).toImage();
     }
 
@@ -120,7 +109,10 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
     delete m_doc;
     m_doc = 0;
 
-    return m_loadingCompleted;
+    if (m_loadingCompleted) {
+        KIO::ThumbnailResult::pass(image);
+    }
+    return KIO::ThumbnailResult::fail();
 }
 
 void CalligraCreator::onLoadingCompleted()

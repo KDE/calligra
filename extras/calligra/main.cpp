@@ -10,9 +10,10 @@
 #include <QUrl>
 #include <QDebug>
 #include <QMimeDatabase>
+#include <QRegularExpression>
 
 #include <KAboutData>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kmimetypetrader.h>
 #include <KServiceTypeTrader>
 #include <krun.h>
@@ -51,7 +52,7 @@ static int handleUrls(const QStringList& files)
 {
     KMimeTypeTrader* mimeTrader = KMimeTypeTrader::self();
     QList<QUrl> notHandledUrls;
-    const QRegExp withProtocolChecker( QStringLiteral("^[a-zA-Z]+:") );
+    const QRegularExpression withProtocolChecker( QStringLiteral("^[a-zA-Z]+:") );
     foreach(const QString& file, files) {
         // convert to an url
         const bool startsWithProtocol = (withProtocolChecker.indexIn(file) == 0);

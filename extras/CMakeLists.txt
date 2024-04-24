@@ -1,5 +1,5 @@
 if(SHOULD_BUILD_APP_CALLIGRA)
-  add_subdirectory( calligra )
+    #add_subdirectory( calligra )
 endif()
 
 if (SHOULD_BUILD_APP_CONVERTER)

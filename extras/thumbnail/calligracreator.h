@@ -9,7 +9,7 @@
 #define _CALLIGRACREATOR_H_
 
 // KF5
-#include <KIO/ThumbCreator>
+#include <KIO/ThumbnailCreator>
 // Qt
 #include <QEventLoop>
 
@@ -17,13 +17,13 @@ class KoPart;
 class KoDocument;
 
 
-class CalligraCreator : public QObject, public ThumbCreator
+class CalligraCreator : public KIO::ThumbnailCreator
 {
     Q_OBJECT
 public:
-    CalligraCreator();
+    CalligraCreator(QObject *parent, const QVariantList &args);
     ~CalligraCreator() override;
-    bool create(const QString &path, int width, int height, QImage &image) override;
+    KIO::ThumbnailResult create(const KIO::ThumbnailRequest &request) override;
 
 private Q_SLOTS:
     void onLoadingCompleted();

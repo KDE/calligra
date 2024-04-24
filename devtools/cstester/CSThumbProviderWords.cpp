@@ -43,13 +43,6 @@ QVector<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
     KWCanvasItem *canvasItem = static_cast<KWCanvasItem*>(m_doc->documentPart()->canvasItem(m_doc));
     KoZoomHandler zoomHandler;
 
-    while (!m_doc->layoutFinishedAtleastOnce()) {
-        QCoreApplication::processEvents();
-
-        if (!QCoreApplication::eventDispatcher()->hasPendingEvents())
-            break;
-    }
-
     KWPageManager *pageManager = m_doc->pageManager();
     KoShapeManager *shapeManager = canvasItem->shapeManager();
 
