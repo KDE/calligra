@@ -13,13 +13,12 @@ Kirigami.ScrollablePage {
     id: base;
     objectName: "WelcomePageRecent";
     title: i18n("Recently Opened Document")
-    actions {
-        main: Kirigami.Action {
-            text: i18n("Open Other...");
-            icon.name: "document-open";
-            onTriggered: mainWindow.openFile();
-        }
+    actions:Kirigami.Action {
+        text: i18n("Open Other...");
+        icon.name: "document-open";
+        onTriggered: mainWindow.openFile();
     }
+
     GridView {
         id: docList;
         cellWidth: Math.floor(width/Math.floor(width/(Kirigami.Units.gridUnit * 8 + Kirigami.Units.largeSpacing * 2)))

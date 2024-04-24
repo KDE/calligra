@@ -4,16 +4,19 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-import QtQuick 2.11
-import QtQuick.Controls 2.5 as QtControls
-import org.kde.kirigami 2.7 as Kirigami
-import org.calligra 1.0
+import QtQuick
+import QtQuick.Controls as QtControls
+import org.kde.kirigami as Kirigami
+import org.kde.kirigamiaddons.formcard as FormCard
+import org.calligra
 import "../../components"
 import "git"
 
-Kirigami.OverlaySheet {
+FormCard.FormCardDialog {
     id: component;
+
     property int accountIndex: -1;
+
     onAccountIndexChanged: {
         accountDetails = cloudAccounts.accountDetails(accountIndex);
     }
@@ -23,67 +26,58 @@ Kirigami.OverlaySheet {
     }
     property QtObject accountDetails;
 
-    header: Kirigami.Heading {
-        text: "Edit Git Account"
-        width: component.width / 2
+    title: i18nc("@title:dialog", "Edit Git Account")
+
+    standardButtons: QtControls.Dialog.Save
+
+    onAccepted: {
+        cloudAccounts.renameAccount(component.accountIndex, nameField.text);
+        dlgLoader.item.close();
     }
 
-    Kirigami.FormLayout {
-        QtControls.TextField {
-            id: nameField;
-            Kirigami.FormData.label: "Account Name";
-        }
+    FormCard.FormTextFieldDelegate {
+        id: nameField;
+        text: i18nc("@label:textbox", "Account Name")
+    }
 
-        QtControls.Button {
-            onClicked: {
-                dlgLoader.item.close();
-                userCredentials.open();
-                if(accountDetails.readProperty("userForRemote") !== undefined) {
-                    credentialsGetter.userForRemote = accountDetails.readProperty("userForRemote");
-                }
-                if(accountDetails.readProperty("privateKeyFile") !== undefined) {
-                    credentialsGetter.privateKeyFile = accountDetails.readProperty("privateKeyFile");
-                }
-                if(accountDetails.readProperty("publicKeyFile") !== undefined) {
-                    credentialsGetter.publicKeyFile = accountDetails.readProperty("publicKeyFile");
-                }
-                if(accountDetails.readProperty("needsPrivateKeyPassphrase") !== undefined) {
-                    credentialsGetter.needsPrivateKeyPassphrase = accountDetails.readProperty("needsPrivateKeyPassphrase");
-                }
+    FormCard.FormDelegateSeparator {}
+
+    FormCard.FormButtonDelegate {
+        onClicked: {
+            dlgLoader.item.close();
+            userCredentials.open();
+            if(accountDetails.readProperty("userForRemote") !== undefined) {
+                credentialsGetter.userForRemote = accountDetails.readProperty("userForRemote");
             }
-            text: "Edit User Credentials";
-            Kirigami.FormData.label: "User Credentials"
-        }
-
-        Kirigami.Separator {
-        }
-
-        QtControls.Button {
-            text: "Save";
-            onClicked: {
-                cloudAccounts.renameAccount(component.accountIndex, nameField.text);
-                dlgLoader.item.close();
+            if(accountDetails.readProperty("privateKeyFile") !== undefined) {
+                credentialsGetter.privateKeyFile = accountDetails.readProperty("privateKeyFile");
+            }
+            if(accountDetails.readProperty("publicKeyFile") !== undefined) {
+                credentialsGetter.publicKeyFile = accountDetails.readProperty("publicKeyFile");
+            }
+            if(accountDetails.readProperty("needsPrivateKeyPassphrase") !== undefined) {
+                credentialsGetter.needsPrivateKeyPassphrase = accountDetails.readProperty("needsPrivateKeyPassphrase");
             }
         }
+        text: i18nc("@action:button", "Edit User Credentials")
+    }
 
-        Kirigami.OverlaySheet {
-            id: userCredentials;
-            header: Kirigami.Heading { text: "User Credentials" }
-            GetUserCredentials {
-                id: credentialsGetter
-                onAccepted: {
-                    component.userForRemote = userForRemote;
-                    component.privateKeyFile = privateKeyFile;
-                    component.publicKeyFile = publicKeyFile;
-                    component.needsPrivateKeyPassphrase = needsPrivateKeyPassphrase;
-                    userCredentials.close();
-                }
+
+    Kirigami.Dialog {
+        id: userCredentials;
+        title: "User Credentials"
+        GetUserCredentials {
+            id: credentialsGetter
+            onAccepted: {
+                component.userForRemote = userForRemote;
+                component.privateKeyFile = privateKeyFile;
+                component.publicKeyFile = publicKeyFile;
+                component.needsPrivateKeyPassphrase = needsPrivateKeyPassphrase;
+                userCredentials.close();
             }
-            onSheetOpenChanged: {
-                if (sheetOpen === false) {
-                    dlgLoader.item.open();
-                }
-            }
+        }
+        onClosed: {
+            dlgLoader.item.open();
         }
     }
 }

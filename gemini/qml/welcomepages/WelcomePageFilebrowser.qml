@@ -15,33 +15,32 @@ Kirigami.ScrollablePage {
     objectName: "WelcomePageFilebrowser";
     title: i18n("Open From Your Library");
     property string categoryUIName: (docList.model === textDocumentsModel) ? "text documents" : "presentations"
-    actions {
-        main: Kirigami.Action {
+    actions: [
+        Kirigami.Action {
             text: i18n("Open Other...");
             icon.name: "document-open";
             onTriggered: mainWindow.openFile();
-        }
-        contextualActions: [
-            Kirigami.Action {
-                text: i18n("Text Documents");
-                onTriggered: {
-                    if (!checked) {
-                        docList.model = textDocumentsModel;
-                    }
+        },
+        Kirigami.Action {
+            text: i18n("Text Documents");
+            onTriggered: {
+                if (!checked) {
+                    docList.model = textDocumentsModel;
                 }
-                checked: docList.model === textDocumentsModel;
-            },
-            Kirigami.Action {
-                text: i18n("Presentations");
-                onTriggered: {
-                    if(!checked) {
-                        docList.model = presentationDocumentsModel;
-                    }
-                }
-                checked: docList.model === presentationDocumentsModel;
             }
-        ]
-    }
+            checked: docList.model === textDocumentsModel;
+        },
+        Kirigami.Action {
+            text: i18n("Presentations");
+            onTriggered: {
+                if(!checked) {
+                    docList.model = presentationDocumentsModel;
+                }
+            }
+            checked: docList.model === presentationDocumentsModel;
+        }
+    ]
+
     GridView {
         id: docList;
         cellWidth: Math.floor(width/Math.floor(width/(Kirigami.Units.gridUnit * 8 + Kirigami.Units.largeSpacing * 2)))

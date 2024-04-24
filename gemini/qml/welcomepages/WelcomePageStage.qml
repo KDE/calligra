@@ -43,22 +43,20 @@ Kirigami.ScrollablePage {
 //         ListElement { text: "Galactic Voyage"; thumbnail: ""; color: "#E8EFF1"; templateFile: ""; variants: [] }
 
     property bool showClassicModel: true
-    actions {
-        contextualActions: [
-            Kirigami.Action {
-                text: i18n("Classic");
-                onToggled: base.showClassicModel = checked
-                checked: showClassicModel
-                checkable: true
-            },
-            Kirigami.Action {
-                text: i18n("Wide");
-                onToggled: base.showClassicModel = !checked
-                checked: !showClassicModel
-                checkable: true
-            }
-        ]
-    }
+    actions: [
+        Kirigami.Action {
+            text: i18n("Classic");
+            onToggled: base.showClassicModel = checked
+            checked: showClassicModel
+            checkable: true
+        },
+        Kirigami.Action {
+            text: i18n("Wide");
+            onToggled: base.showClassicModel = !checked
+            checked: !showClassicModel
+            checkable: true
+        }
+    ]
 
     GridView {
         id: docList;

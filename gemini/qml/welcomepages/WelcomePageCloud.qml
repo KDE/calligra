@@ -33,11 +33,8 @@ Kirigami.ScrollablePage {
     CloudAccountsModel {
         id: cloudAccounts;
     }
-    actions {
-        main: Kirigami.Action {
-        }
-    }
-        Connections {
+
+    Connections {
         target: controllerMIT;
         onNeedAuthenticateChanged: {
             if(controllerMIT.needAuthenticate) {

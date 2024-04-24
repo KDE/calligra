@@ -4,18 +4,16 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-import QtQuick 2.11
-import QtQuick.Controls 2.2 as QtControls
-import org.kde.kirigami 2.7 as Kirigami
-import org.calligra 1.0
+import QtQuick
+import QtQuick.Controls as QtControls
+import org.kde.kirigami as Kirigami
+import org.calligra
 import "dropbox" as Dropbox
 
-Kirigami.OverlaySheet {
+Kirigami.Dialog {
     id: component
     property string serviceName: "";
-    header: Kirigami.Heading {
-        text: "Add DropBox Account"
-    }
-    Dropbox.SetupPage {
-    }
+    title: i18nc("@title:dialog", "Add DropBox Account")
+
+    contentItem: Dropbox.SetupPage {}
 } 

@@ -13,7 +13,7 @@ Kirigami.ScrollablePage {
     id: base;
     objectName: "WelcomePageWords"
     title: i18n("Create a Text Document")
-    actions.main: Kirigami.Action {
+    actions: Kirigami.Action {
         text: i18n("Create Custom Document...")
         icon.name: "configure"
         onTriggered: pageStack.push(customDocWords);

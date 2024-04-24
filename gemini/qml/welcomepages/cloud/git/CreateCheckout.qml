@@ -4,10 +4,10 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-import QtQuick 2.11
-import QtQuick.Layouts 1.11 as QtLayouts
-import QtQuick.Controls 2.11 as QtControls
-import org.kde.kirigami 2.7 as Kirigami
+import QtQuick
+import QtQuick.Layouts  as QtLayouts
+import QtQuick.Controls as QtControls
+import org.kde.kirigami as Kirigami
 import org.calligra 1.0
 import Calligra.Gemini.Git 1.0
 import "../../../components"
@@ -132,10 +132,12 @@ Kirigami.FormLayout {
         }
     }
 
-    Kirigami.OverlaySheet {
+    Kirigami.Dialog {
         id: userCredentials;
-        header: Kirigami.Heading { text: "User Credentials" }
-        GetUserCredentials {
+
+        title: "User Credentials"
+
+        contentItem: GetUserCredentials {
             onAccepted: {
                 base.userForRemote = userForRemote;
                 base.privateKeyFile = privateKeyFile;
@@ -144,10 +146,8 @@ Kirigami.FormLayout {
                 userCredentials.close();
             }
         }
-        onSheetOpenChanged: {
-            if (sheetOpen === false) {
-                dlgLoader.item.open();
-            }
+        onClosed: {
+            dlgLoader.item.open();
         }
     }
 }
