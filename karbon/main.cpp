@@ -19,7 +19,6 @@
 #include <QLoggingCategory>
 
 #include <KoApplication.h>
-#include <Calligra2Migration.h>
 
 #include <KarbonFactory.h>
 #include <KarbonDocument.h>
@@ -55,12 +54,6 @@ int main( int argc, char* argv[] )
 
     KoApplication app(KARBON_MIME_TYPE, QStringLiteral("calligrakarbon"), newKarbonAboutData, argc, argv);
     KLocalizedString::setApplicationDomain("karbon");
-
-    // Migrate data from kde4 to kf5 locations
-    Calligra2Migration m("karbon");
-    m.setConfigFiles(QStringList() << QStringLiteral("karbonrc"));
-    m.setUiFiles(QStringList() << QStringLiteral("karbon.rc")<< QStringLiteral("karbon_readonly.rc"));
-    m.migrate();
 
     if (!app.start()) {  // parses command line args, create initial docs and mainwindows
         return 1;

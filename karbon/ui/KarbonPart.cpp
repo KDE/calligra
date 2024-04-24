@@ -63,7 +63,7 @@ KoView * KarbonPart::createViewInstance(KoDocument *_document, QWidget *parent)
 
     // Add the color bar below the karbon view (the reason for the ProxyView)
     QVBoxLayout *layout = new QVBoxLayout(view);
-    layout->setMargin(0);
+    layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(result);
     layout->addWidget(result->colorBar());

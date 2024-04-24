@@ -40,10 +40,9 @@ KarbonFactory::~KarbonFactory()
 {
 }
 
-QObject* KarbonFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
+QObject* KarbonFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args)
 {
     Q_UNUSED(args);
-    Q_UNUSED(keyword);
 
     KarbonPart *part = new KarbonPart(parent);
     KarbonDocument* doc = new KarbonDocument(part);

@@ -30,7 +30,7 @@ public:
     explicit KarbonFactory();
     ~KarbonFactory() override;
 
-    QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword) override;
+    QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args) override;
 
     static const KSharedConfig::Ptr &karbonConfig();
     static const KoComponentData &global();

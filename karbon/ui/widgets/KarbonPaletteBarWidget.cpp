@@ -121,7 +121,7 @@ void KarbonPaletteBarWidget::createLayout()
         setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
         m_colorBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
     }
-    layout()->setMargin(0);
+    layout()->setContentsMargins({});
     layout()->setSpacing(2);
 }
 

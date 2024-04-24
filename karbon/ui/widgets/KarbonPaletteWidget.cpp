@@ -142,7 +142,7 @@ void KarbonPaletteWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void KarbonPaletteWidget::wheelEvent(QWheelEvent *event)
 {
-    applyScrolling(-event->delta()/10);
+    applyScrolling(-event->angleDelta().y()/10);
 }
 
 void KarbonPaletteWidget::keyPressEvent(QKeyEvent *event)
