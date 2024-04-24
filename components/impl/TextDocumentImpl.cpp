@@ -220,7 +220,7 @@ bool TextDocumentImpl::load(const QUrl& url)
         if (ok) {
             QString mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
             // in case this is a open document template remove the -template from the end
-            mimeType.remove( QRegExp( "-template$" ) );
+            mimeType.remove( QRegularExpression( "-template$" ) );
             d->document->setMimeTypeAfterLoading(mimeType);
             d->document->resetURL();
             d->document->setEmpty();

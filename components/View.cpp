@@ -101,12 +101,12 @@ void View::setZoom(float newValue)
     }
 }
 
-void View::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+void View::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     if (d->canvas) {
         d->canvas->setGeometry(newGeometry);
     }
-    QQuickPaintedItem::geometryChanged(newGeometry, oldGeometry);
+    QQuickPaintedItem::geometryChange(newGeometry, oldGeometry);
 }
 
 void View::Private::updateCanvas()

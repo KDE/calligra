@@ -106,7 +106,7 @@ protected:
     /**
      * Inherited from QQuickPaintedItem.
      */
-    void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
+    void geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry) override;
 
 private:
     class Private;
