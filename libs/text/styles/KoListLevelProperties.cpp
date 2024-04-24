@@ -274,7 +274,7 @@ void KoListLevelProperties::setBulletCharacter(QChar character)
 
 QChar KoListLevelProperties::bulletCharacter() const
 {
-    return propertyInt(KoListStyle::BulletCharacter);
+    return QChar(propertyInt(KoListStyle::BulletCharacter));
 }
 
 void KoListLevelProperties::setRelativeBulletSize(int percent)

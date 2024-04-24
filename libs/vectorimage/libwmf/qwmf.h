@@ -21,7 +21,7 @@
 
 #include <QString>
 #include <QPainter>
-#include <QMatrix>
+#include <QTransform>
 #include <QPen>
 #include <QColor>
 #include <QImage>
@@ -217,7 +217,7 @@ protected:
 
     // coordinate system
     bool   mAbsoluteCoord;
-    QMatrix  mInternalWorldMatrix;   // memorisation of WMF matrix transformation
+    QTransform  mInternalWorldMatrix;   // memorisation of WMF matrix transformation
     QRect mHeaderBoundingBox;
     QRect mBBox;
 

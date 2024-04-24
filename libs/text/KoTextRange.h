@@ -111,6 +111,4 @@ protected:
     KoTextRangePrivate *d;
 };
 
-KOTEXT_EXPORT QDebug operator<<(QDebug dbg, const KoTextRange *o);
-
 #endif

@@ -68,7 +68,6 @@ set(komain_LIB_SRCS
     KoPart.cpp
 
     MainDebug.cpp
-    Calligra2Migration.cpp
 )
 
 if( Qt6DBus_FOUND )
@@ -105,6 +104,7 @@ target_link_libraries(komain
         KF6::KIOCore
         KF6::Completion
         KF6::IconThemes
+        KF6::IconWidgets
         KF6::DBusAddons
 )
 

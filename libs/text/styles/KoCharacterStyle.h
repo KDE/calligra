@@ -208,9 +208,9 @@ public:
     /// See similar named method on QTextCharFormat
     qreal fontPointSize() const;
     /// See similar named method on QTextCharFormat
-    void setFontWeight(int weight);
+    void setFontWeight(QFont::Weight weight);
     /// See similar named method on QTextCharFormat
-    int fontWeight() const;
+    QFont::Weight fontWeight() const;
     /// See similar named method on QTextCharFormat
     void setFontItalic(bool italic);
     /// See similar named method on QTextCharFormat

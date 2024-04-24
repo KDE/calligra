@@ -55,7 +55,7 @@ void KoPAPrintJob::startPrinting(RemovePolicy removePolicy)
     KoZoomHandler zoomHandler;
     zoomHandler.setResolution( m_printer.resolution(), m_printer.resolution() );
 
-    QSize size = m_printer.pageRect().size();
+    QSizeF size = m_printer.paperRect(QPrinter::Millimeter).size();
 
     QPainter painter( &m_printer );
     for ( int i = fromPage; i <= toPage; ++i ) {

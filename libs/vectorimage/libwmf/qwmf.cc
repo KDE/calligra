@@ -798,11 +798,11 @@ void QWinMetaFile::dibBitBlt(long num, short* parm)
             // wmf file allow negative width or height
             mPainter.save();
             if (parm[ 5 ] < 0) {    // width < 0 => horizontal flip
-                QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
+                QTransform m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
                 mPainter.setMatrix(m, true);
             }
             if (parm[ 4 ] < 0) {    // height < 0 => vertical flip
-                QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+                QTransform m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
                 mPainter.setMatrix(m, true);
             }
             mPainter.drawImage(parm[ 7 ], parm[ 6 ], bmpSrc, parm[ 3 ], parm[ 2 ], parm[ 5 ], parm[ 4 ]);
@@ -827,11 +827,11 @@ void QWinMetaFile::dibStretchBlt(long num, short* parm)
         // wmf file allow negative width or height
         mPainter.save();
         if (parm[ 7 ] < 0) {    // width < 0 => horizontal flip
-            QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
+            QTransform m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
             mPainter.setMatrix(m, true);
         }
         if (parm[ 6 ] < 0) {    // height < 0 => vertical flip
-            QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+            QTransform m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
             mPainter.setMatrix(m, true);
         }
         bmpSrc = bmpSrc.copy(parm[ 5 ], parm[ 4 ], parm[ 3 ], parm[ 2 ]);
@@ -856,11 +856,11 @@ void QWinMetaFile::stretchDib(long num, short* parm)
         // wmf file allow negative width or height
         mPainter.save();
         if (parm[ 8 ] < 0) {    // width < 0 => horizontal flip
-            QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
+            QTransform m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
             mPainter.setMatrix(m, true);
         }
         if (parm[ 7 ] < 0) {    // height < 0 => vertical flip
-            QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+            QTransform m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
             mPainter.setMatrix(m, true);
         }
         bmpSrc = bmpSrc.copy(parm[ 6 ], parm[ 5 ], parm[ 4 ], parm[ 3 ]);

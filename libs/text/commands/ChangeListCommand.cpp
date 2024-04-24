@@ -28,7 +28,8 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
     setText(kundo2_i18n("Change List"));
 
     const bool styleCompletelySetAlready = extractTextBlocks(cursor, levelProperties.level(), levelProperties.labelType());
-    QSet<int> levels = m_levels.values().toSet();
+    const auto levelValues = m_levels.values();
+    QSet<int> levels{levelValues.cbegin(), levelValues.cend()};
     KoListStyle::LabelType labelType = levelProperties.labelType();
     KoListStyle listStyle;
 
@@ -160,11 +161,12 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
     KoList *newList = 0;
     //First check if we could merge with previous or next list
     if (m_flags & KoTextEditor::MergeWithAdjacentList) {
-        QSet<int> levels = m_levels.values().toSet();
+        const auto levelValues = m_levels.values();
+        const QSet<int> levels{levelValues.cbegin(), levelValues.cend()};
         // attempt to merge with previous block
         QTextBlock prev = m_blocks.value(0).previous();
         bool isMergeable = true;
-        foreach (int lev, levels) {
+        for (int lev : levels) {
             KoListLevelProperties llp = listStyle->levelProperties(lev);
             // checks format compatibility
             isMergeable = (isMergeable && prev.isValid() && prev.textList() && (formatsEqual(llp, prev.textList()->format())));

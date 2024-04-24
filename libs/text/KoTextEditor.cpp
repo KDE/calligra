@@ -1372,11 +1372,11 @@ void KoTextEditor::insertText(const QString &text, const QString &hRef)
     if (format.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
     }
-    static QRegExp urlScanner("\\S+://\\S+");
+    static QRegularExpression urlScanner("\\S+://\\S+");
     if (!hRef.isEmpty()) {
         format.setAnchor(true);
         format.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
-        if ((urlScanner.indexIn(hRef)) == 0) {//web url
+        if ((hRef.indexOf(urlScanner)) == 0) {//web url
             format.setAnchorHref(hRef);
         } else {
             format.setAnchorHref("#"+hRef);
@@ -1404,7 +1404,7 @@ void KoTextEditor::insertText(const QString &text, const QString &hRef)
         format.clearProperty(KoCharacterStyle::AnchorType);
         d->caret.setCharFormat(format);
     }
-    emit cursorPositionChanged();
+    Q_EMIT cursorPositionChanged();
 }
 
 bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode, int n)

@@ -961,7 +961,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             if (ts.hasAttributeNS(KoXmlNS::text, "c")) {
                 howmany = ts.attributeNS(KoXmlNS::text, "c", QString()).toInt();
             }
-            cursor.insertText(QString().fill(32, howmany));
+            cursor.insertText(QString().fill(u' ', howmany));
             *stripLeadingSpace = false;
         } else if ( (isTextNS && localName == "note")) { // text:note
             loadNote(ts, cursor);

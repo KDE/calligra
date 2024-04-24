@@ -35,7 +35,7 @@ KoInlineObject *InsertTextReferenceAction::createInlineObject()
     QWidget *widget = new QWidget();
     QVBoxLayout *lay = new QVBoxLayout(widget);
     widget->setLayout(lay);
-    lay->setMargin(0);
+    lay->setContentsMargins({});
 
     QLabel *label = new QLabel(i18n("Select the index you want to reference"), widget);
     lay->addWidget(label);

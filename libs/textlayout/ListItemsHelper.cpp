@@ -199,7 +199,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         calcWidth = false;
         if (format.intProperty(KoListStyle::BulletCharacter))
             item = QString(QChar(format.intProperty(KoListStyle::BulletCharacter)));
-        width = m_fm.width(item);
+        width = m_fm.boundingRect(item).width();
         int percent = format.intProperty(KoListStyle::RelativeBulletSize);
         if (percent > 0)
             width = width * (percent / 100.0);
@@ -225,10 +225,10 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     blockData.setCounterPrefix(prefix);
     blockData.setCounterSuffix(suffix);
     if (calcWidth)
-        width = m_fm.width(item);
+        width = m_fm.boundingRect(item).width();
     index++;
 
-    width += m_fm.width(prefix + suffix);
+    width += m_fm.boundingRect(prefix + suffix).width();
 
     qreal counterSpacing = 0;
     if (format.boolProperty(KoListStyle::AlignmentMode)) {

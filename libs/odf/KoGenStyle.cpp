@@ -18,7 +18,7 @@
 #include <OdfDebug.h>
 
 // Returns -1, 0 (equal) or 1
-static int compareMap(const QMultiMap<QString, QString>& map1, const QMultiMap<QString, QString>& map2)
+static int compareMap(const QMap<QString, QString>& map1, const QMap<QString, QString>& map2)
 {
     auto it = map1.constBegin();
     auto oit = map2.constBegin();
@@ -350,7 +350,7 @@ void KoGenStyle::addAttributePercent(const QString &attrName, int value)
     addAttribute(attrName, str.data());
 }
 
-void KoGenStyle::addStyleMap(const QMultiMap<QString, QString>& styleMap)
+void KoGenStyle::addStyleMap(const QMap<QString, QString>& styleMap)
 {
     // check, if already present
     for (int i = 0 ; i < m_maps.count() ; ++i) {

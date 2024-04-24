@@ -645,7 +645,7 @@ static void parseOdfLineWidth(const QString &width, KoCharacterStyle::LineWeight
         lineWeight = KoCharacterStyle::ThickLineWeight;
     else if (width.endsWith('%')) {
         lineWeight = KoCharacterStyle::PercentLineWeight;
-        lineWidth = width.midRef(0, width.length() - 1).toDouble();
+        lineWidth = QStringView{width}.mid(0, width.length() - 1).toDouble();
     } else if (width[width.length()-1].isNumber()) {
         lineWeight = KoCharacterStyle::LengthLineWeight;
         lineWidth = width.toDouble();
@@ -807,13 +807,13 @@ qreal KoCharacterStyle::fontPointSize() const
 {
     return d->propertyDouble(QTextFormat::FontPointSize);
 }
-void KoCharacterStyle::setFontWeight(int weight)
+void KoCharacterStyle::setFontWeight(QFont::Weight weight)
 {
     d->setProperty(QTextFormat::FontWeight, weight);
 }
-int KoCharacterStyle::fontWeight() const
+QFont::Weight KoCharacterStyle::fontWeight() const
 {
-    return d->propertyInt(QTextFormat::FontWeight);
+    return QFont::Weight(d->propertyInt(QTextFormat::FontWeight));
 }
 void KoCharacterStyle::setFontItalic(bool italic)
 {
@@ -1493,7 +1493,7 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         const QString fontSize(styleStack.property(KoXmlNS::fo, "font-size"));
         if (!fontSize.isEmpty()) {
             if (fontSize.endsWith('%')) {
-                setPercentageFontSize(fontSize.leftRef(fontSize.length() - 1).toDouble());
+                setPercentageFontSize(QStringView{fontSize}.left(fontSize.length() - 1).toDouble());
             } else {
                 setFontPointSize(KoUnit::parseValue(fontSize));
             }
@@ -1509,15 +1509,15 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     // Specify the weight of a font. The permitted values are normal, bold, and numeric values 100-900, in steps of 100. Unsupported numerical values are rounded off to the next supported value.
     const QString fontWeight(styleStack.property(KoXmlNS::fo, "font-weight"));
     if (!fontWeight.isEmpty()) {     // 3.10.24
-        int boldness;
+        QFont::Weight boldness;
         if (fontWeight == "normal")
-            boldness = 50;
+            boldness = QFont::Normal;
         else if (fontWeight == "bold")
-            boldness = 75;
+            boldness = QFont::Bold;
         else
-            // XSL/CSS has 100,200,300...900. Not the same scale as Qt!
+            // XSL/CSS has the same scale as Qt!
             // See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#font-weight
-            boldness = fontWeight.toInt() / 10;
+            boldness = QFont::Weight(fontWeight.toInt());
         setFontWeight(boldness);
     }
 
@@ -1678,9 +1678,10 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         else if (textPosition.startsWith(QLatin1String("sub")))
             setVerticalAlignment(QTextCharFormat::AlignSubScript);
         else {
-            QRegExp re("(-?[\\d.]+)%.*");
-            if (re.exactMatch(textPosition)) {
-                int percent = re.capturedTexts().at(1).toInt();
+            QRegularExpression re(QRegularExpression::anchoredPattern("(-?[\\d.]+)%.*"));
+            QRegularExpressionMatch match = re.match(textPosition);
+            if (match.hasMatch()) {
+                int percent = match.captured(1).toInt();
                 if (percent > 0)
                     setVerticalAlignment(QTextCharFormat::AlignSuperScript);
                 else if (percent < 0)

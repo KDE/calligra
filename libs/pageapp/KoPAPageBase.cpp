@@ -283,15 +283,15 @@ QPixmap KoPAPageBase::generateThumbnail(const QSize &size)
         return QPixmap();
 
     KoZoomHandler zoomHandler;
-    QSize thumbnailSize(size);
+    QSizeF thumbnailSize(size);
 
     KoPAUtil::setSizeAndZoom(pageLayout(), thumbnailSize, zoomHandler);
 
-    QPixmap pixmap(thumbnailSize);
+    QPixmap pixmap(thumbnailSize.toSize());
     // paint white as default page background
     pixmap.fill(Qt::white);
     QPainter painter(&pixmap);
-    painter.setClipRect(QRect(QPoint(0, 0), thumbnailSize));
+    painter.setClipRect(QRectF(QPoint(0, 0), thumbnailSize));
     painter.setRenderHint(QPainter::Antialiasing);
 
     paintPage(painter, zoomHandler);
@@ -306,15 +306,15 @@ QImage KoPAPageBase::thumbImage(const QSize &size)
     }
 
     KoZoomHandler zoomHandler;
-    QSize thumbnailSize(size);
+    QSizeF thumbnailSize(size);
 
     KoPAUtil::setSizeAndZoom(pageLayout(), thumbnailSize, zoomHandler);
 
-    QImage image(thumbnailSize, QImage::Format_RGB32);
+    QImage image(thumbnailSize.toSize(), QImage::Format_RGB32);
     // paint white as default page background
     image.fill(QColor(Qt::white).rgb());
     QPainter painter(&image);
-    painter.setClipRect(QRect(QPoint(0, 0), thumbnailSize));
+    painter.setClipRect(QRectF(QPoint(0, 0), thumbnailSize));
     painter.setRenderHint(QPainter::Antialiasing);
 
     paintPage(painter, zoomHandler);

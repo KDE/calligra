@@ -6,7 +6,7 @@
 
 #include "KoPASavingContext.h"
 
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include "KoPAPage.h"
 
@@ -77,8 +77,8 @@ QString KoPASavingContext::pageName( const KoPAPage * page )
     }
     else {
         name = page->name();
-        QRegExp rx( "^page[0-9]+$" );
-        if ( name.isEmpty() || m_pageNames.contains( name ) || rx.indexIn( name ) != -1 ) {
+        QRegularExpression rx( "^page[0-9]+$" );
+        if ( name.isEmpty() || m_pageNames.contains( name ) || name.indexOf(rx) != -1 ) {
             name = "page" + QString::number( m_page );
         }
         Q_ASSERT( !m_pageNames.contains( name ) );

@@ -229,7 +229,7 @@ QRectF KoTextLayoutObstruction::cropToLine(const QRectF &lineRect)
         qreal points[2] = { lineRect.top(), lineRect.bottom() };
         for (int i = 0; i < 2; i++) {
             const qreal y = points[i];
-            QMap<qreal, QLineF>::const_iterator iter = m_edges.constBegin();
+            QMultiMap<qreal, QLineF>::const_iterator iter = m_edges.constBegin();
             for (;iter != m_edges.constEnd(); ++iter) {
                 QLineF line = iter.value();
                 if (line.y2() < y) // not a section that will intersect with ou Y yet

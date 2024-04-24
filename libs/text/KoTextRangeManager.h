@@ -64,9 +64,9 @@ public:
      * matchLast.
      * Single position text ranges is only added once to the hash
      */
-    QHash<int, KoTextRange *> textRangesChangingWithin(const QTextDocument *, int first, int last, int matchFirst, int matchLast) const;
+    QMultiHash<int, KoTextRange *> textRangesChangingWithin(const QTextDocument *, int first, int last, int matchFirst, int matchLast) const;
 
-    QHash<int, KoTextRange *> textRangesChangingWithin(const QTextDocument *, QList<const QMetaObject*> types, int first, int last, int matchFirst, int matchLast) const;
+    QMultiHash<int, KoTextRange *> textRangesChangingWithin(const QTextDocument *, QList<const QMetaObject*> types, int first, int last, int matchFirst, int matchLast) const;
 
     template <class T>
     T *createAndLoadOdf(const QTextCursor &cursor, const KoXmlElement &element, KoShapeLoadingContext &context) {

@@ -66,7 +66,6 @@
 #include <QTabBar>
 #include <QPrinter>
 #include <QPrintDialog>
-#include <QDesktopWidget>
 #include <QPrintPreviewDialog>
 #include <QCloseEvent>
 #include <QPointer>
@@ -345,7 +344,6 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KoComponentDa
     d->dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
     d->dockWidgetMenu->setVisible(false);
-    d->dockWidgetMenu->setDelayed(false);
 
     // Load list of recent files
     KSharedConfigPtr configPtr = componentData.config();
@@ -1374,7 +1372,7 @@ KoPrintJob* KoMainWindow::exportToPdf(const KoPageLayout &_pageLayout, const QSt
         if (pDoc && pDoc->url().isValid()) {
             startUrl = pDoc->url();
             QString fileName = startUrl.fileName();
-            fileName = fileName.replace( QRegExp( "\\.\\w{2,5}$", Qt::CaseInsensitive ), ".pdf" );
+            fileName = fileName.replace( QRegularExpression( "\\.\\w{2,5}$", QRegularExpression::CaseInsensitiveOption ), ".pdf" );
             startUrl = startUrl.adjusted(QUrl::RemoveFilename);
             startUrl.setPath(startUrl.path() +  fileName );
         }
@@ -1412,17 +1410,17 @@ KoPrintJob* KoMainWindow::exportToPdf(const KoPageLayout &_pageLayout, const QSt
     printJob->printer().setColorMode(QPrinter::Color);
 
     if (pageLayout.format == KoPageFormat::CustomSize) {
-        printJob->printer().setPaperSize(QSizeF(pageLayout.width, pageLayout.height), QPrinter::Millimeter);
+        printJob->printer().setPageSize(QPageSize{QSizeF(pageLayout.width, pageLayout.height), QPageSize::Millimeter});
     } else {
-        printJob->printer().setPaperSize(KoPageFormat::printerPageSize(pageLayout.format));
+        printJob->printer().setPageSize(KoPageFormat::printerPageSize(pageLayout.format));
     }
 
     switch (pageLayout.orientation) {
-    case KoPageFormat::Portrait: printJob->printer().setOrientation(QPrinter::Portrait); break;
-    case KoPageFormat::Landscape: printJob->printer().setOrientation(QPrinter::Landscape); break;
+    case KoPageFormat::Portrait: printJob->printer().setPageOrientation(QPageLayout::Portrait); break;
+    case KoPageFormat::Landscape: printJob->printer().setPageOrientation(QPageLayout::Landscape); break;
     }
 
-    printJob->printer().setPageMargins(pageLayout.leftMargin, pageLayout.topMargin, pageLayout.rightMargin, pageLayout.bottomMargin, QPrinter::Millimeter);
+    printJob->printer().setPageMargins(QMargins(pageLayout.leftMargin, pageLayout.topMargin, pageLayout.rightMargin, pageLayout.bottomMargin), QPageLayout::Unit::Millimeter);
 
     //before printing check if the printer can handle printing
     if (!printJob->canPrint()) {
@@ -1449,7 +1447,7 @@ void KoMainWindow::slotConfigureKeys()
         redoAction->setText(i18n("Redo"));
     }
 
-    guiFactory()->configureShortcuts();
+    guiFactory()->showConfigureShortcutsDialog();
 
     if(currentView()) {
         undoAction->setText(oldUndoText);

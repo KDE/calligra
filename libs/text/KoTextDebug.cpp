@@ -159,7 +159,8 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
         attrs.append(QString(" anchorName=\"%1\"").arg(textFormat.anchorNames().join(',')));
     }
 
-    foreach(int id, properties.keys()) {
+    const auto keys = properties.keys();
+    for(int id : keys) {
         QString key, value;
         switch (id) {
         case QTextFormat::TextOutline: {
@@ -249,7 +250,7 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
             break;
         case KoCharacterStyle::HasHyphenation:
             key = "hyphenation";
-            value = properties[id].toBool();
+            value = properties[id].toBool() ? "true" : "false";
             break;
         case KoCharacterStyle::StrikeOutText:
             key = "strikeout-text";
@@ -281,7 +282,7 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
             break;
         }
         if (!key.isEmpty())
-            attrs.append(" ").append(key).append("=\"").append(value).append("\"");
+            attrs.append(u' ').append(key).append("=\"").append(value).append("\"");
     }
     return attrs;
 }
@@ -542,7 +543,7 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             break;
         case KoListStyle::IsOutline:
             key = "is-outline";
-            value = properties[id].toBool();
+            value = QString::number(properties[id].toBool());
             break;
         case KoListStyle::Indent:
             key = "indent";

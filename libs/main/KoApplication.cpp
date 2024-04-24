@@ -126,8 +126,6 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType,
     : QApplication(argc, argv)
     , d(new KoApplicationPrivate())
 {
-    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
-
     QScopedPointer<KAboutData> aboutData(aboutDataGenerator());
     KLocalizedString::setApplicationDomain(aboutData->componentName().toLatin1().data());
     KAboutData::setApplicationData(*aboutData);
@@ -267,12 +265,12 @@ bool KoApplication::start()
     // Get the command line arguments which we have to parse
     QString dpiValues = parser.value("dpi");
     if (!dpiValues.isEmpty()) {
-        int sep = dpiValues.indexOf(QRegExp("[x, ]"));
+        int sep = dpiValues.indexOf(QRegularExpression("[x, ]"));
         int dpiX;
         int dpiY = 0;
         bool ok = true;
         if (sep != -1) {
-            dpiY = dpiValues.midRef(sep + 1).toInt(&ok);
+            dpiY = QStringView{dpiValues}.mid(sep + 1).toInt(&ok);
             dpiValues.truncate(sep);
         }
         if (ok) {
@@ -459,11 +457,11 @@ bool KoApplication::start()
         short int numberOfOpenDocuments = 0; // number of documents open
         short int nPrinted = 0;
         // TODO: remove once Qt has proper handling itself
-        const QRegExp withProtocolChecker( QStringLiteral("^[a-zA-Z]+:") );
+        const QRegularExpression withProtocolChecker( QStringLiteral("^[a-zA-Z]+:") );
         for (int argNumber = 0; argNumber < fileUrls.size(); ++argNumber) {
             const QString fileUrl = fileUrls.at(argNumber);
             // convert to an url
-            const bool startsWithProtocol = (withProtocolChecker.indexIn(fileUrl) == 0);
+            const bool startsWithProtocol = (fileUrl.indexOf(withProtocolChecker) == 0);
             const QUrl url = startsWithProtocol ?
                 QUrl::fromUserInput(fileUrl) :
                 QUrl::fromLocalFile(QDir::current().absoluteFilePath(fileUrl));

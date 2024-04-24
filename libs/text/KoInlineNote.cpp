@@ -159,7 +159,7 @@ void KoInlineNote::resize(const QTextDocument *document, QTextInlineObject &obje
     } else {
         Q_ASSERT(format.isCharFormat());
         QFontMetricsF fm(format.font(), pd);
-        object.setWidth(fm.width(d->label));
+        object.setWidth(fm.boundingRect(d->label).width());
         object.setAscent(fm.ascent());
         object.setDescent(fm.descent());
     }

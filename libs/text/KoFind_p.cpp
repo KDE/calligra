@@ -19,6 +19,7 @@
 #include <QTextCursor>
 #include <QTimer>
 #include <QAction>
+#include <QRegularExpression>
 #include "TextDebug.h"
 
 #include "KoFind.h"
@@ -89,7 +90,7 @@ void KoFindPrivate::findActivated()
     strategy = &findStrategy;
 
     strategy->dialog()->show();
-    KWindowSystem::activateWindow(strategy->dialog()->winId());
+    KWindowSystem::activateWindow(strategy->dialog()->windowHandle());
 
     findNext->setEnabled(true);
     findPrev->setEnabled(true);
@@ -120,7 +121,7 @@ void KoFindPrivate::replaceActivated()
     strategy = &replaceStrategy;
 
     strategy->dialog()->show();
-    KWindowSystem::activateWindow(strategy->dialog()->winId());
+    KWindowSystem::activateWindow(strategy->dialog()->windowHandle());
 }
 
 void KoFindPrivate::startFind()
@@ -207,14 +208,14 @@ void KoFindPrivate::parseSettingsAndFind()
         //debugText << "start" << lastKnownPosition.position();
     }
 
-    QRegExp regExp;
+    QRegularExpression regExp;
     QString pattern = strategy->dialog()->pattern();
     if (options & KFind::RegularExpression) {
-        regExp = QRegExp(pattern);
+        regExp = QRegularExpression(pattern);
     }
 
     QTextCursor cursor;
-    if (!regExp.isEmpty() && regExp.isValid()) {
+    if (regExp.isValid()) {
         cursor = document->find(regExp, lastKnownPosition, flags);
     } else {
         cursor = document->find(pattern, lastKnownPosition, flags);

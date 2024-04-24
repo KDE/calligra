@@ -45,6 +45,7 @@
 #include <QItemSelection>
 #include <QApplication>
 #include <QClipboard>
+#include <QActionGroup>
 
 #include <algorithm>
 
@@ -145,12 +146,12 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     layout->addWidget(button, 1, 5);
 
     layout->setSpacing(0);
-    layout->setMargin(3);
+    layout->setContentsMargins(3, 3, 3, 3);
     layout->setColumnStretch(2, 10);
 
     setWidget(mainWidget);
 
-    connect(m_buttonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &KoPADocumentStructureDocker::slotButtonClicked);
+    connect(m_buttonGroup, &QButtonGroup::idClicked, this, &KoPADocumentStructureDocker::slotButtonClicked);
 
     m_model = new KoPADocumentModel(this);
     m_sectionView->setModel(m_model);

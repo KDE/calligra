@@ -555,7 +555,7 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
     if (!textRangeManager()) {
         return;
     }
-    QHash<int, KoTextRange *> ranges = textRangeManager()->textRangesChangingWithin(effectiveDocument, {&KoAnchorTextRange::staticMetaObject, &KoAnnotation::staticMetaObject}, pos, pos+length, pos, pos+length);
+    QMultiHash<int, KoTextRange *> ranges = textRangeManager()->textRangesChangingWithin(effectiveDocument, {&KoAnchorTextRange::staticMetaObject, &KoAnnotation::staticMetaObject}, pos, pos+length, pos, pos+length);
     foreach(KoTextRange *range, ranges) {
         KoAnchorTextRange *anchorRange = qobject_cast<KoAnchorTextRange *>(range);
         if (anchorRange) {

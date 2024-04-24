@@ -323,8 +323,8 @@ QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
     connect(modeBox, QOverload<int>::of(&QComboBox::activated), this, &KoPencilTool::selectMode);
     connect(optimizeRaw, &QCheckBox::stateChanged, this, &KoPencilTool::setOptimize);
     connect(optimizeCurve, &QCheckBox::stateChanged, this, &KoPencilTool::setOptimize);
-    connect(fittingError, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KoPencilTool::setDelta);
-    connect(combineAngle, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KoPencilTool::setDelta);
+    connect(fittingError, &QDoubleSpinBox::valueChanged, this, &KoPencilTool::setDelta);
+    connect(combineAngle, &QDoubleSpinBox::valueChanged, this, &KoPencilTool::setDelta);
 
     modeBox->setCurrentIndex(m_mode);
     stackedWidget->setCurrentIndex(m_mode);

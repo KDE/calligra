@@ -39,7 +39,7 @@ KoInlineObject *InsertVariableAction::createInlineObject()
     QWidget *widget = variable->createOptionsWidget();
     if (widget) {
         if (widget->layout()) {
-            widget->layout()->setMargin(0);
+            widget->layout()->setContentsMargins({});
         }
         KPageDialog *dialog = new KPageDialog(m_canvas->canvasWidget());
         dialog->setWindowTitle(i18n("%1 Options", m_templateName));

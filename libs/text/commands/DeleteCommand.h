@@ -61,7 +61,7 @@ private:
 
     QSet<KoInlineObject *> m_invalidInlineObjects;
     QList<QTextCursor> m_cursorsToWholeDeleteBlocks;
-    QHash<int, KoTextRange *> m_rangesToRemove;
+    QMultiHash<int, KoTextRange *> m_rangesToRemove;
     QList<SectionDeleteInfo> m_sectionsToRemove;
 
     bool m_first;

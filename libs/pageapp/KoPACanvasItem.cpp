@@ -126,8 +126,8 @@ void KoPACanvasItem::keyReleaseEvent( QKeyEvent *event )
 
 void KoPACanvasItem::wheelEvent ( QGraphicsSceneWheelEvent * event )
 {
-    QWheelEvent ev(event->pos().toPoint(), event->delta(), event->buttons(), event->modifiers(), event->orientation());
-    koPAView()->viewMode()->wheelEvent( &ev, viewConverter()->viewToDocument(widgetToView(ev.pos() + documentOffset())));
+    QWheelEvent ev(event->pos().toPoint(), event->screenPos(), event->pixelDelta(), event->pixelDelta(), event->buttons(), event->modifiers(), event->phase(), event->isInverted());
+    koPAView()->viewMode()->wheelEvent( &ev, viewConverter()->viewToDocument(widgetToView(ev.position().toPoint() + documentOffset())));
 }
 
 void KoPACanvasItem::closeEvent( QCloseEvent * event )

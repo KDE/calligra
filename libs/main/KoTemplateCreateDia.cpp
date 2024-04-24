@@ -37,7 +37,7 @@
 #include <KoResourcePaths.h>
 
 #include <klocalizedstring.h>
-#include <kicondialog.h>
+#include <KIconDialog>
 #include <kmessagebox.h>
 #include <MainDebug.h>
 #include <KoNetAccess.h>

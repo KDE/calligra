@@ -933,8 +933,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             d->dropCapsDistance = pStyle.dropCapsDistance();
 
             if (dropCapsLength == 0) { // means whole word is to be dropped
-                int firstNonSpace = blockText.indexOf(QRegExp("[^ ]"));
-                dropCapsLength = blockText.indexOf(QRegExp("\\W"), firstNonSpace);
+                int firstNonSpace = blockText.indexOf(QRegularExpression("[^ ]"));
+                dropCapsLength = blockText.indexOf(QRegularExpression("\\W"), firstNonSpace);
             } else {
                 // LibreOffice skips softbreaks but not spaces. We will do the same
                 QTextCursor c1(block);
@@ -1495,7 +1495,7 @@ qreal KoTextLayoutArea::textIndent(const QTextBlock &block, QTextList *textList,
         // if auto-text-indent is set,
         // return an indent approximately 3-characters wide as per current font
         QTextCursor blockCursor(block);
-        qreal guessGlyphWidth = QFontMetricsF(blockCursor.charFormat().font()).width('x');
+        qreal guessGlyphWidth = QFontMetricsF(blockCursor.charFormat().font()).boundingRect('x').width();
         return guessGlyphWidth * 3;
     }
 

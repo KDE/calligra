@@ -235,7 +235,8 @@ void KoDocumentSectionView::slotActionToggled(bool on, const QPersistentModelInd
 
 QStyleOptionViewItem KoDocumentSectionView::optionForIndex(const QModelIndex &index) const
 {
-    QStyleOptionViewItem option = viewOptions();
+    QStyleOptionViewItem option;
+    initViewItemOption(&option);
     option.rect = visualRect(index);
     if (index == currentIndex())
         option.state |= QStyle::State_HasFocus;

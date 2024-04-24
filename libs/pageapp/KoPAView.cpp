@@ -190,8 +190,7 @@ void KoPAView::addImages(const QVector<QImage> &imageList, const QPoint &insertA
     foreach(const QImage &image, imageList) {
 
         KoProperties params;
-        QVariant v;
-        v.setValue<QImage>(image);
+        auto v = QVariant::fromValue(image);
         params.setProperty("qimage", v);
 
         KoShape *shape = factory->createShape(&params, d->doc->resourceManager());
@@ -217,11 +216,11 @@ void KoPAView::addImages(const QVector<QImage> &imageList, const QPoint &insertA
 void KoPAView::initGUI(KoPAFlags flags)
 {
     d->tabBarLayout = new QGridLayout(this);
-    d->tabBarLayout->setMargin(0);
+    d->tabBarLayout->setContentsMargins({});
     d->tabBarLayout->setSpacing(0);
     d->insideWidget = new QWidget();
     QGridLayout *gridLayout = new QGridLayout(d->insideWidget);
-    gridLayout->setMargin(0);
+    gridLayout->setContentsMargins({});
     gridLayout->setSpacing(0);
     setLayout(d->tabBarLayout);
 

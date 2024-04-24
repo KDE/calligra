@@ -70,9 +70,7 @@ public:
         return QList<QWidget*>() << page;
     }
 
-    void updateItemWidgets(const QList<QWidget*> widgets,
-                           const QStyleOptionViewItem &option,
-                           const QPersistentModelIndex &index) const override
+    void updateItemWidgets(const QList< QWidget * > &widgets, const QStyleOptionViewItem &option, const QPersistentModelIndex &index) const override
     {
         FileItem *fileItem = (FileItem*)index.data().value<void*>();
 

@@ -10,12 +10,13 @@
 #include "KoTextEditor.h"
 
 #include <KoCanvasBase.h>
+#include <QWidget>
 
 #include "TextDebug.h"
 
 InsertInlineObjectActionBase::InsertInlineObjectActionBase(KoCanvasBase *canvas, const QString &name)
-        : QAction(name, canvas->canvasWidget()),
-        m_canvas(canvas)
+    : QAction(name, canvas->canvasWidget())
+    , m_canvas(canvas)
 {
     connect(this, &QAction::triggered, this, &InsertInlineObjectActionBase::activated);
 }

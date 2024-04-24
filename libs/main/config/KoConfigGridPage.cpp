@@ -84,7 +84,7 @@ KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
     hboxLayout->addStretch();
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins({});
     mainLayout->addWidget(generalGrp);
     mainLayout->addWidget(spacingGrp);
     mainLayout->addStretch();

@@ -13,7 +13,7 @@
 #include <KoXmlWriter.h>
 #include <OdfDebug.h>
 #include <QBuffer>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include <QTest>
 #include <QLoggingCategory>

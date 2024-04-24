@@ -414,7 +414,7 @@ public:
      * @brief Add a style:map to the style.
      * @param styleMap the attributes for the map, associated as (name,value).
      */
-    void addStyleMap(const QMultiMap<QString, QString> &styleMap);
+    void addStyleMap(const QMap<QString, QString> &styleMap);
 
     /**
      * @return true if the style has no attributes, no properties, no style map etc.
@@ -519,7 +519,7 @@ private:
     QByteArray m_familyName;
     QString m_parentName;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
-    typedef QMultiMap<QString, QString> StyleMap;
+    typedef QMap<QString, QString> StyleMap;
     StyleMap m_properties[LastPropertyType+1];
     StyleMap m_childProperties[LastPropertyType+1];
     StyleMap m_attributes;

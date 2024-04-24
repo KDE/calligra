@@ -187,9 +187,9 @@ QList<KoTextRange *> KoTextRangeManager::textRanges() const
     return allRanges;
 }
 
-QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTextDocument *doc, int first, int last, int matchFirst, int matchLast) const
+QMultiHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTextDocument *doc, int first, int last, int matchFirst, int matchLast) const
 {
-    QHash<int, KoTextRange *> ranges;
+    QMultiHash<int, KoTextRange *> ranges;
     if (!d->m_textRanges.contains(doc))
         return ranges;
 
@@ -203,27 +203,27 @@ QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTe
         for (KoTextRange *range: docRanges) {
             if (!range->hasRange()) {
                 if (range->rangeStart() >= first && range->rangeStart() <= last) {
-                    ranges.insertMulti(range->rangeStart(), range);
+                    ranges.insert(range->rangeStart(), range);
                 }
             } else {
                 if (range->rangeStart() >= first && range->rangeStart() <= last) {
                     if (matchLast == -1 || range->rangeEnd() <= matchLast) {
                         if (range->rangeEnd() >= matchFirst) {
-                            ranges.insertMulti(range->rangeStart(), range);
+                            ranges.insert(range->rangeStart(), range);
                         }
                     }
                 }
                 if (range->rangeEnd() >= first && range->rangeEnd() <= last) {
                     if (matchLast == -1 || range->rangeStart() <= matchLast) {
                         if (range->rangeStart() >= matchFirst) {
-                            ranges.insertMulti(range->rangeEnd(), range);
+                            ranges.insert(range->rangeEnd(), range);
                         }
                     }
                 }
                 if (range->rangeStart() >= first && range->rangeStart() <= last) {
                     if (matchLast == -1 || range->rangeEnd() >= matchLast) {
                         if (range->rangeEnd() >= matchFirst) {
-                            ranges.insert(range->rangeStart(), range);
+                            ranges.replace(range->rangeStart(), range);
                         }
                     }
                 }
@@ -243,7 +243,7 @@ QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTe
                     continue;
                 if ((*it)->rangeStart() > last)
                     break;
-                ranges.insertMulti((*it)->rangeStart(), (*it));
+                ranges.insert((*it)->rangeStart(), (*it));
             }
 
             // Second, non-overlapping
@@ -259,21 +259,21 @@ QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTe
                 if (range->rangeStart() >= first && range->rangeStart() <= last) {
                     if (matchLast == -1 || range->rangeEnd() <= matchLast) {
                         if (range->rangeEnd() >= matchFirst) {
-                            ranges.insertMulti(range->rangeStart(), range);
+                            ranges.insert(range->rangeStart(), range);
                         }
                     }
                 }
                 if (range->rangeEnd() >= first && range->rangeEnd() <= last) {
                     if (matchLast == -1 || range->rangeStart() <= matchLast) {
                         if (range->rangeStart() >= matchFirst) {
-                            ranges.insertMulti(range->rangeEnd(), range);
+                            ranges.insert(range->rangeEnd(), range);
                         }
                     }
                 }
                 if (range->rangeStart() >= first && range->rangeStart() <= last) {
                     if (matchLast == -1 || range->rangeEnd() >= matchLast) {
                         if (range->rangeEnd() >= matchFirst) {
-                            ranges.insert(range->rangeStart(), range);
+                            ranges.replace(range->rangeStart(), range);
                         }
                     }
                 }
@@ -288,27 +288,27 @@ QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTe
 
                 if (!range->hasRange()) {
                     if (range->rangeStart() >= first && range->rangeStart() <= last) {
-                        ranges.insertMulti(range->rangeStart(), range);
+                        ranges.insert(range->rangeStart(), range);
                     }
                 } else {
                     if (range->rangeStart() >= first && range->rangeStart() <= last) {
                         if (matchLast == -1 || range->rangeEnd() <= matchLast) {
                             if (range->rangeEnd() >= matchFirst) {
-                                ranges.insertMulti(range->rangeStart(), range);
+                                ranges.insert(range->rangeStart(), range);
                             }
                         }
                     }
                     if (range->rangeEnd() >= first && range->rangeEnd() <= last) {
                         if (matchLast == -1 || range->rangeStart() <= matchLast) {
                             if (range->rangeStart() >= matchFirst) {
-                                ranges.insertMulti(range->rangeEnd(), range);
+                                ranges.insert(range->rangeEnd(), range);
                             }
                         }
                     }
                     if (range->rangeStart() >= first && range->rangeStart() <= last) {
                         if (matchLast == -1 || range->rangeEnd() >= matchLast) {
                             if (range->rangeEnd() >= matchFirst) {
-                                ranges.insert(range->rangeStart(), range);
+                                ranges.replace(range->rangeStart(), range);
                             }
                         }
                     }
@@ -320,9 +320,9 @@ QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTe
     return ranges;
 }
 
-QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTextDocument *doc, QList<const QMetaObject*> types, int first, int last, int matchFirst, int matchLast) const
+QMultiHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTextDocument *doc, QList<const QMetaObject*> types, int first, int last, int matchFirst, int matchLast) const
 {
-    QHash<int, KoTextRange *> ranges;
+    QMultiHash<int, KoTextRange *> ranges;
     if (!d->m_textRanges.contains(doc))
         return ranges;
 
@@ -350,7 +350,7 @@ QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTe
                 continue;
             if ((*it)->rangeStart() > last)
                 break;
-            ranges.insertMulti((*it)->rangeStart(), (*it));
+            ranges.insert((*it)->rangeStart(), (*it));
         }
 
         // Second, non-overlapping
@@ -366,21 +366,21 @@ QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTe
             if (range->rangeStart() >= first && range->rangeStart() <= last) {
                 if (matchLast == -1 || range->rangeEnd() <= matchLast) {
                     if (range->rangeEnd() >= matchFirst) {
-                        ranges.insertMulti(range->rangeStart(), range);
+                        ranges.insert(range->rangeStart(), range);
                     }
                 }
             }
             if (range->rangeEnd() >= first && range->rangeEnd() <= last) {
                 if (matchLast == -1 || range->rangeStart() <= matchLast) {
                     if (range->rangeStart() >= matchFirst) {
-                        ranges.insertMulti(range->rangeEnd(), range);
+                        ranges.insert(range->rangeEnd(), range);
                     }
                 }
             }
             if (range->rangeStart() >= first && range->rangeStart() <= last) {
                 if (matchLast == -1 || range->rangeEnd() >= matchLast) {
                     if (range->rangeEnd() >= matchFirst) {
-                        ranges.insert(range->rangeStart(), range);
+                        ranges.replace(range->rangeStart(), range);
                     }
                 }
             }
@@ -395,27 +395,27 @@ QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTe
 
             if (!range->hasRange()) {
                 if (range->rangeStart() >= first && range->rangeStart() <= last) {
-                    ranges.insertMulti(range->rangeStart(), range);
+                    ranges.insert(range->rangeStart(), range);
                 }
             } else {
                 if (range->rangeStart() >= first && range->rangeStart() <= last) {
                     if (matchLast == -1 || range->rangeEnd() <= matchLast) {
                         if (range->rangeEnd() >= matchFirst) {
-                            ranges.insertMulti(range->rangeStart(), range);
+                            ranges.insert(range->rangeStart(), range);
                         }
                     }
                 }
                 if (range->rangeEnd() >= first && range->rangeEnd() <= last) {
                     if (matchLast == -1 || range->rangeStart() <= matchLast) {
                         if (range->rangeStart() >= matchFirst) {
-                            ranges.insertMulti(range->rangeEnd(), range);
+                            ranges.insert(range->rangeEnd(), range);
                         }
                     }
                 }
                 if (range->rangeStart() >= first && range->rangeStart() <= last) {
                     if (matchLast == -1 || range->rangeEnd() >= matchLast) {
                         if (range->rangeEnd() >= matchFirst) {
-                            ranges.insert(range->rangeStart(), range);
+                            ranges.replace(range->rangeStart(), range);
                         }
                     }
                 }

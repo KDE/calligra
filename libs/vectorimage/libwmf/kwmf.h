@@ -32,7 +32,6 @@ DESCRIPTION
 
 #include <kovectorimage_export.h>
 
-#include <QLinkedList>
 #include <QList>
 #include <QPoint>
 #include <QSize>
@@ -117,7 +116,7 @@ private:
     int m_windowFlipX;
     int m_windowFlipY;
     DrawContext m_dc;
-    QLinkedList<DrawContext> m_savedDcs;
+    QList<DrawContext> m_savedDcs;
     QPoint m_lineFrom;
 
     // Windows handle management.
@@ -132,7 +131,7 @@ private:
     class WinObjBrushHandle: public WinObjHandle
     {
     public:
-        virtual void apply(KWmf &p);
+        void apply(KWmf &p) override;
         unsigned m_color;
         unsigned m_style;
     };
@@ -140,7 +139,7 @@ private:
     class WinObjPenHandle: public WinObjHandle
     {
     public:
-        virtual void apply(KWmf &p);
+        void apply(KWmf &p) override;
         unsigned m_color;
         unsigned m_style;
         unsigned m_width;

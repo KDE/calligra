@@ -83,7 +83,7 @@ public:
     {
     public:
         StatusBarItem() // for QValueList
-            : m_widget(0),
+            : m_widget(nullptr),
               m_connected(false),
               m_hidden(false) {}
 
@@ -94,11 +94,11 @@ public:
               m_connected(false),
               m_hidden(false) {}
 
-        bool operator==(const StatusBarItem& rhs) {
+        bool operator==(const StatusBarItem& rhs) const {
             return m_widget == rhs.m_widget;
         }
 
-        bool operator!=(const StatusBarItem& rhs) {
+        bool operator!=(const StatusBarItem& rhs) const {
             return m_widget != rhs.m_widget;
         }
 
@@ -316,7 +316,7 @@ QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
     QPrintDialog *printDialog = new QPrintDialog(&printJob->printer(), parent);
     printDialog->setOptionTabs(printJob->createOptionWidgets());
     printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
-    printDialog->setEnabledOptions(printJob->printDialogOptions());
+    printDialog->setOptions(printJob->printDialogOptions());
     return printDialog;
 }
 
@@ -328,7 +328,7 @@ void KoView::setupGlobalActions()
     actionCollection()->setDefaultShortcut(undo, QKeySequence::Undo);
     actionCollection()->setDefaultShortcut(redo, QKeySequence::Redo);
     d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
-    connect(d->actionAuthor, QOverload<const QString &>::of(&KSelectAction::triggered), this, &KoView::changeAuthorProfile);
+    connect(d->actionAuthor, &KSelectAction::textTriggered, this, &KoView::changeAuthorProfile);
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
 
     slotUpdateAuthorProfileActions();

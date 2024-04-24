@@ -46,6 +46,7 @@
 #include <kio/job.h>
 #include <kdirnotify.h>
 #include <KBackup>
+#include <KLazyLocalizedString>
 
 #include <QMimeDatabase>
 #include <QTemporaryFile>
@@ -316,7 +317,7 @@ public:
 #endif
         QObject::connect(m_job, &KIO::FileCopyJob::result,
                          document, [this](KJob* job) { _k_slotJobFinished(job); });
-        QObject::connect(m_job, &KIO::FileCopyJob::mimetype,
+        QObject::connect(m_job, &KIO::FileCopyJob::mimeTypeFound,
                          document, [this](KIO::Job* job, const QString &mime) { _k_slotGotMimeType(job, mime); });
     }
 
@@ -540,7 +541,7 @@ bool KoDocument::saveFile()
 
     if (backupFile()) {
         if (url().isLocalFile())
-            KBackup::backupFile(url().toLocalFile(), d->backupPath);
+            KBackup::simpleBackupFile(url().toLocalFile(), d->backupPath);
         else {
             KIO::UDSEntry entry;
             if (KIO::NetAccess::stat(url(),
@@ -621,7 +622,7 @@ bool KoDocument::saveFile()
     if (ret) {
         KNotification *notify = new KNotification("DocumentSaved");
         notify->setText(i18n("Document <i>%1</i> saved", url().url()));
-        notify->addContext("url", url().url());
+        notify->setUrls({url()});
         QTimer::singleShot(0, notify, &KNotification::sendEvent);
     }
 
@@ -1598,7 +1599,7 @@ bool KoDocument::openFile()
 
         KNotification *notify = new KNotification("DocumentLoaded");
         notify->setText(i18n("Document <i>%1</i> loaded", url().url()));
-        notify->addContext("url", url().url());
+        notify->setUrls(QList<QUrl>{url()});
         QTimer::singleShot(0, notify, &KNotification::sendEvent);
         d->parentPart->deleteOpenPane();
     }
@@ -1664,8 +1665,8 @@ bool KoDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXmlD
     bool ok = doc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn);
     store->close();
     if (!ok) {
-        errorMain << "Parsing error in " << filename << "! Aborting!" << endl
-        << " In line: " << errorLine << ", column: " << errorColumn << endl
+        errorMain << "Parsing error in " << filename << "! Aborting!" << Qt::endl
+        << " In line: " << errorLine << ", column: " << errorColumn << Qt::endl
         << " Error message: " << errorMsg << Qt::endl;
         d->lastErrorMessage = i18n("Parsing error in %1 at line %2, column %3\nError message: %4"
                                    , filename  , errorLine, errorColumn ,
@@ -1741,8 +1742,8 @@ bool KoDocument::loadNativeFormat(const QString & file_)
             if (res)
                 res = completeLoading(0);
         } else {
-            errorMain << "Parsing Error! Aborting! (in KoDocument::loadNativeFormat (QFile))" << endl
-            << "  Line: " << errorLine << " Column: " << errorColumn << endl
+            errorMain << "Parsing Error! Aborting! (in KoDocument::loadNativeFormat (QFile))" << Qt::endl
+            << "  Line: " << errorLine << " Column: " << errorColumn << Qt::endl
             << "  Message: " << errorMsg << Qt::endl;
             d->lastErrorMessage = i18n("parsing error in the main document at line %1, column %2\nError message: %3", errorLine, errorColumn, i18n(errorMsg.toUtf8()));
             res = false;
@@ -1875,7 +1876,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
     if (oasis && store->hasFile("VersionList.xml")) {
         KNotification *notify = new KNotification("DocumentHasVersions");
         notify->setText(i18n("Document <i>%1</i> contains several versions. Go to File->Versions to open an old version.", store->urlOfStore().url()));
-        notify->addContext("url", store->urlOfStore().url());
+        notify->setUrls({store->urlOfStore()});
         QTimer::singleShot(0, notify, &KNotification::sendEvent);
 
         KoXmlDocument versionInfo;
@@ -2259,13 +2260,13 @@ bool KoDocument::hasExternURL() const
 
 static const struct {
     const char *localName;
-    const char *documentType;
+    KLazyLocalizedString documentType;
 } TN2DTArray[] = {
-    { "text", I18N_NOOP("a word processing") },
-    { "spreadsheet", I18N_NOOP("a spreadsheet") },
-    { "presentation", I18N_NOOP("a presentation") },
-    { "chart", I18N_NOOP("a chart") },
-    { "drawing", I18N_NOOP("a drawing") }
+    { "text", kli18n("a word processing") },
+    { "spreadsheet", kli18n("a spreadsheet") },
+    { "presentation", kli18n("a presentation") },
+    { "chart", kli18n("a chart") },
+    { "drawing", kli18n("a drawing") }
 };
 static const unsigned int numTN2DT = sizeof(TN2DTArray) / sizeof(*TN2DTArray);
 
@@ -2273,7 +2274,7 @@ QString KoDocument::tagNameToDocumentType(const QString& localName)
 {
     for (unsigned int i = 0 ; i < numTN2DT ; ++i)
         if (localName == TN2DTArray[i].localName)
-            return i18n(TN2DTArray[i].documentType);
+            return TN2DTArray[i].documentType.toString();
     return localName;
 }
 

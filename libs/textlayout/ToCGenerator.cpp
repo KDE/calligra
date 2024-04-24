@@ -59,7 +59,7 @@ void ToCGenerator::setBlock(const QTextBlock &block)
 
 QString ToCGenerator::fetchBookmarkRef(const QTextBlock &block, KoTextRangeManager *textRangeManager)
 {
-    QHash<int, KoTextRange *> ranges = textRangeManager->textRangesChangingWithin(block.document(), {&KoBookmark::staticMetaObject}, block.position(), block.position() + block.length(), block.position(), block.position() + block.length());
+    QMultiHash<int, KoTextRange *> ranges = textRangeManager->textRangesChangingWithin(block.document(), {&KoBookmark::staticMetaObject}, block.position(), block.position() + block.length(), block.position(), block.position() + block.length());
     foreach (KoTextRange *range, ranges) {
         KoBookmark *bookmark = dynamic_cast<KoBookmark *>(range);
         if (bookmark) {
@@ -179,7 +179,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
     QString tocEntryText = block.text();
     tocEntryText.remove(QChar::ObjectReplacementCharacter);
     // some headings contain tabs, replace all occurrences with spaces
-    tocEntryText.replace('\t',' ').remove(0x200B);
+    tocEntryText.replace('\t',' ').remove(QChar(0x200B));
     tocEntryText = removeWhitespacePrefix(tocEntryText);
 
     // Add only blocks with text

@@ -143,7 +143,7 @@ void KoPACanvas::keyReleaseEvent( QKeyEvent *event )
 
 void KoPACanvas::wheelEvent ( QWheelEvent * event )
 {
-    koPAView()->viewMode()->wheelEvent( event, viewConverter()->viewToDocument(widgetToView(event->pos() + documentOffset())));
+    koPAView()->viewMode()->wheelEvent( event, viewConverter()->viewToDocument(widgetToView(event->position().toPoint() + documentOffset())));
 }
 
 void KoPACanvas::closeEvent( QCloseEvent * event )

@@ -77,7 +77,7 @@ KoPageNavigator::KoPageNavigator(KoPAView *view)
     QWidget* controlWidget = new QWidget(this);
     QHBoxLayout* layout = new QHBoxLayout(controlWidget);
     layout->setSpacing(0);
-    layout->setMargin(0);
+    layout->setContentsMargins({});
 
     // the original go-*-view-page icons as set for the actions are not reused,
     // because they look too complex, at least with the Oxygen icons
@@ -115,10 +115,10 @@ KoPageNavigator::KoPageNavigator(KoPAView *view)
 
     // Fix width by the largest needed
     QFontMetrics fontMetrics(font());
-    d->pageNumberEdit->setMinimumWidth(fontMetrics.width(QString::number(maxPageCountPattern*10))); //one more
+    d->pageNumberEdit->setMinimumWidth(fontMetrics.boundingRect(QString::number(maxPageCountPattern*10)).width()); //one more
     const int editWidth = widget(Edit)->minimumWidth();
-    const int normalWidth = fontMetrics.width(displayText(false, isSlideType, maxPageCountPattern, maxPageCountPattern));
-    const int masterWidth = fontMetrics.width(displayText(true, isSlideType, maxPageCountPattern, maxPageCountPattern));
+    const int normalWidth = fontMetrics.boundingRect(displayText(false, isSlideType, maxPageCountPattern, maxPageCountPattern)).width();
+    const int masterWidth = fontMetrics.boundingRect(displayText(true, isSlideType, maxPageCountPattern, maxPageCountPattern)).width();
     setFixedWidth(qMax(editWidth, qMax(normalWidth, masterWidth)));
 
     updateDisplayLabel();
@@ -140,7 +140,7 @@ void KoPageNavigator::initActions()
 
 }
 
-void KoPageNavigator::enterEvent(QEvent *event)
+void KoPageNavigator::enterEvent(QEnterEvent *event)
 {
     Q_UNUSED(event);
 
@@ -176,7 +176,7 @@ bool KoPageNavigator::eventFilter(QObject *watched, QEvent *event)
         // here an increasing delta means going up in the list, so go to
         // smaller page numbers, and vice versa.
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
-        const int delta = wheelEvent->delta();
+        const int delta = wheelEvent->angleDelta().y();
 
         // trigger the respective actions
         if (delta > 0) {

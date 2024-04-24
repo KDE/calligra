@@ -364,7 +364,7 @@ QRect KoDocumentSectionDelegate::decorationRect(const QStyleOptionViewItem &opti
         if (index.data(Model::ActiveRole).toBool())
             font.setBold(!font.bold());
         const QFontMetrics metrics(font);
-        const int totalwidth = metrics.width(index.data(Qt::DisplayRole).toString()) + width + d->margin;
+        const int totalwidth = metrics.boundingRect(index.data(Qt::DisplayRole).toString()).width() + width + d->margin;
         int left;
         if (totalwidth < option.rect.width())
             left = (option.rect.width() - totalwidth) / 2;
@@ -416,7 +416,7 @@ void KoDocumentSectionDelegate::drawText(QPainter *p, const QStyleOptionViewItem
         }
 
         const QString text = index.data(Qt::DisplayRole).toString();
-        const QString elided = elidedText(p->fontMetrics(), r.width(), Qt::ElideRight, text);
+        const QString elided = p->fontMetrics().elidedText(text, Qt::ElideRight, r.width());
         p->drawText(d->margin, 0, r.width(), r.height(), Qt::AlignLeft | Qt::AlignTop, elided);
     }
     p->restore();
@@ -507,7 +507,7 @@ void KoDocumentSectionDelegate::drawProgressBar(QPainter *p, const QStyleOptionV
             opt.textAlignment = Qt::AlignHCenter;
             opt.text = i18n("%1 %", opt.progress);
             opt.rect = r;
-            opt.orientation = Qt::Horizontal;
+            opt.state = QStyle::State_Horizontal;
             opt.state = option.state;
             style->drawControl(QStyle::CE_ProgressBar, &opt, p, 0);
         }
