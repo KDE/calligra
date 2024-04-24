@@ -100,15 +100,15 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     buttonGroup->addButton(d->dialog->m_radioTab, 3);
     buttonGroup->addButton(d->dialog->m_radioOther, 4);
 
-    connect(d->dialog->m_formatComboBox, QOverload<const QString &>::of(&QComboBox::activated),
+    connect(d->dialog->m_formatComboBox, &QComboBox::textActivated,
             this, &KoCsvImportDialog::formatChanged);
-    connect(buttonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked),
+    connect(buttonGroup, &QButtonGroup::idClicked,
             this, &KoCsvImportDialog::delimiterClicked);
     connect(d->dialog->m_delimiterEdit, &QLineEdit::returnPressed,
             this, &KoCsvImportDialog::returnPressed);
     connect(d->dialog->m_delimiterEdit, &QLineEdit::textChanged,
             this, &KoCsvImportDialog::genericDelimiterChanged);
-    connect(d->dialog->m_comboQuote, QOverload<const QString &>::of(&QComboBox::activated),
+    connect(d->dialog->m_comboQuote, &QComboBox::textActivated,
             this, &KoCsvImportDialog::textquoteSelected);
     connect(d->dialog->m_sheet, &QTableWidget::currentCellChanged,
             this, &KoCsvImportDialog::currentCellChanged);
@@ -658,7 +658,7 @@ void KoCsvImportDialog::delimiterClicked(int id)
 void KoCsvImportDialog::textquoteSelected(const QString& mark)
 {
     if (mark == i18n("None"))
-        d->textQuote = 0;
+        d->textQuote = {};
     else
         d->textQuote = mark[0];
 

@@ -11,6 +11,7 @@
 
 #include <QStringList>
 #include <QString>
+#include <QRegularExpression>
 
 
 class Q_DECL_HIDDEN KoResourceFiltering::Private
@@ -25,9 +26,9 @@ public:
     , filename(true)
     , resourceServer(0)
     {}
-    QRegExp isTag;
-    QRegExp isExactMatch;
-    QRegExp searchTokenizer;
+    QRegularExpression isTag;
+    QRegularExpression isExactMatch;
+    QRegularExpression searchTokenizer;
     bool hasNewFilters;
     bool name,filename;
     KoResourceServerBase *resourceServer;
@@ -124,13 +125,15 @@ void KoResourceFiltering::populateIncludeExcludeFilters(const QStringList& filte
 
         if(!name.isEmpty()) {
             if (name.startsWith('[')) {
-                if (d->isTag.exactMatch(name) && d->resourceServer) {
-                    name = d->isTag.cap(1);
+                QRegularExpressionMatch match = d->isTag.match(name);
+                if (match.hasMatch() && d->resourceServer) {
+                    name = match.captured(1);
                     (*target) += d->resourceServer->queryResources(name);
                 }
             }
             else if (name.startsWith('"')) {
-                if (d->isExactMatch.exactMatch(name)) {
+                QRegularExpressionMatch match = d->isExactMatch.match(name);
+                if (match.hasMatch()) {
                     target->push_back(name);
                 }
             }

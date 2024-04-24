@@ -37,7 +37,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
     delete colorSetContainer;
     colorSetContainer = new QWidget();
     colorSetLayout = new QGridLayout();
-    colorSetLayout->setMargin(3);
+    colorSetLayout->setContentsMargins(3, 3, 3, 3);
     colorSetLayout->setSpacing(0); // otherwise the use can click where there is none
     colorSetContainer->setBackgroundRole(QPalette::Dark);
     for(int i = 0; i<16; i++) {
@@ -136,7 +136,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->firstShowOfContainer = true;
 
     d->mainLayout = new QVBoxLayout();
-    d->mainLayout->setMargin(4);
+    d->mainLayout->setContentsMargins(4, 4, 4, 4);
     d->mainLayout->setSpacing(2);
 
     d->colorSetContainer = 0;
@@ -144,7 +144,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->numRecents = 0;
     d->recentsLayout = new QHBoxLayout();
     d->mainLayout->addLayout(d->recentsLayout);
-    d->recentsLayout->setMargin(0);
+    d->recentsLayout->setContentsMargins({});
     d->recentsLayout->addWidget(new QLabel(i18n("Recent:")));
     d->recentsLayout->addStretch(1);
 

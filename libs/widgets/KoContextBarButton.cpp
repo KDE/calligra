@@ -121,7 +121,7 @@ void KoContextBarButton::stopFading()
     m_fadingValue = 0;
 }
 
-void KoContextBarButton::enterEvent(QEvent *event)
+void KoContextBarButton::enterEvent(QEnterEvent *event)
 {
     QToolButton::enterEvent(event);
 

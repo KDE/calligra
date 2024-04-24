@@ -128,8 +128,6 @@ public:
         Try     = 0x00000010, ///< Show Try button.
         Cancel  = 0x00000020, ///< Show Cancel-button. (this button reject()s the dialog; result set to QDialog::Rejected)
         Close   = 0x00000040, ///< Show Close-button. (this button closes the dialog)
-        No      = 0x00000080, ///< Show No button. (this button closes the dialog and sets the result to KoDialog::No)
-        Yes     = 0x00000100, ///< Show Yes button. (this button closes the dialog and sets the result to KoDialog::Yes)
         Reset   = 0x00000200, ///< Show Reset button
         Details = 0x00000400, ///< Show Details button. (this button will show the detail widget set with setDetailsWidget)
         User1   = 0x00001000, ///< Show User defined button 1.

@@ -79,14 +79,14 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
     layout->addWidget( d->colorSetWidget, 0, 0, 1, -1 );
     layout->addWidget( d->colorChooser, 1, 0 );
     layout->addWidget( d->opacitySlider, 1, 1 );
-    layout->setMargin(4);
+    layout->setContentsMargins(4, 4, 4, 4);
 
     wdgAction->setDefaultWidget(widget);
     d->menu->addAction(wdgAction);
     setMenu(d->menu);
     new QHBoxLayout(d->menu);
     d->menu->layout()->addWidget(widget);
-    d->menu->layout()->setMargin(0);
+    d->menu->layout()->setContentsMargins({});
 
     connect(this, &QAction::triggered, this, &KoColorPopupAction::emitColorChanged);
 

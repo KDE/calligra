@@ -629,7 +629,7 @@ protected:
         QDir().mkpath(QFileInfo(m_blackListFile).path());
         QFile f(m_blackListFile);
         if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            warnWidgets << "Cannot write meta information to '" << m_blackListFile << "'." << endl;
+            warnWidgets << "Cannot write meta information to '" << m_blackListFile << "'." << Qt::endl;
             return;
         }
 

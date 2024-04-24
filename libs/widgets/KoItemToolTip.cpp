@@ -7,7 +7,6 @@
 
 #include <QApplication>
 #include <QBasicTimer>
-#include <QDesktopWidget>
 #include <QModelIndex>
 #include <QPainter>
 #include <QPaintEvent>
@@ -67,23 +66,25 @@ void KoItemToolTip::showTip(QWidget *widget, const QPoint &pos, const QStyleOpti
 
 void KoItemToolTip::updatePosition(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option)
 {
-    const QRect drect = QApplication::desktop()->availableGeometry(widget);
-    const QSize size = sizeHint();
-    const int width = size.width(), height = size.height();
-    const QPoint gpos = widget->mapToGlobal(pos);
-    const QRect irect(widget->mapToGlobal(option.rect.topLeft()), option.rect.size());
+    // Todo update for wayland
 
-    int y = gpos.y() + 20;
-    if (y + height > drect.bottom())
-        y = qMax(drect.top(), irect.top() - height);
+    //const QRect drect = QApplication::desktop()->availableGeometry(widget);
+    //const QSize size = sizeHint();
+    //const int width = size.width(), height = size.height();
+    //const QPoint gpos = widget->mapToGlobal(pos);
+    //const QRect irect(widget->mapToGlobal(option.rect.topLeft()), option.rect.size());
 
-    int x;
-    if (gpos.x() + width < drect.right())
-        x = gpos.x();
-    else
-        x = qMax(drect.left(), gpos.x() - width);
+    //int y = gpos.y() + 20;
+    //if (y + height > drect.bottom())
+    //    y = qMax(drect.top(), irect.top() - height);
 
-    move(x, y);
+    //int x;
+    //if (gpos.x() + width < drect.right())
+    //    x = gpos.x();
+    //else
+    //    x = qMax(drect.left(), gpos.x() - width);
+
+    //move(x, y);
 
     resize(sizeHint());
  }

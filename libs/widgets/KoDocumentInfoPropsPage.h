@@ -7,7 +7,7 @@
 #ifndef _KODOCUMENTINFOPROPSPAGE_H_
 #define _KODOCUMENTINFOPROPSPAGE_H_
 
-#include <kpropertiesdialog.h>
+#include <KPropertiesDialogPlugin>
 #include "kowidgets_export.h"
 
 class KOWIDGETS_EXPORT KoDocumentInfoPropsPage : public KPropertiesDialogPlugin

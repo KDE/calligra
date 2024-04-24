@@ -183,7 +183,7 @@ void KoGradientEditWidget::setupUI()
     editLayout->addWidget(m_addToPredefs, ++row, 0, 1, 3);
 
     editLayout->setSpacing(3);
-    editLayout->setMargin(6);
+    editLayout->setContentsMargins(6, 6, 6, 6);
     editLayout->setRowMinimumHeight(0, 12);
     editLayout->setRowStretch(++row, 1);
 }

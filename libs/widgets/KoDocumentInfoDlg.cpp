@@ -33,7 +33,7 @@
 
 
 // see KoIcon.h
-#define koSmallIcon(name) (SmallIcon(QStringLiteral(name)))
+#define koSmallIcon(name) (QIcon::fromTheme(name).pixmap(KIconLoader::StdSizes::SizeSmall))
 
 
 class KoPageWidgetItemAdapter : public KPageWidgetItem

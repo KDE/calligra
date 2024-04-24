@@ -146,13 +146,13 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->buttonGroup->addButton(button, Button_Remove);
     d->buttonLayout->addWidget(button, 0, 1);
 
-    connect(d->buttonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &KoResourceItemChooser::slotButtonClicked);
+    connect(d->buttonGroup, &QButtonGroup::idClicked, this, &KoResourceItemChooser::slotButtonClicked);
 
     d->buttonLayout->setColumnStretch(0, 1);
     d->buttonLayout->setColumnStretch(1, 1);
     d->buttonLayout->setColumnStretch(2, 2);
     d->buttonLayout->setSpacing(0);
-    d->buttonLayout->setMargin(0);
+    d->buttonLayout->setContentsMargins({});
 
     d->viewModeButton = new QToolButton(this);
     d->viewModeButton->setIcon(koIcon("view-choose"));
@@ -166,7 +166,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     layout->addWidget(d->splitter, 1, 0, 1, 2);
     layout->addWidget(d->tagManager->tagFilterWidget(), 2, 0, 1, 2);
     layout->addLayout(d->buttonLayout, 3, 0, 1, 2);
-    layout->setMargin(0);
+    layout->setContentsMargins({});
     layout->setSpacing(0);
     updateButtonState();
     showTaggingBar(false);
@@ -496,7 +496,7 @@ bool KoResourceItemChooser::eventFilter(QObject *object, QEvent *event)
         QWheelEvent *qwheel = static_cast<QWheelEvent *>(event);
         if (qwheel->modifiers() & Qt::ControlModifier) {
 
-            int degrees = qwheel->delta() / 8;
+            int degrees = qwheel->angleDelta().y() / 8;
             int newBaseLength = chooserSync->baseLength() + degrees / 15 * 10;
             chooserSync->setBaseLength(newBaseLength);
             return true;

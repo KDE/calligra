@@ -69,7 +69,7 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     : QMenu(parent)
 {
     QGridLayout *mainLayout = new QGridLayout();
-    mainLayout->setMargin(2);
+    mainLayout->setContentsMargins(2, 2, 2, 2);
 
      // The cap group
     capGroup = new QButtonGroup(this);
@@ -173,7 +173,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
 {
     setObjectName("Stroke widget");
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins({});
 
     QHBoxLayout *firstLineLayout = new QHBoxLayout();
 
@@ -247,8 +247,8 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     connect(d->lineStyle,  QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KoStrokeConfigWidget::applyChanges);
     connect(d->lineWidth,  &KoUnitDoubleSpinBox::valueChangedPt,    this, &KoStrokeConfigWidget::applyChanges);
     connect(d->colorAction, &KoColorPopupAction::colorChanged, this, &KoStrokeConfigWidget::applyChanges);
-    connect(d->capNJoinMenu->capGroup,   QOverload<int>::of(&QButtonGroup::buttonClicked),       this, &KoStrokeConfigWidget::applyChanges);
-    connect(d->capNJoinMenu->joinGroup,  QOverload<int>::of(&QButtonGroup::buttonClicked),       this, &KoStrokeConfigWidget::applyChanges);
+    connect(d->capNJoinMenu->capGroup,   &QButtonGroup::idClicked,       this, &KoStrokeConfigWidget::applyChanges);
+    connect(d->capNJoinMenu->joinGroup,  &QButtonGroup::idClicked,       this, &KoStrokeConfigWidget::applyChanges);
     connect(d->capNJoinMenu->miterLimit, &KoUnitDoubleSpinBox::valueChangedPt,    this, &KoStrokeConfigWidget::applyChanges);
     connect(d->startMarkerSelector,  QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KoStrokeConfigWidget::startMarkerChanged);
     connect(d->endMarkerSelector,  QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KoStrokeConfigWidget::endMarkerChanged);

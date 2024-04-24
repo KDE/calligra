@@ -33,7 +33,7 @@ public:
             type == QLatin1String("config") ?  QStandardPaths::GenericConfigLocation :
             type == QLatin1String("cache") ?   QStandardPaths::CacheLocation :
             type == QLatin1String("tmp") ?     QStandardPaths::TempLocation :
-            type == QLatin1String("appdata") ? QStandardPaths::DataLocation :
+            type == QLatin1String("appdata") ? QStandardPaths::AppDataLocation :
             type == QLatin1String("locale") ?  QStandardPaths::GenericDataLocation :
             /* default */                      QStandardPaths::GenericDataLocation;
     }

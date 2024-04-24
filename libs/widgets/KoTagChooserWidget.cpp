@@ -51,13 +51,12 @@ KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
     comboLayout->addWidget(d->tagToolButton, 0, 1);
 
     comboLayout->setSpacing(0);
-    comboLayout->setMargin(0);
+    comboLayout->setContentsMargins({});
     comboLayout->setColumnStretch(0, 3);
     this->setEnabled(true);
     clear();
 
-    connect(d->comboBox, QOverload<const QString &>::of(&KComboBox::currentIndexChanged),
-            this, &KoTagChooserWidget::tagChosen);
+    connect(d->comboBox, &KComboBox::currentTextChanged, this, &KoTagChooserWidget::tagChosen);
     connect(d->tagToolButton, &KoTagToolButton::popupMenuAboutToShow,
             this, &KoTagChooserWidget::tagOptionsContextMenuAboutToShow);
     connect(d->tagToolButton, &KoTagToolButton::newTagRequested,
@@ -156,7 +155,7 @@ void KoTagChooserWidget::addItems(QStringList tagNames)
     tagNames.sort();
     QStringList items;
 
-    foreach(const QString & readOnlyTag, d->readOnlyTags) {
+    for(const QString & readOnlyTag : std::as_const(d->readOnlyTags)) {
         items.append(readOnlyTag);
     }
 

@@ -38,7 +38,7 @@ KoZoomInput::KoZoomInput(QWidget* parent)
     QWidget* first = new QWidget(this);
     QHBoxLayout* layout = new QHBoxLayout(first);
     layout->setSpacing(0);
-    layout->setMargin(0);
+    layout->setContentsMargins({});
     d->label = new QLabel(first);
     d->label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(d->label, 10);
@@ -60,7 +60,7 @@ KoZoomInput::KoZoomInput(QWidget* parent)
     addWidget(d->combo);
     d->inside = false;
 
-    connect(d->combo, QOverload<const QString &>::of(&QComboBox::activated), this, &KoZoomInput::zoomLevelChanged);
+    connect(d->combo, &QComboBox::textActivated, this, &KoZoomInput::zoomLevelChanged);
 }
 
 KoZoomInput::~KoZoomInput()
@@ -68,7 +68,7 @@ KoZoomInput::~KoZoomInput()
     delete d;
 }
 
-void KoZoomInput::enterEvent(QEvent* event)
+void KoZoomInput::enterEvent(QEnterEvent* event)
 {
     Q_UNUSED(event);
 

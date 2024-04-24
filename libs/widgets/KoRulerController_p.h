@@ -128,7 +128,7 @@ public:
                 currentTab = KoText::Tab();
                 currentTab.type = tab->type;
                 if (tab->type == QTextOption::DelimiterTab)
-                    currentTab.delimiter = QLocale::system().decimalPoint(); // TODO check language of text
+                    currentTab.delimiter = QLocale::system().decimalPoint()[0]; // TODO check language of text
                 currentTabIndex = tabList.count();
                 tabList << currentTab;
             } else {

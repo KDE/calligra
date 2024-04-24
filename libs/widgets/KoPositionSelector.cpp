@@ -169,7 +169,7 @@ KoPositionSelector::KoPositionSelector(QWidget *parent)
     lay->addWidget(d->bottomLeft, 2, 0);
     setLayout(lay);
 
-    connect(&d->buttonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &KoPositionSelector::positionChanged);
+    connect(&d->buttonGroup, &QButtonGroup::idClicked, this, &KoPositionSelector::positionChanged);
 }
 
 KoPositionSelector::~KoPositionSelector() {

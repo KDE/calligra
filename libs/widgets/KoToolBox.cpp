@@ -10,10 +10,10 @@
 #include "KoToolBoxLayout_p.h"
 #include "KoToolBoxButton_p.h"
 
+#include <QActionGroup>
 #include <QButtonGroup>
-#include <QDesktopWidget>
 #include <QToolButton>
-#include <QStyleOptionFrameV3>
+#include <QStyleOptionFrame>
 #include <QPainter>
 #include <QHash>
 #include <QApplication>
@@ -33,21 +33,9 @@
 
 #define BUTTON_MARGIN 10
 
-static int buttonSize(int screen)
+static int buttonSize()
 {
-    QRect rc = QGuiApplication::screens().at(screen)->geometry();
-    if (rc.width() <= 1024) {
-        return 12;
-    }
-    else if (rc.width() <= 1377) {
-        return 14;
-    }
-    else  if (rc.width() <= 1920 ) {
-        return 16;
-    }
-    else {
-        return 22;
-    }
+    return 16;
 }
 
 class KoToolBox::Private
@@ -120,7 +108,7 @@ void KoToolBox::addButton(KoToolAction *toolAction)
 
     d->buttons << button;
 
-    int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
+    int toolbuttonSize = buttonSize();
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
     int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
     button->setIconSize(QSize(iconSize, iconSize));
@@ -287,7 +275,7 @@ void KoToolBox::slotContextIconSize()
 void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
 {
 
-    int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
+    int toolbuttonSize = buttonSize();
 
     if (!d->contextSize) {
 

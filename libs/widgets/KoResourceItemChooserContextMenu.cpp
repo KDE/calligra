@@ -30,7 +30,7 @@ KoLineEditAction::KoLineEditAction(QObject* parent)
     pWidget->setLayout(pLayout);
     setDefaultWidget(pWidget);
 
-    connect (m_editBox, QOverload<const QString &>::of(&KLineEdit::returnPressed),
+    connect (m_editBox, &KLineEdit::returnKeyPressed,
              this, &KoLineEditAction::onTriggered);
 }
 

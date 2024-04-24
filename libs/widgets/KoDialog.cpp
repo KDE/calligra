@@ -11,7 +11,6 @@
 #include "KoDialog_p.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QDialogButtonBox>
 #include <QHBoxLayout>
 #include <QHideEvent>
@@ -116,15 +115,11 @@ void KoDialogPrivate::appendButton(KoDialog::ButtonCode key, const KGuiItem &ite
         role = QDialogButtonBox::ApplyRole;
         break;
     case KoDialog::Try:
-    case KoDialog::Yes:
         role = QDialogButtonBox::YesRole;
         break;
     case KoDialog::Close:
     case KoDialog::Cancel:
         role = QDialogButtonBox::RejectRole;
-        break;
-    case KoDialog::No:
-        role = QDialogButtonBox::NoRole;
         break;
     case KoDialog::User1:
     case KoDialog::User2:
@@ -253,12 +248,6 @@ void KoDialog::setButtons(ButtonCodes buttonMask)
     if (buttonMask & Close) {
         d->appendButton(Close, KStandardGuiItem::close());
     }
-    if (buttonMask & Yes) {
-        d->appendButton(Yes, KStandardGuiItem::yes());
-    }
-    if (buttonMask & No) {
-        d->appendButton(No, KStandardGuiItem::no());
-    }
     if (buttonMask & Details) {
         d->appendButton(Details, KGuiItem(QString(), "help-about"));
         setDetailsWidgetVisible(false);
@@ -349,7 +338,7 @@ void KoDialog::setMainWidget(QWidget *widget)
     d->mMainWidget = widget;
     if (d->mMainWidget && d->mMainWidget->layout()) {
         // Avoid double-margin problem
-        d->mMainWidget->layout()->setMargin(0);
+        d->mMainWidget->layout()->setContentsMargins({});
     }
     d->setupLayout();
 }
@@ -531,7 +520,7 @@ void KoDialog::resizeLayout(QLayout *layout, int margin, int spacing)   //static
     }
 
     if (layout->layout()) {
-        layout->layout()->setMargin(margin);
+        layout->layout()->setContentsMargins(margin, margin, margin, margin);
         layout->layout()->setSpacing(spacing);
     }
 }
@@ -893,14 +882,6 @@ void KoDialog::slotButtonClicked(int button)
         break;
     case User1:
         emit user1Clicked();
-        break;
-    case Yes:
-        emit yesClicked();
-        done(Yes);
-        break;
-    case No:
-        emit noClicked();
-        done(No);
         break;
     case Cancel:
         emit cancelClicked();

@@ -70,7 +70,7 @@ KoTagFilterWidget::KoTagFilterWidget(QWidget* parent): QWidget(parent)
     d->tagSearchLineEdit->setEnabled(true);
 
     filterBarLayout->setSpacing(0);
-    filterBarLayout->setMargin(0);
+    filterBarLayout->setContentsMargins({});
     filterBarLayout->setColumnStretch(0, 1);
     filterBarLayout->addWidget(d->tagSearchLineEdit, 0, 0);
 

@@ -27,7 +27,7 @@ public Q_SLOTS:
 
 protected:
     void paintEvent(QPaintEvent*) override;
-    void enterEvent(QEvent *event) override;
+    void enterEvent(QEnterEvent *event) override;
     void leaveEvent(QEvent *event) override;
     void showEvent(QShowEvent *event) override;
     void hideEvent(QHideEvent *event) override;

@@ -86,7 +86,7 @@ KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceSe
     setMenu(d->menu);
     new QHBoxLayout(d->menu);
     d->menu->layout()->addWidget(widget);
-    d->menu->layout()->setMargin(0);
+    d->menu->layout()->setContentsMargins({});
 
     connect(d->resourceList, &QAbstractItemView::clicked, this, &KoResourcePopupAction::indexChanged);
 

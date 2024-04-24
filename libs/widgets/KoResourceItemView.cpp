@@ -20,7 +20,8 @@ bool KoResourceItemView::viewportEvent(QEvent *event)
 {
     if (event->type() == QEvent::ToolTip && model()) {
         QHelpEvent *he = static_cast<QHelpEvent *>(event);
-        QStyleOptionViewItem option = viewOptions();
+        QStyleOptionViewItem option;
+        initViewItemOption(&option);
         QModelIndex index = model()->buddy(indexAt(he->pos()));
         if (index.isValid()) {
             option.rect = visualRect(index);

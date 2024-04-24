@@ -36,7 +36,7 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
     :QWidget(parent), d(new Private())
 {
     QGridLayout* buttonLayout = new QGridLayout(this);
-    buttonLayout->setMargin(0);
+    buttonLayout->setContentsMargins({});
     buttonLayout->setSpacing(0);
 
     d->tagToolButton = new QToolButton(this);

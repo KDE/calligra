@@ -197,7 +197,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
 {
     setObjectName("Fill widget");
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins({});
     layout->setSpacing(0);
 
     d->group = new QButtonGroup(this);
@@ -237,7 +237,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     d->group->addButton(button, Pattern);
     layout->addWidget(button);
 
-    connect(d->group, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &KoFillConfigWidget::styleButtonPressed);
+    connect(d->group, &QButtonGroup::idClicked, this, &KoFillConfigWidget::styleButtonPressed);
 
     d->colorButton = new KoColorPopupButton(this);
     d->colorButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);

@@ -14,6 +14,7 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QDomDocument>
+#include <QRegularExpression>
 
 #include <KoResourceServer.h>
 
@@ -69,7 +70,7 @@ void KoResourceTagStore::removeResource(const KoResource *resource)
 
 QStringList KoResourceTagStore::tagNamesList() const
 {
-    return d->tagList.uniqueKeys();
+    return d->tagList.keys();
 }
 
 void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
@@ -131,7 +132,7 @@ void KoResourceTagStore::delTag(const QString& tag)
 
 QStringList KoResourceTagStore::searchTag(const QString& query) const
 {
-    QStringList tagsList = query.split(QRegExp("[,]\\s*"), Qt::SkipEmptyParts);
+    QStringList tagsList = query.split(QRegularExpression("[,]\\s*"), Qt::SkipEmptyParts);
     if (tagsList.isEmpty()) {
         return QStringList();
     }
@@ -217,7 +218,8 @@ void KoResourceTagStore::writeXMLFile(const QString &tagstore)
     }
 
     // Now write empty tags
-    foreach (const QString &tag, d->tagList.uniqueKeys())  {
+    const auto tags = d->tagList.keys();
+    for (const QString &tag : tags)  {
         if (d->tagList[tag] == 0) {
             QDomElement resourceEl = doc.createElement("resource");
             resourceEl.setAttribute("identifier", "dummy");

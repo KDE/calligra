@@ -14,7 +14,6 @@
 #include <QString>
 #include <QLocale>
 #include <QStringList>
-#include <QRegExp>
 #include <QList>
 #include <QSlider>
 #include <QLineEdit>
@@ -147,11 +146,12 @@ void KoZoomAction::triggered(const QString& text)
 
     if( mode == KoZoomMode::ZOOM_CONSTANT ) {
         bool ok;
-        QRegExp regexp( ".*(\\d+).*" ); // "Captured" non-empty sequence of digits
-        int pos = regexp.indexIn( zoomString );
+        QRegularExpression regexp( ".*(\\d+).*" ); // "Captured" non-empty sequence of digits
+        QRegularExpressionMatch match;
+        int pos = zoomString.indexOf(regexp, 0, &match);
 
         if( pos > -1 ) {
-            zoom = regexp.cap( 1 ).toInt( &ok );
+            zoom = match.captured( 1 ).toInt( &ok );
 
             if( !ok ) {
                 zoom = 0;

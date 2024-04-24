@@ -11,7 +11,7 @@
 #include <QFontInfo>
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QWidget>
 
 #include <QGlobalStatic>
 
@@ -27,7 +27,7 @@ KoDpi::KoDpi()
     // Another way to get the DPI of the display would be QPaintDeviceMetrics,
     // but we have no widget here (and moving this to KoView wouldn't allow
     // using this from the document easily).
-    auto window = qGuiApplication->activeWindow()
+    auto window = qApp->activeWindow();
     if (window) {
         m_dpiX = window->logicalDpiX();
         m_dpiY = window->logicalDpiY();
