@@ -30,11 +30,11 @@ Annotations::Annotations( OLEStreamReader* tableStream, const Word97::FIB& fib )
         m_annotationRef( 0 ), m_annotationRefIt( 0 )
 {
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << endl << "footnotes" << endl
-          << "   fcPlcffndRef=" << fib.fcPlcffndRef << " lcbPlcffndRef=" << fib.lcbPlcffndRef << endl
-          << "   fcPlcffndTxt=" << fib.fcPlcffndTxt << " lcbPlcffndTxt=" << fib.lcbPlcffndTxt << endl
-          << "annotations" << endl
-          << "   fcPlcfandRef=" << fib.fcPlcfandRef << " lcbPlcfandRef=" << fib.lcbPlcfandRef << endl
+    wvlog << Qt::endl << "footnotes" << Qt::endl
+          << "   fcPlcffndRef=" << fib.fcPlcffndRef << " lcbPlcffndRef=" << fib.lcbPlcffndRef << Qt::endl
+          << "   fcPlcffndTxt=" << fib.fcPlcffndTxt << " lcbPlcffndTxt=" << fib.lcbPlcffndTxt << Qt::endl
+          << "annotations" << Qt::endl
+          << "   fcPlcfandRef=" << fib.fcPlcfandRef << " lcbPlcfandRef=" << fib.lcbPlcfandRef << Qt::endl
           << "   fcPlcfandTxt=" << fib.fcPlcfandTxt << " lcbPlcfandTxt=" << fib.lcbPlcfandTxt << Qt::endl;
 #endif
     tableStream->push();

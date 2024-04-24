@@ -1029,15 +1029,19 @@ QString extractConditional(const QString &_text)
         if (! end.isNull()) {
             {
                 QString regex = QString("^_%1(.*\"\\$\".*)%2;.*").arg(QString("\\%1").arg(text[1]), QString("\\%1").arg(end));
-                QRegExp ex(regex);
-                ex.setMinimal(true);
-                if (ex.indexIn(text) >= 0) return ex.cap(1);
+                QRegularExpression ex(regex, QRegularExpression::InvertedGreedinessOption);
+                QRegularExpressionMatch match;
+                if (text.indexOf(ex, 0, &match) >= 0) {
+                    return match.captured(1);
+                }
             }
             {
                 QString regex = QString("^_%1(.*\\[\\$.*\\].*)%2;.*").arg(QString("\\%1").arg(text[1]), QString("\\%1").arg(end));
-                QRegExp ex(regex);
-                ex.setMinimal(true);
-                if (ex.indexIn(text) >= 0) return ex.cap(1);
+                QRegularExpression ex(regex, QRegularExpression::InvertedGreedinessOption);
+                QRegularExpressionMatch match;
+                if (text.indexOf(ex) >= 0) {
+                    return match.captured(1);
+                }
             }
         }
     }
@@ -1152,8 +1156,9 @@ QString currencyValue(const QString &value)
     if (value[0] == QChar(UNICODE_EUR)) return "EUR";
     if (value[0] == QChar(UNICODE_GBP)) return "GBP";
     if (value[0] == QChar(UNICODE_JPY)) return "JPY";
-    QRegExp symbolRegEx("^([^a-zA-Z0-9\\-_\\s]+)");
-    if (symbolRegEx.indexIn(value) >= 0) return symbolRegEx.cap(1);
+    QRegularExpression symbolRegEx("^([^a-zA-Z0-9\\-_\\s]+)");
+    QRegularExpressionMatch match;
+    if (value.indexOf(symbolRegEx, 0, &match) >= 0) return match.captured(1);
     return QString();
 }
 

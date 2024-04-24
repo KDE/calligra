@@ -25,7 +25,7 @@ public:
     VFill  fill;
     VFillRule fillRule;
     VStroke  stroke;
-    QMatrix matrix;
+    QTransform matrix;
     QFont  font;
 };
 

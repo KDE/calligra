@@ -33,7 +33,7 @@
 #include <QString>
 #include <QTime>
 #include <QtAlgorithms>
-#include <QMatrix>
+#include <QTransform>
 #include <QDebug>
 #include <QLoggingCategory>
 
@@ -540,7 +540,7 @@ void Filterkpr2odf::appendLine(KoXmlWriter* content, const KoXmlElement& objectE
     KoXmlElement angle = objectElement.namedItem("ANGLE").toElement();
     if (!angle.isNull()) {
         double angInRad = -angle.attribute("value").toDouble() * M_PI / 180.0;
-        QMatrix m(cos(angInRad), -sin(angInRad), sin(angInRad), cos(angInRad), 0, 0);
+        QTransform m(cos(angInRad), -sin(angInRad), sin(angInRad), cos(angInRad), 0, 0);
         qreal transX1 = 0.0;
         qreal transY1 = 0.0;
         qreal transX2 = 0.0;
@@ -1247,7 +1247,7 @@ void Filterkpr2odf::appendArrow(KoXmlWriter* content, const KoXmlElement& object
     double y = orig.attribute("y").toDouble();
     y -= m_pageHeight * (m_currentPage - 1);
 
-    QMatrix matrix;
+    QTransform matrix;
     matrix.translate(x + 0.5 * width, y + 0.5 * height);
     matrix.rotate(rotateAngle);
     matrix.translate(-0.5 * width, -0.5 * height);
@@ -1420,7 +1420,7 @@ void Filterkpr2odf::set2DGeometry(KoXmlWriter* content, const KoXmlElement& obje
     KoXmlElement angle = objectElement.namedItem("ANGLE").toElement();
     if (!angle.isNull()) {
         double angInRad = -angle.attribute("value").toDouble() * M_PI / 180.0;
-        QMatrix m(cos(angInRad), -sin(angInRad), sin(angInRad), cos(angInRad), 0, 0);
+        QTransform m(cos(angInRad), -sin(angInRad), sin(angInRad), cos(angInRad), 0, 0);
         QPointF center(s.width() / 2, s.height() / 2);
         qreal rotX = 0.0;
         qreal rotY = 0.0;

@@ -93,7 +93,7 @@ QpRec::type()
 //
 //QP_DEBUG("CellRef: NoteBook" << cNoteBook << ", col "
 //         << cColumn << ", Page " << (int)cPage << ", Row "
-//         << cRow << endl
+//         << cRow << Qt::endl
 //        );
 //}
 //
@@ -221,7 +221,7 @@ QpRecCell::cellRef(char* pText, QpTableNames& pTable, QP_INT16 /*pNoteBook*/, QP
 
         QP_UINT8 lPage = (lPageRelative ? pPage + cPage : pPage);
 
-        QP_DEBUG("pTable.name((unsigned)lPage) = " <<  pTable.name((unsigned)lPage) << endl);
+        QP_DEBUG("pTable.name((unsigned)lPage) = " <<  pTable.name((unsigned)lPage) << Qt::endl);
 
         lOut << pTable.name((unsigned)lPage) << '!'; // is '!' compat with QPRO???
     }
@@ -274,7 +274,7 @@ QpRecCell::cellRef(char* pText, QpTableNames& pTable, QpIStream& pFormulaRef)
                  << ", last col " << lLastColumn
                  << ", last page " << (unsigned)lLastPage
                  << ", last row " << lLastRow
-                 << endl
+                 << Qt::endl
                 );
 // ??? next few lines shouldn't just add rows together
         cellRef(pText, pTable, lNoteBook, lFirstPage, lFirstColumn, lFirstRow);
@@ -289,7 +289,7 @@ QpRecCell::cellRef(char* pText, QpTableNames& pTable, QpIStream& pFormulaRef)
         pFormulaRef >> lColumn >> lPage >> lRow;
 
         QP_DEBUG("FormulaRef: NoteBook " << lNoteBook << ", Col " << (unsigned)lColumn
-                 << ", Page " << (unsigned)lPage << ", Row " << lRow << endl
+                 << ", Page " << (unsigned)lPage << ", Row " << lRow << Qt::endl
                 );
 
 // ??? sort out what to do about lNotebook
@@ -305,7 +305,7 @@ QpRecBof::QpRecBof(QP_INT16, QpIStream& pIn)
 {
     pIn >> cFileFormat;
 
-    QP_DEBUG("BOF fileformat=" << cFileFormat << endl);
+    QP_DEBUG("BOF fileformat=" << cFileFormat << Qt::endl);
 }
 
 QpRecBof::~QpRecBof()
@@ -317,7 +317,7 @@ QpRecBof::~QpRecBof()
 QpRecEof::QpRecEof(QP_INT16, QpIStream&)
         : QpRec(QpEof)
 {
-    QP_DEBUG("EOF" << endl);
+    QP_DEBUG("EOF" << Qt::endl);
 }
 
 QpRecEof::~QpRecEof()
@@ -342,7 +342,7 @@ QpRecRecalcMode::QpRecRecalcMode(QP_INT16, QpIStream& pIn)
                                : cMode == Automatic  ? " (Automatic)"
                                : " (Unknown)"
                               )
-             << endl
+             << Qt::endl
             );
 }
 
@@ -381,7 +381,7 @@ QpRecRecalcOrder::QpRecRecalcOrder(QP_INT16, QpIStream& pIn)
                                 : cOrder == Row  ? " (Row)"
                                 : " (Unknown)"
                                )
-             << endl
+             << Qt::endl
             );
 }
 
@@ -412,7 +412,7 @@ QpRecEmptyCell::QpRecEmptyCell(QP_INT16, QpIStream& pIn)
 
     loadCellInfo(pIn);
 
-    QP_DEBUG(endl);
+    QP_DEBUG(Qt::endl);
 }
 
 QpRecEmptyCell::~QpRecEmptyCell()
@@ -431,7 +431,7 @@ QpRecIntegerCell::QpRecIntegerCell(QP_INT16, QpIStream& pIn)
 
     pIn >> cInt;
 
-    QP_DEBUG(", Int " << cInt << endl);
+    QP_DEBUG(", Int " << cInt << Qt::endl);
 }
 
 QpRecIntegerCell::~QpRecIntegerCell()
@@ -455,7 +455,7 @@ QpRecFloatingPointCell::QpRecFloatingPointCell(QP_INT16, QpIStream& pIn)
 
     pIn >> cValue;
 
-    QP_DEBUG(", Value " << cValue << endl);
+    QP_DEBUG(", Value " << cValue << Qt::endl);
 }
 
 QpRecFloatingPointCell::~QpRecFloatingPointCell()
@@ -482,7 +482,7 @@ QpRecLabelCell::QpRecLabelCell(QP_INT16 pLen, QpIStream& pIn)
 
     pIn.read(cLabel, lLabelLen);
 
-    QP_DEBUG(", Prefix " << cLabelPrefix << ", Label " << cLabel << endl);
+    QP_DEBUG(", Prefix " << cLabelPrefix << ", Label " << cLabel << Qt::endl);
 }
 
 QpRecLabelCell::~QpRecLabelCell()
@@ -529,12 +529,12 @@ QpRecFormulaCell::QpRecFormulaCell(QP_INT16 pLen, QpIStream& pIn)
 
     pIn.read(cFormula, lFormulaLen);
 
-    QP_DEBUG(", LastValue " << cLastValue << ", State " << cState << endl);
-    QP_DEBUG("   FormulaLen " << cLen << ", CellRef " << cCellRef << ", Formula" << endl);
+    QP_DEBUG(", LastValue " << cLastValue << ", State " << cState << Qt::endl);
+    QP_DEBUG("   FormulaLen " << cLen << ", CellRef " << cCellRef << ", Formula" << Qt::endl);
 #ifdef QP_TRACE
     Hexout(cFormula, lFormulaLen);
 #endif
-    QP_DEBUG(endl);
+    QP_DEBUG(Qt::endl);
 }
 
 QpRecFormulaCell::~QpRecFormulaCell()
@@ -566,7 +566,7 @@ QpRecFormulaCell::formulaReferences()
 QpRecUnknown::QpRecUnknown(QP_INT16 /*pType*/, QP_INT16 pLen, QpIStream& pIn)
         : QpRec(QpUnknown)
 {
-    QP_DEBUG("Unknown Type " << pType << ", len " << pLen << endl);
+    QP_DEBUG("Unknown Type " << pType << ", len " << pLen << Qt::endl);
 
     if (pLen > 0) {
         char* lBuf = new char[pLen];
@@ -588,7 +588,7 @@ QpRecBop::QpRecBop(QP_INT16, QpIStream& pIn)
         : QpRec(QpBop)
 {
     pIn >> cPageIndex;
-    QP_DEBUG("BOP: " << (unsigned)cPageIndex << endl);
+    QP_DEBUG("BOP: " << (unsigned)cPageIndex << Qt::endl);
 }
 
 QpRecBop::~QpRecBop()
@@ -610,7 +610,7 @@ QpRecPageName::QpRecPageName(QP_INT16, QpIStream& pIn)
 {
     pIn >> cPageName;
 
-    QP_DEBUG("Page Name: " << cPageName << endl);
+    QP_DEBUG("Page Name: " << cPageName << Qt::endl);
 }
 
 QpRecPageName::~QpRecPageName()
@@ -628,7 +628,7 @@ QpRecPageName::pageName()
 QpRecPassword::QpRecPassword(QP_INT16 pLen, QpIStream& pIn)
         : QpRec(QpPassword)
 {
-    QP_DEBUG("Password len = " << pLen << endl);
+    QP_DEBUG("Password len = " << pLen << Qt::endl);
 
     cPassword = new QP_UINT8[pLen];
 
@@ -638,7 +638,7 @@ QpRecPassword::QpRecPassword(QP_INT16 pLen, QpIStream& pIn)
 #ifdef QP_TRACE
     Hexout((char*)cPassword, pLen);
 #endif
-    QP_DEBUG(endl);
+    QP_DEBUG(Qt::endl);
 }
 
 QpRecPassword::~QpRecPassword()

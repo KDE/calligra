@@ -1514,6 +1514,6 @@ void OdtHtmlConverter::flattenStyle(const QString &styleName, QHash<QString, Sty
 QString OdtHtmlConverter::cssClassName(const QString& odfStyleName)
 {
     QString retval = odfStyleName;
-    QRegExp exp("[^a-zA-Z0-9_]"); //CSS class names are only allowed to use alphanumeric and underscore.
+    QRegularExpression exp("[^a-zA-Z0-9_]"); //CSS class names are only allowed to use alphanumeric and underscore.
     return retval.replace(exp, "_sc_"); //Not pretty, but it should serve to create unique class names.
 }

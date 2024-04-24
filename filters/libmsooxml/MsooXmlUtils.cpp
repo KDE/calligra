@@ -53,8 +53,6 @@
 #include <QImage>
 #include <QImageReader>
 #include <QPalette>
-#include <QRegExp>
-
 
 #include <memory>
 
@@ -162,8 +160,8 @@ KoFilter::ConversionStatus Utils::loadAndParse(QIODevice* io, KoXmlDocument& doc
     int errorLine, errorColumn;
     bool ok = doc.setContent(io, true, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
-        errorMsooXml << "Parsing error in " << fileName << ", aborting!" << endl
-        << " In line: " << errorLine << ", column: " << errorColumn << endl
+        errorMsooXml << "Parsing error in " << fileName << ", aborting!" << Qt::endl
+        << " In line: " << errorLine << ", column: " << errorColumn << Qt::endl
         << " Error message: " << errorMsg;
         errorMessage = i18n("Parsing error in the main document at line %1, column %2.\nError message: %3", errorLine , errorColumn , errorMsg);
         return KoFilter::ParsingError;

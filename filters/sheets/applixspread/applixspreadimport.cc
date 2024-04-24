@@ -8,6 +8,7 @@
 
 #include <QFile>
 #include <QMessageBox>
+#include <QRegularExpression>
 #include <QDebug>
 #include <math.h>
 #include <KoFilterChain.h>
@@ -237,9 +238,9 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             }
 
             // Replace part for this characters: <, >, &
-            mystr.replace(QRegExp("&"), "&amp;");
-            mystr.replace(QRegExp("<"), "&lt;");
-            mystr.replace(QRegExp(">"), "&gt;");
+            mystr.replace(QRegularExpression("&"), "&amp;");
+            mystr.replace(QRegularExpression("<"), "&lt;");
+            mystr.replace(QRegularExpression(">"), "&gt;");
 
 
             // Replace part for Applix Characters
@@ -343,13 +344,13 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                     qDebug() << "   = underline";
                     underline = 1;
                 } else if (typeChar.startsWith("FG")) {
-                    fg = typeChar.midRef(2).toInt();
+                    fg = QStringView{typeChar}.mid(2).toInt();
                     qDebug() << "  = Colornr" << fg;
                 } else if (typeChar.startsWith("TF")) {
-                    fontnr = typeChar.midRef(2).toInt();
+                    fontnr = QStringView{typeChar}.mid(2).toInt();
                     qDebug() << " = Font :" << fontnr << "" << typefacetab[fontnr];
                 } else if (typeChar.startsWith('P')) {
-                    fontsize = typeChar.midRef(1).toInt();
+                    fontsize = QStringView{typeChar}.mid(1).toInt();
                     qDebug() << "   = Fontsize" << fontsize;
                 } else {
                     qDebug() << "   = ??? Unknown typeChar:" << typeChar;
@@ -593,7 +594,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 QChar
 APPLIXSPREADImport::specCharfind(QChar a, QChar b)
 {
-    QChar chr;
+    int chr;
 
     if ((a == 'n') && (b == 'p'))  chr = 0x00DF; // 'ß';
 
@@ -760,7 +761,7 @@ APPLIXSPREADImport::specCharfind(QChar a, QChar b)
 
     else  chr = 0x0023; // '#';
 
-    return chr;
+    return QChar(chr);
 }
 
 

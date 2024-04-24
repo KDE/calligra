@@ -196,7 +196,7 @@ QString SvgOutputDev::convertPath(const GfxPath *path)
     return output;
 }
 
-QString SvgOutputDev::convertMatrix(const QMatrix &matrix)
+QString SvgOutputDev::convertMatrix(const QTransform &matrix)
 {
     return QString("matrix(%1 %2 %3 %4 %5 %6)")
            .arg(matrix.m11()).arg(matrix.m12())
@@ -371,7 +371,7 @@ QString SvgOutputDev::printStroke()
         stroke += " stroke-dasharray=\" ";
 
         foreach(qreal dash, d->pen.dashPattern()) {
-            stroke += dash + ' ';
+            stroke += QChar(int(dash)) + ' ';
         }
         stroke += "\"";
     }
@@ -427,9 +427,9 @@ void SvgOutputDev::drawString(GfxState * state, const GooString * s)
     double y = state->getCurY();
 
     const double * ctm = state->getCTM();
-    QMatrix transform(ctm[0], ctm[1], ctm[2], ctm[3], ctm[4], ctm[5]);
+    QTransform transform(ctm[0], ctm[1], ctm[2], ctm[3], ctm[4], ctm[5]);
 
-    QMatrix mirror;
+    QTransform mirror;
     mirror.translate(x, y);
     mirror.scale(1.0, -1.0);
     mirror.translate(-x, -y);
@@ -523,8 +523,7 @@ void SvgOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
     }
 
     const double * ctm = state->getCTM();
-    QMatrix m;
-    m.setMatrix(ctm[0] / width, ctm[1] / width, -ctm[2] / height, -ctm[3] / height, ctm[2] + ctm[4], ctm[3] + ctm[5]);
+    QTransform m(ctm[0] / width, ctm[1] / width, -ctm[2] / height, -ctm[3] / height, ctm[2] + ctm[4], ctm[3] + ctm[5]);
 
     QByteArray ba;
     QBuffer device(&ba);

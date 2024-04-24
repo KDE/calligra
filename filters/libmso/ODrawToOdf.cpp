@@ -13,6 +13,7 @@
 #include <KoXmlWriter.h>
 #include <QColor>
 #include <QBuffer>
+#include <QRegularExpression>
 #include "generated/leinputstream.h"
 
 #include <cmath>
@@ -118,7 +119,7 @@ namespace
     {
         static const QString f("%1");
         static const QString e("");
-        static const QRegExp r("\\.?0+$");
+        static const QRegularExpression r("\\.?0+$");
         return f.arg(v, 0, 'f').replace(r, e);
     }
 

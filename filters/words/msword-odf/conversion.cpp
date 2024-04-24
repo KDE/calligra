@@ -32,7 +32,6 @@
 #include <wv2/src/fields.h>
 
 #include <QDomDocument>
-#include <QRegExp>
 #include <QString>
 #include <QMap>
 
@@ -500,7 +499,7 @@ int Conversion::ditheringToGray(const quint16 ipat, bool* ok)
     case ipatBackDiag:
     case ipatCross:
     case ipatDiagCross:
-        debugMsDoc << "Unsupported shading pattern (0x" << hex << ipat << ")";
+        debugMsDoc << "Unsupported shading pattern (0x" << Qt::hex << ipat << ")";
         return (255 - qRound(0.3 * 255));
 
     case ipatPctNew2:
@@ -558,7 +557,7 @@ int Conversion::ditheringToGray(const quint16 ipat, bool* ok)
     case ipatPctNew97:
         return (255 - qRound(0.975 * 255));
     default:
-        debugMsDoc << "Unsupported shading pattern (0x" << hex << ipat << ")";
+        debugMsDoc << "Unsupported shading pattern (0x" << Qt::hex << ipat << ")";
         *ok = false;
         return 0;
     }

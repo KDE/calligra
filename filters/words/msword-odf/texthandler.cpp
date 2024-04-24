@@ -39,6 +39,7 @@
 #include <QUrl>
 #include <QBuffer>
 #include <QFontInfo>
+#include <QRegularExpression>
 #include <QRandomGenerator>
 
 #include <klocalizedstring.h>
@@ -421,7 +422,7 @@ void WordsTextHandler::footnoteFound(wvWare::FootnoteData data,
         }
         case msonfcChiManSty:
         {
-            QChar chicagoStyle[] =  {42, 8224, 8225, 167};
+            QChar chicagoStyle[] =  {QChar(42), QChar(8224), QChar(8225), QChar(167)};
             int styleIndex = (noteNumber - 1) % 4;
             int repeatCount = (noteNumber - 1) / 4;
             noteNumberString = QString(chicagoStyle[styleIndex]);
@@ -1011,7 +1012,7 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     //instructions and the content between fieldSeparator and fieldEnd
     //represents the field RESULT [optional].  In most cases the field RESULT
     //stores the complete information (instruction are applied by msword).
-    debugMsDoc << "fld->flt:" << fld->flt << "( 0x" << hex << fld->flt << ")";
+    debugMsDoc << "fld->flt:" << fld->flt << "( 0x" << Qt::hex << fld->flt << ")";
 
     //nested field
     if (m_fld->m_insideField) {
@@ -1122,16 +1123,17 @@ void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         // \l field-argument - Text in this switch's field-argument specifies a
         // location in the file, such as a bookmark, where to jump.
         //
-        QRegExp rx("\\s\\\\l\\s\"(\\S+)\"");
-        if (rx.indexIn(*inst) >= 0) {
+        QRegularExpression rx("\\s\\\\l\\s\"(\\S+)\"");
+        QRegularExpressionMatch match;
+        if (inst->indexOf(rx, 0, &match) >= 0) {
             // prevent invalid URI
-            if (rx.cap(1) != "#") {
-                m_fld->m_hyperLinkUrl = rx.cap(1).prepend("#");
+            if (match.captured(1) != "#") {
+                m_fld->m_hyperLinkUrl = match.captured(1).prepend("#");
             }
         }
-        rx = QRegExp("HYPERLINK\\s\"(\\S+)\"");
-        if (rx.indexIn(*inst) >= 0) {
-            m_fld->m_hyperLinkUrl.prepend(rx.cap(1));
+        rx = QRegularExpression("HYPERLINK\\s\"(\\S+)\"");
+        if (inst->indexOf(rx, 0, &match) >= 0) {
+            m_fld->m_hyperLinkUrl.prepend(match.captured(1));
         }
 
         m_fld->m_hyperLinkActive = true;
@@ -1145,12 +1147,13 @@ void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         //
         // \h - Creates a hyperlink to the bookmarked paragraph.
         //
-        QRegExp rx("REF\\s(\\S+)");
-        if (rx.indexIn(*inst) >= 0) {
-            m_fld->m_hyperLinkUrl = rx.cap(1);
+        QRegularExpression rx("REF\\s(\\S+)");
+        QRegularExpressionMatch match;
+        if (inst->indexOf(rx, 0, &match) >= 0) {
+            m_fld->m_hyperLinkUrl = match.captured(1);
         }
-        rx = QRegExp("\\s\\\\h\\s");
-        if (rx.indexIn(*inst) >= 0) {
+        rx = QRegularExpression("\\s\\\\h\\s");
+        if (inst->indexOf(rx, 0, &match) >= 0) {
             m_fld->m_hyperLinkActive = true;
             m_fld->m_hyperLinkUrl.prepend("#");
         }
@@ -1176,12 +1179,13 @@ void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         //
         // \h - Creates a hyperlink to the bookmarked paragraph.
         //
-        QRegExp rx("PAGEREF\\s(\\S+)");
-        if (rx.indexIn(*inst) >= 0) {
-            m_fld->m_hyperLinkUrl = rx.cap(1);
+        QRegularExpression rx("PAGEREF\\s(\\S+)");
+        QRegularExpressionMatch match;
+        if (inst->indexOf(rx, 0, &match) >= 0) {
+            m_fld->m_hyperLinkUrl = match.captured(1);
         }
-        rx = QRegExp("\\s\\\\h\\s");
-        if (rx.indexIn(*inst) >= 0) {
+        rx = QRegularExpression("\\s\\\\h\\s");
+        if (inst->indexOf(rx) >= 0) {
             m_fld->m_hyperLinkActive = true;
             m_fld->m_hyperLinkUrl.prepend("#");
         }
@@ -1195,9 +1199,11 @@ void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         // something like 'TIME \@ "MMMM d, yyyy"' into 'MMMM d, yyyy' cause
         // the NumberFormatParser doesn't handle it correct else.
         //
-        QRegExp rx(".*\"(.*)\".*");
-        if (rx.indexIn(*inst) >= 0)
-            m_fld->m_instructions = rx.cap(1);
+        QRegularExpression rx(".*\"(.*)\".*");
+        QRegularExpressionMatch match;
+        if (inst->indexOf(rx, 0, &match) >= 0) {
+            m_fld->m_instructions = match.captured(1);
+        }
         break;
     }
     default:
@@ -1246,11 +1252,12 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
     {
         //TODO: nested fields support required
         //NOTE: actually combined characters stored as 'equation'
-        QRegExp rx("eq \\\\o\\(\\\\s\\\\up 36\\(([^\\)]*)\\),\\\\s\\\\do 12\\(([^\\)]*)\\)\\)");
-        int where = rx.indexIn(*inst);
+        QRegularExpression rx("eq \\\\o\\(\\\\s\\\\up 36\\(([^\\)]*)\\),\\\\s\\\\do 12\\(([^\\)]*)\\)\\)");
+        QRegularExpressionMatch match;
+        int where = inst->indexOf(rx, 0, &match);
 
         if (where != -1) {
-            QString cc = rx.cap(1) + rx.cap(2);
+            QString cc = match.captured(1) + match.captured(2);
             if (!cc.isEmpty()) {
                 m_paragraph->setCombinedCharacters(true);
                 m_paragraph->addRunOfText(cc, chp, QString(""), m_parser->styleSheet());
@@ -1277,9 +1284,10 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
         break;
     case MACROBUTTON:
     {
-        QRegExp rx("MACROBUTTON\\s\\s?\\w+\\s\\s?(.+)$");
-        if (rx.indexIn(*inst) >= 0) {
-            writer.addTextNode(rx.cap(1));
+        QRegularExpression rx("MACROBUTTON\\s\\s?\\w+\\s\\s?(.+)$");
+        QRegularExpressionMatch match;
+        if (inst->indexOf(rx, 0, &match) >= 0) {
+            writer.addTextNode(match.captured(1));
         }
         break;
     }
@@ -1360,21 +1368,22 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
     }
     case SYMBOL:
     {
-        QRegExp rx_txt("SYMBOL\\s{2}(\\S+)\\s+.+$");
+        QRegularExpression rx_txt("SYMBOL\\s{2}(\\S+)\\s+.+$");
+        QRegularExpressionMatch match;
         QString txt;
         *inst = inst->trimmed();
 
         //check for text in field instructions
-        if (rx_txt.indexIn(*inst) >= 0) {
-            txt = rx_txt.cap(1);
+        if (inst->indexOf(rx_txt, 0, &match) >= 0) {
+            txt = match.captured(1);
 
             //ascii code
             if (inst->contains("\\a")) {
-                QRegExp rx16("0\\D.+");
+                QRegularExpression rx16("0\\D.+");
                 bool ok = false;
                 int n;
 
-                if (rx16.indexIn(txt) >= 0) {
+                if (txt.indexOf(rx16) >= 0) {
                     n = txt.toInt(&ok, 16);
                 } else {
                     n = txt.toInt(&ok, 10);
@@ -1456,11 +1465,12 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
          * ************************************************
          */
         // \h - Makes the table of contents entries hyperlinks.
-        QRegExp rx = QRegExp("\\s\\\\h\\s");
+        QRegularExpression rx("\\s\\\\h\\s");
+        QRegularExpressionMatch match;
         QString hlinkStyleName;
         bool hyperlink = false;
 
-        if (rx.indexIn(*inst) >= 0) {
+        if (inst->indexOf(rx) >= 0) {
             hyperlink = true;
         }
         // Hyperlink style info is not provided by the TOC field, reusing the
@@ -1475,10 +1485,10 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
         // the table of contents.  Page numbers are omitted from all levels
         // unless a range of entry levels is specified by text in this switch's
         // field-argument.  A range is specified as for \l.
-        rx = QRegExp("\\s\\\\n\\s");
+        rx = QRegularExpression("\\s\\\\n\\s");
         bool pgnum = true;
 
-        if (rx.indexIn(*inst) >= 0) {
+        if (inst->indexOf(rx) >= 0) {
             pgnum = false;
         }
 
@@ -1486,22 +1496,22 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
         // specified range of built-in heading styles.  Headings in a style
         // range are specified by text in field-argument.  If no heading range
         // is specified, all heading levels used in the document are listed.
-        rx = QRegExp("\\s\\\\o\\s\"(\\S+)\"");
+        rx = QRegularExpression("\\s\\\\o\\s\"(\\S+)\"");
         int levels = 0;
 
-        if (rx.indexIn(*inst) >= 0) {
-            QStringList levels_lst = rx.cap(1).split('-');
+        if (inst->indexOf(rx, 0, &match) >= 0) {
+            QStringList levels_lst = match.captured(1).split('-');
             levels = levels_lst.last().toInt();
         }
 
         // \p field-argument - text in this switch's field-argument specifies a
         // sequence of characters that separate an entry and its page number.
         // The default is a tab with leader dots.
-        rx = QRegExp("\\s\\\\p\\s\"(\\s)\"");
+        rx = QRegularExpression("\\s\\\\p\\s\"(\\s)\"");
         QString separator;
 
-        if (rx.indexIn(*inst) >= 0) {
-            separator = rx.cap(1);
+        if (inst->indexOf(rx, 0, &match) >= 0) {
+            separator = match.captured(1);
         } else {
             // The tab leader character is not provided by the TOC field,
             // reusing from the last paragraph style applied in index-body.
@@ -1516,15 +1526,15 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
         // specifies those styles as a set of comma-separated doublets, with
         // each doublet being a comma-separated set of style name and table of
         // content level.  \t can be combined with \o.
-        rx = QRegExp("\\s\\\\t\\s\"(.+)\"");
+        rx = QRegularExpression("\\s\\\\t\\s\"(.+)\"");
         QMap<QString, int> customStyles;
         bool useOutlineLevel = true;
 
-        if (rx.indexIn(*inst) >= 0) {
+        if (inst->indexOf(rx, 0, &match) >= 0) {
             // Most of the files contain semicolons instead of commas.
-            QStringList fragments = rx.cap(1).split(QRegExp(";"));
+            QStringList fragments = match.captured(1).split(QRegularExpression(";"));
             if (fragments.size() % 2) {
-                fragments = rx.cap(1).split(QRegExp(","));
+                fragments = match.captured(1).split(QRegularExpression(","));
             }
             if (!(fragments.size() % 2)) {
                 bool ok;
@@ -1559,10 +1569,10 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
                     styleNames.append("Normal");
                 }
             } else {
-                rx = QRegExp("\\S+(\\d+)$");
-                if (rx.indexIn(styleNames.first()) >= 0) {
+                rx = QRegularExpression("\\S+(\\d+)$");
+                if (styleNames.first().indexOf(rx, 0, &match) >= 0) {
                     bool ok = false;
-                    uint n = rx.cap(1).toUInt(&ok, 10);
+                    uint n = match.captured(1).toUInt(&ok, 10);
                     if (!ok) {
                         debugMsDoc << "Conversion of QString to uint failed!";
                     } else {
@@ -1624,7 +1634,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
             }
         }
         //|-- <text:index-title-template>
-        int n = styleNames.indexOf(QRegExp("\\S+Heading$"));
+        int n = styleNames.indexOf(QRegularExpression("\\S+Heading$"));
         if (n != -1) {
             cwriter->startElement("text:index-title-template");
             cwriter->addAttribute("text:style-name", styleNames[n]);

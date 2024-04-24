@@ -236,7 +236,7 @@
 
 inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrname)
 {
-    const QStringRef v(attrs.value(atrname));
+    const QStringView v(attrs.value(atrname));
     return v.isNull() ? QString() : v.toString();
 }
 

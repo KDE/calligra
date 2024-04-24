@@ -21,7 +21,6 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QFile>
-#include <QTextCodec>
 #include <QtEndian>
 #include <QTextDocument>
 #include <QTextCursor>
@@ -414,19 +413,19 @@ void ExternBookRecord::setData(unsigned size, const unsigned char* data, const u
         d->name = QString(":");
     } else {
         d->name = EString::fromUnicodeString(data + 2, true, size - 2).str();
-        if (d->name.length() > 2 && d->name[0] == 0x0001) {
-            if (d->name[1] == 0x0001) {
+        if (d->name.length() > 2 && d->name[0] == QChar(0x0001)) {
+            if (d->name[1] == QChar(0x0001)) {
                 // 'unc-volume'
-                d->name = "unc://" + d->name.remove(0, 3).replace(0x0003, '/');
-            } else if (d->name[1] == 0x0002) {
+                d->name = "unc://" + d->name.remove(0, 3).replace(QChar(0x0003), '/');
+            } else if (d->name[1] == QChar(0x0002)) {
                 // relative to drive volume
-                d->name.remove(0, 2).replace(0x0003, '/');
-            } else if (d->name[1] == 0x0005) {
+                d->name.remove(0, 2).replace(QChar(0x0003), '/');
+            } else if (d->name[1] == QChar(0x0005)) {
                 // full url
                 d->name.remove(0, 3);
             } else {
                 // TODO other options
-                d->name.remove(0, 2).replace(0x0003, '/');
+                d->name.remove(0, 2).replace(QChar(0x0003), '/');
             }
         }
     }
@@ -969,12 +968,12 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
             if (fHighByte) {
                 for (unsigned k = 0; k < len*2; ++k) {
                     unsigned zc = readU16(data + 15 + k * 2);
-                    str.append(QString(zc));
+                    str.append(QChar(zc));
                 }
             } else {
                 for (unsigned k = 0; k < len; ++k) {
                     unsigned char uc = readU8(data + 15 + k) + 0x0 * 256;
-                    str.append(QString(uc));
+                    str.append(QChar(uc));
                 }
             }
 
@@ -2289,7 +2288,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         //const unsigned long version = readU16( buffer + 2 ); // must be 0x0000 or 0x0001
         //const unsigned long systemId = readU32( buffer + 4 );
 
-        QTextCodec* codec = QTextCodec::codecForLocale();
+        auto toUtf8 = QStringDecoder(QStringConverter::System);
 
         summarystream->seek(summarystream->tell() + 16);   // skip CLSID
         bytes_read = summarystream->read(buffer, 4);
@@ -2346,7 +2345,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                         const unsigned long length = readU32(buffer);
                         bytes_read = summarystream->read(buffer, length);
                         if (bytes_read != length) break;
-                        QString s = codec->toUnicode(reinterpret_cast<const char*>(buffer), static_cast<int>(length));
+                        QString s = toUtf8(QByteArray(reinterpret_cast<const char*>(buffer), static_cast<int>(length)));
                         workbook->setProperty(propertyId, s);
                     } break;
                     case 0x0040: { //VT_FILETIME
@@ -2358,7 +2357,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                         time <<= 32;
                         time += (unsigned long) dwLowDateTime;
                         time -= 116444736000000000LL;
-                        QString s(QDateTime::fromTime_t(time / 10000000.0).toString(Qt::ISODate));
+                        QString s(QDateTime::fromSecsSinceEpoch(time / 10000000.0).toString(Qt::ISODate));
                         workbook->setProperty(propertyId, s);
                     } break;
                     default:
@@ -2370,9 +2369,9 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                     if (type != 0x0002) break; // type should always be 2
                     bytes_read = summarystream->read(buffer, 4);
                     unsigned int codepage = readU32(buffer);
-                    QTextCodec* newCodec = QTextCodec::codecForName("CP" + QByteArray::number(codepage));
+                    auto newCodec = QStringConverter::encodingForName(QByteArray("CP" + QByteArray::number(codepage)));
                     if (newCodec) {
-                        codec = newCodec;
+                        toUtf8 = QStringDecoder(*newCodec);
                     }
                     qCDebug(lcSidewinder) << "Codepage:" << codepage;
                     }

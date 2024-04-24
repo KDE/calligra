@@ -68,7 +68,7 @@ KoFilter::ConversionStatus XAMLImport::convert(const QByteArray& from, const QBy
     QIODevice* in = new KCompressionDevice(fileIn, compressionType);
 
     if (!in->open(QIODevice::ReadOnly)) {
-        kError(30514) << "Cannot open file! Aborting!" << endl;
+        kError(30514) << "Cannot open file! Aborting!" << Qt::endl;
         delete in;
         return KoFilter::FileNotFound;
     }
@@ -81,7 +81,7 @@ KoFilter::ConversionStatus XAMLImport::convert(const QByteArray& from, const QBy
     if (! parsed) {
         kError(30514) << "Error while parsing file: "
         << "at line " << line << " column: " << col
-        << " message: " << errormessage << endl;
+        << " message: " << errormessage << Qt::endl;
         // ### TODO: feedback to the user
         return KoFilter::ParsingError;
     }
@@ -91,7 +91,7 @@ KoFilter::ConversionStatus XAMLImport::convert(const QByteArray& from, const QBy
 
     KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
     if (!out) {
-        kError(30514) << "Unable to open output file!" << endl;
+        kError(30514) << "Unable to open output file!" << Qt::endl;
         return KoFilter::StorageCreationError;
     }
     QByteArray cstring = outdoc.toLatin1(); // utf-8 already
@@ -125,7 +125,7 @@ XAMLImport::convert()
     m_gc.push(gc);
     parseGroup(0L, docElem);
 
-    QMatrix mat;
+    QTransform mat;
     mat.scale(1, -1);
     mat.translate(0, -m_document.height());
     VTransformCmd trafo(0L, mat);
@@ -534,7 +534,7 @@ XAMLImport::setupTransform(const QDomElement &e)
 {
     XAMLGraphicsContext *gc = m_gc.current();
 
-    QMatrix mat = VPath::parseTransform(e.attribute("transform"));
+    QTransform mat = VPath::parseTransform(e.attribute("transform"));
     gc->matrix = mat * gc->matrix;
 }
 

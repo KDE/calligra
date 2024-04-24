@@ -8,6 +8,8 @@
 #define XLSUTILS_H
 
 #include <QDebug>
+#include <QRegularExpression>
+#include <QPoint>
 #include <math.h>
 
 // translate the range-character to a number
@@ -27,24 +29,25 @@ inline int rangeStringToInt(const QString &string)
 }
 
 // splits a given cellrange like Sheet1.D2:Sheet1.F2, Sheet1.D2:F2, D2:F2 or D2 into its parts
-inline QPair<QString,QRect> splitCellRange(QString range)
+inline std::pair<QString,QRect> splitCellRange(QString range)
 {
     range.remove( '$' ); // remove "fixed" character
     // remove []
     if(range.startsWith(QLatin1Char('[')) && range.endsWith(QLatin1Char(']'))) {
         range.remove(0, 1).chop(1);
     }
-    QPair<QString,QRect> result;
+    std::pair<QString,QRect> result;
     const bool isPoint = !range.contains( ':' );
-    QRegExp regEx = isPoint ? QRegExp( "(.*)(\\.|\\!)([A-Z]+)([0-9]+)" ) : QRegExp ( "(.*)(\\.|\\!)([A-Z]+)([0-9]+)\\:(|.*\\.)([A-Z]+)([0-9]+)" );
-    if ( regEx.indexIn( range ) >= 0 ) {
-        const QString sheetName = regEx.cap( 1 );
-        QPoint topLeft( rangeStringToInt( regEx.cap(3) ), regEx.cap(4).toInt() );
+    QRegularExpression regEx = isPoint ? QRegularExpression( "(.*)(\\.|\\!)([A-Z]+)([0-9]+)" ) : QRegularExpression ( "(.*)(\\.|\\!)([A-Z]+)([0-9]+)\\:(|.*\\.)([A-Z]+)([0-9]+)" );
+    QRegularExpressionMatch match;
+    if ( range.indexOf(regEx, 0, &match) >= 0 ) {
+        const QString sheetName = match.captured( 1 );
+        QPoint topLeft( rangeStringToInt( match.captured(3) ), match.captured(4).toInt() );
         if ( isPoint ) {
-            result = QPair<QString,QRect>(sheetName, QRect(topLeft,QSize(1,1)));
+            result = std::pair<QString,QRect>(sheetName, QRect(topLeft, QSize(1,1)));
         } else {
-            QPoint bottomRight( rangeStringToInt( regEx.cap(6) ), regEx.cap(7).toInt() );
-            result = QPair<QString,QRect>(sheetName, QRect(topLeft,bottomRight));
+            const QPoint bottomRight( rangeStringToInt( match.captured(6) ), match.captured(7).toInt() );
+            result = std::pair<QString,QRect>(sheetName, QRect(topLeft,bottomRight));
         }
     }
     return result;

@@ -1,7 +1,3 @@
-if(Qca-qt6_FOUND)
-    add_definitions( -DHAVE_QCA2 )
-endif()
-
 include_directories(
     ${KOMAIN_INCLUDES}
     ${KOODF2_INCLUDES} # For charts

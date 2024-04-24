@@ -76,25 +76,25 @@ void Cell::generate(QTextStream& out, Table* table)
 
     out << "\\multicolumn{1}{";
     Format::generate(out, table->searchColumn(_col));
-    out << "}{" << endl;
+    out << "}{" << Qt::endl;
 
     if (getTextDataType() == "Str" || getTextDataType() == "Num") {
         generateTextFormat(out, getText());
         //out << getText();
     }
 
-    out << "}" << endl;
+    out << "}" << Qt::endl;
 
     /*if(getColSpan() > 0)
-     out << "}" << endl;
+     out << "}" << Qt::endl;
     else*/ if (getMultirow() > 0)
-        out << "}" << endl;
+        out << "}" << Qt::endl;
 
     /*Element* elt = 0;
     debugLatex <<"GENERATION OF A TABLE" << count();
-    out << endl << "\\begin{tabular}";
+    out << Qt::endl << "\\begin{tabular}";
     generateCellHeader(out);
-    out << endl;
+    out << Qt::endl;
     indent();
 
     int row= 0;
@@ -115,19 +115,19 @@ void Cell::generate(QTextStream& out, Table* table)
 
      if(elt->hasRightBorder())
       out << "|";
-     out << "}{" << endl;
+     out << "}{" << Qt::endl;
 
      generateCell(out, row, col);
-     out << "}" << endl;
+     out << "}" << Qt::endl;
      if(col < getMaxCol())
-      out << "&" << endl;
+      out << "&" << Qt::endl;
     }
-    out << "\\\\" << endl;
+    out << "\\\\" << Qt::endl;
     writeIndent(out);
     row = row + 1;
     }
     generateBottomLineBorder(out, row - 1);
-    out << "\\end{tabular}" << endl << endl;
+    out << "\\end{tabular}" << Qt::endl << Qt::endl;
     unindent();*/
     debugLatex << "END OF GENERATION OF A CELL";
 }

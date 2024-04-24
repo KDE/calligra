@@ -10,6 +10,7 @@
 #include "ImportUtils.h"
 
 #include <NumberFormatParser.h>
+#include <QRegularExpression>
 
 namespace XlsUtils {
 
@@ -66,15 +67,15 @@ bool isTimeFormat(const QString& valueFormat)
 
     // if there is still a time formatting picture item that was not escaped
     // and therefore removed above, then we have a time format here.
-    QRegExp ex("(h|H|m|s)");
-    return ex.indexIn(vf) >= 0;
+    QRegularExpression ex("(h|H|m|s)");
+    return vf.indexOf(ex) >= 0;
 }
 
 bool isFractionFormat(const QString& valueFormat)
 {
-    QRegExp ex("^#[?]+/[0-9?]+$");
+    QRegularExpression ex("^#[?]+/[0-9?]+$");
     QString vf = removeEscaped(valueFormat);
-    return ex.indexIn(vf) >= 0;
+    return vf.indexOf(ex) >= 0;
 }
 
 bool isDateFormat(const QString& valueFormat)
@@ -89,10 +90,11 @@ CellFormatKey::CellFormatKey(const Swinder::Format* format, const QString& formu
 {
     if (!isGeneral) {
         if (formula.startsWith(QLatin1String("msoxl:="))) { // special cases
-            QRegExp roundRegExp( "^msoxl:=ROUND[A-Z]*\\(.*;[\\s]*([0-9]+)[\\s]*\\)$" );
-            if (roundRegExp.indexIn(formula) >= 0) {
+            QRegularExpression roundRegExp( "^msoxl:=ROUND[A-Z]*\\(.*;[\\s]*([0-9]+)[\\s]*\\)$" );
+            QRegularExpressionMatch match;
+            if (formula.indexOf(roundRegExp, 0, &match) >= 0) {
                 bool ok = false;
-                int decimals = roundRegExp.cap(1).trimmed().toInt(&ok);
+                int decimals = match.captured(1).trimmed().toInt(&ok);
                 if (ok) {
                     decimalCount = decimals;
                 }

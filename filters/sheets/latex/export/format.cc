@@ -174,7 +174,7 @@ void Format::generateTextFormat(QTextStream& out, QString text)
         float blue  = ((float) getPenColor().blue()) / 255;
 
         out << "\\textcolor[rgb]{" << red << ", " << green <<
-        ", " << blue << "}{" << text << "}" << endl;
+        ", " << blue << "}{" << text << "}" << Qt::endl;
     }
 }
 
@@ -186,6 +186,6 @@ void Format::generateColor(QTextStream& out)
         float blue  = ((float) getBrushColor().blue()) / 255;
 
         out << "[rgb]{" << red << ", " << green <<
-        ", " << blue << "}%" << endl;
+        ", " << blue << "}%" << Qt::endl;
     }
 }

@@ -405,7 +405,7 @@ XFigParser::XFigParser( QIODevice* device )
     if( (device == 0) || (m_XFigStreamLineReader.hasError()) )
         return;
 
-    m_TextDecoder = QStringDecoder(QStringDecoder::encodingForName("ISO 8859-1"));
+    m_TextDecoder = QStringDecoder(QStringConverter::Latin1);
 
     // setup
     if (! parseHeader())
@@ -621,7 +621,7 @@ void XFigParser::parseColorObject()
     }
 
     QChar hashChar;
-    textStream >> ws >> hashChar;
+    textStream >> Qt::ws >> hashChar;
     const int red = parseTwoDigitHexValue(textStream);
     const int green = parseTwoDigitHexValue(textStream);
     const int blue = parseTwoDigitHexValue(textStream);
@@ -1037,7 +1037,9 @@ XFigParser::parseText()
                 if (charValue == 1) {
                     break;
                 }
-                text.append( m_TextDecoder->decode(QString(QChar(charValue))));
+                QByteArray c;
+                c.append(charValue);
+                text.append(m_TextDecoder.decode(c));
 
                 // digits are consumed
                 i += 3;

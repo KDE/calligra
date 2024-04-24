@@ -283,20 +283,20 @@ namespace wvWare
     template<class T>
     void PLCF<T>::dumpCPs() const
     {
-        wvlog << "PLCF: count=" << count() << endl;
+        wvlog << "PLCF: count=" << count() << Qt::endl;
         std::vector<U32>::const_iterator it = m_indices.begin();
         std::vector<U32>::const_iterator end = m_indices.end();
         for ( ; it != end; ++it )
-            wvlog << "    " << ( *it ) << endl;
-        wvlog << "PLCF done." << endl;
+            wvlog << "    " << ( *it ) << Qt::endl;
+        wvlog << "PLCF done." << Qt::endl;
     }
 
     template<class T>
     U32 PLCF<T>::calculateCount( U32 length )
     {
         if ( ( length - 4 ) % ( T::sizeOf + 4 ) ) {
-            wvlog << "Warning: PLCF size seems to be screwed" << endl;
-            wvlog << "Warning: length: " << length << ", size: " << T::sizeOf << ", mod: " << ( length - 4 ) % ( T::sizeOf + 4 ) << endl;
+            wvlog << "Warning: PLCF size seems to be screwed" << Qt::endl;
+            wvlog << "Warning: length: " << length << ", size: " << T::sizeOf << ", mod: " << ( length - 4 ) % ( T::sizeOf + 4 ) << Qt::endl;
             return 0;
         }
         return ( length - 4 ) / ( T::sizeOf + 4 );
@@ -452,8 +452,8 @@ namespace wvWare
     U32 PLCFMap<T>::calculateCount( U32 length ) const
     {
         if ( ( length - 4 ) % ( T::sizeOf + 4 ) ) {
-            wvlog << "Warning: PLCFMap size seems to be screwed" << endl;
-            wvlog << "Warning: length: " << length << ", size: " << T::sizeOf << ", mod: " << ( length - 4 ) % ( T::sizeOf + 4 ) << endl;
+            wvlog << "Warning: PLCFMap size seems to be screwed" << Qt::endl;
+            wvlog << "Warning: length: " << length << ", size: " << T::sizeOf << ", mod: " << ( length - 4 ) % ( T::sizeOf + 4 ) << Qt::endl;
             return 0;
         }
         return ( length - 4 ) / ( T::sizeOf + 4 );
@@ -611,11 +611,11 @@ namespace wvWare
                 const int pos = tmp * 2 - m_fkp.m_internalOffset;
                 if ( pos < 0 ) {
                     wvlog << "ERROR: FKP internalOffset (" << m_fkp.m_internalOffset << ") is bigger than " <<
-                        "2*" << (int)tmp << ", FKP array index would be negative!" << endl;
+                        "2*" << (int)tmp << ", FKP array index would be negative!" << Qt::endl;
                     return 0;
                 } else if ( pos >= 511 - m_fkp.m_internalOffset ) {
                     wvlog << "ERROR: FKP array index (" << pos << " is bigger than allocated size ("
-                          << 511 - m_fkp.m_internalOffset << ")" << endl;
+                          << 511 - m_fkp.m_internalOffset << ")" << Qt::endl;
                     return 0;
                 } else {
                     return &m_fkp.m_fkp[ pos ];

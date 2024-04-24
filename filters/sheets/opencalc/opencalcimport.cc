@@ -11,7 +11,6 @@
 #include <KoDocumentInfo.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
-#include <kcodecs.h>
 #include <KoFilterChain.h>
 #include <KoUnit.h>
 #include <KoStyleStack.h>
@@ -408,7 +407,7 @@ bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, 
                                 int tmpAngle = style.angle();
                                 int textHeight = static_cast<int>(cos(tmpAngle * M_PI / 180)
                                                                   * (fm.ascent() + fm.descent())
-                                                                  + abs((int)(fm.width(cell.displayText())
+                                                                  + abs((int)(fm.boundingRect(cell.displayText()).width()
                                                                               * sin(tmpAngle * M_PI / 180))));
                                 /*
                                   int textWidth = static_cast<int>( abs ( ( int ) ( sin( tmpAngle * M_PI / 180 )
@@ -506,19 +505,19 @@ bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, 
 
                 int p1 = value.indexOf('-');
                 if (p1 > 0)
-                    year  = value.leftRef(p1).toInt(&ok);
+                    year  = QStringView{value}.left(p1).toInt(&ok);
 
                 qDebug() << "year:" << value.left(p1);
 
                 int p2 = value.indexOf('-', ++p1);
 
                 if (ok)
-                    month = value.midRef(p1, p2 - p1).toInt(&ok);
+                    month = QStringView{value}.mid(p1, p2 - p1).toInt(&ok);
 
                 qDebug() << "month:" << value.mid(p1, p2 - p1);
 
                 if (ok)
-                    day = value.rightRef(value.length() - p2 - 1).toInt(&ok);
+                    day = QStringView{value}.right(value.length() - p2 - 1).toInt(&ok);
 
                 qDebug() << "day:" << value.right(value.length() - p2);
 
@@ -624,7 +623,7 @@ void OpenCalcImport::loadOasisCondition(const Cell& cell, const KoXmlElement &pr
     MapBase *const map = cell.sheet()->map();
     ValueParser *const parser = map->parser();
 
-    QLinkedList<Conditional> cond;
+    QList<Conditional> cond;
     while (!elementItem.isNull()) {
         qDebug() << "elementItem.tagName() :" << elementItem.tagName();
 
@@ -1278,7 +1277,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
                 QString p = t.attributeNS(ooNS::table, "protection-key", QString());
                 QByteArray str(p.toLatin1());
                 qDebug() << "Decoding password:" << str;
-                passwd = KCodecs::base64Decode(str);
+                passwd = QByteArray::fromBase64(str);
             }
             qDebug() << "Password hash: '" << passwd << "'";
             table->setProtected(passwd);
@@ -1296,7 +1295,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
             QString p = b.attributeNS(ooNS::table, "protection-key", QString());
             QByteArray str(p.toLatin1());
             qDebug() << "Decoding password:" << str;
-            passwd = KCodecs::base64Decode(str);
+            passwd = QByteArray::fromBase64(str);
         }
         qDebug() << "Password hash: '" << passwd << "'";
 

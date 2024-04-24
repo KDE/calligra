@@ -156,12 +156,12 @@ void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox *ct,
 
         doc.setStyleManager(0);
     } else { // plain-text
-        QStringList lines = m_shapeText.text().split(QRegExp("[\n\r]"));
+        QStringList lines = m_shapeText.text().split(QRegularExpression("[\n\r]"));
         foreach (const QString& line, lines) {
             out.xml.startElement("text:p", false);
             int pos = 0;
             while (pos < line.length()) {
-                int idx = line.indexOf(QRegExp("[^ ]"), pos);
+                int idx = line.indexOf(QRegularExpression("[^ ]"), pos);
                 if (idx == -1) idx = line.length();
                 int cnt = idx - pos;
                 if (cnt > 1) {

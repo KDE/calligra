@@ -41,7 +41,7 @@
 #include <sheets/core/odf/SheetsOdf.h>
 
 #include <QBrush>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QList>
 #include <QCache>
@@ -1675,13 +1675,15 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCell()
     if (refList.count() >= 2) {
         const QString fromCell = refList[0];
         const QString toCell = refList[1];
-        QRegExp rx("([A-Za-z]+)([0-9]+)");
-        if(rx.exactMatch(fromCell)) {
-            const int fromRow = rx.cap(2).toInt() - 1;
+        QRegularExpression rx("^([A-Za-z]+)([0-9]+)$");
+        QRegularExpressionMatch match = rx.match(fromCell);
+        if(match.hasMatch()) {
+            const int fromRow = match.captured(2).toInt() - 1;
             const int fromCol = Calligra::Sheets::Util::decodeColumnLabelText(fromCell) - 1;
-            if(rx.exactMatch(toCell)) {
+            match = rx.match(toCell);
+            if(match.hasMatch()) {
                 Cell* cell = m_context->sheet->cell(fromCol, fromRow, true);
-                cell->rowsMerged = rx.cap(2).toInt() - fromRow;
+                cell->rowsMerged = match.captured(2).toInt() - fromRow;
                 cell->columnsMerged = Calligra::Sheets::Util::decodeColumnLabelText(toCell) - fromCol;
 
                 // correctly take right/bottom borders from the cells that are merged into this one
@@ -2065,7 +2067,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_autoFilter()
     TRY_READ_ATTR_WITHOUT_NS(ref)
 
     // take last numbers and replace it with max row
-    ref.replace(QRegExp("[0-9]+$"), QString::number(m_context->sheet->maxRow()+1));
+    ref.replace(QRegularExpression("[0-9]+$"), QString::number(m_context->sheet->maxRow()+1));
 
     ref.prepend(".");
     QString sheetName = m_context->worksheetName;
@@ -2300,7 +2302,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
     shapeId = "_x0000_s" + shapeId;
 
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
-    QString destinationName = QLatin1String("") + link.mid(link.lastIndexOf('/') + 1);
+    QString destinationName = link.mid(link.lastIndexOf('/') + 1);
     KoFilter::ConversionStatus status = m_context->import->copyFile(link, destinationName, false);
     if (status == KoFilter::OK) {
         addManifestEntryForFile(destinationName);
@@ -2308,7 +2310,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
 
     //TODO find out which cell to pick
     Cell* cell = m_context->sheet->cell(0, 0, true);
-    cell->appendOleObject( qMakePair<QString,QString>(destinationName, m_context->oleReplacements.value(shapeId)), m_context->oleFrameBegins.value(shapeId));
+    cell->appendOleObject( qMakePair<QString,QString>(std::move(destinationName), m_context->oleReplacements.value(shapeId)), m_context->oleFrameBegins.value(shapeId));
 
     while (!atEnd()) {
         readNext();

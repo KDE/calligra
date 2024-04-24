@@ -80,17 +80,17 @@ void Spreadsheet::generate(QTextStream &out, bool hasPreamble)
 
     /* Body */
     if (hasPreamble) {
-        out << "\\begin{document}" << endl;
+        out << "\\begin{document}" << Qt::endl;
         indent();
     }
 
     _map.generate(out);
 
     if (hasPreamble)
-        out << "\\end{document}" << endl;
+        out << "\\end{document}" << Qt::endl;
     unindent();
     if (getIndentation() != 0)
-        errorLatex << "Error : indent != 0 at the end ! " << endl;
+        errorLatex << "Error : indent != 0 at the end ! " << Qt::endl;
 }
 
 /*******************************************/
@@ -105,7 +105,7 @@ void Spreadsheet::generatePreamble(QTextStream &out)
     // debugLatex <<"header :" << _headers.count();
 
     /* default : no rule */
-    // out << "\\renewcommand{\\headrulewidth}{0pt}" << endl;
+    // out << "\\renewcommand{\\headrulewidth}{0pt}" << Qt::endl;
     // for(header = _headers.first(); header != 0; header = _headers.next())
     // {
     //  generateTypeHeader(out, header);
@@ -118,7 +118,7 @@ void Spreadsheet::generatePreamble(QTextStream &out)
      debugLatex <<"footer :" << _footers.count();
     */
     /* default : no rule */
-    /* out << "\\renewcommand{\\footrulewidth}{0pt}" << endl;
+    /* out << "\\renewcommand{\\footrulewidth}{0pt}" << Qt::endl;
      for(footer = _footers.first(); footer != 0; footer = _footers.next())
      {
       generateTypeFooter(out, footer);
@@ -126,10 +126,10 @@ void Spreadsheet::generatePreamble(QTextStream &out)
     }*/
     /* Specify what header/footer style to use */
     /*if(getFileHeader()->hasHeader() || getFileHeader()->hasFooter())
-     out << "\\pagestyle{fancy}" << endl;
+     out << "\\pagestyle{fancy}" << Qt::endl;
     else
     {
-     out << "\\pagestyle{empty}" << endl;
+     out << "\\pagestyle{empty}" << Qt::endl;
     }*/
 }
 
@@ -142,11 +142,11 @@ void Spreadsheet::generateTypeHeader(QTextStream &/*out*/)
     if((_fileHeader->getHeadType() == TH_ALL ||
      _fileHeader->getHeadType() == TH_FIRST) && header->getInfo() == SI_EVEN)
     {
-     out << "\\fancyhead[L]{}" << endl;
+     out << "\\fancyhead[L]{}" << Qt::endl;
      out << "\\fancyhead[C]{";
      header->generate(out);
-     out << "}" << endl;
-     out << "\\fancyhead[R]{}" << endl;
+     out << "}" << Qt::endl;
+     out << "\\fancyhead[R]{}" << Qt::endl;
     }
 
     switch(header->getInfo())
@@ -155,18 +155,18 @@ void Spreadsheet::generateTypeHeader(QTextStream &/*out*/)
      case SI_FIRST:
       break;
      case SI_ODD:
-      out << "\\fancyhead[RO]{}" << endl;
+      out << "\\fancyhead[RO]{}" << Qt::endl;
       out << "\\fancyhead[CO]{";
       header->generate(out);
-      out << "}" << endl;
-      out << "\\fancyhead[LO]{}" << endl;
+      out << "}" << Qt::endl;
+      out << "\\fancyhead[LO]{}" << Qt::endl;
       break;
      case SI_EVEN:
-      out << "\\fancyhead[RE]{}" << endl;
+      out << "\\fancyhead[RE]{}" << Qt::endl;
       out << "\\fancyhead[CE]{";
       header->generate(out);
-      out << "}" << endl;
-      out << "\\fancyhead[LE]{}" << endl;
+      out << "}" << Qt::endl;
+      out << "\\fancyhead[LE]{}" << Qt::endl;
       break;
     }
 
@@ -174,8 +174,8 @@ void Spreadsheet::generateTypeHeader(QTextStream &/*out*/)
     {
      out << "\\fancyhead{";
      header->generate(out);
-     out << "}" << endl;
-     out << "\\thispagestyle{fancy}" << endl;
+     out << "}" << Qt::endl;
+     out << "\\thispagestyle{fancy}" << Qt::endl;
     }*/
 }
 
@@ -186,11 +186,11 @@ void Spreadsheet::generateTypeFooter(QTextStream &/*out*/)
 {
     /*if(_fileHeader->getFootType() == TH_ALL && footer->getInfo() == SI_EVEN)
     {
-     out << "\\fancyfoot[L]{}" << endl;
+     out << "\\fancyfoot[L]{}" << Qt::endl;
      out << "\\fancyfoot[C]{";
      footer->generate(out);
-     out << "}" << endl;
-     out << "\\fancyfoot[R]{}" << endl;
+     out << "}" << Qt::endl;
+     out << "\\fancyfoot[R]{}" << Qt::endl;
     }
     else if(_fileHeader->getFootType() == TH_EVODD)
     {
@@ -215,8 +215,8 @@ void Spreadsheet::generateTypeFooter(QTextStream &/*out*/)
     {
      out << "\\fanycfoot{";
      footer->generate(out);
-     out << "}" << endl;
-     out << "\\thispagestyle{fancy}" << endl;
+     out << "}" << Qt::endl;
+     out << "\\thispagestyle{fancy}" << Qt::endl;
     }*/
 }
 

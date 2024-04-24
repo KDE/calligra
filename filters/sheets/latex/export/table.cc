@@ -161,17 +161,17 @@ Row* Table::searchRow(int rowNumber)
 void Table::generate(QTextStream& out)
 {
     debugLatex << "GENERATION OF A TABLE" << getMaxRow() << " -" << getMaxColumn()
-    << endl;
-    out << endl << "%% " << getName() << endl;
+    << Qt::endl;
+    out << Qt::endl << "%% " << getName() << Qt::endl;
     if (getOrientation() == "Portrait") {
-        out << "\\begin{sidewaystable}" << endl << endl;
+        out << "\\begin{sidewaystable}" << Qt::endl << Qt::endl;
         indent();
         writeIndent(out);
     }
 
     out << "\\begin{tabular}";
     generateTableHeader(out);
-    out << endl;
+    out << Qt::endl;
     indent();
     int rowNumber = 1;
     while (rowNumber <= getMaxRow()) {
@@ -185,26 +185,26 @@ void Table::generate(QTextStream& out)
             generateCell(out, rowNumber, col);
 
             if (col < getMaxColumn())
-                out << " & " << endl;
+                out << " & " << Qt::endl;
         }
-        out << "\\\\" << endl;
+        out << "\\\\" << Qt::endl;
         rowNumber++;
     }
     generateBottomLineBorder(out, rowNumber - 1);
     unindent();
     writeIndent(out);
-    out << "\\end{tabular}" << endl << endl;
+    out << "\\end{tabular}" << Qt::endl << Qt::endl;
     unindent();
 
     if (getOrientation() == "Portrait") {
-        out << "\\end{sidewaystable}" << endl;
+        out << "\\end{sidewaystable}" << Qt::endl;
         unindent();
     }
     /*Element* elt = 0;
     debugLatex <<"GENERATION OF A TABLE" << count();
-    out << endl << "\\begin{tabular}";
+    out << Qt::endl << "\\begin{tabular}";
     generateTableHeader(out);
-    out << endl;
+    out << Qt::endl;
     indent();
 
     int row= 0;
@@ -225,19 +225,19 @@ void Table::generate(QTextStream& out)
 
      if(elt->hasRightBorder())
       out << "|";
-     out << "}{" << endl;
+     out << "}{" << Qt::endl;
 
      generateCell(out, row, col);
-     out << "}" << endl;
+     out << "}" << Qt::endl;
      if(col < getMaxCol())
-      out << "&" << endl;
+      out << "&" << Qt::endl;
     }
-    out << "\\\\" << endl;
+    out << "\\\\" << Qt::endl;
     writeIndent(out);
     row = row + 1;
     }
     generateBottomLineBorder(out, row - 1);
-    out << "\\end{tabular}" << endl << endl;
+    out << "\\end{tabular}" << Qt::endl << Qt::endl;
     unindent();*/
     debugLatex << "END OF GENERATION OF A TABLE";
 }
@@ -270,7 +270,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
     if (fullLine) {
         /* All column have a top border */
         writeIndent(out);
-        out << "\\hline" << endl;
+        out << "\\hline" << Qt::endl;
     } else {
         int index = 0;
         while (index < getMaxColumn()) {
@@ -282,7 +282,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
                     index++;
                 }
                 end = index - 1;
-                out << "\\cline{" << begin << "-" << end << "} " << endl;
+                out << "\\cline{" << begin << "-" << end << "} " << Qt::endl;
             }
             index++;
         }
@@ -321,7 +321,7 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
     if (fullLine) {
         /* All column have a bottom border */
         writeIndent(out);
-        out << "\\hline" << endl;
+        out << "\\hline" << Qt::endl;
     } else {
         int index = 0;
         while (index < getMaxColumn()) {
@@ -333,7 +333,7 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
                     ++index;
                 }
                 end = index - 1;
-                out << "\\cline{" << begin << "-" << end << "} " << endl;
+                out << "\\cline{" << begin << "-" << end << "} " << Qt::endl;
             }
             ++index;
         }

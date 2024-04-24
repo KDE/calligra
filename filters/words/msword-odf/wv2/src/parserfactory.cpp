@@ -63,7 +63,7 @@ namespace
             wvlog << "+++ Attention: Strange magic number: " << magic << Qt::endl;
 
         U16 nFib = wordDocument->readU16();
-        wvlog << "nFib = 0x" << hex << nFib << dec << "(" << nFib << ")" << Qt::endl;
+        wvlog << "nFib = 0x" << Qt::hex << nFib << Qt::dec << "(" << nFib << ")" << Qt::endl;
         wordDocument->seek( 0 );  // rewind the stream
 
         if ( nFib < 101 ) {

@@ -27,7 +27,7 @@ QColor NumberFormatParser::color(const QString& name)
 {
     if (name.startsWith(QLatin1String("color"), Qt::CaseInsensitive)) {
         bool ok = false;
-        const int index = name.midRef(5).toInt(&ok) + 7;
+        const int index = QStringView{name}.mid(5).toInt(&ok) + 7;
         return MSO::defaultIndexedColor(index);
     } else {
         return QColor(name);
@@ -119,7 +119,7 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
     KoXmlWriter xmlWriter(&buffer);
 
     QString plainText;
-    QMap< QString, QString > conditions;
+    QMultiMap< QString, QString > conditions;
     QString condition;
 
     // This is for the month vs. minutes-context.
@@ -514,7 +514,7 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
                 KoGenStyle result = styleFromTypeAndBuffer(type, buffer);
                 result.addAttribute("style:volatile", "true");
                 const QString styleName = styles->insert(result, "N");
-                conditions.insertMulti(condition, styleName);
+                conditions.insert(condition, styleName);
             }
             condition.clear();
 
@@ -576,7 +576,7 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
             KoGenStyle result = styleFromTypeAndBuffer(type, buffer);
             result.addAttribute("style:volatile", "true");
             const QString styleName = styles->insert(result, "N");
-            conditions.insertMulti(condition, styleName);
+            conditions.insert(condition, styleName);
         }
         condition.clear();
 
@@ -597,10 +597,7 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
     }
 
     // Add conditional styles.
-    for (QMap<QString, QString>::const_iterator it = conditions.constBegin();
-	 it != conditions.constEnd();
-	 ++it)
-    {
+    for (auto it = conditions.constBegin(); it != conditions.constEnd(); ++it) {
         // Conditional styles are always numbers.
         type = KoGenStyle::NumericNumberStyle;
 

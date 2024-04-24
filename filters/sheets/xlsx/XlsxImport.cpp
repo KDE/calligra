@@ -30,7 +30,6 @@
 #include <QFile>
 #include <QFont>
 #include <QPen>
-#include <QRegExp>
 #include <QImage>
 
 #include <kpluginfactory.h>

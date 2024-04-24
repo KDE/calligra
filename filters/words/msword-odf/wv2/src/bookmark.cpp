@@ -31,9 +31,9 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
     m_start(0), m_startIt(0), m_end(0), m_endIt(0), m_nFib(fib.nFib)
 {
 #ifdef WV2_DEBUG_BOOKMARK
-    wvlog   << endl
-            << "   fcPlcfbkf=" << fib.fcPlcfbkf << " lcbPlcfbkf=" << fib.lcbPlcfbkf << endl
-            << "   fcPlcfbkl=" << fib.fcPlcfbkl << " lcbPlcfbkl=" << fib.lcbPlcfbkl << endl
+    wvlog   << Qt::endl
+            << "   fcPlcfbkf=" << fib.fcPlcfbkf << " lcbPlcfbkf=" << fib.lcbPlcfbkf << Qt::endl
+            << "   fcPlcfbkl=" << fib.fcPlcfbkl << " lcbPlcfbkl=" << fib.lcbPlcfbkl << Qt::endl
             << "   lcbSttbfbkmk=" << fib.fcSttbfbkmk << " lcbSttbfbkmk=" << fib.lcbSttbfbkmk << Qt::endl;
 #endif
 

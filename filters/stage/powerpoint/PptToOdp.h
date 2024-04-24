@@ -695,13 +695,13 @@ private:
     * @brief An declaration.
     * settings for declaration text and usedeclaration name.
     */
-    QHash<DeclarationType/*type*/,QPair<QString/*declarationName*/,QString/*text*/> >declaration;
+    QMultiHash<DeclarationType/*type*/,QPair<QString/*declarationName*/,QString/*text*/> >declaration;
 
     /**
     * @brief An notesDeclaration.
     * settings for notes declaration  text and usenotes declaration name.
     */
-    QHash<DeclarationType/*type*/,QPair<QString /*declarationName*/,QString/*text*/> >notesDeclaration;
+    QMultiHash<DeclarationType/*type*/,QPair<QString /*declarationName*/,QString/*text*/> >notesDeclaration;
 };
 
 #endif // PPTTOODP_H

@@ -12,7 +12,6 @@
 #include "KoXmlStreamReader.h"
 
 #include <QXmlStreamReader>
-#include <QStringRef>
 #include <QVector>
 #include <QSharedData>
 
@@ -87,8 +86,8 @@ public:
     // --------------------------------
     // Reimplemented from QXmlStreamReader
 
-    QStringRef prefix() const;
-    QStringRef qualifiedName() const;
+    QStringView prefix() const;
+    QStringView qualifiedName() const;
     void setDevice(QIODevice *device);
     KoXmlStreamAttributes attributes() const;
 
@@ -118,29 +117,30 @@ private:
  */
 class KOODF2_EXPORT KoXmlStreamAttribute
 {
-    friend class QVector<KoXmlStreamAttribute>;       // For the default constructor
-    friend class KoXmlStreamAttributes;               // For the normal constructor
-    friend class KoXmlStreamReader;
+    friend QList<KoXmlStreamAttribute>;       // For the default constructor
+    friend KoXmlStreamAttributes;               // For the normal constructor
+    friend KoXmlStreamReader;
  public:
     ~KoXmlStreamAttribute();
 
+    // TODO move that back to the private part
+    KoXmlStreamAttribute();
+    KoXmlStreamAttribute(const KoXmlStreamAttribute &other);
+    KoXmlStreamAttribute(const QXmlStreamAttribute *attr, const KoXmlStreamReader *reader);
+
     // API taken from QXmlStreamAttribute
     bool       isDefault() const;
-    QStringRef name() const;
-    QStringRef namespaceUri() const;
-    QStringRef prefix() const;
-    QStringRef qualifiedName() const;
-    QStringRef value() const;
+    QStringView name() const;
+    QStringView namespaceUri() const;
+    QStringView prefix() const;
+    QStringView qualifiedName() const;
+    QStringView value() const;
 
     bool operator==(const KoXmlStreamAttribute &other) const;
     bool operator!=(const KoXmlStreamAttribute &other) const;
     KoXmlStreamAttribute &operator=(const KoXmlStreamAttribute &other);
 
  private:
-    // Only for friend classes.
-    KoXmlStreamAttribute();
-    KoXmlStreamAttribute(const KoXmlStreamAttribute &other);
-    KoXmlStreamAttribute(const QXmlStreamAttribute *attr, const KoXmlStreamReader *reader);
 
     class Private;
     Private * const d;
@@ -165,7 +165,7 @@ class KOODF2_EXPORT KoXmlStreamAttributes
     friend class KoXmlStreamReader;
 
  public:
-    typedef const KoXmlStreamAttribute *const_iterator;
+    using const_iterator = const QList<KoXmlStreamAttribute>::const_iterator;
 
     KoXmlStreamAttributes(const KoXmlStreamAttributes &other);
     ~KoXmlStreamAttributes();
@@ -187,11 +187,11 @@ class KOODF2_EXPORT KoXmlStreamAttributes
     bool        hasAttribute(const QString &qualifiedName) const;
     bool        hasAttribute(const QLatin1String &qualifiedName) const;
     bool        hasAttribute ( const QString & namespaceUri, const QString & name ) const;
-    QStringRef  value ( const QString & namespaceUri, const QString & name ) const;
-    QStringRef  value ( const QString & namespaceUri, const QLatin1String & name ) const;
-    QStringRef  value ( const QLatin1String & namespaceUri, const QLatin1String & name ) const;
-    QStringRef  value(const QString &qualifiedName) const;
-    QStringRef  value(const QLatin1String &qualifiedName) const;
+    QStringView  value ( const QString & namespaceUri, const QString & name ) const;
+    QStringView  value ( const QString & namespaceUri, const QLatin1String & name ) const;
+    QStringView  value ( const QLatin1String & namespaceUri, const QLatin1String & name ) const;
+    QStringView  value(const QString &qualifiedName) const;
+    QStringView  value(const QLatin1String &qualifiedName) const;
 
  private:
     // Only available from friend class KoXmlStreamReader.

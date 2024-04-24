@@ -9,6 +9,8 @@
 // Own
 #include "KoOdfChartWriter.h"
 
+#include <QRegularExpression>
+
 // libstdc++
 #include <algorithm> // For std:find()
 
@@ -59,18 +61,19 @@ QString KoOdfChartWriter::normalizeCellRange(QString range)
     range.remove('$');
 
     const bool isPoint = !range.contains( ':' );
-    QRegExp regEx(isPoint ? "(|.*\\.|.*\\!)([A-Z0-9]+)"
+    QRegularExpression regEx(isPoint ? "(|.*\\.|.*\\!)([A-Z0-9]+)"
 		          : "(|.*\\.|.*\\!)([A-Z]+[0-9]+)\\:(|.*\\.|.*\\!)([A-Z0-9]+)");
-    if (regEx.indexIn(range) >= 0) {
+    QRegularExpressionMatch match;
+    if (range.indexOf(regEx, 0, &match) >= 0) {
         range.clear();
-        QString sheetName = regEx.cap(1);
+        QString sheetName = match.captured(1);
         if (sheetName.endsWith(QLatin1Char('.')) || sheetName.endsWith(QLatin1Char('!')))
             sheetName.chop(1);
         if (!sheetName.isEmpty())
             range = sheetName + '.';
-        range += regEx.cap(2);
+        range += match.captured(2);
         if (!isPoint)
-            range += ':' + regEx.cap(4);
+            range += ':' + match.captured(4);
     }
 
     return range;
@@ -80,9 +83,9 @@ QColor KoOdfChartWriter::tintColor(const QColor & color, qreal tintfactor)
 {
     QColor retColor;
     const qreal  nonTindedPart = 1.0 - tintfactor;
-    qreal luminance = 0.0;
-    qreal sat = 0.0;
-    qreal hue = 0.0;
+    float luminance = 0.0;
+    float sat = 0.0;
+    float hue = 0.0;
     color.getHslF(&hue, &sat, &luminance);
     luminance = luminance * tintfactor + nonTindedPart;
     retColor.setHslF(hue, sat, luminance);
@@ -969,9 +972,9 @@ qreal KoOdfChartWriter::calculateFade(int index, int maxIndex)
 QColor KoOdfChartWriter::shadeColor(const QColor& col, qreal factor)
 {
     QColor result = col;
-    qreal luminance = 0.0;
-    qreal hue = 0.0;
-    qreal sat = 0.0;
+    float luminance = 0.0;
+    float hue = 0.0;
+    float sat = 0.0;
     result.getHslF(&hue, &sat, &luminance);
     luminance *= factor;
     result.setHslF(hue, sat, luminance);

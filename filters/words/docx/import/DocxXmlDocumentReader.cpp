@@ -144,7 +144,6 @@ void DocxXmlDocumentReader::init()
     m_outputFrames = true;
     m_currentNumId.clear();
     m_prevListLevel = 0;
-    qsrand(QTime::currentTime().msec());
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -1360,7 +1359,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::readBorderElement(BorderSide b
     if (!space.isEmpty()) {
         int sp = 0;
         STRING_TO_INT(space, sp, QString("w:%1@space").arg(borderSideName));
-        sourcePadding.insertMulti(borderSide, sp);
+        sourcePadding.insert(borderSide, sp);
     }
     readNext();
     return KoFilter::OK;
@@ -1399,7 +1398,7 @@ void DocxXmlDocumentReader::createBorderStyle(const QString& size, const QString
         border.append(QLatin1String("#000000"));
     }
 
-    sourceBorder.insertMulti(borderSide,border);
+    sourceBorder.insert(borderSide,border);
 }
 
 #undef CURRENT_EL
@@ -2804,7 +2803,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             else {
                 int spacePosition = m_complexCharValue.indexOf(' ');
                 QString textValue(QLatin1Char('#'));
-                textValue.append(m_complexCharValue.leftRef(spacePosition));
+                textValue.append(QStringView{m_complexCharValue}.left(spacePosition));
                 m_complexCharValue.remove(0, textValue.length());
                 body->addAttribute("xlink:href", QUrl(textValue).toEncoded());
             }
@@ -5016,10 +5015,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bdr()
         bool ok = false;
         const qreal sp = qreal(TWIP_TO_POINT(space.toDouble(&ok)));
         if (ok) {
-            m_textBorderPaddings.insertMulti(TopBorder, sp);
-            m_textBorderPaddings.insertMulti(LeftBorder, sp);
-            m_textBorderPaddings.insertMulti(RightBorder, sp);
-            m_textBorderPaddings.insertMulti(BottomBorder, sp);
+            m_textBorderPaddings.insert(TopBorder, sp);
+            m_textBorderPaddings.insert(LeftBorder, sp);
+            m_textBorderPaddings.insert(RightBorder, sp);
+            m_textBorderPaddings.insert(BottomBorder, sp);
         }
     }
 

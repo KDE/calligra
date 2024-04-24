@@ -39,6 +39,7 @@
 
 #include <QColor>
 #include <QByteArray>
+#include <QRegularExpression>
 
 //#define USE_OFFICEARTDGG_CONTAINER
 //#define DEBUG_GHANDLER
@@ -60,7 +61,7 @@ namespace
 QString format(double v) {
     static const QString f("%1");
     static const QString e("");
-    static const QRegExp r("\\.?0+$");
+    static const QRegularExpression r("\\.?0+$");
     return f.arg(v, 0, 'f').replace(r, e);
 }
 QString mm(double v) {

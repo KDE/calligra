@@ -366,12 +366,12 @@ void Header::debug()
     qDebug() << "b_shift:" << b_shift;
     qDebug() << "s_shift:" << s_shift;
     qDebug() << "num_bat:" << num_bat;
-    qDebug() << "dirent_start: 0x" << hex << dirent_start;
-    qDebug() << "threshold:" << dec << threshold;
-    qDebug() << "sbat_start: 0x" << hex << sbat_start;
-    qDebug() << "num_sbat:" << dec << num_sbat;
-    qDebug() << "mbat_start: 0x" << hex << mbat_start;
-    qDebug() << "num_mbat:" << dec << num_mbat;
+    qDebug() << "dirent_start: 0x" << Qt::hex << dirent_start;
+    qDebug() << "threshold:" << Qt::dec << threshold;
+    qDebug() << "sbat_start: 0x" << Qt::hex << sbat_start;
+    qDebug() << "num_sbat:" << Qt::dec << num_sbat;
+    qDebug() << "mbat_start: 0x" << Qt::hex << mbat_start;
+    qDebug() << "num_mbat:" << Qt::dec << num_mbat;
 
     unsigned s = (num_bat <= 109) ? num_bat : 109;
     std::cout << "bat blocks:";

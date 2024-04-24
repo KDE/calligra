@@ -52,7 +52,6 @@
 
 #include <QBuffer>
 #include <QColor>
-#include <QTextCodec>
 
 //TODO: provide all streams to the wv2 parser; POLE storage is going to replace
 //OLE storage soon!
@@ -229,7 +228,7 @@ void Document::processAssociatedStrings()
     }
 
     static const quint16 CP_WINUNICODE = 0x04B0;
-    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+    auto decoder = QStringDecoder(QStringDecoder::Utf8);
 
     QString title;
     QString subject;
@@ -248,11 +247,11 @@ void Document::processAssociatedStrings()
                 if (ps.property.at(i)._has_vt_I2) {
                     quint16 codepage = ps.property.at(i).vt_I2;
                     if (codepage == CP_WINUNICODE) {
-                        codec = QTextCodec::codecForName("UTF-16");
+                        decoder = QStringDecoder(QStringDecoder::Utf16);
                     } else {
-                        QTextCodec *newCodec = QTextCodec::codecForName(QString("Windows-%1").arg(codepage).toLatin1());
+                        auto newCodec = QStringDecoder::encodingForName(QString("Windows-%1").arg(codepage).toLatin1());
                         if (newCodec) {
-                            codec = newCodec;
+                            decoder = QStringDecoder(*newCodec);
                         } else {
                             warnMsDoc << "Unknown codepage " << codepage;
                         }
@@ -282,7 +281,7 @@ void Document::processAssociatedStrings()
             }
             if (p_str) {
                 if (ps.property.at(i).vt_lpstr) {
-                    *p_str = codec->toUnicode(ps.property.at(i).vt_lpstr->characters.data());
+                    *p_str = decoder(ps.property.at(i).vt_lpstr->characters.data());
                 }
                 p_str = 0;
             }

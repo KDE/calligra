@@ -30,10 +30,10 @@ Footnotes97::Footnotes97( OLEStreamReader* tableStream, const Word97::FIB& fib )
     m_footnoteRef( 0 ), m_footnoteRefIt( 0 ), m_endnoteRef( 0 ), m_endnoteRefIt( 0 )
 {
 #ifdef WV2_DEBUG_FOOTNOTES
-    wvlog << "Footnotes97::Footnotes97()" << endl
-          << "   fcPlcffndRef=" << fib.fcPlcffndRef << " lcbPlcffndRef=" << fib.lcbPlcffndRef << endl
-          << "   fcPlcffndTxt=" << fib.fcPlcffndTxt << " lcbPlcffndTxt=" << fib.lcbPlcffndTxt << endl
-          << "   fcPlcfendRef=" << fib.fcPlcfendRef << " lcbPlcfendRef=" << fib.lcbPlcfendRef << endl
+    wvlog << "Footnotes97::Footnotes97()" << Qt::endl
+          << "   fcPlcffndRef=" << fib.fcPlcffndRef << " lcbPlcffndRef=" << fib.lcbPlcffndRef << Qt::endl
+          << "   fcPlcffndTxt=" << fib.fcPlcffndTxt << " lcbPlcffndTxt=" << fib.lcbPlcffndTxt << Qt::endl
+          << "   fcPlcfendRef=" << fib.fcPlcfendRef << " lcbPlcfendRef=" << fib.lcbPlcfendRef << Qt::endl
           << "   fcPlcfendTxt=" << fib.fcPlcfendTxt << " lcbPlcfendTxt=" << fib.lcbPlcfendTxt << Qt::endl;
 #endif
     tableStream->push();

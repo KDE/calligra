@@ -343,7 +343,7 @@ XlsxXmlChartReader::Private::Private ( )
 int columnWidth(unsigned long col, unsigned long dx = 0, qreal defaultColumnWidth = 8.43) {
     QFont font("Arial", 10);
     QFontMetricsF fm(font);
-    const qreal characterWidth = fm.width("h");
+    const qreal characterWidth = fm.boundingRect("h").width();
     defaultColumnWidth *= characterWidth;
     return (defaultColumnWidth * col) + (dx / 1024.0 * defaultColumnWidth);
 }
@@ -3401,7 +3401,7 @@ QString convertToFormat( KoGenStyle::Type formatType, const QString& formatStrin
     switch (formatType) {
         case KoGenStyle::NumericDateStyle: {
             QString f = formatString;
-            f.replace( QRegExp( "[m{1}]" ), "M" );
+            f.replace( QRegularExpression( "[m{1}]" ), "M" );
             QDateTime dt = QDate( 1899, 12, 30 ).startOfDay();
             return dt.addDays( value.toInt() ).toString( f );
         }
@@ -3436,7 +3436,7 @@ void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString
     }
 //    const QString sheet = range.section( '!', 0, 0 );
     const QString cellRange = range.section( '!', 1, -1 );
-    const QStringList& res = cellRange.split( QRegExp( "[$:]" ), Qt::SkipEmptyParts );
+    const QStringList& res = cellRange.split( QRegularExpression( "[$:]" ), Qt::SkipEmptyParts );
 
     if (res.count() <= 1) {
         return;

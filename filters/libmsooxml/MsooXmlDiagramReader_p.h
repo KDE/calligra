@@ -426,7 +426,7 @@ class ListAtom : public AbstractAtom
 {
     public:
         explicit ListAtom(const QString &tagName) : AbstractAtom(tagName) {}
-        explicit ListAtom(const QStringRef &tagName) : AbstractAtom(tagName.toString()) {}
+        explicit ListAtom(const QStringView &tagName) : AbstractAtom(tagName.toString()) {}
         ~ListAtom() override {}
         ListAtom* clone(Context* context) override;
         void dump(Context* context, int level) override;

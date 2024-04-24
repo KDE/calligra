@@ -61,8 +61,8 @@ bool KoOdfListLevelProperties::readOdf(KoXmlStreamReader &reader)
     //FIXME: Handle child element
     bool retval = readAttributes(reader);
 
-    KoXmlStreamAttributes attrs = reader.attributes();
-    foreach (const KoXmlStreamAttribute &attr, attrs) {
+    const KoXmlStreamAttributes attrs = reader.attributes();
+    for (const KoXmlStreamAttribute &attr : attrs) {
         d->propertiesAttributes.insert(attr.qualifiedName().toString(), attr.value().toString());
     }
     debugOdf2 << "level properties attributes:" << d->propertiesAttributes;
@@ -77,8 +77,8 @@ bool KoOdfListLevelProperties::readOdf(KoXmlStreamReader &reader)
             // FIXME: Should create a class for  this element or not.
             retval = readAttributes(reader);
 
-            KoXmlStreamAttributes attrs = reader.attributes();
-            foreach (const KoXmlStreamAttribute &attr, attrs) {
+            const KoXmlStreamAttributes attrs = reader.attributes();
+            for (const KoXmlStreamAttribute &attr : attrs) {
                 d->labelAlignmentAttributes.insert(attr.qualifiedName().toString(), attr.value().toString());
             }
             debugOdf2 << "Label alignment attributes:" << d->labelAlignmentAttributes;

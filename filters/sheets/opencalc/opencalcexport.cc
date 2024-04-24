@@ -10,7 +10,6 @@
 
 #include <QDomDocument>
 
-#include <kcodecs.h>
 #include <kpluginfactory.h>
 
 #include <KoDocumentInfo.h>
@@ -405,7 +404,7 @@ bool OpenCalcExport::exportBody(QDomDocument & doc, QDomElement & content, const
 
         QByteArray passwd = ksdoc->map()->passwordHash();
         if (passwd.length() > 0) {
-            QByteArray str(KCodecs::base64Encode(passwd));
+            QByteArray str(passwd.toBase64());
             body.setAttribute("table:protection-key", QString(str.data()));
         }
     }
@@ -426,7 +425,7 @@ bool OpenCalcExport::exportBody(QDomDocument & doc, QDomElement & content, const
 
             QByteArray passwd = sheet->passwordHash();
             if (passwd.length() > 0) {
-                QByteArray str(KCodecs::base64Encode(passwd));
+                QByteArray str(passwd.toBase64());
                 tabElem.setAttribute("table:protection-key", QString(str.data()));
             }
         }
@@ -1016,10 +1015,11 @@ QString OpenCalcExport::convertFormula(QString const & formula) const
     }
 
     QString s;
-    QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
-    int n = exp.indexIn(formula, 0);
+    QRegularExpression exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
+    QRegularExpressionMatch match;
+    int n = formula.indexOf(exp, 0, &match);
     qDebug() << "Exp:" << formula << ", n:" << n << ", Length:" << formula.length()
-    << ", Matched length: " << exp.matchedLength();
+    << ", Matched length: " << match.capturedLength();
 
     bool inQuote1 = false;
     bool inQuote2 = false;
@@ -1029,7 +1029,7 @@ QString OpenCalcExport::convertFormula(QString const & formula) const
         return formula;
     while (i < l) {
         if ((n != -1) && (n < i)) {
-            n = exp.indexIn(formula, i);
+            n = formula.indexOf(exp, i, &match);
             qDebug() << "Exp:" << formula.right(l - i) << ", n:" << n;
         }
         if (formula[i] == '"') {
@@ -1078,7 +1078,7 @@ QString OpenCalcExport::convertFormula(QString const & formula) const
             continue;
         }
         if (n == i) {
-            int ml = exp.matchedLength();
+            int ml = match.capturedLength();
             if (ml > -1 && (i + ml) < formula.count() && formula[ i + ml ] == '!') {
                 qDebug() << "No cell ref but sheet name";
                 s += formula[i];

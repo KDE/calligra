@@ -1537,7 +1537,7 @@
         <field name="reserved"                  size="32" />
       </option>
       <option predicate="valueType(i) == XNumber">
-        <field name="floatValue"type="float" size="64" />
+        <field name="floatValue" type="float" size="64" />
       </option>
       <option predicate="valueType(i) == String">
         <field name="reserved"                  size="32"/>
@@ -1644,7 +1644,7 @@
     <if predicate="!isMonikerSavedAsStr()">
       <field name="oleMonikerClsid"   type="uuid" />
       <choose>
-        <option predicate="oleMonikerClsid() == &quot;{79eac9e0-baf9-11ce-8282-00aa004ba90b}&quot;">
+        <option predicate="oleMonikerClsid().toString() == &quot;{79eac9e0-baf9-11ce-8282-00aa004ba90b}&quot;">
           <field name="urlMonikerSize"    type="unsigned" size="32" />
           <field name="urlMonikerUrl"     type="unicodechars" />
           <choose>

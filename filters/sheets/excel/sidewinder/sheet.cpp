@@ -754,11 +754,11 @@ double Column::columnUnitsToPts(const double columnUnits)
     // https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-xls/
     QFont font("Arial", 10);
     QFontMetricsF fontMetrics(font);
-    double characterWidth = qMax(fontMetrics.width("0"),qMax(fontMetrics.width("1"),
-    qMax(fontMetrics.width("2"),qMax(fontMetrics.width("3"),
-    qMax(fontMetrics.width("4"),qMax(fontMetrics.width("5"),
-    qMax(fontMetrics.width("6"),qMax(fontMetrics.width("7"),
-    qMax(fontMetrics.width("8"),fontMetrics.width("9"))))))))));
+    double characterWidth = qMax(fontMetrics.boundingRect("0").width(),qMax(fontMetrics.boundingRect("1").width(),
+    qMax(fontMetrics.boundingRect("2").width(),qMax(fontMetrics.boundingRect("3").width(),
+    qMax(fontMetrics.boundingRect("4").width(),qMax(fontMetrics.boundingRect("5").width(),
+    qMax(fontMetrics.boundingRect("6").width(),qMax(fontMetrics.boundingRect("7").width(),
+    qMax(fontMetrics.boundingRect("8").width(),fontMetrics.boundingRect("9").width())))))))));
 
     double width = characterWidth * columnUnits / 256.0; //px
     width = qRound(width / 8.0 + 0.5) * 8.0;

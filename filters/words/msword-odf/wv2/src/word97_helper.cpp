@@ -409,8 +409,8 @@ U16 determineParameterLength( U16 sprm, const U8* in, WordVersion version )
     }
     else { // Word67
         if ( sprm > 255 )
-            wvlog << "Error: Trying to get the length of a flaky SPRM (" << sprm << ", 0x" << hex
-                  << sprm << dec << ") via the Word 95 method!" << Qt::endl;
+            wvlog << "Error: Trying to get the length of a flaky SPRM (" << sprm << ", 0x" << Qt::hex
+                  << sprm << Qt::dec << ") via the Word 95 method!" << Qt::endl;
         return Word95::SPRM::determineParameterLength( static_cast<U8>( sprm ), in );
     }
 }
@@ -1140,7 +1140,7 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         case SPRM::sprmPUndocumented4:
             break;
         default:
-            wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << Qt::endl;
+            wvlog << "Huh? None of the defined sprms matches 0x" << Qt::hex << sprm << Qt::dec << "... trying to skip anyway" << Qt::endl;
             break;
     }
     return static_cast<S16>( sprmLength );  // length of the SPRM
@@ -1731,7 +1731,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             wvlog << "=> fPicBullet:" << fPicBullet << "| fNoAutoSize:" << fNoAutoSize << "| check:" << *ptr;
             break;
         default:
-            wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << Qt::endl;
+            wvlog << "Huh? None of the defined sprms matches 0x" << Qt::hex << sprm << Qt::dec << "... trying to skip anyway" << Qt::endl;
             break;
     }
     return static_cast<S16>( sprmLength );  // length of the SPRM
@@ -1796,7 +1796,7 @@ S16 PICF::applyPICFSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet
             readBRC( brcRight, ptr, version );
             break;
         default:
-            wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << Qt::endl;
+            wvlog << "Huh? None of the defined sprms matches 0x" << Qt::hex << sprm << Qt::dec << "... trying to skip anyway" << Qt::endl;
             break;
     }
     return static_cast<S16>( sprmLength );  // length of the SPRM
@@ -2014,7 +2014,7 @@ S16 SEP::applySEPSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet* 
             wTextFlow = readU16( ptr );
             break;
         default:
-            wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << Qt::endl;
+            wvlog << "Huh? None of the defined sprms matches 0x" << Qt::hex << sprm << Qt::dec << "... trying to skip anyway" << Qt::endl;
             break;
     }
     return static_cast<S16>( sprmLength );  // length of the SPRM
@@ -2648,7 +2648,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         break;
     }
     default:
-        wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << Qt::endl;
+        wvlog << "Huh? None of the defined sprms matches 0x" << Qt::hex << sprm << Qt::dec << "... trying to skip anyway" << Qt::endl;
         break;
     }
     return static_cast<S16>( sprmLength );  // length of the SPRM

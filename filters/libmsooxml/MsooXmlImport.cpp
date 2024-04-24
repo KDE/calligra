@@ -24,7 +24,6 @@
 #include <QFile>
 #include <QFont>
 #include <QPen>
-#include <QRegExp>
 #include <QImage>
 #include <QInputDialog>
 #include <QImageReader>
@@ -33,6 +32,7 @@
 #include "MsooXmlDebug.h"
 #include <kzip.h>
 #include <QTemporaryFile>
+#include <QCryptographicHash>
 
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoDocumentInfo.h>
@@ -42,15 +42,6 @@
 #include <KoXmlWriter.h>
 
 #include <memory>
-
-#ifdef HAVE_QCA2
-// QCA headers have "slots" and "signals", which QT_NO_SIGNALS_SLOTS_KEYWORDS does not like
-#define slots Q_SLOTS
-#define signals Q_SIGNALS
-#include <QtCrypto>
-#undef slots
-#undef signals
-#endif
 
 using namespace MSOOXML;
 
@@ -182,15 +173,6 @@ static inline quint64 readU64(const void* p)
 {
     return quint64(readU32(p)) | quint64(readU32(reinterpret_cast<const char*>(p)+4)) << 32;
 }
-
-#ifdef HAVE_QCA2
-static QByteArray sha1sum(const QByteArray& data)
-{
-    QCA::Hash sha1Hash("sha1");
-    sha1Hash.update(data);
-    return sha1Hash.final().toByteArray();
-}
-#endif
 
 bool MsooXmlImport::isPasswordProtectedFile(QString &filename)
 {
@@ -365,8 +347,8 @@ QTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
                 x1[i] = x1[i] ^ hfinal[i];
                 x2[i] = x2[i] ^ hfinal[i];
             }
-            x1 = sha1sum(x1);
-            x2 = sha1sum(x2);
+            x1 = QCryptographicHash::hash(x1, QCryptographicHash::Sha1);
+            x2 = QCryptographicHash::hash(x2, QCryptographicHash::Sha1);
             QByteArray x3 = x1 + x2;
             QByteArray key = x3.left(128 / 8);
 

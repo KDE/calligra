@@ -64,7 +64,6 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_inGrpSpPr = false;
     m_insideTable = false;
     m_isLockedCanvas = false;
-    qsrand(QTime::currentTime().msec());
 }
 
 bool MSOOXML_CURRENT_CLASS::isCustomShape()

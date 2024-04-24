@@ -13,6 +13,8 @@
 #ifndef MSOOXML_DRAWINGML_SHARED_IMPL_H
 #define MSOOXML_DRAWINGML_SHARED_IMPL_H
 
+#include <QString>
+
 #undef CURRENT_EL
 #define CURRENT_EL extLst
 //! extLst (Extension List)
@@ -527,8 +529,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hslClr()
     READ_ATTR_WITHOUT_NS(lum)
 
     qreal trueHue = hue.toDouble() / 6000.0 / 360;
-    qreal trueSat = sat.leftRef(sat.size() - 1).toDouble() / 100.0;
-    qreal trueLum = lum.leftRef(lum.size() - 1).toDouble() / 100.0;
+    qreal trueSat = QStringView{sat}.left(sat.size() - 1).toDouble() / 100.0;
+    qreal trueLum = QStringView{lum}.left(lum.size() - 1).toDouble() / 100.0;
 
     m_currentColor.setHslF(trueHue, trueSat, trueLum);
 

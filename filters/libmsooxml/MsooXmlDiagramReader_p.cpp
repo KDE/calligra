@@ -1732,7 +1732,7 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
     xmlWriter->addAttribute("svg:width", QString("%1px").arg(w));
     xmlWriter->addAttribute("svg:height", QString("%1px").arg(h));
     if(rotateAngle != 0) {
-        QMatrix matrix;
+        QTransform matrix;
         matrix.translate(m_svgX + 0.5 * w, m_svgY + 0.5 * h);
         matrix.rotate(rotateAngle);
         matrix.translate(-0.5 * w, -0.5 * h);
@@ -2077,7 +2077,7 @@ bool IfAtom::testAtom(Context* context) {
         warnMsooXml<<"TODO func=posOdd";
     } else if(m_function == "revPos") { // Reverse position function.
         const int position = axis.indexOf(context->currentNode()) + 1;
-        funcValue = axis.count()-position;
+        funcValue = QChar(int(axis.count()) - position);
         //TODO lastIndexOf? 1-based? what index for not-found?
         warnMsooXml<<"TODO func=revPos";
     } else if(m_function == "var") { // Used to reference a variable.

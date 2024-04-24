@@ -244,7 +244,7 @@ static unsigned convertColumnWidth(qreal width)
         KoPostscriptPaintDevice pd;
         QFontMetricsF fm(f, &pd);
         for (char c = '0'; c <= '9'; ++c) {
-            factor = qMax(factor, fm.width(c));
+            factor = qMax(factor, fm.boundingRect(c).width());
         }
     }
     return width / factor * 256;

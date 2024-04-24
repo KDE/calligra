@@ -107,7 +107,7 @@ XAMLExport::visitVDocument(KarbonDocument& document)
     "<?xml version=\"1.0\" ?>\n" <<
     /* "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" " <<* */
     // "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">"
-    /*<<*/ endl;
+    /*<<*/ Qt::endl;
 
     // Add one line comment to identify Content Creator,
     // probably remove this later
@@ -116,15 +116,15 @@ XAMLExport::visitVDocument(KarbonDocument& document)
     // http://schemas.microsoft.com/2003/xaml
     // need to mention defs too Definitions namespace xmlns:def="Definition"
     *m_defs <<
-    "<!-- Generator: Calligra Karbon WVG XAML Graphics export filter  $VERSION/$DATE.  -->" << endl;
+    "<!-- Generator: Calligra Karbon WVG XAML Graphics export filter  $VERSION/$DATE.  -->" << Qt::endl;
     *m_defs <<
     "<Canvas xmlns=\"http://schemas.microsoft.com/winfx/avalon/2005\" Width=\"" << rect.width() <<
-    "Height=\"" << rect.height() << "\">" << endl;
-    *m_defs << "<Canvas.Resources>" << endl;
+    "Height=\"" << rect.height() << "\">" << Qt::endl;
+    *m_defs << "<Canvas.Resources>" << Qt::endl;
 
     // bleuch: this is horrible, do something about it TODO
     // Microsoft Acrylic has a transform group just like this
-    *m_body << "<Transform=\"scale(1, -1) Translate(0, -" << rect.height() << ")\">" << endl;
+    *m_body << "<Transform=\"scale(1, -1) Translate(0, -" << rect.height() << ")\">" << Qt::endl;
 
     // we do not need the selection anymore:
     document.selection()->clear();
@@ -137,9 +137,9 @@ XAMLExport::visitVDocument(KarbonDocument& document)
     VVisitor::visitVDocument(document);
 
     // end tag:
-    *m_body << "</Canvas>" << endl;
-    *m_defs << "</Canvas.Resources>" << endl;
-    *m_body << "</Canvas>" << endl;
+    *m_body << "</Canvas>" << Qt::endl;
+    *m_defs << "</Canvas.Resources>" << Qt::endl;
+    *m_body << "</Canvas>" << Qt::endl;
 }
 
 QString
@@ -155,9 +155,9 @@ XAMLExport::getID(VObject *obj)
 void
 XAMLExport::visitVGroup(VGroup& group)
 {
-    *m_body << "<Canvas" << getID(&group) << ">" << endl;
+    *m_body << "<Canvas" << getID(&group) << ">" << Qt::endl;
     VVisitor::visitVGroup(group);
-    *m_body << "</Canvas>" << endl;
+    *m_body << "</Canvas>" << Qt::endl;
 }
 
 void
@@ -181,7 +181,7 @@ XAMLExport::visitVPath(VPath& composite)
             *m_body << " FillRule=\"NonZero\"";
     }
 
-    *m_body << " />" << endl;
+    *m_body << " />" << Qt::endl;
 }
 
 void
@@ -204,7 +204,7 @@ XAMLExport::getColorStops(const QVector<VColorStop*> &colorStops)
         getHexColor(m_defs, colorStops.at(i)->color);
         *m_defs << "\" Offset=\"" << QString().setNum(colorStops.at(i)->rampPoint);
         //  XAML uses ARGB values and other methods such as masks for Transparency/Opacity    #  aa  rrggbb
-        // *m_defs << "\" stop-opacity=\"" << colorStops.at( i )->color.opacity() << "\"" << " />" << endl;
+        // *m_defs << "\" stop-opacity=\"" << colorStops.at( i )->color.opacity() << "\"" << " />" << Qt::endl;
         // Maybe this only applies to gradients, need to check.
     }
 }
@@ -225,12 +225,12 @@ XAMLExport::getGradient(const VGradient& grad)
             *m_defs << "SpreadMethod=\"Reflect\" ";
         else if (grad.repeatMethod() == VGradient::repeat)
             *m_defs << "SpreadMethod=\"Repeat\" ";
-        *m_defs << ">" << endl;
+        *m_defs << ">" << Qt::endl;
 
         // color stops
         getColorStops(grad.colorStops());
 
-        *m_defs << "</LinearGradientBrush>" << endl;
+        *m_defs << "</LinearGradientBrush>" << Qt::endl;
         *m_body << "url(#" << uid << ")";
     } else if (grad.type() == VGradient::radial) {
         // do radial grad
@@ -247,12 +247,12 @@ XAMLExport::getGradient(const VGradient& grad)
             *m_defs << "SpreadMethod=\"Reflect\" ";
         else if (grad.repeatMethod() == VGradient::repeat)
             *m_defs << "SpreadMethod=\"Repeat\" ";
-        *m_defs << ">" << endl;
+        *m_defs << ">" << Qt::endl;
 
         // color stops
         getColorStops(grad.colorStops());
 
-        *m_defs << "</RadialGradientBrush>" << endl;
+        *m_defs << "</RadialGradientBrush>" << Qt::endl;
         *m_body << "url(#" << uid << ")";
     }
 }

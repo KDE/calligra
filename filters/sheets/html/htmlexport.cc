@@ -172,7 +172,7 @@ void HTMLExport::openPage(Sheet *sheet, KoDocument *document, QString &str)
           "<html>\n"
           "<head>\n"
           "<meta http-equiv=\"Content-Type\" " +
-          QString("content=\"text/html; charset=%1\">\n").arg(QString(m_dialog->encoding()->name())) +
+          QString("content=\"text/html; charset=\"UTF-8\">\n") +
           "<meta name=\"Generator\" "
           "content=\"KSpread HTML Export Filter Version = " +
           CalligraVersionWrapper::versionString() +

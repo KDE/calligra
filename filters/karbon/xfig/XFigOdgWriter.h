@@ -37,8 +37,6 @@ class KoXmlWriter;
 class KoStore;
 class KoGenStyle;
 
-template<typename T> class QVector;
-
 
 class XFigOdgWriter
 {
@@ -80,7 +78,7 @@ private:
     void writeHatch(KoGenStyle& odfStyle, int patternType, const QString& colorString);
 
     void writeComment(const XFigAbstractObject* object);
-    void writePoints( const QVector<XFigPoint>& points );
+    void writePoints( const QList<XFigPoint>& points );
     /// Writes z-index and sets layer name
     void writeZIndex( const XFigAbstractGraphObject* graphObject );
 

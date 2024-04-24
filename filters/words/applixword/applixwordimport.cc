@@ -127,7 +127,7 @@ bool APPLIXWORDImport::parseFontProperty(const QString& type, KoGenStyle& style)
         style.addProperty("style:text-underline-style", "none", KoGenStyle::TextType);
         return true;
     } else if (type.startsWith("size:")) {
-        style.addPropertyPt("fo:font-size", type.midRef(5).toInt(), KoGenStyle::TextType);
+        style.addPropertyPt("fo:font-size", type.mid(5).toInt(), KoGenStyle::TextType);
         return true;
     } else if (type.startsWith("face:")) { // e.g. face:"Symbol"
         const QString fontname = type.mid(6, type.length() - 6 - 1);
@@ -161,7 +161,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
 
     QFile in(m_chain->inputFile());
     if (!in.open(QIODevice::ReadOnly)) {
-        errorAw << "Unable to open input file!" << endl;
+        errorAw << "Unable to open input file!" << Qt::endl;
         in.close();
         return KoFilter::FileNotFound;
     }
@@ -441,7 +441,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
 QChar
 APPLIXWORDImport::specCharfind(QChar a, QChar b) // TODO share this code with applixspreadimport.cc
 {
-    QChar chr;
+    int chr;
 
     if ((a == 'n') && (b == 'p'))  chr = 0x00DF; // 'ß';
 
@@ -608,7 +608,7 @@ APPLIXWORDImport::specCharfind(QChar a, QChar b) // TODO share this code with ap
 
     else  chr = 0x0023; // '#';
 
-    return chr;
+    return QChar(chr);
 }
 
 

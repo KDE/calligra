@@ -565,7 +565,7 @@ XFigOdgWriter::writeZIndex( const XFigAbstractGraphObject* graphObject )
 }
 
 void
-XFigOdgWriter::writePoints( const QVector<XFigPoint>& points )
+XFigOdgWriter::writePoints( const QList<XFigPoint>& points )
 {
     const XFigPoint& firstPoint = points.at(0);
 

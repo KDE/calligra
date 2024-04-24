@@ -35,10 +35,10 @@ public:
 
     // Builds a prefix for the current element. Only called if the
     // document is unsound.
-    QStringRef buildNewPrefix();
+    QStringView buildNewPrefix();
     // Builds a qualified name for the current element. Only called if
     // the document is unsound.
-    QStringRef  buildQName();
+    QStringView  buildQName();
 
     KoXmlStreamReader *q;       // The owner object;
 
@@ -54,7 +54,7 @@ public:
 
     // If the document is unsound, we need to build the prefix and
     // qualified names from a prefix that we get from "prefixes" and
-    // the actual name.  But we return a QStringRef and not QString so
+    // the actual name.  But we return a QStringView and not QString so
     // we need to make sure that the stringref is valid until this
     // KoXmlStreamReader is destructed.  So we use this QSet as a
     // cache of all constructed qualified names that we ever generate.
@@ -196,7 +196,7 @@ void KoXmlStreamReader::Private::checkSoundness()
     isChecked = true;
 }
 
-QStringRef KoXmlStreamReader::Private::buildNewPrefix()
+QStringView KoXmlStreamReader::Private::buildNewPrefix()
 {
     if (!isChecked) {
         checkSoundness();       // Sets isChecked and isSound;
@@ -210,11 +210,11 @@ QStringRef KoXmlStreamReader::Private::buildNewPrefix()
     //QString nsUri = q->QXmlStreamReader::namespaceUri().toString();
     QString newPrefix = prefixes.value(q->QXmlStreamReader::namespaceUri().toString());
 
-    // The following code is because prefix() returns a QStringRef,
+    // The following code is because prefix() returns a QStringView,
     // not a QString.  So we need to make sure that the QString that
     // it references stays valid until the end of the document is
     // parsed.  We do this by storing all prefix names that are
-    // accessed in a QSet<QString> and return a QStringRef that
+    // accessed in a QSet<QString> and return a QStringView that
     // references the copy in the set.  Ugly but effective.
 #if 1
     if (!prefixCache.contains(newPrefix)) {
@@ -232,10 +232,10 @@ QStringRef KoXmlStreamReader::Private::buildNewPrefix()
 #endif
 
     // Will always succeed since we entered it if it didn't exist already.
-    return (*it).leftRef(-1);
+    return QStringView{*it}.left(-1);
 }
 
-QStringRef KoXmlStreamReader::Private::buildQName()
+QStringView KoXmlStreamReader::Private::buildQName()
 {
     if (!isChecked) {
         checkSoundness();       // Sets isChecked and isSound;
@@ -251,10 +251,10 @@ QStringRef KoXmlStreamReader::Private::buildQName()
         + ':' + q->QXmlStreamReader::name().toString();
 
     // The following code is because qualifiedName() returns a
-    // QStringRef, not a QString.  So we need to make sure that the
+    // QStringView, not a QString.  So we need to make sure that the
     // QString that it references stays valid until the end of the
     // document is parsed.  We do this by storing all qualified names
-    // that are accessed in a QSet<QString> and return a QStringRef
+    // that are accessed in a QSet<QString> and return a QStringView
     // that references the copy in the set.  Ugly but effective.
 #if 1
     if (!qualifiedNamesCache.contains(qualifiedName)) {
@@ -272,7 +272,7 @@ QStringRef KoXmlStreamReader::Private::buildQName()
 #endif
 
     // Will always succeed since we entered it if it didn't exist already.
-    return (*it).leftRef(-1);
+    return QStringView(*it).left(-1);
 }
 
 
@@ -348,12 +348,12 @@ void KoXmlStreamReader::addExtraNamespace(const QString &prefix, const QString &
 // Should these be made inline?  that would make it very fast at the
 // cost of a possibly unstable API.
 
-QStringRef KoXmlStreamReader::prefix() const
+QStringView KoXmlStreamReader::prefix() const
 {
     return d->isSound ? QXmlStreamReader::prefix() : d->buildNewPrefix();
 }
 
-QStringRef KoXmlStreamReader::qualifiedName() const
+QStringView KoXmlStreamReader::qualifiedName() const
 {
     return d->isSound ? QXmlStreamReader::qualifiedName() : d->buildQName();
 }
@@ -473,18 +473,18 @@ bool KoXmlStreamAttribute::isDefault() const
     return d->qAttr->isDefault();
 }
 
-QStringRef KoXmlStreamAttribute::name() const
+QStringView KoXmlStreamAttribute::name() const
 {
     return d->qAttr->name();
 }
 
-QStringRef KoXmlStreamAttribute::namespaceUri() const
+QStringView KoXmlStreamAttribute::namespaceUri() const
 {
     return d->qAttr->namespaceUri();
 }
 
 
-QStringRef KoXmlStreamAttribute::prefix() const
+QStringView KoXmlStreamAttribute::prefix() const
 {
     if (d->reader->isSound()) {
         return d->qAttr->prefix();
@@ -494,11 +494,11 @@ QStringRef KoXmlStreamAttribute::prefix() const
         d->generateQName();
     }
 
-    return d->qName.leftRef(d->prefixLen);
+    return QStringView{d->qName}.left(d->prefixLen);
 }
 
 
-QStringRef KoXmlStreamAttribute::qualifiedName() const
+QStringView KoXmlStreamAttribute::qualifiedName() const
 {
     if (d->reader->isSound()) {
         return d->qAttr->qualifiedName();
@@ -508,11 +508,11 @@ QStringRef KoXmlStreamAttribute::qualifiedName() const
         d->generateQName();
     }
 
-    return d->qName.leftRef(-1);
+    return QStringView{d->qName}.left(-1);
 }
 
 
-QStringRef KoXmlStreamAttribute::value() const
+QStringView KoXmlStreamAttribute::value() const
 {
     return d->qAttr->value();
 }
@@ -551,7 +551,7 @@ public:
     ~Private();
 
     const KoXmlStreamReader      *reader;
-    QVector<KoXmlStreamAttribute> koAttrs;
+    QList<KoXmlStreamAttribute> koAttrs;
     const QXmlStreamAttributes    qAttrs; // We need the Q attributes to live while this class lives.
 };
 
@@ -659,7 +659,7 @@ bool KoXmlStreamAttributes::hasAttribute(const QLatin1String &qualifiedName) con
 }
 
 
-QStringRef KoXmlStreamAttributes::value(const QString &qualifiedName) const
+QStringView KoXmlStreamAttributes::value(const QString &qualifiedName) const
 {
     for (int i = 0; i < size(); ++i) {
         if (qualifiedName == this->at(i).qualifiedName()) {
@@ -667,11 +667,11 @@ QStringRef KoXmlStreamAttributes::value(const QString &qualifiedName) const
         }
     }
 
-    return QStringRef();
+    return {};
 }
 
 
-QStringRef KoXmlStreamAttributes::value(const QLatin1String &qualifiedName) const
+QStringView KoXmlStreamAttributes::value(const QLatin1String &qualifiedName) const
 {
     // FIXME: Find faster way.
     const QString qName(qualifiedName);

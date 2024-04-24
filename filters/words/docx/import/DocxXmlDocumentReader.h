@@ -427,7 +427,7 @@ public:
 
     // The map contains names of default styles applied to objects that do not
     // explicitly declare a style.  The object type (family) is the key.
-    QMap<QString, QString> m_namedDefaultStyles;
+    QMultiMap<QString, QString> m_namedDefaultStyles;
 
     // The map contains abstractNumId of the abstract numbering definition that
     // is inherited by a numbering definition instance identified by numId (key).

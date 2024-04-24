@@ -34,6 +34,7 @@
 #include <QBuffer>
 #include <QRandomGenerator>
 #include <qmath.h>
+#include <QRegularExpression>
 
 //#define DEBUG_PPTTOODP
 //#define USE_OFFICEARTDGG_CONTAINER
@@ -91,7 +92,7 @@ namespace
     QString format(double v) {
         static const QString f("%1");
         static const QString e("");
-        static const QRegExp r("\\.?0+$");
+        static const QRegularExpression r("\\.?0+$");
         return f.arg(v, 0, 'f').replace(r, e);
     }
 
@@ -829,7 +830,6 @@ PptToOdp::PptToOdp(ProgressCallback setProgress)
   m_isList(false),
   m_previousListLevel(0)
 {
-    qsrand(QTime::currentTime().msec());
 }
 
 PptToOdp::~PptToOdp()
@@ -2924,7 +2924,7 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
     // TextBytesAtom record.
     //
     const QString text = getText(tc).append('\r');
-    static const QRegExp lineend("[\v\r]");
+    static const QRegularExpression lineend("[\v\r]");
     qint32 pos = 0, end = 0;
 
     ListStack levels;
@@ -3482,7 +3482,7 @@ void PptToOdp::processDeclaration(KoXmlWriter* xmlWriter)
             QString footerText = QString::fromUtf16(footerAtom->footer.data(), footerAtom->footer.size());
             QString ftrName = findDeclaration(Footer, footerText);
             if ( ftrName.isEmpty() ) {
-                ftrName = QString("ftr%1").arg((declaration.values(Footer).count() + 1));
+                ftrName = QString("ftr%1").arg(QString::number(declaration.values(Footer).count() + 1));
                 insertDeclaration(Footer, ftrName, footerText);
             }
             usedFooterDeclaration.insert(slideNo,ftrName);
@@ -3576,7 +3576,7 @@ void PptToOdp::insertDeclaration(DeclarationType type, const QString &name, cons
     item.first = name;
     item.second = text;
 
-    declaration.insertMulti(type, item);
+    declaration.insert(type, item);
 }
 
 void PptToOdp::insertNotesDeclaration(DeclarationType type, const QString &name, const QString &text)
@@ -3585,7 +3585,7 @@ void PptToOdp::insertNotesDeclaration(DeclarationType type, const QString &name,
     item.first = name;
     item.second = text;
 
-    notesDeclaration.insertMulti(type, item);
+    notesDeclaration.insert(type, item);
 }
 
 // @brief check if the provided groupShape contains the master shape

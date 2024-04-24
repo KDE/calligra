@@ -921,7 +921,7 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processTextBox(o, out);
         break;
     default:
-        qDebug() << "Cannot handle shape 0x" << hex << shapeType;
+        qDebug() << "Cannot handle shape 0x" << Qt::hex << shapeType;
         break;
     }
 }

@@ -113,8 +113,8 @@ bool KoOdfStyleProperties::saveAttributes(KoXmlWriter *writer)
 
 void copyAttributes(KoXmlStreamReader &reader, AttributeSet &attributes)
 {
-    KoXmlStreamAttributes attrs = reader.attributes();
-    foreach (const KoXmlStreamAttribute &attr, attrs) {
+    const KoXmlStreamAttributes attrs = reader.attributes();
+    for (const KoXmlStreamAttribute &attr : attrs) {
         attributes.insert(attr.qualifiedName().toString(), attr.value().toString());
     }
 }

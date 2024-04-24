@@ -11,7 +11,6 @@
 #include <QListWidget>
 #include <QRadioButton>
 #include <QSpinBox>
-#include <QTextCodec>
 #include <QApplication>
 #include <QUrl>
 
@@ -28,9 +27,6 @@ ExportDialog::ExportDialog(QWidget *parent)
     connect(m_mainwidget->mSelectAllButton, &QAbstractButton::clicked, this, &ExportDialog::selectAll);
     connect(m_mainwidget->mDeselectAllButton, &QAbstractButton::clicked,
             m_mainwidget->mSheets, &QAbstractItemView::clearSelection);
-
-    m_mainwidget->mEncodingBox->addItem(i18n("Recommended: UTF-8"));
-    m_mainwidget->mEncodingBox->addItem(i18n("Locale (%1)", QString::fromLatin1(QTextCodec::codecForLocale()->name())));
 
     m_mainwidget->mCustomURL->setMode(KFile::ExistingOnly);
 
@@ -51,14 +47,6 @@ void ExportDialog::selectAll()
 ExportDialog::~ExportDialog()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-}
-
-QTextCodec *ExportDialog::encoding() const
-{
-    if (m_mainwidget->mEncodingBox->currentIndex() == 1)  // locale selected
-        return QTextCodec::codecForLocale();
-
-    return QTextCodec::codecForName("utf8");   // utf8 is default
 }
 
 bool ExportDialog::useBorders() const

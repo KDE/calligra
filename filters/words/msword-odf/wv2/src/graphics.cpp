@@ -172,9 +172,9 @@ int EscherHeader::recordInstance()
 void EscherHeader::dump()
 {
     wvlog << "Dumping Escher header:" << Qt::endl;
-    wvlog << " recVer = " << hex << recVer << dec << Qt::endl;
-    wvlog << " recInstance = " << hex << recInstance << dec << Qt::endl;
-    wvlog << " recType = " << hex << recType << dec << Qt::endl;
+    wvlog << " recVer = " << Qt::hex << recVer << Qt::dec << Qt::endl;
+    wvlog << " recInstance = " << Qt::hex << recInstance << Qt::dec << Qt::endl;
+    wvlog << " recType = " << Qt::hex << recType << Qt::dec << Qt::endl;
     wvlog << " recLen = " << recLen << Qt::endl;
     wvlog << "Finished dumping Escher header." << Qt::endl;
 }

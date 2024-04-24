@@ -40,7 +40,7 @@
 int columnWidth2(unsigned long col, unsigned long dx = 0, qreal defaultColumnWidth = 8.43) {
     QFont font("Arial", 10);
     QFontMetricsF fm(font);
-    const qreal characterWidth = fm.width("h");
+    const qreal characterWidth = fm.boundingRect("h").width();
     defaultColumnWidth *= characterWidth;
     return (defaultColumnWidth * col) + (dx / 1024.0 * defaultColumnWidth);
 }

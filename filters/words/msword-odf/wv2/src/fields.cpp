@@ -89,14 +89,14 @@ Fields::Fields( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
     tableStream->push();
 
 #ifdef WV2_DEBUG_FIELDS
-    wvlog << "Fields --------------" << endl
-          << "  main: fc=" << fib.fcPlcffldMom << " lcb=" << fib.lcbPlcffldMom << endl
-          << "  header: fc=" << fib.fcPlcffldHdr << " lcb=" << fib.lcbPlcffldHdr << endl
-          << "  footnote: fc=" << fib.fcPlcffldFtn << " lcb=" << fib.lcbPlcffldFtn << endl
-          << "  annotation: fc=" << fib.fcPlcffldAtn << " lcb=" << fib.lcbPlcffldAtn << endl
-          << "  endnote: fc=" << fib.fcPlcffldEdn << " lcb=" << fib.lcbPlcffldEdn << endl
-          << "  textbox: fc=" << fib.fcPlcffldTxbx << " lcb=" << fib.lcbPlcffldTxbx << endl
-          << "  bookmark: fc=" << fib.fcSttbfbkmk << " lcb=" << fib.lcbSttbfbkmk << endl
+    wvlog << "Fields --------------" << Qt::endl
+          << "  main: fc=" << fib.fcPlcffldMom << " lcb=" << fib.lcbPlcffldMom << Qt::endl
+          << "  header: fc=" << fib.fcPlcffldHdr << " lcb=" << fib.lcbPlcffldHdr << Qt::endl
+          << "  footnote: fc=" << fib.fcPlcffldFtn << " lcb=" << fib.lcbPlcffldFtn << Qt::endl
+          << "  annotation: fc=" << fib.fcPlcffldAtn << " lcb=" << fib.lcbPlcffldAtn << Qt::endl
+          << "  endnote: fc=" << fib.fcPlcffldEdn << " lcb=" << fib.lcbPlcffldEdn << Qt::endl
+          << "  textbox: fc=" << fib.fcPlcffldTxbx << " lcb=" << fib.lcbPlcffldTxbx << Qt::endl
+          << "  bookmark: fc=" << fib.fcSttbfbkmk << " lcb=" << fib.lcbSttbfbkmk << Qt::endl
           << "  headertextbox: fc=" << fib.fcPlcffldHdrTxbx << " lcb=" << fib.lcbPlcffldHdrTxbx << Qt::endl;
 #endif
     tableStream->seek( fib.fcPlcffldMom, WV2_SEEK_SET ); // to make the sanity check work

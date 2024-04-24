@@ -156,7 +156,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
         case QpIntegerCell:
             lRecInt = (QpRecIntegerCell*)lRec;
             field.setNum(lRecInt->integer());
-//cout << "Setting R " << lRecInt->row()+1 << ", C " << ((unsigned)lRecInt->column()) << endl;
+//cout << "Setting R " << lRecInt->row()+1 << ", C " << ((unsigned)lRecInt->column()) << Qt::endl;
             if (table)
                 setText(table, lRecInt->row() + 1, ((unsigned)lRecInt->column()) + 1, field, false);
             break;

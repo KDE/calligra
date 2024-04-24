@@ -54,7 +54,7 @@ XmlParser::XmlParser(const KoStore* in)
 {
     _in = const_cast<KoStore*>(in);
     if (!_in->open("root")) {
-        errorLatex << "Unable to open input file!" << endl;
+        errorLatex << "Unable to open input file!" << Qt::endl;
         return;
     }
     /* input file Reading */

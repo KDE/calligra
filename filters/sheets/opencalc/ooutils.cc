@@ -14,7 +14,6 @@
 #include <QColor>
 #include <QImage>
 #include <KoUnit.h>
-#include <QRegExp>
 #include <QDebug>
 #include <kzip.h>
 
@@ -41,7 +40,7 @@ QString OoUtils::expandWhitespace(const KoXmlElement& tag)
         howmany = tag.attributeNS(ooNS::text, "c", QString()).toInt();
 
     QString result;
-    return result.fill(32, howmany);
+    return result.fill(QChar(32), howmany);
 }
 
 bool OoUtils::parseBorder(const QString & tag, double * width, int * style, QColor * color)
@@ -464,9 +463,9 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(QIODevice* io, KoXmlDocument& d
     QString errorMsg;
     int errorLine, errorColumn;
     if (!doc.setContent(io, &errorMsg, &errorLine, &errorColumn)) {
-        qWarning() << "Parsing error in " << fileName << "! Aborting!" << endl
-        << " In line: " << errorLine << ", column: " << errorColumn << endl
-        << " Error message: " << errorMsg << endl;
+        qWarning() << "Parsing error in " << fileName << "! Aborting!" << Qt::endl
+        << " In line: " << errorLine << ", column: " << errorColumn << Qt::endl
+        << " Error message: " << errorMsg << Qt::endl;
         return KoFilter::ParsingError;
     }
 
@@ -480,7 +479,7 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, KoXmlD
     qDebug() << "Trying to open" << filename;
 
     if (!zip) {
-        qWarning() << "No ZIP file!" << endl;
+        qWarning() << "No ZIP file!" << Qt::endl;
         return KoFilter::CreationError; // Should not happen
     }
 
@@ -507,7 +506,7 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail(QImage& thumbnail, KZip* zip)
     qDebug() << "Trying to open thumbnail" << filename;
 
     if (!zip) {
-        qWarning() << "No ZIP file!" << endl;
+        qWarning() << "No ZIP file!" << Qt::endl;
         return KoFilter::CreationError; // Should not happen
     }
 

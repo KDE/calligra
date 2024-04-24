@@ -11,13 +11,15 @@
 #include "sheets/engine/SheetBase.h"
 #include "sheets/core/Map.h"
 
-#include <kcharsets.h>
 #include <kmessagebox.h>
 #include <KSharedConfig>
+#include <KLocalizedString>
 
 #include <QButtonGroup>
 #include <QGroupBox>
 #include <QGuiApplication>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 
 using namespace Calligra::Sheets;
 
@@ -31,18 +33,6 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
     setDefaultButton(KoDialog::Ok);
     QGuiApplication::restoreOverrideCursor();
 
-    QStringList encodings;
-    encodings << i18nc("Descriptive encoding name", "Recommended ( %1 )" , "UTF-8");
-    encodings << i18nc("Descriptive encoding name", "Locale ( %1 )" , QString(QTextCodec::codecForLocale()->name()));
-    encodings += KCharsets::charsets()->descriptiveEncodingNames();
-    // Add a few non-standard encodings, which might be useful for text files
-    const QString description(i18nc("Descriptive encoding name", "Other ( %1 )"));
-    encodings << description.arg("Apple Roman"); // Apple
-    encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
-    encodings << description.arg("CP 1258"); // Windows
-
-    m_dialog->comboBoxEncoding->addItems(encodings);
-
     setMainWidget(m_dialog);
 
     QButtonGroup *group = new QButtonGroup(m_dialog);
@@ -55,8 +45,8 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
     // Invalid 'Other' delimiters
     // - Quotes
     // - CR,LF,Vertical-tab,Formfeed,ASCII bel
-    QRegExp rx("^[^\"'\r\n\v\f\a]{0,1}$");
-    m_delimiterValidator = new QRegExpValidator(rx, m_dialog->m_delimiterBox);
+    QRegularExpression rx("^[^\"'\r\n\v\f\a]{0,1}$");
+    m_delimiterValidator = new QRegularExpressionValidator(rx, m_dialog->m_delimiterBox);
     m_dialog->m_delimiterEdit->setValidator(m_delimiterValidator);
 
     connect(group, &QButtonGroup::idClicked,
@@ -65,7 +55,7 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
             this, &CSVExportDialog::returnPressed);
     connect(m_dialog->m_delimiterEdit, &QLineEdit::textChanged,
             this, &CSVExportDialog::textChanged);
-    connect(m_dialog->m_comboQuote, QOverload<const QString &>::of(&QComboBox::activated),
+    connect(m_dialog->m_comboQuote, &QComboBox::textActivated,
             this, &CSVExportDialog::textquoteSelected);
     connect(m_dialog->m_selectionOnly, &QAbstractButton::toggled,
             this, &CSVExportDialog::selectionOnlyChanged);
@@ -93,10 +83,6 @@ void CSVExportDialog::loadSettings()
     bool delimAbove = configGroup.readEntry("sheetDelimiterAbove", false);
     const QString eol = configGroup.readEntry("eol", "\r\n");
 
-    // update widgets
-    if (!codecText.isEmpty()) {
-        m_dialog->comboBoxEncoding->setCurrentIndex(m_dialog->comboBoxEncoding->findText(codecText));
-    }
     if (m_delimiter == ",")
         m_dialog->m_radioComma->setChecked(true);
     else if (m_delimiter == "\t")
@@ -126,7 +112,6 @@ void CSVExportDialog::saveSettings()
     KConfigGroup configGroup = KSharedConfig::openConfig()->group("CSVDialog Settings");
     configGroup.writeEntry("textQuote", QString(m_textquote));
     configGroup.writeEntry("delimiter", m_delimiter);
-    configGroup.writeEntry("codec", m_dialog->comboBoxEncoding->currentText());
     configGroup.writeEntry("selectionOnly", exportSelectionOnly());
     configGroup.writeEntry("sheetDelimiter", getSheetDelimiter());
     configGroup.writeEntry("sheetDelimiterAbove", printAlwaysSheetDelimiter());

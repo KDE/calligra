@@ -1405,7 +1405,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_borders()
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_border()
 {
     READ_PROLOGUE
-    diagonalDirections = 0;
+    diagonalDirections = {};
 
     if (readBooleanAttr("diagonalUp")) {
         diagonalDirections |= XlsxXmlStylesReader::DiagonalUp;

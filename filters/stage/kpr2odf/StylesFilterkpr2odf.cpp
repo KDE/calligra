@@ -1093,7 +1093,7 @@ const QString Filterkpr2odf::createListStyle(const KoXmlElement& element)
         if (type == 6) { //STYLE_CUSTOMBULLET
             bulletChar = QChar(counter.attribute("bullet").toInt());
         } else {
-            bulletChar = s_oasisCounterTypes[ type ];
+            bulletChar = QChar(s_oasisCounterTypes[ type ]);
         }
         elementWriter.addAttribute("text:bullet-char", QString(bulletChar));
     } else {

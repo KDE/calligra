@@ -233,12 +233,12 @@ ListLevel::ListLevel( OLEStreamReader* tableStream ) :
     m_lvlf( tableStream, false ), m_grpprlPapx( 0 ), m_grpprlChpx( 0 )
 {
 #ifdef WV2_DEBUG_LIST_READING
-    wvlog << "######" << endl
+    wvlog << "######" << Qt::endl
           << "      iStartAt=" << static_cast<int>( m_lvlf.iStartAt ) << " nfc=" << static_cast<int>( m_lvlf.nfc )
-          << " jc=" << static_cast<int>( m_lvlf.jc ) << endl << "      fLegal=" << static_cast<int>( m_lvlf.fLegal )
+          << " jc=" << static_cast<int>( m_lvlf.jc ) << Qt::endl << "      fLegal=" << static_cast<int>( m_lvlf.fLegal )
           << " fNoRestart=" << static_cast<int>( m_lvlf.fNoRestart ) << " fPrev=" << static_cast<int>( m_lvlf.fPrev )
-          << endl << "      fPrevSpace=" << static_cast<int>( m_lvlf.fPrevSpace ) << " fWord6="
-          << static_cast<int>( m_lvlf.fWord6 ) << endl << "      cbGrpprlPapx=" << static_cast<int>( m_lvlf.cbGrpprlPapx )
+          << Qt::endl << "      fPrevSpace=" << static_cast<int>( m_lvlf.fPrevSpace ) << " fWord6="
+          << static_cast<int>( m_lvlf.fWord6 ) << Qt::endl << "      cbGrpprlPapx=" << static_cast<int>( m_lvlf.cbGrpprlPapx )
           << " cbGrpprlChpx=" << static_cast<int>( m_lvlf.cbGrpprlChpx ) << Qt::endl;
 #endif
 
@@ -429,7 +429,7 @@ int ListLevel::writeCharProperty( U16 sprm, U16 value, U8** grpprl )
 ListData::ListData( OLEStreamReader* tableStream ) : m_lstf( tableStream, false )
 {
 #ifdef WV2_DEBUG_LIST_READING
-    wvlog << "######" << endl
+    wvlog << "######" << Qt::endl
           << " lsid= 0x" << hex << m_lstf.lsid << dec
           << " fSimpleList=" << static_cast<int>( m_lstf.fSimpleList )
           << " tlpc=" << m_lstf.tplc << Qt::endl;
@@ -546,10 +546,10 @@ const ListLevel* ListFormatOverrideLVL::listLevel() const
 
 void ListFormatOverrideLVL::dump() const
 {
-    wvlog << "------------" << endl
-          << "      iStartAt=" << m_lfolvl.iStartAt << " ilvl=" << static_cast<int>( m_lfolvl.ilvl ) << endl
+    wvlog << "------------" << Qt::endl
+          << "      iStartAt=" << m_lfolvl.iStartAt << " ilvl=" << static_cast<int>( m_lfolvl.ilvl ) << Qt::endl
           << "      fStartAt=" << static_cast<int>( m_lfolvl.fStartAt ) << " fFormatting="
-          << static_cast<int>( m_lfolvl.fFormatting ) << endl
+          << static_cast<int>( m_lfolvl.fFormatting ) << Qt::endl
           << "done" << Qt::endl;
 }
 
@@ -557,7 +557,7 @@ void ListFormatOverrideLVL::dump() const
 ListFormatOverride::ListFormatOverride( OLEStreamReader* tableStream ) : m_lfo( tableStream, false )
 {
 #ifdef WV2_DEBUG_LIST_READING
-    wvlog << "######" << endl
+    wvlog << "######" << Qt::endl
           << " lsid= 0x" << hex << m_lfo.lsid << dec << " clfolvl=" << static_cast<int>( m_lfo.clfolvl ) << Qt::endl;
 #endif
 }
@@ -669,18 +669,18 @@ ListInfo::ListInfo( Word97::PAP& pap, Word97::CHP& chp, ListInfoProvider& listIn
 void ListInfo::dump() const
 {
     wvlog << "------------------------------" << Qt::endl;
-    wvlog << "   linkedIstd=" << m_linkedIstd << endl
-          << "   restartingCounter=" << m_restartingCounter << " startAt=" << m_startAt.first << endl
-          << "   startAtOverridden=" << m_startAt.second << endl
+    wvlog << "   linkedIstd=" << m_linkedIstd << Qt::endl
+          << "   restartingCounter=" << m_restartingCounter << " startAt=" << m_startAt.first << Qt::endl
+          << "   startAtOverridden=" << m_startAt.second << Qt::endl
           << "   numberFormat=" << static_cast<int>( m_numberFormat ) << " alignment="
-          << static_cast<int>( m_alignment ) << endl << "   isLegal=" << m_isLegal
-          << " notRestarted=" << m_notRestarted << endl << "   prev=" << m_prev
-          << " prevSpace=" << m_prevSpace << endl << "   isWord6=" << m_isWord6
+          << static_cast<int>( m_alignment ) << Qt::endl << "   isLegal=" << m_isLegal
+          << " notRestarted=" << m_notRestarted << Qt::endl << "   prev=" << m_prev
+          << " prevSpace=" << m_prevSpace << Qt::endl << "   isWord6=" << m_isWord6
           << " text= '";
     for ( int i = 0; i < m_text.text.length(); ++i )
         wvlog << "<" << static_cast<char>( m_text.text[ i ].low() ) << "/" << m_text.text[ i ].unicode() << ">";
-    wvlog << "'" << endl
-          << "   followingChar=" << static_cast<int>( m_followingChar ) << endl
+    wvlog << "'" << Qt::endl
+          << "   followingChar=" << static_cast<int>( m_followingChar ) << Qt::endl
           << "ListInfo::dump() done -------------------------" << Qt::endl;
 }
 
@@ -690,7 +690,7 @@ ListInfoProvider::ListInfoProvider( const StyleSheet* styleSheet )
       m_currentLst( 0 ), m_version( Word67 )
 {
 #ifdef WV2_DEBUG_LIST_READING
-    wvlog << "################################" << endl
+    wvlog << "################################" << Qt::endl
           << " ---> pre-Word 8" << Qt::endl;
 #endif
 }
@@ -699,9 +699,9 @@ ListInfoProvider::ListInfoProvider( OLEStreamReader* tableStream, const Word97::
     m_listNames( 0 ), m_pap( 0 ), m_styleSheet( styleSheet ), m_currentLfoLVL( 0 ), m_currentLst( 0 ), m_version( Word8 )
 {
 #ifdef WV2_DEBUG_LIST_READING
-    wvlog << "################################" << endl
-          << "   fcPlcfLst=" << fib.fcPlcfLst << " lcbPlcfLst=" << fib.lcbPlcfLst << endl
-          << "   fcPlfLfo=" << fib.fcPlfLfo << " lcbPlfLfo=" << fib.lcbPlfLfo << endl
+    wvlog << "################################" << Qt::endl
+          << "   fcPlcfLst=" << fib.fcPlcfLst << " lcbPlcfLst=" << fib.lcbPlcfLst << Qt::endl
+          << "   fcPlfLfo=" << fib.fcPlfLfo << " lcbPlfLfo=" << fib.lcbPlfLfo << Qt::endl
           << "   fcSttbListNames=" << fib.fcSttbListNames << " lcbSttbListNames=" << fib.lcbSttbListNames << Qt::endl;
 #endif
 

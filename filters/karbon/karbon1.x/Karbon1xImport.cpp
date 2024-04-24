@@ -1184,15 +1184,15 @@ void KarbonImport::loadText(const KoXmlElement &element)
     QString text = element.attribute("text", "");
 
     // catch path of the form Mx1 y1Lx2 y2 indicating a single line segment
-    QRegExp exp("M[-+]?[0-9]*\\.?[0-9]+ [-+]?[0-9]*\\.?[0-9]+L[-+]?[0-9]*\\.?[0-9]+ [-+]?[0-9]*\\.?[0-9]+");
+    QRegularExpression exp("M[-+]?[0-9]*\\.?[0-9]+ [-+]?[0-9]*\\.?[0-9]+L[-+]?[0-9]*\\.?[0-9]+ [-+]?[0-9]*\\.?[0-9]+");
 
     KoXmlElement e = element.firstChild().toElement();
     const bool isOnPath = e.tagName() == "PATH";
     if (isOnPath) {
         QString data = e.attribute("d");
         // check if we have a single line path
-        if (exp.exactMatch(data)) {
-            QStringList coords = data.split(QRegExp("[M\\sL]"), Qt::SkipEmptyParts);
+        if (exp.match(data).hasMatch()) {
+            QStringList coords = data.split(QRegularExpression("[M\\sL]"), Qt::SkipEmptyParts);
             if (coords.size() == 4) {
                 // in old karbon a single line text path was used to specify the direction
                 // of the text, however the length of the path was not required to match
@@ -1212,7 +1212,7 @@ void KarbonImport::loadText(const KoXmlElement &element)
                 font.setItalic(element.attribute("italic").toInt() == 1);
                 // calculate the required font length
                 QFontMetrics metrics(font);
-                qreal requiredLength = metrics.width(text);
+                qreal requiredLength = metrics.boundingRect(text).width();
                 if (requiredLength > currLength) {
                     // extend the text path with the required text length to be safe
                     p2 = p1 + requiredLength * QPointF(dx/currLength, dy/currLength);

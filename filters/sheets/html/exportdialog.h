@@ -32,11 +32,6 @@ public:
     QStringList sheets() const;
 
     /**
-      Returns preferred encoding. Defaults to UTF-8.
-     */
-    QTextCodec *encoding() const;
-
-    /**
       Returns a valid URL if the custom button was selected.
       Else, it will return QUrl().
     */

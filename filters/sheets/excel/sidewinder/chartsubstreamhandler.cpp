@@ -11,7 +11,7 @@
 #include "worksheetsubstreamhandler.h"
 #include "xmltk.h"
 
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include <XlsUtils.h>  // splitCellRange() et al.
 

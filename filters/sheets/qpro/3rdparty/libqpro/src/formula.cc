@@ -344,7 +344,7 @@ QpFormula::formula()
                 ) {
                 if (cReplaceFunc[lIdx].cOperand == lOperand) {
                     lFound = -1;
-                    QP_DEBUG("Processing " << (int)lOperand << endl);
+                    QP_DEBUG("Processing " << (int)lOperand << Qt::endl);
                     (*cReplaceFunc[lIdx].cFunc)(*this, cReplaceFunc[lIdx].cArg);
                 }
             }
@@ -357,17 +357,17 @@ QpFormula::formula()
             ) {
             if (gConv[lIdx].cOperand == lOperand) {
                 lFound = -1;
-                QP_DEBUG("Processing " << (int)lOperand << endl);
+                QP_DEBUG("Processing " << (int)lOperand << Qt::endl);
                 (*gConv[lIdx].cFunc)(*this, gConv[lIdx].cArg);
             }
         }
 
-        QP_DEBUG("Top = " << cStack.top() << endl);
+        QP_DEBUG("Top = " << cStack.top() << Qt::endl);
     }
 
     cStack.join(2, "");
 
-    QP_DEBUG("Formula = " << cStack.top() << endl);
+    QP_DEBUG("Formula = " << cStack.top() << Qt::endl);
     return strcpy(new char[strlen(cStack.top())+1], cStack.top());
 }
 

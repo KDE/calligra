@@ -677,7 +677,7 @@ void ExcelImport::Private::processSheetForConditionals(Sheet* is, Calligra::Shee
         Calligra::Sheets::Region r;
         for (QRect rect : cf->region().translated(1, 1))
             r.add(rect, os);
-        QLinkedList<Calligra::Sheets::Conditional> conds;
+        QList<Calligra::Sheets::Conditional> conds;
         foreach (const Conditional& c, cf->conditionals()) {
             Calligra::Sheets::Conditional kc;
             switch (c.cond) {
@@ -758,7 +758,7 @@ QString ExcelImport::Private::convertHeaderFooter(const QString& text)
     if ((pos < 0) && (text.length() > 0))   // If there is no &
         result += text;
     else if (pos > 0) // Some text and '&'
-        result += text.midRef(0,  pos - 1);
+        result += QStringView{text}.mid(0,  pos - 1);
 
     while (pos >= 0 && pos + 1 < len) {
         switch (text[pos + 1].unicode()) {
@@ -788,9 +788,9 @@ QString ExcelImport::Private::convertHeaderFooter(const QString& text)
         lastPos = pos;
         pos = text.indexOf('&', lastPos + 1);
         if (!skipUnsupported && (pos > (lastPos + 1)))
-            result += text.midRef(lastPos + 2, (pos - lastPos - 2));
+            result += QStringView{text}.mid(lastPos + 2, (pos - lastPos - 2));
         else if (!skipUnsupported && (pos < 0))  //Remaining text
-            result += text.midRef(lastPos + 2, len - (lastPos + 2));
+            result += QStringView{text}.mid(lastPos + 2, len - (lastPos + 2));
         else
             skipUnsupported = false;
     }
@@ -971,7 +971,7 @@ void ExcelImport::Private::processCell(Cell* ic, Calligra::Sheets::Cell oc)
     cellStyles[styleId].add (QRect(oc.column(), oc.row(), 1, 1), oc.sheet());
     QHash<QString, Calligra::Sheets::Conditions>::ConstIterator conds = dataStyleConditions.constFind(ic->format().valueFormat());
     if (conds != dataStyleConditions.constEnd()) {
-        cellConditions.append(qMakePair(QRect(oc.column(), oc.row(), 1, 1), conds.value()));
+        cellConditions.append(qMakePair(Calligra::Sheets::Region(QRect(oc.column(), oc.row(), 1, 1)), conds.value()));
     }
 
     processCellObjects(ic, oc);

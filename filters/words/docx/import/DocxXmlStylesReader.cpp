@@ -486,7 +486,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
     }
 
     if (isDefault) {
-        m_context->m_namedDefaultStyles.insertMulti(odfType, styleName);
+        m_context->m_namedDefaultStyles.insert(odfType, styleName);
     }
 
     m_currentParagraphStyle = KoGenStyle();

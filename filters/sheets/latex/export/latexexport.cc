@@ -31,7 +31,7 @@ KoFilter::ConversionStatus LATEXExport::convert(const QByteArray& from, const QB
 
     KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
     if (!in || !in->open("root")) {
-        errorLatex << "Unable to open input file!" << endl;
+        errorLatex << "Unable to open input file!" << Qt::endl;
         delete in;
         return KoFilter::FileNotFound;
     }

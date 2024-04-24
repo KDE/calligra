@@ -177,10 +177,10 @@ void  convert_string_to_qcolor(const QString &color_string, QColor * color)
     /* GNUmeric gives us two bytes of color data per element. */
     /* We only care about the top byte. */
 
-    red   = color_string.midRef(0, first_col_pos).toInt(&number_ok, 16) >> 8;
-    green = color_string.midRef(first_col_pos + 1,
+    red   = color_string.mid(0, first_col_pos).toInt(&number_ok, 16) >> 8;
+    green = color_string.mid(first_col_pos + 1,
                              (second_col_pos - first_col_pos) - 1).toInt(&number_ok, 16) >> 8;
-    blue  = color_string.midRef(second_col_pos + 1,
+    blue  = color_string.mid(second_col_pos + 1,
                              (color_string.length() - first_col_pos) - 1).toInt(&number_ok, 16) >> 8;
     color->setRgb(red, green, blue);
 }
@@ -201,11 +201,11 @@ void areaNames(Doc * ksdoc, const QString &_name, QString _zone)
             int pos = left.indexOf('$');
 
             rect.setLeft(Util::decodeColumnLabelText(left.left(pos)));
-            rect.setTop(left.rightRef(left.length() - pos - 1).toInt());
+            rect.setTop(left.right(left.length() - pos - 1).toInt());
 
             pos = right.indexOf('$');
             rect.setRight(Util::decodeColumnLabelText(right.left(pos)));
-            rect.setBottom(right.rightRef(right.length() - pos - 1).toInt());
+            rect.setBottom(right.right(right.length() - pos - 1).toInt());
         } else {
             QString left = _zone;
             int pos = left.indexOf('$');
@@ -213,7 +213,7 @@ void areaNames(Doc * ksdoc, const QString &_name, QString _zone)
             rect.setLeft(leftPos);
             rect.setRight(leftPos);
 
-            int top = left.rightRef(left.length() - pos - 1).toInt();
+            int top = left.right(left.length() - pos - 1).toInt();
             rect.setTop(top);
             rect.setBottom(top);
         }
@@ -634,7 +634,7 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
                 int val  = cell_content.toInt(&ok);
 
                 qDebug() << "!!!   FormatString: Date:" << formatString << ", CellContent:" << cell_content
-                << ", Double: " << val << endl;
+                << ", Double: " << val << Qt::endl;
                 if (!ok)
                     return false;
 
@@ -681,7 +681,7 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
                 double content = cell_content.toDouble(&ok);
 
                 qDebug() << "   FormatString: Time:" << formatString << ", CellContent:" << cell_content
-                << ", Double: " << content << endl;
+                << ", Double: " << content << Qt::endl;
 
                 if (!ok)
                     return false;
@@ -798,7 +798,7 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
     QDomElement foot(printInfo.namedItem("Footer").toElement());
     if (!foot.isNull()) {
         qDebug() << "Parsing footer:" << foot.attribute("Left") << "," << foot.attribute("Middle") << ","
-        << foot.attribute("Right") << ", " << endl;
+        << foot.attribute("Right") << ", " << Qt::endl;
         if (foot.hasAttribute("Left"))
             footLeft = convertVars(foot.attribute("Left"), table);
         if (foot.hasAttribute("Middle"))
@@ -1014,7 +1014,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
             int endRow   = e.attribute("endRow").toInt() + 1;
 
             qDebug() << "------Style:" << startCol << ","
-            << startRow << " - " << endCol << ", " << endRow << endl;
+            << startRow << " - " << endCol << ", " << endRow << Qt::endl;
 
             if (endCol - startCol > 200 || endRow - startRow > 200) {
                 style_region = style_region.nextSibling();
@@ -1661,12 +1661,12 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     QIODevice* in = new KCompressionDevice(m_chain->inputFile(), KCompressionDevice::GZip);
 
     if (!in) {
-        qDebug() << "Cannot create device for uncompressing! Aborting!" << endl;
+        qDebug() << "Cannot create device for uncompressing! Aborting!" << Qt::endl;
         return KoFilter::FileNotFound;
     }
 
     if (!in->open(QIODevice::ReadOnly)) {
-        qDebug() << "Cannot open file for uncompressing! Aborting!" << endl;
+        qDebug() << "Cannot open file for uncompressing! Aborting!" << Qt::endl;
         delete in;
         return KoFilter::FileNotFound;
     }
@@ -1675,9 +1675,9 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     QString errorMsg;
     int errorLine, errorColumn;
     if (!doc.setContent(in, true, &errorMsg, &errorLine, &errorColumn)) {
-        qDebug() << "Parsing error in " << from << "! Aborting!" << endl
-        << " In line: " << errorLine << ", column: " << errorColumn << endl
-        << " Error message: " << errorMsg << endl;
+        qDebug() << "Parsing error in " << from << "! Aborting!" << Qt::endl
+        << " In line: " << errorLine << ", column: " << errorColumn << Qt::endl
+        << " Error message: " << errorMsg << Qt::endl;
         in->close();
         return KoFilter::ParsingError;
     }
@@ -1910,7 +1910,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
 
                         qDebug() << "FOO:" << column << row;
                         qDebug() <<
-                        Cell(table, column, row).decodeFormula(expr).toLatin1() << endl;
+                        Cell(table, column, row).decodeFormula(expr).toLatin1() << Qt::endl;
                         qDebug() << expr;
 
                         setText(table, row, column, Cell(table, column, row).decodeFormula(expr), false);

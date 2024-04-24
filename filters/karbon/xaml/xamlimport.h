@@ -12,6 +12,7 @@
 #include <QMap>
 #include <QStack>
 #include <QByteArray>
+#include <QTransform>
 #include <core/KarbonDocument.h>
 #include <core/vgradient.h>
 #include <core/vfill.h>
@@ -41,7 +42,7 @@ protected:
         }
         VGradient gradient;
         bool  bbox;
-        QMatrix gradientTransform;
+        QTransform gradientTransform;
     };
 
     void parseGroup(VGroup *, const QDomElement &);

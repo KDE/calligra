@@ -418,7 +418,7 @@ bool Parser9x::readPieceTable()
                 else
                     wvlog << "_";
             }
-            wvlog << endl << "   position: " << m_wordDocument->tell() << ", limit: " << limit << Qt::endl;
+            wvlog << Qt::endl << "   position: " << m_wordDocument->tell() << ", limit: " << limit << Qt::endl;
         }
 #endif
     }
@@ -779,7 +779,7 @@ void Parser9x::processParagraph( U32 fc )
                         QString name = emitPictureData( 0, sharedBPChp, true);
                         props->setBulletPictureName(name);
                     } else {
-                        wvlog << "BulletPicture: Support for character 0x" << hex << c << "not implement yet.";
+                        wvlog << "BulletPicture: Support for character 0x" << Qt::hex << c << "not implement yet.";
                     }
                 } else {
                     wvlog << "BulletPicture: A special character expected, skipping!";
@@ -1211,7 +1211,7 @@ QString Parser9x::emitPictureData( const U32 globalCP, SharedPtr<const Word97::C
 
     //[MS-DOC] — v20101219, 419/621
     if ( picf->cbHeader != 0x44 ) {
-        wvlog << "Error: Expected size of the PICF structure is 0x44, got " << hex << picf->cbHeader;
+        wvlog << "Error: Expected size of the PICF structure is 0x44, got " << Qt::hex << picf->cbHeader;
         wvlog << "Skipping the image!" << Qt::endl;
         delete picf;
         return ret;
@@ -1277,7 +1277,7 @@ void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )
 
     int length = range.second - range.first;
 #ifdef WV2_DEBUG_HEADERS
-    wvlog << "found a range: start=" << range.first << " lim=" << range.second << endl
+    wvlog << "found a range: start=" << range.first << " lim=" << range.second << Qt::endl
             << "length: " << length << Qt::endl;
 #endif
     if ( length < 1 ) {

@@ -8722,13 +8722,13 @@ void STSHI::clear() {
 void STSHI::dump() const
 {
     wvlog << "Dumping STSHI:" <<
-    "\ncstd= 0x" << hex << cstd << dec << "(" << cstd << ")" <<
+    "\ncstd= 0x" << Qt::hex << cstd << Qt::dec << "(" << cstd << ")" <<
     "\ncbSTDBaseInFile=" << cbSTDBaseInFile <<
     "\nfStdStylenamesWritten=" << fStdStylenamesWritten <<
-    "\nstiMaxWhenSaved= 0x" << hex << stiMaxWhenSaved <<
-     dec << "(" << stiMaxWhenSaved  << ")" <<
-    "\nistdMaxFixedWhenSaved= 0x" << hex << istdMaxFixedWhenSaved <<
-    "\nnVerBuiltInNamesWhenSaved=" << dec << nVerBuiltInNamesWhenSaved <<
+    "\nstiMaxWhenSaved= 0x" << Qt::hex << stiMaxWhenSaved <<
+     Qt::dec << "(" << stiMaxWhenSaved  << ")" <<
+    "\nistdMaxFixedWhenSaved= 0x" << Qt::hex << istdMaxFixedWhenSaved <<
+    "\nnVerBuiltInNamesWhenSaved=" << Qt::dec << nVerBuiltInNamesWhenSaved <<
     "\nDumping STSHI done:" << Qt::endl;
 }
 

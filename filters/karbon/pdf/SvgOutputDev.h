@@ -13,7 +13,7 @@
 #include <QString>
 
 class GfxPath;
-class QMatrix;
+class QTransform;
 class GooString;
 
 /**
@@ -61,7 +61,7 @@ public:
     void dumpContent();
 private:
     QString convertPath(const GfxPath *path);
-    QString convertMatrix(const QMatrix &matrix);
+    QString convertMatrix(const QTransform &matrix);
     QString convertMatrix(const double * matrix);
     QString printFill();
     QString printStroke();
