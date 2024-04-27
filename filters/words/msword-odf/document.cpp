@@ -52,6 +52,7 @@
 
 #include <QBuffer>
 #include <QColor>
+#include <QStringDecoder>
 
 //TODO: provide all streams to the wv2 parser; POLE storage is going to replace
 //OLE storage soon!
