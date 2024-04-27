@@ -11,8 +11,7 @@
 #include <QApplication>
 
 #include <klocalizedstring.h>
-#include <kcharsets.h>
-#include <kcombobox.h>
+#include <KComboBox>
 #include <kmessagebox.h>
 
 #include "AsciiImportDebug.h"

@@ -184,7 +184,6 @@ include(MacroEnsureVersion)
 find_package(KF6 ${REQUIRED_KF6_VERSION} REQUIRED
     COMPONENTS
     Archive
-    Codecs
     Completion
     Config
     ConfigWidgets

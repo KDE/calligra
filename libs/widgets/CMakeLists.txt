@@ -120,7 +120,6 @@ target_link_libraries(kowidgets
         KF6::GuiAddons
         KF6::WidgetsAddons
         KF6::ConfigCore
-        KF6::Codecs
         KF6::Completion
         KF6::CoreAddons
         KF6::IconThemes

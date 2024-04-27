@@ -15,7 +15,6 @@
 #include <QTableWidgetSelectionRange>
 
 // KF5
-#include <kcharsets.h>
 #include <kconfig.h>
 #include <WidgetsDebug.h>
 #include <klocalizedstring.h>

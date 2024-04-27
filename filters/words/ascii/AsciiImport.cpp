@@ -16,7 +16,6 @@
 #include <QApplication>
 
 #include <kpluginfactory.h>
-#include <kencodingprober.h>
 
 #include <CalligraVersionWrapper.h>
 #include <KoFilterChain.h>
