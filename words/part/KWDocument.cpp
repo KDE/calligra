@@ -453,6 +453,7 @@ void KWDocument::removeSequencedShape(KoShape *shape)
 void KWDocument::mainTextFrameSetLayoutDone()
 {
     m_mainFramesetEverFinished = true;
+    Q_EMIT mainTextFrameSetLayoutFinished();
 }
 
 KWFrameSet *KWDocument::frameSetByName(const QString &name)

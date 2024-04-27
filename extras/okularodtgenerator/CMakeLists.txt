@@ -28,7 +28,7 @@ install(TARGETS kookularGenerator_odt  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 ## odt generator plugin
 
 kcoreaddons_add_plugin(okularGenerator_odt_calligra
-    INSTALL_NAMESPACE "okular/generators"
+    INSTALL_NAMESPACE "okular_generators"
     SOURCES OkularOdtGeneratorPlugin.cpp
 )
 
@@ -36,5 +36,4 @@ target_link_libraries( okularGenerator_odt_calligra
     kookularGenerator_odt
 )
 
-install( FILES okularOdt_calligra.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
 install( PROGRAMS okularApplication_odt_calligra.desktop DESTINATION ${KDE_INSTALL_APPDIR} )

@@ -24,6 +24,5 @@ if(SHOULD_BUILD_OKULAR_GENERATOR_RTF)
         kookularGenerator_odt
     )
 
-    install( FILES okularRtf_calligra.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
     install( PROGRAMS okularApplication_rtf_calligra.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 endif()

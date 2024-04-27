@@ -591,14 +591,13 @@ set_package_properties(SharedMimeInfo PROPERTIES
 ##
 ## Test for Okular
 ##
-## Disabled since Okular switched to Qt6
-##macro_optional_find_package(Okular5 0.99.60 QUIET)
-##set_package_properties(Okular5 PROPERTIES
-##    DESCRIPTION "A unified document viewer"
-##    URL "https://okular.kde.org/"
-##    PURPOSE "Required to build the plugins for Okular"
-##    TYPE OPTIONAL
-##    )
+macro_optional_find_package(Okular6 24.04.0 QUIET)
+set_package_properties(Okular6 PROPERTIES
+    DESCRIPTION "A unified document viewer"
+    URL "https://okular.kde.org/"
+    PURPOSE "Required to build the plugins for Okular"
+    TYPE OPTIONAL
+)
 
 ##
 ## Test for librevenge
@@ -872,12 +871,12 @@ calligra_drop_product_on_bad_condition( PART_SHEETS
     )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP
-    Okular5_FOUND "Okular devel not found"
-    )
+    Okular6_FOUND "Okular devel not found"
+)
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODT
-    Okular5_FOUND "Okular devel not found"
-    )
+    Okular6_FOUND "Okular devel not found"
+)
 
 calligra_drop_product_on_bad_condition( PLUGIN_CHARTSHAPE
     KChartQt6_FOUND "KChart devel not found"

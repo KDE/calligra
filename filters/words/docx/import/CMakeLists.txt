@@ -78,6 +78,5 @@ if(SHOULD_BUILD_OKULAR_GENERATOR_DOCX)
         kookularGenerator_odt
     )
 
-    install( FILES okularDocx_calligra.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
     install( PROGRAMS okularApplication_docx_calligra.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 endif()

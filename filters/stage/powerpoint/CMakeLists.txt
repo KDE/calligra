@@ -36,6 +36,5 @@ if(SHOULD_BUILD_OKULAR_GENERATOR_PPT)
         kookularGenerator_odp
     )
 
-    install( FILES okularPowerpoint_calligra.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
     install( PROGRAMS okularApplication_powerpoint_calligra.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 endif()

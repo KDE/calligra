@@ -228,8 +228,11 @@ Q_SIGNALS:
     /// emitted whenever a shape is removed
     void shapeRemoved(KoShape *);
 
-    /// emitted wheneve a resources needs to be set on the canvasResourceManager
+    /// emitted whenever a resources needs to be set on the canvasResourceManager
     void resourceChanged(int key, const QVariant &value);
+
+    /// emitted whenever the layout finished computing.
+    void mainTextFrameSetLayoutFinished();
 
 private Q_SLOTS:
     /// Shape maintenance on already registered framesets

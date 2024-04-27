@@ -90,11 +90,10 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
         return false;
     }
 
-    while (!m_doc->layoutFinishedAtleastOnce()) {
-        QCoreApplication::processEvents();
-
-        if (!QCoreApplication::eventDispatcher()->hasPendingEvents())
-            break;
+    if (!m_doc->layoutFinishedAtleastOnce()) {
+        QEventLoop eventLoop;
+        connect(m_doc, &KWDocument::mainTextFrameSetLayoutFinished, &eventLoop, &QEventLoop::quit);
+        eventLoop.exec();
     }
 
     KWPageManager *pageManager = m_doc->pageManager();
@@ -276,7 +275,7 @@ Okular::TextPage* OkularOdtGenerator::textPage( Okular::Page *page )
         const double right = static_cast<double>(rect.right()) / pageWidth;
         const double bottom = static_cast<double>(rect.bottom()) / pageHeight;
         textPage->append( charAreaInfo.character,
-                          new Okular::NormalizedRect( left, top, right, bottom ) );
+                          Okular::NormalizedRect( left, top, right, bottom ) );
     }
     return textPage;
 }

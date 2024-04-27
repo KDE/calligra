@@ -48,6 +48,5 @@ if(SHOULD_BUILD_OKULAR_GENERATOR_PPTX)
         kookularGenerator_odp
     )
 
-    install( FILES okularPptx_calligra.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
     install( PROGRAMS okularApplication_pptx_calligra.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 endif()

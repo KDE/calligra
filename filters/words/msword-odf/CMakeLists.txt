@@ -41,7 +41,5 @@ if(SHOULD_BUILD_OKULAR_GENERATOR_DOC)
     target_link_libraries( okularGenerator_doc_calligra
         kookularGenerator_odt
     )
-
-    install( FILES okularDoc_calligra.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
     install( PROGRAMS okularApplication_doc_calligra.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 endif()
