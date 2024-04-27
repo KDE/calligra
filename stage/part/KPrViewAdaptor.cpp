@@ -131,7 +131,7 @@ bool KPrViewAdaptor::exportPageThumbnail( int page, int width, int height,
         Q_ASSERT( pageObject );
         return m_view->exportPageThumbnail( pageObject, QUrl::fromLocalFile( filename ),
                                             QSize( qMax( 0, width ), qMax( 0, height ) ),
-                                            format.isEmpty() ? "PNG" : format.toLatin1(),
+                                            format.isEmpty() ? QByteArray("PNG") : format.toUtf8(),
                                             qBound( -1, quality, 100 ) );
     }
     else {
