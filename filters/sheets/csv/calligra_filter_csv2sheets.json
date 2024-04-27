@@ -20,5 +20,5 @@
     },
     "X-KDE-Export": "application/vnd.oasis.opendocument.spreadsheet",
     "X-KDE-Import": "text/csv,text/tab-separated-values,text/plain",
-    "X-KDE-Weight": "50"
+    "X-KDE-Weight": 50
 }

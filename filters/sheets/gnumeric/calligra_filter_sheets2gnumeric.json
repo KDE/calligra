@@ -20,5 +20,5 @@
     },
     "X-KDE-Export": "application/x-gnumeric",
     "X-KDE-Import": "application/x-kspread",
-    "X-KDE-Weight": "1"
+    "X-KDE-Weight": 1
 }

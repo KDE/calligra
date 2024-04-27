@@ -20,5 +20,5 @@
     },
     "X-KDE-Export": "application/x-kspread",
     "X-KDE-Import": "application/x-quattropro",
-    "X-KDE-Weight": "1"
+    "X-KDE-Weight": 1
 }

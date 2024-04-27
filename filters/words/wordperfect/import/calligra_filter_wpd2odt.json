@@ -19,5 +19,5 @@
     },
     "X-KDE-Export": "application/vnd.oasis.opendocument.text",
     "X-KDE-Import": "application/vnd.wordperfect",
-    "X-KDE-Weight": "1"
+    "X-KDE-Weight": 1
 }

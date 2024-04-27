@@ -20,5 +20,5 @@
     },
     "X-KDE-Export": "application/x-kspread",
     "X-KDE-Import": "application/vnd.sun.xml.calc,application/vnd.sun.xml.calc.template",
-    "X-KDE-Weight": "1"
+    "X-KDE-Weight": 1
 }
