@@ -44,7 +44,7 @@
 #include <kiconloader.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
-#include <kio/job.h>
+#include <KIO/FileCopyJob>
 #include <kstandardguiitem.h>
 
 // ODF thumbnail extent

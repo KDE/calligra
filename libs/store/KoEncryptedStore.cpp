@@ -19,7 +19,7 @@
 #include <QBuffer>
 #include <KPasswordDialog>
 #include <knewpassworddialog.h>
-#include <qt5keychain/keychain.h>
+#include <qt6keychain/keychain.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kzip.h>

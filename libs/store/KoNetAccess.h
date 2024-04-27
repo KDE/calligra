@@ -14,7 +14,7 @@
 #include <QtCore/QString>
 #include <kio/global.h>
 #include <kio/udsentry.h>
-#include <kio/jobclasses.h> // for KIO::JobFlags
+#include <KIO/Job> // for KIO::JobFlags
 
 class QWidget;
 

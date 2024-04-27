@@ -51,8 +51,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
 
-#include <kio/job.h>
-#include <kio/jobclasses.h>
+#include <KIO/Job>
 #include <kurl.h>
 
 #include "MockPart.h"

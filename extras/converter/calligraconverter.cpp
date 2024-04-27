@@ -16,7 +16,7 @@
 #include <KAboutData>
 #include <klocalizedstring.h>
 #include <KoNetAccess.h>
-#include <kio/job.h>
+#include <KIO/FileCopyJob>
 
 #include <KoDocumentEntry.h>
 #include <KoDocument.h>

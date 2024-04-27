@@ -43,7 +43,8 @@
 #include <klocalizedstring.h>
 #include <MainDebug.h>
 #include <kconfiggroup.h>
-#include <kio/job.h>
+#include <KIO/FileCopyJob>
+#include <KIO/StatJob>
 #include <kdirnotify.h>
 #include <KBackup>
 #include <KLazyLocalizedString>

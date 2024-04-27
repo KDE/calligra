@@ -9,14 +9,10 @@
 
 #include "KoNetAccess.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <signal.h>
 #include <unistd.h>
 
 #include <cstring>
 
-#include <QtCore/QCharRef>
 #include <QApplication>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
@@ -28,10 +24,13 @@
 #include <klocalizedstring.h>
 #include <kjobwidgets.h>
 
-#include "kio/job.h"
-#include "kio/mkdirjob.h"
-#include "kio/copyjob.h"
-#include "kio/deletejob.h"
+#include <KIO/Job>
+#include <KIO/MkdirJob>
+#include <KIO/FileCopyJob>
+#include <KIO/CopyJob>
+#include <KIO/DeleteJob>
+#include <KIO/MimetypeJob>
+#include <KIO/StatJob>
 
 namespace KIO
 {
