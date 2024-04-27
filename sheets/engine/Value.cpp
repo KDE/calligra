@@ -249,6 +249,7 @@ Value::Value(int i)
     d->format = fmt_Number;
 }
 
+#ifndef Q_OS_WIN
 // create an integer value
 Value::Value(qsizetype i)
         : d(Private::null())
@@ -257,6 +258,7 @@ Value::Value(qsizetype i)
     d->i = i;
     d->format = fmt_Number;
 }
+#endif
 
 // create a floating-point value
 Value::Value(double f)

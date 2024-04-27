@@ -101,10 +101,12 @@ public:
      */
     explicit Value(int64_t i);
 
+#ifndef Q_OS_WIN
     /**
      * Creates an integer value.
      */
     explicit Value(qsizetype i);
+#endif
 
     /**
      * Creates an integer value.
