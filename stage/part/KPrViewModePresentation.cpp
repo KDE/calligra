@@ -23,6 +23,7 @@
 #include <QEvent>
 #include <QKeyEvent>
 #include <QPainter>
+#include <QApplication>
 
 #include <kcursor.h>
 
