@@ -498,7 +498,7 @@ void AbstractAtom::readElement(Context* context, MsooXmlDiagramReader* reader) {
             while (!reader->atEnd()) {
                 QXmlStreamReader::TokenType tokenType = reader->readNext();
                 if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
-                if(!reader->isStartElement() && reader->qualifiedName() == "dgm:varLst") break;
+                if(!reader->isStartElement() && reader->qualifiedName() == QLatin1StringView("dgm:varLst")) break;
                 if(reader->isStartElement()) {
                     const QXmlStreamAttributes attrs(reader->attributes());
                     TRY_READ_ATTR_WITHOUT_NS(val)

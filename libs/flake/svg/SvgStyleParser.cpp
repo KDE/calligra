@@ -372,7 +372,7 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
     QMutableMapIterator<QString, QString> it(styleMap);
     while (it.hasNext()) {
         it.next();
-        if (it.value() == "inherit") {
+        if (it.value() == QLatin1StringView("inherit")) {
             it.setValue(inheritedAttribute(it.key(), e));
         }
     }

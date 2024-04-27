@@ -116,15 +116,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_AlternateContent()
 
     while (!atEnd()) {
         readNext();
-        if (isEndElement() && name() == "AlternateContent") {
+        if (isEndElement() && name() == QLatin1StringView("AlternateContent")) {
             break;
         }
 
         if (isStartElement()) {
-            if (name() == "Choice") {
+            if (name() == QLatin1StringView("Choice")) {
                 TRY_READ(Choice)
             }
-            else if (!m_choiceAccepted && qualifiedName() == "mc:Fallback") {
+            else if (!m_choiceAccepted && qualifiedName() == QLatin1StringView("mc:Fallback")) {
                 TRY_READ(Fallback)
             }
             else {
@@ -159,7 +159,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Choice()
     m_choiceAccepted = true;
     while (!atEnd()) {
         readNext();
-        if (isEndElement() && name() == "Choice") {
+        if (isEndElement() && name() == QLatin1StringView("Choice")) {
             break;
         }
         if (isStartElement()) {
@@ -179,7 +179,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Fallback()
 
     while (!atEnd()) {
         readNext();
-        if (isEndElement() && name() == "Fallback") {
+        if (isEndElement() && name() == QLatin1StringView("Fallback")) {
             break;
         }
 
@@ -192,7 +192,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Fallback()
 #endif
 #ifdef XLSXXMLWORKSHEETREADER_CPP
             // FIXME: This Choice/Content/Fallback structure needs a more general treatment.
-            if (name() == "oleObject") {
+            if (name() == QLatin1StringView("oleObject")) {
                 TRY_READ(oleObject)
             }
 #endif

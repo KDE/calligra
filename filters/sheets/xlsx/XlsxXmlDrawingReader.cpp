@@ -220,7 +220,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
 
     while (!atEnd()) {
         readNext();
-        if (isEndElement() && name() == "wsDr") {
+        if (isEndElement() && name() == QLatin1StringView("wsDr")) {
             break;
         }
         if (isStartElement()) {

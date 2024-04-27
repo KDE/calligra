@@ -364,7 +364,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             ELSE_TRY_READ_IF(footnotePr)
             ELSE_TRY_READ_IF(endnotePr)
             ELSE_TRY_READ_IF(lnNumType)
-            else if (name() == "bidi") {
+            else if (name() == QLatin1StringView("bidi")) {
                 m_currentPageStyle.addProperty("style:writing-mode", "rl-tb");
             }
             SKIP_UNKNOWN
@@ -1424,7 +1424,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(v, shapetype)
-            else if (name() == "shape") {
+            else if (name() == QLatin1StringView("shape")) {
                 m_outputFrames = false;
                 TRY_READ(shape)
                 m_outputFrames = true;
@@ -2737,7 +2737,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             ELSE_TRY_READ_IF(endnoteReference)
             ELSE_TRY_READ_IF(footnoteReference)
             ELSE_TRY_READ_IF(object)
-            else if (name() == "pict") {
+            else if (name() == QLatin1StringView("pict")) {
                 // Protecting in case the object is inside a textbox inside a shape
                 VMLShapeProperties oldProperties = m_currentVMLProperties;
                 TRY_READ(pict)
@@ -2748,7 +2748,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             ELSE_TRY_READ_IF(lastRenderedPageBreak)
             ELSE_TRY_READ_IF(br)
             ELSE_TRY_READ_IF_NS(mc, AlternateContent)
-            else  if (qualifiedName() == "w:tab") {
+            else  if (qualifiedName() == QLatin1StringView("w:tab")) {
                 body->startElement("text:tab");
                 body->endElement(); // text:tab
             }
@@ -3057,7 +3057,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
         debugDocx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (name() == "rPr") {
+            if (name() == QLatin1StringView("rPr")) {
                 m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
                 TRY_READ(rPr)
                 KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
@@ -5346,7 +5346,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
             readNext();
             BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
-                if (qualifiedName() == "v:background") {
+                if (qualifiedName() == QLatin1StringView("v:background")) {
                     TRY_READ(VML_background)
                 }
                 ELSE_TRY_READ_IF(drawing)
@@ -6045,7 +6045,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if(qualifiedName() == "w:p") {
+            if(qualifiedName() == QLatin1StringView("w:p")) {
                 KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
 
                 QBuffer buffer;
@@ -6178,7 +6178,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
             ELSE_TRY_READ_IF(tcMar)
             ELSE_TRY_READ_IF(vMerge)
             ELSE_TRY_READ_IF(vAlign)
-            else if (name() == "textDirection") {
+            else if (name() == QLatin1StringView("textDirection")) {
                 TRY_READ(textDirectionTc)
             }
             SKIP_UNKNOWN
@@ -7196,7 +7196,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_oMathParaPr()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (qualifiedName() == "m:jc") {
+            if (qualifiedName() == QLatin1StringView("m:jc")) {
                 TRY_READ(jc_m)
             }
         }
@@ -7217,7 +7217,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_oMath()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (qualifiedName() == "m:r") {
+            if (qualifiedName() == QLatin1StringView("m:r")) {
                 TRY_READ(r_m)
             }
             ELSE_TRY_READ_IF(del)
@@ -7294,7 +7294,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r_m()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(w, rPr)
-            else if (qualifiedName() == "m:t") {
+            else if (qualifiedName() == QLatin1StringView("m:t")) {
                 TRY_READ(t_m)
             }
             SKIP_UNKNOWN

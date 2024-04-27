@@ -218,7 +218,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
         qCDebug(lcXlsxImport) << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (name() == "sheet") {
+            if (name() == QLatin1StringView("sheet")) {
                 TRY_READ(sheet)
                 ++worksheet;
                 m_context->import->reportProgress(45 + (55/numberOfWorkSheets) * worksheet);

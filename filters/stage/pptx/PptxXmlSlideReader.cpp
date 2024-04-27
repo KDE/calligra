@@ -1481,27 +1481,27 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
                 shapeWriter = new KoXmlWriter(shapeBuf);
                 body = shapeWriter;
             }
-            if (qualifiedName() == "p:sp") {
+            if (qualifiedName() == QLatin1StringView("p:sp")) {
                 TRY_READ(sp)
                 potentiallyAddToLayoutFrames = true;
             }
-            else if (qualifiedName() == "p:grpSp") {
+            else if (qualifiedName() == QLatin1StringView("p:grpSp")) {
                 TRY_READ(grpSp)
                 potentiallyAddToLayoutFrames = true;
             }
-            else if (qualifiedName() == "p:pic") {
+            else if (qualifiedName() == QLatin1StringView("p:pic")) {
                 TRY_READ(pic)
                 potentiallyAddToLayoutFrames = true;
             }
-            else if (qualifiedName() == "p:graphicFrame") {
+            else if (qualifiedName() == QLatin1StringView("p:graphicFrame")) {
                 TRY_READ(graphicFrame)
                 potentiallyAddToLayoutFrames = true;
             }
-            else if (qualifiedName() == "p:cxnSp") {
+            else if (qualifiedName() == QLatin1StringView("p:cxnSp")) {
                 TRY_READ(cxnSp)
                 potentiallyAddToLayoutFrames = true;
             }
-            else if (qualifiedName() == "mc:AlternateContent") {
+            else if (qualifiedName() == QLatin1StringView("mc:AlternateContent")) {
                 TRY_READ(AlternateContent)
                 potentiallyAddToLayoutFrames = true;
             }
@@ -1733,7 +1733,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
         if (isStartElement()) {
             TRY_READ_IF_NS(a, graphic)
             ELSE_TRY_READ_IF(nvGraphicFramePr)
-            else if (qualifiedName() == "p:xfrm") {
+            else if (qualifiedName() == QLatin1StringView("p:xfrm")) {
                 read_xfrm_p();
             }
 //! @todo add ELSE_WRONG_FORMAT
@@ -1798,7 +1798,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvGraphicFramePr()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (qualifiedName() == "p:cNvPr") {
+            if (qualifiedName() == QLatin1StringView("p:cNvPr")) {
                 read_cNvPr_p();
             }
             // commented atm. for tables because it is not clear what idx type would mean for table

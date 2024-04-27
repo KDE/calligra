@@ -694,7 +694,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
             ELSE_TRY_READ_IF(name)
             ELSE_TRY_READ_IF(b)
             ELSE_TRY_READ_IF(i)
-            else if (name() == "color") {
+            else if (name() == QLatin1StringView("color")) {
                 m_currentColor = QColor();
                 TRY_READ(color)
                 if (m_currentColor.isValid()) {

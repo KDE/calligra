@@ -145,7 +145,7 @@ QSize KoAspectButton::sizeHint () const {
 }
 
 void KoAspectButton::keyReleaseEvent (QKeyEvent *e) {
-    if(e->text() == " ") {
+    if(e->text() == QLatin1StringView(" ")) {
         setKeepAspectRatio(! d->keepAspect);
         e->accept();
     }

@@ -102,14 +102,14 @@ KoFilter::ConversionStatus VmlDrawingReader::read_xml()
 
     while (!atEnd()) {
         readNext();
-        if (isEndElement() && qualifiedName() == "xml") {
+        if (isEndElement() && qualifiedName() == QLatin1StringView("xml")) {
             break;
         }
         if (isStartElement()) {
-            if (name() == "shapetype") {
+            if (name() == QLatin1StringView("shapetype")) {
                 TRY_READ(shapetype)
             }
-            else if (name() == "shape") {
+            else if (name() == QLatin1StringView("shape")) {
                 oldBody = body; // Body protection starts
                 QBuffer frameBuf;
                 KoXmlWriter frameWriter(&frameBuf);

@@ -183,7 +183,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblBg()
         BREAK_IF_END_OF(CURRENT_EL)
         if(isStartElement()) {
             TRY_READ_IF(fill)
-            else if (name() == "fillRef") {
+            else if (name() == QLatin1StringView("fillRef")) {
                 // NOTE: This is a heavy simplification for the moment
                 // In reality we should use graphic properties in the cell-style
                 // but it is not supported atm.
@@ -546,7 +546,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcStyle()
         if(isStartElement()) {
 //             TRY_READ_IF(cell3D)
             TRY_READ_IF(fill)
-            else if (name() == "fillRef") {
+            else if (name() == QLatin1StringView("fillRef")) {
                 // NOTE: This is a heavy simplification for the moment
                 // In reality we should use graphic properties in the cell-style
                 // but it is not supported atm.

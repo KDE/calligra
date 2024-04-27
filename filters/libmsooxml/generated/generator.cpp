@@ -140,7 +140,7 @@ int main()
         xml.readNext();
         switch (state) {
         case Beginning:
-            if (xml.isStartElement() && xml.name() == "presetShapeDefinitons") {
+            if (xml.isStartElement() && xml.name() == QLatin1StringView("presetShapeDefinitons")) {
                 xml.readNext();
                 state = ShapeNameNext;
             }
@@ -171,25 +171,25 @@ int main()
                 outStream << "attributes[\"" << currentShapeName << "\"]=\"" << shapeAttributes << "\";" << "\n";
                 shapeAttributes = "";
             }
-            else if (xml.isStartElement() && xml.name() == "avLst") {
+            else if (xml.isStartElement() && xml.name() == QLatin1StringView("avLst")) {
                 shapeDefinition += handler.handle_avLst(&xml);
             }
-            else if (xml.isStartElement() && xml.name() == "gdLst") {
+            else if (xml.isStartElement() && xml.name() == QLatin1StringView("gdLst")) {
                 shapeDefinition += handler.handle_gdLst(&xml);
             }
-            else if (xml.isStartElement() && xml.name() == "pathLst") {
+            else if (xml.isStartElement() && xml.name() == QLatin1StringView("pathLst")) {
                 shapeAttributes += handler.handle_pathLst(&xml);
                 pathEquations += handler.pathEquationsCreated();
             }
-            else if (xml.isStartElement() && xml.name() == "ahLst") {
+            else if (xml.isStartElement() && xml.name() == QLatin1StringView("ahLst")) {
                 xml.skipCurrentElement();
             }
-            else if (xml.isStartElement() && xml.name() == "rect") {
+            else if (xml.isStartElement() && xml.name() == QLatin1StringView("rect")) {
                 // draw:text-areas
                 textareas = handler.handle_rect(&xml);
                 outStream << "textareas[\"" << currentShapeName << "\"]=\"" << textareas << "\";" << "\n";
             }
-            else if (xml.isStartElement() && xml.name() == "cxnLst") {
+            else if (xml.isStartElement() && xml.name() == QLatin1StringView("cxnLst")) {
                 xml.skipCurrentElement();
             }
             xml.readNext();

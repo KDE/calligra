@@ -122,7 +122,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_abstractNum()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (name() == "lvl") {
+            if (name() == QLatin1StringView("lvl")) {
                 m_currentBulletProperties.clear();
                 TRY_READ(lvl)
                 m_currentBulletList.append(m_currentBulletProperties);
@@ -163,7 +163,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlOverride()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (name() == "lvl") {
+            if (name() == QLatin1StringView("lvl")) {
                 m_currentBulletProperties.clear();
                 TRY_READ(lvl)
                 int index = 0;
@@ -176,7 +176,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlOverride()
                     ++index;
                 }
             }
-            else if (name() == "startOverride") {
+            else if (name() == QLatin1StringView("startOverride")) {
                 int index = 0;
                 while (index < m_currentBulletList.size()) {
                     if (m_currentBulletList.at(index).m_level == level)
@@ -249,14 +249,14 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
             ELSE_TRY_READ_IF(lvlText)
             ELSE_TRY_READ_IF(lvlJc)
             ELSE_TRY_READ_IF(suff)
-            else if (name() == "lvlPicBulletId") {
+            else if (name() == QLatin1StringView("lvlPicBulletId")) {
                 TRY_READ(lvlPicBulletId)
                 pictureType = true;
             }
-            else if (name() == "pPr") {
+            else if (name() == QLatin1StringView("pPr")) {
                 TRY_READ(pPr_numbering)
             }
-            else if (name() == "rPr") {
+            else if (name() == QLatin1StringView("rPr")) {
                 TRY_READ(rPr)
             }
             SKIP_UNKNOWN
@@ -463,7 +463,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (name() == "abstractNumId") {
+            if (name() == QLatin1StringView("abstractNumId")) {
                TRY_READ(abstractNumId)
                m_currentBulletList = m_abstractListStyles[m_currentAbstractId];
                m_context->m_abstractNumIDs[numId] = m_currentAbstractId;

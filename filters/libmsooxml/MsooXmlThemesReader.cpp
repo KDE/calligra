@@ -930,21 +930,21 @@ KoFilter::ConversionStatus MsooXmlThemesReader::fillStyleReadHelper(int& index)
             QString gradAngle = "16200000"; // 270 degrees as the default, that is, from up to down
             while (!atEnd()) {
                 readNext();
-                if (isEndElement() && qualifiedName() == "a:gradFill") {
+                if (isEndElement() && qualifiedName() == QLatin1StringView("a:gradFill")) {
                     break;
                 }
-                else if (isStartElement() && qualifiedName() == "a:lin") {
+                else if (isStartElement() && qualifiedName() == QLatin1StringView("a:lin")) {
                     attrs = attributes();
                     TRY_READ_ATTR_WITHOUT_NS(ang)
                     gradAngle = ang;
                 }
-                else if (isStartElement() && qualifiedName() == "a:gsLst") {
+                else if (isStartElement() && qualifiedName() == QLatin1StringView("a:gsLst")) {
                     while (!atEnd()) {
                         readNext();
-                        if (isEndElement() && qualifiedName() == "a:gsLst") {
+                        if (isEndElement() && qualifiedName() == QLatin1StringView("a:gsLst")) {
                             break;
                         }
-                        else if (isStartElement() && qualifiedName() == "a:gs") {
+                        else if (isStartElement() && qualifiedName() == QLatin1StringView("a:gs")) {
                             attrs = attributes();
                             TRY_READ_ATTR_WITHOUT_NS(pos)
                             int gradPosition = pos.toInt() / 1000;
@@ -954,28 +954,28 @@ KoFilter::ConversionStatus MsooXmlThemesReader::fillStyleReadHelper(int& index)
                             int alphaModifier = 0;
                             while (!atEnd()) {
                                 readNext();
-                                if (isEndElement() && qualifiedName() == "a:gs") {
+                                if (isEndElement() && qualifiedName() == QLatin1StringView("a:gs")) {
                                     break;
                                 }
-                                else if (isStartElement() && qualifiedName() == "a:schemeClr") {
+                                else if (isStartElement() && qualifiedName() == QLatin1StringView("a:schemeClr")) {
                                      while (!atEnd()) {
                                          readNext();
-                                         if (isEndElement() && qualifiedName() == "a:schemeClr") {
+                                         if (isEndElement() && qualifiedName() == QLatin1StringView("a:schemeClr")) {
                                              break;
                                          }
                                          else if (isStartElement()) {
                                              attrs = attributes();
                                              TRY_READ_ATTR_WITHOUT_NS(val)
-                                             if (qualifiedName() == "a:tint") {
+                                             if (qualifiedName() == QLatin1StringView("a:tint")) {
                                                  tintModifier = val.toInt()/100000.0;
                                              }
-                                             else if (qualifiedName() == "a:shade") {
+                                             else if (qualifiedName() == QLatin1StringView("a:shade")) {
                                                  shadeModifier = val.toInt()/100000.0;
                                              }
-                                             else if (qualifiedName() == "a:satMod") {
+                                             else if (qualifiedName() == QLatin1StringView("a:satMod")) {
                                                  satModifier = val.toDouble()/100000.0;
                                              }
-                                             else if (qualifiedName() == "a:alpha") {
+                                             else if (qualifiedName() == QLatin1StringView("a:alpha")) {
                                                  alphaModifier = val.toInt()/1000;
                                              }
                                          }
@@ -1095,17 +1095,17 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_majorFont()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (qualifiedName() == "a:latin") {
+            if (qualifiedName() == QLatin1StringView("a:latin")) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(typeface)
                 m_context->theme->fontScheme.majorFonts.latinTypeface = typeface;
             }
-            else if (qualifiedName() == "a:ea") {
+            else if (qualifiedName() == QLatin1StringView("a:ea")) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(typeface)
                 m_context->theme->fontScheme.minorFonts.eaTypeface = typeface;
             }
-            else if (qualifiedName() == "a:cs") {
+            else if (qualifiedName() == QLatin1StringView("a:cs")) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(typeface)
                 m_context->theme->fontScheme.minorFonts.csTypeface = typeface;
@@ -1126,17 +1126,17 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_minorFont()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (qualifiedName() == "a:latin") {
+            if (qualifiedName() == QLatin1StringView("a:latin")) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(typeface)
                 m_context->theme->fontScheme.minorFonts.latinTypeface = typeface;
             }
-            else if (qualifiedName() == "a:ea") {
+            else if (qualifiedName() == QLatin1StringView("a:ea")) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(typeface)
                 m_context->theme->fontScheme.minorFonts.eaTypeface = typeface;
             }
-            else if (qualifiedName() == "a:cs") {
+            else if (qualifiedName() == QLatin1StringView("a:cs")) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(typeface)
                 m_context->theme->fontScheme.minorFonts.csTypeface = typeface;

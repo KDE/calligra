@@ -381,7 +381,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         if (isStartElement()) {
             const QXmlStreamAttributes attrs(attributes());
             TRY_READ_IF(name)
-            else if (name() == "rPr") {
+            else if (name() == QLatin1StringView("rPr")) {
                 if (type == "table") {
                     m_currentTextStyle = KoGenStyle(KoGenStyle::TextStyle, "text");
                     m_currentTableStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
@@ -396,7 +396,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
                     m_currentTableStyleProperties = 0;
                 }
             }
-            else if (name() == "pPr") {
+            else if (name() == QLatin1StringView("pPr")) {
                 if (type == "table") {
                     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphStyle, "paragraph");
                     m_currentTableStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
@@ -411,7 +411,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
                     m_currentTableStyleProperties = 0;
                 }
             }
-            else if (name() == "tblPr") {
+            else if (name() == QLatin1StringView("tblPr")) {
                 m_currentTableStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
                 if (m_currentTableStyleProperties == 0) {
                     m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;
@@ -422,7 +422,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
                 m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentTableStyleProperties);
                 m_currentTableStyleProperties = 0;
             }
-            else if (name() == "tcPr") {
+            else if (name() == QLatin1StringView("tcPr")) {
                 m_currentTableStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
                 if (m_currentTableStyleProperties == 0) {
                     m_currentTableStyleProperties = new MSOOXML::TableStyleProperties;

@@ -1346,15 +1346,15 @@ void OdtMobiHtmlConverter::openFontOptionsElement(KoXmlWriter *htmlWriter, Style
 {
 
 
-    if (styleInfo->attributes.value("text-decoration") == "underline") {
+    if (styleInfo->attributes.value("text-decoration") == QLatin1StringView("underline")) {
         htmlWriter->startElement("u");
         m_underlineTag = true;
     }
-    if (styleInfo->attributes.value("font-style") == "italic") {
+    if (styleInfo->attributes.value("font-style") == QLatin1StringView("italic")) {
         htmlWriter->startElement("i");
         m_italicTag = true;
     }
-    if (styleInfo->attributes.value("font-weight") == "bold") {
+    if (styleInfo->attributes.value("font-weight") == QLatin1StringView("bold")) {
         htmlWriter->startElement("font");
         htmlWriter->addAttribute("size", "4"); // When text is bold.
         htmlWriter->startElement("b");

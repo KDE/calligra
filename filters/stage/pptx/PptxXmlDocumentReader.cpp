@@ -607,7 +607,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldIdLst()
         debugPptx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (name() == "sldId") {
+            if (name() == QLatin1StringView("sldId")) {
                 TRY_READ(sldId)
                 if (m_context->numberOfItems > 0) {
                     m_context->import->reportProgress(100 / m_context->numberOfItems);
@@ -638,7 +638,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterIdLst()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (name() == "notesMasterId") {
+            if (name() == QLatin1StringView("notesMasterId")) {
                 TRY_READ(notesMasterId)
                 if (m_context->numberOfItems > 0) {
                     m_context->import->reportProgress(100 / m_context->numberOfItems);
@@ -672,7 +672,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterIdLst()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (name() == "sldMasterId") {
+            if (name() == QLatin1StringView("sldMasterId")) {
                 TRY_READ(sldMasterId)
                 if (m_context->numberOfItems > 0) {
                     m_context->import->reportProgress(100 / m_context->numberOfItems);

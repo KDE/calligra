@@ -280,7 +280,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
     readNext();
     //qCDebug(lcXlsxImport) << *this << namespaceUri();
 
-    if (name() != "worksheet" && name() != "dialogsheet" && name() != "chartsheet") {
+    if (name() != QLatin1StringView("worksheet") && name() != QLatin1StringView("dialogsheet") && name() != QLatin1StringView("chartsheet")) {
         return KoFilter::WrongFormat;
     }
     if (!expectNS(MSOOXML::Schemas::spreadsheetml)) {
@@ -301,10 +301,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
     }
 //! @todo expect other namespaces too...
 
-    if (name() == "worksheet") {
+    if (name() == QLatin1StringView("worksheet")) {
         TRY_READ(worksheet)
     }
-    else if (name() == "dialogsheet") {
+    else if (name() == QLatin1StringView("dialogsheet")) {
         TRY_READ(dialogsheet)
     }
 
@@ -493,7 +493,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
             ELSE_TRY_READ_IF(cols)
             ELSE_TRY_READ_IF(sheetData) // does fill the m_context->sheet
             ELSE_TRY_READ_IF(mergeCells)
-            else if (name() == "drawing") {
+            else if (name() == QLatin1StringView("drawing")) {
                 KoXmlWriter *tempBodyHolder = body;
                 body = new KoXmlWriter(&drawingBuffer);
                 TRY_READ(drawing)
@@ -504,7 +504,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
             ELSE_TRY_READ_IF(hyperlinks)
             ELSE_TRY_READ_IF(picture)
             ELSE_TRY_READ_IF(oleObjects)
-            else if (name() == "controls") {
+            else if (name() == QLatin1StringView("controls")) {
                 KoXmlWriter *tempBodyHolder = body;
                 body = new KoXmlWriter(&drawingBuffer);
                 TRY_READ(controls)
@@ -931,7 +931,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cfRule()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (name() == "formula") {
+            if (name() == QLatin1StringView("formula")) {
                 TRY_READ(formula)
                 formulas.push_back(m_formula);
             }
@@ -1642,7 +1642,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_v()
     readNext();
 
     // It is possible to have empty <v/> element
-    if (name() == "v" && isEndElement()) {
+    if (name() == QLatin1StringView("v") && isEndElement()) {
         READ_EPILOGUE
     }
 
@@ -1925,7 +1925,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_filters()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (name() == "filter") {
+            if (name() == QLatin1StringView("filter")) {
                 if (hasValueAlready) {
                     m_context->currentFilterCondition.value += "|";
                 }

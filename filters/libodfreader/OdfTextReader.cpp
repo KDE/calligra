@@ -187,7 +187,7 @@ void OdfTextReader::readTextLevelElement(KoXmlStreamReader &reader)
 
     QString tagName = reader.qualifiedName().toString();
         
-    if (reader.prefix() == "draw" || reader.prefix() == "dr3d") {
+    if (reader.prefix() == QLatin1StringView("draw") || reader.prefix() == QLatin1StringView("dr3d")) {
 	OdfDrawReader *drawReader = m_parent->drawReader();
 	if (drawReader) {
 	    drawReader->readCommonGraphicsElements(reader);
@@ -822,7 +822,7 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
 
         QString tagName = reader.qualifiedName().toString();
 
-	if (reader.prefix() == "draw" || reader.prefix() == "dr3d") {
+	if (reader.prefix() == QLatin1StringView("draw") || reader.prefix() == QLatin1StringView("dr3d")) {
 	    OdfDrawReader *drawReader = m_parent->drawReader();
 	    if (drawReader) {
 		drawReader->readCommonGraphicsElements(reader);
@@ -831,7 +831,7 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
 		reader.skipCurrentElement();
 	    }
         } // draw | dr3d namespace
-        else if (reader.prefix() == "office") {
+        else if (reader.prefix() == QLatin1StringView("office")) {
             if (tagName == "office:annotation") {
                 readElementOfficeAnnotation(reader);
             }
@@ -843,7 +843,7 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
                 readUnknownElement(reader);
             }
         } // office namespace
-        else if (reader.prefix() == "text") {
+        else if (reader.prefix() == QLatin1StringView("text")) {
 
             if (tagName == "text:a") {
                 readElementTextA(reader);

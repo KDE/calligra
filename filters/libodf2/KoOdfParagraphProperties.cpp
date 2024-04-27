@@ -104,7 +104,7 @@ bool KoOdfParagraphProperties::readOdf(KoXmlStreamReader &reader)
         }
         else if (child == "style:tab-stops") {
             while (reader.readNextStartElement()) {
-                if (reader.qualifiedName() == "style:tab-stop") {
+                if (reader.qualifiedName() == QLatin1StringView("style:tab-stop")) {
                     KoOdfStyleTabStop  *tabStop = new KoOdfStyleTabStop;
 
                     copyAttributes(reader, tabStop->attributes);

@@ -327,7 +327,7 @@ void OdfDrawReader::readGraphicsObjectChildren(KoXmlStreamReader &reader)
             reader.skipCurrentElement();
             //readElementOfficeEventListeners(reader);
         }
-        else if (reader.prefix() == "svg") {
+        else if (reader.prefix() == QLatin1StringView("svg")) {
 	    if (tagName == "svg:desc") {
 		// FIXME: NYI
 		reader.skipCurrentElement();
@@ -342,7 +342,7 @@ void OdfDrawReader::readGraphicsObjectChildren(KoXmlStreamReader &reader)
 		reader.skipCurrentElement();
 	    }
         } // namespace svg
-        else if (reader.prefix() == "text") {
+        else if (reader.prefix() == QLatin1StringView("text")) {
 	    OdfTextReader *textReader = m_parent->textReader();
 	    if (!textReader) {
 		reader.skipCurrentElement();

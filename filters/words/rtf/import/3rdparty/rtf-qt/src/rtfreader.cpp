@@ -191,7 +191,7 @@ namespace RtfReader
     
     void Reader::changeDestination( const QString &destinationName )
     {
-	if ( m_destinationStack.top()->name() == "ignorable" ) {
+	if ( m_destinationStack.top()->name() == QLatin1StringView("ignorable") ) {
 	    // we don't change destinations inside ignored groups
 	    return;
 	}

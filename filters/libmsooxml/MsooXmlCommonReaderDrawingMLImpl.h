@@ -1634,7 +1634,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
         if (isStartElement()) {
             TRY_READ_IF_NS(a, fillRef)
             ELSE_TRY_READ_IF_NS(a, lnRef)
-            else if (qualifiedName() == "a:fontRef") {
+            else if (qualifiedName() == QLatin1StringView("a:fontRef")) {
                 m_currentColor = QColor();
                 m_referredFontName.clear();
                 TRY_READ(fontRef)
@@ -1728,7 +1728,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                 TRY_READ(xfrm)
                 m_xfrm_read = true;
             }
-            else if (qualifiedName() == "a:custGeom") {
+            else if (qualifiedName() == QLatin1StringView("a:custGeom")) {
                 TRY_READ(custGeom)
                 m_contentType = "custom";
             }
@@ -2891,10 +2891,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_endParaRPr()
             else if (QUALIFIED_NAME_IS(highlight)) {
                 TRY_READ(DrawingML_highlight)
             }
-            else if (name() == "gradFill") {
+            else if (name() == QLatin1StringView("gradFill")) {
                 TRY_READ(gradFillRpr)
             }
-            else if (name() == "noFill") {
+            else if (name() == QLatin1StringView("noFill")) {
                 m_currentTextStyleProperties->setTextOutline(QPen(Qt::SolidLine));
             }
             ELSE_TRY_READ_IF(hlinkClick)
@@ -3048,10 +3048,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             TRY_READ_IF(latin)
             //ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(solidFill)
-            else if (name() == "gradFill") {
+            else if (name() == QLatin1StringView("gradFill")) {
                 TRY_READ(gradFillRpr)
             }
-            else if (name() == "noFill") {
+            else if (name() == QLatin1StringView("noFill")) {
                 m_currentTextStyleProperties->setTextOutline(QPen(Qt::SolidLine));
             }
             else if (QUALIFIED_NAME_IS(highlight)) {
@@ -3304,17 +3304,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_custGeom()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (name() == "avLst") {
+            if (name() == QLatin1StringView("avLst")) {
                 m_customEquations += handler.handle_avLst(this);
             }
-            else if (name() == "gdLst") {
+            else if (name() == QLatin1StringView("gdLst")) {
                 m_customEquations += handler.handle_gdLst(this);
             }
-            else if (name() == "pathLst") {
+            else if (name() == QLatin1StringView("pathLst")) {
                 m_customPath = handler.handle_pathLst(this);
                 m_customEquations += handler.pathEquationsCreated();
             }
-            else if (name() == "rect") {
+            else if (name() == QLatin1StringView("rect")) {
                 m_textareas = handler.handle_rect(this);
             }
 
@@ -4091,7 +4091,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
             ELSE_TRY_READ_IF_NS(p, oleObj)
             ELSE_TRY_READ_IF_NS(a, tbl)
 #endif
-            else if (qualifiedName() == "mc:AlternateContent") {
+            else if (qualifiedName() == QLatin1StringView("mc:AlternateContent")) {
                 TRY_READ(AlternateContent)
             }
             SKIP_UNKNOWN
@@ -4578,7 +4578,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFill()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(gsLst)
-            else if (qualifiedName() == "a:lin") {
+            else if (qualifiedName() == QLatin1StringView("a:lin")) {
                 gradRotation = true;
                 TRY_READ(lin)
             }
@@ -4642,7 +4642,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFillRpr()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (name() == "gs") {
+            if (name() == QLatin1StringView("gs")) {
                 TRY_READ(gs)
                 gradPositions.push_back(QPair<int, QColor>(m_gradPosition, m_currentColor));
                 if (m_gradPosition == 50) {
@@ -6026,10 +6026,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(solidFill)
-            else if (name() == "gradFill") {
+            else if (name() == QLatin1StringView("gradFill")) {
                 TRY_READ(gradFillRpr)
             }
-            else if (name() == "noFill") {
+            else if (name() == QLatin1StringView("noFill")) {
                 m_currentTextStyleProperties->setTextOutline(QPen(Qt::SolidLine));
             }
             ELSE_TRY_READ_IF(latin)

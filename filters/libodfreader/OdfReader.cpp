@@ -135,7 +135,7 @@ bool OdfReader::readContent(OdfReaderBackend *backend, OdfReaderContext *context
     while (!reader.atEnd()) {
         reader.readNext();
 
-        if (reader.isStartElement() && reader.qualifiedName() == "office:document-content") {
+        if (reader.isStartElement() && reader.qualifiedName() == QLatin1StringView("office:document-content")) {
             foundContent = true;
             break;
         }

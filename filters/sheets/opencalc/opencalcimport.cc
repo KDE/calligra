@@ -1418,10 +1418,9 @@ QString * OpenCalcImport::loadFormat(KoXmlElement * element,
             if (e.hasAttributeNS(ooNS::fo, "color"))
                 negRed = true; // we only support red...
         } else if (e.localName() == "text" && e.namespaceURI() == ooNS::number) {
-            if (negRed && (e.text() == "-"))
-                ;
-            else
+            if (!negRed || (e.text() != QLatin1StringView("-"))) {
                 format->append(e.text());
+            }
         } else if (e.localName() == "currency-symbol" && e.namespaceURI() == ooNS::number) {
             QString sym(e.text());
             qDebug() << "Currency:" << sym;

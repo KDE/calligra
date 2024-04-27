@@ -232,10 +232,10 @@ QString ComplexShapeHandler::handle_avLst(QXmlStreamReader* reader)
 
     while (!reader->atEnd()) {
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "avLst") {
+        if (reader->isEndElement() && reader->name() == QLatin1StringView("avLst")) {
             break;
         }
-        else if (reader->isStartElement() && reader->name() == "gd") {
+        else if (reader->isStartElement() && reader->name() == QLatin1StringView("gd")) {
             returnString += handle_gd(reader);
         }
     }
@@ -249,10 +249,10 @@ QString ComplexShapeHandler::handle_gdLst(QXmlStreamReader* reader)
 
     while (!reader->atEnd()) {
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "gdLst") {
+        if (reader->isEndElement() && reader->name() == QLatin1StringView("gdLst")) {
             break;
         }
-        else if (reader->isStartElement() && reader->name() == "gd") {
+        else if (reader->isStartElement() && reader->name() == QLatin1StringView("gd")) {
             returnString += handle_gd(reader);
         }
     }
@@ -265,7 +265,7 @@ QString ComplexShapeHandler::handle_rect(QXmlStreamReader* reader)
     QXmlStreamAttributes attrs = reader->attributes();
     while (!reader->atEnd()) {
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "rect") {
+        if (reader->isEndElement() && reader->name() == QLatin1StringView("rect")) {
             break;
         }
     }
@@ -282,7 +282,7 @@ QString ComplexShapeHandler::handle_close(QXmlStreamReader* reader)
 {
     while (!reader->atEnd()) {
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "close") {
+        if (reader->isEndElement() && reader->name() == QLatin1StringView("close")) {
             break;
         }
     }
@@ -294,7 +294,7 @@ QString ComplexShapeHandler::handle_arcTo(QXmlStreamReader* reader)
     QXmlStreamAttributes attrs = reader->attributes();
     while (!reader->atEnd()) {
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "arcTo") {
+        if (reader->isEndElement() && reader->name() == QLatin1StringView("arcTo")) {
             break;
         }
     }
@@ -444,7 +444,7 @@ QString ComplexShapeHandler::handle_pt(QXmlStreamReader* reader)
     QXmlStreamAttributes attrs = reader->attributes();
     while (!reader->atEnd()) {
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "pt") {
+        if (reader->isEndElement() && reader->name() == QLatin1StringView("pt")) {
             break;
         }
     }
@@ -483,10 +483,10 @@ QString ComplexShapeHandler::handle_lnTo(QXmlStreamReader* reader)
 
     while (!reader->atEnd()) {
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "lnTo") {
+        if (reader->isEndElement() && reader->name() == QLatin1StringView("lnTo")) {
             break;
         }
-        else if (reader->isStartElement() && reader->name() == "pt") {
+        else if (reader->isStartElement() && reader->name() == QLatin1StringView("pt")) {
             returnString += handle_pt(reader);
         }
     }
@@ -499,10 +499,10 @@ QString ComplexShapeHandler::handle_moveTo(QXmlStreamReader* reader)
 
     while (!reader->atEnd()) {
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "moveTo") {
+        if (reader->isEndElement() && reader->name() == QLatin1StringView("moveTo")) {
             break;
         }
-        else if (reader->isStartElement() && reader->name() == "pt") {
+        else if (reader->isStartElement() && reader->name() == QLatin1StringView("pt")) {
             returnString += handle_pt(reader);
         }
     }
@@ -515,10 +515,10 @@ QString ComplexShapeHandler::handle_quadBezTo(QXmlStreamReader* reader)
 
     while (!reader->atEnd()) {
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "quadBezTo") {
+        if (reader->isEndElement() && reader->name() == QLatin1StringView("quadBezTo")) {
             break;
         }
-        else if (reader->isStartElement() && reader->name() == "pt") {
+        else if (reader->isStartElement() && reader->name() == QLatin1StringView("pt")) {
             returnString += handle_pt(reader);
         }
     }
@@ -531,10 +531,10 @@ QString ComplexShapeHandler::handle_cubicBezTo(QXmlStreamReader* reader)
 
     while (!reader->atEnd()) {
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "cubicBezTo") {
+        if (reader->isEndElement() && reader->name() == QLatin1StringView("cubicBezTo")) {
             break;
         }
-        else if (reader->isStartElement() && reader->name() == "pt") {
+        else if (reader->isStartElement() && reader->name() == QLatin1StringView("pt")) {
             returnString += handle_pt(reader);
         }
     }
@@ -561,31 +561,31 @@ QString ComplexShapeHandler::handle_path(QXmlStreamReader* reader)
 
     while (!reader->atEnd()) {
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "path") {
-            if (attrs.value("stroke") == "false" || attrs.value("stroke") == "0" ) {
+        if (reader->isEndElement() && reader->name() == QLatin1StringView("path")) {
+            if (attrs.value("stroke") == QLatin1StringView("false") || attrs.value("stroke") == QLatin1StringView("0") ) {
                 returnString += "S ";
             }
-            if (attrs.value("fill") == "none") {
+            if (attrs.value("fill") == QLatin1StringView("none")) {
                 returnString += "F ";
             }
             break;
         }
-        else if (reader->isStartElement() && reader->name() == "moveTo") {
+        else if (reader->isStartElement() && reader->name() == QLatin1StringView("moveTo")) {
             returnString += handle_moveTo(reader);
         }
-        else if (reader->isStartElement() && reader->name() == "close") {
+        else if (reader->isStartElement() && reader->name() == QLatin1StringView("close")) {
             returnString += handle_close(reader);
         }
-        else if (reader->isStartElement() && reader->name() == "lnTo") {
+        else if (reader->isStartElement() && reader->name() == QLatin1StringView("lnTo")) {
             returnString += handle_lnTo(reader);
         }
-        else if (reader->isStartElement() && reader->name() == "cubicBezTo") {
+        else if (reader->isStartElement() && reader->name() == QLatin1StringView("cubicBezTo")) {
             returnString += handle_cubicBezTo(reader);
         }
-        else if (reader->isStartElement() && reader->name() == "quadBezTo") {
+        else if (reader->isStartElement() && reader->name() == QLatin1StringView("quadBezTo")) {
             returnString += handle_quadBezTo(reader);
         }
-        else if (reader->isStartElement() && reader->name() == "arcTo") {
+        else if (reader->isStartElement() && reader->name() == QLatin1StringView("arcTo")) {
             returnString += handle_arcTo(reader);
         }
 	else if (reader->isStartElement()) {
@@ -605,10 +605,10 @@ QString ComplexShapeHandler::handle_pathLst(QXmlStreamReader* reader)
 
     while (!reader->atEnd()) {
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "pathLst") {
+        if (reader->isEndElement() && reader->name() == QLatin1StringView("pathLst")) {
             break;
         }
-        else if (reader->isStartElement() && reader->name() == "path") {
+        else if (reader->isStartElement() && reader->name() == QLatin1StringView("path")) {
             returnString += handle_path(reader);
         }
     }

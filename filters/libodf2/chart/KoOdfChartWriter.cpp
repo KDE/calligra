@@ -234,7 +234,7 @@ void KoOdfChartWriter::addShapePropertyStyle(/*const*/ KoChart::Series* series, 
         style.addProperty("svg:stroke-color", m_palette.at(24 + curSerNum).name(),
 			  KoGenStyle::GraphicType);
     }
-    else if (paletteIsSet && m_chart->m_impl->name() == "scatter")
+    else if (paletteIsSet && m_chart->m_impl->name() == QByteArrayView("scatter"))
         style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
     if (series->spPr->areaFill.valid) {
         if (series->spPr->areaFill.type == KoChart::Fill::Solid) {
@@ -649,7 +649,7 @@ bool KoOdfChartWriter::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     // Area diagrams are special in that Excel displays the areas in another
     // order than OpenOffice.org and Calligra Sheets. To make sure the same areas are
     // visible we do the same as OpenOffice.org does and reverse the order.
-    if (chart()->m_impl->name() == "area") {
+    if (chart()->m_impl->name() == QByteArrayView("area")) {
         for (int i = chart()->m_series.count() - 1; i >= 0; --i) {
             chart()->m_series.append(chart()->m_series.takeAt(i));
         }
@@ -730,7 +730,7 @@ bool KoOdfChartWriter::saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles,
     bool marker = false;
     Q_FOREACH (KoChart::Series* series, chart()->m_series) {
         lines = true;
-        if (chart()->m_impl->name() == "scatter" && !paletteIsSet) {
+        if (chart()->m_impl->name() == QByteArrayView("scatter") && !paletteIsSet) {
             KoChart::ScatterImpl* impl = static_cast< KoChart::ScatterImpl* >(chart()->m_impl);
             lines = (impl->style == KoChart::ScatterImpl::Line
 		     || impl->style == KoChart::ScatterImpl::LineMarker);
@@ -867,11 +867,11 @@ bool KoOdfChartWriter::saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles,
 
         bodyWriter->addAttribute("chart:class", "chart:" + chart()->m_impl->name());
 
-//         if (chart()->m_impl->name() == "scatter") {
+//         if (chart()->m_impl->name() == QLatin1StringView("scatter")) {
 //             bodyWriter->startElement("chart:domain");
 //             bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E5");
 //             bodyWriter->endElement();
-//         } else if (chart()->m_impl->name() == "bubble") {
+//         } else if (chart()->m_impl->name() == QLatin1StringView("bubble")) {
 
             QString domainRange;
             Q_FOREACH (const QString& curRange, series->m_domainValuesCellRangeAddress) {
@@ -903,7 +903,7 @@ bool KoOdfChartWriter::saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles,
             bodyWriter->startElement("chart:data-point");
             KoGenStyle gs(KoGenStyle::GraphicAutoStyle, "chart");
 
-            if (chart()->m_impl->name() == "circle" || chart()->m_impl->name() == "ring") {
+            if (chart()->m_impl->name() == QByteArrayView("circle") || chart()->m_impl->name() == QByteArrayView("ring")) {
                 QColor fillColor;
                 if (j < series->m_dataPoints.count()) {
                     KoChart::DataPoint *dataPoint = series->m_dataPoints[j];

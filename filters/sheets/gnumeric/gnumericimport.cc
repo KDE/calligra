@@ -251,15 +251,15 @@ void set_document_attributes(Doc * ksdoc, QDomElement * docElem)
     while (!attributeItem.isNull()) {
         QDomNode gmr_name  = attributeItem.namedItem("name");
         QDomNode gmr_value = attributeItem.namedItem("value");
-        if (gmr_name.toElement().text() == "WorkbookView::show_horizontal_scrollbar") {
+        if (gmr_name.toElement().text() == QLatin1StringView("WorkbookView::show_horizontal_scrollbar")) {
             sett->setShowHorizontalScrollBar(gmr_value.toElement().text().toLower() == "true" ? true : false);
-        } else if (gmr_name.toElement().text() == "WorkbookView::show_vertical_scrollbar") {
+        } else if (gmr_name.toElement().text() == QLatin1StringView("WorkbookView::show_vertical_scrollbar")) {
             sett->setShowVerticalScrollBar(gmr_value.toElement().text().toLower() == "true" ? true : false);
-        } else if (gmr_name.toElement().text() == "WorkbookView::show_notebook_tabs") {
+        } else if (gmr_name.toElement().text() == QLatin1StringView("WorkbookView::show_notebook_tabs")) {
             sett->setShowTabBar(gmr_value.toElement().text().toLower() == "true" ? true : false);
-        } else if (gmr_name.toElement().text() == "WorkbookView::do_auto_completion") {
+        } else if (gmr_name.toElement().text() == QLatin1StringView("WorkbookView::do_auto_completion")) {
             sett->setCompletionMode(KCompletion::CompletionAuto);
-        } else if (gmr_name.toElement().text() == "WorkbookView::is_protected") {
+        } else if (gmr_name.toElement().text() == QLatin1StringView("WorkbookView::is_protected")) {
             //TODO protect document ???
             //ksdoc->map()->isProtected()
         }
@@ -283,21 +283,21 @@ void set_document_info(KoDocument * document, QDomElement * docElem)
 
         KoDocumentInfo * DocumentInfo     = document->documentInfo();
 
-        if (gmr_name.toElement().text() == "title") {
+        if (gmr_name.toElement().text() == QLatin1StringView("title")) {
             DocumentInfo->setAboutInfo("title", gmr_value.toElement().text());
-        } else if (gmr_name.toElement().text() == "keywords") {
+        } else if (gmr_name.toElement().text() == QLatin1StringView("keywords")) {
             DocumentInfo->setAboutInfo("keyword", gmr_value.toElement().text());
-        } else if (gmr_name.toElement().text() == "comments") {
+        } else if (gmr_name.toElement().text() == QLatin1StringView("comments")) {
             DocumentInfo->setAboutInfo("comments", gmr_value.toElement().text());
-        } else if (gmr_name.toElement().text() == "category") {
+        } else if (gmr_name.toElement().text() == QLatin1StringView("category")) {
             /* Not supported by Calligra::Sheets */
-        } else if (gmr_name.toElement().text() == "manager") {
+        } else if (gmr_name.toElement().text() == QLatin1StringView("manager")) {
             /* Not supported by Calligra::Sheets */
-        } else if (gmr_name.toElement().text() == "application") {
+        } else if (gmr_name.toElement().text() == QLatin1StringView("application")) {
             /* Not supported by Calligra::Sheets */
-        } else if (gmr_name.toElement().text() == "author") {
+        } else if (gmr_name.toElement().text() == QLatin1StringView("author")) {
             DocumentInfo->setAuthorInfo("creator", gmr_value.toElement().text());
-        } else if (gmr_name.toElement().text() == "company") {
+        } else if (gmr_name.toElement().text() == QLatin1StringView("company")) {
             DocumentInfo->setAuthorInfo("company", gmr_value.toElement().text());
         }
 

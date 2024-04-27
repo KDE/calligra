@@ -908,7 +908,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
             ELSE_TRY_READ_IF(textbox)
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(shadow)
-            else if (qualifiedName() == "w10:wrap") {
+            else if (qualifiedName() == QLatin1StringView("w10:wrap")) {
                 m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
             }
@@ -1000,7 +1000,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(shadow)
             ELSE_TRY_READ_IF(imagedata)
-            else if (qualifiedName() == "w10:wrap") {
+            else if (qualifiedName() == QLatin1StringView("w10:wrap")) {
                 m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
             }
@@ -1336,43 +1336,43 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (name() == "shapetype") {
+            if (name() == QLatin1StringView("shapetype")) {
                 m_VMLShapeStack.push(m_currentVMLProperties);
                 // Template by default should not have any group info
                 TRY_READ(shapetype)
                 m_currentVMLProperties = m_VMLShapeStack.pop();
             }
-            else if (name() == "rect") {
+            else if (name() == QLatin1StringView("rect")) {
                 m_VMLShapeStack.push(m_currentVMLProperties);
                 m_currentVMLProperties.insideGroup = true;
                 TRY_READ(rect)
                 m_currentVMLProperties = m_VMLShapeStack.pop();
             }
-            else if (name() == "roundrect") {
+            else if (name() == QLatin1StringView("roundrect")) {
                 m_VMLShapeStack.push(m_currentVMLProperties);
                 m_currentVMLProperties.insideGroup = true;
                 TRY_READ(roundrect)
                 m_currentVMLProperties = m_VMLShapeStack.pop();
             }
-            else if (name() == "oval") {
+            else if (name() == QLatin1StringView("oval")) {
                 m_VMLShapeStack.push(m_currentVMLProperties);
                 m_currentVMLProperties.insideGroup = true;
                 TRY_READ(oval)
                 m_currentVMLProperties = m_VMLShapeStack.pop();
             }
-            else if (name() == "shape") {
+            else if (name() == QLatin1StringView("shape")) {
                 m_VMLShapeStack.push(m_currentVMLProperties);
                 m_currentVMLProperties.insideGroup = true;
                 TRY_READ(shape)
                 m_currentVMLProperties = m_VMLShapeStack.pop();
             }
-            else if (name() == "group") {
+            else if (name() == QLatin1StringView("group")) {
                 m_VMLShapeStack.push(m_currentVMLProperties);
                 m_currentVMLProperties.insideGroup = true;
                 TRY_READ(group)
                 m_currentVMLProperties = m_VMLShapeStack.pop();
             }
-            else if (name() == "line") {
+            else if (name() == QLatin1StringView("line")) {
                 m_VMLShapeStack.push(m_currentVMLProperties);
                 m_currentVMLProperties.insideGroup = true;
                 TRY_READ(line)
@@ -1382,7 +1382,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(shadow)
             ELSE_TRY_READ_IF(imagedata)
-            else if (qualifiedName() == "w10:wrap") {
+            else if (qualifiedName() == QLatin1StringView("w10:wrap")) {
                 m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
             }
@@ -1436,7 +1436,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader(FrameStartElemen
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(shadow)
             ELSE_TRY_READ_IF(imagedata)
-            else if (qualifiedName() == "w10:wrap") {
+            else if (qualifiedName() == QLatin1StringView("w10:wrap")) {
                 m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
             }
@@ -2503,7 +2503,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(fill)
             ELSE_TRY_READ_IF(shadow)
-            else if (qualifiedName() == "w10:wrap") {
+            else if (qualifiedName() == QLatin1StringView("w10:wrap")) {
                 m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
             }
@@ -2658,10 +2658,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
 
-    if (m_currentVMLProperties.vmlStyle.value("mso-fit-shape-to-text") == "t") {
+    if (m_currentVMLProperties.vmlStyle.value("mso-fit-shape-to-text") == u't') {
         oldProperties.fitShapeToText = true;
     }
-    if (m_currentVMLProperties.vmlStyle.value("mso-fit-text-to-shape") == "t") {
+    if (m_currentVMLProperties.vmlStyle.value("mso-fit-text-to-shape") == u't') {
         oldProperties.fitTextToShape = true;
     }
 

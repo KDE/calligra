@@ -136,11 +136,11 @@ bool KoOdfPageLayout::readOdf(KoXmlStreamReader &reader)
             d->pageLayoutProperties = dynamic_cast<KoOdfPageLayoutProperties*>(properties);
         }
 
-        else if (propertiesType == "style:header-style") {
+        else if (propertiesType == QLatin1StringView("style:header-style")) {
             // The header/footer properties are contained inside a
             // style element so we need to read past that.
             reader.readNextStartElement();
-            if (reader.qualifiedName() != "style:header-footer-properties") {
+            if (reader.qualifiedName() != QLatin1StringView("style:header-footer-properties")) {
                 reader.skipCurrentElement();
                 return false;
             }
@@ -157,11 +157,11 @@ bool KoOdfPageLayout::readOdf(KoXmlStreamReader &reader)
             reader.skipCurrentElement();
         }
 
-        else if (propertiesType == "style:footer-style") {
+        else if (propertiesType == QLatin1StringView("style:footer-style")) {
             // The header/footer properties are contained inside a
             // style element so we need to read past that.
             reader.readNextStartElement();
-            if (reader.qualifiedName() != "style:header-footer-properties") {
+            if (reader.qualifiedName() != QLatin1StringView("style:header-footer-properties")) {
                 reader.skipCurrentElement();
                 return false;
             }
