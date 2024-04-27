@@ -142,7 +142,7 @@ public:
      * @returns whether the image was successfully saved
      */
     bool exportPageThumbnail( KoPAPageBase * page, const QUrl &url, const QSize& size = QSize( 512, 512 ),
-                              const char * format = 0, int quality = -1 );
+                              const QByteArray &format = {}, int quality = -1 );
 
     /// Update page navigation actions
     void updatePageNavigationActions() override;

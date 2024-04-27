@@ -517,6 +517,7 @@ void RectStorage<T>::invalidateCache(const QRect& invRect)
     Region invRegion = Region(invRect);
     const QVector<QRect> rects = m_cachedArea.intersected(invRegion).rects();
     m_cachedArea.removeIntersects(invRegion);
+    qHash(QPoint(0, 0), (size_t)0);
     for (const QRect& rect : rects) {
         for (int col = rect.left(); col <= rect.right(); ++col) {
             for (int row = rect.top(); row <= rect.bottom(); ++row)

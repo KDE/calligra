@@ -437,9 +437,9 @@ QTextStream& operator<<(QTextStream& ts, Formula formula);
   QHash/QSet support
 ****************************************************************************/
 
-inline uint qHash(const Formula& formula)
+inline size_t qHash(const Formula& formula, size_t seed = 0)
 {
-    return qHash(formula.expression());
+    return qHash(formula.expression(), seed);
 }
 
 } // namespace Sheets

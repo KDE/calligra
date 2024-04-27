@@ -50,8 +50,8 @@ public:
 
 
 class Conditions;
-uint qHash(const Conditions& conditions);
-uint qHash(const Conditional& condition);
+size_t qHash(const Conditions& conditions, size_t seed = 0);
+size_t qHash(const Conditional& condition, size_t seed = 0);
 
 /**
  * \class Conditions

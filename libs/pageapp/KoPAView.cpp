@@ -1000,7 +1000,7 @@ QPixmap KoPAView::pageThumbnail(KoPAPageBase* page, const QSize& size)
 }
 
 bool KoPAView::exportPageThumbnail( KoPAPageBase * page, const QUrl &url, const QSize& size,
-                                    const char * format, int quality )
+                                    const QByteArray &format, int quality )
 {
     bool res = false;
     QPixmap pix = d->doc->pageThumbnail( page, size );

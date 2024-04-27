@@ -297,16 +297,15 @@ bool Conditions::operator==(const Conditions& other) const
     return true;
 }
 
-uint Calligra::Sheets::qHash(const Conditions &c)
+size_t Calligra::Sheets::qHash(const Conditions &c, size_t seed)
 {
-    uint res = qHash(c.defaultStyle());
-    for (const Conditional& co : c.conditionList()) {
-        res ^= qHash(co);
-    }
-    return res;
+    return qHashMulti(
+        qHash(c.defaultStyle(), seed),
+        qHashRange(c.conditionList().cbegin(), c.conditionList().cend(), seed)
+    );
 }
 
-uint Calligra::Sheets::qHash(const Conditional& c)
+size_t Calligra::Sheets::qHash(const Conditional& c, size_t seed)
 {
-    return qHash(c.value1);
+    return qHash(c.value1, seed);
 }

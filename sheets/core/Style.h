@@ -21,15 +21,15 @@
 #include "engine/Format.h"
 #include "Currency.h"
 
+static inline size_t qHash(const QColor& color, size_t seed = 0)
+{ return qHash(uint(color.rgb()), seed); }
 
-static inline uint qHash(const QColor& color)
-{ return uint(color.rgb()); }
+static inline size_t qHash(const QPen& pen, size_t seed = 0)
+{ return qHashMulti(seed, pen.color(), pen.style()); }
 
-static inline uint qHash(const QPen& pen)
-{ return qHash(pen.color()) ^ 37 * uint(pen.style()); }
+static inline size_t qHash(const QBrush& brush, size_t seed = 0)
+{ return qHashMulti(seed, brush.color(), uint(brush.style())); }
 
-static inline uint qHash(const QBrush& brush)
-{ return qHash(brush.color()) ^ 91 * uint(brush.style()); }
 
 class QFont;
 class QTextCharFormat;
@@ -49,7 +49,7 @@ class ValueParser;
 // used for preloading OASIS auto styles
 typedef QMap<QString, Style>       Styles;
 
-CALLIGRA_SHEETS_CORE_EXPORT uint qHash(const Style& style);
+CALLIGRA_SHEETS_CORE_EXPORT size_t qHash(const Style& style, size_t seed = 0);
 
 /**
  * \ingroup Style
@@ -271,7 +271,7 @@ public:
     inline bool operator!=(const Style& other) const {
         return !operator==(other);
     }
-    friend CALLIGRA_SHEETS_CORE_EXPORT uint qHash(const Style& style);
+    friend CALLIGRA_SHEETS_CORE_EXPORT size_t qHash(const Style& style, size_t seed);
     void operator=(const Style& style);
     Style operator-(const Style& style) const;
     /// Insert and replace substyles from style
@@ -381,7 +381,7 @@ public:
     virtual QString debugData(bool withName = true) const {
         QString out; if (withName) out = name(Style::DefaultStyleKey); return out;
     }
-    virtual uint koHash() const { return uint(type()); }
+    virtual size_t koHash(size_t seed) const { return ::qHash(uint(type()), seed); }
     static QString name(Style::Key key);
 };
 
@@ -429,7 +429,7 @@ public:
     QString debugData(bool withName = true) const override {
         QString out; if (withName) out = SubStyle::name(Style::NamedStyleKey) + ' '; out += name; return out;
     }
-    uint koHash() const override { return uint(type()) ^ qHash(name); }
+    size_t koHash(size_t seed) const override { return qHashMulti(seed, uint(type()), name); }
     QString name;
 };
 
@@ -447,7 +447,7 @@ public:
     QString debugData(bool withName = true) const override {
         QString out; if (withName) out = name(m_type) + ' '; QDebug qdbg(&out); qdbg << value1; return out;
     }
-    uint koHash() const override { return uint(type()) ^ ::qHash(value1); }
+    size_t koHash(size_t seed) const override { return ::qHashMulti(seed, uint(type()), value1); }
     Value1 value1;
 private:
     Style::Key m_type;

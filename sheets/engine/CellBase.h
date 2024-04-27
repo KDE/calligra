@@ -281,9 +281,9 @@ private:
     QSharedDataPointer<Private> d;
 };
 
-inline uint qHash(const CellBase& cell)
+inline size_t qHash(const CellBase& cell, size_t seed = 0)
 {
-    return (static_cast<uint>(cell.column()) << 16) + static_cast<uint>(cell.row());
+    return ::qHash((static_cast<uint>(cell.column()) << 16) + static_cast<uint>(cell.row()), seed);
 }
 
 } // namespace Sheets

@@ -343,9 +343,9 @@ private:
     friend class CellTest;
 };
 
-inline uint qHash(const Cell& cell)
+inline size_t qHash(const Cell& cell, size_t seed = 0)
 {
-    return (static_cast<uint>(cell.column()) << 16) + static_cast<uint>(cell.row());
+    return ::qHash((static_cast<uint>(cell.column()) << 16) + static_cast<uint>(cell.row()), seed);
 }
 
 } // namespace Sheets

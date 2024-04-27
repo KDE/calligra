@@ -60,10 +60,10 @@ private:
     static QMap<QString, QString> m_symbols;
 };
 
+size_t qHash(const Calligra::Sheets::Currency& cur, size_t seed = 0);
+
 } // namespace Sheets
 } // namespace Calligra
-
-uint qHash(const Calligra::Sheets::Currency& cur);
 
 Q_DECLARE_METATYPE(Calligra::Sheets::Currency)
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Currency, Q_MOVABLE_TYPE);

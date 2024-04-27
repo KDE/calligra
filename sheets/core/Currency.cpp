@@ -101,8 +101,8 @@ QString Currency::symbol() const
     return m_symbols.count(m_code) ? m_symbols[m_code] : m_code;
 }
 
-uint qHash(const Calligra::Sheets::Currency& cur) {
-    return ::qHash(cur.symbol());
+size_t Calligra::Sheets::qHash(const Calligra::Sheets::Currency& cur, size_t seed) {
+    return ::qHash(cur.symbol(), seed);
 }
 
 

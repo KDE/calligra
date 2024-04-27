@@ -524,11 +524,11 @@ bool Style::operator==(const Style& other) const
     return true;
 }
 
-uint Calligra::Sheets::qHash(const Style& style)
+size_t Calligra::Sheets::qHash(const Style& style, size_t seed)
 {
-    uint hash = 0;
+    size_t hash = 0;
     for (const SharedSubStyle& ss : style.subStyles()) {
-        hash ^= ss->koHash();
+        hash ^= ss->koHash(seed);
     }
     return hash;
 }

@@ -960,26 +960,26 @@ namespace Calligra
 {
 namespace Sheets
 {
-uint qHash(const Value& value)
+size_t qHash(const Value& value, size_t seed)
 {
     switch (value.type()) {
     case Value::Empty:
     case Value::CellRange:
         return 0;
     case Value::Boolean:
-        return ::qHash(value.asBoolean());
+        return ::qHash(value.asBoolean(), seed);
     case Value::Integer:
-        return ::qHash(value.asInteger());
+        return ::qHash(value.asInteger(), seed);
     case Value::Float:
-        return ::qHash((int64_t)numToDouble(value.asFloat()));
+        return ::qHash((int64_t)numToDouble(value.asFloat()), seed);
     case Value::Complex:
-        return ::qHash((int64_t)value.asComplex().real());
+        return ::qHash((int64_t)value.asComplex().real(), seed);
     case Value::String:
-        return ::qHash(value.asString());
+        return ::qHash(value.asString(), seed);
     case Value::Array:
-        return qHash(value.element(0, 0));
+        return qHash(value.element(0, 0), seed);
     case Value::Error:
-        return ::qHash(value.errorMessage());
+        return ::qHash(value.errorMessage(), seed);
     }
     return 0;
 }
