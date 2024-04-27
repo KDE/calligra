@@ -4,14 +4,9 @@ endif()
 
 ########### libkostore ###############
 
-if( Qca-qt6_FOUND )
-    add_definitions( -DQCA2 )
-endif()
-
 set(kostore_LIB_SRCS
     KoDirectoryStore.cpp
     KoEncryptedStore.cpp
-    KoEncryptionChecker.cpp
     KoLZF.cpp
     KoStore.cpp
     KoStoreDevice.cpp
@@ -39,11 +34,9 @@ target_link_libraries(kostore
         KF6::KIOWidgets
         KF6::WidgetsAddons
         KF6::I18n
+        OpenSSL::SSL
         ${QTKEYCHAIN_LIBRARIES}
 )
-if( Qca-qt6_FOUND )
-    target_link_libraries(kostore PRIVATE qca-qt6)
-endif()
 
 set_target_properties(kostore PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

@@ -228,6 +228,12 @@ find_package(Qt6 ${REQUIRED_QT_VERSION} QUIET
     Sql
 )
 
+find_package(OpenSSL)
+set_package_properties(OpenSSL PROPERTIES
+    TYPE REQUIRED
+    PURPOSE "Encrypted communications"
+)
+
 set_package_properties(Qt6DBus PROPERTIES
     TYPE RECOMMENDED
     )

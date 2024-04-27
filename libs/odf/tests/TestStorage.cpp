@@ -9,7 +9,6 @@
 #include <QDir>
 
 #include <KoStore.h>
-#include <KoEncryptionChecker.h>
 #include <OdfDebug.h>
 #include <stdlib.h>
 
@@ -53,11 +52,7 @@ void TestStorage::storage_data()
     QTest::newRow("tar") << (int) KoStore::Tar << "test.tgz";
     QTest::newRow("directory") << (int) KoStore::Directory << "testdir";
     QTest::newRow("zip") << (int) KoStore::Zip <<"test.zip";
-#ifdef QCA2
-    if (KoEncryptionChecker::isEncryptionSupported()) {
-        QTest::newRow("Encrypted") << (int) KoStore::Encrypted << "testEncrypted.zip";
-    }
-#endif
+    QTest::newRow("Encrypted") << (int) KoStore::Encrypted << "testEncrypted.zip";
 }
 
 void TestStorage::storage()

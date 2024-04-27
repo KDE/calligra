@@ -12,9 +12,7 @@
 #include "KoTarStore.h"
 #include "KoZipStore.h"
 #include "KoDirectoryStore.h"
-#ifdef QCA2
 #include "KoEncryptedStore.h"
-#endif
 
 #include <QBuffer>
 #include <QFileInfo>
@@ -65,19 +63,15 @@ KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArr
     case Tar:
         return new KoTarStore(fileName, mode, appIdentification, writeMimetype);
     case Zip:
-#ifdef QCA2
         if (automatic && mode == Read) {
             // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
             return new KoEncryptedStore(fileName, Read, appIdentification, writeMimetype);
         }
-#endif
         return new KoZipStore(fileName, mode, appIdentification, writeMimetype);
     case Directory:
         return new KoDirectoryStore(fileName /* should be a dir name.... */, mode, writeMimetype);
-#ifdef QCA2
     case Encrypted:
         return new KoEncryptedStore(fileName, mode, appIdentification, writeMimetype);
-#endif
     default:
         warnStore << "Unsupported backend requested for KoStore : " << backend;
         return 0;
@@ -105,17 +99,13 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
         errorStore << "Can't create a Directory store for a memory buffer!" << Qt::endl;
         /* fall through */
     case Zip:
-#ifdef QCA2
         if (automatic && mode == Read) {
             // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
             return new KoEncryptedStore(device, Read, appIdentification, writeMimetype);
         }
-#endif
         return new KoZipStore(device, mode, appIdentification, writeMimetype);
-#ifdef QCA2
     case Encrypted:
         return new KoEncryptedStore(device, mode, appIdentification, writeMimetype);
-#endif
     default:
         warnStore << "Unsupported backend requested for KoStore : " << backend;
         return 0;
@@ -151,17 +141,13 @@ KoStore* KoStore::createStore(QWidget* window, const QUrl &url, Mode mode, const
     case Tar:
         return new KoTarStore(window, url, tmpFile, mode, appIdentification);
     case Zip:
-#ifdef QCA2
         if (automatic && mode == Read) {
             // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
             return new KoEncryptedStore(window, url, tmpFile, Read, appIdentification, writeMimetype);
         }
-#endif
         return new KoZipStore(window, url, tmpFile, mode, appIdentification, writeMimetype);
-#ifdef QCA2
     case Encrypted:
         return new KoEncryptedStore(window, url, tmpFile, mode, appIdentification, writeMimetype);
-#endif
     default:
         warnStore << "Unsupported backend requested for KoStore (QUrl) : " << backend;
         KMessageBox::error(window,

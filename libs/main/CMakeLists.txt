@@ -12,10 +12,6 @@ include_directories( ${KOMAIN_INCLUDES})
 
 ########### next target ###############
 
-if( Qca-qt6_FOUND )
-   add_definitions( -DQCA2 )
-endif()
-
 set(komain_LIB_SRCS
     KoAutoSaveRecoveryDialog.cpp
     KoApplication.cpp

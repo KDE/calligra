@@ -6,10 +6,8 @@
 
 #ifndef KoEncryptedStore_h
 #define KoEncryptedStore_h
-#ifdef QCA2
 #include "KoStore.h"
 #include <QHash>
-#include <QtCrypto>
 
 class QString;
 class QByteArray;
@@ -88,15 +86,14 @@ protected:
     void savePasswordInKWallet();
 
 private:
-    QCA::SecureArray decryptFile(QCA::SecureArray & encryptedFile, KoEncryptedStore_EncryptionData & encData, QCA::SecureArray & password);
+    QByteArray decryptFile(QByteArray & encryptedFile, KoEncryptedStore_EncryptionData & encData, QByteArray & password);
 
     /** returns true if the file should be encrypted, false otherwise **/
     bool isToBeEncrypted(const QString &fullpath);
 
 protected:
-    QCA::Initializer m_qcaInit;
     QHash<QString, KoEncryptedStore_EncryptionData> m_encryptionData;
-    QCA::SecureArray m_password;
+    QByteArray m_password;
     QString m_filename;
     QByteArray m_manifestBuffer;
     KZip *m_pZip;
@@ -110,5 +107,4 @@ protected:
 private:
     Q_DECLARE_PRIVATE(KoStore)
 };
-#endif
 #endif

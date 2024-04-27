@@ -788,12 +788,10 @@ bool KoDocument::saveNativeFormat(const QString & file)
         backend = KoStore::Directory;
         debugMain << "Saving as uncompressed XML, using directory store.";
     }
-#ifdef QCA2
     else if (d->specialOutputFlag == SaveEncrypted) {
         backend = KoStore::Encrypted;
         debugMain << "Saving using encrypted backend.";
     }
-#endif
     else if (d->specialOutputFlag == SaveAsFlatXML) {
         debugMain << "Saving as a flat XML file.";
         QFile f(file);
@@ -2182,12 +2180,8 @@ int KoDocument::supportedSpecialFormats() const
     // Apps which support special output flags can add reimplement and add to this.
     // E.g. this is how did "saving in the 1.1 format".
     // SaveAsDirectoryStore is a given since it's implemented by KoDocument itself.
-    // SaveEncrypted is implemented in KoDocument as well, if QCA2 was found.
-#ifdef QCA2
+    // SaveEncrypted is implemented in KoDocument as well
     return SaveAsDirectoryStore | SaveEncrypted;
-#else
-    return SaveAsDirectoryStore;
-#endif
 }
 
 void KoDocument::setErrorMessage(const QString& errMsg)
