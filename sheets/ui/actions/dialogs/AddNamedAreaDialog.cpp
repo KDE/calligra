@@ -17,36 +17,34 @@
 
 #include <KLocalizedString>
 
-
 using namespace Calligra::Sheets;
 
-AddNamedAreaDialog::AddNamedAreaDialog(QWidget* parent)
-        : ActionDialog(parent)
+AddNamedAreaDialog::AddNamedAreaDialog(QWidget *parent)
+    : ActionDialog(parent)
 {
     setButtonText(Apply, i18n("Add Named Area"));
     setCaption(i18n("Add Named Area"));
     setObjectName(QLatin1String("AddNamedAreaDialog"));
 
-    QWidget* widget = new QWidget();
+    QWidget *widget = new QWidget();
     setMainWidget(widget);
 
-    QVBoxLayout* layout = new QVBoxLayout(widget);
+    QVBoxLayout *layout = new QVBoxLayout(widget);
 
-    QLabel* label = new QLabel(i18n("Enter the area name:"), widget);
+    QLabel *label = new QLabel(i18n("Enter the area name:"), widget);
     layout->addWidget(label);
 
     m_areaName = new QLineEdit(widget);
     m_areaName->setFocus();
-    m_areaName->setMinimumWidth(m_areaName->sizeHint().width()* 3);
+    m_areaName->setMinimumWidth(m_areaName->sizeHint().width() * 3);
     layout->addWidget(m_areaName);
 
     enableButtonOk(!m_areaName->text().isEmpty());
 
-    connect(m_areaName, &QLineEdit::textChanged,
-            this, &AddNamedAreaDialog::slotAreaNameChanged);
+    connect(m_areaName, &QLineEdit::textChanged, this, &AddNamedAreaDialog::slotAreaNameChanged);
 }
 
-void AddNamedAreaDialog::slotAreaNameChanged(const QString& name)
+void AddNamedAreaDialog::slotAreaNameChanged(const QString &name)
 {
     enableButtonOk(!name.isEmpty());
 }
@@ -59,7 +57,4 @@ QString AddNamedAreaDialog::areaName() const
 void AddNamedAreaDialog::onApply()
 {
     emit addArea(areaName());
-
 }
-
-

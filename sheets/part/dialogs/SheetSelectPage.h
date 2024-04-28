@@ -30,17 +30,17 @@ class SheetSelectPage : public QWidget
     Q_OBJECT
 public:
     explicit SheetSelectPage(QWidget *parent = 0);
-//     ~SheetSelectPage();
+    //     ~SheetSelectPage();
 
     /**
      * @see printOptionPrefix()
      */
-    void setAvailableSheets(const QStringList& sheetlist);
+    void setAvailableSheets(const QStringList &sheetlist);
 
     /**
      * @return false if no sheet is selected for printing.
      */
-    bool isValid(QString& msg);
+    bool isValid(QString &msg);
 
     /**
      * @return list of sheets that will be printed, in correct order.
@@ -70,12 +70,12 @@ public Q_SLOTS:
     /**
      * Inserts given sheet to the list of available sheets.
      */
-    void prependAvailableSheet(const QString& sheetname);
+    void prependAvailableSheet(const QString &sheetname);
 
     /**
      * Inserts given sheet to the list of sheets for printing at the top.
      */
-    void prependSelectedSheet(const QString& sheetname);
+    void prependSelectedSheet(const QString &sheetname);
 
 protected Q_SLOTS:
 

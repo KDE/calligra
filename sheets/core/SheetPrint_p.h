@@ -29,54 +29,65 @@ class PrintNewPageEntry
 {
 public:
     explicit PrintNewPageEntry(int startItem, int endItem = 0, double size = 0, double offset = 0)
-            : m_iStartItem(startItem)
-            , m_iEndItem(endItem)
-            , m_dSize(size)
-            , m_dOffset(offset) {}
+        : m_iStartItem(startItem)
+        , m_iEndItem(endItem)
+        , m_dSize(size)
+        , m_dOffset(offset)
+    {
+    }
 
-    int startItem() const {
+    int startItem() const
+    {
         return m_iStartItem;
     }
-    void setStartItem(int startItem) {
+    void setStartItem(int startItem)
+    {
         m_iStartItem = startItem;
     }
 
-    int endItem() const {
+    int endItem() const
+    {
         return m_iEndItem;
     }
-    void setEndItem(int endItem) {
+    void setEndItem(int endItem)
+    {
         m_iEndItem = endItem;
     }
 
-    double size() const {
+    double size() const
+    {
         return m_dSize;
     }
-    void setSize(double size) {
+    void setSize(double size)
+    {
         m_dSize = size;
     }
 
-    double offset() const {
+    double offset() const
+    {
         return m_dOffset;
     }
-    void setOffset(double offset) {
+    void setOffset(double offset)
+    {
         m_dOffset = offset;
     }
 
-    bool operator==(PrintNewPageEntry const & entry) const;
-
+    bool operator==(PrintNewPageEntry const &entry) const;
 
 private:
-    int m_iStartItem;   // column or row index
-    int m_iEndItem;     // column or row index
-    double m_dSize;     // width or height
-    double m_dOffset;   // horizontal or vertical offset
+    int m_iStartItem; // column or row index
+    int m_iEndItem; // column or row index
+    double m_dSize; // width or height
+    double m_dOffset; // horizontal or vertical offset
 };
-
 
 class Q_DECL_HIDDEN SheetPrint::Private
 {
 public:
-    Private(SheetPrint *parent) : q(parent) {}
+    Private(SheetPrint *parent)
+        : q(parent)
+    {
+    }
 
     /**
      * Calculates the zoom factor, so that the printout fits on pages in X direction.
@@ -110,7 +121,7 @@ public:
 
 public:
     SheetPrint *q;
-    Sheet * m_pSheet;
+    Sheet *m_pSheet;
 
     /**
      * Width of repeated columns in points, stored for performance reasons

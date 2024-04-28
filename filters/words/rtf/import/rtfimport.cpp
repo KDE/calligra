@@ -13,27 +13,26 @@
 */
 #include "rtfimport.h"
 
-#include <KPluginFactory>
-#include <KMessageBox>
 #include <KLocalizedString>
+#include <KMessageBox>
+#include <KPluginFactory>
 
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
-#include "rtfreader.h"
 #include "TextDocumentRtfOutput.h"
+#include "rtfreader.h"
 #include <QTextDocument>
 #include <QTextDocumentWriter>
 
-K_PLUGIN_FACTORY_WITH_JSON(RTFImportFactory, "calligra_filter_rtf2odt.json",
-                           registerPlugin<RTFImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(RTFImportFactory, "calligra_filter_rtf2odt.json", registerPlugin<RTFImport>();)
 
-RTFImport::RTFImport(QObject* parent, const QVariantList&)
+RTFImport::RTFImport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus RTFImport::convert(const QByteArray &from, const QByteArray &to)
 {
     // This filter only supports RTF to Words conversion
     if ((from != "application/rtf") || (to != "application/vnd.oasis.opendocument.text")) {
@@ -53,21 +52,20 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
         if (!batch) {
             KMessageBox::error(0,
                                i18n("The file cannot be loaded, as it seems not to be an RTF document."),
-                               i18n("Words's RTF Import Filter"), KMessageBox::Option());
+                               i18n("Words's RTF Import Filter"),
+                               KMessageBox::Option());
         }
         return KoFilter::WrongFormat;
     }
 
     QTextDocument doc;
-    RtfReader::TextDocumentRtfOutput output( &doc );
+    RtfReader::TextDocumentRtfOutput output(&doc);
     reader.parseTo(&output);
 
     QFile saveFile(m_chain->outputFile());
     if (!saveFile.open(QIODevice::WriteOnly)) {
         if (!batch) {
-            KMessageBox::error(0,
-                               i18n("The file cannot be loaded."),
-                               i18n("Words's RTF Import Filter"), KMessageBox::Option());
+            KMessageBox::error(0, i18n("The file cannot be loaded."), i18n("Words's RTF Import Filter"), KMessageBox::Option());
         }
         return KoFilter::CreationError;
     }
@@ -75,10 +73,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
     QTextDocumentWriter writer(&saveFile, "odf");
     if (!writer.write(&doc)) {
         if (!batch) {
-            KMessageBox::error(0,
-                               i18n("The file cannot be loaded."),
-                               i18n("Words's RTF Import Filter"), KMessageBox::Option());
-
+            KMessageBox::error(0, i18n("The file cannot be loaded."), i18n("Words's RTF Import Filter"), KMessageBox::Option());
         }
         return KoFilter::CreationError;
     }

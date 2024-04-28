@@ -15,15 +15,14 @@
 #include <QSizeF>
 
 // Calligra
-#include <KoShapeContainerModel.h>
 #include <KoInsets.h>
+#include <KoShapeContainerModel.h>
 
 // KoChart
 #include "kochart_global.h"
 
-
-
-namespace KoChart {
+namespace KoChart
+{
 
 class PlotArea;
 
@@ -52,17 +51,17 @@ class PlotArea;
  * J - FloatingPosition
  *
  * A chart can consist of the following elements:
- * 
+ *
  * Title: Positioned at the top in (D)
  * Sub-title: Positioned below Title in (D)
  * Footer: Position at the bottom in (E)
  * Legend: Positiond according to legend-position and alignmnent
  *         Note that Legend is the only component with this level of layout control from odf
- * 
+ *
  * Plot area: Positioned in the center (I)
  * Axes: Attached to the plot area
  * Axis title: Positioned beside the axis it describes
- * 
+ *
  * Each of these elements may be manually positioned and sized,
  * but by default the layouting does the job.
  */
@@ -74,14 +73,14 @@ public:
 
     /**
      * Add @a shape and register it with GenericItemType
-     * 
+     *
      * This is normally called from the resource manager.
-     * 
+     *
      * Note that this shape will not be layed out until it gets a proper item type
      * set with setItemType()
-     * 
+     *
      * Abstract in KoShapeContainerModel so needs to be here.
-     * 
+     *
      * @see setItemType()
      */
     void add(KoShape *shape) override;
@@ -114,7 +113,7 @@ public:
     /**
      * Returns a list of shapes in this layout.
      */
-    QList<KoShape*> shapes() const override;
+    QList<KoShape *> shapes() const override;
 
     /**
      * Called whenever a property of the container (i.e. the ChartShape) is changed.
@@ -142,7 +141,7 @@ public:
     void childChanged(KoShape *shape, KoShape::ChangeType type) override;
 
     /**
-     * Does the layouting of all visible shapes 
+     * Does the layouting of all visible shapes
      *
      * Only does a relayout if one has been schedules previously through
      * scheduleRelayout().
@@ -162,7 +161,7 @@ public:
     /**
      * Sets the padding to @p padding that will be applied during layout
      */
-    void setPadding (const KoInsets &padding);
+    void setPadding(const KoInsets &padding);
     /// Returns the padding defined for this layout
     KoInsets padding() const;
     /// Set spacing in points to @p hSpacing, @p vSpacing to be used for this layout
@@ -182,19 +181,19 @@ private:
 
     void rotateAxisTitles(PlotArea *plotarea);
 
-    void layoutAxisTitles(int pos, const QMultiMap<int, KoShape*> &map, const QRectF &rect, const QRectF plotarea) const;
+    void layoutAxisTitles(int pos, const QMultiMap<int, KoShape *> &map, const QRectF &rect, const QRectF plotarea) const;
 
 #ifdef COMPILING_TESTS
 public:
 #endif
-    QString dbg(const QList<KoShape*> &shapes) const;
+    QString dbg(const QList<KoShape *> &shapes) const;
     QString dbg(const KoShape *shape) const;
     static qreal relativePosition(qreal start1, qreal length1, qreal start2, qreal length2, qreal start, qreal length);
     static QPointF itemPosition(const KoShape *shape);
-    static QSizeF  itemSize(const KoShape *shape);
-    static void  setItemSize(KoShape *shape, const QSizeF &size);
-    static QRectF  itemRect(const KoShape *shape);
-    static void    setItemPosition(KoShape *shape, const QPointF& pos);
+    static QSizeF itemSize(const KoShape *shape);
+    static void setItemSize(KoShape *shape, const QSizeF &size);
+    static QRectF itemRect(const KoShape *shape);
+    static void setItemPosition(KoShape *shape, const QPointF &pos);
     /// Returns the plot area minus axis labels
     static QRectF diagramArea(const KoShape *shape);
     /// Returns the @p rect minus axis labels
@@ -211,8 +210,8 @@ private:
     QPointF m_spacing;
     bool m_layoutingEnabled;
     class LayoutData;
-    QMap<KoShape*, LayoutData*> m_layoutItems;
-    QMap<int, KoShape*> m_shapes;
+    QMap<KoShape *, LayoutData *> m_layoutItems;
+    QMap<int, KoShape *> m_shapes;
 };
 
 } // namespace KoChart

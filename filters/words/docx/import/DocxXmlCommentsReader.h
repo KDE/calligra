@@ -26,7 +26,7 @@ class DocxXmlCommentReader : public DocxXmlDocumentReader
 public:
     explicit DocxXmlCommentReader(KoOdfWriters *writers);
     ~DocxXmlCommentReader() override;
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
 
 protected:
     KoFilter::ConversionStatus read_comments();
@@ -35,7 +35,7 @@ protected:
 private:
     void init();
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
-#endif //DOCXXMLCOMMENTREADER_H
+#endif // DOCXXMLCOMMENTREADER_H

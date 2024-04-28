@@ -34,11 +34,11 @@ public:
      */
     ~MergeStrategy() override;
 
-    KUndo2Command* createCommand() override;
+    KUndo2Command *createCommand() override;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

@@ -20,8 +20,8 @@
 
 #include "KPrAnimationStep.h"
 #include "KPrAnimationSubStep.h"
-#include <KoPASavingContext.h>
 #include "KoXmlWriter.h"
+#include <KoPASavingContext.h>
 
 KPrAnimationStep::KPrAnimationStep()
 {
@@ -33,22 +33,22 @@ KPrAnimationStep::~KPrAnimationStep()
 
 void KPrAnimationStep::init(KPrAnimationCache *animationCache, int step)
 {
-    for(int i=0;i < this->animationCount(); i++) {
-        QAbstractAnimation * animation = this->animationAt(i);
-        if (KPrAnimationSubStep * a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+    for (int i = 0; i < this->animationCount(); i++) {
+        QAbstractAnimation *animation = this->animationAt(i);
+        if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep *>(animation)) {
             a->init(animationCache, step);
         }
     }
 }
 
-bool KPrAnimationStep::saveOdf(KoPASavingContext & paContext) const
+bool KPrAnimationStep::saveOdf(KoPASavingContext &paContext) const
 {
     KoXmlWriter &writer = paContext.xmlWriter();
     writer.startElement("anim:par");
-    for (int i=0; i < this->animationCount(); i++) {
+    for (int i = 0; i < this->animationCount(); i++) {
         bool startStep = !i;
         QAbstractAnimation *animation = this->animationAt(i);
-        if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+        if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep *>(animation)) {
             a->saveOdf(paContext, startStep);
         }
     }
@@ -58,9 +58,9 @@ bool KPrAnimationStep::saveOdf(KoPASavingContext & paContext) const
 
 void KPrAnimationStep::deactivate()
 {
-    for (int i=0; i < this->animationCount(); i++) {
+    for (int i = 0; i < this->animationCount(); i++) {
         QAbstractAnimation *animation = this->animationAt(i);
-        if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+        if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep *>(animation)) {
             a->deactivate();
         }
     }

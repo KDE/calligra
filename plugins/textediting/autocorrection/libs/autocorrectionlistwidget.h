@@ -8,7 +8,6 @@
 
 #include <QListWidget>
 
-
 class AutoCorrectionListWidget : public QListWidget
 {
     Q_OBJECT

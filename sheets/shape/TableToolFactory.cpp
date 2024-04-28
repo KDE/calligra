@@ -6,8 +6,8 @@
 
 // Local
 #include "TableToolFactory.h"
-#include "TableTool.h"
 #include "TableShape.h"
+#include "TableTool.h"
 
 #include <KLocalizedString>
 
@@ -29,7 +29,7 @@ TableToolFactory::~TableToolFactory()
 {
 }
 
-KoToolBase* TableToolFactory::createTool(KoCanvasBase* canvas)
+KoToolBase *TableToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new TableTool(canvas);
 }

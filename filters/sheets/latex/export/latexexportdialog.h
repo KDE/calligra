@@ -21,10 +21,11 @@ class LatexExportDialog : public KoDialog
     Q_OBJECT
 
 public:
-    explicit LatexExportDialog(KoStore*, QWidget* parent = 0);
+    explicit LatexExportDialog(KoStore *, QWidget *parent = 0);
     ~LatexExportDialog() override;
 
-    void setOutputFile(const QString& file) {
+    void setOutputFile(const QString &file)
+    {
         m_fileOut = file;
     }
 
@@ -38,9 +39,8 @@ private:
     Ui::LatexExportWidget m_ui;
 
     QString m_fileOut;
-    KoStore* m_inputStore;
-    KConfig* m_config;
-
+    KoStore *m_inputStore;
+    KConfig *m_config;
 };
 
 #endif /* __LATEXEXPORTDIALOG_H__ */

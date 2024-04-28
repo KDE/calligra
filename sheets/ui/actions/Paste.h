@@ -8,18 +8,16 @@
 #ifndef CALLIGRA_SHEETS_ACTION_PASTE
 #define CALLIGRA_SHEETS_ACTION_PASTE
 
-
 #include "DialogCellAction.h"
-
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class PasteRegular : public CellAction {
-Q_OBJECT
+class PasteRegular : public CellAction
+{
+    Q_OBJECT
 public:
     PasteRegular(Actions *actions);
     virtual ~PasteRegular();
@@ -29,8 +27,9 @@ protected:
     QAction *createAction() override;
 };
 
-class PasteSpecial : public DialogCellAction {
-Q_OBJECT
+class PasteSpecial : public DialogCellAction
+{
+    Q_OBJECT
 public:
     PasteSpecial(Actions *actions);
     virtual ~PasteSpecial();
@@ -44,8 +43,9 @@ protected:
 
 class PasteInsertDialog;
 
-class PasteWithInsert : public CellAction {
-Q_OBJECT
+class PasteWithInsert : public CellAction
+{
+    Q_OBJECT
 public:
     PasteWithInsert(Actions *actions);
     virtual ~PasteWithInsert();
@@ -55,9 +55,7 @@ protected:
     PasteInsertDialog *m_dlg;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_PASTE
+#endif // CALLIGRA_SHEETS_ACTION_PASTE

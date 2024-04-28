@@ -22,35 +22,35 @@
 
 #include "SvgWriter.h"
 
-#include "SvgUtil.h"
 #include "SvgSavingContext.h"
 #include "SvgShape.h"
 #include "SvgStyleWriter.h"
+#include "SvgUtil.h"
 
-#include <KoShapeLayer.h>
-#include <KoShapeGroup.h>
 #include <KoPathShape.h>
-#include <KoXmlWriter.h>
+#include <KoShapeGroup.h>
+#include <KoShapeLayer.h>
 #include <KoShapePainter.h>
+#include <KoXmlWriter.h>
 
-#include <QFile>
-#include <QString>
-#include <QTextStream>
 #include <QBuffer>
+#include <QFile>
 #include <QPainter>
+#include <QString>
 #include <QSvgGenerator>
+#include <QTextStream>
 
 #include <algorithm>
 
-SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
+SvgWriter::SvgWriter(const QList<KoShapeLayer *> &layers, const QSizeF &pageSize)
     : m_pageSize(pageSize)
     , m_writeInlineImages(true)
 {
-    foreach(KoShapeLayer *layer, layers)
+    foreach (KoShapeLayer *layer, layers)
         m_toplevelShapes.append(layer);
 }
 
-SvgWriter::SvgWriter(const QList<KoShape*> &toplevelShapes, const QSizeF &pageSize)
+SvgWriter::SvgWriter(const QList<KoShape *> &toplevelShapes, const QSizeF &pageSize)
     : m_toplevelShapes(toplevelShapes)
     , m_pageSize(pageSize)
     , m_writeInlineImages(true)
@@ -59,7 +59,6 @@ SvgWriter::SvgWriter(const QList<KoShape*> &toplevelShapes, const QSizeF &pageSi
 
 SvgWriter::~SvgWriter()
 {
-
 }
 
 bool SvgWriter::save(const QString &filename, bool writeInlineImages)
@@ -102,12 +101,12 @@ bool SvgWriter::save(QIODevice &outputDevice)
         SvgSavingContext savingContext(outputDevice, m_writeInlineImages);
 
         // top level shapes
-        foreach(KoShape *shape, m_toplevelShapes) {
-            KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
-            if(layer) {
+        foreach (KoShape *shape, m_toplevelShapes) {
+            KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(shape);
+            if (layer) {
                 saveLayer(layer, savingContext);
             } else {
-                KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
+                KoShapeGroup *group = dynamic_cast<KoShapeGroup *>(shape);
                 if (group)
                     saveGroup(group, savingContext);
                 else
@@ -127,11 +126,11 @@ void SvgWriter::saveLayer(KoShapeLayer *layer, SvgSavingContext &context)
     context.shapeWriter().startElement("g");
     context.shapeWriter().addAttribute("id", context.getID(layer));
 
-    QList<KoShape*> sortedShapes = layer->shapes();
+    QList<KoShape *> sortedShapes = layer->shapes();
     std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
-    foreach(KoShape * shape, sortedShapes) {
-        KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
+    foreach (KoShape *shape, sortedShapes) {
+        KoShapeGroup *group = dynamic_cast<KoShapeGroup *>(shape);
         if (group)
             saveGroup(group, context);
         else
@@ -141,7 +140,7 @@ void SvgWriter::saveLayer(KoShapeLayer *layer, SvgSavingContext &context)
     context.shapeWriter().endElement();
 }
 
-void SvgWriter::saveGroup(KoShapeGroup * group, SvgSavingContext &context)
+void SvgWriter::saveGroup(KoShapeGroup *group, SvgSavingContext &context)
 {
     context.shapeWriter().startElement("g");
     context.shapeWriter().addAttribute("id", context.getID(group));
@@ -149,11 +148,11 @@ void SvgWriter::saveGroup(KoShapeGroup * group, SvgSavingContext &context)
 
     SvgStyleWriter::saveSvgStyle(group, context);
 
-    QList<KoShape*> sortedShapes = group->shapes();
+    QList<KoShape *> sortedShapes = group->shapes();
     std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
-    foreach(KoShape * shape, sortedShapes) {
-        KoShapeGroup * childGroup = dynamic_cast<KoShapeGroup*>(shape);
+    foreach (KoShape *shape, sortedShapes) {
+        KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup *>(shape);
         if (childGroup)
             saveGroup(childGroup, context);
         else
@@ -165,11 +164,11 @@ void SvgWriter::saveGroup(KoShapeGroup * group, SvgSavingContext &context)
 
 void SvgWriter::saveShape(KoShape *shape, SvgSavingContext &context)
 {
-    SvgShape *svgShape = dynamic_cast<SvgShape*>(shape);
+    SvgShape *svgShape = dynamic_cast<SvgShape *>(shape);
     if (svgShape && svgShape->saveSvg(context))
         return;
 
-    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
+    KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
     if (path) {
         savePath(path, context);
     } else {
@@ -196,7 +195,7 @@ void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
 
     // paint shape to the image
     KoShapePainter painter;
-    painter.setShapes(QList<KoShape*>()<< shape);
+    painter.setShapes(QList<KoShape *>() << shape);
 
     // generate svg from shape
     QBuffer svgBuffer;
@@ -210,14 +209,14 @@ void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
 
     // remove anything before the start of the svg element from the buffer
     int startOfContent = svgBuffer.buffer().indexOf("<svg");
-    if(startOfContent>0) {
+    if (startOfContent > 0) {
         svgBuffer.buffer().remove(0, startOfContent);
     }
 
     // check if painting to svg produced any output
     if (svgBuffer.buffer().isEmpty()) {
         // prepare a transparent image, make it twice as big as the original size
-        QImage image(2*bbox.size().toSize(), QImage::Format_ARGB32);
+        QImage image(2 * bbox.size().toSize(), QImage::Format_ARGB32);
         image.fill(0);
         painter.paint(image);
 

@@ -8,12 +8,12 @@
 #ifndef KCHART_FONT_EDITOR_DIALOG_H
 #define KCHART_FONT_EDITOR_DIALOG_H
 
-
 #include <KoDialog.h>
 
 class KFontChooser;
 
-namespace KoChart {
+namespace KoChart
+{
 
 class FontEditorDialog : public KoDialog
 {
@@ -24,6 +24,5 @@ public:
 };
 
 } // Namespace KoChart
-
 
 #endif // KCHART_FONT_EDITOR_DIALOG_H

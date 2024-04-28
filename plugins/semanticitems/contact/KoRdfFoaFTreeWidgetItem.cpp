@@ -8,13 +8,12 @@
 #include "KoDocumentRdf.h"
 #include "RdfSemanticTreeWidgetSelectAction.h"
 
-#include <kdebug.h>
 #include <KLocalizedString>
-
+#include <kdebug.h>
 
 KoRdfFoaFTreeWidgetItem::KoRdfFoaFTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfFoaF foaf)
-        : KoRdfSemanticTreeWidgetItem(parent)
-        , m_foaf(foaf)
+    : KoRdfSemanticTreeWidgetItem(parent)
+    , m_foaf(foaf)
 {
     setText(ColName, m_foaf->name());
 }

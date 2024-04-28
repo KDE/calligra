@@ -9,8 +9,8 @@
 #ifndef koTemplateCreateDia_h
 #define koTemplateCreateDia_h
 
-#include <KoDialog.h>
 #include "komain_export.h"
+#include <KoDialog.h>
 
 class QString;
 class QPixmap;
@@ -28,13 +28,11 @@ class KOMAIN_EXPORT KoTemplateCreateDia : public KoDialog
     Q_OBJECT
 
 private:
-    KoTemplateCreateDia( const QString &templatesResourcePath,
-                         const QString &filePath, const QPixmap &thumbnail, QWidget *parent=0 );
+    KoTemplateCreateDia(const QString &templatesResourcePath, const QString &filePath, const QPixmap &thumbnail, QWidget *parent = 0);
     ~KoTemplateCreateDia() override;
 
 public:
-    static void createTemplate(const QString &templatesResourcePath, const char *suffix,
-                               KoDocument *document, QWidget *parent = 0);
+    static void createTemplate(const QString &templatesResourcePath, const char *suffix, KoDocument *document, QWidget *parent = 0);
 
 private Q_SLOTS:
     void slotOk();
@@ -47,12 +45,13 @@ private Q_SLOTS:
     void slotAddGroup();
     void slotRemove();
     void slotSelectionChanged();
+
 private:
     void updatePixmap();
     void fillGroupTree();
 
 private:
-    KoTemplateCreateDiaPrivate * const d;
+    KoTemplateCreateDiaPrivate *const d;
 };
 
 #endif

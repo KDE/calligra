@@ -14,18 +14,16 @@ class KoCompositeOpsBenchmark : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void init();
-    
+
     void initTestCase();
     void cleanupTestCase();
-    
+
     void benchmarkCompositeOver();
     void benchmarkCompositeAlphaDarken();
 
 private:
-    quint8 * m_dstBuffer;
-    quint8 * m_srcBuffer;
-        
-
+    quint8 *m_dstBuffer;
+    quint8 *m_srcBuffer;
 };
 
 #endif

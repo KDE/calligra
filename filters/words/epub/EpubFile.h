@@ -13,12 +13,10 @@
 
 #include "FileCollector.h"
 
-
 class QString;
 class QByteArray;
 
 class KoStore;
-
 
 class EpubFile : public FileCollector
 {
@@ -29,16 +27,12 @@ public:
     // When you have created all the content and added it using
     // addContentFile(), call this function once and it will write the
     // epub to the disk.
-    KoFilter::ConversionStatus  writeEpub(const QString &fileName,
-                                          const QByteArray &appIdentification,
-                                          QHash<QString, QString> metadata);
+    KoFilter::ConversionStatus writeEpub(const QString &fileName, const QByteArray &appIdentification, QHash<QString, QString> metadata);
 
 private:
-    KoFilter::ConversionStatus  writeMetaInf(KoStore *epubStore);
-    KoFilter::ConversionStatus  writeOpf(KoStore *epubStore,
-                                         QHash<QString, QString> &metadata);
-    KoFilter::ConversionStatus  writeNcx(KoStore *epubStore,
-                                         QHash<QString, QString> &metadata);
+    KoFilter::ConversionStatus writeMetaInf(KoStore *epubStore);
+    KoFilter::ConversionStatus writeOpf(KoStore *epubStore, QHash<QString, QString> &metadata);
+    KoFilter::ConversionStatus writeNcx(KoStore *epubStore, QHash<QString, QString> &metadata);
 
 private:
 };

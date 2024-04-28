@@ -7,12 +7,13 @@
 
 #include <KoElementReference.h>
 
-#include <QTest>
 #include <QLoggingCategory>
+#include <QTest>
 
 void TestKoElementReference::initTestCase()
 {
-    QLoggingCategory::setFilterRules("*.debug=false\n"
+    QLoggingCategory::setFilterRules(
+        "*.debug=false\n"
         "calligra.lib.store=true");
 }
 

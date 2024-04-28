@@ -7,15 +7,14 @@
 
 #include "TestKChartModel.h"
 
-#include <QObject>
 #include <QAbstractItemModel>
+#include <QObject>
 #include <QRect>
 
-#include "DataSet.h"
 #include "CellRegion.h"
+#include "DataSet.h"
 
 using namespace KoChart;
-
 
 TestKChartModel::TestKChartModel()
     : m_model(0)
@@ -111,7 +110,7 @@ void TestKChartModel::testDataSetInsertionAndRemoval()
     QCOMPARE(m_model->rowCount(), 10);
     QCOMPARE(m_model->columnCount(), 2);
     m_model->removeDataSet(&dataSet1);
-    qInfo()<<4.1<<m_model->rowCount()<<m_model->columnCount();
+    qInfo() << 4.1 << m_model->rowCount() << m_model->columnCount();
     m_model->removeDataSet(&dataSet2);
     QCOMPARE(m_testModel->m_numRows, 0);
     QCOMPARE(m_testModel->m_numCols, 0);
@@ -138,7 +137,7 @@ void TestKChartModel::testDataSetInsertionAndRemoval()
     m_model->removeDataSet(&dataSet3);
     QCOMPARE(m_testModel->m_numRows, 0);
     QCOMPARE(m_testModel->m_numCols, 0);
-    
+
     m_model->setDataDirection(Qt::Horizontal);
     QVERIFY(m_model->dataDirection() == Qt::Horizontal);
     m_model->addDataSet(&dataSet1);

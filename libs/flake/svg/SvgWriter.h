@@ -33,10 +33,10 @@ class FLAKE_EXPORT SvgWriter
 {
 public:
     /// Creates svg writer to export specified layers
-    SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize);
+    SvgWriter(const QList<KoShapeLayer *> &layers, const QSizeF &pageSize);
 
     /// Creates svg writer to export specified shapes
-    SvgWriter(const QList<KoShape*> &toplevelShapes, const QSizeF &pageSize);
+    SvgWriter(const QList<KoShape *> &toplevelShapes, const QSizeF &pageSize);
 
     /// Destroys the svg writer
     virtual ~SvgWriter();
@@ -54,7 +54,7 @@ private:
     void savePath(KoPathShape *path, SvgSavingContext &context);
     void saveGeneric(KoShape *shape, SvgSavingContext &context);
 
-    QList<KoShape*> m_toplevelShapes;
+    QList<KoShape *> m_toplevelShapes;
     QSizeF m_pageSize;
     bool m_writeInlineImages;
 };

@@ -6,8 +6,8 @@
 
 #include "KPrEventActionWidget.h"
 
-KPrEventActionWidget::KPrEventActionWidget(QWidget * parent)
-        : QWidget(parent)
+KPrEventActionWidget::KPrEventActionWidget(QWidget *parent)
+    : QWidget(parent)
 {
 }
 

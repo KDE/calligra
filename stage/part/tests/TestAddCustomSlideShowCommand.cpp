@@ -1,18 +1,18 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ * SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #include "TestAddCustomSlideShowCommand.h"
 
+#include "KPrCustomSlideShows.h"
+#include "KPrCustomSlideShowsModel.h"
 #include "KPrDocument.h"
 #include "KoPAMasterPage.h"
 #include "KoPAPage.h"
 #include "PAMock.h"
 #include "commands/KPrAddCustomSlideShowCommand.h"
-#include "KPrCustomSlideShows.h"
-#include "KPrCustomSlideShowsModel.h"
 
 #include <QTest>
 
@@ -27,7 +27,7 @@ void TestAddCustomSlideShowCommand::addCustomSlideShow()
     doc.insertPage(page1, 0);
 
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
-    KoPAMasterPage * m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
+    KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
     QVERIFY(p1 != 0);
     QVERIFY(m1 != 0);

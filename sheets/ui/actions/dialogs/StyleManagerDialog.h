@@ -33,7 +33,7 @@ class StyleManagerDialog : public ActionDialog
     Q_OBJECT
 
 public:
-    StyleManagerDialog(QWidget* parent, Selection* selection, StyleManager* manager);
+    StyleManagerDialog(QWidget *parent, Selection *selection, StyleManager *manager);
     ~StyleManagerDialog() override;
 
 Q_SIGNALS:
@@ -46,19 +46,19 @@ protected Q_SLOTS:
     void slotEdit();
     void slotRemove();
     void slotDisplayMode(int mode);
-    void selectionChanged(QTreeWidgetItem*);
+    void selectionChanged(QTreeWidgetItem *);
 
 private:
     void fillComboBox();
 
 private:
-    Selection*      m_selection;
-    StyleManager*   m_styleManager;
-    QTreeWidget*    m_styleList;
-    KComboBox*      m_displayBox;
-    QPushButton*    m_newButton;
-    QPushButton*    m_modifyButton;
-    QPushButton*    m_deleteButton;
+    Selection *m_selection;
+    StyleManager *m_styleManager;
+    QTreeWidget *m_styleList;
+    KComboBox *m_displayBox;
+    QPushButton *m_newButton;
+    QPushButton *m_modifyButton;
+    QPushButton *m_deleteButton;
 };
 
 } // namespace Sheets

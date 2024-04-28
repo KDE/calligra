@@ -6,13 +6,13 @@
 #ifndef NOTESCONFIGURATIONDIALOG_H
 #define NOTESCONFIGURATIONDIALOG_H
 
-#include <ui_NotesConfigurationDialog.h>
 #include <KoListStyle.h>
 #include <KoOdfNotesConfiguration.h>
+#include <ui_NotesConfigurationDialog.h>
 
 #include <QDialog>
-#include <QTextDocument>
 #include <QObject>
+#include <QTextDocument>
 
 class KoStyleManager;
 
@@ -36,7 +36,7 @@ public Q_SLOTS:
     /**
      * stores the applied notes' configuration as globalnotesconfiguration of the document
      */
-    void apply(QAbstractButton*);
+    void apply(QAbstractButton *);
 
 private:
     KoOdfNotesConfiguration *m_notesConfig;

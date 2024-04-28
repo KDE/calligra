@@ -13,17 +13,17 @@ SPDX-License-Identifier: LGPL-2.1-or-later
 
 #include "PresentationVariable.h"
 
-#include <KoXmlReader.h>
-#include <KoXmlWriter.h>
+#include <KPrPage.h>
+#include <KoPATextPage.h>
 #include <KoProperties.h>
 #include <KoShape.h>
-#include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
 #include <KoXmlNS.h>
-#include <KoPATextPage.h>
-#include <KPrPage.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
 PresentationVariable::PresentationVariable()
     : KoVariable(true)
@@ -51,12 +51,12 @@ void PresentationVariable::setProperties(const KoProperties *props)
 
 void PresentationVariable::resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(document->documentLayout());
     if (lay) {
         KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(posInDocument);
         if (rootArea) {
-            if (KoPATextPage *textPage = dynamic_cast<KoPATextPage*>(rootArea->page())) {
-                if (KPrPage *page = dynamic_cast<KPrPage*>(textPage->page())) {
+            if (KoPATextPage *textPage = dynamic_cast<KoPATextPage *>(rootArea->page())) {
+                if (KPrPage *page = dynamic_cast<KPrPage *>(textPage->page())) {
                     setValue(page->declaration(m_type));
                 }
             }
@@ -65,10 +65,10 @@ void PresentationVariable::resize(const QTextDocument *document, QTextInlineObje
     KoVariable::resize(document, object, posInDocument, format, pd);
 }
 
-void PresentationVariable::saveOdf(KoShapeSavingContext & context)
+void PresentationVariable::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
-    const char * type = "";
+    const char *type = "";
     switch (m_type) {
     case KPrDeclarations::Footer:
         type = "presentation:footer";
@@ -84,18 +84,16 @@ void PresentationVariable::saveOdf(KoShapeSavingContext & context)
     writer->endElement();
 }
 
-bool PresentationVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
+bool PresentationVariable::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_UNUSED(context);
     const QString localName(element.localName());
 
     if (localName == "footer") {
         m_type = KPrDeclarations::Footer;
-    }
-    else if (localName == "header") {
+    } else if (localName == "header") {
         m_type = KPrDeclarations::Header;
-    }
-    else if (localName == "date-time") {
+    } else if (localName == "date-time") {
         m_type = KPrDeclarations::DateTime;
     }
     return true;

@@ -13,46 +13,46 @@
 
 #include "PictureDebug.h"
 
-ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, KUndo2Command *parent):
-    KUndo2Command(parent),
-    m_imageChanged(true),
-    m_shape(shape),
-    m_newImageData(newImageData),
-    m_oldCroppingRect(shape->cropRect()),
-    m_newCroppingRect(0, 0, 1, 1),
-    m_oldColorMode(shape->colorMode()),
-    m_newColorMode(shape->colorMode())
+ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_imageChanged(true)
+    , m_shape(shape)
+    , m_newImageData(newImageData)
+    , m_oldCroppingRect(shape->cropRect())
+    , m_newCroppingRect(0, 0, 1, 1)
+    , m_oldColorMode(shape->colorMode())
+    , m_newColorMode(shape->colorMode())
 {
     setText(kundo2_i18n("Change image"));
 
     // we need new here as setUserData deletes the old data
-    m_oldImageData = m_shape->imageData() ? new KoImageData(*m_shape->imageData()): 0;
+    m_oldImageData = m_shape->imageData() ? new KoImageData(*m_shape->imageData()) : 0;
 }
 
-ChangeImageCommand::ChangeImageCommand(PictureShape *shape, const QRectF &croppingRect, KUndo2Command *parent):
-    KUndo2Command(parent),
-    m_imageChanged(false),
-    m_shape(shape),
-    m_oldImageData(0),
-    m_newImageData(0),
-    m_oldCroppingRect(shape->cropRect()),
-    m_newCroppingRect(croppingRect),
-    m_oldColorMode(shape->colorMode()),
-    m_newColorMode(shape->colorMode())
+ChangeImageCommand::ChangeImageCommand(PictureShape *shape, const QRectF &croppingRect, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_imageChanged(false)
+    , m_shape(shape)
+    , m_oldImageData(0)
+    , m_newImageData(0)
+    , m_oldCroppingRect(shape->cropRect())
+    , m_newCroppingRect(croppingRect)
+    , m_oldColorMode(shape->colorMode())
+    , m_newColorMode(shape->colorMode())
 {
     setText(kundo2_i18n("Crop image"));
 }
 
-ChangeImageCommand::ChangeImageCommand(PictureShape *shape, PictureShape::ColorMode colorMode, KUndo2Command *parent):
-    KUndo2Command(parent),
-    m_imageChanged(false),
-    m_shape(shape),
-    m_oldImageData(0),
-    m_newImageData(0),
-    m_oldCroppingRect(shape->cropRect()),
-    m_newCroppingRect(shape->cropRect()),
-    m_oldColorMode(shape->colorMode()),
-    m_newColorMode(colorMode)
+ChangeImageCommand::ChangeImageCommand(PictureShape *shape, PictureShape::ColorMode colorMode, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_imageChanged(false)
+    , m_shape(shape)
+    , m_oldImageData(0)
+    , m_newImageData(0)
+    , m_oldCroppingRect(shape->cropRect())
+    , m_newCroppingRect(shape->cropRect())
+    , m_oldColorMode(shape->colorMode())
+    , m_newColorMode(colorMode)
 {
     setText(kundo2_i18n("Change image color mode"));
 }
@@ -67,7 +67,7 @@ void ChangeImageCommand::redo()
 {
     if (m_imageChanged) {
         // we need new here as setUserData deletes the old data
-        m_shape->setUserData(m_newImageData ? new KoImageData(*m_newImageData): 0);
+        m_shape->setUserData(m_newImageData ? new KoImageData(*m_newImageData) : 0);
     }
 
     m_shape->setColorMode(m_newColorMode);
@@ -79,7 +79,7 @@ void ChangeImageCommand::undo()
 {
     if (m_imageChanged) {
         // we need new here as setUserData deletes the old data
-        m_shape->setUserData(m_oldImageData ? new KoImageData(*m_oldImageData): 0);
+        m_shape->setUserData(m_oldImageData ? new KoImageData(*m_oldImageData) : 0);
     }
 
     m_shape->setColorMode(m_oldColorMode);

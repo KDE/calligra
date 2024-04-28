@@ -12,24 +12,23 @@
 #include <math.h>
 
 QString identifierData[] = {
-    "",          // IdentifierUnknown
-    "pi",        // IdentifierPi
-    "left",      // IdentifierLeft
-    "top",       // IdentifierTop
-    "right",     // IdentifierRight
-    "bottom",    // IdentifierBottom
-    "xstretch",  // IdentifierXstretch
-    "ystretch",  // IdentifierYstretch
+    "", // IdentifierUnknown
+    "pi", // IdentifierPi
+    "left", // IdentifierLeft
+    "top", // IdentifierTop
+    "right", // IdentifierRight
+    "bottom", // IdentifierBottom
+    "xstretch", // IdentifierXstretch
+    "ystretch", // IdentifierYstretch
     "hasstroke", // IdentifierHasStroke
-    "hasfill",   // IdentifierHasFill
-    "width",     // IdentifierWidth
-    "height",    // IdentifierHeight
-    "logwidth",  // IdentifierLogwidth
-    "logheight"  // IdentifierLogheight
+    "hasfill", // IdentifierHasFill
+    "width", // IdentifierWidth
+    "height", // IdentifierHeight
+    "logwidth", // IdentifierLogwidth
+    "logheight" // IdentifierLogheight
 };
 
-
-EnhancedPathParameter::EnhancedPathParameter(EnhancedPathShape * parent)
+EnhancedPathParameter::EnhancedPathParameter(EnhancedPathShape *parent)
     : m_parent(parent)
 {
     Q_ASSERT(m_parent);
@@ -39,7 +38,7 @@ EnhancedPathParameter::~EnhancedPathParameter()
 {
 }
 
-EnhancedPathShape * EnhancedPathParameter::parent()
+EnhancedPathShape *EnhancedPathParameter::parent()
 {
     return m_parent;
 }
@@ -54,8 +53,9 @@ void EnhancedPathParameter::modify(qreal value)
     Q_UNUSED(value);
 }
 
-EnhancedPathConstantParameter::EnhancedPathConstantParameter(qreal value, EnhancedPathShape * parent)
-    : EnhancedPathParameter(parent), m_value(value)
+EnhancedPathConstantParameter::EnhancedPathConstantParameter(qreal value, EnhancedPathShape *parent)
+    : EnhancedPathParameter(parent)
+    , m_value(value)
 {
 }
 
@@ -69,12 +69,13 @@ QString EnhancedPathConstantParameter::toString() const
     return QString::number(m_value);
 }
 
-EnhancedPathNamedParameter::EnhancedPathNamedParameter(Identifier identifier, EnhancedPathShape * parent)
-: EnhancedPathParameter(parent), m_identifier(identifier)
+EnhancedPathNamedParameter::EnhancedPathNamedParameter(Identifier identifier, EnhancedPathShape *parent)
+    : EnhancedPathParameter(parent)
+    , m_identifier(identifier)
 {
 }
 
-EnhancedPathNamedParameter::EnhancedPathNamedParameter(const QString &identifier, EnhancedPathShape * parent)
+EnhancedPathNamedParameter::EnhancedPathNamedParameter(const QString &identifier, EnhancedPathShape *parent)
     : EnhancedPathParameter(parent)
 {
     m_identifier = identifierFromString(identifier);
@@ -84,7 +85,7 @@ qreal EnhancedPathNamedParameter::evaluate()
 {
     const QRect &viewBox = parent()->viewBox();
 
-    switch(m_identifier) {
+    switch (m_identifier) {
     case IdentifierPi:
         return M_PI;
         break;
@@ -169,8 +170,9 @@ QString EnhancedPathNamedParameter::toString() const
     return identifierData[m_identifier];
 }
 
-EnhancedPathReferenceParameter::EnhancedPathReferenceParameter(const QString &reference, EnhancedPathShape * parent)
-: EnhancedPathParameter(parent), m_reference(reference)
+EnhancedPathReferenceParameter::EnhancedPathReferenceParameter(const QString &reference, EnhancedPathShape *parent)
+    : EnhancedPathParameter(parent)
+    , m_reference(reference)
 {
 }
 
@@ -188,4 +190,3 @@ QString EnhancedPathReferenceParameter::toString() const
 {
     return m_reference;
 }
-

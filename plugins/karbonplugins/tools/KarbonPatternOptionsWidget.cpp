@@ -13,8 +13,9 @@ public:
     Ui_PatternOptionsWidget widget;
 };
 
-KarbonPatternOptionsWidget::KarbonPatternOptionsWidget(QWidget * parent)
-        : QWidget(parent), d(new Private())
+KarbonPatternOptionsWidget::KarbonPatternOptionsWidget(QWidget *parent)
+    : QWidget(parent)
+    , d(new Private())
 {
     d->widget.setupUi(this);
 
@@ -132,8 +133,8 @@ void KarbonPatternOptionsWidget::setPatternSize(const QSize &size)
 void KarbonPatternOptionsWidget::updateControls()
 {
     bool stretch = d->widget.patternRepeat->currentIndex() == KoPatternBackground::Stretched;
-    d->widget.patternWidth->setEnabled(! stretch);
-    d->widget.patternHeight->setEnabled(! stretch);
+    d->widget.patternWidth->setEnabled(!stretch);
+    d->widget.patternHeight->setEnabled(!stretch);
 
     bool tiled = d->widget.patternRepeat->currentIndex() == KoPatternBackground::Tiled;
     d->widget.referencePoint->setEnabled(tiled);
@@ -142,4 +143,3 @@ void KarbonPatternOptionsWidget::updateControls()
     d->widget.tileOffsetX->setEnabled(tiled);
     d->widget.tileOffsetY->setEnabled(tiled);
 }
-

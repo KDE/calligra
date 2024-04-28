@@ -20,7 +20,7 @@ class DatabaseModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    explicit DatabaseModule(QObject* parent, const QVariantList& args = QVariantList());
+    explicit DatabaseModule(QObject *parent, const QVariantList &args = QVariantList());
 
     QString descriptionFileName() const override;
 };

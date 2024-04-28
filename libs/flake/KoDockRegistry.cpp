@@ -6,19 +6,19 @@
 
 #include "KoDockRegistry.h"
 
-#include <QGlobalStatic>
-#include <QFontDatabase>
 #include <QDebug>
+#include <QFontDatabase>
+#include <QGlobalStatic>
 
-#include <KSharedConfig>
 #include <KConfigGroup>
+#include <KSharedConfig>
 
 #include "KoPluginLoader.h"
 
 Q_GLOBAL_STATIC(KoDockRegistry, s_instance)
 
 KoDockRegistry::KoDockRegistry()
-  : d(0)
+    : d(0)
 {
 }
 
@@ -37,9 +37,8 @@ KoDockRegistry::~KoDockRegistry()
     qDeleteAll(values());
 }
 
-KoDockRegistry* KoDockRegistry::instance()
+KoDockRegistry *KoDockRegistry::instance()
 {
-
     if (!s_instance.exists()) {
         s_instance->init();
     }
@@ -48,7 +47,7 @@ KoDockRegistry* KoDockRegistry::instance()
 
 QFont KoDockRegistry::dockFont()
 {
-    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
+    KConfigGroup group(KSharedConfig::openConfig(), "GUI");
     QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     QFont smallFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
 
@@ -60,8 +59,7 @@ QFont KoDockRegistry::dockFont()
         if (smallFont.pointSize() >= pointSize) {
             smallFont.setPointSizeF(pointSize * 0.9);
         }
-    }
-    else {
+    } else {
         // paletteFontSize was set, use that
         smallFont.setPointSize(pointSize);
     }

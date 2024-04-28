@@ -6,8 +6,10 @@
 
 #include "PhantomElement.h"
 
-PhantomElement::PhantomElement( BasicElement* parent ) : RowElement( parent ) 
-{}
+PhantomElement::PhantomElement(BasicElement *parent)
+    : RowElement(parent)
+{
+}
 
 ElementType PhantomElement::elementType() const
 {

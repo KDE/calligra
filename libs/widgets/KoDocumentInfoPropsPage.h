@@ -7,23 +7,22 @@
 #ifndef _KODOCUMENTINFOPROPSPAGE_H_
 #define _KODOCUMENTINFOPROPSPAGE_H_
 
-#include <KPropertiesDialogPlugin>
 #include "kowidgets_export.h"
+#include <KPropertiesDialogPlugin>
 
 class KOWIDGETS_EXPORT KoDocumentInfoPropsPage : public KPropertiesDialogPlugin
 {
     Q_OBJECT
 
 public:
-    explicit KoDocumentInfoPropsPage(KPropertiesDialog *props,
-                                     const QVariantList & = QVariantList());
+    explicit KoDocumentInfoPropsPage(KPropertiesDialog *props, const QVariantList & = QVariantList());
     ~KoDocumentInfoPropsPage() override;
 
     void applyChanges() override;
 
 private:
     class KoDocumentInfoPropsPagePrivate;
-    KoDocumentInfoPropsPagePrivate * const d;
+    KoDocumentInfoPropsPagePrivate *const d;
 };
 
 #endif

@@ -5,21 +5,18 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "KoXmlStreamReader.h"
 
 // Qt
+#include <QSet>
 #include <QString>
 #include <QStringList>
-#include <QSet>
 
 #include "Odf2Debug.h"
 
-
 // ================================================================
 //             class KoXmlStreamReader and Private class
-
 
 class Q_DECL_HIDDEN KoXmlStreamReader::Private
 {
@@ -31,26 +28,26 @@ public:
 
     // Checks the soundness of the whole document.  Must be called
     // after the namespace declarations are read.
-    void        checkSoundness();
+    void checkSoundness();
 
     // Builds a prefix for the current element. Only called if the
     // document is unsound.
     QStringView buildNewPrefix();
     // Builds a qualified name for the current element. Only called if
     // the document is unsound.
-    QStringView  buildQName();
+    QStringView buildQName();
 
-    KoXmlStreamReader *q;       // The owner object;
+    KoXmlStreamReader *q; // The owner object;
 
-    bool  isSound;              // True if the document is sound (see the class doc for details)
-    bool  isChecked;            // True if the soundness is checked
+    bool isSound; // True if the document is sound (see the class doc for details)
+    bool isChecked; // True if the soundness is checked
 
     // These are filled using the addEx{pected,tra}Namespace() functions.
-    QHash<QString, QString>  expectedNamespaces;  // nsUri, prefix
-    QHash<QString, QString>  extraNamespaces;     // nsUri, prefix
+    QHash<QString, QString> expectedNamespaces; // nsUri, prefix
+    QHash<QString, QString> extraNamespaces; // nsUri, prefix
 
     // This is only used when a document is unsound, but is always created.
-    QHash<QString, QString>  prefixes; // nsUri, prefix
+    QHash<QString, QString> prefixes; // nsUri, prefix
 
     // If the document is unsound, we need to build the prefix and
     // qualified names from a prefix that we get from "prefixes" and
@@ -58,10 +55,9 @@ public:
     // we need to make sure that the stringref is valid until this
     // KoXmlStreamReader is destructed.  So we use this QSet as a
     // cache of all constructed qualified names that we ever generate.
-    QSet<QString>  prefixCache;
-    QSet<QString>  qualifiedNamesCache;
+    QSet<QString> prefixCache;
+    QSet<QString> qualifiedNamesCache;
 };
-
 
 KoXmlStreamReader::Private::Private(KoXmlStreamReader *qq)
     : q(qq)
@@ -72,7 +68,6 @@ KoXmlStreamReader::Private::Private(KoXmlStreamReader *qq)
 KoXmlStreamReader::Private::~Private()
 {
 }
-
 
 void KoXmlStreamReader::Private::clear()
 {
@@ -90,24 +85,23 @@ void KoXmlStreamReader::Private::clear()
     qualifiedNamesCache.clear();
 }
 
-
 void KoXmlStreamReader::Private::checkSoundness()
 {
     isSound = true;
 
     // Temp values
-    QStringList    namespacesToFix;    // List of namespaces we need to create a unique prefix for
-    QSet<QString>  usedPrefixes;
+    QStringList namespacesToFix; // List of namespaces we need to create a unique prefix for
+    QSet<QString> usedPrefixes;
 
     // Initialize by setting all expected prefixes and all extra ones.
     prefixes.clear();
-    foreach(const QString &nsUri, expectedNamespaces.keys()) {
+    foreach (const QString &nsUri, expectedNamespaces.keys()) {
         QString prefix = expectedNamespaces.value(nsUri);
 
         prefixes.insert(nsUri, prefix);
         usedPrefixes.insert(prefix);
     }
-    foreach(const QString &nsUri, extraNamespaces.keys()) {
+    foreach (const QString &nsUri, extraNamespaces.keys()) {
         QString prefix = extraNamespaces.value(nsUri);
 
         prefixes.insert(nsUri, prefix);
@@ -124,21 +118,18 @@ void KoXmlStreamReader::Private::checkSoundness()
     // would be interesting to know which application created such a
     // strange beast).
     //
-    QXmlStreamNamespaceDeclarations  nsDeclarations = q->QXmlStreamReader::namespaceDeclarations();
-    foreach(const QXmlStreamNamespaceDeclaration &decl, nsDeclarations) {
-
+    QXmlStreamNamespaceDeclarations nsDeclarations = q->QXmlStreamReader::namespaceDeclarations();
+    foreach (const QXmlStreamNamespaceDeclaration &decl, nsDeclarations) {
         QString nsUri(decl.namespaceUri().toString());
         QString prefix(decl.prefix().toString());
 
         if (prefixes.contains(nsUri)) {
             if (prefix == prefixes.value(nsUri)) {
-
                 // 1. nsUri = expected nsUri AND prefix = expected prefix:
                 //
                 // Soundness is not disturbed. Let's continue with the next declaration.
                 continue;
-            }
-            else {
+            } else {
                 // 2. nsUri = expected nsUri AND prefix != expected prefix:
                 //
                 // Document is not sound but we don't need to do
@@ -148,30 +139,27 @@ void KoXmlStreamReader::Private::checkSoundness()
                 isSound = false;
                 continue;
             }
-        }
-        else {
+        } else {
             // 3. nsUri is not among the expected nsUri's
             //
             // Let's check if the prefix is unique or if it already
             // exists among the expected ones.  If it is unique the
             // soundness is not affected, otherwise it is unsound.
             if (usedPrefixes.contains(prefix)) {
-
                 // Yes, the prefix is used for another namespace among
                 // the expected ones.  Let's store this namespace for
                 // now and create a unique, non-"expected" prefix
                 // later when all namespaces and prefixes are known.
                 isSound = false;
                 namespacesToFix.append(nsUri);
-            }
-            else {
+            } else {
                 prefixes.insert(nsUri, prefix);
                 usedPrefixes.insert(prefix);
             }
         }
     }
 
-    //debugOdf2 << "namespaces to fix:" << namespacesToFix;
+    // debugOdf2 << "namespaces to fix:" << namespacesToFix;
 
     // Finally, if necessary, create unique prefixes for namespaces
     // that are found to use one of the expected prefixes.  It doesn't
@@ -190,8 +178,8 @@ void KoXmlStreamReader::Private::checkSoundness()
         prefixes.insert(ns, pfx);
     }
 
-    //debugOdf2 << "Document soundness:" << isSound;
-    //debugOdf2 << "prefixes:" << prefixes;
+    // debugOdf2 << "Document soundness:" << isSound;
+    // debugOdf2 << "prefixes:" << prefixes;
 
     isChecked = true;
 }
@@ -199,7 +187,7 @@ void KoXmlStreamReader::Private::checkSoundness()
 QStringView KoXmlStreamReader::Private::buildNewPrefix()
 {
     if (!isChecked) {
-        checkSoundness();       // Sets isChecked and isSound;
+        checkSoundness(); // Sets isChecked and isSound;
     }
 
     if (isSound) {
@@ -207,7 +195,7 @@ QStringView KoXmlStreamReader::Private::buildNewPrefix()
     }
 
     // FIXME: Handle undeclared prefixes.  (Is that even legal?)
-    //QString nsUri = q->QXmlStreamReader::namespaceUri().toString();
+    // QString nsUri = q->QXmlStreamReader::namespaceUri().toString();
     QString newPrefix = prefixes.value(q->QXmlStreamReader::namespaceUri().toString());
 
     // The following code is because prefix() returns a QStringView,
@@ -223,12 +211,12 @@ QStringView KoXmlStreamReader::Private::buildNewPrefix()
         prefixCache.insert(newPrefix);
     }
 
-    QSet<QString>::ConstIterator  it = prefixCache.find(newPrefix);
+    QSet<QString>::ConstIterator it = prefixCache.find(newPrefix);
 #else
     // This should work too but it's unclear from the documentation
     // what is returned if it was already in the set.  It only
     // mentions "the inserted item"
-    QSet<QString>::ConstIterator  it = prefixCace.insert(newPrefix);
+    QSet<QString>::ConstIterator it = prefixCace.insert(newPrefix);
 #endif
 
     // Will always succeed since we entered it if it didn't exist already.
@@ -238,7 +226,7 @@ QStringView KoXmlStreamReader::Private::buildNewPrefix()
 QStringView KoXmlStreamReader::Private::buildQName()
 {
     if (!isChecked) {
-        checkSoundness();       // Sets isChecked and isSound;
+        checkSoundness(); // Sets isChecked and isSound;
     }
 
     if (isSound) {
@@ -246,9 +234,8 @@ QStringView KoXmlStreamReader::Private::buildQName()
     }
 
     // FIXME: Handle undeclared prefixes.  (Is that even legal?)
-    //QString nsUri = q->QXmlStreamReader::namespaceUri().toString();
-    QString qualifiedName = prefixes.value(q->QXmlStreamReader::namespaceUri().toString())
-        + ':' + q->QXmlStreamReader::name().toString();
+    // QString nsUri = q->QXmlStreamReader::namespaceUri().toString();
+    QString qualifiedName = prefixes.value(q->QXmlStreamReader::namespaceUri().toString()) + ':' + q->QXmlStreamReader::name().toString();
 
     // The following code is because qualifiedName() returns a
     // QStringView, not a QString.  So we need to make sure that the
@@ -263,22 +250,20 @@ QStringView KoXmlStreamReader::Private::buildQName()
         qualifiedNamesCache.insert(qualifiedName);
     }
 
-    QSet<QString>::ConstIterator  it = qualifiedNamesCache.find(qualifiedName);
+    QSet<QString>::ConstIterator it = qualifiedNamesCache.find(qualifiedName);
 #else
     // This should work too but it's unclear from the documentation
     // what is returned if it was already in the set.  It only
     // mentions "the inserted item"
-    QSet<QString>::ConstIterator  it = qualifiedNamesCache.insert(qualifiedName);
+    QSet<QString>::ConstIterator it = qualifiedNamesCache.insert(qualifiedName);
 #endif
 
     // Will always succeed since we entered it if it didn't exist already.
     return QStringView(*it).left(-1);
 }
 
-
 // ----------------------------------------------------------------
 //                     class KoXmlStreamReader
-
 
 KoXmlStreamReader::KoXmlStreamReader()
     : QXmlStreamReader()
@@ -315,14 +300,12 @@ KoXmlStreamReader::~KoXmlStreamReader()
     delete d;
 }
 
-
 void KoXmlStreamReader::clear()
 {
     d->clear();
 
     QXmlStreamReader::clear();
 }
-
 
 void KoXmlStreamReader::addExpectedNamespace(const QString &prefix, const QString &namespaceUri)
 {
@@ -340,10 +323,8 @@ void KoXmlStreamReader::addExtraNamespace(const QString &prefix, const QString &
     d->isSound = false;
 }
 
-
 // ----------------------------------------------------------------
 //                 Reimplemented from QXmlStreamReader
-
 
 // Should these be made inline?  that would make it very fast at the
 // cost of a possibly unstable API.
@@ -358,7 +339,6 @@ QStringView KoXmlStreamReader::qualifiedName() const
     return d->isSound ? QXmlStreamReader::qualifiedName() : d->buildQName();
 }
 
-
 void KoXmlStreamReader::setDevice(QIODevice *device)
 {
     // Setting the device clears the checked status since we don't know
@@ -371,26 +351,22 @@ void KoXmlStreamReader::setDevice(QIODevice *device)
 
 KoXmlStreamAttributes KoXmlStreamReader::attributes() const
 {
-    QXmlStreamAttributes   qAttrs = QXmlStreamReader::attributes();
-    KoXmlStreamAttributes  retval = KoXmlStreamAttributes(this, qAttrs);
+    QXmlStreamAttributes qAttrs = QXmlStreamReader::attributes();
+    KoXmlStreamAttributes retval = KoXmlStreamAttributes(this, qAttrs);
 
     return retval;
 }
 
-
 // ----------------------------------------------------------------
 //                         private functions
-
 
 bool KoXmlStreamReader::isSound() const
 {
     return d->isSound;
 }
 
-
 // ================================================================
 //             class KoXmlStreamAttribute and Private class
-
 
 class Q_DECL_HIDDEN KoXmlStreamAttribute::Private
 {
@@ -402,11 +378,11 @@ public:
     void generateQName();
 
     const QXmlStreamAttribute *qAttr;
-    const KoXmlStreamReader   *reader;
+    const KoXmlStreamReader *reader;
 
     // These two are only used when the document is unsound
-    QString  qName;             // qualifiedName if it was ever asked for.
-    int      prefixLen;         // the length of the prefix alone. -1 means uninitialized.
+    QString qName; // qualifiedName if it was ever asked for.
+    int prefixLen; // the length of the prefix alone. -1 means uninitialized.
 };
 
 KoXmlStreamAttribute::Private::Private(const QXmlStreamAttribute *attr, const KoXmlStreamReader *r)
@@ -429,7 +405,6 @@ KoXmlStreamAttribute::Private::~Private()
 {
 }
 
-
 void KoXmlStreamAttribute::Private::generateQName()
 {
     qName = reader->d->prefixes.value(qAttr->namespaceUri().toString());
@@ -438,35 +413,30 @@ void KoXmlStreamAttribute::Private::generateQName()
     qName += QLatin1Char(':') + qAttr->name();
 }
 
-
 // ----------------------------------------------------------------
-
-
 
 KoXmlStreamAttribute::KoXmlStreamAttribute()
     : d(new KoXmlStreamAttribute::Private(0, 0))
 {
-    //debugOdf2 << "default constructor called";
+    // debugOdf2 << "default constructor called";
 }
 
-KoXmlStreamAttribute::KoXmlStreamAttribute(const QXmlStreamAttribute *attr,
-                                           const KoXmlStreamReader *reader)
+KoXmlStreamAttribute::KoXmlStreamAttribute(const QXmlStreamAttribute *attr, const KoXmlStreamReader *reader)
     : d(new KoXmlStreamAttribute::Private(attr, reader))
 {
-    //debugOdf2 << "normal constructor called";
+    // debugOdf2 << "normal constructor called";
 }
 
 KoXmlStreamAttribute::KoXmlStreamAttribute(const KoXmlStreamAttribute &other)
     : d(new KoXmlStreamAttribute::Private(*other.d))
 {
-    //debugOdf2 << "copy constructor called";
+    // debugOdf2 << "copy constructor called";
 }
 
 KoXmlStreamAttribute::~KoXmlStreamAttribute()
 {
     delete d;
 }
-
 
 bool KoXmlStreamAttribute::isDefault() const
 {
@@ -483,7 +453,6 @@ QStringView KoXmlStreamAttribute::namespaceUri() const
     return d->qAttr->namespaceUri();
 }
 
-
 QStringView KoXmlStreamAttribute::prefix() const
 {
     if (d->reader->isSound()) {
@@ -496,7 +465,6 @@ QStringView KoXmlStreamAttribute::prefix() const
 
     return QStringView{d->qName}.left(d->prefixLen);
 }
-
 
 QStringView KoXmlStreamAttribute::qualifiedName() const
 {
@@ -511,12 +479,10 @@ QStringView KoXmlStreamAttribute::qualifiedName() const
     return QStringView{d->qName}.left(-1);
 }
 
-
 QStringView KoXmlStreamAttribute::value() const
 {
     return d->qAttr->value();
 }
-
 
 bool KoXmlStreamAttribute::operator==(const KoXmlStreamAttribute &other) const
 {
@@ -528,7 +494,6 @@ bool KoXmlStreamAttribute::operator!=(const KoXmlStreamAttribute &other) const
     return d->qAttr != other.d->qAttr;
 }
 
-
 KoXmlStreamAttribute &KoXmlStreamAttribute::operator=(const KoXmlStreamAttribute &other)
 {
     d->qAttr = other.d->qAttr;
@@ -539,10 +504,8 @@ KoXmlStreamAttribute &KoXmlStreamAttribute::operator=(const KoXmlStreamAttribute
     return *this;
 }
 
-
 // ================================================================
 //             class KoXmlStreamAttributes and Private class
-
 
 class Q_DECL_HIDDEN KoXmlStreamAttributes::Private : public QSharedData
 {
@@ -550,9 +513,9 @@ public:
     Private(const KoXmlStreamReader *r, const QXmlStreamAttributes &qa);
     ~Private();
 
-    const KoXmlStreamReader      *reader;
+    const KoXmlStreamReader *reader;
     QList<KoXmlStreamAttribute> koAttrs;
-    const QXmlStreamAttributes    qAttrs; // We need the Q attributes to live while this class lives.
+    const QXmlStreamAttributes qAttrs; // We need the Q attributes to live while this class lives.
 };
 
 KoXmlStreamAttributes::Private::Private(const KoXmlStreamReader *r, const QXmlStreamAttributes &qa)
@@ -566,12 +529,9 @@ KoXmlStreamAttributes::Private::~Private()
 {
 }
 
-
 // ----------------------------------------------------------------
 
-
-KoXmlStreamAttributes::KoXmlStreamAttributes(const KoXmlStreamReader *r,
-                                             const QXmlStreamAttributes &qAttrs)
+KoXmlStreamAttributes::KoXmlStreamAttributes(const KoXmlStreamReader *r, const QXmlStreamAttributes &qAttrs)
     : d(new KoXmlStreamAttributes::Private(r, qAttrs))
 {
     for (int i = 0; i < qAttrs.size(); ++i) {
@@ -595,9 +555,8 @@ KoXmlStreamAttributes &KoXmlStreamAttributes::operator=(const KoXmlStreamAttribu
     return *this;
 }
 
-
 // Relevant parts of the QVector API
-const KoXmlStreamAttribute& KoXmlStreamAttributes::at(int i) const
+const KoXmlStreamAttribute &KoXmlStreamAttributes::at(int i) const
 {
     return d->koAttrs[i];
 }
@@ -612,9 +571,9 @@ KoXmlStreamAttribute KoXmlStreamAttributes::value(int i) const
     return d->koAttrs.value(i);
 }
 
-const KoXmlStreamAttribute& KoXmlStreamAttributes::operator[](int i) const
+const KoXmlStreamAttribute &KoXmlStreamAttributes::operator[](int i) const
 {
-    return d->koAttrs[i];//.operator[](i);
+    return d->koAttrs[i]; //.operator[](i);
 }
 
 KoXmlStreamAttributes::const_iterator KoXmlStreamAttributes::begin() const
@@ -626,7 +585,6 @@ KoXmlStreamAttributes::const_iterator KoXmlStreamAttributes::end() const
 {
     return const_iterator(d->koAttrs.end());
 }
-
 
 // reimplemented from QXmlStreamAttributes
 bool KoXmlStreamAttributes::hasAttribute(const QString &qualifiedName) const
@@ -640,7 +598,6 @@ bool KoXmlStreamAttributes::hasAttribute(const QString &qualifiedName) const
 
     return false;
 }
-
 
 bool KoXmlStreamAttributes::hasAttribute(const QLatin1String &qualifiedName) const
 {
@@ -658,7 +615,6 @@ bool KoXmlStreamAttributes::hasAttribute(const QLatin1String &qualifiedName) con
 #endif
 }
 
-
 QStringView KoXmlStreamAttributes::value(const QString &qualifiedName) const
 {
     for (int i = 0; i < size(); ++i) {
@@ -670,7 +626,6 @@ QStringView KoXmlStreamAttributes::value(const QString &qualifiedName) const
     return {};
 }
 
-
 QStringView KoXmlStreamAttributes::value(const QLatin1String &qualifiedName) const
 {
     // FIXME: Find faster way.
@@ -678,10 +633,8 @@ QStringView KoXmlStreamAttributes::value(const QLatin1String &qualifiedName) con
     return value(qName);
 }
 
-
 // ================================================================
 //                         non-class functions
-
 
 void prepareForOdf(KoXmlStreamReader &reader)
 {
@@ -723,20 +676,20 @@ void prepareForOdf(KoXmlStreamReader &reader)
 
     // This list of namespaces is taken from KoXmlReader::fixNamespace()
     // They were generated by old versions of OpenOffice.org.
-    reader.addExtraNamespace("office",    "http://openoffice.org/2000/office");
-    reader.addExtraNamespace("text",      "http://openoffice.org/2000/text");
-    reader.addExtraNamespace("style",     "http://openoffice.org/2000/style");
-    reader.addExtraNamespace("fo",        "http://www.w3.org/1999/XSL/Format");
-    reader.addExtraNamespace("table",     "http://openoffice.org/2000/table");
-    reader.addExtraNamespace("drawing",   "http://openoffice.org/2000/drawing");
+    reader.addExtraNamespace("office", "http://openoffice.org/2000/office");
+    reader.addExtraNamespace("text", "http://openoffice.org/2000/text");
+    reader.addExtraNamespace("style", "http://openoffice.org/2000/style");
+    reader.addExtraNamespace("fo", "http://www.w3.org/1999/XSL/Format");
+    reader.addExtraNamespace("table", "http://openoffice.org/2000/table");
+    reader.addExtraNamespace("drawing", "http://openoffice.org/2000/drawing");
     reader.addExtraNamespace("datastyle", "http://openoffice.org/2000/datastyle");
-    reader.addExtraNamespace("svg",       "http://www.w3.org/2000/svg");
-    reader.addExtraNamespace("chart",     "http://openoffice.org/2000/chart");
-    reader.addExtraNamespace("dr3d",      "http://openoffice.org/2000/dr3d");
-    reader.addExtraNamespace("form",      "http://openoffice.org/2000/form");
-    reader.addExtraNamespace("script",    "http://openoffice.org/2000/script");
-    reader.addExtraNamespace("meta",      "http://openoffice.org/2000/meta");
-    reader.addExtraNamespace("config",    "http://openoffice.org/2001/config");
-    reader.addExtraNamespace("pres",      "http://openoffice.org/2000/presentation");
-    reader.addExtraNamespace("manifest",  "http://openoffice.org/2001/manifest");
+    reader.addExtraNamespace("svg", "http://www.w3.org/2000/svg");
+    reader.addExtraNamespace("chart", "http://openoffice.org/2000/chart");
+    reader.addExtraNamespace("dr3d", "http://openoffice.org/2000/dr3d");
+    reader.addExtraNamespace("form", "http://openoffice.org/2000/form");
+    reader.addExtraNamespace("script", "http://openoffice.org/2000/script");
+    reader.addExtraNamespace("meta", "http://openoffice.org/2000/meta");
+    reader.addExtraNamespace("config", "http://openoffice.org/2001/config");
+    reader.addExtraNamespace("pres", "http://openoffice.org/2000/presentation");
+    reader.addExtraNamespace("manifest", "http://openoffice.org/2001/manifest");
 }

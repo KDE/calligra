@@ -7,25 +7,25 @@
 #ifndef KPRIRISWIPEEFFECTSTRATEGYBASE_H
 #define KPRIRISWIPEEFFECTSTRATEGYBASE_H
 
-//Qt includes
+// Qt includes
 #include <QPainterPath>
 
-//KPresenter includes
+// KPresenter includes
 #include "pageeffects/KPrPageEffectStrategy.h"
 
 class KPrIrisWipeEffectStrategyBase : public KPrPageEffectStrategy
 {
 public:
-    KPrIrisWipeEffectStrategyBase(QPainterPath shape, int subType, const char * smilType, const char *smilSubType, bool reverse = false );
+    KPrIrisWipeEffectStrategyBase(QPainterPath shape, int subType, const char *smilType, const char *smilSubType, bool reverse = false);
     ~KPrIrisWipeEffectStrategyBase() override;
 
-    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
+    void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine) override;
 
-    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
+    void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data) override;
 
-    void next( const KPrPageEffect::Data &data ) override;
+    void next(const KPrPageEffect::Data &data) override;
 
-    int findMaxScaling( const KPrPageEffect::Data &data );
+    int findMaxScaling(const KPrPageEffect::Data &data);
 
 protected:
     QPainterPath m_shape;

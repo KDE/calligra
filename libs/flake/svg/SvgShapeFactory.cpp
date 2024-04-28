@@ -5,17 +5,17 @@
  */
 
 #include "SvgShapeFactory.h"
-#include "SvgParser.h"
 #include "KoShapeGroup.h"
 #include "KoShapeGroupCommand.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeRegistry.h"
+#include "SvgParser.h"
+#include <KLocalizedString>
 #include <KoOdfLoadingContext.h>
-#include <KoStyleStack.h>
-#include <KoXmlNS.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <KLocalizedString>
+#include <KoStyleStack.h>
+#include <KoXmlNS.h>
 
 #define SVGSHAPEFACTORYID "SvgShapeFactory"
 
@@ -24,14 +24,13 @@ SvgShapeFactory::SvgShapeFactory()
 {
     setLoadingPriority(4);
     setXmlElementNames(QString(KoXmlNS::draw), QStringList("image"));
-    // hide from add shapes docker as the shape is not able to be dragged onto 
+    // hide from add shapes docker as the shape is not able to be dragged onto
     // the canvas as createDefaultShape returns 0.
     setHidden(true);
 }
 
 SvgShapeFactory::~SvgShapeFactory()
 {
-
 }
 
 void SvgShapeFactory::addToRegistry()
@@ -51,7 +50,7 @@ bool SvgShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContex
 
         // check the mimetype
         if (href.startsWith(QLatin1String("./"))) {
-            href.remove(0,2);
+            href.remove(0, 2);
         }
 
         QString mimetype = context.odfLoadingContext().mimeTypeForPath(href, true);
@@ -63,7 +62,7 @@ bool SvgShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContex
 
 KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    const KoXmlElement & imageElement(KoXml::namedItemNS(element, KoXmlNS::draw, "image"));
+    const KoXmlElement &imageElement(KoXml::namedItemNS(element, KoXmlNS::draw, "image"));
     if (imageElement.isNull()) {
         errorFlake << "svg image element not found";
         return 0;
@@ -77,7 +76,7 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
 
         // check the mimetype
         if (href.startsWith(QLatin1String("./"))) {
-            href.remove(0,2);
+            href.remove(0, 2);
         }
         QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
         debugFlake << mimetype;
@@ -97,16 +96,15 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
 
         context.odfLoadingContext().store()->close();
 
-        if (! parsed) {
+        if (!parsed) {
             errorFlake << "Error while parsing file: "
-            << "at line " << line << " column: " << col
-            << " message: " << errormessage << Qt::endl;
+                       << "at line " << line << " column: " << col << " message: " << errormessage << Qt::endl;
             return 0;
         }
 
         SvgParser parser(context.documentResourceManager());
 
-        QList<KoShape*> shapes = parser.parseSvg(xmlDoc.documentElement());
+        QList<KoShape *> shapes = parser.parseSvg(xmlDoc.documentElement());
         if (shapes.isEmpty())
             return 0;
 
@@ -126,7 +124,7 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
             bool loaded = shape->loadOdf(element, context);
             context.odfLoadingContext().styleStack().restore();
             if (!loaded) {
-                errorFlake << "Failed to load svg shape: "<<shape->shapeId();
+                errorFlake << "Failed to load svg shape: " << shape->shapeId();
                 delete shape;
                 return 0;
             }

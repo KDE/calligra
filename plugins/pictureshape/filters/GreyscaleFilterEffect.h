@@ -16,9 +16,9 @@ class GreyscaleFilterEffect : public KoFilterEffect
 public:
     GreyscaleFilterEffect();
     ~GreyscaleFilterEffect() override;
-    void save(KoXmlWriter& writer) override;
-    bool load(const KoXmlElement& element, const KoFilterEffectLoadingContext& context) override;
-    QImage processImage(const QImage& image, const KoFilterEffectRenderContext& context) const override;
+    void save(KoXmlWriter &writer) override;
+    bool load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context) override;
+    QImage processImage(const QImage &image, const KoFilterEffectRenderContext &context) const override;
 };
 
 #endif // GRAYSCALEFILTEREFFECT_H

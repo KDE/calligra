@@ -9,8 +9,8 @@
 #define CHANGETEXTFONTCOMMAND_H
 
 #include "ArtisticTextRange.h"
-#include <kundo2command.h>
 #include <QFont>
+#include <kundo2command.h>
 
 class ArtisticTextShape;
 

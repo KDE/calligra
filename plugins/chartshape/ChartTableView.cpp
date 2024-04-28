@@ -5,15 +5,13 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "ChartTableView.h"
-
 
 using namespace KoChart;
 
 ChartTableView::ChartTableView(QWidget *parent /* = 0 */)
-   : QTableView(parent)
+    : QTableView(parent)
 {
 }
 
@@ -24,8 +22,7 @@ ChartTableView::~ChartTableView()
 /**
  * \reimpl
  */
-void ChartTableView::currentChanged(const QModelIndex &current, 
-                                    const QModelIndex &previous)
+void ChartTableView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
 

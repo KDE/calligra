@@ -49,10 +49,15 @@ private:
     bool layoutMergedCellsNotEnding(TableIterator *cursor, qreal topBorderWidth, qreal bottomBorderWidth, qreal rowBottom);
     QRectF cellBoundingRect(const QTextTableCell &cell) const;
     void paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, const QTextTableCell &tableCell, KoTextLayoutArea *frameArea);
-    void paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, const QTextTableCell &tableCell, bool topRow, int maxRow, QVector<QLineF> *accuBlankBorders);
+    void paintCellBorders(QPainter *painter,
+                          const KoTextDocumentLayout::PaintContext &context,
+                          const QTextTableCell &tableCell,
+                          bool topRow,
+                          int maxRow,
+                          QVector<QLineF> *accuBlankBorders);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

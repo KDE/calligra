@@ -8,11 +8,9 @@
 #ifndef CALLIGRA_SHEETS_ACTION_INDENT
 #define CALLIGRA_SHEETS_ACTION_INDENT
 
-
 #include "CellAction.h"
 
 #include "ui/commands/AbstractRegionCommand.h"
-
 
 namespace Calligra
 {
@@ -20,8 +18,9 @@ namespace Sheets
 {
 class IndentDialog;
 
-class Indent : public CellAction {
-Q_OBJECT
+class Indent : public CellAction
+{
+    Q_OBJECT
 public:
     Indent(Actions *actions, bool negative);
     virtual ~Indent();
@@ -33,8 +32,6 @@ protected:
 
     bool m_negative;
 };
-
-
 
 /**
  * \ingroup Commands
@@ -49,12 +46,12 @@ public:
 
 protected:
     bool performCommands() override;
+
 private:
     double m_indent;
 };
 
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_INDENT
+#endif // CALLIGRA_SHEETS_ACTION_INDENT

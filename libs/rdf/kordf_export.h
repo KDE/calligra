@@ -15,13 +15,13 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef KORDF_EXPORT
-# if defined(MAKE_KORDF_LIB)
+#if defined(MAKE_KORDF_LIB)
 /* We are building this library */
-#  define KORDF_EXPORT KDE_EXPORT
-# else
+#define KORDF_EXPORT KDE_EXPORT
+#else
 /* We are using this library */
-#  define KORDF_EXPORT KDE_IMPORT
-# endif
+#define KORDF_EXPORT KDE_IMPORT
+#endif
 #endif
 
 #else /* UNIX */
@@ -34,17 +34,16 @@
 
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
-# if defined(MAKE_KORDF_LIB)
-#       define KORDF_TEST_EXPORT KDE_EXPORT
-#   else
-#       define KORDF_TEST_EXPORT KDE_IMPORT
-#   endif
-# else /* not windows */
-#   define KORDF_TEST_EXPORT KDE_EXPORT
-# endif
-#else /* not compiling tests */
-#   define KORDF_TEST_EXPORT
+#if defined(MAKE_KORDF_LIB)
+#define KORDF_TEST_EXPORT KDE_EXPORT
+#else
+#define KORDF_TEST_EXPORT KDE_IMPORT
 #endif
-
+#else /* not windows */
+#define KORDF_TEST_EXPORT KDE_EXPORT
+#endif
+#else /* not compiling tests */
+#define KORDF_TEST_EXPORT
+#endif
 
 #endif

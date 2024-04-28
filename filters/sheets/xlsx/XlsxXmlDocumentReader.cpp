@@ -10,19 +10,19 @@
  */
 
 // Own
-#include "XlsxUtils.h"
 #include "XlsxXmlDocumentReader.h"
+#include "XlsxUtils.h"
 
-#include <KoBorder.h>  // needed by DrawingMLMethodso
+#include <KoBorder.h> // needed by DrawingMLMethodso
 
-#include "XlsxXmlWorksheetReader.h"
-#include "XlsxXmlCommentsReader.h"
 #include "XlsxImport.h"
+#include "XlsxXmlCommentsReader.h"
+#include "XlsxXmlWorksheetReader.h"
+#include <KoFontFace.h>
+#include <KoXmlWriter.h>
+#include <MsooXmlRelationships.h>
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
-#include <MsooXmlRelationships.h>
-#include <KoXmlWriter.h>
-#include <KoFontFace.h>
 #include <VmlDrawingReader.h>
 
 #undef MSOOXML_CURRENT_NS
@@ -31,24 +31,22 @@
 
 #include <MsooXmlReader_p.h>
 
-XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
-    XlsxImport& _import,
-    MSOOXML::DrawingMLTheme* _themes,
-    const QVector<QString>& _sharedStrings,
-    const XlsxComments& _comments,
-    const XlsxStyles& _styles,
-    MSOOXML::MsooXmlRelationships& _relationships,
-    const QString &_file,
-    const QString &_path
-    )
-        : MSOOXML::MsooXmlReaderContext(&_relationships)
-        , import(&_import)
-        , themes(_themes)
-        , sharedStrings(&_sharedStrings)
-        , comments(&_comments)
-        , styles(&_styles)
-        , file(_file)
-        , path(_path)
+XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(XlsxImport &_import,
+                                                           MSOOXML::DrawingMLTheme *_themes,
+                                                           const QVector<QString> &_sharedStrings,
+                                                           const XlsxComments &_comments,
+                                                           const XlsxStyles &_styles,
+                                                           MSOOXML::MsooXmlRelationships &_relationships,
+                                                           const QString &_file,
+                                                           const QString &_path)
+    : MSOOXML::MsooXmlReaderContext(&_relationships)
+    , import(&_import)
+    , themes(_themes)
+    , sharedStrings(&_sharedStrings)
+    , comments(&_comments)
+    , styles(&_styles)
+    , file(_file)
+    , path(_path)
 {
 }
 
@@ -56,18 +54,21 @@ class XlsxXmlDocumentReader::Private
 {
 public:
     Private()
-            : worksheetNumber(0) {
+        : worksheetNumber(0)
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
     uint worksheetNumber;
+
 private:
 };
 
 XlsxXmlDocumentReader::XlsxXmlDocumentReader(KoOdfWriters *writers)
-        : MSOOXML::MsooXmlReader(writers)
-        , m_context(0)
-        , d(new Private)
+    : MSOOXML::MsooXmlReader(writers)
+    , m_context(0)
+    , d(new Private)
 {
     init();
 }
@@ -82,9 +83,9 @@ void XlsxXmlDocumentReader::init()
     m_defaultNamespace = "";
 }
 
-KoFilter::ConversionStatus XlsxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus XlsxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<XlsxXmlDocumentReaderContext*>(context);
+    m_context = dynamic_cast<XlsxXmlDocumentReaderContext *>(context);
     Q_ASSERT(m_context);
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
@@ -121,17 +122,17 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::readInternal()
     for (int i = 0; i < namespaces.count(); i++) {
         qCDebug(lcXlsxImport) << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
-//! @todo find out whether the namespace returned by namespaceUri()
-//!       is exactly the same ref as the element of namespaceDeclarations()
+    //! @todo find out whether the namespace returned by namespaceUri()
+    //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration(QString(), MSOOXML::Schemas::spreadsheetml))) {
         raiseError(i18n("Namespace \"%1\" not found", QLatin1String(MSOOXML::Schemas::spreadsheetml)));
         return KoFilter::WrongFormat;
     }
-//! @todo expect other namespaces too...
+    //! @todo expect other namespaces too...
 
     TRY_READ(workbook)
 
-//! @todo hardcoded font face list; look at fonts used by theme
+    //! @todo hardcoded font face list; look at fonts used by theme
     mainStyles->insertFontFace(KoFontFace("Calibri"));
     mainStyles->insertFontFace(KoFontFace("Arial"));
     mainStyles->insertFontFace(KoFontFace("Tahoma"));
@@ -185,7 +186,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_workbook()
         if (isStartElement()) {
             TRY_READ_IF(sheets)
             SKIP_UNKNOWN
-//! @todo add ELSE_WRONG_FORMAT
+            //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
@@ -208,9 +209,8 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
 {
     READ_PROLOGUE
 
-    unsigned numberOfWorkSheets = m_context->relationships->targetCountWithWord("worksheets") +
-        m_context->relationships->targetCountWithWord("dialogsheets") +
-        m_context->relationships->targetCountWithWord("chartsheets");
+    unsigned numberOfWorkSheets = m_context->relationships->targetCountWithWord("worksheets") + m_context->relationships->targetCountWithWord("dialogsheets")
+        + m_context->relationships->targetCountWithWord("chartsheets");
     unsigned worksheet = 1;
 
     while (!atEnd()) {
@@ -221,7 +221,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
             if (name() == QLatin1StringView("sheet")) {
                 TRY_READ(sheet)
                 ++worksheet;
-                m_context->import->reportProgress(45 + (55/numberOfWorkSheets) * worksheet);
+                m_context->import->reportProgress(45 + (55 / numberOfWorkSheets) * worksheet);
             }
             ELSE_WRONG_FORMAT
         }
@@ -240,11 +240,9 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
             if (filterConditionSize > 0) {
                 if (type == "and") {
                     body->startElement("table:filter-and");
-                }
-                else if (type == "or") {
+                } else if (type == "or") {
                     body->startElement("table:filter-or");
-                }
-                else {
+                } else {
                     body->startElement("table:filter");
                 }
                 int conditionIndex = 0;
@@ -264,7 +262,6 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
 
         body->endElement(); // table:database-ranges
     }
-
 
     READ_EPILOGUE
 }
@@ -291,9 +288,8 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
     TRY_READ_ATTR_WITHOUT_NS(state)
     qCDebug(lcXlsxImport) << "r:id:" << r_id << "sheetId:" << sheetId << "name:" << name << "state:" << state;
 
-    unsigned numberOfWorkSheets = m_context->relationships->targetCountWithWord("worksheets") +
-        m_context->relationships->targetCountWithWord("dialogsheets") +
-        m_context->relationships->targetCountWithWord("chartsheets");
+    unsigned numberOfWorkSheets = m_context->relationships->targetCountWithWord("worksheets") + m_context->relationships->targetCountWithWord("dialogsheets")
+        + m_context->relationships->targetCountWithWord("chartsheets");
     d->worksheetNumber++; // counted from 1
     QString path, file;
     QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
@@ -302,30 +298,34 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
 
     // Loading potential ole replacements
     VmlDrawingReader vmlreader(this);
-    QString vmlTarget = m_context->relationships->targetForType(path, file,
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
+    QString vmlTarget = m_context->relationships->targetForType(path, file, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
 
     if (!vmlTarget.isEmpty()) {
         QString errorMessage, vmlPath, vmlFile;
 
         MSOOXML::Utils::splitPathAndFile(vmlTarget, &vmlPath, &vmlFile);
 
-        VmlDrawingReaderContext vmlContext(*m_context->import,
-            vmlPath, vmlFile, *m_context->relationships);
+        VmlDrawingReaderContext vmlContext(*m_context->import, vmlPath, vmlFile, *m_context->relationships);
 
-        const KoFilter::ConversionStatus status =
-            m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
+        const KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
         if (status != KoFilter::OK) {
             vmlreader.raiseError(errorMessage);
         }
     }
 
     XlsxXmlWorksheetReader worksheetReader(this);
-    XlsxXmlWorksheetReaderContext context(d->worksheetNumber, numberOfWorkSheets, name, state, path, file,
-                                          m_context->themes, *m_context->sharedStrings,
+    XlsxXmlWorksheetReaderContext context(d->worksheetNumber,
+                                          numberOfWorkSheets,
+                                          name,
+                                          state,
+                                          path,
+                                          file,
+                                          m_context->themes,
+                                          *m_context->sharedStrings,
                                           *m_context->comments,
                                           *m_context->styles,
-                                          *m_context->relationships, m_context->import,
+                                          *m_context->relationships,
+                                          m_context->import,
                                           vmlreader.content(),
                                           vmlreader.frames(),
                                           m_context->autoFilters);

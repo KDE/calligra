@@ -29,7 +29,7 @@ class AngleDialog : public ActionDialog
 {
     Q_OBJECT
 public:
-    AngleDialog(QWidget* parent, int angle);
+    AngleDialog(QWidget *parent, int angle);
 
     void setAngle(int angle);
     int angle();
@@ -41,6 +41,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     virtual void onApply() override;
     void slotDefault();
+
 protected:
     QSpinBox *m_pAngle;
 };

@@ -8,9 +8,9 @@
 #ifndef PAGEVARIABLE_H
 #define PAGEVARIABLE_H
 
-#include <KoVariable.h>
-#include <KoTextPage.h>
 #include <KoOdfNumberDefinition.h>
+#include <KoTextPage.h>
+#include <KoVariable.h>
 
 class KoShapeSavingContext;
 
@@ -20,11 +20,7 @@ class KoShapeSavingContext;
 class PageVariable : public KoVariable
 {
 public:
-    enum PageType {
-        PageCount,
-        PageNumber,
-        PageContinuation
-    };
+    enum PageType { PageCount, PageNumber, PageContinuation };
 
     /**
      * Constructor.
@@ -36,10 +32,10 @@ public:
     void propertyChanged(Property property, const QVariant &value) override;
 
     /// reimplemented
-    void saveOdf(KoShapeSavingContext & context) override;
+    void saveOdf(KoShapeSavingContext &context) override;
 
-    ///reimplemented
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context) override;
+    /// reimplemented
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
 private:
     void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;

@@ -6,24 +6,24 @@
 
 #include "KoReplaceStrategy.h"
 
+#include <KLocalizedString>
+#include <KMessageBox>
 #include <QTextCursor>
 #include <kfind.h>
 #include <kreplacedialog.h>
-#include <KMessageBox>
-#include <KLocalizedString>
 
 #include "FindDirection_p.h"
 
-KoReplaceStrategy::KoReplaceStrategy(QWidget * parent)
-        : m_dialog(new KReplaceDialog(parent))
-        , m_replaced(0)
+KoReplaceStrategy::KoReplaceStrategy(QWidget *parent)
+    : m_dialog(new KReplaceDialog(parent))
+    , m_replaced(0)
 {
     m_dialog->setOptions(KFind::FromCursor);
 }
 
 KoReplaceStrategy::~KoReplaceStrategy()
 {
-    if (m_dialog->parent()==0)
+    if (m_dialog->parent() == 0)
         delete m_dialog;
 }
 
@@ -42,9 +42,7 @@ void KoReplaceStrategy::displayFinalDialog()
     if (m_replaced == 0) {
         KMessageBox::information(m_dialog->parentWidget(), i18n("Found no match\n\nNo text was replaced"));
     } else {
-        KMessageBox::information(m_dialog->parentWidget(),
-                                 i18np("1 replacement made",
-                                       "%1 replacements made", m_replaced));
+        KMessageBox::information(m_dialog->parentWidget(), i18np("1 replacement made", "%1 replacements made", m_replaced));
     }
     reset();
 }
@@ -56,7 +54,10 @@ bool KoReplaceStrategy::foundMatch(QTextCursor &cursor, FindDirection *findDirec
         findDirection->select(cursor);
         // TODO: not only Yes and No, but Yes, No, All and Cancel
         int value = KMessageBox::questionTwoActions(m_dialog->parentWidget(),
-                                               i18n("Replace %1 with %2?", m_dialog->pattern(), m_dialog->replacement()), {}, KStandardGuiItem::ok(), KStandardGuiItem::cancel());
+                                                    i18n("Replace %1 with %2?", m_dialog->pattern(), m_dialog->replacement()),
+                                                    {},
+                                                    KStandardGuiItem::ok(),
+                                                    KStandardGuiItem::cancel());
         if (value != KMessageBox::PrimaryAction) {
             replace = false;
         }

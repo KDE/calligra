@@ -7,8 +7,8 @@
 #ifndef MSOOXMLDRAWINGTABLESTYLE_H
 #define MSOOXMLDRAWINGTABLESTYLE_H
 
-#include <MsooXmlTableStyle.h>
 #include <KoTblStyle.h>
+#include <MsooXmlTableStyle.h>
 
 /**
  * The idea behind these classes is the following:
@@ -67,16 +67,16 @@ public:
     DrawingTableStyle();
     ~DrawingTableStyle() override;
 
-    //the style takes ownership of the properties
-    void addProperties(Type type, TableStyleProperties* properties);
-    TableStyleProperties* properties(Type type) const;
+    // the style takes ownership of the properties
+    void addProperties(Type type, TableStyleProperties *properties);
+    TableStyleProperties *properties(Type type) const;
 
-    //Style of the whole table, not cell styles
+    // Style of the whole table, not cell styles
     KoTblStyle::Ptr mainStyle;
 
 private:
-    QMap<Type, TableStyleProperties*> m_properties;
-    //TODO: handle the table background stored in the element TblBg
+    QMap<Type, TableStyleProperties *> m_properties;
+    // TODO: handle the table background stored in the element TblBg
 };
 
 class KOMSOOXML_EXPORT DrawingTableStyleConverterProperties : public TableStyleConverterProperties
@@ -110,16 +110,16 @@ private:
 class KOMSOOXML_EXPORT DrawingTableStyleConverter : public TableStyleConverter
 {
 public:
-    explicit DrawingTableStyleConverter(DrawingTableStyleConverterProperties const& properties, DrawingTableStyle* style =0);
+    explicit DrawingTableStyleConverter(DrawingTableStyleConverterProperties const &properties, DrawingTableStyle *style = 0);
     ~DrawingTableStyleConverter() override;
 
     KoCellStyle::Ptr style(int row, int column, const QPair<int, int> &spans) override;
 
 private:
-    void applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column, const QPair<int, int> &spans);
+    void applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr &style, int row, int column, const QPair<int, int> &spans);
 
-    DrawingTableStyle * const m_style;
-    DrawingTableStyleConverterProperties const& m_properties;
+    DrawingTableStyle *const m_style;
+    DrawingTableStyleConverterProperties const &m_properties;
 };
 
 }

@@ -8,11 +8,11 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 #ifndef __ko_filter_entry_h__
 #define __ko_filter_entry_h__
 
+#include "komain_export.h"
+#include <KPluginMetaData>
 #include <QExplicitlySharedDataPointer>
 #include <QList>
 #include <QStringList>
-#include <KPluginMetaData>
-#include "komain_export.h"
 
 class QObject;
 class KoFilter;
@@ -22,18 +22,17 @@ class KoFilterChain;
  */
 class KOMAIN_TEST_EXPORT KoFilterEntry : public QSharedData
 {
-
 public:
     typedef QExplicitlySharedDataPointer<KoFilterEntry> Ptr;
 
-    //KoFilterEntry() : weight( 0 ) { m_service = 0; } // for QList
+    // KoFilterEntry() : weight( 0 ) { m_service = 0; } // for QList
     /**
      * @param loader pluginloader for the filter, KoFilterEntry takes ownership
      */
     explicit KoFilterEntry(const KPluginMetaData &metaData);
     ~KoFilterEntry();
 
-    KoFilter* createFilter(KoFilterChain* chain, QObject* parent = 0);
+    KoFilter *createFilter(KoFilterChain *chain, QObject *parent = 0);
 
     /**
      *  The imported mimetype(s).
@@ -58,14 +57,16 @@ public:
     /**
      *  @return TRUE if the filter can import the requested mimetype.
      */
-    bool imports(const QString& _mimetype) const {
+    bool imports(const QString &_mimetype) const
+    {
         return (import.contains(_mimetype));
     }
 
     /**
      *  @return TRUE if the filter can export the requested mimetype.
      */
-    bool exports(const QString& _m) const {
+    bool exports(const QString &_m) const
+    {
         return (export_.contains(_m));
     }
 
@@ -75,7 +76,6 @@ public:
      *  This function will query KDED to find all available filters.
      */
     static QList<KoFilterEntry::Ptr> query();
-
 
 private:
     KPluginMetaData const m_metaData;

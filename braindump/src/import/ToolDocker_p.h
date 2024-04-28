@@ -14,16 +14,16 @@
 #include <KoDockWidgetTitleBar.h>
 #include <KoIcon.h>
 
-#include <QPointer>
+#include <QAction>
 #include <QGridLayout>
+#include <QLabel>
+#include <QPointer>
 #include <QScrollArea>
 #include <QScrollBar>
-#include <QLabel>
 #include <QSet>
-#include <QAction>
 #include <QStyleOptionFrame>
-#include <QToolButton>
 #include <QTabWidget>
+#include <QToolButton>
 
 class ToolDocker::Private
 {
@@ -39,7 +39,7 @@ public:
     {
     }
 
-    QList<QPointer<QWidget> > currentWidgetList;
+    QList<QPointer<QWidget>> currentWidgetList;
     QSet<QWidget *> currentAuxWidgets;
     QScrollArea *scrollArea;
     QWidget *hiderWidget; // non current widgets are hidden by being children of this
@@ -47,8 +47,8 @@ public:
     QGridLayout *housekeeperLayout;
     ToolDocker *q;
     Qt::DockWidgetArea dockingArea;
-    bool tabbed :1;
-    bool hasTitle :1;
+    bool tabbed : 1;
+    bool hasTitle : 1;
     QIcon lockIcon;
     QIcon unlockIcon;
     QIcon tabIcon;
@@ -56,8 +56,9 @@ public:
     QToolButton *lockButton;
     QToolButton *tabButton;
 
-    void recreateLayout(const QList<QPointer<QWidget> > &optionWidgetList) {
-        foreach(QPointer<QWidget> widget, currentWidgetList) {
+    void recreateLayout(const QList<QPointer<QWidget>> &optionWidgetList)
+    {
+        foreach (QPointer<QWidget> widget, currentWidgetList) {
             widget->setParent(hiderWidget);
         }
         qDeleteAll(currentAuxWidgets);
@@ -65,12 +66,12 @@ public:
 
         currentWidgetList = optionWidgetList;
 
-        if(tabbed && currentWidgetList.size() > 1) {
+        if (tabbed && currentWidgetList.size() > 1) {
             QTabWidget *t;
             housekeeperLayout->addWidget(t = new QTabWidget(), 0, 0);
             currentAuxWidgets.insert(t);
-            foreach(QWidget * widget, currentWidgetList) {
-                if(widget->objectName().isEmpty()) {
+            foreach (QWidget *widget, currentWidgetList) {
+                if (widget->objectName().isEmpty()) {
                     Q_ASSERT(!(widget->objectName().isEmpty()));
                     continue; // skip this docker in release build when assert don't crash
                 }
@@ -78,22 +79,22 @@ public:
             }
         } else {
             int cnt = 0;
-            switch(dockingArea) {
+            switch (dockingArea) {
             case Qt::TopDockWidgetArea:
             case Qt::BottomDockWidgetArea:
                 housekeeperLayout->setHorizontalSpacing(2);
                 housekeeperLayout->setVerticalSpacing(0);
-                foreach(QWidget * widget, currentWidgetList) {
+                foreach (QWidget *widget, currentWidgetList) {
                     QFrame *s;
                     QLabel *l;
-                    if(widget->objectName().isEmpty()) {
+                    if (widget->objectName().isEmpty()) {
                         continue; // skip this docker in release build when assert don't crash
                     }
                     housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), 0, 2 * cnt);
                     currentAuxWidgets.insert(l);
                     housekeeperLayout->addWidget(widget, 1, 2 * cnt);
                     widget->show();
-                    if(widget != currentWidgetList.last()) {
+                    if (widget != currentWidgetList.last()) {
                         housekeeperLayout->addWidget(s = new QFrame(), 0, 2 * cnt + 1, 2, 1);
                         s->setFrameShape(QFrame::VLine);
                         currentAuxWidgets.insert(s);
@@ -106,10 +107,10 @@ public:
                 housekeeperLayout->setHorizontalSpacing(0);
                 housekeeperLayout->setVerticalSpacing(2);
                 cnt = 0;
-                foreach(QWidget * widget, currentWidgetList) {
+                foreach (QWidget *widget, currentWidgetList) {
                     QFrame *s;
                     QLabel *l;
-                    if(widget->objectName().isEmpty()) {
+                    if (widget->objectName().isEmpty()) {
                         Q_ASSERT(!(widget->objectName().isEmpty()));
                         continue; // skip this docker in release build when assert don't crash
                     }
@@ -117,7 +118,7 @@ public:
                     currentAuxWidgets.insert(l);
                     housekeeperLayout->addWidget(widget, 3 * cnt + 1, 0);
                     widget->show();
-                    if(widget != currentWidgetList.last()) {
+                    if (widget != currentWidgetList.last()) {
                         housekeeperLayout->addWidget(s = new QFrame(), 3 * cnt + 2, 0);
                         s->setFrameShape(QFrame::HLine);
                         currentAuxWidgets.insert(s);
@@ -133,13 +134,15 @@ public:
         housekeeperLayout->invalidate();
     }
 
-    void locationChanged(Qt::DockWidgetArea area) {
+    void locationChanged(Qt::DockWidgetArea area)
+    {
         dockingArea = area;
         recreateLayout(currentWidgetList);
     }
 
-    void toggleLock() {
-        if(!hasTitle) {
+    void toggleLock()
+    {
+        if (!hasTitle) {
             q->setTitleBarWidget(new KoDockWidgetTitleBar(q));
             hasTitle = true;
             lockButton->setIcon(unlockIcon);
@@ -163,8 +166,9 @@ public:
         }
         q->resizeEvent(0);
     }
-    void toggleTab() {
-        if(!tabbed) {
+    void toggleTab()
+    {
+        if (!tabbed) {
             tabbed = true;
             tabButton->setIcon(unTabIcon);
         } else {

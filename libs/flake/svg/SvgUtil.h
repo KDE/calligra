@@ -96,7 +96,7 @@ public:
     static qreal parseUnitXY(SvgGraphicsContext *gc, const QString &unit);
 
     /// parses the number into parameter number
-    static const char * parseNumber(const char *ptr, qreal &number);
+    static const char *parseNumber(const char *ptr, qreal &number);
 };
 
 #endif // SVGUTIL_H

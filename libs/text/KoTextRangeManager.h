@@ -7,17 +7,16 @@
 #ifndef KOTEXTRANGEMANAGER_H
 #define KOTEXTRANGEMANAGER_H
 
-#include "KoBookmarkManager.h"
 #include "KoAnnotationManager.h"
+#include "KoBookmarkManager.h"
 #include "KoTextRange.h"
 #include "kotext_export.h"
 
 // Qt
-#include <QMetaType>
 #include <QHash>
+#include <QMetaType>
 #include <QSet>
 #include <QTextCursor>
-
 
 /**
  * A container to register all the text ranges with.
@@ -66,14 +65,16 @@ public:
      */
     QMultiHash<int, KoTextRange *> textRangesChangingWithin(const QTextDocument *, int first, int last, int matchFirst, int matchLast) const;
 
-    QMultiHash<int, KoTextRange *> textRangesChangingWithin(const QTextDocument *, QList<const QMetaObject*> types, int first, int last, int matchFirst, int matchLast) const;
+    QMultiHash<int, KoTextRange *>
+    textRangesChangingWithin(const QTextDocument *, QList<const QMetaObject *> types, int first, int last, int matchFirst, int matchLast) const;
 
-    template <class T>
-    T *createAndLoadOdf(const QTextCursor &cursor, const KoXmlElement &element, KoShapeLoadingContext &context) {
+    template<class T>
+    T *createAndLoadOdf(const QTextCursor &cursor, const KoXmlElement &element, KoShapeLoadingContext &context)
+    {
         T *object = new T(cursor.document(), cursor.position());
         object->setManager(this);
         if (!object->loadOdf(element, context)) {
-            delete(object);
+            delete (object);
             return nullptr;
         }
         insert(object);
@@ -81,9 +82,8 @@ public:
     }
 
 private:
-    
     class KoTextRangeManagerPrivate;
-    
+
     KoTextRangeManagerPrivate *d;
 
     KoBookmarkManager m_bookmarkManager;

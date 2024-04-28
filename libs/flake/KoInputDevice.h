@@ -10,9 +10,9 @@
 
 #include "flake_export.h"
 
+#include <QDebug>
 #include <QHash>
 #include <QTabletEvent>
-#include <QDebug>
 
 /**
  * This class represents an input device.
@@ -63,21 +63,20 @@ public:
     bool isMouse() const;
 
     /// equal
-    bool operator==(const KoInputDevice&) const;
+    bool operator==(const KoInputDevice &) const;
     /// not equal
-    bool operator!=(const KoInputDevice&) const;
+    bool operator!=(const KoInputDevice &) const;
     /// assignment
-    KoInputDevice & operator=(const KoInputDevice &);
+    KoInputDevice &operator=(const KoInputDevice &);
 
-    static KoInputDevice invalid();   ///< invalid input device
-    static KoInputDevice mouse();     ///< Standard mouse
-    static KoInputDevice stylus();    ///< Wacom style/pen
-    static KoInputDevice eraser();    ///< Wacom eraser
-
+    static KoInputDevice invalid(); ///< invalid input device
+    static KoInputDevice mouse(); ///< Standard mouse
+    static KoInputDevice stylus(); ///< Wacom style/pen
+    static KoInputDevice eraser(); ///< Wacom eraser
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_METATYPE(KoInputDevice)
@@ -87,8 +86,11 @@ FLAKE_EXPORT QDebug operator<<(QDebug debug, const KoInputDevice &device);
 inline size_t qHash(const KoInputDevice &key, size_t seed)
 {
     return qHash(QString(":%1:%2:%3:%4")
-                 .arg(QString::number((int)key.device()), QString::number((int)key.pointer()), QString::number(key.uniqueTabletId()), QString::number(key.isMouse())), seed);
+                     .arg(QString::number((int)key.device()),
+                          QString::number((int)key.pointer()),
+                          QString::number(key.uniqueTabletId()),
+                          QString::number(key.isMouse())),
+                 seed);
 }
 
 #endif
-

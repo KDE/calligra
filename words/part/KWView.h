@@ -8,15 +8,15 @@
 #ifndef KWVIEW_H
 #define KWVIEW_H
 
-#include "words_export.h"
-#include "KWPage.h"
-#include "./dockers/KWStatisticsWidget.h"
 #include "./dockers/KWStatisticsDocker.h"
+#include "./dockers/KWStatisticsWidget.h"
+#include "KWPage.h"
+#include "words_export.h"
 
+#include <KoFindMatch.h>
 #include <KoView.h>
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
-#include <KoFindMatch.h>
 
 #include <QWidget>
 
@@ -65,7 +65,8 @@ public:
      * return the KWDocument that owns this view.
      * @see KoView::document()
      */
-    KWDocument *kwdocument() const {
+    KWDocument *kwdocument() const
+    {
         return m_document;
     }
 
@@ -79,7 +80,8 @@ public:
     virtual QWidget *canvas() const;
 
     /// returns true if this view has the snap-to-grid enabled.
-    bool snapToGrid() const {
+    bool snapToGrid() const
+    {
         return m_snapToGrid;
     }
 
@@ -89,12 +91,13 @@ public:
     KoCanvasBase *canvasBase() const;
 
     /// Return the view converter for this view.
-    KoViewConverter *viewConverter() {
+    KoViewConverter *viewConverter()
+    {
         return &m_zoomHandler;
     }
 
     /// show a popup on the view, adding to it a list of actions
-    void popupContextMenu(const QPoint &globalPosition, const QList<QAction*> &actions);
+    void popupContextMenu(const QPoint &globalPosition, const QList<QAction *> &actions);
 
     const KWPage currentPage() const;
     void setCurrentPage(const KWPage &page);
@@ -102,13 +105,21 @@ public:
     /// go to page
     void goToPage(const KWPage &page);
 
-    KoZoomController *zoomController() const override { return m_zoomController; }
+    KoZoomController *zoomController() const override
+    {
+        return m_zoomController;
+    }
 
-    int minPageNumber() const { return m_minPageNum; }
-    int maxPageNumber() const { return m_maxPageNum; }
+    int minPageNumber() const
+    {
+        return m_minPageNum;
+    }
+    int maxPageNumber() const
+    {
+        return m_maxPageNum;
+    }
 
     void viewMouseMoveEvent(QMouseEvent *e);
-
 
 Q_SIGNALS:
     void shownPagesChanged();
@@ -139,7 +150,7 @@ public Q_SLOTS:
 protected:
     /// reimplemented method from superclass
     void showEvent(QShowEvent *event) override;
-    bool event(QEvent* event) override;
+    bool event(QEvent *event) override;
 
 private:
     void setupActions();
@@ -239,7 +250,7 @@ private:
     int m_minPageNum;
     int m_maxPageNum;
 
-    //Word count stuff for display in status bar
+    // Word count stuff for display in status bar
     void buildAssociatedWidget();
     KWStatisticsWidget *wordCount;
 

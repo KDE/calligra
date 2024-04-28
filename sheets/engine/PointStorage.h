@@ -10,10 +10,9 @@
 #include <QString>
 #include <QVector>
 
-#include "StorageBase.h"
 #include "Region.h"
+#include "StorageBase.h"
 #include "calligra_sheets_limits.h"
-
 
 namespace Calligra
 {
@@ -59,19 +58,23 @@ public:
      * Constructor.
      * Creates an empty storage. Actually, does nothing.
      */
-    PointStorage() {
+    PointStorage()
+    {
         m_storingUndo = false;
     }
 
     /**
      * Destructor.
      */
-    virtual ~PointStorage() {}
+    virtual ~PointStorage()
+    {
+    }
 
     /**
      * Clears the storage.
      */
-    void clear() {
+    void clear()
+    {
         m_cols.clear();
         m_rows.clear();
         m_data.clear();
@@ -85,7 +88,8 @@ public:
      * \see row()
      * \see data()
      */
-    int count() const {
+    int count() const
+    {
         return m_data.count();
     }
 
@@ -93,7 +97,8 @@ public:
      * Inserts \p data at \p col , \p row .
      * \return the overridden data (default data, if no overwrite)
      */
-    T insert(int col, int row, const T& data) {
+    T insert(int col, int row, const T &data)
+    {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         // row's missing?
@@ -125,14 +130,16 @@ public:
             // column exists
             else {
                 const int index = m_rows.value(row - 1) + (cit - cstart);
-                const T oldData = m_data[ index ];
-                m_data[ index ] = data;
-                if (m_storingUndo) m_undoData << qMakePair(QPoint(col, row), oldData);
+                const T oldData = m_data[index];
+                m_data[index] = data;
+                if (m_storingUndo)
+                    m_undoData << qMakePair(QPoint(col, row), oldData);
                 return oldData;
             }
         }
         squeezeRows();
-        if (m_storingUndo) m_undoData << qMakePair(QPoint(col, row), T());
+        if (m_storingUndo)
+            m_undoData << qMakePair(QPoint(col, row), T());
         return T();
     }
 
@@ -141,7 +148,8 @@ public:
      * default object.
      * \return the data at the given coordinate
      */
-    T lookup(int col, int row, const T& defaultVal = T()) const {
+    T lookup(int col, int row, const T &defaultVal = T()) const
+    {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         // is the row not present?
@@ -160,12 +168,14 @@ public:
      * Removes data at \p col , \p row .
      * \return the removed data (default data, if none)
      */
-    T take(int col, int row, const T& defaultVal = T()) {
+    T take(int col, int row, const T &defaultVal = T())
+    {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         // row's missing?
         if (row > m_rows.count()) {
-            if (m_storingUndo) m_undoData << qMakePair(QPoint(col, row), defaultVal);
+            if (m_storingUndo)
+                m_undoData << qMakePair(QPoint(col, row), defaultVal);
             return defaultVal;
         }
         const int rowStart = (row - 1 < m_rows.count()) ? m_rows.value(row - 1) : m_data.count();
@@ -174,12 +184,13 @@ public:
         QVector<int>::const_iterator cit = std::lower_bound(cols.begin(), cols.end(), col);
         // column's missing?
         if (cit == cols.constEnd() || col != *cit) {
-            if (m_storingUndo) m_undoData << qMakePair(QPoint(col, row), defaultVal);
+            if (m_storingUndo)
+                m_undoData << qMakePair(QPoint(col, row), defaultVal);
             return defaultVal;
         }
         const int index = rowStart + (cit - cols.constBegin());
         // save the old data
-        const T oldData = m_data[ index ];
+        const T oldData = m_data[index];
         // remove the actual data
         m_data.remove(index);
         // remove the column index
@@ -188,16 +199,18 @@ public:
         for (int r = row; r < m_rows.count(); ++r)
             --m_rows[r];
         squeezeRows();
-        if (m_storingUndo) m_undoData << qMakePair(QPoint(col, row), oldData);
+        if (m_storingUndo)
+            m_undoData << qMakePair(QPoint(col, row), oldData);
         return oldData;
     }
 
     /**
      * Insert \p number columns at \p position .
      */
-    void insertColumns(int position, int number) override {
+    void insertColumns(int position, int number) override
+    {
         Q_ASSERT(1 <= position && position <= KS_colMax);
-        QVector< QPair<QPoint, T> > oldData;
+        QVector<QPair<QPoint, T>> oldData;
         for (int row = m_rows.count(); row >= 1; --row) {
             const int rowStart = m_rows.value(row - 1);
             const int rowLength = (row < m_rows.count()) ? m_rows.value(row) - rowStart : -1;
@@ -215,15 +228,17 @@ public:
             }
         }
         squeezeRows();
-        if (m_storingUndo) m_undoData << oldData;
+        if (m_storingUndo)
+            m_undoData << oldData;
     }
 
     /**
      * Removes \p number columns at \p position .
      */
-    void removeColumns(int position, int number) override {
+    void removeColumns(int position, int number) override
+    {
         Q_ASSERT(1 <= position && position <= KS_colMax);
-        QVector< QPair<QPoint, T> > oldData;
+        QVector<QPair<QPoint, T>> oldData;
         for (int row = m_rows.count(); row >= 1; --row) {
             const int rowStart = m_rows.value(row - 1);
             const int rowLength = (row < m_rows.count()) ? m_rows.value(row) - rowStart : -1;
@@ -242,18 +257,20 @@ public:
             }
         }
         squeezeRows();
-        if (m_storingUndo) m_undoData << oldData;
+        if (m_storingUndo)
+            m_undoData << oldData;
     }
 
     /**
      * Insert \p number rows at \p position .
      */
-    void insertRows(int position, int number) override {
+    void insertRows(int position, int number) override
+    {
         Q_ASSERT(1 <= position && position <= KS_rowMax);
         // row's missing?
         if (position > m_rows.count())
             return;
-        QVector< QPair<QPoint, T> > oldData;
+        QVector<QPair<QPoint, T>> oldData;
         int dataCount = 0;
         int rowCount = 0;
         // save the old data
@@ -277,18 +294,20 @@ public:
         for (int r = 0; r < number; ++r)
             m_rows.insert(position, index);
         squeezeRows();
-        if (m_storingUndo) m_undoData << oldData;
+        if (m_storingUndo)
+            m_undoData << oldData;
     }
 
     /**
      * Removes \p number rows at \p position .
      */
-    void removeRows(int position, int number) override {
+    void removeRows(int position, int number) override
+    {
         Q_ASSERT(1 <= position && position <= KS_rowMax);
         // row's missing?
         if (position > m_rows.count())
             return;
-        QVector< QPair<QPoint, T> > oldData;
+        QVector<QPair<QPoint, T>> oldData;
         int dataCount = 0;
         int rowCount = 0;
         // save the old data
@@ -313,16 +332,18 @@ public:
         while (rowCount-- > 0)
             m_rows.remove(position - 1);
         squeezeRows();
-        if (m_storingUndo) m_undoData << oldData;
+        if (m_storingUndo)
+            m_undoData << oldData;
     }
 
     /**
      * Shifts the data right of \p rect to the left by the width of \p rect .
      * The data formerly contained in \p rect becomes overridden.
      */
-    void removeShiftLeft(const QRect& rect) override {
+    void removeShiftLeft(const QRect &rect) override
+    {
         Q_ASSERT(1 <= rect.left() && rect.left() <= KS_colMax);
-        QVector< QPair<QPoint, T> > oldData;
+        QVector<QPair<QPoint, T>> oldData;
         for (int row = qMin(rect.bottom(), m_rows.count()); row >= rect.top(); --row) {
             const int rowStart = m_rows.value(row - 1);
             const int rowLength = (row < m_rows.count()) ? m_rows.value(row) - rowStart : -1;
@@ -341,15 +362,17 @@ public:
             }
         }
         squeezeRows();
-        if (m_storingUndo) m_undoData << oldData;
+        if (m_storingUndo)
+            m_undoData << oldData;
     }
 
     /**
      * Shifts the data in and right of \p rect to the right by the width of \p rect .
      */
-    void insertShiftRight(const QRect& rect) override {
+    void insertShiftRight(const QRect &rect) override
+    {
         Q_ASSERT(1 <= rect.left() && rect.left() <= KS_colMax);
-        QVector< QPair<QPoint, T> > oldData;
+        QVector<QPair<QPoint, T>> oldData;
         for (int row = rect.top(); row <= rect.bottom() && row <= m_rows.count(); ++row) {
             const int rowStart = m_rows.value(row - 1);
             const int rowLength = (row < m_rows.count()) ? m_rows.value(row) - rowStart : -1;
@@ -367,7 +390,8 @@ public:
             }
         }
         squeezeRows();
-        if (m_storingUndo) m_undoData << oldData;
+        if (m_storingUndo)
+            m_undoData << oldData;
     }
 
     /**
@@ -375,12 +399,13 @@ public:
      * The data formerly contained in \p rect becomes overridden.
      * \return the removed data
      */
-    void removeShiftUp(const QRect& rect) override {
+    void removeShiftUp(const QRect &rect) override
+    {
         Q_ASSERT(1 <= rect.top() && rect.top() <= KS_rowMax);
         // row's missing?
         if (rect.top() > m_rows.count())
             return;
-        QVector< QPair<QPoint, T> > oldData;
+        QVector<QPair<QPoint, T>> oldData;
         for (int row = rect.top(); row <= m_rows.count() && row <= KS_rowMax - rect.height(); ++row) {
             const int rowStart = m_rows.value(row - 1);
             const int rowLength = (row < m_rows.count()) ? m_rows.value(row) - rowStart : -1;
@@ -466,19 +491,21 @@ public:
             }
         }
         squeezeRows();
-        if (m_storingUndo) m_undoData << oldData;
+        if (m_storingUndo)
+            m_undoData << oldData;
     }
 
     /**
      * Shifts the data in and below \p rect to the bottom by the height of \p rect .
      * \return the data, that became out of range (shifted over the end)
      */
-    void insertShiftDown(const QRect& rect) override {
+    void insertShiftDown(const QRect &rect) override
+    {
         Q_ASSERT(1 <= rect.top() && rect.top() <= KS_rowMax);
         // row's missing?
         if (rect.top() > m_rows.count())
             return;
-        QVector< QPair<QPoint, T> > oldData;
+        QVector<QPair<QPoint, T>> oldData;
         for (int row = m_rows.count(); row >= rect.top(); --row) {
             const int rowStart = m_rows.value(row - 1);
             const int rowLength = (row < m_rows.count()) ? m_rows.value(row) - rowStart : -1;
@@ -514,7 +541,7 @@ public:
                         // column exists
                         else {
                             const int index = m_rows.value(row2 - 1) + (cit2 - cstart2);
-                            m_data[ index ] = data.value(col);
+                            m_data[index] = data.value(col);
                         }
                     }
 
@@ -528,7 +555,8 @@ public:
             }
         }
         squeezeRows();
-        if (m_storingUndo) m_undoData << oldData;
+        if (m_storingUndo)
+            m_undoData << oldData;
     }
 
     /**
@@ -536,11 +564,12 @@ public:
      * Can be used in conjunction with nextInColumn() to loop through a column.
      * \return the first used data in \p col or the default data, if the column is empty.
      */
-    T firstInColumn(int col, int* newRow = 0) const {
+    T firstInColumn(int col, int *newRow = 0) const
+    {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         const int index = m_cols.indexOf(col);
         if (newRow) {
-            if (index == -1)   // not found
+            if (index == -1) // not found
                 *newRow = 0;
             else
                 *newRow = std::upper_bound(m_rows.begin(), m_rows.end(), index) - m_rows.begin();
@@ -553,7 +582,8 @@ public:
      * Can be used in conjunction with nextInRow() to loop through a row.
      * \return the first used data in \p row or the default data, if the row is empty.
      */
-    T firstInRow(int row, int* newCol = 0) const {
+    T firstInRow(int row, int *newCol = 0) const
+    {
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         // row's empty?
         if (row > m_rows.count() || ((row < m_rows.count()) && m_rows.value(row - 1) == m_rows.value(row))) {
@@ -571,11 +601,12 @@ public:
      * Can be used in conjunction with prevInColumn() to loop through a column.
      * \return the last used data in \p col or the default data, if the column is empty.
      */
-    T lastInColumn(int col, int* newRow = 0) const {
+    T lastInColumn(int col, int *newRow = 0) const
+    {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         const int index = m_cols.lastIndexOf(col);
         if (newRow) {
-            if (index == -1)   // not found
+            if (index == -1) // not found
                 *newRow = 0;
             else
                 *newRow = std::upper_bound(m_rows.begin(), m_rows.end(), index) - m_rows.begin();
@@ -588,7 +619,8 @@ public:
      * Can be used in conjunction with prevInRow() to loop through a row.
      * \return the last used data in \p row or the default data, if the row is empty.
      */
-    T lastInRow(int row, int* newCol = 0) const {
+    T lastInRow(int row, int *newCol = 0) const
+    {
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         if (m_rows.isEmpty()) {
             if (newCol)
@@ -617,7 +649,8 @@ public:
      * Can be used in conjunction with firstInColumn() to loop through a column.
      * \return the next used data in \p col or the default data, there is no further data.
      */
-    T nextInColumn(int col, int row, int* newRow = 0) const {
+    T nextInColumn(int col, int row, int *newRow = 0) const
+    {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         // no next row?
@@ -629,7 +662,7 @@ public:
         // search beginning in rows after the specified row
         const int index = m_cols.indexOf(col, m_rows.value(row));
         if (newRow) {
-            if (index == -1)   // not found
+            if (index == -1) // not found
                 *newRow = 0;
             else
                 *newRow = std::upper_bound(m_rows.begin(), m_rows.end(), index) - m_rows.begin();
@@ -642,7 +675,8 @@ public:
      * Can be used in conjunction with firstInRow() to loop through a row.
      * \return the next used data in \p row or the default data, if there is no further data.
      */
-    T nextInRow(int col, int row, int* newCol = 0) const {
+    T nextInRow(int col, int row, int *newCol = 0) const
+    {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         // is the row not present?
@@ -669,7 +703,8 @@ public:
      * Can be used in conjunction with lastInColumn() to loop through a column.
      * \return the previous used data in \p col or the default data, there is no further data.
      */
-    T prevInColumn(int col, int row, int* newRow = 0) const {
+    T prevInColumn(int col, int row, int *newRow = 0) const
+    {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         // first row?
@@ -680,7 +715,7 @@ public:
         }
         const int index = m_cols.lastIndexOf(col, m_rows.value(row - 1) - 1);
         if (newRow) {
-            if (index == -1)   // not found
+            if (index == -1) // not found
                 *newRow = 0;
             else
                 *newRow = std::upper_bound(m_rows.begin(), m_rows.end(), index) - m_rows.begin();
@@ -693,7 +728,8 @@ public:
      * Can be used in conjunction with lastInRow() to loop through a row.
      * \return the previous used data in \p row or the default data, if there is no further data.
      */
-    T prevInRow(int col, int row, int* newCol = 0) const {
+    T prevInRow(int col, int row, int *newCol = 0) const
+    {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         const QVector<int>::const_iterator cstart((row - 1 < m_rows.count()) ? m_cols.begin() + m_rows.value(row - 1) : m_cols.end());
@@ -713,7 +749,8 @@ public:
      * For debugging/testing purposes.
      * \note only works with primitive/printable data
      */
-    QString dump() const {
+    QString dump() const
+    {
         QString str;
         // determine the dimension of the matrix (the missing column number)
         int maxCols = 0;
@@ -735,7 +772,7 @@ public:
                 while (counter-- > 1)
                     str += "  ,";
                 str += QString("%1,").arg(data.value(col), 2);
-//                 str += QString( "%1," ).arg( (data.value( col ) == T()) ? "" : "_", 2 );
+                //                 str += QString( "%1," ).arg( (data.value( col ) == T()) ? "" : "_", 2 );
                 lastCol = cols.value(col);
             }
             // fill the column up to the max
@@ -743,7 +780,7 @@ public:
             while (counter-- > 0)
                 str += "  ,";
             // replace the last comma
-            str[str.length()-1] = ')';
+            str[str.length() - 1] = ')';
             str += '\n';
         }
         return str.isEmpty() ? QString("()") : str.mid(0, str.length() - 1);
@@ -756,7 +793,8 @@ public:
      * \see row()
      * \see data()
      */
-    int col(int index) const {
+    int col(int index) const
+    {
         return m_cols.value(index);
     }
 
@@ -767,7 +805,8 @@ public:
      * \see col()
      * \see data()
      */
-    int row(int index) const {
+    int row(int index) const
+    {
         return std::upper_bound(m_rows.begin(), m_rows.end(), index) - m_rows.begin();
     }
 
@@ -778,7 +817,8 @@ public:
      * \see col()
      * \see row()
      */
-    T data(int index) const {
+    T data(int index) const
+    {
         return m_data.value(index);
     }
 
@@ -786,7 +826,8 @@ public:
      * The maximum occupied column, i.e. the horizontal storage dimension.
      * \return the maximum column
      */
-    int columns() const {
+    int columns() const
+    {
         int columns = 0;
         for (int c = 0; c < m_cols.count(); ++c)
             columns = qMax(m_cols.value(c), columns);
@@ -797,7 +838,8 @@ public:
      * The maximum occupied row, i.e. the vertical storage dimension.
      * \return the maximum row
      */
-    int rows() const {
+    int rows() const
+    {
         return m_rows.count();
     }
 
@@ -808,7 +850,8 @@ public:
      * and all positions are adjusted.
      * \return a subset of the storage stripped down to the values in \p region
      */
-    PointStorage<T> subStorage(const Region& region, bool keepOffset = true) const {
+    PointStorage<T> subStorage(const Region &region, bool keepOffset = true) const
+    {
         // Determine the offset.
         const QPoint offset = keepOffset ? QPoint(0, 0) : region.boundingRect().topLeft() - QPoint(1, 1);
         // this generates an array of values
@@ -835,55 +878,57 @@ public:
     /**
      * Equality operator.
      */
-    bool operator==(const PointStorage<T>& o) const {
+    bool operator==(const PointStorage<T> &o) const
+    {
         return (m_rows == o.m_rows && m_cols == o.m_cols && m_data == o.m_data);
     }
 
-    const QVector< QPair<QPoint, T> > &undoData() const {
+    const QVector<QPair<QPoint, T>> &undoData() const
+    {
         return m_undoData;
     }
 
-    void resetUndo() override {
+    void resetUndo() override
+    {
         m_undoData.clear();
         storeUndo(false);
     }
 
 private:
-    void squeezeRows() {
+    void squeezeRows()
+    {
         int row = m_rows.count() - 1;
         while (m_rows.value(row) == m_data.count() && row >= 0)
             m_rows.remove(row--);
     }
 
 private:
-    QVector<int> m_cols;    // stores the column indices (beginning with one)
-    QVector<int> m_rows;    // stores the row offsets in m_data
-    QVector<T>   m_data;    // stores the actual non-default data
+    QVector<int> m_cols; // stores the column indices (beginning with one)
+    QVector<int> m_rows; // stores the row offsets in m_data
+    QVector<T> m_data; // stores the actual non-default data
 
-    QVector< QPair<QPoint, T> > m_undoData;
+    QVector<QPair<QPoint, T>> m_undoData;
 };
-
 
 class CommentStorage : public PointStorage<QString>
 {
 public:
     CommentStorage()
-            : PointStorage<QString>() {
+        : PointStorage<QString>()
+    {
     }
 
-    CommentStorage(const PointStorage<QString>& o)  //krazy:exclude=explicit
-            : PointStorage<QString>(o) {
+    CommentStorage(const PointStorage<QString> &o) // krazy:exclude=explicit
+        : PointStorage<QString>(o)
+    {
     }
 
-    CommentStorage& operator=(const PointStorage<QString>& o) {
+    CommentStorage &operator=(const PointStorage<QString> &o)
+    {
         PointStorage<QString>::operator=(o);
         return *this;
     }
 };
-
-
-
-
 
 } // namespace Sheets
 } // namespace Calligra

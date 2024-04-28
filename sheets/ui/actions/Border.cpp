@@ -18,9 +18,7 @@
 
 #include <KLocalizedString>
 
-
 using namespace Calligra::Sheets;
-
 
 BorderLeft::BorderLeft(Actions *actions)
     : CellAction(actions, "borderLeft", i18n("Border Left"), koIcon("format-border-set-left"), i18n("Set a left border to the selected area"))
@@ -31,7 +29,8 @@ BorderLeft::~BorderLeft()
 {
 }
 
-QAction *BorderLeft::createAction() {
+QAction *BorderLeft::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Left"));
     return res;
@@ -42,7 +41,7 @@ void BorderLeft::execute(Selection *selection, Sheet *sheet, QWidget *)
     BorderColor *a = dynamic_cast<BorderColor *>(m_actions->cellAction("borderColor"));
     QColor color = a->selectedColor();
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Border"));
     Style s;
@@ -55,7 +54,6 @@ void BorderLeft::execute(Selection *selection, Sheet *sheet, QWidget *)
     command->execute(selection->canvas());
 }
 
-
 BorderRight::BorderRight(Actions *actions)
     : CellAction(actions, "borderRight", i18n("Border Right"), koIcon("format-border-set-right"), i18n("Set a right border to the selected area"))
 {
@@ -65,7 +63,8 @@ BorderRight::~BorderRight()
 {
 }
 
-QAction *BorderRight::createAction() {
+QAction *BorderRight::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Right"));
     return res;
@@ -76,7 +75,7 @@ void BorderRight::execute(Selection *selection, Sheet *sheet, QWidget *)
     BorderColor *a = dynamic_cast<BorderColor *>(m_actions->cellAction("borderColor"));
     QColor color = a->selectedColor();
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Border"));
     Style s;
@@ -98,7 +97,8 @@ BorderTop::~BorderTop()
 {
 }
 
-QAction *BorderTop::createAction() {
+QAction *BorderTop::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Top"));
     return res;
@@ -109,7 +109,7 @@ void BorderTop::execute(Selection *selection, Sheet *sheet, QWidget *)
     BorderColor *a = dynamic_cast<BorderColor *>(m_actions->cellAction("borderColor"));
     QColor color = a->selectedColor();
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Border"));
     Style s;
@@ -118,7 +118,6 @@ void BorderTop::execute(Selection *selection, Sheet *sheet, QWidget *)
     command->add(*selection);
     command->execute(selection->canvas());
 }
-
 
 BorderBottom::BorderBottom(Actions *actions)
     : CellAction(actions, "borderBottom", i18n("Border Bottom"), koIcon("format-border-set-bottom"), i18n("Set a bottom border to the selected area"))
@@ -129,7 +128,8 @@ BorderBottom::~BorderBottom()
 {
 }
 
-QAction *BorderBottom::createAction() {
+QAction *BorderBottom::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Bottom"));
     return res;
@@ -140,7 +140,7 @@ void BorderBottom::execute(Selection *selection, Sheet *sheet, QWidget *)
     BorderColor *a = dynamic_cast<BorderColor *>(m_actions->cellAction("borderColor"));
     QColor color = a->selectedColor();
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Border"));
     Style s;
@@ -159,7 +159,8 @@ BorderAll::~BorderAll()
 {
 }
 
-QAction *BorderAll::createAction() {
+QAction *BorderAll::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("All"));
     return res;
@@ -170,7 +171,7 @@ void BorderAll::execute(Selection *selection, Sheet *sheet, QWidget *)
     BorderColor *a = dynamic_cast<BorderColor *>(m_actions->cellAction("borderColor"));
     QColor color = a->selectedColor();
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Border"));
     Style s;
@@ -185,7 +186,6 @@ void BorderAll::execute(Selection *selection, Sheet *sheet, QWidget *)
     command->execute(selection->canvas());
 }
 
-
 BorderNone::BorderNone(Actions *actions)
     : CellAction(actions, "borderRemove", i18n("No Borders"), koIcon("format-border-set-none"), i18n("Remove all borders in the selected area"))
 {
@@ -195,7 +195,8 @@ BorderNone::~BorderNone()
 {
 }
 
-QAction *BorderNone::createAction() {
+QAction *BorderNone::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("None"));
     return res;
@@ -203,7 +204,7 @@ QAction *BorderNone::createAction() {
 
 void BorderNone::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Border"));
     Style s;
@@ -218,9 +219,12 @@ void BorderNone::execute(Selection *selection, Sheet *sheet, QWidget *)
     command->execute(selection->canvas());
 }
 
-
 BorderOutline::BorderOutline(Actions *actions)
-    : CellAction(actions, "borderOutline", i18n("Border Outline"), koIcon("format-border-set-external"), i18n("Set a border to the outline of the selected area"))
+    : CellAction(actions,
+                 "borderOutline",
+                 i18n("Border Outline"),
+                 koIcon("format-border-set-external"),
+                 i18n("Set a border to the outline of the selected area"))
 {
 }
 
@@ -228,7 +232,8 @@ BorderOutline::~BorderOutline()
 {
 }
 
-QAction *BorderOutline::createAction() {
+QAction *BorderOutline::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Outline"));
     return res;
@@ -239,7 +244,7 @@ void BorderOutline::execute(Selection *selection, Sheet *sheet, QWidget *)
     BorderColor *a = dynamic_cast<BorderColor *>(m_actions->cellAction("borderColor"));
     QColor color = a->selectedColor();
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Border"));
     Style s;
@@ -252,7 +257,6 @@ void BorderOutline::execute(Selection *selection, Sheet *sheet, QWidget *)
     command->execute(selection->canvas());
 }
 
-
 BorderColor::BorderColor(Actions *actions)
     : CellAction(actions, "borderColor", i18n("Border Color"), koIcon("format-stroke-color"), i18n("Select a new border color"))
 {
@@ -262,7 +266,8 @@ BorderColor::~BorderColor()
 {
 }
 
-QAction *BorderColor::createAction() {
+QAction *BorderColor::createAction()
+{
     m_colorAction = new KoColorPopupAction(m_actions->tool());
     m_colorAction->setIcon(m_icon);
     m_colorAction->setToolTip(m_tooltip);
@@ -276,12 +281,13 @@ QColor BorderColor::selectedColor()
     return m_colorAction->currentColor();
 }
 
-void BorderColor::triggeredBorderColor(const KoColor &color) {
+void BorderColor::triggeredBorderColor(const KoColor &color)
+{
     CellToolBase *tool = m_actions->tool();
     Selection *selection = tool->selection();
     Sheet *sheet = selection->activeSheet();
 
-    BorderColorCommand* command = new BorderColorCommand();
+    BorderColorCommand *command = new BorderColorCommand();
     command->setSheet(sheet);
     QColor c = color.toQColor();
     command->setColor(c);
@@ -289,9 +295,8 @@ void BorderColor::triggeredBorderColor(const KoColor &color) {
     command->execute(selection->canvas());
 }
 
-
 BorderColorCommand::BorderColorCommand()
-        : AbstractRegionCommand()
+    : AbstractRegionCommand()
 {
     setText(kundo2_i18n("Change Border Color"));
 }
@@ -300,9 +305,11 @@ bool BorderColorCommand::performCommands()
 {
     QRect cur = firstRange();
     for (int y = cur.top(); y < cur.top() + cur.height(); ++y) {
-        if (y > m_sheet->fullCellStorage()->rows()) break;
+        if (y > m_sheet->fullCellStorage()->rows())
+            break;
         for (int x = cur.left(); x < cur.left() + cur.width(); ++x) {
-            if (y > m_sheet->fullCellStorage()->rows()) break;
+            if (y > m_sheet->fullCellStorage()->rows())
+                break;
 
             Style style = m_sheet->fullCellStorage()->style(x, y);
             Style newStyle;
@@ -351,6 +358,3 @@ bool BorderColorCommand::performCommands()
     }
     return true;
 }
-
-
-

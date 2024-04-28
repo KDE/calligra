@@ -27,7 +27,7 @@ class StateShapePlugin : public QObject
 {
     Q_OBJECT
 public:
-    StateShapePlugin(QObject *parent, const QVariantList&);
+    StateShapePlugin(QObject *parent, const QVariantList &);
 };
 
 #endif

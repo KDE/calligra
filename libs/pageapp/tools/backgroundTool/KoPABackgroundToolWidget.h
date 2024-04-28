@@ -17,7 +17,7 @@ class KoPABackgroundToolWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KoPABackgroundToolWidget( KoPABackgroundTool *tool, QWidget *parent = 0 );
+    explicit KoPABackgroundToolWidget(KoPABackgroundTool *tool, QWidget *parent = 0);
     ~KoPABackgroundToolWidget() override;
 
 public Q_SLOTS:
@@ -30,7 +30,7 @@ private Q_SLOTS:
 
 private:
     Ui::BackgroundToolWidget widget;
-    KoPABackgroundTool * m_tool;
+    KoPABackgroundTool *m_tool;
 };
 
 #endif /* KOPABACKGROUNDTOOLWIDGET_H */

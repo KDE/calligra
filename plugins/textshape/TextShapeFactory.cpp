@@ -8,30 +8,30 @@
 #include "TextShapeFactory.h"
 #include "TextShape.h"
 
+#include <KoDocumentResourceManager.h>
+#include <KoImageCollection.h>
+#include <KoInlineTextObjectManager.h>
 #include <KoProperties.h>
 #include <KoShape.h>
+#include <KoShapeLoadingContext.h>
+#include <KoStyleManager.h>
 #include <KoTextDocument.h>
+#include <KoTextRangeManager.h>
 #include <KoTextShapeData.h>
 #include <KoXmlNS.h>
-#include <KoStyleManager.h>
-#include <KoDocumentResourceManager.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoTextRangeManager.h>
 #include <changetracker/KoChangeTracker.h>
-#include <KoImageCollection.h>
-#include <KoShapeLoadingContext.h>
 
 #include <KoIcon.h>
 
 #include <KLocalizedString>
-#include <kundo2stack.h>
 #include <QTextCursor>
+#include <kundo2stack.h>
 
 TextShapeFactory::TextShapeFactory()
-        : KoShapeFactoryBase(TextShape_SHAPEID, i18n("Text"))
+    : KoShapeFactoryBase(TextShape_SHAPEID, i18n("Text"))
 {
     setToolTip(i18n("A shape that shows text"));
-    QList<QPair<QString, QStringList> > odfElements;
+    QList<QPair<QString, QStringList>> odfElements;
     odfElements.append(QPair<QString, QStringList>(KoXmlNS::draw, QStringList("text-box")));
     odfElements.append(QPair<QString, QStringList>(KoXmlNS::table, QStringList("table")));
     setXmlElements(odfElements);
@@ -74,7 +74,7 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
         KoTextDocument document(text->textShapeData()->document());
 
         if (documentResources->hasResource(KoText::StyleManager)) {
-            KoStyleManager *styleManager = documentResources->resource(KoText::StyleManager).value<KoStyleManager*>();
+            KoStyleManager *styleManager = documentResources->resource(KoText::StyleManager).value<KoStyleManager *>();
             document.setStyleManager(styleManager);
         }
 
@@ -84,17 +84,17 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
         document.setUndoStack(documentResources->undoStack());
 
         if (documentResources->hasResource(KoText::PageProvider)) {
-            KoPageProvider *pp = static_cast<KoPageProvider *>(documentResources->resource(KoText::PageProvider).value<void*>());
+            KoPageProvider *pp = static_cast<KoPageProvider *>(documentResources->resource(KoText::PageProvider).value<void *>());
             text->setPageProvider(pp);
         }
         if (documentResources->hasResource(KoText::ChangeTracker)) {
-            KoChangeTracker *changeTracker = documentResources->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+            KoChangeTracker *changeTracker = documentResources->resource(KoText::ChangeTracker).value<KoChangeTracker *>();
             document.setChangeTracker(changeTracker);
         }
 
         document.setShapeController(documentResources->shapeController());
 
-        //update the resources of the document
+        // update the resources of the document
         text->updateDocumentData();
 
         text->setImageCollection(documentResources->imageCollection());
@@ -106,7 +106,7 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
 KoShape *TextShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
 {
     Q_UNUSED(params)
-    TextShape *shape = static_cast<TextShape*>(createDefaultShape(documentResources));
+    TextShape *shape = static_cast<TextShape *>(createDefaultShape(documentResources));
     shape->textShapeData()->document()->setUndoRedoEnabled(false);
     shape->setSize(QSizeF(300, 200));
     /*
@@ -122,24 +122,23 @@ KoShape *TextShapeFactory::createShape(const KoProperties *params, KoDocumentRes
     return shape;
 }
 
-bool TextShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool TextShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
-    return (e.localName() == "text-box" && e.namespaceURI() == KoXmlNS::draw) ||
-        (e.localName() == "table" && e.namespaceURI() == KoXmlNS::table);
+    return (e.localName() == "text-box" && e.namespaceURI() == KoXmlNS::draw) || (e.localName() == "table" && e.namespaceURI() == KoXmlNS::table);
 }
 
 void TextShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
     QVariant variant;
-    variant.setValue<KoInlineTextObjectManager*>(new KoInlineTextObjectManager(manager));
+    variant.setValue<KoInlineTextObjectManager *>(new KoInlineTextObjectManager(manager));
     manager->setResource(KoText::InlineTextObjectManager, variant);
 
     variant.setValue<KoTextRangeManager *>(new KoTextRangeManager());
     manager->setResource(KoText::TextRangeManager, variant);
 
     if (!manager->hasResource(KoDocumentResourceManager::UndoStack)) {
-//        qWarning() << "No KUndo2Stack found in the document resource manager, creating a new one";
+        //        qWarning() << "No KUndo2Stack found in the document resource manager, creating a new one";
         manager->setUndoStack(new KUndo2Stack(manager));
     }
     if (!manager->hasResource(KoText::StyleManager)) {

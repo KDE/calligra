@@ -12,10 +12,10 @@
 class KPrSweepWipeStrategy : public KPrPageEffectStrategy
 {
 public:
-    KPrSweepWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse );
+    KPrSweepWipeStrategy(int subType, const char *smilType, const char *smilSubType, bool reverse);
     ~KPrSweepWipeStrategy() override;
 
-    void next( const KPrPageEffect::Data &data ) override;
+    void next(const KPrPageEffect::Data &data) override;
 
 protected:
     void drawSweep(QPainter &p, double startAngle, double rotationRange, QRect boundingRect, const KPrPageEffect::Data &data);

@@ -14,19 +14,24 @@
 #include <QLabel>
 #include <QLayout>
 #include <QStyle>
-#include <QStylePainter>
 #include <QStyleOptionFrame>
+#include <QStylePainter>
 
 class Q_DECL_HIDDEN KoDockWidgetTitleBarButton::Private
 {
 public:
-    Private() : styleSize(0, 0), iconSize(0) {}
+    Private()
+        : styleSize(0, 0)
+        , iconSize(0)
+    {
+    }
     QSize styleSize;
     int iconSize;
 };
 
 KoDockWidgetTitleBarButton::KoDockWidgetTitleBarButton(QWidget *parent)
-        : QAbstractButton(parent), d(new Private())
+    : QAbstractButton(parent)
+    , d(new Private())
 {
     setFocusPolicy(Qt::NoFocus);
 }
@@ -47,9 +52,9 @@ QSize KoDockWidgetTitleBarButton::sizeHint() const
 
     int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
     if (iconSize != d->iconSize) {
-        const_cast<KoDockWidgetTitleBarButton*>(this)->d->iconSize = iconSize;
+        const_cast<KoDockWidgetTitleBarButton *>(this)->d->iconSize = iconSize;
         const QPixmap pm = icon().pixmap(iconSize);
-        const_cast<KoDockWidgetTitleBarButton*>(this)->d->styleSize = QSize(pm.width() + margin, pm.height() + margin);
+        const_cast<KoDockWidgetTitleBarButton *>(this)->d->styleSize = QSize(pm.width() + margin, pm.height() + margin);
     }
     return d->styleSize;
 }

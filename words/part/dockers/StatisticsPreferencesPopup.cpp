@@ -23,7 +23,6 @@ StatisticsPreferencesPopup::StatisticsPreferencesPopup(QWidget *parent)
     connect(w->check_flesch, &QCheckBox::stateChanged, this, &StatisticsPreferencesPopup::fleschDisplayChange);
 }
 
-
 QSize StatisticsPreferencesPopup::sizeHint() const
 {
     return layout()->sizeHint();

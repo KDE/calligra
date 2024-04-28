@@ -7,8 +7,8 @@
 #ifndef KWPAGESTYLEPROPERTIESCOMMAND_H
 #define KWPAGESTYLEPROPERTIESCOMMAND_H
 
-#include "../words_export.h"
 #include "../KWPage.h"
+#include "../words_export.h"
 
 #include <KoPageLayout.h>
 #include <KoText.h>

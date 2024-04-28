@@ -5,23 +5,24 @@
  */
 
 #include "MoveStartOffsetStrategy.h"
-#include "ChangeTextOffsetCommand.h"
 #include "ArtisticTextShape.h"
-#include <KoPathShape.h>
+#include "ChangeTextOffsetCommand.h"
 #include <KoPathSegment.h>
+#include <KoPathShape.h>
 #include <KoToolBase.h>
 #include <math.h>
 
 // helper function to calculate the squared distance between two points
 qreal squaredDistance(const QPointF &p1, const QPointF &p2)
 {
-    qreal dx = p1.x()-p2.x();
-    qreal dy = p1.y()-p2.y();
-    return dx*dx + dy*dy;
+    qreal dx = p1.x() - p2.x();
+    qreal dy = p1.y() - p2.y();
+    return dx * dx + dy * dy;
 }
 
 MoveStartOffsetStrategy::MoveStartOffsetStrategy(KoToolBase *tool, ArtisticTextShape *text)
-    : KoInteractionStrategy(tool), m_text(text)
+    : KoInteractionStrategy(tool)
+    , m_text(text)
 {
     m_oldStartOffset = m_text->startOffset();
     m_baselineShape = KoPathShape::createShapeFromPainterPath(m_text->baseline());
@@ -31,7 +32,7 @@ MoveStartOffsetStrategy::MoveStartOffsetStrategy(KoToolBase *tool, ArtisticTextS
         const int subpathPointCount = m_baselineShape->subpathPointCount(i);
         for (int j = 0; j < subpathPointCount; ++j) {
             KoPathSegment s = m_baselineShape->segmentByIndex(KoPathPointIndex(i, j));
-            if(s.isValid()) {
+            if (s.isValid()) {
                 const qreal length = s.length();
                 m_segmentLengths.append(length);
                 m_totalLength += length;
@@ -52,8 +53,8 @@ void MoveStartOffsetStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
 
     // create a roi to check segments at
     QRectF grabRect;
-    grabRect.setHeight(2*grabSensitivity());
-    grabRect.setWidth(2*grabSensitivity());
+    grabRect.setHeight(2 * grabSensitivity());
+    grabRect.setWidth(2 * grabSensitivity());
     grabRect.moveCenter(localMousePoint);
 
     // get all segments intersecting our roi
@@ -64,10 +65,10 @@ void MoveStartOffsetStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
     qreal nearestPointParam = 0.0;
     KoPathPointIndex nearestPathPoint;
     qreal minDistance = HUGE_VAL;
-    foreach(const KoPathSegment &s, segments) {
+    foreach (const KoPathSegment &s, segments) {
         qreal t = s.nearestPoint(localMousePoint);
         qreal distance = squaredDistance(localMousePoint, s.pointAt(t));
-        if ( distance < minDistance) {
+        if (distance < minDistance) {
             nearestPointParam = t;
             nearestSegment = s;
             nearestPathPoint = m_baselineShape->pathPointIndex(s.first());
@@ -86,7 +87,7 @@ void MoveStartOffsetStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
             if (i == nearestPathPoint.first) {
                 nearestSegment = segmentCount + nearestPathPoint.second;
             }
-            segmentCount += m_baselineShape->isClosedSubpath(i) ? subpathPointCount : subpathPointCount-1;
+            segmentCount += m_baselineShape->isClosedSubpath(i) ? subpathPointCount : subpathPointCount - 1;
         }
         qreal length = 0.0;
         for (int i = 0; i < nearestSegment; ++i) {
@@ -106,5 +107,4 @@ KUndo2Command *MoveStartOffsetStrategy::createCommand()
 
 void MoveStartOffsetStrategy::finishInteraction(Qt::KeyboardModifiers /*modifiers*/)
 {
-
 }

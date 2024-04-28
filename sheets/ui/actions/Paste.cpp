@@ -28,10 +28,7 @@
 #include <QClipboard>
 #include <QMimeData>
 
-
 using namespace Calligra::Sheets;
-
-
 
 PasteRegular::PasteRegular(Actions *actions)
     : CellAction(actions, "paste", QString(), QIcon(), i18n("Paste the contents of the clipboard at the cursor"))
@@ -42,26 +39,28 @@ PasteRegular::~PasteRegular()
 {
 }
 
-QAction *PasteRegular::createAction() {
+QAction *PasteRegular::createAction()
+{
     QAction *action = KStandardAction::paste(nullptr, nullptr, m_actions->tool());
     connect(action, &QAction::triggered, this, &PasteRegular::triggered);
     action->setToolTip(m_tooltip);
     return action;
 }
 
-
 void PasteRegular::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
     QClipboard *clipboard = QApplication::clipboard();
-    const QMimeData* mimeData = clipboard->mimeData(QClipboard::Clipboard);
+    const QMimeData *mimeData = clipboard->mimeData(QClipboard::Clipboard);
 
     if (mimeData->hasFormat("application/vnd.oasis.opendocument.spreadsheet")) {
         QByteArray returnedTypeMime = "application/vnd.oasis.opendocument.spreadsheet";
         QByteArray arr = mimeData->data(returnedTypeMime);
-        if (arr.isEmpty()) return;
+        if (arr.isEmpty())
+            return;
         QBuffer buffer(&arr);
         Map *map = sheet->fullMap();
-        if (!Odf::paste(buffer, map)) return;
+        if (!Odf::paste(buffer, map))
+            return;
     }
 
     CellToolBase *tool = m_actions->tool();
@@ -71,16 +70,15 @@ void PasteRegular::execute(Selection *selection, Sheet *sheet, QWidget *)
     }
 
     // If we are pasting regular text, redirect to the insertFromClipboard action, if it exists.
-    if (!mimeData->hasFormat("application/x-calligra-sheets-snippet") &&
-        !mimeData->hasHtml() && mimeData->hasText() &&
-        mimeData->text().split('\n').count() >= 2 )
-    {
+    if (!mimeData->hasFormat("application/x-calligra-sheets-snippet") && !mimeData->hasHtml() && mimeData->hasText()
+        && mimeData->text().split('\n').count() >= 2) {
         CellAction *a = m_actions->cellAction("insertFromClipboard");
-        if (a) a->trigger();
+        if (a)
+            a->trigger();
         return;
     }
 
-    //debugSheetsUI <<"Pasting. Rect=" << selection->lastRange() <<" bytes";
+    // debugSheetsUI <<"Pasting. Rect=" << selection->lastRange() <<" bytes";
     PasteCommand *const command = new PasteCommand();
     command->setSheet(sheet);
     command->add(*selection);
@@ -92,10 +90,12 @@ void PasteRegular::execute(Selection *selection, Sheet *sheet, QWidget *)
     selection->emitModified();
 }
 
-
-
 PasteSpecial::PasteSpecial(Actions *actions)
-    : DialogCellAction(actions, "specialPaste", i18n("Special Paste..."), koIcon("special_paste"), i18n("Paste the contents of the clipboard with special options"))
+    : DialogCellAction(actions,
+                       "specialPaste",
+                       i18n("Special Paste..."),
+                       koIcon("special_paste"),
+                       i18n("Paste the contents of the clipboard with special options"))
 {
 }
 
@@ -151,17 +151,20 @@ void PasteSpecial::paste()
     command->execute(m_selection->canvas());
 }
 
-
-
 PasteWithInsert::PasteWithInsert(Actions *actions)
-    : CellAction(actions, "pasteWithInsertion", i18n("Paste with Insertion"), koIcon("insertcellcopy"), i18n("Inserts a cell from the clipboard into the spreadsheet"))
+    : CellAction(actions,
+                 "pasteWithInsertion",
+                 i18n("Paste with Insertion"),
+                 koIcon("insertcellcopy"),
+                 i18n("Inserts a cell from the clipboard into the spreadsheet"))
     , m_dlg(nullptr)
 {
 }
 
 PasteWithInsert::~PasteWithInsert()
 {
-    if (m_dlg) delete m_dlg;
+    if (m_dlg)
+        delete m_dlg;
 }
 
 void PasteWithInsert::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
@@ -172,18 +175,18 @@ void PasteWithInsert::execute(Selection *selection, Sheet *sheet, QWidget *canva
     PasteCommand *const command = new PasteCommand();
     command->setSheet(sheet);
     command->add(*selection);
-    command->setMimeData(mimeData, clipboard->ownsClipboard());   // this sets the source, if applicable
+    command->setMimeData(mimeData, clipboard->ownsClipboard()); // this sets the source, if applicable
 
     // First the insertion, then the actual pasting
-    int shiftMode = -1;   // 0 = right, 1 = down
+    int shiftMode = -1; // 0 = right, 1 = down
 
     if (command->unknownShiftDirection()) {
         m_dlg = new PasteInsertDialog(canvasWidget);
         int res = m_dlg->exec();
         if (m_dlg->checkedRight())
-            shiftMode = 0;   // right
+            shiftMode = 0; // right
         else
-            shiftMode = 1;   // down
+            shiftMode = 1; // down
         delete m_dlg;
         m_dlg = nullptr;
         if (res != QDialog::Accepted) {
@@ -193,9 +196,9 @@ void PasteWithInsert::execute(Selection *selection, Sheet *sheet, QWidget *canva
     } else {
         // Determine the shift direction, if needed.
         if (command->isColumnSelected())
-            shiftMode = 0;   // right
+            shiftMode = 0; // right
         else
-            shiftMode = 1;   // down
+            shiftMode = 1; // down
     }
 
     // The paste command has now generated the correct areas for us, so let's perform the insertion.
@@ -241,6 +244,3 @@ void PasteWithInsert::execute(Selection *selection, Sheet *sheet, QWidget *canva
     // TODO - this works, but undo is separate for cell shift and actual paste ... maybe group these?
     command->execute(selection->canvas());
 }
-
-
-

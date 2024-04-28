@@ -1,31 +1,30 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2009 Jan Hambrecht <jaham@gmx.net>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ * SPDX-FileCopyrightText: 2009 Jan Hambrecht <jaham@gmx.net>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #include "FilterEffectsPlugin.h"
-#include "BlurEffectFactory.h"
-#include "OffsetEffectFactory.h"
-#include "MergeEffectFactory.h"
-#include "ColorMatrixEffectFactory.h"
-#include "FloodEffectFactory.h"
-#include "CompositeEffectFactory.h"
 #include "BlendEffectFactory.h"
+#include "BlurEffectFactory.h"
+#include "ColorMatrixEffectFactory.h"
 #include "ComponentTransferEffectFactory.h"
-#include "ImageEffectFactory.h"
-#include "MorphologyEffectFactory.h"
+#include "CompositeEffectFactory.h"
 #include "ConvolveMatrixEffectFactory.h"
+#include "FloodEffectFactory.h"
+#include "ImageEffectFactory.h"
+#include "MergeEffectFactory.h"
+#include "MorphologyEffectFactory.h"
+#include "OffsetEffectFactory.h"
 
 #include "KoFilterEffectRegistry.h"
 
 #include <KPluginFactory>
 
-K_PLUGIN_FACTORY_WITH_JSON(FilterEffectsPluginFacory, "calligra_filtereffects.json",
-                           registerPlugin<FilterEffectsPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(FilterEffectsPluginFacory, "calligra_filtereffects.json", registerPlugin<FilterEffectsPlugin>();)
 
-FilterEffectsPlugin::FilterEffectsPlugin(QObject *parent, const QList<QVariant>&)
-        : QObject(parent)
+FilterEffectsPlugin::FilterEffectsPlugin(QObject *parent, const QList<QVariant> &)
+    : QObject(parent)
 {
     KoFilterEffectRegistry::instance()->add(new BlurEffectFactory());
     KoFilterEffectRegistry::instance()->add(new OffsetEffectFactory());

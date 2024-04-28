@@ -8,14 +8,16 @@
 #include "ArtisticTextShape.h"
 #include <KLocalizedString>
 
-DetachTextFromPathCommand::DetachTextFromPathCommand( ArtisticTextShape * textShape, KUndo2Command * parent )
-: KUndo2Command(parent), m_textShape(textShape), m_pathShape(0)
+DetachTextFromPathCommand::DetachTextFromPathCommand(ArtisticTextShape *textShape, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_textShape(textShape)
+    , m_pathShape(0)
 {
-    setText( kundo2_i18n("Detach Path") );
-    
-    Q_ASSERT( m_textShape->layout() != ArtisticTextShape::Straight );
+    setText(kundo2_i18n("Detach Path"));
 
-    if( m_textShape->layout() == ArtisticTextShape::OnPath )
+    Q_ASSERT(m_textShape->layout() != ArtisticTextShape::Straight);
+
+    if (m_textShape->layout() == ArtisticTextShape::OnPath)
         m_path = m_textShape->baseline();
     else
         m_pathShape = m_textShape->baselineShape();
@@ -34,12 +36,12 @@ void DetachTextFromPathCommand::undo()
 {
     m_textShape->update();
 
-    if( m_pathShape )
-        m_textShape->putOnPath( m_pathShape );
+    if (m_pathShape)
+        m_textShape->putOnPath(m_pathShape);
     else
-        m_textShape->putOnPath( m_path );
+        m_textShape->putOnPath(m_path);
 
     m_textShape->update();
-    
+
     KUndo2Command::undo();
 }

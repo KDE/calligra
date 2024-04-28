@@ -2,17 +2,17 @@
  * SPDX-FileCopyrightText: 2005, 2007 Thomas Zander <zander@kde.org>
  * SPDX-FileCopyrightText: 2012 Shreya Pandit <shreya@shreyapandit.com>
  * SPDX-FileCopyrightText: 2012 Inge Wallin <inge@lysator.liu.se>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef KWSTATISTICSWIDGET_H
 #define KWSTATISTICSWIDGET_H
 
-#include <QWidget>
-#include <QToolButton>
-#include <QLabel>
 #include <QHBoxLayout>
+#include <QLabel>
+#include <QToolButton>
+#include <QWidget>
 
 #include "StatisticsPreferencesPopup.h"
 #include <KWCanvas.h>
@@ -26,7 +26,7 @@ class KWDocument;
 class StatisticsPreferencesPopup;
 
 /** KWStatisticswidget shows text statistics about a text document.
- */ 
+ */
 
 class KWStatisticsWidget : public QWidget
 {
@@ -36,20 +36,17 @@ public:
     explicit KWStatisticsWidget(QWidget *parent = 0, bool shortVersion = false);
     ~KWStatisticsWidget() override;
 
-    enum LayoutDirection {
-        LayoutVertical,
-        LayoutHorizontal
-    };
+    enum LayoutDirection { LayoutVertical, LayoutHorizontal };
 
     void setLayoutDirection(LayoutDirection direction);
 
     friend class KWStatisticsDocker;
     friend class StatisticsPreferencesPopup;
 
-    void setCanvas(KWCanvas* canvas);
+    void setCanvas(KWCanvas *canvas);
 
     void unsetCanvas();
-    
+
 public Q_SLOTS:
     void wordsDisplayChanged(int);
     void sentencesDisplayChanged(int);
@@ -67,7 +64,7 @@ private:
     void updateDataUi();
 
 private:
-    //to know if this instance is a short version or a full one
+    // to know if this instance is a short version or a full one
     bool shortVersion;
 
     // Labels, e.g. "Words:"
@@ -79,7 +76,7 @@ private:
     QLabel *m_nospacesLabel;
     QLabel *m_fleschLabel;
     QLabel *m_linesLabel;
-    //QLabel *m_paragraphsLabel;
+    // QLabel *m_paragraphsLabel;
 
     // The values.
     QLabel *m_countWords;

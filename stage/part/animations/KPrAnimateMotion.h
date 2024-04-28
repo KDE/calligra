@@ -22,8 +22,8 @@
 
 #include "KPrAnimationBase.h"
 
-#include <QPainterPath>
 #include "stage_export.h"
+#include <QPainterPath>
 
 class KoPathShape;
 
@@ -33,8 +33,8 @@ public:
     explicit KPrAnimateMotion(KPrShapeAnimation *shapeAnimation);
     ~KPrAnimateMotion() override;
 
-    bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context ) override;
-    bool saveOdf(KoPASavingContext & paContext) const override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    bool saveOdf(KoPASavingContext &paContext) const override;
     void init(KPrAnimationCache *animationCache, int step) override;
     QPainterPath pathOutline() const;
     KoPathShape *path() const;
@@ -54,4 +54,3 @@ private:
 };
 
 #endif // KPRANIMATEMOTION_H
-

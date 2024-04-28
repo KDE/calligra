@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &AUTOCORRECT_LOG();
 
 #define debugAutocorrect qCDebug(AUTOCORRECT_LOG)

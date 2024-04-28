@@ -19,8 +19,8 @@
 
 #include "ColumnLayout.h"
 
-#include <QRectF>
 #include <QDebug>
+#include <QRectF>
 
 #include <KLocalizedString>
 
@@ -30,7 +30,9 @@
 
 #include <algorithm>
 
-ColumnLayout::ColumnLayout() : Layout("columnlayout"), m_isUpdating(false)
+ColumnLayout::ColumnLayout()
+    : Layout("columnlayout")
+    , m_isUpdating(false)
 {
 }
 
@@ -45,69 +47,70 @@ QRectF ColumnLayout::boundingBox() const
     return rect;
 }
 
-void ColumnLayout::shapesAdded(QList<KoShape*> _shapes)
+void ColumnLayout::shapesAdded(QList<KoShape *> _shapes)
 {
-    foreach(KoShape * shape, _shapes) {
+    foreach (KoShape *shape, _shapes) {
         m_shapes.push_back(shape);
     }
 }
 
-void ColumnLayout::shapeAdded(KoShape* _shape)
+void ColumnLayout::shapeAdded(KoShape *_shape)
 {
     m_shapes.push_back(_shape);
 }
 
-void ColumnLayout::shapeRemoved(KoShape* _shape)
+void ColumnLayout::shapeRemoved(KoShape *_shape)
 {
     m_shapes.removeAll(_shape);
 }
 
-bool contains(const QList<KoShape*> list1, const QList<KoShape*> list2)
+bool contains(const QList<KoShape *> list1, const QList<KoShape *> list2)
 {
-    foreach(KoShape * shape, list2) {
-        if(list1.contains(shape)) {
+    foreach (KoShape *shape, list2) {
+        if (list1.contains(shape)) {
             return true;
         }
     }
     return false;
 }
 
-void ColumnLayout::shapeGeometryChanged(KoShape* _shape)
+void ColumnLayout::shapeGeometryChanged(KoShape *_shape)
 {
     Q_UNUSED(_shape)
     Q_ASSERT(m_shapes.contains(_shape));
 }
 
-
-bool shapeIsLessThan(KoShape* s1, KoShape* s2)
+bool shapeIsLessThan(KoShape *s1, KoShape *s2)
 {
     return s1->absolutePosition().y() < s2->absolutePosition().y();
 }
 
 void ColumnLayout::relayout()
 {
-    if(m_isUpdating) return;
+    if (m_isUpdating)
+        return;
     m_isUpdating = true;
     // First sort them
     qDebug() << "<moh>";
-    foreach(KoShape * _shape, m_shapes) {
+    foreach (KoShape *_shape, m_shapes) {
         qDebug() << _shape << _shape->absolutePosition(KoFlake::TopLeftCorner).y() << " " << _shape->position().y();
     }
     qDebug() << "</moh>";
-    std:sort(m_shapes.begin(), m_shapes.end(), shapeIsLessThan);
+std:
+    sort(m_shapes.begin(), m_shapes.end(), shapeIsLessThan);
     // Update position
     qreal y = 0;
     qDebug() << "<Updating>";
-    foreach(KoShape * shape, m_shapes) {
+    foreach (KoShape *shape, m_shapes) {
         bool dependOnOtherShape = false;
-        foreach(KoShape * otherShape, m_shapes) {
-            if(otherShape->hasDependee(shape)) {
+        foreach (KoShape *otherShape, m_shapes) {
+            if (otherShape->hasDependee(shape)) {
                 qDebug() << shape << " depends on " << otherShape;
                 dependOnOtherShape = true;
                 break;
             }
         }
-        if(!dependOnOtherShape) {
+        if (!dependOnOtherShape) {
             shape->update();
             QRectF b;
             Utils::containerBoundRec(shape, b);
@@ -122,7 +125,8 @@ void ColumnLayout::relayout()
     m_isUpdating = false;
 }
 
-ColumnLayoutFactory::ColumnLayoutFactory() : LayoutFactory("columnlayout", i18n("Column"))
+ColumnLayoutFactory::ColumnLayoutFactory()
+    : LayoutFactory("columnlayout", i18n("Column"))
 {
 }
 
@@ -130,7 +134,7 @@ ColumnLayoutFactory::~ColumnLayoutFactory()
 {
 }
 
-Layout* ColumnLayoutFactory::createLayout() const
+Layout *ColumnLayoutFactory::createLayout() const
 {
     return new ColumnLayout;
 }

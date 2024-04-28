@@ -12,7 +12,6 @@
 #include <KoDocument.h>
 #include <KoXmlReaderForward.h>
 
-
 class QIODevice;
 class KoView;
 class KoOdfReadStore;
@@ -20,7 +19,8 @@ class QPainter;
 class QWidget;
 class KoShapeLoadingContext;
 
-namespace KoChart {
+namespace KoChart
+{
 
 #define CHART_MIME_TYPE "application/vnd.oasis.opendocument.chart"
 
@@ -33,26 +33,33 @@ public:
     ~ChartDocument();
 
     /// reimplemented from KoDocument
-    QByteArray nativeFormatMimeType() const override { return CHART_MIME_TYPE; }
+    QByteArray nativeFormatMimeType() const override
+    {
+        return CHART_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
-    QByteArray nativeOasisMimeType() const override { return CHART_MIME_TYPE; }
+    QByteArray nativeOasisMimeType() const override
+    {
+        return CHART_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
-    QStringList extraNativeMimeTypes() const override { return QStringList(); }
-
+    QStringList extraNativeMimeTypes() const override
+    {
+        return QStringList();
+    }
 
     bool loadOdf(KoOdfReadStore &odfStore) override;
     bool loadXML(const KoXmlDocument &doc, KoStore *store) override;
-    
+
     bool saveOdf(SavingContext &context) override;
-    
+
     void paintContent(QPainter &painter, const QRect &rect) override;
-    
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace KoChart
 
 #endif // KCHART_CHARTDOCUMENT_H
-

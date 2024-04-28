@@ -10,10 +10,11 @@ class Q_DECL_HIDDEN KoInputDevice::Private
 {
 public:
     Private(QInputDevice::DeviceType d, QPointingDevice::PointerType p, qint64 id, bool m)
-            : device(d),
-            pointer(p),
-            uniqueTabletId(id),
-            mouse(m) {
+        : device(d)
+        , pointer(p)
+        , uniqueTabletId(id)
+        , mouse(m)
+    {
     }
     QInputDevice::DeviceType device;
     QPointingDevice::PointerType pointer;
@@ -22,20 +23,19 @@ public:
 };
 
 KoInputDevice::KoInputDevice(QInputDevice::DeviceType device, QPointingDevice::PointerType pointer, qint64 uniqueTabletId)
-        : d(new Private(device, pointer, uniqueTabletId, false))
+    : d(new Private(device, pointer, uniqueTabletId, false))
 {
 }
 
 KoInputDevice::KoInputDevice()
-        : d(new Private(QInputDevice::DeviceType::Unknown, QPointingDevice::PointerType::Unknown, -1, true))
+    : d(new Private(QInputDevice::DeviceType::Unknown, QPointingDevice::PointerType::Unknown, -1, true))
 {
 }
 
 KoInputDevice::KoInputDevice(const KoInputDevice &other)
-        : d(new Private(other.d->device, other.d->pointer, other.d->uniqueTabletId, other.d->mouse))
+    : d(new Private(other.d->device, other.d->pointer, other.d->uniqueTabletId, other.d->mouse))
 {
 }
-
 
 KoInputDevice::~KoInputDevice()
 {
@@ -65,11 +65,9 @@ bool KoInputDevice::isMouse() const
     return d->mouse || d->device == QInputDevice::DeviceType::Unknown || d->pointer == QPointingDevice::PointerType::Unknown;
 }
 
-
 bool KoInputDevice::operator==(const KoInputDevice &other) const
 {
-    return d->device == other.d->device && d->pointer == other.d->pointer &&
-           d->uniqueTabletId == other.d->uniqueTabletId && d->mouse == other.d->mouse;
+    return d->device == other.d->device && d->pointer == other.d->pointer && d->uniqueTabletId == other.d->uniqueTabletId && d->mouse == other.d->mouse;
 }
 
 bool KoInputDevice::operator!=(const KoInputDevice &other) const
@@ -77,7 +75,7 @@ bool KoInputDevice::operator!=(const KoInputDevice &other) const
     return !(operator==(other));
 }
 
-KoInputDevice & KoInputDevice::operator=(const KoInputDevice & other)
+KoInputDevice &KoInputDevice::operator=(const KoInputDevice &other)
 {
     d->device = other.d->device;
     d->pointer = other.d->pointer;
@@ -92,8 +90,6 @@ KoInputDevice KoInputDevice::invalid()
     KoInputDevice id(QInputDevice::DeviceType::Unknown, QPointingDevice::PointerType::Unknown);
     return id;
 }
-
-
 
 KoInputDevice KoInputDevice::mouse()
 {
@@ -144,7 +140,7 @@ QDebug operator<<(QDebug dbg, const KoInputDevice &device)
             dbg.nospace() << "allPointerTypes";
             break;
         }
-        switch(device.device()) {
+        switch (device.device()) {
         case QInputDevice::DeviceType::Unknown:
             dbg.space() << "no device";
             break;

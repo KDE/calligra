@@ -7,8 +7,8 @@
  */
 #include "formulas.h"
 
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 
 #include <QBuffer>
 #include <QDataStream>
@@ -46,7 +46,7 @@ FormulaToken::FormulaToken(unsigned t)
     d->id = t;
 }
 
-FormulaToken::FormulaToken(const FormulaToken& token)
+FormulaToken::FormulaToken(const FormulaToken &token)
 {
     d = new Private;
     d->ver = token.d->ver;
@@ -57,7 +57,7 @@ FormulaToken::FormulaToken(const FormulaToken& token)
         d->data[i] = token.d->data[i];
 }
 
-FormulaToken& FormulaToken::operator=(const FormulaToken& token)
+FormulaToken &FormulaToken::operator=(const FormulaToken &token)
 {
     d->ver = token.d->ver;
     d->id = token.id();
@@ -76,7 +76,7 @@ FormulaToken::~FormulaToken()
 FormulaToken FormulaToken::createBool(bool value)
 {
     FormulaToken t(Bool);
-    unsigned char data = value ? 1: 0;
+    unsigned char data = value ? 1 : 0;
     t.setData(1, &data);
     return t;
 }
@@ -91,7 +91,7 @@ FormulaToken FormulaToken::createNum(double value)
     ds.setFloatingPointPrecision(QDataStream::DoublePrecision);
     ds << value;
     Q_ASSERT(b.data().size() == 8);
-    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char *>(b.data().data()));
     return t;
 }
 
@@ -107,11 +107,11 @@ FormulaToken FormulaToken::createStr(const QString &value)
     for (int i = 0; i < value.length(); i++) {
         ds << quint16(value[i].unicode());
     }
-    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char *>(b.data().data()));
     return t;
 }
 
-FormulaToken FormulaToken::createRef(const QPoint& pos, bool rowFixed, bool colFixed)
+FormulaToken FormulaToken::createRef(const QPoint &pos, bool rowFixed, bool colFixed)
 {
     FormulaToken t(Ref);
     QBuffer b;
@@ -123,11 +123,13 @@ FormulaToken FormulaToken::createRef(const QPoint& pos, bool rowFixed, bool colF
     bool rowRel = !rowFixed;
     bool colRel = !colFixed;
 
-    if (rowRel) col |= 0x4000;
-    if (colRel) col |= 0x8000;
+    if (rowRel)
+        col |= 0x4000;
+    if (colRel)
+        col |= 0x8000;
     ds << quint16(row);
     ds << quint16(col);
-    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char *>(b.data().data()));
     return t;
 }
 
@@ -135,11 +137,11 @@ FormulaToken FormulaToken::createRefErr()
 {
     FormulaToken t(RefErr);
     quint32 zero = 0;
-    t.setData(4, reinterpret_cast<unsigned char*>(&zero));
+    t.setData(4, reinterpret_cast<unsigned char *>(&zero));
     return t;
 }
 
-FormulaToken FormulaToken::createArea(const QRect& area, bool topFixed, bool bottomFixed, bool leftFixed, bool rightFixed)
+FormulaToken FormulaToken::createArea(const QRect &area, bool topFixed, bool bottomFixed, bool leftFixed, bool rightFixed)
 {
     FormulaToken t(Area);
     QBuffer b;
@@ -155,15 +157,19 @@ FormulaToken FormulaToken::createArea(const QRect& area, bool topFixed, bool bot
     bool rowRel2 = !bottomFixed;
     bool colRel2 = !rightFixed;
 
-    if (rowRel1) col1 |= 0x4000;
-    if (colRel1) col1 |= 0x8000;
-    if (rowRel2) col2 |= 0x4000;
-    if (colRel2) col2 |= 0x8000;
+    if (rowRel1)
+        col1 |= 0x4000;
+    if (colRel1)
+        col1 |= 0x8000;
+    if (rowRel2)
+        col2 |= 0x4000;
+    if (colRel2)
+        col2 |= 0x8000;
     ds << quint16(row1);
     ds << quint16(row2);
     ds << quint16(col1);
     ds << quint16(col2);
-    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char *>(b.data().data()));
     return t;
 }
 
@@ -171,7 +177,7 @@ FormulaToken FormulaToken::createAreaErr()
 {
     FormulaToken t(AreaErr);
     quint64 zero = 0;
-    t.setData(8, reinterpret_cast<unsigned char*>(&zero));
+    t.setData(8, reinterpret_cast<unsigned char *>(&zero));
     return t;
 }
 
@@ -189,7 +195,7 @@ FormulaToken FormulaToken::createFunc(const QString &func, unsigned argCount)
         ds << quint8(argCount);
     }
     ds << quint16(functionIndex(func));
-    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char *>(b.data().data()));
     return t;
 }
 
@@ -208,67 +214,177 @@ unsigned FormulaToken::id() const
     return d->id;
 }
 
-const char* FormulaToken::idAsString() const
+const char *FormulaToken::idAsString() const
 {
-    const char* s = 0;
+    const char *s = 0;
 
     switch (d->id) {
-    case Matrix:       s = "Matrix"; break;
-    case Table:        s = "Table"; break;
-    case Add:          s = "Add"; break;
-    case Sub:          s = "Sub"; break;
-    case Mul:          s = "Mul"; break;
-    case Div:          s = "Div"; break;
-    case Power:        s = "Power"; break;
-    case Concat:       s = "Concat"; break;
-    case LT:           s = "LT"; break;
-    case LE:           s = "LE"; break;
-    case EQ:           s = "EQ"; break;
-    case GE:           s = "GE"; break;
-    case GT:           s = "GT"; break;
-    case NE:           s = "NE"; break;
-    case Intersect:    s = "Intersect"; break;
-    case Union:        s = "Union"; break;
-    case Range:        s = "Range"; break;
-    case UPlus:        s = "UPlus"; break;
-    case UMinus:       s = "UMinus"; break;
-    case Percent:      s = "Percent"; break;
-    case Paren:        s = "Paren"; break;
-    case String:       s = "String"; break;
-    case MissArg:      s = "MissArg"; break;
-    case ErrorCode:    s = "ErrorCode"; break;
-    case Bool:         s = "Bool"; break;
-    case Integer:      s = "Integer"; break;
-    case Array:        s = "Array"; break;
-    case Function:     s = "Function"; break;
-    case FunctionVar:  s = "FunctionVar"; break;
-    case Name:         s = "Name"; break;
-    case Ref:          s = "Ref"; break;
-    case RefErr:       s = "RefErr"; break;
-    case RefN:         s = "RefN"; break;
-    case Area:         s = "Area"; break;
-    case AreaErr:      s = "AreaErr"; break;
-    case AreaN:        s = "AreaN"; break;
-    case NameX:        s = "NameX"; break;
-    case Ref3d:        s = "Ref3d"; break;
-    case RefErr3d:     s = "RefErr3d"; break;
-    case Float:        s = "Float"; break;
-    case Area3d:       s = "Area3d"; break;
-    case AreaErr3d:    s = "AreaErr3d"; break;
-    case NatFormula:   s = "NatFormula"; break;
-    case Sheet:        s = "Sheet"; break;
-    case EndSheet:     s = "EndSheet"; break;
-    case MemArea:      s = "MemArea"; break;
-    case MemErr:       s = "MemErr"; break;
-    case MemNoMem:     s = "MemNoMem"; break;
-    case MemFunc:      s = "MemFunc"; break;
-    case MemAreaN:     s = "MemAreaN"; break;
-    case MemNoMemN:    s = "MemNoMemN"; break;
-    case Attr: switch (attr()) {
-        case AttrChoose:    s = "AttrChoose"; break;
-        default:            s = "Attr"; break;
-    } break;
-    case 0:            s = ""; break; // NOPE...
+    case Matrix:
+        s = "Matrix";
+        break;
+    case Table:
+        s = "Table";
+        break;
+    case Add:
+        s = "Add";
+        break;
+    case Sub:
+        s = "Sub";
+        break;
+    case Mul:
+        s = "Mul";
+        break;
+    case Div:
+        s = "Div";
+        break;
+    case Power:
+        s = "Power";
+        break;
+    case Concat:
+        s = "Concat";
+        break;
+    case LT:
+        s = "LT";
+        break;
+    case LE:
+        s = "LE";
+        break;
+    case EQ:
+        s = "EQ";
+        break;
+    case GE:
+        s = "GE";
+        break;
+    case GT:
+        s = "GT";
+        break;
+    case NE:
+        s = "NE";
+        break;
+    case Intersect:
+        s = "Intersect";
+        break;
+    case Union:
+        s = "Union";
+        break;
+    case Range:
+        s = "Range";
+        break;
+    case UPlus:
+        s = "UPlus";
+        break;
+    case UMinus:
+        s = "UMinus";
+        break;
+    case Percent:
+        s = "Percent";
+        break;
+    case Paren:
+        s = "Paren";
+        break;
+    case String:
+        s = "String";
+        break;
+    case MissArg:
+        s = "MissArg";
+        break;
+    case ErrorCode:
+        s = "ErrorCode";
+        break;
+    case Bool:
+        s = "Bool";
+        break;
+    case Integer:
+        s = "Integer";
+        break;
+    case Array:
+        s = "Array";
+        break;
+    case Function:
+        s = "Function";
+        break;
+    case FunctionVar:
+        s = "FunctionVar";
+        break;
+    case Name:
+        s = "Name";
+        break;
+    case Ref:
+        s = "Ref";
+        break;
+    case RefErr:
+        s = "RefErr";
+        break;
+    case RefN:
+        s = "RefN";
+        break;
+    case Area:
+        s = "Area";
+        break;
+    case AreaErr:
+        s = "AreaErr";
+        break;
+    case AreaN:
+        s = "AreaN";
+        break;
+    case NameX:
+        s = "NameX";
+        break;
+    case Ref3d:
+        s = "Ref3d";
+        break;
+    case RefErr3d:
+        s = "RefErr3d";
+        break;
+    case Float:
+        s = "Float";
+        break;
+    case Area3d:
+        s = "Area3d";
+        break;
+    case AreaErr3d:
+        s = "AreaErr3d";
+        break;
+    case NatFormula:
+        s = "NatFormula";
+        break;
+    case Sheet:
+        s = "Sheet";
+        break;
+    case EndSheet:
+        s = "EndSheet";
+        break;
+    case MemArea:
+        s = "MemArea";
+        break;
+    case MemErr:
+        s = "MemErr";
+        break;
+    case MemNoMem:
+        s = "MemNoMem";
+        break;
+    case MemFunc:
+        s = "MemFunc";
+        break;
+    case MemAreaN:
+        s = "MemAreaN";
+        break;
+    case MemNoMemN:
+        s = "MemNoMemN";
+        break;
+    case Attr:
+        switch (attr()) {
+        case AttrChoose:
+            s = "AttrChoose";
+            break;
+        default:
+            s = "Attr";
+            break;
+        }
+        break;
+    case 0:
+        s = "";
+        break; // NOPE...
     default:
         s = "Unknown";
         qCDebug(lcSidewinder) << QString("Unhandled formula id %1 as string").arg(d->id);
@@ -277,7 +393,6 @@ const char* FormulaToken::idAsString() const
 
     return s;
 }
-
 
 unsigned FormulaToken::size() const
 {
@@ -304,72 +419,95 @@ unsigned FormulaToken::size() const
     case Percent:
     case Paren:
     case MissArg:
-        s = 0; break;
+        s = 0;
+        break;
 
     case Attr:
         switch (attr()) {
-            case AttrChoose:    s = 3 + 2 * (1+readU16(&(d->data[1]))); break;
-            default:            s = 3; break;
-        } break;
+        case AttrChoose:
+            s = 3 + 2 * (1 + readU16(&(d->data[1])));
+            break;
+        default:
+            s = 3;
+            break;
+        }
+        break;
 
     case ErrorCode:
     case Bool:
-        s = 1; break;
+        s = 1;
+        break;
 
     case Integer:
-        s = 2; break;
+        s = 2;
+        break;
 
     case Array:
-        s = 7; break;
+        s = 7;
+        break;
 
     case Function:
-        s = 2; break;
+        s = 2;
+        break;
 
     case FunctionVar:
-        s = 3; break;
+        s = 3;
+        break;
 
     case Matrix:
     case Table:
-        s = (d->ver == Excel97) ? 4 : 3; break;
+        s = (d->ver == Excel97) ? 4 : 3;
+        break;
 
     case Name:
-        s = (d->ver == Excel97) ? 4 : 14; break;
+        s = (d->ver == Excel97) ? 4 : 14;
+        break;
 
     case Ref:
     case RefErr:
     case RefN:
-        s = (d->ver == Excel97) ? 4 : 3; break;
+        s = (d->ver == Excel97) ? 4 : 3;
+        break;
 
     case Area:
     case AreaErr:
     case AreaN:
-        s = (d->ver == Excel97) ? 8 : 6; break;
+        s = (d->ver == Excel97) ? 8 : 6;
+        break;
 
     case NameX:
-        s = (d->ver == Excel97) ? 6 : 24; break;
+        s = (d->ver == Excel97) ? 6 : 24;
+        break;
 
     case Ref3d:
     case RefErr3d:
-        s = (d->ver == Excel97) ? 6 : 17; break;
+        s = (d->ver == Excel97) ? 6 : 17;
+        break;
 
     case Float:
-        s = 8; break;
+        s = 8;
+        break;
 
     case Area3d:
     case AreaErr3d:
-        s = (d->ver == Excel97) ? 10 : 20; break;
+        s = (d->ver == Excel97) ? 10 : 20;
+        break;
 
     case MemArea:
-        s = 6; break;
+        s = 6;
+        break;
 
     case MemErr:
-        s = 6; break;
+        s = 6;
+        break;
 
     case 0: // NOPE
-        s = 0; break;
+        s = 0;
+        break;
 
     case MemFunc:
-        s = 2; break;
+        s = 2;
+        break;
 
     case NatFormula:
     case Sheet:
@@ -379,7 +517,7 @@ unsigned FormulaToken::size() const
     case MemNoMemN:
     default:
         if (d->data.empty())
-        // WARNING this is unhandled case
+            // WARNING this is unhandled case
             qCDebug(lcSidewinder) << "Unhandled formula token with id" << d->id;
         else
             s = d->data.size();
@@ -389,7 +527,7 @@ unsigned FormulaToken::size() const
     return s;
 }
 
-void FormulaToken::setData(unsigned size, const unsigned char* data)
+void FormulaToken::setData(unsigned size, const unsigned char *data)
 {
     d->data.resize(size);
     for (unsigned i = 0; i < size; ++i)
@@ -405,7 +543,7 @@ Value FormulaToken::value() const
 {
     Value result;
 
-    unsigned char* buf;
+    unsigned char *buf;
     buf = new unsigned char[d->data.size()];
     for (unsigned k = 0; k < d->data.size(); ++k)
         buf[k] = d->data[k];
@@ -429,17 +567,16 @@ Value FormulaToken::value() const
         break;
 
     case String: {
-        EString estr = (version() == Excel97) ?
-                       EString::fromUnicodeString(buf, false, d->data.size()) :
-                       EString::fromByteString(buf, false, d->data.size());
+        EString estr = (version() == Excel97) ? EString::fromUnicodeString(buf, false, d->data.size()) : EString::fromByteString(buf, false, d->data.size());
         result = Value(estr.str());
         break;
     }
 
-    default: break;
+    default:
+        break;
     }
 
-    delete [] buf;
+    delete[] buf;
 
     return result;
 }
@@ -472,393 +609,393 @@ struct FunctionEntry {
 };
 
 static const FunctionEntry FunctionEntries[] = {
-    { "COUNT",           1, true },     // 0
-    { "IF",              0, true },     // 1
-    { "ISNA",            1, false },    // 2
-    { "ISERROR",         1, false },    // 3
-    { "SUM",             0, true },     // 4
-    { "AVERAGE",         0, true },     // 5
-    { "MIN",             0, true },     // 6
-    { "MAX",             0, true },     // 7
-    { "ROW",             0, true },     // 8
-    { "COLUMN",          0, true },     // 9
-    { "NA",              0, false },    // 10
-    { "NPV",             0, true },     // 11
-    { "STDEV",           0, true },     // 12
-    { "DOLLAR",          0, true },     // 13
-    { "FIXED",           0, true },     // 14
-    { "SIN",             1, false },    // 15
-    { "COS",             1, false },    // 16
-    { "TAN",             1, false },    // 17
-    { "ATAN",            1, false },    // 18
-    { "PI",              0, false },    // 19
-    { "SQRT",            1, false },    // 20
-    { "EXP",             1, false },    // 21
-    { "LN",              1, false },    // 22
-    { "LOG10",           1, false },    // 23
-    { "ABS",             1, false },    // 24
-    { "INT",             1, false },    // 25
-    { "SIGN",            1, false },    // 26
-    { "ROUND",           2, false },    // 27
-    { "LOOKUP",          0, true },     // 28
-    { "INDEX",           0, true },     // 29
-    { "REPT",            2, false },    // 30
-    { "MID",             3, false },    // 31
-    { "LEN",             1, false },    // 32
-    { "VALUE",           1, false },    // 33
-    { "TRUE",            0, false },    // 34
-    { "FALSE",           0, false },    // 35
-    { "AND",             0, true },     // 36
-    { "OR",              0, true },     // 37
-    { "NOT",             1, false },    // 38
-    { "MOD",             2, false },    // 39
-    { "DCOUNT",          3, false },    // 40
-    { "DSUM",            3, false },    // 41
-    { "DAVERAGE",        3, false },    // 42
-    { "DMIN",            3, false },    // 43
-    { "DMAX",            3, false },    // 44
-    { "DSTDEV",          3, false },    // 45
-    { "VAR",             0, true },     // 46
-    { "DVAR",            3, false },    // 47
-    { "TEXT",            2, false },    // 48
-    { "LINEST",          0, true },     // 49
-    { "TREND",           0, true },     // 50
-    { "LOGEST",          0, true },     // 51
-    { "GROWTH",          0, true },     // 52
-    { "GOTO",            0, false },    // 53
-    { "HALT",            0, true },     // 54
-    { "RETURN",          0, true },     // 55
-    { "PV",              0, true },     // 56
-    { "FV",              0, true },     // 57
-    { "NPER",            0, true },     // 58
-    { "PMT",             0, true },     // 59
-    { "RATE",            0, true },     // 60
-    { "MIRR",            3, false },    // 61
-    { "IRR",             0, true },     // 62
-    { "RAND",            0, false },    // 63
-    { "MATCH",           0, true },     // 64
-    { "DATE",            3, false },    // 65
-    { "TIME",            3, false },    // 66
-    { "DAY",             1, false },    // 67
-    { "MONTH",           1, false },    // 68
-    { "YEAR",            1, false },    // 69
-    { "WEEKDAY",         0, true },     // 70
-    { "HOUR",            1, false },    // 71
-    { "MINUTE",          1, false },    // 72
-    { "SECOND",          1, false },    // 73
-    { "NOW",             0, false },    // 74
-    { "AREAS",           1, false },    // 75
-    { "ROWS",            1, false },    // 76
-    { "COLUMNS",         1, false },    // 77
-    { "OFFSET",          0, true },     // 78
-    { "ABSREF",          2, false },    // 79
-    { "RELREF",          2, false },    // 80
-    { "ARGUMENT",        0, true },     // 81
-    { "SEARCH",          0, true },     // 82
-    { "TRANSPOSE",       1, false },    // 83
-    { "ERROR",           0, true },     // 84
-    { "STEP",            0, false },    // 85
-    { "TYPE",            1, false },    // 86
-    { "ECHO",            0, true },
-    { "SETNAME",         0, true },     // deprecated...
-    { "CALLER",          0, false },
-    { "DEREF",           1, false },
-    { "WINDOWS",         0, true },
-    { "SERIES",          4, true },
-    { "DOCUMENTS",       0, true },
-    { "ACTIVECELL",      0, false },    // deprecated...
-    { "SELECTION",       0, false },
-    { "RESULT",          0, true },
-    { "ATAN2",           2, false },    // 97
-    { "ASIN",            1, false },    // 98
-    { "ACOS",            1, false },    // 99
-    { "CHOOSE",          0, true },     // 100
-    { "HLOOKUP",         0, true },     // 101
-    { "VLOOKUP",         0, true },     // 102
-    { "LINKS",           0, true },
-    { "INPUT",           0, true },
-    { "ISREF",           1, false },    // 105
-    { "GETFORMULA",      1, false },    // deprecated...
-    { "GETNAME",         0, true },     // deprecated...
-    { "SETVALUE",        2, false },    // deprecated...
-    { "LOG",             0, true },     // 109
-    { "EXEC",            0, true },
-    { "CHAR",            1, false },    // 111
-    { "LOWER",           1, false },    // 112
-    { "UPPER",           1, false },    // 113
-    { "PROPER",          1, false },    // 114
-    { "LEFT",            0, true },     // 115
-    { "RIGHT",           0, true },     // 116
-    { "EXACT",           2, false },    // 117
-    { "TRIM",            1, false },    // 118
-    { "REPLACE",         4, false },    // 119
-    { "SUBSTITUTE",      0, true },     // 120
-    { "CODE",            1, false },    // 121
-    { "NAMES",           0, true },
-    { "DIRECTORY",       0, true },
-    { "FIND",            0, true },     // 124
-    { "CELL",            0, true },     // 125
-    { "ISERR",           1, false },    // 126
-    { "ISTEXT",          1, false },    // 127
-    { "ISNUMBER",        1, false },    // 128
-    { "ISBLANK",         1, false },    // 129
-    { "T",               1, false },    // 130
-    { "N",               1, false },    // 131
-    { "FOPEN",           0, true },     // not portable, insecure, deprecated
-    { "FCLOSE",          1, false },    // not portable, insecure, deprecated
-    { "FSIZE",           1, false },    // not portable, insecure, deprecated
-    { "FREADLN",         1, false },    // not portable, insecure, deprecated
-    { "FREAD",           2, false },    // not portable, insecure, deprecated
-    { "FWRITELN",        2, false },    // not portable, insecure, deprecated
-    { "FWRITE",          2, false },    // not portable, insecure, deprecated
-    { "FPOS",            0, true },     // not portable, insecure, deprecated
-    { "DATEVALUE",       1, false },    // 140
-    { "TIMEVALUE",       1, false },    // 141
-    { "SLN",             3, false },    // 142
-    { "SYD",             4, false },    // 143
-    { "DDB",             0, true },     // 144
-    { "GETDEF",          0, true },
-    { "REFTEXT",         0, true },
-    { "TEXTREF",         0, true },
-    { "INDIRECT",        0, true },     // 148
-    { "REGISTER",        0, true },
-    { "CALL",            0, true },
-    { "ADDBAR",          0, true },     // deprecated
-    { "ADDMENU",         0, true },     // deprecated
-    { "ADDCOMMAND",      0, true },     // deprecated
-    { "ENABLECOMMAND",   0, true },     // deprecated
-    { "CHECKCOMMAND",    0, true },     // deprecated
-    { "RENAMECOMMAND",   0, true },     // deprecated
-    { "SHOWBAR",         0, true },     // deprecated
-    { "DELETEMENU",      0, true },     // deprecated
-    { "DELETECOMMAND",   0, true },     // deprecated
-    { "GETCHARTITEM",    0, true },     // deprecated
-    { "DIALOGBOX",       0, true },     // deprecated
-    { "CLEAN",           1, false },    // 162
-    { "MDETERM",         1, false },    // 163
-    { "MINVERSE",        1, false },    // 164
-    { "MMULT",           2, false },    // 165
-    { "FILES",           0, true },     // not portable, insecure, deprecated
-    { "IPMT",            0, true },     // 167
-    { "PPMT",            0, true },     // 168
-    { "COUNTA",          0, true },     // 169
-    { "CANCELKEY",       1, true },
-    { "FOR",             0, true },
-    { "WHILE",           1, false },
-    { "BREAK",           0, false },
-    { "NEXT",            0, false },
-    { "INITIATE",        2, false },
-    { "REQUEST",         2, false },
-    { "POKE",            3, false },
-    { "EXECUTE",         2, false },
-    { "TERMINATE",       1, false },
-    { "RESTART",         0, true },
-    { "HELP",            0, true },
-    { "GETBAR",          0, true },
-    { "PRODUCT",         0, true },     // 183
-    { "FACT",            1, false },    // 184
-    { "GETCELL",         0, true },
-    { "GETWORKSPACE",    1, false },
-    { "GETWINDOW",       0, true },
-    { "GETDOCUMENT",     0, true },
-    { "DPRODUCT",        3, false },    // 189
-    { "ISNONTEXT",       1, false },    // 190
-    { "GETNOTE",         0, true },
-    { "NOTE",            0, true },
-    { "STDEVP",          0, true },     // 193
-    { "VARP",            0, true },     // 194
-    { "DSTDEVP",         3, false },    // 195
-    { "DVARP",           3, false },    // 196
-    { "TRUNC",           0, true },     // 197
-    { "ISLOGICAL",       1, false },    // 198
-    { "DCOUNTA",         3, false },    // 199
-    { "DELETEBAR",       1, false },
-    { "UNREGISTER",      1, false },
-    { "Unknown202",      0, true },
-    { "Unknown203",      0, true },
-    { "USDOLLAR",        0, true },
-    { "FINDB",           0, true },
-    { "SEARCHB",         0, true },
-    { "REPLACEB",        4, false },
-    { "LEFTB",           0, true },
-    { "RIGHTB",          0, true },
-    { "MIDB",            3, false },
-    { "LENB",            1, false },
-    { "ROUNDUP",         2, false },    // 212
-    { "ROUNDDOWN",       2, false },    // 213
-    { "ASC",             1, false },
-    { "DBCS",            1, false },
-    { "RANK",            0, true },     // 216
-    { "Unknown217",      0, true },
-    { "Unknown218",      0, true },
-    { "ADDRESS",         0, true },     // 219
-    { "DAYS360",         0, true },     // 220
-    { "CURRENTDATE",     0, false },    // 221
-    { "VBD",             0, true },     // 222
-    { "ELSE",            0, false },
-    { "ELSE.IF",         1, false },
-    { "END.IF",          0, false },
-    { "FOR.CELL",        0, true },
-    { "MEDIAN",          0, true },     // 227
-    { "SUMPRODUCT",      0, true },     // 228
-    { "SINH",            1, false },    // 229
-    { "COSH",            1, false },    // 230
-    { "TANH",            1, false },    // 231
-    { "ASINH",           1, false },    // 232
-    { "ACOSH",           1, false },    // 233
-    { "ATANH",           1, false },    // 234
-    { "DGET",            3, false },    // 235
-    { "CREATEOBJECT",    0, true },
-    { "VOLATILE",        0, true },
-    { "LASTERROR",       0, false },
-    { "CUSTOMUNDO",      0, true },
-    { "CUSTOMREPEAT",    0, true },
-    { "FORMULACONVERT",  0, true },
-    { "GETLINKINFO",     0, true },
-    { "TEXTBOX",         0, true },
-    { "INFO",            1, false },    // 244
-    { "GROUP",           0, false },
-    { "GETOBJECT",       0, true },
-    { "DB",              0, true },     // 247
-    { "PAUSE",           0, true },
-    { "Unknown249",      0, true },
-    { "Unknown250",      0, true },
-    { "RESUME",          0, true },
-    { "FREQUENCY",       2, false },    // 252
-    { "ADDTOOLBAR",      0, true },
-    { "DELETETOOLBAR",   0, true },
-    { "USER.DEFINED.FUNCTION", 0, true },
-    { "RESETTOOLBAR",    1, false },
-    { "EVALUATE",        1, false },
-    { "GETTOOLBAR",      0, true },
-    { "GETTOOL",         0, true },
-    { "SPELLINGCHECK",   0, true },
-    { "ERRORTYPE",       1, false },    // 261
-    { "APPTITLE",        0, true },
-    { "WINDOWTITLE",     0, true },
-    { "SAVETOOLBAR",     0, true },
-    { "ENABLETOOL",      3, false },
-    { "PRESSTOOL",       3, false },
-    { "REGISTERID",      0, true },
-    { "GETWORKBOOK",     0, true },
-    { "AVEDEV",          0, true },     // 269
-    { "BETADIST",        0, true },     // 270
-    { "GAMMALN",         1, false },    // 271
-    { "BETAINV",         0, true },     // 272
-    { "BINOMDIST",       4, false },    // 273
-    { "CHIDIST",         2, false },    // 274
-    { "CHIINV",          2, false },    // 275
-    { "COMBIN",          2, false },    // 276
-    { "CONFIDENCE",      3, false },    // 277
-    { "CRITBINOM",       3, false },    // 278
-    { "EVEN",            1, false },    // 279
-    { "EXPONDIST",       3, false },    // 280
-    { "FDIST",           3, false },    // 281
-    { "FINV",            3, false },    // 282
-    { "FISHER",          1, false },    // 283
-    { "FISHERINV",       1, false },    // 284
-    { "FLOOR",           2, false },    // 285
-    { "GAMMADIST",       4, false },    // 286
-    { "GAMMAINV",        3, false },    // 287
-    { "CEILING",         2, false },    // 288
-    { "HYPGEOMDIST",     4, false },    // 289
-    { "LOGNORMDIST",     3, false },    // 290
-    { "LOGINV",          3, false },    // 291
-    { "NEGBINOMDIST",    3, false },    // 292
-    { "NORMDIST",        4, false },    // 293
-    { "NORMSDIST",       1, false },    // 294
-    { "NORMINV",         3, false },    // 295
-    { "NORMSINV",        1, false },    // 296
-    { "STANDARDIZE",     3, false },    // 297
-    { "ODD",             1, false },    // 298
-    { "PERMUT",          2, false },    // 299
-    { "POISSON",         3, false },    // 300
-    { "TDIST",           3, false },    // 301
-    { "WEIBULL",         4, false },    // 302
-    { "SUMXMY2",         2, false },    // 303
-    { "SUMX2MY2",        2, false },    // 304
-    { "SUMX2DY2",        2, false },    // 305
-    { "CHITEST",         2, false },    // 306
-    { "CORREL",          2, false },    // 307
-    { "COVAR",           2, false },    // 308
-    { "FORECAST",        3, false },    // 309
-    { "FTEST",           2, false },    // 310
-    { "INTERCEPT",       2, false },    // 311
-    { "PEARSON",         2, false },    // 312
-    { "RSQ",             2, false },    // 313
-    { "STEYX",           2, false },    // 314
-    { "SLOPE",           2, false },    // 315
-    { "TTEST",           4, false },    // 316
-    { "PROB",            0, true },     // 317
-    { "DEVSQ",           0, true },     // 318
-    { "GEOMEAN",         0, true },     // 319
-    { "HARMEAN",         0, true },     // 320
-    { "SUMSQ",           0, true },     // 321
-    { "KURT",            0, true },     // 322
-    { "SKEW",            0, true },     // 323
-    { "ZTEST",           0, true },     // 324
-    { "LARGE",           2, false },    // 325
-    { "SMALL",           2, false },    // 326
-    { "QUARTILE",        2, false },    // 327
-    { "PERCENTILE",      2, false },    // 328
-    { "PERCENTRANK",     0, true },     // 329
-    { "MODALVALUE",      0, true },     // 330
-    { "TRIMMEAN",        2, false },    // 331
-    { "TINV",            2, false },    // 332
-    { "Unknown333",      0, true },
-    { "MOVIECOMMAND",    0, true },
-    { "GETMOVIE",        0, true },
-    { "CONCATENATE",     0, true },     // 336
-    { "POWER",           2, false },    // 337
-    { "PIVOTADDDATA",    0, true },
-    { "GETPIVOTTABLE",   0, true },
-    { "GETPIVOTFIELD",   0, true },
-    { "GETPIVOTITEM",    0, true },
-    { "RADIANS",         1, false },    // 342
-    { "DEGREES",         1, false },    // 343
-    { "SUBTOTAL",        0, true },     // 344
-    { "SUMIF",           0, true },     // 345
-    { "COUNTIF",         2, true },    // 346
-    { "COUNTBLANK",      1, true },    // 347
-    { "SCENARIOGET",     0, true },
-    { "OPTIONSLISTSGET", 1, false },
-    { "ISPMT",           4, false },
-    { "DATEDIF",         3, false },
-    { "DATESTRING",      1, false },
-    { "NUMBERSTRING",    2, false },
-    { "ROMAN",           0, true },     // 354
-    { "OPENDIALOG",      0, true },
-    { "SAVEDIALOG",      0, true },
-    { "VIEWGET",         0, true },
-    { "GETPIVOTDATA",    2, true },     // 358
-    { "HYPERLINK",       1, true },
-    { "PHONETIC",        1, false },
-    { "AVERAGEA",        0, true },     // 361
-    { "MAXA",            0, true },     // 362
-    { "MINA",            0, true },     // 363
-    { "STDEVPA",         0, true },     // 364
-    { "VARPA",           0, true },     // 365
-    { "STDEVA",          0, true },     // 366
-    { "VARA",            0, true },     // 367
-    { "BAHTTEXT",        1, false },    // 368
-    //TODO; following formulas are not supported in Calligra Tables yet
-    { "THAIDAYOFWEEK",   1, false },    // 369
-    { "THAIDIGIT",       1, false },    // 370
-    { "THAIMONTHOFYEAR", 1, false },    // 371
-    { "THAINUMSOUND",    1, false },    // 372
-    { "THAINUMSTRING",   1, false },    // 373
-    { "THAISTRINGLENGTH", 1, false },   // 374
-    { "ISTHAIDIGIT",     1, false },    // 375
-    { "ROUNDBAHTDOWN",   1, false },    // 376
-    { "ROUNDBAHTUP",     1, false },    // 377
-    { "THAIYEAR",        1, false },    // 378
-    { "RTD",             1, false },    // 379
-    { "ISHYPERLINK",     1, false }     // 380
+    {"COUNT", 1, true}, // 0
+    {"IF", 0, true}, // 1
+    {"ISNA", 1, false}, // 2
+    {"ISERROR", 1, false}, // 3
+    {"SUM", 0, true}, // 4
+    {"AVERAGE", 0, true}, // 5
+    {"MIN", 0, true}, // 6
+    {"MAX", 0, true}, // 7
+    {"ROW", 0, true}, // 8
+    {"COLUMN", 0, true}, // 9
+    {"NA", 0, false}, // 10
+    {"NPV", 0, true}, // 11
+    {"STDEV", 0, true}, // 12
+    {"DOLLAR", 0, true}, // 13
+    {"FIXED", 0, true}, // 14
+    {"SIN", 1, false}, // 15
+    {"COS", 1, false}, // 16
+    {"TAN", 1, false}, // 17
+    {"ATAN", 1, false}, // 18
+    {"PI", 0, false}, // 19
+    {"SQRT", 1, false}, // 20
+    {"EXP", 1, false}, // 21
+    {"LN", 1, false}, // 22
+    {"LOG10", 1, false}, // 23
+    {"ABS", 1, false}, // 24
+    {"INT", 1, false}, // 25
+    {"SIGN", 1, false}, // 26
+    {"ROUND", 2, false}, // 27
+    {"LOOKUP", 0, true}, // 28
+    {"INDEX", 0, true}, // 29
+    {"REPT", 2, false}, // 30
+    {"MID", 3, false}, // 31
+    {"LEN", 1, false}, // 32
+    {"VALUE", 1, false}, // 33
+    {"TRUE", 0, false}, // 34
+    {"FALSE", 0, false}, // 35
+    {"AND", 0, true}, // 36
+    {"OR", 0, true}, // 37
+    {"NOT", 1, false}, // 38
+    {"MOD", 2, false}, // 39
+    {"DCOUNT", 3, false}, // 40
+    {"DSUM", 3, false}, // 41
+    {"DAVERAGE", 3, false}, // 42
+    {"DMIN", 3, false}, // 43
+    {"DMAX", 3, false}, // 44
+    {"DSTDEV", 3, false}, // 45
+    {"VAR", 0, true}, // 46
+    {"DVAR", 3, false}, // 47
+    {"TEXT", 2, false}, // 48
+    {"LINEST", 0, true}, // 49
+    {"TREND", 0, true}, // 50
+    {"LOGEST", 0, true}, // 51
+    {"GROWTH", 0, true}, // 52
+    {"GOTO", 0, false}, // 53
+    {"HALT", 0, true}, // 54
+    {"RETURN", 0, true}, // 55
+    {"PV", 0, true}, // 56
+    {"FV", 0, true}, // 57
+    {"NPER", 0, true}, // 58
+    {"PMT", 0, true}, // 59
+    {"RATE", 0, true}, // 60
+    {"MIRR", 3, false}, // 61
+    {"IRR", 0, true}, // 62
+    {"RAND", 0, false}, // 63
+    {"MATCH", 0, true}, // 64
+    {"DATE", 3, false}, // 65
+    {"TIME", 3, false}, // 66
+    {"DAY", 1, false}, // 67
+    {"MONTH", 1, false}, // 68
+    {"YEAR", 1, false}, // 69
+    {"WEEKDAY", 0, true}, // 70
+    {"HOUR", 1, false}, // 71
+    {"MINUTE", 1, false}, // 72
+    {"SECOND", 1, false}, // 73
+    {"NOW", 0, false}, // 74
+    {"AREAS", 1, false}, // 75
+    {"ROWS", 1, false}, // 76
+    {"COLUMNS", 1, false}, // 77
+    {"OFFSET", 0, true}, // 78
+    {"ABSREF", 2, false}, // 79
+    {"RELREF", 2, false}, // 80
+    {"ARGUMENT", 0, true}, // 81
+    {"SEARCH", 0, true}, // 82
+    {"TRANSPOSE", 1, false}, // 83
+    {"ERROR", 0, true}, // 84
+    {"STEP", 0, false}, // 85
+    {"TYPE", 1, false}, // 86
+    {"ECHO", 0, true},
+    {"SETNAME", 0, true}, // deprecated...
+    {"CALLER", 0, false},
+    {"DEREF", 1, false},
+    {"WINDOWS", 0, true},
+    {"SERIES", 4, true},
+    {"DOCUMENTS", 0, true},
+    {"ACTIVECELL", 0, false}, // deprecated...
+    {"SELECTION", 0, false},
+    {"RESULT", 0, true},
+    {"ATAN2", 2, false}, // 97
+    {"ASIN", 1, false}, // 98
+    {"ACOS", 1, false}, // 99
+    {"CHOOSE", 0, true}, // 100
+    {"HLOOKUP", 0, true}, // 101
+    {"VLOOKUP", 0, true}, // 102
+    {"LINKS", 0, true},
+    {"INPUT", 0, true},
+    {"ISREF", 1, false}, // 105
+    {"GETFORMULA", 1, false}, // deprecated...
+    {"GETNAME", 0, true}, // deprecated...
+    {"SETVALUE", 2, false}, // deprecated...
+    {"LOG", 0, true}, // 109
+    {"EXEC", 0, true},
+    {"CHAR", 1, false}, // 111
+    {"LOWER", 1, false}, // 112
+    {"UPPER", 1, false}, // 113
+    {"PROPER", 1, false}, // 114
+    {"LEFT", 0, true}, // 115
+    {"RIGHT", 0, true}, // 116
+    {"EXACT", 2, false}, // 117
+    {"TRIM", 1, false}, // 118
+    {"REPLACE", 4, false}, // 119
+    {"SUBSTITUTE", 0, true}, // 120
+    {"CODE", 1, false}, // 121
+    {"NAMES", 0, true},
+    {"DIRECTORY", 0, true},
+    {"FIND", 0, true}, // 124
+    {"CELL", 0, true}, // 125
+    {"ISERR", 1, false}, // 126
+    {"ISTEXT", 1, false}, // 127
+    {"ISNUMBER", 1, false}, // 128
+    {"ISBLANK", 1, false}, // 129
+    {"T", 1, false}, // 130
+    {"N", 1, false}, // 131
+    {"FOPEN", 0, true}, // not portable, insecure, deprecated
+    {"FCLOSE", 1, false}, // not portable, insecure, deprecated
+    {"FSIZE", 1, false}, // not portable, insecure, deprecated
+    {"FREADLN", 1, false}, // not portable, insecure, deprecated
+    {"FREAD", 2, false}, // not portable, insecure, deprecated
+    {"FWRITELN", 2, false}, // not portable, insecure, deprecated
+    {"FWRITE", 2, false}, // not portable, insecure, deprecated
+    {"FPOS", 0, true}, // not portable, insecure, deprecated
+    {"DATEVALUE", 1, false}, // 140
+    {"TIMEVALUE", 1, false}, // 141
+    {"SLN", 3, false}, // 142
+    {"SYD", 4, false}, // 143
+    {"DDB", 0, true}, // 144
+    {"GETDEF", 0, true},
+    {"REFTEXT", 0, true},
+    {"TEXTREF", 0, true},
+    {"INDIRECT", 0, true}, // 148
+    {"REGISTER", 0, true},
+    {"CALL", 0, true},
+    {"ADDBAR", 0, true}, // deprecated
+    {"ADDMENU", 0, true}, // deprecated
+    {"ADDCOMMAND", 0, true}, // deprecated
+    {"ENABLECOMMAND", 0, true}, // deprecated
+    {"CHECKCOMMAND", 0, true}, // deprecated
+    {"RENAMECOMMAND", 0, true}, // deprecated
+    {"SHOWBAR", 0, true}, // deprecated
+    {"DELETEMENU", 0, true}, // deprecated
+    {"DELETECOMMAND", 0, true}, // deprecated
+    {"GETCHARTITEM", 0, true}, // deprecated
+    {"DIALOGBOX", 0, true}, // deprecated
+    {"CLEAN", 1, false}, // 162
+    {"MDETERM", 1, false}, // 163
+    {"MINVERSE", 1, false}, // 164
+    {"MMULT", 2, false}, // 165
+    {"FILES", 0, true}, // not portable, insecure, deprecated
+    {"IPMT", 0, true}, // 167
+    {"PPMT", 0, true}, // 168
+    {"COUNTA", 0, true}, // 169
+    {"CANCELKEY", 1, true},
+    {"FOR", 0, true},
+    {"WHILE", 1, false},
+    {"BREAK", 0, false},
+    {"NEXT", 0, false},
+    {"INITIATE", 2, false},
+    {"REQUEST", 2, false},
+    {"POKE", 3, false},
+    {"EXECUTE", 2, false},
+    {"TERMINATE", 1, false},
+    {"RESTART", 0, true},
+    {"HELP", 0, true},
+    {"GETBAR", 0, true},
+    {"PRODUCT", 0, true}, // 183
+    {"FACT", 1, false}, // 184
+    {"GETCELL", 0, true},
+    {"GETWORKSPACE", 1, false},
+    {"GETWINDOW", 0, true},
+    {"GETDOCUMENT", 0, true},
+    {"DPRODUCT", 3, false}, // 189
+    {"ISNONTEXT", 1, false}, // 190
+    {"GETNOTE", 0, true},
+    {"NOTE", 0, true},
+    {"STDEVP", 0, true}, // 193
+    {"VARP", 0, true}, // 194
+    {"DSTDEVP", 3, false}, // 195
+    {"DVARP", 3, false}, // 196
+    {"TRUNC", 0, true}, // 197
+    {"ISLOGICAL", 1, false}, // 198
+    {"DCOUNTA", 3, false}, // 199
+    {"DELETEBAR", 1, false},
+    {"UNREGISTER", 1, false},
+    {"Unknown202", 0, true},
+    {"Unknown203", 0, true},
+    {"USDOLLAR", 0, true},
+    {"FINDB", 0, true},
+    {"SEARCHB", 0, true},
+    {"REPLACEB", 4, false},
+    {"LEFTB", 0, true},
+    {"RIGHTB", 0, true},
+    {"MIDB", 3, false},
+    {"LENB", 1, false},
+    {"ROUNDUP", 2, false}, // 212
+    {"ROUNDDOWN", 2, false}, // 213
+    {"ASC", 1, false},
+    {"DBCS", 1, false},
+    {"RANK", 0, true}, // 216
+    {"Unknown217", 0, true},
+    {"Unknown218", 0, true},
+    {"ADDRESS", 0, true}, // 219
+    {"DAYS360", 0, true}, // 220
+    {"CURRENTDATE", 0, false}, // 221
+    {"VBD", 0, true}, // 222
+    {"ELSE", 0, false},
+    {"ELSE.IF", 1, false},
+    {"END.IF", 0, false},
+    {"FOR.CELL", 0, true},
+    {"MEDIAN", 0, true}, // 227
+    {"SUMPRODUCT", 0, true}, // 228
+    {"SINH", 1, false}, // 229
+    {"COSH", 1, false}, // 230
+    {"TANH", 1, false}, // 231
+    {"ASINH", 1, false}, // 232
+    {"ACOSH", 1, false}, // 233
+    {"ATANH", 1, false}, // 234
+    {"DGET", 3, false}, // 235
+    {"CREATEOBJECT", 0, true},
+    {"VOLATILE", 0, true},
+    {"LASTERROR", 0, false},
+    {"CUSTOMUNDO", 0, true},
+    {"CUSTOMREPEAT", 0, true},
+    {"FORMULACONVERT", 0, true},
+    {"GETLINKINFO", 0, true},
+    {"TEXTBOX", 0, true},
+    {"INFO", 1, false}, // 244
+    {"GROUP", 0, false},
+    {"GETOBJECT", 0, true},
+    {"DB", 0, true}, // 247
+    {"PAUSE", 0, true},
+    {"Unknown249", 0, true},
+    {"Unknown250", 0, true},
+    {"RESUME", 0, true},
+    {"FREQUENCY", 2, false}, // 252
+    {"ADDTOOLBAR", 0, true},
+    {"DELETETOOLBAR", 0, true},
+    {"USER.DEFINED.FUNCTION", 0, true},
+    {"RESETTOOLBAR", 1, false},
+    {"EVALUATE", 1, false},
+    {"GETTOOLBAR", 0, true},
+    {"GETTOOL", 0, true},
+    {"SPELLINGCHECK", 0, true},
+    {"ERRORTYPE", 1, false}, // 261
+    {"APPTITLE", 0, true},
+    {"WINDOWTITLE", 0, true},
+    {"SAVETOOLBAR", 0, true},
+    {"ENABLETOOL", 3, false},
+    {"PRESSTOOL", 3, false},
+    {"REGISTERID", 0, true},
+    {"GETWORKBOOK", 0, true},
+    {"AVEDEV", 0, true}, // 269
+    {"BETADIST", 0, true}, // 270
+    {"GAMMALN", 1, false}, // 271
+    {"BETAINV", 0, true}, // 272
+    {"BINOMDIST", 4, false}, // 273
+    {"CHIDIST", 2, false}, // 274
+    {"CHIINV", 2, false}, // 275
+    {"COMBIN", 2, false}, // 276
+    {"CONFIDENCE", 3, false}, // 277
+    {"CRITBINOM", 3, false}, // 278
+    {"EVEN", 1, false}, // 279
+    {"EXPONDIST", 3, false}, // 280
+    {"FDIST", 3, false}, // 281
+    {"FINV", 3, false}, // 282
+    {"FISHER", 1, false}, // 283
+    {"FISHERINV", 1, false}, // 284
+    {"FLOOR", 2, false}, // 285
+    {"GAMMADIST", 4, false}, // 286
+    {"GAMMAINV", 3, false}, // 287
+    {"CEILING", 2, false}, // 288
+    {"HYPGEOMDIST", 4, false}, // 289
+    {"LOGNORMDIST", 3, false}, // 290
+    {"LOGINV", 3, false}, // 291
+    {"NEGBINOMDIST", 3, false}, // 292
+    {"NORMDIST", 4, false}, // 293
+    {"NORMSDIST", 1, false}, // 294
+    {"NORMINV", 3, false}, // 295
+    {"NORMSINV", 1, false}, // 296
+    {"STANDARDIZE", 3, false}, // 297
+    {"ODD", 1, false}, // 298
+    {"PERMUT", 2, false}, // 299
+    {"POISSON", 3, false}, // 300
+    {"TDIST", 3, false}, // 301
+    {"WEIBULL", 4, false}, // 302
+    {"SUMXMY2", 2, false}, // 303
+    {"SUMX2MY2", 2, false}, // 304
+    {"SUMX2DY2", 2, false}, // 305
+    {"CHITEST", 2, false}, // 306
+    {"CORREL", 2, false}, // 307
+    {"COVAR", 2, false}, // 308
+    {"FORECAST", 3, false}, // 309
+    {"FTEST", 2, false}, // 310
+    {"INTERCEPT", 2, false}, // 311
+    {"PEARSON", 2, false}, // 312
+    {"RSQ", 2, false}, // 313
+    {"STEYX", 2, false}, // 314
+    {"SLOPE", 2, false}, // 315
+    {"TTEST", 4, false}, // 316
+    {"PROB", 0, true}, // 317
+    {"DEVSQ", 0, true}, // 318
+    {"GEOMEAN", 0, true}, // 319
+    {"HARMEAN", 0, true}, // 320
+    {"SUMSQ", 0, true}, // 321
+    {"KURT", 0, true}, // 322
+    {"SKEW", 0, true}, // 323
+    {"ZTEST", 0, true}, // 324
+    {"LARGE", 2, false}, // 325
+    {"SMALL", 2, false}, // 326
+    {"QUARTILE", 2, false}, // 327
+    {"PERCENTILE", 2, false}, // 328
+    {"PERCENTRANK", 0, true}, // 329
+    {"MODALVALUE", 0, true}, // 330
+    {"TRIMMEAN", 2, false}, // 331
+    {"TINV", 2, false}, // 332
+    {"Unknown333", 0, true},
+    {"MOVIECOMMAND", 0, true},
+    {"GETMOVIE", 0, true},
+    {"CONCATENATE", 0, true}, // 336
+    {"POWER", 2, false}, // 337
+    {"PIVOTADDDATA", 0, true},
+    {"GETPIVOTTABLE", 0, true},
+    {"GETPIVOTFIELD", 0, true},
+    {"GETPIVOTITEM", 0, true},
+    {"RADIANS", 1, false}, // 342
+    {"DEGREES", 1, false}, // 343
+    {"SUBTOTAL", 0, true}, // 344
+    {"SUMIF", 0, true}, // 345
+    {"COUNTIF", 2, true}, // 346
+    {"COUNTBLANK", 1, true}, // 347
+    {"SCENARIOGET", 0, true},
+    {"OPTIONSLISTSGET", 1, false},
+    {"ISPMT", 4, false},
+    {"DATEDIF", 3, false},
+    {"DATESTRING", 1, false},
+    {"NUMBERSTRING", 2, false},
+    {"ROMAN", 0, true}, // 354
+    {"OPENDIALOG", 0, true},
+    {"SAVEDIALOG", 0, true},
+    {"VIEWGET", 0, true},
+    {"GETPIVOTDATA", 2, true}, // 358
+    {"HYPERLINK", 1, true},
+    {"PHONETIC", 1, false},
+    {"AVERAGEA", 0, true}, // 361
+    {"MAXA", 0, true}, // 362
+    {"MINA", 0, true}, // 363
+    {"STDEVPA", 0, true}, // 364
+    {"VARPA", 0, true}, // 365
+    {"STDEVA", 0, true}, // 366
+    {"VARA", 0, true}, // 367
+    {"BAHTTEXT", 1, false}, // 368
+    // TODO; following formulas are not supported in Calligra Tables yet
+    {"THAIDAYOFWEEK", 1, false}, // 369
+    {"THAIDIGIT", 1, false}, // 370
+    {"THAIMONTHOFYEAR", 1, false}, // 371
+    {"THAINUMSOUND", 1, false}, // 372
+    {"THAINUMSTRING", 1, false}, // 373
+    {"THAISTRINGLENGTH", 1, false}, // 374
+    {"ISTHAIDIGIT", 1, false}, // 375
+    {"ROUNDBAHTDOWN", 1, false}, // 376
+    {"ROUNDBAHTUP", 1, false}, // 377
+    {"THAIYEAR", 1, false}, // 378
+    {"RTD", 1, false}, // 379
+    {"ISHYPERLINK", 1, false} // 380
 };
 
-static const FunctionEntry* functionEntry(const QString& functionName)
+static const FunctionEntry *functionEntry(const QString &functionName)
 {
-    static QHash<QString, const FunctionEntry*> entries;
+    static QHash<QString, const FunctionEntry *> entries;
     if (entries.isEmpty()) {
         for (int i = 0; i <= 380; i++) {
             entries[QString::fromLatin1(FunctionEntries[i].name)] = &FunctionEntries[i];
@@ -867,10 +1004,11 @@ static const FunctionEntry* functionEntry(const QString& functionName)
     return entries.value(functionName);
 }
 
-const char* FormulaToken::functionName() const
+const char *FormulaToken::functionName() const
 {
-    if (functionIndex() > 367) return 0;
-    return FunctionEntries[ functionIndex()].name;
+    if (functionIndex() > 367)
+        return 0;
+    return FunctionEntries[functionIndex()].name;
 }
 
 unsigned FormulaToken::functionParams() const
@@ -878,8 +1016,9 @@ unsigned FormulaToken::functionParams() const
     unsigned params = 0;
 
     if (d->id == Function) {
-        if (functionIndex() > 367) return 0;
-        params = FunctionEntries[ functionIndex()].params;
+        if (functionIndex() > 367)
+            return 0;
+        params = FunctionEntries[functionIndex()].params;
     }
 
     if (d->id == FunctionVar) {
@@ -892,22 +1031,25 @@ unsigned FormulaToken::functionParams() const
 
 unsigned FormulaToken::functionIndex(const QString &functionName)
 {
-    const FunctionEntry* e = functionEntry(functionName);
-    if (e) return e - FunctionEntries;
+    const FunctionEntry *e = functionEntry(functionName);
+    if (e)
+        return e - FunctionEntries;
     return -1;
 }
 
 unsigned FormulaToken::functionParams(const QString &functionName)
 {
-    const FunctionEntry* e = functionEntry(functionName);
-    if (e) return e->params;
+    const FunctionEntry *e = functionEntry(functionName);
+    if (e)
+        return e->params;
     return 0;
 }
 
 bool FormulaToken::fixedFunctionParams(const QString &functionName)
 {
-    const FunctionEntry* e = functionEntry(functionName);
-    if (e) return !e->varParams;
+    const FunctionEntry *e = functionEntry(functionName);
+    if (e)
+        return !e->varParams;
     return false;
 }
 
@@ -915,7 +1057,7 @@ unsigned FormulaToken::attr() const
 {
     unsigned attr = 0;
     if (d->id == Attr && d->data.size() > 0) {
-        attr = (unsigned) d->data[0];
+        attr = (unsigned)d->data[0];
     }
     return attr;
 }
@@ -932,8 +1074,7 @@ unsigned long FormulaToken::nameIndex() const
             buf[2] = d->data[2];
             buf[3] = d->data[3];
             ni = readU32(buf);
-        }
-        else if (d->ver == Excel95) {
+        } else if (d->ver == Excel95) {
             buf[0] = d->data[8];
             buf[1] = d->data[9];
             ni = readU16(buf);
@@ -954,8 +1095,7 @@ unsigned long FormulaToken::nameXIndex() const
             buf[2] = d->data[4];
             buf[3] = d->data[5];
             ni = readU32(buf);
-        }
-        else if (d->ver == Excel95) {
+        } else if (d->ver == Excel95) {
             buf[0] = d->data[10];
             buf[1] = d->data[11];
             ni = readU16(buf);
@@ -964,7 +1104,7 @@ unsigned long FormulaToken::nameXIndex() const
     return ni;
 }
 
-static QString escapeSheetName(const QString& sheetName)
+static QString escapeSheetName(const QString &sheetName)
 {
     bool hasSpecial = false;
     for (int i = 0; i < sheetName.length(); i++) {
@@ -974,10 +1114,11 @@ static QString escapeSheetName(const QString& sheetName)
         }
     }
 
-    if (!hasSpecial) return sheetName;
+    if (!hasSpecial)
+        return sheetName;
 
     QString res = sheetName;
-    while(res.startsWith(QLatin1Char('\'')) && res.endsWith(QLatin1Char('\''))) {
+    while (res.startsWith(QLatin1Char('\'')) && res.endsWith(QLatin1Char('\''))) {
         res.remove(0, 1).chop(1);
     }
     return "$'" + res.replace('\'', QLatin1String("\'\'")) + "'";
@@ -1017,10 +1158,14 @@ QString FormulaToken::area(unsigned row, unsigned col, bool relative) const
         col2Ref &= 0x3fff;
 
         if (relative) {
-            if (row1Ref & 0x8000) row1Ref -= 0x10000;
-            if (row2Ref & 0x8000) row2Ref -= 0x10000;
-            if (col1Ref & 0x80) col1Ref -= 0x100;
-            if (col2Ref & 0x80) col2Ref -= 0x100;
+            if (row1Ref & 0x8000)
+                row1Ref -= 0x10000;
+            if (row2Ref & 0x8000)
+                row2Ref -= 0x10000;
+            if (col1Ref & 0x80)
+                col1Ref -= 0x100;
+            if (col2Ref & 0x80)
+                col2Ref -= 0x100;
         }
     } else {
         buf[0] = d->data[0];
@@ -1048,10 +1193,14 @@ QString FormulaToken::area(unsigned row, unsigned col, bool relative) const
         row2Ref &= 0x3fff;
 
         if (relative) {
-            if (row1Ref & 0x2000) row1Ref -= 0x4000;
-            if (row2Ref & 0x2000) row2Ref -= 0x4000;
-            if (col1Ref & 0x80) col1Ref -= 0x100;
-            if (col2Ref & 0x80) col2Ref -= 0x100;
+            if (row1Ref & 0x2000)
+                row1Ref -= 0x4000;
+            if (row2Ref & 0x2000)
+                row2Ref -= 0x4000;
+            if (col1Ref & 0x80)
+                col1Ref -= 0x100;
+            if (col2Ref & 0x80)
+                col2Ref -= 0x100;
         }
     }
 
@@ -1063,7 +1212,7 @@ QString FormulaToken::area(unsigned row, unsigned col, bool relative) const
     }
 
     QString result;
-    result.append(QString("["));    // OpenDocument format
+    result.append(QString("[")); // OpenDocument format
 
     if (!col1Relative)
         result.append(QString("$"));
@@ -1079,12 +1228,12 @@ QString FormulaToken::area(unsigned row, unsigned col, bool relative) const
         result.append(QString("$"));
     result.append(QString::number(row2Ref + 1));
 
-    result.append(QString("]"));  // OpenDocument format
+    result.append(QString("]")); // OpenDocument format
 
     return result;
 }
 
-QString FormulaToken::area3d(const std::vector<QString>& externSheets, unsigned /*row*/, unsigned /*col*/) const
+QString FormulaToken::area3d(const std::vector<QString> &externSheets, unsigned /*row*/, unsigned /*col*/) const
 {
     if (version() != Excel97) {
         return QString("Unknown");
@@ -1123,7 +1272,7 @@ QString FormulaToken::area3d(const std::vector<QString>& externSheets, unsigned 
     col2Ref &= 0x3fff;
 
     QString result;
-    result.append(QString("["));    // OpenDocument format
+    result.append(QString("[")); // OpenDocument format
 
     if (sheetRef >= externSheets.size())
         result.append(QString("Error"));
@@ -1145,7 +1294,7 @@ QString FormulaToken::area3d(const std::vector<QString>& externSheets, unsigned 
         result.append(QString("$"));
     result.append(QString::number(row2Ref + 1));
 
-    result.append(QString("]"));  // OpenDocument format
+    result.append(QString("]")); // OpenDocument format
 
     return result;
 }
@@ -1191,11 +1340,11 @@ QString FormulaToken::areaMap(unsigned row, unsigned col)
     buf[0] = d->data[0];
     unsigned ptg = readU8(buf);
     const int type = (ptg & 0x20 ? 1 : 0) + (ptg & 0x60 ? 2 : 0);
-    //Q_ASSERT(type == 1 || type == 2 || type == 3);
+    // Q_ASSERT(type == 1 || type == 2 || type == 3);
     buf[0] = d->data[5];
     buf[1] = d->data[6];
     unsigned cce = readU16(buf);
-    //printf( "SIZE=%i\n", cce );
+    // printf( "SIZE=%i\n", cce );
     if (cce < 7) {
         qCDebug(lcSidewinder) << QString("Error: Invalid size %1 for formula areaMap of type %2").arg(cce).arg(type);
         return QString();
@@ -1203,7 +1352,7 @@ QString FormulaToken::areaMap(unsigned row, unsigned col)
 
     // remove the first seven elements cause they are done
     d->data.erase(d->data.begin(), d->data.begin() + 7);
-    //unsigned size, const unsigned char* data
+    // unsigned size, const unsigned char* data
 
     QString result;
     switch (type) {
@@ -1218,7 +1367,7 @@ QString FormulaToken::areaMap(unsigned row, unsigned col)
         break;
     }
 
-    //d->data.erase(d->data.begin(), d->data.begin() + cce);
+    // d->data.erase(d->data.begin(), d->data.begin() + cce);
     return result;
 }
 
@@ -1258,7 +1407,7 @@ QString FormulaToken::ref(unsigned /*row*/, unsigned /*col*/) const
 
     QString result;
 
-    result.append(QString("["));    // OpenDocument format
+    result.append(QString("[")); // OpenDocument format
 
     if (!colRelative)
         result.append(QString("$"));
@@ -1267,7 +1416,7 @@ QString FormulaToken::ref(unsigned /*row*/, unsigned /*col*/) const
         result.append(QString("$"));
     result.append(QString::number(rowRef + 1));
 
-    result.append(QString("]"));  // OpenDocument format
+    result.append(QString("]")); // OpenDocument format
 
     return result;
 }
@@ -1311,11 +1460,13 @@ QString FormulaToken::refn(unsigned row, unsigned col) const
         }
     }
 
-    if (colRelative) colRef += col;
-    if (rowRelative) rowRef += row;
+    if (colRelative)
+        colRef += col;
+    if (rowRelative)
+        rowRef += row;
     QString result;
 
-    result.append(QString("["));    // OpenDocument format
+    result.append(QString("[")); // OpenDocument format
 
     if (!colRelative)
         result.append(QString("$"));
@@ -1324,12 +1475,12 @@ QString FormulaToken::refn(unsigned row, unsigned col) const
         result.append(QString("$"));
     result.append(QString::number(rowRef + 1));
 
-    result.append(QString("]"));  // OpenDocument format
+    result.append(QString("]")); // OpenDocument format
 
     return result;
 }
 
-QString FormulaToken::ref3d(const std::vector<QString>& externSheets, unsigned /*row*/, unsigned /*col*/) const
+QString FormulaToken::ref3d(const std::vector<QString> &externSheets, unsigned /*row*/, unsigned /*col*/) const
 {
     if (version() != Excel97) {
         return QString("Unknown");
@@ -1357,7 +1508,7 @@ QString FormulaToken::ref3d(const std::vector<QString>& externSheets, unsigned /
 
     QString result;
 
-    result.append(QString("["));    // OpenDocument format
+    result.append(QString("[")); // OpenDocument format
 
     if (sheetRef >= externSheets.size())
         result.append(QString("Error"));
@@ -1372,8 +1523,7 @@ QString FormulaToken::ref3d(const std::vector<QString>& externSheets, unsigned /
         result.append(QString("$"));
     result.append(QString::number(rowRef + 1));
 
-    result.append(QString("]"));  // OpenDocument format
-
+    result.append(QString("]")); // OpenDocument format
 
     return result;
 }
@@ -1383,9 +1533,9 @@ QString FormulaToken::array(unsigned row, unsigned col) const
     Q_UNUSED(row);
     Q_UNUSED(col);
 
-    #ifdef __GNUC__
-        #warning TODO Implement FormulaToken::array()
-    #endif
+#ifdef __GNUC__
+#warning TODO Implement FormulaToken::array()
+#endif
 
     qCDebug(lcSidewinder) << QString("Unhandled formula array-token with row=%1 and column=%2").arg(row).arg(col);
 
@@ -1431,7 +1581,7 @@ std::pair<unsigned, unsigned> FormulaToken::baseFormulaRecord() const
     }
 }
 
-std::ostream& operator<<(std::ostream& s,  Swinder::FormulaToken token)
+std::ostream &operator<<(std::ostream &s, Swinder::FormulaToken token)
 {
     s << std::setw(2) << std::hex << token.id() << std::dec;
     // s  << "  Size: " << std::dec << token.size();
@@ -1445,8 +1595,7 @@ std::ostream& operator<<(std::ostream& s,  Swinder::FormulaToken token)
     case FormulaToken::String: {
         Value v = token.value();
         s << v;
-    }
-    break;
+    } break;
 
     case FormulaToken::Function:
         s << "Function " << token.functionName();
@@ -1460,7 +1609,7 @@ std::ostream& operator<<(std::ostream& s,  Swinder::FormulaToken token)
     return s;
 }
 
-FormulaTokens FormulaDecoder::decodeFormula(unsigned size, unsigned pos, const unsigned char* data, unsigned version)
+FormulaTokens FormulaDecoder::decodeFormula(unsigned size, unsigned pos, const unsigned char *data, unsigned version)
 {
     FormulaTokens tokens;
     const unsigned formula_len = readU16(data + pos);
@@ -1476,9 +1625,8 @@ FormulaTokens FormulaDecoder::decodeFormula(unsigned size, unsigned pos, const u
 
         if (t.id() == FormulaToken::String) {
             // find bytes taken to represent the string
-            EString estr = (version == Excel97) ?
-                           EString::fromUnicodeString(data + j, false, formula_len) :
-                           EString::fromByteString(data + j, false, formula_len);
+            EString estr =
+                (version == Excel97) ? EString::fromUnicodeString(data + j, false, formula_len) : EString::fromByteString(data + j, false, formula_len);
             t.setData(estr.size(), data + j);
             j += estr.size();
         } else {
@@ -1495,17 +1643,19 @@ FormulaTokens FormulaDecoder::decodeFormula(unsigned size, unsigned pos, const u
 
 typedef std::vector<QString> UStringStack;
 
-static void mergeTokens(UStringStack* stack, unsigned count, const QString &mergeString)
+static void mergeTokens(UStringStack *stack, unsigned count, const QString &mergeString)
 {
-    if (!stack) return;
-    if (stack->size() < count) return;
+    if (!stack)
+        return;
+    if (stack->size() < count)
+        return;
 
     QString s1;
 
     while (count) {
         count--;
 
-        QString last = (*stack)[stack->size()-1];
+        QString last = (*stack)[stack->size() - 1];
         QString tmp = last;
         tmp.append(s1);
         s1 = tmp;
@@ -1526,9 +1676,9 @@ static void mergeTokens(UStringStack* stack, unsigned count, const QString &merg
 static void dumpStack(std::vector<QString> stack)
 {
     std::cout << std::endl;
-    std::cout << "Stack now is: " ;
+    std::cout << "Stack now is: ";
     if (stack.empty())
-        std::cout << "(empty)" ;
+        std::cout << "(empty)";
 
     for (unsigned i = 0; i < stack.size(); ++i)
         std::cout << "  " << i << ": " << stack[i] << std::endl;
@@ -1536,7 +1686,7 @@ static void dumpStack(std::vector<QString> stack)
 }
 #endif
 
-QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens)
+QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens &tokens)
 {
     UStringStack stack;
 
@@ -1545,7 +1695,7 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
 
 #ifdef SWINDER_XLS2RAW
         std::cout << "Formula Token " << c << ": ";
-        std::cout <<  token.id() << "  ";
+        std::cout << token.id() << "  ";
         std::cout << token.idAsString() << std::endl;
 #endif
 
@@ -1612,27 +1762,27 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
 
         case FormulaToken::UPlus: {
             QString str("+");
-            str.append(stack[stack.size()-1]);
-            stack[stack.size()-1] = str;
+            str.append(stack[stack.size() - 1]);
+            stack[stack.size() - 1] = str;
             break;
         }
 
         case FormulaToken::UMinus: {
             QString str("-");
-            str.append(stack[ stack.size()-1 ]);
-            stack[stack.size()-1] = str;
+            str.append(stack[stack.size() - 1]);
+            stack[stack.size() - 1] = str;
             break;
         }
 
         case FormulaToken::Percent:
-            stack[stack.size()-1].append(QString("%"));
+            stack[stack.size() - 1].append(QString("%"));
             break;
 
         case FormulaToken::Paren: {
             QString str("(");
-            str.append(stack[ stack.size()-1 ]);
+            str.append(stack[stack.size() - 1]);
             str.append(QString(")"));
-            stack[stack.size()-1] = str;
+            stack[stack.size() - 1] = str;
             break;
         }
 
@@ -1697,9 +1847,9 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
             if (!stack.empty()) {
                 QString str(token.functionName() ? token.functionName() : "??");
                 str.append(QString("("));
-                str.append(stack[stack.size()-1]);
+                str.append(stack[stack.size() - 1]);
                 str.append(QString(")"));
-                stack[stack.size()-1] = str;
+                stack[stack.size() - 1] = str;
             }
             break;
         }
@@ -1712,9 +1862,9 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
                     if (token.functionIndex() != 255)
                         str = token.functionName() ? token.functionName() : "??";
                     str.append(QString("("));
-                    str.append(stack[stack.size()-1]);
+                    str.append(stack[stack.size() - 1]);
                     str.append(QString(")"));
-                    stack[stack.size()-1] = str;
+                    stack[stack.size() - 1] = str;
                 }
             } else {
                 unsigned count = token.functionParams() - 1;
@@ -1722,9 +1872,9 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
                 if (!stack.empty()) {
                     QString str;
                     str.append(QString("("));
-                    str.append(stack[ stack.size()-1 ]);
+                    str.append(stack[stack.size() - 1]);
                     str.append(QString(")"));
-                    stack[stack.size()-1] = str;
+                    stack[stack.size() - 1] = str;
                 }
             }
             break;
@@ -1735,43 +1885,43 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
                 if (!stack.empty()) {
                     QString str("SUM");
                     str.append(QString("("));
-                    str.append(stack[ stack.size()-1 ]);
+                    str.append(stack[stack.size() - 1]);
                     str.append(QString(")"));
-                    stack[stack.size()-1] = str;
+                    stack[stack.size() - 1] = str;
                 }
             }
             break;
 
         case FormulaToken::Name:
-            stack.push_back(nameFromIndex(token.nameIndex()-1));
+            stack.push_back(nameFromIndex(token.nameIndex() - 1));
             break;
 
         case FormulaToken::NameX:
-            stack.push_back(externNameFromIndex(token.nameXIndex()-1));
+            stack.push_back(externNameFromIndex(token.nameXIndex() - 1));
             break;
 
         case FormulaToken::Matrix: {
             std::pair<unsigned, unsigned> formulaCellPos = token.baseFormulaRecord();
-            if( isShared ) {
-              FormulaTokens ft = sharedFormulas(formulaCellPos);
-              if (!ft.empty())
-                  stack.push_back(decodeFormula(row, col, isShared, ft));
+            if (isShared) {
+                FormulaTokens ft = sharedFormulas(formulaCellPos);
+                if (!ft.empty())
+                    stack.push_back(decodeFormula(row, col, isShared, ft));
             } else {
-              // "2.5.198.58 PtgExp" says that if its not a sharedFormula then it's an indication that the
-              // result is an reference to cells. So, we can savly ignore that case...
-              qCDebug(lcSidewinder) << "MATRIX first=%i second=" << formulaCellPos.first << formulaCellPos.second;
+                // "2.5.198.58 PtgExp" says that if its not a sharedFormula then it's an indication that the
+                // result is an reference to cells. So, we can savly ignore that case...
+                qCDebug(lcSidewinder) << "MATRIX first=%i second=" << formulaCellPos.first << formulaCellPos.second;
             }
             break;
         }
 
         case FormulaToken::Table: {
             std::pair<unsigned, unsigned> formulaCellPos = token.baseFormulaRecord();
-            if( isShared ) {
-              DataTableRecord* dt = tableRecord(formulaCellPos);
-              if(dt)
-                  stack.push_back(dataTableFormula(row, col, dt));
+            if (isShared) {
+                DataTableRecord *dt = tableRecord(formulaCellPos);
+                if (dt)
+                    stack.push_back(dataTableFormula(row, col, dt));
             } else {
-              qCDebug(lcSidewinder) << "TABLE first=%i second=" << formulaCellPos.first << formulaCellPos.second;
+                qCDebug(lcSidewinder) << "TABLE first=%i second=" << formulaCellPos.first << formulaCellPos.second;
             }
             break;
         }
@@ -1794,7 +1944,8 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
             stack.push_back(token.value().asString());
             break;
 
-        case 0: break; // NOPE
+        case 0:
+            break; // NOPE
 
         case FormulaToken::MemFunc:
             // as far as I can tell this is only meta-data
@@ -1828,7 +1979,7 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
     return result;
 }
 
-QString FormulaDecoder::dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record)
+QString FormulaDecoder::dataTableFormula(unsigned row, unsigned col, const DataTableRecord *record)
 {
     QString result("MULTIPLE.OPERATIONS(");
 

@@ -17,12 +17,13 @@ public:
     {
     public:
         explicit Relation(KoShape *child)
-        : inside(false),
-        inheritsTransform(false),
-        m_child(child)
-        {}
+            : inside(false)
+            , inheritsTransform(false)
+            , m_child(child)
+        {
+        }
 
-        KoShape* child()
+        KoShape *child()
         {
             return m_child;
         }
@@ -39,7 +40,7 @@ public:
         qDeleteAll(relations);
     }
 
-    Relation* findRelation(const KoShape *child) const
+    Relation *findRelation(const KoShape *child) const
     {
         foreach (Relation *relation, relations) {
             if (relation->child() == child) {
@@ -49,13 +50,12 @@ public:
         return 0;
     }
 
-
     // TODO use a QMap<KoShape*, bool> instead this should speed things up a bit
     QList<Relation *> relations;
 };
 
 KoShapeContainerDefaultModel::KoShapeContainerDefaultModel()
-: d(new Private())
+    : d(new Private())
 {
 }
 
@@ -78,12 +78,11 @@ void KoShapeContainerDefaultModel::proposeMove(KoShape *shape, QPointF &move)
         allowedToMove = parent->isEditable();
         parent = parent->parent();
     }
-    if (! allowedToMove) {
+    if (!allowedToMove) {
         move.setX(0);
         move.setY(0);
     }
 }
-
 
 void KoShapeContainerDefaultModel::setClipped(const KoShape *child, bool clipping)
 {
@@ -101,7 +100,7 @@ void KoShapeContainerDefaultModel::setClipped(const KoShape *child, bool clippin
 bool KoShapeContainerDefaultModel::isClipped(const KoShape *child) const
 {
     Private::Relation *relation = d->findRelation(child);
-    return relation ? relation->inside: false;
+    return relation ? relation->inside : false;
 }
 
 void KoShapeContainerDefaultModel::remove(KoShape *child)
@@ -118,10 +117,10 @@ int KoShapeContainerDefaultModel::count() const
     return d->relations.count();
 }
 
-QList<KoShape*> KoShapeContainerDefaultModel::shapes() const
+QList<KoShape *> KoShapeContainerDefaultModel::shapes() const
 {
-    QList<KoShape*> answer;
-    foreach(Private::Relation *relation, d->relations) {
+    QList<KoShape *> answer;
+    foreach (Private::Relation *relation, d->relations) {
         answer.append(relation->child());
     }
     return answer;
@@ -152,6 +151,5 @@ void KoShapeContainerDefaultModel::setInheritsTransform(const KoShape *shape, bo
 bool KoShapeContainerDefaultModel::inheritsTransform(const KoShape *shape) const
 {
     Private::Relation *relation = d->findRelation(shape);
-    return relation ? relation->inheritsTransform: false;
+    return relation ? relation->inheritsTransform : false;
 }
-

@@ -16,19 +16,17 @@ class QSize;
 
 class KWPageCacheManager;
 
-class KWPageCache {
-
-
+class KWPageCache
+{
 public:
-
     /// create a pagecache object with the existing
     /// QImage.
-    //KWPageCache(KWPageCacheManager *manager, QImage *img);
+    // KWPageCache(KWPageCacheManager *manager, QImage *img);
     /// create a new pagecache object with a new QImage
     KWPageCache(KWPageCacheManager *manager, int w, int h);
     ~KWPageCache();
 
-    KWPageCacheManager* m_manager;
+    KWPageCacheManager *m_manager;
     QVector<QImage> cache;
     int m_tilesx, m_tilesy;
     QSize m_size;
@@ -40,10 +38,9 @@ public:
     bool allExposed;
 };
 
-class KWPageCacheManager {
-
+class KWPageCacheManager
+{
 public:
-
     explicit KWPageCacheManager(int cacheSize);
 
     ~KWPageCacheManager();

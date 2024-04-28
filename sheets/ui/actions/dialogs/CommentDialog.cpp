@@ -11,15 +11,14 @@
 // Local
 #include "CommentDialog.h"
 
+#include <KLocalizedString>
 #include <QVBoxLayout>
 #include <ktextedit.h>
-#include <KLocalizedString>
-
 
 using namespace Calligra::Sheets;
 
-CommentDialog::CommentDialog(QWidget* parent)
-        : ActionDialog(parent)
+CommentDialog::CommentDialog(QWidget *parent)
+    : ActionDialog(parent)
 {
     setCaption(i18n("Cell Comment"));
 
@@ -49,4 +48,3 @@ void CommentDialog::onApply()
 {
     emit changeComment(comment());
 }
-

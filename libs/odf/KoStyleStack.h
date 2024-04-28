@@ -8,10 +8,9 @@
 #ifndef KOSTYLESTACK_H
 #define KOSTYLESTACK_H
 
-
 #include <QList>
-#include <QStack>
 #include <QPair>
+#include <QStack>
 
 #include "koodf_export.h"
 #include <KoXmlReader.h>
@@ -52,7 +51,7 @@ public:
     /**
      * Create a style stack based on other namespaces than OASIS - used for OOo-1.1 import.
      */
-    explicit KoStyleStack(const char* styleNSURI, const char* foNSURI);
+    explicit KoStyleStack(const char *styleNSURI, const char *foNSURI);
     virtual ~KoStyleStack();
 
     /**
@@ -79,7 +78,7 @@ public:
     /**
      * Pushes the new style onto the stack.
      */
-    void push(const KoXmlElement& style);
+    void push(const KoXmlElement &style);
 
     /**
      * Check if any of the styles on the stack has an attribute called 'localName'
@@ -104,7 +103,7 @@ public:
      * and return it, where detail is e.g. left, right, top or bottom.
      * This allows to also find 'name' alone (e.g. padding implies padding-left, padding-right etc.)
      */
-    QString property(const QString &nsURI, const QString &localName, const  QString &detail) const;
+    QString property(const QString &nsURI, const QString &localName, const QString &detail) const;
 
     /**
      * Check if any of the styles on the stack has a child element called 'localName' in the namespace 'nsURI'.
@@ -122,7 +121,7 @@ public:
      * Special case for the current font size, due to special handling of fo:font-size="115%".
      * First item in the returned value contains the font point size and the second the got percent.
      */
-    QPair<qreal,qreal> fontSize(const qreal defaultFontPointSize = 12.0) const;
+    QPair<qreal, qreal> fontSize(const qreal defaultFontPointSize = 12.0) const;
 
     /**
      * Return the name of the style specified by the user,
@@ -130,13 +129,13 @@ public:
      * This is used to know e.g. which user-style is associated with the current paragraph.
      * There could be none though.
      */
-    QString userStyleName(const QString& family) const;
+    QString userStyleName(const QString &family) const;
 
     /**
      * Return the display name of the style specified by the user,
      * i.e. not an auto style
      */
-    QString userStyleDisplayName(const QString& family) const;
+    QString userStyleDisplayName(const QString &family) const;
 
     /**
      * Set the type of properties that will be looked for.
@@ -145,7 +144,7 @@ public:
      * If @p typeProperties is 0, the stylestack is reset to look for "properties"
      * as it does by default.
      */
-    void setTypeProperties(const char* typeProperties);
+    void setTypeProperties(const char *typeProperties);
 
     /**
      * Overloaded method to also set backup properties to search in
@@ -155,7 +154,7 @@ public:
     void setTypeProperties(const QList<QString> &typeProperties);
 
 private:
-    bool isUserStyle(const KoXmlElement& e, const QString& family) const;
+    bool isUserStyle(const KoXmlElement &e, const QString &family) const;
 
     inline bool hasProperty(const QString &nsURI, const QString &localName, const QString *detail) const;
 
@@ -176,11 +175,11 @@ private:
     QString m_foNSURI;
 
     class KoStyleStackPrivate;
-    KoStyleStackPrivate * const d;
+    KoStyleStackPrivate *const d;
 
     // forbidden
-    void operator=(const KoStyleStack&);
-    KoStyleStack(const KoStyleStack&);
+    void operator=(const KoStyleStack &);
+    KoStyleStack(const KoStyleStack &);
 };
 
 #endif /* KOSTYLESTACK_H */

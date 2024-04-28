@@ -43,7 +43,8 @@ public:
      * one will be shown.
      * Higher sorting numbers will be shown first. The default is 1.
      */
-    virtual int sortingOrder() const {
+    virtual int sortingOrder() const
+    {
         return 1;
     }
 
@@ -52,13 +53,15 @@ public:
      * the specified type.
      * @param id an ID like the KoShapeFactoryBase::shapeId()
      */
-    virtual bool showForShapeId(const QString &id) const {
-        Q_UNUSED(id); return true;
+    virtual bool showForShapeId(const QString &id) const
+    {
+        Q_UNUSED(id);
+        return true;
     }
 
-
     /// \internal a compare for sorting.
-    static bool compare(KoShapeConfigFactoryBase *f1, KoShapeConfigFactoryBase *f2) {
+    static bool compare(KoShapeConfigFactoryBase *f1, KoShapeConfigFactoryBase *f2)
+    {
         return f1->sortingOrder() - f2->sortingOrder() > 0;
     }
 };

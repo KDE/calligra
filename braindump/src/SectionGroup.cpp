@@ -19,19 +19,21 @@
 
 #include <KLocalizedString>
 
-#include "SectionGroup.h"
-#include "Section.h"
 #include "RootSection.h"
+#include "Section.h"
+#include "SectionGroup.h"
 
 int SectionGroup::s_count = 0;
 
-SectionGroup::SectionGroup(SectionGroup* parent) : m_parent(parent)
+SectionGroup::SectionGroup(SectionGroup *parent)
+    : m_parent(parent)
 {
 }
 
-SectionGroup::SectionGroup(const SectionGroup& _rhs) : m_parent(0)
+SectionGroup::SectionGroup(const SectionGroup &_rhs)
+    : m_parent(0)
 {
-    foreach(Section * section, _rhs.m_children) {
+    foreach (Section *section, _rhs.m_children) {
         insertSection(new Section(*section));
     }
 }
@@ -40,39 +42,42 @@ SectionGroup::~SectionGroup()
 {
 }
 
-void SectionGroup::insertSection(Section* page, int index)
+void SectionGroup::insertSection(Section *page, int index)
 {
-    if(page->sectionParent() == this) return;
-    if(page->sectionParent()) page->sectionParent()->removeSection(page);
+    if (page->sectionParent() == this)
+        return;
+    if (page->sectionParent())
+        page->sectionParent()->removeSection(page);
     m_children.insert(index, page);
     page->setSectionParent(this);
 }
 
-void SectionGroup::insertSection(Section* page, Section* before)
+void SectionGroup::insertSection(Section *page, Section *before)
 {
-    if(before == 0) {
+    if (before == 0) {
         insertSection(page, m_children.count());
     } else {
         insertSection(page, m_children.indexOf(before));
     }
 }
 
-void SectionGroup::removeSection(Section* page)
+void SectionGroup::removeSection(Section *page)
 {
     page->setSectionParent(0);
     m_children.removeAll(page);
 }
 
-QList<Section*> SectionGroup::sections() const
+QList<Section *> SectionGroup::sections() const
 {
     return m_children;
 }
 
-Section* SectionGroup::newSection(Section* before)
+Section *SectionGroup::newSection(Section *before)
 {
-    SectionGroup* root = this;
-    while(root->sectionParent()) root = root->sectionParent();
-    Section* section = new Section(dynamic_cast<RootSection*>(root)) ;
+    SectionGroup *root = this;
+    while (root->sectionParent())
+        root = root->sectionParent();
+    Section *section = new Section(dynamic_cast<RootSection *>(root));
     insertSection(section, before);
     section->setName(nextName());
     return section;
@@ -83,39 +88,39 @@ QString SectionGroup::nextName()
     return i18n("Untitled %1", ++s_count);
 }
 
-SectionGroup* SectionGroup::sectionParent()
+SectionGroup *SectionGroup::sectionParent()
 {
     return m_parent;
 }
 
-void SectionGroup::setSectionParent(SectionGroup* parent)
+void SectionGroup::setSectionParent(SectionGroup *parent)
 {
     m_parent = parent;
 }
 
-void SectionGroup::sectionAdded(Section* page)
+void SectionGroup::sectionAdded(Section *page)
 {
-    if(m_parent)
+    if (m_parent)
         m_parent->sectionAdded(page);
 }
 
-void SectionGroup::sectionRemoved(Section* page)
+void SectionGroup::sectionRemoved(Section *page)
 {
-    if(m_parent)
+    if (m_parent)
         m_parent->sectionRemoved(page);
 }
 
-int SectionGroup::indexOf(Section* section)
+int SectionGroup::indexOf(Section *section)
 {
     return m_children.indexOf(section);
 }
 
-Section* SectionGroup::nextSection(Section* section)
+Section *SectionGroup::nextSection(Section *section)
 {
     int idx = indexOf(section);
     idx += 1;
     Q_ASSERT(idx >= 0);
-    if(idx < m_children.count()) {
+    if (idx < m_children.count()) {
         return m_children[idx];
     } else {
         return 0;

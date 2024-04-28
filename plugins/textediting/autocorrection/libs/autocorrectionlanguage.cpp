@@ -5,9 +5,9 @@
 */
 
 #include "autocorrectionlanguage.h"
+#include <QDebug>
 #include <QLocale>
 #include <QSet>
-#include <QDebug>
 
 static bool stripCountryCode(QString *languageCode)
 {
@@ -43,7 +43,7 @@ AutoCorrectionLanguage::AutoCorrectionLanguage(QWidget *parent)
                     insertedLanguages << languageName;
                 }
             }
-            qInfo()<<Q_FUNC_INFO<<languageName<<languageCode;
+            qInfo() << Q_FUNC_INFO << languageName << languageCode;
         }
     }
 
@@ -58,10 +58,10 @@ AutoCorrectionLanguage::AutoCorrectionLanguage(QWidget *parent)
     const int index = findData(defaultLang);
     setCurrentIndex(index);
     model()->sort(0);
-    qInfo()<<Q_FUNC_INFO<<QLocale::system().uiLanguages()<<':'<<index<<defaultLang;
-//    for (int i = 0; i < count(); ++i) {
-//        qInfo()<<i<<':'<<itemText(i)<<itemData(i).toString();
-//    }
+    qInfo() << Q_FUNC_INFO << QLocale::system().uiLanguages() << ':' << index << defaultLang;
+    //    for (int i = 0; i < count(); ++i) {
+    //        qInfo()<<i<<':'<<itemText(i)<<itemData(i).toString();
+    //    }
 }
 
 AutoCorrectionLanguage::~AutoCorrectionLanguage() = default;

@@ -26,18 +26,14 @@
 #include "LayoutPage_Position.h"
 #include "LayoutPage_Protection.h"
 
-
-#include "engine/CalculationSettings.h"
 #include "core/DocBase.h"
 #include "core/Map.h"
 #include "core/Sheet.h"
-
+#include "engine/CalculationSettings.h"
 
 #include <KPageWidget>
 
-
 using namespace Calligra::Sheets;
-
 
 /***************************************************************************
  *
@@ -45,10 +41,10 @@ using namespace Calligra::Sheets;
  *
  ***************************************************************************/
 
-LayoutDialog::LayoutDialog(QWidget* parent, Sheet *sheet, StyleManager* manager, bool isStyle)
-        : ActionDialog(parent)
-        , m_sheet(sheet)
-        , m_styleManager(manager)
+LayoutDialog::LayoutDialog(QWidget *parent, Sheet *sheet, StyleManager *manager, bool isStyle)
+    : ActionDialog(parent)
+    , m_sheet(sheet)
+    , m_styleManager(manager)
 {
     init(isStyle);
 }
@@ -60,7 +56,8 @@ LayoutDialog::~LayoutDialog()
 Style LayoutDialog::style(bool multicell)
 {
     Style style;
-    if (!multicell) style.setDefault();  // If not multicell, the style needs to override existing formatting
+    if (!multicell)
+        style.setDefault(); // If not multicell, the style needs to override existing formatting
     borderPage->apply(&style, multicell);
     floatPage->apply(&style, multicell);
     fontPage->apply(&style, multicell);
@@ -104,13 +101,13 @@ void LayoutDialog::setCustomStyle(const CustomStyle &style)
     protectPage->loadFrom(style, false);
 }
 
-
 void LayoutDialog::setOkButtonEnabled(bool enabled)
 {
     enableButtonApply(enabled);
 }
 
-void LayoutDialog::onApply() {
+void LayoutDialog::onApply()
+{
     emit applyStyle();
     accept();
 }
@@ -152,6 +149,3 @@ void LayoutDialog::init(bool isStyle)
     protectPage = new LayoutPageProtection(this);
     main->addPage(protectPage, i18n("Cell Protection"));
 }
-
-
-

@@ -8,29 +8,26 @@
 #ifndef KOPATHSEGMENTTYPECOMMAND_H
 #define KOPATHSEGMENTTYPECOMMAND_H
 
-#include <kundo2command.h>
-#include <QList>
-#include <QPointF>
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 #include "flake_export.h"
+#include <QList>
+#include <QPointF>
+#include <kundo2command.h>
 
 /// The undo / redo command for changing segments to curves/lines
 class FLAKE_EXPORT KoPathSegmentTypeCommand : public KUndo2Command
 {
 public:
     /// Segment Types
-    enum SegmentType {
-        Curve = 1,
-        Line = 2
-    };
+    enum SegmentType { Curve = 1, Line = 2 };
 
     /**
-    * Command for changing the segment type ( curve/line )
-    * @param pointData point data identifying the segment that should be changed.
-    * @param segmentType to which the segment should be changed to
-    * @param parent the parent command used for macro commands
-    */
+     * Command for changing the segment type ( curve/line )
+     * @param pointData point data identifying the segment that should be changed.
+     * @param segmentType to which the segment should be changed to
+     * @param parent the parent command used for macro commands
+     */
     KoPathSegmentTypeCommand(const KoPathPointData &pointData, SegmentType segmentType, KUndo2Command *parent = 0);
 
     /**

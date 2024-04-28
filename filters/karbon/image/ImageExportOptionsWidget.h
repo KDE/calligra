@@ -50,6 +50,7 @@ private Q_SLOTS:
     void unitChanged(int);
     void aspectChanged(bool);
     void setPage(int idx);
+
 private:
     void updateFromPointSize(const QSizeF &pointSize);
     void updateFromPixelSize(const QSize &pixelSize);

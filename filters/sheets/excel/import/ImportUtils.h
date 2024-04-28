@@ -10,35 +10,36 @@
 #ifndef IMPORTUTILS_H
 #define IMPORTUTILS_H
 
-#include <QString>
-#include <QHash>
 #include <QDebug>
+#include <QHash>
 #include <QLoggingCategory>
+#include <QString>
 
 #include "../sidewinder/format.h"
 #include "../sidewinder/value.h"
 
-namespace XlsUtils {
+namespace XlsUtils
+{
 
 /// Remove via the "\" char escaped characters from the string.
 QString removeEscaped(const QString &text, bool removeOnlyEscapeChar = false);
 /// extract and return locale and remove locale from time string.
 QString extractLocale(QString &time);
 
-bool isPercentageFormat(const QString& valueFormat);
-bool isTimeFormat(const QString& valueFormat);
-bool isFractionFormat(const QString& valueFormat);
-bool isDateFormat(const QString& valueFormat);
+bool isPercentageFormat(const QString &valueFormat);
+bool isTimeFormat(const QString &valueFormat);
+bool isFractionFormat(const QString &valueFormat);
+bool isDateFormat(const QString &valueFormat);
 
 struct CellFormatKey {
-    const Swinder::Format* format;
+    const Swinder::Format *format;
     bool isGeneral;
     int decimalCount;
-    CellFormatKey(const Swinder::Format* format, const QString& formula);
-    bool operator==(const CellFormatKey& b) const;
+    CellFormatKey(const Swinder::Format *format, const QString &formula);
+    bool operator==(const CellFormatKey &b) const;
 };
 
-static inline uint qHash(const CellFormatKey& key)
+static inline uint qHash(const CellFormatKey &key)
 {
     return ::qHash(key.format) ^ ::qHash(key.decimalCount);
 }

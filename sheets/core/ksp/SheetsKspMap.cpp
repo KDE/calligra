@@ -4,7 +4,6 @@
 // Copyright 1999- 2006 The KSpread Team <calligra-devel@kde.org>
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
-
 #include "SheetsKsp.h"
 #include "SheetsKspPrivate.h"
 
@@ -20,15 +19,16 @@
 
 #include <KLocalizedString>
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
-
-QDomElement Ksp::saveMap(Map *map, QDomDocument& doc)
+QDomElement Ksp::saveMap(Map *map, QDomDocument &doc)
 {
     QDomElement spread = doc.documentElement();
 
-    QDomElement areaname = saveNamedAreas (map->namedAreaManager(), doc);
+    QDomElement areaname = saveNamedAreas(map->namedAreaManager(), doc);
     spread.appendChild(areaname);
 
     QDomElement defaults = doc.createElement("defaults");
@@ -36,7 +36,7 @@ QDomElement Ksp::saveMap(Map *map, QDomDocument& doc)
     defaults.setAttribute("col-width", QString::number(map->defaultColumnFormat().width));
     spread.appendChild(defaults);
 
-    QDomElement s = saveStyles (map->styleManager(), doc);
+    QDomElement s = saveStyles(map->styleManager(), doc);
     spread.appendChild(s);
 
     QDomElement mymap = doc.createElement("map");
@@ -51,9 +51,9 @@ QDomElement Ksp::saveMap(Map *map, QDomDocument& doc)
         }
     }
 
-    for(SheetBase* sheet : map->sheetList()) {
+    for (SheetBase *sheet : map->sheetList()) {
         Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
-        QDomElement e = saveSheet (fullSheet, doc);
+        QDomElement e = saveSheet(fullSheet, doc);
         if (e.isNull())
             return e;
         mymap.appendChild(e);
@@ -61,9 +61,9 @@ QDomElement Ksp::saveMap(Map *map, QDomDocument& doc)
     return mymap;
 }
 
-bool Ksp::loadMap(Map *map, const KoXmlElement& mymap)
+bool Ksp::loadMap(Map *map, const KoXmlElement &mymap)
 {
-    map->setLoading (true);
+    map->setLoading(true);
     map->loadingInfo()->setFileFormat(LoadingInfo::NativeFormat);
     const QString activeSheet = mymap.attribute("activeTable");
     const QPoint marker(mymap.attribute("markerColumn").toInt(), mymap.attribute("markerRow").toInt());
@@ -75,15 +75,15 @@ bool Ksp::loadMap(Map *map, const KoXmlElement& mymap)
     if (n.isNull()) {
         // We need at least one sheet !
         map->doc()->setErrorMessage(i18n("This document has no sheets (tables)."));
-        map->setLoading (false);
+        map->setLoading(false);
         return false;
     }
     while (!n.isNull()) {
         KoXmlElement e = n.toElement();
         if (!e.isNull() && e.tagName() == "table") {
             Sheet *t = dynamic_cast<Sheet *>(map->addNewSheet());
-            if (!loadSheet (t, e)) {
-                map->setLoading (false);
+            if (!loadSheet(t, e)) {
+                map->setLoading(false);
                 return false;
             }
         }
@@ -97,11 +97,9 @@ bool Ksp::loadMap(Map *map, const KoXmlElement& mymap)
         map->loadingInfo()->setInitialActiveSheet(map->findSheet(activeSheet));
     }
 
-    map->setLoading (false);
+    map->setLoading(false);
     return true;
 }
 
-
-
-}  // Sheets
-}  // Calligra
+} // Sheets
+} // Calligra

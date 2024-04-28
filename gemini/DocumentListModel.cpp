@@ -8,22 +8,23 @@
 
 #include <QDebug>
 #include <QDirIterator>
+#include <QLocale>
 #include <QRunnable>
 #include <QThreadPool>
 #include <QTimer>
-#include <QLocale>
 
-#include <KSharedConfig>
 #include <KConfigGroup>
+#include <KSharedConfig>
 
 /*#include <QSparqlConnection>
-#include <QSparqlResult>
-#include <QSparqlError>*/
 #include <KFileItem>
+#include <QSparqlError>*/
+#include <QSparqlResult>
 
-
-QDebug operator<<(QDebug dbg, const DocumentListModel::DocumentInfo& d) { 
-    dbg.nospace() << d.filePath << "," << d.fileName << "," << d.docType << "," << d.fileSize << "," << d.authorName << "," << d.accessedTime << "," << d.modifiedTime << "," << d.uuid;
+QDebug operator<<(QDebug dbg, const DocumentListModel::DocumentInfo &d)
+{
+    dbg.nospace() << d.filePath << "," << d.fileName << "," << d.docType << "," << d.fileSize << "," << d.authorName << "," << d.accessedTime << ","
+                  << d.modifiedTime << "," << d.uuid;
     return dbg.space();
 };
 
@@ -31,8 +32,10 @@ const QString SearchThread::textDocumentType = QString("http://www.semanticdeskt
 const QString SearchThread::presentationType = QString("http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#PresentationDocument");
 const QString SearchThread::spreadsheetType = QString("http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#SpreadsheetDocument");
 
-SearchThread::SearchThread(const QHash<QString, DocumentListModel::DocumentType> &docTypes, QObject *parent) 
-    : QObject(parent), m_abort(false), m_docTypes(docTypes)
+SearchThread::SearchThread(const QHash<QString, DocumentListModel::DocumentType> &docTypes, QObject *parent)
+    : QObject(parent)
+    , m_abort(false)
+    , m_docTypes(docTypes)
 {
 }
 
@@ -42,8 +45,8 @@ SearchThread::~SearchThread()
 
 void SearchThread::run()
 {
-// Keeping this code around, in case Tracker later blows up horribly and we
-// have to rapidly reenable the filesystem only support
+    // Keeping this code around, in case Tracker later blows up horribly and we
+    // have to rapidly reenable the filesystem only support
     // Get documents from the device storage's document directory...
     QString documentsDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     QStringList nameFilters;
@@ -135,15 +138,14 @@ void DocumentListModel::searchFinished()
 
 void DocumentListModel::addDocument(const DocumentInfo &info)
 {
-    if(m_allDocumentInfos.contains(info))
-    {
+    if (m_allDocumentInfos.contains(info)) {
         qDebug() << "Attempted to add duplicate entry" << info;
         return;
     }
 
     m_allDocumentInfos.append(info);
 
-    if(m_filter == UnknownType || info.docType == m_filter) {
+    if (m_filter == UnknownType || info.docType == m_filter) {
         beginInsertRows(QModelIndex(), m_currentDocumentInfos.count(), m_currentDocumentInfos.count());
         m_currentDocumentInfos.append(info);
         endInsertRows();
@@ -152,7 +154,7 @@ void DocumentListModel::addDocument(const DocumentInfo &info)
 
 int DocumentListModel::rowCount(const QModelIndex &parent) const
 {
-    if(parent.isValid())
+    if (parent.isValid())
         return 0;
     return m_currentDocumentInfos.count();
 }
@@ -173,17 +175,26 @@ QVariant DocumentListModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case FileNameRole: // intentional fall through
-    case Qt::DisplayRole: return info.fileName;
-    case FilePathRole: return info.filePath;
-    case DocTypeRole: return info.docType;
-    case FileSizeRole: return info.fileSize;
-    case AuthorNameRole: return info.authorName;
-    case AccessedTimeRole: return prettyTime(info.accessedTime);
-    case ModifiedTimeRole: return prettyTime(info.modifiedTime);
-    case UUIDRole: return info.uuid;
-    case SectionCategoryRole: 
+    case Qt::DisplayRole:
+        return info.fileName;
+    case FilePathRole:
+        return info.filePath;
+    case DocTypeRole:
+        return info.docType;
+    case FileSizeRole:
+        return info.fileSize;
+    case AuthorNameRole:
+        return info.authorName;
+    case AccessedTimeRole:
+        return prettyTime(info.accessedTime);
+    case ModifiedTimeRole:
+        return prettyTime(info.modifiedTime);
+    case UUIDRole:
+        return info.uuid;
+    case SectionCategoryRole:
         return m_groupBy == GroupByName ? QVariant::fromValue(info.fileName[0].toUpper()) : QVariant(info.docType);
-    default: return QVariant();
+    default:
+        return QVariant();
     }
 }
 
@@ -198,14 +209,22 @@ QVariant DocumentListModel::headerData(int section, Qt::Orientation orientation,
     if (orientation == Qt::Vertical || role != Qt::DisplayRole)
         return QVariant();
     switch (section) {
-    case 0: return tr("Filename");
-    case 1: return tr("Path");
-    case 2: return tr("Type");
-    case 3: return tr("Size");
-    case 4: return tr("Author");
-    case 5: return tr("Last Accessed");
-    case 6: return tr("Last Modified");
-    default: return QVariant();
+    case 0:
+        return tr("Filename");
+    case 1:
+        return tr("Path");
+    case 2:
+        return tr("Type");
+    case 3:
+        return tr("Size");
+    case 4:
+        return tr("Author");
+    case 5:
+        return tr("Last Accessed");
+    case 6:
+        return tr("Last Modified");
+    default:
+        return QVariant();
     }
 }
 
@@ -223,13 +242,13 @@ void DocumentListModel::relayout()
     emit layoutAboutToBeChanged();
 
     QList<DocumentInfo> newList;
-    foreach(const DocumentInfo &docInfo, m_allDocumentInfos) {
-        if(m_filter == UnknownType || docInfo.docType == m_filter) {
+    foreach (const DocumentInfo &docInfo, m_allDocumentInfos) {
+        if (m_filter == UnknownType || docInfo.docType == m_filter) {
             qDebug() << docInfo.filePath;
             newList.append(docInfo);
         }
     }
-    
+
     m_currentDocumentInfos = newList;
     emit layoutChanged();
     endResetModel();
@@ -262,4 +281,3 @@ void DocumentListModel::componentComplete()
     endResetModel();
     startSearch();
 }
-

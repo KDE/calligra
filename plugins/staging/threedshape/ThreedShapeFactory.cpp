@@ -9,38 +9,37 @@
 #include "ThreedShapeFactory.h"
 
 // Qt
-#include <QByteArray>
 #include <QBuffer>
+#include <QByteArray>
 #include <QImage>
 
 // KF5
 #include <KLocalizedString>
 
 // Calligra
-#include <KoXmlNS.h>
 #include <KoIcon.h>
-//#include "KoShapeBasedDocumentBase.h"
-#include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
+#include <KoXmlNS.h>
+// #include "KoShapeBasedDocumentBase.h"
 #include <KoDocumentResourceManager.h>
+#include <KoOdfLoadingContext.h>
 #include <KoProperties.h>
+#include <KoShapeLoadingContext.h>
 
 // 3D Shape
 #include "SceneObject.h"
-//#include "ThreedShapeConfigWidget.h"
+// #include "ThreedShapeConfigWidget.h"
 #include "ThreedDebug.h"
-
 
 ThreedShapeFactory::ThreedShapeFactory()
     : KoShapeFactoryBase(THREEDSHAPEID, i18n("3D Scene"))
 {
     setToolTip(i18n("Shape that displays a simple 3D scene."));
-    //KIconLoader::global()->addAppDir("kchart");
+    // KIconLoader::global()->addAppDir("kchart");
     setIconName(koIconName("x-shape-3d"));
     setLoadingPriority(1);
 
     // Tell the shape loader which tag we can store
-    QList<QPair<QString, QStringList> > elementNamesList;
+    QList<QPair<QString, QStringList>> elementNamesList;
     elementNamesList.append(qMakePair(QString(KoXmlNS::dr3d), QStringList("scene")));
     setXmlElements(elementNamesList);
 }
@@ -68,19 +67,18 @@ KoShape *ThreedShapeFactory::createDefaultShape(KoDocumentResourceManager *docum
     return defaultShape;
 }
 
-KoShape *ThreedShapeFactory::createShape(const KoProperties *params,
-                                         KoDocumentResourceManager *documentResources) const
+KoShape *ThreedShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
 {
     Q_UNUSED(params);
 
-    SceneObject *shape = static_cast<SceneObject*>(createDefaultShape(documentResources));
+    SceneObject *shape = static_cast<SceneObject *>(createDefaultShape(documentResources));
 
     return shape;
 }
 
-QList<KoShapeConfigWidgetBase*> ThreedShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> ThreedShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> result;
+    QList<KoShapeConfigWidgetBase *> result;
 
     return result;
 }

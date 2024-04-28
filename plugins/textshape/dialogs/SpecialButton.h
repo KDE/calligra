@@ -33,4 +33,4 @@ protected:
     bool isPopupVisible;
 };
 
-#endif //SPECIALBUTTON_H
+#endif // SPECIALBUTTON_H

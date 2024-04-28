@@ -28,13 +28,12 @@
 
 #include "RememberPositionCommand.h"
 
-ChangeLayoutCommand::ChangeLayoutCommand(Section* _section, const QString& _newLayout) :
-    m_section(_section),
-    m_oldLayout(_section->layout()->id()),
-    m_newLayout(_newLayout),
-    m_command(new RememberPositionCommand(_section->sectionContainer()->layer()->shapes()))
+ChangeLayoutCommand::ChangeLayoutCommand(Section *_section, const QString &_newLayout)
+    : m_section(_section)
+    , m_oldLayout(_section->layout()->id())
+    , m_newLayout(_newLayout)
+    , m_command(new RememberPositionCommand(_section->sectionContainer()->layer()->shapes()))
 {
-
 }
 
 ChangeLayoutCommand::~ChangeLayoutCommand()

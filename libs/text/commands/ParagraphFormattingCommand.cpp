@@ -6,9 +6,9 @@
 
 #include "ParagraphFormattingCommand.h"
 
+#include "KoTextEditor_p.h"
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
-#include "KoTextEditor_p.h"
 
 #include <KLocalizedString>
 
@@ -44,7 +44,7 @@ public:
         cursor.mergeBlockCharFormat(m_deltaCharFormat);
 
         QList<QTextCharFormat>::ConstIterator it = m_formats.constBegin();
-        foreach(QTextCursor cursor, m_cursors) {
+        foreach (QTextCursor cursor, m_cursors) {
             cursor.setCharFormat(*it);
             ++it;
         }
@@ -70,12 +70,12 @@ ParagraphFormattingCommand::ParagraphFormattingCommand(KoTextEditor *editor,
                                                        const QTextBlockFormat &blockFormat,
                                                        const KoListLevelProperties &llp,
                                                        KUndo2Command *parent)
-      :KUndo2Command(parent),
-       m_first(true),
-       m_editor(editor),
-       m_charFormat(characterFormat),
-       m_blockFormat(blockFormat),
-       m_levelProperties(llp)
+    : KUndo2Command(parent)
+    , m_first(true)
+    , m_editor(editor)
+    , m_charFormat(characterFormat)
+    , m_blockFormat(blockFormat)
+    , m_levelProperties(llp)
 {
     Q_ASSERT(editor);
 

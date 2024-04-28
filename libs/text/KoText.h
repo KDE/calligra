@@ -17,7 +17,6 @@
 #include <QMetaType>
 #include <QTextOption>
 
-
 /**
  * Generic namespace of the Calligra Text library for helper methods and data.
  */
@@ -33,9 +32,9 @@ KOTEXT_EXPORT QString valignmentToString(Qt::Alignment align);
 /// This enum contains values to be used as keys in KoCanvasResourceManager
 enum CanvasResource {
     CurrentTextDocument = 382490375, ///< set by the text plugin whenever the document is changed
-    CurrentTextPosition = 183523,   ///<  used by the text plugin whenever the position is changed
-    CurrentTextAnchor = 341899485,   ///<  used by the text plugin whenever the anchor-position is changed
-    SelectedTextPosition = 21314576,   ///<  used by the text plugin whenever the alternative selection is changed
+    CurrentTextPosition = 183523, ///<  used by the text plugin whenever the position is changed
+    CurrentTextAnchor = 341899485, ///<  used by the text plugin whenever the anchor-position is changed
+    SelectedTextPosition = 21314576, ///<  used by the text plugin whenever the alternative selection is changed
     ///  used by the text plugin whenever the alternative selection anchor-position is changed
     SelectedTextAnchor = 3344189
 };
@@ -43,15 +42,15 @@ enum CanvasResource {
 /// For paragraphs each tab definition is represented by this struct.
 struct KOTEXT_EXPORT Tab {
     Tab();
-    qreal position;    ///< distance in ps-points from the edge of the text-shape
-    QTextOption::TabType type;       ///< Determine which type is used.
-    QChar delimiter;    ///< If type is DelimitorTab; tab until this char was found in the text.
+    qreal position; ///< distance in ps-points from the edge of the text-shape
+    QTextOption::TabType type; ///< Determine which type is used.
+    QChar delimiter; ///< If type is DelimitorTab; tab until this char was found in the text.
     KoCharacterStyle::LineType leaderType; // none/single/double
     KoCharacterStyle::LineStyle leaderStyle; // solid/dotted/dash/...
     KoCharacterStyle::LineWeight leaderWeight; // auto/bold/thin/length/percentage/...
     qreal leaderWidth; // the width value if length/percentage
     QColor leaderColor; ///< if color is valid, then use this instead of the (current) text color
-    QString leaderText;   ///< character to print as the leader (filler of the tabbed space)
+    QString leaderText; ///< character to print as the leader (filler of the tabbed space)
 
     bool operator==(const Tab &tab) const;
 };
@@ -64,31 +63,26 @@ enum DocumentResource {
     ChangeTracker = KoDocumentResourceManager::KoTextStart + 1, ///< KoChangeTracker
     InlineTextObjectManager, ///< The KoText inline-text-object manager. KoInlineTextObjectManager
     TextRangeManager, ///< The KoText inline-text-object manager. KoInlineTextObjectManager
-    StyleManager,           ///< The KoStyleManager
-    PageProvider,            ///< The KoPageProvider
+    StyleManager, ///< The KoStyleManager
+    PageProvider, ///< The KoPageProvider
     /** The KoDocumentRdf for the document,
         this will be a KoDocumentRdfBase when Soprano support is not compiled in. */
     DocumentRdf
 
 };
 
-enum KoTextFrameProperty {
-    SubFrameType = QTextFormat::UserProperty + 1
-};
+enum KoTextFrameProperty { SubFrameType = QTextFormat::UserProperty + 1 };
 
-enum KoSubFrameType {
-    AuxillaryFrameType = 1,
-    NoteFrameType
-};
+enum KoSubFrameType { AuxillaryFrameType = 1, NoteFrameType };
 
 /// Text in the objects will be positioned according to the direction.
 enum Direction {
-    AutoDirection,      ///< Take the direction from the text.
+    AutoDirection, ///< Take the direction from the text.
     LeftRightTopBottom, ///< Text layout for most western languages
     RightLeftTopBottom, ///< Text layout for languages like Hebrew
-    TopBottomRightLeft,  ///< Vertical text layout.
-    TopBottomLeftRight,  ///< Vertical text layout. ?
-    InheritDirection    ///< Direction is unspecified and should come from the container
+    TopBottomRightLeft, ///< Vertical text layout.
+    TopBottomLeftRight, ///< Vertical text layout. ?
+    InheritDirection ///< Direction is unspecified and should come from the container
 };
 
 /// convert the string version of directions (as specified in XSL and ODF) to the Direction enum
@@ -98,18 +92,18 @@ KOTEXT_EXPORT QString directionToString(Direction direction);
 
 /// There are several possible text breaks
 enum KoTextBreakProperty {
-    NoBreak = 0,         ///< No text break
-    ColumnBreak,     ///< Column break
-    PageBreak        ///< Page break
+    NoBreak = 0, ///< No text break
+    ColumnBreak, ///< Column break
+    PageBreak ///< Page break
 };
 
 /// convert the string version of text break (as specified in ODF) to the KoTextBreakProperty enum
 KOTEXT_EXPORT KoTextBreakProperty textBreakFromString(const QString &textBreak);
 /// convert the KoTextBreakProperty enum to the string version of text break (as specified in ODF)
-KOTEXT_EXPORT QString textBreakToString (KoTextBreakProperty textBreak);
+KOTEXT_EXPORT QString textBreakToString(KoTextBreakProperty textBreak);
 
-///TODO: move to KoUnit ?
-KOTEXT_EXPORT QTextLength parseLength (const QString &length);
+/// TODO: move to KoUnit ?
+KOTEXT_EXPORT QTextLength parseLength(const QString &length);
 }
 
 Q_DECLARE_TYPEINFO(KoText::Tab, Q_MOVABLE_TYPE);

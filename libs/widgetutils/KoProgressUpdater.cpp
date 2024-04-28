@@ -11,10 +11,9 @@
 #include <QTextStream>
 #include <QTimer>
 
-#include "KoUpdaterPrivate_p.h"
-#include "KoUpdater.h"
 #include "KoProgressProxy.h"
-
+#include "KoUpdater.h"
+#include "KoUpdaterPrivate_p.h"
 
 // 4 updates per second should be enough
 #define PROGRESSUPDATER_GUITIMERINTERVAL 250
@@ -22,9 +21,7 @@
 class Q_DECL_HIDDEN KoProgressUpdater::Private
 {
 public:
-
-    Private(KoProgressUpdater *_parent, KoProgressProxy *p, Mode _mode,
-            QTextStream *output_ = 0)
+    Private(KoProgressUpdater *_parent, KoProgressProxy *p, Mode _mode, QTextStream *output_ = 0)
         : parent(_parent)
         , progressBar(p)
         , mode(_mode)
@@ -42,15 +39,14 @@ public:
     Mode mode;
     int totalWeight;
     int currentProgress;
-    bool updated;          // is true whenever the progress needs to be recomputed
+    bool updated; // is true whenever the progress needs to be recomputed
     QTextStream *output;
     QTimer updateGuiTimer; // fires regularly to update the progress bar widget
-    QList<QPointer<KoUpdaterPrivate> > subtasks;
-    QList<QPointer<KoUpdater> > subTaskWrappers; // We delete these
+    QList<QPointer<KoUpdaterPrivate>> subtasks;
+    QList<QPointer<KoUpdater>> subTaskWrappers; // We delete these
     QTime referenceTime;
 
-    static void logEvents(QTextStream& out, KoProgressUpdater::Private *updater,
-                          QTime startTime, const QString& prefix);
+    static void logEvents(QTextStream &out, KoProgressUpdater::Private *updater, QTime startTime, const QString &prefix);
     bool canceled;
 };
 
@@ -58,9 +54,8 @@ public:
 // hierarchy. Do not make KoProgressProxy its parent (note that KoProgressProxy
 // is not necessarily castable to QObject ). This prevents proper functioning
 // of progress reporting in multi-threaded environments.
-KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar,
-                                     Mode mode, QTextStream *output)
-    : d (new Private(this, progressBar, mode, output))
+KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar, Mode mode, QTextStream *output)
+    : d(new Private(this, progressBar, mode, output))
 {
     Q_ASSERT(d->progressBar);
     connect(&d->updateGuiTimer, &QTimer::timeout, this, &KoProgressUpdater::updateUi);
@@ -106,18 +101,17 @@ void KoProgressUpdater::start(int range, const QString &text)
     qDeleteAll(d->subTaskWrappers);
     d->subTaskWrappers.clear();
 
-    d->progressBar->setRange(0, range-1);
+    d->progressBar->setRange(0, range - 1);
     d->progressBar->setValue(0);
 
-    if(!text.isEmpty()) {
+    if (!text.isEmpty()) {
         d->progressBar->setFormat(text);
     }
     d->totalWeight = 0;
     d->canceled = false;
 }
 
-QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
-                                                    const QString &name)
+QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight, const QString &name)
 {
     KoUpdaterPrivate *p = new KoUpdaterPrivate(this, weight, name);
     d->totalWeight += weight;
@@ -138,7 +132,7 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
 
 void KoProgressUpdater::cancel()
 {
-    foreach(KoUpdaterPrivate *updater, d->subtasks) {
+    foreach (KoUpdaterPrivate *updater, d->subtasks) {
         updater->setProgress(100);
         updater->interrupt();
     }
@@ -165,7 +159,7 @@ void KoProgressUpdater::updateUi()
 
     if (d->updated) {
         int totalProgress = 0;
-        foreach(QPointer<KoUpdaterPrivate> updater, d->subtasks) {
+        foreach (QPointer<KoUpdaterPrivate> updater, d->subtasks) {
             if (updater->interrupted()) {
                 d->currentProgress = -1;
                 return;
@@ -176,7 +170,7 @@ void KoProgressUpdater::updateUi()
                 progress = updater->progress();
             }
 
-            totalProgress += progress *updater->weight();
+            totalProgress += progress * updater->weight();
         }
 
         d->currentProgress = totalProgress / d->totalWeight;
@@ -184,7 +178,7 @@ void KoProgressUpdater::updateUi()
     }
 
     if (d->currentProgress == -1) {
-        d->progressBar->setValue( d->progressBar->maximum() );
+        d->progressBar->setValue(d->progressBar->maximum());
         // should we hide the progressbar after a little while?
         return;
     }
@@ -206,16 +200,14 @@ bool KoProgressUpdater::hasOutput() const
     return d->output != 0;
 }
 
-void KoProgressUpdater::Private::logEvents(QTextStream& out,
-                                           KoProgressUpdater::Private *updater,
-                                           QTime startTime,
-                                           const QString& prefix) {
+void KoProgressUpdater::Private::logEvents(QTextStream &out, KoProgressUpdater::Private *updater, QTime startTime, const QString &prefix)
+{
     // initial implementation: write out the names of all events
     foreach (QPointer<KoUpdaterPrivate> p, updater->subtasks) {
-        if (!p) continue;
+        if (!p)
+            continue;
         foreach (const KoUpdaterPrivate::TimePoint &tp, p->getPoints()) {
-            out << prefix+p->objectName() << '\t'
-                    << startTime.msecsTo(tp.time) << '\t' << tp.value << Qt::endl;
+            out << prefix + p->objectName() << '\t' << startTime.msecsTo(tp.time) << '\t' << tp.value << Qt::endl;
         }
     }
 }

@@ -5,40 +5,40 @@
  */
 
 #include "SvgLoadingContext.h"
-#include "SvgGraphicContext.h"
-#include "SvgUtil.h"
 #include "SvgCssHelper.h"
+#include "SvgGraphicContext.h"
 #include "SvgStyleParser.h"
+#include "SvgUtil.h"
 
 #include <KoDocumentResourceManager.h>
 
 #include <FlakeDebug.h>
 
-#include <QStack>
 #include <QFileInfo>
+#include <QStack>
 
 class Q_DECL_HIDDEN SvgLoadingContext::Private
 {
 public:
     Private()
-        : zIndex(0), styleParser(0)
+        : zIndex(0)
+        , styleParser(0)
     {
-
     }
 
     ~Private()
     {
-        if (! gcStack.isEmpty())
+        if (!gcStack.isEmpty())
             warnFlake << "the context stack is not empty (current count" << gcStack.size() << ", expected 0)";
         qDeleteAll(gcStack);
         gcStack.clear();
         delete styleParser;
     }
-    QStack<SvgGraphicsContext*> gcStack;
+    QStack<SvgGraphicsContext *> gcStack;
     QString initialXmlBaseDir;
     int zIndex;
     KoDocumentResourceManager *documentResourceManager;
-    QHash<QString, KoShape*> loadedShapes;
+    QHash<QString, KoShape *> loadedShapes;
     QHash<QString, KoXmlElement> definitions;
     SvgCssHelper cssStyles;
     SvgStyleParser *styleParser;
@@ -70,7 +70,7 @@ SvgGraphicsContext *SvgLoadingContext::pushGraphicsContext(const KoXmlElement &e
     SvgGraphicsContext *gc = new SvgGraphicsContext;
 
     // copy data from current context
-    if (! d->gcStack.isEmpty() && inherit)
+    if (!d->gcStack.isEmpty() && inherit)
         *gc = *(d->gcStack.top());
 
     gc->filterId.clear(); // filters are not inherited
@@ -97,7 +97,7 @@ SvgGraphicsContext *SvgLoadingContext::pushGraphicsContext(const KoXmlElement &e
 
 void SvgLoadingContext::popGraphicsContext()
 {
-    delete(d->gcStack.pop());
+    delete (d->gcStack.pop());
 }
 
 void SvgLoadingContext::setInitialXmlBaseDir(const QString &baseDir)
@@ -114,7 +114,7 @@ QString SvgLoadingContext::xmlBaseDir() const
 QString SvgLoadingContext::absoluteFilePath(const QString &href)
 {
     QFileInfo info(href);
-    if (! info.isRelative())
+    if (!info.isRelative())
         return href;
 
     SvgGraphicsContext *gc = currentGC();
@@ -122,7 +122,7 @@ QString SvgLoadingContext::absoluteFilePath(const QString &href)
         return d->initialXmlBaseDir;
 
     QString baseDir = d->initialXmlBaseDir;
-    if (! gc->xmlBaseDir.isEmpty())
+    if (!gc->xmlBaseDir.isEmpty())
         baseDir = absoluteFilePath(gc->xmlBaseDir);
 
     QFileInfo pathInfo(QFileInfo(baseDir).filePath());
@@ -143,7 +143,7 @@ int SvgLoadingContext::nextZIndex()
     return d->zIndex++;
 }
 
-KoImageCollection* SvgLoadingContext::imageCollection()
+KoImageCollection *SvgLoadingContext::imageCollection()
 {
     return d->documentResourceManager->imageCollection();
 }
@@ -154,7 +154,7 @@ void SvgLoadingContext::registerShape(const QString &id, KoShape *shape)
         d->loadedShapes.insert(id, shape);
 }
 
-KoShape* SvgLoadingContext::shapeById(const QString &id)
+KoShape *SvgLoadingContext::shapeById(const QString &id)
 {
     return d->loadedShapes.value(id);
 }

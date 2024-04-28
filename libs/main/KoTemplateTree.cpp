@@ -10,11 +10,11 @@
 #include <QPrinter>
 #include <QUrl>
 
-#include <kdesktopfile.h>
 #include <KConfig>
-#include <MainDebug.h>
-#include <KLocalizedString>
 #include <KConfigGroup>
+#include <KLocalizedString>
+#include <MainDebug.h>
+#include <kdesktopfile.h>
 
 #include <KoNetAccess.h>
 #include <KoResourcePaths.h>
@@ -22,9 +22,10 @@
 #include <KoTemplateGroup.h>
 #include <KoTemplates.h>
 
-KoTemplateTree::KoTemplateTree(const QString &templatesResourcePath, bool readTree) :
-        m_templatesResourcePath(templatesResourcePath), m_defaultGroup(0),
-        m_defaultTemplate(0)
+KoTemplateTree::KoTemplateTree(const QString &templatesResourcePath, bool readTree)
+    : m_templatesResourcePath(templatesResourcePath)
+    , m_defaultGroup(0)
+    , m_defaultTemplate(0)
 {
     if (readTree)
         readTemplateTree();
@@ -37,50 +38,48 @@ KoTemplateTree::~KoTemplateTree()
 
 void KoTemplateTree::readTemplateTree()
 {
-
     readGroups();
     readTemplates();
 }
 
 void KoTemplateTree::writeTemplateTree()
 {
-
     const QString localDir = KoResourcePaths::saveLocation("data", m_templatesResourcePath);
 
     foreach (KoTemplateGroup *group, m_groups) {
-        //kDebug( 30003 ) <<"---------------------------------";
-        //kDebug( 30003 ) <<"group:" << group->name();
+        // kDebug( 30003 ) <<"---------------------------------";
+        // kDebug( 30003 ) <<"group:" << group->name();
 
         bool touched = false;
-        const QList<KoTemplate*> templates = group->templates();
-        QList<KoTemplate*>::ConstIterator it = templates.begin();
+        const QList<KoTemplate *> templates = group->templates();
+        QList<KoTemplate *>::ConstIterator it = templates.begin();
         for (; it != templates.end() && !touched && !group->touched(); ++it)
             touched = (*it)->touched();
 
         if (group->touched() || touched) {
-            //kDebug( 30003 ) <<"touched";
+            // kDebug( 30003 ) <<"touched";
             if (!group->isHidden()) {
-                //kDebug( 30003 ) <<"not hidden";
+                // kDebug( 30003 ) <<"not hidden";
                 QDir().mkpath(localDir + group->name()); // create the local group dir
             } else {
-                //kDebug( 30003 ) <<"hidden";
+                // kDebug( 30003 ) <<"hidden";
                 if (group->dirs().count() == 1 && group->dirs().contains(localDir)) {
-                    //kDebug( 30003 ) <<"local only";
+                    // kDebug( 30003 ) <<"local only";
                     KIO::NetAccess::del(QUrl::fromLocalFile(group->dirs().first()), 0);
-                    //kDebug( 30003 ) <<"removing:" << group->dirs().first();
+                    // kDebug( 30003 ) <<"removing:" << group->dirs().first();
                 } else {
-                    //kDebug( 30003 ) <<"global";
+                    // kDebug( 30003 ) <<"global";
                     QDir().mkpath(localDir + group->name());
                 }
             }
         }
         foreach (KoTemplate *t, templates) {
             if (t->touched()) {
-                //kDebug( 30003 ) <<"++template:" << t->name();
+                // kDebug( 30003 ) <<"++template:" << t->name();
                 writeTemplate(t, group, localDir);
             }
             if (t->isHidden() && t->touched()) {
-                //kDebug( 30003 ) <<"+++ delete local template ##############";
+                // kDebug( 30003 ) <<"+++ delete local template ##############";
                 writeTemplate(t, group, localDir);
                 QFile::remove(t->file());
                 QFile::remove(t->picture());
@@ -91,7 +90,6 @@ void KoTemplateTree::writeTemplateTree()
 
 void KoTemplateTree::add(KoTemplateGroup *g)
 {
-
     KoTemplateGroup *group = find(g->name());
     if (group == nullptr)
         m_groups.append(g);
@@ -104,8 +102,8 @@ void KoTemplateTree::add(KoTemplateGroup *g)
 
 KoTemplateGroup *KoTemplateTree::find(const QString &name) const
 {
-    QList<KoTemplateGroup*>::const_iterator it = m_groups.begin();
-    KoTemplateGroup* ret = nullptr;
+    QList<KoTemplateGroup *>::const_iterator it = m_groups.begin();
+    KoTemplateGroup *ret = nullptr;
 
     while (it != m_groups.end()) {
         if ((*it)->name() == name) {
@@ -121,16 +119,15 @@ KoTemplateGroup *KoTemplateTree::find(const QString &name) const
 
 void KoTemplateTree::readGroups()
 {
-
     const QStringList dirs = KoResourcePaths::findDirs("data", m_templatesResourcePath);
-    foreach(const QString & dirName, dirs) {
-        //kDebug( 30003 ) <<"dir:" << *it;
+    foreach (const QString &dirName, dirs) {
+        // kDebug( 30003 ) <<"dir:" << *it;
         QDir dir(dirName);
         // avoid the annoying warning
         if (!dir.exists())
             continue;
         QStringList templateDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-        foreach(const QString & templateDirName, templateDirs) {
+        foreach (const QString &templateDirName, templateDirs) {
             QDir templateDir(dirName + templateDirName);
             QString name = templateDirName;
             QString defaultTab;
@@ -141,7 +138,7 @@ void KoTemplateTree::readGroups()
                 name = dg.readEntry("Name");
                 defaultTab = dg.readEntry("X-KDE-DefaultTab");
                 sortingWeight = dg.readEntry("X-KDE-SortingWeight", 1000);
-                //kDebug( 30003 ) <<"name:" << name;
+                // kDebug( 30003 ) <<"name:" << name;
             }
             KoTemplateGroup *g = new KoTemplateGroup(name, templateDir.absolutePath() + QDir::separator(), sortingWeight);
             add(g);
@@ -155,7 +152,7 @@ void KoTemplateTree::readTemplates()
 {
     QString dontShow = "hide nothing at all - show all the templates, please, and let the user make the choice";
 
-    foreach (KoTemplateGroup* group, m_groups) {
+    foreach (KoTemplateGroup *group, m_groups) {
         QStringList dirs = group->dirs();
         for (QStringList::ConstIterator it = dirs.constBegin(); it != dirs.constEnd(); ++it) {
             QDir d(*it);
@@ -164,7 +161,7 @@ void KoTemplateTree::readTemplates()
             QStringList files = d.entryList(QDir::Files | QDir::Readable, QDir::Name);
             for (int i = 0; i < files.count(); ++i) {
                 QString filePath = *it + files[i];
-                //kDebug( 30003 ) <<"filePath:" << filePath;
+                // kDebug( 30003 ) <<"filePath:" << filePath;
                 QString icon;
                 QString text;
                 QString description;
@@ -187,12 +184,12 @@ void KoTemplateTree::readTemplates()
                         text = config.readEntry("Name");
                         fileName = filePath;
                         description = config.readEntry("Comment");
-                        //kDebug( 30003 ) <<"name:" << text;
+                        // kDebug( 30003 ) <<"name:" << text;
                         icon = config.readEntry("Icon");
                         if (icon[0] != '/' && // allow absolute paths for icons
-                                QFile::exists(*it + icon)) // allow icons from icontheme
+                            QFile::exists(*it + icon)) // allow icons from icontheme
                             icon = *it + icon;
-                        //kDebug( 30003 ) <<"icon2:" << icon;
+                        // kDebug( 30003 ) <<"icon2:" << icon;
                         color = config.readEntry("X-KDE-Color");
                         swatch = config.readEntry("X-KDE-Swatch");
                         wide = config.readEntry("X-KDE-TemplateIsWideFormat", false);
@@ -206,16 +203,16 @@ void KoTemplateTree::readTemplates()
                         if (measureSystem == dontShow)
                             continue;
 
-                        //kDebug( 30003 ) <<"hidden:" << hidden_str;
+                        // kDebug( 30003 ) <<"hidden:" << hidden_str;
                         templatePath = config.readPathEntry("URL", QString());
-                        //kDebug( 30003 ) <<"Link to :" << templatePath;
+                        // kDebug( 30003 ) <<"Link to :" << templatePath;
                         if (templatePath[0] != '/') {
                             if (templatePath.left(6) == "file:/") // I doubt this will happen
                                 templatePath = templatePath.right(templatePath.length() - 6);
-                            //else
-                            //  kDebug( 30003 ) <<"dirname=" << *it;
+                            // else
+                            //   kDebug( 30003 ) <<"dirname=" << *it;
                             templatePath = *it + templatePath;
-                            //kDebug( 30003 ) <<"templatePath:" << templatePath;
+                            // kDebug( 30003 ) <<"templatePath:" << templatePath;
                         }
                     } else
                         continue; // Invalid
@@ -232,8 +229,7 @@ void KoTemplateTree::readTemplates()
                     templatePath = filePath; // Note that we store the .png file as the template !
                     // That's the way it's always been done. Then the app replaces the extension...
                 }
-                KoTemplate *t = new KoTemplate(text, description, templatePath, icon, fileName,
-                                               measureSystem, color, swatch, variantName, wide, hidden);
+                KoTemplate *t = new KoTemplate(text, description, templatePath, icon, fileName, measureSystem, color, swatch, variantName, wide, hidden);
                 if (!thumbnail.isEmpty())
                     t->setThumbnail(*it + thumbnail);
                 group->add(t, false, false); // false -> we aren't a "user", false -> don't
@@ -246,8 +242,7 @@ void KoTemplateTree::readTemplates()
     }
 }
 
-void KoTemplateTree::writeTemplate(KoTemplate *t, KoTemplateGroup *group,
-                                   const QString &localDir)
+void KoTemplateTree::writeTemplate(KoTemplate *t, KoTemplateGroup *group, const QString &localDir)
 {
     QString fileName;
     if (t->isHidden()) {

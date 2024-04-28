@@ -9,13 +9,13 @@
 #include "KWPageStyle.h"
 #include "KWPageStyle_p.h"
 
-#include <KoXmlWriter.h>
-#include <KoXmlNS.h>
-#include <KoUnit.h>
 #include <KoColorBackground.h>
-#include <KoPatternBackground.h>
 #include <KoImageCollection.h>
 #include <KoOdfLoadingContext.h>
+#include <KoPatternBackground.h>
+#include <KoUnit.h>
+#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 #include <QBuffer>
 #include <QColor>
@@ -45,7 +45,7 @@ void KWPageStylePrivate::clear()
 ///////////
 
 KWPageStyle::KWPageStyle(const QString &name, const QString &displayname)
-    : d (new KWPageStylePrivate())
+    : d(new KWPageStylePrivate())
 {
     d->name = name;
     if (!displayname.isEmpty())
@@ -65,7 +65,6 @@ bool KWPageStyle::isValid() const
 {
     return d && !d->name.isEmpty();
 }
-
 
 KWPageStyle &KWPageStyle::operator=(const KWPageStyle &ps)
 {
@@ -218,24 +217,23 @@ KoGenStyle KWPageStyle::saveOdf() const
     pageLayout.setAutoStyleInStylesDotXml(true);
 
     switch (d->pageUsage) {
-        case LeftPages:
-            pageLayout.addAttribute("style:page-usage", "left");
-            break;
-        case MirroredPages:
-            pageLayout.addAttribute("style:page-usage", "mirrored");
-            break;
-        case RightPages:
-            pageLayout.addAttribute("style:page-usage", "right");
-            break;
-        default:
-            pageLayout.addAttribute("style:page-usage", "all");
-            break;
+    case LeftPages:
+        pageLayout.addAttribute("style:page-usage", "left");
+        break;
+    case MirroredPages:
+        pageLayout.addAttribute("style:page-usage", "mirrored");
+        break;
+    case RightPages:
+        pageLayout.addAttribute("style:page-usage", "right");
+        break;
+    default:
+        pageLayout.addAttribute("style:page-usage", "all");
+        break;
     }
 
     // Save background color if it is set
-    if (d->fullPageBackground)
-    {
-        KoColorBackground *colorBackground = dynamic_cast<KoColorBackground*>(d->fullPageBackground.data());
+    if (d->fullPageBackground) {
+        KoColorBackground *colorBackground = dynamic_cast<KoColorBackground *>(d->fullPageBackground.data());
         if (colorBackground)
             pageLayout.addProperty("fo:background-color", colorBackground->color().name());
     }
@@ -244,15 +242,13 @@ KoGenStyle KWPageStyle::saveOdf() const
     d->columns.saveOdf(pageLayout);
 
     //<style:footnote-sep style:adjustment="left" style:width="0.5pt" style:rel-width="20%" style:line-style="solid"/>
-    //writer.startElement("style:footnote-sep");
+    // writer.startElement("style:footnote-sep");
     // TODO
-    //writer.addAttribute("style:adjustment",)
-    //writer.addAttribute("style:width",)
-    //writer.addAttribute("style:rel-width",)
-    //writer.addAttribute("style:line-style",)
-    //writer.endElement();
-
-
+    // writer.addAttribute("style:adjustment",)
+    // writer.addAttribute("style:width",)
+    // writer.addAttribute("style:rel-width",)
+    // writer.addAttribute("style:line-style",)
+    // writer.endElement();
 
     if (headerPolicy() != Words::HFTypeNone) {
         QBuffer buffer;
@@ -318,9 +314,9 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
     d->columns.loadOdf(props);
 
     KoXmlElement header = KoXml::namedItemNS(style, KoXmlNS::style, "header-style");
-    if (! header.isNull()) {
+    if (!header.isNull()) {
         KoXmlElement hfprops = KoXml::namedItemNS(header, KoXmlNS::style, "header-footer-properties");
-        if (! hfprops.isNull()) {
+        if (!hfprops.isNull()) {
             d->headerDistance = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "margin-bottom"));
             d->headerMinimumHeight = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "min-height"));
             const QString dynamicSpacing(hfprops.attributeNS(KoXmlNS::style, "dynamic-spacing"));
@@ -330,9 +326,9 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
     }
 
     KoXmlElement footer = KoXml::namedItemNS(style, KoXmlNS::style, "footer-style");
-    if (! footer.isNull()) {
+    if (!footer.isNull()) {
         KoXmlElement hfprops = KoXml::namedItemNS(footer, KoXmlNS::style, "header-footer-properties");
-        if (! hfprops.isNull()) {
+        if (!hfprops.isNull()) {
             d->footerDistance = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "margin-top"));
             d->footerMinimumHeight = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "min-height"));
             const QString dynamicSpacing(hfprops.attributeNS(KoXmlNS::style, "dynamic-spacing"));
@@ -346,12 +342,12 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
     if (!propBackgroundImage.isNull()) {
         const QString href = propBackgroundImage.attributeNS(KoXmlNS::xlink, "href", QString());
         if (!href.isEmpty()) {
-            QSharedPointer<KoPatternBackground> background =  QSharedPointer<KoPatternBackground>(new KoPatternBackground(documentResources->imageCollection()));
+            QSharedPointer<KoPatternBackground> background = QSharedPointer<KoPatternBackground>(new KoPatternBackground(documentResources->imageCollection()));
             d->fullPageBackground = background;
 
             KoImageCollection *imageCollection = documentResources->imageCollection();
             if (imageCollection != 0) {
-                KoImageData *imageData = imageCollection->createImageData(href,context.store());
+                KoImageData *imageData = imageCollection->createImageData(href, context.store());
                 background->setPattern(imageData);
             }
         }
@@ -361,11 +357,9 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
     // Load background color
     QString backgroundColor = props.attributeNS(KoXmlNS::fo, "background-color", QString());
     if (!backgroundColor.isNull() && d->fullPageBackground == 0) {
-
         if (backgroundColor == "transparent") {
             d->fullPageBackground.clear();
-        }
-        else {
+        } else {
             d->fullPageBackground = QSharedPointer<KoShapeBackground>(new KoColorBackground(QColor(backgroundColor)));
         }
     }
@@ -412,7 +406,7 @@ const KWPageStylePrivate *KWPageStyle::priv() const
 
 uint KWPageStyle::hash() const
 {
-    return ((uint) d) + 1;
+    return ((uint)d) + 1;
 }
 
 bool KWPageStyle::isPageSpread() const

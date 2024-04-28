@@ -9,17 +9,17 @@
 
 #include <KoUnit.h>
 
-#include <QString>
+#include <QFontMetrics>
 #include <QRectF>
 #include <QRegularExpression>
+#include <QString>
 #include <QStringList>
-#include <QFontMetrics>
 
 #include <math.h>
 
 #define DPI 72.0
 
-#define DEG2RAD(degree) degree/180.0*M_PI
+#define DEG2RAD(degree) degree / 180.0 * M_PI
 
 double SvgUtil::fromUserSpace(double value)
 {
@@ -133,15 +133,14 @@ QTransform SvgUtil::parseTransform(const QString &transform)
             }
         } else if (subtransform[0] == "translate") {
             if (params.count() == 2) {
-                result.translate(SvgUtil::fromUserSpace(params[0].toDouble()),
-                                 SvgUtil::fromUserSpace(params[1].toDouble()));
-            } else {   // Spec : if only one param given, assume 2nd param to be 0
-                result.translate(SvgUtil::fromUserSpace(params[0].toDouble()) , 0);
+                result.translate(SvgUtil::fromUserSpace(params[0].toDouble()), SvgUtil::fromUserSpace(params[1].toDouble()));
+            } else { // Spec : if only one param given, assume 2nd param to be 0
+                result.translate(SvgUtil::fromUserSpace(params[0].toDouble()), 0);
             }
         } else if (subtransform[0] == "scale") {
             if (params.count() == 2) {
                 result.scale(params[0].toDouble(), params[1].toDouble());
-            } else {   // Spec : if only one param given, assume uniform scaling
+            } else { // Spec : if only one param given, assume uniform scaling
                 result.scale(params[0].toDouble(), params[0].toDouble());
             }
         } else if (subtransform[0].toLower() == "skewx") {
@@ -150,10 +149,15 @@ QTransform SvgUtil::parseTransform(const QString &transform)
             result.shear(0.0F, tan(DEG2RAD(params[0].toDouble())));
         } else if (subtransform[0] == "matrix") {
             if (params.count() >= 6) {
-                result.setMatrix(params[0].toDouble(), params[1].toDouble(), 0,
-                                 params[2].toDouble(), params[3].toDouble(), 0,
+                result.setMatrix(params[0].toDouble(),
+                                 params[1].toDouble(),
+                                 0,
+                                 params[2].toDouble(),
+                                 params[3].toDouble(),
+                                 0,
                                  SvgUtil::fromUserSpace(params[4].toDouble()),
-                                 SvgUtil::fromUserSpace(params[5].toDouble()), 1);
+                                 SvgUtil::fromUserSpace(params[5].toDouble()),
+                                 1);
             }
         }
     }
@@ -167,15 +171,15 @@ QString SvgUtil::transformToString(const QTransform &transform)
         return QString();
 
     if (transform.type() == QTransform::TxTranslate) {
-        return QString("translate(%1, %2)")
-                     .arg(toUserSpace(transform.dx()))
-                     .arg(toUserSpace(transform.dy()));
+        return QString("translate(%1, %2)").arg(toUserSpace(transform.dx())).arg(toUserSpace(transform.dy()));
     } else {
         return QString("matrix(%1 %2 %3 %4 %5 %6)")
-                     .arg(transform.m11()).arg(transform.m12())
-                     .arg(transform.m21()).arg(transform.m22())
-                     .arg(toUserSpace(transform.dx()))
-                     .arg(toUserSpace(transform.dy()));
+            .arg(transform.m11())
+            .arg(transform.m12())
+            .arg(transform.m21())
+            .arg(transform.m22())
+            .arg(toUserSpace(transform.dx()))
+            .arg(toUserSpace(transform.dy()));
     }
 }
 
@@ -250,7 +254,7 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz
                 value /= m_gc.top()->matrix.m22();
         }
     }*/
-    //value *= 90.0 / DPI;
+    // value *= 90.0 / DPI;
 
     return value;
 }
@@ -283,7 +287,7 @@ qreal SvgUtil::parseUnitXY(SvgGraphicsContext *gc, const QString &unit)
     }
 }
 
-const char * SvgUtil::parseNumber(const char *ptr, qreal &number)
+const char *SvgUtil::parseNumber(const char *ptr, qreal &number)
 {
     int integer, exponent;
     qreal decimal, frac;

@@ -6,11 +6,11 @@
 
 #include "KoTemplatesPane.h"
 
-#include "KoTemplateGroup.h"
 #include "KoTemplate.h"
+#include "KoTemplateGroup.h"
 
-#include <KSharedConfig>
 #include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <QStandardItemModel>
 #include <QUrl>
@@ -19,18 +19,17 @@ class KoTemplatesPanePrivate
 {
 public:
     KoTemplatesPanePrivate()
-            : m_selected(false) {
+        : m_selected(false)
+    {
     }
 
     bool m_selected;
     QString m_alwaysUseTemplate;
 };
 
-
-KoTemplatesPane::KoTemplatesPane(QWidget* parent, const QString& header,
-                                 KoTemplateGroup *group, KoTemplate* defaultTemplate)
-        : KoDetailsPane(parent, header)
-        , d(new KoTemplatesPanePrivate)
+KoTemplatesPane::KoTemplatesPane(QWidget *parent, const QString &header, KoTemplateGroup *group, KoTemplate *defaultTemplate)
+    : KoDetailsPane(parent, header)
+    , d(new KoTemplatesPanePrivate)
 {
     setFocusProxy(m_documentList);
 
@@ -40,11 +39,11 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, const QString& header,
     d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
     connect(m_alwaysUseCheckBox, &QAbstractButton::clicked, this, &KoTemplatesPane::alwaysUseClicked);
 
-    QStandardItem* selectItem = 0;
-    QStandardItem* rootItem = model()->invisibleRootItem();
-    QStandardItem* defaultItem = 0;
+    QStandardItem *selectItem = 0;
+    QStandardItem *rootItem = model()->invisibleRootItem();
+    QStandardItem *defaultItem = 0;
 
-    foreach (KoTemplate* t, group->templates()) {
+    foreach (KoTemplate *t, group->templates()) {
         if (t->isHidden())
             continue;
 
@@ -53,7 +52,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, const QString& header,
         icon = icon.scaled(IconExtent, IconExtent, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         icon = icon.convertToFormat(QImage::Format_ARGB32);
         icon = icon.copy((icon.width() - IconExtent) / 2, (icon.height() - IconExtent) / 2, IconExtent, IconExtent);
-        QStandardItem* item = new QStandardItem(QPixmap::fromImage(icon), t->name());
+        QStandardItem *item = new QStandardItem(QPixmap::fromImage(icon), t->name());
         item->setEditable(false);
         item->setData(t->description(), Qt::UserRole);
         item->setData(t->file(), Qt::UserRole + 1);
@@ -91,10 +90,10 @@ KoTemplatesPane::~KoTemplatesPane()
     delete d;
 }
 
-void KoTemplatesPane::selectionChanged(const QModelIndex& index)
+void KoTemplatesPane::selectionChanged(const QModelIndex &index)
 {
     if (index.isValid()) {
-        QStandardItem* item = model()->itemFromIndex(index);
+        QStandardItem *item = model()->itemFromIndex(index);
         m_openButton->setEnabled(true);
         m_alwaysUseCheckBox->setEnabled(true);
         m_titleLabel->setText(item->data(Qt::DisplayRole).toString());
@@ -116,10 +115,10 @@ void KoTemplatesPane::openFile()
     KoDetailsPane::openFile();
 }
 
-void KoTemplatesPane::openFile(const QModelIndex& index)
+void KoTemplatesPane::openFile(const QModelIndex &index)
 {
     if (index.isValid()) {
-        QStandardItem* item = model()->itemFromIndex(index);
+        QStandardItem *item = model()->itemFromIndex(index);
         KConfigGroup cfgGrp(KSharedConfig::openConfig(), "TemplateChooserDialog");
         cfgGrp.writePathEntry("FullTemplateName", item->data(Qt::UserRole + 1).toString());
         cfgGrp.writeEntry("LastReturnType", "Template");
@@ -135,7 +134,7 @@ bool KoTemplatesPane::isSelected()
 
 void KoTemplatesPane::alwaysUseClicked()
 {
-    QStandardItem* item = model()->itemFromIndex(m_documentList->selectionModel()->currentIndex());
+    QStandardItem *item = model()->itemFromIndex(m_documentList->selectionModel()->currentIndex());
 
     if (!m_alwaysUseCheckBox->isChecked()) {
         d->m_alwaysUseTemplate.clear();
@@ -149,12 +148,12 @@ void KoTemplatesPane::alwaysUseClicked()
     emit alwaysUseChanged(this, d->m_alwaysUseTemplate);
 }
 
-void KoTemplatesPane::changeAlwaysUseTemplate(KoTemplatesPane* sender, const QString& alwaysUse)
+void KoTemplatesPane::changeAlwaysUseTemplate(KoTemplatesPane *sender, const QString &alwaysUse)
 {
     if (this == sender)
         return;
 
-    QStandardItem* item = model()->itemFromIndex(m_documentList->selectionModel()->currentIndex());
+    QStandardItem *item = model()->itemFromIndex(m_documentList->selectionModel()->currentIndex());
 
     // If the old always use template is selected uncheck the checkbox
     if (item && (item->data(Qt::UserRole + 1).toString() == d->m_alwaysUseTemplate)) {

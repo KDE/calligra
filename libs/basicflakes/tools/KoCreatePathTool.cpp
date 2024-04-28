@@ -9,25 +9,24 @@
 #include "KoCreatePathTool.h"
 #include "KoCreatePathTool_p.h"
 
-#include "KoPointerEvent.h"
-#include "KoPathShape.h"
-#include "KoSelection.h"
 #include "KoDocumentResourceManager.h"
+#include "KoPathShape.h"
+#include "KoPointerEvent.h"
+#include "KoSelection.h"
 #include "KoShapePaintingContext.h"
 #include "KoShapeStroke.h"
 #include <KoColor.h>
 
 #include <KLocalizedString>
 
-#include <QSpinBox>
-#include <QPainter>
-#include <QLabel>
-#include <QGridLayout>
 #include <QCheckBox>
-
+#include <QGridLayout>
+#include <QLabel>
+#include <QPainter>
+#include <QSpinBox>
 
 KoCreatePathTool::KoCreatePathTool(KoCanvasBase *canvas)
-        : KoToolBase(*(new KoCreatePathToolPrivate(this, canvas)))
+    : KoToolBase(*(new KoCreatePathToolPrivate(this, canvas)))
 {
 }
 
@@ -54,7 +53,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
         KoShape::applyConversion(painter, converter);
 
         painter.setPen(QPen(Qt::blue, 0));
-        painter.setBrush(Qt::white);   //TODO make configurable
+        painter.setBrush(Qt::white); // TODO make configurable
 
         const bool firstPoint = (d->firstPoint == d->activePoint);
         if (d->pointIsDragged || firstPoint) {
@@ -65,12 +64,11 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
             d->activePoint->paint(painter, d->handleRadius, paintFlags, onlyPaintActivePoints);
         }
 
-
         // check if we have to color the first point
         if (d->mouseOverFirstPoint)
-            painter.setBrush(Qt::red);     //TODO make configurable
+            painter.setBrush(Qt::red); // TODO make configurable
         else
-            painter.setBrush(Qt::white);   //TODO make configurable
+            painter.setBrush(Qt::white); // TODO make configurable
 
         d->firstPoint->paint(painter, d->handleRadius, KoPathPoint::Node);
 
@@ -82,7 +80,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
         painter.setTransform(d->hoveredPoint->parent()->absoluteTransformation(&converter), true);
         KoShape::applyConversion(painter, converter);
         painter.setPen(QPen(Qt::blue, 0));
-        painter.setBrush(Qt::white);   //TODO make configurable
+        painter.setBrush(Qt::white); // TODO make configurable
         d->hoveredPoint->paint(painter, d->handleRadius, KoPathPoint::Node);
         painter.restore();
     }
@@ -92,13 +90,13 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
     painter.restore();
 }
 
-void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter)
+void KoCreatePathTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
 {
     Q_D(KoCreatePathTool);
     painter.setTransform(pathShape.absoluteTransformation(&converter) * painter.transform());
     painter.save();
 
-    KoShapePaintingContext paintContext; //FIXME
+    KoShapePaintingContext paintContext; // FIXME
     pathShape.paint(painter, converter, paintContext);
     painter.restore();
     if (pathShape.stroke()) {
@@ -112,14 +110,13 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 {
     Q_D(KoCreatePathTool);
 
-    //Right click removes last point
+    // Right click removes last point
     if (event->button() == Qt::RightButton) {
-      removeLastPoint();
-      return;
+        removeLastPoint();
+        return;
     }
 
-    const bool isOverFirstPoint = d->shape &&
-        handleGrabRect(d->firstPoint->point()).contains(event->point);
+    const bool isOverFirstPoint = d->shape && handleGrabRect(d->firstPoint->point()).contains(event->point);
     bool haveCloseModifier = (listeningToModifiers() && (event->modifiers() & Qt::ShiftModifier));
 
     if ((event->button() == Qt::LeftButton) && haveCloseModifier && !isOverFirstPoint) {
@@ -166,7 +163,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         }
     } else {
         KoPathShape *pathShape = new KoPathShape();
-        d->shape=pathShape;
+        d->shape = pathShape;
         pathShape->setShapeId(KoPathShapeId);
 
         KoShapeStroke *stroke = new KoShapeStroke(canvas()->resourceManager()->activeStroke());
@@ -198,19 +195,19 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 
 bool KoCreatePathTool::listeningToModifiers()
 {
-  Q_D(KoCreatePathTool);
-  return d->listeningToModifiers;
+    Q_D(KoCreatePathTool);
+    return d->listeningToModifiers;
 }
 
 bool KoCreatePathTool::pathStarted()
 {
-  Q_D(KoCreatePathTool);
-  return ((bool) d->shape);
+    Q_D(KoCreatePathTool);
+    return ((bool)d->shape);
 }
 
 void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    //remove handle
+    // remove handle
     canvas()->updateCanvas(handlePaintRect(event->point));
 
     endPathWithoutLastPoint();
@@ -269,7 +266,7 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     Q_D(KoCreatePathTool);
 
-    if (! d->shape || (event->buttons() & Qt::RightButton))
+    if (!d->shape || (event->buttons() & Qt::RightButton))
         return;
 
     d->listeningToModifiers = true; // After the first press-and-release
@@ -279,7 +276,7 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
 
     if (!d->finishAfterThisPoint) {
         d->activePoint = d->shape->lineTo(event->point);
-        canvas()->snapGuide()->setIgnoredPathPoints((QList<KoPathPoint*>()<<d->activePoint));
+        canvas()->snapGuide()->setIgnoredPathPoints((QList<KoPathPoint *>() << d->activePoint));
     }
 
     // apply symmetric point property if applicable
@@ -291,7 +288,6 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
     }
 
     if (d->finishAfterThisPoint) {
-
         d->firstPoint->setControlPoint1(d->activePoint->controlPoint1());
         delete d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
         d->activePoint = d->firstPoint;
@@ -368,7 +364,7 @@ void KoCreatePathTool::removeLastPoint()
     }
 }
 
-void KoCreatePathTool::activate(ToolActivation, const QSet<KoShape*> &)
+void KoCreatePathTool::activate(ToolActivation, const QSet<KoShape *> &)
 {
     Q_D(KoCreatePathTool);
     useCursor(Qt::ArrowCursor);
@@ -386,15 +382,14 @@ void KoCreatePathTool::deactivate()
     cancelPath();
 }
 
-void KoCreatePathTool::documentResourceChanged(int key, const QVariant & res)
+void KoCreatePathTool::documentResourceChanged(int key, const QVariant &res)
 {
     Q_D(KoCreatePathTool);
 
     switch (key) {
     case KoDocumentResourceManager::HandleRadius: {
         d->handleRadius = res.toUInt();
-    }
-    break;
+    } break;
     default:
         return;
     }
@@ -436,11 +431,11 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
     }
 }
 
-QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
+QList<QPointer<QWidget>> KoCreatePathTool::createOptionWidgets()
 {
     Q_D(KoCreatePathTool);
 
-    QList<QPointer<QWidget> > list;
+    QList<QPointer<QWidget>> list;
 
     QWidget *angleWidget = new QWidget();
     angleWidget->setObjectName("Angle Constraints");
@@ -469,9 +464,12 @@ QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
     d->strokeWidget->setActive(false);
     list.append(d->strokeWidget);
 
-
-    connect(angleEdit, QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int v) { d_func()->angleDeltaChanged(v); });
-    connect(angleSnap, QOverload<int>::of(&QCheckBox::stateChanged), this, [this](int v) { d_func()->angleSnapChanged(v); });
+    connect(angleEdit, QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int v) {
+        d_func()->angleDeltaChanged(v);
+    });
+    connect(angleSnap, QOverload<int>::of(&QCheckBox::stateChanged), this, [this](int v) {
+        d_func()->angleSnapChanged(v);
+    });
 
     return list;
 }
@@ -487,5 +485,5 @@ KoShapeStroke *KoCreatePathTool::createStroke()
     return stroke;
 }
 
-//have to include this because of Q_PRIVATE_SLOT
+// have to include this because of Q_PRIVATE_SLOT
 #include <moc_KoCreatePathTool.cpp>

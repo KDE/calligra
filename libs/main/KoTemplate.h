@@ -8,8 +8,8 @@
 #ifndef koTemplate_h
 #define koTemplate_h
 
-#include <QString>
 #include <QPixmap>
+#include <QString>
 
 /**
  * @internal
@@ -45,7 +45,6 @@ X-KDE-Color=purple
  */
 class KoTemplate
 {
-
 public:
     explicit KoTemplate(const QString &name,
                         const QString &description = QString(),
@@ -57,78 +56,103 @@ public:
                         const QString &swatch = QString(),
                         const QString &variantName = QString(),
                         bool wide = false,
-                        bool hidden = false, bool touched = false);
-    ~KoTemplate() {}
+                        bool hidden = false,
+                        bool touched = false);
+    ~KoTemplate()
+    {
+    }
 
-    QString name() const {
+    QString name() const
+    {
         return m_name;
     }
-    QString description() const {
+    QString description() const
+    {
         return m_descr;
     }
-    QString file() const {
+    QString file() const
+    {
         return m_file;
     }
-    QString picture() const {
+    QString picture() const
+    {
         return m_picture;
     }
-    QString fileName() const {
+    QString fileName() const
+    {
         return m_fileName;
     }
     const QPixmap &loadPicture();
 
-    bool isHidden() const {
+    bool isHidden() const
+    {
         return m_hidden;
     }
-    void setHidden(bool hidden = true) {
-        m_hidden = hidden; m_touched = true;
+    void setHidden(bool hidden = true)
+    {
+        m_hidden = hidden;
+        m_touched = true;
     }
 
-    bool touched() const {
+    bool touched() const
+    {
         return m_touched;
     }
 
-    QString measureSystem() const {
+    QString measureSystem() const
+    {
         return m_measureSystem;
     }
-    void setMeasureSystem(const QString& system) {
+    void setMeasureSystem(const QString &system)
+    {
         m_measureSystem = system;
     }
 
-    QString color() const {
+    QString color() const
+    {
         return m_color;
     }
-    void setColor(const QString& color) {
+    void setColor(const QString &color)
+    {
         m_color = color;
     }
 
-    QString swatch() const {
+    QString swatch() const
+    {
         return m_swatch;
     }
-    void setSwatch(const QString& swatch) {
+    void setSwatch(const QString &swatch)
+    {
         m_swatch = swatch;
     }
 
-    QString variantName() const {
+    QString variantName() const
+    {
         return m_variantName;
     }
-    void setVariantName(const QString& variantName) {
+    void setVariantName(const QString &variantName)
+    {
         m_variantName = variantName;
     }
 
-    QString thumbnail() const {
+    QString thumbnail() const
+    {
         return m_thumbnail;
     }
-    void setThumbnail(const QString& thumbnail) {
+    void setThumbnail(const QString &thumbnail)
+    {
         m_thumbnail = thumbnail;
     }
 
-    bool wide() const {
+    bool wide() const
+    {
         return m_wide;
     }
-    void setWide(bool wide) {
+    void setWide(bool wide)
+    {
         m_wide = wide;
     }
+
 private:
     QString m_name, m_descr, m_file, m_picture, m_fileName, m_color, m_swatch, m_variantName, m_thumbnail;
     bool m_wide;
@@ -138,6 +162,5 @@ private:
     QPixmap m_pixmap;
     QString m_measureSystem;
 };
-
 
 #endif

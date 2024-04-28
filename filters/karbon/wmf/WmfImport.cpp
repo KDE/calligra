@@ -17,12 +17,10 @@ DESCRIPTION
 
 #include <QFile>
 
-K_PLUGIN_FACTORY_WITH_JSON(WMFImportFactory, "calligra_filter_wmf2svg.json",
-			   registerPlugin<WMFImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(WMFImportFactory, "calligra_filter_wmf2svg.json", registerPlugin<WMFImport>();)
 
-
-WMFImport::WMFImport(QObject *parent, const QVariantList&) :
-        KoFilter(parent)
+WMFImport::WMFImport(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
 }
 
@@ -30,7 +28,7 @@ WMFImport::~WMFImport()
 {
 }
 
-KoFilter::ConversionStatus WMFImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus WMFImport::convert(const QByteArray &from, const QByteArray &to)
 {
     if (to != "image/svg+xml" || from != "image/x-wmf")
         return KoFilter::NotImplemented;

@@ -13,15 +13,15 @@
 #include <QDebug>
 
 #include "KWDocument.h"
-#include "words_export.h"
-#include "KWViewMode.h"
 #include "KWPage.h"
+#include "KWViewMode.h"
+#include "words_export.h"
 
 #include <KoCanvasBase.h>
 
-#include <QRectF>
 #include <QImage>
 #include <QQueue>
+#include <QRectF>
 
 class QRect;
 class QPainter;
@@ -40,7 +40,6 @@ public:
     ~KWCanvasBase() override;
 
 public: // KoCanvasBase interface methods.
-
     /// reimplemented method from superclass
     void gridSize(qreal *horizontal, qreal *vertical) const override;
 
@@ -101,7 +100,6 @@ public: // KoCanvasBase interface methods.
     QPoint documentOffset() const;
 
 protected:
-
     void paint(QPainter &painter, const QRectF &paintRect);
 
     void paintBackgrounds(QPainter &painter, KWViewMode::ViewMap &viewMap);
@@ -123,28 +121,30 @@ protected:
      * @param inwardsY is the vertical vector (with value -1, 0 or 1) for the vector
      * pointing inwards for the border part nearest the center of the page.
      */
-    void paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData,
-                         const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
-                         int inwardsX, int inwardsY) const;
+    void paintBorderSide(QPainter &painter,
+                         const KoBorder::BorderData &borderData,
+                         const QPointF &lineStart,
+                         const QPointF &lineEnd,
+                         qreal zoom,
+                         int inwardsX,
+                         int inwardsY) const;
 
     virtual void updateCanvasInternal(const QRectF &clip) = 0;
 
 protected:
-
     KWDocument *m_document;
     KoShapeManager *m_shapeManager;
     KoToolProxy *m_toolProxy;
     KWViewMode *m_viewMode;
     QPoint m_documentOffset;
     KoViewConverter *m_viewConverter;
-    bool  m_showAnnotations;   //< true if annotations should be shown in the canvas
+    bool m_showAnnotations; //< true if annotations should be shown in the canvas
 
     bool m_cacheEnabled;
     qreal m_currentZoom;
     qreal m_maxZoom; //< above this zoomlevel we scale the cached image, instead of recreating the cache.
     KWPageCacheManager *m_pageCacheManager;
     int m_cacheSize;
-
 };
 
 #endif // KWCANVASBASE_H

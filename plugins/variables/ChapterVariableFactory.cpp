@@ -38,4 +38,3 @@ KoInlineObject *ChapterVariableFactory::createInlineObject(const KoProperties *p
         var->readProperties(properties);
     return var;
 }
-

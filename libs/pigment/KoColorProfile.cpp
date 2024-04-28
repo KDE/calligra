@@ -2,7 +2,7 @@
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include "KoColorProfile.h"
 #include "DebugPigment.h"
@@ -15,13 +15,14 @@ struct Q_DECL_HIDDEN KoColorProfile::Private {
     QString copyright;
 };
 
-KoColorProfile::KoColorProfile(const QString &fileName) : d(new Private)
+KoColorProfile::KoColorProfile(const QString &fileName)
+    : d(new Private)
 {
-//     dbgPigment <<" Profile filename =" << fileName;
+    //     dbgPigment <<" Profile filename =" << fileName;
     d->fileName = fileName;
 }
 
-KoColorProfile::KoColorProfile(const KoColorProfile& profile)
+KoColorProfile::KoColorProfile(const KoColorProfile &profile)
     : d(new Private(*profile.d))
 {
 }
@@ -36,12 +37,11 @@ bool KoColorProfile::load()
     return false;
 }
 
-bool KoColorProfile::save(const QString & filename)
+bool KoColorProfile::save(const QString &filename)
 {
     Q_UNUSED(filename);
     return false;
 }
-
 
 QString KoColorProfile::name() const
 {

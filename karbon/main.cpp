@@ -14,21 +14,24 @@
 */
 
 #include "ui/splash/hi256-app-calligrakarbon.xpm"
-#include <QSplashScreen>
 #include <QHideEvent>
 #include <QLoggingCategory>
+#include <QSplashScreen>
 
 #include <KoApplication.h>
 
-#include <KarbonFactory.h>
 #include <KarbonDocument.h>
+#include <KarbonFactory.h>
 #include <ui/KarbonAboutData.h>
 
 #ifdef MAINTANER_WANTED_SPLASH
 class KoSplashScreen : public QSplashScreen
 {
 public:
-    explicit KoSplashScreen(const QPixmap& pixmap) : QSplashScreen(pixmap) {}
+    explicit KoSplashScreen(const QPixmap &pixmap)
+        : QSplashScreen(pixmap)
+    {
+    }
 
     void hideEvent(QHideEvent *event) override
     {
@@ -38,7 +41,7 @@ public:
 };
 #endif
 
-int main( int argc, char* argv[] )
+int main(int argc, char *argv[])
 {
     /**
      * Disable debug output by default, only log warnings.
@@ -49,13 +52,14 @@ int main( int argc, char* argv[] )
      *
      * See: http://doc.qt.io/qt-5/qloggingcategory.html
      */
-    QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
-                                     "calligra.*.warning=true");
+    QLoggingCategory::setFilterRules(
+        "calligra.*.debug=false\n"
+        "calligra.*.warning=true");
 
     KoApplication app(KARBON_MIME_TYPE, QStringLiteral("calligrakarbon"), newKarbonAboutData, argc, argv);
     KLocalizedString::setApplicationDomain("karbon");
 
-    if (!app.start()) {  // parses command line args, create initial docs and mainwindows
+    if (!app.start()) { // parses command line args, create initial docs and mainwindows
         return 1;
     }
 
@@ -65,10 +69,11 @@ int main( int argc, char* argv[] )
     // so use an xpm.
     QSplashScreen *splashScreen = new KoSplashScreen(QPixmap(splash_screen_xpm));
     splashScreen->show();
-    splashScreen->showMessage("<p style=\"color:black\">"
-    "<b>Calligra Karbon is unmaintained!</b><br><br>"
-    "The Calligra community welcomes someone to take over.<br><br>"
-    "See community.kde.org/Calligra</p>");
+    splashScreen->showMessage(
+        "<p style=\"color:black\">"
+        "<b>Calligra Karbon is unmaintained!</b><br><br>"
+        "The Calligra community welcomes someone to take over.<br><br>"
+        "See community.kde.org/Calligra</p>");
 #endif
 
     return app.exec();

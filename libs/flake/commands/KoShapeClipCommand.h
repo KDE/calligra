@@ -8,8 +8,8 @@
 #define KOSHAPECLIPCOMMAND_H
 
 #include "flake_export.h"
-#include <kundo2command.h>
 #include <QList>
+#include <kundo2command.h>
 
 class KoShape;
 class KoPathShape;
@@ -26,7 +26,10 @@ public:
      * @param clipPathShapes the path shapes to be used a clipping path
      * @param parent the parent command used for macro commands
      */
-    KoShapeClipCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> &shapes, const QList<KoPathShape*> &clipPathShapes, KUndo2Command *parent = 0);
+    KoShapeClipCommand(KoShapeBasedDocumentBase *controller,
+                       const QList<KoShape *> &shapes,
+                       const QList<KoPathShape *> &clipPathShapes,
+                       KUndo2Command *parent = 0);
 
     /**
      * Command to set a new shape clipping path for a single shape
@@ -35,7 +38,7 @@ public:
      * @param clipPathShapes the path shapes to be used a clipping path
      * @param parent the parent command used for macro commands
      */
-    KoShapeClipCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, const QList<KoPathShape*> &clipPathShapes, KUndo2Command *parent = 0);
+    KoShapeClipCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, const QList<KoPathShape *> &clipPathShapes, KUndo2Command *parent = 0);
 
     /// Destroys the command
     ~KoShapeClipCommand() override;
@@ -47,7 +50,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOSHAPECLIPCOMMAND_H

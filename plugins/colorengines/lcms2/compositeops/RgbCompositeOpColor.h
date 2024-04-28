@@ -7,23 +7,22 @@
 #ifndef RGBCOMPOSITEOPCOLOR_H
 #define RGBCOMPOSITEOPCOLOR_H
 
-#include "KoColorSpaceMaths.h"
 #include "KoColorConversions.h"
+#include "KoColorSpaceMaths.h"
 #include <KoCompositeOpAlphaBase.h>
 
-#define SCALE_TO_FLOAT( v ) KoColorSpaceMaths< channels_type, float>::scaleToA( v )
-#define SCALE_FROM_FLOAT( v ) KoColorSpaceMaths< float, channels_type>::scaleToA( v )
+#define SCALE_TO_FLOAT(v) KoColorSpaceMaths<channels_type, float>::scaleToA(v)
+#define SCALE_FROM_FLOAT(v) KoColorSpaceMaths<float, channels_type>::scaleToA(v)
 
 template<class _CSTraits>
-class RgbCompositeOpColor : public KoCompositeOpAlphaBase<_CSTraits, RgbCompositeOpColor<_CSTraits>, true >
+class RgbCompositeOpColor : public KoCompositeOpAlphaBase<_CSTraits, RgbCompositeOpColor<_CSTraits>, true>
 {
     typedef typename _CSTraits::channels_type channels_type;
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
 
 public:
-
     RgbCompositeOpColor(KoColorSpace *cs)
-        : KoCompositeOpAlphaBase<_CSTraits, RgbCompositeOpColor<_CSTraits>, true >(cs, COMPOSITE_COLOR, i18n("Color"), KoCompositeOp::categoryMisc())
+        : KoCompositeOpAlphaBase<_CSTraits, RgbCompositeOpColor<_CSTraits>, true>(cs, COMPOSITE_COLOR, i18n("Color"), KoCompositeOp::categoryMisc())
     {
     }
 
@@ -32,13 +31,9 @@ public:
         return qMin(srcAlpha, dstAlpha);
     }
 
-    inline static void composeColorChannels(channels_type srcBlend,
-                                            const channels_type *src,
-                                            channels_type *dst,
-                                            bool allChannelFlags,
-                                            const QBitArray &channelFlags)
+    inline static void
+    composeColorChannels(channels_type srcBlend, const channels_type *src, channels_type *dst, bool allChannelFlags, const QBitArray &channelFlags)
     {
-
         float dstRed = SCALE_TO_FLOAT(dst[_CSTraits::red_pos]);
         float dstGreen = SCALE_TO_FLOAT(dst[_CSTraits::green_pos]);
         float dstBlue = SCALE_TO_FLOAT(dst[_CSTraits::blue_pos]);

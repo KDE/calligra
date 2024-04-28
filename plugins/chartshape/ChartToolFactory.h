@@ -19,10 +19,9 @@ public:
     ChartToolFactory();
     ~ChartToolFactory();
 
-    KoToolBase * createTool(KoCanvasBase *canvas) override;
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 } // namespace KoChart
-
 
 #endif

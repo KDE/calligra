@@ -7,30 +7,30 @@
  */
 
 #include "KWStatusBar.h"
-#include "KWView.h"
 #include "KWDocument.h"
+#include "KWView.h"
 #include "frames/KWTextFrameSet.h"
 
 #include <KoCanvasBase.h>
-#include <KoToolManager.h>
 #include <KoCanvasControllerWidget.h>
-#include <KoZoomController.h>
 #include <KoTextDocument.h>
-#include <KoTextEditor.h>
 #include <KoTextDocumentLayout.h>
+#include <KoTextEditor.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoToolManager.h>
+#include <KoZoomController.h>
 
-#include <QStackedWidget>
-#include <QLabel>
-#include <QStatusBar>
-#include <QLineEdit>
-#include <QIntValidator>
-#include <QToolButton>
-#include <QTimer>
 #include <QAction>
+#include <QIntValidator>
+#include <QLabel>
+#include <QLineEdit>
+#include <QStackedWidget>
+#include <QStatusBar>
+#include <QTimer>
+#include <QToolButton>
 
-#include <ksqueezedtextlabel.h>
 #include <KLocalizedString>
+#include <ksqueezedtextlabel.h>
 
 const KLocalizedString i18nModified = ki18n("Modified");
 const KLocalizedString i18nSaved = ki18n("Saved");
@@ -45,7 +45,9 @@ class KWStatusBarBaseItem : public QStackedWidget
 public:
     QLabel *m_label;
     QWidget *m_widget;
-    KWStatusBarBaseItem(QWidget *parent = 0) : QStackedWidget(parent), m_widget(0)
+    KWStatusBarBaseItem(QWidget *parent = 0)
+        : QStackedWidget(parent)
+        , m_widget(0)
     {
 #ifdef Q_WS_MAC
         setAttribute(Qt::WA_MacMiniSize, true);
@@ -53,12 +55,13 @@ public:
         m_label = new QLabel(this);
         addWidget(m_label);
     }
+
 protected:
-    void enterEvent(QEnterEvent*) override
+    void enterEvent(QEnterEvent *) override
     {
         setCurrentIndex(1);
     }
-    void leaveEvent(QEvent*) override
+    void leaveEvent(QEvent *) override
     {
         if (m_widget) {
             if (m_widget->hasFocus()) {
@@ -83,7 +86,8 @@ class KWStatusBarEditItem : public KWStatusBarBaseItem
 {
 public:
     QLineEdit *m_edit;
-    KWStatusBarEditItem(QWidget *parent = 0) : KWStatusBarBaseItem(parent)
+    KWStatusBarEditItem(QWidget *parent = 0)
+        : KWStatusBarBaseItem(parent)
     {
         m_edit = new QLineEdit(this);
         m_edit->setValidator(new QIntValidator(m_edit));
@@ -97,7 +101,8 @@ class KWStatusBarButtonItem : public KWStatusBarBaseItem
 {
 public:
     QToolButton *m_button;
-    KWStatusBarButtonItem(QWidget *parent = 0) : KWStatusBarBaseItem(parent)
+    KWStatusBarButtonItem(QWidget *parent = 0)
+        : KWStatusBarBaseItem(parent)
     {
         m_button = new QToolButton(this);
         m_widget = m_button;
@@ -106,19 +111,22 @@ public:
 };
 
 KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
-    : QObject(statusBar),
-    m_statusbar(statusBar),
-    m_controller(0),
-    m_currentPageNumber(0)
+    : QObject(statusBar)
+    , m_statusbar(statusBar)
+    , m_controller(0)
+    , m_currentPageNumber(0)
 {
     KWDocument *document = view->kwdocument();
     m_statusbar->setContextMenuPolicy(Qt::ActionsContextMenu);
 
     m_pageLabel = new KWStatusBarEditItem();
-    m_pageLabel->setFixedWidth(QFontMetrics(m_pageLabel->m_label->font()).boundingRect(i18nPageRange.subs("9999").subs("9999").subs("9999").toString()).width());
+    m_pageLabel->setFixedWidth(
+        QFontMetrics(m_pageLabel->m_label->font()).boundingRect(i18nPageRange.subs("9999").subs("9999").subs("9999").toString()).width());
     m_statusbar->addWidget(m_pageLabel);
     m_pageLabel->setVisible(document->config().statusBarShowPage());
-    connect(m_pageLabel->m_edit, &QLineEdit::returnPressed, this, [this]() { gotoPage(); });
+    connect(m_pageLabel->m_edit, &QLineEdit::returnPressed, this, [this]() {
+        gotoPage();
+    });
     connect(document, &KWDocument::pageSetupChanged, this, &KWStatusBar::updatePageCount);
 
     QAction *action = new QAction(i18n("Page Number"), this);
@@ -148,7 +156,9 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     m_pageStyleLabel->m_label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     m_pageStyleLabel->setToolTip(i18n("Change the page style"));
     m_statusbar->addWidget(m_pageStyleLabel);
-    connect(m_pageStyleLabel->m_button, &QToolButton::clicked, this, [this]() { showPageStyle(); });
+    connect(m_pageStyleLabel->m_button, &QToolButton::clicked, this, [this]() {
+        showPageStyle();
+    });
     connect(document, &KWDocument::pageSetupChanged, this, &KWStatusBar::updatePageStyle);
     m_pageStyleLabel->setVisible(document->config().statusBarShowPageStyle());
 
@@ -205,8 +215,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     m_statusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_statusbar->addWidget(m_statusLabel, 1);
     connect(m_statusbar, &QStatusBar::messageChanged, this, &KWStatusBar::setText);
-    connect(KoToolManager::instance(), &KoToolManager::changedStatusText,
-            this, &KWStatusBar::setText);
+    connect(KoToolManager::instance(), &KoToolManager::changedStatusText, this, &KWStatusBar::setText);
 
     m_zoomAction = new QAction(i18n("Zoom Controller"), this);
     m_zoomAction->setObjectName("zoom_controller");
@@ -216,8 +225,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
 
     updateCurrentTool(0);
     setCurrentView(view);
-    connect(KoToolManager::instance(), &KoToolManager::changedTool,
-            this, &KWStatusBar::updateCurrentTool);
+    connect(KoToolManager::instance(), &KoToolManager::changedTool, this, &KWStatusBar::updateCurrentTool);
 }
 
 KWStatusBar::~KWStatusBar()
@@ -245,11 +253,14 @@ void KWStatusBar::setModified(bool modified)
 
 void KWStatusBar::updatePageCount()
 {
-   if (m_currentView) {
+    if (m_currentView) {
         if (m_currentView->minPageNumber() == m_currentView->maxPageNumber()) {
             m_pageLabel->m_label->setText(i18nPage.subs(m_currentView->minPageNumber()).subs(m_currentView->kwdocument()->pageCount()).toString());
         } else {
-            m_pageLabel->m_label->setText(i18nPageRange.subs(m_currentView->minPageNumber()).subs(m_currentView->maxPageNumber()).subs(m_currentView->kwdocument()->pageCount()).toString());
+            m_pageLabel->m_label->setText(i18nPageRange.subs(m_currentView->minPageNumber())
+                                              .subs(m_currentView->maxPageNumber())
+                                              .subs(m_currentView->kwdocument()->pageCount())
+                                              .toString());
         }
         m_pageLabel->m_edit->setText(QString::number(m_currentView->currentPage().pageNumber()));
         if (m_modifiedLabel->text().isEmpty())
@@ -328,13 +339,13 @@ void KWStatusBar::gotoLine()
     QTextBlock block = fs ? fs->document()->findBlockByLineNumber(linenumber) : QTextBlock();
     if (!block.isValid())
         return;
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(fs->document()->documentLayout());
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout *>(fs->document()->documentLayout());
     Q_ASSERT(lay);
     KoTextLayoutRootArea *area = lay->rootAreaForPosition(block.position());
     if (!area)
         return;
     gotoPage(area->page()->pageNumber());
-    //m_currentView->canvasBase()->ensureVisible(block.layout()->boundingRect());
+    // m_currentView->canvasBase()->ensureVisible(block.layout()->boundingRect());
 }
 
 void KWStatusBar::updateMousePosition(const QPoint &pos)
@@ -346,7 +357,7 @@ void KWStatusBar::updateMousePosition(const QPoint &pos)
 void KWStatusBar::canvasResourceChanged(int key, const QVariant &value)
 {
     Q_UNUSED(value);
-    if (key ==  KoCanvasResourceManager::CurrentPage) {
+    if (key == KoCanvasResourceManager::CurrentPage) {
         updateCursorPosition();
         updatePageStyle();
         updatePageSize();
@@ -355,7 +366,7 @@ void KWStatusBar::canvasResourceChanged(int key, const QVariant &value)
 
 void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
 {
-    KoCanvasControllerWidget *widget = dynamic_cast<KoCanvasControllerWidget*>(canvasController);
+    KoCanvasControllerWidget *widget = dynamic_cast<KoCanvasControllerWidget *>(canvasController);
     if (!widget) {
         return;
     }
@@ -364,8 +375,7 @@ void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
         return; // ignore tool changes in other mainWindows
 
     if (m_controller) {
-        disconnect(m_controller.data(), &KoCanvasControllerProxyObject::canvasMousePositionChanged,
-                this, &KWStatusBar::updateMousePosition);
+        disconnect(m_controller.data(), &KoCanvasControllerProxyObject::canvasMousePositionChanged, this, &KWStatusBar::updateMousePosition);
     }
     m_controller = canvasController->proxyObject;
     if (canvasController) {
@@ -373,7 +383,7 @@ void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
         KWView *view = 0;
         QWidget *parent = widget->parentWidget();
         while (view == 0 && parent != 0) {
-            view = dynamic_cast<KWView*>(parent);
+            view = dynamic_cast<KWView *>(parent);
             if (!view) {
                 parent = parent->parentWidget();
             }
@@ -381,8 +391,7 @@ void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
         if (view) {
             setCurrentView(view);
         }
-        connect(m_controller.data(), &KoCanvasControllerProxyObject::canvasMousePositionChanged, this,
-                &KWStatusBar::updateMousePosition);
+        connect(m_controller.data(), &KoCanvasControllerProxyObject::canvasMousePositionChanged, this, &KWStatusBar::updateMousePosition);
     } else {
         m_mousePosLabel->setText(QString());
     }
@@ -395,17 +404,16 @@ void KWStatusBar::setCurrentView(KWView *view)
         return;
     } else if (view == m_currentView) {
         return;
-    } else if (view->canvasBase() == 0 ) {
+    } else if (view->canvasBase() == 0) {
         return;
     }
 
     if (m_currentView) {
-        KoCanvasBase *const canvas =  m_currentView->canvasBase();
+        KoCanvasBase *const canvas = m_currentView->canvasBase();
         Q_ASSERT(canvas);
         KoCanvasResourceManager *resourceManager = canvas->resourceManager();
         Q_ASSERT(resourceManager);
-        disconnect(resourceManager, &KoCanvasResourceManager::canvasResourceChanged,
-            this, &KWStatusBar::canvasResourceChanged);
+        disconnect(resourceManager, &KoCanvasResourceManager::canvasResourceChanged, this, &KWStatusBar::canvasResourceChanged);
         QWidget *zoomWidget = m_zoomWidgets.value(m_currentView);
         if (zoomWidget) {
             m_statusbar->removeWidget(zoomWidget);
@@ -487,7 +495,7 @@ void KWStatusBar::showPageStyle(bool visible)
 
 void KWStatusBar::showPageSize(bool visible)
 {
-   Q_ASSERT(m_currentView);
+    Q_ASSERT(m_currentView);
     m_currentView->kwdocument()->config().setStatusBarShowPageSize(visible);
     m_pageSizeLabel->setVisible(visible);
 }
@@ -523,7 +531,7 @@ void KWStatusBar::showZoom(bool visible)
 
 void KWStatusBar::removeView(QObject *object)
 {
-    KWView *view = static_cast<KWView*>(object);
+    KWView *view = static_cast<KWView *>(object);
     QWidget *widget = m_zoomWidgets.value(view);
     if (widget) {
         widget->deleteLater();
@@ -533,7 +541,7 @@ void KWStatusBar::removeView(QObject *object)
         m_currentView = 0;
 }
 
-//static
+// static
 void KWStatusBar::addViewControls(QStatusBar *statusBar, KWView *view)
 {
     /**
@@ -551,13 +559,13 @@ void KWStatusBar::addViewControls(QStatusBar *statusBar, KWView *view)
 
     QVariant variant = statusBar->property(KWSTATUSBAR);
     if (variant.isValid()) { // already exists!
-        KWStatusBar *decorator = static_cast<KWStatusBar*>(variant.value<void*>());
+        KWStatusBar *decorator = static_cast<KWStatusBar *>(variant.value<void *>());
         if (decorator)
             decorator->connect(view, &QObject::destroyed, decorator, &KWStatusBar::removeView);
         return;
     }
     KWStatusBar *decorator = new KWStatusBar(statusBar, view);
     decorator->connect(view, &QObject::destroyed, decorator, &KWStatusBar::removeView);
-    variant.setValue<void*>(decorator);
+    variant.setValue<void *>(decorator);
     statusBar->setProperty(KWSTATUSBAR, variant);
 }

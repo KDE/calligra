@@ -17,10 +17,10 @@
 #define MSOOXML_CURRENT_CLASS MsooXmlDiagramReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
+#include <KoGenStyles.h>
+#include <KoXmlWriter.h>
 #include <MsooXmlReader_p.h>
 #include <MsooXmlUtils.h>
-#include <KoXmlWriter.h>
-#include <KoGenStyles.h>
 #include <QExplicitlySharedDataPointer>
 #include <typeinfo>
 
@@ -28,7 +28,7 @@
 
 using namespace MSOOXML;
 
-MsooXmlDiagramReaderContext::MsooXmlDiagramReaderContext(KoGenStyles* styles)
+MsooXmlDiagramReaderContext::MsooXmlDiagramReaderContext(KoGenStyles *styles)
     : MSOOXML::MsooXmlReaderContext()
     , m_styles(styles)
     , m_context(new Diagram::Context)
@@ -45,19 +45,19 @@ int MsooXmlDiagramReaderContext::shapeListSize() const
     return m_context->m_shapeList.size();
 }
 
-void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect &rect)
+void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter *xmlWriter, const QRect &rect)
 {
     // The root layout node always inherits the canvas dimensions by default.
     m_context->m_rootLayout->m_values["l"] = rect.x();
     m_context->m_rootLayout->m_values["t"] = rect.y();
     m_context->m_rootLayout->m_values["w"] = rect.width();
     m_context->m_rootLayout->m_values["h"] = rect.height();
-	debugMsooXml << "drawingRect" << rect;
+    debugMsooXml << "drawingRect" << rect;
 
     // Do the (re-)layout.
-    m_context->m_rootLayout->layoutAtom(m_context);    
+    m_context->m_rootLayout->layoutAtom(m_context);
     // Write the content.
-    m_context->m_rootLayout->writeAtom(m_context, xmlWriter, m_styles);  
+    m_context->m_rootLayout->writeAtom(m_context, xmlWriter, m_styles);
 }
 
 MsooXmlDiagramReader::MsooXmlDiagramReader(KoOdfWriters *writers)
@@ -70,9 +70,9 @@ MsooXmlDiagramReader::~MsooXmlDiagramReader()
 {
 }
 
-KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<MsooXmlDiagramReaderContext*>(context);
+    m_context = dynamic_cast<MsooXmlDiagramReaderContext *>(context);
     Q_ASSERT(m_context);
 
     readNext();
@@ -83,11 +83,12 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
     readNext();
     if (qualifiedName() == QLatin1String("dgm:dataModel")) {
         m_type = DataModelType;
-        
+
         Diagram::PointListNode rootList;
         while (!atEnd()) {
             QXmlStreamReader::TokenType tokenType = readNext();
-            if (tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
+            if (tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument)
+                break;
             if (isStartElement()) {
                 if (qualifiedName() == QLatin1String("dgm:ptLst")) { // list of points
                     rootList.readAll(m_context->m_context, this);
@@ -96,28 +97,28 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
                 }
             }
         }
-        
-        QMap<QString, Diagram::PointNode*> pointMap;
-        foreach(Diagram::AbstractNode* node, rootList.children()) {
-            if (Diagram::PointNode* point = dynamic_cast<Diagram::PointNode*>(node))
+
+        QMap<QString, Diagram::PointNode *> pointMap;
+        foreach (Diagram::AbstractNode *node, rootList.children()) {
+            if (Diagram::PointNode *point = dynamic_cast<Diagram::PointNode *>(node))
                 if (!point->m_modelId.isEmpty())
                     pointMap[point->m_modelId] = point;
         }
 
-        foreach(Diagram::AbstractNode* node, m_context->m_context->m_connections->children()) {
-            if (Diagram::ConnectionNode* connection = dynamic_cast<Diagram::ConnectionNode*>(node)) {
+        foreach (Diagram::AbstractNode *node, m_context->m_context->m_connections->children()) {
+            if (Diagram::ConnectionNode *connection = dynamic_cast<Diagram::ConnectionNode *>(node)) {
                 Q_ASSERT(pointMap.contains(connection->m_srcId));
                 Q_ASSERT(pointMap.contains(connection->m_destId));
                 Q_ASSERT(connection->m_parTransId.isEmpty() || pointMap.contains(connection->m_parTransId));
                 Q_ASSERT(connection->m_sibTransId.isEmpty() || pointMap.contains(connection->m_sibTransId));
-                Diagram::PointNode* source = pointMap.value(connection->m_srcId);
-                Diagram::PointNode* destination = pointMap.value(connection->m_destId);
-                Diagram::PointNode* parent = connection->m_parTransId.isEmpty() ? 0 : pointMap.value(connection->m_parTransId);
-                Diagram::PointNode* sibling = connection->m_sibTransId.isEmpty() ? 0 : pointMap.value(connection->m_sibTransId);
+                Diagram::PointNode *source = pointMap.value(connection->m_srcId);
+                Diagram::PointNode *destination = pointMap.value(connection->m_destId);
+                Diagram::PointNode *parent = connection->m_parTransId.isEmpty() ? 0 : pointMap.value(connection->m_parTransId);
+                Diagram::PointNode *sibling = connection->m_sibTransId.isEmpty() ? 0 : pointMap.value(connection->m_sibTransId);
 
                 const int srcOrd = connection->m_srcOrd;
                 const int destOrd = connection->m_destOrd;
-                Q_UNUSED(destOrd); //TODO how to apply that one?
+                Q_UNUSED(destOrd); // TODO how to apply that one?
 
                 if (parent) {
                     // add a transition between parent and child
@@ -128,7 +129,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
                 }
 
                 if (sibling) {
-                     // add a transition between siblings
+                    // add a transition between siblings
                     Q_ASSERT(sibling->m_type == "sibTrans");
                     Q_ASSERT(rootList.children().contains(sibling));
                     rootList.removeChild(sibling);
@@ -138,22 +139,22 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
                 if (connection->m_type == QLatin1String("parOf")) {
                     // This defines a parent-child relationship in the sense that node X is a parent of node Y.
                     Q_ASSERT(rootList.children().contains(destination));
-                    //Q_ASSERT(rootList.children().at(destOrd) == destination);
+                    // Q_ASSERT(rootList.children().at(destOrd) == destination);
                     rootList.removeChild(destination);
                     source->insertChild(srcOrd, destination);
                 } else if (connection->m_type == QLatin1String("presOf")) {
                     // A presentation type relationship. This type of relationship exists to actually present data.
-                    //TODO
+                    // TODO
                 } else if (connection->m_type == QLatin1String("presParOf")) {
                     // A relationship defining a parent of a presentation node.
-                    //TODO
+                    // TODO
                 }
             }
         }
 
         delete m_context->m_context->m_rootPoint;
-        foreach(Diagram::AbstractNode* node, rootList.children()) {
-            if (Diagram::PointNode* pt = dynamic_cast<Diagram::PointNode*>(node)) {
+        foreach (Diagram::AbstractNode *node, rootList.children()) {
+            if (Diagram::PointNode *pt = dynamic_cast<Diagram::PointNode *>(node)) {
                 if (pt->m_type == QLatin1String("doc")) {
                     m_context->m_context->m_rootPoint = pt;
                     break;
@@ -166,7 +167,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         }
         Q_ASSERT(rootList.children().contains(m_context->m_context->m_rootPoint));
         rootList.removeChild(m_context->m_context->m_rootPoint);
-        //Q_ASSERT(rootList.children().isEmpty());
+        // Q_ASSERT(rootList.children().isEmpty());
         m_context->m_context->setCurrentNode(m_context->m_context->m_rootPoint);
 
 #if 0
@@ -178,22 +179,22 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         visGraph << "}\n";
         visGraphFile.close();
 #endif
-        //m_context->m_context->m_rootPoint->dump(m_context->m_context, 0);
-        //Q_ASSERT( false );
-    }
-    else if (qualifiedName() == QLatin1String("dgm:layoutDef")) {
+        // m_context->m_context->m_rootPoint->dump(m_context->m_context, 0);
+        // Q_ASSERT( false );
+    } else if (qualifiedName() == QLatin1String("dgm:layoutDef")) {
         m_type = LayoutDefType;
 
         while (!atEnd()) {
             QXmlStreamReader::TokenType tokenType = readNext();
-            if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
+            if (tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument)
+                break;
             if (isStartElement()) {
                 if (qualifiedName() == QLatin1String("dgm:layoutNode")) {
                     m_context->m_context->m_rootLayout->readAll(m_context->m_context, this);
                 }
-                //ELSE_TRY_READ_IF(title)
-                //ELSE_TRY_READ_IF(sampData)
-                //ELSE_TRY_READ_IF(styleData)
+                // ELSE_TRY_READ_IF(title)
+                // ELSE_TRY_READ_IF(sampData)
+                // ELSE_TRY_READ_IF(styleData)
             }
         }
         if (!m_context->m_context->m_rootPoint) {
@@ -206,18 +207,15 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         // once done we start a second build-process that does additional things once the layout-tree is fully available.
         m_context->m_context->m_rootLayout->finishBuild(m_context->m_context);
 
-        //m_context->m_context->m_rootLayout->dump(m_context->m_context,0);
-        //Q_ASSERT( false );
-    }
-    else if (qualifiedName() == QLatin1String("dgm:styleDef")) {
+        // m_context->m_context->m_rootLayout->dump(m_context->m_context,0);
+        // Q_ASSERT( false );
+    } else if (qualifiedName() == QLatin1String("dgm:styleDef")) {
         m_type = StyleDefType;
-        //TODO
-    }
-    else if (qualifiedName() == QLatin1String("dgm:colorsDef")) {
+        // TODO
+    } else if (qualifiedName() == QLatin1String("dgm:colorsDef")) {
         m_type = ColorsDefType;
-        //TODO
-    }
-    else {
+        // TODO
+    } else {
         return KoFilter::WrongFormat;
     }
 
@@ -225,4 +223,3 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
     m_type = InvalidType;
     return KoFilter::OK;
 }
-

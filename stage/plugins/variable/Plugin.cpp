@@ -9,13 +9,11 @@ SPDX-License-Identifier: LGPL-2.1-or-later
 *
 */
 #include "Plugin.h"
+#include "PresentationVariableFactory.h"
 #include <KPluginFactory>
 #include <KoInlineObjectRegistry.h>
-#include "PresentationVariableFactory.h"
 
-
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kprvariables.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kprvariables.json", registerPlugin<Plugin>();)
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
@@ -24,4 +22,3 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
 }
 
 #include "Plugin.moc"
-

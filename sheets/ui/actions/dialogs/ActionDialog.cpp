@@ -14,7 +14,7 @@ using namespace Calligra::Sheets;
 /******************************************************************/
 
 ActionDialog::ActionDialog(QWidget *parent, ButtonCodes extraButtons)
-        : KoDialog(parent)
+    : KoDialog(parent)
 {
     setModal(false);
     ButtonCodes buttons = Apply | Close;
@@ -44,7 +44,7 @@ void ActionDialog::slotClose()
 void ActionDialog::showEvent(QShowEvent *event)
 {
     QWidget *w = defaultWidget();
-    if (w) w->setFocus();
+    if (w)
+        w->setFocus();
     KoDialog::showEvent(event);
 }
-

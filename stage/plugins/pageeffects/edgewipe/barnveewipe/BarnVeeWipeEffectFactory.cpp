@@ -13,30 +13,25 @@
 #define BarnVeeWipeEffectId "BarnVeeWipeEffect"
 
 BarnVeeWipeEffectFactory::BarnVeeWipeEffectFactory()
-: KPrPageEffectFactory( BarnVeeWipeEffectId, i18n( "Barn Vee" ) )
+    : KPrPageEffectFactory(BarnVeeWipeEffectId, i18n("Barn Vee"))
 {
-    addStrategy( new BarnVeeWipeStrategy( FromTop, "down", false ) );
-    addStrategy( new BarnVeeWipeStrategy( FromRight, "left", false ) );
-    addStrategy( new BarnVeeWipeStrategy( FromBottom, "top", false ) );
-    addStrategy( new BarnVeeWipeStrategy( FromLeft, "right", false ) );
+    addStrategy(new BarnVeeWipeStrategy(FromTop, "down", false));
+    addStrategy(new BarnVeeWipeStrategy(FromRight, "left", false));
+    addStrategy(new BarnVeeWipeStrategy(FromBottom, "top", false));
+    addStrategy(new BarnVeeWipeStrategy(FromLeft, "right", false));
 }
 
 BarnVeeWipeEffectFactory::~BarnVeeWipeEffectFactory()
 {
 }
 
-static const KLazyLocalizedString s_subTypes[] = {
-    kli18n( "From Top" ),
-    kli18n( "From Right" ),
-    kli18n( "From Bottom" ),
-    kli18n( "From Left" )
-};
+static const KLazyLocalizedString s_subTypes[] = {kli18n("From Top"), kli18n("From Right"), kli18n("From Bottom"), kli18n("From Left")};
 
 QString BarnVeeWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return s_subTypes[subType].toString();
     } else {
-        return i18n( "Unknown subtype" );
+        return i18n("Unknown subtype");
     }
 }

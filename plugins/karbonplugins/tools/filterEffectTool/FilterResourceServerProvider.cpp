@@ -10,13 +10,13 @@
 #include "FilterResourceServerProvider.h"
 #include "FilterEffectResource.h"
 
-#include <QFileInfo>
 #include <QDir>
+#include <QFileInfo>
 
-#include <KoResourcePaths.h>
-#include <KoResourceServerProvider.h>
 #include "KoSegmentGradient.h"
 #include "KoStopGradient.h"
+#include <KoResourcePaths.h>
+#include <KoResourceServerProvider.h>
 
 FilterResourceServerProvider *FilterResourceServerProvider::m_singleton = 0;
 
@@ -38,7 +38,7 @@ FilterResourceServerProvider::~FilterResourceServerProvider()
     delete m_filterEffectServer;
 }
 
-FilterResourceServerProvider* FilterResourceServerProvider::instance()
+FilterResourceServerProvider *FilterResourceServerProvider::instance()
 {
     if (FilterResourceServerProvider::m_singleton == 0) {
         FilterResourceServerProvider::m_singleton = new FilterResourceServerProvider();
@@ -46,7 +46,7 @@ FilterResourceServerProvider* FilterResourceServerProvider::instance()
     return FilterResourceServerProvider::m_singleton;
 }
 
-KoResourceServer<FilterEffectResource>* FilterResourceServerProvider::filterEffectServer()
+KoResourceServer<FilterEffectResource> *FilterResourceServerProvider::filterEffectServer()
 {
     m_filterEffectThread->barrier();
     return m_filterEffectServer;

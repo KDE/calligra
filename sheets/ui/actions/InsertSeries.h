@@ -8,10 +8,9 @@
 #ifndef CALLIGRA_SHEETS_ACTION_INSERT_SERIES
 #define CALLIGRA_SHEETS_ACTION_INSERT_SERIES
 
-
 #include "DialogCellAction.h"
-#include "ui/sheets_ui_export.h"
 #include "ui/commands/DataManipulators.h"
+#include "ui/sheets_ui_export.h"
 
 namespace Calligra
 {
@@ -19,8 +18,9 @@ namespace Sheets
 {
 class SeriesDialog;
 
-class InsertSeries : public DialogCellAction {
-Q_OBJECT
+class InsertSeries : public DialogCellAction
+{
+    Q_OBJECT
 public:
     InsertSeries(Actions *actions);
     virtual ~InsertSeries();
@@ -46,20 +46,17 @@ public:
 
     /** Setup the series. This sets the necessary parameters, and also the
     correct range. */
-    void setupSeries(const QPoint &_marker, double start, double end,
-                     double step, Series mode, Series type);
+    void setupSeries(const QPoint &_marker, double start, double end, double step, Series mode, Series type);
+
 protected:
-    Value newValue(Element *element, int col, int row, bool *,
-                           Format::Type *) override;
+    Value newValue(Element *element, int col, int row, bool *, Format::Type *) override;
 
     Series m_type;
     Value m_start, m_step, m_prev;
     int m_last;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_INSERT_SERIES
+#endif // CALLIGRA_SHEETS_ACTION_INSERT_SERIES

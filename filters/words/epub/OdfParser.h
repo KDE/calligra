@@ -9,36 +9,34 @@
 #define ODFPARSER_H
 
 // Qt
-#include <QString>
-#include <QVariantList>
 #include <QFile>
-#include <QObject>
-#include <QTextStream>
 #include <QHash>
 #include <QList>
+#include <QObject>
+#include <QString>
+#include <QTextStream>
+#include <QVariantList>
 
 // Calligra
 #include <KoFilter.h>
 
 class KoStore;
 
-
 class OdfParser
 {
 public:
     enum VectorType {
-        VectorTypeOther,        // Uninitialized
-        VectorTypeWmf,          // Windows MetaFile
-        VectorTypeEmf,          // Extended MetaFile
-        VectorTypeSvm           // StarView Metafile
+        VectorTypeOther, // Uninitialized
+        VectorTypeWmf, // Windows MetaFile
+        VectorTypeEmf, // Extended MetaFile
+        VectorTypeSvm // StarView Metafile
         // ... more here later
     };
 
     OdfParser();
     virtual ~OdfParser();
 
-    KoFilter::ConversionStatus parseMetadata(KoStore *odfStore,
-                                             QHash<QString, QString> &metadata);
+    KoFilter::ConversionStatus parseMetadata(KoStore *odfStore, QHash<QString, QString> &metadata);
     // Parse manifest
     //
     // Format is QHash<path, type>
@@ -46,8 +44,7 @@ public:
     //   path  is the full path of the file stored in the manifest
     //   type  is the mimetype of the file.
     //
-    KoFilter::ConversionStatus parseManifest(KoStore *odfStore,
-                                             QHash<QString, QString> &manifest);
+    KoFilter::ConversionStatus parseManifest(KoStore *odfStore, QHash<QString, QString> &manifest);
 
 private:
 };

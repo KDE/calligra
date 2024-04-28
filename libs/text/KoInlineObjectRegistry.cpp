@@ -5,20 +5,19 @@
  */
 
 #include "KoInlineObjectRegistry.h"
-#include "KoInlineObjectFactoryBase.h"
 #include "InsertVariableAction_p.h"
+#include "KoInlineObjectFactoryBase.h"
 
 #include <KoCanvasBase.h>
 #include <KoInlineObject.h>
-#include <KoXmlReader.h>
 #include <KoPluginLoader.h>
+#include <KoXmlReader.h>
 
 #include <QGlobalStatic>
 
 #include "TextDebug.h"
 
 Q_GLOBAL_STATIC(KoInlineObjectRegistry, s_instance)
-
 
 class Q_DECL_HIDDEN KoInlineObjectRegistry::Private
 {
@@ -45,14 +44,13 @@ void KoInlineObjectRegistry::Private::init(KoInlineObjectRegistry *q)
             foreach (const QString &elementName, factory->odfElementNames()) {
                 factories.insert(QPair<QString, QString>(nameSpace, elementName), factory);
 
-                debugText << "Inserting variable factory" << factory->id() << " for"
-                    << nameSpace << ":" << elementName;
+                debugText << "Inserting variable factory" << factory->id() << " for" << nameSpace << ":" << elementName;
             }
         }
     }
 }
 
-KoInlineObjectRegistry* KoInlineObjectRegistry::instance()
+KoInlineObjectRegistry *KoInlineObjectRegistry::instance()
 {
     if (!s_instance.exists()) {
         s_instance->d->init(s_instance);
@@ -60,9 +58,9 @@ KoInlineObjectRegistry* KoInlineObjectRegistry::instance()
     return s_instance;
 }
 
-QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase *host) const
+QList<QAction *> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase *host) const
 {
-    QList<QAction*> answer;
+    QList<QAction *> answer;
     foreach (const QString &key, keys()) {
         KoInlineObjectFactoryBase *factory = value(key);
         if (factory->type() == KoInlineObjectFactoryBase::TextVariable) {
@@ -70,9 +68,9 @@ QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase
                 answer.append(new InsertVariableAction(host, factory, templ));
             }
 #ifndef NDEBUG
-           if (factory->templates().isEmpty()) {
+            if (factory->templates().isEmpty()) {
                 warnText << "Variable factory" << factory->id() << "has no templates, skipping.";
-           }
+            }
 #endif
         }
     }
@@ -81,8 +79,7 @@ QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase
 
 KoInlineObject *KoInlineObjectRegistry::createFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const
 {
-    KoInlineObjectFactoryBase *factory = d->factories.value(
-            QPair<QString, QString>(element.namespaceURI(), element.tagName()));
+    KoInlineObjectFactoryBase *factory = d->factories.value(QPair<QString, QString>(element.namespaceURI(), element.tagName()));
     if (factory == 0) {
         debugText << "No factory for" << element.namespaceURI() << ":" << element.tagName();
         return 0;
@@ -104,6 +101,6 @@ KoInlineObjectRegistry::~KoInlineObjectRegistry()
 }
 
 KoInlineObjectRegistry::KoInlineObjectRegistry()
-        : d(new Private())
+    : d(new Private())
 {
 }

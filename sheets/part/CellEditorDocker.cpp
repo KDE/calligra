@@ -15,14 +15,13 @@
 #include <KLocalizedString>
 
 // Calligra
-#include <KoToolProxy.h>
 #include <KoToolManager.h>
+#include <KoToolProxy.h>
 
 // Calligra Sheets
 #include "ui/CellToolBase.h"
 #include "ui/ExternalEditor.h"
 #include "ui/LocationComboBox.h"
-
 
 using namespace Calligra::Sheets;
 
@@ -47,7 +46,7 @@ CellEditorDocker::CellEditorDocker()
     d->canvas = 0;
     d->canvasResetBugWorkaround = false;
 
-    QWidget* w = new QWidget(this);
+    QWidget *w = new QWidget(this);
 
     d->locationComboBox = new LocationComboBox(w);
     d->locationComboBox->setMinimumWidth(100);
@@ -57,7 +56,7 @@ CellEditorDocker::CellEditorDocker()
 
     d->editor = new ExternalEditor(w);
     d->editor->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
-//     d->editor->setMinimumHeight(d->locationComboBox->height());
+    //     d->editor->setMinimumHeight(d->locationComboBox->height());
 
     d->applyButton = new QToolButton(w);
     d->applyButton->setDefaultAction(d->editor->applyAction());
@@ -74,7 +73,7 @@ CellEditorDocker::CellEditorDocker()
     d->layout->addWidget(d->editor, 0, 4);
     d->layout->setColumnStretch(4, 1);
 
-//     w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+    //     w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
     setWidget(w);
 }
 
@@ -91,7 +90,7 @@ void CellEditorDocker::setCanvas(KoCanvasBase *canvas)
     if (d->toolProxy) {
         disconnect(d->toolProxy.data(), &KoToolProxy::toolChanged, this, &CellEditorDocker::toolChanged);
     }
-    d->canvas = dynamic_cast<CanvasBase*>(canvas);
+    d->canvas = dynamic_cast<CanvasBase *>(canvas);
     if (d->canvas) {
         d->locationComboBox->setSelection(d->canvas->selection());
         d->toolProxy = d->canvas->toolProxy();
@@ -101,7 +100,8 @@ void CellEditorDocker::setCanvas(KoCanvasBase *canvas)
 
 void CellEditorDocker::unsetCanvas()
 {
-    if (d->canvasResetBugWorkaround) return;
+    if (d->canvasResetBugWorkaround)
+        return;
     debugSheets << "unsetting canvas";
     if (d->toolProxy) {
         disconnect(d->toolProxy.data(), &KoToolProxy::toolChanged, this, &CellEditorDocker::toolChanged);
@@ -128,7 +128,7 @@ void CellEditorDocker::resizeEvent(QResizeEvent *event)
             return;
         }
         const int itemWidth = item->minimumSize().width();
-        if (newWidth <= 2 *(minWidth - itemWidth) + margin) {
+        if (newWidth <= 2 * (minWidth - itemWidth) + margin) {
             d->layout->removeItem(item);
             d->layout->addItem(item, 1, 0, 1, column + 1);
             d->layout->setRowStretch(0, 0);
@@ -154,8 +154,8 @@ void CellEditorDocker::toolChanged(const QString &toolId)
     setEnabled(isCellTool);
 
     if (isCellTool) {
-        KoToolBase* tool = KoToolManager::instance()->toolById(d->canvas, toolId);
-        d->cellTool = qobject_cast<CellToolBase*>(tool);
+        KoToolBase *tool = KoToolManager::instance()->toolById(d->canvas, toolId);
+        d->cellTool = qobject_cast<CellToolBase *>(tool);
         Q_ASSERT(d->cellTool);
         d->editor->setCellTool(d->cellTool);
         d->cellTool->setExternalEditor(d->editor);
@@ -173,9 +173,9 @@ QString CellEditorDockerFactory::id() const
     return QString::fromLatin1("CalligraSheetsCellEditor");
 }
 
-QDockWidget* CellEditorDockerFactory::createDockWidget()
+QDockWidget *CellEditorDockerFactory::createDockWidget()
 {
-    CellEditorDocker* widget = new CellEditorDocker();
+    CellEditorDocker *widget = new CellEditorDocker();
     widget->setObjectName(id());
 
     return widget;

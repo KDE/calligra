@@ -7,14 +7,11 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef KOCHART_PIECONFIGWIDGET
 #define KOCHART_PIECONFIGWIDGET
 
-
 #include "ConfigSubWidgetBase.h"
 #include "ui_PieConfigWidget.h"
-
 
 namespace KoChart
 {
@@ -38,16 +35,16 @@ public:
 
 public Q_SLOTS:
     void dataPointSelectionChanged(int index);
-    void brushChanged(const QColor& color);
-    void penChanged(const QColor& color);
+    void brushChanged(const QColor &color);
+    void penChanged(const QColor &color);
     void showCategoryChanged(bool b);
     void showNumberChanged(bool b);
     void showPercentChanged(bool b);
     void explodeFactorChanged(int percent);
 
 Q_SIGNALS:
-    void penChanged(KoChart::DataSet *dataSet, const QColor& color, int section);
-    void brushChanged(KoChart::DataSet *dataSet, const QColor& color, int section);
+    void penChanged(KoChart::DataSet *dataSet, const QColor &color, int section);
+    void brushChanged(KoChart::DataSet *dataSet, const QColor &color, int section);
     void showCategoryChanged(KoChart::DataSet *dataSet, bool b, int section);
     void showNumberChanged(KoChart::DataSet *dataSet, bool b, int section);
     void showPercentChanged(KoChart::DataSet *dataSet, bool b, int section);
@@ -61,7 +58,6 @@ private:
     Ui::PieConfigWidget m_ui;
 };
 
-}  // namespace KoChart
-
+} // namespace KoChart
 
 #endif // KOCHART_PIECONFIGWIDGET

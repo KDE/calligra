@@ -8,8 +8,8 @@
 #include "ConnectionToolFactory.h"
 #include "ConnectionTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 #include <QDebug>
 
 ConnectionToolFactory::ConnectionToolFactory()
@@ -26,7 +26,7 @@ ConnectionToolFactory::~ConnectionToolFactory()
 {
 }
 
-KoToolBase* ConnectionToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *ConnectionToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new ConnectionTool( canvas );
+    return new ConnectionTool(canvas);
 }

@@ -9,7 +9,8 @@
 #include <QObject>
 #include <QString>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Staff;
 class Voice;
@@ -21,14 +22,15 @@ class Sheet;
  * or more voices. Musical elements can be added to a voice+staff combination, where the voice decides where
  * in a bar a musical element should be placed, and the staff controls on what staff to draw the element.
  */
-class Part : public QObject {
+class Part : public QObject
+{
     Q_OBJECT
 public:
     /**
      * Creates a new part in the given sheet with the given name. The part is not added to the sheet, to do that
      * either call Sheet::addPart(Part*) or use Sheet::addPart(QString) to create a new part.
      */
-    Part(Sheet* sheet, const QString& name);
+    Part(Sheet *sheet, const QString &name);
 
     /**
      * Destructor.
@@ -38,7 +40,7 @@ public:
     /**
      * Returns the sheet this part is part of.
      */
-    Sheet* sheet();
+    Sheet *sheet();
 
     /**
      * Return the name of this part.
@@ -62,26 +64,26 @@ public:
      *
      * @param index the index of the staff to return.
      */
-    Staff* staff(int index);
+    Staff *staff(int index);
 
     /**
      * Adds a new staff to this part. The staff is added after all existing staves.
      */
-    Staff* addStaff();
+    Staff *addStaff();
 
-    void addStaff(Staff* staff);
-    
+    void addStaff(Staff *staff);
+
     /**
      * Inserts a new staff into this part. The staff is inserted before the staff with index before.
      *
      * @param before the index of the staff before which the new staff is inserted
      */
-    Staff* insertStaff(int before);
+    Staff *insertStaff(int before);
 
-    int indexOfStaff(Staff* staff);
-    
-    void removeStaff(Staff* staff, bool deleteStaff=true);
-    
+    int indexOfStaff(Staff *staff);
+
+    void removeStaff(Staff *staff, bool deleteStaff = true);
+
     /**
      * Returns the number of voices in this part. Normally the number of voices will be at least as high as the
      * number of staves, but this is in no way enforced.
@@ -93,34 +95,35 @@ public:
      *
      * @param index the index of the voice to return.
      */
-    Voice* voice(int index);
+    Voice *voice(int index);
 
     /**
      * Adds a voice to this part. The created voice is returned.
      */
-    Voice* addVoice();
+    Voice *addVoice();
 
-    int indexOfVoice(Voice* voice);
+    int indexOfVoice(Voice *voice);
 public Q_SLOTS:
     /**
      * Change the name of this part.
      *
      * @param name the new name of the part
      */
-    void setName(const QString& name);
+    void setName(const QString &name);
 
     /**
      * Change the short name of this part.
      *
      * @param shortName the new short name of the part
      */
-    void setShortName(const QString& shortName);
+    void setShortName(const QString &shortName);
 Q_SIGNALS:
-    void nameChanged(const QString& name);
-    void shortNameChanged(const QString& shortName);
+    void nameChanged(const QString &name);
+    void shortNameChanged(const QString &shortName);
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

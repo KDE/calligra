@@ -16,7 +16,6 @@ class RgbCompositeOpLighten : public KoCompositeOp
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
 
 public:
-
     RgbCompositeOpLighten(KoColorSpace *cs)
         : KoCompositeOp(cs, COMPOSITE_LIGHTEN, i18n("Lighten"), "")
     {
@@ -24,14 +23,17 @@ public:
 
     using KoCompositeOp::composite;
 
-    void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                   const quint8 *srcRowStart, qint32 srcRowStride,
-                   const quint8 *maskRowStart, qint32 maskRowStride,
-                   qint32 rows, qint32 numColumns,
+    void composite(quint8 *dstRowStart,
+                   qint32 dstRowStride,
+                   const quint8 *srcRowStart,
+                   qint32 srcRowStride,
+                   const quint8 *maskRowStart,
+                   qint32 maskRowStride,
+                   qint32 rows,
+                   qint32 numColumns,
                    quint8 opacity,
                    const QBitArray &channelFlags) const override
     {
-
         while (rows > 0) {
             const quint8 *mask = maskRowStart;
             const channels_type *src = reinterpret_cast<const channels_type *>(srcRowStart);
@@ -47,13 +49,12 @@ public:
                 if (mask != 0) {
                     if (*mask != OPACITY_OPAQUE_U8) {
                         channels_type tmpOpacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(*mask);
-                        srcAlpha =  KoColorSpaceMaths<channels_type>::multiply(srcAlpha, tmpOpacity);
+                        srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, tmpOpacity);
                     }
                     mask++;
                 }
 
                 if (srcAlpha != NATIVE_OPACITY_TRANSPARENT) {
-
                     if (opacity != OPACITY_OPAQUE_U8) {
                         channels_type tmpOpacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(opacity);
                         srcAlpha = KoColorSpaceMaths<channels_type>::multiply(src[_CSTraits::alpha_pos], tmpOpacity);

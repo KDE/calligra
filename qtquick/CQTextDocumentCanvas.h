@@ -24,28 +24,28 @@ class CQTextDocumentCanvas : public CQCanvasBase
 {
     Q_OBJECT
     Q_PROPERTY(QString searchTerm READ searchTerm WRITE setSearchTerm NOTIFY searchTermChanged)
-    Q_PROPERTY(QObject* documentModel READ documentModel NOTIFY documentModelChanged)
-    Q_PROPERTY(QObject* document READ doc NOTIFY documentModelChanged);
+    Q_PROPERTY(QObject *documentModel READ documentModel NOTIFY documentModelChanged)
+    Q_PROPERTY(QObject *document READ doc NOTIFY documentModelChanged);
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
     Q_PROPERTY(int currentPageNumber READ currentPageNumber WRITE setCurrentPageNumber NOTIFY currentPageNumberChanged)
     Q_PROPERTY(QObjectList linkTargets READ linkTargets NOTIFY linkTargetsChanged)
-    Q_PROPERTY(QObject* textEditor READ textEditor NOTIFY textEditorChanged)
-    Q_PROPERTY(QObject* notes READ notes NOTIFY notesChanged)
+    Q_PROPERTY(QObject *textEditor READ textEditor NOTIFY textEditorChanged)
+    Q_PROPERTY(QObject *notes READ notes NOTIFY notesChanged)
 
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
     Q_PROPERTY(QRectF selectionStartPos READ selectionStartPos NOTIFY selectionChanged)
     Q_PROPERTY(QRectF selectionEndPos READ selectionEndPos NOTIFY selectionChanged)
-    Q_PROPERTY(QObject* zoomAction READ zoomAction NOTIFY zoomActionChanged)
+    Q_PROPERTY(QObject *zoomAction READ zoomAction NOTIFY zoomActionChanged)
 
     Q_PROPERTY(QSizeF thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
 public:
-    explicit CQTextDocumentCanvas(QDeclarativeItem* parent = 0);
+    explicit CQTextDocumentCanvas(QDeclarativeItem *parent = 0);
     virtual ~CQTextDocumentCanvas();
 
     int currentPageNumber() const;
     void setCurrentPageNumber(const int &currentPageNumber);
     int cameraY() const;
-    void setCameraY (int cameraY);
+    void setCameraY(int cameraY);
 
     QString searchTerm() const;
     void setSearchTerm(const QString &term);
@@ -53,40 +53,40 @@ public:
     QObject *documentModel() const;
     QSize documentSize() const;
 
-    virtual void render(QPainter* painter, const QRectF& target);
+    virtual void render(QPainter *painter, const QRectF &target);
 
-    KWDocument* document() const;
-    Q_INVOKABLE QObject* doc() const;
-    Q_INVOKABLE QObject* part() const;
+    KWDocument *document() const;
+    Q_INVOKABLE QObject *doc() const;
+    Q_INVOKABLE QObject *part() const;
 
     QObjectList linkTargets() const;
 
-    Q_INVOKABLE qreal pagePosition( int page );
+    Q_INVOKABLE qreal pagePosition(int page);
 
     virtual qreal shapeTransparency() const;
     virtual void setShapeTransparency(qreal newTransparency);
 
-    QObject* textEditor();
+    QObject *textEditor();
     // Deselects any text selection present in the document, and deselects all shapes
     // This is highly useful, as it makes navigation prettier.
     Q_INVOKABLE void deselectEverything();
 
     // A list model of notes as created using addSticker(QString) and addNote(QString, QColor)
-    QObject* notes() const;
+    QObject *notes() const;
     // Adds a sticker (simply an SVG) to the position indicated by the center of the viewport.
-    Q_INVOKABLE void addSticker(const QString& imageUrl);
+    Q_INVOKABLE void addSticker(const QString &imageUrl);
     // Adds a note to the position indicated by the center of the viewport. Color is the color
     // the text and the background sticker should have.
-    Q_INVOKABLE void addNote(const QString& text, const QString& color, const QString& imageUrl);
+    Q_INVOKABLE void addNote(const QString &text, const QString &color, const QString &imageUrl);
 
     bool hasSelection() const;
     QRectF selectionStartPos() const;
     QRectF selectionEndPos() const;
 
-    QObject* zoomAction() const;
+    QObject *zoomAction() const;
 
     QSizeF thumbnailSize() const;
-    void setThumbnailSize(const QSizeF& newSize);
+    void setThumbnailSize(const QSizeF &newSize);
 Q_SIGNALS:
     void searchTermChanged();
     void documentModelChanged();
@@ -101,9 +101,9 @@ Q_SIGNALS:
     void thumbnailSizeChanged();
 
 protected:
-    virtual bool event( QEvent* event );
-    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
-    virtual void openFile(const QString& uri);
+    virtual bool event(QEvent *event);
+    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+    virtual void openFile(const QString &uri);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *e);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
@@ -111,12 +111,12 @@ protected:
 
 private Q_SLOTS:
     void findNoMatchFound();
-    void findMatchFound(const KoFindMatch& match);
+    void findMatchFound(const KoFindMatch &match);
     void updateCanvas();
     void findPrevious();
     void findNext();
     void updateDocumentSize(const QSize &size);
-    void currentToolChanged(KoCanvasController* controller, int uniqueToolId);
+    void currentToolChanged(KoCanvasController *controller, int uniqueToolId);
 
 private:
     void createAndSetCanvasControllerOn(KoCanvasBase *canvas);
@@ -126,6 +126,6 @@ private:
     void gotoPage(int pageNumber, KoDocument *document);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 #endif // CQTEXTDOCUMENTCANVAS_H

@@ -14,13 +14,12 @@
 #include <QTransform>
 
 #include "SvmEnums.h"
-#include "SvmStructs.h"
 #include "SvmGraphicsContext.h"
+#include "SvmStructs.h"
 
 class QRect;
 class QPolygon;
 class QPainter;
-
 
 /**
    \file
@@ -64,7 +63,7 @@ public:
     */
     void eof() override;
 
-    void rect( SvmGraphicsContext &context, const QRect &rect ) override;
+    void rect(SvmGraphicsContext &context, const QRect &rect) override;
 
     /**
        Handler META_POLYLINE_ACTION
@@ -92,21 +91,22 @@ public:
     void polyPolygon(SvmGraphicsContext &context, const QList<QPolygon> &polyPolygon) override;
 
     void textArray(SvmGraphicsContext &context,
-                           const QPoint &point, const QString &string,
-                           quint16 startIndex, quint16 len,
-                           quint32 dxArrayLen, qint32 *dxArray) override;
+                   const QPoint &point,
+                   const QString &string,
+                   quint16 startIndex,
+                   quint16 len,
+                   quint32 dxArrayLen,
+                   qint32 *dxArray) override;
 
- private:
+private:
     void updateFromGraphicscontext(SvmGraphicsContext &context);
 
- private:
+private:
     QPainter *m_painter;
-    QSize     m_outputSize;
+    QSize m_outputSize;
 
     QTransform m_outputTransform;
 };
-
-
 }
 
 #endif

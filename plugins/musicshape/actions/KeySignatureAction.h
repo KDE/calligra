@@ -11,10 +11,11 @@
 class KeySignatureAction : public AbstractMusicAction
 {
 public:
-    KeySignatureAction(SimpleEntryTool* tool, int accidentals);
-    explicit KeySignatureAction(SimpleEntryTool* tool);
+    KeySignatureAction(SimpleEntryTool *tool, int accidentals);
+    explicit KeySignatureAction(SimpleEntryTool *tool);
 
-    void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) override;
+    void mousePress(MusicCore::Staff *staff, int bar, const QPointF &pos) override;
+
 private:
     int m_accidentals;
     bool m_showDialog;

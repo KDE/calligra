@@ -8,9 +8,9 @@
 #ifndef REMOVETEXTRANGECOMMAND_H
 #define REMOVETEXTRANGECOMMAND_H
 
-#include <kundo2command.h>
-#include <QPointer>
 #include "ArtisticTextTool.h"
+#include <QPointer>
+#include <kundo2command.h>
 
 class ArtisticTextShape;
 
@@ -33,4 +33,3 @@ private:
 };
 
 #endif // REMOVETEXTRANGECOMMAND_H
-

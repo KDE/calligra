@@ -22,14 +22,15 @@ class TestBlockLayout : public QObject
 {
     Q_OBJECT
 public:
-    TestBlockLayout() {}
+    TestBlockLayout()
+    {
+    }
 
     /// FIXME: fix these broken tests
 
     /// Test tabs.
     void testTabs_data();
     void testTabs();
-
 
 private Q_SLOTS:
     void initTestCase();
@@ -65,10 +66,10 @@ private Q_SLOTS:
     void testBasicTextAlignments();
     void testTextAlignments();
 
-// relativeBulletSize
+    // relativeBulletSize
 
-    //etc
-    //void testParagOffset();
+    // etc
+    // void testParagOffset();
     void testParagraphBorders();
     void testParagraphMargins();
 

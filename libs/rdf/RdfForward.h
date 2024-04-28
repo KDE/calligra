@@ -21,9 +21,9 @@ class KoRdfBasicSemanticItem;
 
 namespace Soprano
 {
-    class Model;
-    class Statement;
-    class Node;
+class Model;
+class Statement;
+class Node;
 }
 
 typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;

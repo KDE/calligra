@@ -15,21 +15,21 @@
 // Local
 #include "FormulaDialog.h"
 
-#include "engine/CellBase.h"
+#include "core/Sheet.h"
 #include "engine/CalculationSettings.h"
+#include "engine/CellBase.h"
 #include "engine/FunctionDescription.h"
 #include "engine/FunctionRepository.h"
 #include "engine/Localization.h"
 #include "engine/MapBase.h"
-#include "core/Sheet.h"
 #include "ui/CellEditorBase.h"
 #include "ui/Selection.h"
 
 #include <KoIcon.h>
 
 #include <KComboBox>
-#include <klineedit.h>
 #include <KLocalizedString>
+#include <klineedit.h>
 
 #include <QApplication>
 #include <QCloseEvent>
@@ -43,11 +43,10 @@
 #include <QTabWidget>
 #include <QTextBrowser>
 
-
 using namespace Calligra::Sheets;
 
-FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBase* editor, const QString& formulaName)
-        : ActionDialog(parent)
+FormulaDialog::FormulaDialog(QWidget *parent, Selection *selection, CellEditorBase *editor, const QString &formulaName)
+    : ActionDialog(parent)
 {
     setCaption(i18n("Function"));
     setButtonText(Apply, i18n("Set Function"));
@@ -98,17 +97,18 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     functions->setModel(proxyModel);
 
-    QItemSelectionModel* selectionmodel = new QItemSelectionModel(proxyModel, this);
+    QItemSelectionModel *selectionmodel = new QItemSelectionModel(proxyModel, this);
     functions->setSelectionModel(selectionmodel);
-    connect(selectionmodel, &QItemSelectionModel::currentRowChanged,
-            this, [this] () { slotSelected(); });
+    connect(selectionmodel, &QItemSelectionModel::currentRowChanged, this, [this]() {
+        slotSelected();
+    });
     // When items are activated on single click, also change the help page on mouse-over, otherwise there is no (easy) way to get
     // the help without inserting the function
     if (functions->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, functions)) {
         connect(functions, &QAbstractItemView::entered, this, &FormulaDialog::slotIndexSelected);
         functions->setMouseTracking(true);
     }
-    //connect(proxyModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
+    // connect(proxyModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
 
     selectFunction = new QPushButton(page);
     selectFunction->setToolTip(i18n("Insert function"));
@@ -173,38 +173,28 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     refresh_result = true;
 
-    connect(typeFunction, &KComboBox::textActivated,
-            this, &FormulaDialog::slotActivated);
+    connect(typeFunction, &KComboBox::textActivated, this, &FormulaDialog::slotActivated);
     /*
         connect( functions, SIGNAL(highlighted(QString)),
                  this, SLOT(slotSelected(QString)) );
         connect( functions, SIGNAL(selected(QString)),
                  this, SLOT(slotSelected(QString)) );
     */
-    connect(functions, &QAbstractItemView::activated,
-            this , &FormulaDialog::slotDoubleClicked);
+    connect(functions, &QAbstractItemView::activated, this, &FormulaDialog::slotDoubleClicked);
 
     slotActivated(i18n("All"));
 
-    connect(selectFunction, &QAbstractButton::clicked,
-            this, &FormulaDialog::slotSelectButton);
+    connect(selectFunction, &QAbstractButton::clicked, this, &FormulaDialog::slotSelectButton);
 
-    connect(firstElement, &QLineEdit::textChanged,
-            this, &FormulaDialog::slotChangeText);
-    connect(secondElement, &QLineEdit::textChanged,
-            this, &FormulaDialog::slotChangeText);
-    connect(thirdElement, &QLineEdit::textChanged,
-            this, &FormulaDialog::slotChangeText);
-    connect(fourElement, &QLineEdit::textChanged,
-            this, &FormulaDialog::slotChangeText);
-    connect(fiveElement, &QLineEdit::textChanged,
-            this, &FormulaDialog::slotChangeText);
+    connect(firstElement, &QLineEdit::textChanged, this, &FormulaDialog::slotChangeText);
+    connect(secondElement, &QLineEdit::textChanged, this, &FormulaDialog::slotChangeText);
+    connect(thirdElement, &QLineEdit::textChanged, this, &FormulaDialog::slotChangeText);
+    connect(fourElement, &QLineEdit::textChanged, this, &FormulaDialog::slotChangeText);
+    connect(fiveElement, &QLineEdit::textChanged, this, &FormulaDialog::slotChangeText);
 
-    connect(m_selection, &Selection::changed,
-            this, &FormulaDialog::slotSelectionChanged);
+    connect(m_selection, &Selection::changed, this, &FormulaDialog::slotSelectionChanged);
 
-    connect(m_browser, &QTextBrowser::anchorClicked,
-            this, &FormulaDialog::slotShowFunction);
+    connect(m_browser, &QTextBrowser::anchorClicked, this, &FormulaDialog::slotShowFunction);
 
     // Save the name of the active sheet.
     m_sheetName = m_selection->activeSheet()->sheetName();
@@ -237,10 +227,8 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     if (functions->currentIndex().isValid())
         selectFunction->setEnabled(false);
 
-    connect(searchFunct, &QLineEdit::textChanged,
-            this, &FormulaDialog::slotSearchText);
-    connect(searchFunct, &KLineEdit::returnPressed,
-            this, &FormulaDialog::slotPressReturn);
+    connect(searchFunct, &QLineEdit::textChanged, this, &FormulaDialog::slotSearchText);
+    connect(searchFunct, &KLineEdit::returnPressed, this, &FormulaDialog::slotPressReturn);
 
     resize(QSize(660, 520).expandedTo(minimumSizeHint()));
 }
@@ -250,7 +238,7 @@ FormulaDialog::~FormulaDialog()
     debugSheets << "FormulaDialog::~FormulaDialog()";
 }
 
-void FormulaDialog::setFormula (const QString& formulaName)
+void FormulaDialog::setFormula(const QString &formulaName)
 {
     if (!formulaName.isEmpty()) {
         debugSheets << "formulaName=" << formulaName;
@@ -275,12 +263,11 @@ void FormulaDialog::setFormula (const QString& formulaName)
     }
 }
 
-
 void FormulaDialog::slotPressReturn()
 {
-    //laurent 2001-07-07 deactivate this code
-    //because Calligra Sheets crash.
-    //TODO fix it
+    // laurent 2001-07-07 deactivate this code
+    // because Calligra Sheets crash.
+    // TODO fix it
     /*
     if( !functions->currentText().isEmpty() )
         slotDoubleClicked( functions->findItem( functions->currentText() ) );
@@ -294,7 +281,7 @@ void FormulaDialog::slotSearchText(const QString &_text)
         functions->scrollTo(functions->currentIndex());
 }
 
-bool FormulaDialog::eventFilter(QObject* obj, QEvent* ev)
+bool FormulaDialog::eventFilter(QObject *obj, QEvent *ev)
 {
     if (obj == firstElement && ev->type() == QEvent::FocusIn)
         m_focus = firstElement;
@@ -364,12 +351,12 @@ void FormulaDialog::onClose()
 void FormulaDialog::slotSelectButton()
 {
     if (functions->currentIndex().isValid()) {
-//slotDoubleClicked(functions->findItem(functions->text(functions->currentItem())));
+        // slotDoubleClicked(functions->findItem(functions->text(functions->currentItem())));
         slotDoubleClicked(functions->currentIndex());
     }
 }
 
-void FormulaDialog::slotChangeText(const QString&)
+void FormulaDialog::slotChangeText(const QString &)
 {
     // Test the lock
     if (!refresh_result)
@@ -428,10 +415,10 @@ QString FormulaDialog::createFormula()
             tmp = tmp + createParameter(fiveElement->text(), 4);
     }
 
-    return(tmp);
+    return (tmp);
 }
 
-QString FormulaDialog::createParameter(const QString& _text, int param)
+QString FormulaDialog::createParameter(const QString &_text, int param)
 {
     if (_text.isEmpty())
         return QString("");
@@ -449,7 +436,7 @@ QString FormulaDialog::createParameter(const QString& _text, int param)
         double tmp = m_selection->activeSheet()->map()->calculationSettings()->locale()->readNumber(_text, &isNumber);
         Q_UNUSED(tmp);
 
-        //In case of number or boolean return _text, else return value as KSpread_String
+        // In case of number or boolean return _text, else return value as KSpread_String
         if (isNumber || _text.toUpper() == "FALSE" || _text.toUpper() == "TRUE")
             return _text;
     }
@@ -494,7 +481,7 @@ QString FormulaDialog::createParameter(const QString& _text, int param)
                 text = _text;
         }
     }
-    return text;
+        return text;
     case KSpread_Float:
         return _text;
     case KSpread_Boolean:
@@ -509,8 +496,7 @@ QString FormulaDialog::createParameter(const QString& _text, int param)
     return text;
 }
 
-static void showEntry(KLineEdit* edit, QLabel* label,
-                      FunctionDescription* desc, int param)
+static void showEntry(KLineEdit *edit, QLabel *label, FunctionDescription *desc, int param)
 {
     edit->show();
     label->setText(desc->param(param).helpText() + ':');
@@ -532,9 +518,6 @@ static void showEntry(KLineEdit* edit, QLabel* label,
         edit->setText("0");
         break;
     }
-
-
-
 }
 
 void FormulaDialog::slotDoubleClicked(QModelIndex item)
@@ -636,23 +619,24 @@ void FormulaDialog::slotDoubleClicked(QModelIndex item)
     slotChangeText("");
 }
 
-void FormulaDialog::slotIndexSelected(const QModelIndex& index)
+void FormulaDialog::slotIndexSelected(const QModelIndex &index)
 {
     // This slot is only called when single-click to activate is used in the listbox, when the mouse moves over a item; to prevent
     // the active selection to change after the user activated one, slotSelected is only called when the current tab is the Help tab,
     // and not when the parameters tab is active
-    if (m_tabwidget->currentIndex() != 0) return;
+    if (m_tabwidget->currentIndex() != 0)
+        return;
     QString function = proxyModel->data(index).toString();
     slotSelected(function);
 }
 
-void FormulaDialog::slotSelected(const QString& afunction)
+void FormulaDialog::slotSelected(const QString &afunction)
 {
     QString function = afunction;
     if (function.isNull())
         function = proxyModel->data(functions->currentIndex()).toString();
 
-    FunctionDescription* desc = FunctionRepository::self()->functionInfo(function);
+    FunctionDescription *desc = FunctionRepository::self()->functionInfo(function);
     if (!desc) {
         m_browser->setText(i18n("Description is not available."));
         return;
@@ -669,7 +653,7 @@ void FormulaDialog::slotSelected(const QString& afunction)
 
     // Set the help text
     m_browser->setText(m_desc->toQML());
-    //m_browser->setContentsPos( 0, 0 );
+    // m_browser->setContentsPos( 0, 0 );
 
     m_focus = 0;
 
@@ -681,13 +665,13 @@ void FormulaDialog::slotSelected(const QString& afunction)
 }
 
 // from hyperlink in the "Related Function"
-void FormulaDialog::slotShowFunction(const QUrl& functionUrl)
+void FormulaDialog::slotShowFunction(const QUrl &functionUrl)
 {
     const QString function = functionUrl.toString();
 
-    FunctionDescription* desc =
-        FunctionRepository::self()->functionInfo(function);
-    if (!desc) return;
+    FunctionDescription *desc = FunctionRepository::self()->functionInfo(function);
+    if (!desc)
+        return;
 
     // select the category
     QString category = desc->group();
@@ -715,10 +699,9 @@ void FormulaDialog::slotSelectionChanged()
     }
 }
 
-void FormulaDialog::slotActivated(const QString& category)
+void FormulaDialog::slotActivated(const QString &category)
 {
-    const QStringList lst = (category == i18n("All")) ?
-        FunctionRepository::self()->functionNames() : FunctionRepository::self()->functionNames(category);
+    const QStringList lst = (category == i18n("All")) ? FunctionRepository::self()->functionNames() : FunctionRepository::self()->functionNames(category);
 
     debugSheets << "category:" << category << " (" << lst.count() << "functions)";
 
@@ -733,5 +716,3 @@ void FormulaDialog::slotActivated(const QString& category)
     const QString text = proxyModel->data(proxyModel->index(0, 0)).toString();
     slotSelected(text);
 }
-
-

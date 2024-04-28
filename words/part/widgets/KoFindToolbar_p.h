@@ -9,11 +9,11 @@
 
 #include "KoFindToolbar.h"
 
+#include <QApplication>
 #include <QHBoxLayout>
-#include <QToolButton>
 #include <QMenu>
 #include <QTimer>
-#include <QApplication>
+#include <QToolButton>
 
 #include <KLocalizedString>
 #include <khistorycombobox.h>
@@ -21,8 +21,8 @@
 #include <KoIcon.h>
 
 #include "KoFindBase.h"
-#include "KoFindOptionSet.h"
 #include "KoFindOption.h"
+#include "KoFindOptionSet.h"
 
 class KSqueezedTextLabel;
 class QLabel;
@@ -30,7 +30,10 @@ class QLabel;
 class Q_DECL_HIDDEN KoFindToolbar::Private
 {
 public:
-    Private(KoFindToolbar *qq) : q(qq) { }
+    Private(KoFindToolbar *qq)
+        : q(qq)
+    {
+    }
 
     void matchFound();
     void noMatchFound();

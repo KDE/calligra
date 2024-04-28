@@ -5,11 +5,11 @@
 */
 #include "MobiFile.h"
 
-#include "MobiHeaderGenerator.h"
 #include "MobiExportDebug.h"
+#include "MobiHeaderGenerator.h"
 
-#include <QFile>
 #include <QDataStream>
+#include <QFile>
 
 MobiFile::MobiFile()
 {
@@ -20,11 +20,10 @@ void MobiFile::addContentRawText(const QByteArray &content)
     m_textContent = content;
 }
 
-void MobiFile:: addContentImage(int id, const QByteArray &content)
+void MobiFile::addContentImage(int id, const QByteArray &content)
 {
     m_imageContent.insert(id, content);
 }
-
 
 KoFilter::ConversionStatus MobiFile::writeMobiFile(const QString &outputFile, MobiHeaderGenerator &headerGenerator)
 {
@@ -63,84 +62,84 @@ KoFilter::ConversionStatus MobiFile::writeMobiFile(const QString &outputFile, Mo
 void MobiFile::writeRecord0(QDataStream &out, MobiHeaderGenerator &headers)
 {
     // Write palmDoc Header.
-    out <<  headers.m_docHeader->compression;
-    out <<  headers.m_docHeader->unused;
-    out <<  headers.m_docHeader->textLength;
-    out <<  headers.m_docHeader->pdbrecordCount;
-    out <<  headers.m_docHeader->maxRecordSize;
-    out <<  headers.m_docHeader->encryptionType;
-    out <<  headers.m_docHeader->unknown;
+    out << headers.m_docHeader->compression;
+    out << headers.m_docHeader->unused;
+    out << headers.m_docHeader->textLength;
+    out << headers.m_docHeader->pdbrecordCount;
+    out << headers.m_docHeader->maxRecordSize;
+    out << headers.m_docHeader->encryptionType;
+    out << headers.m_docHeader->unknown;
 
     out.device()->write(headers.m_mobiHeader->identifier);
 
-    out <<  headers.m_mobiHeader->mobiHeaderLength;
-    out <<  headers.m_mobiHeader->mobiType;
-    out <<  headers.m_mobiHeader->textEncoding;
-    out <<  headers.m_mobiHeader->uniqueId;
-    out <<  headers.m_mobiHeader->fileVersion;
-    out <<  headers.m_mobiHeader->ortographicIndex;
-    out <<  headers.m_mobiHeader->inflectionIndex;
-    out <<  headers.m_mobiHeader->indexNames;
-    out <<  headers.m_mobiHeader->indexkeys;
-    out <<  headers.m_mobiHeader->extraIndex0;
-    out <<  headers.m_mobiHeader->extraIndex1;
-    out <<  headers.m_mobiHeader->extraIndex2;
-    out <<  headers.m_mobiHeader->extraIndex3;
-    out <<  headers.m_mobiHeader->extraIndex4;
-    out <<  headers.m_mobiHeader->extraIndex5;
-    out <<  headers.m_mobiHeader->firstNonBookIndex;
-    out <<  headers.m_mobiHeader->fullNameOffset;
-    out <<  headers.m_mobiHeader->fullNameLength;
-    out <<  headers.m_mobiHeader->local;
-    out <<  headers.m_mobiHeader->inputLanguage;
-    out <<  headers.m_mobiHeader->outputLanguage;
-    out <<  headers.m_mobiHeader->minversion;
-    out <<  headers.m_mobiHeader->firstImageIndex;
-    out <<  headers.m_mobiHeader->huffmanRecordOffset;
-    out <<  headers.m_mobiHeader->huffmanRecordCount;
-    out <<  headers.m_mobiHeader->huffmanTableOffset;
-    out <<  headers.m_mobiHeader->huffmanTableLength;
-    out <<  headers.m_mobiHeader->EXTH_Flags;
-    out <<  headers.m_mobiHeader->unknown1;
-    out <<  headers.m_mobiHeader->unknown1_1;
-    out <<  headers.m_mobiHeader->unknown1_2;
-    out <<  headers.m_mobiHeader->unknown1_3;
-    out <<  headers.m_mobiHeader->drmOffset;
-    out <<  headers.m_mobiHeader->drmCount;
-    out <<  headers.m_mobiHeader->drmSize;
-    out <<  headers.m_mobiHeader->drmFlags;
-    out <<  headers.m_mobiHeader->unknown2;
-    out <<  headers.m_mobiHeader->unknown2_1;
-    out <<  headers.m_mobiHeader->firstContentRecordNumber;
-    out <<  headers.m_mobiHeader->lastContentRecordNumber;
-    out <<  headers.m_mobiHeader->unknown3;
-    out <<  headers.m_mobiHeader->FCIS_recordNumber;
-    out <<  headers.m_mobiHeader->unknown4;
-    out <<  headers.m_mobiHeader->FLIS_recordNumber;
-    out <<  headers.m_mobiHeader->unknown5;
-    out <<  headers.m_mobiHeader->unknown6;
-    out <<  headers.m_mobiHeader->unknown7;
-    out <<  headers.m_mobiHeader->unknown8;
-    out <<  headers.m_mobiHeader->unknown9;
-    out <<  headers.m_mobiHeader->unknown10;
-    out <<  headers.m_mobiHeader->extraRecordDataFlags;
-    out <<  headers.m_mobiHeader->INDX_recordOffset;
+    out << headers.m_mobiHeader->mobiHeaderLength;
+    out << headers.m_mobiHeader->mobiType;
+    out << headers.m_mobiHeader->textEncoding;
+    out << headers.m_mobiHeader->uniqueId;
+    out << headers.m_mobiHeader->fileVersion;
+    out << headers.m_mobiHeader->ortographicIndex;
+    out << headers.m_mobiHeader->inflectionIndex;
+    out << headers.m_mobiHeader->indexNames;
+    out << headers.m_mobiHeader->indexkeys;
+    out << headers.m_mobiHeader->extraIndex0;
+    out << headers.m_mobiHeader->extraIndex1;
+    out << headers.m_mobiHeader->extraIndex2;
+    out << headers.m_mobiHeader->extraIndex3;
+    out << headers.m_mobiHeader->extraIndex4;
+    out << headers.m_mobiHeader->extraIndex5;
+    out << headers.m_mobiHeader->firstNonBookIndex;
+    out << headers.m_mobiHeader->fullNameOffset;
+    out << headers.m_mobiHeader->fullNameLength;
+    out << headers.m_mobiHeader->local;
+    out << headers.m_mobiHeader->inputLanguage;
+    out << headers.m_mobiHeader->outputLanguage;
+    out << headers.m_mobiHeader->minversion;
+    out << headers.m_mobiHeader->firstImageIndex;
+    out << headers.m_mobiHeader->huffmanRecordOffset;
+    out << headers.m_mobiHeader->huffmanRecordCount;
+    out << headers.m_mobiHeader->huffmanTableOffset;
+    out << headers.m_mobiHeader->huffmanTableLength;
+    out << headers.m_mobiHeader->EXTH_Flags;
+    out << headers.m_mobiHeader->unknown1;
+    out << headers.m_mobiHeader->unknown1_1;
+    out << headers.m_mobiHeader->unknown1_2;
+    out << headers.m_mobiHeader->unknown1_3;
+    out << headers.m_mobiHeader->drmOffset;
+    out << headers.m_mobiHeader->drmCount;
+    out << headers.m_mobiHeader->drmSize;
+    out << headers.m_mobiHeader->drmFlags;
+    out << headers.m_mobiHeader->unknown2;
+    out << headers.m_mobiHeader->unknown2_1;
+    out << headers.m_mobiHeader->firstContentRecordNumber;
+    out << headers.m_mobiHeader->lastContentRecordNumber;
+    out << headers.m_mobiHeader->unknown3;
+    out << headers.m_mobiHeader->FCIS_recordNumber;
+    out << headers.m_mobiHeader->unknown4;
+    out << headers.m_mobiHeader->FLIS_recordNumber;
+    out << headers.m_mobiHeader->unknown5;
+    out << headers.m_mobiHeader->unknown6;
+    out << headers.m_mobiHeader->unknown7;
+    out << headers.m_mobiHeader->unknown8;
+    out << headers.m_mobiHeader->unknown9;
+    out << headers.m_mobiHeader->unknown10;
+    out << headers.m_mobiHeader->extraRecordDataFlags;
+    out << headers.m_mobiHeader->INDX_recordOffset;
 
     // EXTH header.
     out.device()->write(headers.m_exthHeader->identifier);
 
-    out <<  qint32(headers.m_exthHeader->headerLength);
-    out <<  headers.m_exthHeader->exthRecordCount;
+    out << qint32(headers.m_exthHeader->headerLength);
+    out << headers.m_exthHeader->exthRecordCount;
     foreach (qint32 type, headers.m_exthHeader->exthRecord.keys()) {
-        out <<  type;
-        out <<  qint32((8 + headers.m_exthHeader->exthRecord.value(type).size()));
+        out << type;
+        out << qint32((8 + headers.m_exthHeader->exthRecord.value(type).size()));
         out.device()->write(headers.m_exthHeader->exthRecord.value(type));
     }
     // These are extra EXTH records information about ebook.
 
     // Creator Software
-    out << qint32(204);// Record type 204
-    out << qint32(12);// Record length
+    out << qint32(204); // Record type 204
+    out << qint32(12); // Record length
     /* Known Values: 1=mobigen, 2=Mobipocket Creator, 200=kindlegen (Windows),
         201=kindlegen (Linux), 202=kindlegen (Mac).
         Warning: Calibre creates fake creator entries, pretending to be a Linux
@@ -200,7 +199,7 @@ void MobiFile::writePalmDataBaseHeader(QDataStream &out, MobiHeaderGenerator &he
     out << headers.m_dbHeader->nextRecordIdList;
     out << headers.m_dbHeader->numberOfRecords;
 
-    for(int offset = 0; offset < headers.m_dbHeader->recordsInfo.size(); offset++) {
+    for (int offset = 0; offset < headers.m_dbHeader->recordsInfo.size(); offset++) {
         out << qint32(headers.m_dbHeader->recordsInfo.key(offset));
         out << qint32((2 * offset));
     }

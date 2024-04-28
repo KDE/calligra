@@ -8,10 +8,10 @@
 #ifndef KOSUBPATHJOINCOMMAND_H
 #define KOSUBPATHJOINCOMMAND_H
 
-#include <kundo2command.h>
-#include <QPointF>
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
+#include <QPointF>
+#include <kundo2command.h>
 
 /// The undo / redo command for joining two subpath end points
 class KoSubpathJoinCommand : public KUndo2Command
@@ -33,6 +33,7 @@ public:
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
     KoPathPointData m_pointData1;
     KoPathPointData m_pointData2;
@@ -42,10 +43,7 @@ private:
     QPointF m_oldControlPoint2;
     KoPathPoint::PointProperties m_oldProperties1;
     KoPathPoint::PointProperties m_oldProperties2;
-    enum Reverse {
-        ReverseFirst = 1,
-        ReverseSecond = 2
-    };
+    enum Reverse { ReverseFirst = 1, ReverseSecond = 2 };
     int m_reverse;
 };
 

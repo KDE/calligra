@@ -8,11 +8,9 @@
 #ifndef CALLIGRA_SHEETS_ACTION_SUBTOTALS
 #define CALLIGRA_SHEETS_ACTION_SUBTOTALS
 
-
 #include "CellAction.h"
 
 #include "ui/commands/DataManipulators.h"
-
 
 namespace Calligra
 {
@@ -20,8 +18,9 @@ namespace Sheets
 {
 class SubtotalDialog;
 
-class Subtotals : public CellAction {
-Q_OBJECT
+class Subtotals : public CellAction
+{
+    Q_OBJECT
 public:
     Subtotals(Actions *actions);
     virtual ~Subtotals();
@@ -48,11 +47,11 @@ public:
     void setRange(const Region &range);
     void setPrimaryColumn(int col);
     void setColumns(QList<int> columns);
+
 protected:
     bool preProcess() override;
     bool postProcess() override;
-    Value newValue(Element *element, int col, int row,
-                           bool *parse, Format::Type *fmtType) override;
+    Value newValue(Element *element, int col, int row, bool *parse, Format::Type *fmtType) override;
     Style newFormat(Element *element, int col, int row) override;
 
 private:
@@ -60,9 +59,7 @@ private:
     Private *d;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_SUBTOTALS
+#endif // CALLIGRA_SHEETS_ACTION_SUBTOTALS

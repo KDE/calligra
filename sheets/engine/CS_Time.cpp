@@ -1,11 +1,11 @@
 /** This file is part of the KDE project
  *  SPDX-FileCopyrightText: 2023 dag Andersen <dag.andersen@kdemail.net>
  *  SPDX-License-Identifier: LGPL-2.0-only
-*/
+ */
 
 #include "CS_Time.h"
-#include <SheetsDebug.h>
 #include <QTime>
+#include <SheetsDebug.h>
 
 using namespace Calligra::Sheets;
 
@@ -144,13 +144,13 @@ Time &Time::operator=(const Time &other)
 {
     m_duration = other.m_duration;
     m_valid = other.m_valid;
-    m_hours =  other.m_hours;
-    m_minutes =  other.m_minutes;
-    m_seconds =  other.m_seconds;
-    m_hour =  other.m_hour;
-    m_minute =  other.m_minute;
-    m_second =  other.m_second;
-    m_msecs =  other.m_msecs;
+    m_hours = other.m_hours;
+    m_minutes = other.m_minutes;
+    m_seconds = other.m_seconds;
+    m_hour = other.m_hour;
+    m_minute = other.m_minute;
+    m_second = other.m_second;
+    m_msecs = other.m_msecs;
     return *this;
 }
 
@@ -191,23 +191,24 @@ void Time::fixCastingOffsets()
 
 QDebug operator<<(QDebug dbg, const Calligra::Sheets::Time *v)
 {
-    if (v) return dbg<<*v;
-    dbg.noquote().nospace()<<"Calligra::Sheets::Time(";
-    dbg<<"0x0";
-    dbg<<')';
+    if (v)
+        return dbg << *v;
+    dbg.noquote().nospace() << "Calligra::Sheets::Time(";
+    dbg << "0x0";
+    dbg << ')';
     return dbg.quote().space();
 }
 
 QDebug operator<<(QDebug dbg, const Calligra::Sheets::Time &v)
 {
-    dbg.noquote().nospace()<<"Calligra::Sheets::Time(";
+    dbg.noquote().nospace() << "Calligra::Sheets::Time(";
     if (v.isValid()) {
-        dbg<<"d="<<v.duration()<<" h="<<v.hours()<<'('<<v.hour()<<')';
-        dbg<<" m="<<(int)v.minutes()<<'('<<v.minute()<<')';
-        dbg<<" s="<<v.seconds()<<'('<<v.second()<<'.'<<v.msec()<<')';
+        dbg << "d=" << v.duration() << " h=" << v.hours() << '(' << v.hour() << ')';
+        dbg << " m=" << (int)v.minutes() << '(' << v.minute() << ')';
+        dbg << " s=" << v.seconds() << '(' << v.second() << '.' << v.msec() << ')';
     } else {
-        dbg<<"Invalid";
+        dbg << "Invalid";
     }
-    dbg<<')';
+    dbg << ')';
     return dbg.quote().space();
 }

@@ -6,23 +6,23 @@
 
 #include "KWConfigureDialog.h"
 
-#include "KWView.h"
 #include "KWCanvasBase.h"
+#include "KWView.h"
 
+#include <KoConfigAuthorPage.h>
 #include <KoConfigDocumentPage.h>
 #include <KoConfigGridPage.h>
 #include <KoConfigMiscPage.h>
-#include <KoConfigAuthorPage.h>
-#include <KoShapeController.h>
 #include <KoDocument.h>
 #include <KoIcon.h>
+#include <KoShapeController.h>
 
 #include <KLocalizedString>
 
 #include <QPushButton>
 
-KWConfigureDialog::KWConfigureDialog(KWView* parent)
-: KPageDialog(parent)
+KWConfigureDialog::KWConfigureDialog(KWView *parent)
+    : KPageDialog(parent)
 {
     setFaceType(List);
     setWindowTitle(i18n("Configure"));
@@ -51,8 +51,7 @@ KWConfigureDialog::KWConfigureDialog(KWView* parent)
     item->setIcon(koIcon("user-identity"));
 
     connect(buttonBox(), &QDialogButtonBox::accepted, this, &KWConfigureDialog::slotApply);
-    connect(buttonBox(), &QDialogButtonBox::clicked,
-            this, &KWConfigureDialog::handleButtonClicked);
+    connect(buttonBox(), &QDialogButtonBox::clicked, this, &KWConfigureDialog::handleButtonClicked);
     connect(this, &KWConfigureDialog::changed, parent, &KoView::slotUpdateAuthorProfileActions);
 }
 
@@ -68,24 +67,20 @@ void KWConfigureDialog::slotApply()
 
 void KWConfigureDialog::slotDefault()
 {
-    QWidget* curr = currentPage()->widget();
+    QWidget *curr = currentPage()->widget();
 
     if (curr == m_gridPage) {
         m_gridPage->slotDefault();
-    }
-    else if (curr == m_docPage) {
+    } else if (curr == m_docPage) {
         m_docPage->slotDefault();
     }
 }
 
-void KWConfigureDialog::handleButtonClicked(QAbstractButton* button)
+void KWConfigureDialog::handleButtonClicked(QAbstractButton *button)
 {
-    if(button == buttonBox()->button(QDialogButtonBox::RestoreDefaults))
-    {
+    if (button == buttonBox()->button(QDialogButtonBox::RestoreDefaults)) {
         slotDefault();
-    }
-    else if (button == buttonBox()->button(QDialogButtonBox::Apply))
-    {
+    } else if (button == buttonBox()->button(QDialogButtonBox::Apply)) {
         slotApply();
     }
 }

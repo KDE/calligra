@@ -39,12 +39,13 @@ class Localization;
  * \ingroup UI
  * Dialog page to show the calculation settings used by the document.
  */
-class calcSettings :  public QObject
+class calcSettings : public QObject
 {
     Q_OBJECT
 public:
-    calcSettings(MapBase* map, KoVBox *box);
+    calcSettings(MapBase *map, KoVBox *box);
     void apply();
+
 protected:
     CalculationSettings *m_cs;
     QCheckBox *m_caseSensitiveCheckbox, *m_precisionAsShownCheckbox, *m_searchCriteriaMustApplyToWholeCellCheckbox, *m_automaticFindLabelsCheckbox;
@@ -56,7 +57,7 @@ protected:
  * \ingroup UI
  * Dialog page to show the current locale used by the document.
  */
-class parameterLocale :  public QObject
+class parameterLocale : public QObject
 {
     Q_OBJECT
 public:
@@ -64,18 +65,18 @@ public:
     void apply();
 public Q_SLOTS:
     void updateDefaultSystemConfig();
+
 protected:
     /**
      * Updates the GUI widgets to match the specified locale.
      */
-    void updateToMatchLocale(Localization* locale);
+    void updateToMatchLocale(Localization *locale);
 
     QLabel *m_shortDate, *m_time, *m_money, *m_date, *m_language, *m_number;
     QPushButton *m_updateButton;
     MapBase *m_map;
     bool m_bUpdateLocale;
 };
-
 
 /**
  * \ingroup UI
@@ -85,7 +86,7 @@ class DocumentSettingsDialog : public ActionDialog
 {
     Q_OBJECT
 public:
-    explicit DocumentSettingsDialog(MapBase *map, QWidget* parent);
+    explicit DocumentSettingsDialog(MapBase *map, QWidget *parent);
     ~DocumentSettingsDialog() override;
 
 Q_SIGNALS:
@@ -96,7 +97,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

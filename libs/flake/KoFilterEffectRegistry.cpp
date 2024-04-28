@@ -17,7 +17,7 @@
 Q_GLOBAL_STATIC(KoFilterEffectRegistry, s_instance)
 
 KoFilterEffectRegistry::KoFilterEffectRegistry()
-  : d(0)
+    : d(0)
 {
 }
 
@@ -29,14 +29,13 @@ void KoFilterEffectRegistry::init()
     KoPluginLoader::load(QStringLiteral("calligra/shapefiltereffects"), config);
 }
 
-
 KoFilterEffectRegistry::~KoFilterEffectRegistry()
 {
     qDeleteAll(doubleEntries());
     qDeleteAll(values());
 }
 
-KoFilterEffectRegistry* KoFilterEffectRegistry::instance()
+KoFilterEffectRegistry *KoFilterEffectRegistry::instance()
 {
     if (!s_instance.exists()) {
         s_instance->init();
@@ -44,13 +43,13 @@ KoFilterEffectRegistry* KoFilterEffectRegistry::instance()
     return s_instance;
 }
 
-KoFilterEffect * KoFilterEffectRegistry::createFilterEffectFromXml(const KoXmlElement & element, const KoFilterEffectLoadingContext &context)
+KoFilterEffect *KoFilterEffectRegistry::createFilterEffectFromXml(const KoXmlElement &element, const KoFilterEffectLoadingContext &context)
 {
-    KoFilterEffectFactoryBase * factory = get(element.tagName());
+    KoFilterEffectFactoryBase *factory = get(element.tagName());
     if (!factory)
         return 0;
 
-    KoFilterEffect * filterEffect = factory->createFilterEffect();
+    KoFilterEffect *filterEffect = factory->createFilterEffect();
     if (filterEffect->load(element, context))
         return filterEffect;
 

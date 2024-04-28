@@ -8,10 +8,10 @@
 #ifndef KOGUIDESDATA_H
 #define KOGUIDESDATA_H
 
+#include "KoXmlReaderForward.h"
 #include "flake_export.h"
 #include <QList>
 #include <Qt>
-#include "KoXmlReaderForward.h"
 
 class QPainter;
 class KoViewConverter;
@@ -92,9 +92,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
-
 #endif
-

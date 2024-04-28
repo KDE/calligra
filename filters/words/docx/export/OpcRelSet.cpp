@@ -5,18 +5,16 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "OpcRelSet.h"
 
 // Qt
-#include <QString>
 #include <QByteArray>
 #include <QList>
+#include <QString>
 
 // This filter
 #include "DocxExportDebug.h"
-
 
 // ================================================================
 //                         class OpcRelSet
@@ -29,11 +27,10 @@ OpcRelSet::~OpcRelSet()
 {
 }
 
-
 QString OpcRelSet::addRelationship(const QString &type, const QString &target)
 {
     Q_UNUSED(type);
     Q_UNUSED(target);
-    //FIXME: NYI
+    // FIXME: NYI
     return QString();
 }

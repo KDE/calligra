@@ -8,17 +8,16 @@
 #ifndef EXPORTEPUB2_H
 #define EXPORTEPUB2_H
 
-#include <QObject>
-#include <QString>
-#include <QVariantList>
 #include <QFile>
-#include <QTextStream>
 #include <QHash>
 #include <QList>
+#include <QObject>
+#include <QString>
+#include <QTextStream>
+#include <QVariantList>
 
 #include <KoFilter.h>
 #include <KoStore.h>
-
 
 class EpubFile;
 
@@ -27,16 +26,16 @@ class ExportEpub2 : public KoFilter
     Q_OBJECT
 public:
     enum VectorType {
-        VectorTypeOther,        // Uninitialized
-        VectorTypeWmf,          // Windows MetaFile
-        VectorTypeEmf,          // Extended MetaFile
-        VectorTypeSvm           // StarView Metafile
+        VectorTypeOther, // Uninitialized
+        VectorTypeWmf, // Windows MetaFile
+        VectorTypeEmf, // Extended MetaFile
+        VectorTypeSvm // StarView Metafile
         // ... more here later
     };
 
     ExportEpub2(QObject *parent, const QVariantList &);
     ~ExportEpub2() override;
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 
 private:
     KoFilter::ConversionStatus extractImages(KoStore *odfStore, EpubFile *epubFile);
@@ -56,11 +55,10 @@ private:
 
 public Q_SLOTS:
 
-
 private:
     QHash<QString, QString> m_metadata;
     QHash<QString, QString> m_manifest;
-    QHash<QString, QSizeF>  m_imagesSrcList;
+    QHash<QString, QSizeF> m_imagesSrcList;
     QHash<QString, QString> m_mediaFilesList;
 };
 

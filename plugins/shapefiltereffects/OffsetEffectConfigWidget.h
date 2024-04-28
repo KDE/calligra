@@ -20,15 +20,15 @@ public:
     explicit OffsetEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
-    bool editFilterEffect(KoFilterEffect * filterEffect) override;
+    bool editFilterEffect(KoFilterEffect *filterEffect) override;
 
 private Q_SLOTS:
     void offsetChanged(double offset);
 
 private:
-    OffsetEffect * m_effect;
-    QDoubleSpinBox * m_offsetX;
-    QDoubleSpinBox * m_offsetY;
+    OffsetEffect *m_effect;
+    QDoubleSpinBox *m_offsetX;
+    QDoubleSpinBox *m_offsetY;
 };
 
 #endif // OFFSETEFFECTCONFIGWIDGET_H

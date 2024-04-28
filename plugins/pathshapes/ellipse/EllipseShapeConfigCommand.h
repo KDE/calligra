@@ -27,6 +27,7 @@ public:
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
     EllipseShape *m_ellipse;
     EllipseShape::EllipseType m_oldType;
@@ -38,4 +39,3 @@ private:
 };
 
 #endif // ELLIPSESHAPECONFIGCOMMAND_H
-

@@ -19,7 +19,7 @@
 template<typename channels_type, typename pixel_type, bool alphaLocked, bool allChannelsFlag>
 struct OverCompositor128 {
     struct OptionalParams {
-        OptionalParams(const KoCompositeOp::ParameterInfo& params)
+        OptionalParams(const KoCompositeOp::ParameterInfo &params)
             : channelFlags(params.channelFlags)
         {
         }
@@ -50,8 +50,8 @@ struct OverCompositor128 {
 #endif
         Q_UNUSED(oparams);
 
-        const Pixel *sp = reinterpret_cast<const Pixel*>(src);
-        Pixel *dp = reinterpret_cast<Pixel*>(dst);
+        const Pixel *sp = reinterpret_cast<const Pixel *>(src);
+        Pixel *dp = reinterpret_cast<Pixel *>(dst);
 
         Vc::float_v src_alpha;
         Vc::float_v dst_alpha;
@@ -61,10 +61,10 @@ struct OverCompositor128 {
         Vc::float_v src_c3;
 
         const Vc::float_v::IndexType indexes(Vc::IndexesFromZero);
-        Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> data(const_cast<Pixel*>(sp));
+        Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> data(const_cast<Pixel *>(sp));
         (src_c1, src_c2, src_c3, src_alpha) = data[indexes];
 
-        //bool haveOpacity = opacity != 1.0;
+        // bool haveOpacity = opacity != 1.0;
         const Vc::float_v opacity_norm_vec(opacity);
         src_alpha *= opacity_norm_vec;
 
@@ -124,20 +124,20 @@ struct OverCompositor128 {
             dataDest[indexes] = (dst_c1, dst_c2, dst_c3, new_alpha);
         } else {
 #if INFO_DEBUG
-                ++countTwo;
+            ++countTwo;
 #endif
-                dataDest[indexes] = (src_c1, src_c2, src_c3, new_alpha);
+            dataDest[indexes] = (src_c1, src_c2, src_c3, new_alpha);
         }
     }
 
-    template <bool haveMask, Vc::Implementation _impl>
+    template<bool haveMask, Vc::Implementation _impl>
     static ALWAYS_INLINE void compositeOnePixelScalar(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const OptionalParams &oparams)
     {
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
 
-        const channels_type *s = reinterpret_cast<const channels_type*>(src);
-        channels_type *d = reinterpret_cast<channels_type*>(dst);
+        const channels_type *s = reinterpret_cast<const channels_type *>(src);
+        channels_type *d = reinterpret_cast<channels_type *>(dst);
 
         float srcAlpha = s[alpha_pos];
         srcAlpha *= opacity;
@@ -156,7 +156,6 @@ struct OverCompositor128 {
 #endif
 
         if (srcAlpha != NATIVE_OPACITY_TRANSPARENT) {
-
             float dstAlpha = d[alpha_pos];
             float srcBlendNorm;
 
@@ -179,7 +178,7 @@ struct OverCompositor128 {
                 qDebug() << "params" << srcBlendNorm << allChannelsFlag << alphaLocked << dstAlpha << haveMask;
             }
 #endif
-            if(allChannelsFlag) {
+            if (allChannelsFlag) {
                 if (srcBlendNorm == NATIVE_OPACITY_OPAQUE) {
                     if (!alphaLocked) {
                         KoStreamedMathFunctions::copyPixel<16>(src, dst);
@@ -188,10 +187,11 @@ struct OverCompositor128 {
                         d[1] = s[1];
                         d[2] = s[2];
                     }
-                } else if (srcBlendNorm != 0.0){
+                } else if (srcBlendNorm != 0.0) {
 #if INFO_DEBUG
                     if (display) {
-                        qDebug() << "calc" << s[0] << d[0] << srcBlendNorm * (s[0] - d[0]) + d[0] << s[0] - d[0] << srcBlendNorm * (s[0] - d[0]) << srcBlendNorm;
+                        qDebug() << "calc" << s[0] << d[0] << srcBlendNorm * (s[0] - d[0]) + d[0] << s[0] - d[0] << srcBlendNorm * (s[0] - d[0])
+                                 << srcBlendNorm;
                     }
 #endif
                     d[0] = srcBlendNorm * (s[0] - d[0]) + d[0];
@@ -202,13 +202,19 @@ struct OverCompositor128 {
                 const QBitArray &channelFlags = oparams.channelFlags;
 
                 if (srcBlendNorm == NATIVE_OPACITY_OPAQUE) {
-                    if(channelFlags.at(0)) d[0] = s[0];
-                    if(channelFlags.at(1)) d[1] = s[1];
-                    if(channelFlags.at(2)) d[2] = s[2];
+                    if (channelFlags.at(0))
+                        d[0] = s[0];
+                    if (channelFlags.at(1))
+                        d[1] = s[1];
+                    if (channelFlags.at(2))
+                        d[2] = s[2];
                 } else if (srcBlendNorm != 0.0) {
-                    if(channelFlags.at(0)) d[0] = srcBlendNorm * (s[0] - d[0]) + d[0];
-                    if(channelFlags.at(1)) d[1] = srcBlendNorm * (s[1] - d[1]) + d[1];
-                    if(channelFlags.at(2)) d[2] = srcBlendNorm * (s[2] - d[2]) + d[2];
+                    if (channelFlags.at(0))
+                        d[0] = srcBlendNorm * (s[0] - d[0]) + d[0];
+                    if (channelFlags.at(1))
+                        d[1] = srcBlendNorm * (s[1] - d[1]) + d[1];
+                    if (channelFlags.at(2))
+                        d[2] = srcBlendNorm * (s[2] - d[2]) + d[2];
                 }
             }
 
@@ -234,41 +240,38 @@ template<Vc::Implementation _impl>
 class KoOptimizedCompositeOpOver128 : public KoCompositeOp
 {
 public:
-    KoOptimizedCompositeOpOver128(const KoColorSpace* cs)
-        : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix()) {}
+    KoOptimizedCompositeOpOver128(const KoColorSpace *cs)
+        : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix())
+    {
+    }
 
     using KoCompositeOp::composite;
 
-    virtual void composite(const KoCompositeOp::ParameterInfo& params) const
+    virtual void composite(const KoCompositeOp::ParameterInfo &params) const
     {
-        if(params.maskRowStart) {
+        if (params.maskRowStart) {
             composite<true>(params);
         } else {
             composite<false>(params);
         }
     }
 
-    template <bool haveMask>
-    inline void composite(const KoCompositeOp::ParameterInfo& params) const {
-        if (params.channelFlags.isEmpty() ||
-            params.channelFlags == QBitArray(4, true)) {
-
-            KoStreamedMath<_impl>::template genericComposite128<haveMask, false, OverCompositor128<float, quint32, false, true> >(params);
+    template<bool haveMask>
+    inline void composite(const KoCompositeOp::ParameterInfo &params) const
+    {
+        if (params.channelFlags.isEmpty() || params.channelFlags == QBitArray(4, true)) {
+            KoStreamedMath<_impl>::template genericComposite128<haveMask, false, OverCompositor128<float, quint32, false, true>>(params);
         } else {
-            const bool allChannelsFlag =
-                params.channelFlags.at(0) &&
-                params.channelFlags.at(1) &&
-                params.channelFlags.at(2);
+            const bool allChannelsFlag = params.channelFlags.at(0) && params.channelFlags.at(1) && params.channelFlags.at(2);
 
-            const bool alphaLocked =
-                !params.channelFlags.at(3);
+            const bool alphaLocked = !params.channelFlags.at(3);
 
             if (allChannelsFlag && alphaLocked) {
-                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, quint32, true, true> >(params);
+                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, quint32, true, true>>(params);
             } else if (!allChannelsFlag && !alphaLocked) {
-                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, quint32, false, false> >(params);
-            } else /*if (!allChannelsFlag && alphaLocked) */{
-                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, quint32, true, false> >(params);
+                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, quint32, false, false>>(params);
+            } else /*if (!allChannelsFlag && alphaLocked) */ {
+                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, quint32, true, false>>(params);
             }
         }
     }

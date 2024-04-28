@@ -6,28 +6,28 @@
  */
 #include "KoInlineNote.h"
 
-#include <KoXmlWriter.h>
-#include <KoXmlNS.h>
-#include <KoShapeSavingContext.h>
+#include "TextDebug.h"
 #include <KoOdfNumberDefinition.h>
+#include <KoParagraphStyle.h>
+#include <KoShapeSavingContext.h>
+#include <KoStyleManager.h>
+#include <KoText.h>
+#include <KoTextDocument.h>
 #include <KoTextLoader.h>
 #include <KoTextWriter.h>
-#include <KoTextDocument.h>
-#include <KoText.h>
-#include <KoStyleManager.h>
-#include <KoParagraphStyle.h>
-#include "TextDebug.h"
-#include <writeodf/writeodftext.h>
-#include <writeodf/writeodfoffice.h>
+#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 #include <writeodf/writeodfdc.h>
+#include <writeodf/writeodfoffice.h>
+#include <writeodf/writeodftext.h>
 
+#include <QDateTime>
+#include <QFontMetricsF>
+#include <QTextCursor>
 #include <QTextDocument>
 #include <QTextFrame>
-#include <QTextCursor>
 #include <QTextInlineObject>
-#include <QFontMetricsF>
 #include <QTextOption>
-#include <QDateTime>
 
 using namespace writeodf;
 
@@ -165,7 +165,13 @@ void KoInlineNote::resize(const QTextDocument *document, QTextInlineObject &obje
     }
 }
 
-void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &originalFormat)
+void KoInlineNote::paint(QPainter &painter,
+                         QPaintDevice *pd,
+                         const QTextDocument *document,
+                         const QRectF &rect,
+                         const QTextInlineObject &object,
+                         int posInDocument,
+                         const QTextCharFormat &originalFormat)
 {
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
@@ -205,21 +211,18 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     layout.draw(&painter, rect.topLeft());
 }
 
-bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool KoInlineNote::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     KoTextLoader loader(context);
     QTextCursor cursor(d->textFrame);
 
     if (element.namespaceURI() == KoXmlNS::text && element.localName() == "note") {
-
         QString className = element.attributeNS(KoXmlNS::text, "note-class");
         if (className == "footnote") {
             d->type = Footnote;
-        }
-        else if (className == "endnote") {
+        } else if (className == "endnote") {
             d->type = Endnote;
-        }
-        else {
+        } else {
             return false;
         }
 
@@ -237,25 +240,23 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
                 }
             }
         }
-    }
-    else if (element.namespaceURI() == KoXmlNS::office && element.localName() == "annotation") {
+    } else if (element.namespaceURI() == KoXmlNS::office && element.localName() == "annotation") {
         d->author = element.attributeNS(KoXmlNS::text, "dc-creator");
         d->date = QDateTime::fromString(element.attributeNS(KoXmlNS::text, "dc-date"), Qt::ISODate);
         loader.loadBody(element, cursor); // would skip author and date, and do just the <text-p> and <text-list> elements
-    }
-    else {
+    } else {
         return false;
     }
 
     return true;
 }
 
-void KoInlineNote::saveOdf(KoShapeSavingContext & context)
+void KoInlineNote::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
 
     if (d->type == Footnote || d->type == Endnote) {
-        text_note note(writer, (d->type == Footnote) ?"footnote" :"endnote");
+        text_note note(writer, (d->type == Footnote) ? "footnote" : "endnote");
         text_note_citation cite(note.add_text_note_citation());
         if (!autoNumbering()) {
             cite.set_text_label(d->label);
@@ -265,8 +266,7 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
         text_note_body body(note.add_text_note_body());
         KoTextWriter textWriter(context);
         textWriter.write(d->document, d->textFrame->firstPosition(), d->textFrame->lastPosition());
-    }
-    else if (d->type == Annotation) {
+    } else if (d->type == Annotation) {
         office_annotation annotation(writer);
         if (!d->author.isEmpty()) {
             dc_creator creator(annotation.add_dc_creator());
@@ -278,7 +278,7 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
         }
 
         KoTextWriter textWriter(context);
-        textWriter.write(d->document, d->textFrame->firstPosition(),d->textFrame->lastPosition());
+        textWriter.write(d->document, d->textFrame->firstPosition(), d->textFrame->lastPosition());
     }
 }
 

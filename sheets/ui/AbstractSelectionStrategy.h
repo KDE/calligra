@@ -7,8 +7,8 @@
 #ifndef CALLIGRA_SHEETS_ABSTRACT_SELECTION_STRATEGY
 #define CALLIGRA_SHEETS_ABSTRACT_SELECTION_STRATEGY
 
-#include <KoInteractionStrategy.h>
 #include "sheets_ui_export.h"
+#include <KoInteractionStrategy.h>
 
 #include <Qt>
 
@@ -43,8 +43,8 @@ public:
      */
     ~AbstractSelectionStrategy() override;
 
-    void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers) override;
-    KUndo2Command* createCommand() override;
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command *createCommand() override;
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
 
     /**
@@ -56,8 +56,7 @@ public:
      * to check
      * \return \c true if there is a size grip; \c false otherwise.
      */
-    static bool hitTestSelectionSizeGrip(KoCanvasBase *canvas, Selection *selection,
-                                         const QPointF &position);
+    static bool hitTestSelectionSizeGrip(KoCanvasBase *canvas, Selection *selection, const QPointF &position);
 
     /**
      * Checks, if there is a size grip for the reference selection at
@@ -68,17 +67,16 @@ public:
      * to check
      * \return \c true if there is a size grip; \c false otherwise.
      */
-    static bool hitTestReferenceSizeGrip(KoCanvasBase *canvas, Selection *selection,
-                                         const QPointF &position);
+    static bool hitTestReferenceSizeGrip(KoCanvasBase *canvas, Selection *selection, const QPointF &position);
 
 protected:
     CellToolBase *cellTool() const;
-    Selection* selection() const;
-    const QPointF& startPosition() const;
+    Selection *selection() const;
+    const QPointF &startPosition() const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

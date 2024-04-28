@@ -30,11 +30,26 @@ public:
     /// revert the actions done in redo
     void undo() override;
 
-    void changedStyle(KoCharacterStyle *s) {m_changedCharacterStyles.append(s);}
-    void origStyle(KoCharacterStyle *s) {m_origCharacterStyles.append(s);}
-    void changedStyle(KoParagraphStyle *s) {m_changedParagraphStyles.append(s);}
-    void origStyle(KoParagraphStyle *s) {m_origParagraphStyles.append(s);}
-    void changedStyle(int id) {m_changedStyles.insert(id);}
+    void changedStyle(KoCharacterStyle *s)
+    {
+        m_changedCharacterStyles.append(s);
+    }
+    void origStyle(KoCharacterStyle *s)
+    {
+        m_origCharacterStyles.append(s);
+    }
+    void changedStyle(KoParagraphStyle *s)
+    {
+        m_changedParagraphStyles.append(s);
+    }
+    void origStyle(KoParagraphStyle *s)
+    {
+        m_origParagraphStyles.append(s);
+    }
+    void changedStyle(int id)
+    {
+        m_changedStyles.insert(id);
+    }
 
 private:
     QList<QTextDocument *> m_documents;

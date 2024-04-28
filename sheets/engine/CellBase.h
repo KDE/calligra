@@ -9,13 +9,12 @@
 #ifndef __CELLBASE_H__
 #define __CELLBASE_H__
 
-
 #include "sheets_engine_export.h"
 
+#include <QDebug>
 #include <QPoint>
 #include <QRect>
 #include <QSharedDataPointer>
-#include <QDebug>
 
 namespace Calligra
 {
@@ -30,7 +29,6 @@ class Validity;
 class CALLIGRA_SHEETS_ENGINE_EXPORT CellBase
 {
 public:
-
     /**
      * Constructor.
      * Creates the null cell.
@@ -42,18 +40,18 @@ public:
      * Constructor.
      * Creates a CellBase for accessing the data in \p sheet at position \p col , \p row.
      */
-    CellBase(SheetBase* sheet, unsigned int column, unsigned int row);
+    CellBase(SheetBase *sheet, unsigned int column, unsigned int row);
 
     /**
      * Constructor.
      * Creates a Cell for accessing the data in \p sheet at position \p pos .
      */
-    CellBase(SheetBase* sheet, const QPoint& pos);
+    CellBase(SheetBase *sheet, const QPoint &pos);
 
     /**
      * Copy constructor.
      */
-    CellBase(const CellBase& other);
+    CellBase(const CellBase &other);
 
     /**
      * Destructor.
@@ -68,7 +66,7 @@ public:
     /**
      * \return the sheet this cell belongs to
      */
-    SheetBase* sheet() const;
+    SheetBase *sheet() const;
 
     /**
      * Returns the cell's column.
@@ -114,7 +112,6 @@ public:
      */
     static QString fullName(const SheetBase *s, int col, int row);
 
-
     /**
      * Returns the value that this cell holds. It could be from the user
      * (i.e. when s/he enters a value) or a result of formula.
@@ -128,7 +125,7 @@ public:
      *
      * \see setUserInput, parseUserInput
      */
-    void setValue(const Value& value);
+    void setValue(const Value &value);
 
     /**
      * The cell's formula. Usable to analyze the formula's tokens.
@@ -139,7 +136,7 @@ public:
     /**
      * Sets \p formula as associated formula of this cell.
      */
-    void setFormula(const Formula& formula);
+    void setFormula(const Formula &formula);
 
     /**
      * Returns true, if this cell has no content, i.e no value and no formula.
@@ -167,16 +164,16 @@ public:
      *
      * \see parseUserInput, setValue
      */
-    virtual void setUserInput(const QString& text);
+    virtual void setUserInput(const QString &text);
 
     /**
      * Sets the user input and parses it.
      *
      * \see setUserInput, setValue
      */
-    void parseUserInput(const QString& text);
+    void parseUserInput(const QString &text);
 
-    virtual Value parsedUserInput(const QString& text);
+    virtual Value parsedUserInput(const QString &text);
 
     /**
      * Sets the user input without parsing it, without clearing existing formulas
@@ -186,15 +183,14 @@ public:
      *
      * \see parseUserInput, setValue
      */
-    void setRawUserInput(const QString& text);
-
+    void setRawUserInput(const QString &text);
 
     /**
      * \return the comment associated with this cell
      */
     QString comment() const;
 
-    void setComment(const QString& comment);
+    void setComment(const QString &comment);
 
     /**
      * \return the validity checks associated with this cell
@@ -202,7 +198,6 @@ public:
     Validity validity() const;
 
     void setValidity(Validity validity);
-
 
     /**
      * Encodes the cell's formula into a text representation.
@@ -219,11 +214,7 @@ public:
      *
      * \see encodeFormula()
      */
-    QString decodeFormula(const QString& text) const;
-
-
-
-
+    QString decodeFormula(const QString &text) const;
 
     /**
      * Given the column number, this static function returns the corresponding
@@ -231,41 +222,40 @@ public:
      */
     static QString columnName(unsigned int column);
 
-
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Matrix locking
+    // BEGIN Matrix locking
     //
 
     bool isLocked() const;
     QRect lockedCells() const;
 
     //
-    //END Matrix locking
+    // END Matrix locking
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Operators
+    // BEGIN Operators
     //
 
     /**
      * Assignment.
      */
-    CellBase& operator=(const CellBase& other);
+    CellBase &operator=(const CellBase &other);
 
     /**
      * Tests whether this cell's location is less than the \p other 's.
      * (QMap support)
      * \note Does not compare the cell attributes/data.
      */
-    bool operator<(const CellBase& other) const;
+    bool operator<(const CellBase &other) const;
 
     /**
      * Tests for equality with \p other 's location only.
      * (QHash support)
      * \note Does not compare the cell attributes/data.
      */
-    bool operator==(const CellBase& other) const;
+    bool operator==(const CellBase &other) const;
 
     /**
      * Is null.
@@ -273,15 +263,14 @@ public:
     bool operator!() const;
 
     //
-    //END Operators
-
+    // END Operators
 
 private:
     class Private;
     QSharedDataPointer<Private> d;
 };
 
-inline size_t qHash(const CellBase& cell, size_t seed = 0)
+inline size_t qHash(const CellBase &cell, size_t seed = 0)
 {
     return ::qHash((static_cast<uint>(cell.column()) << 16) + static_cast<uint>(cell.row()), seed);
 }
@@ -289,18 +278,16 @@ inline size_t qHash(const CellBase& cell, size_t seed = 0)
 } // namespace Sheets
 } // namespace Calligra
 
-
 /***************************************************************************
   QDebug support
 ****************************************************************************/
 
-inline QDebug operator<<(QDebug str, const Calligra::Sheets::CellBase& cell)
+inline QDebug operator<<(QDebug str, const Calligra::Sheets::CellBase &cell)
 {
     if (!cell) {
         return str << qPrintable(QStringLiteral("CellBase::isNull"));
     }
     return str << qPrintable(QString("%1%2").arg(Calligra::Sheets::CellBase::columnName(cell.column())).arg(QString::number(cell.row())));
 }
-
 
 #endif

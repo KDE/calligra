@@ -6,8 +6,8 @@
 
 #include "KoConnectionShapeConfigWidget.h"
 #include "commands/KoConnectionShapeTypeCommand.h"
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 
 KoConnectionShapeConfigWidget::KoConnectionShapeConfigWidget()
 {
@@ -32,8 +32,8 @@ void KoConnectionShapeConfigWidget::setConnectionType(int type)
 
 void KoConnectionShapeConfigWidget::open(KoShape *shape)
 {
-    m_connection = dynamic_cast<KoConnectionShape*>(shape);
-    if (! m_connection)
+    m_connection = dynamic_cast<KoConnectionShape *>(shape);
+    if (!m_connection)
         return;
 
     widget.connectionType->blockSignals(true);
@@ -49,7 +49,7 @@ void KoConnectionShapeConfigWidget::save()
     m_connection->setType(static_cast<KoConnectionShape::Type>(widget.connectionType->currentIndex()));
 }
 
-KUndo2Command * KoConnectionShapeConfigWidget::createCommand()
+KUndo2Command *KoConnectionShapeConfigWidget::createCommand()
 {
     if (!m_connection) {
         return 0;

@@ -8,16 +8,17 @@
 #include "BlurEffect.h"
 #include "KoFilterEffect.h"
 
-#include <QSpinBox>
 #include <KLocalizedString>
+#include <QSpinBox>
 
 #include <QGridLayout>
 #include <QLabel>
 
 BlurEffectConfigWidget::BlurEffectConfigWidget(QWidget *parent)
-        : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
+    : KoFilterEffectConfigWidgetBase(parent)
+    , m_effect(0)
 {
-    QGridLayout * g = new QGridLayout(this);
+    QGridLayout *g = new QGridLayout(this);
 
     g->addWidget(new QLabel(i18n("Radius"), this), 0, 0);
     m_stdDeviation = new QDoubleSpinBox(this);
@@ -29,13 +30,13 @@ BlurEffectConfigWidget::BlurEffectConfigWidget(QWidget *parent)
     connect(m_stdDeviation, &QDoubleSpinBox::valueChanged, this, &BlurEffectConfigWidget::stdDeviationChanged);
 }
 
-bool BlurEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
+bool BlurEffectConfigWidget::editFilterEffect(KoFilterEffect *filterEffect)
 {
-    m_effect = dynamic_cast<BlurEffect*>(filterEffect);
+    m_effect = dynamic_cast<BlurEffect *>(filterEffect);
     if (!m_effect)
         return false;
 
-    m_stdDeviation->setValue(m_effect->deviation().x()*100.0);
+    m_stdDeviation->setValue(m_effect->deviation().x() * 100.0);
     return true;
 }
 

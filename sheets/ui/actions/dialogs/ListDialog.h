@@ -21,7 +21,7 @@ class Localization;
  * \ingroup UI
  * Dialog to edit custom value lists.
  */
-class ListDialog: public ActionDialog
+class ListDialog : public ActionDialog
 {
     Q_OBJECT
 public:
@@ -50,7 +50,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

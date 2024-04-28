@@ -9,7 +9,7 @@
 #include <QString>
 
 #include "DataFilter.h"
-//#include "Map.h"
+// #include "Map.h"
 #include "engine/Region.h"
 
 using namespace Calligra::Sheets;
@@ -18,63 +18,66 @@ class Q_DECL_HIDDEN Database::Private : public QSharedData
 {
 public:
     Private()
-            : filter()
-            , isSelection(false)
-            , onUpdateKeepStyles(false)
-            , onUpdateKeepSize(true)
-            , hasPersistentData(true)
-            , containsHeader(true)
-            , displayFilterButtons(false)
-            , orientation(Qt::Vertical)
-            , refreshDelay(0) {
+        : filter()
+        , isSelection(false)
+        , onUpdateKeepStyles(false)
+        , onUpdateKeepSize(true)
+        , hasPersistentData(true)
+        , containsHeader(true)
+        , displayFilterButtons(false)
+        , orientation(Qt::Vertical)
+        , refreshDelay(0)
+    {
     }
 
-    Private(const Private& other)
-            : QSharedData(other)
-            , filter(other.filter)
-            , isSelection(other.isSelection)
-            , onUpdateKeepStyles(other.onUpdateKeepStyles)
-            , onUpdateKeepSize(other.onUpdateKeepSize)
-            , hasPersistentData(other.hasPersistentData)
-            , containsHeader(other.containsHeader)
-            , displayFilterButtons(other.displayFilterButtons)
-            , orientation(other.orientation)
-            , targetRangeAddress(other.targetRangeAddress)
-            , refreshDelay(other.refreshDelay) {
+    Private(const Private &other)
+        : QSharedData(other)
+        , filter(other.filter)
+        , isSelection(other.isSelection)
+        , onUpdateKeepStyles(other.onUpdateKeepStyles)
+        , onUpdateKeepSize(other.onUpdateKeepSize)
+        , hasPersistentData(other.hasPersistentData)
+        , containsHeader(other.containsHeader)
+        , displayFilterButtons(other.displayFilterButtons)
+        , orientation(other.orientation)
+        , targetRangeAddress(other.targetRangeAddress)
+        , refreshDelay(other.refreshDelay)
+    {
     }
 
-    virtual ~Private() {
+    virtual ~Private()
+    {
     }
 
     Filter filter;
     QString name;
-    bool isSelection                    : 1;
-    bool onUpdateKeepStyles             : 1;
-    bool onUpdateKeepSize               : 1;
-    bool hasPersistentData              : 1;
-    bool containsHeader                 : 1;
-    bool displayFilterButtons           : 1;
+    bool isSelection : 1;
+    bool onUpdateKeepStyles : 1;
+    bool onUpdateKeepSize : 1;
+    bool hasPersistentData : 1;
+    bool containsHeader : 1;
+    bool displayFilterButtons : 1;
     Qt::Orientation orientation;
     Region targetRangeAddress;
     int refreshDelay;
 
 private:
-    void operator=(const Private&);
+    void operator=(const Private &);
 };
 
 Database::Database()
-        : d(new Private)
+    : d(new Private)
 {
 }
 
-Database::Database(const QString& name)
-        : d(new Private)
+Database::Database(const QString &name)
+    : d(new Private)
 {
     d->name = name;
 }
 
-Database::Database(const Database& other)
-        : d(other.d)
+Database::Database(const Database &other)
+    : d(other.d)
 {
 }
 
@@ -87,11 +90,13 @@ bool Database::isEmpty() const
     return range().isEmpty(); // it may be empty though
 }
 
-bool Database::isSelection() const {
+bool Database::isSelection() const
+{
     return d->isSelection;
 }
 
-void Database::setIsSelection(bool sel) {
+void Database::setIsSelection(bool sel)
+{
     d->isSelection = sel;
 }
 
@@ -100,7 +105,8 @@ Qt::Orientation Database::orientation() const
     return d->orientation;
 }
 
-void Database::setOrientation(Qt::Orientation o) {
+void Database::setOrientation(Qt::Orientation o)
+{
     d->orientation = o;
 }
 
@@ -114,39 +120,45 @@ void Database::setContainsHeader(bool enable)
     d->containsHeader = enable;
 }
 
-bool Database::onUpdateKeepStyles() const {
+bool Database::onUpdateKeepStyles() const
+{
     return d->onUpdateKeepStyles;
 }
 
-bool Database::onUpdateKeepSize() const {
+bool Database::onUpdateKeepSize() const
+{
     return d->onUpdateKeepSize;
 }
 
-bool Database::hasPersistentData() const {
+bool Database::hasPersistentData() const
+{
     return d->hasPersistentData;
 }
 
-void Database::setOnUpdateKeepStyles(bool val) {
+void Database::setOnUpdateKeepStyles(bool val)
+{
     d->onUpdateKeepStyles = val;
 }
 
-void Database::setOnUpdateKeepSize(bool val) {
+void Database::setOnUpdateKeepSize(bool val)
+{
     d->onUpdateKeepSize = val;
 }
 
-void Database::setHasPersistentData(bool val) {
+void Database::setHasPersistentData(bool val)
+{
     d->hasPersistentData = val;
 }
 
-int Database::refreshDelay() const {
+int Database::refreshDelay() const
+{
     return d->refreshDelay;
 }
 
-void Database::setRefreshDelay(int delay) {
+void Database::setRefreshDelay(int delay)
+{
     d->refreshDelay = delay;
 }
-
-
 
 bool Database::displayFilterButtons() const
 {
@@ -158,35 +170,35 @@ void Database::setDisplayFilterButtons(bool enable)
     d->displayFilterButtons = enable;
 }
 
-const Calligra::Sheets::Region& Database::range() const
+const Calligra::Sheets::Region &Database::range() const
 {
     return d->targetRangeAddress;
 }
 
-void Database::setRange(const Region& region)
+void Database::setRange(const Region &region)
 {
     Q_ASSERT(region.isContiguous());
     d->targetRangeAddress = region;
 }
 
-const Filter& Database::filter() const
+const Filter &Database::filter() const
 {
     return d->filter;
 }
 
-void Database::setFilter(const Filter& filter)
+void Database::setFilter(const Filter &filter)
 {
     if (d->filter == filter)
         return;
     d->filter = filter;
 }
 
-void Database::operator=(const Database & other)
+void Database::operator=(const Database &other)
 {
     d = other.d;
 }
 
-bool Database::operator==(const Database& other) const
+bool Database::operator==(const Database &other) const
 {
     // NOTE Stefan: Don't compare targetRangeAddress.
     if (d->isSelection != other.d->isSelection)
@@ -210,7 +222,7 @@ bool Database::operator==(const Database& other) const
     return true;
 }
 
-bool Database::operator<(const Database& other) const
+bool Database::operator<(const Database &other) const
 {
     return (d < other.d);
 }

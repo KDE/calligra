@@ -23,21 +23,20 @@ public:
     explicit EmfViewer(QSize &size);
     ~EmfViewer();
 
-    void loadFile( const QString &fileName );
+    void loadFile(const QString &fileName);
 
 private Q_SLOTS:
     void slotOpenFile();
 
 private:
-
     // Actions
     QAction *m_fileOpenAction;
     QAction *m_fileQuitAction;
 
     // The central widget
-    QLabel  *m_label;
+    QLabel *m_label;
 
-    QSize    m_size;
+    QSize m_size;
 };
 
 #endif

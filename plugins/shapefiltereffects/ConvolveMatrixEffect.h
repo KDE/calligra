@@ -22,8 +22,8 @@ public:
     /// Edge mode, i.e. how the kernel behaves at image edges
     enum EdgeMode {
         Duplicate, ///< duplicates colors at the edges
-        Wrap,      ///< takes the colors at the opposite edge
-        None       ///< uses values of zero for each color channel
+        Wrap, ///< takes the colors at the opposite edge
+        None ///< uses values of zero for each color channel
     };
 
     ConvolveMatrixEffect();
@@ -80,14 +80,14 @@ public:
 private:
     void setDefaults();
 
-    QPoint m_order;          ///< the dimension of the kernel
+    QPoint m_order; ///< the dimension of the kernel
     QVector<qreal> m_kernel; ///< the kernel
-    qreal m_divisor;         ///< the divisor
-    qreal m_bias;            ///< the bias
-    QPoint m_target;         ///< target cell within the kernel
-    EdgeMode m_edgeMode;     ///< the edge mode
+    qreal m_divisor; ///< the divisor
+    qreal m_bias; ///< the bias
+    QPoint m_target; ///< target cell within the kernel
+    EdgeMode m_edgeMode; ///< the edge mode
     QPointF m_kernelUnitLength; ///< the kernel unit length
-    bool m_preserveAlpha;    ///< indicates if original alpha values are left intact
+    bool m_preserveAlpha; ///< indicates if original alpha values are left intact
 };
 
 #endif // CONVOLVEMATRIXEFFECT_H

@@ -14,7 +14,7 @@
 **
 ** To receive a copy of the GNU Library General Public License, write to the
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+* Boston, MA 02110-1301, USA.
 **
 */
 
@@ -35,9 +35,8 @@
 /**
  * This class hold a row.
  */
-class Row: public Format
+class Row : public Format
 {
-
     /* USEFUL DATA */
     long _row;
     double _height;
@@ -65,32 +64,34 @@ public:
      * getters
      */
 
-    long   getRow() const {
+    long getRow() const
+    {
         return _row;
     }
-    double getHeight() const {
+    double getHeight() const
+    {
         return _height;
     }
 
     /**
      * setters
      */
-    void setRow(int r) {
+    void setRow(int r)
+    {
         _row = r;
     }
-    void setHeight(double h) {
+    void setHeight(double h)
+    {
         _height = h;
     }
 
     /**
      * Helpful functions
      */
-    void     analyze(const QDomNode) override;
-    void     generate(QTextStream&);
+    void analyze(const QDomNode) override;
+    void generate(QTextStream &);
 
 private:
-
 };
 
 #endif /* __CALLIGRA_SHEETS_LATEX_ROW_H__ */
-

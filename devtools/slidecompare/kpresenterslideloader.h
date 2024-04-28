@@ -10,22 +10,24 @@
 
 class KoPADocument;
 
-class KPresenterSlideLoader : public SlideLoader {
+class KPresenterSlideLoader : public SlideLoader
+{
 private:
-    const KoPADocument* m_doc;
+    const KoPADocument *m_doc;
     int version;
 
 public:
-    explicit KPresenterSlideLoader(QObject* parent = 0);
+    explicit KPresenterSlideLoader(QObject *parent = 0);
     ~KPresenterSlideLoader();
     int numberOfSlides();
     QSize slideSize();
-    int slideVersion(int /*position*/) {
+    int slideVersion(int /*position*/)
+    {
         // version is independent of position for this loader
         return version;
     }
-    QPixmap loadSlide(int number, const QSize& maxsize);
-    void open(const QString& path);
+    QPixmap loadSlide(int number, const QSize &maxsize);
+    void open(const QString &path);
     void close();
 };
 

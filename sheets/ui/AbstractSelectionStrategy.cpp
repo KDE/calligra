@@ -30,10 +30,9 @@ public:
     QPointF start;
 };
 
-AbstractSelectionStrategy::AbstractSelectionStrategy(CellToolBase *cellTool,
-        const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
-        : KoInteractionStrategy(cellTool)
-        , d(new Private)
+AbstractSelectionStrategy::AbstractSelectionStrategy(CellToolBase *cellTool, const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
+    : KoInteractionStrategy(cellTool)
+    , d(new Private)
 {
     Q_UNUSED(modifiers)
     d->cellTool = cellTool;
@@ -45,7 +44,7 @@ AbstractSelectionStrategy::~AbstractSelectionStrategy()
     delete d;
 }
 
-void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::KeyboardModifiers modifiers)
+void AbstractSelectionStrategy::handleMouseMove(const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers)
     Selection *const selection = d->cellTool->selection();
@@ -57,7 +56,8 @@ void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::
     int row = selection->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
     if (col < 1 || col > KS_colMax || row < 1 || row > KS_rowMax) {
-        debugSheetsUI << "col or row is out of range:" << "col:" << col << " row:" << row;
+        debugSheetsUI << "col or row is out of range:"
+                      << "col:" << col << " row:" << row;
         return;
     }
     // Test whether mouse is over the Selection.handle
@@ -72,7 +72,7 @@ void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::
     tool()->repaintDecorations();
 }
 
-KUndo2Command* AbstractSelectionStrategy::createCommand()
+KUndo2Command *AbstractSelectionStrategy::createCommand()
 {
     return 0;
 }
@@ -84,9 +84,7 @@ void AbstractSelectionStrategy::finishInteraction(Qt::KeyboardModifiers modifier
 }
 
 // static
-bool AbstractSelectionStrategy::hitTestSelectionSizeGrip(KoCanvasBase *canvas,
-        Selection *selection,
-        const QPointF &position)
+bool AbstractSelectionStrategy::hitTestSelectionSizeGrip(KoCanvasBase *canvas, Selection *selection, const QPointF &position)
 {
     if (selection->referenceSelectionMode() || !selection->isValid()) {
         return false;
@@ -119,9 +117,7 @@ bool AbstractSelectionStrategy::hitTestSelectionSizeGrip(KoCanvasBase *canvas,
 }
 
 // static
-bool AbstractSelectionStrategy::hitTestReferenceSizeGrip(KoCanvasBase *canvas,
-        Selection *selection,
-        const QPointF &position)
+bool AbstractSelectionStrategy::hitTestReferenceSizeGrip(KoCanvasBase *canvas, Selection *selection, const QPointF &position)
 {
     if (!selection->referenceSelectionMode() || !selection->isValid()) {
         return false;
@@ -155,12 +151,12 @@ CellToolBase *AbstractSelectionStrategy::cellTool() const
     return d->cellTool;
 }
 
-Selection* AbstractSelectionStrategy::selection() const
+Selection *AbstractSelectionStrategy::selection() const
 {
     return d->cellTool->selection();
 }
 
-const QPointF& AbstractSelectionStrategy::startPosition() const
+const QPointF &AbstractSelectionStrategy::startPosition() const
 {
     return d->start;
 }

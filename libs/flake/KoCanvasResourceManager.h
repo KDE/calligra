@@ -46,39 +46,35 @@ class FLAKE_EXPORT KoCanvasResourceManager : public QObject
     Q_OBJECT
 
 public:
-
     /**
      * This enum holds identifiers to the resources that can be stored in here.
      */
     enum CanvasResource {
-        ForegroundColor,    ///< The active foreground color selected for this canvas.
-        BackgroundColor,    ///< The active background color selected for this canvas.
-        ActiveStroke,       ///< The active stroke selected for this canvas
-        PageSize,           ///< The size of the (current) page in postscript points.
-        Unit,               ///< The unit of this canvas
-        CurrentPage,        ///< The current page number
-        ActiveStyleType,    ///< the actual active style type see KoFlake::StyleType for valid values
-        ActiveRange,        ///< The area where the rulers should show white
-        ShowTextShapeOutlines,     ///< Paint of text shape outlines ?
-        ShowFormattingCharacters,  ///< Paint of formatting characters ?
-        ShowTableBorders,  ///< Paint of table borders (when not really there) ?
+        ForegroundColor, ///< The active foreground color selected for this canvas.
+        BackgroundColor, ///< The active background color selected for this canvas.
+        ActiveStroke, ///< The active stroke selected for this canvas
+        PageSize, ///< The size of the (current) page in postscript points.
+        Unit, ///< The unit of this canvas
+        CurrentPage, ///< The current page number
+        ActiveStyleType, ///< the actual active style type see KoFlake::StyleType for valid values
+        ActiveRange, ///< The area where the rulers should show white
+        ShowTextShapeOutlines, ///< Paint of text shape outlines ?
+        ShowFormattingCharacters, ///< Paint of formatting characters ?
+        ShowTableBorders, ///< Paint of table borders (when not really there) ?
         ShowSectionBounds, ///< Paint of sections bounds ?
         ShowInlineObjectVisualization, ///< paint a different  background for inline objects
         ApplicationSpeciality, ///< Special features and limitations of the application
-        KarbonStart = 1000,      ///< Base number for Karbon specific values.
-        KexiStart = 2000,        ///< Base number for Kexi specific values.
-        FlowStart = 3000,        ///< Base number for Flow specific values.
-        PlanStart = 4000,        ///< Base number for Plan specific values.
-        StageStart = 5000,       ///< Base number for Stage specific values.
-        SheetsStart = 6000,      ///< Base number for Sheets specific values.
-        WordsStart = 7000,       ///< Base number for Words specific values.
-        KoPageAppStart = 8000    ///< Base number for KoPageApp specific values.
+        KarbonStart = 1000, ///< Base number for Karbon specific values.
+        KexiStart = 2000, ///< Base number for Kexi specific values.
+        FlowStart = 3000, ///< Base number for Flow specific values.
+        PlanStart = 4000, ///< Base number for Plan specific values.
+        StageStart = 5000, ///< Base number for Stage specific values.
+        SheetsStart = 6000, ///< Base number for Sheets specific values.
+        WordsStart = 7000, ///< Base number for Words specific values.
+        KoPageAppStart = 8000 ///< Base number for KoPageApp specific values.
     };
 
-    enum ApplicationSpecial {
-        NoSpecial = 0,
-        NoAdvancedText = 1
-    };
+    enum ApplicationSpecial { NoSpecial = 0, NoAdvancedText = 1 };
 
     /**
      * Constructor.
@@ -231,8 +227,8 @@ Q_SIGNALS:
     void canvasResourceChanged(int key, const QVariant &value);
 
 private:
-    KoCanvasResourceManager(const KoCanvasResourceManager&);
-    KoCanvasResourceManager& operator=(const KoCanvasResourceManager&);
+    KoCanvasResourceManager(const KoCanvasResourceManager &);
+    KoCanvasResourceManager &operator=(const KoCanvasResourceManager &);
 
     class Private;
     Private *const d;

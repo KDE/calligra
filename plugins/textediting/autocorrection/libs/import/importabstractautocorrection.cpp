@@ -6,7 +6,6 @@
 
 #include "importabstractautocorrection.h"
 
-
 ImportAbstractAutocorrection::ImportAbstractAutocorrection()
 {
 }

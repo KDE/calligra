@@ -6,27 +6,27 @@
 
 #include "MergeEffect.h"
 #include "KoViewConverter.h"
-#include "KoXmlWriter.h"
 #include "KoXmlReader.h"
+#include "KoXmlWriter.h"
 #include <KLocalizedString>
 #include <QPainter>
 #include <limits.h>
 
 MergeEffect::MergeEffect()
-        : KoFilterEffect(MergeEffectId, i18n("Merge"))
+    : KoFilterEffect(MergeEffectId, i18n("Merge"))
 {
     setRequiredInputCount(2);
     setMaximalInputCount(INT_MAX);
 }
 
-QImage MergeEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &/*context*/) const
+QImage MergeEffect::processImage(const QImage &image, const KoFilterEffectRenderContext & /*context*/) const
 {
     Q_UNUSED(image);
 
     return image;
 }
 
-QImage MergeEffect::processImages(const QVector<QImage> &images, const KoFilterEffectRenderContext &/*context*/) const
+QImage MergeEffect::processImages(const QVector<QImage> &images, const KoFilterEffectRenderContext & /*context*/) const
 {
     int imageCount = images.count();
     if (!imageCount)
@@ -74,7 +74,7 @@ void MergeEffect::save(KoXmlWriter &writer)
 
     saveCommonAttributes(writer);
 
-    foreach(const QString &input, inputs()) {
+    foreach (const QString &input, inputs()) {
         writer.startElement("feMergeNode");
         writer.addAttribute("in", input);
         writer.endElement();

@@ -10,24 +10,33 @@
 
 #include "../core/Global.h"
 
-namespace MusicCore {
-    class Staff;
-    class VoiceBar;
-    class Chord;
+namespace MusicCore
+{
+class Staff;
+class VoiceBar;
+class Chord;
 }
 class MusicShape;
 
-class CreateChordCommand : public KUndo2Command {
+class CreateChordCommand : public KUndo2Command
+{
 public:
-    CreateChordCommand(MusicShape* shape, MusicCore::VoiceBar* voiceBar, MusicCore::Staff* staff, MusicCore::Duration duration, int before, int pitch, int accidentals);
-    CreateChordCommand(MusicShape* shape, MusicCore::VoiceBar* voiceBar, MusicCore::Staff* staff, MusicCore::Duration duration, int before);
+    CreateChordCommand(MusicShape *shape,
+                       MusicCore::VoiceBar *voiceBar,
+                       MusicCore::Staff *staff,
+                       MusicCore::Duration duration,
+                       int before,
+                       int pitch,
+                       int accidentals);
+    CreateChordCommand(MusicShape *shape, MusicCore::VoiceBar *voiceBar, MusicCore::Staff *staff, MusicCore::Duration duration, int before);
     void redo() override;
     void undo() override;
+
 private:
-    MusicShape* m_shape;
-    MusicCore::VoiceBar* m_voiceBar;
+    MusicShape *m_shape;
+    MusicCore::VoiceBar *m_voiceBar;
     int m_before;
-    MusicCore::Chord* m_chord;
+    MusicCore::Chord *m_chord;
 };
 
 #endif // CREATECHORDCOMMAND_H

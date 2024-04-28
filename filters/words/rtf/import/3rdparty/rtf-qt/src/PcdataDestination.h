@@ -4,29 +4,29 @@
 #ifndef RTFREADER_PCDATADESTINATION_H
 #define RTFREADER_PCDATADESTINATION_H
 
-#include <QString>
 #include <QColor>
+#include <QString>
 
 #include "Destination.h"
 #include "rtfreader_export.h"
 namespace RtfReader
 {
-    class Reader;
+class Reader;
 
-    class RTFREADER_EXPORT PcdataDestination: public Destination
-    {
-      public:
-	PcdataDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );
+class RTFREADER_EXPORT PcdataDestination : public Destination
+{
+public:
+    PcdataDestination(Reader *reader, AbstractRtfOutput *output, const QString &name);
 
-	~PcdataDestination() override;
+    ~PcdataDestination() override;
 
-	void handleControlWord( const QByteArray &controlWord, bool hasValue, const int value ) override;
-	void handlePlainText( const QByteArray &plainText ) override;
-	void aboutToEndDestination() override = 0;
+    void handleControlWord(const QByteArray &controlWord, bool hasValue, const int value) override;
+    void handlePlainText(const QByteArray &plainText) override;
+    void aboutToEndDestination() override = 0;
 
-      protected:
-	QString m_pcdata;
-      };
+protected:
+    QString m_pcdata;
+};
 }
 
 #endif

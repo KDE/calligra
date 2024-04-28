@@ -27,15 +27,18 @@ namespace Sheets
  * \ingroup UI
  * Dialog to resize rows.
  */
-class ResizeRowDialog: public KoDialog
+class ResizeRowDialog : public KoDialog
 {
     Q_OBJECT
 
 public:
-    explicit ResizeRowDialog(QWidget* parent, KoUnit unit);
+    explicit ResizeRowDialog(QWidget *parent, KoUnit unit);
     void setRowHeight(double height);
     double rowHeight();
-    void setDefault(double d) { defaultHeight = d; }
+    void setDefault(double d)
+    {
+        defaultHeight = d;
+    }
 
 protected Q_SLOTS:
     virtual void slotOk();
@@ -50,15 +53,18 @@ protected:
  * \ingroup UI
  * Dialog to resize columns.
  */
-class ResizeColumnDialog: public KoDialog
+class ResizeColumnDialog : public KoDialog
 {
     Q_OBJECT
 
 public:
-    explicit ResizeColumnDialog(QWidget* parent, KoUnit unit);
+    explicit ResizeColumnDialog(QWidget *parent, KoUnit unit);
     void setColWidth(double width);
     double colWidth();
-    void setDefault(double d) { defaultWidth = d; }
+    void setDefault(double d)
+    {
+        defaultWidth = d;
+    }
 
 protected Q_SLOTS:
     virtual void slotOk();

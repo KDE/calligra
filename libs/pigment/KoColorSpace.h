@@ -9,16 +9,16 @@
 
 #include <limits.h>
 
-#include <QImage>
 #include <QHash>
-#include <QVector>
+#include <QImage>
 #include <QList>
+#include <QVector>
 
-#include "KoColorSpaceConstants.h"
 #include "KoColorConversionTransformation.h"
+#include "KoColorSpaceConstants.h"
 #include "KoCompositeOp.h"
-#include <KoID.h>
 #include "pigment_export.h"
+#include <KoID.h>
 
 class QDomDocument;
 class QDomElement;
@@ -27,18 +27,9 @@ class KoColorProfile;
 class KoColorTransformation;
 class QBitArray;
 
-enum Deletability {
-    OwnedByRegistryDoNotDelete,
-    OwnedByRegistryRegistryDeletes,
-    NotOwnedByRegistry
-};
+enum Deletability { OwnedByRegistryDoNotDelete, OwnedByRegistryRegistryDeletes, NotOwnedByRegistry };
 
-enum ColorSpaceIndependence {
-    FULLY_INDEPENDENT,
-    TO_LAB16,
-    TO_RGBA8,
-    TO_RGBA16
-};
+enum ColorSpaceIndependence { FULLY_INDEPENDENT, TO_LAB16, TO_RGBA8, TO_RGBA16 };
 
 class KoMixColorsOp;
 class KoConvolutionOp;
@@ -74,16 +65,17 @@ class PIGMENTCMS_EXPORT KoColorSpace
 {
     friend class KoColorSpaceRegistry;
     friend class KoColorSpaceFactory;
+
 protected:
     /// Only for use by classes that serve as baseclass for real color spaces
     KoColorSpace();
 
 public:
-
     /// Should be called by real color spaces
-    KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp);
+    KoColorSpace(const QString &id, const QString &name, KoMixColorsOp *mixColorsOp, KoConvolutionOp *convolutionOp);
 
-    virtual bool operator==(const KoColorSpace& rhs) const;
+    virtual bool operator==(const KoColorSpace &rhs) const;
+
 protected:
     virtual ~KoColorSpace();
 
@@ -94,17 +86,17 @@ public:
      * maybe convert to 3d space in future?
      */
     QPolygonF gamutXYY() const;
-    
+
     /*
      * @returns a polygon with 5 samples per channel converted to xyY, but unlike
      * gamutxyY it focuses on the luminance. This then can be used to visualise
      * the approximate trc of a given colorspace.
      */
     QPolygonF estimatedTRCXYY() const;
-    
-    QVector <qreal> colorants() const;
-    QVector <qreal> lumaCoefficients() const;
-    
+
+    QVector<qreal> colorants() const;
+    QVector<qreal> lumaCoefficients() const;
+
     //========== Channels =====================================================//
 
     /// Return a list describing all the channels this color model has. The order
@@ -168,7 +160,7 @@ public:
      * an 8-bit value. The position is not the number of bytes, but
      * the position of the channel as defined in the channel info list.
      */
-    virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos) const = 0;
+    virtual quint8 scaleToU8(const quint8 *srcPixel, qint32 channelPos) const = 0;
 
     /**
      * Set dstPixel to the pixel containing only the given channel of srcPixel. The remaining channels
@@ -206,7 +198,7 @@ public:
     /**
      * @return true if the profile given in argument can be used by this color space
      */
-    virtual bool profileIsCompatible(const KoColorProfile* profile) const = 0;
+    virtual bool profileIsCompatible(const KoColorProfile *profile) const = 0;
 
     /**
      * If false, images in this colorspace will degrade considerably by
@@ -225,23 +217,23 @@ public:
     /**
      * Tests if the colorspace offers the specific composite op.
      */
-    virtual bool hasCompositeOp(const QString & id) const;
+    virtual bool hasCompositeOp(const QString &id) const;
 
     /**
      * Returns the list of user-visible composite ops supported by this colorspace.
      */
-    virtual QList<KoCompositeOp*> compositeOps() const;
+    virtual QList<KoCompositeOp *> compositeOps() const;
 
     /**
      * Retrieve a single composite op from the ones this colorspace offers.
      * If the requested composite op does not exist, COMPOSITE_OVER is returned.
      */
-    virtual const KoCompositeOp * compositeOp(const QString & id) const;
+    virtual const KoCompositeOp *compositeOp(const QString &id) const;
 
     /**
      * add a composite op to this colorspace.
      */
-    virtual void addCompositeOp(const KoCompositeOp * op);
+    virtual void addCompositeOp(const KoCompositeOp *op);
 
     /**
      * Returns true if the colorspace supports channel values outside the
@@ -249,17 +241,14 @@ public:
      */
     virtual bool hasHighDynamicRange() const = 0;
 
-
-//========== Display profiles =============================================//
+    //========== Display profiles =============================================//
 
     /**
      * Return the profile of this color space.
      */
-    virtual const KoColorProfile * profile() const = 0;
+    virtual const KoColorProfile *profile() const = 0;
 
-
-//================= Conversion functions ==================================//
-
+    //================= Conversion functions ==================================//
 
     /**
      * The fromQColor methods take a given color defined as an RGB QColor
@@ -270,7 +259,7 @@ public:
      * @param dst a pointer to a pixel
      * @param profile the optional profile that describes the color values of QColor
      */
-    virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const = 0;
+    virtual void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *profile = 0) const = 0;
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
@@ -281,7 +270,7 @@ public:
      * @param c the QColor that will be filled with the color at src
      * @param profile the optional profile that describes the color in c, for instance the monitor profile
      */
-    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const = 0;
+    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile *profile = 0) const = 0;
 
     /**
      * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.
@@ -293,8 +282,10 @@ public:
      * @param renderingIntent the rendering intent
      * @param conversionFlags the conversion flags
      */
-    virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   const KoColorProfile *  dstProfile,
+    virtual QImage convertToQImage(const quint8 *data,
+                                   qint32 width,
+                                   qint32 height,
+                                   const KoColorProfile *dstProfile,
                                    KoColorConversionTransformation::Intent renderingIntent,
                                    KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
@@ -305,7 +296,7 @@ public:
      * @param dst the destination data
      * @param nPixels the number of source pixels
      */
-    virtual void toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const;
+    virtual void toLabA16(const quint8 *src, quint8 *dst, quint32 nPixels) const;
 
     /**
      * Convert the specified data from Lab (D50). to this colorspace. All colorspaces are
@@ -315,7 +306,7 @@ public:
      * @param dst the destination data
      * @param nPixels the number of pixels in the array
      */
-    virtual void fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const;
+    virtual void fromLabA16(const quint8 *src, quint8 *dst, quint32 nPixels) const;
 
     /**
      * Convert the specified data to sRGB 16 bits. All colorspaces are guaranteed to support this
@@ -324,7 +315,7 @@ public:
      * @param dst the destination data
      * @param nPixels the number of source pixels
      */
-    virtual void toRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const;
+    virtual void toRgbA16(const quint8 *src, quint8 *dst, quint32 nPixels) const;
 
     /**
      * Convert the specified data from sRGB 16 bits. to this colorspace. All colorspaces are
@@ -334,12 +325,12 @@ public:
      * @param dst the destination data
      * @param nPixels the number of pixels in the array
      */
-    virtual void fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const;
+    virtual void fromRgbA16(const quint8 *src, quint8 *dst, quint32 nPixels) const;
 
     /**
      * Create a color conversion transformation.
      */
-    virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace,
+    virtual KoColorConversionTransformation *createColorConverter(const KoColorSpace *dstColorSpace,
                                                                   KoColorConversionTransformation::Intent renderingIntent,
                                                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
@@ -353,25 +344,25 @@ public:
      * in different threads at the same time, you need to create one color converter
      * per-thread using createColorConverter.
      */
-    virtual bool convertPixelsTo(const quint8 * src,
-                                 quint8 * dst, const KoColorSpace * dstColorSpace,
+    virtual bool convertPixelsTo(const quint8 *src,
+                                 quint8 *dst,
+                                 const KoColorSpace *dstColorSpace,
                                  quint32 numPixels,
                                  KoColorConversionTransformation::Intent renderingIntent,
                                  KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
-//============================== Manipulation functions ==========================//
+    //============================== Manipulation functions ==========================//
 
-
-//
-// The manipulation functions have default implementations that _convert_ the pixel
-// to a QColor and back. Reimplement these methods in your color strategy!
-//
+    //
+    // The manipulation functions have default implementations that _convert_ the pixel
+    // to a QColor and back. Reimplement these methods in your color strategy!
+    //
 
     /**
      * Get the alpha value of the given pixel, downscaled to an 8-bit value.
      */
-    virtual quint8 opacityU8(const quint8 * pixel) const = 0;
-    virtual qreal opacityF(const quint8 * pixel) const = 0;
+    virtual quint8 opacityU8(const quint8 *pixel) const = 0;
+    virtual qreal opacityF(const quint8 *pixel) const = 0;
 
     /**
      * Set the alpha channel of the given run of pixels to the given value.
@@ -381,8 +372,8 @@ public:
      * nPixels -- the number of pixels
      *
      */
-    virtual void setOpacity(quint8 * pixels, quint8 alpha, qint32 nPixels) const = 0;
-    virtual void setOpacity(quint8 * pixels, qreal alpha, qint32 nPixels) const = 0;
+    virtual void setOpacity(quint8 *pixels, quint8 alpha, qint32 nPixels) const = 0;
+    virtual void setOpacity(quint8 *pixels, qreal alpha, qint32 nPixels) const = 0;
 
     /**
      * Multiply the alpha channel of the given run of pixels by the given value.
@@ -392,33 +383,33 @@ public:
      * nPixels -- the number of pixels
      *
      */
-    virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const = 0;
+    virtual void multiplyAlpha(quint8 *pixels, quint8 alpha, qint32 nPixels) const = 0;
 
     /**
      * Applies the specified 8-bit alpha mask to the pixels. We assume that there are just
      * as many alpha values as pixels but we do not check this; the alpha values
      * are assumed to be 8-bits.
      */
-    virtual void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const = 0;
+    virtual void applyAlphaU8Mask(quint8 *pixels, const quint8 *alpha, qint32 nPixels) const = 0;
 
     /**
      * Applies the inverted 8-bit alpha mask to the pixels. We assume that there are just
      * as many alpha values as pixels but we do not check this; the alpha values
      * are assumed to be 8-bits.
      */
-    virtual void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const = 0;
+    virtual void applyInverseAlphaU8Mask(quint8 *pixels, const quint8 *alpha, qint32 nPixels) const = 0;
 
     /**
      * Applies the specified float alpha mask to the pixels. We assume that there are just
      * as many alpha values as pixels but we do not check this; alpha values have to be between 0.0 and 1.0
      */
-    virtual void applyAlphaNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const = 0;
+    virtual void applyAlphaNormedFloatMask(quint8 *pixels, const float *alpha, qint32 nPixels) const = 0;
 
     /**
      * Applies the inverted specified float alpha mask to the pixels. We assume that there are just
      * as many alpha values as pixels but we do not check this; alpha values have to be between 0.0 and 1.0
      */
-    virtual void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const = 0;
+    virtual void applyInverseNormedFloatMask(quint8 *pixels, const float *alpha, qint32 nPixels) const = 0;
 
     /**
      * Create an adjustment object for adjusting the brightness and contrast
@@ -437,7 +428,7 @@ public:
      * 0..N-2 - color channels of the pixel;
      * N-1 - alpha channel of the pixel (if exists)
      */
-    virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const* transferValues) const = 0;
+    virtual KoColorTransformation *createPerChannelAdjustment(const quint16 *const *transferValues) const = 0;
 
     /**
      * Darken all color channels with the given amount. If compensate is true,
@@ -457,47 +448,47 @@ public:
      * opaque and completely transparent are taken into account when computing the different;
      * other transparency levels are not regarded when finding the difference.
      */
-    virtual quint8 difference(const quint8* src1, const quint8* src2) const = 0;
+    virtual quint8 difference(const quint8 *src1, const quint8 *src2) const = 0;
 
     /**
      * Get the difference between 2 colors, normalized in the range (0,255). This function
      * takes the Alpha channel of the pixel into account. Alpha channel has the same
      * weight as Lightness channel.
      */
-    virtual quint8 differenceA(const quint8* src1, const quint8* src2) const = 0;
+    virtual quint8 differenceA(const quint8 *src1, const quint8 *src2) const = 0;
 
     /**
      * @return the mix color operation of this colorspace (do not delete it locally, it's deleted by the colorspace).
      */
-    virtual KoMixColorsOp* mixColorsOp() const;
+    virtual KoMixColorsOp *mixColorsOp() const;
 
     /**
      * @return the convolution operation of this colorspace (do not delete it locally, it's deleted by the colorspace).
      */
-    virtual KoConvolutionOp* convolutionOp() const;
+    virtual KoConvolutionOp *convolutionOp() const;
 
     /**
      * Calculate the intensity of the given pixel, scaled down to the range 0-255. XXX: Maybe this should be more flexible
      */
-    virtual quint8 intensity8(const quint8 * src) const = 0;
+    virtual quint8 intensity8(const quint8 *src) const = 0;
 
     /*
      *increase luminosity by step
      */
-    virtual void increaseLuminosity(quint8 * pixel, qreal step) const;
-    virtual void decreaseLuminosity(quint8 * pixel, qreal step) const;
-    virtual void increaseSaturation(quint8 * pixel, qreal step) const;
-    virtual void decreaseSaturation(quint8 * pixel, qreal step) const;
-    virtual void increaseHue(quint8 * pixel, qreal step) const;
-    virtual void decreaseHue(quint8 * pixel, qreal step) const;
-    virtual void increaseRed(quint8 * pixel, qreal step) const;
-    virtual void increaseGreen(quint8 * pixel, qreal step) const;
-    virtual void increaseBlue(quint8 * pixel, qreal step) const;
-    virtual void increaseYellow(quint8 * pixel, qreal step) const;
+    virtual void increaseLuminosity(quint8 *pixel, qreal step) const;
+    virtual void decreaseLuminosity(quint8 *pixel, qreal step) const;
+    virtual void increaseSaturation(quint8 *pixel, qreal step) const;
+    virtual void decreaseSaturation(quint8 *pixel, qreal step) const;
+    virtual void increaseHue(quint8 *pixel, qreal step) const;
+    virtual void decreaseHue(quint8 *pixel, qreal step) const;
+    virtual void increaseRed(quint8 *pixel, qreal step) const;
+    virtual void increaseGreen(quint8 *pixel, qreal step) const;
+    virtual void increaseBlue(quint8 *pixel, qreal step) const;
+    virtual void increaseYellow(quint8 *pixel, qreal step) const;
     virtual void toHSY(const QVector<qreal> &channelValues, qreal *hue, qreal *sat, qreal *luma) const = 0;
-    virtual QVector <qreal> fromHSY(qreal *hue, qreal *sat, qreal *luma) const = 0;
+    virtual QVector<qreal> fromHSY(qreal *hue, qreal *sat, qreal *luma) const = 0;
     virtual void toYUV(const QVector<qreal> &channelValues, qreal *y, qreal *u, qreal *v) const = 0;
-    virtual QVector <qreal> fromYUV(qreal *y, qreal *u, qreal *v) const = 0;
+    virtual QVector<qreal> fromYUV(qreal *y, qreal *u, qreal *v) const = 0;
     /**
      * Compose two arrays of pixels together. If source and target
      * are not the same color model, the source pixels will be
@@ -512,7 +503,9 @@ public:
      * @param conversionFlags the conversion flags
      *
      */
-    virtual void bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op,
+    virtual void bitBlt(const KoColorSpace *srcSpace,
+                        const KoCompositeOp::ParameterInfo &params,
+                        const KoCompositeOp *op,
                         KoColorConversionTransformation::Intent renderingIntent,
                         KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
@@ -529,7 +522,7 @@ public:
      *                 element is \<color /\>
      * @param doc is the document containing colorElt
      */
-    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const = 0;
+    virtual void colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const = 0;
 
     /**
      * Unserialize a color following Create's swatch color specification available
@@ -540,27 +533,26 @@ public:
      * @return the unserialize color, or an empty color object if the function failed
      *         to unserialize the color
      */
-    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const = 0;
+    virtual void colorFromXML(quint8 *pixel, const QDomElement &elt) const = 0;
 
-    KoColorTransformation* createColorTransformation(const QString & id, const QHash<QString, QVariant> & parameters) const;
+    KoColorTransformation *createColorTransformation(const QString &id, const QHash<QString, QVariant> &parameters) const;
 
 protected:
-
     /**
      * Use this function in the constructor of your colorspace to add the information about a channel.
      * @param ci a pointer to the information about a channel
      */
-    virtual void addChannel(KoChannelInfo * ci);
-    const KoColorConversionTransformation* toLabA16Converter() const;
-    const KoColorConversionTransformation* fromLabA16Converter() const;
-    const KoColorConversionTransformation* toRgbA16Converter() const;
-    const KoColorConversionTransformation* fromRgbA16Converter() const;
+    virtual void addChannel(KoChannelInfo *ci);
+    const KoColorConversionTransformation *toLabA16Converter() const;
+    const KoColorConversionTransformation *fromLabA16Converter() const;
+    const KoColorConversionTransformation *toRgbA16Converter() const;
+    const KoColorConversionTransformation *fromRgbA16Converter() const;
 
     /**
      * Returns the thread-local conversion cache. If it doesn't exist
      * yet, it is created. If it is currently too small, it is resized.
      */
-    QVector<quint8> * threadLocalConversionCache(quint32 size) const;
+    QVector<quint8> *threadLocalConversionCache(quint32 size) const;
 
     /**
      * This function defines the behavior of the bitBlt function
@@ -587,10 +579,8 @@ protected:
      */
     virtual bool preferCompositionInSourceColorSpace() const;
 
-
     struct Private;
-    Private * const d;
-
+    Private *const d;
 };
 
 inline QDebug operator<<(QDebug dbg, const KoColorSpace *cs)
@@ -599,6 +589,5 @@ inline QDebug operator<<(QDebug dbg, const KoColorSpace *cs)
 
     return dbg.space();
 }
-
 
 #endif // KOCOLORSPACE_H

@@ -26,7 +26,7 @@ public:
             shapeFactory->newDocumentResourceManager(resourceManager);
         }
         // read persistent application wide resources
-        KSharedConfigPtr config =  KSharedConfig::openConfig();
+        KSharedConfigPtr config = KSharedConfig::openConfig();
         if (config->hasGroup("Misc")) {
             KConfigGroup miscGroup = config->group("Misc");
             const qreal pasteOffset = miscGroup.readEntry("CopyOffset", 10.0);
@@ -58,7 +58,7 @@ KoShapeBasedDocumentBase::~KoShapeBasedDocumentBase()
     delete d;
 }
 
-void KoShapeBasedDocumentBase::shapesRemoved(const QList<KoShape*> & /*shapes*/, KUndo2Command * /*command*/)
+void KoShapeBasedDocumentBase::shapesRemoved(const QList<KoShape *> & /*shapes*/, KUndo2Command * /*command*/)
 {
 }
 

@@ -6,43 +6,42 @@
 
 #include "KoMarkerData.h"
 
-#include <FlakeDebug.h>
-#include <KoStyleStack.h>
-#include <KoXmlNS.h>
-#include <KoUnit.h>
-#include <KoOdfLoadingContext.h>
-#include <KoGenStyle.h>
-#include "KoShapeLoadingContext.h"
 #include "KoMarker.h"
 #include "KoMarkerSharedLoadingData.h"
+#include "KoShapeLoadingContext.h"
+#include <FlakeDebug.h>
+#include <KoGenStyle.h>
+#include <KoOdfLoadingContext.h>
+#include <KoStyleStack.h>
+#include <KoUnit.h>
+#include <KoXmlNS.h>
 
 /**
- * This defines the factor the width of the arrow is widened 
+ * This defines the factor the width of the arrow is widened
  * when the width of the line is changed.
  */
 static const qreal ResizeFactor = 1.5;
 
 static const struct {
-    const char * m_markerPositionLoad;
-    const char * m_markerWidthLoad;
-    const char * m_markerCenterLoad;
-    const char * m_markerPositionSave;
-    const char * m_markerWidthSave;
-    const char * m_markerCenterSave;
-} markerOdfData[] = {
-    { "marker-start", "marker-start-width", "marker-start-center", "draw:marker-start", "draw:marker-start-width", "draw:marker-start-center" },
-    { "marker-end"  , "marker-end-width",   "marker-end-center", "draw:marker-end"  , "draw:marker-end-width",   "draw:marker-end-center" }
-};
+    const char *m_markerPositionLoad;
+    const char *m_markerWidthLoad;
+    const char *m_markerCenterLoad;
+    const char *m_markerPositionSave;
+    const char *m_markerWidthSave;
+    const char *m_markerCenterSave;
+} markerOdfData[] = {{"marker-start", "marker-start-width", "marker-start-center", "draw:marker-start", "draw:marker-start-width", "draw:marker-start-center"},
+                     {"marker-end", "marker-end-width", "marker-end-center", "draw:marker-end", "draw:marker-end-width", "draw:marker-end-center"}};
 
 class Q_DECL_HIDDEN KoMarkerData::Private
 {
 public:
     Private(KoMarker *marker, qreal baseWidth, KoMarkerData::MarkerPosition position, bool center)
-    : marker(marker)
-    , baseWidth(baseWidth)
-    , position(position)
-    , center(center)
-    {}
+        : marker(marker)
+        , baseWidth(baseWidth)
+        , position(position)
+        , center(center)
+    {
+    }
 
     QExplicitlySharedDataPointer<KoMarker> marker;
     qreal baseWidth;
@@ -51,23 +50,23 @@ public:
 };
 
 KoMarkerData::KoMarkerData(KoMarker *marker, qreal width, MarkerPosition position, bool center)
-: d(new Private(marker, width, position, center))
+    : d(new Private(marker, width, position, center))
 {
 }
 
 KoMarkerData::KoMarkerData(MarkerPosition position)
-: d(new Private(0, 0, position, false))
+    : d(new Private(0, 0, position, false))
 {
 }
 
 KoMarkerData::KoMarkerData()
-: d(0)
+    : d(0)
 {
     Q_ASSERT(0);
 }
 
 KoMarkerData::KoMarkerData(const KoMarkerData &other)
-: d(new Private(other.d->marker.data(), other.d->baseWidth, other.d->position, other.d->center))
+    : d(new Private(other.d->marker.data(), other.d->baseWidth, other.d->position, other.d->center))
 {
 }
 
@@ -75,7 +74,6 @@ KoMarkerData::~KoMarkerData()
 {
     delete d;
 }
-
 
 KoMarker *KoMarkerData::marker() const
 {
@@ -130,7 +128,7 @@ KoMarkerData &KoMarkerData::operator=(const KoMarkerData &other)
 
 bool KoMarkerData::loadOdf(qreal penWidth, KoShapeLoadingContext &context)
 {
-    KoMarkerSharedLoadingData *markerShared = dynamic_cast<KoMarkerSharedLoadingData*>(context.sharedData(MARKER_SHARED_LOADING_ID));
+    KoMarkerSharedLoadingData *markerShared = dynamic_cast<KoMarkerSharedLoadingData *>(context.sharedData(MARKER_SHARED_LOADING_ID));
     if (markerShared) {
         KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
         // draw:marker-end="Arrow" draw:marker-end-width="0.686cm" draw:marker-end-center="true"

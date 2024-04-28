@@ -8,15 +8,15 @@
 #include "KoShadowConfigWidget.h"
 #include "ui_KoShadowConfigWidget.h"
 
-#include <KoIcon.h>
-#include <KoUnit.h>
-#include <KoColorPopupAction.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceManager.h>
+#include <KoColorPopupAction.h>
+#include <KoIcon.h>
 #include <KoSelection.h>
+#include <KoShapeManager.h>
 #include <KoShapeShadow.h>
 #include <KoShapeShadowCommand.h>
-#include <KoShapeManager.h>
+#include <KoUnit.h>
 
 #include <KLocalizedString>
 
@@ -73,7 +73,7 @@ void KoShadowConfigWidget::setShadowColor(const QColor &color)
     d->widget.shadowColor->blockSignals(true);
     d->actionShadowColor->blockSignals(true);
 
-    d->actionShadowColor->setCurrentColor( color );
+    d->actionShadowColor->setCurrentColor(color);
 
     d->actionShadowColor->blockSignals(false);
     d->widget.shadowColor->blockSignals(false);
@@ -86,10 +86,10 @@ QColor KoShadowConfigWidget::shadowColor() const
 
 void KoShadowConfigWidget::setShadowOffset(const QPointF &offset)
 {
-    qreal length = sqrt(offset.x()*offset.x() + offset.y()*offset.y());
+    qreal length = sqrt(offset.x() * offset.x() + offset.y() * offset.y());
     qreal angle = atan2(-offset.y(), offset.x());
     if (angle < 0.0) {
-        angle += 2*M_PI;
+        angle += 2 * M_PI;
     }
 
     d->widget.shadowAngle->blockSignals(true);
@@ -136,18 +136,18 @@ bool KoShadowConfigWidget::shadowVisible() const
 
 void KoShadowConfigWidget::visibilityChanged()
 {
-    d->widget.shadowAngle->setEnabled( d->widget.shadowVisible->isChecked() );
-    d->widget.shadowBlur->setEnabled( d->widget.shadowVisible->isChecked() );
-    d->widget.shadowColor->setEnabled( d->widget.shadowVisible->isChecked() );
-    d->widget.shadowOffset->setEnabled( d->widget.shadowVisible->isChecked() );
+    d->widget.shadowAngle->setEnabled(d->widget.shadowVisible->isChecked());
+    d->widget.shadowBlur->setEnabled(d->widget.shadowVisible->isChecked());
+    d->widget.shadowColor->setEnabled(d->widget.shadowVisible->isChecked());
+    d->widget.shadowOffset->setEnabled(d->widget.shadowVisible->isChecked());
 }
 
 void KoShadowConfigWidget::applyChanges()
 {
     if (d->canvas) {
         KoSelection *selection = d->canvas->shapeManager()->selection();
-        KoShape * shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
-        if (! shape) {
+        KoShape *shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
+        if (!shape) {
             return;
         }
 
@@ -162,22 +162,22 @@ void KoShadowConfigWidget::applyChanges()
 
 void KoShadowConfigWidget::selectionChanged()
 {
-    if (! d->canvas) {
+    if (!d->canvas) {
         return;
     }
 
     KoSelection *selection = d->canvas->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
+    KoShape *shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
 
     setEnabled(shape != nullptr);
 
-    if (! shape) {
+    if (!shape) {
         setShadowVisible(false);
         return;
     }
 
-    KoShapeShadow * shadow = shape->shadow();
-    if (! shadow) {
+    KoShapeShadow *shadow = shape->shadow();
+    if (!shadow) {
         setShadowVisible(false);
         return;
     }
@@ -196,8 +196,7 @@ void KoShadowConfigWidget::setCanvas(KoCanvasBase *canvas)
 
     setUnit(canvas->unit());
 
-    connect( d->canvas->resourceManager(), &KoCanvasResourceManager::canvasResourceChanged,
-             this, &KoShadowConfigWidget::resourceChanged );
+    connect(d->canvas->resourceManager(), &KoCanvasResourceManager::canvasResourceChanged, this, &KoShadowConfigWidget::resourceChanged);
 }
 
 void KoShadowConfigWidget::setUnit(const KoUnit &unit)
@@ -210,9 +209,9 @@ void KoShadowConfigWidget::setUnit(const KoUnit &unit)
     d->widget.shadowBlur->blockSignals(false);
 }
 
-void KoShadowConfigWidget::resourceChanged( int key, const QVariant & res )
+void KoShadowConfigWidget::resourceChanged(int key, const QVariant &res)
 {
-    if( key == KoCanvasResourceManager::Unit ) {
+    if (key == KoCanvasResourceManager::Unit) {
         setUnit(res.value<KoUnit>());
     }
 }

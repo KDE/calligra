@@ -9,32 +9,32 @@
 #include "TestMultipleFiles.h"
 
 // Qt
-#include <QTextDocument>
 #include <QDir>
+#include <QTextDocument>
 
 // Calligra
-#include <KoStore.h>
 #include <KoOdfReadStore.h>
+#include <KoStore.h>
 #include <KoTextShapeDataBase.h>
 
 // KoChart
-#include "ChartShape.h"
 #include "ChartDocument.h"
+#include "ChartShape.h"
 
 static void filterMessages(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     QByteArray localMsg = msg.toLocal8Bit();
     QString cat(context.category);
     switch (type) {
-        case QtDebugMsg:
-            //             fprintf(stderr, "%s\n%s\n%s\n%d\n%d\n", context.category, context.file, context.function, context.version, context.line);
-            if (cat.startsWith("calligra.plugin.chart.odf")) {
-                 fprintf(stderr, "%d: %s\n", context.line, localMsg.constData());
-            }
-            break;
-        default:
-            fprintf(stderr, "%s\n", localMsg.constData());
-            break;
+    case QtDebugMsg:
+        //             fprintf(stderr, "%s\n%s\n%s\n%d\n%d\n", context.category, context.file, context.function, context.version, context.line);
+        if (cat.startsWith("calligra.plugin.chart.odf")) {
+            fprintf(stderr, "%d: %s\n", context.line, localMsg.constData());
+        }
+        break;
+    default:
+        fprintf(stderr, "%s\n", localMsg.constData());
+        break;
     }
 }
 
@@ -61,7 +61,7 @@ void TestMultipleFiles::cleanupTestCase()
 void TestMultipleFiles::init()
 {
     QVERIFY(currentDoc < documents.count());
-    qInfo()<<"------ Testing:"<<documents.at(currentDoc);
+    qInfo() << "------ Testing:" << documents.at(currentDoc);
     m_chart = new ChartShape(0);
 
     QDir srcdir(QFINDTESTDATA(documents.at(currentDoc)));
@@ -89,4 +89,3 @@ void TestMultipleFiles::cleanup()
     delete m_chart;
     m_chart = 0;
 }
-

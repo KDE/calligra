@@ -8,10 +8,10 @@
 #include "SvgUtil.h"
 
 SvgFilterHelper::SvgFilterHelper()
-        : m_filterUnits(ObjectBoundingBox) // default as per svg spec
-        , m_primitiveUnits(UserSpaceOnUse) // default as per svg spec
-        , m_position(-0.1, -0.1) // default as per svg spec
-        , m_size(1.2, 1.2) // default as per svg spec
+    : m_filterUnits(ObjectBoundingBox) // default as per svg spec
+    , m_primitiveUnits(UserSpaceOnUse) // default as per svg spec
+    , m_position(-0.1, -0.1) // default as per svg spec
+    , m_size(1.2, 1.2) // default as per svg spec
 {
 }
 
@@ -39,12 +39,12 @@ SvgFilterHelper::Units SvgFilterHelper::primitiveUnits() const
     return m_primitiveUnits;
 }
 
-void SvgFilterHelper::setPosition(const QPointF & position)
+void SvgFilterHelper::setPosition(const QPointF &position)
 {
     m_position = position;
 }
 
-QPointF SvgFilterHelper::position(const QRectF & objectBound) const
+QPointF SvgFilterHelper::position(const QRectF &objectBound) const
 {
     if (m_filterUnits == UserSpaceOnUse) {
         return m_position;
@@ -53,12 +53,12 @@ QPointF SvgFilterHelper::position(const QRectF & objectBound) const
     }
 }
 
-void SvgFilterHelper::setSize(const QSizeF & size)
+void SvgFilterHelper::setSize(const QSizeF &size)
 {
     m_size = size;
 }
 
-QSizeF SvgFilterHelper::size(const QRectF & objectBound) const
+QSizeF SvgFilterHelper::size(const QRectF &objectBound) const
 {
     if (m_filterUnits == UserSpaceOnUse) {
         return m_size;

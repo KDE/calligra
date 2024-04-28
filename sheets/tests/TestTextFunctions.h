@@ -16,7 +16,7 @@ namespace Sheets
 
 class MapBase;
 
-class TestTextFunctions: public QObject
+class TestTextFunctions : public QObject
 {
     Q_OBJECT
 
@@ -52,8 +52,9 @@ private Q_SLOTS:
     void testTEXT();
 
     void cleanupTestCase();
+
 private:
-    Value evaluate(const QString&, Value& ex);
+    Value evaluate(const QString &, Value &ex);
 
     MapBase *m_map;
 };

@@ -33,7 +33,7 @@ class KoShapeLoadingContext;
  * of the shape. The coordinates or parameters of the commands
  * can be constant values, named variables (identifiers),
  * modifiers, functions or formulae.
-*/
+ */
 class EnhancedPathShape : public KoParameterShape
 {
 public:
@@ -74,7 +74,7 @@ public:
     void addFormula(const QString &name, const QString &formula);
 
     /// Add a single handle with format: x y minX maxX minY maxY
-    void addHandle(const QMap<QString,QVariant> &handle);
+    void addHandle(const QMap<QString, QVariant> &handle);
 
     /// Add modifiers with format: modifier0 modifier1 modifier2 ...
     void addModifiers(const QString &modifiers);
@@ -89,13 +89,13 @@ public:
     QPointF shapeToViewbox(const QPointF &point) const;
 
     /// Sets if the shape is to be mirrored horizontally before applying any other transformations
-    //NOTE: in the standard nothing is mentioned about the priorities of the transformations"
-    //it's assumed like this because of the behavior shown in OOo
+    // NOTE: in the standard nothing is mentioned about the priorities of the transformations"
+    // it's assumed like this because of the behavior shown in OOo
     void setMirrorHorizontally(bool mirrorHorizontally);
 
     /// Sets if the shape is to be mirrored vertically before applying any other transformations
-    //NOTE: in the standard nothing is mentioned about the priorities of the transformations"
-    //it's assumed like this because of the behavior shown in OOo
+    // NOTE: in the standard nothing is mentioned about the priorities of the transformations"
+    // it's assumed like this because of the behavior shown in OOo
     void setMirrorVertically(bool mirrorVertically);
 
     // Sets member variable representing draw:path-stretchpoint-x attribute
@@ -109,14 +109,14 @@ public:
 
     void saveEnhancedGeometry(KoShapeSavingContext &context) const;
 
-    bool loadEnhancedGeometry(const KoXmlElement & element, KoShapeLoadingContext &context);
+    bool loadEnhancedGeometry(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 protected:
     // from KoShape
     void saveOdf(KoShapeSavingContext &context) const override;
     // from KoShape
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
-    //from KoShape
+    // from KoShape
     void shapeChanged(ChangeType type, KoShape *shape = 0) override;
     // from KoParameterShape
     void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
@@ -145,23 +145,23 @@ protected:
     // Returns true if any points were actually changed, otherwise false.
     bool useStretchPoints(const QSizeF &size, qreal &scale);
 
-    typedef QMap<QString, EnhancedPathFormula*> FormulaStore;
+    typedef QMap<QString, EnhancedPathFormula *> FormulaStore;
     typedef QList<qreal> ModifierStore;
-    typedef QMap<QString, EnhancedPathParameter*> ParameterStore;
+    typedef QMap<QString, EnhancedPathParameter *> ParameterStore;
 
-    QRect m_viewBox;     ///< the viewbox rectangle
-    QRectF m_viewBound;   ///< the bounding box of the path in viewbox coordinates
+    QRect m_viewBox; ///< the viewbox rectangle
+    QRectF m_viewBound; ///< the bounding box of the path in viewbox coordinates
     QTransform m_viewMatrix; ///< matrix to convert from viewbox coordinates to shape coordinates
     QTransform m_mirrorMatrix; ///< matrix to used for mirroring
     QPointF m_viewBoxOffset;
     QStringList m_textArea;
-    QList<EnhancedPathCommand*> m_commands; ///< the commands creating the outline
-    QList<EnhancedPathHandle*> m_enhancedHandles; ///< the handles for modifying the shape
-    FormulaStore m_formulae;     ///< the formulae
-    ModifierStore m_modifiers;   ///< the modifier values
+    QList<EnhancedPathCommand *> m_commands; ///< the commands creating the outline
+    QList<EnhancedPathHandle *> m_enhancedHandles; ///< the handles for modifying the shape
+    FormulaStore m_formulae; ///< the formulae
+    ModifierStore m_modifiers; ///< the modifier values
     ParameterStore m_parameters; ///< the shared parameters
-    bool m_mirrorVertically; ///<whether or not the shape is to be mirrored vertically before transforming it
-    bool m_mirrorHorizontally; ///<whether or not the shape is to be mirrored horizontally before transforming it
+    bool m_mirrorVertically; ///< whether or not the shape is to be mirrored vertically before transforming it
+    bool m_mirrorHorizontally; ///< whether or not the shape is to be mirrored horizontally before transforming it
     qreal m_pathStretchPointX; ///< draw:path-stretchpoint-x attribute
     qreal m_pathStretchPointY; ///< draw:path-stretchpoint-y attribute
     QHash<QString, qreal> m_resultCache; ///< cache for intermediate results used when evaluating path

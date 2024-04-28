@@ -9,26 +9,26 @@
 #include "TestTableLayout.h"
 #include "MockRootAreaProvider.h"
 
-#include <KoParagraphStyle.h>
-#include <KoListStyle.h>
-#include <KoListLevelProperties.h>
-#include <KoStyleManager.h>
-#include <KoTextBlockData.h>
-#include <KoTextBlockBorderData.h>
-#include <KoTextDocument.h>
+#include <FrameIterator.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoListLevelProperties.h>
+#include <KoListStyle.h>
+#include <KoParagraphStyle.h>
+#include <KoPointedAt.h>
+#include <KoStyleManager.h>
 #include <KoTableColumnAndRowStyleManager.h>
 #include <KoTableColumnStyle.h>
 #include <KoTableRowStyle.h>
 #include <KoTableStyle.h>
-#include <KoTextPage.h>
+#include <KoTextBlockBorderData.h>
+#include <KoTextBlockData.h>
 #include <KoTextDebug.h>
-#include <FrameIterator.h>
-#include <KoPointedAt.h>
+#include <KoTextDocument.h>
+#include <KoTextPage.h>
 
+#include <QTest>
 #include <QTextCursor>
 #include <QTextTable>
-#include <QTest>
 
 #include <TextLayoutDebug.h>
 
@@ -46,7 +46,11 @@ void TestTableLayout::initTestCase()
     m_doc = 0;
     m_layout = 0;
 
-    m_loremIpsum = QString("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.");
+    m_loremIpsum = QString(
+        "Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut "
+        "wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum "
+        "iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto "
+        "odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.");
 }
 
 void TestTableLayout::cleanupTestCase()
@@ -65,7 +69,7 @@ QTextCursor TestTableLayout::setupTest()
     Q_ASSERT(provider);
     KoTextDocument(m_doc).setInlineTextObjectManager(new KoInlineTextObjectManager);
 
-    m_doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false)); //do it manually since we do not load the appDefaultStyle
+    m_doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false)); // do it manually since we do not load the appDefaultStyle
 
     m_styleManager = new KoStyleManager(0);
     KoTextDocument(m_doc).setStyleManager(m_styleManager);
@@ -80,7 +84,13 @@ QTextCursor TestTableLayout::setupTest()
     return cursor;
 }
 
-void TestTableLayout::setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText, KoTableStyle* tableStyle)
+void TestTableLayout::setupTest(const QString &mergedText,
+                                const QString &topRightText,
+                                const QString &midRightText,
+                                const QString &bottomLeftText,
+                                const QString &bottomMidText,
+                                const QString &bottomRightText,
+                                KoTableStyle *tableStyle)
 {
     QTextCursor cursor = setupTest();
 
@@ -91,51 +101,51 @@ void TestTableLayout::setupTest(const QString &mergedText, const QString &topRig
     if (tableStyle)
         tableStyle->applyStyle(tableFormat);
 
-    m_table = cursor.insertTable(3,3,tableFormat);
-    m_table->mergeCells(0,0,2,2);
+    m_table = cursor.insertTable(3, 3, tableFormat);
+    m_table->mergeCells(0, 0, 2, 2);
     if (mergedText.length() > 0) {
-        m_table->cellAt(0,0).firstCursorPosition().insertText(mergedText);
-        QTextBlock b2 = m_table->cellAt(0,0).firstCursorPosition().block();
+        m_table->cellAt(0, 0).firstCursorPosition().insertText(mergedText);
+        QTextBlock b2 = m_table->cellAt(0, 0).firstCursorPosition().block();
         while (b2.isValid()) {
             style.applyStyle(b2);
             b2 = b2.next();
         }
     }
     if (topRightText.length() > 0) {
-        m_table->cellAt(0,2).firstCursorPosition().insertText(topRightText);
-        QTextBlock b2 = m_table->cellAt(0,2).firstCursorPosition().block();
+        m_table->cellAt(0, 2).firstCursorPosition().insertText(topRightText);
+        QTextBlock b2 = m_table->cellAt(0, 2).firstCursorPosition().block();
         while (b2.isValid()) {
             style.applyStyle(b2);
             b2 = b2.next();
         }
     }
     if (midRightText.length() > 0) {
-        m_table->cellAt(1,2).firstCursorPosition().insertText(midRightText);
-        QTextBlock b2 = m_table->cellAt(1,2).firstCursorPosition().block();
+        m_table->cellAt(1, 2).firstCursorPosition().insertText(midRightText);
+        QTextBlock b2 = m_table->cellAt(1, 2).firstCursorPosition().block();
         while (b2.isValid()) {
             style.applyStyle(b2);
             b2 = b2.next();
         }
     }
     if (bottomLeftText.length() > 0) {
-        m_table->cellAt(2,0).firstCursorPosition().insertText(bottomLeftText);
-        QTextBlock b2 = m_table->cellAt(2,0).firstCursorPosition().block();
+        m_table->cellAt(2, 0).firstCursorPosition().insertText(bottomLeftText);
+        QTextBlock b2 = m_table->cellAt(2, 0).firstCursorPosition().block();
         while (b2.isValid()) {
             style.applyStyle(b2);
             b2 = b2.next();
         }
     }
     if (bottomMidText.length() > 0) {
-        m_table->cellAt(2,1).firstCursorPosition().insertText(bottomMidText);
-        QTextBlock b2 = m_table->cellAt(2,1).firstCursorPosition().block();
+        m_table->cellAt(2, 1).firstCursorPosition().insertText(bottomMidText);
+        QTextBlock b2 = m_table->cellAt(2, 1).firstCursorPosition().block();
         while (b2.isValid()) {
             style.applyStyle(b2);
             b2 = b2.next();
         }
     }
     if (bottomRightText.length() > 0) {
-        m_table->cellAt(2,2).firstCursorPosition().insertText(bottomRightText);
-        QTextBlock b2 = m_table->cellAt(2,2).firstCursorPosition().block();
+        m_table->cellAt(2, 2).firstCursorPosition().insertText(bottomRightText);
+        QTextBlock b2 = m_table->cellAt(2, 2).firstCursorPosition().block();
         while (b2.isValid()) {
             style.applyStyle(b2);
             b2 = b2.next();
@@ -145,37 +155,37 @@ void TestTableLayout::setupTest(const QString &mergedText, const QString &topRig
 
 QTextBlock TestTableLayout::mergedCellBlock() const
 {
-    return m_table->cellAt(0,0).firstCursorPosition().block();
+    return m_table->cellAt(0, 0).firstCursorPosition().block();
 }
 
 QTextBlock TestTableLayout::topRightCellBlock() const
 {
-    return m_table->cellAt(0,2).firstCursorPosition().block();
+    return m_table->cellAt(0, 2).firstCursorPosition().block();
 }
 
 QTextBlock TestTableLayout::midRightCellBlock() const
 {
-    return m_table->cellAt(1,2).firstCursorPosition().block();
+    return m_table->cellAt(1, 2).firstCursorPosition().block();
 }
 
 QTextBlock TestTableLayout::bottomLeftCellBlock() const
 {
-    return m_table->cellAt(2,0).firstCursorPosition().block();
+    return m_table->cellAt(2, 0).firstCursorPosition().block();
 }
 
 QTextBlock TestTableLayout::bottomMidCellBlock() const
 {
-    return m_table->cellAt(2,1).firstCursorPosition().block();
+    return m_table->cellAt(2, 1).firstCursorPosition().block();
 }
 
 QTextBlock TestTableLayout::bottomRightCellBlock() const
 {
-    return m_table->cellAt(2,2).firstCursorPosition().block();
+    return m_table->cellAt(2, 2).firstCursorPosition().block();
 }
 
 void TestTableLayout::testSetupTest()
 {
-    setupTest("m","02","12","20","21","22");
+    setupTest("m", "02", "12", "20", "21", "22");
     m_layout->layout();
     QCOMPARE(mergedCellBlock().text(), QString("m"));
     QCOMPARE(topRightCellBlock().text(), QString("02"));
@@ -190,20 +200,20 @@ void TestTableLayout::testMergedCells()
     QTextCursor cursor = setupTest();
 
     m_table = cursor.insertTable(3, 5);
-    m_table->mergeCells(0,0,2,2);
-    m_table->mergeCells(0,2,3,1);
-    m_table->mergeCells(0,3,3,1);
-    m_table->mergeCells(0,4,3,1);
-    m_table->mergeCells(2,0,1,1);
-    m_table->mergeCells(2,1,1,1);
+    m_table->mergeCells(0, 0, 2, 2);
+    m_table->mergeCells(0, 2, 3, 1);
+    m_table->mergeCells(0, 3, 3, 1);
+    m_table->mergeCells(0, 4, 3, 1);
+    m_table->mergeCells(2, 0, 1, 1);
+    m_table->mergeCells(2, 1, 1, 1);
 
     m_layout->layout();
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     QVERIFY(!provider->m_askedForMoreThenOneArea);
     // check if table is layed out
     for (int i = 0; i < provider->m_areas.count(); ++i) {
-        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        qInfo() << "area:" << i << "referenceRect:" << provider->area(i)->referenceRect();
     }
     QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET_FIRST_AREA);
     KoPointedAt p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
@@ -212,7 +222,7 @@ void TestTableLayout::testMergedCells()
 
 void TestTableLayout::testColumnWidthUndefined()
 {
-    setupTest("","","","","","");
+    setupTest("", "", "", "", "", "");
     m_layout->layout();
 
     QCOMPARE(m_table->columns(), 3);
@@ -221,15 +231,15 @@ void TestTableLayout::testColumnWidthUndefined()
     QTextLayout *lay = bottomLeftCellBlock().layout();
     QVERIFY(lay);
     QCOMPARE(lay->lineCount(), 1);
-    QVERIFY(qAbs(lay->lineAt(0).width() - 200.0/3) < ROUNDING);
+    QVERIFY(qAbs(lay->lineAt(0).width() - 200.0 / 3) < ROUNDING);
     lay = bottomMidCellBlock().layout();
     QVERIFY(lay);
     QCOMPARE(lay->lineCount(), 1);
-    QVERIFY(qAbs(lay->lineAt(0).width() - 200.0/3) < ROUNDING);
+    QVERIFY(qAbs(lay->lineAt(0).width() - 200.0 / 3) < ROUNDING);
     lay = bottomRightCellBlock().layout();
     QVERIFY(lay);
     QCOMPARE(lay->lineCount(), 1);
-    QVERIFY(qAbs(lay->lineAt(0).width() - 200.0/3) < ROUNDING);
+    QVERIFY(qAbs(lay->lineAt(0).width() - 200.0 / 3) < ROUNDING);
 }
 
 void TestTableLayout::testColumnWidthFixed()
@@ -283,15 +293,15 @@ void TestTableLayout::testColumnWidthFixedZero()
 
     QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).width() - 120.5) < ROUNDING);
     QVERIFY(qAbs(topRightCellBlock().layout()->lineAt(0).width() - 0.1) < ROUNDING);
-    //FIXME QVERIFY(qAbs(bottomLeftCellBlock().layout()->lineAt(0).width() - 0.0) < ROUNDING);
+    // FIXME QVERIFY(qAbs(bottomLeftCellBlock().layout()->lineAt(0).width() - 0.0) < ROUNDING);
     QVERIFY(qAbs(bottomMidCellBlock().layout()->lineAt(0).width() - 120.5) < ROUNDING);
-    //FIXME QVERIFY(qAbs(bottomRightCellBlock().layout()->lineAt(0).width() - 0.0) < ROUNDING);
+    // FIXME QVERIFY(qAbs(bottomRightCellBlock().layout()->lineAt(0).width() - 0.0) < ROUNDING);
 }
 
 void TestTableLayout::testColumnWidthFixedShrink()
 {
     KoTableStyle *tableStyle = new KoTableStyle;
-    //tableStyle->setWidth(QTextLength(QTextLength::FixedLength, 200.0)); // no table-width defined
+    // tableStyle->setWidth(QTextLength(QTextLength::FixedLength, 200.0)); // no table-width defined
 
     setupTest("merged text", "top right text", "mid right text", "bottom left text", "bottom mid text", "bottom right text", tableStyle);
     KoTableColumnAndRowStyleManager styleManager = KoTableColumnAndRowStyleManager::getManager(m_table);
@@ -336,11 +346,11 @@ void TestTableLayout::testColumnWidthRelative()
 
     m_layout->layout();
 
-    QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).width() - 200.0*0.2 - 200.0*0.5) < ROUNDING);
-    QVERIFY(qAbs(topRightCellBlock().layout()->lineAt(0).width() - 200.0*0.1) < ROUNDING);
-    QVERIFY(qAbs(bottomLeftCellBlock().layout()->lineAt(0).width() - 200.0*0.2) < ROUNDING);
-    QVERIFY(qAbs(bottomMidCellBlock().layout()->lineAt(0).width() - 200.0*0.5) < ROUNDING);
-    QVERIFY(qAbs(bottomRightCellBlock().layout()->lineAt(0).width() - 200.0*0.1) < ROUNDING);
+    QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).width() - 200.0 * 0.2 - 200.0 * 0.5) < ROUNDING);
+    QVERIFY(qAbs(topRightCellBlock().layout()->lineAt(0).width() - 200.0 * 0.1) < ROUNDING);
+    QVERIFY(qAbs(bottomLeftCellBlock().layout()->lineAt(0).width() - 200.0 * 0.2) < ROUNDING);
+    QVERIFY(qAbs(bottomMidCellBlock().layout()->lineAt(0).width() - 200.0 * 0.5) < ROUNDING);
+    QVERIFY(qAbs(bottomRightCellBlock().layout()->lineAt(0).width() - 200.0 * 0.1) < ROUNDING);
 }
 
 void TestTableLayout::testRowHeightFixed()
@@ -355,8 +365,8 @@ void TestTableLayout::testRowHeightFixed()
 
     m_layout->layout();
 
-    QVERIFY(!dynamic_cast<MockRootAreaProvider*>(m_layout->provider())->m_askedForMoreThenOneArea);
-    //QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).height() - 14) < ROUNDING);
+    QVERIFY(!dynamic_cast<MockRootAreaProvider *>(m_layout->provider())->m_askedForMoreThenOneArea);
+    // QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).height() - 14) < ROUNDING);
 }
 
 void TestTableLayout::testRowHeightMinimum()
@@ -371,11 +381,11 @@ void TestTableLayout::testRowHeightMinimum()
 
     m_layout->layout();
 
-    QVERIFY(!dynamic_cast<MockRootAreaProvider*>(m_layout->provider())->m_askedForMoreThenOneArea);
-    //QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).height() - 14) < ROUNDING);
+    QVERIFY(!dynamic_cast<MockRootAreaProvider *>(m_layout->provider())->m_askedForMoreThenOneArea);
+    // QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).height() - 14) < ROUNDING);
 }
 
-QTextTable *TestTableLayout::addTable(QTextCursor cursor, int rows, int columns, KoTableStyle* tableStyle)
+QTextTable *TestTableLayout::addTable(QTextCursor cursor, int rows, int columns, KoTableStyle *tableStyle)
 {
     KoParagraphStyle style;
     style.setStyleId(101); // needed to do manually since we don't use the stylemanager
@@ -388,8 +398,8 @@ QTextTable *TestTableLayout::addTable(QTextCursor cursor, int rows, int columns,
     for (int r = 0; r < table->rows(); ++r) {
         for (int c = 0; c < table->columns(); ++c) {
             QString s = QString("Cell %1, %2").arg(r, c);
-            table->cellAt(r,c).firstCursorPosition().insertText(s);
-            QTextBlock b2 = table->cellAt(r,c).firstCursorPosition().block();
+            table->cellAt(r, c).firstCursorPosition().insertText(s);
+            QTextBlock b2 = table->cellAt(r, c).firstCursorPosition().block();
             while (b2.isValid()) {
                 style.applyStyle(b2);
                 b2 = b2.next();
@@ -404,7 +414,7 @@ void TestTableLayout::testOneTableNeedsTwoRootAreas()
     QTextCursor c = setupTest();
     QTextTable *table1 = addTable(c, 6, 3);
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 90));
     provider->maxPosition = 10; // guard against loop
@@ -412,11 +422,13 @@ void TestTableLayout::testOneTableNeedsTwoRootAreas()
     m_layout->layout();
 
     for (int i = 0; i < provider->m_areas.count(); ++i) {
-        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        qInfo() << "area:" << i << "referenceRect:" << provider->area(i)->referenceRect();
         QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET);
         KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
-        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
-        else qInfo()<<"table1 is not in area"<<i;
+        if (table1 == p.table)
+            qInfo() << "table1 is in area" << i;
+        else
+            qInfo() << "table1 is not in area" << i;
     }
 
     QCOMPARE(provider->m_areas.count(), 2);
@@ -437,20 +449,24 @@ void TestTableLayout::testTwoTablesNeedsTwoRootAreas()
     QTextTable *table1 = addTable(c, 2, 3);
     QTextTable *table2 = addTable(c, 3, 3);
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 90));
 
     m_layout->layout();
 
     for (int i = 0; i < provider->m_areas.count(); ++i) {
-        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        qInfo() << "area:" << i << "referenceRect:" << provider->area(i)->referenceRect();
         QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET);
         KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
-        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
-        else qInfo()<<"table1 is not in area"<<i;
-        if (table2 == p.table) qInfo()<<"table2 is in area"<<i;
-        else qInfo()<<"table2 is not in area"<<i;
+        if (table1 == p.table)
+            qInfo() << "table1 is in area" << i;
+        else
+            qInfo() << "table1 is not in area" << i;
+        if (table2 == p.table)
+            qInfo() << "table2 is in area" << i;
+        else
+            qInfo() << "table2 is not in area" << i;
     }
 
     QCOMPARE(provider->m_areas.count(), 2);
@@ -470,27 +486,27 @@ void TestTableLayout::testMergedRowsSpansAreas()
     QTextCursor c = setupTest();
     QTextTable *table1 = addTable(c, 6, 3);
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 90));
     provider->maxPosition = 10; // guard against loop
 
-    table1->mergeCells(0,0,2,1);
-    table1->mergeCells(0,1,2,1);
-    table1->mergeCells(0,2,2,1);
+    table1->mergeCells(0, 0, 2, 1);
+    table1->mergeCells(0, 1, 2, 1);
+    table1->mergeCells(0, 2, 2, 1);
 
-    table1->mergeCells(2,0,2,1);
-    table1->mergeCells(2,1,2,1);
-    table1->mergeCells(2,2,2,1);
+    table1->mergeCells(2, 0, 2, 1);
+    table1->mergeCells(2, 1, 2, 1);
+    table1->mergeCells(2, 2, 2, 1);
 
-    table1->mergeCells(4,0,2,1);
-    table1->mergeCells(4,1,2,1);
-    table1->mergeCells(4,2,2,1);
+    table1->mergeCells(4, 0, 2, 1);
+    table1->mergeCells(4, 1, 2, 1);
+    table1->mergeCells(4, 2, 2, 1);
 
     m_layout->layout();
 
     for (int i = 0; i < provider->m_areas.count(); ++i) {
-        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        qInfo() << "area:" << i << "referenceRect:" << provider->area(i)->referenceRect();
     }
     // should be room in two areas (it is if cells are not merged)
     QCOMPARE(provider->m_areas.count(), 2);
@@ -509,35 +525,35 @@ void TestTableLayout::testMergedRowsSpansAreas2()
     QTextCursor c = setupTest();
     QTextTable *table1 = addTable(c, 10, 3);
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 110));
     provider->maxPosition = 10; // guard against loop
 
-    table1->mergeCells(0,0,2,1);
-    table1->mergeCells(0,1,2,1);
-    table1->mergeCells(0,2,2,1);
+    table1->mergeCells(0, 0, 2, 1);
+    table1->mergeCells(0, 1, 2, 1);
+    table1->mergeCells(0, 2, 2, 1);
 
-    table1->mergeCells(2,0,2,1);
-    table1->mergeCells(2,1,2,1);
-    table1->mergeCells(2,2,2,1);
+    table1->mergeCells(2, 0, 2, 1);
+    table1->mergeCells(2, 1, 2, 1);
+    table1->mergeCells(2, 2, 2, 1);
 
-    table1->mergeCells(4,0,2,1);
-    table1->mergeCells(4,1,2,1);
-    table1->mergeCells(4,2,2,1);
+    table1->mergeCells(4, 0, 2, 1);
+    table1->mergeCells(4, 1, 2, 1);
+    table1->mergeCells(4, 2, 2, 1);
 
-    table1->mergeCells(6,0,2,1);
-    table1->mergeCells(6,1,2,1);
-    table1->mergeCells(6,2,2,1);
+    table1->mergeCells(6, 0, 2, 1);
+    table1->mergeCells(6, 1, 2, 1);
+    table1->mergeCells(6, 2, 2, 1);
 
-    table1->mergeCells(8,0,2,1);
-    table1->mergeCells(8,1,2,1);
-    table1->mergeCells(8,2,2,1);
+    table1->mergeCells(8, 0, 2, 1);
+    table1->mergeCells(8, 1, 2, 1);
+    table1->mergeCells(8, 2, 2, 1);
 
     m_layout->layout();
 
     for (int i = 0; i < provider->m_areas.count(); ++i) {
-        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        qInfo() << "area:" << i << "referenceRect:" << provider->area(i)->referenceRect();
     }
     QVERIFY2(provider->m_areas.count() <= 5, "Table should fit in max 5 areas, possibly in 3");
 
@@ -553,19 +569,19 @@ void TestTableLayout::testTwoTablesMergedRowsSpansAreas()
     QTextTable *table1 = addTable(c, 4, 3);
     QTextTable *table2 = addTable(c, 3, 3);
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 90));
     provider->maxPosition = 10; // guard against loop
 
-    table2->mergeCells(0,0,2,1);
-    table2->mergeCells(0,1,2,1);
-    table2->mergeCells(0,2,2,1);
+    table2->mergeCells(0, 0, 2, 1);
+    table2->mergeCells(0, 1, 2, 1);
+    table2->mergeCells(0, 2, 2, 1);
 
     m_layout->layout();
 
     for (int i = 0; i < provider->m_areas.count(); ++i) {
-        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        qInfo() << "area:" << i << "referenceRect:" << provider->area(i)->referenceRect();
     }
 
     QCOMPARE(provider->m_areas.count(), 2);
@@ -590,19 +606,19 @@ void TestTableLayout::testTwoTablesMergedRowsSpansThreeAreas()
     QTextTable *table1 = addTable(c, 4, 3);
     QTextTable *table2 = addTable(c, 8, 3); // should need 2 areas
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 90));
     provider->maxPosition = 10; // guard against loop
 
-    table2->mergeCells(0,0,2,1);
-    table2->mergeCells(0,1,2,1);
-    table2->mergeCells(0,2,2,1);
+    table2->mergeCells(0, 0, 2, 1);
+    table2->mergeCells(0, 1, 2, 1);
+    table2->mergeCells(0, 2, 2, 1);
 
     m_layout->layout();
 
     for (int i = 0; i < provider->m_areas.count(); ++i) {
-        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        qInfo() << "area:" << i << "referenceRect:" << provider->area(i)->referenceRect();
     }
 
     QCOMPARE(provider->m_areas.count(), 3);
@@ -630,7 +646,7 @@ void TestTableLayout::testRowHeightLargerThanAreaHeight()
     QTextCursor c = setupTest();
     QTextTable *table1 = addTable(c, 1, 3);
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 22));
     provider->maxPosition = 10; // guard against loop
@@ -638,11 +654,13 @@ void TestTableLayout::testRowHeightLargerThanAreaHeight()
     m_layout->layout();
 
     for (int i = 0; i < provider->m_areas.count(); ++i) {
-        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        qInfo() << "area:" << i << "referenceRect:" << provider->area(i)->referenceRect();
         QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET);
         KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
-        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
-        else qInfo()<<"table1 is not in area"<<i;
+        if (table1 == p.table)
+            qInfo() << "table1 is in area" << i;
+        else
+            qInfo() << "table1 is not in area" << i;
     }
 
     // Atm. a table row larger than the area will result in the creation of three areas,
@@ -665,7 +683,7 @@ void TestTableLayout::testSingleHeaderRow()
     f.setHeaderRowCount(1);
     table1->setFormat(f);
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 100));
     provider->maxPosition = 10; // guard against loop
@@ -673,11 +691,13 @@ void TestTableLayout::testSingleHeaderRow()
     m_layout->layout();
 
     for (int i = 0; i < provider->m_areas.count(); ++i) {
-        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        qInfo() << "area:" << i << "referenceRect:" << provider->area(i)->referenceRect();
         QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET);
         KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
-        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
-        else qInfo()<<"table1 is not in area"<<i;
+        if (table1 == p.table)
+            qInfo() << "table1 is in area" << i;
+        else
+            qInfo() << "table1 is not in area" << i;
     }
 
     QVERIFY2(provider->m_areas.count() == 1, "Table should have been placed in area 0");
@@ -695,7 +715,7 @@ void TestTableLayout::testMultipleHeaderRows()
     f.setHeaderRowCount(2);
     table1->setFormat(f);
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 100));
     provider->maxPosition = 10; // guard against loop
@@ -703,11 +723,13 @@ void TestTableLayout::testMultipleHeaderRows()
     m_layout->layout();
 
     for (int i = 0; i < provider->m_areas.count(); ++i) {
-        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        qInfo() << "area:" << i << "referenceRect:" << provider->area(i)->referenceRect();
         QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET);
         KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
-        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
-        else qInfo()<<"table1 is not in area"<<i;
+        if (table1 == p.table)
+            qInfo() << "table1 is in area" << i;
+        else
+            qInfo() << "table1 is not in area" << i;
     }
 
     QVERIFY2(provider->m_areas.count() == 1, "Table should have been placed in area 0");
@@ -725,7 +747,7 @@ void TestTableLayout::testTableWithSingleHeaderRow()
     f.setHeaderRowCount(1);
     table1->setFormat(f);
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 100));
     provider->maxPosition = 10; // guard against loop
@@ -733,11 +755,13 @@ void TestTableLayout::testTableWithSingleHeaderRow()
     m_layout->layout();
 
     for (int i = 0; i < provider->m_areas.count(); ++i) {
-        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        qInfo() << "area:" << i << "referenceRect:" << provider->area(i)->referenceRect();
         QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., (i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET));
         KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
-        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
-        else qInfo()<<"table1 is not in area"<<i;
+        if (table1 == p.table)
+            qInfo() << "table1 is in area" << i;
+        else
+            qInfo() << "table1 is not in area" << i;
     }
 
     QVERIFY2(provider->m_areas.count() == 1, "Table should have been placed in area 0");
@@ -755,7 +779,7 @@ void TestTableLayout::testTableWithMultipleHeaderRow()
     f.setHeaderRowCount(2);
     table1->setFormat(f);
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 100));
     provider->maxPosition = 10; // guard against loop
@@ -763,11 +787,13 @@ void TestTableLayout::testTableWithMultipleHeaderRow()
     m_layout->layout();
 
     for (int i = 0; i < provider->m_areas.count(); ++i) {
-        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        qInfo() << "area:" << i << "referenceRect:" << provider->area(i)->referenceRect();
         QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., (i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET));
         KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
-        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
-        else qInfo()<<"table1 is not in area"<<i;
+        if (table1 == p.table)
+            qInfo() << "table1 is in area" << i;
+        else
+            qInfo() << "table1 is not in area" << i;
     }
 
     QVERIFY2(provider->m_areas.count() == 1, "Table should have been placed in area 0");
@@ -785,7 +811,7 @@ void TestTableLayout::testHeaderRowHeightLargerThanAreaHeight()
     f.setHeaderRowCount(1);
     table1->setFormat(f);
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 20));
     provider->maxPosition = 10; // guard against loop
@@ -793,11 +819,13 @@ void TestTableLayout::testHeaderRowHeightLargerThanAreaHeight()
     m_layout->layout();
 
     for (int i = 0; i < provider->m_areas.count(); ++i) {
-        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        qInfo() << "area:" << i << "referenceRect:" << provider->area(i)->referenceRect();
         QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., (i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET));
         KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
-        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
-        else qInfo()<<"table1 is not in area"<<i;
+        if (table1 == p.table)
+            qInfo() << "table1 is in area" << i;
+        else
+            qInfo() << "table1 is not in area" << i;
     }
 
     // Atm. a table row larger than the area will result in the creation of three areas,

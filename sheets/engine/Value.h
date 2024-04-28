@@ -13,9 +13,9 @@
 #include <QTextStream>
 #include <QVariant>
 
-#include "sheets_engine_export.h"
-#include "Number.h"
 #include "CS_Time.h"
+#include "Number.h"
+#include "sheets_engine_export.h"
 
 using namespace std;
 
@@ -37,9 +37,7 @@ class ValueStorage;
  */
 class CALLIGRA_SHEETS_ENGINE_EXPORT Value
 {
-
 public:
-
     enum Type {
         Empty,
         Boolean,
@@ -52,17 +50,7 @@ public:
         Error
     };
 
-    enum Format {
-        fmt_None,
-        fmt_Boolean,
-        fmt_Number,
-        fmt_Percent,
-        fmt_Money,
-        fmt_DateTime,
-        fmt_Date,
-        fmt_Time,
-        fmt_String
-    };
+    enum Format { fmt_None, fmt_Boolean, fmt_Number, fmt_Percent, fmt_Money, fmt_DateTime, fmt_Date, fmt_Time, fmt_String };
     /**
      * Creates an empty value, i.e holds nothing.
      */
@@ -81,7 +69,7 @@ public:
     /**
      * Creates a copy from another value.
      */
-    Value(const Value& _value);
+    Value(const Value &_value);
 
     /**
      * Assigns from another value.
@@ -89,7 +77,7 @@ public:
      * Because the data is implicitly shared, such assignment is very fast and
      * doesn't consume additional memory.
      */
-    Value& operator= (const Value& _value);
+    Value &operator=(const Value &_value);
 
     /**
      * Creates a boolean value.
@@ -133,12 +121,12 @@ public:
     /**
      * Creates a complex number value.
      */
-    explicit Value(const complex<Number>& c);
+    explicit Value(const complex<Number> &c);
 
     /**
      * Creates a string value.
      */
-    explicit Value(const QString& s);
+    explicit Value(const QString &s);
 
     /**
      * Creates a string value.
@@ -148,7 +136,7 @@ public:
     /**
      * Creates an array value using the data from \p array.
      */
-    explicit Value(const ValueStorage& array, const QSize& size);
+    explicit Value(const ValueStorage &array, const QSize &size);
 
     /**
      * Creates a floating-point value from date/time.
@@ -156,19 +144,19 @@ public:
      * Internally date/time is represented as serial-number, i.e number of
      * elapsed day since reference date. Day 61 is defined as March 1, 1900.
      */
-    Value(const QDateTime& dt, const CalculationSettings* settings);
+    Value(const QDateTime &dt, const CalculationSettings *settings);
 
     /**
      * Creates a floating-point value from time.
      * See also note above.
      */
-    explicit Value(const Time& time);
+    explicit Value(const Time &time);
 
     /**
      * Creates a floating-point value from date.
      * See also note above.
      */
-    Value(const QDate& date, const CalculationSettings* settings);
+    Value(const QDate &date, const CalculationSettings *settings);
 
     /**
      * Returns the type of the value.
@@ -196,35 +184,40 @@ public:
     /**
      * Returns true if empty.
      */
-    bool isEmpty() const {
+    bool isEmpty() const
+    {
         return type() == Empty;
     }
 
     /**
      * Returns true, if the type of this value is Boolean.
      */
-    bool isBoolean() const {
+    bool isBoolean() const
+    {
         return type() == Boolean;
     }
 
     /**
      * Returns true, if the type of this value is integer.
      */
-    bool isInteger() const {
+    bool isInteger() const
+    {
         return type() == Integer;
     }
 
     /**
      * Returns true, if the type of this value is floating-point.
      */
-    bool isFloat() const {
+    bool isFloat() const
+    {
         return type() == Float;
     }
 
     /**
      * Returns true, if the type of this value is the complex number type.
      */
-    bool isComplex() const {
+    bool isComplex() const
+    {
         return type() == Complex;
     }
 
@@ -232,35 +225,39 @@ public:
      * Returns true, if the type of this value is either
      * integer, floating-point or complex number.
      */
-    bool isNumber() const {
+    bool isNumber() const
+    {
         return (type() == Integer) || (type() == Float) || (type() == Complex);
     }
 
     /**
      * Returns true, if the type of this value is string.
      */
-    bool isString() const {
+    bool isString() const
+    {
         return type() == String;
     }
 
     /**
      * Returns true, if the type of this value is array.
      */
-    bool isArray() const {
+    bool isArray() const
+    {
         return type() == Array;
     }
 
     /**
      * Returns true, if this value holds error information.
      */
-    bool isError() const {
+    bool isError() const
+    {
         return type() == Error;
     }
 
     /**
      * Sets this value to hold error message.
      */
-    void setError(const QString& msg);
+    void setError(const QString &msg);
 
     /**
      * Returns the boolean value of this value.
@@ -314,12 +311,12 @@ public:
     /**
      * Returns the date/time representation of this value.
      */
-    QDateTime asDateTime(const CalculationSettings* settings) const;
+    QDateTime asDateTime(const CalculationSettings *settings) const;
 
     /**
      * Returns the date representation of this value.
      */
-    QDate asDate(const CalculationSettings* settings) const;
+    QDate asDate(const CalculationSettings *settings) const;
 
     /**
      * Returns the time representation of this value.
@@ -342,7 +339,7 @@ public:
     /**
      * Sets an element in the array value. Do not use if isArray() is false.
      */
-    void setElement(unsigned column, unsigned row, const Value& value);
+    void setElement(unsigned column, unsigned row, const Value &value);
 
     /**
      * If this value is an array, return the number of columns.
@@ -374,7 +371,7 @@ public:
     /**
      * Returns constant reference to empty value.
      */
-    static const Value& empty();
+    static const Value &empty();
 
     /*
      * Returns a constant reference to a null value.
@@ -382,35 +379,35 @@ public:
      * A null value is equal to an empty value (and the other way around) in
      * every way, except for what isNull() returns.
      */
-    static const Value& null();
+    static const Value &null();
 
     /**
      * Returns constant reference to '\#CIRCLE!' error.
      *
      * This is used to indicate circular cell references.
      */
-    static const Value& errorCIRCLE();
+    static const Value &errorCIRCLE();
 
     /**
      * Returns constant reference to '\#DEPEND!' error.
      *
      * This is used to indicate broken cell references.
      */
-    static const Value& errorDEPEND();
+    static const Value &errorDEPEND();
 
     /**
      * Returns constant reference to '\#DIV/0!' error.
      *
      * This is used to indicate that a formula divides by 0 (zero).
      */
-    static const Value& errorDIV0();
+    static const Value &errorDIV0();
 
     /**
      * Returns constant reference to '\#N/A' error.
      *
      * This is to indicate that  a value is not available to a function.
      */
-    static const Value& errorNA();
+    static const Value &errorNA();
 
     /**
      * Returns constant reference to '\#NAME?' error.
@@ -419,35 +416,35 @@ public:
      * recognized, possibly a misspelled name or name that
      * does not exist.
      */
-    static const Value& errorNAME();
+    static const Value &errorNAME();
 
     /**
      * Returns constant reference to '\#NUM!' error.
      *
      * This is to indicate a problem with a number in a formula.
      */
-    static const Value& errorNUM();
+    static const Value &errorNUM();
 
     /**
      * Returns constant reference to '\#NULL!' error.
      *
      * This is to indicate that two area do not intersect.
      */
-    static const Value& errorNULL();
+    static const Value &errorNULL();
 
     /**
      * Returns constant reference to '\#PARSE!' error.
      *
      * This is used to indicate that a formula could not be parsed correctly.
      */
-    static const Value& errorPARSE();
+    static const Value &errorPARSE();
 
     /**
      * Returns constant reference to '\#REF!' error.
      *
      * This is used to indicate an invalid cell reference.
      */
-    static const Value& errorREF();
+    static const Value &errorREF();
 
     /**
      * Returns constant reference to '\#VALUE!' error.
@@ -455,38 +452,39 @@ public:
      * This is to indicate that wrong type of argument or operand
      * is used, usually within a function call, e.g SIN("some text").
      */
-    static const Value& errorVALUE();
+    static const Value &errorVALUE();
 
     /**
      * Returns true if it is OK to compare this value with v.
      * If this function returns false, then return value of compare is undefined.
      */
-    bool allowComparison(const Value& v) const;
+    bool allowComparison(const Value &v) const;
 
     /**
      * Returns -1, 0, 1, depends whether this value is less than, equal to, or
      * greater than v.
      */
-    int compare(const Value& v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+    int compare(const Value &v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
     /**
      * Returns true if this value is equal to v.
      */
-    bool equal(const Value& v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+    bool equal(const Value &v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
     /**
      * Returns true if this value is less than v.
      */
-    bool less(const Value& v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+    bool less(const Value &v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
     /**
      * Returns true if this value is greater than v.
      */
-    bool greater(const Value& v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+    bool greater(const Value &v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
     // comparison operator - returns true only if strictly identical, unlike equal()/compare()
-    bool operator==(const Value& v) const;
-    inline bool operator!=(const Value& other) const {
+    bool operator==(const Value &v) const;
+    inline bool operator!=(const Value &other) const
+    {
         return !operator==(other);
     }
 
@@ -505,7 +503,7 @@ private:
   QHash/QSet support
 ****************************************************************************/
 
-size_t CALLIGRA_SHEETS_ENGINE_EXPORT qHash(const Value& value, size_t seed = 0);
+size_t CALLIGRA_SHEETS_ENGINE_EXPORT qHash(const Value &value, size_t seed = 0);
 
 } // namespace Sheets
 } // namespace Calligra
@@ -513,19 +511,18 @@ size_t CALLIGRA_SHEETS_ENGINE_EXPORT qHash(const Value& value, size_t seed = 0);
 Q_DECLARE_METATYPE(Calligra::Sheets::Value)
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Value, Q_MOVABLE_TYPE);
 
-
 /***************************************************************************
   QTextStream support
 ****************************************************************************/
 
-CALLIGRA_SHEETS_ENGINE_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Sheets::Value::Type type);
-CALLIGRA_SHEETS_ENGINE_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Sheets::Value value);
+CALLIGRA_SHEETS_ENGINE_EXPORT QTextStream &operator<<(QTextStream &ts, Calligra::Sheets::Value::Type type);
+CALLIGRA_SHEETS_ENGINE_EXPORT QTextStream &operator<<(QTextStream &ts, Calligra::Sheets::Value value);
 
 /***************************************************************************
   QDebug support
 ****************************************************************************/
 
-CALLIGRA_SHEETS_ENGINE_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Value& v);
-QDebug operator<<(QDebug stream, const Calligra::Sheets::Value::Format& f);
+CALLIGRA_SHEETS_ENGINE_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Value &v);
+QDebug operator<<(QDebug stream, const Calligra::Sheets::Value::Format &f);
 
 #endif // CALLIGRA_SHEETS_VALUE_H

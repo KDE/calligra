@@ -11,8 +11,9 @@
 
 // contacts
 #ifdef KDEPIMLIBS_FOUND
-namespace KABC {
-    class Addressee;
+namespace KABC
+{
+class Addressee;
 }
 class KJob;
 #endif
@@ -27,7 +28,6 @@ class KoRdfFoaF : public KoRdfSemanticItem
 {
     Q_OBJECT
 public:
-
     explicit KoRdfFoaF(QObject *parent, const KoDocumentRdf *m_rdf = 0);
     KoRdfFoaF(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it);
     virtual ~KoRdfFoaF();
@@ -38,7 +38,7 @@ public:
      * Export to a VCard format file
      * Prompt for a filename if none is given
      */
-    void exportToFile(const QString& fileName = QString()) const;
+    void exportToFile(const QString &fileName = QString()) const;
     /**
      * Import from VCard data contained in ba.
      */
@@ -66,7 +66,7 @@ private:
     // s == m_uri
     // s -> <uri:gollum>; p -> <http://xmlns.com/foaf/0.1/name>; o -> "Gollum"
     // s-> <uri:gollum>; p -> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>; o -> <http://xmlns.com/foaf/0.1/Person>
-    QString m_uri;   // This is the subject in Rdf
+    QString m_uri; // This is the subject in Rdf
     QString m_name;
     QString m_nick;
     QString m_homePage;
@@ -80,7 +80,6 @@ private:
 private Q_SLOTS:
     void onCreateJobFinished(KJob *job);
 #endif
-
 };
 
 typedef QExplicitlySharedDataPointer<KoRdfFoaF> hKoRdfFoaF;

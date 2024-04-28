@@ -7,10 +7,10 @@
 #ifndef KOINLINEOBJECTREGISTRY_H
 #define KOINLINEOBJECTREGISTRY_H
 
+#include "kotext_export.h"
 #include <KoGenericRegistry.h>
 #include <KoInlineObjectFactoryBase.h>
 #include <KoXmlReaderForward.h>
-#include "kotext_export.h"
 #include <QList>
 
 class KoCanvasBase;
@@ -24,7 +24,7 @@ class KoShapeLoadingContext;
  * @see KoInlineObject
  * @see KoVariable
  */
-class KOTEXT_EXPORT KoInlineObjectRegistry : public KoGenericRegistry<KoInlineObjectFactoryBase*>
+class KOTEXT_EXPORT KoInlineObjectRegistry : public KoGenericRegistry<KoInlineObjectFactoryBase *>
 {
 public:
     KoInlineObjectRegistry();
@@ -47,7 +47,7 @@ public:
      *  actions as a parent (for memory management purposes) as well.
      * @see KoInlineTextObjectManager::createInsertVariableActions()
      */
-    QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
+    QList<QAction *> createInsertVariableActions(KoCanvasBase *host) const;
 
     /**
      * Use the element to find out which variable plugin can load it, and returns the loaded
@@ -58,11 +58,11 @@ public:
     KoInlineObject *createFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
 private:
-    KoInlineObjectRegistry(const KoInlineObjectRegistry&);
-    KoInlineObjectRegistry operator=(const KoInlineObjectRegistry&);
+    KoInlineObjectRegistry(const KoInlineObjectRegistry &);
+    KoInlineObjectRegistry operator=(const KoInlineObjectRegistry &);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

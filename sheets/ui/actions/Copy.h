@@ -8,20 +8,18 @@
 #ifndef CALLIGRA_SHEETS_ACTION_COPY
 #define CALLIGRA_SHEETS_ACTION_COPY
 
-
 // Copy and Cut
 
 #include "CellAction.h"
-
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class Copy : public CellAction {
-Q_OBJECT
+class Copy : public CellAction
+{
+    Q_OBJECT
 public:
     Copy(Actions *actions);
     virtual ~Copy();
@@ -30,12 +28,19 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
     QAction *createAction() override;
 
-    virtual bool enabledIfReadOnly() const override { return true; }
-    virtual bool enabledIfProtected() const override { return true; }
+    virtual bool enabledIfReadOnly() const override
+    {
+        return true;
+    }
+    virtual bool enabledIfProtected() const override
+    {
+        return true;
+    }
 };
 
-class Cut : public CellAction {
-Q_OBJECT
+class Cut : public CellAction
+{
+    Q_OBJECT
 public:
     Cut(Actions *actions);
     virtual ~Cut();
@@ -45,9 +50,7 @@ protected:
     QAction *createAction() override;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_COPY
+#endif // CALLIGRA_SHEETS_ACTION_COPY

@@ -12,11 +12,10 @@
 #include "KoCompositeOpRegistry.h"
 #include "KoStreamedMath.h"
 
-
 template<typename channels_type, typename pixel_type, bool alphaLocked, bool allChannelsFlag>
 struct OverCompositor32 {
     struct OptionalParams {
-        OptionalParams(const KoCompositeOp::ParameterInfo& params)
+        OptionalParams(const KoCompositeOp::ParameterInfo &params)
             : channelFlags(params.channelFlags)
         {
         }
@@ -65,7 +64,6 @@ struct OverCompositor32 {
         Vc::float_v dst_c2;
         Vc::float_v dst_c3;
 
-
         KoStreamedMath<_impl>::template fetch_colors_32<src_aligned>(src, src_c1, src_c2, src_c3);
         Vc::float_v src_blend;
         Vc::float_v new_alpha;
@@ -110,8 +108,9 @@ struct OverCompositor32 {
         KoStreamedMath<_impl>::write_channels_32(dst, new_alpha, dst_c1, dst_c2, dst_c3);
     }
 
-    template <bool haveMask, Vc::Implementation _impl>
-    static ALWAYS_INLINE void compositeOnePixelScalar(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, const OptionalParams &oparams)
+    template<bool haveMask, Vc::Implementation _impl>
+    static ALWAYS_INLINE void
+    compositeOnePixelScalar(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, const OptionalParams &oparams)
     {
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
@@ -127,7 +126,6 @@ struct OverCompositor32 {
         }
 
         if (srcAlpha != 0.0) {
-
             float dstAlpha = dst[alpha_pos];
             float srcBlendNorm;
 
@@ -138,7 +136,7 @@ struct OverCompositor32 {
                 srcBlendNorm = 1.0;
 
                 if (!allChannelsFlag) {
-                    pixel_type *d = reinterpret_cast<pixel_type*>(dst);
+                    pixel_type *d = reinterpret_cast<pixel_type *>(dst);
                     *d = 0; // dstAlpha is already null
                 }
             } else {
@@ -146,18 +144,18 @@ struct OverCompositor32 {
                 srcBlendNorm = srcAlpha / dstAlpha;
             }
 
-            if(allChannelsFlag) {
+            if (allChannelsFlag) {
                 if (srcBlendNorm == 1.0) {
                     if (!alphaLocked) {
-                        const pixel_type *s = reinterpret_cast<const pixel_type*>(src);
-                        pixel_type *d = reinterpret_cast<pixel_type*>(dst);
+                        const pixel_type *s = reinterpret_cast<const pixel_type *>(src);
+                        pixel_type *d = reinterpret_cast<pixel_type *>(dst);
                         *d = *s;
                     } else {
                         dst[0] = src[0];
                         dst[1] = src[1];
                         dst[2] = src[2];
                     }
-                } else if (srcBlendNorm != 0.0){
+                } else if (srcBlendNorm != 0.0) {
                     dst[0] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[0], src[0], srcBlendNorm);
                     dst[1] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[1], src[1], srcBlendNorm);
                     dst[2] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[2], src[2], srcBlendNorm);
@@ -166,13 +164,19 @@ struct OverCompositor32 {
                 const QBitArray &channelFlags = oparams.channelFlags;
 
                 if (srcBlendNorm == 1.0) {
-                    if(channelFlags.at(0)) dst[0] = src[0];
-                    if(channelFlags.at(1)) dst[1] = src[1];
-                    if(channelFlags.at(2)) dst[2] = src[2];
+                    if (channelFlags.at(0))
+                        dst[0] = src[0];
+                    if (channelFlags.at(1))
+                        dst[1] = src[1];
+                    if (channelFlags.at(2))
+                        dst[2] = src[2];
                 } else if (srcBlendNorm != 0.0) {
-                    if(channelFlags.at(0)) dst[0] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[0], src[0], srcBlendNorm);
-                    if(channelFlags.at(1)) dst[1] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[1], src[1], srcBlendNorm);
-                    if(channelFlags.at(2)) dst[2] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[2], src[2], srcBlendNorm);
+                    if (channelFlags.at(0))
+                        dst[0] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[0], src[0], srcBlendNorm);
+                    if (channelFlags.at(1))
+                        dst[1] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[1], src[1], srcBlendNorm);
+                    if (channelFlags.at(2))
+                        dst[2] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[2], src[2], srcBlendNorm);
                 }
             }
 
@@ -192,41 +196,38 @@ template<Vc::Implementation _impl>
 class KoOptimizedCompositeOpOver32 : public KoCompositeOp
 {
 public:
-    KoOptimizedCompositeOpOver32(const KoColorSpace* cs)
-        : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix()) {}
+    KoOptimizedCompositeOpOver32(const KoColorSpace *cs)
+        : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix())
+    {
+    }
 
     using KoCompositeOp::composite;
 
-    virtual void composite(const KoCompositeOp::ParameterInfo& params) const
+    virtual void composite(const KoCompositeOp::ParameterInfo &params) const
     {
-        if(params.maskRowStart) {
+        if (params.maskRowStart) {
             composite<true>(params);
         } else {
             composite<false>(params);
         }
     }
 
-    template <bool haveMask>
-    inline void composite(const KoCompositeOp::ParameterInfo& params) const {
-        if (params.channelFlags.isEmpty() ||
-            params.channelFlags == QBitArray(4, true)) {
-
-            KoStreamedMath<_impl>::template genericComposite32<haveMask, false, OverCompositor32<quint8, quint32, false, true> >(params);
+    template<bool haveMask>
+    inline void composite(const KoCompositeOp::ParameterInfo &params) const
+    {
+        if (params.channelFlags.isEmpty() || params.channelFlags == QBitArray(4, true)) {
+            KoStreamedMath<_impl>::template genericComposite32<haveMask, false, OverCompositor32<quint8, quint32, false, true>>(params);
         } else {
-            const bool allChannelsFlag =
-                params.channelFlags.at(0) &&
-                params.channelFlags.at(1) &&
-                params.channelFlags.at(2);
+            const bool allChannelsFlag = params.channelFlags.at(0) && params.channelFlags.at(1) && params.channelFlags.at(2);
 
-            const bool alphaLocked =
-                !params.channelFlags.at(3);
+            const bool alphaLocked = !params.channelFlags.at(3);
 
             if (allChannelsFlag && alphaLocked) {
-                KoStreamedMath<_impl>::template genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, true, true> >(params);
+                KoStreamedMath<_impl>::template genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, true, true>>(params);
             } else if (!allChannelsFlag && !alphaLocked) {
-                KoStreamedMath<_impl>::template genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, false, false> >(params);
-            } else /*if (!allChannelsFlag && alphaLocked) */{
-                KoStreamedMath<_impl>::template genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, true, false> >(params);
+                KoStreamedMath<_impl>::template genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, false, false>>(params);
+            } else /*if (!allChannelsFlag && alphaLocked) */ {
+                KoStreamedMath<_impl>::template genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, true, false>>(params);
             }
         }
     }

@@ -7,8 +7,8 @@
 #ifndef __KO_COLOR_DISPLAY_RENDERER_INTERFACE_H
 #define __KO_COLOR_DISPLAY_RENDERER_INTERFACE_H
 
-#include <QObject>
 #include <QColor>
+#include <QObject>
 #include <QSharedPointer>
 
 #include "KoColor.h"
@@ -53,7 +53,6 @@ public:
     virtual KoColor fromHsv(int h, int s, int v, int a = 255) const = 0;
     virtual void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const = 0;
 
-
     /**
      * \return the minimum value of a floating point channel that can
      *         be seen on screen
@@ -81,7 +80,7 @@ private:
  */
 class PIGMENTCMS_EXPORT KoDumbColorDisplayRenderer : public KoColorDisplayRendererInterface
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     QColor toQColor(const KoColor &c) const override;
     KoColor approximateFromRenderedQColor(const QColor &c) const override;
@@ -91,7 +90,7 @@ public:
     qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const override;
     qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const override;
 
-    static KoColorDisplayRendererInterface* instance();
+    static KoColorDisplayRendererInterface *instance();
 };
 
 #endif /* __KO_COLOR_DISPLAY_RENDERER_INTERFACE_H */

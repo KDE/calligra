@@ -14,10 +14,7 @@
 
 #include "FileCollector.h"
 
-
 class QString;
-
-
 
 /**
  * @brief this class manages a set of relationships in a file in the OPC format

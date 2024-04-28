@@ -7,10 +7,10 @@
  */
 
 #include "KoCreateShapesTool.h"
+#include "KoCreateShapeStrategy.h"
+#include "KoInteractionStrategy.h"
 #include "KoInteractionTool_p.h"
 #include "KoPointerEvent.h"
-#include "KoInteractionStrategy.h"
-#include "KoCreateShapeStrategy.h"
 
 #include <QMouseEvent>
 #include <QPainter>
@@ -19,8 +19,8 @@ class KoCreateShapesToolPrivate : public KoInteractionToolPrivate
 {
 public:
     KoCreateShapesToolPrivate(KoToolBase *qq, KoCanvasBase *canvas)
-        : KoInteractionToolPrivate(qq, canvas),
-        newShapeProperties(0)
+        : KoInteractionToolPrivate(qq, canvas)
+        , newShapeProperties(0)
     {
     }
 
@@ -49,7 +49,7 @@ void KoCreateShapesTool::mouseReleaseEvent(KoPointerEvent *event)
     emit KoToolBase::done();
 }
 
-void KoCreateShapesTool::activate(ToolActivation, const QSet<KoShape*> &)
+void KoCreateShapesTool::activate(ToolActivation, const QSet<KoShape *> &)
 {
     useCursor(Qt::ArrowCursor);
 }
@@ -72,7 +72,7 @@ void KoCreateShapesTool::setShapeProperties(const KoProperties *properties)
     d->newShapeProperties = properties;
 }
 
-const KoProperties * KoCreateShapesTool::shapeProperties()
+const KoProperties *KoCreateShapesTool::shapeProperties()
 {
     Q_D(KoCreateShapesTool);
     return d->newShapeProperties;
@@ -82,4 +82,3 @@ KoInteractionStrategy *KoCreateShapesTool::createStrategy(KoPointerEvent *event)
 {
     return new KoCreateShapeStrategy(this, event->point);
 }
-

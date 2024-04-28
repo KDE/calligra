@@ -34,16 +34,18 @@ PageVariableFactory::PageVariableFactory()
     var2.properties = props;
     addTemplate(var2);
 
-    //KoInlineObjectTemplate var3;
-    //var3.id = "pagecontinuation";
-    //var3.name = i18n("Page Continuation");
-    //props = new KoProperties();
-    //props->setProperty("vartype", 3);
-    //var3.properties = props;
-    //addTemplate(var3);
+    // KoInlineObjectTemplate var3;
+    // var3.id = "pagecontinuation";
+    // var3.name = i18n("Page Continuation");
+    // props = new KoProperties();
+    // props->setProperty("vartype", 3);
+    // var3.properties = props;
+    // addTemplate(var3);
 
     QStringList elementNames;
-    elementNames << "page-count" << "page-number" << "page-continuation-string";
+    elementNames << "page-count"
+                 << "page-number"
+                 << "page-continuation-string";
     setOdfElementNames(KoXmlNS::text, elementNames);
 }
 

@@ -7,10 +7,10 @@
 #ifndef _KO_PROPERTIES_H
 #define _KO_PROPERTIES_H
 
-#include <QString>
-#include <QMap>
-#include <QVariant>
 #include "kowidgetutils_export.h"
+#include <QMap>
+#include <QString>
+#include <QVariant>
 
 class QDomElement;
 
@@ -21,7 +21,6 @@ class QDomElement;
 class KOWIDGETUTILS_EXPORT KoProperties
 {
 public:
-
     /**
      * Create a new properties object
      */
@@ -35,7 +34,6 @@ public:
     ~KoProperties();
 
 public:
-
     /**
      * Fill the properties object from the XML dom node.
      *
@@ -162,11 +160,10 @@ public:
 
     bool operator==(const KoProperties &other) const;
     KoProperties operator=(const KoProperties &other) const;
-    
-private:
 
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // _KO_PROPERTIES_H

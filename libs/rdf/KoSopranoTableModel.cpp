@@ -9,13 +9,13 @@
 #include "KoDocumentRdf.h"
 #include "KoRdfPrefixMapping.h"
 // KF5
-#include <kdebug.h>
 #include <KLocalizedString>
+#include <kdebug.h>
 
 #include <algorithm>
 
 KoSopranoTableModel::KoSopranoTableModel(KoDocumentRdf *rdf)
-        : m_rdf(rdf)
+    : m_rdf(rdf)
 {
     Soprano::StatementIterator siter = model()->listStatements();
     while (siter.next()) {
@@ -148,9 +148,7 @@ Qt::ItemFlags KoSopranoTableModel::flags(const QModelIndex &index) const
     if (index.row() >= 0) {
         Soprano::Statement st = m_statementIndex[index.row()];
         if (isInlineRdf(st)) {
-            if (index.column() == ColSubj
-                    || index.column() == ColObjType
-                    || index.column() == ColCtx) {
+            if (index.column() == ColSubj || index.column() == ColObjType || index.column() == ColCtx) {
                 ret &= (~Qt::ItemIsEditable);
             }
         }
@@ -193,9 +191,7 @@ bool KoSopranoTableModel::setData(const QModelIndex &index, const QVariant &valu
         return setDataUpdateTriple(index, st, n);
     case ColObj: {
         if (st.object().isLiteral()) {
-            n.setObject(
-                Soprano::Node(
-                    Soprano::LiteralValue(value.toString())));
+            n.setObject(Soprano::Node(Soprano::LiteralValue(value.toString())));
         } else {
             n.setObject(Soprano::Node(QUrl(uri)));
         }
@@ -206,9 +202,7 @@ bool KoSopranoTableModel::setData(const QModelIndex &index, const QVariant &valu
         if (v == "URI") {
             n.setObject(Soprano::Node(QUrl(st.object().toString())));
         } else if (v == "Literal") {
-            n.setObject(
-                Soprano::Node(
-                    Soprano::LiteralValue(st.object().toString())));
+            n.setObject(Soprano::Node(Soprano::LiteralValue(st.object().toString())));
         } else {
             n.setObject(Soprano::Node(QString(st.object().toString())));
         }
@@ -265,15 +259,13 @@ QModelIndexList KoSopranoTableModel::copyTriples(const QModelIndexList &srclist)
     foreach (const QModelIndex &src, srclist) {
         int r = src.row();
         kDebug(30015) << "r:" << r;
-        Soprano::Statement st = m_statementIndex[ r ];
+        Soprano::Statement st = m_statementIndex[r];
         //
         // Append a bnode to the object to ensure the "copy"
         // is unique relative to the original.
         //
-        Soprano::Node obj(QUrl(st.object().toString() + '-'
-                               + model()->createBlankNode().toString()));
-        Soprano::Statement n(st.subject(), st.predicate(),
-                             obj, st.context());
+        Soprano::Node obj(QUrl(st.object().toString() + '-' + model()->createBlankNode().toString()));
+        Soprano::Statement n(st.subject(), st.predicate(), obj, st.context());
         model()->addStatement(n);
         m_statementIndex << n;
         QModelIndex newIdx = index(currentNewRowNum, ColSubj);
@@ -300,17 +292,18 @@ void KoSopranoTableModel::deleteTriples(const QModelIndexList &srclist)
         int r = src.row();
         rowsToRemoveDesc << r;
     }
-    std:sort(rowsToRemoveDesc.begin(), rowsToRemoveDesc.end(), std::greater<int>());
+std:
+    sort(rowsToRemoveDesc.begin(), rowsToRemoveDesc.end(), std::greater<int>());
     int r;
     foreach (r, rowsToRemoveDesc) {
-        Soprano::Statement st = m_statementIndex[ r ];
-        int firstRow =  r;
+        Soprano::Statement st = m_statementIndex[r];
+        int firstRow = r;
         int lastRow = r;
         beginRemoveRows(QModelIndex(), firstRow, lastRow);
         model()->removeStatement(st);
         // m_statementIndex[ r ] = Soprano::Statement();
         for (int i = r; i < m_statementIndex.size() - 1; ++i) {
-            m_statementIndex[ i ] = m_statementIndex[ i + 1 ];
+            m_statementIndex[i] = m_statementIndex[i + 1];
         }
         m_statementIndex.removeLast();
         endRemoveRows();
@@ -330,7 +323,7 @@ int KoSopranoTableModel::invalidStatementCount() const
 QModelIndexList KoSopranoTableModel::invalidStatementList() const
 {
     QModelIndexList ret;
-    for (int r = 0; r < m_statementIndex.size(); ++r)  {
+    for (int r = 0; r < m_statementIndex.size(); ++r) {
         const Soprano::Statement &s = m_statementIndex.at(r);
         if (!s.isValid()) {
             int col = ColSubj;
@@ -349,4 +342,3 @@ QModelIndexList KoSopranoTableModel::invalidStatementList() const
     }
     return ret;
 }
-

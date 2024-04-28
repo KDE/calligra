@@ -19,36 +19,35 @@
     Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef KXQTS_TreeSortFilter_H
 #define KXQTS_TreeSortFilter_H
 
 #include <QSortFilterProxyModel>
 
 /**
-  * @short A sort & filter model for hierarchical item models.
-  *
-  * The current feature is that, when sorting, numbers are treated as
-  * a whole instead of on a character-per-character basis. For example, "myFile-10" is sorted
-  * after "myFile-9".
-  *
-  * @ingroup KXQTS
-  * @author Frans Englich <frans.englich@telia.com>
-  */
+ * @short A sort & filter model for hierarchical item models.
+ *
+ * The current feature is that, when sorting, numbers are treated as
+ * a whole instead of on a character-per-character basis. For example, "myFile-10" is sorted
+ * after "myFile-9".
+ *
+ * @ingroup KXQTS
+ * @author Frans Englich <frans.englich@telia.com>
+ */
 class TreeSortFilter : public QSortFilterProxyModel
 {
 public:
     /**
-      * Creates a TreeSortFilter.
-      *
-      * @param parent the parent. Must not be @c null.
-      */
+     * Creates a TreeSortFilter.
+     *
+     * @param parent the parent. Must not be @c null.
+     */
     explicit TreeSortFilter(QObject *parent);
-protected:
 
+protected:
     /**
-      * Compares @p left and @p right. They are treated as QStrings.
-      */
+     * Compares @p left and @p right. They are treated as QStrings.
+     */
     virtual bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
 
     virtual bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;

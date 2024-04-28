@@ -15,4 +15,3 @@ KoResourceModelBase::KoResourceModelBase(QObject *parent)
 KoResourceModelBase::~KoResourceModelBase()
 {
 }
-

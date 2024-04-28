@@ -14,10 +14,10 @@ using namespace Calligra::Sheets;
 
 // ----- PageLayoutCommand -----
 
-PageLayoutCommand::PageLayoutCommand(Sheet* sheet, const PrintSettings& settings, KUndo2Command* parent)
-        : KUndo2Command(parent)
-        , m_sheet(sheet)
-        , m_settings(settings)
+PageLayoutCommand::PageLayoutCommand(Sheet *sheet, const PrintSettings &settings, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_sheet(sheet)
+    , m_settings(settings)
 {
     setText(kundo2_i18n("Set Page Layout"));
 }

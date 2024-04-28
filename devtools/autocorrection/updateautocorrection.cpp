@@ -10,8 +10,8 @@
 #include "Autocorrection.h"
 #include <ACConfig.h>
 
-#include <QCoreApplication>
 #include <QCommandLineParser>
+#include <QCoreApplication>
 #include <QDebug>
 
 int main(int argc, char *argv[])
@@ -24,11 +24,11 @@ int main(int argc, char *argv[])
     QCommandLineParser parser;
     parser.setApplicationDescription("Updates calligra autocorrection files with data from libreoffice");
     parser.addHelpOption();
-    QCommandLineOption loOption(QStringList()<<QStringLiteral("l")<<QStringLiteral("libreoffice"),
+    QCommandLineOption loOption(QStringList() << QStringLiteral("l") << QStringLiteral("libreoffice"),
                                 QStringLiteral("<directory> Where to find LibreOffice files.\nDefault: %1").arg(loDefault),
                                 QStringLiteral("directory"));
     parser.addOption(loOption);
-    QCommandLineOption calligraOption(QStringList()<<QStringLiteral("c")<<QStringLiteral("calligra"),
+    QCommandLineOption calligraOption(QStringList() << QStringLiteral("c") << QStringLiteral("calligra"),
                                       QStringLiteral("<directory> Where to find and store Calligra files.\nDefault: %1").arg(calligraDefault),
                                       QStringLiteral("directory"));
     parser.addOption(calligraOption);
@@ -42,24 +42,24 @@ int main(int argc, char *argv[])
     if (calligra.isEmpty()) {
         calligra = calligraDefault;
     }
-    qInfo()<<'\n';
-    qInfo()<<"======"<<app.applicationName();
-    qInfo()<<"LibreOffice:"<<libreoffice;
-    qInfo()<<"Calligra:"<<calligra;
-    qInfo()<<"======\n";
+    qInfo() << '\n';
+    qInfo() << "======" << app.applicationName();
+    qInfo() << "LibreOffice:" << libreoffice;
+    qInfo() << "Calligra:" << calligra;
+    qInfo() << "======\n";
 
     AutoCorrection c;
     c.updateAutoCorrections(libreoffice, calligra);
 
-    qInfo()<<'\n';
-    qInfo()<<"====== Report:";
-    qInfo()<<"New languages:"<<c.newLanguages.count();
+    qInfo() << '\n';
+    qInfo() << "====== Report:";
+    qInfo() << "New languages:" << c.newLanguages.count();
     if (!c.newLanguages.isEmpty()) {
-        qInfo()<<'\t'<<c.newLanguages;
+        qInfo() << '\t' << c.newLanguages;
     }
-    qInfo()<<"Modified languages:"<<c.modifiedLanguages.count();
+    qInfo() << "Modified languages:" << c.modifiedLanguages.count();
     if (!c.modifiedLanguages.isEmpty()) {
-        qInfo()<<'\t'<<c.modifiedLanguages;
+        qInfo() << '\t' << c.modifiedLanguages;
     }
-    qInfo()<<"======\n";
+    qInfo() << "======\n";
 }

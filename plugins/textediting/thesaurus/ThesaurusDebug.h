@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &THESAURUS_LOG();
 
 #define debugThesaurus qCDebug(THESAURUS_LOG)

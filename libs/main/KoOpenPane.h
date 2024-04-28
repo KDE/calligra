@@ -6,8 +6,8 @@
 #ifndef KOOPENPANE_H
 #define KOOPENPANE_H
 
-#include <QWidget>
 #include <QList>
+#include <QWidget>
 
 class KoOpenPanePrivate;
 class QPixmap;
@@ -29,11 +29,11 @@ public:
      * @param mimeFilter the MIME type filter that should be selected on creation.
      * @param templatesResourcePath the path for template resources.
      */
-    KoOpenPane(QWidget *parent, const QStringList& mimeFilter, const QString& templatesResourcePath = QString());
+    KoOpenPane(QWidget *parent, const QStringList &mimeFilter, const QString &templatesResourcePath = QString());
     ~KoOpenPane() override;
 
-    QTreeWidgetItem* addPane(const QString &title, const QString &iconName, QWidget *widget, int sortWeight);
-    QTreeWidgetItem* addPane(const QString& title, const QPixmap& icon, QWidget* widget, int sortWeight);
+    QTreeWidgetItem *addPane(const QString &title, const QString &iconName, QWidget *widget, int sortWeight);
+    QTreeWidgetItem *addPane(const QString &title, const QPixmap &icon, QWidget *widget, int sortWeight);
 
     /**
      * If the application has a way to create a document not based on a template, but on user
@@ -43,29 +43,28 @@ public:
      * @param title the title shown in the sidebar
      * @param icon the icon shown in the sidebar
      */
-    void addCustomDocumentWidget(QWidget *widget, const QString& title = QString(), const QString& icon = QString());
-
+    void addCustomDocumentWidget(QWidget *widget, const QString &title = QString(), const QString &icon = QString());
 
 protected Q_SLOTS:
     void updateSelectedWidget();
-    void itemClicked(QTreeWidgetItem* item);
+    void itemClicked(QTreeWidgetItem *item);
 
     /// Saves the splitter sizes for KoDetailsPaneBase based panes
-    void saveSplitterSizes(KoDetailsPane* sender, const QList<int>& sizes);
+    void saveSplitterSizes(KoDetailsPane *sender, const QList<int> &sizes);
 
 private Q_SLOTS:
     /// when clicked "Open Existing Document" button
     void openFileDialog();
 
 Q_SIGNALS:
-    void openExistingFile(const QUrl&);
-    void openTemplate(const QUrl&);
+    void openExistingFile(const QUrl &);
+    void openTemplate(const QUrl &);
 
     /// Emitted when the always use template has changed
-    void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
+    void alwaysUseChanged(KoTemplatesPane *sender, const QString &alwaysUse);
 
     /// Emitted when one of the detail panes have changed it's splitter
-    void splitterResized(KoDetailsPane* sender, const QList<int>& sizes);
+    void splitterResized(KoDetailsPane *sender, const QList<int> &sizes);
 
 protected:
     void initRecentDocs();
@@ -73,16 +72,16 @@ protected:
      * Populate the list with all templates the user can choose.
      * @param templatesResourcePath the template-type (group) that should be selected on creation.
      */
-    void initTemplates(const QString& templatesResourcePath);
+    void initTemplates(const QString &templatesResourcePath);
 
     // QWidget overrides
-    void dragEnterEvent(QDragEnterEvent * event) override;
-    void dropEvent(QDropEvent * event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
 
 private:
     QStringList m_mimeFilter;
 
-    KoOpenPanePrivate * const d;
+    KoOpenPanePrivate *const d;
 };
 
-#endif //KOOPENPANE_H
+#endif // KOOPENPANE_H

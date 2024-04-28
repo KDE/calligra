@@ -10,18 +10,16 @@
 #ifndef KCHART_SHAPE_H
 #define KCHART_SHAPE_H
 
-
 // Qt
 #include <Qt>
 
 // Calligra
-#include <KoShapeContainer.h>
 #include <KoFrameShape.h>
+#include <KoShapeContainer.h>
 
 // KoChart
-#include "kochart_global.h"
 #include "KoChartInterface.h"
-
+#include "kochart_global.h"
 
 class QAbstractItemModel;
 
@@ -43,15 +41,15 @@ class KoXmlWriter;
 class KoGenStyles;
 class KoOdfLoadingContext;
 
-
 // FIXME: Remove all mentions of KChart from the public API.
-namespace KChart {
-    class Chart;
-    class Legend;
-    class CartesianAxis;
-    class CartesianCoordinatePlane;
-    class AbstractCoordinatePlane;
-    class AbstractDiagram;
+namespace KChart
+{
+class Chart;
+class Legend;
+class CartesianAxis;
+class CartesianCoordinatePlane;
+class AbstractCoordinatePlane;
+class AbstractDiagram;
 }
 
 // Interface to SimpleTextShape plugin
@@ -59,7 +57,8 @@ class KoTextShapeData;
 #define TextShapeId "TextShapeID"
 #define OdfLoadingHelperId "OdfLoadingHelperId"
 
-namespace KoChart {
+namespace KoChart
+{
 
 class DataSet;
 class ChartProxyModel;
@@ -74,17 +73,17 @@ class ChartLayout;
 class TableSource;
 class ChartDocument;
 
-void saveOdfFont(KoGenStyle &style, const QFont& font, const QColor& color);
-QString saveOdfFont(KoGenStyles& mainStyles, const QFont& font, const QColor& color);
+void saveOdfFont(KoGenStyle &style, const QFont &font, const QColor &color);
+QString saveOdfFont(KoGenStyles &mainStyles, const QFont &font, const QColor &color);
 QColor defaultDataSetColor(int dataSetNum);
-const char * odfCharttype(int charttype);
+const char *odfCharttype(int charttype);
 
-
-class ChartShape
-    : public QObject
-    , public KoChart::ChartInterface // The public interface within Calligra
-    , public KoFrameShape            // For saving as a frame
-    , public KoShapeContainer        // The chart shape embeds other shapes.
+class ChartShape : public QObject,
+                   public KoChart::ChartInterface // The public interface within Calligra
+    ,
+                   public KoFrameShape // For saving as a frame
+    ,
+                   public KoShapeContainer // The chart shape embeds other shapes.
 {
     Q_OBJECT
     Q_INTERFACES(KoChart::ChartInterface)
@@ -97,22 +96,22 @@ public:
     ChartProxyModel *proxyModel() const;
 
     // Parts of the chart
-    KoShape        *title() const;
-    TextLabelData  *titleData() const;
-    KoShape        *subTitle() const;
-    TextLabelData  *subTitleData() const;
-    KoShape        *footer() const;
-    TextLabelData  *footerData() const;
-    Legend         *legend() const;
-    PlotArea       *plotArea() const;
-    ChartLayout    *layout() const;
+    KoShape *title() const;
+    TextLabelData *titleData() const;
+    KoShape *subTitle() const;
+    TextLabelData *subTitleData() const;
+    KoShape *footer() const;
+    TextLabelData *footerData() const;
+    Legend *legend() const;
+    PlotArea *plotArea() const;
+    ChartLayout *layout() const;
 
     /**
      * Returns a list of all labels in this chart, visible and hidden.
      * Use this method with caution, as it re-creates the list every
      * time you call it.
      */
-    QList<KoShape*> labels() const;
+    QList<KoShape *> labels() const;
 
     void showTitle(bool doShow);
     void showSubTitle(bool doShow);
@@ -151,9 +150,9 @@ public:
     bool usesInternalModelOnly() const;
     void setUsesInternalModelOnly(bool doesSo);
 
-    ChartType     chartType() const;
-    ChartSubtype  chartSubType() const;
-    bool          isThreeD() const;
+    ChartType chartType() const;
+    ChartSubtype chartSubType() const;
+    bool isThreeD() const;
 
     /***
      * Inherited from koChartInterface
@@ -164,7 +163,7 @@ public:
      *
      * See sheets/SheetAccessModel.h for details.
      */
-    void setSheetAccessModel(QAbstractItemModel* model) override;
+    void setSheetAccessModel(QAbstractItemModel *model) override;
 
     /**
      * Re-initializes the chart with data from an arbitrary region.
@@ -177,20 +176,15 @@ public:
      *
      * @see ChartProxyModel::init()
      */
-    void reset(const QString& region,
-               bool firstRowIsLabel,
-               bool firstColumnIsLabel,
-               Qt::Orientation dataDirection) override;
+    void reset(const QString &region, bool firstRowIsLabel, bool firstColumnIsLabel, Qt::Orientation dataDirection) override;
 
     void setChartType(ChartType type);
     void setChartSubType(ChartSubtype subType, bool reset = false);
     void setThreeD(bool threeD);
 
     /// reimplemented
-    void paintComponent(QPainter &painter, const KoViewConverter &converter,
-                        KoShapePaintingContext &paintcontext) override;
-    void paintDecorations(QPainter &painter, const KoViewConverter &converter,
-                          const KoCanvasBase *canvas);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
 
     /// reimplemented
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
@@ -232,8 +226,7 @@ protected:
     void shapeChanged(ChangeType type, KoShape *shape = 0) override;
 
 private:
-    bool loadEmbeddedDocument(KoStore *store, const KoXmlElement &objectElement,
-                              const KoOdfLoadingContext &loadingContext);
+    bool loadEmbeddedDocument(KoStore *store, const KoXmlElement &objectElement, const KoOdfLoadingContext &loadingContext);
 
     class Private;
     Private *const d;

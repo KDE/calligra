@@ -7,10 +7,10 @@
 #ifndef SVGTEXTHELPER_H
 #define SVGTEXTHELPER_H
 
-#include <QVector>
-#include <QString>
 #include <QList>
 #include <QPointF>
+#include <QString>
+#include <QVector>
 
 typedef QList<qreal> CharTransforms;
 
@@ -20,11 +20,7 @@ class SvgGraphicsContext;
 class ArtisticTextLoadingContext
 {
 public:
-    enum OffsetType {
-        None,
-        Absolute,
-        Relative
-    };
+    enum OffsetType { None, Absolute, Relative };
 
     ArtisticTextLoadingContext();
 
@@ -62,12 +58,14 @@ private:
 
     struct CharTransformState {
         CharTransformState()
-            : hasData(false), lastTransform(0.0)
+            : hasData(false)
+            , lastTransform(0.0)
         {
         }
 
         CharTransformState(const CharTransforms &initialData)
-            : data(initialData), hasData(!initialData.isEmpty())
+            : data(initialData)
+            , hasData(!initialData.isEmpty())
             , lastTransform(initialData.isEmpty() ? 0.0 : initialData.last())
         {
         }
@@ -87,11 +85,7 @@ private:
 
     typedef QList<CharTransformState> CharTransformStack;
 
-    enum ValueType {
-        Number,
-        XLength,
-        YLength
-    };
+    enum ValueType { Number, XLength, YLength };
 
     /// Parses offset values from the given string
     CharTransforms parseList(const QString &listString, SvgGraphicsContext *gc, ValueType type);
@@ -103,12 +97,12 @@ private:
     CharTransformState m_currentAbsolutePosY; ///< current absolute character y-positions
     CharTransformState m_currentRelativePosX; ///< current relative character x-positions
     CharTransformState m_currentRelativePosY; ///< current relative character y-positions
-    CharTransformState m_currentRotations;    ///< current character rotations
+    CharTransformState m_currentRotations; ///< current character rotations
     CharTransformStack m_absolutePosX; ///< stack of absolute character x-positions
     CharTransformStack m_absolutePosY; ///< stack of absolute character y-positions
     CharTransformStack m_relativePosX; ///< stack of relative character x-positions
     CharTransformStack m_relativePosY; ///< stack of relative character y-positions
-    CharTransformStack m_rotations;    ///< stack of character rotations
+    CharTransformStack m_rotations; ///< stack of character rotations
 
     QPointF m_textPosition;
 };

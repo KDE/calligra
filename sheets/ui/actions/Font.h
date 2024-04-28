@@ -8,11 +8,9 @@
 #ifndef CALLIGRA_SHEETS_ACTION_FONT
 #define CALLIGRA_SHEETS_ACTION_FONT
 
-
 #include "CellAction.h"
 
 #include "ui/commands/AbstractRegionCommand.h"
-
 
 class KFontAction;
 class KFontSizeAction;
@@ -24,8 +22,9 @@ namespace Calligra
 namespace Sheets
 {
 
-class Font : public CellAction {
-Q_OBJECT
+class Font : public CellAction
+{
+    Q_OBJECT
 public:
     Font(Actions *actions);
     virtual ~Font();
@@ -33,16 +32,19 @@ public:
     virtual void updateOnChange(Selection *selection, const Cell &activeCell) override;
 protected Q_SLOTS:
     void triggeredFont(const QString &name);
+
 protected:
-    virtual void execute(Selection *, Sheet *, QWidget *) override {}  // never called
+    virtual void execute(Selection *, Sheet *, QWidget *) override
+    {
+    } // never called
     QAction *createAction() override;
 
     KFontAction *m_fontAction;
 };
 
-
-class FontSize : public CellAction {
-Q_OBJECT
+class FontSize : public CellAction
+{
+    Q_OBJECT
 public:
     FontSize(Actions *actions);
     virtual ~FontSize();
@@ -50,16 +52,19 @@ public:
     virtual void updateOnChange(Selection *selection, const Cell &activeCell) override;
 protected Q_SLOTS:
     void triggeredSize(int size);
+
 protected:
-    virtual void execute(Selection *, Sheet *, QWidget *) override {}  // never called
+    virtual void execute(Selection *, Sheet *, QWidget *) override
+    {
+    } // never called
     QAction *createAction() override;
 
     KFontSizeAction *m_fontAction;
 };
 
-
-class FontColor : public CellAction {
-Q_OBJECT
+class FontColor : public CellAction
+{
+    Q_OBJECT
 public:
     FontColor(Actions *actions);
     virtual ~FontColor();
@@ -67,17 +72,17 @@ public:
     virtual void updateOnChange(Selection *selection, const Cell &activeCell) override;
 protected Q_SLOTS:
     void triggeredColor(const KoColor &color);
+
 protected:
-    virtual void execute(Selection *, Sheet *, QWidget *) override {}  // never called
+    virtual void execute(Selection *, Sheet *, QWidget *) override
+    {
+    } // never called
     QAction *createAction() override;
 
     KoColorPopupAction *m_fontAction;
 };
 
-
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_FONT
+#endif // CALLIGRA_SHEETS_ACTION_FONT

@@ -26,7 +26,7 @@
 #include <KoXmlReader.h>
 
 KPrAnimateTransform::KPrAnimateTransform(KPrShapeAnimation *shapeAnimation)
-: KPrAnimationBase(shapeAnimation)
+    : KPrAnimationBase(shapeAnimation)
 {
     m_duration = 1;
 }

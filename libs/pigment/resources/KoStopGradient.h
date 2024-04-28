@@ -6,14 +6,13 @@
 #ifndef KOSTOPGRADIENT_H
 #define KOSTOPGRADIENT_H
 
-#include <QPair>
 #include <QGradient>
+#include <QPair>
 
-#include "KoColor.h"
 #include "KoAbstractGradient.h"
+#include "KoColor.h"
 #include "KoResource.h"
 #include <pigment_export.h>
-
 
 typedef QPair<qreal, KoColor> KoGradientStop;
 
@@ -22,27 +21,26 @@ typedef QPair<qreal, KoColor> KoGradientStop;
  */
 class PIGMENTCMS_EXPORT KoStopGradient : public KoAbstractGradient
 {
-
 public:
     explicit KoStopGradient(const QString &filename);
     ~KoStopGradient() override;
 
-    KoAbstractGradient* clone() const override;
+    KoAbstractGradient *clone() const override;
 
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;
-    bool saveToDevice(QIODevice* dev) const override;
+    bool saveToDevice(QIODevice *dev) const override;
 
     /// reimplemented
-    QGradient* toQGradient() const override;
+    QGradient *toQGradient() const override;
 
     /// reimplemented
-    void colorAt(KoColor&, qreal t) const override;
+    void colorAt(KoColor &, qreal t) const override;
 
     /// Creates KoStopGradient from a QGradient
-    static KoStopGradient * fromQGradient(QGradient * gradient);
-    
+    static KoStopGradient *fromQGradient(QGradient *gradient);
+
     /// Sets the gradient stops
     void setStops(QList<KoGradientStop> stops);
     QList<KoGradientStop> stops() const;
@@ -51,25 +49,21 @@ public:
     QString defaultFileExtension() const override;
 
 protected:
-
     QList<KoGradientStop> m_stops;
     QPointF m_start;
     QPointF m_stop;
     QPointF m_focalPoint;
 
 private:
-
     mutable KoColor buffer;
 
 private:
-
     void loadKarbonGradient(QIODevice *file);
-    void parseKarbonGradient(const QDomElement& element);
+    void parseKarbonGradient(const QDomElement &element);
 
     void loadSvgGradient(QIODevice *file);
-    void parseSvgGradient(const QDomElement& element);
+    void parseSvgGradient(const QDomElement &element);
     void parseSvgColor(QColor &color, const QString &s);
 };
 
 #endif // KOSTOPGRADIENT_H
-

@@ -20,7 +20,7 @@ class KoCanvasController;
  */
 class KoPanTool : public KoToolBase
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     /**
      * Constructor.
@@ -39,17 +39,19 @@ public:
     /// reimplemented from superclass
     void keyPressEvent(QKeyEvent *event) override;
     /// reimplemented from superclass
-    void paint(QPainter &, const KoViewConverter &) override {}
+    void paint(QPainter &, const KoViewConverter &) override
+    {
+    }
     /// reimplemented from superclass
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     /// reimplemented method
     void customMoveEvent(KoPointerEvent *event) override;
     /// reimplemented method
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
 
-
     /// set the canvasController this tool works on.
-    void setCanvasController(KoCanvasController *controller) {
+    void setCanvasController(KoCanvasController *controller)
+    {
         m_controller = controller;
     }
 

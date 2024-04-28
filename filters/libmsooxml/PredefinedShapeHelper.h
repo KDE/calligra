@@ -29,7 +29,6 @@ public:
 
     // Container for draw:text-areas attribute, should be used in draw:enhanced-geometry
     QHash<QString, QString> textareas;
-
 };
 
 #endif

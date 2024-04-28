@@ -40,7 +40,7 @@ public:
      * @param pageLayout the page layout
      * @param styleName the style name of the page layout style
      */
-    void addPageLayoutStyle( KPrPageLayout * pageLayout, const QString & styleName );
+    void addPageLayoutStyle(KPrPageLayout *pageLayout, const QString &styleName);
 
     /**
      * Get page layout style
@@ -48,7 +48,7 @@ public:
      * @param pageLayout the pointer to the used page layout
      * @return the style name for the page layout or an null string if it is not found
      */
-    QString pageLayoutStyle( KPrPageLayout * pageLayout );
+    QString pageLayoutStyle(KPrPageLayout *pageLayout);
 
 private:
     QMap<KPrPageLayout *, QString> m_pageLayoutToName;

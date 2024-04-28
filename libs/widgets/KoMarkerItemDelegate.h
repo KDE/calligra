@@ -14,13 +14,14 @@
 
 class KoMarkerItemDelegate : public QAbstractItemDelegate
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit KoMarkerItemDelegate(KoMarkerData::MarkerPosition position, QObject *parent = nullptr);
     ~KoMarkerItemDelegate() override = default;
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &index) const override;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+
 private:
     KoMarkerData::MarkerPosition m_position;
 };

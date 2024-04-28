@@ -22,8 +22,8 @@ class KOWIDGETS_EXPORT KoResourceSelector : public QComboBox
     Q_OBJECT
 public:
     enum DisplayMode {
-        ImageMode,  ///< Displays image of resources (default)
-        TextMode   ///< Displays name of resources
+        ImageMode, ///< Displays image of resources (default)
+        TextMode ///< Displays name of resources
     };
 
     /**
@@ -37,45 +37,46 @@ public:
      * @param resourceAdapter the resource adapter providing the resources to display
      * @param parent the parent widget
      */
-    explicit KoResourceSelector( QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget * parent = 0 );
+    explicit KoResourceSelector(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = 0);
 
     /// Destroys the resource selector
     ~KoResourceSelector() override;
 
     /// Sets the resource adaptor to get resources from
-    void setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter>resourceAdapter);
+    void setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter);
 
     /// Sets the display mode
     void setDisplayMode(DisplayMode mode);
 
     /// Sets number of columns to display in the popup view
-    void setColumnCount( int columnCount );
+    void setColumnCount(int columnCount);
 
     /// Sets the height of the popup view rows
-    void setRowHeight( int rowHeight );
+    void setRowHeight(int rowHeight);
 
 Q_SIGNALS:
     /// Emitted when a resource was selected
-    void resourceSelected( KoResource * resource );
+    void resourceSelected(KoResource *resource);
 
     /// Is emitted when the user has clicked on the current resource
-    void resourceApplied( KoResource * resource );
+    void resourceApplied(KoResource *resource);
 
 protected:
     /// reimplemented
-    void paintEvent( QPaintEvent * ) override;
+    void paintEvent(QPaintEvent *) override;
     /// reimplemented
-    void mousePressEvent( QMouseEvent * ) override;
+    void mousePressEvent(QMouseEvent *) override;
     /// reimplemented
-    void mouseMoveEvent( QMouseEvent * event ) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
 private Q_SLOTS:
-    void indexChanged( int index );
-    void resourceAdded(KoResource*);
-    void resourceRemoved(KoResource*);
+    void indexChanged(int index);
+    void resourceAdded(KoResource *);
+    void resourceRemoved(KoResource *);
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KORESOURCESELECTOR_H

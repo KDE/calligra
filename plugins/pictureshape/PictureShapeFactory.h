@@ -13,7 +13,9 @@ class PictureShapeFactory : public KoShapeFactoryBase
 {
 public:
     PictureShapeFactory();
-    ~PictureShapeFactory() override {}
+    ~PictureShapeFactory() override
+    {
+    }
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
     KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const override;
@@ -22,7 +24,7 @@ public:
     /// reimplemented
     void newDocumentResourceManager(KoDocumentResourceManager *manager) const override;
     /// reimplemented
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels() override;
+    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels() override;
 };
 
 #endif

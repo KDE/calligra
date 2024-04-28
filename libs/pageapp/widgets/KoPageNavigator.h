@@ -14,12 +14,11 @@
 class KoPAView;
 class KoPAPageBase;
 
-
 class KoPageNavigator : public QStackedWidget
 {
     Q_OBJECT
 
-    enum State {Display = 0, Edit = 1};
+    enum State { Display = 0, Edit = 1 };
 
 public:
     explicit KoPageNavigator(KoPAView *view);
@@ -42,4 +41,4 @@ private:
     Private *const d;
 };
 
-#endif //KOPAGENAVIGATOR_H
+#endif // KOPAGENAVIGATOR_H

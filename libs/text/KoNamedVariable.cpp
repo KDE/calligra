@@ -14,9 +14,9 @@
 #include <KoXmlReader.h>
 
 KoNamedVariable::KoNamedVariable(Property key, const QString &name)
-        : KoVariable(true),
-        m_name(name),
-        m_key(key)
+    : KoVariable(true)
+    , m_name(name)
+    , m_key(key)
 {
 }
 

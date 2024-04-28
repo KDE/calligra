@@ -50,7 +50,7 @@ public:
      * \param settings the print settings
      * \param force forces a recreation of the pages, if \c true
      */
-    void setPrintSettings(const PrintSettings& settings, bool force = false);
+    void setPrintSettings(const PrintSettings &settings, bool force = false);
 
     /**
      * Number of pages.
@@ -72,10 +72,10 @@ public:
     virtual QSizeF size(int page) const;
 
 protected:
-    Sheet* sheet() const;
-    const PrintSettings& printSettings() const;
+    Sheet *sheet() const;
+    const PrintSettings &printSettings() const;
     virtual void clearPages();
-    virtual bool pageNeedsPrinting(const QRect& cellRange) const;
+    virtual bool pageNeedsPrinting(const QRect &cellRange) const;
     virtual void insertPage(int page);
     virtual void preparePage(int page);
 
@@ -83,7 +83,7 @@ private:
     Q_DISABLE_COPY(PageManager)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

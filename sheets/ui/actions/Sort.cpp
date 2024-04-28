@@ -6,20 +6,18 @@
 */
 
 #include "Sort.h"
-#include "Actions.h"
 #include "./dialogs/SortDialog.h"
+#include "Actions.h"
 
-#include "engine/ValueCalc.h"
-#include "engine/ValueConverter.h"
-#include "engine/CalculationSettings.h"
 #include "core/ApplicationSettings.h"
 #include "core/CellStorage.h"
 #include "core/Map.h"
 #include "core/Sheet.h"
+#include "engine/CalculationSettings.h"
+#include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
 
 #include <KLocalizedString>
-
-
 
 using namespace Calligra::Sheets;
 
@@ -31,9 +29,9 @@ Sort::Sort(Actions *actions)
 
 Sort::~Sort()
 {
-    if (m_dlg) delete m_dlg;
+    if (m_dlg)
+        delete m_dlg;
 }
-
 
 void Sort::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
@@ -109,8 +107,6 @@ void Sort::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
     m_dlg = nullptr;
 }
 
-
-
 SortInc::SortInc(Actions *actions)
     : CellAction(actions, "sortInc", i18n("Sort &Increasing"), koIcon("view-sort-ascending"), i18n("Sort a group of cells in ascending(first to last) order"))
 {
@@ -130,7 +126,7 @@ void SortInc::execute(Selection *selection, Sheet *sheet, QWidget *)
         selection->emitModified();
     }
 
-    SortManipulator* command = new SortManipulator();
+    SortManipulator *command = new SortManipulator();
     command->add(range, sheet);
     command->setSheet(sheet);
 
@@ -143,9 +139,12 @@ void SortInc::execute(Selection *selection, Sheet *sheet, QWidget *)
     command->execute(selection->canvas());
 }
 
-
 SortDesc::SortDesc(Actions *actions)
-    : CellAction(actions, "sortDesc", i18n("Sort &Decreasing"), koIcon("view-sort-descending"), i18n("Sort a group of cells in decreasing(last to first) order"))
+    : CellAction(actions,
+                 "sortDesc",
+                 i18n("Sort &Decreasing"),
+                 koIcon("view-sort-descending"),
+                 i18n("Sort a group of cells in decreasing(last to first) order"))
 {
 }
 
@@ -163,7 +162,7 @@ void SortDesc::execute(Selection *selection, Sheet *sheet, QWidget *)
         selection->emitModified();
     }
 
-    SortManipulator* command = new SortManipulator();
+    SortManipulator *command = new SortManipulator();
     command->add(range, sheet);
     command->setSheet(sheet);
 
@@ -176,13 +175,9 @@ void SortDesc::execute(Selection *selection, Sheet *sheet, QWidget *)
     command->execute(selection->canvas());
 }
 
-
-
-
-
 SortManipulator::SortManipulator()
-        : AbstractDFManipulator()
-        , m_cellStorage(0)
+    : AbstractDFManipulator()
+    , m_cellStorage(0)
 {
     m_changeformat = false;
     m_rows = true;
@@ -196,7 +191,7 @@ SortManipulator::~SortManipulator()
 {
 }
 
-bool SortManipulator::process(Element* element)
+bool SortManipulator::process(Element *element)
 {
     // process one element - rectangular range
 
@@ -224,7 +219,8 @@ bool SortManipulator::preProcess()
                 Cell cell = Cell(m_sheet, col, row);
                 m_styles.insert(cell, cell.style());
                 // encode the formula if there is one, so that cell references get updated correctly
-                if (cell.isFormula()) m_formulas.insert(cell, cell.encodeFormula());
+                if (cell.isFormula())
+                    m_formulas.insert(cell, cell.encodeFormula());
             }
     }
 
@@ -257,13 +253,12 @@ void SortManipulator::clearCriteria()
     m_criteria.clear();
 }
 
-Value SortManipulator::newValue(Element *element, int col, int row,
-                                bool *parse, Format::Type *)
+Value SortManipulator::newValue(Element *element, int col, int row, bool *parse, Format::Type *)
 {
     QRect range = element->rect();
     int colidx = col - range.left();
     int rowidx = row - range.top();
-    if (m_rows)  // sort rows
+    if (m_rows) // sort rows
         rowidx = sorted[rowidx];
     else
         colidx = sorted[colidx];
@@ -289,7 +284,7 @@ Style SortManipulator::newFormat(Element *element, int col, int row)
     int colidx = col - range.left();
     int rowidx = row - range.top();
     if (m_changeformat) {
-        if (m_rows)  // sort rows
+        if (m_rows) // sort rows
             rowidx = sorted[rowidx];
         else
             colidx = sorted[colidx];
@@ -309,7 +304,8 @@ void SortManipulator::sort(Element *element)
     int count = max - min + 1;
     // initially, all values are at their original positions
     sorted.clear();
-    for (int i = 0; i < count; ++i) sorted[i] = i;
+    for (int i = 0; i < count; ++i)
+        sorted[i] = i;
 
     // for each position, find the lowest value and move it there
     int start = m_skipfirst ? 1 : 0;
@@ -367,7 +363,7 @@ bool SortManipulator::shouldReorder(Element *element, int first, int second)
             int pos = 0;
             // Try to locate our two strings in the list. If both are there, assume
             // ordering as specified by the list.
-            for (QStringList::ConstIterator  it = m_customlist.constBegin(); it != m_customlist.constEnd(); ++it) {
+            for (QStringList::ConstIterator it = m_customlist.constBegin(); it != m_customlist.constEnd(); ++it) {
                 if ((pos1 == -1) && ((*it).toLower() == s1))
                     pos1 = pos;
                 if ((pos2 == -1) && ((*it).toLower() == s2))

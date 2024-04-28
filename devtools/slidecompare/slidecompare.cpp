@@ -7,10 +7,10 @@
 #include <QApplication>
 #include <QPixmap>
 
-int
-main(int argc, char** argv) {
+int main(int argc, char **argv)
+{
     QApplication app(argc, argv);
-//    QPixmapCache::setCacheLimit(100000);
+    //    QPixmapCache::setCacheLimit(100000);
 
     CombinedView cv;
     cv.resize(630, 410);

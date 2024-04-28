@@ -31,7 +31,7 @@ EllipseShapeConfigWidget::EllipseShapeConfigWidget()
 
 void EllipseShapeConfigWidget::open(KoShape *shape)
 {
-    m_ellipse = dynamic_cast<EllipseShape*>(shape);
+    m_ellipse = dynamic_cast<EllipseShape *>(shape);
     if (!m_ellipse)
         return;
 

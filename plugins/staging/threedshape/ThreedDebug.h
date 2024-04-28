@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &THREED_LOG();
 
 #define debugThreed qCDebug(THREED_LOG)

@@ -9,9 +9,9 @@
 #define KODIALOG_P_H
 
 #include "KoDialog.h"
+#include <QHash>
 #include <QPointer>
 #include <QSize>
-#include <QHash>
 
 class QBoxLayout;
 class QPushButton;
@@ -24,12 +24,17 @@ class KoDialogPrivate
     Q_DECLARE_PUBLIC(KoDialog)
 protected:
     KoDialogPrivate()
-        : mDetailsVisible(false), mSettingDetails(false), mDeferredDelete(false),
-          mDetailsWidget(0),
-          mTopLayout(0), mMainWidget(0), mUrlHelp(0), mActionSeparator(0),
-          mButtonOrientation(Qt::Horizontal),
-          mDefaultButton(KoDialog::NoDefault),
-          mButtonBox(0)
+        : mDetailsVisible(false)
+        , mSettingDetails(false)
+        , mDeferredDelete(false)
+        , mDetailsWidget(0)
+        , mTopLayout(0)
+        , mMainWidget(0)
+        , mUrlHelp(0)
+        , mActionSeparator(0)
+        , mButtonOrientation(Qt::Horizontal)
+        , mDefaultButton(KoDialog::NoDefault)
+        , mButtonBox(0)
     {
     }
 
@@ -70,7 +75,7 @@ protected Q_SLOTS:
 
 private:
     void init(KoDialog *);
-    bool dirty: 1;
+    bool dirty : 1;
 };
 
 #endif // KDEUI_KDIALOG_P_H

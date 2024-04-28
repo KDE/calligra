@@ -18,21 +18,19 @@
 #ifndef KOTEXTLAYOUTAREA_P_H
 #define KOTEXTLAYOUTAREA_P_H
 
-#include "KoTextLayoutTableArea.h"
 #include "KoTextLayoutEndNotesArea.h"
 #include "KoTextLayoutNoteArea.h"
+#include "KoTextLayoutTableArea.h"
 
 #include <KoTextBlockBorderData.h>
 
-//local type for temporary use in restartLayout
-struct LineKeeper
-{
+// local type for temporary use in restartLayout
+struct LineKeeper {
     int columns;
     qreal lineWidth;
     QPointF position;
 };
 Q_DECLARE_TYPEINFO(LineKeeper, Q_MOVABLE_TYPE);
-
 
 class Q_DECL_HIDDEN KoTextLayoutArea::Private
 {
@@ -66,8 +64,8 @@ public:
         , footNoteAutoCount(0)
         , extraTextIndent(0)
         , endNotesArea(0)
-        {
-        }
+    {
+    }
 
     KoTextLayoutArea *parent; //  A pointer to the parent
 
@@ -130,8 +128,6 @@ public:
     void stashRemainingLayout(QTextBlock &block, int lineTextStartOfFirstKeep, QVector<LineKeeper> &stashedLines, QPointF &stashedCounterPosition);
     /// utility method to recreate partial layout of a split block
     QTextLine recreatePartialLayout(QTextBlock &block, const QVector<LineKeeper> &stashedLines, QPointF &stashedCounterPosition, QTextLine &line);
-
-
 };
 
 #endif // KOTEXTLAYOUTAREA_P_H

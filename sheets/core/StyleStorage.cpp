@@ -18,8 +18,8 @@
 #include "engine/RTree.h"
 
 #include "core/Map.h"
-#include "engine/RectStorage.h"
 #include "core/StyleManager.h"
+#include "engine/RectStorage.h"
 
 using namespace Calligra::Sheets;
 
@@ -30,14 +30,14 @@ public:
     {
         m_storingUndo = false;
     }
-    Map* map;
+    Map *map;
     RTree<SharedSubStyle> tree;
-    QMap<Style::Key, QList<SharedSubStyle> > subStyles;
-    QMap<int, QPair<QRectF, SharedSubStyle> > possibleGarbage;
-    StyleStorageLoaderJob* loader;
+    QMap<Style::Key, QList<SharedSubStyle>> subStyles;
+    QMap<int, QPair<QRectF, SharedSubStyle>> possibleGarbage;
+    StyleStorageLoaderJob *loader;
 
     bool m_storingUndo;
-    QVector< QPair<QRectF, SharedSubStyle> > m_undoData;
+    QVector<QPair<QRectF, SharedSubStyle>> m_undoData;
 
     void ensureLoaded();
 };
@@ -45,20 +45,24 @@ public:
 class Calligra::Sheets::StyleStorageLoaderJob : public QRunnable
 {
 public:
-    StyleStorageLoaderJob(StyleStorage* storage, const QList<QPair<Region, Style> >& styles);
+    StyleStorageLoaderJob(StyleStorage *storage, const QList<QPair<Region, Style>> &styles);
     void run() override;
     void waitForFinished();
     bool isFinished();
-    QList<QPair<Region, Style> > data() const { return m_styles; }
+    QList<QPair<Region, Style>> data() const
+    {
+        return m_styles;
+    }
+
 private:
-    StyleStorage* m_storage;
-    QList<QPair<Region, Style> > m_styles;
+    StyleStorage *m_storage;
+    QList<QPair<Region, Style>> m_styles;
 };
 
-StyleStorageLoaderJob::StyleStorageLoaderJob(StyleStorage *storage, const QList<QPair<Region, Style> > &styles)
-    : m_storage(storage), m_styles(styles)
+StyleStorageLoaderJob::StyleStorageLoaderJob(StyleStorage *storage, const QList<QPair<Region, Style>> &styles)
+    : m_storage(storage)
+    , m_styles(styles)
 {
-
 }
 
 void StyleStorageLoaderJob::waitForFinished()
@@ -77,24 +81,25 @@ void StyleStorageLoaderJob::run()
     debugSheetsStyle << "Loading styles:" << Qt::endl << m_styles;
     QElapsedTimer t;
     t.start();
-    StyleStorage::Private* d = m_storage->d;
-    QList<QPair<Region, SharedSubStyle> > subStyles;
+    StyleStorage::Private *d = m_storage->d;
+    QList<QPair<Region, SharedSubStyle>> subStyles;
 
     typedef QPair<Region, Style> StyleRegion;
-    for (const StyleRegion& styleArea : m_styles) {
-        const Region& reg = styleArea.first;
-        const Style& style = styleArea.second;
-        if (style.isEmpty()) continue;
+    for (const StyleRegion &styleArea : m_styles) {
+        const Region &reg = styleArea.first;
+        const Style &style = styleArea.second;
+        if (style.isEmpty())
+            continue;
 
         // find substyles
-        for (const SharedSubStyle& subStyle : style.subStyles()) {
+        for (const SharedSubStyle &subStyle : style.subStyles()) {
             bool foundShared = false;
-            typedef const QList< SharedSubStyle> StoredSubStyleList;
-            StoredSubStyleList& storedSubStyles(d->subStyles.value(subStyle->type()));
+            typedef const QList<SharedSubStyle> StoredSubStyleList;
+            StoredSubStyleList &storedSubStyles(d->subStyles.value(subStyle->type()));
             StoredSubStyleList::ConstIterator end(storedSubStyles.end());
             for (StoredSubStyleList::ConstIterator it(storedSubStyles.begin()); it != end; ++it) {
                 if (Style::compare(subStyle.data(), (*it).data())) {
-        //             debugSheetsStyle <<"[REUSING EXISTING SUBSTYLE]";
+                    //             debugSheetsStyle <<"[REUSING EXISTING SUBSTYLE]";
                     subStyles.append(qMakePair(reg, *it));
                     foundShared = true;
                     break;
@@ -102,7 +107,7 @@ void StyleStorageLoaderJob::run()
             }
             if (!foundShared) {
                 // insert substyle and add to the used substyle list
-                //if (reg.contains(QPoint(1,1))) {debugSheetsStyle<<"load:"<<reg<<':'; subStyle.data()->dump();}
+                // if (reg.contains(QPoint(1,1))) {debugSheetsStyle<<"load:"<<reg<<':'; subStyle.data()->dump();}
                 subStyles.append(qMakePair(reg, subStyle));
             }
         }
@@ -122,17 +127,17 @@ void StyleStorage::Private::ensureLoaded()
     }
 }
 
-StyleStorage::StyleStorage(Map* map)
-        : QObject(map)
-        , d(new Private)
+StyleStorage::StyleStorage(Map *map)
+    : QObject(map)
+    , d(new Private)
 {
     d->map = map;
     d->loader = 0;
 }
 
-StyleStorage::StyleStorage(const StyleStorage& other)
-        : QObject(other.d->map)
-        , d(new Private)
+StyleStorage::StyleStorage(const StyleStorage &other)
+    : QObject(other.d->map)
+    , d(new Private)
 {
     d->map = other.d->map;
     d->tree = other.d->tree;
@@ -151,7 +156,7 @@ StyleStorage::~StyleStorage()
     delete d;
 }
 
-Style StyleStorage::contains(const QPoint& point) const
+Style StyleStorage::contains(const QPoint &point) const
 {
     d->ensureLoaded();
 
@@ -161,43 +166,43 @@ Style StyleStorage::contains(const QPoint& point) const
 
         return *style;
     }
-    Style* style = new Style();
+    Style *style = new Style();
     (*style) = composeStyle(subStyles);
 
-    //if (point.x() == 1 && point.y() == 1) {debugSheetsStyle <<"StyleStorage: style:"<<point<<':'; style->dump();}
+    // if (point.x() == 1 && point.y() == 1) {debugSheetsStyle <<"StyleStorage: style:"<<point<<':'; style->dump();}
     return *style;
 }
 
-Style StyleStorage::contains(const QRect& rect) const
+Style StyleStorage::contains(const QRect &rect) const
 {
     d->ensureLoaded();
     QList<SharedSubStyle> subStyles = d->tree.contains(rect);
     return composeStyle(subStyles);
 }
 
-Style StyleStorage::intersects(const QRect& rect) const
+Style StyleStorage::intersects(const QRect &rect) const
 {
     d->ensureLoaded();
     QList<SharedSubStyle> subStyles = d->tree.intersects(rect);
     return composeStyle(subStyles);
 }
 
-QVector< QPair<QRectF, SharedSubStyle> > StyleStorage::currentData(const Region& region) const
+QVector<QPair<QRectF, SharedSubStyle>> StyleStorage::currentData(const Region &region) const
 {
     d->ensureLoaded();
-    QVector< QPair<QRectF, SharedSubStyle> > result;
+    QVector<QPair<QRectF, SharedSubStyle>> result;
     Region::ConstIterator end = region.constEnd();
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
         const QRect rect = (*it)->rect();
-        QList< QPair<QRectF, SharedSubStyle> > pairs = d->tree.intersectingPairs(rect).values();
+        QList<QPair<QRectF, SharedSubStyle>> pairs = d->tree.intersectingPairs(rect).values();
         for (int i = 0; i < pairs.count(); ++i) {
             // trim the rects
             pairs[i].first = pairs[i].first.intersected(rect);
         }
         // Always a default subStyle first, even if there are no pairs.
         // This is necessary for undo to properly clear new substyles.
-        result.push_back (qMakePair(QRectF(rect), SharedSubStyle()));
-        result.append (QVector< QPair<QRectF, SharedSubStyle> >::fromList (pairs));
+        result.push_back(qMakePair(QRectF(rect), SharedSubStyle()));
+        result.append(QVector<QPair<QRectF, SharedSubStyle>>::fromList(pairs));
     }
     return result;
 }
@@ -209,7 +214,7 @@ QRect StyleStorage::usedArea() const
 }
 
 // create default styles in the style tables - used in Odf saving
-void StyleStorage::saveCreateDefaultStyles(int& maxCols, int& maxRows, QMap<int, Style> &columnDefaultStyles, QMap<int, Style> &rowDefaultStyles) const
+void StyleStorage::saveCreateDefaultStyles(int &maxCols, int &maxRows, QMap<int, Style> &columnDefaultStyles, QMap<int, Style> &rowDefaultStyles) const
 {
     d->ensureLoaded();
 
@@ -218,7 +223,7 @@ void StyleStorage::saveCreateDefaultStyles(int& maxCols, int& maxRows, QMap<int,
     maxRows = used.bottom();
 
     const QRect sheetRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
-    const QList< QPair<QRectF, SharedSubStyle> > pairs = d->tree.intersectingPairs(sheetRect).values();
+    const QList<QPair<QRectF, SharedSubStyle>> pairs = d->tree.intersectingPairs(sheetRect).values();
     for (int i = 0; i < pairs.count(); ++i) {
         const QRect rect = pairs[i].first.toRect();
         // column default cell styles
@@ -257,7 +262,7 @@ int StyleStorage::nextColumnIndexInRow(int column, int row) const
     return rect.isNull() ? 0 : rect.left();
 }
 
-void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle, bool markRegionChanged)
+void StyleStorage::insert(const QRect &rect, const SharedSubStyle &subStyle, bool markRegionChanged)
 {
     d->ensureLoaded();
 
@@ -280,12 +285,12 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle, boo
     }
 
     // lookup already used substyles
-    typedef const QList< SharedSubStyle> StoredSubStyleList;
-    StoredSubStyleList& storedSubStyles(d->subStyles.value(subStyle->type()));
+    typedef const QList<SharedSubStyle> StoredSubStyleList;
+    StoredSubStyleList &storedSubStyles(d->subStyles.value(subStyle->type()));
     StoredSubStyleList::ConstIterator end(storedSubStyles.end());
     for (StoredSubStyleList::ConstIterator it(storedSubStyles.begin()); it != end; ++it) {
         if (Style::compare(subStyle.data(), (*it).data())) {
-//             debugSheetsStyle <<"[REUSING EXISTING SUBSTYLE]";
+            //             debugSheetsStyle <<"[REUSING EXISTING SUBSTYLE]";
             d->tree.insert(rect, *it);
             if (markRegionChanged) {
                 regionChanged(rect);
@@ -301,16 +306,16 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle, boo
     }
 }
 
-void StyleStorage::insert(const Region& region, const Style& style)
+void StyleStorage::insert(const Region &region, const Style &style)
 {
     d->ensureLoaded();
     auto subs = style.subStyles();
-    if (style.isEmpty()) {  // empty styles have no substyle, but we need the default one, so let's tweak it
-      Style st;
-      st.setDefault();
-      subs = style.subStyles();
+    if (style.isEmpty()) { // empty styles have no substyle, but we need the default one, so let's tweak it
+        Style st;
+        st.setDefault();
+        subs = style.subStyles();
     }
-    for (const SharedSubStyle& subStyle : subs) {
+    for (const SharedSubStyle &subStyle : subs) {
         Region::ConstIterator end(region.constEnd());
         for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
             // insert substyle
@@ -322,7 +327,7 @@ void StyleStorage::insert(const Region& region, const Style& style)
     }
 }
 
-void StyleStorage::load(const QList<QPair<Region, Style> >& styles)
+void StyleStorage::load(const QList<QPair<Region, Style>> &styles)
 {
     Q_ASSERT(!d->loader);
     d->loader = new StyleStorageLoaderJob(this, styles);
@@ -332,76 +337,84 @@ void StyleStorage::insertRows(int position, int number)
 {
     d->ensureLoaded();
     // process the tree
-    QVector< QPair<QRectF, SharedSubStyle> > undoData;
+    QVector<QPair<QRectF, SharedSubStyle>> undoData;
     undoData << d->tree.insertRows(position, number);
-    if (m_storingUndo) d->m_undoData << undoData;
+    if (m_storingUndo)
+        d->m_undoData << undoData;
 }
 
 void StyleStorage::insertColumns(int position, int number)
 {
     d->ensureLoaded();
     // process the tree
-    QVector< QPair<QRectF, SharedSubStyle> > undoData;
+    QVector<QPair<QRectF, SharedSubStyle>> undoData;
     undoData << d->tree.insertColumns(position, number);
-    if (m_storingUndo) d->m_undoData << undoData;
+    if (m_storingUndo)
+        d->m_undoData << undoData;
 }
 
 void StyleStorage::removeRows(int position, int number)
 {
     d->ensureLoaded();
     // process the tree
-    QVector< QPair<QRectF, SharedSubStyle> > undoData;
+    QVector<QPair<QRectF, SharedSubStyle>> undoData;
     undoData << d->tree.removeRows(position, number);
-    if (m_storingUndo) d->m_undoData << undoData;
+    if (m_storingUndo)
+        d->m_undoData << undoData;
 }
 
 void StyleStorage::removeColumns(int position, int number)
 {
     d->ensureLoaded();
     // process the tree
-    QVector< QPair<QRectF, SharedSubStyle> > undoData;
+    QVector<QPair<QRectF, SharedSubStyle>> undoData;
     undoData << d->tree.removeColumns(position, number);
-    if (m_storingUndo) d->m_undoData << undoData;
+    if (m_storingUndo)
+        d->m_undoData << undoData;
 }
 
-void StyleStorage::insertShiftRight(const QRect& rect)
+void StyleStorage::insertShiftRight(const QRect &rect)
 {
     d->ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
-    QVector< QPair<QRectF, SharedSubStyle> > undoData;
+    QVector<QPair<QRectF, SharedSubStyle>> undoData;
     undoData << d->tree.insertShiftRight(rect);
     regionChanged(invalidRect);
-    if (m_storingUndo) d->m_undoData << undoData;
+    if (m_storingUndo)
+        d->m_undoData << undoData;
 }
 
-void StyleStorage::insertShiftDown(const QRect& rect)
+void StyleStorage::insertShiftDown(const QRect &rect)
 {
     d->ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
-    QVector< QPair<QRectF, SharedSubStyle> > undoData;
+    QVector<QPair<QRectF, SharedSubStyle>> undoData;
     undoData << d->tree.insertShiftDown(rect);
     regionChanged(invalidRect);
-    if (m_storingUndo) d->m_undoData << undoData;
+    if (m_storingUndo)
+        d->m_undoData << undoData;
 }
 
-void StyleStorage::removeShiftLeft(const QRect& rect)
+void StyleStorage::removeShiftLeft(const QRect &rect)
 {
     d->ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
-    QVector< QPair<QRectF, SharedSubStyle> > undoData;
+    QVector<QPair<QRectF, SharedSubStyle>> undoData;
     undoData << d->tree.removeShiftLeft(rect);
     regionChanged(invalidRect);
-    if (m_storingUndo) d->m_undoData << undoData;
+    if (m_storingUndo)
+        d->m_undoData << undoData;
 }
 
-void StyleStorage::removeShiftUp(const QRect& rect)
+void StyleStorage::removeShiftUp(const QRect &rect)
 {
     d->ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
-    QVector< QPair<QRectF, SharedSubStyle> > undoData;
+    QVector<QPair<QRectF, SharedSubStyle>> undoData;
     undoData << d->tree.removeShiftUp(rect);
     regionChanged(invalidRect);
-    if (m_storingUndo) d->m_undoData << undoData;
+    if (m_storingUndo)
+        d->m_undoData << undoData;
 }
 
 void StyleStorage::garbageCollection()
@@ -414,106 +427,107 @@ void StyleStorage::garbageCollection()
     if (d->possibleGarbage.isEmpty())
         return;
 
-/* DISABLE THIS FOR NOW
- * This gadbage collection seems to be slowing things down a lot, without really doing much. Disabling it for now, but we'll need to adjust the entire style storage, likely by storing each substyle separately.
+    /* DISABLE THIS FOR NOW
+     * This gadbage collection seems to be slowing things down a lot, without really doing much. Disabling it for now, but we'll need to adjust the entire style
+    storage, likely by storing each substyle separately.
 
-    const int currentZIndex = d->possibleGarbage.constBegin().key();
-    const QPair<QRectF, SharedSubStyle> currentPair = d->possibleGarbage.take(currentZIndex);
+        const int currentZIndex = d->possibleGarbage.constBegin().key();
+        const QPair<QRectF, SharedSubStyle> currentPair = d->possibleGarbage.take(currentZIndex);
 
-    // check whether the named style still exists
-    if (currentPair.second->type() == Style::NamedStyleKey &&
-            !styleManager()->style(static_cast<const NamedStyle*>(currentPair.second.data())->name)) {
-        debugSheetsStyle << "removing" << currentPair.second->debugData()
-        << "at" << Region(currentPair.first.toRect()).name()
-        << "used" << currentPair.second->ref << "times" << Qt::endl;
-        qDebug() << "removing" << currentPair.second->debugData()
-        << "at" << Region(currentPair.first.toRect()).name()
-        << "used" << currentPair.second->ref << "times" << Qt::endl;
-        d->tree.remove(currentPair.first.toRect(), currentPair.second);
-        d->subStyles[currentPair.second->type()].removeAll(currentPair.second);
-        QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
-        return; // already done
-    }
-
-    typedef QPair<QRectF, SharedSubStyle> SharedSubStylePair;
-    QMap<int, SharedSubStylePair> pairs = d->tree.intersectingPairs(currentPair.first.toRect());
-    if (pairs.isEmpty())   // actually never true, just for sanity
-        return;
-    int zIndex = pairs.constBegin().key();
-    SharedSubStylePair pair = pairs[zIndex];
-
-    // check whether the default style is placed first
-    if (zIndex == currentZIndex &&
-            currentPair.second->type() == Style::DefaultStyleKey &&
-            pair.second->type() == Style::DefaultStyleKey &&
-            pair.first == currentPair.first) {
-        debugSheetsStyle << "removing default style"
-        << "at" << Region(currentPair.first.toRect()).name()
-        << "used" << currentPair.second->ref << "times" << Qt::endl;
-        qDebug() << "removing default style"
-        << "at" << Region(currentPair.first.toRect()).name()
-        << "used" << currentPair.second->ref << "times" << Qt::endl;
-        d->tree.remove(currentPair.first.toRect(), currentPair.second);
-        QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
-        return; // already done
-    }
-
-    // check, if the current substyle is covered by others added after it
-    bool found = false;
-    QMap<int, SharedSubStylePair>::ConstIterator end = pairs.constEnd();
-    for (QMap<int, SharedSubStylePair>::ConstIterator it = pairs.constFind(currentZIndex); it != end; ++it) {
-        zIndex = it.key();
-        pair = it.value();
-
-        // as long as the substyle in question was not found, skip the substyle
-        if (!found) {
-            if (pair.first == currentPair.first &&
-                    Style::compare(pair.second.data(), currentPair.second.data()) &&
-                    zIndex == currentZIndex) {
-                found = true;
-            }
-            continue;
-        }
-
-        // remove the current pair, if another substyle of the same type,
-        // the default style or a named style follows and the rectangle
-        // is completely covered
-        if (zIndex != currentZIndex &&
-                (pair.second->type() == currentPair.second->type() ||
-                 pair.second->type() == Style::DefaultStyleKey ||
-                 pair.second->type() == Style::NamedStyleKey) &&
-                pair.first.toRect().contains(currentPair.first.toRect())) {
-
+        // check whether the named style still exists
+        if (currentPair.second->type() == Style::NamedStyleKey &&
+                !styleManager()->style(static_cast<const NamedStyle*>(currentPair.second.data())->name)) {
             debugSheetsStyle << "removing" << currentPair.second->debugData()
             << "at" << Region(currentPair.first.toRect()).name()
             << "used" << currentPair.second->ref << "times" << Qt::endl;
             qDebug() << "removing" << currentPair.second->debugData()
             << "at" << Region(currentPair.first.toRect()).name()
             << "used" << currentPair.second->ref << "times" << Qt::endl;
-            d->tree.remove(currentPair.first.toRect(), currentPair.second, currentZIndex);
-#if 0
-            debugSheetsStyle << "StyleStorage: usage of" << currentPair.second->debugData() << " is" << currentPair.second->ref;
-            // FIXME Stefan: The usage of substyles used once should be
-            //               two (?) here, not more. Why is this not the case?
-            //               The shared pointers are used by:
-            //               a) the tree
-            //               b) the reusage list (where it should be removed)
-            //               c) the cached styles (!)
-            //               d) the undo data of operations (!)
-            if (currentPair.second->ref == 2) {
-                debugSheetsStyle << "StyleStorage: removing" << currentPair.second << " from the used subStyles";
-                d->subStyles[currentPair.second->type()].removeAll(currentPair.second);
-            }
-#endif
-            break;
+            d->tree.remove(currentPair.first.toRect(), currentPair.second);
+            d->subStyles[currentPair.second->type()].removeAll(currentPair.second);
+            QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
+            return; // already done
         }
-    }
-    QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
 
-*/
+        typedef QPair<QRectF, SharedSubStyle> SharedSubStylePair;
+        QMap<int, SharedSubStylePair> pairs = d->tree.intersectingPairs(currentPair.first.toRect());
+        if (pairs.isEmpty())   // actually never true, just for sanity
+            return;
+        int zIndex = pairs.constBegin().key();
+        SharedSubStylePair pair = pairs[zIndex];
+
+        // check whether the default style is placed first
+        if (zIndex == currentZIndex &&
+                currentPair.second->type() == Style::DefaultStyleKey &&
+                pair.second->type() == Style::DefaultStyleKey &&
+                pair.first == currentPair.first) {
+            debugSheetsStyle << "removing default style"
+            << "at" << Region(currentPair.first.toRect()).name()
+            << "used" << currentPair.second->ref << "times" << Qt::endl;
+            qDebug() << "removing default style"
+            << "at" << Region(currentPair.first.toRect()).name()
+            << "used" << currentPair.second->ref << "times" << Qt::endl;
+            d->tree.remove(currentPair.first.toRect(), currentPair.second);
+            QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
+            return; // already done
+        }
+
+        // check, if the current substyle is covered by others added after it
+        bool found = false;
+        QMap<int, SharedSubStylePair>::ConstIterator end = pairs.constEnd();
+        for (QMap<int, SharedSubStylePair>::ConstIterator it = pairs.constFind(currentZIndex); it != end; ++it) {
+            zIndex = it.key();
+            pair = it.value();
+
+            // as long as the substyle in question was not found, skip the substyle
+            if (!found) {
+                if (pair.first == currentPair.first &&
+                        Style::compare(pair.second.data(), currentPair.second.data()) &&
+                        zIndex == currentZIndex) {
+                    found = true;
+                }
+                continue;
+            }
+
+            // remove the current pair, if another substyle of the same type,
+            // the default style or a named style follows and the rectangle
+            // is completely covered
+            if (zIndex != currentZIndex &&
+                    (pair.second->type() == currentPair.second->type() ||
+                     pair.second->type() == Style::DefaultStyleKey ||
+                     pair.second->type() == Style::NamedStyleKey) &&
+                    pair.first.toRect().contains(currentPair.first.toRect())) {
+
+                debugSheetsStyle << "removing" << currentPair.second->debugData()
+                << "at" << Region(currentPair.first.toRect()).name()
+                << "used" << currentPair.second->ref << "times" << Qt::endl;
+                qDebug() << "removing" << currentPair.second->debugData()
+                << "at" << Region(currentPair.first.toRect()).name()
+                << "used" << currentPair.second->ref << "times" << Qt::endl;
+                d->tree.remove(currentPair.first.toRect(), currentPair.second, currentZIndex);
+    #if 0
+                debugSheetsStyle << "StyleStorage: usage of" << currentPair.second->debugData() << " is" << currentPair.second->ref;
+                // FIXME Stefan: The usage of substyles used once should be
+                //               two (?) here, not more. Why is this not the case?
+                //               The shared pointers are used by:
+                //               a) the tree
+                //               b) the reusage list (where it should be removed)
+                //               c) the cached styles (!)
+                //               d) the undo data of operations (!)
+                if (currentPair.second->ref == 2) {
+                    debugSheetsStyle << "StyleStorage: removing" << currentPair.second << " from the used subStyles";
+                    d->subStyles[currentPair.second->type()].removeAll(currentPair.second);
+                }
+    #endif
+                break;
+            }
+        }
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
+
+    */
 }
 
-void StyleStorage::regionChanged(const QRect& rect)
+void StyleStorage::regionChanged(const QRect &rect)
 {
     // still busy loading? no garbage to collect
     if (d->loader && !d->loader->isFinished())
@@ -523,18 +537,18 @@ void StyleStorage::regionChanged(const QRect& rect)
     // mark the possible garbage
     // NOTE Stefan: The map may contain multiple indices. The already existing possible garbage has
     // has to be inserted most recently, because it should be accessed first.
-/* DISABLING GARBAGE FOR NOW
-    d->possibleGarbage = d->tree.intersectingPairs(rect).unite(d->possibleGarbage);
-    QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
-*/
+    /* DISABLING GARBAGE FOR NOW
+        d->possibleGarbage = d->tree.intersectingPairs(rect).unite(d->possibleGarbage);
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
+    */
 }
 
-Style StyleStorage::composeStyle(const QList<SharedSubStyle>& subStyles) const
+Style StyleStorage::composeStyle(const QList<SharedSubStyle> &subStyles) const
 {
     d->ensureLoaded();
 
     if (subStyles.isEmpty()) {
-//         debugSheetsStyle <<"StyleStorage:" << "nothing to merge, return the default style";
+        //         debugSheetsStyle <<"StyleStorage:" << "nothing to merge, return the default style";
         return *styleManager()->defaultStyle();
     }
     // From OpenDocument-v1.2-os-part1 16.2<style:style>
@@ -567,9 +581,10 @@ Style StyleStorage::composeStyle(const QList<SharedSubStyle>& subStyles) const
     CustomStyle *namedStyle = 0;
     for (int i = subStyles.count() - 1; i >= 0; --i) {
         if (subStyles[i]->type() == Style::NamedStyleKey) {
-            namedStyle = styleManager()->style(static_cast<const NamedStyle*>(subStyles[i].data())->name);
+            namedStyle = styleManager()->style(static_cast<const NamedStyle *>(subStyles[i].data())->name);
             if (namedStyle) {
-                debugSheetsStyle<<"Compose found namedstyle:"<<static_cast<const NamedStyle*>(subStyles[i].data())->name<<namedStyle->parentName();namedStyle->dump();
+                debugSheetsStyle << "Compose found namedstyle:" << static_cast<const NamedStyle *>(subStyles[i].data())->name << namedStyle->parentName();
+                namedStyle->dump();
                 break;
             }
         }
@@ -579,14 +594,15 @@ Style StyleStorage::composeStyle(const QList<SharedSubStyle>& subStyles) const
     // get attributes from parent styles
     if (namedStyle) {
         // first, load the attributes of the parent style(s)
-        QList<CustomStyle*> parentStyles;
+        QList<CustomStyle *> parentStyles;
         CustomStyle *parentStyle = styleManager()->style(namedStyle->parentName());
-        debugSheetsStyle <<"StyleStorage:" << namedStyle->name() <<"'s parent =" << namedStyle->parentName();
+        debugSheetsStyle << "StyleStorage:" << namedStyle->name() << "'s parent =" << namedStyle->parentName();
         while (parentStyle) {
             if (namedStyle->name() == parentStyle->name()) {
                 // FIXME: This should not happen
                 // Afaics sometimes break because LO saves default style explicitly
-                errorSheetsStyle << "StyleStorage:" << "Style" << namedStyle->name() << "has itself as parent";
+                errorSheetsStyle << "StyleStorage:"
+                                 << "Style" << namedStyle->name() << "has itself as parent";
                 parentStyle = nullptr;
                 break;
             }
@@ -619,7 +635,7 @@ Style StyleStorage::composeStyle(const QList<SharedSubStyle>& subStyles) const
             // treated above
         } else {
             // insert the substyle
-//             debugSheetsStyle <<"StyleStorage: inserting" << subStyles[i]->debugData();
+            //             debugSheetsStyle <<"StyleStorage: inserting" << subStyles[i]->debugData();
             style.insertSubStyle(subStyles[i]);
             // not the default anymore
             style.clearAttribute(Style::DefaultStyleKey);
@@ -637,12 +653,12 @@ Style StyleStorage::composeStyle(const QList<SharedSubStyle>& subStyles) const
     return style;
 }
 
-StyleManager* StyleStorage::styleManager() const
+StyleManager *StyleStorage::styleManager() const
 {
     return d->map->styleManager();
 }
 
-const QVector< QPair<QRectF, SharedSubStyle> > &StyleStorage::undoData() const
+const QVector<QPair<QRectF, SharedSubStyle>> &StyleStorage::undoData() const
 {
     return d->m_undoData;
 }
@@ -652,6 +668,3 @@ void StyleStorage::resetUndo()
     d->m_undoData.clear();
     storeUndo(false);
 }
-
-
-

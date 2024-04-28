@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &EPUBEXPORT_LOG();
 
 #define debugEpub qCDebug(EPUBEXPORT_LOG)

@@ -20,14 +20,13 @@ public:
 class KoCopyColorConversionTransformationFactory : public KoColorConversionTransformationFactory
 {
 public:
-    KoCopyColorConversionTransformationFactory(const QString& _colorModelId, const QString& _depthId, const QString& _profileName);
-    KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
-                                                                       const KoColorSpace* dstColorSpace,
-                                                                       KoColorConversionTransformation::Intent renderingIntent,
-                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const override;
+    KoCopyColorConversionTransformationFactory(const QString &_colorModelId, const QString &_depthId, const QString &_profileName);
+    KoColorConversionTransformation *createColorTransformation(const KoColorSpace *srcColorSpace,
+                                                               const KoColorSpace *dstColorSpace,
+                                                               KoColorConversionTransformation::Intent renderingIntent,
+                                                               KoColorConversionTransformation::ConversionFlags conversionFlags) const override;
     bool conserveColorInformation() const override;
     bool conserveDynamicRange() const override;
 };
-
 
 #endif

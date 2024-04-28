@@ -8,11 +8,11 @@
 #ifndef _WMFSTACK_H_
 #define _WMFSTACK_H_
 
-#include <QPen>
+#include <QBrush>
 #include <QColor>
 #include <QFont>
-#include <QBrush>
 #include <QImage>
+#include <QPen>
 
 /**
    Namespace for Windows Metafile (WMF) classes
@@ -30,25 +30,27 @@ class WmfDeviceContext;
 class KoWmfHandle
 {
 public:
-    virtual ~KoWmfHandle() {}
+    virtual ~KoWmfHandle()
+    {
+    }
     virtual void apply(WmfDeviceContext *) = 0;
 };
 
-class KoWmfBrushHandle: public KoWmfHandle
+class KoWmfBrushHandle : public KoWmfHandle
 {
 public:
     void apply(WmfDeviceContext *) override;
     QBrush brush;
 };
 
-class KoWmfPenHandle: public KoWmfHandle
+class KoWmfPenHandle : public KoWmfHandle
 {
 public:
     void apply(WmfDeviceContext *) override;
     QPen pen;
 };
 
-class KoWmfPatternBrushHandle: public KoWmfHandle
+class KoWmfPatternBrushHandle : public KoWmfHandle
 {
 public:
     void apply(WmfDeviceContext *) override;
@@ -56,17 +58,15 @@ public:
     QImage image;
 };
 
-class KoWmfFontHandle: public KoWmfHandle
+class KoWmfFontHandle : public KoWmfHandle
 {
 public:
     void apply(WmfDeviceContext *) override;
     QFont font;
     int escapement;
     int orientation;
-    int height;                 // Can be negative. In 'font' above, we store the absolute value.
+    int height; // Can be negative. In 'font' above, we store the absolute value.
 };
-
-
 }
 
 #endif

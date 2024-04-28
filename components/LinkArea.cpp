@@ -16,13 +16,14 @@ class LinkArea::Private
 {
 public:
     Private()
-        : document{ nullptr }
+        : document{nullptr}
         , controllerZoom(1.f)
         , clickInProgress(false)
         , wiggleFactor(2)
-    { }
+    {
+    }
 
-    Calligra::Components::Document* document;
+    Calligra::Components::Document *document;
     float controllerZoom;
 
     bool clickInProgress;
@@ -30,7 +31,7 @@ public:
     int wiggleFactor;
 };
 
-LinkArea::LinkArea(QQuickItem* parent)
+LinkArea::LinkArea(QQuickItem *parent)
     : QQuickItem(parent)
     , d(new Private)
 {
@@ -42,53 +43,51 @@ LinkArea::~LinkArea()
     delete d;
 }
 
-Calligra::Components::Document* LinkArea::document() const
+Calligra::Components::Document *LinkArea::document() const
 {
     return d->document;
 }
 
-void LinkArea::setDocument(Calligra::Components::Document* newDocument)
+void LinkArea::setDocument(Calligra::Components::Document *newDocument)
 {
-    if( newDocument != d->document )
-    {
+    if (newDocument != d->document) {
         d->document = newDocument;
         emit documentChanged();
     }
 }
 
-void LinkArea::mousePressEvent(QMouseEvent* event)
+void LinkArea::mousePressEvent(QMouseEvent *event)
 {
     d->clickInProgress = true;
     d->clickLocation = event->pos();
 }
 
-void LinkArea::mouseReleaseEvent(QMouseEvent* event)
+void LinkArea::mouseReleaseEvent(QMouseEvent *event)
 {
-    if(!d->clickInProgress)
+    if (!d->clickInProgress)
         return;
     d->clickInProgress = false;
 
     // Don't activate anything if the finger has moved too far
     QRect rect((d->clickLocation - QPointF(d->wiggleFactor, d->wiggleFactor)).toPoint(), QSize(d->wiggleFactor * 2, d->wiggleFactor * 2));
-    if(!rect.contains(event->pos())) {
+    if (!rect.contains(event->pos())) {
         return;
     }
 
     QPoint pos = event->pos() / d->controllerZoom;
     QUrl url;
-    if( d->document )
-        url = d->document->urlAtPoint( pos );
+    if (d->document)
+        url = d->document->urlAtPoint(pos);
 
-    if(url.isEmpty()) {
+    if (url.isEmpty()) {
         emit clicked();
-    }
-    else {
+    } else {
         emit linkClicked(url);
     }
     event->accept();
 }
 
-void LinkArea::mouseDoubleClickEvent(QMouseEvent* event)
+void LinkArea::mouseDoubleClickEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
     emit doubleClicked();
@@ -101,8 +100,7 @@ float LinkArea::controllerZoom() const
 
 void LinkArea::setControllerZoom(float newZoom)
 {
-    if(d->controllerZoom != newZoom)
-    {
+    if (d->controllerZoom != newZoom) {
         d->controllerZoom = newZoom;
         emit controllerZoomChanged();
     }

@@ -8,11 +8,11 @@
 #ifndef KWANCHORINGPROPERTIES_H
 #define KWANCHORINGPROPERTIES_H
 
-#include <ui_KWAnchoringProperties.h>
 #include <dialogs/KWShapeConfigFactory.h>
+#include <ui_KWAnchoringProperties.h>
 
-#include <KoShapeConfigWidgetBase.h>
 #include <KoShapeAnchor.h>
+#include <KoShapeConfigWidgetBase.h>
 
 #include <QList>
 #include <QPointF>
@@ -39,7 +39,8 @@ public:
     void save(KUndo2Command *command, KWCanvas *canvas);
 
     /// reimplemented
-    bool showOnShapeCreate() override {
+    bool showOnShapeCreate() override
+    {
         return true;
     }
 
@@ -54,7 +55,6 @@ private:
     static const int vertRels[4][20];
 
     static const int horizRels[4][20];
-
 
     Ui::KWAnchoringProperties widget;
     FrameConfigSharedState *m_state;

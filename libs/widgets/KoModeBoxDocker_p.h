@@ -23,7 +23,10 @@ public:
     explicit KoModeBoxDocker(KoModeBox *modeBox);
 
     /// reimplemented from KoCanvasObserverBase
-    QString observerName() const override { return QStringLiteral("KoModeBoxDocker"); }
+    QString observerName() const override
+    {
+        return QStringLiteral("KoModeBoxDocker");
+    }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 

@@ -4,24 +4,23 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef TABLEOFCONTENTSSTYLECONFIGURE_H
 #define TABLEOFCONTENTSSTYLECONFIGURE_H
 
-#include "TableOfContentsStyleModel.h"
 #include "TableOfContentsStyleDelegate.h"
+#include "TableOfContentsStyleModel.h"
 
 #include <QDialog>
 
-namespace Ui {
-    class TableOfContentsStyleConfigure;
+namespace Ui
+{
+class TableOfContentsStyleConfigure;
 }
 
 class QStandardItemModel;
 class KoStyleManager;
 class TableOfContentsStyleModel;
 class KoTableOfContentsGeneratorInfo;
-
 
 class TableOfContentsStyleConfigure : public QDialog
 {

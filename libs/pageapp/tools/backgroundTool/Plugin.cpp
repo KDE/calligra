@@ -11,13 +11,12 @@
 
 #include <KPluginFactory>
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kopabackgroundtool.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kopabackgroundtool.json", registerPlugin<Plugin>();)
 
-Plugin::Plugin( QObject* parent, const QVariantList& )
-    : QObject( parent )
+Plugin::Plugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
 {
-    KoToolRegistry::instance()->add( new KoPABackgroundToolFactory() );
+    KoToolRegistry::instance()->add(new KoPABackgroundToolFactory());
 }
 
 #include <Plugin.moc>

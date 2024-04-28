@@ -13,23 +13,23 @@
 class CQCanvasControllerItem : public QDeclarativeItem
 {
     Q_OBJECT
-    Q_PROPERTY(QDeclarativeItem* canvas READ canvas WRITE setCanvas NOTIFY canvasChanged)
-    Q_PROPERTY(QDeclarativeItem* flickable READ flickable WRITE setFlickable NOTIFY flickableChanged)
+    Q_PROPERTY(QDeclarativeItem *canvas READ canvas WRITE setCanvas NOTIFY canvasChanged)
+    Q_PROPERTY(QDeclarativeItem *flickable READ flickable WRITE setFlickable NOTIFY flickableChanged)
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
     Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
     Q_PROPERTY(qreal minimumZoom READ minimumZoom WRITE setMinimumZoom NOTIFY minimumZoomChanged)
     Q_PROPERTY(qreal maximumZoom READ maximumZoom WRITE setMaximumZoom NOTIFY maximumZoomChanged)
 public:
-    explicit CQCanvasControllerItem(QDeclarativeItem* parent = 0);
+    explicit CQCanvasControllerItem(QDeclarativeItem *parent = 0);
     ~CQCanvasControllerItem();
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget* );
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
 
-    QDeclarativeItem* canvas() const;
-    void setCanvas(QDeclarativeItem* canvas);
+    QDeclarativeItem *canvas() const;
+    void setCanvas(QDeclarativeItem *canvas);
 
-    QDeclarativeItem* flickable() const;
-    void setFlickable(QDeclarativeItem* item);
+    QDeclarativeItem *flickable() const;
+    void setFlickable(QDeclarativeItem *item);
 
     QSize documentSize() const;
 
@@ -51,7 +51,7 @@ public Q_SLOTS:
     void beginZoomGesture();
     void endZoomGesture();
 
-    void zoomBy(qreal amount, const QPointF& center = QPointF());
+    void zoomBy(qreal amount, const QPointF &center = QPointF());
 
     void fitToWidth(qreal width);
 
@@ -67,17 +67,17 @@ Q_SIGNALS:
     void movingFastChanged();
 
 protected:
-    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
-    virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value);
+    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 private Q_SLOTS:
-    void updateDocumentSize(const QSize& size);
-    void updateDocumentPosition(const QPoint& pos);
+    void updateDocumentSize(const QSize &size);
+    void updateDocumentPosition(const QPoint &pos);
     void canvasControllerChanged();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // CQCANVASCONTROLLERITEM_H

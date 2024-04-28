@@ -7,8 +7,8 @@
 #ifndef CALLIGRA_SHEETS_PASTE_STRATEGY
 #define CALLIGRA_SHEETS_PASTE_STRATEGY
 
-#include "SelectionStrategy.h"
 #include "../sheets_ui_export.h"
+#include "SelectionStrategy.h"
 
 namespace Calligra
 {
@@ -35,11 +35,11 @@ public:
      */
     ~PasteStrategy() override;
 
-    KUndo2Command* createCommand() override;
+    KUndo2Command *createCommand() override;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

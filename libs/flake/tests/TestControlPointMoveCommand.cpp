@@ -5,9 +5,9 @@
 */
 #include "TestControlPointMoveCommand.h"
 
-#include <QPainterPath>
-#include "KoPathShape.h"
 #include "KoPathControlPointMoveCommand.h"
+#include "KoPathShape.h"
+#include <QPainterPath>
 
 #include <QTest>
 

@@ -8,8 +8,8 @@
 
 #include <QGlobalStatic>
 
-#include <KoColorSpaceRegistry.h>
 #include <KoChannelInfo.h>
+#include <KoColorSpaceRegistry.h>
 
 Q_GLOBAL_STATIC(KoDumbColorDisplayRenderer, s_instance)
 
@@ -49,7 +49,7 @@ void KoDumbColorDisplayRenderer::getHsv(const KoColor &srcColor, int *h, int *s,
     qcolor.getHsv(h, s, v, a);
 }
 
-KoColorDisplayRendererInterface* KoDumbColorDisplayRenderer::instance()
+KoColorDisplayRendererInterface *KoDumbColorDisplayRenderer::instance()
 {
     return s_instance;
 }

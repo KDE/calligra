@@ -33,21 +33,18 @@ public:
     /// @return the list of recent files with their paths
     QStringList recentFiles() const;
 
-
 Q_SIGNALS:
 
     void recentFilesListChanged();
 
 public Q_SLOTS:
 
-
     /// add the given filename to the front of the list of recent filenames
     void addRecent(const QString &_url);
 
 private:
     class Private;
-    Private* d;
-
+    Private *d;
 };
 
 #endif // FILEMANAGER_H

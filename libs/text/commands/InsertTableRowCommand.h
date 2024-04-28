@@ -6,8 +6,8 @@
 #ifndef INSERTTABLEROWCOMMAND_H
 #define INSERTTABLEROWCOMMAND_H
 
-#include <kundo2command.h>
 #include <KoTableRowStyle.h>
+#include <kundo2command.h>
 
 class KoTextEditor;
 class QTextTable;
@@ -15,7 +15,6 @@ class QTextTable;
 class InsertTableRowCommand : public KUndo2Command
 {
 public:
-
     InsertTableRowCommand(KoTextEditor *te, QTextTable *t, bool below, KUndo2Command *parent = 0);
 
     void undo() override;

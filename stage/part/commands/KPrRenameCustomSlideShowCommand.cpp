@@ -1,16 +1,20 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ * SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #include "KPrRenameCustomSlideShowCommand.h"
 
-#include "KPrDocument.h"
-#include "KPrCustomSlideShowsModel.h"
 #include "KPrCustomSlideShows.h"
+#include "KPrCustomSlideShowsModel.h"
+#include "KPrDocument.h"
 
-KPrRenameCustomSlideShowCommand::KPrRenameCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &oldName, const QString &newName, KUndo2Command *parent)
+KPrRenameCustomSlideShowCommand::KPrRenameCustomSlideShowCommand(KPrDocument *doc,
+                                                                 KPrCustomSlideShowsModel *model,
+                                                                 const QString &oldName,
+                                                                 const QString &newName,
+                                                                 KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_doc(doc)
     , m_model(model)

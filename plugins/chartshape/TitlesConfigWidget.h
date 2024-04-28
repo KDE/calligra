@@ -7,23 +7,20 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef KOCHART_TITLESCONFIGWIDGET
 #define KOCHART_TITLESCONFIGWIDGET
 
-
-#include "ConfigWidgetBase.h"
 #include "ChartShape.h"
+#include "ConfigWidgetBase.h"
 #include "ui_TitlesConfigWidget.h"
-
 
 class KoShape;
 class QAction;
 
 namespace KChart
 {
-    class Position;
-    class CartesianAxis;
+class Position;
+class CartesianAxis;
 }
 
 namespace KoChart
@@ -45,17 +42,19 @@ public:
     QAction *createAction();
 
     /// reimplemented
-    bool showOnShapeCreate() override { return true; }
+    bool showOnShapeCreate() override
+    {
+        return true;
+    }
 
 public Q_SLOTS:
     void updateData() override;
 
 private:
     friend ChartTool;
-    Ui::TitlesConfigWidget  ui;
+    Ui::TitlesConfigWidget ui;
 };
 
-}  // namespace KoChart
-
+} // namespace KoChart
 
 #endif // KOCHART_TITLESCONFIGWIDGET

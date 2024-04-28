@@ -7,17 +7,17 @@
 
 #include "KoTextPaste.h"
 
-#include <KoTextDocument.h>
-#include <KoOdfReadStore.h>
-#include <KoOdfLoadingContext.h>
-#include <KoShapeLoadingContext.h>
-#include <KoShapeController.h>
-#include <KoShape.h>
 #include <KoCanvasBase.h>
-#include <KoTextEditor.h>
-#include <opendocument/KoTextLoader.h>
-#include <KoTextSharedLoadingData.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfReadStore.h>
 #include <KoSectionModel.h>
+#include <KoShape.h>
+#include <KoShapeController.h>
+#include <KoShapeLoadingContext.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
+#include <KoTextSharedLoadingData.h>
+#include <opendocument/KoTextLoader.h>
 
 #include "TextDebug.h"
 #ifdef SHOULD_BUILD_RDF
@@ -28,9 +28,7 @@
 class Q_DECL_HIDDEN KoTextPaste::Private
 {
 public:
-    Private(KoTextEditor *editor, KoShapeController *shapeCont, QSharedPointer<Soprano::Model> _rdfModel,
-        KoCanvasBase *c, KUndo2Command *cmd
-    )
+    Private(KoTextEditor *editor, KoShapeController *shapeCont, QSharedPointer<Soprano::Model> _rdfModel, KoCanvasBase *c, KUndo2Command *cmd)
         : editor(editor)
         , resourceManager(shapeCont->resourceManager())
         , rdfModel(_rdfModel)
@@ -49,7 +47,7 @@ public:
 };
 
 KoTextPaste::KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, QSharedPointer<Soprano::Model> rdfModel, KoCanvasBase *c, KUndo2Command *cmd)
-        : d(new Private(editor, shapeController, rdfModel, c, cmd))
+    : d(new Private(editor, shapeController, rdfModel, c, cmd))
 {
 }
 
@@ -69,15 +67,14 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
 
     debugText << "text paste";
     // load the paste directly into the editor's cursor -- which breaks encapsulation
-    loader.loadBody(body, *d->editor->cursor(), KoTextLoader::PasteMode);   // now let's load the body from the ODF KoXmlElement.
+    loader.loadBody(body, *d->editor->cursor(), KoTextLoader::PasteMode); // now let's load the body from the ODF KoXmlElement.
 
-//     context.sectionModel()->invalidate(); FIXME!!
+    //     context.sectionModel()->invalidate(); FIXME!!
 
 #ifdef SHOULD_BUILD_RDF
     debugText << "text paste, rdf handling" << d->rdfModel;
     // RDF: Grab RDF metadata from ODF file if present & load it into rdfModel
-    if (d->rdfModel)
-    {
+    if (d->rdfModel) {
         QSharedPointer<Soprano::Model> tmpmodel(Soprano::createModel());
         ok = KoTextRdfCore::loadManifest(odfStore.store(), tmpmodel);
         debugText << "ok:" << ok << " tmpmodel.sz:" << tmpmodel->statementCount();

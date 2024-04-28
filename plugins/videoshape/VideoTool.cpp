@@ -6,25 +6,25 @@
 
 #include "VideoTool.h"
 
-#include "ui_VideoToolWidget.h"
-#include "VideoShape.h"
-#include "VideoCollection.h"
-#include "SelectVideoWidget.h"
 #include "ChangeVideoCommand.h"
 #include "FullScreenPlayer.h"
+#include "SelectVideoWidget.h"
+#include "VideoCollection.h"
 #include "VideoData.h"
+#include "VideoShape.h"
+#include "ui_VideoToolWidget.h"
 
-#include <KoIcon.h>
 #include <KoCanvasBase.h>
+#include <KoIcon.h>
 #include <KoViewConverter.h>
 
 #include <KoDialog.h>
 
-#include <QUrl>
-#include <QPointer>
 #include <QPainter>
+#include <QPointer>
+#include <QUrl>
 
-class VideoToolUI: public QWidget, public Ui::VideoTool
+class VideoToolUI : public QWidget, public Ui::VideoTool
 {
 public:
     VideoToolUI()
@@ -35,18 +35,15 @@ public:
     }
 };
 
-
 VideoTool::VideoTool(KoCanvasBase *canvas)
-    : KoToolBase(canvas),
-      m_videoToolUI(0),
-      m_videoShape(0)
+    : KoToolBase(canvas)
+    , m_videoToolUI(0)
+    , m_videoShape(0)
 {
-
 }
 
 VideoTool::~VideoTool()
 {
-
 }
 
 void VideoTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
@@ -54,7 +51,7 @@ void VideoTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &s
     Q_UNUSED(toolActivation);
 
     foreach (KoShape *shape, shapes) {
-        if ((m_videoShape = dynamic_cast<VideoShape*>(shape)))
+        if ((m_videoShape = dynamic_cast<VideoShape *>(shape)))
             break;
     }
 
@@ -78,7 +75,7 @@ void VideoTool::mouseMoveEvent(KoPointerEvent *event)
 
 void VideoTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-        Q_UNUSED(event);
+    Q_UNUSED(event);
 }
 
 void VideoTool::paint(QPainter &painter, const KoViewConverter &converter)
@@ -123,7 +120,7 @@ void VideoTool::changeUrlPressed()
 
 void VideoTool::play()
 {
-    VideoData *videoData = qobject_cast<VideoData*>(m_videoShape->userData());
+    VideoData *videoData = qobject_cast<VideoData *>(m_videoShape->userData());
     Q_ASSERT(videoData);
     new FullScreenPlayer(videoData->playableUrl());
 }

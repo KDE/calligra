@@ -12,13 +12,14 @@
 
 class CSVFilter : public KoFilter
 {
-
     Q_OBJECT
 
 public:
-    CSVFilter(QObject* parent, const QVariantList&);
-    ~CSVFilter() override {}
+    CSVFilter(QObject *parent, const QVariantList &);
+    ~CSVFilter() override
+    {
+    }
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };
 #endif // CSVIMPORT_H

@@ -21,41 +21,36 @@
 #include "ValueConverter.h"
 #include "ValueParser.h"
 
-#include <QTimer>
 #include <KLocalizedString>
+#include <QTimer>
 
 using namespace Calligra::Sheets;
 
 class Q_DECL_HIDDEN MapBase::Private
 {
 public:
-
     bool isLoading;
     int tableId;
     /**
      * List of all sheets in this map.
      */
     QList<SheetBase *> lstSheets, lstDeletedSheets;
-    QMap<SheetBase *, int> lstDeletedPos;   // original positions of deleted sheets - this only works correctly if we restore in reverse order
+    QMap<SheetBase *, int> lstDeletedPos; // original positions of deleted sheets - this only works correctly if we restore in reverse order
 
-    CalculationSettings* calculationSettings;
-    ValueCalc* calc;
-    ValueConverter* converter;
-    ValueParser* parser;
+    CalculationSettings *calculationSettings;
+    ValueCalc *calc;
+    ValueConverter *converter;
+    ValueParser *parser;
 
-    DependencyManager* dependencyManager;
-    NamedAreaManager* namedAreaManager;
-    RecalcManager* recalcManager;
+    DependencyManager *dependencyManager;
+    NamedAreaManager *namedAreaManager;
+    RecalcManager *recalcManager;
 
-    QList<Damage*> damages;
+    QList<Damage *> damages;
 };
 
-
-
-
-
-MapBase::MapBase() :
-    QObject()
+MapBase::MapBase()
+    : QObject()
     , d(new Private)
 {
     d->isLoading = false;
@@ -79,9 +74,7 @@ MapBase::MapBase() :
     connect(this, &MapBase::sheetRevived, d->dependencyManager, &DependencyManager::addSheet);
     connect(this, &MapBase::sheetRevived, d->recalcManager, &RecalcManager::addSheet);
 
-    connect(d->namedAreaManager, &NamedAreaManager::namedAreaModified,
-            d->dependencyManager, &DependencyManager::namedAreaModified);
-
+    connect(d->namedAreaManager, &NamedAreaManager::namedAreaModified, d->dependencyManager, &DependencyManager::namedAreaModified);
 }
 
 MapBase::~MapBase()
@@ -104,8 +97,6 @@ MapBase::~MapBase()
     delete d;
 }
 
-
-
 SheetBase *MapBase::sheet(int index) const
 {
     return d->lstSheets.value(index);
@@ -116,7 +107,7 @@ int MapBase::indexOf(SheetBase *sheet) const
     return d->lstSheets.indexOf(sheet);
 }
 
-QList<SheetBase *>& MapBase::sheetList() const
+QList<SheetBase *> &MapBase::sheetList() const
 {
     return d->lstSheets;
 }
@@ -126,23 +117,22 @@ int MapBase::count() const
     return d->lstSheets.count();
 }
 
-
-SheetBase *MapBase::findSheet(const QString & _name) const
+SheetBase *MapBase::findSheet(const QString &_name) const
 {
-    for (SheetBase* sheet : d->lstSheets) {
+    for (SheetBase *sheet : d->lstSheets) {
         if (_name.toLower() == sheet->sheetName().toLower())
             return sheet;
     }
     return nullptr;
 }
 
-void MapBase::moveSheet(const QString & _from, const QString & _to, bool _before)
+void MapBase::moveSheet(const QString &_from, const QString &_to, bool _before)
 {
-    SheetBase* sheetfrom = findSheet(_from);
-    SheetBase* sheetto = findSheet(_to);
+    SheetBase *sheetfrom = findSheet(_from);
+    SheetBase *sheetto = findSheet(_to);
 
-    int from = d->lstSheets.indexOf(sheetfrom) ;
-    int to = d->lstSheets.indexOf(sheetto) ;
+    int from = d->lstSheets.indexOf(sheetfrom);
+    int to = d->lstSheets.indexOf(sheetto);
     if (!_before)
         ++to;
 
@@ -158,44 +148,45 @@ void MapBase::moveSheet(const QString & _from, const QString & _to, bool _before
     }
 }
 
-
 SheetBase *MapBase::nextSheet(SheetBase *currentSheet) const
 {
     bool returnNext = false;
-    for (SheetBase* sheet : d->lstSheets) {
-        if (returnNext) return sheet;
-        if (sheet == currentSheet) returnNext = true;
+    for (SheetBase *sheet : d->lstSheets) {
+        if (returnNext)
+            return sheet;
+        if (sheet == currentSheet)
+            returnNext = true;
     }
     // If returnNext is set here, it means that currentSheet was last in the list.
-    if (returnNext) return currentSheet;
+    if (returnNext)
+        return currentSheet;
     return nullptr;
 }
 
-SheetBase * MapBase::previousSheet(SheetBase *currentSheet) const
+SheetBase *MapBase::previousSheet(SheetBase *currentSheet) const
 {
     SheetBase *prev = nullptr;
-    for (SheetBase* sheet : d->lstSheets) {
+    for (SheetBase *sheet : d->lstSheets) {
         if (sheet == currentSheet) {
-            if (prev) return prev;
-            return currentSheet;  // this means that currentSheet was first in the list
+            if (prev)
+                return prev;
+            return currentSheet; // this means that currentSheet was first in the list
         }
         prev = sheet;
     }
     return nullptr;
 }
 
-SheetBase* MapBase::createSheet(const QString& name)
+SheetBase *MapBase::createSheet(const QString &name)
 {
     QString sheetName(i18n("Sheet%1", d->tableId++));
-    if ( !name.isEmpty() )
+    if (!name.isEmpty())
         sheetName = name;
-    SheetBase* sheet = new SheetBase(this, sheetName);
+    SheetBase *sheet = new SheetBase(this, sheetName);
     return sheet;
 }
 
-
-
-SheetBase *MapBase::addNewSheet(const QString& name)
+SheetBase *MapBase::addNewSheet(const QString &name)
 {
     SheetBase *t = createSheet(name);
     addSheet(t);
@@ -208,17 +199,18 @@ void MapBase::addSheet(SheetBase *_sheet)
     emit sheetAdded(_sheet);
 }
 
-void MapBase::removeSheet(SheetBase* sheet)
+void MapBase::removeSheet(SheetBase *sheet)
 {
     int pos = d->lstSheets.indexOf(sheet);
-    if (pos >= 0) d->lstDeletedPos[sheet] = pos;
+    if (pos >= 0)
+        d->lstDeletedPos[sheet] = pos;
     d->lstSheets.removeAll(sheet);
     d->lstDeletedSheets.append(sheet);
     namedAreaManager()->remove(sheet);
     emit sheetRemoved(sheet);
 }
 
-void MapBase::reviveSheet(SheetBase* sheet)
+void MapBase::reviveSheet(SheetBase *sheet)
 {
     d->lstDeletedSheets.removeAll(sheet);
     if (d->lstDeletedPos.contains(sheet)) {
@@ -265,61 +257,56 @@ QStringList MapBase::hiddenSheets() const
     return result;
 }
 
-
-
-ValueParser* MapBase::parser() const
+ValueParser *MapBase::parser() const
 {
     return d->parser;
 }
 
-ValueConverter* MapBase::converter() const
+ValueConverter *MapBase::converter() const
 {
     return d->converter;
 }
 
-ValueCalc* MapBase::calc() const
+ValueCalc *MapBase::calc() const
 {
     return d->calc;
 }
 
-
-DependencyManager* MapBase::dependencyManager() const
+DependencyManager *MapBase::dependencyManager() const
 {
     return d->dependencyManager;
 }
 
-NamedAreaManager* MapBase::namedAreaManager() const
+NamedAreaManager *MapBase::namedAreaManager() const
 {
     return d->namedAreaManager;
 }
 
-RecalcManager* MapBase::recalcManager() const
+RecalcManager *MapBase::recalcManager() const
 {
     return d->recalcManager;
 }
 
-CalculationSettings* MapBase::calculationSettings() const
+CalculationSettings *MapBase::calculationSettings() const
 {
     return d->calculationSettings;
 }
 
-
-
-void MapBase::addDamage(Damage* damage)
+void MapBase::addDamage(Damage *damage)
 {
     // Do not create a new Damage, if we are in loading process. Check for it before
     // calling this function. This prevents unnecessary memory allocations (new).
     // see FIXME in Sheet::setSheetName().
-//     Q_ASSERT(!isLoading());
+    //     Q_ASSERT(!isLoading());
     Q_CHECK_PTR(damage);
 
 #ifndef NDEBUG
     if (damage->type() == Damage::Cell) {
-        debugSheetsDamage << "Adding\t" << *static_cast<CellDamage*>(damage);
+        debugSheetsDamage << "Adding\t" << *static_cast<CellDamage *>(damage);
     } else if (damage->type() == Damage::Sheet) {
-        debugSheetsDamage << "Adding\t" << *static_cast<SheetDamage*>(damage);
+        debugSheetsDamage << "Adding\t" << *static_cast<SheetDamage *>(damage);
     } else if (damage->type() == Damage::Selection) {
-        debugSheetsDamage << "Adding\t" << *static_cast<SelectionDamage*>(damage);
+        debugSheetsDamage << "Adding\t" << *static_cast<SelectionDamage *>(damage);
     } else {
         debugSheetsDamage << "Adding\t" << *damage;
     }
@@ -335,29 +322,29 @@ void MapBase::addDamage(Damage* damage)
 void MapBase::flushDamages()
 {
     // Copy the damages to process. This allows new damages while processing.
-    QList<Damage*> damages = d->damages;
+    QList<Damage *> damages = d->damages;
     d->damages.clear();
     emit damagesFlushed(damages);
     qDeleteAll(damages);
 }
 
-void MapBase::handleDamages(const QList<Damage*>& damages)
+void MapBase::handleDamages(const QList<Damage *> &damages)
 {
     Region formulaChangedRegion;
     Region namedAreaChangedRegion;
     Region valueChangedRegion;
     WorkbookDamage::Changes workbookChanges = WorkbookDamage::None;
-    bool allValues = false, allFormulas = false;   // These are for improved code readability
+    bool allValues = false, allFormulas = false; // These are for improved code readability
 
-    QList<Damage*>::ConstIterator end(damages.end());
-    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
-        Damage* damage = *it;
+    QList<Damage *>::ConstIterator end(damages.end());
+    for (QList<Damage *>::ConstIterator it = damages.begin(); it != end; ++it) {
+        Damage *damage = *it;
 
         if (damage->type() == Damage::Cell) {
-            CellDamage* cellDamage = static_cast<CellDamage*>(damage);
+            CellDamage *cellDamage = static_cast<CellDamage *>(damage);
             debugSheetsDamage << "Processing\t" << *cellDamage;
-            SheetBase* const damagedSheet = cellDamage->sheet();
-            const Region& region = cellDamage->region();
+            SheetBase *const damagedSheet = cellDamage->sheet();
+            const Region &region = cellDamage->region();
             const CellDamage::Changes changes = cellDamage->changes();
 
             if (!allValues) {
@@ -374,17 +361,16 @@ void MapBase::handleDamages(const QList<Damage*>& damages)
         }
 
         if (damage->type() == Damage::Sheet) {
-            SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
+            SheetDamage *sheetDamage = static_cast<SheetDamage *>(damage);
             debugSheetsDamage << "Processing\t" << *sheetDamage;
-//             SheetBase* damagedSheet = sheetDamage->sheet();
+            //             SheetBase* damagedSheet = sheetDamage->sheet();
 
-            if (sheetDamage->changes() & SheetDamage::PropertiesChanged) {
-            }
+            if (sheetDamage->changes() & SheetDamage::PropertiesChanged) { }
             continue;
         }
 
         if (damage->type() == Damage::Workbook) {
-            WorkbookDamage* workbookDamage = static_cast<WorkbookDamage*>(damage);
+            WorkbookDamage *workbookDamage = static_cast<WorkbookDamage *>(damage);
             debugSheetsDamage << "Processing\t" << *damage;
             const WorkbookDamage::Changes changes = workbookDamage->changes();
 
@@ -395,7 +381,7 @@ void MapBase::handleDamages(const QList<Damage*>& damages)
                 allValues = true;
             continue;
         }
-//         debugSheetsDamage <<"Unhandled\t" << *damage;
+        //         debugSheetsDamage <<"Unhandled\t" << *damage;
     }
 
     if (allFormulas) {
@@ -416,27 +402,26 @@ void MapBase::handleDamages(const QList<Damage*>& damages)
     }
 }
 
-
-
 bool MapBase::isLoading() const
 {
     return d->isLoading;
 }
 
-void MapBase::setLoading(bool l) {
+void MapBase::setLoading(bool l)
+{
     d->isLoading = l;
 }
 
-Region MapBase::regionFromName(const QString& expression, SheetBase* sheet) const
+Region MapBase::regionFromName(const QString &expression, SheetBase *sheet) const
 {
     Region res;
 
-    if (expression.isEmpty()) return res;
+    if (expression.isEmpty())
+        return res;
 
     // FIXME Stefan: Does not respect quoted names!
     QStringList substrings = expression.split(';');
     for (QString sRegion : substrings) {
-
         // check for a named area first
         const Region namedAreaRegion = namedAreaManager()->namedArea(sRegion);
         if (namedAreaRegion.isValid()) {
@@ -451,8 +436,8 @@ Region MapBase::regionFromName(const QString& expression, SheetBase* sheet) cons
             QString sUL = sRegion.left(delimiterPos);
             QString sLR = sRegion.mid(delimiterPos + 1);
 
-            SheetBase* firstSheet = filterSheetName(sUL);
-            SheetBase* lastSheet = filterSheetName(sLR);
+            SheetBase *firstSheet = filterSheetName(sUL);
+            SheetBase *lastSheet = filterSheetName(sLR);
             // TODO: lastSheet is silently ignored if it is different from firstSheet
 
             // Still has the sheet name separator?
@@ -478,11 +463,12 @@ Region MapBase::regionFromName(const QString& expression, SheetBase* sheet) cons
             }
         } else {
             // single cell
-            SheetBase* targetSheet = filterSheetName(sRegion);
+            SheetBase *targetSheet = filterSheetName(sRegion);
             // Still has the sheet name separator?
             if (sRegion.contains('!'))
                 return res;
-            if (!targetSheet) targetSheet = sheet;
+            if (!targetSheet)
+                targetSheet = sheet;
             Region::Point pt(sRegion);
             res.add(pt.pos(), targetSheet, pt.isColumnFixed(), pt.isRowFixed());
         }
@@ -492,9 +478,9 @@ Region MapBase::regionFromName(const QString& expression, SheetBase* sheet) cons
 }
 
 // get sheet name from a cell range string
-SheetBase* MapBase::filterSheetName(QString& sRegion) const
+SheetBase *MapBase::filterSheetName(QString &sRegion) const
 {
-    SheetBase* sheet = 0;
+    SheetBase *sheet = 0;
     int delimiterPos = sRegion.lastIndexOf('!');
     if (delimiterPos < 0)
         delimiterPos = sRegion.lastIndexOf('.');
@@ -502,7 +488,7 @@ SheetBase* MapBase::filterSheetName(QString& sRegion) const
         QString sheetName = sRegion.left(delimiterPos);
         sheet = findSheet(sheetName);
         // try again without apostrophes
-        while(!sheet && sheetName.count() > 2 && sheetName[0] == '\'' && sheetName[sheetName.count()-1] == '\'') {
+        while (!sheet && sheetName.count() > 2 && sheetName[0] == '\'' && sheetName[sheetName.count() - 1] == '\'') {
             sheetName = sheetName.mid(1, sheetName.count() - 2);
             sheet = findSheet(sheetName);
         }
@@ -513,8 +499,7 @@ SheetBase* MapBase::filterSheetName(QString& sRegion) const
     return sheet;
 }
 
-bool MapBase::isNamedArea (const QString &name) {
+bool MapBase::isNamedArea(const QString &name)
+{
     return namedAreaManager()->contains(name);
 }
-
-

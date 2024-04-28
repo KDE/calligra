@@ -10,24 +10,22 @@
 
 #include "KoSegmentGradient.h"
 
+#include <algorithm>
 #include <cfloat>
 #include <cmath>
-#include <algorithm>
 
+#include <QBuffer>
+#include <QByteArray>
+#include <QFile>
 #include <QImage>
 #include <QTextStream>
-#include <QFile>
-#include <QByteArray>
-#include <QBuffer>
 
-
-#include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoMixColorsOp.h"
 
 #include <DebugPigment.h>
 #include <KLocalizedString>
-
 
 KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::m_instance = 0;
 KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColorInterpolationStrategy::m_instance = 0;
@@ -39,7 +37,7 @@ KoGradientSegment::SineInterpolationStrategy *KoGradientSegment::SineInterpolati
 KoGradientSegment::SphereIncreasingInterpolationStrategy *KoGradientSegment::SphereIncreasingInterpolationStrategy::m_instance = 0;
 KoGradientSegment::SphereDecreasingInterpolationStrategy *KoGradientSegment::SphereDecreasingInterpolationStrategy::m_instance = 0;
 
-KoSegmentGradient::KoSegmentGradient(const QString& file)
+KoSegmentGradient::KoSegmentGradient(const QString &file)
     : KoAbstractGradient(file)
 {
 }
@@ -55,12 +53,12 @@ KoSegmentGradient::~KoSegmentGradient()
 KoSegmentGradient::KoSegmentGradient(const KoSegmentGradient &rhs)
     : KoAbstractGradient(rhs)
 {
-    foreach(KoGradientSegment *segment, rhs.m_segments) {
+    foreach (KoGradientSegment *segment, rhs.m_segments) {
         pushSegment(new KoGradientSegment(*segment));
     }
 }
 
-KoAbstractGradient* KoSegmentGradient::clone() const
+KoAbstractGradient *KoSegmentGradient::clone() const
 {
     return new KoSegmentGradient(*this);
 }
@@ -117,10 +115,9 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
 
     dbgPigment << "Number of segments = " << numSegments;
 
-    const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 
     for (int i = 0; i < numSegments; i++) {
-
         QString segmentText = fileContent.readLine();
         QTextStream segmentFields(&segmentText);
         QStringList values = segmentText.split(' ');
@@ -157,10 +154,11 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
 
         KoColor rightColor(data, rgbColorSpace);
 
-        KoGradientSegment *segment = new KoGradientSegment(interpolationType, colorInterpolationType, leftOffset, middleOffset, rightOffset, leftColor, rightColor);
+        KoGradientSegment *segment =
+            new KoGradientSegment(interpolationType, colorInterpolationType, leftOffset, middleOffset, rightOffset, leftColor, rightColor);
         Q_CHECK_PTR(segment);
 
-        if (!segment -> isValid()) {
+        if (!segment->isValid()) {
             delete segment;
             return false;
         }
@@ -175,7 +173,6 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
     } else {
         return false;
     }
-
 }
 
 bool KoSegmentGradient::save()
@@ -199,7 +196,7 @@ bool KoSegmentGradient::saveToDevice(QIODevice *dev) const
     fileContent << "Name: " << name() << "\n";
     fileContent << m_segments.count() << "\n";
 
-    foreach(KoGradientSegment* segment, m_segments) {
+    foreach (KoGradientSegment *segment, m_segments) {
         fileContent << QString::number(segment->startOffset(), 'f') << " " << QString::number(segment->middleOffset(), 'f') << " "
                     << QString::number(segment->endOffset(), 'f') << " ";
 
@@ -207,8 +204,8 @@ bool KoSegmentGradient::saveToDevice(QIODevice *dev) const
         QColor endColor = segment->endColor().toQColor();
         fileContent << QString::number(startColor.redF(), 'f') << " " << QString::number(startColor.greenF(), 'f') << " "
                     << QString::number(startColor.blueF(), 'f') << " " << QString::number(startColor.alphaF(), 'f') << " ";
-        fileContent << QString::number(endColor.redF(), 'f') << " " << QString::number(endColor.greenF(), 'f') << " "
-                    << QString::number(endColor.blueF(), 'f') << " " << QString::number(endColor.alphaF(), 'f') << " ";
+        fileContent << QString::number(endColor.redF(), 'f') << " " << QString::number(endColor.greenF(), 'f') << " " << QString::number(endColor.blueF(), 'f')
+                    << " " << QString::number(endColor.alphaF(), 'f') << " ";
 
         fileContent << (int)segment->interpolation() << " " << (int)segment->colorInterpolation() << "\n";
     }
@@ -232,7 +229,7 @@ KoGradientSegment *KoSegmentGradient::segmentAt(qreal t) const
     return 0;
 }
 
-void KoSegmentGradient::colorAt(KoColor& dst, qreal t) const
+void KoSegmentGradient::colorAt(KoColor &dst, qreal t) const
 {
     const KoGradientSegment *segment = segmentAt(t);
     Q_ASSERT(segment != 0);
@@ -242,16 +239,16 @@ void KoSegmentGradient::colorAt(KoColor& dst, qreal t) const
     }
 }
 
-QGradient* KoSegmentGradient::toQGradient() const
+QGradient *KoSegmentGradient::toQGradient() const
 {
-    QGradient* gradient = new QLinearGradient();
+    QGradient *gradient = new QLinearGradient();
 
     QColor color;
-    foreach(KoGradientSegment* segment, m_segments) {
+    foreach (KoGradientSegment *segment, m_segments) {
         segment->startColor().toQColor(&color);
-        gradient->setColorAt(segment->startOffset() , color);
+        gradient->setColorAt(segment->startOffset(), color);
         segment->endColor().toQColor(&color);
-        gradient->setColorAt(segment->endOffset() , color);
+        gradient->setColorAt(segment->endOffset(), color);
     }
     return gradient;
 }
@@ -261,7 +258,13 @@ QString KoSegmentGradient::defaultFileExtension() const
     return QString(".ggr");
 }
 
-KoGradientSegment::KoGradientSegment(int interpolationType, int colorInterpolationType, qreal startOffset, qreal middleOffset, qreal endOffset, const KoColor& startColor, const KoColor& endColor)
+KoGradientSegment::KoGradientSegment(int interpolationType,
+                                     int colorInterpolationType,
+                                     qreal startOffset,
+                                     qreal middleOffset,
+                                     qreal endOffset,
+                                     const KoColor &startColor,
+                                     const KoColor &endColor)
 {
     m_interpolator = 0;
 
@@ -333,12 +336,12 @@ KoGradientSegment::KoGradientSegment(int interpolationType, int colorInterpolati
     m_endColor = endColor;
 }
 
-const KoColor& KoGradientSegment::startColor() const
+const KoColor &KoGradientSegment::startColor() const
 {
     return m_startColor;
 }
 
-const KoColor& KoGradientSegment::endColor() const
+const KoColor &KoGradientSegment::endColor() const
 {
     return m_endColor;
 }
@@ -438,7 +441,7 @@ void KoGradientSegment::setColorInterpolation(int colorInterpolationType)
     }
 }
 
-void KoGradientSegment::colorAt(KoColor& dst, qreal t) const
+void KoGradientSegment::colorAt(KoColor &dst, qreal t) const
 {
     Q_ASSERT(t > m_startOffset - DBL_EPSILON && t < m_endOffset + DBL_EPSILON);
 
@@ -453,7 +456,6 @@ void KoGradientSegment::colorAt(KoColor& dst, qreal t) const
     qreal colorT = m_interpolator->valueAt(segmentT, m_middleT);
 
     m_colorInterpolator->colorAt(dst, colorT, m_startColor, m_endColor);
-
 }
 
 bool KoGradientSegment::isValid() const
@@ -464,7 +466,10 @@ bool KoGradientSegment::isValid() const
 }
 
 KoGradientSegment::RGBColorInterpolationStrategy::RGBColorInterpolationStrategy()
-        : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8()), buffer(m_colorSpace), m_start(m_colorSpace), m_end(m_colorSpace)
+    : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
+    , buffer(m_colorSpace)
+    , m_start(m_colorSpace)
+    , m_end(m_colorSpace)
 {
 }
 
@@ -478,24 +483,23 @@ KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInt
     return m_instance;
 }
 
-void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const
+void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor &dst, qreal t, const KoColor &start, const KoColor &end) const
 {
-    
     KoColor startDummy, endDummy;
-    //hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
-    const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
-    //convert to the right colorspace for the start and end if we have our mixSpace.
-    if (mixSpace){
+    // hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
+    const KoColorSpace *mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
+    // convert to the right colorspace for the start and end if we have our mixSpace.
+    if (mixSpace) {
         startDummy = KoColor(start, mixSpace);
         endDummy = KoColor(end, mixSpace);
     } else {
         startDummy = start;
         endDummy = end;
     }
-    
+
     m_start.fromKoColor(start);
     m_end.fromKoColor(end);
-    
+
     const quint8 *colors[2];
     colors[0] = startDummy.data();
     colors[1] = endDummy.data();
@@ -504,14 +508,13 @@ void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qre
     colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
     colorWeights[1] = 255 - colorWeights[0];
 
-    //check if our mixspace exists, it doesn't at startup.
-    if (mixSpace){
-        if ( !(*buffer.colorSpace() == *mixSpace)) {
+    // check if our mixspace exists, it doesn't at startup.
+    if (mixSpace) {
+        if (!(*buffer.colorSpace() == *mixSpace)) {
             buffer = KoColor(mixSpace);
-            }
+        }
         mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-    }
-    else {
+    } else {
         buffer = KoColor(m_colorSpace);
         m_colorSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
     }
@@ -520,7 +523,7 @@ void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qre
 }
 
 KoGradientSegment::HSVCWColorInterpolationStrategy::HSVCWColorInterpolationStrategy()
-        : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
+    : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
 {
 }
 
@@ -534,7 +537,7 @@ KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColo
     return m_instance;
 }
 
-void KoGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const
+void KoGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor &dst, qreal t, const KoColor &start, const KoColor &end) const
 {
     QColor sc;
     QColor ec;
@@ -564,11 +567,10 @@ void KoGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, q
     dst.fromQColor(result);
 }
 
-KoGradientSegment::HSVCCWColorInterpolationStrategy::HSVCCWColorInterpolationStrategy() :
-        m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
+KoGradientSegment::HSVCCWColorInterpolationStrategy::HSVCCWColorInterpolationStrategy()
+    : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
 {
 }
-
 
 KoGradientSegment::HSVCCWColorInterpolationStrategy *KoGradientSegment::HSVCCWColorInterpolationStrategy::instance()
 {
@@ -580,7 +582,7 @@ KoGradientSegment::HSVCCWColorInterpolationStrategy *KoGradientSegment::HSVCCWCo
     return m_instance;
 }
 
-void KoGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const
+void KoGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor &dst, qreal t, const KoColor &start, const KoColor &end) const
 {
     QColor sc;
     QColor se;
@@ -734,10 +736,21 @@ qreal KoGradientSegment::SphereDecreasingInterpolationStrategy::valueAt(qreal t,
     return value;
 }
 
-void KoSegmentGradient::createSegment(int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, const QColor & left, const QColor & right)
+void KoSegmentGradient::createSegment(int interpolation,
+                                      int colorInterpolation,
+                                      double startOffset,
+                                      double endOffset,
+                                      double middleOffset,
+                                      const QColor &left,
+                                      const QColor &right)
 {
-    pushSegment(new KoGradientSegment(interpolation, colorInterpolation, startOffset, middleOffset, endOffset, KoColor(left, colorSpace()), KoColor(right, colorSpace())));
-
+    pushSegment(new KoGradientSegment(interpolation,
+                                      colorInterpolation,
+                                      startOffset,
+                                      middleOffset,
+                                      endOffset,
+                                      KoColor(left, colorSpace()),
+                                      KoColor(right, colorSpace())));
 }
 
 const QList<double> KoSegmentGradient::getHandlePositions() const
@@ -761,15 +774,15 @@ const QList<double> KoSegmentGradient::getMiddleHandlePositions() const
     return middleHandlePositions;
 }
 
-void KoSegmentGradient::moveSegmentStartOffset(KoGradientSegment* segment, double t)
+void KoSegmentGradient::moveSegmentStartOffset(KoGradientSegment *segment, double t)
 {
-    QList<KoGradientSegment*>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
+    QList<KoGradientSegment *>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
         if (it == m_segments.begin()) {
             segment->setStartOffset(0.0);
             return;
         }
-        KoGradientSegment* previousSegment = (*(it - 1));
+        KoGradientSegment *previousSegment = (*(it - 1));
         if (t > segment->startOffset()) {
             if (t > segment->middleOffset())
                 t = segment->middleOffset();
@@ -782,15 +795,15 @@ void KoSegmentGradient::moveSegmentStartOffset(KoGradientSegment* segment, doubl
     }
 }
 
-void KoSegmentGradient::moveSegmentEndOffset(KoGradientSegment* segment, double t)
+void KoSegmentGradient::moveSegmentEndOffset(KoGradientSegment *segment, double t)
 {
-    QList<KoGradientSegment*>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
+    QList<KoGradientSegment *>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
         if (it + 1 == m_segments.end()) {
             segment->setEndOffset(1.0);
             return;
         }
-        KoGradientSegment* followingSegment = (*(it + 1));
+        KoGradientSegment *followingSegment = (*(it + 1));
         if (t < segment->endOffset()) {
             if (t < segment->middleOffset())
                 t = segment->middleOffset();
@@ -803,7 +816,7 @@ void KoSegmentGradient::moveSegmentEndOffset(KoGradientSegment* segment, double 
     }
 }
 
-void KoSegmentGradient::moveSegmentMiddleOffset(KoGradientSegment* segment, double t)
+void KoSegmentGradient::moveSegmentMiddleOffset(KoGradientSegment *segment, double t)
 {
     if (segment) {
         if (t > segment->endOffset())
@@ -815,20 +828,20 @@ void KoSegmentGradient::moveSegmentMiddleOffset(KoGradientSegment* segment, doub
     }
 }
 
-void KoSegmentGradient::splitSegment(KoGradientSegment* segment)
+void KoSegmentGradient::splitSegment(KoGradientSegment *segment)
 {
     Q_ASSERT(segment != 0);
-    QList<KoGradientSegment*>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
+    QList<KoGradientSegment *>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
         KoColor midleoffsetColor(segment->endColor().colorSpace());
         segment->colorAt(midleoffsetColor, segment->middleOffset());
-        KoGradientSegment* newSegment = new KoGradientSegment(
-            segment->interpolation(), segment->colorInterpolation(),
-            segment ->startOffset(),
-            (segment->middleOffset() - segment->startOffset()) / 2 + segment->startOffset(),
-            segment->middleOffset(),
-            segment->startColor(),
-            midleoffsetColor);
+        KoGradientSegment *newSegment = new KoGradientSegment(segment->interpolation(),
+                                                              segment->colorInterpolation(),
+                                                              segment->startOffset(),
+                                                              (segment->middleOffset() - segment->startOffset()) / 2 + segment->startOffset(),
+                                                              segment->middleOffset(),
+                                                              segment->startColor(),
+                                                              midleoffsetColor);
         m_segments.insert(it, newSegment);
         segment->setStartColor(midleoffsetColor);
         segment->setStartOffset(segment->middleOffset());
@@ -836,26 +849,27 @@ void KoSegmentGradient::splitSegment(KoGradientSegment* segment)
     }
 }
 
-void KoSegmentGradient::duplicateSegment(KoGradientSegment* segment)
+void KoSegmentGradient::duplicateSegment(KoGradientSegment *segment)
 {
     Q_ASSERT(segment != 0);
-    QList<KoGradientSegment*>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
+    QList<KoGradientSegment *>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
         double middlePositionPercentage = (segment->middleOffset() - segment->startOffset()) / segment->length();
         double center = segment->startOffset() + segment->length() / 2;
-        KoGradientSegment* newSegment = new KoGradientSegment(
-            segment->interpolation(), segment->colorInterpolation(),
-            segment ->startOffset(),
-            segment->length() / 2 * middlePositionPercentage + segment->startOffset(),
-            center, segment->startColor(),
-            segment->endColor());
+        KoGradientSegment *newSegment = new KoGradientSegment(segment->interpolation(),
+                                                              segment->colorInterpolation(),
+                                                              segment->startOffset(),
+                                                              segment->length() / 2 * middlePositionPercentage + segment->startOffset(),
+                                                              center,
+                                                              segment->startColor(),
+                                                              segment->endColor());
         m_segments.insert(it, newSegment);
         segment->setStartOffset(center);
-        segment->setMiddleOffset(segment->length() * middlePositionPercentage  + segment->startOffset());
+        segment->setMiddleOffset(segment->length() * middlePositionPercentage + segment->startOffset());
     }
 }
 
-void KoSegmentGradient::mirrorSegment(KoGradientSegment* segment)
+void KoSegmentGradient::mirrorSegment(KoGradientSegment *segment)
 {
     Q_ASSERT(segment != 0);
     KoColor tmpColor = segment->startColor();
@@ -874,15 +888,15 @@ void KoSegmentGradient::mirrorSegment(KoGradientSegment* segment)
         segment->setColorInterpolation(COLOR_INTERP_HSV_CW);
 }
 
-KoGradientSegment* KoSegmentGradient::removeSegment(KoGradientSegment* segment)
+KoGradientSegment *KoSegmentGradient::removeSegment(KoGradientSegment *segment)
 {
     Q_ASSERT(segment != 0);
     if (m_segments.count() < 2)
         return 0;
-    QList<KoGradientSegment*>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
+    QList<KoGradientSegment *>::iterator it = std::find(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
         double middlePositionPercentage;
-        KoGradientSegment* nextSegment;
+        KoGradientSegment *nextSegment;
         if (it == m_segments.begin()) {
             nextSegment = (*(it + 1));
             middlePositionPercentage = (nextSegment->middleOffset() - nextSegment->startOffset()) / nextSegment->length();
@@ -909,7 +923,7 @@ bool KoSegmentGradient::removeSegmentPossible() const
     return true;
 }
 
-const QList<KoGradientSegment *>& KoSegmentGradient::segments() const
+const QList<KoGradientSegment *> &KoSegmentGradient::segments() const
 {
     return m_segments;
 }

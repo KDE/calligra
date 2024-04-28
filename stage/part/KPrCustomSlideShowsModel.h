@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ * SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #ifndef KPRCUSTOMSLIDESHOWSMODEL_H
 #define KPRCUSTOMSLIDESHOWSMODEL_H
@@ -26,14 +26,12 @@ class STAGE_TEST_EXPORT KPrCustomSlideShowsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-
-    //List the actions that you could perform with slides
-    //within a custom show.
-    enum CustomShowActions
-    {
-        SlidesAdd,       ///< add slides
-        SlidesDelete,    ///< delete slides
-        SlidesMove       ///< move slides
+    // List the actions that you could perform with slides
+    // within a custom show.
+    enum CustomShowActions {
+        SlidesAdd, ///< add slides
+        SlidesDelete, ///< delete slides
+        SlidesMove ///< move slides
     };
 
     explicit KPrCustomSlideShowsModel(KPrDocument *document, QObject *parent = 0);
@@ -182,7 +180,6 @@ private:
     QString m_activeCustomSlideShowName;
     QSize m_iconSize;
     KPrDocument *m_document;
-
 };
 
 #endif // KPRCUSTOMSLIDESHOWSMODEL_H

@@ -2,1024 +2,1032 @@
 /* version 238de9c7d8d4d94a0769b032115cd1bd164442f4 */
 #ifndef SIMPLEPARSER_H
 #define SIMPLEPARSER_H
-#include <QString>
 #include <QByteArray>
+#include <QSharedPointer> // replace with QScopedPointer when switching to Qt 4.6
+#include <QString>
 #include <QVector>
-#include <QSharedPointer>// replace with QScopedPointer when switching to Qt 4.6
 class LEInputStream;
-namespace MSO{
-class StreamOffset {
+namespace MSO
+{
+class StreamOffset
+{
 public:
-    virtual ~StreamOffset() {}
+    virtual ~StreamOffset()
+    {
+    }
     quint32 streamOffset;
 };
 class RecordHeader;
-void parseRecordHeader(LEInputStream& in, RecordHeader& _s);
+void parseRecordHeader(LEInputStream &in, RecordHeader &_s);
 class CurrentUserAtom;
-void parseCurrentUserAtom(LEInputStream& in, CurrentUserAtom& _s);
+void parseCurrentUserAtom(LEInputStream &in, CurrentUserAtom &_s);
 class TODOS;
-void parseTODOS(LEInputStream& in, TODOS& _s);
+void parseTODOS(LEInputStream &in, TODOS &_s);
 class Byte;
-void parseByte(LEInputStream& in, Byte& _s);
+void parseByte(LEInputStream &in, Byte &_s);
 class ZeroByte;
-void parseZeroByte(LEInputStream& in, ZeroByte& _s);
+void parseZeroByte(LEInputStream &in, ZeroByte &_s);
 class CurrentUserStream;
-void parseCurrentUserStream(LEInputStream& in, CurrentUserStream& _s);
+void parseCurrentUserStream(LEInputStream &in, CurrentUserStream &_s);
 class OfficeArtBStoreDelay;
-void parseOfficeArtBStoreDelay(LEInputStream& in, OfficeArtBStoreDelay& _s);
+void parseOfficeArtBStoreDelay(LEInputStream &in, OfficeArtBStoreDelay &_s);
 class OfficeArtRecordHeader;
-void parseOfficeArtRecordHeader(LEInputStream& in, OfficeArtRecordHeader& _s);
+void parseOfficeArtRecordHeader(LEInputStream &in, OfficeArtRecordHeader &_s);
 class OfficeArtBlipJPEG;
-void parseOfficeArtBlipJPEG(LEInputStream& in, OfficeArtBlipJPEG& _s);
+void parseOfficeArtBlipJPEG(LEInputStream &in, OfficeArtBlipJPEG &_s);
 class OfficeArtBlipPNG;
-void parseOfficeArtBlipPNG(LEInputStream& in, OfficeArtBlipPNG& _s);
+void parseOfficeArtBlipPNG(LEInputStream &in, OfficeArtBlipPNG &_s);
 class OfficeArtBlipDIB;
-void parseOfficeArtBlipDIB(LEInputStream& in, OfficeArtBlipDIB& _s);
+void parseOfficeArtBlipDIB(LEInputStream &in, OfficeArtBlipDIB &_s);
 class OfficeArtBlipTIFF;
-void parseOfficeArtBlipTIFF(LEInputStream& in, OfficeArtBlipTIFF& _s);
+void parseOfficeArtBlipTIFF(LEInputStream &in, OfficeArtBlipTIFF &_s);
 class RECT;
-void parseRECT(LEInputStream& in, RECT& _s);
+void parseRECT(LEInputStream &in, RECT &_s);
 class POINT;
-void parsePOINT(LEInputStream& in, POINT& _s);
+void parsePOINT(LEInputStream &in, POINT &_s);
 class PowerPointStructs;
-void parsePowerPointStructs(LEInputStream& in, PowerPointStructs& _s);
+void parsePowerPointStructs(LEInputStream &in, PowerPointStructs &_s);
 class SoundCollectionAtom;
-void parseSoundCollectionAtom(LEInputStream& in, SoundCollectionAtom& _s);
+void parseSoundCollectionAtom(LEInputStream &in, SoundCollectionAtom &_s);
 class HeadersFootersAtom;
-void parseHeadersFootersAtom(LEInputStream& in, HeadersFootersAtom& _s);
+void parseHeadersFootersAtom(LEInputStream &in, HeadersFootersAtom &_s);
 class UserDateAtom;
-void parseUserDateAtom(LEInputStream& in, UserDateAtom& _s);
+void parseUserDateAtom(LEInputStream &in, UserDateAtom &_s);
 class HeaderAtom;
-void parseHeaderAtom(LEInputStream& in, HeaderAtom& _s);
+void parseHeaderAtom(LEInputStream &in, HeaderAtom &_s);
 class FooterAtom;
-void parseFooterAtom(LEInputStream& in, FooterAtom& _s);
+void parseFooterAtom(LEInputStream &in, FooterAtom &_s);
 class PerSlideHeadersFootersContainer;
-void parsePerSlideHeadersFootersContainer(LEInputStream& in, PerSlideHeadersFootersContainer& _s);
+void parsePerSlideHeadersFootersContainer(LEInputStream &in, PerSlideHeadersFootersContainer &_s);
 class EndDocumentAtom;
-void parseEndDocumentAtom(LEInputStream& in, EndDocumentAtom& _s);
+void parseEndDocumentAtom(LEInputStream &in, EndDocumentAtom &_s);
 class DocInfoListContainer;
-void parseDocInfoListContainer(LEInputStream& in, DocInfoListContainer& _s);
+void parseDocInfoListContainer(LEInputStream &in, DocInfoListContainer &_s);
 class SlideViewInfoAtom;
-void parseSlideViewInfoAtom(LEInputStream& in, SlideViewInfoAtom& _s);
+void parseSlideViewInfoAtom(LEInputStream &in, SlideViewInfoAtom &_s);
 class GuideAtom;
-void parseGuideAtom(LEInputStream& in, GuideAtom& _s);
+void parseGuideAtom(LEInputStream &in, GuideAtom &_s);
 class DocProgTagsContainer;
-void parseDocProgTagsContainer(LEInputStream& in, DocProgTagsContainer& _s);
+void parseDocProgTagsContainer(LEInputStream &in, DocProgTagsContainer &_s);
 class TextAutoNumberScheme;
-void parseTextAutoNumberScheme(LEInputStream& in, TextAutoNumberScheme& _s);
+void parseTextAutoNumberScheme(LEInputStream &in, TextAutoNumberScheme &_s);
 class BlipCollection9Container;
-void parseBlipCollection9Container(LEInputStream& in, BlipCollection9Container& _s);
+void parseBlipCollection9Container(LEInputStream &in, BlipCollection9Container &_s);
 class Kinsoku9Atom;
-void parseKinsoku9Atom(LEInputStream& in, Kinsoku9Atom& _s);
+void parseKinsoku9Atom(LEInputStream &in, Kinsoku9Atom &_s);
 class ExHyperlink9Container;
-void parseExHyperlink9Container(LEInputStream& in, ExHyperlink9Container& _s);
+void parseExHyperlink9Container(LEInputStream &in, ExHyperlink9Container &_s);
 class PresAdvisorFlags9Atom;
-void parsePresAdvisorFlags9Atom(LEInputStream& in, PresAdvisorFlags9Atom& _s);
+void parsePresAdvisorFlags9Atom(LEInputStream &in, PresAdvisorFlags9Atom &_s);
 class EnvelopeData9Atom;
-void parseEnvelopeData9Atom(LEInputStream& in, EnvelopeData9Atom& _s);
+void parseEnvelopeData9Atom(LEInputStream &in, EnvelopeData9Atom &_s);
 class EnvelopeFlags9Atom;
-void parseEnvelopeFlags9Atom(LEInputStream& in, EnvelopeFlags9Atom& _s);
+void parseEnvelopeFlags9Atom(LEInputStream &in, EnvelopeFlags9Atom &_s);
 class HTMLDocInfo9Atom;
-void parseHTMLDocInfo9Atom(LEInputStream& in, HTMLDocInfo9Atom& _s);
+void parseHTMLDocInfo9Atom(LEInputStream &in, HTMLDocInfo9Atom &_s);
 class HTMLPublishInfo9Container;
-void parseHTMLPublishInfo9Container(LEInputStream& in, HTMLPublishInfo9Container& _s);
+void parseHTMLPublishInfo9Container(LEInputStream &in, HTMLPublishInfo9Container &_s);
 class BroadcastDocInfo9Container;
-void parseBroadcastDocInfo9Container(LEInputStream& in, BroadcastDocInfo9Container& _s);
+void parseBroadcastDocInfo9Container(LEInputStream &in, BroadcastDocInfo9Container &_s);
 class OutlineTextProps9Container;
-void parseOutlineTextProps9Container(LEInputStream& in, OutlineTextProps9Container& _s);
+void parseOutlineTextProps9Container(LEInputStream &in, OutlineTextProps9Container &_s);
 class OutlineTextPropsHeaderExAtom;
-void parseOutlineTextPropsHeaderExAtom(LEInputStream& in, OutlineTextPropsHeaderExAtom& _s);
+void parseOutlineTextPropsHeaderExAtom(LEInputStream &in, OutlineTextPropsHeaderExAtom &_s);
 class StyleTextProp9Atom;
-void parseStyleTextProp9Atom(LEInputStream& in, StyleTextProp9Atom& _s);
+void parseStyleTextProp9Atom(LEInputStream &in, StyleTextProp9Atom &_s);
 class FontCollection10Container;
-void parseFontCollection10Container(LEInputStream& in, FontCollection10Container& _s);
+void parseFontCollection10Container(LEInputStream &in, FontCollection10Container &_s);
 class GridSpacing10Atom;
-void parseGridSpacing10Atom(LEInputStream& in, GridSpacing10Atom& _s);
+void parseGridSpacing10Atom(LEInputStream &in, GridSpacing10Atom &_s);
 class AuthorNameAtom;
-void parseAuthorNameAtom(LEInputStream& in, AuthorNameAtom& _s);
+void parseAuthorNameAtom(LEInputStream &in, AuthorNameAtom &_s);
 class CommentIndex10Atom;
-void parseCommentIndex10Atom(LEInputStream& in, CommentIndex10Atom& _s);
+void parseCommentIndex10Atom(LEInputStream &in, CommentIndex10Atom &_s);
 class FontEmbedFlags10Atom;
-void parseFontEmbedFlags10Atom(LEInputStream& in, FontEmbedFlags10Atom& _s);
+void parseFontEmbedFlags10Atom(LEInputStream &in, FontEmbedFlags10Atom &_s);
 class CopyrightAtom;
-void parseCopyrightAtom(LEInputStream& in, CopyrightAtom& _s);
+void parseCopyrightAtom(LEInputStream &in, CopyrightAtom &_s);
 class KeywordsAtom;
-void parseKeywordsAtom(LEInputStream& in, KeywordsAtom& _s);
+void parseKeywordsAtom(LEInputStream &in, KeywordsAtom &_s);
 class FilterPrivacyFlags10Atom;
-void parseFilterPrivacyFlags10Atom(LEInputStream& in, FilterPrivacyFlags10Atom& _s);
+void parseFilterPrivacyFlags10Atom(LEInputStream &in, FilterPrivacyFlags10Atom &_s);
 class OutlineTextProps10Container;
-void parseOutlineTextProps10Container(LEInputStream& in, OutlineTextProps10Container& _s);
+void parseOutlineTextProps10Container(LEInputStream &in, OutlineTextProps10Container &_s);
 class StyleTextProp10Atom;
-void parseStyleTextProp10Atom(LEInputStream& in, StyleTextProp10Atom& _s);
+void parseStyleTextProp10Atom(LEInputStream &in, StyleTextProp10Atom &_s);
 class DocToolbarStates10Atom;
-void parseDocToolbarStates10Atom(LEInputStream& in, DocToolbarStates10Atom& _s);
+void parseDocToolbarStates10Atom(LEInputStream &in, DocToolbarStates10Atom &_s);
 class SlideListTable10Container;
-void parseSlideListTable10Container(LEInputStream& in, SlideListTable10Container& _s);
+void parseSlideListTable10Container(LEInputStream &in, SlideListTable10Container &_s);
 class DiffTree10Container;
-void parseDiffTree10Container(LEInputStream& in, DiffTree10Container& _s);
+void parseDiffTree10Container(LEInputStream &in, DiffTree10Container &_s);
 class ModifyPasswordAtom;
-void parseModifyPasswordAtom(LEInputStream& in, ModifyPasswordAtom& _s);
+void parseModifyPasswordAtom(LEInputStream &in, ModifyPasswordAtom &_s);
 class PhotoAlbumInfo10Atom;
-void parsePhotoAlbumInfo10Atom(LEInputStream& in, PhotoAlbumInfo10Atom& _s);
+void parsePhotoAlbumInfo10Atom(LEInputStream &in, PhotoAlbumInfo10Atom &_s);
 class SmartTagStore11Container;
-void parseSmartTagStore11Container(LEInputStream& in, SmartTagStore11Container& _s);
+void parseSmartTagStore11Container(LEInputStream &in, SmartTagStore11Container &_s);
 class OutlineTextProps11Container;
-void parseOutlineTextProps11Container(LEInputStream& in, OutlineTextProps11Container& _s);
+void parseOutlineTextProps11Container(LEInputStream &in, OutlineTextProps11Container &_s);
 class BinaryTagDataBlob;
-void parseBinaryTagDataBlob(LEInputStream& in, BinaryTagDataBlob& _s);
+void parseBinaryTagDataBlob(LEInputStream &in, BinaryTagDataBlob &_s);
 class PP12DocBinaryTagExtension;
-void parsePP12DocBinaryTagExtension(LEInputStream& in, PP12DocBinaryTagExtension& _s);
+void parsePP12DocBinaryTagExtension(LEInputStream &in, PP12DocBinaryTagExtension &_s);
 class SorterViewInfoContainer;
-void parseSorterViewInfoContainer(LEInputStream& in, SorterViewInfoContainer& _s);
+void parseSorterViewInfoContainer(LEInputStream &in, SorterViewInfoContainer &_s);
 class VBAInfoAtom;
-void parseVBAInfoAtom(LEInputStream& in, VBAInfoAtom& _s);
+void parseVBAInfoAtom(LEInputStream &in, VBAInfoAtom &_s);
 class MasterListWithTextContainer;
-void parseMasterListWithTextContainer(LEInputStream& in, MasterListWithTextContainer& _s);
+void parseMasterListWithTextContainer(LEInputStream &in, MasterListWithTextContainer &_s);
 class MasterPersistAtom;
-void parseMasterPersistAtom(LEInputStream& in, MasterPersistAtom& _s);
+void parseMasterPersistAtom(LEInputStream &in, MasterPersistAtom &_s);
 class SlideListWithTextContainer;
-void parseSlideListWithTextContainer(LEInputStream& in, SlideListWithTextContainer& _s);
+void parseSlideListWithTextContainer(LEInputStream &in, SlideListWithTextContainer &_s);
 class NotesListWithTextContainer;
-void parseNotesListWithTextContainer(LEInputStream& in, NotesListWithTextContainer& _s);
+void parseNotesListWithTextContainer(LEInputStream &in, NotesListWithTextContainer &_s);
 class NotesPersistAtom;
-void parseNotesPersistAtom(LEInputStream& in, NotesPersistAtom& _s);
+void parseNotesPersistAtom(LEInputStream &in, NotesPersistAtom &_s);
 class TextHeaderAtom;
-void parseTextHeaderAtom(LEInputStream& in, TextHeaderAtom& _s);
+void parseTextHeaderAtom(LEInputStream &in, TextHeaderAtom &_s);
 class TextCharsAtom;
-void parseTextCharsAtom(LEInputStream& in, TextCharsAtom& _s);
+void parseTextCharsAtom(LEInputStream &in, TextCharsAtom &_s);
 class TextBytesAtom;
-void parseTextBytesAtom(LEInputStream& in, TextBytesAtom& _s);
+void parseTextBytesAtom(LEInputStream &in, TextBytesAtom &_s);
 class MasterTextPropAtom;
-void parseMasterTextPropAtom(LEInputStream& in, MasterTextPropAtom& _s);
+void parseMasterTextPropAtom(LEInputStream &in, MasterTextPropAtom &_s);
 class MasterTextPropRun;
-void parseMasterTextPropRun(LEInputStream& in, MasterTextPropRun& _s);
+void parseMasterTextPropRun(LEInputStream &in, MasterTextPropRun &_s);
 class StyleTextPropAtom;
-void parseStyleTextPropAtom(LEInputStream& in, StyleTextPropAtom& _s);
+void parseStyleTextPropAtom(LEInputStream &in, StyleTextPropAtom &_s);
 class SlideNumberMCAtom;
-void parseSlideNumberMCAtom(LEInputStream& in, SlideNumberMCAtom& _s);
+void parseSlideNumberMCAtom(LEInputStream &in, SlideNumberMCAtom &_s);
 class DateTimeMCAtom;
-void parseDateTimeMCAtom(LEInputStream& in, DateTimeMCAtom& _s);
+void parseDateTimeMCAtom(LEInputStream &in, DateTimeMCAtom &_s);
 class GenericDateMCAtom;
-void parseGenericDateMCAtom(LEInputStream& in, GenericDateMCAtom& _s);
+void parseGenericDateMCAtom(LEInputStream &in, GenericDateMCAtom &_s);
 class HeaderMCAtom;
-void parseHeaderMCAtom(LEInputStream& in, HeaderMCAtom& _s);
+void parseHeaderMCAtom(LEInputStream &in, HeaderMCAtom &_s);
 class FooterMCAtom;
-void parseFooterMCAtom(LEInputStream& in, FooterMCAtom& _s);
+void parseFooterMCAtom(LEInputStream &in, FooterMCAtom &_s);
 class RTFDateTimeMCAtom;
-void parseRTFDateTimeMCAtom(LEInputStream& in, RTFDateTimeMCAtom& _s);
+void parseRTFDateTimeMCAtom(LEInputStream &in, RTFDateTimeMCAtom &_s);
 class TextBookmarkAtom;
-void parseTextBookmarkAtom(LEInputStream& in, TextBookmarkAtom& _s);
+void parseTextBookmarkAtom(LEInputStream &in, TextBookmarkAtom &_s);
 class TextRange;
-void parseTextRange(LEInputStream& in, TextRange& _s);
+void parseTextRange(LEInputStream &in, TextRange &_s);
 class MouseClickTextInteractiveInfoAtom;
-void parseMouseClickTextInteractiveInfoAtom(LEInputStream& in, MouseClickTextInteractiveInfoAtom& _s);
+void parseMouseClickTextInteractiveInfoAtom(LEInputStream &in, MouseClickTextInteractiveInfoAtom &_s);
 class MouseOverTextInteractiveInfoAtom;
-void parseMouseOverTextInteractiveInfoAtom(LEInputStream& in, MouseOverTextInteractiveInfoAtom& _s);
+void parseMouseOverTextInteractiveInfoAtom(LEInputStream &in, MouseOverTextInteractiveInfoAtom &_s);
 class SlideId;
-void parseSlideId(LEInputStream& in, SlideId& _s);
+void parseSlideId(LEInputStream &in, SlideId &_s);
 class TabStops;
-void parseTabStops(LEInputStream& in, TabStops& _s);
+void parseTabStops(LEInputStream &in, TabStops &_s);
 class TabStop;
-void parseTabStop(LEInputStream& in, TabStop& _s);
+void parseTabStop(LEInputStream &in, TabStop &_s);
 class PFWrapFlags;
-void parsePFWrapFlags(LEInputStream& in, PFWrapFlags& _s);
+void parsePFWrapFlags(LEInputStream &in, PFWrapFlags &_s);
 class ColorIndexStruct;
-void parseColorIndexStruct(LEInputStream& in, ColorIndexStruct& _s);
+void parseColorIndexStruct(LEInputStream &in, ColorIndexStruct &_s);
 class BulletFlags;
-void parseBulletFlags(LEInputStream& in, BulletFlags& _s);
+void parseBulletFlags(LEInputStream &in, BulletFlags &_s);
 class PFMasks;
-void parsePFMasks(LEInputStream& in, PFMasks& _s);
+void parsePFMasks(LEInputStream &in, PFMasks &_s);
 class CFMasks;
-void parseCFMasks(LEInputStream& in, CFMasks& _s);
+void parseCFMasks(LEInputStream &in, CFMasks &_s);
 class CFStyle;
-void parseCFStyle(LEInputStream& in, CFStyle& _s);
+void parseCFStyle(LEInputStream &in, CFStyle &_s);
 class FontCollectionContainer;
-void parseFontCollectionContainer(LEInputStream& in, FontCollectionContainer& _s);
+void parseFontCollectionContainer(LEInputStream &in, FontCollectionContainer &_s);
 class FontEntityAtom;
-void parseFontEntityAtom(LEInputStream& in, FontEntityAtom& _s);
+void parseFontEntityAtom(LEInputStream &in, FontEntityAtom &_s);
 class FontEmbedDataBlob;
-void parseFontEmbedDataBlob(LEInputStream& in, FontEmbedDataBlob& _s);
+void parseFontEmbedDataBlob(LEInputStream &in, FontEmbedDataBlob &_s);
 class KinsokuAtom;
-void parseKinsokuAtom(LEInputStream& in, KinsokuAtom& _s);
+void parseKinsokuAtom(LEInputStream &in, KinsokuAtom &_s);
 class KinsokuLeadingAtom;
-void parseKinsokuLeadingAtom(LEInputStream& in, KinsokuLeadingAtom& _s);
+void parseKinsokuLeadingAtom(LEInputStream &in, KinsokuLeadingAtom &_s);
 class KinsokuFollowingAtom;
-void parseKinsokuFollowingAtom(LEInputStream& in, KinsokuFollowingAtom& _s);
+void parseKinsokuFollowingAtom(LEInputStream &in, KinsokuFollowingAtom &_s);
 class TextSpecialInfoAtom;
-void parseTextSpecialInfoAtom(LEInputStream& in, TextSpecialInfoAtom& _s);
+void parseTextSpecialInfoAtom(LEInputStream &in, TextSpecialInfoAtom &_s);
 class SmartTags;
-void parseSmartTags(LEInputStream& in, SmartTags& _s);
+void parseSmartTags(LEInputStream &in, SmartTags &_s);
 class ExOleEmbedAtom;
-void parseExOleEmbedAtom(LEInputStream& in, ExOleEmbedAtom& _s);
+void parseExOleEmbedAtom(LEInputStream &in, ExOleEmbedAtom &_s);
 class PointStruct;
-void parsePointStruct(LEInputStream& in, PointStruct& _s);
+void parsePointStruct(LEInputStream &in, PointStruct &_s);
 class RatioStruct;
-void parseRatioStruct(LEInputStream& in, RatioStruct& _s);
+void parseRatioStruct(LEInputStream &in, RatioStruct &_s);
 class PersistDirectoryAtom;
-void parsePersistDirectoryAtom(LEInputStream& in, PersistDirectoryAtom& _s);
+void parsePersistDirectoryAtom(LEInputStream &in, PersistDirectoryAtom &_s);
 class UnknownDocumentContainerChild;
-void parseUnknownDocumentContainerChild(LEInputStream& in, UnknownDocumentContainerChild& _s);
+void parseUnknownDocumentContainerChild(LEInputStream &in, UnknownDocumentContainerChild &_s);
 class UnknownOfficeArtClientDataChild;
-void parseUnknownOfficeArtClientDataChild(LEInputStream& in, UnknownOfficeArtClientDataChild& _s);
+void parseUnknownOfficeArtClientDataChild(LEInputStream &in, UnknownOfficeArtClientDataChild &_s);
 class UnknownSlideContainerChild;
-void parseUnknownSlideContainerChild(LEInputStream& in, UnknownSlideContainerChild& _s);
+void parseUnknownSlideContainerChild(LEInputStream &in, UnknownSlideContainerChild &_s);
 class UnknownTextContainerChild;
-void parseUnknownTextContainerChild(LEInputStream& in, UnknownTextContainerChild& _s);
+void parseUnknownTextContainerChild(LEInputStream &in, UnknownTextContainerChild &_s);
 class PersistDirectoryEntry;
-void parsePersistDirectoryEntry(LEInputStream& in, PersistDirectoryEntry& _s);
+void parsePersistDirectoryEntry(LEInputStream &in, PersistDirectoryEntry &_s);
 class PersistIdRef;
-void parsePersistIdRef(LEInputStream& in, PersistIdRef& _s);
+void parsePersistIdRef(LEInputStream &in, PersistIdRef &_s);
 class SchemeListElementColorSchemeAtom;
-void parseSchemeListElementColorSchemeAtom(LEInputStream& in, SchemeListElementColorSchemeAtom& _s);
+void parseSchemeListElementColorSchemeAtom(LEInputStream &in, SchemeListElementColorSchemeAtom &_s);
 class RoundTripOArtTextStyles12Atom;
-void parseRoundTripOArtTextStyles12Atom(LEInputStream& in, RoundTripOArtTextStyles12Atom& _s);
+void parseRoundTripOArtTextStyles12Atom(LEInputStream &in, RoundTripOArtTextStyles12Atom &_s);
 class SlideNameAtom;
-void parseSlideNameAtom(LEInputStream& in, SlideNameAtom& _s);
+void parseSlideNameAtom(LEInputStream &in, SlideNameAtom &_s);
 class SlideProgTagsContainer;
-void parseSlideProgTagsContainer(LEInputStream& in, SlideProgTagsContainer& _s);
+void parseSlideProgTagsContainer(LEInputStream &in, SlideProgTagsContainer &_s);
 class PP9SlideBinaryTagExtension;
-void parsePP9SlideBinaryTagExtension(LEInputStream& in, PP9SlideBinaryTagExtension& _s);
+void parsePP9SlideBinaryTagExtension(LEInputStream &in, PP9SlideBinaryTagExtension &_s);
 class Comment10Container;
-void parseComment10Container(LEInputStream& in, Comment10Container& _s);
+void parseComment10Container(LEInputStream &in, Comment10Container &_s);
 class Comment10Atom;
-void parseComment10Atom(LEInputStream& in, Comment10Atom& _s);
+void parseComment10Atom(LEInputStream &in, Comment10Atom &_s);
 class LinkedSlide10Atom;
-void parseLinkedSlide10Atom(LEInputStream& in, LinkedSlide10Atom& _s);
+void parseLinkedSlide10Atom(LEInputStream &in, LinkedSlide10Atom &_s);
 class LinkedShape10Atom;
-void parseLinkedShape10Atom(LEInputStream& in, LinkedShape10Atom& _s);
+void parseLinkedShape10Atom(LEInputStream &in, LinkedShape10Atom &_s);
 class SlideFlags10Atom;
-void parseSlideFlags10Atom(LEInputStream& in, SlideFlags10Atom& _s);
+void parseSlideFlags10Atom(LEInputStream &in, SlideFlags10Atom &_s);
 class HashCode10Atom;
-void parseHashCode10Atom(LEInputStream& in, HashCode10Atom& _s);
+void parseHashCode10Atom(LEInputStream &in, HashCode10Atom &_s);
 class ExtTimeNodeContainer;
-void parseExtTimeNodeContainer(LEInputStream& in, ExtTimeNodeContainer& _s);
+void parseExtTimeNodeContainer(LEInputStream &in, ExtTimeNodeContainer &_s);
 class BuildListContainer;
-void parseBuildListContainer(LEInputStream& in, BuildListContainer& _s);
+void parseBuildListContainer(LEInputStream &in, BuildListContainer &_s);
 class RoundTripHeaderFooterDefaults12Atom;
-void parseRoundTripHeaderFooterDefaults12Atom(LEInputStream& in, RoundTripHeaderFooterDefaults12Atom& _s);
+void parseRoundTripHeaderFooterDefaults12Atom(LEInputStream &in, RoundTripHeaderFooterDefaults12Atom &_s);
 class TagNameAtom;
-void parseTagNameAtom(LEInputStream& in, TagNameAtom& _s);
+void parseTagNameAtom(LEInputStream &in, TagNameAtom &_s);
 class TagValueAtom;
-void parseTagValueAtom(LEInputStream& in, TagValueAtom& _s);
+void parseTagValueAtom(LEInputStream &in, TagValueAtom &_s);
 class RoundTripMainMasterRecord;
-void parseRoundTripMainMasterRecord(LEInputStream& in, RoundTripMainMasterRecord& _s);
+void parseRoundTripMainMasterRecord(LEInputStream &in, RoundTripMainMasterRecord &_s);
 class TemplateNameAtom;
-void parseTemplateNameAtom(LEInputStream& in, TemplateNameAtom& _s);
+void parseTemplateNameAtom(LEInputStream &in, TemplateNameAtom &_s);
 class RoundTripSlideSyncInfo12Container;
-void parseRoundTripSlideSyncInfo12Container(LEInputStream& in, RoundTripSlideSyncInfo12Container& _s);
+void parseRoundTripSlideSyncInfo12Container(LEInputStream &in, RoundTripSlideSyncInfo12Container &_s);
 class SlideFlags;
-void parseSlideFlags(LEInputStream& in, SlideFlags& _s);
+void parseSlideFlags(LEInputStream &in, SlideFlags &_s);
 class NotesRoundTripAtom;
-void parseNotesRoundTripAtom(LEInputStream& in, NotesRoundTripAtom& _s);
+void parseNotesRoundTripAtom(LEInputStream &in, NotesRoundTripAtom &_s);
 class HandoutContainer;
-void parseHandoutContainer(LEInputStream& in, HandoutContainer& _s);
+void parseHandoutContainer(LEInputStream &in, HandoutContainer &_s);
 class ExControlStg;
-void parseExControlStg(LEInputStream& in, ExControlStg& _s);
+void parseExControlStg(LEInputStream &in, ExControlStg &_s);
 class ExOleObjStg;
-void parseExOleObjStg(LEInputStream& in, ExOleObjStg& _s);
+void parseExOleObjStg(LEInputStream &in, ExOleObjStg &_s);
 class UserEditAtom;
-void parseUserEditAtom(LEInputStream& in, UserEditAtom& _s);
+void parseUserEditAtom(LEInputStream &in, UserEditAtom &_s);
 class VbaProjectStg;
-void parseVbaProjectStg(LEInputStream& in, VbaProjectStg& _s);
+void parseVbaProjectStg(LEInputStream &in, VbaProjectStg &_s);
 class SlideAtom;
-void parseSlideAtom(LEInputStream& in, SlideAtom& _s);
+void parseSlideAtom(LEInputStream &in, SlideAtom &_s);
 class SlideShowSlideInfoAtom;
-void parseSlideShowSlideInfoAtom(LEInputStream& in, SlideShowSlideInfoAtom& _s);
+void parseSlideShowSlideInfoAtom(LEInputStream &in, SlideShowSlideInfoAtom &_s);
 class SlideShowDocInfoAtom;
-void parseSlideShowDocInfoAtom(LEInputStream& in, SlideShowDocInfoAtom& _s);
+void parseSlideShowDocInfoAtom(LEInputStream &in, SlideShowDocInfoAtom &_s);
 class SlideSchemeColorSchemeAtom;
-void parseSlideSchemeColorSchemeAtom(LEInputStream& in, SlideSchemeColorSchemeAtom& _s);
+void parseSlideSchemeColorSchemeAtom(LEInputStream &in, SlideSchemeColorSchemeAtom &_s);
 class RoundTripSlideRecord;
-void parseRoundTripSlideRecord(LEInputStream& in, RoundTripSlideRecord& _s);
+void parseRoundTripSlideRecord(LEInputStream &in, RoundTripSlideRecord &_s);
 class NamedShowsContainer;
-void parseNamedShowsContainer(LEInputStream& in, NamedShowsContainer& _s);
+void parseNamedShowsContainer(LEInputStream &in, NamedShowsContainer &_s);
 class SummaryContainer;
-void parseSummaryContainer(LEInputStream& in, SummaryContainer& _s);
+void parseSummaryContainer(LEInputStream &in, SummaryContainer &_s);
 class DocRoutingSlipAtom;
-void parseDocRoutingSlipAtom(LEInputStream& in, DocRoutingSlipAtom& _s);
+void parseDocRoutingSlipAtom(LEInputStream &in, DocRoutingSlipAtom &_s);
 class PrintOptionsAtom;
-void parsePrintOptionsAtom(LEInputStream& in, PrintOptionsAtom& _s);
+void parsePrintOptionsAtom(LEInputStream &in, PrintOptionsAtom &_s);
 class RoundTripCustomTableStyles12Atom;
-void parseRoundTripCustomTableStyles12Atom(LEInputStream& in, RoundTripCustomTableStyles12Atom& _s);
+void parseRoundTripCustomTableStyles12Atom(LEInputStream &in, RoundTripCustomTableStyles12Atom &_s);
 class RoundTripCompositeMasterId12Atom;
-void parseRoundTripCompositeMasterId12Atom(LEInputStream& in, RoundTripCompositeMasterId12Atom& _s);
+void parseRoundTripCompositeMasterId12Atom(LEInputStream &in, RoundTripCompositeMasterId12Atom &_s);
 class ColorStruct;
-void parseColorStruct(LEInputStream& in, ColorStruct& _s);
+void parseColorStruct(LEInputStream &in, ColorStruct &_s);
 class ExObjListAtom;
-void parseExObjListAtom(LEInputStream& in, ExObjListAtom& _s);
+void parseExObjListAtom(LEInputStream &in, ExObjListAtom &_s);
 class ExAviMovieContainer;
-void parseExAviMovieContainer(LEInputStream& in, ExAviMovieContainer& _s);
+void parseExAviMovieContainer(LEInputStream &in, ExAviMovieContainer &_s);
 class ExCDAudioContainer;
-void parseExCDAudioContainer(LEInputStream& in, ExCDAudioContainer& _s);
+void parseExCDAudioContainer(LEInputStream &in, ExCDAudioContainer &_s);
 class ExControlAtom;
-void parseExControlAtom(LEInputStream& in, ExControlAtom& _s);
+void parseExControlAtom(LEInputStream &in, ExControlAtom &_s);
 class ExHyperlinkAtom;
-void parseExHyperlinkAtom(LEInputStream& in, ExHyperlinkAtom& _s);
+void parseExHyperlinkAtom(LEInputStream &in, ExHyperlinkAtom &_s);
 class FriendlyNameAtom;
-void parseFriendlyNameAtom(LEInputStream& in, FriendlyNameAtom& _s);
+void parseFriendlyNameAtom(LEInputStream &in, FriendlyNameAtom &_s);
 class TargetAtom;
-void parseTargetAtom(LEInputStream& in, TargetAtom& _s);
+void parseTargetAtom(LEInputStream &in, TargetAtom &_s);
 class LocationAtom;
-void parseLocationAtom(LEInputStream& in, LocationAtom& _s);
+void parseLocationAtom(LEInputStream &in, LocationAtom &_s);
 class ExMCIMovieContainer;
-void parseExMCIMovieContainer(LEInputStream& in, ExMCIMovieContainer& _s);
+void parseExMCIMovieContainer(LEInputStream &in, ExMCIMovieContainer &_s);
 class ExMIDIAudioContainer;
-void parseExMIDIAudioContainer(LEInputStream& in, ExMIDIAudioContainer& _s);
+void parseExMIDIAudioContainer(LEInputStream &in, ExMIDIAudioContainer &_s);
 class ExWAVAudioEmbeddedContainer;
-void parseExWAVAudioEmbeddedContainer(LEInputStream& in, ExWAVAudioEmbeddedContainer& _s);
+void parseExWAVAudioEmbeddedContainer(LEInputStream &in, ExWAVAudioEmbeddedContainer &_s);
 class ExWAVAudioLinkContainer;
-void parseExWAVAudioLinkContainer(LEInputStream& in, ExWAVAudioLinkContainer& _s);
+void parseExWAVAudioLinkContainer(LEInputStream &in, ExWAVAudioLinkContainer &_s);
 class UnknownExObjListSubContainerChild;
-void parseUnknownExObjListSubContainerChild(LEInputStream& in, UnknownExObjListSubContainerChild& _s);
+void parseUnknownExObjListSubContainerChild(LEInputStream &in, UnknownExObjListSubContainerChild &_s);
 class ExOleLinkAtom;
-void parseExOleLinkAtom(LEInputStream& in, ExOleLinkAtom& _s);
+void parseExOleLinkAtom(LEInputStream &in, ExOleLinkAtom &_s);
 class ExOleObjAtom;
-void parseExOleObjAtom(LEInputStream& in, ExOleObjAtom& _s);
+void parseExOleObjAtom(LEInputStream &in, ExOleObjAtom &_s);
 class MenuNameAtom;
-void parseMenuNameAtom(LEInputStream& in, MenuNameAtom& _s);
+void parseMenuNameAtom(LEInputStream &in, MenuNameAtom &_s);
 class ProgIDAtom;
-void parseProgIDAtom(LEInputStream& in, ProgIDAtom& _s);
+void parseProgIDAtom(LEInputStream &in, ProgIDAtom &_s);
 class ClipboardNameAtom;
-void parseClipboardNameAtom(LEInputStream& in, ClipboardNameAtom& _s);
+void parseClipboardNameAtom(LEInputStream &in, ClipboardNameAtom &_s);
 class MetafileBlob;
-void parseMetafileBlob(LEInputStream& in, MetafileBlob& _s);
+void parseMetafileBlob(LEInputStream &in, MetafileBlob &_s);
 class OfficeArtFDGG;
-void parseOfficeArtFDGG(LEInputStream& in, OfficeArtFDGG& _s);
+void parseOfficeArtFDGG(LEInputStream &in, OfficeArtFDGG &_s);
 class OfficeArtFDG;
-void parseOfficeArtFDG(LEInputStream& in, OfficeArtFDG& _s);
+void parseOfficeArtFDG(LEInputStream &in, OfficeArtFDG &_s);
 class OfficeArtFRITContainer;
-void parseOfficeArtFRITContainer(LEInputStream& in, OfficeArtFRITContainer& _s);
+void parseOfficeArtFRITContainer(LEInputStream &in, OfficeArtFRITContainer &_s);
 class OfficeArtFRIT;
-void parseOfficeArtFRIT(LEInputStream& in, OfficeArtFRIT& _s);
+void parseOfficeArtFRIT(LEInputStream &in, OfficeArtFRIT &_s);
 class OfficeArtBStoreContainer;
-void parseOfficeArtBStoreContainer(LEInputStream& in, OfficeArtBStoreContainer& _s);
+void parseOfficeArtBStoreContainer(LEInputStream &in, OfficeArtBStoreContainer &_s);
 class OfficeArtSpgrContainer;
-void parseOfficeArtSpgrContainer(LEInputStream& in, OfficeArtSpgrContainer& _s);
+void parseOfficeArtSpgrContainer(LEInputStream &in, OfficeArtSpgrContainer &_s);
 class OfficeArtSolverContainer;
-void parseOfficeArtSolverContainer(LEInputStream& in, OfficeArtSolverContainer& _s);
+void parseOfficeArtSolverContainer(LEInputStream &in, OfficeArtSolverContainer &_s);
 class OfficeArtFConnectorRule;
-void parseOfficeArtFConnectorRule(LEInputStream& in, OfficeArtFConnectorRule& _s);
+void parseOfficeArtFConnectorRule(LEInputStream &in, OfficeArtFConnectorRule &_s);
 class OfficeArtFArcRule;
-void parseOfficeArtFArcRule(LEInputStream& in, OfficeArtFArcRule& _s);
+void parseOfficeArtFArcRule(LEInputStream &in, OfficeArtFArcRule &_s);
 class OfficeArtFCalloutRule;
-void parseOfficeArtFCalloutRule(LEInputStream& in, OfficeArtFCalloutRule& _s);
+void parseOfficeArtFCalloutRule(LEInputStream &in, OfficeArtFCalloutRule &_s);
 class OfficeArtFSPGR;
-void parseOfficeArtFSPGR(LEInputStream& in, OfficeArtFSPGR& _s);
+void parseOfficeArtFSPGR(LEInputStream &in, OfficeArtFSPGR &_s);
 class OfficeArtFSP;
-void parseOfficeArtFSP(LEInputStream& in, OfficeArtFSP& _s);
+void parseOfficeArtFSP(LEInputStream &in, OfficeArtFSP &_s);
 class OfficeArtFOPT;
-void parseOfficeArtFOPT(LEInputStream& in, OfficeArtFOPT& _s);
+void parseOfficeArtFOPT(LEInputStream &in, OfficeArtFOPT &_s);
 class OfficeArtSecondaryFOPT;
-void parseOfficeArtSecondaryFOPT(LEInputStream& in, OfficeArtSecondaryFOPT& _s);
+void parseOfficeArtSecondaryFOPT(LEInputStream &in, OfficeArtSecondaryFOPT &_s);
 class OfficeArtTertiaryFOPT;
-void parseOfficeArtTertiaryFOPT(LEInputStream& in, OfficeArtTertiaryFOPT& _s);
+void parseOfficeArtTertiaryFOPT(LEInputStream &in, OfficeArtTertiaryFOPT &_s);
 class MSOPATHINFO;
-void parseMSOPATHINFO(LEInputStream& in, MSOPATHINFO& _s);
+void parseMSOPATHINFO(LEInputStream &in, MSOPATHINFO &_s);
 class FixedPoint;
-void parseFixedPoint(LEInputStream& in, FixedPoint& _s);
+void parseFixedPoint(LEInputStream &in, FixedPoint &_s);
 class PVertices_complex;
-void parsePVertices_complex(LEInputStream& in, PVertices_complex& _s);
+void parsePVertices_complex(LEInputStream &in, PVertices_complex &_s);
 class PSegmentInfo_complex;
-void parsePSegmentInfo_complex(LEInputStream& in, PSegmentInfo_complex& _s);
+void parsePSegmentInfo_complex(LEInputStream &in, PSegmentInfo_complex &_s);
 class FillShadeColors_complex;
-void parseFillShadeColors_complex(LEInputStream& in, FillShadeColors_complex& _s);
+void parseFillShadeColors_complex(LEInputStream &in, FillShadeColors_complex &_s);
 class PWrapPolygonVertices_complex;
-void parsePWrapPolygonVertices_complex(LEInputStream& in, PWrapPolygonVertices_complex& _s);
+void parsePWrapPolygonVertices_complex(LEInputStream &in, PWrapPolygonVertices_complex &_s);
 class OfficeArtCOLORREF;
-void parseOfficeArtCOLORREF(LEInputStream& in, OfficeArtCOLORREF& _s);
+void parseOfficeArtCOLORREF(LEInputStream &in, OfficeArtCOLORREF &_s);
 class OfficeArtChildAnchor;
-void parseOfficeArtChildAnchor(LEInputStream& in, OfficeArtChildAnchor& _s);
+void parseOfficeArtChildAnchor(LEInputStream &in, OfficeArtChildAnchor &_s);
 class DocOfficeArtClientAnchor;
-void parseDocOfficeArtClientAnchor(LEInputStream& in, DocOfficeArtClientAnchor& _s);
+void parseDocOfficeArtClientAnchor(LEInputStream &in, DocOfficeArtClientAnchor &_s);
 class XlsOfficeArtClientAnchor;
-void parseXlsOfficeArtClientAnchor(LEInputStream& in, XlsOfficeArtClientAnchor& _s);
+void parseXlsOfficeArtClientAnchor(LEInputStream &in, XlsOfficeArtClientAnchor &_s);
 class OfficeArtFPSPL;
-void parseOfficeArtFPSPL(LEInputStream& in, OfficeArtFPSPL& _s);
+void parseOfficeArtFPSPL(LEInputStream &in, OfficeArtFPSPL &_s);
 class RectStruct;
-void parseRectStruct(LEInputStream& in, RectStruct& _s);
+void parseRectStruct(LEInputStream &in, RectStruct &_s);
 class SmallRectStruct;
-void parseSmallRectStruct(LEInputStream& in, SmallRectStruct& _s);
+void parseSmallRectStruct(LEInputStream &in, SmallRectStruct &_s);
 class DocOfficeArtClientData;
-void parseDocOfficeArtClientData(LEInputStream& in, DocOfficeArtClientData& _s);
+void parseDocOfficeArtClientData(LEInputStream &in, DocOfficeArtClientData &_s);
 class XlsOfficeArtClientData;
-void parseXlsOfficeArtClientData(LEInputStream& in, XlsOfficeArtClientData& _s);
+void parseXlsOfficeArtClientData(LEInputStream &in, XlsOfficeArtClientData &_s);
 class ShapeFlagsAtom;
-void parseShapeFlagsAtom(LEInputStream& in, ShapeFlagsAtom& _s);
+void parseShapeFlagsAtom(LEInputStream &in, ShapeFlagsAtom &_s);
 class ShapeFlags10Atom;
-void parseShapeFlags10Atom(LEInputStream& in, ShapeFlags10Atom& _s);
+void parseShapeFlags10Atom(LEInputStream &in, ShapeFlags10Atom &_s);
 class ExObjRefAtom;
-void parseExObjRefAtom(LEInputStream& in, ExObjRefAtom& _s);
+void parseExObjRefAtom(LEInputStream &in, ExObjRefAtom &_s);
 class AnimationInfoAtom;
-void parseAnimationInfoAtom(LEInputStream& in, AnimationInfoAtom& _s);
+void parseAnimationInfoAtom(LEInputStream &in, AnimationInfoAtom &_s);
 class SoundContainer;
-void parseSoundContainer(LEInputStream& in, SoundContainer& _s);
+void parseSoundContainer(LEInputStream &in, SoundContainer &_s);
 class InteractiveInfoAtom;
-void parseInteractiveInfoAtom(LEInputStream& in, InteractiveInfoAtom& _s);
+void parseInteractiveInfoAtom(LEInputStream &in, InteractiveInfoAtom &_s);
 class MacroNameAtom;
-void parseMacroNameAtom(LEInputStream& in, MacroNameAtom& _s);
+void parseMacroNameAtom(LEInputStream &in, MacroNameAtom &_s);
 class PlaceholderAtom;
-void parsePlaceholderAtom(LEInputStream& in, PlaceholderAtom& _s);
+void parsePlaceholderAtom(LEInputStream &in, PlaceholderAtom &_s);
 class RecolorInfoAtom;
-void parseRecolorInfoAtom(LEInputStream& in, RecolorInfoAtom& _s);
+void parseRecolorInfoAtom(LEInputStream &in, RecolorInfoAtom &_s);
 class OutlineTextRefAtom;
-void parseOutlineTextRefAtom(LEInputStream& in, OutlineTextRefAtom& _s);
+void parseOutlineTextRefAtom(LEInputStream &in, OutlineTextRefAtom &_s);
 class ShapeProgsTagContainer;
-void parseShapeProgsTagContainer(LEInputStream& in, ShapeProgsTagContainer& _s);
+void parseShapeProgsTagContainer(LEInputStream &in, ShapeProgsTagContainer &_s);
 class PP9ShapeBinaryTagExtension;
-void parsePP9ShapeBinaryTagExtension(LEInputStream& in, PP9ShapeBinaryTagExtension& _s);
+void parsePP9ShapeBinaryTagExtension(LEInputStream &in, PP9ShapeBinaryTagExtension &_s);
 class PP10ShapeBinaryTagExtension;
-void parsePP10ShapeBinaryTagExtension(LEInputStream& in, PP10ShapeBinaryTagExtension& _s);
+void parsePP10ShapeBinaryTagExtension(LEInputStream &in, PP10ShapeBinaryTagExtension &_s);
 class PP11ShapeBinaryTagExtension;
-void parsePP11ShapeBinaryTagExtension(LEInputStream& in, PP11ShapeBinaryTagExtension& _s);
+void parsePP11ShapeBinaryTagExtension(LEInputStream &in, PP11ShapeBinaryTagExtension &_s);
 class RoundTripNewPlaceHolderId12Atom;
-void parseRoundTripNewPlaceHolderId12Atom(LEInputStream& in, RoundTripNewPlaceHolderId12Atom& _s);
+void parseRoundTripNewPlaceHolderId12Atom(LEInputStream &in, RoundTripNewPlaceHolderId12Atom &_s);
 class RoundTripShapeId12Atom;
-void parseRoundTripShapeId12Atom(LEInputStream& in, RoundTripShapeId12Atom& _s);
+void parseRoundTripShapeId12Atom(LEInputStream &in, RoundTripShapeId12Atom &_s);
 class RoundTripHFPlaceholder12Atom;
-void parseRoundTripHFPlaceholder12Atom(LEInputStream& in, RoundTripHFPlaceholder12Atom& _s);
+void parseRoundTripHFPlaceholder12Atom(LEInputStream &in, RoundTripHFPlaceholder12Atom &_s);
 class RoundTripShapeCheckSumForCustomLayouts12Atom;
-void parseRoundTripShapeCheckSumForCustomLayouts12Atom(LEInputStream& in, RoundTripShapeCheckSumForCustomLayouts12Atom& _s);
+void parseRoundTripShapeCheckSumForCustomLayouts12Atom(LEInputStream &in, RoundTripShapeCheckSumForCustomLayouts12Atom &_s);
 class XlsOfficeArtClientTextBox;
-void parseXlsOfficeArtClientTextBox(LEInputStream& in, XlsOfficeArtClientTextBox& _s);
+void parseXlsOfficeArtClientTextBox(LEInputStream &in, XlsOfficeArtClientTextBox &_s);
 class DocOfficeArtClientTextBox;
-void parseDocOfficeArtClientTextBox(LEInputStream& in, DocOfficeArtClientTextBox& _s);
+void parseDocOfficeArtClientTextBox(LEInputStream &in, DocOfficeArtClientTextBox &_s);
 class PptOfficeArtClientTextBox;
-void parsePptOfficeArtClientTextBox(LEInputStream& in, PptOfficeArtClientTextBox& _s);
+void parsePptOfficeArtClientTextBox(LEInputStream &in, PptOfficeArtClientTextBox &_s);
 class OfficeArtIDCL;
-void parseOfficeArtIDCL(LEInputStream& in, OfficeArtIDCL& _s);
+void parseOfficeArtIDCL(LEInputStream &in, OfficeArtIDCL &_s);
 class OfficeArtFOPTEOPID;
-void parseOfficeArtFOPTEOPID(LEInputStream& in, OfficeArtFOPTEOPID& _s);
+void parseOfficeArtFOPTEOPID(LEInputStream &in, OfficeArtFOPTEOPID &_s);
 class OfficeArtColorMRUContainer;
-void parseOfficeArtColorMRUContainer(LEInputStream& in, OfficeArtColorMRUContainer& _s);
+void parseOfficeArtColorMRUContainer(LEInputStream &in, OfficeArtColorMRUContainer &_s);
 class MSOCR;
-void parseMSOCR(LEInputStream& in, MSOCR& _s);
+void parseMSOCR(LEInputStream &in, MSOCR &_s);
 class OfficeArtSplitMenuColorContainer;
-void parseOfficeArtSplitMenuColorContainer(LEInputStream& in, OfficeArtSplitMenuColorContainer& _s);
+void parseOfficeArtSplitMenuColorContainer(LEInputStream &in, OfficeArtSplitMenuColorContainer &_s);
 class todo;
-void parsetodo(LEInputStream& in, todo& _s);
+void parsetodo(LEInputStream &in, todo &_s);
 class FibBase;
-void parseFibBase(LEInputStream& in, FibBase& _s);
+void parseFibBase(LEInputStream &in, FibBase &_s);
 class FibRgW97;
-void parseFibRgW97(LEInputStream& in, FibRgW97& _s);
+void parseFibRgW97(LEInputStream &in, FibRgW97 &_s);
 class FibRgLw97;
-void parseFibRgLw97(LEInputStream& in, FibRgLw97& _s);
+void parseFibRgLw97(LEInputStream &in, FibRgLw97 &_s);
 class FibRgFcLcb97;
-void parseFibRgFcLcb97(LEInputStream& in, FibRgFcLcb97& _s);
+void parseFibRgFcLcb97(LEInputStream &in, FibRgFcLcb97 &_s);
 class FibRgFcLcb2000;
-void parseFibRgFcLcb2000(LEInputStream& in, FibRgFcLcb2000& _s);
+void parseFibRgFcLcb2000(LEInputStream &in, FibRgFcLcb2000 &_s);
 class FibRgFcLcb2002;
-void parseFibRgFcLcb2002(LEInputStream& in, FibRgFcLcb2002& _s);
+void parseFibRgFcLcb2002(LEInputStream &in, FibRgFcLcb2002 &_s);
 class LPStshi;
-void parseLPStshi(LEInputStream& in, LPStshi& _s);
+void parseLPStshi(LEInputStream &in, LPStshi &_s);
 class LPStd;
-void parseLPStd(LEInputStream& in, LPStd& _s);
+void parseLPStd(LEInputStream &in, LPStd &_s);
 class PlcfSed;
-void parsePlcfSed(LEInputStream& in, PlcfSed& _s);
+void parsePlcfSed(LEInputStream &in, PlcfSed &_s);
 class Sed;
-void parseSed(LEInputStream& in, Sed& _s);
+void parseSed(LEInputStream &in, Sed &_s);
 class Plcfhdd;
-void parsePlcfhdd(LEInputStream& in, Plcfhdd& _s);
+void parsePlcfhdd(LEInputStream &in, Plcfhdd &_s);
 class PlcBteChpx;
-void parsePlcBteChpx(LEInputStream& in, PlcBteChpx& _s);
+void parsePlcBteChpx(LEInputStream &in, PlcBteChpx &_s);
 class PlcfBtePapx;
-void parsePlcfBtePapx(LEInputStream& in, PlcfBtePapx& _s);
+void parsePlcfBtePapx(LEInputStream &in, PlcfBtePapx &_s);
 class Tcg;
-void parseTcg(LEInputStream& in, Tcg& _s);
+void parseTcg(LEInputStream &in, Tcg &_s);
 class PrcData;
-void parsePrcData(LEInputStream& in, PrcData& _s);
+void parsePrcData(LEInputStream &in, PrcData &_s);
 class Sprm;
-void parseSprm(LEInputStream& in, Sprm& _s);
+void parseSprm(LEInputStream &in, Sprm &_s);
 class Pcdt;
-void parsePcdt(LEInputStream& in, Pcdt& _s);
+void parsePcdt(LEInputStream &in, Pcdt &_s);
 class FCompressed;
-void parseFCompressed(LEInputStream& in, FCompressed& _s);
+void parseFCompressed(LEInputStream &in, FCompressed &_s);
 class Prm0;
-void parsePrm0(LEInputStream& in, Prm0& _s);
+void parsePrm0(LEInputStream &in, Prm0 &_s);
 class Prm1;
-void parsePrm1(LEInputStream& in, Prm1& _s);
+void parsePrm1(LEInputStream &in, Prm1 &_s);
 class SttbfFfn;
-void parseSttbfFfn(LEInputStream& in, SttbfFfn& _s);
+void parseSttbfFfn(LEInputStream &in, SttbfFfn &_s);
 class SttbfFfnEntry;
-void parseSttbfFfnEntry(LEInputStream& in, SttbfFfnEntry& _s);
+void parseSttbfFfnEntry(LEInputStream &in, SttbfFfnEntry &_s);
 class CodePageString;
-void parseCodePageString(LEInputStream& in, CodePageString& _s);
+void parseCodePageString(LEInputStream &in, CodePageString &_s);
 class FILETIME;
-void parseFILETIME(LEInputStream& in, FILETIME& _s);
+void parseFILETIME(LEInputStream &in, FILETIME &_s);
 class ClipboardData;
-void parseClipboardData(LEInputStream& in, ClipboardData& _s);
+void parseClipboardData(LEInputStream &in, ClipboardData &_s);
 class PropertyIdentifierAndOffset;
-void parsePropertyIdentifierAndOffset(LEInputStream& in, PropertyIdentifierAndOffset& _s);
+void parsePropertyIdentifierAndOffset(LEInputStream &in, PropertyIdentifierAndOffset &_s);
 class TypedPropertyValue;
-void parseTypedPropertyValue(LEInputStream& in, TypedPropertyValue& _s);
+void parseTypedPropertyValue(LEInputStream &in, TypedPropertyValue &_s);
 class PropertySet;
-void parsePropertySet(LEInputStream& in, PropertySet& _s);
+void parsePropertySet(LEInputStream &in, PropertySet &_s);
 class PropertySetStream;
-void parsePropertySetStream(LEInputStream& in, PropertySetStream& _s);
+void parsePropertySetStream(LEInputStream &in, PropertySetStream &_s);
 class SummaryInformationPropertySetStream;
-void parseSummaryInformationPropertySetStream(LEInputStream& in, SummaryInformationPropertySetStream& _s);
+void parseSummaryInformationPropertySetStream(LEInputStream &in, SummaryInformationPropertySetStream &_s);
 class DocumentSummaryInformationPropertySetStream;
-void parseDocumentSummaryInformationPropertySetStream(LEInputStream& in, DocumentSummaryInformationPropertySetStream& _s);
+void parseDocumentSummaryInformationPropertySetStream(LEInputStream &in, DocumentSummaryInformationPropertySetStream &_s);
 class PicturesStream;
-void parsePicturesStream(LEInputStream& in, PicturesStream& _s);
+void parsePicturesStream(LEInputStream &in, PicturesStream &_s);
 class OfficeArtMetafileHeader;
-void parseOfficeArtMetafileHeader(LEInputStream& in, OfficeArtMetafileHeader& _s);
+void parseOfficeArtMetafileHeader(LEInputStream &in, OfficeArtMetafileHeader &_s);
 class SoundCollectionContainer;
-void parseSoundCollectionContainer(LEInputStream& in, SoundCollectionContainer& _s);
+void parseSoundCollectionContainer(LEInputStream &in, SoundCollectionContainer &_s);
 class SlideHeadersFootersContainer;
-void parseSlideHeadersFootersContainer(LEInputStream& in, SlideHeadersFootersContainer& _s);
+void parseSlideHeadersFootersContainer(LEInputStream &in, SlideHeadersFootersContainer &_s);
 class NotesHeadersFootersContainer;
-void parseNotesHeadersFootersContainer(LEInputStream& in, NotesHeadersFootersContainer& _s);
+void parseNotesHeadersFootersContainer(LEInputStream &in, NotesHeadersFootersContainer &_s);
 class ScalingStruct;
-void parseScalingStruct(LEInputStream& in, ScalingStruct& _s);
+void parseScalingStruct(LEInputStream &in, ScalingStruct &_s);
 class TextPFException9;
-void parseTextPFException9(LEInputStream& in, TextPFException9& _s);
+void parseTextPFException9(LEInputStream &in, TextPFException9 &_s);
 class TextCFException9;
-void parseTextCFException9(LEInputStream& in, TextCFException9& _s);
+void parseTextCFException9(LEInputStream &in, TextCFException9 &_s);
 class TextDefaults9Atom;
-void parseTextDefaults9Atom(LEInputStream& in, TextDefaults9Atom& _s);
+void parseTextDefaults9Atom(LEInputStream &in, TextDefaults9Atom &_s);
 class Kinsoku9Container;
-void parseKinsoku9Container(LEInputStream& in, Kinsoku9Container& _s);
+void parseKinsoku9Container(LEInputStream &in, Kinsoku9Container &_s);
 class OutlineTextProps9Entry;
-void parseOutlineTextProps9Entry(LEInputStream& in, OutlineTextProps9Entry& _s);
+void parseOutlineTextProps9Entry(LEInputStream &in, OutlineTextProps9Entry &_s);
 class TextCFException10;
-void parseTextCFException10(LEInputStream& in, TextCFException10& _s);
+void parseTextCFException10(LEInputStream &in, TextCFException10 &_s);
 class TextDefaults10Atom;
-void parseTextDefaults10Atom(LEInputStream& in, TextDefaults10Atom& _s);
+void parseTextDefaults10Atom(LEInputStream &in, TextDefaults10Atom &_s);
 class CommentIndex10Container;
-void parseCommentIndex10Container(LEInputStream& in, CommentIndex10Container& _s);
+void parseCommentIndex10Container(LEInputStream &in, CommentIndex10Container &_s);
 class OutlineTextProps10Entry;
-void parseOutlineTextProps10Entry(LEInputStream& in, OutlineTextProps10Entry& _s);
+void parseOutlineTextProps10Entry(LEInputStream &in, OutlineTextProps10Entry &_s);
 class PP11DocBinaryTagExtension;
-void parsePP11DocBinaryTagExtension(LEInputStream& in, PP11DocBinaryTagExtension& _s);
+void parsePP11DocBinaryTagExtension(LEInputStream &in, PP11DocBinaryTagExtension &_s);
 class UnknownBinaryTag;
-void parseUnknownBinaryTag(LEInputStream& in, UnknownBinaryTag& _s);
+void parseUnknownBinaryTag(LEInputStream &in, UnknownBinaryTag &_s);
 class NoZoomViewInfoAtom;
-void parseNoZoomViewInfoAtom(LEInputStream& in, NoZoomViewInfoAtom& _s);
+void parseNoZoomViewInfoAtom(LEInputStream &in, NoZoomViewInfoAtom &_s);
 class VBAInfoContainer;
-void parseVBAInfoContainer(LEInputStream& in, VBAInfoContainer& _s);
+void parseVBAInfoContainer(LEInputStream &in, VBAInfoContainer &_s);
 class NormalViewSetInfoAtom;
-void parseNormalViewSetInfoAtom(LEInputStream& in, NormalViewSetInfoAtom& _s);
+void parseNormalViewSetInfoAtom(LEInputStream &in, NormalViewSetInfoAtom &_s);
 class TextContainerMeta;
-void parseTextContainerMeta(LEInputStream& in, TextContainerMeta& _s);
+void parseTextContainerMeta(LEInputStream &in, TextContainerMeta &_s);
 class SlidePersistAtom;
-void parseSlidePersistAtom(LEInputStream& in, SlidePersistAtom& _s);
+void parseSlidePersistAtom(LEInputStream &in, SlidePersistAtom &_s);
 class TextRuler;
-void parseTextRuler(LEInputStream& in, TextRuler& _s);
+void parseTextRuler(LEInputStream &in, TextRuler &_s);
 class TextPFException;
-void parseTextPFException(LEInputStream& in, TextPFException& _s);
+void parseTextPFException(LEInputStream &in, TextPFException &_s);
 class TextCFException;
-void parseTextCFException(LEInputStream& in, TextCFException& _s);
+void parseTextCFException(LEInputStream &in, TextCFException &_s);
 class FontCollectionEntry;
-void parseFontCollectionEntry(LEInputStream& in, FontCollectionEntry& _s);
+void parseFontCollectionEntry(LEInputStream &in, FontCollectionEntry &_s);
 class KinsokuContainer;
-void parseKinsokuContainer(LEInputStream& in, KinsokuContainer& _s);
+void parseKinsokuContainer(LEInputStream &in, KinsokuContainer &_s);
 class TextSIException;
-void parseTextSIException(LEInputStream& in, TextSIException& _s);
+void parseTextSIException(LEInputStream &in, TextSIException &_s);
 class TextMasterStyleLevel;
-void parseTextMasterStyleLevel(LEInputStream& in, TextMasterStyleLevel& _s);
+void parseTextMasterStyleLevel(LEInputStream &in, TextMasterStyleLevel &_s);
 class DocumentAtom;
-void parseDocumentAtom(LEInputStream& in, DocumentAtom& _s);
+void parseDocumentAtom(LEInputStream &in, DocumentAtom &_s);
 class SlideTime10Atom;
-void parseSlideTime10Atom(LEInputStream& in, SlideTime10Atom& _s);
+void parseSlideTime10Atom(LEInputStream &in, SlideTime10Atom &_s);
 class PP12SlideBinaryTagExtension;
-void parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTagExtension& _s);
+void parsePP12SlideBinaryTagExtension(LEInputStream &in, PP12SlideBinaryTagExtension &_s);
 class ProgStringTagContainer;
-void parseProgStringTagContainer(LEInputStream& in, ProgStringTagContainer& _s);
+void parseProgStringTagContainer(LEInputStream &in, ProgStringTagContainer &_s);
 class NotesAtom;
-void parseNotesAtom(LEInputStream& in, NotesAtom& _s);
+void parseNotesAtom(LEInputStream &in, NotesAtom &_s);
 class ExObjListContainer;
-void parseExObjListContainer(LEInputStream& in, ExObjListContainer& _s);
+void parseExObjListContainer(LEInputStream &in, ExObjListContainer &_s);
 class ExControlContainer;
-void parseExControlContainer(LEInputStream& in, ExControlContainer& _s);
+void parseExControlContainer(LEInputStream &in, ExControlContainer &_s);
 class ExHyperlinkContainer;
-void parseExHyperlinkContainer(LEInputStream& in, ExHyperlinkContainer& _s);
+void parseExHyperlinkContainer(LEInputStream &in, ExHyperlinkContainer &_s);
 class ExOleLinkContainer;
-void parseExOleLinkContainer(LEInputStream& in, ExOleLinkContainer& _s);
+void parseExOleLinkContainer(LEInputStream &in, ExOleLinkContainer &_s);
 class ExOleEmbedContainer;
-void parseExOleEmbedContainer(LEInputStream& in, ExOleEmbedContainer& _s);
+void parseExOleEmbedContainer(LEInputStream &in, ExOleEmbedContainer &_s);
 class OfficeArtFDGGBlock;
-void parseOfficeArtFDGGBlock(LEInputStream& in, OfficeArtFDGGBlock& _s);
+void parseOfficeArtFDGGBlock(LEInputStream &in, OfficeArtFDGGBlock &_s);
 class OfficeArtSolverContainerFileBlock;
-void parseOfficeArtSolverContainerFileBlock(LEInputStream& in, OfficeArtSolverContainerFileBlock& _s);
+void parseOfficeArtSolverContainerFileBlock(LEInputStream &in, OfficeArtSolverContainerFileBlock &_s);
 class Rotation;
-void parseRotation(LEInputStream& in, Rotation& _s);
+void parseRotation(LEInputStream &in, Rotation &_s);
 class ProtectionBooleanProperties;
-void parseProtectionBooleanProperties(LEInputStream& in, ProtectionBooleanProperties& _s);
+void parseProtectionBooleanProperties(LEInputStream &in, ProtectionBooleanProperties &_s);
 class ITxid;
-void parseITxid(LEInputStream& in, ITxid& _s);
+void parseITxid(LEInputStream &in, ITxid &_s);
 class DxTextLeft;
-void parseDxTextLeft(LEInputStream& in, DxTextLeft& _s);
+void parseDxTextLeft(LEInputStream &in, DxTextLeft &_s);
 class DyTextTop;
-void parseDyTextTop(LEInputStream& in, DyTextTop& _s);
+void parseDyTextTop(LEInputStream &in, DyTextTop &_s);
 class DxTextRight;
-void parseDxTextRight(LEInputStream& in, DxTextRight& _s);
+void parseDxTextRight(LEInputStream &in, DxTextRight &_s);
 class DyTextBottom;
-void parseDyTextBottom(LEInputStream& in, DyTextBottom& _s);
+void parseDyTextBottom(LEInputStream &in, DyTextBottom &_s);
 class WrapText;
-void parseWrapText(LEInputStream& in, WrapText& _s);
+void parseWrapText(LEInputStream &in, WrapText &_s);
 class AnchorText;
-void parseAnchorText(LEInputStream& in, AnchorText& _s);
+void parseAnchorText(LEInputStream &in, AnchorText &_s);
 class TxflTextFlow;
-void parseTxflTextFlow(LEInputStream& in, TxflTextFlow& _s);
+void parseTxflTextFlow(LEInputStream &in, TxflTextFlow &_s);
 class CdirFont;
-void parseCdirFont(LEInputStream& in, CdirFont& _s);
+void parseCdirFont(LEInputStream &in, CdirFont &_s);
 class HspNext;
-void parseHspNext(LEInputStream& in, HspNext& _s);
+void parseHspNext(LEInputStream &in, HspNext &_s);
 class Txdir;
-void parseTxdir(LEInputStream& in, Txdir& _s);
+void parseTxdir(LEInputStream &in, Txdir &_s);
 class TextBooleanProperties;
-void parseTextBooleanProperties(LEInputStream& in, TextBooleanProperties& _s);
+void parseTextBooleanProperties(LEInputStream &in, TextBooleanProperties &_s);
 class CropFromTop;
-void parseCropFromTop(LEInputStream& in, CropFromTop& _s);
+void parseCropFromTop(LEInputStream &in, CropFromTop &_s);
 class CropFromBottom;
-void parseCropFromBottom(LEInputStream& in, CropFromBottom& _s);
+void parseCropFromBottom(LEInputStream &in, CropFromBottom &_s);
 class CropFromLeft;
-void parseCropFromLeft(LEInputStream& in, CropFromLeft& _s);
+void parseCropFromLeft(LEInputStream &in, CropFromLeft &_s);
 class CropFromRight;
-void parseCropFromRight(LEInputStream& in, CropFromRight& _s);
+void parseCropFromRight(LEInputStream &in, CropFromRight &_s);
 class Pib;
-void parsePib(LEInputStream& in, Pib& _s);
+void parsePib(LEInputStream &in, Pib &_s);
 class PibName;
-void parsePibName(LEInputStream& in, PibName& _s);
+void parsePibName(LEInputStream &in, PibName &_s);
 class PibFlags;
-void parsePibFlags(LEInputStream& in, PibFlags& _s);
+void parsePibFlags(LEInputStream &in, PibFlags &_s);
 class PictureTransparent;
-void parsePictureTransparent(LEInputStream& in, PictureTransparent& _s);
+void parsePictureTransparent(LEInputStream &in, PictureTransparent &_s);
 class PictureContrast;
-void parsePictureContrast(LEInputStream& in, PictureContrast& _s);
+void parsePictureContrast(LEInputStream &in, PictureContrast &_s);
 class PictureBrightness;
-void parsePictureBrightness(LEInputStream& in, PictureBrightness& _s);
+void parsePictureBrightness(LEInputStream &in, PictureBrightness &_s);
 class BlipBooleanProperties;
-void parseBlipBooleanProperties(LEInputStream& in, BlipBooleanProperties& _s);
+void parseBlipBooleanProperties(LEInputStream &in, BlipBooleanProperties &_s);
 class GeoLeft;
-void parseGeoLeft(LEInputStream& in, GeoLeft& _s);
+void parseGeoLeft(LEInputStream &in, GeoLeft &_s);
 class GeoTop;
-void parseGeoTop(LEInputStream& in, GeoTop& _s);
+void parseGeoTop(LEInputStream &in, GeoTop &_s);
 class GeoRight;
-void parseGeoRight(LEInputStream& in, GeoRight& _s);
+void parseGeoRight(LEInputStream &in, GeoRight &_s);
 class GeoBottom;
-void parseGeoBottom(LEInputStream& in, GeoBottom& _s);
+void parseGeoBottom(LEInputStream &in, GeoBottom &_s);
 class ShapePath;
-void parseShapePath(LEInputStream& in, ShapePath& _s);
+void parseShapePath(LEInputStream &in, ShapePath &_s);
 class PVertices;
-void parsePVertices(LEInputStream& in, PVertices& _s);
+void parsePVertices(LEInputStream &in, PVertices &_s);
 class PSegmentInfo;
-void parsePSegmentInfo(LEInputStream& in, PSegmentInfo& _s);
+void parsePSegmentInfo(LEInputStream &in, PSegmentInfo &_s);
 class AdjustValue;
-void parseAdjustValue(LEInputStream& in, AdjustValue& _s);
+void parseAdjustValue(LEInputStream &in, AdjustValue &_s);
 class Adjust2Value;
-void parseAdjust2Value(LEInputStream& in, Adjust2Value& _s);
+void parseAdjust2Value(LEInputStream &in, Adjust2Value &_s);
 class Adjust3Value;
-void parseAdjust3Value(LEInputStream& in, Adjust3Value& _s);
+void parseAdjust3Value(LEInputStream &in, Adjust3Value &_s);
 class Adjust4Value;
-void parseAdjust4Value(LEInputStream& in, Adjust4Value& _s);
+void parseAdjust4Value(LEInputStream &in, Adjust4Value &_s);
 class Adjust5Value;
-void parseAdjust5Value(LEInputStream& in, Adjust5Value& _s);
+void parseAdjust5Value(LEInputStream &in, Adjust5Value &_s);
 class Adjust6Value;
-void parseAdjust6Value(LEInputStream& in, Adjust6Value& _s);
+void parseAdjust6Value(LEInputStream &in, Adjust6Value &_s);
 class Adjust7Value;
-void parseAdjust7Value(LEInputStream& in, Adjust7Value& _s);
+void parseAdjust7Value(LEInputStream &in, Adjust7Value &_s);
 class Adjust8Value;
-void parseAdjust8Value(LEInputStream& in, Adjust8Value& _s);
+void parseAdjust8Value(LEInputStream &in, Adjust8Value &_s);
 class GeometryBooleanProperties;
-void parseGeometryBooleanProperties(LEInputStream& in, GeometryBooleanProperties& _s);
+void parseGeometryBooleanProperties(LEInputStream &in, GeometryBooleanProperties &_s);
 class FillType;
-void parseFillType(LEInputStream& in, FillType& _s);
+void parseFillType(LEInputStream &in, FillType &_s);
 class FillColor;
-void parseFillColor(LEInputStream& in, FillColor& _s);
+void parseFillColor(LEInputStream &in, FillColor &_s);
 class FillOpacity;
-void parseFillOpacity(LEInputStream& in, FillOpacity& _s);
+void parseFillOpacity(LEInputStream &in, FillOpacity &_s);
 class FillBackColor;
-void parseFillBackColor(LEInputStream& in, FillBackColor& _s);
+void parseFillBackColor(LEInputStream &in, FillBackColor &_s);
 class FillBackOpacity;
-void parseFillBackOpacity(LEInputStream& in, FillBackOpacity& _s);
+void parseFillBackOpacity(LEInputStream &in, FillBackOpacity &_s);
 class FillCrMod;
-void parseFillCrMod(LEInputStream& in, FillCrMod& _s);
+void parseFillCrMod(LEInputStream &in, FillCrMod &_s);
 class FillBlip;
-void parseFillBlip(LEInputStream& in, FillBlip& _s);
+void parseFillBlip(LEInputStream &in, FillBlip &_s);
 class FillBlipName;
-void parseFillBlipName(LEInputStream& in, FillBlipName& _s);
+void parseFillBlipName(LEInputStream &in, FillBlipName &_s);
 class FillBlipFlags;
-void parseFillBlipFlags(LEInputStream& in, FillBlipFlags& _s);
+void parseFillBlipFlags(LEInputStream &in, FillBlipFlags &_s);
 class FillWidth;
-void parseFillWidth(LEInputStream& in, FillWidth& _s);
+void parseFillWidth(LEInputStream &in, FillWidth &_s);
 class FillHeight;
-void parseFillHeight(LEInputStream& in, FillHeight& _s);
+void parseFillHeight(LEInputStream &in, FillHeight &_s);
 class FillAngle;
-void parseFillAngle(LEInputStream& in, FillAngle& _s);
+void parseFillAngle(LEInputStream &in, FillAngle &_s);
 class FillFocus;
-void parseFillFocus(LEInputStream& in, FillFocus& _s);
+void parseFillFocus(LEInputStream &in, FillFocus &_s);
 class FillToLeft;
-void parseFillToLeft(LEInputStream& in, FillToLeft& _s);
+void parseFillToLeft(LEInputStream &in, FillToLeft &_s);
 class FillToTop;
-void parseFillToTop(LEInputStream& in, FillToTop& _s);
+void parseFillToTop(LEInputStream &in, FillToTop &_s);
 class FillToRight;
-void parseFillToRight(LEInputStream& in, FillToRight& _s);
+void parseFillToRight(LEInputStream &in, FillToRight &_s);
 class FillToBottom;
-void parseFillToBottom(LEInputStream& in, FillToBottom& _s);
+void parseFillToBottom(LEInputStream &in, FillToBottom &_s);
 class FillRectLeft;
-void parseFillRectLeft(LEInputStream& in, FillRectLeft& _s);
+void parseFillRectLeft(LEInputStream &in, FillRectLeft &_s);
 class FillRectTop;
-void parseFillRectTop(LEInputStream& in, FillRectTop& _s);
+void parseFillRectTop(LEInputStream &in, FillRectTop &_s);
 class FillRectRight;
-void parseFillRectRight(LEInputStream& in, FillRectRight& _s);
+void parseFillRectRight(LEInputStream &in, FillRectRight &_s);
 class FillRectBottom;
-void parseFillRectBottom(LEInputStream& in, FillRectBottom& _s);
+void parseFillRectBottom(LEInputStream &in, FillRectBottom &_s);
 class FillDztype;
-void parseFillDztype(LEInputStream& in, FillDztype& _s);
+void parseFillDztype(LEInputStream &in, FillDztype &_s);
 class FillShadePreset;
-void parseFillShadePreset(LEInputStream& in, FillShadePreset& _s);
+void parseFillShadePreset(LEInputStream &in, FillShadePreset &_s);
 class FillShadeColors;
-void parseFillShadeColors(LEInputStream& in, FillShadeColors& _s);
+void parseFillShadeColors(LEInputStream &in, FillShadeColors &_s);
 class FillOriginX;
-void parseFillOriginX(LEInputStream& in, FillOriginX& _s);
+void parseFillOriginX(LEInputStream &in, FillOriginX &_s);
 class FillOriginY;
-void parseFillOriginY(LEInputStream& in, FillOriginY& _s);
+void parseFillOriginY(LEInputStream &in, FillOriginY &_s);
 class FillShapeOriginX;
-void parseFillShapeOriginX(LEInputStream& in, FillShapeOriginX& _s);
+void parseFillShapeOriginX(LEInputStream &in, FillShapeOriginX &_s);
 class FillShapeOriginY;
-void parseFillShapeOriginY(LEInputStream& in, FillShapeOriginY& _s);
+void parseFillShapeOriginY(LEInputStream &in, FillShapeOriginY &_s);
 class FillColorExt;
-void parseFillColorExt(LEInputStream& in, FillColorExt& _s);
+void parseFillColorExt(LEInputStream &in, FillColorExt &_s);
 class FillBackColorExt;
-void parseFillBackColorExt(LEInputStream& in, FillBackColorExt& _s);
+void parseFillBackColorExt(LEInputStream &in, FillBackColorExt &_s);
 class FillStyleBooleanProperties;
-void parseFillStyleBooleanProperties(LEInputStream& in, FillStyleBooleanProperties& _s);
+void parseFillStyleBooleanProperties(LEInputStream &in, FillStyleBooleanProperties &_s);
 class LineColor;
-void parseLineColor(LEInputStream& in, LineColor& _s);
+void parseLineColor(LEInputStream &in, LineColor &_s);
 class LineOpacity;
-void parseLineOpacity(LEInputStream& in, LineOpacity& _s);
+void parseLineOpacity(LEInputStream &in, LineOpacity &_s);
 class LineBackColor;
-void parseLineBackColor(LEInputStream& in, LineBackColor& _s);
+void parseLineBackColor(LEInputStream &in, LineBackColor &_s);
 class LineFillBlip;
-void parseLineFillBlip(LEInputStream& in, LineFillBlip& _s);
+void parseLineFillBlip(LEInputStream &in, LineFillBlip &_s);
 class LineWidth;
-void parseLineWidth(LEInputStream& in, LineWidth& _s);
+void parseLineWidth(LEInputStream &in, LineWidth &_s);
 class LineStyle;
-void parseLineStyle(LEInputStream& in, LineStyle& _s);
+void parseLineStyle(LEInputStream &in, LineStyle &_s);
 class LineDashing;
-void parseLineDashing(LEInputStream& in, LineDashing& _s);
+void parseLineDashing(LEInputStream &in, LineDashing &_s);
 class LineStartArrowhead;
-void parseLineStartArrowhead(LEInputStream& in, LineStartArrowhead& _s);
+void parseLineStartArrowhead(LEInputStream &in, LineStartArrowhead &_s);
 class LineEndArrowhead;
-void parseLineEndArrowhead(LEInputStream& in, LineEndArrowhead& _s);
+void parseLineEndArrowhead(LEInputStream &in, LineEndArrowhead &_s);
 class LineStartArrowWidth;
-void parseLineStartArrowWidth(LEInputStream& in, LineStartArrowWidth& _s);
+void parseLineStartArrowWidth(LEInputStream &in, LineStartArrowWidth &_s);
 class LineStartArrowLength;
-void parseLineStartArrowLength(LEInputStream& in, LineStartArrowLength& _s);
+void parseLineStartArrowLength(LEInputStream &in, LineStartArrowLength &_s);
 class LineEndArrowWidth;
-void parseLineEndArrowWidth(LEInputStream& in, LineEndArrowWidth& _s);
+void parseLineEndArrowWidth(LEInputStream &in, LineEndArrowWidth &_s);
 class LineEndArrowLength;
-void parseLineEndArrowLength(LEInputStream& in, LineEndArrowLength& _s);
+void parseLineEndArrowLength(LEInputStream &in, LineEndArrowLength &_s);
 class LineJoinStyle;
-void parseLineJoinStyle(LEInputStream& in, LineJoinStyle& _s);
+void parseLineJoinStyle(LEInputStream &in, LineJoinStyle &_s);
 class LineEndCapStyle;
-void parseLineEndCapStyle(LEInputStream& in, LineEndCapStyle& _s);
+void parseLineEndCapStyle(LEInputStream &in, LineEndCapStyle &_s);
 class LineStyleBooleanProperties;
-void parseLineStyleBooleanProperties(LEInputStream& in, LineStyleBooleanProperties& _s);
+void parseLineStyleBooleanProperties(LEInputStream &in, LineStyleBooleanProperties &_s);
 class ShadowType;
-void parseShadowType(LEInputStream& in, ShadowType& _s);
+void parseShadowType(LEInputStream &in, ShadowType &_s);
 class ShadowColor;
-void parseShadowColor(LEInputStream& in, ShadowColor& _s);
+void parseShadowColor(LEInputStream &in, ShadowColor &_s);
 class ShadowOpacity;
-void parseShadowOpacity(LEInputStream& in, ShadowOpacity& _s);
+void parseShadowOpacity(LEInputStream &in, ShadowOpacity &_s);
 class ShadowOffsetX;
-void parseShadowOffsetX(LEInputStream& in, ShadowOffsetX& _s);
+void parseShadowOffsetX(LEInputStream &in, ShadowOffsetX &_s);
 class ShadowOffsetY;
-void parseShadowOffsetY(LEInputStream& in, ShadowOffsetY& _s);
+void parseShadowOffsetY(LEInputStream &in, ShadowOffsetY &_s);
 class ShadowStyleBooleanProperties;
-void parseShadowStyleBooleanProperties(LEInputStream& in, ShadowStyleBooleanProperties& _s);
+void parseShadowStyleBooleanProperties(LEInputStream &in, ShadowStyleBooleanProperties &_s);
 class HspMaster;
-void parseHspMaster(LEInputStream& in, HspMaster& _s);
+void parseHspMaster(LEInputStream &in, HspMaster &_s);
 class Cxstyle;
-void parseCxstyle(LEInputStream& in, Cxstyle& _s);
+void parseCxstyle(LEInputStream &in, Cxstyle &_s);
 class BWMode;
-void parseBWMode(LEInputStream& in, BWMode& _s);
+void parseBWMode(LEInputStream &in, BWMode &_s);
 class ShapeBooleanProperties;
-void parseShapeBooleanProperties(LEInputStream& in, ShapeBooleanProperties& _s);
+void parseShapeBooleanProperties(LEInputStream &in, ShapeBooleanProperties &_s);
 class DxyCalloutGap;
-void parseDxyCalloutGap(LEInputStream& in, DxyCalloutGap& _s);
+void parseDxyCalloutGap(LEInputStream &in, DxyCalloutGap &_s);
 class Spcoa;
-void parseSpcoa(LEInputStream& in, Spcoa& _s);
+void parseSpcoa(LEInputStream &in, Spcoa &_s);
 class Spcod;
-void parseSpcod(LEInputStream& in, Spcod& _s);
+void parseSpcod(LEInputStream &in, Spcod &_s);
 class DxyCalloutDropSpecified;
-void parseDxyCalloutDropSpecified(LEInputStream& in, DxyCalloutDropSpecified& _s);
+void parseDxyCalloutDropSpecified(LEInputStream &in, DxyCalloutDropSpecified &_s);
 class DxyCalloutLengthSpecified;
-void parseDxyCalloutLengthSpecified(LEInputStream& in, DxyCalloutLengthSpecified& _s);
+void parseDxyCalloutLengthSpecified(LEInputStream &in, DxyCalloutLengthSpecified &_s);
 class CalloutBooleanProperties;
-void parseCalloutBooleanProperties(LEInputStream& in, CalloutBooleanProperties& _s);
+void parseCalloutBooleanProperties(LEInputStream &in, CalloutBooleanProperties &_s);
 class PWrapPolygonVertices;
-void parsePWrapPolygonVertices(LEInputStream& in, PWrapPolygonVertices& _s);
+void parsePWrapPolygonVertices(LEInputStream &in, PWrapPolygonVertices &_s);
 class DxWrapDistLeft;
-void parseDxWrapDistLeft(LEInputStream& in, DxWrapDistLeft& _s);
+void parseDxWrapDistLeft(LEInputStream &in, DxWrapDistLeft &_s);
 class DyWrapDistTop;
-void parseDyWrapDistTop(LEInputStream& in, DyWrapDistTop& _s);
+void parseDyWrapDistTop(LEInputStream &in, DyWrapDistTop &_s);
 class DxWrapDistRight;
-void parseDxWrapDistRight(LEInputStream& in, DxWrapDistRight& _s);
+void parseDxWrapDistRight(LEInputStream &in, DxWrapDistRight &_s);
 class DyWrapDistBottom;
-void parseDyWrapDistBottom(LEInputStream& in, DyWrapDistBottom& _s);
+void parseDyWrapDistBottom(LEInputStream &in, DyWrapDistBottom &_s);
 class LidRegroup;
-void parseLidRegroup(LEInputStream& in, LidRegroup& _s);
+void parseLidRegroup(LEInputStream &in, LidRegroup &_s);
 class PosH;
-void parsePosH(LEInputStream& in, PosH& _s);
+void parsePosH(LEInputStream &in, PosH &_s);
 class PosRelH;
-void parsePosRelH(LEInputStream& in, PosRelH& _s);
+void parsePosRelH(LEInputStream &in, PosRelH &_s);
 class PosV;
-void parsePosV(LEInputStream& in, PosV& _s);
+void parsePosV(LEInputStream &in, PosV &_s);
 class PosRelV;
-void parsePosRelV(LEInputStream& in, PosRelV& _s);
+void parsePosRelV(LEInputStream &in, PosRelV &_s);
 class PctHR;
-void parsePctHR(LEInputStream& in, PctHR& _s);
+void parsePctHR(LEInputStream &in, PctHR &_s);
 class AlignHR;
-void parseAlignHR(LEInputStream& in, AlignHR& _s);
+void parseAlignHR(LEInputStream &in, AlignHR &_s);
 class DxHeightHR;
-void parseDxHeightHR(LEInputStream& in, DxHeightHR& _s);
+void parseDxHeightHR(LEInputStream &in, DxHeightHR &_s);
 class DxWidthHR;
-void parseDxWidthHR(LEInputStream& in, DxWidthHR& _s);
+void parseDxWidthHR(LEInputStream &in, DxWidthHR &_s);
 class BorderTopColor;
-void parseBorderTopColor(LEInputStream& in, BorderTopColor& _s);
+void parseBorderTopColor(LEInputStream &in, BorderTopColor &_s);
 class BorderLeftColor;
-void parseBorderLeftColor(LEInputStream& in, BorderLeftColor& _s);
+void parseBorderLeftColor(LEInputStream &in, BorderLeftColor &_s);
 class BorderBottomColor;
-void parseBorderBottomColor(LEInputStream& in, BorderBottomColor& _s);
+void parseBorderBottomColor(LEInputStream &in, BorderBottomColor &_s);
 class BorderRightColor;
-void parseBorderRightColor(LEInputStream& in, BorderRightColor& _s);
+void parseBorderRightColor(LEInputStream &in, BorderRightColor &_s);
 class GroupShapeBooleanProperties;
-void parseGroupShapeBooleanProperties(LEInputStream& in, GroupShapeBooleanProperties& _s);
+void parseGroupShapeBooleanProperties(LEInputStream &in, GroupShapeBooleanProperties &_s);
 class WzFillId;
-void parseWzFillId(LEInputStream& in, WzFillId& _s);
+void parseWzFillId(LEInputStream &in, WzFillId &_s);
 class DiagramBooleanProperties;
-void parseDiagramBooleanProperties(LEInputStream& in, DiagramBooleanProperties& _s);
+void parseDiagramBooleanProperties(LEInputStream &in, DiagramBooleanProperties &_s);
 class PptOfficeArtClientAnchor;
-void parsePptOfficeArtClientAnchor(LEInputStream& in, PptOfficeArtClientAnchor& _s);
+void parsePptOfficeArtClientAnchor(LEInputStream &in, PptOfficeArtClientAnchor &_s);
 class AnimationInfoContainer;
-void parseAnimationInfoContainer(LEInputStream& in, AnimationInfoContainer& _s);
+void parseAnimationInfoContainer(LEInputStream &in, AnimationInfoContainer &_s);
 class MouseClickInteractiveInfoContainer;
-void parseMouseClickInteractiveInfoContainer(LEInputStream& in, MouseClickInteractiveInfoContainer& _s);
+void parseMouseClickInteractiveInfoContainer(LEInputStream &in, MouseClickInteractiveInfoContainer &_s);
 class MouseOverInteractiveInfoContainer;
-void parseMouseOverInteractiveInfoContainer(LEInputStream& in, MouseOverInteractiveInfoContainer& _s);
+void parseMouseOverInteractiveInfoContainer(LEInputStream &in, MouseOverInteractiveInfoContainer &_s);
 class ShapeClientRoundtripDataSubcontainerOrAtom;
-void parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, ShapeClientRoundtripDataSubcontainerOrAtom& _s);
+void parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream &in, ShapeClientRoundtripDataSubcontainerOrAtom &_s);
 class ShapeProgBinaryTagSubContainerOrAtom;
-void parseShapeProgBinaryTagSubContainerOrAtom(LEInputStream& in, ShapeProgBinaryTagSubContainerOrAtom& _s);
+void parseShapeProgBinaryTagSubContainerOrAtom(LEInputStream &in, ShapeProgBinaryTagSubContainerOrAtom &_s);
 class OfficeArtClientTextBox;
-void parseOfficeArtClientTextBox(LEInputStream& in, OfficeArtClientTextBox& _s);
+void parseOfficeArtClientTextBox(LEInputStream &in, OfficeArtClientTextBox &_s);
 class TextRulerAtom;
-void parseTextRulerAtom(LEInputStream& in, TextRulerAtom& _s);
+void parseTextRulerAtom(LEInputStream &in, TextRulerAtom &_s);
 class OfficeArtFOPTE;
-void parseOfficeArtFOPTE(LEInputStream& in, OfficeArtFOPTE& _s);
+void parseOfficeArtFOPTE(LEInputStream &in, OfficeArtFOPTE &_s);
 class Fib;
-void parseFib(LEInputStream& in, Fib& _s);
+void parseFib(LEInputStream &in, Fib &_s);
 class STSH;
-void parseSTSH(LEInputStream& in, STSH& _s);
+void parseSTSH(LEInputStream &in, STSH &_s);
 class Clx;
-void parseClx(LEInputStream& in, Clx& _s);
+void parseClx(LEInputStream &in, Clx &_s);
 class Pcr;
-void parsePcr(LEInputStream& in, Pcr& _s);
+void parsePcr(LEInputStream &in, Pcr &_s);
 class Prm;
-void parsePrm(LEInputStream& in, Prm& _s);
+void parsePrm(LEInputStream &in, Prm &_s);
 class OfficeArtBlipEMF;
-void parseOfficeArtBlipEMF(LEInputStream& in, OfficeArtBlipEMF& _s);
+void parseOfficeArtBlipEMF(LEInputStream &in, OfficeArtBlipEMF &_s);
 class OfficeArtBlipWMF;
-void parseOfficeArtBlipWMF(LEInputStream& in, OfficeArtBlipWMF& _s);
+void parseOfficeArtBlipWMF(LEInputStream &in, OfficeArtBlipWMF &_s);
 class OfficeArtBlipPICT;
-void parseOfficeArtBlipPICT(LEInputStream& in, OfficeArtBlipPICT& _s);
+void parseOfficeArtBlipPICT(LEInputStream &in, OfficeArtBlipPICT &_s);
 class OfficeArtBlip;
-void parseOfficeArtBlip(LEInputStream& in, OfficeArtBlip& _s);
+void parseOfficeArtBlip(LEInputStream &in, OfficeArtBlip &_s);
 class ZoomViewInfoAtom;
-void parseZoomViewInfoAtom(LEInputStream& in, ZoomViewInfoAtom& _s);
+void parseZoomViewInfoAtom(LEInputStream &in, ZoomViewInfoAtom &_s);
 class PP9DocBinaryTagExtension;
-void parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtension& _s);
+void parsePP9DocBinaryTagExtension(LEInputStream &in, PP9DocBinaryTagExtension &_s);
 class TextMasterStyle9Level;
-void parseTextMasterStyle9Level(LEInputStream& in, TextMasterStyle9Level& _s);
+void parseTextMasterStyle9Level(LEInputStream &in, TextMasterStyle9Level &_s);
 class StyleTextProp9;
-void parseStyleTextProp9(LEInputStream& in, StyleTextProp9& _s);
+void parseStyleTextProp9(LEInputStream &in, StyleTextProp9 &_s);
 class PP10DocBinaryTagExtension;
-void parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExtension& _s);
+void parsePP10DocBinaryTagExtension(LEInputStream &in, PP10DocBinaryTagExtension &_s);
 class TextMasterStyle10Level;
-void parseTextMasterStyle10Level(LEInputStream& in, TextMasterStyle10Level& _s);
+void parseTextMasterStyle10Level(LEInputStream &in, TextMasterStyle10Level &_s);
 class NotesTextViewInfoContainer;
-void parseNotesTextViewInfoContainer(LEInputStream& in, NotesTextViewInfoContainer& _s);
+void parseNotesTextViewInfoContainer(LEInputStream &in, NotesTextViewInfoContainer &_s);
 class OutlineViewInfoContainer;
-void parseOutlineViewInfoContainer(LEInputStream& in, OutlineViewInfoContainer& _s);
+void parseOutlineViewInfoContainer(LEInputStream &in, OutlineViewInfoContainer &_s);
 class NormalViewSetInfoContainer;
-void parseNormalViewSetInfoContainer(LEInputStream& in, NormalViewSetInfoContainer& _s);
+void parseNormalViewSetInfoContainer(LEInputStream &in, NormalViewSetInfoContainer &_s);
 class SlideListWithTextSubContainerOrAtom;
-void parseSlideListWithTextSubContainerOrAtom(LEInputStream& in, SlideListWithTextSubContainerOrAtom& _s);
+void parseSlideListWithTextSubContainerOrAtom(LEInputStream &in, SlideListWithTextSubContainerOrAtom &_s);
 class OutlineAtom;
-void parseOutlineAtom(LEInputStream& in, OutlineAtom& _s);
+void parseOutlineAtom(LEInputStream &in, OutlineAtom &_s);
 class TextContainer;
-void parseTextContainer(LEInputStream& in, TextContainer& _s);
+void parseTextContainer(LEInputStream &in, TextContainer &_s);
 class MouseClickTextInfo;
-void parseMouseClickTextInfo(LEInputStream& in, MouseClickTextInfo& _s);
+void parseMouseClickTextInfo(LEInputStream &in, MouseClickTextInfo &_s);
 class MouseOverTextInfo;
-void parseMouseOverTextInfo(LEInputStream& in, MouseOverTextInfo& _s);
+void parseMouseOverTextInfo(LEInputStream &in, MouseOverTextInfo &_s);
 class TextPFRun;
-void parseTextPFRun(LEInputStream& in, TextPFRun& _s);
+void parseTextPFRun(LEInputStream &in, TextPFRun &_s);
 class TextCFRun;
-void parseTextCFRun(LEInputStream& in, TextCFRun& _s);
+void parseTextCFRun(LEInputStream &in, TextCFRun &_s);
 class TextCFExceptionAtom;
-void parseTextCFExceptionAtom(LEInputStream& in, TextCFExceptionAtom& _s);
+void parseTextCFExceptionAtom(LEInputStream &in, TextCFExceptionAtom &_s);
 class DefaultRulerAtom;
-void parseDefaultRulerAtom(LEInputStream& in, DefaultRulerAtom& _s);
+void parseDefaultRulerAtom(LEInputStream &in, DefaultRulerAtom &_s);
 class TextPFExceptionAtom;
-void parseTextPFExceptionAtom(LEInputStream& in, TextPFExceptionAtom& _s);
+void parseTextPFExceptionAtom(LEInputStream &in, TextPFExceptionAtom &_s);
 class TextSIRun;
-void parseTextSIRun(LEInputStream& in, TextSIRun& _s);
+void parseTextSIRun(LEInputStream &in, TextSIRun &_s);
 class TextSIExceptionAtom;
-void parseTextSIExceptionAtom(LEInputStream& in, TextSIExceptionAtom& _s);
+void parseTextSIExceptionAtom(LEInputStream &in, TextSIExceptionAtom &_s);
 class TextMasterStyleAtom;
-void parseTextMasterStyleAtom(LEInputStream& in, TextMasterStyleAtom& _s);
+void parseTextMasterStyleAtom(LEInputStream &in, TextMasterStyleAtom &_s);
 class PP10SlideBinaryTagExtension;
-void parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTagExtension& _s);
+void parsePP10SlideBinaryTagExtension(LEInputStream &in, PP10SlideBinaryTagExtension &_s);
 class ExObjListSubContainer;
-void parseExObjListSubContainer(LEInputStream& in, ExObjListSubContainer& _s);
+void parseExObjListSubContainer(LEInputStream &in, ExObjListSubContainer &_s);
 class OfficeArtDggContainer;
-void parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _s);
+void parseOfficeArtDggContainer(LEInputStream &in, OfficeArtDggContainer &_s);
 class OfficeArtFOPTEChoice;
-void parseOfficeArtFOPTEChoice(LEInputStream& in, OfficeArtFOPTEChoice& _s);
+void parseOfficeArtFOPTEChoice(LEInputStream &in, OfficeArtFOPTEChoice &_s);
 class OfficeArtClientAnchor;
-void parseOfficeArtClientAnchor(LEInputStream& in, OfficeArtClientAnchor& _s);
+void parseOfficeArtClientAnchor(LEInputStream &in, OfficeArtClientAnchor &_s);
 class PptOfficeArtClientData;
-void parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData& _s);
+void parsePptOfficeArtClientData(LEInputStream &in, PptOfficeArtClientData &_s);
 class ShapeProgBinaryTagContainer;
-void parseShapeProgBinaryTagContainer(LEInputStream& in, ShapeProgBinaryTagContainer& _s);
+void parseShapeProgBinaryTagContainer(LEInputStream &in, ShapeProgBinaryTagContainer &_s);
 class WordDocument;
-void parseWordDocument(LEInputStream& in, WordDocument& _s);
+void parseWordDocument(LEInputStream &in, WordDocument &_s);
 class Table;
-void parseTable(LEInputStream& in, Table& _s);
+void parseTable(LEInputStream &in, Table &_s);
 class Pcd;
-void parsePcd(LEInputStream& in, Pcd& _s);
+void parsePcd(LEInputStream &in, Pcd &_s);
 class OfficeArtFBSE;
-void parseOfficeArtFBSE(LEInputStream& in, OfficeArtFBSE& _s);
+void parseOfficeArtFBSE(LEInputStream &in, OfficeArtFBSE &_s);
 class OfficeArtBStoreContainerFileBlock;
-void parseOfficeArtBStoreContainerFileBlock(LEInputStream& in, OfficeArtBStoreContainerFileBlock& _s);
+void parseOfficeArtBStoreContainerFileBlock(LEInputStream &in, OfficeArtBStoreContainerFileBlock &_s);
 class SlideViewInfoInstance;
-void parseSlideViewInfoInstance(LEInputStream& in, SlideViewInfoInstance& _s);
+void parseSlideViewInfoInstance(LEInputStream &in, SlideViewInfoInstance &_s);
 class DocProgBinaryTagSubContainerOrAtom;
-void parseDocProgBinaryTagSubContainerOrAtom(LEInputStream& in, DocProgBinaryTagSubContainerOrAtom& _s);
+void parseDocProgBinaryTagSubContainerOrAtom(LEInputStream &in, DocProgBinaryTagSubContainerOrAtom &_s);
 class TextMasterStyle9Atom;
-void parseTextMasterStyle9Atom(LEInputStream& in, TextMasterStyle9Atom& _s);
+void parseTextMasterStyle9Atom(LEInputStream &in, TextMasterStyle9Atom &_s);
 class BlipEntityAtom;
-void parseBlipEntityAtom(LEInputStream& in, BlipEntityAtom& _s);
+void parseBlipEntityAtom(LEInputStream &in, BlipEntityAtom &_s);
 class TextMasterStyle10Atom;
-void parseTextMasterStyle10Atom(LEInputStream& in, TextMasterStyle10Atom& _s);
+void parseTextMasterStyle10Atom(LEInputStream &in, TextMasterStyle10Atom &_s);
 class TextClientDataSubContainerOrAtom;
-void parseTextClientDataSubContainerOrAtom(LEInputStream& in, TextClientDataSubContainerOrAtom& _s);
+void parseTextClientDataSubContainerOrAtom(LEInputStream &in, TextClientDataSubContainerOrAtom &_s);
 class TextContainerInteractiveInfo;
-void parseTextContainerInteractiveInfo(LEInputStream& in, TextContainerInteractiveInfo& _s);
+void parseTextContainerInteractiveInfo(LEInputStream &in, TextContainerInteractiveInfo &_s);
 class DocumentTextInfoContainer;
-void parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoContainer& _s);
+void parseDocumentTextInfoContainer(LEInputStream &in, DocumentTextInfoContainer &_s);
 class SlideProgBinaryTagSubContainerOrAtom;
-void parseSlideProgBinaryTagSubContainerOrAtom(LEInputStream& in, SlideProgBinaryTagSubContainerOrAtom& _s);
+void parseSlideProgBinaryTagSubContainerOrAtom(LEInputStream &in, SlideProgBinaryTagSubContainerOrAtom &_s);
 class DrawingGroupContainer;
-void parseDrawingGroupContainer(LEInputStream& in, DrawingGroupContainer& _s);
+void parseDrawingGroupContainer(LEInputStream &in, DrawingGroupContainer &_s);
 class OfficeArtClientData;
-void parseOfficeArtClientData(LEInputStream& in, OfficeArtClientData& _s);
+void parseOfficeArtClientData(LEInputStream &in, OfficeArtClientData &_s);
 class ShapeProgTagsSubContainerOrAtom;
-void parseShapeProgTagsSubContainerOrAtom(LEInputStream& in, ShapeProgTagsSubContainerOrAtom& _s);
+void parseShapeProgTagsSubContainerOrAtom(LEInputStream &in, ShapeProgTagsSubContainerOrAtom &_s);
 class DocumentContainer;
-void parseDocumentContainer(LEInputStream& in, DocumentContainer& _s);
+void parseDocumentContainer(LEInputStream &in, DocumentContainer &_s);
 class DocInfoListSubContainerOrAtom;
-void parseDocInfoListSubContainerOrAtom(LEInputStream& in, DocInfoListSubContainerOrAtom& _s);
+void parseDocInfoListSubContainerOrAtom(LEInputStream &in, DocInfoListSubContainerOrAtom &_s);
 class DocProgBinaryTagContainer;
-void parseDocProgBinaryTagContainer(LEInputStream& in, DocProgBinaryTagContainer& _s);
+void parseDocProgBinaryTagContainer(LEInputStream &in, DocProgBinaryTagContainer &_s);
 class SlideProgBinaryTagContainer;
-void parseSlideProgBinaryTagContainer(LEInputStream& in, SlideProgBinaryTagContainer& _s);
+void parseSlideProgBinaryTagContainer(LEInputStream &in, SlideProgBinaryTagContainer &_s);
 class OfficeArtSpContainer;
-void parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s);
+void parseOfficeArtSpContainer(LEInputStream &in, OfficeArtSpContainer &_s);
 class OfficeArtInlineSpContainer;
-void parseOfficeArtInlineSpContainer(LEInputStream& in, OfficeArtInlineSpContainer& _s);
+void parseOfficeArtInlineSpContainer(LEInputStream &in, OfficeArtInlineSpContainer &_s);
 class DocProgTagsSubContainerOrAtom;
-void parseDocProgTagsSubContainerOrAtom(LEInputStream& in, DocProgTagsSubContainerOrAtom& _s);
+void parseDocProgTagsSubContainerOrAtom(LEInputStream &in, DocProgTagsSubContainerOrAtom &_s);
 class SlideProgTagsSubContainerOrAtom;
-void parseSlideProgTagsSubContainerOrAtom(LEInputStream& in, SlideProgTagsSubContainerOrAtom& _s);
+void parseSlideProgTagsSubContainerOrAtom(LEInputStream &in, SlideProgTagsSubContainerOrAtom &_s);
 class OfficeArtDgContainer;
-void parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s);
+void parseOfficeArtDgContainer(LEInputStream &in, OfficeArtDgContainer &_s);
 class OfficeArtSpgrContainerFileBlock;
-void parseOfficeArtSpgrContainerFileBlock(LEInputStream& in, OfficeArtSpgrContainerFileBlock& _s);
+void parseOfficeArtSpgrContainerFileBlock(LEInputStream &in, OfficeArtSpgrContainerFileBlock &_s);
 class DrawingContainer;
-void parseDrawingContainer(LEInputStream& in, DrawingContainer& _s);
+void parseDrawingContainer(LEInputStream &in, DrawingContainer &_s);
 class MainMasterContainer;
-void parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s);
+void parseMainMasterContainer(LEInputStream &in, MainMasterContainer &_s);
 class SlideContainer;
-void parseSlideContainer(LEInputStream& in, SlideContainer& _s);
+void parseSlideContainer(LEInputStream &in, SlideContainer &_s);
 class NotesContainer;
-void parseNotesContainer(LEInputStream& in, NotesContainer& _s);
+void parseNotesContainer(LEInputStream &in, NotesContainer &_s);
 class MasterOrSlideContainer;
-void parseMasterOrSlideContainer(LEInputStream& in, MasterOrSlideContainer& _s);
+void parseMasterOrSlideContainer(LEInputStream &in, MasterOrSlideContainer &_s);
 class PowerPointStruct;
-void parsePowerPointStruct(LEInputStream& in, PowerPointStruct& _s);
-class RecordHeader : public StreamOffset {
+void parsePowerPointStruct(LEInputStream &in, PowerPointStruct &_s);
+class RecordHeader : public StreamOffset
+{
 public:
     quint8 recVer;
     quint16 recInstance;
     quint16 recType;
     quint32 recLen;
-    RecordHeader(void* /*dummy*/ = 0) {}
+    RecordHeader(void * /*dummy*/ = 0)
+    {
+    }
 };
-class CurrentUserAtom : public StreamOffset {
+class CurrentUserAtom : public StreamOffset
+{
 public:
     bool _has_unicodeUserName;
     bool _has_unknown;
@@ -1036,43 +1044,64 @@ public:
     quint32 relVersion;
     QVector<quint16> unicodeUserName;
     QByteArray unknown;
-    CurrentUserAtom(void* /*dummy*/ = 0) {}
+    CurrentUserAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TODOS : public StreamOffset {
+class TODOS : public StreamOffset
+{
 public:
     QList<Byte> anon;
-    TODOS(void* /*dummy*/ = 0) {}
+    TODOS(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Byte : public StreamOffset {
+class Byte : public StreamOffset
+{
 public:
     quint8 b;
-    Byte(void* /*dummy*/ = 0) {}
+    Byte(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ZeroByte : public StreamOffset {
+class ZeroByte : public StreamOffset
+{
 public:
     quint8 b;
-    ZeroByte(void* /*dummy*/ = 0) {}
+    ZeroByte(void * /*dummy*/ = 0)
+    {
+    }
 };
-class CurrentUserStream : public StreamOffset {
+class CurrentUserStream : public StreamOffset
+{
 public:
     CurrentUserAtom anon1;
     QList<Byte> trailing;
-    CurrentUserStream(void* /*dummy*/ = 0) {}
+    CurrentUserStream(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtBStoreDelay : public StreamOffset {
+class OfficeArtBStoreDelay : public StreamOffset
+{
 public:
     QList<OfficeArtBStoreContainerFileBlock> rgfb;
-    OfficeArtBStoreDelay(void* /*dummy*/ = 0) {}
+    OfficeArtBStoreDelay(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtRecordHeader : public StreamOffset {
+class OfficeArtRecordHeader : public StreamOffset
+{
 public:
     quint8 recVer;
     quint16 recInstance;
     quint16 recType;
     quint32 recLen;
-    OfficeArtRecordHeader(void* /*dummy*/ = 0) {}
+    OfficeArtRecordHeader(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtBlipJPEG : public StreamOffset {
+class OfficeArtBlipJPEG : public StreamOffset
+{
 public:
     bool _has_rgbUid2;
     OfficeArtRecordHeader rh;
@@ -1080,9 +1109,12 @@ public:
     QByteArray rgbUid2;
     quint8 tag;
     QByteArray BLIPFileData;
-    OfficeArtBlipJPEG(void* /*dummy*/ = 0) {}
+    OfficeArtBlipJPEG(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtBlipPNG : public StreamOffset {
+class OfficeArtBlipPNG : public StreamOffset
+{
 public:
     bool _has_rgbUid2;
     OfficeArtRecordHeader rh;
@@ -1090,9 +1122,12 @@ public:
     QByteArray rgbUid2;
     quint8 tag;
     QByteArray BLIPFileData;
-    OfficeArtBlipPNG(void* /*dummy*/ = 0) {}
+    OfficeArtBlipPNG(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtBlipDIB : public StreamOffset {
+class OfficeArtBlipDIB : public StreamOffset
+{
 public:
     bool _has_rgbUid2;
     OfficeArtRecordHeader rh;
@@ -1100,9 +1135,12 @@ public:
     QByteArray rgbUid2;
     quint8 tag;
     QByteArray BLIPFileData;
-    OfficeArtBlipDIB(void* /*dummy*/ = 0) {}
+    OfficeArtBlipDIB(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtBlipTIFF : public StreamOffset {
+class OfficeArtBlipTIFF : public StreamOffset
+{
 public:
     bool _has_rgbUid2;
     OfficeArtRecordHeader rh;
@@ -1110,34 +1148,49 @@ public:
     QByteArray rgbUid2;
     quint8 tag;
     QByteArray BLIPFileData;
-    OfficeArtBlipTIFF(void* /*dummy*/ = 0) {}
+    OfficeArtBlipTIFF(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RECT : public StreamOffset {
+class RECT : public StreamOffset
+{
 public:
     qint32 left;
     qint32 top;
     qint32 right;
     qint32 bottom;
-    RECT(void* /*dummy*/ = 0) {}
+    RECT(void * /*dummy*/ = 0)
+    {
+    }
 };
-class POINT : public StreamOffset {
+class POINT : public StreamOffset
+{
 public:
     qint32 x;
     qint32 y;
-    POINT(void* /*dummy*/ = 0) {}
+    POINT(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PowerPointStructs : public StreamOffset {
+class PowerPointStructs : public StreamOffset
+{
 public:
     QList<PowerPointStruct> anon;
-    PowerPointStructs(void* /*dummy*/ = 0) {}
+    PowerPointStructs(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SoundCollectionAtom : public StreamOffset {
+class SoundCollectionAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 soundIdSeed;
-    SoundCollectionAtom(void* /*dummy*/ = 0) {}
+    SoundCollectionAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class HeadersFootersAtom : public StreamOffset {
+class HeadersFootersAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     qint16 formatId;
@@ -1149,27 +1202,39 @@ public:
     bool fHasFooter;
     quint8 reserved1;
     quint8 reserved2;
-    HeadersFootersAtom(void* /*dummy*/ = 0) {}
+    HeadersFootersAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class UserDateAtom : public StreamOffset {
+class UserDateAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QVector<quint16> userDate;
-    UserDateAtom(void* /*dummy*/ = 0) {}
+    UserDateAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class HeaderAtom : public StreamOffset {
+class HeaderAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QVector<quint16> header;
-    HeaderAtom(void* /*dummy*/ = 0) {}
+    HeaderAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FooterAtom : public StreamOffset {
+class FooterAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QVector<quint16> footer;
-    FooterAtom(void* /*dummy*/ = 0) {}
+    FooterAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PerSlideHeadersFootersContainer : public StreamOffset {
+class PerSlideHeadersFootersContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     HeadersFootersAtom hfAtom;
@@ -1177,53 +1242,77 @@ public:
     QSharedPointer<HeaderAtom> headerAtom;
     QSharedPointer<FooterAtom> footerAtom;
     QSharedPointer<UserDateAtom> userDateAtom2;
-    PerSlideHeadersFootersContainer(void* /*dummy*/ = 0) {}
+    PerSlideHeadersFootersContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class EndDocumentAtom : public StreamOffset {
+class EndDocumentAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
-    EndDocumentAtom(void* /*dummy*/ = 0) {}
+    EndDocumentAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocInfoListContainer : public StreamOffset {
+class DocInfoListContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<DocInfoListSubContainerOrAtom> rgChildRec;
-    DocInfoListContainer(void* /*dummy*/ = 0) {}
+    DocInfoListContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideViewInfoAtom : public StreamOffset {
+class SlideViewInfoAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint8 unused1;
     quint8 fSnapToGrid;
     quint8 fSnapToShape;
-    SlideViewInfoAtom(void* /*dummy*/ = 0) {}
+    SlideViewInfoAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class GuideAtom : public StreamOffset {
+class GuideAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 type;
     qint32 pos;
-    GuideAtom(void* /*dummy*/ = 0) {}
+    GuideAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocProgTagsContainer : public StreamOffset {
+class DocProgTagsContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<DocProgTagsSubContainerOrAtom> rgChildRec;
-    DocProgTagsContainer(void* /*dummy*/ = 0) {}
+    DocProgTagsContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextAutoNumberScheme : public StreamOffset {
+class TextAutoNumberScheme : public StreamOffset
+{
 public:
     quint16 scheme;
     quint16 startNum;
-    TextAutoNumberScheme(void* /*dummy*/ = 0) {}
+    TextAutoNumberScheme(void * /*dummy*/ = 0)
+    {
+    }
 };
-class BlipCollection9Container : public StreamOffset {
+class BlipCollection9Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<BlipEntityAtom> rgBlipEntityAtom;
-    BlipCollection9Container(void* /*dummy*/ = 0) {}
+    BlipCollection9Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Kinsoku9Atom : public StreamOffset {
+class Kinsoku9Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint8 korLevel;
@@ -1232,15 +1321,21 @@ public:
     quint8 jpnLevel;
     quint8 reserveda;
     quint32 reservedb;
-    Kinsoku9Atom(void* /*dummy*/ = 0) {}
+    Kinsoku9Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExHyperlink9Container : public StreamOffset {
+class ExHyperlink9Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    ExHyperlink9Container(void* /*dummy*/ = 0) {}
+    ExHyperlink9Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PresAdvisorFlags9Atom : public StreamOffset {
+class PresAdvisorFlags9Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     bool fDisableCaseStyleTitleRule;
@@ -1256,15 +1351,21 @@ public:
     bool fDisablePrintTip;
     quint8 reserveda;
     quint16 reservedb;
-    PresAdvisorFlags9Atom(void* /*dummy*/ = 0) {}
+    PresAdvisorFlags9Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class EnvelopeData9Atom : public StreamOffset {
+class EnvelopeData9Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    EnvelopeData9Atom(void* /*dummy*/ = 0) {}
+    EnvelopeData9Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class EnvelopeFlags9Atom : public StreamOffset {
+class EnvelopeFlags9Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     bool fHasEnvelope;
@@ -1274,9 +1375,12 @@ public:
     quint8 reserved2a;
     quint8 reserved2b;
     quint16 reserved2c;
-    EnvelopeFlags9Atom(void* /*dummy*/ = 0) {}
+    EnvelopeFlags9Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class HTMLDocInfo9Atom : public StreamOffset {
+class HTMLDocInfo9Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 unused1;
@@ -1294,134 +1398,194 @@ public:
     bool fShowSlideAnimation;
     bool reserved1;
     quint16 unused3;
-    HTMLDocInfo9Atom(void* /*dummy*/ = 0) {}
+    HTMLDocInfo9Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class HTMLPublishInfo9Container : public StreamOffset {
+class HTMLPublishInfo9Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    HTMLPublishInfo9Container(void* /*dummy*/ = 0) {}
+    HTMLPublishInfo9Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class BroadcastDocInfo9Container : public StreamOffset {
+class BroadcastDocInfo9Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    BroadcastDocInfo9Container(void* /*dummy*/ = 0) {}
+    BroadcastDocInfo9Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OutlineTextProps9Container : public StreamOffset {
+class OutlineTextProps9Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<OutlineTextProps9Entry> rgOutlineTextProps9Entry;
-    OutlineTextProps9Container(void* /*dummy*/ = 0) {}
+    OutlineTextProps9Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OutlineTextPropsHeaderExAtom : public StreamOffset {
+class OutlineTextPropsHeaderExAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 slideIdRef;
     quint32 txType;
-    OutlineTextPropsHeaderExAtom(void* /*dummy*/ = 0) {}
+    OutlineTextPropsHeaderExAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class StyleTextProp9Atom : public StreamOffset {
+class StyleTextProp9Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<StyleTextProp9> rgStyleTextProp9;
-    StyleTextProp9Atom(void* /*dummy*/ = 0) {}
+    StyleTextProp9Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FontCollection10Container : public StreamOffset {
+class FontCollection10Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<FontCollectionEntry> rgFontCollectionEntry;
-    FontCollection10Container(void* /*dummy*/ = 0) {}
+    FontCollection10Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class GridSpacing10Atom : public StreamOffset {
+class GridSpacing10Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 x;
     quint32 y;
-    GridSpacing10Atom(void* /*dummy*/ = 0) {}
+    GridSpacing10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class AuthorNameAtom : public StreamOffset {
+class AuthorNameAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray authorName;
-    AuthorNameAtom(void* /*dummy*/ = 0) {}
+    AuthorNameAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class CommentIndex10Atom : public StreamOffset {
+class CommentIndex10Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     qint32 colorIndex;
     qint32 commentIndexSeed;
-    CommentIndex10Atom(void* /*dummy*/ = 0) {}
+    CommentIndex10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FontEmbedFlags10Atom : public StreamOffset {
+class FontEmbedFlags10Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     bool fSubset;
     bool fSubsetOptionConfirmed;
     quint16 unuseda;
     quint16 unusedb;
-    FontEmbedFlags10Atom(void* /*dummy*/ = 0) {}
+    FontEmbedFlags10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class CopyrightAtom : public StreamOffset {
+class CopyrightAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray copyright;
-    CopyrightAtom(void* /*dummy*/ = 0) {}
+    CopyrightAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class KeywordsAtom : public StreamOffset {
+class KeywordsAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray keywords;
-    KeywordsAtom(void* /*dummy*/ = 0) {}
+    KeywordsAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FilterPrivacyFlags10Atom : public StreamOffset {
+class FilterPrivacyFlags10Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     bool fRemovePII;
     quint8 reserved2a;
     quint8 reserved2b;
     quint16 reserved2c;
-    FilterPrivacyFlags10Atom(void* /*dummy*/ = 0) {}
+    FilterPrivacyFlags10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OutlineTextProps10Container : public StreamOffset {
+class OutlineTextProps10Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<OutlineTextProps10Entry> rgOutlineTextProps10Entry;
-    OutlineTextProps10Container(void* /*dummy*/ = 0) {}
+    OutlineTextProps10Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class StyleTextProp10Atom : public StreamOffset {
+class StyleTextProp10Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<TextCFException10> rgStyleTextProp10;
-    StyleTextProp10Atom(void* /*dummy*/ = 0) {}
+    StyleTextProp10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocToolbarStates10Atom : public StreamOffset {
+class DocToolbarStates10Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     bool fShowReviewingToolbar;
     bool fShowReviewingGallery;
     quint8 reserved;
-    DocToolbarStates10Atom(void* /*dummy*/ = 0) {}
+    DocToolbarStates10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideListTable10Container : public StreamOffset {
+class SlideListTable10Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    SlideListTable10Container(void* /*dummy*/ = 0) {}
+    SlideListTable10Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DiffTree10Container : public StreamOffset {
+class DiffTree10Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    DiffTree10Container(void* /*dummy*/ = 0) {}
+    DiffTree10Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ModifyPasswordAtom : public StreamOffset {
+class ModifyPasswordAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray modifyPassword;
-    ModifyPasswordAtom(void* /*dummy*/ = 0) {}
+    ModifyPasswordAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PhotoAlbumInfo10Atom : public StreamOffset {
+class PhotoAlbumInfo10Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint8 fUseBlackWhite;
@@ -1429,55 +1593,79 @@ public:
     quint8 layout;
     quint8 unused;
     quint16 frameShape;
-    PhotoAlbumInfo10Atom(void* /*dummy*/ = 0) {}
+    PhotoAlbumInfo10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SmartTagStore11Container : public StreamOffset {
+class SmartTagStore11Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    SmartTagStore11Container(void* /*dummy*/ = 0) {}
+    SmartTagStore11Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OutlineTextProps11Container : public StreamOffset {
+class OutlineTextProps11Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    OutlineTextProps11Container(void* /*dummy*/ = 0) {}
+    OutlineTextProps11Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class BinaryTagDataBlob : public StreamOffset {
+class BinaryTagDataBlob : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray data;
-    BinaryTagDataBlob(void* /*dummy*/ = 0) {}
+    BinaryTagDataBlob(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PP12DocBinaryTagExtension : public StreamOffset {
+class PP12DocBinaryTagExtension : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray tagName;
     RecordHeader rhData;
     QByteArray todo;
-    PP12DocBinaryTagExtension(void* /*dummy*/ = 0) {}
+    PP12DocBinaryTagExtension(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SorterViewInfoContainer : public StreamOffset {
+class SorterViewInfoContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    SorterViewInfoContainer(void* /*dummy*/ = 0) {}
+    SorterViewInfoContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class VBAInfoAtom : public StreamOffset {
+class VBAInfoAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 persistIdRef;
     quint32 fHasMacros;
     quint32 version;
-    VBAInfoAtom(void* /*dummy*/ = 0) {}
+    VBAInfoAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MasterListWithTextContainer : public StreamOffset {
+class MasterListWithTextContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<MasterPersistAtom> rgMasterPersistAtom;
-    MasterListWithTextContainer(void* /*dummy*/ = 0) {}
+    MasterListWithTextContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MasterPersistAtom : public StreamOffset {
+class MasterPersistAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 persistIdRef;
@@ -1489,21 +1677,30 @@ public:
     quint32 reserved5;
     quint32 masterId;
     quint32 reserved6;
-    MasterPersistAtom(void* /*dummy*/ = 0) {}
+    MasterPersistAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideListWithTextContainer : public StreamOffset {
+class SlideListWithTextContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<SlideListWithTextSubContainerOrAtom> rgChildRec;
-    SlideListWithTextContainer(void* /*dummy*/ = 0) {}
+    SlideListWithTextContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class NotesListWithTextContainer : public StreamOffset {
+class NotesListWithTextContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<NotesPersistAtom> rgNotesPersistAtom;
-    NotesListWithTextContainer(void* /*dummy*/ = 0) {}
+    NotesListWithTextContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class NotesPersistAtom : public StreamOffset {
+class NotesPersistAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 persistIdRef;
@@ -1515,154 +1712,223 @@ public:
     quint32 reserved3;
     quint32 notesId;
     quint32 reserved4;
-    NotesPersistAtom(void* /*dummy*/ = 0) {}
+    NotesPersistAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextHeaderAtom : public StreamOffset {
+class TextHeaderAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 textType;
-    TextHeaderAtom(void* /*dummy*/ = 0) {}
+    TextHeaderAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextCharsAtom : public StreamOffset {
+class TextCharsAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QVector<quint16> textChars;
-    TextCharsAtom(void* /*dummy*/ = 0) {}
+    TextCharsAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextBytesAtom : public StreamOffset {
+class TextBytesAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray textChars;
-    TextBytesAtom(void* /*dummy*/ = 0) {}
+    TextBytesAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MasterTextPropAtom : public StreamOffset {
+class MasterTextPropAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<MasterTextPropRun> rgMasterTextPropRun;
-    MasterTextPropAtom(void* /*dummy*/ = 0) {}
+    MasterTextPropAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MasterTextPropRun : public StreamOffset {
+class MasterTextPropRun : public StreamOffset
+{
 public:
     quint32 count;
     quint16 indentLevel;
-    MasterTextPropRun(void* /*dummy*/ = 0) {}
+    MasterTextPropRun(void * /*dummy*/ = 0)
+    {
+    }
 };
-class StyleTextPropAtom : public StreamOffset {
+class StyleTextPropAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<TextPFRun> rgTextPFRun;
     QList<TextCFRun> rgTextCFRun;
-    StyleTextPropAtom(void* /*dummy*/ = 0) {}
+    StyleTextPropAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideNumberMCAtom : public StreamOffset {
+class SlideNumberMCAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     qint32 position;
-    SlideNumberMCAtom(void* /*dummy*/ = 0) {}
+    SlideNumberMCAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DateTimeMCAtom : public StreamOffset {
+class DateTimeMCAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     qint32 position;
     quint8 index;
     QByteArray unused;
-    DateTimeMCAtom(void* /*dummy*/ = 0) {}
+    DateTimeMCAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class GenericDateMCAtom : public StreamOffset {
+class GenericDateMCAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     qint32 position;
-    GenericDateMCAtom(void* /*dummy*/ = 0) {}
+    GenericDateMCAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class HeaderMCAtom : public StreamOffset {
+class HeaderMCAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     qint32 position;
-    HeaderMCAtom(void* /*dummy*/ = 0) {}
+    HeaderMCAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FooterMCAtom : public StreamOffset {
+class FooterMCAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     qint32 position;
-    FooterMCAtom(void* /*dummy*/ = 0) {}
+    FooterMCAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RTFDateTimeMCAtom : public StreamOffset {
+class RTFDateTimeMCAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     qint32 position;
     QByteArray format;
-    RTFDateTimeMCAtom(void* /*dummy*/ = 0) {}
+    RTFDateTimeMCAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextBookmarkAtom : public StreamOffset {
+class TextBookmarkAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     qint32 begin;
     qint32 end;
     qint32 bookmarkID;
-    TextBookmarkAtom(void* /*dummy*/ = 0) {}
+    TextBookmarkAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextRange : public StreamOffset {
+class TextRange : public StreamOffset
+{
 public:
     qint32 begin;
     qint32 end;
-    TextRange(void* /*dummy*/ = 0) {}
+    TextRange(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MouseClickTextInteractiveInfoAtom : public StreamOffset {
+class MouseClickTextInteractiveInfoAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     TextRange range;
-    MouseClickTextInteractiveInfoAtom(void* /*dummy*/ = 0) {}
+    MouseClickTextInteractiveInfoAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MouseOverTextInteractiveInfoAtom : public StreamOffset {
+class MouseOverTextInteractiveInfoAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     TextRange range;
-    MouseOverTextInteractiveInfoAtom(void* /*dummy*/ = 0) {}
+    MouseOverTextInteractiveInfoAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideId : public StreamOffset {
+class SlideId : public StreamOffset
+{
 public:
     quint32 slideId;
-    SlideId(void* /*dummy*/ = 0) {}
+    SlideId(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TabStops : public StreamOffset {
+class TabStops : public StreamOffset
+{
 public:
     quint16 count;
     QList<TabStop> rgTabStop;
-    TabStops(void* /*dummy*/ = 0) {}
+    TabStops(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TabStop : public StreamOffset {
+class TabStop : public StreamOffset
+{
 public:
     qint16 position;
     quint16 type;
-    TabStop(void* /*dummy*/ = 0) {}
+    TabStop(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PFWrapFlags : public StreamOffset {
+class PFWrapFlags : public StreamOffset
+{
 public:
     bool charWrap;
     bool wordWrap;
     bool overflow;
     quint8 reserved1;
     quint8 reserved2;
-    PFWrapFlags(void* /*dummy*/ = 0) {}
+    PFWrapFlags(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ColorIndexStruct : public StreamOffset {
+class ColorIndexStruct : public StreamOffset
+{
 public:
     quint8 red;
     quint8 green;
     quint8 blue;
     quint8 index;
-    ColorIndexStruct(void* /*dummy*/ = 0) {}
+    ColorIndexStruct(void * /*dummy*/ = 0)
+    {
+    }
 };
-class BulletFlags : public StreamOffset {
+class BulletFlags : public StreamOffset
+{
 public:
     bool fHasBullet;
     bool fBulletHasFont;
     bool fBulletHasColor;
     bool fBulletHasSize;
     quint16 reserved;
-    BulletFlags(void* /*dummy*/ = 0) {}
+    BulletFlags(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PFMasks : public StreamOffset {
+class PFMasks : public StreamOffset
+{
 public:
     bool hasBullet;
     bool bulletHasFont;
@@ -1691,9 +1957,12 @@ public:
     bool bulletScheme;
     bool bulletHasScheme;
     quint8 reserved2;
-    PFMasks(void* /*dummy*/ = 0) {}
+    PFMasks(void * /*dummy*/ = 0)
+    {
+    }
 };
-class CFMasks : public StreamOffset {
+class CFMasks : public StreamOffset
+{
 public:
     bool bold;
     bool italic;
@@ -1719,9 +1988,12 @@ public:
     bool csTypeface;
     bool pp11ext;
     quint8 reserved;
-    CFMasks(void* /*dummy*/ = 0) {}
+    CFMasks(void * /*dummy*/ = 0)
+    {
+    }
 };
-class CFStyle : public StreamOffset {
+class CFStyle : public StreamOffset
+{
 public:
     bool bold;
     bool italic;
@@ -1735,15 +2007,21 @@ public:
     bool emboss;
     quint8 pp9rt;
     quint8 unused4;
-    CFStyle(void* /*dummy*/ = 0) {}
+    CFStyle(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FontCollectionContainer : public StreamOffset {
+class FontCollectionContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<FontCollectionEntry> rgFontCollectionEntry;
-    FontCollectionContainer(void* /*dummy*/ = 0) {}
+    FontCollectionContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FontEntityAtom : public StreamOffset {
+class FontEntityAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QVector<quint16> lfFaceName;
@@ -1756,45 +2034,66 @@ public:
     bool fNoFontSubstitution;
     quint8 reserved;
     quint8 lfPitchAndFamily;
-    FontEntityAtom(void* /*dummy*/ = 0) {}
+    FontEntityAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FontEmbedDataBlob : public StreamOffset {
+class FontEmbedDataBlob : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray data;
-    FontEmbedDataBlob(void* /*dummy*/ = 0) {}
+    FontEmbedDataBlob(void * /*dummy*/ = 0)
+    {
+    }
 };
-class KinsokuAtom : public StreamOffset {
+class KinsokuAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 level;
-    KinsokuAtom(void* /*dummy*/ = 0) {}
+    KinsokuAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class KinsokuLeadingAtom : public StreamOffset {
+class KinsokuLeadingAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QVector<quint16> kinsokuLeading;
-    KinsokuLeadingAtom(void* /*dummy*/ = 0) {}
+    KinsokuLeadingAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class KinsokuFollowingAtom : public StreamOffset {
+class KinsokuFollowingAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QVector<quint16> kinsokuFollowing;
-    KinsokuFollowingAtom(void* /*dummy*/ = 0) {}
+    KinsokuFollowingAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextSpecialInfoAtom : public StreamOffset {
+class TextSpecialInfoAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<TextSIRun> rgSIRun;
-    TextSpecialInfoAtom(void* /*dummy*/ = 0) {}
+    TextSpecialInfoAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SmartTags : public StreamOffset {
+class SmartTags : public StreamOffset
+{
 public:
     quint32 count;
     QVector<quint32> rgSmartTagIndex;
-    SmartTags(void* /*dummy*/ = 0) {}
+    SmartTags(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExOleEmbedAtom : public StreamOffset {
+class ExOleEmbedAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 exColorFollow;
@@ -1802,148 +2101,217 @@ public:
     quint8 fNoSizeToServer;
     quint8 fIsTable;
     quint8 unused;
-    ExOleEmbedAtom(void* /*dummy*/ = 0) {}
+    ExOleEmbedAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PointStruct : public StreamOffset {
+class PointStruct : public StreamOffset
+{
 public:
     qint32 x;
     qint32 y;
-    PointStruct(void* /*dummy*/ = 0) {}
+    PointStruct(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RatioStruct : public StreamOffset {
+class RatioStruct : public StreamOffset
+{
 public:
     qint32 numer;
     qint32 denom;
-    RatioStruct(void* /*dummy*/ = 0) {}
+    RatioStruct(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PersistDirectoryAtom : public StreamOffset {
+class PersistDirectoryAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<PersistDirectoryEntry> rgPersistDirEntry;
-    PersistDirectoryAtom(void* /*dummy*/ = 0) {}
+    PersistDirectoryAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class UnknownDocumentContainerChild : public StreamOffset {
+class UnknownDocumentContainerChild : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray unknown;
-    UnknownDocumentContainerChild(void* /*dummy*/ = 0) {}
+    UnknownDocumentContainerChild(void * /*dummy*/ = 0)
+    {
+    }
 };
-class UnknownOfficeArtClientDataChild : public StreamOffset {
+class UnknownOfficeArtClientDataChild : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray unknown;
-    UnknownOfficeArtClientDataChild(void* /*dummy*/ = 0) {}
+    UnknownOfficeArtClientDataChild(void * /*dummy*/ = 0)
+    {
+    }
 };
-class UnknownSlideContainerChild : public StreamOffset {
+class UnknownSlideContainerChild : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray unknown;
-    UnknownSlideContainerChild(void* /*dummy*/ = 0) {}
+    UnknownSlideContainerChild(void * /*dummy*/ = 0)
+    {
+    }
 };
-class UnknownTextContainerChild : public StreamOffset {
+class UnknownTextContainerChild : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray unknown;
-    UnknownTextContainerChild(void* /*dummy*/ = 0) {}
+    UnknownTextContainerChild(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PersistDirectoryEntry : public StreamOffset {
+class PersistDirectoryEntry : public StreamOffset
+{
 public:
     quint32 persistId;
     quint16 cPersist;
     QVector<quint32> rgPersistOffset;
-    PersistDirectoryEntry(void* /*dummy*/ = 0) {}
+    PersistDirectoryEntry(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PersistIdRef : public StreamOffset {
+class PersistIdRef : public StreamOffset
+{
 public:
     quint32 anon;
-    PersistIdRef(void* /*dummy*/ = 0) {}
+    PersistIdRef(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SchemeListElementColorSchemeAtom : public StreamOffset {
+class SchemeListElementColorSchemeAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<ColorStruct> rgSchemeColor;
-    SchemeListElementColorSchemeAtom(void* /*dummy*/ = 0) {}
+    SchemeListElementColorSchemeAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RoundTripOArtTextStyles12Atom : public StreamOffset {
+class RoundTripOArtTextStyles12Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    RoundTripOArtTextStyles12Atom(void* /*dummy*/ = 0) {}
+    RoundTripOArtTextStyles12Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideNameAtom : public StreamOffset {
+class SlideNameAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QVector<quint16> slideName;
-    SlideNameAtom(void* /*dummy*/ = 0) {}
+    SlideNameAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideProgTagsContainer : public StreamOffset {
+class SlideProgTagsContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<SlideProgTagsSubContainerOrAtom> rgTypeRec;
-    SlideProgTagsContainer(void* /*dummy*/ = 0) {}
+    SlideProgTagsContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PP9SlideBinaryTagExtension : public StreamOffset {
+class PP9SlideBinaryTagExtension : public StreamOffset
+{
 public:
     RecordHeader rh;
     QVector<quint16> tagName;
     RecordHeader rhData;
     QList<TextMasterStyle9Atom> rgTextMasterStyleAtom;
-    PP9SlideBinaryTagExtension(void* /*dummy*/ = 0) {}
+    PP9SlideBinaryTagExtension(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Comment10Container : public StreamOffset {
+class Comment10Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    Comment10Container(void* /*dummy*/ = 0) {}
+    Comment10Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Comment10Atom : public StreamOffset {
+class Comment10Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    Comment10Atom(void* /*dummy*/ = 0) {}
+    Comment10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LinkedSlide10Atom : public StreamOffset {
+class LinkedSlide10Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 linkedSlideIdRef;
     qint32 clinkedShapes;
-    LinkedSlide10Atom(void* /*dummy*/ = 0) {}
+    LinkedSlide10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LinkedShape10Atom : public StreamOffset {
+class LinkedShape10Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 shapeIdRef;
     quint32 linkedShapeIdRef;
-    LinkedShape10Atom(void* /*dummy*/ = 0) {}
+    LinkedShape10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideFlags10Atom : public StreamOffset {
+class SlideFlags10Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     bool fPreserveMaster;
     bool fOverrideMasterAnimatino;
     quint16 unuseda;
     quint16 unusedb;
-    SlideFlags10Atom(void* /*dummy*/ = 0) {}
+    SlideFlags10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class HashCode10Atom : public StreamOffset {
+class HashCode10Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 hash;
-    HashCode10Atom(void* /*dummy*/ = 0) {}
+    HashCode10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExtTimeNodeContainer : public StreamOffset {
+class ExtTimeNodeContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    ExtTimeNodeContainer(void* /*dummy*/ = 0) {}
+    ExtTimeNodeContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class BuildListContainer : public StreamOffset {
+class BuildListContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    BuildListContainer(void* /*dummy*/ = 0) {}
+    BuildListContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RoundTripHeaderFooterDefaults12Atom : public StreamOffset {
+class RoundTripHeaderFooterDefaults12Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     bool fIncludeDate;
@@ -1951,72 +2319,105 @@ public:
     bool fIncludeHeader;
     bool fIncludeSlideNumber;
     quint8 reserved;
-    RoundTripHeaderFooterDefaults12Atom(void* /*dummy*/ = 0) {}
+    RoundTripHeaderFooterDefaults12Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TagNameAtom : public StreamOffset {
+class TagNameAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QVector<quint16> tagName;
-    TagNameAtom(void* /*dummy*/ = 0) {}
+    TagNameAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TagValueAtom : public StreamOffset {
+class TagValueAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QVector<quint16> tagValue;
-    TagValueAtom(void* /*dummy*/ = 0) {}
+    TagValueAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RoundTripMainMasterRecord : public StreamOffset {
+class RoundTripMainMasterRecord : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    RoundTripMainMasterRecord(void* /*dummy*/ = 0) {}
+    RoundTripMainMasterRecord(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TemplateNameAtom : public StreamOffset {
+class TemplateNameAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QVector<quint16> templateName;
-    TemplateNameAtom(void* /*dummy*/ = 0) {}
+    TemplateNameAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RoundTripSlideSyncInfo12Container : public StreamOffset {
+class RoundTripSlideSyncInfo12Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    RoundTripSlideSyncInfo12Container(void* /*dummy*/ = 0) {}
+    RoundTripSlideSyncInfo12Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideFlags : public StreamOffset {
+class SlideFlags : public StreamOffset
+{
 public:
     bool fMasterObjects;
     bool fMasterScheme;
     bool fMasterBackground;
     quint8 unused1;
     quint8 unused2;
-    SlideFlags(void* /*dummy*/ = 0) {}
+    SlideFlags(void * /*dummy*/ = 0)
+    {
+    }
 };
-class NotesRoundTripAtom : public StreamOffset {
+class NotesRoundTripAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    NotesRoundTripAtom(void* /*dummy*/ = 0) {}
+    NotesRoundTripAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class HandoutContainer : public StreamOffset {
+class HandoutContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    HandoutContainer(void* /*dummy*/ = 0) {}
+    HandoutContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExControlStg : public StreamOffset {
+class ExControlStg : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    ExControlStg(void* /*dummy*/ = 0) {}
+    ExControlStg(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExOleObjStg : public StreamOffset {
+class ExOleObjStg : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    ExOleObjStg(void* /*dummy*/ = 0) {}
+    ExOleObjStg(void * /*dummy*/ = 0)
+    {
+    }
 };
-class UserEditAtom : public StreamOffset {
+class UserEditAtom : public StreamOffset
+{
 public:
     bool _has_encryptSessionPersistIdRef;
     RecordHeader rh;
@@ -2032,15 +2433,21 @@ public:
     quint16 unused;
     quint32 encryptSessionPersistIdRef;
     QList<ZeroByte> zeroPadding;
-    UserEditAtom(void* /*dummy*/ = 0) {}
+    UserEditAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class VbaProjectStg : public StreamOffset {
+class VbaProjectStg : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    VbaProjectStg(void* /*dummy*/ = 0) {}
+    VbaProjectStg(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideAtom : public StreamOffset {
+class SlideAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 geom;
@@ -2049,9 +2456,12 @@ public:
     quint32 notesIdRef;
     SlideFlags slideFlags;
     quint16 unused;
-    SlideAtom(void* /*dummy*/ = 0) {}
+    SlideAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideShowSlideInfoAtom : public StreamOffset {
+class SlideShowSlideInfoAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 slidetime;
@@ -2074,9 +2484,12 @@ public:
     quint8 reserved7;
     quint8 speed;
     QByteArray unused;
-    SlideShowSlideInfoAtom(void* /*dummy*/ = 0) {}
+    SlideShowSlideInfoAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideShowDocInfoAtom : public StreamOffset {
+class SlideShowDocInfoAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     ColorIndexStruct penColor;
@@ -2095,151 +2508,223 @@ public:
     bool fHideScrollBar;
     quint8 reserved;
     quint16 unused;
-    SlideShowDocInfoAtom(void* /*dummy*/ = 0) {}
+    SlideShowDocInfoAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideSchemeColorSchemeAtom : public StreamOffset {
+class SlideSchemeColorSchemeAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QList<ColorStruct> rgSchemeColor;
-    SlideSchemeColorSchemeAtom(void* /*dummy*/ = 0) {}
+    SlideSchemeColorSchemeAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RoundTripSlideRecord : public StreamOffset {
+class RoundTripSlideRecord : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    RoundTripSlideRecord(void* /*dummy*/ = 0) {}
+    RoundTripSlideRecord(void * /*dummy*/ = 0)
+    {
+    }
 };
-class NamedShowsContainer : public StreamOffset {
+class NamedShowsContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    NamedShowsContainer(void* /*dummy*/ = 0) {}
+    NamedShowsContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SummaryContainer : public StreamOffset {
+class SummaryContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    SummaryContainer(void* /*dummy*/ = 0) {}
+    SummaryContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocRoutingSlipAtom : public StreamOffset {
+class DocRoutingSlipAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    DocRoutingSlipAtom(void* /*dummy*/ = 0) {}
+    DocRoutingSlipAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PrintOptionsAtom : public StreamOffset {
+class PrintOptionsAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    PrintOptionsAtom(void* /*dummy*/ = 0) {}
+    PrintOptionsAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RoundTripCustomTableStyles12Atom : public StreamOffset {
+class RoundTripCustomTableStyles12Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray todo;
-    RoundTripCustomTableStyles12Atom(void* /*dummy*/ = 0) {}
+    RoundTripCustomTableStyles12Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RoundTripCompositeMasterId12Atom : public StreamOffset {
+class RoundTripCompositeMasterId12Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 compositeMasterId;
-    RoundTripCompositeMasterId12Atom(void* /*dummy*/ = 0) {}
+    RoundTripCompositeMasterId12Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ColorStruct : public StreamOffset {
+class ColorStruct : public StreamOffset
+{
 public:
     quint8 red;
     quint8 green;
     quint8 blue;
     quint8 unused;
-    ColorStruct(void* /*dummy*/ = 0) {}
+    ColorStruct(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExObjListAtom : public StreamOffset {
+class ExObjListAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     qint32 exObjIdSeed;
-    ExObjListAtom(void* /*dummy*/ = 0) {}
+    ExObjListAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExAviMovieContainer : public StreamOffset {
+class ExAviMovieContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ExAviMovieContainer(void* /*dummy*/ = 0) {}
+    ExAviMovieContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExCDAudioContainer : public StreamOffset {
+class ExCDAudioContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ExCDAudioContainer(void* /*dummy*/ = 0) {}
+    ExCDAudioContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExControlAtom : public StreamOffset {
+class ExControlAtom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint32 slideIdRef;
-    ExControlAtom(void* /*dummy*/ = 0) {}
+    ExControlAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExHyperlinkAtom : public StreamOffset {
+class ExHyperlinkAtom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint32 exHyperLinkId;
-    ExHyperlinkAtom(void* /*dummy*/ = 0) {}
+    ExHyperlinkAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FriendlyNameAtom : public StreamOffset {
+class FriendlyNameAtom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QVector<quint16> friendlyName;
-    FriendlyNameAtom(void* /*dummy*/ = 0) {}
+    FriendlyNameAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TargetAtom : public StreamOffset {
+class TargetAtom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QVector<quint16> target;
-    TargetAtom(void* /*dummy*/ = 0) {}
+    TargetAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LocationAtom : public StreamOffset {
+class LocationAtom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QVector<quint16> location;
-    LocationAtom(void* /*dummy*/ = 0) {}
+    LocationAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExMCIMovieContainer : public StreamOffset {
+class ExMCIMovieContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ExMCIMovieContainer(void* /*dummy*/ = 0) {}
+    ExMCIMovieContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExMIDIAudioContainer : public StreamOffset {
+class ExMIDIAudioContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ExMIDIAudioContainer(void* /*dummy*/ = 0) {}
+    ExMIDIAudioContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExWAVAudioEmbeddedContainer : public StreamOffset {
+class ExWAVAudioEmbeddedContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ExWAVAudioEmbeddedContainer(void* /*dummy*/ = 0) {}
+    ExWAVAudioEmbeddedContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExWAVAudioLinkContainer : public StreamOffset {
+class ExWAVAudioLinkContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ExWAVAudioLinkContainer(void* /*dummy*/ = 0) {}
+    ExWAVAudioLinkContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class UnknownExObjListSubContainerChild : public StreamOffset {
+class UnknownExObjListSubContainerChild : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    UnknownExObjListSubContainerChild(void* /*dummy*/ = 0) {}
+    UnknownExObjListSubContainerChild(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExOleLinkAtom : public StreamOffset {
+class ExOleLinkAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 slideIdRef;
     quint32 oleUpdateMode;
     quint32 unused;
-    ExOleLinkAtom(void* /*dummy*/ = 0) {}
+    ExOleLinkAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExOleObjAtom : public StreamOffset {
+class ExOleObjAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 drawAspect;
@@ -2248,81 +2733,117 @@ public:
     quint32 subType;
     quint32 persistIdRef;
     quint32 unused;
-    ExOleObjAtom(void* /*dummy*/ = 0) {}
+    ExOleObjAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MenuNameAtom : public StreamOffset {
+class MenuNameAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray menuName;
-    MenuNameAtom(void* /*dummy*/ = 0) {}
+    MenuNameAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ProgIDAtom : public StreamOffset {
+class ProgIDAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray progId;
-    ProgIDAtom(void* /*dummy*/ = 0) {}
+    ProgIDAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ClipboardNameAtom : public StreamOffset {
+class ClipboardNameAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray clipboardName;
-    ClipboardNameAtom(void* /*dummy*/ = 0) {}
+    ClipboardNameAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MetafileBlob : public StreamOffset {
+class MetafileBlob : public StreamOffset
+{
 public:
     RecordHeader rh;
     qint16 mm;
     qint16 xExt;
     qint16 yExt;
     QByteArray data;
-    MetafileBlob(void* /*dummy*/ = 0) {}
+    MetafileBlob(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFDGG : public StreamOffset {
+class OfficeArtFDGG : public StreamOffset
+{
 public:
     quint32 spidMax;
     quint32 cidcl;
     quint32 cspSaved;
     quint32 cdgSaved;
-    OfficeArtFDGG(void* /*dummy*/ = 0) {}
+    OfficeArtFDGG(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFDG : public StreamOffset {
+class OfficeArtFDG : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint32 csp;
     quint32 spidCur;
-    OfficeArtFDG(void* /*dummy*/ = 0) {}
+    OfficeArtFDG(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFRITContainer : public StreamOffset {
+class OfficeArtFRITContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QList<OfficeArtFRIT> rgfrit;
-    OfficeArtFRITContainer(void* /*dummy*/ = 0) {}
+    OfficeArtFRITContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFRIT : public StreamOffset {
+class OfficeArtFRIT : public StreamOffset
+{
 public:
     quint16 fridNew;
     quint16 fridOld;
-    OfficeArtFRIT(void* /*dummy*/ = 0) {}
+    OfficeArtFRIT(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtBStoreContainer : public StreamOffset {
+class OfficeArtBStoreContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QList<OfficeArtBStoreContainerFileBlock> rgfb;
-    OfficeArtBStoreContainer(void* /*dummy*/ = 0) {}
+    OfficeArtBStoreContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtSpgrContainer : public StreamOffset {
+class OfficeArtSpgrContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QList<OfficeArtSpgrContainerFileBlock> rgfb;
-    OfficeArtSpgrContainer(void* /*dummy*/ = 0) {}
+    OfficeArtSpgrContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtSolverContainer : public StreamOffset {
+class OfficeArtSolverContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QList<OfficeArtSolverContainerFileBlock> rgfb;
-    OfficeArtSolverContainer(void* /*dummy*/ = 0) {}
+    OfficeArtSolverContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFConnectorRule : public StreamOffset {
+class OfficeArtFConnectorRule : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint32 ruid;
@@ -2331,32 +2852,44 @@ public:
     quint32 spidC;
     quint32 cptiA;
     quint32 cptiB;
-    OfficeArtFConnectorRule(void* /*dummy*/ = 0) {}
+    OfficeArtFConnectorRule(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFArcRule : public StreamOffset {
+class OfficeArtFArcRule : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint32 ruid;
     quint32 spid;
-    OfficeArtFArcRule(void* /*dummy*/ = 0) {}
+    OfficeArtFArcRule(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFCalloutRule : public StreamOffset {
+class OfficeArtFCalloutRule : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint32 ruid;
     quint32 spid;
-    OfficeArtFCalloutRule(void* /*dummy*/ = 0) {}
+    OfficeArtFCalloutRule(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFSPGR : public StreamOffset {
+class OfficeArtFSPGR : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     qint32 xLeft;
     qint32 yTop;
     qint32 xRight;
     qint32 yBottom;
-    OfficeArtFSPGR(void* /*dummy*/ = 0) {}
+    OfficeArtFSPGR(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFSP : public StreamOffset {
+class OfficeArtFSP : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint32 spid;
@@ -2373,74 +2906,104 @@ public:
     bool fBackground;
     bool fHaveSpt;
     quint32 unused1;
-    OfficeArtFSP(void* /*dummy*/ = 0) {}
+    OfficeArtFSP(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFOPT : public StreamOffset {
+class OfficeArtFOPT : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QList<OfficeArtFOPTEChoice> fopt;
     QByteArray complexData;
-    OfficeArtFOPT(void* /*dummy*/ = 0) {}
+    OfficeArtFOPT(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtSecondaryFOPT : public StreamOffset {
+class OfficeArtSecondaryFOPT : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QList<OfficeArtFOPTEChoice> fopt;
     QByteArray complexData;
-    OfficeArtSecondaryFOPT(void* /*dummy*/ = 0) {}
+    OfficeArtSecondaryFOPT(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtTertiaryFOPT : public StreamOffset {
+class OfficeArtTertiaryFOPT : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QList<OfficeArtFOPTEChoice> fopt;
     QByteArray complexData;
-    OfficeArtTertiaryFOPT(void* /*dummy*/ = 0) {}
+    OfficeArtTertiaryFOPT(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MSOPATHINFO : public StreamOffset {
+class MSOPATHINFO : public StreamOffset
+{
 public:
     quint8 type;
     quint16 segments;
-    MSOPATHINFO(void* /*dummy*/ = 0) {}
+    MSOPATHINFO(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FixedPoint : public StreamOffset {
+class FixedPoint : public StreamOffset
+{
 public:
     quint16 fractional;
     qint16 integral;
-    FixedPoint(void* /*dummy*/ = 0) {}
+    FixedPoint(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PVertices_complex : public StreamOffset {
+class PVertices_complex : public StreamOffset
+{
 public:
     quint16 nElems;
     quint16 nElemsAlloc;
     quint16 cbElem;
     QByteArray data;
-    PVertices_complex(void* /*dummy*/ = 0) {}
+    PVertices_complex(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PSegmentInfo_complex : public StreamOffset {
+class PSegmentInfo_complex : public StreamOffset
+{
 public:
     quint16 nElems;
     quint16 nElemsAlloc;
     quint16 cbElem;
     QByteArray data;
-    PSegmentInfo_complex(void* /*dummy*/ = 0) {}
+    PSegmentInfo_complex(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillShadeColors_complex : public StreamOffset {
+class FillShadeColors_complex : public StreamOffset
+{
 public:
     quint16 nElems;
     quint16 nElemsAlloc;
     quint16 cbElem;
     QByteArray data;
-    FillShadeColors_complex(void* /*dummy*/ = 0) {}
+    FillShadeColors_complex(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PWrapPolygonVertices_complex : public StreamOffset {
+class PWrapPolygonVertices_complex : public StreamOffset
+{
 public:
     quint16 nElems;
     quint16 nElemsAlloc;
     quint16 cbElem;
     QByteArray data;
-    PWrapPolygonVertices_complex(void* /*dummy*/ = 0) {}
+    PWrapPolygonVertices_complex(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtCOLORREF : public StreamOffset {
+class OfficeArtCOLORREF : public StreamOffset
+{
 public:
     quint8 red;
     quint8 green;
@@ -2453,24 +3016,33 @@ public:
     bool unused1;
     bool unused2;
     bool unused3;
-    OfficeArtCOLORREF(void* /*dummy*/ = 0) {}
+    OfficeArtCOLORREF(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtChildAnchor : public StreamOffset {
+class OfficeArtChildAnchor : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     qint32 xLeft;
     qint32 yTop;
     qint32 xRight;
     qint32 yBottom;
-    OfficeArtChildAnchor(void* /*dummy*/ = 0) {}
+    OfficeArtChildAnchor(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocOfficeArtClientAnchor : public StreamOffset {
+class DocOfficeArtClientAnchor : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     qint32 clientAnchor;
-    DocOfficeArtClientAnchor(void* /*dummy*/ = 0) {}
+    DocOfficeArtClientAnchor(void * /*dummy*/ = 0)
+    {
+    }
 };
-class XlsOfficeArtClientAnchor : public StreamOffset {
+class XlsOfficeArtClientAnchor : public StreamOffset
+{
 public:
     bool _has_width;
     bool _has_height;
@@ -2496,74 +3068,107 @@ public:
     qint16 dxR;
     quint16 rwB;
     qint16 dyB;
-    XlsOfficeArtClientAnchor(void* /*dummy*/ = 0) {}
+    XlsOfficeArtClientAnchor(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFPSPL : public StreamOffset {
+class OfficeArtFPSPL : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint32 spid;
     bool reserved1;
     bool fLast;
-    OfficeArtFPSPL(void* /*dummy*/ = 0) {}
+    OfficeArtFPSPL(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RectStruct : public StreamOffset {
+class RectStruct : public StreamOffset
+{
 public:
     qint32 top;
     qint32 left;
     qint32 right;
     qint32 bottom;
-    RectStruct(void* /*dummy*/ = 0) {}
+    RectStruct(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SmallRectStruct : public StreamOffset {
+class SmallRectStruct : public StreamOffset
+{
 public:
     qint16 top;
     qint16 left;
     qint16 right;
     qint16 bottom;
-    SmallRectStruct(void* /*dummy*/ = 0) {}
+    SmallRectStruct(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocOfficeArtClientData : public StreamOffset {
+class DocOfficeArtClientData : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint32 clientData;
-    DocOfficeArtClientData(void* /*dummy*/ = 0) {}
+    DocOfficeArtClientData(void * /*dummy*/ = 0)
+    {
+    }
 };
-class XlsOfficeArtClientData : public StreamOffset {
+class XlsOfficeArtClientData : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
-    XlsOfficeArtClientData(void* /*dummy*/ = 0) {}
+    XlsOfficeArtClientData(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShapeFlagsAtom : public StreamOffset {
+class ShapeFlagsAtom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ShapeFlagsAtom(void* /*dummy*/ = 0) {}
+    ShapeFlagsAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShapeFlags10Atom : public StreamOffset {
+class ShapeFlags10Atom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ShapeFlags10Atom(void* /*dummy*/ = 0) {}
+    ShapeFlags10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExObjRefAtom : public StreamOffset {
+class ExObjRefAtom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint32 exObjIdRef;
-    ExObjRefAtom(void* /*dummy*/ = 0) {}
+    ExObjRefAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class AnimationInfoAtom : public StreamOffset {
+class AnimationInfoAtom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    AnimationInfoAtom(void* /*dummy*/ = 0) {}
+    AnimationInfoAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SoundContainer : public StreamOffset {
+class SoundContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    SoundContainer(void* /*dummy*/ = 0) {}
+    SoundContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class InteractiveInfoAtom : public StreamOffset {
+class InteractiveInfoAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 soundIdRef;
@@ -2578,128 +3183,185 @@ public:
     quint8 reserved;
     quint8 hyperlinkType;
     QByteArray unused;
-    InteractiveInfoAtom(void* /*dummy*/ = 0) {}
+    InteractiveInfoAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MacroNameAtom : public StreamOffset {
+class MacroNameAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray macroName;
-    MacroNameAtom(void* /*dummy*/ = 0) {}
+    MacroNameAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PlaceholderAtom : public StreamOffset {
+class PlaceholderAtom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     qint32 position;
     quint8 placementId;
     quint8 size;
     quint16 unused;
-    PlaceholderAtom(void* /*dummy*/ = 0) {}
+    PlaceholderAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RecolorInfoAtom : public StreamOffset {
+class RecolorInfoAtom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    RecolorInfoAtom(void* /*dummy*/ = 0) {}
+    RecolorInfoAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OutlineTextRefAtom : public StreamOffset {
+class OutlineTextRefAtom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     qint32 index;
-    OutlineTextRefAtom(void* /*dummy*/ = 0) {}
+    OutlineTextRefAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShapeProgsTagContainer : public StreamOffset {
+class ShapeProgsTagContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QList<ShapeProgTagsSubContainerOrAtom> rgChildRec;
-    ShapeProgsTagContainer(void* /*dummy*/ = 0) {}
+    ShapeProgsTagContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PP9ShapeBinaryTagExtension : public StreamOffset {
+class PP9ShapeBinaryTagExtension : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QVector<quint16> tagName;
     RecordHeader rhData;
     StyleTextProp9Atom styleTextProp9Atom;
-    PP9ShapeBinaryTagExtension(void* /*dummy*/ = 0) {}
+    PP9ShapeBinaryTagExtension(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PP10ShapeBinaryTagExtension : public StreamOffset {
+class PP10ShapeBinaryTagExtension : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QVector<quint16> tagName;
     RecordHeader rhData;
     QByteArray todo;
-    PP10ShapeBinaryTagExtension(void* /*dummy*/ = 0) {}
+    PP10ShapeBinaryTagExtension(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PP11ShapeBinaryTagExtension : public StreamOffset {
+class PP11ShapeBinaryTagExtension : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QVector<quint16> tagName;
     RecordHeader rhData;
     QByteArray todo;
-    PP11ShapeBinaryTagExtension(void* /*dummy*/ = 0) {}
+    PP11ShapeBinaryTagExtension(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RoundTripNewPlaceHolderId12Atom : public StreamOffset {
+class RoundTripNewPlaceHolderId12Atom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint8 newPlaceHolderId;
-    RoundTripNewPlaceHolderId12Atom(void* /*dummy*/ = 0) {}
+    RoundTripNewPlaceHolderId12Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RoundTripShapeId12Atom : public StreamOffset {
+class RoundTripShapeId12Atom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint32 shapeId;
-    RoundTripShapeId12Atom(void* /*dummy*/ = 0) {}
+    RoundTripShapeId12Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RoundTripHFPlaceholder12Atom : public StreamOffset {
+class RoundTripHFPlaceholder12Atom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint8 placeHolderId;
-    RoundTripHFPlaceholder12Atom(void* /*dummy*/ = 0) {}
+    RoundTripHFPlaceholder12Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class RoundTripShapeCheckSumForCustomLayouts12Atom : public StreamOffset {
+class RoundTripShapeCheckSumForCustomLayouts12Atom : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint32 shapeCheckSum;
     quint32 textCheckSum;
     QByteArray unknown;
-    RoundTripShapeCheckSumForCustomLayouts12Atom(void* /*dummy*/ = 0) {}
+    RoundTripShapeCheckSumForCustomLayouts12Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class XlsOfficeArtClientTextBox : public StreamOffset {
+class XlsOfficeArtClientTextBox : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
-    XlsOfficeArtClientTextBox(void* /*dummy*/ = 0) {}
+    XlsOfficeArtClientTextBox(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocOfficeArtClientTextBox : public StreamOffset {
+class DocOfficeArtClientTextBox : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     quint32 clientTextBox;
-    DocOfficeArtClientTextBox(void* /*dummy*/ = 0) {}
+    DocOfficeArtClientTextBox(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PptOfficeArtClientTextBox : public StreamOffset {
+class PptOfficeArtClientTextBox : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QList<TextClientDataSubContainerOrAtom> rgChildRec;
-    PptOfficeArtClientTextBox(void* /*dummy*/ = 0) {}
+    PptOfficeArtClientTextBox(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtIDCL : public StreamOffset {
+class OfficeArtIDCL : public StreamOffset
+{
 public:
     quint32 dgid;
     quint32 cspidCur;
-    OfficeArtIDCL(void* /*dummy*/ = 0) {}
+    OfficeArtIDCL(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFOPTEOPID : public StreamOffset {
+class OfficeArtFOPTEOPID : public StreamOffset
+{
 public:
     quint16 opid;
     bool fBid;
     bool fComplex;
-    OfficeArtFOPTEOPID(void* /*dummy*/ = 0) {}
+    OfficeArtFOPTEOPID(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtColorMRUContainer : public StreamOffset {
+class OfficeArtColorMRUContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QList<MSOCR> rgmsocr;
-    OfficeArtColorMRUContainer(void* /*dummy*/ = 0) {}
+    OfficeArtColorMRUContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MSOCR : public StreamOffset {
+class MSOCR : public StreamOffset
+{
 public:
     quint8 red;
     quint8 green;
@@ -2707,21 +3369,30 @@ public:
     quint8 unused1;
     bool fSchemeIndex;
     quint8 unused2;
-    MSOCR(void* /*dummy*/ = 0) {}
+    MSOCR(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtSplitMenuColorContainer : public StreamOffset {
+class OfficeArtSplitMenuColorContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QList<MSOCR> smca;
-    OfficeArtSplitMenuColorContainer(void* /*dummy*/ = 0) {}
+    OfficeArtSplitMenuColorContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class todo : public StreamOffset {
+class todo : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray anon;
-    todo(void* /*dummy*/ = 0) {}
+    todo(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FibBase : public StreamOffset {
+class FibBase : public StreamOffset
+{
 public:
     quint16 wIdent;
     quint16 nFib;
@@ -2754,9 +3425,12 @@ public:
     quint16 reserved4;
     quint32 reserved5;
     quint32 reserved6;
-    FibBase(void* /*dummy*/ = 0) {}
+    FibBase(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FibRgW97 : public StreamOffset {
+class FibRgW97 : public StreamOffset
+{
 public:
     quint16 reserved1;
     quint16 reserved2;
@@ -2772,9 +3446,12 @@ public:
     quint16 reserved12;
     quint16 reserved13;
     quint16 lidFE;
-    FibRgW97(void* /*dummy*/ = 0) {}
+    FibRgW97(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FibRgLw97 : public StreamOffset {
+class FibRgLw97 : public StreamOffset
+{
 public:
     quint32 cbMac;
     quint32 reserved1;
@@ -2798,9 +3475,12 @@ public:
     quint32 reserved12;
     quint32 reserved13;
     quint32 reserved14;
-    FibRgLw97(void* /*dummy*/ = 0) {}
+    FibRgLw97(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FibRgFcLcb97 : public StreamOffset {
+class FibRgFcLcb97 : public StreamOffset
+{
 public:
     quint32 fcStshfOrig;
     quint32 lcbStshfOrig;
@@ -2988,9 +3668,12 @@ public:
     quint32 lcbSttbListNames;
     quint32 fcSttbfUssr;
     quint32 lcbSttbfUssr;
-    FibRgFcLcb97(void* /*dummy*/ = 0) {}
+    FibRgFcLcb97(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FibRgFcLcb2000 : public StreamOffset {
+class FibRgFcLcb2000 : public StreamOffset
+{
 public:
     quint32 fcPlcfTch;
     quint32 lcbPlcfTch;
@@ -3022,9 +3705,12 @@ public:
     quint32 lcbPgdEdnOld;
     quint32 fcBkdEdnOld;
     quint32 lcbBkdEdnOld;
-    FibRgFcLcb2000(void* /*dummy*/ = 0) {}
+    FibRgFcLcb2000(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FibRgFcLcb2002 : public StreamOffset {
+class FibRgFcLcb2002 : public StreamOffset
+{
 public:
     quint32 fcUnused1;
     quint32 lcbUnused1;
@@ -3076,139 +3762,202 @@ public:
     quint32 lcbUnused2;
     quint32 fcPlcffactoid;
     quint32 lcbPlcffactoid;
-    FibRgFcLcb2002(void* /*dummy*/ = 0) {}
+    FibRgFcLcb2002(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LPStshi : public StreamOffset {
+class LPStshi : public StreamOffset
+{
 public:
     quint16 cbSthi;
     QByteArray stshi;
-    LPStshi(void* /*dummy*/ = 0) {}
+    LPStshi(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LPStd : public StreamOffset {
+class LPStd : public StreamOffset
+{
 public:
     bool _has_padding;
     quint16 cbStd;
     QByteArray std;
     quint8 padding;
-    LPStd(void* /*dummy*/ = 0) {}
+    LPStd(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PlcfSed : public StreamOffset {
+class PlcfSed : public StreamOffset
+{
 public:
     QVector<quint32> aCP;
     QList<Sed> aSed;
-    PlcfSed(void* /*dummy*/ = 0) {}
+    PlcfSed(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Sed : public StreamOffset {
+class Sed : public StreamOffset
+{
 public:
     quint16 fn;
     qint32 fcSepx;
     quint16 fnMpr;
     quint32 fcMpr;
-    Sed(void* /*dummy*/ = 0) {}
+    Sed(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Plcfhdd : public StreamOffset {
+class Plcfhdd : public StreamOffset
+{
 public:
     QVector<quint32> aCP;
-    Plcfhdd(void* /*dummy*/ = 0) {}
+    Plcfhdd(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PlcBteChpx : public StreamOffset {
+class PlcBteChpx : public StreamOffset
+{
 public:
     QVector<quint32> aCP;
     QVector<quint32> aPnBteChpx;
-    PlcBteChpx(void* /*dummy*/ = 0) {}
+    PlcBteChpx(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PlcfBtePapx : public StreamOffset {
+class PlcfBtePapx : public StreamOffset
+{
 public:
     QVector<quint32> aCP;
     QVector<quint32> aPnBteChpx;
-    PlcfBtePapx(void* /*dummy*/ = 0) {}
+    PlcfBtePapx(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Tcg : public StreamOffset {
+class Tcg : public StreamOffset
+{
 public:
     quint8 nTcgVer;
     QByteArray todo;
-    Tcg(void* /*dummy*/ = 0) {}
+    Tcg(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PrcData : public StreamOffset {
+class PrcData : public StreamOffset
+{
 public:
     qint16 cbGrpprl;
     QList<Sprm> GrpPrl;
-    PrcData(void* /*dummy*/ = 0) {}
+    PrcData(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Sprm : public StreamOffset {
+class Sprm : public StreamOffset
+{
 public:
     quint16 ispmd;
     bool fSpec;
     quint8 sgc;
     quint8 spra;
-    Sprm(void* /*dummy*/ = 0) {}
+    Sprm(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Pcdt : public StreamOffset {
+class Pcdt : public StreamOffset
+{
 public:
     quint8 clxt;
     quint32 lcb;
     QList<Pcd> PlcPcd;
-    Pcdt(void* /*dummy*/ = 0) {}
+    Pcdt(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FCompressed : public StreamOffset {
+class FCompressed : public StreamOffset
+{
 public:
     quint32 fc;
     bool fCompressed;
     bool r1;
-    FCompressed(void* /*dummy*/ = 0) {}
+    FCompressed(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Prm0 : public StreamOffset {
+class Prm0 : public StreamOffset
+{
 public:
     bool fComplex;
     quint8 isprm;
     quint8 val;
-    Prm0(void* /*dummy*/ = 0) {}
+    Prm0(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Prm1 : public StreamOffset {
+class Prm1 : public StreamOffset
+{
 public:
     bool fComplex;
     quint16 igrpprl;
-    Prm1(void* /*dummy*/ = 0) {}
+    Prm1(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SttbfFfn : public StreamOffset {
+class SttbfFfn : public StreamOffset
+{
 public:
     quint16 cData;
     quint16 cbExtra;
     QList<SttbfFfnEntry> data;
-    SttbfFfn(void* /*dummy*/ = 0) {}
+    SttbfFfn(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SttbfFfnEntry : public StreamOffset {
+class SttbfFfnEntry : public StreamOffset
+{
 public:
     quint8 cchData;
     QByteArray Data;
-    SttbfFfnEntry(void* /*dummy*/ = 0) {}
+    SttbfFfnEntry(void * /*dummy*/ = 0)
+    {
+    }
 };
-class CodePageString : public StreamOffset {
+class CodePageString : public StreamOffset
+{
 public:
     quint32 size;
     QByteArray characters;
-    CodePageString(void* /*dummy*/ = 0) {}
+    CodePageString(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FILETIME : public StreamOffset {
+class FILETIME : public StreamOffset
+{
 public:
     quint32 dwLowDateTime;
     quint32 dwHighDateTime;
-    FILETIME(void* /*dummy*/ = 0) {}
+    FILETIME(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ClipboardData : public StreamOffset {
+class ClipboardData : public StreamOffset
+{
 public:
     quint32 size;
     quint32 format;
     QByteArray data;
-    ClipboardData(void* /*dummy*/ = 0) {}
+    ClipboardData(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PropertyIdentifierAndOffset : public StreamOffset {
+class PropertyIdentifierAndOffset : public StreamOffset
+{
 public:
     quint32 propertyIdentifier;
     quint32 offset;
-    PropertyIdentifierAndOffset(void* /*dummy*/ = 0) {}
+    PropertyIdentifierAndOffset(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TypedPropertyValue : public StreamOffset {
+class TypedPropertyValue : public StreamOffset
+{
 public:
     bool _has_vt_I2;
     bool _has_paddingI2;
@@ -3221,17 +3970,23 @@ public:
     QSharedPointer<CodePageString> vt_lpstr;
     QSharedPointer<FILETIME> vg_FILETIME;
     QSharedPointer<ClipboardData> vg_CF;
-    TypedPropertyValue(void* /*dummy*/ = 0) {}
+    TypedPropertyValue(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PropertySet : public StreamOffset {
+class PropertySet : public StreamOffset
+{
 public:
     quint32 size;
     quint32 numProperties;
     QList<PropertyIdentifierAndOffset> propertyIdentifierAndOffset;
     QList<TypedPropertyValue> property;
-    PropertySet(void* /*dummy*/ = 0) {}
+    PropertySet(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PropertySetStream : public StreamOffset {
+class PropertySetStream : public StreamOffset
+{
 public:
     bool _has_fmtID1;
     bool _has_offset1;
@@ -3247,25 +4002,37 @@ public:
     PropertySet propertySet1;
     QSharedPointer<PropertySet> propertySet2;
     QList<Byte> padding;
-    PropertySetStream(void* /*dummy*/ = 0) {}
+    PropertySetStream(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SummaryInformationPropertySetStream : public StreamOffset {
+class SummaryInformationPropertySetStream : public StreamOffset
+{
 public:
     PropertySetStream propertySet;
-    SummaryInformationPropertySetStream(void* /*dummy*/ = 0) {}
+    SummaryInformationPropertySetStream(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocumentSummaryInformationPropertySetStream : public StreamOffset {
+class DocumentSummaryInformationPropertySetStream : public StreamOffset
+{
 public:
     PropertySetStream propertySet;
-    DocumentSummaryInformationPropertySetStream(void* /*dummy*/ = 0) {}
+    DocumentSummaryInformationPropertySetStream(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PicturesStream : public StreamOffset {
+class PicturesStream : public StreamOffset
+{
 public:
     OfficeArtBStoreDelay anon1;
     QList<Byte> trailing;
-    PicturesStream(void* /*dummy*/ = 0) {}
+    PicturesStream(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtMetafileHeader : public StreamOffset {
+class OfficeArtMetafileHeader : public StreamOffset
+{
 public:
     quint32 cbSize;
     RECT rcBounds;
@@ -3273,39 +4040,54 @@ public:
     quint32 cbsave;
     quint8 compression;
     quint8 filter;
-    OfficeArtMetafileHeader(void* /*dummy*/ = 0) {}
+    OfficeArtMetafileHeader(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SoundCollectionContainer : public StreamOffset {
+class SoundCollectionContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     SoundCollectionAtom soundCollectionAtom;
     QList<SoundContainer> rgSoundContainer;
-    SoundCollectionContainer(void* /*dummy*/ = 0) {}
+    SoundCollectionContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideHeadersFootersContainer : public StreamOffset {
+class SlideHeadersFootersContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     HeadersFootersAtom hfAtom;
     QSharedPointer<UserDateAtom> userDateAtom;
     QSharedPointer<FooterAtom> footerAtom;
-    SlideHeadersFootersContainer(void* /*dummy*/ = 0) {}
+    SlideHeadersFootersContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class NotesHeadersFootersContainer : public StreamOffset {
+class NotesHeadersFootersContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     HeadersFootersAtom hfAtom;
     QSharedPointer<UserDateAtom> userDateAtom;
     QSharedPointer<HeaderAtom> headerAtom;
     QSharedPointer<FooterAtom> footerAtom;
-    NotesHeadersFootersContainer(void* /*dummy*/ = 0) {}
+    NotesHeadersFootersContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ScalingStruct : public StreamOffset {
+class ScalingStruct : public StreamOffset
+{
 public:
     RatioStruct x;
     RatioStruct y;
-    ScalingStruct(void* /*dummy*/ = 0) {}
+    ScalingStruct(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextPFException9 : public StreamOffset {
+class TextPFException9 : public StreamOffset
+{
 public:
     bool _has_bulletBlipRef;
     bool _has_fBulletHasAutoNumber;
@@ -3313,9 +4095,12 @@ public:
     quint16 bulletBlipRef;
     quint16 fBulletHasAutoNumber;
     QSharedPointer<TextAutoNumberScheme> bulletAutoNumberScheme;
-    TextPFException9(void* /*dummy*/ = 0) {}
+    TextPFException9(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextCFException9 : public StreamOffset {
+class TextCFException9 : public StreamOffset
+{
 public:
     bool _has_pp10runid;
     bool _has_unuseda;
@@ -3324,30 +4109,42 @@ public:
     quint8 pp10runid;
     quint32 unuseda;
     quint8 unusedb;
-    TextCFException9(void* /*dummy*/ = 0) {}
+    TextCFException9(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextDefaults9Atom : public StreamOffset {
+class TextDefaults9Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     TextCFException9 cf9;
     TextPFException9 pf9;
-    TextDefaults9Atom(void* /*dummy*/ = 0) {}
+    TextDefaults9Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Kinsoku9Container : public StreamOffset {
+class Kinsoku9Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     Kinsoku9Atom kinsoku9Atom;
     QSharedPointer<KinsokuLeadingAtom> kinsokuLeadingAtom;
     QSharedPointer<KinsokuFollowingAtom> kinsokuFollowingAtom;
-    Kinsoku9Container(void* /*dummy*/ = 0) {}
+    Kinsoku9Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OutlineTextProps9Entry : public StreamOffset {
+class OutlineTextProps9Entry : public StreamOffset
+{
 public:
     OutlineTextPropsHeaderExAtom outlineTextHeaderAtom;
     StyleTextProp9Atom styleTextProp9Atom;
-    OutlineTextProps9Entry(void* /*dummy*/ = 0) {}
+    OutlineTextProps9Entry(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextCFException10 : public StreamOffset {
+class TextCFException10 : public StreamOffset
+{
 public:
     bool _has_newEAFontRef;
     bool _has_csFontRef;
@@ -3356,43 +4153,61 @@ public:
     quint16 newEAFontRef;
     quint16 csFontRef;
     quint32 pp11ext;
-    TextCFException10(void* /*dummy*/ = 0) {}
+    TextCFException10(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextDefaults10Atom : public StreamOffset {
+class TextDefaults10Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     TextCFException10 cf10;
-    TextDefaults10Atom(void* /*dummy*/ = 0) {}
+    TextDefaults10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class CommentIndex10Container : public StreamOffset {
+class CommentIndex10Container : public StreamOffset
+{
 public:
     RecordHeader rh;
     QSharedPointer<AuthorNameAtom> authorNameAtom;
     QSharedPointer<CommentIndex10Atom> authorIndexAtom;
-    CommentIndex10Container(void* /*dummy*/ = 0) {}
+    CommentIndex10Container(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OutlineTextProps10Entry : public StreamOffset {
+class OutlineTextProps10Entry : public StreamOffset
+{
 public:
     OutlineTextPropsHeaderExAtom outlineTextHeaderAtom;
     StyleTextProp10Atom styleTextProp10Atom;
-    OutlineTextProps10Entry(void* /*dummy*/ = 0) {}
+    OutlineTextProps10Entry(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PP11DocBinaryTagExtension : public StreamOffset {
+class PP11DocBinaryTagExtension : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray tagName;
     RecordHeader rhData;
     SmartTagStore11Container smartTagStore11;
     OutlineTextProps11Container outlineTextProps;
-    PP11DocBinaryTagExtension(void* /*dummy*/ = 0) {}
+    PP11DocBinaryTagExtension(void * /*dummy*/ = 0)
+    {
+    }
 };
-class UnknownBinaryTag : public StreamOffset {
+class UnknownBinaryTag : public StreamOffset
+{
 public:
     TagNameAtom tagNameAtom;
     BinaryTagDataBlob tagData;
-    UnknownBinaryTag(void* /*dummy*/ = 0) {}
+    UnknownBinaryTag(void * /*dummy*/ = 0)
+    {
+    }
 };
-class NoZoomViewInfoAtom : public StreamOffset {
+class NoZoomViewInfoAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     ScalingStruct curScale;
@@ -3401,15 +4216,21 @@ public:
     quint8 unused2;
     quint8 fDraftMode;
     quint16 unused3;
-    NoZoomViewInfoAtom(void* /*dummy*/ = 0) {}
+    NoZoomViewInfoAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class VBAInfoContainer : public StreamOffset {
+class VBAInfoContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     VBAInfoAtom vbaInfoAtom;
-    VBAInfoContainer(void* /*dummy*/ = 0) {}
+    VBAInfoContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class NormalViewSetInfoAtom : public StreamOffset {
+class NormalViewSetInfoAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     RatioStruct leftPortion;
@@ -3420,27 +4241,66 @@ public:
     bool fHideThumbnails;
     bool fBarSnapped;
     quint8 reserved;
-    NormalViewSetInfoAtom(void* /*dummy*/ = 0) {}
+    NormalViewSetInfoAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextContainerMeta : public StreamOffset {
+class TextContainerMeta : public StreamOffset
+{
 public:
-    class choice242357012 : public QSharedPointer<StreamOffset> {
+    class choice242357012 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice242357012() {}
-        explicit choice242357012(SlideNumberMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice242357012(DateTimeMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice242357012(GenericDateMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice242357012(HeaderMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice242357012(FooterMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice242357012(RTFDateTimeMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice242357012()
+        {
+        }
+        explicit choice242357012(SlideNumberMCAtom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice242357012(DateTimeMCAtom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice242357012(GenericDateMCAtom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice242357012(HeaderMCAtom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice242357012(FooterMCAtom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice242357012(RTFDateTimeMCAtom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice242357012 meta;
-    TextContainerMeta(void* /*dummy*/ = 0) {}
+    TextContainerMeta(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlidePersistAtom : public StreamOffset {
+class SlidePersistAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 persistIdRef;
@@ -3453,9 +4313,12 @@ public:
     qint32 cTexts;
     SlideId slideId;
     quint32 reserved5;
-    SlidePersistAtom(void* /*dummy*/ = 0) {}
+    SlidePersistAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextRuler : public StreamOffset {
+class TextRuler : public StreamOffset
+{
 public:
     bool _has_cLevels;
     bool _has_defaultTabSize;
@@ -3497,9 +4360,12 @@ public:
     quint16 indent4;
     quint16 leftMargin5;
     quint16 indent5;
-    TextRuler(void* /*dummy*/ = 0) {}
+    TextRuler(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextPFException : public StreamOffset {
+class TextPFException : public StreamOffset
+{
 public:
     bool _has_bulletChar;
     bool _has_bulletFontRef;
@@ -3530,9 +4396,12 @@ public:
     quint16 fontAlign;
     QSharedPointer<PFWrapFlags> wrapFlags;
     quint16 textDirection;
-    TextPFException(void* /*dummy*/ = 0) {}
+    TextPFException(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextCFException : public StreamOffset {
+class TextCFException : public StreamOffset
+{
 public:
     bool _has_fontRef;
     bool _has_oldEAFontRef;
@@ -3549,26 +4418,35 @@ public:
     quint16 fontSize;
     QSharedPointer<ColorIndexStruct> color;
     qint16 position;
-    TextCFException(void* /*dummy*/ = 0) {}
+    TextCFException(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FontCollectionEntry : public StreamOffset {
+class FontCollectionEntry : public StreamOffset
+{
 public:
     FontEntityAtom fontEntityAtom;
     QSharedPointer<FontEmbedDataBlob> fontEmbedData1;
     QSharedPointer<FontEmbedDataBlob> fontEmbedData2;
     QSharedPointer<FontEmbedDataBlob> fontEmbedData3;
     QSharedPointer<FontEmbedDataBlob> fontEmbedData4;
-    FontCollectionEntry(void* /*dummy*/ = 0) {}
+    FontCollectionEntry(void * /*dummy*/ = 0)
+    {
+    }
 };
-class KinsokuContainer : public StreamOffset {
+class KinsokuContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     KinsokuAtom kinsokuAtom;
     QSharedPointer<KinsokuLeadingAtom> kinsokuLeadingAtom;
     QSharedPointer<KinsokuFollowingAtom> kinsokuFollowingAtom;
-    KinsokuContainer(void* /*dummy*/ = 0) {}
+    KinsokuContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextSIException : public StreamOffset {
+class TextSIException : public StreamOffset
+{
 public:
     bool _has_spellInfo;
     bool _has_lid;
@@ -3601,15 +4479,21 @@ public:
     quint8 reserved3bc;
     bool grammarError;
     QSharedPointer<SmartTags> smartTags;
-    TextSIException(void* /*dummy*/ = 0) {}
+    TextSIException(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextMasterStyleLevel : public StreamOffset {
+class TextMasterStyleLevel : public StreamOffset
+{
 public:
     TextPFException pf;
     TextCFException cf;
-    TextMasterStyleLevel(void* /*dummy*/ = 0) {}
+    TextMasterStyleLevel(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocumentAtom : public StreamOffset {
+class DocumentAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     PointStruct slideSize;
@@ -3623,45 +4507,63 @@ public:
     quint8 fOmitTitlePlace;
     quint8 fRightToLeft;
     quint8 fShowComments;
-    DocumentAtom(void* /*dummy*/ = 0) {}
+    DocumentAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideTime10Atom : public StreamOffset {
+class SlideTime10Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     FILETIME fileTime;
-    SlideTime10Atom(void* /*dummy*/ = 0) {}
+    SlideTime10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PP12SlideBinaryTagExtension : public StreamOffset {
+class PP12SlideBinaryTagExtension : public StreamOffset
+{
 public:
     RecordHeader rh;
     QVector<quint16> tagName;
     RecordHeader rhData;
     QSharedPointer<RoundTripHeaderFooterDefaults12Atom> roundTripHeaderFooterDefaultsAtom;
-    PP12SlideBinaryTagExtension(void* /*dummy*/ = 0) {}
+    PP12SlideBinaryTagExtension(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ProgStringTagContainer : public StreamOffset {
+class ProgStringTagContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     TagNameAtom tagNameAtom;
     QSharedPointer<TagValueAtom> tagValueAtom;
-    ProgStringTagContainer(void* /*dummy*/ = 0) {}
+    ProgStringTagContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class NotesAtom : public StreamOffset {
+class NotesAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint32 slideIdRef;
     SlideFlags slideFlags;
     quint16 unused;
-    NotesAtom(void* /*dummy*/ = 0) {}
+    NotesAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExObjListContainer : public StreamOffset {
+class ExObjListContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     ExObjListAtom exObjListAtom;
     QList<ExObjListSubContainer> rgChildRec;
-    ExObjListContainer(void* /*dummy*/ = 0) {}
+    ExObjListContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExControlContainer : public StreamOffset {
+class ExControlContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     ExControlAtom exControlAtom;
@@ -3670,18 +4572,24 @@ public:
     QSharedPointer<ProgIDAtom> progIdAtom;
     QSharedPointer<ClipboardNameAtom> clipboardNameAtom;
     QSharedPointer<MetafileBlob> metafile;
-    ExControlContainer(void* /*dummy*/ = 0) {}
+    ExControlContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExHyperlinkContainer : public StreamOffset {
+class ExHyperlinkContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     ExHyperlinkAtom exHyperlinkAtom;
     QSharedPointer<FriendlyNameAtom> friendlyNameAtom;
     QSharedPointer<TargetAtom> targetAtom;
     QSharedPointer<LocationAtom> locationAtom;
-    ExHyperlinkContainer(void* /*dummy*/ = 0) {}
+    ExHyperlinkContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExOleLinkContainer : public StreamOffset {
+class ExOleLinkContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     ExOleLinkAtom exOleLinkAtom;
@@ -3690,9 +4598,12 @@ public:
     QSharedPointer<ProgIDAtom> progIdAtom;
     QSharedPointer<ClipboardNameAtom> clipboardNameAtom;
     QSharedPointer<MetafileBlob> metafile;
-    ExOleLinkContainer(void* /*dummy*/ = 0) {}
+    ExOleLinkContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExOleEmbedContainer : public StreamOffset {
+class ExOleEmbedContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     ExOleEmbedAtom exOleEmbedAtom;
@@ -3701,37 +4612,73 @@ public:
     QSharedPointer<ProgIDAtom> progIdAtom;
     QSharedPointer<ClipboardNameAtom> clipboardNameAtom;
     QSharedPointer<MetafileBlob> metafile;
-    ExOleEmbedContainer(void* /*dummy*/ = 0) {}
+    ExOleEmbedContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFDGGBlock : public StreamOffset {
+class OfficeArtFDGGBlock : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     OfficeArtFDGG head;
     QList<OfficeArtIDCL> Rgidcl;
-    OfficeArtFDGGBlock(void* /*dummy*/ = 0) {}
+    OfficeArtFDGGBlock(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtSolverContainerFileBlock : public StreamOffset {
+class OfficeArtSolverContainerFileBlock : public StreamOffset
+{
 public:
-    class choice3062460075 : public QSharedPointer<StreamOffset> {
+    class choice3062460075 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice3062460075() {}
-        explicit choice3062460075(OfficeArtFConnectorRule* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3062460075(OfficeArtFArcRule* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3062460075(OfficeArtFCalloutRule* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice3062460075()
+        {
+        }
+        explicit choice3062460075(OfficeArtFConnectorRule *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3062460075(OfficeArtFArcRule *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3062460075(OfficeArtFCalloutRule *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice3062460075 anon;
-    OfficeArtSolverContainerFileBlock(void* /*dummy*/ = 0) {}
+    OfficeArtSolverContainerFileBlock(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Rotation : public StreamOffset {
+class Rotation : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint rotation;
-    Rotation(void* /*dummy*/ = 0) {}
+    Rotation(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ProtectionBooleanProperties : public StreamOffset {
+class ProtectionBooleanProperties : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     bool fLockAgainstGrouping;
@@ -3756,75 +4703,111 @@ public:
     bool fUsefLockRotation;
     bool fUsefLockAgainstUngrouping;
     quint8 unused2;
-    ProtectionBooleanProperties(void* /*dummy*/ = 0) {}
+    ProtectionBooleanProperties(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ITxid : public StreamOffset {
+class ITxid : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 iTxid;
-    ITxid(void* /*dummy*/ = 0) {}
+    ITxid(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DxTextLeft : public StreamOffset {
+class DxTextLeft : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dxTextLeft;
-    DxTextLeft(void* /*dummy*/ = 0) {}
+    DxTextLeft(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DyTextTop : public StreamOffset {
+class DyTextTop : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dyTextTop;
-    DyTextTop(void* /*dummy*/ = 0) {}
+    DyTextTop(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DxTextRight : public StreamOffset {
+class DxTextRight : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dxTextRight;
-    DxTextRight(void* /*dummy*/ = 0) {}
+    DxTextRight(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DyTextBottom : public StreamOffset {
+class DyTextBottom : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dyTextBottom;
-    DyTextBottom(void* /*dummy*/ = 0) {}
+    DyTextBottom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class WrapText : public StreamOffset {
+class WrapText : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 wrapText;
-    WrapText(void* /*dummy*/ = 0) {}
+    WrapText(void * /*dummy*/ = 0)
+    {
+    }
 };
-class AnchorText : public StreamOffset {
+class AnchorText : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 anchorText;
-    AnchorText(void* /*dummy*/ = 0) {}
+    AnchorText(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TxflTextFlow : public StreamOffset {
+class TxflTextFlow : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 txflTextFlow;
-    TxflTextFlow(void* /*dummy*/ = 0) {}
+    TxflTextFlow(void * /*dummy*/ = 0)
+    {
+    }
 };
-class CdirFont : public StreamOffset {
+class CdirFont : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 cdirFont;
-    CdirFont(void* /*dummy*/ = 0) {}
+    CdirFont(void * /*dummy*/ = 0)
+    {
+    }
 };
-class HspNext : public StreamOffset {
+class HspNext : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 hspNext;
-    HspNext(void* /*dummy*/ = 0) {}
+    HspNext(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Txdir : public StreamOffset {
+class Txdir : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 txdir;
-    Txdir(void* /*dummy*/ = 0) {}
+    Txdir(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextBooleanProperties : public StreamOffset {
+class TextBooleanProperties : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     bool unused1;
@@ -3841,69 +4824,102 @@ public:
     bool fUsefSelectText;
     quint8 unused6a;
     quint8 unused6b;
-    TextBooleanProperties(void* /*dummy*/ = 0) {}
+    TextBooleanProperties(void * /*dummy*/ = 0)
+    {
+    }
 };
-class CropFromTop : public StreamOffset {
+class CropFromTop : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint cropFromTop;
-    CropFromTop(void* /*dummy*/ = 0) {}
+    CropFromTop(void * /*dummy*/ = 0)
+    {
+    }
 };
-class CropFromBottom : public StreamOffset {
+class CropFromBottom : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint cropFromBottom;
-    CropFromBottom(void* /*dummy*/ = 0) {}
+    CropFromBottom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class CropFromLeft : public StreamOffset {
+class CropFromLeft : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint cropFromLeft;
-    CropFromLeft(void* /*dummy*/ = 0) {}
+    CropFromLeft(void * /*dummy*/ = 0)
+    {
+    }
 };
-class CropFromRight : public StreamOffset {
+class CropFromRight : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint cropFromRight;
-    CropFromRight(void* /*dummy*/ = 0) {}
+    CropFromRight(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Pib : public StreamOffset {
+class Pib : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 pib;
-    Pib(void* /*dummy*/ = 0) {}
+    Pib(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PibName : public StreamOffset {
+class PibName : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 pibName;
-    PibName(void* /*dummy*/ = 0) {}
+    PibName(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PibFlags : public StreamOffset {
+class PibFlags : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 pibFlags;
-    PibFlags(void* /*dummy*/ = 0) {}
+    PibFlags(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PictureTransparent : public StreamOffset {
+class PictureTransparent : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF pictureTransparent;
-    PictureTransparent(void* /*dummy*/ = 0) {}
+    PictureTransparent(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PictureContrast : public StreamOffset {
+class PictureContrast : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 pictureContrast;
-    PictureContrast(void* /*dummy*/ = 0) {}
+    PictureContrast(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PictureBrightness : public StreamOffset {
+class PictureBrightness : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 pictureBrightness;
-    PictureBrightness(void* /*dummy*/ = 0) {}
+    PictureBrightness(void * /*dummy*/ = 0)
+    {
+    }
 };
-class BlipBooleanProperties : public StreamOffset {
+class BlipBooleanProperties : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     bool fPictureActive;
@@ -3924,99 +4940,147 @@ public:
     bool fUsefPicturePreserveGrays;
     bool unused2a;
     quint8 unused2b;
-    BlipBooleanProperties(void* /*dummy*/ = 0) {}
+    BlipBooleanProperties(void * /*dummy*/ = 0)
+    {
+    }
 };
-class GeoLeft : public StreamOffset {
+class GeoLeft : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 geoLeft;
-    GeoLeft(void* /*dummy*/ = 0) {}
+    GeoLeft(void * /*dummy*/ = 0)
+    {
+    }
 };
-class GeoTop : public StreamOffset {
+class GeoTop : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 geoTop;
-    GeoTop(void* /*dummy*/ = 0) {}
+    GeoTop(void * /*dummy*/ = 0)
+    {
+    }
 };
-class GeoRight : public StreamOffset {
+class GeoRight : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 geoRight;
-    GeoRight(void* /*dummy*/ = 0) {}
+    GeoRight(void * /*dummy*/ = 0)
+    {
+    }
 };
-class GeoBottom : public StreamOffset {
+class GeoBottom : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 geoBottom;
-    GeoBottom(void* /*dummy*/ = 0) {}
+    GeoBottom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShapePath : public StreamOffset {
+class ShapePath : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 shapePath;
-    ShapePath(void* /*dummy*/ = 0) {}
+    ShapePath(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PVertices : public StreamOffset {
+class PVertices : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 pVertices;
-    PVertices(void* /*dummy*/ = 0) {}
+    PVertices(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PSegmentInfo : public StreamOffset {
+class PSegmentInfo : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 pSegmentInfo;
-    PSegmentInfo(void* /*dummy*/ = 0) {}
+    PSegmentInfo(void * /*dummy*/ = 0)
+    {
+    }
 };
-class AdjustValue : public StreamOffset {
+class AdjustValue : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjustvalue;
-    AdjustValue(void* /*dummy*/ = 0) {}
+    AdjustValue(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Adjust2Value : public StreamOffset {
+class Adjust2Value : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjust2value;
-    Adjust2Value(void* /*dummy*/ = 0) {}
+    Adjust2Value(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Adjust3Value : public StreamOffset {
+class Adjust3Value : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjust3value;
-    Adjust3Value(void* /*dummy*/ = 0) {}
+    Adjust3Value(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Adjust4Value : public StreamOffset {
+class Adjust4Value : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjust4value;
-    Adjust4Value(void* /*dummy*/ = 0) {}
+    Adjust4Value(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Adjust5Value : public StreamOffset {
+class Adjust5Value : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjust5value;
-    Adjust5Value(void* /*dummy*/ = 0) {}
+    Adjust5Value(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Adjust6Value : public StreamOffset {
+class Adjust6Value : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjust6value;
-    Adjust6Value(void* /*dummy*/ = 0) {}
+    Adjust6Value(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Adjust7Value : public StreamOffset {
+class Adjust7Value : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjust7value;
-    Adjust7Value(void* /*dummy*/ = 0) {}
+    Adjust7Value(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Adjust8Value : public StreamOffset {
+class Adjust8Value : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 adjust8value;
-    Adjust8Value(void* /*dummy*/ = 0) {}
+    Adjust8Value(void * /*dummy*/ = 0)
+    {
+    }
 };
-class GeometryBooleanProperties : public StreamOffset {
+class GeometryBooleanProperties : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     bool fFillOk;
@@ -4037,189 +5101,282 @@ public:
     bool unused3a;
     bool unused3b;
     quint8 unused4;
-    GeometryBooleanProperties(void* /*dummy*/ = 0) {}
+    GeometryBooleanProperties(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillType : public StreamOffset {
+class FillType : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 fillType;
-    FillType(void* /*dummy*/ = 0) {}
+    FillType(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillColor : public StreamOffset {
+class FillColor : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF fillColor;
-    FillColor(void* /*dummy*/ = 0) {}
+    FillColor(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillOpacity : public StreamOffset {
+class FillOpacity : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillOpacity;
-    FillOpacity(void* /*dummy*/ = 0) {}
+    FillOpacity(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillBackColor : public StreamOffset {
+class FillBackColor : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF fillBackColor;
-    FillBackColor(void* /*dummy*/ = 0) {}
+    FillBackColor(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillBackOpacity : public StreamOffset {
+class FillBackOpacity : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillBackOpacity;
-    FillBackOpacity(void* /*dummy*/ = 0) {}
+    FillBackOpacity(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillCrMod : public StreamOffset {
+class FillCrMod : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF fillCrMod;
-    FillCrMod(void* /*dummy*/ = 0) {}
+    FillCrMod(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillBlip : public StreamOffset {
+class FillBlip : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 fillBlip;
-    FillBlip(void* /*dummy*/ = 0) {}
+    FillBlip(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillBlipName : public StreamOffset {
+class FillBlipName : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 fillBlipName;
-    FillBlipName(void* /*dummy*/ = 0) {}
+    FillBlipName(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillBlipFlags : public StreamOffset {
+class FillBlipFlags : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 fillBlipFlags;
-    FillBlipFlags(void* /*dummy*/ = 0) {}
+    FillBlipFlags(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillWidth : public StreamOffset {
+class FillWidth : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillWidth;
-    FillWidth(void* /*dummy*/ = 0) {}
+    FillWidth(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillHeight : public StreamOffset {
+class FillHeight : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillHeight;
-    FillHeight(void* /*dummy*/ = 0) {}
+    FillHeight(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillAngle : public StreamOffset {
+class FillAngle : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillAngle;
-    FillAngle(void* /*dummy*/ = 0) {}
+    FillAngle(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillFocus : public StreamOffset {
+class FillFocus : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillFocus;
-    FillFocus(void* /*dummy*/ = 0) {}
+    FillFocus(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillToLeft : public StreamOffset {
+class FillToLeft : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillToLeft;
-    FillToLeft(void* /*dummy*/ = 0) {}
+    FillToLeft(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillToTop : public StreamOffset {
+class FillToTop : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillToTop;
-    FillToTop(void* /*dummy*/ = 0) {}
+    FillToTop(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillToRight : public StreamOffset {
+class FillToRight : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillToRight;
-    FillToRight(void* /*dummy*/ = 0) {}
+    FillToRight(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillToBottom : public StreamOffset {
+class FillToBottom : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillToBottom;
-    FillToBottom(void* /*dummy*/ = 0) {}
+    FillToBottom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillRectLeft : public StreamOffset {
+class FillRectLeft : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillRectLeft;
-    FillRectLeft(void* /*dummy*/ = 0) {}
+    FillRectLeft(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillRectTop : public StreamOffset {
+class FillRectTop : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillRectTop;
-    FillRectTop(void* /*dummy*/ = 0) {}
+    FillRectTop(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillRectRight : public StreamOffset {
+class FillRectRight : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillRectRight;
-    FillRectRight(void* /*dummy*/ = 0) {}
+    FillRectRight(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillRectBottom : public StreamOffset {
+class FillRectBottom : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillRectBottom;
-    FillRectBottom(void* /*dummy*/ = 0) {}
+    FillRectBottom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillDztype : public StreamOffset {
+class FillDztype : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillDztype;
-    FillDztype(void* /*dummy*/ = 0) {}
+    FillDztype(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillShadePreset : public StreamOffset {
+class FillShadePreset : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 fillShadePreset;
-    FillShadePreset(void* /*dummy*/ = 0) {}
+    FillShadePreset(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillShadeColors : public StreamOffset {
+class FillShadeColors : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 fillShadeColors;
-    FillShadeColors(void* /*dummy*/ = 0) {}
+    FillShadeColors(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillOriginX : public StreamOffset {
+class FillOriginX : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillOriginX;
-    FillOriginX(void* /*dummy*/ = 0) {}
+    FillOriginX(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillOriginY : public StreamOffset {
+class FillOriginY : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillOriginY;
-    FillOriginY(void* /*dummy*/ = 0) {}
+    FillOriginY(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillShapeOriginX : public StreamOffset {
+class FillShapeOriginX : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillShapeOriginX;
-    FillShapeOriginX(void* /*dummy*/ = 0) {}
+    FillShapeOriginX(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillShapeOriginY : public StreamOffset {
+class FillShapeOriginY : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint fillShapeOriginY;
-    FillShapeOriginY(void* /*dummy*/ = 0) {}
+    FillShapeOriginY(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillColorExt : public StreamOffset {
+class FillColorExt : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF fillColorExt;
-    FillColorExt(void* /*dummy*/ = 0) {}
+    FillColorExt(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillBackColorExt : public StreamOffset {
+class FillBackColorExt : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF fillBackColorExt;
-    FillBackColorExt(void* /*dummy*/ = 0) {}
+    FillBackColorExt(void * /*dummy*/ = 0)
+    {
+    }
 };
-class FillStyleBooleanProperties : public StreamOffset {
+class FillStyleBooleanProperties : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     bool fNoFillHitTest;
@@ -4240,99 +5397,147 @@ public:
     bool fUsefRecolorFillAsPicture;
     bool unused2a;
     quint8 unused2b;
-    FillStyleBooleanProperties(void* /*dummy*/ = 0) {}
+    FillStyleBooleanProperties(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineColor : public StreamOffset {
+class LineColor : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF lineColor;
-    LineColor(void* /*dummy*/ = 0) {}
+    LineColor(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineOpacity : public StreamOffset {
+class LineOpacity : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 lineOpacity;
-    LineOpacity(void* /*dummy*/ = 0) {}
+    LineOpacity(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineBackColor : public StreamOffset {
+class LineBackColor : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF lineBackColor;
-    LineBackColor(void* /*dummy*/ = 0) {}
+    LineBackColor(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineFillBlip : public StreamOffset {
+class LineFillBlip : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineFillBlip;
-    LineFillBlip(void* /*dummy*/ = 0) {}
+    LineFillBlip(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineWidth : public StreamOffset {
+class LineWidth : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineWidth;
-    LineWidth(void* /*dummy*/ = 0) {}
+    LineWidth(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineStyle : public StreamOffset {
+class LineStyle : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineStyle;
-    LineStyle(void* /*dummy*/ = 0) {}
+    LineStyle(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineDashing : public StreamOffset {
+class LineDashing : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineDashing;
-    LineDashing(void* /*dummy*/ = 0) {}
+    LineDashing(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineStartArrowhead : public StreamOffset {
+class LineStartArrowhead : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineStartArrowhead;
-    LineStartArrowhead(void* /*dummy*/ = 0) {}
+    LineStartArrowhead(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineEndArrowhead : public StreamOffset {
+class LineEndArrowhead : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineEndArrowhead;
-    LineEndArrowhead(void* /*dummy*/ = 0) {}
+    LineEndArrowhead(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineStartArrowWidth : public StreamOffset {
+class LineStartArrowWidth : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineStartArrowWidth;
-    LineStartArrowWidth(void* /*dummy*/ = 0) {}
+    LineStartArrowWidth(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineStartArrowLength : public StreamOffset {
+class LineStartArrowLength : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineStartArrowLength;
-    LineStartArrowLength(void* /*dummy*/ = 0) {}
+    LineStartArrowLength(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineEndArrowWidth : public StreamOffset {
+class LineEndArrowWidth : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineEndArrowWidth;
-    LineEndArrowWidth(void* /*dummy*/ = 0) {}
+    LineEndArrowWidth(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineEndArrowLength : public StreamOffset {
+class LineEndArrowLength : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineEndArrowLength;
-    LineEndArrowLength(void* /*dummy*/ = 0) {}
+    LineEndArrowLength(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineJoinStyle : public StreamOffset {
+class LineJoinStyle : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineJoinStyle;
-    LineJoinStyle(void* /*dummy*/ = 0) {}
+    LineJoinStyle(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineEndCapStyle : public StreamOffset {
+class LineEndCapStyle : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lineEndCapStyle;
-    LineEndCapStyle(void* /*dummy*/ = 0) {}
+    LineEndCapStyle(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LineStyleBooleanProperties : public StreamOffset {
+class LineStyleBooleanProperties : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     bool fNoLineDrawDash;
@@ -4357,39 +5562,57 @@ public:
     bool unused3;
     bool fUsefLineOpaqueBackColor;
     quint8 unused4;
-    LineStyleBooleanProperties(void* /*dummy*/ = 0) {}
+    LineStyleBooleanProperties(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShadowType : public StreamOffset {
+class ShadowType : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 shadowType;
-    ShadowType(void* /*dummy*/ = 0) {}
+    ShadowType(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShadowColor : public StreamOffset {
+class ShadowColor : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF shadowColor;
-    ShadowColor(void* /*dummy*/ = 0) {}
+    ShadowColor(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShadowOpacity : public StreamOffset {
+class ShadowOpacity : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     FixedPoint shadowOpacity;
-    ShadowOpacity(void* /*dummy*/ = 0) {}
+    ShadowOpacity(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShadowOffsetX : public StreamOffset {
+class ShadowOffsetX : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 shadowOffsetX;
-    ShadowOffsetX(void* /*dummy*/ = 0) {}
+    ShadowOffsetX(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShadowOffsetY : public StreamOffset {
+class ShadowOffsetY : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 shadowOffsetY;
-    ShadowOffsetY(void* /*dummy*/ = 0) {}
+    ShadowOffsetY(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShadowStyleBooleanProperties : public StreamOffset {
+class ShadowStyleBooleanProperties : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     bool fShadowObscured;
@@ -4398,27 +5621,39 @@ public:
     bool fUsefShadowObscured;
     bool fUsefShadow;
     quint16 unused2;
-    ShadowStyleBooleanProperties(void* /*dummy*/ = 0) {}
+    ShadowStyleBooleanProperties(void * /*dummy*/ = 0)
+    {
+    }
 };
-class HspMaster : public StreamOffset {
+class HspMaster : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 hspMaster;
-    HspMaster(void* /*dummy*/ = 0) {}
+    HspMaster(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Cxstyle : public StreamOffset {
+class Cxstyle : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 cxstyle;
-    Cxstyle(void* /*dummy*/ = 0) {}
+    Cxstyle(void * /*dummy*/ = 0)
+    {
+    }
 };
-class BWMode : public StreamOffset {
+class BWMode : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 bWMode;
-    BWMode(void* /*dummy*/ = 0) {}
+    BWMode(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShapeBooleanProperties : public StreamOffset {
+class ShapeBooleanProperties : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     bool fBackground;
@@ -4447,39 +5682,57 @@ public:
     bool unused5;
     bool unused6;
     quint8 unused7;
-    ShapeBooleanProperties(void* /*dummy*/ = 0) {}
+    ShapeBooleanProperties(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DxyCalloutGap : public StreamOffset {
+class DxyCalloutGap : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 dxyCalloutGap;
-    DxyCalloutGap(void* /*dummy*/ = 0) {}
+    DxyCalloutGap(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Spcoa : public StreamOffset {
+class Spcoa : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 spcoa;
-    Spcoa(void* /*dummy*/ = 0) {}
+    Spcoa(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Spcod : public StreamOffset {
+class Spcod : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 spcod;
-    Spcod(void* /*dummy*/ = 0) {}
+    Spcod(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DxyCalloutDropSpecified : public StreamOffset {
+class DxyCalloutDropSpecified : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 dxyCalloutDropSpecified;
-    DxyCalloutDropSpecified(void* /*dummy*/ = 0) {}
+    DxyCalloutDropSpecified(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DxyCalloutLengthSpecified : public StreamOffset {
+class DxyCalloutLengthSpecified : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 dxyCalloutLengthSpecified;
-    DxyCalloutLengthSpecified(void* /*dummy*/ = 0) {}
+    DxyCalloutLengthSpecified(void * /*dummy*/ = 0)
+    {
+    }
 };
-class CalloutBooleanProperties : public StreamOffset {
+class CalloutBooleanProperties : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     bool fCalloutLengthSpecified;
@@ -4500,117 +5753,174 @@ public:
     bool fUsefCallout;
     bool unused2a;
     quint8 unused2b;
-    CalloutBooleanProperties(void* /*dummy*/ = 0) {}
+    CalloutBooleanProperties(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PWrapPolygonVertices : public StreamOffset {
+class PWrapPolygonVertices : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 pWrapPolygonVertices;
-    PWrapPolygonVertices(void* /*dummy*/ = 0) {}
+    PWrapPolygonVertices(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DxWrapDistLeft : public StreamOffset {
+class DxWrapDistLeft : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dxWrapDistLeft;
-    DxWrapDistLeft(void* /*dummy*/ = 0) {}
+    DxWrapDistLeft(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DyWrapDistTop : public StreamOffset {
+class DyWrapDistTop : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dyWrapDistTop;
-    DyWrapDistTop(void* /*dummy*/ = 0) {}
+    DyWrapDistTop(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DxWrapDistRight : public StreamOffset {
+class DxWrapDistRight : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dxWrapDistRight;
-    DxWrapDistRight(void* /*dummy*/ = 0) {}
+    DxWrapDistRight(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DyWrapDistBottom : public StreamOffset {
+class DyWrapDistBottom : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dyWrapDistBottom;
-    DyWrapDistBottom(void* /*dummy*/ = 0) {}
+    DyWrapDistBottom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class LidRegroup : public StreamOffset {
+class LidRegroup : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 lidRegroup;
-    LidRegroup(void* /*dummy*/ = 0) {}
+    LidRegroup(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PosH : public StreamOffset {
+class PosH : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 posH;
-    PosH(void* /*dummy*/ = 0) {}
+    PosH(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PosRelH : public StreamOffset {
+class PosRelH : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 posRelH;
-    PosRelH(void* /*dummy*/ = 0) {}
+    PosRelH(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PosV : public StreamOffset {
+class PosV : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 posV;
-    PosV(void* /*dummy*/ = 0) {}
+    PosV(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PosRelV : public StreamOffset {
+class PosRelV : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 posRelV;
-    PosRelV(void* /*dummy*/ = 0) {}
+    PosRelV(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PctHR : public StreamOffset {
+class PctHR : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 pctHR;
-    PctHR(void* /*dummy*/ = 0) {}
+    PctHR(void * /*dummy*/ = 0)
+    {
+    }
 };
-class AlignHR : public StreamOffset {
+class AlignHR : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     quint32 alignHR;
-    AlignHR(void* /*dummy*/ = 0) {}
+    AlignHR(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DxHeightHR : public StreamOffset {
+class DxHeightHR : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dxHeightHR;
-    DxHeightHR(void* /*dummy*/ = 0) {}
+    DxHeightHR(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DxWidthHR : public StreamOffset {
+class DxWidthHR : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 dxWidthHR;
-    DxWidthHR(void* /*dummy*/ = 0) {}
+    DxWidthHR(void * /*dummy*/ = 0)
+    {
+    }
 };
-class BorderTopColor : public StreamOffset {
+class BorderTopColor : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF borderTopColor;
-    BorderTopColor(void* /*dummy*/ = 0) {}
+    BorderTopColor(void * /*dummy*/ = 0)
+    {
+    }
 };
-class BorderLeftColor : public StreamOffset {
+class BorderLeftColor : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF borderLeftColor;
-    BorderLeftColor(void* /*dummy*/ = 0) {}
+    BorderLeftColor(void * /*dummy*/ = 0)
+    {
+    }
 };
-class BorderBottomColor : public StreamOffset {
+class BorderBottomColor : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF borderBottomColor;
-    BorderBottomColor(void* /*dummy*/ = 0) {}
+    BorderBottomColor(void * /*dummy*/ = 0)
+    {
+    }
 };
-class BorderRightColor : public StreamOffset {
+class BorderRightColor : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     OfficeArtCOLORREF borderRightColor;
-    BorderRightColor(void* /*dummy*/ = 0) {}
+    BorderRightColor(void * /*dummy*/ = 0)
+    {
+    }
 };
-class GroupShapeBooleanProperties : public StreamOffset {
+class GroupShapeBooleanProperties : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     bool fPrint;
@@ -4645,15 +5955,21 @@ public:
     bool fUsefStandardHR;
     bool fUsefIsBullet;
     bool fUsefLayoutInCell;
-    GroupShapeBooleanProperties(void* /*dummy*/ = 0) {}
+    GroupShapeBooleanProperties(void * /*dummy*/ = 0)
+    {
+    }
 };
-class WzFillId : public StreamOffset {
+class WzFillId : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 wzFillId;
-    WzFillId(void* /*dummy*/ = 0) {}
+    WzFillId(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DiagramBooleanProperties : public StreamOffset {
+class DiagramBooleanProperties : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     bool fPseudoInline;
@@ -4672,97 +5988,208 @@ public:
     bool unused5;
     quint8 unused6a;
     quint8 unused6b;
-    DiagramBooleanProperties(void* /*dummy*/ = 0) {}
+    DiagramBooleanProperties(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PptOfficeArtClientAnchor : public StreamOffset {
+class PptOfficeArtClientAnchor : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QSharedPointer<SmallRectStruct> rect1;
     QSharedPointer<RectStruct> rect2;
-    PptOfficeArtClientAnchor(void* /*dummy*/ = 0) {}
+    PptOfficeArtClientAnchor(void * /*dummy*/ = 0)
+    {
+    }
 };
-class AnimationInfoContainer : public StreamOffset {
+class AnimationInfoContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     AnimationInfoAtom animationAtom;
     QSharedPointer<SoundContainer> animationSound;
-    AnimationInfoContainer(void* /*dummy*/ = 0) {}
+    AnimationInfoContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MouseClickInteractiveInfoContainer : public StreamOffset {
+class MouseClickInteractiveInfoContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     InteractiveInfoAtom interactiveInfoAtom;
     QSharedPointer<MacroNameAtom> macroNameAtom;
-    MouseClickInteractiveInfoContainer(void* /*dummy*/ = 0) {}
+    MouseClickInteractiveInfoContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MouseOverInteractiveInfoContainer : public StreamOffset {
+class MouseOverInteractiveInfoContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     InteractiveInfoAtom interactiveInfoAtom;
     QSharedPointer<MacroNameAtom> macroNameAtom;
-    MouseOverInteractiveInfoContainer(void* /*dummy*/ = 0) {}
+    MouseOverInteractiveInfoContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShapeClientRoundtripDataSubcontainerOrAtom : public StreamOffset {
+class ShapeClientRoundtripDataSubcontainerOrAtom : public StreamOffset
+{
 public:
-    class choice3146562028 : public QSharedPointer<StreamOffset> {
+    class choice3146562028 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice3146562028() {}
-        explicit choice3146562028(ShapeProgsTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3146562028(RoundTripNewPlaceHolderId12Atom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3146562028(RoundTripShapeId12Atom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3146562028(RoundTripHFPlaceholder12Atom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3146562028(RoundTripShapeCheckSumForCustomLayouts12Atom* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice3146562028()
+        {
+        }
+        explicit choice3146562028(ShapeProgsTagContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3146562028(RoundTripNewPlaceHolderId12Atom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3146562028(RoundTripShapeId12Atom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3146562028(RoundTripHFPlaceholder12Atom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3146562028(RoundTripShapeCheckSumForCustomLayouts12Atom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice3146562028 anon;
-    ShapeClientRoundtripDataSubcontainerOrAtom(void* /*dummy*/ = 0) {}
+    ShapeClientRoundtripDataSubcontainerOrAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShapeProgBinaryTagSubContainerOrAtom : public StreamOffset {
+class ShapeProgBinaryTagSubContainerOrAtom : public StreamOffset
+{
 public:
-    class choice2754406405 : public QSharedPointer<StreamOffset> {
+    class choice2754406405 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice2754406405() {}
-        explicit choice2754406405(PP9ShapeBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2754406405(PP10ShapeBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2754406405(PP11ShapeBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2754406405(UnknownBinaryTag* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice2754406405()
+        {
+        }
+        explicit choice2754406405(PP9ShapeBinaryTagExtension *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2754406405(PP10ShapeBinaryTagExtension *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2754406405(PP11ShapeBinaryTagExtension *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2754406405(UnknownBinaryTag *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice2754406405 anon;
-    ShapeProgBinaryTagSubContainerOrAtom(void* /*dummy*/ = 0) {}
+    ShapeProgBinaryTagSubContainerOrAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtClientTextBox : public StreamOffset {
+class OfficeArtClientTextBox : public StreamOffset
+{
 public:
-    class choice2757443956 : public QSharedPointer<StreamOffset> {
+    class choice2757443956 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice2757443956() {}
-        explicit choice2757443956(XlsOfficeArtClientTextBox* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2757443956(DocOfficeArtClientTextBox* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2757443956(PptOfficeArtClientTextBox* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice2757443956()
+        {
+        }
+        explicit choice2757443956(XlsOfficeArtClientTextBox *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2757443956(DocOfficeArtClientTextBox *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2757443956(PptOfficeArtClientTextBox *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice2757443956 anon;
-    OfficeArtClientTextBox(void* /*dummy*/ = 0) {}
+    OfficeArtClientTextBox(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextRulerAtom : public StreamOffset {
+class TextRulerAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     TextRuler textRuler;
-    TextRulerAtom(void* /*dummy*/ = 0) {}
+    TextRulerAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFOPTE : public StreamOffset {
+class OfficeArtFOPTE : public StreamOffset
+{
 public:
     OfficeArtFOPTEOPID opid;
     qint32 op;
-    OfficeArtFOPTE(void* /*dummy*/ = 0) {}
+    OfficeArtFOPTE(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Fib : public StreamOffset {
+class Fib : public StreamOffset
+{
 public:
     FibBase base;
     quint16 csw;
@@ -4776,41 +6203,77 @@ public:
     quint16 cswNew;
     QByteArray fibRgCswNew;
     QByteArray trail;
-    Fib(void* /*dummy*/ = 0) {}
+    Fib(void * /*dummy*/ = 0)
+    {
+    }
 };
-class STSH : public StreamOffset {
+class STSH : public StreamOffset
+{
 public:
     LPStshi lpstshi;
     QList<LPStd> rglpstd;
-    STSH(void* /*dummy*/ = 0) {}
+    STSH(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Clx : public StreamOffset {
+class Clx : public StreamOffset
+{
 public:
     QList<Pcr> RgPrc;
     Pcdt pcdt;
-    Clx(void* /*dummy*/ = 0) {}
+    Clx(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Pcr : public StreamOffset {
+class Pcr : public StreamOffset
+{
 public:
     quint8 clxt;
     PrcData prcData;
-    Pcr(void* /*dummy*/ = 0) {}
+    Pcr(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Prm : public StreamOffset {
+class Prm : public StreamOffset
+{
 public:
-    class choice1129181155 : public QSharedPointer<StreamOffset> {
+    class choice1129181155 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice1129181155() {}
-        explicit choice1129181155(Prm0* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1129181155(Prm1* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice1129181155()
+        {
+        }
+        explicit choice1129181155(Prm0 *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice1129181155(Prm1 *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice1129181155 prm;
-    Prm(void* /*dummy*/ = 0) {}
+    Prm(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtBlipEMF : public StreamOffset {
+class OfficeArtBlipEMF : public StreamOffset
+{
 public:
     bool _has_rgbUid2;
     OfficeArtRecordHeader rh;
@@ -4818,9 +6281,12 @@ public:
     QByteArray rgbUid2;
     OfficeArtMetafileHeader metafileHeader;
     QByteArray BLIPFileData;
-    OfficeArtBlipEMF(void* /*dummy*/ = 0) {}
+    OfficeArtBlipEMF(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtBlipWMF : public StreamOffset {
+class OfficeArtBlipWMF : public StreamOffset
+{
 public:
     bool _has_rgbUid2;
     OfficeArtRecordHeader rh;
@@ -4828,9 +6294,12 @@ public:
     QByteArray rgbUid2;
     OfficeArtMetafileHeader metafileHeader;
     QByteArray BLIPFileData;
-    OfficeArtBlipWMF(void* /*dummy*/ = 0) {}
+    OfficeArtBlipWMF(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtBlipPICT : public StreamOffset {
+class OfficeArtBlipPICT : public StreamOffset
+{
 public:
     bool _has_rgbUid2;
     OfficeArtRecordHeader rh;
@@ -4838,28 +6307,70 @@ public:
     QByteArray rgbUid2;
     OfficeArtMetafileHeader metafileHeader;
     QByteArray BLIPFileData;
-    OfficeArtBlipPICT(void* /*dummy*/ = 0) {}
+    OfficeArtBlipPICT(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtBlip : public StreamOffset {
+class OfficeArtBlip : public StreamOffset
+{
 public:
-    class choice279968329 : public QSharedPointer<StreamOffset> {
+    class choice279968329 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice279968329() {}
-        explicit choice279968329(OfficeArtBlipEMF* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice279968329(OfficeArtBlipWMF* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice279968329(OfficeArtBlipPICT* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice279968329(OfficeArtBlipJPEG* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice279968329(OfficeArtBlipPNG* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice279968329(OfficeArtBlipDIB* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice279968329(OfficeArtBlipTIFF* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice279968329()
+        {
+        }
+        explicit choice279968329(OfficeArtBlipEMF *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice279968329(OfficeArtBlipWMF *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice279968329(OfficeArtBlipPICT *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice279968329(OfficeArtBlipJPEG *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice279968329(OfficeArtBlipPNG *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice279968329(OfficeArtBlipDIB *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice279968329(OfficeArtBlipTIFF *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice279968329 anon;
-    OfficeArtBlip(void* /*dummy*/ = 0) {}
+    OfficeArtBlip(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ZoomViewInfoAtom : public StreamOffset {
+class ZoomViewInfoAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     ScalingStruct curScale;
@@ -4868,9 +6379,12 @@ public:
     quint8 fUseVarScale;
     quint8 fDraftMode;
     quint16 unused2;
-    ZoomViewInfoAtom(void* /*dummy*/ = 0) {}
+    ZoomViewInfoAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PP9DocBinaryTagExtension : public StreamOffset {
+class PP9DocBinaryTagExtension : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray tagName;
@@ -4887,22 +6401,31 @@ public:
     QSharedPointer<HTMLPublishInfo9Container> htmlPublishInfoAtom;
     QList<BroadcastDocInfo9Container> rgBroadcastDocInfo9;
     QSharedPointer<OutlineTextProps9Container> outlineTextPropsContainer;
-    PP9DocBinaryTagExtension(void* /*dummy*/ = 0) {}
+    PP9DocBinaryTagExtension(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextMasterStyle9Level : public StreamOffset {
+class TextMasterStyle9Level : public StreamOffset
+{
 public:
     TextPFException9 pf9;
     TextCFException9 cf9;
-    TextMasterStyle9Level(void* /*dummy*/ = 0) {}
+    TextMasterStyle9Level(void * /*dummy*/ = 0)
+    {
+    }
 };
-class StyleTextProp9 : public StreamOffset {
+class StyleTextProp9 : public StreamOffset
+{
 public:
     TextPFException9 pf9;
     TextCFException9 cf9;
     TextSIException si;
-    StyleTextProp9(void* /*dummy*/ = 0) {}
+    StyleTextProp9(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PP10DocBinaryTagExtension : public StreamOffset {
+class PP10DocBinaryTagExtension : public StreamOffset
+{
 public:
     RecordHeader rh;
     QByteArray tagName;
@@ -4922,54 +6445,96 @@ public:
     QSharedPointer<DiffTree10Container> rgDiffTree10Container;
     QSharedPointer<ModifyPasswordAtom> modifyPasswordAtom;
     QSharedPointer<PhotoAlbumInfo10Atom> photoAlbumInfoAtom;
-    PP10DocBinaryTagExtension(void* /*dummy*/ = 0) {}
+    PP10DocBinaryTagExtension(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextMasterStyle10Level : public StreamOffset {
+class TextMasterStyle10Level : public StreamOffset
+{
 public:
     TextCFException10 cf10;
-    TextMasterStyle10Level(void* /*dummy*/ = 0) {}
+    TextMasterStyle10Level(void * /*dummy*/ = 0)
+    {
+    }
 };
-class NotesTextViewInfoContainer : public StreamOffset {
+class NotesTextViewInfoContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     ZoomViewInfoAtom zoomViewInfo;
-    NotesTextViewInfoContainer(void* /*dummy*/ = 0) {}
+    NotesTextViewInfoContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OutlineViewInfoContainer : public StreamOffset {
+class OutlineViewInfoContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     NoZoomViewInfoAtom noZoomViewInfo;
-    OutlineViewInfoContainer(void* /*dummy*/ = 0) {}
+    OutlineViewInfoContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class NormalViewSetInfoContainer : public StreamOffset {
+class NormalViewSetInfoContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     NormalViewSetInfoAtom normalViewSetInfoAtom;
-    NormalViewSetInfoContainer(void* /*dummy*/ = 0) {}
+    NormalViewSetInfoContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideListWithTextSubContainerOrAtom : public StreamOffset {
+class SlideListWithTextSubContainerOrAtom : public StreamOffset
+{
 public:
     SlidePersistAtom slidePersistAtom;
     QList<TextContainer> atoms;
-    SlideListWithTextSubContainerOrAtom(void* /*dummy*/ = 0) {}
+    SlideListWithTextSubContainerOrAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OutlineAtom : public StreamOffset {
+class OutlineAtom : public StreamOffset
+{
 public:
     OutlineTextRefAtom outlineTextRefAtom;
     QSharedPointer<TextRulerAtom> textRulerAtom;
-    OutlineAtom(void* /*dummy*/ = 0) {}
+    OutlineAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextContainer : public StreamOffset {
+class TextContainer : public StreamOffset
+{
 public:
     TextHeaderAtom textHeaderAtom;
-    class choice1060411409 : public QSharedPointer<StreamOffset> {
+    class choice1060411409 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice1060411409() {}
-        explicit choice1060411409(TextCharsAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1060411409(TextBytesAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice1060411409()
+        {
+        }
+        explicit choice1060411409(TextCharsAtom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice1060411409(TextBytesAtom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice1060411409 text;
     QSharedPointer<StyleTextPropAtom> style;
@@ -4982,65 +6547,95 @@ public:
     QSharedPointer<TextSpecialInfoAtom> specialinfo2;
     QSharedPointer<TextRulerAtom> textRulerAtom;
     QList<TextContainerInteractiveInfo> interactive2;
-    TextContainer(void* /*dummy*/ = 0) {}
+    TextContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MouseClickTextInfo : public StreamOffset {
+class MouseClickTextInfo : public StreamOffset
+{
 public:
     MouseClickInteractiveInfoContainer interactive;
     MouseClickTextInteractiveInfoAtom text;
-    MouseClickTextInfo(void* /*dummy*/ = 0) {}
+    MouseClickTextInfo(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MouseOverTextInfo : public StreamOffset {
+class MouseOverTextInfo : public StreamOffset
+{
 public:
     MouseOverInteractiveInfoContainer interactive;
     MouseOverTextInteractiveInfoAtom text;
-    MouseOverTextInfo(void* /*dummy*/ = 0) {}
+    MouseOverTextInfo(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextPFRun : public StreamOffset {
+class TextPFRun : public StreamOffset
+{
 public:
     quint32 count;
     quint16 indentLevel;
     TextPFException pf;
-    TextPFRun(void* /*dummy*/ = 0) {}
+    TextPFRun(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextCFRun : public StreamOffset {
+class TextCFRun : public StreamOffset
+{
 public:
     quint32 count;
     TextCFException cf;
-    TextCFRun(void* /*dummy*/ = 0) {}
+    TextCFRun(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextCFExceptionAtom : public StreamOffset {
+class TextCFExceptionAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     TextCFException cf;
-    TextCFExceptionAtom(void* /*dummy*/ = 0) {}
+    TextCFExceptionAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DefaultRulerAtom : public StreamOffset {
+class DefaultRulerAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     TextRuler defaultTextRuler;
-    DefaultRulerAtom(void* /*dummy*/ = 0) {}
+    DefaultRulerAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextPFExceptionAtom : public StreamOffset {
+class TextPFExceptionAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint16 reserved;
     TextPFException pf;
-    TextPFExceptionAtom(void* /*dummy*/ = 0) {}
+    TextPFExceptionAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextSIRun : public StreamOffset {
+class TextSIRun : public StreamOffset
+{
 public:
     quint32 count;
     TextSIException si;
-    TextSIRun(void* /*dummy*/ = 0) {}
+    TextSIRun(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextSIExceptionAtom : public StreamOffset {
+class TextSIExceptionAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     TextSIException textSIException;
-    TextSIExceptionAtom(void* /*dummy*/ = 0) {}
+    TextSIExceptionAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextMasterStyleAtom : public StreamOffset {
+class TextMasterStyleAtom : public StreamOffset
+{
 public:
     bool _has_lstLvl1level;
     bool _has_lstLvl2level;
@@ -5059,9 +6654,12 @@ public:
     QSharedPointer<TextMasterStyleLevel> lstLvl4;
     quint16 lstLvl5level;
     QSharedPointer<TextMasterStyleLevel> lstLvl5;
-    TextMasterStyleAtom(void* /*dummy*/ = 0) {}
+    TextMasterStyleAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PP10SlideBinaryTagExtension : public StreamOffset {
+class PP10SlideBinaryTagExtension : public StreamOffset
+{
 public:
     RecordHeader rh;
     QVector<quint16> tagName;
@@ -5076,32 +6674,86 @@ public:
     QSharedPointer<HashCode10Atom> hashCodeAtom;
     QSharedPointer<ExtTimeNodeContainer> extTimeNodeContainer;
     QSharedPointer<BuildListContainer> buildListContainer;
-    PP10SlideBinaryTagExtension(void* /*dummy*/ = 0) {}
+    PP10SlideBinaryTagExtension(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ExObjListSubContainer : public StreamOffset {
+class ExObjListSubContainer : public StreamOffset
+{
 public:
-    class choice2338534801 : public QSharedPointer<StreamOffset> {
+    class choice2338534801 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice2338534801() {}
-        explicit choice2338534801(ExAviMovieContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2338534801(ExCDAudioContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2338534801(ExControlContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2338534801(ExHyperlinkContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2338534801(ExMCIMovieContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2338534801(ExMIDIAudioContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2338534801(ExOleEmbedContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2338534801(ExOleLinkContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2338534801(ExWAVAudioEmbeddedContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2338534801(ExWAVAudioLinkContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2338534801(UnknownExObjListSubContainerChild* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice2338534801()
+        {
+        }
+        explicit choice2338534801(ExAviMovieContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2338534801(ExCDAudioContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2338534801(ExControlContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2338534801(ExHyperlinkContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2338534801(ExMCIMovieContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2338534801(ExMIDIAudioContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2338534801(ExOleEmbedContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2338534801(ExOleLinkContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2338534801(ExWAVAudioEmbeddedContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2338534801(ExWAVAudioLinkContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2338534801(UnknownExObjListSubContainerChild *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice2338534801 anon;
-    ExObjListSubContainer(void* /*dummy*/ = 0) {}
+    ExObjListSubContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtDggContainer : public StreamOffset {
+class OfficeArtDggContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     OfficeArtFDGGBlock drawingGroup;
@@ -5112,162 +6764,588 @@ public:
     QSharedPointer<OfficeArtSplitMenuColorContainer> splitColors;
     QSharedPointer<OfficeArtBStoreContainer> blipStore2;
     QSharedPointer<OfficeArtTertiaryFOPT> unknown;
-    OfficeArtDggContainer(void* /*dummy*/ = 0) {}
+    OfficeArtDggContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFOPTEChoice : public StreamOffset {
+class OfficeArtFOPTEChoice : public StreamOffset
+{
 public:
-    class choice3165202096 : public QSharedPointer<StreamOffset> {
+    class choice3165202096 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice3165202096() {}
-        explicit choice3165202096(Rotation* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(ProtectionBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(ITxid* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(DxTextLeft* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(DyTextTop* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(DxTextRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(DyTextBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(WrapText* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(AnchorText* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(TxflTextFlow* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(CdirFont* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(HspNext* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(Txdir* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(TextBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(CropFromTop* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(CropFromBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(CropFromLeft* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(CropFromRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(Pib* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(PibName* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(PibFlags* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(PictureTransparent* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(PictureContrast* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(PictureBrightness* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(BlipBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(GeoLeft* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(GeoTop* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(GeoRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(GeoBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(ShapePath* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(PVertices* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(PSegmentInfo* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(AdjustValue* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(Adjust2Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(Adjust3Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(Adjust4Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(Adjust5Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(Adjust6Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(Adjust7Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(Adjust8Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(GeometryBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillType* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillOpacity* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillBackColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillBackOpacity* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillCrMod* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillBlip* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillBlipName* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillBlipFlags* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillWidth* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillHeight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillAngle* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillFocus* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillToLeft* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillToTop* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillToRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillToBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillRectLeft* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillRectTop* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillRectRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillRectBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillDztype* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillShadePreset* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillShadeColors* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillOriginX* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillOriginY* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillShapeOriginX* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillShapeOriginY* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillColorExt* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillBackColorExt* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(FillStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineOpacity* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineBackColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineFillBlip* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineWidth* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineStyle* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineDashing* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineStartArrowhead* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineEndArrowhead* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineStartArrowWidth* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineStartArrowLength* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineEndArrowWidth* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineEndArrowLength* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineJoinStyle* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineEndCapStyle* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LineStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(ShadowType* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(ShadowColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(ShadowOpacity* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(ShadowOffsetX* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(ShadowOffsetY* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(ShadowStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(HspMaster* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(Cxstyle* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(BWMode* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(ShapeBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(DxyCalloutGap* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(Spcoa* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(Spcod* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(DxyCalloutDropSpecified* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(DxyCalloutLengthSpecified* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(CalloutBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(PWrapPolygonVertices* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(DxWrapDistLeft* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(DyWrapDistTop* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(DxWrapDistRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(DyWrapDistBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(LidRegroup* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(PosH* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(PosRelH* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(PosV* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(PosRelV* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(PctHR* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(AlignHR* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(DxHeightHR* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(DxWidthHR* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(BorderTopColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(BorderLeftColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(BorderBottomColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(BorderRightColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(GroupShapeBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(WzFillId* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(DiagramBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3165202096(OfficeArtFOPTE* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice3165202096()
+        {
+        }
+        explicit choice3165202096(Rotation *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(ProtectionBooleanProperties *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(ITxid *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(DxTextLeft *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(DyTextTop *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(DxTextRight *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(DyTextBottom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(WrapText *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(AnchorText *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(TxflTextFlow *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(CdirFont *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(HspNext *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(Txdir *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(TextBooleanProperties *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(CropFromTop *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(CropFromBottom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(CropFromLeft *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(CropFromRight *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(Pib *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(PibName *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(PibFlags *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(PictureTransparent *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(PictureContrast *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(PictureBrightness *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(BlipBooleanProperties *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(GeoLeft *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(GeoTop *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(GeoRight *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(GeoBottom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(ShapePath *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(PVertices *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(PSegmentInfo *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(AdjustValue *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(Adjust2Value *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(Adjust3Value *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(Adjust4Value *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(Adjust5Value *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(Adjust6Value *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(Adjust7Value *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(Adjust8Value *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(GeometryBooleanProperties *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillType *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillColor *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillOpacity *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillBackColor *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillBackOpacity *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillCrMod *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillBlip *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillBlipName *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillBlipFlags *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillWidth *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillHeight *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillAngle *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillFocus *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillToLeft *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillToTop *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillToRight *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillToBottom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillRectLeft *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillRectTop *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillRectRight *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillRectBottom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillDztype *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillShadePreset *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillShadeColors *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillOriginX *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillOriginY *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillShapeOriginX *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillShapeOriginY *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillColorExt *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillBackColorExt *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(FillStyleBooleanProperties *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineColor *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineOpacity *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineBackColor *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineFillBlip *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineWidth *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineStyle *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineDashing *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineStartArrowhead *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineEndArrowhead *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineStartArrowWidth *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineStartArrowLength *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineEndArrowWidth *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineEndArrowLength *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineJoinStyle *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineEndCapStyle *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LineStyleBooleanProperties *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(ShadowType *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(ShadowColor *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(ShadowOpacity *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(ShadowOffsetX *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(ShadowOffsetY *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(ShadowStyleBooleanProperties *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(HspMaster *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(Cxstyle *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(BWMode *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(ShapeBooleanProperties *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(DxyCalloutGap *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(Spcoa *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(Spcod *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(DxyCalloutDropSpecified *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(DxyCalloutLengthSpecified *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(CalloutBooleanProperties *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(PWrapPolygonVertices *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(DxWrapDistLeft *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(DyWrapDistTop *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(DxWrapDistRight *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(DyWrapDistBottom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(LidRegroup *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(PosH *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(PosRelH *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(PosV *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(PosRelV *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(PctHR *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(AlignHR *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(DxHeightHR *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(DxWidthHR *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(BorderTopColor *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(BorderLeftColor *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(BorderBottomColor *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(BorderRightColor *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(GroupShapeBooleanProperties *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(WzFillId *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(DiagramBooleanProperties *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3165202096(OfficeArtFOPTE *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice3165202096 anon;
-    OfficeArtFOPTEChoice(void* /*dummy*/ = 0) {}
+    OfficeArtFOPTEChoice(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtClientAnchor : public StreamOffset {
+class OfficeArtClientAnchor : public StreamOffset
+{
 public:
-    class choice1726903461 : public QSharedPointer<StreamOffset> {
+    class choice1726903461 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice1726903461() {}
-        explicit choice1726903461(PptOfficeArtClientAnchor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1726903461(DocOfficeArtClientAnchor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1726903461(XlsOfficeArtClientAnchor* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice1726903461()
+        {
+        }
+        explicit choice1726903461(PptOfficeArtClientAnchor *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice1726903461(DocOfficeArtClientAnchor *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice1726903461(XlsOfficeArtClientAnchor *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice1726903461 anon;
-    OfficeArtClientAnchor(void* /*dummy*/ = 0) {}
+    OfficeArtClientAnchor(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PptOfficeArtClientData : public StreamOffset {
+class PptOfficeArtClientData : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QSharedPointer<ShapeFlagsAtom> shapeFlagsAtom;
@@ -5282,20 +7360,29 @@ public:
     QSharedPointer<UnknownOfficeArtClientDataChild> unknown1;
     QList<ShapeClientRoundtripDataSubcontainerOrAtom> rgShapeClientRoundtripData;
     QSharedPointer<UnknownOfficeArtClientDataChild> unknown2;
-    PptOfficeArtClientData(void* /*dummy*/ = 0) {}
+    PptOfficeArtClientData(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShapeProgBinaryTagContainer : public StreamOffset {
+class ShapeProgBinaryTagContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     ShapeProgBinaryTagSubContainerOrAtom rec;
-    ShapeProgBinaryTagContainer(void* /*dummy*/ = 0) {}
+    ShapeProgBinaryTagContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class WordDocument : public StreamOffset {
+class WordDocument : public StreamOffset
+{
 public:
     Fib fib;
-    WordDocument(void* /*dummy*/ = 0) {}
+    WordDocument(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Table : public StreamOffset {
+class Table : public StreamOffset
+{
 public:
     STSH stsh;
     PlcfSed plcfSed;
@@ -5306,9 +7393,12 @@ public:
     Clx clx;
     SttbfFfn sttbfFfn;
     QByteArray dop;
-    Table(void* /*dummy*/ = 0) {}
+    Table(void * /*dummy*/ = 0)
+    {
+    }
 };
-class Pcd : public StreamOffset {
+class Pcd : public StreamOffset
+{
 public:
     bool fNoParaLast;
     bool fR1;
@@ -5317,9 +7407,12 @@ public:
     quint16 fR3;
     FCompressed fc;
     Prm prm;
-    Pcd(void* /*dummy*/ = 0) {}
+    Pcd(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtFBSE : public StreamOffset {
+class OfficeArtFBSE : public StreamOffset
+{
 public:
     bool _has_nameData;
     OfficeArtRecordHeader rh;
@@ -5336,48 +7429,111 @@ public:
     quint8 unused3;
     QByteArray nameData;
     QSharedPointer<OfficeArtBlip> embeddedBlip;
-    OfficeArtFBSE(void* /*dummy*/ = 0) {}
+    OfficeArtFBSE(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtBStoreContainerFileBlock : public StreamOffset {
+class OfficeArtBStoreContainerFileBlock : public StreamOffset
+{
 public:
-    class choice2043165903 : public QSharedPointer<StreamOffset> {
+    class choice2043165903 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice2043165903() {}
-        explicit choice2043165903(OfficeArtFBSE* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2043165903(OfficeArtBlip* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice2043165903()
+        {
+        }
+        explicit choice2043165903(OfficeArtFBSE *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2043165903(OfficeArtBlip *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice2043165903 anon;
-    OfficeArtBStoreContainerFileBlock(void* /*dummy*/ = 0) {}
+    OfficeArtBStoreContainerFileBlock(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideViewInfoInstance : public StreamOffset {
+class SlideViewInfoInstance : public StreamOffset
+{
 public:
     RecordHeader rh;
     SlideViewInfoAtom slideViewInfoAtom;
     QSharedPointer<ZoomViewInfoAtom> zoomViewInfoAtom;
     QList<GuideAtom> rgGuideAtom;
-    SlideViewInfoInstance(void* /*dummy*/ = 0) {}
+    SlideViewInfoInstance(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocProgBinaryTagSubContainerOrAtom : public StreamOffset {
+class DocProgBinaryTagSubContainerOrAtom : public StreamOffset
+{
 public:
-    class choice214961565 : public QSharedPointer<StreamOffset> {
+    class choice214961565 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice214961565() {}
-        explicit choice214961565(PP9DocBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice214961565(PP10DocBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice214961565(PP11DocBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice214961565(PP12DocBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice214961565(UnknownBinaryTag* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice214961565()
+        {
+        }
+        explicit choice214961565(PP9DocBinaryTagExtension *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice214961565(PP10DocBinaryTagExtension *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice214961565(PP11DocBinaryTagExtension *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice214961565(PP12DocBinaryTagExtension *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice214961565(UnknownBinaryTag *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice214961565 anon;
-    DocProgBinaryTagSubContainerOrAtom(void* /*dummy*/ = 0) {}
+    DocProgBinaryTagSubContainerOrAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextMasterStyle9Atom : public StreamOffset {
+class TextMasterStyle9Atom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint16 cLevels;
@@ -5386,17 +7542,23 @@ public:
     QSharedPointer<TextMasterStyle9Level> lstLvl3;
     QSharedPointer<TextMasterStyle9Level> lstLvl4;
     QSharedPointer<TextMasterStyle9Level> lstLvl5;
-    TextMasterStyle9Atom(void* /*dummy*/ = 0) {}
+    TextMasterStyle9Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class BlipEntityAtom : public StreamOffset {
+class BlipEntityAtom : public StreamOffset
+{
 public:
     RecordHeader rh;
     quint8 winBlipType;
     quint8 unused;
     OfficeArtBStoreContainerFileBlock blip;
-    BlipEntityAtom(void* /*dummy*/ = 0) {}
+    BlipEntityAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextMasterStyle10Atom : public StreamOffset {
+class TextMasterStyle10Atom : public StreamOffset
+{
 public:
     bool _has_lstLvl1level;
     bool _has_lstLvl2level;
@@ -5415,37 +7577,88 @@ public:
     QSharedPointer<TextMasterStyle10Level> lstLvl4;
     quint16 lstLvl5level;
     QSharedPointer<TextMasterStyle10Level> lstLvl5;
-    TextMasterStyle10Atom(void* /*dummy*/ = 0) {}
+    TextMasterStyle10Atom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextClientDataSubContainerOrAtom : public StreamOffset {
+class TextClientDataSubContainerOrAtom : public StreamOffset
+{
 public:
-    class choice2925155378 : public QSharedPointer<StreamOffset> {
+    class choice2925155378 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice2925155378() {}
-        explicit choice2925155378(OutlineAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2925155378(TextContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice2925155378()
+        {
+        }
+        explicit choice2925155378(OutlineAtom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2925155378(TextContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice2925155378 anon;
-    TextClientDataSubContainerOrAtom(void* /*dummy*/ = 0) {}
+    TextClientDataSubContainerOrAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class TextContainerInteractiveInfo : public StreamOffset {
+class TextContainerInteractiveInfo : public StreamOffset
+{
 public:
-    class choice3752530176 : public QSharedPointer<StreamOffset> {
+    class choice3752530176 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice3752530176() {}
-        explicit choice3752530176(MouseClickTextInfo* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3752530176(MouseOverTextInfo* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice3752530176()
+        {
+        }
+        explicit choice3752530176(MouseClickTextInfo *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice3752530176(MouseOverTextInfo *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice3752530176 interactive;
-    TextContainerInteractiveInfo(void* /*dummy*/ = 0) {}
+    TextContainerInteractiveInfo(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocumentTextInfoContainer : public StreamOffset {
+class DocumentTextInfoContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     QSharedPointer<KinsokuContainer> kinsoku;
@@ -5456,60 +7669,147 @@ public:
     TextSIExceptionAtom textSIDefaultsAtom;
     TextMasterStyleAtom textMasterStyleAtom;
     QSharedPointer<TextMasterStyleAtom> textMasterStyleAtom2;
-    DocumentTextInfoContainer(void* /*dummy*/ = 0) {}
+    DocumentTextInfoContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideProgBinaryTagSubContainerOrAtom : public StreamOffset {
+class SlideProgBinaryTagSubContainerOrAtom : public StreamOffset
+{
 public:
-    class choice4024872665 : public QSharedPointer<StreamOffset> {
+    class choice4024872665 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice4024872665() {}
-        explicit choice4024872665(PP9SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4024872665(PP12SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4024872665(PP10SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4024872665(UnknownBinaryTag* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice4024872665()
+        {
+        }
+        explicit choice4024872665(PP9SlideBinaryTagExtension *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice4024872665(PP12SlideBinaryTagExtension *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice4024872665(PP10SlideBinaryTagExtension *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice4024872665(UnknownBinaryTag *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice4024872665 anon;
-    SlideProgBinaryTagSubContainerOrAtom(void* /*dummy*/ = 0) {}
+    SlideProgBinaryTagSubContainerOrAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DrawingGroupContainer : public StreamOffset {
+class DrawingGroupContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     OfficeArtDggContainer OfficeArtDgg;
-    DrawingGroupContainer(void* /*dummy*/ = 0) {}
+    DrawingGroupContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtClientData : public StreamOffset {
+class OfficeArtClientData : public StreamOffset
+{
 public:
-    class choice2520977885 : public QSharedPointer<StreamOffset> {
+    class choice2520977885 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice2520977885() {}
-        explicit choice2520977885(DocOfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2520977885(PptOfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2520977885(XlsOfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice2520977885()
+        {
+        }
+        explicit choice2520977885(DocOfficeArtClientData *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2520977885(PptOfficeArtClientData *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2520977885(XlsOfficeArtClientData *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice2520977885 anon;
-    OfficeArtClientData(void* /*dummy*/ = 0) {}
+    OfficeArtClientData(void * /*dummy*/ = 0)
+    {
+    }
 };
-class ShapeProgTagsSubContainerOrAtom : public StreamOffset {
+class ShapeProgTagsSubContainerOrAtom : public StreamOffset
+{
 public:
-    class choice42781012 : public QSharedPointer<StreamOffset> {
+    class choice42781012 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice42781012() {}
-        explicit choice42781012(ProgStringTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice42781012(ShapeProgBinaryTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice42781012()
+        {
+        }
+        explicit choice42781012(ProgStringTagContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice42781012(ShapeProgBinaryTagContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice42781012 anon;
-    ShapeProgTagsSubContainerOrAtom(void* /*dummy*/ = 0) {}
+    ShapeProgTagsSubContainerOrAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocumentContainer : public StreamOffset {
+class DocumentContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     DocumentAtom documentAtom;
@@ -5537,40 +7837,88 @@ public:
     QSharedPointer<RoundTripCustomTableStyles12Atom> rtCustomTableStylesAtom2;
     QList<UnknownDocumentContainerChild> unknown4;
     QSharedPointer<TextMasterStyle10Atom> unknown5;
-    DocumentContainer(void* /*dummy*/ = 0) {}
+    DocumentContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocInfoListSubContainerOrAtom : public StreamOffset {
+class DocInfoListSubContainerOrAtom : public StreamOffset
+{
 public:
-    class choice2631814737 : public QSharedPointer<StreamOffset> {
+    class choice2631814737 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice2631814737() {}
-        explicit choice2631814737(DocProgTagsContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2631814737(NormalViewSetInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2631814737(NotesTextViewInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2631814737(OutlineViewInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2631814737(SlideViewInfoInstance* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2631814737(SorterViewInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2631814737(VBAInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice2631814737()
+        {
+        }
+        explicit choice2631814737(DocProgTagsContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2631814737(NormalViewSetInfoContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2631814737(NotesTextViewInfoContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2631814737(OutlineViewInfoContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2631814737(SlideViewInfoInstance *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2631814737(SorterViewInfoContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2631814737(VBAInfoContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice2631814737 anon;
-    DocInfoListSubContainerOrAtom(void* /*dummy*/ = 0) {}
+    DocInfoListSubContainerOrAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocProgBinaryTagContainer : public StreamOffset {
+class DocProgBinaryTagContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     DocProgBinaryTagSubContainerOrAtom rec;
-    DocProgBinaryTagContainer(void* /*dummy*/ = 0) {}
+    DocProgBinaryTagContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideProgBinaryTagContainer : public StreamOffset {
+class SlideProgBinaryTagContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     SlideProgBinaryTagSubContainerOrAtom rec;
-    SlideProgBinaryTagContainer(void* /*dummy*/ = 0) {}
+    SlideProgBinaryTagContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtSpContainer : public StreamOffset {
+class OfficeArtSpContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QSharedPointer<OfficeArtFSPGR> shapeGroup;
@@ -5587,43 +7935,97 @@ public:
     QSharedPointer<OfficeArtSecondaryFOPT> shapeSecondaryOptions2;
     QSharedPointer<OfficeArtTertiaryFOPT> shapeTertiaryOptions2;
     QSharedPointer<UnknownTextContainerChild> unknown;
-    OfficeArtSpContainer(void* /*dummy*/ = 0) {}
+    OfficeArtSpContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtInlineSpContainer : public StreamOffset {
+class OfficeArtInlineSpContainer : public StreamOffset
+{
 public:
     OfficeArtSpContainer shape;
     QList<OfficeArtBStoreContainerFileBlock> rgfb;
-    OfficeArtInlineSpContainer(void* /*dummy*/ = 0) {}
+    OfficeArtInlineSpContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DocProgTagsSubContainerOrAtom : public StreamOffset {
+class DocProgTagsSubContainerOrAtom : public StreamOffset
+{
 public:
-    class choice61655436 : public QSharedPointer<StreamOffset> {
+    class choice61655436 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice61655436() {}
-        explicit choice61655436(ProgStringTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice61655436(DocProgBinaryTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice61655436()
+        {
+        }
+        explicit choice61655436(ProgStringTagContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice61655436(DocProgBinaryTagContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice61655436 anon;
-    DocProgTagsSubContainerOrAtom(void* /*dummy*/ = 0) {}
+    DocProgTagsSubContainerOrAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideProgTagsSubContainerOrAtom : public StreamOffset {
+class SlideProgTagsSubContainerOrAtom : public StreamOffset
+{
 public:
-    class choice310259039 : public QSharedPointer<StreamOffset> {
+    class choice310259039 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice310259039() {}
-        explicit choice310259039(ProgStringTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice310259039(SlideProgBinaryTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice310259039()
+        {
+        }
+        explicit choice310259039(ProgStringTagContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice310259039(SlideProgBinaryTagContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice310259039 anon;
-    SlideProgTagsSubContainerOrAtom(void* /*dummy*/ = 0) {}
+    SlideProgTagsSubContainerOrAtom(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtDgContainer : public StreamOffset {
+class OfficeArtDgContainer : public StreamOffset
+{
 public:
     OfficeArtRecordHeader rh;
     QSharedPointer<OfficeArtFDG> drawingData;
@@ -5632,33 +8034,75 @@ public:
     QSharedPointer<OfficeArtSpContainer> shape;
     QList<OfficeArtSpgrContainerFileBlock> deletedShapes;
     QSharedPointer<OfficeArtSolverContainer> solvers;
-    OfficeArtDgContainer(void* /*dummy*/ = 0) {}
+    OfficeArtDgContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class OfficeArtSpgrContainerFileBlock : public StreamOffset {
+class OfficeArtSpgrContainerFileBlock : public StreamOffset
+{
 public:
-    class choice4117040 : public QSharedPointer<StreamOffset> {
+    class choice4117040 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice4117040() {}
-        explicit choice4117040(OfficeArtSpContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4117040(OfficeArtSpgrContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4117040(OfficeArtFSP* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4117040(OfficeArtFSPGR* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4117040(OfficeArtClientAnchor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4117040(OfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice4117040()
+        {
+        }
+        explicit choice4117040(OfficeArtSpContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice4117040(OfficeArtSpgrContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice4117040(OfficeArtFSP *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice4117040(OfficeArtFSPGR *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice4117040(OfficeArtClientAnchor *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice4117040(OfficeArtClientData *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice4117040 anon;
-    OfficeArtSpgrContainerFileBlock(void* /*dummy*/ = 0) {}
+    OfficeArtSpgrContainerFileBlock(void * /*dummy*/ = 0)
+    {
+    }
 };
-class DrawingContainer : public StreamOffset {
+class DrawingContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     OfficeArtDgContainer OfficeArtDg;
-    DrawingContainer(void* /*dummy*/ = 0) {}
+    DrawingContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MainMasterContainer : public StreamOffset {
+class MainMasterContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     SlideAtom slideAtom;
@@ -5675,9 +8119,12 @@ public:
     QList<RoundTripMainMasterRecord> rgRoundTripMainMaster;
     QSharedPointer<TemplateNameAtom> templateNameAtom;
     QSharedPointer<SlideProgTagsContainer> unknown3;
-    MainMasterContainer(void* /*dummy*/ = 0) {}
+    MainMasterContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class SlideContainer : public StreamOffset {
+class SlideContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     SlideAtom slideAtom;
@@ -5691,9 +8138,12 @@ public:
     QSharedPointer<UnknownSlideContainerChild> unknown;
     QList<RoundTripSlideRecord> rgRoundTripSlide;
     QSharedPointer<UnknownSlideContainerChild> unknown2;
-    SlideContainer(void* /*dummy*/ = 0) {}
+    SlideContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class NotesContainer : public StreamOffset {
+class NotesContainer : public StreamOffset
+{
 public:
     RecordHeader rh;
     NotesAtom notesAtom;
@@ -5704,43 +8154,117 @@ public:
     QSharedPointer<SlideProgTagsContainer> slideProgTagsContainer;
     QSharedPointer<PerSlideHeadersFootersContainer> perSlideHFContainer2;
     QList<NotesRoundTripAtom> rgNotesRoundTripAtom;
-    NotesContainer(void* /*dummy*/ = 0) {}
+    NotesContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class MasterOrSlideContainer : public StreamOffset {
+class MasterOrSlideContainer : public StreamOffset
+{
 public:
-    class choice2788643208 : public QSharedPointer<StreamOffset> {
+    class choice2788643208 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice2788643208() {}
-        explicit choice2788643208(MainMasterContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2788643208(SlideContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice2788643208()
+        {
+        }
+        explicit choice2788643208(MainMasterContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice2788643208(SlideContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice2788643208 anon;
-    MasterOrSlideContainer(void* /*dummy*/ = 0) {}
+    MasterOrSlideContainer(void * /*dummy*/ = 0)
+    {
+    }
 };
-class PowerPointStruct : public StreamOffset {
+class PowerPointStruct : public StreamOffset
+{
 public:
-    class choice394521820 : public QSharedPointer<StreamOffset> {
+    class choice394521820 : public QSharedPointer<StreamOffset>
+    {
     public:
-        choice394521820() {}
-        explicit choice394521820(DocumentContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice394521820(MasterOrSlideContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice394521820(PersistDirectoryAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice394521820(NotesContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice394521820(HandoutContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice394521820(SlideContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice394521820(ExOleObjStg* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice394521820(ExControlStg* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice394521820(VbaProjectStg* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice394521820(UserEditAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
+        choice394521820()
+        {
+        }
+        explicit choice394521820(DocumentContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice394521820(MasterOrSlideContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice394521820(PersistDirectoryAtom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice394521820(NotesContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice394521820(HandoutContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice394521820(SlideContainer *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice394521820(ExOleObjStg *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice394521820(ExControlStg *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice394521820(VbaProjectStg *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        explicit choice394521820(UserEditAtom *a)
+            : QSharedPointer<StreamOffset>(a)
+        {
+        }
+        template<typename T>
+        T *get()
+        {
+            return dynamic_cast<T *>(this->data());
+        }
+        template<typename T>
+        const T *get() const
+        {
+            return dynamic_cast<const T *>(this->data());
+        }
+        template<typename T>
+        bool is() const
+        {
+            return get<T>();
+        }
     };
     choice394521820 anon;
-    PowerPointStruct(void* /*dummy*/ = 0) {}
+    PowerPointStruct(void * /*dummy*/ = 0)
+    {
+    }
 };
 } // close namespace
 #endif

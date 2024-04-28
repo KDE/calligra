@@ -10,7 +10,7 @@
 #include <KoParagraphStyle.h>
 
 ParagraphLayout::ParagraphLayout(QWidget *parent)
-        : QWidget(parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
 
@@ -43,14 +43,14 @@ void ParagraphLayout::slotAlignChanged()
 
 void ParagraphLayout::breakAfterChanged()
 {
-   m_breakAfterInherited = false;
-   emit parStyleChanged();
+    m_breakAfterInherited = false;
+    emit parStyleChanged();
 }
 
 void ParagraphLayout::keepTogetherChanged()
 {
-   m_keepTogetherInherited = false;
-   emit parStyleChanged();
+    m_keepTogetherInherited = false;
+    emit parStyleChanged();
 }
 
 void ParagraphLayout::breakBeforeChanged()
@@ -68,19 +68,26 @@ void ParagraphLayout::thresholdValueChanged()
 void ParagraphLayout::setDisplay(KoParagraphStyle *style, bool directFormattingMode)
 {
     switch (style->alignment()) {
-    case Qt::AlignRight: widget.right->setChecked(true); break;
-    case Qt::AlignHCenter: widget.center->setChecked(true); break;
-    case Qt::AlignJustify: widget.justify->setChecked(true); break;
+    case Qt::AlignRight:
+        widget.right->setChecked(true);
+        break;
+    case Qt::AlignHCenter:
+        widget.center->setChecked(true);
+        break;
+    case Qt::AlignJustify:
+        widget.justify->setChecked(true);
+        break;
     case Qt::AlignLeft:
     default:
-        widget.left->setChecked(true); break;
+        widget.left->setChecked(true);
+        break;
     }
 
-    m_alignmentInherited = directFormattingMode|| !style->hasProperty(QTextFormat::BlockAlignment);
-    m_keepTogetherInherited = directFormattingMode|| !style->hasProperty(QTextFormat::BlockNonBreakableLines);
-    m_breakAfterInherited = directFormattingMode|| !style->hasProperty(KoParagraphStyle::BreakAfter);
-    m_breakBeforeInherited = directFormattingMode|| !style->hasProperty(KoParagraphStyle::BreakBefore);
-    m_orphanThresholdInherited = directFormattingMode|| !style->hasProperty(KoParagraphStyle::OrphanThreshold);
+    m_alignmentInherited = directFormattingMode || !style->hasProperty(QTextFormat::BlockAlignment);
+    m_keepTogetherInherited = directFormattingMode || !style->hasProperty(QTextFormat::BlockNonBreakableLines);
+    m_breakAfterInherited = directFormattingMode || !style->hasProperty(KoParagraphStyle::BreakAfter);
+    m_breakBeforeInherited = directFormattingMode || !style->hasProperty(KoParagraphStyle::BreakBefore);
+    m_orphanThresholdInherited = directFormattingMode || !style->hasProperty(KoParagraphStyle::OrphanThreshold);
 
     widget.keepTogether->setChecked(style->nonBreakableLines());
     widget.breakBefore->setChecked(style->breakBefore());
@@ -104,23 +111,23 @@ void ParagraphLayout::save(KoParagraphStyle *style)
         style->setAlignment(align);
     }
 
-        if (!m_keepTogetherInherited) {
-            style->setNonBreakableLines(widget.keepTogether->isChecked());
-        }
-        if (!m_breakBeforeInherited) {
-            if (widget.breakBefore->isChecked())
-                style->setBreakBefore(KoText::PageBreak);
-            else
-                style->setBreakBefore(KoText::NoBreak);
-        }
-        if (!m_breakAfterInherited) {
-            if (widget.breakAfter->isChecked())
-                style->setBreakAfter(KoText::PageBreak);
-            else
-                style->setBreakAfter(KoText::NoBreak);
-        }
+    if (!m_keepTogetherInherited) {
+        style->setNonBreakableLines(widget.keepTogether->isChecked());
+    }
+    if (!m_breakBeforeInherited) {
+        if (widget.breakBefore->isChecked())
+            style->setBreakBefore(KoText::PageBreak);
+        else
+            style->setBreakBefore(KoText::NoBreak);
+    }
+    if (!m_breakAfterInherited) {
+        if (widget.breakAfter->isChecked())
+            style->setBreakAfter(KoText::PageBreak);
+        else
+            style->setBreakAfter(KoText::NoBreak);
+    }
 
-        if (!m_orphanThresholdInherited) {
-            style->setOrphanThreshold(widget.threshold->value());
-        }
+    if (!m_orphanThresholdInherited) {
+        style->setOrphanThreshold(widget.threshold->value());
+    }
 }

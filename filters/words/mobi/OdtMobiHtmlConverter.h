@@ -9,18 +9,17 @@
 #define ODTMOBIHTMLCONVERTER_H
 
 #include <QHash>
-#include <QString>
 #include <QList>
+#include <QString>
 
-#include <KoXmlReader.h>
 #include <KoFilter.h>
+#include <KoXmlReader.h>
 
 class QByteArray;
 class QSizeF;
 class KoXmlWriter;
 class KoStore;
 class FileCollector;
-
 
 struct StyleInfo {
     StyleInfo();
@@ -29,41 +28,39 @@ struct StyleInfo {
     QString parent;
     bool isDefaultStyle;
 
-    int  defaultOutlineLevel;
+    int defaultOutlineLevel;
     bool shouldBreakChapter;
     bool inUse;
 
     QHash<QString, QString> attributes;
 };
 
-
 class OdtMobiHtmlConverter
 {
- public:
+public:
     struct ConversionOptions {
-        bool  stylesInCssFile;  // True if the css should go into a separate file
-        bool  doBreakIntoChapters; // True if the output should be broken into chapters.
-        bool  useMobiConventions;  // True if Mobi is using the convention.
-                                   // to handle img tag and for handle indentation
-                                   // and do not write meta and link tag in html head.
+        bool stylesInCssFile; // True if the css should go into a separate file
+        bool doBreakIntoChapters; // True if the output should be broken into chapters.
+        bool useMobiConventions; // True if Mobi is using the convention.
+                                 // to handle img tag and for handle indentation
+                                 // and do not write meta and link tag in html head.
     };
 
     OdtMobiHtmlConverter();
     ~OdtMobiHtmlConverter();
 
-    KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QString> &metaData,
+    KoFilter::ConversionStatus convertContent(KoStore *odfStore,
+                                              QHash<QString, QString> &metaData,
                                               ConversionOptions *options,
                                               FileCollector *collector,
                                               // Out parameters:
                                               QHash<QString, QSizeF> &images);
 
- private:
-
+private:
     // Helper functions to create the html contents.
     void beginHtmlFile(QHash<QString, QString> &metaData);
     void endHtmlFile();
     void createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &metaData);
-
 
     // All handleTag*() are named after the tag in the ODF that they handle.
     void handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
@@ -103,28 +100,26 @@ class OdtMobiHtmlConverter
     void closeFontOptionsElement(KoXmlWriter *htmlWriter);
     //
 
-    KoFilter::ConversionStatus collectStyles(KoStore *odfStore, QHash<QString, StyleInfo*> &styles);
-    void collectStyleSet(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles);
+    KoFilter::ConversionStatus collectStyles(KoStore *odfStore, QHash<QString, StyleInfo *> &styles);
+    void collectStyleSet(KoXmlNode &stylesNode, QHash<QString, StyleInfo *> &styles);
     void collectStyleAttributes(KoXmlElement &propertiesElement, StyleInfo *styleInfo);
 
-    void fixStyleTree(QHash<QString, StyleInfo*> &styles);
+    void fixStyleTree(QHash<QString, StyleInfo *> &styles);
 
-    KoFilter::ConversionStatus createCSS(QHash<QString, StyleInfo*> &styles,
-                                         QByteArray &cssContent);
-    void flattenStyles(QHash<QString, StyleInfo*> &styles);
-    void flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles,
-                      QSet<QString> &doneStyles);
+    KoFilter::ConversionStatus createCSS(QHash<QString, StyleInfo *> &styles, QByteArray &cssContent);
+    void flattenStyles(QHash<QString, StyleInfo *> &styles);
+    void flattenStyle(const QString &styleName, QHash<QString, StyleInfo *> &styles, QSet<QString> &doneStyles);
 
     // Write bookmarks position in its reference.
     void generateMobiInternalLinks();
 
- private:
+private:
     FileCollector *m_collector;
 
     // Some variables used while creating the HTML contents.
-    QByteArray   m_cssContent;
-    QByteArray   m_htmlContent;
-    QBuffer     *m_outBuf;
+    QByteArray m_cssContent;
+    QByteArray m_htmlContent;
+    QBuffer *m_outBuf;
     KoXmlWriter *m_htmlWriter;
 
     // Options for the conversion process
@@ -132,7 +127,7 @@ class OdtMobiHtmlConverter
     //        others from FileConversion.h.
     const ConversionOptions *m_options;
 
-    QHash<QString, StyleInfo*> m_styles;
+    QHash<QString, StyleInfo *> m_styles;
 
     // The number of the current chapter during the conversion.
     int m_currentChapter;
@@ -146,7 +141,7 @@ class OdtMobiHtmlConverter
     //    name   is the name of the picture inside the ODT file
     //    size   is the size in points.
     //
-    QHash<QString, QSizeF>  m_images;
+    QHash<QString, QSizeF> m_images;
 
     // Internal links have to be done in a two pass fashion.
     //
@@ -198,10 +193,9 @@ class OdtMobiHtmlConverter
     //
 
     // The format is QHash <reference position in file, reference id>
-    QMap <qint64, QString> m_refrencesList;
+    QMap<qint64, QString> m_refrencesList;
     // The format is QHash <bookmark position in file, bookmark id>
-    QMap <QString, qint64> m_bookMarksList;
-
+    QMap<QString, qint64> m_bookMarksList;
 };
 
 #endif // ODTMOBIHTMLCONVERTER_H

@@ -9,10 +9,10 @@
 #ifndef SIMPLELINKSWIDGET_H
 #define SIMPLELINKSWIDGET_H
 
-#include  <ui_SimpleLinksWidget.h>
 #include "FormattingButton.h"
-#include <QWidget>
 #include <KoTextEditor.h>
+#include <QWidget>
+#include <ui_SimpleLinksWidget.h>
 
 class ReferencesTool;
 

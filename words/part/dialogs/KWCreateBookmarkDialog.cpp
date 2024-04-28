@@ -9,7 +9,7 @@
 #include <KLocalizedString>
 
 KWCreateBookmark::KWCreateBookmark(const QStringList &nameList, const QString &suggestedName, QWidget *parent)
-        : QWidget(parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
     widget.bookmarkName->setCompleter(0);
@@ -24,8 +24,8 @@ QString KWCreateBookmark::bookmarkName()
 }
 
 KWCreateBookmarkDialog::KWCreateBookmarkDialog(const QStringList &nameList, const QString &suggestedName, QWidget *parent)
-        : KoDialog(parent),
-        m_nameList(nameList)
+    : KoDialog(parent)
+    , m_nameList(nameList)
 {
     if (suggestedName.isEmpty() || m_nameList.contains(suggestedName)) {
         enableButtonOk(false);

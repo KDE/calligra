@@ -2,7 +2,7 @@
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef _KO_COLOR_TRANSFORMATION_H_
 #define _KO_COLOR_TRANSFORMATION_H_
@@ -13,7 +13,6 @@
 
 class QVariant;
 class QString;
-
 
 /**
  * This is the base class of all color transform that takes n pixels in input
@@ -53,17 +52,20 @@ public:
     /**
      * Get the parameter id for a parameter name
      */
-    virtual int parameterId(const QString& name) const;
+    virtual int parameterId(const QString &name) const;
 
-    void setParameters(const QHash<QString, QVariant> & parameters);
+    void setParameters(const QHash<QString, QVariant> &parameters);
     /**
      * Update one parameter of a cached transformation object.
      *
      */
-    virtual void setParameter(int id, const QVariant& parameter);
+    virtual void setParameter(int id, const QVariant &parameter);
 
     /// @return true
-    virtual bool isValid() const { return true; }
+    virtual bool isValid() const
+    {
+        return true;
+    }
 };
 
 #endif

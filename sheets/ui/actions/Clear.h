@@ -8,7 +8,6 @@
 #ifndef CALLIGRA_SHEETS_ACTION_CLEAR
 #define CALLIGRA_SHEETS_ACTION_CLEAR
 
-
 #include "CellAction.h"
 
 #include "core/ColFormatStorage.h"
@@ -17,14 +16,14 @@
 
 #include <QMap>
 
-
 namespace Calligra
 {
 namespace Sheets
 {
 
-class ClearAll : public CellAction {
-Q_OBJECT
+class ClearAll : public CellAction
+{
+    Q_OBJECT
 public:
     ClearAll(Actions *actions);
     virtual ~ClearAll();
@@ -33,8 +32,9 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
 
-class ClearContents : public CellAction {
-Q_OBJECT
+class ClearContents : public CellAction
+{
+    Q_OBJECT
 public:
     ClearContents(Actions *actions);
     virtual ~ClearContents();
@@ -42,7 +42,6 @@ public:
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
-
 
 /**
  * \ingroup Commands
@@ -62,8 +61,8 @@ public:
     ~DeleteCommand() override;
 
     enum Mode {
-        Everything,     ///< Delete also column and row formats.
-        OnlyCells       ///< Delete only cell contents, styles, etc.
+        Everything, ///< Delete also column and row formats.
+        OnlyCells ///< Delete only cell contents, styles, etc.
     };
     void setMode(Mode mode);
 
@@ -72,10 +71,11 @@ protected:
      * Processes \p element , a Region::Point or a Region::Range .
      * Invoked by performCommands() .
      */
-    bool process(Element* element) override;
+    bool process(Element *element) override;
 
     // dummy
-    Value newValue(Element*, int, int, bool*, Format::Type*) override {
+    Value newValue(Element *, int, int, bool *, Format::Type *) override
+    {
         return Value();
     }
 
@@ -88,12 +88,7 @@ protected:
     Mode m_mode;
 };
 
-
-
-
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_CLEAR
+#endif // CALLIGRA_SHEETS_ACTION_CLEAR

@@ -5,20 +5,20 @@
  */
 #include "InsertBibliographyDialog.h"
 
-#include <ToCBibGeneratorInfo.h>
 #include <BibliographyGenerator.h>
-#include <KoParagraphStyle.h>
-#include <KoOdfBibliographyConfiguration.h>
 #include <KoBibliographyInfo.h>
+#include <KoOdfBibliographyConfiguration.h>
+#include <KoParagraphStyle.h>
+#include <ToCBibGeneratorInfo.h>
 
-#include <QMessageBox>
-#include <QListWidgetItem>
 #include <QDebug>
+#include <QListWidgetItem>
+#include <QMessageBox>
 
-InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget *parent) :
-    QDialog(parent),
-    m_editor(editor),
-    m_bibInfo(new KoBibliographyInfo())
+InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget *parent)
+    : QDialog(parent)
+    , m_editor(editor)
+    , m_bibInfo(new KoBibliographyInfo())
 {
     dialog.setupUi(this);
 
@@ -30,9 +30,9 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
     connect(dialog.addedFields, &QListWidget::itemChanged, this, &InsertBibliographyDialog::spanChanged);
 
     /*  To do : handle tab stops
-    */
-    //connect(dialog.addTabStop,SIGNAL(clicked()),this,SLOT(insertTabStop()));
-    //connect(dialog.removeTabStop,SIGNAL(clicked()),this,SLOT(removeTabStop()));
+     */
+    // connect(dialog.addTabStop,SIGNAL(clicked()),this,SLOT(insertTabStop()));
+    // connect(dialog.removeTabStop,SIGNAL(clicked()),this,SLOT(removeTabStop()));
 
     dialog.addedFields->clear();
     dialog.availableFields->clear();
@@ -58,7 +58,7 @@ void InsertBibliographyDialog::updateFields()
     dialog.addedFields->clear();
 
     QSet<QString> addedFields;
-    foreach(IndexEntry *entry, m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries) {
+    foreach (IndexEntry *entry, m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries) {
         if (entry->name == IndexEntry::BIBLIOGRAPHY) {
             IndexEntryBibliography *bibEntry = static_cast<IndexEntryBibliography *>(entry);
             QListWidgetItem *bibItem = new QListWidgetItem(bibEntry->dataField, dialog.addedFields);
@@ -72,7 +72,8 @@ void InsertBibliographyDialog::updateFields()
             spanField->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         }
     }
-    QSet<QString> availableFields = QSet<QString>(KoOdfBibliographyConfiguration::bibDataFields.begin(), KoOdfBibliographyConfiguration::bibDataFields.end()) - addedFields;
+    QSet<QString> availableFields =
+        QSet<QString>(KoOdfBibliographyConfiguration::bibDataFields.begin(), KoOdfBibliographyConfiguration::bibDataFields.end()) - addedFields;
 
     foreach (const QString &field, availableFields) {
         new QListWidgetItem(field, dialog.availableFields);
@@ -85,11 +86,10 @@ void InsertBibliographyDialog::addField()
     int row = dialog.availableFields->currentRow();
 
     if (row != -1) {
-
         disconnect(dialog.addedFields, &QListWidget::itemChanged, this, &InsertBibliographyDialog::spanChanged);
 
         QString newDataField = dialog.availableFields->takeItem(row)->text();
-        QListWidgetItem *bibField = new QListWidgetItem(newDataField,dialog.addedFields);
+        QListWidgetItem *bibField = new QListWidgetItem(newDataField, dialog.addedFields);
         bibField->setData(Qt::UserRole, QVariant::fromValue<IndexEntry::IndexEntryName>(IndexEntry::BIBLIOGRAPHY));
 
         IndexEntryBibliography *newEntry = new IndexEntryBibliography(QString());
@@ -129,12 +129,12 @@ void InsertBibliographyDialog::addSpan()
     m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.append(static_cast<IndexEntry *>(span));
 }
 
-void InsertBibliographyDialog::spanChanged( QListWidgetItem *item )
+void InsertBibliographyDialog::spanChanged(QListWidgetItem *item)
 {
     int row = dialog.addedFields->currentRow();
 
     if (row != -1) {
-        IndexEntrySpan *span = static_cast<IndexEntrySpan *>( m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.at(row) );
+        IndexEntrySpan *span = static_cast<IndexEntrySpan *>(m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.at(row));
         span->text = item->text();
     }
 }

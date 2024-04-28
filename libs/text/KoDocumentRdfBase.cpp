@@ -16,7 +16,7 @@
 #include "TextDebug.h"
 
 KoDocumentRdfBase::KoDocumentRdfBase(QObject *parent)
-        : QObject(parent)
+    : QObject(parent)
 {
 }
 
@@ -34,7 +34,7 @@ QSharedPointer<Soprano::Model> KoDocumentRdfBase::model() const
 void KoDocumentRdfBase::linkToResourceManager(KoDocumentResourceManager *rm)
 {
     QVariant variant;
-    variant.setValue<QObject*>(this);
+    variant.setValue<QObject *>(this);
     rm->setResource(KoText::DocumentRdf, variant);
 }
 

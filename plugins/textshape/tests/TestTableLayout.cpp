@@ -2,21 +2,21 @@
 #include "../TableLayout.h"
 #include "../TableLayoutData.h"
 
-#include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
-#include <KoTableColumnAndRowStyleManager.h>
-#include <KoTextDocument.h>
+#include <KoStyleManager.h>
 #include <KoTableCellStyle.h>
+#include <KoTableColumnAndRowStyleManager.h>
 #include <KoTableColumnStyle.h>
 #include <KoTableRowStyle.h>
 #include <KoTableStyle.h>
+#include <KoTextDocument.h>
 
-#include <QTextDocument>
-#include <QTextTable>
-#include <QTextCursor>
+#include <QPen>
 #include <QPoint>
 #include <QString>
-#include <QPen>
+#include <QTextCursor>
+#include <QTextDocument>
+#include <QTextTable>
 
 void TestTableLayout::init()
 {
@@ -30,12 +30,13 @@ void TestTableLayout::init()
     m_defaultCellStyle = 0;
 }
 
-void TestTableLayout::initTest(int rows, int columns,
-        KoTableStyle *tableStyle,
-        const QList<KoTableColumnStyle *> &columnStyles,
-        const QList<KoTableRowStyle *> &rowStyles,
-        const QMap<QPair<int, int>, KoTableCellStyle *> &cellStyles,
-        const QMap<QPair<int, int>, QString> &cellTexts)
+void TestTableLayout::initTest(int rows,
+                               int columns,
+                               KoTableStyle *tableStyle,
+                               const QList<KoTableColumnStyle *> &columnStyles,
+                               const QList<KoTableRowStyle *> &rowStyles,
+                               const QMap<QPair<int, int>, KoTableCellStyle *> &cellStyles,
+                               const QMap<QPair<int, int>, QString> &cellTexts)
 {
     // Mock shape of size 200x1000 pt.
     m_shape = new MockTextShape();
@@ -128,7 +129,6 @@ void TestTableLayout::initTest(int rows, int columns,
         style.applyStyle(b2);
         b2 = b2.next();
     }
-
 }
 
 void TestTableLayout::initTestSimple(int rows, int columns, KoTableStyle *tableStyle)
@@ -858,7 +858,6 @@ void TestTableLayout::testFeatureCombination()
     QMap<QPair<int, int>, KoTableCellStyle *> cellStyles;
     QMap<QPair<int, int>, QString> cellTexts;
 
-
     KoTableCellStyle *cellStyle1 = new KoTableCellStyle();
     QVERIFY(cellStyle1);
     cellStyle1->setPadding(8.0);
@@ -952,13 +951,13 @@ void TestTableLayout::testFeatureCombination()
     QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(152, 2, 146, 38.4));
 
     cell = m_table->cellAt(1, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(2, 28+14.4+2, 146, 4+2*14.4));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(2, 28 + 14.4 + 2, 146, 4 + 2 * 14.4));
 
     cell = m_table->cellAt(1, 2);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(152, 28+14.4+2, 146, 14.4));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(152, 28 + 14.4 + 2, 146, 14.4));
 
     cell = m_table->cellAt(2, 2);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(152, 32+2*14.4+2, 146, 14.4));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(152, 32 + 2 * 14.4 + 2, 146, 14.4));
 
     cleanupTest();
 }

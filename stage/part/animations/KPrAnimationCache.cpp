@@ -20,8 +20,8 @@
 #include "KPrAnimationCache.h"
 
 #include <QString>
-#include <QVariant>
 #include <QTransform>
+#include <QVariant>
 
 #include <KoShape.h>
 
@@ -35,7 +35,6 @@ KPrAnimationCache::KPrAnimationCache()
 KPrAnimationCache::~KPrAnimationCache()
 {
 }
-
 
 bool KPrAnimationCache::hasValue(KoShape *shape, const QString &id) const
 {
@@ -83,7 +82,6 @@ QVariant KPrAnimationCache::value(int step, KoShape *shape, const QString &id) c
     return QVariant();
 }
 
-
 QVariant KPrAnimationCache::value(QTextBlockUserData *textBlockData, const QString &id, const QVariant &defaultValue) const
 {
     if (m_currentTextBlockDataValues.contains(textBlockData))
@@ -97,52 +95,45 @@ void KPrAnimationCache::init(int step, KoShape *shape, QTextBlockUserData *textB
         for (int i = m_textBlockDataValuesStack.size(); i <= step; ++i) {
             // copy previous values
             if (i > 0) {
-                m_textBlockDataValuesStack.append(m_textBlockDataValuesStack[i-1]);
-            }
-            else {
-                m_textBlockDataValuesStack.append(QMap<QTextBlockUserData *, QMap<QString, QVariant> >());
+                m_textBlockDataValuesStack.append(m_textBlockDataValuesStack[i - 1]);
+            } else {
+                m_textBlockDataValuesStack.append(QMap<QTextBlockUserData *, QMap<QString, QVariant>>());
             }
         }
         // check if value is valid
         if (value.isValid()) {
             m_textBlockDataValuesStack[step][textBlockUserData][id] = value;
-        }
-        else {
+        } else {
             m_textBlockDataValuesStack[step][textBlockUserData].remove(id);
         }
 
         // Check visibility
         if (id == "visibility") {
-            for(int i = step - 1; i >= 0; i--)
-            {
-                if(!this->hasValue(i, textBlockUserData, id)){
+            for (int i = step - 1; i >= 0; i--) {
+                if (!this->hasValue(i, textBlockUserData, id)) {
                     this->setValue(i, textBlockUserData, id, value.toBool());
                 }
             }
         }
-    }
-    else {
+    } else {
         for (int i = m_shapeValuesStack.size(); i <= step; ++i) {
             // copy previous values
             if (i > 0) {
-                m_shapeValuesStack.append(m_shapeValuesStack[i-1]);
-            }
-            else {
-                m_shapeValuesStack.append(QMap<KoShape *, QMap<QString, QVariant> >());
+                m_shapeValuesStack.append(m_shapeValuesStack[i - 1]);
+            } else {
+                m_shapeValuesStack.append(QMap<KoShape *, QMap<QString, QVariant>>());
             }
         }
         // check if value is valid
         if (value.isValid()) {
             m_shapeValuesStack[step][shape][id] = value;
-        }
-        else {
+        } else {
             m_shapeValuesStack[step][shape].remove(id);
         }
 
         // Check visibility
         if (id == "visibility") {
-            for(int i = step - 1; i >= 0; i--)
-            {
+            for (int i = step - 1; i >= 0; i--) {
                 if (!this->hasValue(i, shape, id)) {
                     this->setValue(i, shape, id, value.toBool());
                 }
@@ -157,17 +148,14 @@ void KPrAnimationCache::update(KoShape *shape, QTextBlockUserData *textBlockUser
         if (id == "transform" && !m_next[shape]) {
             QTransform transform = m_currentTextBlockDataValues[textBlockUserData][id].value<QTransform>();
             m_currentTextBlockDataValues[textBlockUserData][id] = transform * value.value<QTransform>();
-        }
-        else {
+        } else {
             m_currentTextBlockDataValues[textBlockUserData][id] = value;
         }
-    }
-    else {
+    } else {
         if (id == "transform" && !m_next[shape]) {
             QTransform transform = m_currentShapeValues[shape][id].value<QTransform>();
             m_currentShapeValues[shape][id] = transform * value.value<QTransform>();
-        }
-        else {
+        } else {
             m_currentShapeValues[shape][id] = value;
         }
     }
@@ -188,11 +176,11 @@ void KPrAnimationCache::startStep(int step)
 
 void KPrAnimationCache::endStep(int step)
 {
-    if (m_shapeValuesStack.size() > step+1) {
-        m_currentShapeValues = m_shapeValuesStack[step+1];
+    if (m_shapeValuesStack.size() > step + 1) {
+        m_currentShapeValues = m_shapeValuesStack[step + 1];
     }
-    if (m_textBlockDataValuesStack.size() > step+1) {
-        m_currentTextBlockDataValues = m_textBlockDataValuesStack[step+1];
+    if (m_textBlockDataValuesStack.size() > step + 1) {
+        m_currentTextBlockDataValues = m_textBlockDataValuesStack[step + 1];
     }
 }
 
@@ -202,8 +190,6 @@ void KPrAnimationCache::next()
         m_next[s] = true;
     }
 }
-
-
 
 void KPrAnimationCache::setPageSize(const QSizeF &size)
 {

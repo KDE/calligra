@@ -31,16 +31,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
     m_tableStyle = 0;
 
     if (!d->tableStyleList) {
-        d->tableStyleList = new QMap<QString, MSOOXML::DrawingTableStyle*>;
+        d->tableStyleList = new QMap<QString, MSOOXML::DrawingTableStyle *>;
 
         QString tableStylesFile;
         QString tableStylesPath;
         MSOOXML::Utils::splitPathAndFile(m_context->tableStylesFilePath, &tableStylesPath, &tableStylesFile);
 
         MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
-        MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
-                                                                        tableStylesFile, &m_context->slideMasterProperties->theme,
-                                                                        d->tableStyleList, m_context->colorMap);
+        MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import,
+                                                                         tableStylesPath,
+                                                                         tableStylesFile,
+                                                                         &m_context->slideMasterProperties->theme,
+                                                                         d->tableStyleList,
+                                                                         m_context->colorMap);
         m_context->import->loadAndParseDocument(&tableStyleReader, m_context->tableStylesFilePath, &tableStyleReaderContext);
     }
 
@@ -56,7 +59,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
             SKIP_UNKNOWN
-//             ELSE_WRONG_FORMAT
+            //             ELSE_WRONG_FORMAT
         }
     }
 
@@ -86,8 +89,8 @@ void MSOOXML_CURRENT_CLASS::defineStyles()
     converterProperties.setLocalStyles(std::move(m_localTableStyles));
     // TODO: converterProperties.setLocalDefaulCelltStyle()
     MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, m_tableStyle);
-    for(int row = 0; row < rowCount; ++row ) {
-        for(int column = 0; column < columnCount; ++column ) {
+    for (int row = 0; row < rowCount; ++row) {
+        for (int column = 0; column < columnCount; ++column) {
             spans.first = m_table->cellAt(row, column)->rowSpan();
             spans.second = m_table->cellAt(row, column)->columnSpan();
             KoCellStyle::Ptr style = styleConverter.style(row, column, spans);
@@ -105,47 +108,47 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
 
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(bandCol)
-    if(MSOOXML::Utils::convertBooleanAttr(bandCol)) {
+    if (MSOOXML::Utils::convertBooleanAttr(bandCol)) {
         m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::ColumnBanded;
     }
     TRY_READ_ATTR_WITHOUT_NS(bandRow)
-    if(MSOOXML::Utils::convertBooleanAttr(bandRow)) {
+    if (MSOOXML::Utils::convertBooleanAttr(bandRow)) {
         m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::RowBanded;
     }
     TRY_READ_ATTR_WITHOUT_NS(firstCol)
-    if(MSOOXML::Utils::convertBooleanAttr(firstCol)) {
+    if (MSOOXML::Utils::convertBooleanAttr(firstCol)) {
         m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::FirstCol;
     }
     TRY_READ_ATTR_WITHOUT_NS(firstRow)
-    if(MSOOXML::Utils::convertBooleanAttr(firstRow)) {
+    if (MSOOXML::Utils::convertBooleanAttr(firstRow)) {
         m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::FirstRow;
     }
     TRY_READ_ATTR_WITHOUT_NS(lastCol)
-    if(MSOOXML::Utils::convertBooleanAttr(lastCol)) {
+    if (MSOOXML::Utils::convertBooleanAttr(lastCol)) {
         m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::FirstCol;
     }
     TRY_READ_ATTR_WITHOUT_NS(lastRow)
-    if(MSOOXML::Utils::convertBooleanAttr(lastCol)) {
+    if (MSOOXML::Utils::convertBooleanAttr(lastCol)) {
         m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::LastCol;
     }
-//     TRY_READ_ATTR_WITHOUT_NS(rtl)
+    //     TRY_READ_ATTR_WITHOUT_NS(rtl)
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-//             TRY_READ_IF(blipFill)
-//             ELSE_TRY_READ_IF(effectDrag)
-//             ELSE_TRY_READ_IF(effectLst)
-//             ELSE_TRY_READ_IF(extLst)
-//             ELSE_TRY_READ_IF(gradFill)
-//             ELSE_TRY_READ_IF(grpFill)
-//             ELSE_TRY_READ_IF(noFill)
-//             ELSE_TRY_READ_IF(pattFill)
-//             ELSE_TRY_READ_IF(solidFill)
-//             ELSE_TRY_READ_IF(tableStyle)
-            /*ELSE_*/TRY_READ_IF(tableStyleId)
-//             ELSE_WRONG_FORMAT
+            //             TRY_READ_IF(blipFill)
+            //             ELSE_TRY_READ_IF(effectDrag)
+            //             ELSE_TRY_READ_IF(effectLst)
+            //             ELSE_TRY_READ_IF(extLst)
+            //             ELSE_TRY_READ_IF(gradFill)
+            //             ELSE_TRY_READ_IF(grpFill)
+            //             ELSE_TRY_READ_IF(noFill)
+            //             ELSE_TRY_READ_IF(pattFill)
+            //             ELSE_TRY_READ_IF(solidFill)
+            //             ELSE_TRY_READ_IF(tableStyle)
+            /*ELSE_*/ TRY_READ_IF(tableStyleId)
+            //             ELSE_WRONG_FORMAT
             SKIP_UNKNOWN
         }
     }
@@ -182,17 +185,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gridCol()
 
     const qreal columnWidth = EMU_TO_POINT(w.toFloat());
 
-    KoColumn* column = m_table->columnAt(m_currentTableColumnNumber++);
+    KoColumn *column = m_table->columnAt(m_currentTableColumnNumber++);
     KoColumnStyle::Ptr style = KoColumnStyle::create();
     style->setWidth(columnWidth);
     column->setStyle(style);
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-//         if(isStartElement()) {
-//             TRY_READ_IF(extLst)
-//         }
+        //         if(isStartElement()) {
+        //             TRY_READ_IF(extLst)
+        //         }
     }
 
     READ_EPILOGUE
@@ -209,7 +212,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tr()
 
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(h)
-    KoRow* row = m_table->rowAt(m_currentTableRowNumber);
+    KoRow *row = m_table->rowAt(m_currentTableRowNumber);
     KoRowStyle::Ptr style = KoRowStyle::create();
     style->setHeight(EMU_TO_POINT(h.toFloat()));
     style->setHeightType(KoRowStyle::MinimumHeight);
@@ -220,8 +223,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tr()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tc)
-//             ELSE_TRY_READ_IF(extLst)
-//             ELSE_WRONG_FORMAT
+            //             ELSE_TRY_READ_IF(extLst)
+            //             ELSE_WRONG_FORMAT
             SKIP_UNKNOWN
         }
     }
@@ -242,7 +245,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
     TRY_READ_ATTR_WITHOUT_NS(gridSpan)
     TRY_READ_ATTR_WITHOUT_NS(rowSpan)
 
-    KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+    KoCell *cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
 
     if (!gridSpan.isEmpty()) {
         cell->setColumnSpan(gridSpan.toInt());
@@ -265,13 +268,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
             if (qualifiedName() == QLatin1StringView("a:txBody")) {
                 QBuffer buffer;
 
-                KoXmlWriter* oldBody = body;
-                KoXmlWriter newBody(&buffer, oldBody->indentLevel()+1);
+                KoXmlWriter *oldBody = body;
+                KoXmlWriter newBody(&buffer, oldBody->indentLevel() + 1);
                 body = &newBody;
 
                 TRY_READ_IN_CONTEXT(DrawingML_txBody);
 
-                KoRawCellChild* textChild = new KoRawCellChild(buffer.data());
+                KoRawCellChild *textChild = new KoRawCellChild(buffer.data());
                 cell->appendChild(textChild);
 
                 body = oldBody;
@@ -310,9 +313,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tableStyleId()
         tempDevice.open(QIODevice::ReadOnly);
         MSOOXML::Utils::splitPathAndFile(m_context->tableStylesFilePath, &tableStylesPath, &tableStylesFile);
         MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
-        MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
-                                                                         tableStylesFile, &m_context->slideMasterProperties->theme,
-                                                                         d->tableStyleList, m_context->colorMap);
+        MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import,
+                                                                         tableStylesPath,
+                                                                         tableStylesFile,
+                                                                         &m_context->slideMasterProperties->theme,
+                                                                         d->tableStyleList,
+                                                                         m_context->colorMap);
         m_context->import->loadAndParseFromDevice(&tableStyleReader, &tempDevice, &tableStyleReaderContext);
     }
 
@@ -337,35 +343,31 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-//             TRY_READ_IF(blipFill)
-//             ELSE_TRY_READ_IF(cell3D)
-//             ELSE_TRY_READ_IF(extLst)
-//             ELSE_TRY_READ_IF(gradFill)
-//             ELSE_TRY_READ_IF(grpFill)
-//             ELSE_TRY_READ_IF(lnBlToTr)
-//             ELSE_TRY_READ_IF(lnTlToBr)
-//             ELSE_TRY_READ_IF(pattFill)
+            //             TRY_READ_IF(blipFill)
+            //             ELSE_TRY_READ_IF(cell3D)
+            //             ELSE_TRY_READ_IF(extLst)
+            //             ELSE_TRY_READ_IF(gradFill)
+            //             ELSE_TRY_READ_IF(grpFill)
+            //             ELSE_TRY_READ_IF(lnBlToTr)
+            //             ELSE_TRY_READ_IF(lnTlToBr)
+            //             ELSE_TRY_READ_IF(pattFill)
             if (QUALIFIED_NAME_IS(lnL)) {
                 TRY_READ(Table_lnL)
                 localStyleProperties->left = m_currentBorder;
                 localStyleProperties->setProperties |= TableStyleProperties::LeftBorder;
-            }
-            else if (QUALIFIED_NAME_IS(lnR)) {
+            } else if (QUALIFIED_NAME_IS(lnR)) {
                 TRY_READ(Table_lnR)
                 localStyleProperties->right = m_currentBorder;
                 localStyleProperties->setProperties |= TableStyleProperties::RightBorder;
-            }
-            else if (QUALIFIED_NAME_IS(lnT)) {
+            } else if (QUALIFIED_NAME_IS(lnT)) {
                 TRY_READ(Table_lnT)
                 localStyleProperties->top = m_currentBorder;
                 localStyleProperties->setProperties |= TableStyleProperties::TopBorder;
-            }
-            else if (QUALIFIED_NAME_IS(lnB)) {
+            } else if (QUALIFIED_NAME_IS(lnB)) {
                 TRY_READ(Table_lnB)
                 localStyleProperties->bottom = m_currentBorder;
                 localStyleProperties->setProperties |= TableStyleProperties::BottomBorder;
-            }
-            else if (QUALIFIED_NAME_IS(solidFill)) {
+            } else if (QUALIFIED_NAME_IS(solidFill)) {
                 TRY_READ(solidFill)
                 localStyleProperties->backgroundColor = m_currentColor;
                 localStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundColor;

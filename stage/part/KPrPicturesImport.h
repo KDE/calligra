@@ -7,8 +7,8 @@
 #ifndef KPRPICTURESIMPORT_H
 #define KPRPICTURESIMPORT_H
 
-#include <QObject>
 #include <QList>
+#include <QObject>
 
 class KoShapeFactoryBase;
 class KoPAPageBase;

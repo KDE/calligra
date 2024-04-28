@@ -5,10 +5,10 @@
 #include "TestTextFunctions.h"
 
 #include "TestKspreadCommon.h"
+#include "engine/Localization.h"
 #include "engine/MapBase.h"
 #include "engine/SheetBase.h"
 #include <engine/CalculationSettings.h>
-#include "engine/Localization.h"
 
 void TestTextFunctions::initTestCase()
 {
@@ -17,18 +17,26 @@ void TestTextFunctions::initTestCase()
 
     m_map = new MapBase;
     m_map->addNewSheet();
-    SheetBase* sheet = m_map->sheet(0);
+    SheetBase *sheet = m_map->sheet(0);
     sheet->setSheetName("Sheet1");
 
-    m_map->calculationSettings()->locale()->setLanguage("en_US");  // needed for decimals
+    m_map->calculationSettings()->locale()->setLanguage("en_US"); // needed for decimals
 }
 
-#define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
+#define CHECK_EVAL(x, y)                                                                                                                                       \
+    {                                                                                                                                                          \
+        Value z(y);                                                                                                                                            \
+        QCOMPARE(evaluate(x, z), (z));                                                                                                                         \
+    }
 // CHECK_EVAL has the side effect that the value 'y' is modified, e.g due to localization
 // Use CHECK_VALUE2 where this this is a problem
-#define CHECK_EVAL2(x,y,r) { Value z(y); QCOMPARE(evaluate(x,z),r); }
+#define CHECK_EVAL2(x, y, r)                                                                                                                                   \
+    {                                                                                                                                                          \
+        Value z(y);                                                                                                                                            \
+        QCOMPARE(evaluate(x, z), r);                                                                                                                           \
+    }
 
-Value TestTextFunctions::evaluate(const QString& formula, Value& ex)
+Value TestTextFunctions::evaluate(const QString &formula, Value &ex)
 {
     Formula f(m_map->sheet(0));
     QString expr = formula;
@@ -48,8 +56,8 @@ Value TestTextFunctions::evaluate(const QString& formula, Value& ex)
 void TestTextFunctions::testASC()
 {
     // TODO reactivate after function is implemented
-//     CHECK_EVAL( "ASC(\"ＡＢＣ\")", Value( "ABC" ) );
-//     CHECK_EVAL( "ASC(\"アイウ\")", Value( "ｧｨｩ" ) );
+    //     CHECK_EVAL( "ASC(\"ＡＢＣ\")", Value( "ABC" ) );
+    //     CHECK_EVAL( "ASC(\"アイウ\")", Value( "ｧｨｩ" ) );
 }
 
 void TestTextFunctions::testCHAR()
@@ -90,15 +98,15 @@ void TestTextFunctions::testCONCATENATE()
 
 void TestTextFunctions::testEXACT()
 {
-    CHECK_EVAL("EXACT(\"A\";\"A\")",  Value(true));
-    CHECK_EVAL("EXACT(\"A\";\"a\")",  Value(false));
-    CHECK_EVAL("EXACT(1;1)",  Value(true));
-    CHECK_EVAL("EXACT((1/3)*3;1)",  Value(true));
-    CHECK_EVAL("EXACT(TRUE();TRUE())",  Value(true));
-    CHECK_EVAL("EXACT(\"1\";2)",  Value(false));
-    CHECK_EVAL("EXACT(\"h\";1)",  Value(false));
-    CHECK_EVAL("EXACT(\"1\";1)",  Value(true));
-    CHECK_EVAL("EXACT(\" 1\";1)",  Value(false));
+    CHECK_EVAL("EXACT(\"A\";\"A\")", Value(true));
+    CHECK_EVAL("EXACT(\"A\";\"a\")", Value(false));
+    CHECK_EVAL("EXACT(1;1)", Value(true));
+    CHECK_EVAL("EXACT((1/3)*3;1)", Value(true));
+    CHECK_EVAL("EXACT(TRUE();TRUE())", Value(true));
+    CHECK_EVAL("EXACT(\"1\";2)", Value(false));
+    CHECK_EVAL("EXACT(\"h\";1)", Value(false));
+    CHECK_EVAL("EXACT(\"1\";1)", Value(true));
+    CHECK_EVAL("EXACT(\" 1\";1)", Value(false));
 }
 
 void TestTextFunctions::testFIND()
@@ -141,8 +149,8 @@ void TestTextFunctions::testFIXED()
 void TestTextFunctions::testJIS()
 {
     // TODO reactivate after function is implemented
-//     CHECK_EVAL( "JIS(\"ABC\")", Value( "ＡＢＣ") );
-//     CHECK_EVAL( "JIS(\"ｧｨｩ\")", Value( "アイウ" ) );
+    //     CHECK_EVAL( "JIS(\"ABC\")", Value( "ＡＢＣ") );
+    //     CHECK_EVAL( "JIS(\"ｧｨｩ\")", Value( "アイウ" ) );
 }
 
 void TestTextFunctions::testLEFT()
@@ -183,16 +191,16 @@ void TestTextFunctions::testMID()
 void TestTextFunctions::testNUMBERVALUE()
 {
     // TODO this is not actually supported at this time
-    CHECK_EVAL( "NUMBERVALUE(\"6\"; \".\")", Value( 6 ) ); // VALUE converts text to numbers (unlike N).
-    CHECK_EVAL( "NUMBERVALUE(\"300.5\"; \".\")", Value( 300.5 ) ); // Period works.
-/*
-    CHECK_EVAL( "NUMBERVALUE(\"300,5\"; \",\")", Value( 300.5 ) ); // Comma works
-    CHECK_EVAL( "NUMBERVALUE(\"6,000.5\"; \".\")", Value( 6000.5 ) ); // Period + thousands work.
-    CHECK_EVAL( "NUMBERVALUE(\"6.000,5\"; \",\")", Value( 6000.5 ) ); // Comma + thousands work.
-    CHECK_EVAL( "NUMBERVALUE(\"3!456!000*567\"; \"*\"; \"!\")", Value( 3456000.567 ) ); // Thousands separator works
-    CHECK_EVAL( "NUMBERVALUE(\"+6,000.5\"; \".\")", Value( 6000.5 ) ); // Positive sign
-    CHECK_EVAL( "NUMBERVALUE(\"-6,000.5\"; \".\")", Value( -6000.5 ) ); // Negative sign
-*/
+    CHECK_EVAL("NUMBERVALUE(\"6\"; \".\")", Value(6)); // VALUE converts text to numbers (unlike N).
+    CHECK_EVAL("NUMBERVALUE(\"300.5\"; \".\")", Value(300.5)); // Period works.
+    /*
+        CHECK_EVAL( "NUMBERVALUE(\"300,5\"; \",\")", Value( 300.5 ) ); // Comma works
+        CHECK_EVAL( "NUMBERVALUE(\"6,000.5\"; \".\")", Value( 6000.5 ) ); // Period + thousands work.
+        CHECK_EVAL( "NUMBERVALUE(\"6.000,5\"; \",\")", Value( 6000.5 ) ); // Comma + thousands work.
+        CHECK_EVAL( "NUMBERVALUE(\"3!456!000*567\"; \"*\"; \"!\")", Value( 3456000.567 ) ); // Thousands separator works
+        CHECK_EVAL( "NUMBERVALUE(\"+6,000.5\"; \".\")", Value( 6000.5 ) ); // Positive sign
+        CHECK_EVAL( "NUMBERVALUE(\"-6,000.5\"; \".\")", Value( -6000.5 ) ); // Negative sign
+    */
 }
 
 void TestTextFunctions::testPROPER()
@@ -210,14 +218,14 @@ void TestTextFunctions::testREPLACE()
 
 void TestTextFunctions::testREPT()
 {
-    CHECK_EVAL("REPT(\"X\";3)",  Value("XXX"));
-    CHECK_EVAL("REPT(\"XY\";2)",  Value("XYXY"));
-    CHECK_EVAL("REPT(\"X\";2.9)",  Value("XX"));
-    CHECK_EVAL("REPT(\"XY\";2.9)",  Value("XYXY"));
-    CHECK_EVAL("REPT(\"X\";0)",  Value(""));
-    CHECK_EVAL("REPT(\"XYZ\";0)",  Value(""));
-    CHECK_EVAL("REPT(\"X\";-1)",  Value::errorVALUE());
-    CHECK_EVAL("REPT(\"XYZ\";-0.1)",  Value::errorVALUE());
+    CHECK_EVAL("REPT(\"X\";3)", Value("XXX"));
+    CHECK_EVAL("REPT(\"XY\";2)", Value("XYXY"));
+    CHECK_EVAL("REPT(\"X\";2.9)", Value("XX"));
+    CHECK_EVAL("REPT(\"XY\";2.9)", Value("XYXY"));
+    CHECK_EVAL("REPT(\"X\";0)", Value(""));
+    CHECK_EVAL("REPT(\"XYZ\";0)", Value(""));
+    CHECK_EVAL("REPT(\"X\";-1)", Value::errorVALUE());
+    CHECK_EVAL("REPT(\"XYZ\";-0.1)", Value::errorVALUE());
 }
 
 void TestTextFunctions::testRIGHT()
@@ -258,7 +266,7 @@ void TestTextFunctions::testSUBSTITUTE()
 void TestTextFunctions::testT()
 {
     CHECK_EVAL("T(\"Hi\")", Value("Hi"));
-    CHECK_EVAL("T(5)",      Value(""));
+    CHECK_EVAL("T(5)", Value(""));
 }
 
 void TestTextFunctions::testTRIM()
@@ -308,13 +316,12 @@ void TestTextFunctions::testTEXT()
 {
     CHECK_EVAL("TEXT(71)", Value("71"));
     // this is not currently supported
-//    CHECK_EVAL("TEXT(TIME(13;10;43);\"hh:mm\")", Value("13:10"));
+    //    CHECK_EVAL("TEXT(TIME(13;10;43);\"hh:mm\")", Value("13:10"));
 }
 
 void TestTextFunctions::cleanupTestCase()
 {
     delete m_map;
 }
-
 
 QTEST_MAIN(TestTextFunctions)

@@ -26,10 +26,11 @@ class QuickStateHandler : public QObject
 {
     Q_OBJECT
 public:
-    QuickStateHandler(const QString& _catId, const QString& _textId, QObject* _obj);
+    QuickStateHandler(const QString &_catId, const QString &_textId, QObject *_obj);
     ~QuickStateHandler();
 public Q_SLOTS:
     void activate();
+
 private:
     QString m_catId;
     QString m_textId;

@@ -9,8 +9,8 @@
 
 #include "KoColorModelStandardIds.h"
 
-#include <QTest>
 #include <DebugPigment.h>
+#include <QTest>
 #include <string.h>
 
 #include "KoColor.h"
@@ -19,7 +19,6 @@
 #include "KoCompositeOp.h"
 #include "KoMixColorsOp.h"
 #include <KoCompositeOpRegistry.h>
-
 
 #define NUM_CHANNELS 4
 
@@ -40,8 +39,8 @@ void KoRgbU8ColorSpaceTester::testBasics()
 
 void KoRgbU8ColorSpaceTester::testMixColors()
 {
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoMixColorsOp * mixOp = cs->mixColorsOp();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoMixColorsOp *mixOp = cs->mixColorsOp();
 
     // Test mixColors.
     quint8 pixel1[4];
@@ -136,18 +135,16 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
 {
     // Just COMPOSITE_COPY for now
 
-    QList<KoID> depthIDs = KoColorSpaceRegistry::instance()->colorDepthList(RGBAColorModelID.id(),
-                           KoColorSpaceRegistry::AllColorSpaces);
+    QList<KoID> depthIDs = KoColorSpaceRegistry::instance()->colorDepthList(RGBAColorModelID.id(), KoColorSpaceRegistry::AllColorSpaces);
 
-    foreach(const KoID& depthId, depthIDs) {
-
-        if (depthId.id().contains("Float")) continue;
+    foreach (const KoID &depthId, depthIDs) {
+        if (depthId.id().contains("Float"))
+            continue;
 
         dbgPigment << depthId.id();
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
-                                     RGBAColorModelID.id(), depthId.id(), "");
-        
-        const KoCompositeOp* copyOp = cs->compositeOp(COMPOSITE_COPY);
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), depthId.id(), "");
+
+        const KoCompositeOp *copyOp = cs->compositeOp(COMPOSITE_COPY);
         KoColor src(cs), dst(cs);
 
         QColor red(255, 0, 0);
@@ -157,13 +154,12 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
         // Copying a color over another color should replace the original color
         src.fromQColor(red);
         dst.fromQColor(blue);
-        
+
         dbgPigment << src.toQColor() << dst.toQColor();
 
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 
-        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
-                          0, 0, 1, 1, OPACITY_OPAQUE_U8);
+        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(), 0, 0, 1, 1, OPACITY_OPAQUE_U8);
 
         src.fromQColor(red);
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) == 0);
@@ -174,8 +170,7 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
 
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 
-        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
-                          0, 0, 1, 1, OPACITY_OPAQUE_U8);
+        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(), 0, 0, 1, 1, OPACITY_OPAQUE_U8);
 
         src.fromQColor(transparentRed);
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) == 0);
@@ -186,52 +181,52 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
 
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 
-        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
-                          0, 0, 1, 1, OPACITY_OPAQUE_U8);
+        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(), 0, 0, 1, 1, OPACITY_OPAQUE_U8);
 
         src.fromQColor(blue);
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) == 0);
-
     }
 }
 
 void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
 {
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    QList<KoCompositeOp*> ops = cs->compositeOps();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    QList<KoCompositeOp *> ops = cs->compositeOps();
 
-    foreach(const KoCompositeOp *op, ops) {
+    foreach (const KoCompositeOp *op, ops) {
         /**
          * ALPHA_DARKEN composite op doesn't take channel
          * flags into account, so just skip it
          */
-        if (op->id() == COMPOSITE_ALPHA_DARKEN) continue;
-        if (op->id() == COMPOSITE_DISSOLVE) continue;
+        if (op->id() == COMPOSITE_ALPHA_DARKEN)
+            continue;
+        if (op->id() == COMPOSITE_DISSOLVE)
+            continue;
 
-        quint8 src[] = {128,128,128,129};
-        quint8 goodDst[] = {10,10,10,11};
-        quint8 badDst[] = {12,12,12,0};
+        quint8 src[] = {128, 128, 128, 129};
+        quint8 goodDst[] = {10, 10, 10, 11};
+        quint8 badDst[] = {12, 12, 12, 0};
 
         KoCompositeOp::ParameterInfo params;
-        params.maskRowStart  = 0;
-        params.dstRowStride  = 0;
-        params.srcRowStride  = 0;
+        params.maskRowStart = 0;
+        params.dstRowStride = 0;
+        params.srcRowStride = 0;
         params.maskRowStride = 0;
-        params.rows          = 1;
-        params.cols          = 1;
-        params.opacity       = 1.0f;
-        params.flow          = 1.0f;
+        params.rows = 1;
+        params.cols = 1;
+        params.opacity = 1.0f;
+        params.flow = 1.0f;
 
         QBitArray channelFlags(4, true);
         channelFlags[2] = false;
-        params.channelFlags  = channelFlags;
+        params.channelFlags = channelFlags;
 
-        params.srcRowStart   = src;
+        params.srcRowStart = src;
 
-        params.dstRowStart   = goodDst;
+        params.dstRowStart = goodDst;
         op->composite(params);
 
-        params.dstRowStart   = badDst;
+        params.dstRowStart = badDst;
         op->composite(params);
 
         /**
@@ -239,12 +234,10 @@ void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
          * before increasing alpha of the pixel
          */
         if (badDst[3] != 0 && badDst[2] != 0) {
-            dbgPigment << op->id()
-                     << "easy case:" << goodDst[2]
-                     << "difficult case:" << badDst[2];
+            dbgPigment << op->id() << "easy case:" << goodDst[2] << "difficult case:" << badDst[2];
 
             dbgPigment << "The composite op has failed to erase the color "
-                "channel which was hidden by zero alpha.";
+                          "channel which was hidden by zero alpha.";
             dbgPigment << "Expected Blue channel:" << 0;
             dbgPigment << "Actual Blue channel:  " << badDst[2];
 

@@ -24,9 +24,9 @@ public:
 
 public Q_SLOTS:
     void setLetterSynchronization(bool value);
+
 private:
     int valueFromText(const QString &text) const override;
-
 
     KoOdfNumberDefinition m_format;
 };

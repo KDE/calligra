@@ -5,7 +5,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "OdsReaderBackend.h"
 
@@ -15,20 +14,18 @@
 // Odftraverse library
 #include "OdfParser.h"
 
-
 // ================================================================
 //             class OdsReaderBackend::Private
 
-
 class OdsReaderBackend::Private
 {
- public:
+public:
     Private();
     ~Private();
 
-    bool dummy;                 // We don't have any actual content in
-                                // this class yet but it's still
-                                // needed for forward binary compatibility.
+    bool dummy; // We don't have any actual content in
+                // this class yet but it's still
+                // needed for forward binary compatibility.
 };
 
 OdsReaderBackend::Private::Private()
@@ -39,10 +36,8 @@ OdsReaderBackend::Private::~Private()
 {
 }
 
-
 // ================================================================
 //                 class OdsReaderBackend
-
 
 OdsReaderBackend::OdsReaderBackend()
     : d(new OdsReaderBackend::Private)
@@ -54,9 +49,7 @@ OdsReaderBackend::~OdsReaderBackend()
     delete d;
 }
 
-
 // ----------------------------------------------------------------
 //                 ODS document level functions
-
 
 IMPLEMENT_BACKEND_FUNCTION(OdsReader, OfficeSpreadsheet)

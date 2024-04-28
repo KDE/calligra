@@ -7,17 +7,17 @@
 #ifndef KPRDOUBLESWEEPWIPESTRATEGY_H
 #define KPRDOUBLESWEEPWIPESTRATEGY_H
 
-#include <KPrPageEffectStrategy.h>
 #include "KPrSweepWipeStrategy.h"
+#include <KPrPageEffectStrategy.h>
 
 class KPrDoubleSweepWipeStrategy : public KPrSweepWipeStrategy
 {
 public:
-    KPrDoubleSweepWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse );
+    KPrDoubleSweepWipeStrategy(int subType, const char *smilType, const char *smilSubType, bool reverse);
     ~KPrDoubleSweepWipeStrategy() override;
 
-    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
-    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
+    void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine) override;
+    void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data) override;
 };
 
 #endif // KPRDOUBLESWEEPWIPESTRATEGY_H

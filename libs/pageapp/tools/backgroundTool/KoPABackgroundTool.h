@@ -21,32 +21,32 @@ public:
     explicit KoPABackgroundTool(KoCanvasBase *base);
     ~KoPABackgroundTool() override;
 
-    ///Reimplemented from KoToolBase
-    void paint( QPainter &painter, const KoViewConverter &converter ) override;
-    ///Reimplemented from KoToolBase
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
-    ///Reimplemented from KoToolBase
+    /// Reimplemented from KoToolBase
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    /// Reimplemented from KoToolBase
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
+    /// Reimplemented from KoToolBase
     void deactivate() override;
-    ///Reimplemented from KoToolBase
-    void mousePressEvent( KoPointerEvent *event ) override;
-    ///Reimplemented from KoToolBase
-    void mouseMoveEvent( KoPointerEvent *event ) override;
-    ///Reimplemented from KoToolBase
-    void mouseReleaseEvent( KoPointerEvent *event ) override;
+    /// Reimplemented from KoToolBase
+    void mousePressEvent(KoPointerEvent *event) override;
+    /// Reimplemented from KoToolBase
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    /// Reimplemented from KoToolBase
+    void mouseReleaseEvent(KoPointerEvent *event) override;
 
-    KoPAViewBase * view() const;
+    KoPAViewBase *view() const;
 
     void addOptionWidget(QWidget *widget);
 public Q_SLOTS:
     void slotActivePageChanged();
 
 protected:
-    ///Reimplemented from KoToolBase
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    /// Reimplemented from KoToolBase
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
 private:
-    KoPAViewBase * m_view;
-    QList<QPointer<QWidget> > m_addOnWidgets;
+    KoPAViewBase *m_view;
+    QList<QPointer<QWidget>> m_addOnWidgets;
 };
 
-#endif //KOPABACKGROUNDTOOL_H
+#endif // KOPABACKGROUNDTOOL_H

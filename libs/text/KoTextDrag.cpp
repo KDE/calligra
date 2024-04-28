@@ -12,15 +12,15 @@
 #include <QMimeData>
 #include <QString>
 
-#include <KoStore.h>
-#include <KoGenStyles.h>
-#include <KoGenChanges.h>
-#include <KoOdfWriteStore.h>
-#include <KoXmlWriter.h>
-#include <KoDocumentBase.h>
-#include <KoEmbeddedDocumentSaver.h>
 #include "KoShapeSavingContext.h"
 #include "KoStyleManager.h"
+#include <KoDocumentBase.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoGenChanges.h>
+#include <KoGenStyles.h>
+#include <KoOdfWriteStore.h>
+#include <KoStore.h>
+#include <KoXmlWriter.h>
 #include <opendocument/KoTextSharedSavingData.h>
 
 #include "KoTextOdfSaveHelper.h"
@@ -32,7 +32,7 @@
 #include "TextDebug.h"
 
 KoTextDrag::KoTextDrag()
-        : m_mimeData(0)
+    : m_mimeData(0)
 {
 }
 
@@ -43,7 +43,7 @@ KoTextDrag::~KoTextDrag()
     }
 }
 
-bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
+bool KoTextDrag::setOdf(const char *mimeType, KoTextOdfSaveHelper &helper)
 {
     QBuffer buffer;
     QScopedPointer<KoStore> store(KoStore::createStore(&buffer, KoStore::Write, mimeType));
@@ -53,8 +53,8 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     KoOdfWriteStore odfStore(store.data());
     KoEmbeddedDocumentSaver embeddedSaver;
 
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
-    KoXmlWriter* contentWriter = odfStore.contentWriter();
+    KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
+    KoXmlWriter *contentWriter = odfStore.contentWriter();
 
     if (!contentWriter) {
         return false;
@@ -62,7 +62,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
 
     KoGenStyles mainStyles;
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
-    KoShapeSavingContext * context = helper.context(bodyWriter, mainStyles, embeddedSaver);
+    KoShapeSavingContext *context = helper.context(bodyWriter, mainStyles, embeddedSaver);
     KoGenChanges changes;
 
     KoSharedSavingData *sharedData = context->sharedData(KOTEXT_SHARED_SAVING_ID);
@@ -98,18 +98,17 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
 
     odfStore.closeContentWriter();
 
-    //add manifest line for content.xml
+    // add manifest line for content.xml
     manifestWriter->addManifestEntry("content.xml", "text/xml");
 
     debugText << "testing to see if we should add rdf to odf file?";
 
 #ifdef SHOULD_BUILD_RDF
-    debugText << "helper has model" << ( helper.rdfModel() != 0 );
+    debugText << "helper has model" << (helper.rdfModel() != 0);
     // RDF: Copy relevant RDF to output ODF
     if (QSharedPointer<Soprano::Model> m = helper.rdfModel()) {
         debugText << "rdf model size:" << m->statementCount();
-        KoTextRdfCore::createAndSaveManifest(m, textSharedData->getRdfIdMapping(),
-                                             store.data(), manifestWriter);
+        KoTextRdfCore::createAndSaveManifest(m, textSharedData->getRdfIdMapping(), store.data(), manifestWriter);
     }
 #endif
 
@@ -140,7 +139,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     return true;
 }
 
-void KoTextDrag::setData(const QString & mimeType, const QByteArray & data)
+void KoTextDrag::setData(const QString &mimeType, const QByteArray &data)
 {
     if (m_mimeData == 0) {
         m_mimeData = new QMimeData();
@@ -148,9 +147,9 @@ void KoTextDrag::setData(const QString & mimeType, const QByteArray & data)
     m_mimeData->setData(mimeType, data);
 }
 
-QMimeData * KoTextDrag::takeMimeData()
+QMimeData *KoTextDrag::takeMimeData()
 {
-    QMimeData * mimeData = m_mimeData;
+    QMimeData *mimeData = m_mimeData;
     m_mimeData = 0;
     return mimeData;
 }

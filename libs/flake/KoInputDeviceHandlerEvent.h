@@ -20,9 +20,9 @@ class FLAKE_EXPORT KoInputDeviceHandlerEvent : public QInputEvent
 {
 public:
     enum Type {
-        ButtonPressed = QEvent::User + 2008,  ///< a button was pressed
+        ButtonPressed = QEvent::User + 2008, ///< a button was pressed
         ButtonReleased, ///< a button was released
-        PositionChanged   ///< the position has changed
+        PositionChanged ///< the position has changed
     };
 
     /// Constructs a new device event of the given type
@@ -31,7 +31,7 @@ public:
     ~KoInputDeviceHandlerEvent() override;
 
     /// Creates and returns a KoPointerEvent for tools to consume
-    virtual KoPointerEvent * pointerEvent() = 0;
+    virtual KoPointerEvent *pointerEvent() = 0;
 
     /// The device button which caused the event, Qt::NoButton if it is a move event
     Qt::MouseButton button() const;
@@ -48,7 +48,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOINPUTDEVICEHANDLEREVENT_H

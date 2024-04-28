@@ -9,8 +9,8 @@
 #ifndef ELEMENTFACTORY_H
 #define ELEMENTFACTORY_H
 
-#include <QString>
 #include "koformula_export.h"
+#include <QString>
 
 class BasicElement;
 
@@ -50,7 +50,6 @@ enum ElementType {
     Empty
 };
 
-
 /**
  * @short An implementation of the factory pattern to create element instances
  *
@@ -62,7 +61,8 @@ enum ElementType {
  *
  * @author Martin Pfeiffer
  */
-class KOFORMULA_EXPORT ElementFactory {
+class KOFORMULA_EXPORT ElementFactory
+{
 public:
     /// The default constructor
     ElementFactory();
@@ -73,14 +73,14 @@ public:
      * @param parent The parent element of the newly created element
      * @return A pointer to the new BasicElement derived element
      */
-    static BasicElement* createElement( const QString& tagName, BasicElement* parent );
+    static BasicElement *createElement(const QString &tagName, BasicElement *parent);
 
     /**
      * Obtain the MathML name of a ElementType.
      * @param type The given ElementType to get the MathML name from
      * @return The MathML name as QString
      */
-    static QString elementName( ElementType type );
+    static QString elementName(ElementType type);
 };
 
 #endif // ELEMENTFACTORY_H

@@ -8,14 +8,12 @@
 #ifndef KOODFLOADINGCONTEXT_H
 #define KOODFLOADINGCONTEXT_H
 
-#include "koodf_export.h"
 #include "KoOdfStylesReader.h"
-
+#include "koodf_export.h"
 
 class KoStore;
 class KoOdfManifestEntry;
 class KoStyleStack;
-
 
 /**
  * Used during loading of Oasis format (and discarded at the end of the loading).
@@ -40,9 +38,9 @@ public:
     virtual ~KoOdfLoadingContext();
 
     /**
-    * Set different manifest
-    * @param fileName file name of the manifest file
-    */
+     * Set different manifest
+     * @param fileName file name of the manifest file
+     */
     void setManifestFile(const QString &fileName);
 
     KoStore *store() const;
@@ -50,8 +48,8 @@ public:
     KoOdfStylesReader &stylesReader();
 
     /**
-    * Get the application default styles styleReader
-    */
+     * Get the application default styles styleReader
+     */
     KoOdfStylesReader &defaultStylesReader();
 
     KoStyleStack &styleStack() const;
@@ -96,7 +94,6 @@ public:
     void setUseStylesAutoStyles(bool useStylesAutoStyles);
     bool useStylesAutoStyles() const;
 
-
     /**
      * @return the mimetype for the document in the given path using the manifest
      * The mimetype is defined in the manifest.xml document.
@@ -105,16 +102,16 @@ public:
                     Note: Be sure to call this function with a closed store when guess is set to true as otherwise
                     it will fail.
      */
-    QString mimeTypeForPath(const QString& path, bool guess = false) const;
+    QString mimeTypeForPath(const QString &path, bool guess = false) const;
 
     /**
      * @return the full list of entries from the manifest file
      */
-    QList<KoOdfManifestEntry*> manifestEntries() const;
+    QList<KoOdfManifestEntry *> manifestEntries() const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
     /// Parse and set generator and generatorType attributes from <meta:generator> attribute of meta.xml file
     void parseGenerator() const;
     bool parseManifest(const KoXmlDocument &manifestDocument);

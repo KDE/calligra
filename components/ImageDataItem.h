@@ -13,8 +13,10 @@
 #include <QPixmap>
 #include <QQuickItem>
 
-namespace Calligra {
-namespace Components {
+namespace Calligra
+{
+namespace Components
+{
 
 /**
  * \brief This provides a simple item that can be used to render Pixmaps.
@@ -37,9 +39,9 @@ class ImageDataItem : public QQuickItem
     Q_PROPERTY(QImage data READ data WRITE setData NOTIFY dataChanged)
 
 public:
-    explicit ImageDataItem(QQuickItem* parent = 0);
+    explicit ImageDataItem(QQuickItem *parent = 0);
     ~ImageDataItem() override;
-    
+
     /**
      * Getter for property #data.
      */
@@ -47,17 +49,17 @@ public:
     /**
      * Setter for property #data.
      */
-    void setData(const QImage& newValue);
+    void setData(const QImage &newValue);
 
 Q_SIGNALS:
     void dataChanged();
 
 protected:
-    QSGNode* updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData*) override;
+    QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *) override;
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 } // Namespace Components

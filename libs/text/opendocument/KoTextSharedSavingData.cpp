@@ -6,8 +6,8 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 
 #include "KoTextSharedSavingData.h"
 
-#include "KoGenChanges.h"
 #include "KoDocumentRdfBase.h"
+#include "KoGenChanges.h"
 
 #ifdef SHOULD_BUILD_RDF
 #include <Soprano/Soprano>
@@ -18,8 +18,13 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 class Q_DECL_HIDDEN KoTextSharedSavingData::Private
 {
 public:
-    Private(void) : changes(0) { }
-    ~Private() {}
+    Private(void)
+        : changes(0)
+    {
+    }
+    ~Private()
+    {
+    }
 
     KoGenChanges *changes;
     QMap<QString, QString> m_rdfIdMapping; //< This lets the RDF system know old->new xml:id
@@ -30,7 +35,7 @@ public:
 };
 
 KoTextSharedSavingData::KoTextSharedSavingData()
-        : d(new Private())
+    : d(new Private())
 {
 }
 
@@ -38,18 +43,19 @@ KoTextSharedSavingData::~KoTextSharedSavingData()
 {
 }
 
-void KoTextSharedSavingData::setGenChanges(KoGenChanges& changes) {
+void KoTextSharedSavingData::setGenChanges(KoGenChanges &changes)
+{
     d->changes = &changes;
 }
 
-KoGenChanges& KoTextSharedSavingData::genChanges() const
+KoGenChanges &KoTextSharedSavingData::genChanges() const
 {
     return *(d->changes);
 }
 
 void KoTextSharedSavingData::addRdfIdMapping(const QString &oldid, const QString &newid)
 {
-    d->m_rdfIdMapping[ oldid ] = newid;
+    d->m_rdfIdMapping[oldid] = newid;
 }
 
 QMap<QString, QString> KoTextSharedSavingData::getRdfIdMapping() const

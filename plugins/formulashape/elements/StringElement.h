@@ -11,9 +11,10 @@
 #include "koformula_export.h"
 
 /**
- * @short Implementation of the MathML ms element 
+ * @short Implementation of the MathML ms element
  */
-class KOFORMULA_EXPORT StringElement : public TokenElement {
+class KOFORMULA_EXPORT StringElement : public TokenElement
+{
 public:
     /// The standard constructor
     explicit StringElement(BasicElement *parent = 0);
@@ -21,7 +22,7 @@ public:
     /// @return The element's ElementType
     ElementType elementType() const override;
 
-    QRectF renderToPath( const QString& raw, QPainterPath& path ) const override;
+    QRectF renderToPath(const QString &raw, QPainterPath &path) const override;
 };
 
 #endif // STRINGELEMENT_H

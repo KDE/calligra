@@ -7,14 +7,14 @@
 
 #include "KPrHtmlExportDialog.h"
 
+#include <QDir>
 #include <QMessageBox>
 #include <QPainter>
-#include <QDir>
 // #include <QWebFrame>
-#include <QUrl>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QUrl>
 
 #include <KLocalizedString>
 #include <kzip.h>
@@ -23,24 +23,28 @@
 
 #include "KPrHtmlExport.h"
 
-KPrHtmlExportDialog::KPrHtmlExportDialog(const QList<KoPAPageBase*> &slides, const QString &title, const QString &author, QWidget *parent)
-: KoDialog(parent)
-, m_allSlides(slides)
-, m_title(title)
+KPrHtmlExportDialog::KPrHtmlExportDialog(const QList<KoPAPageBase *> &slides, const QString &title, const QString &author, QWidget *parent)
+    : KoDialog(parent)
+    , m_allSlides(slides)
+    , m_title(title)
 {
     QWidget *widget = new QWidget(this);
     ui.setupUi(widget);
     setMainWidget(widget);
-    setCaption( i18n("Html Export"));
+    setCaption(i18n("Html Export"));
     setButtonText(Ok, i18n("Export"));
     ui.klineedit_title->setText(m_title);
     ui.klineedit_author->setText(author);
 
     connect(ui.pushbuttonBrowseTemplate, &QAbstractButton::clicked, this, &KPrHtmlExportDialog::browserAction);
 
-//     connect(&preview, SIGNAL(loadFinished(bool)), this, SLOT(renderPreview()));
-    connect(ui.klineedit_title, &KLineEdit::editingFinished, this, [this]() { generatePreview(); });
-    connect(ui.klineedit_author, &KLineEdit::editingFinished, this, [this]() { generatePreview(); });
+    //     connect(&preview, SIGNAL(loadFinished(bool)), this, SLOT(renderPreview()));
+    connect(ui.klineedit_title, &KLineEdit::editingFinished, this, [this]() {
+        generatePreview();
+    });
+    connect(ui.klineedit_author, &KLineEdit::editingFinished, this, [this]() {
+        generatePreview();
+    });
     connect(ui.kListBox_slides, &QListWidget::currentRowChanged, this, &KPrHtmlExportDialog::generatePreview);
     connect(ui.kcombobox, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &KPrHtmlExportDialog::generatePreview);
     connect(ui.pushButton_selectAll, &QAbstractButton::clicked, this, &KPrHtmlExportDialog::checkAllItems);
@@ -57,9 +61,9 @@ KPrHtmlExportDialog::KPrHtmlExportDialog(const QList<KoPAPageBase*> &slides, con
     this->generatePreview();
 }
 
-QList<KoPAPageBase*> KPrHtmlExportDialog::checkedSlides()
+QList<KoPAPageBase *> KPrHtmlExportDialog::checkedSlides()
 {
-    QList<KoPAPageBase*> selectedSlides;
+    QList<KoPAPageBase *> selectedSlides;
     int countItems = ui.kListBox_slides->count();
     for (int i = 0; i < countItems; ++i) {
         if (ui.kListBox_slides->item(i)->checkState() == Qt::Checked) {
@@ -72,7 +76,7 @@ QList<KoPAPageBase*> KPrHtmlExportDialog::checkedSlides()
 void KPrHtmlExportDialog::checkAllItems()
 {
     int countItems = ui.kListBox_slides->count();
-    for (int i = 0; i < countItems; ++i ){
+    for (int i = 0; i < countItems; ++i) {
         ui.kListBox_slides->item(i)->setCheckState(Qt::Checked);
     }
 }
@@ -85,7 +89,8 @@ void KPrHtmlExportDialog::uncheckAllItems()
     }
 }
 
-QStringList KPrHtmlExportDialog::slidesNames(){
+QStringList KPrHtmlExportDialog::slidesNames()
+{
     QStringList names;
     int countItems = ui.kListBox_slides->count();
     for (int i = 0; i < countItems; ++i) {
@@ -101,14 +106,13 @@ QUrl KPrHtmlExportDialog::templateUrl()
     return QUrl::fromLocalFile(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
 }
 
-void KPrHtmlExportDialog::generateSlidesNames(const QList<KoPAPageBase*> &slides)
+void KPrHtmlExportDialog::generateSlidesNames(const QList<KoPAPageBase *> &slides)
 {
     QString slideName;
     for (int i = 0; i < slides.count(); ++i) {
         if (slides.at(i)->name().isEmpty()) {
             slideName = i18n("Slide %1", QString::number(i + 1));
-        }
-        else {
+        } else {
             slideName = slides.at(i)->name();
         }
         QListWidgetItem *listItem = new QListWidgetItem(slideName);
@@ -123,14 +127,14 @@ void KPrHtmlExportDialog::loadTemplatesList()
     const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
                                                        QStringLiteral("calligrastage/templates/exportHTML/templates"),
                                                        QStandardPaths::LocateDirectory);
-    for (QStringList::ConstIterator path=dirs.constBegin(); path!=dirs.constEnd(); ++path) {
+    for (QStringList::ConstIterator path = dirs.constBegin(); path != dirs.constEnd(); ++path) {
         QDir dir(*path);
         dir.setFilter(QDir::Files);
         QStringList entries = dir.entryList();
-        for (QStringList::ConstIterator entry=entries.constBegin(); entry!=entries.constEnd(); ++entry) {
+        for (QStringList::ConstIterator entry = entries.constBegin(); entry != entries.constEnd(); ++entry) {
             if (*entry != "." && *entry != "..") {
                 QString name = *entry;
-                if(name.endsWith(QLatin1String(".zip"), Qt::CaseInsensitive)){
+                if (name.endsWith(QLatin1String(".zip"), Qt::CaseInsensitive)) {
                     name.chop(4);
                 }
                 ui.kcombobox->addItem(name, QVariant(QString(*path + *entry)));
@@ -145,10 +149,9 @@ void KPrHtmlExportDialog::addSelectedTemplateToFavorite()
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/stage/templates/exportHTML/templates/");
     QUrl templatePath = QUrl::fromLocalFile(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
     savePath += templatePath.fileName();
-    if(!(QFile::copy(templatePath.toLocalFile(), savePath))){
+    if (!(QFile::copy(templatePath.toLocalFile(), savePath))) {
         QMessageBox::information(this, i18n("Error"), i18n("There is already a favorite file with this name"));
-    }
-    else {
+    } else {
         // Update list
         QString name(ui.kcombobox->itemText(ui.kcombobox->currentIndex()));
         // deactivate preview
@@ -156,8 +159,8 @@ void KPrHtmlExportDialog::addSelectedTemplateToFavorite()
         ui.kcombobox->removeItem(ui.kcombobox->currentIndex());
         ui.kcombobox->insertItem(0, name, savePath);
         ui.kcombobox->setCurrentIndex(0);
-        //reactivate preview
-        connect( ui.kcombobox, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &KPrHtmlExportDialog::generatePreview);
+        // reactivate preview
+        connect(ui.kcombobox, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &KPrHtmlExportDialog::generatePreview);
     }
 }
 
@@ -187,7 +190,8 @@ void KPrHtmlExportDialog::browserAction()
     }
 }
 
-bool KPrHtmlExportDialog::verifyZipFile(const QString &zipLocalPath){
+bool KPrHtmlExportDialog::verifyZipFile(const QString &zipLocalPath)
+{
     QString message;
     KZip zip(zipLocalPath);
     if (!zip.open(QIODevice::ReadOnly)) {
@@ -199,7 +203,7 @@ bool KPrHtmlExportDialog::verifyZipFile(const QString &zipLocalPath){
             message = i18n("Zip file need to contain style.css");
         }
     }
-    if(!message.isEmpty()){
+    if (!message.isEmpty()) {
         QMessageBox::information(this, i18n("Error"), message);
     }
     return message.isEmpty();
@@ -242,29 +246,35 @@ void KPrHtmlExportDialog::generatePreview(int item)
     ui.toolButton_next->setEnabled(frameToRender < (m_allSlides.size() - 1));
 
     KPrHtmlExport previewGenerator;
-    QList<KoPAPageBase*> slides;
+    QList<KoPAPageBase *> slides;
     QStringList slidesNames;
     slides.append(this->m_allSlides.at(frameToRender));
     slidesNames.append(ui.kListBox_slides->item(frameToRender)->text());
 
-    previewGenerator.exportPreview(KPrHtmlExport::Parameter(templateUrl(), static_cast<KPrView*>(parentWidget()), slides, QUrl(),
-                                              this->author(), ui.klineedit_title->text(), slidesNames, false));
-//     preview.mainFrame()->load(url);
+    previewGenerator.exportPreview(KPrHtmlExport::Parameter(templateUrl(),
+                                                            static_cast<KPrView *>(parentWidget()),
+                                                            slides,
+                                                            QUrl(),
+                                                            this->author(),
+                                                            ui.klineedit_title->text(),
+                                                            slidesNames,
+                                                            false));
+    //     preview.mainFrame()->load(url);
 }
 
 void KPrHtmlExportDialog::renderPreview()
 {
-//     preview.currentFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
-//     preview.currentFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
-//     preview.setViewportSize(preview.currentFrame()->contentsSize());
-//     QImage image(preview.currentFrame()->contentsSize(), QImage::Format_ARGB32);
-//     QPainter painter(&image);
+    //     preview.currentFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+    //     preview.currentFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
+    //     preview.setViewportSize(preview.currentFrame()->contentsSize());
+    //     QImage image(preview.currentFrame()->contentsSize(), QImage::Format_ARGB32);
+    //     QPainter painter(&image);
 
-//     preview.mainFrame()->render(&painter);
-//     painter.end();
+    //     preview.mainFrame()->render(&painter);
+    //     painter.end();
 
-//     QImage thumbnail = image.scaled(ui.qLabel_preview->size(), Qt::KeepAspectRatio);
-//     ui.qLabel_preview->setPixmap(QPixmap::fromImage(thumbnail));
+    //     QImage thumbnail = image.scaled(ui.qLabel_preview->size(), Qt::KeepAspectRatio);
+    //     ui.qLabel_preview->setPixmap(QPixmap::fromImage(thumbnail));
 }
 
 bool KPrHtmlExportDialog::selectedTemplateIsFavorite()
@@ -279,9 +289,8 @@ bool KPrHtmlExportDialog::selectedTemplateIsSystemFavorite()
     QString dir;
 
     const QString writablePath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
-    const QStringList paths = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                                        QStringLiteral("calligrastage/templates/exportHTML"),
-                                                        QStandardPaths::LocateDirectory);
+    const QStringList paths =
+        QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("calligrastage/templates/exportHTML"), QStandardPaths::LocateDirectory);
     foreach (const QString &path, paths) {
         if (!path.startsWith(writablePath)) {
             dir = path;
@@ -298,13 +307,11 @@ void KPrHtmlExportDialog::updateFavoriteButton()
         if (this->selectedTemplateIsSystemFavorite()) {
             ui.pushButton_Favorite->setEnabled(false);
             ui.pushButton_Favorite->setToolTip(i18n("You may not remove the templates provided with the application"));
-        }
-        else {
+        } else {
             ui.pushButton_Favorite->setEnabled(true);
             ui.pushButton_Favorite->setToolTip("");
         }
-    }
-    else {
+    } else {
         ui.pushButton_Favorite->setText(i18n("Add Template"));
         ui.pushButton_Favorite->setEnabled(true);
         ui.pushButton_Favorite->setToolTip("");
@@ -313,15 +320,16 @@ void KPrHtmlExportDialog::updateFavoriteButton()
 
 void KPrHtmlExportDialog::favoriteAction()
 {
-   if (this->selectedTemplateIsFavorite()) {
-        int button = QMessageBox::question(this, i18n("Confirm remove"), i18n("Are you sure you want to remove \"%1\"?",
-            ui.kcombobox->currentText()), QMessageBox::Yes | QMessageBox::No);
+    if (this->selectedTemplateIsFavorite()) {
+        int button = QMessageBox::question(this,
+                                           i18n("Confirm remove"),
+                                           i18n("Are you sure you want to remove \"%1\"?", ui.kcombobox->currentText()),
+                                           QMessageBox::Yes | QMessageBox::No);
 
-        if (button == QMessageBox::Yes){
+        if (button == QMessageBox::Yes) {
             this->delSelectedTemplateFromFavorite();
         }
-    }
-    else {
+    } else {
         this->addSelectedTemplateToFavorite();
     }
 }

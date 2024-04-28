@@ -7,8 +7,8 @@
 #ifndef KOEVENTACTION_H
 #define KOEVENTACTION_H
 
-#include "flake_export.h"
 #include "KoXmlReaderForward.h"
+#include "flake_export.h"
 
 class QString;
 class KoShapeLoadingContext;
@@ -82,11 +82,13 @@ public:
      * If the action takes some time to finish it can bs stopped with
      * this method before its end.
      */
-    virtual void finish() {}
+    virtual void finish()
+    {
+    }
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOEVENTACTION_H */

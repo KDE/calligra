@@ -6,22 +6,19 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef KOCHART_PLOTAREACONFIGWIDGET
 #define KOCHART_PLOTAREACONFIGWIDGET
 
-
-#include "ConfigWidgetBase.h"
 #include "ChartShape.h"
-
+#include "ConfigWidgetBase.h"
 
 class KoShape;
 class QAction;
 
 namespace KChart
 {
-    class Position;
-    class CartesianAxis;
+class Position;
+class CartesianAxis;
 }
 
 namespace KoChart
@@ -46,11 +43,14 @@ public:
     ~PlotAreaConfigWidget();
 
     void deactivate() override;
-    void open(KoShape* shape) override;
-    QAction * createAction();
+    void open(KoShape *shape) override;
+    QAction *createAction();
 
     /// reimplemented
-    bool showOnShapeCreate() override { return true; }
+    bool showOnShapeCreate() override
+    {
+        return true;
+    }
 
     /// Delete all open dialogs.
     /// This is called when e.g. the tool is deactivated.
@@ -63,7 +63,7 @@ public:
     StockConfigWidget *stockConfigWidget() const;
     AxesConfigWidget *stockAxesConfigWidget() const;
     RadarDataSetConfigWidget *radarDataSetConfigWidget() const;
-    
+
 public Q_SLOTS:
     void chartTypeSelected(QAction *action);
     void setThreeDMode(bool threeD);
@@ -89,7 +89,6 @@ Q_SIGNALS:
     void threeDModeToggled(bool threeD);
     void chartOrientationChanged(Qt::Orientation);
 
-
     void dataSetXDataRegionChanged(KoChart::DataSet *dataSet, const KoChart::CellRegion &region);
     void dataSetYDataRegionChanged(KoChart::DataSet *dataSet, const KoChart::CellRegion &region);
     void dataSetCustomDataRegionChanged(KoChart::DataSet *dataSet, const KoChart::CellRegion &region);
@@ -102,10 +101,9 @@ private:
     void createActions();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
-}  // namespace KoChart
-
+} // namespace KoChart
 
 #endif // KOCHART_PLOTAREACONFIGWIDGET

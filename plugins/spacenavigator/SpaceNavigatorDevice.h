@@ -21,11 +21,11 @@ public:
     virtual bool start() override;
     virtual bool stop() override;
 private Q_SLOTS:
-    void slotMoveEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons );
-    void slotButtonEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons, Qt::MouseButton, int type );
+    void slotMoveEvent(int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons);
+    void slotButtonEvent(int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons, Qt::MouseButton, int type);
 
 private:
-    SpaceNavigatorPollingThread * m_thread;
+    SpaceNavigatorPollingThread *m_thread;
 };
 
 #endif // SPACENAVIGATORDEVICE_H

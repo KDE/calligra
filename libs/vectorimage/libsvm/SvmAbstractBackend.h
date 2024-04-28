@@ -10,15 +10,13 @@
 #include "kovectorimage_export.h"
 
 #include "SvmEnums.h"
-#include "SvmStructs.h"
 #include "SvmGraphicsContext.h"
-
+#include "SvmStructs.h"
 
 class QPoint;
 class QRect;
 class QPolygon;
 class QString;
-
 
 /**
    \file
@@ -38,8 +36,8 @@ namespace Libsvm
 class KOVECTORIMAGE_EXPORT SvmAbstractBackend
 {
 public:
-    SvmAbstractBackend() {};
-    virtual ~SvmAbstractBackend() {};
+    SvmAbstractBackend(){};
+    virtual ~SvmAbstractBackend(){};
 
     /**
        Initialisation routine
@@ -90,12 +88,13 @@ public:
     virtual void polyPolygon(SvmGraphicsContext &context, const QList<QPolygon> &polyPolygon) = 0;
 
     virtual void textArray(SvmGraphicsContext &context,
-                           const QPoint &point, const QString &string,
-                           quint16 startIndex, quint16 len,
-                           quint32 dxArrayLen, qint32 *dxArray) = 0;
+                           const QPoint &point,
+                           const QString &string,
+                           quint16 startIndex,
+                           quint16 len,
+                           quint32 dxArrayLen,
+                           qint32 *dxArray) = 0;
 };
-
-
 }
 
 #endif

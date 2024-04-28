@@ -12,12 +12,15 @@
 
 #include <KoShapeMoveCommand.h>
 
-KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document, const KWPageStyle &styleBefore, const KWPageStyle &styleAfter, KUndo2Command *parent)
-    : KUndo2Command(kundo2_i18n("Page Properties"), parent),
-    m_document(document),
-    m_style(styleBefore),
-    m_styleBefore(styleBefore),
-    m_styleAfter(styleAfter)
+KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document,
+                                                           const KWPageStyle &styleBefore,
+                                                           const KWPageStyle &styleAfter,
+                                                           KUndo2Command *parent)
+    : KUndo2Command(kundo2_i18n("Page Properties"), parent)
+    , m_document(document)
+    , m_style(styleBefore)
+    , m_styleBefore(styleBefore)
+    , m_styleAfter(styleAfter)
 {
     Q_ASSERT(m_styleAfter != m_styleBefore); // would be kinda useless
     m_styleBefore.detach(m_styleBefore.name()); // all mine now!

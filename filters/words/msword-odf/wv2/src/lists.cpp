@@ -19,12 +19,12 @@
 #include "lists.h"
 
 #include "../../msdoc.h"
+#include "crc32.h"
 #include "olestream.h"
+#include "styles.h"
+#include "utilities.h"
 #include "word97_generated.h"
 #include "word_helper.h"
-#include "utilities.h"
-#include "styles.h"
-#include "crc32.h"
 
 #include "wvlog.h"
 #include <algorithm>
@@ -36,232 +36,234 @@
 // hide that fact.
 namespace wvWare
 {
-    namespace Word97
-    {
-        struct LSTF;
-        struct LVLF;
-    }
-    namespace
-    {
-        const int maxListLevels = 9;
-        const int oldStyleIlfo = 2047;
-        const U16 usLid = 0x409; // The list names in the STTBF are always Unicode, the lid doesn't matter
-        const U16 istdNil = 4095; // default style
+namespace Word97
+{
+struct LSTF;
+struct LVLF;
+}
+namespace
+{
+const int maxListLevels = 9;
+const int oldStyleIlfo = 2047;
+const U16 usLid = 0x409; // The list names in the STTBF are always Unicode, the lid doesn't matter
+const U16 istdNil = 4095; // default style
 
-        // some sprms we need here
-        const U16 sprmCFBold = 0x0835;
-        const U16 sprmCFItalic = 0x0836;
-        const U16 sprmCFSmallCaps = 0x083A;
-        const U16 sprmCFCaps = 0x083B;
-        const U16 sprmCFStrike = 0x0837;
-        const U16 sprmCKul = 0x2A3E;
-        const U16 sprmCIco = 0x2A42;
-        const U16 sprmCRgFtc0 = 0x4A4F;
-        const U16 sprmCHps = 0x4A43;
+// some sprms we need here
+const U16 sprmCFBold = 0x0835;
+const U16 sprmCFItalic = 0x0836;
+const U16 sprmCFSmallCaps = 0x083A;
+const U16 sprmCFCaps = 0x083B;
+const U16 sprmCFStrike = 0x0837;
+const U16 sprmCKul = 0x2A3E;
+const U16 sprmCIco = 0x2A42;
+const U16 sprmCRgFtc0 = 0x4A4F;
+const U16 sprmCHps = 0x4A43;
 
-        unsigned int createFakeLSID( const Word97::ANLD& anld )
-        {
-            // As our structure contains padding bytes we have to use
-            // an array which is guaranteed not to have "holes" for the
-            // CRC32 sum...
-            unsigned char buffer[102];
-            buffer[0] = anld.nfc;
-            buffer[1] = anld.cxchTextBefore;
-            buffer[2] = anld.cxchTextAfter;
-            buffer[3] = anld.jc;
-            buffer[4] = anld.fPrev;
-            buffer[5] = anld.fHang;
-            buffer[6] = anld.fSetBold;
-            buffer[7] = anld.fSetItalic;
-            buffer[8] = anld.fSetSmallCaps;
-            buffer[9] = anld.fSetCaps;
-            buffer[10] = anld.fSetStrike;
-            buffer[11] = anld.fSetKul;
-            buffer[12] = anld.fPrevSpace;
-            buffer[13] = anld.fBold;
-            buffer[14] = anld.fItalic;
-            buffer[15] = anld.fSmallCaps;
-            buffer[16] = anld.fCaps;
-            buffer[17] = anld.fStrike;
-            buffer[18] = anld.kul;
-            buffer[19] = anld.ico;
-            unsigned short* tmp = reinterpret_cast<unsigned short*>( buffer ) + 10;
-            *tmp++ = anld.ftc;
-            *tmp++ = anld.hps;
-            *tmp++ = anld.iStartAt;
-            *tmp++ = anld.dxaIndent;
-            *tmp++ = anld.dxaSpace;
-            buffer[30] = anld.fNumber1;
-            buffer[31] = anld.fNumberAcross;
-            buffer[32] = anld.fRestartHdn;
-            buffer[33] = anld.fSpareX;
-            tmp += 2;
-            for ( int i = 0; i < 32; ++i )
-                *tmp++ = anld.rgxch[i];
-            // 98 bytes up to this point + 4 for the CRC32 sum
-            buffer[98] = 0;
-            buffer[99] = 0;
-            buffer[100] = 0;
-            buffer[101] = 0;
-            return CalcCRC32( buffer, 102, 98, 4 );
-        }
-    }
+unsigned int createFakeLSID(const Word97::ANLD &anld)
+{
+    // As our structure contains padding bytes we have to use
+    // an array which is guaranteed not to have "holes" for the
+    // CRC32 sum...
+    unsigned char buffer[102];
+    buffer[0] = anld.nfc;
+    buffer[1] = anld.cxchTextBefore;
+    buffer[2] = anld.cxchTextAfter;
+    buffer[3] = anld.jc;
+    buffer[4] = anld.fPrev;
+    buffer[5] = anld.fHang;
+    buffer[6] = anld.fSetBold;
+    buffer[7] = anld.fSetItalic;
+    buffer[8] = anld.fSetSmallCaps;
+    buffer[9] = anld.fSetCaps;
+    buffer[10] = anld.fSetStrike;
+    buffer[11] = anld.fSetKul;
+    buffer[12] = anld.fPrevSpace;
+    buffer[13] = anld.fBold;
+    buffer[14] = anld.fItalic;
+    buffer[15] = anld.fSmallCaps;
+    buffer[16] = anld.fCaps;
+    buffer[17] = anld.fStrike;
+    buffer[18] = anld.kul;
+    buffer[19] = anld.ico;
+    unsigned short *tmp = reinterpret_cast<unsigned short *>(buffer) + 10;
+    *tmp++ = anld.ftc;
+    *tmp++ = anld.hps;
+    *tmp++ = anld.iStartAt;
+    *tmp++ = anld.dxaIndent;
+    *tmp++ = anld.dxaSpace;
+    buffer[30] = anld.fNumber1;
+    buffer[31] = anld.fNumberAcross;
+    buffer[32] = anld.fRestartHdn;
+    buffer[33] = anld.fSpareX;
+    tmp += 2;
+    for (int i = 0; i < 32; ++i)
+        *tmp++ = anld.rgxch[i];
+    // 98 bytes up to this point + 4 for the CRC32 sum
+    buffer[98] = 0;
+    buffer[99] = 0;
+    buffer[100] = 0;
+    buffer[101] = 0;
+    return CalcCRC32(buffer, 102, 98, 4);
+}
+}
 
-    class ListLevel
-    {
-    public:
-        explicit ListLevel( OLEStreamReader* tableStream );
-        explicit ListLevel( const Word97::ANLD& anld );
-        ~ListLevel();
+class ListLevel
+{
+public:
+    explicit ListLevel(OLEStreamReader *tableStream);
+    explicit ListLevel(const Word97::ANLD &anld);
+    ~ListLevel();
 
-        S32 startAt() const;
-        U8 numberFormat() const;
-        U8 alignment() const;
-        bool isLegal() const;
-        bool notRestarted() const;
-        bool prev() const;
-        bool prevSpace() const;
-        bool isWord6() const;  // ###### Do we want to have that?
-        UString text() const;
-        U8 followingChar() const;
-        U16 space() const;
-        U16 indent() const;
+    S32 startAt() const;
+    U8 numberFormat() const;
+    U8 alignment() const;
+    bool isLegal() const;
+    bool notRestarted() const;
+    bool prev() const;
+    bool prevSpace() const;
+    bool isWord6() const; // ###### Do we want to have that?
+    UString text() const;
+    U8 followingChar() const;
+    U16 space() const;
+    U16 indent() const;
 
-        void applyGrpprlPapx( Word97::PAP* pap, const StyleSheet* styleSheet ) const;
-        void applyGrpprlChpx( Word97::CHP* chp, const Style* style, const StyleSheet* styleSheet ) const;
+    void applyGrpprlPapx(Word97::PAP *pap, const StyleSheet *styleSheet) const;
+    void applyGrpprlChpx(Word97::CHP *chp, const Style *style, const StyleSheet *styleSheet) const;
 
-    private:
-        ListLevel( const ListLevel& rhs );
-        ListLevel& operator=( const ListLevel& rhs );
+private:
+    ListLevel(const ListLevel &rhs);
+    ListLevel &operator=(const ListLevel &rhs);
 
-        int writeCharProperty( U16 sprm, U8 value, U8** grpprl );
-        int writeCharProperty( U16 sprm, U16 value, U8** grpprl );
+    int writeCharProperty(U16 sprm, U8 value, U8 **grpprl);
+    int writeCharProperty(U16 sprm, U16 value, U8 **grpprl);
 
-        Word97::LVLF m_lvlf;
-        U8* m_grpprlPapx;
-        U8* m_grpprlChpx;
-        UString m_numberText;
-    };
+    Word97::LVLF m_lvlf;
+    U8 *m_grpprlPapx;
+    U8 *m_grpprlChpx;
+    UString m_numberText;
+};
 
+class ListData
+{
+public:
+    explicit ListData(OLEStreamReader *tableStream);
+    ListData(S32 lsid, bool fRestartHdn);
+    ~ListData();
 
-    class ListData
-    {
-    public:
-        explicit ListData( OLEStreamReader* tableStream );
-        ListData( S32 lsid, bool fRestartHdn );
-        ~ListData();
+    S32 lsid() const;
+    U16 istdForLevel(U8 level) const;
+    bool isSimpleList() const;
+    bool restartingCounter() const;
 
-        S32 lsid() const;
-        U16 istdForLevel( U8 level ) const;
-        bool isSimpleList() const;
-        bool restartingCounter() const;
+    // The ownership is transferred to us
+    void appendListLevel(ListLevel *listLevel);
+    const ListLevel *listLevel(U8 level) const;
 
-        // The ownership is transferred to us
-        void appendListLevel( ListLevel* listLevel );
-        const ListLevel* listLevel( U8 level ) const;
+    void applyGrpprlPapx(Word97::PAP *pap, const StyleSheet *styleSheet) const;
 
-        void applyGrpprlPapx( Word97::PAP* pap, const StyleSheet* styleSheet ) const;
+private:
+    ListData(const ListData &rhs);
+    ListData &operator=(const ListData &rhs);
 
-    private:
-        ListData( const ListData& rhs );
-        ListData& operator=( const ListData& rhs );
+    Word97::LSTF m_lstf;
+    std::vector<ListLevel *> m_listLevels;
+};
 
-        Word97::LSTF m_lstf;
-        std::vector<ListLevel*> m_listLevels;
-    };
+class ListFormatOverrideLVL
+{
+public:
+    ListFormatOverrideLVL(OLEStreamReader *tableStream);
+    ~ListFormatOverrideLVL();
 
+    S32 startAt() const;
+    U8 level() const;
 
-    class ListFormatOverrideLVL
-    {
-    public:
-        ListFormatOverrideLVL( OLEStreamReader* tableStream );
-        ~ListFormatOverrideLVL();
+    bool overridesStartAt() const;
+    void resetStartAtFlag();
+    bool overridesFormat() const;
 
-        S32 startAt() const;
-        U8 level() const;
+    const ListLevel *listLevel() const;
 
-        bool overridesStartAt() const;
-        void resetStartAtFlag();
-        bool overridesFormat() const;
+    void dump() const;
 
-        const ListLevel* listLevel() const;
+private:
+    ListFormatOverrideLVL(const ListFormatOverrideLVL &rhs);
+    ListFormatOverrideLVL &operator=(const ListFormatOverrideLVL &rhs);
 
-        void dump() const;
-    private:
-        ListFormatOverrideLVL( const ListFormatOverrideLVL& rhs );
-        ListFormatOverrideLVL& operator=( const ListFormatOverrideLVL& rhs );
+    Word97::LFOLVL m_lfolvl;
+    ListLevel *m_level;
+};
 
-        Word97::LFOLVL m_lfolvl;
-        ListLevel* m_level;
-    };
+class ListFormatOverride
+{
+public:
+    explicit ListFormatOverride(OLEStreamReader *tableStream);
+    explicit ListFormatOverride(S32 lsid);
+    ~ListFormatOverride();
 
+    S32 lsid() const;
+    U8 countOfLevels() const;
+    const ListFormatOverrideLVL *overrideLVL(U8 level) const;
 
-    class ListFormatOverride
-    {
-    public:
-        explicit ListFormatOverride( OLEStreamReader* tableStream );
-        explicit ListFormatOverride( S32 lsid );
-        ~ListFormatOverride();
+    // The ownership is transferred to us
+    void appendListFormatOverrideLVL(ListFormatOverrideLVL *listFormatOverrideLVL);
 
-        S32 lsid() const;
-        U8 countOfLevels() const;
-        const ListFormatOverrideLVL* overrideLVL( U8 level ) const;
+private:
+    ListFormatOverride(const ListFormatOverride &rhs);
+    ListFormatOverride &operator=(const ListFormatOverride &rhs);
 
-        // The ownership is transferred to us
-        void appendListFormatOverrideLVL( ListFormatOverrideLVL* listFormatOverrideLVL );
+    Word97::LFO m_lfo;
+    std::vector<ListFormatOverrideLVL *> m_lfoLevels;
+};
 
-    private:
-        ListFormatOverride( const ListFormatOverride& rhs );
-        ListFormatOverride& operator=( const ListFormatOverride& rhs );
-
-        Word97::LFO m_lfo;
-        std::vector<ListFormatOverrideLVL*> m_lfoLevels;
-    };
-
-    // Compares the lisd variables, needed to generate a new unique ID
-    // for converted ANLDs
-    bool operator<( const ListFormatOverride& lhs, const ListFormatOverride& rhs )
-    {
-        return lhs.lsid() < rhs.lsid();
-    }
+// Compares the lisd variables, needed to generate a new unique ID
+// for converted ANLDs
+bool operator<(const ListFormatOverride &lhs, const ListFormatOverride &rhs)
+{
+    return lhs.lsid() < rhs.lsid();
+}
 
 } // namespace wvWare
 
 using namespace wvWare;
 
-ListLevel::ListLevel( OLEStreamReader* tableStream ) :
-    m_lvlf( tableStream, false ), m_grpprlPapx( 0 ), m_grpprlChpx( 0 )
+ListLevel::ListLevel(OLEStreamReader *tableStream)
+    : m_lvlf(tableStream, false)
+    , m_grpprlPapx(0)
+    , m_grpprlChpx(0)
 {
 #ifdef WV2_DEBUG_LIST_READING
     wvlog << "######" << Qt::endl
-          << "      iStartAt=" << static_cast<int>( m_lvlf.iStartAt ) << " nfc=" << static_cast<int>( m_lvlf.nfc )
-          << " jc=" << static_cast<int>( m_lvlf.jc ) << Qt::endl << "      fLegal=" << static_cast<int>( m_lvlf.fLegal )
-          << " fNoRestart=" << static_cast<int>( m_lvlf.fNoRestart ) << " fPrev=" << static_cast<int>( m_lvlf.fPrev )
-          << Qt::endl << "      fPrevSpace=" << static_cast<int>( m_lvlf.fPrevSpace ) << " fWord6="
-          << static_cast<int>( m_lvlf.fWord6 ) << Qt::endl << "      cbGrpprlPapx=" << static_cast<int>( m_lvlf.cbGrpprlPapx )
-          << " cbGrpprlChpx=" << static_cast<int>( m_lvlf.cbGrpprlChpx ) << Qt::endl;
+          << "      iStartAt=" << static_cast<int>(m_lvlf.iStartAt) << " nfc=" << static_cast<int>(m_lvlf.nfc) << " jc=" << static_cast<int>(m_lvlf.jc)
+          << Qt::endl
+          << "      fLegal=" << static_cast<int>(m_lvlf.fLegal) << " fNoRestart=" << static_cast<int>(m_lvlf.fNoRestart)
+          << " fPrev=" << static_cast<int>(m_lvlf.fPrev) << Qt::endl
+          << "      fPrevSpace=" << static_cast<int>(m_lvlf.fPrevSpace) << " fWord6=" << static_cast<int>(m_lvlf.fWord6) << Qt::endl
+          << "      cbGrpprlPapx=" << static_cast<int>(m_lvlf.cbGrpprlPapx) << " cbGrpprlChpx=" << static_cast<int>(m_lvlf.cbGrpprlChpx) << Qt::endl;
 #endif
 
-    if ( m_lvlf.cbGrpprlPapx != 0 ) {
-        m_grpprlPapx = new U8[ m_lvlf.cbGrpprlPapx ];
-        tableStream->read( m_grpprlPapx, m_lvlf.cbGrpprlPapx );
+    if (m_lvlf.cbGrpprlPapx != 0) {
+        m_grpprlPapx = new U8[m_lvlf.cbGrpprlPapx];
+        tableStream->read(m_grpprlPapx, m_lvlf.cbGrpprlPapx);
     }
-    if ( m_lvlf.cbGrpprlChpx != 0 ) {
-        m_grpprlChpx = new U8[ m_lvlf.cbGrpprlChpx ];
-        tableStream->read( m_grpprlChpx, m_lvlf.cbGrpprlChpx );
+    if (m_lvlf.cbGrpprlChpx != 0) {
+        m_grpprlChpx = new U8[m_lvlf.cbGrpprlChpx];
+        tableStream->read(m_grpprlChpx, m_lvlf.cbGrpprlChpx);
     }
 
     U16 len = tableStream->readU16();
-    if ( len != 0 ) {
-        XCHAR* string = new XCHAR[ len ];
-        for ( int i = 0; i < len; ++i )
-            string[ i ] = tableStream->readU16();
+    if (len != 0) {
+        XCHAR *string = new XCHAR[len];
+        for (int i = 0; i < len; ++i)
+            string[i] = tableStream->readU16();
         // The UString takes ownership, don't delete[] string!
-        m_numberText = UString( reinterpret_cast<UChar*>( string ), len, false );
+        m_numberText = UString(reinterpret_cast<UChar *>(string), len, false);
     }
 }
 
-ListLevel::ListLevel( const Word97::ANLD& anld ) : m_grpprlPapx( 0 ), m_grpprlChpx( 0 )
+ListLevel::ListLevel(const Word97::ANLD &anld)
+    : m_grpprlPapx(0)
+    , m_grpprlChpx(0)
 {
     m_lvlf.iStartAt = anld.iStartAt;
     m_lvlf.nfc = anld.nfc;
@@ -274,22 +276,21 @@ ListLevel::ListLevel( const Word97::ANLD& anld ) : m_grpprlPapx( 0 ), m_grpprlCh
 
     // number text
 #ifdef WV2_DEBUG_LIST_PROCESSING
-    wvlog << "cxchTextBefore=" << static_cast<int>( anld.cxchTextBefore ) << " cxchTextAfter="
-          << static_cast<int>( anld.cxchTextAfter ) << Qt::endl;
+    wvlog << "cxchTextBefore=" << static_cast<int>(anld.cxchTextBefore) << " cxchTextAfter=" << static_cast<int>(anld.cxchTextAfter) << Qt::endl;
 #endif
-    if ( anld.cxchTextBefore > 0 && anld.cxchTextBefore <= 32 ) {
-        m_numberText = UString( reinterpret_cast<const UChar*>( &anld.rgxch[ 0 ] ), anld.cxchTextBefore );
+    if (anld.cxchTextBefore > 0 && anld.cxchTextBefore <= 32) {
+        m_numberText = UString(reinterpret_cast<const UChar *>(&anld.rgxch[0]), anld.cxchTextBefore);
 #ifdef WV2_DEBUG_LIST_PROCESSING
         wvlog << "String (before): '" << m_numberText.ascii() << "'" << Qt::endl;
 #endif
     }
-    m_numberText += UString( static_cast<char>( 0 ) ); // we are faking list level 0, so we have
-                                                       // to insert the "variable"
-    if ( anld.cxchTextAfter > 0 && anld.cxchTextAfter <= 32 ) {
+    m_numberText += UString(static_cast<char>(0)); // we are faking list level 0, so we have
+                                                   // to insert the "variable"
+    if (anld.cxchTextAfter > 0 && anld.cxchTextAfter <= 32) {
         int start = anld.cxchTextAfter > anld.cxchTextBefore ? anld.cxchTextBefore : 0;
-        m_numberText += UString( reinterpret_cast<const UChar*>( &anld.rgxch[ start ] ), anld.cxchTextAfter - start );
+        m_numberText += UString(reinterpret_cast<const UChar *>(&anld.rgxch[start]), anld.cxchTextAfter - start);
 #ifdef WV2_DEBUG_LIST_PROCESSING
-        wvlog << "String (after): '" << UString( reinterpret_cast<const UChar*>( &anld.rgxch[ start ] ), anld.cxchTextAfter - start ).ascii() << "'" << Qt::endl;
+        wvlog << "String (after): '" << UString(reinterpret_cast<const UChar *>(&anld.rgxch[start]), anld.cxchTextAfter - start).ascii() << "'" << Qt::endl;
 #endif
     }
 
@@ -298,36 +299,36 @@ ListLevel::ListLevel( const Word97::ANLD& anld ) : m_grpprlPapx( 0 ), m_grpprlCh
     m_lvlf.cbGrpprlPapx = 0;
 
     // Allocate enough for all sprms and set the cb as limit
-    m_grpprlChpx = new U8[ 29 ];
-    U8* grpprl = m_grpprlChpx;
+    m_grpprlChpx = new U8[29];
+    U8 *grpprl = m_grpprlChpx;
     m_lvlf.cbGrpprlChpx = 0;
 
-    if ( anld.fSetBold )
-        m_lvlf.cbGrpprlChpx += writeCharProperty( sprmCFBold, anld.fBold, &grpprl );
-    if ( anld.fSetItalic )
-        m_lvlf.cbGrpprlChpx += writeCharProperty( sprmCFItalic, anld.fItalic, &grpprl );
-    if ( anld.fSetSmallCaps )
-        m_lvlf.cbGrpprlChpx += writeCharProperty( sprmCFSmallCaps, anld.fSmallCaps, &grpprl );
-    if ( anld.fSetCaps )
-        m_lvlf.cbGrpprlChpx += writeCharProperty( sprmCFCaps, anld.fCaps, &grpprl );
-    if ( anld.fSetStrike )
-        m_lvlf.cbGrpprlChpx += writeCharProperty( sprmCFStrike, anld.fStrike, &grpprl );
-    if ( anld.fSetKul )
-        m_lvlf.cbGrpprlChpx += writeCharProperty( sprmCKul, anld.kul, &grpprl );
+    if (anld.fSetBold)
+        m_lvlf.cbGrpprlChpx += writeCharProperty(sprmCFBold, anld.fBold, &grpprl);
+    if (anld.fSetItalic)
+        m_lvlf.cbGrpprlChpx += writeCharProperty(sprmCFItalic, anld.fItalic, &grpprl);
+    if (anld.fSetSmallCaps)
+        m_lvlf.cbGrpprlChpx += writeCharProperty(sprmCFSmallCaps, anld.fSmallCaps, &grpprl);
+    if (anld.fSetCaps)
+        m_lvlf.cbGrpprlChpx += writeCharProperty(sprmCFCaps, anld.fCaps, &grpprl);
+    if (anld.fSetStrike)
+        m_lvlf.cbGrpprlChpx += writeCharProperty(sprmCFStrike, anld.fStrike, &grpprl);
+    if (anld.fSetKul)
+        m_lvlf.cbGrpprlChpx += writeCharProperty(sprmCKul, anld.kul, &grpprl);
 
-    m_lvlf.cbGrpprlChpx += writeCharProperty( sprmCIco, anld.ico, &grpprl );
-    m_lvlf.cbGrpprlChpx += writeCharProperty( sprmCRgFtc0, static_cast<U16>( anld.ftc ), &grpprl );
-    m_lvlf.cbGrpprlChpx += writeCharProperty( sprmCHps, anld.hps, &grpprl );
+    m_lvlf.cbGrpprlChpx += writeCharProperty(sprmCIco, anld.ico, &grpprl);
+    m_lvlf.cbGrpprlChpx += writeCharProperty(sprmCRgFtc0, static_cast<U16>(anld.ftc), &grpprl);
+    m_lvlf.cbGrpprlChpx += writeCharProperty(sprmCHps, anld.hps, &grpprl);
 
 #ifdef WV2_DEBUG_LIST_PROCESSING
-    wvlog << "The CHPX is " << static_cast<int>( m_lvlf.cbGrpprlChpx ) << " bytes long" << Qt::endl;
+    wvlog << "The CHPX is " << static_cast<int>(m_lvlf.cbGrpprlChpx) << " bytes long" << Qt::endl;
 #endif
 }
 
 ListLevel::~ListLevel()
 {
-    delete [] m_grpprlChpx;
-    delete [] m_grpprlPapx;
+    delete[] m_grpprlChpx;
+    delete[] m_grpprlPapx;
 }
 
 S32 ListLevel::startAt() const
@@ -390,64 +391,63 @@ U16 ListLevel::indent() const
     return m_lvlf.dxaIndent;
 }
 
-void ListLevel::applyGrpprlPapx( Word97::PAP* pap, const StyleSheet* styleSheet ) const
+void ListLevel::applyGrpprlPapx(Word97::PAP *pap, const StyleSheet *styleSheet) const
 {
 #ifdef WV2_DEBUG_LIST_PROCESSING
-    wvlog << "cbGrpprlPapx=" << static_cast<int>( m_lvlf.cbGrpprlPapx ) << Qt::endl;
+    wvlog << "cbGrpprlPapx=" << static_cast<int>(m_lvlf.cbGrpprlPapx) << Qt::endl;
 #endif
-    if ( m_grpprlPapx )
-        pap->apply( m_grpprlPapx, m_lvlf.cbGrpprlPapx, 0, styleSheet, 0, Word8 );
+    if (m_grpprlPapx)
+        pap->apply(m_grpprlPapx, m_lvlf.cbGrpprlPapx, 0, styleSheet, 0, Word8);
 }
 
-void ListLevel::applyGrpprlChpx( Word97::CHP* chp, const Style* style, const StyleSheet* styleSheet ) const
+void ListLevel::applyGrpprlChpx(Word97::CHP *chp, const Style *style, const StyleSheet *styleSheet) const
 {
 #ifdef WV2_DEBUG_LIST_PROCESSING
-    wvlog << "cbGrpprlChpx=" << static_cast<int>( m_lvlf.cbGrpprlChpx ) << Qt::endl;
+    wvlog << "cbGrpprlChpx=" << static_cast<int>(m_lvlf.cbGrpprlChpx) << Qt::endl;
 #endif
-    if ( m_grpprlChpx )
-        chp->apply( m_grpprlChpx, m_lvlf.cbGrpprlChpx, style, styleSheet, 0, Word8 );
+    if (m_grpprlChpx)
+        chp->apply(m_grpprlChpx, m_lvlf.cbGrpprlChpx, style, styleSheet, 0, Word8);
 }
 
-int ListLevel::writeCharProperty( U16 sprm, U8 value, U8** grpprl )
+int ListLevel::writeCharProperty(U16 sprm, U8 value, U8 **grpprl)
 {
-    write( *grpprl, sprm );
-    *grpprl += sizeof( U16 );
+    write(*grpprl, sprm);
+    *grpprl += sizeof(U16);
     **grpprl = value;
-    ++( *grpprl );
+    ++(*grpprl);
     return 3;
 }
 
-int ListLevel::writeCharProperty( U16 sprm, U16 value, U8** grpprl )
+int ListLevel::writeCharProperty(U16 sprm, U16 value, U8 **grpprl)
 {
-    write( *grpprl, sprm );
-    *grpprl += sizeof( U16 );
-    write( *grpprl, value );
-    *grpprl += sizeof( U16 );
+    write(*grpprl, sprm);
+    *grpprl += sizeof(U16);
+    write(*grpprl, value);
+    *grpprl += sizeof(U16);
     return 4;
 }
 
-ListData::ListData( OLEStreamReader* tableStream ) : m_lstf( tableStream, false )
+ListData::ListData(OLEStreamReader *tableStream)
+    : m_lstf(tableStream, false)
 {
 #ifdef WV2_DEBUG_LIST_READING
     wvlog << "######" << Qt::endl
-          << " lsid= 0x" << hex << m_lstf.lsid << dec
-          << " fSimpleList=" << static_cast<int>( m_lstf.fSimpleList )
-          << " tlpc=" << m_lstf.tplc << Qt::endl;
+          << " lsid= 0x" << hex << m_lstf.lsid << dec << " fSimpleList=" << static_cast<int>(m_lstf.fSimpleList) << " tlpc=" << m_lstf.tplc << Qt::endl;
 #endif
 }
 
-ListData::ListData( S32 lsid, bool fRestartHdn )
+ListData::ListData(S32 lsid, bool fRestartHdn)
 {
     m_lstf.lsid = lsid;
     m_lstf.fSimpleList = true;
-    for ( int i = 0; i < 9; ++i )
-        m_lstf.rgistd[ i ] = istdNil;
+    for (int i = 0; i < 9; ++i)
+        m_lstf.rgistd[i] = istdNil;
     m_lstf.fRestartHdn = fRestartHdn;
 }
 
 ListData::~ListData()
 {
-    std::for_each( m_listLevels.begin(), m_listLevels.end(), Delete<ListLevel>() );
+    std::for_each(m_listLevels.begin(), m_listLevels.end(), Delete<ListLevel>());
 }
 
 S32 ListData::lsid() const
@@ -455,9 +455,9 @@ S32 ListData::lsid() const
     return m_lstf.lsid;
 }
 
-U16 ListData::istdForLevel( U8 level ) const
+U16 ListData::istdForLevel(U8 level) const
 {
-    return m_lstf.rgistd[ level ];
+    return m_lstf.rgistd[level];
 }
 
 bool ListData::isSimpleList() const
@@ -470,42 +470,42 @@ bool ListData::restartingCounter() const
     return m_lstf.fRestartHdn;
 }
 
-void ListData::appendListLevel( ListLevel* listLevel )
+void ListData::appendListLevel(ListLevel *listLevel)
 {
 #ifdef WV2_DEBUG_LIST_READING
-    wvlog << "this=" << hex << reinterpret_cast<int>( this ) << dec << Qt::endl;
+    wvlog << "this=" << hex << reinterpret_cast<int>(this) << dec << Qt::endl;
 #endif
-    m_listLevels.push_back( listLevel );
+    m_listLevels.push_back(listLevel);
 }
 
-const ListLevel* ListData::listLevel( U8 level ) const
+const ListLevel *ListData::listLevel(U8 level) const
 {
-    if ( level < m_listLevels.size() )
-        return m_listLevels[ level ];
+    if (level < m_listLevels.size())
+        return m_listLevels[level];
     return 0;
 }
 
-void ListData::applyGrpprlPapx( Word97::PAP* pap, const StyleSheet* styleSheet ) const
+void ListData::applyGrpprlPapx(Word97::PAP *pap, const StyleSheet *styleSheet) const
 {
 #ifdef WV2_DEBUG_LIST_PROCESSING
-    wvlog << "level=" << static_cast<int>( pap->ilvl ) << Qt::endl;
+    wvlog << "level=" << static_cast<int>(pap->ilvl) << Qt::endl;
 #endif
 
-    if ( !pap || pap->ilvl >= maxListLevels || ( m_lstf.fSimpleList && pap->ilvl != 0 ) )
+    if (!pap || pap->ilvl >= maxListLevels || (m_lstf.fSimpleList && pap->ilvl != 0))
         return;
-    ListLevel* lvl = m_listLevels[ pap->ilvl ];
-    if ( lvl )
-        lvl->applyGrpprlPapx( pap, styleSheet );
+    ListLevel *lvl = m_listLevels[pap->ilvl];
+    if (lvl)
+        lvl->applyGrpprlPapx(pap, styleSheet);
     else
         wvlog << "Bug: Didn't find the level " << pap->ilvl << " in the LSTF!" << Qt::endl;
 }
 
-
-ListFormatOverrideLVL::ListFormatOverrideLVL( OLEStreamReader* tableStream ) :
-    m_lfolvl( tableStream, false ), m_level( 0 )
+ListFormatOverrideLVL::ListFormatOverrideLVL(OLEStreamReader *tableStream)
+    : m_lfolvl(tableStream, false)
+    , m_level(0)
 {
-    if ( m_lfolvl.fFormatting ) {
-        m_level = new ListLevel( tableStream );
+    if (m_lfolvl.fFormatting) {
+        m_level = new ListLevel(tableStream);
     }
 }
 
@@ -539,7 +539,7 @@ bool ListFormatOverrideLVL::overridesFormat() const
     return m_lfolvl.fFormatting;
 }
 
-const ListLevel* ListFormatOverrideLVL::listLevel() const
+const ListLevel *ListFormatOverrideLVL::listLevel() const
 {
     return m_level;
 }
@@ -547,29 +547,27 @@ const ListLevel* ListFormatOverrideLVL::listLevel() const
 void ListFormatOverrideLVL::dump() const
 {
     wvlog << "------------" << Qt::endl
-          << "      iStartAt=" << m_lfolvl.iStartAt << " ilvl=" << static_cast<int>( m_lfolvl.ilvl ) << Qt::endl
-          << "      fStartAt=" << static_cast<int>( m_lfolvl.fStartAt ) << " fFormatting="
-          << static_cast<int>( m_lfolvl.fFormatting ) << Qt::endl
+          << "      iStartAt=" << m_lfolvl.iStartAt << " ilvl=" << static_cast<int>(m_lfolvl.ilvl) << Qt::endl
+          << "      fStartAt=" << static_cast<int>(m_lfolvl.fStartAt) << " fFormatting=" << static_cast<int>(m_lfolvl.fFormatting) << Qt::endl
           << "done" << Qt::endl;
 }
 
-
-ListFormatOverride::ListFormatOverride( OLEStreamReader* tableStream ) : m_lfo( tableStream, false )
+ListFormatOverride::ListFormatOverride(OLEStreamReader *tableStream)
+    : m_lfo(tableStream, false)
 {
 #ifdef WV2_DEBUG_LIST_READING
-    wvlog << "######" << Qt::endl
-          << " lsid= 0x" << hex << m_lfo.lsid << dec << " clfolvl=" << static_cast<int>( m_lfo.clfolvl ) << Qt::endl;
+    wvlog << "######" << Qt::endl << " lsid= 0x" << hex << m_lfo.lsid << dec << " clfolvl=" << static_cast<int>(m_lfo.clfolvl) << Qt::endl;
 #endif
 }
 
-ListFormatOverride::ListFormatOverride( S32 lsid )
+ListFormatOverride::ListFormatOverride(S32 lsid)
 {
     m_lfo.lsid = lsid;
 }
 
 ListFormatOverride::~ListFormatOverride()
 {
-    std::for_each( m_lfoLevels.begin(), m_lfoLevels.end(), Delete<ListFormatOverrideLVL>() );
+    std::for_each(m_lfoLevels.begin(), m_lfoLevels.end(), Delete<ListFormatOverrideLVL>());
 }
 
 S32 ListFormatOverride::lsid() const
@@ -582,23 +580,23 @@ U8 ListFormatOverride::countOfLevels() const
     return m_lfo.clfolvl;
 }
 
-const ListFormatOverrideLVL* ListFormatOverride::overrideLVL( U8 level ) const
+const ListFormatOverrideLVL *ListFormatOverride::overrideLVL(U8 level) const
 {
-    std::vector<ListFormatOverrideLVL*>::const_iterator it = m_lfoLevels.begin();
-    std::vector<ListFormatOverrideLVL*>::const_iterator end = m_lfoLevels.end();
-    for ( ; it != end; ++it )
-        if ( ( *it )->level() == level )
+    std::vector<ListFormatOverrideLVL *>::const_iterator it = m_lfoLevels.begin();
+    std::vector<ListFormatOverrideLVL *>::const_iterator end = m_lfoLevels.end();
+    for (; it != end; ++it)
+        if ((*it)->level() == level)
             return *it;
     return 0;
 }
 
-void ListFormatOverride::appendListFormatOverrideLVL( ListFormatOverrideLVL* listFormatOverrideLVL )
+void ListFormatOverride::appendListFormatOverrideLVL(ListFormatOverrideLVL *listFormatOverrideLVL)
 {
-    m_lfoLevels.push_back( listFormatOverrideLVL );
+    m_lfoLevels.push_back(listFormatOverrideLVL);
 }
 
-
-ListText::ListText() : chp( 0 )
+ListText::ListText()
+    : chp(0)
 {
 }
 
@@ -606,21 +604,31 @@ ListText::~ListText()
 {
 }
 
-
-ListInfo::ListInfo( Word97::PAP& pap, Word97::CHP& chp, ListInfoProvider& listInfoProvider ) :
-    m_linkedIstd( istdNil ), m_restartingCounter( false ), m_numberFormat( 0 ),
-    m_alignment( 0 ), m_isLegal( false ), m_notRestarted( false ), m_prev( false ),
-    m_prevSpace( false ), m_isWord6( false ), m_followingChar( 0 ), m_lsid( 0 ),
-    m_space( 0 ), m_indent( 0 ), m_picAutoSize( false ), m_type( NumberType )
+ListInfo::ListInfo(Word97::PAP &pap, Word97::CHP &chp, ListInfoProvider &listInfoProvider)
+    : m_linkedIstd(istdNil)
+    , m_restartingCounter(false)
+    , m_numberFormat(0)
+    , m_alignment(0)
+    , m_isLegal(false)
+    , m_notRestarted(false)
+    , m_prev(false)
+    , m_prevSpace(false)
+    , m_isWord6(false)
+    , m_followingChar(0)
+    , m_lsid(0)
+    , m_space(0)
+    , m_indent(0)
+    , m_picAutoSize(false)
+    , m_type(NumberType)
 {
-    if ( !listInfoProvider.setPAP( &pap ) ) {
+    if (!listInfoProvider.setPAP(&pap)) {
         return;
     }
-    const ListLevel* const level = listInfoProvider.formattingListLevel();
-    const ListData* const listData = listInfoProvider.m_currentLst;
+    const ListLevel *const level = listInfoProvider.formattingListLevel();
+    const ListData *const listData = listInfoProvider.m_currentLst;
 
-    if ( listData ) {
-        m_linkedIstd = listData->istdForLevel( pap.ilvl );
+    if (listData) {
+        m_linkedIstd = listData->istdForLevel(pap.ilvl);
         m_restartingCounter = listData->restartingCounter();
         m_lsid = listData->lsid();
     } else {
@@ -629,8 +637,7 @@ ListInfo::ListInfo( Word97::PAP& pap, Word97::CHP& chp, ListInfoProvider& listIn
 
     m_startAt = listInfoProvider.startAt();
 
-    if ( level ) {
-
+    if (level) {
         m_numberFormat = level->numberFormat();
         m_alignment = level->alignment();
         m_isLegal = level->isLegal();
@@ -672,31 +679,37 @@ void ListInfo::dump() const
     wvlog << "   linkedIstd=" << m_linkedIstd << Qt::endl
           << "   restartingCounter=" << m_restartingCounter << " startAt=" << m_startAt.first << Qt::endl
           << "   startAtOverridden=" << m_startAt.second << Qt::endl
-          << "   numberFormat=" << static_cast<int>( m_numberFormat ) << " alignment="
-          << static_cast<int>( m_alignment ) << Qt::endl << "   isLegal=" << m_isLegal
-          << " notRestarted=" << m_notRestarted << Qt::endl << "   prev=" << m_prev
-          << " prevSpace=" << m_prevSpace << Qt::endl << "   isWord6=" << m_isWord6
-          << " text= '";
-    for ( int i = 0; i < m_text.text.length(); ++i )
-        wvlog << "<" << static_cast<char>( m_text.text[ i ].low() ) << "/" << m_text.text[ i ].unicode() << ">";
+          << "   numberFormat=" << static_cast<int>(m_numberFormat) << " alignment=" << static_cast<int>(m_alignment) << Qt::endl
+          << "   isLegal=" << m_isLegal << " notRestarted=" << m_notRestarted << Qt::endl
+          << "   prev=" << m_prev << " prevSpace=" << m_prevSpace << Qt::endl
+          << "   isWord6=" << m_isWord6 << " text= '";
+    for (int i = 0; i < m_text.text.length(); ++i)
+        wvlog << "<" << static_cast<char>(m_text.text[i].low()) << "/" << m_text.text[i].unicode() << ">";
     wvlog << "'" << Qt::endl
-          << "   followingChar=" << static_cast<int>( m_followingChar ) << Qt::endl
+          << "   followingChar=" << static_cast<int>(m_followingChar) << Qt::endl
           << "ListInfo::dump() done -------------------------" << Qt::endl;
 }
 
-
-ListInfoProvider::ListInfoProvider( const StyleSheet* styleSheet )
-    : m_listNames( 0 ), m_pap( 0 ), m_styleSheet( styleSheet ), m_currentLfoLVL( 0 ),
-      m_currentLst( 0 ), m_version( Word67 )
+ListInfoProvider::ListInfoProvider(const StyleSheet *styleSheet)
+    : m_listNames(0)
+    , m_pap(0)
+    , m_styleSheet(styleSheet)
+    , m_currentLfoLVL(0)
+    , m_currentLst(0)
+    , m_version(Word67)
 {
 #ifdef WV2_DEBUG_LIST_READING
-    wvlog << "################################" << Qt::endl
-          << " ---> pre-Word 8" << Qt::endl;
+    wvlog << "################################" << Qt::endl << " ---> pre-Word 8" << Qt::endl;
 #endif
 }
 
-ListInfoProvider::ListInfoProvider( OLEStreamReader* tableStream, const Word97::FIB& fib, const StyleSheet* styleSheet ) :
-    m_listNames( 0 ), m_pap( 0 ), m_styleSheet( styleSheet ), m_currentLfoLVL( 0 ), m_currentLst( 0 ), m_version( Word8 )
+ListInfoProvider::ListInfoProvider(OLEStreamReader *tableStream, const Word97::FIB &fib, const StyleSheet *styleSheet)
+    : m_listNames(0)
+    , m_pap(0)
+    , m_styleSheet(styleSheet)
+    , m_currentLfoLVL(0)
+    , m_currentLst(0)
+    , m_version(Word8)
 {
 #ifdef WV2_DEBUG_LIST_READING
     wvlog << "################################" << Qt::endl
@@ -706,33 +719,29 @@ ListInfoProvider::ListInfoProvider( OLEStreamReader* tableStream, const Word97::
 #endif
 
     tableStream->push();
-    if ( fib.lcbPlcfLst != 0 ) {
-        tableStream->seek( fib.fcPlcfLst, WV2_SEEK_SET );
-        readListData( tableStream, fib.fcPlcfLst + fib.lcbPlcfLst );
+    if (fib.lcbPlcfLst != 0) {
+        tableStream->seek(fib.fcPlcfLst, WV2_SEEK_SET);
+        readListData(tableStream, fib.fcPlcfLst + fib.lcbPlcfLst);
     }
-    if ( fib.lcbPlfLfo != 0 ) {
-        if ( static_cast<U32>( tableStream->tell() ) != fib.fcPlfLfo ) {
-            wvlog << "Found a \"hole\" within the table stream (list data): current="
-                  << tableStream->tell() << " expected=" << fib.fcPlfLfo << Qt::endl;
-            tableStream->seek( fib.fcPlfLfo, WV2_SEEK_SET );
+    if (fib.lcbPlfLfo != 0) {
+        if (static_cast<U32>(tableStream->tell()) != fib.fcPlfLfo) {
+            wvlog << "Found a \"hole\" within the table stream (list data): current=" << tableStream->tell() << " expected=" << fib.fcPlfLfo << Qt::endl;
+            tableStream->seek(fib.fcPlfLfo, WV2_SEEK_SET);
         }
-        readListFormatOverride( tableStream );
+        readListFormatOverride(tableStream);
     }
-    if ( fib.lcbSttbListNames != 0 ) {
+    if (fib.lcbSttbListNames != 0) {
         // Get rid of leading garbage. Take care, though, as the STTBF most likely starts
         // with 0xffff (extended character STTBF)
-        while ( (static_cast<U32>( tableStream->tell() ) < fib.fcSttbListNames) &&
-                tableStream->readU8() == 0xff )
-        {
-        }
+        while ((static_cast<U32>(tableStream->tell()) < fib.fcSttbListNames) && tableStream->readU8() == 0xff) { }
 
         // Check the position and warn about corrupt files
-        if ( static_cast<U32>( tableStream->tell() ) != fib.fcSttbListNames ) {
-            wvlog << "Found a \"hole\" within the table stream (list format override): current="
-                  << tableStream->tell() << " expected=" << fib.fcSttbListNames << Qt::endl;
-            tableStream->seek( fib.fcSttbListNames, WV2_SEEK_SET );
+        if (static_cast<U32>(tableStream->tell()) != fib.fcSttbListNames) {
+            wvlog << "Found a \"hole\" within the table stream (list format override): current=" << tableStream->tell() << " expected=" << fib.fcSttbListNames
+                  << Qt::endl;
+            tableStream->seek(fib.fcSttbListNames, WV2_SEEK_SET);
         }
-        readListNames( tableStream );
+        readListNames(tableStream);
     }
     tableStream->pop();
 
@@ -744,40 +753,39 @@ ListInfoProvider::ListInfoProvider( OLEStreamReader* tableStream, const Word97::
 ListInfoProvider::~ListInfoProvider()
 {
     delete m_listNames;
-    std::for_each( m_listFormatOverride.begin(), m_listFormatOverride.end(), Delete<ListFormatOverride>() );
-    std::for_each( m_listData.begin(), m_listData.end(), Delete<ListData>() );
+    std::for_each(m_listFormatOverride.begin(), m_listFormatOverride.end(), Delete<ListFormatOverride>());
+    std::for_each(m_listData.begin(), m_listData.end(), Delete<ListData>());
 }
 
-bool ListInfoProvider::isValid( S16 ilfo, U8 nLvlAnm ) const
+bool ListInfoProvider::isValid(S16 ilfo, U8 nLvlAnm) const
 {
-    if ( m_version == Word67 )
+    if (m_version == Word67)
         return nLvlAnm != 0;
     else
-        return ilfo == oldStyleIlfo || ( ilfo > 0 && ilfo <= static_cast<int>( m_listFormatOverride.size() ) );
+        return ilfo == oldStyleIlfo || (ilfo > 0 && ilfo <= static_cast<int>(m_listFormatOverride.size()));
 }
 
-bool ListInfoProvider::setPAP( Word97::PAP* pap )
+bool ListInfoProvider::setPAP(Word97::PAP *pap)
 {
 #ifdef WV2_DEBUG_LIST_PROCESSING
-    wvlog << "nLvlAnm = " << static_cast<int>( pap->nLvlAnm )
-          << " ilfo = " << pap->ilfo << Qt::endl;
+    wvlog << "nLvlAnm = " << static_cast<int>(pap->nLvlAnm) << " ilfo = " << pap->ilfo << Qt::endl;
 #endif
     // Is it a list paragraph at all?
-    if ( ( m_version == Word67 ? static_cast<S16>( pap->nLvlAnm ) : pap->ilfo ) < 1 )  {
+    if ((m_version == Word67 ? static_cast<S16>(pap->nLvlAnm) : pap->ilfo) < 1) {
         m_pap = 0;
         m_currentLfoLVL = 0;
         m_currentLst = 0;
         return false;
     }
 
-    m_pap = pap;  // Don't we all love dangling pointers?
-    if ( m_version == Word67 )
+    m_pap = pap; // Don't we all love dangling pointers?
+    if (m_version == Word67)
         convertCompatANLD();
     else {
-        if ( m_listFormatOverride.size() < static_cast<unsigned int>( pap->ilfo ) ) { // 1-based index!
+        if (m_listFormatOverride.size() < static_cast<unsigned int>(pap->ilfo)) { // 1-based index!
             // This might be an old-style pap, where a pap->ilfo of 2047 suggests to look at
             // the ANLD of that paragraph and to convert it
-            if ( pap->ilfo == oldStyleIlfo )
+            if (pap->ilfo == oldStyleIlfo)
                 convertCompatANLD();
             else {
                 wvlog << "Bug: ListInfoProvider::setWord97StylePAP -- out of bounds access (ilfo=" << pap->ilfo << ")" << Qt::endl;
@@ -788,24 +796,23 @@ bool ListInfoProvider::setPAP( Word97::PAP* pap )
             }
         }
     }
-    processOverride( m_listFormatOverride[ pap->ilfo - 1 ] );
+    processOverride(m_listFormatOverride[pap->ilfo - 1]);
     return true;
 }
 
-void ListInfoProvider::readListData( OLEStreamReader* tableStream, const U32 endOfLSTF )
+void ListInfoProvider::readListData(OLEStreamReader *tableStream, const U32 endOfLSTF)
 {
     const U16 count = tableStream->readU16();
 #ifdef WV2_DEBUG_LIST_READING
     wvlog << "count=" << count << Qt::endl;
 #endif
-    for ( int i = 0; i < count; ++i ) {
-        m_listData.push_back( new ListData( tableStream ) );
+    for (int i = 0; i < count; ++i) {
+        m_listData.push_back(new ListData(tableStream));
     }
 
     // NOTE: this is a bug in the spec, but it at least seems to be a "stable" bug ;)
-    if ( static_cast<U32>( tableStream->tell() ) != endOfLSTF ) {
-        wvlog << "Expected a different size of this plcflst! (expected: "
-              << endOfLSTF << " position: " << tableStream->tell() << ")" << Qt::endl;
+    if (static_cast<U32>(tableStream->tell()) != endOfLSTF) {
+        wvlog << "Expected a different size of this plcflst! (expected: " << endOfLSTF << " position: " << tableStream->tell() << ")" << Qt::endl;
     }
 
 #ifdef WV2_DEBUG_LIST_READING
@@ -813,60 +820,60 @@ void ListInfoProvider::readListData( OLEStreamReader* tableStream, const U32 end
 #endif
     // Now read in the ListLevels for each ListData. If fSimpleList is true
     // there is only 1 level, else there are 9.
-    std::vector<ListData*>::const_iterator it = m_listData.begin();
-    std::vector<ListData*>::const_iterator end = m_listData.end();
-    for ( ; it != end; ++it ) {
-        if ( ( *it )->isSimpleList() ) {
-            ( *it )->appendListLevel( new ListLevel( tableStream ) );
+    std::vector<ListData *>::const_iterator it = m_listData.begin();
+    std::vector<ListData *>::const_iterator end = m_listData.end();
+    for (; it != end; ++it) {
+        if ((*it)->isSimpleList()) {
+            (*it)->appendListLevel(new ListLevel(tableStream));
         } else {
-            for ( int i = 0; i < maxListLevels; ++i ) {
-                ( *it )->appendListLevel( new ListLevel( tableStream ) );
+            for (int i = 0; i < maxListLevels; ++i) {
+                (*it)->appendListLevel(new ListLevel(tableStream));
             }
         }
     }
 }
 
-void ListInfoProvider::readListFormatOverride( OLEStreamReader* tableStream )
+void ListInfoProvider::readListFormatOverride(OLEStreamReader *tableStream)
 {
     const U32 count = tableStream->readU32();
 #ifdef WV2_DEBUG_LIST_READING
     wvlog << "count=" << count << Qt::endl;
 #endif
-    for ( U32 i = 0; i < count; ++i ) {
-        m_listFormatOverride.push_back( new ListFormatOverride( tableStream ) );
+    for (U32 i = 0; i < count; ++i) {
+        m_listFormatOverride.push_back(new ListFormatOverride(tableStream));
     }
 
-    std::vector<ListFormatOverride*>::const_iterator it = m_listFormatOverride.begin();
-    std::vector<ListFormatOverride*>::const_iterator end = m_listFormatOverride.end();
-    for ( ; it != end; ++it ) {
-        const U8 levelCount = ( *it )->countOfLevels();
-        for ( int i = 0; i < levelCount; ++i ) {
+    std::vector<ListFormatOverride *>::const_iterator it = m_listFormatOverride.begin();
+    std::vector<ListFormatOverride *>::const_iterator end = m_listFormatOverride.end();
+    for (; it != end; ++it) {
+        const U8 levelCount = (*it)->countOfLevels();
+        for (int i = 0; i < levelCount; ++i) {
             // Word seems to write 0xff pagging-bytes between LFO and LFOLVLs,
             // also between different LFOLVLs, get rid of it (Werner)
-            eatLeading0xff( tableStream );
-            ( *it )->appendListFormatOverrideLVL( new ListFormatOverrideLVL( tableStream ) );
+            eatLeading0xff(tableStream);
+            (*it)->appendListFormatOverrideLVL(new ListFormatOverrideLVL(tableStream));
         }
     }
 }
 
-void ListInfoProvider::readListNames( OLEStreamReader* tableStream )
+void ListInfoProvider::readListNames(OLEStreamReader *tableStream)
 {
 #ifdef WV2_DEBUG_LIST_READING
     wvlog << "" << Qt::endl;
 #endif
-    m_listNames = new STTBF( usLid, tableStream, false );
+    m_listNames = new STTBF(usLid, tableStream, false);
 #ifdef WV2_DEBUG_LIST_READING
     m_listNames->dumpStrings();
 #endif
 }
 
-void ListInfoProvider::eatLeading0xff( OLEStreamReader* tableStream )
+void ListInfoProvider::eatLeading0xff(OLEStreamReader *tableStream)
 {
-    while ( tableStream->readU8() == 0xff ) {}
-    tableStream->seek( -1, WV2_SEEK_CUR ); // rewind the stream
+    while (tableStream->readU8() == 0xff) { }
+    tableStream->seek(-1, WV2_SEEK_CUR); // rewind the stream
 }
 
-void ListInfoProvider::processOverride( ListFormatOverride* lfo )
+void ListInfoProvider::processOverride(ListFormatOverride *lfo)
 {
 #ifdef WV2_DEBUG_LIST_PROCESSING
     wvlog << "" << Qt::endl;
@@ -874,22 +881,22 @@ void ListInfoProvider::processOverride( ListFormatOverride* lfo )
     bool appliedPapx = false;
     // It turns out we need a non-const pointer, as we have to reset the
     // startAt flag after the first paragraph
-    m_currentLfoLVL = const_cast<ListFormatOverrideLVL*>( lfo->overrideLVL( m_pap->ilvl ) );
+    m_currentLfoLVL = const_cast<ListFormatOverrideLVL *>(lfo->overrideLVL(m_pap->ilvl));
 
-    if ( m_currentLfoLVL ) {
+    if (m_currentLfoLVL) {
 #ifdef WV2_DEBUG_LIST_PROCESSING
-        wvlog << "      Level " << static_cast<int>( m_pap->ilvl ) << " found:" << Qt::endl;
+        wvlog << "      Level " << static_cast<int>(m_pap->ilvl) << " found:" << Qt::endl;
         m_currentLfoLVL->dump();
 #endif
-        if ( m_currentLfoLVL->overridesFormat() && m_currentLfoLVL->listLevel() ) {
-            m_currentLfoLVL->listLevel()->applyGrpprlPapx( m_pap, m_styleSheet );
+        if (m_currentLfoLVL->overridesFormat() && m_currentLfoLVL->listLevel()) {
+            m_currentLfoLVL->listLevel()->applyGrpprlPapx(m_pap, m_styleSheet);
             appliedPapx = true;
         }
     }
-    m_currentLst = findLST( lfo->lsid() );
+    m_currentLst = findLST(lfo->lsid());
 
-    if ( m_currentLst && !appliedPapx )
-        m_currentLst->applyGrpprlPapx( m_pap, m_styleSheet );
+    if (m_currentLst && !appliedPapx)
+        m_currentLst->applyGrpprlPapx(m_pap, m_styleSheet);
 }
 
 void ListInfoProvider::convertCompatANLD()
@@ -905,78 +912,77 @@ void ListInfoProvider::convertCompatANLD()
     // information. I'm sure it's more likely to win in the lottery
     // than facing that situation, though :-)
     // Note that compat lists are always simple lists. (ilvl == 0)
-    const S32 lsid = createFakeLSID( m_pap->anld );
+    const S32 lsid = createFakeLSID(m_pap->anld);
     m_pap->ilvl = 0;
 #ifdef WV2_DEBUG_LIST_PROCESSING
     wvlog << "      generated a unique lsid: " << lsid << Qt::endl;
 #endif
 
     // Does it already exist?
-    std::vector<ListData*>::const_iterator it = m_listData.begin();
-    std::vector<ListData*>::const_iterator end = m_listData.end();
-    for ( int i = 1; it != end; ++it, ++i ) // 1-based index!
-        if ( ( *it )->lsid() == lsid ) {
+    std::vector<ListData *>::const_iterator it = m_listData.begin();
+    std::vector<ListData *>::const_iterator end = m_listData.end();
+    for (int i = 1; it != end; ++it, ++i) // 1-based index!
+        if ((*it)->lsid() == lsid) {
             m_pap->ilfo = i;
             return;
         }
 
     // It's not there yet...
     // Fake a LFO structure (with 0 overridden levels and the lsid we generated)
-    m_listFormatOverride.push_back( new ListFormatOverride( lsid ) );
+    m_listFormatOverride.push_back(new ListFormatOverride(lsid));
     m_pap->ilfo = m_listFormatOverride.size();
 
     // And another fake, the LSTF
-    ListData* listData = new ListData( lsid, m_pap->anld.fRestartHdn );
-    listData->appendListLevel( new ListLevel( m_pap->anld ) );
-    m_listData.push_back( listData );
+    ListData *listData = new ListData(lsid, m_pap->anld.fRestartHdn);
+    listData->appendListLevel(new ListLevel(m_pap->anld));
+    m_listData.push_back(listData);
 }
 
-ListData* ListInfoProvider::findLST( S32 lsid )
+ListData *ListInfoProvider::findLST(S32 lsid)
 {
 #ifdef WV2_DEBUG_LIST_PROCESSING
     wvlog << "lsid=" << lsid << Qt::endl;
 #endif
-    std::vector<ListData*>::const_iterator it = m_listData.begin();
-    std::vector<ListData*>::const_iterator end = m_listData.end();
-    for ( ; it != end; ++it )
-        if ( ( *it )->lsid() == lsid )
+    std::vector<ListData *>::const_iterator it = m_listData.begin();
+    std::vector<ListData *>::const_iterator end = m_listData.end();
+    for (; it != end; ++it)
+        if ((*it)->lsid() == lsid)
             return *it;
     return 0;
 }
 
-const ListLevel* ListInfoProvider::formattingListLevel() const
+const ListLevel *ListInfoProvider::formattingListLevel() const
 {
-    if ( m_currentLfoLVL && m_currentLfoLVL->overridesFormat() && m_currentLfoLVL->listLevel() )
+    if (m_currentLfoLVL && m_currentLfoLVL->overridesFormat() && m_currentLfoLVL->listLevel())
         return m_currentLfoLVL->listLevel();
-    return m_currentLst ? m_currentLst->listLevel( m_pap->ilvl ) : 0;
+    return m_currentLst ? m_currentLst->listLevel(m_pap->ilvl) : 0;
 }
 
 std::pair<S32, bool> ListInfoProvider::startAt()
 {
-    std::pair<S32, bool> start( 1, false );
-    if ( m_currentLfoLVL && m_currentLfoLVL->overridesStartAt() ) {
+    std::pair<S32, bool> start(1, false);
+    if (m_currentLfoLVL && m_currentLfoLVL->overridesStartAt()) {
         start.second = true;
-        if ( m_currentLfoLVL->overridesFormat() && m_currentLfoLVL->listLevel() )
+        if (m_currentLfoLVL->overridesFormat() && m_currentLfoLVL->listLevel())
             start.first = m_currentLfoLVL->listLevel()->startAt();
         else
             start.first = m_currentLfoLVL->startAt();
         // Reset the startAt flag after the first paragraph (Word 97 spec, LFO parag.)
         m_currentLfoLVL->resetStartAtFlag();
-    }
-    else {
-        const ListLevel* level = m_currentLst ? m_currentLst->listLevel( m_pap->ilvl ) : 0;
-        if ( level )
+    } else {
+        const ListLevel *level = m_currentLst ? m_currentLst->listLevel(m_pap->ilvl) : 0;
+        if (level)
             start.first = level->startAt();
     }
     return start;
 }
 
-ListText ListInfoProvider::text(const Word97::CHP& chp) const
+ListText ListInfoProvider::text(const Word97::CHP &chp) const
 {
     ListText ret;
     ret.text = formattingListLevel()->text();
-    ret.chp = new Word97::CHP( chp );
-    Style style( chp );
+    ret.chp = new Word97::CHP(chp);
+    Style style(chp);
 
     // Get the appropriate style for this paragraph
     // const Style* style = m_styleSheet->styleByIndex( m_pap->istd );
@@ -987,6 +993,6 @@ ListText ListInfoProvider::text(const Word97::CHP& chp) const
     //     ret.chp = new Word97::CHP( style->chp() );
     // }
 
-    formattingListLevel()->applyGrpprlChpx( ret.chp, &style, m_styleSheet );
+    formattingListLevel()->applyGrpprlChpx(ret.chp, &style, m_styleSheet);
     return ret;
 }

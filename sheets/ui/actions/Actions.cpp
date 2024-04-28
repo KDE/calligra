@@ -13,13 +13,13 @@
 #include "AutoFormat.h"
 #include "AutoSum.h"
 #include "Border.h"
+#include "CSVActions.h"
 #include "Cells.h"
 #include "Clear.h"
 #include "Comment.h"
 #include "Conditional.h"
 #include "Consolidate.h"
 #include "Copy.h"
-#include "CSVActions.h"
 #include "CustomLists.h"
 #include "DocumentSettings.h"
 #include "Editing.h"
@@ -57,7 +57,6 @@
 
 #include "engine/SheetsDebug.h"
 #include "ui/CellToolBase.h"
-
 
 using namespace Calligra::Sheets;
 
@@ -199,7 +198,7 @@ void Actions::createActions()
     addAction(new PasteSpecial(this));
     addAction(new PasteWithInsert(this));
     // Pivot
-//    addAction(new Pivot(this));
+    //    addAction(new Pivot(this));
     // SelectAll
     addAction(new SelectAll(this));
 #ifndef NDEBUG
@@ -247,7 +246,6 @@ void Actions::createActions()
     addAction(new ClearValidity(this));
 
     // TODO!
-
 }
 
 void Actions::addAction(CellAction *a)
@@ -304,5 +302,3 @@ void Actions::init()
         cellAction->init();
     }
 }
-
-

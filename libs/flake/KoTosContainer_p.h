@@ -8,7 +8,6 @@
 class KoTosContainerPrivate : public KoShapeContainerPrivate
 {
 public:
-
     explicit KoTosContainerPrivate(KoShapeContainer *q);
 
     ~KoTosContainerPrivate() override;

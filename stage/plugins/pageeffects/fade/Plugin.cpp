@@ -6,15 +6,14 @@
  */
 
 #include "Plugin.h"
+#include "KPrFadeEffectFactory.h"
 #include <KPluginFactory>
 #include <KPrPageEffectRegistry.h>
-#include "KPrFadeEffectFactory.h"
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_pageeffect_fade.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_pageeffect_fade.json", registerPlugin<Plugin>();)
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
-: QObject(parent)
+    : QObject(parent)
 {
     KPrPageEffectRegistry::instance()->add(new KPrFadeEffectFactory());
 }

@@ -15,7 +15,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef ELAPSED_TIME_P_H
 #define ELAPSED_TIME_P_H
 
@@ -34,24 +33,31 @@ public:
 
 #ifdef NDEBUG
 
-    ElapsedTime() {}
-    explicit ElapsedTime(const QString &, OutputMode = Default) {}
+    ElapsedTime()
+    {
+    }
+    explicit ElapsedTime(const QString &, OutputMode = Default)
+    {
+    }
 
 #else // NDEBUG
 
-    ElapsedTime() {
+    ElapsedTime()
+    {
         m_time.start();
     }
 
     explicit ElapsedTime(const QString &name, OutputMode mode = Default)
-            : m_name(name) {
+        : m_name(name)
+    {
         m_time.start();
         if (mode != PrintOnlyTime) {
             debugSheets << QString("*** (" + name + ")... Starting measuring...");
         }
     }
 
-    ~ElapsedTime() {
+    ~ElapsedTime()
+    {
         uint milliSec = m_time.elapsed();
         uint min = static_cast<uint>(milliSec / (1000 * 60));
         milliSec -= (min * 60 * 1000);
@@ -65,7 +71,7 @@ public:
     }
 
 private:
-    QElapsedTimer   m_time;
+    QElapsedTimer m_time;
     QString m_name;
 
 #endif // NDEBUG

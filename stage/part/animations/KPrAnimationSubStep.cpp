@@ -17,12 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #include "KPrAnimationSubStep.h"
 #include "KPrShapeAnimation.h"
 #include <KoPASavingContext.h>
 #include <KoXmlWriter.h>
-
 
 KPrAnimationSubStep::KPrAnimationSubStep()
 {
@@ -34,22 +32,22 @@ KPrAnimationSubStep::~KPrAnimationSubStep()
 
 void KPrAnimationSubStep::init(KPrAnimationCache *animationCache, int step)
 {
-    for(int i=0;i < this->animationCount();i++) {
-        QAbstractAnimation * animation = this->animationAt(i);
-        if (KPrShapeAnimation *a = dynamic_cast<KPrShapeAnimation*>(animation)) {
+    for (int i = 0; i < this->animationCount(); i++) {
+        QAbstractAnimation *animation = this->animationAt(i);
+        if (KPrShapeAnimation *a = dynamic_cast<KPrShapeAnimation *>(animation)) {
             a->init(animationCache, step);
         }
     }
 }
 
-bool KPrAnimationSubStep::saveOdf(KoPASavingContext & paContext, bool startStep) const
+bool KPrAnimationSubStep::saveOdf(KoPASavingContext &paContext, bool startStep) const
 {
     KoXmlWriter &writer = paContext.xmlWriter();
     writer.startElement("anim:par");
-    for (int i=0; i < this->animationCount(); i++) {
+    for (int i = 0; i < this->animationCount(); i++) {
         bool startSubStep = !i;
         QAbstractAnimation *animation = this->animationAt(i);
-        if (KPrShapeAnimation *a = dynamic_cast<KPrShapeAnimation*>(animation)) {
+        if (KPrShapeAnimation *a = dynamic_cast<KPrShapeAnimation *>(animation)) {
             a->saveOdf(paContext, startStep, startSubStep);
         }
     }
@@ -59,9 +57,9 @@ bool KPrAnimationSubStep::saveOdf(KoPASavingContext & paContext, bool startStep)
 
 void KPrAnimationSubStep::deactivate()
 {
-    for (int i=0; i < this->animationCount(); i++) {
+    for (int i = 0; i < this->animationCount(); i++) {
         QAbstractAnimation *animation = this->animationAt(i);
-        if (KPrShapeAnimation *a = dynamic_cast<KPrShapeAnimation*>(animation)) {
+        if (KPrShapeAnimation *a = dynamic_cast<KPrShapeAnimation *>(animation)) {
             a->deactivate();
         }
     }

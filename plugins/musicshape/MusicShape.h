@@ -6,13 +6,14 @@
 #ifndef MUSIC_SHAPE
 #define MUSIC_SHAPE
 
-#include <KoShape.h>
 #include <KoFrameShape.h>
+#include <KoShape.h>
 
 #define MusicShapeId "MusicShape"
 
-namespace MusicCore {
-    class Sheet;
+namespace MusicCore
+{
+class Sheet;
 }
 
 class MusicRenderer;
@@ -25,43 +26,50 @@ public:
     MusicShape();
     ~MusicShape() override;
     /// reimplemented
-    void paint( QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext) override;
-    void constPaint( QPainter& painter, const KoViewConverter& converter ) const;
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void constPaint(QPainter &painter, const KoViewConverter &converter) const;
 
     /// reimplemented
-    void setSize( const QSizeF &newSize ) override;
+    void setSize(const QSizeF &newSize) override;
 
     /// reimplemented
-    void saveOdf( KoShapeSavingContext & context ) const override;
+    void saveOdf(KoShapeSavingContext &context) const override;
     // reimplemented
-    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
-    MusicCore::Sheet* sheet();
-    void setSheet(MusicCore::Sheet* sheet, int firstSystem);
+    MusicCore::Sheet *sheet();
+    void setSheet(MusicCore::Sheet *sheet, int firstSystem);
     int firstSystem() const;
     void setFirstSystem(int system);
     int lastSystem() const;
     int firstBar() const;
     int lastBar() const;
-    MusicRenderer* renderer();
-    MusicStyle* style();
-    void engrave(bool engraveBars=true);
+    MusicRenderer *renderer();
+    MusicStyle *style();
+    void engrave(bool engraveBars = true);
 
-    MusicShape* successor() { return m_successor; }
-    MusicShape* predecessor() { return m_predecessor; }
+    MusicShape *successor()
+    {
+        return m_successor;
+    }
+    MusicShape *predecessor()
+    {
+        return m_predecessor;
+    }
+
 protected:
     // reimplemented
-    bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context ) override;
+    bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+
 private:
-    MusicCore::Sheet* m_sheet;
+    MusicCore::Sheet *m_sheet;
     int m_firstSystem;
     int m_lastSystem;
-    MusicStyle* m_style;
-    Engraver* m_engraver;
-    MusicRenderer* m_renderer;
-    MusicShape* m_successor;
-    MusicShape* m_predecessor;
+    MusicStyle *m_style;
+    Engraver *m_engraver;
+    MusicRenderer *m_renderer;
+    MusicShape *m_successor;
+    MusicShape *m_predecessor;
 };
-
 
 #endif // MUSIC_SHAPE

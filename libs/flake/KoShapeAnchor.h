@@ -10,7 +10,6 @@
 
 #include "flake_export.h"
 
-
 class KoShape;
 class KoXmlElement;
 class KoShapeLoadingContext;
@@ -52,9 +51,10 @@ class FLAKE_EXPORT KoShapeAnchor
 {
 public:
     /**
-    * This class is an interface that positions the shape linked to text anchor
-    */
-    class PlacementStrategy {
+     * This class is an interface that positions the shape linked to text anchor
+     */
+    class PlacementStrategy
+    {
     public:
         PlacementStrategy(){};
         virtual ~PlacementStrategy(){};
@@ -74,7 +74,8 @@ public:
         virtual void updateContainerModel() = 0;
     };
 
-    class TextLocation {
+    class TextLocation
+    {
     public:
         TextLocation(){};
         virtual ~TextLocation(){};
@@ -82,17 +83,9 @@ public:
         virtual int position() const = 0;
     };
 
-    enum HorizontalPos {
-        HCenter,
-        HFromInside,
-        HFromLeft,
-        HInside,
-        HLeft,
-        HOutside,
-        HRight
-    };
+    enum HorizontalPos { HCenter, HFromInside, HFromLeft, HInside, HLeft, HOutside, HRight };
 
-    enum HorizontalRel { //NOTE: update KWAnchoringProperties if you change this
+    enum HorizontalRel { // NOTE: update KWAnchoringProperties if you change this
         HChar,
         HPage,
         HPageContent,
@@ -108,15 +101,9 @@ public:
         HParagraphStartMargin
     };
 
-    enum VerticalPos {
-        VBelow,
-        VBottom,
-        VFromTop,
-        VMiddle,
-        VTop
-    };
+    enum VerticalPos { VBelow, VBottom, VFromTop, VMiddle, VTop };
 
-    enum VerticalRel { //NOTE: update KWAnchoringProperties if you change this
+    enum VerticalRel { // NOTE: update KWAnchoringProperties if you change this
         VBaseline,
         VChar,
         VFrame,
@@ -129,12 +116,7 @@ public:
         VText
     };
 
-    enum AnchorType {
-        AnchorAsCharacter,
-        AnchorToCharacter,
-        AnchorParagraph,
-        AnchorPage
-    };
+    enum AnchorType { AnchorAsCharacter, AnchorToCharacter, AnchorParagraph, AnchorPage };
 
     /**
      * Constructor for an in-place anchor.
@@ -243,7 +225,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

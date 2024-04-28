@@ -7,7 +7,7 @@
 #include "KoProgressBar.h"
 
 KoProgressBar::KoProgressBar(QWidget *parent)
- : QProgressBar(parent)
+    : QProgressBar(parent)
 {
 }
 
@@ -25,10 +25,10 @@ void KoProgressBar::setValue(int value)
     QProgressBar::setValue(value);
 
     if (value >= minimum() && value < maximum()) {
-        setVisible( true );
+        setVisible(true);
     } else {
         emit done();
-        setVisible( false );
+        setVisible(false);
     }
 }
 

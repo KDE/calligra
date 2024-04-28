@@ -37,17 +37,17 @@ public:
     void setView(KoPAViewBase *view);
 
     /**
-      * Return the Animations data Model
-      *
-      * @return a KPrShapeAnimations pointer
-      */
+     * Return the Animations data Model
+     *
+     * @return a KPrShapeAnimations pointer
+     */
     KPrShapeAnimations *mainModel();
 
     /**
-      * Return the preview animations view mode
-      *
-      * @return a KPrViewModePreviewShapeAnimations pointer
-      */
+     * Return the preview animations view mode
+     *
+     * @return a KPrViewModePreviewShapeAnimations pointer
+     */
     KPrViewModePreviewShapeAnimations *previewMode();
 
     /**
@@ -57,18 +57,18 @@ public:
     void setPreviewMode(KPrViewModePreviewShapeAnimations *previewMode);
 
     /**
-      * Return the predefined animations loader class
-      *
-      * @return a KPrPredefinedAnimationsLoader pointer
-      */
+     * Return the predefined animations loader class
+     *
+     * @return a KPrPredefinedAnimationsLoader pointer
+     */
     KPrPredefinedAnimationsLoader *animationsLoader();
 
     /**
-      * Return the current selected shape (the animation selected on animations list
-      * view if the shape has an animation or just the selected shape on canvas)
-      *
-      * @return a KPrPredefinedAnimationsLoader pointer
-      */
+     * Return the current selected shape (the animation selected on animations list
+     * view if the shape has an animation or just the selected shape on canvas)
+     *
+     * @return a KPrPredefinedAnimationsLoader pointer
+     */
     KoShape *getSelectedShape();
 
 Q_SIGNALS:
@@ -167,8 +167,9 @@ private Q_SLOTS:
     void setTriggerEvent(QAction *action);
     /// load predefined animations
     void initializeView();
+
 protected:
-     bool eventFilter(QObject *ob, QEvent *ev) override;
+    bool eventFilter(QObject *ob, QEvent *ev) override;
 
 private:
     /// Return a pointer to the KPrShapeAnimations for the given page

@@ -76,8 +76,8 @@ protected:
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event) = 0;
 
 private:
-    KoInteractionTool(const KoInteractionTool&);
-    KoInteractionTool& operator=(const KoInteractionTool&);
+    KoInteractionTool(const KoInteractionTool &);
+    KoInteractionTool &operator=(const KoInteractionTool &);
 
     Q_DECLARE_PRIVATE(KoInteractionTool)
 };

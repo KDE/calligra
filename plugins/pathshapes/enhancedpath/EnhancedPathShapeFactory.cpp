@@ -7,12 +7,12 @@
 #include "enhancedpath/EnhancedPathShapeFactory.h"
 #include "enhancedpath/EnhancedPathShape.h"
 
-#include <KoShapeStroke.h>
+#include <KoColorBackground.h>
 #include <KoProperties.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeStroke.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
-#include <KoColorBackground.h>
-#include <KoShapeLoadingContext.h>
 
 #include <KoIcon.h>
 
@@ -67,9 +67,7 @@ KoShape *EnhancedPathShapeFactory::createDefaultShape(KoDocumentResourceManager 
 KoShape *EnhancedPathShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *) const
 {
     QVariant viewboxData;
-    const QRect viewBox = (params->property(QLatin1String("viewBox"), viewboxData)) ?
-        viewboxData.toRect() :
-        QRect(0, 0, 100, 100);
+    const QRect viewBox = (params->property(QLatin1String("viewBox"), viewboxData)) ? viewboxData.toRect() : QRect(0, 0, 100, 100);
 
     EnhancedPathShape *shape = new EnhancedPathShape(viewBox);
 
@@ -103,9 +101,8 @@ KoShape *EnhancedPathShapeFactory::createShape(const KoProperties *params, KoDoc
     return shape;
 }
 
-KoProperties* EnhancedPathShapeFactory::dataToProperties(
-    const QString &modifiers, const QStringList &commands,
-    const ListType &handles, const ComplexType & formulae) const
+KoProperties *
+EnhancedPathShapeFactory::dataToProperties(const QString &modifiers, const QStringList &commands, const ListType &handles, const ComplexType &formulae) const
 {
     KoProperties *props = new KoProperties();
     props->setProperty("modifiers", modifiers);
@@ -325,7 +322,7 @@ void EnhancedPathShapeFactory::addSmiley()
     t.family = "funny";
     t.toolTip = i18n("Smiley");
     t.iconName = koIconName("smiley-shape");
-    KoProperties* properties = dataToProperties(modifiers, commands, handles, formulae);
+    KoProperties *properties = dataToProperties(modifiers, commands, handles, formulae);
     properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
     t.properties = properties;
 
@@ -405,7 +402,7 @@ void EnhancedPathShapeFactory::addCircularArrow()
     t.family = "arrow";
     t.toolTip = i18n("A circular-arrow");
     t.iconName = koIconName("circular-arrow-shape");
-    KoProperties* properties = dataToProperties(modifiers, commands, handles, formulae);
+    KoProperties *properties = dataToProperties(modifiers, commands, handles, formulae);
     properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
     t.properties = properties;
     addTemplate(t);
@@ -421,24 +418,24 @@ void EnhancedPathShapeFactory::addGearhead()
 
     uint toothCount = 10;
     qreal toothAngle = 360.0 / qreal(toothCount);
-    //kDebug() <<"toothAngle =" << toothAngle;
+    // kDebug() <<"toothAngle =" << toothAngle;
     qreal outerRadius = 0.5 * 25.0;
     qreal innerRadius = 0.5 * 17.0;
     QPointF center(20, 25);
     qreal radian = (270.0 - 0.35 * toothAngle) * M_PI / 180.0;
-    commands.append(QString("M %1 %2").arg(center.x() + innerRadius*cos(radian)).arg(center.y() + innerRadius*sin(radian)));
+    commands.append(QString("M %1 %2").arg(center.x() + innerRadius * cos(radian)).arg(center.y() + innerRadius * sin(radian)));
     QString cmd("L");
     for (uint i = 0; i < toothCount; ++i) {
         radian += 0.15 * toothAngle * M_PI / 180.0;
-        cmd += QString(" %1 %2").arg(center.x() + outerRadius*cos(radian)).arg(center.y() + outerRadius*sin(radian));
+        cmd += QString(" %1 %2").arg(center.x() + outerRadius * cos(radian)).arg(center.y() + outerRadius * sin(radian));
         radian += 0.35 * toothAngle * M_PI / 180.0;
-        cmd += QString(" %1 %2").arg(center.x() + outerRadius*cos(radian)).arg(center.y() + outerRadius*sin(radian));
+        cmd += QString(" %1 %2").arg(center.x() + outerRadius * cos(radian)).arg(center.y() + outerRadius * sin(radian));
         radian += 0.15 * toothAngle * M_PI / 180.0;
-        cmd += QString(" %1 %2").arg(center.x() + innerRadius*cos(radian)).arg(center.y() + innerRadius*sin(radian));
+        cmd += QString(" %1 %2").arg(center.x() + innerRadius * cos(radian)).arg(center.y() + innerRadius * sin(radian));
         radian += 0.35 * toothAngle * M_PI / 180.0;
-        cmd += QString(" %1 %2").arg(center.x() + innerRadius*cos(radian)).arg(center.y() + innerRadius*sin(radian));
+        cmd += QString(" %1 %2").arg(center.x() + innerRadius * cos(radian)).arg(center.y() + innerRadius * sin(radian));
     }
-    //kDebug() <<"gear command =" << cmd;
+    // kDebug() <<"gear command =" << cmd;
     commands.append(cmd);
     commands.append("Z");
     commands.append("N");
@@ -450,14 +447,14 @@ void EnhancedPathShapeFactory::addGearhead()
     t.family = "funny";
     t.toolTip = i18n("A gearhead");
     t.iconName = koIconName("gearhead-shape");
-    KoProperties* properties = dataToProperties(QString(), commands, ListType(), ComplexType());
+    KoProperties *properties = dataToProperties(QString(), commands, ListType(), ComplexType());
     properties->setProperty("background", QVariant::fromValue<QColor>(QColor(Qt::blue)));
     properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 40, 90));
     t.properties = properties;
     addTemplate(t);
 }
 
-bool EnhancedPathShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool EnhancedPathShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
     return (e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw);

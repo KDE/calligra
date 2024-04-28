@@ -8,14 +8,13 @@
 #include <KPluginFactory>
 #include <KPrPageEffectRegistry.h>
 
+#include "boxsnakes/KPrBoxSnakesWipeEffectFactory.h"
+#include "parallelsnakes/KPrParallelSnakesWipeEffectFactory.h"
 #include "snakewipe/KPrSnakeWipeEffectFactory.h"
 #include "spiralwipe/KPrSpiralWipeEffectFactory.h"
-#include "parallelsnakes/KPrParallelSnakesWipeEffectFactory.h"
-#include "boxsnakes/KPrBoxSnakesWipeEffectFactory.h"
 #include "waterfallwipe/KPrWaterfallWipeEffectFactory.h"
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_pageeffect_matrixwipe.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_pageeffect_matrixwipe.json", registerPlugin<Plugin>();)
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
@@ -28,4 +27,3 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
 }
 
 #include "Plugin.moc"
-

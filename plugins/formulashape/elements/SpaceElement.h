@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    SPDX-FileCopyrightText: 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                  Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
    SPDX-FileCopyrightText: 2006 Martin Pfeiffer <hubipete@gmx.net>
    SPDX-FileCopyrightText: 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
@@ -31,7 +31,8 @@ enum LineBreak {
  * FormulaShape currently does not implement linebreaking the linebreaking
  * attributes of SpaceElement are ignored.
  */
-class KOFORMULA_EXPORT SpaceElement : public BasicElement {
+class KOFORMULA_EXPORT SpaceElement : public BasicElement
+{
 public:
     /// The standard constructor
     explicit SpaceElement(BasicElement *parent = 0);
@@ -41,19 +42,19 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am The AttributeManager providing information about attributes values
      */
-    void paint( QPainter& painter, AttributeManager* am ) override;
+    void paint(QPainter &painter, AttributeManager *am) override;
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am ) override;
+    void layout(const AttributeManager *am) override;
 
     /// @return The element's ElementType
     ElementType elementType() const override;
 
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const override;
+    QString attributesDefaultValue(const QString &attribute) const override;
 };
 
 #endif // SPACEELEMENT_H

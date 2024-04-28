@@ -10,10 +10,12 @@
 
 #include "TextDebug.h"
 
-KoTextShapeSavingContext::KoTextShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
-        KoEmbeddedDocumentSaver& embeddedSaver, KoGenChanges& changes)
-        : KoShapeSavingContext(xmlWriter, mainStyles, embeddedSaver)
-	, m_changes(changes)
+KoTextShapeSavingContext::KoTextShapeSavingContext(KoXmlWriter &xmlWriter,
+                                                   KoGenStyles &mainStyles,
+                                                   KoEmbeddedDocumentSaver &embeddedSaver,
+                                                   KoGenChanges &changes)
+    : KoShapeSavingContext(xmlWriter, mainStyles, embeddedSaver)
+    , m_changes(changes)
 {
 }
 
@@ -21,7 +23,7 @@ KoTextShapeSavingContext::~KoTextShapeSavingContext()
 {
 }
 
-KoGenChanges & KoTextShapeSavingContext::changes()
+KoGenChanges &KoTextShapeSavingContext::changes()
 {
     return m_changes;
 }

@@ -12,8 +12,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 
-struct LinkLayerLink
-{
+struct LinkLayerLink {
     QRectF linkRect;
     QUrl linkTarget;
 };
@@ -24,7 +23,8 @@ public:
     Private()
         : clickInProgress(false)
         , wiggleFactor(4)
-    {}
+    {
+    }
     QVariantList links;
     QList<LinkLayerLink> realLinks;
 
@@ -37,7 +37,7 @@ public:
     QColor linkColor;
 };
 
-CQLinkArea::CQLinkArea(QDeclarativeItem* parent)
+CQLinkArea::CQLinkArea(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
     , d(new Private)
 {
@@ -51,17 +51,16 @@ CQLinkArea::~CQLinkArea()
     delete d;
 }
 
-void CQLinkArea::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
+void CQLinkArea::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->save();
     painter->setPen(Qt::transparent);
     painter->setBrush(QBrush(d->linkColor));
-    foreach(const LinkLayerLink& link, d->realLinks) {
-        QRectF target(
-            (link.linkRect.y() / d->sourceSize.height()) * height(),
-            (link.linkRect.x() / d->sourceSize.width()) * width(),
-            (link.linkRect.height() / d->sourceSize.height()) * height(),
-            (link.linkRect.width() / d->sourceSize.width()) * width());
+    foreach (const LinkLayerLink &link, d->realLinks) {
+        QRectF target((link.linkRect.y() / d->sourceSize.height()) * height(),
+                      (link.linkRect.x() / d->sourceSize.width()) * width(),
+                      (link.linkRect.height() / d->sourceSize.height()) * height(),
+                      (link.linkRect.width() / d->sourceSize.width()) * width());
         painter->drawRect(target);
     }
     painter->restore();
@@ -72,14 +71,14 @@ QVariantList CQLinkArea::links() const
     return d->links;
 }
 
-void CQLinkArea::setLinks(const QVariantList& newLinks)
+void CQLinkArea::setLinks(const QVariantList &newLinks)
 {
     d->links = newLinks;
     // run through the new data and cache a data list with the information
     // so we don't have to interpret the QObjects all the time
     d->realLinks.clear();
-    foreach(const QVariant& var, newLinks) {
-        QObject* obj = var.value<QObject*>();
+    foreach (const QVariant &var, newLinks) {
+        QObject *obj = var.value<QObject *>();
         if (!obj) {
             continue;
         }
@@ -96,7 +95,7 @@ QSizeF CQLinkArea::sourceSize() const
     return d->sourceSize;
 }
 
-void CQLinkArea::setSourceSize(const QSizeF& size)
+void CQLinkArea::setSourceSize(const QSizeF &size)
 {
     if (size != d->sourceSize) {
         d->sourceSize = size;
@@ -110,23 +109,23 @@ QColor CQLinkArea::linkColor() const
     return d->linkColor;
 }
 
-void CQLinkArea::setLinkColor(const QColor& color)
+void CQLinkArea::setLinkColor(const QColor &color)
 {
     if (color != d->linkColor) {
         d->linkColor = color;
-        d->linkColor.setAlphaF( 0.25 );
+        d->linkColor.setAlphaF(0.25);
         emit linkColorChanged();
         update();
     }
 }
 
-void CQLinkArea::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void CQLinkArea::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     d->clickInProgress = true;
     d->clickLocation = event->pos();
 }
 
-void CQLinkArea::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+void CQLinkArea::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     d->clickInProgress = false;
     // Don't activate anything if the finger has moved too far
@@ -136,12 +135,11 @@ void CQLinkArea::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     }
     QUrl url;
     QPointF inverted(event->pos().y(), event->pos().x());
-    foreach(const LinkLayerLink& link, d->realLinks) {
-        QRectF scaledTarget(
-            (link.linkRect.x() / d->sourceSize.width()) * width(),
-            (link.linkRect.y() / d->sourceSize.height()) * height(),
-            (link.linkRect.width() / d->sourceSize.width()) * width(),
-            (link.linkRect.height() / d->sourceSize.height()) * height() );
+    foreach (const LinkLayerLink &link, d->realLinks) {
+        QRectF scaledTarget((link.linkRect.x() / d->sourceSize.width()) * width(),
+                            (link.linkRect.y() / d->sourceSize.height()) * height(),
+                            (link.linkRect.width() / d->sourceSize.width()) * width(),
+                            (link.linkRect.height() / d->sourceSize.height()) * height());
 
         if (scaledTarget.contains(inverted)) {
             url = link.linkTarget;
@@ -155,7 +153,7 @@ void CQLinkArea::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     }
 }
 
-void CQLinkArea::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+void CQLinkArea::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event)
     emit doubleClicked();

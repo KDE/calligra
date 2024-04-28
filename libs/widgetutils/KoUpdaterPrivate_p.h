@@ -26,12 +26,10 @@
  */
 class KoUpdaterPrivate : public QObject
 {
-
     Q_OBJECT
 
 public:
-
-    KoUpdaterPrivate(KoProgressUpdater *parent, int weight, const QString& name)
+    KoUpdaterPrivate(KoProgressUpdater *parent, int weight, const QString &name)
         : QObject(0)
         , m_progress(0)
         , m_weight(weight)
@@ -46,28 +44,46 @@ public:
     /// interrupted, too.
     ~KoUpdaterPrivate() override;
 
-    bool interrupted() const { return m_interrupted; }
+    bool interrupted() const
+    {
+        return m_interrupted;
+    }
 
-    int progress() const { return m_progress; }
+    int progress() const
+    {
+        return m_progress;
+    }
 
-    int weight() const { return m_weight; }
+    int weight() const
+    {
+        return m_weight;
+    }
 
-    class TimePoint {
+    class TimePoint
+    {
     public:
         QTime time;
         int value;
 
-        explicit TimePoint(int value_) :time(QTime::currentTime()), value(value_) {}
-        TimePoint() {}
+        explicit TimePoint(int value_)
+            : time(QTime::currentTime())
+            , value(value_)
+        {
+        }
+        TimePoint()
+        {
+        }
     };
 
-    void addPoint(int value) {
+    void addPoint(int value)
+    {
         if (m_hasOutput) {
             m_points.append(TimePoint(value));
         }
     }
 
-    const QVector<TimePoint> & getPoints() const {
+    const QVector<TimePoint> &getPoints() const
+    {
         return m_points;
     }
 
@@ -81,7 +97,7 @@ public Q_SLOTS:
     void interrupt();
 
     /// progress comes from KoUpdater
-    void setProgress( int percent );
+    void setProgress(int percent);
 
 Q_SIGNALS:
 

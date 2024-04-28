@@ -17,25 +17,36 @@ public:
     quint16 nElemsAlloc;
     quint16 cbElem;
     QByteArray data;
-    IMsoArray () :nElems(0), nElemsAlloc(0), cbElem(0) {}
+    IMsoArray()
+        : nElems(0)
+        , nElemsAlloc(0)
+        , cbElem(0)
+    {
+    }
 };
 
 class DrawStyle
 {
 private:
-    const MSO::OfficeArtDggContainer* d;
-    const MSO::OfficeArtSpContainer* mastersp;
-    const MSO::OfficeArtSpContainer* sp;
+    const MSO::OfficeArtDggContainer *d;
+    const MSO::OfficeArtSpContainer *mastersp;
+    const MSO::OfficeArtSpContainer *sp;
+
 public:
-    explicit DrawStyle(const MSO::OfficeArtDggContainer* d_ = 0,
-                       const MSO::OfficeArtSpContainer* mastersp_ = 0,
-                       const MSO::OfficeArtSpContainer* sp_ = 0)
-            : d(d_), mastersp(mastersp_), sp(sp_) {}
+    explicit DrawStyle(const MSO::OfficeArtDggContainer *d_ = 0, const MSO::OfficeArtSpContainer *mastersp_ = 0, const MSO::OfficeArtSpContainer *sp_ = 0)
+        : d(d_)
+        , mastersp(mastersp_)
+        , sp(sp_)
+    {
+    }
 
     /**
      * @return the OfficeArtSpContainer record specifying the shape container.
      */
-    const MSO::OfficeArtSpContainer* shapeContainer() const { return sp; };
+    const MSO::OfficeArtSpContainer *shapeContainer() const
+    {
+        return sp;
+    };
 
     /**
      * @return the shape type that MUST be an MSOSPT enumeration value.
@@ -138,9 +149,9 @@ public:
     // Fill Style property set
     quint32 fillType() const;
     MSO::OfficeArtCOLORREF fillColor() const;
-    MSO::FixedPoint        fillOpacity() const;
+    MSO::FixedPoint fillOpacity() const;
     MSO::OfficeArtCOLORREF fillBackColor() const;
-    MSO::FixedPoint        fillBackOpacity() const;
+    MSO::FixedPoint fillBackOpacity() const;
     MSO::OfficeArtCOLORREF fillCrMod() const;
     quint32 fillBlip() const;
     quint32 fillBlipName() const;
@@ -268,13 +279,13 @@ public:
  * @param b class that contains options.
  * @return pointer to the option of type A or 0 if there is none.
  */
-template <typename A, typename B>
-const A*
-get(const B& b)
+template<typename A, typename B>
+const A *get(const B &b)
 {
-    foreach(const MSO::OfficeArtFOPTEChoice& a, b.fopt) {
+    foreach (const MSO::OfficeArtFOPTEChoice &a, b.fopt) {
         const A *ptr = a.anon.get<A>();
-        if (ptr) return ptr;
+        if (ptr)
+            return ptr;
     }
     return 0;
 }
@@ -285,16 +296,20 @@ get(const B& b)
  * @param o OfficeArtSpContainer instance which contains options.
  * @return pointer to the option of type A or 0 if there is none.
  */
-template <typename A>
-const A*
-get(const MSO::OfficeArtSpContainer& o)
+template<typename A>
+const A *get(const MSO::OfficeArtSpContainer &o)
 {
-    const A* a = 0;
-    if (o.shapePrimaryOptions) a = get<A>(*o.shapePrimaryOptions);
-    if (!a && o.shapeSecondaryOptions1) a = get<A>(*o.shapeSecondaryOptions1);
-    if (!a && o.shapeSecondaryOptions2) a = get<A>(*o.shapeSecondaryOptions2);
-    if (!a && o.shapeTertiaryOptions1) a = get<A>(*o.shapeTertiaryOptions1);
-    if (!a && o.shapeTertiaryOptions2) a = get<A>(*o.shapeTertiaryOptions2);
+    const A *a = 0;
+    if (o.shapePrimaryOptions)
+        a = get<A>(*o.shapePrimaryOptions);
+    if (!a && o.shapeSecondaryOptions1)
+        a = get<A>(*o.shapeSecondaryOptions1);
+    if (!a && o.shapeSecondaryOptions2)
+        a = get<A>(*o.shapeSecondaryOptions2);
+    if (!a && o.shapeTertiaryOptions1)
+        a = get<A>(*o.shapeTertiaryOptions1);
+    if (!a && o.shapeTertiaryOptions2)
+        a = get<A>(*o.shapeTertiaryOptions2);
     return a;
 }
 /**
@@ -304,15 +319,15 @@ get(const MSO::OfficeArtSpContainer& o)
  * @param o OfficeArtDggContainer instance which contains options.
  * @return pointer to the option of type A or 0 if there is none.
  */
-template <typename A>
-const A*
-get(const MSO::OfficeArtDggContainer& o)
+template<typename A>
+const A *get(const MSO::OfficeArtDggContainer &o)
 {
-    const A* a = 0;
+    const A *a = 0;
     if (o.drawingPrimaryOptions) {
         a = get<A>(*o.drawingPrimaryOptions);
     }
-    if (!a && o.drawingTertiaryOptions) a = get<A>(*o.drawingTertiaryOptions);
+    if (!a && o.drawingTertiaryOptions)
+        a = get<A>(*o.drawingTertiaryOptions);
     return a;
 }
 /**
@@ -322,11 +337,10 @@ get(const MSO::OfficeArtDggContainer& o)
  * @param o OfficeArtDggContainer instance which contains options.
  * @return pointer to the option of type A or 0 if there is none.
  */
-template <typename A, typename T>
-const A*
-get(const T* o)
+template<typename A, typename T>
+const A *get(const T *o)
 {
-    return (o) ?get<A>(*o) :0;
+    return (o) ? get<A>(*o) : 0;
 }
 /**
  * Retrieve the complex data from an options containing class B
@@ -338,19 +352,17 @@ get(const T* o)
  * @param b class that contains options.
  * @return IMsoArray storing complex data
  */
-template <typename A, typename B>
-IMsoArray
-getComplexData(const B& b)
+template<typename A, typename B>
+IMsoArray getComplexData(const B &b)
 {
-    MSO::OfficeArtFOPTE* p = nullptr;
+    MSO::OfficeArtFOPTE *p = nullptr;
     IMsoArray a;
-    const char* pData = b.complexData.data();
+    const char *pData = b.complexData.data();
     uint offset = 0;
 
-    foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt) {
-        p = (MSO::OfficeArtFOPTE*) _c.anon.data();
+    foreach (const MSO::OfficeArtFOPTEChoice &_c, b.fopt) {
+        p = (MSO::OfficeArtFOPTE *)_c.anon.data();
         if (p->opid.fComplex) {
-
             // there is wrong offset inside PVertices
             if (_c.anon.is<MSO::PVertices>()) {
                 if (_c.anon.get<A>()) {
@@ -358,11 +370,11 @@ getComplexData(const B& b)
                         memcpy(&a.nElems, pData + offset, sizeof(quint16));
                         memcpy(&a.nElemsAlloc, pData + offset + 2, sizeof(quint16));
                         memcpy(&a.cbElem, pData + offset + 4, sizeof(quint16));
-                        a.data = b.complexData.mid(offset+6, p->op);
+                        a.data = b.complexData.mid(offset + 6, p->op);
                         break;
                     }
                 } else {
-                    offset += p->op +6;
+                    offset += p->op + 6;
                 }
             } else {
                 if (_c.anon.get<A>()) {
@@ -370,7 +382,7 @@ getComplexData(const B& b)
                         memcpy(&a.nElems, pData + offset, sizeof(quint16));
                         memcpy(&a.nElemsAlloc, pData + offset + 2, sizeof(quint16));
                         memcpy(&a.cbElem, pData + offset + 4, sizeof(quint16));
-                        a.data = b.complexData.mid(offset+6, p->op-6);
+                        a.data = b.complexData.mid(offset + 6, p->op - 6);
                         break;
                     }
                 } else {
@@ -391,16 +403,20 @@ getComplexData(const B& b)
  * @param o OfficeArtSpContainer instance which contains options
  * @return IMsoArray storing complex data
  */
-template <typename A>
-IMsoArray
-getComplexData(const MSO::OfficeArtSpContainer& o)
+template<typename A>
+IMsoArray getComplexData(const MSO::OfficeArtSpContainer &o)
 {
     IMsoArray a;
-    if (o.shapePrimaryOptions) a = getComplexData<A>(*o.shapePrimaryOptions);
-    if (!a.data.size() && o.shapeSecondaryOptions1) a = getComplexData<A>(*o.shapeSecondaryOptions1);
-    if (!a.data.size() && o.shapeSecondaryOptions2) a = getComplexData<A>(*o.shapeSecondaryOptions2);
-    if (!a.data.size() && o.shapeTertiaryOptions1) a = getComplexData<A>(*o.shapeTertiaryOptions1);
-    if (!a.data.size() && o.shapeTertiaryOptions2) a = getComplexData<A>(*o.shapeTertiaryOptions2);
+    if (o.shapePrimaryOptions)
+        a = getComplexData<A>(*o.shapePrimaryOptions);
+    if (!a.data.size() && o.shapeSecondaryOptions1)
+        a = getComplexData<A>(*o.shapeSecondaryOptions1);
+    if (!a.data.size() && o.shapeSecondaryOptions2)
+        a = getComplexData<A>(*o.shapeSecondaryOptions2);
+    if (!a.data.size() && o.shapeTertiaryOptions1)
+        a = getComplexData<A>(*o.shapeTertiaryOptions1);
+    if (!a.data.size() && o.shapeTertiaryOptions2)
+        a = getComplexData<A>(*o.shapeTertiaryOptions2);
     return a;
 }
 
@@ -415,16 +431,15 @@ getComplexData(const MSO::OfficeArtSpContainer& o)
  * @param b class that contains options.
  * @return QString storing complex data
  */
-template <typename A, typename B>
-QString
-getComplexName(const B& b)
+template<typename A, typename B>
+QString getComplexName(const B &b)
 {
-    MSO::OfficeArtFOPTE* p = nullptr;
+    MSO::OfficeArtFOPTE *p = nullptr;
     uint offset = 0;
     QString a;
 
-    foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt) {
-        p = (MSO::OfficeArtFOPTE*) _c.anon.data();
+    foreach (const MSO::OfficeArtFOPTEChoice &_c, b.fopt) {
+        p = (MSO::OfficeArtFOPTE *)_c.anon.data();
         if (p->opid.fComplex) {
             if (_c.anon.get<A>()) {
                 a.append(b.complexData.mid(offset, p->op));
@@ -446,16 +461,20 @@ getComplexName(const B& b)
  * @param o OfficeArtSpContainer instance which contains options
  * @return QString storing complex data
  */
-template <typename A>
-QString
-getComplexName(const MSO::OfficeArtSpContainer& o)
+template<typename A>
+QString getComplexName(const MSO::OfficeArtSpContainer &o)
 {
     QString a;
-    if (o.shapePrimaryOptions) a = getComplexName<A>(*o.shapePrimaryOptions);
-    if (!a.isEmpty() && o.shapeSecondaryOptions1) a = getComplexName<A>(*o.shapeSecondaryOptions1);
-    if (!a.isEmpty() && o.shapeSecondaryOptions2) a = getComplexName<A>(*o.shapeSecondaryOptions2);
-    if (!a.isEmpty() && o.shapeTertiaryOptions1) a = getComplexName<A>(*o.shapeTertiaryOptions1);
-    if (!a.isEmpty() && o.shapeTertiaryOptions2) a = getComplexName<A>(*o.shapeTertiaryOptions2);
+    if (o.shapePrimaryOptions)
+        a = getComplexName<A>(*o.shapePrimaryOptions);
+    if (!a.isEmpty() && o.shapeSecondaryOptions1)
+        a = getComplexName<A>(*o.shapeSecondaryOptions1);
+    if (!a.isEmpty() && o.shapeSecondaryOptions2)
+        a = getComplexName<A>(*o.shapeSecondaryOptions2);
+    if (!a.isEmpty() && o.shapeTertiaryOptions1)
+        a = getComplexName<A>(*o.shapeTertiaryOptions1);
+    if (!a.isEmpty() && o.shapeTertiaryOptions2)
+        a = getComplexName<A>(*o.shapeTertiaryOptions2);
     return a;
 }
 

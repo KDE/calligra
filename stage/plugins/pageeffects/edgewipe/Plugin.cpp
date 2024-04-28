@@ -9,18 +9,17 @@
 #include <KPluginFactory>
 #include <KPrPageEffectRegistry.h>
 
-#include "diagonalwipe/DiagonalWipeEffectFactory.h"
-#include "miscdiagonalwipe/MiscDiagonalWipeEffectFactory.h"
-#include "boxwipe/BoxWipeEffectFactory.h"
-#include "fourboxwipe/FourBoxWipeEffectFactory.h"
 #include "barndoorwipe/BarnDoorWipeEffectFactory.h"
-#include "veewipe/VeeWipeEffectFactory.h"
 #include "barnveewipe/BarnVeeWipeEffectFactory.h"
-#include "zigzagwipe/ZigZagWipeEffectFactory.h"
 #include "barnzigzagwipe/BarnZigZagWipeEffectFactory.h"
+#include "boxwipe/BoxWipeEffectFactory.h"
+#include "diagonalwipe/DiagonalWipeEffectFactory.h"
+#include "fourboxwipe/FourBoxWipeEffectFactory.h"
+#include "miscdiagonalwipe/MiscDiagonalWipeEffectFactory.h"
+#include "veewipe/VeeWipeEffectFactory.h"
+#include "zigzagwipe/ZigZagWipeEffectFactory.h"
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_pageeffect_edgewipe.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_pageeffect_edgewipe.json", registerPlugin<Plugin>();)
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
@@ -37,4 +36,3 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
 }
 
 #include "Plugin.moc"
-

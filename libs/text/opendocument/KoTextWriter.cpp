@@ -12,12 +12,12 @@
 
 #include "KoTextWriter.h"
 
-#include <KoTextWriter_p.h>
-#include <KoStyleManager.h>
-#include <KoParagraphStyle.h>
-#include <KoTextDocument.h>
-#include <KoShapeSavingContext.h>
 #include <KoGenStyles.h>
+#include <KoParagraphStyle.h>
+#include <KoShapeSavingContext.h>
+#include <KoStyleManager.h>
+#include <KoTextDocument.h>
+#include <KoTextWriter_p.h>
 #include <opendocument/KoTextSharedSavingData.h>
 
 #include <QTextList>
@@ -63,7 +63,10 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlock &block, KoStyleManager
     return saveParagraphStyle(blockFormat, charFormat, styleManager, context);
 }
 
-QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat, KoStyleManager * styleManager, KoShapeSavingContext &context)
+QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat,
+                                         const QTextCharFormat &charFormat,
+                                         KoStyleManager *styleManager,
+                                         KoShapeSavingContext &context)
 {
     KoParagraphStyle *defaultParagraphStyle = styleManager->defaultParagraphStyle();
     KoParagraphStyle *originalParagraphStyle = styleManager->paragraphStyle(blockFormat.intProperty(KoParagraphStyle::StyleId));
@@ -100,7 +103,7 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, co
 
 void KoTextWriter::write(const QTextDocument *document, int from, int to)
 {
-    d->document = const_cast<QTextDocument*>(document);
+    d->document = const_cast<QTextDocument *>(document);
     d->styleManager = KoTextDocument(document).styleManager();
 
     QTextBlock fromblock = document->findBlock(from);
@@ -135,10 +138,8 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
             if (currentList) {
                 int fromindex = currentList->itemNumber(fromblock);
                 int toindex = currentList->itemNumber(toblock);
-                if ((fromcursor.isNull() || fromcursor.currentList() != currentList) &&
-                    (toCursor.isNull() || toCursor.currentList() != currentList) &&
-                    fromindex <= 0 && (toindex < 0 || toindex == currentList->count()-1)
-                ) {
+                if ((fromcursor.isNull() || fromcursor.currentList() != currentList) && (toCursor.isNull() || toCursor.currentList() != currentList)
+                    && fromindex <= 0 && (toindex < 0 || toindex == currentList->count() - 1)) {
                     currentList = 0;
                 }
             }

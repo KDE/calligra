@@ -16,7 +16,7 @@ class KoFilterEffect;
 class FilterAddCommand : public KUndo2Command
 {
 public:
-    FilterAddCommand(KoFilterEffect *filterEffect, KoShape * shape, KUndo2Command *parent = 0);
+    FilterAddCommand(KoFilterEffect *filterEffect, KoShape *shape, KUndo2Command *parent = 0);
     ~FilterAddCommand() override;
     /// redo the command
     void redo() override;
@@ -24,8 +24,8 @@ public:
     void undo() override;
 
 private:
-    KoFilterEffect * m_filterEffect;
-    KoShape * m_shape;
+    KoFilterEffect *m_filterEffect;
+    KoShape *m_shape;
     bool m_isAdded;
 };
 

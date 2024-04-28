@@ -5,8 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
-
 #ifndef TESTFINDMATCH_H
 #define TESTFINDMATCH_H
 
@@ -16,7 +14,6 @@ class TestFindMatch : public QObject
 {
     Q_OBJECT
 public:
-    
 private Q_SLOTS:
     void testBasic();
     void testCopyAssign();

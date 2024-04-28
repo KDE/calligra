@@ -7,20 +7,20 @@
  */
 #include "TestKoDocumentRdf.h"
 
-#include <QTest>
-#include <QUuid>
 #include <QString>
+#include <QTest>
+#include <QTextCharFormat>
 #include <QTextDocument>
 #include <QTextTable>
-#include <QTextCharFormat>
+#include <QUuid>
 
-#include <KoRdfSemanticItem.h>
-#include <KoDocumentRdf.h>
-#include <KoTextEditor.h>
 #include <KoBookmark.h>
-#include <KoTextInlineRdf.h>
-#include <KoTextDocument.h>
+#include <KoDocumentRdf.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoRdfSemanticItem.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
+#include <KoTextInlineRdf.h>
 
 const QString lorem(
     "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
@@ -28,8 +28,7 @@ const QString lorem(
     "exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n"
     "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla"
     "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia"
-    "deserunt mollit anim id est laborum.\n"
-    );
+    "deserunt mollit anim id est laborum.\n");
 
 void TestKoDocumentRdf::testCreate()
 {

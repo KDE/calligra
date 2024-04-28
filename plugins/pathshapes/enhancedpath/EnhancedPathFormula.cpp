@@ -28,7 +28,7 @@ bool isIdentifier(QChar ch);
 // e.g. '+' is 1 while '*' is 3
 int opPrecedence(FormulaToken::Operator op);
 // helper function: return function of given token text
-EnhancedPathFormula::Function matchFunction(const QString & text);
+EnhancedPathFormula::Function matchFunction(const QString &text);
 // helper function: return function name from function identifier
 QString matchFunction(EnhancedPathFormula::Function function);
 
@@ -38,31 +38,45 @@ class FormulaTokenStack : public QVector<FormulaToken>
 {
 public:
     FormulaTokenStack()
-        : QVector<FormulaToken>(), topIndex(0)
+        : QVector<FormulaToken>()
+        , topIndex(0)
     {
         ensureSpace();
     }
 
-    bool isEmpty() const { return topIndex == 0; }
-    unsigned itemCount() const { return topIndex; }
-    void push(const FormulaToken& token)
+    bool isEmpty() const
+    {
+        return topIndex == 0;
+    }
+    unsigned itemCount() const
+    {
+        return topIndex;
+    }
+    void push(const FormulaToken &token)
     {
         ensureSpace();
         insert(topIndex++, token);
     }
-    FormulaToken pop() { return (topIndex > 0) ? FormulaToken(at(--topIndex)) : FormulaToken(); }
-    const FormulaToken& top() { return top(0); }
-    const FormulaToken& top(unsigned index)
+    FormulaToken pop()
+    {
+        return (topIndex > 0) ? FormulaToken(at(--topIndex)) : FormulaToken();
+    }
+    const FormulaToken &top()
+    {
+        return top(0);
+    }
+    const FormulaToken &top(unsigned index)
     {
         static FormulaToken null;
         if (topIndex > index)
-            return at(topIndex-index-1);
+            return at(topIndex - index - 1);
         return null;
     }
+
 private:
     void ensureSpace()
     {
-        while((int) topIndex >= size())
+        while ((int)topIndex >= size())
             resize(size() + 10);
     }
     unsigned topIndex;
@@ -71,20 +85,34 @@ private:
 class Opcode
 {
 public:
+    enum { Nop = 0, Load, Ref, Function, Add, Sub, Neg, Mul, Div };
 
-  enum { Nop = 0, Load, Ref, Function, Add, Sub, Neg, Mul, Div };
+    unsigned type;
+    unsigned index;
 
-  unsigned type;
-  unsigned index;
-
-  Opcode(): type(Nop), index(0) {}
-  Opcode(unsigned t): type(t), index(0) {}
-  Opcode(unsigned t, unsigned i): type(t), index(i) {}
+    Opcode()
+        : type(Nop)
+        , index(0)
+    {
+    }
+    Opcode(unsigned t)
+        : type(t)
+        , index(0)
+    {
+    }
+    Opcode(unsigned t, unsigned i)
+        : type(t)
+        , index(i)
+    {
+    }
 };
 
-
 EnhancedPathFormula::EnhancedPathFormula(const QString &text, EnhancedPathShape *parent)
-    : m_valid(false), m_compiled(false), m_error(ErrorNone), m_text(text), m_parent(parent)
+    : m_valid(false)
+    , m_compiled(false)
+    , m_error(ErrorNone)
+    , m_text(text)
+    , m_parent(parent)
 {
     Q_ASSERT(m_parent);
 }
@@ -114,7 +142,7 @@ qreal EnhancedPathFormula::evaluate()
 
     QStack<QVariant> stack;
     // stack.reserve(3) here so that the stack is not resized all the time
-    // this reduces the number of a/de/re-llocations for documents with 
+    // this reduces the number of a/de/re-llocations for documents with
     // a lot of enhanced path shapes quite a lot.
     stack.reserve(3);
     int index = 0;
@@ -125,9 +153,9 @@ qreal EnhancedPathFormula::evaluate()
     }
 
     for (int pc = 0; pc < m_codes.count(); pc++) {
-        Opcode& opcode = m_codes[pc];
+        Opcode &opcode = m_codes[pc];
         index = opcode.index;
-        switch(opcode.type) {
+        switch (opcode.type) {
         // no operation
         case Opcode::Nop:
             break;
@@ -135,7 +163,7 @@ qreal EnhancedPathFormula::evaluate()
         // load a constant, push to stack
         case Opcode::Load:
             stack.push(m_constants[index]);
-        break;
+            break;
 
         // unary operation
         case Opcode::Neg: {
@@ -227,7 +255,7 @@ qreal EnhancedPathFormula::evaluate()
 
 qreal EnhancedPathFormula::evaluateFunction(Function function, const QList<qreal> &arguments) const
 {
-    switch(function) {
+    switch (function) {
     case EnhancedPathFormula::FunctionAbs:
         return fabs(arguments[0]);
         break;
@@ -271,18 +299,8 @@ qreal EnhancedPathFormula::evaluateFunction(Function function, const QList<qreal
 
 TokenList EnhancedPathFormula::scan(const QString &formula) const
 {
-  // parsing state
-    enum {
-        Start,
-        Finish,
-        Bad,
-        InNumber,
-        InDecimal,
-        InExpIndicator,
-        InExponent,
-        InString,
-        InIdentifier
-    } state;
+    // parsing state
+    enum { Start, Finish, Bad, InNumber, InDecimal, InExpIndicator, InExponent, InString, InIdentifier } state;
 
     TokenList tokens;
 
@@ -293,10 +311,10 @@ TokenList EnhancedPathFormula::scan(const QString &formula) const
     QString expr = formula + QChar();
 
     // main loop
-    while((state != Bad) && (state != Finish) && (i < expr.length())) {
+    while ((state != Bad) && (state != Finish) && (i < expr.length())) {
         QChar ch = expr[i];
 
-        switch(state) {
+        switch (state) {
         case Start:
             tokenStart = i;
 
@@ -416,7 +434,7 @@ bool EnhancedPathFormula::compile(const TokenList &tokens)
 
     for (int i = 0; i <= tokens.count(); i++) {
         // helper token: InvalidOp is end-of-formula
-        FormulaToken token =  (i < tokens.count()) ? tokens[i] : FormulaToken(FormulaToken::TypeOperator);
+        FormulaToken token = (i < tokens.count()) ? tokens[i] : FormulaToken(FormulaToken::TypeOperator);
         FormulaToken::Type tokenType = token.type();
 
         // unknown token is invalid
@@ -428,14 +446,14 @@ bool EnhancedPathFormula::compile(const TokenList &tokens)
         if (tokenType == FormulaToken::TypeNumber) {
             syntaxStack.push(token);
             m_constants.append(QVariant(token.asNumber()));
-            m_codes.append(Opcode(Opcode::Load, m_constants.count()-1));
+            m_codes.append(Opcode(Opcode::Load, m_constants.count() - 1));
         }
         // for identifier, push immediately to stack
         // generate code to load from reference
         if (tokenType == FormulaToken::TypeFunction || tokenType == FormulaToken::TypeReference) {
             syntaxStack.push(token);
             m_constants.append(QVariant(token.text()));
-            m_codes.append(Opcode(Opcode::Ref, m_constants.count()-1));
+            m_codes.append(Opcode(Opcode::Ref, m_constants.count() - 1));
         }
         // are we entering a function ?
         // if token is operator, and stack already has: id (arg
@@ -443,9 +461,7 @@ bool EnhancedPathFormula::compile(const TokenList &tokens)
             FormulaToken arg = syntaxStack.top();
             FormulaToken par = syntaxStack.top(1);
             FormulaToken id = syntaxStack.top(2);
-            if (!arg.isOperator() &&
-                 par.asOperator() == FormulaToken::OperatorLeftPar &&
-                 id.isFunction()) {
+            if (!arg.isOperator() && par.asOperator() == FormulaToken::OperatorLeftPar && id.isFunction()) {
                 argStack.push(argCount);
                 argCount = 1;
             }
@@ -453,147 +469,153 @@ bool EnhancedPathFormula::compile(const TokenList &tokens)
         // for any other operator, try to apply all parsing rules
         if (tokenType == FormulaToken::TypeOperator) {
             // repeat until no more rule applies
-            for (; ;) {
+            for (;;) {
                 bool ruleFound = false;
 
                 // rule for function arguments, if token is , or)
                 // id (arg1 , arg2 -> id (arg
                 if (!ruleFound)
-                if (syntaxStack.itemCount() >= 5)
-                if ((token.asOperator() == FormulaToken::OperatorRightPar) ||
-                    (token.asOperator() == FormulaToken::OperatorComma)) {
-                    FormulaToken arg2 = syntaxStack.top();
-                    FormulaToken sep = syntaxStack.top(1);
-                    FormulaToken arg1 = syntaxStack.top(2);
-                    FormulaToken par = syntaxStack.top(3);
-                    FormulaToken id = syntaxStack.top(4);
-                    if (!arg2.isOperator())
-                      if (sep.asOperator() == FormulaToken::OperatorComma)
-                        if (!arg1.isOperator())
-                          if (par.asOperator() == FormulaToken::OperatorLeftPar)
-                            if (id.isFunction()) {
-                        ruleFound = true;
-                        syntaxStack.pop();
-                        syntaxStack.pop();
-                        argCount++;
-                    }
-                }
+                    if (syntaxStack.itemCount() >= 5)
+                        if ((token.asOperator() == FormulaToken::OperatorRightPar) || (token.asOperator() == FormulaToken::OperatorComma)) {
+                            FormulaToken arg2 = syntaxStack.top();
+                            FormulaToken sep = syntaxStack.top(1);
+                            FormulaToken arg1 = syntaxStack.top(2);
+                            FormulaToken par = syntaxStack.top(3);
+                            FormulaToken id = syntaxStack.top(4);
+                            if (!arg2.isOperator())
+                                if (sep.asOperator() == FormulaToken::OperatorComma)
+                                    if (!arg1.isOperator())
+                                        if (par.asOperator() == FormulaToken::OperatorLeftPar)
+                                            if (id.isFunction()) {
+                                                ruleFound = true;
+                                                syntaxStack.pop();
+                                                syntaxStack.pop();
+                                                argCount++;
+                                            }
+                        }
                 // rule for function last argument:
                 //  id (arg) -> arg
                 if (!ruleFound)
-                  if (syntaxStack.itemCount() >= 4) {
-                    FormulaToken par2 = syntaxStack.top();
-                    FormulaToken arg = syntaxStack.top(1);
-                    FormulaToken par1 = syntaxStack.top(2);
-                    FormulaToken id = syntaxStack.top(3);
-                    if (par2.asOperator() == FormulaToken::OperatorRightPar)
-                      if (!arg.isOperator())
-                        if (par1.asOperator() == FormulaToken::OperatorLeftPar)
-                          if (id.isFunction()) {
-                        ruleFound = true;
-                        syntaxStack.pop();
-                        syntaxStack.pop();
-                        syntaxStack.pop();
-                        syntaxStack.pop();
-                        syntaxStack.push(arg);
-                        m_codes.append(Opcode(Opcode::Function, argCount));
-                        argCount = argStack.empty() ? 0 : argStack.pop();
+                    if (syntaxStack.itemCount() >= 4) {
+                        FormulaToken par2 = syntaxStack.top();
+                        FormulaToken arg = syntaxStack.top(1);
+                        FormulaToken par1 = syntaxStack.top(2);
+                        FormulaToken id = syntaxStack.top(3);
+                        if (par2.asOperator() == FormulaToken::OperatorRightPar)
+                            if (!arg.isOperator())
+                                if (par1.asOperator() == FormulaToken::OperatorLeftPar)
+                                    if (id.isFunction()) {
+                                        ruleFound = true;
+                                        syntaxStack.pop();
+                                        syntaxStack.pop();
+                                        syntaxStack.pop();
+                                        syntaxStack.pop();
+                                        syntaxStack.push(arg);
+                                        m_codes.append(Opcode(Opcode::Function, argCount));
+                                        argCount = argStack.empty() ? 0 : argStack.pop();
+                                    }
                     }
-                }
 
                 // rule for parenthesis:  (Y) -> Y
                 if (!ruleFound)
-                  if (syntaxStack.itemCount() >= 3) {
-                    FormulaToken right = syntaxStack.top();
-                    FormulaToken y = syntaxStack.top(1);
-                    FormulaToken left = syntaxStack.top(2);
-                    if (right.isOperator())
-                      if (!y.isOperator())
-                        if (left.isOperator())
-                          if (right.asOperator() == FormulaToken::OperatorRightPar)
-                            if (left.asOperator() == FormulaToken::OperatorLeftPar) {
-                        ruleFound = true;
-                        syntaxStack.pop();
-                        syntaxStack.pop();
-                        syntaxStack.pop();
-                        syntaxStack.push(y);
+                    if (syntaxStack.itemCount() >= 3) {
+                        FormulaToken right = syntaxStack.top();
+                        FormulaToken y = syntaxStack.top(1);
+                        FormulaToken left = syntaxStack.top(2);
+                        if (right.isOperator())
+                            if (!y.isOperator())
+                                if (left.isOperator())
+                                    if (right.asOperator() == FormulaToken::OperatorRightPar)
+                                        if (left.asOperator() == FormulaToken::OperatorLeftPar) {
+                                            ruleFound = true;
+                                            syntaxStack.pop();
+                                            syntaxStack.pop();
+                                            syntaxStack.pop();
+                                            syntaxStack.push(y);
+                                        }
                     }
-                }
 
                 // rule for binary operator:  A (op) B -> A
                 // conditions: precedence of op >= precedence of token
                 // action: push (op) to result
                 // e.g. "A * B" becomes 'A' if token is operator '+'
                 if (!ruleFound)
-                  if (syntaxStack.itemCount() >= 3) {
-                    FormulaToken b = syntaxStack.top();
-                    FormulaToken op = syntaxStack.top(1);
-                    FormulaToken a = syntaxStack.top(2);
-                    if (!a.isOperator())
-                      if (!b.isOperator())
-                        if (op.isOperator())
-                          if (token.asOperator() != FormulaToken::OperatorLeftPar)
-                            if (opPrecedence(op.asOperator()) >= opPrecedence(token.asOperator())) {
-                        ruleFound = true;
-                        syntaxStack.pop();
-                        syntaxStack.pop();
-                        syntaxStack.pop();
-                        syntaxStack.push(b);
-                        switch(op.asOperator()) {
-                        // simple binary operations
-                        case FormulaToken::OperatorAdd: m_codes.append(Opcode::Add); break;
-                        case FormulaToken::OperatorSub: m_codes.append(Opcode::Sub); break;
-                        case FormulaToken::OperatorMul: m_codes.append(Opcode::Mul); break;
-                        case FormulaToken::OperatorDiv: m_codes.append(Opcode::Div); break;
-                        default: break;
-                        }
+                    if (syntaxStack.itemCount() >= 3) {
+                        FormulaToken b = syntaxStack.top();
+                        FormulaToken op = syntaxStack.top(1);
+                        FormulaToken a = syntaxStack.top(2);
+                        if (!a.isOperator())
+                            if (!b.isOperator())
+                                if (op.isOperator())
+                                    if (token.asOperator() != FormulaToken::OperatorLeftPar)
+                                        if (opPrecedence(op.asOperator()) >= opPrecedence(token.asOperator())) {
+                                            ruleFound = true;
+                                            syntaxStack.pop();
+                                            syntaxStack.pop();
+                                            syntaxStack.pop();
+                                            syntaxStack.push(b);
+                                            switch (op.asOperator()) {
+                                            // simple binary operations
+                                            case FormulaToken::OperatorAdd:
+                                                m_codes.append(Opcode::Add);
+                                                break;
+                                            case FormulaToken::OperatorSub:
+                                                m_codes.append(Opcode::Sub);
+                                                break;
+                                            case FormulaToken::OperatorMul:
+                                                m_codes.append(Opcode::Mul);
+                                                break;
+                                            case FormulaToken::OperatorDiv:
+                                                m_codes.append(Opcode::Div);
+                                                break;
+                                            default:
+                                                break;
+                                            }
+                                        }
                     }
-                }
 
                 // rule for unary operator:  (op1) (op2) X -> (op1) X
                 // conditions: op2 is unary, token is not '('
                 // action: push (op2) to result
                 // e.g.  "* - 2" becomes '*'
                 if (!ruleFound)
-                  if (token.asOperator() != FormulaToken::OperatorLeftPar)
-                  if (syntaxStack.itemCount() >= 3) {
-                    FormulaToken x = syntaxStack.top();
-                    FormulaToken op2 = syntaxStack.top(1);
-                    FormulaToken op1 = syntaxStack.top(2);
-                    if (!x.isOperator())
-                      if (op1.isOperator())
-                        if (op2.isOperator())
-                          if ((op2.asOperator() == FormulaToken::OperatorAdd)
-                                  || (op2.asOperator() == FormulaToken::OperatorSub)) {
-                        ruleFound = true;
-                        syntaxStack.pop();
-                        syntaxStack.pop();
-                        syntaxStack.push(x);
-                        if (op2.asOperator() == FormulaToken::OperatorSub)
-                            m_codes.append(Opcode(Opcode::Neg));
-                    }
-                }
+                    if (token.asOperator() != FormulaToken::OperatorLeftPar)
+                        if (syntaxStack.itemCount() >= 3) {
+                            FormulaToken x = syntaxStack.top();
+                            FormulaToken op2 = syntaxStack.top(1);
+                            FormulaToken op1 = syntaxStack.top(2);
+                            if (!x.isOperator())
+                                if (op1.isOperator())
+                                    if (op2.isOperator())
+                                        if ((op2.asOperator() == FormulaToken::OperatorAdd) || (op2.asOperator() == FormulaToken::OperatorSub)) {
+                                            ruleFound = true;
+                                            syntaxStack.pop();
+                                            syntaxStack.pop();
+                                            syntaxStack.push(x);
+                                            if (op2.asOperator() == FormulaToken::OperatorSub)
+                                                m_codes.append(Opcode(Opcode::Neg));
+                                        }
+                        }
 
                 // auxiliary rule for unary operator:  (op) X -> X
                 // conditions: op is unary, op is first in syntax stack, token is not '('
                 // action: push (op) to result
                 if (!ruleFound)
-                  if (token.asOperator() != FormulaToken::OperatorLeftPar)
-                    if (syntaxStack.itemCount() == 2) {
-                    FormulaToken x = syntaxStack.top();
-                    FormulaToken op = syntaxStack.top(1);
-                    if (!x.isOperator())
-                      if (op.isOperator())
-                        if ((op.asOperator() == FormulaToken::OperatorAdd)
-                                || (op.asOperator() == FormulaToken::OperatorSub)) {
-                        ruleFound = true;
-                        syntaxStack.pop();
-                        syntaxStack.pop();
-                        syntaxStack.push(x);
-                        if (op.asOperator() == FormulaToken::OperatorSub)
-                            m_codes.append(Opcode(Opcode::Neg));
-                    }
-                }
+                    if (token.asOperator() != FormulaToken::OperatorLeftPar)
+                        if (syntaxStack.itemCount() == 2) {
+                            FormulaToken x = syntaxStack.top();
+                            FormulaToken op = syntaxStack.top(1);
+                            if (!x.isOperator())
+                                if (op.isOperator())
+                                    if ((op.asOperator() == FormulaToken::OperatorAdd) || (op.asOperator() == FormulaToken::OperatorSub)) {
+                                        ruleFound = true;
+                                        syntaxStack.pop();
+                                        syntaxStack.pop();
+                                        syntaxStack.push(x);
+                                        if (op.asOperator() == FormulaToken::OperatorSub)
+                                            m_codes.append(Opcode(Opcode::Neg));
+                                    }
+                        }
 
                 if (!ruleFound)
                     break;
@@ -606,16 +628,16 @@ bool EnhancedPathFormula::compile(const TokenList &tokens)
     // syntaxStack must left only one operand and end-of-formula (i.e. InvalidOp)
     m_valid = false;
     if (syntaxStack.itemCount() == 2)
-      if (syntaxStack.top().isOperator())
-        if (syntaxStack.top().asOperator() == FormulaToken::OperatorInvalid)
-          if (!syntaxStack.top(1).isOperator())
-              m_valid = true;
+        if (syntaxStack.top().isOperator())
+            if (syntaxStack.top().asOperator() == FormulaToken::OperatorInvalid)
+                if (!syntaxStack.top(1).isOperator())
+                    m_valid = true;
 
     // bad parsing ? clean-up everything
-    if (! m_valid) {
+    if (!m_valid) {
         m_constants.clear();
         m_codes.clear();
-        qWarning() << "compiling of "<< m_text << " failed";
+        qWarning() << "compiling of " << m_text << " failed";
     }
 
     return m_valid;
@@ -626,9 +648,10 @@ QString EnhancedPathFormula::toString() const
     return m_text;
 }
 
-
 FormulaToken::FormulaToken(Type type, const QString &text, int position)
-    : m_type(type), m_text(text), m_position(position)
+    : m_type(type)
+    , m_text(text)
+    , m_position(position)
 {
 }
 
@@ -638,7 +661,7 @@ FormulaToken::FormulaToken(const FormulaToken &token)
         *this = token;
 }
 
-FormulaToken & FormulaToken::operator=(const FormulaToken &rhs)
+FormulaToken &FormulaToken::operator=(const FormulaToken &rhs)
 {
     if (this == &rhs)
         return *this;
@@ -673,15 +696,31 @@ FormulaToken::Operator matchOperator(const QString &text)
         return FormulaToken::OperatorInvalid;
 
     const char c = text[0].toLatin1();
-    switch(c) {
-    case '+': return FormulaToken::OperatorAdd; break;
-    case '-': return FormulaToken::OperatorSub; break;
-    case '*': return FormulaToken::OperatorMul; break;
-    case '/': return FormulaToken::OperatorDiv; break;
-    case '(': return FormulaToken::OperatorLeftPar; break;
-    case ')': return FormulaToken::OperatorRightPar; break;
-    case ',': return FormulaToken::OperatorComma; break;
-    default : return FormulaToken::OperatorInvalid; break;
+    switch (c) {
+    case '+':
+        return FormulaToken::OperatorAdd;
+        break;
+    case '-':
+        return FormulaToken::OperatorSub;
+        break;
+    case '*':
+        return FormulaToken::OperatorMul;
+        break;
+    case '/':
+        return FormulaToken::OperatorDiv;
+        break;
+    case '(':
+        return FormulaToken::OperatorLeftPar;
+        break;
+    case ')':
+        return FormulaToken::OperatorRightPar;
+        break;
+    case ',':
+        return FormulaToken::OperatorComma;
+        break;
+    default:
+        return FormulaToken::OperatorInvalid;
+        break;
     }
 }
 
@@ -696,15 +735,31 @@ bool isIdentifier(QChar ch)
 int opPrecedence(FormulaToken::Operator op)
 {
     int prec = -1;
-    switch(op) {
-    case FormulaToken::OperatorMul: prec = 5; break;
-    case FormulaToken::OperatorDiv: prec = 6; break;
-    case FormulaToken::OperatorAdd: prec = 3; break;
-    case FormulaToken::OperatorSub: prec = 3; break;
-    case FormulaToken::OperatorComma: prec = 0; break;
-    case FormulaToken::OperatorRightPar: prec = 0; break;
-    case FormulaToken::OperatorLeftPar: prec = -1; break;
-    default: prec = -1; break;
+    switch (op) {
+    case FormulaToken::OperatorMul:
+        prec = 5;
+        break;
+    case FormulaToken::OperatorDiv:
+        prec = 6;
+        break;
+    case FormulaToken::OperatorAdd:
+        prec = 3;
+        break;
+    case FormulaToken::OperatorSub:
+        prec = 3;
+        break;
+    case FormulaToken::OperatorComma:
+        prec = 0;
+        break;
+    case FormulaToken::OperatorRightPar:
+        prec = 0;
+        break;
+    case FormulaToken::OperatorLeftPar:
+        prec = -1;
+        break;
+    default:
+        prec = -1;
+        break;
     }
     return prec;
 }
@@ -737,7 +792,7 @@ EnhancedPathFormula::Function matchFunction(const QString &text)
 
 QString matchFunction(EnhancedPathFormula::Function function)
 {
-    switch(function) {
+    switch (function) {
     case EnhancedPathFormula::FunctionAbs:
         return "fabs";
         break;
@@ -790,16 +845,34 @@ void EnhancedPathFormula::debugOpcodes()
 #ifndef NDEBUG
     foreach (const Opcode &c, m_codes) {
         QString ctext;
-        switch(c.type) {
-        case Opcode::Load: ctext = QString("Load #%1").arg(c.index); break;
-        case Opcode::Ref: ctext = QString("Ref #%1").arg(c.index); break;
-        case Opcode::Function: ctext = QString("Function (%1)").arg(c.index); break;
-        case Opcode::Add: ctext = "Add"; break;
-        case Opcode::Sub: ctext = "Sub"; break;
-        case Opcode::Mul: ctext = "Mul"; break;
-        case Opcode::Div: ctext = "Div"; break;
-        case Opcode::Neg: ctext = "Neg"; break;
-        default: ctext = "Unknown"; break;
+        switch (c.type) {
+        case Opcode::Load:
+            ctext = QString("Load #%1").arg(c.index);
+            break;
+        case Opcode::Ref:
+            ctext = QString("Ref #%1").arg(c.index);
+            break;
+        case Opcode::Function:
+            ctext = QString("Function (%1)").arg(c.index);
+            break;
+        case Opcode::Add:
+            ctext = "Add";
+            break;
+        case Opcode::Sub:
+            ctext = "Sub";
+            break;
+        case Opcode::Mul:
+            ctext = "Mul";
+            break;
+        case Opcode::Div:
+            ctext = "Div";
+            break;
+        case Opcode::Neg:
+            ctext = "Neg";
+            break;
+        default:
+            ctext = "Unknown";
+            break;
         }
         qDebug() << ctext;
     }

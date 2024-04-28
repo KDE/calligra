@@ -16,15 +16,15 @@ public:
     ~CornersInWipeStrategy() override;
 
     /// reimplemented from KPrPageEffectStrategy
-    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
+    void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine) override;
     /// reimplemented from KPrPageEffectStrategy
-    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
+    void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data) override;
     /// reimplemented from KPrPageEffectStrategy
-    void next( const KPrPageEffect::Data &data ) override;
+    void next(const KPrPageEffect::Data &data) override;
 
 private:
     /// calculates clip path for given step
-    QPainterPath clipPath( int step, const QRect &area );
+    QPainterPath clipPath(int step, const QRect &area);
 };
 
 #endif // CORNERSINWIPESTRATEGY_H

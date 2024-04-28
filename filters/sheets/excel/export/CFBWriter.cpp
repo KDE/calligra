@@ -21,7 +21,9 @@ static const quint32 FREESECT = 0xFFFFFFFF;
 static const quint32 NOSTREAM = 0xFFFFFFFF;
 
 CFBWriter::CFBWriter(bool largeSectors)
-    : m_device(0), m_ownsDevice(false), m_sectorSize(largeSectors ? 4096 : 512)
+    : m_device(0)
+    , m_ownsDevice(false)
+    , m_sectorSize(largeSectors ? 4096 : 512)
 {
 }
 
@@ -51,11 +53,13 @@ bool CFBWriter::open(const QString &fileName)
 {
     m_device = new QFile(fileName);
     if (!m_device->open(QIODevice::WriteOnly)) {
-        delete m_device; m_device = 0;
+        delete m_device;
+        m_device = 0;
         return false;
     }
     if (m_device->isSequential()) {
-        delete m_device; m_device = 0;
+        delete m_device;
+        m_device = 0;
         return false;
     }
     m_ownsDevice = true;
@@ -66,25 +70,29 @@ bool CFBWriter::open(const QString &fileName)
 class CFBWriter::StreamIODevice : public QIODevice
 {
 public:
-    StreamIODevice(CFBWriter& writer, DirectoryEntry& entry);
+    StreamIODevice(CFBWriter &writer, DirectoryEntry &entry);
     ~StreamIODevice() override;
     void close() override;
     bool open(OpenMode mode) override;
     qint64 size() const override;
+
 protected:
     qint64 writeData(const char *data, qint64 len) override;
     qint64 readData(char *data, qint64 maxlen) override;
     void appendData(const char *data, qint64 len);
-    qint64 internalWriteData(const char* data, qint64 len, qint64 pos);
+    qint64 internalWriteData(const char *data, qint64 len, qint64 pos);
+
 private:
-    DirectoryEntry& m_entry;
-    CFBWriter& m_writer;
+    DirectoryEntry &m_entry;
+    CFBWriter &m_writer;
     QByteArray m_buffer;
     unsigned m_lastSector;
 };
 
-CFBWriter::StreamIODevice::StreamIODevice(CFBWriter& writer, DirectoryEntry& entry)
-    : m_entry(entry), m_writer(writer), m_lastSector(-1)
+CFBWriter::StreamIODevice::StreamIODevice(CFBWriter &writer, DirectoryEntry &entry)
+    : m_entry(entry)
+    , m_writer(writer)
+    , m_lastSector(-1)
 {
     m_writer.m_openStreams.append(this);
     QIODevice::open(QIODevice::WriteOnly);
@@ -105,9 +113,11 @@ void CFBWriter::StreamIODevice::close()
             int sector = -1;
             for (int i = 0; i < m_buffer.size(); i += 64) {
                 QByteArray b = m_buffer.mid(i, 64);
-                if (b.size() < 64) b.append(QByteArray(64 - b.size(), '\0'));
+                if (b.size() < 64)
+                    b.append(QByteArray(64 - b.size(), '\0'));
                 sector = m_writer.writeMiniSector(b, sector);
-                if (i == 0) m_entry.firstSector = sector;
+                if (i == 0)
+                    m_entry.firstSector = sector;
             }
         } else {
             // write full sectors first
@@ -146,7 +156,8 @@ void CFBWriter::StreamIODevice::appendData(const char *data, qint64 len)
     m_buffer.append(data, len);
 
     // cutoff for mini-fat
-    if (m_entry.streamSize == 0 && m_buffer.size() <= 4096) return;
+    if (m_entry.streamSize == 0 && m_buffer.size() <= 4096)
+        return;
 
     while (unsigned(m_buffer.size()) > m_writer.m_sectorSize) {
         QByteArray sector = m_buffer.left(m_writer.m_sectorSize);
@@ -206,11 +217,11 @@ qint64 CFBWriter::StreamIODevice::readData(char *data, qint64 maxlen)
     return -1;
 }
 
-QIODevice* CFBWriter::openSubStream(const QString &streamName)
+QIODevice *CFBWriter::openSubStream(const QString &streamName)
 {
-    DirectoryEntry* parent = &m_entries[0];
+    DirectoryEntry *parent = &m_entries[0];
     QStringList parts = streamName.split('/');
-    for (int i = 0; i < parts.size()-1; i++) {
+    for (int i = 0; i < parts.size() - 1; i++) {
         if (parent->children.contains(parts[i])) {
             parent = parent->children[parts[i]];
             Q_ASSERT(parent->type == DirectoryEntry::Storage);
@@ -226,15 +237,17 @@ QIODevice* CFBWriter::openSubStream(const QString &streamName)
     return new StreamIODevice(*this, m_entries.last());
 }
 
-void CFBWriter::setRootClassId(const QUuid& classId)
+void CFBWriter::setRootClassId(const QUuid &classId)
 {
     m_entries[0].uuid = classId;
 }
 
-static bool compareNames(const QString& a, const QString& b)
+static bool compareNames(const QString &a, const QString &b)
 {
-    if (a.length() < b.length()) return true;
-    if (a.length() > b.length()) return false;
+    if (a.length() < b.length())
+        return true;
+    if (a.length() > b.length())
+        return false;
     return a.toUpper() < b.toUpper();
 }
 
@@ -246,8 +259,8 @@ void CFBWriter::DirectoryEntry::buildChildrenTree()
     }
     QList<QString> names = children.keys();
     std::sort(names.begin(), names.end(), compareNames);
-    QList<DirectoryEntry*> entries;
-    foreach (const QString& name, names) {
+    QList<DirectoryEntry *> entries;
+    foreach (const QString &name, names) {
         entries.append(children[name]);
     }
     int h = entries.size() / 2;
@@ -260,13 +273,13 @@ void CFBWriter::DirectoryEntry::buildSiblingTree(const QList<DirectoryEntry *> &
     if (middle > first) {
         int h = middle / 2;
         leftSibling = nodes[h];
-        leftSibling->buildSiblingTree(nodes, first, h, middle-1);
+        leftSibling->buildSiblingTree(nodes, first, h, middle - 1);
     } else
         leftSibling = 0;
     if (last > middle) {
         int h = ((last - middle + 1) / 2) + middle;
         rightSibling = nodes[h];
-        rightSibling->buildSiblingTree(nodes, middle+1, h, last);
+        rightSibling->buildSiblingTree(nodes, middle + 1, h, last);
     } else
         rightSibling = 0;
 }
@@ -281,7 +294,7 @@ void CFBWriter::close()
     Q_ASSERT(!m_device->isSequential());
 
     // close streams
-    foreach (StreamIODevice* stream, m_openStreams)
+    foreach (StreamIODevice *stream, m_openStreams)
         stream->close();
 
     // write directory entries
@@ -293,24 +306,25 @@ void CFBWriter::close()
     unsigned dirSector = -1;
     m_directorySectorCount = 0;
     m_firstDirectorySector = -1;
-    for (int i = 0; i < m_entries.size(); i += m_sectorSize/128) {
+    for (int i = 0; i < m_entries.size(); i += m_sectorSize / 128) {
         QByteArray sector(m_sectorSize, '\0');
         QBuffer b(&sector);
         b.open(QIODevice::WriteOnly);
         QDataStream ds(&b);
         ds.setByteOrder(QDataStream::LittleEndian);
-        for (int j = 0; j < int(m_sectorSize/128) && i+j < m_entries.size(); j++) {
-            const DirectoryEntry& e = m_entries[i+j];
-            const ushort* name = e.name.utf16();
+        for (int j = 0; j < int(m_sectorSize / 128) && i + j < m_entries.size(); j++) {
+            const DirectoryEntry &e = m_entries[i + j];
+            const ushort *name = e.name.utf16();
             int n = 0;
             while (*name) {
                 ds << quint16(*name);
-                n++; name++;
+                n++;
+                name++;
             }
-            for (int i = 0; i < 32-n; i++) {
+            for (int i = 0; i < 32 - n; i++) {
                 ds << quint16(0);
             }
-            ds << quint16(n*2+2);
+            ds << quint16(n * 2 + 2);
             ds << quint8(e.type);
             ds << quint8(0); // color flag: black
             ds << quint32(e.leftSibling ? e.leftSibling->id : NOSTREAM);
@@ -330,14 +344,14 @@ void CFBWriter::close()
 
     // write mini-fat
     unsigned miniFatSector = -1;
-    for (int i = 0; i < m_miniFat.size(); i += m_sectorSize/4) {
+    for (int i = 0; i < m_miniFat.size(); i += m_sectorSize / 4) {
         QByteArray sector(m_sectorSize, '\0');
         QBuffer b(&sector);
         b.open(QIODevice::WriteOnly);
         QDataStream ds(&b);
         ds.setByteOrder(QDataStream::LittleEndian);
-        for (int j = 0; j < int(m_sectorSize/4) && i+j < m_miniFat.size(); j++) {
-            ds << quint32(m_miniFat[i+j]);
+        for (int j = 0; j < int(m_sectorSize / 4) && i + j < m_miniFat.size(); j++) {
+            ds << quint32(m_miniFat[i + j]);
         }
         miniFatSector = writeSector(sector, miniFatSector);
         if (m_miniFatSectorCount == 0) {
@@ -347,10 +361,10 @@ void CFBWriter::close()
     }
 
     // write fat
-    unsigned sectorCount = (m_fat.size() + (m_sectorSize/4)-1) / (m_sectorSize/4);
+    unsigned sectorCount = (m_fat.size() + (m_sectorSize / 4) - 1) / (m_sectorSize / 4);
     unsigned fatSize = m_fat.size() + sectorCount;
-    while ((fatSize + (m_sectorSize/4)-1) / (m_sectorSize/4) > sectorCount) {
-        sectorCount = (fatSize + (m_sectorSize/4)-1) / (m_sectorSize/4);
+    while ((fatSize + (m_sectorSize / 4) - 1) / (m_sectorSize / 4) > sectorCount) {
+        sectorCount = (fatSize + (m_sectorSize / 4) - 1) / (m_sectorSize / 4);
         fatSize = m_fat.size() + sectorCount;
     }
     for (unsigned i = 0; i < sectorCount; ++i) {
@@ -362,7 +376,7 @@ void CFBWriter::close()
         m_device->seek((sector + 1) * m_sectorSize);
         QDataStream ds(m_device);
         ds.setByteOrder(QDataStream::LittleEndian);
-        for (unsigned j = 0, idx = i*(m_sectorSize/4); j < m_sectorSize/4; ++j, ++idx) {
+        for (unsigned j = 0, idx = i * (m_sectorSize / 4); j < m_sectorSize / 4; ++j, ++idx) {
             ds << quint32(idx < unsigned(m_fat.size()) ? m_fat[idx] : FREESECT);
         }
     }
@@ -448,7 +462,7 @@ unsigned CFBWriter::writeMiniSector(const QByteArray &data, unsigned previousSec
 
 unsigned CFBWriter::fatSectorCount() const
 {
-    return (m_fat.size() + (m_sectorSize/4)-1) / (m_sectorSize/4);
+    return (m_fat.size() + (m_sectorSize / 4) - 1) / (m_sectorSize / 4);
 }
 
 void CFBWriter::writeHeader()
@@ -465,19 +479,19 @@ void CFBWriter::writeHeader()
     QDataStream ds(m_device);
     ds.setByteOrder(QDataStream::LittleEndian);
 
-    ds.writeRawData(reinterpret_cast<const char*>(signature), signatureLength); // Header Signature
-    ds.writeRawData(zeroes, 16);   // Header CLSID
-    ds << quint16(0x003E);         // Minor version
-    ds << quint16(m_sectorSize == 4096 ? 0x0004 : 0x0003);         // Major version
-    ds << quint16(0xFFFE);         // Byte order
-    ds << quint16(m_sectorSize == 4096 ? 0x000C : 0x0009);         // Sector shift
-    ds << quint16(0x0006);         // Mini Sector shift
-    ds.writeRawData(zeroes, 6);    // Reserved
+    ds.writeRawData(reinterpret_cast<const char *>(signature), signatureLength); // Header Signature
+    ds.writeRawData(zeroes, 16); // Header CLSID
+    ds << quint16(0x003E); // Minor version
+    ds << quint16(m_sectorSize == 4096 ? 0x0004 : 0x0003); // Major version
+    ds << quint16(0xFFFE); // Byte order
+    ds << quint16(m_sectorSize == 4096 ? 0x000C : 0x0009); // Sector shift
+    ds << quint16(0x0006); // Mini Sector shift
+    ds.writeRawData(zeroes, 6); // Reserved
     ds << quint32(m_sectorSize == 4096 ? m_directorySectorCount : 0);
     ds << quint32(fatSectorCount());
     ds << quint32(m_firstDirectorySector);
-    ds << quint32(0);              // Transaction Signature Number
-    ds << quint32(0x1000);         // Mini Stream Cutoff size
+    ds << quint32(0); // Transaction Signature Number
+    ds << quint32(0x1000); // Mini Stream Cutoff size
     ds << quint32(m_firstMiniFatSector);
     ds << quint32(m_miniFatSectorCount);
     ds << quint32(m_firstDifatSector);

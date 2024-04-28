@@ -9,26 +9,26 @@
 
 #include "SpellCheck.h"
 #include "BgSpellCheck.h"
-#include "SpellCheckMenu.h"
 #include "SpellCheckDebug.h"
+#include "SpellCheckMenu.h"
 
 #include <KoCharacterStyle.h>
 #include <KoTextBlockData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootAreaProvider.h>
 
-#include <KSharedConfig>
-#include <KLocalizedString>
 #include <KConfigGroup>
+#include <KLocalizedString>
+#include <KSharedConfig>
 #include <ktoggleaction.h>
 #include <sonnet/configdialog.h>
 
+#include <QAction>
+#include <QApplication>
 #include <QTextBlock>
+#include <QTextCharFormat>
 #include <QThread>
 #include <QTimer>
-#include <QApplication>
-#include <QTextCharFormat>
-#include <QAction>
 
 SpellCheck::SpellCheck()
     : m_document(0)
@@ -49,18 +49,17 @@ SpellCheck::SpellCheck()
     KToggleAction *spellCheck = new KToggleAction(i18n("Auto Spell Check"), this);
     addAction("tool_auto_spellcheck", spellCheck);
 
-    KConfigGroup spellConfig =  KSharedConfig::openConfig()->group("Spelling");
+    KConfigGroup spellConfig = KSharedConfig::openConfig()->group("Spelling");
     m_enableSpellCheck = spellConfig.readEntry("autoSpellCheck", m_enableSpellCheck);
     spellCheck->setChecked(m_enableSpellCheck);
     m_speller = Sonnet::Speller(spellConfig.readEntry("defaultLanguage", "en_US"));
     m_bgSpellCheck = new BgSpellCheck(m_speller, this);
 
     m_spellCheckMenu = new SpellCheckMenu(m_speller, this);
-    QPair<QString, QAction*> pair = m_spellCheckMenu->menuAction();
+    QPair<QString, QAction *> pair = m_spellCheckMenu->menuAction();
     addAction(pair.first, pair.second);
 
-    connect(m_bgSpellCheck, &BgSpellCheck::misspelledWord,
-            this, &SpellCheck::highlightMisspelled);
+    connect(m_bgSpellCheck, &BgSpellCheck::misspelledWord, this, &SpellCheck::highlightMisspelled);
     connect(m_bgSpellCheck, &Sonnet::BackgroundChecker::done, this, &SpellCheck::finishedRun);
     connect(spellCheck, &QAction::toggled, this, &SpellCheck::setBackgroundSpellChecking);
 }
@@ -95,7 +94,7 @@ void SpellCheck::startingSimpleEdit(QTextDocument *document, int cursorPosition)
 
 void SpellCheck::checkSection(QTextDocument *document, int startPosition, int endPosition)
 {
-    if (startPosition >= endPosition) {  // no work
+    if (startPosition >= endPosition) { // no work
         return;
     }
 
@@ -119,10 +118,10 @@ void SpellCheck::setDocument(QTextDocument *document)
     if (m_document == document)
         return;
     if (m_document)
-        disconnect (document, &QTextDocument::contentsChange, this, &SpellCheck::documentChanged);
+        disconnect(document, &QTextDocument::contentsChange, this, &SpellCheck::documentChanged);
 
     m_document = document;
-    connect (document, &QTextDocument::contentsChange, this, &SpellCheck::documentChanged);
+    connect(document, &QTextDocument::contentsChange, this, &SpellCheck::documentChanged);
 }
 
 QStringList SpellCheck::availableBackends() const
@@ -148,7 +147,7 @@ void SpellCheck::setBackgroundSpellChecking(bool on)
 {
     if (m_enableSpellCheck == on)
         return;
-    KConfigGroup spellConfig =  KSharedConfig::openConfig()->group("Spelling");
+    KConfigGroup spellConfig = KSharedConfig::openConfig()->group("Spelling");
     m_enableSpellCheck = on;
     spellConfig.writeEntry("autoSpellCheck", m_enableSpellCheck);
     if (m_document) {
@@ -160,13 +159,12 @@ void SpellCheck::setBackgroundSpellChecking(bool on)
             m_spellCheckMenu->setEnabled(false);
             m_spellCheckMenu->setVisible(false);
         } else {
-            //when re-enabling 'Auto Spell Check' we want spellchecking the whole document
+            // when re-enabling 'Auto Spell Check' we want spellchecking the whole document
             checkSection(m_document, 0, m_document->characterCount() - 1);
             m_spellCheckMenu->setVisible(true);
         }
     }
 }
-
 
 void SpellCheck::setSkipAllUppercaseWords(bool on)
 {
@@ -187,10 +185,10 @@ bool SpellCheck::addWordToPersonal(const QString &word, int startPosition)
     KoTextBlockData blockData(block);
     blockData.setMarkupsLayoutValidity(KoTextBlockData::Misspell, false);
     checkSection(m_document, block.position(), block.position() + block.length() - 1);
-    // TODO we should probably recheck the entire document so other occurrences are also removed, but then again we should recheck every document (footer,header etc) not sure how to do this
+    // TODO we should probably recheck the entire document so other occurrences are also removed, but then again we should recheck every document (footer,header
+    // etc) not sure how to do this
     return m_bgSpellCheck->addWordToPersonal(word);
 }
-
 
 QString SpellCheck::defaultLanguage() const
 {
@@ -233,7 +231,7 @@ static_cast<MyThread*>(QThread::currentThread())->mySleep(400);
 
 void SpellCheck::documentChanged(int from, int charsRemoved, int charsAdded)
 {
-    QTextDocument *document = qobject_cast<QTextDocument*>(sender());
+    QTextDocument *document = qobject_cast<QTextDocument *>(sender());
     if (document == 0)
         return;
 
@@ -271,7 +269,7 @@ void SpellCheck::documentChanged(int from, int charsRemoved, int charsAdded)
             blockData.clearMarkups(KoTextBlockData::Misspell);
         }
         block = block.next();
-    } while(block.isValid() && block.position() <= from + charsAdded);
+    } while (block.isValid() && block.position() <= from + charsAdded);
 
     m_simpleEdit = false;
 }
@@ -293,7 +291,7 @@ void SpellCheck::runQueue()
             KoTextBlockData blockData(block);
             blockData.clearMarkups(KoTextBlockData::Misspell);
             block = block.next();
-        } while(block.isValid() && block.position() < m_activeSection.to);
+        } while (block.isValid() && block.position() < m_activeSection.to);
 
         m_bgSpellCheck->startRun(m_activeSection.document, m_activeSection.from, m_activeSection.to);
         break;
@@ -303,7 +301,7 @@ void SpellCheck::runQueue()
 void SpellCheck::configureSpellCheck()
 {
     Sonnet::ConfigDialog *dialog = new Sonnet::ConfigDialog(0);
-    connect (dialog, &Sonnet::ConfigDialog::languageChanged, this, &SpellCheck::setDefaultLanguage);
+    connect(dialog, &Sonnet::ConfigDialog::languageChanged, this, &SpellCheck::setDefaultLanguage);
     dialog->exec();
     delete dialog;
 }
@@ -313,7 +311,7 @@ void SpellCheck::finishedRun()
     Q_ASSERT(QThread::currentThread() == QApplication::instance()->thread());
     m_isChecking = false;
 
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_activeSection.document->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(m_activeSection.document->documentLayout());
     lay->provider()->updateAll();
 
     QTimer::singleShot(0, this, &SpellCheck::runQueue);
@@ -323,7 +321,7 @@ void SpellCheck::setCurrentCursorPosition(QTextDocument *document, int cursorPos
 {
     setDocument(document);
     if (m_enableSpellCheck) {
-        //check if word at cursor is misspelled
+        // check if word at cursor is misspelled
         QTextBlock block = m_document->findBlock(cursorPosition);
         if (block.isValid()) {
             KoTextBlockData blockData(block);
@@ -359,7 +357,7 @@ void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition,
 
     QTextCursor cursor(m_document);
     cursor.setPosition(startPosition);
-    cursor.movePosition(QTextCursor::NextCharacter,QTextCursor::KeepAnchor, lengthOfWord);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, lengthOfWord);
     cursor.removeSelectedText();
     cursor.insertText(word);
 }

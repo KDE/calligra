@@ -9,7 +9,6 @@
 #ifndef KCHART_AXIS_H
 #define KCHART_AXIS_H
 
-
 // Qt
 #include <QObject>
 
@@ -18,16 +17,15 @@
 
 #include <KChartCartesianAxis.h>
 
-namespace KoOdfNumberStyles {
-    struct NumericStyleFormat;
+namespace KoOdfNumberStyles
+{
+struct NumericStyleFormat;
 }
 
-namespace KoChart {
+namespace KoChart
+{
 
-enum OdfGridClass {
-    OdfMajorGrid,
-    OdfMinorGrid
-};
+enum OdfGridClass { OdfMajorGrid, OdfMinorGrid };
 
 /**
  * @brief The Axis class handles axis as well as grid settings.
@@ -56,7 +54,7 @@ public:
     bool showOverlappingDataLabels() const;
     QString id() const;
     AxisDimension dimension() const;
-    QList<DataSet*> dataSets() const;
+    QList<DataSet *> dataSets() const;
     qreal majorInterval() const;
     qreal minorInterval() const;
     int minorIntervalDivisor() const;
@@ -119,8 +117,7 @@ public:
     void SetNumericStyleFormat(KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat) const;
 
     bool loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &context);
-    bool loadOdfChartSubtypeProperties(const KoXmlElement &axisElement,
-                                        KoShapeLoadingContext &context);
+    bool loadOdfChartSubtypeProperties(const KoXmlElement &axisElement, KoShapeLoadingContext &context);
     void saveOdf(KoShapeSavingContext &context);
     void saveOdfGrid(KoShapeSavingContext &context, OdfGridClass gridClass);
 
@@ -151,7 +148,8 @@ public:
      * The attribute value is an integer that is interpreted as a percentage relative to the width of a single bar.
      * Negative values specify gaps between bars.
      * This attribute is evaluated for chart styles that are applied to a <chart:axis> element when a chart:dimension attribute set to y.
-     * Note: This allows bars to be attached to different axis arranged differently as long as they are grouped per axis (chart:group-bars-per-axis attribute is true).
+     * Note: This allows bars to be attached to different axis arranged differently as long as they are grouped per axis (chart:group-bars-per-axis attribute is
+     * true).
      */
     int gapBetweenBars() const;
     /**
@@ -163,7 +161,8 @@ public:
      * (that is the distance between the last bar in one category and t*he first bar in the following category).
      * It is specified as an integer percentage relative to the width of a single bar.
      * This attribute is evaluated for chart styles that are applied to a <chart:axis> element with chart:dimension attribute set to y.
-     * Note: Bars attached to different axis can be arranged differently as long as they are grouped per axis (chart:group-bars-per-axis attribute has the value true).
+     * Note: Bars attached to different axis can be arranged differently as long as they are grouped per axis (chart:group-bars-per-axis attribute has the value
+     * true).
      */
     int gapBetweenSets() const;
 

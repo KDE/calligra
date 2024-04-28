@@ -28,13 +28,15 @@
 #ifndef CONVERT_H
 #define CONVERT_H
 
+#include "wv2_export.h"
 #include <word95_generated.h>
 #include <word97_generated.h>
-#include "wv2_export.h"
 
-namespace wvWare {
+namespace wvWare
+{
 
-namespace Word95 {
+namespace Word95
+{
 
 // This has been added to the template file, as the mapping is
 // non-trivial. Shaheed: Please check the implementation

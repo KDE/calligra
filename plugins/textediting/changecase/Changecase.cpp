@@ -7,13 +7,13 @@
 #include "Changecase.h"
 #include "ChangecaseDebug.h"
 
+#include <QRadioButton>
 #include <QTextBlock>
 #include <QTextDocument>
-#include <QRadioButton>
 #include <QVBoxLayout>
 
-#include <KoDialog.h>
 #include <KLocalizedString>
+#include <KoDialog.h>
 
 Changecase::Changecase()
 {
@@ -137,8 +137,7 @@ void Changecase::sentenceCase()
                     m_cursor.insertText(currentWord.toUpper());
                     iter--;
                     pos--;
-                }
-                else if (prevLetterIndex < m_startPosition)
+                } else if (prevLetterIndex < m_startPosition)
                     break;
             }
         }
@@ -148,8 +147,7 @@ void Changecase::sentenceCase()
                 m_cursor.setPosition(pos);
                 m_cursor.deleteChar();
                 m_cursor.insertText((*iter).toUpper());
-            }
-            else if (!(*iter).isLetter() && currentWord.isLower()) {
+            } else if (!(*iter).isLetter() && currentWord.isLower()) {
                 m_cursor.setPosition(prevLetterIndex);
                 m_cursor.deleteChar();
                 m_cursor.insertText(currentWord.toUpper());
@@ -257,14 +255,13 @@ void Changecase::initialCaps()
         QString::ConstIterator constIter = text.constBegin();
         while (pos < m_endPosition && constIter != text.constEnd()) {
             bool isSpace = constIter->isSpace();
-            
+
             if (pos >= m_startPosition) {
                 if (space && !isSpace) {
                     if (!foundToBeChanged && constIter->isLower())
                         foundToBeChanged = true;
                     result.append(constIter->toTitleCase());
-                }
-                else
+                } else
                     result.append(*constIter);
             }
 

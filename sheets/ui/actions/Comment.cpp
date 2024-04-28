@@ -11,13 +11,10 @@
 
 #include <KLocalizedString>
 
-#include "engine/CellBaseStorage.h"
 #include "core/Sheet.h"
-
-
+#include "engine/CellBaseStorage.h"
 
 using namespace Calligra::Sheets;
-
 
 Comment::Comment(Actions *actions)
     : DialogCellAction(actions, "comment", i18n("Comment..."), koIcon("edit-comment"), i18n("Edit a comment for this cell"))
@@ -28,7 +25,6 @@ Comment::Comment(Actions *actions)
 Comment::~Comment()
 {
 }
-
 
 ActionDialog *Comment::createDialog(QWidget *canvasWidget)
 {
@@ -46,13 +42,12 @@ void Comment::onSelectionChanged()
 
 void Comment::changeComment(const QString &comment)
 {
-    CommentCommand* command = new CommentCommand();
+    CommentCommand *command = new CommentCommand();
     command->setSheet(m_selection->activeSheet());
     command->setComment(comment);
     command->add(*m_selection);
     command->execute(m_selection->canvas());
 }
-
 
 ClearComment::ClearComment(Actions *actions)
     : CellAction(actions, "clearComment", i18n("Clear Comment"), koIcon("delete-comment"), i18n("Remove this cell's comment"))
@@ -63,7 +58,8 @@ ClearComment::~ClearComment()
 {
 }
 
-QAction *ClearComment::createAction() {
+QAction *ClearComment::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Remove Comment"));
     return res;
@@ -72,27 +68,25 @@ QAction *ClearComment::createAction() {
 // We're just keeping this enabled for everything, no need to check every selection change
 void ClearComment::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    CommentCommand* command = new CommentCommand();
+    CommentCommand *command = new CommentCommand();
     command->setSheet(sheet);
     command->setComment(QString());
     command->add(*selection);
     command->execute(selection->canvas());
 }
 
-
-
-CommentCommand::CommentCommand(KUndo2Command* parent)
-        : AbstractRegionCommand(parent)
+CommentCommand::CommentCommand(KUndo2Command *parent)
+    : AbstractRegionCommand(parent)
 {
 }
 
-bool CommentCommand::process(Element* element)
+bool CommentCommand::process(Element *element)
 {
     m_sheet->cellStorage()->setComment(element->rect().left(), element->rect().top(), m_comment);
     return true;
 }
 
-void CommentCommand::setComment(const QString& comment)
+void CommentCommand::setComment(const QString &comment)
 {
     m_comment = comment;
     if (m_comment.isEmpty())
@@ -100,4 +94,3 @@ void CommentCommand::setComment(const QString& comment)
     else
         setText(kundo2_i18n("Add Comment"));
 }
-

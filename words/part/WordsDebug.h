@@ -14,14 +14,14 @@
 
 extern const WORDS_EXPORT QLoggingCategory &WORDS_LOG();
 
-#define debugWords qCDebug(WORDS_LOG)<<Q_FUNC_INFO
-#define warnWords qCWarning(WORDS_LOG)<<Q_FUNC_INFO
-#define errorWords qCCritical(WORDS_LOG)<<Q_FUNC_INFO
+#define debugWords qCDebug(WORDS_LOG) << Q_FUNC_INFO
+#define warnWords qCWarning(WORDS_LOG) << Q_FUNC_INFO
+#define errorWords qCCritical(WORDS_LOG) << Q_FUNC_INFO
 
 extern const WORDS_EXPORT QLoggingCategory &WORDSUI_LOG();
 
-#define debugWordsUI qCDebug(WORDSUI_LOG)<<Q_FUNC_INFO
-#define warnWordsUI qCWarning(WORDSUI_LOG)<<Q_FUNC_INFO
-#define errorWordsUI qCCritical(WORDSUI_LOG)<<Q_FUNC_INFO
+#define debugWordsUI qCDebug(WORDSUI_LOG) << Q_FUNC_INFO
+#define warnWordsUI qCWarning(WORDSUI_LOG) << Q_FUNC_INFO
+#define errorWordsUI qCCritical(WORDSUI_LOG) << Q_FUNC_INFO
 
 #endif

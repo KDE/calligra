@@ -10,15 +10,15 @@
 #include <KLocalizedString>
 #include <math.h>
 
-KoPathSegmentBreakCommand::KoPathSegmentBreakCommand(const KoPathPointData & pointData, KUndo2Command *parent)
-        : KUndo2Command(parent)
-        , m_pointData(pointData)
-        , m_startIndex(-1, -1)
-        , m_broken(false)
+KoPathSegmentBreakCommand::KoPathSegmentBreakCommand(const KoPathPointData &pointData, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_pointData(pointData)
+    , m_startIndex(-1, -1)
+    , m_broken(false)
 {
     if (m_pointData.pathShape->isClosedSubpath(m_pointData.pointIndex.first)) {
         m_startIndex = m_pointData.pointIndex;
-        KoPathPoint * before = m_pointData.pathShape->pointByIndex(m_startIndex);
+        KoPathPoint *before = m_pointData.pathShape->pointByIndex(m_startIndex);
         if (before->properties() & KoPathPoint::CloseSubpath) {
             m_startIndex.second = 0;
         } else {

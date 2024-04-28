@@ -10,10 +10,9 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &PICTURE_LOG();
 
-#define debugPicture qCDebug(PICTURE_LOG)<<Q_FUNC_INFO
+#define debugPicture qCDebug(PICTURE_LOG) << Q_FUNC_INFO
 #define warnPicture qCWarning(PICTURE_LOG)
 #define errorPicture qCCritical(PICTURE_LOG)
 

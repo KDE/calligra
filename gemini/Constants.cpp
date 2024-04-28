@@ -9,13 +9,13 @@
 #include <QApplication>
 #include <QWidget>
 
-Constants::Constants(QObject* parent)
+Constants::Constants(QObject *parent)
     : QObject(parent)
 {
     m_gridWidth = qApp->activeWindow()->width() / gridColumns();
     m_gridHeight = qApp->activeWindow()->height() / gridRows();
     m_toolbarButtonSize = m_gridHeight;
-    m_toolbarHeight = (m_gridHeight *  gridRows()) / 12.55814; // magic number which /should/ yield a nice, solid 84 if we're running at 1080p
+    m_toolbarHeight = (m_gridHeight * gridRows()) / 12.55814; // magic number which /should/ yield a nice, solid 84 if we're running at 1080p
 }
 
 int Constants::animationDuration() const
@@ -28,11 +28,11 @@ qreal Constants::gridHeight() const
     return m_gridHeight;
 }
 
-void Constants::setGridHeight( qreal height )
+void Constants::setGridHeight(qreal height)
 {
     m_gridHeight = height;
     m_toolbarButtonSize = m_gridHeight;
-    m_toolbarHeight = (m_gridHeight *  gridRows()) / 12.55814; // magic number which /should/ yield a nice, solid 84 if we're running at 1080p
+    m_toolbarHeight = (m_gridHeight * gridRows()) / 12.55814; // magic number which /should/ yield a nice, solid 84 if we're running at 1080p
     emit gridSizeChanged();
 }
 
@@ -41,11 +41,11 @@ qreal Constants::gridWidth() const
     return m_gridWidth;
 }
 
-void Constants::setGridWidth( qreal width )
+void Constants::setGridWidth(qreal width)
 {
     m_gridWidth = width;
     m_toolbarButtonSize = m_gridHeight;
-    m_toolbarHeight = (m_gridHeight *  gridRows()) / 12.55814; // magic number which /should/ yield a nice, solid 84 if we're running at 1080p
+    m_toolbarHeight = (m_gridHeight * gridRows()) / 12.55814; // magic number which /should/ yield a nice, solid 84 if we're running at 1080p
     emit gridSizeChanged();
 }
 
@@ -98,8 +98,8 @@ qreal Constants::hugeFontSize() const
 
 bool Constants::isLandscape() const
 {
-	// If user switches certain settings in windows, activeWindow can become null.
-	if(qApp->activeWindow())
-	    return qApp->activeWindow()->height() < qApp->activeWindow()->width();
-	return true;
+    // If user switches certain settings in windows, activeWindow can become null.
+    if (qApp->activeWindow())
+        return qApp->activeWindow()->height() < qApp->activeWindow()->width();
+    return true;
 }

@@ -6,11 +6,11 @@
 #ifndef SIMPLECAPTIONSWIDGET_H
 #define SIMPLECAPTIONSWIDGET_H
 
-#include <ui_SimpleCaptionsWidget.h>
 #include <KoListStyle.h>
+#include <ui_SimpleCaptionsWidget.h>
 
-#include <QWidget>
 #include <QTextBlock>
+#include <QWidget>
 
 class TextTool;
 class KoStyleManager;
@@ -26,7 +26,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void doneWithFocus();
-    
+
 private:
     Ui::SimpleCaptionsWidget widget;
     KoStyleManager *m_styleManager;

@@ -11,10 +11,9 @@
 #include <KoCharacterStyle.h>
 #include <KoStyleThumbnailer.h>
 
-
 StylesManagerModel::StylesManagerModel(QObject *parent)
-: QAbstractListModel(parent)
-, m_styleThumbnailer(0)
+    : QAbstractListModel(parent)
+    , m_styleThumbnailer(0)
 {
 }
 
@@ -28,7 +27,7 @@ QVariant StylesManagerModel::data(const QModelIndex &index, int role) const
     if (row < 0 || row >= m_styles.size()) {
         return QVariant();
     }
-    //debugTextShape << row << role;
+    // debugTextShape << row << role;
 
     QVariant retval;
     switch (role) {
@@ -38,8 +37,7 @@ QVariant StylesManagerModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole:
         if (!m_styleThumbnailer) {
             retval = QPixmap();
-        }
-        else {
+        } else {
             retval = m_styleThumbnailer->thumbnail(m_styles[row]);
         }
         break;
@@ -126,6 +124,3 @@ QModelIndex StylesManagerModel::styleIndex(KoCharacterStyle *style)
     }
     return index;
 }
-
-
-

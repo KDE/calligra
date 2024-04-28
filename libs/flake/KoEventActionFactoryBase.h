@@ -15,7 +15,7 @@ class KoEventAction;
 class QWidget;
 
 /**
- * Factory for creating KoEventActions 
+ * Factory for creating KoEventActions
  *
  * This is the base class for event action plugins. Each plugin that ships a KoEventAction should
  * also ship a factory.
@@ -30,7 +30,7 @@ public:
      * @param action Only presentation event actions need to set the action. It is not used
      *               for script event actions.
      */
-    explicit KoEventActionFactoryBase(const QString &id, const QString & action = QString());
+    explicit KoEventActionFactoryBase(const QString &id, const QString &action = QString());
     virtual ~KoEventActionFactoryBase();
 
     /**
@@ -56,7 +56,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOEVENTACTIONFACTORY_H */

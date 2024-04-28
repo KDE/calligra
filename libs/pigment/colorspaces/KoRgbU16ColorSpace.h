@@ -9,9 +9,9 @@
 
 #include <QColor>
 
+#include "KoColorModelStandardIds.h"
 #include "KoSimpleColorSpace.h"
 #include "KoSimpleColorSpaceFactory.h"
-#include "KoColorModelStandardIds.h"
 
 struct KoBgrU16Traits;
 
@@ -21,45 +21,41 @@ struct KoBgrU16Traits;
  */
 class KoRgbU16ColorSpace : public KoSimpleColorSpace<KoBgrU16Traits>
 {
-
 public:
-
     KoRgbU16ColorSpace();
     ~KoRgbU16ColorSpace() override;
 
     static QString colorSpaceId();
 
-    virtual KoColorSpace* clone() const;
+    virtual KoColorSpace *clone() const;
 
-    void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const override;
+    void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *profile = 0) const override;
 
-    void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const override;
-    
+    void toQColor(const quint8 *src, QColor *c, const KoColorProfile *profile = 0) const override;
+
     void toHSY(const QVector<qreal> &channelValues, qreal *hue, qreal *sat, qreal *luma) const override;
-    QVector <qreal> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
+    QVector<qreal> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
     void toYUV(const QVector<qreal> &channelValues, qreal *y, qreal *u, qreal *v) const override;
-    QVector <qreal> fromYUV(qreal *y, qreal *u, qreal *v) const override;
-
+    QVector<qreal> fromYUV(qreal *y, qreal *u, qreal *v) const override;
 };
 
 class KoRgbU16ColorSpaceFactory : public KoSimpleColorSpaceFactory
 {
-
 public:
     KoRgbU16ColorSpaceFactory()
-            : KoSimpleColorSpaceFactory(KoRgbU16ColorSpace::colorSpaceId(),
-                                        i18n("RGB (16-bit integer/channel, unmanaged)"),
-                                        true,
-                                        RGBAColorModelID,
-                                        Integer16BitsColorDepthID,
-                                        16) {
+        : KoSimpleColorSpaceFactory(KoRgbU16ColorSpace::colorSpaceId(),
+                                    i18n("RGB (16-bit integer/channel, unmanaged)"),
+                                    true,
+                                    RGBAColorModelID,
+                                    Integer16BitsColorDepthID,
+                                    16)
+    {
     }
 
-    KoColorSpace *createColorSpace(const KoColorProfile *) const override {
+    KoColorSpace *createColorSpace(const KoColorProfile *) const override
+    {
         return new KoRgbU16ColorSpace();
     }
-
 };
-
 
 #endif

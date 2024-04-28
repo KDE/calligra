@@ -6,7 +6,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "VectorShape.h"
 
@@ -14,24 +13,24 @@
 #include <math.h>
 
 // Qt
-#include <QFontDatabase>
-#include <QPen>
-#include <QPainter>
 #include <QBuffer>
 #include <QDataStream>
+#include <QFontDatabase>
 #include <QMutexLocker>
-#include <QThreadPool>
+#include <QPainter>
+#include <QPen>
 #include <QSvgRenderer>
+#include <QThreadPool>
 
 // Calligra
-#include "KoUnit.h"
 #include "KoStore.h"
+#include "KoUnit.h"
 #include "KoXmlNS.h"
 #include "KoXmlReader.h"
 #include "KoXmlWriter.h"
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
 
@@ -39,27 +38,27 @@
 #include "WmfPainterBackend.h"
 
 // Vector shape
-#include "VectorDebug.h"
-#include "EmfParser.h"
-#include "EmfOutputPainterStrategy.h"
 #include "EmfOutputDebugStrategy.h"
-#include "SvmParser.h"
+#include "EmfOutputPainterStrategy.h"
+#include "EmfParser.h"
 #include "SvmPainterBackend.h"
+#include "SvmParser.h"
+#include "VectorDebug.h"
 
 // Comment out to get uncached painting, which is good for debugging
-//#define VECTORSHAPE_PAINT_UNCACHED
+// #define VECTORSHAPE_PAINT_UNCACHED
 
 // Comment out to get unthreaded painting, which is good for debugging
-//#define VECTORSHAPE_PAINT_UNTHREADED
+// #define VECTORSHAPE_PAINT_UNTHREADED
 
 VectorShape::VectorShape()
-    : KoFrameShape( KoXmlNS::draw, "image" )
+    : KoFrameShape(KoXmlNS::draw, "image")
     , m_type(VectorTypeNone)
     , m_isRendering(false)
 {
     setShapeId(VectorShape_SHAPEID);
     // Default size of the shape.
-    KoShape::setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
+    KoShape::setSize(QSizeF(CM_TO_POINT(8), CM_TO_POINT(5)));
     m_cache.setMaxCost(3);
 }
 
@@ -72,7 +71,7 @@ VectorShape::~VectorShape()
 }
 
 // Methods specific to the vector shape.
-QByteArray  VectorShape::compressedContents() const
+QByteArray VectorShape::compressedContents() const
 {
     return m_contents;
 }
@@ -95,11 +94,15 @@ void VectorShape::setCompressedContents(const QByteArray &newContents, VectorTyp
 // ----------------------------------------------------------------
 //                             Painting
 
-RenderThread::RenderThread(const QByteArray &contents, VectorShape::VectorType type,
-                           const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY)
-    : QObject(), QRunnable(),
-      m_contents(contents), m_type(type),
-      m_size(size), m_boundingSize(boundingSize), m_zoomX(zoomX), m_zoomY(zoomY)
+RenderThread::RenderThread(const QByteArray &contents, VectorShape::VectorType type, const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY)
+    : QObject()
+    , QRunnable()
+    , m_contents(contents)
+    , m_type(type)
+    , m_size(size)
+    , m_boundingSize(boundingSize)
+    , m_zoomX(zoomX)
+    , m_zoomY(zoomY)
 {
     setAutoDelete(true);
 }
@@ -155,7 +158,7 @@ void RenderThread::draw(QPainter &painter)
 
 void RenderThread::drawNull(QPainter &painter) const
 {
-    QRectF  rect(QPointF(0,0), m_size);
+    QRectF rect(QPointF(0, 0), m_size);
     painter.save();
 
     // Draw a simple cross in a rectangle just to indicate that there is something here.
@@ -169,7 +172,7 @@ void RenderThread::drawNull(QPainter &painter) const
 
 void RenderThread::drawWmf(QPainter &painter) const
 {
-    Libwmf::WmfPainterBackend  wmfPainter(&painter, m_size);
+    Libwmf::WmfPainterBackend wmfPainter(&painter, m_size);
     if (!wmfPainter.load(m_contents)) {
         drawNull(painter);
         return;
@@ -183,33 +186,33 @@ void RenderThread::drawWmf(QPainter &painter) const
 void RenderThread::drawEmf(QPainter &painter) const
 {
     // FIXME: Make emfOutput use QSizeF
-    QSize  shapeSizeInt( m_size.width(), m_size.height() );
-    //debugVector << "-------------------------------------------";
-    //debugVector << "size:     " << shapeSizeInt << m_size;
-    //debugVector << "position: " << position();
-    //debugVector << "-------------------------------------------";
+    QSize shapeSizeInt(m_size.width(), m_size.height());
+    // debugVector << "-------------------------------------------";
+    // debugVector << "size:     " << shapeSizeInt << m_size;
+    // debugVector << "position: " << position();
+    // debugVector << "-------------------------------------------";
 
-    Libemf::Parser  emfParser;
+    Libemf::Parser emfParser;
 
 #ifndef LIBEMF_DEBUG
     // Create a new painter output strategy.  Last param = true means keep aspect ratio.
-    Libemf::OutputPainterStrategy  emfPaintOutput( painter, shapeSizeInt, true );
-    emfParser.setOutput( &emfPaintOutput );
+    Libemf::OutputPainterStrategy emfPaintOutput(painter, shapeSizeInt, true);
+    emfParser.setOutput(&emfPaintOutput);
 #else
-    Libemf::OutputDebugStrategy  emfDebugOutput;
-    emfParser.setOutput( &emfDebugOutput );
+    Libemf::OutputDebugStrategy emfDebugOutput;
+    emfParser.setOutput(&emfDebugOutput);
 #endif
     emfParser.load(m_contents);
 }
 
 void RenderThread::drawSvm(QPainter &painter) const
 {
-    QSize  shapeSizeInt( m_size.width(), m_size.height() );
+    QSize shapeSizeInt(m_size.width(), m_size.height());
 
-    Libsvm::SvmParser  svmParser;
+    Libsvm::SvmParser svmParser;
 
     // Create a new painter backend.
-    Libsvm::SvmPainterBackend  svmPaintOutput(&painter, shapeSizeInt);
+    Libsvm::SvmPainterBackend svmPaintOutput(&painter, shapeSizeInt);
     svmParser.setBackend(&svmPaintOutput);
     svmParser.parse(m_contents);
 }
@@ -254,17 +257,15 @@ void VectorShape::renderFinished(const QSize &boundingSize, QImage *image)
     m_isRendering = false;
 }
 
-
 // ----------------------------------------------------------------
 //                         Loading and Saving
 
-
-void VectorShape::saveOdf(KoShapeSavingContext & context) const
+void VectorShape::saveOdf(KoShapeSavingContext &context) const
 {
     QMutexLocker locker(&m_mutex);
 
     KoEmbeddedDocumentSaver &fileSaver = context.embeddedSaver();
-    KoXmlWriter             &xmlWriter = context.xmlWriter();
+    KoXmlWriter &xmlWriter = context.xmlWriter();
 
     QString fileName = fileSaver.getFilename("VectorImages/Image");
     QByteArray mimeType;
@@ -294,30 +295,28 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
     xmlWriter.endElement(); // draw:frame
 }
 
-bool VectorShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool VectorShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    //debugVector <<"Loading ODF frame in the vector shape. Element = " << element.tagName();
+    // debugVector <<"Loading ODF frame in the vector shape. Element = " << element.tagName();
     loadOdfAttributes(element, context, OdfAllAttributes);
     return loadOdfFrame(element, context);
 }
 
-
 inline static int read32(const char *buffer, const int offset)
 {
     // little endian
-    int result = (int) buffer[offset];
-    result |= (int) buffer[offset+1] << 8;
-    result |= (int) buffer[offset+2] << 16;
-    result |= (int) buffer[offset+3] << 24;
+    int result = (int)buffer[offset];
+    result |= (int)buffer[offset + 1] << 8;
+    result |= (int)buffer[offset + 2] << 16;
+    result |= (int)buffer[offset + 3] << 24;
 
     return result;
 }
 
 // Load the actual contents within the vector shape.
-bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
-                                      KoShapeLoadingContext &context)
+bool VectorShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    //debugVector <<"Loading ODF element: " << element.tagName();
+    // debugVector <<"Loading ODF element: " << element.tagName();
     QMutexLocker locker(&m_mutex);
 
     // Get the reference to the vector file.  If there is no href, then just return.
@@ -326,8 +325,8 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
         return false;
 
     // Try to open the embedded file.
-    KoStore *store  = context.odfLoadingContext().store();
-    bool     result = store->open(href);
+    KoStore *store = context.odfLoadingContext().store();
+    bool result = store->open(href);
 
     if (!result) {
         return false;
@@ -365,7 +364,7 @@ void VectorShape::waitUntilReady(const KoViewConverter &converter, bool asynchro
     render(converter, asynchronous, true);
 }
 
-QImage* VectorShape::render(const KoViewConverter &converter, bool asynchronous, bool useCache) const
+QImage *VectorShape::render(const KoViewConverter &converter, bool asynchronous, bool useCache) const
 {
     QRectF rect = converter.documentToView(boundingRect());
     int id = rect.size().toSize().height();
@@ -378,8 +377,7 @@ QImage* VectorShape::render(const KoViewConverter &converter, bool asynchronous,
             qreal zoomX, zoomY;
             converter.zoom(&zoomX, &zoomY);
             QMutexLocker locker(&m_mutex);
-            const QByteArray uncompressedContents =
-                m_type != VectorShape::VectorTypeNone ? qUncompress(m_contents) : QByteArray();
+            const QByteArray uncompressedContents = m_type != VectorShape::VectorTypeNone ? qUncompress(m_contents) : QByteArray();
             RenderThread *t = new RenderThread(uncompressedContents, m_type, size(), rect.size().toSize(), zoomX, zoomY);
             connect(t, &RenderThread::finished, this, &VectorShape::renderFinished);
             if (asynchronous) { // render and paint the image threaded
@@ -418,27 +416,24 @@ bool VectorShape::isWmf(const QByteArray &bytes)
     debugVector << "Check for WMF";
 
     const char *data = bytes.constData();
-    const int   size = bytes.count();
+    const int size = bytes.count();
 
     if (size < 10)
         return false;
 
     // This is how the 'file' command identifies a WMF.
-    if (data[0] == '\327' && data[1] == '\315' && data[2] == '\306' && data[3] == '\232')
-    {
+    if (data[0] == '\327' && data[1] == '\315' && data[2] == '\306' && data[3] == '\232') {
         // FIXME: Is this a compressed wmf?  Check it up.
         debugVector << "WMF identified: header 1";
         return true;
     }
 
-    if (data[0] == '\002' && data[1] == '\000' && data[2] == '\011' && data[3] == '\000')
-    {
+    if (data[0] == '\002' && data[1] == '\000' && data[2] == '\011' && data[3] == '\000') {
         debugVector << "WMF identified: header 2";
         return true;
     }
 
-    if (data[0] == '\001' && data[1] == '\000' && data[2] == '\011' && data[3] == '\000')
-    {
+    if (data[0] == '\001' && data[1] == '\000' && data[2] == '\011' && data[3] == '\000') {
         debugVector << "WMF identified: header 3";
         return true;
     }
@@ -451,20 +446,18 @@ bool VectorShape::isEmf(const QByteArray &bytes)
     debugVector << "Check for EMF";
 
     const char *data = bytes.constData();
-    const int   size = bytes.count();
+    const int size = bytes.count();
 
     // This is how the 'file' command identifies an EMF.
     // 1. Check type
     qint32 mark = read32(data, 0);
     if (mark != 0x00000001) {
-        //debugVector << "Not an EMF: mark = " << mark << " instead of 0x00000001";
+        // debugVector << "Not an EMF: mark = " << mark << " instead of 0x00000001";
         return false;
     }
 
     // 2. An EMF has the string " EMF" at the start + offset 40.
-    if (size > 44
-        && data[40] == ' ' && data[41] == 'E' && data[42] == 'M' && data[43] == 'F')
-    {
+    if (size > 44 && data[40] == ' ' && data[41] == 'E' && data[42] == 'M' && data[43] == 'F') {
         debugVector << "EMF identified";
         return true;
     }

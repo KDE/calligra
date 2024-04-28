@@ -7,8 +7,8 @@
 #ifndef REMOVEDELETECHANGESCOMMAND_H
 #define REMOVEDELETECHANGESCOMMAND_H
 
-#include <kundo2command.h>
 #include <QPointer>
+#include <kundo2command.h>
 
 class QTextDocument;
 

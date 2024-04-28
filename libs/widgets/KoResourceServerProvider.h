@@ -16,19 +16,18 @@
 
 #include <WidgetsDebug.h>
 
-#include "KoResourceServer.h"
-#include "KoPattern.h"
 #include "KoAbstractGradient.h"
 #include "KoColorSet.h"
+#include "KoPattern.h"
+#include "KoResourceServer.h"
 
 /**
  * KoResourceLoaderThread allows threaded loading of the resources of a resource server
  */
-class KOWIDGETS_EXPORT KoResourceLoaderThread : public QThread {
-
+class KOWIDGETS_EXPORT KoResourceLoaderThread : public QThread
+{
     Q_OBJECT
 public:
-
     /**
      * Constructs a KoResourceLoaderThread for a server
      * @param server the server the resources will be loaded for
@@ -49,11 +48,9 @@ protected:
     void run() override;
 
 private:
-
-    KoResourceServerBase * m_server;
+    KoResourceServerBase *m_server;
     QStringList m_fileNames;
 };
-
 
 /**
  * Provides default resource servers for gradients, patterns and palettes
@@ -66,19 +63,19 @@ public:
     KoResourceServerProvider();
     ~KoResourceServerProvider() override;
 
-    static KoResourceServerProvider* instance();
+    static KoResourceServerProvider *instance();
 
-    KoResourceServer<KoPattern>* patternServer(bool block = true);
-    KoResourceServer<KoAbstractGradient>* gradientServer(bool block = true);
-    KoResourceServer<KoColorSet>* paletteServer(bool block = true);
+    KoResourceServer<KoPattern> *patternServer(bool block = true);
+    KoResourceServer<KoAbstractGradient> *gradientServer(bool block = true);
+    KoResourceServer<KoColorSet> *paletteServer(bool block = true);
 
 private:
-    KoResourceServerProvider(const KoResourceServerProvider&);
-    KoResourceServerProvider operator=(const KoResourceServerProvider&);
+    KoResourceServerProvider(const KoResourceServerProvider &);
+    KoResourceServerProvider operator=(const KoResourceServerProvider &);
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // KORESOURCESERVERPROVIDER_H

@@ -8,8 +8,8 @@
 #ifndef KOPATHBASECOMMAND_H
 #define KOPATHBASECOMMAND_H
 
-#include <kundo2command.h>
 #include <QSet>
+#include <kundo2command.h>
 
 class KoPathShape;
 
@@ -35,7 +35,7 @@ protected:
      */
     void repaint(bool normalizeShapes);
 
-    QSet<KoPathShape*> m_shapes; ///< the shapes the command operates on
+    QSet<KoPathShape *> m_shapes; ///< the shapes the command operates on
 };
 
 #endif // KOPATHBASECOMMAND_H

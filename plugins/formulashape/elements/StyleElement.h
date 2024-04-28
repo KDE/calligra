@@ -17,7 +17,8 @@
  * Basically it holds children like a row but it is able to apply almost any style on
  * them.
  */
-class KOFORMULA_EXPORT StyleElement : public RowElement {
+class KOFORMULA_EXPORT StyleElement : public RowElement
+{
 public:
     /// The standard constructor
     explicit StyleElement(BasicElement *parent = 0);

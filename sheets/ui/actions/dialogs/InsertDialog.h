@@ -33,7 +33,7 @@ class InsertDialog : public KoDialog
 public:
     enum Mode { Insert, Remove };
 
-    InsertDialog(QWidget* parent, Mode _mode);
+    InsertDialog(QWidget *parent, Mode _mode);
 
     bool moveRowsChecked();
     bool moveColumnsChecked();

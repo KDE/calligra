@@ -11,4 +11,3 @@ const QLoggingCategory &TEXTSHAPE_LOG()
     static const QLoggingCategory category("calligra.plugin.text.shape");
     return category;
 }
-

@@ -27,8 +27,7 @@
  *
  * 0x00000002 — 0x7FFFFFFF - Used to identify normal properties.
  */
-enum PropertyType
-{
+enum PropertyType {
     PIDSI_CODEPAGE = 0x00000001,
     PIDSI_TITLE,
     PIDSI_SUBJECT,

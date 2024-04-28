@@ -8,8 +8,8 @@
 #ifndef KORESOURCEITEMVIEW_H
 #define KORESOURCEITEMVIEW_H
 
-#include <KoTableView.h>
 #include <KoIconToolTip.h>
+#include <KoTableView.h>
 
 class QEvent;
 class QModelIndex;
@@ -20,9 +20,11 @@ class KoResourceItemView : public KoTableView
     Q_OBJECT
 
 public:
-
     explicit KoResourceItemView(QWidget *parent = nullptr);
-    ~KoResourceItemView() override { disconnect(); }
+    ~KoResourceItemView() override
+    {
+        disconnect();
+    }
 
     /// reimplemented
     bool viewportEvent(QEvent *event) override;
@@ -38,7 +40,6 @@ protected:
 
 private:
     KoIconToolTip m_tip;
-
 };
 
 #endif // KORESOURCEITEMVIEW_H

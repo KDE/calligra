@@ -16,7 +16,7 @@ class SubStreamHandler
 public:
     virtual ~SubStreamHandler();
 
-    virtual void handleRecord(Record* record) = 0;
+    virtual void handleRecord(Record *record) = 0;
 };
 
 } // namespace Swinder

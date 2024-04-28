@@ -16,11 +16,11 @@ class KWDocument;
 #include "KWPage.h"
 #include "words_export.h"
 
+#include <QObject>
 #include <QPointF>
+#include <QRect>
 #include <QRectF>
 #include <QSizeF>
-#include <QObject>
-#include <QRect>
 
 /**
  * Abstract base class for KWCanvas's view modes.
@@ -42,13 +42,15 @@ class WORDS_EXPORT KWViewMode : public QObject
     Q_OBJECT
 public:
     KWViewMode();
-    ~KWViewMode() override {}
+    ~KWViewMode() override
+    {
+    }
 
     /// a two value return type for mapExposedRects()
     struct ViewMap {
-        QRect clipRect;   ///< the rectangle in the view coordinates showing (part of) the clip
+        QRect clipRect; ///< the rectangle in the view coordinates showing (part of) the clip
         QPointF distance; ///< the displacement between the document and the view in view coordinates.
-        KWPage page;      ///< The page that this section represents.
+        KWPage page; ///< The page that this section represents.
     };
 
     /** Document coord -> view coord */
@@ -67,7 +69,8 @@ public:
     virtual QSizeF contentsSize() const = 0;
 
     /** Does this viewmode know anything about pages? */
-    virtual bool hasPages() {
+    virtual bool hasPages()
+    {
         return true;
     }
 
@@ -84,7 +87,7 @@ public:
      * @param viewModeType the type of viewMode
      * @param document
      */
-    static KWViewMode *create(const QString& viewModeType, KWDocument *document);
+    static KWViewMode *create(const QString &viewModeType, KWDocument *document);
 
     /**
      * This method converts a clip-rect of the view to a set of cliprects as they are
@@ -111,7 +114,11 @@ public Q_SLOTS:
      * added or removed or just resized.
      */
     void pageSetupChanged();
-    void setPageManager(KWPageManager *pageManager) { m_pageManager = pageManager; updatePageCache(); }
+    void setPageManager(KWPageManager *pageManager)
+    {
+        m_pageManager = pageManager;
+        updatePageCache();
+    }
 
 protected:
     /**

@@ -8,43 +8,35 @@
 
 #include <KoXmlVector.h>
 
-#include <QTest>
 #include <QDebug>
+#include <QTest>
 
-
-enum TestEnum
-{
-    FirstType = 0,
-    SecondType = 1,
-    ThirdType = 2,
-    FourthType = 3,
-    FifthType = 4
-};
+enum TestEnum { FirstType = 0, SecondType = 1, ThirdType = 2, FourthType = 3, FifthType = 4 };
 
 class TestStruct
 {
 public:
-    bool attr: 1;
-    unsigned int number: 28;
+    bool attr : 1;
+    unsigned int number : 28;
     TestEnum type;
     QString string;
 };
 
 Q_DECLARE_TYPEINFO(TestStruct, Q_MOVABLE_TYPE);
 
-static QDataStream& operator<<(QDataStream& s, const TestStruct& item)
+static QDataStream &operator<<(QDataStream &s, const TestStruct &item)
 {
     quint8 flag = item.attr ? 1 : 0;
 
     s << flag;
-    s << (quint8) item.type;
+    s << (quint8)item.type;
     s << item.number;
     s << item.string;
 
     return s;
 }
 
-static QDataStream& operator>>(QDataStream& s, TestStruct& item)
+static QDataStream &operator>>(QDataStream &s, TestStruct &item)
 {
     quint8 flag;
     quint8 type;
@@ -57,7 +49,7 @@ static QDataStream& operator>>(QDataStream& s, TestStruct& item)
     s >> string;
 
     item.attr = (flag != 0);
-    item.type = (TestEnum) type;
+    item.type = (TestEnum)type;
     item.number = number;
     item.string = string;
 
@@ -73,23 +65,21 @@ void TestKoXmlVector::simpleConstructor()
     QCOMPARE(vector.isEmpty(), true);
 }
 
-
 static const int writeAndReadUncompressedCount = 5;
 
 void TestKoXmlVector::writeAndRead_data()
 {
     QTest::addColumn<unsigned int>("itemCount");
-    for(unsigned int i = 0; i < writeAndReadUncompressedCount*3+1; ++i) {
+    for (unsigned int i = 0; i < writeAndReadUncompressedCount * 3 + 1; ++i) {
         QTest::newRow(QByteArray::number(i)) << i;
     }
 }
-
 
 void TestKoXmlVector::writeAndRead()
 {
     QFETCH(unsigned int, itemCount);
 
-    KoXmlVector<TestStruct, writeAndReadUncompressedCount+1> vector;
+    KoXmlVector<TestStruct, writeAndReadUncompressedCount + 1> vector;
 
     // add 3x items than what would not be compressed
     for (unsigned int i = 0; i < itemCount; ++i) {
@@ -106,8 +96,8 @@ void TestKoXmlVector::writeAndRead()
         item.number = number;
         item.string = string;
 
-        QCOMPARE(vector.count(), (signed)i+1);
-        QCOMPARE(vector.size(), (signed)i+1);
+        QCOMPARE(vector.count(), (signed)i + 1);
+        QCOMPARE(vector.size(), (signed)i + 1);
         QCOMPARE(vector.isEmpty(), false);
     }
 
@@ -129,7 +119,7 @@ void TestKoXmlVector::writeAndRead()
     }
     // and backwards
     for (unsigned int ri = itemCount; ri > 0; --ri) {
-        const unsigned int i = ri-1;
+        const unsigned int i = ri - 1;
         const bool attr = (i % 2) == 0;
         const TestEnum type = (TestEnum)(i % 5);
         const unsigned int number = i;
@@ -143,7 +133,5 @@ void TestKoXmlVector::writeAndRead()
         QCOMPARE(readItem.string, string);
     }
 }
-
-
 
 QTEST_GUILESS_MAIN(TestKoXmlVector)

@@ -12,8 +12,10 @@
 
 #include <QQuickItem>
 
-namespace Calligra {
-namespace Components {
+namespace Calligra
+{
+namespace Components
+{
 
 class View;
 
@@ -47,7 +49,7 @@ class ViewController : public QQuickItem
      * \set setView()
      * \notify viewChanged()
      */
-    Q_PROPERTY(Calligra::Components::View* view READ view WRITE setView NOTIFY viewChanged)
+    Q_PROPERTY(Calligra::Components::View *view READ view WRITE setView NOTIFY viewChanged)
     /**
      * \property flickable
      * \brief The flickable that is used to control scrolling.
@@ -57,7 +59,7 @@ class ViewController : public QQuickItem
      * \set setFlickable()
      * \notify flickableChanged()
      */
-    Q_PROPERTY(QQuickItem* flickable READ flickable WRITE setFlickable NOTIFY flickableChanged)
+    Q_PROPERTY(QQuickItem *flickable READ flickable WRITE setFlickable NOTIFY flickableChanged)
     /**
      * \property minimumZoom
      * \brief The minimum zoom level.
@@ -122,7 +124,7 @@ public:
      *
      * \param parent The parent item.
      */
-    explicit ViewController(QQuickItem* parent = 0);
+    explicit ViewController(QQuickItem *parent = 0);
     /**
      * Destructor.
      */
@@ -131,19 +133,19 @@ public:
     /**
      * Getter for property #view
      */
-    View* view() const;
+    View *view() const;
     /**
      * Setter for property #view
      */
-    void setView(View* newView);
+    void setView(View *newView);
     /**
      * Getter for property #flickable
      */
-    QQuickItem* flickable() const;
+    QQuickItem *flickable() const;
     /**
      * Setter for property #flickable
      */
-    void setFlickable(QQuickItem* item);
+    void setFlickable(QQuickItem *item);
     /**
      * Getter for property #minimumZoom
      */
@@ -188,7 +190,7 @@ public:
     /**
      * Reimlemented from superclass
      */
-    bool event(QEvent* event) override;
+    bool event(QEvent *event) override;
 public Q_SLOTS:
     /**
      * \brief Zoom by a specific amount around a centre point.
@@ -248,20 +250,20 @@ Q_SIGNALS:
     void useZoomProxyChanged();
 
 protected:
-    QSGNode* updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData* ) override;
+    QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *) override;
 
 private Q_SLOTS:
     void documentChanged();
     void contentPositionChanged();
     void documentSizeChanged();
     void documentStatusChanged();
-    void documentOffsetChanged(const QPoint& offset);
+    void documentOffsetChanged(const QPoint &offset);
     void zoomTimeout();
     void flickableWidthChanged();
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 } // Namespace Components

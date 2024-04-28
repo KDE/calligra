@@ -2,17 +2,17 @@
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger (cberger@cberger.net)
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef KIS_XYZ_U16_COLORSPACE_H_
 #define KIS_XYZ_U16_COLORSPACE_H_
 
-#include <LcmsColorSpace.h>
 #include <KoColorSpaceTraits.h>
+#include <LcmsColorSpace.h>
 
 #include <KoColorModelStandardIds.h>
 
-#define TYPE_XYZA_16 (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1))
+#define TYPE_XYZA_16 (COLORSPACE_SH(PT_XYZ) | CHANNELS_SH(3) | BYTES_SH(2) | EXTRA_SH(1))
 
 class XyzU16ColorSpace : public LcmsColorSpace<KoXyzU16Traits>
 {
@@ -35,23 +35,23 @@ public:
 
     void colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const override;
 
-    void colorFromXML(quint8* pixel, const QDomElement& elt) const override;
+    void colorFromXML(quint8 *pixel, const QDomElement &elt) const override;
     void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const override;
-    QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
+    QVector<double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
     void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const override;
-    QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
+    QVector<double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
 
     static QString colorSpaceId()
     {
         return QString("XYZA16");
     }
-
 };
 
 class XyzU16ColorSpaceFactory : public LcmsColorSpaceFactory
 {
 public:
-    XyzU16ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_XYZA_16, cmsSigXYZData)
+    XyzU16ColorSpaceFactory()
+        : LcmsColorSpaceFactory(TYPE_XYZA_16, cmsSigXYZData)
     {
     }
     QString id() const override

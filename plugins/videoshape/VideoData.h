@@ -43,13 +43,13 @@ public:
      * @param videoData the other one.
      */
     VideoData(const VideoData &videoData);
-    
+
     /// destructor
     virtual ~VideoData();
 
     void setExternalVideo(const QUrl &location, bool saveInternal, VideoCollection *collection = 0);
     void setVideo(const QString &location, KoStore *store, VideoCollection *collection = 0);
-    //void setVideo(const QUrl &location);
+    // void setVideo(const QUrl &location);
 
     /**
      * Save the video data to the param device.
@@ -63,7 +63,10 @@ public:
 
     VideoData &operator=(const VideoData &other);
 
-    inline bool operator!=(const VideoData &other) const { return !operator==(other); }
+    inline bool operator!=(const VideoData &other) const
+    {
+        return !operator==(other);
+    }
     bool operator==(const VideoData &other) const;
 
     /// returns if this is a valid imageData with actual video data present on it.
@@ -81,9 +84,10 @@ public:
     qint64 key();
 
     enum DataStoreState {
-        StateEmpty,     ///< No video data, possible an external video
+        StateEmpty, ///< No video data, possible an external video
         StateSpooled, ///< Video data is spooled
     };
+
 protected:
     friend class VideoCollection;
 

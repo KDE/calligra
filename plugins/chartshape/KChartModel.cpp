@@ -9,19 +9,18 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "KChartModel.h"
 
 // KoChart
+#include "ChartDebug.h"
 #include "DataSet.h"
 #include "PlotArea.h"
-#include "ChartDebug.h"
 
 // KChart
+#include <KChartDataValueAttributes>
 #include <KChartGlobal>
 #include <KChartPieAttributes>
-#include <KChartDataValueAttributes>
 
 using namespace KoChart;
 
@@ -31,41 +30,42 @@ using namespace KoChart;
 QString roleToString(int role)
 {
     switch (role) {
-        case Qt::DisplayRole:
-            return "Qt::DisplayRole";
-        case KChart::DatasetBrushRole:
-            return "KChart::DatasetBrushRole";
-        case KChart::DatasetPenRole:
-            return "KChart::DatasetPenRole";
-        case KChart::PieAttributesRole:
-            return "KChart::PieAttributesRole";
-        case KChart::DataValueLabelAttributesRole:
-            return "KChart::DataValueLabelAttributesRole";
-        case KChart::ThreeDAttributesRole:
-            return "KChart::ThreeDAttributesRole";
-        case KChart::LineAttributesRole:
-            return "KChart::LineAttributesRole";
-        case KChart::ThreeDLineAttributesRole:
-            return "KChart::ThreeDLineAttributesRole";
-        case KChart::BarAttributesRole:
-            return "KChart::BarAttributesRole";
-        case KChart::StockBarAttributesRole:
-            return "KChart::StockBarAttributesRole";
-        case KChart::ThreeDBarAttributesRole:
-            return "KChart::ThreeDBarAttributesRole";
-        case KChart::ThreeDPieAttributesRole:
-            return "KChart::ThreeDPieAttributesRole";
-        case KChart::DataHiddenRole:
-            return "KChart::DataHiddenRole";
-        case KChart::ValueTrackerAttributesRole:
-            return "KChart::ValueTrackerAttributesRole";
-        case KChart::CommentRole:
-            return "KChart::CommentRole";
+    case Qt::DisplayRole:
+        return "Qt::DisplayRole";
+    case KChart::DatasetBrushRole:
+        return "KChart::DatasetBrushRole";
+    case KChart::DatasetPenRole:
+        return "KChart::DatasetPenRole";
+    case KChart::PieAttributesRole:
+        return "KChart::PieAttributesRole";
+    case KChart::DataValueLabelAttributesRole:
+        return "KChart::DataValueLabelAttributesRole";
+    case KChart::ThreeDAttributesRole:
+        return "KChart::ThreeDAttributesRole";
+    case KChart::LineAttributesRole:
+        return "KChart::LineAttributesRole";
+    case KChart::ThreeDLineAttributesRole:
+        return "KChart::ThreeDLineAttributesRole";
+    case KChart::BarAttributesRole:
+        return "KChart::BarAttributesRole";
+    case KChart::StockBarAttributesRole:
+        return "KChart::StockBarAttributesRole";
+    case KChart::ThreeDBarAttributesRole:
+        return "KChart::ThreeDBarAttributesRole";
+    case KChart::ThreeDPieAttributesRole:
+        return "KChart::ThreeDPieAttributesRole";
+    case KChart::DataHiddenRole:
+        return "KChart::DataHiddenRole";
+    case KChart::ValueTrackerAttributesRole:
+        return "KChart::ValueTrackerAttributesRole";
+    case KChart::CommentRole:
+        return "KChart::CommentRole";
     }
     return "Unknown DataRole";
 }
 
-class KChartModel::Private {
+class KChartModel::Private
+{
 public:
     Private(KChartModel *parent, PlotArea *plotArea);
     ~Private();
@@ -78,23 +78,23 @@ public:
      * this model (i.e. not attached, thus not in dataSets), an index
      * is returned before which this dataSet should be inserted.
      */
-    int  dataSetIndex(DataSet *dataSet) const;
+    int dataSetIndex(DataSet *dataSet) const;
 
     /**
      * Returns the cached (!) max size of all data sets in this model.
      */
-    int  maxDataSetSize() const;
+    int maxDataSetSize() const;
 
     /**
      * Calculates the maximum size of all data sets in the passed list.
      */
-    int  calcMaxDataSetSize(QList<DataSet*> list) const;
+    int calcMaxDataSetSize(QList<DataSet *> list) const;
 
     /**
      * Only calculates the new size for the current data set list,
      * but does not update it.
      */
-    int  calcMaxDataSetSize() const;
+    int calcMaxDataSetSize() const;
 
     /**
      * Returns the first model index a certain data point of a data occupies
@@ -113,21 +113,20 @@ public:
 
     bool isKnownDataRole(int role) const;
 
-    int             dataDimensions;
-    int             biggestDataSetSize;
-    QList<DataSet*> dataSets;
+    int dataDimensions;
+    int biggestDataSetSize;
+    QList<DataSet *> dataSets;
 
     Qt::Orientation dataDirection;
 };
-
 
 KChartModel::Private::Private(KChartModel *parent, PlotArea *_plotArea)
     : q(parent)
     , plotArea(_plotArea)
 {
-    dataDimensions      = 1;
-    dataDirection       = Qt::Vertical;
-    biggestDataSetSize  = 0;
+    dataDimensions = 1;
+    dataDirection = Qt::Vertical;
+    biggestDataSetSize = 0;
 }
 
 KChartModel::Private::~Private()
@@ -139,7 +138,7 @@ int KChartModel::Private::maxDataSetSize() const
     return biggestDataSetSize;
 }
 
-int KChartModel::Private::calcMaxDataSetSize(QList<DataSet*> list) const
+int KChartModel::Private::calcMaxDataSetSize(QList<DataSet *> list) const
 {
     int maxSize = 0;
     foreach (DataSet *dataSet, list)
@@ -188,14 +187,12 @@ QModelIndex KChartModel::Private::dataPointLastModelIndex(int dataSetNumber, int
     return q->index(dataSetRowOrCol, index);
 }
 
-
 // ================================================================
 //                     class KChartModel
 
-
 KChartModel::KChartModel(PlotArea *plotArea, QObject *parent)
-    : QAbstractItemModel(parent),
-      d(new Private(this, plotArea))
+    : QAbstractItemModel(parent)
+    , d(new Private(this, plotArea))
 {
 }
 
@@ -203,7 +200,6 @@ KChartModel::~KChartModel()
 {
     delete d;
 }
-
 
 void KChartModel::setDataDirection(Qt::Orientation direction)
 {
@@ -220,14 +216,12 @@ Qt::Orientation KChartModel::categoryDirection() const
     return d->dataDirection == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal;
 }
 
-QVariant KChartModel::data(const QModelIndex &index,
-                            int role /* = Qt::DisplayRole */) const
+QVariant KChartModel::data(const QModelIndex &index, int role /* = Qt::DisplayRole */) const
 {
-    if (!index.isValid() ||
-         !d->isKnownDataRole(role)) {
+    if (!index.isValid() || !d->isKnownDataRole(role)) {
         return QVariant();
     }
-//     if (!role == Qt::DisplayRole) {qInfo()<<Q_FUNC_INFO<<index.row()<<roleToString(role);}
+    //     if (!role == Qt::DisplayRole) {qInfo()<<Q_FUNC_INFO<<index.row()<<roleToString(role);}
     int dataSetNumber, section;
     // Offset from the data set's row or column (depending on the data direction).
     // With one data dimension, it's always 0. Otherwise it's 1 for y data, and
@@ -278,7 +272,6 @@ QVariant KChartModel::data(const QModelIndex &index,
     return QVariant();
 }
 
-
 void KChartModel::dataSetChanged(DataSet *dataSet)
 {
     Q_ASSERT(d->dataSets.contains(dataSet));
@@ -293,8 +286,7 @@ void KChartModel::dataSetChanged(DataSet *dataSet)
     emit headerDataChanged(dataDirection(), first, last);
 }
 
-void KChartModel::dataSetChanged(DataSet *dataSet, DataRole /*role*/,
-                                  int first /* = -1 */, int last /* = -1 */)
+void KChartModel::dataSetChanged(DataSet *dataSet, DataRole /*role*/, int first /* = -1 */, int last /* = -1 */)
 {
     Q_ASSERT(d->dataSets.contains(dataSet));
     if (!d->dataSets.contains(dataSet))
@@ -323,8 +315,7 @@ void KChartModel::dataSetChanged(DataSet *dataSet, DataRole /*role*/,
         qSwap(first, last);
 
     int dataSetNumber = d->dataSetIndex(dataSet);
-    emit dataChanged(d->dataPointFirstModelIndex(dataSetNumber, first),
-                     d->dataPointLastModelIndex(dataSetNumber, last));
+    emit dataChanged(d->dataPointFirstModelIndex(dataSetNumber, first), d->dataPointLastModelIndex(dataSetNumber, last));
 }
 
 void KChartModel::dataSetSizeChanged(DataSet *dataSet, int newSize)
@@ -371,7 +362,7 @@ void KChartModel::dataSetSizeChanged(DataSet *dataSet, int newSize)
     }
 }
 
-void KChartModel::slotColumnsInserted(const QModelIndex& parent, int start, int end)
+void KChartModel::slotColumnsInserted(const QModelIndex &parent, int start, int end)
 {
     if (d->dataDirection == Qt::Horizontal) {
         beginInsertColumns(parent, start, end);
@@ -396,9 +387,7 @@ bool KChartModel::Private::isKnownDataRole(int role) const
     return false;
 }
 
-QVariant KChartModel::headerData(int section,
-                                  Qt::Orientation orientation,
-                                  int role /* = Qt::DisplayRole */) const
+QVariant KChartModel::headerData(int section, Qt::Orientation orientation, int role /* = Qt::DisplayRole */) const
 {
     if (!d->isKnownDataRole(role)) {
         return QVariant();
@@ -416,7 +405,7 @@ QVariant KChartModel::headerData(int section,
             return QVariant();
         }
 
-        DataSet *dataSet  = d->dataSets[dataSetNumber];
+        DataSet *dataSet = d->dataSets[dataSetNumber];
 
         switch (role) {
         case Qt::DisplayRole:
@@ -452,13 +441,12 @@ QVariant KChartModel::headerData(int section,
     return QVariant();
 }
 
-QModelIndex KChartModel::index(int row, int column,
-                                 const QModelIndex &parent) const
+QModelIndex KChartModel::index(int row, int column, const QModelIndex &parent) const
 {
     // Seems following can happen in which case we shouldn't return a
     // QModelIndex with an invalid position cause else other things
     // may go wrong.
-    if(row >= rowCount(parent) || column >= columnCount(parent)) {
+    if (row >= rowCount(parent) || column >= columnCount(parent)) {
         return QModelIndex();
     }
 
@@ -491,8 +479,7 @@ int KChartModel::columnCount(const QModelIndex &parent /* = QModelIndex() */) co
     int columns;
     if (d->dataDirection == Qt::Vertical) {
         columns = d->dataSets.size() * d->dataDimensions;
-    }
-    else
+    } else
         columns = d->maxDataSetSize();
 
     return columns;
@@ -521,12 +508,9 @@ void KChartModel::addDataSet(DataSet *dataSet)
     if (!d->dataSets.isEmpty()) {
         const int columnAboutToBeInserted = dataSetIndex * d->dataDimensions;
         if (d->dataDirection == Qt::Vertical) {
-            beginInsertColumns(QModelIndex(), columnAboutToBeInserted,
-                                columnAboutToBeInserted + d->dataDimensions - 1);
-        }
-        else
-            beginInsertRows(QModelIndex(), columnAboutToBeInserted,
-                             columnAboutToBeInserted + d->dataDimensions - 1);
+            beginInsertColumns(QModelIndex(), columnAboutToBeInserted, columnAboutToBeInserted + d->dataDimensions - 1);
+        } else
+            beginInsertRows(QModelIndex(), columnAboutToBeInserted, columnAboutToBeInserted + d->dataDimensions - 1);
         d->dataSets.insert(dataSetIndex, dataSet);
 
         if (d->dataDirection == Qt::Vertical)
@@ -537,19 +521,16 @@ void KChartModel::addDataSet(DataSet *dataSet)
         const int dataSetSize = dataSet->size();
         if (dataSetSize > d->maxDataSetSize()) {
             if (d->dataDirection == Qt::Vertical)
-                beginInsertRows(QModelIndex(),
-                                 d->maxDataSetSize(), dataSetSize - 1);
+                beginInsertRows(QModelIndex(), d->maxDataSetSize(), dataSetSize - 1);
             else
-                beginInsertColumns(QModelIndex(),
-                                    d->maxDataSetSize(), dataSetSize - 1);
+                beginInsertColumns(QModelIndex(), d->maxDataSetSize(), dataSetSize - 1);
             d->biggestDataSetSize = d->calcMaxDataSetSize();
             if (d->dataDirection == Qt::Vertical)
                 endInsertRows();
             else
                 endInsertColumns();
         }
-    }
-    else {
+    } else {
         // If we had no datasets before, we haven't had a valid
         // structure yet.  Thus, emit the modelReset() signal.
         beginResetModel();
@@ -568,11 +549,10 @@ void KChartModel::removeDataSet(DataSet *dataSet, bool silent)
     if (silent) {
         d->dataSets.removeAt(dataSetIndex);
         d->biggestDataSetSize = d->calcMaxDataSetSize();
-    }
-    else {
+    } else {
         // Simulate removing this dataSet without actually doing so
         // in order to calculate new max data set size
-        QList<DataSet*> _dataSets(d->dataSets);
+        QList<DataSet *> _dataSets(d->dataSets);
         _dataSets.removeAll(dataSet);
         // Cached size
         int oldMaxDataSetSize = d->maxDataSetSize();
@@ -618,7 +598,7 @@ void KChartModel::removeDataSet(DataSet *dataSet, bool silent)
     }
 }
 
-QList<DataSet*> KChartModel::dataSets() const
+QList<DataSet *> KChartModel::dataSets() const
 {
     return d->dataSets;
 }

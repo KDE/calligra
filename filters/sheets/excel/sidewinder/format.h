@@ -8,9 +8,9 @@
 #ifndef SWINDER_FORMAT_H
 #define SWINDER_FORMAT_H
 
-#include <cstdio> // for sscanf
-#include <QString>
 #include <QColor>
+#include <QString>
+#include <cstdio> // for sscanf
 
 namespace Swinder
 {
@@ -23,25 +23,29 @@ public:
     QColor color;
 
     enum {
-        NoLine,         // no line at all
-        SolidLine,      // a simple solid line
-        DashLine,       // dashes separated by a few pixels
-        DotLine,        // dots separated by a few pixels
-        DashDotLine,    // alternate dots and dashes
+        NoLine, // no line at all
+        SolidLine, // a simple solid line
+        DashLine, // dashes separated by a few pixels
+        DotLine, // dots separated by a few pixels
+        DashDotLine, // alternate dots and dashes
         DashDotDotLine, // one dash, two dots, one dash, two dots
-        DoubleLine      // two simple solid lines
+        DoubleLine // two simple solid lines
     };
 
-    Pen(): style(SolidLine), width(0) {}
+    Pen()
+        : style(SolidLine)
+        , width(0)
+    {
+    }
 
-    friend inline bool operator==(const Pen&, const Pen&);
-    friend inline bool operator!=(const Pen&, const Pen&);
+    friend inline bool operator==(const Pen &, const Pen &);
+    friend inline bool operator!=(const Pen &, const Pen &);
 };
 
 /**
     Returns true if p1 is equal to p2; otherwise returns false.
 */
-inline bool operator==(const Pen& p1, const Pen& p2)
+inline bool operator==(const Pen &p1, const Pen &p2)
 {
     return p1.style == p2.style && p1.width == p2.width && p1.color == p2.color;
 }
@@ -49,11 +53,10 @@ inline bool operator==(const Pen& p1, const Pen& p2)
 /**
     Returns true if p1 is not equal to p2; otherwise returns false.
 */
-inline bool operator!=(const Pen& p1, const Pen& p2)
+inline bool operator!=(const Pen &p1, const Pen &p2)
 {
     return p1.style != p2.style || p1.width != p2.width || p1.color != p2.color;
 }
-
 
 /**
  * Defines font information for cell format.
@@ -66,7 +69,6 @@ inline bool operator!=(const Pen& p1, const Pen& p2)
 class FormatFont
 {
 public:
-
     /**
      * Creates a default font information.
      */
@@ -80,17 +82,17 @@ public:
     /**
      * Creates a copy of font information.
      */
-    FormatFont(const FormatFont&);
+    FormatFont(const FormatFont &);
 
     /**
      * Assigns from another font information.
      */
-    FormatFont& operator=(const FormatFont&);
+    FormatFont &operator=(const FormatFont &);
 
     /**
      * Assigns from another font information.
      */
-    FormatFont& assign(const FormatFont&);
+    FormatFont &assign(const FormatFont &);
 
     /**
      * Returns true if it is a default font information.
@@ -105,7 +107,7 @@ public:
     /**
      * Sets a new family for the font information.
      */
-    void setFontFamily(const QString& fontFamily);
+    void setFontFamily(const QString &fontFamily);
 
     /**
      * Returns the size of font (in points).
@@ -125,7 +127,7 @@ public:
     /**
      * Sets the color of the font.
      */
-    void setColor(const QColor& color);
+    void setColor(const QColor &color);
 
     /**
      * Returns true if bold has been set.
@@ -190,12 +192,12 @@ public:
     /**
      * Returns true if this font is equal to f; otherwise returns false.
      */
-    bool operator==(const FormatFont& f) const;
+    bool operator==(const FormatFont &f) const;
 
     /**
      * Returns true if this font is not equal to f; otherwise returns false.
      */
-    bool operator!=(const FormatFont& f) const;
+    bool operator!=(const FormatFont &f) const;
 
 private:
     class Private;
@@ -213,7 +215,6 @@ private:
 class FormatAlignment
 {
 public:
-
     /**
      * Creates a default alignment information.
      */
@@ -227,17 +228,17 @@ public:
     /**
      * Creates a copy of alignment information.
      */
-    FormatAlignment(const FormatAlignment&);
+    FormatAlignment(const FormatAlignment &);
 
     /**
      * Assigns from another alignment information.
      */
-    FormatAlignment& operator=(const FormatAlignment&);
+    FormatAlignment &operator=(const FormatAlignment &);
 
     /**
      * Assigns from another alignment information.
      */
-    FormatAlignment& assign(const FormatAlignment&);
+    FormatAlignment &assign(const FormatAlignment &);
 
     /**
      * Returns true if it is a default alignment information.
@@ -347,12 +348,12 @@ public:
     /**
      * Returns true if this alignment is equal to f; otherwise returns false.
      */
-    bool operator==(const FormatAlignment& f) const;
+    bool operator==(const FormatAlignment &f) const;
 
     /**
      * Returns true if this alignment is not equal to f; otherwise returns false.
      */
-    bool operator!=(const FormatAlignment& f) const;
+    bool operator!=(const FormatAlignment &f) const;
 
 private:
     class Private;
@@ -379,17 +380,17 @@ public:
     /**
      * Creates a copy of background information.
      */
-    FormatBackground(const FormatBackground&);
+    FormatBackground(const FormatBackground &);
 
     /**
      * Assigns from another background information.
      */
-    FormatBackground& operator=(const FormatBackground&);
+    FormatBackground &operator=(const FormatBackground &);
 
     /**
      * Assigns from another background information.
      */
-    FormatBackground& assign(const FormatBackground&);
+    FormatBackground &assign(const FormatBackground &);
 
     /**
      * Returns true if it is a default background information.
@@ -405,8 +406,8 @@ public:
         Dense5Pattern, ///< 25% gray
         Dense6Pattern, ///< 12.5% gray
         Dense7Pattern, ///< 6.25% gray
-        HorPattern,  ///< Horizontal lines
-        VerPattern,  ///< Vertical lines
+        HorPattern, ///< Horizontal lines
+        VerPattern, ///< Vertical lines
         CrossPattern, ///< Horizontal and Vertical lines
         BDiagPattern, ///< Left-bottom to right-top diagonal lines
         FDiagPattern, ///< Left-top to right-bottom diagonal lines
@@ -440,7 +441,7 @@ public:
      *
      * \sa backgroundColor
      */
-    void setBackgroundColor(const QColor&);
+    void setBackgroundColor(const QColor &);
 
     /**
      * Returns the foreground color of the background area.
@@ -454,17 +455,17 @@ public:
      *
      * \sa foregroundColor
      */
-    void setForegroundColor(const QColor&);
+    void setForegroundColor(const QColor &);
 
     /**
      * Returns true if this background is equal to f; otherwise returns false.
      */
-    bool operator==(const FormatBackground& f) const;
+    bool operator==(const FormatBackground &f) const;
 
     /**
      * Returns true if this background is not equal to f; otherwise returns false.
      */
-    bool operator!=(const FormatBackground& f) const;
+    bool operator!=(const FormatBackground &f) const;
 
 private:
     class Private;
@@ -479,7 +480,6 @@ private:
 class FormatBorders
 {
 public:
-
     /**
      * Creates a default border information.
      */
@@ -493,17 +493,17 @@ public:
     /**
      * Creates a copy of border information.
      */
-    FormatBorders(const FormatBorders&);
+    FormatBorders(const FormatBorders &);
 
     /**
      * Assigns from another border information.
      */
-    FormatBorders& operator=(const FormatBorders&);
+    FormatBorders &operator=(const FormatBorders &);
 
     /**
      * Assigns from another border information.
      */
-    FormatBorders& assign(const FormatBorders&);
+    FormatBorders &assign(const FormatBorders &);
 
     /**
      * Returns true if it is a default border information.
@@ -515,72 +515,72 @@ public:
      *
      * \sa setLeftBorder
      */
-    const Pen& leftBorder() const;
+    const Pen &leftBorder() const;
 
     /**
      * Sets pen style, width and color for left border.
      *
      * \sa leftBorder
      */
-    void setLeftBorder(const Pen& pen);
+    void setLeftBorder(const Pen &pen);
 
     /**
      * Returns pen style, width and color for right border.
      *
      * \sa setRightBorder
      */
-    const Pen& rightBorder() const;
+    const Pen &rightBorder() const;
 
     /**
      * Sets pen style, width and color for right border.
      *
      * \sa rightBorder
      */
-    void setRightBorder(const Pen& pen);
+    void setRightBorder(const Pen &pen);
 
     /**
      * Returns pen style, width and color for top border.
      *
      * \sa setTopBorder
      */
-    const Pen& topBorder() const;
+    const Pen &topBorder() const;
 
     /**
      * Sets pen style, width and color for top border.
      *
      * \sa topBorder
      */
-    void setTopBorder(const Pen& pen);
+    void setTopBorder(const Pen &pen);
 
     /**
      * Returns pen style, width and color for bottom border.
      *
      * \sa setBottomBorder
      */
-    const Pen& bottomBorder() const;
+    const Pen &bottomBorder() const;
 
     /**
      * Sets pen style, width and color for bottom border.
      *
      * \sa bottomBorder
      */
-    void setBottomBorder(const Pen& pen);
+    void setBottomBorder(const Pen &pen);
 
     // diagonal borders
-    const Pen& topLeftBorder() const;
-    void setTopLeftBorder(const Pen& pen);
-    const Pen& bottomLeftBorder() const;
-    void setBottomLeftBorder(const Pen& pen);
+    const Pen &topLeftBorder() const;
+    void setTopLeftBorder(const Pen &pen);
+    const Pen &bottomLeftBorder() const;
+    void setBottomLeftBorder(const Pen &pen);
 
     /**
      * Returns true if this background is equal to f; otherwise returns false.
      */
-    bool operator==(const FormatBorders& f) const;
+    bool operator==(const FormatBorders &f) const;
 
     /**
      * Returns true if this background is not equal to f; otherwise returns false.
      */
-    bool operator!=(const FormatBorders& f) const;
+    bool operator!=(const FormatBorders &f) const;
 
 private:
     class Private;
@@ -608,11 +608,9 @@ private:
  *
  */
 
-
 class Format
 {
 public:
-
     /**
      * Creates a default format.
      */
@@ -626,17 +624,17 @@ public:
     /**
      * Creates a copy from another format.
      */
-    Format(const Format& f);
+    Format(const Format &f);
 
     /**
      * Assigns from another format.
      */
-    Format& operator= (const Format& f);
+    Format &operator=(const Format &f);
 
     /**
      * Assigns from another value.
      */
-    Format& assign(const Format& f);
+    Format &assign(const Format &f);
 
     /**
      * Returns true if it is a default format information.
@@ -646,42 +644,42 @@ public:
     /**
      * Returns a constant reference to the formatting information of this format.
      */
-    FormatFont& font() const;
+    FormatFont &font() const;
 
     /**
      * Sets new font information for this format.
      */
-    void setFont(const FormatFont& font);
+    void setFont(const FormatFont &font);
 
     /**
      * Returns a constant reference to the alignment information of this format.
      */
-    FormatAlignment& alignment() const;
+    FormatAlignment &alignment() const;
 
     /**
      * Sets new alignment information for this format.
      */
-    void setAlignment(const FormatAlignment& alignment);
+    void setAlignment(const FormatAlignment &alignment);
 
     /**
      * Returns a reference to the borders information of this format.
      */
-    FormatBorders& borders() const;
+    FormatBorders &borders() const;
 
     /**
      * Sets new borders information for this format.
      */
-    void setBorders(const FormatBorders& border);
+    void setBorders(const FormatBorders &border);
 
     /**
      * Returns a reference to the background information of this format.
      */
-    FormatBackground& background() const;
+    FormatBackground &background() const;
 
     /**
      * Sets new background information for this format.
      */
-    void setBackground(const FormatBackground&);
+    void setBackground(const FormatBackground &);
 
     /**
      * Returns the formatting string to display the value of this format.
@@ -691,7 +689,7 @@ public:
     /**
      * Sets the new formatting string to display the value of this format.
      */
-    void setValueFormat(const QString& valueFormat);
+    void setValueFormat(const QString &valueFormat);
 
     enum { Standard = -1, Left, Center, Right, Justify, Distributed };
 
@@ -709,24 +707,23 @@ public:
      * the result is "Italic, right-aligned".
      *
      */
-    Format& apply(const Format& f);
+    Format &apply(const Format &f);
 
     /**
      * Returns true if this format is equal to f; otherwise returns false.
      */
-    bool operator==(const Format& f) const;
+    bool operator==(const Format &f) const;
 
     /**
      * Returns true if this format is not equal to f; otherwise returns false.
      */
-    bool operator!=(const Format& f) const;
+    bool operator!=(const Format &f) const;
 
 private:
     class Private;
-    Private* d; // can't never be 0
+    Private *d; // can't never be 0
 };
 
 }
 
 #endif // SWINDER_FORMAT_H
-

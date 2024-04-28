@@ -16,10 +16,10 @@
 #ifndef CALLIGRA_SHEETS_VIEW
 #define CALLIGRA_SHEETS_VIEW
 
+#include "sheets_part_export.h"
+#include <KoCanvasControllerWidget.h>
 #include <KoView.h>
 #include <KoZoomMode.h>
-#include <KoCanvasControllerWidget.h>
-#include "sheets_part_export.h"
 
 #include "engine/ProtectableObject.h"
 
@@ -79,39 +79,39 @@ public:
     ~View() override;
 
     /** \return the document this view displays. */
-    Doc* doc() const;
+    Doc *doc() const;
 
     /** \return the canvas of the view */
-    Canvas* canvasWidget() const;
+    Canvas *canvasWidget() const;
 
     /** \return the canvas controller of the view */
-    KoCanvasController* canvasController() const;
+    KoCanvasController *canvasController() const;
 
     /** \return the column header */
-    ColumnHeaderWidget* columnHeader() const;
+    ColumnHeaderWidget *columnHeader() const;
 
     /** \return the row header */
-    RowHeaderWidget* rowHeader() const;
+    RowHeaderWidget *rowHeader() const;
 
     /** \return the horizontal scrollbar */
-    QScrollBar* horzScrollBar() const;
+    QScrollBar *horzScrollBar() const;
 
     /** \return the vertical scrollbar */
-    QScrollBar* vertScrollBar() const;
+    QScrollBar *vertScrollBar() const;
 
     /** \return the tab bar */
-    TabBar* tabBar() const;
+    TabBar *tabBar() const;
 
     /** \return the zoom handler */
-    KoZoomHandler* zoomHandler() const;
+    KoZoomHandler *zoomHandler() const;
 
     /** \return the sheet, that is currently displayed */
-    Sheet* activeSheet() const;
+    Sheet *activeSheet() const;
 
     /**
      * \return the SheetView for \p sheet
      */
-    SheetView* sheetView(Sheet* sheet);
+    SheetView *sheetView(Sheet *sheet);
 
     /** Loads the view settings. */
     void initConfig();
@@ -131,7 +131,7 @@ public:
     /**
      * \return the current cell selection.
      */
-    Selection* selection() const;
+    Selection *selection() const;
 
     /**
      * Updates the action, that unhides a hidden sheet.
@@ -143,12 +143,12 @@ public:
     /**
      * @return marker for @p sheet
      */
-    QPoint markerFromSheet(SheetBase* sheet) const;
+    QPoint markerFromSheet(SheetBase *sheet) const;
 
     /**
      * @return scroll offset for @p sheet
      */
-    QPointF offsetFromSheet(SheetBase* sheet) const;
+    QPointF offsetFromSheet(SheetBase *sheet) const;
 
     /**
      * Save current sheet selection.
@@ -173,27 +173,26 @@ public:
      * \param title the window title
      * \return \c true on success; \c false on failure
      */
-    bool showPasswordDialog(ProtectableObject *obj, ProtectableObject::Mode mode, const QString& title);
-
+    bool showPasswordDialog(ProtectableObject *obj, ProtectableObject::Mode mode, const QString &title);
 
 public Q_SLOTS:
     /** Clears all visual cached data. */
     void refreshSheetViews();
 
     /** Invalidates all visual cached data for the cells in \p region. */
-    void refreshSelection(const Region& region);
+    void refreshSelection(const Region &region);
 
     void finishLoading();
     /**
      * Prepares this view for a modification of \p region, e.g. closes the cell
      * editor.
      */
-    void aboutToModify(const Region& region);
+    void aboutToModify(const Region &region);
 
     /** Sets the initial scrolling offset and selection after loading. */
     void initialPosition();
 
-    //BEGIN Actions
+    // BEGIN Actions
     void createTemplate();
     void recalcWorkBook();
     void recalcWorkSheet();
@@ -221,20 +220,20 @@ public Q_SLOTS:
      * Shows the sheet properties dialog.
      */
     void sheetProperties();
-    //END Actions
+    // END Actions
 
     /**
      * Sets the currently displayed \p sheet.
      * \param sheet the sheet
      * \param updateTabBar if \c true, updates the tab bar
      */
-    void setActiveSheet(Sheet* sheet, bool updateTabBar = true);
+    void setActiveSheet(Sheet *sheet, bool updateTabBar = true);
 
     /**
      * Switch the active sheet to the name. This slot is connected to the tab bar
      * and activated when the user selects a new sheet in the tab bar.
      */
-    void changeSheet(const QString& _name);
+    void changeSheet(const QString &_name);
 
     /**
      * Switch the active sheet to the next visible sheet. Does nothing if the current
@@ -265,10 +264,10 @@ public Q_SLOTS:
      * Shapes can either be anchored to cells or to the sheet/page.
      * \param mode string indicating cell or sheet anchoring
      */
-    void setShapeAnchoring(const QString& mode);
+    void setShapeAnchoring(const QString &mode);
 
     /** Shows the context menu for the on-the-fly calculation method. */
-    void statusBarClicked(const QPoint& pos);
+    void statusBarClicked(const QPoint &pos);
 
     /** Updates the on-the-fly calculation method menu. */
     void menuCalc(bool);
@@ -306,13 +305,13 @@ public Q_SLOTS:
     /**
      * Shows context menu when tabbar is double-clicked.
      */
-    void popupTabBarMenu(const QPoint&);
+    void popupTabBarMenu(const QPoint &);
 
     /**
      * \ingroup Damages
      * Handles damages that need visual updates.
      */
-    void handleDamages(const QList<Damage*>& damages);
+    void handleDamages(const QList<Damage *> &damages);
 
     /**
      * write in statusBar result of calc (Min, or Max, average, sum, count)
@@ -325,10 +324,10 @@ protected Q_SLOTS:
 
 public Q_SLOTS:
     /** Reacts on selection changes. */
-    void slotChangeSelection(const Region&);
+    void slotChangeSelection(const Region &);
 
     /** Reacts on reference selection changes. */
-    void slotScrollChoice(const Region&);
+    void slotScrollChoice(const Region &);
 
     /** Updates the shape anchoring action. */
     void shapeSelectionChanged();
@@ -336,7 +335,7 @@ public Q_SLOTS:
     /** Calls KoToolProxy::deleteSelection(). */
     void editDeleteSelection();
 
-    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
+    void updateAccessedCellRange(Sheet *sheet, const QPoint &location);
 
 public: // reimplementations
     // KoView interface
@@ -367,17 +366,17 @@ public:
      */
     void disableAutoScroll();
 
-
 protected:
     // QWidget interface
-    void keyPressEvent(QKeyEvent * _ev) override;
+    void keyPressEvent(QKeyEvent *_ev) override;
     virtual void resizeEvent(QResizeEvent *event) override;
     // KoView interface
     void updateReadWrite(bool readwrite) override;
-    KoPrintJob * createPrintJob() override;
+    KoPrintJob *createPrintJob() override;
 
     /** Informs the sheet views about this view's siize. This is necessary to ensure that they always are big enough to fill in the entire view. */
     void sendSizeToSheetViews();
+
 public:
     KoZoomController *zoomController() const override;
 
@@ -395,10 +394,10 @@ private Q_SLOTS:
     void addSheet(SheetBase *sheet);
 
     /** Removes \p sheet from the displayed sheets. */
-    void removeSheet(SheetBase* sheet);
+    void removeSheet(SheetBase *sheet);
 
     /** Called if a Sheet-instance is deleted to proper clean-up internal pointers. */
-    void sheetDestroyed(QObject* obj);
+    void sheetDestroyed(QObject *obj);
 
     void sheetHidden(SheetBase *sheet);
     void sheetShown(SheetBase *sheet);
@@ -408,11 +407,10 @@ private Q_SLOTS:
 private:
     Q_DISABLE_COPY(View)
 
-
     int autoScrollAcceleration(int offset) const;
 
     class Private;
-    Private * const d;
+    Private *const d;
 
     /** Creates and initializes the canvas and other child widgets. */
     void initView();
@@ -421,24 +419,23 @@ private:
     void setHeaderMinima();
 };
 
-
 /**
  * Overriding this to provide scrolling beyond the scrollbar's edge
  */
-class SheetsCanvasControllerWidget : public KoCanvasControllerWidget {
+class SheetsCanvasControllerWidget : public KoCanvasControllerWidget
+{
     Q_OBJECT
 public:
-    explicit SheetsCanvasControllerWidget(KActionCollection * actionCollection, View *parent = 0);
+    explicit SheetsCanvasControllerWidget(KActionCollection *actionCollection, View *parent = 0);
     ~SheetsCanvasControllerWidget() override;
 
 protected:
-    void wheelEvent(QWheelEvent *ev) override; 
+    void wheelEvent(QWheelEvent *ev) override;
     void recenterPreferred() override;
+
 private:
     View *view;
 };
-
-
 
 } // namespace Sheets
 } // namespace Calligra

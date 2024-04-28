@@ -4,8 +4,8 @@
 
 #include "KPrPlaceholderToolFactory.h"
 
-#include "KPrPlaceholderTool.h"
 #include "KPrPlaceholderShape.h"
+#include "KPrPlaceholderTool.h"
 
 #include <KLocalizedString>
 
@@ -22,7 +22,7 @@ KPrPlaceholderToolFactory::~KPrPlaceholderToolFactory()
 {
 }
 
-KoToolBase * KPrPlaceholderToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KPrPlaceholderToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KPrPlaceholderTool(canvas);
 }

@@ -36,20 +36,16 @@ public:
     KoCellStyle::Ptr defualtCellStyle() const;
     void setDefaultCellStyle(KoCellStyle::Ptr defaultStyle);
 
-    enum Visibility {
-        Collapse,
-        Filter,
-        Visible
-    };
+    enum Visibility { Collapse, Filter, Visible };
     Visibility visibility();
     void setVisibility(Visibility visibility);
 
 private:
-    void saveOdf(KoXmlWriter& writer, KoGenStyles& styles);
-    void finishSaveOdf(KoXmlWriter& writer, KoGenStyles& styles);
+    void saveOdf(KoXmlWriter &writer, KoGenStyles &styles);
+    void finishSaveOdf(KoXmlWriter &writer, KoGenStyles &styles);
 
-    KoRow(const KoRow&);
-    KoRow& operator=(const KoRow&);
+    KoRow(const KoRow &);
+    KoRow &operator=(const KoRow &);
 
     KoCellStyle::Ptr m_defaultCellStyle;
     KoRowStyle::Ptr m_style;

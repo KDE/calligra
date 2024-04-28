@@ -7,14 +7,14 @@
 #ifndef KWNAVIGATIONWIDGET_H
 #define KWNAVIGATIONWIDGET_H
 
-#include <QWidget>
 #include <QHBoxLayout>
 #include <QStandardItem>
-#include <QTreeView>
 #include <QTimer>
+#include <QTreeView>
+#include <QWidget>
 
 // FIXME: Don't cross include
-//#include "KWNavigationDocker.h"
+// #include "KWNavigationDocker.h"
 #include "StatisticsPreferencesPopup.h"
 #include <KWCanvas.h>
 #include <KoTextDocumentLayout.h>
@@ -38,7 +38,7 @@ public:
 
     friend class KWNavigationDocker;
 
-    void setCanvas(KWCanvas* canvas);
+    void setCanvas(KWCanvas *canvas);
 
     void unsetCanvas();
 

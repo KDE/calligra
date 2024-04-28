@@ -19,10 +19,10 @@ class MainWindow : public QMainWindow
     Q_PROPERTY(QString currentTouchPage READ currentTouchPage WRITE setCurrentTouchPage NOTIFY currentTouchPageChanged)
     Q_PROPERTY(bool temporaryFile READ temporaryFile WRITE setTemporaryFile NOTIFY temporaryFileChanged)
     Q_PROPERTY(bool fullScreen READ fullScreen WRITE setFullScreen NOTIFY fullScreenChanged)
-    Q_PROPERTY(QObject* desktopKoView READ desktopKoView NOTIFY desktopKoViewChanged)
+    Q_PROPERTY(QObject *desktopKoView READ desktopKoView NOTIFY desktopKoViewChanged)
 
 public:
-    explicit MainWindow(QStringList fileNames, QWidget* parent = 0, Qt::WindowFlags flags = Qt::WindowFlags());
+    explicit MainWindow(QStringList fileNames, QWidget *parent = 0, Qt::WindowFlags flags = Qt::WindowFlags());
     ~MainWindow() override;
 
     bool allowClose() const;
@@ -30,7 +30,8 @@ public:
 
     bool slateMode() const;
 
-    QString applicationName() const {
+    QString applicationName() const
+    {
         return QLatin1String("CALLIGRA GEMINI");
     }
 
@@ -43,14 +44,14 @@ public:
     bool fullScreen() const;
     void setFullScreen(bool newValue);
 
-    QObject* desktopKoView() const;
+    QObject *desktopKoView() const;
     Q_INVOKABLE int lastScreen() const;
 
-    Q_INVOKABLE void setAlternativeSaveAction(QAction* altAction);
+    Q_INVOKABLE void setAlternativeSaveAction(QAction *altAction);
 
-    void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent *event) override;
 
-    Q_INVOKABLE void setDocAndPart(QObject* document, QObject* part);
+    Q_INVOKABLE void setDocAndPart(QObject *document, QObject *part);
 
 public Q_SLOTS:
     void minimize();
@@ -60,8 +61,8 @@ public Q_SLOTS:
     void switchToDesktop();
     void documentChanged();
     void resetWindowTitle();
-    void resourceChanged(int key, const QVariant& v);
-    void resourceChangedTouch(int key, const QVariant& v);
+    void resourceChanged(int key, const QVariant &v);
+    void resourceChangedTouch(int key, const QVariant &v);
     /**
      * Used to open an arbitrary file from the welcome screen,
      * not from the normal UI (desktopproxy does that)
@@ -85,10 +86,10 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
 #ifdef Q_OS_WIN
-    bool winEvent(MSG * message, long * result);
+    bool winEvent(MSG *message, long *result);
 #endif
 };
 

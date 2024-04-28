@@ -8,14 +8,14 @@
 #ifndef APPLIXWORDIMPORT_H
 #define APPLIXWORDIMPORT_H
 
-#include <QString>
-#include <QColor>
-#include <QVariantList>
-#include <QFile>
-#include <QObject>
-#include <QTextStream>
 #include <KoFilter.h>
 #include <KoStore.h>
+#include <QColor>
+#include <QFile>
+#include <QObject>
+#include <QString>
+#include <QTextStream>
+#include <QVariantList>
 
 class KoOdfWriteStore;
 class QByteArray;
@@ -23,23 +23,24 @@ class KoGenStyle;
 
 class APPLIXWORDImport : public KoFilter
 {
-
     Q_OBJECT
 
 public:
-    APPLIXWORDImport(QObject *parent, const QVariantList&);
-    ~APPLIXWORDImport() override {}
+    APPLIXWORDImport(QObject *parent, const QVariantList &);
+    ~APPLIXWORDImport() override
+    {
+    }
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 
 private:
-    QChar   specCharfind(QChar , QChar);
+    QChar specCharfind(QChar, QChar);
     QString readTagLine(QTextStream &);
-    void    replaceSpecial(QString &);
+    void replaceSpecial(QString &);
     QString nextLine(QTextStream &);
-    int     readHeader(QTextStream &stream);
+    int readHeader(QTextStream &stream);
     bool createMeta(KoOdfWriteStore &store);
-    bool parseFontProperty(const QString& type, KoGenStyle& style) const;
+    bool parseFontProperty(const QString &type, KoGenStyle &style) const;
 
 private:
     int m_stepsize;

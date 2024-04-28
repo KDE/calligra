@@ -19,7 +19,8 @@ public:
     explicit KarbonOutlinePaintingStrategy(KoShapeManager *shapeManager);
     ~KarbonOutlinePaintingStrategy() override;
     /// reimplemented from KoShapeManagerPaintingStrategy
-    void paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
+    void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
+
 private:
     KoShapeStroke *m_stroke;
 };

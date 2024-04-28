@@ -5,15 +5,15 @@
 
 #include "TestColFormatStorage.h"
 
-#include <QVector>
+#include <KLocalizedString>
 #include <QDebug>
 #include <QTest>
-#include <KLocalizedString>
+#include <QVector>
 
 #include "core/ColFormatStorage.h"
-#include "engine/calligra_sheets_limits.h"
 #include "core/Map.h"
 #include "core/Sheet.h"
+#include "engine/calligra_sheets_limits.h"
 
 using namespace Calligra::Sheets;
 

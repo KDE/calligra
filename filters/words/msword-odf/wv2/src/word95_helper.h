@@ -23,18 +23,17 @@
 #include "global.h"
 #include "wv2_export.h"
 
-
 namespace wvWare
 {
-    namespace Word95
-    {
-        namespace SPRM
-        {
+namespace Word95
+{
+namespace SPRM
+{
 
-            U16 determineParameterLength( U8 sprm, const U8* in );
+U16 determineParameterLength(U8 sprm, const U8 *in);
 
-        } // namespace SPRM
-    } // namespace Word95
+} // namespace SPRM
+} // namespace Word95
 } // namespace wvWare
 
 #endif // WORD95_HELPER_H

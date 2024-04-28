@@ -2,12 +2,12 @@
  * SPDX-FileCopyrightText: 2009 Thomas Zander <zander@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ */
 #ifndef KOPATHSHAPEPRIVATE_H
 #define KOPATHSHAPEPRIVATE_H
 
-#include "KoTosContainer_p.h"
 #include "KoMarkerData.h"
+#include "KoTosContainer_p.h"
 
 class KoPathShapePrivate : public KoTosContainerPrivate
 {

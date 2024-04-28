@@ -13,7 +13,7 @@ public:
     KPrSoundEventActionFactory();
     virtual ~KPrSoundEventActionFactory();
 
-    KoEventAction * createEventAction() override;
+    KoEventAction *createEventAction() override;
     QWidget *createOptionWidget() override;
 };
 

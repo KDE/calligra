@@ -1,18 +1,17 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
-
+ * SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #include "TestEditCustomSlideShowsCommand.h"
+#include "KPrCustomSlideShows.h"
+#include "KPrCustomSlideShowsModel.h"
 #include "KPrDocument.h"
 #include "KoPAMasterPage.h"
 #include "KoPAPage.h"
 #include "PAMock.h"
 #include "commands/KPrEditCustomSlideShowsCommand.h"
-#include "KPrCustomSlideShows.h"
-#include "KPrCustomSlideShowsModel.h"
 
 #include <QTest>
 
@@ -27,7 +26,7 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
     doc.insertPage(page1, 0);
 
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
-    KoPAMasterPage * m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
+    KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
     QVERIFY(p1 != 0);
     QVERIFY(m1 != 0);
@@ -38,7 +37,7 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
     KoPAPage *page3 = new KoPAPage(master1);
     doc.insertPage(page3, 0);
 
-    QList<KoPAPageBase*> slideList;
+    QList<KoPAPageBase *> slideList;
 
     slideList.append(page1);
     slideList.append(page2);
@@ -48,7 +47,7 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
 
     doc.customSlideShows()->insert(customShowName, slideList);
 
-    QList<KoPAPageBase*> initialSlideShow = doc.customSlideShows()->getByName(customShowName);
+    QList<KoPAPageBase *> initialSlideShow = doc.customSlideShows()->getByName(customShowName);
 
     QCOMPARE(initialSlideShow.count(), 3);
 
@@ -57,7 +56,7 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
     KPrEditCustomSlideShowsCommand command(&doc, customShowName, initialSlideShow);
 
     command.redo();
-    QList<KoPAPageBase*> modifiedSlideShow = doc.customSlideShows()->getByName(customShowName);
+    QList<KoPAPageBase *> modifiedSlideShow = doc.customSlideShows()->getByName(customShowName);
     QCOMPARE(modifiedSlideShow, initialSlideShow);
 
     command.undo();

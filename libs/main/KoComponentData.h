@@ -39,7 +39,7 @@ public:
      *
      * It does not copy the data. The data is shared between the old and new objects.
      */
-    KoComponentData(const KoComponentData&);
+    KoComponentData(const KoComponentData &);
 
     /**
      * Destructor.
@@ -51,17 +51,20 @@ public:
      *
      * It does not copy the data. The data is shared between the old and new objects.
      */
-    KoComponentData &operator=(const KoComponentData&);
+    KoComponentData &operator=(const KoComponentData &);
 
     /**
      * Returns whether two objects reference the same data.
      */
-    bool operator==(const KoComponentData&) const;
+    bool operator==(const KoComponentData &) const;
 
     /**
      * Returns whether two objects do not reference the same data.
      */
-    bool operator!=(const KoComponentData &rhs) const { return !operator==(rhs); }
+    bool operator!=(const KoComponentData &rhs) const
+    {
+        return !operator==(rhs);
+    }
 
     /**
      * Returns the general config object (componentName"rc").

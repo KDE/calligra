@@ -27,14 +27,15 @@ class Layout;
 class LayoutFactory
 {
 public:
-    LayoutFactory(const QString& _id, const QString& _name);
+    LayoutFactory(const QString &_id, const QString &_name);
     virtual ~LayoutFactory();
-    const QString& id() const;
-    const QString& name() const;
-    virtual Layout* createLayout() const = 0;
+    const QString &id() const;
+    const QString &name() const;
+    virtual Layout *createLayout() const = 0;
+
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

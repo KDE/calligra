@@ -18,5 +18,4 @@ public:
     KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
-
-#endif 
+#endif

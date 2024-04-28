@@ -8,10 +8,11 @@
 
 #include <QObject>
 
-namespace MusicCore {
-    class Sheet;
-    class Staff;
-    class VoiceBar;
+namespace MusicCore
+{
+class Sheet;
+class Staff;
+class VoiceBar;
 }
 
 /**
@@ -29,12 +30,28 @@ public:
     void moveDown();
     void setVoice(int voice);
 
-    MusicCore::Staff* staff() const { return m_staff; }
-    int voice() const { return m_voice; }
-    int bar() const { return m_bar; }
-    int element() const { return m_element; }
-    int line() const { return m_line; }
-    MusicCore::VoiceBar* voiceBar() const;
+    MusicCore::Staff *staff() const
+    {
+        return m_staff;
+    }
+    int voice() const
+    {
+        return m_voice;
+    }
+    int bar() const
+    {
+        return m_bar;
+    }
+    int element() const
+    {
+        return m_element;
+    }
+    int line() const
+    {
+        return m_line;
+    }
+    MusicCore::VoiceBar *voiceBar() const;
+
 private:
     MusicCore::Sheet *m_sheet;
     MusicCore::Staff *m_staff;

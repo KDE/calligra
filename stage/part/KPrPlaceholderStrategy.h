@@ -30,41 +30,41 @@ public:
      *
      * @param presentationClass The presentation:class attribute of the placeholder
      */
-    static KPrPlaceholderStrategy * create( const QString & presentationClass );
+    static KPrPlaceholderStrategy *create(const QString &presentationClass);
 
     /**
      * Check if the presentation class is supported
      *
      * @param presentationClass The presentation:class attribute of the placeholder
      */
-    static bool supported( const QString & presentationClass );
+    static bool supported(const QString &presentationClass);
 
     virtual ~KPrPlaceholderStrategy();
 
     virtual KoShape *createShape(KoDocumentResourceManager *documentResources);
 
-    virtual void paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect, KoShapePaintingContext &paintcontext);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, const QRectF &rect, KoShapePaintingContext &paintcontext);
 
-    virtual void saveOdf( KoShapeSavingContext & context );
+    virtual void saveOdf(KoShapeSavingContext &context);
 
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     virtual void init(KoDocumentResourceManager *documentResources);
 
-    virtual KoShapeUserData * userData() const;
+    virtual KoShapeUserData *userData() const;
 
 protected:
     /**
      * @param presentationClass The presentation:class of the shape used for creating a shape of that type
      */
-    KPrPlaceholderStrategy( const QString & presentationClass );
+    KPrPlaceholderStrategy(const QString &presentationClass);
 
     /**
      * Get the text that is displayed
      */
     virtual QString text() const;
 
-    const PlaceholderData * m_placeholderData;
+    const PlaceholderData *m_placeholderData;
 };
 
 #endif /* KPRPLACEHOLDERSTRATEGY_H */

@@ -5,8 +5,8 @@
 */
 
 #include "lineeditwithautocorrectiontest.h"
-#include "../widgets/lineeditwithautocorrection.h"
 #include "../autocorrection.h"
+#include "../widgets/lineeditwithautocorrection.h"
 #include <QTest>
 #include <qtestkeyboard.h>
 

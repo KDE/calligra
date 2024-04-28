@@ -58,11 +58,10 @@ class TabBar : public QWidget
     Q_PROPERTY(unsigned count READ count)
 
 public:
-
     /**
      * Creates a new tabbar.
      */
-    explicit TabBar(QWidget* parent = 0, const char *name = 0);
+    explicit TabBar(QWidget *parent = 0, const char *name = 0);
 
     /**
      * Destroy the tabbar.
@@ -107,14 +106,14 @@ public:
     /**
      * Ensures that specified tab is visible.
      */
-    void ensureVisible(const QString& tab);
+    void ensureVisible(const QString &tab);
 
 public Q_SLOTS:
 
     /**
      * Replaces all tabs with the list of strings.
      */
-    void setTabs(const QStringList& list);
+    void setTabs(const QStringList &list);
 
     /**
      * Sets the tab bar to be read only.
@@ -128,19 +127,19 @@ public Q_SLOTS:
     /**
      * Adds a tab to the tab bar.
      */
-    void addTab(const QString& text);
+    void addTab(const QString &text);
 
     /**
      * Removes a tab from the bar. If the tab was the active one then
      * no tab will be active.
      * It is recommended to call setActiveTab after a call to this function.
      */
-    void removeTab(const QString& text);
+    void removeTab(const QString &text);
 
     /**
      * Renames a tab.
      */
-    void renameTab(const QString& old_name, const QString& new_name);
+    void renameTab(const QString &old_name, const QString &new_name);
 
     /**
      * Moves a tab to another position and reorder other tabs.
@@ -189,7 +188,7 @@ public Q_SLOTS:
     /**
      * Sets active tab.
      */
-    void setActiveTab(const QString& text);
+    void setActiveTab(const QString &text);
 
     /**
      * Removes all tabs.
@@ -203,7 +202,7 @@ Q_SIGNALS:
     /**
      * Emitted if the active tab changed.
      */
-    void tabChanged(const QString& _text);
+    void tabChanged(const QString &_text);
 
     /**
      * This signal is emitted whenever a tab is dragged, moved and
@@ -221,7 +220,7 @@ Q_SIGNALS:
      * This signal is emitted whenever the tab bar is right-clicked.
      * Typically it is used to popup a context menu.
      */
-    void contextMenu(const QPoint& pos);
+    void contextMenu(const QPoint &pos);
 
     /**
      * This signal is emitted whenever the tab bar is double-clicked.
@@ -233,20 +232,20 @@ protected Q_SLOTS:
     void autoScrollForward();
 
 protected:
-    void paintEvent(QPaintEvent* ev) override;
-    void resizeEvent(QResizeEvent* ev) override;
-    void mousePressEvent(QMouseEvent* ev) override;
-    void mouseReleaseEvent(QMouseEvent* ev) override;
-    void mouseDoubleClickEvent(QMouseEvent* ev) override;
-    void mouseMoveEvent(QMouseEvent* ev) override;
-    void wheelEvent(QWheelEvent * e) override;
+    void paintEvent(QPaintEvent *ev) override;
+    void resizeEvent(QResizeEvent *ev) override;
+    void mousePressEvent(QMouseEvent *ev) override;
+    void mouseReleaseEvent(QMouseEvent *ev) override;
+    void mouseDoubleClickEvent(QMouseEvent *ev) override;
+    void mouseMoveEvent(QMouseEvent *ev) override;
+    void wheelEvent(QWheelEvent *e) override;
 
 private:
-    TabBarPrivate * const d;
+    TabBarPrivate *const d;
 
     // don't allow copy or assignment
-    TabBar(const TabBar&);
-    TabBar& operator=(const TabBar&);
+    TabBar(const TabBar &);
+    TabBar &operator=(const TabBar &);
 };
 
 } // namespace Sheets

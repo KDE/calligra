@@ -11,17 +11,17 @@
 #include <KoToolManager.h>
 
 #include <QDebug>
-#include <QTimer>
-#include <QQuickWindow>
 #include <QPainter>
-#include <QSGTransformNode>
+#include <QQuickWindow>
 #include <QSGSimpleTextureNode>
+#include <QSGTransformNode>
+#include <QTimer>
 
-#include <KoCanvasController.h>
+#include "gemini/ViewModeSwitchEvent.h"
 #include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoZoomMode.h>
-#include "gemini/ViewModeSwitchEvent.h"
 
 #include "Document.h"
 #include "View.h"
@@ -47,14 +47,15 @@ public:
         , useZoomProxy{true}
         , zoomProxy{nullptr}
         , zoomTimer{nullptr}
-    { }
+    {
+    }
 
-    ViewController* q;
+    ViewController *q;
 
-    View* view;
-    QQuickItem* flickable;
+    View *view;
+    QQuickItem *flickable;
 
-    KoCanvasController* canvasController;
+    KoCanvasController *canvasController;
 
     float lastX;
     float lastY;
@@ -71,21 +72,22 @@ public:
     float maximumZoom;
 
     bool useZoomProxy;
-    QImage* zoomProxy;
-    QTimer* zoomTimer;
+    QImage *zoomProxy;
+    QTimer *zoomTimer;
     QVector3D zoomCenter;
 
     QSizeF documentSize;
 };
 
-ViewController::ViewController(QQuickItem* parent)
-    : QQuickItem{parent}, d{new Private}
+ViewController::ViewController(QQuickItem *parent)
+    : QQuickItem{parent}
+    , d{new Private}
 {
     setFlag(QQuickItem::ItemHasContents, true);
 
     KoZoomMode::setMinimumZoom(d->minimumZoom);
     KoZoomMode::setMaximumZoom(d->maximumZoom);
-    
+
     d->zoomTimer = new QTimer{this};
     d->zoomTimer->setInterval(500);
     d->zoomTimer->setSingleShot(true);
@@ -97,18 +99,21 @@ ViewController::~ViewController()
     delete d;
 }
 
-View* ViewController::view() const
+View *ViewController::view() const
 {
     return d->view;
 }
 
-void ViewController::setView(View* newView)
+void ViewController::setView(View *newView)
 {
-    if(newView != d->view) {
-        if(d->view) {
-            if(d->view->document()) {
-                if(d->canvasController) {
-                    disconnect(d->canvasController->proxyObject, &KoCanvasControllerProxyObject::moveDocumentOffset, this, &ViewController::documentOffsetChanged);
+    if (newView != d->view) {
+        if (d->view) {
+            if (d->view->document()) {
+                if (d->canvasController) {
+                    disconnect(d->canvasController->proxyObject,
+                               &KoCanvasControllerProxyObject::moveDocumentOffset,
+                               this,
+                               &ViewController::documentOffsetChanged);
                 }
                 d->view->document()->disconnect(this);
             }
@@ -118,7 +123,7 @@ void ViewController::setView(View* newView)
         d->view = newView;
         connect(d->view, &View::documentChanged, this, &ViewController::documentChanged);
 
-        if(d->view->document()) {
+        if (d->view->document()) {
             documentChanged();
         } else {
             d->canvasController = nullptr;
@@ -128,15 +133,15 @@ void ViewController::setView(View* newView)
     }
 }
 
-QQuickItem* ViewController::flickable() const
+QQuickItem *ViewController::flickable() const
 {
     return d->flickable;
 }
 
-void ViewController::setFlickable(QQuickItem* item)
+void ViewController::setFlickable(QQuickItem *item)
 {
-    if(item != d->flickable) {
-        if(item && item->metaObject()->indexOfProperty("contentWidth") == -1) {
+    if (item != d->flickable) {
+        if (item && item->metaObject()->indexOfProperty("contentWidth") == -1) {
             qWarning() << Q_FUNC_INFO << "Item does not seem to be a flickable, ignoring.";
             return;
         }
@@ -145,10 +150,10 @@ void ViewController::setFlickable(QQuickItem* item)
 
         d->flickable = item;
 
-        if(item) {
+        if (item) {
             documentSizeChanged();
-            connect(d->flickable, SIGNAL(contentXChanged()), this, SLOT(contentPositionChanged()) );
-            connect(d->flickable, SIGNAL(contentYChanged()), this, SLOT(contentPositionChanged()) );
+            connect(d->flickable, SIGNAL(contentXChanged()), this, SLOT(contentPositionChanged()));
+            connect(d->flickable, SIGNAL(contentYChanged()), this, SLOT(contentPositionChanged()));
             connect(d->flickable, &QQuickItem::widthChanged, this, &ViewController::flickableWidthChanged);
         }
         emit flickableChanged();
@@ -162,7 +167,7 @@ float ViewController::minimumZoom() const
 
 void ViewController::setMinimumZoom(float newValue)
 {
-    if(newValue != d->minimumZoom) {
+    if (newValue != d->minimumZoom) {
         d->minimumZoom = newValue;
         KoZoomMode::setMinimumZoom(newValue);
         emit minimumZoomChanged();
@@ -176,7 +181,7 @@ bool ViewController::minimumZoomFitsWidth() const
 
 void ViewController::setMinimumZoomFitsWidth(bool newValue)
 {
-    if(newValue != d->minimumZoomFitsWidth) {
+    if (newValue != d->minimumZoomFitsWidth) {
         d->minimumZoomFitsWidth = newValue;
 
         flickableWidthChanged();
@@ -187,7 +192,7 @@ void ViewController::setMinimumZoomFitsWidth(bool newValue)
 
 float ViewController::zoom() const
 {
-    if(d->useZoomProxy && d->zoomProxy) {
+    if (d->useZoomProxy && d->zoomProxy) {
         return d->zoom + d->zoomChange;
     }
 
@@ -197,9 +202,9 @@ float ViewController::zoom() const
 void ViewController::setZoom(float newZoom)
 {
     newZoom = qBound(d->minimumZoom, newZoom, d->maximumZoom);
-    if(newZoom != d->zoom) {
-        if(d->useZoomProxy && d->view) {
-            if(!d->zoomProxy) {
+    if (newZoom != d->zoom) {
+        if (d->useZoomProxy && d->view) {
+            if (!d->zoomProxy) {
                 d->zoomProxy = new QImage{int(d->flickable->width()), int(d->flickable->height()), QImage::Format_ARGB32};
 
                 QPainter p;
@@ -210,8 +215,8 @@ void ViewController::setZoom(float newZoom)
                 d->view->setVisible(false);
             }
 
-            if(d->zoomCenter.isNull()) {
-                d->zoomCenter = QVector3D{ float(d->flickable->width()) / 2.f, float(d->flickable->height()) / 2.f, 0.f };
+            if (d->zoomCenter.isNull()) {
+                d->zoomCenter = QVector3D{float(d->flickable->width()) / 2.f, float(d->flickable->height()) / 2.f, 0.f};
             }
             d->zoomChange = newZoom - d->zoom;
             update();
@@ -219,7 +224,7 @@ void ViewController::setZoom(float newZoom)
         } else {
             d->zoom = newZoom;
 
-            if(d->view) {
+            if (d->view) {
                 d->view->setZoom(d->zoom);
             }
         }
@@ -235,7 +240,7 @@ float ViewController::maximumZoom() const
 
 void ViewController::setMaximumZoom(float newValue)
 {
-    if(newValue != d->maximumZoom) {
+    if (newValue != d->maximumZoom) {
         d->maximumZoom = newValue;
         KoZoomMode::setMaximumZoom(newValue);
         emit maximumZoomChanged();
@@ -243,17 +248,18 @@ void ViewController::setMaximumZoom(float newValue)
 }
 
 bool ViewController::useZoomProxy() const
-{    void updateMinimumZoom();
+{
+    void updateMinimumZoom();
 
     return d->useZoomProxy;
 }
 
 void ViewController::setUseZoomProxy(bool proxy)
 {
-    if(proxy != d->useZoomProxy) {
+    if (proxy != d->useZoomProxy) {
         d->useZoomProxy = proxy;
 
-        if(!d->useZoomProxy && d->zoomProxy) {
+        if (!d->useZoomProxy && d->zoomProxy) {
             delete d->zoomProxy;
             d->zoomProxy = nullptr;
             update();
@@ -263,46 +269,45 @@ void ViewController::setUseZoomProxy(bool proxy)
     }
 }
 
-bool ViewController::event(QEvent* event)
+bool ViewController::event(QEvent *event)
 {
-    switch(static_cast<int>(event->type())) {
-        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
-            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+    switch (static_cast<int>(event->type())) {
+    case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+        ViewModeSynchronisationObject *syncObject = static_cast<ViewModeSwitchEvent *>(event)->synchronisationObject();
 
-            if (d->canvasController) {
-                syncObject->scrollBarValue = d->canvasController->documentOffset();
-                syncObject->zoomLevel = zoom();
-                syncObject->activeToolId = KoToolManager::instance()->activeToolId();
-                syncObject->shapes = d->canvasController->canvas()->shapeManager()->shapes();
-                syncObject->currentIndex = d->view->document()->currentIndex();
-                syncObject->initialized = true;
-            }
-
-            return true;
+        if (d->canvasController) {
+            syncObject->scrollBarValue = d->canvasController->documentOffset();
+            syncObject->zoomLevel = zoom();
+            syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+            syncObject->shapes = d->canvasController->canvas()->shapeManager()->shapes();
+            syncObject->currentIndex = d->view->document()->currentIndex();
+            syncObject->initialized = true;
         }
-        case ViewModeSwitchEvent::SwitchedToTouchModeEvent: {
-            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
-            if (d->canvasController && syncObject->initialized) {
-                d->canvasController->canvas()->shapeManager()->setShapes(syncObject->shapes);
+        return true;
+    }
+    case ViewModeSwitchEvent::SwitchedToTouchModeEvent: {
+        ViewModeSynchronisationObject *syncObject = static_cast<ViewModeSwitchEvent *>(event)->synchronisationObject();
 
-                KoToolManager::instance()->switchToolRequested("PageToolFactory_ID");
-                qApp->processEvents();
+        if (d->canvasController && syncObject->initialized) {
+            d->canvasController->canvas()->shapeManager()->setShapes(syncObject->shapes);
 
-                setZoom(syncObject->zoomLevel);
+            KoToolManager::instance()->switchToolRequested("PageToolFactory_ID");
+            qApp->processEvents();
 
-                qApp->processEvents();
-                if(syncObject->scrollBarValue.isNull()) {
-                    d->view->document()->setCurrentIndex(syncObject->currentIndex);
-                }
-                else {
-                    d->canvasController->setScrollBarValue(syncObject->scrollBarValue);
-                }
-                emit d->view->document()->requestViewUpdate();
+            setZoom(syncObject->zoomLevel);
+
+            qApp->processEvents();
+            if (syncObject->scrollBarValue.isNull()) {
+                d->view->document()->setCurrentIndex(syncObject->currentIndex);
+            } else {
+                d->canvasController->setScrollBarValue(syncObject->scrollBarValue);
             }
-
-            return true;
+            emit d->view->document()->requestViewUpdate();
         }
+
+        return true;
+    }
     }
     return QQuickItem::event(event);
 }
@@ -315,27 +320,27 @@ void ViewController::zoomAroundPoint(float amount, float x, float y)
 
 void ViewController::zoomToFitWidth(float width)
 {
-    if( width < 0.01f )
+    if (width < 0.01f)
         return;
 
-    if( d->zoom < 0.01f )
+    if (d->zoom < 0.01f)
         return;
 
-    if( d->documentSize.width() > 0.f && d->documentSize.width() < 2e6 )
-        setZoom( width / ( d->documentSize.width() / d->zoom ) );
+    if (d->documentSize.width() > 0.f && d->documentSize.width() < 2e6)
+        setZoom(width / (d->documentSize.width() / d->zoom));
 }
 
-QSGNode* ViewController::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData* )
+QSGNode *ViewController::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *)
 {
-    if(!d->zoomProxy) {
-        if(node) {
+    if (!d->zoomProxy) {
+        if (node) {
             delete node;
         }
         return 0;
     }
 
-    auto root = static_cast<QSGTransformNode*>(node);
-    if(!root) {
+    auto root = static_cast<QSGTransformNode *>(node);
+    if (!root) {
         root = new QSGTransformNode{};
     }
 
@@ -343,8 +348,8 @@ QSGNode* ViewController::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintN
     itemToView.translate(QVector3D{d->flickable->property("contentX").toFloat(), d->flickable->property("contentY").toFloat(), 0.f} + d->zoomCenter);
     root->setMatrix(itemToView);
 
-    auto center = static_cast<QSGTransformNode*>(root->firstChild());
-    if(!center) {
+    auto center = static_cast<QSGTransformNode *>(root->firstChild());
+    if (!center) {
         center = new QSGTransformNode{};
         root->appendChildNode(center);
     }
@@ -366,15 +371,15 @@ QSGNode* ViewController::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintN
     centerToView.translate(left, top);
     center->setMatrix(centerToView);
 
-    auto texNode = static_cast<QSGSimpleTextureNode*>(center->firstChild());
-    if(!texNode)     {
+    auto texNode = static_cast<QSGSimpleTextureNode *>(center->firstChild());
+    if (!texNode) {
         texNode = new QSGSimpleTextureNode{};
         center->appendChildNode(texNode);
     }
     texNode->setRect(d->zoomProxy->rect());
 
     auto texture = window()->createTextureFromImage(*d->zoomProxy);
-    if(texNode->texture()) {
+    if (texNode->texture()) {
         delete texNode->texture();
     }
     texNode->setTexture(texture);
@@ -384,13 +389,13 @@ QSGNode* ViewController::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintN
 
 void ViewController::contentPositionChanged()
 {
-    if(!d->canvasController || d->ignoreFlickableChange)
+    if (!d->canvasController || d->ignoreFlickableChange)
         return;
 
     float newX = d->flickable->property("contentX").toFloat();
     float newY = d->flickable->property("contentY").toFloat();
 
-    //TODO: The rounding here causes some issues at edges. Need to investigate how to fix it.
+    // TODO: The rounding here causes some issues at edges. Need to investigate how to fix it.
     QPointF diff = QPointF{newX - d->lastX, newY - d->lastY};
     d->ignoreOffsetChange = true;
     d->canvasController->pan(diff.toPoint());
@@ -412,16 +417,16 @@ void ViewController::documentChanged()
 
 void ViewController::documentSizeChanged()
 {
-    if(d->view && d->view->document() && d->flickable) {
-        if(!d->canvasController) {
+    if (d->view && d->view->document() && d->flickable) {
+        if (!d->canvasController) {
             d->canvasController = d->view->document()->canvasController();
         }
 
         d->documentSize = d->view->document()->documentSize();
-        //Limit the size of this item to always be at least the same size
-        //as the flickable, since otherwise we can end up with situations
-        //where children cannot interact, for example when using the
-        //LinkArea as a child of this item.
+        // Limit the size of this item to always be at least the same size
+        // as the flickable, since otherwise we can end up with situations
+        // where children cannot interact, for example when using the
+        // LinkArea as a child of this item.
         setWidth(qMax(d->flickable->width() - 1, d->documentSize.width()));
         setHeight(qMax(d->flickable->height() - 1, d->documentSize.height()));
 
@@ -434,15 +439,15 @@ void ViewController::documentSizeChanged()
 
 void ViewController::documentStatusChanged()
 {
-    if(d->view->document()->status() == DocumentStatus::Loaded) {
+    if (d->view->document()->status() == DocumentStatus::Loaded) {
         d->canvasController = d->view->document()->canvasController();
         connect(d->canvasController->proxyObject, &KoCanvasControllerProxyObject::moveDocumentOffset, this, &ViewController::documentOffsetChanged);
     }
 }
 
-void ViewController::documentOffsetChanged(const QPoint& offset)
+void ViewController::documentOffsetChanged(const QPoint &offset)
 {
-    if(d->ignoreOffsetChange || !d->flickable) {
+    if (d->ignoreOffsetChange || !d->flickable) {
         return;
     }
 
@@ -467,10 +472,9 @@ void ViewController::zoomTimeout()
     float oldX = d->flickable->property("contentX").toReal();
     float oldY = d->flickable->property("contentY").toReal();
 
-
     float z = 1.0 + d->zoomChange;
-    d->flickable->setProperty("contentX", oldX + ((d->zoomCenter.x() * z - d->zoomCenter.x())) );
-    d->flickable->setProperty("contentY", oldY + ((d->zoomCenter.y() * z - d->zoomCenter.y())) );
+    d->flickable->setProperty("contentX", oldX + ((d->zoomCenter.x() * z - d->zoomCenter.x())));
+    d->flickable->setProperty("contentY", oldY + ((d->zoomCenter.y() * z - d->zoomCenter.y())));
 
     QMetaObject::invokeMethod(d->flickable, "returnToBounds");
 
@@ -487,7 +491,7 @@ void ViewController::zoomTimeout()
 
 void ViewController::flickableWidthChanged()
 {
-    if(d->minimumZoomFitsWidth && d->flickable && d->documentSize.width() > 0.f) {
+    if (d->minimumZoomFitsWidth && d->flickable && d->documentSize.width() > 0.f) {
         setMinimumZoom(d->flickable->width() / (d->documentSize.width() / d->zoom));
         setZoom(d->zoom);
     }

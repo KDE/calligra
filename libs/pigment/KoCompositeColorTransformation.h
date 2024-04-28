@@ -11,7 +11,6 @@
 
 #include <QScopedPointer>
 
-
 /**
  * A class for storing a composite color transformation. All the
  * transformations added with appendTransform() are applied
@@ -55,7 +54,7 @@ public:
      * is only one non-null transform, it is returned directly to
      * avoid extra virtual calls added by KoCompositeColorTransformation.
      */
-    static KoColorTransformation* createOptimizedCompositeTransform(const QVector<KoColorTransformation*> transforms);
+    static KoColorTransformation *createOptimizedCompositeTransform(const QVector<KoColorTransformation *> transforms);
 
 private:
     struct Private;

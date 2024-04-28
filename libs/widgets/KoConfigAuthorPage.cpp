@@ -13,21 +13,21 @@
 #include <KoGlobal.h>
 #include <KoIcon.h>
 
-#include <KLocalizedString>
-#include <KUser>
-#include <KEMailSettings>
 #include <KConfigGroup>
+#include <KEMailSettings>
+#include <KLocalizedString>
 #include <KSharedConfig>
+#include <KUser>
 
-#include <QLineEdit>
-#include <QStackedWidget>
-#include <QList>
 #include <QComboBox>
 #include <QGridLayout>
+#include <QInputDialog>
+#include <QLineEdit>
+#include <QList>
+#include <QStackedWidget>
 #include <QString>
 #include <QStringList>
 #include <QToolButton>
-#include <QInputDialog>
 
 class Q_DECL_HIDDEN KoConfigAuthorPage::Private
 {
@@ -38,9 +38,8 @@ public:
     QToolButton *deleteUser;
 };
 
-
 KoConfigAuthorPage::KoConfigAuthorPage()
-        : d(new Private)
+    : d(new Private)
 {
     QGridLayout *layout = new QGridLayout;
 
@@ -81,7 +80,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     KConfigGroup authorGroup(config, "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
 
-    foreach (const QString &profile , profiles) {
+    foreach (const QString &profile, profiles) {
         KConfigGroup cgs(&authorGroup, "Author-" + profile);
         aUi = new Ui::KoConfigAuthorPage();
         w = new QWidget;
@@ -126,7 +125,7 @@ void KoConfigAuthorPage::profileChanged(int i)
 void KoConfigAuthorPage::addUser()
 {
     bool ok;
-    QString profileName = QInputDialog::getText(this, i18n("Name of Profile"), i18n("Name (not duplicate or blank name):"),QLineEdit::Normal, "", &ok);
+    QString profileName = QInputDialog::getText(this, i18n("Name of Profile"), i18n("Name (not duplicate or blank name):"), QLineEdit::Normal, "", &ok);
 
     if (!ok) {
         return;

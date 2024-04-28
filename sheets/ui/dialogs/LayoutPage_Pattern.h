@@ -19,12 +19,11 @@
 #ifndef CALLIGRA_SHEETS_LAYOUT_PAGE_PATTERN
 #define CALLIGRA_SHEETS_LAYOUT_PAGE_PATTERN
 
-#include <QWidget>
 #include <QFrame>
+#include <QWidget>
 
 class QPushButton;
 class KColorButton;
-
 
 namespace Calligra
 {
@@ -33,23 +32,27 @@ namespace Sheets
 
 class Style;
 
-
 class BrushSelect : public QFrame
 {
     Q_OBJECT
 public:
     BrushSelect(QWidget *parent, const char *_name);
 
-    void setBrushStyle(Qt::BrushStyle _pat) {
-        brushStyle = _pat; repaint();
+    void setBrushStyle(Qt::BrushStyle _pat)
+    {
+        brushStyle = _pat;
+        repaint();
     }
-    Qt::BrushStyle getBrushStyle() const {
+    Qt::BrushStyle getBrushStyle() const
+    {
         return brushStyle;
     }
-    QColor getBrushColor() const {
+    QColor getBrushColor() const
+    {
         return brushColor;
     }
-    void setBrushColor(const QColor &_c) {
+    void setBrushColor(const QColor &_c)
+    {
         brushColor = _c;
     }
     void setPattern(const QColor &_color, Qt::BrushStyle _style);
@@ -70,7 +73,6 @@ protected:
     bool selected;
 };
 
-
 #define BRUSH_COUNT 15
 
 /**
@@ -83,7 +85,7 @@ class LayoutPagePattern : public QWidget
 public:
     LayoutPagePattern(QWidget *parent);
 
-    void apply(Style * style, bool partial);
+    void apply(Style *style, bool partial);
     void loadFrom(const Style &style, bool partial);
 
 public Q_SLOTS:
@@ -91,24 +93,24 @@ public Q_SLOTS:
     void slotSetColorButton(const QColor &_color);
     void slotSetBackgroundColor(const QColor &_color);
     void slotNotAnyColor();
+
 protected:
     Qt::BrushStyle getBrushStyle(int idx);
 
     BrushSelect *selectedBrush;
     BrushSelect *brush[BRUSH_COUNT];
     BrushSelect *preview;
-    KColorButton* color;
-    QPushButton* notAnyColor;
+    KColorButton *color;
+    QPushButton *notAnyColor;
     KColorButton *bgColorButton;
 
     QColor currentColor;
     QColor bgColor;
 
     bool m_notAnyColor;
-    QColor m_bgColor;  // original color
-    QBrush m_brush;    // original brush
+    QColor m_bgColor; // original color
+    QBrush m_brush; // original brush
 };
-
 
 } // namespace Sheets
 } // namespace Calligra

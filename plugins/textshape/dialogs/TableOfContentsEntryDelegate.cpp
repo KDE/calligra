@@ -7,16 +7,16 @@
 #include "TableOfContentsEntryDelegate.h"
 
 #include <KLocalizedString>
-#include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
+#include <KoStyleManager.h>
 #include <KoStyleThumbnailer.h>
 
 #include <QComboBox>
 #include <QPainter>
 
-TableOfContentsEntryDelegate::TableOfContentsEntryDelegate(KoStyleManager *manager):
-    QStyledItemDelegate(),
-    m_styleManager(manager)
+TableOfContentsEntryDelegate::TableOfContentsEntryDelegate(KoStyleManager *manager)
+    : QStyledItemDelegate()
+    , m_styleManager(manager)
 {
     Q_ASSERT(manager);
 }
@@ -25,19 +25,16 @@ QSize TableOfContentsEntryDelegate::sizeHint(const QStyleOptionViewItem &option,
 {
     Q_UNUSED(option);
     Q_UNUSED(index);
-    return QSize(250,48);
+    return QSize(250, 48);
 }
 
-QWidget *TableOfContentsEntryDelegate::createEditor(QWidget *parent,
-                                                    const QStyleOptionViewItem &/* option */,
-                                                    const QModelIndex &/* index */) const
+QWidget *TableOfContentsEntryDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem & /* option */, const QModelIndex & /* index */) const
 {
     QComboBox *editor = new QComboBox(parent);
     return editor;
 }
 
-void TableOfContentsEntryDelegate::setEditorData(QWidget *editor,
-                                                 const QModelIndex &index) const
+void TableOfContentsEntryDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
     int value = index.model()->data(index, Qt::EditRole).toInt();
     QComboBox *comboBox = static_cast<QComboBox *>(editor);
@@ -45,7 +42,7 @@ void TableOfContentsEntryDelegate::setEditorData(QWidget *editor,
     QList<KoParagraphStyle *> paragraphStyles = m_styleManager->paragraphStyles();
     int count = 0;
     int indexCount = 0;
-    foreach (const KoParagraphStyle *style, paragraphStyles ) {
+    foreach (const KoParagraphStyle *style, paragraphStyles) {
         comboBox->addItem(style->name());
         comboBox->setItemData(count, style->styleId());
 
@@ -59,8 +56,7 @@ void TableOfContentsEntryDelegate::setEditorData(QWidget *editor,
     comboBox->setCurrentIndex(indexCount);
 }
 
-void TableOfContentsEntryDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
-                                                const QModelIndex &index) const
+void TableOfContentsEntryDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     QComboBox *comboBox = static_cast<QComboBox *>(editor);
     int value = comboBox->itemData(comboBox->currentIndex()).toInt();
@@ -68,8 +64,7 @@ void TableOfContentsEntryDelegate::setModelData(QWidget *editor, QAbstractItemMo
     model->setData(index, value, Qt::EditRole);
 }
 
-void TableOfContentsEntryDelegate::updateEditorGeometry(QWidget *editor,
-                                                        const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+void TableOfContentsEntryDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex & /* index */) const
 {
     editor->setGeometry(option.rect);
 }

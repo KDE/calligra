@@ -8,7 +8,7 @@
 #include "RectangleShape.h"
 #include <KLocalizedString>
 
-RectangleShapeConfigCommand::RectangleShapeConfigCommand(RectangleShape * rectangle, qreal cornerRadiusX, qreal cornerRadiusY, KUndo2Command *parent)
+RectangleShapeConfigCommand::RectangleShapeConfigCommand(RectangleShape *rectangle, qreal cornerRadiusX, qreal cornerRadiusY, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_rectangle(rectangle)
     , m_newCornerRadiusX(cornerRadiusX)

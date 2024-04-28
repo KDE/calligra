@@ -27,7 +27,8 @@ public:
     ~KoToolSelection() override;
 
     /// return true if the tool currently has something selected that can be copied or deleted.
-    virtual bool hasSelection() {
+    virtual bool hasSelection()
+    {
         return false;
     }
 };

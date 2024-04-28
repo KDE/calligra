@@ -6,22 +6,21 @@
 
 #include "zoomcontroller_test.h"
 
-#include <QTest>
 #include <QCoreApplication>
+#include <QTest>
 
 #include <KActionCollection>
 #include <WidgetsDebug.h>
 
 #include "KoCanvasControllerWidget.h"
-#include "KoZoomHandler.h"
 #include "KoZoomController.h"
+#include "KoZoomHandler.h"
 
 void zoomcontroller_test::testApi()
 {
     KoZoomHandler zoomHandler;
     KoZoomController zoomController(new KoCanvasControllerWidget(0), &zoomHandler, new KActionCollection(this), KoZoomAction::AspectMode);
     Q_UNUSED(zoomController);
-
 }
 
 QTEST_MAIN(zoomcontroller_test)

@@ -65,7 +65,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
 
     while (!atEnd()) {
         readNext();
-        //debugMsooXml << *this;
+        // debugMsooXml << *this;
         if (isCharacters()) {
             body->addTextSpan(text().toString());
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -78,7 +78,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
             BREAK_IF_END_OF(CURRENT_EL)
         }
     }
-//debugMsooXml << "{1}";
+    // debugMsooXml << "{1}";
 
     if (m_read_t_args) {
         m_read_t_args = false;
@@ -87,8 +87,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
         READ_EPILOGUE
     }
 }
-
-
 
 // ================================================================
 //                     Namespace: mc
@@ -102,7 +100,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
 // The above is only true when called from XmlWorksheetReader.  For Docx,
 // there are always namespaces, so it doesn't apply.
 // Same is true for READ_EPILOGUE.
-
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "mc"
@@ -123,11 +120,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_AlternateContent()
         if (isStartElement()) {
             if (name() == QLatin1StringView("Choice")) {
                 TRY_READ(Choice)
-            }
-            else if (!m_choiceAccepted && qualifiedName() == QLatin1StringView("mc:Fallback")) {
+            } else if (!m_choiceAccepted && qualifiedName() == QLatin1StringView("mc:Fallback")) {
                 TRY_READ(Fallback)
-            }
-            else {
+            } else {
                 skipCurrentElement();
             }
         }
@@ -141,7 +136,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_AlternateContent()
 //! Choice handler
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Choice()
 {
-
     const QXmlStreamAttributes attrs(attributes());
 
     TRY_READ_ATTR_WITHOUT_NS(Requires)
@@ -176,7 +170,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Choice()
 //! Fallback handler
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Fallback()
 {
-
     while (!atEnd()) {
         readNext();
         if (isEndElement() && name() == QLatin1StringView("Fallback")) {

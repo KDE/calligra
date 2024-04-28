@@ -19,13 +19,19 @@ KWPageCache::KWPageCache(KWPageCacheManager *manager, QImage *img)
 }*/
 
 KWPageCache::KWPageCache(KWPageCacheManager *manager, int w, int h)
-    : m_manager(manager), m_tilesx(1), m_tilesy(1), m_size(w, h), allExposed(true)
+    : m_manager(manager)
+    , m_tilesx(1)
+    , m_tilesy(1)
+    , m_size(w, h)
+    , allExposed(true)
 {
     if (w > MAX_TILE_SIZE || h > MAX_TILE_SIZE) {
         m_tilesx = w / MAX_TILE_SIZE;
-        if (w % MAX_TILE_SIZE != 0) m_tilesx++;
+        if (w % MAX_TILE_SIZE != 0)
+            m_tilesx++;
         m_tilesy = h / MAX_TILE_SIZE;
-        if (h % MAX_TILE_SIZE != 0) m_tilesy++;
+        if (h % MAX_TILE_SIZE != 0)
+            m_tilesy++;
 
         for (int x = 0; x < m_tilesx; x++) {
             for (int y = 0; y < m_tilesy; y++) {
@@ -38,7 +44,6 @@ KWPageCache::KWPageCache(KWPageCacheManager *manager, int w, int h)
         cache.push_back(QImage(w, h, QImage::Format_RGB16));
     }
 }
-
 
 KWPageCache::~KWPageCache()
 {
@@ -73,7 +78,7 @@ void KWPageCacheManager::insert(const KWPage &page, KWPageCache *cache)
 KWPageCache *KWPageCacheManager::cache(const QSize &size)
 {
     KWPageCache *cache = 0;
-    if (!cache){
+    if (!cache) {
         cache = new KWPageCache(this, size.width(), size.height());
     }
     return cache;
@@ -83,4 +88,3 @@ void KWPageCacheManager::clear()
 {
     m_cache.clear();
 }
-

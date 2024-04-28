@@ -12,7 +12,12 @@
 #include "TextDebug.h"
 
 struct Edge {
-    Edge() : distance(0.0) { innerPen.setWidthF(0.); outerPen.setWidthF(0.); }
+    Edge()
+        : distance(0.0)
+    {
+        innerPen.setWidthF(0.);
+        outerPen.setWidthF(0.);
+    }
     QPen innerPen;
     QPen outerPen;
     qreal distance;
@@ -21,7 +26,11 @@ struct Edge {
 class Q_DECL_HIDDEN KoTextBlockBorderData::Private
 {
 public:
-    Private() : refCount(0), mergeWithNext(true) {}
+    Private()
+        : refCount(0)
+        , mergeWithNext(true)
+    {
+    }
     Edge edges[4];
 
     QAtomicInt refCount;
@@ -29,9 +38,9 @@ public:
 };
 
 KoTextBlockBorderData::KoTextBlockBorderData(const QRectF &paragRect)
-        : d(new Private())
+    : d(new Private())
 {
-    ///TODO Remove parameter paragRect and update references to this constructor.
+    /// TODO Remove parameter paragRect and update references to this constructor.
     Q_UNUSED(paragRect);
 }
 
@@ -41,7 +50,7 @@ KoTextBlockBorderData::~KoTextBlockBorderData()
 }
 
 KoTextBlockBorderData::KoTextBlockBorderData(const KoTextBlockBorderData &other)
-        : d(new Private())
+    : d(new Private())
 {
     d->mergeWithNext = other.d->mergeWithNext;
 
@@ -145,24 +154,38 @@ qreal KoTextBlockBorderData::inset(Side side) const
     return d->edges[side].outerPen.widthF() + d->edges[side].distance + d->edges[side].innerPen.widthF();
 }
 
-void KoTextBlockBorderData::setEdge(Side side, const QTextBlockFormat &bf,
-                                    KoParagraphStyle::Property style, KoParagraphStyle::Property width,
-                                    KoParagraphStyle::Property color, KoParagraphStyle::Property space,
+void KoTextBlockBorderData::setEdge(Side side,
+                                    const QTextBlockFormat &bf,
+                                    KoParagraphStyle::Property style,
+                                    KoParagraphStyle::Property width,
+                                    KoParagraphStyle::Property color,
+                                    KoParagraphStyle::Property space,
                                     KoParagraphStyle::Property innerWidth)
 {
-
     Edge edge;
-    KoBorder::BorderStyle  borderStyle;
+    KoBorder::BorderStyle borderStyle;
     borderStyle = static_cast<KoBorder::BorderStyle>(bf.intProperty(style));
     switch (borderStyle) {
-    case KoBorder::BorderDotted: edge.innerPen.setStyle(Qt::DotLine); break;
-    case KoBorder::BorderDashed: edge.innerPen.setStyle(Qt::DashLine); break;
-    case KoBorder::BorderDashDot: edge.innerPen.setStyle(Qt::DashDotLine); break;
-    case KoBorder::BorderDashDotDot: edge.innerPen.setStyle(Qt::DashDotDotLine); break;
-    case KoBorder::BorderGroove: /* TODO */ break;
-    case KoBorder::BorderRidge: /* TODO */ break;
-    case KoBorder::BorderInset: /* TODO */ break;
-    case KoBorder::BorderOutset: /* TODO */ break;
+    case KoBorder::BorderDotted:
+        edge.innerPen.setStyle(Qt::DotLine);
+        break;
+    case KoBorder::BorderDashed:
+        edge.innerPen.setStyle(Qt::DashLine);
+        break;
+    case KoBorder::BorderDashDot:
+        edge.innerPen.setStyle(Qt::DashDotLine);
+        break;
+    case KoBorder::BorderDashDotDot:
+        edge.innerPen.setStyle(Qt::DashDotDotLine);
+        break;
+    case KoBorder::BorderGroove: /* TODO */
+        break;
+    case KoBorder::BorderRidge: /* TODO */
+        break;
+    case KoBorder::BorderInset: /* TODO */
+        break;
+    case KoBorder::BorderOutset: /* TODO */
+        break;
     default:
         edge.innerPen.setStyle(Qt::SolidLine);
     }
@@ -170,7 +193,7 @@ void KoTextBlockBorderData::setEdge(Side side, const QTextBlockFormat &bf,
     edge.innerPen.setJoinStyle(Qt::MiterJoin);
     edge.innerPen.setCapStyle(Qt::FlatCap);
     edge.outerPen = edge.innerPen;
-    edge.outerPen.setWidthF(bf.doubleProperty(width));   // TODO check if this does not need any conversion
+    edge.outerPen.setWidthF(bf.doubleProperty(width)); // TODO check if this does not need any conversion
 
     edge.distance = bf.doubleProperty(space);
     edge.innerPen.setWidthF(bf.doubleProperty(innerWidth));

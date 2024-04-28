@@ -8,19 +8,16 @@
 #ifndef CALLIGRA_SHEETS_ACTION_SELECT_ALL
 #define CALLIGRA_SHEETS_ACTION_SELECT_ALL
 
-
-
 #include "CellAction.h"
-
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class SelectAll : public CellAction {
-Q_OBJECT
+class SelectAll : public CellAction
+{
+    Q_OBJECT
 public:
     SelectAll(Actions *actions);
     virtual ~SelectAll();
@@ -29,12 +26,17 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
     QAction *createAction() override;
 
-    virtual bool enabledIfReadOnly() const override { return true; }
-    virtual bool enabledIfProtected() const override { return true; }
+    virtual bool enabledIfReadOnly() const override
+    {
+        return true;
+    }
+    virtual bool enabledIfProtected() const override
+    {
+        return true;
+    }
 };
-
 
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_SELECT_ALL
+#endif // CALLIGRA_SHEETS_ACTION_SELECT_ALL

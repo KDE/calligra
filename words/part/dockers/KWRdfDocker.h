@@ -8,10 +8,10 @@
 #ifndef KWRdfDOCKER_H
 #define KWRdfDOCKER_H
 
+#include <KoCanvasObserverBase.h>
+#include <KoDocumentRdf.h>
 #include <QDockWidget>
 #include <ui_KWRdfDocker.h>
-#include <KoDocumentRdf.h>
-#include <KoCanvasObserverBase.h>
 
 class QTextDocument;
 class KoSelection;
@@ -31,11 +31,11 @@ class KWRdfDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     explicit KWRdfDocker();
     ~KWRdfDocker();
-    
+
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
-    
+
     KoCanvasBase *canvas();
 
 private Q_SLOTS:

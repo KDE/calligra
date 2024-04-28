@@ -16,9 +16,8 @@
 #include <KoXmlStreamReader.h>
 
 // this library
-#include "koodfreader_export.h"
 #include "OdfReaderInternals.h"
-
+#include "koodfreader_export.h"
 
 class QSizeF;
 
@@ -30,7 +29,6 @@ class OdfReaderContext;
 
 class OdfTextReader;
 class OdfDrawReader;
-
 
 /** @brief Read the XML tree of the content of an ODF file.
  *
@@ -58,7 +56,7 @@ class OdfDrawReader;
  */
 class KOODFREADER_EXPORT OdfReader
 {
- public:
+public:
     OdfReader();
     virtual ~OdfReader();
 
@@ -72,7 +70,7 @@ class KOODFREADER_EXPORT OdfReader
 
     bool readContent(OdfReaderBackend *backend, OdfReaderContext *context);
 
- protected:
+protected:
     // All readElement*() are named after the full qualifiedName of
     // the element in ODF that they handle.
 
@@ -89,14 +87,13 @@ class KOODFREADER_EXPORT OdfReader
 
     void readUnknownElement(KoXmlStreamReader &reader);
 
-
- protected:
-    OdfReaderBackend  *m_backend;
-    OdfReaderContext  *m_context;
+protected:
+    OdfReaderBackend *m_backend;
+    OdfReaderContext *m_context;
 
     // Helper readers
-    OdfTextReader     *m_textReader;
-    OdfDrawReader     *m_drawReader;
+    OdfTextReader *m_textReader;
+    OdfDrawReader *m_drawReader;
 };
 
 #endif // ODFREADER_H

@@ -12,13 +12,13 @@
 
 #include <KoTextEditingPlugin.h>
 
-#include <sonnet/speller.h>
-#include <QTextCharFormat>
-#include <QTextDocument>
 #include <QPointer>
 #include <QQueue>
+#include <QTextCharFormat>
+#include <QTextDocument>
 #include <QTextLayout>
 #include <QTextStream>
+#include <sonnet/speller.h>
 
 class QTextDocument;
 class QTextStream;
@@ -43,7 +43,7 @@ public:
     /// reimplemented from superclass
     void checkSection(QTextDocument *document, int startPosition, int endPosition) override;
 
-    ///reimplemented from superclass
+    /// reimplemented from superclass
     void setCurrentCursorPosition(QTextDocument *document, int cursorPosition) override;
 
     QStringList availableBackends() const;
@@ -59,10 +59,10 @@ public:
 
     bool addWordToPersonal(const QString &word, int startPosition);
 
-    //reimplemented from Calligra2.0, we disconnect and re- connect the 'documentChanged' signal only when the document has replaced
+    // reimplemented from Calligra2.0, we disconnect and re- connect the 'documentChanged' signal only when the document has replaced
     void setDocument(QTextDocument *document);
 
-    void replaceWordBySuggestion(const QString &word, int startPosition,int lengthOfWord);
+    void replaceWordBySuggestion(const QString &word, int startPosition, int lengthOfWord);
 
 public Q_SLOTS:
     void setDefaultLanguage(const QString &lang);
@@ -98,7 +98,7 @@ private:
     QTextStream stream;
     SpellCheckMenu *m_spellCheckMenu;
     SpellSections m_activeSection; // the section we are currently doing a run on;
-    bool m_simpleEdit; //set when user is doing a simple edit, meaning we should not start spellchecking
+    bool m_simpleEdit; // set when user is doing a simple edit, meaning we should not start spellchecking
     int m_cursorPosition; // simple edit cursor position
 };
 

@@ -12,8 +12,7 @@
 
 // KoChart
 #include "kochart_global.h"
-//#include "ChartShape.h"
-
+// #include "ChartShape.h"
 
 #if 0
 namespace KChart
@@ -23,7 +22,6 @@ class AbstractDiagram;
 class Chart;
 }
 #endif
-
 
 namespace KoChart
 {
@@ -61,16 +59,15 @@ public:
      */
     void setChartType(ChartType type, ChartSubtype subType);
 
-
 private:
-    ChartShape                        *m_chart;
-    //KChart::Chart                    *m_chart;
-    ChartType                       m_oldType;
-    ChartType                       m_newType;
-    ChartSubtype                    m_oldSubtype;
-    ChartSubtype                    m_newSubtype;
-    //KChart::AbstractCoordinatePlane  *m_oldCoordinatePlane;
-    //KChart::AbstractDiagram          *m_oldDiagram;
+    ChartShape *m_chart;
+    // KChart::Chart                    *m_chart;
+    ChartType m_oldType;
+    ChartType m_newType;
+    ChartSubtype m_oldSubtype;
+    ChartSubtype m_newSubtype;
+    // KChart::AbstractCoordinatePlane  *m_oldCoordinatePlane;
+    // KChart::AbstractDiagram          *m_oldDiagram;
 };
 
 } // namespace KoChart

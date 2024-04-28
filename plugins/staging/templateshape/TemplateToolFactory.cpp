@@ -5,7 +5,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "TemplateToolFactory.h"
 
@@ -19,11 +18,10 @@
 #include "TemplateShape.h"
 #include "TemplateTool.h"
 
-
 TemplateToolFactory::TemplateToolFactory()
     : KoToolFactoryBase("TemplateToolFactoryId")
 {
-    setToolTip( i18n( "Template shape editing" ) );
+    setToolTip(i18n("Template shape editing"));
     setIconName(koIconName("x-template"));
     setToolType(dynamicToolType());
     setPriority(1);
@@ -34,8 +32,7 @@ TemplateToolFactory::~TemplateToolFactory()
 {
 }
 
-KoToolBase* TemplateToolFactory::createTool( KoCanvasBase* canvas )
+KoToolBase *TemplateToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new TemplateTool( canvas );
+    return new TemplateTool(canvas);
 }
-

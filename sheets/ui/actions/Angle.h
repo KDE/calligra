@@ -8,34 +8,31 @@
 #ifndef CALLIGRA_SHEETS_ACTION_ANGLE
 #define CALLIGRA_SHEETS_ACTION_ANGLE
 
-
 #include "DialogCellAction.h"
-
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class Angle : public DialogCellAction {
-Q_OBJECT
+class Angle : public DialogCellAction
+{
+    Q_OBJECT
 public:
     Angle(Actions *actions);
     virtual ~Angle();
 
 protected Q_SLOTS:
     void adjustAngle(int angle);
+
 protected:
     QAction *createAction() override;
 
     ActionDialog *createDialog(QWidget *canvasWidget) override;
     void onSelectionChanged() override;
-
-
 };
 
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_ANGLE
+#endif // CALLIGRA_SHEETS_ACTION_ANGLE

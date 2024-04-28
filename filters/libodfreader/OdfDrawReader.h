@@ -16,16 +16,14 @@
 #include <KoXmlStreamReader.h>
 
 // this library
-#include "koodfreader_export.h"
 #include "OdfReaderInternals.h"
-
+#include "koodfreader_export.h"
 
 class QSizeF;
 
 class OdfReader;
 class OdfDrawReaderBackend;
 class OdfReaderContext;
-
 
 /** @brief Read the XML tree of the content of an ODT file.
  *
@@ -39,7 +37,7 @@ class OdfReaderContext;
  */
 class KOODFREADER_EXPORT OdfDrawReader
 {
- public:
+public:
     OdfDrawReader();
     ~OdfDrawReader();
 
@@ -50,12 +48,12 @@ class KOODFREADER_EXPORT OdfDrawReader
     // ----------------------------------------------------------------
     // Dr3d elements
 
-    DECLARE_READER_FUNCTION(Dr3dScene);   // ODF 1.2  10.5.2
-    DECLARE_READER_FUNCTION(Dr3dLight);   // ODF 1.2  10.5.3
-    DECLARE_READER_FUNCTION(Dr3dCube);    // ODF 1.2  10.5.4
-    DECLARE_READER_FUNCTION(Dr3dSphere);  // ODF 1.2  10.5.5
+    DECLARE_READER_FUNCTION(Dr3dScene); // ODF 1.2  10.5.2
+    DECLARE_READER_FUNCTION(Dr3dLight); // ODF 1.2  10.5.3
+    DECLARE_READER_FUNCTION(Dr3dCube); // ODF 1.2  10.5.4
+    DECLARE_READER_FUNCTION(Dr3dSphere); // ODF 1.2  10.5.5
     DECLARE_READER_FUNCTION(Dr3dExtrude); // ODF 1.2  10.5.6
-    DECLARE_READER_FUNCTION(Dr3dRotate);  // ODF 1.2  10.5.7
+    DECLARE_READER_FUNCTION(Dr3dRotate); // ODF 1.2  10.5.7
 
     // ----------------------------------------------------------------
     // Draw elements
@@ -64,27 +62,26 @@ class KOODFREADER_EXPORT OdfDrawReader
     // This is the main entry point for draw reading.
     void readCommonGraphicsElements(KoXmlStreamReader &reader);
 
- protected:
+protected:
     // ----------------------------------------------------------------
     // Dr3d elements
-
 
     // ----------------------------------------------------------------
     // Draw functions: circle, rectangle, etc
 
     DECLARE_READER_FUNCTION(DrawA);
 
-    DECLARE_READER_FUNCTION(DrawRect);            // ODF 1.2  10.3.2
-    DECLARE_READER_FUNCTION(DrawLine);            // ODF 1.2  10.3.3
-    DECLARE_READER_FUNCTION(DrawPolyline);        // ODF 1.2  10.3.4
-    DECLARE_READER_FUNCTION(DrawPolygon);         // ODF 1.2  10.3.5
-    DECLARE_READER_FUNCTION(DrawRegularPolygon);  // ODF 1.2  10.3.6
-    DECLARE_READER_FUNCTION(DrawPath);            // ODF 1.2  10.3.7
-    DECLARE_READER_FUNCTION(DrawCircle);          // ODF 1.2  10.3.8
-    DECLARE_READER_FUNCTION(DrawEllipse);         // ODF 1.2  10.3.9
-    DECLARE_READER_FUNCTION(DrawConnector);       // ODF 1.2  10.3.10
-    DECLARE_READER_FUNCTION(DrawCaption);         // ODF 1.2  10.3.11
-    DECLARE_READER_FUNCTION(DrawMeasure);         // ODF 1.2  10.3.12
+    DECLARE_READER_FUNCTION(DrawRect); // ODF 1.2  10.3.2
+    DECLARE_READER_FUNCTION(DrawLine); // ODF 1.2  10.3.3
+    DECLARE_READER_FUNCTION(DrawPolyline); // ODF 1.2  10.3.4
+    DECLARE_READER_FUNCTION(DrawPolygon); // ODF 1.2  10.3.5
+    DECLARE_READER_FUNCTION(DrawRegularPolygon); // ODF 1.2  10.3.6
+    DECLARE_READER_FUNCTION(DrawPath); // ODF 1.2  10.3.7
+    DECLARE_READER_FUNCTION(DrawCircle); // ODF 1.2  10.3.8
+    DECLARE_READER_FUNCTION(DrawEllipse); // ODF 1.2  10.3.9
+    DECLARE_READER_FUNCTION(DrawConnector); // ODF 1.2  10.3.10
+    DECLARE_READER_FUNCTION(DrawCaption); // ODF 1.2  10.3.11
+    DECLARE_READER_FUNCTION(DrawMeasure); // ODF 1.2  10.3.12
 
     void readGraphicsObjectChildren(KoXmlStreamReader &reader);
 
@@ -101,12 +98,11 @@ class KOODFREADER_EXPORT OdfDrawReader
     // FIXME: Move this to a common file (OdfReaderUtils?)
     void readUnknownElement(KoXmlStreamReader &reader);
 
+private:
+    OdfReader *m_parent; // The OdfReader controlling this one.
 
- private:
-    OdfReader             *m_parent;  // The OdfReader controlling this one.
-
-    OdfDrawReaderBackend  *m_backend;
-    OdfReaderContext      *m_context;
+    OdfDrawReaderBackend *m_backend;
+    OdfReaderContext *m_context;
 };
 
 #endif // ODFDRAWREADER_H

@@ -12,20 +12,20 @@
 #ifndef KWDOCUMENT_H
 #define KWDOCUMENT_H
 
-#include "KWPageManager.h"
 #include "KWApplicationConfig.h"
+#include "KWPageManager.h"
 #include "frames/KWFrameLayout.h"
 #include "words_export.h"
 
 #include <KoDocument.h>
-#include <KoShapeManager.h>
 #include <KoShapeBasedDocumentBase.h>
+#include <KoShapeManager.h>
 #include <KoXmlReader.h>
 
 #include <QObject>
 #include <QPainter>
-#include <QRect>
 #include <QPointer>
+#include <QRect>
 
 class KWView;
 class KWPage;
@@ -63,13 +63,13 @@ public:
     /// reimplemented from KoShapeBasedDocumentBase
     void removeShape(KoShape *shape) override;
     // reimplemented from KoShapeBasedDocumentBase
-    void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command) override;
+    void shapesRemoved(const QList<KoShape *> &shapes, KUndo2Command *command) override;
 
     // KoDocument interface
     /// reimplemented from KoDocument
-    QPixmap generatePreview(const QSize& size) override;
+    QPixmap generatePreview(const QSize &size) override;
     /// reimplemented from KoDocument
-    void paintContent(QPainter&, const QRect&) override;
+    void paintContent(QPainter &, const QRect &) override;
     /// reimplemented from KoDocument
     bool loadXML(const KoXmlDocument &doc, KoStore *store) override;
     /// reimplemented from KoDocumentBase
@@ -77,13 +77,20 @@ public:
     /// reimplemented from KoDocumentBase
     bool saveOdf(SavingContext &documentContext) override;
     /// reimplemented from KoDocument
-    int pageCount() const override {
+    int pageCount() const override
+    {
         return pageManager()->pageCount();
     }
     /// reimplemented from KoDocument
-    QByteArray nativeFormatMimeType() const override { return WORDS_MIME_TYPE; }
+    QByteArray nativeFormatMimeType() const override
+    {
+        return WORDS_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
-    QByteArray nativeOasisMimeType() const override { return WORDS_MIME_TYPE; }
+    QByteArray nativeOasisMimeType() const override
+    {
+        return WORDS_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
     QStringList extraNativeMimeTypes() const override
     {
@@ -91,36 +98,40 @@ public:
                              << "application/vnd.oasis.opendocument.text-template";
     }
 
-
     bool isMasterDocument() const;
     void setIsMasterDocument(bool isMasterDocument);
 
     // others
-    KoAnnotationLayoutManager *annotationLayoutManager() const {
+    KoAnnotationLayoutManager *annotationLayoutManager() const
+    {
         return m_annotationManager;
     }
     /**
      * Return the pageManager used in this document.
      */
-    const KWPageManager *pageManager() const {
+    const KWPageManager *pageManager() const
+    {
         return &m_pageManager;
     }
     /**
      * Return the pageManager used in this document.
      */
-    Q_SCRIPTABLE KWPageManager *pageManager() {
+    Q_SCRIPTABLE KWPageManager *pageManager()
+    {
         return &m_pageManager;
     }
     /**
      * Return the frameLayout used in this document.
      */
-    Q_SCRIPTABLE KWFrameLayout *frameLayout() {
+    Q_SCRIPTABLE KWFrameLayout *frameLayout()
+    {
         return &m_frameLayout;
     }
     /**
      * Return the statistics of this document.
      */
-    Q_SCRIPTABLE KWDocumentStatistics *statistics() {
+    Q_SCRIPTABLE KWDocumentStatistics *statistics()
+    {
         return m_documentStatistics;
     }
 
@@ -142,17 +153,19 @@ public:
     KWPage appendPage(const QString &masterPageName = QString());
 
     /// return the amount of framesets this document holds
-    int frameSetCount() const {
+    int frameSetCount() const
+    {
         return m_frameSets.count();
     }
     /// return a list of all the framesets this document holds
-    const QList<KWFrameSet*> &frameSets() const {
+    const QList<KWFrameSet *> &frameSets() const
+    {
         return m_frameSets;
     }
     /// return a frameset, or null, by name. @see KWFrameSet::name()
     KWFrameSet *frameSetByName(const QString &name);
     /// return a suggestion for a copy frameset that does not collide with known ones.
-    QString suggestFrameSetNameForCopy(const QString& base);
+    QString suggestFrameSetNameForCopy(const QString &base);
     /// return a suggestion for a new frameset name that does not collide with known ones.
     QString uniqueFrameSetName(const QString &suggestion);
     /// return the main text frameset of the document
@@ -164,10 +177,12 @@ public:
     /// return the textRangeManager for this document.
     KoTextRangeManager *textRangeManager() const;
 
-    KWApplicationConfig &config() {
+    KWApplicationConfig &config()
+    {
         return m_config;
     }
-    const KWApplicationConfig &config() const {
+    const KWApplicationConfig &config() const
+    {
         return m_config;
     }
 
@@ -177,7 +192,10 @@ public:
     // reimplemented slot from KoDocument
     void initEmpty() override;
 
-    bool layoutFinishedAtleastOnce() const { return m_mainFramesetEverFinished; }
+    bool layoutFinishedAtleastOnce() const
+    {
+        return m_mainFramesetEverFinished;
+    }
 
     /// request a relayout of auto-generated frames on all pages of this argument style.
     void updatePagesForStyle(const KWPageStyle &style);
@@ -190,10 +208,13 @@ public:
     KWFrame *frameOfShape(KoShape *shape) const;
 
     /// returns the document's shapeController. This controller should only be used for deleting shapes.
-    //TODO: refactor the shapeController so it can be completely per document maybe? Then it can be added to the resourceManager
-    KoShapeController *shapeController() const { return m_shapeController; }
+    // TODO: refactor the shapeController so it can be completely per document maybe? Then it can be added to the resourceManager
+    KoShapeController *shapeController() const
+    {
+        return m_shapeController;
+    }
 
-    KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const override;
+    KoDocumentInfoDlg *createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const override;
 
 public Q_SLOTS:
     /**
@@ -201,7 +222,7 @@ public Q_SLOTS:
      * @param framesets The framesets that should be relayouted. If no framesets are
      * provided (empty list) then all framesets and therefore all pages are relayouted.
      */
-    void relayout(QList<KWFrameSet*> framesets = QList<KWFrameSet*>());
+    void relayout(QList<KWFrameSet *> framesets = QList<KWFrameSet *>());
     /**
      * Register a frameset.
      * @param frameset The frameset that should be registered. Future operations like
@@ -252,7 +273,7 @@ private:
     friend class KWDLoader;
     friend class KWOdfLoader;
     friend class KWPagePropertiesCommand;
-    QString renameFrameSet(const QString &prefix , const QString &base);
+    QString renameFrameSet(const QString &prefix, const QString &base);
     /**
      * post process loading after either oasis or oldxml loading finished
      */
@@ -272,7 +293,7 @@ private:
 
 private:
     bool m_isMasterDocument;
-    QList<KWFrameSet*> m_frameSets;
+    QList<KWFrameSet *> m_frameSets;
     KWPageManager m_pageManager;
     KWFrameLayout m_frameLayout;
     KWApplicationConfig m_config;
@@ -280,7 +301,7 @@ private:
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
     QPointer<KoUpdater> m_layoutProgressUpdater;
     KoShapeController *m_shapeController;
-    QList<KoShape*> m_loadedAnnotationShapes;
+    QList<KoShape *> m_loadedAnnotationShapes;
     KoAnnotationLayoutManager *m_annotationManager;
     KWDocumentStatistics *m_documentStatistics;
 };

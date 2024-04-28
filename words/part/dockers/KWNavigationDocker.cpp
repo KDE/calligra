@@ -6,8 +6,8 @@
 
 #include "KWNavigationDocker.h"
 
-#include <KoCanvasResourceManager.h>
 #include <KWCanvas.h>
+#include <KoCanvasResourceManager.h>
 
 #include <dockers/KWNavigationWidget.h>
 
@@ -28,7 +28,7 @@ KWNavigationDocker::~KWNavigationDocker()
 
 void KWNavigationDocker::setCanvas(KoCanvasBase *_canvas)
 {
-    KWCanvas *canvas = dynamic_cast<KWCanvas*>(_canvas);
+    KWCanvas *canvas = dynamic_cast<KWCanvas *>(_canvas);
     m_navigationWidget->setCanvas(canvas);
 }
 

@@ -90,7 +90,7 @@ public Q_SLOTS:
 #endif
 
 private:
-    KUndo2ViewPrivate* const d;
+    KUndo2ViewPrivate *const d;
     Q_DISABLE_COPY(KUndo2View)
 };
 

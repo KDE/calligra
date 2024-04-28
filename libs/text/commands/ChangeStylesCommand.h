@@ -21,17 +21,18 @@ class QTextDocument;
 class ChangeStylesCommand : public KUndo2Command
 {
 public:
-    ChangeStylesCommand(QTextDocument *qDoc
-        , const QList<KoCharacterStyle *> &origCharacterStyles
-        , const QList<KoParagraphStyle *> &origParagraphStyles
-        , const QSet<int> &changedStyles
-        , KUndo2Command *parent);
+    ChangeStylesCommand(QTextDocument *qDoc,
+                        const QList<KoCharacterStyle *> &origCharacterStyles,
+                        const QList<KoParagraphStyle *> &origParagraphStyles,
+                        const QSet<int> &changedStyles,
+                        KUndo2Command *parent);
     ~ChangeStylesCommand() override;
 
     /// redo the command
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
     /**
      * Helper function for clearing common properties.

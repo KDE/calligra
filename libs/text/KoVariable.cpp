@@ -9,19 +9,19 @@
 
 #include <KoShape.h>
 
-#include <QPainter>
+#include "TextDebug.h"
 #include <QFontMetricsF>
+#include <QPainter>
 #include <QTextDocument>
 #include <QTextInlineObject>
-#include "TextDebug.h"
 
 class KoVariablePrivate : public KoInlineObjectPrivate
 {
 public:
     KoVariablePrivate()
-            : modified(true),
-            document(0),
-            lastPositionInDocument(-1)
+        : modified(true)
+        , document(0)
+        , lastPositionInDocument(-1)
     {
     }
 
@@ -38,7 +38,7 @@ public:
 };
 
 KoVariable::KoVariable(bool propertyChangeListener)
-        : KoInlineObject(*(new KoVariablePrivate()), propertyChangeListener)
+    : KoInlineObject(*(new KoVariablePrivate()), propertyChangeListener)
 {
 }
 
@@ -58,7 +58,7 @@ void KoVariable::setValue(const QString &value)
     }
 }
 
-void KoVariable::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat & format)
+void KoVariable::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
     Q_D(KoVariable);
     if (d->document) {
@@ -99,7 +99,13 @@ void KoVariable::resize(const QTextDocument *document, QTextInlineObject &object
     }
 }
 
-void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format)
+void KoVariable::paint(QPainter &painter,
+                       QPaintDevice *pd,
+                       const QTextDocument *document,
+                       const QRectF &rect,
+                       const QTextInlineObject &object,
+                       int posInDocument,
+                       const QTextCharFormat &format)
 {
     Q_D(KoVariable);
     Q_UNUSED(document);
@@ -151,5 +157,5 @@ void KoVariable::documentDestroyed()
     // deleteLater(); does not work when closing a document as the inline object manager is deleted before the control is given back to the event loop
     // therefore commit suicide.
     // See http://www.parashift.com/c++-faq-lite/delete-this.html
-    delete(this);
+    delete (this);
 }

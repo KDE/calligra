@@ -32,10 +32,10 @@ public:
 
     void setProperties(const KoProperties *props) override;
 
-    ///reimplemented
+    /// reimplemented
     void saveOdf(KoShapeSavingContext &context) override;
 
-    ///reimplemented
+    /// reimplemented
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
 private:
@@ -45,4 +45,3 @@ private:
 };
 
 #endif
-

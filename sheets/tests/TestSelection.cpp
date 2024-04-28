@@ -8,19 +8,19 @@
 
 #include <QTest>
 
-#include "part/Canvas.h"
 #include "core/Map.h"
-#include "ui/Selection.h"
 #include "core/Sheet.h"
+#include "part/Canvas.h"
+#include "ui/Selection.h"
 
 using namespace Calligra::Sheets;
 
 void TestSelection::initialize()
 {
     Map map;
-    Sheet* sheet1 = new Sheet(&map, "Sheet1");
+    Sheet *sheet1 = new Sheet(&map, "Sheet1");
     map.addSheet(sheet1);
-    Sheet* sheet2 = new Sheet(&map, "Sheet2");
+    Sheet *sheet2 = new Sheet(&map, "Sheet2");
     map.addSheet(sheet2);
     Canvas canvas(0);
     Selection selection(&canvas);
@@ -285,7 +285,7 @@ void TestSelection::activeElement()
 
     // normal mode:
 
-    //BEGIN Leave the active element unset.
+    // BEGIN Leave the active element unset.
     selection.startReferenceSelection();
     QVERIFY(!selection.activeElement());
 
@@ -312,7 +312,7 @@ void TestSelection::activeElement()
     selection.extend(QPoint(1, 3), sheet1);
     QCOMPARE(selection.name(sheet1), QString("A1:B1;A3"));
     QVERIFY(!selection.activeElement());
-    //END Leave the active element unset.
+    // END Leave the active element unset.
 }
 
 void TestSelection::referenceSelectionMode()

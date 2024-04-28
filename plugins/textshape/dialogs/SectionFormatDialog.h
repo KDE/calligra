@@ -31,11 +31,11 @@ private:
     class SectionNameValidator;
 
     Ui::SectionFormatDialog m_widget;
-    KoTextEditor* m_editor;
+    KoTextEditor *m_editor;
     QModelIndex m_curIdx;
     KoSectionModel *m_sectionModel;
 
     KoSection *sectionFromModel(const QModelIndex &idx);
 };
 
-#endif //SECTIONFORMATDIALOG_H
+#endif // SECTIONFORMATDIALOG_H

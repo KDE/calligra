@@ -9,14 +9,14 @@
 #include "KoStore.h"
 #include "KoStore_p.h"
 
-#include "KoTarStore.h"
-#include "KoZipStore.h"
 #include "KoDirectoryStore.h"
 #include "KoEncryptedStore.h"
+#include "KoTarStore.h"
+#include "KoZipStore.h"
 
 #include <QBuffer>
-#include <QFileInfo>
 #include <QFile>
+#include <QFileInfo>
 
 #include <QUrl>
 #include <StoreDebug.h>
@@ -32,14 +32,14 @@ static KoStore::Backend determineBackend(QIODevice *dev)
     unsigned char buf[5];
     if (dev->read((char *)buf, 4) < 4)
         return DefaultFormat; // will create a "bad" store (bad()==true)
-    if (buf[0] == 0037 && buf[1] == 0213)   // gzip -> tar.gz
+    if (buf[0] == 0037 && buf[1] == 0213) // gzip -> tar.gz
         return KoStore::Tar;
     if (buf[0] == 'P' && buf[1] == 'K' && buf[2] == 3 && buf[3] == 4)
         return KoStore::Zip;
     return DefaultFormat; // fallback
 }
 
-KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArray & appIdentification, Backend backend, bool writeMimetype)
+KoStore *KoStore::createStore(const QString &fileName, Mode mode, const QByteArray &appIdentification, Backend backend, bool writeMimetype)
 {
     bool automatic = false;
     if (backend == Auto) {
@@ -78,7 +78,7 @@ KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArr
     }
 }
 
-KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & appIdentification, Backend backend, bool writeMimetype)
+KoStore *KoStore::createStore(QIODevice *device, Mode mode, const QByteArray &appIdentification, Backend backend, bool writeMimetype)
 {
     bool automatic = false;
     if (backend == Auto) {
@@ -112,19 +112,18 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
     }
 }
 
-KoStore* KoStore::createStore(QWidget* window, const QUrl &url, Mode mode, const QByteArray & appIdentification, Backend backend, bool writeMimetype)
+KoStore *KoStore::createStore(QWidget *window, const QUrl &url, Mode mode, const QByteArray &appIdentification, Backend backend, bool writeMimetype)
 {
     const bool automatic = (backend == Auto);
     if (url.isLocalFile())
-        return createStore(url.toLocalFile(), mode,  appIdentification, backend, writeMimetype);
+        return createStore(url.toLocalFile(), mode, appIdentification, backend, writeMimetype);
 
     QString tmpFile;
     if (mode == KoStore::Write) {
         if (automatic)
             backend = DefaultFormat;
     } else {
-        const bool downloaded =
-            KIO::NetAccess::download(url, tmpFile, window);
+        const bool downloaded = KIO::NetAccess::download(url, tmpFile, window);
 
         if (!downloaded) {
             errorStore << "Could not download file!" << Qt::endl;
@@ -150,9 +149,7 @@ KoStore* KoStore::createStore(QWidget* window, const QUrl &url, Mode mode, const
         return new KoEncryptedStore(window, url, tmpFile, mode, appIdentification, writeMimetype);
     default:
         warnStore << "Unsupported backend requested for KoStore (QUrl) : " << backend;
-        KMessageBox::error(window,
-                           i18n("The directory mode is not supported for remote locations."),
-                           i18n("Calligra Storage"));
+        KMessageBox::error(window, i18n("The directory mode is not supported for remote locations."), i18n("Calligra Storage"));
         return 0;
     }
 }
@@ -165,7 +162,8 @@ const char MAINNAME[] = "maindoc.xml";
 
 KoStore::KoStore(Mode mode, bool writeMimetype)
     : d_ptr(new KoStorePrivate(this, mode, writeMimetype))
-{}
+{
+}
 
 KoStore::~KoStore()
 {
@@ -184,7 +182,7 @@ QUrl KoStore::urlOfStore() const
     }
 }
 
-bool KoStore::open(const QString & _name)
+bool KoStore::open(const QString &_name)
 {
     Q_D(KoStore);
     // This also converts from relative to absolute, i.e. merges the currentPath()
@@ -247,7 +245,7 @@ bool KoStore::close()
     return ret;
 }
 
-QIODevice* KoStore::device() const
+QIODevice *KoStore::device() const
 {
     Q_D(const KoStore);
     if (!d->isOpen)
@@ -274,9 +272,9 @@ QByteArray KoStore::read(qint64 max)
     return d->stream->read(max);
 }
 
-qint64 KoStore::write(const QByteArray& data)
+qint64 KoStore::write(const QByteArray &data)
 {
-    return write(data.constData(), data.size());   // see below
+    return write(data.constData(), data.size()); // see below
 }
 
 qint64 KoStore::read(char *_buffer, qint64 _len)
@@ -294,10 +292,11 @@ qint64 KoStore::read(char *_buffer, qint64 _len)
     return d->stream->read(_buffer, _len);
 }
 
-qint64 KoStore::write(const char* _data, qint64 _len)
+qint64 KoStore::write(const char *_data, qint64 _len)
 {
     Q_D(KoStore);
-    if (_len == 0) return 0;
+    if (_len == 0)
+        return 0;
 
     if (!d->isOpen) {
         errorStore << "KoStore: You must open before writing" << Qt::endl;
@@ -332,13 +331,12 @@ qint64 KoStore::size() const
 bool KoStore::enterDirectory(const QString &directory)
 {
     Q_D(KoStore);
-    //debugStore <<"enterDirectory" << directory;
+    // debugStore <<"enterDirectory" << directory;
     int pos;
     bool success = true;
     QString tmp(directory);
 
-    while ((pos = tmp.indexOf('/')) != -1 &&
-            (success = d->enterDirectoryInternal(tmp.left(pos))))
+    while ((pos = tmp.indexOf('/')) != -1 && (success = d->enterDirectoryInternal(tmp.left(pos))))
         tmp.remove(0, pos + 1);
 
     if (success && !tmp.isEmpty())
@@ -405,7 +403,7 @@ bool KoStore::addLocalFile(const QString &fileName, const QString &destName)
         data.resize(block);
         if (write(data) != block)
             return false;
-        data.resize(8*1024);
+        data.resize(8 * 1024);
     }
     Q_ASSERT(total == size);
     if (total != size) {
@@ -438,7 +436,7 @@ bool KoStore::addDataToFile(QByteArray &buffer, const QString &destName)
         data.resize(block);
         if (write(data) != block)
             return false;
-        data.resize(8*1024);
+        data.resize(8 * 1024);
     }
 
     close();
@@ -453,7 +451,6 @@ bool KoStore::extractFile(const QString &srcName, const QString &fileName)
     QFile file(fileName);
     return d->extractFile(srcName, file);
 }
-
 
 bool KoStore::extractFile(const QString &srcName, QByteArray &data)
 {
@@ -508,20 +505,19 @@ bool KoStore::atEnd() const
 }
 
 // See the specification for details of what this function does.
-QString KoStorePrivate::toExternalNaming(const QString & _internalNaming) const
+QString KoStorePrivate::toExternalNaming(const QString &_internalNaming) const
 {
     if (_internalNaming == ROOTPART)
         return q->currentPath() + MAINNAME;
 
     QString intern;
-    if (_internalNaming.startsWith("tar:/"))     // absolute reference
-        intern = _internalNaming.mid(5);   // remove protocol
+    if (_internalNaming.startsWith("tar:/")) // absolute reference
+        intern = _internalNaming.mid(5); // remove protocol
     else
         intern = q->currentPath() + _internalNaming;
 
     return intern;
 }
-
 
 bool KoStorePrivate::enterDirectoryInternal(const QString &directory)
 {
@@ -532,7 +528,7 @@ bool KoStorePrivate::enterDirectoryInternal(const QString &directory)
     return false;
 }
 
-bool KoStore::hasFile(const QString& fileName) const
+bool KoStore::hasFile(const QString &fileName) const
 {
     Q_D(const KoStore);
     return fileExists(d->toExternalNaming(fileName));
@@ -541,7 +537,7 @@ bool KoStore::hasFile(const QString& fileName) const
 bool KoStore::finalize()
 {
     Q_D(KoStore);
-    Q_ASSERT(!d->finalized);   // call this only once!
+    Q_ASSERT(!d->finalized); // call this only once!
     d->finalized = true;
     return doFinalize();
 }
@@ -555,7 +551,7 @@ bool KoStore::isEncrypted()
     return false;
 }
 
-bool KoStore::setPassword(const QString& /*password*/)
+bool KoStore::setPassword(const QString & /*password*/)
 {
     return false;
 }

@@ -19,7 +19,7 @@ public:
     /// Destructor
     ~ConnectionToolFactory() override;
     /// reimplemented
-    KoToolBase* createTool( KoCanvasBase *canvas ) override;
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif

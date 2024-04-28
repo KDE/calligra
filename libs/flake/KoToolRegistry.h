@@ -9,15 +9,15 @@
 #define KO_TOOL_REGISTRY_H_
 
 #include "KoGenericRegistry.h"
-#include <KoToolFactoryBase.h>
 #include "flake_export.h"
+#include <KoToolFactoryBase.h>
 
 /**
  * This singleton class keeps a register of all available flake tools,
  * or rather, of the factories that the KoToolBox (and KoToolManager) will use
  * to create flake tools.
  */
-class FLAKE_EXPORT KoToolRegistry : public KoGenericRegistry<KoToolFactoryBase*>
+class FLAKE_EXPORT KoToolRegistry : public KoGenericRegistry<KoToolFactoryBase *>
 {
 public:
     KoToolRegistry();
@@ -37,12 +37,12 @@ public:
     void addDeferred(KoToolFactoryBase *toolFactory);
 
 private:
-    KoToolRegistry(const KoToolRegistry&);
-    KoToolRegistry operator=(const KoToolRegistry&);
+    KoToolRegistry(const KoToolRegistry &);
+    KoToolRegistry operator=(const KoToolRegistry &);
     void init();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

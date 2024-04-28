@@ -17,4 +17,3 @@ qreal inToHalfPt(qreal in)
 {
     return in * (qreal)72.0;
 }
-

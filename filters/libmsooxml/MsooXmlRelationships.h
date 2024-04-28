@@ -28,27 +28,27 @@ class MsooXmlImport;
 class KOMSOOXML_EXPORT MsooXmlRelationships
 {
 public:
-    explicit MsooXmlRelationships(MsooXmlImport& importer, KoOdfWriters *writers, QString& errorMessage);
+    explicit MsooXmlRelationships(MsooXmlImport &importer, KoOdfWriters *writers, QString &errorMessage);
 
     ~MsooXmlRelationships();
 
-    QString target(const QString& path, const QString& file, const QString& id);
+    QString target(const QString &path, const QString &file, const QString &id);
 
-    QString targetForType(const QString& path, const QString& file, const QString& relType);
+    QString targetForType(const QString &path, const QString &file, const QString &relType);
 
-    unsigned targetCountWithWord(const QString& searchTerm);
+    unsigned targetCountWithWord(const QString &searchTerm);
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
-namespace Relationships {
-    static const char comments[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments";
-    static const char commentAuthors[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/commentAuthors";
-    static const char tableStyles[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tableStyles";
+namespace Relationships
+{
+static const char comments[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments";
+static const char commentAuthors[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/commentAuthors";
+static const char tableStyles[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tableStyles";
+}
 }
 
-}
-
-#endif //MSOOXMLRELATIONSHIPSREADER_H
+#endif // MSOOXMLRELATIONSHIPSREADER_H

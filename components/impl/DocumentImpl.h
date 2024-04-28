@@ -10,8 +10,8 @@
 #ifndef CALLIGRA_COMPONENTS_DOCUMENTIMPL_H
 #define CALLIGRA_COMPONENTS_DOCUMENTIMPL_H
 
-#include <QObject>
 #include "Global.h"
+#include <QObject>
 
 class KoDocument;
 class QGraphicsWidget;
@@ -21,8 +21,10 @@ class KoZoomController;
 class KoDocument;
 class KoCanvasBase;
 
-namespace Calligra {
-namespace Components {
+namespace Calligra
+{
+namespace Components
+{
 
 /**
  * \brief Defines an interface for handling specific documents in Document.
@@ -33,23 +35,23 @@ class DocumentImpl : public QObject
 {
     Q_OBJECT
 public:
-    explicit DocumentImpl(QObject* parent = 0);
+    explicit DocumentImpl(QObject *parent = 0);
     ~DocumentImpl() override;
 
-    virtual bool load(const QUrl& url) = 0;
+    virtual bool load(const QUrl &url) = 0;
     virtual int currentIndex() = 0;
     virtual void setCurrentIndex(int newValue) = 0;
     virtual int indexCount() const = 0;
     virtual QUrl urlAtPoint(QPoint point) = 0;
 
     DocumentType::Type documentType() const;
-    KoFindBase* finder() const;
-    QGraphicsWidget* canvas() const;
-    KoCanvasController* canvasController() const;
-    KoZoomController* zoomController() const;
+    KoFindBase *finder() const;
+    QGraphicsWidget *canvas() const;
+    KoCanvasController *canvasController() const;
+    KoZoomController *zoomController() const;
     QSize documentSize() const;
-    KoDocument* koDocument() const;
-    virtual QObject* part() const = 0;
+    KoDocument *koDocument() const;
+    virtual QObject *part() const = 0;
 
     void setReadOnly(bool readOnly);
 
@@ -60,19 +62,19 @@ Q_SIGNALS:
 
 protected:
     void setDocumentType(DocumentType::Type type);
-    void setKoDocument(KoDocument* document);
-    void setCanvas(QGraphicsWidget* newCanvas);
-    void setFinder(KoFindBase* newFinder);
+    void setKoDocument(KoDocument *document);
+    void setCanvas(QGraphicsWidget *newCanvas);
+    void setFinder(KoFindBase *newFinder);
 
-    void createAndSetCanvasController(KoCanvasBase* canvas);
-    void createAndSetZoomController(KoCanvasBase* canvas);
+    void createAndSetCanvasController(KoCanvasBase *canvas);
+    void createAndSetZoomController(KoCanvasBase *canvas);
 
 protected Q_SLOTS:
-    void setDocumentSize(const QSize& size);
+    void setDocumentSize(const QSize &size);
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 } // Namespace Components

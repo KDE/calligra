@@ -9,9 +9,9 @@
 #include "KoTextDocumentLayout.h"
 #include "ToCGenerator.h"
 
-#include <KoTextDocument.h>
 #include <KoParagraphStyle.h>
 #include <KoTableOfContentsGeneratorInfo.h>
+#include <KoTextDocument.h>
 
 #include <QTextDocument>
 #include <TextLayoutDebug.h>
@@ -73,10 +73,10 @@ void IndexGeneratorManager::requestGeneration()
 
 void IndexGeneratorManager::startDoneTimer()
 {
-    //we delay acting on the finishedLayout signal by 1 second. This way we
-    // don't act on it until every header has had a chance to be layouted
-    // in words (we assume that a new finishedLayout signal will arrive within that
-    // 1 second)
+    // we delay acting on the finishedLayout signal by 1 second. This way we
+    //  don't act on it until every header has had a chance to be layouted
+    //  in words (we assume that a new finishedLayout signal will arrive within that
+    //  1 second)
     m_doneTimer.start();
 }
 
@@ -134,7 +134,6 @@ bool IndexGeneratorManager::generate()
         block = block.next();
     }
 
-
     if (m_state == FirstRun) {
         m_state = FirstRunLayouting;
     }
@@ -153,14 +152,14 @@ bool IndexGeneratorManager::generate()
 void IndexGeneratorManager::layoutDone()
 {
     switch (m_state) {
-        case FirstRunLayouting:
-            m_state = SecondRunNeeded;
-            m_documentLayout->scheduleLayout();
-            break;
-        case SecondRunLayouting:
-            m_state = Resting;
-            break;
-        default:
-            break;
+    case FirstRunLayouting:
+        m_state = SecondRunNeeded;
+        m_documentLayout->scheduleLayout();
+        break;
+    case SecondRunLayouting:
+        m_state = Resting;
+        break;
+    default:
+        break;
     }
 }

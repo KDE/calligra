@@ -7,10 +7,10 @@
 #ifndef MOBIFILE_H
 #define MOBIFILE_H
 
-#include <QObject>
+#include "FileCollector.h"
 #include "KoFilter.h"
 #include "MobiHeaderGenerator.h"
-#include "FileCollector.h"
+#include <QObject>
 
 class MobiFile : public FileCollector
 {

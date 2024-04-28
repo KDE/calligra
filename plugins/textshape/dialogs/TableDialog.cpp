@@ -9,7 +9,7 @@
 #include <KLocalizedString>
 
 TableDialog::TableDialog(QWidget *parent)
-        : KoDialog(parent)
+    : KoDialog(parent)
 {
     setCaption(i18n("Insert Table"));
     setButtons(KoDialog::Ok | KoDialog::Cancel);

@@ -7,8 +7,8 @@
 #include "KoMarkerSelector.h"
 
 #include "KoMarker.h"
-#include "KoMarkerModel.h"
 #include "KoMarkerItemDelegate.h"
+#include "KoMarkerModel.h"
 #include "KoPathShape.h"
 
 #include <QPainter>
@@ -18,15 +18,16 @@ class KoMarkerSelector::Private
 {
 public:
     Private(KoMarkerData::MarkerPosition position, QWidget *parent)
-    : model(new KoMarkerModel(QList<KoMarker*>(), position, parent))
-    {}
+        : model(new KoMarkerModel(QList<KoMarker *>(), position, parent))
+    {
+    }
 
     KoMarkerModel *model;
 };
 
 KoMarkerSelector::KoMarkerSelector(KoMarkerData::MarkerPosition position, QWidget *parent)
-: QComboBox(parent)
-, d(new Private(position, this))
+    : QComboBox(parent)
+    , d(new Private(position, this))
 {
     setModel(d->model);
     setItemDelegate(new KoMarkerItemDelegate(position, this));
@@ -59,7 +60,7 @@ void KoMarkerSelector::paintEvent(QPaintEvent *pe)
     pathShape.moveTo(QPointF(rect.left(), rect.center().y()));
     pathShape.lineTo(QPointF(rect.right(), rect.center().y()));
 
-    KoMarker *marker = itemData(currentIndex(), Qt::DecorationRole).value<KoMarker*>();
+    KoMarker *marker = itemData(currentIndex(), Qt::DecorationRole).value<KoMarker *>();
     if (marker != nullptr) {
         pathShape.setMarker(marker, d->model->position());
     }
@@ -84,12 +85,12 @@ void KoMarkerSelector::setMarker(KoMarker *marker)
 
 KoMarker *KoMarkerSelector::marker() const
 {
-    return itemData(currentIndex(), Qt::DecorationRole).value<KoMarker*>();
+    return itemData(currentIndex(), Qt::DecorationRole).value<KoMarker *>();
 }
 
-void KoMarkerSelector::updateMarkers(const QList<KoMarker*> markers)
+void KoMarkerSelector::updateMarkers(const QList<KoMarker *> markers)
 {
-    KoMarkerModel *model = new KoMarkerModel(markers,d->model->position(), this);
+    KoMarkerModel *model = new KoMarkerModel(markers, d->model->position(), this);
     d->model = model;
     // this deletes the old model
     setModel(model);

@@ -8,10 +8,10 @@
 
 #include "FormattingPreview.h"
 
-#include <KoPostscriptPaintDevice.h>
-#include <KoZoomHandler.h>
-#include <KoStyleThumbnailer.h>
 #include <KoCharacterStyle.h>
+#include <KoPostscriptPaintDevice.h>
+#include <KoStyleThumbnailer.h>
+#include <KoZoomHandler.h>
 
 #include <QBrush>
 #include <QColor>
@@ -33,13 +33,13 @@
 #include <KLocalizedString>
 #include <QDebug>
 
-FormattingPreview::FormattingPreview(QWidget* parent)
-        : QFrame(parent),
-        m_sampleText(i18n("Font")),
-        m_characterStyle(0),
-        m_paragraphStyle(0),
-        m_thumbnailer(new KoStyleThumbnailer()),
-        m_previewLayoutRequired(true)
+FormattingPreview::FormattingPreview(QWidget *parent)
+    : QFrame(parent)
+    , m_sampleText(i18n("Font"))
+    , m_characterStyle(0)
+    , m_paragraphStyle(0)
+    , m_thumbnailer(new KoStyleThumbnailer())
+    , m_previewLayoutRequired(true)
 {
     setFrameStyle(QFrame::Box | QFrame::Plain);
     setMinimumSize(500, 150);
@@ -68,8 +68,8 @@ void FormattingPreview::setText(const QString &sampleText)
     update();
 }
 
-//Character properties
-void FormattingPreview::setCharacterStyle(const KoCharacterStyle* style)
+// Character properties
+void FormattingPreview::setCharacterStyle(const KoCharacterStyle *style)
 {
     if (m_characterStyle) {
         delete m_characterStyle;
@@ -95,7 +95,7 @@ void FormattingPreview::setParagraphStyle(const KoParagraphStyle *style)
     update();
 }
 
-//Painting related methods
+// Painting related methods
 
 void FormattingPreview::paintEvent(QPaintEvent *event)
 {
@@ -107,7 +107,7 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     QRect rectang = contentsRect();
 
     p->fillRect(rectang, QBrush(QColor(Qt::white)));
-    p->drawImage(rectang, m_thumbnailer->thumbnail(m_characterStyle,m_paragraphStyle,rectang.size(),m_previewLayoutRequired, KoStyleThumbnailer::NoFlags));
+    p->drawImage(rectang, m_thumbnailer->thumbnail(m_characterStyle, m_paragraphStyle, rectang.size(), m_previewLayoutRequired, KoStyleThumbnailer::NoFlags));
 
     m_previewLayoutRequired = false;
 

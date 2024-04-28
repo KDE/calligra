@@ -23,33 +23,31 @@
 
 #include "mswordodfimport.h"
 
-#include <QFile>
-#include <QString>
 #include <QBuffer>
 #include <QByteArray>
+#include <QFile>
+#include <QString>
 
 #include <KPluginFactory>
 
 #include <KoFilterChain.h>
 #include <KoOdfWriteStore.h>
 
+#include "MsDocDebug.h"
 #include "document.h"
 #include "exceptions.h"
 #include "msdoc.h"
-#include "MsDocDebug.h"
 
 #include "generated/simpleParser.h"
 #include "pole.h"
 
-//function prototypes of local functions
-static bool readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer);
+// function prototypes of local functions
+static bool readStream(POLE::Storage &storage, const char *streampath, QBuffer &buffer);
 
-K_PLUGIN_FACTORY_WITH_JSON(MSWordOdfImportFactory, "calligra_filter_doc2odt.json",
-                           registerPlugin<MSWordOdfImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(MSWordOdfImportFactory, "calligra_filter_doc2odt.json", registerPlugin<MSWordOdfImport>();)
 
-
-MSWordOdfImport::MSWordOdfImport(QObject *parent, const QVariantList&)
-        : KoFilter(parent)
+MSWordOdfImport::MSWordOdfImport(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
 }
 
@@ -60,8 +58,7 @@ MSWordOdfImport::~MSWordOdfImport()
 KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, const QByteArray &to)
 {
     // check for proper conversion
-    if ((to != "application/vnd.oasis.opendocument.text") ||
-        (from != "application/msword")) {
+    if ((to != "application/vnd.oasis.opendocument.text") || (from != "application/msword")) {
         return KoFilter::NotImplemented;
     }
 
@@ -75,14 +72,14 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
      *  POLE storage, POLE and LEInput streams
      * ************************************************
      */
-    //TODO: POLE:Stream or LEInputStream ?
+    // TODO: POLE:Stream or LEInputStream ?
 
     POLE::Storage storage(inputFile.toLocal8Bit());
     if (!storage.open()) {
         debugMsDoc << "Cannot open " << inputFile;
         return KoFilter::InvalidFormat;
     }
-    //WordDocument Stream
+    // WordDocument Stream
     QBuffer buff1;
     if (!readStream(storage, "/WordDocument", buff1)) {
         return KoFilter::InvalidFormat;
@@ -102,13 +99,13 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     }
     wdstm.rewind(m);
 
-    //document is encrypted or obfuscated
+    // document is encrypted or obfuscated
     if (fibBase.fEncrypted) {
         return KoFilter::PasswordProtected;
     }
 
-    //1Table Stream or 0Table Stream
-    const char* tblstm_name = fibBase.fWhichTblStm ? "1Table" : "0Table";
+    // 1Table Stream or 0Table Stream
+    const char *tblstm_name = fibBase.fWhichTblStm ? "1Table" : "0Table";
     POLE::Stream tblstm_pole(&storage, tblstm_name);
     if (tblstm_pole.fail()) {
         if (fibBase.nFib >= Word8nFib) {
@@ -117,8 +114,8 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         }
     }
 
-    //Data Stream
-    LEInputStream* datastm = 0;
+    // Data Stream
+    LEInputStream *datastm = 0;
     QBuffer buff3;
     if (!readStream(storage, "/Data", buff3)) {
         debugMsDoc << "Failed to open /Data stream, no big deal (OPTIONAL).";
@@ -126,8 +123,8 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         datastm = new LEInputStream(&buff3);
     }
 
-    //Summary Information Stream
-    LEInputStream* sistm = 0;
+    // Summary Information Stream
+    LEInputStream *sistm = 0;
     QBuffer buff4;
     if (!readStream(storage, "/SummaryInformation", buff4)) {
         debugMsDoc << "Failed to open /SummaryInformation stream, no big deal (OPTIONAL).";
@@ -142,16 +139,28 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
      */
     struct Finalizer {
     public:
-        Finalizer(LEInputStream *ds, LEInputStream *sis) : m_store(0), m_genStyles(0), m_document(0),
-                                      m_contentWriter(0), m_bodyWriter(0),
-                                      m_datastm(ds), m_sistm(sis) { }
-        ~Finalizer() {
-            delete m_store; delete m_genStyles; delete m_document; delete m_contentWriter; delete m_bodyWriter;
+        Finalizer(LEInputStream *ds, LEInputStream *sis)
+            : m_store(0)
+            , m_genStyles(0)
+            , m_document(0)
+            , m_contentWriter(0)
+            , m_bodyWriter(0)
+            , m_datastm(ds)
+            , m_sistm(sis)
+        {
+        }
+        ~Finalizer()
+        {
+            delete m_store;
+            delete m_genStyles;
+            delete m_document;
+            delete m_contentWriter;
+            delete m_bodyWriter;
             if (m_datastm) {
                 delete m_datastm;
             }
             if (m_sistm) {
-              delete m_sistm;
+                delete m_sistm;
             }
         }
 
@@ -160,15 +169,14 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         Document *m_document;
         KoXmlWriter *m_contentWriter;
         KoXmlWriter *m_bodyWriter;
-        LEInputStream* m_datastm;
-        LEInputStream* m_sistm;
+        LEInputStream *m_datastm;
+        LEInputStream *m_sistm;
     };
     Finalizer finalizer(datastm, sistm);
 
     // Create output files
     KoStore *storeout;
-    storeout = KoStore::createStore(outputFile, KoStore::Write,
-                                    "application/vnd.oasis.opendocument.text", KoStore::Zip);
+    storeout = KoStore::createStore(outputFile, KoStore::Write, "application/vnd.oasis.opendocument.text", KoStore::Zip);
     if (!storeout) {
         warnMsDoc << "Unable to open output file!";
         return KoFilter::FileNotFound;
@@ -179,22 +187,22 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
 
     debugMsDoc << "created oasisStore.";
 
-    //create KoGenStyles for writing styles while we're parsing
-    KoGenStyles* mainStyles = new KoGenStyles();
+    // create KoGenStyles for writing styles while we're parsing
+    KoGenStyles *mainStyles = new KoGenStyles();
     finalizer.m_genStyles = mainStyles; // will delete this as it goes out of scope.
 
-    //create a writer for meta.xml
+    // create a writer for meta.xml
     QBuffer buf;
     buf.open(QIODevice::WriteOnly);
     KoXmlWriter metaWriter(&buf);
 
-    //create a writer for manifest.xml
+    // create a writer for manifest.xml
     QBuffer manifestBuf;
     manifestBuf.open(QIODevice::WriteOnly);
     KoXmlWriter manifestWriter(&manifestBuf);
 
-    //open contentWriter & bodyWriter *temp* writers
-    //so we can write picture files while we parse
+    // open contentWriter & bodyWriter *temp* writers
+    // so we can write picture files while we parse
     QBuffer contentBuf;
     QBuffer bodyBuf;
     KoXmlWriter *contentWriter = new KoXmlWriter(&contentBuf);
@@ -202,24 +210,31 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     KoXmlWriter *bodyWriter = new KoXmlWriter(&bodyBuf);
     finalizer.m_bodyWriter = bodyWriter;
     if (!bodyWriter || !contentWriter) {
-        //not sure if this is the right error to return
+        // not sure if this is the right error to return
         return KoFilter::CreationError;
     }
 
     debugMsDoc << "created temp contentWriter and bodyWriter.";
 
-    //open tags in bodyWriter
+    // open tags in bodyWriter
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
 
-    //create our document object, writing to the temporary buffers
+    // create our document object, writing to the temporary buffers
     Document *document = 0;
 
     try {
-        document = new Document(QFile::encodeName(inputFile).data(), this,
-                                bodyWriter, &metaWriter, &manifestWriter,
-                                storeout, mainStyles,
-                                wdstm, tblstm_pole, datastm, sistm);
+        document = new Document(QFile::encodeName(inputFile).data(),
+                                this,
+                                bodyWriter,
+                                &metaWriter,
+                                &manifestWriter,
+                                storeout,
+                                mainStyles,
+                                wdstm,
+                                tblstm_pole,
+                                datastm,
+                                sistm);
     } catch (const InvalidFormatException &_e) {
         debugMsDoc << _e.msg;
         return KoFilter::InvalidFormat;
@@ -230,11 +245,11 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
 
     finalizer.m_document = document;
 
-    //check that we can parse the document?
+    // check that we can parse the document?
     if (!document->hasParser()) {
         return KoFilter::WrongFormat;
     }
-    //actual parsing & action
+    // actual parsing & action
     try {
         quint8 ret = document->parse();
         switch (ret) {
@@ -251,25 +266,25 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         return KoFilter::StupidError;
     }
 
-    document->processSubDocQueue(); //process the queues we've created?
-    document->finishDocument(); //process footnotes, pictures, ...
+    document->processSubDocQueue(); // process the queues we've created?
+    document->finishDocument(); // process footnotes, pictures, ...
 
     if (!document->bodyFound()) {
         return KoFilter::WrongFormat;
     }
     debugMsDoc << "finished parsing.";
 
-    //save the office:automatic-styles & and fonts in content.xml
+    // save the office:automatic-styles & and fonts in content.xml
     mainStyles->saveOdfStyles(KoGenStyles::FontFaceDecls, contentWriter);
     mainStyles->saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
 
-    //close tags in bodyWriter
-    bodyWriter->endElement();//office:text
-    bodyWriter->endElement();//office:body
+    // close tags in bodyWriter
+    bodyWriter->endElement(); // office:text
+    bodyWriter->endElement(); // office:body
 
-    //now create real content/body writers & dump the information there
-    KoXmlWriter* realContentWriter = oasisStore.contentWriter();
-    if(!realContentWriter) {
+    // now create real content/body writers & dump the information there
+    KoXmlWriter *realContentWriter = oasisStore.contentWriter();
+    if (!realContentWriter) {
         warnMsDoc << "Error writing content.";
         return KoFilter::CreationError;
     }
@@ -278,7 +293,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     KoXmlWriter *realBodyWriter = oasisStore.bodyWriter();
     realBodyWriter->addCompleteElement(&bodyBuf);
 
-    //now close content & body writers
+    // now close content & body writers
     if (!oasisStore.closeContentWriter()) {
         warnMsDoc << "Error closing content.";
         return KoFilter::CreationError;
@@ -286,7 +301,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
 
     debugMsDoc << "closed content & body writers.";
 
-    //create the settings file
+    // create the settings file
     storeout->open("settings.xml");
     KoStoreDevice settingsDev(storeout);
     KoXmlWriter *settingsWriter = oasisStore.createOasisXmlWriter(&settingsDev, "office:document-settings");
@@ -335,9 +350,9 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
 
     debugMsDoc << "created settings.xml";
 
-    //create the manifest file
+    // create the manifest file
     KoXmlWriter *realManifestWriter = oasisStore.manifestWriter("application/vnd.oasis.opendocument.text");
-    //create the styles.xml file
+    // create the styles.xml file
     mainStyles->saveOdfStylesDotXml(storeout, realManifestWriter);
     realManifestWriter->addManifestEntry("content.xml", "text/xml");
     realManifestWriter->addManifestEntry("settings.xml", "text/xml");
@@ -345,7 +360,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
 
     debugMsDoc << "created manifest and styles.xml";
 
-    //create meta.xml
+    // create meta.xml
     if (!storeout->open("meta.xml")) {
         return KoFilter::CreationError;
     }
@@ -354,8 +369,8 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     KoXmlWriter *meta = KoOdfWriteStore::createOasisXmlWriter(&metaDev, "office:document-meta");
     meta->startElement("office:meta");
     meta->addCompleteElement(&buf);
-    meta->endElement(); //office:meta
-    meta->endElement(); //office:document-meta
+    meta->endElement(); // office:meta
+    meta->endElement(); // office:document-meta
     meta->endDocument();
     delete meta;
     if (!storeout->close()) {
@@ -369,8 +384,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     return KoFilter::OK;
 }
 
-void
-MSWordOdfImport::setProgress(const int percent)
+void MSWordOdfImport::setProgress(const int percent)
 {
     emit sigProgress(percent);
 }
@@ -381,8 +395,7 @@ MSWordOdfImport::setProgress(const int percent)
  * @param streampath; stream path into the POLE storage
  * @param buffer; buffer provided by the user
  */
-bool
-readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer)
+bool readStream(POLE::Storage &storage, const char *streampath, QBuffer &buffer)
 {
     std::string path(streampath);
     POLE::Stream stream(&storage, path);
@@ -393,7 +406,7 @@ readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer)
 
     QByteArray array;
     array.resize(stream.size());
-    unsigned long r = stream.read((unsigned char*)array.data(), stream.size());
+    unsigned long r = stream.read((unsigned char *)array.data(), stream.size());
     if (r != stream.size()) {
         errorMsDoc << "Error while reading from " << streampath << "stream";
         return false;

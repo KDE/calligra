@@ -20,10 +20,10 @@
 #include "LayoutPage_Float.h"
 #include "LayoutWidgets.h"
 
-#include "engine/Localization.h"
-#include <core/ValueFormatter.h>
-#include <core/Map.h>
 #include "core/Style.h"
+#include "engine/Localization.h"
+#include <core/Map.h>
+#include <core/ValueFormatter.h>
 
 #include <QGridLayout>
 #include <QGroupBox>
@@ -39,60 +39,89 @@
 
 using namespace Calligra::Sheets;
 
-
-LayoutPageFloat::LayoutPageFloat(QWidget* parent, Localization *locale, ValueFormatter *formatter)
-        : QWidget(parent)
-        , m_locale(locale)
-        , m_formatter(formatter)
+LayoutPageFloat::LayoutPageFloat(QWidget *parent, Localization *locale, ValueFormatter *formatter)
+    : QWidget(parent)
+    , m_locale(locale)
+    , m_formatter(formatter)
 {
     m_bFormatColorChanged = false;
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
     QGroupBox *grp = new QGroupBox(i18n("Format"), this);
     QGridLayout *grid = new QGridLayout(grp);
 
     int fHeight = grp->fontMetrics().height();
-    grid->addItem(new QSpacerItem(0, fHeight / 2), 0, 0);  // groupbox title
+    grid->addItem(new QSpacerItem(0, fHeight / 2), 0, 0); // groupbox title
 
     generic = new QRadioButton(i18n("Generic"), grp);
-    generic->setWhatsThis(i18n("This is the default format and Calligra Sheets autodetects the actual data type depending on the current cell data. By default, Calligra Sheets right justifies numbers, dates and times within a cell and left justifies anything else."));
+    generic->setWhatsThis(
+        i18n("This is the default format and Calligra Sheets autodetects the actual data type depending on the current cell data. By default, Calligra Sheets "
+             "right justifies numbers, dates and times within a cell and left justifies anything else."));
     grid->addWidget(generic, 1, 0);
 
     number = new QRadioButton(i18n("Number"), grp);
-    number->setWhatsThis(i18n("The number notation uses the notation you globally choose in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & Language -> Numbers tab. Numbers are right justified by default."));
+    number->setWhatsThis(
+        i18n("The number notation uses the notation you globally choose in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
+             "Language -> Numbers tab. Numbers are right justified by default."));
     grid->addWidget(number, 2, 0);
 
     percent = new QRadioButton(i18n("Percent"), grp);
-    percent->setWhatsThis(i18n("When you have a number in the current cell and you switch from the dcell format from Generic to Percent, the current cell number will be multiplied by 100%.\nFor example if you enter 12 and set the cell format to Percent, the number will then be 1,200 %. Switching back to Generic cell format will bring it back to 12.\nYou can also use the Percent icon in the Format Toolbar."));
+    percent->setWhatsThis(
+        i18n("When you have a number in the current cell and you switch from the dcell format from Generic to Percent, the current cell number will be "
+             "multiplied by 100%.\nFor example if you enter 12 and set the cell format to Percent, the number will then be 1,200 %. Switching back to Generic "
+             "cell format will bring it back to 12.\nYou can also use the Percent icon in the Format Toolbar."));
     grid->addWidget(percent, 3, 0);
 
     money = new QRadioButton(i18n("Money"), grp);
-    money->setWhatsThis(i18n("The Money format converts your number into money notation using the settings globally fixed in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & Language -> Money. The currency symbol will be displayed and the precision will be the one set in System Settings.\nYou can also use the Currency icon in the Format Toolbar to set the cell formatting to look like your current currency."));
+    money->setWhatsThis(
+        i18n("The Money format converts your number into money notation using the settings globally fixed in System Settings -> Common Appearance and Behavior "
+             "-> Locale -> Country/Region & Language -> Money. The currency symbol will be displayed and the precision will be the one set in System "
+             "Settings.\nYou can also use the Currency icon in the Format Toolbar to set the cell formatting to look like your current currency."));
     grid->addWidget(money, 4, 0);
 
     scientific = new QRadioButton(i18n("Scientific"), grp);
-    scientific->setWhatsThis(i18n("The scientific format changes your number using the scientific notation. For example, 0.0012 will be changed to 1.2E-03. Going back using Generic cell format will display 0.0012 again."));
+    scientific->setWhatsThis(
+        i18n("The scientific format changes your number using the scientific notation. For example, 0.0012 will be changed to 1.2E-03. Going back using "
+             "Generic cell format will display 0.0012 again."));
     grid->addWidget(scientific, 5, 0);
 
     fraction = new QRadioButton(i18n("Fraction"), grp);
-    fraction->setWhatsThis(i18n("The fraction format changes your number into a fraction. For example, 0.1 can be changed to 1/8, 2/16, 1/10, etc. You define the type of fraction by choosing it in the field on the right. If the exact fraction is not possible in the fraction mode you choose, the nearest closest match is chosen.\n For example: when we have 1.5 as number, we choose Fraction and Sixteenths 1/16 the text displayed into cell is \"1 8/16\" which is an exact fraction. If you have 1.4 as number in your cell and you choose Fraction and Sixteenths 1/16 then the cell will display \"1 6/16\" which is the nearest closest Sixteenth fraction."));
+    fraction->setWhatsThis(
+        i18n("The fraction format changes your number into a fraction. For example, 0.1 can be changed to 1/8, 2/16, 1/10, etc. You define the type of "
+             "fraction by choosing it in the field on the right. If the exact fraction is not possible in the fraction mode you choose, the nearest closest "
+             "match is chosen.\n For example: when we have 1.5 as number, we choose Fraction and Sixteenths 1/16 the text displayed into cell is \"1 8/16\" "
+             "which is an exact fraction. If you have 1.4 as number in your cell and you choose Fraction and Sixteenths 1/16 then the cell will display \"1 "
+             "6/16\" which is the nearest closest Sixteenth fraction."));
     grid->addWidget(fraction, 6, 0);
 
     date = new QRadioButton(i18n("Date"), grp);
-    date->setWhatsThis(i18n("To enter a date, you should enter it in one of the formats set in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & Language -> Time & Dates. There are two formats set here: the date format and the short date format.\nJust like you can drag down numbers you can also drag down dates and the next cells will also get dates."));
+    date->setWhatsThis(
+        i18n("To enter a date, you should enter it in one of the formats set in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region "
+             "& Language -> Time & Dates. There are two formats set here: the date format and the short date format.\nJust like you can drag down numbers you "
+             "can also drag down dates and the next cells will also get dates."));
     grid->addWidget(date, 7, 0);
 
     time = new QRadioButton(i18n("Time"), grp);
-    time->setWhatsThis(i18n("This formats your cell content as a time. To enter a time, you should enter it in the Time format set in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & Language -> Date & Time. In the Cell Format dialog box you can set how the time should be displayed by choosing one of the available time format options. The default format is the system format set in System Settings. When the number in the cell does not make sense as a time, Calligra Sheets will display 00:00 in the global format you have in System Settings."));
+    time->setWhatsThis(
+        i18n("This formats your cell content as a time. To enter a time, you should enter it in the Time format set in System Settings -> Common Appearance "
+             "and Behavior -> Locale -> Country/Region & Language -> Date & Time. In the Cell Format dialog box you can set how the time should be displayed "
+             "by choosing one of the available time format options. The default format is the system format set in System Settings. When the number in the "
+             "cell does not make sense as a time, Calligra Sheets will display 00:00 in the global format you have in System Settings."));
     grid->addWidget(time, 8, 0);
 
     datetime = new QRadioButton(i18n("Datetime"), grp);
-    datetime->setWhatsThis(i18n("To enter a datetime, you should enter it in one of the formats set in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & Language -> Time & Dates. There are two formats set here: the date format and the short date format.\nJust like you can drag down numbers you can also drag down dates and the next cells will also get datetimes."));
+    datetime->setWhatsThis(
+        i18n("To enter a datetime, you should enter it in one of the formats set in System Settings -> Common Appearance and Behavior -> Locale -> "
+             "Country/Region & Language -> Time & Dates. There are two formats set here: the date format and the short date format.\nJust like you can drag "
+             "down numbers you can also drag down dates and the next cells will also get datetimes."));
     grid->addWidget(datetime, 9, 0);
 
     textFormat = new QRadioButton(i18n("Text"), grp);
-    textFormat->setWhatsThis(i18n("This formats your cell content as text. This can be useful if you want a number treated as text instead as a number, for example for a ZIP code. Setting a number as text format will left justify it. When numbers are formatted as text, they cannot be used in calculations or formulas. It also change the way the cell is justified."));
+    textFormat->setWhatsThis(
+        i18n("This formats your cell content as text. This can be useful if you want a number treated as text instead as a number, for example for a ZIP code. "
+             "Setting a number as text format will left justify it. When numbers are formatted as text, they cannot be used in calculations or formulas. It "
+             "also change the way the cell is justified."));
     grid->addWidget(textFormat, 10, 0);
 
     customFormat = new QRadioButton(i18n("Custom"), grp);
@@ -130,7 +159,9 @@ LayoutPageFloat::LayoutPageFloat(QWidget* parent, Localization *locale, ValueFor
     precision->setSpecialValueText(i18n("variable"));
     precision->setRange(-1, 10);
     precision->setSingleStep(1);
-    precision->setWhatsThis(i18n("You can control how many digits are displayed after the decimal point for numeric values. This can also be changed using the Increase precision or Decrease precision icons in the Format toolbar. "));
+    precision->setWhatsThis(
+        i18n("You can control how many digits are displayed after the decimal point for numeric values. This can also be changed using the Increase precision "
+             "or Decrease precision icons in the Format toolbar. "));
     grid->addWidget(precision, 1, 1);
 
     prefix = new KLineEdit(box);
@@ -141,7 +172,7 @@ LayoutPageFloat::LayoutPageFloat(QWidget* parent, Localization *locale, ValueFor
     format->setWhatsThis(i18n("You can choose whether positive values are displayed with a leading + sign and whether negative values are shown in red."));
     grid->addWidget(format, 0, 3);
 
-    QLabel* tmpQLabel;
+    QLabel *tmpQLabel;
     tmpQLabel = new QLabel(box);
     grid->addWidget(tmpQLabel, 2, 0);
     tmpQLabel->setText(i18n("Postfix:"));
@@ -154,11 +185,11 @@ LayoutPageFloat::LayoutPageFloat(QWidget* parent, Localization *locale, ValueFor
     grid->addWidget(tmpQLabel, 1, 0);
     tmpQLabel->setText(i18n("Precision:"));
 
-    QPixmap formatOnlyNegSignedPixmap    = paintFormatPixmap("123.456", Qt::black, "-123.456", Qt::black);
+    QPixmap formatOnlyNegSignedPixmap = paintFormatPixmap("123.456", Qt::black, "-123.456", Qt::black);
     QPixmap formatRedOnlyNegSignedPixmap = paintFormatPixmap("123.456", Qt::black, "-123.456", Qt::red);
-    QPixmap formatRedNeverSignedPixmap   = paintFormatPixmap("123.456", Qt::black, "123.456", Qt::red);
-    QPixmap formatAlwaysSignedPixmap     = paintFormatPixmap("+123.456", Qt::black, "-123.456", Qt::black);
-    QPixmap formatRedAlwaysSignedPixmap  = paintFormatPixmap("+123.456", Qt::black, "-123.456", Qt::red);
+    QPixmap formatRedNeverSignedPixmap = paintFormatPixmap("123.456", Qt::black, "123.456", Qt::red);
+    QPixmap formatAlwaysSignedPixmap = paintFormatPixmap("+123.456", Qt::black, "-123.456", Qt::black);
+    QPixmap formatRedAlwaysSignedPixmap = paintFormatPixmap("+123.456", Qt::black, "-123.456", Qt::red);
 
     format->setIconSize(QSize(150, 14));
     format->insertItem(0, formatOnlyNegSignedPixmap, "");
@@ -186,7 +217,8 @@ LayoutPageFloat::LayoutPageFloat(QWidget* parent, Localization *locale, ValueFor
         Currency c(curr);
         QString symbol = c.symbol();
         QString text = curr;
-        if (symbol.size() && symbol != curr) text +=" (" + c.symbol() + ")";
+        if (symbol.size() && symbol != curr)
+            text += " (" + c.symbol() + ")";
         index++;
         currency->insertItem(index, text);
     }
@@ -217,8 +249,7 @@ LayoutPageFloat::LayoutPageFloat(QWidget* parent, Localization *locale, ValueFor
     this->resize(400, 400);
 }
 
-QPixmap LayoutPageFloat::paintFormatPixmap(const char * _string1, const QColor & _color1,
-        const char *_string2, const QColor & _color2)
+QPixmap LayoutPageFloat::paintFormatPixmap(const char *_string1, const QColor &_color1, const char *_string2, const QColor &_color2)
 {
     QPixmap pixmap(150, 14);
     pixmap.fill(Qt::transparent);
@@ -255,8 +286,7 @@ void LayoutPageFloat::slotChangeState()
     prefix->setEnabled(true);
     postfix->setEnabled(true);
     format->setEnabled(true);
-    if (generic->isChecked() || number->isChecked() || percent->isChecked() ||
-            scientific->isChecked() || textFormat->isChecked())
+    if (generic->isChecked() || number->isChecked() || percent->isChecked() || scientific->isChecked() || textFormat->isChecked())
         listFormat->setEnabled(false);
     else if (money->isChecked()) {
         listFormat->setEnabled(false);
@@ -416,15 +446,33 @@ void LayoutPageFloat::updateFormatType()
     } else if (fraction->isChecked()) {
         newFormatType = Format::fraction_half;
         switch (listFormat->currentRow()) {
-        case 0: newFormatType = Format::fraction_half; break;
-        case 1: newFormatType = Format::fraction_quarter; break;
-        case 2: newFormatType = Format::fraction_eighth; break;
-        case 3: newFormatType = Format::fraction_sixteenth; break;
-        case 4: newFormatType = Format::fraction_tenth; break;
-        case 5: newFormatType = Format::fraction_hundredth; break;
-        case 6: newFormatType = Format::fraction_one_digit; break;
-        case 7: newFormatType = Format::fraction_two_digits; break;
-        case 8: newFormatType = Format::fraction_three_digits; break;
+        case 0:
+            newFormatType = Format::fraction_half;
+            break;
+        case 1:
+            newFormatType = Format::fraction_quarter;
+            break;
+        case 2:
+            newFormatType = Format::fraction_eighth;
+            break;
+        case 3:
+            newFormatType = Format::fraction_sixteenth;
+            break;
+        case 4:
+            newFormatType = Format::fraction_tenth;
+            break;
+        case 5:
+            newFormatType = Format::fraction_hundredth;
+            break;
+        case 6:
+            newFormatType = Format::fraction_one_digit;
+            break;
+        case 7:
+            newFormatType = Format::fraction_two_digits;
+            break;
+        case 8:
+            newFormatType = Format::fraction_three_digits;
+            break;
         }
     } else if (datetime->isChecked()) {
         const auto item = listFormat->currentItem();
@@ -455,19 +503,19 @@ void LayoutPageFloat::makeformat()
         color = Qt::black;
         break;
     case 1:
-        floatFormat =  Style::OnlyNegSigned;
+        floatFormat = Style::OnlyNegSigned;
         color = Qt::red;
         break;
     case 2:
-        floatFormat =  Style::AlwaysUnsigned;
+        floatFormat = Style::AlwaysUnsigned;
         color = Qt::red;
         break;
     case 3:
-        floatFormat =  Style::AlwaysSigned;
+        floatFormat = Style::AlwaysSigned;
         color = Qt::black;
         break;
     case 4:
-        floatFormat =  Style::AlwaysSigned;
+        floatFormat = Style::AlwaysSigned;
         color = Qt::red;
         break;
     }
@@ -477,13 +525,18 @@ void LayoutPageFloat::makeformat()
     if (Format::isDate(newFormatType) || Format::isTime(newFormatType) || Format::isDateTime(newFormatType)) {
         val = Value(4.1234);
     }
-    if (!format->isEnabled()) color = Qt::black;
+    if (!format->isEnabled())
+        color = Qt::black;
 
-    tmp = m_formatter->formatText(val, newFormatType, precision->value(),
-                          floatFormat,
-                          prefix->isEnabled() ? prefix->text() : QString(),
-                          postfix->isEnabled() ? postfix->text() : QString(),
-                          newFormatType == Format::Money ? m_currency.symbol() : QString()).asString();
+    tmp = m_formatter
+              ->formatText(val,
+                           newFormatType,
+                           precision->value(),
+                           floatFormat,
+                           prefix->isEnabled() ? prefix->text() : QString(),
+                           postfix->isEnabled() ? postfix->text() : QString(),
+                           newFormatType == Format::Money ? m_currency.symbol() : QString())
+              .asString();
     if (tmp.length() > 50)
         tmp = tmp.left(50);
     exampleLabel->setText(tmp.prepend("<font color=" + color.name() + '>').append("</font>"));
@@ -616,7 +669,3 @@ void LayoutPageFloat::loadFrom(const Style &style, bool /*partial*/)
     // enable controls as needed
     slotChangeState();
 }
-
-
-
-

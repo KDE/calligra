@@ -6,14 +6,14 @@
 #ifndef KO_TOOL_MANAGER_P
 #define KO_TOOL_MANAGER_P
 
+#include <QHash>
 #include <QList>
 #include <QObject>
 #include <QString>
 #include <QTimer>
-#include <QHash>
 
-#include <QKeySequence>
 #include <QAction>
+#include <QKeySequence>
 
 #include "KoInputDevice.h"
 #include "KoToolManager.h"
@@ -53,7 +53,7 @@ public:
     void movedFocus(QWidget *from, QWidget *to);
     void updateCursor(const QCursor &cursor);
     void switchBackRequested();
-    void selectionChanged(const QList<KoShape*> &shapes);
+    void selectionChanged(const QList<KoShape *> &shapes);
     void currentLayerChanged(const KoShapeLayer *layer);
     void updateToolForProxy();
     void switchToolTemporaryRequested(const QString &id);
@@ -76,14 +76,13 @@ public:
 
     void switchToolByShortcut(QKeyEvent *event);
 
-
     KoToolManager *q;
 
-    QList<ToolHelper*> tools; // list of all available tools via their factories.
+    QList<ToolHelper *> tools; // list of all available tools via their factories.
 
-    QHash<KoToolBase*, int> uniqueToolIds; // for the changedTool signal
-    QHash<KoCanvasController*, QList<CanvasData*> > canvasses;
-    QHash<KoCanvasBase*, KoToolProxy*> proxies;
+    QHash<KoToolBase *, int> uniqueToolIds; // for the changedTool signal
+    QHash<KoCanvasController *, QList<CanvasData *>> canvasses;
+    QHash<KoCanvasBase *, KoToolProxy *> proxies;
 
     CanvasData *canvasData; // data about the active canvas.
 
@@ -120,7 +119,8 @@ public:
     KoToolBase *createTool(KoCanvasBase *canvas) const;
     ShortcutToolAction *createShortcutToolAction(QObject *parent);
     /// unique id, >= 0
-    int uniqueId() const {
+    int uniqueId() const
+    {
         return m_uniqueId;
     }
     /// QAction->shortcut() if it exists, otherwise KoToolFactoryBase::shortcut()
@@ -137,7 +137,7 @@ private Q_SLOTS:
     void shortcutToolActionUpdated();
 
 private:
-    KoToolFactoryBase * const m_toolFactory;
+    KoToolFactoryBase *const m_toolFactory;
     const int m_uniqueId;
     QKeySequence m_customShortcut;
     bool m_hasCustomShortcut;
@@ -156,7 +156,7 @@ private Q_SLOTS:
     void slotSelectionChanged();
 
 Q_SIGNALS:
-    void selectionChanged(const QList<KoShape*> &shape);
+    void selectionChanged(const QList<KoShape *> &shape);
 
 private:
     KoShapeManager *m_shapeManager;

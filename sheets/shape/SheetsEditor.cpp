@@ -9,10 +9,10 @@
 #include "TableShape.h"
 
 #include <QHBoxLayout>
-#include <QVBoxLayout>
+#include <QInputDialog>
 #include <QListWidget>
 #include <QPushButton>
-#include <QInputDialog>
+#include <QVBoxLayout>
 
 #include <KLocalizedString>
 
@@ -24,19 +24,19 @@ using namespace Calligra::Sheets;
 class SheetsEditor::Private
 {
 public:
-    TableShape* tableShape;
-    QListWidget* list;
+    TableShape *tableShape;
+    QListWidget *list;
     QPushButton *renamebtn, *addbtn, *rembtn;
 };
 
-SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
-        : QWidget(parent)
-        , d(new Private)
+SheetsEditor::SheetsEditor(TableShape *tableShape, QWidget *parent)
+    : QWidget(parent)
+    , d(new Private)
 {
     setObjectName(QLatin1String("SheetsEditor"));
     d->tableShape = tableShape;
 
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setMargin(0);
     setLayout(layout);
 
@@ -46,12 +46,12 @@ SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
     layout->addWidget(d->list);
 
     Map *map = d->tableShape->map();
-    for(SheetBase* sheet : map->sheetList()) {
+    for (SheetBase *sheet : map->sheetList()) {
         sheetAdded(sheet);
     }
     connect(map, &Map::sheetAdded, this, &SheetsEditor::sheetAdded);
 
-    QVBoxLayout* btnlayout = new QVBoxLayout();
+    QVBoxLayout *btnlayout = new QVBoxLayout();
     layout->addLayout(btnlayout);
 
     d->renamebtn = new QPushButton(/*koIcon("edit-rename"),*/ i18n("Rename"), this);
@@ -75,17 +75,20 @@ SheetsEditor::~SheetsEditor()
     delete d;
 }
 
-void SheetsEditor::sheetAdded(SheetBase* bsheet)
+void SheetsEditor::sheetAdded(SheetBase *bsheet)
 {
     Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
     Q_ASSERT(sheet);
-    QListWidgetItem* item = new QListWidgetItem(sheet->sheetName());
+    QListWidgetItem *item = new QListWidgetItem(sheet->sheetName());
     item->setCheckState(sheet->isHidden() ? Qt::Unchecked : Qt::Checked);
     d->list->addItem(item);
-    connect(sheet, &Sheet::nameChanged, this, [this, sheet] (const QString &oldName, const QString &name) { Q_UNUSED(name); sheetNameChanged(sheet, oldName); });
+    connect(sheet, &Sheet::nameChanged, this, [this, sheet](const QString &oldName, const QString &name) {
+        Q_UNUSED(name);
+        sheetNameChanged(sheet, oldName);
+    });
 }
 
-void SheetsEditor::sheetNameChanged(Sheet* sheet, const QString& old_name)
+void SheetsEditor::sheetNameChanged(Sheet *sheet, const QString &old_name)
 {
     for (int i = 0; i < d->list->count(); ++i)
         if (d->list->item(i)->text() == old_name)
@@ -99,11 +102,11 @@ void SheetsEditor::selectionChanged()
     d->rembtn->setEnabled(d->list->currentItem());
 }
 
-void SheetsEditor::itemChanged(QListWidgetItem* item)
+void SheetsEditor::itemChanged(QListWidgetItem *item)
 {
     Q_ASSERT(item);
     Map *map = d->tableShape->map();
-    SheetBase* bsheet = map->findSheet(item->text());
+    SheetBase *bsheet = map->findSheet(item->text());
     Sheet *sheet = bsheet ? dynamic_cast<Sheet *>(bsheet) : nullptr;
     if (sheet)
         sheet->setHidden(item->checkState() != Qt::Checked);
@@ -111,12 +114,12 @@ void SheetsEditor::itemChanged(QListWidgetItem* item)
 
 void SheetsEditor::renameClicked()
 {
-    QListWidgetItem* item = d->list->currentItem();
-    if (! item)
+    QListWidgetItem *item = d->list->currentItem();
+    if (!item)
         return;
     Map *map = d->tableShape->map();
-    SheetBase* sheet = map->findSheet(item->text());
-    if (! sheet)
+    SheetBase *sheet = map->findSheet(item->text());
+    if (!sheet)
         return;
     QString name = QInputDialog::getText(0, i18n("Rename"), i18n("Enter Name:"), QLineEdit::Normal, sheet->sheetName());
     if (name.isEmpty())
@@ -132,12 +135,12 @@ void SheetsEditor::addClicked()
 
 void SheetsEditor::removeClicked()
 {
-    QListWidgetItem* item = d->list->currentItem();
-    if (! item)
+    QListWidgetItem *item = d->list->currentItem();
+    if (!item)
         return;
     Map *map = d->tableShape->map();
-    SheetBase* sheet = map->findSheet(item->text());
-    if (! sheet)
+    SheetBase *sheet = map->findSheet(item->text());
+    if (!sheet)
         return;
     map->removeSheet(sheet);
     delete item;

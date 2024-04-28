@@ -10,8 +10,8 @@
 
 #include "komain_export.h"
 #include <QObject>
-#include <QVariant>
 #include <QSharedDataPointer>
+#include <QVariant>
 
 /**
  * \brief A single searching option.
@@ -119,7 +119,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOFINDOPTION_H

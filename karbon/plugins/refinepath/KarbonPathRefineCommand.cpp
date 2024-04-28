@@ -5,25 +5,32 @@
  */
 
 #include "KarbonPathRefineCommand.h"
-#include <KoPathShape.h>
+#include <KLocalizedString>
 #include <KoPathPointData.h>
 #include <KoPathPointInsertCommand.h>
-#include <KLocalizedString>
+#include <KoPathShape.h>
 
-
-class KarbonPathRefineCommand::Private {
+class KarbonPathRefineCommand::Private
+{
 public:
-    Private(KoPathShape * p, uint insertPointsCount)
-            : path(p), insertCount(insertPointsCount), initialized(false) {}
-    ~Private() {}
+    Private(KoPathShape *p, uint insertPointsCount)
+        : path(p)
+        , insertCount(insertPointsCount)
+        , initialized(false)
+    {
+    }
+    ~Private()
+    {
+    }
 
-    KoPathShape * path; ///< the path to refine
-    uint insertCount;   ///< the number of points to insert into segments
-    bool initialized;   ///< tells whether the subcommands are already created
+    KoPathShape *path; ///< the path to refine
+    uint insertCount; ///< the number of points to insert into segments
+    bool initialized; ///< tells whether the subcommands are already created
 };
 
-KarbonPathRefineCommand::KarbonPathRefineCommand(KoPathShape * path, uint insertPointsCount, KUndo2Command *parent)
-        : KUndo2Command(parent), d(new Private(path, insertPointsCount))
+KarbonPathRefineCommand::KarbonPathRefineCommand(KoPathShape *path, uint insertPointsCount, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , d(new Private(path, insertPointsCount))
 {
     setText(kundo2_i18n("Refine path"));
 }
@@ -36,7 +43,7 @@ KarbonPathRefineCommand::~KarbonPathRefineCommand()
 void KarbonPathRefineCommand::redo()
 {
     // check if we have to create the insert points commands
-    if (! d->initialized) {
+    if (!d->initialized) {
         // create insert point commands, one for each point to insert
         // into each segment
         for (uint iteration = 0; iteration < d->insertCount; ++iteration) {
@@ -58,7 +65,7 @@ void KarbonPathRefineCommand::redo()
                 }
             }
             // create the command and execute it
-            KUndo2Command * cmd = new KoPathPointInsertCommand(pointData, insertPosition, this);
+            KUndo2Command *cmd = new KoPathPointInsertCommand(pointData, insertPosition, this);
             cmd->redo();
         }
         d->initialized = true;
@@ -73,4 +80,3 @@ void KarbonPathRefineCommand::undo()
     KUndo2Command::undo();
     d->path->update();
 }
-

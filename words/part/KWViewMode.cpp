@@ -47,7 +47,7 @@ void KWViewMode::pageSetupChanged()
 // static
 KWViewMode *KWViewMode::create(const QString &viewModeType, KWDocument *document)
 {
-    KWViewMode * vm = 0;
+    KWViewMode *vm = 0;
     if (viewModeType == KWViewModePreview::viewMode())
         vm = new KWViewModePreview();
     if (vm == 0)
@@ -56,4 +56,3 @@ KWViewMode *KWViewMode::create(const QString &viewModeType, KWDocument *document
     vm->setPageManager(document->pageManager());
     return vm;
 }
-

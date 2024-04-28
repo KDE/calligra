@@ -7,8 +7,8 @@
 #ifndef ATTACHTEXTTOPATHCOMMAND_H
 #define ATTACHTEXTTOPATHCOMMAND_H
 
-#include <kundo2command.h>
 #include <QTransform>
+#include <kundo2command.h>
 
 class ArtisticTextShape;
 class KoPathShape;
@@ -16,14 +16,15 @@ class KoPathShape;
 class AttachTextToPathCommand : public KUndo2Command
 {
 public:
-    AttachTextToPathCommand( ArtisticTextShape * textShape, KoPathShape * pathShape, KUndo2Command * parent = 0 );
+    AttachTextToPathCommand(ArtisticTextShape *textShape, KoPathShape *pathShape, KUndo2Command *parent = 0);
     /// reimplemented from KUndo2Command
     void redo() override;
     /// reimplemented from KUndo2Command
     void undo() override;
+
 private:
-    ArtisticTextShape * m_textShape;
-    KoPathShape * m_pathShape;
+    ArtisticTextShape *m_textShape;
+    KoPathShape *m_pathShape;
     QTransform m_oldMatrix;
 };
 

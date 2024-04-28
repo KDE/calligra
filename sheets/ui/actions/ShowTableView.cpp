@@ -8,18 +8,16 @@
 #include "ShowTableView.h"
 #include "Actions.h"
 
-#include <QAction>
 #include <KLocalizedString>
+#include <QAction>
 
 #ifndef NDEBUG
-#include <QTableView>
 #include "core/SheetModel.h"
 #include <KoDialog.h>
+#include <QTableView>
 #endif
 
-
 using namespace Calligra::Sheets;
-
 
 ShowTableView::ShowTableView(Actions *actions)
     : CellAction(actions, "qTableView", i18n("Show QTableView..."), koIcon("table"), QString())
@@ -30,7 +28,8 @@ ShowTableView::~ShowTableView()
 {
 }
 
-QAction *ShowTableView::createAction() {
+QAction *ShowTableView::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_T));
     return res;
@@ -40,8 +39,8 @@ void ShowTableView::execute(Selection *, Sheet *sheet, QWidget *canvasWidget)
 {
 #ifndef NDEBUG
     KoDialog *dialog = new KoDialog(canvasWidget);
-    QTableView* const view = new QTableView(dialog);
-    SheetModel* const model = new SheetModel(sheet);
+    QTableView *const view = new QTableView(dialog);
+    SheetModel *const model = new SheetModel(sheet);
     view->setModel(model);
     dialog->setCaption("Read{Only,Write}TableModel Test");
     dialog->setMainWidget(view);
@@ -50,6 +49,3 @@ void ShowTableView::execute(Selection *, Sheet *sheet, QWidget *canvasWidget)
     delete model;
 #endif
 }
-
-
-

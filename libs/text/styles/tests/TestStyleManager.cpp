@@ -43,7 +43,7 @@ void TestStyleManager::initTestCase()
 
 void TestStyleManager::init()
 {
-debugText << "init";
+    debugText << "init";
     // Each test case starts with a document containing
     // "foo\nbar" and an empty style manager.
     m_doc = new QTextDocument();
@@ -51,7 +51,7 @@ debugText << "init";
     QTextCursor(m_doc).insertText("foo\nbar");
     m_styleManager = new KoStyleManager(0);
     m_koDoc->setStyleManager(m_styleManager);
-debugText << "init done";
+    debugText << "init done";
 }
 
 void TestStyleManager::testAddRemoveCharacterStyle()

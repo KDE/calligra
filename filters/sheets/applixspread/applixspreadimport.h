@@ -16,28 +16,29 @@ struct t_rc;
 
 class APPLIXSPREADImport : public KoFilter
 {
-
     Q_OBJECT
 
 public:
-    APPLIXSPREADImport(QObject *parent, const QVariantList&);
-    ~APPLIXSPREADImport() override {}
+    APPLIXSPREADImport(QObject *parent, const QVariantList &);
+    ~APPLIXSPREADImport() override
+    {
+    }
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 
 protected:
     QString nextLine(QTextStream &);
-    QChar   specCharfind(QChar , QChar);
-    void    writePen(QString &, int, int, const QString&);
+    QChar specCharfind(QChar, QChar);
+    void writePen(QString &, int, int, const QString &);
     QString writeColor(t_mycolor *);
-    void    readTypefaceTable(QTextStream &, QStringList &);
-    void    readColormap(QTextStream &, QList<t_mycolor*> &);
-    void    readView(QTextStream &, const QString&, t_rc &);
-    void    filterSHFGBG(const QString&, int *, int *, int *);
-    void    transPenFormat(const QString&, int *, int *);
-    int     readHeader(QTextStream &);
-    int     translateColumnNumber(const QString&);
-    QString convertFormula(const QString& input) const;
+    void readTypefaceTable(QTextStream &, QStringList &);
+    void readColormap(QTextStream &, QList<t_mycolor *> &);
+    void readView(QTextStream &, const QString &, t_rc &);
+    void filterSHFGBG(const QString &, int *, int *, int *);
+    void transPenFormat(const QString &, int *, int *);
+    int readHeader(QTextStream &);
+    int translateColumnNumber(const QString &);
+    QString convertFormula(const QString &input) const;
 
 private:
     int m_stepsize;

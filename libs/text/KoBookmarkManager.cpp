@@ -14,14 +14,16 @@
 class KoBookmarkManagerPrivate
 {
 public:
-    KoBookmarkManagerPrivate() { }
-    QHash<QString, KoBookmark*> bookmarkHash;
+    KoBookmarkManagerPrivate()
+    {
+    }
+    QHash<QString, KoBookmark *> bookmarkHash;
     QList<QString> bookmarkNameList;
     int lastId;
 };
 
 KoBookmarkManager::KoBookmarkManager()
-        : d(new KoBookmarkManagerPrivate)
+    : d(new KoBookmarkManagerPrivate)
 {
 }
 
@@ -45,7 +47,7 @@ void KoBookmarkManager::remove(const QString &name)
 
 void KoBookmarkManager::rename(const QString &oldName, const QString &newName)
 {
-    QHash<QString, KoBookmark*>::iterator i = d->bookmarkHash.begin();
+    QHash<QString, KoBookmark *>::iterator i = d->bookmarkHash.begin();
 
     while (i != d->bookmarkHash.end()) {
         if (i.key() == oldName) {

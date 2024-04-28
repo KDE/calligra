@@ -13,13 +13,15 @@
 struct TypographicQuotes {
     QChar begin;
     QChar end;
-    bool operator!=(const TypographicQuotes &q) const { return begin != q.begin || end != q.end; }
+    bool operator!=(const TypographicQuotes &q) const
+    {
+        return begin != q.begin || end != q.end;
+    }
 };
 
 class ImportAbstractAutocorrection
 {
 public:
-
     enum LoadAttribute {
         All = 0,
         SuperScript,

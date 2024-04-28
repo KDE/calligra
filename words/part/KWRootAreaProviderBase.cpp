@@ -7,21 +7,20 @@
  */
 
 #include "KWRootAreaProviderBase.h"
-#include "KWPageManager.h"
 #include "KWDocument.h"
+#include "KWPageManager.h"
 #include "KWView.h"
-#include "frames/KWTextFrameSet.h"
 #include "frames/KWCopyShape.h"
+#include "frames/KWTextFrameSet.h"
 
-#include <KoTextLayoutRootArea.h>
 #include <KoShape.h>
+#include <KoShapeAnchor.h>
 #include <KoShapeContainer.h>
 #include <KoShapeFactoryBase.h>
-#include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutObstruction.h>
-#include <KoShapeAnchor.h>
-
+#include <KoTextLayoutRootArea.h>
+#include <KoTextShapeData.h>
 
 KWRootAreaProviderBase::KWRootAreaProviderBase(KWTextFrameSet *textFrameSet)
     : KoTextLayoutRootAreaProvider()
@@ -36,24 +35,21 @@ void KWRootAreaProviderBase::doPostLayout(KoTextLayoutRootArea *rootArea, bool /
         return;
     }
 
-    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
+    KoTextShapeData *data = qobject_cast<KoTextShapeData *>(shape->userData());
     Q_ASSERT(data);
 
     QRectF updateRect = shape->outlineRect();
 
-    QSizeF newSize = shape->size()
-                    - QSizeF(data->leftPadding() + data->rightPadding(),
-                             data->topPadding() + data->bottomPadding());
+    QSizeF newSize = shape->size() - QSizeF(data->leftPadding() + data->rightPadding(), data->topPadding() + data->bottomPadding());
 
     KoBorder *border = shape->border();
 
     if (border) {
-        newSize -= QSizeF(border->borderWidth(KoBorder::LeftBorder) + border->borderWidth(KoBorder::RightBorder), border->borderWidth(KoBorder::TopBorder) + border->borderWidth(KoBorder::BottomBorder));
+        newSize -= QSizeF(border->borderWidth(KoBorder::LeftBorder) + border->borderWidth(KoBorder::RightBorder),
+                          border->borderWidth(KoBorder::TopBorder) + border->borderWidth(KoBorder::BottomBorder));
     }
 
-    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
-        ||data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
-
+    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
         newSize.setHeight(rootArea->bottom() - rootArea->top());
 
         // adjust size to have at least the defined minimum height
@@ -62,22 +58,21 @@ void KWRootAreaProviderBase::doPostLayout(KoTextLayoutRootArea *rootArea, bool /
         if (firstShape->minimumHeight() > newSize.height())
             newSize.setHeight(firstShape->minimumHeight());
     }
-    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
-        ||data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
+    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
         newSize.setWidth(rootArea->right() - rootArea->left());
     }
 
-    newSize += QSizeF(data->leftPadding() + data->rightPadding(),
-                      data->topPadding() + data->bottomPadding());
+    newSize += QSizeF(data->leftPadding() + data->rightPadding(), data->topPadding() + data->bottomPadding());
     if (border) {
-        newSize += QSizeF(border->borderWidth(KoBorder::LeftBorder) + border->borderWidth(KoBorder::RightBorder), border->borderWidth(KoBorder::TopBorder) + border->borderWidth(KoBorder::BottomBorder));
+        newSize += QSizeF(border->borderWidth(KoBorder::LeftBorder) + border->borderWidth(KoBorder::RightBorder),
+                          border->borderWidth(KoBorder::TopBorder) + border->borderWidth(KoBorder::BottomBorder));
     }
 
     if (newSize != rootArea->associatedShape()->size()) {
         rootArea->associatedShape()->setSize(newSize);
 
         // transfer the new size to the copy-shapes
-        foreach(KWCopyShape *cs, frameSet()->copyShapes()) {
+        foreach (KWCopyShape *cs, frameSet()->copyShapes()) {
             cs->setSize(newSize);
         }
     }
@@ -97,19 +92,21 @@ QRectF KWRootAreaProviderBase::suggestRect(KoTextLayoutRootArea *rootArea)
 {
     KoShape *shape = rootArea->associatedShape();
     if (!shape) { // no shape => nothing to draw => no space needed
-        return QRectF(0., 0., 0.,0.);
+        return QRectF(0., 0., 0., 0.);
     }
 
-    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
+    KoTextShapeData *data = qobject_cast<KoTextShapeData *>(shape->userData());
     Q_ASSERT(data);
 
     QRectF rect(QPointF(), shape->size());
-    rect.adjust(data->leftPadding(), data->topPadding(), -data->rightPadding(), - data->bottomPadding());
+    rect.adjust(data->leftPadding(), data->topPadding(), -data->rightPadding(), -data->bottomPadding());
 
     KoBorder *border = shape->border();
     if (border) {
-        rect.adjust(border->borderWidth(KoBorder::LeftBorder),  border->borderWidth(KoBorder::TopBorder),
-              -border->borderWidth(KoBorder::RightBorder), - border->borderWidth(KoBorder::BottomBorder));
+        rect.adjust(border->borderWidth(KoBorder::LeftBorder),
+                    border->borderWidth(KoBorder::TopBorder),
+                    -border->borderWidth(KoBorder::RightBorder),
+                    -border->borderWidth(KoBorder::BottomBorder));
     }
 
     rect.setWidth(qMax(rect.width(), qreal(1.0)));
@@ -118,8 +115,7 @@ QRectF KWRootAreaProviderBase::suggestRect(KoTextLayoutRootArea *rootArea)
         rect.setHeight(1E6);
     }
 
-    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
-        || data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
+    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
         // By setting this we make sure the textlayout librar does 2 internal runs. Once to
         // figure out how much width is needed, second to do a normal layout using that calculated width
         rootArea->setNoWrap(1E6);
@@ -130,25 +126,25 @@ QRectF KWRootAreaProviderBase::suggestRect(KoTextLayoutRootArea *rootArea)
 
 QList<KoTextLayoutObstruction *> KWRootAreaProviderBase::relevantObstructions(KoTextLayoutRootArea *rootArea)
 {
-    QList<KoTextLayoutObstruction*> obstructions;
+    QList<KoTextLayoutObstruction *> obstructions;
     Q_ASSERT(rootArea);
 
     KoShape *currentShape = rootArea->associatedShape();
 
-    if(!currentShape) {
+    if (!currentShape) {
         return obstructions;
     }
 
     // let's convert into canvas/KWDocument coords
     QRectF rect = currentShape->boundingRect();
 
-    //TODO would probably be faster if we could use the RTree of the shape manager
+    // TODO would probably be faster if we could use the RTree of the shape manager
     foreach (KWFrameSet *fs, frameSet()->wordsDocument()->frameSets()) {
-        if (fs  == frameSet()) {
+        if (fs == frameSet()) {
             continue; // we don't collide with ourselves
         }
 
-        if (KWTextFrameSet *tfs = qobject_cast<KWTextFrameSet*>(fs)) {
+        if (KWTextFrameSet *tfs = qobject_cast<KWTextFrameSet *>(fs)) {
             if (tfs->textFrameSetType() != Words::OtherTextFrameSet) {
                 continue; // we don't collide with headers, footers and main-text.
             }
@@ -158,7 +154,7 @@ QList<KoTextLayoutObstruction *> KWRootAreaProviderBase::relevantObstructions(Ko
             if (shape == currentShape) {
                 continue;
             }
-            if (! shape->isVisible(true)) {
+            if (!shape->isVisible(true)) {
                 continue;
             }
             if (shape->anchor() && shape->anchor()->anchorType() != KoShapeAnchor::AnchorPage) {
@@ -170,7 +166,7 @@ QList<KoTextLayoutObstruction *> KWRootAreaProviderBase::relevantObstructions(Ko
             if (shape->zIndex() <= currentShape->zIndex()) {
                 continue;
             }
-            if (! rect.intersects(shape->boundingRect())) {
+            if (!rect.intersects(shape->boundingRect())) {
                 continue;
             }
             bool isChild = false;

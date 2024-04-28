@@ -10,8 +10,8 @@
 // Qt
 #include <QAbstractItemModel>
 #include <QPair>
-#include <kundo2command.h>
 #include <QVector>
+#include <kundo2command.h>
 
 // Sheets
 #include "Formula.h"
@@ -42,8 +42,8 @@ public:
 
     void add(const QVector<Pair> &pairs);
 
-    PointStorageUndoCommand& operator<<(const Pair &pair);
-    PointStorageUndoCommand& operator<<(const QVector<Pair> &pairs);
+    PointStorageUndoCommand &operator<<(const Pair &pair);
+    PointStorageUndoCommand &operator<<(const QVector<Pair> &pairs);
 
 private:
     QAbstractItemModel *const m_model;
@@ -52,11 +52,10 @@ private:
 };
 
 template<typename T>
-PointStorageUndoCommand<T>::PointStorageUndoCommand(QAbstractItemModel *const model,
-        int role, KUndo2Command *parent)
-        : KUndo2Command(parent)
-        , m_model(model)
-        , m_role(role)
+PointStorageUndoCommand<T>::PointStorageUndoCommand(QAbstractItemModel *const model, int role, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_model(model)
+    , m_role(role)
 {
 }
 
@@ -76,20 +75,20 @@ void PointStorageUndoCommand<T>::undo()
 }
 
 template<typename T>
-void PointStorageUndoCommand<T>::add(const QVector<Pair>& pairs)
+void PointStorageUndoCommand<T>::add(const QVector<Pair> &pairs)
 {
     m_undoData << pairs;
 }
 
 template<typename T>
-PointStorageUndoCommand<T>& PointStorageUndoCommand<T>::operator<<(const Pair& pair)
+PointStorageUndoCommand<T> &PointStorageUndoCommand<T>::operator<<(const Pair &pair)
 {
     m_undoData << pair;
     return *this;
 }
 
 template<typename T>
-PointStorageUndoCommand<T>& PointStorageUndoCommand<T>::operator<<(const QVector<Pair>& pairs)
+PointStorageUndoCommand<T> &PointStorageUndoCommand<T>::operator<<(const QVector<Pair> &pairs)
 {
     m_undoData << pairs;
     return *this;

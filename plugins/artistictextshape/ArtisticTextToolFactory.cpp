@@ -5,28 +5,27 @@
  */
 
 #include "ArtisticTextToolFactory.h"
-#include "ArtisticTextTool.h"
 #include "ArtisticTextShape.h"
+#include "ArtisticTextTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 
 ArtisticTextToolFactory::ArtisticTextToolFactory()
     : KoToolFactoryBase("ArtisticTextToolFactoryID")
 {
-    setToolTip( i18n("Artistic text editing") );
-    setToolType( dynamicToolType() );
+    setToolTip(i18n("Artistic text editing"));
+    setToolType(dynamicToolType());
     setIconName(koIconName("artistictext-tool"));
-    setPriority( 1 );
-    setActivationShapeId( ArtisticTextShapeID );
+    setPriority(1);
+    setActivationShapeId(ArtisticTextShapeID);
 }
 
 ArtisticTextToolFactory::~ArtisticTextToolFactory()
 {
 }
 
-KoToolBase * ArtisticTextToolFactory::createTool( KoCanvasBase * canvas )
+KoToolBase *ArtisticTextToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new ArtisticTextTool( canvas );
+    return new ArtisticTextTool(canvas);
 }
-

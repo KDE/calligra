@@ -10,22 +10,21 @@
 #define XFIGSTREAMLINEREADER_H
 
 // Qt
-#include <QTextStream>
 #include <QString>
+#include <QTextStream>
 
 class QIODevice;
-
 
 class XFigStreamLineReader
 {
 public:
-    enum CommentReadModus {DropComments, TakeComment, CollectComments};
+    enum CommentReadModus { DropComments, TakeComment, CollectComments };
 
-    explicit XFigStreamLineReader(QIODevice* device);
+    explicit XFigStreamLineReader(QIODevice *device);
     ~XFigStreamLineReader();
 
     bool atEnd() const;
-//     Error error() const;
+    //     Error error() const;
     QString errorString() const;
     bool hasError() const;
 
@@ -46,7 +45,6 @@ private:
     bool m_HasError;
     QString m_ErrorString;
 };
-
 
 inline bool XFigStreamLineReader::hasError() const
 {

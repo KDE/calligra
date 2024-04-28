@@ -50,9 +50,7 @@ public:
      * in @ref saveEmbeddedFiles. This function should be called from
      * within saveOdf in a shape or a document.
      */
-    void embedFile(KoXmlWriter &writer, const char *element,
-                   const QString &path, const QByteArray &mimeType,
-                   const QByteArray &contents);
+    void embedFile(KoXmlWriter &writer, const char *element, const QString &path, const QByteArray &mimeType, const QByteArray &contents);
 
     /**
      * Queues the file for saving into the store.
@@ -63,14 +61,12 @@ public:
      * reference to the file within content.xml, e.g. when the file is
      * part of an embedded object with embedded files within it.
      */
-    void saveFile(const QString &path, const QByteArray &mimeType,
-                  const QByteArray &contents);
+    void saveFile(const QString &path, const QByteArray &mimeType, const QByteArray &contents);
 
     /**
      *
      */
-    void saveManifestEntry(const QString &fullPath, const QString &mediaType,
-                           const QString &version = QString());
+    void saveManifestEntry(const QString &fullPath, const QString &mediaType, const QString &version = QString());
 
     /**
      * Save all embedded documents to the store.
@@ -79,7 +75,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
     Q_DISABLE_COPY(KoEmbeddedDocumentSaver)
 };
 

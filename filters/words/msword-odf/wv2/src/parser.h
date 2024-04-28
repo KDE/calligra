@@ -19,8 +19,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "sharedptr.h"
 #include "global.h"
+#include "sharedptr.h"
 #include "wv2_export.h"
 
 namespace wvWare
@@ -94,13 +94,16 @@ public:
      * to determine the nFib to select the proper parser... oh well
      * At least we take ownership ;)
      */
-    Parser( OLEStorage* storage, OLEStreamReader* wordDocument );
-    ~Parser() override;  // Don't forget to close everything properly here
+    Parser(OLEStorage *storage, OLEStreamReader *wordDocument);
+    ~Parser() override; // Don't forget to close everything properly here
 
     /**
      * Is everything alright?
      */
-    bool isOk() const { return m_okay; }
+    bool isOk() const
+    {
+        return m_okay;
+    }
 
     /**
      * Invokes the parsing process.
@@ -110,16 +113,16 @@ public:
     /**
      * Get the FIB (read only!)
      */
-    virtual const Word97::FIB& fib() const = 0;
+    virtual const Word97::FIB &fib() const = 0;
     /**
      * Get the DOP (read only!)
      */
-    virtual const Word97::DOP& dop() const = 0;
+    virtual const Word97::DOP &dop() const = 0;
 
     /**
      * Get the font family name structure for a given ftc.
      */
-    virtual const Word97::FFN& font( S16 ftc ) const = 0;
+    virtual const Word97::FFN &font(S16 ftc) const = 0;
 
     /**
      * Get the associated strings (author, title,...).
@@ -131,17 +134,17 @@ public:
     /**
      * This stylesheet holds all the styles inside the Word file
      */
-    virtual const StyleSheet& styleSheet() const = 0;
+    virtual const StyleSheet &styleSheet() const = 0;
 
     /**
      * This Drawings holds all the information about drawings the Word file
      */
-    virtual const Drawings* getDrawings() const = 0;
+    virtual const Drawings *getDrawings() const = 0;
 
     /**
      * This table holds actuald MS-Doc stream
      */
-    virtual OLEStreamReader* getTable() = 0;
+    virtual OLEStreamReader *getTable() = 0;
 
     /**
      * Look for textbox text data and process them.
@@ -154,57 +157,58 @@ public:
      * The inline replacement handler is used to replace certain characters on the fly.
      * We don't take ownership of the handler!
      */
-    void setInlineReplacementHandler( InlineReplacementHandler* handler );
+    void setInlineReplacementHandler(InlineReplacementHandler *handler);
     /**
      * The sub-document handler gets all callbacks related to the document structure.
      * We don't take ownership of the handler!
      */
-    void setSubDocumentHandler( SubDocumentHandler* handler );
+    void setSubDocumentHandler(SubDocumentHandler *handler);
     /**
      * The table handler is used to tell the consumer about table structures.
      * We don't take ownership of the handler!
      */
-    void setTableHandler( TableHandler* handler );
+    void setTableHandler(TableHandler *handler);
 
     /**
      * The text handler is the main worker among all handlers. It's used to forward
      * the formatted text to the document, make sure that it's fast.
      * We don't take ownership of the handler!
      */
-    void setTextHandler( TextHandler* handler );
+    void setTextHandler(TextHandler *handler);
     /**
      * The graphics handler is used to tell the consumer about MS-ODRAW structures.
      * We don't take ownership of the handler!
      */
-    void setGraphicsHandler( GraphicsHandler* handler );
+    void setGraphicsHandler(GraphicsHandler *handler);
 
     // Do we need public access to parts of the OLEStorage interface?
     // If we add public accessors we should make m_storage private.
 
 protected:
-    InlineReplacementHandler* m_inlineHandler;
-    SubDocumentHandler* m_subDocumentHandler;
-    TableHandler* m_tableHandler;
-    TextHandler* m_textHandler;
-    GraphicsHandler* m_graphicsHandler;
+    InlineReplacementHandler *m_inlineHandler;
+    SubDocumentHandler *m_subDocumentHandler;
+    TableHandler *m_tableHandler;
+    TextHandler *m_textHandler;
+    GraphicsHandler *m_graphicsHandler;
     bool m_ourInlineHandler;
     bool m_ourSubDocumentHandler;
     bool m_ourTableHandler;
     bool m_ourTextHandler;
     bool m_ourGraphicsHandler;
 
-    OLEStorage* m_storage;           // The storage representing the file
-    OLEStreamReader* m_wordDocument; // document stream ('WordDocument')
+    OLEStorage *m_storage; // The storage representing the file
+    OLEStreamReader *m_wordDocument; // document stream ('WordDocument')
 
-    bool m_okay;                     // Still alright?
+    bool m_okay; // Still alright?
 
 private:
-    Parser( const Parser& rhs );
-    Parser& operator=( const Parser& rhs );
+    Parser(const Parser &rhs);
+    Parser &operator=(const Parser &rhs);
 
-    template<typename Handler> void setHandler( Handler* newHandler, Handler** handler, bool& ourHandler )
+    template<typename Handler>
+    void setHandler(Handler *newHandler, Handler **handler, bool &ourHandler)
     {
-        if ( ourHandler ) {
+        if (ourHandler) {
             ourHandler = false;
             delete *handler;
         }

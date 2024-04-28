@@ -8,14 +8,12 @@
 #ifndef KCHART_KDCHARTCONVERTIONS_H
 #define KCHART_KDCHARTCONVERTIONS_H
 
-
 // KChart
-#include <KChartEnums>
 #include <KChartCartesianAxis>
+#include <KChartEnums>
 
 // KoChart
 #include "kochart_global.h"
-
 
 namespace KoChart
 {

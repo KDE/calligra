@@ -9,15 +9,15 @@
 #include "CSTProcessRunner.h"
 
 #include <QCoreApplication>
+#include <QDebug>
 #include <QDir>
 #include <QString>
-#include <QDebug>
 
 static const char PROGRAM[] = "cstwrapper.sh";
 
 CSTProcessRunner::CSTProcessRunner(const QString &documentDir, const QString &resultDir, int concurrentProcesses, bool pickup)
-: m_resultDir(resultDir)
-, m_concurrentProcesses(concurrentProcesses)
+    : m_resultDir(resultDir)
+    , m_concurrentProcesses(concurrentProcesses)
 {
     if (!QDir::current().exists(resultDir)) {
         qWarning() << "Creating result directory " << resultDir;
@@ -30,13 +30,13 @@ CSTProcessRunner::CSTProcessRunner(const QString &documentDir, const QString &re
     }
     QDir docDir(documentDir);
     QFileInfoList list = docDir.entryInfoList(QDir::Files, QDir::Name);
-    foreach(const QFileInfo &entry, list) {
+    foreach (const QFileInfo &entry, list) {
         m_documents.append(entry.filePath());
     }
     if (pickup) {
         QDir resDir(resultDir);
         QFileInfoList resList = resDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
-        foreach(const QFileInfo &entry, resList) {
+        foreach (const QFileInfo &entry, resList) {
             QString fileName = entry.fileName();
             if (fileName.endsWith(".check")) {
                 fileName.resize(fileName.length() - 6);
@@ -56,8 +56,7 @@ void CSTProcessRunner::start()
 {
     for (int i = 0; i < m_concurrentProcesses; ++i) {
         QProcess *process = new QProcess();
-        connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-                this, &CSTProcessRunner::processFinished);
+        connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &CSTProcessRunner::processFinished);
         startCstester(process);
     }
 }
@@ -86,25 +85,22 @@ void CSTProcessRunner::processFinished(int exitCode, QProcess::ExitStatus exitSt
                 if (exitCode & 127) {
                     int signal = exitCode & 127;
                     m_killed[signal].append(document);
-//                     qDebug() << "exit with signal:" << signal;
+                    //                     qDebug() << "exit with signal:" << signal;
                 }
                 startCstester(process);
-            }
-            else {
+            } else {
                 QString tmp(document);
                 document.clear();
                 startMd5(process, tmp);
             }
-        }
-        else {
+        } else {
             if (exitCode != 0) {
                 qWarning() << "cstmd5gen.sh failed";
             }
-//             qDebug() << "md5 done";
+            //             qDebug() << "md5 done";
             startCstester(process);
         }
-    }
-    else {
+    } else {
         qWarning("processFinished but progress not there");
     }
 }
@@ -125,11 +121,10 @@ void CSTProcessRunner::startCstester(QProcess *process)
 
             QCoreApplication::exit(0);
         }
-    }
-    else {
-        //TODO: check if result is already there and then do nothing
+    } else {
+        // TODO: check if result is already there and then do nothing
         QString document = m_documents.takeFirst();
-        //qDebug() << "start:" << process << document << m_resultDir;
+        // qDebug() << "start:" << process << document << m_resultDir;
         QStringList arguments;
         arguments << "--outdir" << m_resultDir << "--create" << document;
         m_processes[process] = document;
@@ -148,15 +143,14 @@ void CSTProcessRunner::startMd5(QProcess *process, const QString &document)
 
 void CSTProcessRunner::logResult()
 {
-    QMap<int, QList<QString> >::const_iterator it = m_killed.constBegin();
+    QMap<int, QList<QString>>::const_iterator it = m_killed.constBegin();
 
     QTextStream out(stdout);
     out << "Documents resulted in a signal\n";
     for (; it != m_killed.constEnd(); ++it) {
         out << "Signal " << it.key() << ", " << it.value().size() << " documents\n";
         QList<QString>::const_iterator lIt = it.value().constBegin();
-        for (; lIt != it.value().constEnd(); ++lIt)
-        {
+        for (; lIt != it.value().constEnd(); ++lIt) {
             out << *lIt << "\n";
         }
     }

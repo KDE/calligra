@@ -9,8 +9,8 @@
 
 #include "kowidgets_export.h"
 
-#include <KoText.h>
 #include <KoPageLayout.h>
+#include <KoText.h>
 #include <QWidget>
 
 class KoUnit;
@@ -56,7 +56,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

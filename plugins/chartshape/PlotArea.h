@@ -11,24 +11,24 @@
 #define KCHART_PLOTAREA_H
 
 // Qt
-#include <QObject>
 #include <QList>
+#include <QObject>
 
 // ChartShape
 #include "ChartShape.h"
 #include "DataSet.h"
 
-namespace KChart {
-    class CartesianCoordinatePlane;
-    class PolarCoordinatePlane;
-    class RadarCoordinatePlane;
+namespace KChart
+{
+class CartesianCoordinatePlane;
+class PolarCoordinatePlane;
+class RadarCoordinatePlane;
 }
-
 
 class Ko3dScene;
 
-
-namespace KoChart {
+namespace KoChart
+{
 
 /**
  * @brief The PlotArea class is the central chart element. It plots the data and draws the axes.
@@ -61,15 +61,15 @@ public:
 
     ChartProxyModel *proxyModel() const;
 
-    ChartType    chartType() const;
+    ChartType chartType() const;
     ChartSubtype chartSubType() const;
-    void         setChartType(ChartType type);
-    void         setChartSubType(ChartSubtype subType);
+    void setChartType(ChartType type);
+    void setChartSubType(ChartSubtype subType);
 
-    QList<Axis*>    axes() const;
-    QList<DataSet*> dataSets() const;
-    int             dataSetCount() const;
-    bool            addAxis(Axis *axis);
+    QList<Axis *> axes() const;
+    QList<DataSet *> dataSets() const;
+    int dataSetCount() const;
+    bool addAxis(Axis *axis);
     /// Remove and delete the @p axis.
     /// Also deletes the title
     bool removeAxis(Axis *axis);
@@ -126,7 +126,6 @@ public:
 
     void saveOdf(KoShapeSavingContext &context) const override;
     void saveOdfSubType(KoXmlWriter &bodyWriter, KoGenStyle &plotAreaStyle) const;
-
 
     void setThreeD(bool threeD);
 
@@ -195,4 +194,3 @@ private:
 } // Namespace KoChart
 
 #endif // KCHART_PLOTAREA_H
-

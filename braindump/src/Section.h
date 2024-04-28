@@ -29,24 +29,26 @@ class Layout;
 class SectionContainer;
 class RootSection;
 
-class Section :  public SectionGroup
+class Section : public SectionGroup
 {
 public:
-    explicit Section(RootSection* _rootSection);
-    Section(const Section& _rhs);
+    explicit Section(RootSection *_rootSection);
+    Section(const Section &_rhs);
     virtual ~Section();
+
 public:
-    SectionContainer* sectionContainer();
-    const QString& name() const;
-    void setName(const QString& _name);
-    Layout* layout();
-    void setLayout(Layout* layout);
+    SectionContainer *sectionContainer();
+    const QString &name() const;
+    void setName(const QString &_name);
+    Layout *layout();
+    void setLayout(Layout *layout);
+
 private:
-    Layout* m_layout;
-    SectionContainer* m_sectionContainer;
+    Layout *m_layout;
+    SectionContainer *m_sectionContainer;
     QString m_name;
 };
 
-Q_DECLARE_METATYPE(Section*)
+Q_DECLARE_METATYPE(Section *)
 
 #endif

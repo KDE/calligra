@@ -27,4 +27,3 @@ FunctorBase::~FunctorBase()
 void FunctorBase::operator()() const
 {
 }
-

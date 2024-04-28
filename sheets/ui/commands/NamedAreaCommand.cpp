@@ -6,17 +6,17 @@
 
 #include "NamedAreaCommand.h"
 
+#include "core/Sheet.h"
 #include "engine/Damages.h"
 #include "engine/FormulaStorage.h"
 #include "engine/MapBase.h"
 #include "engine/NamedAreaManager.h"
-#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
-NamedAreaCommand::NamedAreaCommand(KUndo2Command* parent)
-        : AbstractRegionCommand(parent)
-        , m_remove(false)
+NamedAreaCommand::NamedAreaCommand(KUndo2Command *parent)
+    : AbstractRegionCommand(parent)
+    , m_remove(false)
 {
     setText(kundo2_i18n("Add Named Area"));
 }
@@ -25,12 +25,12 @@ NamedAreaCommand::~NamedAreaCommand()
 {
 }
 
-void NamedAreaCommand::setAreaName(const QString& name)
+void NamedAreaCommand::setAreaName(const QString &name)
 {
     m_areaName = name;
 }
 
-void NamedAreaCommand::setNewAreaName(const QString& name)
+void NamedAreaCommand::setNewAreaName(const QString &name)
 {
     m_newAreaName = name;
 }
@@ -46,12 +46,14 @@ void NamedAreaCommand::setRemove(bool remove)
 
 bool NamedAreaCommand::preProcess()
 {
-    if (!m_firstrun) return true;
+    if (!m_firstrun)
+        return true;
 
     const Region namedArea = m_sheet->map()->namedAreaManager()->namedArea(m_areaName);
     if (!namedArea.isEmpty())
         m_oldArea = namedArea;
-    if (m_remove) return true;
+    if (m_remove)
+        return true;
     // no protection or matrix lock check needed
     return isContiguous();
 }
@@ -66,11 +68,13 @@ bool NamedAreaCommand::performNonCommandActions()
             manager->remove(m_areaName);
 
         QString name = m_newAreaName;
-        if (!name.length()) name = m_areaName;
+        if (!name.length())
+            name = m_areaName;
         manager->insert(*this, name);
     } else {
         QString name = m_newAreaName;
-        if (!name.length()) name = m_areaName;
+        if (!name.length())
+            name = m_areaName;
         manager->remove(name);
         if (!m_oldArea.isEmpty())
             manager->insert(m_oldArea, m_areaName);
@@ -85,5 +89,3 @@ bool NamedAreaCommand::undoNonCommandActions()
     m_remove = !m_remove;
     return true;
 }
-
-

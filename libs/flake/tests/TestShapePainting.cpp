@@ -38,7 +38,7 @@ void TestShapePainting::testPaintShape()
     manager.addShape(container);
     QCOMPARE(manager.shapes().count(), 3);
 
-    QImage image(100, 100,  QImage::Format_Mono);
+    QImage image(100, 100, QImage::Format_Mono);
     QPainter painter(&image);
     KoViewConverter vc;
     manager.paint(painter, vc, false);
@@ -58,7 +58,6 @@ void TestShapePainting::testPaintShape()
     QCOMPARE(shape2->paintedCount, 0);
     QCOMPARE(container->paintedCount, 1);
 
-
     container->setClipped(shape1, false);
     container->setClipped(shape2, true);
     QCOMPARE(container->isClipped(shape1), false);
@@ -68,7 +67,6 @@ void TestShapePainting::testPaintShape()
     shape2->paintedCount = 0;
     container->paintedCount = 0;
     manager.paint(painter, vc, false);
-
 
     // with this shape not being clipped, the shapeManager will paint the container and this shape
     QCOMPARE(shape1->paintedCount, 1);
@@ -99,7 +97,7 @@ void TestShapePainting::testPaintHiddenShape()
     manager.addShape(top);
     QCOMPARE(manager.shapes().count(), 5);
 
-    QImage image(100, 100,  QImage::Format_Mono);
+    QImage image(100, 100, QImage::Format_Mono);
     QPainter painter(&image);
     KoViewConverter vc;
     manager.paint(painter, vc, false);
@@ -123,17 +121,22 @@ void TestShapePainting::testPaintOrder()
     // with both various child shapes the stacking order of the layer shapes
     // is most important, then within this the child shape index is used.
 
-    class OrderedMockShape : public MockShape {
+    class OrderedMockShape : public MockShape
+    {
     public:
-        OrderedMockShape(QList<MockShape*> &list) : order(list) {}
-        void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override {
+        OrderedMockShape(QList<MockShape *> &list)
+            : order(list)
+        {
+        }
+        void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override
+        {
             order.append(this);
             MockShape::paint(painter, converter, paintcontext);
         }
-        QList<MockShape*> &order;
+        QList<MockShape *> &order;
     };
 
-    QList<MockShape*> order;
+    QList<MockShape *> order;
 
     MockContainer *top = new MockContainer();
     top->setZIndex(2);
@@ -159,7 +162,7 @@ void TestShapePainting::testPaintOrder()
     manager.addShape(bottom);
     QCOMPARE(manager.shapes().count(), 6);
 
-    QImage image(100, 100,  QImage::Format_Mono);
+    QImage image(100, 100, QImage::Format_Mono);
     QPainter painter(&image);
     KoViewConverter vc;
     manager.paint(painter, vc, false);
@@ -215,17 +218,17 @@ void TestShapePainting::testPaintOrder()
     child2_2->setZIndex(2);
     branch2->addShape(child2_1);
     branch2->addShape(child2_2);
- 
+
     root->addShape(branch1);
     root->addShape(branch2);
-    
-    QList<KoShape*> sortedShapes;
+
+    QList<KoShape *> sortedShapes;
     sortedShapes.append(root);
     sortedShapes.append(branch1);
     sortedShapes.append(branch2);
     sortedShapes.append(branch1->shapes());
     sortedShapes.append(branch2->shapes());
-    
+
     std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     QCOMPARE(sortedShapes.count(), 7);
     QVERIFY(sortedShapes[0] == root);

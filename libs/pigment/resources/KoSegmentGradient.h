@@ -10,46 +10,43 @@
 #ifndef KOSEGMENTGRADIENT_H
 #define KOSEGMENTGRADIENT_H
 
-#include <QList>
 #include <QColor>
+#include <QList>
 
-#include <KoResource.h>
 #include "KoAbstractGradient.h"
 #include "KoColor.h"
+#include <KoResource.h>
 
 #include <pigment_export.h>
 
+enum { INTERP_LINEAR = 0, INTERP_CURVED, INTERP_SINE, INTERP_SPHERE_INCREASING, INTERP_SPHERE_DECREASING };
 
-enum {
-    INTERP_LINEAR = 0,
-    INTERP_CURVED,
-    INTERP_SINE,
-    INTERP_SPHERE_INCREASING,
-    INTERP_SPHERE_DECREASING
-};
-
-enum {
-    COLOR_INTERP_RGB,
-    COLOR_INTERP_HSV_CCW,
-    COLOR_INTERP_HSV_CW
-};
+enum { COLOR_INTERP_RGB, COLOR_INTERP_HSV_CCW, COLOR_INTERP_HSV_CW };
 
 /// Write API docs here
 class PIGMENTCMS_EXPORT KoGradientSegment
 {
 public:
-    KoGradientSegment(int interpolationType, int colorInterpolationType, qreal startOffset, qreal middleOffset, qreal endOffset, const KoColor& startColor, const KoColor& endColor);
+    KoGradientSegment(int interpolationType,
+                      int colorInterpolationType,
+                      qreal startOffset,
+                      qreal middleOffset,
+                      qreal endOffset,
+                      const KoColor &startColor,
+                      const KoColor &endColor);
 
     // startOffset <= t <= endOffset
-    void colorAt(KoColor&, qreal t) const;
+    void colorAt(KoColor &, qreal t) const;
 
-    const KoColor& startColor() const;
-    const KoColor& endColor() const;
+    const KoColor &startColor() const;
+    const KoColor &endColor() const;
 
-    void setStartColor(const KoColor& color) {
+    void setStartColor(const KoColor &color)
+    {
         m_startColor = color;
     }
-    void setEndColor(const KoColor& color) {
+    void setEndColor(const KoColor &color)
+    {
         m_endColor = color;
     }
 
@@ -61,7 +58,8 @@ public:
     void setMiddleOffset(qreal t);
     void setEndOffset(qreal t);
 
-    qreal length() {
+    qreal length()
+    {
         return m_length;
     }
 
@@ -72,15 +70,19 @@ public:
     void setColorInterpolation(int colorInterpolationType);
 
     bool isValid() const;
-protected:
 
+protected:
     class ColorInterpolationStrategy
     {
     public:
-        ColorInterpolationStrategy() {}
-        virtual ~ColorInterpolationStrategy() {}
+        ColorInterpolationStrategy()
+        {
+        }
+        virtual ~ColorInterpolationStrategy()
+        {
+        }
 
-        virtual void colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const = 0;
+        virtual void colorAt(KoColor &dst, qreal t, const KoColor &start, const KoColor &end) const = 0;
         virtual int type() const = 0;
     };
 
@@ -89,8 +91,9 @@ protected:
     public:
         static RGBColorInterpolationStrategy *instance();
 
-        void colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const override;
-        int type() const override {
+        void colorAt(KoColor &dst, qreal t, const KoColor &start, const KoColor &end) const override;
+        int type() const override
+        {
             return COLOR_INTERP_RGB;
         }
 
@@ -98,7 +101,7 @@ protected:
         RGBColorInterpolationStrategy();
 
         static RGBColorInterpolationStrategy *m_instance;
-        const KoColorSpace * const m_colorSpace;
+        const KoColorSpace *const m_colorSpace;
         mutable KoColor buffer;
         mutable KoColor m_start;
         mutable KoColor m_end;
@@ -109,15 +112,17 @@ protected:
     public:
         static HSVCWColorInterpolationStrategy *instance();
 
-        void colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const override;
-        int type() const override {
+        void colorAt(KoColor &dst, qreal t, const KoColor &start, const KoColor &end) const override;
+        int type() const override
+        {
             return COLOR_INTERP_HSV_CW;
         }
+
     private:
         HSVCWColorInterpolationStrategy();
 
         static HSVCWColorInterpolationStrategy *m_instance;
-        const KoColorSpace * const m_colorSpace;
+        const KoColorSpace *const m_colorSpace;
     };
 
     class HSVCCWColorInterpolationStrategy : public ColorInterpolationStrategy
@@ -125,22 +130,28 @@ protected:
     public:
         static HSVCCWColorInterpolationStrategy *instance();
 
-        void colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const override;
-        int type() const override {
+        void colorAt(KoColor &dst, qreal t, const KoColor &start, const KoColor &end) const override;
+        int type() const override
+        {
             return COLOR_INTERP_HSV_CCW;
         }
+
     private:
         HSVCCWColorInterpolationStrategy();
 
         static HSVCCWColorInterpolationStrategy *m_instance;
-        const KoColorSpace * const m_colorSpace;
+        const KoColorSpace *const m_colorSpace;
     };
 
     class InterpolationStrategy
     {
     public:
-        InterpolationStrategy() {}
-        virtual ~InterpolationStrategy() {}
+        InterpolationStrategy()
+        {
+        }
+        virtual ~InterpolationStrategy()
+        {
+        }
 
         virtual qreal valueAt(qreal t, qreal middle) const = 0;
         virtual int type() const = 0;
@@ -152,7 +163,8 @@ protected:
         static LinearInterpolationStrategy *instance();
 
         qreal valueAt(qreal t, qreal middle) const override;
-        int type() const override {
+        int type() const override
+        {
             return INTERP_LINEAR;
         }
 
@@ -162,7 +174,9 @@ protected:
         static qreal calcValueAt(qreal t, qreal middle);
 
     private:
-        LinearInterpolationStrategy() {}
+        LinearInterpolationStrategy()
+        {
+        }
 
         static LinearInterpolationStrategy *m_instance;
     };
@@ -173,9 +187,11 @@ protected:
         static CurvedInterpolationStrategy *instance();
 
         qreal valueAt(qreal t, qreal middle) const override;
-        int type() const override {
+        int type() const override
+        {
             return INTERP_CURVED;
         }
+
     private:
         CurvedInterpolationStrategy();
 
@@ -189,11 +205,15 @@ protected:
         static SphereIncreasingInterpolationStrategy *instance();
 
         qreal valueAt(qreal t, qreal middle) const override;
-        int type() const override {
+        int type() const override
+        {
             return INTERP_SPHERE_INCREASING;
         }
+
     private:
-        SphereIncreasingInterpolationStrategy() {}
+        SphereIncreasingInterpolationStrategy()
+        {
+        }
 
         static SphereIncreasingInterpolationStrategy *m_instance;
     };
@@ -204,11 +224,15 @@ protected:
         static SphereDecreasingInterpolationStrategy *instance();
 
         qreal valueAt(qreal t, qreal middle) const override;
-        int type() const override {
+        int type() const override
+        {
             return INTERP_SPHERE_DECREASING;
         }
+
     private:
-        SphereDecreasingInterpolationStrategy() {}
+        SphereDecreasingInterpolationStrategy()
+        {
+        }
 
         static SphereDecreasingInterpolationStrategy *m_instance;
     };
@@ -219,14 +243,19 @@ protected:
         static SineInterpolationStrategy *instance();
 
         qreal valueAt(qreal t, qreal middle) const override;
-        int type() const override {
+        int type() const override
+        {
             return INTERP_SINE;
         }
+
     private:
-        SineInterpolationStrategy() {}
+        SineInterpolationStrategy()
+        {
+        }
 
         static SineInterpolationStrategy *m_instance;
     };
+
 private:
     InterpolationStrategy *m_interpolator;
     ColorInterpolationStrategy *m_colorInterpolator;
@@ -242,16 +271,15 @@ private:
 };
 
 /**
-  * KoSegmentGradient stores a segment based gradients like Gimp gradients
-  */
+ * KoSegmentGradient stores a segment based gradients like Gimp gradients
+ */
 class PIGMENTCMS_EXPORT KoSegmentGradient : public KoAbstractGradient
 {
-
 public:
     explicit KoSegmentGradient(const QString &file);
     ~KoSegmentGradient() override;
 
-    KoAbstractGradient* clone() const override;
+    KoAbstractGradient *clone() const override;
 
     /// reimplemented
     bool load() override;
@@ -259,10 +287,10 @@ public:
 
     /// not implemented
     bool save() override;
-    bool saveToDevice(QIODevice* dev) const override;
+    bool saveToDevice(QIODevice *dev) const override;
 
     /// reimplemented
-    void colorAt(KoColor& dst, qreal t) const override;
+    void colorAt(KoColor &dst, qreal t) const override;
 
     /**
      * Returns the segment at a given position
@@ -272,12 +300,12 @@ public:
     KoGradientSegment *segmentAt(qreal t) const;
 
     /// reimplemented
-    QGradient* toQGradient() const override;
+    QGradient *toQGradient() const override;
 
     /// reimplemented
     QString defaultFileExtension() const override;
 
-        /**
+    /**
      * a gradient colour picker can consist of one or more segments.
      * A segment has two end points - each colour in the gradient
      * colour picker represents a segment end point.
@@ -290,7 +318,13 @@ public:
      * @param right
      * @return void
      */
-    void createSegment(int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, const QColor & left, const QColor & right);
+    void createSegment(int interpolation,
+                       int colorInterpolation,
+                       double startOffset,
+                       double endOffset,
+                       double middleOffset,
+                       const QColor &left,
+                       const QColor &right);
 
     /**
      * gets a list of end points of the segments in the gradient
@@ -322,7 +356,7 @@ public:
      * @param t the new startoff position for the segment
      * @return void
      */
-    void moveSegmentStartOffset(KoGradientSegment* segment, double t);
+    void moveSegmentStartOffset(KoGradientSegment *segment, double t);
 
     /**
      * Moves the endoffset of the specified segment to the specified
@@ -338,7 +372,7 @@ public:
      * @param t the new end position for the segment
      * @return void
      */
-    void moveSegmentEndOffset(KoGradientSegment* segment, double t);
+    void moveSegmentEndOffset(KoGradientSegment *segment, double t);
 
     /**
      * moves the Middle of the specified segment to the specified
@@ -351,28 +385,28 @@ public:
      * @param t the new middle position for the segment
      * @return void
      */
-    void moveSegmentMiddleOffset(KoGradientSegment* segment, double t);
+    void moveSegmentMiddleOffset(KoGradientSegment *segment, double t);
 
     /**
      * splits the specified segment into two equal parts
      * @param segment the segment to split
      * @return void
      */
-    void splitSegment(KoGradientSegment* segment);
+    void splitSegment(KoGradientSegment *segment);
 
     /**
      * duplicate the specified segment
      * @param segment the segment to duplicate
      * @return void
      */
-    void duplicateSegment(KoGradientSegment* segment);
+    void duplicateSegment(KoGradientSegment *segment);
 
     /**
      * create a segment horizontally reversed to the specified one.
      * @param segment the segment to reverse
      * @return void
      */
-    void mirrorSegment(KoGradientSegment* segment);
+    void mirrorSegment(KoGradientSegment *segment);
 
     /**
      * removes the specific segment from the gradient colour picker.
@@ -381,7 +415,7 @@ public:
      * segment. 0 if the segment is not in the gradient or it is
      * not possible to remove the segment.
      */
-    KoGradientSegment* removeSegment(KoGradientSegment* segment);
+    KoGradientSegment *removeSegment(KoGradientSegment *segment);
 
     /**
      * checks if it's possible to remove a segment (at least two
@@ -390,20 +424,20 @@ public:
      */
     bool removeSegmentPossible() const;
 
-    const QList<KoGradientSegment *>& segments() const;
+    const QList<KoGradientSegment *> &segments() const;
 
 protected:
     KoSegmentGradient(const KoSegmentGradient &rhs);
 
-    inline void pushSegment(KoGradientSegment* segment) {
+    inline void pushSegment(KoGradientSegment *segment)
+    {
         m_segments.push_back(segment);
     }
 
     QList<KoGradientSegment *> m_segments;
 
-    private:
+private:
     bool init();
 };
 
 #endif // KOSEGMENTGRADIENT_H
-

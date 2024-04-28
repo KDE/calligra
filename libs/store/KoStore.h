@@ -8,9 +8,9 @@
 #ifndef __koStore_h_
 #define __koStore_h_
 
+#include "kostore_export.h"
 #include <QByteArray>
 #include <QIODevice>
-#include "kostore_export.h"
 
 class QWidget;
 class QUrl;
@@ -25,7 +25,6 @@ class KoStorePrivate;
 class KOSTORE_EXPORT KoStore
 {
 public:
-
     enum Mode { Read, Write };
     enum Backend { Auto, Tar, Zip, Directory, Encrypted };
 
@@ -48,18 +47,16 @@ public:
      * fill it with data from the appIdentification. This is only
      * applicable if Mode is set to Write.
      */
-    static KoStore *createStore(const QString &fileName, Mode mode,
-                                const QByteArray &appIdentification = QByteArray(),
-                                Backend backend = Auto, bool writeMimetype = true);
+    static KoStore *
+    createStore(const QString &fileName, Mode mode, const QByteArray &appIdentification = QByteArray(), Backend backend = Auto, bool writeMimetype = true);
 
     /**
      * Create a store for any kind of QIODevice: file, memory buffer...
      * KoStore will take care of opening the QIODevice.
      * This method doesn't support the Directory store!
      */
-    static KoStore *createStore(QIODevice *device, Mode mode,
-                                const QByteArray &appIdentification = QByteArray(),
-                                Backend backend = Auto, bool writeMimetype = true);
+    static KoStore *
+    createStore(QIODevice *device, Mode mode, const QByteArray &appIdentification = QByteArray(), Backend backend = Auto, bool writeMimetype = true);
 
     /**
      * Open a store (i.e. the representation on disk of a Calligra document).
@@ -85,8 +82,12 @@ public:
      *
      * @bug saving not completely implemented (fixed temporary file)
      */
-    static KoStore *createStore(QWidget *window, const QUrl &url, Mode mode,
-                                const QByteArray &appIdentification = QByteArray(), Backend backend = Auto, bool writeMimetype = true);
+    static KoStore *createStore(QWidget *window,
+                                const QUrl &url,
+                                Mode mode,
+                                const QByteArray &appIdentification = QByteArray(),
+                                Backend backend = Auto,
+                                bool writeMimetype = true);
 
     /**
      * Destroys the store (i.e. closes the file on the hard disk)
@@ -151,7 +152,7 @@ public:
      * Write data into the currently opened file. You can also use the streams
      * for this.
      */
-    virtual qint64 write(const char* data, qint64 length);
+    virtual qint64 write(const char *data, qint64 length);
 
     /**
      * @return the size of the currently opened file, -1 on error.
@@ -307,7 +308,8 @@ protected:
      * Finalize store - called by finalize.
      * @return true on success
      */
-    virtual bool doFinalize() {
+    virtual bool doFinalize()
+    {
         return true;
     }
 
@@ -360,8 +362,8 @@ private:
     Q_DECLARE_PRIVATE(KoStore)
 
 private:
-    KoStore(const KoStore& store);    ///< don't copy
-    KoStore& operator=(const KoStore& store);    ///< don't assign
+    KoStore(const KoStore &store); ///< don't copy
+    KoStore &operator=(const KoStore &store); ///< don't assign
 };
 
 #endif

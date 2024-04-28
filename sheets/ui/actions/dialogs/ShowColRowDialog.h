@@ -26,11 +26,11 @@ namespace Sheets
  * \ingroup UI
  * Dialog to show hidden columns/rows.
  */
-class ShowColRowDialog: public KoDialog
+class ShowColRowDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    ShowColRowDialog(QWidget* parent, bool rows);
+    ShowColRowDialog(QWidget *parent, bool rows);
 
     void setList(const QVector<QString> &captions);
     QVector<int> selectedIndexes() const;
@@ -40,7 +40,7 @@ public Q_SLOTS:
     void slotDoubleClicked(QListWidgetItem *);
 
 protected:
-    QListWidget * list;
+    QListWidget *list;
 };
 
 } // namespace Sheets

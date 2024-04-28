@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2017 Dag Andersen <danders@get2net.dk>
  * SPDX-FileCopyrightText: 2012 Brijesh Patel <brijesh3105@gmail.com>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -14,7 +14,6 @@
 // KoChart
 #include "kochart_global.h"
 
-
 class KoShape;
 
 #if 0
@@ -25,7 +24,6 @@ class AbstractDiagram;
 class Chart;
 }
 #endif
-
 
 namespace KoChart
 {
@@ -40,7 +38,7 @@ public:
     /**
      * Constructor.
      */
-    ChartTextShapeCommand(KoShape* textShape, ChartShape* chart, bool isVisible, KUndo2Command *parent = 0);
+    ChartTextShapeCommand(KoShape *textShape, ChartShape *chart, bool isVisible, KUndo2Command *parent = 0);
 
     /**
      * Destructor.

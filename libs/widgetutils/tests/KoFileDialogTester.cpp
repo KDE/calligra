@@ -8,16 +8,16 @@
 #include "ui_KoFileDialogTester.h"
 
 #include <QApplication>
-#include <QStandardPaths>
-#include <QListWidget>
 #include <QCheckBox>
+#include <QListWidget>
 #include <QRadioButton>
+#include <QStandardPaths>
 
 #include <KoFileDialog.h>
 
-KoFileDialogTester::KoFileDialogTester(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::KoFileDialogTester)
+KoFileDialogTester::KoFileDialogTester(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::KoFileDialogTester)
 {
     ui->setupUi(this);
 
@@ -29,32 +29,27 @@ KoFileDialogTester::KoFileDialogTester(QWidget *parent) :
     connect(ui->bnImportDirectory, &QAbstractButton::clicked, this, &KoFileDialogTester::testImportDirectory);
     connect(ui->bnSaveFile, &QAbstractButton::clicked, this, &KoFileDialogTester::testSaveFile);
 
-    m_nameFilters << QStringLiteral("Documents (*.odt *.doc *.txt)")
-                << QStringLiteral("Images (*.png *.jpg *.jpeg)")
-                << QStringLiteral("Presentations (*.ppt *.odp)")
-                << QStringLiteral("Patterns (*.pat *.jpg *.gif *.png *.tif *.xpm *.bmp)")
-                << QStringLiteral("Palettes (*.gpl *.pal *.act *.aco *.colors)");
+    m_nameFilters << QStringLiteral("Documents (*.odt *.doc *.txt)") << QStringLiteral("Images (*.png *.jpg *.jpeg)")
+                  << QStringLiteral("Presentations (*.ppt *.odp)") << QStringLiteral("Patterns (*.pat *.jpg *.gif *.png *.tif *.xpm *.bmp)")
+                  << QStringLiteral("Palettes (*.gpl *.pal *.act *.aco *.colors)");
 
-    m_mimeFilter = QStringList()
-            << QStringLiteral("image/x-exr") << QStringLiteral("image/openraster") << QStringLiteral("image/x-tga") << QStringLiteral("image/vnd.adobe.photoshop")
-            << QStringLiteral("image/x-xcf") << QStringLiteral("image/x-portable-pixmap") << QStringLiteral("image/x-portable-graymap")
-            << QStringLiteral("image/x-portable-bitmap") << QStringLiteral("image/png") << QStringLiteral("image/jp2")
-            << QStringLiteral("image/tiff") << QStringLiteral("application/vnd.oasis.opendocument.graphics")
-            << QStringLiteral("application/pdf") << QStringLiteral("image/jpeg") << QStringLiteral("image/bmp") << QStringLiteral("image/x-xpixmap")
-            << QStringLiteral("image/gif") << QStringLiteral("image/x-xbitmap")
-            << QStringLiteral("image/x-adobe-dng") << QStringLiteral("image/x-xfig") << QStringLiteral("image/svg+xml") << QStringLiteral("image/svg+xml-compressed")
-            << QStringLiteral("image/x-eps") << QStringLiteral("image/eps") << QStringLiteral("application/eps") << QStringLiteral("application/x-eps") << QStringLiteral("application/postscript")
-            << QStringLiteral("image/x-wmf") << QStringLiteral("application/x-karbon")
-            << QStringLiteral("image/tiff") << QStringLiteral("application/vnd.oasis.opendocument.graphics")
-            ;
+    m_mimeFilter = QStringList() << QStringLiteral("image/x-exr") << QStringLiteral("image/openraster") << QStringLiteral("image/x-tga")
+                                 << QStringLiteral("image/vnd.adobe.photoshop") << QStringLiteral("image/x-xcf") << QStringLiteral("image/x-portable-pixmap")
+                                 << QStringLiteral("image/x-portable-graymap") << QStringLiteral("image/x-portable-bitmap") << QStringLiteral("image/png")
+                                 << QStringLiteral("image/jp2") << QStringLiteral("image/tiff") << QStringLiteral("application/vnd.oasis.opendocument.graphics")
+                                 << QStringLiteral("application/pdf") << QStringLiteral("image/jpeg") << QStringLiteral("image/bmp")
+                                 << QStringLiteral("image/x-xpixmap") << QStringLiteral("image/gif") << QStringLiteral("image/x-xbitmap")
+                                 << QStringLiteral("image/x-adobe-dng") << QStringLiteral("image/x-xfig") << QStringLiteral("image/svg+xml")
+                                 << QStringLiteral("image/svg+xml-compressed") << QStringLiteral("image/x-eps") << QStringLiteral("image/eps")
+                                 << QStringLiteral("application/eps") << QStringLiteral("application/x-eps") << QStringLiteral("application/postscript")
+                                 << QStringLiteral("image/x-wmf") << QStringLiteral("application/x-karbon") << QStringLiteral("image/tiff")
+                                 << QStringLiteral("application/vnd.oasis.opendocument.graphics");
 }
 
 KoFileDialogTester::~KoFileDialogTester()
 {
     delete ui;
 }
-
-
 
 void KoFileDialogTester::testOpenFile()
 {
@@ -63,22 +58,17 @@ void KoFileDialogTester::testOpenFile()
     dlg.setCaption(QStringLiteral("Testing: OpenFile"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
-
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
+        } else {
             dlg.setNameFilters(m_nameFilters);
         }
-    }
-    else {
+    } else {
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
+        } else {
             dlg.setMimeTypeFilters(m_mimeFilter);
         }
-
     }
 
     if (ui->chkHideNameFilterDetailsOption->isChecked()) {
@@ -89,7 +79,6 @@ void KoFileDialogTester::testOpenFile()
     ui->listResults->addItem(url);
     ui->lblMime->setText(dlg.selectedMimeType());
     ui->txtFilter->setText(dlg.selectedNameFilter());
-
 }
 
 void KoFileDialogTester::testOpenFiles()
@@ -99,23 +88,18 @@ void KoFileDialogTester::testOpenFiles()
     dlg.setCaption(QStringLiteral("Testing: OpenFile"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
-
-          if (ui->chkSetDefaultFilter->isChecked()) {
+        if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
+        } else {
             dlg.setNameFilters(m_nameFilters);
         }
 
-    }
-    else {
-           if (ui->chkSetDefaultFilter->isChecked()) {
+    } else {
+        if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
+        } else {
             dlg.setMimeTypeFilters(m_mimeFilter);
         }
-
     }
 
     if (ui->chkHideNameFilterDetailsOption->isChecked()) {
@@ -123,7 +107,7 @@ void KoFileDialogTester::testOpenFiles()
     }
 
     QStringList urls = dlg.filenames();
-    foreach(const QString &url, urls) {
+    foreach (const QString &url, urls) {
         ui->listResults->addItem(url);
     }
     ui->lblMime->setText(dlg.selectedMimeType());
@@ -137,23 +121,18 @@ void KoFileDialogTester::testOpenDirectory()
     dlg.setCaption(QStringLiteral("Testing: OpenDirectory"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
-
-         if (ui->chkSetDefaultFilter->isChecked()) {
+        if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
+        } else {
             dlg.setNameFilters(m_nameFilters);
         }
 
-    }
-    else {
-         if (ui->chkSetDefaultFilter->isChecked()) {
+    } else {
+        if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
+        } else {
             dlg.setMimeTypeFilters(m_mimeFilter);
         }
-
     }
 
     if (ui->chkHideNameFilterDetailsOption->isChecked()) {
@@ -166,7 +145,6 @@ void KoFileDialogTester::testOpenDirectory()
     ui->txtFilter->setText(dlg.selectedNameFilter());
 }
 
-
 void KoFileDialogTester::testImportFile()
 {
     ui->listResults->clear();
@@ -175,24 +153,18 @@ void KoFileDialogTester::testImportFile()
     dlg.setCaption(QStringLiteral("Testing: ImportFile"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
-
-         if (ui->chkSetDefaultFilter->isChecked()) {
+        if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
+        } else {
             dlg.setNameFilters(m_nameFilters);
         }
 
-    }
-    else {
-
+    } else {
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
+        } else {
             dlg.setMimeTypeFilters(m_mimeFilter);
         }
-
     }
 
     if (ui->chkHideNameFilterDetailsOption->isChecked()) {
@@ -212,31 +184,26 @@ void KoFileDialogTester::testImportFiles()
     dlg.setCaption(QStringLiteral("Testing: ImportFiles"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
-
-         if (ui->chkSetDefaultFilter->isChecked()) {
+        if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
+        } else {
             dlg.setNameFilters(m_nameFilters);
         }
 
-    }
-    else {
-
+    } else {
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
+        } else {
             dlg.setMimeTypeFilters(m_mimeFilter);
         }
-
     }
 
     if (ui->chkHideNameFilterDetailsOption->isChecked()) {
         dlg.setHideNameFilterDetailsOption();
     }
 
-    QStringList urls = dlg.filenames(); foreach(const QString &url, urls) {
+    QStringList urls = dlg.filenames();
+    foreach (const QString &url, urls) {
         ui->listResults->addItem(url);
     }
     ui->lblMime->setText(dlg.selectedMimeType());
@@ -250,23 +217,18 @@ void KoFileDialogTester::testImportDirectory()
     dlg.setCaption(QStringLiteral("Testing: Import Directory"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
-
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
+        } else {
             dlg.setNameFilters(m_nameFilters);
         }
 
-    }
-    else {
-            if (ui->chkSetDefaultFilter->isChecked()) {
+    } else {
+        if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
+        } else {
             dlg.setMimeTypeFilters(m_mimeFilter);
         }
-
     }
 
     if (ui->chkHideNameFilterDetailsOption->isChecked()) {
@@ -289,20 +251,15 @@ void KoFileDialogTester::testSaveFile()
     if (ui->radioName->isChecked()) {
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
+        } else {
             dlg.setNameFilters(m_nameFilters);
         }
-    }
-    else {
-
+    } else {
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
+        } else {
             dlg.setMimeTypeFilters(m_mimeFilter);
         }
-
     }
 
     if (ui->chkHideNameFilterDetailsOption->isChecked()) {

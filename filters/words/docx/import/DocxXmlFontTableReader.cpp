@@ -24,21 +24,20 @@
 
 #include <MsooXmlReader_p.h>
 
-
-DocxXmlFontTableReaderContext::DocxXmlFontTableReaderContext(KoGenStyles& _styles)
-        : styles(&_styles)
+DocxXmlFontTableReaderContext::DocxXmlFontTableReaderContext(KoGenStyles &_styles)
+    : styles(&_styles)
 {
 }
 
 DocxXmlFontTableReader::DocxXmlFontTableReader(KoOdfWriters *writers)
-        : MSOOXML::MsooXmlReader(writers)
-        , m_context(0)
+    : MSOOXML::MsooXmlReader(writers)
+    , m_context(0)
 {
 }
 
-DocxXmlFontTableReader::DocxXmlFontTableReader(QIODevice* io, KoOdfWriters *writers)
-        : MSOOXML::MsooXmlReader(io, writers)
-        , m_context(0)
+DocxXmlFontTableReader::DocxXmlFontTableReader(QIODevice *io, KoOdfWriters *writers)
+    : MSOOXML::MsooXmlReader(io, writers)
+    , m_context(0)
 {
 }
 
@@ -46,16 +45,16 @@ DocxXmlFontTableReader::~DocxXmlFontTableReader()
 {
 }
 
-KoFilter::ConversionStatus DocxXmlFontTableReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus DocxXmlFontTableReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<DocxXmlFontTableReaderContext*>(context);
+    m_context = dynamic_cast<DocxXmlFontTableReaderContext *>(context);
     debugDocx << "=============================";
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
     }
 
-    //w:document
+    // w:document
     readNext();
     debugDocx << namespaceUri();
 
@@ -75,13 +74,13 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read(MSOOXML::MsooXmlReaderCo
     for (int i = 0; i < namespaces.count(); i++) {
         debugDocx << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
-//! @todo find out whether the namespace returned by namespaceUri()
-//!       is exactly the same ref as the element of namespaceDeclarations()
+    //! @todo find out whether the namespace returned by namespaceUri()
+    //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration("w", MSOOXML::Schemas::wordprocessingml))) {
         raiseError(i18n("Namespace \"%1\" not found", QLatin1String(MSOOXML::Schemas::wordprocessingml)));
         return KoFilter::WrongFormat;
     }
-//! @todo expect other namespaces too...
+    //! @todo expect other namespaces too...
 
     TRY_READ(fonts)
 
@@ -158,7 +157,7 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_font()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-// CASE #1100
+    // CASE #1100
     /*! Specifies the primary name of the current font.
         This name shall be used to link the information stored
         in this element with uses of this value in the rFonts element
@@ -176,7 +175,7 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_font()
             TRY_READ_IF(family)
             ELSE_TRY_READ_IF(pitch)
             SKIP_UNKNOWN
-//! @todo add ELSE_WRONG_FORMAT
+            //! @todo add ELSE_WRONG_FORMAT
         }
     }
 

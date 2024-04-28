@@ -6,33 +6,31 @@
 
 #include "TableOfContentsStyleModel.h"
 
-#include "KoStyleManager.h"
-#include <KoStyleThumbnailer.h>
 #include "KoParagraphStyle.h"
-#include "ToCBibGeneratorInfo.h"
+#include "KoStyleManager.h"
 #include "KoTableOfContentsGeneratorInfo.h"
+#include "ToCBibGeneratorInfo.h"
+#include <KoStyleThumbnailer.h>
 
 #include <QPair>
 
 #include <KLocalizedString>
 
 TableOfContentsStyleModel::TableOfContentsStyleModel(const KoStyleManager *manager, KoTableOfContentsGeneratorInfo *info)
-    :QAbstractTableModel(),
-      m_styleManager(manager),
-      m_styleThumbnailer(new KoStyleThumbnailer()),
-      m_tocInfo(info)
+    : QAbstractTableModel()
+    , m_styleManager(manager)
+    , m_styleThumbnailer(new KoStyleThumbnailer())
+    , m_tocInfo(info)
 {
     Q_ASSERT(manager);
     Q_ASSERT(info);
 
     m_styleThumbnailer->setThumbnailSize(QSize(250, 48));
 
-    foreach(const KoParagraphStyle *style, m_styleManager->paragraphStyles()) {
+    foreach (const KoParagraphStyle *style, m_styleManager->paragraphStyles()) {
         m_styleList.append(style->styleId());
         m_outlineLevel.append(getOutlineLevel(style->styleId()));
     }
-
-
 }
 
 QModelIndex TableOfContentsStyleModel::index(int row, int column, const QModelIndex &parent) const
@@ -40,7 +38,7 @@ QModelIndex TableOfContentsStyleModel::index(int row, int column, const QModelIn
     if (row < 0 || column < 0 || column > 1)
         return QModelIndex();
 
-    if (! parent.isValid()) {
+    if (!parent.isValid()) {
         if (row >= m_styleList.count())
             return QModelIndex();
 
@@ -49,7 +47,6 @@ QModelIndex TableOfContentsStyleModel::index(int row, int column, const QModelIn
     }
     return QModelIndex();
 }
-
 
 int TableOfContentsStyleModel::rowCount(const QModelIndex &parent) const
 {
@@ -70,7 +67,7 @@ QVariant TableOfContentsStyleModel::data(const QModelIndex &index, int role) con
     if (!index.isValid())
         return QVariant();
 
-    int id = static_cast< QPair<int, int> *>(index.internalPointer())->first;
+    int id = static_cast<QPair<int, int> *>(index.internalPointer())->first;
     if (index.column() == 0) {
         switch (role) {
         case Qt::DisplayRole: {
@@ -86,24 +83,26 @@ QVariant TableOfContentsStyleModel::data(const QModelIndex &index, int role) con
             }
             break;
         }
-        default: break;
+        default:
+            break;
         }
     } else {
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
         switch (role) {
         case Qt::DisplayRole:
             if (paragStyle) {
-                if(QVariant(static_cast< QPair<int, int> *>(index.internalPointer())->second).value<int>() == 0)
+                if (QVariant(static_cast<QPair<int, int> *>(index.internalPointer())->second).value<int>() == 0)
                     return QVariant(i18n("Disabled"));
                 else
-                    return QVariant(static_cast< QPair<int, int> *>(index.internalPointer())->second);
+                    return QVariant(static_cast<QPair<int, int> *>(index.internalPointer())->second);
             }
             // fall through
         case Qt::EditRole:
             if (paragStyle)
-                return QVariant(static_cast< QPair<int, int> *>(index.internalPointer())->second);
+                return QVariant(static_cast<QPair<int, int> *>(index.internalPointer())->second);
             // fall through
-        default: break;
+        default:
+            break;
         }
     }
     return QVariant();
@@ -127,7 +126,7 @@ bool TableOfContentsStyleModel::setData(const QModelIndex &index, const QVariant
     if (!index.isValid())
         return false;
 
-    static_cast< QPair<int, int> *>(index.internalPointer())->second = value.toInt();
+    static_cast<QPair<int, int> *>(index.internalPointer())->second = value.toInt();
     QAbstractTableModel::setData(index, value, role);
     m_outlineLevel[index.row()] = value.toInt();
     return true;
@@ -137,7 +136,7 @@ void TableOfContentsStyleModel::saveData()
 {
     int row = 0;
 
-    foreach(const int styleId, m_styleList) {
+    foreach (const int styleId, m_styleList) {
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(styleId);
         if (paragStyle) {
             setOutlineLevel(styleId, m_outlineLevel[row]);
@@ -145,7 +144,6 @@ void TableOfContentsStyleModel::saveData()
         row++;
     }
 }
-
 
 int TableOfContentsStyleModel::getOutlineLevel(int styleId)
 {
@@ -161,23 +159,23 @@ int TableOfContentsStyleModel::getOutlineLevel(int styleId)
 
 void TableOfContentsStyleModel::setOutlineLevel(int styleId, int outLineLevel)
 {
-    //ignore changes to paragraph styles with KoParagraphStyle::OutlineLevel property set.
-    //i.e. those considered by KoTableOfContentsGeneratorInfo::m_useOutlineLevel==true
+    // ignore changes to paragraph styles with KoParagraphStyle::OutlineLevel property set.
+    // i.e. those considered by KoTableOfContentsGeneratorInfo::m_useOutlineLevel==true
     if (m_styleManager->paragraphStyle(styleId)->hasProperty(KoParagraphStyle::OutlineLevel)) {
         return;
     }
 
-    //check if the outlineLevel has changed
+    // check if the outlineLevel has changed
     if (getOutlineLevel(styleId) == outLineLevel) {
         return;
     }
 
-    //now insert the style at the correct place( remove from the old place first and then insert at the new level)
+    // now insert the style at the correct place( remove from the old place first and then insert at the new level)
     IndexSourceStyle indexStyleMoved;
     bool styleFound = false;
     int sourceStyleIndex = 0;
     foreach (const IndexSourceStyles &indexSourceStyles, m_tocInfo->m_indexSourceStyles) {
-        int index=0;
+        int index = 0;
         foreach (const IndexSourceStyle &indexStyle, indexSourceStyles.styles) {
             if (styleId == indexStyle.styleId) {
                 styleFound = true;
@@ -193,13 +191,13 @@ void TableOfContentsStyleModel::setOutlineLevel(int styleId, int outLineLevel)
         sourceStyleIndex++;
     }
 
-    //this style is not in the IndexSourceStyles list so fill it
-    if (! styleFound) {
+    // this style is not in the IndexSourceStyles list so fill it
+    if (!styleFound) {
         indexStyleMoved.styleId = styleId;
         indexStyleMoved.styleName = m_styleManager->paragraphStyle(styleId)->name();
     }
 
-    //check if IndexSourceStyles are there for this outlineLevel, if not create it
+    // check if IndexSourceStyles are there for this outlineLevel, if not create it
     bool sourceStylePresent = false;
     foreach (const IndexSourceStyles &indexSourceStyles, m_tocInfo->m_indexSourceStyles) {
         if (outLineLevel == indexSourceStyles.outlineLevel) {
@@ -208,7 +206,7 @@ void TableOfContentsStyleModel::setOutlineLevel(int styleId, int outLineLevel)
         }
     }
 
-    if ( !sourceStylePresent) {
+    if (!sourceStylePresent) {
         IndexSourceStyles indexStyles;
         indexStyles.outlineLevel = outLineLevel;
         m_tocInfo->m_indexSourceStyles.append(indexStyles);
@@ -222,7 +220,6 @@ void TableOfContentsStyleModel::setOutlineLevel(int styleId, int outLineLevel)
         }
         sourceStyleIndex++;
     }
-
 }
 
 QVariant TableOfContentsStyleModel::headerData(int section, Qt::Orientation orientation, int role) const

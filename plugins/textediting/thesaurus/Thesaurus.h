@@ -40,7 +40,7 @@ public:
     void finishedParagraph(QTextDocument *document, int cursorPosition) override;
     void startingSimpleEdit(QTextDocument *document, int cursorPosition) override;
 
-     void checkSection(QTextDocument *document, int startPosition, int endPosition) override;
+    void checkSection(QTextDocument *document, int startPosition, int endPosition) override;
 
 private Q_SLOTS:
     void process();
@@ -70,7 +70,7 @@ private:
     void setCaption();
     void updateNavButtons();
 
-    enum Mode {grep, other};
+    enum Mode { grep, other };
 
     bool m_standAlone;
     int m_historyPos;

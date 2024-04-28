@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &VECTOR_LOG();
 
 #define debugVector qCDebug(VECTOR_LOG)

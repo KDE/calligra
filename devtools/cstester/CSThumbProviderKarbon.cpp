@@ -9,25 +9,25 @@
 
 #include "CSThumbProviderKarbon.h"
 
-#include <KarbonPart.h>
 #include <KarbonDocument.h>
+#include <KarbonPart.h>
 
 #include <QApplication>
 #include <QEventLoop>
-#include <QPixmap>
 #include <QPainter>
+#include <QPixmap>
 
 void processEvents()
 {
     int i = 100;
-    //while (QCoreApplication::eventDispatcher()->hasPendingEvents() && i > 0) {
-    //    --i;
-    //    QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-    //}
+    // while (QCoreApplication::eventDispatcher()->hasPendingEvents() && i > 0) {
+    //     --i;
+    //     QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+    // }
 }
 
 CSThumbProviderKarbon::CSThumbProviderKarbon(KarbonDocument *doc)
-: m_doc(doc)
+    : m_doc(doc)
 {
 }
 

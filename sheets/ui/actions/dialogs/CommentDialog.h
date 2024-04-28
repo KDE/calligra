@@ -27,15 +27,19 @@ class CommentDialog : public ActionDialog
 {
     Q_OBJECT
 public:
-    CommentDialog(QWidget* parent);
+    CommentDialog(QWidget *parent);
 
     void setComment(const QString &comment);
     QString comment() const;
 Q_SIGNALS:
     void changeComment(const QString &comment);
+
 protected:
     virtual void onApply() override;
-    virtual QWidget *defaultWidget() override { return multiLine; }
+    virtual QWidget *defaultWidget() override
+    {
+        return multiLine;
+    }
 
     KTextEdit *multiLine;
 };

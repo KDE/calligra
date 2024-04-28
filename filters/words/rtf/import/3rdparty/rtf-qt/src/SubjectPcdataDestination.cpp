@@ -7,17 +7,17 @@
 
 namespace RtfReader
 {
-    SubjectPcdataDestination::SubjectPcdataDestination( Reader *reader, AbstractRtfOutput *output, const QString &name ) :
-      PcdataDestination( reader, output, name )
-    {
-    }
+SubjectPcdataDestination::SubjectPcdataDestination(Reader *reader, AbstractRtfOutput *output, const QString &name)
+    : PcdataDestination(reader, output, name)
+{
+}
 
-    SubjectPcdataDestination::~SubjectPcdataDestination()
-    {
-    }
+SubjectPcdataDestination::~SubjectPcdataDestination()
+{
+}
 
-    void SubjectPcdataDestination::aboutToEndDestination()
-    {
-	m_output->setSubject( m_pcdata );
-    }
+void SubjectPcdataDestination::aboutToEndDestination()
+{
+    m_output->setSubject(m_pcdata);
+}
 }

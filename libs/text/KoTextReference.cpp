@@ -6,8 +6,8 @@
 
 #include "KoTextReference.h"
 
-#include "KoTextLocator.h"
 #include "KoInlineTextObjectManager.h"
+#include "KoTextLocator.h"
 
 // Include Q_UNSUSED classes, for building on Windows
 #include <KoShapeLoadingContext.h>
@@ -15,8 +15,8 @@
 #include <KoXmlReader.h>
 
 KoTextReference::KoTextReference(int indexId)
-        : KoVariable(),
-        m_indexId(indexId)
+    : KoVariable()
+    , m_indexId(indexId)
 {
 }
 
@@ -45,9 +45,9 @@ void KoTextReference::setup()
     variableMoved(0, 0);
 }
 
-KoTextLocator* KoTextReference::locator()
+KoTextLocator *KoTextReference::locator()
 {
-    return dynamic_cast<KoTextLocator*>(manager()->inlineTextObject(m_indexId));
+    return dynamic_cast<KoTextLocator *>(manager()->inlineTextObject(m_indexId));
 }
 
 bool KoTextReference::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)

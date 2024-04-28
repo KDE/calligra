@@ -38,7 +38,6 @@ public:
     qreal m_descent;
 };
 
-
 /**
  * Text layouter that allows text to flow in multiple root area and around
  * obstructions.
@@ -106,7 +105,7 @@ public:
      */
     QSizeF documentSize() const override;
 
-    QRectF frameBoundingRect(QTextFrame*) const override;
+    QRectF frameBoundingRect(QTextFrame *) const override;
 
     /// the default tab size for this document
     qreal defaultTabSpacing() const;
@@ -130,10 +129,10 @@ public:
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
     /// Draws the layout on the given painter with the given context.
-    void draw(QPainter * painter, const QAbstractTextDocumentLayout::PaintContext & context) override;
+    void draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context) override;
 
     /// reimplemented DO NOT CALL - USE HITTEST IN THE ROOTAREAS INSTEAD
-    int hitTest(const QPointF & point, Qt::HitTestAccuracy accuracy) const override;
+    int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const override;
 
     /// reimplemented to always return 1
     int pageCount() const override;
@@ -153,7 +152,6 @@ public:
      * this method.
      */
     void registerAnchoredObstruction(KoTextLayoutObstruction *obstruction);
-
 
     /**
      * Anchors are special InlineObjects that we detect in positionInlineObject()
@@ -190,9 +188,9 @@ public:
     /// remove inline object
     void removeInlineObject(KoShapeAnchor *textAnchor);
 
-    void clearInlineObjectRegistry(const QTextBlock& block);
+    void clearInlineObjectRegistry(const QTextBlock &block);
 
-    KoInlineObjectExtent inlineObjectExtent(const QTextFragment&);
+    KoInlineObjectExtent inlineObjectExtent(const QTextFragment &);
 
     /**
      * We allow a text document to be distributed onto a sequence of KoTextLayoutRootArea;
@@ -202,7 +200,6 @@ public:
      * @return the KoTextLayoutRootArea the text is laid-out in. Or 0 if there is no shape for that text character.
      */
     KoTextLayoutRootArea *rootAreaForPosition(int position) const;
-
 
     KoTextLayoutRootArea *rootAreaForPoint(const QPointF &point) const;
 
@@ -221,7 +218,7 @@ public:
     QList<KoTextLayoutObstruction *> currentObstructions();
 
     QList<KoTextLayoutRootArea *> rootAreas() const;
-    QList<KoShape*> shapes() const;
+    QList<KoShape *> shapes() const;
 
     /// Set should layout be continued when done with current root area
     void setContinuousLayout(bool continuous);
@@ -234,7 +231,7 @@ public:
     void setBlockChanges(bool block);
     bool changesBlocked() const;
 
-    KoTextDocumentLayout* referencedLayout() const;
+    KoTextDocumentLayout *referencedLayout() const;
     void setReferencedLayout(KoTextDocumentLayout *layout);
 
     /**
@@ -307,7 +304,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
     bool doLayout();
     void updateProgress(const QTextFrame::iterator &it);

@@ -6,14 +6,14 @@
 
 #include "KoPABackgroundToolFactory.h"
 
-//Calligra includes
+// Calligra includes
 #include "KoPABackgroundTool.h"
 
-#include <KoPageApp.h>
-#include <KoPADocument.h>
-#include <KoPACanvasBase.h>
-#include <KoPAViewBase.h>
 #include <KoIcon.h>
+#include <KoPACanvasBase.h>
+#include <KoPADocument.h>
+#include <KoPAViewBase.h>
+#include <KoPageApp.h>
 
 KoPABackgroundToolFactory::KoPABackgroundToolFactory()
     : KoToolFactoryBase("KoPABackgroundTool")
@@ -28,15 +28,14 @@ KoPABackgroundToolFactory::~KoPABackgroundToolFactory()
 {
 }
 
-KoToolBase * KoPABackgroundToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KoPABackgroundToolFactory::createTool(KoCanvasBase *canvas)
 {
     // We need the canvas to know in which app we are to turn the tooltip to page or slide design
     if (dynamic_cast<KoPACanvasBase *>(canvas)) {
         KoPAViewBase *view = static_cast<KoPACanvasBase *>(canvas)->koPAView();
 
         if (view) {
-            const QString toolTip =
-                (view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Design") : i18n("Slide Design");
+            const QString toolTip = (view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Design") : i18n("Slide Design");
             setToolTip(toolTip);
         }
         return new KoPABackgroundTool(canvas);

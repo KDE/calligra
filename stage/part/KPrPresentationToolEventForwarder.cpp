@@ -9,7 +9,7 @@
 #include <KoPACanvas.h>
 
 KPrPresentationToolEventForwarder::KPrPresentationToolEventForwarder(KoPACanvasBase *canvas)
-:QWidget(canvas->canvasWidget())
+    : QWidget(canvas->canvasWidget())
 {
 }
 

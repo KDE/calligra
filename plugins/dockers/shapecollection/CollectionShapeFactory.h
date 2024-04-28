@@ -8,18 +8,17 @@
 
 #include <KoShapeFactoryBase.h>
 
-
 class CollectionShapeFactory : public KoShapeFactoryBase
 {
-    public:
-        CollectionShapeFactory(const QString &id, KoShape* shape);
-        ~CollectionShapeFactory() override;
+public:
+    CollectionShapeFactory(const QString &id, KoShape *shape);
+    ~CollectionShapeFactory() override;
 
-        KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
-        bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
 
-    private:
-        KoShape* m_shape;
+private:
+    KoShape *m_shape;
 };
 
-#endif //KOCOLLECTIONSHAPEFACTORY_H
+#endif // KOCOLLECTIONSHAPEFACTORY_H

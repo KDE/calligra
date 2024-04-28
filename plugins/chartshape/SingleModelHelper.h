@@ -11,8 +11,8 @@
 // Qt
 #include <QObject>
 
-
-namespace KoChart {
+namespace KoChart
+{
 
 class ChartProxyModel;
 class Table;

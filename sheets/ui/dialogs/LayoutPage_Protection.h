@@ -19,9 +19,8 @@
 #ifndef CALLIGRA_SHEETS_LAYOUT_PAGE_PROTECTION
 #define CALLIGRA_SHEETS_LAYOUT_PAGE_PROTECTION
 
-#include <QWidget>
 #include "ui_ProtectionWidget.h"
-
+#include <QWidget>
 
 namespace Calligra
 {
@@ -29,7 +28,6 @@ namespace Sheets
 {
 
 class Style;
-
 
 /**
  * \ingroup UI
@@ -40,19 +38,18 @@ class LayoutPageProtection : public QWidget, public Ui::ProtectionWidget
     Q_OBJECT
 
 public:
-    LayoutPageProtection(QWidget * parent);
+    LayoutPageProtection(QWidget *parent);
     ~LayoutPageProtection() override;
 
-    void apply(Style * style, bool partial);
+    void apply(Style *style, bool partial);
     void loadFrom(const Style &style, bool partial);
 
 protected:
-    bool            m_isProtected;
-    bool            m_hideFormula;
-    bool            m_hideAll;
-    bool            m_dontPrint;
+    bool m_isProtected;
+    bool m_hideFormula;
+    bool m_hideAll;
+    bool m_dontPrint;
 };
-
 
 } // namespace Sheets
 } // namespace Calligra

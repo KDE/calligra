@@ -15,8 +15,8 @@
 #ifndef CALLIGRA_SHEETS_SORT_DIALOG
 #define CALLIGRA_SHEETS_SORT_DIALOG
 
-#include <KoDialog.h>
 #include "engine/Value.h"
+#include <KoDialog.h>
 
 class QTableWidgetItem;
 
@@ -35,7 +35,7 @@ class SortDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    SortDialog(QWidget* parent, QRect rect, const QVector<Value> &firstRow, const QVector<Value> &firstCol);
+    SortDialog(QWidget *parent, QRect rect, const QVector<Value> &firstRow, const QVector<Value> &firstCol);
     ~SortDialog() override;
 
     void setCustomLists(const QStringList &lsts, Localization *locale);
@@ -52,7 +52,6 @@ public:
     int criterionIndex(int row) const;
     Qt::SortOrder criterionSortOrder(int row) const;
     Qt::CaseSensitivity criterionCaseSensitivity(int row) const;
- 
 
 public Q_SLOTS: // reimplementations
     void slotButtonClicked(int button) override;

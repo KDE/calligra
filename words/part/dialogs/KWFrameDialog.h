@@ -10,9 +10,9 @@
 
 #include <KoShapeConfigFactoryBase.h>
 
-#include <kpagedialog.h>
-#include <QList>
 #include <QCheckBox>
+#include <QList>
+#include <kpagedialog.h>
 
 class KWFrameConnectSelector;
 class KWRunAroundProperties;
@@ -62,14 +62,18 @@ public:
     /// the different states
     enum State {
         Unset, ///< start value
-        On,     ///< on
-        Off,    ///< off
+        On, ///< on
+        Off, ///< off
         TriState ///< Both on and off
     };
     /// constructor
-    GuiHelper() : m_state(Unset) { }
+    GuiHelper()
+        : m_state(Unset)
+    {
+    }
     /// Add a new state
-    void addState(State state) {
+    void addState(State state)
+    {
         if (m_state == Unset)
             m_state = state;
         else if (m_state != state)
@@ -81,7 +85,8 @@ public:
      * @param checkbox the checkbox to set.
      * @param hide if true the checkbox will be hidden when there was no 'addState' called
      */
-    void updateCheckBox(QCheckBox *checkbox, bool hide) {
+    void updateCheckBox(QCheckBox *checkbox, bool hide)
+    {
         if (m_state == Unset) {
             if (hide)
                 checkbox->setVisible(false);

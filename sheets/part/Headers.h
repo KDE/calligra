@@ -30,34 +30,42 @@ public:
     explicit ColumnHeader(CanvasBase *_canvas);
     virtual ~ColumnHeader();
 
-    int markerColumn() const {
-        return  m_iSelectionAnchor;
+    int markerColumn() const
+    {
+        return m_iSelectionAnchor;
     }
     void equalizeColumn(double resize);
 
     virtual void updateColumns(int from, int to) = 0;
     virtual QSizeF size() const = 0;
-    qreal width() const { return size().width(); }
-    qreal height() const { return size().height(); }
-    virtual void setCursor(const QCursor& cursor) = 0;
+    qreal width() const
+    {
+        return size().width();
+    }
+    qreal height() const
+    {
+        return size().height();
+    }
+    virtual void setCursor(const QCursor &cursor) = 0;
     virtual void scroll(qreal dx, qreal dy) = 0;
     virtual QPalette palette() const = 0;
     virtual void update() = 0;
 
-    void setHeaderFont(const QFont& font);
+    void setHeaderFont(const QFont &font);
     QFont headerFont() const;
+
 protected:
-    void paint(QPainter* painter, const QRectF& painterRect);
-    void mousePress(KoPointerEvent* _ev);
-    void mouseRelease(KoPointerEvent* _ev);
-    void mouseDoubleClick(KoPointerEvent* _ev);
-    void mouseMove(KoPointerEvent* _ev);
-    void focusOut(QFocusEvent* ev);
-    void resize(const QSizeF& size, const QSizeF& oldSize);
+    void paint(QPainter *painter, const QRectF &painterRect);
+    void mousePress(KoPointerEvent *_ev);
+    void mouseRelease(KoPointerEvent *_ev);
+    void mouseDoubleClick(KoPointerEvent *_ev);
+    void mouseMove(KoPointerEvent *_ev);
+    void focusOut(QFocusEvent *ev);
+    void resize(const QSizeF &size, const QSizeF &oldSize);
     virtual void paintSizeIndicator(int mouseX) = 0;
     virtual void removeSizeIndicator() = 0;
-    
-    void doToolChanged(const QString& toolId);
+
+    void doToolChanged(const QString &toolId);
 
 protected:
     CanvasBase *m_pCanvas;
@@ -89,7 +97,7 @@ protected:
      * The user may resize columns by dragging the mouse around the XBorder widget.
      * This is the column over which the user pressed the mouse button. This column is going
      * to be resized.
-      */
+     */
     int m_iResizedColumn;
 
     /**
@@ -112,8 +120,6 @@ protected:
     QFont m_font;
 };
 
-
-
 /**
  * Base class for the widget left to the cells showing the row headers.
  */
@@ -123,33 +129,42 @@ public:
     explicit RowHeader(CanvasBase *_canvas);
     virtual ~RowHeader();
 
-    int markerRow() const {
-        return  m_iSelectionAnchor;
+    int markerRow() const
+    {
+        return m_iSelectionAnchor;
     }
     void equalizeRow(double resize);
-    
+
     virtual void updateRows(int from, int to) = 0;
     virtual QSizeF size() const = 0;
-    qreal width() const { return size().width(); }
-    qreal height() const { return size().height(); }
-    virtual void setCursor(const QCursor& cursor) = 0;
+    qreal width() const
+    {
+        return size().width();
+    }
+    qreal height() const
+    {
+        return size().height();
+    }
+    virtual void setCursor(const QCursor &cursor) = 0;
     virtual void scroll(qreal dx, qreal dy) = 0;
     virtual QPalette palette() const = 0;
     virtual void update() = 0;
 
-    void setHeaderFont(const QFont& font);
+    void setHeaderFont(const QFont &font);
     QFont headerFont() const;
+
 protected:
-    void paint(QPainter* painter, const QRectF& painterRect);
-    void mousePress(KoPointerEvent* _ev);
-    void mouseRelease(KoPointerEvent* _ev);
-    void mouseDoubleClick(KoPointerEvent* _ev);
-    void mouseMove(KoPointerEvent* _ev);
-    void focusOut(QFocusEvent* ev);
+    void paint(QPainter *painter, const QRectF &painterRect);
+    void mousePress(KoPointerEvent *_ev);
+    void mouseRelease(KoPointerEvent *_ev);
+    void mouseDoubleClick(KoPointerEvent *_ev);
+    void mouseMove(KoPointerEvent *_ev);
+    void focusOut(QFocusEvent *ev);
     virtual void paintSizeIndicator(int mouseX) = 0;
     virtual void removeSizeIndicator() = 0;
 
-    void doToolChanged(const QString& toolId);
+    void doToolChanged(const QString &toolId);
+
 protected:
     CanvasBase *m_pCanvas;
 
@@ -173,8 +188,6 @@ protected:
     QFont m_font;
 };
 
-
-
 /**
  * Base class for the widget in the top left corner of the canvas,
  * responsible for selecting all cells in a sheet.
@@ -182,19 +195,20 @@ protected:
 class SelectAllButton
 {
 public:
-    explicit SelectAllButton(CanvasBase* canvasBase);
+    explicit SelectAllButton(CanvasBase *canvasBase);
     virtual ~SelectAllButton();
 
     virtual QPalette palette() const = 0;
     virtual void update() = 0;
-protected:
-    void paint(QPainter* painter, const QRectF& painterRect);
-    void mousePress(KoPointerEvent* event);
-    void mouseRelease(KoPointerEvent* event);
-    void doToolChanged(const QString& toolId);
 
 protected:
-    CanvasBase* m_canvasBase;
+    void paint(QPainter *painter, const QRectF &painterRect);
+    void mousePress(KoPointerEvent *event);
+    void mouseRelease(KoPointerEvent *event);
+    void doToolChanged(const QString &toolId);
+
+protected:
+    CanvasBase *m_canvasBase;
     bool m_mousePressed;
     bool m_cellToolIsActive;
 };

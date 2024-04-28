@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "TemplateShapePlugin.h"
 
@@ -13,25 +12,22 @@
 #include <KPluginFactory>
 
 // Calligra libs
-#include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
+#include <KoToolRegistry.h>
 
 // This shape
 #include "TemplateShapeFactory.h"
 #include "TemplateToolFactory.h"
 
-
-K_PLUGIN_FACTORY_WITH_JSON(TemplateShapePluginFactory, "calligra_shape_template.json",
-                           registerPlugin<TemplateShapePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(TemplateShapePluginFactory, "calligra_shape_template.json", registerPlugin<TemplateShapePlugin>();)
 
 TemplateShapePlugin::TemplateShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new TemplateShapeFactory() );
+    KoShapeRegistry::instance()->add(new TemplateShapeFactory());
 
     // Template: Disable this if you don't need editing.
-    KoToolRegistry::instance()->add( new TemplateToolFactory() );
+    KoToolRegistry::instance()->add(new TemplateToolFactory());
 }
-
 
 #include <TemplateShapePlugin.moc>

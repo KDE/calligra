@@ -5,16 +5,15 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "KChartConvertions.h"
 
 // KChart
-#include <KChartEnums>
 #include <KChartCartesianAxis>
+#include <KChartEnums>
 
-
-namespace KoChart {
+namespace KoChart
+{
 
 KChart::CartesianAxis::Position PositionToKChartAxisPosition(Position position)
 {
@@ -28,7 +27,7 @@ KChart::CartesianAxis::Position PositionToKChartAxisPosition(Position position)
     case StartPosition:
         return KChart::CartesianAxis::Left;
     }
-    
+
     Q_ASSERT("Unknown KChart::CartesianAxis::Position!");
     return KChart::CartesianAxis::Bottom;
 }
@@ -58,7 +57,7 @@ QString PositionToString(Position position)
     case FloatingPosition:
         return QString();
     }
-    
+
     Q_ASSERT("Unknown Position!");
     return QString();
 }
@@ -87,7 +86,7 @@ KChartEnums::PositionValue PositionToKChartPositionValue(Position position)
     case FloatingPosition:
         return KChartEnums::PositionFloating;
     }
-    
+
     Q_ASSERT("Unknown Position!");
     return KChartEnums::PositionEast;
 }
@@ -115,12 +114,12 @@ Position KChartPositionValueToPosition(KChartEnums::PositionValue position)
         return CenterPosition;
     case KChartEnums::PositionFloating:
         return FloatingPosition;
-        
+
     // These are unsupported values
     case KChartEnums::PositionUnknown:
         return FloatingPosition;
     }
-    
+
     Q_ASSERT("Unknown KChartEnums::PositionValue!");
     return FloatingPosition;
 }
@@ -128,18 +127,18 @@ Position KChartPositionValueToPosition(KChartEnums::PositionValue position)
 Qt::Orientation LegendExpansionToQtOrientation(LegendExpansion expansion)
 {
     switch (expansion) {
-        case HighLegendExpansion:
-            return Qt::Vertical;
-        case WideLegendExpansion:
-            return Qt::Horizontal;
-        case BalancedLegendExpansion:
-            // KChart doesn't allow a balanced expansion
-            return Qt::Vertical;
-        case CustomLegendExpansion:
-            // KChart doesn't allow a custom expansion
-            return Qt::Vertical;
+    case HighLegendExpansion:
+        return Qt::Vertical;
+    case WideLegendExpansion:
+        return Qt::Horizontal;
+    case BalancedLegendExpansion:
+        // KChart doesn't allow a balanced expansion
+        return Qt::Vertical;
+    case CustomLegendExpansion:
+        // KChart doesn't allow a custom expansion
+        return Qt::Vertical;
     }
-    
+
     Q_ASSERT("Unknown Qt::Orientation!");
     return Qt::Vertical;
 }
@@ -152,7 +151,7 @@ LegendExpansion QtOrientationToLegendExpansion(Qt::Orientation orientation)
     case Qt::Vertical:
         return HighLegendExpansion;
     }
-    
+
     Q_ASSERT("Unknown LegendExpansion!");
     return HighLegendExpansion;
 }

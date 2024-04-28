@@ -6,16 +6,16 @@
 
 #include "KWStartupWidget.h"
 
-#include "KWDocumentColumns.h"
-#include "../KWPage.h"
 #include "../KWDocument.h"
+#include "../KWPage.h"
+#include "KWDocumentColumns.h"
 
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
 
 KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColumns &columns)
-        : QWidget(parent),
-        m_unit(doc->unit())
+    : QWidget(parent)
+    , m_unit(doc->unit())
 {
     widget.setupUi(this);
     m_columns = columns;

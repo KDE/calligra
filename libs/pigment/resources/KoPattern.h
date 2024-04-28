@@ -14,9 +14,7 @@
 /// Write API docs here
 class PIGMENTCMS_EXPORT KoPattern : public KoResource
 {
-
 public:
-
     /**
      * Creates a new KoPattern object using @p filename.  No file is opened
      * in the constructor, you have to call load.
@@ -28,23 +26,22 @@ public:
     ~KoPattern() override;
 
 public:
-
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;
-    bool saveToDevice(QIODevice* dev) const override;
+    bool saveToDevice(QIODevice *dev) const override;
 
     bool loadPatFromDevice(QIODevice *dev);
-    bool savePatToDevice(QIODevice* dev) const;
+    bool savePatToDevice(QIODevice *dev) const;
 
     qint32 width() const;
     qint32 height() const;
 
     QString defaultFileExtension() const override;
 
-    KoPattern& operator=(const KoPattern& pattern);
+    KoPattern &operator=(const KoPattern &pattern);
 
-    KoPattern* clone() const;
+    KoPattern *clone() const;
 
     /**
      * @brief pattern the actual pattern image
@@ -53,16 +50,14 @@ public:
     QImage pattern() const;
 
 private:
-
-    bool init(QByteArray& data);
-    void setPatternImage(const QImage& image);
+    bool init(QByteArray &data);
+    void setPatternImage(const QImage &image);
 
 private:
     QImage m_pattern;
     mutable QByteArray m_md5;
 };
 
-Q_DECLARE_METATYPE(KoPattern*)
+Q_DECLARE_METATYPE(KoPattern *)
 
 #endif // KOPATTERN_H
-

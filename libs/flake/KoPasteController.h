@@ -37,7 +37,7 @@ private:
     Q_PRIVATE_SLOT(d, void paste())
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

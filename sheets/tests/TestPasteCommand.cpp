@@ -4,18 +4,18 @@
 
 #include "TestPasteCommand.h"
 
-#include <QTest>
 #include <QMimeData>
+#include <QTest>
 
 #include "MockPart.h"
 
+#include "core/Map.h"
+#include "core/Sheet.h"
 #include "part/CanvasItem.h"
 #include "part/Doc.h"
-#include "core/Map.h"
 #include "ui/Selection.h"
-#include "core/Sheet.h"
-#include <engine/Value.h>
 #include "ui/commands/PasteCommand.h"
+#include <engine/Value.h>
 
 using namespace Calligra::Sheets;
 
@@ -23,7 +23,7 @@ void PasteCommandTest::testKSpreadSnippet()
 {
     Doc doc(new MockPart);
     Map *map = doc.map();
-    Sheet* sheet = new Sheet(map, "Sheet1");
+    Sheet *sheet = new Sheet(map, "Sheet1");
     map->addSheet(sheet);
     Cell(sheet, 1, 3).setCellValue(Value(3));
     Cell(sheet, 1, 4).setUserInput("=2*A3+7*A3");
@@ -36,15 +36,14 @@ void PasteCommandTest::testKSpreadSnippet()
     selection.initialize(QPoint(2, 4), sheet);
 
     QMimeData *mimedata = new QMimeData();
-    mimedata->setData("application/x-calligra-sheets-snippet",
-                      "range 1 4 1 5 Sheet1\n");
+    mimedata->setData("application/x-calligra-sheets-snippet", "range 1 4 1 5 Sheet1\n");
 
     PasteCommand *command = new PasteCommand();
     command->setSheet(selection.activeSheet());
     command->add(selection);
     command->setMimeData(mimedata, true);
     command->setPasteFC(true);
-    qDebug()<<(*command);
+    qDebug() << (*command);
     command->execute(&canvas);
     map->flushDamages();
 

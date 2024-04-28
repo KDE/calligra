@@ -35,17 +35,23 @@ public:
     void endPage() override;
 
     // path painting
-    void stroke(GfxState * state) override;
-    void fill(GfxState * state) override;
+    void stroke(GfxState *state) override;
+    void fill(GfxState *state) override;
     void eoFill(GfxState *state) override;
 
     // text
-    void drawString(GfxState * state, const GooString * s) override;
+    void drawString(GfxState *state, const GooString *s) override;
 
     // images
-    void drawImage(GfxState *state, Object *ref, Stream *str,
-                           int width, int height, GfxImageColorMap *colorMap,
-                           bool interpolate, const int *maskColors, bool inlineImg) override;
+    void drawImage(GfxState *state,
+                   Object *ref,
+                   Stream *str,
+                   int width,
+                   int height,
+                   GfxImageColorMap *colorMap,
+                   bool interpolate,
+                   const int *maskColors,
+                   bool inlineImg) override;
     // styles
     void updateAll(GfxState *state) override;
     void updateFillColor(GfxState *state) override;
@@ -59,15 +65,16 @@ public:
 
     /// Dumps content to svg file
     void dumpContent();
+
 private:
     QString convertPath(const GfxPath *path);
     QString convertMatrix(const QTransform &matrix);
-    QString convertMatrix(const double * matrix);
+    QString convertMatrix(const double *matrix);
     QString printFill();
     QString printStroke();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // SVGOUTPUTDEV_H

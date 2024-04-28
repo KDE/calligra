@@ -6,11 +6,10 @@
 
 #include "KoToolManager_p.h"
 
-#include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoShapeManager.h>
 #include <KoToolBase.h>
 #include <KoToolFactoryBase.h>
-
 
 static int newUniqueToolHelperId()
 {
@@ -25,10 +24,10 @@ static int newUniqueToolHelperId()
  */
 
 ToolHelper::ToolHelper(KoToolFactoryBase *tool)
-    : m_toolFactory(tool),
-      m_uniqueId(newUniqueToolHelperId()),
-      m_hasCustomShortcut(false),
-      m_toolAction(0)
+    : m_toolFactory(tool)
+    , m_uniqueId(newUniqueToolHelperId())
+    , m_hasCustomShortcut(false)
+    , m_toolAction(0)
 {
     // TODO: how to get an existing custom shortcut in the beginning here?
     // Once the first ShortcutToolAction is added to the actionCollection,
@@ -86,7 +85,7 @@ void ToolHelper::activate()
 
 void ToolHelper::shortcutToolActionUpdated()
 {
-    ShortcutToolAction *action = static_cast<ShortcutToolAction*>(sender());
+    ShortcutToolAction *action = static_cast<ShortcutToolAction *>(sender());
     // check if shortcut changed
     const QKeySequence actionShortcut = action->shortcut();
     const QKeySequence currentShortcut = shortcut();
@@ -112,9 +111,9 @@ KoToolBase *ToolHelper::createTool(KoCanvasBase *canvas) const
     return tool;
 }
 
-ShortcutToolAction* ToolHelper::createShortcutToolAction(QObject *parent)
+ShortcutToolAction *ToolHelper::createShortcutToolAction(QObject *parent)
 {
-    ShortcutToolAction* action = new ShortcutToolAction(id(), text(), parent);
+    ShortcutToolAction *action = new ShortcutToolAction(id(), text(), parent);
     action->setShortcut(shortcut());
 
     connect(action, &QAction::changed, this, &ToolHelper::shortcutToolActionUpdated);
@@ -143,8 +142,8 @@ QKeySequence ToolHelper::shortcut() const
 
 //   ************ Connector **********
 Connector::Connector(KoShapeManager *parent)
-        : QObject(parent),
-        m_shapeManager(parent)
+    : QObject(parent)
+    , m_shapeManager(parent)
 {
     connect(m_shapeManager, &KoShapeManager::selectionChanged, this, &Connector::slotSelectionChanged);
 }
@@ -171,4 +170,3 @@ void ShortcutToolAction::actionTriggered()
     // TODO: why not ToolHelper::activate(); and thus a slightly different behaviour?
     KoToolManager::instance()->switchToolRequested(m_toolID);
 }
-

@@ -12,11 +12,9 @@
 
 #include <KoFilter.h>
 
-
 class QString;
 
 class KoStore;
-
 
 /**
  * @brief this class manages the content types in a file in the OPC format
@@ -40,8 +38,8 @@ private:
 
 private:
     // data
-    QHash<QString, QString>  defaults;  // Extension, ContentType
-    QHash<QString, QString>  parts;  // Partname, ContentType
+    QHash<QString, QString> defaults; // Extension, ContentType
+    QHash<QString, QString> parts; // Partname, ContentType
 };
 
 #endif // OPCCONTENTTYPES_H

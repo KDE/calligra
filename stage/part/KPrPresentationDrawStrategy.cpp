@@ -7,49 +7,48 @@
  */
 #include "KPrPresentationDrawStrategy.h"
 
-#include <QKeyEvent>
 #include <QApplication>
+#include <QKeyEvent>
 #include <QStandardPaths>
 
 #include <KoPACanvasBase.h>
 
-#include "KPrPresentationTool.h"
 #include "KPrPresentationDrawWidget.h"
+#include "KPrPresentationTool.h"
 
-KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * tool )
-: KPrPresentationStrategyBase( tool )
+KPrPresentationDrawStrategy::KPrPresentationDrawStrategy(KPrPresentationTool *tool)
+    : KPrPresentationStrategyBase(tool)
 {
     m_widget = new KPrPresentationDrawWidget(canvas());
     QPixmap pix(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligrastage/cursors/pen.png"));
     const qreal factor = 1.2;
     const int oldWidth = pix.width();
     const int oldHeight = pix.height();
-    pix = pix.scaled(oldWidth*factor, oldHeight*factor);
+    pix = pix.scaled(oldWidth * factor, oldHeight * factor);
     QCursor cur(pix);
     QApplication::setOverrideCursor(cur);
 
-    setToolWidgetParent( m_widget );
+    setToolWidgetParent(m_widget);
     m_widget->show();
-    m_widget->installEventFilter( m_tool );
+    m_widget->installEventFilter(m_tool);
 }
 
 KPrPresentationDrawStrategy::~KPrPresentationDrawStrategy()
 {
-    setToolWidgetParent( canvas()->canvasWidget() );
+    setToolWidgetParent(canvas()->canvasWidget());
     QApplication::restoreOverrideCursor();
 }
 
-bool KPrPresentationDrawStrategy::keyPressEvent( QKeyEvent * event )
+bool KPrPresentationDrawStrategy::keyPressEvent(QKeyEvent *event)
 {
     bool handled = true;
-    switch ( event->key() )
-    {
-        case Qt::Key_Escape:
-            activateDefaultStrategy();
-            break;
-        case Qt::Key_H:
-            handled = false;
-            break;
+    switch (event->key()) {
+    case Qt::Key_Escape:
+        activateDefaultStrategy();
+        break;
+    case Qt::Key_H:
+        handled = false;
+        break;
     }
     return handled;
 }

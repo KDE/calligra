@@ -13,9 +13,9 @@
 #include "commands/SheetCommands.h"
 
 #include <KoCanvasBase.h>
-#include <KoShapeManager.h>
-#include <KoShape.h>
 #include <KoIcon.h>
+#include <KoShape.h>
+#include <KoShapeManager.h>
 
 #include <KXMLGUIClient>
 
@@ -26,30 +26,29 @@ using namespace Calligra::Sheets;
 class MapViewModel::Private
 {
 public:
-    Sheet* activeSheet;
+    Sheet *activeSheet;
     KoCanvasBase *canvas;
     KXMLGUIClient *xmlGuiClient;
     QActionGroup *gotoSheetActionGroup;
 };
 
-
 MapViewModel::MapViewModel(Map *map, KoCanvasBase *canvas, KXMLGUIClient *xmlGuiClient)
-        : MapModel(map)
-        , d(new Private)
+    : MapModel(map)
+    , d(new Private)
 {
     d->activeSheet = 0;
     d->canvas = canvas;
     d->xmlGuiClient = xmlGuiClient;
     d->gotoSheetActionGroup = new QActionGroup(this);
 
-    connect(d->gotoSheetActionGroup, &QActionGroup::triggered,
-            this, &MapViewModel::gotoSheetActionTriggered);
+    connect(d->gotoSheetActionGroup, &QActionGroup::triggered, this, &MapViewModel::gotoSheetActionTriggered);
 
     // Add the initial controlled sheets.
     const QList<SheetBase *> sheets = map->sheetList();
     for (int i = 0; i < sheets.count(); ++i) {
         Sheet *sheet = dynamic_cast<Sheet *>(sheets[i]);
-        if (sheet) addSheet(sheet);
+        if (sheet)
+            addSheet(sheet);
     }
 }
 
@@ -73,7 +72,7 @@ QVariant MapViewModel::data(const QModelIndex &index, int role) const
     if (index.row() >= map()->count()) {
         return QVariant();
     }
-    SheetBase* basesheet = map()->sheet(index.row());
+    SheetBase *basesheet = map()->sheet(index.row());
     Sheet *sheet = dynamic_cast<Sheet *>(basesheet);
     return QVariant(sheet == d->activeSheet);
 }
@@ -108,23 +107,23 @@ bool MapViewModel::setData(const QModelIndex &index, const QVariant &value, int 
     if (index.row() >= map()->count()) {
         return false;
     }
-    SheetBase* basesheet (map()->sheet(index.row()));
+    SheetBase *basesheet(map()->sheet(index.row()));
     Sheet *sheet = dynamic_cast<Sheet *>(basesheet);
     setActiveSheet(sheet);
     return true;
 }
 
-Sheet* MapViewModel::activeSheet() const
+Sheet *MapViewModel::activeSheet() const
 {
     return d->activeSheet;
 }
 
-void MapViewModel::setActiveSheet(Sheet* sheet)
+void MapViewModel::setActiveSheet(Sheet *sheet)
 {
     if (d->activeSheet == sheet) {
         return;
     }
-    const QList<SheetBase*> list = map()->sheetList();
+    const QList<SheetBase *> list = map()->sheetList();
     const int oldRow = list.indexOf(d->activeSheet);
     const int newRow = list.indexOf(sheet);
 
@@ -137,7 +136,7 @@ void MapViewModel::setActiveSheet(Sheet* sheet)
 
     // Unhide, if necessary.
     if (sheet->isHidden()) {
-        KUndo2Command* command = new ShowSheetCommand(sheet);
+        KUndo2Command *command = new ShowSheetCommand(sheet);
         d->canvas->addCommand(command);
     }
 
@@ -166,10 +165,8 @@ void MapViewModel::addSheet(SheetBase *sheet)
     MapModel::addSheet(sheet);
     Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
 
-    connect(fullSheet, &Sheet::shapeAdded,
-            this, &MapViewModel::addShape);
-    connect(fullSheet, &Sheet::shapeRemoved,
-            this, &MapViewModel::removeShape);
+    connect(fullSheet, &Sheet::shapeAdded, this, &MapViewModel::addShape);
+    connect(fullSheet, &Sheet::shapeRemoved, this, &MapViewModel::removeShape);
 
     if (!d->xmlGuiClient) {
         return;
@@ -193,10 +190,8 @@ void MapViewModel::removeSheet(SheetBase *sheet)
     MapModel::removeSheet(sheet);
     Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
 
-    disconnect(fullSheet, &Sheet::shapeAdded,
-               this, &MapViewModel::addShape);
-    disconnect(fullSheet, &Sheet::shapeRemoved,
-               this, &MapViewModel::removeShape);
+    disconnect(fullSheet, &Sheet::shapeAdded, this, &MapViewModel::addShape);
+    disconnect(fullSheet, &Sheet::shapeRemoved, this, &MapViewModel::removeShape);
 
     if (!d->xmlGuiClient) {
         return;

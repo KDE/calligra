@@ -17,7 +17,7 @@ void TestTrigFunctions::initTestCase()
 //  - different algorithms among spreadsheet programs
 //  - precision limitation of floating-point number representation
 //  - accuracy problem due to propagated error in the implementation
-#define CHECK_EVAL(x,y) QCOMPARE(evaluate(x),RoundNumber(y))
+#define CHECK_EVAL(x, y) QCOMPARE(evaluate(x), RoundNumber(y))
 #define ROUND(x) (roundf(1e10 * x) / 1e10)
 
 // round to get at most 10-digits number
@@ -27,7 +27,7 @@ static Value RoundNumber(double f)
 }
 
 // round to get at most 10-digits number
-static Value RoundNumber(const Value& v)
+static Value RoundNumber(const Value &v)
 {
     if (v.isNumber()) {
         double d = numToDouble(v.asFloat());
@@ -38,7 +38,7 @@ static Value RoundNumber(const Value& v)
         return v;
 }
 
-Value TestTrigFunctions::evaluate(const QString& formula)
+Value TestTrigFunctions::evaluate(const QString &formula)
 {
     Formula f;
     QString expr = formula;

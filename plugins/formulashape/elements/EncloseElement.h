@@ -14,7 +14,8 @@
 /**
  * @short Implementation of the MathML menclose element
  */
-class KOFORMULA_EXPORT EncloseElement : public RowElement {
+class KOFORMULA_EXPORT EncloseElement : public RowElement
+{
 public:
     /// The standard constructor
     explicit EncloseElement(BasicElement *parent = 0);
@@ -24,16 +25,16 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    void paint( QPainter& painter, AttributeManager* am ) override;
+    void paint(QPainter &painter, AttributeManager *am) override;
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am ) override;
+    void layout(const AttributeManager *am) override;
 
     /// @return The element's ElementType
-    ElementType elementType() const override;   
+    ElementType elementType() const override;
 
 private:
     /// The QPainterPath holding what the enclose element has to paint

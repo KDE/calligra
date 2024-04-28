@@ -6,21 +6,21 @@
 
 #include "TableOfContentsTemplate.h"
 
-#include <KoTableOfContentsGeneratorInfo.h>
-#include <KoStyleManager.h>
-#include <KoParagraphStyle.h>
 #include <KLocalizedString>
+#include <KoParagraphStyle.h>
+#include <KoStyleManager.h>
+#include <KoTableOfContentsGeneratorInfo.h>
 
-TableOfContentsTemplate::TableOfContentsTemplate(KoStyleManager *manager):
-    m_manager(manager)
+TableOfContentsTemplate::TableOfContentsTemplate(KoStyleManager *manager)
+    : m_manager(manager)
 {
     Q_ASSERT(manager);
 }
 
 QList<KoTableOfContentsGeneratorInfo *> TableOfContentsTemplate::templates()
 {
-    //if you are adding your own custom styles specifically for ToC, add it as an unused style in KoStyleManager
-    // when the ToC is used the style will be automatically move to the usedStyle section
+    // if you are adding your own custom styles specifically for ToC, add it as an unused style in KoStyleManager
+    //  when the ToC is used the style will be automatically move to the usedStyle section
 
     QList<KoTableOfContentsGeneratorInfo *> predefinedTemplates;
     KoTableOfContentsGeneratorInfo *firstTemplate = new KoTableOfContentsGeneratorInfo();
@@ -29,7 +29,7 @@ QList<KoTableOfContentsGeneratorInfo *> TableOfContentsTemplate::templates()
     firstTemplate->m_indexTitleTemplate.styleId = m_manager->defaultTableOfcontentsTitleStyle()->styleId();
     firstTemplate->m_indexTitleTemplate.styleName = m_manager->defaultTableOfcontentsTitleStyle()->name();
 
-    for (int level=1; level <= firstTemplate->m_outlineLevel; ++level) {
+    for (int level = 1; level <= firstTemplate->m_outlineLevel; ++level) {
         firstTemplate->m_entryTemplate[level - 1].styleId = m_manager->defaultTableOfContentsEntryStyle(level)->styleId();
         firstTemplate->m_entryTemplate[level - 1].styleName = m_manager->defaultTableOfContentsEntryStyle(level)->name();
     }

@@ -13,13 +13,14 @@ namespace Sheets
 {
 
 /**
- * A callback for task progress updates. Sheets has a child class that couples this with KoUpdater, the purpose of this class is so we can use this functionality without pulling in kolibs/UI dependencies.
+ * A callback for task progress updates. Sheets has a child class that couples this with KoUpdater, the purpose of this class is so we can use this
+ * functionality without pulling in kolibs/UI dependencies.
  */
 class CALLIGRA_SHEETS_ENGINE_EXPORT Updater
 {
 public:
-    Updater() {};
-    virtual ~Updater() {};
+    Updater(){};
+    virtual ~Updater(){};
 
     virtual void setProgress(int percent) = 0;
 };
@@ -27,5 +28,4 @@ public:
 } // namespace Sheets
 } // namespace Calligra
 
-
-#endif   // CALLIGRA_SHEETS_UPDATER_H
+#endif // CALLIGRA_SHEETS_UPDATER_H

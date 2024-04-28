@@ -4,24 +4,24 @@
 #ifndef RTFREADER_INFOREVISEDTIMEDESTINATION_H
 #define RTFREADER_INFOREVISEDTIMEDESTINATION_H
 
-#include <QString>
 #include <QColor>
+#include <QString>
 
 #include "InfoTimeDestination.h"
 #include "rtfreader_export.h"
 namespace RtfReader
 {
-    class Reader;
+class Reader;
 
-    class RTFREADER_EXPORT InfoRevisedTimeDestination: public InfoTimeDestination
-    {
-      public:
-	InfoRevisedTimeDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );
+class RTFREADER_EXPORT InfoRevisedTimeDestination : public InfoTimeDestination
+{
+public:
+    InfoRevisedTimeDestination(Reader *reader, AbstractRtfOutput *output, const QString &name);
 
-	~InfoRevisedTimeDestination() override;
+    ~InfoRevisedTimeDestination() override;
 
-	void aboutToEndDestination() override;
-      };
+    void aboutToEndDestination() override;
+};
 }
 
 #endif

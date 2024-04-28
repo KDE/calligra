@@ -8,24 +8,25 @@
 #include "KoShapeMoveCommand.h"
 
 #include <KoShape.h>
+#include <KoShapeAnchor.h>
 #include <KoShapeContainer.h>
 #include <KoShapeContainerModel.h>
-#include <KoShapeAnchor.h>
 
 #include <KLocalizedString>
 
 class Q_DECL_HIDDEN KoShapeMoveCommand::Private
 {
 public:
-    QList<KoShape*> shapes;
+    QList<KoShape *> shapes;
     QVector<QPointF> previousPositions, newPositions, previousOffsets, newOffsets;
 };
 
-KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes,
-                                       const QVector<QPointF> &previousPositions, const QVector<QPointF> &newPositions,
+KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape *> &shapes,
+                                       const QVector<QPointF> &previousPositions,
+                                       const QVector<QPointF> &newPositions,
                                        KUndo2Command *parent)
-    : KUndo2Command(parent),
-    d(new Private())
+    : KUndo2Command(parent)
+    , d(new Private())
 {
     d->shapes = shapes;
     d->previousPositions = previousPositions;
@@ -36,12 +37,14 @@ KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes,
     setText(kundo2_i18n("Move shapes"));
 }
 
-KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes,
-                                       const QVector<QPointF> &previousPositions, const QVector<QPointF> &newPositions,
-                                       const QVector<QPointF> &previousOffsets, const QVector<QPointF> &newOffsets,
+KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape *> &shapes,
+                                       const QVector<QPointF> &previousPositions,
+                                       const QVector<QPointF> &newPositions,
+                                       const QVector<QPointF> &previousOffsets,
+                                       const QVector<QPointF> &newOffsets,
                                        KUndo2Command *parent)
-        : KUndo2Command(parent),
-        d(new Private())
+    : KUndo2Command(parent)
+    , d(new Private())
 {
     d->shapes = shapes;
     d->previousPositions = previousPositions;

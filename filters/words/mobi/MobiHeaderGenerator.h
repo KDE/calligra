@@ -7,9 +7,9 @@
 #ifndef MOBIHEADERGENERATOR_H
 #define MOBIHEADERGENERATOR_H
 
-#include <QObject>
-#include <QHash>
 #include <QChar>
+#include <QHash>
+#include <QObject>
 
 // I follow the file structure that mobi packet creator  create.
 struct palmDBHeader {
@@ -52,36 +52,34 @@ struct palmDBHeader {
     // There should two bytes zero
 
     int headerLength; // This is not in header just to have header length for myself
-    //qint32 grapToData; /// traditionally 2 zero bytes to Info or raw data
+    // qint32 grapToData; /// traditionally 2 zero bytes to Info or raw data
 };
 
 /// PalmDocHeadr length = 16
-struct palmDocHeader
-{
+struct palmDocHeader {
     palmDocHeader();
 
-    qint16 compression;  /// 1 == no compression, 2 = PalmDOC compression, 17480 = HUFF/CDIC compression
+    qint16 compression; /// 1 == no compression, 2 = PalmDOC compression, 17480 = HUFF/CDIC compression
     qint16 unused; /// Always zero
     qint32 textLength;
     qint16 pdbrecordCount;
-    qint16 maxRecordSize;/// Maximum size of each record containing text, always 4096
+    qint16 maxRecordSize; /// Maximum size of each record containing text, always 4096
 
     /// 0 == no encryption, 1 = Old Mobipocket
     /// Encryption, 2 = Mobipocket Encryption
     qint16 encryptionType;
 
-    qint16 unknown;/// Usually zero
+    qint16 unknown; /// Usually zero
     qint32 headerLength; // This is not in header just to have header length for myself
 };
 
 /// mobi header length 232
-struct mobiHeader
-{
+struct mobiHeader {
     mobiHeader();
 
     QByteArray identifier; /// 	the characters M O B I
-    int mobiHeaderLength;// = 232;
-    qint32 mobiType;// = 2;
+    int mobiHeaderLength; // = 232;
+    qint32 mobiType; // = 2;
     /**  The kind of Mobipocket file this is
         2 Mobipocket Book
         3 PalmDoc Book
@@ -104,16 +102,16 @@ struct mobiHeader
     // FIXME: Really i do not know what should i set for this parameter.
     qint32 fileVersion; /// Version of the Mobipocket format used in this file.
 
-    qint32 ortographicIndex;/// Section number of orthographic meta index. 0xFFFFFFFF if index is not available.
-    qint32 inflectionIndex;/// Section number of inflection meta index. 0xFFFFFFFF if index is not available.
-    qint32 indexNames;/// 0xFFFFFFFF if index is not available.
-    qint32 indexkeys;/// 0xFFFFFFFF if index is not available.
-    qint32 extraIndex0;/// Section number of extra 0 meta index. 0xFFFFFFFF if index is not available.
-    qint32 extraIndex1;/// Section number of extra 0 meta index. 0xFFFFFFFF if index is not available.
-    qint32 extraIndex2;/// Section number of extra 0 meta index. 0xFFFFFFFF if index is not available.
-    qint32 extraIndex3;/// Section number of extra 0 meta index. 0xFFFFFFFF if index is not available.
-    qint32 extraIndex4;/// Section number of extra 0 meta index. 0xFFFFFFFF if index is not available.
-    qint32 extraIndex5;/// Section number of extra 0 meta index. 0xFFFFFFFF if index is not available.
+    qint32 ortographicIndex; /// Section number of orthographic meta index. 0xFFFFFFFF if index is not available.
+    qint32 inflectionIndex; /// Section number of inflection meta index. 0xFFFFFFFF if index is not available.
+    qint32 indexNames; /// 0xFFFFFFFF if index is not available.
+    qint32 indexkeys; /// 0xFFFFFFFF if index is not available.
+    qint32 extraIndex0; /// Section number of extra 0 meta index. 0xFFFFFFFF if index is not available.
+    qint32 extraIndex1; /// Section number of extra 0 meta index. 0xFFFFFFFF if index is not available.
+    qint32 extraIndex2; /// Section number of extra 0 meta index. 0xFFFFFFFF if index is not available.
+    qint32 extraIndex3; /// Section number of extra 0 meta index. 0xFFFFFFFF if index is not available.
+    qint32 extraIndex4; /// Section number of extra 0 meta index. 0xFFFFFFFF if index is not available.
+    qint32 extraIndex5; /// Section number of extra 0 meta index. 0xFFFFFFFF if index is not available.
 
     qint32 firstNonBookIndex; /// First record number (starting with 0) that's not the book's text
 
@@ -124,52 +122,52 @@ struct mobiHeader
     /// next byte is dialect, 08 = British, 04 = US.
     /// Thus US English is 1033, UK English is 2057.
     qint32 local;
-    qint32 inputLanguage;/// Input language for a dictionary
-    qint32 outputLanguage;/// Output language for a dictionary
-    qint32 minversion;/// Minimum mobipocket version support needed to read this file.
+    qint32 inputLanguage; /// Input language for a dictionary
+    qint32 outputLanguage; /// Output language for a dictionary
+    qint32 minversion; /// Minimum mobipocket version support needed to read this file.
 
     /// First record number (starting with 0) that contains an image.
     /// Image records should be sequential.
     qint32 firstImageIndex;
-    qint32 huffmanRecordOffset;/// The record number of the first huffman compression record.
-    qint32 huffmanRecordCount;/// The number of huffman compression records.
-    qint32 huffmanTableOffset;// = 0;
-    qint32 huffmanTableLength;// = 0;
+    qint32 huffmanRecordOffset; /// The record number of the first huffman compression record.
+    qint32 huffmanRecordCount; /// The number of huffman compression records.
+    qint32 huffmanTableOffset; // = 0;
+    qint32 huffmanTableLength; // = 0;
 
-    qint32 EXTH_Flags;/// bitfield. if bit 6 (0x40) is set, then there's an EXTH record
+    qint32 EXTH_Flags; /// bitfield. if bit 6 (0x40) is set, then there's an EXTH record
 
     // Here there is 32 byte
-    qint64 unknown1;// = 0;
-    qint64 unknown1_1;// = 0;
-    qint64 unknown1_2;// = 0;
-    qint64 unknown1_3;// = 0;
+    qint64 unknown1; // = 0;
+    qint64 unknown1_1; // = 0;
+    qint64 unknown1_2; // = 0;
+    qint64 unknown1_3; // = 0;
 
-    qint32 drmOffset;/// Offset to DRM key info in DRMed files. 0xFFFFFFFF if no DRM
-    qint32 drmCount;/// Number of entries in DRM info. 0xFFFFFFFF if no DRM
-    qint32 drmSize;/// Number of bytes in DRM info.
-    qint32 drmFlags;/// Some flags concerning the DRM info.
+    qint32 drmOffset; /// Offset to DRM key info in DRMed files. 0xFFFFFFFF if no DRM
+    qint32 drmCount; /// Number of entries in DRM info. 0xFFFFFFFF if no DRM
+    qint32 drmSize; /// Number of bytes in DRM info.
+    qint32 drmFlags; /// Some flags concerning the DRM info.
 
     // Here there is 12 byte unknown
-    qint64 unknown2;// = 0;
-    qint32 unknown2_1;// = 0;
+    qint64 unknown2; // = 0;
+    qint32 unknown2_1; // = 0;
 
-    qint16 firstContentRecordNumber;/// Number of first text record. Normally 1.
+    qint16 firstContentRecordNumber; /// Number of first text record. Normally 1.
     qint16 lastContentRecordNumber; /// Last content record number
 
-    qint32 unknown3;/// Use 0x00000001.
+    qint32 unknown3; /// Use 0x00000001.
 
     qint32 FCIS_recordNumber;
-    qint32 unknown4;/// Use 0x00000001.
+    qint32 unknown4; /// Use 0x00000001.
 
     qint32 FLIS_recordNumber;
-    qint32 unknown5;/// Use 0x00000001.
+    qint32 unknown5; /// Use 0x00000001.
 
-    qint64 unknown6;/// Use 0x0000000000000000.
-    qint32 unknown7;/// Use 0xFFFFFFFF.
-    qint32 unknown8;/// Use 0x00000000.
-    qint32 unknown9;/// Use 0xFFFFFFFF.
-    qint32 unknown10;/// Use 0xFFFFFFFF.
-    qint32 extraRecordDataFlags;// = 0;
+    qint64 unknown6; /// Use 0x0000000000000000.
+    qint32 unknown7; /// Use 0xFFFFFFFF.
+    qint32 unknown8; /// Use 0x00000000.
+    qint32 unknown9; /// Use 0xFFFFFFFF.
+    qint32 unknown10; /// Use 0xFFFFFFFF.
+    qint32 extraRecordDataFlags; // = 0;
 
     /// (If not 0xFFFFFFFF)The record number of the
     /// first INDX record created from an ncx file.
@@ -204,9 +202,11 @@ public:
     MobiHeaderGenerator();
     ~MobiHeaderGenerator();
 
-    void generateMobiHeaders(QHash<QString, QString> metaData
-                             ,int compressedTextSize, int uncompressedTextSize,
-                             QList<int> imagesSize, QList<qint32> textRecordsOffset);
+    void generateMobiHeaders(QHash<QString, QString> metaData,
+                             int compressedTextSize,
+                             int uncompressedTextSize,
+                             QList<int> imagesSize,
+                             QList<qint32> textRecordsOffset);
 
 public:
     palmDBHeader *m_dbHeader;
@@ -224,7 +224,6 @@ private:
     int calculateRecordsCount();
 
 private:
-
     QByteArray m_author;
     int m_rawTextSize;
     int m_uncompressedTextSize;

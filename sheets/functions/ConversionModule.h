@@ -20,7 +20,7 @@ class ConversionModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    explicit ConversionModule(QObject* parent, const QVariantList& args = QVariantList());
+    explicit ConversionModule(QObject *parent, const QVariantList &args = QVariantList());
 
     QString descriptionFileName() const override;
 };

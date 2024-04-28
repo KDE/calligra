@@ -7,8 +7,8 @@
 #ifndef KPRVIEWMODENOTES_H
 #define KPRVIEWMODENOTES_H
 
-#include <KoPageApp.h>
 #include <KoPAViewMode.h>
+#include <KoPageApp.h>
 
 class KoPAView;
 class KoPAPageBase;
@@ -19,7 +19,7 @@ public:
     KPrViewModeNotes(KoPAViewBase *view, KoPACanvasBase *canvas);
     ~KPrViewModeNotes() override;
 
-    void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect) override;
+    void paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect) override;
     void tabletEvent(QTabletEvent *event, const QPointF &point) override;
     void mousePressEvent(QMouseEvent *event, const QPointF &point) override;
     void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point) override;
@@ -28,12 +28,12 @@ public:
     void shortcutOverrideEvent(QKeyEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
-    void wheelEvent(QWheelEvent * event, const QPointF &point) override;
+    void wheelEvent(QWheelEvent *event, const QPointF &point) override;
 
     void activate(KoPAViewMode *previousViewMode) override;
     void deactivate() override;
 
-    void updateActivePage( KoPAPageBase *page ) override;
+    void updateActivePage(KoPAPageBase *page) override;
 
     void addShape(KoShape *shape) override;
     void removeShape(KoShape *shape) override;
@@ -42,4 +42,3 @@ public:
 };
 
 #endif // KPRVIEWMODENOTES_H
-

@@ -8,8 +8,8 @@
 
 #include "flake_export.h"
 
-#include <QObject>
 #include <KoDataCenterBase.h>
+#include <QObject>
 
 class QImage;
 class QUrl;
@@ -95,7 +95,7 @@ private:
     KoImageData *cacheImage(KoImageData *data);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOIMAGECOLLECTION_H

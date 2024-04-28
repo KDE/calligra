@@ -9,18 +9,19 @@
 
 #include "sheets_core_export.h"
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
 class Sheet;
-
-
 
 /** Convenience class for formats */
 class CALLIGRA_SHEETS_CORE_EXPORT RowFormat
 {
 public:
-    RowFormat() {
+    RowFormat()
+    {
         hidden = false;
         filtered = false;
         hasPageBreak = false;
@@ -33,7 +34,6 @@ public:
     bool hasPageBreak;
 };
 
-
 /** first and last row are both inclusive in all functions */
 class CALLIGRA_SHEETS_CORE_EXPORT RowFormatStorage
 {
@@ -41,40 +41,39 @@ public:
     explicit RowFormatStorage(Sheet *sheet);
     ~RowFormatStorage();
 
-    Sheet* sheet() const;
+    Sheet *sheet() const;
 
     /** Height of the given row. firstRow and lastRow are set to the first and last row that share the same height. */
-    double rowHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
+    double rowHeight(int row, int *lastRow = 0, int *firstRow = 0) const;
     void setRowHeight(int firstRow, int lastRow, double height);
 
-    bool isHidden(int row, int* lastRow = 0, int* firstRow = 0) const;
+    bool isHidden(int row, int *lastRow = 0, int *firstRow = 0) const;
     void setHidden(int firstRow, int lastRow, bool hidden);
 
-    bool isFiltered(int row, int* lastRow = 0, int* firstRow = 0) const;
+    bool isFiltered(int row, int *lastRow = 0, int *firstRow = 0) const;
     void setFiltered(int firstRow, int lastRow, bool filtered);
 
-    bool isHiddenOrFiltered(int row, int* lastRow = 0, int* firstRow = 0) const;
+    bool isHiddenOrFiltered(int row, int *lastRow = 0, int *firstRow = 0) const;
 
-    double visibleHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
+    double visibleHeight(int row, int *lastRow = 0, int *firstRow = 0) const;
 
     double totalRowHeight(int firstRow, int lastRow) const;
     double totalVisibleRowHeight(int firstRow, int lastRow) const;
 
-    int rowForPosition(double ypos, double * topOfRow = 0) const;
+    int rowForPosition(double ypos, double *topOfRow = 0) const;
 
-    bool hasPageBreak(int row, int* lastRow = 0, int* firstRow = 0) const;
+    bool hasPageBreak(int row, int *lastRow = 0, int *firstRow = 0) const;
     void setPageBreak(int firstRow, int lastRow, bool pageBreak);
 
     /** Convenience function - sets everything at once. */
-    void setRowFormat (int firstRow, int lastRow, const RowFormat &f);
+    void setRowFormat(int firstRow, int lastRow, const RowFormat &f);
     RowFormat getRowFormat(int row) const;
 
-    bool isDefaultRow(int row, int* lastRow = 0, int* firstRow = 0) const;
+    bool isDefaultRow(int row, int *lastRow = 0, int *firstRow = 0) const;
     void setDefault(int firstRow, int lastRow);
     int lastNonDefaultRow() const;
 
     bool rowsAreEqual(int row1, int row2) const;
-
 
     /**
      * Insert \p number of rows at position \p row.
@@ -88,17 +87,15 @@ public:
      */
     void removeRows(int row, int number);
 
-    RowFormatStorage& operator=(const RowFormatStorage& r);
+    RowFormatStorage &operator=(const RowFormatStorage &r);
+
 private:
-    RowFormatStorage(const RowFormatStorage&);
+    RowFormatStorage(const RowFormatStorage &);
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
-
 
 } // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_SHEETS_ROWFORMATSTORAGE_H
-

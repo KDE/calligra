@@ -12,11 +12,7 @@
 
 #include "core/Cell.h"
 
-
-
 using namespace Calligra::Sheets;
-
-
 
 TextCase::TextCase(Actions *actions, CaseManipulator::CaseMode mode)
     : CellAction(actions, actionName(mode), actionCaption(mode), actionIcon(mode), actionToolTip(mode))
@@ -28,13 +24,20 @@ TextCase::~TextCase()
 {
 }
 
-QAction *TextCase::createAction() {
+QAction *TextCase::createAction()
+{
     QAction *res = CellAction::createAction();
     QString itext;
     switch (m_mode) {
-    case CaseManipulator::Upper:      itext = i18n("Upper"); break;
-    case CaseManipulator::Lower:      itext = i18n("Lower"); break;
-    case CaseManipulator::FirstUpper: itext = i18n("First Letter Upper"); break;
+    case CaseManipulator::Upper:
+        itext = i18n("Upper");
+        break;
+    case CaseManipulator::Lower:
+        itext = i18n("Lower");
+        break;
+    case CaseManipulator::FirstUpper:
+        itext = i18n("First Letter Upper");
+        break;
     };
     res->setIconText(itext);
     return res;
@@ -42,12 +45,18 @@ QAction *TextCase::createAction() {
 
 void TextCase::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    CaseManipulator* command = new CaseManipulator;
+    CaseManipulator *command = new CaseManipulator;
 
     switch (m_mode) {
-    case CaseManipulator::Upper:      command->setText(kundo2_i18n("Switch to uppercase")); break;
-    case CaseManipulator::Lower:      command->setText(kundo2_i18n("Switch to lowercase")); break;
-    case CaseManipulator::FirstUpper: command->setText(kundo2_i18n("First letter uppercase")); break;
+    case CaseManipulator::Upper:
+        command->setText(kundo2_i18n("Switch to uppercase"));
+        break;
+    case CaseManipulator::Lower:
+        command->setText(kundo2_i18n("Switch to lowercase"));
+        break;
+    case CaseManipulator::FirstUpper:
+        command->setText(kundo2_i18n("First letter uppercase"));
+        break;
     };
     command->changeMode(m_mode);
     command->add(*selection);
@@ -58,9 +67,12 @@ void TextCase::execute(Selection *selection, Sheet *sheet, QWidget *)
 QString TextCase::actionName(CaseManipulator::CaseMode mode)
 {
     switch (mode) {
-    case CaseManipulator::Upper:      return "toUpperCase";
-    case CaseManipulator::Lower:      return "toLowerCase";
-    case CaseManipulator::FirstUpper: return "firstLetterToUpperCase";
+    case CaseManipulator::Upper:
+        return "toUpperCase";
+    case CaseManipulator::Lower:
+        return "toLowerCase";
+    case CaseManipulator::FirstUpper:
+        return "firstLetterToUpperCase";
     };
     return QString();
 }
@@ -68,9 +80,12 @@ QString TextCase::actionName(CaseManipulator::CaseMode mode)
 QIcon TextCase::actionIcon(CaseManipulator::CaseMode mode)
 {
     switch (mode) {
-    case CaseManipulator::Upper:      return koIconWanted("no icon in Kate, but LO has one", "format-text-uppercase");
-    case CaseManipulator::Lower:      return koIconWanted("no icon in Kate, but LO has one", "format-text-lowercase");
-    case CaseManipulator::FirstUpper: return koIcon("format-text-capitalize");
+    case CaseManipulator::Upper:
+        return koIconWanted("no icon in Kate, but LO has one", "format-text-uppercase");
+    case CaseManipulator::Lower:
+        return koIconWanted("no icon in Kate, but LO has one", "format-text-lowercase");
+    case CaseManipulator::FirstUpper:
+        return koIcon("format-text-capitalize");
     };
     return QIcon();
 }
@@ -78,9 +93,12 @@ QIcon TextCase::actionIcon(CaseManipulator::CaseMode mode)
 QString TextCase::actionCaption(CaseManipulator::CaseMode mode)
 {
     switch (mode) {
-    case CaseManipulator::Upper:      return i18n("Upper Case");
-    case CaseManipulator::Lower:      return i18n("Lower Case");
-    case CaseManipulator::FirstUpper: return i18n("Convert First Letter to Upper Case");
+    case CaseManipulator::Upper:
+        return i18n("Upper Case");
+    case CaseManipulator::Lower:
+        return i18n("Lower Case");
+    case CaseManipulator::FirstUpper:
+        return i18n("Convert First Letter to Upper Case");
     };
     return QString();
 }
@@ -88,14 +106,15 @@ QString TextCase::actionCaption(CaseManipulator::CaseMode mode)
 QString TextCase::actionToolTip(CaseManipulator::CaseMode mode)
 {
     switch (mode) {
-    case CaseManipulator::Upper:      return i18n("Convert all letters to upper case");
-    case CaseManipulator::Lower:      return i18n("Convert all letters to lower case");
-    case CaseManipulator::FirstUpper: return i18n("Capitalize the first letter");
+    case CaseManipulator::Upper:
+        return i18n("Convert all letters to upper case");
+    case CaseManipulator::Lower:
+        return i18n("Convert all letters to lower case");
+    case CaseManipulator::FirstUpper:
+        return i18n("Capitalize the first letter");
     };
     return QString();
 }
-
-
 
 CaseManipulator::CaseManipulator()
 {
@@ -107,17 +126,18 @@ CaseManipulator::~CaseManipulator()
 {
 }
 
-Value CaseManipulator::newValue(Element *element, int col, int row,
-                                bool *parse, Format::Type *)
+Value CaseManipulator::newValue(Element *element, int col, int row, bool *parse, Format::Type *)
 {
     Q_UNUSED(element)
     // if we are here, we know that we want the change
     *parse = false;
     QString str = Cell(m_sheet, col, row).value().asString();
     switch (m_mode) {
-    case Upper: str = str.toUpper();
+    case Upper:
+        str = str.toUpper();
         break;
-    case Lower: str = str.toLower();
+    case Lower:
+        str = str.toLower();
         break;
     case FirstUpper:
         if (str.length() > 0)
@@ -141,5 +161,3 @@ bool CaseManipulator::wantChange(Element *element, int col, int row)
     // necessary ?
     return true;
 }
-
-

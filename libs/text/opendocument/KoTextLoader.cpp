@@ -20,74 +20,74 @@
  */
 #include "KoTextLoader.h"
 
-#include <KoTextMeta.h>
-#include <KoBookmark.h>
-#include <KoBookmarkManager.h>
+#include "KoBibliographyInfo.h"
+#include "KoDocumentRdfBase.h"
+#include "KoElementReference.h"
+#include "KoList.h"
+#include "KoSection.h"
+#include "KoSectionEnd.h"
+#include "KoTableOfContentsGeneratorInfo.h"
+#include "KoTextDebug.h"
+#include "KoTextDocument.h"
+#include "KoTextInlineRdf.h"
+#include "KoTextSharedLoadingData.h"
+#include "KoTextSoftPageBreak.h"
+#include "KoTextTableTemplate.h"
+#include <KoAnchorInlineObject.h>
+#include <KoAnchorTextRange.h>
 #include <KoAnnotation.h>
 #include <KoAnnotationManager.h>
-#include <KoInlineNote.h>
+#include <KoBookmark.h>
+#include <KoBookmarkManager.h>
 #include <KoInlineCite.h>
-#include <KoTextRangeManager.h>
+#include <KoInlineNote.h>
+#include <KoInlineObjectRegistry.h>
 #include <KoInlineTextObjectManager.h>
-#include "KoList.h"
+#include <KoOdfBibliographyConfiguration.h>
+#include <KoOdfLineNumberingConfiguration.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
-#include <KoOdfLineNumberingConfiguration.h>
 #include <KoShapeContainer.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>
 #include <KoTableColumnAndRowStyleManager.h>
-#include <KoAnchorInlineObject.h>
-#include <KoAnchorTextRange.h>
 #include <KoTextBlockData.h>
-#include "KoTextDebug.h"
-#include "KoTextDocument.h"
-#include "KoTextSharedLoadingData.h"
-#include <KoOdfBibliographyConfiguration.h>
+#include <KoTextMeta.h>
+#include <KoTextRangeManager.h>
 #include <KoVariable.h>
 #include <KoVariableManager.h>
-#include <KoInlineObjectRegistry.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
-#include "KoTextInlineRdf.h"
-#include "KoTableOfContentsGeneratorInfo.h"
-#include "KoBibliographyInfo.h"
-#include "KoSection.h"
-#include "KoSectionEnd.h"
-#include "KoTextSoftPageBreak.h"
-#include "KoDocumentRdfBase.h"
-#include "KoElementReference.h"
-#include "KoTextTableTemplate.h"
 
-#include "styles/KoStyleManager.h"
-#include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
-#include "styles/KoListStyle.h"
 #include "styles/KoListLevelProperties.h"
-#include "styles/KoTableStyle.h"
-#include "styles/KoTableColumnStyle.h"
-#include "styles/KoTableCellStyle.h"
+#include "styles/KoListStyle.h"
+#include "styles/KoParagraphStyle.h"
 #include "styles/KoSectionStyle.h"
-#include <KoSectionUtils.h>
+#include "styles/KoStyleManager.h"
+#include "styles/KoTableCellStyle.h"
+#include "styles/KoTableColumnStyle.h"
+#include "styles/KoTableStyle.h"
 #include <KoSectionModel.h>
+#include <KoSectionUtils.h>
 
-#include <KLocalizedString>
 #include "TextDebug.h"
+#include <KLocalizedString>
 
+#include <QElapsedTimer>
 #include <QList>
-#include <QVector>
 #include <QMap>
 #include <QRect>
 #include <QStack>
+#include <QString>
 #include <QTextBlock>
 #include <QTextCursor>
-#include <QTextList>
-#include <QTextTable>
-#include <QElapsedTimer>
-#include <QString>
 #include <QTextInlineObject>
+#include <QTextList>
 #include <QTextStream>
+#include <QTextTable>
+#include <QVector>
 #include <QXmlStreamReader>
 
 // if defined then debugging is enabled
@@ -143,30 +143,32 @@ public:
     KoList *previousList(int level) const;
 
     explicit Private(KoShapeLoadingContext &context, KoShape *s)
-        : context(context),
-          textSharedData(0),
-          // stylesDotXml says from where the office:automatic-styles are to be picked from:
-          // the content.xml or the styles.xml (in a multidocument scenario). It does not
-          // decide from where the office:styles are to be picked (always picked from styles.xml).
-          // For our use here, stylesDotXml is always false (see ODF1.1 spec §2.1).
-          stylesDotXml(context.odfLoadingContext().useStylesAutoStyles()),
-          bodyProgressTotal(0),
-          bodyProgressValue(0),
-          nextProgressReportMs(0),
-          currentLists(10),
-          currentListStyle(0),
-          currentListLevel(1),
-          endCharStyle(0),
-          styleManager(0),
-          shape(s),
-          loadSpanLevel(0),
-          loadSpanInitialPos(0)
+        : context(context)
+        , textSharedData(0)
+        ,
+        // stylesDotXml says from where the office:automatic-styles are to be picked from:
+        // the content.xml or the styles.xml (in a multidocument scenario). It does not
+        // decide from where the office:styles are to be picked (always picked from styles.xml).
+        // For our use here, stylesDotXml is always false (see ODF1.1 spec §2.1).
+        stylesDotXml(context.odfLoadingContext().useStylesAutoStyles())
+        , bodyProgressTotal(0)
+        , bodyProgressValue(0)
+        , nextProgressReportMs(0)
+        , currentLists(10)
+        , currentListStyle(0)
+        , currentListLevel(1)
+        , endCharStyle(0)
+        , styleManager(0)
+        , shape(s)
+        , loadSpanLevel(0)
+        , loadSpanInitialPos(0)
         , m_previousList(10)
     {
         progressTime.start();
     }
 
-    ~Private() {
+    ~Private()
+    {
         debugText << "Loading took" << (float)(progressTime.elapsed()) / 1000 << " seconds";
     }
 
@@ -175,8 +177,8 @@ public:
 
 KoList *KoTextLoader::Private::list(const QTextDocument *document, KoListStyle *listStyle, bool mergeSimilarStyledList)
 {
-    //TODO: Remove mergeSimilarStyledList parameter by finding a way to put the numbered-paragraphs of same level
-    //      to a single QTextList while loading rather than maintaining a hash list
+    // TODO: Remove mergeSimilarStyledList parameter by finding a way to put the numbered-paragraphs of same level
+    //       to a single QTextList while loading rather than maintaining a hash list
     if (mergeSimilarStyledList) {
         if (lists.contains(listStyle)) {
             return lists[listStyle];
@@ -208,13 +210,13 @@ KoList *KoTextLoader::Private::previousList(int level) const
 inline static bool isspace(ushort ch)
 {
     // options are ordered by likelihood
-    return ch == ' ' || ch== '\n' || ch == '\r' ||  ch == '\t';
+    return ch == ' ' || ch == '\n' || ch == '\r' || ch == '\t';
 }
 
 QString KoTextLoader::normalizeWhitespace(const QString &in, bool leadingSpace)
 {
     QString textstring = in;
-    ushort *text = (ushort*)textstring.data(); // this detaches from the string 'in'
+    ushort *text = (ushort *)textstring.data(); // this detaches from the string 'in'
     int r, w = 0;
     int len = textstring.length();
     for (r = 0; r < len; ++r) {
@@ -251,12 +253,12 @@ KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoShape *shape)
         d->textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
     }
 
-    //debugText << "sharedData" << sharedData << "textSharedData" << d->textSharedData;
+    // debugText << "sharedData" << sharedData << "textSharedData" << d->textSharedData;
 
     if (!d->textSharedData) {
         d->textSharedData = new KoTextSharedLoadingData();
         KoDocumentResourceManager *rm = context.documentResourceManager();
-        KoStyleManager *styleManager = rm->resource(KoText::StyleManager).value<KoStyleManager*>();
+        KoStyleManager *styleManager = rm->resource(KoText::StyleManager).value<KoStyleManager *>();
         d->textSharedData->loadOdfStyles(context, styleManager);
         if (!sharedData) {
             context.addSharedData(KOTEXT_SHARED_LOADING_ID, d->textSharedData);
@@ -267,7 +269,7 @@ KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoShape *shape)
     }
 
     if (context.documentRdf()) {
-        d->rdfIdList = qobject_cast<KoDocumentRdfBase*>(context.documentRdf())->idrefList();
+        d->rdfIdList = qobject_cast<KoDocumentRdfBase *>(context.documentRdf())->idrefList();
     }
 }
 
@@ -319,15 +321,11 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
     }
 
     KoOdfLineNumberingConfiguration *lineNumberingConfiguration =
-            new KoOdfLineNumberingConfiguration(d->context.odfLoadingContext()
-                                                .stylesReader()
-                                                .lineNumberingConfiguration());
+        new KoOdfLineNumberingConfiguration(d->context.odfLoadingContext().stylesReader().lineNumberingConfiguration());
     KoTextDocument(document).setLineNumberingConfiguration(lineNumberingConfiguration);
 
     KoOdfBibliographyConfiguration *bibConfiguration =
-            new KoOdfBibliographyConfiguration(d->context.odfLoadingContext()
-                                               .stylesReader()
-                                               .globalBibliographyConfiguration());
+        new KoOdfBibliographyConfiguration(d->context.odfLoadingContext().stylesReader().globalBibliographyConfiguration());
     KoTextDocument(document).styleManager()->setBibliographyConfiguration(bibConfiguration);
 
     d->styleManager = KoTextDocument(document).styleManager();
@@ -338,14 +336,12 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
     bool usedParagraph = false; // set to true if we found a tag that used the paragraph, indicating that the next round needs to start a new one.
 
     if (bodyElem.namespaceURI() == KoXmlNS::table && bodyElem.localName() == "table") {
-
         loadTable(bodyElem, cursor);
-    }
-    else {
+    } else {
         startBody(KoXml::childNodesCount(bodyElem));
 
         KoXmlElement tag;
-        for (KoXmlNode _node = bodyElem.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) {
+        for (KoXmlNode _node = bodyElem.firstChild(); !_node.isNull(); _node = _node.nextSibling()) {
             if (!(tag = _node.toElement()).isNull()) {
                 const QString localName = tag.localName();
 
@@ -359,7 +355,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
                     } else if (localName == "h") { // heading
                         loadHeading(tag, cursor);
                     } else if (localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
-                            || localName == "list" || localName == "numbered-paragraph") {  // OASIS
+                               || localName == "list" || localName == "numbered-paragraph") { // OASIS
                         loadList(tag, cursor);
                     } else if (localName == "section") {
                         loadSection(tag, cursor);
@@ -384,8 +380,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
                             warnText << "unhandled text:" << localName;
                         }
                     }
-                } else if (tag.namespaceURI() == KoXmlNS::draw
-                           || tag.namespaceURI() == KoXmlNS::dr3d) {
+                } else if (tag.namespaceURI() == KoXmlNS::draw || tag.namespaceURI() == KoXmlNS::dr3d) {
                     loadShape(tag, cursor);
                 } else if (tag.namespaceURI() == KoXmlNS::table) {
                     if (localName == "table") {
@@ -416,9 +411,9 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
 
     KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
     Q_UNUSED(textRangeManager);
-    //debugText << "text ranges::";
-    //foreach(KoTextRange *range, textRangeManager->textRanges()) {
-        //debugText << range->id();
+    // debugText << "text ranges::";
+    // foreach(KoTextRange *range, textRangeManager->textRanges()) {
+    // debugText << range->id();
     //}
 
     if (!rootCallChecker) {
@@ -435,8 +430,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
 void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &cursor)
 {
     // TODO use the default style name a default value?
-    const QString styleName = element.attributeNS(KoXmlNS::text, "style-name",
-                                                  QString());
+    const QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
 
     KoParagraphStyle *paragraphStyle = d->textSharedData->paragraphStyle(styleName, d->stylesDotXml);
 
@@ -447,7 +441,6 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
         if (!styleName.isEmpty())
             warnText << "paragraph style " << styleName << "not found - using default style";
         paragraphStyle = d->styleManager->defaultParagraphStyle();
-
     }
 
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
@@ -475,16 +468,12 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
     // attach Rdf to cursor.block()
     // remember inline Rdf metadata -- if the xml-id is actually
     // about rdf.
-    if (element.hasAttributeNS(KoXmlNS::xhtml, "property")
-            || d->rdfIdList.contains(id.toString()))
-    {
+    if (element.hasAttributeNS(KoXmlNS::xhtml, "property") || d->rdfIdList.contains(id.toString())) {
         QTextBlock block = cursor.block();
-        KoTextInlineRdf* inlineRdf =
-                new KoTextInlineRdf((QTextDocument*)block.document(), block);
+        KoTextInlineRdf *inlineRdf = new KoTextInlineRdf((QTextDocument *)block.document(), block);
         if (inlineRdf->loadOdf(element)) {
-                KoTextInlineRdf::attach(inlineRdf, cursor);
-        }
-        else {
+            KoTextInlineRdf::attach(inlineRdf, cursor);
+        } else {
             delete inlineRdf;
             inlineRdf = 0;
         }
@@ -498,16 +487,17 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
     loadSpan(element, cursor, &stripLeadingSpace);
     QTextBlock block = cursor.block();
     QString text = block.text();
-    if (text.length() == 0 || text.at(text.length()-1) == QChar(0x2028)) {
+    if (text.length() == 0 || text.at(text.length() - 1) == QChar(0x2028)) {
         if (d->endCharStyle) {
             QTextBlockFormat blockFormat = block.blockFormat();
-            blockFormat.setProperty(KoParagraphStyle::EndCharStyle, QVariant::fromValue< QSharedPointer<KoCharacterStyle> >(QSharedPointer<KoCharacterStyle>(d->endCharStyle->clone())));
+            blockFormat.setProperty(KoParagraphStyle::EndCharStyle,
+                                    QVariant::fromValue<QSharedPointer<KoCharacterStyle>>(QSharedPointer<KoCharacterStyle>(d->endCharStyle->clone())));
             cursor.setBlockFormat(blockFormat);
         }
     }
     d->endCharStyle = 0;
 
-    cursor.setCharFormat(cf);   // restore the cursor char format
+    cursor.setCharFormat(cf); // restore the cursor char format
 }
 
 void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
@@ -526,15 +516,14 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
     }
     if (paragraphStyle) {
         // Apply list style when loading a list but we don't have a list style
-        paragraphStyle->applyStyle(block, (d->currentListLevel > 1) &&
-                                   d->currentLists[d->currentListLevel - 2] && !d->currentListStyle);
+        paragraphStyle->applyStyle(block, (d->currentListLevel > 1) && d->currentLists[d->currentListLevel - 2] && !d->currentListStyle);
     }
 
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
     bool stripLeadingSpace = true;
     loadSpan(element, cursor, &stripLeadingSpace);
-    cursor.setCharFormat(cf);   // restore the cursor char format
+    cursor.setCharFormat(cf); // restore the cursor char format
 
     if ((block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) && (level == -1)) {
         level = block.blockFormat().property(KoParagraphStyle::OutlineLevel).toInt();
@@ -552,29 +541,29 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
         cursor.mergeBlockFormat(blockFormat);
     }
 
-    //we are defining our default behaviour here
-    //Case 1: If text:outline-style is specified then we use the outline style to determine the numbering style
-    //Case 2: If text:outline-style is not specified then if the <text:h> element is inside a <text:list> then it is numbered
-    //        otherwise it is not
+    // we are defining our default behaviour here
+    // Case 1: If text:outline-style is specified then we use the outline style to determine the numbering style
+    // Case 2: If text:outline-style is not specified then if the <text:h> element is inside a <text:list> then it is numbered
+    //         otherwise it is not
     KoListStyle *outlineStyle = d->styleManager->outlineStyle();
     if (!outlineStyle) {
         outlineStyle = d->styleManager->defaultOutlineStyle()->clone();
         d->styleManager->setOutlineStyle(outlineStyle);
     }
 
-    //if outline style is not specified and this is not inside a list then we do not number it
+    // if outline style is not specified and this is not inside a list then we do not number it
     if (outlineStyle->styleId() == d->styleManager->defaultOutlineStyle()->styleId()) {
         if (d->currentListLevel <= 1) {
             QTextBlockFormat blockFormat;
             blockFormat.setProperty(KoParagraphStyle::UnnumberedListItem, true);
             cursor.mergeBlockFormat(blockFormat);
-        } else { //inside a list then take the numbering from the list style
+        } else { // inside a list then take the numbering from the list style
             int level = d->currentListLevel - 1;
             KoListLevelProperties llp;
             if (!d->currentListStyle->hasLevelProperties(level)) {
                 // Look if one of the lower levels are defined to we can copy over that level.
-                for(int i = level - 1; i >= 0; --i) {
-                    if(d->currentLists[level - 1]->style()->hasLevelProperties(i)) {
+                for (int i = level - 1; i >= 0; --i) {
+                    if (d->currentLists[level - 1]->style()->hasLevelProperties(i)) {
                         llp = d->currentLists[level - 1]->style()->levelProperties(i);
                         break;
                     }
@@ -600,15 +589,12 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
     KoElementReference id;
     id.loadOdf(element);
 
-    if (element.hasAttributeNS(KoXmlNS::xhtml, "property")
-            || d->rdfIdList.contains(id.toString())) {
+    if (element.hasAttributeNS(KoXmlNS::xhtml, "property") || d->rdfIdList.contains(id.toString())) {
         QTextBlock block = cursor.block();
-        KoTextInlineRdf* inlineRdf =
-                new KoTextInlineRdf((QTextDocument*)block.document(), block);
+        KoTextInlineRdf *inlineRdf = new KoTextInlineRdf((QTextDocument *)block.document(), block);
         if (inlineRdf->loadOdf(element)) {
             KoTextInlineRdf::attach(inlineRdf, cursor);
-        }
-        else {
+        } else {
             delete inlineRdf;
             inlineRdf = 0;
         }
@@ -636,20 +622,18 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 
     if (element.hasAttributeNS(KoXmlNS::text, "continue-list")) {
         if (d->xmlIdToListMap.contains(element.attributeNS(KoXmlNS::text, "continue-list", QString()))) {
-           continuedList = d->xmlIdToListMap.value(element.attributeNS(KoXmlNS::text, "continue-list", QString()));
+            continuedList = d->xmlIdToListMap.value(element.attributeNS(KoXmlNS::text, "continue-list", QString()));
         }
     } else {
-        //the ODF spec says that continue-numbering is considered only if continue-list is not specified
+        // the ODF spec says that continue-numbering is considered only if continue-list is not specified
         if (element.hasAttributeNS(KoXmlNS::text, "continue-numbering")) {
             const QString continueNumbering = element.attributeNS(KoXmlNS::text, "continue-numbering", QString());
             if (continueNumbering == "true") {
-                //since ODF spec says "and the numbering style of the preceding list is the same as the current list"
+                // since ODF spec says "and the numbering style of the preceding list is the same as the current list"
                 KoList *prevList = d->previousList(d->currentListLevel);
-                if (prevList && listStyle && prevList->style()->hasLevelProperties(d->currentListLevel)
-                        && listStyle->hasLevelProperties(d->currentListLevel)
-                        && (prevList->style()->levelProperties(d->currentListLevel).labelType() ==
-                       listStyle->levelProperties(d->currentListLevel).labelType())) {
-                   continuedList = prevList;
+                if (prevList && listStyle && prevList->style()->hasLevelProperties(d->currentListLevel) && listStyle->hasLevelProperties(d->currentListLevel)
+                    && (prevList->style()->levelProperties(d->currentListLevel).labelType() == listStyle->levelProperties(d->currentListLevel).labelType())) {
+                    continuedList = prevList;
                 }
             }
         }
@@ -696,16 +680,16 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
         level = qBound(0, level, 10);
     }
 
-    if (! numberedParagraph) {
+    if (!numberedParagraph) {
         d->setCurrentList(d->currentLists[d->currentListLevel - 2], level);
     }
 
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
     if (d->currentListStyle)
-        debugText << "styleName =" << styleName << "listStyle =" << d->currentListStyle->name()
-                      << "level =" << level << "hasLevelProperties =" << d->currentListStyle->hasLevelProperties(level)
-                         //<<" style="<<props.style()<<" prefix="<<props.listItemPrefix()<<" suffix="<<props.listItemSuffix()
-                         ;
+        debugText << "styleName =" << styleName << "listStyle =" << d->currentListStyle->name() << "level =" << level
+                  << "hasLevelProperties =" << d->currentListStyle->hasLevelProperties(level)
+            //<<" style="<<props.style()<<" prefix="<<props.listItemPrefix()<<" suffix="<<props.listItemSuffix()
+            ;
     else
         debugText << "styleName =" << styleName << " currentListStyle = 0";
 #endif
@@ -718,19 +702,19 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 
     for (KoXmlNode _node = element.firstChild(); !_node.isNull(); _node = _node.nextSibling()) {
         if (!(e = _node.toElement()).isNull()) {
-                childElementsList.append(e);
+            childElementsList.append(e);
         }
     }
 
     // Iterate over list items and add them to the textlist
     bool firstTime = true;
     foreach (e, childElementsList) {
-      if (e.localName() != "removed-content") {
+        if (e.localName() != "removed-content") {
             if (!firstTime && !numberedParagraph)
                 cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
             firstTime = false;
             loadListItem(e, cursor, level);
-      }
+        }
     }
 
     if (numberedParagraph || --d->currentListLevel == 1) {
@@ -770,14 +754,14 @@ void KoTextLoader::loadListItem(const KoXmlElement &e, QTextCursor &cursor, int 
             if (!d->currentLists[level - 1]->style()->hasLevelProperties(level)) {
                 KoListLevelProperties llp;
                 // Look if one of the lower levels are defined to we can copy over that level.
-                for(int i = level - 1; i >= 0; --i) {
-                    if(d->currentLists[level - 1]->style()->hasLevelProperties(i)) {
+                for (int i = level - 1; i >= 0; --i) {
+                    if (d->currentLists[level - 1]->style()->hasLevelProperties(i)) {
                         llp = d->currentLists[level - 1]->style()->levelProperties(i);
                         break;
                     }
                 }
                 llp.setLevel(level);
-            // TODO make the 10 configurable
+                // TODO make the 10 configurable
                 llp.setIndent(level * 10.0);
                 d->currentLists[level - 1]->style()->setLevelProperties(llp);
             }
@@ -792,7 +776,6 @@ void KoTextLoader::loadListItem(const KoXmlElement &e, QTextCursor &cursor, int 
             int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString()).toInt();
             blockFormat.setProperty(KoParagraphStyle::ListStartValue, startValue);
         }
-
 
         // mark intermediate paragraphs as unnumbered items
         QTextCursor c(current);
@@ -827,8 +810,7 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
 
     // Close the section on the last block of text we have loaded just now.
     QTextBlockFormat format = cursor.block().blockFormat();
-    KoSectionUtils::setSectionEndings(format,
-        KoSectionUtils::sectionEndings(format) << d->context.sectionModel()->createSectionEnd(section));
+    KoSectionUtils::setSectionEndings(format, KoSectionUtils::sectionEndings(format) << d->context.sectionModel()->createSectionEnd(section));
     d->sectionStack.pop();
 
     cursor.setBlockFormat(format);
@@ -864,7 +846,7 @@ void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
 {
     KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
     if (textObjectManager) {
-        //Now creating citation with default type KoInlineCite::Citation.
+        // Now creating citation with default type KoInlineCite::Citation.
         KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
 
         // the manager is needed during loading so set it now
@@ -877,8 +859,7 @@ void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
     }
 }
 
-void KoTextLoader::loadText(const QString &fulltext, QTextCursor &cursor,
-                            bool *stripLeadingSpace, bool isLastNode)
+void KoTextLoader::loadText(const QString &fulltext, QTextCursor &cursor, bool *stripLeadingSpace, bool isLastNode)
 {
     QString text = normalizeWhitespace(fulltext, *stripLeadingSpace);
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
@@ -892,12 +873,11 @@ void KoTextLoader::loadText(const QString &fulltext, QTextCursor &cursor,
 
         cursor.insertText(text);
 
-        if (d->loadSpanLevel == 1 && isLastNode
-                && cursor.position() > d->loadSpanInitialPos) {
+        if (d->loadSpanLevel == 1 && isLastNode && cursor.position() > d->loadSpanInitialPos) {
             QTextCursor tempCursor(cursor);
             tempCursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, 1); // select last char loaded
-            if (tempCursor.selectedText() == " " && *stripLeadingSpace) {            // if it's a collapsed blankspace
-                tempCursor.removeSelectedText();                                    // remove it
+            if (tempCursor.selectedText() == " " && *stripLeadingSpace) { // if it's a collapsed blankspace
+                tempCursor.removeSelectedText(); // remove it
             }
         }
     }
@@ -920,8 +900,8 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         const bool isDr3dNS = ts.namespaceURI() == KoXmlNS::dr3d;
         const bool isOfficeNS = ts.namespaceURI() == KoXmlNS::office;
 
-        //if (isOfficeNS)
-        debugText << "office:"<<isOfficeNS << localName;
+        // if (isOfficeNS)
+        debugText << "office:" << isOfficeNS << localName;
 
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
         debugText << "load" << localName << *stripLeadingSpace << node.toText().data();
@@ -933,8 +913,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
 
         if (node.isText()) {
             bool isLastNode = node.nextSibling().isNull();
-            loadText(node.toText().data(), cursor, stripLeadingSpace,
-                     isLastNode);
+            loadText(node.toText().data(), cursor, stripLeadingSpace, isLastNode);
         } else if (isTextNS && localName == "span") { // text:span
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
             debugText << "  <span> localName=" << localName;
@@ -954,7 +933,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 warnText << "character style " << styleName << " not found";
             }
 
-            loadSpan(ts, cursor, stripLeadingSpace);   // recurse
+            loadSpan(ts, cursor, stripLeadingSpace); // recurse
             cursor.setCharFormat(cf); // restore the cursor char format
         } else if (isTextNS && localName == "s") { // text:s
             int howmany = 1;
@@ -963,10 +942,10 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             }
             cursor.insertText(QString().fill(u' ', howmany));
             *stripLeadingSpace = false;
-        } else if ( (isTextNS && localName == "note")) { // text:note
+        } else if ((isTextNS && localName == "note")) { // text:note
             loadNote(ts, cursor);
         } else if (isTextNS && localName == "bibliography-mark") { // text:bibliography-mark
-            loadCite(ts,cursor);
+            loadCite(ts, cursor);
         } else if (isTextNS && localName == "tab") { // text:tab
             cursor.insertText("\t");
             *stripLeadingSpace = false;
@@ -989,7 +968,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             newCharFormat.setAnchorHref(target);
             cursor.setCharFormat(newCharFormat);
 
-            loadSpan(ts, cursor, stripLeadingSpace);   // recurse
+            loadSpan(ts, cursor, stripLeadingSpace); // recurse
             cursor.setCharFormat(cf); // restore the cursor char format
 
         } else if (isTextNS && localName == "line-break") { // text:line-break
@@ -1010,29 +989,26 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
             if (textObjectManager) {
                 const QTextDocument *document = cursor.block().document();
-                KoTextMeta* startmark = new KoTextMeta(document);
+                KoTextMeta *startmark = new KoTextMeta(document);
                 textObjectManager->insertInlineObject(cursor, startmark);
 
                 // Add inline Rdf here.
                 KoElementReference id;
                 id.loadOdf(ts);
 
-                if (ts.hasAttributeNS(KoXmlNS::xhtml, "property")
-                        || (id.isValid() && d->rdfIdList.contains(id.toString()))) {
-                    KoTextInlineRdf* inlineRdf =
-                            new KoTextInlineRdf((QTextDocument*)document, startmark);
+                if (ts.hasAttributeNS(KoXmlNS::xhtml, "property") || (id.isValid() && d->rdfIdList.contains(id.toString()))) {
+                    KoTextInlineRdf *inlineRdf = new KoTextInlineRdf((QTextDocument *)document, startmark);
                     if (inlineRdf->loadOdf(ts)) {
                         startmark->setInlineRdf(inlineRdf);
-                    }
-                    else {
+                    } else {
                         delete inlineRdf;
                         inlineRdf = 0;
                     }
                 }
 
-                loadSpan(ts, cursor, stripLeadingSpace);   // recurse
+                loadSpan(ts, cursor, stripLeadingSpace); // recurse
 
-                KoTextMeta* endmark = new KoTextMeta(document);
+                KoTextMeta *endmark = new KoTextMeta(document);
                 textObjectManager->insertInlineObject(cursor, endmark);
                 startmark->setEndBookmark(endmark);
             }
@@ -1042,7 +1018,8 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
 
             if (localName == "bookmark-end") {
-                KoBookmark *bookmark = textRangeManager->bookmarkManager()->bookmark(KoBookmark::createUniqueBookmarkName(textRangeManager->bookmarkManager(), ts.attribute("name"), true));
+                KoBookmark *bookmark = textRangeManager->bookmarkManager()->bookmark(
+                    KoBookmark::createUniqueBookmarkName(textRangeManager->bookmarkManager(), ts.attribute("name"), true));
                 if (bookmark) {
                     bookmark->setRangeEnd(cursor.position());
                 }
@@ -1060,12 +1037,12 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 linkCf.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Bookmark);
                 QStringList anchorName;
                 anchorName << bookmarkName;
-                linkCf.setAnchorHref('#'+ bookmarkName);
+                linkCf.setAnchorHref('#' + bookmarkName);
                 cursor.setCharFormat(linkCf);
             }
             // TODO add support for loading text:reference-format
-            loadSpan(ts, cursor, stripLeadingSpace);   // recurse
-            cursor.setCharFormat(cf);   // restore the cursor char format
+            loadSpan(ts, cursor, stripLeadingSpace); // recurse
+            cursor.setCharFormat(cf); // restore the cursor char format
         }
         // text:annotation and text:annotation-end
         else if (isOfficeNS && (localName == "annotation" || localName == "annotation-end")) {
@@ -1077,7 +1054,8 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 // If the tag is annotation-end, there should already be a KoAnnotation
                 // with the same name as this one.  If so, just find it and set the end
                 // of the range to the current position.
-                KoAnnotation *annotation = textRangeManager->annotationManager()->annotation(KoAnnotation::createUniqueAnnotationName(textRangeManager->annotationManager(), ts.attribute("name"), true));
+                KoAnnotation *annotation = textRangeManager->annotationManager()->annotation(
+                    KoAnnotation::createUniqueAnnotationName(textRangeManager->annotationManager(), ts.attribute("name"), true));
                 if (annotation) {
                     annotation->setRangeEnd(cursor.position());
                 }
@@ -1096,13 +1074,11 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
 
                     d->textSharedData->shapeInserted(shape, element, d->context);
                     annotation->setAnnotationShape(shape);
-                }
-                else {
+                } else {
                     warnText << "Could not load annotation";
                 }
             }
-        }
-        else if (isTextNS && localName == "number") { // text:number
+        } else if (isTextNS && localName == "number") { // text:number
             /*                ODF Spec, §4.1.1, Formatted Heading Numbering
             If a heading has a numbering applied, the text of the formatted number can be included in a
             <text:number> element. This text can be used by applications that do not support numbering of
@@ -1141,7 +1117,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     }
                 }
             } else {
-#if 0 //1.6:
+#if 0 // 1.6:
                 bool handled = false;
                 // Check if it's a variable
                 KoVariable *var = context.variableCollection().loadOasisField(textDocument(), ts, context);
@@ -1180,8 +1156,8 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     }
 
     QString tableTemplateName = tableElem.attributeNS(KoXmlNS::table, "template-name", "");
-    if (! tableTemplateName.isEmpty()) {
-        if(KoTextTableTemplate *tableTemplate = d->styleManager->tableTemplate(tableTemplateName)) {
+    if (!tableTemplateName.isEmpty()) {
+        if (KoTextTableTemplate *tableTemplate = d->styleManager->tableTemplate(tableTemplateName)) {
             tableFormat.setProperty(KoTableStyle::TableTemplate, tableTemplate->styleId());
         }
     }
@@ -1233,7 +1209,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 
     // 'Hide' the block before the table (possibly the extra block we just inserted)
     QTextBlockFormat blockFormat;
-    //blockFormat.setFont(currentBlock.blockFormat().font());
+    // blockFormat.setFont(currentBlock.blockFormat().font());
     QTextCursor tmpCursor(currentBlock);
     blockFormat.setProperty(KoParagraphStyle::HiddenByTable, true);
     QVariant masterStyle = tableFormat.property(KoTableStyle::MasterPageName);
@@ -1248,19 +1224,21 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
     int rows = 0;
     int columns = 0;
-    QVector<QRect> spanStore; //temporary list to store spans until the entire table have been created
+    QVector<QRect> spanStore; // temporary list to store spans until the entire table have been created
     KoXmlElement tblTag;
     int headingRowCounter = 0;
 
-    forEachElement(tblTag, tableElem) {
-        if (! tblTag.isNull()) {
+    forEachElement(tblTag, tableElem)
+    {
+        if (!tblTag.isNull()) {
             const QString tblLocalName = tblTag.localName();
             if (tblTag.namespaceURI() == KoXmlNS::table) {
                 if (tblLocalName == "table-column") {
                     loadTableColumn(tblTag, tbl, columns);
                 } else if (tblLocalName == "table-columns") {
                     KoXmlElement e;
-                    forEachElement(e, tblTag) {
+                    forEachElement(e, tblTag)
+                    {
                         if (e.localName() == "table-column") {
                             loadTableColumn(e, tbl, columns);
                         }
@@ -1269,7 +1247,8 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                     loadTableRow(tblTag, tbl, spanStore, cursor, rows);
                 } else if (tblLocalName == "table-rows") {
                     KoXmlElement subTag;
-                    forEachElement(subTag, tblTag) {
+                    forEachElement(subTag, tblTag)
+                    {
                         if (!subTag.isNull()) {
                             if ((subTag.namespaceURI() == KoXmlNS::table) && (subTag.localName() == "table-row")) {
                                 loadTableRow(subTag, tbl, spanStore, cursor, rows);
@@ -1278,7 +1257,8 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                     }
                 } else if (tblLocalName == "table-header-rows") {
                     KoXmlElement subTag;
-                    forEachElement(subTag, tblTag) {
+                    forEachElement(subTag, tblTag)
+                    {
                         if (!subTag.isNull()) {
                             if ((subTag.namespaceURI() == KoXmlNS::table) && (subTag.localName() == "table-row")) {
                                 headingRowCounter++;
@@ -1298,7 +1278,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     }
 
     // Finally create spans
-    foreach(const QRect &span, spanStore) {
+    foreach (const QRect &span, spanStore) {
         tbl->mergeCells(span.y(), span.x(), span.height(), span.width()); // for some reason Qt takes row, column
     }
     cursor = tbl->lastCursorPosition();
@@ -1363,7 +1343,8 @@ void KoTextLoader::loadTableRow(const KoXmlElement &tblTag, QTextTable *tbl, QVe
     // Added a row
     int currentCell = 0;
     KoXmlElement rowTag;
-    forEachElement(rowTag, tblTag) {
+    forEachElement(rowTag, tblTag)
+    {
         if (!rowTag.isNull()) {
             const QString rowLocalName = rowTag.localName();
             if (rowTag.namespaceURI() == KoXmlNS::table) {
@@ -1417,13 +1398,12 @@ void KoTextLoader::loadTableCell(const KoXmlElement &rowTag, QTextTable *tbl, QV
         id.loadOdf(rowTag);
 
         if (rowTag.hasAttributeNS(KoXmlNS::xhtml, "property") || d->rdfIdList.contains(id.toString())) {
-            KoTextInlineRdf* inlineRdf = new KoTextInlineRdf((QTextDocument*)cursor.block().document(),cell);
+            KoTextInlineRdf *inlineRdf = new KoTextInlineRdf((QTextDocument *)cursor.block().document(), cell);
             if (inlineRdf->loadOdf(rowTag)) {
                 QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                cellFormat.setProperty(KoTableCellStyle::InlineRdf,QVariant::fromValue(inlineRdf));
+                cellFormat.setProperty(KoTableCellStyle::InlineRdf, QVariant::fromValue(inlineRdf));
                 cell.setFormat(cellFormat);
-            }
-            else {
+            } else {
                 delete inlineRdf;
                 inlineRdf = 0;
             }
@@ -1434,13 +1414,13 @@ void KoTextLoader::loadTableCell(const KoXmlElement &rowTag, QTextTable *tbl, QV
     }
 }
 
-void KoTextLoader::loadShapeWithHyperLink(const KoXmlElement &element, QTextCursor& cursor)
+void KoTextLoader::loadShapeWithHyperLink(const KoXmlElement &element, QTextCursor &cursor)
 {
     // get the hyperlink
     QString hyperLink = element.attributeNS(KoXmlNS::xlink, "href");
     KoShape *shape = 0;
 
-    //load the shape for hyperlink
+    // load the shape for hyperlink
     KoXmlNode node = element.firstChild();
     if (!node.isNull()) {
         KoXmlElement ts = node.toElement();
@@ -1485,7 +1465,6 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
     return shape;
 }
 
-
 void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
 {
     // make sure that the tag is table-of-content
@@ -1504,7 +1483,8 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     info->m_styleName = element.attribute("style-name");
 
     KoXmlElement e;
-    forEachElement(e, element) {
+    forEachElement(e, element)
+    {
         if (e.isNull() || e.namespaceURI() != KoXmlNS::text) {
             continue;
         }
@@ -1512,9 +1492,9 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
         if (e.localName() == "table-of-content-source" && e.namespaceURI() == KoXmlNS::text) {
             info->loadOdf(d->textSharedData, e);
             // uncomment to see what has been loaded
-            //info.tableOfContentData()->dump();
-            tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
-            tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
+            // info.tableOfContentData()->dump();
+            tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo *>(info));
+            tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument *>(tocDocument));
             cursor.insertBlock(tocFormat);
 
             // We'll just try to find displayable elements and add them as paragraphs
@@ -1523,7 +1503,8 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
 
             bool firstTime = true;
             KoXmlElement p;
-            forEachElement(p, e) {
+            forEachElement(p, e)
+            {
                 // All elem will be "p" instead of the title, which is particular
                 if (p.isNull() || p.namespaceURI() != KoXmlNS::text)
                     continue;
@@ -1549,7 +1530,7 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
                 c.mergeBlockFormat(blockFormat);
             }
 
-        }// index-body
+        } // index-body
     }
 }
 
@@ -1570,7 +1551,8 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
     info->m_styleName = element.attribute("style-name");
 
     KoXmlElement e;
-    forEachElement(e, element) {
+    forEachElement(e, element)
+    {
         if (e.isNull() || e.namespaceURI() != KoXmlNS::text) {
             continue;
         }
@@ -1578,8 +1560,8 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
         if (e.localName() == "bibliography-source" && e.namespaceURI() == KoXmlNS::text) {
             info->loadOdf(d->textSharedData, e);
 
-            bibFormat.setProperty(KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info));
-            bibFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
+            bibFormat.setProperty(KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo *>(info));
+            bibFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument *>(bibDocument));
 
             cursor.insertBlock(bibFormat);
             // We'll just try to find displayable elements and add them as paragraphs
@@ -1588,7 +1570,8 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
 
             bool firstTime = true;
             KoXmlElement p;
-            forEachElement(p, e) {
+            forEachElement(p, e)
+            {
                 // All elem will be "p" instead of the title, which is particular
                 if (p.isNull() || p.namespaceURI() != KoXmlNS::text)
                     continue;
@@ -1614,7 +1597,7 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
                 c.mergeBlockFormat(blockFormat);
             }
 
-        }// index-body
+        } // index-body
     }
 }
 
@@ -1632,7 +1615,7 @@ void KoTextLoader::startBody(int total)
 void KoTextLoader::processBody()
 {
     d->bodyProgressValue++;
-    if (d->progressTime.elapsed() >= d->nextProgressReportMs) {  // update based on elapsed time, don't saturate the queue
+    if (d->progressTime.elapsed() >= d->nextProgressReportMs) { // update based on elapsed time, don't saturate the queue
         d->nextProgressReportMs = d->progressTime.elapsed() + 333; // report 3 times per second
         Q_ASSERT(d->bodyProgressTotal > 0);
         const int percent = d->bodyProgressValue * 100 / d->bodyProgressTotal;

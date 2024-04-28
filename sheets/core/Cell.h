@@ -27,8 +27,8 @@
 
 #include "engine/CellBase.h"
 
-#include "sheets_core_export.h"
 #include "Style.h"
+#include "sheets_core_export.h"
 
 class QRect;
 class QPoint;
@@ -45,8 +45,6 @@ class Sheet;
 class CellTest;
 class Localization;
 class CellStorage;
-
-
 
 /**
  * This namespace collects enumerations related to
@@ -81,8 +79,6 @@ enum Operation {
 };
 } // namespace Paste
 
-
-
 /**
  * An accessor to the actual cell data.
  * The Cell object acts as accessor to the actual data stored in the separate
@@ -104,18 +100,18 @@ public:
      * Constructor.
      * Creates a Cell for accessing the data in \p sheet at position \p col , \p row .
      */
-    Cell(Sheet* sheet, int column, int row);
+    Cell(Sheet *sheet, int column, int row);
 
     /**
      * Constructor.
      * Creates a Cell for accessing the data in \p sheet at position \p pos .
      */
-    Cell(Sheet* sheet, const QPoint& pos);
+    Cell(Sheet *sheet, const QPoint &pos);
 
     /**
      * Copy constructor.
      */
-    Cell(const Cell& other);
+    Cell(const Cell &other);
 
     /**
      * Destructor.
@@ -125,17 +121,17 @@ public:
     /**
      * Assignment.
      */
-    Cell& operator=(const Cell& other);
+    Cell &operator=(const Cell &other);
 
     /**
      * \return the full sheet this cell belongs to
      */
-    Sheet* fullSheet() const;
+    Sheet *fullSheet() const;
 
     /**
      * Returns the locale setting of this cell.
      */
-    Localization* locale() const;
+    Localization *locale() const;
 
     /**
      * Returns true, if this is a default cell, i.e. if the cell has no value, formula, link and
@@ -153,14 +149,14 @@ public:
     /**
      * \return the output text, e.g. the result of a formula
      */
-    QString displayText(const Style& s = Style(), Value* v = 0, bool *showFormula = 0) const;
+    QString displayText(const Style &s = Style(), Value *v = 0, bool *showFormula = 0) const;
 
     /**
      * \return the conditions associated with this cell
      */
     Conditions conditions() const;
 
-    void setConditions(const Conditions& conditions);
+    void setConditions(const Conditions &conditions);
 
     /**
      * \return the database associated with this cell
@@ -179,7 +175,7 @@ public:
      * Possible choices for link are URL (web, ftp), e-mail address, local file,
      * or another cell.
      */
-    void setLink(const QString& link);
+    void setLink(const QString &link);
 
     /**
      * \return the Style associated with this Cell
@@ -192,7 +188,7 @@ public:
      */
     Style effectiveStyle() const;
 
-    void setStyle(const Style& style);
+    void setStyle(const Style &style);
 
     /**
      * Returns the richtext that this cell holds.
@@ -212,22 +208,22 @@ public:
      *
      * \see parseUserInput, setValue
      */
-    virtual void setUserInput(const QString& text) override;
-    virtual Value parsedUserInput(const QString& text) override;
+    virtual void setUserInput(const QString &text) override;
+    virtual Value parsedUserInput(const QString &text) override;
 
     /**
      * Copies the format from \p cell .
      *
      * @see copyAll(Cell *cell)
      */
-    void copyFormat(const Cell& cell, Paste::Mode mode);
+    void copyFormat(const Cell &cell, Paste::Mode mode);
 
     /**
      * Copies the content from \p cell .
      *
      * @see copyAll(Cell *cell)
      */
-    void copyContent(const Cell& cell, Paste::Mode mode, Paste::Operation op);
+    void copyContent(const Cell &cell, Paste::Mode mode, Paste::Operation op);
 
     /**
      * Copies the format and the content from \p cell .
@@ -235,7 +231,7 @@ public:
      * @see copyContent( const Cell& cell )
      * @see copyFormat( const Cell& cell )
      */
-    void copyAll(const Cell& cell, Paste::Mode mode, Paste::Operation op);
+    void copyAll(const Cell &cell, Paste::Mode mode, Paste::Operation op);
 
     /**
      * @return the width of this cell as double
@@ -256,10 +252,9 @@ public:
      */
     bool needsPrinting() const;
 
-
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Merging
+    // BEGIN Merging
     //
 
     /**
@@ -306,11 +301,11 @@ public:
     int mergedYCells() const;
 
     //
-    //END Merging
+    // END Merging
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Effective style attributes
+    // BEGIN Effective style attributes
     //
 
     /** returns horizontal alignment, depending on style and value type */
@@ -323,18 +318,18 @@ public:
     bool isText() const;
 
     //
-    //END Effective style attributes
+    // END Effective style attributes
     //
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN
+    // BEGIN
     //
 
     /**
      * Tests for equality of all cell attributes/data to those in \p other .
      */
-    bool compareData(const Cell& other) const;
+    bool compareData(const Cell &other) const;
 
 private:
     // Caching this value for easier retrieval
@@ -343,7 +338,7 @@ private:
     friend class CellTest;
 };
 
-inline size_t qHash(const Cell& cell, size_t seed = 0)
+inline size_t qHash(const Cell &cell, size_t seed = 0)
 {
     return ::qHash((static_cast<uint>(cell.column()) << 16) + static_cast<uint>(cell.row()), seed);
 }
@@ -354,4 +349,4 @@ inline size_t qHash(const Cell& cell, size_t seed = 0)
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Cell, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(Calligra::Sheets::Cell)
 
-#endif  // CALLIGRA_SHEETS_CELL
+#endif // CALLIGRA_SHEETS_CELL

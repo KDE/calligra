@@ -20,7 +20,7 @@ void KoTextEditingRegistry::init()
     KoPluginLoader::load(QStringLiteral("calligra/textediting"), config);
 }
 
-KoTextEditingRegistry* KoTextEditingRegistry::instance()
+KoTextEditingRegistry *KoTextEditingRegistry::instance()
 {
     if (!s_instance.exists()) {
         s_instance->init();

@@ -24,8 +24,8 @@ class KoUnit;
  * getting a value will not change the value due to conversions.
  * The KoDocument class has a unit() method for consistent (document wide) configuration of the
  * used unit.
- * It is advised to use a QDoubleSpinBox in QtDesigner and then use the context-menu item: 'Promote to Custom Widget' and use the values: 'classname=KoUnitDoubleSpinBox', 'headerfile=KoUnitDoubleSpinBox.h'
- * This will generate code that uses this spinbox in the correct manner.
+ * It is advised to use a QDoubleSpinBox in QtDesigner and then use the context-menu item: 'Promote to Custom Widget' and use the values:
+ * 'classname=KoUnitDoubleSpinBox', 'headerfile=KoUnitDoubleSpinBox.h' This will generate code that uses this spinbox in the correct manner.
  */
 class KOWIDGETS_EXPORT KoUnitDoubleSpinBox : public QDoubleSpinBox
 {
@@ -38,7 +38,7 @@ public:
      * the default unit of points.
      * @param parent the parent widget
      */
-    explicit KoUnitDoubleSpinBox( QWidget *parent = 0);
+    explicit KoUnitDoubleSpinBox(QWidget *parent = 0);
     ~KoUnitDoubleSpinBox() override;
 
     /**
@@ -46,14 +46,14 @@ public:
      * @param newValue the new value
      * @see value()
      */
-    virtual void changeValue( double newValue );
+    virtual void changeValue(double newValue);
     /**
      * This spinbox shows the internal value after a conversion to the unit set here.
      */
-    virtual void setUnit( const KoUnit &);
+    virtual void setUnit(const KoUnit &);
 
     /// @return the current value, converted in points
-    double value( ) const;
+    double value() const;
 
     /// Set minimum value in points.
     void setMinimum(double min);
@@ -68,7 +68,7 @@ public:
     void setLineStepPt(double step);
 
     /// Set minimum, maximum value and the step size (all in points)
-    void setMinMaxStep( double min, double max, double step );
+    void setMinMaxStep(double min, double max, double step);
 
     /// reimplemented from superclass, will forward to KoUnitDoubleValidator
     QValidator::State validate(QString &input, int &pos) const override;
@@ -78,22 +78,21 @@ public:
      * @param value the number as double
      * @return the resulting string
      */
-    QString textFromValue( double value ) const override;
+    QString textFromValue(double value) const override;
     /**
      * Transform a string into a double, while taking care of locale specific symbols.
      * @param str the string to transform into a number
      * @return the value as double
      */
-    double valueFromText( const QString& str ) const override;
-
+    double valueFromText(const QString &str) const override;
 
 Q_SIGNALS:
     /// emitted like valueChanged in the parent, but this one emits the point value
-    void valueChangedPt( qreal );
+    void valueChangedPt(qreal);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
 private Q_SLOTS:
     // exists to do emits for valueChangedPt
@@ -101,4 +100,3 @@ private Q_SLOTS:
 };
 
 #endif
-

@@ -7,7 +7,6 @@
 #ifndef CALLIGRA_SHEETS_TABLE_TOOL_FACTORY
 #define CALLIGRA_SHEETS_TABLE_TOOL_FACTORY
 
-
 #include <KoToolFactoryBase.h>
 
 namespace Calligra
@@ -21,7 +20,7 @@ public:
     TableToolFactory();
     ~TableToolFactory();
 
-    KoToolBase* createTool(KoCanvasBase* canvas) override;
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 } // namespace Sheets

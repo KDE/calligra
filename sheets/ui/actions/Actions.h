@@ -9,9 +9,9 @@
 
 #include "sheets_ui_export.h"
 
+#include <QMap>
 #include <QObject>
 #include <QString>
-#include <QMap>
 
 class QAction;
 
@@ -37,7 +37,10 @@ public:
 
     /** For actions that need access to the cell tool, which isn't yet constructed fully in the constructor. */
     void init();
-    CellToolBase *tool() { return m_tool; }
+    CellToolBase *tool()
+    {
+        return m_tool;
+    }
     void updateOnChange(bool readWrite, Selection *selection, const Cell &activeCell);
     void onEditorDeleted();
     CellAction *cellAction(const QString &name);
@@ -54,4 +57,4 @@ protected:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTIONS
+#endif // CALLIGRA_SHEETS_ACTIONS

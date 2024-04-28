@@ -7,9 +7,8 @@
 #ifndef CALLOUTTOOLFACTORY_H
 #define CALLOUTTOOLFACTORY_H
 
-#include <KoToolFactoryBase.h>
 #include <KoPathTool.h>
-
+#include <KoToolFactoryBase.h>
 
 /// Factory for the KoPathTool
 class CalloutToolFactory : public KoToolFactoryBase
@@ -27,10 +26,10 @@ class CalloutPathTool : public KoPathTool
 public:
     CalloutPathTool(KoCanvasBase *canvas);
 
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
 public Q_SLOTS:
-    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
 };
 
 #endif

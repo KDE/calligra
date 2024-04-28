@@ -20,7 +20,7 @@ public:
     ~KPrPresentationBlackWidget() override;
 
 protected:
-    void paintEvent( QPaintEvent * event ) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     QSize m_size;

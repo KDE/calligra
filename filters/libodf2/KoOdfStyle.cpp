@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "KoOdfStyle.h"
 
@@ -13,18 +12,17 @@
 #include <QString>
 
 // Odflib
-#include "KoXmlStreamReader.h"
-#include "KoXmlWriter.h"
+#include "KoOdfGraphicProperties.h"
+#include "KoOdfParagraphProperties.h"
 #include "KoOdfStyleProperties.h"
 #include "KoOdfTextProperties.h"
-#include "KoOdfParagraphProperties.h"
-#include "KoOdfGraphicProperties.h"
+#include "KoXmlStreamReader.h"
+#include "KoXmlWriter.h"
 
 #include "Odf2Debug.h"
 
 // ================================================================
 //                         class KoOdfStyle
-
 
 class Q_DECL_HIDDEN KoOdfStyle::Private
 {
@@ -35,7 +33,7 @@ public:
     QString family;
     QString parent;
 
-    QHash<QString, KoOdfStyleProperties*> properties;  // e.g. "text-properties",
+    QHash<QString, KoOdfStyleProperties *> properties; // e.g. "text-properties",
 };
 
 KoOdfStyle::Private::Private()
@@ -47,9 +45,7 @@ KoOdfStyle::Private::~Private()
     qDeleteAll(properties);
 }
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfStyle::KoOdfStyle()
     : KoOdfStyleBase(StyleStyle)
@@ -61,7 +57,6 @@ KoOdfStyle::~KoOdfStyle()
 {
     delete d;
 }
-
 
 QString KoOdfStyle::family() const
 {
@@ -83,13 +78,12 @@ void KoOdfStyle::setParent(const QString &parent)
     d->parent = parent;
 }
 
-
-QHash<QString, KoOdfStyleProperties*> KoOdfStyle::properties() const
+QHash<QString, KoOdfStyleProperties *> KoOdfStyle::properties() const
 {
     return d->properties;
 }
 
-KoOdfStyleProperties *KoOdfStyle::properties(const QString& name) const
+KoOdfStyleProperties *KoOdfStyle::properties(const QString &name) const
 {
     return d->properties.value(name, 0);
 }
@@ -111,11 +105,10 @@ void KoOdfStyle::setProperty(const QString &propertySet, const QString &property
     props->setAttribute(property, value);
 }
 
-
 bool KoOdfStyle::readOdf(KoXmlStreamReader &reader)
 {
     // Load style attributes.
-    KoXmlStreamAttributes  attrs = reader.attributes();
+    KoXmlStreamAttributes attrs = reader.attributes();
 
     setName(attrs.value("style:name").toString());
     setDisplayName(attrs.value("style:display-name").toString());
@@ -126,7 +119,6 @@ bool KoOdfStyle::readOdf(KoXmlStreamReader &reader)
 
     // Load child elements: property sets and other children.
     while (reader.readNextStartElement()) {
-
         // So far we only have support for text-, paragraph- and graphic-properties
         const QString propertiesType = reader.qualifiedName().toString();
         // Create a new propertyset variable depending on the type of properties.
@@ -155,8 +147,7 @@ bool KoOdfStyle::saveOdf(KoXmlWriter *writer)
 {
     if (isDefaultStyle()) {
         writer->startElement("style:default-style");
-    }
-    else {
+    } else {
         writer->startElement("style:style");
         writer->addAttribute("style:name", name());
     }
@@ -171,10 +162,10 @@ bool KoOdfStyle::saveOdf(KoXmlWriter *writer)
     }
 
     // Write properties
-    foreach(const QString &propertySet, d->properties.keys()) {
+    foreach (const QString &propertySet, d->properties.keys()) {
         d->properties.value(propertySet)->saveOdf(propertySet, writer);
     }
 
-    writer->endElement();  // style:{default-,}style
+    writer->endElement(); // style:{default-,}style
     return true;
 }

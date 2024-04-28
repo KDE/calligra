@@ -1,7 +1,7 @@
 /** This file is part of the KDE project
  *  SPDX-FileCopyrightText: 2023 dag Andersen <dag.andersen@kdemail.net>
  *  SPDX-License-Identifier: LGPL-2.0-only
-*/
+ */
 
 #ifndef CALLIGRA_SHEETS_TIME_H
 #define CALLIGRA_SHEETS_TIME_H
@@ -10,8 +10,8 @@
 
 #include "Number.h"
 
-#include <QTime>
 #include <QDebug>
+#include <QTime>
 
 class QLocale;
 
@@ -43,11 +43,13 @@ public:
     Time(const Time &time);
 
     /// Set this Time to @p valid
-    void setValid(bool valid) {
+    void setValid(bool valid)
+    {
         m_valid = valid;
     }
     /// @return true if this Time is valid
-    bool isValid() const {
+    bool isValid() const
+    {
         return m_valid;
     }
     /// @return the duration
@@ -98,7 +100,8 @@ public:
     bool operator!=(const Time &other) const;
 
     /// @return the current time
-    static Time currentTime() {
+    static Time currentTime()
+    {
         return Time(QTime::currentTime());
     }
 
@@ -114,7 +117,8 @@ private:
     int m_second = 0;
     int m_msecs = 0;
 };
-}}
+}
+}
 
 CALLIGRA_SHEETS_ENGINE_EXPORT QDebug operator<<(QDebug dbg, const Calligra::Sheets::Time *v);
 CALLIGRA_SHEETS_ENGINE_EXPORT QDebug operator<<(QDebug dbg, const Calligra::Sheets::Time &v);

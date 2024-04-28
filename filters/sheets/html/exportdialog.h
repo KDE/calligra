@@ -15,11 +15,12 @@ class QUrl;
 class ExportWidget : public QWidget, public Ui::ExportWidget
 {
 public:
-    explicit ExportWidget(QWidget *parent) : QWidget(parent) {
+    explicit ExportWidget(QWidget *parent)
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
-
 
 class ExportDialog : public KoDialog
 {
@@ -48,6 +49,7 @@ public:
     int pixelsBetweenCells() const;
 protected Q_SLOTS:
     void selectAll();
+
 private:
     ExportWidget *m_mainwidget;
 };

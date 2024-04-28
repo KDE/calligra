@@ -20,8 +20,8 @@
 #ifndef _SECTIONSIO_H_
 #define _SECTIONSIO_H_
 
-#include <QObject>
 #include <QMap>
+#include <QObject>
 
 class QDomDocument;
 class QDomElement;
@@ -34,26 +34,26 @@ class SectionsIO : public QObject
 {
     Q_OBJECT
 public:
-    explicit SectionsIO(RootSection* rootSection);
+    explicit SectionsIO(RootSection *rootSection);
     ~SectionsIO();
+
 public:
-    enum PushMode {
-        SinglePush,
-        RecursivePush
-    };
+    enum PushMode { SinglePush, RecursivePush };
     /**
      * push a section to save
      */
-    void push(Section* _section, PushMode _pushMode = SinglePush);
+    void push(Section *_section, PushMode _pushMode = SinglePush);
 public Q_SLOTS:
     void save();
+
 private:
     void load();
+
 private:
-    RootSection* m_rootSection;
-    QTimer* m_timer;
+    RootSection *m_rootSection;
+    QTimer *m_timer;
     struct SaveContext;
-    QMap<Section*, SaveContext*> m_contextes;
+    QMap<Section *, SaveContext *> m_contextes;
     QString m_directory; ///< directory where the sections are saved
 private:
     /**
@@ -62,13 +62,13 @@ private:
      *                        from that list, otherwise doSave will remove the
      *                        associated files
      */
-    void saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGroup* root, QList<SaveContext*>& contextToRemove);
-    void loadTheStructure(QDomElement& elt, SectionGroup* root, RootSection* _rootSection);
+    void saveTheStructure(QDomDocument &doc, QDomElement &elt, SectionGroup *root, QList<SaveContext *> &contextToRemove);
+    void loadTheStructure(QDomElement &elt, SectionGroup *root, RootSection *_rootSection);
     QString generateFileName();
-    bool usedFileName(const QString&);
+    bool usedFileName(const QString &);
     QString structureFileName();
     int m_nextNumber;
-    QList<Section* > m_sectionsToSave;
+    QList<Section *> m_sectionsToSave;
 };
 
 #endif

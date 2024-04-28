@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-  *
-  * SPDX-FileCopyrightText: 2013 Inge Wallin <inge@lysator.liu.se>
-  * SPDX-FileCopyrightText: 2013 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
-  *
-  * SPDX-License-Identifier: LGPL-2.0-or-later
-  */
+ *
+ * SPDX-FileCopyrightText: 2013 Inge Wallin <inge@lysator.liu.se>
+ * SPDX-FileCopyrightText: 2013 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 // Own
 #include "KoOdfListLevelProperties.h"
@@ -21,22 +21,19 @@
 // ----------------------------------------------------------------
 //                         private class
 
-
 class Q_DECL_HIDDEN KoOdfListLevelProperties::Private
 {
 public:
     Private()
-        :hasLabelAlignment(false){};
-    ~Private() {};
+        : hasLabelAlignment(false){};
+    ~Private(){};
 
     bool hasLabelAlignment;
-    AttributeSet propertiesAttributes;  // name, value
-    AttributeSet labelAlignmentAttributes;  // name, value
+    AttributeSet propertiesAttributes; // name, value
+    AttributeSet labelAlignmentAttributes; // name, value
 };
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfListLevelProperties::KoOdfListLevelProperties()
     : KoOdfStyleProperties()
@@ -49,16 +46,14 @@ KoOdfListLevelProperties::~KoOdfListLevelProperties()
     delete d;
 }
 
-
 void KoOdfListLevelProperties::clear()
 {
     KoOdfStyleProperties::clear();
 }
 
-
 bool KoOdfListLevelProperties::readOdf(KoXmlStreamReader &reader)
 {
-    //FIXME: Handle child element
+    // FIXME: Handle child element
     bool retval = readAttributes(reader);
 
     const KoXmlStreamAttributes attrs = reader.attributes();

@@ -8,21 +8,21 @@
 #include "KWPrintingDialog.h"
 
 #include "KWDocument.h"
-#include "KWPageManager.h"
 #include "KWPage.h"
+#include "KWPageManager.h"
 #include "KWView.h"
-#include "frames/KWTextFrameSet.h"
 #include "frames/KWFrame.h"
+#include "frames/KWTextFrameSet.h"
 
+#include "KoCanvasBase.h"
 #include <KoInsets.h>
 #include <KoShapeManager.h>
-#include "KoCanvasBase.h"
 #include <KoUnit.h>
 
 #include <QApplication>
 #include <QTextBlock>
-#include <QTextLayout>
 #include <QTextDocument>
+#include <QTextLayout>
 
 KWPrintingDialog::KWPrintingDialog(KWDocument *document, KoShapeManager *shapeManager, KWView *view)
     : KoPrintingDialog(view)
@@ -31,11 +31,11 @@ KWPrintingDialog::KWPrintingDialog(KWDocument *document, KoShapeManager *shapeMa
 {
     setShapeManager(shapeManager);
 
-    //while (! m_document->layoutFinishedAtleastOnce()) {
-    //    QCoreApplication::processEvents();
-    //    if (! QCoreApplication::hasPendingEvents())
-    //        break;
-    //}
+    // while (! m_document->layoutFinishedAtleastOnce()) {
+    //     QCoreApplication::processEvents();
+    //     if (! QCoreApplication::hasPendingEvents())
+    //         break;
+    // }
     printer().setFromTo(documentFirstPage(), documentLastPage());
 }
 
@@ -47,7 +47,7 @@ QRectF KWPrintingDialog::preparePage(int pageNumber)
 {
     const int resolution = printer().resolution();
     KWPage page = m_document->pageManager()->page(pageNumber);
-    if (! page.isValid())
+    if (!page.isValid())
         return QRectF();
     printer().setPageSize(QPageSize(page.rect().size().toSize(), QPageSize::Unit::Point));
 
@@ -60,14 +60,14 @@ QRectF KWPrintingDialog::preparePage(int pageNumber)
     const int pageOffset = qRound(POINT_TO_INCH(resolution * page.offsetInDocument()));
     painter().translate(0, -pageOffset);
 
-    const int clipHeight = (int) POINT_TO_INCH(resolution * page.height());
-    int clipWidth = (int) POINT_TO_INCH(resolution * page.width());
+    const int clipHeight = (int)POINT_TO_INCH(resolution * page.height());
+    int clipWidth = (int)POINT_TO_INCH(resolution * page.width());
     int offsetX = -bleedOffsetX;
 
     return QRectF(offsetX, pageOffset - bleedOffsetY, clipWidth + bleedWidth, clipHeight + bleedHeight);
 }
 
-QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber)
+QList<KoShape *> KWPrintingDialog::shapesOnPage(int pageNumber)
 {
     Q_ASSERT(pageNumber > 0);
     KWPage page = m_document->pageManager()->page(pageNumber);
@@ -79,9 +79,9 @@ void KWPrintingDialog::printingDone()
 {
 }
 
-QList<QWidget*> KWPrintingDialog::createOptionWidgets() const
+QList<QWidget *> KWPrintingDialog::createOptionWidgets() const
 {
-    return QList<QWidget*>();
+    return QList<QWidget *>();
 }
 
 int KWPrintingDialog::documentFirstPage() const
@@ -102,14 +102,10 @@ int KWPrintingDialog::documentCurrentPage() const
 
 QAbstractPrintDialog::PrintDialogOptions KWPrintingDialog::printDialogOptions() const
 {
-    return QAbstractPrintDialog::PrintToFile |
-           QAbstractPrintDialog::PrintPageRange |
-           QAbstractPrintDialog::PrintCurrentPage |
-           QAbstractPrintDialog::PrintCollateCopies |
-           QAbstractPrintDialog::PrintShowPageSize;
+    return QAbstractPrintDialog::PrintToFile | QAbstractPrintDialog::PrintPageRange | QAbstractPrintDialog::PrintCurrentPage
+        | QAbstractPrintDialog::PrintCollateCopies | QAbstractPrintDialog::PrintShowPageSize;
 }
 
 // options;
 //   DPI
 //   fontEmbeddingEnabled
-

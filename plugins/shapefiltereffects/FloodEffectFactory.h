@@ -15,8 +15,8 @@ class FloodEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     FloodEffectFactory();
-    KoFilterEffect * createFilterEffect() const override;
-    KoFilterEffectConfigWidgetBase * createConfigWidget() const override;
+    KoFilterEffect *createFilterEffect() const override;
+    KoFilterEffectConfigWidgetBase *createConfigWidget() const override;
 };
 
 #endif // FLOODEFFECTFACTORY_H

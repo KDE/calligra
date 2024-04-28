@@ -8,12 +8,10 @@
 #ifndef CALLIGRA_SHEETS_ACTION_FIND_REPLACE
 #define CALLIGRA_SHEETS_ACTION_FIND_REPLACE
 
-
 #include "CellAction.h"
 
 #include "core/Cell.h"
 #include "dialogs/FindDialog.h"
-
 
 class KFind;
 class KReplace;
@@ -24,8 +22,9 @@ namespace Calligra
 namespace Sheets
 {
 
-class FindReplaceAction : public CellAction {
-Q_OBJECT
+class FindReplaceAction : public CellAction
+{
+    Q_OBJECT
 public:
     FindReplaceAction(Actions *actions);
     virtual ~FindReplaceAction();
@@ -48,8 +47,14 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
     QAction *createAction() override;
 
-    virtual bool enabledIfReadOnly() const override { return true; }
-    virtual bool enabledIfProtected() const override { return true; }
+    virtual bool enabledIfReadOnly() const override
+    {
+        return true;
+    }
+    virtual bool enabledIfProtected() const override
+    {
+        return true;
+    }
 
     void initFindReplace();
     Cell findNextCell();
@@ -66,9 +71,9 @@ protected:
     FindOption::searchTypeValue m_typeValue;
     FindOption::searchDirectionValue m_directionValue;
     // Current "find" operation
-    KFind* m_find;
-    KReplace* m_replace;
-    KUndo2Command* m_replaceCommand;
+    KFind *m_find;
+    KReplace *m_replace;
+    KUndo2Command *m_replaceCommand;
     int m_findLeftColumn;
     int m_findRightColumn;
     int m_findTopRow;
@@ -77,8 +82,8 @@ protected:
     QPoint m_findPos;
     QPoint m_findEnd;
 
-    Sheet * m_currentSheet;
-    Sheet * m_firstSheet;
+    Sheet *m_currentSheet;
+    Sheet *m_firstSheet;
 };
 
 /**
@@ -86,7 +91,8 @@ protected:
  * This base class provides the necessary access methods.
  */
 
-class FindAction : public CellAction {
+class FindAction : public CellAction
+{
 public:
     FindAction(Actions *actions, const QString &actionName);
     virtual ~FindAction();
@@ -96,8 +102,9 @@ protected:
     FindReplaceAction *m_findAction;
 };
 
-class FindNext : public FindAction {
-Q_OBJECT
+class FindNext : public FindAction
+{
+    Q_OBJECT
 public:
     FindNext(Actions *actions);
     virtual ~FindNext();
@@ -106,12 +113,19 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
     QAction *createAction() override;
 
-    virtual bool enabledIfReadOnly() const override { return true; }
-    virtual bool enabledIfProtected() const override { return true; }
+    virtual bool enabledIfReadOnly() const override
+    {
+        return true;
+    }
+    virtual bool enabledIfProtected() const override
+    {
+        return true;
+    }
 };
 
-class FindPrevious : public FindAction {
-Q_OBJECT
+class FindPrevious : public FindAction
+{
+    Q_OBJECT
 public:
     FindPrevious(Actions *actions);
     virtual ~FindPrevious();
@@ -120,12 +134,19 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
     QAction *createAction() override;
 
-    virtual bool enabledIfReadOnly() const override { return true; }
-    virtual bool enabledIfProtected() const override { return true; }
+    virtual bool enabledIfReadOnly() const override
+    {
+        return true;
+    }
+    virtual bool enabledIfProtected() const override
+    {
+        return true;
+    }
 };
 
-class Replace : public FindAction {
-Q_OBJECT
+class Replace : public FindAction
+{
+    Q_OBJECT
 public:
     Replace(Actions *actions);
     virtual ~Replace();
@@ -135,8 +156,7 @@ protected:
     QAction *createAction() override;
 };
 
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_FIND_REPLACE
+#endif // CALLIGRA_SHEETS_ACTION_FIND_REPLACE

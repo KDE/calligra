@@ -6,8 +6,8 @@
 #ifndef PATHTOOLOPTIONWIDGET_H
 #define PATHTOOLOPTIONWIDGET_H
 
-#include <QWidget>
 #include <QFlags>
+#include <QWidget>
 
 #include <ui_PathToolOptionWidgetBase.h>
 
@@ -17,10 +17,7 @@ class PathToolOptionWidget : public QWidget
 {
     Q_OBJECT
 public:
-    enum Type {
-        PlainPath = 1,
-        ParametricShape = 2
-    };
+    enum Type { PlainPath = 1, ParametricShape = 2 };
     Q_DECLARE_FLAGS(Types, Type)
 
     explicit PathToolOptionWidget(KoPathTool *tool, QWidget *parent = 0);

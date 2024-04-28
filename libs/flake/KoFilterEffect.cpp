@@ -9,15 +9,16 @@
 #include "KoXmlWriter.h"
 
 #include <QImage>
-#include <QString>
 #include <QRectF>
+#include <QString>
 
 class Q_DECL_HIDDEN KoFilterEffect::Private
 {
 public:
     Private()
         : filterRect(0, 0, 1, 1)
-        , requiredInputCount(1), maximalInputCount(1)
+        , requiredInputCount(1)
+        , maximalInputCount(1)
     {
         // add the default input
         inputs.append(QString());
@@ -122,23 +123,23 @@ int KoFilterEffect::maximalInputCount() const
     return qMax(d->maximalInputCount, d->requiredInputCount);
 }
 
-QImage KoFilterEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &/*context*/) const
+QImage KoFilterEffect::processImage(const QImage &image, const KoFilterEffectRenderContext & /*context*/) const
 {
     return image;
 }
 
-QImage KoFilterEffect::processImages(const QVector<QImage> &images, const KoFilterEffectRenderContext &/*context*/) const
+QImage KoFilterEffect::processImages(const QVector<QImage> &images, const KoFilterEffectRenderContext & /*context*/) const
 {
     Q_ASSERT(images.count());
     return images.first();
 }
 
-bool KoFilterEffect::load(const KoXmlElement &/*element*/, const KoFilterEffectLoadingContext &/*context*/)
+bool KoFilterEffect::load(const KoXmlElement & /*element*/, const KoFilterEffectLoadingContext & /*context*/)
 {
     return true;
 }
 
-void KoFilterEffect::save(KoXmlWriter &/*writer*/)
+void KoFilterEffect::save(KoXmlWriter & /*writer*/)
 {
 }
 
@@ -151,9 +152,9 @@ void KoFilterEffect::setRequiredInputCount(int count)
 
 void KoFilterEffect::setMaximalInputCount(int count)
 {
-    d->maximalInputCount = qMax(0,count);
+    d->maximalInputCount = qMax(0, count);
     if (d->inputs.count() > maximalInputCount()) {
-        int removeCount = d->inputs.count()-maximalInputCount();
+        int removeCount = d->inputs.count() - maximalInputCount();
         for (int i = 0; i < removeCount; ++i)
             d->inputs.pop_back();
     }

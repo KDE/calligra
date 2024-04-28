@@ -10,40 +10,41 @@
 #include "KoPrintingDialog.h"
 #include "KoProgressUpdater.h"
 
-#include <KoZoomHandler.h>
-#include <KoShapeManager.h>
 #include <KoShape.h>
+#include <KoShapeManager.h>
 #include <KoUpdater.h>
+#include <KoZoomHandler.h>
 
-#include <QCoreApplication>
-#include <MainDebug.h>
 #include <KLocalizedString>
-#include <QPainter>
-#include <QPrinter>
+#include <MainDebug.h>
+#include <QCoreApplication>
+#include <QDialog>
 #include <QGridLayout>
 #include <QLabel>
+#include <QPainter>
+#include <QPrinter>
 #include <QPushButton>
-#include <QTimer>
-#include <QDialog>
 #include <QThread>
+#include <QTimer>
 
-
-class KoPrintingDialogPrivate {
+class KoPrintingDialogPrivate
+{
 public:
     explicit KoPrintingDialogPrivate(KoPrintingDialog *dia)
-        : parent(dia),
-          stop(true),
-          shapeManager(0),
-          painter(0),
-          printer(new QPrinter()),
-          index(0),
-          progress(0),
-          dialog(0),
-          removePolicy(KoPrintJob::DoNotDelete)
+        : parent(dia)
+        , stop(true)
+        , shapeManager(0)
+        , painter(0)
+        , printer(new QPrinter())
+        , index(0)
+        , progress(0)
+        , dialog(0)
+        , removePolicy(KoPrintJob::DoNotDelete)
     {
     }
 
-    ~KoPrintingDialogPrivate() {
+    ~KoPrintingDialogPrivate()
+    {
         stop = true;
         delete progress;
         if (painter && painter->isActive()) {
@@ -56,7 +57,8 @@ public:
         delete dialog;
     }
 
-    void preparePage(const QVariant &page) {
+    void preparePage(const QVariant &page)
+    {
         const int pageNumber = page.toInt();
 
         QPointer<KoUpdater> updater = updaters.at(index - 1);
@@ -67,7 +69,7 @@ public:
 
         QRectF clipRect;
 
-        if (! stop) {
+        if (!stop) {
             clipRect = parent->preparePage(pageNumber);
         }
 
@@ -86,14 +88,14 @@ public:
         updater->setProgress(55);
         painter->save(); // state after page preparation
 
-        QList<KoShape*> shapes = parent->shapesOnPage(pageNumber);
+        QList<KoShape *> shapes = parent->shapesOnPage(pageNumber);
         if (shapes.isEmpty()) {
             debugMain << "Printing page" << pageNumber << "I notice there are no shapes on this page";
         } else {
             const int progressPart = 45 / shapes.count();
-            foreach(KoShape *shape, shapes) {
+            foreach (KoShape *shape, shapes) {
                 debugMain << "Calling waitUntilReady on shape;" << shape;
-                if(! stop)
+                if (!stop)
                     shape->waitUntilReady(zoomer);
                 debugMain << "done";
                 updater->setProgress(updater->progress() + progressPart);
@@ -102,7 +104,8 @@ public:
         updater->setProgress(100);
     }
 
-    void resetValues() {
+    void resetValues()
+    {
         index = 0;
         updaters.clear();
         if (painter && painter->isActive())
@@ -112,7 +115,8 @@ public:
         stop = false;
     }
 
-    void printPage(const QVariant &page) {
+    void printPage(const QVariant &page)
+    {
         painter->restore(); // state after page preparation
         painter->save();
         parent->printPage(page.toInt(), *painter);
@@ -127,8 +131,8 @@ public:
         }
     }
 
-    void printingDone() {
-
+    void printingDone()
+    {
         // printing done!
         painter->end();
         progress->cancel();
@@ -139,14 +143,13 @@ public:
         QTimer::singleShot(1200, dialog, &QDialog::accept);
         if (removePolicy == KoPrintJob::DeleteWhenDone) {
             parent->deleteLater();
-        }
-        else {
+        } else {
             resetValues();
         }
-
     }
 
-    void stopPressed() {
+    void stopPressed()
+    {
         if (stop) { // pressed a second time.
             dialog->done(0);
             return;
@@ -175,7 +178,7 @@ public:
     QPushButton *button;
     QList<int> pageRange; ///< user requested list of pages
     QList<int> pages; ///< effective list of pages
-    QList< QPointer<KoUpdater> > updaters;
+    QList<QPointer<KoUpdater>> updaters;
     QDialog *dialog;
     KoPrintJob::RemovePolicy removePolicy;
 };

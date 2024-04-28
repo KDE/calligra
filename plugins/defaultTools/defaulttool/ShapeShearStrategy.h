@@ -7,8 +7,8 @@
 #ifndef SHAPESHEARSTRATEGY_H
 #define SHAPESHEARSTRATEGY_H
 
-#include <KoInteractionStrategy.h>
 #include <KoFlake.h>
+#include <KoInteractionStrategy.h>
 
 #include <QPointF>
 #include <QSizeF>
@@ -31,13 +31,18 @@ public:
      * @param clicked the initial point that the user depressed (in pt).
      * @param direction the handle that was grabbed
      */
-    ShapeShearStrategy( KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction );
-    ~ShapeShearStrategy() override {}
+    ShapeShearStrategy(KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction);
+    ~ShapeShearStrategy() override
+    {
+    }
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
-    KUndo2Command* createCommand() override;
-    void finishInteraction( Qt::KeyboardModifiers modifiers ) override { Q_UNUSED( modifiers ); }
-    void paint( QPainter &painter, const KoViewConverter &converter) override;
+    KUndo2Command *createCommand() override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override
+    {
+        Q_UNUSED(modifiers);
+    }
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
 private:
     QPointF m_start;
@@ -49,8 +54,7 @@ private:
     bool m_isMirrored;
     QVector<QTransform> m_oldTransforms;
     QTransform m_initialSelectionMatrix;
-    QList<KoShape*> m_selectedShapes;
+    QList<KoShape *> m_selectedShapes;
 };
 
 #endif
-

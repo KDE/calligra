@@ -11,8 +11,8 @@
 
 #include <KoInteractionStrategy.h>
 
-#include <QPointF>
 #include <QList>
+#include <QPointF>
 #include <QVector>
 
 class KoCanvasBase;
@@ -32,13 +32,16 @@ public:
      * @param clicked the initial point that the user depressed (in pt).
      */
     ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked);
-    ~ShapeMoveStrategy() override {}
+    ~ShapeMoveStrategy() override
+    {
+    }
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
-    KUndo2Command* createCommand() override;
+    KUndo2Command *createCommand() override;
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
-    void paint( QPainter &painter, const KoViewConverter &converter) override;
-    void handleCustomEvent( KoPointerEvent * event ) override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void handleCustomEvent(KoPointerEvent *event) override;
+
 private:
     void moveSelection();
     QVector<QPointF> m_previousPositions;
@@ -46,7 +49,7 @@ private:
     QVector<QPointF> m_previousOffsets;
     QVector<QPointF> m_newOffsets;
     QPointF m_start, m_diff, m_initialSelectionPosition, m_initialOffset;
-    QList<KoShape*> m_selectedShapes;
+    QList<KoShape *> m_selectedShapes;
     KoCanvasBase *m_canvas;
     bool m_firstMove;
 };

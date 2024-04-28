@@ -15,9 +15,13 @@ class KPrFactoryInit : public KPrFactory
     Q_INTERFACES(KPluginFactory)
 
 public:
-    explicit KPrFactoryInit() : KPrFactory() {}
-    ~KPrFactoryInit() override {}
-
+    explicit KPrFactoryInit()
+        : KPrFactory()
+    {
+    }
+    ~KPrFactoryInit() override
+    {
+    }
 };
 
 #endif

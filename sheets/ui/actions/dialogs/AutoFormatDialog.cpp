@@ -20,23 +20,21 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-
-
 using namespace Calligra::Sheets;
 
 class AutoFormatDialog::Private
 {
 public:
-    QComboBox* combo;
-    QLabel* label;
+    QComboBox *combo;
+    QLabel *label;
 
     QList<QString> names;
     QMap<QString, QPixmap> pixmaps;
 };
 
-AutoFormatDialog::AutoFormatDialog(QWidget* parent)
-        : ActionDialog(parent)
-        , d(new Private())
+AutoFormatDialog::AutoFormatDialog(QWidget *parent)
+    : ActionDialog(parent)
+    , d(new Private())
 {
     setCaption(i18n("Automatic Format"));
     setObjectName(QLatin1String("AutoFormatDialog"));
@@ -64,7 +62,7 @@ AutoFormatDialog::~AutoFormatDialog()
 void AutoFormatDialog::setList(const QMap<QString, QPixmap> &list)
 {
     d->pixmaps = list;
-    d->names = list.keys();  // storing this so that indexes retain the same order
+    d->names = list.keys(); // storing this so that indexes retain the same order
     d->names.sort(Qt::CaseInsensitive);
 
     d->combo->clear();
@@ -78,13 +76,15 @@ void AutoFormatDialog::setList(const QMap<QString, QPixmap> &list)
 QString AutoFormatDialog::selectedOption()
 {
     int idx = d->combo->currentIndex();
-    if (idx < 0) return QString();
+    if (idx < 0)
+        return QString();
     return d->names.at(idx);
 }
 
 void AutoFormatDialog::slotActivated(int index)
 {
-    if ((index < 0) || (index >= d->names.length())) return;
+    if ((index < 0) || (index >= d->names.length()))
+        return;
 
     enableButtonOk(true);
 
@@ -95,8 +95,7 @@ void AutoFormatDialog::slotActivated(int index)
 void AutoFormatDialog::onApply()
 {
     int idx = d->combo->currentIndex();
-    if (idx < 0) return;
+    if (idx < 0)
+        return;
     emit applyFormat(selectedOption());
 }
-
-

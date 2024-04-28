@@ -9,7 +9,6 @@
 
 #include <QtGlobal>
 
-
 namespace Libsvm
 {
 
@@ -21,15 +20,13 @@ SvmGraphicsContext::SvmGraphicsContext()
     , textColor(Qt::black)
     , textFillColor(Qt::black)
     , textFillColorSet(false)
-    , textAlign(ALIGN_TOP)      // FIXME: Correct?
+    , textAlign(ALIGN_TOP) // FIXME: Correct?
     , mapMode()
-    , font("Helvetica", 300)    // 300 is of course a completely arbitrary value
+    , font("Helvetica", 300) // 300 is of course a completely arbitrary value
     , overlineColor(Qt::black)
     , overlineColorSet(false)
-      //... more here
-    , changedItems(0xffffffff)  // Everything changed the first time.
+    //... more here
+    , changedItems(0xffffffff) // Everything changed the first time.
 {
 }
-
-
 }

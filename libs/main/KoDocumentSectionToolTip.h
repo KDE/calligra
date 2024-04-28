@@ -15,7 +15,7 @@ class KoDocumentSectionModel;
  * A default tooltip for a KoDocumentSection that shows a thumbnail
  * image and the list of properties associated with the document model.
  */
-class KoDocumentSectionToolTip: public KoItemToolTip
+class KoDocumentSectionToolTip : public KoItemToolTip
 {
     Q_OBJECT
 

@@ -12,11 +12,12 @@ class TestListStyle : public QObject
 {
     Q_OBJECT
 public:
-    TestListStyle() {}
+    TestListStyle()
+    {
+    }
 
 private Q_SLOTS:
     void testListStyle();
-
 };
 
 #endif

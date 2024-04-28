@@ -9,31 +9,31 @@
 #include "KoConnectionShape.h"
 #include "KoConnectionShape_p.h"
 
-#include "KoViewConverter.h"
+#include "KoConnectionShapeLoadingUpdater.h"
+#include "KoPathPoint.h"
+#include "KoPathShapeLoader.h"
+#include "KoShapeBackground.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
-#include "KoConnectionShapeLoadingUpdater.h"
-#include "KoPathShapeLoader.h"
-#include "KoPathPoint.h"
-#include "KoShapeBackground.h"
+#include "KoViewConverter.h"
+#include <KoUnit.h>
+#include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
-#include <KoXmlNS.h>
-#include <KoUnit.h>
 #include <QPainter>
 #include <QPainterPath>
 
 #include <FlakeDebug.h>
 
 KoConnectionShapePrivate::KoConnectionShapePrivate(KoConnectionShape *q)
-    : KoParameterShapePrivate(q),
-    shape1(0),
-    shape2(0),
-    connectionPointId1(-1),
-    connectionPointId2(-1),
-    connectionType(KoConnectionShape::Standard),
-    forceUpdate(false),
-    hasCustomPath(false)
+    : KoParameterShapePrivate(q)
+    , shape1(0)
+    , shape2(0)
+    , connectionPointId1(-1)
+    , connectionPointId2(-1)
+    , connectionType(KoConnectionShape::Standard)
+    , forceUpdate(false)
+    , hasCustomPath(false)
 {
 }
 
@@ -62,33 +62,28 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
              * of the orthogonal direction.
              */
             // define our edge points in the right order
-            const KoFlake::Position corners[4] = {
-                KoFlake::BottomRightCorner,
-                KoFlake::BottomLeftCorner,
-                KoFlake::TopLeftCorner,
-                KoFlake::TopRightCorner
-            };
+            const KoFlake::Position corners[4] = {KoFlake::BottomRightCorner, KoFlake::BottomLeftCorner, KoFlake::TopLeftCorner, KoFlake::TopRightCorner};
 
-            QPointF vHandle = handlePoint-centerPoint;
+            QPointF vHandle = handlePoint - centerPoint;
             for (int i = 0; i < 4; ++i) {
                 // first point of bounding box edge
                 QPointF p1 = attachedShape->absolutePosition(corners[i]);
                 // second point of bounding box edge
-                QPointF p2 = attachedShape->absolutePosition(corners[(i+1)%4]);
+                QPointF p2 = attachedShape->absolutePosition(corners[(i + 1) % 4]);
                 // check on which side of the first sector edge our second sector edge is
-                const qreal c0 = crossProd(p1-centerPoint, p2-centerPoint);
+                const qreal c0 = crossProd(p1 - centerPoint, p2 - centerPoint);
                 // check on which side of the first sector edge our handle point is
-                const qreal c1 = crossProd(p1-centerPoint, vHandle);
+                const qreal c1 = crossProd(p1 - centerPoint, vHandle);
                 // second edge and handle point must be on the same side of first edge
                 if ((c0 < 0 && c1 > 0) || (c0 > 0 && c1 < 0))
                     continue;
                 // check on which side of the handle point our second sector edge is
-                const qreal c2 = crossProd(vHandle, p2-centerPoint);
+                const qreal c2 = crossProd(vHandle, p2 - centerPoint);
                 // second edge must be on the same side of the handle point as on first edge
                 if ((c0 < 0 && c2 > 0) || (c0 > 0 && c2 < 0))
                     continue;
                 // now we found the correct edge
-                QPointF vDir = 0.5 *(p1+p2) - centerPoint;
+                QPointF vDir = 0.5 * (p1 + p2) - centerPoint;
                 // look at coordinate with the greatest absolute value
                 // and construct our escape direction accordingly
                 const qreal xabs = qAbs<qreal>(vDir.x());
@@ -223,7 +218,7 @@ void KoConnectionShapePrivate::normalPath(const qreal MinimumEscapeLength)
                 // we are not going into the same direction, so switch direction
                 direction1 = perpendicularDirection(edgePoint1, direction1, edgePoint2);
             }
-        } while (! connected);
+        } while (!connected);
     }
 
     path.append(edges1);
@@ -310,7 +305,7 @@ KoConnectionShape::~KoConnectionShape()
         d->shape2->removeDependee(this);
 }
 
-void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
+void KoConnectionShape::saveOdf(KoShapeSavingContext &context) const
 {
     Q_D(const KoConnectionShape);
     context.xmlWriter().startElement("draw:connector");
@@ -358,7 +353,7 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().endElement();
 }
 
-bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool KoConnectionShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_D(KoConnectionShape);
     loadOdfAttributes(element, context, OdfMandatories | OdfCommonChildElements | OdfAdditionalAttributes);
@@ -452,8 +447,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
             // trigger finishing the connections in case we have all data
             // otherwise it gets called again once the shapes we are
             // connected to are loaded
-        }
-        else {
+        } else {
             d->hasCustomPath = false;
         }
         finishLoadingConnection();
@@ -497,8 +491,8 @@ void KoConnectionShape::finishLoadingConnection()
             QPointF diffRelative(relativeBegin - relativeEnd);
             QPointF diffAbsolute(p1 - p2);
 
-            qreal factorX = diffRelative.x() ? diffAbsolute.x() / diffRelative.x(): 1.0;
-            qreal factorY = diffRelative.y() ? diffAbsolute.y() / diffRelative.y(): 1.0;
+            qreal factorX = diffRelative.x() ? diffAbsolute.x() / diffRelative.x() : 1.0;
+            qreal factorY = diffRelative.y() ? diffAbsolute.y() / diffRelative.y() : 1.0;
 
             p1.setX(p1.x() - relativeBegin.x() * factorX);
             p1.setY(p1.y() - relativeBegin.y() * factorY);
@@ -554,7 +548,7 @@ void KoConnectionShape::updatePath(const QSizeF &size)
     switch (d->connectionType) {
     case Standard: {
         d->normalPath(MinimumEscapeLength);
-        if (d->path.count() != 0){
+        if (d->path.count() != 0) {
             moveTo(d->path[0]);
             for (int index = 1; index < d->path.count(); ++index)
                 lineTo(d->path[index]);
@@ -566,9 +560,9 @@ void KoConnectionShape::updatePath(const QSizeF &size)
         QPointF direction1 = d->escapeDirection(0);
         QPointF direction2 = d->escapeDirection(d->handles.count() - 1);
         moveTo(d->handles[StartHandle]);
-        if (! direction1.isNull())
+        if (!direction1.isNull())
             lineTo(d->handles[StartHandle] + MinimumEscapeLength * direction1);
-        if (! direction2.isNull())
+        if (!direction2.isNull())
             lineTo(d->handles[EndHandle] + MinimumEscapeLength * direction2);
         lineTo(d->handles[EndHandle]);
         break;
@@ -582,7 +576,7 @@ void KoConnectionShape::updatePath(const QSizeF &size)
         QPointF direction1 = d->escapeDirection(0);
         QPointF direction2 = d->escapeDirection(d->handles.count() - 1);
         moveTo(d->handles[StartHandle]);
-        if (! direction1.isNull() && ! direction2.isNull()) {
+        if (!direction1.isNull() && !direction2.isNull()) {
             QPointF curvePoint1 = d->handles[StartHandle] + 5.0 * MinimumEscapeLength * direction1;
             QPointF curvePoint2 = d->handles[EndHandle] + 5.0 * MinimumEscapeLength * direction2;
             curveTo(curvePoint1, curvePoint2, d->handles[EndHandle]);
@@ -594,7 +588,7 @@ void KoConnectionShape::updatePath(const QSizeF &size)
     normalize();
 }
 
-bool KoConnectionShape::connectFirst(KoShape * shape1, int connectionPointId)
+bool KoConnectionShape::connectFirst(KoShape *shape1, int connectionPointId)
 {
     Q_D(KoConnectionShape);
     // refuse to connect to a shape that depends on us (e.g. a artistic text shape)
@@ -621,7 +615,7 @@ bool KoConnectionShape::connectFirst(KoShape * shape1, int connectionPointId)
     return true;
 }
 
-bool KoConnectionShape::connectSecond(KoShape * shape2, int connectionPointId)
+bool KoConnectionShape::connectSecond(KoShape *shape2, int connectionPointId)
 {
     Q_D(KoConnectionShape);
     // refuse to connect to a shape that depends on us (e.g. a artistic text shape)
@@ -714,14 +708,13 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape *shape)
     case ConnectionPointChanged:
         if (shape == d->shape1 && !shape->hasConnectionPoint(d->connectionPointId1)) {
             connectFirst(0, -1);
-        } else if ( shape == d->shape2 && !shape->hasConnectionPoint(d->connectionPointId2)){
+        } else if (shape == d->shape2 && !shape->hasConnectionPoint(d->connectionPointId2)) {
             connectSecond(0, -1);
         } else {
             d->forceUpdate = true;
         }
         break;
-    case BackgroundChanged:
-    {
+    case BackgroundChanged: {
         // connection shape should not have a background
         QSharedPointer<KoShapeBackground> fill = background();
         if (fill) {

@@ -34,16 +34,14 @@ namespace KoTextRdfCore
  * Save the RDF selected triples from model to the store with the
  * given RDF/XML filename
  */
-bool saveRdf( QSharedPointer<Soprano::Model> model, Soprano::StatementIterator triples,
-              KoStore *store, KoXmlWriter *manifestWriter, const QString &fileName);
+bool saveRdf(QSharedPointer<Soprano::Model> model, Soprano::StatementIterator triples, KoStore *store, KoXmlWriter *manifestWriter, const QString &fileName);
 
 /**
  * Save the given RDF model to the manifest.rdf file. The idmap is used
  * to maintain xml:id links from the model so they will be valid with
  * the content.xml that generated the idmap.
  */
-bool createAndSaveManifest(QSharedPointer<Soprano::Model> model,
-                           const QMap<QString, QString> &idmap, KoStore *store, KoXmlWriter *manifestWriter);
+bool createAndSaveManifest(QSharedPointer<Soprano::Model> model, const QMap<QString, QString> &idmap, KoStore *store, KoXmlWriter *manifestWriter);
 
 /**
  * Load the manifest.rdf file from the ODF container store
@@ -100,8 +98,7 @@ QList<Soprano::Statement> KOTEXT_EXPORT loadList(QSharedPointer<Soprano::Model> 
  * bnodeZ          22-rdf-syntax-ns\#rest  nil
  *
  */
-void KOTEXT_EXPORT saveList(QSharedPointer<Soprano::Model> model, Soprano::Node ListHeadSubject,
-        QList<Soprano::Node> &dataBNodeList, Soprano::Node context);
+void KOTEXT_EXPORT saveList(QSharedPointer<Soprano::Model> model, Soprano::Node ListHeadSubject, QList<Soprano::Node> &dataBNodeList, Soprano::Node context);
 
 /**
  * Using model->removeStatements() will fail if the statement does not
@@ -111,8 +108,7 @@ void KOTEXT_EXPORT saveList(QSharedPointer<Soprano::Model> model, Soprano::Node 
  * because you don't have to ensure that a statement is added only once
  * to the remove list.
  */
-void KOTEXT_EXPORT removeStatementsIfTheyExist( QSharedPointer<Soprano::Model> model,
-                                                const QList<Soprano::Statement> &removeList);
+void KOTEXT_EXPORT removeStatementsIfTheyExist(QSharedPointer<Soprano::Model> model, const QList<Soprano::Statement> &removeList);
 
 /**
  * Given the Subj+Pred get the Object for the triple. If there are
@@ -122,15 +118,9 @@ void KOTEXT_EXPORT removeStatementsIfTheyExist( QSharedPointer<Soprano::Model> m
  */
 Soprano::Node KOTEXT_EXPORT getObject(QSharedPointer<Soprano::Model> model, Soprano::Node s, Soprano::Node p);
 
-QString KOTEXT_EXPORT getProperty(QSharedPointer<Soprano::Model> m,
-                                  Soprano::Node subj,
-                                  Soprano::Node pred,
-                                  const QString &defval);
-QString KOTEXT_EXPORT optionalBindingAsString(Soprano::QueryResultIterator& it,
-                                              const QString &bindingName,
-                                              const QString &def = QString());
+QString KOTEXT_EXPORT getProperty(QSharedPointer<Soprano::Model> m, Soprano::Node subj, Soprano::Node pred, const QString &defval);
+QString KOTEXT_EXPORT optionalBindingAsString(Soprano::QueryResultIterator &it, const QString &bindingName, const QString &def = QString());
 QByteArray KOTEXT_EXPORT fileToByteArray(const QString &fileName);
 
 }
 #endif
-

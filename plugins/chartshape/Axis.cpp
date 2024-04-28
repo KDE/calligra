@@ -12,65 +12,64 @@
 
 // Qt
 #include <QList>
+#include <QPointer>
 #include <QString>
 #include <QTextDocument>
-#include <QPointer>
 
 // Calligra
+#include <KoCharacterStyle.h>
+#include <KoGenStyles.h>
+#include <KoOdfGraphicStyles.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfNumberStyles.h>
+#include <KoOdfStylesReader.h>
+#include <KoOdfWorkaround.h>
 #include <KoShapeLoadingContext.h>
-#include <KoShapeSavingContext.h>
 #include <KoShapeRegistry.h>
+#include <KoShapeSavingContext.h>
+#include <KoStyleStack.h>
+#include <KoTextDocumentLayout.h>
+#include <KoTextShapeData.h>
+#include <KoUnit.h>
+#include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
-#include <KoGenStyles.h>
-#include <KoXmlNS.h>
-#include <KoTextShapeData.h>
-#include <KoOdfStylesReader.h>
-#include <KoUnit.h>
-#include <KoStyleStack.h>
-#include <KoOdfLoadingContext.h>
-#include <KoCharacterStyle.h>
-#include <KoOdfGraphicStyles.h>
-#include <KoOdfWorkaround.h>
-#include <KoTextDocumentLayout.h>
-#include <KoOdfNumberStyles.h>
 
 // KChart
-#include <KChartChart>
-#include <KChartLegend>
+#include <KChartBackgroundAttributes>
+#include <KChartBarAttributes>
+#include <KChartBarDiagram>
 #include <KChartCartesianAxis>
 #include <KChartCartesianCoordinatePlane>
-#include <KChartRadarCoordinatePlane>
+#include <KChartChart>
 #include <KChartGridAttributes>
-#include <KChartBarDiagram>
+#include <KChartLegend>
 #include <KChartLineDiagram>
+#include <KChartPieAttributes>
 #include <KChartPieDiagram>
 #include <KChartPlotter>
-#include <KChartStockDiagram>
-#include <KChartRingDiagram>
+#include <KChartRadarCoordinatePlane>
 #include <KChartRadarDiagram>
-#include <KChartBarAttributes>
-#include <KChartPieAttributes>
-#include <KChartThreeDBarAttributes>
-#include <KChartThreeDPieAttributes>
-#include <KChartThreeDLineAttributes>
-#include <KChartBackgroundAttributes>
+#include <KChartRingDiagram>
 #include <KChartRulerAttributes>
+#include <KChartStockDiagram>
+#include <KChartThreeDBarAttributes>
+#include <KChartThreeDLineAttributes>
+#include <KChartThreeDPieAttributes>
 #include <kchart_version.h>
 
 // KoChart
-#include "PlotArea.h"
-#include "KChartModel.h"
-#include "DataSet.h"
-#include "Legend.h"
-#include "KChartConvertions.h"
-#include "ChartProxyModel.h"
-#include "TextLabelDummy.h"
-#include "ChartLayout.h"
-#include "OdfLoadingHelper.h"
-#include "OdfHelper.h"
 #include "ChartDebug.h"
-
+#include "ChartLayout.h"
+#include "ChartProxyModel.h"
+#include "DataSet.h"
+#include "KChartConvertions.h"
+#include "KChartModel.h"
+#include "Legend.h"
+#include "OdfHelper.h"
+#include "OdfLoadingHelper.h"
+#include "PlotArea.h"
+#include "TextLabelDummy.h"
 
 using namespace KoChart;
 
@@ -106,10 +105,10 @@ public:
     void createBubbleDiagram();
     void createSurfaceDiagram();
     void createGanttDiagram();
-    void applyAttributesToDataSet(DataSet* set, ChartType newCharttype);
+    void applyAttributesToDataSet(DataSet *set, ChartType newCharttype);
 
     // Pointer to Axis that owns this Private instance
-    Axis * const q;
+    Axis *const q;
 
     PlotArea *plotArea;
 
@@ -120,7 +119,7 @@ public:
 
     /// FIXME: Unused variable 'id', including id() getter
     QString id;
-    QList<DataSet*> dataSets;
+    QList<DataSet *> dataSets;
     qreal majorInterval;
     int minorIntervalDivisor;
     bool showInnerMinorTicks;
@@ -135,23 +134,23 @@ public:
     bool useAutomaticMinimumRange;
     bool useAutomaticMaximumRange;
 
-    KChart::CartesianAxis            *const kdAxis;
+    KChart::CartesianAxis *const kdAxis;
     KChart::CartesianCoordinatePlane *kdPlane;
-    KChart::PolarCoordinatePlane     *kdPolarPlane;
-    KChart::RadarCoordinatePlane     *kdRadarPlane;
+    KChart::PolarCoordinatePlane *kdPolarPlane;
+    KChart::RadarCoordinatePlane *kdRadarPlane;
     KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat;
 
-    QList<QPointer<KChart::AbstractCartesianDiagram> > diagrams;
+    QList<QPointer<KChart::AbstractCartesianDiagram>> diagrams;
 
     QPointer<KChart::BarDiagram> kdBarDiagram;
     QPointer<KChart::LineDiagram> kdLineDiagram;
     QPointer<KChart::LineDiagram> kdAreaDiagram;
-    QPointer<KChart::PieDiagram>  kdCircleDiagram;
-    QPointer<KChart::RingDiagram>  kdRingDiagram;
+    QPointer<KChart::PieDiagram> kdCircleDiagram;
+    QPointer<KChart::RingDiagram> kdRingDiagram;
     QPointer<KChart::RadarDiagram> kdRadarDiagram;
-    QPointer<KChart::Plotter>     kdScatterDiagram;
+    QPointer<KChart::Plotter> kdScatterDiagram;
     QPointer<KChart::StockDiagram> kdStockDiagram;
-    QPointer<KChart::Plotter>  kdBubbleDiagram;
+    QPointer<KChart::Plotter> kdBubbleDiagram;
     // FIXME BUG: Somehow we need to visualize something for these
     //            missing chart types.  We have some alternatives:
     //            1. Show an empty area
@@ -165,8 +164,8 @@ public:
     QPointer<KChart::BarDiagram> kdSurfaceDiagram;
     QPointer<KChart::BarDiagram> kdGanttDiagram;
 
-    ChartType     plotAreaChartType;
-    ChartSubtype  plotAreaChartSubType;
+    ChartType plotAreaChartType;
+    ChartSubtype plotAreaChartSubType;
 
     // If KChart::LineDiagram::centerDataPoints() property is set to true,
     // the data points drawn in a line (i.e., also an area) diagram start at
@@ -188,19 +187,26 @@ public:
 
     QString axisPosition;
     QString axisLabelsPosition;
-
 };
 
 class CartesianAxis : public KChart::CartesianAxis
 {
 public:
-    CartesianAxis(KoChart::Axis *_axis) : KChart::CartesianAxis(), axis(_axis) {}
-    virtual ~CartesianAxis() {}
-    const QString customizedLabel(const QString& label) const override {
+    CartesianAxis(KoChart::Axis *_axis)
+        : KChart::CartesianAxis()
+        , axis(_axis)
+    {
+    }
+    virtual ~CartesianAxis()
+    {
+    }
+    const QString customizedLabel(const QString &label) const override
+    {
         if (KoOdfNumberStyles::NumericStyleFormat *n = axis->numericStyleFormat())
             return KoOdfNumberStyles::format(label, *n);
         return label;
     }
+
 private:
     KoChart::Axis *axis;
 };
@@ -273,23 +279,21 @@ Axis::Private::~Private()
 
     delete kdAxis;
 
-    foreach(DataSet *dataSet, dataSets)
+    foreach (DataSet *dataSet, dataSets)
         dataSet->setAttachedAxis(0);
 }
 
 void Axis::Private::registerDiagram(KChart::AbstractDiagram *diagram)
 {
-    QObject::connect(plotArea->proxyModel(), SIGNAL(columnsInserted(QModelIndex,int,int)),
-                     diagram->model(), SLOT(slotColumnsInserted(QModelIndex,int,int)));
+    QObject::connect(plotArea->proxyModel(),
+                     SIGNAL(columnsInserted(QModelIndex, int, int)),
+                     diagram->model(),
+                     SLOT(slotColumnsInserted(QModelIndex, int, int)));
 
-    QObject::connect(diagram, &KChart::AbstractDiagram::propertiesChanged,
-                     plotArea, &PlotArea::plotAreaUpdate);
-    QObject::connect(diagram, &KChart::AbstractDiagram::layoutChanged,
-                     plotArea, &PlotArea::plotAreaUpdate);
-    QObject::connect(diagram, &KChart::AbstractDiagram::modelsChanged,
-                     plotArea, &PlotArea::plotAreaUpdate);
-    QObject::connect(diagram, &KChart::AbstractDiagram::dataHidden,
-                     plotArea, &PlotArea::plotAreaUpdate);
+    QObject::connect(diagram, &KChart::AbstractDiagram::propertiesChanged, plotArea, &PlotArea::plotAreaUpdate);
+    QObject::connect(diagram, &KChart::AbstractDiagram::layoutChanged, plotArea, &PlotArea::plotAreaUpdate);
+    QObject::connect(diagram, &KChart::AbstractDiagram::modelsChanged, plotArea, &PlotArea::plotAreaUpdate);
+    QObject::connect(diagram, &KChart::AbstractDiagram::dataHidden, plotArea, &PlotArea::plotAreaUpdate);
 }
 
 KChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded(ChartType chartType)
@@ -353,12 +357,11 @@ KChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded(ChartType ch
             createGanttDiagram();
         diagram = kdGanttDiagram;
         break;
-    default:
-        ;
+    default:;
     }
     diagram->setObjectName(q->name()); // for debug
     adjustAllDiagrams();
-    debugChartAxis<<q->name()<<"diagram"<<diagram<<"for"<<chartType;
+    debugChartAxis << q->name() << "diagram" << diagram << "for" << chartType;
     return diagram;
 }
 
@@ -368,31 +371,31 @@ KChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded(ChartType ch
 KChart::AbstractDiagram *Axis::Private::getDiagram(ChartType chartType)
 {
     switch (chartType) {
-        case BarChartType:
-            return kdBarDiagram;
-        case LineChartType:
-            return kdLineDiagram;
-        case AreaChartType:
-            return kdAreaDiagram;
-        case CircleChartType:
-            return kdCircleDiagram;
-        case RingChartType:
-            return kdRingDiagram;
-        case RadarChartType:
-        case FilledRadarChartType:
-            return kdRadarDiagram;
-        case ScatterChartType:
-            return kdScatterDiagram;
-        case StockChartType:
-            return kdStockDiagram;
-        case BubbleChartType:
-            return kdBubbleDiagram;
-        case SurfaceChartType:
-            return kdSurfaceDiagram;
-        case GanttChartType:
-            return kdGanttDiagram;
-        case LastChartType:
-            return 0;
+    case BarChartType:
+        return kdBarDiagram;
+    case LineChartType:
+        return kdLineDiagram;
+    case AreaChartType:
+        return kdAreaDiagram;
+    case CircleChartType:
+        return kdCircleDiagram;
+    case RingChartType:
+        return kdRingDiagram;
+    case RadarChartType:
+    case FilledRadarChartType:
+        return kdRadarDiagram;
+    case ScatterChartType:
+        return kdScatterDiagram;
+    case StockChartType:
+        return kdStockDiagram;
+    case BubbleChartType:
+        return kdBubbleDiagram;
+    case SurfaceChartType:
+        return kdSurfaceDiagram;
+    case GanttChartType:
+        return kdGanttDiagram;
+    case LastChartType:
+        return 0;
         // Compiler warning for unhandled chart type is intentional.
     }
     Q_ASSERT(!"Unhandled chart type");
@@ -416,7 +419,6 @@ void Axis::Private::deleteDiagram(ChartType chartType)
         deleteDiagram(diagram);
     }
 }
-
 
 void Axis::Private::createBarDiagram()
 {
@@ -534,8 +536,7 @@ void Axis::Private::createAreaDiagram()
 
     if (plotAreaChartSubType == StackedChartSubtype)
         kdAreaDiagram->setType(KChart::LineDiagram::Stacked);
-    else if (plotAreaChartSubType == PercentChartSubtype)
-    {
+    else if (plotAreaChartSubType == PercentChartSubtype) {
         kdAreaDiagram->setType(KChart::LineDiagram::Percent);
         kdAreaDiagram->setUnitSuffix("%", Qt::Vertical);
     }
@@ -617,8 +618,8 @@ void Axis::Private::createRadarDiagram(bool filled)
 {
     Q_ASSERT(kdRadarDiagram == 0);
 
-    //kdRadarDiagramModel->setDataDimensions(2);
-    //kdRadarDiagramModel->setDataDirection(Qt::Horizontal);
+    // kdRadarDiagramModel->setDataDimensions(2);
+    // kdRadarDiagramModel->setDataDirection(Qt::Horizontal);
 
     kdRadarDiagram = new KChart::RadarDiagram(plotArea->kdChart(), kdRadarPlane);
     KChartModel *model = new KChartModel(plotArea, kdRadarDiagram);
@@ -635,7 +636,7 @@ void Axis::Private::createRadarDiagram(bool filled)
         kdRadarDiagram->setFillAlpha(0.4);
     }
 
-#if 0  // Stacked and Percent not supported by KChart.
+#if 0 // Stacked and Percent not supported by KChart.
     if (plotAreaChartSubType == StackedChartSubtype)
         kdRadarDiagram->setType(KChart::PolarDiagram::Stacked);
     else if (plotAreaChartSubType == PercentChartSubtype)
@@ -665,7 +666,6 @@ void Axis::Private::createScatterDiagram()
     }
     kdPlane->addDiagram(kdScatterDiagram);
 
-
     foreach (Axis *axis, plotArea->axes()) {
         if (axis->isVisible() && axis->dimension() == XAxisDimension) {
             kdScatterDiagram->addAxis(axis->kdAxis());
@@ -690,21 +690,21 @@ void Axis::Private::createStockDiagram()
     KChartModel *model = new KChartModel(plotArea, kdStockDiagram);
     kdStockDiagram->setModel(model);
     switch (plotAreaChartSubType) {
-        case HighLowCloseChartSubtype:
-            kdStockDiagram->setType(KChart::StockDiagram::HighLowClose);
-            break;
-        case OpenHighLowCloseChartSubtype:
-            kdStockDiagram->setType(KChart::StockDiagram::OpenHighLowClose);
-            break;
-        case CandlestickChartSubtype:
-            kdStockDiagram->setType(KChart::StockDiagram::Candlestick);
-            break;
+    case HighLowCloseChartSubtype:
+        kdStockDiagram->setType(KChart::StockDiagram::HighLowClose);
+        break;
+    case OpenHighLowCloseChartSubtype:
+        kdStockDiagram->setType(KChart::StockDiagram::OpenHighLowClose);
+        break;
+    case CandlestickChartSubtype:
+        kdStockDiagram->setType(KChart::StockDiagram::Candlestick);
+        break;
     }
     registerDiagram(kdStockDiagram);
 
     model->setDataDimensions(numDimensions(StockChartType));
 
-#if 0  // Stacked and Percent not supported by KChart.
+#if 0 // Stacked and Percent not supported by KChart.
     if (plotAreaChartSubType == StackedChartSubtype)
         kdStockDiagram->setType(KChart::StockDiagram::Stacked);
     else if (plotAreaChartSubType == PercentChartSubtype)
@@ -744,14 +744,14 @@ void Axis::Private::createBubbleDiagram()
     kdPlane->addDiagram(kdBubbleDiagram);
 
     foreach (Axis *axis, plotArea->axes()) {
-        //if (axis->dimension() == XAxisDimension)
+        // if (axis->dimension() == XAxisDimension)
         if (axis->isVisible() && axis->dimension() == XAxisDimension) {
             kdBubbleDiagram->addAxis(axis->kdAxis());
             q->registerDiagram(kdBubbleDiagram);
         }
     }
 
-     // disable the connecting line
+    // disable the connecting line
     KChart::LineAttributes la = kdBubbleDiagram->lineAttributes();
     la.setVisible(false);
     kdBubbleDiagram->setLineAttributes(la);
@@ -803,7 +803,6 @@ void Axis::Private::adjustAllDiagrams()
         kdAreaDiagram->setCenterDataPoints(centerDataPoints);
 }
 
-
 // ================================================================
 //                             class Axis
 
@@ -827,7 +826,7 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     d->kdPolarPlane = parent->kdPolarPlane();
     d->kdRadarPlane = parent->kdRadarPlane();
 
-    d->plotAreaChartType    = d->plotArea->chartType();
+    d->plotAreaChartType = d->plotArea->chartType();
     d->plotAreaChartSubType = d->plotArea->chartSubType();
 
     setOdfAxisPosition("start");
@@ -837,7 +836,7 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     if (textShapeFactory)
         d->title = textShapeFactory->createDefaultShape(parent->parent()->resourceManager());
     if (d->title) {
-        d->titleData = qobject_cast<TextLabelData*>(d->title->userData());
+        d->titleData = qobject_cast<TextLabelData *>(d->title->userData());
         if (d->titleData == 0) {
             d->titleData = new TextLabelData;
             d->title->setUserData(d->titleData);
@@ -846,8 +845,7 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
         QFont font = d->titleData->document()->defaultFont();
         font.setPointSizeF(9);
         d->titleData->document()->setDefaultFont(font);
-    }
-    else {
+    } else {
         d->title = new TextLabelDummy;
         d->titleData = new TextLabelData;
         KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout(d->titleData->document());
@@ -861,7 +859,7 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     d->plotArea->parent()->setInheritsTransform(d->title, true);
     d->title->setDeletable(false);
     d->title->setZIndex(5);
-    d->title->setToolDelegates(QSet<KoShape*>()<<parent->parent()<<d->title); // Enable chart tool
+    d->title->setToolDelegates(QSet<KoShape *>() << parent->parent() << d->title); // Enable chart tool
     d->titleData->setResizeMethod(KoTextShapeDataBase::AutoResize);
     d->title->setAdditionalStyleAttribute("chart:auto-position", "true");
     d->title->setAllowedInteraction(KoShape::ShearingAllowed, false);
@@ -886,7 +884,7 @@ Axis::~Axis()
     delete d;
 }
 
-PlotArea* Axis::plotArea() const
+PlotArea *Axis::plotArea() const
 {
     return d->plotArea;
 }
@@ -921,7 +919,7 @@ AxisDimension Axis::dimension() const
     return d->dimension;
 }
 
-QList<DataSet*> Axis::dataSets() const
+QList<DataSet *> Axis::dataSets() const
 {
     return d->dataSets;
 }
@@ -943,7 +941,7 @@ bool Axis::attachDataSet(DataSet *dataSet)
 
         KChart::AbstractDiagram *diagram = d->getDiagramAndCreateIfNeeded(chartType);
         Q_ASSERT(diagram);
-        KChartModel *model = dynamic_cast<KChartModel*>(diagram->model());
+        KChartModel *model = dynamic_cast<KChartModel *>(diagram->model());
         Q_ASSERT(model);
 
         model->addDataSet(dataSet);
@@ -969,11 +967,10 @@ bool Axis::detachDataSet(DataSet *dataSet, bool silent)
 
         KChart::AbstractDiagram *oldDiagram = d->getDiagram(chartType);
         Q_ASSERT(oldDiagram);
-        KChartModel *oldModel = dynamic_cast<KChartModel*>(oldDiagram->model());
+        KChartModel *oldModel = dynamic_cast<KChartModel *>(oldDiagram->model());
         Q_ASSERT(oldModel);
 
-        const int rowCount = oldModel->dataDirection() == Qt::Vertical
-                                 ? oldModel->columnCount() : oldModel->rowCount();
+        const int rowCount = oldModel->dataDirection() == Qt::Vertical ? oldModel->columnCount() : oldModel->rowCount();
         // If there's only as many rows as needed for *one*
         // dataset, that means that the dataset we're removing is
         // the last one in the model --> delete model
@@ -996,8 +993,8 @@ bool Axis::detachDataSet(DataSet *dataSet, bool silent)
 
 void Axis::clearDataSets()
 {
-    QList<DataSet*> list = d->dataSets;
-    foreach(DataSet *dataSet, list)
+    QList<DataSet *> list = d->dataSets;
+    foreach (DataSet *dataSet, list)
         detachDataSet(dataSet, true);
 }
 
@@ -1168,9 +1165,7 @@ void Axis::setScalingLogarithmic(bool logarithmicScaling)
     if (dimension() != YAxisDimension)
         return;
 
-    d->kdPlane->setAxesCalcModeY(d->logarithmicScaling
-                                  ? KChart::AbstractCoordinatePlane::Logarithmic
-                                  : KChart::AbstractCoordinatePlane::Linear);
+    d->kdPlane->setAxesCalcModeY(d->logarithmicScaling ? KChart::AbstractCoordinatePlane::Logarithmic : KChart::AbstractCoordinatePlane::Linear);
     d->kdPlane->layoutPlanes();
 
     requestRepaint();
@@ -1191,7 +1186,7 @@ void Axis::setShowMajorGrid(bool showGrid)
     d->showMajorGrid = showGrid;
 
     // KChart
-    KChart::GridAttributes  attributes = d->kdPlane->gridAttributes(orientation());
+    KChart::GridAttributes attributes = d->kdPlane->gridAttributes(orientation());
     attributes.setGridVisible(d->showMajorGrid);
     d->kdPlane->setGridAttributes(orientation(), attributes);
 
@@ -1212,7 +1207,7 @@ void Axis::setShowMinorGrid(bool showGrid)
     d->showMinorGrid = showGrid;
 
     // KChart
-    KChart::GridAttributes  attributes = d->kdPlane->gridAttributes(orientation());
+    KChart::GridAttributes attributes = d->kdPlane->gridAttributes(orientation());
     attributes.setSubGridVisible(d->showMinorGrid);
     d->kdPlane->setGridAttributes(orientation(), attributes);
 
@@ -1245,8 +1240,7 @@ void Axis::setShowOverlappingDataLabels(bool show)
 Qt::Orientation Axis::orientation() const
 {
     bool chartIsVertical = d->plotArea->isVertical();
-    bool horizontal = d->dimension == (chartIsVertical ? YAxisDimension
-                                                       : XAxisDimension);
+    bool horizontal = d->dimension == (chartIsVertical ? YAxisDimension : XAxisDimension);
     return horizontal ? Qt::Horizontal : Qt::Vertical;
 }
 
@@ -1254,7 +1248,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
-    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData(OdfLoadingHelperId);
+    OdfLoadingHelper *helper = (OdfLoadingHelper *)context.sharedData(OdfLoadingHelperId);
     bool reverseAxis = false;
 
     d->title->setVisible(false);
@@ -1275,7 +1269,6 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
     setMinorInterval(0.0);
 
     if (!axisElement.isNull()) {
-
         QString styleName = axisElement.attributeNS(KoXmlNS::chart, "style-name", QString());
         const KoXmlElement *stylElement = stylesReader.findStyle(styleName, "chart");
         if (stylElement) {
@@ -1287,15 +1280,15 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
         }
 
         KoXmlElement n;
-        forEachElement (n, axisElement) {
+        forEachElement(n, axisElement)
+        {
             if (n.namespaceURI() != KoXmlNS::chart)
                 continue;
             if (n.localName() == "title") {
                 OdfHelper::loadOdfTitle(d->title, n, context);
                 // title shall *always* have AutoResize
                 d->titleData->setResizeMethod(KoTextShapeDataBase::AutoResize);
-            }
-            else if (n.localName() == "grid") {
+            } else if (n.localName() == "grid") {
                 bool major = false;
                 if (n.hasAttributeNS(KoXmlNS::chart, "class")) {
                     const QString className = n.attributeNS(KoXmlNS::chart, "class");
@@ -1318,15 +1311,14 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
                     styleStack.setTypeProperties("graphic");
                     if (styleStack.hasProperty(KoXmlNS::svg, "stroke-color")) {
                         const QString strokeColor = styleStack.property(KoXmlNS::svg, "stroke-color");
-                        //d->showMajorGrid = true;
+                        // d->showMajorGrid = true;
                         if (major)
                             gridPen = QPen(QColor(strokeColor));
                         else
                             subGridPen = QPen(QColor(strokeColor));
                     }
                 }
-            }
-            else if (n.localName() == "categories") {
+            } else if (n.localName() == "categories") {
                 if (n.hasAttributeNS(KoXmlNS::table, "cell-range-address")) {
                     const CellRegion region = CellRegion(helper->tableSource, n.attributeNS(KoXmlNS::table, "cell-range-address"));
                     helper->categoryRegionSpecifiedInXAxis = true;
@@ -1343,7 +1335,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
         // NOTE: chart:dimension already handled by PlotArea before and passed
         // explicitly in the constructor.
     } else {
-        warnChartOdf<<"No axis element";
+        warnChartOdf << "No axis element";
     }
 
     if (axisElement.hasAttributeNS(KoXmlNS::chart, "style-name")) {
@@ -1356,15 +1348,11 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
 
         styleStack.setTypeProperties("chart");
 
-        if (styleStack.hasProperty(KoXmlNS::chart, "logarithmic")
-            && styleStack.property(KoXmlNS::chart, "logarithmic") == "true")
-        {
+        if (styleStack.hasProperty(KoXmlNS::chart, "logarithmic") && styleStack.property(KoXmlNS::chart, "logarithmic") == "true") {
             setScalingLogarithmic(true);
         }
 
-        if (styleStack.hasProperty(KoXmlNS::chart, "reverse-direction")
-            && styleStack.property(KoXmlNS::chart, "reverse-direction") == "true")
-        {
+        if (styleStack.hasProperty(KoXmlNS::chart, "reverse-direction") && styleStack.property(KoXmlNS::chart, "reverse-direction") == "true") {
             reverseAxis = true;
         }
 
@@ -1389,12 +1377,10 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
         if (styleStack.hasProperty(KoXmlNS::chart, "text-overlap"))
             setShowOverlappingDataLabels(styleStack.property(KoXmlNS::chart, "text-overlap") != "false");
         if (styleStack.hasProperty(KoXmlNS::chart, "visible"))
-            setVisible(styleStack.property(KoXmlNS::chart, "visible")  != "false");
+            setVisible(styleStack.property(KoXmlNS::chart, "visible") != "false");
         if (styleStack.hasProperty(KoXmlNS::chart, "minimum")) {
             const qreal minimum = styleStack.property(KoXmlNS::chart, "minimum").toDouble();
-            const qreal maximum = orientation() == Qt::Vertical
-                                    ? d->kdPlane->verticalRange().second
-                                    : d->kdPlane->horizontalRange().second;
+            const qreal maximum = orientation() == Qt::Vertical ? d->kdPlane->verticalRange().second : d->kdPlane->horizontalRange().second;
             if (orientation() == Qt::Vertical)
                 d->kdPlane->setVerticalRange(qMakePair(minimum, maximum));
             else
@@ -1402,9 +1388,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
             d->useAutomaticMinimumRange = false;
         }
         if (styleStack.hasProperty(KoXmlNS::chart, "maximum")) {
-            const qreal minimum = orientation() == Qt::Vertical
-                                    ? d->kdPlane->verticalRange().first
-                                    : d->kdPlane->horizontalRange().first;
+            const qreal minimum = orientation() == Qt::Vertical ? d->kdPlane->verticalRange().first : d->kdPlane->horizontalRange().first;
             const qreal maximum = styleStack.property(KoXmlNS::chart, "maximum").toDouble();
             if (orientation() == Qt::Vertical)
                 d->kdPlane->setVerticalRange(qMakePair(minimum, maximum));
@@ -1429,10 +1413,10 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
             setFontSize(fontSize);
         }
         if (styleStack.hasProperty(KoXmlNS::fo, "font-color")) {
-            QString fontColorString =  styleStack.property(KoXmlNS::fo, "font-color");
+            QString fontColorString = styleStack.property(KoXmlNS::fo, "font-color");
             QColor color(fontColorString);
             if (color.isValid()) {
-                KChart::TextAttributes tatt =  kdAxis()->textAttributes();
+                KChart::TextAttributes tatt = kdAxis()->textAttributes();
                 QPen pen = tatt.pen();
                 pen.setColor(color);
                 tatt.setPen(pen);
@@ -1459,7 +1443,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
         }
         if (styleStack.hasProperty(KoXmlNS::fo, "font-weight")) {
             QString fontWeight = styleStack.property(KoXmlNS::fo, "font-weight");
-            //fo:font-weight attribute are normal, bold, 100, 200, 300, 400, 500, 600, 700, 800 or 900.
+            // fo:font-weight attribute are normal, bold, 100, 200, 300, 400, 500, 600, 700, 800 or 900.
             if (fontWeight == "bold") {
                 QFont f = this->font();
                 f.setBold(true);
@@ -1469,7 +1453,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
             }
         }
     } else {
-        warnChartOdf<<"Axis element has no style information";
+        warnChartOdf << "Axis element has no style information";
         setShowLabels(KoOdfWorkaround::fixMissingStyle_DisplayLabel(axisElement, context));
     }
 
@@ -1489,9 +1473,9 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
         gridAttr.setGridPen(gridPen);
     if (subGridPen.style() != Qt::NoPen)
         gridAttr.setSubGridPen(subGridPen);
-//     if (plotArea()->chartType() == RadarChartType || plotArea()->chartType() == FilledRadarChartType)
-//         d->kdPolarPlane->setGridAttributes(false, gridAttr);
-//     else
+    //     if (plotArea()->chartType() == RadarChartType || plotArea()->chartType() == FilledRadarChartType)
+    //         d->kdPolarPlane->setGridAttributes(false, gridAttr);
+    //     else
     d->kdPolarPlane->setGridAttributes(true, gridAttr);
 
     gridAttr = d->kdRadarPlane->globalGridAttributes();
@@ -1509,7 +1493,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
     d->kdRadarPlane->setTextAttributes(ta);
 
     if (reverseAxis) {
-        KChart::CartesianCoordinatePlane *plane = dynamic_cast<KChart::CartesianCoordinatePlane*>(kdPlane());
+        KChart::CartesianCoordinatePlane *plane = dynamic_cast<KChart::CartesianCoordinatePlane *>(kdPlane());
         if (plane) {
             if (orientation() == Qt::Horizontal)
                 plane->setHorizontalRangeReversed(reverseAxis);
@@ -1528,12 +1512,11 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
     }
     requestRepaint();
 
-    debugChartOdf<<"Loaded axis:"<<name()<<"dimension:"<<dimension();
+    debugChartOdf << "Loaded axis:" << name() << "dimension:" << dimension();
     return true;
 }
 
-bool Axis::loadOdfChartSubtypeProperties(const KoXmlElement &axisElement,
-                                          KoShapeLoadingContext &context)
+bool Axis::loadOdfChartSubtypeProperties(const KoXmlElement &axisElement, KoShapeLoadingContext &context)
 {
     Q_UNUSED(axisElement);
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
@@ -1563,16 +1546,16 @@ QString Axis::name() const
         return d->name;
     }
     QString name;
-    switch(dimension()) {
-        case XAxisDimension:
-            name = QLatin1Char('x');
-            break;
-        case YAxisDimension:
-            name = QLatin1Char('y');
-            break;
-        case ZAxisDimension:
-            name = QLatin1Char('z');
-            break;
+    switch (dimension()) {
+    case XAxisDimension:
+        name = QLatin1Char('x');
+        break;
+    case YAxisDimension:
+        name = QLatin1Char('y');
+        break;
+    case ZAxisDimension:
+        name = QLatin1Char('z');
+        break;
     }
     int i = 1;
     foreach (Axis *axis, d->plotArea->axes()) {
@@ -1602,7 +1585,6 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     KoGenStyle axisStyle(KoGenStyle::ChartAutoStyle, "chart");
     axisStyle.addProperty("chart:logarithmic", scalingIsLogarithmic());
 
-
     axisStyle.addProperty("chart:reverse-direction", axisDirectionReversed());
     if (!d->axisPosition.isEmpty()) {
         axisStyle.addProperty("chart:axis-position", d->axisPosition);
@@ -1625,31 +1607,27 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     }
 
     if (!d->useAutomaticMinimumRange) {
-        const qreal minimum = orientation() == Qt::Vertical
-                            ? d->kdPlane->verticalRange().first
-                            : d->kdPlane->horizontalRange().first;
+        const qreal minimum = orientation() == Qt::Vertical ? d->kdPlane->verticalRange().first : d->kdPlane->horizontalRange().first;
         axisStyle.addProperty("chart:minimum", (int)minimum);
     }
     if (!d->useAutomaticMaximumRange) {
-        const qreal maximum = orientation() == Qt::Vertical
-                            ? d->kdPlane->verticalRange().second
-                            : d->kdPlane->horizontalRange().second;
+        const qreal maximum = orientation() == Qt::Vertical ? d->kdPlane->verticalRange().second : d->kdPlane->horizontalRange().second;
         axisStyle.addProperty("chart:maximum", (int)maximum);
     }
 
-    //axisStyle.addPropertyPt("chart:origin", origin);
+    // axisStyle.addPropertyPt("chart:origin", origin);
 
-    KChart::TextAttributes tatt =  kdAxis()->textAttributes();
+    KChart::TextAttributes tatt = kdAxis()->textAttributes();
     QPen pen = tatt.pen();
     axisStyle.addProperty("fo:font-color", pen.color().name(), KoGenStyle::TextType);
     axisStyle.addProperty("fo:font-family", tatt.font().family(), KoGenStyle::TextType);
     axisStyle.addPropertyPt("fo:font-size", fontSize(), KoGenStyle::TextType);
     if (font().bold()) {
-        axisStyle.addProperty("fo:font-weight", "bold" , KoGenStyle::TextType);
+        axisStyle.addProperty("fo:font-weight", "bold", KoGenStyle::TextType);
         // TODO support other weights
     }
     if (font().italic()) {
-        axisStyle.addProperty("fo:font-style", "italic" , KoGenStyle::TextType);
+        axisStyle.addProperty("fo:font-style", "italic", KoGenStyle::TextType);
         // TODO oblique
     }
 
@@ -1744,11 +1722,11 @@ void Axis::plotAreaChartTypeChanged(ChartType newChartType)
         return;
     }
 
-    //qDebug() << "changed ChartType";
+    // qDebug() << "changed ChartType";
 
     ChartType oldChartType = d->plotAreaChartType;
 
-    debugChartAxis<<oldChartType<<"->"<<newChartType;
+    debugChartAxis << oldChartType << "->" << newChartType;
     // Change only the fill in case of type change from RadarChartType to FilledRadarChartType
     // or viceversa as rest of the properties remain same
     if (newChartType == RadarChartType && oldChartType == FilledRadarChartType) {
@@ -1758,22 +1736,22 @@ void Axis::plotAreaChartTypeChanged(ChartType newChartType)
     } else {
         KChart::AbstractDiagram *newDiagram = d->getDiagram(newChartType);
         if (newDiagram) {
-            debugChartAxis<<"already exists:"<<newDiagram;
+            debugChartAxis << "already exists:" << newDiagram;
             // Some dataset(s) have been attached to this diagram,
             // we delete it to get a fresh start
             d->deleteDiagram(newDiagram);
         }
         newDiagram = d->getDiagramAndCreateIfNeeded(newChartType);
 
-        KChartModel *newModel = dynamic_cast<KChartModel*>(newDiagram->model());
+        KChartModel *newModel = dynamic_cast<KChartModel *>(newDiagram->model());
         // FIXME: This causes a crash on unimplemented types. We should
         //        handle that in some other way.
         Q_ASSERT(newModel);
 
         foreach (DataSet *dataSet, d->dataSets) {
-            //if (dataSet->chartType() != LastChartType) {
-                dataSet->setChartType(LastChartType);
-                dataSet->setChartSubType(NoChartSubtype);
+            // if (dataSet->chartType() != LastChartType) {
+            dataSet->setChartType(LastChartType);
+            dataSet->setChartSubType(NoChartSubtype);
             //}
         }
 
@@ -1781,7 +1759,7 @@ void Axis::plotAreaChartTypeChanged(ChartType newChartType)
         Q_ASSERT(oldDiagram);
         // We need to know the old model so that we can remove the data sets
         // from the old model that we added to the new model.
-        KChartModel *oldModel = dynamic_cast<KChartModel*>(oldDiagram->model());
+        KChartModel *oldModel = dynamic_cast<KChartModel *>(oldDiagram->model());
         Q_ASSERT(oldModel);
 
         foreach (DataSet *dataSet, d->dataSets) {
@@ -1789,8 +1767,7 @@ void Axis::plotAreaChartTypeChanged(ChartType newChartType)
                 continue;
             }
             newModel->addDataSet(dataSet);
-            const int dataSetCount = oldModel->dataDirection() == Qt::Vertical
-                                     ? oldModel->columnCount() : oldModel->rowCount();
+            const int dataSetCount = oldModel->dataDirection() == Qt::Vertical ? oldModel->columnCount() : oldModel->rowCount();
             if (dataSetCount == oldModel->dataDimensions()) {
                 d->deleteDiagram(oldChartType);
             } else {
@@ -1818,7 +1795,8 @@ void Axis::plotAreaChartSubTypeChanged(ChartSubtype subType)
             KChart::BarDiagram::BarType type;
             switch (subType) {
             case StackedChartSubtype:
-                type = KChart::BarDiagram::Stacked; break;
+                type = KChart::BarDiagram::Stacked;
+                break;
             case PercentChartSubtype:
                 type = KChart::BarDiagram::Percent;
                 d->kdBarDiagram->setUnitSuffix("%", d->kdBarDiagram->orientation());
@@ -1834,7 +1812,8 @@ void Axis::plotAreaChartSubTypeChanged(ChartSubtype subType)
             KChart::LineDiagram::LineType type;
             switch (subType) {
             case StackedChartSubtype:
-                type = KChart::LineDiagram::Stacked; break;
+                type = KChart::LineDiagram::Stacked;
+                break;
             case PercentChartSubtype:
                 type = KChart::LineDiagram::Percent;
                 d->kdLineDiagram->setUnitSuffix("%", Qt::Vertical);
@@ -1850,7 +1829,8 @@ void Axis::plotAreaChartSubTypeChanged(ChartSubtype subType)
             KChart::LineDiagram::LineType type;
             switch (subType) {
             case StackedChartSubtype:
-                type = KChart::LineDiagram::Stacked; break;
+                type = KChart::LineDiagram::Stacked;
+                break;
             case PercentChartSubtype:
                 type = KChart::LineDiagram::Percent;
                 d->kdAreaDiagram->setUnitSuffix("%", Qt::Vertical);
@@ -1898,7 +1878,7 @@ void Axis::plotAreaChartSubTypeChanged(ChartSubtype subType)
     default:;
         // FIXME: Implement more chart types
     }
-    Q_FOREACH(DataSet* set,  d->dataSets) {
+    Q_FOREACH (DataSet *set, d->dataSets) {
         set->setChartType(d->plotAreaChartType);
         set->setChartSubType(subType);
     }
@@ -1914,26 +1894,26 @@ void Axis::plotAreaIsVerticalChanged()
 
 void Axis::Private::updatePosition()
 {
-//     // Is the first x or y axis?
-//     bool first = (dimension == XAxisDimension) ? plotArea->xAxis() == q
-//                                                : plotArea->yAxis() == q;
-//
-//     Position position;
-//     ItemType type = GenericItemType;
-//     if (q->orientation() == Qt::Horizontal) {
-//         position = first ? BottomPosition : TopPosition;
-//         type = first ? XAxisTitleType : SecondaryXAxisTitleType;
-//     } else {
-//         position = first ? StartPosition : EndPosition;
-//         type = first ? YAxisTitleType : SecondaryYAxisTitleType;
-//     }
-//     // KChart
-//     kdAxis->setPosition(PositionToKChartAxisPosition(position));
-//     ChartLayout *layout = plotArea->parent()->layout();
-//     layout->setPosition(title, position, type);
-//     layout->layout();
-//
-//     q->requestRepaint();
+    //     // Is the first x or y axis?
+    //     bool first = (dimension == XAxisDimension) ? plotArea->xAxis() == q
+    //                                                : plotArea->yAxis() == q;
+    //
+    //     Position position;
+    //     ItemType type = GenericItemType;
+    //     if (q->orientation() == Qt::Horizontal) {
+    //         position = first ? BottomPosition : TopPosition;
+    //         type = first ? XAxisTitleType : SecondaryXAxisTitleType;
+    //     } else {
+    //         position = first ? StartPosition : EndPosition;
+    //         type = first ? YAxisTitleType : SecondaryYAxisTitleType;
+    //     }
+    //     // KChart
+    //     kdAxis->setPosition(PositionToKChartAxisPosition(position));
+    //     ChartLayout *layout = plotArea->parent()->layout();
+    //     layout->setPosition(title, position, type);
+    //     layout->layout();
+    //
+    //     q->requestRepaint();
 }
 
 void Axis::registerAxis(Axis *axis)
@@ -1963,7 +1943,6 @@ void Axis::registerAxis(Axis *axis)
         axis->registerDiagram(d->kdBubbleDiagram);
     }
     // FIXME: Add all diagrams here
-
 }
 
 void Axis::registerDiagram(KChart::AbstractCartesianDiagram *diagram)
@@ -2108,7 +2087,7 @@ void Axis::setAngleOffset(qreal angle)
 
 void Axis::setHoleSize(qreal value)
 {
-    //TODO KChart does not support
+    // TODO KChart does not support
 }
 
 QFont Axis::font() const
@@ -2149,7 +2128,7 @@ bool Axis::isVisible() const
 
 void Axis::setVisible(bool visible)
 {
-    debugChartAxis<<d->isVisible<<"->"<<visible<<d->kdBarDiagram;
+    debugChartAxis << d->isVisible << "->" << visible << d->kdBarDiagram;
     d->isVisible = visible;
     if (visible) {
         d->restoreDiagrams();
@@ -2182,7 +2161,7 @@ QString Axis::odfAxisPosition() const
 void Axis::updateKChartAxisPosition()
 {
     if (!isCartesian(d->plotArea->chartType())) {
-        debugChartAxis<<name()<<"Not a cartesian chart"<<d->plotArea->chartType();
+        debugChartAxis << name() << "Not a cartesian chart" << d->plotArea->chartType();
         return;
     }
     KChart::CartesianAxis::Position pos;
@@ -2271,7 +2250,7 @@ void Axis::updateKChartAxisPosition()
         }
         d->kdAxis->setPosition(pos);
     }
-    debugChartAxis<<name()<<d->kdAxis<<pos<<d->kdAxis->isAbscissa();
+    debugChartAxis << name() << d->kdAxis << pos << d->kdAxis->isAbscissa();
     d->plotArea->plotAreaUpdate();
 }
 
@@ -2285,18 +2264,18 @@ CartesianAxis::Position Axis::actualAxisPosition() const
     CartesianAxis::Position pos = d->kdAxis->position();
     if (d->plotArea->isVertical()) {
         switch (pos) {
-            case KChart::CartesianAxis::Bottom:
-                pos = KChart::CartesianAxis::Left;
-                break;
-            case KChart::CartesianAxis::Top:
-                pos = KChart::CartesianAxis::Right;
-                break;
-            case KChart::CartesianAxis::Left:
-                pos = KChart::CartesianAxis::Bottom;
-                break;
-            case KChart::CartesianAxis::Right:
-                pos = KChart::CartesianAxis::Top;
-                break;
+        case KChart::CartesianAxis::Bottom:
+            pos = KChart::CartesianAxis::Left;
+            break;
+        case KChart::CartesianAxis::Top:
+            pos = KChart::CartesianAxis::Right;
+            break;
+        case KChart::CartesianAxis::Left:
+            pos = KChart::CartesianAxis::Bottom;
+            break;
+        case KChart::CartesianAxis::Right:
+            pos = KChart::CartesianAxis::Top;
+            break;
         }
     }
     return pos;
@@ -2305,7 +2284,7 @@ CartesianAxis::Position Axis::actualAxisPosition() const
 bool Axis::axisDirectionReversed() const
 {
     bool reversed = false;
-    KChart::CartesianCoordinatePlane *plane = dynamic_cast<KChart::CartesianCoordinatePlane*>(kdPlane());
+    KChart::CartesianCoordinatePlane *plane = dynamic_cast<KChart::CartesianCoordinatePlane *>(kdPlane());
     if (plane) {
         if (orientation() == Qt::Horizontal)
             reversed = plane->isHorizontalRangeReversed();
@@ -2338,6 +2317,6 @@ void Axis::updateKChartStockAttributes()
 
 QDebug operator<<(QDebug dbg, KoChart::Axis *a)
 {
-    dbg.nospace().noquote() <<"Axis["<<a->name()<<']';
+    dbg.nospace().noquote() << "Axis[" << a->name() << ']';
     return dbg.space().quote();
 }

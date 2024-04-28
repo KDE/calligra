@@ -6,21 +6,21 @@
 
 #include "KWNavigationWidget.h"
 
-#include "Words.h"
 #include "KWDocument.h"
+#include "Words.h"
 #include "frames/KWFrame.h"
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
 #include <KWView.h>
 #include <KoParagraphStyle.h>
 #include <KoTextDocument.h>
-#include <KoTextLayoutRootArea.h>
 #include <KoTextEditor.h>
+#include <KoTextLayoutRootArea.h>
 
-#include <QStack>
-#include <QTextDocument>
-#include <QTextBlock>
 #include <QHeaderView>
+#include <QStack>
+#include <QTextBlock>
+#include <QTextDocument>
 
 KWNavigationWidget::KWNavigationWidget(QWidget *parent)
     : QWidget(parent)
@@ -65,8 +65,7 @@ void KWNavigationWidget::initLayout()
 void KWNavigationWidget::navigationClicked(const QModelIndex &idx)
 {
     if (idx.column() == 0) {
-        QTextDocument *doc = static_cast<QTextDocument *>(
-            m_model->itemFromIndex(idx)->data(Qt::UserRole + 2).value<void *>());
+        QTextDocument *doc = static_cast<QTextDocument *>(m_model->itemFromIndex(idx)->data(Qt::UserRole + 2).value<void *>());
 
         int position = m_model->itemFromIndex(idx)->data(Qt::UserRole + 1).toInt();
 
@@ -100,12 +99,13 @@ void KWNavigationWidget::updateData()
     m_treeView->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     m_treeView->header()->setStretchLastSection(false);
 
-    QStack< QPair<QStandardItem *, int> > curChain;
+    QStack<QPair<QStandardItem *, int>> curChain;
     curChain.push(QPair<QStandardItem *, int>(m_model->invisibleRootItem(), 0));
 
     foreach (KWFrameSet *fs, m_document->frameSets()) {
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs == 0) continue;
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet *>(fs);
+        if (tfs == 0)
+            continue;
 
         tfs->wordsDocument();
         QTextDocument *doc = tfs->document();
@@ -121,7 +121,7 @@ void KWNavigationWidget::updateData()
             QStandardItem *item = new QStandardItem(block.text());
             item->setData(block.position(), Qt::UserRole + 1);
             item->setData(QVariant::fromValue((void *)doc), Qt::UserRole + 2);
-            QList< QStandardItem *> buf;
+            QList<QStandardItem *> buf;
 
             KoTextLayoutRootArea *a = m_layout->rootAreaForPosition(block.position());
 
@@ -144,7 +144,7 @@ void KWNavigationWidget::updateData()
     m_updateTimer->start(300);
 }
 
-void KWNavigationWidget::setCanvas(KWCanvas* canvas)
+void KWNavigationWidget::setCanvas(KWCanvas *canvas)
 {
     if (!canvas)
         return;
@@ -153,8 +153,7 @@ void KWNavigationWidget::setCanvas(KWCanvas* canvas)
         disconnect(m_layout, &KoTextDocumentLayout::finishedLayout, this, &KWNavigationWidget::updateData);
     }
     if (m_document->mainFrameSet()) {
-        m_layout = qobject_cast<KoTextDocumentLayout *>(
-            m_document->mainFrameSet()->document()->documentLayout());
+        m_layout = qobject_cast<KoTextDocumentLayout *>(m_document->mainFrameSet()->document()->documentLayout());
         connect(m_layout, &KoTextDocumentLayout::finishedLayout, this, &KWNavigationWidget::updateData);
     } else {
         m_layout = 0;

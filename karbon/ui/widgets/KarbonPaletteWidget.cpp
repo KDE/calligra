@@ -7,10 +7,10 @@
 #include "KarbonPaletteWidget.h"
 #include <KoColorSet.h>
 
-#include <QPainter>
 #include <QMouseEvent>
-#include <QWheelEvent>
+#include <QPainter>
 #include <QToolTip>
+#include <QWheelEvent>
 
 KarbonPaletteWidget::KarbonPaletteWidget(QWidget *parent)
     : QWidget(parent)
@@ -121,7 +121,7 @@ void KarbonPaletteWidget::mouseMoveEvent(QMouseEvent *event)
         int index = indexFromPosition(event->pos());
         if (index != m_pressedIndex) {
             m_hasDragged = true;
-            applyScrolling(m_pressedIndex-index);
+            applyScrolling(m_pressedIndex - index);
             m_pressedIndex = indexFromPosition(event->pos());
         }
     }
@@ -142,12 +142,12 @@ void KarbonPaletteWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void KarbonPaletteWidget::wheelEvent(QWheelEvent *event)
 {
-    applyScrolling(-event->angleDelta().y()/10);
+    applyScrolling(-event->angleDelta().y() / 10);
 }
 
 void KarbonPaletteWidget::keyPressEvent(QKeyEvent *event)
 {
-    switch(event->key()) {
+    switch (event->key()) {
     case Qt::Key_Left:
         if (m_orientation == Qt::Horizontal)
             applyScrolling(-1);
@@ -166,15 +166,15 @@ void KarbonPaletteWidget::keyPressEvent(QKeyEvent *event)
         break;
     case Qt::Key_PageDown:
         if (m_orientation == Qt::Vertical)
-            applyScrolling(height()/patchSize().height());
+            applyScrolling(height() / patchSize().height());
         else
-            applyScrolling(width()/patchSize().width());
+            applyScrolling(width() / patchSize().width());
         break;
     case Qt::Key_PageUp:
         if (m_orientation == Qt::Vertical)
-            applyScrolling(-height()/patchSize().height());
+            applyScrolling(-height() / patchSize().height());
         else
-            applyScrolling(-width()/patchSize().width());
+            applyScrolling(-width() / patchSize().width());
         break;
     }
 }
@@ -182,26 +182,25 @@ void KarbonPaletteWidget::keyPressEvent(QKeyEvent *event)
 bool KarbonPaletteWidget::event(QEvent *event)
 {
     if (event->type() == QEvent::ToolTip) {
-         QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
-         int index = indexFromPosition(helpEvent->pos());
-         if (index != -1) {
-             KoColorSetEntry entry = m_palette->getColor(index);
-             QString text;
-             if (!entry.name.isEmpty())
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        int index = indexFromPosition(helpEvent->pos());
+        if (index != -1) {
+            KoColorSetEntry entry = m_palette->getColor(index);
+            QString text;
+            if (!entry.name.isEmpty())
                 text += "<center><b>" + entry.name + "</b></center>";
-             QColor color = entry.color.toQColor();
-             text += QString("%1 (%2 %3 %4)").arg(color.name())
-                     .arg(color.red()).arg(color.green()).arg(color.blue());
+            QColor color = entry.color.toQColor();
+            text += QString("%1 (%2 %3 %4)").arg(color.name()).arg(color.red()).arg(color.green()).arg(color.blue());
 
-             QToolTip::showText(helpEvent->globalPos(), text);
-         } else {
-             QToolTip::hideText();
-             event->ignore();
-         }
+            QToolTip::showText(helpEvent->globalPos(), text);
+        } else {
+            QToolTip::hideText();
+            event->ignore();
+        }
 
-         return true;
-     }
-     return QWidget::event(event);
+        return true;
+    }
+    return QWidget::event(event);
 }
 
 int KarbonPaletteWidget::indexFromPosition(const QPoint &position)
@@ -225,16 +224,15 @@ int KarbonPaletteWidget::indexFromPosition(const QPoint &position)
 QSize KarbonPaletteWidget::patchSize() const
 {
     const int patchSize = m_orientation == Qt::Horizontal ? height() : width();
-    return QSize(patchSize-1, patchSize-1);
+    return QSize(patchSize - 1, patchSize - 1);
 }
 
 void KarbonPaletteWidget::applyScrolling(int delta)
 {
-    int newScrollOffset = qBound(0, m_scrollOffset+delta, maximalScrollOffset());
+    int newScrollOffset = qBound(0, m_scrollOffset + delta, maximalScrollOffset());
     if (newScrollOffset != m_scrollOffset) {
         m_scrollOffset = newScrollOffset;
         update();
         emit scrollOffsetChanged();
     }
 }
-

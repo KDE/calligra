@@ -14,7 +14,6 @@
 
 #include "sheets_core_export.h"
 
-
 namespace Calligra
 {
 namespace Sheets
@@ -32,12 +31,11 @@ class PrintSettings;
  */
 class CALLIGRA_SHEETS_CORE_EXPORT SheetPrint : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    explicit SheetPrint(Sheet * sheet = 0);
+    explicit SheetPrint(Sheet *sheet = 0);
     SheetPrint(const SheetPrint &other);
     ~SheetPrint();
-
 
     /**
      * Sets the print \p settings.
@@ -102,7 +100,6 @@ public:
      */
     void operator=(const SheetPrint &);
 
-
 public Q_SLOTS:
     /**
      * Updates the print range, according to the inserted columns
@@ -131,8 +128,6 @@ public Q_SLOTS:
      * \param nbRow number of removed rows
      */
     void removeRow(int row, int nbRow);
-
-
 
 private:
     class Private;

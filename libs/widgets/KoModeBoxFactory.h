@@ -9,11 +9,11 @@
 #ifndef KOMODEBOXFACTORY_H
 #define KOMODEBOXFACTORY_H
 
-#include <KoDockFactoryBase.h>
 #include "kowidgets_export.h"
+#include <KoDockFactoryBase.h>
 
-#include <QString>
 #include <QDockWidget>
+#include <QString>
 
 class KoCanvasControllerWidget;
 
@@ -24,17 +24,20 @@ class KoCanvasControllerWidget;
 class KOWIDGETS_EXPORT KoModeBoxFactory : public KoDockFactoryBase
 {
 public:
-    explicit KoModeBoxFactory(KoCanvasControllerWidget *canvas, const QString &applicationName, const QString& appName);
+    explicit KoModeBoxFactory(KoCanvasControllerWidget *canvas, const QString &applicationName, const QString &appName);
     ~KoModeBoxFactory() override;
 
     QString id() const override;
     KoDockFactoryBase::DockPosition defaultDockPosition() const override;
-    QDockWidget* createDockWidget() override;
-    bool isCollapsable() const override { return false; }
+    QDockWidget *createDockWidget() override;
+    bool isCollapsable() const override
+    {
+        return false;
+    }
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

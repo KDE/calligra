@@ -176,6 +176,8 @@ include(ECMAddTests)
 include(ECMMarkAsTest)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
+include(KDEClangFormat)
+include(KDEGitCommitHooks)
 # own macros
 include(MacroBoolTo01)
 include(MacroOptionalFindPackage)
@@ -1078,3 +1080,7 @@ if(KF6DocTools_FOUND)
     # Disable for now, since it is failing
 endif()
 
+file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h)
+kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
+
+kde_configure_git_pre_commit_hook(CHECKS CLANG_FORMAT)

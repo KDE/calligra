@@ -38,13 +38,13 @@ public:
     enum Property {
         StyleId = QTextTableFormat::UserProperty + 1,
         // Linespacing properties
-        KeepTogether,    ///< If true, the row is not allowed to break
-        MinimumRowHeight,    ///< a qreal specifying the minimum row height in pt
-        RowHeight,      ///< a qreal specifying the exact row height in pt
-        BreakBefore,    ///< If true, insert a frame break before this table row
-        BreakAfter,     ///< If true, insert a frame break after this table row
-        MasterPageName,         ///< Optional name of the master-page
-        UseOptimalHeight        ///< If true, the row height should fit the content
+        KeepTogether, ///< If true, the row is not allowed to break
+        MinimumRowHeight, ///< a qreal specifying the minimum row height in pt
+        RowHeight, ///< a qreal specifying the exact row height in pt
+        BreakBefore, ///< If true, insert a frame break before this table row
+        BreakAfter, ///< If true, insert a frame break after this table row
+        MasterPageName, ///< Optional name of the master-page
+        UseOptimalHeight ///< If true, the row height should fit the content
     };
 
     /// Constructor
@@ -71,7 +71,7 @@ public:
     KoText::KoTextBreakProperty breakBefore() const;
     void setBreakAfter(KoText::KoTextBreakProperty state);
     KoText::KoTextBreakProperty breakAfter() const;
-    
+
     void setUseOptimalHeight(bool on);
     bool useOptimalHeight() const;
 
@@ -154,6 +154,7 @@ public:
      * Returns true if this table row style is empty.
      */
     bool isEmpty() const;
+
 private:
     /**
      * Load the style from the \a KoStyleStack style stack using the

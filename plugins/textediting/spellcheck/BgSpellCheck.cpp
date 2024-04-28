@@ -11,14 +11,14 @@
 
 #include <KoCharacterStyle.h>
 
-#include <QTextDocument>
 #include <QCoreApplication>
 #include <QTextBlock>
+#include <QTextDocument>
 
 #define MaxCharsPerRun 1000
 
-BgSpellCheck::BgSpellCheck(const Speller &speller, QObject *parent):
-    BackgroundChecker(speller, parent)
+BgSpellCheck::BgSpellCheck(const Speller &speller, QObject *parent)
+    : BackgroundChecker(speller, parent)
 {
     connect(this, &Sonnet::BackgroundChecker::misspelling, this, &BgSpellCheck::foundMisspelling);
     QString lang = speller.language();
@@ -38,7 +38,7 @@ void BgSpellCheck::setDefaultLanguage(const QString &language)
     m_defaultLanguage = language;
     int index = m_defaultLanguage.indexOf('_');
     if (index > 0) {
-        m_defaultCountry = m_defaultLanguage.mid(index+1);
+        m_defaultCountry = m_defaultLanguage.mid(index + 1);
         m_defaultLanguage = m_defaultLanguage.left(index);
     }
 }
@@ -55,7 +55,7 @@ void BgSpellCheck::startRun(QTextDocument *document, int startPosition, int endP
         if (m_currentCountry.isEmpty()) {
             changeLanguage(m_currentLanguage);
         } else {
-            changeLanguage(m_currentLanguage+'_'+m_currentCountry);
+            changeLanguage(m_currentLanguage + '_' + m_currentCountry);
         }
     }
     if (m_currentPosition < m_endPosition) {
@@ -86,8 +86,7 @@ QString BgSpellCheck::fetchMoreText()
         }
 
         iter = block.begin();
-        while (!iter.atEnd() && iter.fragment().position() + iter.fragment().length() <=
-                m_currentPosition) {
+        while (!iter.atEnd() && iter.fragment().position() + iter.fragment().length() <= m_currentPosition) {
             ++iter;
         }
 
@@ -108,10 +107,10 @@ QString BgSpellCheck::fetchMoreText()
         country = m_defaultCountry;
 
     // debugSpellCheck << "init" << language << country << "/" << iter.fragment().position();
-    while(true) {
+    while (true) {
         end = iter.fragment().position() + iter.fragment().length();
         // debugSpellCheck << " + " << iter.fragment().position() << "-" << iter.fragment().position() + iter.fragment().length()
-            // << block.text().mid(iter.fragment().position() - block.position(), iter.fragment().length());
+        // << block.text().mid(iter.fragment().position() - block.position(), iter.fragment().length());
         if (end >= qMin(m_endPosition, m_currentPosition + MaxCharsPerRun)) {
             break;
         }
@@ -126,19 +125,15 @@ QString BgSpellCheck::fetchMoreText()
         // debugSpellCheck << "Checking for viability forwarding to " << iter.fragment().position();
         cf = iter.fragment().charFormat();
         // debugSpellCheck << " new fragment language;"
-            // << (cf.hasProperty(KoCharacterStyle::Language) ?  cf.property(KoCharacterStyle::Language).toString() : "unset");
+        // << (cf.hasProperty(KoCharacterStyle::Language) ?  cf.property(KoCharacterStyle::Language).toString() : "unset");
 
-        if ((cf.hasProperty(KoCharacterStyle::Language)
-                    && language != cf.property(KoCharacterStyle::Language).toString())
-                || (!cf.hasProperty(KoCharacterStyle::Language)
-                    && language != m_defaultLanguage)) {
+        if ((cf.hasProperty(KoCharacterStyle::Language) && language != cf.property(KoCharacterStyle::Language).toString())
+            || (!cf.hasProperty(KoCharacterStyle::Language) && language != m_defaultLanguage)) {
             break;
         }
 
-        if ((cf.hasProperty(KoCharacterStyle::Country)
-                    && country != cf.property(KoCharacterStyle::Country).toString())
-                || (!cf.hasProperty(KoCharacterStyle::Country)
-                    && country != m_defaultCountry)) {
+        if ((cf.hasProperty(KoCharacterStyle::Country) && country != cf.property(KoCharacterStyle::Country).toString())
+            || (!cf.hasProperty(KoCharacterStyle::Country) && country != m_defaultCountry)) {
             break;
         }
     }

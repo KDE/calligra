@@ -9,8 +9,8 @@
 #define CALLIGRA_SHEETS_CURRENCY
 
 #include <QHash>
-#include <QString>
 #include <QMetaType>
+#include <QString>
 
 #include "sheets_core_export.h"
 
@@ -35,16 +35,16 @@ public:
      * \param code the code, e.g. EUR, USD,..
      * \param format the format, e.g. the code in Gnumeric format is [$EUR]
      */
-    Currency(QString const & code = QString(), Format format = Native);
+    Currency(QString const &code = QString(), Format format = Native);
 
     /**
      * Destructor.
      */
     ~Currency();
 
-
-    bool operator==(Currency const & other) const;
-    inline bool operator!=(Currency const & other) const {
+    bool operator==(Currency const &other) const;
+    inline bool operator!=(Currency const &other) const
+    {
         return !operator==(other);
     }
 
@@ -54,19 +54,19 @@ public:
 
     static QList<QString> symbols();
     QString symbolToCode(const QString &code);
+
 private:
     static void loadSymbols();
     QString m_code;
     static QMap<QString, QString> m_symbols;
 };
 
-size_t qHash(const Calligra::Sheets::Currency& cur, size_t seed = 0);
+size_t qHash(const Calligra::Sheets::Currency &cur, size_t seed = 0);
 
 } // namespace Sheets
 } // namespace Calligra
 
 Q_DECLARE_METATYPE(Calligra::Sheets::Currency)
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Currency, Q_MOVABLE_TYPE);
-
 
 #endif

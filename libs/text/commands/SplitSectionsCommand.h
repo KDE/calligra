@@ -10,17 +10,13 @@
 class KoSection;
 class QTextDocument;
 
-//FIXME: why it is not going from KoTextCommandBase?
-// If it will be changed to KoTextCommandBase,
-// don't forget to add UndoRedoFinalizer.
+// FIXME: why it is not going from KoTextCommandBase?
+//  If it will be changed to KoTextCommandBase,
+//  don't forget to add UndoRedoFinalizer.
 class SplitSectionsCommand : public KUndo2Command
 {
 public:
-    enum SplitType
-    {
-        Startings,
-        Endings
-    };
+    enum SplitType { Startings, Endings };
 
     explicit SplitSectionsCommand(QTextDocument *document, SplitType type, int splitPosition);
     ~SplitSectionsCommand() override;

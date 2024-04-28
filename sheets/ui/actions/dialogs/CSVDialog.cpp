@@ -13,8 +13,8 @@
 
 using namespace Calligra::Sheets;
 
-CSVDialog::CSVDialog(QWidget* parent)
-        : KoCsvImportDialog(parent)
+CSVDialog::CSVDialog(QWidget *parent)
+    : KoCsvImportDialog(parent)
 {
 }
 
@@ -45,5 +45,3 @@ Value CSVDialog::value()
     }
     return res;
 }
-
-

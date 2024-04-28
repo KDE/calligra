@@ -17,11 +17,9 @@
 // this library
 #include "koodfreader_export.h"
 
-
 class QSizeF;
 class KoStore;
 class KoOdfStyleManager;
-
 
 /** @brief The OdfReaderContext contains data that is usable while reading an ODF file.
  *
@@ -55,7 +53,7 @@ class KoOdfStyleManager;
 
 class KOODFREADER_EXPORT OdfReaderContext
 {
- public:
+public:
     explicit OdfReaderContext(KoStore *store);
     virtual ~OdfReaderContext();
 
@@ -70,7 +68,7 @@ class KOODFREADER_EXPORT OdfReaderContext
     KoStore *odfStore() const;
 
     /** Return the styles of the ODF file.
-      */
+     */
     KoOdfStyleManager *styleManager() const;
 
     /** Return the metadata of an ODF file.
@@ -101,7 +99,6 @@ class KOODFREADER_EXPORT OdfReaderContext
     bool isInsideParagraph() const;
     void setIsInsideParagraph(bool isInside);
 
-
     // This data below is created during the traversal and can be
     // accessed after the traversal is finished.
 
@@ -113,14 +110,13 @@ class KOODFREADER_EXPORT OdfReaderContext
      *    name   is the name of the picture inside the ODT file
      *    size   is the size in points.
      */
-    QHash<QString, QSizeF>   images() const;
+    QHash<QString, QSizeF> images() const;
 
-    //QHash<QString, QString>  mediaFiles() const;
+    // QHash<QString, QString>  mediaFiles() const;
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif // ODFREADERCONTEXT_H

@@ -26,6 +26,7 @@ public:
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
     SpiralShape *m_spiral;
     SpiralShape::SpiralType m_oldType;
@@ -37,4 +38,3 @@ private:
 };
 
 #endif // SPIRALSHAPECONFIGCOMMAND_H
-

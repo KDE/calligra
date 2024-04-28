@@ -6,38 +6,40 @@
 #ifndef MUSICWIDGET_H
 #define MUSICWIDGET_H
 
-#include <QWidget>
 #include "../Engraver.h"
-#include "../Renderer.h"
 #include "../MusicStyle.h"
+#include "../Renderer.h"
+#include <QWidget>
 
-namespace MusicCore {
-    class Sheet;
+namespace MusicCore
+{
+class Sheet;
 }
 class Engraver;
 
-class MusicWidget : public QWidget {
+class MusicWidget : public QWidget
+{
     Q_OBJECT
 public:
-    explicit MusicWidget(QWidget* parent = 0);
+    explicit MusicWidget(QWidget *parent = 0);
 
     /**
      * Set the sheet that is displayed in this MusicWidget. The widget doesn't take ownership of the sheet,
      * (unless it is already the parent QObject of it), but it is still probably not a good idea to have the
      * same sheet in multiple widgets, as the layout of the sheet is stored in the sheet itself.
      */
-    void setSheet(MusicCore::Sheet* sheet);
-    
+    void setSheet(MusicCore::Sheet *sheet);
+
     /**
      * Get the sheet that is currently displayed in this widget.
      */
-    MusicCore::Sheet* sheet() const;
+    MusicCore::Sheet *sheet() const;
 
     /**
      * Sets the scale at which the music should be painted in this widget.
      */
     void setScale(qreal scale);
-    
+
     /**
      * Gets the scale at which the music is painted in this widget.
      */
@@ -48,14 +50,16 @@ public Q_SLOTS:
      * of the music is required. This is done automatically if the widget changes size or scale.
      */
     void engrave();
+
 protected:
-    void paintEvent(QPaintEvent* event) override;
-    void resizeEvent(QResizeEvent* event) override;
+    void paintEvent(QPaintEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+
 private:
     Engraver m_engraver;
     MusicStyle m_style;
     MusicRenderer m_renderer;
-    MusicCore::Sheet* m_sheet;
+    MusicCore::Sheet *m_sheet;
     qreal m_scale;
     int m_lastSystem;
 };

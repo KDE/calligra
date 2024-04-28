@@ -47,14 +47,14 @@ public:
     bool shadowVisible() const;
 
 public Q_SLOTS:
-    void setUnit( const KoUnit &unit );
+    void setUnit(const KoUnit &unit);
     void setCanvas(KoCanvasBase *canvas);
 
 private Q_SLOTS:
     void visibilityChanged();
     void applyChanges();
     void selectionChanged();
-    void resourceChanged( int key, const QVariant & res );
+    void resourceChanged(int key, const QVariant &res);
 
 private:
     class Private;

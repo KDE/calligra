@@ -6,11 +6,11 @@
 
 #include "KoPrintJob.h"
 
-#include <QWidget>
 #include <QPainter>
+#include <QWidget>
 
 KoPrintJob::KoPrintJob(QObject *parent)
-        : QObject(parent)
+    : QObject(parent)
 {
 }
 
@@ -26,15 +26,13 @@ void KoPrintJob::startPrinting(RemovePolicy removePolicy)
 
 QAbstractPrintDialog::PrintDialogOptions KoPrintJob::printDialogOptions() const
 {
-    return QAbstractPrintDialog::PrintToFile |
-           QAbstractPrintDialog::PrintPageRange |
-           QAbstractPrintDialog::PrintCollateCopies |
-           QAbstractPrintDialog::PrintShowPageSize;
+    return QAbstractPrintDialog::PrintToFile | QAbstractPrintDialog::PrintPageRange | QAbstractPrintDialog::PrintCollateCopies
+        | QAbstractPrintDialog::PrintShowPageSize;
 }
 
 bool KoPrintJob::canPrint()
 {
-    if (! printer().isValid()) {
+    if (!printer().isValid()) {
         return false;
     }
 

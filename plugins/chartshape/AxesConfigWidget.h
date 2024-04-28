@@ -6,13 +6,11 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef KOCHART_AXESCONFIGWIDGET
 #define KOCHART_AXESCONFIGWIDGET
 
-
-#include "ConfigSubWidgetBase.h"
 #include "ChartShape.h"
+#include "ConfigSubWidgetBase.h"
 
 #include <QObject>
 
@@ -21,8 +19,8 @@ class QAction;
 
 namespace KChart
 {
-    class Position;
-    class CartesianAxis;
+class Position;
+class CartesianAxis;
 }
 
 namespace KoChart
@@ -41,7 +39,7 @@ public:
     AxesConfigWidget(QList<ChartType> types, QWidget *parent = 0);
     ~AxesConfigWidget();
 
-    void open(ChartShape* shape) override;
+    void open(ChartShape *shape) override;
 
     /// Delete all open dialogs.
     /// This is called when e.g. the tool is deactivated.
@@ -68,7 +66,7 @@ public Q_SLOTS:
     void ui_axisLabelsFontChanged();
 
 Q_SIGNALS:
-    void axisAdded(KoChart::AxisDimension, const QString& title);
+    void axisAdded(KoChart::AxisDimension, const QString &title);
     void axisRemoved(KoChart::Axis *axis);
     void axisShowTitleChanged(KoChart::Axis *axis, bool b);
     void axisShowChanged(KoChart::Axis *axis, bool b);
@@ -82,7 +80,7 @@ Q_SIGNALS:
     void axisSubStepWidthChanged(KoChart::Axis *axis, qreal width);
     void axisUseAutomaticStepWidthChanged(KoChart::Axis *axis, bool automatic);
     void axisUseAutomaticSubStepWidthChanged(KoChart::Axis *axis, bool automatic);
-    void axisLabelsFontChanged(KoChart::Axis *axis, const QFont& font);
+    void axisLabelsFontChanged(KoChart::Axis *axis, const QFont &font);
 
     void gapBetweenBarsChanged(KoChart::Axis *axis, int percent);
     void gapBetweenSetsChanged(KoChart::Axis *axis, int percent);
@@ -97,10 +95,9 @@ private:
     void createActions();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
-}  // namespace KoChart
-
+} // namespace KoChart
 
 #endif // KOCHART_AXESCONFIGWIDGET

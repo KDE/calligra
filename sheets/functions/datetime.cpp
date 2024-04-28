@@ -7,13 +7,13 @@
 
 #include "DateTimeModule.h"
 
-#include "engine/Function.h"
 #include "engine/CalculationSettings.h"
+#include "engine/Function.h"
 // #include "FunctionModuleRegistry.h"
+#include "engine/CS_Time.h"
 #include "engine/Localization.h"
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
-#include "engine/CS_Time.h"
 
 // #include <kcalendarsystem.h>
 
@@ -62,142 +62,140 @@ Value func_year(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_yearFrac(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_years(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreaddatetimemodule.json", DateTimeModule)
 
-
-DateTimeModule::DateTimeModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+DateTimeModule::DateTimeModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
-    f = new Function("CURRENTDATE",  func_currentDate);
+    f = new Function("CURRENTDATE", func_currentDate);
     f->setParamCount(0);
     add(f);
-    f = new Function("CURRENTDATETIME",  func_currentDateTime);
+    f = new Function("CURRENTDATETIME", func_currentDateTime);
     f->setParamCount(0);
     add(f);
-    f = new Function("CURRENTTIME",  func_currentTime);
+    f = new Function("CURRENTTIME", func_currentTime);
     f->setParamCount(0);
     add(f);
-    f = new Function("DATE",  func_date);
+    f = new Function("DATE", func_date);
     f->setParamCount(3);
     add(f);
-    f = new Function("DATE2UNIX",  func_date2unix);
+    f = new Function("DATE2UNIX", func_date2unix);
     f->setParamCount(1);
     add(f);
-    f = new Function("DATEDIF",  func_dateDif);
+    f = new Function("DATEDIF", func_dateDif);
     f->setParamCount(3);
     add(f);
-    f = new Function("DATEVALUE",  func_datevalue);
+    f = new Function("DATEVALUE", func_datevalue);
     add(f);
-    f = new Function("DAY",  func_day);
+    f = new Function("DAY", func_day);
     add(f);
-    f = new Function("DAYNAME",  func_dayname);
+    f = new Function("DAYNAME", func_dayname);
     add(f);
-    f = new Function("DAYOFYEAR",  func_dayOfYear);
+    f = new Function("DAYOFYEAR", func_dayOfYear);
     f->setParamCount(3);
     add(f);
-    f = new Function("DAYS",  func_days);
+    f = new Function("DAYS", func_days);
     f->setParamCount(2);
     add(f);
-    f = new Function("DAYS360",  func_days360);
+    f = new Function("DAYS360", func_days360);
     f->setParamCount(2, 3);
     add(f);
-    f = new Function("DAYSINMONTH",  func_daysInMonth);
+    f = new Function("DAYSINMONTH", func_daysInMonth);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDAYSINMONTH");
     f->setParamCount(2);
     add(f);
-    f = new Function("DAYSINYEAR",  func_daysInYear);
+    f = new Function("DAYSINYEAR", func_daysInYear);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDAYSINYEAR");
     add(f);
-    f = new Function("EASTERSUNDAY",  func_easterSunday);
+    f = new Function("EASTERSUNDAY", func_easterSunday);
     add(f);
-    f = new Function("EDATE",  func_edate);
+    f = new Function("EDATE", func_edate);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETEDATE");
     f->setParamCount(2);
     add(f);
-    f = new Function("EOMONTH",  func_eomonth);
+    f = new Function("EOMONTH", func_eomonth);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETEOMONTH");
     f->setParamCount(2);
     add(f);
-    f = new Function("HOUR",  func_hour);
+    f = new Function("HOUR", func_hour);
     f->setParamCount(0, 1);
     add(f);
-    f = new Function("HOURS",  func_hour);   // same as HOUR
+    f = new Function("HOURS", func_hour); // same as HOUR
     f->setParamCount(0, 1);
     add(f);
-    f = new Function("ISLEAPYEAR",  func_isLeapYear);
+    f = new Function("ISLEAPYEAR", func_isLeapYear);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETISLEAPYEAR");
     add(f);
-    f = new Function("ISOWEEKNUM",  func_isoWeekNum);
+    f = new Function("ISOWEEKNUM", func_isoWeekNum);
     f->setParamCount(1, 2);
     add(f);
-    f = new Function("MINUTE",  func_minute);
+    f = new Function("MINUTE", func_minute);
     f->setParamCount(0, 1);
     add(f);
-    f = new Function("MINUTES",  func_minute);   // same as MINUTE
+    f = new Function("MINUTES", func_minute); // same as MINUTE
     f->setParamCount(0, 1);
     add(f);
-    f = new Function("MONTH",  func_month);
+    f = new Function("MONTH", func_month);
     add(f);
-    f = new Function("MONTHNAME",  func_monthname);
+    f = new Function("MONTHNAME", func_monthname);
     add(f);
-    f = new Function("MONTHS",  func_months);
+    f = new Function("MONTHS", func_months);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFMONTHS");
     f->setParamCount(3);
     add(f);
-    f = new Function("NETWORKDAY",  func_networkday);
-    //f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETNETWORKDAYS");
+    f = new Function("NETWORKDAY", func_networkday);
+    // f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETNETWORKDAYS");
     f->setParamCount(2, 3);
     f->setAcceptArray();
     add(f);
-    f = new Function("NOW",  func_currentDateTime);
+    f = new Function("NOW", func_currentDateTime);
     f->setParamCount(0);
     add(f);
-    f = new Function("SECOND",  func_second);
+    f = new Function("SECOND", func_second);
     f->setParamCount(0, 1);
     add(f);
-    f = new Function("SECONDS",  func_second);   // same as SECOND
+    f = new Function("SECONDS", func_second); // same as SECOND
     f->setParamCount(0, 1);
     add(f);
-    f = new Function("TIME",  func_time);
+    f = new Function("TIME", func_time);
     f->setParamCount(3);
     add(f);
-    f = new Function("TIMEVALUE",  func_timevalue);
+    f = new Function("TIMEVALUE", func_timevalue);
     add(f);
-    f = new Function("TODAY",  func_currentDate);
+    f = new Function("TODAY", func_currentDate);
     f->setParamCount(0);
     add(f);
-    f = new Function("UNIX2DATE",  func_unix2date);
+    f = new Function("UNIX2DATE", func_unix2date);
     f->setParamCount(1);
     add(f);
-    f = new Function("WEEKDAY",  func_weekday);
+    f = new Function("WEEKDAY", func_weekday);
     f->setParamCount(1, 2);
     add(f);
-    f = new Function("WEEKNUM",  func_weekNum);
+    f = new Function("WEEKNUM", func_weekNum);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETWEEKNUM");
     f->setParamCount(1, 2);
     add(f);
-    f = new Function("WEEKS",  func_weeks);
+    f = new Function("WEEKS", func_weeks);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFWEEKS");
     f->setParamCount(3);
     add(f);
-    f = new Function("WEEKSINYEAR",  func_weeksInYear);
+    f = new Function("WEEKSINYEAR", func_weeksInYear);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETWEEKSINYEAR");
     add(f);
-    f = new Function("WORKDAY",  func_workday);
+    f = new Function("WORKDAY", func_workday);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETWORKDAY");
     f->setParamCount(2, 3);
     f->setAcceptArray();
     add(f);
-    f = new Function("YEAR",   func_year);
+    f = new Function("YEAR", func_year);
     add(f);
-    f = new Function("YEARFRAC",  func_yearFrac);
+    f = new Function("YEARFRAC", func_yearFrac);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETYEARFRAC");
     f->setParamCount(2, 3);
     add(f);
-    f = new Function("YEARS",  func_years);
+    f = new Function("YEARS", func_years);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFYEARS");
     f->setParamCount(3);
     add(f);
@@ -207,7 +205,6 @@ QString DateTimeModule::descriptionFileName() const
 {
     return QString("datetime.xml");
 }
-
 
 // Function: EDATE
 Value func_edate(valVector args, ValueCalc *calc, FuncExtra *)
@@ -228,7 +225,8 @@ Value func_eomonth(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // add months to date using EDATE
     Value modDate = func_edate(args, calc, 0);
-    if (modDate.isError()) return modDate;
+    if (modDate.isError())
+        return modDate;
 
     // modDate is currently in Date format
     QDate date = modDate.asDate(calc->settings());
@@ -238,7 +236,7 @@ Value func_eomonth(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // internal helper function
-static int func_days360_helper(const QDate& _date1, const QDate& _date2, bool european)
+static int func_days360_helper(const QDate &_date1, const QDate &_date2, bool european)
 {
     int day1, day2;
     int month1, month2;
@@ -252,12 +250,12 @@ static int func_days360_helper(const QDate& _date1, const QDate& _date2, bool eu
         date2 = tmp;
     }
 
-    day1   = date1.day();
-    day2   = date2.day();
+    day1 = date1.day();
+    day2 = date2.day();
     month1 = date1.month();
     month2 = date2.month();
-    year1  = date1.year();
-    year2  = date2.year();
+    year1 = date1.year();
+    year2 = date2.year();
 
     if (european) {
         if (day1 == 31)
@@ -266,9 +264,7 @@ static int func_days360_helper(const QDate& _date1, const QDate& _date2, bool eu
             day2 = 30;
     } else {
         // thanks to the Gnumeric developers for this...
-        if (month1 == 2 && month2 == 2
-                && date1.daysInMonth() == day1
-                && date2.daysInMonth() == day2)
+        if (month1 == 2 && month2 == 2 && date1.daysInMonth() == day1 && date2.daysInMonth() == day2)
             day2 = 30;
 
         if (month1 == 2 && date1.daysInMonth() == day1)
@@ -281,8 +277,7 @@ static int func_days360_helper(const QDate& _date1, const QDate& _date2, bool eu
             day1 = 30;
     }
 
-    return ((year2 - year1) * 12 + (month2 - month1)) * 30
-           + (day2 - day1);
+    return ((year2 - year1) * 12 + (month2 - month1)) * 30 + (day2 - day1);
 }
 
 // Function: DAYS360
@@ -302,7 +297,8 @@ Value func_days360(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_year(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value v = calc->conv()->asDate(args[0]);
-    if (v.isError()) return v;
+    if (v.isError())
+        return v;
     QDate date = v.asDate(calc->settings());
     return Value(date.year());
 }
@@ -311,7 +307,8 @@ Value func_year(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_month(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value v = calc->conv()->asDate(args[0]);
-    if (v.isError()) return v;
+    if (v.isError())
+        return v;
     QDate date = v.asDate(calc->settings());
     return Value(date.month());
 }
@@ -320,7 +317,8 @@ Value func_month(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_day(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value v = calc->conv()->asDate(args[0]);
-    if (v.isError()) return v;
+    if (v.isError())
+        return v;
     QDate date = v.asDate(calc->settings());
     return Value(date.day());
 }
@@ -331,7 +329,8 @@ Value func_hour(valVector args, ValueCalc *calc, FuncExtra *)
     Time time;
     if (args.count() == 1) {
         Value v = calc->conv()->asTime(args[0]);
-        if (v.isError()) return v;
+        if (v.isError())
+            return v;
         time = v.asTime();
     } else
         time = Time::currentTime();
@@ -344,7 +343,8 @@ Value func_minute(valVector args, ValueCalc *calc, FuncExtra *)
     Time time;
     if (args.count() == 1) {
         Value v = calc->conv()->asTime(args[0]);
-        if (v.isError()) return v;
+        if (v.isError())
+            return v;
         time = v.asTime();
     } else
         time = Time::currentTime();
@@ -357,7 +357,8 @@ Value func_second(valVector args, ValueCalc *calc, FuncExtra *)
     Time time;
     if (args.count() == 1) {
         Value v = calc->conv()->asTime(args[0]);
-        if (v.isError()) return v;
+        if (v.isError())
+            return v;
         time = v.asTime();
     } else
         time = Time::currentTime();
@@ -368,7 +369,8 @@ Value func_second(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_weekday(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value v(calc->conv()->asDate(args[0]));
-    if (v.isError()) return v;
+    if (v.isError())
+        return v;
     QDate date = v.asDate(calc->settings());
     int method = 1;
     if (args.count() == 2)
@@ -383,7 +385,8 @@ Value func_weekday(valVector args, ValueCalc *calc, FuncExtra *)
         --result;
     else if (method == 1) {
         ++result;
-        if (result > 7) result = result % 7;
+        if (result > 7)
+            result = result % 7;
     }
 
     return Value(result);
@@ -395,7 +398,7 @@ Value func_datevalue(valVector args, ValueCalc *calc, FuncExtra *)
 {
     if (args[0].isString()) {
         Value v = calc->conv()->asDate(args[0]);
-        if (! v.isError())
+        if (!v.isError())
             return calc->conv()->asFloat(v);
     }
     return Value::errorVALUE();
@@ -407,7 +410,7 @@ Value func_timevalue(valVector args, ValueCalc *calc, FuncExtra *)
 {
     if (args[0].isString()) {
         Value v = calc->conv()->asTime(args[0]);
-        if (! v.isError())
+        if (!v.isError())
             return calc->conv()->asFloat(v);
     }
     return Value::errorVALUE();
@@ -456,7 +459,7 @@ Value func_months(valVector args, ValueCalc *calc, FuncExtra *)
 
     int type = calc->conv()->asInteger(args[2]).asInteger();
     if (type == 0) {
-        int months  = (date2.year() - date1.year()) * 12;
+        int months = (date2.year() - date1.year()) * 12;
         months += date2.month() - date1.month();
 
         if (date2.day() < date1.day())
@@ -531,7 +534,7 @@ Value func_date(valVector args, ValueCalc *calc, FuncExtra *)
         tmpDate = tmpDate.addMonths(m - 1);
         tmpDate = tmpDate.addDays(d - 1);
 
-        //debugSheetsFormula <<"func_date:: date =" << tmpDate;
+        // debugSheetsFormula <<"func_date:: date =" << tmpDate;
         return Value(tmpDate, calc->settings());
     }
 }
@@ -570,20 +573,20 @@ Value func_time(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: CURRENTDATE
-Value func_currentDate(valVector, ValueCalc * calc, FuncExtra *)
+Value func_currentDate(valVector, ValueCalc *calc, FuncExtra *)
 {
     return Value(QDate::currentDate(), calc->settings());
 }
 
 // Function: CURRENTTIME
-Value func_currentTime(valVector, ValueCalc * calc, FuncExtra *)
+Value func_currentTime(valVector, ValueCalc *calc, FuncExtra *)
 {
     Q_UNUSED(calc);
     return Value(Time::currentTime());
 }
 
 // Function: CURRENTDATETIME
-Value func_currentDateTime(valVector, ValueCalc * calc, FuncExtra *)
+Value func_currentDateTime(valVector, ValueCalc *calc, FuncExtra *)
 {
     return Value(QDateTime::currentDateTime(), calc->settings());
 }
@@ -592,7 +595,8 @@ Value func_currentDateTime(valVector, ValueCalc * calc, FuncExtra *)
 Value func_dayOfYear(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value date = func_date(args, calc, 0);
-    if (date.isError()) return date;
+    if (date.isError())
+        return date;
     return Value(date.asDate(calc->settings()).dayOfYear());
 }
 
@@ -623,7 +627,7 @@ Value func_daysInYear(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_weeksInYear(valVector args, ValueCalc *calc, FuncExtra *)
 {
     int y = calc->conv()->asInteger(args[0]).asInteger();
-    QDate date(y, 12, 31);   // last day of the year
+    QDate date(y, 12, 31); // last day of the year
     int yearNumber;
     int weekNumber = date.weekNumber(&yearNumber);
     // day assigned to first week of next year?
@@ -686,9 +690,9 @@ Value func_isoWeekNum(valVector args, ValueCalc *calc, FuncExtra *)
         startday = 0;
 
     int weeknum;
-    int day;                   // current date
-    int day4;                  // 4th of jan.
-    int day0;                  // offset to 4th of jan.
+    int day; // current date
+    int day4; // 4th of jan.
+    int day0; // offset to 4th of jan.
 
     // date to find
     day = date.toJulianDay();
@@ -732,7 +736,8 @@ Value func_isoWeekNum(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_weekNum(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value v(calc->conv()->asDate(args[0]));
-    if (v.isError()) return v;
+    if (v.isError())
+        return v;
     QDate date = v.asDate(calc->settings());
 
     if (!date.isValid())
@@ -757,7 +762,7 @@ Value func_weekNum(valVector args, ValueCalc *calc, FuncExtra *)
     if (date1.dayOfWeek() == 7 && method == 1)
         res--;
 
-    //debugSheetsFormula <<"weeknum = [startday(" << startday <<") + base(7) + New Year(" << date1.dayOfWeek() <<") + days(" << days <<")] / 7 =" << res;
+    // debugSheetsFormula <<"weeknum = [startday(" << startday <<") + base(7) + New Year(" << date1.dayOfWeek() <<") + days(" << days <<")] / 7 =" << res;
 
     return Value(res);
 }
@@ -776,14 +781,16 @@ Value func_weekNum(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_dateDif(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value v1(calc->conv()->asDate(args[0]));
-    if (v1.isError()) return v1;
+    if (v1.isError())
+        return v1;
     QDate date1 = v1.asDate(calc->settings());
 
     if (!date1.isValid())
         return Value::errorVALUE();
 
     Value v2(calc->conv()->asDate(args[1]));
-    if (v2.isError()) return v2;
+    if (v2.isError())
+        return v2;
     QDate date2 = v2.asDate(calc->settings());
 
     if (!date2.isValid())
@@ -801,7 +808,7 @@ Value func_dateDif(valVector args, ValueCalc *calc, FuncExtra *)
 
     QDate Temp1, Temp2;
 
-    //QDate date0(1899,12,30); // referenceDate
+    // QDate date0(1899,12,30); // referenceDate
     QDate date0 = calc->settings()->referenceDate();
 
     if (date2 < date1) {
@@ -879,14 +886,16 @@ Value func_dateDif(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_yearFrac(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value v1(calc->conv()->asDate(args[0]));
-    if (v1.isError()) return v1;
+    if (v1.isError())
+        return v1;
     QDate date1 = v1.asDate(calc->settings());
 
     if (!date1.isValid())
         return Value::errorVALUE();
 
     Value v2(calc->conv()->asDate(args[1]));
-    if (v2.isError()) return v2;
+    if (v2.isError())
+        return v2;
     QDate date2 = v2.asDate(calc->settings());
 
     if (!date2.isValid())
@@ -911,7 +920,8 @@ Value func_workday(valVector args, ValueCalc *calc, FuncExtra *e)
 {
     Value v(calc->conv()->asDate(args[0]));
 
-    if (v.isError()) return v;
+    if (v.isError())
+        return v;
     QDate startdate = v.asDate(calc->settings());
 
     if (!startdate.isValid())
@@ -922,10 +932,10 @@ Value func_workday(valVector args, ValueCalc *calc, FuncExtra *e)
     //
     int days = calc->conv()->asInteger(args[1]).asInteger();
 
-    QDate date0 = calc->settings()->referenceDate();   // referenceDate
-    QDate enddate = startdate;                    // enddate
-    valVector holidays;                           // stores holidays
-    int sign = 1;                                 // sign 1 = forward, -1 = backward
+    QDate date0 = calc->settings()->referenceDate(); // referenceDate
+    QDate enddate = startdate; // enddate
+    valVector holidays; // stores holidays
+    int sign = 1; // sign 1 = forward, -1 = backward
 
     if (days < 0) {
         // change sign and set count to ccw
@@ -959,7 +969,7 @@ Value func_workday(valVector args, ValueCalc *calc, FuncExtra *e)
                             holidays.append(v);
                     }
                 } // cols
-            }   // rows
+            } // rows
         } else {
             // no array parameter
             if (args[2].isString()) {
@@ -1004,21 +1014,23 @@ Value func_networkday(valVector args, ValueCalc *calc, FuncExtra *e)
 {
     Value v1(calc->conv()->asDate(args[0]));
 
-    if (v1.isError()) return v1;
+    if (v1.isError())
+        return v1;
     QDate startdate = v1.asDate(calc->settings());
 
     Value v2(calc->conv()->asDate(args[1]));
 
-    if (v2.isError()) return v2;
+    if (v2.isError())
+        return v2;
     QDate enddate = v2.asDate(calc->settings());
 
     if (!startdate.isValid() || !enddate.isValid())
         return Value::errorVALUE();
 
-    int days = 0;                                 // workdays
-    QDate date0 = calc->settings()->referenceDate();   // referenceDate
-    valVector holidays;                           // stores holidays
-    int sign = 1;                                 // sign 1 = forward, -1 = backward
+    int days = 0; // workdays
+    QDate date0 = calc->settings()->referenceDate(); // referenceDate
+    valVector holidays; // stores holidays
+    int sign = 1; // sign 1 = forward, -1 = backward
 
     if (enddate < startdate) {
         // change sign and set count to ccw
@@ -1052,7 +1064,7 @@ Value func_networkday(valVector args, ValueCalc *calc, FuncExtra *e)
                             holidays.append(v);
                     }
                 } // cols
-            }   // rows
+            } // rows
         } else {
             // no array parameter
             if (args[2].isString()) {
@@ -1078,7 +1090,7 @@ Value func_networkday(valVector args, ValueCalc *calc, FuncExtra *e)
     // count days
     //
     while (startdate != enddate) {
-        if (startdate.dayOfWeek() > 5 || holidays.contains(Value((int64_t) date0.daysTo(startdate)))) {
+        if (startdate.dayOfWeek() > 5 || holidays.contains(Value((int64_t)date0.daysTo(startdate)))) {
             startdate = startdate.addDays(1 * sign);
             continue;
         }

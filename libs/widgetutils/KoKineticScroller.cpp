@@ -5,12 +5,12 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
+#include <KConfigGroup>
+#include <KSharedConfig>
 #include <KoKineticScroller.h>
 #include <QAbstractItemView>
-#include <KSharedConfig>
-#include <KConfigGroup>
 
-QScroller* KoKineticScroller::createPreconfiguredScroller(QAbstractScrollArea *scrollArea)
+QScroller *KoKineticScroller::createPreconfiguredScroller(QAbstractScrollArea *scrollArea)
 {
     KConfigGroup config = KSharedConfig::openConfig()->group("KoKineticScroller");
     int sensitivity = config.readEntry("KineticScrollingSensitivity", 75);
@@ -99,7 +99,7 @@ QScroller::ScrollerGestureType KoKineticScroller::getConfiguredGestureType()
 
 void KoKineticScroller::updateCursor(QWidget *source, QScroller::State state)
 {
-    if( state == QScroller::State::Pressed ) {
+    if (state == QScroller::State::Pressed) {
         source->setCursor(Qt::OpenHandCursor);
     } else if (state == QScroller::State::Dragging) {
         source->setCursor(Qt::ClosedHandCursor);

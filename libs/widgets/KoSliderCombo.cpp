@@ -6,28 +6,27 @@
 #include "KoSliderCombo.h"
 #include "KoSliderCombo_p.h"
 
-#include <QTimer>
 #include <QApplication>
+#include <QDoubleSpinBox>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QLineEdit>
+#include <QMenu>
+#include <QMouseEvent>
 #include <QSize>
 #include <QSlider>
 #include <QStyle>
-#include <QStylePainter>
 #include <QStyleOptionSlider>
-#include <QLineEdit>
+#include <QStylePainter>
+#include <QTimer>
 #include <QValidator>
-#include <QHBoxLayout>
-#include <QFrame>
-#include <QMenu>
-#include <QMouseEvent>
-#include <QDoubleSpinBox>
-
 
 #include <KLocalizedString>
 #include <WidgetsDebug.h>
 
 KoSliderCombo::KoSliderCombo(QWidget *parent)
-   : QComboBox(parent)
-    ,d(new KoSliderComboPrivate())
+    : QComboBox(parent)
+    , d(new KoSliderComboPrivate())
 {
     d->thePublic = this;
     d->minimum = 0.0;
@@ -37,7 +36,7 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     d->container->setAttribute(Qt::WA_WindowPropagation);
     QStyleOptionComboBox opt;
     opt.initFrom(this);
-//    d->container->setFrameStyle(style()->styleHint(QStyle::SH_ComboBox_PopupFrameStyle, &opt, this));
+    //    d->container->setFrameStyle(style()->styleHint(QStyle::SH_ComboBox_PopupFrameStyle, &opt, this));
 
     d->slider = new QSlider(Qt::Horizontal);
     d->slider->setMinimum(0);
@@ -45,9 +44,9 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     d->slider->setPageStep(10);
     d->slider->setValue(0);
     // When set to true, causes flicker on Qt 4.6. Any reason to keep it?
-    d->firstShowOfSlider = false; //true;
+    d->firstShowOfSlider = false; // true;
 
-    QHBoxLayout * l = new QHBoxLayout();
+    QHBoxLayout *l = new QHBoxLayout();
     l->setContentsMargins(2, 2, 2, 2);
     l->setSpacing(2);
     l->addWidget(d->slider);
@@ -59,9 +58,15 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     setEditable(true);
     setEditText(QLocale().toString(0.0, d->decimals));
 
-    connect(d->slider, &QSlider::valueChanged, this, [this] (int value) { d->sliderValueChanged(value); });
-    connect(d->slider, &QSlider::sliderReleased, this, [this] () { d->sliderReleased(); });
-    connect(lineEdit(), &QLineEdit::editingFinished, this, [this] () { d->lineEditFinished(); });
+    connect(d->slider, &QSlider::valueChanged, this, [this](int value) {
+        d->sliderValueChanged(value);
+    });
+    connect(d->slider, &QSlider::sliderReleased, this, [this]() {
+        d->sliderReleased();
+    });
+    connect(lineEdit(), &QLineEdit::editingFinished, this, [this]() {
+        d->lineEditFinished();
+    });
 }
 
 KoSliderCombo::~KoSliderCombo()
@@ -95,14 +100,14 @@ QSize KoSliderCombo::minimumSizeHint() const
 
 void KoSliderCombo::KoSliderComboPrivate::showPopup()
 {
-    if(firstShowOfSlider) {
-        container->show(); //show container a bit early so the slider can be layout'ed
+    if (firstShowOfSlider) {
+        container->show(); // show container a bit early so the slider can be layout'ed
         firstShowOfSlider = false;
     }
 
     QStyleOptionSlider opt;
     opt.initFrom(slider);
-    opt.maximum=256;
+    opt.maximum = 256;
     opt.sliderPosition = opt.sliderValue = slider->value();
     int hdlPos = thePublic->style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle).center().x();
 
@@ -117,12 +122,12 @@ void KoSliderCombo::KoSliderComboPrivate::showPopup()
 
     // Make sure the popup is not drawn outside the screen area
     // todo port to wayland
-    //QRect screenRect = QApplication::desktop()->availableGeometry(thePublic);
-    //if (popupRect.right() > screenRect.right())
+    // QRect screenRect = QApplication::desktop()->availableGeometry(thePublic);
+    // if (popupRect.right() > screenRect.right())
     //    popupRect.translate(screenRect.right() - popupRect.right(), 0);
-    //if (popupRect.left() < screenRect.left())
+    // if (popupRect.left() < screenRect.left())
     //    popupRect.translate(screenRect.left() - popupRect.left(), 0);
-    //if (popupRect.bottom() > screenRect.bottom())
+    // if (popupRect.bottom() > screenRect.bottom())
     //    popupRect.translate(0, -(thePublic->height() + container->height()));
 
     container->setGeometry(popupRect);
@@ -143,17 +148,16 @@ void KoSliderCombo::hideEvent(QHideEvent *)
 
 void KoSliderCombo::changeEvent(QEvent *e)
 {
-    switch (e->type())
-    {
-        case QEvent::EnabledChange:
-            if (!isEnabled())
-                d->hidePopup();
-            break;
-        case QEvent::PaletteChange:
-            d->container->setPalette(palette());
-            break;
-        default:
-            break;
+    switch (e->type()) {
+    case QEvent::EnabledChange:
+        if (!isEnabled())
+            d->hidePopup();
+        break;
+    case QEvent::PaletteChange:
+        d->container->setPalette(palette());
+        break;
+    default:
+        break;
     }
     QComboBox::changeEvent(e);
 }
@@ -178,21 +182,21 @@ void KoSliderCombo::mousePressEvent(QMouseEvent *e)
     opt.initFrom(this);
     opt.subControls = QStyle::SC_All;
     opt.editable = true;
-    QStyle::SubControl sc = style()->hitTestComplexControl(QStyle::CC_ComboBox, &opt, e->pos(),
-                                                           this);
-    if (sc == QStyle::SC_ComboBoxArrow && !d->container->isVisible())
-    {
+    QStyle::SubControl sc = style()->hitTestComplexControl(QStyle::CC_ComboBox, &opt, e->pos(), this);
+    if (sc == QStyle::SC_ComboBoxArrow && !d->container->isVisible()) {
         d->showPopup();
-    }
-    else
+    } else
         QComboBox::mousePressEvent(e);
 }
 
 void KoSliderCombo::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_Up) setValue(value() + d->slider->singleStep() * (maximum() - minimum()) / 256 + 0.5);
-    else if (e->key() == Qt::Key_Down) setValue(value() - d->slider->singleStep() * (maximum() - minimum()) / 256 - 0.5);
-    else QComboBox::keyPressEvent(e);
+    if (e->key() == Qt::Key_Up)
+        setValue(value() + d->slider->singleStep() * (maximum() - minimum()) / 256 + 0.5);
+    else if (e->key() == Qt::Key_Down)
+        setValue(value() - d->slider->singleStep() * (maximum() - minimum()) / 256 - 0.5);
+    else
+        QComboBox::keyPressEvent(e);
 }
 
 void KoSliderCombo::wheelEvent(QWheelEvent *e)
@@ -215,7 +219,7 @@ void KoSliderCombo::KoSliderComboPrivate::lineEditFinished()
 
 void KoSliderCombo::KoSliderComboPrivate::sliderValueChanged(int slidervalue)
 {
-    thePublic->setEditText(QLocale().toString(minimum + (maximum - minimum)*slidervalue/256, decimals));
+    thePublic->setEditText(QLocale().toString(minimum + (maximum - minimum) * slidervalue / 256, decimals));
 
     qreal value = QLocale().toDouble(thePublic->currentText());
     emit thePublic->valueChanged(value, false);
@@ -250,8 +254,10 @@ qreal KoSliderCombo::value() const
 void KoSliderCombo::setDecimals(int dec)
 {
     d->decimals = dec;
-    if (dec == 0) lineEdit()->setValidator(new QIntValidator(this));
-    else lineEdit()->setValidator(new QDoubleValidator(this));
+    if (dec == 0)
+        lineEdit()->setValidator(new QIntValidator(this));
+    else
+        lineEdit()->setValidator(new QDoubleValidator(this));
 }
 
 void KoSliderCombo::setMinimum(qreal min)
@@ -266,9 +272,9 @@ void KoSliderCombo::setMaximum(qreal max)
 
 void KoSliderCombo::setValue(qreal value)
 {
-    if(value < d->minimum)
+    if (value < d->minimum)
         value = d->minimum;
-    if(value > d->maximum)
+    if (value > d->maximum)
         value = d->maximum;
     setEditText(QLocale().toString(value, d->decimals));
     d->slider->blockSignals(true);
@@ -283,13 +289,11 @@ void KoSliderComboContainer::mousePressEvent(QMouseEvent *e)
     opt.initFrom(m_parent);
     opt.subControls = QStyle::SC_All;
     opt.activeSubControls = QStyle::SC_ComboBoxArrow;
-    QStyle::SubControl sc = style()->hitTestComplexControl(QStyle::CC_ComboBox, &opt,
-                                                           m_parent->mapFromGlobal(e->globalPos()),
-                                                           m_parent);
+    QStyle::SubControl sc = style()->hitTestComplexControl(QStyle::CC_ComboBox, &opt, m_parent->mapFromGlobal(e->globalPos()), m_parent);
     if (sc == QStyle::SC_ComboBoxArrow)
         setAttribute(Qt::WA_NoMouseReplay);
     QMenu::mousePressEvent(e);
 }
 
-//have to include this because of Q_PRIVATE_SLOT
+// have to include this because of Q_PRIVATE_SLOT
 #include <moc_KoSliderCombo.cpp>

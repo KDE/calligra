@@ -31,14 +31,14 @@ public:
     Units primitiveUnits() const;
 
     /// Sets filter position
-    void setPosition(const QPointF & position);
+    void setPosition(const QPointF &position);
     /// Returns filter position (objectBound is used when filterUnits == ObjectBoundingBox)
-    QPointF position(const QRectF & objectBound) const;
+    QPointF position(const QRectF &objectBound) const;
 
     /// Sets filter size
-    void setSize(const QSizeF & size);
+    void setSize(const QSizeF &size);
     /// Returns filter size (objectBound is used when filterUnits == ObjectBoundingBox)
-    QSizeF size(const QRectF & objectBound) const;
+    QSizeF size(const QRectF &objectBound) const;
 
     /// Sets the dom element containing the filter
     void setContent(const KoXmlElement &content);
@@ -47,6 +47,7 @@ public:
 
     static QPointF toUserSpace(const QPointF &position, const QRectF &objectBound);
     static QSizeF toUserSpace(const QSizeF &size, const QRectF &objectBound);
+
 private:
     Units m_filterUnits;
     Units m_primitiveUnits;

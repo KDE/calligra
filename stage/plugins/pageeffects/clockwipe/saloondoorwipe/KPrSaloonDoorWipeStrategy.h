@@ -12,11 +12,11 @@
 class KPrSaloonDoorWipeStrategy : public KPrSweepWipeStrategy
 {
 public:
-    KPrSaloonDoorWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse );
+    KPrSaloonDoorWipeStrategy(int subType, const char *smilType, const char *smilSubType, bool reverse);
     ~KPrSaloonDoorWipeStrategy() override;
 
-    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
-    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
+    void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine) override;
+    void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data) override;
 };
 
 #endif // KPRSALOONDOORWIPESTRATEGY_H

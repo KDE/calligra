@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * 
+ *
  * SPDX-FileCopyrightText: 2018 Dag Andersen <danders@get2net.dk>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -15,8 +15,8 @@
 class QModelIndex;
 class QAction;
 
-
-namespace KoChart {
+namespace KoChart
+{
 
 class ChartShape;
 class DataProxy;
@@ -50,4 +50,3 @@ private:
 } // Namespace KoChart
 
 #endif // KCHART_STOCKDATAEDITOR_H
-

@@ -7,7 +7,6 @@
 #include "SheetModel.h"
 
 // Sheets
-#include "engine/Formula.h"
 #include "Binding.h"
 #include "Cell.h"
 #include "CellStorage.h"
@@ -17,6 +16,7 @@
 #include "ModelSupport.h"
 #include "Sheet.h"
 #include "ValueFormatter.h"
+#include "engine/Formula.h"
 
 // Qt
 #include <QItemSelectionRange>
@@ -26,12 +26,12 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN SheetModel::Private
 {
 public:
-    Sheet* sheet;
+    Sheet *sheet;
 };
 
-SheetModel::SheetModel(Sheet* sheet)
-        : QAbstractTableModel(sheet)
-        , d(new Private)
+SheetModel::SheetModel(Sheet *sheet)
+    : QAbstractTableModel(sheet)
+    , d(new Private)
 {
     d->sheet = sheet;
 }
@@ -41,7 +41,7 @@ SheetModel::~SheetModel()
     delete d;
 }
 
-int SheetModel::columnCount(const QModelIndex& parent) const
+int SheetModel::columnCount(const QModelIndex &parent) const
 {
     if (parent.isValid() && parent.internalPointer() != d->sheet->map()) {
         return 0;
@@ -49,7 +49,7 @@ int SheetModel::columnCount(const QModelIndex& parent) const
     return KS_colMax;
 }
 
-QVariant SheetModel::data(const QModelIndex& index, int role) const
+QVariant SheetModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
@@ -70,8 +70,7 @@ QVariant SheetModel::data(const QModelIndex& index, int role) const
     const Style style = cell.effectiveStyle();
     if (role == Qt::DisplayRole) {
         // Display a formula if warranted.  If not, simply display the value.
-        if (cell.isFormula() && d->sheet->getShowFormula() &&
-                !(d->sheet->isProtected() && style.hideFormula())) {
+        if (cell.isFormula() && d->sheet->getShowFormula() && !(d->sheet->isProtected() && style.hideFormula())) {
             return QVariant(cell.userInput());
         } else if (d->sheet->getHideZero() && cell.value().isNumber() && cell.value().asFloat() == 0.0) {
             // Hide zero.
@@ -79,10 +78,13 @@ QVariant SheetModel::data(const QModelIndex& index, int role) const
         } else if (!cell.isEmpty()) {
             // Format the value appropriately and set the display text.
             // The format of the resulting value is used below to determine the alignment.
-            Value value = d->sheet->fullMap()->formatter()->formatText(cell.value(), style.formatType(),
-                          style.precision(), style.floatFormat(),
-                          style.prefix(), style.postfix(),
-                          style.currency().symbol());
+            Value value = d->sheet->fullMap()->formatter()->formatText(cell.value(),
+                                                                       style.formatType(),
+                                                                       style.precision(),
+                                                                       style.floatFormat(),
+                                                                       style.prefix(),
+                                                                       style.postfix(),
+                                                                       style.currency().symbol());
             return value.asString();
         }
     } else if (role == Qt::EditRole) {
@@ -124,7 +126,7 @@ QVariant SheetModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-Qt::ItemFlags SheetModel::flags(const QModelIndex& index) const
+Qt::ItemFlags SheetModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid()) {
         return Qt::NoItemFlags;
@@ -174,7 +176,7 @@ QModelIndex SheetModel::index(int row, int column, const QModelIndex &parent) co
     return QModelIndex();
 }
 
-int SheetModel::rowCount(const QModelIndex& parent) const
+int SheetModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid() && parent.internalPointer() != d->sheet->map()) {
         return 0;
@@ -182,7 +184,7 @@ int SheetModel::rowCount(const QModelIndex& parent) const
     return KS_rowMax;
 }
 
-bool SheetModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool SheetModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (!index.isValid()) {
         return false;
@@ -259,7 +261,7 @@ bool SheetModel::setData(const QItemSelectionRange &range, const QVariant &value
         break;
     case StyleRole:
         // TODO
-//         storage->setStyle(region, value.value<Style>());
+        //         storage->setStyle(region, value.value<Style>());
         break;
     case TargetRangeRole:
         storage->setDatabase(region, value.value<Database>());
@@ -274,13 +276,12 @@ bool SheetModel::setData(const QItemSelectionRange &range, const QVariant &value
     return true;
 }
 
-bool SheetModel::setData(const QModelIndex &topLeft, const QModelIndex &bottomRight,
-                         const QVariant &value, int role)
+bool SheetModel::setData(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVariant &value, int role)
 {
     return setData(QItemSelectionRange(topLeft, bottomRight), value, role);
 }
 
-Sheet* SheetModel::sheet() const
+Sheet *SheetModel::sheet() const
 {
     return d->sheet;
 }

@@ -5,13 +5,12 @@
 */
 #include "PptToOdp.h"
 #include <KoOdf.h>
-#include <QCoreApplication>
-#include <QDir>
 #include <QBuffer>
+#include <QCoreApplication>
 #include <QDebug>
+#include <QDir>
 
-int
-convert(const QString& in, KoStore* out)
+int convert(const QString &in, KoStore *out)
 {
     // open inputFile
     POLE::Storage storage(in.toLocal8Bit());
@@ -24,19 +23,16 @@ convert(const QString& in, KoStore* out)
 }
 
 /* convert all files in a directory */
-int
-convertAllFilesInDir(const QDir &dir, const QString firstFile = QString())
+int convertAllFilesInDir(const QDir &dir, const QString firstFile = QString())
 {
     bool skip = firstFile.size() > 0;
-    foreach(const QFileInfo& f, dir.entryInfoList(QDir::Files,
-            QDir::Size | QDir::Reversed)) {
+    foreach (const QFileInfo &f, dir.entryInfoList(QDir::Files, QDir::Size | QDir::Reversed)) {
         if (skip) {
             skip = !f.absoluteFilePath().endsWith(firstFile);
         }
         if (!skip) {
             QBuffer buffer;
-            KoStore* storeout = KoStore::createStore(&buffer, KoStore::Write,
-                                KoOdf::mimeType(KoOdf::Presentation), KoStore::Tar);
+            KoStore *storeout = KoStore::createStore(&buffer, KoStore::Write, KoOdf::mimeType(KoOdf::Presentation), KoStore::Tar);
             qDebug() << "Converting " << f.size() << " " << f.absoluteFilePath();
             convert(f.absoluteFilePath(), storeout);
             delete storeout;
@@ -45,8 +41,7 @@ convertAllFilesInDir(const QDir &dir, const QString firstFile = QString())
     return 0;
 }
 
-int
-main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     if (argc != 2 && argc != 3) {
         return 1;
@@ -74,14 +69,12 @@ main(int argc, char** argv)
         return KoFilter::StupidError;
     }
     // create output store
-    KoStore* storeout;
+    KoStore *storeout;
     QBuffer buffer;
     if (file2.isNull()) {
-        storeout = KoStore::createStore(&buffer, KoStore::Write,
-                                        KoOdf::mimeType(KoOdf::Presentation), KoStore::Tar);
+        storeout = KoStore::createStore(&buffer, KoStore::Write, KoOdf::mimeType(KoOdf::Presentation), KoStore::Tar);
     } else {
-        storeout = KoStore::createStore(file2, KoStore::Write,
-                                        KoOdf::mimeType(KoOdf::Presentation), KoStore::Zip);
+        storeout = KoStore::createStore(file2, KoStore::Write, KoOdf::mimeType(KoOdf::Presentation), KoStore::Zip);
     }
     if (!storeout) {
         return KoFilter::FileNotFound;

@@ -8,23 +8,23 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  *
  */
-#include <KoDocument.h>
-#include <KoPADocument.h>
 #include <KWDocument.h>
-#include <sheets/part/Doc.h>
+#include <KoDocument.h>
+#include <KoDocumentEntry.h>
+#include <KoPADocument.h>
 #include <KoPart.h>
 #include <KoPluginLoader.h>
-#include <KoDocumentEntry.h>
+#include <sheets/part/Doc.h>
 
 #include <QApplication>
-#include <QCommandLineParser>
 #include <QBuffer>
+#include <QCommandLineParser>
+#include <QDebug>
 #include <QDir>
 #include <QFileInfo>
 #include <QImage>
-#include <QTimer>
 #include <QMimeDatabase>
-#include <QDebug>
+#include <QTimer>
 
 #include "CSThumbProviderStage.h"
 #include "CSThumbProviderTables.h"
@@ -33,12 +33,12 @@
 #include "config_cstester.h"
 
 #ifdef BUILD_KARBON
-#include <KarbonPart.h>
-#include <KarbonDocument.h>
 #include "CSThumbProviderKarbon.h"
+#include <KarbonDocument.h>
+#include <KarbonPart.h>
 #endif
 
-KoDocument* openFile(const QString &filename)
+KoDocument *openFile(const QString &filename)
 {
     const QString mimetype = QMimeDatabase().mimeTypeForFile(filename).name();
 
@@ -68,9 +68,8 @@ KoDocument* openFile(const QString &filename)
 
         if (document->openUrl(url)) {
             document->setReadWrite(false);
-        }
-        else {
-            qWarning()<< "openUrl failed" << filename << mimetype << error;
+        } else {
+            qWarning() << "openUrl failed" << filename << mimetype << error;
             delete document;
             document = 0;
         }
@@ -108,13 +107,11 @@ QVector<QImage> createThumbnails(KoDocument *document, const QSize &thumbSize)
 {
     CSThumbProvider *tp = 0;
 
-    if (KoPADocument *doc = qobject_cast<KoPADocument*>(document)) {
+    if (KoPADocument *doc = qobject_cast<KoPADocument *>(document)) {
         tp = new CSThumbProviderStage(doc);
-    }
-    else if (Calligra::Sheets::Doc *doc = qobject_cast<Calligra::Sheets::Doc*>(document)) {
+    } else if (Calligra::Sheets::Doc *doc = qobject_cast<Calligra::Sheets::Doc *>(document)) {
         tp = new CSThumbProviderTables(doc);
-    }
-    else if (KWDocument *doc = qobject_cast<KWDocument*>(document)) {
+    } else if (KWDocument *doc = qobject_cast<KWDocument *>(document)) {
         tp = new CSThumbProviderWords(doc);
     }
 #ifdef BUILD_KARBON
@@ -166,8 +163,7 @@ bool checkThumbnails(const QVector<QImage> &thumbnails, const QString &dir, bool
         if (ba != baCheck) {
             qDebug() << "Check failed:" << dir << "Page" << i << "differ";
             success = false;
-        }
-        else if (verbose) {
+        } else if (verbose) {
             qDebug() << "Check successful:" << dir << "Page" << i << "identical";
         }
     }
@@ -197,11 +193,12 @@ bool checkThumbnails(const QVector<QImage> &thumbnails, const QVector<QImage> &o
         oIt->save(&oBuffer, "PNG");
 
         if (ba != baCheck) {
-            qDebug() << "Check failed:" << "Page" << i << "differ";
+            qDebug() << "Check failed:"
+                     << "Page" << i << "differ";
             success = false;
-        }
-        else if (verbose) {
-            qDebug() << "Check successful:" << "Page" << i << "identical";
+        } else if (verbose) {
+            qDebug() << "Check successful:"
+                     << "Page" << i << "identical";
         }
     }
     return success;
@@ -217,7 +214,8 @@ int main(int argc, char *argv[])
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("create"), i18n("create verification data for file")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("indir"), i18n("directory to read the data from"), QStringLiteral("dir")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("outdir"), i18n("directory to save the data to"), QStringLiteral("dir")));
-    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("roundtrip"), i18n("load/save/load and check the document is the same after load and save/load")));
+    parser.addOption(
+        QCommandLineOption(QStringList() << QStringLiteral("roundtrip"), i18n("load/save/load and check the document is the same after load and save/load")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("verbose"), i18n("be verbose")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("verify"), i18n("verify the file")));
 
@@ -246,8 +244,7 @@ int main(int argc, char *argv[])
     if (optionCount > 1) {
         qCritical() << "create, roundtrip and verify cannot be used the same time";
         exit(1);
-    }
-    else if (optionCount < 1) {
+    } else if (optionCount < 1) {
         qCritical() << "one of the options create, roundtrip or verify needs to be specified";
         exit(1);
     }
@@ -280,13 +277,12 @@ int main(int argc, char *argv[])
 
     int successful = 0;
     int failed = 0;
-    foreach(const QString &filename, parser.positionalArguments()) {
+    foreach (const QString &filename, parser.positionalArguments()) {
         QFileInfo file(filename);
         QString checkDir;
         if (!parser.isSet("indir")) {
             checkDir = filename + ".check";
-        }
-        else {
+        } else {
             checkDir = inDir + '/' + file.fileName() + ".check";
         }
 
@@ -299,44 +295,40 @@ int main(int argc, char *argv[])
         qDebug() << "inDir" << inDir << "outDir" << outDir << "checkDir" << checkDir;
 
         // filename must be a absolute path
-        KoDocument* document = openFile(file.absoluteFilePath());
+        KoDocument *document = openFile(file.absoluteFilePath());
         if (!document) {
             exit(2);
         }
 
-        QVector<QImage> thumbnails(createThumbnails(document, QSize(800,800)));
+        QVector<QImage> thumbnails(createThumbnails(document, QSize(800, 800)));
 
         qDebug() << "created" << thumbnails.size() << "thumbnails";
         if (create) {
             saveThumbnails(file, thumbnails, outDir);
-        }
-        else if (verify) {
+        } else if (verify) {
             if (parser.isSet("outdir")) {
                 saveThumbnails(file, thumbnails, outDir);
             }
             if (checkThumbnails(thumbnails, checkDir, verbose)) {
                 ++successful;
-            }
-            else {
+            } else {
                 ++failed;
                 exitValue = 2;
             }
-        }
-        else if (roundtrip) {
+        } else if (roundtrip) {
             QString rFilename = saveFile(document, filename, "cstester-roundtrip");
             delete document;
             QFileInfo rFile(rFilename);
             qDebug() << roundtrip << "rFilename" << rFilename << rFile.absoluteFilePath();
             document = openFile(rFile.absoluteFilePath());
-            QVector<QImage> others(createThumbnails(document, QSize(800,800)));
+            QVector<QImage> others(createThumbnails(document, QSize(800, 800)));
             if (parser.isSet("outdir")) {
                 saveThumbnails(file, others, outDir);
                 saveThumbnails(file, thumbnails, outDir + "/before");
             }
             if (checkThumbnails(thumbnails, others, verbose)) {
                 ++successful;
-            }
-            else {
+            } else {
                 ++failed;
                 exitValue = 2;
             }

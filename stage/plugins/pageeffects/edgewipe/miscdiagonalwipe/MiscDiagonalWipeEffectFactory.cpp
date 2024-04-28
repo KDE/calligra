@@ -14,10 +14,10 @@
 #define MiscDiagonalWipeEffectId "MiscDiagonalWipeEffect"
 
 MiscDiagonalWipeEffectFactory::MiscDiagonalWipeEffectFactory()
-: KPrPageEffectFactory( MiscDiagonalWipeEffectId, i18n( "Misc Diagonal" ) )
+    : KPrPageEffectFactory(MiscDiagonalWipeEffectId, i18n("Misc Diagonal"))
 {
-    addStrategy( new DoubleBarnDoorWipeStrategy() );
-    addStrategy( new DoubleDiamondWipeStrategy() );
+    addStrategy(new DoubleBarnDoorWipeStrategy());
+    addStrategy(new DoubleDiamondWipeStrategy());
 }
 
 MiscDiagonalWipeEffectFactory::~MiscDiagonalWipeEffectFactory()
@@ -25,8 +25,8 @@ MiscDiagonalWipeEffectFactory::~MiscDiagonalWipeEffectFactory()
 }
 
 static const KLazyLocalizedString s_subTypes[] = {
-    kli18n( "Double Barn Door" ),
-    kli18n( "Double Diamond" ),
+    kli18n("Double Barn Door"),
+    kli18n("Double Diamond"),
 };
 
 QString MiscDiagonalWipeEffectFactory::subTypeName(int subType) const
@@ -34,6 +34,6 @@ QString MiscDiagonalWipeEffectFactory::subTypeName(int subType) const
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return s_subTypes[subType].toString();
     } else {
-        return i18n( "Unknown subtype" );
+        return i18n("Unknown subtype");
     }
 }

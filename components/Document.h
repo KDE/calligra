@@ -7,7 +7,6 @@
  *
  */
 
-
 #ifndef CALLIGRA_COMPONENTS_DOCUMENT_H
 #define CALLIGRA_COMPONENTS_DOCUMENT_H
 
@@ -21,8 +20,10 @@ class KoCanvasController;
 class QGraphicsWidget;
 class KoFindBase;
 
-namespace Calligra {
-namespace Components {
+namespace Calligra
+{
+namespace Components
+{
 
 /**
  * \brief The Document object provides a loader for Calligra Documents.
@@ -32,8 +33,8 @@ class Document : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(QObject* document READ document NOTIFY documentChanged)
-    Q_PROPERTY(QObject* part READ part NOTIFY documentChanged)
+    Q_PROPERTY(QObject *document READ document NOTIFY documentChanged)
+    Q_PROPERTY(QObject *part READ part NOTIFY documentChanged)
     Q_PROPERTY(Calligra::Components::DocumentType::Type documentType READ documentType NOTIFY documentTypeChanged)
     Q_PROPERTY(Calligra::Components::DocumentStatus::Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
@@ -74,14 +75,14 @@ class Document : public QObject
      * \get textEditor() const
      * \notify textEditorChanged()
      */
-    Q_PROPERTY(QObject* textEditor READ textEditor NOTIFY textEditorChanged)
+    Q_PROPERTY(QObject *textEditor READ textEditor NOTIFY textEditorChanged)
 
 public:
-    explicit Document(QObject* parent = 0);
+    explicit Document(QObject *parent = 0);
     ~Document() override;
 
     QUrl source() const;
-    void setSource(const QUrl& value);
+    void setSource(const QUrl &value);
 
     bool readOnly() const;
     void setReadOnly(bool readOnly);
@@ -89,8 +90,8 @@ public:
     DocumentType::Type documentType() const;
     DocumentStatus::Status status() const;
     QSize documentSize() const;
-    QObject* document() const;
-    virtual QObject* part() const;
+    QObject *document() const;
+    virtual QObject *part() const;
 
     /**
      * Getter for property #currentIndex.
@@ -111,18 +112,18 @@ public:
      * to QML.
      * @{
      */
-    KoFindBase* finder() const;
-    QGraphicsWidget* canvas() const;
-    KoCanvasController* canvasController() const;
-    KoZoomController* zoomController() const;
-    KoDocument* koDocument() const;
+    KoFindBase *finder() const;
+    QGraphicsWidget *canvas() const;
+    KoCanvasController *canvasController() const;
+    KoZoomController *zoomController() const;
+    KoDocument *koDocument() const;
 
     /**
      * \return The url of the link at point or an empty url if there is no link at point.
      */
-    virtual QUrl urlAtPoint( const QPoint& point );
+    virtual QUrl urlAtPoint(const QPoint &point);
 
-    QObject* textEditor();
+    QObject *textEditor();
     // Deselects any text selection present in the document, and deselects all shapes
     // This is highly useful, as it makes navigation prettier.
     Q_INVOKABLE void deselectEverything();
@@ -154,12 +155,12 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 } // Namespace Components
 } // Namespace Calligra
 
-Q_DECLARE_METATYPE(Calligra::Components::Document*)
+Q_DECLARE_METATYPE(Calligra::Components::Document *)
 
 #endif // CALLIGRA_COMPONENTS_DOCUMENT_H

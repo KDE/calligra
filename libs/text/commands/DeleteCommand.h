@@ -9,10 +9,10 @@
 
 #include "KoTextCommandBase.h"
 
-#include <QTextCharFormat>
 #include <QHash>
-#include <QSet>
 #include <QPointer>
+#include <QSet>
+#include <QTextCharFormat>
 
 class QTextDocument;
 
@@ -26,12 +26,9 @@ class DeleteVisitor;
 class DeleteCommand : public KoTextCommandBase
 {
 public:
-    enum DeleteMode {
-        PreviousChar,
-        NextChar
-    };
+    enum DeleteMode { PreviousChar, NextChar };
 
-    DeleteCommand(DeleteMode mode, QTextDocument *document, KoShapeController *shapeController, KUndo2Command* parent = 0);
+    DeleteCommand(DeleteMode mode, QTextDocument *document, KoShapeController *shapeController, KUndo2Command *parent = 0);
     ~DeleteCommand() override;
 
     void undo() override;

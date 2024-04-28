@@ -1,22 +1,24 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2010 Jan Hambrecht <jaham@gmx.net>
-*
-* SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ * SPDX-FileCopyrightText: 2010 Jan Hambrecht <jaham@gmx.net>
+ *
+ * SPDX-License-Identifier: LGPL-2.1-or-later
+ */
 
 #include "KoFilterEffectLoadingContext.h"
 
-#include <QString>
-#include <QRectF>
-#include <QFileInfo>
 #include <QDir>
+#include <QFileInfo>
+#include <QRectF>
+#include <QString>
 
 class Q_DECL_HIDDEN KoFilterEffectLoadingContext::Private
 {
 public:
     Private()
-        : convertFilterUnits(false), convertFilterPrimitiveUnits(false)
-    {}
+        : convertFilterUnits(false)
+        , convertFilterPrimitiveUnits(false)
+    {
+    }
     QString basePath;
     QRectF shapeBound;
     bool convertFilterUnits;
@@ -100,7 +102,7 @@ qreal KoFilterEffectLoadingContext::convertFilterPrimitiveUnitsY(qreal value) co
 QString KoFilterEffectLoadingContext::pathFromHref(const QString &href) const
 {
     QFileInfo info(href);
-    if (! info.isRelative())
+    if (!info.isRelative())
         return href;
 
     QFileInfo pathInfo(QFileInfo(d->basePath).filePath());

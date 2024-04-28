@@ -16,18 +16,18 @@
 **
 ** To receive a copy of the GNU Library General Public License, write to the
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+* Boston, MA 02110-1301, USA.
 **
 */
 
 #ifndef __CALLIGRA_SHEETS_LATEX_FORMAT_H__
 #define __CALLIGRA_SHEETS_LATEX_FORMAT_H__
 
-#include <QTextStream>
-#include <QString>
-#include <QColor>
-#include "xmlparser.h"
 #include "pen.h"
+#include "xmlparser.h"
+#include <QColor>
+#include <QString>
+#include <QTextStream>
 
 /***********************************************************************/
 /* Class: Format                                                       */
@@ -39,7 +39,7 @@ class Row;
 /**
  * This class describe a cell, row or column format.
  */
-class Format: public XmlParser
+class Format : public XmlParser
 {
     long _align;
     long _alignY;
@@ -91,127 +91,161 @@ public:
     /**
      * getters
      */
-    long getMultirow() const {
+    long getMultirow() const
+    {
         return _multirow;
     }
-    long getAlign() const {
+    long getAlign() const
+    {
         return _align;
     }
-    long getAlignY() const {
+    long getAlignY() const
+    {
         return _alignY;
     }
-    QColor getBgColor() const {
+    QColor getBgColor() const
+    {
         return _bgColor;
     }
-    bool getVerticalText() const {
+    bool getVerticalText() const
+    {
         return _verticalText;
     }
-    double getAngle() const {
+    double getAngle() const
+    {
         return _angle;
     }
-    QColor getBrushColor() const {
+    QColor getBrushColor() const
+    {
         return _brushColor;
     }
-    int getBrushStyle() const {
+    int getBrushStyle() const
+    {
         return _brushStyle;
     }
-    int getIndent() const {
+    int getIndent() const
+    {
         return _indent;
     }
-    bool getDontPrintText() const {
+    bool getDontPrintText() const
+    {
         return _dontprinttext;
     }
 
-    bool hasBorder() const {
+    bool hasBorder() const
+    {
         return (hasTopBorder() || hasBottomBorder() || hasLeftBorder() || hasRightBorder());
     }
     bool hasTopBorder() const;
-    //Pen* getTopBorder() const { return _topBorder; }
+    // Pen* getTopBorder() const { return _topBorder; }
     bool hasBottomBorder() const;
-    //Pen* getBottomBorder() const { return _bottomBorder; }
+    // Pen* getBottomBorder() const { return _bottomBorder; }
     bool hasLeftBorder() const;
-    //Pen* getLeftBorder() const { return _leftBorder; }
+    // Pen* getLeftBorder() const { return _leftBorder; }
     bool hasRightBorder() const;
-    //Pen* getRightBorder() const { return _rightBorder; }
+    // Pen* getRightBorder() const { return _rightBorder; }
 
     /* pen */
-    double getPenWidth() const {
+    double getPenWidth() const
+    {
         return _penWidth;
     }
-    int getPenStyle()    const {
+    int getPenStyle() const
+    {
         return _penStyle;
     }
-    QColor getPenColor() const {
+    QColor getPenColor() const
+    {
         return _penColor;
     }
 
     /* font */
-    int getFontSize() const {
+    int getFontSize() const
+    {
         return _size;
     }
-    QString getFontFamily() const {
+    QString getFontFamily() const
+    {
         return _family;
     }
-    int getFontWeight() const {
+    int getFontWeight() const
+    {
         return _weight;
     }
-    bool isValidFormat() const {
+    bool isValidFormat() const
+    {
         return _isValidFormat;
     }
 
     /**
      * setters
      */
-    void setAlign(long a) {
+    void setAlign(long a)
+    {
         _align = a;
     }
-    void setAlignY(long a) {
+    void setAlignY(long a)
+    {
         _alignY = a;
     }
-    void setBgColor(QColor b) {
+    void setBgColor(QColor b)
+    {
         _bgColor = b;
     }
-    void setMultirow(long mr)  {
+    void setMultirow(long mr)
+    {
         _multirow = mr;
     }
-    void setVerticalText(bool vt) {
+    void setVerticalText(bool vt)
+    {
         _verticalText = vt;
     }
-    void setAngle(double a) {
+    void setAngle(double a)
+    {
         _angle = a;
     }
-    void setBrushColor(QString bc) {
+    void setBrushColor(QString bc)
+    {
         _brushColor.setNamedColor(bc);
     }
-    void setBrushStyle(int bs) {
+    void setBrushStyle(int bs)
+    {
         _brushStyle = bs;
     }
-    void setIndent(int indent) {
+    void setIndent(int indent)
+    {
         _indent = indent;
     }
-    void setDontPrintText(bool dpt) {
+    void setDontPrintText(bool dpt)
+    {
         _dontprinttext = dpt;
     }
 
     /* pen */
-    void setPenWidth(double pw) {
+    void setPenWidth(double pw)
+    {
         _penWidth = pw;
     }
-    void setPenStyle(int ps)    {
+    void setPenStyle(int ps)
+    {
         _penStyle = ps;
     }
-    void setPenColor(QString pc) {
+    void setPenColor(QString pc)
+    {
         _penColor.setNamedColor(pc);
     }
 
     /* font */
-    void setFontSize(int s) {
+    void setFontSize(int s)
+    {
         _size = s;
     }
-    void setFontFamily(QString f) {
+    void setFontFamily(QString f)
+    {
         _family = f;
     }
-    void setFontWeight(int w) {
+    void setFontWeight(int w)
+    {
         _weight = w;
     }
 
@@ -234,12 +268,12 @@ public:
      * @param col The column of this cell.
      * @param row The row of this cell.
      */
-    void generate(QTextStream& out, Column* col = nullptr, Row* row = nullptr);
+    void generate(QTextStream &out, Column *col = nullptr, Row *row = nullptr);
 
     /**
      * Generate the text cell format (color and font).
      */
-    void generateTextFormat(QTextStream& out, QString text);
+    void generateTextFormat(QTextStream &out, QString text);
 
     /**
      * Generate the color format for a column or a row.
@@ -248,7 +282,7 @@ public:
      *
      * @param out The output stream
      */
-    void generateColor(QTextStream& out);
+    void generateColor(QTextStream &out);
 };
 
 #endif /* __CALLIGRA_SHEETS_LATEX_FORMAT_H__ */

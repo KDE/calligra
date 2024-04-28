@@ -6,9 +6,9 @@
 #ifndef SIMPLEENTRY_TOOL
 #define SIMPLEENTRY_TOOL
 
-#include <QPointF>
-#include <KoToolBase.h>
 #include "core/Chord.h"
+#include <KoToolBase.h>
+#include <QPointF>
 
 class MusicShape;
 class KUndo2Command;
@@ -16,8 +16,9 @@ class AbstractMusicAction;
 class MusicCursor;
 class QMenu;
 
-namespace MusicCore {
-    class Staff;
+namespace MusicCore
+{
+class Staff;
 }
 
 /**
@@ -27,51 +28,52 @@ class SimpleEntryTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    explicit SimpleEntryTool( KoCanvasBase* canvas );
+    explicit SimpleEntryTool(KoCanvasBase *canvas);
     ~SimpleEntryTool() override;
 
-    void paint( QPainter& painter, const KoViewConverter& converter ) override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    void mousePressEvent( KoPointerEvent* event ) override ;
-    void mouseMoveEvent( KoPointerEvent* event ) override;
-    void mouseReleaseEvent( KoPointerEvent* event ) override;
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
 
-    void keyPressEvent( QKeyEvent *event ) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     void deactivate() override;
 
-    void addCommand(KUndo2Command* command);
+    void addCommand(KUndo2Command *command);
 
-    MusicShape* shape();
+    MusicShape *shape();
     int voice();
-    
-    void setSelection(int startBar, int endBar, MusicCore::Staff* startStaff, MusicCore::Staff* endStaff);
+
+    void setSelection(int startBar, int endBar, MusicCore::Staff *startStaff, MusicCore::Staff *endStaff);
+
 protected:
-    QWidget * createOptionWidget() override;
+    QWidget *createOptionWidget() override;
 protected Q_SLOTS:
-    void activeActionChanged(QAction* action);
+    void activeActionChanged(QAction *action);
     void voiceChanged(int voice);
     void addBars();
     void actionTriggered();
     void importSheet();
     void exportSheet();
+
 private:
     MusicShape *m_musicshape;
-    AbstractMusicAction* m_activeAction;
+    AbstractMusicAction *m_activeAction;
     QPointF m_point;
     int m_voice;
 
-    MusicCore::Staff* m_contextMenuStaff;
+    MusicCore::Staff *m_contextMenuStaff;
     int m_contextMenuBar;
     QPointF m_contextMenuPoint;
 
     int m_selectionStart, m_selectionEnd;
     MusicCore::Staff *m_selectionStaffStart, *m_selectionStaffEnd;
 
-    MusicCursor* m_cursor;
-    QList<QMenu*> m_menus; 
+    MusicCursor *m_cursor;
+    QList<QMenu *> m_menus;
 };
 
 #endif
-

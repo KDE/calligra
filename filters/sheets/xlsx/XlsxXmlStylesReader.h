@@ -13,8 +13,8 @@
 #define XLSXXMLSTYLESREADER_H
 
 #include <MsooXmlTheme.h>
-#include <QFlags>
 #include <QColor>
+#include <QFlags>
 
 #include "XlsxXmlCommonReader.h"
 
@@ -62,19 +62,19 @@ public:
     };
 
     //! Indicates whether the alignment formatting specified for this xf should be applied
-//! @todo should be saved as metadata in ODF
+    //! @todo should be saved as metadata in ODF
     bool applyAlignment;
 
     //! Indicates whether the border formatting specified for this xf should be applied.
-//! @todo should be saved as metadata in ODF
+    //! @todo should be saved as metadata in ODF
     bool applyBorder;
 
     //! Indicates whether the fill formatting specified for this xf should be applied.
-//! @todo should be saved as metadata in ODF
+    //! @todo should be saved as metadata in ODF
     bool applyFill;
 
     //! Indicates whether the font formatting specified for this xf should be applied.
-//! @todo should be saved as metadata in ODF
+    //! @todo should be saved as metadata in ODF
     bool applyFont;
 
     //! Indicates whether the number formatting specified for this xf should be applied.
@@ -84,19 +84,19 @@ public:
     bool applyProtection;
 
     //! Zero-based index of the border record used by this cell format. Can be -1.
-//! @todo set pointer directly here for optimization?
+    //! @todo set pointer directly here for optimization?
     int borderId;
 
     //! Zero-based index of the fill record used by this cell format. Can be -1.
-//! @todo set pointer directly here for optimization?
+    //! @todo set pointer directly here for optimization?
     int fillId;
 
     //! Font id used in XlsXStyles::fontStyle(). Can be -1.
-//! @todo set pointer directly here for optimization?
+    //! @todo set pointer directly here for optimization?
     int fontId;
 
     //! Id of the number format (numFmt) record used by this cell format. Can be -1.
-//! @todo set pointer directly here for optimization?
+    //! @todo set pointer directly here for optimization?
     int numFmtId;
 
     //! Indicates whether the cell rendering includes a pivot table dropdown button.
@@ -109,12 +109,12 @@ public:
     //! For xf records contained in cellXfs this is the zero-based index of an xf record
     //! contained in cellStyleXfs corresponding to the cell style applied to the cell.
     //! Not present for xf records contained in cellStyleXfs. Can be -1.
-//! @todo set pointer directly here for optimization?
+    //! @todo set pointer directly here for optimization?
     int xfId;
 
-//! @todo should be saved as metadata in ODF if applyAlignment false
+    //! @todo should be saved as metadata in ODF if applyAlignment false
     ST_HorizontalAlignment horizontalAlignment;
-//! @todo should be saved as metadata in ODF if applyAlignment false
+    //! @todo should be saved as metadata in ODF if applyAlignment false
     ST_VerticalAlignment verticalAlignment;
 
     //! Indicates whether if the text in the cell should be line-wrapped with the cell.
@@ -127,15 +127,15 @@ public:
     //! vertical top-to-bottom-text without rotated characters
     uint textRotation;
 
-    void setHorizontalAlignment(const QString& alignment);
-    void setVerticalAlignment(const QString& alignment);
+    void setHorizontalAlignment(const QString &alignment);
+    void setVerticalAlignment(const QString &alignment);
 
     //! Sets up @a cellStyle to match this cell style.
     //! @todo implement more styling
-    bool setupCellStyle(const XlsxStyles *styles, KoGenStyle* cellStyle) const;
+    bool setupCellStyle(const XlsxStyles *styles, KoGenStyle *cellStyle) const;
 
     //! Used by setupCellStyle() & read_dxf
-    void setupCellStyleAlignment(KoGenStyle* cellStyle) const;
+    void setupCellStyleAlignment(KoGenStyle *cellStyle) const;
 };
 
 class XlsxStyles
@@ -145,66 +145,71 @@ public:
     ~XlsxStyles();
 
     //! @return font style for id @a id (counted from 0)
-    KoGenStyle* fontStyle(int id) const {
+    KoGenStyle *fontStyle(int id) const
+    {
         if (id < 0 || id >= fontStyles.size())
             return 0;
         return fontStyles[id];
     }
 
     //! @return fill style for id @a id (counted from 0)
-    KoGenStyle* fillStyle(int id) const {
+    KoGenStyle *fillStyle(int id) const
+    {
         if (id < 0 || id >= fillStyles.size())
             return 0;
         return fillStyles[id];
     }
 
     //! @return border style for id @a id (counted from 0)
-    KoGenStyle* borderStyle(int id) const {
+    KoGenStyle *borderStyle(int id) const
+    {
         if (id < 0 || id >= borderStyles.size())
             return 0;
         return borderStyles[id];
     }
 
     //! @return cell format for id @a id (counted from 0)
-    XlsxCellFormat* cellFormat(int id) const {
+    XlsxCellFormat *cellFormat(int id) const
+    {
         if (id < 0 || id >= cellFormats.size())
             return 0;
         return cellFormats[id];
     }
 
     //! @return number format string for id @a (counted from 0)
-    QString numberFormatString( int id ) const
+    QString numberFormatString(int id) const
     {
-        return numberFormatStrings[ id ];
+        return numberFormatStrings[id];
     }
 
-//     //! @return the KoGenStyle the number-formatting style has
-//     KoGenStyle numberFormatStyle( int id ) const {
-//         return numberFormatStyles[ id ];
-//     }
+    //     //! @return the KoGenStyle the number-formatting style has
+    //     KoGenStyle numberFormatStyle( int id ) const {
+    //         return numberFormatStyles[ id ];
+    //     }
 
     //! @return the KoGenStyle styleName the number-formatting style has
-    QString numberFormatStyleName( int id ) const {
-        return numberFormatStyleNames[ id ];
+    QString numberFormatStyleName(int id) const
+    {
+        return numberFormatStyleNames[id];
     }
 
     //! @return conditional style name for the given index
-    QString conditionalStyle( int index ) const
+    QString conditionalStyle(int index) const
     {
-        return conditionalStyles[ index ];
+        return conditionalStyles[index];
     }
 
 protected:
     void setCellFormat(XlsxCellFormat *format, int cellFormatIndex);
 
-    QVector<KoGenStyle*> fontStyles;
-    QVector<KoGenStyle*> fillStyles;
-    QVector<KoGenStyle*> borderStyles;
-    QVector<XlsxCellFormat*> cellFormats;
-    QMap< int, QString > numberFormatStrings;
-//     QMap< int, KoGenStyle > numberFormatStyles;
-    QMap< int, QString > numberFormatStyleNames;
-    QMap< int, QString > conditionalStyles;
+    QVector<KoGenStyle *> fontStyles;
+    QVector<KoGenStyle *> fillStyles;
+    QVector<KoGenStyle *> borderStyles;
+    QVector<XlsxCellFormat *> cellFormats;
+    QMap<int, QString> numberFormatStrings;
+    //     QMap< int, KoGenStyle > numberFormatStyles;
+    QMap<int, QString> numberFormatStyleNames;
+    QMap<int, QString> conditionalStyles;
 
     friend class XlsxXmlStylesReader;
 };
@@ -212,13 +217,11 @@ protected:
 class XlsxXmlStylesReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart,
-                               XlsxImport* _import,
-                               MSOOXML::DrawingMLTheme* _themes);
-    XlsxStyles* styles;
+    XlsxXmlStylesReaderContext(XlsxStyles &_styles, bool _skipFirstPart, XlsxImport *_import, MSOOXML::DrawingMLTheme *_themes);
+    XlsxStyles *styles;
     bool skipFirstPart;
-    XlsxImport* import;
-    MSOOXML::DrawingMLTheme* themes;
+    XlsxImport *import;
+    MSOOXML::DrawingMLTheme *themes;
     QVector<QString> colorIndices;
 };
 
@@ -233,12 +236,9 @@ public:
 
     //! Reads/parses the file of format document.xml.
     //! The output goes mainly to KoXmlWriter* KoOdfWriters::body
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
 
-    enum DiagonalDirection {
-        DiagonalUp = 1,
-        DiagonalDown = 2
-    };
+    enum DiagonalDirection { DiagonalUp = 1, DiagonalDown = 2 };
     Q_DECLARE_FLAGS(DiagonalDirections, DiagonalDirection)
     DiagonalDirections diagonalDirections;
 
@@ -257,13 +257,13 @@ protected:
     KoFilter::ConversionStatus read_alignment();
     KoFilter::ConversionStatus read_fills();
     KoFilter::ConversionStatus read_fill();
-//! @todo implement read_patternFill
+    //! @todo implement read_patternFill
     KoFilter::ConversionStatus read_patternFill();
     KoFilter::ConversionStatus read_bgColor();
     KoFilter::ConversionStatus read_fgColor();
-//! @todo implement read_gradientFill
+    //! @todo implement read_gradientFill
     KoFilter::ConversionStatus read_gradientFill();
-//! @todo implement read_stop()
+    //! @todo implement read_stop()
     KoFilter::ConversionStatus read_borders();
     KoFilter::ConversionStatus read_border();
     KoFilter::ConversionStatus read_top();
@@ -277,7 +277,7 @@ protected:
 
     uint m_cellFormatIndex;
 
-    XlsxXmlStylesReaderContext* m_context;
+    XlsxXmlStylesReaderContext *m_context;
 
     QColor m_currentFgColor;
     QColor m_currentBgColor;
@@ -289,15 +289,15 @@ protected:
 
     int m_colorIndex;
 
-    KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs, QString& borderStyle);
+    KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes &attrs, QString &borderStyle);
 
 private:
     void init();
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(XlsxXmlStylesReader::DiagonalDirections)
 
-#endif //XLSXXMLSTYLESREADER_H
+#endif // XLSXXMLSTYLESREADER_H

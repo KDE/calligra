@@ -15,12 +15,12 @@
 
 #include "AutoFillCommand.h"
 
-#include "engine/ValueConverter.h"
-#include "engine/CS_Time.h"
 #include "core/ApplicationSettings.h"
 #include "core/Cell.h"
 #include "core/Map.h"
 #include "core/Sheet.h"
+#include "engine/CS_Time.h"
+#include "engine/ValueConverter.h"
 
 #include <QRegularExpression>
 
@@ -32,9 +32,7 @@ QStringList *AutoFillCommand::day = nullptr;
 QStringList *AutoFillCommand::shortDay = nullptr;
 QStringList *AutoFillCommand::other = nullptr;
 
-
 // TODO - this needs redoing, it is generally poorly written
-
 
 /**********************************************************************************
  *
@@ -54,42 +52,45 @@ class AutoFillSequenceItem
 public:
     enum Type { VALUE, FORMULA, DAY, SHORTDAY, MONTH, SHORTMONTH, OTHER };
 
-    explicit AutoFillSequenceItem(const Cell& cell, ApplicationSettings *sett);
+    explicit AutoFillSequenceItem(const Cell &cell, ApplicationSettings *sett);
 
     Value delta(AutoFillSequenceItem *_seq, bool *ok) const;
 
     Value nextValue(int _no, Value _delta) const;
     Value prevValue(int _no, Value _delta) const;
 
-    Type type() const {
+    Type type() const
+    {
         return m_type;
     }
-    Value value() const {
+    Value value() const
+    {
         return m_value;
     }
-    int otherEnd() const {
+    int otherEnd() const
+    {
         return m_otherEnd;
     }
-    int otherBegin() const {
+    int otherBegin() const
+    {
         return m_otherBegin;
     }
 
 protected:
-    Value   m_value;
-    Type    m_type;
-    int     m_otherBegin;
-    int     m_otherEnd;
+    Value m_value;
+    Type m_type;
+    int m_otherBegin;
+    int m_otherEnd;
 };
 
 } // namespace Sheets
 } // namespace Calligra
 
-
-AutoFillSequenceItem::AutoFillSequenceItem(const Cell& cell, ApplicationSettings *sett)
-        : m_value()
-        , m_type(VALUE)
-        , m_otherBegin(0)
-        , m_otherEnd(0)
+AutoFillSequenceItem::AutoFillSequenceItem(const Cell &cell, ApplicationSettings *sett)
+    : m_value()
+    , m_type(VALUE)
+    , m_otherBegin(0)
+    , m_otherEnd(0)
 {
     if (cell.isFormula()) {
         m_value = Value(cell.encodeFormula());
@@ -246,7 +247,6 @@ Value AutoFillSequenceItem::delta(AutoFillSequenceItem *seq, bool *ok) const
             *ok = false;
             return Value();
         }
-
     }
     case MONTH: {
         const int i = AutoFillCommand::month->indexOf(m_value.asString());
@@ -424,7 +424,6 @@ Value AutoFillSequenceItem::prevValue(int _no, Value _delta) const
     return Value();
 }
 
-
 /**********************************************************************************
  *
  * AutoFillSequence
@@ -438,11 +437,11 @@ namespace Sheets
 /**
  * A sequence of cell contents for auto-filling.
  */
-class AutoFillSequence : public QList<AutoFillSequenceItem*>
+class AutoFillSequence : public QList<AutoFillSequenceItem *>
 {
 public:
     AutoFillSequence();
-    AutoFillSequence(const QList<AutoFillSequenceItem*>&);
+    AutoFillSequence(const QList<AutoFillSequenceItem *> &);
     ~AutoFillSequence();
 
     QList<Value> createDeltaSequence(int intervalLength) const;
@@ -455,8 +454,8 @@ AutoFillSequence::AutoFillSequence()
 {
 }
 
-AutoFillSequence::AutoFillSequence(const QList<AutoFillSequenceItem*>& list)
-        : QList<AutoFillSequenceItem*>(list)
+AutoFillSequence::AutoFillSequence(const QList<AutoFillSequenceItem *> &list)
+    : QList<AutoFillSequenceItem *>(list)
 {
 }
 
@@ -486,14 +485,13 @@ QList<Value> AutoFillSequence::createDeltaSequence(int intervalLength) const
     return deltaSequence;
 }
 
-
 /**********************************************************************************
  *
  * File static helper functions
  *
  **********************************************************************************/
 
-static QList<Value> findInterval(const AutoFillSequence& _seqList)
+static QList<Value> findInterval(const AutoFillSequence &_seqList)
 {
     // What is the interval (block)? If your sheet looks like this:
     // 1 3 5 7 9
@@ -516,13 +514,13 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
         deltaSequence = _seqList.createDeltaSequence(intervalLength);
 
         QString str("Deltas: [ ");
-        foreach(const Value &v, deltaSequence) {
+        foreach (const Value &v, deltaSequence) {
             if (v.isBoolean())
                 str += v.asBoolean() ? "change " : "nochange ";
             else if (v.isInteger())
                 str += QString::number(v.asInteger()) + ' ';
             else if (v.isFloat())
-                str += QString::number((double) v.asFloat()) + ' ';
+                str += QString::number((double)v.asFloat()) + ' ';
             else
                 str += v.asString() + ' ';
         }
@@ -536,7 +534,7 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
         // and for all s=0...intervalLength-1.
         for (int i = 1; (i + 1) * intervalLength < _seqList.count(); ++i) {
             AutoFillSequence tail = _seqList.mid(i * intervalLength);
-//             debugSheets <<"Verifying for sequence after" << i * intervalLength <<", length:" << tail.count();
+            //             debugSheets <<"Verifying for sequence after" << i * intervalLength <<", length:" << tail.count();
             QList<Value> otherDeltaSequence = tail.createDeltaSequence(intervalLength);
             if (deltaSequence != otherDeltaSequence) {
                 debugSheets << "Interval does not match.";
@@ -556,13 +554,13 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
             deltaSequence.append(Value());
 
         QString str("Deltas: [ ");
-        foreach(const Value &v, deltaSequence) {
+        foreach (const Value &v, deltaSequence) {
             if (v.isBoolean())
                 str += v.asBoolean() ? "change " : "nochange ";
             else if (v.isInteger())
                 str += QString::number(v.asInteger()) + ' ';
             else if (v.isFloat())
-                str += QString::number((double) v.asFloat()) + ' ';
+                str += QString::number((double)v.asFloat()) + ' ';
             else
                 str += v.asString() + ' ';
         }
@@ -573,11 +571,8 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
     return deltaSequence;
 }
 
-static void fillSequence(const QList<Cell>& _srcList,
-                         const QList<Cell>& _destList,
-                         const AutoFillSequence& _seqList,
-                         const QList<Value>& deltaSequence,
-                         bool down)
+static void
+fillSequence(const QList<Cell> &_srcList, const QList<Cell> &_destList, const AutoFillSequence &_seqList, const QList<Value> &deltaSequence, bool down)
 {
     const int intervalLength = deltaSequence.count();
     // starting position depends on the sequence and interval length
@@ -635,10 +630,7 @@ static void fillSequence(const QList<Cell>& _srcList,
         } else if (value.format() == Value::fmt_Date) {
             const Value dateValue = cell.sheet()->map()->converter()->asDate(value);
             cell.setCellValue(dateValue);
-        } else if (value.type() == Value::Boolean ||
-                   value.type() == Value::Complex ||
-                   value.type() == Value::Float ||
-                   value.type() == Value::Integer) {
+        } else if (value.type() == Value::Boolean || value.type() == Value::Complex || value.type() == Value::Float || value.type() == Value::Integer) {
             cell.setCellValue(value);
         } else { // if (value.type() == Value::String)
             QRegularExpression number("(\\d+)");
@@ -670,7 +662,6 @@ static void fillSequence(const QList<Cell>& _srcList,
     }
 }
 
-
 /**********************************************************************************
  *
  * AutoFillCommand
@@ -686,12 +677,12 @@ AutoFillCommand::~AutoFillCommand()
 {
 }
 
-void AutoFillCommand::setSourceRange(const QRect& range)
+void AutoFillCommand::setSourceRange(const QRect &range)
 {
     m_sourceRange = range;
 }
 
-void AutoFillCommand::setTargetRange(const QRect& range)
+void AutoFillCommand::setTargetRange(const QRect &range)
 {
     m_targetRange = range;
 }
@@ -779,10 +770,7 @@ bool AutoFillCommand::performCommands()
     return true;
 }
 
-void AutoFillCommand::fillSequence(const QList<Cell>& _srcList,
-                                   const QList<Cell>& _destList,
-                                   const AutoFillSequence& _seqList,
-                                   bool down)
+void AutoFillCommand::fillSequence(const QList<Cell> &_srcList, const QList<Cell> &_destList, const AutoFillSequence &_seqList, bool down)
 {
     if (_srcList.isEmpty() || _destList.isEmpty())
         return;
@@ -790,14 +778,14 @@ void AutoFillCommand::fillSequence(const QList<Cell>& _srcList,
     // find an interval to use to fill the sequence
     QList<Value> deltaSequence;
 
-    //If we only have a single cell, the interval will depend upon the data type.
+    // If we only have a single cell, the interval will depend upon the data type.
     //- For numeric values, set the interval to 0 as we don't know what might be useful as a sequence
     //- For time values, set the interval to one hour, as this will probably be the most useful setting
     //- For date values, set the interval to one day, as this will probably be the most useful setting
     //
-    //Note that the above options were chosen for consistency with Excel.  Gnumeric (1.59) sets
-    //the interval to 0 for all types, OpenOffice.org (2.00) uses increments of 1.00, 1 hour and 1 day
-    //respectively
+    // Note that the above options were chosen for consistency with Excel.  Gnumeric (1.59) sets
+    // the interval to 0 for all types, OpenOffice.org (2.00) uses increments of 1.00, 1 hour and 1 day
+    // respectively
     if (_srcList.count() == 1) {
         const Cell cell = _srcList.value(0);
         if (cell.isTime() || cell.value().format() == Value::fmt_DateTime) {

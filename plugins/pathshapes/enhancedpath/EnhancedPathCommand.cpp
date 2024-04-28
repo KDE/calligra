@@ -9,14 +9,15 @@
 #include "EnhancedPathParameter.h"
 #include "EnhancedPathShape.h"
 #include <KoPathPoint.h>
-#include <math.h>
 #include <QDebug>
+#include <math.h>
 
 // radian to degree factor
-const qreal rad2deg = 180.0/M_PI;
+const qreal rad2deg = 180.0 / M_PI;
 
 EnhancedPathCommand::EnhancedPathCommand(const QChar &command, EnhancedPathShape *parent)
-    : m_command(command), m_parent(parent)
+    : m_command(command)
+    , m_parent(parent)
 {
     Q_ASSERT(m_parent);
 }
@@ -59,8 +60,8 @@ bool EnhancedPathCommand::execute()
         break;
     // cubic bezier curve from current point (x1 y1 x2 y2 x y) +
     case 'C':
-        for (int i = 0; i < pointsCount; i+=3)
-            m_parent->curveTo(points[i], points[i+1], points[i+2]);
+        for (int i = 0; i < pointsCount; i += 3)
+            m_parent->curveTo(points[i], points[i + 1], points[i + 2]);
         break;
     // closes the current subpath
     case 'Z':
@@ -84,19 +85,19 @@ bool EnhancedPathCommand::execute()
     case 'U': {
         bool lineTo = m_command.unicode() == 'T';
 
-        for (int i = 0; i < pointsCount; i+=3) {
-            const QPointF &radii = points[i+1];
-            const QPointF &angles = points[i+2] / rad2deg;
+        for (int i = 0; i < pointsCount; i += 3) {
+            const QPointF &radii = points[i + 1];
+            const QPointF &angles = points[i + 2] / rad2deg;
             // compute the ellipses starting point
             QPointF start(radii.x() * cos(angles.x()), -1 * radii.y() * sin(angles.x()));
-            qreal sweepAngle = degSweepAngle(points[i+2].x(), points[i+2].y(), false);
+            qreal sweepAngle = degSweepAngle(points[i + 2].x(), points[i + 2].y(), false);
 
             if (lineTo)
                 m_parent->lineTo(points[i] + start);
             else
                 m_parent->moveTo(points[i] + start);
 
-            m_parent->arcTo(radii.x(), radii.y(), points[i+2].x(), sweepAngle);
+            m_parent->arcTo(radii.x(), radii.y(), points[i + 2].x(), sweepAngle);
         }
         break;
     }
@@ -110,8 +111,8 @@ bool EnhancedPathCommand::execute()
     case 'V': {
         bool lineTo = ((m_command.unicode() == 'A') || (m_command.unicode() == 'W'));
         bool clockwise = ((m_command.unicode() == 'W') || (m_command.unicode() == 'V'));
-        for (int i = 0; i < pointsCount; i+=4) {
-            QRectF bbox = rectFromPoints(points[i], points[i+1]);
+        for (int i = 0; i < pointsCount; i += 4) {
+            QRectF bbox = rectFromPoints(points[i], points[i + 1]);
             QPointF center = bbox.center();
             qreal rx = 0.5 * bbox.width();
             qreal ry = 0.5 * bbox.height();
@@ -124,8 +125,8 @@ bool EnhancedPathCommand::execute()
                 ry = 1;
             }
 
-            QPointF startRadialVector = points[i+2] - center;
-            QPointF endRadialVector = points[i+3] - center;
+            QPointF startRadialVector = points[i + 2] - center;
+            QPointF endRadialVector = points[i + 3] - center;
 
             // convert from ellipse space to unit-circle space
             qreal x0 = startRadialVector.x() / rx;
@@ -134,19 +135,19 @@ bool EnhancedPathCommand::execute()
             qreal x1 = endRadialVector.x() / rx;
             qreal y1 = endRadialVector.y() / ry;
 
-            qreal startAngle = angleFromPoint(QPointF(x0,y0));
-            qreal stopAngle = angleFromPoint(QPointF(x1,y1));
+            qreal startAngle = angleFromPoint(QPointF(x0, y0));
+            qreal stopAngle = angleFromPoint(QPointF(x1, y1));
 
             // we are moving counter-clockwise to the end angle
             qreal sweepAngle = radSweepAngle(startAngle, stopAngle, clockwise);
             // compute the starting point to draw the line to
             // as the point x3 y3 is not on the ellipse, spec says the point define radial vector
-            QPointF startPoint(rx * cos(startAngle), ry * sin(2*M_PI - startAngle));
+            QPointF startPoint(rx * cos(startAngle), ry * sin(2 * M_PI - startAngle));
 
             // if A or W is first command in enhanced path
             // move to the starting point
             bool isFirstCommandInPath = (m_parent->subpathCount() == 0);
-            bool isFirstCommandInSubpath = m_parent->isClosedSubpath( m_parent->subpathCount() - 1 );
+            bool isFirstCommandInSubpath = m_parent->isClosedSubpath(m_parent->subpathCount() - 1);
 
             if (lineTo && !isFirstCommandInPath && !isFirstCommandInSubpath) {
                 m_parent->lineTo(center + startPoint);
@@ -160,7 +161,7 @@ bool EnhancedPathCommand::execute()
     }
     // elliptical quadrant (initial segment tangential to x-axis) (x y) +
     case 'X': {
-        KoPathPoint * lastPoint = lastPathPoint();
+        KoPathPoint *lastPoint = lastPathPoint();
         bool xDir = true;
         // There exists a problem on msvc with for(each) and QVector<QPointF>
         for (int i = 0; i < points.count(); ++i) {
@@ -168,7 +169,7 @@ bool EnhancedPathCommand::execute()
             qreal rx = point.x() - lastPoint->point().x();
             qreal ry = point.y() - lastPoint->point().y();
             qreal startAngle = xDir ? (ry > 0.0 ? 90.0 : 270.0) : (rx < 0.0 ? 0.0 : 180.0);
-            qreal sweepAngle = xDir ? (rx*ry < 0.0 ? 90.0 : -90.0) : (rx*ry > 0.0 ? 90.0 : -90.0);
+            qreal sweepAngle = xDir ? (rx * ry < 0.0 ? 90.0 : -90.0) : (rx * ry > 0.0 ? 90.0 : -90.0);
             lastPoint = m_parent->arcTo(fabs(rx), fabs(ry), startAngle, sweepAngle);
             xDir = !xDir;
         }
@@ -176,7 +177,7 @@ bool EnhancedPathCommand::execute()
     }
     // elliptical quadrant (initial segment tangential to y-axis) (x y) +
     case 'Y': {
-        KoPathPoint * lastPoint = lastPathPoint();
+        KoPathPoint *lastPoint = lastPathPoint();
         bool xDir = false;
         // There exists a problem on msvc with for(each) and QVector<QPointF>
         for (int i = 0; i < points.count(); ++i) {
@@ -184,7 +185,7 @@ bool EnhancedPathCommand::execute()
             qreal rx = point.x() - lastPoint->point().x();
             qreal ry = point.y() - lastPoint->point().y();
             qreal startAngle = xDir ? (ry > 0.0 ? 90.0 : 270.0) : (rx < 0.0 ? 0.0 : 180.0);
-            qreal sweepAngle = xDir ? (rx*ry < 0.0 ? 90.0 : -90.0) : (rx*ry > 0.0 ? 90.0 : -90.0);
+            qreal sweepAngle = xDir ? (rx * ry < 0.0 ? 90.0 : -90.0) : (rx * ry > 0.0 ? 90.0 : -90.0);
             lastPoint = m_parent->arcTo(fabs(rx), fabs(ry), startAngle, sweepAngle);
             xDir = !xDir;
         }
@@ -192,8 +193,8 @@ bool EnhancedPathCommand::execute()
     }
     // quadratic bezier curve (x1 y1 x y)+
     case 'Q':
-        for (int i = 0; i < pointsCount; i+=2)
-            m_parent->curveTo(points[i], points[i+1]);
+        for (int i = 0; i < pointsCount; i += 2)
+            m_parent->curveTo(points[i], points[i + 1]);
         break;
     default:
         break;
@@ -210,22 +211,21 @@ QVector<QPointF> EnhancedPathCommand::pointsFromParameters() const
     points.reserve(paramCount);
     for (int i = 0; i < paramCount - 1; i += 2) {
         p.setX(m_parameters[i]->evaluate());
-        p.setY(m_parameters[i+1]->evaluate());
+        p.setY(m_parameters[i + 1]->evaluate());
         points.append(p);
     }
 
     int mod = 1;
-    if (m_command.unicode() == 'C' || m_command.unicode() == 'U'
-            || m_command.unicode() == 'T') {
+    if (m_command.unicode() == 'C' || m_command.unicode() == 'U' || m_command.unicode() == 'T') {
         mod = 3;
-    } else if (m_command.unicode() == 'A' || m_command.unicode() == 'B'
-            || m_command.unicode() == 'W' || m_command.unicode() == 'V') {
+    } else if (m_command.unicode() == 'A' || m_command.unicode() == 'B' || m_command.unicode() == 'W' || m_command.unicode() == 'V') {
         mod = 4;
     } else if (m_command.unicode() == 'Q') {
         mod = 2;
     }
     if ((points.count() % mod) != 0) { // invalid command
-        qWarning() << "Invalid point count for command" << m_command << "ignoring" << "count:" << points.count() << "mod:" << mod;
+        qWarning() << "Invalid point count for command" << m_command << "ignoring"
+                   << "count:" << points.count() << "mod:" << mod;
         return QVector<QPointF>();
     }
 
@@ -242,28 +242,28 @@ qreal EnhancedPathCommand::angleFromPoint(const QPointF &point) const
 {
     qreal angle = atan2(point.y(), point.x());
     if (angle < 0.0)
-        angle += 2*M_PI;
+        angle += 2 * M_PI;
 
-    return 2*M_PI - angle;
+    return 2 * M_PI - angle;
 }
 
 qreal EnhancedPathCommand::radSweepAngle(qreal start, qreal stop, bool clockwise) const
 {
     qreal sweepAngle = stop - start;
     if (fabs(sweepAngle) < 0.1) {
-        return 2*M_PI;
+        return 2 * M_PI;
     }
     if (clockwise) {
         // we are moving clockwise to the end angle
         if (stop > start)
-            sweepAngle = (stop - start) - 2*M_PI;
+            sweepAngle = (stop - start) - 2 * M_PI;
     } else {
         // we are moving counter-clockwise to the stop angle
         if (start > stop)
-            sweepAngle = 2*M_PI - (start-stop);
+            sweepAngle = 2 * M_PI - (start - stop);
     }
 
-   return sweepAngle;
+    return sweepAngle;
 }
 
 qreal EnhancedPathCommand::degSweepAngle(qreal start, qreal stop, bool clockwise) const
@@ -279,33 +279,33 @@ qreal EnhancedPathCommand::degSweepAngle(qreal start, qreal stop, bool clockwise
     } else {
         // we are moving counter-clockwise to the stop angle
         if (start > stop)
-            sweepAngle = 360.0 - (start-stop);
+            sweepAngle = 360.0 - (start - stop);
     }
 
-   return sweepAngle;
+    return sweepAngle;
 }
 
-KoPathPoint * EnhancedPathCommand::lastPathPoint() const
+KoPathPoint *EnhancedPathCommand::lastPathPoint() const
 {
     KoPathPoint *lastPoint = 0;
     int subpathCount = m_parent->subpathCount();
     if (subpathCount) {
-        int subpathPointCount = m_parent->subpathPointCount(subpathCount-1);
-        lastPoint = m_parent->pointByIndex(KoPathPointIndex(subpathCount-1, subpathPointCount-1));
+        int subpathPointCount = m_parent->subpathPointCount(subpathCount - 1);
+        lastPoint = m_parent->pointByIndex(KoPathPointIndex(subpathCount - 1, subpathPointCount - 1));
     }
     return lastPoint;
 }
 
 QRectF EnhancedPathCommand::rectFromPoints(const QPointF &tl, const QPointF &br) const
 {
-    return QRectF(tl, QSizeF(br.x()-tl.x(), br.y()-tl.y())).normalized();
+    return QRectF(tl, QSizeF(br.x() - tl.x(), br.y() - tl.y())).normalized();
 }
 
 QString EnhancedPathCommand::toString() const
 {
     QString cmd = m_command;
 
-    foreach(EnhancedPathParameter *p, m_parameters)
+    foreach (EnhancedPathParameter *p, m_parameters)
         cmd += p->toString() + ' ';
 
     return cmd.trimmed();

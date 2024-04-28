@@ -9,20 +9,19 @@
 #ifndef KOLCMSCOLORSPACE_H_
 #define KOLCMSCOLORSPACE_H_
 
-#include <colorprofiles/LcmsColorProfileContainer.h>
 #include <KoColorSpaceAbstract.h>
+#include <colorprofiles/LcmsColorProfileContainer.h>
 
 class LcmsColorProfileContainer;
 
 class KoLcmsInfo
 {
     struct Private {
-        cmsUInt32Number cmType;  // The colorspace type as defined by littlecms
+        cmsUInt32Number cmType; // The colorspace type as defined by littlecms
         cmsColorSpaceSignature colorSpaceSignature; // The colorspace signature as defined in icm/icc files
     };
 
 public:
-
     KoLcmsInfo(cmsUInt32Number cmType, cmsColorSpaceSignature colorSpaceSignature)
         : d(new Private)
     {
@@ -53,7 +52,7 @@ struct KoLcmsDefaultTransformations {
     cmsHTRANSFORM toRGB;
     cmsHTRANSFORM fromRGB;
     static cmsHPROFILE s_RGBProfile;
-    static QMap< QString, QMap< LcmsColorProfileContainer *, KoLcmsDefaultTransformations * > > s_transformations;
+    static QMap<QString, QMap<LcmsColorProfileContainer *, KoLcmsDefaultTransformations *>> s_transformations;
 };
 
 /**
@@ -64,7 +63,6 @@ template<class _CSTraits>
 class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
 {
     struct KoLcmsColorTransformation : public KoColorTransformation {
-
         KoLcmsColorTransformation(const KoColorSpace *colorSpace)
             : KoColorTransformation()
             , m_colorSpace(colorSpace)
@@ -79,7 +77,6 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
 
         ~KoLcmsColorTransformation() override
         {
-
             if (cmstransform) {
                 cmsDeleteTransform(cmstransform);
             }
@@ -118,8 +115,8 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
                     dst += pixelSize;
                 }
 
-                delete [] alpha;
-                delete [] dstalpha;
+                delete[] alpha;
+                delete[] dstalpha;
             } else {
                 while (numPixels > 0) {
                     qreal alpha = m_colorSpace->opacityF(src);
@@ -142,20 +139,15 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
         mutable quint8 *qcolordata; // A small buffer for conversion from and to qcolor.
         KoLcmsDefaultTransformations *defaultTransformations;
 
-        mutable cmsHPROFILE   lastRGBProfile;  // Last used profile to transform to/from RGB
-        mutable cmsHTRANSFORM lastToRGB;       // Last used transform to transform to RGB
-        mutable cmsHTRANSFORM lastFromRGB;     // Last used transform to transform from RGB
+        mutable cmsHPROFILE lastRGBProfile; // Last used profile to transform to/from RGB
+        mutable cmsHTRANSFORM lastToRGB; // Last used transform to transform to RGB
+        mutable cmsHTRANSFORM lastFromRGB; // Last used transform to transform from RGB
         LcmsColorProfileContainer *profile;
         KoColorProfile *colorProfile;
     };
 
 protected:
-
-    LcmsColorSpace(const QString &id,
-                   const QString &name,
-                   cmsUInt32Number cmType,
-                   cmsColorSpaceSignature colorSpaceSignature,
-                   KoColorProfile *p)
+    LcmsColorSpace(const QString &id, const QString &name, cmsUInt32Number cmType, cmsColorSpaceSignature colorSpaceSignature, KoColorProfile *p)
         : KoColorSpaceAbstract<_CSTraits>(id, name)
         , KoLcmsInfo(cmType, colorSpaceSignature)
         , d(new Private())
@@ -191,29 +183,28 @@ protected:
         if (KoLcmsDefaultTransformations::s_RGBProfile == 0) {
             KoLcmsDefaultTransformations::s_RGBProfile = cmsCreate_sRGBProfile();
         }
-        d->defaultTransformations = KoLcmsDefaultTransformations::s_transformations[this->id()][ d->profile];
+        d->defaultTransformations = KoLcmsDefaultTransformations::s_transformations[this->id()][d->profile];
         if (!d->defaultTransformations) {
             d->defaultTransformations = new KoLcmsDefaultTransformations;
             d->defaultTransformations->fromRGB = cmsCreateTransform(KoLcmsDefaultTransformations::s_RGBProfile,
-                                                 TYPE_BGR_8,
-                                                 d->profile->lcmsProfile(),
-                                                 this->colorSpaceType(),
-                                                 KoColorConversionTransformation::internalRenderingIntent(),
-                                                 KoColorConversionTransformation::internalConversionFlags());
+                                                                    TYPE_BGR_8,
+                                                                    d->profile->lcmsProfile(),
+                                                                    this->colorSpaceType(),
+                                                                    KoColorConversionTransformation::internalRenderingIntent(),
+                                                                    KoColorConversionTransformation::internalConversionFlags());
             Q_ASSERT(d->defaultTransformations->fromRGB);
             d->defaultTransformations->toRGB = cmsCreateTransform(d->profile->lcmsProfile(),
-                                               this->colorSpaceType(),
-                                               KoLcmsDefaultTransformations::s_RGBProfile,
-                                               TYPE_BGR_8,
-                                               KoColorConversionTransformation::internalRenderingIntent(),
-                                               KoColorConversionTransformation::internalConversionFlags());
+                                                                  this->colorSpaceType(),
+                                                                  KoLcmsDefaultTransformations::s_RGBProfile,
+                                                                  TYPE_BGR_8,
+                                                                  KoColorConversionTransformation::internalRenderingIntent(),
+                                                                  KoColorConversionTransformation::internalConversionFlags());
             Q_ASSERT(d->defaultTransformations->toRGB);
-            KoLcmsDefaultTransformations::s_transformations[ this->id()][ d->profile ] = d->defaultTransformations;
+            KoLcmsDefaultTransformations::s_transformations[this->id()][d->profile] = d->defaultTransformations;
         }
     }
 
 public:
-
     bool hasHighDynamicRange() const override
     {
         return false;
@@ -251,7 +242,6 @@ public:
                                                     KoColorConversionTransformation::internalRenderingIntent(),
                                                     KoColorConversionTransformation::internalConversionFlags());
                 d->lastRGBProfile = profile->lcmsProfile();
-
             }
             cmsDoTransform(d->lastFromRGB, d->qcolordata, dst, 1);
         }
@@ -265,16 +255,18 @@ public:
         if (profile == 0) {
             // Default sRGB transform
             Q_ASSERT(d->defaultTransformations && d->defaultTransformations->toRGB);
-            cmsDoTransform(d->defaultTransformations->toRGB, const_cast <quint8 *>(src), d->qcolordata, 1);
+            cmsDoTransform(d->defaultTransformations->toRGB, const_cast<quint8 *>(src), d->qcolordata, 1);
         } else {
             if (d->lastToRGB == 0 || (d->lastToRGB != 0 && d->lastRGBProfile != profile->lcmsProfile())) {
-                d->lastToRGB = cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
-                                                  profile->lcmsProfile(), TYPE_BGR_8,
+                d->lastToRGB = cmsCreateTransform(d->profile->lcmsProfile(),
+                                                  this->colorSpaceType(),
+                                                  profile->lcmsProfile(),
+                                                  TYPE_BGR_8,
                                                   KoColorConversionTransformation::internalRenderingIntent(),
                                                   KoColorConversionTransformation::internalConversionFlags());
                 d->lastRGBProfile = profile->lcmsProfile();
             }
-            cmsDoTransform(d->lastToRGB, const_cast <quint8 *>(src), d->qcolordata, 1);
+            cmsDoTransform(d->lastToRGB, const_cast<quint8 *>(src), d->qcolordata, 1);
         }
         c->setRgb(d->qcolordata[2], d->qcolordata[1], d->qcolordata[0]);
         c->setAlpha(this->opacityU8(src));
@@ -297,9 +289,12 @@ public:
 
         adj->profiles[0] = d->profile->lcmsProfile();
         adj->profiles[2] = d->profile->lcmsProfile();
-        adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(),
-                             KoColorConversionTransformation::adjustmentRenderingIntent(),
-                             KoColorConversionTransformation::adjustmentConversionFlags());
+        adj->cmstransform = cmsCreateMultiprofileTransform(adj->profiles,
+                                                           3,
+                                                           this->colorSpaceType(),
+                                                           this->colorSpaceType(),
+                                                           KoColorConversionTransformation::adjustmentRenderingIntent(),
+                                                           KoColorConversionTransformation::adjustmentConversionFlags());
         adj->csProfile = d->profile->lcmsProfile();
         return adj;
     }
@@ -310,34 +305,37 @@ public:
             return 0;
         }
 
-        cmsToneCurve **transferFunctions = new cmsToneCurve*[ this->colorChannelCount()];
+        cmsToneCurve **transferFunctions = new cmsToneCurve *[this->colorChannelCount()];
 
         for (uint ch = 0; ch < this->colorChannelCount(); ch++) {
-            transferFunctions[ch] = transferValues[ch] ?
-                                    cmsBuildTabulatedToneCurve16(0, 256, transferValues[ch]) :
-                                    cmsBuildGamma(0, 1.0);
+            transferFunctions[ch] = transferValues[ch] ? cmsBuildTabulatedToneCurve16(0, 256, transferValues[ch]) : cmsBuildGamma(0, 1.0);
         }
 
-        cmsToneCurve **alphaTransferFunctions = new cmsToneCurve*[1];
-        alphaTransferFunctions[0] = transferValues[this->colorChannelCount()] ?
-                                    cmsBuildTabulatedToneCurve16(0, 256, transferValues[this->colorChannelCount()]) :
-                                    cmsBuildGamma(0, 1.0);
+        cmsToneCurve **alphaTransferFunctions = new cmsToneCurve *[1];
+        alphaTransferFunctions[0] =
+            transferValues[this->colorChannelCount()] ? cmsBuildTabulatedToneCurve16(0, 256, transferValues[this->colorChannelCount()]) : cmsBuildGamma(0, 1.0);
 
         KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);
         adj->profiles[0] = cmsCreateLinearizationDeviceLink(this->colorSpaceSignature(), transferFunctions);
         adj->profiles[1] = cmsCreateLinearizationDeviceLink(cmsSigGrayData, alphaTransferFunctions);
         adj->profiles[2] = 0;
         adj->csProfile = d->profile->lcmsProfile();
-        adj->cmstransform  = cmsCreateTransform(adj->profiles[0], this->colorSpaceType(), 0, this->colorSpaceType(),
-                                                KoColorConversionTransformation::adjustmentRenderingIntent(),
-                                                KoColorConversionTransformation::adjustmentConversionFlags());
+        adj->cmstransform = cmsCreateTransform(adj->profiles[0],
+                                               this->colorSpaceType(),
+                                               0,
+                                               this->colorSpaceType(),
+                                               KoColorConversionTransformation::adjustmentRenderingIntent(),
+                                               KoColorConversionTransformation::adjustmentConversionFlags());
 
-        adj->cmsAlphaTransform  = cmsCreateTransform(adj->profiles[1], TYPE_GRAY_DBL, 0, TYPE_GRAY_DBL,
-                                  KoColorConversionTransformation::adjustmentRenderingIntent(),
-                                  KoColorConversionTransformation::adjustmentConversionFlags());
+        adj->cmsAlphaTransform = cmsCreateTransform(adj->profiles[1],
+                                                    TYPE_GRAY_DBL,
+                                                    0,
+                                                    TYPE_GRAY_DBL,
+                                                    KoColorConversionTransformation::adjustmentRenderingIntent(),
+                                                    KoColorConversionTransformation::adjustmentConversionFlags());
 
-        delete [] transferFunctions;
-        delete [] alphaTransferFunctions;
+        delete[] transferFunctions;
+        delete[] alphaTransferFunctions;
         return adj;
     }
 
@@ -346,8 +344,7 @@ public:
         quint8 lab1[8], lab2[8];
         cmsCIELab labF1, labF2;
 
-        if (this->opacityU8(src1) == OPACITY_TRANSPARENT_U8
-                || this->opacityU8(src2) == OPACITY_TRANSPARENT_U8) {
+        if (this->opacityU8(src1) == OPACITY_TRANSPARENT_U8 || this->opacityU8(src2) == OPACITY_TRANSPARENT_U8) {
             return (this->opacityU8(src1) == this->opacityU8(src2) ? 0 : 255);
         }
         Q_ASSERT(this->toLabA16Converter());
@@ -371,8 +368,7 @@ public:
         cmsCIELab labF1;
         cmsCIELab labF2;
 
-        if (this->opacityU8(src1) == OPACITY_TRANSPARENT_U8
-                || this->opacityU8(src2) == OPACITY_TRANSPARENT_U8) {
+        if (this->opacityU8(src1) == OPACITY_TRANSPARENT_U8 || this->opacityU8(src2) == OPACITY_TRANSPARENT_U8) {
             return (this->opacityU8(src1) == this->opacityU8(src2) ? 0 : 255);
         }
         Q_ASSERT(this->toLabA16Converter());
@@ -406,7 +402,6 @@ public:
     }
 
 private:
-
     inline LcmsColorProfileContainer *lcmsProfile() const
     {
         return d->profile;

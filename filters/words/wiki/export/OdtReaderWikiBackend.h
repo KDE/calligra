@@ -10,18 +10,16 @@
 #define ODTREADERWIKIBACKEND_H
 
 // Calligra
-#include <KoXmlStreamReader.h>
 #include <KoFilter.h>
+#include <KoXmlStreamReader.h>
 #include <OdfTextReaderBackend.h>
-
 
 class OdfReaderContext;
 class OdfReaderWikiContext;
 
-
 class OdtReaderWikiBackend : public OdfTextReaderBackend
 {
- public:
+public:
     explicit OdtReaderWikiBackend();
     ~OdtReaderWikiBackend() override;
 
@@ -46,6 +44,5 @@ private:
     void outputTextStyle(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext);
     void outputHeadingLevel(OdfReaderWikiContext *wikiContext);
 };
-
 
 #endif // ODTREADERWIKIBACKEND_H

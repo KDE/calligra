@@ -5,8 +5,8 @@
  */
 
 #include "KoToolBoxFactory.h"
-#include "KoToolBox_p.h"
 #include "KoToolBoxDocker_p.h"
+#include "KoToolBox_p.h"
 
 QString KoToolBoxFactory::id() const
 {
@@ -18,7 +18,7 @@ KoDockFactoryBase::DockPosition KoToolBoxFactory::defaultDockPosition() const
     return KoDockFactoryBase::DockLeft;
 }
 
-QDockWidget* KoToolBoxFactory::createDockWidget()
+QDockWidget *KoToolBoxFactory::createDockWidget()
 {
     KoToolBox *box = new KoToolBox();
     KoToolBoxDocker *docker = new KoToolBoxDocker(box);

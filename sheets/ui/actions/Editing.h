@@ -8,19 +8,16 @@
 #ifndef CALLIGRA_SHEETS_ACTION_EDITING
 #define CALLIGRA_SHEETS_ACTION_EDITING
 
-
-
 #include "CellAction.h"
-
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class EditCell : public CellAction {
-Q_OBJECT
+class EditCell : public CellAction
+{
+    Q_OBJECT
 public:
     EditCell(Actions *actions);
     virtual ~EditCell();
@@ -31,8 +28,9 @@ protected:
 };
 
 /** Handles the F4 key in editor */
-class PermuteFixation : public CellAction {
-Q_OBJECT
+class PermuteFixation : public CellAction
+{
+    Q_OBJECT
 public:
     PermuteFixation(Actions *actions);
     virtual ~PermuteFixation();
@@ -42,9 +40,7 @@ protected:
     QAction *createAction() override;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_EDITING
+#endif // CALLIGRA_SHEETS_ACTION_EDITING

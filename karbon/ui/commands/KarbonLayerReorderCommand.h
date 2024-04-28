@@ -12,8 +12,8 @@
 #ifndef KARBONLAYERREORDERCOMMAND_H
 #define KARBONLAYERREORDERCOMMAND_H
 
-#include <kundo2command.h>
 #include <karbonui_export.h>
+#include <kundo2command.h>
 
 class KarbonDocument;
 class KoShapeLayer;
@@ -25,7 +25,7 @@ public:
     /// The different types of layer commands.
     enum ReorderType {
         RaiseLayer, ///< raises layer in z-order
-        LowerLayer  ///< lowers layer in z-order
+        LowerLayer ///< lowers layer in z-order
     };
 
     /**
@@ -35,7 +35,7 @@ public:
      * @param commandType the type of the command to redo
      * @param parent the parent command used for stacking
      */
-    KarbonLayerReorderCommand(KarbonDocument* document, KoShapeLayer* layer, ReorderType commandType, KUndo2Command* parent = 0);
+    KarbonLayerReorderCommand(KarbonDocument *document, KoShapeLayer *layer, ReorderType commandType, KUndo2Command *parent = 0);
 
     /**
      * Layer command which works on a single layer.
@@ -44,7 +44,7 @@ public:
      * @param commandType the type of the command to redo
      * @param parent the parent command used for stacking
      */
-    KarbonLayerReorderCommand(KarbonDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, KUndo2Command* parent = 0);
+    KarbonLayerReorderCommand(KarbonDocument *document, QList<KoShapeLayer *> layers, ReorderType commandType, KUndo2Command *parent = 0);
 
     virtual ~KarbonLayerReorderCommand();
 
@@ -54,10 +54,9 @@ public:
     virtual void undo();
 
 private:
-    KarbonDocument *m_document;         ///< the document to work on
-    QList<KoShapeLayer*> m_layers; ///< the list of layers subject to the command
-    ReorderType m_cmdType;         ///< the type of the command to redo
+    KarbonDocument *m_document; ///< the document to work on
+    QList<KoShapeLayer *> m_layers; ///< the list of layers subject to the command
+    ReorderType m_cmdType; ///< the type of the command to redo
 };
 
 #endif // KARBONLAYERREORDERCOMMAND_H
-

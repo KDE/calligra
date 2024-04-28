@@ -7,9 +7,9 @@
  */
 #include "KoResource.h"
 
+#include <QDebug>
 #include <QDomElement>
 #include <QFileInfo>
-#include <QDebug>
 #include <QImage>
 
 #include "KoHashGenerator.h"
@@ -24,7 +24,7 @@ struct Q_DECL_HIDDEN KoResource::Private {
     QImage image;
 };
 
-KoResource::KoResource(const QString& filename)
+KoResource::KoResource(const QString &filename)
     : d(new Private)
 {
     d->filename = filename;
@@ -64,7 +64,7 @@ void KoResource::setImage(const QImage &image)
 QByteArray KoResource::md5() const
 {
     if (d->md5.isEmpty()) {
-        const_cast<KoResource*>(this)->setMD5(generateMD5());
+        const_cast<KoResource *>(this)->setMD5(generateMD5());
     }
     return d->md5;
 }
@@ -85,11 +85,11 @@ QString KoResource::filename() const
     return d->filename;
 }
 
-void KoResource::setFilename(const QString& filename)
+void KoResource::setFilename(const QString &filename)
 {
     d->filename = filename;
     QFileInfo fileInfo(filename);
-    d->removable = ! fileInfo.exists() || fileInfo.isWritable();
+    d->removable = !fileInfo.exists() || fileInfo.isWritable();
 }
 
 QString KoResource::shortFilename() const
@@ -103,7 +103,7 @@ QString KoResource::name() const
     return d->name;
 }
 
-void KoResource::setName(const QString& name)
+void KoResource::setName(const QString &name)
 {
     d->name = name;
 }
@@ -127,4 +127,3 @@ QString KoResource::defaultFileExtension() const
 {
     return QString();
 }
-

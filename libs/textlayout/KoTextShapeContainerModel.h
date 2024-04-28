@@ -36,7 +36,7 @@ public:
     /// reimplemented from KoShapeContainerModel
     int count() const override;
     /// reimplemented from KoShapeContainerModel
-    QList<KoShape*> shapes() const override;
+    QList<KoShape *> shapes() const override;
     /// reimplemented from KoShapeContainerModel
     void containerChanged(KoShapeContainer *container, KoShape::ChangeType type) override;
     /// reimplemented from KoShapeContainerModel
@@ -60,7 +60,7 @@ private:
     void relayoutInlineObject(KoShape *child);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

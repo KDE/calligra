@@ -6,9 +6,9 @@
 #ifndef KOODFBIBLIOGRAPHYCONFIGURATION_H
 #define KOODFBIBLIOGRAPHYCONFIGURATION_H
 
-#include <QString>
 #include <QMetaType>
 #include <QObject>
+#include <QString>
 
 #include "KoXmlReader.h"
 #include "koodf_export.h"
@@ -30,7 +30,6 @@ class KOODF_EXPORT KoOdfBibliographyConfiguration : public QObject
 {
     Q_OBJECT
 public:
-
     KoOdfBibliographyConfiguration();
     ~KoOdfBibliographyConfiguration() override;
     KoOdfBibliographyConfiguration(const KoOdfBibliographyConfiguration &other);
@@ -47,7 +46,7 @@ public:
     /**
      * save the bibliography-configuration element
      */
-    void saveOdf(KoXmlWriter * writer) const;
+    void saveOdf(KoXmlWriter *writer) const;
 
     /**
      * Sort by position
@@ -93,12 +92,10 @@ public:
     void setSortKeys(const QVector<SortKeyPair> &sortKeys);
 
 private:
-
     class Private;
-    Private * const d;
-
+    Private *const d;
 };
 
-Q_DECLARE_METATYPE(KoOdfBibliographyConfiguration*)
+Q_DECLARE_METATYPE(KoOdfBibliographyConfiguration *)
 
 #endif // KOODFBIBLIOGRAPHYCONFIGURATION_H

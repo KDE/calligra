@@ -7,9 +7,9 @@
 
 #include "autocorrection.h"
 
-#include "import/importkmailautocorrection.h"
 #include "AutoCorrectionDebug.h"
-//#include "settings/pimcommonsettings.h"
+#include "import/importkmailautocorrection.h"
+// #include "settings/pimcommonsettings.h"
 #include <KColorScheme>
 #include <QDir>
 #include <QFile>
@@ -20,7 +20,6 @@
 #include <QTextBlock>
 #include <QTextDocument>
 #include <QXmlStreamWriter>
-
 
 AutoCorrection::AutoCorrection()
 {
@@ -432,7 +431,7 @@ void AutoCorrection::addNonBreakingSpace()
                 }
             }
         } else {
-            //°C (degrees)
+            // °C (degrees)
             const int pos = mCursor.position() - 2 - block.position();
             if (pos >= 0) {
                 const QChar previousChar = text.at(pos);
@@ -816,47 +815,46 @@ int AutoCorrection::replaceEmoji(QTextDocument &document, int position)
     if (!mEnabled) {
         return position;
     }
-    if (!mAdvancedAutocorrect) {
-    }
+    if (!mAdvancedAutocorrect) { }
     if (mAutocorrectEntries.isEmpty()) {
         return position;
     }
     const auto colon = QLatin1Char(':');
     if (document.characterAt(position) != colon) {
-        qInfo()<<Q_FUNC_INFO<<"not colon"<<document.characterAt(position);
+        qInfo() << Q_FUNC_INFO << "not colon" << document.characterAt(position);
         return position;
     }
     mCursor = QTextCursor(&document);
-    mCursor.setPosition(position+1); // include the colon in selection
+    mCursor.setPosition(position + 1); // include the colon in selection
     int prev = -1;
     QTextBlock block = mCursor.block();
     const auto string = block.text();
-    qInfo()<<Q_FUNC_INFO<<"check:"<<string;
-    for (int pos = string.length()-2; pos >= 0; --pos) {
+    qInfo() << Q_FUNC_INFO << "check:" << string;
+    for (int pos = string.length() - 2; pos >= 0; --pos) {
         if (string.at(pos) == colon) {
             prev = block.position() + pos;
             break;
         }
     }
     if (prev < 0) {
-        qInfo()<<Q_FUNC_INFO<<"no emoji";
+        qInfo() << Q_FUNC_INFO << "no emoji";
         return position;
     }
     mCursor.setPosition(prev, QTextCursor::KeepAnchor);
     mWord = mCursor.selectedText();
     if (mWord.length() < 3) {
-        qInfo()<<Q_FUNC_INFO<<prev<<"too short"<<mWord;
+        qInfo() << Q_FUNC_INFO << prev << "too short" << mWord;
         return position;
     }
 
     QString actualWord = mWord;
     int colons = actualWord.count(colon);
     if (colons != 2) {
-        qInfo()<<Q_FUNC_INFO<<"to few colons"<<mWord;
+        qInfo() << Q_FUNC_INFO << "to few colons" << mWord;
         return position;
     }
     auto replacement = mAutocorrectEntries.value(mWord);
-    qCDebug(AUTOCORRECTION_LOG)<<"search for key:"<<mWord<<"replace with:"<<replacement;
+    qCDebug(AUTOCORRECTION_LOG) << "search for key:" << mWord << "replace with:" << replacement;
     if (replacement.isEmpty()) {
         return position;
     }
@@ -1071,7 +1069,8 @@ void AutoCorrection::readAutoCorrectionXmlFile(bool forceGlobal)
     QString localFileName;
     // Look at local file:
     if (!forceGlobal) {
-        localFileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("calligra/autocorrect/") + mAutoCorrectLang + QLatin1String(".xml"));
+        localFileName =
+            QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("calligra/autocorrect/") + mAutoCorrectLang + QLatin1String(".xml"));
         localExists = QFile::exists(localFileName);
         if (localExists) {
             loadLocalFileName(localFileName);
@@ -1086,7 +1085,7 @@ void AutoCorrection::readAutoCorrectionXmlFile(bool forceGlobal)
 
 void AutoCorrection::loadGlobalFileName(const QString &fname, bool forceGlobal)
 {
-    qInfo()<<Q_FUNC_INFO<<mAutoCorrectLang<<fname;
+    qInfo() << Q_FUNC_INFO << mAutoCorrectLang << fname;
     if (fname.isEmpty()) {
         mTypographicSingleQuotes = typographicDefaultSingleQuotes();
         mTypographicDoubleQuotes = typographicDefaultDoubleQuotes();
@@ -1112,7 +1111,7 @@ void AutoCorrection::loadGlobalFileName(const QString &fname, bool forceGlobal)
 
 void AutoCorrection::loadLocalFileName(const QString &localFileName)
 {
-    qInfo()<<Q_FUNC_INFO<<mAutoCorrectLang<<localFileName;
+    qInfo() << Q_FUNC_INFO << mAutoCorrectLang << localFileName;
     ImportKMailAutocorrection import;
     QString messageError;
     if (import.import(localFileName, messageError, ImportAbstractAutocorrection::All)) {
@@ -1134,7 +1133,8 @@ void AutoCorrection::writeAutoCorrectionXmlFile()
         qCDebug(AUTOCORRECTION_LOG) << "language not set";
         return;
     }
-    const QString fname = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/calligra/autocorrect/") + mAutoCorrectLang + QLatin1String(".xml");
+    const QString fname = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/calligra/autocorrect/") + mAutoCorrectLang
+        + QLatin1String(".xml");
     writeAutoCorrectionXmlFile(fname);
 }
 
@@ -1223,7 +1223,7 @@ AutoCorrection::TypographicQuotes AutoCorrection::typographicDoubleQuotes() cons
 
 void AutoCorrection::setLanguage(const QString &lang, bool forceGlobal)
 {
-    qInfo()<<Q_FUNC_INFO<<lang<<forceGlobal;
+    qInfo() << Q_FUNC_INFO << lang << forceGlobal;
     if (mAutoCorrectLang != lang || forceGlobal) {
         mAutoCorrectLang = lang;
         // Re-read xml file
@@ -1234,7 +1234,7 @@ void AutoCorrection::setLanguage(const QString &lang, bool forceGlobal)
 void AutoCorrection::setEnabledAutoCorrection(bool b)
 {
     mEnabled = b;
-    qInfo()<<Q_FUNC_INFO<<mEnabled;
+    qInfo() << Q_FUNC_INFO << mEnabled;
 }
 
 void AutoCorrection::setUppercaseFirstCharOfSentence(bool b)

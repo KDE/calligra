@@ -20,7 +20,7 @@ class PropertyContainer : public QObject
 {
     Q_OBJECT
 public:
-    explicit PropertyContainer(QString name, QObject* parent = 0);
+    explicit PropertyContainer(QString name, QObject *parent = 0);
     ~PropertyContainer() override;
 
     // As QObject already as setProperty and property() functions, we must
@@ -29,6 +29,7 @@ public:
     Q_INVOKABLE QVariant readProperty(QString name);
 
     Q_INVOKABLE QString name();
+
 private:
     QString m_name;
 };

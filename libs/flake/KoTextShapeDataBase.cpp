@@ -8,9 +8,9 @@
 #include "KoTextShapeDataBase_p.h"
 
 KoTextShapeDataBasePrivate::KoTextShapeDataBasePrivate()
-        : document(0)
-        , textAlignment(Qt::AlignLeft | Qt::AlignTop)
-        , resizeMethod(KoTextShapeDataBase::NoResize)
+    : document(0)
+    , textAlignment(Qt::AlignLeft | Qt::AlignTop)
+    , resizeMethod(KoTextShapeDataBase::NoResize)
 {
 }
 
@@ -49,8 +49,7 @@ KoInsets KoTextShapeDataBase::shapeMargins() const
 void KoTextShapeDataBase::setVerticalAlignment(Qt::Alignment alignment)
 {
     Q_D(KoTextShapeDataBase);
-    d->textAlignment = (d->textAlignment & Qt::AlignHorizontal_Mask)
-        | (alignment & Qt::AlignVertical_Mask);
+    d->textAlignment = (d->textAlignment & Qt::AlignHorizontal_Mask) | (alignment & Qt::AlignVertical_Mask);
 }
 
 Qt::Alignment KoTextShapeDataBase::verticalAlignment() const

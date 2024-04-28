@@ -9,20 +9,21 @@
 #include "KoFilterEffect.h"
 #include "MatrixDataModel.h"
 
-#include <QSpinBox>
 #include <KComboBox>
 #include <KLocalizedString>
+#include <QSpinBox>
 
 #include <QGridLayout>
+#include <QHeaderView>
 #include <QLabel>
 #include <QStackedWidget>
 #include <QTableView>
-#include <QHeaderView>
 
 ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
-        : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
+    : KoFilterEffectConfigWidgetBase(parent)
+    , m_effect(0)
 {
-    QGridLayout * g = new QGridLayout(this);
+    QGridLayout *g = new QGridLayout(this);
 
     m_type = new KComboBox(this);
     m_type->addItem(i18n("Apply color matrix"));
@@ -37,7 +38,7 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
 
     m_matrixModel = new MatrixDataModel(this);
 
-    QTableView * matrixWidget = new QTableView(m_stack);
+    QTableView *matrixWidget = new QTableView(m_stack);
     matrixWidget->setModel(m_matrixModel);
     matrixWidget->horizontalHeader()->hide();
     matrixWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -45,8 +46,8 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     matrixWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     m_stack->addWidget(matrixWidget);
 
-    QWidget * saturateWidget = new QWidget(m_stack);
-    QGridLayout * saturateLayout = new QGridLayout(saturateWidget);
+    QWidget *saturateWidget = new QWidget(m_stack);
+    QGridLayout *saturateLayout = new QGridLayout(saturateWidget);
     saturateLayout->addWidget(new QLabel(i18n("Saturate value"), saturateWidget), 0, 0);
     m_saturate = new QDoubleSpinBox(saturateWidget);
     m_saturate->setRange(0.0, 1.0);
@@ -56,8 +57,8 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     saturateWidget->setLayout(saturateLayout);
     m_stack->addWidget(saturateWidget);
 
-    QWidget * hueRotateWidget = new QWidget(m_stack);
-    QGridLayout * hueRotateLayout = new QGridLayout(hueRotateWidget);
+    QWidget *hueRotateWidget = new QWidget(m_stack);
+    QGridLayout *hueRotateLayout = new QGridLayout(hueRotateWidget);
     hueRotateLayout->addWidget(new QLabel(i18n("Angle"), hueRotateWidget), 0, 0);
     m_hueRotate = new QDoubleSpinBox(hueRotateWidget);
     m_hueRotate->setRange(0.0, 360.0);
@@ -67,7 +68,7 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     hueRotateWidget->setLayout(hueRotateLayout);
     m_stack->addWidget(hueRotateWidget);
 
-    QWidget * luminanceWidget = new QWidget(m_stack);
+    QWidget *luminanceWidget = new QWidget(m_stack);
     m_stack->addWidget(luminanceWidget);
 
     setLayout(g);
@@ -79,9 +80,9 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     connect(m_matrixModel, &QAbstractItemModel::dataChanged, this, &ColorMatrixEffectConfigWidget::matrixChanged);
 }
 
-bool ColorMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
+bool ColorMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect *filterEffect)
 {
-    m_effect = dynamic_cast<ColorMatrixEffect*>(filterEffect);
+    m_effect = dynamic_cast<ColorMatrixEffect *>(filterEffect);
     if (!m_effect)
         return false;
 

@@ -8,18 +8,16 @@
 #ifndef CALLIGRA_SHEETS_ACTION_GOTO
 #define CALLIGRA_SHEETS_ACTION_GOTO
 
-
 #include "DialogCellAction.h"
-
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class Goto : public DialogCellAction {
-Q_OBJECT
+class Goto : public DialogCellAction
+{
+    Q_OBJECT
 public:
     Goto(Actions *actions);
     virtual ~Goto();
@@ -31,14 +29,19 @@ protected:
     virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
     QAction *createAction() override;
 
-    virtual bool enabledIfReadOnly() const override { return true; }
-    virtual bool enabledIfProtected() const override { return true; }
+    virtual bool enabledIfReadOnly() const override
+    {
+        return true;
+    }
+    virtual bool enabledIfProtected() const override
+    {
+        return true;
+    }
 
     QWidget *m_canvasWidget;
 };
 
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_GOTO
+#endif // CALLIGRA_SHEETS_ACTION_GOTO

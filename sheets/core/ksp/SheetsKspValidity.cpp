@@ -5,7 +5,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #include "SheetsKsp.h"
 #include "SheetsKspPrivate.h"
 
@@ -15,89 +14,92 @@
 
 #include <KoXmlReader.h>
 
+namespace Calligra
+{
+namespace Sheets
+{
 
-namespace Calligra {
-namespace Sheets {
-
-bool Ksp::loadValidity(Validity *v, ValueParser *parser, const KoXmlElement& validityElement) {
+bool Ksp::loadValidity(Validity *v, ValueParser *parser, const KoXmlElement &validityElement)
+{
     bool ok = false;
     KoXmlElement param = validityElement.namedItem("param").toElement();
     if (!param.isNull()) {
         if (param.hasAttribute("cond")) {
-            v->setCondition((Validity::Type) param.attribute("cond").toInt(&ok));
+            v->setCondition((Validity::Type)param.attribute("cond").toInt(&ok));
             if (!ok)
                 return false;
         }
         if (param.hasAttribute("action")) {
-            v->setAction((Validity::Action) param.attribute("action").toInt(&ok));
+            v->setAction((Validity::Action)param.attribute("action").toInt(&ok));
             if (!ok)
                 return false;
         }
         if (param.hasAttribute("allow")) {
-            v->setRestriction((Validity::Restriction) param.attribute("allow").toInt(&ok));
+            v->setRestriction((Validity::Restriction)param.attribute("allow").toInt(&ok));
             if (!ok)
                 return false;
         }
         if (param.hasAttribute("valmin")) {
-            v->setMinimumValue (parser->tryParseNumber(param.attribute("valmin"), &ok));
+            v->setMinimumValue(parser->tryParseNumber(param.attribute("valmin"), &ok));
             if (!ok)
                 return false;
         }
         if (param.hasAttribute("valmax")) {
-            v->setMaximumValue (parser->tryParseNumber(param.attribute("valmax"), &ok));
+            v->setMaximumValue(parser->tryParseNumber(param.attribute("valmax"), &ok));
             if (!ok)
                 return false;
         }
         if (param.hasAttribute("displaymessage")) {
-            v->setDisplayMessage ((bool)param.attribute("displaymessage").toInt());
+            v->setDisplayMessage((bool)param.attribute("displaymessage").toInt());
         }
         if (param.hasAttribute("displayvalidationinformation")) {
-            v->setDisplayValidationInformation ((bool)param.attribute("displayvalidationinformation").toInt());
+            v->setDisplayValidationInformation((bool)param.attribute("displayvalidationinformation").toInt());
         }
         if (param.hasAttribute("allowemptycell")) {
-            v->setAllowEmptyCell ((bool)param.attribute("allowemptycell").toInt());
+            v->setAllowEmptyCell((bool)param.attribute("allowemptycell").toInt());
         }
         if (param.hasAttribute("listvalidity")) {
-            v->setValidityList (param.attribute("listvalidity").split(';', Qt::SkipEmptyParts));
+            v->setValidityList(param.attribute("listvalidity").split(';', Qt::SkipEmptyParts));
         }
     }
     KoXmlElement inputTitle = validityElement.namedItem("inputtitle").toElement();
     if (!inputTitle.isNull()) {
-        v->setTitleInfo (inputTitle.text());
+        v->setTitleInfo(inputTitle.text());
     }
     KoXmlElement inputMessage = validityElement.namedItem("inputmessage").toElement();
     if (!inputMessage.isNull()) {
-        v->setMessageInfo (inputMessage.text());
+        v->setMessageInfo(inputMessage.text());
     }
 
     KoXmlElement titleElement = validityElement.namedItem("title").toElement();
     if (!titleElement.isNull()) {
-        v->setTitle (titleElement.text());
+        v->setTitle(titleElement.text());
     }
     KoXmlElement messageElement = validityElement.namedItem("message").toElement();
     if (!messageElement.isNull()) {
-        v->setMessage (messageElement.text());
+        v->setMessage(messageElement.text());
     }
     KoXmlElement timeMinElement = validityElement.namedItem("timemin").toElement();
     if (!timeMinElement.isNull()) {
-        v->setMinimumValue (parser->tryParseTime(timeMinElement.text()));
+        v->setMinimumValue(parser->tryParseTime(timeMinElement.text()));
     }
     KoXmlElement timeMaxElement = validityElement.namedItem("timemax").toElement();
     if (!timeMaxElement.isNull()) {
-        v->setMaximumValue (parser->tryParseTime(timeMaxElement.text()));
+        v->setMaximumValue(parser->tryParseTime(timeMaxElement.text()));
     }
     KoXmlElement dateMinElement = validityElement.namedItem("datemin").toElement();
     if (!dateMinElement.isNull()) {
-        v->setMinimumValue (parser->tryParseTime(dateMinElement.text()));
+        v->setMinimumValue(parser->tryParseTime(dateMinElement.text()));
     }
     KoXmlElement dateMaxElement = validityElement.namedItem("datemax").toElement();
     if (!dateMaxElement.isNull()) {
-        v->setMaximumValue (parser->tryParseTime(dateMaxElement.text()));
+        v->setMaximumValue(parser->tryParseTime(dateMaxElement.text()));
     }
     return true;
 }
 
-QDomElement Ksp::saveValidity(QDomDocument& doc, Validity *v, const ValueConverter *converter) {
+QDomElement Ksp::saveValidity(QDomDocument &doc, Validity *v, const ValueConverter *converter)
+{
     QDomElement validityElement = doc.createElement("validity");
 
     QDomElement param = doc.createElement("param");
@@ -126,7 +128,6 @@ QDomElement Ksp::saveValidity(QDomDocument& doc, Validity *v, const ValueConvert
     QDomElement inputMessage = doc.createElement("inputmessage");
     inputMessage.appendChild(doc.createTextNode(v->messageInfo()));
     validityElement.appendChild(inputMessage);
-
 
     Validity::Restriction rr = v->restriction();
     QString tmp;
@@ -164,6 +165,5 @@ QDomElement Ksp::saveValidity(QDomDocument& doc, Validity *v, const ValueConvert
     return validityElement;
 }
 
-
-}  // Sheets
-}  // Calligra
+} // Sheets
+} // Calligra

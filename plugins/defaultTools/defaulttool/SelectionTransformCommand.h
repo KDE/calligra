@@ -7,8 +7,8 @@
 #ifndef SELECTION_TRANSFORM_COMMAND_H
 #define SELECTION_TRANSFORM_COMMAND_H
 
-#include <kundo2command.h>
 #include <QTransform>
+#include <kundo2command.h>
 
 class KoSelection;
 class KoShape;
@@ -16,15 +16,16 @@ class KoShape;
 class SelectionTransformCommand : public KUndo2Command
 {
 public:
-    SelectionTransformCommand( KoSelection * selection, const QTransform &oldTransformation, const QTransform &newTransformation, KUndo2Command * parent = 0 );
+    SelectionTransformCommand(KoSelection *selection, const QTransform &oldTransformation, const QTransform &newTransformation, KUndo2Command *parent = 0);
 
     /// reimplemented from KUndo2Command
     void redo() override;
     /// reimplemented from KUndo2Command
     void undo() override;
+
 private:
-    KoSelection * m_selection;
-    QList<KoShape*> m_selectedShapes;
+    KoSelection *m_selection;
+    QList<KoShape *> m_selectedShapes;
     QTransform m_oldTransformation;
     QTransform m_newTransformation;
 };

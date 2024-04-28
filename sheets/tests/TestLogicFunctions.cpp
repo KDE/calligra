@@ -6,10 +6,10 @@
 
 #include "TestKspreadCommon.h"
 
-#include <engine/MapBase.h>
-#include <engine/SheetBase.h>
 #include <engine/CalculationSettings.h>
 #include <engine/Localization.h>
+#include <engine/MapBase.h>
+#include <engine/SheetBase.h>
 
 using namespace Calligra::Sheets;
 
@@ -33,9 +33,13 @@ void TestLogicFunctions::initTestCase()
 }
 
 // because we may need to promote expected value from integer to float
-#define CHECK_EVAL(x,y) { Value z = (y); QCOMPARE(evaluate(x,z),(z)); }
+#define CHECK_EVAL(x, y)                                                                                                                                       \
+    {                                                                                                                                                          \
+        Value z = (y);                                                                                                                                         \
+        QCOMPARE(evaluate(x, z), (z));                                                                                                                         \
+    }
 
-Value TestLogicFunctions::evaluate(const QString& formula, Value& ex)
+Value TestLogicFunctions::evaluate(const QString &formula, Value &ex)
 {
     Formula f(m_sheet);
     QString expr = formula;
@@ -77,7 +81,7 @@ void TestLogicFunctions::testAND()
     CHECK_EVAL("AND(FALSE())", Value(false));
 
     // literal non-convertible text should give an error
-    //CHECK_EVAL("AND(FALSE();\"a\")", Value::errorVALUE());
+    // CHECK_EVAL("AND(FALSE();\"a\")", Value::errorVALUE());
 }
 
 void TestLogicFunctions::testFALSE()
@@ -159,7 +163,7 @@ void TestLogicFunctions::testOR()
     CHECK_EVAL("OR(FALSE())", Value(false));
 
     // literal non-convertible text should give an error
-    //CHECK_EVAL("OR(TRUE();\"a\")", Value::errorVALUE());
+    // CHECK_EVAL("OR(TRUE();\"a\")", Value::errorVALUE());
 }
 
 void TestLogicFunctions::testTRUE()
@@ -210,7 +214,7 @@ void TestLogicFunctions::testXOR()
     CHECK_EVAL("XOR(FALSE())", Value(false));
 
     // literal non-convertible text should give an error
-    //CHECK_EVAL("XOR(TRUE();\"a\")", Value::errorVALUE());
+    // CHECK_EVAL("XOR(TRUE();\"a\")", Value::errorVALUE());
 }
 
 QTEST_MAIN(TestLogicFunctions)

@@ -8,8 +8,7 @@
 #ifndef EMFBITMAPHEADER_H
 #define EMFBITMAPHEADER_H
 
-
-#include <Qt>                   // For qint, etc.
+#include <Qt> // For qint, etc.
 
 class QDataStream;
 
@@ -17,9 +16,7 @@ class QDataStream;
  * @file
  *
  * definitions for Device Independent Bitmaps, as used in both WMF and EMF files.
-*/
-
-
+ */
 
 /// Namespace for Enhanced Metafile (EMF) classes
 
@@ -34,11 +31,11 @@ namespace Libemf
  *  - BitmapV4Header   [MS-WMF].pdf 2.2.2.4
  *  - BitmapV5Header   [MS-WMF].pdf 2.2.2.5
  */
-class BitmapHeader 
+class BitmapHeader
 {
 public:
     typedef enum {
-        //BitmapCoreHeader,   Not yet supported
+        // BitmapCoreHeader,   Not yet supported
         BitmapInfoHeader,
         BitmapV4Header,
         BitmapV5Header
@@ -52,46 +49,58 @@ public:
      * \param stream the data stream to read from.
      * \param size the size of the header. This decides what type it is.
      */
-    BitmapHeader( QDataStream &stream, int size );
+    BitmapHeader(QDataStream &stream, int size);
     ~BitmapHeader();
 
     /**
        The width of the bitmap, in pixels
     */
-    qint32 width() const { return m_width; };
+    qint32 width() const
+    {
+        return m_width;
+    };
 
     /**
        The height of the bitmap, in pixels
     */
-    qint32 height() const { return m_height; };
+    qint32 height() const
+    {
+        return m_height;
+    };
 
     /**
        The number of bits that make up a pixel
 
        This is an enumerated type - see the BitCount enum
     */
-    quint16 bitCount() const { return m_bitCount; };
+    quint16 bitCount() const
+    {
+        return m_bitCount;
+    };
 
     /**
        The type of compression used in the image
 
        This is an enumerated type
     */
-    quint32 compression() const { return m_compression; };
+    quint32 compression() const
+    {
+        return m_compression;
+    };
 
-//private:
-    Type  m_headerType;         /// Which header type that is represented.
+    // private:
+    Type m_headerType; /// Which header type that is represented.
 
     // Data to be found in a BitmapInfoHeader
     quint32 m_headerSize;
-    qint32  m_width;
-    qint32  m_height;
+    qint32 m_width;
+    qint32 m_height;
     quint16 m_planes;
     quint16 m_bitCount;
     quint32 m_compression;
     quint32 m_imageSize;
-    qint32  m_xPelsPerMeter;
-    qint32  m_yPelsPerMeter;
+    qint32 m_xPelsPerMeter;
+    qint32 m_yPelsPerMeter;
     quint32 m_colorUsed;
     quint32 m_colorImportant;
 
@@ -101,10 +110,10 @@ public:
     quint32 m_blueMask;
     quint32 m_alphaMask;
     quint32 m_colorSpaceType;
-    quint32 m_endpoints[9];     // Actually a CIEXYZTriple
-    qint32  m_gammaRed;
-    qint32  m_gammaGreen;
-    qint32  m_gammaBlue;
+    quint32 m_endpoints[9]; // Actually a CIEXYZTriple
+    qint32 m_gammaRed;
+    qint32 m_gammaGreen;
+    qint32 m_gammaBlue;
 
     // Additional data to be found in a BitmapV5Header
     quint32 m_intent;
@@ -112,8 +121,6 @@ public:
     quint32 m_profileSize;
     quint32 m_reserved;
 };
- 
-
 
 } // namespace Libemf
 

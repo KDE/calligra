@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-only
-*/
+ */
 
 #include "WmfExport.h"
 #include <WmfWriter.h>
@@ -13,16 +13,16 @@
 
 #include <KPluginFactory>
 
-#include <KoFilterChain.h>
-#include <KoShapeStroke.h>
-#include <KoShape.h>
-#include <KoShapeContainer.h>
 #include <KoColorBackground.h>
+#include <KoFilterChain.h>
 #include <KoGradientBackground.h>
-#include <KoPatternBackground.h>
-#include <KoUnit.h>
 #include <KoPAPageBase.h>
 #include <KoPageLayout.h>
+#include <KoPatternBackground.h>
+#include <KoShape.h>
+#include <KoShapeContainer.h>
+#include <KoShapeStroke.h>
+#include <KoUnit.h>
 
 #include <algorithm>
 
@@ -32,13 +32,10 @@
 TODO: bs.wmf stroke in red with MSword and in brown with Words ??
 */
 
-K_PLUGIN_FACTORY_WITH_JSON(WmfExportFactory, "calligra_filter_karbon2wmf.json",
-			   registerPlugin<WmfExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(WmfExportFactory, "calligra_filter_karbon2wmf.json", registerPlugin<WmfExport>();)
 
-
-
-WmfExport::WmfExport(QObject*parent, const QVariantList&) :
-        KoFilter(parent)
+WmfExport::WmfExport(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
 }
 
@@ -46,17 +43,17 @@ WmfExport::~WmfExport()
 {
 }
 
-KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus WmfExport::convert(const QByteArray &from, const QByteArray &to)
 {
     if (to != "image/x-wmf" || from != "application/vnd.oasis.opendocument.graphics")
         return KoFilter::NotImplemented;
 
-    KoDocument * doc = m_chain->inputDocument();
-    if (! doc)
+    KoDocument *doc = m_chain->inputDocument();
+    if (!doc)
         return KoFilter::ParsingError;
 
-    KarbonDocument * karbonPart = dynamic_cast<KarbonDocument*>(doc);
-    if (! karbonPart)
+    KarbonDocument *karbonPart = dynamic_cast<KarbonDocument *>(doc);
+    if (!karbonPart)
         return KoFilter::WrongFormat;
 
     // open Placeable Wmf file
@@ -75,7 +72,7 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
     return KoFilter::OK;
 }
 
-void WmfExport::paintDocument(KarbonDocument* document)
+void WmfExport::paintDocument(KarbonDocument *document)
 {
     KoPAPageBase *page = document->pages().value(0);
     if (!page) {
@@ -97,26 +94,26 @@ void WmfExport::paintDocument(KarbonDocument* document)
         mScaleY = static_cast<double>(height) / pageSize.height();
     }
 
-    QList<KoShape*> shapes = page->shapes();
+    QList<KoShape *> shapes = page->shapes();
     std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     // Export layers.
-    foreach(KoShape * shape, shapes) {
-        if (dynamic_cast<KoShapeContainer*>(shape))
+    foreach (KoShape *shape, shapes) {
+        if (dynamic_cast<KoShapeContainer *>(shape))
             continue;
         paintShape(shape);
     }
 }
 
-void WmfExport::paintShape(KoShape * shape)
+void WmfExport::paintShape(KoShape *shape)
 {
     QList<QPolygonF> subpaths = shape->outline().toFillPolygons(shape->absoluteTransformation(0));
 
-    if (! subpaths.count())
+    if (!subpaths.count())
         return;
 
     QList<QPolygon> polygons;
-    foreach(const QPolygonF & subpath, subpaths) {
+    foreach (const QPolygonF &subpath, subpaths) {
         QPolygon p;
         uint pointCount = subpath.count();
         for (uint i = 0; i < pointCount; ++i)
@@ -126,19 +123,19 @@ void WmfExport::paintShape(KoShape * shape)
     }
     mWmf->setPen(getPen(shape->stroke()));
 
-    if (polygons.count() == 1 && ! shape->background())
+    if (polygons.count() == 1 && !shape->background())
         mWmf->drawPolyline(polygons.first());
     else {
         QBrush fill(Qt::NoBrush);
-        QSharedPointer<KoColorBackground>  cbg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
+        QSharedPointer<KoColorBackground> cbg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
         if (cbg)
             fill = QBrush(cbg->color(), cbg->style());
-        QSharedPointer<KoGradientBackground>  gbg = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
+        QSharedPointer<KoGradientBackground> gbg = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
         if (gbg) {
             fill = QBrush(*gbg->gradient());
             fill.setTransform(gbg->transform());
         }
-        QSharedPointer<KoPatternBackground>  pbg = qSharedPointerDynamicCast<KoPatternBackground>(shape->background());
+        QSharedPointer<KoPatternBackground> pbg = qSharedPointerDynamicCast<KoPatternBackground>(shape->background());
         if (pbg) {
             fill.setTextureImage(pbg->pattern());
             fill.setTransform(pbg->transform());
@@ -151,10 +148,10 @@ void WmfExport::paintShape(KoShape * shape)
     }
 }
 
-QPen WmfExport::getPen(const KoShapeStrokeModel * stroke)
+QPen WmfExport::getPen(const KoShapeStrokeModel *stroke)
 {
-    const KoShapeStroke * lineStroke = dynamic_cast<const KoShapeStroke*>(stroke);
-    if (! lineStroke)
+    const KoShapeStroke *lineStroke = dynamic_cast<const KoShapeStroke *>(stroke);
+    if (!lineStroke)
         return QPen(Qt::NoPen);
 
     QPen pen(lineStroke->lineStyle());
@@ -181,4 +178,3 @@ int WmfExport::coordY(double top)
 }
 
 #include <WmfExport.moc>
-

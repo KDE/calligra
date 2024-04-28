@@ -10,9 +10,9 @@
 #include "Document.h"
 
 #include <QDebug>
-#include <QUrl>
-#include <QSizeF>
 #include <QPoint>
+#include <QSizeF>
+#include <QUrl>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -21,32 +21,37 @@
 #include <KoShapeManager.h>
 #include <KoTextEditor.h>
 
-#include "impl/TextDocumentImpl.h"
-#include "impl/SpreadsheetImpl.h"
 #include "impl/PresentationImpl.h"
+#include "impl/SpreadsheetImpl.h"
+#include "impl/TextDocumentImpl.h"
 
 using namespace Calligra::Components;
 
 class Document::Private
 {
 public:
-    Private(Document* qq) : q{qq}, impl{nullptr}, status{DocumentStatus::Unloaded}, readOnly{false}
-    { }
+    Private(Document *qq)
+        : q{qq}
+        , impl{nullptr}
+        , status{DocumentStatus::Unloaded}
+        , readOnly{false}
+    {
+    }
 
     void updateImpl();
 
-    Document* q;
+    Document *q;
 
     QUrl source;
-    DocumentImpl* impl;
+    DocumentImpl *impl;
     DocumentStatus::Status status;
     bool readOnly;
 };
 
-Document::Document(QObject* parent)
-    : QObject{parent}, d{new Private{this}}
+Document::Document(QObject *parent)
+    : QObject{parent}
+    , d{new Private{this}}
 {
-
 }
 
 Document::~Document()
@@ -59,9 +64,9 @@ QUrl Document::source() const
     return d->source;
 }
 
-void Document::setSource(const QUrl& value)
+void Document::setSource(const QUrl &value)
 {
-    if(value != d->source) {
+    if (value != d->source) {
         d->source = value;
         emit sourceChanged();
 
@@ -71,9 +76,9 @@ void Document::setSource(const QUrl& value)
         d->updateImpl();
         emit documentTypeChanged();
 
-        if(d->impl) {
+        if (d->impl) {
             d->impl->setReadOnly(d->readOnly);
-            if(d->impl->load(d->source)) {
+            if (d->impl->load(d->source)) {
                 d->status = DocumentStatus::Loaded;
                 connect(d->impl->canvasController()->canvas()->shapeManager(), &KoShapeManager::selectionChanged, this, &Document::textEditorChanged);
             } else {
@@ -104,7 +109,7 @@ void Document::setReadOnly(bool readOnly)
 
 DocumentType::Type Document::documentType() const
 {
-    if(d->impl) {
+    if (d->impl) {
         return d->impl->documentType();
     }
 
@@ -118,7 +123,7 @@ DocumentStatus::Status Document::status() const
 
 QSize Document::documentSize() const
 {
-    if(d->impl) {
+    if (d->impl) {
         return d->impl->documentSize();
     }
 
@@ -127,7 +132,7 @@ QSize Document::documentSize() const
 
 int Document::currentIndex() const
 {
-    if(d->impl) {
+    if (d->impl) {
         return d->impl->currentIndex();
     }
 
@@ -136,83 +141,83 @@ int Document::currentIndex() const
 
 void Document::setCurrentIndex(int newValue)
 {
-    if(d->impl) {
+    if (d->impl) {
         d->impl->setCurrentIndex(newValue);
     }
 }
 
 int Document::indexCount() const
 {
-    if(d->impl) {
+    if (d->impl) {
         return d->impl->indexCount();
     }
 
     return 0;
 }
 
-KoFindBase* Document::finder() const
+KoFindBase *Document::finder() const
 {
-    if(d->impl) {
+    if (d->impl) {
         return d->impl->finder();
     }
 
     return nullptr;
 }
 
-QGraphicsWidget* Document::canvas() const
+QGraphicsWidget *Document::canvas() const
 {
-    if(d->impl) {
+    if (d->impl) {
         return d->impl->canvas();
     }
 
     return nullptr;
 }
 
-KoCanvasController* Document::canvasController() const
+KoCanvasController *Document::canvasController() const
 {
-    if(d->impl) {
+    if (d->impl) {
         return d->impl->canvasController();
     }
 
     return nullptr;
 }
 
-KoZoomController* Document::zoomController() const
+KoZoomController *Document::zoomController() const
 {
-    if(d->impl) {
+    if (d->impl) {
         return d->impl->zoomController();
     }
 
     return nullptr;
 }
 
-QObject* Document::part() const
+QObject *Document::part() const
 {
     return d->impl->part();
 }
 
-QObject* Document::document() const
+QObject *Document::document() const
 {
     return koDocument();
 }
 
-KoDocument* Document::koDocument() const
+KoDocument *Document::koDocument() const
 {
-    if(d->impl) {
+    if (d->impl) {
         return d->impl->koDocument();
     }
 
     return nullptr;
 }
 
-QUrl Document::urlAtPoint(const QPoint& point)
+QUrl Document::urlAtPoint(const QPoint &point)
 {
-    if(d->impl)
+    if (d->impl)
         return d->impl->urlAtPoint(point);
     return QUrl();
 }
 
-QObject * Document::textEditor()
+QObject *Document::textEditor()
 {
     if (d->impl && d->impl->canvasController()) {
         return KoTextEditor::getTextEditorFromCanvas(d->impl->canvasController()->canvas());
@@ -222,7 +227,7 @@ QObject * Document::textEditor()
 
 void Document::deselectEverything()
 {
-    KoTextEditor* editor = KoTextEditor::getTextEditorFromCanvas(d->impl->canvasController()->canvas());
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(d->impl->canvasController()->canvas());
     if (editor) {
         editor->clearSelection();
     }
@@ -236,7 +241,7 @@ void Document::Private::updateImpl()
     impl = nullptr;
 
     auto type = Global::documentType(source);
-    switch(type) {
+    switch (type) {
     case DocumentType::TextDocument:
         impl = new TextDocumentImpl{q};
         break;
@@ -250,7 +255,7 @@ void Document::Private::updateImpl()
         break;
     }
 
-    if(impl) {
+    if (impl) {
         connect(impl, &DocumentImpl::documentSizeChanged, q, &Document::documentSizeChanged);
         connect(impl, &DocumentImpl::currentIndexChanged, q, &Document::currentIndexChanged);
         connect(impl, &DocumentImpl::requestViewUpdate, q, &Document::requestViewUpdate);

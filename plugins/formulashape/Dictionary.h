@@ -7,8 +7,8 @@
 #ifndef DICTIONARY_H
 #define DICTIONARY_H
 
-#include <QString>
 #include <QChar>
+#include <QString>
 
 /** Enum encoding all states of  mo's form attribute */
 enum Form {
@@ -28,15 +28,16 @@ enum Form {
  * It also implements a lookup method for entities as MathML allows a number of them.
  * The method mapEntity maps a given "&...;" representation to the corresponding QChar.
  */
-class Dictionary {
+class Dictionary
+{
 public:
     /// Standard constructor sets default values to operator attributes
     Dictionary();
 
     /// @return The mapped entity represented as a QChar
-    QChar mapEntity( const QString& entity );
+    QChar mapEntity(const QString &entity);
 
-    bool queryOperator( const QString& queriedOperator, Form form );
+    bool queryOperator(const QString &queriedOperator, Form form);
 
     /// @return The form value of the currently queried operator
     Form form() const;
@@ -106,4 +107,4 @@ private:
     bool m_accent;
 };
 
-#endif //DICTIONARY_H
+#endif // DICTIONARY_H

@@ -34,14 +34,16 @@ private Q_SLOTS:
 
 private:
     /// reimplemented
-    QString observerName() const override { return QStringLiteral("SnapGuideDocker"); }
+    QString observerName() const override
+    {
+        return QStringLiteral("SnapGuideDocker");
+    }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // SNAPGUIDEDOCKER_H
-

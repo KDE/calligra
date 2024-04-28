@@ -23,11 +23,11 @@ class FormattingPreview : public QFrame
     Q_OBJECT
 
 public:
-    explicit FormattingPreview(QWidget* parent = 0);
+    explicit FormattingPreview(QWidget *parent = 0);
     ~FormattingPreview() override;
 
 public Q_SLOTS:
-    ///Character properties
+    /// Character properties
     void setCharacterStyle(const KoCharacterStyle *style);
     void setParagraphStyle(const KoParagraphStyle *style);
 
@@ -45,4 +45,4 @@ private:
     bool m_previewLayoutRequired;
 };
 
-#endif //FORMATTINGPREVIEW_H
+#endif // FORMATTINGPREVIEW_H

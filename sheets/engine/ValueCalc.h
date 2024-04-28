@@ -12,10 +12,10 @@
 #include "sheets_engine_export.h"
 
 #ifdef max
-# undef max
+#undef max
 #endif
 #ifdef min
-# undef min
+#undef min
 #endif
 
 namespace Calligra
@@ -31,15 +31,14 @@ enum Comp { isEqual, isLess, isGreater, lessEqual, greaterEqual, notEqual, strin
 enum Type { numeric, string };
 
 struct Condition {
-    Comp     comp;
-    int      index;
-    Number   value;
-    QString  stringValue;
-    Type     type;
+    Comp comp;
+    int index;
+    Number value;
+    QString stringValue;
+    Type type;
 };
 
-typedef void (*arrayWalkFunc)(ValueCalc *, Value &result,
-                              Value val, Value param);
+typedef void (*arrayWalkFunc)(ValueCalc *, Value &result, Value val, Value param);
 // A function that can map an array element-wise
 typedef Value (ValueCalc::*arrayMapFunc)(const Value &val, const Value &param);
 
@@ -55,13 +54,14 @@ of more complicated and ranged functions.
 class CALLIGRA_SHEETS_ENGINE_EXPORT ValueCalc
 {
 public:
-    explicit ValueCalc(ValueConverter* c);
+    explicit ValueCalc(ValueConverter *c);
 
-    ValueConverter *conv() {
+    ValueConverter *conv()
+    {
         return converter;
     }
 
-    const CalculationSettings* settings() const;
+    const CalculationSettings *settings() const;
 
     /** basic arithmetic operations */
     Value add(const Value &a, const Value &b);
@@ -114,41 +114,51 @@ public:
     int sign(const Value &a);
 
     // just a quick workaround
-    Value add(Number a, const Value& b) {
+    Value add(Number a, const Value &b)
+    {
         return add(Value(a), b);
     }
-    Value sub(Number a, const Value& b) {
+    Value sub(Number a, const Value &b)
+    {
         return sub(Value(a), b);
     }
-    Value mul(Number a, const Value& b) {
+    Value mul(Number a, const Value &b)
+    {
         return mul(Value(a), b);
     }
-    Value div(Number a, const Value& b) {
+    Value div(Number a, const Value &b)
+    {
         return div(Value(a), b);
     }
-    Value pow(Number a, const Value& b) {
+    Value pow(Number a, const Value &b)
+    {
         return pow(Value(a), b);
     }
 
-    bool equal(const Value &a, Number b)   {
+    bool equal(const Value &a, Number b)
+    {
         return equal(a, Value(b));
     }
-    bool greater(const Value &a, Number b) {
+    bool greater(const Value &a, Number b)
+    {
         return greater(a, Value(b));
     }
-    bool lower(const Value &a, Number b)   {
+    bool lower(const Value &a, Number b)
+    {
         return lower(a, Value(b));
     }
-    bool equal(Number a, const Value &b)   {
+    bool equal(Number a, const Value &b)
+    {
         return equal(Value(a), b);
     }
-    bool greater(Number a, const Value &b) {
+    bool greater(Number a, const Value &b)
+    {
         return greater(Value(a), b);
     }
-    bool lower(Number a, const Value &b)   {
+    bool lower(Number a, const Value &b)
+    {
         return lower(Value(a), b);
     }
-
 
     /** rounding */
     Value roundDown(const Value &a, const Value &digits);
@@ -220,10 +230,8 @@ public:
     Value gaussinv(Value xx);
     Value GetGamma(Value _x);
     Value GetLogGamma(Value _x);
-    Value GetGammaDist(Value _x, Value _alpha,
-                       Value _beta);
-    Value GetBeta(Value _x, Value _alpha,
-                  Value _beta);
+    Value GetGammaDist(Value _x, Value _alpha, Value _beta);
+    Value GetBeta(Value _x, Value _alpha, Value _beta);
 
     /** bessel functions - may also end up being separated from here */
     Value besseli(Value v, Value x);
@@ -236,18 +244,14 @@ public:
     Value erfc(Value x);
 
     /** array/range walking */
-    void arrayWalk(const Value &range, Value &res,
-                   arrayWalkFunc func, Value param);
+    void arrayWalk(const Value &range, Value &res, arrayWalkFunc func, Value param);
     /** Walk the array in function-like style.
     This method is here to avoid duplication in function handlers. */
-    void arrayWalk(QVector<Value> &range, Value &res,
-                   arrayWalkFunc func, Value param);
+    void arrayWalk(QVector<Value> &range, Value &res, arrayWalkFunc func, Value param);
     Value arrayMap(const Value &array, arrayMapFunc func, const Value &param);
     Value twoArrayMap(const Value &array1, arrayMapFunc func, const Value &array2);
-    void twoArrayWalk(const Value &a1, const Value &a2,
-                      Value &res, arrayWalkFunc func);
-    void twoArrayWalk(QVector<Value> &a1,
-                      QVector<Value> &a2, Value &res, arrayWalkFunc func);
+    void twoArrayWalk(const Value &a1, const Value &a2, Value &res, arrayWalkFunc func);
+    void twoArrayWalk(QVector<Value> &a1, QVector<Value> &a2, Value &res, arrayWalkFunc func);
     arrayWalkFunc awFunc(const QString &name);
     void registerAwFunc(const QString &name, arrayWalkFunc func);
 
@@ -256,29 +260,22 @@ public:
     Value sum(const Value &range, bool full = true);
     Value sumsq(const Value &range, bool full = true);
     Value sumIf(const Value &range, const Condition &cond);
-    Value sumIf(const CellBase &sumRangeStart,
-                const Value &checkRange, const Condition &cond);
-    Value sumIfs(const CellBase &sumRangeStart,
-                 QList<Value> c_Range, QList<Condition> cond, const float limit);
+    Value sumIf(const CellBase &sumRangeStart, const Value &checkRange, const Condition &cond);
+    Value sumIfs(const CellBase &sumRangeStart, QList<Value> c_Range, QList<Condition> cond, const float limit);
     Value averageIf(const Value &range, const Condition &cond);
-    Value averageIf(const CellBase &avgRangeStart,
-                const Value &checkRange, const Condition &cond);
-    Value averageIfs(const CellBase &avgRangeStart,
-                 QList<Value> c_Range, QList<Condition> cond, const float limit);
+    Value averageIf(const CellBase &avgRangeStart, const Value &checkRange, const Condition &cond);
+    Value averageIfs(const CellBase &avgRangeStart, QList<Value> c_Range, QList<Condition> cond, const float limit);
     int count(const Value &range, bool full = true);
     int countIf(const Value &range, const Condition &cond);
     Value countIfs(const CellBase &cntRangeStart, QList<Value> c_range, QList<Condition> cond, const float limit);
     Value avg(const Value &range, bool full = true);
     Value max(const Value &range, bool full = true);
     Value min(const Value &range, bool full = true);
-    Value product(const Value &range, Value init,
-                  bool full = true);
+    Value product(const Value &range, Value init, bool full = true);
     Value stddev(const Value &range, bool full = true);
-    Value stddev(const Value &range, Value avg,
-                 bool full = true);
+    Value stddev(const Value &range, Value avg, bool full = true);
     Value stddevP(const Value &range, bool full = true);
-    Value stddevP(const Value &range, Value avg,
-                  bool full = true);
+    Value stddevP(const Value &range, Value avg, bool full = true);
 
     /** range functions using value lists */
     Value sum(QVector<Value> range, bool full = true);
@@ -286,18 +283,15 @@ public:
     Value avg(QVector<Value> range, bool full = true);
     Value max(QVector<Value> range, bool full = true);
     Value min(QVector<Value> range, bool full = true);
-    Value product(QVector<Value> range, Value init,
-                  bool full = true);
+    Value product(QVector<Value> range, Value init, bool full = true);
     Value stddev(QVector<Value> range, bool full = true);
-    Value stddev(QVector<Value> range, Value avg,
-                 bool full = true);
+    Value stddev(QVector<Value> range, Value avg, bool full = true);
     Value stddevP(QVector<Value> range, bool full = true);
-    Value stddevP(QVector<Value> range, Value avg,
-                  bool full = true);
+    Value stddevP(QVector<Value> range, Value avg, bool full = true);
 
     int days360(int day1, int month1, int year1, bool leapYear1, int day2, int month2, int year2, bool leapYear2, bool usaMethod);
-    int days360(const QDate& _date1, const QDate& _date2, bool european);
-    Value yearFrac(const QDate& startDate, const QDate& endDate, int basis);
+    int days360(const QDate &_date1, const QDate &_date2, bool european);
+    Value yearFrac(const QDate &startDate, const QDate &endDate, int basis);
 
     /**
       This method parses the condition in string text to the condition cond.
@@ -315,7 +309,7 @@ public:
     Value::Format format(Value a, Value b);
 
 protected:
-    ValueConverter* converter;
+    ValueConverter *converter;
 
     /** registered array-walk functions */
     std::map<QString, arrayWalkFunc> awFuncs;
@@ -324,6 +318,4 @@ protected:
 } // namespace Sheets
 } // namespace Calligra
 
-
 #endif // CALLIGRA_SHEETS_VALUECALC
-

@@ -13,11 +13,11 @@
 #ifndef XLSXXMLWORKSHEETREADER_H
 #define XLSXXMLWORKSHEETREADER_H
 
-#include <KoBorder.h>   // needed by DrawingMLMethods
+#include <KoBorder.h> // needed by DrawingMLMethods
 
-//#include <MsooXmlThemesReader.h>
-#include <MsooXmlTheme.h>
+// #include <MsooXmlThemesReader.h>
 #include <MsooXmlCommonReader.h>
+#include <MsooXmlTheme.h>
 
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
@@ -39,14 +39,14 @@ public:
     ~XlsxXmlWorksheetReader() override;
 
     //! Reads/parses the XML.
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
 
 protected:
     KoFilter::ConversionStatus readInternal();
     KoFilter::ConversionStatus read_chartsheet();
     KoFilter::ConversionStatus read_worksheet();
     KoFilter::ConversionStatus read_dialogsheet();
-    KoFilter::ConversionStatus read_sheetHelper(const QString& type);
+    KoFilter::ConversionStatus read_sheetHelper(const QString &type);
     KoFilter::ConversionStatus read_sheetFormatPr();
     KoFilter::ConversionStatus read_cols();
     KoFilter::ConversionStatus read_col();
@@ -78,7 +78,7 @@ protected:
     KoFilter::ConversionStatus read_tableParts();
     KoFilter::ConversionStatus read_tablePart();
 
-    XlsxXmlWorksheetReaderContext* m_context;
+    XlsxXmlWorksheetReaderContext *m_context;
 
     KoGenStyle m_tableStyle;
     //! for table:table-column
@@ -99,66 +99,66 @@ protected:
 
 private:
     void init();
-    ///Column width measured as the number of characters of the maximum digit width of the
-    ///numbers 0, 1, 2,..., 9 as rendered in the normal style's font...
-    /// @return column width in cm
+    /// Column width measured as the number of characters of the maximum digit width of the
+    /// numbers 0, 1, 2,..., 9 as rendered in the normal style's font...
+    ///  @return column width in cm
     QString computeColumnWidth(qreal widthNumber) const;
 
     QString processRowStyle(qreal height = -1.0);
 
     void showWarningAboutWorksheetSize();
-    void saveColumnStyle(const QString& widthString);
-    void appendTableColumns(int columns, const QString& width = QString());
+    void saveColumnStyle(const QString &widthString);
+    void appendTableColumns(int columns, const QString &width = QString());
     void appendTableCells(int cells);
     //! Saves annotation element (comments) for cell specified by @a col and @a row it there is any annotation defined.
     void saveAnnotation(int col, int row);
 
-    typedef QPair<int, QMap<QString, QString> > Condition;
+    typedef QPair<int, QMap<QString, QString>> Condition;
     QList<Condition> m_conditionalIndices;
-    QMap<QString, QList<Condition> > m_conditionalStyles;
+    QMap<QString, QList<Condition>> m_conditionalStyles;
 
     QString m_formula;
 
-#include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
+#include <MsooXmlCommonReaderMethods.h>
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 class XlsxXmlWorksheetReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     //! Creates the context object.
-    XlsxXmlWorksheetReaderContext(
-        uint _worksheetNumber,
-        uint _numberOfWorkSheets,
-        const QString& _worksheetName,
-        const QString& _state,
-        const QString _path, const QString _file,
-        MSOOXML::DrawingMLTheme*& _themes,
-        const QVector<QString>& _sharedStrings,
-        const XlsxComments& _comments,
-        const XlsxStyles& _styles,
-        MSOOXML::MsooXmlRelationships& _relationships,
-        XlsxImport* _import,
-        QMap<QString, QString> _oleReplacements,
-        QMap<QString, QString> _oleBeginFrames,
-        QVector<XlsxXmlDocumentReaderContext::AutoFilter>& autoFilters);
+    XlsxXmlWorksheetReaderContext(uint _worksheetNumber,
+                                  uint _numberOfWorkSheets,
+                                  const QString &_worksheetName,
+                                  const QString &_state,
+                                  const QString _path,
+                                  const QString _file,
+                                  MSOOXML::DrawingMLTheme *&_themes,
+                                  const QVector<QString> &_sharedStrings,
+                                  const XlsxComments &_comments,
+                                  const XlsxStyles &_styles,
+                                  MSOOXML::MsooXmlRelationships &_relationships,
+                                  XlsxImport *_import,
+                                  QMap<QString, QString> _oleReplacements,
+                                  QMap<QString, QString> _oleBeginFrames,
+                                  QVector<XlsxXmlDocumentReaderContext::AutoFilter> &autoFilters);
 
     ~XlsxXmlWorksheetReaderContext() override;
 
-    Sheet* sheet;
+    Sheet *sheet;
     const uint worksheetNumber;
     const uint numberOfWorkSheets;
     const QString worksheetName;
     QString state;
-    MSOOXML::DrawingMLTheme* themes;
+    MSOOXML::DrawingMLTheme *themes;
     const QVector<QString> *sharedStrings;
-    const XlsxComments* comments;
-    const XlsxStyles* styles;
+    const XlsxComments *comments;
+    const XlsxStyles *styles;
 
-    XlsxImport* import;
+    XlsxImport *import;
     const QString path;
     const QString file;
 
@@ -166,13 +166,13 @@ public:
     QMap<QString, QString> oleFrameBegins;
 
     XlsxXmlDocumentReaderContext::AutoFilterCondition currentFilterCondition;
-    QVector<XlsxXmlDocumentReaderContext::AutoFilter>& autoFilters;
+    QVector<XlsxXmlDocumentReaderContext::AutoFilter> &autoFilters;
 
     bool firstRoundOfReading;
 
-    QList<QMap<QString, QString> > conditionalStyleForPosition(const QString& positionLetter, int positionNumber);
+    QList<QMap<QString, QString>> conditionalStyleForPosition(const QString &positionLetter, int positionNumber);
 
-    QList<QPair<QString, QMap<QString, QString> > >conditionalStyles;
+    QList<QPair<QString, QMap<QString, QString>>> conditionalStyles;
 };
 
 #endif

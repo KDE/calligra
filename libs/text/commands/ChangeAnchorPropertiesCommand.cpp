@@ -9,14 +9,17 @@
 #include "KoAnchorInlineObject.h"
 #include "KoAnchorTextRange.h"
 
-#include <KoTextEditor.h>
-#include <KoShapeContainer.h>
-#include <KoTextShapeDataBase.h>
-#include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoShapeContainer.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
 #include <KoTextRangeManager.h>
+#include <KoTextShapeDataBase.h>
 
-ChangeAnchorPropertiesCommand::ChangeAnchorPropertiesCommand(KoShapeAnchor *anchor, const KoShapeAnchor &newAnchorData, KoShapeContainer *newParent, KUndo2Command *parent)
+ChangeAnchorPropertiesCommand::ChangeAnchorPropertiesCommand(KoShapeAnchor *anchor,
+                                                             const KoShapeAnchor &newAnchorData,
+                                                             KoShapeContainer *newParent,
+                                                             KUndo2Command *parent)
     : KUndo2Command(kundo2_noi18n("Change Anchor Properties"), parent)
     , m_anchor(anchor)
     , m_oldAnchor(0)
@@ -55,9 +58,9 @@ void ChangeAnchorPropertiesCommand::redo()
 {
     KoTextShapeDataBase *textData = 0;
     if (m_oldParent) {
-        textData = qobject_cast<KoTextShapeDataBase*>(m_oldParent->userData());
-    } else  if (m_newParent) {
-        textData = qobject_cast<KoTextShapeDataBase*>(m_newParent->userData());
+        textData = qobject_cast<KoTextShapeDataBase *>(m_oldParent->userData());
+    } else if (m_newParent) {
+        textData = qobject_cast<KoTextShapeDataBase *>(m_newParent->userData());
     }
 
     KUndo2Command::redo();
@@ -66,7 +69,7 @@ void ChangeAnchorPropertiesCommand::redo()
 
     m_anchor->shape()->update();
     if (m_first) {
-        m_oldAbsPos =  m_anchor->shape()->absolutePosition();
+        m_oldAbsPos = m_anchor->shape()->absolutePosition();
         m_anchor->shape()->setParent(m_newParent);
         // let's just set the old absolute position so it doesn't look like it's moving around
         m_anchor->shape()->setAbsolutePosition(m_oldAbsPos);
@@ -92,7 +95,7 @@ void ChangeAnchorPropertiesCommand::redo()
 
         case KoShapeAnchor::AnchorAsCharacter:
             if (m_first) {
-                //first time we need to remove the character manually
+                // first time we need to remove the character manually
                 QTextCursor cursor(textData->document());
                 cursor.setPosition(m_oldLocation->position());
                 cursor.deleteChar();
@@ -170,14 +173,14 @@ void ChangeAnchorPropertiesCommand::undo()
 {
     KoTextShapeDataBase *textData = 0;
     if (m_oldParent) {
-        textData = qobject_cast<KoTextShapeDataBase*>(m_oldParent->userData());
-    } else  if (m_newParent) {
-        textData = qobject_cast<KoTextShapeDataBase*>(m_newParent->userData());
+        textData = qobject_cast<KoTextShapeDataBase *>(m_oldParent->userData());
+    } else if (m_newParent) {
+        textData = qobject_cast<KoTextShapeDataBase *>(m_newParent->userData());
     }
 
     copyLayoutProperties(&m_oldAnchor, m_anchor);
 
-    m_newAbsPos =  m_anchor->shape()->absolutePosition();
+    m_newAbsPos = m_anchor->shape()->absolutePosition();
 
     m_anchor->shape()->update();
     m_anchor->shape()->setParent(m_oldParent);

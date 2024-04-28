@@ -13,23 +13,25 @@
 #include "ContentsModelImpl.h"
 
 class KoDocument;
-namespace Calligra {
-namespace Components {
+namespace Calligra
+{
+namespace Components
+{
 
 class PresentationContentsModelImpl : public ContentsModelImpl
 {
 public:
-    explicit PresentationContentsModelImpl(KoDocument* document);
+    explicit PresentationContentsModelImpl(KoDocument *document);
     ~PresentationContentsModelImpl() override;
 
     int rowCount() const override;
     QVariant data(int index, ContentsModel::Role role) const override;
-    void setThumbnailSize(const QSize& size) override;
+    void setThumbnailSize(const QSize &size) override;
     QImage thumbnail(int index, int width) const override;
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 }
 }

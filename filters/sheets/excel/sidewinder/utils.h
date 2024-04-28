@@ -11,11 +11,11 @@
 #include "value.h"
 #include <map>
 
+#include <QLoggingCategory>
+#include <QRect>
 #include <QString>
 #include <QUuid>
-#include <QRect>
 #include <QtEndian>
-#include <QLoggingCategory>
 
 //"calligra.filter.sidewinder"
 Q_DECLARE_LOGGING_CATEGORY(lcSidewinder)
@@ -37,30 +37,30 @@ static const uint maximalRowCount = 65536;
 // Returns A for 1, B for 2, C for 3, etc.
 QString columnName(uint column);
 // Returns the escaped sheet-name.
-QString encodeSheetName(const QString& name);
+QString encodeSheetName(const QString &name);
 // Returns an encoded cell-address like e.g. "Sheet1!A1".
-QString encodeAddress(const QString& sheetName, uint column, uint row);
+QString encodeAddress(const QString &sheetName, uint column, uint row);
 // Returns an encoded cell-range like e.g. "Sheet1!A1:B2".
-QString encodeAddress(const QString& sheetName, const QRect &rect);
+QString encodeAddress(const QString &sheetName, const QRect &rect);
 
 class Workbook;
 class XlsRecordOutputStream;
 
 Value errorAsValue(int errorCode);
 
-static inline unsigned long readU16(const void* p)
+static inline unsigned long readU16(const void *p)
 {
-    const unsigned char* ptr = (const unsigned char*) p;
+    const unsigned char *ptr = (const unsigned char *)p;
     return ptr[0] + (ptr[1] << 8);
 }
 
-static inline unsigned readU8(const void* p)
+static inline unsigned readU8(const void *p)
 {
-    const unsigned char* ptr = (const unsigned char*) p;
+    const unsigned char *ptr = (const unsigned char *)p;
     return ptr[0];
 }
 
-static inline long readS16(const void* p)
+static inline long readS16(const void *p)
 {
     long val = readU16(p);
     if (val & 0x8000)
@@ -68,22 +68,22 @@ static inline long readS16(const void* p)
     return val;
 }
 
-static inline long readS8(const void* p)
+static inline long readS8(const void *p)
 {
-    const unsigned char* ptr = (const unsigned char*) p;
+    const unsigned char *ptr = (const unsigned char *)p;
     long val = *ptr;
     if (val & 0x80)
         val = val - 0x100;
     return val;
 }
 
-static inline unsigned long readU32(const void* p)
+static inline unsigned long readU32(const void *p)
 {
-    const unsigned char* ptr = (const unsigned char*) p;
+    const unsigned char *ptr = (const unsigned char *)p;
     return ptr[0] + (ptr[1] << 8) + (ptr[2] << 16) + (ptr[3] << 24);
 }
 
-static inline long readS32(const void* p)
+static inline long readS32(const void *p)
 {
     long val = readU32(p);
     if (val & 0x800000)
@@ -91,25 +91,24 @@ static inline long readS32(const void* p)
     return val;
 }
 
-static inline double readFixed32(const void* p)
+static inline double readFixed32(const void *p)
 {
-    const unsigned char* ptr = (const unsigned char*) p;
+    const unsigned char *ptr = (const unsigned char *)p;
     unsigned a = readU16(ptr);
     unsigned b = readU16(ptr + 2);
     return a + (b / 65536.0);
 }
 
-static inline QUuid readUuid(const void* p)
+static inline QUuid readUuid(const void *p)
 {
-    const unsigned char* ptr = (const unsigned char*) p;
-    return QUuid(readU32(ptr), readU16(ptr+4), readU16(ptr+6),
-        ptr[9], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13], ptr[14], ptr[15]);
+    const unsigned char *ptr = (const unsigned char *)p;
+    return QUuid(readU32(ptr), readU16(ptr + 4), readU16(ptr + 6), ptr[9], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13], ptr[14], ptr[15]);
 }
 
 // FIXME check that double is 64 bits
-static inline double readFloat64(const void*p)
+static inline double readFloat64(const void *p)
 {
-    quint64 val = qFromLittleEndian<quint64>(reinterpret_cast<const uchar*>(p));
+    quint64 val = qFromLittleEndian<quint64>(reinterpret_cast<const uchar *>(p));
     double num = 0.0;
     memcpy(&num, &val, sizeof num);
     return num;
@@ -117,14 +116,13 @@ static inline double readFloat64(const void*p)
 
 // RK value is special encoded integer or floating-point
 // see any documentation of Excel file format for detail description
-static inline void decodeRK(unsigned rkvalue, bool& isInteger,
-                            int& i, double& f)
+static inline void decodeRK(unsigned rkvalue, bool &isInteger, int &i, double &f)
 {
     double factor = (rkvalue & 0x01) ? 0.01 : 1;
     if (rkvalue & 0x02) {
         // FIXME check that int is 32 bits ?
         isInteger = true;
-        i = *((int*) & rkvalue) >> 2;
+        i = *((int *)&rkvalue) >> 2;
         if (rkvalue & 0x01) {
             if (i % 100 == 0) {
                 i /= 100;
@@ -137,30 +135,40 @@ static inline void decodeRK(unsigned rkvalue, bool& isInteger,
         // TODO ensure double takes 8 bytes
         isInteger = false;
         rkvalue = qFromLittleEndian<quint32>(rkvalue);
-        unsigned char* s = (unsigned char*) & rkvalue;
-        unsigned char* r = (unsigned char*) & f;
+        unsigned char *s = (unsigned char *)&rkvalue;
+        unsigned char *r = (unsigned char *)&f;
         r[0] = r[1] = r[2] = r[3] = 0;
         r[4] = s[0] & 0xfc;
-        r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
+        r[5] = s[1];
+        r[6] = s[2];
+        r[7] = s[3];
         f *= factor;
     }
 }
-
 
 /**
  * Supported Excel document version.
  */
 enum { UnknownExcel = 0, Excel95, Excel97, Excel2000 };
 
-QString readByteString(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0);
-QString readTerminatedUnicodeChars(const void* data, unsigned* size = 0, unsigned maxSize = -1, bool* error = 0);
-QString readUnicodeChars(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1, unsigned offset = 0, bool unicode = true, bool asianPhonetics = false, bool richText = false);
-QString readUnicodeString(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1);
-QString readUnicodeCharArray(const void* p, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1);
+QString readByteString(const void *data, unsigned length, unsigned maxSize = -1, bool *error = 0, unsigned *size = 0);
+QString readTerminatedUnicodeChars(const void *data, unsigned *size = 0, unsigned maxSize = -1, bool *error = 0);
+QString readUnicodeChars(const void *data,
+                         unsigned length,
+                         unsigned maxSize = -1,
+                         bool *error = 0,
+                         unsigned *size = 0,
+                         unsigned continuePosition = -1,
+                         unsigned offset = 0,
+                         bool unicode = true,
+                         bool asianPhonetics = false,
+                         bool richText = false);
+QString readUnicodeString(const void *data, unsigned length, unsigned maxSize = -1, bool *error = 0, unsigned *size = 0, unsigned continuePosition = -1);
+QString readUnicodeCharArray(const void *p, unsigned length, unsigned maxSize = -1, bool *error = 0, unsigned *size = 0, unsigned continuePosition = -1);
 
-std::ostream& operator<<(std::ostream& s, const QString& ustring);
-std::ostream& operator<<(std::ostream& s, const QByteArray& data);
-std::ostream& operator<<(std::ostream& s, const QUuid& uuid);
+std::ostream &operator<<(std::ostream &s, const QString &ustring);
+std::ostream &operator<<(std::ostream &s, const QByteArray &data);
+std::ostream &operator<<(std::ostream &s, const QUuid &uuid);
 
 /**
   Class Record represents a base class for all other type record,
@@ -170,21 +178,21 @@ std::ostream& operator<<(std::ostream& s, const QUuid& uuid);
 class Record
 {
 public:
-
     /**
       Static ID of the record. Subclasses should override this value
       with the id of the record they handle.
     */
     static const unsigned int id;
 
-    virtual unsigned int rtti() const {
+    virtual unsigned int rtti() const
+    {
         return this->id;
     }
 
     /**
       Creates a new generic record.
     */
-    explicit Record(Workbook*);
+    explicit Record(Workbook *);
 
     /**
       Destroys the record.
@@ -194,30 +202,34 @@ public:
     /**
      * Record factory, create a new record of specified type.
      */
-    static Record* create(unsigned type, Workbook *book);
+    static Record *create(unsigned type, Workbook *book);
 
-    void setVersion(unsigned v) {
+    void setVersion(unsigned v)
+    {
         ver = v;
     }
 
-    unsigned version() const {
+    unsigned version() const
+    {
         return ver;
     }
 
-    void setRecordSize(unsigned size) {
+    void setRecordSize(unsigned size)
+    {
         m_size = size;
     }
 
-    unsigned recordSize() const {
+    unsigned recordSize() const
+    {
         return m_size;
     }
 
     /**
       Sets the data for this record.
      */
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned int *continuePositions);
 
-    virtual void writeData(XlsRecordOutputStream& out) const;
+    virtual void writeData(XlsRecordOutputStream &out) const;
 
     /**
       Sets the position of the record in the OLE stream. Somehow this is
@@ -233,16 +245,18 @@ public:
     /**
       Returns the name of the record. For debugging only.
      */
-    virtual const char* name() const {
+    virtual const char *name() const
+    {
         return "Unknown";
     }
 
     /**
       Dumps record information to output stream. For debugging only.
      */
-    virtual void dump(std::ostream& out) const;
+    virtual void dump(std::ostream &out) const;
 
     bool isValid() const;
+
 protected:
     void setIsValid(bool isValid);
     // the workbook
@@ -257,23 +271,24 @@ protected:
     unsigned m_size;
 };
 
-typedef Record*(*RecordFactory)(Workbook*);
-typedef Record*(*RecordFactoryWithArgs)(Workbook*, void*);
+typedef Record *(*RecordFactory)(Workbook *);
+typedef Record *(*RecordFactoryWithArgs)(Workbook *, void *);
 
 class RecordRegistry
 {
 public:
     static void registerRecordClass(unsigned id, RecordFactory factory);
-    static void registerRecordClass(unsigned id, RecordFactoryWithArgs factory, void* args);
+    static void registerRecordClass(unsigned id, RecordFactoryWithArgs factory, void *args);
     static void unregisterRecordClass(unsigned id);
-    static Record* createRecord(unsigned id, Workbook *book);
+    static Record *createRecord(unsigned id, Workbook *book);
+
 private:
-    RecordRegistry() {};
-    static RecordRegistry* instance();
+    RecordRegistry(){};
+    static RecordRegistry *instance();
 
     std::map<unsigned, RecordFactory> records;
     std::map<unsigned, RecordFactoryWithArgs> recordsWithArgs;
-    std::map<unsigned, void*> recordArgs;
+    std::map<unsigned, void *> recordArgs;
 };
 
 } // namespace Swinder

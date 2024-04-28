@@ -10,13 +10,15 @@
 #include <QObject>
 #include <QVariantList>
 
-class StencilBoxPlugin : public QObject {
+class StencilBoxPlugin : public QObject
+{
     Q_OBJECT
 
 public:
-    StencilBoxPlugin(QObject * parent, const QVariantList & );
-    ~StencilBoxPlugin() override {}
+    StencilBoxPlugin(QObject *parent, const QVariantList &);
+    ~StencilBoxPlugin() override
+    {
+    }
 };
 
 #endif
-

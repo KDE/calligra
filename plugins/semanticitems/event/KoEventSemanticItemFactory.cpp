@@ -11,13 +11,13 @@
 // lib
 #include "KoRdfCalendarEvent.h"
 // KF5
-#include <kdebug.h>
 #include <KLocalizedString>
+#include <kdebug.h>
 // Qt
 #include <QMimeData>
 
 KoEventSemanticItemFactory::KoEventSemanticItemFactory()
-  : KoRdfSemanticItemFactoryBase("Event")
+    : KoRdfSemanticItemFactoryBase("Event")
 {
 }
 
@@ -48,15 +48,13 @@ void KoEventSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticIt
         "    OPTIONAL {  \n"
         "               ?ev cal:geo ?geo . \n"
         "               ?geo rdf:first ?lat . \n"
-       "               ?geo rdf:rest ?joiner . \n"
-       "               ?joiner rdf:first ?long \n"
-       "              } \n"
-       "    } \n"
-       "  } \n");
+        "               ?geo rdf:rest ?joiner . \n"
+        "               ?joiner rdf:first ?long \n"
+        "              } \n"
+        "    } \n"
+        "  } \n");
 
-    Soprano::QueryResultIterator it =
-        m->executeQuery(sparqlQuery,
-                        Soprano::Query::QueryLanguageSparql);
+    Soprano::QueryResultIterator it = m->executeQuery(sparqlQuery, Soprano::Query::QueryLanguageSparql);
 
     QList<hKoRdfBasicSemanticItem> oldSemanticItems = semanticItems;
     // uniqfilter is needed because soprano is not honouring
@@ -90,7 +88,7 @@ void KoEventSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticIt
     }
 }
 
-hKoRdfBasicSemanticItem KoEventSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+hKoRdfBasicSemanticItem KoEventSemanticItemFactory::createSemanticItem(const KoDocumentRdf *rdf, QObject *parent)
 {
     return hKoRdfBasicSemanticItem(new KoRdfCalendarEvent(parent, rdf));
 }
@@ -100,10 +98,8 @@ bool KoEventSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMimeDa
     return mimeData->hasFormat(QLatin1String("text/calendar"));
 }
 
-hKoRdfBasicSemanticItem KoEventSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData *mimeData,
-                                                                            KoCanvasBase *host,
-                                                                            const KoDocumentRdf *rdf,
-                                                                            QObject *parent) const
+hKoRdfBasicSemanticItem
+KoEventSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *rdf, QObject *parent) const
 {
     const QByteArray ba = mimeData->data(QLatin1String("text/calendar"));
     hKoRdfSemanticItem semanticItem = hKoRdfSemanticItem(new KoRdfCalendarEvent(parent, rdf));

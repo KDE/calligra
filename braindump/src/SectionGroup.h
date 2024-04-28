@@ -27,30 +27,34 @@ class Section;
 class SectionGroup
 {
 public:
-    explicit SectionGroup(SectionGroup* parent);
-    SectionGroup(const SectionGroup& _rhs);
+    explicit SectionGroup(SectionGroup *parent);
+    SectionGroup(const SectionGroup &_rhs);
     virtual ~SectionGroup();
-    void insertSection(Section* page, int index);
-    void insertSection(Section* page, Section* before = 0);
-    void removeSection(Section* page);
-    QList<Section*> sections() const;
-    Section* newSection(Section* before = 0);
-    Section* nextSection(Section* section);
-    int indexOf(Section* section);
+    void insertSection(Section *page, int index);
+    void insertSection(Section *page, Section *before = 0);
+    void removeSection(Section *page);
+    QList<Section *> sections() const;
+    Section *newSection(Section *before = 0);
+    Section *nextSection(Section *section);
+    int indexOf(Section *section);
+
 protected:
-    virtual void sectionAdded(Section* page);
-    virtual void sectionRemoved(Section* page);
+    virtual void sectionAdded(Section *page);
+    virtual void sectionRemoved(Section *page);
+
 public:
     /**
      * @return the parent section (if any) of that document.
      */
-    SectionGroup* sectionParent();
+    SectionGroup *sectionParent();
     static QString nextName();
+
 private:
-    void setSectionParent(SectionGroup* parent);
+    void setSectionParent(SectionGroup *parent);
+
 private:
-    SectionGroup* m_parent;
-    QList<Section*> m_children;
+    SectionGroup *m_parent;
+    QList<Section *> m_children;
     static int s_count;
 };
 

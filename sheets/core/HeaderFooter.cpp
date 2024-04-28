@@ -20,15 +20,14 @@
 #include <QUrl>
 
 #ifndef Q_OS_WIN
-    #include <pwd.h>
+#include <pwd.h>
 #endif
 #include <unistd.h>
-
 
 using namespace Calligra::Sheets;
 
 HeaderFooter::HeaderFooter(Sheet *sheet)
-        : m_pSheet(sheet)
+    : m_pSheet(sheet)
 {
 }
 
@@ -51,16 +50,16 @@ QString HeaderFooter::localizeHeadFootLine(const QString &_text) const
       Please use the same words (even upper/lower case) as in
       KoPageLayoutDia.cc function setupTab2(), without the brackets "<" and ">"
     */
-    replaceHeadFootLineMacro(tmp, "page",   i18n("page"));
-    replaceHeadFootLineMacro(tmp, "pages",  i18n("pages"));
-    replaceHeadFootLineMacro(tmp, "file",   i18n("file"));
-    replaceHeadFootLineMacro(tmp, "name",   i18n("name"));
-    replaceHeadFootLineMacro(tmp, "time",   i18n("time"));
-    replaceHeadFootLineMacro(tmp, "date",   i18n("date"));
+    replaceHeadFootLineMacro(tmp, "page", i18n("page"));
+    replaceHeadFootLineMacro(tmp, "pages", i18n("pages"));
+    replaceHeadFootLineMacro(tmp, "file", i18n("file"));
+    replaceHeadFootLineMacro(tmp, "name", i18n("name"));
+    replaceHeadFootLineMacro(tmp, "time", i18n("time"));
+    replaceHeadFootLineMacro(tmp, "date", i18n("date"));
     replaceHeadFootLineMacro(tmp, "author", i18n("author"));
-    replaceHeadFootLineMacro(tmp, "email",  i18n("email"));
-    replaceHeadFootLineMacro(tmp, "org",    i18n("org"));
-    replaceHeadFootLineMacro(tmp, "sheet",  i18n("sheet"));
+    replaceHeadFootLineMacro(tmp, "email", i18n("email"));
+    replaceHeadFootLineMacro(tmp, "org", i18n("org"));
+    replaceHeadFootLineMacro(tmp, "sheet", i18n("sheet"));
 
     return tmp;
 }
@@ -74,30 +73,35 @@ QString HeaderFooter::delocalizeHeadFootLine(const QString &_text) const
       Please use the same words (even upper/lower case) as in
       KoPageLayoutDia.cc function setupTab2(), without the brackets "<" and ">"
     */
-    replaceHeadFootLineMacro(tmp, i18n("page"),   "page");
-    replaceHeadFootLineMacro(tmp, i18n("pages"),  "pages");
-    replaceHeadFootLineMacro(tmp, i18n("file"),   "file");
-    replaceHeadFootLineMacro(tmp, i18n("name"),   "name");
-    replaceHeadFootLineMacro(tmp, i18n("time"),   "time");
-    replaceHeadFootLineMacro(tmp, i18n("date"),   "date");
+    replaceHeadFootLineMacro(tmp, i18n("page"), "page");
+    replaceHeadFootLineMacro(tmp, i18n("pages"), "pages");
+    replaceHeadFootLineMacro(tmp, i18n("file"), "file");
+    replaceHeadFootLineMacro(tmp, i18n("name"), "name");
+    replaceHeadFootLineMacro(tmp, i18n("time"), "time");
+    replaceHeadFootLineMacro(tmp, i18n("date"), "date");
     replaceHeadFootLineMacro(tmp, i18n("author"), "author");
-    replaceHeadFootLineMacro(tmp, i18n("email"),  "email");
-    replaceHeadFootLineMacro(tmp, i18n("org"),    "org");
-    replaceHeadFootLineMacro(tmp, i18n("sheet"),  "sheet");
+    replaceHeadFootLineMacro(tmp, i18n("email"), "email");
+    replaceHeadFootLineMacro(tmp, i18n("org"), "org");
+    replaceHeadFootLineMacro(tmp, i18n("sheet"), "sheet");
 
     return tmp;
 }
 
-void HeaderFooter::setHeadFootLine(const QString &_headl, const QString &_headm, const QString &_headr,
-                                   const QString &_footl, const QString &_footm, const QString &_footr)
+void HeaderFooter::setHeadFootLine(const QString &_headl,
+                                   const QString &_headm,
+                                   const QString &_headr,
+                                   const QString &_footl,
+                                   const QString &_footm,
+                                   const QString &_footr)
 {
-    m_headLeft  = _headl;
+    m_headLeft = _headl;
     m_headRight = _headr;
-    m_headMid   = _headm;
-    m_footLeft  = _footl;
+    m_headMid = _headm;
+    m_footLeft = _footl;
     m_footRight = _footr;
-    m_footMid   = _footm;
-    if (m_pSheet->doc()) m_pSheet->doc()->setModified(true);
+    m_footMid = _footm;
+    if (m_pSheet->doc())
+        m_pSheet->doc()->setModified(true);
 }
 
 QString HeaderFooter::completeHeading(const QString &_data, int _page, int _pageCount, const QString &_sheet) const
@@ -119,7 +123,7 @@ QString HeaderFooter::completeHeading(const QString &_data, int _page, int _page
     if (!_sheet.isEmpty())
         ta = _sheet;
 
-    KoDocumentInfo* info = m_pSheet->doc()->documentInfo();
+    KoDocumentInfo *info = m_pSheet->doc()->documentInfo();
     QString full_name;
     QString email_addr;
     QString organization;

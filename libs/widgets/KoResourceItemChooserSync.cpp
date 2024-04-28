@@ -11,11 +11,9 @@
 
 Q_GLOBAL_STATIC(KoResourceItemChooserSync, s_instance)
 
-struct Q_DECL_HIDDEN KoResourceItemChooserSync::Private
-{
+struct Q_DECL_HIDDEN KoResourceItemChooserSync::Private {
     int baseLength;
 };
-
 
 KoResourceItemChooserSync::KoResourceItemChooserSync()
     : d(new Private)
@@ -25,7 +23,7 @@ KoResourceItemChooserSync::KoResourceItemChooserSync()
 
 KoResourceItemChooserSync::~KoResourceItemChooserSync() = default;
 
-KoResourceItemChooserSync* KoResourceItemChooserSync::instance()
+KoResourceItemChooserSync *KoResourceItemChooserSync::instance()
 {
     return s_instance;
 }
@@ -40,10 +38,3 @@ void KoResourceItemChooserSync::setBaseLength(int length)
     d->baseLength = qBound(50, length, 150);
     emit baseLenghtChanged(d->baseLength);
 }
-
-
-
-
-
-
-

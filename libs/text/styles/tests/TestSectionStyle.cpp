@@ -7,8 +7,8 @@
 
 #include "styles/KoSectionStyle.h"
 
-#include <QTextFrameFormat>
 #include <QTest>
+#include <QTextFrameFormat>
 
 void TestSectionStyle::testSectionStyle()
 {
@@ -25,7 +25,6 @@ void TestSectionStyle::testSectionStyle()
     QVERIFY(style2);
     QCOMPARE(style2->leftMargin(), 1.0);
     QCOMPARE(style2->rightMargin(), 2.0);
-
 }
 
 QTEST_MAIN(TestSectionStyle)

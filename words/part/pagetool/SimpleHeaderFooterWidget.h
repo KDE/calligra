@@ -14,7 +14,6 @@ class SimpleHeaderFooterWidget : public QWidget
 {
     Q_OBJECT
 public:
-
     explicit SimpleHeaderFooterWidget(KWView *view, QWidget *parent = 0);
     ~SimpleHeaderFooterWidget() override;
 

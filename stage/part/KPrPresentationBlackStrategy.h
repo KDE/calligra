@@ -14,7 +14,7 @@ public:
     explicit KPrPresentationBlackStrategy(KPrPresentationTool *tool);
     ~KPrPresentationBlackStrategy() override;
 
-    bool keyPressEvent( QKeyEvent * event ) override;
+    bool keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif /* KPRPRESENTATIONBLACKSTRATEGY_H */

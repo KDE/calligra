@@ -32,7 +32,7 @@ public:
     /**
      * \return the singleton instance
      */
-    static ToolRegistry* instance();
+    static ToolRegistry *instance();
 
     /**
      * Loads the tools.
@@ -43,7 +43,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

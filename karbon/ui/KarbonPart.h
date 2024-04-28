@@ -14,7 +14,7 @@
  * SPDX-FileCopyrightText: 2006-2007 Thorsten Zachmann <t.zachmann@zagge.de>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ */
 
 #ifndef KARBON_PART_H
 #define KARBON_PART_H
@@ -42,7 +42,7 @@ public:
 
 protected Q_SLOTS:
     /// reimplemented
-    void openTemplate(const QUrl& url) override;
+    void openTemplate(const QUrl &url) override;
 };
 
 #endif

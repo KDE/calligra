@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &DOCXEXPORT_LOG();
 
 #define debugDocx qCDebug(DOCXEXPORT_LOG)

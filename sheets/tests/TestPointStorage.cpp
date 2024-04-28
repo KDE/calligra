@@ -16,66 +16,59 @@ using namespace Calligra::Sheets;
 void PointStorageTest::testInsertion()
 {
     PointStorage<int> storage;
-//     int counter = 1;
-//     for ( int col = 1; col <= 5; ++col )
-//     for ( int row = 1; row <= 5; ++row )
-//     cout << qPrintable( QString( "storage.insert( %1, %2, %3 );" ).arg(col,2).arg(row,2).arg(counter++,2) ) << Qt::endl;    storage.insert(  1,  1, 1 );
-    storage.insert(1,  1,  1);
-    storage.insert(1,  2,  2);
-    storage.insert(1,  3,  3);
-    storage.insert(1,  4,  4);
-    storage.insert(1,  5,  5);
-    storage.insert(2,  1,  6);
-    storage.insert(2,  2,  7);
-    storage.insert(2,  3,  8);
-    storage.insert(2,  4,  9);
-    storage.insert(2,  5, 10);
-    storage.insert(3,  1, 11);
-    storage.insert(3,  2, 12);
-    storage.insert(3,  3, 13);
-    storage.insert(3,  4, 14);
-    storage.insert(3,  5, 15);
-    storage.insert(4,  1, 16);
-    storage.insert(4,  2, 17);
-    storage.insert(4,  3, 18);
-    storage.insert(4,  4, 19);
-    storage.insert(4,  5, 20);
-    storage.insert(5,  1, 21);
-    storage.insert(5,  2, 22);
-    storage.insert(5,  3, 23);
-    storage.insert(5,  4, 24);
-    storage.insert(5,  5, 25);
+    //     int counter = 1;
+    //     for ( int col = 1; col <= 5; ++col )
+    //     for ( int row = 1; row <= 5; ++row )
+    //     cout << qPrintable( QString( "storage.insert( %1, %2, %3 );" ).arg(col,2).arg(row,2).arg(counter++,2) ) << Qt::endl;    storage.insert(  1,  1, 1 );
+    storage.insert(1, 1, 1);
+    storage.insert(1, 2, 2);
+    storage.insert(1, 3, 3);
+    storage.insert(1, 4, 4);
+    storage.insert(1, 5, 5);
+    storage.insert(2, 1, 6);
+    storage.insert(2, 2, 7);
+    storage.insert(2, 3, 8);
+    storage.insert(2, 4, 9);
+    storage.insert(2, 5, 10);
+    storage.insert(3, 1, 11);
+    storage.insert(3, 2, 12);
+    storage.insert(3, 3, 13);
+    storage.insert(3, 4, 14);
+    storage.insert(3, 5, 15);
+    storage.insert(4, 1, 16);
+    storage.insert(4, 2, 17);
+    storage.insert(4, 3, 18);
+    storage.insert(4, 4, 19);
+    storage.insert(4, 5, 20);
+    storage.insert(5, 1, 21);
+    storage.insert(5, 2, 22);
+    storage.insert(5, 3, 23);
+    storage.insert(5, 4, 24);
+    storage.insert(5, 5, 25);
     // overwrite
-    int old = storage.insert(5,  5, 30);
+    int old = storage.insert(5, 5, 30);
     QCOMPARE(old, 25);
     // ( 1, 6,11,16,21)
     // ( 2, 7,12,17,22)
     // ( 3, 8,13,18,23)
     // ( 4, 9,14,19,24)
     // ( 5,10,15,20,25)
-//     qDebug() << endl << qPrintable( storage.dump() );
+    //     qDebug() << endl << qPrintable( storage.dump() );
 
-    QVector<int> data(QVector<int>() << 1 << 6 << 11 << 16 << 21
-                      << 2 << 7 << 12 << 17 << 22
-                      << 3 << 8 << 13 << 18 << 23
-                      << 4 << 9 << 14 << 19 << 24
-                      << 5 << 10 << 15 << 20 << 30);
+    QVector<int> data(QVector<int>() << 1 << 6 << 11 << 16 << 21 << 2 << 7 << 12 << 17 << 22 << 3 << 8 << 13 << 18 << 23 << 4 << 9 << 14 << 19 << 24 << 5 << 10
+                                     << 15 << 20 << 30);
     QVector<int> rows(QVector<int>() << 0 << 5 << 10 << 15 << 20);
-    QVector<int> cols(QVector<int>() << 1 << 2 << 3 << 4 << 5
-                      << 1 << 2 << 3 << 4 << 5
-                      << 1 << 2 << 3 << 4 << 5
-                      << 1 << 2 << 3 << 4 << 5
-                      << 1 << 2 << 3 << 4 << 5);
+    QVector<int> cols(QVector<int>() << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4
+                                     << 5);
     QCOMPARE(storage.m_data, data);
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
-//     qDebug() << "data result: " << storage.m_data;
-//     qDebug() << "data expect: " << data;
-//     qDebug() << "rows result: " << storage.m_rows;
-//     qDebug() << "rows expect: " << rows;
-//     qDebug() << "cols result: " << storage.m_cols;
-//     qDebug() << "cols expect: " << cols;
-
+    //     qDebug() << "data result: " << storage.m_data;
+    //     qDebug() << "data expect: " << data;
+    //     qDebug() << "rows result: " << storage.m_rows;
+    //     qDebug() << "rows expect: " << rows;
+    //     qDebug() << "cols result: " << storage.m_cols;
+    //     qDebug() << "cols expect: " << cols;
 
     // reverse filling
     storage.clear();
@@ -106,42 +99,41 @@ void PointStorageTest::testLookup()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    QCOMPARE(storage.lookup(1, 1),  1);
-    QCOMPARE(storage.lookup(1, 2),  4);
-    QCOMPARE(storage.lookup(1, 3),  0);
-    QCOMPARE(storage.lookup(1, 4),  0);
+    QCOMPARE(storage.lookup(1, 1), 1);
+    QCOMPARE(storage.lookup(1, 2), 4);
+    QCOMPARE(storage.lookup(1, 3), 0);
+    QCOMPARE(storage.lookup(1, 4), 0);
     QCOMPARE(storage.lookup(1, 5), 11);
-    QCOMPARE(storage.lookup(2, 1),  2);
-    QCOMPARE(storage.lookup(2, 2),  5);
-    QCOMPARE(storage.lookup(2, 3),  7);
-    QCOMPARE(storage.lookup(2, 4),  0);
-    QCOMPARE(storage.lookup(2, 5),  0);
-    QCOMPARE(storage.lookup(3, 1),  0);
-    QCOMPARE(storage.lookup(3, 2),  6);
-    QCOMPARE(storage.lookup(3, 3),  8);
-    QCOMPARE(storage.lookup(3, 4),  0);
-    QCOMPARE(storage.lookup(3, 5),  0);
-    QCOMPARE(storage.lookup(4, 1),  0);
-    QCOMPARE(storage.lookup(4, 2),  0);
-    QCOMPARE(storage.lookup(4, 3),  0);
+    QCOMPARE(storage.lookup(2, 1), 2);
+    QCOMPARE(storage.lookup(2, 2), 5);
+    QCOMPARE(storage.lookup(2, 3), 7);
+    QCOMPARE(storage.lookup(2, 4), 0);
+    QCOMPARE(storage.lookup(2, 5), 0);
+    QCOMPARE(storage.lookup(3, 1), 0);
+    QCOMPARE(storage.lookup(3, 2), 6);
+    QCOMPARE(storage.lookup(3, 3), 8);
+    QCOMPARE(storage.lookup(3, 4), 0);
+    QCOMPARE(storage.lookup(3, 5), 0);
+    QCOMPARE(storage.lookup(4, 1), 0);
+    QCOMPARE(storage.lookup(4, 2), 0);
+    QCOMPARE(storage.lookup(4, 3), 0);
     QCOMPARE(storage.lookup(4, 4), 10);
-    QCOMPARE(storage.lookup(4, 5),  0);
-    QCOMPARE(storage.lookup(5, 1),  3);
-    QCOMPARE(storage.lookup(5, 2),  0);
-    QCOMPARE(storage.lookup(5, 3),  9);
-    QCOMPARE(storage.lookup(5, 4),  0);
+    QCOMPARE(storage.lookup(4, 5), 0);
+    QCOMPARE(storage.lookup(5, 1), 3);
+    QCOMPARE(storage.lookup(5, 2), 0);
+    QCOMPARE(storage.lookup(5, 3), 9);
+    QCOMPARE(storage.lookup(5, 4), 0);
     QCOMPARE(storage.lookup(5, 5), 12);
-
 
     // empty row checking
     storage.clear();
     storage.insert(1, 1, 1);
     // ( 1)
 
-    QCOMPARE(storage.lookup(1, 1),  1);
-    QCOMPARE(storage.lookup(2, 1),  0);
-    QCOMPARE(storage.lookup(1, 2),  0);
-    QCOMPARE(storage.lookup(2, 2),  0);
+    QCOMPARE(storage.lookup(1, 1), 1);
+    QCOMPARE(storage.lookup(2, 1), 0);
+    QCOMPARE(storage.lookup(1, 2), 0);
+    QCOMPARE(storage.lookup(2, 2), 0);
 }
 
 void PointStorageTest::testDeletion()
@@ -158,9 +150,9 @@ void PointStorageTest::testDeletion()
     int old = storage.take(4, 4);
     QCOMPARE(old, 10);
     old = storage.take(5, 1);
-    QCOMPARE(old,  3);
+    QCOMPARE(old, 3);
     old = storage.take(2, 2);
-    QCOMPARE(old,  5);
+    QCOMPARE(old, 5);
     // ( 1, 2,  ,  ,  )
     // ( 4,  , 6,  ,  )
     // (  , 7, 8,  , 9)
@@ -174,25 +166,24 @@ void PointStorageTest::testDeletion()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-
     // empty row checking
     storage.clear();
     storage.insert(1, 1, 1);
     // ( 1)
 
     old = storage.take(2, 2);
-    QCOMPARE(old,  0);
+    QCOMPARE(old, 0);
     old = storage.take(1, 2);
-    QCOMPARE(old,  0);
+    QCOMPARE(old, 0);
 
     old = storage.take(2, 1);
-    QCOMPARE(old,  0);
+    QCOMPARE(old, 0);
     old = storage.take(1, 1);
-    QCOMPARE(old,  1);
-    QCOMPARE(storage.lookup(1, 1),  0);
-    QCOMPARE(storage.lookup(2, 1),  0);
-    QCOMPARE(storage.lookup(1, 2),  0);
-    QCOMPARE(storage.lookup(2, 2),  0);
+    QCOMPARE(old, 1);
+    QCOMPARE(storage.lookup(1, 1), 0);
+    QCOMPARE(storage.lookup(2, 1), 0);
+    QCOMPARE(storage.lookup(1, 2), 0);
+    QCOMPARE(storage.lookup(2, 2), 0);
 }
 
 void PointStorageTest::testInsertColumns()
@@ -207,14 +198,16 @@ void PointStorageTest::testInsertColumns()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    QVector< QPair<QPoint, int> > old;
-    storage.resetUndo(); storage.storeUndo(true);
-    storage.insertColumns(2, 2);   // in the middle
+    QVector<QPair<QPoint, int>> old;
+    storage.resetUndo();
+    storage.storeUndo(true);
+    storage.insertColumns(2, 2); // in the middle
     old = storage.undoData();
     QVERIFY(old.count() == 0);
 
-    storage.resetUndo(); storage.storeUndo(true);
-    storage.insertColumns(9, 1);   // beyond the current end
+    storage.resetUndo();
+    storage.storeUndo(true);
+    storage.insertColumns(9, 1); // beyond the current end
     old = storage.undoData();
     QVERIFY(old.count() == 0);
     // ( 1,  ,  , 2,  ,  , 3)
@@ -230,12 +223,13 @@ void PointStorageTest::testInsertColumns()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-    storage.resetUndo(); storage.storeUndo(true);
-    storage.insertColumns(6, 4);   // shift the last column out of range
+    storage.resetUndo();
+    storage.storeUndo(true);
+    storage.insertColumns(6, 4); // shift the last column out of range
     old = storage.undoData();
     QVERIFY(old.count() == 3);
-    QVERIFY(old.contains(qMakePair(QPoint(7, 1),  3)));
-    QVERIFY(old.contains(qMakePair(QPoint(7, 3),  9)));
+    QVERIFY(old.contains(qMakePair(QPoint(7, 1), 3)));
+    QVERIFY(old.contains(qMakePair(QPoint(7, 3), 9)));
     QVERIFY(old.contains(qMakePair(QPoint(7, 5), 12)));
     // ( 1,  ,  , 2,  ,  ,  ,  ,  ,  )
     // ( 4,  ,  , 5, 6,  ,  ,  ,  ,  )
@@ -250,13 +244,13 @@ void PointStorageTest::testInsertColumns()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-
     // empty row checking
     storage.clear();
     storage.insert(1, 1, 1);
     // ( 1)
 
-    storage.resetUndo(); storage.storeUndo(true);
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.insertColumns(1, 1);
     old = storage.undoData();
     QVERIFY(old.count() == 0);
@@ -282,23 +276,25 @@ void PointStorageTest::testDeleteColumns()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    QVector< QPair<QPoint, int> > old;
-    storage.resetUndo(); storage.storeUndo(true);
-    storage.removeColumns(2, 2);   // in the middle
+    QVector<QPair<QPoint, int>> old;
+    storage.resetUndo();
+    storage.storeUndo(true);
+    storage.removeColumns(2, 2); // in the middle
     old = storage.undoData();
     QVERIFY(old.count() == 5);
-    QVERIFY(old.contains(qMakePair(QPoint(2, 1),  2)));
-    QVERIFY(old.contains(qMakePair(QPoint(2, 2),  5)));
-    QVERIFY(old.contains(qMakePair(QPoint(3, 2),  6)));
-    QVERIFY(old.contains(qMakePair(QPoint(2, 3),  7)));
-    QVERIFY(old.contains(qMakePair(QPoint(3, 3),  8)));
+    QVERIFY(old.contains(qMakePair(QPoint(2, 1), 2)));
+    QVERIFY(old.contains(qMakePair(QPoint(2, 2), 5)));
+    QVERIFY(old.contains(qMakePair(QPoint(3, 2), 6)));
+    QVERIFY(old.contains(qMakePair(QPoint(2, 3), 7)));
+    QVERIFY(old.contains(qMakePair(QPoint(3, 3), 8)));
 
-    storage.resetUndo(); storage.storeUndo(true);
-    storage.removeColumns(3, 1);   // beyond the current end
+    storage.resetUndo();
+    storage.storeUndo(true);
+    storage.removeColumns(3, 1); // beyond the current end
     old = storage.undoData();
     QVERIFY(old.count() == 3);
-    QVERIFY(old.contains(qMakePair(QPoint(3, 1),  3)));
-    QVERIFY(old.contains(qMakePair(QPoint(3, 3),  9)));
+    QVERIFY(old.contains(qMakePair(QPoint(3, 1), 3)));
+    QVERIFY(old.contains(qMakePair(QPoint(3, 3), 9)));
     QVERIFY(old.contains(qMakePair(QPoint(3, 5), 12)));
 
     // ( 1,  )
@@ -327,14 +323,16 @@ void PointStorageTest::testInsertRows()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    QVector< QPair<QPoint, int> > old;
-    storage.resetUndo(); storage.storeUndo(true);
-    storage.insertRows(2, 2);   // in the middle
+    QVector<QPair<QPoint, int>> old;
+    storage.resetUndo();
+    storage.storeUndo(true);
+    storage.insertRows(2, 2); // in the middle
     old = storage.undoData();
     QVERIFY(old.count() == 0);
 
-    storage.resetUndo(); storage.storeUndo(true);
-    storage.insertRows(9, 1);   // beyond the current end
+    storage.resetUndo();
+    storage.storeUndo(true);
+    storage.insertRows(9, 1); // beyond the current end
     old = storage.undoData();
     QVERIFY(old.count() == 0);
 
@@ -353,9 +351,9 @@ void PointStorageTest::testInsertRows()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-
-    storage.resetUndo(); storage.storeUndo(true);
-    storage.insertRows(6, 4);   // shift the last row out of range
+    storage.resetUndo();
+    storage.storeUndo(true);
+    storage.insertRows(6, 4); // shift the last row out of range
     old = storage.undoData();
     QVERIFY(old.count() == 2);
     QVERIFY(old.contains(qMakePair(QPoint(1, 7), 11)));
@@ -378,13 +376,13 @@ void PointStorageTest::testInsertRows()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-
     // first row checking
     storage.clear();
     storage.insert(1, 1, 1);
     // ( 1)
 
-    storage.resetUndo(); storage.storeUndo(true);
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.insertRows(1, 1);
     old = storage.undoData();
     QVERIFY(old.count() == 0);
@@ -411,20 +409,22 @@ void PointStorageTest::testDeleteRows()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    QVector< QPair<QPoint, int> > old;
-    storage.resetUndo(); storage.storeUndo(true);
-    storage.removeRows(2, 2);   // in the middle
+    QVector<QPair<QPoint, int>> old;
+    storage.resetUndo();
+    storage.storeUndo(true);
+    storage.removeRows(2, 2); // in the middle
     old = storage.undoData();
     QVERIFY(old.count() == 6);
-    QVERIFY(old.contains(qMakePair(QPoint(1, 2),  4)));
-    QVERIFY(old.contains(qMakePair(QPoint(2, 2),  5)));
-    QVERIFY(old.contains(qMakePair(QPoint(3, 2),  6)));
-    QVERIFY(old.contains(qMakePair(QPoint(2, 3),  7)));
-    QVERIFY(old.contains(qMakePair(QPoint(3, 3),  8)));
-    QVERIFY(old.contains(qMakePair(QPoint(5, 3),  9)));
+    QVERIFY(old.contains(qMakePair(QPoint(1, 2), 4)));
+    QVERIFY(old.contains(qMakePair(QPoint(2, 2), 5)));
+    QVERIFY(old.contains(qMakePair(QPoint(3, 2), 6)));
+    QVERIFY(old.contains(qMakePair(QPoint(2, 3), 7)));
+    QVERIFY(old.contains(qMakePair(QPoint(3, 3), 8)));
+    QVERIFY(old.contains(qMakePair(QPoint(5, 3), 9)));
 
-    storage.resetUndo(); storage.storeUndo(true);
-    storage.removeRows(3, 1);   // at the current end
+    storage.resetUndo();
+    storage.storeUndo(true);
+    storage.removeRows(3, 1); // at the current end
     old = storage.undoData();
     QVERIFY(old.count() == 2);
     QVERIFY(old.contains(qMakePair(QPoint(1, 3), 11)));
@@ -452,17 +452,19 @@ void PointStorageTest::testShiftLeft()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    QVector< QPair<QPoint, int> > old;
-    storage.resetUndo(); storage.storeUndo(true);
+    QVector<QPair<QPoint, int>> old;
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.removeShiftLeft(QRect(2, 2, 2, 2));
     old = storage.undoData();
     QVERIFY(old.count() == 4);
-    QVERIFY(old.contains(qMakePair(QPoint(2, 2),  5)));
-    QVERIFY(old.contains(qMakePair(QPoint(3, 2),  6)));
-    QVERIFY(old.contains(qMakePair(QPoint(2, 3),  7)));
-    QVERIFY(old.contains(qMakePair(QPoint(3, 3),  8)));
+    QVERIFY(old.contains(qMakePair(QPoint(2, 2), 5)));
+    QVERIFY(old.contains(qMakePair(QPoint(3, 2), 6)));
+    QVERIFY(old.contains(qMakePair(QPoint(2, 3), 7)));
+    QVERIFY(old.contains(qMakePair(QPoint(3, 3), 8)));
 
-    storage.resetUndo(); storage.storeUndo(true);
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.removeShiftLeft(QRect(5, 5, 1, 1));
     old = storage.undoData();
     QVERIFY(old.count() == 1);
@@ -493,13 +495,15 @@ void PointStorageTest::testShiftRight()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    QVector< QPair<QPoint, int> > old;
-    storage.resetUndo(); storage.storeUndo(true);
+    QVector<QPair<QPoint, int>> old;
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.insertShiftRight(QRect(2, 2, 2, 2));
     old = storage.undoData();
     QVERIFY(old.count() == 0);
 
-    storage.resetUndo(); storage.storeUndo(true);
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.insertShiftRight(QRect(5, 5, 1, 1));
     old = storage.undoData();
     QVERIFY(old.count() == 0);
@@ -516,12 +520,12 @@ void PointStorageTest::testShiftRight()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-
-    storage.resetUndo(); storage.storeUndo(true);
-    storage.insertShiftRight(QRect(4, 2, 6, 1));     // shift the 6 out of range
+    storage.resetUndo();
+    storage.storeUndo(true);
+    storage.insertShiftRight(QRect(4, 2, 6, 1)); // shift the 6 out of range
     old = storage.undoData();
     QVERIFY(old.count() == 1);
-    QVERIFY(old.contains(qMakePair(QPoint(5, 2),  6)));
+    QVERIFY(old.contains(qMakePair(QPoint(5, 2), 6)));
     // ( 1, 2,  ,  , 3,  ,  ,  ,  ,  )
     // ( 4,  ,  ,  ,  ,  ,  ,  ,  , 5)
     // (  ,  ,  , 7, 8,  , 9,  ,  ,  )
@@ -549,21 +553,23 @@ void PointStorageTest::testShiftUp()
     // (11,  ,  ,  ,12)
 
     QRect rect;
-    QVector< QPair<QPoint, int> > old;
+    QVector<QPair<QPoint, int>> old;
     rect = QRect(2, 2, 2, 1);
-    storage.resetUndo(); storage.storeUndo(true);
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.removeShiftUp(rect);
     old = storage.undoData();
-//     qDebug() << "moved two filled cells up onto filled cells:"<<rect<< endl << qPrintable( storage.dump() );
+    //     qDebug() << "moved two filled cells up onto filled cells:"<<rect<< endl << qPrintable( storage.dump() );
     QVERIFY(old.count() == 2);
-    QVERIFY(old.contains(qMakePair(QPoint(2, 2),  5)));
-    QVERIFY(old.contains(qMakePair(QPoint(3, 2),  6)));
+    QVERIFY(old.contains(qMakePair(QPoint(2, 2), 5)));
+    QVERIFY(old.contains(qMakePair(QPoint(3, 2), 6)));
 
     rect = QRect(5, 5, 1, 1);
-    storage.resetUndo(); storage.storeUndo(true);
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.removeShiftUp(rect); // shift data from 6,5 -> 5,5
     old = storage.undoData();
-//     qDebug() << "moved 1 cell from non-existent row onto filled cell:"<<rect << endl << qPrintable( storage.dump() );
+    //     qDebug() << "moved 1 cell from non-existent row onto filled cell:"<<rect << endl << qPrintable( storage.dump() );
     QVERIFY(old.count() == 1);
     QVERIFY(old.contains(qMakePair(QPoint(5, 5), 12)));
     // ( 1, 2,  ,  , 3)
@@ -580,12 +586,12 @@ void PointStorageTest::testShiftUp()
     QCOMPARE(storage.m_cols, cols);
 
     rect = QRect(1, 4, 1, 1);
-    storage.resetUndo(); storage.storeUndo(true);
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.removeShiftUp(rect);
     old = storage.undoData();
-//     qDebug() << "moved 1 filled cell onto unfilled cell:"<<rect << endl << qPrintable( storage.dump() );
+    //     qDebug() << "moved 1 filled cell onto unfilled cell:"<<rect << endl << qPrintable( storage.dump() );
     QCOMPARE(old.count(), 0);
-
 
     // first row
     storage.clear();
@@ -595,17 +601,18 @@ void PointStorageTest::testShiftUp()
     // ( 1,  )
     // ( 2, 3)
     // (  , 4)
-//     qDebug() << "start:" << endl << qPrintable( storage.dump() );
+    //     qDebug() << "start:" << endl << qPrintable( storage.dump() );
 
-    storage.resetUndo(); storage.storeUndo(true);
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.removeShiftUp(QRect(1, 1, 2, 2));
     old = storage.undoData();
-//     qDebug() << "moved 1 filled, 1 unfilled two rows up onto 1 row:"<<QRect(1, 1, 2, 2) << endl << qPrintable( storage.dump() );
+    //     qDebug() << "moved 1 filled, 1 unfilled two rows up onto 1 row:"<<QRect(1, 1, 2, 2) << endl << qPrintable( storage.dump() );
     qDebug() << old;
     QVERIFY(old.count() == 3);
-    QVERIFY(old.contains(qMakePair(QPoint(1, 1),  1)));
-    QVERIFY(old.contains(qMakePair(QPoint(1, 2),  2)));
-    QVERIFY(old.contains(qMakePair(QPoint(2, 2),  3)));
+    QVERIFY(old.contains(qMakePair(QPoint(1, 1), 1)));
+    QVERIFY(old.contains(qMakePair(QPoint(1, 2), 2)));
+    QVERIFY(old.contains(qMakePair(QPoint(2, 2), 3)));
     // (  , 4)
     QCOMPARE(storage.rows(), 1);
     QCOMPARE(storage.columns(), 2);
@@ -630,13 +637,15 @@ void PointStorageTest::testShiftDown()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    QVector< QPair<QPoint, int> > old;
-    storage.resetUndo(); storage.storeUndo(true);
+    QVector<QPair<QPoint, int>> old;
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.insertShiftDown(QRect(2, 2, 2, 2));
     old = storage.undoData();
     QVERIFY(old.count() == 0);
 
-    storage.resetUndo(); storage.storeUndo(true);
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.insertShiftDown(QRect(5, 5, 1, 1));
     old = storage.undoData();
     QVERIFY(old.count() == 0);
@@ -654,12 +663,12 @@ void PointStorageTest::testShiftDown()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-
-    storage.resetUndo(); storage.storeUndo(true);
-    storage.insertShiftDown(QRect(2, 4, 1, 6));     // shift the 7 out of range
+    storage.resetUndo();
+    storage.storeUndo(true);
+    storage.insertShiftDown(QRect(2, 4, 1, 6)); // shift the 7 out of range
     old = storage.undoData();
     QVERIFY(old.count() == 1);
-    QVERIFY(old.contains(qMakePair(QPoint(2, 5),  7)));
+    QVERIFY(old.contains(qMakePair(QPoint(2, 5), 7)));
     // ( 1, 2,  ,  , 3)
     // ( 4,  ,  ,  ,  )
     // (  ,  ,  ,  , 9)
@@ -679,7 +688,6 @@ void PointStorageTest::testShiftDown()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-
     // first row
     storage.clear();
     storage.m_data << 1 << 2 << 3 << 4;
@@ -689,7 +697,8 @@ void PointStorageTest::testShiftDown()
     // ( 2, 3)
     // (  , 4)
 
-    storage.resetUndo(); storage.storeUndo(true);
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.insertShiftDown(QRect(1, 1, 2, 2));
     old = storage.undoData();
     QVERIFY(old.count() == 0);
@@ -715,7 +724,7 @@ void PointStorageTest::testShiftDownUp()
             storage.m_data << (row * col);
             storage.m_cols << col;
         }
-        storage.m_rows << (5 *(row - 1));
+        storage.m_rows << (5 * (row - 1));
     }
     // qDebug() << "Origin:" << endl << qPrintable(storage.dump());
     // ( 1, 2, 3, 4, 5)
@@ -724,15 +733,18 @@ void PointStorageTest::testShiftDownUp()
     // ( 4, 8,12,16,20)
     // ( 5,10,15,20,25)
 
-    QVector<int> data(QVector<int>() << 1 << 2 << 3 << 4 << 5 << 2 << 4 << 6 << 8 << 10 << 3 << 6 << 9 << 12 << 15 << 4 << 8 << 12 << 16 << 20 << 5 << 10 << 15 << 20 << 25);
+    QVector<int> data(QVector<int>() << 1 << 2 << 3 << 4 << 5 << 2 << 4 << 6 << 8 << 10 << 3 << 6 << 9 << 12 << 15 << 4 << 8 << 12 << 16 << 20 << 5 << 10 << 15
+                                     << 20 << 25);
     QVector<int> rows(QVector<int>() << 0 << 5 << 10 << 15 << 20);
-    QVector<int> cols(QVector<int>() << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5);
+    QVector<int> cols(QVector<int>() << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4
+                                     << 5);
     QCOMPARE(storage.m_data, data);
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-    QVector< QPair<QPoint, int> > old;
-    storage.resetUndo(); storage.storeUndo(true);
+    QVector<QPair<QPoint, int>> old;
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.insertShiftDown(QRect(3, 2, 2, 2));
     old = storage.undoData();
     QVERIFY(old.count() == 0);
@@ -746,19 +758,22 @@ void PointStorageTest::testShiftDownUp()
     // (  ,  ,12,16,  )
     // (  ,  ,15,20,  )
 
-    data = QVector<int>() << 1 << 2 << 3 << 4 << 5 << 2 << 4 << 10 << 3 << 6 << 15 << 4 << 8 << 6 << 8 << 20 << 5 << 10 << 9 << 12 << 25 << 12 << 16 << 15 << 20;
+    data = QVector<int>() << 1 << 2 << 3 << 4 << 5 << 2 << 4 << 10 << 3 << 6 << 15 << 4 << 8 << 6 << 8 << 20 << 5 << 10 << 9 << 12 << 25 << 12 << 16 << 15
+                          << 20;
     cols = QVector<int>() << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 5 << 1 << 2 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 3 << 4 << 3 << 4;
     rows = QVector<int>() << 0 << 5 << 8 << 11 << 16 << 21 << 23;
     QCOMPARE(storage.m_data, data);
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-    storage.resetUndo(); storage.storeUndo(true);
+    storage.resetUndo();
+    storage.storeUndo(true);
     storage.removeShiftUp(QRect(3, 2, 2, 2));
     old = storage.undoData();
     QVERIFY(old.count() == 0);
 
-    data = QVector<int>() << 1 << 2 << 3 << 4 << 5 << 2 << 4 << 6 << 8 << 10 << 3 << 6 << 9 << 12 << 15 << 4 << 8 << 12 << 16 << 20 << 5 << 10 << 15 << 20 << 25;
+    data = QVector<int>() << 1 << 2 << 3 << 4 << 5 << 2 << 4 << 6 << 8 << 10 << 3 << 6 << 9 << 12 << 15 << 4 << 8 << 12 << 16 << 20 << 5 << 10 << 15 << 20
+                          << 25;
     rows = QVector<int>() << 0 << 5 << 10 << 15 << 20;
     cols = QVector<int>() << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5;
     QCOMPARE(storage.m_data, data);
@@ -779,16 +794,16 @@ void PointStorageTest::testFirstInColumn()
     // (11,  ,  ,  ,12)
 
     int newRow = 0;
-    QCOMPARE(storage.firstInColumn(1, &newRow),  1);
-    QCOMPARE(newRow,  1);
-    QCOMPARE(storage.firstInColumn(2, &newRow),  2);
-    QCOMPARE(newRow,  1);
-    QCOMPARE(storage.firstInColumn(3, &newRow),  6);
-    QCOMPARE(newRow,  2);
+    QCOMPARE(storage.firstInColumn(1, &newRow), 1);
+    QCOMPARE(newRow, 1);
+    QCOMPARE(storage.firstInColumn(2, &newRow), 2);
+    QCOMPARE(newRow, 1);
+    QCOMPARE(storage.firstInColumn(3, &newRow), 6);
+    QCOMPARE(newRow, 2);
     QCOMPARE(storage.firstInColumn(4, &newRow), 10);
-    QCOMPARE(newRow,  4);
-    QCOMPARE(storage.firstInColumn(5, &newRow),  3);
-    QCOMPARE(newRow,  1);
+    QCOMPARE(newRow, 4);
+    QCOMPARE(storage.firstInColumn(5, &newRow), 3);
+    QCOMPARE(newRow, 1);
 
     storage.clear();
     storage.m_data << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 11 << 12;
@@ -800,10 +815,10 @@ void PointStorageTest::testFirstInColumn()
     // (  ,  ,  ,  ,  )
     // (11,  ,  ,  ,12)
 
-    QCOMPARE(storage.firstInColumn(4, &newRow),  0);
-    QCOMPARE(newRow,  0);
-    QCOMPARE(storage.firstInColumn(5, &newRow),  3);
-    QCOMPARE(newRow,  1);
+    QCOMPARE(storage.firstInColumn(4, &newRow), 0);
+    QCOMPARE(newRow, 0);
+    QCOMPARE(storage.firstInColumn(5, &newRow), 3);
+    QCOMPARE(newRow, 1);
 }
 
 void PointStorageTest::testFirstInRow()
@@ -819,16 +834,16 @@ void PointStorageTest::testFirstInRow()
     // (11,  ,  ,  ,12)
 
     int newCol = 0;
-    QCOMPARE(storage.firstInRow(1, &newCol),  1);
-    QCOMPARE(newCol,  1);
-    QCOMPARE(storage.firstInRow(2, &newCol),  4);
-    QCOMPARE(newCol,  1);
-    QCOMPARE(storage.firstInRow(3, &newCol),  7);
-    QCOMPARE(newCol,  2);
+    QCOMPARE(storage.firstInRow(1, &newCol), 1);
+    QCOMPARE(newCol, 1);
+    QCOMPARE(storage.firstInRow(2, &newCol), 4);
+    QCOMPARE(newCol, 1);
+    QCOMPARE(storage.firstInRow(3, &newCol), 7);
+    QCOMPARE(newCol, 2);
     QCOMPARE(storage.firstInRow(4, &newCol), 10);
-    QCOMPARE(newCol,  4);
+    QCOMPARE(newCol, 4);
     QCOMPARE(storage.firstInRow(5, &newCol), 11);
-    QCOMPARE(newCol,  1);
+    QCOMPARE(newCol, 1);
 
     storage.clear();
     storage.m_data << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 11 << 12;
@@ -840,11 +855,10 @@ void PointStorageTest::testFirstInRow()
     // (  ,  ,  ,  ,  )
     // (11,  ,  ,  ,12)
 
-    QCOMPARE(storage.firstInRow(4, &newCol),  0);
-    QCOMPARE(newCol,  0);
+    QCOMPARE(storage.firstInRow(4, &newCol), 0);
+    QCOMPARE(newCol, 0);
     QCOMPARE(storage.firstInRow(5, &newCol), 11);
-    QCOMPARE(newCol,  1);
-
+    QCOMPARE(newCol, 1);
 
     storage.clear();
     storage.m_data << 1;
@@ -853,10 +867,10 @@ void PointStorageTest::testFirstInRow()
     // (  )
     // ( 1)
 
-    QCOMPARE(storage.firstInRow(1, &newCol),  0);
-    QCOMPARE(newCol,  0);
-    QCOMPARE(storage.firstInRow(2, &newCol),  1);
-    QCOMPARE(newCol,  1);
+    QCOMPARE(storage.firstInRow(1, &newCol), 0);
+    QCOMPARE(newCol, 0);
+    QCOMPARE(storage.firstInRow(2, &newCol), 1);
+    QCOMPARE(newCol, 1);
 }
 
 void PointStorageTest::testLastInColumn()
@@ -873,17 +887,17 @@ void PointStorageTest::testLastInColumn()
 
     int newRow = 0;
     QCOMPARE(storage.lastInColumn(1, &newRow), 11);
-    QCOMPARE(newRow,  5);
-    QCOMPARE(storage.lastInColumn(2, &newRow),  7);
-    QCOMPARE(newRow,  3);
-    QCOMPARE(storage.lastInColumn(3, &newRow),  8);
-    QCOMPARE(newRow,  3);
+    QCOMPARE(newRow, 5);
+    QCOMPARE(storage.lastInColumn(2, &newRow), 7);
+    QCOMPARE(newRow, 3);
+    QCOMPARE(storage.lastInColumn(3, &newRow), 8);
+    QCOMPARE(newRow, 3);
     QCOMPARE(storage.lastInColumn(4, &newRow), 10);
-    QCOMPARE(newRow,  4);
+    QCOMPARE(newRow, 4);
     QCOMPARE(storage.lastInColumn(5, &newRow), 12);
-    QCOMPARE(newRow,  5);
-    QCOMPARE(storage.lastInColumn(6, &newRow),  0);
-    QCOMPARE(newRow,  0);
+    QCOMPARE(newRow, 5);
+    QCOMPARE(storage.lastInColumn(6, &newRow), 0);
+    QCOMPARE(newRow, 0);
 }
 
 void PointStorageTest::testLastInRow()
@@ -899,18 +913,18 @@ void PointStorageTest::testLastInRow()
     // (11,  ,  ,  ,12)
 
     int newCol = 0;
-    QCOMPARE(storage.lastInRow(1, &newCol),  3);
-    QCOMPARE(newCol,  5);
-    QCOMPARE(storage.lastInRow(2, &newCol),  6);
-    QCOMPARE(newCol,  3);
-    QCOMPARE(storage.lastInRow(3, &newCol),  9);
-    QCOMPARE(newCol,  5);
+    QCOMPARE(storage.lastInRow(1, &newCol), 3);
+    QCOMPARE(newCol, 5);
+    QCOMPARE(storage.lastInRow(2, &newCol), 6);
+    QCOMPARE(newCol, 3);
+    QCOMPARE(storage.lastInRow(3, &newCol), 9);
+    QCOMPARE(newCol, 5);
     QCOMPARE(storage.lastInRow(4, &newCol), 10);
-    QCOMPARE(newCol,  4);
+    QCOMPARE(newCol, 4);
     QCOMPARE(storage.lastInRow(5, &newCol), 12);
-    QCOMPARE(newCol,  5);
-    QCOMPARE(storage.lastInRow(6, &newCol),  0);
-    QCOMPARE(newCol,  0);
+    QCOMPARE(newCol, 5);
+    QCOMPARE(storage.lastInRow(6, &newCol), 0);
+    QCOMPARE(newCol, 0);
 }
 
 void PointStorageTest::testNextInColumn()
@@ -927,18 +941,17 @@ void PointStorageTest::testNextInColumn()
 
     int newRow = 0;
     QCOMPARE(storage.nextInColumn(1, 3, &newRow), 11);
-    QCOMPARE(newRow,  5);
-    QCOMPARE(storage.nextInColumn(2, 3, &newRow),  0);
-    QCOMPARE(newRow,  0);
-    QCOMPARE(storage.nextInColumn(3, 3, &newRow),  0);
-    QCOMPARE(newRow,  0);
+    QCOMPARE(newRow, 5);
+    QCOMPARE(storage.nextInColumn(2, 3, &newRow), 0);
+    QCOMPARE(newRow, 0);
+    QCOMPARE(storage.nextInColumn(3, 3, &newRow), 0);
+    QCOMPARE(newRow, 0);
     QCOMPARE(storage.nextInColumn(4, 3, &newRow), 10);
-    QCOMPARE(newRow,  4);
+    QCOMPARE(newRow, 4);
     QCOMPARE(storage.nextInColumn(5, 3, &newRow), 12);
-    QCOMPARE(newRow,  5);
-    QCOMPARE(storage.nextInColumn(6, 3, &newRow),  0);
-    QCOMPARE(newRow,  0);
-
+    QCOMPARE(newRow, 5);
+    QCOMPARE(storage.nextInColumn(6, 3, &newRow), 0);
+    QCOMPARE(newRow, 0);
 
     //
     storage.clear();
@@ -951,14 +964,14 @@ void PointStorageTest::testNextInColumn()
     // ( 2,  )
     // ( 3, 4)
 
-    QCOMPARE(storage.nextInColumn(1, 1, &newRow),  1);
-    QCOMPARE(newRow,  3);
-    QCOMPARE(storage.nextInColumn(2, 1, &newRow),  4);
-    QCOMPARE(newRow,  5);
-    QCOMPARE(storage.nextInColumn(1, 7, &newRow),  0);
-    QCOMPARE(newRow,  0);
-    QCOMPARE(storage.nextInColumn(2, 5, &newRow),  0);
-    QCOMPARE(newRow,  0);
+    QCOMPARE(storage.nextInColumn(1, 1, &newRow), 1);
+    QCOMPARE(newRow, 3);
+    QCOMPARE(storage.nextInColumn(2, 1, &newRow), 4);
+    QCOMPARE(newRow, 5);
+    QCOMPARE(storage.nextInColumn(1, 7, &newRow), 0);
+    QCOMPARE(newRow, 0);
+    QCOMPARE(storage.nextInColumn(2, 5, &newRow), 0);
+    QCOMPARE(newRow, 0);
 }
 
 void PointStorageTest::testNextInRow()
@@ -974,18 +987,18 @@ void PointStorageTest::testNextInRow()
     // (11,  ,  ,  ,12)
 
     int newCol = 0;
-    QCOMPARE(storage.nextInRow(3, 1, &newCol),  3);
-    QCOMPARE(newCol,  5);
-    QCOMPARE(storage.nextInRow(3, 2, &newCol),  0);
-    QCOMPARE(newCol,  0);
-    QCOMPARE(storage.nextInRow(3, 3, &newCol),  9);
-    QCOMPARE(newCol,  5);
+    QCOMPARE(storage.nextInRow(3, 1, &newCol), 3);
+    QCOMPARE(newCol, 5);
+    QCOMPARE(storage.nextInRow(3, 2, &newCol), 0);
+    QCOMPARE(newCol, 0);
+    QCOMPARE(storage.nextInRow(3, 3, &newCol), 9);
+    QCOMPARE(newCol, 5);
     QCOMPARE(storage.nextInRow(3, 4, &newCol), 10);
-    QCOMPARE(newCol,  4);
+    QCOMPARE(newCol, 4);
     QCOMPARE(storage.nextInRow(3, 5, &newCol), 12);
-    QCOMPARE(newCol,  5);
-    QCOMPARE(storage.nextInRow(3, 6, &newCol),  0);
-    QCOMPARE(newCol,  0);
+    QCOMPARE(newCol, 5);
+    QCOMPARE(storage.nextInRow(3, 6, &newCol), 0);
+    QCOMPARE(newCol, 0);
 }
 
 void PointStorageTest::testPrevInColumn()
@@ -1001,20 +1014,20 @@ void PointStorageTest::testPrevInColumn()
     // (11,  ,  ,  ,12)
 
     int newRow = 0;
-    QCOMPARE(storage.prevInColumn(1, 3, &newRow),  4);
-    QCOMPARE(newRow,  2);
-    QCOMPARE(storage.prevInColumn(2, 3, &newRow),  5);
-    QCOMPARE(newRow,  2);
-    QCOMPARE(storage.prevInColumn(3, 3, &newRow),  6);
-    QCOMPARE(newRow,  2);
-    QCOMPARE(storage.prevInColumn(4, 3, &newRow),  0);
-    QCOMPARE(newRow,  0);
-    QCOMPARE(storage.prevInColumn(5, 3, &newRow),  3);
-    QCOMPARE(newRow,  1);
-    QCOMPARE(storage.prevInColumn(6, 3, &newRow),  0);
-    QCOMPARE(newRow,  0);
-    QCOMPARE(storage.prevInColumn(3, 7, &newRow),  8);
-    QCOMPARE(newRow,  3);
+    QCOMPARE(storage.prevInColumn(1, 3, &newRow), 4);
+    QCOMPARE(newRow, 2);
+    QCOMPARE(storage.prevInColumn(2, 3, &newRow), 5);
+    QCOMPARE(newRow, 2);
+    QCOMPARE(storage.prevInColumn(3, 3, &newRow), 6);
+    QCOMPARE(newRow, 2);
+    QCOMPARE(storage.prevInColumn(4, 3, &newRow), 0);
+    QCOMPARE(newRow, 0);
+    QCOMPARE(storage.prevInColumn(5, 3, &newRow), 3);
+    QCOMPARE(newRow, 1);
+    QCOMPARE(storage.prevInColumn(6, 3, &newRow), 0);
+    QCOMPARE(newRow, 0);
+    QCOMPARE(storage.prevInColumn(3, 7, &newRow), 8);
+    QCOMPARE(newRow, 3);
 }
 
 void PointStorageTest::testPrevInRow()
@@ -1030,18 +1043,18 @@ void PointStorageTest::testPrevInRow()
     // (11,  ,  ,  ,12)
 
     int newCol = 0;
-    QCOMPARE(storage.prevInRow(3, 1, &newCol),  2);
-    QCOMPARE(newCol,  2);
-    QCOMPARE(storage.prevInRow(3, 2, &newCol),  5);
-    QCOMPARE(newCol,  2);
-    QCOMPARE(storage.prevInRow(3, 3, &newCol),  7);
-    QCOMPARE(newCol,  2);
-    QCOMPARE(storage.prevInRow(3, 4, &newCol),  0);
-    QCOMPARE(newCol,  0);
+    QCOMPARE(storage.prevInRow(3, 1, &newCol), 2);
+    QCOMPARE(newCol, 2);
+    QCOMPARE(storage.prevInRow(3, 2, &newCol), 5);
+    QCOMPARE(newCol, 2);
+    QCOMPARE(storage.prevInRow(3, 3, &newCol), 7);
+    QCOMPARE(newCol, 2);
+    QCOMPARE(storage.prevInRow(3, 4, &newCol), 0);
+    QCOMPARE(newCol, 0);
     QCOMPARE(storage.prevInRow(3, 5, &newCol), 11);
-    QCOMPARE(newCol,  1);
-    QCOMPARE(storage.prevInRow(3, 6, &newCol),  0);
-    QCOMPARE(newCol,  0);
+    QCOMPARE(newCol, 1);
+    QCOMPARE(storage.prevInRow(3, 6, &newCol), 0);
+    QCOMPARE(newCol, 0);
 }
 
 void PointStorageTest::testIteration()
@@ -1056,44 +1069,44 @@ void PointStorageTest::testIteration()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    QCOMPARE(storage.data(0),  1);
-    QCOMPARE(storage.data(1),  2);
-    QCOMPARE(storage.data(2),  3);
-    QCOMPARE(storage.data(3),  4);
-    QCOMPARE(storage.data(4),  5);
-    QCOMPARE(storage.data(5),  6);
-    QCOMPARE(storage.data(6),  7);
-    QCOMPARE(storage.data(7),  8);
-    QCOMPARE(storage.data(8),  9);
+    QCOMPARE(storage.data(0), 1);
+    QCOMPARE(storage.data(1), 2);
+    QCOMPARE(storage.data(2), 3);
+    QCOMPARE(storage.data(3), 4);
+    QCOMPARE(storage.data(4), 5);
+    QCOMPARE(storage.data(5), 6);
+    QCOMPARE(storage.data(6), 7);
+    QCOMPARE(storage.data(7), 8);
+    QCOMPARE(storage.data(8), 9);
     QCOMPARE(storage.data(9), 10);
     QCOMPARE(storage.data(10), 11);
     QCOMPARE(storage.data(11), 12);
 
-    QCOMPARE(storage.col(0),  1);
-    QCOMPARE(storage.col(1),  2);
-    QCOMPARE(storage.col(2),  5);
-    QCOMPARE(storage.col(3),  1);
-    QCOMPARE(storage.col(4),  2);
-    QCOMPARE(storage.col(5),  3);
-    QCOMPARE(storage.col(6),  2);
-    QCOMPARE(storage.col(7),  3);
-    QCOMPARE(storage.col(8),  5);
-    QCOMPARE(storage.col(9),  4);
-    QCOMPARE(storage.col(10),  1);
-    QCOMPARE(storage.col(11),  5);
+    QCOMPARE(storage.col(0), 1);
+    QCOMPARE(storage.col(1), 2);
+    QCOMPARE(storage.col(2), 5);
+    QCOMPARE(storage.col(3), 1);
+    QCOMPARE(storage.col(4), 2);
+    QCOMPARE(storage.col(5), 3);
+    QCOMPARE(storage.col(6), 2);
+    QCOMPARE(storage.col(7), 3);
+    QCOMPARE(storage.col(8), 5);
+    QCOMPARE(storage.col(9), 4);
+    QCOMPARE(storage.col(10), 1);
+    QCOMPARE(storage.col(11), 5);
 
-    QCOMPARE(storage.row(0),  1);
-    QCOMPARE(storage.row(1),  1);
-    QCOMPARE(storage.row(2),  1);
-    QCOMPARE(storage.row(3),  2);
-    QCOMPARE(storage.row(4),  2);
-    QCOMPARE(storage.row(5),  2);
-    QCOMPARE(storage.row(6),  3);
-    QCOMPARE(storage.row(7),  3);
-    QCOMPARE(storage.row(8),  3);
-    QCOMPARE(storage.row(9),  4);
-    QCOMPARE(storage.row(10),  5);
-    QCOMPARE(storage.row(11),  5);
+    QCOMPARE(storage.row(0), 1);
+    QCOMPARE(storage.row(1), 1);
+    QCOMPARE(storage.row(2), 1);
+    QCOMPARE(storage.row(3), 2);
+    QCOMPARE(storage.row(4), 2);
+    QCOMPARE(storage.row(5), 2);
+    QCOMPARE(storage.row(6), 3);
+    QCOMPARE(storage.row(7), 3);
+    QCOMPARE(storage.row(8), 3);
+    QCOMPARE(storage.row(9), 4);
+    QCOMPARE(storage.row(10), 5);
+    QCOMPARE(storage.row(11), 5);
 }
 
 void PointStorageTest::testColumnIteration()
@@ -1105,8 +1118,8 @@ void PointStorageTest::testColumnIteration()
     QCOMPARE(storage.firstInColumn(1, &row), 27);
     QCOMPARE(row, 1);
     row = -1;
-//     QCOMPARE(storage.nextInColumn(1, 0, &row), 27);
-//     QCOMPARE(row, 1);
+    //     QCOMPARE(storage.nextInColumn(1, 0, &row), 27);
+    //     QCOMPARE(row, 1);
     QCOMPARE(storage.nextInColumn(1, 1, &row), 0);
     QCOMPARE(row, 0);
 
@@ -1124,8 +1137,8 @@ void PointStorageTest::testColumnIteration()
     QCOMPARE(storage.lastInColumn(1, &row), 5);
     QCOMPARE(row, 5);
     row = -1;
-//     QCOMPARE(storage.prevInColumn(1, KS_rowMax + 1, &row), 5);
-//     QCOMPARE(row, 5);
+    //     QCOMPARE(storage.prevInColumn(1, KS_rowMax + 1, &row), 5);
+    //     QCOMPARE(row, 5);
     QCOMPARE(storage.prevInColumn(1, 6, &row), 5);
     QCOMPARE(row, 5);
     QCOMPARE(storage.prevInColumn(1, 5, &row), 27);
@@ -1147,7 +1160,7 @@ void PointStorageTest::testRowIteration()
     QCOMPARE(col, 0);
 
     storage.insert(5, 1, 5);
-//     qDebug() << qPrintable(storage.dump());
+    //     qDebug() << qPrintable(storage.dump());
     QCOMPARE(storage.nextInRow(1, 1, &col), 5);
     QCOMPARE(col, 5);
     QCOMPARE(storage.nextInRow(1, 5, &col), 0);
@@ -1160,8 +1173,8 @@ void PointStorageTest::testRowIteration()
     QCOMPARE(storage.lastInRow(1, &col), 5);
     QCOMPARE(col, 5);
     col = -1;
-//     QCOMPARE(storage.prevInRow(KS_colMax + 1, 1, &col), 5);
-//     QCOMPARE(col, 5);
+    //     QCOMPARE(storage.prevInRow(KS_colMax + 1, 1, &col), 5);
+    //     QCOMPARE(col, 5);
     QCOMPARE(storage.prevInRow(6, 1, &col), 5);
     QCOMPARE(col, 5);
     QCOMPARE(storage.prevInRow(5, 1, &col), 27);
@@ -1197,7 +1210,7 @@ void PointStorageTest::testDimension()
 
 void PointStorageTest::testSubStorage()
 {
-// #if 0
+    // #if 0
     PointStorage<int> storage;
     storage.m_data << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12;
     storage.m_rows << 0 << 3 << 6 << 9 << 10;
@@ -1209,7 +1222,7 @@ void PointStorageTest::testSubStorage()
     // (11,  ,  ,  ,12)
 
     PointStorage<int> subStorage;
-    subStorage = storage.subStorage(Region(QRect(1, 1, 5, 5)));       // all
+    subStorage = storage.subStorage(Region(QRect(1, 1, 5, 5))); // all
     // ( 1, 2,  ,  , 3)
     // ( 4, 5, 6,  ,  )
     // (  , 7, 8,  , 9)
@@ -1223,7 +1236,7 @@ void PointStorageTest::testSubStorage()
     QCOMPARE(subStorage.m_rows, rows);
     QCOMPARE(subStorage.m_cols, cols);
 
-    subStorage = storage.subStorage(Region(QRect(1, 1, 3, 3)));       // upper left
+    subStorage = storage.subStorage(Region(QRect(1, 1, 3, 3))); // upper left
     // ( 1, 2,  )
     // ( 4, 5, 6)
     // (  , 7, 8)
@@ -1235,7 +1248,7 @@ void PointStorageTest::testSubStorage()
     QCOMPARE(subStorage.m_rows, rows);
     QCOMPARE(subStorage.m_cols, cols);
 
-    subStorage = storage.subStorage(Region(QRect(4, 4, 5, 5)));       // lower right
+    subStorage = storage.subStorage(Region(QRect(4, 4, 5, 5))); // lower right
     // (  ,  ,  ,  ,  )
     // (  ,  ,  ,  ,  )
     // (  ,  ,  ,  ,  )
@@ -1248,7 +1261,7 @@ void PointStorageTest::testSubStorage()
     QCOMPARE(subStorage.m_data, data);
     QCOMPARE(subStorage.m_rows, rows);
     QCOMPARE(subStorage.m_cols, cols);
-// #endif
+    // #endif
 }
 
 QTEST_MAIN(PointStorageTest)

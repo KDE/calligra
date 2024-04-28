@@ -6,16 +6,15 @@
 
 #include "KoResourceTaggingTest.h"
 
-#include <QTest>
 #include <QCoreApplication>
 #include <QFileInfo>
+#include <QTest>
 
 #include <KActionCollection>
 #include <WidgetsDebug.h>
 
 #include "KoResource.h"
 #include "KoResourceServerProvider.h"
-
 
 void KoResourceTaggingTest::initTestCase()
 {
@@ -35,7 +34,7 @@ void KoResourceTaggingTest::testInitialization()
 
 void KoResourceTaggingTest::testTagging()
 {
-    KoResourceServer<KoPattern>* patServer = KoResourceServerProvider::instance()->patternServer();
+    KoResourceServer<KoPattern> *patServer = KoResourceServerProvider::instance()->patternServer();
     KoResourceTagStore tagStore(patServer);
     KoResource *res = patServer->resources().constFirst();
     QVERIFY(res);
@@ -80,15 +79,14 @@ void KoResourceTaggingTest::testTagging()
 
     tagStore.delTag("test1");
     QVERIFY(tagStore.tagNamesList().size() == 1);
-
 }
 
 void KoResourceTaggingTest::testReadWriteXML()
 {
-    KoResourceServer<KoPattern>* patServer = KoResourceServerProvider::instance()->patternServer();
+    KoResourceServer<KoPattern> *patServer = KoResourceServerProvider::instance()->patternServer();
     KoResourceTagStore tagStore(patServer);
 
-    QList<KoPattern*> patterns = patServer->resources();
+    QList<KoPattern *> patterns = patServer->resources();
     Q_ASSERT(patterns.size() > 5);
     tagStore.addTag(patterns[0], "test0");
     tagStore.addTag(patterns[1], "test1");

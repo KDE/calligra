@@ -22,19 +22,18 @@ class XlsxImport : public MSOOXML::MsooXmlImport
 {
     Q_OBJECT
 public:
-    XlsxImport(QObject * parent, const QVariantList &);
+    XlsxImport(QObject *parent, const QVariantList &);
     ~XlsxImport() override;
 
 protected:
-    bool acceptsSourceMimeType(const QByteArray& mime) const override;
+    bool acceptsSourceMimeType(const QByteArray &mime) const override;
 
-    bool acceptsDestinationMimeType(const QByteArray& mime) const override;
+    bool acceptsDestinationMimeType(const QByteArray &mime) const override;
 
-    KoFilter::ConversionStatus parseParts(KoOdfWriters *writers,
-            MSOOXML::MsooXmlRelationships *relationships, QString& errorMessage) override;
+    KoFilter::ConversionStatus parseParts(KoOdfWriters *writers, MSOOXML::MsooXmlRelationships *relationships, QString &errorMessage) override;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

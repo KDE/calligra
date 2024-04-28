@@ -5,21 +5,21 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "KoShapeContainer.h"
-#include "KoShapeContainer_p.h"
-#include "KoShapeContainerModel.h"
-#include "KoShapeStrokeModel.h"
 #include "KoShapeContainerDefaultModel.h"
+#include "KoShapeContainerModel.h"
+#include "KoShapeContainer_p.h"
 #include "KoShapeSavingContext.h"
+#include "KoShapeStrokeModel.h"
 
-#include <QPointF>
 #include <QPainter>
 #include <QPainterPath>
+#include <QPointF>
 
 #include <algorithm>
 
 KoShapeContainerPrivate::KoShapeContainerPrivate(KoShapeContainer *q)
-    : KoShapePrivate(q),
-    model(0)
+    : KoShapePrivate(q)
+    , model(0)
 {
 }
 
@@ -29,7 +29,7 @@ KoShapeContainerPrivate::~KoShapeContainerPrivate()
 }
 
 KoShapeContainer::KoShapeContainer(KoShapeContainerModel *model)
-        : KoShape(*(new KoShapeContainerPrivate(this)))
+    : KoShape(*(new KoShapeContainerPrivate(this)))
 {
     Q_D(KoShapeContainer);
     d->model = model;
@@ -44,7 +44,7 @@ KoShapeContainer::~KoShapeContainer()
 {
     Q_D(KoShapeContainer);
     if (d->model) {
-        foreach(KoShape *shape, d->model->shapes()) {
+        foreach (KoShape *shape, d->model->shapes()) {
             delete shape;
         }
     }
@@ -74,7 +74,7 @@ void KoShapeContainer::removeShape(KoShape *shape)
     d->model->remove(shape);
     shape->setParent(0);
 
-    KoShapeContainer * grandparent = parent();
+    KoShapeContainer *grandparent = parent();
     if (grandparent) {
         grandparent->model()->childChanged(this, KoShape::ChildChanged);
     }
@@ -85,19 +85,19 @@ void KoShapeContainer::removeAllShapes()
     Q_D(KoShapeContainer);
     if (d->model == 0)
         return;
-    for(int i = d->model->shapes().count() - 1; i >= 0; --i) {
+    for (int i = d->model->shapes().count() - 1; i >= 0; --i) {
         KoShape *shape = d->model->shapes().at(i);
         d->model->remove(shape);
         shape->setParent(0);
     }
 
-    KoShapeContainer * grandparent = parent();
+    KoShapeContainer *grandparent = parent();
     if (grandparent) {
         grandparent->model()->childChanged(this, KoShape::ChildChanged);
     }
 }
 
-int  KoShapeContainer::shapeCount() const
+int KoShapeContainer::shapeCount() const
 {
     Q_D(const KoShapeContainer);
     if (d->model == 0)
@@ -155,7 +155,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     if (d->model == 0 || d->model->count() == 0)
         return;
 
-    QList<KoShape*> sortedObjects = d->model->shapes();
+    QList<KoShape *> sortedObjects = d->model->shapes();
     std::sort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
 
     // Do the following to revert the absolute transformation of the container
@@ -179,12 +179,11 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     QTransform absTrans = absoluteTransformation(0);
     QRectF clipRect = absTrans.map(outline()).boundingRect();
 
-
-    foreach(KoShape *shape, sortedObjects) {
-        //debugFlake <<"KoShapeContainer::painting shape:" << shape->shapeId() <<"," << shape->boundingRect();
+    foreach (KoShape *shape, sortedObjects) {
+        // debugFlake <<"KoShapeContainer::painting shape:" << shape->shapeId() <<"," << shape->boundingRect();
         if (!shape->isVisible())
             continue;
-        if (!isClipped(shape))  // the shapeManager will have to draw those, or else we can't do clipRects
+        if (!isClipped(shape)) // the shapeManager will have to draw those, or else we can't do clipRects
             continue;
         // don't try to draw a child shape that is not in the clipping rect of the painter.
         if (!clipRect.intersects(shape->boundingRect()))
@@ -204,17 +203,17 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     }
 }
 
-void KoShapeContainer::shapeChanged(ChangeType type, KoShape* shape)
+void KoShapeContainer::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
     Q_D(KoShapeContainer);
     if (d->model == 0)
         return;
-    if (!(type == RotationChanged || type == ScaleChanged || type == ShearChanged
-            || type == SizeChanged || type == PositionChanged || type == GenericMatrixChange))
+    if (!(type == RotationChanged || type == ScaleChanged || type == ShearChanged || type == SizeChanged || type == PositionChanged
+          || type == GenericMatrixChange))
         return;
     d->model->containerChanged(this, type);
-    foreach(KoShape *shape, d->model->shapes())
+    foreach (KoShape *shape, d->model->shapes())
         shape->notifyChanged();
 }
 
@@ -231,15 +230,15 @@ void KoShapeContainer::update() const
     Q_D(const KoShapeContainer);
     KoShape::update();
     if (d->model)
-        foreach(KoShape *shape, d->model->shapes())
+        foreach (KoShape *shape, d->model->shapes())
             shape->update();
 }
 
-QList<KoShape*> KoShapeContainer::shapes() const
+QList<KoShape *> KoShapeContainer::shapes() const
 {
     Q_D(const KoShapeContainer);
     if (d->model == 0)
-        return QList<KoShape*>();
+        return QList<KoShape *>();
 
     return d->model->shapes();
 }

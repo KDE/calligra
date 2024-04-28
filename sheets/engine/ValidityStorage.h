@@ -25,14 +25,24 @@ class ValidityStorage : public QObject, public RectStorage<Validity>
 {
     Q_OBJECT
 public:
-    explicit ValidityStorage(MapBase* map) : QObject(map), RectStorage<Validity>(map) {}
-    ValidityStorage(const ValidityStorage& other) : QObject(other.parent()), RectStorage<Validity>(other) {}
+    explicit ValidityStorage(MapBase *map)
+        : QObject(map)
+        , RectStorage<Validity>(map)
+    {
+    }
+    ValidityStorage(const ValidityStorage &other)
+        : QObject(other.parent())
+        , RectStorage<Validity>(other)
+    {
+    }
 
 protected Q_SLOTS:
-    void triggerGarbageCollection() override {
+    void triggerGarbageCollection() override
+    {
         QTimer::singleShot(g_garbageCollectionTimeOut, this, &ValidityStorage::garbageCollection);
     }
-    void garbageCollection() override {
+    void garbageCollection() override
+    {
         RectStorage<Validity>::garbageCollection();
     }
 };

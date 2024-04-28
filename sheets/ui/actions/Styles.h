@@ -8,19 +8,18 @@
 #ifndef CALLIGRA_SHEETS_ACTION_STYLES
 #define CALLIGRA_SHEETS_ACTION_STYLES
 
-
 #include "DialogCellAction.h"
 
 class KSelectAction;
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class StyleFromCell : public CellAction {
-Q_OBJECT
+class StyleFromCell : public CellAction
+{
+    Q_OBJECT
 public:
     StyleFromCell(Actions *actions);
     virtual ~StyleFromCell();
@@ -31,9 +30,9 @@ protected:
     virtual bool enabledForSelection(Selection *selection, const Cell &activeCell) override;
 };
 
-
-class ShowStyleManager : public DialogCellAction {
-Q_OBJECT
+class ShowStyleManager : public DialogCellAction
+{
+    Q_OBJECT
 public:
     ShowStyleManager(Actions *actions);
     virtual ~ShowStyleManager();
@@ -45,9 +44,9 @@ protected:
     virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
 };
 
-
-class SetStyle : public CellAction {
-Q_OBJECT
+class SetStyle : public CellAction
+{
+    Q_OBJECT
 public:
     SetStyle(Actions *actions);
     virtual ~SetStyle();
@@ -57,15 +56,17 @@ public:
 protected Q_SLOTS:
     void triggeredSelect(const QString &name);
     void fillStyles();
+
 protected:
-    virtual void execute(Selection *, Sheet *, QWidget *) override {}  // never called
+    virtual void execute(Selection *, Sheet *, QWidget *) override
+    {
+    } // never called
     QAction *createAction() override;
 
     KSelectAction *m_selectAction;
 };
 
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_STYLES
+#endif // CALLIGRA_SHEETS_ACTION_STYLES

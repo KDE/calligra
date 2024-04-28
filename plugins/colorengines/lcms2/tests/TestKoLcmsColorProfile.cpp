@@ -8,8 +8,8 @@
 
 #include <QTest>
 
-#include <lcms2.h>
 #include <cmath>
+#include <lcms2.h>
 
 qreal testRounding(qreal value)
 {
@@ -148,7 +148,12 @@ void TestKoLcmsColorProfile::testConversion()
     quint16 dst[4];
     memset(&dst, 0, 8);
 
-    linearRgb->convertPixelsTo((quint8 *)&src, (quint8 *)&dst, sRgb, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::BlackpointCompensation);
+    linearRgb->convertPixelsTo((quint8 *)&src,
+                               (quint8 *)&dst,
+                               sRgb,
+                               1,
+                               KoColorConversionTransformation::IntentRelativeColorimetric,
+                               KoColorConversionTransformation::BlackpointCompensation);
 
     quint16 dst2[4];
     memset(&dst2, 0, 8);
@@ -157,17 +162,11 @@ void TestKoLcmsColorProfile::testConversion()
     QByteArray rawData = linearRgb->profile()->rawData();
     cmsHPROFILE linearRgbProfile = cmsOpenProfileFromMem((void *)rawData.constData(), rawData.size());
 
-    cmsHTRANSFORM tf = cmsCreateTransform(linearRgbProfile,
-                                          TYPE_BGRA_16,
-                                          sRgbProfile,
-                                          TYPE_BGRA_16,
-                                          INTENT_RELATIVE_COLORIMETRIC,
-                                          cmsFLAGS_NOOPTIMIZE);
+    cmsHTRANSFORM tf = cmsCreateTransform(linearRgbProfile, TYPE_BGRA_16, sRgbProfile, TYPE_BGRA_16, INTENT_RELATIVE_COLORIMETRIC, cmsFLAGS_NOOPTIMIZE);
 
     cmsDoTransform(tf, (quint8 *)&src, (quint8 *)&dst2, 1);
 
     Q_ASSERT(dst[0] == dst2[0]);
-
 }
 
 QTEST_MAIN(TestKoLcmsColorProfile)

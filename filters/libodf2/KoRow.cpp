@@ -11,19 +11,15 @@
 #include <QMap>
 #include <QString>
 
-namespace {
-    const QMap<KoRow::Visibility, QString> visibilityMap {
-        { KoRow::Collapse, "collapse" },
-        { KoRow::Filter, "filter" },
-        { KoRow::Visible, "visible" }
-    };
+namespace
+{
+const QMap<KoRow::Visibility, QString> visibilityMap{{KoRow::Collapse, "collapse"}, {KoRow::Filter, "filter"}, {KoRow::Visible, "visible"}};
 }
 
-
 KoRow::KoRow()
-: m_defaultCellStyle(0)
-, m_style(0)
-, m_visibility(Visible)
+    : m_defaultCellStyle(0)
+    , m_style(0)
+    , m_visibility(Visible)
 {
 }
 
@@ -61,20 +57,20 @@ KoRow::Visibility KoRow::visibility()
     return m_visibility;
 }
 
-void KoRow::saveOdf(KoXmlWriter& writer, KoGenStyles& styles)
+void KoRow::saveOdf(KoXmlWriter &writer, KoGenStyles &styles)
 {
     writer.startElement("table:table-row");
-    if(m_style) {
+    if (m_style) {
         writer.addAttribute("table:style-name", m_style->saveOdf(styles));
     }
-    if(m_defaultCellStyle) {
+    if (m_defaultCellStyle) {
         writer.addAttribute("table:default-cell-style-name", m_defaultCellStyle->saveOdf(styles));
     }
     writer.addAttribute("table:visibility", visibilityMap.value(m_visibility));
 }
 
-void KoRow::finishSaveOdf(KoXmlWriter& writer, KoGenStyles& styles)
+void KoRow::finishSaveOdf(KoXmlWriter &writer, KoGenStyles &styles)
 {
     Q_UNUSED(styles)
-    writer.endElement();//table:row
+    writer.endElement(); // table:row
 }

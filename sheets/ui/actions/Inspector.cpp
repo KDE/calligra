@@ -19,20 +19,21 @@
 #include <KPageWidget>
 
 // Sheets
+#include "core/Cell.h"
+#include "core/Sheet.h"
 #include "engine/DependencyManager.h"
 #include "engine/MapBase.h"
 #include "engine/Region.h"
-#include "core/Cell.h"
-#include "core/Sheet.h"
 #include "ui/Selection.h"
-
-
 
 using namespace Calligra::Sheets;
 
-
 Inspector::Inspector(Actions *actions)
-    : DialogCellAction(actions, "inspector", i18n("Run Inspector..."), koIconWanted("not used in UI, but devs might do, so nice to have", "inspector"), QString())
+    : DialogCellAction(actions,
+                       "inspector",
+                       i18n("Run Inspector..."),
+                       koIconWanted("not used in UI, but devs might do, so nice to have", "inspector"),
+                       QString())
 {
 }
 
@@ -40,7 +41,8 @@ Inspector::~Inspector()
 {
 }
 
-QAction *Inspector::createAction() {
+QAction *Inspector::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_I));
     return res;
@@ -58,8 +60,6 @@ void Inspector::onSelectionChanged()
     dlg->setCell(cell);
 }
 
-
-
 // * * * DIALOG * * *
 
 namespace Calligra
@@ -72,12 +72,12 @@ class InspectorDialog::Private
 public:
     Cell cell;
     Style style;
-    Sheet* sheet;
+    Sheet *sheet;
 
     QTreeWidget *cellView;
     QTreeWidget *sheetView;
     QTreeWidget *styleView;
-    QTreeWidget* depView;
+    QTreeWidget *depView;
 
     void handleCell();
     void handleSheet();
@@ -88,21 +88,27 @@ public:
 } // namespace Sheets
 } // namespace Calligra
 
-
-
 static QString boolAsString(bool b)
 {
-    if (b) return QString("True");
-    else return QString("False");
+    if (b)
+        return QString("True");
+    else
+        return QString("False");
 }
 
 static QString dirAsString(Qt::LayoutDirection dir)
 {
     QString str;
     switch (dir) {
-    case Qt::LeftToRight: str = "Left to Right"; break;
-    case Qt::RightToLeft: str = "Right to Left"; break;
-    default: str = "Unknown"; break;
+    case Qt::LeftToRight:
+        str = "Left to Right";
+        break;
+    case Qt::RightToLeft:
+        str = "Right to Left";
+        break;
+    default:
+        str = "Unknown";
+        break;
     }
     return str;
 }
@@ -122,8 +128,7 @@ void InspectorDialog::Private::handleCell()
     new QTreeWidgetItem(cellView, QStringList() << "Empty" << boolAsString(cell.isEmpty()));
     new QTreeWidgetItem(cellView, QStringList() << "Formula" << boolAsString(cell.isFormula()));
     new QTreeWidgetItem(cellView, QStringList() << "Text" << cell.userInput());
-    new QTreeWidgetItem(cellView, QStringList() << "Text (Displayed)" <<
-                        cell.displayText().replace(QChar('\n'), "\\n"));
+    new QTreeWidgetItem(cellView, QStringList() << "Text (Displayed)" << cell.displayText().replace(QChar('\n'), "\\n"));
 
     QTextStream ts(&str, QIODeviceBase::WriteOnly);
     ts << cell.value();
@@ -150,31 +155,26 @@ void InspectorDialog::Private::handleStyle() // direct style access
     new QTreeWidgetItem(styleView, QStringList() << "Currency symbol" << style.currency().symbol());
     new QTreeWidgetItem(styleView, QStringList() << "Currency code" << style.currency().code());
 
-    QTreeWidgetItem* flags = new QTreeWidgetItem(styleView, QStringList("Flags"));
-    new QTreeWidgetItem(flags, QStringList() << "Border (left)" <<
-                        boolAsString(style.hasAttribute(Style::LeftPen)));
-    new QTreeWidgetItem(flags, QStringList() << "Border (right)" <<
-                        boolAsString(style.hasAttribute(Style::RightPen)));
-    new QTreeWidgetItem(flags, QStringList() << "Border (top)" <<
-                        boolAsString(style.hasAttribute(Style::TopPen)));
-    new QTreeWidgetItem(flags, QStringList() << "Border (bottom)" <<
-                        boolAsString(style.hasAttribute(Style::BottomPen)));
+    QTreeWidgetItem *flags = new QTreeWidgetItem(styleView, QStringList("Flags"));
+    new QTreeWidgetItem(flags, QStringList() << "Border (left)" << boolAsString(style.hasAttribute(Style::LeftPen)));
+    new QTreeWidgetItem(flags, QStringList() << "Border (right)" << boolAsString(style.hasAttribute(Style::RightPen)));
+    new QTreeWidgetItem(flags, QStringList() << "Border (top)" << boolAsString(style.hasAttribute(Style::TopPen)));
+    new QTreeWidgetItem(flags, QStringList() << "Border (bottom)" << boolAsString(style.hasAttribute(Style::BottomPen)));
 
-    new QTreeWidgetItem(styleView, QStringList() << "Border pen width (bottom)" <<
-                        QString::number(style.bottomBorderPen().width()));
+    new QTreeWidgetItem(styleView, QStringList() << "Border pen width (bottom)" << QString::number(style.bottomBorderPen().width()));
 }
 
 void InspectorDialog::Private::handleSheet()
 {
     sheetView->clear();
 
-    new QTreeWidgetItem(sheetView, QStringList() << "Name" << sheet->sheetName()) ;
+    new QTreeWidgetItem(sheetView, QStringList() << "Name" << sheet->sheetName());
     new QTreeWidgetItem(sheetView, QStringList() << "Layout Direction" << dirAsString(sheet->layoutDirection()));
 }
 
 void InspectorDialog::Private::handleDep()
 {
-    DependencyManager* manager = sheet->map()->dependencyManager();
+    DependencyManager *manager = sheet->map()->dependencyManager();
     Region deps = manager->consumingRegion(cell);
 
     depView->clear();
@@ -190,12 +190,11 @@ void InspectorDialog::Private::handleDep()
                 new QTreeWidgetItem(depView, QStringList() << k1 << k2);
             }
     }
-
 }
 
 InspectorDialog::InspectorDialog(QWidget *parent)
-        : ActionDialog(parent)
-        , d(new Private)
+    : ActionDialog(parent)
+    , d(new Private)
 {
     setWindowTitle("Inspector");
     setButtons(Close);
@@ -204,33 +203,37 @@ InspectorDialog::InspectorDialog(QWidget *parent)
     setMainWidget(main);
     main->setFaceType(KPageWidget::List);
 
-    QFrame* cellPage = new QFrame();
+    QFrame *cellPage = new QFrame();
     main->addPage(cellPage, QString("Cell"));
-    QVBoxLayout* cellLayout = new QVBoxLayout(cellPage);
+    QVBoxLayout *cellLayout = new QVBoxLayout(cellPage);
     d->cellView = new QTreeWidget(cellPage);
     cellLayout->addWidget(d->cellView);
-    d->cellView->setHeaderLabels(QStringList() << "Key" << "Value");
+    d->cellView->setHeaderLabels(QStringList() << "Key"
+                                               << "Value");
 
-    QFrame* stylePage = new QFrame();
+    QFrame *stylePage = new QFrame();
     main->addPage(stylePage, QString("Style"));
-    QVBoxLayout* styleLayout = new QVBoxLayout(stylePage);
+    QVBoxLayout *styleLayout = new QVBoxLayout(stylePage);
     d->styleView = new QTreeWidget(stylePage);
     styleLayout->addWidget(d->styleView);
-    d->styleView->setHeaderLabels(QStringList() << "Key" << "Value");
+    d->styleView->setHeaderLabels(QStringList() << "Key"
+                                                << "Value");
 
-    QFrame* sheetPage = new QFrame();
-    main->addPage(sheetPage,  QString("Sheet"));
-    QVBoxLayout* sheetLayout = new QVBoxLayout(sheetPage);
+    QFrame *sheetPage = new QFrame();
+    main->addPage(sheetPage, QString("Sheet"));
+    QVBoxLayout *sheetLayout = new QVBoxLayout(sheetPage);
     d->sheetView = new QTreeWidget(sheetPage);
     sheetLayout->addWidget(d->sheetView);
-    d->sheetView->setHeaderLabels(QStringList() << "Key" << "Value");
+    d->sheetView->setHeaderLabels(QStringList() << "Key"
+                                                << "Value");
 
-    QFrame* depPage = new QFrame();
-    main->addPage(depPage,  QString("Dependencies"));
-    QVBoxLayout* depLayout = new QVBoxLayout(depPage);
+    QFrame *depPage = new QFrame();
+    main->addPage(depPage, QString("Dependencies"));
+    QVBoxLayout *depLayout = new QVBoxLayout(depPage);
     d->depView = new QTreeWidget(depPage);
     depLayout->addWidget(d->depView);
-    d->depView->setHeaderLabels(QStringList() << "Cell" << "Content");
+    d->depView->setHeaderLabels(QStringList() << "Cell"
+                                              << "Content");
 
     resize(800, 500);
 }
@@ -251,4 +254,3 @@ void InspectorDialog::setCell(const Cell &cell)
     d->handleStyle();
     d->handleDep();
 }
-

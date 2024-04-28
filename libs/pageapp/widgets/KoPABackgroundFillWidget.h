@@ -22,7 +22,7 @@ public:
 
     void setView(KoPAViewBase *view);
 
-    QList<KoShape*> currentShapes() override;
+    QList<KoShape *> currentShapes() override;
 
     KoShape *currentShape() override;
 };

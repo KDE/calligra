@@ -21,12 +21,11 @@ class KoGenStyles;
 class NumberFormatParser
 {
 public:
-    static QColor color(const QString& name);
+    static QColor color(const QString &name);
     static QLocale locale(int langid);
 
-    static KoGenStyle parse(const QString& numberFormat, KoGenStyles* styles = 0,
-			    KoGenStyle::Type type = KoGenStyle::ParagraphAutoStyle);
-    static bool isDateFormat(const QString& numberFormat);
+    static KoGenStyle parse(const QString &numberFormat, KoGenStyles *styles = 0, KoGenStyle::Type type = KoGenStyle::ParagraphAutoStyle);
+    static bool isDateFormat(const QString &numberFormat);
 };
 
 #endif

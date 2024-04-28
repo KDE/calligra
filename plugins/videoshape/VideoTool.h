@@ -17,15 +17,15 @@ class VideoTool : public KoToolBase
 {
     Q_OBJECT
 
-   public:
+public:
     explicit VideoTool(KoCanvasBase *canvas);
     ~VideoTool();
 
-    void paint( QPainter& painter, const KoViewConverter& converter ) override;
-    void mousePressEvent( KoPointerEvent* event ) override;
-    void mouseMoveEvent( KoPointerEvent* event ) override;
-    void mouseReleaseEvent( KoPointerEvent* event ) override;
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
 
 protected:
     QWidget *createOptionWidget() override;
@@ -39,5 +39,4 @@ private:
     VideoShape *m_videoShape;
 };
 
-
-#endif //VIDEOTOOL_H
+#endif // VIDEOTOOL_H

@@ -10,13 +10,13 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 
 #include "KoFilterManager.h"
 
-#include <QUrl>
 #include <KoDialog.h>
 #include <KoProgressUpdater.h>
+#include <QUrl>
 
+#include <QPointer>
 #include <QString>
 #include <QStringList>
-#include <QPointer>
 
 class QListWidget;
 
@@ -31,7 +31,6 @@ public:
         : progressUpdater(progressUpdater_)
     {
     }
-
 };
 
 class KoFilterChooser : public KoDialog
@@ -39,8 +38,7 @@ class KoFilterChooser : public KoDialog
     Q_OBJECT
 
 public:
-    KoFilterChooser(QWidget *parent, const QStringList &mimeTypes,
-                    const QString &nativeFormat = QString(), const QUrl &url = QUrl());
+    KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, const QString &nativeFormat = QString(), const QUrl &url = QUrl());
     ~KoFilterChooser() override;
 
     QString filterSelected();

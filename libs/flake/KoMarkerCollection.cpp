@@ -8,12 +8,12 @@
 
 #include "KoMarker.h"
 #include "KoMarkerSharedLoadingData.h"
-#include <KoXmlReader.h>
-#include <KoShapeLoadingContext.h>
+#include <FlakeDebug.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
+#include <KoShapeLoadingContext.h>
+#include <KoXmlReader.h>
 #include <QStandardPaths>
-#include <FlakeDebug.h>
 
 class Q_DECL_HIDDEN KoMarkerCollection::Private
 {
@@ -22,12 +22,12 @@ public:
     {
     }
 
-    QList<QExplicitlySharedDataPointer<KoMarker> > markers;
+    QList<QExplicitlySharedDataPointer<KoMarker>> markers;
 };
 
 KoMarkerCollection::KoMarkerCollection(QObject *parent)
-: QObject(parent)
-, d(new Private)
+    : QObject(parent)
+    , d(new Private)
 {
     // Add no marker so the user can remove a marker from the line.
     d->markers.append(QExplicitlySharedDataPointer<KoMarker>(0));
@@ -43,12 +43,12 @@ KoMarkerCollection::~KoMarkerCollection()
 bool KoMarkerCollection::loadOdf(KoShapeLoadingContext &context)
 {
     debugFlake;
-    QHash<QString, KoMarker*> lookupTable;
+    QHash<QString, KoMarker *> lookupTable;
 
-    const QHash<QString, KoXmlElement*> markers = context.odfLoadingContext().stylesReader().drawStyles("marker");
+    const QHash<QString, KoXmlElement *> markers = context.odfLoadingContext().stylesReader().drawStyles("marker");
     loadOdfMarkers(markers, context, lookupTable);
 
-    KoMarkerSharedLoadingData * sharedMarkerData = new KoMarkerSharedLoadingData(lookupTable);
+    KoMarkerSharedLoadingData *sharedMarkerData = new KoMarkerSharedLoadingData(lookupTable);
     context.addSharedData(MARKER_SHARED_LOADING_ID, sharedMarkerData);
 
     return true;
@@ -70,22 +70,20 @@ void KoMarkerCollection::loadDefaultMarkers()
         if (KoOdfReadStore::loadAndParse(&file, doc, errorMessage, filePath)) {
             markerReader.createStyleMap(doc, true);
 
-            QHash<QString, KoMarker*> lookupTable;
-            const QHash<QString, KoXmlElement*> defaultMarkers = markerReader.drawStyles("marker");
+            QHash<QString, KoMarker *> lookupTable;
+            const QHash<QString, KoXmlElement *> defaultMarkers = markerReader.drawStyles("marker");
             loadOdfMarkers(defaultMarkers, shapeContext, lookupTable);
-        }
-        else {
+        } else {
             warnFlake << "reading of" << filePath << "failed:" << errorMessage;
         }
-    }
-    else {
+    } else {
         debugFlake << "markers.xml not found";
     }
 }
 
-void KoMarkerCollection::loadOdfMarkers(const QHash<QString, KoXmlElement*> &markers, KoShapeLoadingContext &context, QHash<QString, KoMarker*> &lookupTable)
+void KoMarkerCollection::loadOdfMarkers(const QHash<QString, KoXmlElement *> &markers, KoShapeLoadingContext &context, QHash<QString, KoMarker *> &lookupTable)
 {
-    QHash<QString, KoXmlElement*>::const_iterator it(markers.constBegin());
+    QHash<QString, KoXmlElement *>::const_iterator it(markers.constBegin());
     for (; it != markers.constEnd(); ++it) {
         KoMarker *marker = new KoMarker();
         if (marker->loadOdf(*(it.value()), context)) {
@@ -95,26 +93,25 @@ void KoMarkerCollection::loadOdfMarkers(const QHash<QString, KoXmlElement*> &mar
             if (m != marker) {
                 delete marker;
             }
-        }
-        else {
+        } else {
             delete marker;
         }
     }
 }
 
-QList<KoMarker*> KoMarkerCollection::markers() const
+QList<KoMarker *> KoMarkerCollection::markers() const
 {
-    QMap<QString, KoMarker*> markerMap;
-    foreach (const QExplicitlySharedDataPointer<KoMarker>& m, d->markers) {
+    QMap<QString, KoMarker *> markerMap;
+    foreach (const QExplicitlySharedDataPointer<KoMarker> &m, d->markers) {
         const auto name = m ? m->name() : QString();
         markerMap[name] = m.data();
     }
     return markerMap.values();
 }
 
-KoMarker * KoMarkerCollection::addMarker(KoMarker *marker)
+KoMarker *KoMarkerCollection::addMarker(KoMarker *marker)
 {
-    foreach (const QExplicitlySharedDataPointer<KoMarker>& m, d->markers) {
+    foreach (const QExplicitlySharedDataPointer<KoMarker> &m, d->markers) {
         if (marker == m.data()) {
             return marker;
         }

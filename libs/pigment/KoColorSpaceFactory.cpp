@@ -15,29 +15,30 @@
 #include "KoColorSpaceRegistry.h"
 
 struct Q_DECL_HIDDEN KoColorSpaceFactory::Private {
-    QList<KoColorProfile*> colorprofiles;
-    QHash<QString, KoColorSpace* > availableColorspaces;
+    QList<KoColorProfile *> colorprofiles;
+    QHash<QString, KoColorSpace *> availableColorspaces;
     QMutex mutex;
 };
 
-KoColorSpaceFactory::KoColorSpaceFactory() : d(new Private)
+KoColorSpaceFactory::KoColorSpaceFactory()
+    : d(new Private)
 {
 }
 
 KoColorSpaceFactory::~KoColorSpaceFactory()
 {
-    foreach(KoColorProfile* profile, d->colorprofiles) {
+    foreach (KoColorProfile *profile, d->colorprofiles) {
         KoColorSpaceRegistry::instance()->removeProfile(profile);
         delete profile;
     }
     delete d;
 }
 
-const KoColorProfile* KoColorSpaceFactory::colorProfile(const QByteArray& rawData) const
+const KoColorProfile *KoColorSpaceFactory::colorProfile(const QByteArray &rawData) const
 {
-    KoColorProfile* colorProfile = createColorProfile(rawData);
+    KoColorProfile *colorProfile = createColorProfile(rawData);
     if (colorProfile && colorProfile->valid()) {
-        if (const KoColorProfile* existingProfile = KoColorSpaceRegistry::instance()->profileByName(colorProfile->name())) {
+        if (const KoColorProfile *existingProfile = KoColorSpaceRegistry::instance()->profileByName(colorProfile->name())) {
             delete colorProfile;
             return existingProfile;
         }
@@ -47,23 +48,21 @@ const KoColorProfile* KoColorSpaceFactory::colorProfile(const QByteArray& rawDat
     return colorProfile;
 }
 
-const KoColorSpace *KoColorSpaceFactory::grabColorSpace(const KoColorProfile * profile)
+const KoColorSpace *KoColorSpaceFactory::grabColorSpace(const KoColorProfile *profile)
 {
     QMutexLocker l(&d->mutex);
     Q_ASSERT(profile);
     auto it = d->availableColorspaces.find(profile->name());
-    KoColorSpace* cs;
+    KoColorSpace *cs;
 
     if (it == d->availableColorspaces.end()) {
         cs = createColorSpace(profile);
         if (cs) {
             d->availableColorspaces[profile->name()] = cs;
         }
-    }
-    else {
+    } else {
         cs = it.value();
     }
 
     return cs;
 }
-

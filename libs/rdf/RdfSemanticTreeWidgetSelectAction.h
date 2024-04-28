@@ -7,17 +7,16 @@
 #ifndef __rdf_RdfSemanticTreeWidgetSelectAction_h__
 #define __rdf_RdfSemanticTreeWidgetSelectAction_h__
 
-#include "kordf_export.h"
-#include "RdfSemanticTreeWidgetAction.h"
 #include "KoRdfSemanticItem.h"
-
+#include "RdfSemanticTreeWidgetAction.h"
+#include "kordf_export.h"
 
 class KORDF_EXPORT RdfSemanticTreeWidgetSelectAction : public RdfSemanticTreeWidgetAction
 {
     hKoRdfSemanticItem si;
+
 public:
-    RdfSemanticTreeWidgetSelectAction(QWidget *parent, KoCanvasBase *canvas,
-            hKoRdfSemanticItem si, const QString &name = QString("Select"));
+    RdfSemanticTreeWidgetSelectAction(QWidget *parent, KoCanvasBase *canvas, hKoRdfSemanticItem si, const QString &name = QString("Select"));
 
     virtual ~RdfSemanticTreeWidgetSelectAction();
     virtual void activated();

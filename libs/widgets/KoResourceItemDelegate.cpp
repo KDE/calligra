@@ -9,66 +9,66 @@
 #include <KoAbstractGradient.h>
 #include <QPainter>
 
-KoResourceItemDelegate::KoResourceItemDelegate( QObject * parent )
-    : QAbstractItemDelegate( parent ), m_checkerPainter( 4 )
+KoResourceItemDelegate::KoResourceItemDelegate(QObject *parent)
+    : QAbstractItemDelegate(parent)
+    , m_checkerPainter(4)
 {
 }
 
-void KoResourceItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+void KoResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if( ! index.isValid() )
+    if (!index.isValid())
         return;
 
-    KoResource * resource = static_cast<KoResource*>( index.internalPointer() );
+    KoResource *resource = static_cast<KoResource *>(index.internalPointer());
     if (!resource)
         return;
 
     painter->save();
 
     if (option.state & QStyle::State_Selected)
-        painter->fillRect( option.rect, option.palette.highlight() );
+        painter->fillRect(option.rect, option.palette.highlight());
 
-    QRect innerRect = option.rect.adjusted( 2, 1, -2, -1 );
+    QRect innerRect = option.rect.adjusted(2, 1, -2, -1);
 
-    KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>( resource );
+    KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient *>(resource);
     if (gradient) {
-        QGradient * g = gradient->toQGradient();
+        QGradient *g = gradient->toQGradient();
 
         QLinearGradient paintGradient;
-        paintGradient.setStops( g->stops() );
-        paintGradient.setStart( innerRect.topLeft() );
-        paintGradient.setFinalStop( innerRect.topRight() );
+        paintGradient.setStops(g->stops());
+        paintGradient.setStart(innerRect.topLeft());
+        paintGradient.setFinalStop(innerRect.topRight());
 
-        m_checkerPainter.paint( *painter, innerRect );
-        painter->fillRect( innerRect, QBrush( paintGradient ) );
+        m_checkerPainter.paint(*painter, innerRect);
+        painter->fillRect(innerRect, QBrush(paintGradient));
 
         delete g;
-    }
-    else {
-        QImage thumbnail = index.data( Qt::DecorationRole ).value<QImage>();
+    } else {
+        QImage thumbnail = index.data(Qt::DecorationRole).value<QImage>();
 
         QSize imageSize = thumbnail.size();
 
-        if(imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width()) {
-            qreal scaleW = static_cast<qreal>( innerRect.width() ) / static_cast<qreal>( imageSize.width() );
-            qreal scaleH = static_cast<qreal>( innerRect.height() ) / static_cast<qreal>( imageSize.height() );
+        if (imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width()) {
+            qreal scaleW = static_cast<qreal>(innerRect.width()) / static_cast<qreal>(imageSize.width());
+            qreal scaleH = static_cast<qreal>(innerRect.height()) / static_cast<qreal>(imageSize.height());
 
-            qreal scale = qMin( scaleW, scaleH );
+            qreal scale = qMin(scaleW, scaleH);
 
-            int thumbW = static_cast<int>( imageSize.width() * scale );
-            int thumbH = static_cast<int>( imageSize.height() * scale );
-            thumbnail = thumbnail.scaled( thumbW, thumbH, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+            int thumbW = static_cast<int>(imageSize.width() * scale);
+            int thumbH = static_cast<int>(imageSize.height() * scale);
+            thumbnail = thumbnail.scaled(thumbW, thumbH, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         }
         painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
         if (thumbnail.hasAlphaChannel()) {
             painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
         }
-        painter->fillRect( innerRect, QBrush(thumbnail) );
+        painter->fillRect(innerRect, QBrush(thumbnail));
     }
     painter->restore();
 }
 
-QSize KoResourceItemDelegate::sizeHint( const QStyleOptionViewItem & optionItem, const QModelIndex & ) const
+QSize KoResourceItemDelegate::sizeHint(const QStyleOptionViewItem &optionItem, const QModelIndex &) const
 {
     return optionItem.decorationSize;
 }

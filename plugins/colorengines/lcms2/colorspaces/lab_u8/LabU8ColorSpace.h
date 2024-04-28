@@ -2,13 +2,13 @@
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef LabU8ColorSpace_H_
 #define LabU8ColorSpace_H_
 
-#include "LcmsColorSpace.h"
 #include "KoColorModelStandardIds.h"
+#include "LcmsColorSpace.h"
 
 #define TYPE_LABA_8 (COLORSPACE_SH(PT_Lab) | CHANNELS_SH(3) | BYTES_SH(1) | EXTRA_SH(1))
 
@@ -36,13 +36,13 @@ public:
         return Integer8BitsColorDepthID;
     }
 
-    virtual KoColorSpace* clone() const;
-    void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const override;
-    void colorFromXML(quint8* pixel, const QDomElement& elt) const override;
+    virtual KoColorSpace *clone() const;
+    void colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const override;
+    void colorFromXML(quint8 *pixel, const QDomElement &elt) const override;
     void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const override;
-    QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
+    QVector<double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
     void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const override;
-    QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
+    QVector<double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
 
 private:
     static const quint32 MAX_CHANNEL_L = 100;
@@ -53,7 +53,10 @@ private:
 class LabU8ColorSpaceFactory : public LcmsColorSpaceFactory
 {
 public:
-    LabU8ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_LABA_8, cmsSigLabData) {}
+    LabU8ColorSpaceFactory()
+        : LcmsColorSpaceFactory(TYPE_LABA_8, cmsSigLabData)
+    {
+    }
 
     bool userVisible() const override
     {

@@ -6,8 +6,8 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "utils.h"
-#include <string.h>
 #include <iomanip>
+#include <string.h>
 
 #include "XlsRecordOutputStream.h"
 
@@ -29,7 +29,7 @@ QString columnName(uint column)
     return s;
 }
 
-QString encodeSheetName(const QString& name)
+QString encodeSheetName(const QString &name)
 {
     QString sheetName = name;
     if (sheetName.contains(' ') || sheetName.contains('.') || sheetName.contains('\''))
@@ -37,12 +37,12 @@ QString encodeSheetName(const QString& name)
     return sheetName;
 }
 
-QString encodeAddress(const QString& sheetName, uint column, uint row)
+QString encodeAddress(const QString &sheetName, uint column, uint row)
 {
-    return QString("%1.%2%3").arg(encodeSheetName(sheetName), columnName(column)).arg(row+1);
+    return QString("%1.%2%3").arg(encodeSheetName(sheetName), columnName(column)).arg(row + 1);
 }
 
-QString encodeAddress(const QString& sheetName, const QRect &rect)
+QString encodeAddress(const QString &sheetName, const QRect &rect)
 {
     int startColumn = rect.left();
     int startRow = rect.top();
@@ -50,20 +50,22 @@ QString encodeAddress(const QString& sheetName, const QRect &rect)
     int endRow = rect.bottom();
     if (rect.width() == 1 && rect.height() == 1)
         return encodeAddress(sheetName, startColumn, startRow);
-    return QString("%1.%2%3:%4%5").arg(encodeSheetName(sheetName), columnName(startColumn)).arg(startRow+1).arg(columnName(endColumn)).arg(endRow+1);
+    return QString("%1.%2%3:%4%5").arg(encodeSheetName(sheetName), columnName(startColumn)).arg(startRow + 1).arg(columnName(endColumn)).arg(endRow + 1);
 }
 
-QString readByteString(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* size)
+QString readByteString(const void *p, unsigned length, unsigned maxSize, bool *error, unsigned *size)
 {
-    const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
+    const unsigned char *data = reinterpret_cast<const unsigned char *>(p);
 
-    if (size) *size = length;
+    if (size)
+        *size = length;
     if (length > maxSize) {
-        if (*error) *error = true;
+        if (*error)
+            *error = true;
         return QString();
     }
 
-    char* buffer = new char[length+1];
+    char *buffer = new char[length + 1];
     memcpy(buffer, data, length);
     buffer[length] = 0;
     QString str(buffer);
@@ -72,35 +74,48 @@ QString readByteString(const void* p, unsigned length, unsigned maxSize, bool* e
     return str;
 }
 
-QString readTerminatedUnicodeChars(const void* p, unsigned* pSize, unsigned maxSize, bool* error)
+QString readTerminatedUnicodeChars(const void *p, unsigned *pSize, unsigned maxSize, bool *error)
 {
-    const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
+    const unsigned char *data = reinterpret_cast<const unsigned char *>(p);
 
     QString str;
     unsigned offset = 0;
     unsigned size = offset;
     while (true) {
-        if (size+2 > maxSize) {
-            if (*error) *error = true;
+        if (size + 2 > maxSize) {
+            if (*error)
+                *error = true;
             return QString();
         }
         unsigned uchar = readU16(data + offset);
         size += 2;
-        if (uchar == '\0') break;
+        if (uchar == '\0')
+            break;
         offset += 2;
         str.append(QChar(uchar));
     }
 
-    if (pSize) *pSize = size;
+    if (pSize)
+        *pSize = size;
     return str;
 }
 
-QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition, unsigned offset, bool unicode, bool asianPhonetics, bool richText)
+QString readUnicodeChars(const void *p,
+                         unsigned length,
+                         unsigned maxSize,
+                         bool *error,
+                         unsigned *pSize,
+                         unsigned continuePosition,
+                         unsigned offset,
+                         bool unicode,
+                         bool asianPhonetics,
+                         bool richText)
 {
-    const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
+    const unsigned char *data = reinterpret_cast<const unsigned char *>(p);
 
     if (maxSize < 1) {
-        if (*error) *error = true;
+        if (*error)
+            *error = true;
         return QString();
     }
 
@@ -109,7 +124,8 @@ QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
 
     if (richText) {
         if (offset + 2 > maxSize) {
-            if (*error) *error = true;
+            if (*error)
+                *error = true;
             return QString();
         }
         formatRuns = readU16(data + offset);
@@ -118,7 +134,8 @@ QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
 
     if (asianPhonetics) {
         if (offset + 4 > maxSize) {
-            if (*error) *error = true;
+            if (*error)
+                *error = true;
             return QString();
         }
         asianPhoneticsSize = readU32(data + offset);
@@ -127,10 +144,13 @@ QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
 
     // find out total bytes used in this string
     unsigned size = offset;
-    if (richText) size += (formatRuns * 4);
-    if (asianPhonetics) size += asianPhoneticsSize;
+    if (richText)
+        size += (formatRuns * 4);
+    if (asianPhonetics)
+        size += asianPhoneticsSize;
     if (size > maxSize) {
-        if (*error) *error = true;
+        if (*error)
+            *error = true;
         return QString();
     }
     QString str;
@@ -138,7 +158,8 @@ QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
         unsigned uchar;
         if (unicode) {
             if (size + 2 > maxSize) {
-                if (*error) *error = true;
+                if (*error)
+                    *error = true;
                 return QString();
             }
             uchar = readU16(data + offset);
@@ -146,7 +167,8 @@ QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
             size += 2;
         } else {
             if (size + 1 > maxSize) {
-                if (*error) *error = true;
+                if (*error)
+                    *error = true;
                 return QString();
             }
             uchar = data[offset++];
@@ -155,7 +177,8 @@ QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
         str.append(QChar(uchar));
         if (offset == continuePosition && k < length - 1) {
             if (size + 1 > maxSize) {
-                if (*error) *error = true;
+                if (*error)
+                    *error = true;
                 return QString();
             }
             unicode = data[offset] & 1;
@@ -164,16 +187,18 @@ QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
         }
     }
 
-    if (pSize) *pSize = size;
+    if (pSize)
+        *pSize = size;
     return str;
 }
 
-QString readUnicodeString(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition)
+QString readUnicodeString(const void *p, unsigned length, unsigned maxSize, bool *error, unsigned *pSize, unsigned continuePosition)
 {
-    const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
+    const unsigned char *data = reinterpret_cast<const unsigned char *>(p);
 
     if (maxSize < 1) {
-        if (*error) *error = true;
+        if (*error)
+            *error = true;
         return QString();
     }
 
@@ -186,7 +211,7 @@ QString readUnicodeString(const void* p, unsigned length, unsigned maxSize, bool
     return readUnicodeChars(p, length, maxSize, error, pSize, continuePosition, offset, unicode, asianPhonetics, richText);
 }
 
-QString readUnicodeCharArray(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition)
+QString readUnicodeCharArray(const void *p, unsigned length, unsigned maxSize, bool *error, unsigned *pSize, unsigned continuePosition)
 {
     if (length == unsigned(-1)) { // null terminated string
         return readTerminatedUnicodeChars(p, pSize, maxSize, error);
@@ -195,20 +220,21 @@ QString readUnicodeCharArray(const void* p, unsigned length, unsigned maxSize, b
     }
 }
 
-std::ostream& operator<<(std::ostream& s, const QString& ustring)
+std::ostream &operator<<(std::ostream &s, const QString &ustring)
 {
     s << qPrintable(ustring);
     return s;
 }
 
-std::ostream& operator<<(std::ostream& s, const QByteArray& d)
+std::ostream &operator<<(std::ostream &s, const QByteArray &d)
 {
     s << std::hex << std::setfill('0');
-    for (int i = 0; i < d.size(); i++) s << " " << std::setw(2) << int((unsigned char)d[i]);
+    for (int i = 0; i < d.size(); i++)
+        s << " " << std::setw(2) << int((unsigned char)d[i]);
     return s << std::dec;
 }
 
-std::ostream& operator<<(std::ostream& s, const QUuid& uuid)
+std::ostream &operator<<(std::ostream &s, const QUuid &uuid)
 {
     return s << uuid.toString().toLatin1().constData();
 }
@@ -218,14 +244,29 @@ Value errorAsValue(int errorCode)
     Value result(Value::Error);
 
     switch (errorCode) {
-    case 0x00: result = Value::errorNULL();  break;
-    case 0x07: result = Value::errorDIV0();  break;
-    case 0x0f: result = Value::errorVALUE(); break;
-    case 0x17: result = Value::errorREF();   break;
-    case 0x1d: result = Value::errorNAME();  break;
-    case 0x24: result = Value::errorNUM();   break;
-    case 0x2A: result = Value::errorNA();    break;
-    default: break;
+    case 0x00:
+        result = Value::errorNULL();
+        break;
+    case 0x07:
+        result = Value::errorDIV0();
+        break;
+    case 0x0f:
+        result = Value::errorVALUE();
+        break;
+    case 0x17:
+        result = Value::errorREF();
+        break;
+    case 0x1d:
+        result = Value::errorNAME();
+        break;
+    case 0x24:
+        result = Value::errorNUM();
+        break;
+    case 0x2A:
+        result = Value::errorNA();
+        break;
+    default:
+        break;
     }
 
     return result;
@@ -248,7 +289,7 @@ Record::~Record()
 {
 }
 
-Record* Record::create(unsigned type, Workbook *book)
+Record *Record::create(unsigned type, Workbook *book)
 {
     return RecordRegistry::createRecord(type, book);
 }
@@ -263,7 +304,7 @@ unsigned Record::position() const
     return stream_position;
 }
 
-void Record::setData(unsigned, const unsigned char*, const unsigned int*)
+void Record::setData(unsigned, const unsigned char *, const unsigned int *)
 {
 }
 
@@ -273,7 +314,7 @@ void Record::writeData(XlsRecordOutputStream &out) const
     qCWarning(lcSidewinder) << "ERROR! writeData not implemented for record type" << rtti();
 }
 
-void Record::dump(std::ostream&) const
+void Record::dump(std::ostream &) const
 {
     // nothing to dump
 }
@@ -293,7 +334,7 @@ void RecordRegistry::registerRecordClass(unsigned id, RecordFactory factory)
     instance()->records[id] = factory;
 }
 
-void RecordRegistry::registerRecordClass(unsigned id, RecordFactoryWithArgs factory, void* args)
+void RecordRegistry::registerRecordClass(unsigned id, RecordFactoryWithArgs factory, void *args)
 {
     instance()->recordsWithArgs[id] = factory;
     instance()->recordArgs[id] = args;
@@ -306,9 +347,9 @@ void RecordRegistry::unregisterRecordClass(unsigned id)
     instance()->recordArgs.erase(id);
 }
 
-Record* RecordRegistry::createRecord(unsigned id, Workbook *book)
+Record *RecordRegistry::createRecord(unsigned id, Workbook *book)
 {
-    RecordRegistry* q = instance();
+    RecordRegistry *q = instance();
 
     std::map<unsigned, RecordFactory>::iterator it = q->records.find(id);
     if (it != q->records.end()) {
@@ -317,16 +358,17 @@ Record* RecordRegistry::createRecord(unsigned id, Workbook *book)
 
     std::map<unsigned, RecordFactoryWithArgs>::iterator it2 = q->recordsWithArgs.find(id);
     if (it2 != q->recordsWithArgs.end()) {
-        return it2->second(book,  q->recordArgs[id]);
+        return it2->second(book, q->recordArgs[id]);
     }
 
     return 0;
 }
 
-RecordRegistry* RecordRegistry::instance()
+RecordRegistry *RecordRegistry::instance()
 {
-    static RecordRegistry* sinstance = 0;
-    if (!sinstance) sinstance = new RecordRegistry();
+    static RecordRegistry *sinstance = 0;
+    if (!sinstance)
+        sinstance = new RecordRegistry();
     return sinstance;
 }
 

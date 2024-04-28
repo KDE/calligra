@@ -4,28 +4,31 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 #include "kpresenterslideloader.h"
+#include <KPluginFactory>
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
-#include <KPluginFactory>
 #include <QDebug>
 
-KPresenterSlideLoader::KPresenterSlideLoader(QObject* parent) :SlideLoader(parent) {
+KPresenterSlideLoader::KPresenterSlideLoader(QObject *parent)
+    : SlideLoader(parent)
+{
     m_doc = 0;
     version = 0;
 }
 
-KPresenterSlideLoader::~KPresenterSlideLoader() {
+KPresenterSlideLoader::~KPresenterSlideLoader()
+{
     close();
 }
-void KPresenterSlideLoader::close() {
+void KPresenterSlideLoader::close()
+{
     delete m_doc;
     m_doc = 0;
     version++;
     emit slidesChanged();
 }
 
-void
-KPresenterSlideLoader::open(const QString& path)
+void KPresenterSlideLoader::open(const QString &path)
 {
     close();
 
@@ -35,7 +38,7 @@ KPresenterSlideLoader::open(const QString& path)
         close();
         return;
     }
-    KoPADocument* doc = factory->create<KoPADocument>();
+    KoPADocument *doc = factory->create<KoPADocument>();
     m_doc = doc;
     KUrl url;
     url.setPath(path);
@@ -50,19 +53,25 @@ KPresenterSlideLoader::open(const QString& path)
     doc->setAutoSave(0);
     emit slidesChanged();
 }
-int
-KPresenterSlideLoader::numberOfSlides() {
-    return (m_doc) ?m_doc->pageCount() :0;
+int KPresenterSlideLoader::numberOfSlides()
+{
+    return (m_doc) ? m_doc->pageCount() : 0;
 }
-QSize KPresenterSlideLoader::slideSize() {
-    if (!m_doc) return QSize();
-    KoPAPageBase* page = m_doc->pages().value(0);
-    if (!page) return QSize();
+QSize KPresenterSlideLoader::slideSize()
+{
+    if (!m_doc)
+        return QSize();
+    KoPAPageBase *page = m_doc->pages().value(0);
+    if (!page)
+        return QSize();
     return page->size().toSize();
 }
-QPixmap KPresenterSlideLoader::loadSlide(int number, const QSize& maxsize) {
-    if (!m_doc) return QPixmap();
-    KoPAPageBase* page = m_doc->pages().value(number);
-    if (!page) return QPixmap();
+QPixmap KPresenterSlideLoader::loadSlide(int number, const QSize &maxsize)
+{
+    if (!m_doc)
+        return QPixmap();
+    KoPAPageBase *page = m_doc->pages().value(number);
+    if (!page)
+        return QPixmap();
     return page->thumbnail(maxsize);
 }

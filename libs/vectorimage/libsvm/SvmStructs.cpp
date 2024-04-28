@@ -9,15 +9,13 @@
 
 #include <QDataStream>
 
-
-static void soakBytes( QDataStream &stream, int numBytes )
+static void soakBytes(QDataStream &stream, int numBytes)
 {
     quint8 scratch;
-    for ( int i = 0; i < numBytes; ++i ) {
+    for (int i = 0; i < numBytes; ++i) {
         stream >> scratch;
     }
 }
-
 
 namespace Libsvm
 {
@@ -42,7 +40,6 @@ QDataStream &operator>>(QDataStream &stream, VersionCompat &compat)
     return stream;
 }
 
-
 Fraction::Fraction()
     : numerator(1)
     , denominator(1)
@@ -62,7 +59,6 @@ QDataStream &operator>>(QDataStream &stream, Fraction &fract)
 
     return stream;
 }
-
 
 MapMode::MapMode()
     : version()
@@ -86,7 +82,7 @@ QDataStream &operator>>(QDataStream &stream, MapMode &mm)
     stream >> mm.origin;
     stream >> mm.scaleX;
     stream >> mm.scaleY;
-    stream >> mm.isSimple;         // FIXME: how many bytes?
+    stream >> mm.isSimple; // FIXME: how many bytes?
 
     return stream;
 }
@@ -120,6 +116,4 @@ QDataStream &operator>>(QDataStream &stream, SvmHeader &header)
 
     return stream;
 }
-
-
 }

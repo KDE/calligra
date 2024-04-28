@@ -13,9 +13,9 @@
 
 #include <KActionCollection>
 
-#include <KWPart.h>
-#include <KWDocument.h>
 #include <KWCanvasItem.h>
+#include <KWDocument.h>
+#include <KWPart.h>
 #include <KoColumns.h>
 #include <KoFindText.h>
 #include <KoShape.h>
@@ -25,11 +25,11 @@
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
 
+#include <QDebug>
+#include <QPointer>
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextLayout>
-#include <QDebug>
-#include <QPointer>
 #include <QUrlQuery>
 
 #include "ComponentsKoCanvasController.h"
@@ -40,23 +40,26 @@ using namespace Calligra::Components;
 class TextDocumentImpl::Private
 {
 public:
-    Private() : part{nullptr}, document{nullptr}
-    { }
+    Private()
+        : part{nullptr}
+        , document{nullptr}
+    {
+    }
 
     QPointer<KWPart> part;
     QPointer<KWDocument> document;
     QPointer<KWCanvasItem> canvas;
     QTimer indexChangedDelay;
 
-    QList< QPair< QRectF, QUrl > > links;
+    QList<QPair<QRectF, QUrl>> links;
 
-    QList<KoShape*> deepShapeFind(QList<KoShape*> shapes)
+    QList<KoShape *> deepShapeFind(QList<KoShape *> shapes)
     {
-        QList<KoShape*> allShapes;
-        foreach(KoShape* shape, shapes) {
+        QList<KoShape *> allShapes;
+        foreach (KoShape *shape, shapes) {
             allShapes.append(shape);
-            KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
-            if(container) {
+            KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(shape);
+            if (container) {
                 allShapes.append(deepShapeFind(container->shapes()));
             }
         }
@@ -67,24 +70,23 @@ public:
     {
         links.clear();
 
-        if(!canvas || !canvas->shapeManager())
+        if (!canvas || !canvas->shapeManager())
             return;
 
-        foreach(const KoShape* shape, canvas->shapeManager()->shapes()) {
-            if(!shape->hyperLink().isEmpty()) {
+        foreach (const KoShape *shape, canvas->shapeManager()->shapes()) {
+            if (!shape->hyperLink().isEmpty()) {
                 QRectF rect = shape->boundingRect();
-                for (KoShapeContainer* parent = shape->parent();
-                     parent; parent = parent->parent()) {
+                for (KoShapeContainer *parent = shape->parent(); parent; parent = parent->parent()) {
                     rect.translate(parent->position());
                 }
                 links.append(QPair<QRectF, QUrl>(rect, QUrl(shape->hyperLink())));
             }
         }
 
-        QList<QTextDocument*> texts;
+        QList<QTextDocument *> texts;
         KoFindText::findTextInShapes(canvas->shapeManager()->shapes(), texts);
-        QList<KoShape*> allShapes = deepShapeFind(canvas->shapeManager()->shapes());
-        foreach(QTextDocument* text, texts) {
+        QList<KoShape *> allShapes = deepShapeFind(canvas->shapeManager()->shapes());
+        foreach (QTextDocument *text, texts) {
             QTextBlock block = text->rootFrame()->firstCursorPosition().block();
             for (; block.isValid(); block = block.next()) {
                 block.begin();
@@ -93,27 +95,25 @@ public:
                     QTextFragment fragment = it.fragment();
                     if (fragment.isValid()) {
                         QTextCharFormat format = fragment.charFormat();
-                        if(format.isAnchor()) {
+                        if (format.isAnchor()) {
                             // This is an anchor, store target and position...
                             QRectF rect = getFragmentPosition(block, fragment);
-                            foreach(KoShape* shape, allShapes) {
-                                KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+                            foreach (KoShape *shape, allShapes) {
+                                KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());
                                 if (!shapeData)
                                     continue;
-                                if(shapeData->document() == text)
-                                {
+                                if (shapeData->document() == text) {
                                     rect.translate(shape->position());
-                                    for (KoShapeContainer* parent = shape->parent();
-                                         parent; parent = parent->parent()) {
+                                    for (KoShapeContainer *parent = shape->parent(); parent; parent = parent->parent()) {
                                         rect.translate(parent->position());
                                     }
                                     break;
                                 }
                             }
                             KWPage page = document->pageManager()->page(rect.top());
-                            //rect.translate(page.rightMargin(), page.topMargin());
-                            //rect = canvas->viewConverter()->documentToView(rect);
-                            //rect.translate(0, page.pageNumber() * (page.topMargin() + page.bottomMargin()) + 20);
+                            // rect.translate(page.rightMargin(), page.topMargin());
+                            // rect = canvas->viewConverter()->documentToView(rect);
+                            // rect.translate(0, page.pageNumber() * (page.topMargin() + page.bottomMargin()) + 20);
                             rect.translate(0, (page.pageNumber() - 1) * (page.topMargin() + 20));
                             links.append(QPair<QRectF, QUrl>(canvas->viewConverter()->documentToView(rect), QUrl(format.anchorHref())));
                         }
@@ -129,10 +129,9 @@ public:
         // TODO this only produces a position for the first part, if the link spans more than one line...
         // Need to sort that somehow, unfortunately probably by slapping this code into the above function.
         // For now leave it like this, more important things are needed.
-        QTextLayout* layout = block.layout();
+        QTextLayout *layout = block.layout();
         QTextLine line = layout->lineForTextPosition(fragment.position() - block.position());
-        if(!line.isValid())
-        {
+        if (!line.isValid()) {
             // fragment has no valid position and consequently no line...
             return QRectF();
         }
@@ -147,10 +146,11 @@ public:
     static const float wiggleFactor;
 };
 
-const float Calligra::Components::TextDocumentImpl::Private::wiggleFactor{ 4.f };
+const float Calligra::Components::TextDocumentImpl::Private::wiggleFactor{4.f};
 
-TextDocumentImpl::TextDocumentImpl(QObject* parent)
-    : DocumentImpl{parent}, d{new Private}
+TextDocumentImpl::TextDocumentImpl(QObject *parent)
+    : DocumentImpl{parent}
+    , d{new Private}
 {
     setDocumentType(DocumentType::TextDocument);
     d->indexChangedDelay.setInterval(0);
@@ -162,7 +162,7 @@ TextDocumentImpl::~TextDocumentImpl()
     delete d;
 }
 
-bool TextDocumentImpl::load(const QUrl& url)
+bool TextDocumentImpl::load(const QUrl &url)
 {
     delete d->part;
     delete d->document;
@@ -197,8 +197,7 @@ bool TextDocumentImpl::load(const QUrl& url)
             layout.bindingSide = MM_TO_POINT(query.queryItemValue("leftmargin").toDouble());
             layout.pageEdge = MM_TO_POINT(query.queryItemValue("rightmargin").toDouble());
             layout.leftMargin = layout.rightMargin = -1;
-        }
-        else {
+        } else {
             layout.bindingSide = layout.pageEdge = -1;
             layout.leftMargin = MM_TO_POINT(query.queryItemValue("leftmargin").toDouble());
             layout.rightMargin = MM_TO_POINT(query.queryItemValue("rightmargin").toDouble());
@@ -210,8 +209,7 @@ bool TextDocumentImpl::load(const QUrl& url)
         d->document->setUnit(KoUnit::fromSymbol(query.queryItemValue("unit")));
         d->document->relayout();
         retval = true;
-    }
-    else if (url.scheme() == QStringLiteral("template")) {
+    } else if (url.scheme() == QStringLiteral("template")) {
         // Nip away the manually added template:// bit of the uri passed from the caller
         bool ok = d->document->loadNativeFormat(url.toString().mid(11));
         d->document->setModified(false);
@@ -220,7 +218,7 @@ bool TextDocumentImpl::load(const QUrl& url)
         if (ok) {
             QString mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
             // in case this is a open document template remove the -template from the end
-            mimeType.remove( QRegularExpression( "-template$" ) );
+            mimeType.remove(QRegularExpression("-template$"));
             d->document->setMimeTypeAfterLoading(mimeType);
             d->document->resetURL();
             d->document->setEmpty();
@@ -229,13 +227,12 @@ bool TextDocumentImpl::load(const QUrl& url)
             d->document->initEmpty();
         }
         retval = true;
-    }
-    else {
+    } else {
         retval = d->document->openUrl(url);
     }
     qDebug() << "Attempting to open" << url << "and our success was" << retval;
 
-    d->canvas = static_cast<KWCanvasItem*>(d->part->canvasItem(d->document));
+    d->canvas = static_cast<KWCanvasItem *>(d->part->canvasItem(d->document));
 
     createAndSetCanvasController(d->canvas);
     createAndSetZoomController(d->canvas);
@@ -254,7 +251,7 @@ bool TextDocumentImpl::load(const QUrl& url)
 
 int TextDocumentImpl::currentIndex()
 {
-    if(!d->canvas || !d->canvas->viewConverter()) {
+    if (!d->canvas || !d->canvas->viewConverter()) {
         return 0;
     }
     QPointF newPoint = d->canvas->viewConverter()->viewToDocument(canvasController()->documentOffset());
@@ -279,22 +276,19 @@ int TextDocumentImpl::indexCount() const
 QUrl TextDocumentImpl::urlAtPoint(QPoint point)
 {
     qDebug() << Q_FUNC_INFO << point + (d->canvas->documentOffset() / zoomController()->zoomAction()->effectiveZoom());
-    for( const QPair< QRectF, QUrl >& link : d->links )
-    {
-        QRectF hitTarget{
-            link.first.x() - Private::wiggleFactor,
-            link.first.y() - Private::wiggleFactor,
-            link.first.width() + Private::wiggleFactor * 2,
-            link.first.height() + Private::wiggleFactor * 2
-        };
+    for (const QPair<QRectF, QUrl> &link : d->links) {
+        QRectF hitTarget{link.first.x() - Private::wiggleFactor,
+                         link.first.y() - Private::wiggleFactor,
+                         link.first.width() + Private::wiggleFactor * 2,
+                         link.first.height() + Private::wiggleFactor * 2};
 
-        if( hitTarget.contains( point + (d->canvas->documentOffset() / zoomController()->zoomAction()->effectiveZoom()) ) )
+        if (hitTarget.contains(point + (d->canvas->documentOffset() / zoomController()->zoomAction()->effectiveZoom())))
             return link.second;
     }
     return QUrl();
 }
 
-QObject* TextDocumentImpl::part() const
+QObject *TextDocumentImpl::part() const
 {
     return d->part;
 }

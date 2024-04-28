@@ -8,17 +8,17 @@
 #include "CommentShape.h"
 #include "InitialsCommentShape.h"
 
-#include <KoShape.h>
 #include <KoCanvasBase.h>
+#include <KoShape.h>
 #include <KoShapeManager.h>
 
-#include <QSet>
 #include <KoPointerEvent.h>
+#include <QSet>
 
-CommentTool::CommentTool(KoCanvasBase* canvas)
-: KoToolBase(canvas)
-, m_canvas(canvas)
-, m_previouseActiveCommentShape(0)
+CommentTool::CommentTool(KoCanvasBase *canvas)
+    : KoToolBase(canvas)
+    , m_canvas(canvas)
+    , m_previouseActiveCommentShape(0)
 {
 }
 
@@ -26,15 +26,15 @@ CommentTool::~CommentTool()
 {
 }
 
-void CommentTool::activate(KoToolBase::ToolActivation toolActivation, const QSet< KoShape* >& /*shapes*/)
+void CommentTool::activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> & /*shapes*/)
 {
     const QCursor cursor(Qt::ArrowCursor);
     emit useCursor(cursor);
 
-    QList<KoShape*> allShapes = m_canvas->shapeManager()->shapes();
-    foreach( KoShape* shape, allShapes ) {
-        InitialsCommentShape* initialsShape = dynamic_cast<InitialsCommentShape*>(shape);
-        if(initialsShape) {
+    QList<KoShape *> allShapes = m_canvas->shapeManager()->shapes();
+    foreach (KoShape *shape, allShapes) {
+        InitialsCommentShape *initialsShape = dynamic_cast<InitialsCommentShape *>(shape);
+        if (initialsShape) {
             initialsShape->setSelectable(true);
         }
     }
@@ -44,37 +44,37 @@ void CommentTool::activate(KoToolBase::ToolActivation toolActivation, const QSet
 
 void CommentTool::deactivate()
 {
-    QList<KoShape*> allShapes = m_canvas->shapeManager()->shapes();
-    foreach( KoShape* shape, allShapes ) {
-        InitialsCommentShape* initialsShape = dynamic_cast<InitialsCommentShape*>(shape);
-        if(initialsShape) {
+    QList<KoShape *> allShapes = m_canvas->shapeManager()->shapes();
+    foreach (KoShape *shape, allShapes) {
+        InitialsCommentShape *initialsShape = dynamic_cast<InitialsCommentShape *>(shape);
+        if (initialsShape) {
             initialsShape->setSelectable(false);
         }
     }
 
-    if(m_previouseActiveCommentShape) {
+    if (m_previouseActiveCommentShape) {
         m_previouseActiveCommentShape->toogleActive();
         m_previouseActiveCommentShape = 0;
     }
 }
 
-
-void CommentTool::mouseReleaseEvent(KoPointerEvent* event)
+void CommentTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    //disable the previous activeshape
-    if(m_previouseActiveCommentShape) {
+    // disable the previous activeshape
+    if (m_previouseActiveCommentShape) {
         m_previouseActiveCommentShape->setActive(false);
     }
 
-    InitialsCommentShape* initialsUnderCursor = dynamic_cast<InitialsCommentShape*>(m_canvas->shapeManager()->shapeAt(event->point, KoFlake::ShapeOnTop, false));
-    if(initialsUnderCursor) {
-        //don't re-activate the shape we just deactivated
-        if(m_previouseActiveCommentShape == initialsUnderCursor->parent()) {
+    InitialsCommentShape *initialsUnderCursor =
+        dynamic_cast<InitialsCommentShape *>(m_canvas->shapeManager()->shapeAt(event->point, KoFlake::ShapeOnTop, false));
+    if (initialsUnderCursor) {
+        // don't re-activate the shape we just deactivated
+        if (m_previouseActiveCommentShape == initialsUnderCursor->parent()) {
             m_previouseActiveCommentShape = 0;
             return;
         }
 
-        CommentShape* commentUnderCursor = dynamic_cast<CommentShape*>(initialsUnderCursor->parent());
+        CommentShape *commentUnderCursor = dynamic_cast<CommentShape *>(initialsUnderCursor->parent());
         Q_ASSERT(commentUnderCursor);
         commentUnderCursor->setActive(true);
 
@@ -83,23 +83,22 @@ void CommentTool::mouseReleaseEvent(KoPointerEvent* event)
     event->accept();
 }
 
-void CommentTool::mouseMoveEvent(KoPointerEvent* event)
+void CommentTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    InitialsCommentShape* shapeUnderCursor = dynamic_cast<InitialsCommentShape*>(m_canvas->shapeManager()->shapeAt(event->point, KoFlake::ShapeOnTop, false));
-    if(shapeUnderCursor) {
+    InitialsCommentShape *shapeUnderCursor = dynamic_cast<InitialsCommentShape *>(m_canvas->shapeManager()->shapeAt(event->point, KoFlake::ShapeOnTop, false));
+    if (shapeUnderCursor) {
         const QCursor cursor(Qt::PointingHandCursor);
         emit useCursor(cursor);
-    }
-    else {
+    } else {
         const QCursor cursor(Qt::ArrowCursor);
         emit useCursor(cursor);
     }
 }
 
-void CommentTool::mousePressEvent(KoPointerEvent* /*event*/)
+void CommentTool::mousePressEvent(KoPointerEvent * /*event*/)
 {
 }
 
-void CommentTool::paint(QPainter& /*painter*/, const KoViewConverter& /*converter*/)
+void CommentTool::paint(QPainter & /*painter*/, const KoViewConverter & /*converter*/)
 {
 }

@@ -24,10 +24,12 @@ class SvgExport : public KoFilter
     Q_OBJECT
 
 public:
-    SvgExport(QObject* parent, const QVariantList&);
-    ~SvgExport() override {}
+    SvgExport(QObject *parent, const QVariantList &);
+    ~SvgExport() override
+    {
+    }
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };
 
 #endif

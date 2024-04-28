@@ -17,7 +17,6 @@ class KoSectionModel;
 class RenameSectionCommand : public KUndo2Command
 {
 public:
-
     RenameSectionCommand(KoSection *section, const QString &newName, QTextDocument *document);
     ~RenameSectionCommand() override;
 

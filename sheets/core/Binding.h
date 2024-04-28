@@ -27,22 +27,22 @@ class CALLIGRA_SHEETS_CORE_EXPORT Binding
 {
 public:
     Binding();
-    explicit Binding(const Region& region);
-    Binding(const Binding& other);
+    explicit Binding(const Region &region);
+    Binding(const Binding &other);
     ~Binding();
 
     bool isEmpty() const;
 
-    BindingModel* model() const;
+    BindingModel *model() const;
 
-    const Region& region() const;
-    void setRegion(const Region& region);
+    const Region &region() const;
+    void setRegion(const Region &region);
 
-    void update(const Region& region);
+    void update(const Region &region);
 
-    void operator=(const Binding& other);
-    bool operator==(const Binding& other) const;
-    bool operator<(const Binding& other) const;
+    void operator=(const Binding &other);
+    bool operator==(const Binding &other) const;
+    bool operator<(const Binding &other) const;
 
 private:
     class Private;

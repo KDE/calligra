@@ -26,7 +26,8 @@ class KoMarker;
 class KoCanvasBase;
 class KoShapeStroke;
 
-namespace KoChart {
+namespace KoChart
+{
 
 class ChartShape;
 
@@ -61,7 +62,7 @@ private:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace KoChart

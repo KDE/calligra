@@ -5,23 +5,24 @@
 */
 #include <algorithm>
 
-#include <QFile>
 #include <QDebug>
 #include <QDomDocument>
+#include <QFile>
 #include <QMap>
-#include <QtGlobal>
+#include <QSet>
 #include <QSharedPointer>
 #include <QStringList>
-#include <QSet>
 #include <QVector>
+#include <QtGlobal>
 
-static QString ns() {
+static QString ns()
+{
     return QStringLiteral("writeodf");
 }
 
 class RNGItem;
-//typedef QSharedPointer<RNGItem> RNGItemPtr;
-typedef RNGItem* RNGItemPtr;
+// typedef QSharedPointer<RNGItem> RNGItemPtr;
+typedef RNGItem *RNGItemPtr;
 typedef QSet<RNGItemPtr> RNGItems;
 typedef QVector<RNGItemPtr> RNGItemList;
 
@@ -32,21 +33,24 @@ class fatal
 {
 private:
     QString msg;
+
 public:
-    fatal() {}
+    fatal()
+    {
+    }
     ~fatal()
     {
         qFatal("%s", qPrintable(msg));
     }
 
-    fatal& operator<<(qsizetype s)
+    fatal &operator<<(qsizetype s)
     {
         msg += QString::number(s);
         return *this;
     }
 
     template<class T>
-    fatal& operator<<(T s)
+    fatal &operator<<(T s)
     {
         msg += s;
         return *this;
@@ -62,14 +66,15 @@ public:
     /**
      * Standard comparator for Datatype.
      */
-    bool operator==(const Datatype& a) const {
-        return constant == a.constant
-                && type == a.type;
+    bool operator==(const Datatype &a) const
+    {
+        return constant == a.constant && type == a.type;
     }
     /**
      * Standard comparator for Datatype.
      */
-    bool operator!=(const Datatype& a) const {
+    bool operator!=(const Datatype &a) const
+    {
         return !(*this == a);
     }
     /**
@@ -87,7 +92,7 @@ public:
 /**
  * Define a qHash so Datatype can be put into a QSet.
  */
-uint qHash(const Datatype& d)
+uint qHash(const Datatype &d)
 {
     return qHash(d.constant) ^ qHash(d.type);
 }
@@ -102,9 +107,11 @@ class RNGItem
 {
 public:
     enum ItemType { Define, Start, Element, Attribute };
+
 private:
-    RNGItem(const RNGItem&);
-    void operator=(const RNGItem&);
+    RNGItem(const RNGItem &);
+    void operator=(const RNGItem &);
+
 protected:
     /**
      * @brief type
@@ -114,13 +121,16 @@ protected:
     /**
      * Internal constructor.
      */
-    RNGItem(ItemType type, const QString &name = QString()) :m_type(type),
-        m_name(name), mixedContent(false)
+    RNGItem(ItemType type, const QString &name = QString())
+        : m_type(type)
+        , m_name(name)
+        , mixedContent(false)
     {
         if (type != Start && name.isEmpty()) {
             fatal() << "name is empty";
         }
     }
+
 public:
     /**
      * true if this item may contain text nodes
@@ -129,7 +139,10 @@ public:
     /**
      * name attribute of the <define/> element
      */
-    const QString& name() const { return m_name; }
+    const QString &name() const
+    {
+        return m_name;
+    }
     /**
      * transformed name that is used in generated C++ code
      */
@@ -159,11 +172,17 @@ public:
     /**
      * true if this is item corresponds to a <element/>
      */
-    bool isElement() const { return m_type == Element; }
+    bool isElement() const
+    {
+        return m_type == Element;
+    }
     /**
      * true if this is item corresponds to a <attribute/>
      */
-    bool isAttribute() const { return m_type == Attribute; }
+    bool isAttribute() const
+    {
+        return m_type == Attribute;
+    }
     /**
      * Return a string value if this item can only contain a single constant value.
      * For example "1.2" is the only allowed, but required value for the
@@ -171,7 +190,7 @@ public:
      */
     QString singleConstant() const
     {
-        return datatype.size() == 1 ?datatype.constBegin()->constant :QString();
+        return datatype.size() == 1 ? datatype.constBegin()->constant : QString();
     }
     /**
      * Return a string with the datatype if only one datatype is possible for
@@ -179,7 +198,7 @@ public:
      */
     QString singleType() const
     {
-        return datatype.size() == 1 ?datatype.constBegin()->type :QString();
+        return datatype.size() == 1 ? datatype.constBegin()->type : QString();
     }
     /**
      * true if this is item corresponds to a <define/>
@@ -196,7 +215,7 @@ public:
     {
         return m_type == Start;
     }
-    bool operator==(const RNGItem& a) const;
+    bool operator==(const RNGItem &a) const;
 };
 
 /**
@@ -205,7 +224,8 @@ public:
 class Element : public RNGItem
 {
 public:
-    Element(const QString& name) :RNGItem(RNGItem::Element, name)
+    Element(const QString &name)
+        : RNGItem(RNGItem::Element, name)
     {
     }
 };
@@ -216,7 +236,8 @@ public:
 class Attribute : public RNGItem
 {
 public:
-    Attribute(const QString& name) :RNGItem(RNGItem::Attribute, name)
+    Attribute(const QString &name)
+        : RNGItem(RNGItem::Attribute, name)
     {
     }
 };
@@ -227,7 +248,8 @@ public:
 class Start : public RNGItem
 {
 public:
-    Start() :RNGItem(RNGItem::Start)
+    Start()
+        : RNGItem(RNGItem::Start)
     {
     }
 };
@@ -238,7 +260,8 @@ public:
 class Define : public RNGItem
 {
 public:
-    Define(const QString& name) :RNGItem(RNGItem::Define, name)
+    Define(const QString &name)
+        : RNGItem(RNGItem::Define, name)
     {
     }
 };
@@ -252,7 +275,11 @@ class MixedCheck
 public:
     int elementCount;
     bool mixed;
-    MixedCheck() :elementCount(0), mixed(false) {}
+    MixedCheck()
+        : elementCount(0)
+        , mixed(false)
+    {
+    }
 };
 
 /**
@@ -261,7 +288,7 @@ public:
  * @param seen items that were already seen, needed to avoid infinite recursion
  * @param mc data that is being collected
  */
-void isMixed(const RNGItemPtr& item, RNGItems& seen, MixedCheck& mc)
+void isMixed(const RNGItemPtr &item, RNGItems &seen, MixedCheck &mc)
 {
     if (item->isAttribute() || seen.contains(item)) {
         return;
@@ -286,7 +313,7 @@ void isMixed(const RNGItemPtr& item, RNGItems& seen, MixedCheck& mc)
  * @param item item to be investigated
  * @return true if item may contain a mix of text nodes and elements
  */
-bool isMixed(const RNGItemPtr& item)
+bool isMixed(const RNGItemPtr &item)
 {
     RNGItems seen;
     MixedCheck mc;
@@ -297,19 +324,19 @@ bool isMixed(const RNGItemPtr& item)
 /**
  * Merge item b in to item a.
  */
-void merge(RNGItemPtr& a, const RNGItemPtr& b)
+void merge(RNGItemPtr &a, const RNGItemPtr &b)
 {
     if (b->mixedContent) {
         a->mixedContent = true;
     }
     Q_ASSERT(a->allowedItems.contains(b));
     if (a->requiredItems.contains(b)) {
-        foreach(RNGItemPtr i, b->requiredItems) {
+        foreach (RNGItemPtr i, b->requiredItems) {
             a->requiredItems.insert(i);
         }
         a->requiredItems.remove(b);
     }
-    foreach(RNGItemPtr i, b->allowedItems) {
+    foreach (RNGItemPtr i, b->allowedItems) {
         a->allowedItems.insert(i);
     }
     a->allowedItems.remove(b);
@@ -363,20 +390,25 @@ class Files
     /**
      * List of open files.
      */
-    QMap<QString,QMap<QString,QTextStream*> > files;
+    QMap<QString, QMap<QString, QTextStream *>> files;
     /**
      * Directory into which to write all the header files.
      */
     const QString outdir;
+
 public:
-    Files(const QString& outdir_) :outdir(outdir_) {}
+    Files(const QString &outdir_)
+        : outdir(outdir_)
+    {
+    }
     /**
      * Close all open files after writing the closing '#endif'
      */
-    ~Files() {
-        typedef const QMap<QString,QTextStream*> map;
-        foreach (map& m, files) {
-            foreach (QTextStream* out, m) {
+    ~Files()
+    {
+        typedef const QMap<QString, QTextStream *> map;
+        foreach (map &m, files) {
+            foreach (QTextStream *out, m) {
                 *out << "#endif\n";
                 out->device()->close();
                 delete out->device();
@@ -384,7 +416,7 @@ public:
             }
         }
     }
-    QTextStream& getFile(const QString& tag, const QString& tag2);
+    QTextStream &getFile(const QString &tag, const QString &tag2);
     void closeNamespace();
 };
 
@@ -419,7 +451,7 @@ QMap<QString, QString> createTypeMap()
 /**
  * Return a Qt/C++ type for each Relax NG type.
  */
-QString mapType(const QString& type)
+QString mapType(const QString &type)
 {
     static const QMap<QString, QString> map = createTypeMap();
     if (!map.contains(type)) {
@@ -431,12 +463,12 @@ QString mapType(const QString& type)
 /**
  * see below
  */
-void parseContent(const QDomElement& content, RNGItem& item, bool required);
+void parseContent(const QDomElement &content, RNGItem &item, bool required);
 
 /**
  * Get a list of names for the attribute or element.
  */
-QStringList getNames(const QDomElement& e)
+QStringList getNames(const QDomElement &e)
 {
     QStringList names;
     QString name = e.attribute("name");
@@ -464,10 +496,10 @@ QStringList getNames(const QDomElement& e)
 /**
  * Parse an <element/> element.
  */
-void parseElement(const QDomElement& e, RNGItem& parent, bool required)
+void parseElement(const QDomElement &e, RNGItem &parent, bool required)
 {
     QStringList names = getNames(e);
-    foreach (const QString& name, names) {
+    foreach (const QString &name, names) {
         RNGItemPtr element = RNGItemPtr(new Element(name));
         parseContent(e, *element, true);
         parent.allowedItems.insert(element);
@@ -480,10 +512,10 @@ void parseElement(const QDomElement& e, RNGItem& parent, bool required)
 /**
  * Parse an <attribute/> element.
  */
-void parseAttribute(const QDomElement& e, RNGItem& parent, bool required)
+void parseAttribute(const QDomElement &e, RNGItem &parent, bool required)
 {
     QStringList names = getNames(e);
-    foreach (const QString& name, names) {
+    foreach (const QString &name, names) {
         RNGItemPtr attribute = RNGItemPtr(new Attribute(name));
         parseContent(e, *attribute, true);
         parent.allowedItems.insert(attribute);
@@ -496,7 +528,7 @@ void parseAttribute(const QDomElement& e, RNGItem& parent, bool required)
 /**
  * Parse the contents of any Relax NG element.
  */
-void parseContent(const QDomElement& content, RNGItem& item, bool required)
+void parseContent(const QDomElement &content, RNGItem &item, bool required)
 {
     QDomElement e = content.firstChildElement();
     while (!e.isNull()) {
@@ -504,8 +536,7 @@ void parseContent(const QDomElement& content, RNGItem& item, bool required)
         QString name = e.attribute("name");
         if (type == "interleave" || type == "oneOrMore" || type == "group") {
             parseContent(e, item, required);
-        } else if (type == "optional" || type == "choice"
-                   || type == "zeroOrMore") {
+        } else if (type == "optional" || type == "choice" || type == "zeroOrMore") {
             parseContent(e, item, false);
         } else if (type == "ref") {
             item.referencedDeclares.insert(name);
@@ -542,7 +573,7 @@ void parseContent(const QDomElement& content, RNGItem& item, bool required)
 /**
  * Parse the contents of a <define/> or <start/> element.
  */
-RNGItemPtr parseDefine(const QDomElement& defineElement, RNGItems& items, bool isstart)
+RNGItemPtr parseDefine(const QDomElement &defineElement, RNGItems &items, bool isstart)
 {
     RNGItemPtr item;
     if (isstart) {
@@ -558,7 +589,7 @@ RNGItemPtr parseDefine(const QDomElement& defineElement, RNGItems& items, bool i
 /**
  * Parse all top level Relax NG elements.
  */
-RNGItemPtr getDefines(QDomElement e, RNGItems& items)
+RNGItemPtr getDefines(QDomElement e, RNGItems &items)
 {
     RNGItemPtr start = RNGItemPtr(0);
     e = e.firstChildElement();
@@ -579,7 +610,7 @@ RNGItemPtr getDefines(QDomElement e, RNGItems& items)
 /**
  * Load an XML from disk into a DOMDocument instance.
  */
-QDomDocument loadDOM(const QString& url)
+QDomDocument loadDOM(const QString &url)
 {
     QFile f(url);
     f.open(QIODevice::ReadOnly);
@@ -599,9 +630,9 @@ QDomDocument loadDOM(const QString& url)
  * This can be used after parsing to find definitions that are the same.
  * Such deduplication can reduce the size of the generated code.
  */
-RNGItemPtr findEqualItem(const RNGItemPtr&i, const RNGItems& items)
+RNGItemPtr findEqualItem(const RNGItemPtr &i, const RNGItems &items)
 {
-    foreach (const RNGItemPtr& j, items) {
+    foreach (const RNGItemPtr &j, items) {
         if (*i == *j) {
             return j;
         }
@@ -612,27 +643,21 @@ RNGItemPtr findEqualItem(const RNGItemPtr&i, const RNGItems& items)
 /**
  * Compare two RNGItem instances.
  */
-bool RNGItem::operator==(const RNGItem& a) const
+bool RNGItem::operator==(const RNGItem &a) const
 {
-    bool unequal = m_type != a.m_type
-            || m_name != a.m_name
-            || mixedContent != a.mixedContent
-            || cppName != a.cppName
-            || referencedDeclares != a.referencedDeclares
-            || requiredReferencedDeclares != a.requiredReferencedDeclares
-            || allowedItems.size() != a.allowedItems.size()
-            || requiredItems.size() != a.requiredItems.size()
-            || datatype != a.datatype;
+    bool unequal = m_type != a.m_type || m_name != a.m_name || mixedContent != a.mixedContent || cppName != a.cppName
+        || referencedDeclares != a.referencedDeclares || requiredReferencedDeclares != a.requiredReferencedDeclares
+        || allowedItems.size() != a.allowedItems.size() || requiredItems.size() != a.requiredItems.size() || datatype != a.datatype;
     if (unequal) {
         return false;
     }
-    foreach (const RNGItemPtr& i, allowedItems) {
+    foreach (const RNGItemPtr &i, allowedItems) {
         RNGItemPtr j = findEqualItem(i, a.allowedItems);
         if (!j) {
             return false;
         }
     }
-    foreach (const RNGItemPtr& i, requiredItems) {
+    foreach (const RNGItemPtr &i, requiredItems) {
         RNGItemPtr j = findEqualItem(i, a.requiredItems);
         if (!j) {
             return false;
@@ -645,11 +670,11 @@ bool RNGItem::operator==(const RNGItem& a) const
  * Move all member items in the global list.
  * If there is already a global member that is equal, use that in the item.
  */
-void collect(RNGItem& item, RNGItems& collected)
+void collect(RNGItem &item, RNGItems &collected)
 {
-    typedef QPair<RNGItemPtr,RNGItemPtr> Pair;
+    typedef QPair<RNGItemPtr, RNGItemPtr> Pair;
     QList<Pair> toSwap;
-    foreach (const RNGItemPtr& i, item.allowedItems) {
+    foreach (const RNGItemPtr &i, item.allowedItems) {
         RNGItemPtr j = findEqualItem(i, collected);
         if (!j) {
             collected.insert(i);
@@ -658,7 +683,7 @@ void collect(RNGItem& item, RNGItems& collected)
             toSwap.append(qMakePair(i, j));
         }
     }
-    foreach (const Pair& i, toSwap) {
+    foreach (const Pair &i, toSwap) {
         RNGItemPtr toRemove = i.first;
         RNGItemPtr toAdd = i.second;
         if (item.requiredItems.contains(toRemove)) {
@@ -674,9 +699,9 @@ void collect(RNGItem& item, RNGItems& collected)
  * Move all member items in the global list.
  * If there is already a global member that is equal, use that in the item.
  */
-void collect(const RNGItems& items, RNGItems& collected)
+void collect(const RNGItems &items, RNGItems &collected)
 {
-    foreach (const RNGItemPtr& item, items) {
+    foreach (const RNGItemPtr &item, items) {
         collect(*item, collected);
     }
 }
@@ -684,9 +709,9 @@ void collect(const RNGItems& items, RNGItems& collected)
 /**
  * Count how often a particular item is used by other items or itself.
  */
-void countUsage(RNGItem& item, QHash<RNGItemPtr,int>& usageCount)
+void countUsage(RNGItem &item, QHash<RNGItemPtr, int> &usageCount)
 {
-    foreach (const RNGItemPtr& i, item.allowedItems) {
+    foreach (const RNGItemPtr &i, item.allowedItems) {
         if (usageCount.contains(i)) {
             usageCount[i]++;
         } else {
@@ -700,17 +725,17 @@ void countUsage(RNGItem& item, QHash<RNGItemPtr,int>& usageCount)
  * place into their parent if possible.
  * This reduces the number of classes in the generated headers.
  */
-int reduce(RNGItems& items)
+int reduce(RNGItems &items)
 {
-    QHash<RNGItemPtr,int> usageCount;
-    foreach (const RNGItemPtr& item, items) {
+    QHash<RNGItemPtr, int> usageCount;
+    foreach (const RNGItemPtr &item, items) {
         countUsage(*item, usageCount);
     }
     RNGItems toRemove;
     foreach (RNGItemPtr item, items) {
         if (usageCount[item] <= 1 && !item->isStart() && item->isDefine()) {
             RNGItemPtr user = RNGItemPtr(0);
-            foreach (const RNGItemPtr& i, items) {
+            foreach (const RNGItemPtr &i, items) {
                 if (i->allowedItems.contains(item)) {
                     Q_ASSERT(!user);
                     user = i;
@@ -723,7 +748,7 @@ int reduce(RNGItems& items)
             break;
         }
     }
-    foreach (const RNGItemPtr& item, toRemove) {
+    foreach (const RNGItemPtr &item, toRemove) {
         items.remove(item);
     }
     return toRemove.size();
@@ -735,11 +760,11 @@ int reduce(RNGItems& items)
  * Relax NG is a hierarchical file format and this function creates a flat list
  * with all items.
  */
-int expand(RNGItems& items)
+int expand(RNGItems &items)
 {
     RNGItems toAdd;
     foreach (RNGItemPtr item, items) {
-        foreach (const RNGItemPtr& i, item->allowedItems) {
+        foreach (const RNGItemPtr &i, item->allowedItems) {
             if (!items.contains(i)) {
                 toAdd.insert(i);
             }
@@ -754,7 +779,7 @@ int expand(RNGItems& items)
 /**
  * Find the <define/> item by name.
  */
-RNGItemPtr getDefine(const QString& name, const RNGItems& items)
+RNGItemPtr getDefine(const QString &name, const RNGItems &items)
 {
     RNGItemPtr item = RNGItemPtr(0);
     foreach (RNGItemPtr i, items) {
@@ -772,13 +797,13 @@ RNGItemPtr getDefine(const QString& name, const RNGItems& items)
  * After parsing, the <ref/> instances should be replaced by the actual
  * items.
  */
-void resolveDefines(RNGItemPtr start, const RNGItems& items, RNGItems& resolved)
+void resolveDefines(RNGItemPtr start, const RNGItems &items, RNGItems &resolved)
 {
     if (resolved.contains(start)) {
         return;
     }
     resolved.insert(start);
-    foreach (const QString& name, start->referencedDeclares) {
+    foreach (const QString &name, start->referencedDeclares) {
         RNGItemPtr i = getDefine(name, items);
         if (start->requiredReferencedDeclares.contains(name)) {
             start->requiredItems.insert(i);
@@ -796,7 +821,7 @@ void resolveDefines(RNGItemPtr start, const RNGItems& items, RNGItems& resolved)
 /**
  * Create a C++ name from the item name.
  */
-QString makeCppName(const RNGItemPtr&item)
+QString makeCppName(const RNGItemPtr &item)
 {
     QString name;
     if (item->isElement() || item->isAttribute()) {
@@ -813,7 +838,7 @@ QString makeCppName(const RNGItemPtr&item)
  * Create a new name from the item name.
  * The new name will not clash with the names from takenNames.
  */
-QString makeUniqueCppName(const RNGItemPtr&item, QSet<QString>& takenNames)
+QString makeUniqueCppName(const RNGItemPtr &item, QSet<QString> &takenNames)
 {
     QString n = makeCppName(item);
     QString name = n;
@@ -828,7 +853,7 @@ QString makeUniqueCppName(const RNGItemPtr&item, QSet<QString>& takenNames)
 /**
  * Create all the C++ names corresponding with the Relax NG items.
  */
-void makeCppNames(RNGItemList& items)
+void makeCppNames(RNGItemList &items)
 {
     QSet<QString> cppnames;
     // handle elements first so they have the nicest names
@@ -854,12 +879,12 @@ void makeCppNames(RNGItemList& items)
 /**
  * Check if an element or attribute is defined below this item.
  */
-bool hasElementOrAttribute(const RNGItemPtr& item, RNGItems& items)
+bool hasElementOrAttribute(const RNGItemPtr &item, RNGItems &items)
 {
     if (items.contains(item)) {
         return false;
     }
-    foreach (const RNGItemPtr& i, item->allowedItems) {
+    foreach (const RNGItemPtr &i, item->allowedItems) {
         if (!i->isDefine() || hasElementOrAttribute(i, items)) {
             return true;
         }
@@ -870,13 +895,14 @@ bool hasElementOrAttribute(const RNGItemPtr& item, RNGItems& items)
 /**
  * Check if an element or attribute is defined below this item.
  */
-bool hasElementOrAttribute(const RNGItemPtr& item)
+bool hasElementOrAttribute(const RNGItemPtr &item)
 {
     RNGItems items;
     return hasElementOrAttribute(item, items);
 }
 
-static RNGItemList toVector(const RNGItems& list) {
+static RNGItemList toVector(const RNGItems &list)
+{
     RNGItemList l;
     l.reserve(list.size());
     std::copy(list.constBegin(), list.constEnd(), std::back_inserter(l));
@@ -912,7 +938,7 @@ RNGItemList getBasesList(RNGItemPtr item)
  * Sort items in the set.
  * This is helpful in making the output reproducible.
  */
-RNGItemList list(const RNGItems& items)
+RNGItemList list(const RNGItems &items)
 {
     RNGItemList list = toVector(items);
     std::stable_sort(list.begin(), list.end(), rngItemPtrLessThan);
@@ -922,10 +948,10 @@ RNGItemList list(const RNGItems& items)
 /**
  * Collect the data types of the attribute item.
  */
-void resolveType(const RNGItemPtr& item, QSet<Datatype>& type)
+void resolveType(const RNGItemPtr &item, QSet<Datatype> &type)
 {
     type.unite(item->datatype);
-    foreach (const RNGItemPtr& i, item->allowedItems) {
+    foreach (const RNGItemPtr &i, item->allowedItems) {
         resolveType(i, type);
     }
 }
@@ -933,9 +959,9 @@ void resolveType(const RNGItemPtr& item, QSet<Datatype>& type)
 /**
  * Collect the data types of the attributes.
  */
-void resolveAttributeDataTypes(const RNGItems& items)
+void resolveAttributeDataTypes(const RNGItems &items)
 {
-    foreach (const RNGItemPtr& i, items) {
+    foreach (const RNGItemPtr &i, items) {
         if (i->isAttribute()) {
             resolveType(i, i->datatype);
         }
@@ -946,15 +972,15 @@ void resolveAttributeDataTypes(const RNGItems& items)
  * Create a ordered list of items.
  * The order is such that dependencies of an item precede the item in the list.
  */
-void addInOrder(RNGItemList& undefined, RNGItemList& defined)
+void addInOrder(RNGItemList &undefined, RNGItemList &defined)
 {
     int last = -1;
     while (last != undefined.size()) {
         last = undefined.size();
         for (int i = 0; i < undefined.size(); ++i) {
-            const RNGItemPtr& ii = undefined[i];
+            const RNGItemPtr &ii = undefined[i];
             bool missingDependency = false;
-            foreach (const RNGItemPtr& j, list(ii->allowedItems)) {
+            foreach (const RNGItemPtr &j, list(ii->allowedItems)) {
                 if (j->isDefine() && !defined.contains(j) && j != ii) {
                     if (undefined.contains(j)) {
                         missingDependency = true;
@@ -982,8 +1008,7 @@ void addInOrder(RNGItemList& undefined, RNGItemList& defined)
 /**
  * Helper structure to collect required arguments.
  */
-struct RequiredArgsList
-{
+struct RequiredArgsList {
     int length;
     QString args;
     QString vals;
@@ -993,7 +1018,7 @@ struct RequiredArgsList
  * Write lists of required arguments that can be used in generated code.
  * This list only covers the required attributes, not required elements.
  */
-RequiredArgsList makeRequiredArgsList(const RNGItemPtr& item)
+RequiredArgsList makeRequiredArgsList(const RNGItemPtr &item)
 {
     RequiredArgsList r;
     r.length = 0;
@@ -1016,7 +1041,7 @@ RequiredArgsList makeRequiredArgsList(const RNGItemPtr& item)
 /**
  * Recursively find the items that are required for the given item.
  */
-RNGItemList getAllRequiredAttributes(const RNGItemPtr& item, RNGItemList& list, int depth = 0)
+RNGItemList getAllRequiredAttributes(const RNGItemPtr &item, RNGItemList &list, int depth = 0)
 {
     if (depth > 10) {
         return list;
@@ -1036,7 +1061,7 @@ RNGItemList getAllRequiredAttributes(const RNGItemPtr& item, RNGItemList& list, 
 /**
  * Write full lists of required arguments that can be used in generated code.
  */
-RequiredArgsList makeFullRequiredArgsList(const RNGItemPtr& item)
+RequiredArgsList makeFullRequiredArgsList(const RNGItemPtr &item)
 {
     RequiredArgsList r;
     r.length = 0;
@@ -1060,7 +1085,7 @@ RequiredArgsList makeFullRequiredArgsList(const RNGItemPtr& item)
 /**
  * Write C++ code to set the required attribute values.
  */
-void setRequiredAttributes(QTextStream& out, const RNGItemPtr& item)
+void setRequiredAttributes(QTextStream &out, const RNGItemPtr &item)
 {
     QString o;
     if (!item->isElement()) {
@@ -1083,7 +1108,7 @@ void setRequiredAttributes(QTextStream& out, const RNGItemPtr& item)
 /**
  * Write the class definition for a class that corresponds to an xml element.
  */
-void defineElement(QTextStream& out, const RNGItemPtr& item)
+void defineElement(QTextStream &out, const RNGItemPtr &item)
 {
     const RNGItemList bases = getBasesList(item);
     out << "class " << item->cppName << " : public OdfWriter";
@@ -1091,14 +1116,13 @@ void defineElement(QTextStream& out, const RNGItemPtr& item)
         out << ", public " << (*i)->cppName;
     }
     out << " {\n";
-    out << "public:" << "\n";
+    out << "public:"
+        << "\n";
     RequiredArgsList r = makeFullRequiredArgsList(item);
     if (r.args.length()) {
         r.args = ", " + r.args;
     }
-    out << "    " << item->cppName << "(OdfWriter* x" << r.args
-        << ") :OdfWriter(x, \"" << item->name() << "\", "
-        << (isMixed(item) ?"false" :"true") << ")";
+    out << "    " << item->cppName << "(OdfWriter* x" << r.args << ") :OdfWriter(x, \"" << item->name() << "\", " << (isMixed(item) ? "false" : "true") << ")";
     for (auto i = bases.begin(); i != bases.end(); ++i) {
         RequiredArgsList r;
         if (item->requiredItems.contains(*i)) {
@@ -1109,9 +1133,8 @@ void defineElement(QTextStream& out, const RNGItemPtr& item)
     out << " {\n";
     setRequiredAttributes(out, item);
     out << "    }\n";
-    out << "    " << item->cppName << "(KoXmlWriter* x" << r.args
-        << ") :OdfWriter(x, \"" << item->name() << "\", "
-        << (isMixed(item) ?"false" :"true") << ")";
+    out << "    " << item->cppName << "(KoXmlWriter* x" << r.args << ") :OdfWriter(x, \"" << item->name() << "\", " << (isMixed(item) ? "false" : "true")
+        << ")";
     for (auto i = bases.begin(); i != bases.end(); ++i) {
         RequiredArgsList r;
         if (item->requiredItems.contains(*i)) {
@@ -1154,7 +1177,7 @@ void defineElement(QTextStream& out, const RNGItemPtr& item)
  * Write the class definition for a class that corresponds to a Relax NG group.
  * These groups are bases to classes that correspond to elements.
  */
-void defineGroup(QTextStream& out, const RNGItemPtr& item)
+void defineGroup(QTextStream &out, const RNGItemPtr &item)
 {
     if (!hasElementOrAttribute(item)) {
         return;
@@ -1177,7 +1200,7 @@ void defineGroup(QTextStream& out, const RNGItemPtr& item)
         r.args = ", " + r.args;
     }
     out << "    " << item->cppName << "(OdfWriter& x" + r.args + ") :";
-    foreach (const RNGItemPtr& i, bases) {
+    foreach (const RNGItemPtr &i, bases) {
         RequiredArgsList r;
         if (item->requiredItems.contains(i)) {
             r = makeFullRequiredArgsList(i);
@@ -1189,7 +1212,7 @@ void defineGroup(QTextStream& out, const RNGItemPtr& item)
     out << "    }\n";
     if (r.length) {
         out << "    " << item->cppName << "(OdfWriter& x) :";
-        foreach (const RNGItemPtr& i, bases) {
+        foreach (const RNGItemPtr &i, bases) {
             out << i->cppName << "(x), ";
         }
         out << "xml(x) {}\n";
@@ -1226,7 +1249,7 @@ void defineGroup(QTextStream& out, const RNGItemPtr& item)
  * Write the definition for a member function to add an element to another
  * element.
  */
-void writeAdderDefinition(const RNGItemPtr& item, const RNGItemPtr& i, QTextStream& out)
+void writeAdderDefinition(const RNGItemPtr &item, const RNGItemPtr &i, QTextStream &out)
 {
     QString name = makeCppName(i);
     RequiredArgsList r = makeFullRequiredArgsList(i);
@@ -1254,14 +1277,14 @@ void writeAdderDefinition(const RNGItemPtr& item, const RNGItemPtr& i, QTextStre
  * Write the definitions for member functions to add elements to other
  * element.
  */
-void writeAdderDefinitions(const RNGItemPtr& item, Files& files)
+void writeAdderDefinitions(const RNGItemPtr &item, Files &files)
 {
     QSet<QString> done;
     foreach (RNGItemPtr i, list(item->allowedItems)) {
         QString name = makeCppName(i);
         if (i->isElement() && !done.contains(name)) {
-            QString tag1 = (item->isElement()) ?item->name() :QString();
-            QTextStream& out = files.getFile(tag1, i->name());
+            QString tag1 = (item->isElement()) ? item->name() : QString();
+            QTextStream &out = files.getFile(tag1, i->name());
             writeAdderDefinition(item, i, out);
             done.insert(name);
         }
@@ -1272,7 +1295,7 @@ void writeAdderDefinitions(const RNGItemPtr& item, Files& files)
  * Write the definitions for member functions to add elements to other
  * element.
  */
-void writeAdderDefinitions(const RNGItemList& items, Files& files)
+void writeAdderDefinitions(const RNGItemList &items, Files &files)
 {
     foreach (RNGItemPtr item, items) {
         writeAdderDefinitions(item, files);
@@ -1283,7 +1306,7 @@ void writeAdderDefinitions(const RNGItemList& items, Files& files)
  * Retrieve the namespace prefix from the tag name.
  * @param tag string with a tag, may be null.
  */
-QString getPrefix(const QString& tag)
+QString getPrefix(const QString &tag)
 {
     QString prefix = tag.left(tag.indexOf(":"));
     if (prefix.isNull()) {
@@ -1297,7 +1320,7 @@ QString getPrefix(const QString& tag)
  * For tag1 = "office:text" and tag2 = "text:p", this returns a stream to a file
  * "writeodfofficetext.h".
  */
-QTextStream& Files::getFile(const QString& tag1, const QString& tag2 = QString())
+QTextStream &Files::getFile(const QString &tag1, const QString &tag2 = QString())
 {
     // each tag can result in either no prefix or a prefix
     // if one if the prefixes is empty and the other is not, then the first
@@ -1313,11 +1336,11 @@ QTextStream& Files::getFile(const QString& tag1, const QString& tag2 = QString()
     }
     QString name = "writeodf" + prefix + prefix2 + ".h";
     QString path = outdir + "/" + name;
-    QFile* file = new QFile(path);
+    QFile *file = new QFile(path);
     if (!file->open(QIODevice::Truncate | QIODevice::WriteOnly | QIODevice::Text)) {
         fatal() << file->errorString();
     }
-    QTextStream* out = new QTextStream(file);
+    QTextStream *out = new QTextStream(file);
     name = name.replace(".", "_").toUpper();
 
     *out << "#ifndef " + name + "\n";
@@ -1342,8 +1365,8 @@ QTextStream& Files::getFile(const QString& tag1, const QString& tag2 = QString()
  */
 void Files::closeNamespace()
 {
-    typedef const QMap<QString,QTextStream*> map;
-    foreach (map& m, files) {
+    typedef const QMap<QString, QTextStream *> map;
+    foreach (map &m, files) {
         map::ConstIterator i = m.begin();
         while (i != m.end()) {
             if (!i.key().isNull() && !ns().isEmpty()) {
@@ -1357,11 +1380,11 @@ void Files::closeNamespace()
 /**
  * Write the header files.
  */
-void write(const RNGItemList& items, const QString &outdir)
+void write(const RNGItemList &items, const QString &outdir)
 {
     Files files(outdir);
 
-    QTextStream& out = files.getFile("", "");
+    QTextStream &out = files.getFile("", "");
     RNGItemList undefined = items;
     RNGItemList defined;
     addInOrder(undefined, defined);
@@ -1385,31 +1408,31 @@ void write(const RNGItemList& items, const QString &outdir)
 /**
  * Convert the given rng file to a collection of header files.
  */
-void convert(const QString& rngfile, const QString& outdir)
+void convert(const QString &rngfile, const QString &outdir)
 {
     QDomDocument dom = loadDOM(rngfile);
     RNGItems items;
     RNGItemPtr start = getDefines(dom.documentElement(), items);
     RNGItems collected;
-    //qDebug() << "define " << items.size();
-    //collect(items, collected);
+    // qDebug() << "define " << items.size();
+    // collect(items, collected);
     collected = items;
-    //qDebug() << "collect " << collected.size();
+    // qDebug() << "collect " << collected.size();
     RNGItems resolved;
     resolveDefines(start, collected, resolved);
-    //qDebug() << "resolve " << resolved.size();
-    //while (expand(resolved)) {}
+    // qDebug() << "resolve " << resolved.size();
+    // while (expand(resolved)) {}
     resolved.remove(start);
-    //qDebug() << "expand " << resolved.size();
+    // qDebug() << "expand " << resolved.size();
     resolveAttributeDataTypes(resolved);
-    while (reduce(resolved)) {}
-    //qDebug() << "reduce " << resolved.size();
+    while (reduce(resolved)) { }
+    // qDebug() << "reduce " << resolved.size();
     RNGItemList list = toVector(resolved);
-    //qDebug() << "filteredItems " << list.size();
+    // qDebug() << "filteredItems " << list.size();
     std::stable_sort(list.begin(), list.end(), rngItemPtrLessThan);
     makeCppNames(list);
     write(list, outdir);
-    //qDebug() << list.size();
+    // qDebug() << list.size();
 }
 
 int main(int argc, char *argv[])

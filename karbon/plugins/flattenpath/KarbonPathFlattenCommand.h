@@ -16,16 +16,16 @@ class KarbonPathFlattenCommand : public KUndo2Command
 {
 public:
     /**
-    * Command to flatten a path.
-    *
-    * The flatten works by inserting a specified number of points into
-    * each path segment to get the given amount of flatness.
-    *
-    * @param path the path to flatten
-    * @param flatness the desired flatness
-    * @param parent the parent command used for macro commands
+     * Command to flatten a path.
+     *
+     * The flatten works by inserting a specified number of points into
+     * each path segment to get the given amount of flatness.
+     *
+     * @param path the path to flatten
+     * @param flatness the desired flatness
+     * @param parent the parent command used for macro commands
      */
-    KarbonPathFlattenCommand(KoPathShape * path, qreal flatness, KUndo2Command *parent = 0);
+    KarbonPathFlattenCommand(KoPathShape *path, qreal flatness, KUndo2Command *parent = 0);
     ~KarbonPathFlattenCommand() override;
 
     /// redo the command
@@ -35,7 +35,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // _KARBONPATHFLATTENCOMMAND_H_

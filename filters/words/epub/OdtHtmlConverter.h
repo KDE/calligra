@@ -1,26 +1,25 @@
- /* This file is part of the KDE project
-   SPDX-FileCopyrightText: 2012 Inge Wallin <inge@lysator.liu.se>
-   SPDX-FileCopyrightText: 2012 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+/* This file is part of the KDE project
+  SPDX-FileCopyrightText: 2012 Inge Wallin <inge@lysator.liu.se>
+  SPDX-FileCopyrightText: 2012 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
 
-   SPDX-License-Identifier: LGPL-2.0-or-later
+  SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #ifndef ODTHTMLCONVERTER_H
 #define ODTHTMLCONVERTER_H
 
 #include <QHash>
-#include <QString>
 #include <QList>
+#include <QString>
 
-#include <KoXmlReader.h>
 #include <KoFilter.h>
+#include <KoXmlReader.h>
 
 class QByteArray;
 class QSizeF;
 class KoXmlWriter;
 class KoStore;
 class FileCollector;
-
 
 struct StyleInfo {
     StyleInfo();
@@ -29,37 +28,37 @@ struct StyleInfo {
     QString parent;
     bool isDefaultStyle;
 
-    int  defaultOutlineLevel;
+    int defaultOutlineLevel;
     bool shouldBreakChapter;
     bool inUse;
 
     QHash<QString, QString> attributes;
 };
 
-
 class OdtHtmlConverter
 {
- public:
+public:
     struct ConversionOptions {
-        bool  stylesInCssFile;  // True if the css should go into a separate file
-        bool  doBreakIntoChapters; // True if the output should be broken into chapters.
-        bool  useMobiConventions;  // True if Mobi is using the convention.
-                                   // to handle img tag and for handle indentation
-                                   // and do not write meta and link tag in html head.
+        bool stylesInCssFile; // True if the css should go into a separate file
+        bool doBreakIntoChapters; // True if the output should be broken into chapters.
+        bool useMobiConventions; // True if Mobi is using the convention.
+                                 // to handle img tag and for handle indentation
+                                 // and do not write meta and link tag in html head.
     };
 
     OdtHtmlConverter();
     ~OdtHtmlConverter();
 
-    KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString,
-                                              QString> &metaData, QHash<QString, QString> *manifest,
+    KoFilter::ConversionStatus convertContent(KoStore *odfStore,
+                                              QHash<QString, QString> &metaData,
+                                              QHash<QString, QString> *manifest,
                                               ConversionOptions *options,
                                               FileCollector *collector,
                                               // Out parameters:
                                               QHash<QString, QSizeF> &images,
                                               QHash<QString, QString> &mediaFiles);
 
- private:
+private:
     enum TableCellType {
         TableDataType,
         TableHeaderType,
@@ -69,7 +68,6 @@ class OdtHtmlConverter
     void beginHtmlFile(QHash<QString, QString> &metaData);
     void endHtmlFile();
     void createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &metaData);
-
 
     // All handleTag*() are named after the tag in the ODF that they handle.
     void handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
@@ -88,9 +86,7 @@ class OdtHtmlConverter
 
     void handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
     void handleEmbeddedFormula(const QString &href, KoXmlWriter *htmlWriter);
-    void copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
-                        QHash<QString, QString> &unknownNamespaces);
-
+    void copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer, QHash<QString, QString> &unknownNamespaces);
 
     void handleTagTab(KoXmlWriter *htmlWriter);
     void handleTagTableOfContent(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
@@ -109,17 +105,15 @@ class OdtHtmlConverter
     void writeFootNotes(KoXmlWriter *htmlWriter);
     void writeEndNotes(KoXmlWriter *htmlWriter);
 
-    KoFilter::ConversionStatus collectStyles(KoStore *odfStore, QHash<QString, StyleInfo*> &styles);
-    void collectStyleSet(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles);
+    KoFilter::ConversionStatus collectStyles(KoStore *odfStore, QHash<QString, StyleInfo *> &styles);
+    void collectStyleSet(KoXmlNode &stylesNode, QHash<QString, StyleInfo *> &styles);
     void collectStyleAttributes(KoXmlElement &propertiesElement, StyleInfo *styleInfo);
 
-    void fixStyleTree(QHash<QString, StyleInfo*> &styles);
+    void fixStyleTree(QHash<QString, StyleInfo *> &styles);
 
-    KoFilter::ConversionStatus createCSS(QHash<QString, StyleInfo*> &styles,
-                                         QByteArray &cssContent);
-    void flattenStyles(QHash<QString, StyleInfo*> &styles);
-    void flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles,
-                      QSet<QString> &doneStyles);
+    KoFilter::ConversionStatus createCSS(QHash<QString, StyleInfo *> &styles, QByteArray &cssContent);
+    void flattenStyles(QHash<QString, StyleInfo *> &styles);
+    void flattenStyle(const QString &styleName, QHash<QString, StyleInfo *> &styles, QSet<QString> &doneStyles);
 
     void writeMediaOverlayDocumentFile();
 
@@ -129,24 +123,23 @@ class OdtHtmlConverter
      * This strips out special characters like . and > that cannot be used
      * in CSS class names.
      */
-    QString cssClassName(const QString& odfStyleName);
+    QString cssClassName(const QString &odfStyleName);
 
-
- private:
+private:
     FileCollector *m_collector;
 
     // Some variables used while creating the HTML contents.
-    QByteArray   m_cssContent;
-    QByteArray   m_htmlContent;
-    QBuffer     *m_outBuf;
+    QByteArray m_cssContent;
+    QByteArray m_htmlContent;
+    QBuffer *m_outBuf;
     KoXmlWriter *m_htmlWriter;
 
     // Options for the conversion process
     const ConversionOptions *m_options;
     QHash<QString, QString> *m_manifest;
-    KoStore                 *m_odfStore;
+    KoStore *m_odfStore;
 
-    QHash<QString, StyleInfo*> m_styles;
+    QHash<QString, StyleInfo *> m_styles;
 
     // The number of the current chapter during the conversion.
     int m_currentChapter;
@@ -160,7 +153,7 @@ class OdtHtmlConverter
     //    name   is the name of the picture inside the ODT file
     //    size   is the size in points.
     //
-    QHash<QString, QSizeF>  m_images;
+    QHash<QString, QSizeF> m_images;
 
     // Internal links have to be done in a two pass fashion.
     //
@@ -209,7 +202,6 @@ class OdtHtmlConverter
     // Format: QHash< QString id, QString video source>
     QHash<QString, QString> m_mediaFilesList;
     int m_mediaId;
-
 };
 
 #endif // ODTHTMLCONVERTER_H

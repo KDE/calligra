@@ -7,17 +7,17 @@
 
 namespace RtfReader
 {
-    InfoRevisedTimeDestination::InfoRevisedTimeDestination( Reader *reader, AbstractRtfOutput *output, const QString &name ) :
-      InfoTimeDestination( reader, output, name )
-    {
-    }
+InfoRevisedTimeDestination::InfoRevisedTimeDestination(Reader *reader, AbstractRtfOutput *output, const QString &name)
+    : InfoTimeDestination(reader, output, name)
+{
+}
 
-    InfoRevisedTimeDestination::~InfoRevisedTimeDestination()
-    {
-    }
+InfoRevisedTimeDestination::~InfoRevisedTimeDestination()
+{
+}
 
-    void InfoRevisedTimeDestination::aboutToEndDestination()
-    {
-	m_output->setRevisedDateTime( dateTime() );
-    }
+void InfoRevisedTimeDestination::aboutToEndDestination()
+{
+    m_output->setRevisedDateTime(dateTime());
+}
 }

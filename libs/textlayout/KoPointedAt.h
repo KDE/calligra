@@ -9,9 +9,9 @@
 
 #include "kotextlayout_export.h"
 
+#include <QPointF>
 #include <QString>
 #include <QTextCursor>
-#include <QPointF>
 
 class KoBookmark;
 class QTextTable;
@@ -27,11 +27,7 @@ public:
 
     void fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManager *inlineManager, KoTextRangeManager *rangeManager);
 
-    enum TableHit {
-          None
-        , ColumnDivider
-        , RowDivider
-    };
+    enum TableHit { None, ColumnDivider, RowDivider };
     int position;
     KoBookmark *bookmark;
     QString externalHRef;
@@ -44,7 +40,6 @@ public:
     qreal tableLeadSize;
     qreal tableTrailSize;
     QPointF tableDividerPos;
-
 };
 
 #endif

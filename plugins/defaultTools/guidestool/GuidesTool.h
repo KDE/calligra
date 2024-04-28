@@ -10,8 +10,8 @@
 
 #include <KoToolBase.h>
 
-#include <QString>
 #include <QPair>
+#include <QString>
 
 class KoCanvasBase;
 class GuidesTransaction;
@@ -38,7 +38,7 @@ public:
     /// reimplemented form KoToolBase
     void repaintDecorations() override;
     /// reimplemented form KoToolBase
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     /// reimplemented form KoToolBase
     void deactivate() override;
 
@@ -54,7 +54,7 @@ public Q_SLOTS:
 
 protected:
     /// reimplemented form KoToolBase
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
 private Q_SLOTS:
     void updateGuidePosition(qreal position);
@@ -63,7 +63,7 @@ private Q_SLOTS:
     /// reimplemented from KoToolBase
     void canvasResourceChanged(int key, const QVariant &res) override;
 
-    void insertorCreateGuidesSlot(GuidesTransaction* result);
+    void insertorCreateGuidesSlot(GuidesTransaction *result);
 
 private:
     typedef QPair<Qt::Orientation, int> GuideLine;
@@ -72,11 +72,7 @@ private:
     /// Calculates update rectangle for specified guide line
     QRectF updateRectFromGuideLine(qreal position, Qt::Orientation orientation);
 
-    enum EditMode {
-        AddGuide,
-        MoveGuide,
-        EditGuide
-    };
+    enum EditMode { AddGuide, MoveGuide, EditGuide };
     Qt::Orientation m_orientation;
     int m_index;
     qreal m_position;

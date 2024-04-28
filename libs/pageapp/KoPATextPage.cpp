@@ -6,9 +6,9 @@
 
 #include "KoPATextPage.h"
 
-KoPATextPage::KoPATextPage(int pageNumber, KoPAPageBase * page)
-: m_pageNumber(pageNumber)
-, m_page(page)
+KoPATextPage::KoPATextPage(int pageNumber, KoPAPageBase *page)
+    : m_pageNumber(pageNumber)
+    , m_page(page)
 {
 }
 

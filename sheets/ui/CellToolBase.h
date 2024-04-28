@@ -17,10 +17,10 @@
 
 #include <KoInteractionTool.h>
 
-#include "sheets_ui_export.h"
 #include "Selection.h"
-#include "core/Cell.h"
 #include "core/ApplicationSettings.h"
+#include "core/Cell.h"
+#include "sheets_ui_export.h"
 
 namespace Calligra
 {
@@ -48,8 +48,8 @@ public:
      * The editor type.
      */
     enum Editor {
-        EmbeddedEditor,  ///< the embedded editor appearing in a cell
-        ExternalEditor   ///< the external editor located in the tool options
+        EmbeddedEditor, ///< the embedded editor appearing in a cell
+        ExternalEditor ///< the external editor located in the tool options
     };
 
     /**
@@ -66,19 +66,19 @@ public:
     void paintReferenceSelection(QPainter &painter, const QRectF &paintRect);
     void paintSelection(QPainter &painter, const QRectF &paintRect);
 
-    void mousePressEvent(KoPointerEvent* event) override;
-    void mouseMoveEvent(KoPointerEvent* event) override;
-    void mouseReleaseEvent(KoPointerEvent* event) override;
-    void mouseDoubleClickEvent(KoPointerEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
-    void inputMethodEvent(QInputMethodEvent * event) override;
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void inputMethodEvent(QInputMethodEvent *event) override;
 
-    Selection* selection() override = 0;
+    Selection *selection() override = 0;
 
     void deleteSelection() override;
 
     virtual bool createEditor(bool clear = true, bool focus = true, bool captureArrows = false);
-    virtual CellEditorBase* editor() const;
+    virtual CellEditorBase *editor() const;
 
     /**
      * Sets the editor \p type, which had the focus at last.
@@ -88,13 +88,13 @@ public:
     /**
      * Sets an external editor to be associated with the internal editor of this tool.
      */
-    void setExternalEditor(Calligra::Sheets::ExternalEditor* editor);
+    void setExternalEditor(Calligra::Sheets::ExternalEditor *editor);
 
     /** Wrapper around addAction, which is protected (in parent). */
 
     void addCellAction(CellAction *a);
 
-    virtual SheetView* sheetView(Sheet* sheet) const = 0;
+    virtual SheetView *sheetView(Sheet *sheet) const = 0;
 
     /** Update all the actions' enabled/disabled status. */
     void updateActions();
@@ -115,16 +115,16 @@ public Q_SLOTS:
     virtual void scrollToCell(const QPoint &location);
 
     void edit();
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     void deactivate() override;
     virtual void deleteEditor(bool saveChanges, bool expandMatrix = false);
     void populateWordCollection();
 
 protected:
     void init();
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
     void applyUserInput(const QString &userInput, bool expandMatrix = false);
-    KoInteractionStrategy* createStrategy(KoPointerEvent* event) override;
+    KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
 
     /**
      * The canvas scrolling offset in document coordinates.
@@ -137,12 +137,11 @@ protected:
     virtual int maxCol() const = 0;
     virtual int maxRow() const = 0;
 
-    QList<QAction*> popupMenuActionList() const;
-
+    QList<QAction *> popupMenuActionList() const;
 
 protected Q_SLOTS:
-    void selectionChanged(const Region&);
-    void activeSheetChanged(Sheet*);
+    void selectionChanged(const Region &);
+    void activeSheetChanged(Sheet *);
     void updateEditor();
     void focusEditorRequested();
     void documentReadWriteToggled(bool enable);
@@ -153,7 +152,7 @@ private:
     Q_DISABLE_COPY(CellToolBase)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

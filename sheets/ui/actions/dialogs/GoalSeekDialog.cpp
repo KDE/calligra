@@ -12,9 +12,9 @@
 
 #include "GoalSeekDialog.h"
 
-#include <ktextedit.h>
-#include "ui_GoalSeekWidget.h"
 #include "ui/Selection.h"
+#include "ui_GoalSeekWidget.h"
+#include <ktextedit.h>
 
 #define SELECTOR_COUNT 3
 
@@ -27,10 +27,9 @@ public:
     Selection *selection;
 };
 
-
-GoalSeekDialog::GoalSeekDialog(QWidget* parent, Selection* selection)
-        : KoDialog(parent)
-        , d(new Private)
+GoalSeekDialog::GoalSeekDialog(QWidget *parent, Selection *selection)
+    : KoDialog(parent)
+    , d(new Private)
 {
     d->selection = selection;
 
@@ -43,7 +42,7 @@ GoalSeekDialog::GoalSeekDialog(QWidget* parent, Selection* selection)
 
     setWindowTitle(i18n("Goal Seek"));
 
-    QWidget* mainWidget = new QWidget(this);
+    QWidget *mainWidget = new QWidget(this);
     d->widget.setupUi(mainWidget);
     for (int i = 1; i <= SELECTOR_COUNT; ++i) {
         RegionSelector *sel = getSelector(i);
@@ -65,11 +64,12 @@ GoalSeekDialog::~GoalSeekDialog()
     delete d;
 }
 
-void GoalSeekDialog::slotClose() {
+void GoalSeekDialog::slotClose()
+{
     accept();
 }
 
-void GoalSeekDialog::closeEvent(QCloseEvent * e)
+void GoalSeekDialog::closeEvent(QCloseEvent *e)
 {
     d->selection->endReferenceSelection();
     e->accept();
@@ -89,31 +89,39 @@ void GoalSeekDialog::textChanged()
 
 RegionSelector *GoalSeekDialog::getSelector(int id)
 {
-    if (id == 1) return d->widget.selector1;
-    if (id == 2) return d->widget.selector2;
-    if (id == 3) return d->widget.selector3;
+    if (id == 1)
+        return d->widget.selector1;
+    if (id == 2)
+        return d->widget.selector2;
+    if (id == 3)
+        return d->widget.selector3;
     return nullptr;
 }
 
 QString GoalSeekDialog::selectorValue(int id)
 {
     RegionSelector *sel = getSelector(id);
-    if (!sel) return QString();
+    if (!sel)
+        return QString();
     return sel->textEdit()->toPlainText();
 }
 
 void GoalSeekDialog::focusSelector(int id)
 {
     RegionSelector *sel = getSelector(id);
-    if (!sel) return;
+    if (!sel)
+        return;
 
     sel->textEdit()->selectAll();
     sel->textEdit()->setFocus();
 }
 
-void GoalSeekDialog::setNotice(const QString &text) {
-    if (text.length()) d->widget.outcome->show();
-    else d->widget.outcome->hide();
+void GoalSeekDialog::setNotice(const QString &text)
+{
+    if (text.length())
+        d->widget.outcome->show();
+    else
+        d->widget.outcome->hide();
 
     d->widget.label4->setText(text);
 }
@@ -122,5 +130,3 @@ void GoalSeekDialog::slotStart()
 {
     emit calculate();
 }
-
-

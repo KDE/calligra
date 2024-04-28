@@ -8,17 +8,17 @@
 
 #include <QDomElement>
 
-#include <QDebug>
 #include <KLocalizedString>
+#include <QDebug>
 
-#include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoIntegerMaths.h>
 
 #include "compositeops/KoCompositeOps.h"
 #include <kis_dom_utils.h>
 
 GrayF32ColorSpace::GrayF32ColorSpace(const QString &name, KoColorProfile *p)
-    : LcmsColorSpace<KoGrayF32Traits>(colorSpaceId(), name,  TYPE_GRAYA_FLT, cmsSigGrayData, p)
+    : LcmsColorSpace<KoGrayF32Traits>(colorSpaceId(), name, TYPE_GRAYA_FLT, cmsSigGrayData, p)
 {
     const IccColorProfile *icc_p = dynamic_cast<const IccColorProfile *>(p);
     Q_ASSERT(icc_p);
@@ -42,7 +42,7 @@ void GrayF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 {
     const KoGrayF32Traits::channels_type *p = reinterpret_cast<const KoGrayF32Traits::channels_type *>(pixel);
     QDomElement labElt = doc.createElement("Gray");
-    labElt.setAttribute("g", KisDomUtils::toString(KoColorSpaceMaths< KoGrayF32Traits::channels_type, qreal>::scaleToA(p[0])));
+    labElt.setAttribute("g", KisDomUtils::toString(KoColorSpaceMaths<KoGrayF32Traits::channels_type, qreal>::scaleToA(p[0])));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
@@ -50,7 +50,7 @@ void GrayF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 void GrayF32ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     KoGrayF32Traits::channels_type *p = reinterpret_cast<KoGrayF32Traits::channels_type *>(pixel);
-    p[0] = KoColorSpaceMaths< qreal, KoGrayF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("g")));
+    p[0] = KoColorSpaceMaths<qreal, KoGrayF32Traits::channels_type>::scaleToA(KisDomUtils::toDouble(elt.attribute("g")));
     p[1] = 1.0;
 }
 
@@ -59,11 +59,11 @@ void GrayF32ColorSpace::toHSY(const QVector<double> &channelValues, qreal *, qre
     *luma = channelValues[0];
 }
 
-QVector <double> GrayF32ColorSpace::fromHSY(qreal *, qreal *, qreal *luma) const
+QVector<double> GrayF32ColorSpace::fromHSY(qreal *, qreal *, qreal *luma) const
 {
-    QVector <double> channelValues(2);
+    QVector<double> channelValues(2);
     channelValues.fill(*luma);
-    channelValues[1]=1.0;
+    channelValues[1] = 1.0;
     return channelValues;
 }
 
@@ -72,10 +72,10 @@ void GrayF32ColorSpace::toYUV(const QVector<double> &channelValues, qreal *y, qr
     *y = channelValues[0];
 }
 
-QVector <double> GrayF32ColorSpace::fromYUV(qreal *y, qreal *, qreal *) const
+QVector<double> GrayF32ColorSpace::fromYUV(qreal *y, qreal *, qreal *) const
 {
-    QVector <double> channelValues(2);
+    QVector<double> channelValues(2);
     channelValues.fill(*y);
-    channelValues[1]=1.0;
+    channelValues[1] = 1.0;
     return channelValues;
 }

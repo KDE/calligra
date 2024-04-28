@@ -11,24 +11,22 @@
 // Qt
 
 // Calligra
-#include <KoXmlReader.h>
-#include <KoXmlNS.h>
-#include <KoXmlWriter.h>
-#include <KoShapeSavingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
 // Shape
-#include "utils.h"
 #include "ThreedDebug.h"
+#include "utils.h"
 
-
-//#define OdfObjectAttributes (OdfAllAttributes & ~(OdfGeometry | OdfTransformation))
+// #define OdfObjectAttributes (OdfAllAttributes & ~(OdfGeometry | OdfTransformation))
 #define OdfObjectAttributes (OdfAdditionalAttributes | OdfMandatories)
 
 // ================================================================
 //                             Object3D
-
 
 Object3D::Object3D(Object3D *parent)
     : m_parent(parent)
@@ -39,7 +37,6 @@ Object3D::~Object3D()
 {
 }
 
-
 QString Object3D::transform()
 {
     return m_transform3D;
@@ -49,7 +46,6 @@ Object3D *Object3D::parent()
 {
     return m_parent;
 }
-
 
 bool Object3D::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context)
 {
@@ -63,7 +59,6 @@ bool Object3D::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext 
 void Object3D::saveOdf(KoShapeSavingContext &context) const
 {
     Q_UNUSED(context);
-
 }
 void Object3D::saveObjectOdf(KoShapeSavingContext &context) const
 {

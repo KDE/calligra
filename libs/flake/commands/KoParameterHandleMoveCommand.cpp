@@ -10,13 +10,18 @@
 #include "KoParameterShape.h"
 #include <KLocalizedString>
 
-KoParameterHandleMoveCommand::KoParameterHandleMoveCommand(KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, Qt::KeyboardModifiers keyModifiers, KUndo2Command *parent)
-        : KUndo2Command(parent)
-        , m_shape(shape)
-        , m_handleId(handleId)
-        , m_startPoint(startPoint)
-        , m_endPoint(endPoint)
-        , m_keyModifiers(keyModifiers)
+KoParameterHandleMoveCommand::KoParameterHandleMoveCommand(KoParameterShape *shape,
+                                                           int handleId,
+                                                           const QPointF &startPoint,
+                                                           const QPointF &endPoint,
+                                                           Qt::KeyboardModifiers keyModifiers,
+                                                           KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_shape(shape)
+    , m_handleId(handleId)
+    , m_startPoint(startPoint)
+    , m_endPoint(endPoint)
+    , m_keyModifiers(keyModifiers)
 {
     setText(kundo2_i18n("Change parameter"));
 }
@@ -42,4 +47,3 @@ void KoParameterHandleMoveCommand::undo()
     m_shape->moveHandle(m_handleId, m_startPoint);
     m_shape->update();
 }
-

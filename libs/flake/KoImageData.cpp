@@ -12,16 +12,16 @@
 
 #include "KoImageCollection.h"
 
-#include <KoUnit.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
+#include <KoUnit.h>
 
 #include <FlakeDebug.h>
 
 #include <QBuffer>
 #include <QCryptographicHash>
-#include <QTemporaryFile>
 #include <QPainter>
+#include <QTemporaryFile>
 
 /// the maximum amount of bytes the image can be while we store it in memory instead of
 /// spooling it to disk in a temp-file.
@@ -33,8 +33,8 @@ KoImageData::KoImageData()
 }
 
 KoImageData::KoImageData(const KoImageData &imageData)
-    : KoShapeUserData(),
-    d(imageData.d)
+    : KoShapeUserData()
+    , d(imageData.d)
 {
     if (d)
         d->refCount.ref();
@@ -54,9 +54,10 @@ KoImageData::~KoImageData()
 
 QPixmap KoImageData::pixmap(const QSize &size)
 {
-    if (!d) return QPixmap();
+    if (!d)
+        return QPixmap();
     QSize wantedSize = size;
-    if (! wantedSize.isValid()) {
+    if (!wantedSize.isValid()) {
         if (d->pixmap.isNull()) // we have a problem, Houston..
             wantedSize = QSize(100, 100);
         else
@@ -65,8 +66,8 @@ QPixmap KoImageData::pixmap(const QSize &size)
     if (d->pixmap.isNull() || d->pixmap.size() != wantedSize) {
         switch (d->dataStoreState) {
         case KoImageDataPrivate::StateEmpty: {
-#if 0       // this is not possible as it gets called during the paint method
-            // and will crash. Therefore create a tmp pixmap and return it.
+#if 0 // this is not possible as it gets called during the paint method
+      // and will crash. Therefore create a tmp pixmap and return it.
             d->pixmap = QPixmap(1, 1);
             QPainter p(&d->pixmap);
             p.setPen(QPen(Qt::gray, 0));
@@ -113,12 +114,12 @@ QSizeF KoImageData::imageSize()
             return QSizeF(100, 100);
 
         if (d->image.dotsPerMeterX())
-            d->imageSize.setWidth(DM_TO_POINT(d->image.width() / (qreal) d->image.dotsPerMeterX() * 10.0));
+            d->imageSize.setWidth(DM_TO_POINT(d->image.width() / (qreal)d->image.dotsPerMeterX() * 10.0));
         else
             d->imageSize.setWidth(d->image.width() / 72.0);
 
         if (d->image.dotsPerMeterY())
-            d->imageSize.setHeight(DM_TO_POINT(d->image.height() / (qreal) d->image.dotsPerMeterY() * 10.0));
+            d->imageSize.setHeight(DM_TO_POINT(d->image.height() / (qreal)d->image.dotsPerMeterY() * 10.0));
         else
             d->imageSize.setHeight(d->image.height() / 72.0);
     }
@@ -133,8 +134,7 @@ QImage KoImageData::image() const
             bool r = d->temporaryFile->open();
             if (!r) {
                 d->errorCode = OpenFailed;
-            }
-            else if (d->errorCode == Success && !d->image.load(d->temporaryFile->fileName(), d->suffix.toLatin1())) {
+            } else if (d->errorCode == Success && !d->image.load(d->temporaryFile->fileName(), d->suffix.toLatin1())) {
                 qWarning() << "Failed to open image" << d->temporaryFile->fileName() << "with format" << d->suffix;
                 d->errorCode = OpenFailed;
             }
@@ -158,11 +158,11 @@ bool KoImageData::hasCachedImage() const
 
 void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
 {
-  qint64 oldKey = 0;
-  if (d) {
-    oldKey = d->key;
-  }
-  Q_ASSERT(!image.isNull());
+    qint64 oldKey = 0;
+    if (d) {
+        oldKey = d->key;
+    }
+    Q_ASSERT(!image.isNull());
     if (collection) {
         // let the collection first check if it already has one. If it doesn't it'll call this method
         // again and well go to the other clause
@@ -207,9 +207,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
         if (oldKey != 0 && d->collection) {
             d->collection->update(oldKey, d->key);
         }
-
     }
-
 }
 
 void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection *collection)
@@ -232,7 +230,10 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
 
         if (store->open(url)) {
             struct Finalizer {
-                ~Finalizer() { store->close(); }
+                ~Finalizer()
+                {
+                    store->close();
+                }
                 KoStore *store;
             };
             Finalizer closer;
@@ -275,8 +276,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
         KoImageData *other = collection->createImageData(imageData);
         this->operator=(*other);
         delete other;
-    }
-    else {
+    } else {
         if (d == 0) {
             d = new KoImageDataPrivate(this);
             d->refCount.ref();
@@ -296,8 +296,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
             d->dataStoreState = KoImageDataPrivate::StateImageOnly;
         }
 
-        if (imageData.size() > MAX_MEMORY_IMAGESIZE
-                || d->errorCode == OpenFailed) {
+        if (imageData.size() > MAX_MEMORY_IMAGESIZE || d->errorCode == OpenFailed) {
             d->image = QImage();
             // store image data
             QBuffer buffer;
@@ -314,14 +313,12 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
         if (oldKey != 0 && d->collection) {
             d->collection->update(oldKey, d->key);
         }
-
     }
 }
 
 bool KoImageData::isValid() const
 {
-    return d && d->dataStoreState != KoImageDataPrivate::StateEmpty
-        && d->errorCode == Success;
+    return d && d->dataStoreState != KoImageDataPrivate::StateEmpty && d->errorCode == Success;
 }
 
 bool KoImageData::operator==(const KoImageData &other) const
@@ -359,5 +356,5 @@ bool KoImageData::saveData(QIODevice &device)
     return d->saveData(device);
 }
 
-//have to include this because of Q_PRIVATE_SLOT
+// have to include this because of Q_PRIVATE_SLOT
 #include "moc_KoImageData.cpp"

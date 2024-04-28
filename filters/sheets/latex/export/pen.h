@@ -16,17 +16,17 @@
 **
 ** To receive a copy of the GNU Library General Public License, write to the
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+* Boston, MA 02110-1301, USA.
 **
 */
 
 #ifndef __CALLIGRA_SHEETS_LATEX_PEN_H__
 #define __CALLIGRA_SHEETS_LATEX_PEN_H__
 
-#include <QTextStream>
-#include <QString>
-#include <QColor>
 #include "xmlparser.h"
+#include <QColor>
+#include <QString>
+#include <QTextStream>
 
 /***********************************************************************/
 /* Class: Pen                                                          */
@@ -35,7 +35,7 @@
 /**
  * This class describe a pen which is used to draw borders.
  */
-class Pen: public XmlParser
+class Pen : public XmlParser
 {
     double _width;
     int _style;
@@ -54,31 +54,39 @@ public:
      *
      * Nothing to do
      */
-    ~Pen() override {}
+    ~Pen() override
+    {
+    }
 
     /**
      * getters
      */
-    double getWidth() const {
+    double getWidth() const
+    {
         return _width;
     }
-    int getStyle() const {
+    int getStyle() const
+    {
         return _style;
     }
-    QColor getColor() const {
+    QColor getColor() const
+    {
         return _color;
     }
 
     /**
      * setters
      */
-    void setWidth(double w) {
+    void setWidth(double w)
+    {
         _width = w;
     }
-    void setStyle(int s) {
+    void setStyle(int s)
+    {
         _style = s;
     }
-    void setColor(QString color) {
+    void setColor(QString color)
+    {
         _color.setNamedColor(color);
     }
 
@@ -91,8 +99,7 @@ public:
      */
     virtual void analyze(const QDomNode);
 
-    virtual void generate(QTextStream&);
-
+    virtual void generate(QTextStream &);
 };
 
 #endif /* __CALLIGRA_SHEETS_LATEX_PEN_H__ */

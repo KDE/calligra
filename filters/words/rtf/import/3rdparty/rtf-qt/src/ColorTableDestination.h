@@ -4,32 +4,32 @@
 #ifndef RTFREADER_COLORTABLEDESTINATION_H
 #define RTFREADER_COLORTABLEDESTINATION_H
 
-#include <QString>
 #include <QColor>
+#include <QString>
 
 #include "Destination.h"
 #include "rtfreader_export.h"
 namespace RtfReader
 {
-    class Reader;
+class Reader;
 
-    class RTFREADER_EXPORT ColorTableDestination: public Destination
-    {
-      public:
-	ColorTableDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );
+class RTFREADER_EXPORT ColorTableDestination : public Destination
+{
+public:
+    ColorTableDestination(Reader *reader, AbstractRtfOutput *output, const QString &name);
 
-	~ColorTableDestination() override;
+    ~ColorTableDestination() override;
 
-	void handleControlWord( const QByteArray &controlWord, bool hasValue, const int value ) override;
-	void handlePlainText( const QByteArray &plainText ) override;
+    void handleControlWord(const QByteArray &controlWord, bool hasValue, const int value) override;
+    void handlePlainText(const QByteArray &plainText) override;
 
-      private:
-	void resetCurrentColor();
+private:
+    void resetCurrentColor();
 
-	// The colour that is currently being built
-	QColor m_currentColor;
-	bool m_colorSet;
-      };
+    // The colour that is currently being built
+    QColor m_currentColor;
+    bool m_colorSet;
+};
 }
 
 #endif

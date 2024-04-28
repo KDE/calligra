@@ -12,17 +12,17 @@
 #include "ui_autocorrectionwidget.h"
 
 #include "widgets/selectspecialchardialog.h"
-//#include <Libkdepim/LineEditCatchReturnKey>
+// #include <Libkdepim/LineEditCatchReturnKey>
 
 #include <KLocalizedString>
 #include <KMessageBox>
 
+#include <QDebug>
 #include <QFileDialog>
 #include <QMenu>
 #include <QPointer>
 #include <QTreeWidgetItem>
 #include <kwidgetsaddons_version.h>
-#include <QDebug>
 
 Q_DECLARE_METATYPE(AutoCorrectionWidget::ImportFileType)
 class AutoCorrectionWidgetPrivate
@@ -57,10 +57,10 @@ AutoCorrectionWidget::AutoCorrectionWidget(QWidget *parent)
     d->ui->add1->setEnabled(false);
     d->ui->add2->setEnabled(false);
 
-//    KPIM::LineEditCatchReturnKey(d->ui->find, this);
-//    KPIM::LineEditCatchReturnKey(d->ui->replace, this);
-//    KPIM::LineEditCatchReturnKey(d->ui->abbreviation, this);
-//    KPIM::LineEditCatchReturnKey(d->ui->twoUpperLetter, this);
+    //    KPIM::LineEditCatchReturnKey(d->ui->find, this);
+    //    KPIM::LineEditCatchReturnKey(d->ui->replace, this);
+    //    KPIM::LineEditCatchReturnKey(d->ui->abbreviation, this);
+    //    KPIM::LineEditCatchReturnKey(d->ui->twoUpperLetter, this);
     connect(d->ui->autoChangeFormat, &QCheckBox::clicked, this, &AutoCorrectionWidget::emitChanged);
     connect(d->ui->autoFormatUrl, &QCheckBox::clicked, this, &AutoCorrectionWidget::emitChanged);
     connect(d->ui->upperCase, &QCheckBox::clicked, this, &AutoCorrectionWidget::emitChanged);
@@ -545,7 +545,7 @@ bool AutoCorrectionWidget::importAutoCorrection(AutoCorrectionWidget::ImportFile
         switch (type) {
         case AutoCorrectionWidget::LibreOffice:
             importAutoCorrection = new ImportLibreOfficeAutocorrection;
-        break;
+            break;
         case AutoCorrectionWidget::KMail:
             importAutoCorrection = new ImportKMailAutocorrection;
             break;
@@ -568,8 +568,8 @@ bool AutoCorrectionWidget::importAutoCorrection(AutoCorrectionWidget::ImportFile
             d->ui->abbreviationList->clear();
             d->ui->abbreviationList->addItems(d->m_upperCaseExceptions.values());
         } else {
-            //KMessageBox::error(this, messageError, i18n("Import Autocorrection File"));
-            qInfo()<<Q_FUNC_INFO<<messageError;
+            // KMessageBox::error(this, messageError, i18n("Import Autocorrection File"));
+            qInfo() << Q_FUNC_INFO << messageError;
             delete importAutoCorrection;
             return false;
         }

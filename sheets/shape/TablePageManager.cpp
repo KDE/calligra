@@ -19,13 +19,13 @@ using namespace Calligra::Sheets;
 class TablePageManager::Private
 {
 public:
-    TableShape* master;
-    QList<TableShape*> pages;
+    TableShape *master;
+    QList<TableShape *> pages;
 };
 
-TablePageManager::TablePageManager(TableShape* master)
-        : PageManager(master->sheet())
-        , d(new Private)
+TablePageManager::TablePageManager(TableShape *master)
+    : PageManager(master->sheet())
+    , d(new Private)
 {
     d->master = master;
 }
@@ -53,9 +53,9 @@ void TablePageManager::insertPage(int page)
     if (page <= 1 || page > d->pages.count()) {
         return;
     }
-    TableShape* const shape = static_cast<TableShape*>(d->pages[page - 1]);
+    TableShape *const shape = static_cast<TableShape *>(d->pages[page - 1]);
     const QRect cellRange = this->cellRange(page);
-//     shape->setVisibleCellRange(cellRange);
+    //     shape->setVisibleCellRange(cellRange);
     shape->KoShape::setSize(shape->sheet()->cellCoordinatesToDocument(cellRange).size());
 }
 

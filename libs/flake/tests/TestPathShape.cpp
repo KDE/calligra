@@ -5,11 +5,11 @@
 */
 #include "TestPathShape.h"
 
-#include <QPainterPath>
-#include "KoPathShape.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 #include "KoPathSegment.h"
+#include "KoPathShape.h"
+#include <QPainterPath>
 
 #include <QTest>
 
@@ -67,15 +67,15 @@ void TestPathShape::normalize()
 void TestPathShape::pathPointIndex()
 {
     KoPathShape path;
-    KoPathPoint * point1 = path.moveTo(QPointF(10, 10));
+    KoPathPoint *point1 = path.moveTo(QPointF(10, 10));
     KoPathPointIndex p1Index(0, 0);
-    KoPathPoint * point2 = path.lineTo(QPointF(20, 20));
+    KoPathPoint *point2 = path.lineTo(QPointF(20, 20));
     KoPathPointIndex p2Index(0, 1);
-    KoPathPoint * point3 = path.moveTo(QPointF(30, 30));
+    KoPathPoint *point3 = path.moveTo(QPointF(30, 30));
     KoPathPointIndex p3Index(1, 0);
-    KoPathPoint * point4 = path.lineTo(QPointF(40, 40));
+    KoPathPoint *point4 = path.lineTo(QPointF(40, 40));
     KoPathPointIndex p4Index(1, 1);
-    KoPathPoint * point5 = 0;
+    KoPathPoint *point5 = 0;
     KoPathPointIndex p5Index(-1, -1);
 
     QCOMPARE(p1Index, path.pathPointIndex(point1));
@@ -94,11 +94,11 @@ void TestPathShape::pathPointIndex()
 void TestPathShape::pointByIndex()
 {
     KoPathShape path;
-    KoPathPoint * point1 = path.moveTo(QPointF(10, 10));
-    KoPathPoint * point2 = path.lineTo(QPointF(20, 20));
-    KoPathPoint * point3 = path.moveTo(QPointF(30, 30));
-    KoPathPoint * point4 = path.lineTo(QPointF(40, 40));
-    KoPathPoint * point5 = 0;
+    KoPathPoint *point1 = path.moveTo(QPointF(10, 10));
+    KoPathPoint *point2 = path.lineTo(QPointF(20, 20));
+    KoPathPoint *point3 = path.moveTo(QPointF(30, 30));
+    KoPathPoint *point4 = path.lineTo(QPointF(40, 40));
+    KoPathPoint *point5 = 0;
 
     QVERIFY(point1 == path.pointByIndex(path.pathPointIndex(point1)));
     QVERIFY(point2 == path.pointByIndex(path.pathPointIndex(point2)));
@@ -110,20 +110,20 @@ void TestPathShape::pointByIndex()
 void TestPathShape::segmentByIndex()
 {
     KoPathShape path;
-    KoPathPoint * point1 = path.moveTo(QPointF(20, 20));
-    KoPathPoint * point2 = path.lineTo(QPointF(15, 25));
+    KoPathPoint *point1 = path.moveTo(QPointF(20, 20));
+    KoPathPoint *point2 = path.lineTo(QPointF(15, 25));
     path.lineTo(QPointF(10, 20));
     path.close();
     path.moveTo(QPointF(20, 30));
-    KoPathPoint * point3 = path.lineTo(QPointF(20, 30));
+    KoPathPoint *point3 = path.lineTo(QPointF(20, 30));
     path.moveTo(QPointF(30, 30));
     path.lineTo(QPointF(40, 30));
     path.lineTo(QPointF(40, 40));
     path.curveTo(QPointF(40, 45), QPointF(30, 45), QPointF(30, 40));
-    KoPathPoint * point4 = path.moveTo(QPointF(50, 50));
+    KoPathPoint *point4 = path.moveTo(QPointF(50, 50));
     path.lineTo(QPointF(60, 50));
     path.lineTo(QPointF(60, 60));
-    KoPathPoint * point5 = path.curveTo(QPointF(60, 65), QPointF(50, 65), QPointF(50, 60));
+    KoPathPoint *point5 = path.curveTo(QPointF(60, 65), QPointF(50, 65), QPointF(50, 60));
     path.close();
 
     QVERIFY(KoPathSegment(point1, point2) == path.segmentByIndex(path.pathPointIndex(point1)));
@@ -284,7 +284,7 @@ void TestPathShape::insertPoint()
 
     KoPathShape path2;
     path2.moveTo(QPointF(0, 0));
-    KoPathPoint * p = new KoPathPoint(0, QPointF(100, 100));
+    KoPathPoint *p = new KoPathPoint(0, QPointF(100, 100));
     QVERIFY(path2.insertPoint(p, KoPathPointIndex(0, 1)) == true);
     QVERIFY(p->parent() == &path2);
 }
@@ -461,22 +461,22 @@ void TestPathShape::openSubpath()
 
     // open at middle point in subpath
     QVERIFY(path.openSubpath(path.pathPointIndex(point1)) == KoPathPointIndex(0, 2));
-    QVERIFY(path.pointByIndex(KoPathPointIndex(0,0))->properties() & KoPathPoint::StartSubpath);
-    QVERIFY(path.pointByIndex(KoPathPointIndex(0,2))->properties() & KoPathPoint::StopSubpath);
+    QVERIFY(path.pointByIndex(KoPathPointIndex(0, 0))->properties() & KoPathPoint::StartSubpath);
+    QVERIFY(path.pointByIndex(KoPathPointIndex(0, 2))->properties() & KoPathPoint::StopSubpath);
     // open at first point in subpath
     QVERIFY(path.openSubpath(path.pathPointIndex(point2)) == KoPathPointIndex(1, 0));
-    QVERIFY(path.pointByIndex(KoPathPointIndex(1,0))->properties() & KoPathPoint::StartSubpath);
-    QVERIFY(path.pointByIndex(KoPathPointIndex(1,3))->properties() & KoPathPoint::StopSubpath);
+    QVERIFY(path.pointByIndex(KoPathPointIndex(1, 0))->properties() & KoPathPoint::StartSubpath);
+    QVERIFY(path.pointByIndex(KoPathPointIndex(1, 3))->properties() & KoPathPoint::StopSubpath);
     // open at last point in subpath
     QVERIFY(path.openSubpath(path.pathPointIndex(point3)) == KoPathPointIndex(2, 1));
-    QVERIFY(path.pointByIndex(KoPathPointIndex(2,0))->properties() & KoPathPoint::StartSubpath);
-    QVERIFY(path.pointByIndex(KoPathPointIndex(2,3))->properties() & KoPathPoint::StopSubpath);
+    QVERIFY(path.pointByIndex(KoPathPointIndex(2, 0))->properties() & KoPathPoint::StartSubpath);
+    QVERIFY(path.pointByIndex(KoPathPointIndex(2, 3))->properties() & KoPathPoint::StopSubpath);
     // try to open open subpath
     QVERIFY(path.openSubpath(path.pathPointIndex(point3)) == KoPathPointIndex(-1, -1));
     // open if the first path is a curve
     QVERIFY(path.openSubpath(path.pathPointIndex(point5)) == KoPathPointIndex(3, 1));
-    QVERIFY(path.pointByIndex(KoPathPointIndex(3,0))->properties() & KoPathPoint::StartSubpath);
-    QVERIFY(path.pointByIndex(KoPathPointIndex(3,2))->properties() & KoPathPoint::StopSubpath);
+    QVERIFY(path.pointByIndex(KoPathPointIndex(3, 0))->properties() & KoPathPoint::StartSubpath);
+    QVERIFY(path.pointByIndex(KoPathPointIndex(3, 2))->properties() & KoPathPoint::StopSubpath);
     // try to open none existing subpath
     QVERIFY(path.openSubpath(KoPathPointIndex(4, 1)) == KoPathPointIndex(-1, -1));
 
@@ -684,10 +684,10 @@ void TestPathShape::addSubpath()
     path.curveTo(QPointF(40, 45), QPointF(30, 45), QPointF(30, 40));
     path.close();
 
-    KoSubpath * sp1 = path.removeSubpath(0);
+    KoSubpath *sp1 = path.removeSubpath(0);
     QVERIFY(path.addSubpath(sp1, 0) == true);
 
-    KoSubpath * sp2 = path.removeSubpath(1);
+    KoSubpath *sp2 = path.removeSubpath(1);
     QVERIFY(path.addSubpath(sp2, 1) == true);
 
     QVERIFY(path.addSubpath(sp2, 4) == false);
@@ -710,15 +710,15 @@ void TestPathShape::addSubpath()
 void TestPathShape::koPathPointDataLess()
 {
     QList<KoPathPointData> v;
-    v.push_back(KoPathPointData((KoPathShape*)1, KoPathPointIndex(1, 1)));
-    v.push_back(KoPathPointData((KoPathShape*)1, KoPathPointIndex(1, 2)));
-    v.push_back(KoPathPointData((KoPathShape*)1, KoPathPointIndex(1, 3)));
-    v.push_back(KoPathPointData((KoPathShape*)1, KoPathPointIndex(1, 6)));
-    v.push_back(KoPathPointData((KoPathShape*)2, KoPathPointIndex(2, 1)));
-    v.push_back(KoPathPointData((KoPathShape*)2, KoPathPointIndex(2, 3)));
-    v.push_back(KoPathPointData((KoPathShape*)2, KoPathPointIndex(3, 3)));
-    v.push_back(KoPathPointData((KoPathShape*)3, KoPathPointIndex(1, 1)));
-    v.push_back(KoPathPointData((KoPathShape*)3, KoPathPointIndex(1, 2)));
+    v.push_back(KoPathPointData((KoPathShape *)1, KoPathPointIndex(1, 1)));
+    v.push_back(KoPathPointData((KoPathShape *)1, KoPathPointIndex(1, 2)));
+    v.push_back(KoPathPointData((KoPathShape *)1, KoPathPointIndex(1, 3)));
+    v.push_back(KoPathPointData((KoPathShape *)1, KoPathPointIndex(1, 6)));
+    v.push_back(KoPathPointData((KoPathShape *)2, KoPathPointIndex(2, 1)));
+    v.push_back(KoPathPointData((KoPathShape *)2, KoPathPointIndex(2, 3)));
+    v.push_back(KoPathPointData((KoPathShape *)2, KoPathPointIndex(3, 3)));
+    v.push_back(KoPathPointData((KoPathShape *)3, KoPathPointIndex(1, 1)));
+    v.push_back(KoPathPointData((KoPathShape *)3, KoPathPointIndex(1, 2)));
 
     QList<KoPathPointData> l;
     l.push_back(v[8]);

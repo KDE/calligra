@@ -18,9 +18,8 @@
 
 #include "EmfEnums.h"
 #include "EmfHeader.h"
-#include "EmfRecords.h"
 #include "EmfOutput.h"
-
+#include "EmfRecords.h"
 
 /**
    \file
@@ -51,12 +50,11 @@ public:
        we want.
     */
     OutputPainterStrategy();
-    OutputPainterStrategy( QPainter &painter, QSize &size, 
-                           bool keepAspectRatio = false );
+    OutputPainterStrategy(QPainter &painter, QSize &size, bool keepAspectRatio = false);
     ~OutputPainterStrategy() override;
 
-    void init( const Header *header ) override;
-    void cleanup( const Header *header ) override;
+    void init(const Header *header) override;
+    void cleanup(const Header *header) override;
     void eof() override;
 
     /**
@@ -64,63 +62,56 @@ public:
     */
     QImage *image();
 
-    void createPen( quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
-		    quint8 red, quint8 green, quint8 blue, quint8 reserved ) override;
-    void createBrushIndirect( quint32 ihBrush, quint32 BrushStyle, quint8 red,
-			      quint8 green, quint8 blue, quint8 reserved, 
-			      quint32 BrushHatch ) override;
-    void createMonoBrush( quint32 ihBrush, Bitmap *bitmap ) override;
-    void selectObject( const quint32 ihObject ) override;
-    void deleteObject( const quint32 ihObject ) override;
-    void arc( const QRect &box, const QPoint &start, const QPoint &end ) override;
-    void chord( const QRect &box, const QPoint &start, const QPoint &end ) override;
-    void pie( const QRect &box, const QPoint &start, const QPoint &end ) override;
-    void ellipse( const QRect &box ) override;
-    void rectangle( const QRect &box ) override;
-    void setMapMode( const quint32 mapMode ) override;
+    void createPen(quint32 ihPen, quint32 penStyle, quint32 x, quint32 y, quint8 red, quint8 green, quint8 blue, quint8 reserved) override;
+    void createBrushIndirect(quint32 ihBrush, quint32 BrushStyle, quint8 red, quint8 green, quint8 blue, quint8 reserved, quint32 BrushHatch) override;
+    void createMonoBrush(quint32 ihBrush, Bitmap *bitmap) override;
+    void selectObject(const quint32 ihObject) override;
+    void deleteObject(const quint32 ihObject) override;
+    void arc(const QRect &box, const QPoint &start, const QPoint &end) override;
+    void chord(const QRect &box, const QPoint &start, const QPoint &end) override;
+    void pie(const QRect &box, const QPoint &start, const QPoint &end) override;
+    void ellipse(const QRect &box) override;
+    void rectangle(const QRect &box) override;
+    void setMapMode(const quint32 mapMode) override;
     void setMetaRgn() override;
-    void setWindowOrgEx( const QPoint &origin ) override;
-    void setWindowExtEx( const QSize &size ) override;
-    void setViewportOrgEx( const QPoint &origin ) override;
-    void setViewportExtEx( const QSize &size ) override;
+    void setWindowOrgEx(const QPoint &origin) override;
+    void setWindowExtEx(const QSize &size) override;
+    void setViewportOrgEx(const QPoint &origin) override;
+    void setViewportExtEx(const QSize &size) override;
     void beginPath() override;
     void closeFigure() override;
     void endPath() override;
-    void setBkMode( const quint32 backgroundMode ) override;
-    void setPolyFillMode( const quint32 polyFillMode ) override;
-    void setLayout( const quint32 layoutMode ) override;
-    void extCreateFontIndirectW( const ExtCreateFontIndirectWRecord &extCreateFontIndirectW ) override;
-    void setTextAlign( const quint32 textAlignMode ) override;
-    void setTextColor( const quint8 red, const quint8 green, const quint8 blue,
-		       const quint8 reserved ) override;
-    void setBkColor( const quint8 red, const quint8 green, const quint8 blue,
-                     const quint8 reserved ) override;
-    void setPixelV( QPoint &point, quint8 red, quint8 green, quint8 blue, quint8 reserved ) override;
-    void modifyWorldTransform( quint32 mode, float M11, float M12,
-			       float M21, float M22, float Dx, float Dy ) override;
-    void setWorldTransform( float M11, float M12, float M21,
-			    float M22, float Dx, float Dy ) override;
-    void extTextOut( const QRect &bounds, const EmrTextObject &textObject ) override;
-    void moveToEx( const qint32 x, const qint32 y ) override;
+    void setBkMode(const quint32 backgroundMode) override;
+    void setPolyFillMode(const quint32 polyFillMode) override;
+    void setLayout(const quint32 layoutMode) override;
+    void extCreateFontIndirectW(const ExtCreateFontIndirectWRecord &extCreateFontIndirectW) override;
+    void setTextAlign(const quint32 textAlignMode) override;
+    void setTextColor(const quint8 red, const quint8 green, const quint8 blue, const quint8 reserved) override;
+    void setBkColor(const quint8 red, const quint8 green, const quint8 blue, const quint8 reserved) override;
+    void setPixelV(QPoint &point, quint8 red, quint8 green, quint8 blue, quint8 reserved) override;
+    void modifyWorldTransform(quint32 mode, float M11, float M12, float M21, float M22, float Dx, float Dy) override;
+    void setWorldTransform(float M11, float M12, float M21, float M22, float Dx, float Dy) override;
+    void extTextOut(const QRect &bounds, const EmrTextObject &textObject) override;
+    void moveToEx(const qint32 x, const qint32 y) override;
     void saveDC() override;
-    void restoreDC( const qint32 savedDC ) override;
-    void lineTo( const QPoint &finishPoint ) override;
-    void arcTo( const QRect &box, const QPoint &start, const QPoint &end ) override;
-    void polygon16( const QRect &bounds, const QList<QPoint> points ) override;
-    void polyLine16( const QRect &bounds, const QList<QPoint> points ) override;
-    void polyPolygon16( const QRect &bounds, const QList< QVector< QPoint > > &points ) override;
-    void polyPolyLine16( const QRect &bounds, const QList< QVector< QPoint > > &points ) override;
-    void polyLine( const QRect &bounds, const QList<QPoint> points ) override;
-    void polyLineTo16( const QRect &bounds, const QList<QPoint> points ) override;
-    void polyBezier16( const QRect &bounds, const QList<QPoint> points ) override;
-    void polyBezierTo16( const QRect &bounds, const QList<QPoint> points ) override;
-    void fillPath( const QRect &bounds ) override;
-    void strokeAndFillPath( const QRect &bounds ) override;
-    void strokePath( const QRect &bounds ) override;
-    void setClipPath( const quint32 regionMode ) override;
-    void bitBlt( BitBltRecord &bitBltRecord ) override;
-    void setStretchBltMode( const quint32 stretchMode ) override;
-    void stretchDiBits( StretchDiBitsRecord &stretchDiBitsRecord ) override;
+    void restoreDC(const qint32 savedDC) override;
+    void lineTo(const QPoint &finishPoint) override;
+    void arcTo(const QRect &box, const QPoint &start, const QPoint &end) override;
+    void polygon16(const QRect &bounds, const QList<QPoint> points) override;
+    void polyLine16(const QRect &bounds, const QList<QPoint> points) override;
+    void polyPolygon16(const QRect &bounds, const QList<QVector<QPoint>> &points) override;
+    void polyPolyLine16(const QRect &bounds, const QList<QVector<QPoint>> &points) override;
+    void polyLine(const QRect &bounds, const QList<QPoint> points) override;
+    void polyLineTo16(const QRect &bounds, const QList<QPoint> points) override;
+    void polyBezier16(const QRect &bounds, const QList<QPoint> points) override;
+    void polyBezierTo16(const QRect &bounds, const QList<QPoint> points) override;
+    void fillPath(const QRect &bounds) override;
+    void strokeAndFillPath(const QRect &bounds) override;
+    void strokePath(const QRect &bounds) override;
+    void setClipPath(const quint32 regionMode) override;
+    void bitBlt(BitBltRecord &bitBltRecord) override;
+    void setStretchBltMode(const quint32 stretchMode) override;
+    void stretchDiBits(StretchDiBitsRecord &stretchDiBitsRecord) override;
 
 private:
     void printPainterTransform(const char *leadText);
@@ -139,55 +130,53 @@ private:
 
        \param ihObject the stock object value
     */
-    void selectStockObject( const quint32 ihObject );
-
+    void selectStockObject(const quint32 ihObject);
 
     /**
        Helper routine to convert the EMF angle (centrepoint + radial endpoint) into
        the Qt format (in degrees - may need to multiply by 16 for some purposes)
     */
-    qreal angleFromArc( const QPoint &centrePoint, const QPoint &radialPoint );
+    qreal angleFromArc(const QPoint &centrePoint, const QPoint &radialPoint);
 
     /**
       Calculate the angular difference (span) between two angles
-      
+
       This should always be positive.
     */
-    qreal angularSpan( const qreal startAngle, const qreal endAngle );
+    qreal angularSpan(const qreal startAngle, const qreal endAngle);
 
     /**
        Convert the EMF font weight scale (0..1000) to Qt equivalent.
-       
-       This is a bit rough - the EMF spec only says 400 is normal, and 
+
+       This is a bit rough - the EMF spec only says 400 is normal, and
        700 is bold.
     */
-    QFont::Weight convertFontWeight( quint32 emfWeight );
+    QFont::Weight convertFontWeight(quint32 emfWeight);
 
+    Header *m_header; // Save to be able to retain scaling.
 
-    Header                  *m_header;   // Save to be able to retain scaling.
+    int m_painterSaves; // The number of times that save() was called.
+    QSize m_outputSize;
+    bool m_keepAspectRatio;
 
-    int                      m_painterSaves; // The number of times that save() was called.
-    QSize                    m_outputSize;
-    bool                     m_keepAspectRatio;
-
-    QMap<quint32, QVariant>  m_objectTable;
+    QMap<quint32, QVariant> m_objectTable;
 
     QPainterPath *m_path;
-    bool          m_currentlyBuildingPath;
+    bool m_currentlyBuildingPath;
 
-    QPainter                *m_painter;
-    QTransform               m_worldTransform; // The transform inside the EMF.
-    QTransform               m_outputTransform; // The transform that the painter already had
-    qreal                    m_outputScale;
+    QPainter *m_painter;
+    QTransform m_worldTransform; // The transform inside the EMF.
+    QTransform m_outputTransform; // The transform that the painter already had
+    qreal m_outputScale;
 
     // Everything that has to do with window and viewport calculation
-    QPoint        m_windowOrg;
-    QSize         m_windowExt;
-    QPoint        m_viewportOrg;
-    QSize         m_viewportExt;
-    bool          m_windowExtIsSet;
-    bool          m_viewportExtIsSet;
-    bool          m_windowViewportIsSet;
+    QPoint m_windowOrg;
+    QSize m_windowExt;
+    QPoint m_viewportOrg;
+    QSize m_viewportExt;
+    bool m_windowExtIsSet;
+    bool m_viewportExtIsSet;
+    bool m_windowViewportIsSet;
 
 #if 0
     // This matrix is needed because the window / viewport calculation
@@ -225,7 +214,7 @@ private:
     /**
        The current map mode
     */
-    MapMode  m_mapMode;
+    MapMode m_mapMode;
     /**
         The current text alignment mode
     */
@@ -234,7 +223,7 @@ private:
     /**
        The current coordinates
     */
-    QPoint  m_currentCoords;
+    QPoint m_currentCoords;
 };
 
 }

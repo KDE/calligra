@@ -22,93 +22,105 @@
 #include "SheetsOdfPrivate.h"
 
 #include <KoGenStyles.h>
-#include <KoXmlNS.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoOdfWorkaround.h>
 #include <KoStyleStack.h>
 #include <KoUnit.h>
+#include <KoXmlNS.h>
 
+#include "Condition.h"
+#include "StyleManager.h"
 #include "engine/CalculationSettings.h"
 #include "engine/Localization.h"
 #include "engine/MapBase.h"
-#include "Condition.h"
-#include "StyleManager.h"
 
 // This file contains functionality to load/save styles
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
-namespace Odf {
+namespace Odf
+{
 
-    // Single style loading
-    void loadStyle(Style *style, KoOdfStylesReader& stylesReader, const KoXmlElement& element,
-                      Conditions& conditions, const StyleManager* styleManager,
-                      const Localization *locale);
-    void loadCustomStyle(CustomStyle *style, KoOdfStylesReader& stylesReader, const KoXmlElement& xmlstyle,
-                          const QString& name, Conditions& conditions,
-                          const StyleManager* styleManager, const Localization *locale);
+// Single style loading
+void loadStyle(Style *style,
+               KoOdfStylesReader &stylesReader,
+               const KoXmlElement &element,
+               Conditions &conditions,
+               const StyleManager *styleManager,
+               const Localization *locale);
+void loadCustomStyle(CustomStyle *style,
+                     KoOdfStylesReader &stylesReader,
+                     const KoXmlElement &xmlstyle,
+                     const QString &name,
+                     Conditions &conditions,
+                     const StyleManager *styleManager,
+                     const Localization *locale);
 
-    // Single style saving
-    void saveStyle(const Style *style, const QSet<Style::Key>& subStyles, KoGenStyle &xmlstyle,
-                      KoGenStyles &mainStyles, const StyleManager* manager, Localization *locale);
-    QString saveCustomStyle(CustomStyle *style, KoGenStyle& genstyle, KoGenStyles &mainStyles,
-                             const StyleManager* manager, Localization *locale);
+// Single style saving
+void saveStyle(const Style *style,
+               const QSet<Style::Key> &subStyles,
+               KoGenStyle &xmlstyle,
+               KoGenStyles &mainStyles,
+               const StyleManager *manager,
+               Localization *locale);
+QString saveCustomStyle(CustomStyle *style, KoGenStyle &genstyle, KoGenStyles &mainStyles, const StyleManager *manager, Localization *locale);
 
-    void loadParagraphProperties(Style *style, KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack);
-    void loadTableCellProperties(Style *style, KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack);
-    void loadTextProperties(Style *style, KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack);
+void loadParagraphProperties(Style *style, KoOdfStylesReader &stylesReader, const KoStyleStack &styleStack);
+void loadTableCellProperties(Style *style, KoOdfStylesReader &stylesReader, const KoStyleStack &styleStack);
+void loadTextProperties(Style *style, KoOdfStylesReader &stylesReader, const KoStyleStack &styleStack);
 
-    /**
-     * @return the name of the data style (number, currency, percentage, date,
-     * boolean, text)
-     */
-    QString saveStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles, Format::Type _style,
-                                       const QString &_prefix, const QString &_postfix, int _precision, const QString& symbol,
-                                       bool thousandsSep, Localization *locale);
-    QString saveStyleNumericDate(KoGenStyles &mainStyles, Format::Type _style, const QString& _prefix, const QString& _postfix, Localization *locale);
-    QString saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type _style,
-            const QString &_prefix, const QString &_suffix);
-    QString saveStyleNumericTime(KoGenStyles& mainStyles, Format::Type _style,
-                                           const QString &_prefix, const QString &_suffix, const Localization *locale);
-    QString saveStyleNumericCustom(KoGenStyles&mainStyles, Format::Type _style,
-            const QString &_prefix, const QString &_suffix);
-    QString saveStyleNumericScientific(KoGenStyles&mainStyles, Format::Type _style,
-            const QString &_prefix, const QString &_suffix, int _precision, bool thousandsSep);
-    QString saveStyleNumericPercentage(KoGenStyles&mainStyles, Format::Type _style, int _precision,
-            const QString &_prefix, const QString &_suffix);
-    QString saveStyleNumericMoney(KoGenStyles&mainStyles, Format::Type _style,
-                                            const QString& symbol, int _precision,
-                                            const QString &_prefix, const QString &_suffix);
-    QString saveStyleNumericText(KoGenStyles&mainStyles, Format::Type _style, int _precision,
-                                           const QString &_prefix, const QString &_suffix);
-    QString saveStyleNumericNumber(KoGenStyles&mainStyles, Format::Type _style, int _precision,
-            const QString &_prefix, const QString &_suffix, bool thousandsSep);
-    QString saveBackgroundStyle(KoGenStyles &mainStyles, const QBrush &brush);
+/**
+ * @return the name of the data style (number, currency, percentage, date,
+ * boolean, text)
+ */
+QString saveStyleNumeric(KoGenStyle &style,
+                         KoGenStyles &mainStyles,
+                         Format::Type _style,
+                         const QString &_prefix,
+                         const QString &_postfix,
+                         int _precision,
+                         const QString &symbol,
+                         bool thousandsSep,
+                         Localization *locale);
+QString saveStyleNumericDate(KoGenStyles &mainStyles, Format::Type _style, const QString &_prefix, const QString &_postfix, Localization *locale);
+QString saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type _style, const QString &_prefix, const QString &_suffix);
+QString saveStyleNumericTime(KoGenStyles &mainStyles, Format::Type _style, const QString &_prefix, const QString &_suffix, const Localization *locale);
+QString saveStyleNumericCustom(KoGenStyles &mainStyles, Format::Type _style, const QString &_prefix, const QString &_suffix);
+QString
+saveStyleNumericScientific(KoGenStyles &mainStyles, Format::Type _style, const QString &_prefix, const QString &_suffix, int _precision, bool thousandsSep);
+QString saveStyleNumericPercentage(KoGenStyles &mainStyles, Format::Type _style, int _precision, const QString &_prefix, const QString &_suffix);
+QString
+saveStyleNumericMoney(KoGenStyles &mainStyles, Format::Type _style, const QString &symbol, int _precision, const QString &_prefix, const QString &_suffix);
+QString saveStyleNumericText(KoGenStyles &mainStyles, Format::Type _style, int _precision, const QString &_prefix, const QString &_suffix);
+QString saveStyleNumericNumber(KoGenStyles &mainStyles, Format::Type _style, int _precision, const QString &_prefix, const QString &_suffix, bool thousandsSep);
+QString saveBackgroundStyle(KoGenStyles &mainStyles, const QBrush &brush);
 
-    // Helpers
-    Format::Type dateType(const QString&, const Localization *locale);
-    Format::Type timeType(const QString&, const Localization *locale);
-    Format::Type fractionType(const QString&);
-    Format::Type numberType(const QString&);
-    Currency numberCurrency(const QString&);
-    QPen decodePen(const QString &border);
-    QString encodePen(const QPen &pen);
-    /**
-     * Returns the name of a color.  This is the same as returned by QColor::name, but an internal cache
-     * is used to reduce the overhead when asking for the name of the same color.
-     */
-    QString colorName(const QColor& color);
+// Helpers
+Format::Type dateType(const QString &, const Localization *locale);
+Format::Type timeType(const QString &, const Localization *locale);
+Format::Type fractionType(const QString &);
+Format::Type numberType(const QString &);
+Currency numberCurrency(const QString &);
+QPen decodePen(const QString &border);
+QString encodePen(const QPen &pen);
+/**
+ * Returns the name of a color.  This is the same as returned by QColor::name, but an internal cache
+ * is used to reduce the overhead when asking for the name of the same color.
+ */
+QString colorName(const QColor &color);
 }
 
-void Odf::loadStyleTemplate(StyleManager *styles, KoOdfStylesReader& stylesReader, MapBase* map)
+void Odf::loadStyleTemplate(StyleManager *styles, KoOdfStylesReader &stylesReader, MapBase *map)
 {
     // reset the map of OpenDocument Styles
     styles->clearOasisStyles();
     QHash<QString, QString> oasisStyles;
 
     // loading default style first
-    const KoXmlElement* defStyle = stylesReader.defaultStyle("table-cell");
+    const KoXmlElement *defStyle = stylesReader.defaultStyle("table-cell");
     if (defStyle) {
         debugSheetsODF << "StyleManager: Loading default cell style";
         Conditions conditions;
@@ -119,9 +131,7 @@ void Odf::loadStyleTemplate(StyleManager *styles, KoOdfStylesReader& stylesReade
             // is set to arbitrary precision.
             KoXmlNode n = defStyle->firstChild();
             while (!n.isNull()) {
-                if (n.isElement() &&
-                        n.namespaceURI() == KoXmlNS::style &&
-                        n.localName() == "table-cell-properties") {
+                if (n.isElement() && n.namespaceURI() == KoXmlNS::style && n.localName() == "table-cell-properties") {
                     KoXmlElement e = n.toElement();
                     if (n.toElement().hasAttributeNS(KoXmlNS::style, "decimal-places")) {
                         bool ok;
@@ -138,11 +148,12 @@ void Odf::loadStyleTemplate(StyleManager *styles, KoOdfStylesReader& stylesReade
     } else
         styles->resetDefaultStyle();
 
-    QList<KoXmlElement*> customStyles(stylesReader.customStyles("table-cell").values());
+    QList<KoXmlElement *> customStyles(stylesReader.customStyles("table-cell").values());
     uint nStyles = customStyles.count();
     for (unsigned int item = 0; item < nStyles; item++) {
-        KoXmlElement* styleElem = customStyles[item];
-        if (!styleElem) continue;
+        KoXmlElement *styleElem = customStyles[item];
+        if (!styleElem)
+            continue;
 
         // assume the name assigned by the application
         const QString oasisName = styleElem->attributeNS(KoXmlNS::style, "name", QString());
@@ -154,14 +165,14 @@ void Odf::loadStyleTemplate(StyleManager *styles, KoOdfStylesReader& stylesReade
         if (!name.isEmpty()) {
             // The style's parent name will be set in loadStyle(..).
             // After all styles are loaded the pointer to the parent is set.
-            CustomStyle * style = new CustomStyle(name);
+            CustomStyle *style = new CustomStyle(name);
 
             Conditions conditions;
             loadCustomStyle(style, stylesReader, *styleElem, name, conditions, styles, map->calculationSettings()->locale());
             // TODO Stefan: conditions
             styles->insertStyle(style);
             // insert it into the map sorted the OpenDocument name
-            styles->defineOasisStyle(oasisName, style->name());  // TODO: is this actually needed?
+            styles->defineOasisStyle(oasisName, style->name()); // TODO: is this actually needed?
             oasisStyles[oasisName] = style->name();
             debugSheetsODF << "Style" << style->name() << ":" << style;
         }
@@ -170,13 +181,12 @@ void Odf::loadStyleTemplate(StyleManager *styles, KoOdfStylesReader& stylesReade
     // replace all OpenDocument internal parent names by Calligra Sheets' style names
     QStringList styleNames = styles->styleNames(false);
 
-    foreach (QString name, styleNames)
-    {
-        CustomStyle *style = styles->style (name);
+    foreach (QString name, styleNames) {
+        CustomStyle *style = styles->style(name);
 
         if (!style->parentName().isNull()) {
             const QString parentOdfName = style->parentName();
-            const CustomStyle* parentStyle = styles->style(oasisStyles.value(parentOdfName));
+            const CustomStyle *parentStyle = styles->style(oasisStyles.value(parentOdfName));
             if (!parentStyle) {
                 warnSheetsODF << parentOdfName << " not found.";
                 continue;
@@ -190,14 +200,12 @@ void Odf::loadStyleTemplate(StyleManager *styles, KoOdfStylesReader& stylesReade
     }
 }
 
-Styles Odf::loadAutoStyles(StyleManager *styles, KoOdfStylesReader& stylesReader,
-                                       QHash<QString, Conditions>& conditionalStyles,
-                                       const Localization *locale)
+Styles Odf::loadAutoStyles(StyleManager *styles, KoOdfStylesReader &stylesReader, QHash<QString, Conditions> &conditionalStyles, const Localization *locale)
 {
     Styles autoStyles;
-    foreach(KoXmlElement* element, stylesReader.autoStyles("table-cell")) {
-        if (element->hasAttributeNS(KoXmlNS::style , "name")) {
-            QString name = element->attributeNS(KoXmlNS::style , "name" , QString());
+    foreach (KoXmlElement *element, stylesReader.autoStyles("table-cell")) {
+        if (element->hasAttributeNS(KoXmlNS::style, "name")) {
+            QString name = element->attributeNS(KoXmlNS::style, "name", QString());
             debugSheetsODF << "StyleManager: Preloading automatic cell style:" << name;
             autoStyles.remove(name);
             Conditions conditions;
@@ -209,7 +217,7 @@ Styles Odf::loadAutoStyles(StyleManager *styles, KoOdfStylesReader& stylesReader
 
             if (element->hasAttributeNS(KoXmlNS::style, "parent-style-name")) {
                 const QString parentOdfName = element->attributeNS(KoXmlNS::style, "parent-style-name", QString());
-                const CustomStyle* parentStyle = styles->style(styles->openDocumentName(parentOdfName));
+                const CustomStyle *parentStyle = styles->style(styles->openDocumentName(parentOdfName));
                 if (!parentStyle) {
                     warnSheetsODF << parentOdfName << " not found.";
                     continue;
@@ -231,9 +239,8 @@ void Odf::saveStyles(StyleManager *manager, KoGenStyles &mainStyles, Localizatio
     manager->clearOasisStyles();
     QStringList styleNames = manager->styleNames(false);
 
-    foreach (QString name, styleNames)
-    {
-        CustomStyle *style = manager->style (name);
+    foreach (QString name, styleNames) {
+        CustomStyle *style = manager->style(name);
         debugSheetsODF << "StyleManager: Saving common cell style" << name;
         KoGenStyle customStyle = KoGenStyle(KoGenStyle::TableCellStyle, "table-cell");
         const QString oasisName = saveCustomStyle(style, customStyle, mainStyles, manager, locale);
@@ -241,12 +248,14 @@ void Odf::saveStyles(StyleManager *manager, KoGenStyles &mainStyles, Localizatio
     }
 }
 
-
 // Single style loading
 
-void Odf::loadStyle(Style *style, KoOdfStylesReader& stylesReader, const KoXmlElement& element,
-                  Conditions& conditions, const StyleManager* styleManager,
-                  const Localization *locale)
+void Odf::loadStyle(Style *style,
+                    KoOdfStylesReader &stylesReader,
+                    const KoXmlElement &element,
+                    Conditions &conditions,
+                    const StyleManager *styleManager,
+                    const Localization *locale)
 {
     // NOTE Stefan: Do not fill the style stack with the parent styles!
     KoStyleStack styleStack;
@@ -262,18 +271,22 @@ void Odf::loadStyle(Style *style, KoOdfStylesReader& stylesReader, const KoXmlEl
     loadParagraphProperties(style, stylesReader, styleStack);
 
     KoXmlElement e;
-    forEachElement(e, element) {
+    forEachElement(e, element)
+    {
         if (e.namespaceURI() == KoXmlNS::style && e.localName() == "map")
             loadConditions(&conditions, e, styleManager);
     }
 
     loadDataStyle(style, stylesReader, element, conditions, styleManager, locale);
-
 }
 
-void Odf::loadCustomStyle(CustomStyle *style, KoOdfStylesReader& stylesReader, const KoXmlElement& xmlstyle,
-                          const QString& name, Conditions& conditions,
-                          const StyleManager* styleManager, const Localization *locale)
+void Odf::loadCustomStyle(CustomStyle *style,
+                          KoOdfStylesReader &stylesReader,
+                          const KoXmlElement &xmlstyle,
+                          const QString &name,
+                          Conditions &conditions,
+                          const StyleManager *styleManager,
+                          const Localization *locale)
 {
     style->setName(name);
     if (xmlstyle.hasAttributeNS(KoXmlNS::style, "parent-style-name"))
@@ -281,38 +294,45 @@ void Odf::loadCustomStyle(CustomStyle *style, KoOdfStylesReader& stylesReader, c
 
     style->setType(Style::CUSTOM);
 
-    loadStyle((Style*) style, stylesReader, xmlstyle, conditions, styleManager, locale);
+    loadStyle((Style *)style, stylesReader, xmlstyle, conditions, styleManager, locale);
 }
 
-
-void Odf::loadDataStyle(Style *style, KoOdfStylesReader& stylesReader, const KoXmlElement& element,
-                             Conditions& conditions, const StyleManager* styleManager,
-                             const Localization *locale)
+void Odf::loadDataStyle(Style *style,
+                        KoOdfStylesReader &stylesReader,
+                        const KoXmlElement &element,
+                        Conditions &conditions,
+                        const StyleManager *styleManager,
+                        const Localization *locale)
 {
     if (element.hasAttributeNS(KoXmlNS::style, "data-style-name")) {
         const QString styleName = element.attributeNS(KoXmlNS::style, "data-style-name", QString());
         loadDataStyle(style, stylesReader, styleName, conditions, styleManager, locale);
     }
-
 }
 
-void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QString &styleName, Conditions &conditions, const StyleManager *styleManager, const Localization *locale)
+void Odf::loadDataStyle(Style *style,
+                        KoOdfStylesReader &stylesReader,
+                        const QString &styleName,
+                        Conditions &conditions,
+                        const StyleManager *styleManager,
+                        const Localization *locale)
 {
-    if (!stylesReader.dataFormats().contains(styleName)) return;
+    if (!stylesReader.dataFormats().contains(styleName))
+        return;
 
-    QPair<KoOdfNumberStyles::NumericStyleFormat, KoXmlElement*> dataStylePair = stylesReader.dataFormats()[styleName];
+    QPair<KoOdfNumberStyles::NumericStyleFormat, KoXmlElement *> dataStylePair = stylesReader.dataFormats()[styleName];
 
-    const KoOdfNumberStyles::NumericStyleFormat& dataStyle = dataStylePair.first;
-    const QList<QPair<QString,QString> > styleMaps = dataStyle.styleMaps;
+    const KoOdfNumberStyles::NumericStyleFormat &dataStyle = dataStylePair.first;
+    const QList<QPair<QString, QString>> styleMaps = dataStyle.styleMaps;
     bool useNewStyle = (styleMaps.count() > 0);
     if (useNewStyle) {
         style = new Style();
-        for (QList<QPair<QString,QString> >::const_iterator it = styleMaps.begin(); it != styleMaps.end(); ++it) {
+        for (QList<QPair<QString, QString>>::const_iterator it = styleMaps.begin(); it != styleMaps.end(); ++it) {
             const Conditional c = loadCondition(&conditions, it->first, it->second, QString());
             if (styleManager->style(c.styleName) == 0) {
-                CustomStyle* s = new CustomStyle(c.styleName);
+                CustomStyle *s = new CustomStyle(c.styleName);
                 loadDataStyle(s, stylesReader, c.styleName, conditions, styleManager, locale);
-                const_cast<StyleManager*>(styleManager)->insertStyle(s);
+                const_cast<StyleManager *>(styleManager)->insertStyle(s);
             }
         }
     }
@@ -405,7 +425,7 @@ void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QSt
     }
 }
 
-void Odf::loadParagraphProperties(Style *style, KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack)
+void Odf::loadParagraphProperties(Style *style, KoOdfStylesReader &stylesReader, const KoStyleStack &styleStack)
 {
     Q_UNUSED(stylesReader);
     debugSheetsODF << "\t paragraph-properties";
@@ -413,9 +433,9 @@ void Odf::loadParagraphProperties(Style *style, KoOdfStylesReader& stylesReader,
         QString str = styleStack.property(KoXmlNS::fo, "text-align");
         if (str == "center")
             style->setHAlign(Style::Center);
-        else if (str == "end" || str=="right")
+        else if (str == "end" || str == "right")
             style->setHAlign(Style::Right);
-        else if (str == "start" || str=="left")
+        else if (str == "start" || str == "left")
             style->setHAlign(Style::Left);
         else if (str == "justify")
             style->setHAlign(Style::Justified);
@@ -425,12 +445,12 @@ void Odf::loadParagraphProperties(Style *style, KoOdfStylesReader& stylesReader,
     }
 
     if (styleStack.hasProperty(KoXmlNS::fo, "margin-left")) {
-        //todo fix me
+        // todo fix me
         style->setIndentation(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-left"), 0.0));
     }
 }
 
-void Odf::loadTableCellProperties(Style *style, KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack)
+void Odf::loadTableCellProperties(Style *style, KoOdfStylesReader &stylesReader, const KoStyleStack &styleStack)
 {
     QString str;
     if (styleStack.hasProperty(KoXmlNS::style, "vertical-align")) {
@@ -483,16 +503,13 @@ void Odf::loadTableCellProperties(Style *style, KoOdfStylesReader& stylesReader,
             style->setHideFormula(true);
         }
     }
-    if (styleStack.hasProperty(KoXmlNS::style, "print-content") &&
-            (styleStack.property(KoXmlNS::style, "print-content") == "false")) {
+    if (styleStack.hasProperty(KoXmlNS::style, "print-content") && (styleStack.property(KoXmlNS::style, "print-content") == "false")) {
         style->setDontPrintText(true);
     }
-    if (styleStack.hasProperty(KoXmlNS::style, "shrink-to-fit") &&
-            (styleStack.property(KoXmlNS::style, "shrink-to-fit") == "true")) {
+    if (styleStack.hasProperty(KoXmlNS::style, "shrink-to-fit") && (styleStack.property(KoXmlNS::style, "shrink-to-fit") == "true")) {
         style->setShrinkToFit(true);
     }
-    if (styleStack.hasProperty(KoXmlNS::style, "direction") &&
-            (styleStack.property(KoXmlNS::style, "direction") == "ttb")) {
+    if (styleStack.hasProperty(KoXmlNS::style, "direction") && (styleStack.property(KoXmlNS::style, "direction") == "ttb")) {
         style->setVerticalText(true);
     }
     if (styleStack.hasProperty(KoXmlNS::style, "rotation-angle")) {
@@ -510,42 +527,42 @@ void Odf::loadTableCellProperties(Style *style, KoOdfStylesReader& stylesReader,
         style->setTopBorderPen(pen);
         style->setBottomBorderPen(pen);
         style->setRightBorderPen(pen);
-        debugSheetsODF<<"\t\tfo:border"<<str;
+        debugSheetsODF << "\t\tfo:border" << str;
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border-left")) {
         str = styleStack.property(KoXmlNS::fo, "border-left");
         style->setLeftBorderPen(decodePen(str));
-        debugSheetsODF<<"\t\tfo:border-left"<<str;
+        debugSheetsODF << "\t\tfo:border-left" << str;
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border-right")) {
         str = styleStack.property(KoXmlNS::fo, "border-right");
         style->setRightBorderPen(decodePen(str));
-        debugSheetsODF<<"\t\tfo:border-right"<<str;
+        debugSheetsODF << "\t\tfo:border-right" << str;
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border-top")) {
         str = styleStack.property(KoXmlNS::fo, "border-top");
         style->setTopBorderPen(decodePen(str));
-        debugSheetsODF<<"\t\tfo:border-top"<<str;
+        debugSheetsODF << "\t\tfo:border-top" << str;
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border-bottom")) {
         str = styleStack.property(KoXmlNS::fo, "border-bottom");
         style->setBottomBorderPen(decodePen(str));
-        debugSheetsODF<<"\t\tfo:border-bottom"<<str;
+        debugSheetsODF << "\t\tfo:border-bottom" << str;
     }
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-tl-br")) {
         str = styleStack.property(KoXmlNS::style, "diagonal-tl-br");
         style->setFallDiagonalPen(decodePen(str));
-        debugSheetsODF<<"\t\tfo:diagonal-tl-br"<<str;
+        debugSheetsODF << "\t\tfo:diagonal-tl-br" << str;
     }
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-bl-tr")) {
         str = styleStack.property(KoXmlNS::style, "diagonal-bl-tr");
         style->setGoUpDiagonalPen(decodePen(str));
-        debugSheetsODF<<"\t\tfo:diagonal-bl-tr"<<str;
+        debugSheetsODF << "\t\tfo:diagonal-bl-tr" << str;
     }
 
     if (styleStack.hasProperty(KoXmlNS::draw, "style-name") || styleStack.hasProperty(KoXmlNS::calligra, "fill-style-name")) {
         QString styleName = styleStack.hasProperty(KoXmlNS::calligra, "fill-style-name") ? styleStack.property(KoXmlNS::calligra, "fill-style-name")
-                : styleStack.property(KoXmlNS::draw, "style-name");
+                                                                                         : styleStack.property(KoXmlNS::draw, "style-name");
         debugSheetsODF << " style name :" << styleName;
 
         const KoXmlElement *xmlstyle = stylesReader.findStyle(styleName, "graphic");
@@ -569,7 +586,7 @@ void Odf::loadTableCellProperties(Style *style, KoOdfStylesReader& stylesReader,
     }
 }
 
-void Odf::loadTextProperties(Style *style, KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack)
+void Odf::loadTextProperties(Style *style, KoOdfStylesReader &stylesReader, const KoStyleStack &styleStack)
 {
     Q_UNUSED(stylesReader);
     // fo:font-size="13pt"
@@ -579,36 +596,39 @@ void Odf::loadTextProperties(Style *style, KoOdfStylesReader& stylesReader, cons
     // fo:font-weight="bold"
     debugSheetsODF << "\t text-properties";
     if (styleStack.hasProperty(KoXmlNS::fo, "font-family")) {
-        style->setFontFamily(styleStack.property(KoXmlNS::fo, "font-family"));     // FIXME Stefan: sanity check
+        style->setFontFamily(styleStack.property(KoXmlNS::fo, "font-family")); // FIXME Stefan: sanity check
         debugSheetsODF << "\t\t fo:font-family:" << style->fontFamily();
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "font-size")) {
-        style->setFontSize((int) KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "font-size"), 10.0));       // FIXME Stefan: fallback to default
+        style->setFontSize((int)KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "font-size"), 10.0)); // FIXME Stefan: fallback to default
         debugSheetsODF << "\t\t fo:font-size:" << style->fontSize();
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "font-style")) {
-        if (styleStack.property(KoXmlNS::fo, "font-style") == "italic") {   // "normal", "oblique"
+        if (styleStack.property(KoXmlNS::fo, "font-style") == "italic") { // "normal", "oblique"
             style->setFontItalic(true);
-            debugSheetsODF << "\t\t fo:font-style:" << "italic";
+            debugSheetsODF << "\t\t fo:font-style:"
+                           << "italic";
         }
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "font-weight")) {
-        if (styleStack.property(KoXmlNS::fo, "font-weight") == "bold") {   // "normal", "100", "200", ...
+        if (styleStack.property(KoXmlNS::fo, "font-weight") == "bold") { // "normal", "100", "200", ...
             style->setFontBold(true);
-            debugSheetsODF << "\t\t fo:font-weight:" << "bold";
+            debugSheetsODF << "\t\t fo:font-weight:"
+                           << "bold";
         }
     }
     if (styleStack.hasProperty(KoXmlNS::style, "text-underline-style")) {
         if (styleStack.property(KoXmlNS::style, "text-underline-style") != "none") {
             style->setFontUnderline(true);
-            debugSheetsODF << "\t\t style:text-underline-style:" << "solid (actually: !none)";
+            debugSheetsODF << "\t\t style:text-underline-style:"
+                           << "solid (actually: !none)";
         }
     }
     if (styleStack.hasProperty(KoXmlNS::style, "text-underline-width")) {
-        //TODO
+        // TODO
     }
     if (styleStack.hasProperty(KoXmlNS::style, "text-underline-color")) {
-        //TODO
+        // TODO
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "color")) {
         QColor color = QColor(styleStack.property(KoXmlNS::fo, "color"));
@@ -619,15 +639,16 @@ void Odf::loadTextProperties(Style *style, KoOdfStylesReader& stylesReader, cons
     }
     if (styleStack.hasProperty(KoXmlNS::style, "text-line-through-style")) {
         if (styleStack.property(KoXmlNS::style, "text-line-through-style") != "none"
-                /*&& styleStack.property("text-line-through-style")=="solid"*/) {
+            /*&& styleStack.property("text-line-through-style")=="solid"*/) {
             style->setFontStrikeOut(true);
-            debugSheetsODF << "\t\t text-line-through-style:" << "solid (actually: !none)";
+            debugSheetsODF << "\t\t text-line-through-style:"
+                           << "solid (actually: !none)";
         }
     }
     if (styleStack.hasProperty(KoXmlNS::style, "font-name")) {
         QString fontName = styleStack.property(KoXmlNS::style, "font-name");
         debugSheetsODF << "\t\t style:font-name:" << fontName;
-        const KoXmlElement * xmlstyle = stylesReader.findStyle(fontName);
+        const KoXmlElement *xmlstyle = stylesReader.findStyle(fontName);
         // TODO: sanity check that it is a font-face style?
         debugSheetsODF << "\t\t\t style:" << xmlstyle;
         if (xmlstyle) {
@@ -637,20 +658,22 @@ void Odf::loadTextProperties(Style *style, KoOdfStylesReader& stylesReader, cons
     }
 }
 
-
-
 // Single style saving
 
-void Odf::saveStyle(const Style *style, const QSet<Style::Key>& keysToStore, KoGenStyle &xmlstyle,
-                  KoGenStyles &mainStyles, const StyleManager* manager, Localization *locale)
+void Odf::saveStyle(const Style *style,
+                    const QSet<Style::Key> &keysToStore,
+                    KoGenStyle &xmlstyle,
+                    KoGenStyles &mainStyles,
+                    const StyleManager *manager,
+                    Localization *locale)
 {
 #ifndef NDEBUG
-    //if (type() == BUILTIN )
-    //  debugSheetsStyle <<"BUILTIN";
-    //else if (type() == CUSTOM )
-    //  debugSheetsStyle <<"CUSTOM";
-    //else if (type() == AUTO )
-    //  debugSheetsStyle <<"AUTO";
+    // if (type() == BUILTIN )
+    //   debugSheetsStyle <<"BUILTIN";
+    // else if (type() == CUSTOM )
+    //   debugSheetsStyle <<"CUSTOM";
+    // else if (type() == AUTO )
+    //   debugSheetsStyle <<"AUTO";
 #endif
 
     if (!style->isDefault() && style->hasAttribute(Style::NamedStyleKey)) {
@@ -678,7 +701,7 @@ void Odf::saveStyle(const Style *style, const QSet<Style::Key>& keysToStore, KoG
             break;
         }
         if (!value.isEmpty()) {
-            xmlstyle.addProperty("style:text-align-source", "fix");   // table-cell-properties
+            xmlstyle.addProperty("style:text-align-source", "fix"); // table-cell-properties
             xmlstyle.addProperty("fo:text-align", value, KoGenStyle::ParagraphType);
         }
     }
@@ -745,9 +768,9 @@ void Odf::saveStyle(const Style *style, const QSet<Style::Key>& keysToStore, KoG
 
     if (keysToStore.contains(Style::Indentation) && style->indentation() != 0.0) {
         xmlstyle.addPropertyPt("fo:margin-left", style->indentation(), KoGenStyle::ParagraphType);
-        //FIXME
-        //if ( a == HAlignUndefined )
-        //currentCellStyle.addProperty("fo:text-align", "start" );
+        // FIXME
+        // if ( a == HAlignUndefined )
+        // currentCellStyle.addProperty("fo:text-align", "start" );
     }
 
     if (keysToStore.contains(Style::DontPrintText) && keysToStore.contains(Style::DontPrintText)) // huh? why twice?
@@ -786,11 +809,9 @@ void Odf::saveStyle(const Style *style, const QSet<Style::Key>& keysToStore, KoG
     //              A line width of zero indicates a cosmetic pen. This means
     //              that the pen width is always drawn one pixel wide,
     //              independent of the transformation set on the painter.
-    if (keysToStore.contains(Style::LeftPen) && keysToStore.contains(Style::RightPen) &&
-            keysToStore.contains(Style::TopPen) && keysToStore.contains(Style::BottomPen) &&
-            (style->leftBorderPen() == style->topBorderPen()) &&
-            (style->leftBorderPen() == style->rightBorderPen()) &&
-            (style->leftBorderPen() == style->bottomBorderPen())) {
+    if (keysToStore.contains(Style::LeftPen) && keysToStore.contains(Style::RightPen) && keysToStore.contains(Style::TopPen)
+        && keysToStore.contains(Style::BottomPen) && (style->leftBorderPen() == style->topBorderPen()) && (style->leftBorderPen() == style->rightBorderPen())
+        && (style->leftBorderPen() == style->bottomBorderPen())) {
         if (style->leftBorderPen().style() != Qt::NoPen)
             xmlstyle.addProperty("fo:border", encodePen(style->leftBorderPen()));
     } else {
@@ -814,10 +835,10 @@ void Odf::saveStyle(const Style *style, const QSet<Style::Key>& keysToStore, KoG
     }
 
     // font
-    if (keysToStore.contains(Style::FontFamily)) {   // !fontFamily().isEmpty() == true
+    if (keysToStore.contains(Style::FontFamily)) { // !fontFamily().isEmpty() == true
         xmlstyle.addProperty("fo:font-family", style->fontFamily(), KoGenStyle::TextType);
     }
-    if (keysToStore.contains(Style::FontSize)) {   // fontSize() != 0
+    if (keysToStore.contains(Style::FontSize)) { // fontSize() != 0
         xmlstyle.addPropertyPt("fo:font-size", style->fontSize(), KoGenStyle::TextType);
     }
 
@@ -828,9 +849,9 @@ void Odf::saveStyle(const Style *style, const QSet<Style::Key>& keysToStore, KoG
         xmlstyle.addProperty("fo:font-style", "italic", KoGenStyle::TextType);
 
     if (keysToStore.contains(Style::FontUnderline) && style->underline()) {
-        //style:text-underline-style="solid" style:text-underline-width="auto"
+        // style:text-underline-style="solid" style:text-underline-width="auto"
         xmlstyle.addProperty("style:text-underline-style", "solid", KoGenStyle::TextType);
-        //copy from oo-129
+        // copy from oo-129
         xmlstyle.addProperty("style:text-underline-width", "auto", KoGenStyle::TextType);
         xmlstyle.addProperty("style:text-underline-color", "font-color", KoGenStyle::TextType);
     }
@@ -838,12 +859,12 @@ void Odf::saveStyle(const Style *style, const QSet<Style::Key>& keysToStore, KoG
     if (keysToStore.contains(Style::FontStrike) && style->strikeOut())
         xmlstyle.addProperty("style:text-line-through-style", "solid", KoGenStyle::TextType);
 
-    if (keysToStore.contains(Style::FontColor) && style->fontColor().isValid()) {   // always save
+    if (keysToStore.contains(Style::FontColor) && style->fontColor().isValid()) { // always save
         xmlstyle.addProperty("fo:color", colorName(style->fontColor()), KoGenStyle::TextType);
     }
 
-    //I don't think there is a reason why the background brush should be saved if it is null,
-    //but remove the check if it causes problems.  -- Robert Knight <robertknight@gmail.com>
+    // I don't think there is a reason why the background brush should be saved if it is null,
+    // but remove the check if it causes problems.  -- Robert Knight <robertknight@gmail.com>
     if (keysToStore.contains(Style::BackgroundBrush) && (style->backgroundBrush().style() != Qt::NoBrush)) {
         QString tmp = saveBackgroundStyle(mainStyles, style->backgroundBrush());
         if (!tmp.isEmpty())
@@ -869,15 +890,12 @@ void Odf::saveStyle(const Style *style, const QSet<Style::Key>& keysToStore, KoG
         currencyCode = style->currency().code();
     }
 
-    QString numericStyle = saveStyleNumeric(xmlstyle, mainStyles, style->formatType(),
-                           _prefix, _postfix, _precision,
-                           currencyCode, _thousandsSep, locale);
+    QString numericStyle = saveStyleNumeric(xmlstyle, mainStyles, style->formatType(), _prefix, _postfix, _precision, currencyCode, _thousandsSep, locale);
     if (!numericStyle.isEmpty())
         xmlstyle.addAttribute("style:data-style-name", numericStyle);
 }
 
-QString Odf::saveCustomStyle(CustomStyle *style, KoGenStyle& genstyle, KoGenStyles &mainStyles,
-                             const StyleManager* manager, Localization *locale)
+QString Odf::saveCustomStyle(CustomStyle *style, KoGenStyle &genstyle, KoGenStyles &mainStyles, const StyleManager *manager, Localization *locale)
 {
     Q_ASSERT(!style->name().isEmpty());
     // default style does not need display name
@@ -898,8 +916,7 @@ QString Odf::saveCustomStyle(CustomStyle *style, KoGenStyle& genstyle, KoGenStyl
     return mainStyles.insert(genstyle, "custom-style");
 }
 
-QString Odf::saveStyle(const Style *style, KoGenStyle& xmlstyle, KoGenStyles& mainStyles,
-                       const StyleManager* manager, Localization *locale)
+QString Odf::saveStyle(const Style *style, KoGenStyle &xmlstyle, KoGenStyles &mainStyles, const StyleManager *manager, Localization *locale)
 {
     // list of substyles to store
     QSet<Style::Key> keysToStore = style->definedKeys(manager);
@@ -917,9 +934,7 @@ QString Odf::saveStyle(const Style *style, KoGenStyle& xmlstyle, KoGenStyles& ma
         // it's not really the parent name in this case
 
         // no differences and not an automatic style yet?
-        if (xmlstyle.isEmpty() &&
-                (keysToStore.count() == 0 ||
-                 (keysToStore.count() == 1 && *keysToStore.constBegin() == Style::NamedStyleKey))) {
+        if (xmlstyle.isEmpty() && (keysToStore.count() == 0 || (keysToStore.count() == 1 && *keysToStore.constBegin() == Style::NamedStyleKey))) {
             return manager->openDocumentName(style->parentName());
         }
     }
@@ -941,13 +956,17 @@ QString Odf::saveBackgroundStyle(KoGenStyles &mainStyles, const QBrush &brush)
     return mainStyles.insert(styleobjectauto, "gr");
 }
 
-QString Odf::saveStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
-                                   Format::Type _style,
-                                   const QString &_prefix, const QString &_postfix,
-                                   int _precision, const QString& symbol,
-                                   bool thousandsSep, Localization *locale)
+QString Odf::saveStyleNumeric(KoGenStyle &style,
+                              KoGenStyles &mainStyles,
+                              Format::Type _style,
+                              const QString &_prefix,
+                              const QString &_postfix,
+                              int _precision,
+                              const QString &symbol,
+                              bool thousandsSep,
+                              Localization *locale)
 {
-//  debugSheetsODF ;
+    //  debugSheetsODF ;
     QString styleName;
     QString valueType;
     switch (_style) {
@@ -1009,8 +1028,12 @@ QString Odf::saveStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
     return styleName;
 }
 
-QString Odf::saveStyleNumericNumber(KoGenStyles& mainStyles, Format::Type /*_style*/, int _precision,
-        const QString& _prefix, const QString& _postfix, bool thousandsSep)
+QString Odf::saveStyleNumericNumber(KoGenStyles &mainStyles,
+                                    Format::Type /*_style*/,
+                                    int _precision,
+                                    const QString &_prefix,
+                                    const QString &_postfix,
+                                    bool thousandsSep)
 {
     QString format;
     if (_precision == -1)
@@ -1025,15 +1048,18 @@ QString Odf::saveStyleNumericNumber(KoGenStyles& mainStyles, Format::Type /*_sty
     return KoOdfNumberStyles::saveOdfNumberStyle(mainStyles, format, _prefix, _postfix, thousandsSep);
 }
 
-QString Odf::saveStyleNumericText(KoGenStyles& /*mainStyles*/, Format::Type /*_style*/, int /*_precision*/,
-                                       const QString& /*_prefix*/, const QString& /*_postfix*/)
+QString
+Odf::saveStyleNumericText(KoGenStyles & /*mainStyles*/, Format::Type /*_style*/, int /*_precision*/, const QString & /*_prefix*/, const QString & /*_postfix*/)
 {
     return "";
 }
 
-QString Odf::saveStyleNumericMoney(KoGenStyles& mainStyles, Format::Type /*_style*/,
-                                        const QString& symbol, int _precision,
-                                        const QString& _prefix, const QString& _postfix)
+QString Odf::saveStyleNumericMoney(KoGenStyles &mainStyles,
+                                   Format::Type /*_style*/,
+                                   const QString &symbol,
+                                   int _precision,
+                                   const QString &_prefix,
+                                   const QString &_postfix)
 {
     QString format;
     if (_precision == -1)
@@ -1048,14 +1074,13 @@ QString Odf::saveStyleNumericMoney(KoGenStyles& mainStyles, Format::Type /*_styl
     return KoOdfNumberStyles::saveOdfCurrencyStyle(mainStyles, format, symbol, _prefix, _postfix);
 }
 
-QString Odf::saveStyleNumericPercentage(KoGenStyles&mainStyles, Format::Type /*_style*/, int _precision,
-        const QString& _prefix, const QString& _postfix)
+QString Odf::saveStyleNumericPercentage(KoGenStyles &mainStyles, Format::Type /*_style*/, int _precision, const QString &_prefix, const QString &_postfix)
 {
     //<number:percentage-style style:name="N106" style:family="data-style">
     //<number:number number:decimal-places="6" number:min-integer-digits="1"/>
     //<number:text>%</number:text>
     //</number:percentage-style>
-    //TODO add decimal etc.
+    // TODO add decimal etc.
     QString format;
     if (_precision == -1)
         format = '0';
@@ -1069,9 +1094,12 @@ QString Odf::saveStyleNumericPercentage(KoGenStyles&mainStyles, Format::Type /*_
     return KoOdfNumberStyles::saveOdfPercentageStyle(mainStyles, format, _prefix, _postfix);
 }
 
-
-QString Odf::saveStyleNumericScientific(KoGenStyles&mainStyles, Format::Type /*_style*/,
-        const QString &_prefix, const QString &_suffix, int _precision, bool thousandsSep)
+QString Odf::saveStyleNumericScientific(KoGenStyles &mainStyles,
+                                        Format::Type /*_style*/,
+                                        const QString &_prefix,
+                                        const QString &_suffix,
+                                        int _precision,
+                                        bool thousandsSep)
 {
     //<number:number-style style:name="N60" style:family="data-style">
     //  <number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
@@ -1089,8 +1117,7 @@ QString Odf::saveStyleNumericScientific(KoGenStyles&mainStyles, Format::Type /*_
     return KoOdfNumberStyles::saveOdfScientificStyle(mainStyles, format, _prefix, _suffix, thousandsSep);
 }
 
-QString Odf::saveStyleNumericDate(KoGenStyles&mainStyles, Format::Type _style,
-                                       const QString& _prefix, const QString& _postfix, Localization *locale)
+QString Odf::saveStyleNumericDate(KoGenStyles &mainStyles, Format::Type _style, const QString &_prefix, const QString &_postfix, Localization *locale)
 {
     QString format;
     if (Format::isDate(_style)) {
@@ -1103,10 +1130,9 @@ QString Odf::saveStyleNumericDate(KoGenStyles&mainStyles, Format::Type _style,
     return KoOdfNumberStyles::saveOdfDateStyle(mainStyles, format, false, _prefix, _postfix);
 }
 
-QString Odf::saveStyleNumericCustom(KoGenStyles& /*mainStyles*/, Format::Type /*_style*/,
-        const QString& /*_prefix*/, const QString& /*_postfix*/)
+QString Odf::saveStyleNumericCustom(KoGenStyles & /*mainStyles*/, Format::Type /*_style*/, const QString & /*_prefix*/, const QString & /*_postfix*/)
 {
-    //TODO
+    // TODO
     //<number:date-style style:name="N50" style:family="data-style" number:automatic-order="true" number:format-source="language">
     //<number:month/>
     //<number:text>/</number:text>
@@ -1117,14 +1143,13 @@ QString Odf::saveStyleNumericCustom(KoGenStyles& /*mainStyles*/, Format::Type /*
     //<number:hours number:style="long"/>
     //<number:text>:</number:text>
     //<number:minutes number:style="long"/>
-    // <number:text> </number:text>
+    //  <number:text> </number:text>
     //<number:am-pm/>
     //</number:date-style>
     return "";
 }
 
-QString Odf::saveStyleNumericTime(KoGenStyles& mainStyles, Format::Type _style,
-                                       const QString& _prefix, const QString& _postfix, const Localization *locale)
+QString Odf::saveStyleNumericTime(KoGenStyles &mainStyles, Format::Type _style, const QString &_prefix, const QString &_postfix, const Localization *locale)
 {
     //<number:time-style style:name="N42" style:family="data-style">
     //<number:hours number:style="long"/>
@@ -1143,8 +1168,7 @@ QString Odf::saveStyleNumericTime(KoGenStyles& mainStyles, Format::Type _style,
     return KoOdfNumberStyles::saveOdfTimeStyle(mainStyles, format, false, _prefix, _postfix);
 }
 
-QString Odf::saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type formatType,
-        const QString &_prefix, const QString &_suffix)
+QString Odf::saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type formatType, const QString &_prefix, const QString &_suffix)
 {
     //<number:number-style style:name="N71" style:family="data-style">
     //<number:fraction number:min-integer-digits="0" number:min-numerator-digits="2" number:min-denominator-digits="2"/>
@@ -1186,7 +1210,6 @@ QString Odf::saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type form
     return KoOdfNumberStyles::saveOdfFractionStyle(mainStyles, format, _prefix, _suffix);
 }
 
-
 // Helpers
 
 Format::Type Odf::dateType(const QString &f, const Localization *locale)
@@ -1201,7 +1224,7 @@ Format::Type Odf::dateType(const QString &f, const Localization *locale)
             return (Format::Type(i));
         }
     }
-    warnSheetsODF<<Q_FUNC_INFO<<"Unknown date or datetime format:"<<f;
+    warnSheetsODF << Q_FUNC_INFO << "Unknown date or datetime format:" << f;
     return Format::ShortDate;
 }
 
@@ -1219,12 +1242,12 @@ Currency Odf::numberCurrency(const QString &_format)
 {
     // Look up if a prefix or postfix is in the currency table,
     // return the currency symbol to use for formatting purposes.
-    if(!_format.isEmpty()) {
+    if (!_format.isEmpty()) {
         QString f = QString(_format.at(0));
         Currency currStart = Currency(f);
         if (currStart.code() != f)
             return currStart;
-        f = QString(_format.at(_format.size()-1));
+        f = QString(_format.at(_format.size() - 1));
         Currency currEnd = Currency(f);
         if (currEnd.code() != f)
             return currEnd;
@@ -1259,13 +1282,13 @@ Format::Type Odf::fractionType(const QString &_format)
 QPen Odf::decodePen(const QString &border)
 {
     QPen pen;
-    //string like "0.088cm solid #800000"
+    // string like "0.088cm solid #800000"
     if (border.isEmpty() || border == "none" || border == "hidden") { // in fact no border
         pen.setStyle(Qt::NoPen);
         return pen;
     }
-    //code from koborder, for the moment Calligra Sheets doesn't use koborder
-    // ## isn't it faster to use QStringList::split than parse it 3 times?
+    // code from koborder, for the moment Calligra Sheets doesn't use koborder
+    //  ## isn't it faster to use QStringList::split than parse it 3 times?
     QString _width = border.section(' ', 0, 0);
     QByteArray _style = border.section(' ', 1, 1).toLatin1();
     QString _color = border.section(' ', 2, 2);
@@ -1295,9 +1318,9 @@ QPen Odf::decodePen(const QString &border)
     return pen;
 }
 
-QString Odf::encodePen(const QPen & pen)
+QString Odf::encodePen(const QPen &pen)
 {
-//     debugSheets<<"encodePen( const QPen & pen ) :"<<pen;
+    //     debugSheets<<"encodePen( const QPen & pen ) :"<<pen;
     // NOTE Stefan: QPen api docs:
     //              A line width of zero indicates a cosmetic pen. This means
     //              that the pen width is always drawn one pixel wide,
@@ -1321,16 +1344,17 @@ QString Odf::encodePen(const QPen & pen)
     case Qt::DashDotDotLine:
         s += "dot-dot-dash";
         break;
-    default: break;
+    default:
+        break;
     }
-    //debugSheets << " encodePen :" << s;
+    // debugSheets << " encodePen :" << s;
     if (pen.color().isValid()) {
         s += ' ' + colorName(pen.color());
     }
     return s;
 }
 
-QString Odf::colorName(const QColor& color)
+QString Odf::colorName(const QColor &color)
 {
     static QMap<QRgb, QString> map;
     QRgb rgb = color.rgb();
@@ -1342,13 +1366,5 @@ QString Odf::colorName(const QColor& color)
     }
 }
 
-
-
-
-
-
-
-
-}  // Sheets
-}  // Calligra
-
+} // Sheets
+} // Calligra

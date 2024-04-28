@@ -8,14 +8,14 @@
  */
 
 #include "KWFrameSet.h"
-#include "KWFrame.h"
 #include "KWCopyShape.h"
+#include "KWFrame.h"
 
 #include <WordsDebug.h>
 
 KWFrameSet::KWFrameSet(Words::FrameSetType type)
-    : QObject(),
-    m_type(type)
+    : QObject()
+    , m_type(type)
 {
     debugWords << "type=" << m_type;
 }
@@ -39,7 +39,7 @@ void KWFrameSet::addShape(KoShape *shape)
     m_shapes.append(shape); // this one first, so we don't enter the addFrame twice.
     setupShape(shape);
 
-    KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(shape);
+    KWCopyShape *copyShape = dynamic_cast<KWCopyShape *>(shape);
     if (copyShape) {
         if (copyShape->original()) {
             addCopy(copyShape);
@@ -50,15 +50,15 @@ void KWFrameSet::addShape(KoShape *shape)
 
 void KWFrameSet::removeShape(KoShape *shape)
 {
-    KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(shape);
+    KWCopyShape *copyShape = dynamic_cast<KWCopyShape *>(shape);
     if (copyShape) {
         removeCopy(copyShape);
     } else {
         // Loop over all frames to see if there is a copy shape that references the removed
         // shape; if it does, then delete the copy too.
-        for(int i = shapes().count() - 1; i >= 0; --i) {
+        for (int i = shapes().count() - 1; i >= 0; --i) {
             KoShape *s = shapes()[i];
-            if (KWCopyShape *cs = dynamic_cast<KWCopyShape*>(s)) {
+            if (KWCopyShape *cs = dynamic_cast<KWCopyShape *>(s)) {
                 if (cs->original() == shape) {
                     cleanupShape(cs);
                     removeShape(cs);

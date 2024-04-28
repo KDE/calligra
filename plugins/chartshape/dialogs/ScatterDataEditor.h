@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * 
+ *
  * SPDX-FileCopyrightText: 2018 Dag Andersen <danders@get2net.dk>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -19,11 +19,12 @@ class QAbstractItemModel;
 class QModelIndex;
 class QAction;
 
-
-namespace KoChart {
+namespace KoChart
+{
 
 class ChartShape;
-namespace Scatter {
+namespace Scatter
+{
 class DataProxy;
 }
 class DataSet;
@@ -56,10 +57,10 @@ protected Q_SLOTS:
 
     void enableActions();
 
-//     void slotDataChanged(const QModelIndex &idx);
+    //     void slotDataChanged(const QModelIndex &idx);
 
-    void dataColumnsInserted(const QModelIndex&, int first, int last);
-    void dataColumnsRemoved(const QModelIndex&, int first, int last);
+    void dataColumnsInserted(const QModelIndex &, int first, int last);
+    void dataColumnsRemoved(const QModelIndex &, int first, int last);
     void dataRowCountChanged();
 
 private:
@@ -80,4 +81,3 @@ private:
 } // Namespace KoChart
 
 #endif // KOCHART_SCATTERDATAEDITOR_H
-

@@ -11,36 +11,35 @@
 
 #include <KoIcon.h>
 
-#include <QString>
-#include <QLocale>
-#include <QStringList>
-#include <QList>
-#include <QSlider>
-#include <QLineEdit>
-#include <QToolButton>
-#include <QLabel>
-#include <QGridLayout>
-#include <QMenu>
-#include <QStatusBar>
 #include <QButtonGroup>
 #include <QComboBox>
-
+#include <QGridLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QList>
+#include <QLocale>
+#include <QMenu>
+#include <QSlider>
+#include <QStatusBar>
+#include <QString>
+#include <QStringList>
+#include <QToolButton>
 
 #include <KLocalizedString>
 #include <WidgetsDebug.h>
 
-#include <math.h>
 #include <algorithm>
+#include <math.h>
 
 class Q_DECL_HIDDEN KoZoomAction::Private
 {
 public:
-
     Private(KoZoomAction *_parent)
         : parent(_parent)
         , minimumZoomValue(-1)
         , maximumZoomValue(-1)
-    {}
+    {
+    }
 
     KoZoomAction *parent;
 
@@ -72,17 +71,11 @@ QList<qreal> KoZoomAction::Private::generateSliderZoomLevels() const
     zoomLevels << 2.0 / 3.0;
     zoomLevels << 1.0;
 
-    for (qreal zoom = zoomLevels.first() / defaultZoomStep;
-         zoom > parent->minimumZoom();
-         zoom /= defaultZoomStep) {
-
+    for (qreal zoom = zoomLevels.first() / defaultZoomStep; zoom > parent->minimumZoom(); zoom /= defaultZoomStep) {
         zoomLevels.prepend(zoom);
     }
 
-    for (qreal zoom = zoomLevels.last() * defaultZoomStep;
-         zoom < parent->maximumZoom();
-         zoom *= defaultZoomStep) {
-
+    for (qreal zoom = zoomLevels.last() * defaultZoomStep; zoom < parent->maximumZoom(); zoom *= defaultZoomStep) {
         zoomLevels.append(zoom);
     }
 
@@ -93,7 +86,7 @@ QList<qreal> KoZoomAction::Private::filterMenuZoomLevels(const QList<qreal> &zoo
 {
     QList<qreal> filteredZoomLevels;
 
-    foreach(qreal zoom, zoomLevels) {
+    foreach (qreal zoom, zoomLevels) {
         if (zoom >= 0.2 && zoom <= 10) {
             filteredZoomLevels << zoom;
         }
@@ -102,22 +95,22 @@ QList<qreal> KoZoomAction::Private::filterMenuZoomLevels(const QList<qreal> &zoo
     return filteredZoomLevels;
 }
 
-KoZoomAction::KoZoomAction(KoZoomMode::Modes zoomModes, const QString& text, QObject *parent)
+KoZoomAction::KoZoomAction(KoZoomMode::Modes zoomModes, const QString &text, QObject *parent)
     : KSelectAction(text, parent)
     , d(new Private(this))
 {
     d->zoomModes = zoomModes;
     d->specialButtons = {};
     setIcon(koIcon("zoom-original"));
-    setEditable( true );
-    setMaxComboViewCount( 15 );
+    setEditable(true);
+    setMaxComboViewCount(15);
 
     d->sliderLookup = d->generateSliderZoomLevels();
 
     d->effectiveZoom = 1.0;
     regenerateItems(d->effectiveZoom, true);
 
-    connect( this, SIGNAL(triggered(QString)), SLOT(triggered(QString)) );
+    connect(this, SIGNAL(triggered(QString)), SLOT(triggered(QString)));
 }
 
 KoZoomAction::~KoZoomAction()
@@ -136,72 +129,71 @@ void KoZoomAction::setZoom(qreal zoom)
     regenerateItems(d->effectiveZoom, true);
 }
 
-void KoZoomAction::triggered(const QString& text)
+void KoZoomAction::triggered(const QString &text)
 {
     QString zoomString = text;
-    zoomString = zoomString.remove( '&' );
+    zoomString = zoomString.remove('&');
 
     KoZoomMode::Mode mode = KoZoomMode::toMode(zoomString);
     int zoom = 0;
 
-    if( mode == KoZoomMode::ZOOM_CONSTANT ) {
+    if (mode == KoZoomMode::ZOOM_CONSTANT) {
         bool ok;
-        QRegularExpression regexp( ".*(\\d+).*" ); // "Captured" non-empty sequence of digits
+        QRegularExpression regexp(".*(\\d+).*"); // "Captured" non-empty sequence of digits
         QRegularExpressionMatch match;
         int pos = zoomString.indexOf(regexp, 0, &match);
 
-        if( pos > -1 ) {
-            zoom = match.captured( 1 ).toInt( &ok );
+        if (pos > -1) {
+            zoom = match.captured(1).toInt(&ok);
 
-            if( !ok ) {
+            if (!ok) {
                 zoom = 0;
             }
         }
     }
 
-    emit zoomChanged( mode, zoom/100.0 );
+    emit zoomChanged(mode, zoom / 100.0);
 }
 
-void KoZoomAction::setZoomModes( KoZoomMode::Modes zoomModes )
+void KoZoomAction::setZoomModes(KoZoomMode::Modes zoomModes)
 {
     d->zoomModes = zoomModes;
-    regenerateItems( d->effectiveZoom );
+    regenerateItems(d->effectiveZoom);
 }
 
 void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
 {
     QList<qreal> zoomLevels = d->filterMenuZoomLevels(d->sliderLookup);
 
-    if( !zoomLevels.contains( zoom ) )
+    if (!zoomLevels.contains(zoom))
         zoomLevels << zoom;
 
     std::sort(zoomLevels.begin(), zoomLevels.end());
 
     // update items with new sorted zoom values
     QStringList values;
-    if(d->zoomModes & KoZoomMode::ZOOM_WIDTH) {
+    if (d->zoomModes & KoZoomMode::ZOOM_WIDTH) {
         values << KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH);
     }
-    if(d->zoomModes & KoZoomMode::ZOOM_TEXT) {
+    if (d->zoomModes & KoZoomMode::ZOOM_TEXT) {
         values << KoZoomMode::toString(KoZoomMode::ZOOM_TEXT);
     }
-    if(d->zoomModes & KoZoomMode::ZOOM_PAGE) {
+    if (d->zoomModes & KoZoomMode::ZOOM_PAGE) {
         values << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
     }
 
-    foreach(qreal value, zoomLevels) {
+    foreach (qreal value, zoomLevels) {
         const qreal valueInPercent = value * 100;
         const int precision = (value > 10.0) ? 0 : 1;
 
         values << i18n("%1%", QLocale().toString(valueInPercent, 'f', precision));
     }
 
-    setItems( values );
+    setItems(values);
 
     emit zoomLevelsChanged(values);
 
-    if(asCurrent)
-    {
+    if (asCurrent) {
         const qreal zoomInPercent = zoom * 100;
         // TODO: why zoomInPercent and not zoom here? different from above
         const int precision = (zoomInPercent > 10.0) ? 0 : 1;
@@ -225,8 +217,8 @@ qreal KoZoomAction::nextZoomLevel() const
 {
     const qreal eps = 1e-5;
     int i = 0;
-    while (d->effectiveZoom > d->sliderLookup[i] - eps &&
-           i < d->sliderLookup.size() - 1) i++;
+    while (d->effectiveZoom > d->sliderLookup[i] - eps && i < d->sliderLookup.size() - 1)
+        i++;
 
     return qMax(d->effectiveZoom, d->sliderLookup[i]);
 }
@@ -235,7 +227,8 @@ qreal KoZoomAction::prevZoomLevel() const
 {
     const qreal eps = 1e-5;
     int i = d->sliderLookup.size() - 1;
-    while (d->effectiveZoom < d->sliderLookup[i] + eps && i > 0) i--;
+    while (d->effectiveZoom < d->sliderLookup[i] + eps && i > 0)
+        i--;
 
     return qMin(d->effectiveZoom, d->sliderLookup[i]);
 }
@@ -260,9 +253,9 @@ void KoZoomAction::zoomOut()
     }
 }
 
-QWidget * KoZoomAction::createWidget(QWidget *parent)
+QWidget *KoZoomAction::createWidget(QWidget *parent)
 {
-    KoZoomWidget* zoomWidget = new KoZoomWidget(parent, d->specialButtons, d->sliderLookup.size() - 1);
+    KoZoomWidget *zoomWidget = new KoZoomWidget(parent, d->specialButtons, d->sliderLookup.size() - 1);
     connect(this, &KoZoomAction::zoomLevelsChanged, zoomWidget, &KoZoomWidget::setZoomLevels);
     connect(this, &KoZoomAction::currentZoomLevelChanged, zoomWidget, &KoZoomWidget::setCurrentZoomLevel);
     connect(this, &KoZoomAction::sliderChanged, zoomWidget, &KoZoomWidget::setSliderValue);
@@ -272,14 +265,14 @@ QWidget * KoZoomAction::createWidget(QWidget *parent)
     connect(zoomWidget, &KoZoomWidget::aspectModeChanged, this, &KoZoomAction::aspectModeChanged);
     connect(zoomWidget, &KoZoomWidget::zoomedToSelection, this, &KoZoomAction::zoomedToSelection);
     connect(zoomWidget, &KoZoomWidget::zoomedToAll, this, &KoZoomAction::zoomedToAll);
-    regenerateItems( d->effectiveZoom, true );
+    regenerateItems(d->effectiveZoom, true);
     syncSliderWithZoom();
     return zoomWidget;
 }
 
 void KoZoomAction::setEffectiveZoom(qreal zoom)
 {
-    if(d->effectiveZoom == zoom)
+    if (d->effectiveZoom == zoom)
         return;
 
     zoom = clampZoom(zoom);
@@ -295,7 +288,7 @@ void KoZoomAction::setSelectedZoomMode(KoZoomMode::Mode mode)
     emit currentZoomLevelChanged(modeString);
 }
 
-void KoZoomAction::setSpecialButtons( SpecialButtons buttons )
+void KoZoomAction::setSpecialButtons(SpecialButtons buttons)
 {
     d->specialButtons = buttons;
 }
@@ -309,8 +302,9 @@ void KoZoomAction::syncSliderWithZoom()
 {
     const qreal eps = 1e-5;
     int i = d->sliderLookup.size() - 1;
-    while (d->effectiveZoom < d->sliderLookup[i] + eps && i > 0) i--;
-    
+    while (d->effectiveZoom < d->sliderLookup[i] + eps && i > 0)
+        i--;
+
     emit sliderChanged(i);
 }
 

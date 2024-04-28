@@ -9,7 +9,6 @@
 
 using namespace Calligra::Sheets;
 
-
 LayoutCheckbox::LayoutCheckbox(QWidget *parent)
     : QCheckBox(parent)
     , m_defaultValue(false)
@@ -17,7 +16,9 @@ LayoutCheckbox::LayoutCheckbox(QWidget *parent)
 {
 }
 
-LayoutCheckbox::~LayoutCheckbox() {}
+LayoutCheckbox::~LayoutCheckbox()
+{
+}
 
 void LayoutCheckbox::setStyleKey(const Style::Key &key, bool defaultValue)
 {
@@ -35,25 +36,29 @@ void LayoutCheckbox::loadFrom(const Style &style, bool partial)
 
     setTristate(false);
     bool val = style.getBoolValue(m_styleKey);
-    if (m_reversed) val = !val;
+    if (m_reversed)
+        val = !val;
     setCheckState(val ? Qt::Checked : Qt::Unchecked);
 }
 
 void LayoutCheckbox::saveTo(Style &style, bool partial)
 {
     Qt::CheckState st = checkState();
-    if (st == Qt::PartiallyChecked) return;
+    if (st == Qt::PartiallyChecked)
+        return;
     bool checked = (st == Qt::Checked) ? true : false;
-    if (m_reversed) checked = !checked;
+    if (m_reversed)
+        checked = !checked;
 
     bool include = false;
     if (partial) {
         // The "partially checked" status was already checked, so the checkbox has something else and we need to include it
         include = true;
     } else {
-        if (checked != m_defaultValue) include = true;
+        if (checked != m_defaultValue)
+            include = true;
     }
 
-    if (include) style.insertSubStyle(m_styleKey, checked);
+    if (include)
+        style.insertSubStyle(m_styleKey, checked);
 }
-

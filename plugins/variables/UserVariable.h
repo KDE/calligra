@@ -7,9 +7,9 @@
 #ifndef USERVARIABLE_H
 #define USERVARIABLE_H
 
-#include <QObject>
-#include <KoVariable.h>
 #include <KoOdfNumberStyles.h>
+#include <KoVariable.h>
+#include <QObject>
 
 class KoShapeSavingContext;
 class KoVariableManager;
@@ -27,19 +27,19 @@ class UserVariable : public KoVariable
 public:
     UserVariable();
 
-    QWidget* createOptionsWidget() override;
+    QWidget *createOptionsWidget() override;
 
     void readProperties(const KoProperties *props);
     void propertyChanged(Property property, const QVariant &value) override;
 
     void saveOdf(KoShapeSavingContext &context) override;
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext & context) override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     KoVariableManager *variableManager();
 
     int property() const;
 
-    const QString& name() const;
+    const QString &name() const;
     void setName(const QString &name);
 
     KoOdfNumberStyles::NumericStyleFormat numberstyle() const;

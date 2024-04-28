@@ -10,10 +10,10 @@
 
 #include "kotextlayout_export.h"
 
+#include <QLineF>
 #include <QMultiMap>
 #include <QPolygonF>
 #include <QRectF>
-#include <QLineF>
 
 class KoShape;
 class QTransform;
@@ -27,11 +27,20 @@ public:
 
     KoTextLayoutObstruction(const QRectF &rect, bool rtl);
 
-    void init(const QTransform &matrix, const QPainterPath &obstruction, qreal distanceLeft, qreal distanceTop, qreal distanceRight, qreal distanceBottom, qreal borderHalfWidth);
+    void init(const QTransform &matrix,
+              const QPainterPath &obstruction,
+              qreal distanceLeft,
+              qreal distanceTop,
+              qreal distanceRight,
+              qreal distanceBottom,
+              qreal borderHalfWidth);
 
     QRectF limit(const QRectF &content);
 
-    KoShape *shape() const { return m_shape; }
+    KoShape *shape() const
+    {
+        return m_shape;
+    }
 
     static qreal xAtY(const QLineF &line, qreal y);
 
@@ -59,6 +68,7 @@ public:
     qreal runAroundThreshold() const;
 
     static bool compareRectLeft(KoTextLayoutObstruction *o1, KoTextLayoutObstruction *o2);
+
 private:
     QPainterPath decoratedOutline(const KoShape *shape, qreal &borderHalfWidth) const;
 
@@ -66,9 +76,10 @@ private:
     Side m_side;
     QRectF m_bounds;
     QPolygonF m_polygon;
-    public:
+
+public:
     QRectF m_line;
-    QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
+    QMultiMap<qreal, QLineF> m_edges; // sorted with y-coord
     KoShape *m_shape;
     QRectF m_rect;
     qreal m_distanceLeft;

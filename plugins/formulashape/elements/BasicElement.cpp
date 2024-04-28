@@ -12,26 +12,26 @@
 
 #include "AttributeManager.h"
 #include "FormulaCursor.h"
-#include "TableDataElement.h"
 #include "FormulaDebug.h"
+#include "TableDataElement.h"
 
-#include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
 #include <QPainter>
 #include <QPainterPath>
 #include <QVariant>
 
-
-BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
+BasicElement::BasicElement(BasicElement *p)
+    : m_parentElement(p)
 {
     m_scaleFactor = 1.0;
     m_scaleLevel = 1;
-    m_boundingRect.setTopLeft( QPointF( 0.0, 0.0 ) );
-    m_boundingRect.setWidth( 7.0 );       // standard values
-    m_boundingRect.setHeight( 10.0 );
+    m_boundingRect.setTopLeft(QPointF(0.0, 0.0));
+    m_boundingRect.setWidth(7.0); // standard values
+    m_boundingRect.setHeight(10.0);
     m_displayStyle = true;
-    setBaseLine( 10.0 );
+    setBaseLine(10.0);
 }
 
 BasicElement::~BasicElement()
@@ -39,209 +39,206 @@ BasicElement::~BasicElement()
     m_attributes.clear();
 }
 
-void BasicElement::paint( QPainter& painter, AttributeManager* )
+void BasicElement::paint(QPainter &painter, AttributeManager *)
 {
     painter.save();
-    painter.setBrush( QBrush( Qt::blue ) );
-    painter.drawRect( QRectF(0.0, 0.0, width(), height()) );
+    painter.setBrush(QBrush(Qt::blue));
+    painter.drawRect(QRectF(0.0, 0.0, width(), height()));
     painter.restore();
 }
 
-void BasicElement::paintEditingHints ( QPainter& painter, AttributeManager* am )
+void BasicElement::paintEditingHints(QPainter &painter, AttributeManager *am)
 {
-    Q_UNUSED( painter )
-    Q_UNUSED( am )
+    Q_UNUSED(painter)
+    Q_UNUSED(am)
 }
 
-void BasicElement::layout( const AttributeManager* )
-{ /* do nothing */ }
+void BasicElement::layout(const AttributeManager *)
+{ /* do nothing */
+}
 
 void BasicElement::stretch()
 {
-    foreach( BasicElement* tmpElement, childElements() ) {
+    foreach (BasicElement *tmpElement, childElements()) {
         tmpElement->stretch();
     }
 }
 
-
-bool BasicElement::acceptCursor( const FormulaCursor& cursor )
+bool BasicElement::acceptCursor(const FormulaCursor &cursor)
 {
-    Q_UNUSED( cursor )
+    Q_UNUSED(cursor)
     return false;
 }
 
-bool BasicElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor)
+bool BasicElement::moveCursor(FormulaCursor &newcursor, FormulaCursor &oldcursor)
 {
-    Q_UNUSED( newcursor )
-    Q_UNUSED( oldcursor )
+    Q_UNUSED(newcursor)
+    Q_UNUSED(oldcursor)
     return false;
 }
 
 QLineF BasicElement::cursorLine(int position) const
 {
-    Q_UNUSED( position )
+    Q_UNUSED(position)
     QPointF top = absoluteBoundingRect().topLeft();
-    QPointF bottom = top + QPointF( 0.0, height() );
-    return QLineF(top,bottom);
+    QPointF bottom = top + QPointF(0.0, height());
+    return QLineF(top, bottom);
 }
 
 QPainterPath BasicElement::selectionRegion(const int pos1, const int pos2) const
 {
-	QLineF l1=cursorLine(pos1);
-	QLineF l2=cursorLine(pos2);
-	//TODO: find out why doesn't work
-	//QRectF r1(l1.p1(),l1.p2());
-	//QRectF r2(l2.p1(),l2.p2());
+    QLineF l1 = cursorLine(pos1);
+    QLineF l2 = cursorLine(pos2);
+    // TODO: find out why doesn't work
+    // QRectF r1(l1.p1(),l1.p2());
+    // QRectF r2(l2.p1(),l2.p2());
 
-	QRectF r1(l1.p1(),l2.p2());
-	QRectF r2(l2.p1(),l1.p2());
-	QPainterPath temp;
-	temp.addRect(r1.united(r2));
-	return temp;
+    QRectF r1(l1.p1(), l2.p2());
+    QRectF r2(l2.p1(), l1.p2());
+    QPainterPath temp;
+    temp.addRect(r1.united(r2));
+    return temp;
 }
-
 
 const QRectF BasicElement::absoluteBoundingRect() const
 {
     QPointF neworigin = origin();
-    BasicElement* tmp=parentElement();
+    BasicElement *tmp = parentElement();
     while (tmp) {
-	neworigin+=tmp->origin();
-	tmp=tmp->parentElement();
+        neworigin += tmp->origin();
+        tmp = tmp->parentElement();
     }
-    return QRectF(neworigin,QSizeF(width(),height()));
+    return QRectF(neworigin, QSizeF(width(), height()));
 }
 
-bool BasicElement::setCursorTo(FormulaCursor& cursor, QPointF point)
+bool BasicElement::setCursorTo(FormulaCursor &cursor, QPointF point)
 {
-    Q_UNUSED( point )
+    Q_UNUSED(point)
     cursor.setPosition(0);
     cursor.setCurrentElement(this);
     return true;
 }
 
-bool BasicElement::replaceChild( BasicElement* oldelement, BasicElement* newelement)
+bool BasicElement::replaceChild(BasicElement *oldelement, BasicElement *newelement)
 {
-    Q_UNUSED( oldelement )
-    Q_UNUSED( newelement )
+    Q_UNUSED(oldelement)
+    Q_UNUSED(newelement)
     return false;
 }
 
-const QList<BasicElement*> BasicElement::childElements() const
+const QList<BasicElement *> BasicElement::childElements() const
 {
     warnFormula << "Returning no elements from BasicElement";
-    return QList<BasicElement*>();
+    return QList<BasicElement *>();
 }
 
-BasicElement* BasicElement::childElementAt( const QPointF& p )
+BasicElement *BasicElement::childElementAt(const QPointF &p)
 {
-    if( !m_boundingRect.contains( p ) )
+    if (!m_boundingRect.contains(p))
         return 0;
 
-    if( childElements().isEmpty() )
+    if (childElements().isEmpty())
         return this;
 
-    BasicElement* ownerElement = 0;
-    foreach( BasicElement* tmpElement, childElements() )
-    {
-        ownerElement = tmpElement->childElementAt( p );
+    BasicElement *ownerElement = 0;
+    foreach (BasicElement *tmpElement, childElements()) {
+        ownerElement = tmpElement->childElementAt(p);
 
-        if( ownerElement )
+        if (ownerElement)
             return ownerElement;
     }
 
-    return this;    // if no child contains the point, it's the FormulaElement itself
+    return this; // if no child contains the point, it's the FormulaElement itself
 }
 
-void BasicElement::setAttribute( const QString& name, const QVariant& value )
+void BasicElement::setAttribute(const QString &name, const QVariant &value)
 {
-    if( name.isEmpty() || !value.canConvert( QVariant::String ) )
+    if (name.isEmpty() || !value.canConvert(QVariant::String))
         return;
 
-    if( value.isNull() )
-        m_attributes.remove( name );
+    if (value.isNull())
+        m_attributes.remove(name);
     else
-        m_attributes.insert( name, value.toString() );
+        m_attributes.insert(name, value.toString());
 }
 
-QString BasicElement::attribute( const QString& attribute ) const
+QString BasicElement::attribute(const QString &attribute) const
 {
-    QString tmp = m_attributes.value( attribute );
-    if( tmp.isEmpty() )
+    QString tmp = m_attributes.value(attribute);
+    if (tmp.isEmpty())
         return QString();
 
     return tmp;
 }
 
-QString BasicElement::inheritsAttribute( const QString& ) const
+QString BasicElement::inheritsAttribute(const QString &) const
 {
-    return QString();   // do nothing
+    return QString(); // do nothing
 }
 
-QString BasicElement::attributesDefaultValue( const QString& ) const
+QString BasicElement::attributesDefaultValue(const QString &) const
 {
-    return QString();  // do nothing
+    return QString(); // do nothing
 }
 
-bool BasicElement::readMathML( const KoXmlElement& element )
+bool BasicElement::readMathML(const KoXmlElement &element)
 {
-    readMathMLAttributes( element );
-    return readMathMLContent( element );
+    readMathMLAttributes(element);
+    return readMathMLContent(element);
 }
 
-bool BasicElement::readMathMLAttributes( const KoXmlElement& element )
+bool BasicElement::readMathMLAttributes(const KoXmlElement &element)
 {
-    QStringList attributeList = KoXml::attributeNames( element );
-    foreach( const QString &attributeName, attributeList ) {
-        m_attributes.insert( attributeName.toLower(),
-                             element.attribute( attributeName ).toLower() );
+    QStringList attributeList = KoXml::attributeNames(element);
+    foreach (const QString &attributeName, attributeList) {
+        m_attributes.insert(attributeName.toLower(), element.attribute(attributeName).toLower());
     }
     return true;
 }
 
-bool BasicElement::readMathMLContent( const KoXmlElement& parent )
+bool BasicElement::readMathMLContent(const KoXmlElement &parent)
 {
-    Q_UNUSED( parent )
+    Q_UNUSED(parent)
     return true;
 }
 
-void BasicElement::writeMathML( KoXmlWriter* writer, const QString& ns ) const
+void BasicElement::writeMathML(KoXmlWriter *writer, const QString &ns) const
 {
     if (elementType() == Basic || elementType() == Unknown) {
         return;
     }
 
     // Collapse a an <mrow> with only one child element to the child element itself.
-    if ((elementType() == Row) && (childElements().count()==1)) {
-        foreach( BasicElement* tmp, childElements() ) {
-            tmp->writeMathML( writer, ns );
+    if ((elementType() == Row) && (childElements().count() == 1)) {
+        foreach (BasicElement *tmp, childElements()) {
+            tmp->writeMathML(writer, ns);
         }
     } else {
-        const QByteArray name = ns.isEmpty() ? ElementFactory::elementName( elementType() ).toLatin1()
-            : ns.toLatin1() + ':' + ElementFactory::elementName( elementType() ).toLatin1();
-        writer->startElement( name );
-        writeMathMLAttributes( writer );
-        if ( elementType() == Formula ) {
+        const QByteArray name =
+            ns.isEmpty() ? ElementFactory::elementName(elementType()).toLatin1() : ns.toLatin1() + ':' + ElementFactory::elementName(elementType()).toLatin1();
+        writer->startElement(name);
+        writeMathMLAttributes(writer);
+        if (elementType() == Formula) {
             /*
              * This is a hack to make OOo compatible. It's mandatory
              * for OOo requires a semantics element as math element's
              * child
              */
-            writer->startElement( "math:semantics" );
+            writer->startElement("math:semantics");
         }
-        writeMathMLContent( writer, ns );
-        if ( elementType() == Formula ) {
+        writeMathMLContent(writer, ns);
+        if (elementType() == Formula) {
             writer->endElement();
         }
         writer->endElement();
     }
 }
 
-void BasicElement::writeMathMLAttributes( KoXmlWriter* writer ) const
+void BasicElement::writeMathMLAttributes(KoXmlWriter *writer) const
 {
     // Ensure consistent ordering of attributes:
     // create list of attributes pointers sorted by attribute name, with a first, z last, prefix included
-    typedef QHash<QString,QString>::ConstIterator ConstAttributeIterator;
+    typedef QHash<QString, QString>::ConstIterator ConstAttributeIterator;
 
     QVector<ConstAttributeIterator> sits;
     sits.reserve(m_attributes.size());
@@ -260,15 +257,15 @@ void BasicElement::writeMathMLAttributes( KoXmlWriter* writer ) const
     }
 
     // finally write all attributes, by estimated sorting
-    foreach(ConstAttributeIterator it, sits) {
-        writer->addAttribute( it.key().toLatin1(), it.value() );
+    foreach (ConstAttributeIterator it, sits) {
+        writer->addAttribute(it.key().toLatin1(), it.value());
     }
 }
 
-void BasicElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
+void BasicElement::writeMathMLContent(KoXmlWriter *writer, const QString &ns) const
 {
-    Q_UNUSED( writer )   // this is just to be reimplemented
-    Q_UNUSED( ns )   // this is just to be reimplemented
+    Q_UNUSED(writer) // this is just to be reimplemented
+    Q_UNUSED(ns) // this is just to be reimplemented
 }
 
 ElementType BasicElement::elementType() const
@@ -276,11 +273,11 @@ ElementType BasicElement::elementType() const
     return Basic;
 }
 
-const QRectF& BasicElement::boundingRect() const
+const QRectF &BasicElement::boundingRect() const
 {
     return m_boundingRect;
 }
-const QRectF& BasicElement::childrenBoundingRect() const
+const QRectF &BasicElement::childrenBoundingRect() const
 {
     return m_childrenBoundingRect;
 }
@@ -310,7 +307,7 @@ QPointF BasicElement::origin() const
     return m_boundingRect.topLeft();
 }
 
-BasicElement* BasicElement::parentElement() const
+BasicElement *BasicElement::parentElement() const
 {
     return m_parentElement;
 }
@@ -324,22 +321,22 @@ int BasicElement::scaleLevel() const
     return m_scaleLevel;
 }
 
-void BasicElement::setWidth( qreal width )
+void BasicElement::setWidth(qreal width)
 {
-    m_boundingRect.setWidth( width );
+    m_boundingRect.setWidth(width);
 }
 
-void BasicElement::setHeight( qreal height )
+void BasicElement::setHeight(qreal height)
 {
-    m_boundingRect.setHeight( height );
+    m_boundingRect.setHeight(height);
 }
 
-void BasicElement::setOrigin( QPointF origin )
+void BasicElement::setOrigin(QPointF origin)
 {
-    m_boundingRect.moveTopLeft( origin );
+    m_boundingRect.moveTopLeft(origin);
 }
 
-void BasicElement::setBaseLine( qreal baseLine )
+void BasicElement::setBaseLine(qreal baseLine)
 {
     m_baseLine = baseLine;
 }
@@ -349,49 +346,48 @@ int BasicElement::endPosition() const
     return 0;
 }
 
-int BasicElement::positionOfChild(BasicElement* child) const
+int BasicElement::positionOfChild(BasicElement *child) const
 {
-    Q_UNUSED( child )
+    Q_UNUSED(child)
     return -1;
 }
 
-void BasicElement::setParentElement( BasicElement* parent )
+void BasicElement::setParentElement(BasicElement *parent)
 {
     m_parentElement = parent;
 }
 
-void BasicElement::setScaleLevel( int scaleLevel )
+void BasicElement::setScaleLevel(int scaleLevel)
 {
-    if(scaleLevel == m_scaleLevel) {
+    if (scaleLevel == m_scaleLevel) {
         return;
     }
-    m_scaleLevel =  qMax(scaleLevel, 0);
+    m_scaleLevel = qMax(scaleLevel, 0);
     int level = scaleLevel;
     m_scaleFactor = 1.9;
-    while(level-- > 0)  { //raise multiplier to the power of level
+    while (level-- > 0) { // raise multiplier to the power of level
         m_scaleFactor *= 0.71;
     }
 }
-BasicElement* BasicElement::elementBefore ( int position ) const
+BasicElement *BasicElement::elementBefore(int position) const
 {
-    Q_UNUSED( position )
+    Q_UNUSED(position)
     return 0;
 }
 
-BasicElement* BasicElement::elementAfter ( int position ) const
+BasicElement *BasicElement::elementAfter(int position) const
 {
-    Q_UNUSED( position )
+    Q_UNUSED(position)
     return 0;
 }
 
-QList< BasicElement* > BasicElement::elementsBetween ( int pos1, int pos2 ) const
+QList<BasicElement *> BasicElement::elementsBetween(int pos1, int pos2) const
 {
-    Q_UNUSED( pos1 )
-    Q_UNUSED( pos2 )
-    QList<BasicElement*> tmp;
+    Q_UNUSED(pos1)
+    Q_UNUSED(pos2)
+    QList<BasicElement *> tmp;
     return tmp;
 }
-
 
 bool BasicElement::displayStyle() const
 {
@@ -402,13 +398,12 @@ void BasicElement::setDisplayStyle(bool displayStyle)
     m_displayStyle = displayStyle;
 }
 
-
-bool BasicElement::hasDescendant ( BasicElement* other ) const
+bool BasicElement::hasDescendant(BasicElement *other) const
 {
-    if (other==this) {
+    if (other == this) {
         return true;
     }
-    foreach (BasicElement* tmp, childElements()) {
+    foreach (BasicElement *tmp, childElements()) {
         if (tmp->hasDescendant(other)) {
             return true;
         }
@@ -416,25 +411,24 @@ bool BasicElement::hasDescendant ( BasicElement* other ) const
     return false;
 }
 
-
-BasicElement* BasicElement::emptyDescendant()
+BasicElement *BasicElement::emptyDescendant()
 {
-    BasicElement* tmp;
+    BasicElement *tmp;
     if (isEmpty() && parentElement() && parentElement()->isInferredRow()) {
         return this;
     }
-    foreach (BasicElement* child, childElements()) {
-        if ( (tmp=child->emptyDescendant()) ) {
+    foreach (BasicElement *child, childElements()) {
+        if ((tmp = child->emptyDescendant())) {
             return tmp;
         }
     }
     return 0;
 }
 
-//TODO: This should be cached
-BasicElement* BasicElement::formulaElement()
+// TODO: This should be cached
+BasicElement *BasicElement::formulaElement()
 {
-    if (parentElement()==0) {
+    if (parentElement() == 0) {
         return this;
     } else {
         return parentElement()->formulaElement();
@@ -446,70 +440,67 @@ bool BasicElement::isEmpty() const
     return false;
 }
 
-
-void BasicElement::setScaleFactor ( qreal scaleFactor )
+void BasicElement::setScaleFactor(qreal scaleFactor)
 {
-    m_scaleFactor=scaleFactor;
+    m_scaleFactor = scaleFactor;
 }
 
 void BasicElement::writeElementTree(int indent, bool wrong) const
 {
     QString s;
-    for (int i=0; i<indent; ++i) {
-        s+="   ";
+    for (int i = 0; i < indent; ++i) {
+        s += "   ";
     }
-    s+=ElementFactory::elementName(elementType());
-    s+=' ';
-    s+=writeElementContent();
-/*    s+="        [scale level ";
-    s+=QString::number(m_scaleFactor)+","+QString::number(m_scaleLevel)+"] ";*/
-    s+=QString(" [")+QString::number(baseLine())+" ; " + QString::number(height())+']';
-    s+=QString(" [")+ QString::number(origin().y())+']';
+    s += ElementFactory::elementName(elementType());
+    s += ' ';
+    s += writeElementContent();
+    /*    s+="        [scale level ";
+        s+=QString::number(m_scaleFactor)+","+QString::number(m_scaleLevel)+"] ";*/
+    s += QString(" [") + QString::number(baseLine()) + " ; " + QString::number(height()) + ']';
+    s += QString(" [") + QString::number(origin().y()) + ']';
     if (wrong) {
-        s+=" -> wrong parent !!!";
+        s += " -> wrong parent !!!";
     }
     debugFormula << s;
-    foreach (BasicElement* tmp, childElements()) {
-        if (tmp->parentElement()!=this) {
-            tmp->writeElementTree(indent+1,true);
+    foreach (BasicElement *tmp, childElements()) {
+        if (tmp->parentElement() != this) {
+            tmp->writeElementTree(indent + 1, true);
         } else {
-            tmp->writeElementTree(indent+1,false);
+            tmp->writeElementTree(indent + 1, false);
         }
     }
 }
-
 
 const QString BasicElement::writeElementContent() const
 {
     return "";
 }
 
-
 bool BasicElement::isInferredRow() const
 {
     return false;
 }
 
-void BasicElement::cleanElementTree ( BasicElement* element )
+void BasicElement::cleanElementTree(BasicElement *element)
 {
-    foreach (BasicElement* tmp,element->childElements()) {
+    foreach (BasicElement *tmp, element->childElements()) {
         cleanElementTree(tmp);
     }
-    if (element->elementType()==Row && element->parentElement() && element->parentElement()->isInferredRow()) {
-        if ( element->childElements().count()==1) {
-            BasicElement* parent=element->parentElement();
-            parent->replaceChild(element,element->childElements()[0]);
-        } else if ( element->isEmpty()) {
-            RowElement* parent=static_cast<RowElement*>(element->parentElement());
+    if (element->elementType() == Row && element->parentElement() && element->parentElement()->isInferredRow()) {
+        if (element->childElements().count() == 1) {
+            BasicElement *parent = element->parentElement();
+            parent->replaceChild(element, element->childElements()[0]);
+        } else if (element->isEmpty()) {
+            RowElement *parent = static_cast<RowElement *>(element->parentElement());
             parent->removeChild(element);
         }
     }
 }
 
-TableDataElement* BasicElement::parentTableData()
+TableDataElement *BasicElement::parentTableData()
 {
-    if (elementType()==TableData) {
-        return static_cast<TableDataElement*>(this);
+    if (elementType() == TableData) {
+        return static_cast<TableDataElement *>(this);
     } else if (parentElement()) {
         return parentElement()->parentTableData();
     } else {

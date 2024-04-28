@@ -14,17 +14,18 @@
 // Interface
 #include <interfaces/KoChartModel.h>
 
-namespace KoChart {
+namespace KoChart
+{
 
 class CellRegionStringValidator : public QValidator
 {
- public:
+public:
     explicit CellRegionStringValidator(KoChart::ChartModel *model);
     ~CellRegionStringValidator();
-	
-    State validate(QString &string, int & pos) const override;
-	
- private:
+
+    State validate(QString &string, int &pos) const override;
+
+private:
     class Private;
     Private *const d;
 };

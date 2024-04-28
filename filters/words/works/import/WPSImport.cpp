@@ -16,21 +16,21 @@
 
 #include "WPSImport.h"
 
+#include <libodfgen/libodfgen.hxx>
 #include <librevenge/librevenge.h>
 #include <libwps/libwps.h>
-#include <libodfgen/libodfgen.hxx>
 
-#include <writerperfect_utils.hxx>
 #include <OutputFileHelper.hxx>
 #include <StringDocumentHandler.hxx>
+#include <writerperfect_utils.hxx>
 
 #include <KoFilterChain.h>
 #include <KoOdf.h>
 
 #include <KPluginFactory>
 
-#include <QString>
 #include <QByteArray>
+#include <QString>
 
 #include <stdio.h>
 
@@ -39,9 +39,9 @@ using namespace libwps;
 class OdtOutputFileHelper : public OutputFileHelper
 {
 public:
-    OdtOutputFileHelper(const char *outFileName,const char *password) :
-        OutputFileHelper(outFileName, password) {};
-    ~OdtOutputFileHelper() override {};
+    OdtOutputFileHelper(const char *outFileName, const char *password)
+        : OutputFileHelper(outFileName, password){};
+    ~OdtOutputFileHelper() override{};
     bool convertDocument(librevenge::RVNGInputStream &input, bool isFlat)
     {
         OdtGenerator collector;
@@ -49,39 +49,31 @@ public:
         StringDocumentHandler stylesHandler, contentHandler, manifestHandler, metaHandler;
         if (isFlat)
             collector.addDocumentHandler(&contentHandler, ODF_FLAT_XML);
-        else
-        {
+        else {
             collector.addDocumentHandler(&contentHandler, ODF_CONTENT_XML);
             collector.addDocumentHandler(&manifestHandler, ODF_MANIFEST_XML);
             collector.addDocumentHandler(&metaHandler, ODF_META_XML);
             collector.addDocumentHandler(&stylesHandler, ODF_STYLES_XML);
         }
-        try
-        {
+        try {
             if (WPS_OK != WPSDocument::parse(&input, &collector))
                 return false;
-        }
-        catch (...)
-        {
+        } catch (...) {
             return false;
         }
-        if (isFlat)
-        {
+        if (isFlat) {
             printf("%s\n", contentHandler.cstr());
             return true;
         }
 
         static const char s_mimetypeStr[] = "application/vnd.oasis.opendocument.text";
-        if (!writeChildFile("mimetype", s_mimetypeStr, (char)0) ||
-                !writeChildFile("META-INF/manifest.xml", manifestHandler.cstr()) ||
-                !writeChildFile("content.xml", contentHandler.cstr()) ||
-                !writeChildFile("meta.xml", metaHandler.cstr()) ||
-                !writeChildFile("styles.xml", stylesHandler.cstr()))
+        if (!writeChildFile("mimetype", s_mimetypeStr, (char)0) || !writeChildFile("META-INF/manifest.xml", manifestHandler.cstr())
+            || !writeChildFile("content.xml", contentHandler.cstr()) || !writeChildFile("meta.xml", metaHandler.cstr())
+            || !writeChildFile("styles.xml", stylesHandler.cstr()))
             return false;
 
-        librevenge::RVNGStringVector objects=collector.getObjectNames();
-        for (unsigned i=0; i<objects.size(); ++i)
-        {
+        librevenge::RVNGStringVector objects = collector.getObjectNames();
+        for (unsigned i = 0; i < objects.size(); ++i) {
             StringDocumentHandler objectHandler;
             if (collector.getObjectContent(objects[i], &objectHandler))
                 writeChildFile(objects[i].cstr(), objectHandler.cstr());
@@ -101,20 +93,20 @@ public:
     }
 
 private:
-
-    static bool handleEmbeddedWKSObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+    static bool handleEmbeddedWKSObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler, const OdfStreamType streamType)
     {
-        if (!data.size()) return false;
+        if (!data.size())
+            return false;
         OdsGenerator exporter;
         exporter.addDocumentHandler(pHandler, streamType);
-        return WPSDocument::parse(const_cast<librevenge::RVNGInputStream *>(data.getDataStream()), &exporter)==WPS_OK;
+        return WPSDocument::parse(const_cast<librevenge::RVNGInputStream *>(data.getDataStream()), &exporter) == WPS_OK;
     }
 };
 
 K_PLUGIN_FACTORY_WITH_JSON(WPSImportFactory, "calligra_filter_wps2odt.json", registerPlugin<WPSImport>();)
 
-WPSImport::WPSImport(QObject* parent, const QVariantList&)
-        : KoFilter(parent)
+WPSImport::WPSImport(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
 }
 
@@ -122,7 +114,7 @@ WPSImport::~WPSImport()
 {
 }
 
-KoFilter::ConversionStatus WPSImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus WPSImport::convert(const QByteArray &from, const QByteArray &to)
 {
     if (from != "application/vnd.ms-works" || to != KoOdf::mimeType(KoOdf::Text))
         return KoFilter::NotImplemented;
@@ -132,14 +124,12 @@ KoFilter::ConversionStatus WPSImport::convert(const QByteArray& from, const QByt
 
     OdtOutputFileHelper helper(outputFile.constData(), 0);
     librevenge::RVNGFileStream input(inputFile.constData());
-    if (!helper.isSupportedFormat(input))
-    {
+    if (!helper.isSupportedFormat(input)) {
         fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Microsoft Works document.\n");
         return KoFilter::ParsingError;
     }
 
-    if (!helper.convertDocument(input, false))
-    {
+    if (!helper.convertDocument(input, false)) {
         fprintf(stderr, "ERROR : Couldn't convert the document\n");
         return KoFilter::ParsingError;
     }

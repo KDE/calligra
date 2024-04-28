@@ -7,24 +7,24 @@
 #ifndef KOFILTEREFFECTREGISTRY_H
 #define KOFILTEREFFECTREGISTRY_H
 
-#include <KoGenericRegistry.h>
 #include <KoFilterEffectFactoryBase.h>
+#include <KoGenericRegistry.h>
 
 #include "flake_export.h"
 
 class KoXmlElement;
 class KoFilterEffectLoadingContext;
 
-class FLAKE_EXPORT KoFilterEffectRegistry : public KoGenericRegistry<KoFilterEffectFactoryBase*>
+class FLAKE_EXPORT KoFilterEffectRegistry : public KoGenericRegistry<KoFilterEffectFactoryBase *>
 {
 public:
     KoFilterEffectRegistry();
     ~KoFilterEffectRegistry() override;
 
     /**
-    * Return the only instance of KoFilterEffectRegistry.
-    * Creates an instance on the first call.
-    */
+     * Return the only instance of KoFilterEffectRegistry.
+     * Creates an instance on the first call.
+     */
     static KoFilterEffectRegistry *instance();
 
     /**
@@ -36,13 +36,12 @@ public:
     KoFilterEffect *createFilterEffectFromXml(const KoXmlElement &element, const KoFilterEffectLoadingContext &context);
 
 private:
-
-    KoFilterEffectRegistry(const KoFilterEffectRegistry&);
-    KoFilterEffectRegistry operator=(const KoFilterEffectRegistry&);
+    KoFilterEffectRegistry(const KoFilterEffectRegistry &);
+    KoFilterEffectRegistry operator=(const KoFilterEffectRegistry &);
     void init();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOFILTEREFFECTREGISTRY_H

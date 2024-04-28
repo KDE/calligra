@@ -98,7 +98,8 @@ void RTreeBenchmark::testLookupPerformance()
     QBENCHMARK {
         for (int y = 1; y <= max_y; y += step_y) {
             for (int x = 1; x <= max_x; x += step_x) {
-                if (!m_tree.contains(QPoint(x, y)).isEmpty()) counter++;
+                if (!m_tree.contains(QPoint(x, y)).isEmpty())
+                    counter++;
             }
         }
     }

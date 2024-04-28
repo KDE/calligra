@@ -11,7 +11,7 @@
 #include <KLocalizedString>
 
 KoCreateShapesToolFactory::KoCreateShapesToolFactory()
-        : KoToolFactoryBase(KoCreateShapesTool_ID)
+    : KoToolFactoryBase(KoCreateShapesTool_ID)
 {
     setToolTip(i18n("Create object"));
     setToolType(mainToolType());
@@ -22,7 +22,7 @@ KoCreateShapesToolFactory::~KoCreateShapesToolFactory()
 {
 }
 
-KoToolBase* KoCreateShapesToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KoCreateShapesToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KoCreateShapesTool(canvas);
 }

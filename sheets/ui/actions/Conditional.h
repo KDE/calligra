@@ -8,12 +8,10 @@
 #ifndef CALLIGRA_SHEETS_ACTION_CONDITIONAL
 #define CALLIGRA_SHEETS_ACTION_CONDITIONAL
 
-
 #include "DialogCellAction.h"
 
 #include "core/Condition.h"
 #include "ui/commands/AbstractRegionCommand.h"
-
 
 namespace Calligra
 {
@@ -21,8 +19,9 @@ namespace Sheets
 {
 class ConditionalDialog;
 
-class SetCondition : public DialogCellAction {
-Q_OBJECT
+class SetCondition : public DialogCellAction
+{
+    Q_OBJECT
 public:
     SetCondition(Actions *actions);
     virtual ~SetCondition();
@@ -35,8 +34,9 @@ protected:
     virtual void onSelectionChanged() override;
 };
 
-class ClearCondition : public CellAction {
-Q_OBJECT
+class ClearCondition : public CellAction
+{
+    Q_OBJECT
 public:
     ClearCondition(Actions *actions);
     virtual ~ClearCondition();
@@ -45,8 +45,6 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
     virtual QAction *createAction() override;
 };
-
-
 
 /**
  * \class ConditionCommand
@@ -57,18 +55,16 @@ class ConditionCommand : public AbstractRegionCommand
 {
 public:
     ConditionCommand();
-    void setConditionList(const QList<Conditional>& list);
+    void setConditionList(const QList<Conditional> &list);
 
 protected:
-    bool process(Element* element) override;
+    bool process(Element *element) override;
 
 private:
     Conditions m_conditions;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_CONDITIONAL
+#endif // CALLIGRA_SHEETS_ACTION_CONDITIONAL

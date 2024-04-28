@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef KOODF_PAGE_LAYOUT_H
 #define KOODF_PAGE_LAYOUT_H
 
@@ -20,10 +19,9 @@ class KoOdfPageLayoutProperties;
 class KoOdfHeaderFooterProperties;
 class KoXmlWriter;
 
-
 class KOODF2_EXPORT KoOdfPageLayout : public KoOdfStyleBase
 {
- public:
+public:
     KoOdfPageLayout();
     ~KoOdfPageLayout() override;
 
@@ -48,10 +46,9 @@ class KOODF2_EXPORT KoOdfPageLayout : public KoOdfStyleBase
     bool readOdf(KoXmlStreamReader &reader) override;
     bool saveOdf(KoXmlWriter *writer) override;
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif

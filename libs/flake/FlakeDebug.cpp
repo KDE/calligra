@@ -6,10 +6,8 @@
 
 #include "FlakeDebug.h"
 
-const QLoggingCategory &FLAKE_LOG() \
+const QLoggingCategory &FLAKE_LOG()
 {
     static const QLoggingCategory category("calligra.lib.flake");
     return category;
 }
-
-

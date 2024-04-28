@@ -14,9 +14,10 @@
 
 #include "Condition.h"
 
-namespace Calligra {
-namespace Sheets {
-
+namespace Calligra
+{
+namespace Sheets
+{
 
 QDomElement Ksp::saveConditions(Conditions *conds, QDomDocument &doc, ValueConverter *converter)
 {
@@ -31,14 +32,14 @@ QDomElement Ksp::saveConditions(Conditions *conds, QDomDocument &doc, ValueConve
         Conditional condition = *it;
 
         /* the name of the element will be "condition<n>"
-            * This is unimportant now but in older versions three conditions were
-            * hardcoded with names "first" "second" and "third"
-        */
+         * This is unimportant now but in older versions three conditions were
+         * hardcoded with names "first" "second" and "third"
+         */
         name.setNum(num);
         name.prepend("condition");
 
         child = doc.createElement(name);
-        child.setAttribute("cond", QString::number((int) condition.cond));
+        child.setAttribute("cond", QString::number((int)condition.cond));
 
         // TODO: saving in KSpread 1.1 | KSpread 1.2 format
         if (condition.value1.isString()) {
@@ -72,13 +73,14 @@ void Ksp::loadConditions(Conditions *conditions, const KoXmlElement &element, co
     Conditional newCondition;
 
     KoXmlElement conditionElement;
-    forEachElement(conditionElement, element) {
+    forEachElement(conditionElement, element)
+    {
         if (!conditionElement.hasAttribute("cond"))
             continue;
 
         bool ok = true;
-        newCondition.cond = (Validity::Type) conditionElement.attribute("cond").toInt(&ok);
-        if(!ok)
+        newCondition.cond = (Validity::Type)conditionElement.attribute("cond").toInt(&ok);
+        if (!ok)
             continue;
 
         if (conditionElement.hasAttribute("val1")) {
@@ -103,7 +105,5 @@ void Ksp::loadConditions(Conditions *conditions, const KoXmlElement &element, co
     }
 }
 
-
-
-}  // Sheets
-}  // Calligra
+} // Sheets
+} // Calligra

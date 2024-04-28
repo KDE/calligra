@@ -31,11 +31,11 @@ private Q_SLOTS:
     void testDocumentToCellCoordinates_data();
     void testDocumentToCellCoordinates();
 
-//    void testCompareRows();
+    //    void testCompareRows();
 
 private:
     Map *m_map;
-    Sheet* m_sheet;
+    Sheet *m_sheet;
 };
 
 } // namespace Sheets

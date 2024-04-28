@@ -7,64 +7,62 @@
 
 #include "EmfRecords.h"
 
+#include "Bitmap.h"
 #include "EmfEnums.h"
 #include "EmfObjects.h"
-#include "Bitmap.h"
 
 #include <VectorImageDebug.h>
 
 namespace Libemf
 {
 
-
 /*****************************************************************************/
 
-
-BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
+BitBltRecord::BitBltRecord(QDataStream &stream, quint32 recordSize)
     : m_bitmap(0)
 {
-    //debugVectorImage << "stream position at the start: " << stream.device()->pos();
-    //debugVectorImage << "record size: " << recordSize;
+    // debugVectorImage << "stream position at the start: " << stream.device()->pos();
+    // debugVectorImage << "record size: " << recordSize;
 
     stream >> m_bounds;
 
-    stream >> m_xDest;          // x, y of upper left corner of the destination.
+    stream >> m_xDest; // x, y of upper left corner of the destination.
     stream >> m_yDest;
-    stream >> m_cxDest;         // width, height of the rectangle in logical coords.
+    stream >> m_cxDest; // width, height of the rectangle in logical coords.
     stream >> m_cyDest;
-    //debugVectorImage << "Destination" << m_xDest << m_yDest << m_cxDest << m_cyDest;
+    // debugVectorImage << "Destination" << m_xDest << m_yDest << m_cxDest << m_cyDest;
 
     stream >> m_BitBltRasterOperation;
-    //debugVectorImage << "bitblt raster operation:" << hex << m_BitBltRasterOperation << dec;
+    // debugVectorImage << "bitblt raster operation:" << hex << m_BitBltRasterOperation << dec;
 
-    stream >> m_xSrc;           // x, y of the source
+    stream >> m_xSrc; // x, y of the source
     stream >> m_ySrc;
-    //debugVectorImage << "Source" << m_xSrc << m_ySrc;
+    // debugVectorImage << "Source" << m_xSrc << m_ySrc;
 
-    //debugVectorImage << "position before the matrix: " << stream.device()->pos();
+    // debugVectorImage << "position before the matrix: " << stream.device()->pos();
     stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
     float M11, M12, M21, M22, Dx, Dy;
-    stream >> M11;              // Transformation matrix
+    stream >> M11; // Transformation matrix
     stream >> M12;
     stream >> M21;
     stream >> M22;
     stream >> Dx;
     stream >> Dy;
-    m_XFormSrc = QTransform( M11, M12, M21, M22, Dx, Dy );
-    //debugVectorImage << "Matrix" << m_XFormSrc;
-    //debugVectorImage << "position after the matrix: " << stream.device()->pos();
+    m_XFormSrc = QTransform(M11, M12, M21, M22, Dx, Dy);
+    // debugVectorImage << "Matrix" << m_XFormSrc;
+    // debugVectorImage << "position after the matrix: " << stream.device()->pos();
 
     stream >> m_red >> m_green >> m_blue >> m_reserved;
-    //debugVectorImage << "Background color" << m_red << m_green << m_blue << m_reserved;
-    //debugVectorImage << "position after background color: " << stream.device()->pos();
+    // debugVectorImage << "Background color" << m_red << m_green << m_blue << m_reserved;
+    // debugVectorImage << "position after background color: " << stream.device()->pos();
 
     stream >> m_UsageSrc;
-    //debugVectorImage << "Color table interpretation" << m_UsageSrc;
+    // debugVectorImage << "Color table interpretation" << m_UsageSrc;
 
-    stream >> m_offBmiSrc;      // Offset to start of bitmap header from start of record
-    stream >> m_cbBmiSrc;       // Size of source bitmap header
-    stream >> m_offBitsSrc;     // Offset to source bitmap from start of record
-    stream >> m_cbBitsSrc;      // Size of source bitmap
+    stream >> m_offBmiSrc; // Offset to start of bitmap header from start of record
+    stream >> m_cbBmiSrc; // Size of source bitmap header
+    stream >> m_offBitsSrc; // Offset to source bitmap from start of record
+    stream >> m_cbBitsSrc; // Size of source bitmap
 #if 0
     debugVectorImage << "header offset:" << m_offBmiSrc;
     debugVectorImage << "header size:  " << m_cbBmiSrc;
@@ -72,14 +70,18 @@ BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
     debugVectorImage << "bitmap size:  " << m_cbBitsSrc;
 #endif
 
-    //debugVectorImage << "stream position before the image: " << stream.device()->pos();
+    // debugVectorImage << "stream position before the image: " << stream.device()->pos();
     if (m_cbBmiSrc > 0) {
-        m_bitmap = new Bitmap( stream, recordSize, 8 + 23 * 4, // header + 23 ints
-                               m_offBmiSrc, m_cbBmiSrc,
-                               m_offBitsSrc, m_cbBitsSrc );
+        m_bitmap = new Bitmap(stream,
+                              recordSize,
+                              8 + 23 * 4, // header + 23 ints
+                              m_offBmiSrc,
+                              m_cbBmiSrc,
+                              m_offBitsSrc,
+                              m_cbBitsSrc);
     }
 
-    //debugVectorImage << "stream position at the end: " << stream.device()->pos();
+    // debugVectorImage << "stream position at the end: " << stream.device()->pos();
 }
 
 BitBltRecord::~BitBltRecord()
@@ -90,10 +92,10 @@ BitBltRecord::~BitBltRecord()
 bool BitBltRecord::hasImage() const
 {
     return m_bitmap && m_bitmap->hasImage();
-    //return ( ( m_cbBmiSrc != 0 ) && ( m_cbBitsSrc != 0 ) );
+    // return ( ( m_cbBmiSrc != 0 ) && ( m_cbBitsSrc != 0 ) );
 }
 
-QImage BitBltRecord::image() 
+QImage BitBltRecord::image()
 {
     return m_bitmap->image();
 #if 0
@@ -128,11 +130,11 @@ QImage BitBltRecord::image()
 }
 
 /*****************************************************************************/
-StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSize )
+StretchDiBitsRecord::StretchDiBitsRecord(QDataStream &stream, quint32 recordSize)
     : m_bitmap(0)
 {
-    //debugVectorImage << "stream position at the start: " << stream.device()->pos();
-    //debugVectorImage << "recordSize =" << recordSize;
+    // debugVectorImage << "stream position at the start: " << stream.device()->pos();
+    // debugVectorImage << "recordSize =" << recordSize;
 
     stream >> m_Bounds;
     stream >> m_xDest;
@@ -147,7 +149,7 @@ StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSiz
     stream >> m_offBitsSrc;
     stream >> m_cbBitsSrc;
 
-    stream >> m_UsageSrc;       // How to interpret color table values.
+    stream >> m_UsageSrc; // How to interpret color table values.
     stream >> m_BitBltRasterOperation;
     stream >> m_cxDest;
     stream >> m_cyDest;
@@ -163,14 +165,18 @@ StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSiz
     debugVectorImage << "m_BitBltRasterOperation =" << hex << m_BitBltRasterOperation << dec;
 #endif
 
-    //debugVectorImage << "stream position before the image: " << stream.device()->pos();
+    // debugVectorImage << "stream position before the image: " << stream.device()->pos();
     if (m_cbBmiSrc > 0) {
-        m_bitmap = new Bitmap( stream, recordSize, 8 + 18 * 4, // header + 18 ints
-                               m_offBmiSrc, m_cbBmiSrc,
-                               m_offBitsSrc, m_cbBitsSrc );
+        m_bitmap = new Bitmap(stream,
+                              recordSize,
+                              8 + 18 * 4, // header + 18 ints
+                              m_offBmiSrc,
+                              m_cbBmiSrc,
+                              m_offBitsSrc,
+                              m_cbBitsSrc);
     }
 
-    //debugVectorImage << "stream position at the end: " << stream.device()->pos();
+    // debugVectorImage << "stream position at the end: " << stream.device()->pos();
 #if 0
     // Read away those bytes that precede the header.  These are undefined
     // according to the spec.  80 is the size of the record above.
@@ -207,7 +213,7 @@ bool StretchDiBitsRecord::hasImage() const
     return m_bitmap && m_bitmap->hasImage();
 }
 
-QImage StretchDiBitsRecord::image() 
+QImage StretchDiBitsRecord::image()
 {
     return m_bitmap->image();
 #if 0
@@ -278,7 +284,7 @@ QImage StretchDiBitsRecord::image()
 }
 
 /*****************************************************************************/
-ExtCreateFontIndirectWRecord::ExtCreateFontIndirectWRecord( QDataStream &stream, quint32 size )
+ExtCreateFontIndirectWRecord::ExtCreateFontIndirectWRecord(QDataStream &stream, quint32 size)
 {
     stream >> m_ihFonts;
     size -= 12;
@@ -310,15 +316,15 @@ ExtCreateFontIndirectWRecord::ExtCreateFontIndirectWRecord( QDataStream &stream,
     size -= 4;
 
     QChar myChar[64];
-    for ( int i = 0; i < 32; ++i ) {
-	stream >> myChar[i];
+    for (int i = 0; i < 32; ++i) {
+        stream >> myChar[i];
     }
     size -= 64;
 
-    for ( int i = 0; i < 32; ++i ) {
-	if ( ! myChar[i].isNull() ) {
-	    m_facename.append( myChar[i] );
-	}
+    for (int i = 0; i < 32; ++i) {
+        if (!myChar[i].isNull()) {
+            m_facename.append(myChar[i]);
+        }
     }
 
 #if 0
@@ -356,17 +362,17 @@ ExtCreateFontIndirectWRecord::ExtCreateFontIndirectWRecord( QDataStream &stream,
     }
     debugVectorImage << "script:" << m_script;
 #endif
-    soakBytes( stream, size ); // rest of the record.
+    soakBytes(stream, size); // rest of the record.
 }
 
 ExtCreateFontIndirectWRecord::~ExtCreateFontIndirectWRecord()
 {
 }
 
-void ExtCreateFontIndirectWRecord::soakBytes( QDataStream &stream, int numBytes )
+void ExtCreateFontIndirectWRecord::soakBytes(QDataStream &stream, int numBytes)
 {
     quint8 scratch;
-    for ( int i = 0; i < numBytes; ++i ) {
+    for (int i = 0; i < numBytes; ++i) {
         stream >> scratch;
     }
 }

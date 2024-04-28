@@ -8,22 +8,22 @@
 
 #include "KoList.h"
 
-#include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
+#include <KoStyleManager.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 
-#include <QTextDocument>
-#include <QTextCursor>
 #include <QTextBlock>
+#include <QTextCursor>
+#include <QTextDocument>
 
-ChangeStylesCommand::ChangeStylesCommand(QTextDocument *qDoc
-        , const QList<KoCharacterStyle *> &origCharacterStyles
-        , const QList<KoParagraphStyle *> &origParagraphStyles
-        , const QSet<int> &changedStyles
-        , KUndo2Command *parent)
-    : KUndo2Command(kundo2_noi18n("stylechangecommand"),parent)
+ChangeStylesCommand::ChangeStylesCommand(QTextDocument *qDoc,
+                                         const QList<KoCharacterStyle *> &origCharacterStyles,
+                                         const QList<KoParagraphStyle *> &origParagraphStyles,
+                                         const QSet<int> &changedStyles,
+                                         KUndo2Command *parent)
+    : KUndo2Command(kundo2_noi18n("stylechangecommand"), parent)
     , m_origCharacterStyles(origCharacterStyles)
     , m_origParagraphStyles(origParagraphStyles)
     , m_changedStyles(changedStyles)
@@ -51,7 +51,7 @@ ChangeStylesCommand::ChangeStylesCommand(QTextDocument *qDoc
         }
 
         bool blockChanged = false;
-        int id =  block.blockFormat().intProperty(KoParagraphStyle::StyleId);
+        int id = block.blockFormat().intProperty(KoParagraphStyle::StyleId);
         if (id > 0 && changedStyles.contains(id)) {
             KoParagraphStyle *style = sm->paragraphStyle(id);
             Q_ASSERT(style);
@@ -120,7 +120,6 @@ void ChangeStylesCommand::redo()
 
         QTextCursor cursor(m_document);
         foreach (Memento *memento, m_mementos) {
-
             cursor.setPosition(memento->blockPosition);
             QTextBlock block = cursor.block();
 
@@ -152,7 +151,7 @@ void ChangeStylesCommand::redo()
 
             QList<QTextCharFormat>::ConstIterator fmtIt = memento->fragmentDirectFormats.constBegin();
             QList<int>::ConstIterator idIt = memento->fragmentStyleId.constBegin();
-            foreach(QTextCursor fragCursor, memento->fragmentCursors) {
+            foreach (QTextCursor fragCursor, memento->fragmentCursors) {
                 QTextCharFormat cf(block.charFormat()); // start with block formatting
 
                 if (*idIt > 0) {
@@ -162,7 +161,7 @@ void ChangeStylesCommand::redo()
                     }
                 }
 
-                cf.merge(*fmtIt); //apply direct formatting
+                cf.merge(*fmtIt); // apply direct formatting
 
                 fragCursor.setCharFormat(cf);
 
@@ -180,14 +179,12 @@ void ChangeStylesCommand::undo()
     KUndo2Command::undo();
 }
 
-
 void ChangeStylesCommand::clearCommonProperties(QTextFormat *firstFormat, const QTextFormat &secondFormat)
 {
     Q_ASSERT(firstFormat);
-    foreach(int key, secondFormat.properties().keys()) {
+    foreach (int key, secondFormat.properties().keys()) {
         if (firstFormat->property(key) == secondFormat.property(key)) {
             firstFormat->clearProperty(key);
         }
     }
 }
-

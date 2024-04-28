@@ -9,11 +9,11 @@
 #include "SpellCheck.h"
 #include "Actions.h"
 
+#include "core/Sheet.h"
 #include "engine/CellBase.h"
 #include "engine/MapBase.h"
 #include "engine/Region.h"
 #include "engine/ValueStorage.h"
-#include "core/Sheet.h"
 
 #include "ui/CellToolBase.h"
 #include "ui/commands/DataManipulators.h"
@@ -27,20 +27,18 @@
 
 #include <KLocalizedString>
 
-
 using namespace Calligra::Sheets;
-
 
 class SpellChecker::Private
 {
 public:
-    KoCanvasBase* canvas;
+    KoCanvasBase *canvas;
     Selection *selection;
     Region region;
     CellBase currentCell;
     SheetBase *currentSheet, *firstSheet;
     Sonnet::Speller speller;
-    Sonnet::Dialog* dialog;
+    Sonnet::Dialog *dialog;
 };
 
 SpellChecker::SpellChecker(QObject *parent)
@@ -57,7 +55,6 @@ SpellChecker::~SpellChecker()
     delete d;
 }
 
-
 void SpellChecker::check(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
     d->currentSheet = d->firstSheet = sheet;
@@ -68,31 +65,36 @@ void SpellChecker::check(Selection *selection, Sheet *sheet, QWidget *canvasWidg
     setSpeller(d->speller);
     if (!d->dialog) {
         d->dialog = new Sonnet::Dialog(this, canvasWidget);
-        connect(d->dialog, &Sonnet::Dialog::replace,
-                this, [this] (const QString &oldText, int start, const QString &newText) {
-                    replace(start, oldText, newText);
-                });
+        connect(d->dialog, &Sonnet::Dialog::replace, this, [this](const QString &oldText, int start, const QString &newText) {
+            replace(start, oldText, newText);
+        });
     }
 
     stop();
     start();
 }
 
-bool SpellChecker::nextSheet() {
+bool SpellChecker::nextSheet()
+{
     if (d->currentSheet->map()->count() == 1)
         // Nothing more to do, if there's only one sheet.
         return false;
 
     // Ask whether we should continue on the next sheet.
     const QString question = i18n("Do you want to check the spelling in the next sheet?");
-    if (KMessageBox::questionTwoActions(d->canvas->canvasWidget(), question, {}, KGuiItem(i18nc("@action:button", "Check next sheet")), KStandardGuiItem::close()) != KMessageBox::PrimaryAction)
+    if (KMessageBox::questionTwoActions(d->canvas->canvasWidget(),
+                                        question,
+                                        {},
+                                        KGuiItem(i18nc("@action:button", "Check next sheet")),
+                                        KStandardGuiItem::close())
+        != KMessageBox::PrimaryAction)
         return false;
 
     const MapBase *map = d->currentSheet->map();
     SheetBase *nextSheet = map->nextSheet(d->currentSheet);
     if (nextSheet == d->currentSheet) // We have reached the end, roll to the beginning
         nextSheet = map->sheet(0);
-    if (nextSheet == d->firstSheet)   // Reached the original sheet - we're done
+    if (nextSheet == d->firstSheet) // Reached the original sheet - we're done
         return false;
 
     d->currentSheet = nextSheet;
@@ -100,13 +102,12 @@ bool SpellChecker::nextSheet() {
     return true;
 }
 
-
 void SpellChecker::advanceToNextCell()
 {
     const ValueStorage *values = d->currentSheet->valueStorage();
     int maxRow = values->rows();
 
-    if (d->region.isSingular()) {  // traversing everything
+    if (d->region.isSingular()) { // traversing everything
         int checkFromRow = 0;
         if (d->currentCell.isNull()) {
             checkFromRow = 1;
@@ -128,17 +129,19 @@ void SpellChecker::advanceToNextCell()
         int col = 0;
         for (int row = checkFromRow; row <= maxRow; ++row) {
             values->firstInRow(row, &col);
-            if (!col) continue;   // empty row
+            if (!col)
+                continue; // empty row
             d->currentCell = CellBase(d->currentSheet, col, row);
             return;
         }
         d->currentCell = CellBase();
-        return;  // No more data
+        return; // No more data
     }
 
     // traversing the selection only
     QRect sel = d->region.firstRange();
-    if (sel.bottom() < maxRow) maxRow = sel.bottom();
+    if (sel.bottom() < maxRow)
+        maxRow = sel.bottom();
 
     int checkFromRow = 0;
     if (d->currentCell.isNull()) {
@@ -164,7 +167,8 @@ void SpellChecker::advanceToNextCell()
             values->firstInRow(row, &col);
         else
             values->nextInRow(row, sel.left() - 1, &col);
-        if (!col) continue;   // empty row
+        if (!col)
+            continue; // empty row
 
         d->currentCell = CellBase(d->currentSheet, col, row);
         return;
@@ -181,13 +185,15 @@ QString SpellChecker::fetchMoreText()
         if (d->currentCell.isNull()) {
             // No more cells. Try the next sheet if we can.
             // If we successfully hit the next sheet, restart the function. A 'continue' would fail the end-loop check, so this is easier.
-            if (d->region.isSingular() && nextSheet()) return fetchMoreText();
+            if (d->region.isSingular() && nextSheet())
+                return fetchMoreText();
 
-            return QString();   // We cannot advance, therefore we are done.
+            return QString(); // We cannot advance, therefore we are done.
         }
 
         Value value = d->currentCell.value();
-        if (!value.isString()) continue;
+        if (!value.isString())
+            continue;
         QString val = value.asString();
         if (!val.isEmpty()) {
             text = val;
@@ -207,12 +213,12 @@ QString SpellChecker::fetchMoreText()
     return text;
 }
 
-
 void SpellChecker::finishedCurrentFeed()
 {
-    if (d->dialog->originalBuffer() == d->dialog->buffer()) return;
+    if (d->dialog->originalBuffer() == d->dialog->buffer())
+        return;
 
-    DataManipulator* command = new DataManipulator();
+    DataManipulator *command = new DataManipulator();
     Sheet *sheet = dynamic_cast<Sheet *>(d->currentSheet);
     command->setSheet(sheet);
     command->setValue(Value(d->dialog->buffer()));
@@ -227,8 +233,6 @@ void SpellChecker::finishCommand()
     // TODO Stefan: Save the ignored words in document.
 }
 
-
-
 SpellCheck::SpellCheck(Actions *actions)
     : CellAction(actions, "tools_spelling", QString(), QIcon(), i18n("Check the spelling"))
 {
@@ -240,8 +244,8 @@ SpellCheck::~SpellCheck()
     delete checker;
 }
 
-QAction *SpellCheck::createAction() {
-
+QAction *SpellCheck::createAction()
+{
     QAction *action = KStandardAction::spelling(nullptr, nullptr, m_actions->tool());
     connect(action, &QAction::triggered, this, &SpellCheck::triggered);
     action->setToolTip(m_tooltip);
@@ -252,7 +256,3 @@ void SpellCheck::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidg
 {
     checker->check(selection, sheet, canvasWidget);
 }
-
-
-
-

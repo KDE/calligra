@@ -9,8 +9,8 @@
 
 #include <KoShapeConfigWidgetBase.h>
 
-#include <QWidget>
 #include <QUrl>
+#include <QWidget>
 
 class VideoShape;
 class SelectVideoWidget;
@@ -36,4 +36,4 @@ private:
     SelectVideoWidget *m_fileSelectionWidget;
 };
 
-#endif //VIDEOSHAPECONFIGWIDGET_H
+#endif // VIDEOSHAPECONFIGWIDGET_H

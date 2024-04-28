@@ -43,21 +43,38 @@ public:
     virtual ~CellAction();
 
     QAction *action();
-    QString name() { return m_name; }
+    QString name()
+    {
+        return m_name;
+    }
     bool shouldBeEnabled(bool readWrite, Selection *selection, const Cell &activeCell);
-    virtual bool shouldBeChecked(Selection *, const Cell &) { return false; }
-    virtual void updateOnChange(Selection *, const Cell & /*activeCell*/) {}
-    virtual void onEditorDeleted() {}
+    virtual bool shouldBeChecked(Selection *, const Cell &)
+    {
+        return false;
+    }
+    virtual void updateOnChange(Selection *, const Cell & /*activeCell*/)
+    {
+    }
+    virtual void onEditorDeleted()
+    {
+    }
     virtual void trigger();
     /** For actions that need access to the cell tool, which isn't yet constructed fully in the constructor. */
-    virtual void init() {};
+    virtual void init(){};
 protected Q_SLOTS:
     void triggered();
+
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) = 0;
 
-    virtual bool enabledIfReadOnly() const { return false; }
-    virtual bool enabledIfProtected() const { return false; }
+    virtual bool enabledIfReadOnly() const
+    {
+        return false;
+    }
+    virtual bool enabledIfProtected() const
+    {
+        return false;
+    }
     virtual bool enabledForSelection(Selection *selection, const Cell &activeCell);
 
     QRect shrinkToUsedArea(QRect rect, Sheet *sheet);
@@ -92,7 +109,9 @@ protected Q_SLOTS:
 
 protected:
     /** Empty implementation of the original execute. Do not override this one, use the below one instead. */
-    virtual void execute(Selection * /*selection*/, Sheet * /*sheet*/, QWidget * /*canvasWidget*/) override final {}
+    virtual void execute(Selection * /*selection*/, Sheet * /*sheet*/, QWidget * /*canvasWidget*/) override final
+    {
+    }
     virtual void executeToggled(bool enabled, Selection *selection, Sheet *sheet, QWidget *canvasWidget) = 0;
 
     virtual QAction *createAction() override;
@@ -102,8 +121,7 @@ protected:
     KToggleAction *m_toggleAction;
 };
 
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_CELL_ACTION
+#endif // CALLIGRA_SHEETS_CELL_ACTION

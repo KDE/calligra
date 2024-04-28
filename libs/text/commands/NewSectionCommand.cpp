@@ -3,19 +3,19 @@
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
 #include "NewSectionCommand.h"
+#include <KoParagraphStyle.h>
 #include <KoSection.h>
 #include <KoSectionEnd.h>
-#include <KoTextDocument.h>
-#include <KoParagraphStyle.h>
-#include <KoTextEditor.h>
-#include <KoSectionUtils.h>
 #include <KoSectionModel.h>
+#include <KoSectionUtils.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
 
 #include <KLocalizedString>
 #include <kundo2command.h>
 
 NewSectionCommand::NewSectionCommand(QTextDocument *document)
-    : KUndo2Command ()
+    : KUndo2Command()
     , m_first(true)
     , m_document(document)
 {
@@ -29,7 +29,7 @@ NewSectionCommand::~NewSectionCommand()
 void NewSectionCommand::undo()
 {
     KUndo2Command::undo();
-    //FIXME: if it will go to KoTextCommandBase, place UndoRedoFinalizer here
+    // FIXME: if it will go to KoTextCommandBase, place UndoRedoFinalizer here
 
     // All formatting changes will be undone automatically.
     // Lets handle Model Level (see KoSectionModel).
@@ -43,7 +43,7 @@ void NewSectionCommand::redo()
 
     if (!m_first) {
         KUndo2Command::redo();
-        //FIXME: if it will go to KoTextCommandBase, place UndoRedoFinalizer here
+        // FIXME: if it will go to KoTextCommandBase, place UndoRedoFinalizer here
 
         // All formatting changes will be redone automatically.
         // Lets handle Model Level (see KoSectionModel).
@@ -54,10 +54,7 @@ void NewSectionCommand::redo()
         KoTextEditor *editor = koDocument.textEditor();
         editor->newLine();
 
-        m_section = sectionModel->createSection(
-            editor->constCursor(),
-            sectionModel->sectionAtPosition(editor->constCursor().position())
-        );
+        m_section = sectionModel->createSection(editor->constCursor(), sectionModel->sectionAtPosition(editor->constCursor().position()));
         m_childIdx = sectionModel->findRowOfChild(m_section);
 
         KoSectionEnd *sectionEnd = sectionModel->createSectionEnd(m_section);

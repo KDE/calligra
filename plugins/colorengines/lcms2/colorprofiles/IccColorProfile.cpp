@@ -1,19 +1,19 @@
 /*
-*  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
-*
-* SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
+ *
+ * SPDX-License-Identifier: LGPL-2.1-or-later
+ */
 
 #include "IccColorProfile.h"
 
-#include <stdint.h>
 #include <limits.h>
+#include <stdint.h>
 
 #include <QFile>
 #include <QSharedPointer>
 
-#include "QDebug"
 #include "LcmsColorProfileContainer.h"
+#include "QDebug"
 
 #include "lcms2.h"
 
@@ -21,11 +21,11 @@ struct IccColorProfile::Data::Private {
     QByteArray rawData;
 };
 
-IccColorProfile::Data::Data() 
+IccColorProfile::Data::Data()
     : d(new Private)
 {
 }
-IccColorProfile::Data::Data(const QByteArray &rawData) 
+IccColorProfile::Data::Data(const QByteArray &rawData)
     : d(new Private)
 {
     d->rawData = rawData;
@@ -63,7 +63,8 @@ struct IccColorProfile::Private {
 };
 
 IccColorProfile::IccColorProfile(const QString &fileName)
-    : KoColorProfile(fileName), d(new Private)
+    : KoColorProfile(fileName)
+    , d(new Private)
 {
     // QSharedPointer lacks a reset in Qt 4.x
     d->shared = QSharedPointer<Private::Shared>(new Private::Shared());
@@ -71,7 +72,8 @@ IccColorProfile::IccColorProfile(const QString &fileName)
 }
 
 IccColorProfile::IccColorProfile(const QByteArray &rawData)
-    : KoColorProfile(""), d(new Private)
+    : KoColorProfile("")
+    , d(new Private)
 {
     d->shared = QSharedPointer<Private::Shared>(new Private::Shared());
     d->shared->data.reset(new Data());
@@ -186,59 +188,59 @@ bool IccColorProfile::hasTRC() const
         return d->shared->lcmsProfile->hasTRC();
     return false;
 }
-QVector <qreal> IccColorProfile::getColorantsXYZ() const
+QVector<qreal> IccColorProfile::getColorantsXYZ() const
 {
     if (d->shared->lcmsProfile) {
         return d->shared->lcmsProfile->getColorantsXYZ();
     }
     return QVector<qreal>(9);
 }
-QVector <qreal> IccColorProfile::getColorantsxyY() const
+QVector<qreal> IccColorProfile::getColorantsxyY() const
 {
     if (d->shared->lcmsProfile) {
         return d->shared->lcmsProfile->getColorantsxyY();
     }
     return QVector<qreal>(9);
 }
-QVector <qreal> IccColorProfile::getWhitePointXYZ() const
+QVector<qreal> IccColorProfile::getWhitePointXYZ() const
 {
-    QVector <qreal> d50Dummy(3);
+    QVector<qreal> d50Dummy(3);
     d50Dummy << 0.9642 << 1.0000 << 0.8249;
     if (d->shared->lcmsProfile) {
         return d->shared->lcmsProfile->getWhitePointXYZ();
     }
     return d50Dummy;
 }
-QVector <qreal> IccColorProfile::getWhitePointxyY() const
+QVector<qreal> IccColorProfile::getWhitePointxyY() const
 {
-    QVector <qreal> d50Dummy(3);
+    QVector<qreal> d50Dummy(3);
     d50Dummy << 0.34773 << 0.35952 << 1.0;
     if (d->shared->lcmsProfile) {
         return d->shared->lcmsProfile->getWhitePointxyY();
     }
     return d50Dummy;
 }
-QVector <qreal> IccColorProfile::getEstimatedTRC() const
+QVector<qreal> IccColorProfile::getEstimatedTRC() const
 {
-    QVector <qreal> dummy(3);
-    dummy.fill(2.2);//estimated sRGB trc.
+    QVector<qreal> dummy(3);
+    dummy.fill(2.2); // estimated sRGB trc.
     if (d->shared->lcmsProfile) {
         return d->shared->lcmsProfile->getEstimatedTRC();
     }
     return dummy;
 }
 
-void IccColorProfile::linearizeFloatValue(QVector <qreal> & Value) const
+void IccColorProfile::linearizeFloatValue(QVector<qreal> &Value) const
 {
     if (d->shared->lcmsProfile)
         d->shared->lcmsProfile->LinearizeFloatValue(Value);
 }
-void IccColorProfile::delinearizeFloatValue(QVector <qreal> & Value) const
+void IccColorProfile::delinearizeFloatValue(QVector<qreal> &Value) const
 {
     if (d->shared->lcmsProfile)
         d->shared->lcmsProfile->DelinearizeFloatValue(Value);
 }
-void IccColorProfile::linearizeFloatValueFast(QVector <qreal> & Value) const
+void IccColorProfile::linearizeFloatValueFast(QVector<qreal> &Value) const
 {
     if (d->shared->lcmsProfile)
         d->shared->lcmsProfile->LinearizeFloatValueFast(Value);
@@ -331,18 +333,19 @@ void IccColorProfile::calculateFloatUIMinMax(void)
     qreal out_min_pixel[4] = {0, 0, 0, 0};
     qreal out_max_pixel[4] = {0, 0, 0, 0};
 
-    cmsHTRANSFORM trans = cmsCreateTransform(
-                              cprofile,
-                              (COLORSPACE_SH(color_space_mask) | CHANNELS_SH(num_channels) | BYTES_SH(2)),
-                              cprofile,
-                              (COLORSPACE_SH(color_space_mask) | FLOAT_SH(1) | CHANNELS_SH(num_channels) | BYTES_SH(0)), //NOTE THAT 'BYTES' FIELD IS SET TO ZERO ON DLB because 8 bytes overflows the bitfield
-                              INTENT_PERCEPTUAL, 0);      // does the intent matter in this case?
+    cmsHTRANSFORM trans = cmsCreateTransform(cprofile,
+                                             (COLORSPACE_SH(color_space_mask) | CHANNELS_SH(num_channels) | BYTES_SH(2)),
+                                             cprofile,
+                                             (COLORSPACE_SH(color_space_mask) | FLOAT_SH(1) | CHANNELS_SH(num_channels)
+                                              | BYTES_SH(0)), // NOTE THAT 'BYTES' FIELD IS SET TO ZERO ON DLB because 8 bytes overflows the bitfield
+                                             INTENT_PERCEPTUAL,
+                                             0); // does the intent matter in this case?
 
     if (trans) {
         cmsDoTransform(trans, in_min_pixel, out_min_pixel, 1);
         cmsDoTransform(trans, in_max_pixel, out_max_pixel, 1);
         cmsDeleteTransform(trans);
-    }//else, we'll just default to [0..1] below
+    } // else, we'll just default to [0..1] below
 
     ret.resize(num_channels);
     for (unsigned int i = 0; i < num_channels; ++i) {
@@ -358,4 +361,3 @@ void IccColorProfile::calculateFloatUIMinMax(void)
         }
     }
 }
-

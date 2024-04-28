@@ -21,11 +21,12 @@
 #include <QTextDocument>
 #include <QTextFragment>
 
-AcceptChangeCommand::AcceptChangeCommand (int changeId, const QList<QPair<int, int> > &changeRanges, QTextDocument *document, KUndo2Command* parent) : KoTextCommandBase(parent),
-    m_first(true),
-    m_changeId(changeId),
-    m_changeRanges(changeRanges),
-    m_document(document)
+AcceptChangeCommand::AcceptChangeCommand(int changeId, const QList<QPair<int, int>> &changeRanges, QTextDocument *document, KUndo2Command *parent)
+    : KoTextCommandBase(parent)
+    , m_first(true)
+    , m_changeId(changeId)
+    , m_changeRanges(changeRanges)
+    , m_document(document)
 {
     setText(kundo2_i18n("Accept change"));
 
@@ -42,7 +43,7 @@ void AcceptChangeCommand::redo()
         m_first = false;
         QTextCursor cursor(m_document);
         if (m_changeTracker->elementById(m_changeId)->getChangeType() != KoGenChange::DeleteChange) {
-            QList<QPair<int, int> >::const_iterator it;
+            QList<QPair<int, int>>::const_iterator it;
             for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); ++it) {
                 cursor.setPosition((*it).first);
                 cursor.setPosition((*it).second, QTextCursor::KeepAnchor);
@@ -51,16 +52,15 @@ void AcceptChangeCommand::redo()
                 if (changeId == m_changeId) {
                     if (int parentChangeId = m_changeTracker->parent(m_changeId)) {
                         format.setProperty(KoCharacterStyle::ChangeTrackerId, parentChangeId);
-                    }
-                    else {
+                    } else {
                         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
                     }
                     cursor.setCharFormat(format);
                 }
             }
         } else {
-            QList<QPair<int, int> >::const_iterator it;
-            QStack<QPair<int, int> > deleteRanges;
+            QList<QPair<int, int>>::const_iterator it;
+            QStack<QPair<int, int>> deleteRanges;
             for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); ++it) {
                 deleteRanges.push(QPair<int, int>((*it).first, (*it).second));
             }
@@ -72,8 +72,7 @@ void AcceptChangeCommand::redo()
             }
         }
         m_changeTracker->acceptRejectChange(m_changeId, true);
-    }
-    else {
+    } else {
         m_changeTracker->acceptRejectChange(m_changeId, true);
         KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);

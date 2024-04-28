@@ -16,12 +16,7 @@ public:
     ~BarnVeeWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType {
-        FromTop,
-        FromRight,
-        FromBottom,
-        FromLeft
-    };
+    enum SubType { FromTop, FromRight, FromBottom, FromLeft };
 };
 
 #endif // BARNVEEWIPEEFFECTFACTORY_H

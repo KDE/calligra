@@ -8,24 +8,24 @@
 
 #include "PictureShapeFactory.h"
 
+#include "PictureDebug.h"
 #include "PictureShape.h"
 #include "PictureShapeConfigWidget.h"
-#include "PictureDebug.h"
 
-#include <QByteArray>
 #include <QBuffer>
+#include <QByteArray>
 #include <QImage>
 
-#include <KoXmlNS.h>
 #include "KoShapeBasedDocumentBase.h"
-#include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
+#include <KLocalizedString>
 #include <KoDocumentResourceManager.h>
+#include <KoIcon.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
+#include <KoOdfLoadingContext.h>
 #include <KoProperties.h>
-#include <KoIcon.h>
-#include <KLocalizedString>
+#include <KoShapeLoadingContext.h>
+#include <KoXmlNS.h>
 
 PictureShapeFactory::PictureShapeFactory()
     : KoShapeFactoryBase(PICTURESHAPEID, i18n("Image"))
@@ -34,7 +34,7 @@ PictureShapeFactory::PictureShapeFactory()
     setIconName(koIconName("x-shape-image"));
     setLoadingPriority(1);
 
-    QList<QPair<QString, QStringList> > elementNamesList;
+    QList<QPair<QString, QStringList>> elementNamesList;
     elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("image")));
     elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("image")));
     setXmlElements(elementNamesList);
@@ -42,7 +42,7 @@ PictureShapeFactory::PictureShapeFactory()
 
 KoShape *PictureShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    PictureShape * defaultShape = new PictureShape();
+    PictureShape *defaultShape = new PictureShape();
     defaultShape->setShapeId(PICTURESHAPEID);
     if (documentResources) {
         defaultShape->setImageCollection(documentResources->imageCollection());
@@ -52,7 +52,7 @@ KoShape *PictureShapeFactory::createDefaultShape(KoDocumentResourceManager *docu
 
 KoShape *PictureShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
 {
-    PictureShape *shape = static_cast<PictureShape*>(createDefaultShape(documentResources));
+    PictureShape *shape = static_cast<PictureShape *>(createDefaultShape(documentResources));
     if (params->contains("qimage")) {
         QImage image = params->property("qimage").value<QImage>();
         Q_ASSERT(!image.isNull());
@@ -65,7 +65,6 @@ KoShape *PictureShapeFactory::createShape(const KoProperties *params, KoDocument
         }
     }
     return shape;
-
 }
 
 bool PictureShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
@@ -80,28 +79,21 @@ bool PictureShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext 
             QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
             if (!mimetype.isEmpty()) {
                 return mimetype.startsWith("image");
+            } else {
+                return (href.endsWith("bmp") || href.endsWith("jpg") || href.endsWith("gif") || href.endsWith("eps") || href.endsWith("png")
+                        || href.endsWith("tif") || href.endsWith("tiff"));
             }
-            else {
-                return ( href.endsWith("bmp") ||
-                         href.endsWith("jpg") ||
-                         href.endsWith("gif") ||
-                         href.endsWith("eps") ||
-                         href.endsWith("png") ||
-                         href.endsWith("tif") ||
-                         href.endsWith("tiff"));
-            }
-        }
-        else {
+        } else {
             return !KoXml::namedItemNS(e, KoXmlNS::office, "binary-data").isNull();
         }
     }
     return false;
 }
 
-QList<KoShapeConfigWidgetBase*> PictureShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> PictureShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> panels;
-    panels.append( new PictureShapeConfigWidget() );
+    QList<KoShapeConfigWidgetBase *> panels;
+    panels.append(new PictureShapeConfigWidget());
     return panels;
 }
 

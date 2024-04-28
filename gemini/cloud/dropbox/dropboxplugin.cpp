@@ -8,22 +8,22 @@
 
 #include "controller.h"
 
-#include <QtQml/QtQml>
 #include <QQmlContext>
+#include <QtQml/QtQml>
 
-void DropboxPlugin::registerTypes(const char* uri)
+void DropboxPlugin::registerTypes(const char *uri)
 {
     Q_UNUSED(uri)
-    Q_ASSERT( uri == QLatin1String( "Calligra.Gemini.Dropbox" ) );
+    Q_ASSERT(uri == QLatin1String("Calligra.Gemini.Dropbox"));
     qmlRegisterUncreatableType<Controller>("Calligra.Gemini.Dropbox", 1, 0, "Controller", "Main controller for all interaction with Dropbox");
 }
 
-void DropboxPlugin::initializeEngine(QQmlEngine* engine, const char* uri)
+void DropboxPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
     Q_UNUSED(uri)
-    Q_ASSERT( uri == QLatin1String( "Calligra.Gemini.Dropbox" ) );
+    Q_ASSERT(uri == QLatin1String("Calligra.Gemini.Dropbox"));
 
-    Controller* controller = new Controller(qApp);
+    Controller *controller = new Controller(qApp);
 
     QQmlContext *context = engine->rootContext();
     context->setContextProperty("controllerMIT", controller);

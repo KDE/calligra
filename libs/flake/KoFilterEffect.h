@@ -52,13 +52,13 @@ public:
     QRectF filterRectForBoundingRect(const QRectF &boundingRect) const;
 
     /**
-    * Sets the name of the output image
-    *
-    * The name is used so that other effects can reference
-    * the output of this effect as one of their input images.
-    *
-    * @param output the output image name
-    */
+     * Sets the name of the output image
+     *
+     * The name is used so that other effects can reference
+     * the output of this effect as one of their input images.
+     *
+     * @param output the output image name
+     */
     void setOutput(const QString &output);
 
     /// Returns the name of the output image
@@ -113,10 +113,10 @@ public:
     virtual QImage processImage(const QImage &image, const KoFilterEffectRenderContext &context) const;
 
     /**
-    * Apply the effect on a list of images.
-    * @param images the images the filter should be applied to
-    * @param context the render context providing additional data
-    */
+     * Apply the effect on a list of images.
+     * @param images the images the filter should be applied to
+     * @param context the render context providing additional data
+     */
     virtual QImage processImages(const QVector<QImage> &images, const KoFilterEffectRenderContext &context) const;
 
     /**
@@ -151,7 +151,7 @@ protected:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // _KO_FILTER_EFFECT_H_

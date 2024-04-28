@@ -29,15 +29,10 @@ public:
 
     ~KoTblStyle() override;
 
-    void setBackgroundColor(const QColor& color);
+    void setBackgroundColor(const QColor &color);
     QColor backgroundColor() const;
 
-    enum BreakType {
-        NoBreak,
-        AutoBreak,
-        ColumnBreak,
-        PageBreak
-    };
+    enum BreakType { NoBreak, AutoBreak, ColumnBreak, PageBreak };
     void setBreakBefore(BreakType breakBefore);
     BreakType breakBefore() const;
 
@@ -47,8 +42,8 @@ public:
     void setAllowBreakBetweenRows(bool allow);
     bool allowBreakBetweenRows() const;
 
-    void setMasterPageName(const QString& name);
-    void setMasterPageName(const char* name);
+    void setMasterPageName(const QString &name);
+    void setMasterPageName(const char *name);
     QString masterPageName() const;
 
     void setLeftMargin(qreal left);
@@ -63,58 +58,35 @@ public:
     void setBottomMargin(qreal bottom);
     qreal bottomMargin() const;
 
-    enum WidthUnit {
-        PercentageUnit,
-        PointsUnit
-    };
+    enum WidthUnit { PercentageUnit, PointsUnit };
     void setWidth(qreal width, WidthUnit unit = PointsUnit);
     qreal width() const;
     WidthUnit widthUnit() const;
 
-    enum HorizontalAlign {
-        CenterAlign,
-        LeftAlign,
-        MarginsAlign,
-        RightAlign
-    };
+    enum HorizontalAlign { CenterAlign, LeftAlign, MarginsAlign, RightAlign };
     void setHorizontalAlign(HorizontalAlign align);
     HorizontalAlign horizontalAlign() const;
 
-    enum BorderModel {
-        CollapsingModel,
-        SeparatingModel
-    };
+    enum BorderModel { CollapsingModel, SeparatingModel };
     void setBorderModel(BorderModel bordelModel);
     BorderModel borderModel() const;
 
     void setDisplay(bool display);
     bool display() const;
 
-    enum KeepWithNext {
-        AutoKeepWithNext,
-        AlwaysKeepWithNext
-    };
+    enum KeepWithNext { AutoKeepWithNext, AlwaysKeepWithNext };
     void setKeepWithNext(KeepWithNext keepWithNext);
     KeepWithNext keepWithNext() const;
 
-    enum WritingMode {
-        LrTbWritingMode,
-        RlTbWritingMode,
-        TbRlWritingMode,
-        TbLrWritingMode,
-        LrWritingMode,
-        RlWritingMode,
-        TbWritingMode,
-        PageWritingMode
-    };
+    enum WritingMode { LrTbWritingMode, RlTbWritingMode, TbRlWritingMode, TbLrWritingMode, LrWritingMode, RlWritingMode, TbWritingMode, PageWritingMode };
     void setWritingMode(WritingMode writingMode);
     WritingMode writingMode() const;
 
 protected:
-    void prepareStyle(KoGenStyle& style) const override;
+    void prepareStyle(KoGenStyle &style) const override;
     KoGenStyle::Type automaticstyleType() const override;
     KoGenStyle::Type styleType() const override;
-    const char* styleFamilyName() const override;
+    const char *styleFamilyName() const override;
     QString defaultPrefix() const override;
 
 private:
@@ -139,9 +111,9 @@ private:
     WritingMode m_writingMode;
 
     bool m_display;
-    //TODO style:page-number
-    //TODO style:shadow
-    //TODO style:background-image
+    // TODO style:page-number
+    // TODO style:shadow
+    // TODO style:background-image
 };
 
 #endif

@@ -8,17 +8,14 @@
 #ifndef CALLIGRA_SHEETS_ACTION_AUTOFILTER
 #define CALLIGRA_SHEETS_ACTION_AUTOFILTER
 
-
 #include "CellAction.h"
 
 #include "ui/commands/AbstractRegionCommand.h"
-
 
 namespace Calligra
 {
 namespace Sheets
 {
-
 
 /**
  * \ingroup Commands
@@ -40,23 +37,18 @@ public:
     bool performCommands() override;
 };
 
-
-
-class AutoFilter : public CellAction {
-Q_OBJECT
+class AutoFilter : public CellAction
+{
+    Q_OBJECT
 public:
     AutoFilter(Actions *actions);
     virtual ~AutoFilter();
+
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
 
-
-
-
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_AUTOFILTER
+#endif // CALLIGRA_SHEETS_ACTION_AUTOFILTER

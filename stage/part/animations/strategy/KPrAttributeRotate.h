@@ -27,7 +27,7 @@ class KPrAttributeRotate : public KPrAnimationAttribute
 public:
     KPrAttributeRotate();
     void updateCache(KPrAnimationCache *cache, KPrShapeAnimation *shapeAnimation, qreal value) override;
-    void initCache(KPrAnimationCache * cache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue) override;
+    void initCache(KPrAnimationCache *cache, int step, KPrShapeAnimation *shapeAnimation, qreal startValue, qreal endValue) override;
 };
 
 #endif // KPRATTRIBUTEROTATE_H

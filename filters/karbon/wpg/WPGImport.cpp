@@ -10,13 +10,13 @@
 
 #include <KPluginFactory>
 
-#include <QString>
-#include <QFile>
 #include <QDebug>
+#include <QFile>
 #include <QLoggingCategory>
+#include <QString>
 
-#include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
+#include <librevenge/librevenge.h>
 
 #include <libwpg/libwpg.h>
 
@@ -35,9 +35,8 @@ const QLoggingCategory &WPG_LOG()
 #define warnWpg qCWarning(WPG_LOG)
 #define errorWpg qCCritical(WPG_LOG)
 
-
-WPGImport::WPGImport(QObject* parent, const QVariantList&)
-        : KoFilter(parent)
+WPGImport::WPGImport(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
 }
 
@@ -45,8 +44,7 @@ WPGImport::~WPGImport()
 {
 }
 
-
-KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus WPGImport::convert(const QByteArray &from, const QByteArray &to)
 {
     if (from != "application/x-wpg")
         return KoFilter::NotImplemented;
@@ -54,22 +52,22 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
     if (to != "image/svg+xml")
         return KoFilter::NotImplemented;
 
-    librevenge::RVNGInputStream* input = new librevenge::RVNGFileStream(m_chain->inputFile().toLocal8Bit());
+    librevenge::RVNGInputStream *input = new librevenge::RVNGFileStream(m_chain->inputFile().toLocal8Bit());
     if (input->isStructured()) {
-        librevenge::RVNGInputStream* olestream = input->getSubStreamByName("Anything");
+        librevenge::RVNGInputStream *olestream = input->getSubStreamByName("Anything");
         if (olestream) {
             delete input;
             input = olestream;
         }
-     }
+    }
     if (!libwpg::WPGraphics::isSupported(input)) {
         warnWpg << "ERROR: Unsupported file format (unsupported version) or file is encrypted!";
         delete input;
         return KoFilter::NotImplemented;
     }
 
-     ::librevenge::RVNGStringVector output;
-     librevenge::RVNGSVGDrawingGenerator generator(output, "");
+    ::librevenge::RVNGStringVector output;
+    librevenge::RVNGSVGDrawingGenerator generator(output, "");
 
     if (!libwpg::WPGraphics::parse(input, &generator)) {
         warnWpg << "ERROR: SVG Generation failed!";
@@ -81,11 +79,13 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
     delete input;
 
     QFile outputFile(m_chain->outputFile());
-    if(!outputFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    if (!outputFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
         warnWpg << "ERROR: Could not open output file" << m_chain->outputFile();
         return KoFilter::InternalError;
     }
-    outputFile.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
+    outputFile.write(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" "
+        "\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
     outputFile.write(output[0].cstr());
     outputFile.close();
 

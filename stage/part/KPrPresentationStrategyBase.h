@@ -24,19 +24,17 @@ public:
      * If the event is handled or should be ignored by the tool return true. Otherwise
      * the event will be handled in the tool.
      */
-    virtual bool keyPressEvent( QKeyEvent * event ) = 0;
+    virtual bool keyPressEvent(QKeyEvent *event) = 0;
 
-    KPrPresentationToolEventForwarder * widget();
+    KPrPresentationToolEventForwarder *widget();
 
 protected:
-    void setToolWidgetParent( QWidget * widget );
+    void setToolWidgetParent(QWidget *widget);
     void activateDefaultStrategy();
-    KoPACanvasBase * canvas();
+    KoPACanvasBase *canvas();
 
     KPrPresentationTool *m_tool;
     KPrPresentationToolEventForwarder *m_widget;
-
 };
 
 #endif /* KPRPRESENTATIONSTRATEGYBASE_H */
-

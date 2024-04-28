@@ -15,7 +15,6 @@
 class KoXmlWriter;
 class KoXmlElement;
 
-
 /** A scene in which to show 3d objects.
  *
  * The scene parameters include camera parameters (origin, direction
@@ -31,23 +30,18 @@ class KoXmlElement;
  * chart:plot-area if the chart also has 3D mode set.
  */
 
-
 #include "koodf_export.h"
-
 
 class KOODF_EXPORT Ko3dScene
 {
 public:
-    enum Projection {
-        Parallel,
-        Perspective
-    };
+    enum Projection { Parallel, Perspective };
 
     enum Shademode {
         Flat,
         Gouraud,
         Phong,
-        Draft                   // Wireframe
+        Draft // Wireframe
     };
 
     class Lightsource
@@ -73,7 +67,7 @@ public:
 
     private:
         QColor m_diffuseColor;
-        QVector3D  m_direction;
+        QVector3D m_direction;
         bool m_enabled;
         bool m_specular;
     };
@@ -113,16 +107,14 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_TYPEINFO(Ko3dScene::Lightsource, Q_MOVABLE_TYPE);
-
 
 /** Try to load a 3d scene from an element and return a pointer to a
  * Ko3dScene if it succeeded.
  */
 KOODF_EXPORT Ko3dScene *load3dScene(const KoXmlElement &element);
-
 
 #endif

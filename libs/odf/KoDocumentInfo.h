@@ -9,8 +9,8 @@
 #ifndef KO_DOCUMENT_INFO_H
 #define KO_DOCUMENT_INFO_H
 
-#include <QObject>
 #include <QMap>
+#include <QObject>
 #include <QString>
 #include <QStringList>
 
@@ -53,21 +53,21 @@ public:
      * @param metaDoc the QDomDocument with the metaInformation
      * @return true if success
      */
-    bool loadOasis(const KoXmlDocument& metaDoc);
+    bool loadOasis(const KoXmlDocument &metaDoc);
 
     /**
      * Save the KoDocumentInfo to an OASIS document
      * @param store a pointer to a KoStore to save in
      * @return true if success
      */
-    bool saveOasis(KoStore* store);
+    bool saveOasis(KoStore *store);
 
     /**
      * Load the KoDocumentInfo from an Calligra-1.3 DomDocument
      * @param doc the QDomDocument to load from
      * @return true if success
      */
-    bool load(const KoXmlDocument& doc);
+    bool load(const KoXmlDocument &doc);
 
     /**
      * Save the KoDocumentInfo to an Calligra-1.3 DomDocument
@@ -84,28 +84,28 @@ public:
      * @param info the kind of information to set
      * @param data the data to set for this information
      */
-    void setAuthorInfo(const QString& info, const QString& data);
+    void setAuthorInfo(const QString &info, const QString &data);
 
     /**
      * Obtain information about the author
      * @param info the kind of information to obtain
      * @return a QString with the information
      */
-    QString authorInfo(const QString& info) const;
+    QString authorInfo(const QString &info) const;
 
     /**
      * Set information about the document
      * @param info the kind of information to set
      * @param data the data to set for this information
      */
-    void setAboutInfo(const QString& info, const QString& data);
+    void setAboutInfo(const QString &info, const QString &data);
 
     /**
      * Obtain information about the document
      * @param info the kind of information to obtain
      * @return a QString with the information
      */
-    QString aboutInfo(const QString& info) const;
+    QString aboutInfo(const QString &info) const;
 
     /**
      * Obtain the generator of the document, as it was loaded from the document
@@ -117,7 +117,7 @@ public:
      * saved to a document in the meta:generator field, it only changes what
      * originalGenerator() will return.
      */
-    void setOriginalGenerator(const QString& generator);
+    void setOriginalGenerator(const QString &generator);
 
     /** Resets part of the meta data */
     void resetMetaData();
@@ -137,14 +137,14 @@ private:
      * @param info the kind of information to set
      * @param data the data to set for this information
      */
-    void setActiveAuthorInfo(const QString& info, const QString& data);
+    void setActiveAuthorInfo(const QString &info, const QString &data);
 
     /**
      * Load the information about the document from an OASIS file
      * @param metaDoc a reference to the information node
      * @return true if success
      */
-    bool loadOasisAboutInfo(const KoXmlNode& metaDoc);
+    bool loadOasisAboutInfo(const KoXmlNode &metaDoc);
 
     /**
      * Save the information about the document to an OASIS file
@@ -158,35 +158,35 @@ private:
      * @param e the element to load from
      * @return true if success
      */
-    bool loadAboutInfo(const KoXmlElement& e);
+    bool loadAboutInfo(const KoXmlElement &e);
 
     /**
      * Save the information about the document to a Calligra-1.3 file
      * @param doc the QDomDocument to save in
      * @return the QDomElement to which was saved
      */
-    QDomElement saveAboutInfo(QDomDocument& doc);
+    QDomElement saveAboutInfo(QDomDocument &doc);
 
     /**
      * Load the information about the document from an OASIS file
      * @param metaDoc a reference to the information node
      * @return true if success
      */
-    bool loadOasisAuthorInfo(const KoXmlNode& metaDoc);
+    bool loadOasisAuthorInfo(const KoXmlNode &metaDoc);
 
     /**
      * Load the information about the document from a Calligra-1.3 file
      * @param e the element to load from
      * @return true if success
      */
-    bool loadAuthorInfo(const KoXmlElement& e);
+    bool loadAuthorInfo(const KoXmlElement &e);
 
     /**
      * Save the information about the author to a Calligra-1.3 file
      * @param doc the QDomDocument to save in
      * @return the QDomElement to which was saved
      */
-    QDomElement saveAuthorInfo(QDomDocument& doc);
+    QDomElement saveAuthorInfo(QDomDocument &doc);
 
     /**
      * Save the information about the document to an OASIS file

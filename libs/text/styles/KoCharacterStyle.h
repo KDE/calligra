@@ -14,9 +14,9 @@
 
 #include <KoXmlReaderForward.h>
 
+#include "kotext_export.h"
 #include <QObject>
 #include <QTextCharFormat>
-#include "kotext_export.h"
 
 class QTextBlock;
 class KoShapeLoadingContext;
@@ -42,10 +42,7 @@ class KOTEXT_EXPORT KoCharacterStyle : public QObject
     Q_OBJECT
 public:
     /// types of style
-    enum Type {
-        CharacterStyle,
-        ParagraphStyle
-    };
+    enum Type { CharacterStyle, ParagraphStyle };
 
     /// list of character style properties we can store in a QTextCharFormat
     enum Property {
@@ -75,61 +72,39 @@ public:
         TextRotationAngle,
         TextRotationScale,
         TextScale,
-        InlineRdf,  ///< KoTextInlineRdf pointer
+        InlineRdf, ///< KoTextInlineRdf pointer
         TextShadow,
         FontRelief,
         TextEmphasizeStyle,
         TextEmphasizePosition,
-        TextCombine,    ///< TextCombineType
-        TextCombineStartChar,    ///< QChar
-        TextCombineEndChar,    ///< QChar
-        HyphenationPushCharCount,   ///< int
+        TextCombine, ///< TextCombineType
+        TextCombineStartChar, ///< QChar
+        TextCombineEndChar, ///< QChar
+        HyphenationPushCharCount, ///< int
         HyphenationRemainCharCount, ///< int
-        FontLetterSpacing,          ///< qreal, not the same format as the FontLetterSpacing in QTextFormat
-        PercentageFontSize, //font-size can be in % and this stores that value
-        AdditionalFontSize, //font-size-rel can specify an addition to the parent value
-        UseWindowFontColor, //boolean, same as odf
+        FontLetterSpacing, ///< qreal, not the same format as the FontLetterSpacing in QTextFormat
+        PercentageFontSize, // font-size can be in % and this stores that value
+        AdditionalFontSize, // font-size-rel can specify an addition to the parent value
+        UseWindowFontColor, // boolean, same as odf
         Blink,
-        AnchorType, //valid only if QTextCharFormat::isAnchor() is true
+        AnchorType, // valid only if QTextCharFormat::isAnchor() is true
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker
         FontYStretch = 577297551 // Internal: Ratio between Linux font pt size and Windows font height
     };
 
     /// List of possible combine mode
-    enum TextCombineType {
-        NoTextCombine,
-        TextCombineLetters,
-        TextCombineLines
-    };
+    enum TextCombineType { NoTextCombine, TextCombineLetters, TextCombineLines };
 
     /// list of possible line type : no line, single line, double line
-    enum LineType {
-        NoLineType,
-        SingleLine,
-        DoubleLine
-    };
+    enum LineType { NoLineType, SingleLine, DoubleLine };
 
     /// List of possible font relief : none, embossed, engraved
-    enum ReliefType {
-        NoRelief,
-        Embossed,
-        Engraved
-    };
+    enum ReliefType { NoRelief, Embossed, Engraved };
 
-    enum EmphasisStyle {
-        NoEmphasis,
-        AccentEmphasis,
-        CircleEmphasis,
-        DiscEmphasis,
-        DotEmphasis
-    };
+    enum EmphasisStyle { NoEmphasis, AccentEmphasis, CircleEmphasis, DiscEmphasis, DotEmphasis };
 
-    enum EmphasisPosition {
-        EmphasisAbove,
-        EmphasisBelow
-    };
-
+    enum EmphasisPosition { EmphasisAbove, EmphasisBelow };
 
     /// list of possible line style.
     enum LineStyle {
@@ -156,16 +131,9 @@ public:
     };
 
     /// list of possible line modes.
-    enum LineMode {
-        NoLineMode,
-        ContinuousLineMode,
-        SkipWhiteSpaceLineMode
-    };
+    enum LineMode { NoLineMode, ContinuousLineMode, SkipWhiteSpaceLineMode };
 
-    enum RotationScale {
-        Fixed,
-        LineHeight
-    };
+    enum RotationScale { Fixed, LineHeight };
 
     enum AnchorTypes {
         Bookmark,
@@ -249,7 +217,6 @@ public:
     void setFontYStretch(qreal stretch);
     /// Return font Y stretch (value relevant for MS compatibility)
     qreal fontYStretch() const;
-
 
     /// See similar named method on QTextCharFormat
     void setFontStyleHint(QFont::StyleHint styleHint);
@@ -373,7 +340,6 @@ public:
     QChar textCombineEndChar() const;
     void setTextCombineEndChar(const QChar &character);
 
-
     ReliefType fontRelief() const;
     void setFontRelief(ReliefType relief);
 
@@ -460,8 +426,7 @@ public:
      * @param element the element containing the
      * @param loadParents true = use the stylestack, false = use just the element
      */
-    void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context,
-                bool loadParents = false);
+    void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context, bool loadParents = false);
 
     /// return true if this style has a non-default value set for the Property
     bool hasProperty(int key) const;
@@ -522,18 +487,18 @@ public:
 
 Q_SIGNALS:
     void nameChanged(const QString &newName);
-    void styleApplied(const KoCharacterStyle*) const;
+    void styleApplied(const KoCharacterStyle *) const;
 
 protected:
     /**
-    * Load the text properties from the \a KoStyleStack style stack using the
-    * OpenDocument format.
-    */
+     * Load the text properties from the \a KoStyleStack style stack using the
+     * OpenDocument format.
+     */
     void loadOdfProperties(KoShapeLoadingContext &context);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_METATYPE(KoCharacterStyle *)

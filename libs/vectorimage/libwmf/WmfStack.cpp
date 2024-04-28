@@ -16,7 +16,6 @@
 // lib
 #include "VectorImageDebug.h"
 
-
 /**
    Namespace for Windows Metafile (WMF) classes
 */

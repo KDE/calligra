@@ -16,7 +16,7 @@ class KoPAPageLayoutDialog : public KoPageLayoutDialog
 {
     Q_OBJECT
 public:
-    explicit KoPAPageLayoutDialog( KoPADocument *document, const KoPageLayout &pageLayout, QWidget *parent = 0 );
+    explicit KoPAPageLayoutDialog(KoPADocument *document, const KoPageLayout &pageLayout, QWidget *parent = 0);
     ~KoPAPageLayoutDialog() override;
     bool applyToDocument() const;
 
@@ -25,4 +25,3 @@ private:
 };
 
 #endif
-

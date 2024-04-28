@@ -10,9 +10,9 @@
 #ifndef KOPAGELAYOUT_H
 #define KOPAGELAYOUT_H
 
+#include "KoBorder.h"
 #include "KoPageFormat.h"
 #include "KoXmlReaderForward.h"
-#include "KoBorder.h"
 
 #include "koodf_export.h"
 
@@ -73,10 +73,10 @@ struct KoPageLayout {
     qreal bottomPadding;
 
     /// page border definition
-    KoBorder  border;
+    KoBorder border;
 
     KOODF_EXPORT bool operator==(const KoPageLayout &l) const;
-    KOODF_EXPORT bool operator!=(const KoPageLayout& l) const;
+    KOODF_EXPORT bool operator!=(const KoPageLayout &l) const;
 
     /**
      * Save this page layout to ODF.
@@ -96,4 +96,3 @@ struct KoPageLayout {
 };
 
 #endif /* KOPAGELAYOUT_H */
-

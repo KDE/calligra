@@ -8,8 +8,8 @@
 #ifndef KOTEXT_STYLES_PRIVATE_H
 #define KOTEXT_STYLES_PRIVATE_H
 
-#include <QVariant>
 #include <QMap>
+#include <QVariant>
 
 class StylePrivate
 {
@@ -17,7 +17,7 @@ public:
     StylePrivate();
     StylePrivate(const StylePrivate &other);
     StylePrivate(const QMap<int, QVariant> &other);
-    StylePrivate & operator=(const StylePrivate &other);
+    StylePrivate &operator=(const StylePrivate &other);
     ~StylePrivate();
 
     void add(int key, const QVariant &value);
@@ -28,14 +28,16 @@ public:
     void copyMissing(const QMap<int, QVariant> &other);
     void removeDuplicates(const StylePrivate &other);
     void removeDuplicates(const QMap<int, QVariant> &other);
-    void clearAll() {
+    void clearAll()
+    {
         m_properties.clear();
     }
     QList<int> keys() const;
     bool operator==(const StylePrivate &other) const;
     bool operator!=(const StylePrivate &other) const;
     bool isEmpty() const;
-    const QMap<int, QVariant> properties() const {
+    const QMap<int, QVariant> properties() const
+    {
         return m_properties;
     }
 

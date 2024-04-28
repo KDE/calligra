@@ -30,10 +30,10 @@ QString KPrPageLayoutDockerFactory::id() const
     return QString("Slide layout");
 }
 
-QDockWidget* KPrPageLayoutDockerFactory::createDockWidget()
+QDockWidget *KPrPageLayoutDockerFactory::createDockWidget()
 {
-    KPrPageLayoutDocker * widget = new KPrPageLayoutDocker();
-    widget->setObjectName( id() );
+    KPrPageLayoutDocker *widget = new KPrPageLayoutDocker();
+    widget->setObjectName(id());
     return widget;
 }
 

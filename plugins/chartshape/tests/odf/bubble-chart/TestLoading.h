@@ -10,7 +10,8 @@
 
 #include "../TestMultipleFiles.h"
 
-namespace KoChart {
+namespace KoChart
+{
 
 class TestLoading : public TestMultipleFiles
 {

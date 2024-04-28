@@ -20,33 +20,32 @@
 
 #include "engine/Localization.h"
 
-
 using namespace Calligra::Sheets;
 
 class ListDialog::Private
 {
 public:
-    QListWidget* list;
-    KTextEdit* textEdit;
-    QPushButton* addButton;
-    QPushButton* cancelButton;
-    QPushButton* removeButton;
-    QPushButton* newButton;
-    QPushButton* modifyButton;
-    QPushButton* copyButton;
+    QListWidget *list;
+    KTextEdit *textEdit;
+    QPushButton *addButton;
+    QPushButton *cancelButton;
+    QPushButton *removeButton;
+    QPushButton *newButton;
+    QPushButton *modifyButton;
+    QPushButton *copyButton;
     bool changed;
 };
 
 static const int numBuiltinLists = 4;
 
-ListDialog::ListDialog(QWidget* parent)
-        : ActionDialog(parent)
-        , d(new Private)
+ListDialog::ListDialog(QWidget *parent)
+    : ActionDialog(parent)
+    , d(new Private)
 {
     setCaption(i18n("Custom Lists"));
     setButtonText(Apply, i18n("Save Changes"));
 
-    QWidget* page = new QWidget(this);
+    QWidget *page = new QWidget(this);
     setMainWidget(page);
 
     QGridLayout *grid1 = new QGridLayout(page);
@@ -108,7 +107,7 @@ ListDialog::~ListDialog()
 
 void ListDialog::slotCurrentRowChanged(int row)
 {
-    //we can't remove the first built-in items
+    // we can't remove the first built-in items
     const bool state = row >= numBuiltinLists;
     d->removeButton->setEnabled(state);
     d->copyButton->setEnabled(row >= 0);
@@ -116,32 +115,37 @@ void ListDialog::slotCurrentRowChanged(int row)
     d->textEdit->clear();
 }
 
-void ListDialog::setCustomLists(const QStringList &list, Localization *locale) {
+void ListDialog::setCustomLists(const QStringList &list, Localization *locale)
+{
     QStringList lst;
 
     QString e;
     for (int month = 1; month <= 12; ++month) {
         e += locale->monthName(month);
-        if (month < 12) e += ", ";
+        if (month < 12)
+            e += ", ";
     }
     lst << e;
     e = QString();
     for (int month = 1; month <= 12; ++month) {
         e += locale->monthName(month, false);
-        if (month < 12) e += ", ";
+        if (month < 12)
+            e += ", ";
     }
     lst << e;
 
     e = QString();
     for (int day = 1; day <= 7; ++day) {
         e += locale->dayName(day);
-        if (day < 7) e += ", ";
+        if (day < 7)
+            e += ", ";
     }
     lst << e;
     e = QString();
     for (int day = 1; day <= 7; ++day) {
         e += locale->dayName(day, false);
-        if (day < 7) e += ", ";
+        if (day < 7)
+            e += ", ";
     }
     lst << e;
 
@@ -158,11 +162,12 @@ void ListDialog::setCustomLists(const QStringList &list, Localization *locale) {
     d->list->addItems(lst);
 }
 
-QStringList ListDialog::customLists() {
+QStringList ListDialog::customLists()
+{
     QStringList result;
     result.append("\\");
 
-    //don't save the first built-in lines
+    // don't save the first built-in lines
     for (int i = numBuiltinLists - 1; i < d->list->count(); ++i) {
         QStringList tmp = d->list->item(i)->text().split(", ", Qt::SkipEmptyParts);
         if (!tmp.isEmpty()) {
@@ -175,7 +180,7 @@ QStringList ListDialog::customLists() {
 
 void ListDialog::slotDoubleClicked()
 {
-    //we can't modify the first built-in items
+    // we can't modify the first built-in items
     if (d->list->currentRow() < numBuiltinLists) {
         return;
     }
@@ -228,13 +233,11 @@ void ListDialog::slotRemove()
     if (!d->list->isEnabled() || d->list->currentRow() == -1) {
         return;
     }
-    //don't remove the first built-in items
+    // don't remove the first built-in items
     if (d->list->currentRow() < numBuiltinLists) {
         return;
     }
-    int ret = KMessageBox::warningContinueCancel(this,
-              i18n("Do you really want to remove this list?"),
-              i18n("Remove List"), KStandardGuiItem::del());
+    int ret = KMessageBox::warningContinueCancel(this, i18n("Do you really want to remove this list?"), i18n("Remove List"), KStandardGuiItem::del());
     if (ret == Cancel) { // response = No
         return;
     }
@@ -247,15 +250,21 @@ void ListDialog::slotRemove()
     d->changed = true;
 }
 
-bool ListDialog::changed() {
+bool ListDialog::changed()
+{
     return d->changed;
 }
 
 void ListDialog::onApply()
 {
     if (!d->textEdit->toPlainText().isEmpty()) {
-        int ret = KMessageBox::warningTwoActions(this, i18n("Entry area is not empty.\nDo you want to continue?"), {}, KStandardGuiItem::cont(), KStandardGuiItem::cancel());
-        if (ret == KMessageBox::SecondaryAction) return;
+        int ret = KMessageBox::warningTwoActions(this,
+                                                 i18n("Entry area is not empty.\nDo you want to continue?"),
+                                                 {},
+                                                 KStandardGuiItem::cont(),
+                                                 KStandardGuiItem::cancel());
+        if (ret == KMessageBox::SecondaryAction)
+            return;
     }
 
     emit saveChanges(customLists());
@@ -263,7 +272,7 @@ void ListDialog::onApply()
 
 void ListDialog::slotModify()
 {
-    //you can modify list but not the first built-in items
+    // you can modify list but not the first built-in items
     if (d->list->currentRow() >= numBuiltinLists && !d->textEdit->toPlainText().isEmpty()) {
         const QString tmp = d->textEdit->toPlainText().split(QChar('\n'), Qt::SkipEmptyParts).join(", ");
         d->list->insertItem(d->list->currentRow(), tmp);

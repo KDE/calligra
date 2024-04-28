@@ -20,9 +20,9 @@
 #ifndef KARBON_DOCUMENT_H
 #define KARBON_DOCUMENT_H
 
-#include <QString>
 #include <QMap>
 #include <QRectF>
+#include <QString>
 
 #include <KoShapeBasedDocumentBase.h>
 
@@ -58,9 +58,15 @@ public:
     KoOdf::DocumentType documentType() const override;
 
     /// reimplemented from KoDocument
-    QByteArray nativeFormatMimeType() const override { return KARBON_MIME_TYPE; }
+    QByteArray nativeFormatMimeType() const override
+    {
+        return KARBON_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
-    QByteArray nativeOasisMimeType() const override { return KARBON_MIME_TYPE; }
+    QByteArray nativeOasisMimeType() const override
+    {
+        return KARBON_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
     QStringList extraNativeMimeTypes() const override
     {
@@ -78,7 +84,7 @@ public:
     /// Returns maximum number of recent files
     uint maxRecentFiles() const;
 
-    bool mergeNativeFormat(const QString & file);
+    bool mergeNativeFormat(const QString &file);
 
 public Q_SLOTS:
     void slotDocumentRestored();
@@ -91,11 +97,9 @@ protected:
     /// Reads settings from config file
     void initConfig();
 
-
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KARBON_DOCUMENT_H
-

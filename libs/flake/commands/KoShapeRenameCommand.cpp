@@ -6,18 +6,19 @@
 
 #include "KoShapeRenameCommand.h"
 
-#include <QString>
-#include <KLocalizedString>
 #include "KoShape.h"
+#include <KLocalizedString>
+#include <QString>
 
 class Q_DECL_HIDDEN KoShapeRenameCommand::Private
 {
 public:
     Private(KoShape *shape, const QString &newName)
-    : shape(shape)
-    , newName(newName)
-    , oldName(shape->name())
-    {}
+        : shape(shape)
+        , newName(newName)
+        , oldName(shape->name())
+    {
+    }
 
     KoShape *shape;
     QString newName;
@@ -26,13 +27,13 @@ public:
 
 KoShapeRenameCommand::KoShapeRenameCommand(KoShape *shape, const QString &newName, KUndo2Command *parent)
     : KUndo2Command(kundo2_i18n("Rename Shape"), parent)
-, d(new Private(shape, newName))
+    , d(new Private(shape, newName))
 {
 }
 
 KoShapeRenameCommand::~KoShapeRenameCommand()
 {
-   delete d;
+    delete d;
 }
 
 void KoShapeRenameCommand::redo()

@@ -8,8 +8,8 @@
 #ifndef SCRIBBLEAREA_H
 #define SCRIBBLEAREA_H
 
-#include <QQuickPaintedItem>
 #include <QImage>
+#include <QQuickPaintedItem>
 
 class ScribbleArea : public QQuickPaintedItem
 {
@@ -18,16 +18,16 @@ class ScribbleArea : public QQuickPaintedItem
     Q_PROPERTY(int penWidth READ penWidth WRITE setPenWidth NOTIFY penWidthChanged)
 
 public:
-    explicit ScribbleArea(QQuickItem* parent = 0);
+    explicit ScribbleArea(QQuickItem *parent = 0);
     ~ScribbleArea() override;
 
     Q_INVOKABLE void clear();
 
     QColor color() const;
-    void setColor(const QColor& newColor);
+    void setColor(const QColor &newColor);
 
     int penWidth() const;
-    void setPenWidth(const int& newWidth);
+    void setPenWidth(const int &newWidth);
 
 Q_SIGNALS:
     void colorChanged();
@@ -36,11 +36,11 @@ Q_SIGNALS:
     void paintingStarted();
 
 protected:
-    bool event(QEvent* event) override;
+    bool event(QEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
-    void paint(QPainter* painter) override;
+    void paint(QPainter *painter) override;
 
 private:
     void drawLineTo(const QPointF &endPoint);

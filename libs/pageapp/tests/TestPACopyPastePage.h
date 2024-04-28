@@ -20,8 +20,8 @@
 #ifndef TESTPACOPYPASTEPAGE_H
 #define TESTPACOPYPASTEPAGE_H
 
-#include <QObject>
 #include <QList>
+#include <QObject>
 #include <QPointF>
 
 class QMimeData;
@@ -33,10 +33,10 @@ class TestPACopyPastePage : public QObject
 {
     Q_OBJECT
 private:
-    void copyAndPaste( MockDocument * doc, QList<KoPAPageBase *> & pages, KoPAPageBase * after );
-    QMimeData * copy( MockDocument * doc, QList<KoPAPageBase *> & pages );
-    void paste( MockDocument * doc, QMimeData * data, KoPAPageBase * after );
-    void addShape( KoPAPageBase * page );
+    void copyAndPaste(MockDocument *doc, QList<KoPAPageBase *> &pages, KoPAPageBase *after);
+    QMimeData *copy(MockDocument *doc, QList<KoPAPageBase *> &pages);
+    void paste(MockDocument *doc, QMimeData *data, KoPAPageBase *after);
+    void addShape(KoPAPageBase *page);
 
     QPointF m_pos;
 

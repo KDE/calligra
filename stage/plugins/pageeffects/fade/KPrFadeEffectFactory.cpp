@@ -15,7 +15,7 @@
 #define FadeEffectId "FadeEffect"
 
 KPrFadeEffectFactory::KPrFadeEffectFactory()
-: KPrPageEffectFactory(FadeEffectId, i18n("Fade"))
+    : KPrPageEffectFactory(FadeEffectId, i18n("Fade"))
 {
     addStrategy(new KPrFadeCrossStrategy());
     addStrategy(new KPrFadeOverColorStrategy());
@@ -25,17 +25,13 @@ KPrFadeEffectFactory::~KPrFadeEffectFactory()
 {
 }
 
-static const KLazyLocalizedString s_subTypes[] = {
-    kli18n("Crossfade"),
-    kli18n("Fade over Color")
-};
+static const KLazyLocalizedString s_subTypes[] = {kli18n("Crossfade"), kli18n("Fade over Color")};
 
 QString KPrFadeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return s_subTypes[subType].toString();
-    }
-    else {
+    } else {
         return i18n("Unknown subtype");
     }
 }

@@ -13,7 +13,10 @@
 class Q_DECL_HIDDEN KoShapeStrokeModel::Private
 {
 public:
-    Private() : refCount(0) { }
+    Private()
+        : refCount(0)
+    {
+    }
     QAtomicInt refCount;
 };
 
@@ -41,4 +44,3 @@ int KoShapeStrokeModel::useCount() const
 {
     return d->refCount;
 }
-

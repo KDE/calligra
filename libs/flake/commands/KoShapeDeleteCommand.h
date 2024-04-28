@@ -9,8 +9,8 @@
 #define KOSHAPEDELETECOMMAND_H
 
 #include "flake_export.h"
-#include <kundo2command.h>
 #include <QList>
+#include <kundo2command.h>
 
 class KoShape;
 class KoShapeBasedDocumentBase;
@@ -32,15 +32,16 @@ public:
      * @param shapes a set of all the shapes that should be deleted.
      * @param parent the parent command used for macro commands
      */
-    KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> &shapes, KUndo2Command *parent = 0);
+    KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape *> &shapes, KUndo2Command *parent = 0);
     ~KoShapeDeleteCommand() override;
     /// redo the command
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

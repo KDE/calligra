@@ -7,31 +7,31 @@
  */
 #include "TestKoTextEditor.h"
 
-#include <QTest>
-#include <QUuid>
-#include <QString>
-#include <QTextDocument>
-#include <QTextTable>
-#include <QTextCharFormat>
 #include <QList>
 #include <QMetaType>
+#include <QString>
+#include <QTest>
+#include <QTextCharFormat>
+#include <QTextDocument>
+#include <QTextTable>
+#include <QUuid>
 
-#include <KoShapeBasedDocumentBase.h>
-#include <KoShape.h>
-#include <KoStyleManager.h>
-#include <KoTextEditor.h>
 #include <KoBookmark.h>
-#include <KoTextDocument.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoTextRangeManager.h>
-#include <KoShapeController.h>
-#include <KoDocumentResourceManager.h>
 #include <KoDocumentRdfBase.h>
+#include <KoDocumentResourceManager.h>
+#include <KoInlineTextObjectManager.h>
 #include <KoParagraphStyle.h>
 #include <KoSection.h>
 #include <KoSectionEnd.h>
-#include <KoSectionUtils.h>
 #include <KoSectionModel.h>
+#include <KoSectionUtils.h>
+#include <KoShape.h>
+#include <KoShapeBasedDocumentBase.h>
+#include <KoShapeController.h>
+#include <KoStyleManager.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
+#include <KoTextRangeManager.h>
 #include <kundo2stack.h>
 
 #include "TextDebug.h"
@@ -42,7 +42,6 @@
 class TestDocument : public KoShapeBasedDocumentBase
 {
 public:
-
     TestDocument()
     {
         m_document = new QTextDocument();
@@ -97,8 +96,7 @@ const QString lorem(
     "exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n"
     "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla"
     "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia"
-    "deserunt mollit anim id est laborum.\n"
-);
+    "deserunt mollit anim id est laborum.\n");
 
 /* FIXME: all the meaning part of this test was commented by boud in 2011
 void TestKoTextEditor::testInsertInlineObject()
@@ -263,15 +261,20 @@ bool TestKoTextEditor::checkStartings(const QVector<QString> &needStartings, KoT
     QList<KoSection *> lst = KoSectionUtils::sectionStartings(editor->blockFormat());
 
     if (lst.size() != needStartings.size()) {
-        debugText << QString("Startings list size is wrong."
-                    " Found %1, Expected %2.").arg(lst.size()).arg(needStartings.size());
+        debugText << QString(
+                         "Startings list size is wrong."
+                         " Found %1, Expected %2.")
+                         .arg(lst.size())
+                         .arg(needStartings.size());
         return false;
     }
 
     for (int i = 0; i < needStartings.size(); i++) {
         if (lst[i]->name() != needStartings[i]) {
-            debugText << QString("Found unexpected section starting."
-                        " Expected %1 section.").arg(needStartings[i]);
+            debugText << QString(
+                             "Found unexpected section starting."
+                             " Expected %1 section.")
+                             .arg(needStartings[i]);
             return false;
         }
     }
@@ -284,15 +287,20 @@ bool TestKoTextEditor::checkEndings(const QVector<QString> &needEndings, KoTextE
     QList<KoSectionEnd *> lst = KoSectionUtils::sectionEndings(editor->blockFormat());
 
     if (lst.size() != needEndings.size()) {
-        debugText << QString("Endings list size is wrong."
-                    " Found %1, expected %2.").arg(lst.size()).arg(needEndings.size());
+        debugText << QString(
+                         "Endings list size is wrong."
+                         " Found %1, expected %2.")
+                         .arg(lst.size())
+                         .arg(needEndings.size());
         return false;
     }
 
     for (int i = 0; i < needEndings.size(); i++) {
         if (lst[i]->correspondingSection()->name() != needEndings[i]) {
-            debugText << QString("Found unexpected section ending."
-                        " Expected %1 section.").arg(needEndings[i]);
+            debugText << QString(
+                             "Found unexpected section ending."
+                             " Expected %1 section.")
+                             .arg(needEndings[i]);
             return false;
         }
     }
@@ -300,11 +308,10 @@ bool TestKoTextEditor::checkEndings(const QVector<QString> &needEndings, KoTextE
     return true;
 }
 
-void TestKoTextEditor::checkSectionFormattingLevel(
-    TestDocument *doc,
-    int neededBlockCount,
-    const QVector< QVector<QString> > &needStartings,
-    const QVector< QVector<QString> > &needEndings)
+void TestKoTextEditor::checkSectionFormattingLevel(TestDocument *doc,
+                                                   int neededBlockCount,
+                                                   const QVector<QVector<QString>> &needStartings,
+                                                   const QVector<QVector<QString>> &needEndings)
 {
     // Assuming here that we can check names of the sections
     // instead of actual pointers. This seems to be true for now.
@@ -316,8 +323,7 @@ void TestKoTextEditor::checkSectionFormattingLevel(
 
     QCOMPARE(doc->m_document->blockCount(), neededBlockCount);
     for (int i = 0; i < doc->m_document->blockCount(); i++) {
-        if (!checkStartings(needStartings[i], editor)
-                || !checkEndings(needEndings[i], editor)) {
+        if (!checkStartings(needStartings[i], editor) || !checkEndings(needEndings[i], editor)) {
             QFAIL("Wrong section information.");
         }
         editor->movePosition(QTextCursor::NextBlock);
@@ -351,7 +357,7 @@ void TestKoTextEditor::checkSectionModelLevel(TestDocument *doc)
         QList<KoSection *> secStartings = KoSectionUtils::sectionStartings(curBlock.blockFormat());
         QList<KoSectionEnd *> secEndings = KoSectionUtils::sectionEndings(curBlock.blockFormat());
 
-        foreach(KoSection *sec, secStartings) {
+        foreach (KoSection *sec, secStartings) {
             SectionHandle *handle = new SectionHandle(sec);
             if (sectionStack.empty()) {
                 rootSections.push_back(handle);
@@ -433,32 +439,14 @@ void TestKoTextEditor::dumpSectionFormattingLevel(TestDocument *doc)
 void TestKoTextEditor::checkSectionTestDocument(TestDocument *doc)
 {
     int neededBlockCount = 11;
-    QVector< QVector<QString> > needStartings =
-    QVector< QVector<QString> >()
-    << (QVector<QString>() << "0")
-    << (QVector<QString>() << "1")
-    << (QVector<QString>() << "2")
-    << (QVector<QString>())
-    << (QVector<QString>())
-    << (QVector<QString>() << "3")
-    << (QVector<QString>())
-    << (QVector<QString>() << "4")
-    << (QVector<QString>())
-    << (QVector<QString>())
-    << (QVector<QString>());
-    QVector< QVector<QString> > needEndings =
-    QVector< QVector<QString> >()
-    << (QVector<QString>())
-    << (QVector<QString>())
-    << (QVector<QString>())
-    << (QVector<QString>() << "2")
-    << (QVector<QString>() << "1")
-    << (QVector<QString>())
-    << (QVector<QString>() << "3")
-    << (QVector<QString>())
-    << (QVector<QString>() << "4")
-    << (QVector<QString>() << "0")
-    << (QVector<QString>());
+    QVector<QVector<QString>> needStartings = QVector<QVector<QString>>()
+        << (QVector<QString>() << "0") << (QVector<QString>() << "1") << (QVector<QString>() << "2") << (QVector<QString>()) << (QVector<QString>())
+        << (QVector<QString>() << "3") << (QVector<QString>()) << (QVector<QString>() << "4") << (QVector<QString>()) << (QVector<QString>())
+        << (QVector<QString>());
+    QVector<QVector<QString>> needEndings = QVector<QVector<QString>>()
+        << (QVector<QString>()) << (QVector<QString>()) << (QVector<QString>()) << (QVector<QString>() << "2") << (QVector<QString>() << "1")
+        << (QVector<QString>()) << (QVector<QString>() << "3") << (QVector<QString>()) << (QVector<QString>() << "4") << (QVector<QString>() << "0")
+        << (QVector<QString>());
 
     checkSectionFormattingLevel(doc, neededBlockCount, needStartings, needEndings);
     checkSectionModelLevel(doc);
@@ -485,8 +473,8 @@ void TestKoTextEditor::testInsertSectionHandling()
     editor->newSection();
 
     QFETCH(int, neededBlockCount);
-    QFETCH(QVector< QVector<QString> >, needStartings);
-    QFETCH(QVector< QVector<QString> >, needEndings);
+    QFETCH(QVector<QVector<QString>>, needStartings);
+    QFETCH(QVector<QVector<QString>>, needEndings);
     checkSectionFormattingLevel(&doc, neededBlockCount, needStartings, needEndings);
     checkSectionModelLevel(&doc);
 
@@ -510,8 +498,8 @@ void TestKoTextEditor::testDeleteSectionHandling()
     QFETCH(int, selectionStart);
     QFETCH(int, selectionEnd);
     QFETCH(int, neededBlockCount);
-    QFETCH(QVector< QVector<QString> >, needStartings);
-    QFETCH(QVector< QVector<QString> >, needEndings);
+    QFETCH(QVector<QVector<QString>>, needStartings);
+    QFETCH(QVector<QVector<QString>>, needEndings);
 
     // placing selection
     editor->setPosition(selectionStart);

@@ -13,9 +13,9 @@
 #include "KoPAPageBase.h"
 
 KPrDeleteSlidesCommand::KPrDeleteSlidesCommand(KPrDocument *document, KoPAPageBase *page, KUndo2Command *parent)
-: KUndo2Command(parent)
-, m_document(document)
-, m_deletePages(false)
+    : KUndo2Command(parent)
+    , m_document(document)
+    , m_deletePages(false)
 {
     Q_ASSERT(m_document);
     Q_ASSERT(page);
@@ -25,10 +25,10 @@ KPrDeleteSlidesCommand::KPrDeleteSlidesCommand(KPrDocument *document, KoPAPageBa
     setText(kundo2_i18nc("Delete one slide", "Delete slide"));
 }
 
-KPrDeleteSlidesCommand::KPrDeleteSlidesCommand(KPrDocument *document, const QList<KoPAPageBase*> &pages, KUndo2Command *parent)
-: KUndo2Command(parent)
-, m_document(document)
-, m_deletePages(false)
+KPrDeleteSlidesCommand::KPrDeleteSlidesCommand(KPrDocument *document, const QList<KoPAPageBase *> &pages, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_document(document)
+    , m_deletePages(false)
 {
     Q_ASSERT(m_document);
     Q_ASSERT(m_document->pages().count() > pages.count());
@@ -42,7 +42,6 @@ KPrDeleteSlidesCommand::KPrDeleteSlidesCommand(KPrDocument *document, const QLis
     }
 
     setText(kundo2_i18np("Delete slide", "Delete slides", m_pages.count()));
-
 }
 
 KPrDeleteSlidesCommand::~KPrDeleteSlidesCommand()
@@ -68,11 +67,11 @@ void KPrDeleteSlidesCommand::redo()
     }
     Q_UNUSED(index); // to build with unused-but-set-variable
     customShows.removeDuplicates();
-    //Save custom slides shows
+    // Save custom slides shows
     foreach (const QString &name, customShows) {
         m_customSlideShows.insert(name, m_document->customSlideShows()->getByName(name));
     }
-    //Remove slide from all custom slides shows
+    // Remove slide from all custom slides shows
     foreach (KoPAPageBase *page, m_pages) {
         m_document->customSlideShows()->removeSlideFromAll(page);
     }
@@ -82,15 +81,15 @@ void KPrDeleteSlidesCommand::redo()
 void KPrDeleteSlidesCommand::undo()
 {
     KUndo2Command::undo();
-    QMapIterator<int, KoPAPageBase*> i(m_pages);
+    QMapIterator<int, KoPAPageBase *> i(m_pages);
 
     while (i.hasNext()) {
         i.next();
         m_document->insertPage(i.value(), i.key());
     }
 
-    //Restore custom shows
-    QMapIterator<QString, QList<KoPAPageBase*> > j(m_customSlideShows);
+    // Restore custom shows
+    QMapIterator<QString, QList<KoPAPageBase *>> j(m_customSlideShows);
 
     while (j.hasNext()) {
         j.next();

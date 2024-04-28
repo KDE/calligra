@@ -19,20 +19,23 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
+#include "wv2_export.h"
 #include <algorithm>
 #include <functional>
 #include <string>
-#include "wv2_export.h"
 
 namespace wvWare
 {
-    template<class T> struct Delete
+template<class T>
+struct Delete {
+    void operator()(T *t) const
     {
-        void operator() (T* t) const { delete t; }
-    };
+        delete t;
+    }
+};
 
-    std::string int2string( int i );
-    std::string uint2string( unsigned int i );
+std::string int2string(int i);
+std::string uint2string(unsigned int i);
 }
 
 #endif // UTILITIES_H

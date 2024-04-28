@@ -8,8 +8,8 @@
 #include "MockShapes.h"
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
-#include <KoShapeStroke.h>
 #include <KoShapeShadow.h>
+#include <KoShapeStroke.h>
 #include <kundo2command.h>
 
 #include <QTest>
@@ -17,12 +17,20 @@
 #include <algorithm>
 
 TestShapeGroupCommand::TestShapeGroupCommand()
-        : toplevelGroup(0), sublevelGroup(0), strokeGroup(0)
-        , cmd1(0), cmd2(0), strokeCmd(0)
-        , toplevelShape1(0), toplevelShape2(0)
-        , sublevelShape1(0), sublevelShape2(0)
-        , extraShape1(0), extraShape2(0)
-        , strokeShape1(0), strokeShape2(0)
+    : toplevelGroup(0)
+    , sublevelGroup(0)
+    , strokeGroup(0)
+    , cmd1(0)
+    , cmd2(0)
+    , strokeCmd(0)
+    , toplevelShape1(0)
+    , toplevelShape2(0)
+    , sublevelShape1(0)
+    , sublevelShape2(0)
+    , extraShape1(0)
+    , extraShape2(0)
+    , strokeShape1(0)
+    , strokeShape2(0)
 {
 }
 
@@ -60,16 +68,16 @@ void TestShapeGroupCommand::init()
     sublevelGroup = new KoShapeGroup();
 
     strokeShape1 = new MockShape();
-    strokeShape1->setSize( QSizeF(50,50) );
-    strokeShape1->setPosition( QPointF(0,0) );
+    strokeShape1->setSize(QSizeF(50, 50));
+    strokeShape1->setPosition(QPointF(0, 0));
 
     strokeShape2 = new MockShape();
-    strokeShape2->setSize( QSizeF(50,50) );
-    strokeShape2->setPosition( QPointF(25,25) );
+    strokeShape2->setSize(QSizeF(50, 50));
+    strokeShape2->setPosition(QPointF(25, 25));
 
     strokeGroup = new KoShapeGroup();
-    strokeGroup->setStroke( new KoShapeStroke( 2.0f ) );
-    strokeGroup->setShadow( new KoShapeShadow() );
+    strokeGroup->setStroke(new KoShapeStroke(2.0f));
+    strokeGroup->setShadow(new KoShapeShadow());
 }
 
 void TestShapeGroupCommand::cleanup()
@@ -126,7 +134,7 @@ void TestShapeGroupCommand::cleanup()
 
 void TestShapeGroupCommand::testToplevelGroup()
 {
-    QList<KoShape*> toplevelShapes;
+    QList<KoShape *> toplevelShapes;
     toplevelShapes << toplevelShape1 << toplevelShape2;
     cmd1 = KoShapeGroupCommand::createCommand(toplevelGroup, toplevelShapes);
 
@@ -150,11 +158,11 @@ void TestShapeGroupCommand::testToplevelGroup()
 
 void TestShapeGroupCommand::testSublevelGroup()
 {
-    QList<KoShape*> toplevelShapes;
+    QList<KoShape *> toplevelShapes;
     toplevelShapes << toplevelShape1 << toplevelShape2;
     cmd1 = KoShapeGroupCommand::createCommand(toplevelGroup, toplevelShapes);
 
-    QList<KoShape*> sublevelShapes;
+    QList<KoShape *> sublevelShapes;
     sublevelShapes << sublevelShape1 << sublevelShape2;
     sublevelShape1->setZIndex(1);
     sublevelShape2->setZIndex(2);
@@ -162,7 +170,7 @@ void TestShapeGroupCommand::testSublevelGroup()
     strokeGroup->setZIndex(-1);
 
     KoShapeGroupCommand::createCommand(sublevelGroup, sublevelShapes, cmd1);
-    KoShapeGroupCommand::createCommand(toplevelGroup, QList<KoShape*>() << sublevelGroup, cmd1);
+    KoShapeGroupCommand::createCommand(toplevelGroup, QList<KoShape *>() << sublevelGroup, cmd1);
 
     cmd1->redo();
 
@@ -184,24 +192,24 @@ void TestShapeGroupCommand::testSublevelGroup()
     QCOMPARE(sublevelGroup->position(), QPointF(100, 100));
 
     // check that the shapes are added in the correct order
-    QList<KoShape*> childOrder(sublevelGroup->shapes());
+    QList<KoShape *> childOrder(sublevelGroup->shapes());
     std::sort(childOrder.begin(), childOrder.end(), KoShape::compareShapeZIndex);
-    QList<KoShape*> expectedOrder;
+    QList<KoShape *> expectedOrder;
     expectedOrder << sublevelShape2 << sublevelShape1;
     QCOMPARE(childOrder, expectedOrder);
     // check that the group has the zIndex/parent of its added top shape
-    QCOMPARE(toplevelGroup->parent(), static_cast<KoShapeContainer*>(0));
+    QCOMPARE(toplevelGroup->parent(), static_cast<KoShapeContainer *>(0));
     QCOMPARE(toplevelGroup->zIndex(), 1);
 }
 
 void TestShapeGroupCommand::testAddToToplevelGroup()
 {
-    QList<KoShape*> toplevelShapes;
+    QList<KoShape *> toplevelShapes;
     toplevelShapes << toplevelShape1 << toplevelShape2;
     cmd1 = KoShapeGroupCommand::createCommand(toplevelGroup, toplevelShapes);
     cmd1->redo();
 
-    cmd2 = KoShapeGroupCommand::createCommand(toplevelGroup, QList<KoShape*>() << extraShape1);
+    cmd2 = KoShapeGroupCommand::createCommand(toplevelGroup, QList<KoShape *>() << extraShape1);
     cmd2->redo();
 
     QVERIFY(extraShape1->parent() == toplevelGroup);
@@ -219,17 +227,17 @@ void TestShapeGroupCommand::testAddToToplevelGroup()
 
 void TestShapeGroupCommand::testAddToSublevelGroup()
 {
-    QList<KoShape*> toplevelShapes;
+    QList<KoShape *> toplevelShapes;
     toplevelShapes << toplevelShape1 << toplevelShape2;
     cmd1 = new KoShapeGroupCommand(toplevelGroup, toplevelShapes);
 
-    QList<KoShape*> sublevelShapes;
+    QList<KoShape *> sublevelShapes;
     sublevelShapes << sublevelShape1 << sublevelShape2;
     new KoShapeGroupCommand(sublevelGroup, sublevelShapes, cmd1);
-    new KoShapeGroupCommand(toplevelGroup, QList<KoShape*>() << sublevelGroup, cmd1);
+    new KoShapeGroupCommand(toplevelGroup, QList<KoShape *>() << sublevelGroup, cmd1);
     cmd1->redo();
 
-    cmd2 = new KoShapeGroupCommand(sublevelGroup, QList<KoShape*>() << extraShape2);
+    cmd2 = new KoShapeGroupCommand(sublevelGroup, QList<KoShape *>() << extraShape2);
     cmd2->redo();
 
     QVERIFY(extraShape2->parent() == sublevelGroup);
@@ -257,7 +265,7 @@ void TestShapeGroupCommand::testAddToSublevelGroup()
 
 void TestShapeGroupCommand::testGroupStrokeShapes()
 {
-    QList<KoShape*> strokeShapes;
+    QList<KoShape *> strokeShapes;
     strokeShapes << strokeShape2 << strokeShape1;
     strokeCmd = new KoShapeGroupCommand(strokeGroup, strokeShapes);
     strokeCmd->redo();

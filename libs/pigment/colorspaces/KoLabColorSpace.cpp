@@ -7,54 +7,66 @@
 #include "KoLabColorSpace.h"
 
 #include <limits.h>
-#include <stdlib.h>
 #include <math.h>
+#include <stdlib.h>
 
-#include <QImage>
 #include <QBitArray>
+#include <QImage>
 
 #include <KLocalizedString>
 
 #include "KoChannelInfo.h"
+#include "KoColorConversions.h"
 #include "KoID.h"
 #include "KoIntegerMaths.h"
-#include "KoColorConversions.h"
 
 #include "../compositeops/KoCompositeOps.h"
 
-KoLabColorSpace::KoLabColorSpace() :
-        KoSimpleColorSpace<KoLabU16Traits>(colorSpaceId(),
-                                           i18n("L*a*b* (16-bit integer/channel, unmanaged)"),
-                                           LABAColorModelID,
-                                           Integer16BitsColorDepthID)
+KoLabColorSpace::KoLabColorSpace()
+    : KoSimpleColorSpace<KoLabU16Traits>(colorSpaceId(), i18n("L*a*b* (16-bit integer/channel, unmanaged)"), LABAColorModelID, Integer16BitsColorDepthID)
 {
-    addChannel(new KoChannelInfo(i18n("Lightness"), CHANNEL_L     * sizeof(quint16), CHANNEL_L, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(100, 100, 100)));
-    addChannel(new KoChannelInfo(i18n("a*"),        CHANNEL_A     * sizeof(quint16), CHANNEL_A, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(150, 150, 150)));
-    addChannel(new KoChannelInfo(i18n("b*"),        CHANNEL_B     * sizeof(quint16), CHANNEL_B, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(200, 200, 200)));
-    addChannel(new KoChannelInfo(i18n("Alpha"),     CHANNEL_ALPHA * sizeof(quint16), CHANNEL_ALPHA, KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
+    addChannel(new KoChannelInfo(i18n("Lightness"),
+                                 CHANNEL_L * sizeof(quint16),
+                                 CHANNEL_L,
+                                 KoChannelInfo::COLOR,
+                                 KoChannelInfo::UINT16,
+                                 sizeof(quint16),
+                                 QColor(100, 100, 100)));
+    addChannel(new KoChannelInfo(i18n("a*"),
+                                 CHANNEL_A * sizeof(quint16),
+                                 CHANNEL_A,
+                                 KoChannelInfo::COLOR,
+                                 KoChannelInfo::UINT16,
+                                 sizeof(quint16),
+                                 QColor(150, 150, 150)));
+    addChannel(new KoChannelInfo(i18n("b*"),
+                                 CHANNEL_B * sizeof(quint16),
+                                 CHANNEL_B,
+                                 KoChannelInfo::COLOR,
+                                 KoChannelInfo::UINT16,
+                                 sizeof(quint16),
+                                 QColor(200, 200, 200)));
+    addChannel(new KoChannelInfo(i18n("Alpha"), CHANNEL_ALPHA * sizeof(quint16), CHANNEL_ALPHA, KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
 
     // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
     addStandardCompositeOps<KoLabU16Traits>(this);
-
 }
 
 KoLabColorSpace::~KoLabColorSpace()
 {
 }
 
-
 QString KoLabColorSpace::colorSpaceId()
 {
     return QString("LABA");
 }
 
-
-KoColorSpace* KoLabColorSpace::clone() const
+KoColorSpace *KoLabColorSpace::clone() const
 {
     return new KoLabColorSpace();
 }
 
-void KoLabColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
+void KoLabColorSpace::fromQColor(const QColor &c, quint8 *dst, const KoColorProfile * /*profile*/) const
 {
     // Convert between RGB and CIE-Lab color spaces
     // Uses ITU-R recommendation BT.709 with D65 as reference white.
@@ -70,7 +82,7 @@ void KoLabColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProf
     Z = 0.019334 * R + 0.119193 * G + 0.950227 * B;
 
     X /= (255 * 0.950456);
-    Y /=  255;
+    Y /= 255;
     Z /= (255 * 1.088754);
 
     quint8 L, a, b;
@@ -102,7 +114,7 @@ void KoLabColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProf
     dst[CHANNEL_ALPHA] = UINT8_TO_UINT16(A);
 }
 
-void KoLabColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
+void KoLabColorSpace::toQColor(const quint8 *src, QColor *c, const KoColorProfile * /*profile*/) const
 {
     // Convert between RGB and CIE-Lab color spaces
     // Uses ITU-R recommendation BT.709 with D65 as reference white.
@@ -155,30 +167,30 @@ void KoLabColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfi
 
 void KoLabColorSpace::toHSY(const QVector<qreal> &channelValues, qreal *hue, qreal *sat, qreal *luma) const
 {
-    LabToLCH(channelValues[0],channelValues[1],channelValues[2], luma, sat, hue);
+    LabToLCH(channelValues[0], channelValues[1], channelValues[2], luma, sat, hue);
 }
 
-QVector <qreal> KoLabColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma) const
+QVector<qreal> KoLabColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma) const
 {
-    QVector <qreal> channelValues(4);
-    LCHToLab(*luma, *sat, *hue, &channelValues[0],&channelValues[1],&channelValues[2]);
-    channelValues[3]=1.0;
+    QVector<qreal> channelValues(4);
+    LCHToLab(*luma, *sat, *hue, &channelValues[0], &channelValues[1], &channelValues[2]);
+    channelValues[3] = 1.0;
     return channelValues;
 }
 
 void KoLabColorSpace::toYUV(const QVector<qreal> &channelValues, qreal *y, qreal *u, qreal *v) const
 {
-    *y =channelValues[0];
-    *v=channelValues[1];
-    *u=channelValues[2];
+    *y = channelValues[0];
+    *v = channelValues[1];
+    *u = channelValues[2];
 }
 
-QVector <qreal> KoLabColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
+QVector<qreal> KoLabColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
 {
-    QVector <qreal> channelValues(4);
-    channelValues[0]=*y;
-    channelValues[1]=*v;
-    channelValues[2]=*u;
-    channelValues[3]=1.0;
+    QVector<qreal> channelValues(4);
+    channelValues[0] = *y;
+    channelValues[1] = *v;
+    channelValues[2] = *u;
+    channelValues[3] = 1.0;
     return channelValues;
 }

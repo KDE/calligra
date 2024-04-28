@@ -15,7 +15,7 @@
 
 using namespace Calligra::Sheets;
 
-QString CopyCommand::saveAsSnippet(const Region& region)
+QString CopyCommand::saveAsSnippet(const Region &region)
 {
     QString res;
     Region::ConstIterator it;
@@ -27,14 +27,17 @@ QString CopyCommand::saveAsSnippet(const Region& region)
         int x2 = range.right();
         int y2 = range.bottom();
         QString entryName = "range";
-        if ((*it)->isRow()) entryName = "row";
-        if ((*it)->isColumn()) entryName = "column";
-        res += entryName + " " + QString::number(x1) + " " + QString::number(y1) + " " + QString::number(x2) + " " + QString::number(y2) + " " + sheet->sheetName() + "\n";
+        if ((*it)->isRow())
+            entryName = "row";
+        if ((*it)->isColumn())
+            entryName = "column";
+        res += entryName + " " + QString::number(x1) + " " + QString::number(y1) + " " + QString::number(x2) + " " + QString::number(y2) + " "
+            + sheet->sheetName() + "\n";
     }
     return res;
 }
 
-static QString cellAsText(const Cell& cell, bool addTab)
+static QString cellAsText(const Cell &cell, bool addTab)
 {
     QString result;
     if (!cell.isDefault()) {
@@ -58,20 +61,19 @@ QString CopyCommand::saveAsPlainText(const Region &region)
     QString result;
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
-      if (result.length()) result += QLatin1Char('\n');
-      Region::Element *el = *it;
-      Sheet *sheet = dynamic_cast<Sheet *>(el->sheet());
-      QRect used = sheet->usedArea (true);
-      QRect rect = el->rect().intersected (used);
-      for (int row = rect.top(); row <= rect.bottom(); ++row) {
-        for (int col = rect.left(); col <= rect.right(); ++col) {
-          Cell cell (sheet, col, row);
-          result += cellAsText (cell, col != rect.right());
+        if (result.length())
+            result += QLatin1Char('\n');
+        Region::Element *el = *it;
+        Sheet *sheet = dynamic_cast<Sheet *>(el->sheet());
+        QRect used = sheet->usedArea(true);
+        QRect rect = el->rect().intersected(used);
+        for (int row = rect.top(); row <= rect.bottom(); ++row) {
+            for (int col = rect.left(); col <= rect.right(); ++col) {
+                Cell cell(sheet, col, row);
+                result += cellAsText(cell, col != rect.right());
+            }
+            result += QLatin1Char('\n');
         }
-        result += QLatin1Char('\n');
-      }
     }
     return result;
 }
-
-

@@ -11,14 +11,14 @@
 #include "TableShape.h"
 #include "ToolHeaders.h"
 
-#include <QApplication>
 #include <QAction>
+#include <QApplication>
+#include <QFileDialog>
 #include <QGridLayout>
 #include <QLabel>
+#include <QMimeDatabase>
 #include <QPainter>
 #include <QPushButton>
-#include <QMimeDatabase>
-#include <QFileDialog>
 #include <QVBoxLayout>
 
 #include <KComboBox>
@@ -26,15 +26,14 @@
 #include <kpagedialog.h>
 
 #include <KoCanvasBase.h>
-#include <KoPointerEvent.h>
-#include <KoIcon.h>
-#include <KoViewConverter.h>
 #include <KoCanvasControllerWidget.h>
+#include <KoIcon.h>
+#include <KoPointerEvent.h>
+#include <KoViewConverter.h>
 
 #include "core/Map.h"
 #include "core/Sheet.h"
 #include "ui/SheetView.h"
-
 
 #define TextShapeId "TextShapeID"
 
@@ -59,10 +58,10 @@ class TableTool::Private
 {
 public:
     TableTool *q;
-    Selection* selection;
-    TableShape* tableShape;
-//     TableToolEditorShape *editorShape;
-    KComboBox* sheetComboBox;
+    Selection *selection;
+    TableShape *tableShape;
+    //     TableToolEditorShape *editorShape;
+    KComboBox *sheetComboBox;
     QWidget *optionWidget;
 
     void setTools();
@@ -105,7 +104,7 @@ void TableTool::Private::setTools()
     horizontalScrollRect = QRectF(shapeRect.left(), shapeRect.bottom(), shapeRect.width(), margins.bottom());
     horizontalScrollBar->setFocusPolicy(Qt::StrongFocus);
     horizontalScrollBar->setInvertedControls(false);
-    horizontalScrollBar->setMaximum(std::max(tableShape->size().width()*10, sheet->columnPosition(maxColumn)));
+    horizontalScrollBar->setMaximum(std::max(tableShape->size().width() * 10, sheet->columnPosition(maxColumn)));
     horizontalScrollBar->setPageStep(tableShape->size().width());
     horizontalScrollBar->setSingleStep(1);
     horizontalScrollBar->setValue(tableShape->topLeftOffset().x());
@@ -115,7 +114,7 @@ void TableTool::Private::setTools()
     int maxRow = qMax(used.height(), selected.bottom());
     verticalScrollRect = QRectF(shapeRect.right(), shapeRect.top(), margins.right(), shapeRect.height());
     verticalScrollBar->setFocusPolicy(Qt::StrongFocus);
-    verticalScrollBar->setMaximum(std::max(tableShape->size().height()*10, sheet->rowPosition(maxRow)));
+    verticalScrollBar->setMaximum(std::max(tableShape->size().height() * 10, sheet->rowPosition(maxRow)));
     verticalScrollBar->setPageStep(tableShape->size().height());
     verticalScrollBar->setSingleStep(1);
     verticalScrollBar->setValue(tableShape->topLeftOffset().y());
@@ -164,7 +163,7 @@ void TableTool::Private::paintTools(QPainter &painter, const KoViewConverter &vi
 
     painter.save();
     rowHeader.setSheet(sheet);
-    paintRect = QRectF(QPointF(0.0, tableShape->topLeftOffset().y()), rowRect.size());//rowRect.translated(-rowRect.width(), -rowRect.top());
+    paintRect = QRectF(QPointF(0.0, tableShape->topLeftOffset().y()), rowRect.size()); // rowRect.translated(-rowRect.width(), -rowRect.top());
     painter.translate(-paintRect.width(), -paintRect.top());
     painter.setClipRect(paintRect);
     rowHeader.paint(&painter, paintRect);
@@ -185,17 +184,16 @@ void TableTool::Private::paintTools(QPainter &painter, const KoViewConverter &vi
     painter.drawRect(tr);
 }
 
-
-TableTool::TableTool(KoCanvasBase* canvas)
-        : CellToolBase(canvas)
-        , d(new Private)
+TableTool::TableTool(KoCanvasBase *canvas)
+    : CellToolBase(canvas)
+    , d(new Private)
 {
     setObjectName(QLatin1String("TableTool"));
     d->q = this;
     d->selection = new Selection(canvas);
     d->controller = nullptr;
     for (QWidget *w = canvas->canvasWidget(); w; w = w->parentWidget()) {
-        d->controller = qobject_cast<KoCanvasControllerWidget*>(w);
+        d->controller = qobject_cast<KoCanvasControllerWidget *>(w);
         if (d->controller) {
             break;
         }
@@ -210,12 +208,12 @@ TableTool::TableTool(KoCanvasBase* canvas)
     d->tableShape = nullptr;
     d->optionWidget = nullptr;
 
-    QAction* importAction = new QAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
+    QAction *importAction = new QAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
     importAction->setIconText(i18n("Import"));
     addAction("import", importAction);
     connect(importAction, &QAction::triggered, this, &TableTool::importDocument);
 
-    QAction* exportAction = new QAction(koIcon("document-export"), i18n("Export OpenDocument Spreadsheet File"), this);
+    QAction *exportAction = new QAction(koIcon("document-export"), i18n("Export OpenDocument Spreadsheet File"), this);
     exportAction->setIconText(i18n("Export"));
     addAction("export", exportAction);
     connect(exportAction, &QAction::triggered, this, &TableTool::exportDocument);
@@ -227,7 +225,7 @@ TableTool::~TableTool()
     delete d;
 }
 
-TableTool::ToolType TableTool::mouseOn(KoPointerEvent* event)
+TableTool::ToolType TableTool::mouseOn(KoPointerEvent *event)
 {
     if (!d->toolRect.contains(event->point)) {
         return None;
@@ -250,244 +248,244 @@ TableTool::ToolType TableTool::mouseOn(KoPointerEvent* event)
     return None;
 }
 
-void TableTool::mousePressEvent(KoPointerEvent* event)
+void TableTool::mousePressEvent(KoPointerEvent *event)
 {
     d->horizontalScrollBar->clearFocus();
     d->verticalScrollBar->clearFocus();
     switch (mouseOn(event)) {
-        case Shape: {
-            d->toolType = Shape;
-            d->focus = Shape;
-            CellToolBase::mousePressEvent(event);
-            break;
+    case Shape: {
+        d->toolType = Shape;
+        d->focus = Shape;
+        CellToolBase::mousePressEvent(event);
+        break;
+    }
+    case ColumnHeader: {
+        d->toolType = ColumnHeader;
+        d->focus = ColumnHeader;
+        selection()->emitCloseEditor(true);
+        KoPointerEvent e(event, event->point - d->columnRect.topLeft() + d->tableShape->topLeftOffset());
+        d->columnHeader.mousePress(&e);
+        if (event->button() == Qt::RightButton) {
+            setPopupActionList(popupMenuActionList());
+            event->accept();
         }
-        case ColumnHeader: {
-            d->toolType = ColumnHeader;
-            d->focus = ColumnHeader;
-            selection()->emitCloseEditor(true);
-            KoPointerEvent e(event, event->point - d->columnRect.topLeft() + d->tableShape->topLeftOffset());
-            d->columnHeader.mousePress(&e);
-            if (event->button() == Qt::RightButton) {
-                setPopupActionList(popupMenuActionList());
-                event->accept();
-            }
-            break;
+        break;
+    }
+    case RowHeader: {
+        d->toolType = RowHeader;
+        d->focus = RowHeader;
+        selection()->emitCloseEditor(true);
+        KoPointerEvent e(event, event->point - d->rowRect.topLeft() + d->tableShape->topLeftOffset());
+        d->rowHeader.mousePress(&e);
+        if (event->button() == Qt::RightButton) {
+            setPopupActionList(popupMenuActionList());
+            event->accept();
         }
-        case RowHeader: {
-            d->toolType = RowHeader;
-            d->focus = RowHeader;
-            selection()->emitCloseEditor(true);
-            KoPointerEvent e(event, event->point - d->rowRect.topLeft() + d->tableShape->topLeftOffset());
-            d->rowHeader.mousePress(&e);
-            if (event->button() == Qt::RightButton) {
-                setPopupActionList(popupMenuActionList());
-                event->accept();
-            }
-            break;
-        }
-        case HScrollBar: {
-            d->toolType = HScrollBar;
-            d->focus = HScrollBar;
-            selection()->emitCloseEditor(true);
-            d->horizontalScrollBar->setFocus();
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->horizontalScrollRect.topLeft());
-            QMouseEvent e(QEvent::MouseButtonPress, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
-            qApp->sendEvent(d->horizontalScrollBar, &e);
-            canvas()->updateCanvas(d->toolRect);
-            break;
-        }
-        case VScrollBar: {
-            d->toolType = VScrollBar;
-            d->focus = VScrollBar;
-            selection()->emitCloseEditor(true);
-            d->verticalScrollBar->setFocus();
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->verticalScrollRect.topLeft());
-            QMouseEvent e(QEvent::MouseButtonPress, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
-            qApp->sendEvent(d->verticalScrollBar, &e);
-            canvas()->updateCanvas(d->toolRect);
-            break;
-        }
-        default: {
-            d->toolType = None;
-            d->focus = None;
-            event->ignore();
-            break;
-        }
+        break;
+    }
+    case HScrollBar: {
+        d->toolType = HScrollBar;
+        d->focus = HScrollBar;
+        selection()->emitCloseEditor(true);
+        d->horizontalScrollBar->setFocus();
+        QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->horizontalScrollRect.topLeft());
+        QMouseEvent e(QEvent::MouseButtonPress, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
+        qApp->sendEvent(d->horizontalScrollBar, &e);
+        canvas()->updateCanvas(d->toolRect);
+        break;
+    }
+    case VScrollBar: {
+        d->toolType = VScrollBar;
+        d->focus = VScrollBar;
+        selection()->emitCloseEditor(true);
+        d->verticalScrollBar->setFocus();
+        QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->verticalScrollRect.topLeft());
+        QMouseEvent e(QEvent::MouseButtonPress, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
+        qApp->sendEvent(d->verticalScrollBar, &e);
+        canvas()->updateCanvas(d->toolRect);
+        break;
+    }
+    default: {
+        d->toolType = None;
+        d->focus = None;
+        event->ignore();
+        break;
+    }
     }
 }
 
-void TableTool::mouseReleaseEvent(KoPointerEvent* event)
+void TableTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     switch (d->toolType) {
-        case Shape: {
-            d->toolType = None;
-            CellToolBase::mouseReleaseEvent(event);
-            break;
+    case Shape: {
+        d->toolType = None;
+        CellToolBase::mouseReleaseEvent(event);
+        break;
+    }
+    case ColumnHeader: {
+        d->toolType = None;
+        KoPointerEvent e(event, event->point - d->columnRect.topLeft() + d->tableShape->topLeftOffset());
+        d->columnHeader.mouseRelease(&e);
+        canvas()->updateCanvas(d->toolRect);
+        break;
+    }
+    case RowHeader: {
+        d->toolType = None;
+        KoPointerEvent e(event, event->point - d->rowRect.topLeft() + d->tableShape->topLeftOffset());
+        d->rowHeader.mouseRelease(&e);
+        canvas()->updateCanvas(d->toolRect);
+        break;
+    }
+    case HScrollBar: {
+        d->toolType = None;
+        QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->horizontalScrollRect.topLeft());
+        QMouseEvent e(QEvent::MouseButtonRelease, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
+        qApp->sendEvent(d->horizontalScrollBar, &e);
+        canvas()->updateCanvas(d->toolRect);
+        break;
+    }
+    case VScrollBar: {
+        d->toolType = None;
+        QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->verticalScrollRect.topLeft());
+        QMouseEvent e(QEvent::MouseButtonRelease, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
+        qApp->sendEvent(d->verticalScrollBar, &e);
+        canvas()->updateCanvas(d->toolRect);
+        break;
+    }
+    default: {
+        d->toolType = None;
+        if (!d->toolRect.contains(event->point)) {
+            event->ignore();
         }
-        case ColumnHeader: {
-            d->toolType = None;
-            KoPointerEvent e(event, event->point - d->columnRect.topLeft() + d->tableShape->topLeftOffset());
-            d->columnHeader.mouseRelease(&e);
-            canvas()->updateCanvas(d->toolRect);
-            break;
-        }
-        case RowHeader: {
-            d->toolType = None;
-            KoPointerEvent e(event, event->point - d->rowRect.topLeft() + d->tableShape->topLeftOffset());
-            d->rowHeader.mouseRelease(&e);
-            canvas()->updateCanvas(d->toolRect);
-            break;
-        }
-        case HScrollBar: {
-            d->toolType = None;
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->horizontalScrollRect.topLeft());
-            QMouseEvent e(QEvent::MouseButtonRelease, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
-            qApp->sendEvent(d->horizontalScrollBar, &e);
-            canvas()->updateCanvas(d->toolRect);
-            break;
-        }
-        case VScrollBar: {
-            d->toolType = None;
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->verticalScrollRect.topLeft());
-            QMouseEvent e(QEvent::MouseButtonRelease, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
-            qApp->sendEvent(d->verticalScrollBar, &e);
-            canvas()->updateCanvas(d->toolRect);
-            break;
-        }
-        default: {
-            d->toolType = None;
-            if (!d->toolRect.contains(event->point)) {
-                event->ignore();
-            }
-            break;
-        }
+        break;
+    }
     }
 }
 
-void TableTool::mouseMoveEvent(KoPointerEvent* event)
+void TableTool::mouseMoveEvent(KoPointerEvent *event)
 {
     ToolType type = d->toolType == None ? mouseOn(event) : d->toolType;
     switch (type) {
-        case Shape:
-            CellToolBase::mouseMoveEvent(event);
-            break;
-        case ColumnHeader: {
-            KoPointerEvent e(event, event->point - d->columnRect.topLeft() + d->tableShape->topLeftOffset());
-            d->columnHeader.mouseMove(&e);
-            break;
+    case Shape:
+        CellToolBase::mouseMoveEvent(event);
+        break;
+    case ColumnHeader: {
+        KoPointerEvent e(event, event->point - d->columnRect.topLeft() + d->tableShape->topLeftOffset());
+        d->columnHeader.mouseMove(&e);
+        break;
+    }
+    case RowHeader: {
+        KoPointerEvent e(event, event->point - d->rowRect.topLeft() + d->tableShape->topLeftOffset());
+        d->rowHeader.mouseMove(&e);
+        break;
+    }
+    case HScrollBar: {
+        QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->horizontalScrollRect.topLeft());
+        QMouseEvent e(QEvent::MouseMove, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
+        qApp->sendEvent(d->horizontalScrollBar, &e);
+        canvas()->updateCanvas(d->toolRect);
+        break;
+    }
+    case VScrollBar: {
+        QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->verticalScrollRect.topLeft());
+        QMouseEvent e(QEvent::MouseMove, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
+        qApp->sendEvent(d->verticalScrollBar, &e);
+        canvas()->updateCanvas(d->toolRect);
+        break;
+    }
+    default:
+        if (!d->toolRect.contains(event->point)) {
+            event->ignore();
         }
-        case RowHeader: {
-            KoPointerEvent e(event, event->point - d->rowRect.topLeft() + d->tableShape->topLeftOffset());
-            d->rowHeader.mouseMove(&e);
-            break;
-        }
-        case HScrollBar: {
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->horizontalScrollRect.topLeft());
-            QMouseEvent e(QEvent::MouseMove, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
-            qApp->sendEvent(d->horizontalScrollBar, &e);
-            canvas()->updateCanvas(d->toolRect);
-            break;
-        }
-        case VScrollBar: {
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->verticalScrollRect.topLeft());
-            QMouseEvent e(QEvent::MouseMove, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
-            qApp->sendEvent(d->verticalScrollBar, &e);
-            canvas()->updateCanvas(d->toolRect);
-            break;
-        }
-        default:
-            if (!d->toolRect.contains(event->point)) {
-                event->ignore();
-            }
-            break;
+        break;
     }
 }
 
-void TableTool::mouseDoubleClickEvent(KoPointerEvent* event)
+void TableTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     switch (mouseOn(event)) {
-        case Shape: {
-            d->toolType = Shape;
-            d->focus = Shape;
-            CellToolBase::mouseDoubleClickEvent(event);
-            break;
+    case Shape: {
+        d->toolType = Shape;
+        d->focus = Shape;
+        CellToolBase::mouseDoubleClickEvent(event);
+        break;
+    }
+    case ColumnHeader: {
+        d->toolType = ColumnHeader;
+        d->focus = ColumnHeader;
+        selection()->emitCloseEditor(true);
+        KoPointerEvent e(event, event->point - d->columnRect.topLeft());
+        d->columnHeader.mouseDoubleClick(&e);
+        break;
+    }
+    case RowHeader: {
+        d->toolType = RowHeader;
+        d->focus = RowHeader;
+        selection()->emitCloseEditor(true);
+        KoPointerEvent e(event, event->point - d->rowRect.topLeft());
+        d->rowHeader.mouseDoubleClick(&e);
+        break;
+    }
+    case HScrollBar: {
+        d->toolType = HScrollBar;
+        d->focus = HScrollBar;
+        selection()->emitCloseEditor(true);
+        d->horizontalScrollBar->setFocus();
+        QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->horizontalScrollRect.topLeft());
+        QMouseEvent e(QEvent::MouseButtonDblClick, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
+        qApp->sendEvent(d->horizontalScrollBar, &e);
+        canvas()->updateCanvas(d->toolRect);
+        break;
+    }
+    case VScrollBar: {
+        d->toolType = VScrollBar;
+        d->focus = VScrollBar;
+        selection()->emitCloseEditor(true);
+        d->verticalScrollBar->setFocus();
+        QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->verticalScrollRect.topLeft());
+        QMouseEvent e(QEvent::MouseButtonDblClick, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
+        qApp->sendEvent(d->verticalScrollBar, &e);
+        canvas()->updateCanvas(d->toolRect);
+        break;
+    }
+    default: {
+        d->toolType = None;
+        d->focus = None;
+        if (!d->toolRect.contains(event->point)) {
+            event->ignore();
         }
-        case ColumnHeader: {
-            d->toolType = ColumnHeader;
-            d->focus = ColumnHeader;
-            selection()->emitCloseEditor(true);
-            KoPointerEvent e(event, event->point - d->columnRect.topLeft());
-            d->columnHeader.mouseDoubleClick(&e);
-            break;
-        }
-        case RowHeader: {
-            d->toolType = RowHeader;
-            d->focus = RowHeader;
-            selection()->emitCloseEditor(true);
-            KoPointerEvent e(event, event->point - d->rowRect.topLeft());
-            d->rowHeader.mouseDoubleClick(&e);
-            break;
-        }
-        case HScrollBar: {
-            d->toolType = HScrollBar;
-            d->focus = HScrollBar;
-            selection()->emitCloseEditor(true);
-            d->horizontalScrollBar->setFocus();
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->horizontalScrollRect.topLeft());
-            QMouseEvent e(QEvent::MouseButtonDblClick, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
-            qApp->sendEvent(d->horizontalScrollBar, &e);
-            canvas()->updateCanvas(d->toolRect);
-            break;
-        }
-        case VScrollBar: {
-            d->toolType = VScrollBar;
-            d->focus = VScrollBar;
-            selection()->emitCloseEditor(true);
-            d->verticalScrollBar->setFocus();
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->verticalScrollRect.topLeft());
-            QMouseEvent e(QEvent::MouseButtonDblClick, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
-            qApp->sendEvent(d->verticalScrollBar, &e);
-            canvas()->updateCanvas(d->toolRect);
-            break;
-        }
-        default: {
-            d->toolType = None;
-            d->focus = None;
-            if (!d->toolRect.contains(event->point)) {
-                event->ignore();
-            }
-            break;
-        }
+        break;
+    }
     }
 }
 
-void TableTool::keyPressEvent(QKeyEvent* event)
+void TableTool::keyPressEvent(QKeyEvent *event)
 {
-    switch(d->focus) {
-        case Shape:
-            if (event->key() == Qt::Key_Menu) {
-                setPopupActionList(popupMenuActionList());
-            }
-            CellToolBase::keyPressEvent(event);
-            event->accept();
-            break;
-        case ColumnHeader:
-        case RowHeader:
-            if (event->key() == Qt::Key_Menu) {
-                setPopupActionList(popupMenuActionList());
-            }
-            event->accept();
-            break;
-        case HScrollBar:
-        case VScrollBar:
-            event->accept();
-            break;
-        default:
-            break;
+    switch (d->focus) {
+    case Shape:
+        if (event->key() == Qt::Key_Menu) {
+            setPopupActionList(popupMenuActionList());
+        }
+        CellToolBase::keyPressEvent(event);
+        event->accept();
+        break;
+    case ColumnHeader:
+    case RowHeader:
+        if (event->key() == Qt::Key_Menu) {
+            setPopupActionList(popupMenuActionList());
+        }
+        event->accept();
+        break;
+    case HScrollBar:
+    case VScrollBar:
+        event->accept();
+        break;
+    default:
+        break;
     }
 }
 
-KoInteractionStrategy* TableTool::createStrategy(KoPointerEvent* event)
+KoInteractionStrategy *TableTool::createStrategy(KoPointerEvent *event)
 {
     if (d->tableShape->hitTest(event->point)) {
         return CellToolBase::createStrategy(event);
@@ -497,8 +495,7 @@ KoInteractionStrategy* TableTool::createStrategy(KoPointerEvent* event)
 
 void TableTool::importDocument()
 {
-    const QString filterString =
-        QMimeDatabase().mimeTypeForName("application/vnd.oasis.opendocument.spreadsheet").filterString();
+    const QString filterString = QMimeDatabase().mimeTypeForName("application/vnd.oasis.opendocument.spreadsheet").filterString();
     // TODO: i18n for title
     QString file = QFileDialog::getOpenFileName(0, "Import", QString(), filterString);
     if (file.isEmpty())
@@ -509,19 +506,18 @@ void TableTool::importDocument()
         return;
 #endif
     updateSheetsList();
-//     if (Sheet* sheet = d->tableShape->sheet()) {
-//         QRect area = sheet->usedArea();
-//         if (area.width() > d->tableShape->columns())
-//             d->tableShape->setColumns(area.width());
-//         if (area.height() > d->tableShape->rows())
-//             d->tableShape->setRows(area.height());
-//     }
+    //     if (Sheet* sheet = d->tableShape->sheet()) {
+    //         QRect area = sheet->usedArea();
+    //         if (area.width() > d->tableShape->columns())
+    //             d->tableShape->setColumns(area.width());
+    //         if (area.height() > d->tableShape->rows())
+    //             d->tableShape->setRows(area.height());
+    //     }
 }
 
 void TableTool::exportDocument()
 {
-    const QString filterString =
-        QMimeDatabase().mimeTypeForName("application/vnd.oasis.opendocument.spreadsheet").filterString();
+    const QString filterString = QMimeDatabase().mimeTypeForName("application/vnd.oasis.opendocument.spreadsheet").filterString();
     // TODO: i18n for title
     QString file = QFileDialog::getSaveFileName(0, "Export", QString(), filterString);
     if (file.isEmpty())
@@ -533,26 +529,27 @@ void TableTool::exportDocument()
 
 void TableTool::repaintDecorations()
 {
-    if (!d->tableShape) return;
+    if (!d->tableShape)
+        return;
     // TODO Stefan: restrict to the changed area
     canvas()->updateCanvas(d->tableShape->boundingRect());
 }
 
-Selection* TableTool::selection()
+Selection *TableTool::selection()
 {
     return d->selection;
 }
 
-void TableTool::slotSelectionChanged(const Region&)
+void TableTool::slotSelectionChanged(const Region &)
 {
     scrollToCell(selection()->cursor());
     canvas()->updateCanvas(d->toolRect);
 }
 
-void TableTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void TableTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
-    for (KoShape* shape : shapes) {
-        d->tableShape = dynamic_cast<TableShape*>(shape);
+    for (KoShape *shape : shapes) {
+        d->tableShape = dynamic_cast<TableShape *>(shape);
         if (d->tableShape)
             break;
     }
@@ -649,7 +646,7 @@ int TableTool::maxRow() const
     return KS_rowMax;
 }
 
-SheetView* TableTool::sheetView(Sheet* sheet) const
+SheetView *TableTool::sheetView(Sheet *sheet) const
 {
     Q_UNUSED(sheet);
     return d->tableShape->sheetView();
@@ -660,11 +657,11 @@ void TableTool::updateSheetsList()
     d->sheetComboBox->blockSignals(true);
     d->sheetComboBox->clear();
     Map *map = d->tableShape->map();
-    for (SheetBase* sheet : map->sheetList()) {
+    for (SheetBase *sheet : map->sheetList()) {
         if (sheet->isHidden())
             continue;
         d->sheetComboBox->addItem(sheet->sheetName());
-        //d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );
+        // d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );
     }
     d->sheetComboBox->blockSignals(false);
 }
@@ -683,7 +680,7 @@ void TableTool::activateSheet()
     update();
 }
 
-void TableTool::sheetActivated(const QString& sheetName)
+void TableTool::sheetActivated(const QString &sheetName)
 {
     Sheet *sheet = d->tableShape->sheet();
     if (sheet) {
@@ -699,29 +696,29 @@ void TableTool::sheetsBtnClicked()
     dialog->setWindowTitle(i18n("Sheets"));
     dialog->setStandardButtons(QDialogButtonBox::Ok);
     dialog->setFaceType(KPageDialog::Plain);
-    SheetsEditor* editor = new SheetsEditor(d->tableShape);
+    SheetsEditor *editor = new SheetsEditor(d->tableShape);
     dialog->layout()->addWidget(editor);
     dialog->exec();
     updateSheetsList();
     delete dialog;
 }
 
-QList<QPointer<QWidget> > TableTool::createOptionWidgets()
+QList<QPointer<QWidget>> TableTool::createOptionWidgets()
 {
     if (!d->optionWidget) {
         d->optionWidget = new QWidget();
         d->optionWidget->setObjectName(QLatin1String("TableTool/Table Options"));
 
-        QVBoxLayout* l = new QVBoxLayout(d->optionWidget);
+        QVBoxLayout *l = new QVBoxLayout(d->optionWidget);
         l->setMargin(0);
         d->optionWidget->setLayout(l);
 
-        QGridLayout* layout = new QGridLayout();
+        QGridLayout *layout = new QGridLayout();
         l->addLayout(layout);
 
-        QLabel* label = nullptr;
+        QLabel *label = nullptr;
 
-        QHBoxLayout* sheetlayout = new QHBoxLayout();
+        QHBoxLayout *sheetlayout = new QHBoxLayout();
         sheetlayout->setMargin(0);
         sheetlayout->setSpacing(3);
         layout->addLayout(sheetlayout, 0, 1);
@@ -730,7 +727,7 @@ QList<QPointer<QWidget> > TableTool::createOptionWidgets()
         Map *map = d->tableShape->map();
         for (SheetBase *s : map->sheetList()) {
             d->sheetComboBox->addItem(s->sheetName());
-            //d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );
+            // d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );
         }
         connect(d->sheetComboBox, &KComboBox::textActivated, this, &TableTool::sheetActivated);
 
@@ -743,22 +740,20 @@ QList<QPointer<QWidget> > TableTool::createOptionWidgets()
         label->setToolTip(i18n("Selected Sheet"));
         layout->addWidget(label, 0, 0);
 
-
-    //layout->setColumnStretch( 1, 1 );
+        // layout->setColumnStretch( 1, 1 );
         layout->setRowStretch(6, 1);
 
         // TODO implement (or remove)
-//         QToolBar* tb = new QToolBar(d->optionWidget);
-//         l->addWidget(tb);
-//         tb->setMovable(false);
-//         tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-//         tb->addAction(action("import"));
-//         tb->addAction(action("export"));
+        //         QToolBar* tb = new QToolBar(d->optionWidget);
+        //         l->addWidget(tb);
+        //         tb->setMovable(false);
+        //         tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        //         tb->addAction(action("import"));
+        //         tb->addAction(action("export"));
 
         d->optionWidget->setWindowTitle(i18n("View Options"));
-
     }
-    QList<QPointer<QWidget> > ow = CellToolBase::createOptionWidgets();
+    QList<QPointer<QWidget>> ow = CellToolBase::createOptionWidgets();
     ow.append(d->optionWidget);
     return ow;
 }

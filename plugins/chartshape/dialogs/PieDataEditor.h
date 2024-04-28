@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * 
+ *
  * SPDX-FileCopyrightText: 2018 Dag Andersen <danders@get2net.dk>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -17,8 +17,8 @@ class QAbstractItemModel;
 class QModelIndex;
 class QAction;
 
-
-namespace KoChart {
+namespace KoChart
+{
 
 class PieDataEditor : public KoDialog
 {
@@ -48,4 +48,3 @@ private:
 } // Namespace KoChart
 
 #endif // KCHART_PIEDATAEDITOR_H
-

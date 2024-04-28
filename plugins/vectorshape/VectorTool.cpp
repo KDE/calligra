@@ -6,41 +6,40 @@
 */
 
 #include "VectorTool.h"
-#include "VectorShape.h"
 #include "ChangeVectorDataCommand.h"
+#include "VectorShape.h"
 
-#include <QToolButton>
-#include <QGridLayout>
-#include <QUrl>
 #include <QFileDialog>
+#include <QGridLayout>
+#include <QToolButton>
+#include <QUrl>
 
-#include <KLocalizedString>
 #include <KIO/StoredTransferJob>
+#include <KLocalizedString>
 
-#include <KoIcon.h>
 #include <KoCanvasBase.h>
+#include <KoIcon.h>
 #include <KoImageCollection.h>
+#include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
-#include <KoPointerEvent.h>
 
-VectorTool::VectorTool( KoCanvasBase* canvas )
-    : KoToolBase( canvas ),
-      m_shape(0)
+VectorTool::VectorTool(KoCanvasBase *canvas)
+    : KoToolBase(canvas)
+    , m_shape(0)
 {
 }
 
-void VectorTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void VectorTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     Q_UNUSED(toolActivation);
 
     foreach (KoShape *shape, shapes) {
-        m_shape = dynamic_cast<VectorShape*>( shape );
-        if ( m_shape )
+        m_shape = dynamic_cast<VectorShape *>(shape);
+        if (m_shape)
             break;
     }
-    if ( !m_shape )
-    {
+    if (!m_shape) {
         emit done();
         return;
     }
@@ -49,10 +48,10 @@ void VectorTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &s
 
 void VectorTool::deactivate()
 {
-  m_shape = 0;
+    m_shape = 0;
 }
 
-QWidget * VectorTool::createOptionWidget()
+QWidget *VectorTool::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();
     QGridLayout *layout = new QGridLayout(optionWidget);
@@ -78,12 +77,11 @@ void VectorTool::changeUrlPressed()
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, {});
         connect(job, &KJob::result, this, &VectorTool::setImageData);
     }
-
 }
 
-void VectorTool::mouseDoubleClickEvent( KoPointerEvent *event )
+void VectorTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    if(canvas()->shapeManager()->shapeAt(event->point) != m_shape) {
+    if (canvas()->shapeManager()->shapeAt(event->point) != m_shape) {
         event->ignore(); // allow the event to be used by another
         return;
     }
@@ -95,7 +93,7 @@ void VectorTool::setImageData(KJob *job)
     if (m_shape == 0) {
         return;
     }
-    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
+    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob *>(job);
     Q_ASSERT(transferJob);
 
     const QByteArray newData = transferJob->data();

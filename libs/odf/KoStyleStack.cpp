@@ -11,20 +11,24 @@
 
 #include <OdfDebug.h>
 
-//#define DEBUG_STYLESTACK
+// #define DEBUG_STYLESTACK
 
 class KoStyleStack::KoStyleStackPrivate
 {
 };
 
 KoStyleStack::KoStyleStack()
-        : m_styleNSURI(KoXmlNS::style), m_foNSURI(KoXmlNS::fo), d(0)
+    : m_styleNSURI(KoXmlNS::style)
+    , m_foNSURI(KoXmlNS::fo)
+    , d(0)
 {
     clear();
 }
 
-KoStyleStack::KoStyleStack(const char* styleNSURI, const char* foNSURI)
-        : m_styleNSURI(styleNSURI), m_foNSURI(foNSURI), d(0)
+KoStyleStack::KoStyleStack(const char *styleNSURI, const char *foNSURI)
+    : m_styleNSURI(styleNSURI)
+    , m_foNSURI(foNSURI)
+    , d(0)
 {
     m_propertiesTagNames.append("properties");
     clear();
@@ -59,7 +63,7 @@ void KoStyleStack::restore()
     debugOdf << "restore (level" << m_marks.count() + 1 << ") -> to index" << toIndex;
 #endif
     Q_ASSERT(toIndex > -1);
-    Q_ASSERT(toIndex <= (int)m_stack.count());   // If equal, nothing to remove. If greater, bug.
+    Q_ASSERT(toIndex <= (int)m_stack.count()); // If equal, nothing to remove. If greater, bug.
     for (int index = (int)m_stack.count() - 1; index >= toIndex; --index)
         m_stack.pop_back();
 }
@@ -73,7 +77,7 @@ void KoStyleStack::pop()
 #endif
 }
 
-void KoStyleStack::push(const KoXmlElement& style)
+void KoStyleStack::push(const KoXmlElement &style)
 {
     m_stack.append(style);
 #ifdef DEBUG_STYLESTACK
@@ -137,8 +141,7 @@ inline bool KoStyleStack::hasProperty(const QString &nsURI, const QString &name,
         --it;
         foreach (const QString &propertiesTagName, m_propertiesTagNames) {
             const KoXmlElement properties = KoXml::namedItemNS(*it, m_styleNSURI, propertiesTagName);
-            if (properties.hasAttributeNS(nsURI, name) ||
-                    (detail && properties.hasAttributeNS(nsURI, fullName)))
+            if (properties.hasAttributeNS(nsURI, name) || (detail && properties.hasAttributeNS(nsURI, fullName)))
                 return true;
         }
     }
@@ -147,7 +150,7 @@ inline bool KoStyleStack::hasProperty(const QString &nsURI, const QString &name,
 
 // Font size is a bit special. "115%" applies to "the fontsize of the parent style".
 // This can be generalized though (hasPropertyThatCanBePercentOfParent() ? :)
-QPair<qreal,qreal> KoStyleStack::fontSize(const qreal defaultFontPointSize) const
+QPair<qreal, qreal> KoStyleStack::fontSize(const qreal defaultFontPointSize) const
 {
     const QString name = "font-size";
     qreal percent = 100;
@@ -160,23 +163,23 @@ QPair<qreal,qreal> KoStyleStack::fontSize(const qreal defaultFontPointSize) cons
             if (properties.hasAttributeNS(m_foNSURI, name)) {
                 const QString value = properties.attributeNS(m_foNSURI, name, QString());
                 if (value.endsWith('%')) {
-                    //sebsauer, 20070609, the specs don't say that we have to calc them together but
-                    //just that we are looking for a valid parent fontsize. So, let's only take the
-                    //first percent definition into account and keep on to seek for a valid parent,
-                    //percent *= value.left( value.length() - 1 ).toDouble() / 100.0;
+                    // sebsauer, 20070609, the specs don't say that we have to calc them together but
+                    // just that we are looking for a valid parent fontsize. So, let's only take the
+                    // first percent definition into account and keep on to seek for a valid parent,
+                    // percent *= value.left( value.length() - 1 ).toDouble() / 100.0;
                     if (percent == 100)
                         percent = QStringView{value}.left(value.length() - 1).toDouble();
                 } else {
                     // e.g. 12pt and indicate that there was not percentage there
-                    return QPair<qreal,qreal> ((percent * KoUnit::parseValue(value))/100.0, 0.0);
+                    return QPair<qreal, qreal>((percent * KoUnit::parseValue(value)) / 100.0, 0.0);
                 }
                 break;
             }
         }
     }
 
-    //if there was no valid parent, we return the default fontsize together with an optional calculated percent-value.
-    return QPair<qreal,qreal> ((percent * defaultFontPointSize)/100.0, percent);
+    // if there was no valid parent, we return the default fontsize together with an optional calculated percent-value.
+    return QPair<qreal, qreal>((percent * defaultFontPointSize) / 100.0, percent);
 }
 
 bool KoStyleStack::hasChildNode(const QString &nsURI, const QString &localName) const
@@ -208,24 +211,24 @@ KoXmlElement KoStyleStack::childNode(const QString &nsURI, const QString &localN
         }
     }
 
-    return KoXmlElement();          // a null element
+    return KoXmlElement(); // a null element
 }
 
-bool KoStyleStack::isUserStyle(const KoXmlElement& e, const QString& family) const
+bool KoStyleStack::isUserStyle(const KoXmlElement &e, const QString &family) const
 {
     if (e.attributeNS(m_styleNSURI, "family", QString()) != family)
         return false;
     const KoXmlElement parent = e.parentNode().toElement();
-    //debugOdf <<"tagName=" << e.tagName() <<" parent-tagName=" << parent.tagName();
+    // debugOdf <<"tagName=" << e.tagName() <<" parent-tagName=" << parent.tagName();
     return parent.localName() == "styles" /*&& parent.namespaceURI() == KoXmlNS::office*/;
 }
 
-QString KoStyleStack::userStyleName(const QString& family) const
+QString KoStyleStack::userStyleName(const QString &family) const
 {
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while (it != m_stack.begin()) {
         --it;
-        //debugOdf << (*it).attributeNS( m_styleNSURI,"name", QString());
+        // debugOdf << (*it).attributeNS( m_styleNSURI,"name", QString());
         if (isUserStyle(*it, family))
             return (*it).attributeNS(m_styleNSURI, "name", QString());
     }
@@ -233,19 +236,19 @@ QString KoStyleStack::userStyleName(const QString& family) const
     return "Standard";
 }
 
-QString KoStyleStack::userStyleDisplayName(const QString& family) const
+QString KoStyleStack::userStyleDisplayName(const QString &family) const
 {
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while (it != m_stack.begin()) {
         --it;
-        //debugOdf << (*it).attributeNS( m_styleNSURI,"display-name");
+        // debugOdf << (*it).attributeNS( m_styleNSURI,"display-name");
         if (isUserStyle(*it, family))
             return (*it).attributeNS(m_styleNSURI, "display-name", QString());
     }
     return QString(); // no display name, this can happen since it's optional
 }
 
-void KoStyleStack::setTypeProperties(const char* typeProperties)
+void KoStyleStack::setTypeProperties(const char *typeProperties)
 {
     m_propertiesTagNames.clear();
     m_propertiesTagNames.append(typeProperties == 0 || qstrlen(typeProperties) == 0 ? QString("properties") : (QString(typeProperties) + "-properties"));

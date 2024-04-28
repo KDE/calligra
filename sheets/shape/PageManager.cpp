@@ -6,11 +6,11 @@
 
 #include "PageManager.h"
 
-#include "engine/Region.h"
 #include "core/ColFormatStorage.h"
 #include "core/PrintSettings.h"
 #include "core/RowFormatStorage.h"
 #include "core/Sheet.h"
+#include "engine/Region.h"
 
 #include <QList>
 
@@ -19,14 +19,13 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN PageManager::Private
 {
 public:
-    Sheet* sheet;
+    Sheet *sheet;
     QList<QRect> pages; // page number to cell range
     PrintSettings settings;
 };
 
-
-PageManager::PageManager(Sheet* sheet)
-        : d(new Private)
+PageManager::PageManager(Sheet *sheet)
+    : d(new Private)
 {
     d->sheet = sheet;
     d->settings = *sheet->printSettings();
@@ -39,7 +38,7 @@ PageManager::~PageManager()
 
 void PageManager::layoutPages()
 {
-    const Sheet* sheet = d->sheet;
+    const Sheet *sheet = d->sheet;
     const PrintSettings settings = d->settings;
     d->pages.clear();
     clearPages();
@@ -47,7 +46,7 @@ void PageManager::layoutPages()
     preparePage(pageNumber);
 
     if (settings.pageOrder() == PrintSettings::LeftToRight) {
-//         debugSheets << "processing printRanges" << settings.printRegion();
+        //         debugSheets << "processing printRanges" << settings.printRegion();
         // iterate over the print ranges
         Region::ConstIterator end = settings.printRegion().constEnd();
         for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it) {
@@ -56,7 +55,7 @@ void PageManager::layoutPages()
 
             // limit the print range to the used area
             const QRect printRange = (*it)->rect() & sheet->usedArea(true);
-//             debugSheets << "processing printRange" << printRange;
+            //             debugSheets << "processing printRange" << printRange;
 
             int rows = 0;
             double height = 0.0;
@@ -70,7 +69,7 @@ void PageManager::layoutPages()
                 else if (height + sheet->rowFormats()->visibleHeight(row + 1) <= size(pageNumber).height())
                     continue;
 
-//                 debugSheets << "1. done: row" << row << "rows" << rows << "height" << height;
+                //                 debugSheets << "1. done: row" << row << "rows" << rows << "height" << height;
 
                 int columns = 0;
                 double width = 0.0;
@@ -83,7 +82,7 @@ void PageManager::layoutPages()
                     if (width + sheet->columnFormats()->visibleWidth(col + 1) <= size(pageNumber).width())
                         continue;
 
-//                     debugSheets << "col" << col << "columns" << columns << "width" << width;
+                    //                     debugSheets << "col" << col << "columns" << columns << "width" << width;
                     const QRect cellRange(col - columns + 1, row - rows + 1, columns, rows);
                     if (pageNeedsPrinting(cellRange)) {
                         d->pages.append(cellRange);
@@ -111,7 +110,7 @@ void PageManager::layoutPages()
             }
         }
     } else { // if (settings.pageOrder() == PrintSettings::TopToBottom)
-//         debugSheets << "processing printRanges" << settings.printRegion();
+        //         debugSheets << "processing printRanges" << settings.printRegion();
         // iterate over the print ranges
         Region::ConstIterator end = settings.printRegion().constEnd();
         for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it) {
@@ -134,7 +133,7 @@ void PageManager::layoutPages()
                 else if (width + sheet->columnFormats()->visibleWidth(col + 1) <= size(pageNumber).width())
                     continue;
 
-//                 debugSheets << "1. done: col" << col << "columns" << columns << "width" << width;
+                //                 debugSheets << "1. done: col" << col << "columns" << columns << "width" << width;
 
                 int rows = 0;
                 double height = 0.0;
@@ -147,7 +146,7 @@ void PageManager::layoutPages()
                     if (height + sheet->rowFormats()->visibleHeight(row + 1) <= size(pageNumber).height())
                         continue;
 
-//                     debugSheets << "row" << row << "rows" << rows << "height" << height;
+                    //                     debugSheets << "row" << row << "rows" << rows << "height" << height;
                     const QRect cellRange(col - columns + 1, row - rows + 1, columns, rows);
                     if (pageNeedsPrinting(cellRange)) {
                         d->pages.append(cellRange);
@@ -178,7 +177,7 @@ void PageManager::layoutPages()
     debugSheets << d->pages.count() << "page(s) created";
 }
 
-void PageManager::setPrintSettings(const PrintSettings& settings, bool force)
+void PageManager::setPrintSettings(const PrintSettings &settings, bool force)
 {
     if (!force && settings == d->settings)
         return;
@@ -206,12 +205,12 @@ QSizeF PageManager::size(int page) const
     return QSizeF(d->settings.printWidth() + 0.5, d->settings.printHeight() + 0.5); // FIXME
 }
 
-Sheet* PageManager::sheet() const
+Sheet *PageManager::sheet() const
 {
     return d->sheet;
 }
 
-const PrintSettings& PageManager::printSettings() const
+const PrintSettings &PageManager::printSettings() const
 {
     return d->settings;
 }
@@ -220,7 +219,7 @@ void PageManager::clearPages()
 {
 }
 
-bool PageManager::pageNeedsPrinting(const QRect& cellRange) const
+bool PageManager::pageNeedsPrinting(const QRect &cellRange) const
 {
     Q_UNUSED(cellRange);
     return true;

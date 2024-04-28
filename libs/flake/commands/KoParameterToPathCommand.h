@@ -8,8 +8,8 @@
 #ifndef KOPARAMETERTOPATHCOMMAND_H
 #define KOPARAMETERTOPATHCOMMAND_H
 
-#include <kundo2command.h>
 #include <QList>
+#include <kundo2command.h>
 
 #include "flake_export.h"
 
@@ -31,15 +31,16 @@ public:
      * @param shapes the list of shapes this command works on
      * @param parent the parent command if this is a compound undo command.
      */
-    explicit KoParameterToPathCommand(const QList<KoParameterShape*> &shapes, KUndo2Command *parent = 0);
+    explicit KoParameterToPathCommand(const QList<KoParameterShape *> &shapes, KUndo2Command *parent = 0);
     ~KoParameterToPathCommand() override;
 
     /// redo the command
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
-    KoParameterToPathCommandPrivate * const d;
+    KoParameterToPathCommandPrivate *const d;
 };
 
 #endif // KOPARAMETERTOPATHCOMMAND_H

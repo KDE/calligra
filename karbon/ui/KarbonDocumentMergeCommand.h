@@ -14,7 +14,7 @@ class KarbonDocument;
 class KarbonDocumentMergeCommand : public KUndo2Command
 {
 public:
-    KarbonDocumentMergeCommand(KarbonDocument * targetPart, KarbonDocument &sourcePart, KUndo2Command *parent = 0);
+    KarbonDocumentMergeCommand(KarbonDocument *targetPart, KarbonDocument &sourcePart, KUndo2Command *parent = 0);
     ~KarbonDocumentMergeCommand() override = default;
     void redo() override;
     void undo() override;

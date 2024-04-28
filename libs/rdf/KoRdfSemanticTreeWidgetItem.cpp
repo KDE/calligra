@@ -9,14 +9,14 @@
 #include "KoDocumentRdf.h"
 // main
 #include <KoCanvasBase.h>
-#include <KoToolProxy.h>
 #include <KoDocumentResourceManager.h>
 #include <KoTextEditor.h>
+#include <KoToolProxy.h>
 // KF5
 #include <KActionMenu>
-#include <kpagedialog.h>
-#include <kdebug.h>
 #include <KLocalizedString>
+#include <kdebug.h>
+#include <kpagedialog.h>
 // Qt
 #include <QVBoxLayout>
 
@@ -28,8 +28,8 @@ class RdfSemanticTreeWidgetApplyStylesheet : public RdfSemanticTreeWidgetAction
     hKoSemanticStylesheet ss;
 
 public:
-
-    RdfSemanticTreeWidgetApplyStylesheet(QWidget *parent, KoCanvasBase *canvas,
+    RdfSemanticTreeWidgetApplyStylesheet(QWidget *parent,
+                                         KoCanvasBase *canvas,
                                          const QString &name,
                                          hKoRdfSemanticItem si,
                                          hKoSemanticStylesheet ss = hKoSemanticStylesheet(0));
@@ -38,10 +38,13 @@ public:
 };
 
 RdfSemanticTreeWidgetApplyStylesheet::RdfSemanticTreeWidgetApplyStylesheet(QWidget *parent,
-        KoCanvasBase *canvas, const QString &name, hKoRdfSemanticItem si, hKoSemanticStylesheet ss )
-            : RdfSemanticTreeWidgetAction(parent, canvas, name)
-            , si(si)
-            , ss(ss)
+                                                                           KoCanvasBase *canvas,
+                                                                           const QString &name,
+                                                                           hKoRdfSemanticItem si,
+                                                                           hKoSemanticStylesheet ss)
+    : RdfSemanticTreeWidgetAction(parent, canvas, name)
+    , si(si)
+    , ss(ss)
 {
 }
 
@@ -58,14 +61,12 @@ void RdfSemanticTreeWidgetApplyStylesheet::activated()
     kDebug(30015) << "semItem:" << si->name() << "xmlid:" << xmlid;
     KoRdfSemanticItemViewSite vs(si, xmlid);
     if (ss) {
-        kDebug(30015) << "apply stylesheet, format(), sheet:" << ss->name()
-                << " xmlid:" << xmlid;
+        kDebug(30015) << "apply stylesheet, format(), sheet:" << ss->name() << " xmlid:" << xmlid;
         vs.applyStylesheet(editor, ss);
     } else {
         vs.disassociateStylesheet();
     }
 }
-
 
 KoRdfSemanticTreeWidgetItem::KoRdfSemanticTreeWidgetItem(QTreeWidgetItem *parent)
     : QTreeWidgetItem(parent)
@@ -76,13 +77,12 @@ KoRdfSemanticTreeWidgetItem::~KoRdfSemanticTreeWidgetItem()
 {
 }
 
-QAction *KoRdfSemanticTreeWidgetItem::createAction(QWidget *parent, KoCanvasBase *host, const QString  &text)
+QAction *KoRdfSemanticTreeWidgetItem::createAction(QWidget *parent, KoCanvasBase *host, const QString &text)
 {
     return new RdfSemanticTreeWidgetAction(parent, host, text);
 }
 
-void KoRdfSemanticTreeWidgetItem::addApplyStylesheetActions(QWidget *parent,
-        QList<QAction *> &actions, KoCanvasBase *host)
+void KoRdfSemanticTreeWidgetItem::addApplyStylesheetActions(QWidget *parent, QList<QAction *> &actions, KoCanvasBase *host)
 {
     if (!host) {
         return;
@@ -104,32 +104,24 @@ void KoRdfSemanticTreeWidgetItem::addApplyStylesheetActions(QWidget *parent,
     topMenu->addAction(subMenu);
     foreach (hKoSemanticStylesheet ss, semanticItem()->stylesheets()) {
         kDebug(30015) << "format(), sheet:" << ss->name() << " xmlid:" << xmlid;
-        QAction * action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
-                                                                   host, ss->name(),
-                                                                   semanticItem(), ss);
+        QAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent, host, ss->name(), semanticItem(), ss);
         subMenu->addAction(action);
     }
     subMenu = new KActionMenu(i18n("User"), topMenu);
     topMenu->addAction(subMenu);
     foreach (hKoSemanticStylesheet ss, semanticItem()->userStylesheets()) {
         kDebug(30015) << "format(), sheet:" << ss->name() << " xmlid:" << xmlid;
-        QAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
-                                                                   host, ss->name(),
-                                                                   semanticItem(), ss);
+        QAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent, host, ss->name(), semanticItem(), ss);
         subMenu->addAction(action);
     }
     // add reapply current sheet option
     topMenu->addSeparator();
     KoRdfSemanticItemViewSite vs(semanticItem(), xmlid);
     if (hKoSemanticStylesheet ss = vs.stylesheet()) {
-        QAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
-                                                                   host, i18n("Reapply Current"),
-                                                                   semanticItem(), ss);
+        QAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent, host, i18n("Reapply Current"), semanticItem(), ss);
         topMenu->addAction(action);
     }
-    QAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
-                                                               host, i18n("Disassociate"),
-                                                               semanticItem(), hKoSemanticStylesheet(0));
+    QAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent, host, i18n("Disassociate"), semanticItem(), hKoSemanticStylesheet(0));
     topMenu->addAction(action);
 }
 
@@ -148,7 +140,7 @@ void KoRdfSemanticTreeWidgetItem::insert(KoCanvasBase *host)
 
 void KoRdfSemanticTreeWidgetItem::edit()
 {
-    QString caption = i18n("Edit %1",uIObjectName());
+    QString caption = i18n("Edit %1", uIObjectName());
     QWidget *widget = new QWidget();
     QVBoxLayout *lay = new QVBoxLayout(widget);
     widget->setLayout(lay);

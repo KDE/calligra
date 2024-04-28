@@ -37,14 +37,14 @@ public:
     QTransform transform() const;
 
     /// Sets pattern tile position
-    void setPosition(const QPointF & position);
+    void setPosition(const QPointF &position);
     /// Returns pattern tile position (objectBound is used when patternUnits == ObjectBoundingBox)
-    QPointF position(const QRectF & objectBound) const;
+    QPointF position(const QRectF &objectBound) const;
 
     /// Sets pattern tile size
-    void setSize(const QSizeF & size);
+    void setSize(const QSizeF &size);
     /// Returns pattern tile size (objectBound is used when patternUnits == ObjectBoundingBox)
-    QSizeF size(const QRectF & objectBound) const;
+    QSizeF size(const QRectF &objectBound) const;
 
     /// Sets the dom element containing the pattern content
     void setContent(const KoXmlElement &content);
@@ -58,10 +58,9 @@ public:
     void setPatternContentViewbox(const QRectF &viewBox);
 
     /// generates the pattern image from the given shapes and using the specified bounding box
-    QImage generateImage(const QRectF &objectBound, const QList<KoShape*> content);
+    QImage generateImage(const QRectF &objectBound, const QList<KoShape *> content);
 
 private:
-
     Units m_patternUnits;
     Units m_patternContentUnits;
     QTransform m_transform;

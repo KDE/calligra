@@ -12,26 +12,33 @@
 #include <QColor>
 
 struct Entry {
-    Entry() : colorCount(1), shape(0), expanded(false) {};
+    Entry()
+        : colorCount(1)
+        , shape(0)
+        , expanded(false){};
     QString text;
     QString image;
     QString color;
     QString categoryName;
     int colorCount;
-    KoShape* shape;
+    KoShape *shape;
     bool expanded;
 };
 
-class CQTextDocumentNotesModel::Private {
+class CQTextDocumentNotesModel::Private
+{
 public:
-    Private() {}
-    ~Private() {
+    Private()
+    {
+    }
+    ~Private()
+    {
         qDeleteAll(entries);
     }
-    QList<Entry*> entries;
+    QList<Entry *> entries;
 };
 
-CQTextDocumentNotesModel::CQTextDocumentNotesModel(QObject* parent)
+CQTextDocumentNotesModel::CQTextDocumentNotesModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
@@ -52,48 +59,48 @@ CQTextDocumentNotesModel::~CQTextDocumentNotesModel()
     delete d;
 }
 
-QVariant CQTextDocumentNotesModel::data(const QModelIndex& index, int role) const
+QVariant CQTextDocumentNotesModel::data(const QModelIndex &index, int role) const
 {
     QVariant data;
     if (index.isValid() && index.row() < d->entries.count()) {
-        Entry* entry = d->entries.at(index.row());
-        switch(role) {
-            case Text:
-                data = entry->text;
-                break;
-            case Image:
-                data = entry->image;
-                break;
-            case Color:
-                data = entry->color;
-                break;
-            case ColorCount:
-                data = entry->colorCount;
-                break;
-            case CategoryName:
-                data = entry->categoryName;
-                break;
-            case FirstOfThisColor:
-                data = true;
-                if (index.row() > 0 && d->entries.at(index.row() - 1)->color == entry->color) {
-                    data = false;
-                }
-                break;
-            case Position:
-                data = entry->shape->absolutePosition();
-                break;
-            case Expanded:
-                data = entry->expanded;
-                break;
-            default:
-                data = QLatin1String("No such role. Supported roles are text, image, color, colorCount and position.");
-                break;
+        Entry *entry = d->entries.at(index.row());
+        switch (role) {
+        case Text:
+            data = entry->text;
+            break;
+        case Image:
+            data = entry->image;
+            break;
+        case Color:
+            data = entry->color;
+            break;
+        case ColorCount:
+            data = entry->colorCount;
+            break;
+        case CategoryName:
+            data = entry->categoryName;
+            break;
+        case FirstOfThisColor:
+            data = true;
+            if (index.row() > 0 && d->entries.at(index.row() - 1)->color == entry->color) {
+                data = false;
+            }
+            break;
+        case Position:
+            data = entry->shape->absolutePosition();
+            break;
+        case Expanded:
+            data = entry->expanded;
+            break;
+        default:
+            data = QLatin1String("No such role. Supported roles are text, image, color, colorCount and position.");
+            break;
         }
     }
     return data;
 }
 
-int CQTextDocumentNotesModel::rowCount(const QModelIndex& parent) const
+int CQTextDocumentNotesModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid()) {
         return 0;
@@ -110,7 +117,7 @@ void CQTextDocumentNotesModel::toggleExpanded(int index)
 {
     if (index > -1 && index < d->entries.count()) {
         QColor color = d->entries.at(index)->color;
-        foreach(Entry* entry, d->entries) {
+        foreach (Entry *entry, d->entries) {
             if (color == entry->color) {
                 entry->expanded = !entry->expanded;
             }
@@ -119,9 +126,9 @@ void CQTextDocumentNotesModel::toggleExpanded(int index)
     dataChanged(this->index(0), this->index(d->entries.count() - 1));
 }
 
-void CQTextDocumentNotesModel::addEntry(const QString& text, const QString& image, const QString& color, KoShape* shape)
+void CQTextDocumentNotesModel::addEntry(const QString &text, const QString &image, const QString &color, KoShape *shape)
 {
-    Entry* entry = new Entry();
+    Entry *entry = new Entry();
     entry->text = text;
     entry->image = image;
     entry->shape = shape;
@@ -135,12 +142,11 @@ void CQTextDocumentNotesModel::addEntry(const QString& text, const QString& imag
         entry->categoryName = "Successes";
     }
 
-    QList<Entry*>::iterator before = d->entries.begin();
+    QList<Entry *>::iterator before = d->entries.begin();
     bool reachedColor = false;
     int colorCount = 0, position = 0;
-    for(; before != d->entries.end(); ++before) {
-        if ((*before)->color == entry->color)
-        {
+    for (; before != d->entries.end(); ++before) {
+        if ((*before)->color == entry->color) {
             // We are now in the current entry's section as defined by colour
             // and we grab the current colour count for that section from
             // this item. Could just increase, but that's cause a double-loop
@@ -151,8 +157,7 @@ void CQTextDocumentNotesModel::addEntry(const QString& text, const QString& imag
             entry->colorCount = colorCount;
             entry->expanded = (*before)->expanded;
         }
-        if (reachedColor)
-        {
+        if (reachedColor) {
             // If we find a new colour, that means we're out of the current
             // section, and we break out. This also conveniently leaves us
             // with the entry we want to insert the item before.

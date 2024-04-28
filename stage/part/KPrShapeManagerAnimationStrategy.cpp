@@ -20,22 +20,23 @@
 
 #include "KPrShapeManagerAnimationStrategy.h"
 
-#include <QPainter>
+#include <KoPAPageBase.h>
 #include <KoShape.h>
 #include <KoShapeManager.h>
-#include <KoPAPageBase.h>
+#include <QPainter>
 
-#include "KPrShapeAnimations.h"
-#include "KPrPlaceholderShape.h"
-#include "animations/KPrAnimationCache.h"
 #include "KPrPageSelectStrategyBase.h"
+#include "KPrPlaceholderShape.h"
+#include "KPrShapeAnimations.h"
 #include "StageDebug.h"
+#include "animations/KPrAnimationCache.h"
 
-KPrShapeManagerAnimationStrategy::KPrShapeManagerAnimationStrategy( KoShapeManager *shapeManager, KPrAnimationCache* animationCache,
-                                                                    KPrPageSelectStrategyBase * strategy )
-: KoShapeManagerPaintingStrategy( shapeManager )
-, m_animationCache( animationCache )
-, m_strategy( strategy )
+KPrShapeManagerAnimationStrategy::KPrShapeManagerAnimationStrategy(KoShapeManager *shapeManager,
+                                                                   KPrAnimationCache *animationCache,
+                                                                   KPrPageSelectStrategyBase *strategy)
+    : KoShapeManagerPaintingStrategy(shapeManager)
+    , m_animationCache(animationCache)
+    , m_strategy(strategy)
 {
 }
 
@@ -44,10 +45,10 @@ KPrShapeManagerAnimationStrategy::~KPrShapeManagerAnimationStrategy()
     delete m_strategy;
 }
 
-void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void KPrShapeManagerAnimationStrategy::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
-    if ( ! dynamic_cast<KPrPlaceholderShape *>( shape ) && m_strategy->page()->displayShape( shape ) ) {
-        if ( m_animationCache->value(shape, "visibility", true).toBool() ) {
+    if (!dynamic_cast<KPrPlaceholderShape *>(shape) && m_strategy->page()->displayShape(shape)) {
+        if (m_animationCache->value(shape, "visibility", true).toBool()) {
             painter.save();
             QTransform animationTransform = m_animationCache->value(shape, "transform", QTransform()).value<QTransform>();
             QTransform transform(painter.transform() * shape->absoluteTransformation(&converter));
@@ -59,13 +60,13 @@ void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter
 
             painter.setTransform(transform);
             // paint shape
-            shapeManager()->paintShape( shape, painter, converter, paintContext);
-            painter.restore();  // for the transform
+            shapeManager()->paintShape(shape, painter, converter, paintContext);
+            painter.restore(); // for the transform
         }
     }
 }
 
-void KPrShapeManagerAnimationStrategy::adapt( KoShape * shape, QRectF & rect )
+void KPrShapeManagerAnimationStrategy::adapt(KoShape *shape, QRectF &rect)
 {
     Q_UNUSED(shape)
     Q_UNUSED(rect)

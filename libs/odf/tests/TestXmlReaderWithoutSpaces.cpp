@@ -1,14 +1,13 @@
 #include <QTest>
 
 #include <QBuffer>
-#include <QFile>
 #include <QDateTime>
+#include <QFile>
 #include <QProcess>
 #include <QString>
 #include <QTextStream>
 
 #include <KoXmlReader.h>
-
 
 class TestXmlReaderWithoutSpaces : public QObject
 {
@@ -36,13 +35,14 @@ private Q_SLOTS:
     void testSimpleOpenDocumentPresentation();
     void testSimpleOpenDocumentFormula();
     void testLargeOpenDocumentSpreadsheet();
-    void testExternalOpenDocumentSpreadsheet(const QString& filename);
+    void testExternalOpenDocumentSpreadsheet(const QString &filename);
 };
 
 void TestXmlReaderWithoutSpaces::initTestCase()
 {
-    QLoggingCategory::setFilterRules("*.debug=false\n"
-    "calligra.lib.odf=true\ncalligra.lib.store=true");
+    QLoggingCategory::setFilterRules(
+        "*.debug=false\n"
+        "calligra.lib.odf=true\ncalligra.lib.store=true");
 }
 
 void TestXmlReaderWithoutSpaces::testNode()
@@ -55,18 +55,18 @@ void TestXmlReaderWithoutSpaces::testNode()
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
     xmlstream << "<earth>";
-    xmlstream  << "<continents>";
-    xmlstream   << "<asia/>";
-    xmlstream   << "<africa/>";
-    xmlstream   << "<europe/>";
-    xmlstream   << "<america/>";
-    xmlstream   << "<australia/>";
-    xmlstream   << "<antartic/>";
-    xmlstream  << "</continents>";
-    xmlstream  << "<oceans>";
-    xmlstream   << "<pacific/>";
-    xmlstream   << "<atlantic/>";
-    xmlstream  << "</oceans>";
+    xmlstream << "<continents>";
+    xmlstream << "<asia/>";
+    xmlstream << "<africa/>";
+    xmlstream << "<europe/>";
+    xmlstream << "<america/>";
+    xmlstream << "<australia/>";
+    xmlstream << "<antartic/>";
+    xmlstream << "</continents>";
+    xmlstream << "<oceans>";
+    xmlstream << "<pacific/>";
+    xmlstream << "<atlantic/>";
+    xmlstream << "</oceans>";
     xmlstream << "</earth>";
     xmldevice.close();
 
@@ -421,8 +421,8 @@ void TestXmlReaderWithoutSpaces::testAttributes()
     QVERIFY(list.contains("src"));
     QVERIFY(list.contains("width"));
     QVERIFY(list.contains("height"));
-    QVERIFY(! list.contains("border"));
-    foreach(QString a, list) {
+    QVERIFY(!list.contains("border"));
+    foreach (QString a, list) {
         QCOMPARE(imgElement.hasAttribute(a), true);
         QCOMPARE(imgElement.attribute(a).isEmpty(), false);
     }
@@ -461,7 +461,7 @@ void TestXmlReaderWithoutSpaces::testText()
     QCOMPARE(parElement.parentNode().isNull(), false);
     QCOMPARE(parElement.parentNode().toDocument() == doc, true);
     QCOMPARE(parElement.hasChildNodes(), true);
-    QCOMPARE(KoXml::childNodesCount(parElement), 2);   // <b> and text node "Hello "
+    QCOMPARE(KoXml::childNodesCount(parElement), 2); // <b> and text node "Hello "
     QCOMPARE(parElement.tagName(), QString("p"));
     QCOMPARE(parElement.prefix().isNull(), true);
     QCOMPARE(parElement.text(), QString("Hello world"));
@@ -509,7 +509,7 @@ void TestXmlReaderWithoutSpaces::testText()
     QCOMPARE(boldElement.ownerDocument() == doc, true);
     QCOMPARE(boldElement.parentNode().isNull(), false);
     QCOMPARE(boldElement.hasChildNodes(), true);
-    QCOMPARE(KoXml::childNodesCount(boldElement), 1);   // text node "world"
+    QCOMPARE(KoXml::childNodesCount(boldElement), 1); // text node "world"
     QCOMPARE(boldElement.tagName(), QString("b"));
     QCOMPARE(boldElement.prefix().isNull(), true);
 
@@ -613,8 +613,8 @@ void TestXmlReaderWithoutSpaces::testDocument()
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
     xmlstream << "<calligra>";
-    xmlstream   << "<words/>\n";
-    xmlstream   << "<stage/>\n";
+    xmlstream << "<words/>\n";
+    xmlstream << "<stage/>\n";
     xmlstream << "</calligra>";
     xmldevice.close();
 
@@ -696,9 +696,9 @@ void TestXmlReaderWithoutSpaces::testDocumentType()
     QTextStream xmlstream(&xmldevice);
     xmlstream << "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">";
     xmlstream << "<body>";
-    xmlstream   << "<img/>";
-    xmlstream   << "<p/>";
-    xmlstream   << "<blockquote/>";
+    xmlstream << "<img/>";
+    xmlstream << "<p/>";
+    xmlstream << "<blockquote/>";
     xmlstream << "</body>";
     xmldevice.close();
 
@@ -774,14 +774,14 @@ void TestXmlReaderWithoutSpaces::testNamespace()
     xmlstream << "<document xmlns:book = \"http://trolltech.com/fnord/book/\"";
     xmlstream << "          xmlns      = \"http://trolltech.com/fnord/\" >";
     xmlstream << "<book>";
-    xmlstream   << "<book:title>Practical XML</book:title>";
-    xmlstream   << "<book:author xmlns:fnord = \"http://trolltech.com/fnord/\"";
-    xmlstream   << "             title=\"Ms\"";
-    xmlstream   << "             fnord:title=\"Goddess\"";
-    xmlstream   << "             name=\"Eris Kallisti\"/>";
-    xmlstream   << "<chapter>";
-    xmlstream     << "<title>A Namespace Called fnord</title>";
-    xmlstream   << "</chapter>";
+    xmlstream << "<book:title>Practical XML</book:title>";
+    xmlstream << "<book:author xmlns:fnord = \"http://trolltech.com/fnord/\"";
+    xmlstream << "             title=\"Ms\"";
+    xmlstream << "             fnord:title=\"Goddess\"";
+    xmlstream << "             name=\"Eris Kallisti\"/>";
+    xmlstream << "<chapter>";
+    xmlstream << "<title>A Namespace Called fnord</title>";
+    xmlstream << "</chapter>";
     xmlstream << "</book>";
     xmlstream << "</document>";
     xmldevice.close();
@@ -835,9 +835,9 @@ void TestXmlReaderWithoutSpaces::testNamespace()
     QCOMPARE(errorLine, 0);
     QCOMPARE(errorColumn, 0);
 
-    const char* defaultNS = "http://trolltech.com/fnord/";
-    const char* bookNS = "http://trolltech.com/fnord/book/";
-    const char* fnordNS = "http://trolltech.com/fnord/";
+    const char *defaultNS = "http://trolltech.com/fnord/";
+    const char *bookNS = "http://trolltech.com/fnord/book/";
+    const char *fnordNS = "http://trolltech.com/fnord/";
 
     // <document>
     rootElement = doc.documentElement();
@@ -869,7 +869,7 @@ void TestXmlReaderWithoutSpaces::testNamespace()
     // another way, find it using namedItemNS()
     KoXmlElement book2TitleElement;
     book2TitleElement = KoXml::namedItemNS(rootElement.firstChild(), bookNS, "title");
-    //book2TitleElement = bookElement.namedItemNS( bookNS, "title" ).toElement();
+    // book2TitleElement = bookElement.namedItemNS( bookNS, "title" ).toElement();
     QCOMPARE(book2TitleElement == bookTitleElement, true);
     QCOMPARE(book2TitleElement.isNull(), false);
     QCOMPARE(book2TitleElement.isElement(), true);
@@ -887,7 +887,7 @@ void TestXmlReaderWithoutSpaces::testNamespace()
     // another way, find it using namedItemNS()
     KoXmlElement book2AuthorElement;
     book2AuthorElement = KoXml::namedItemNS(bookElement, bookNS, "author");
-    //book2AuthorElement = bookElement.namedItemNS( bookNS, "author" ).toElement();
+    // book2AuthorElement = bookElement.namedItemNS( bookNS, "author" ).toElement();
     QCOMPARE(book2AuthorElement == bookAuthorElement, true);
     QCOMPARE(book2AuthorElement.isNull(), false);
     QCOMPARE(book2AuthorElement.isElement(), true);
@@ -937,19 +937,19 @@ void TestXmlReaderWithoutSpaces::testParseQString()
     int errorColumn = 0;
 
     QString xmlText;
-    xmlText +=  "<document xmlns:book = \"http://trolltech.com/fnord/book/\"";
-    xmlText +=  "          xmlns      = \"http://trolltech.com/fnord/\" >";
-    xmlText +=  "<book>";
-    xmlText   +=  "<book:title>Practical XML</book:title>";
-    xmlText   +=  "<book:author xmlns:fnord = \"http://trolltech.com/fnord/\"";
-    xmlText   +=  "             title=\"Ms\"";
-    xmlText   +=  "             fnord:title=\"Goddess\"";
-    xmlText   +=  "             name=\"Eris Kallisti\"/>";
-    xmlText   +=  "<chapter>";
-    xmlText     +=  "<title>A Namespace Called fnord</title>";
-    xmlText   +=  "</chapter>";
-    xmlText +=  "</book>";
-    xmlText +=  "</document>";
+    xmlText += "<document xmlns:book = \"http://trolltech.com/fnord/book/\"";
+    xmlText += "          xmlns      = \"http://trolltech.com/fnord/\" >";
+    xmlText += "<book>";
+    xmlText += "<book:title>Practical XML</book:title>";
+    xmlText += "<book:author xmlns:fnord = \"http://trolltech.com/fnord/\"";
+    xmlText += "             title=\"Ms\"";
+    xmlText += "             fnord:title=\"Goddess\"";
+    xmlText += "             name=\"Eris Kallisti\"/>";
+    xmlText += "<chapter>";
+    xmlText += "<title>A Namespace Called fnord</title>";
+    xmlText += "</chapter>";
+    xmlText += "</book>";
+    xmlText += "</document>";
 
     KoXmlDocument doc(false);
     KoXmlElement rootElement;
@@ -962,9 +962,9 @@ void TestXmlReaderWithoutSpaces::testParseQString()
     QCOMPARE(errorLine, 0);
     QCOMPARE(errorColumn, 0);
 
-    const char* defaultNS = "http://trolltech.com/fnord/";
-    const char* bookNS = "http://trolltech.com/fnord/book/";
-    const char* fnordNS = "http://trolltech.com/fnord/";
+    const char *defaultNS = "http://trolltech.com/fnord/";
+    const char *bookNS = "http://trolltech.com/fnord/book/";
+    const char *fnordNS = "http://trolltech.com/fnord/";
 
     // <document>
     rootElement = doc.documentElement();
@@ -996,7 +996,7 @@ void TestXmlReaderWithoutSpaces::testParseQString()
     // another way, find it using namedItemNS()
     KoXmlElement book2TitleElement;
     book2TitleElement = KoXml::namedItemNS(rootElement.firstChild(), bookNS, "title");
-    //book2TitleElement = bookElement.namedItemNS( bookNS, "title" ).toElement();
+    // book2TitleElement = bookElement.namedItemNS( bookNS, "title" ).toElement();
     QCOMPARE(book2TitleElement == bookTitleElement, true);
     QCOMPARE(book2TitleElement.isNull(), false);
     QCOMPARE(book2TitleElement.isElement(), true);
@@ -1014,7 +1014,7 @@ void TestXmlReaderWithoutSpaces::testParseQString()
     // another way, find it using namedItemNS()
     KoXmlElement book2AuthorElement;
     book2AuthorElement = KoXml::namedItemNS(bookElement, bookNS, "author");
-    //book2AuthorElement = bookElement.namedItemNS( bookNS, "author" ).toElement();
+    // book2AuthorElement = bookElement.namedItemNS( bookNS, "author" ).toElement();
     QCOMPARE(book2AuthorElement == bookAuthorElement, true);
     QCOMPARE(book2AuthorElement.isNull(), false);
     QCOMPARE(book2AuthorElement.isElement(), true);
@@ -1138,13 +1138,13 @@ void TestXmlReaderWithoutSpaces::testSimpleXML()
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
     xmlstream << "<solarsystem>";
-    xmlstream   << "<mercurius/>";
-    xmlstream   << "<venus/>";
-    xmlstream   << "<earth>";
-    xmlstream     << "<moon/>";
-    xmlstream   << "</earth>";
-    xmlstream   << "<mars/>";
-    xmlstream   << "<jupiter/>";
+    xmlstream << "<mercurius/>";
+    xmlstream << "<venus/>";
+    xmlstream << "<earth>";
+    xmlstream << "<moon/>";
+    xmlstream << "</earth>";
+    xmlstream << "<mars/>";
+    xmlstream << "<jupiter/>";
     xmlstream << "</solarsystem>";
     xmldevice.close();
 
@@ -1272,29 +1272,27 @@ void TestXmlReaderWithoutSpaces::testMismatchedTag()
     QCOMPARE(errorColumn, 11);
 }
 
-static void dumpNodes(const KoXmlNode &node, int level=0)
+static void dumpNodes(const KoXmlNode &node, int level = 0)
 {
-    QString indent = QString("%1").arg("", level*3);
+    QString indent = QString("%1").arg("", level * 3);
     if (node.isNull()) {
-        qDebug()<<indent<<"null";
+        qDebug() << indent << "null";
     }
-    qDebug()<<indent<<node.nodeName();
-    for(KoXmlNode n = node.firstChild(); ! n.isNull(); n = n.nextSibling() ) {
-        dumpNodes(n, level+1);
+    qDebug() << indent << node.nodeName();
+    for (KoXmlNode n = node.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        dumpNodes(n, level + 1);
     }
-
 }
-static void dumpNodes(const QDomNode &node, int level=0)
+static void dumpNodes(const QDomNode &node, int level = 0)
 {
-    QString indent = QString("%1").arg("", level*3);
+    QString indent = QString("%1").arg("", level * 3);
     if (node.isNull()) {
-        qDebug()<<indent<<"null";
+        qDebug() << indent << "null";
     }
-    qDebug()<<indent<<node.nodeName();
-    for(QDomNode n = node.firstChild(); ! n.isNull(); n = n.nextSibling() ) {
-        dumpNodes(n, level+1);
+    qDebug() << indent << node.nodeName();
+    for (QDomNode n = node.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        dumpNodes(n, level + 1);
     }
-
 }
 void TestXmlReaderWithoutSpaces::testConvertQDomDocument()
 {
@@ -1306,13 +1304,13 @@ void TestXmlReaderWithoutSpaces::testConvertQDomDocument()
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
     xmlstream << "<solarsystem star=\"sun\">";
-    xmlstream   << "<mercurius/>";
-    xmlstream   << "<venus/>";
-    xmlstream   << "<earth habitable=\"true\"><p>The best place</p>";
-    xmlstream     << "<moon  habitable=\"possible\"/>";
-    xmlstream   << "</earth>";
-    xmlstream   << "<mars/>";
-    xmlstream   << "<jupiter/>";
+    xmlstream << "<mercurius/>";
+    xmlstream << "<venus/>";
+    xmlstream << "<earth habitable=\"true\"><p>The best place</p>";
+    xmlstream << "<moon  habitable=\"possible\"/>";
+    xmlstream << "</earth>";
+    xmlstream << "<mars/>";
+    xmlstream << "<jupiter/>";
     xmlstream << "</solarsystem>";
     xmldevice.close();
 
@@ -1358,7 +1356,7 @@ void TestXmlReaderWithoutSpaces::testConvertQDomDocument()
 
     // <p> in <earth>
     QDomNode placeNode = earthElement.firstChild();
-    qDebug()<<"placeNode"<<placeNode.nodeName();
+    qDebug() << "placeNode" << placeNode.nodeName();
     dumpNodes(placeNode);
     QCOMPARE(placeNode.isNull(), false);
     QCOMPARE(placeNode.isElement(), true);
@@ -1370,7 +1368,7 @@ void TestXmlReaderWithoutSpaces::testConvertQDomDocument()
     QCOMPARE(placeNode.hasChildNodes(), true);
     QCOMPARE(placeNode.childNodes().count(), 1);
 
-    //printf("Result:\n%s\n\n", qPrintable(universeDoc.toString()));
+    // printf("Result:\n%s\n\n", qPrintable(universeDoc.toString()));
 }
 
 void TestXmlReaderWithoutSpaces::testConvertQDomElement()
@@ -1383,15 +1381,15 @@ void TestXmlReaderWithoutSpaces::testConvertQDomElement()
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
     xmlstream << "<universe>";
-    xmlstream  <<  "<solarsystem star=\"sun\">";
-    xmlstream   << "<mercurius/>";
-    xmlstream   << "<venus/>";
-    xmlstream   << "<earth habitable=\"true\"><p>The best place</p>";
-    xmlstream     << "<moon  habitable=\"possible\"/>";
-    xmlstream   << "</earth>";
-    xmlstream   << "<mars/>";
-    xmlstream   << "<jupiter/>";
-    xmlstream  <<  "</solarsystem>";
+    xmlstream << "<solarsystem star=\"sun\">";
+    xmlstream << "<mercurius/>";
+    xmlstream << "<venus/>";
+    xmlstream << "<earth habitable=\"true\"><p>The best place</p>";
+    xmlstream << "<moon  habitable=\"possible\"/>";
+    xmlstream << "</earth>";
+    xmlstream << "<mars/>";
+    xmlstream << "<jupiter/>";
+    xmlstream << "</solarsystem>";
     xmlstream << "</universe>";
     xmldevice.close();
 
@@ -1447,9 +1445,8 @@ void TestXmlReaderWithoutSpaces::testConvertQDomElement()
     QCOMPARE(placeNode.hasChildNodes(), true);
     QCOMPARE(placeNode.childNodes().count(), 1);
 
-    //printf("Result:\n%s\n\n", qPrintable(universeDoc.toString()));
+    // printf("Result:\n%s\n\n", qPrintable(universeDoc.toString()));
 }
-
 
 void TestXmlReaderWithoutSpaces::testSimpleOpenDocumentText()
 {
@@ -1470,12 +1467,12 @@ void TestXmlReaderWithoutSpaces::testSimpleOpenDocumentText()
     xmlstream << " xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\"";
     xmlstream << " xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" ";
     xmlstream << "   office:version=\"1.0\">";
-    xmlstream  << "<office:automatic-styles/>";
-    xmlstream  << "<office:body>";
-    xmlstream   << "<office:text>";
-    xmlstream    << "<text:p text:style-name=\"Standard\">Hello, world!</text:p>";
-    xmlstream   << "</office:text>";
-    xmlstream  << "</office:body>";
+    xmlstream << "<office:automatic-styles/>";
+    xmlstream << "<office:body>";
+    xmlstream << "<office:text>";
+    xmlstream << "<text:p text:style-name=\"Standard\">Hello, world!</text:p>";
+    xmlstream << "</office:text>";
+    xmlstream << "</office:body>";
     xmlstream << "</office:document-content>";
     xmldevice.close();
 
@@ -1485,8 +1482,8 @@ void TestXmlReaderWithoutSpaces::testSimpleOpenDocumentText()
     QCOMPARE(errorLine, 0);
     QCOMPARE(errorColumn, 0);
 
-    const char* officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
-    const char* textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
+    const char *officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
+    const char *textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
 
     // <office:document-content>
     KoXmlElement contentElement;
@@ -1631,8 +1628,8 @@ void TestXmlReaderWithoutSpaces::testWhitespace()
     xmlstream << "<office:document-content ";
     xmlstream << " xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\"";
     xmlstream << " xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\">";
-    xmlstream   << "<text:p> </text:p>";
-    xmlstream   << "<text:p> <text:span/> </text:p>";
+    xmlstream << "<text:p> </text:p>";
+    xmlstream << "<text:p> <text:span/> </text:p>";
     xmlstream << "</office:document-content>";
     xmldevice.close();
 
@@ -1886,42 +1883,44 @@ void TestXmlReaderWithoutSpaces::testSimpleOpenDocumentPresentation()
     xmlstream << "  xmlns:presentation=\"urn:oasis:names:tc:opendocument:xmlns:presentation:1.0\" ";
     xmlstream << "  xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" ";
     xmlstream << "  office:version=\"1.0\">";
-    xmlstream  << "<office:scripts/>";
-    xmlstream  << "<office:automatic-styles/>";
-    xmlstream  << "<office:body>";
-    xmlstream   << "<office:presentation>";
-    xmlstream    << "<draw:page draw:name=\"Title\" draw:style-name=\"dp1\" ";
-    xmlstream    << "   draw:master-page-name=\"lyt-cool\" ";
-    xmlstream    << "   presentation:presentation-page-layout-name=\"AL1T0\">";
-    xmlstream     << "<draw:frame presentation:style-name=\"pr1\" ";
-    xmlstream     << "  draw:text-style-name=\"P2\" draw:layer=\"layout\" ";
-    xmlstream     << "  svg:width=\"23.912cm\" svg:height=\"3.508cm\" ";
-    xmlstream     << "  svg:x=\"2.058cm\" svg:y=\"1.543cm\" ";
-    xmlstream     << "  presentation:class=\"title\" ";
-    xmlstream     << "  presentation:user-transformed=\"true\">";
-    xmlstream      << "<draw:text-box>";
-    xmlstream       << "<text:p text:style-name=\"P1\">Foobar</text:p>";
-    xmlstream      << "</draw:text-box>";
-    xmlstream     << "</draw:frame>";
-    xmlstream     << "<draw:frame presentation:style-name=\"pr2\" ";
-    xmlstream     << "  draw:text-style-name=\"P3\" draw:layer=\"layout\"";
-    xmlstream     << "  svg:width=\"23.912cm\" svg:height=\"13.231cm\"";
-    xmlstream     << "  svg:x=\"2.058cm\" svg:y=\"5.838cm\" ";
-    xmlstream     << "  presentation:class=\"subtitle\">";
-    xmlstream      << "<draw:text-box>";
-    xmlstream       << "<text:p text:style-name=\"P3\">Foo</text:p>";
-    xmlstream      << "</draw:text-box>";
-    xmlstream     << "</draw:frame>";
-    xmlstream     << "<presentation:notes draw:style-name=\"dp2\">";
-    xmlstream      << "<draw:page-thumbnail draw:style-name=\"gr1\" draw:layer=\"layout\" svg:width=\"13.706cm\" svg:height=\"10.28cm\" svg:x=\"3.647cm\" svg:y=\"2.853cm\" draw:page-number=\"1\" presentation:class=\"page\"/>";
-    xmlstream      << "<draw:frame presentation:style-name=\"pr3\" draw:text-style-name=\"P1\" draw:layer=\"layout\" svg:width=\"14.518cm\" svg:height=\"11.411cm\" svg:x=\"3.249cm\" svg:y=\"14.13cm\" presentation:class=\"notes\" presentation:placeholder=\"true\">";
-    xmlstream       << "<draw:text-box/>";
-    xmlstream      << "</draw:frame>";
-    xmlstream     << "</presentation:notes>";
-    xmlstream    << "</draw:page>";
-    xmlstream    << "<presentation:settings presentation:stay-on-top=\"true\"/>";
-    xmlstream   << "</office:presentation>";
-    xmlstream  << "</office:body>";
+    xmlstream << "<office:scripts/>";
+    xmlstream << "<office:automatic-styles/>";
+    xmlstream << "<office:body>";
+    xmlstream << "<office:presentation>";
+    xmlstream << "<draw:page draw:name=\"Title\" draw:style-name=\"dp1\" ";
+    xmlstream << "   draw:master-page-name=\"lyt-cool\" ";
+    xmlstream << "   presentation:presentation-page-layout-name=\"AL1T0\">";
+    xmlstream << "<draw:frame presentation:style-name=\"pr1\" ";
+    xmlstream << "  draw:text-style-name=\"P2\" draw:layer=\"layout\" ";
+    xmlstream << "  svg:width=\"23.912cm\" svg:height=\"3.508cm\" ";
+    xmlstream << "  svg:x=\"2.058cm\" svg:y=\"1.543cm\" ";
+    xmlstream << "  presentation:class=\"title\" ";
+    xmlstream << "  presentation:user-transformed=\"true\">";
+    xmlstream << "<draw:text-box>";
+    xmlstream << "<text:p text:style-name=\"P1\">Foobar</text:p>";
+    xmlstream << "</draw:text-box>";
+    xmlstream << "</draw:frame>";
+    xmlstream << "<draw:frame presentation:style-name=\"pr2\" ";
+    xmlstream << "  draw:text-style-name=\"P3\" draw:layer=\"layout\"";
+    xmlstream << "  svg:width=\"23.912cm\" svg:height=\"13.231cm\"";
+    xmlstream << "  svg:x=\"2.058cm\" svg:y=\"5.838cm\" ";
+    xmlstream << "  presentation:class=\"subtitle\">";
+    xmlstream << "<draw:text-box>";
+    xmlstream << "<text:p text:style-name=\"P3\">Foo</text:p>";
+    xmlstream << "</draw:text-box>";
+    xmlstream << "</draw:frame>";
+    xmlstream << "<presentation:notes draw:style-name=\"dp2\">";
+    xmlstream << "<draw:page-thumbnail draw:style-name=\"gr1\" draw:layer=\"layout\" svg:width=\"13.706cm\" svg:height=\"10.28cm\" svg:x=\"3.647cm\" "
+                 "svg:y=\"2.853cm\" draw:page-number=\"1\" presentation:class=\"page\"/>";
+    xmlstream << "<draw:frame presentation:style-name=\"pr3\" draw:text-style-name=\"P1\" draw:layer=\"layout\" svg:width=\"14.518cm\" svg:height=\"11.411cm\" "
+                 "svg:x=\"3.249cm\" svg:y=\"14.13cm\" presentation:class=\"notes\" presentation:placeholder=\"true\">";
+    xmlstream << "<draw:text-box/>";
+    xmlstream << "</draw:frame>";
+    xmlstream << "</presentation:notes>";
+    xmlstream << "</draw:page>";
+    xmlstream << "<presentation:settings presentation:stay-on-top=\"true\"/>";
+    xmlstream << "</office:presentation>";
+    xmlstream << "</office:body>";
     xmlstream << "</office:document-content>";
     xmldevice.close();
 
@@ -1931,11 +1930,11 @@ void TestXmlReaderWithoutSpaces::testSimpleOpenDocumentPresentation()
     QCOMPARE(errorLine, 0);
     QCOMPARE(errorColumn, 0);
 
-    const char* officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
-    const char* drawNS = "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0";
-    const char* textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
-    const char* presentationNS = "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0";
-    const char* svgNS = "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0";
+    const char *officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
+    const char *drawNS = "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0";
+    const char *textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
+    const char *presentationNS = "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0";
+    const char *svgNS = "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0";
 
     // <office:document-content>
     KoXmlElement contentElement;
@@ -2068,8 +2067,7 @@ void TestXmlReaderWithoutSpaces::testSimpleOpenDocumentPresentation()
     QCOMPARE(titlePageElement.attributeNS(drawNS, "name", ""), QString("Title"));
     QCOMPARE(titlePageElement.attributeNS(drawNS, "style-name", ""), QString("dp1"));
     QCOMPARE(titlePageElement.attributeNS(drawNS, "master-page-name", ""), QString("lyt-cool"));
-    QCOMPARE(titlePageElement.attributeNS(presentationNS,
-                                       "presentation-page-layout-name", ""), QString("AL1T0"));
+    QCOMPARE(titlePageElement.attributeNS(presentationNS, "presentation-page-layout-name", ""), QString("AL1T0"));
 
     // <draw:frame> for the title frame
     KoXmlElement titleFrameElement;
@@ -2193,17 +2191,17 @@ void TestXmlReaderWithoutSpaces::testSimpleOpenDocumentFormula()
     xmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     xmlstream << "<!DOCTYPE math:math PUBLIC \"-//OpenOffice.org//DTD Modified W3C MathML 1.01//EN\" \"math.dtd\">";
     xmlstream << "<math:math xmlns:math=\"http://www.w3.org/1998/Math/MathML\">";
-    xmlstream  << "<math:semantics>";
-    xmlstream   << "<math:mrow>";
-    xmlstream    << "<math:mi>E</math:mi>";
-    xmlstream    << "<math:mo math:stretchy=\"false\">=</math:mo>";
-    xmlstream    << "<math:msup>";
-    xmlstream     << "<math:mi math:fontstyle=\"italic\">mc</math:mi>";
-    xmlstream     << "<math:mn>2</math:mn>";
-    xmlstream    << "</math:msup>";
-    xmlstream   << "</math:mrow>";
-    xmlstream   << "<math:annotation math:encoding=\"StarMath 5.0\">E  =  mc^2 </math:annotation>";
-    xmlstream  << "</math:semantics>";
+    xmlstream << "<math:semantics>";
+    xmlstream << "<math:mrow>";
+    xmlstream << "<math:mi>E</math:mi>";
+    xmlstream << "<math:mo math:stretchy=\"false\">=</math:mo>";
+    xmlstream << "<math:msup>";
+    xmlstream << "<math:mi math:fontstyle=\"italic\">mc</math:mi>";
+    xmlstream << "<math:mn>2</math:mn>";
+    xmlstream << "</math:msup>";
+    xmlstream << "</math:mrow>";
+    xmlstream << "<math:annotation math:encoding=\"StarMath 5.0\">E  =  mc^2 </math:annotation>";
+    xmlstream << "</math:semantics>";
     xmlstream << "</math:math>";
     xmldevice.close();
 
@@ -2213,7 +2211,7 @@ void TestXmlReaderWithoutSpaces::testSimpleOpenDocumentFormula()
     QCOMPARE(errorLine, 0);
     QCOMPARE(errorColumn, 0);
 
-    const char* mathNS = "http://www.w3.org/1998/Math/MathML";
+    const char *mathNS = "http://www.w3.org/1998/Math/MathML";
 
     // <math:math>
     KoXmlElement mathElement;
@@ -2396,7 +2394,6 @@ void TestXmlReaderWithoutSpaces::testLargeOpenDocumentSpreadsheet()
 
     printf("Raw XML size: %lld KB\n", xmldevice.size() / 1024);
 
-
     QElapsedTimer timer;
 
 #if 0
@@ -2426,7 +2423,7 @@ void TestXmlReaderWithoutSpaces::testLargeOpenDocumentSpreadsheet()
     printf("Large spreadsheet: KoXmlDocument parsing time is %lld ms\n", timer.elapsed());
 
     // release memory taken by the XML document content
-    //xmlstream.setDevice( 0 );
+    // xmlstream.setDevice( 0 );
 
     // namespaces that will be used
     QString officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
@@ -2467,7 +2464,7 @@ void TestXmlReaderWithoutSpaces::testLargeOpenDocumentSpreadsheet()
         QCOMPARE(tableElement.attributeNS(tableNS, "print", ""), QString("false"));
 
         // load everything for this table
-        //KoXml::load( tableElement, 99 );
+        // KoXml::load( tableElement, 99 );
 
         QCOMPARE(tableElement.parentNode().isNull(), false);
         QCOMPARE(tableElement.parentNode() == spreadsheetElement, true);
@@ -2501,7 +2498,7 @@ void TestXmlReaderWithoutSpaces::testLargeOpenDocumentSpreadsheet()
                 cellElement = cellElement.nextSibling().toElement();
             }
 
-            //KoXml::unload( rowElement );
+            // KoXml::unload( rowElement );
             rowElement = rowElement.nextSibling().toElement();
         }
 
@@ -2512,7 +2509,7 @@ void TestXmlReaderWithoutSpaces::testLargeOpenDocumentSpreadsheet()
     printf("Large spreadsheet: iterating time is %lld ms\n", timer.elapsed());
 }
 
-void TestXmlReaderWithoutSpaces::testExternalOpenDocumentSpreadsheet(const QString& filename)
+void TestXmlReaderWithoutSpaces::testExternalOpenDocumentSpreadsheet(const QString &filename)
 {
     QProcess unzip;
     QStringList arguments;
@@ -2571,7 +2568,8 @@ void TestXmlReaderWithoutSpaces::testExternalOpenDocumentSpreadsheet(const QStri
     long totalCellCount = 0;
 
     KoXmlElement bodyElement;
-    forEachElement(bodyElement, contentElement) {
+    forEachElement(bodyElement, contentElement)
+    {
         // <office:body>
         if (bodyElement.localName() != QString("body"))
             continue;
@@ -2631,7 +2629,7 @@ void TestXmlReaderWithoutSpaces::testExternalOpenDocumentSpreadsheet(const QStri
 
                 KoXmlElement cellElement;
                 cellElement = rowElement.firstChild().toElement();
-                for (; ;) {
+                for (;;) {
                     if (cellElement.isNull())
                         break;
 
@@ -2661,7 +2659,6 @@ void TestXmlReaderWithoutSpaces::testExternalOpenDocumentSpreadsheet(const QStri
                     cellElement = cellElement.nextSibling().toElement();
                 }
 
-
                 // better not to unload, freeing memory takes time
                 KoXml::unload(rowElement);
 
@@ -2686,7 +2683,7 @@ void TestXmlReaderWithoutSpaces::testExternalOpenDocumentSpreadsheet(const QStri
     int elapsed = timer.elapsed();
     printf("External spreadsheet: iterating time is %d ms\n", elapsed);
     if (elapsed > 0)
-        printf("  approx. %ld cells/second\n", totalCellCount*1000 / elapsed);
+        printf("  approx. %ld cells/second\n", totalCellCount * 1000 / elapsed);
 
     // uncomment to check the XML
     xmlfile.remove();
@@ -2694,4 +2691,3 @@ void TestXmlReaderWithoutSpaces::testExternalOpenDocumentSpreadsheet(const QStri
 
 QTEST_GUILESS_MAIN(TestXmlReaderWithoutSpaces)
 #include <TestXmlReaderWithoutSpaces.moc>
-

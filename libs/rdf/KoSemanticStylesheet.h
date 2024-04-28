@@ -11,9 +11,9 @@
 
 #include "RdfForward.h"
 // Qt
+#include <QList>
 #include <QObject>
 #include <QSharedData>
-#include <QList>
 #include <QString>
 
 class KoSemanticStylesheetPrivate;
@@ -35,22 +35,21 @@ class KoSemanticStylesheetPrivate;
 class KORDF_EXPORT KoSemanticStylesheet : public QObject, public QSharedData
 {
     Q_OBJECT
-    KoSemanticStylesheetPrivate * const d;
-protected:
+    KoSemanticStylesheetPrivate *const d;
 
+protected:
     // Restrict who can make us
     friend class KoRdfSemanticItem;
     friend class KoRdfSemanticItemViewSite;
 
-    KoSemanticStylesheet(const QString &uuid, const QString &name, const QString &templateString,
-                         const QString &type = "System", bool isMutable = false);
+    KoSemanticStylesheet(const QString &uuid, const QString &name, const QString &templateString, const QString &type = "System", bool isMutable = false);
 
     /**
      * Only called from KoRdfSemanticItemViewSite, this method actually
      * applies the stylesheet to a specific reference to a semantic
      * item in the document.
      */
-    void format(hKoRdfSemanticItem obj, KoTextEditor *editor, const QString& xmlid = QString());
+    void format(hKoRdfSemanticItem obj, KoTextEditor *editor, const QString &xmlid = QString());
 
 public:
     ~KoSemanticStylesheet();
@@ -73,5 +72,5 @@ Q_SIGNALS:
 };
 
 #include <QMetaType>
-Q_DECLARE_METATYPE(KoSemanticStylesheet*)
+Q_DECLARE_METATYPE(KoSemanticStylesheet *)
 #endif

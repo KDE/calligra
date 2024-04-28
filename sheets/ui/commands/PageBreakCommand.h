@@ -27,7 +27,8 @@ public:
     enum Mode { BreakBeforeColumn, BreakBeforeRow };
     void setMode(Mode mode);
 
-    void setBreak(bool breaking) {
+    void setBreak(bool breaking)
+    {
         m_breaking = breaking;
     }
 
@@ -38,7 +39,7 @@ protected:
 
 private:
     Mode m_mode;
-    bool m_breaking      : 1;
+    bool m_breaking : 1;
 };
 
 } // namespace Sheets

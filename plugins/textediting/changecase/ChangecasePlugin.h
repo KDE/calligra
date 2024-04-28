@@ -10,13 +10,15 @@
 #include <QObject>
 #include <QVariant>
 
-class ChangecasePlugin : public QObject {
+class ChangecasePlugin : public QObject
+{
     Q_OBJECT
 
 public:
-    ChangecasePlugin(QObject * parent,  const QVariantList & );
-    ~ChangecasePlugin() override {}
+    ChangecasePlugin(QObject *parent, const QVariantList &);
+    ~ChangecasePlugin() override
+    {
+    }
 };
 
 #endif
-

@@ -8,54 +8,58 @@
 #include "KoPathPointInsertCommand.h"
 
 #include "KoPathPoint.h"
-#include <KoPathSegment.h>
 #include <KLocalizedString>
+#include <KoPathSegment.h>
 
 class KoPathPointInsertCommandPrivate
 {
 public:
-    KoPathPointInsertCommandPrivate() : deletePoints(true) { }
-    ~KoPathPointInsertCommandPrivate() {
+    KoPathPointInsertCommandPrivate()
+        : deletePoints(true)
+    {
+    }
+    ~KoPathPointInsertCommandPrivate()
+    {
         if (deletePoints)
             qDeleteAll(points);
     }
     QList<KoPathPointData> pointDataList;
-    QList<KoPathPoint*> points;
-    QList<QPair<QPointF, QPointF> > controlPoints;
+    QList<KoPathPoint *> points;
+    QList<QPair<QPointF, QPointF>> controlPoints;
     bool deletePoints;
 };
 
 KoPathPointInsertCommand::KoPathPointInsertCommand(const QList<KoPathPointData> &pointDataList, qreal insertPosition, KUndo2Command *parent)
-        : KUndo2Command(parent),
-        d(new KoPathPointInsertCommandPrivate())
+    : KUndo2Command(parent)
+    , d(new KoPathPointInsertCommandPrivate())
 {
     if (insertPosition < 0)
         insertPosition = 0;
     if (insertPosition > 1)
         insertPosition = 1;
 
-    //TODO the list needs to be sorted
+    // TODO the list needs to be sorted
 
     QList<KoPathPointData>::const_iterator it(pointDataList.begin());
     for (; it != pointDataList.end(); ++it) {
-        KoPathShape * pathShape = it->pathShape;
+        KoPathShape *pathShape = it->pathShape;
 
         KoPathSegment segment = pathShape->segmentByIndex(it->pointIndex);
 
         // should not happen but to be sure
-        if (! segment.isValid())
+        if (!segment.isValid())
             continue;
 
         d->pointDataList.append(*it);
 
         QPair<KoPathSegment, KoPathSegment> splitSegments = segment.splitAt(insertPosition);
 
-        KoPathPoint * split1 = splitSegments.first.second();
-        KoPathPoint * split2 = splitSegments.second.first();
-        KoPathPoint * splitPoint = new KoPathPoint(pathShape, split1->point());
-        if(split1->activeControlPoint1())
+        KoPathPoint *split1 = splitSegments.first.second();
+        KoPathPoint *split2 = splitSegments.second.first();
+        KoPathPoint *splitPoint = new KoPathPoint(pathShape, split1->point());
+        if (split1->activeControlPoint1())
             splitPoint->setControlPoint1(split1->controlPoint1());
-        if(split2->activeControlPoint2())
+        if (split2->activeControlPoint2())
             splitPoint->setControlPoint2(split2->controlPoint2());
 
         d->points.append(splitPoint);
@@ -76,7 +80,7 @@ void KoPathPointInsertCommand::redo()
     KUndo2Command::redo();
     for (int i = d->pointDataList.size() - 1; i >= 0; --i) {
         KoPathPointData pointData = d->pointDataList.at(i);
-        KoPathShape * pathShape = pointData.pathShape;
+        KoPathShape *pathShape = pointData.pathShape;
 
         KoPathSegment segment = pathShape->segmentByIndex(pointData.pointIndex);
 
@@ -105,11 +109,11 @@ void KoPathPointInsertCommand::undo()
     KUndo2Command::undo();
     for (int i = 0; i < d->pointDataList.size(); ++i) {
         const KoPathPointData &pdBefore = d->pointDataList.at(i);
-        KoPathShape * pathShape = pdBefore.pathShape;
+        KoPathShape *pathShape = pdBefore.pathShape;
         KoPathPointIndex piAfter = pdBefore.pointIndex;
         ++piAfter.second;
 
-        KoPathPoint * before = pathShape->pointByIndex(pdBefore.pointIndex);
+        KoPathPoint *before = pathShape->pointByIndex(pdBefore.pointIndex);
 
         d->points[i] = pathShape->removePoint(piAfter);
 
@@ -117,7 +121,7 @@ void KoPathPointInsertCommand::undo()
             piAfter.second = 0;
         }
 
-        KoPathPoint * after = pathShape->pointByIndex(piAfter);
+        KoPathPoint *after = pathShape->pointByIndex(piAfter);
 
         if (before->activeControlPoint2()) {
             QPointF controlPoint2 = before->controlPoint2();
@@ -135,7 +139,7 @@ void KoPathPointInsertCommand::undo()
     d->deletePoints = true;
 }
 
-QList<KoPathPoint*> KoPathPointInsertCommand::insertedPoints() const
+QList<KoPathPoint *> KoPathPointInsertCommand::insertedPoints() const
 {
     return d->points;
 }

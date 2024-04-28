@@ -10,7 +10,6 @@
 #include "KoCompositeOpAlphaDarken.h"
 #include "KoCompositeOpOver.h"
 
-
 template<>
 template<>
 KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32>::ReturnType
@@ -44,8 +43,7 @@ KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128>::create<Vc::
 }
 
 template<>
-KoReportCurrentArch::ReturnType
-KoReportCurrentArch::create<Vc::ScalarImpl>(ParamType)
+KoReportCurrentArch::ReturnType KoReportCurrentArch::create<Vc::ScalarImpl>(ParamType)
 {
-//     dbgPigment << "Legacy integer arithmetics implementation";
+    //     dbgPigment << "Legacy integer arithmetics implementation";
 }

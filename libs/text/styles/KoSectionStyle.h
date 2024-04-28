@@ -59,7 +59,6 @@ public:
     /// creates a clone of this style with the specified parent
     KoSectionStyle *clone(QObject *parent = 0) const;
 
-
     /// duplicated property from QTextBlockFormat
     void setLeftMargin(qreal margin);
     /// duplicated property from QTextBlockFormat
@@ -70,9 +69,9 @@ public:
     qreal rightMargin() const;
 
     KoText::Direction textProgressionDirection() const;
-    
+
     void setTextProgressionDirection(KoText::Direction dir);
-    
+
     /// See similar named method on QTextBlockFormat
     void setBackground(const QBrush &brush);
     /// See similar named method on QTextBlockFormat
@@ -195,7 +194,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_METATYPE(KoSectionStyle *)

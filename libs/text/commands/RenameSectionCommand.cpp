@@ -4,8 +4,8 @@
 
 #include "RenameSectionCommand.h"
 #include <KoSection.h>
-#include <KoTextDocument.h>
 #include <KoSectionModel.h>
+#include <KoTextDocument.h>
 
 #include <KLocalizedString>
 #include <kundo2command.h>
@@ -42,7 +42,7 @@ void RenameSectionCommand::redo()
 
 int RenameSectionCommand::id() const
 {
-    //FIXME: extract this to some enum shared across all commands
+    // FIXME: extract this to some enum shared across all commands
     return 34537684;
 }
 

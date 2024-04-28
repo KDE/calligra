@@ -19,15 +19,21 @@
 
 #include "Section.h"
 
-#include "SectionContainer.h"
-#include "LayoutFactoryRegistry.h"
 #include "Layout.h"
+#include "LayoutFactoryRegistry.h"
+#include "SectionContainer.h"
 
-Section::Section(RootSection* _rootSection) : SectionGroup(0), m_layout(LayoutFactoryRegistry::instance()->createLayout("freelayout")), m_sectionContainer(new SectionContainer(this, _rootSection))
+Section::Section(RootSection *_rootSection)
+    : SectionGroup(0)
+    , m_layout(LayoutFactoryRegistry::instance()->createLayout("freelayout"))
+    , m_sectionContainer(new SectionContainer(this, _rootSection))
 {
 }
 
-Section::Section(const Section& _rhs) : SectionGroup(_rhs), m_layout(LayoutFactoryRegistry::instance()->createLayout(_rhs.m_layout->id())), m_sectionContainer(new SectionContainer(*_rhs.m_sectionContainer, this))
+Section::Section(const Section &_rhs)
+    : SectionGroup(_rhs)
+    , m_layout(LayoutFactoryRegistry::instance()->createLayout(_rhs.m_layout->id()))
+    , m_sectionContainer(new SectionContainer(*_rhs.m_sectionContainer, this))
 {
     setName(_rhs.name());
 }
@@ -37,27 +43,27 @@ Section::~Section()
     delete m_sectionContainer;
 }
 
-SectionContainer* Section::sectionContainer()
+SectionContainer *Section::sectionContainer()
 {
     return m_sectionContainer;
 }
 
-const QString& Section::name() const
+const QString &Section::name() const
 {
     return m_name;
 }
 
-void Section::setName(const QString& _name)
+void Section::setName(const QString &_name)
 {
     m_name = _name;
 }
 
-Layout* Section::layout()
+Layout *Section::layout()
 {
     return m_layout;
 }
 
-void Section::setLayout(Layout* layout)
+void Section::setLayout(Layout *layout)
 {
     layout->replaceLayout(m_layout);
     delete m_layout;

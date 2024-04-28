@@ -36,15 +36,14 @@
 
 #include "CellStorage.h"
 #include "ColFormatStorage.h"
-#include "Currency.h"
 #include "Condition.h"
+#include "Currency.h"
 #include "Database.h"
 #include "Map.h"
 #include "RowFormatStorage.h"
 #include "Sheet.h"
-#include "ValueFormatter.h"
 #include "StyleStorage.h"
-
+#include "ValueFormatter.h"
 
 using namespace Calligra::Sheets;
 
@@ -53,20 +52,20 @@ Cell::Cell()
     cs = nullptr;
 }
 
-Cell::Cell(Sheet* sheet, int col, int row)
-        : CellBase(sheet, col, row)
+Cell::Cell(Sheet *sheet, int col, int row)
+    : CellBase(sheet, col, row)
 {
     cs = sheet ? sheet->fullCellStorage() : nullptr;
 }
 
-Cell::Cell(Sheet* sheet, const QPoint& pos)
-        : CellBase(sheet, pos)
+Cell::Cell(Sheet *sheet, const QPoint &pos)
+    : CellBase(sheet, pos)
 {
     cs = sheet ? sheet->fullCellStorage() : nullptr;
 }
 
-Cell::Cell(const Cell& other)
-        : CellBase(other)
+Cell::Cell(const Cell &other)
+    : CellBase(other)
 {
     cs = other.isNull() ? nullptr : other.fullSheet()->fullCellStorage();
 }
@@ -75,7 +74,7 @@ Cell::~Cell()
 {
 }
 
-Cell& Cell::operator=(const Cell& other)
+Cell &Cell::operator=(const Cell &other)
 {
     CellBase::operator=(other);
     cs = other.isNull() ? nullptr : other.fullSheet()->fullCellStorage();
@@ -83,13 +82,13 @@ Cell& Cell::operator=(const Cell& other)
 }
 
 // Return the sheet that this cell belongs to.
-Sheet* Cell::fullSheet() const
+Sheet *Cell::fullSheet() const
 {
     Q_ASSERT(!isNull());
     return dynamic_cast<Sheet *>(sheet());
 }
 
-Localization* Cell::locale() const
+Localization *Cell::locale() const
 {
     return sheet()->map()->calculationSettings()->locale();
 }
@@ -143,7 +142,7 @@ Conditions Cell::conditions() const
     return cs->conditions(column(), row());
 }
 
-void Cell::setConditions(const Conditions& conditions)
+void Cell::setConditions(const Conditions &conditions)
 {
     cs->setConditions(Region(cellPosition()), conditions);
 }
@@ -169,16 +168,13 @@ Style Cell::effectiveStyle() const
     return style;
 }
 
-void Cell::setStyle(const Style& style)
+void Cell::setStyle(const Style &style)
 {
     cs->setStyle(Region(cellPosition()), style);
     cs->styleStorage()->contains(cellPosition());
 }
 
-
-
-
-void Cell::setUserInput(const QString& string)
+void Cell::setUserInput(const QString &string)
 {
     QString old = userInput();
 
@@ -190,7 +186,7 @@ void Cell::setUserInput(const QString& string)
 }
 
 // Overrides the parser to disable parsing if the style is set to string
-Value Cell::parsedUserInput(const QString& text)
+Value Cell::parsedUserInput(const QString &text)
 {
     if (style().formatType() == Format::Text)
         return Value(text);
@@ -198,13 +194,11 @@ Value Cell::parsedUserInput(const QString& text)
     return CellBase::parsedUserInput(text);
 }
 
-
-
 // Return the out text, i.e. the text that is visible in the cells
 // square when shown.  This could, for instance, be the calculated
 // result of a formula.
 //
-QString Cell::displayText(const Style& s, Value *v, bool *showFormula) const
+QString Cell::displayText(const Style &s, Value *v, bool *showFormula) const
 {
     if (isNull())
         return QString();
@@ -213,25 +207,29 @@ QString Cell::displayText(const Style& s, Value *v, bool *showFormula) const
     const Style style = s.isEmpty() ? effectiveStyle() : s;
     // Display a formula if warranted.  If not, display the value instead;
     // this is the most common case.
-    if ( isFormula() && !(fullSheet()->isProtected() && style.hideFormula()) &&
-         ( (showFormula && *showFormula) || (!showFormula && fullSheet()->getShowFormula()) ) )
-    {
+    if (isFormula() && !(fullSheet()->isProtected() && style.hideFormula())
+        && ((showFormula && *showFormula) || (!showFormula && fullSheet()->getShowFormula()))) {
         string = userInput();
         if (showFormula)
             *showFormula = true;
     } else if (!isEmpty()) {
-        Value theValue = fullSheet()->fullMap()->formatter()->formatText(value(), style.formatType(), style.precision(),
-                 style.floatFormat(), style.prefix(),
-                 style.postfix(), style.currency().symbol(),
-                 style.customFormat(), style.thousandsSep());
-        if (v) *v = theValue;
+        Value theValue = fullSheet()->fullMap()->formatter()->formatText(value(),
+                                                                         style.formatType(),
+                                                                         style.precision(),
+                                                                         style.floatFormat(),
+                                                                         style.prefix(),
+                                                                         style.postfix(),
+                                                                         style.currency().symbol(),
+                                                                         style.customFormat(),
+                                                                         style.thousandsSep());
+        if (v)
+            *v = theValue;
         string = theValue.asString();
         if (showFormula)
             *showFormula = false;
     }
     return string;
 }
-
 
 QSharedPointer<QTextDocument> Cell::richText() const
 {
@@ -245,12 +243,11 @@ void Cell::setRichText(QSharedPointer<QTextDocument> text)
 
 // FIXME: Continue commenting and cleaning here (ingwa)
 
-
 // copy/paste
 
-void Cell::copyFormat(const Cell& cell, Paste::Mode mode)
+void Cell::copyFormat(const Cell &cell, Paste::Mode mode)
 {
-    Q_ASSERT(!isNull());   // trouble ahead...
+    Q_ASSERT(!isNull()); // trouble ahead...
     Q_ASSERT(!cell.isNull());
 
     Value value = this->value();
@@ -271,14 +268,14 @@ void Cell::copyFormat(const Cell& cell, Paste::Mode mode)
         setConditions(cell.conditions());
 }
 
-void Cell::copyContent(const Cell& cell, Paste::Mode mode, Paste::Operation op)
+void Cell::copyContent(const Cell &cell, Paste::Mode mode, Paste::Operation op)
 {
-    Q_ASSERT(!isNull());   // trouble ahead...
+    Q_ASSERT(!isNull()); // trouble ahead...
     Q_ASSERT(!cell.isNull());
 
     // Do we want values instead of the regular operation?
     if (mode == Paste::Result) {
-        setCellValue (cell.value());
+        setCellValue(cell.value());
         return;
     }
 
@@ -287,11 +284,15 @@ void Cell::copyContent(const Cell& cell, Paste::Mode mode, Paste::Operation op)
     if ((op != Paste::OverWrite) && (value().isNumber() || val.isNumber())) {
         Value cur = value();
         ValueCalc *calc = sheet()->map()->calc();
-        if (op == Paste::Add) val = calc->add (cur, val);
-        else if (op == Paste::Mul) val = calc->mul (cur, val);
-        else if (op == Paste::Sub) val = calc->sub (cur, val);
-        else if (op == Paste::Div) val = calc->div (cur, val);
-        setCellValue (val);
+        if (op == Paste::Add)
+            val = calc->add(cur, val);
+        else if (op == Paste::Mul)
+            val = calc->mul(cur, val);
+        else if (op == Paste::Sub)
+            val = calc->sub(cur, val);
+        else if (op == Paste::Div)
+            val = calc->div(cur, val);
+        setCellValue(val);
         return;
     }
 
@@ -308,12 +309,11 @@ void Cell::copyContent(const Cell& cell, Paste::Mode mode, Paste::Operation op)
     }
     if (!cell.richText().isNull())
         setRichText(cell.richText());
-
 }
 
-void Cell::copyAll(const Cell& cell, Paste::Mode mode, Paste::Operation op)
+void Cell::copyAll(const Cell &cell, Paste::Mode mode, Paste::Operation op)
 {
-    Q_ASSERT(!isNull());   // trouble ahead...
+    Q_ASSERT(!isNull()); // trouble ahead...
     Q_ASSERT(!cell.isNull());
 
     bool wantContent = true;
@@ -336,8 +336,10 @@ void Cell::copyAll(const Cell& cell, Paste::Mode mode, Paste::Operation op)
         wantValidity = false;
     }
 
-    if (wantFormat) copyFormat(cell, mode);
-    if (wantContent) copyContent(cell, mode, op);
+    if (wantFormat)
+        copyFormat(cell, mode);
+    if (wantContent)
+        copyContent(cell, mode, op);
 
     if (wantComment && (!comment().isEmpty() || !cell.comment().isEmpty()))
         setComment(cell.comment());
@@ -345,9 +347,7 @@ void Cell::copyAll(const Cell& cell, Paste::Mode mode, Paste::Operation op)
         setValidity(cell.validity());
 }
 
-
 // end of copy/paste
-
 
 bool Cell::needsPrinting() const
 {
@@ -359,12 +359,8 @@ bool Cell::needsPrinting() const
     const Style style = effectiveStyle();
 
     // Cell borders?
-    if (style.hasAttribute(Style::TopPen) ||
-            style.hasAttribute(Style::LeftPen) ||
-            style.hasAttribute(Style::RightPen) ||
-            style.hasAttribute(Style::BottomPen) ||
-            style.hasAttribute(Style::FallDiagonalPen) ||
-            style.hasAttribute(Style::GoUpDiagonalPen))
+    if (style.hasAttribute(Style::TopPen) || style.hasAttribute(Style::LeftPen) || style.hasAttribute(Style::RightPen) || style.hasAttribute(Style::BottomPen)
+        || style.hasAttribute(Style::FallDiagonalPen) || style.hasAttribute(Style::GoUpDiagonalPen))
         return true;
 
     // Background color or brush?
@@ -373,8 +369,7 @@ bool Cell::needsPrinting() const
 
         // Only brushes that are visible (ie. they have a brush style
         // and are not white) need to be drawn
-        if ((brush.style() != Qt::NoBrush) &&
-                (brush.color() != Qt::white || !brush.texture().isNull()))
+        if ((brush.style() != Qt::NoBrush) && (brush.color() != Qt::white || !brush.texture().isNull()))
             return true;
     }
 
@@ -390,22 +385,21 @@ bool Cell::needsPrinting() const
     return false;
 }
 
-
 // ----------------------------------------------------------------
 //                          Formula handling
-
 
 int Cell::effectiveAlignX() const
 {
     const Style style = effectiveStyle();
     int align = style.halign();
     if (align == Style::HAlignUndefined) {
-        //numbers should be right-aligned by default, as well as BiDi text
+        // numbers should be right-aligned by default, as well as BiDi text
         if ((style.formatType() == Format::Text) || value().isString())
             align = (displayText().isRightToLeft()) ? Style::Right : Style::Left;
         else {
             Value val = value();
-            while (val.isArray()) val = val.element(0, 0);
+            while (val.isArray())
+                val = val.element(0, 0);
             if (val.isBoolean() || val.isNumber())
                 align = Style::Right;
             else
@@ -432,7 +426,7 @@ QString Cell::link() const
     return cs->link(column(), row());
 }
 
-void Cell::setLink(const QString& link)
+void Cell::setLink(const QString &link)
 {
     cs->setLink(column(), row(), link);
 
@@ -494,8 +488,7 @@ int Cell::mergedYCells() const
     return cs->mergedYCells(column(), row());
 }
 
-
-bool Cell::compareData(const Cell& other) const
+bool Cell::compareData(const Cell &other) const
 {
     if (value() != other.value())
         return false;
@@ -517,5 +510,3 @@ bool Cell::compareData(const Cell& other) const
         return false;
     return true;
 }
-
-

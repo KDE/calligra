@@ -12,7 +12,7 @@
 #include <QMessageBox>
 
 StyleManagerDialog::StyleManagerDialog(QWidget *parent)
-        : KoDialog(parent)
+    : KoDialog(parent)
 {
     setButtons(Ok | Cancel | Apply);
     m_styleManagerWidget = new StyleManager(this);
@@ -45,19 +45,24 @@ void StyleManagerDialog::accept()
 
 void StyleManagerDialog::reject()
 {
-    if (m_styleManagerWidget->unappliedStyleChanges()){
-        int ans = QMessageBox::warning(this, i18n("Save Changes"), i18n("You have changes that are not applied. "
-        "What do you want to do with those changes?"), QMessageBox::Apply, QMessageBox::Discard, QMessageBox::Cancel);
+    if (m_styleManagerWidget->unappliedStyleChanges()) {
+        int ans = QMessageBox::warning(this,
+                                       i18n("Save Changes"),
+                                       i18n("You have changes that are not applied. "
+                                            "What do you want to do with those changes?"),
+                                       QMessageBox::Apply,
+                                       QMessageBox::Discard,
+                                       QMessageBox::Cancel);
         switch (ans) {
-        case QMessageBox::Apply :
+        case QMessageBox::Apply:
             if (m_styleManagerWidget->checkUniqueStyleName()) {
                 m_styleManagerWidget->save();
                 break;
             }
             return;
-        case QMessageBox::Discard :
+        case QMessageBox::Discard:
             break;
-        case QMessageBox::Cancel :
+        case QMessageBox::Cancel:
             return;
         }
     }

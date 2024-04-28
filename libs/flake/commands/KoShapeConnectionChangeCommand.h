@@ -7,9 +7,9 @@
 #ifndef KOSHAPECONNECTIONCHANGECOMMAND_H
 #define KOSHAPECONNECTIONCHANGECOMMAND_H
 
+#include "KoConnectionShape.h"
 #include "flake_export.h"
 #include <kundo2command.h>
-#include "KoConnectionShape.h"
 
 /// A command to add a connection between two shapes
 class FLAKE_EXPORT KoShapeConnectionChangeCommand : public KUndo2Command
@@ -24,9 +24,13 @@ public:
      * @param connectionPointId the id of the connection point to connect to
      * @param parent the parent undo command
      */
-    KoShapeConnectionChangeCommand(KoConnectionShape *connection, KoConnectionShape::HandleId connectionHandle,
-                                   KoShape *oldConnectedShape, int oldConnectionPointId,
-                                   KoShape *newConnectedShape, int newConnectionPointId, KUndo2Command *parent = 0);
+    KoShapeConnectionChangeCommand(KoConnectionShape *connection,
+                                   KoConnectionShape::HandleId connectionHandle,
+                                   KoShape *oldConnectedShape,
+                                   int oldConnectionPointId,
+                                   KoShape *newConnectedShape,
+                                   int newConnectionPointId,
+                                   KUndo2Command *parent = 0);
 
     /// Destroys the command
     ~KoShapeConnectionChangeCommand() override;
@@ -38,7 +42,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOSHAPECONNECTIONCHANGECOMMAND_H

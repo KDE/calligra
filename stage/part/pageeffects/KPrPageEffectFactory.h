@@ -19,10 +19,11 @@ class STAGE_EXPORT KPrPageEffectFactory
 {
 public:
     struct Properties {
-        Properties( int duration, int subType )
-        : duration( duration )
-        , subType( subType )
-        {}
+        Properties(int duration, int subType)
+            : duration(duration)
+            , subType(subType)
+        {
+        }
 
         int duration;
         int subType;
@@ -35,7 +36,7 @@ public:
      * @param name The name of the effect. This name is used in the UI
      * @param subTypes The possible subtypes of the page effect
      */
-    KPrPageEffectFactory( const QString & id, const QString & name );
+    KPrPageEffectFactory(const QString &id, const QString &name);
 
     virtual ~KPrPageEffectFactory();
 
@@ -44,7 +45,7 @@ public:
      *
      * @param properties The properties for creating a page effect
      */
-    KPrPageEffect * createPageEffect( const Properties & properties ) const;
+    KPrPageEffect *createPageEffect(const Properties &properties) const;
 
     /**
      * Create a page effect
@@ -53,7 +54,7 @@ public:
      *
      * @param element The element containing the information for creating the page effect
      */
-    KPrPageEffect * createPageEffect( const KoXmlElement & element ) const;
+    KPrPageEffect *createPageEffect(const KoXmlElement &element) const;
 
     /**
      * Get the id of the page effect
@@ -77,7 +78,7 @@ public:
      * If the bool is false the smil:direction is forward if it is true the smil:direction
      * is reverse.
      */
-    QList<QPair<QString, bool> > tags() const;
+    QList<QPair<QString, bool>> tags() const;
 
     /**
      * Get the (i18n'ed) name of a given subtype.
@@ -95,11 +96,11 @@ protected:
      *
      * @param strategy The strategy to add
      */
-    void addStrategy( KPrPageEffectStrategy * strategy );
+    void addStrategy(KPrPageEffectStrategy *strategy);
 
 private:
     struct Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KPRPAGEEFFECTFACTORY_H */

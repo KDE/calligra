@@ -8,8 +8,8 @@
 
 #include "kotext_export.h"
 
-#include <QObject>
 #include <KoXmlReaderForward.h>
+#include <QObject>
 
 class QTextDocument;
 class QTextCursor;
@@ -31,7 +31,7 @@ class KOTEXT_EXPORT KoTextRange : public QObject
 {
     Q_OBJECT
 public:
-    enum TagType {StartTag = 0, EndTag = 1};
+    enum TagType { StartTag = 0, EndTag = 1 };
 
     /**
      * constructor
@@ -55,10 +55,10 @@ public:
      */
     KoTextRangeManager *manager() const;
 
-     /**
+    /**
      * Return the textdocument the range points to.
      */
-   QTextDocument *document() const;
+    QTextDocument *document() const;
 
     /**
      * Save the part of this text range corresponding to position as ODF
@@ -102,7 +102,7 @@ public:
      *
      * @return false if loading failed
      */
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) =  0;
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
 
     void snapshot();
     void restore();

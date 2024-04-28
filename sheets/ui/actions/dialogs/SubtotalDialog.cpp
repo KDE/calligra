@@ -19,7 +19,6 @@
 #include "core/Cell.h"
 #include "ui/Selection.h"
 
-
 using namespace Calligra::Sheets;
 
 class SubtotalDialog::Private
@@ -31,9 +30,9 @@ public:
     bool m_removeExisting;
 };
 
-SubtotalDialog::SubtotalDialog(QWidget* parent, Selection* selection)
-        : KoDialog(parent)
-        , d(new Private)
+SubtotalDialog::SubtotalDialog(QWidget *parent, Selection *selection)
+    : KoDialog(parent)
+    , d(new Private)
 {
     d->selection = selection;
     d->m_removeExisting = false;
@@ -42,7 +41,7 @@ SubtotalDialog::SubtotalDialog(QWidget* parent, Selection* selection)
     setButtons(Ok | Cancel | Details | User1);
     setButtonGuiItem(User1, KGuiItem(i18n("Remove All")));
 
-    QWidget* widget = new QWidget(this);
+    QWidget *widget = new QWidget(this);
     d->mainWidget.setupUi(widget);
     setMainWidget(widget);
 
@@ -125,7 +124,7 @@ QList<int> SubtotalDialog::columns() const
     QList<int> res;
     QRect range = d->selection->lastRange();
     for (int i = 0; i < d->mainWidget.m_columnList->count(); ++i) {
-        QListWidgetItem* item = d->mainWidget.m_columnList->item(i);
+        QListWidgetItem *item = d->mainWidget.m_columnList->item(i);
         if (item->checkState() == Qt::Checked)
             res.append(range.left() + i);
     }
@@ -154,4 +153,3 @@ void SubtotalDialog::slotUser1()
     d->m_removeExisting = true;
     KoDialog::accept();
 }
-

@@ -21,7 +21,7 @@ KPrShapeApplicationData::~KPrShapeApplicationData()
     }
 }
 
-QSet<KPrShapeAnimation *> & KPrShapeApplicationData::animations()
+QSet<KPrShapeAnimation *> &KPrShapeApplicationData::animations()
 {
     return m_animations;
 }

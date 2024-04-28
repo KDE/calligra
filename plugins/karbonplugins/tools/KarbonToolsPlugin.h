@@ -15,9 +15,10 @@ class KarbonToolsPlugin : public QObject
     Q_OBJECT
 
 public:
-    KarbonToolsPlugin(QObject * parent,  const QVariantList &);
-    ~KarbonToolsPlugin() override {}
-
+    KarbonToolsPlugin(QObject *parent, const QVariantList &);
+    ~KarbonToolsPlugin() override
+    {
+    }
 };
 
 #endif // _KARBONTOOLSPLUGIN_H_

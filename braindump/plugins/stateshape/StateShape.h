@@ -31,17 +31,16 @@ public:
     ~StateShape();
 
     // absolutely necessary:
-    void paint(QPainter &painter,
-               const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
-    virtual void saveOdf(KoShapeSavingContext & context) const;
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
-    const QString& categoryId() const;
-    void setCategoryId(const QString& _categoryId);
-    const QString& stateId() const;
-    void setStateId(const QString& _stateId);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    virtual void saveOdf(KoShapeSavingContext &context) const;
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    const QString &categoryId() const;
+    void setCategoryId(const QString &_categoryId);
+    const QString &stateId() const;
+    void setStateId(const QString &_stateId);
+
 private:
     QString m_categoryId, m_stateId;
 };
-
 
 #endif

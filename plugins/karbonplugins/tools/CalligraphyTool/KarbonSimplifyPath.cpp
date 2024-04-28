@@ -7,8 +7,8 @@
 #include "KarbonSimplifyPath.h"
 
 #include <KoCurveFit.h>
-#include <KoPathShape.h>
 #include <KoPathPoint.h>
+#include <KoPathShape.h>
 #include <QDebug>
 
 /*
@@ -27,7 +27,8 @@ FIXME: bezier fit seems to crash when getting to many points in input,
        if there are to many point in one of the subpaths, split it
 */
 
-namespace KarbonSimplifyPath {
+namespace KarbonSimplifyPath
+{
 const qreal SUBDIVISION_COEFF = 100; // use error instead?
 const int MAX_RECURSIVE_DEPTH = 1024;
 int recursiveDepth;
@@ -71,13 +72,13 @@ void karbonSimplifyPath(KoPathShape *path, qreal error)
     }
 
     QList<KoSubpath *> subpaths = split(*path);
-    foreach(KoSubpath *subpath, subpaths)
-    subdivide(subpath);
+    foreach (KoSubpath *subpath, subpaths)
+        subdivide(subpath);
 
     simplifySubpaths(&subpaths, error);
     mergeSubpaths(subpaths, path);
 
-    while (! subpaths.isEmpty()) {
+    while (!subpaths.isEmpty()) {
         KoSubpath *subpath = subpaths.takeLast();
         qDeleteAll(*subpath);
         delete subpath;
@@ -117,10 +118,10 @@ QList<KoSubpath *> KarbonSimplifyPath::split(const KoPathShape &path)
         KoPathPoint *p = path.pointByIndex(KoPathPointIndex(0, i));
         // if the path separates two subpaths
         // (if it isn't smooth nor the first or last point)
-        if (i != 0  &&  i != path.pointCount() - 1) {
+        if (i != 0 && i != path.pointCount() - 1) {
             KoPathPoint *prev = path.pointByIndex(KoPathPointIndex(0, i - 1));
             KoPathPoint *next = path.pointByIndex(KoPathPointIndex(0, i + 1));
-            if (! p->isSmooth(prev, next)) {
+            if (!p->isSmooth(prev, next)) {
                 // create a new subpath
                 subpath->append(new KoPathPoint(*p));
                 subpath = new KoSubpath;
@@ -137,26 +138,23 @@ void KarbonSimplifyPath::subdivide(KoSubpath *subpath)
 {
     for (int i = 1; i < subpath->size(); ++i) {
         recursiveDepth = 0;
-        KoSubpath newPoints = subdivideAux((*subpath)[i-1], (*subpath)[i]);
-        foreach(KoPathPoint *p, newPoints) {
+        KoSubpath newPoints = subdivideAux((*subpath)[i - 1], (*subpath)[i]);
+        foreach (KoPathPoint *p, newPoints) {
             subpath->insert(i, p);
             ++i;
         }
     }
 }
 
-KoSubpath KarbonSimplifyPath::subdivideAux(KoPathPoint *p1,
-        KoPathPoint *p2)
+KoSubpath KarbonSimplifyPath::subdivideAux(KoPathPoint *p1, KoPathPoint *p2)
 {
     if (!p1->activeControlPoint1() && !p2->activeControlPoint2())
         return QList<KoPathPoint *>();
 
-    QPointF curve[4] = {
-        p1->point(),
-        p1->activeControlPoint2() ? p1->controlPoint2() : p1->point(),
-        p2->activeControlPoint1() ? p2->controlPoint1() : p2->point(),
-        p2->point()
-    };
+    QPointF curve[4] = {p1->point(),
+                        p1->activeControlPoint2() ? p1->controlPoint2() : p1->point(),
+                        p2->activeControlPoint1() ? p2->controlPoint1() : p2->point(),
+                        p2->point()};
 
     // if there is no need to add points do nothing
     if (isSufficentlyFlat(curve))
@@ -203,16 +201,15 @@ bool KarbonSimplifyPath::isSufficentlyFlat(QPointF curve[4])
     qreal dx = curve[0].x() - curve[3].y();
     qreal dy = curve[0].y() - curve[3].y();
     qreal dist2 = dx * dx + dy * dy;
-    qreal max2 = qMax(ux*ux, vx*vx) + qMax(uy*uy, vy*vy);
+    qreal max2 = qMax(ux * ux, vx * vx) + qMax(uy * uy, vy * vy);
     max2 *= (SUBDIVISION_COEFF * SUBDIVISION_COEFF);
 
     return max2 <= dist2;
 }
 
-void KarbonSimplifyPath::simplifySubpaths(QList<KoSubpath *> *subpaths,
-        qreal error)
+void KarbonSimplifyPath::simplifySubpaths(QList<KoSubpath *> *subpaths, qreal error)
 {
-    foreach(KoSubpath *subpath, *subpaths) {
+    foreach (KoSubpath *subpath, *subpaths) {
         if (subpath->size() > 2) {
             simplifySubpath(subpath, error);
         }
@@ -237,16 +234,14 @@ void KarbonSimplifyPath::simplifySubpath(KoSubpath *subpath, qreal error)
         KoPathPointIndex index(0, i);
         subpath->append(new KoPathPoint(*simplified->pointByIndex(index)));
     }
-    //res->setPosition( position() );
+    // res->setPosition( position() );
     delete simplified;
 }
 
-void KarbonSimplifyPath::mergeSubpaths(QList<KoSubpath *> subpaths,
-                                       KoPathShape *path)
+void KarbonSimplifyPath::mergeSubpaths(QList<KoSubpath *> subpaths, KoPathShape *path)
 {
     path->clear();
     path->moveTo(subpaths.first()->first()->point());
-
 
     // TODO: to make the code more readable use foreach and explicit
     //       counters with full name
@@ -265,7 +260,7 @@ void KarbonSimplifyPath::mergeSubpaths(QList<KoSubpath *> subpaths,
             // set the second control point of the previous point
             index = KoPathPointIndex(0, path->pointCount() - 2);
             p = path->pointByIndex(index);
-            KoPathPoint *prev = (*subpaths[si])[pi-1];
+            KoPathPoint *prev = (*subpaths[si])[pi - 1];
             if (prev->activeControlPoint2())
                 p->setControlPoint2(prev->controlPoint2());
         }

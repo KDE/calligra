@@ -18,11 +18,11 @@
    Boston, MA  02110-1301  USA.
 */
 
-//Qt's includes
-#include <QTime>
+// Qt's includes
 #include <QColor>
+#include <QTime>
 
-const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
+const QString Filterkpr2odf::createPageStyle(const KoXmlElement &page)
 {
     KoGenStyle style(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
     style.setAutoStyleInStylesDotXml(m_sticky);
@@ -33,61 +33,62 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
         if (!backMaster.isNull()) {
             style.addProperty("presentation:background-visible", backMaster.attribute("displayBackground", "1") == "1");
             style.addProperty("presentation:background-objects-visible", backMaster.attribute("displayMasterPageObject", "1") == "1");
-            useMasterBackground = backMaster.attribute("useMasterBackground", "1") == "1"; // not set was the default and it means use the background from master
+            useMasterBackground =
+                backMaster.attribute("useMasterBackground", "1") == "1"; // not set was the default and it means use the background from master
         } else {
-            //if BACKMASTER is not found we assume it's true
+            // if BACKMASTER is not found we assume it's true
             style.addProperty("presentation:background-visible", true);
             style.addProperty("presentation:background-objects-visible", true);
             style.addProperty("draw:fill", "none");
         }
     }
 
-    if (!page.hasChildNodes()) { //we check if this is an empty page
+    if (!page.hasChildNodes()) { // we check if this is an empty page
         return m_styles.insert(style, "dp");
     }
 
     if (!useMasterBackground) {
-        //it is not an empty page let's keep loading
+        // it is not an empty page let's keep loading
         KoXmlElement backType = page.namedItem("BACKTYPE").toElement();
         if (backType.isNull() || backType.attribute("value") == "0") {
-            //it's some form of color, plain or a gradient
+            // it's some form of color, plain or a gradient
             KoXmlElement bcType = page.namedItem("BCTYPE").toElement();
             if (bcType.isNull() || bcType.attribute("value") == "0") {
-                //background is a plain color
+                // background is a plain color
                 QString color = page.namedItem("BACKCOLOR1").toElement().attribute("color");
-                //if the backcolor is not present it's implicitly white
-                //unless a draw:fill is found, in which case even though a
-                //draw:fill-color is not present it's black in KPresenter2.0
+                // if the backcolor is not present it's implicitly white
+                // unless a draw:fill is found, in which case even though a
+                // draw:fill-color is not present it's black in KPresenter2.0
                 style.addProperty("draw:fill", "solid");
                 style.addProperty("draw:fill-color", page.namedItem("BACKCOLOR1").toElement().attribute("color", "#ffffff"));
             } else {
-                //background is a gradient
+                // background is a gradient
                 style.addProperty("draw:fill", "gradient");
                 style.addProperty("draw:fill-gradient-name", createGradientStyle(page));
             }
         } else {
-            //it's a picture instead
+            // it's a picture instead
             QString pictureName = getPictureNameFromKey(page.namedItem("BACKPICTUREKEY").toElement());
             KoXmlElement backView = page.namedItem("BACKVIEW").toElement();
             style.addProperty("draw:fill", "bitmap");
 
-            //The image is specified by a draw:fill-image style in draw:fill-image-name
+            // The image is specified by a draw:fill-image style in draw:fill-image-name
             KoGenStyle drawFillImage(KoGenStyle::FillImageStyle);
 
-            //default values
-            drawFillImage.addAttribute("xlink:href", "Pictures/" + m_pictures[ pictureName ]);
+            // default values
+            drawFillImage.addAttribute("xlink:href", "Pictures/" + m_pictures[pictureName]);
             drawFillImage.addAttribute("xlink:type", "simple");
             drawFillImage.addAttribute("xlink:show", "embed");
             drawFillImage.addAttribute("xlink:actuate", "onLoad");
             QString repeat;
             if (backView.isNull()) {
-                //the picture is just centered
+                // the picture is just centered
                 repeat = "no-repeat";
             } else if (backView.attribute("value") == "0") {
-                //the picture is stretched
+                // the picture is stretched
                 repeat = "stretch";
             } else if (backView.attribute("value") == "2") {
-                //picture is in mosaic
+                // picture is in mosaic
                 repeat = "repeat";
             }
             style.addProperty("style:repeat", repeat);
@@ -96,7 +97,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
         }
     }
 
-    //Add the duration of the page effect
+    // Add the duration of the page effect
     KoXmlElement pageDuration = page.namedItem("PGTIMER").toElement();
     if (!pageDuration.isNull()) {
         QTime time;
@@ -105,176 +106,176 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
         style.addProperty("presentation:transition-type", "automatic");
     }
 
-    //Add the page effect
-    //Enum: PageEffect
+    // Add the page effect
+    // Enum: PageEffect
     KoXmlElement pageEffect = page.namedItem("PGEFFECT").toElement();
     if (!pageEffect.isNull()) {
-        QString effectName("none");  //we default to none
+        QString effectName("none"); // we default to none
         int effect = pageEffect.attribute("value", "0").toInt();
         switch (effect) {
-        case -1: //PEF_RANDOM
+        case -1: // PEF_RANDOM
             effectName = "random";
             break;
-        case 0: //PEF_NONE
+        case 0: // PEF_NONE
             effectName = "none";
             break;
-        case 1: //PEF_CLOSE_HORZ
+        case 1: // PEF_CLOSE_HORZ
             effectName = "close-horizontal";
             break;
-        case 2: //PEF_CLOSE_VERT
+        case 2: // PEF_CLOSE_VERT
             effectName = "close-vertical";
             break;
-        case 3: //PEF_CLOSE_ALL
+        case 3: // PEF_CLOSE_ALL
             effectName = "close";
             break;
-        case 4: //PEF_OPEN_HORZ
+        case 4: // PEF_OPEN_HORZ
             effectName = "open-horizontal";
             break;
-        case 5: //PEF_OPEN VERT
+        case 5: // PEF_OPEN VERT
             effectName = "open-vertical";
             break;
-        case 6: //PEF_OPEN_ALL
+        case 6: // PEF_OPEN_ALL
             effectName = "open";
             break;
-        case 7: //PEF_INTERLOCKING_HORZ_1
+        case 7: // PEF_INTERLOCKING_HORZ_1
             effectName = "interlocking-horizontal-left";
             break;
-        case 8: //PEF_INTERLOCKING_HORZ_2
+        case 8: // PEF_INTERLOCKING_HORZ_2
             effectName = "interlocking-horizontal-right";
             break;
-        case 9: //PEF_INTERLOCKING_VERT_1
+        case 9: // PEF_INTERLOCKING_VERT_1
             effectName = "interlocking-vertical-up";
             break;
-        case 10: //PEF_INTERLOCKING_VERT_2
+        case 10: // PEF_INTERLOCKING_VERT_2
             effectName = "interlocking-vertical-bottom";
             break;
-        case 11: //PEF_SURROUND1
+        case 11: // PEF_SURROUND1
             effectName = "spiralin-left";
             break;
-        case 12: //PEF_FLY1
+        case 12: // PEF_FLY1
             effectName = "fly-away";
             break;
-        case 13: //PEF_BLINDS_HOR
+        case 13: // PEF_BLINDS_HOR
             effectName = "horizontal-stripes";
             break;
-        case 14: //PEF_BLINDS_VER
+        case 14: // PEF_BLINDS_VER
             effectName = "vertical-stripes";
             break;
-        case 15: //PEF_BOX_IN
+        case 15: // PEF_BOX_IN
             effectName = "fade-to-center";
             break;
-        case 16: //PEF_BOX_OUT
+        case 16: // PEF_BOX_OUT
             effectName = "fade-from-center";
             break;
-        case 17: //PEF_CHECKBOARD_ACROSS
+        case 17: // PEF_CHECKBOARD_ACROSS
             effectName = "horizontal-checkerboard";
             break;
-        case 18: //PEF_CHECKBOARD_DOWN
+        case 18: // PEF_CHECKBOARD_DOWN
             effectName = "vertical-checkerboard";
             break;
-        case 19: //PEF_COVER_DOWN
+        case 19: // PEF_COVER_DOWN
             effectName = "fade-from-top";
             break;
-        case 20: //PEF_UNCOVER_DOWN
+        case 20: // PEF_UNCOVER_DOWN
             effectName = "uncover-to-bottom";
             break;
-        case 21: //PEF_COVER_UP
+        case 21: // PEF_COVER_UP
             effectName = "fade-from-bottom";
             break;
-        case 22: //PEF_UNCOVER_UP
+        case 22: // PEF_UNCOVER_UP
             effectName = "uncover-to-top";
             break;
-        case 23: //PEF_COVER_LEFT
+        case 23: // PEF_COVER_LEFT
             effectName = "fade-from-right";
             break;
-        case 24: //PEF_UNCOVER_LEFT
+        case 24: // PEF_UNCOVER_LEFT
             effectName = "uncover-to-left";
             break;
-        case 25: //PEF_COVER_RIGHT
+        case 25: // PEF_COVER_RIGHT
             effectName = "fade-from-left";
             break;
-        case 26: //PEF_UNCOVER_RIGHT
+        case 26: // PEF_UNCOVER_RIGHT
             effectName = "uncover-to-right";
             break;
-        case 27: //PEF_COVER_LEFT_UP
+        case 27: // PEF_COVER_LEFT_UP
             effectName = "fade-from-lowerright";
             break;
-        case 28: //PEF_UNCOVER_LEFT_UP
+        case 28: // PEF_UNCOVER_LEFT_UP
             effectName = "uncover-to-upperleft";
             break;
-        case 29: //PEF_COVER_LEFT_DOWN
+        case 29: // PEF_COVER_LEFT_DOWN
             effectName = "fade-from-upperrigh";
             break;
-        case 30: //PEF_UNCOVER_LEFT_DOWN
+        case 30: // PEF_UNCOVER_LEFT_DOWN
             effectName = "uncover-to-lowerleft";
             break;
-        case 31: //PEF_COVER_RIGHT_UP
+        case 31: // PEF_COVER_RIGHT_UP
             effectName = "fade-from-lowerleft";
             break;
-        case 32: //PEF_UNCOVER_RIGHT_UP
+        case 32: // PEF_UNCOVER_RIGHT_UP
             effectName = "uncover-to-upperright";
             break;
-        case 33: //PEF_COVER_RIGHT_DOWN
+        case 33: // PEF_COVER_RIGHT_DOWN
             effectName = "fade-from-upperleft";
             break;
-        case 34: //PEF_UNCOVER_RIGHT_DOWN
+        case 34: // PEF_UNCOVER_RIGHT_DOWN
             effectName = "fade-from-lowerleft";
             break;
-        case 35: //PEF_DISSOLVE
+        case 35: // PEF_DISSOLVE
             effectName = "dissolve";
             break;
-        case 36: //PEF_STRIPS_LEFT_UP
+        case 36: // PEF_STRIPS_LEFT_UP
             effectName = "fade-from-lowerright";
             break;
-        case 37: //PEF_STRIPS_LEFT_DOWN
+        case 37: // PEF_STRIPS_LEFT_DOWN
             effectName = "fade-from-upperright";
             break;
-        case 38: //PEF_STRIPS_RIGHT_UP
+        case 38: // PEF_STRIPS_RIGHT_UP
             effectName = "fade-from-lowerleft";
             break;
-        case 39: //PEF_STRIPS_RIGHT_DOWN
+        case 39: // PEF_STRIPS_RIGHT_DOWN
             effectName = "fade-from-upperleft";
             break;
-        case 40: //PEF_MELTING
+        case 40: // PEF_MELTING
             effectName = "melt";
             break;
-        }//switch effect
+        } // switch effect
         style.addProperty("presentation:transition-style", effectName);
 
-        //Add the sound
+        // Add the sound
         KoXmlElement soundEffect = page.namedItem("PGSOUNDEFFECT").toElement();
         if (!soundEffect.isNull() && soundEffect.attribute("soundEffect") != "0") {
-            //As this is a "complex" tag we add it "manually"
+            // As this is a "complex" tag we add it "manually"
             QBuffer buffer;
             buffer.open(QIODevice::WriteOnly);
             KoXmlWriter elementWriter(&buffer);
-//          FIXME:   elementWriter.startElement( "style:presentation-properties" );
+            //          FIXME:   elementWriter.startElement( "style:presentation-properties" );
             elementWriter.startElement("presentation:sound");
-            elementWriter.addAttribute("xlink:href", "Sounds/" + m_sounds[ soundEffect.attribute("soundFileName")]);
+            elementWriter.addAttribute("xlink:href", "Sounds/" + m_sounds[soundEffect.attribute("soundFileName")]);
             elementWriter.addAttribute("xlink:type", "simple");
             elementWriter.addAttribute("xlink:show", "new");
             elementWriter.addAttribute("xlink:actuate", "onRequest");
-            elementWriter.endElement();//presentation:sound
-//             elementWriter.endElement();//style:presentation-properties
+            elementWriter.endElement(); // presentation:sound
+            //             elementWriter.endElement();//style:presentation-properties
 
             QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
             style.addChildElement("presentationSound", elementContents);
         }
-    }//if pageEffect is null
+    } // if pageEffect is null
 
     return m_styles.insert(style, "dp");
 }
 
-const QString Filterkpr2odf::createGradientStyle(const KoXmlElement& gradientElement)
+const QString Filterkpr2odf::createGradientStyle(const KoXmlElement &gradientElement)
 {
     KoGenStyle style(KoGenStyle::GradientStyle);
 
-    //KPresenter didn't allow to customize those attributes
+    // KPresenter didn't allow to customize those attributes
     style.addAttribute("draw:start-intensity", "100%");
     style.addAttribute("draw:end-intensity", "100%");
     style.addAttribute("draw:border", "0%");
-    //Check whether the gradient belongs to a page or to an object
-    int type = 1;//we default to 1
+    // Check whether the gradient belongs to a page or to an object
+    int type = 1; // we default to 1
     if (gradientElement.nodeName() == "PAGE" || gradientElement.nodeName() == "MASTERPAGE") {
         KoXmlElement backColor1 = gradientElement.namedItem("BACKCOLOR1").toElement();
         if (!backColor1.isNull()) {
@@ -324,7 +325,7 @@ const QString Filterkpr2odf::createGradientStyle(const KoXmlElement& gradientEle
         }
     }
 
-    //export the type of the gradient
+    // export the type of the gradient
     QString typeString;
     QString angle;
     switch (type) {
@@ -356,7 +357,7 @@ const QString Filterkpr2odf::createGradientStyle(const KoXmlElement& gradientEle
         typeString = "axial";
         angle = '0';
         break;
-    }//switch type
+    } // switch type
     style.addAttribute("draw:style", typeString);
     style.addAttribute("draw:angle", angle);
 
@@ -365,11 +366,11 @@ const QString Filterkpr2odf::createGradientStyle(const KoXmlElement& gradientEle
 
 const QString Filterkpr2odf::createPageLayout()
 {
-    //Create the page-layout that is: paper, header and footer sizes
+    // Create the page-layout that is: paper, header and footer sizes
     KoXmlElement paper = m_mainDoc.namedItem("DOC").namedItem("PAPER").toElement();
     KoXmlElement paperBorders = paper.namedItem("PAPERBORDERS").toElement();
 
-    //page-layout-properties
+    // page-layout-properties
     KoGenStyle style(KoGenStyle::PageLayoutStyle);
     style.setAutoStyleInStylesDotXml(true);
 
@@ -393,15 +394,15 @@ const QString Filterkpr2odf::createPageLayout()
     }
     style.addProperty("style:print-orientation", "landscape");
 
-    //NOTE: header-style and footer-style are not present because in KPresenter they are treated as text boxes
+    // NOTE: header-style and footer-style are not present because in KPresenter they are treated as text boxes
 
     return m_styles.insert(style, "pm");
 }
 
-const QString Filterkpr2odf::createMasterPageStyle(const KoXmlNode & objects, const KoXmlElement & masterBackground)
+const QString Filterkpr2odf::createMasterPageStyle(const KoXmlNode &objects, const KoXmlElement &masterBackground)
 {
-    //KoXmlElement header( m_mainDoc.namedItem( "DOC" ).namedItem( "HEADER" ).toElement() );
-    //KoXmlElement footer( m_mainDoc.namedItem( "DOC" ).namedItem( "FOOTER" ).toElement() );
+    // KoXmlElement header( m_mainDoc.namedItem( "DOC" ).namedItem( "HEADER" ).toElement() );
+    // KoXmlElement footer( m_mainDoc.namedItem( "DOC" ).namedItem( "FOOTER" ).toElement() );
 
     // set that we work on master
     m_sticky = true;
@@ -424,10 +425,10 @@ const QString Filterkpr2odf::createMasterPageStyle(const KoXmlNode & objects, co
 
     return m_styles.insert(style, "Default");
 }
-//TODO: load the tags still missing
-const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
+// TODO: load the tags still missing
+const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement &element)
 {
-    //A graphic style is wiely used by a broad type of objects, hence can have many different properties
+    // A graphic style is wiely used by a broad type of objects, hence can have many different properties
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(m_sticky);
 
@@ -436,7 +437,7 @@ const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
         if (textObject.hasAttribute("verticalAlign")) {
             QString textAligment = textObject.attribute("verticalAlign");
             if (textAligment == "center") {
-                //all the other values are valid except center that is called middle in ODF
+                // all the other values are valid except center that is called middle in ODF
                 textAligment = "middle";
             }
             style.addProperty("draw:textarea-vertical-align", textAligment);
@@ -472,30 +473,22 @@ const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
         }
         style.addProperty("draw:stroke", stroke);
     } else {
-        //even if the pen is not present for some objects it has to have a black stroke
-        if (element.attribute("type") == "1"
-                || element.attribute("type") == "2"
-                || element.attribute("type") == "3"
-                || element.attribute("type") == "5"
-                || element.attribute("type") == "8"
-                || element.attribute("type") == "11"
-                || element.attribute("type") == "12"
-                || element.attribute("type") == "13"
-                || element.attribute("type") == "14"
-                || element.attribute("type") == "15"
-                || element.attribute("type") == "16") {
+        // even if the pen is not present for some objects it has to have a black stroke
+        if (element.attribute("type") == "1" || element.attribute("type") == "2" || element.attribute("type") == "3" || element.attribute("type") == "5"
+            || element.attribute("type") == "8" || element.attribute("type") == "11" || element.attribute("type") == "12" || element.attribute("type") == "13"
+            || element.attribute("type") == "14" || element.attribute("type") == "15" || element.attribute("type") == "16") {
             style.addProperty("draw:stroke", "solid");
             style.addProperty("svg:stroke-width", "1px");
             style.addProperty("svg:stroke-color", "#000000");
         }
     }
 
-    //We now define what's the object filled with, we "default" to a brush if both attributes are present
+    // We now define what's the object filled with, we "default" to a brush if both attributes are present
     KoXmlElement brush = element.namedItem("BRUSH").toElement();
     KoXmlElement fillType = element.namedItem("FILLTYPE").toElement();
 
     int fillTypeValue = 0;
-    if (! fillType.isNull()) {
+    if (!fillType.isNull()) {
         fillTypeValue = fillType.attribute("value").toInt();
     }
 
@@ -512,9 +505,9 @@ const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
             style.addProperty("draw:fill-color", fillColor);
         } else if (brushStyle >= 9 && brushStyle <= 14) {
             fill = "hatch";
-            style.addProperty("draw:fill-hatch-name",  createHatchStyle(brushStyle, fillColor));
+            style.addProperty("draw:fill-hatch-name", createHatchStyle(brushStyle, fillColor));
         } else if (brushStyle >= 2 && brushStyle <= 8) {
-            //in KPR files transparency was used in ODF opacity is used instead calculated as 100-transparency
+            // in KPR files transparency was used in ODF opacity is used instead calculated as 100-transparency
             int opacity = 100;
             if (brushStyle == 2)
                 opacity = 6;
@@ -530,7 +523,7 @@ const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
                 opacity = 88;
             else if (brushStyle == 8)
                 opacity = 94;
-            //Opacity is a gradient, in this case an uniform one
+            // Opacity is a gradient, in this case an uniform one
             style.addProperty("draw:opacity", createOpacityGradientStyle(opacity));
         }
     } else if (!gradient.isNull() && fillTypeValue == 1) {
@@ -540,7 +533,7 @@ const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
         fill = "none";
     }
 
-    if (!fill.isNull()) { //don't save ""
+    if (!fill.isNull()) { // don't save ""
         style.addProperty("draw:fill", fill);
     }
 
@@ -569,37 +562,37 @@ const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
         QString shadowOffsetY;
         int direction = shadow.attribute("direction").toInt();
         QString distance = QString("%1pt").arg(shadow.attribute("distance").toDouble());
-        //Enum: ShadowDirection
+        // Enum: ShadowDirection
         switch (direction) {
-        case 1: //Left Up
+        case 1: // Left Up
             shadowOffsetX = '-' + distance;
             shadowOffsetY = '-' + distance;
             break;
-        case 2: //Up
+        case 2: // Up
             shadowOffsetX = "0pt";
             shadowOffsetY = '-' + distance;
             break;
-        case 3: //Right Up
+        case 3: // Right Up
             shadowOffsetX = distance;
             shadowOffsetY = '-' + distance;
             break;
-        case 4: //Right
+        case 4: // Right
             shadowOffsetX = distance;
             shadowOffsetY = "0pt";
             break;
-        case 5: //Right Bottom
+        case 5: // Right Bottom
             shadowOffsetX = distance;
             shadowOffsetY = distance;
             break;
-        case 6: //Bottom
+        case 6: // Bottom
             shadowOffsetX = "0pt";
             shadowOffsetY = distance;
             break;
-        case 7: //Left Bottom
+        case 7: // Left Bottom
             shadowOffsetX = '-' + distance;
             shadowOffsetY = distance;
             break;
-        case 8: //Left
+        case 8: // Left
             shadowOffsetX = '-' + distance;
             shadowOffsetY = "0pt";
             break;
@@ -608,13 +601,13 @@ const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
         style.addProperty("draw:shadow-offset-y", shadowOffsetY);
     }
 
-    //If what we're loading is the style for an image and some form of mirror, luminance, greyscale... is applied to it we must load it in the GrpahicStyle
+    // If what we're loading is the style for an image and some form of mirror, luminance, greyscale... is applied to it we must load it in the GrpahicStyle
     KoXmlElement pictureSettings = element.namedItem("PICTURESETTINGS").toElement();
     if (!pictureSettings.isNull()) {
         int mirrorType = pictureSettings.attribute("mirrorType", "0").toInt();
         QString mirror;
         switch (mirrorType) {
-        case 0: //normal
+        case 0: // normal
             break;
         case 1:
             mirror = "horizontal";
@@ -645,17 +638,17 @@ const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
             style.addProperty("draw:color-inversion", "true");
         }
 
-        //NOTE: depth is not portable
+        // NOTE: depth is not portable
     }
 
-//     style.addAttribute( "style:parent-style-name", "standard" ); TODO: add the standard Graphic style
+    //     style.addAttribute( "style:parent-style-name", "standard" ); TODO: add the standard Graphic style
 
     return m_styles.insert(style, "gr");
 }
 
 const QString Filterkpr2odf::createOpacityGradientStyle(int opacity)
 {
-    //Opacity wasn't a gradient in KPR so we go from and to the same value
+    // Opacity wasn't a gradient in KPR so we go from and to the same value
     KoGenStyle style(KoGenStyle::OpacityStyle);
     QString opacityString = QString("%1%").arg(opacity);
     style.addAttribute("draw:start", opacityString);
@@ -671,10 +664,10 @@ const QString Filterkpr2odf::createMarkerStyle(int markerType)
     QString viewBox;
     QString d;
 
-    //Enum: LineEnd
+    // Enum: LineEnd
     switch (markerType) {
-    case 0: //Normal
-        //nothing
+    case 0: // Normal
+        // nothing
         break;
     case 1:
         displayName = "Arrow";
@@ -689,12 +682,14 @@ const QString Filterkpr2odf::createMarkerStyle(int markerType)
     case 3:
         displayName = "Circle";
         viewBox = "0 0 1131 1131";
-        d = "m462 1118-102-29-102-51-93-72-72-93-51-102-29-102-13-105 13-102 29-106 51-102 72-89 93-72 102-50 102-34 106-9 101 9 106 34 98 50 93 72 72 89 51 102 29 106 13 102-13 105-29 102-51 102-72 93-93 72-98 51-106 29-101 13z";
+        d = "m462 1118-102-29-102-51-93-72-72-93-51-102-29-102-13-105 13-102 29-106 51-102 72-89 93-72 102-50 102-34 106-9 101 9 106 34 98 50 93 72 72 89 51 "
+            "102 29 106 13 102-13 105-29 102-51 102-72 93-93 72-98 51-106 29-101 13z";
         break;
     case 4:
         displayName = "Line Arrow";
         viewBox = "0 0 1122 2243";
-        d = "m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z";
+        d = "m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 "
+            "4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z";
         break;
     case 5:
         displayName = "Dimension Lines";
@@ -703,7 +698,7 @@ const QString Filterkpr2odf::createMarkerStyle(int markerType)
         break;
     case 6:
         displayName = "Double Arrow";
-        viewBox = "0 0 1131 1918";//FIXME: same as Double line arrow, not sure if it's ok, nothing in KPresenter1.6
+        viewBox = "0 0 1131 1918"; // FIXME: same as Double line arrow, not sure if it's ok, nothing in KPresenter1.6
         d = "m737 1131h394l-564-1131-567 1131h398l-398 787h1131z";
         break;
     case 7:
@@ -711,7 +706,7 @@ const QString Filterkpr2odf::createMarkerStyle(int markerType)
         viewBox = "0 0 1131 1918";
         d = "m0 11h312 312h122z";
         break;
-    }//switch markerType
+    } // switch markerType
 
     style.addAttribute("draw:display-name", displayName);
     style.addAttribute("draw:viewBox", viewBox);
@@ -766,10 +761,10 @@ const QString Filterkpr2odf::createStrokeDashStyle(int strokeStyle)
         dots2_length = "0.203cm";
         distance = "0.203cm";
         break;
-    }//switch strokeStyle
+    } // switch strokeStyle
 
-    //Not all the strings are filled always so in oder to not
-    //flood the style with unneeded "", we check if it was written
+    // Not all the strings are filled always so in oder to not
+    // flood the style with unneeded "", we check if it was written
     style.addAttribute("draw:display-name", displayName);
     style.addAttribute("draw:style", styleString);
     style.addAttribute("draw:dots1", dots1);
@@ -797,7 +792,7 @@ const QString Filterkpr2odf::createHatchStyle(int brushStyle, const QString &fil
     QString distance;
     QString rotation;
 
-    //Other numbers aren't needed because those aren't a hatch style
+    // Other numbers aren't needed because those aren't a hatch style
     switch (brushStyle) {
     case 9:
         displayName = fillColor + " 0 Degrees";
@@ -846,7 +841,7 @@ const QString Filterkpr2odf::createHatchStyle(int brushStyle, const QString &fil
     return m_styles.insert(style, "hs");
 }
 
-const QString Filterkpr2odf::createParagraphStyle(const KoXmlElement& element)
+const QString Filterkpr2odf::createParagraphStyle(const KoXmlElement &element)
 {
     KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "paragraph");
     style.setAutoStyleInStylesDotXml(m_sticky);
@@ -947,7 +942,7 @@ const QString Filterkpr2odf::createParagraphStyle(const KoXmlElement& element)
     return m_styles.insert(style, "P");
 }
 
-QString Filterkpr2odf::convertBorder(const KoXmlElement& border)
+QString Filterkpr2odf::convertBorder(const KoXmlElement &border)
 {
     QString style;
     int styleInt = border.attribute("style").toInt();
@@ -963,7 +958,7 @@ QString Filterkpr2odf::convertBorder(const KoXmlElement& border)
     return QString("%1 %2 %3").arg(width).arg(style).arg(color.name());
 }
 
-const QString Filterkpr2odf::createTextStyle(const KoXmlElement& element)
+const QString Filterkpr2odf::createTextStyle(const KoXmlElement &element)
 {
     KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
     style.setAutoStyleInStylesDotXml(m_sticky);
@@ -1001,7 +996,7 @@ const QString Filterkpr2odf::createTextStyle(const KoXmlElement& element)
         }
         style.addProperty("style:text-line-through-type", textLineThroughType);
         style.addProperty("style:text-line-through-style", "solid");
-        if (!textLineThroughWidth.isNull()) { //avoid saving ""
+        if (!textLineThroughWidth.isNull()) { // avoid saving ""
             style.addProperty("style:text-line-through-width", textLineThroughWidth);
         }
     }
@@ -1029,7 +1024,7 @@ const QString Filterkpr2odf::createTextStyle(const KoXmlElement& element)
                 textUnderlineType = "single";
                 textUnderlineStyle = "wave";
             }
-        }//if underlineStyleLine == solid
+        } // if underlineStyleLine == solid
         else if (underlineStyleLine == "dot") {
             if (underline == "1") {
                 textUnderlineType = "single";
@@ -1046,10 +1041,10 @@ const QString Filterkpr2odf::createTextStyle(const KoXmlElement& element)
 
         style.addProperty("style:text-underline-type", textUnderlineType);
         style.addProperty("style:text-underline-style", textUnderlineStyle);
-        if (!textUnderlineWidth.isNull()) { //avoid saving ""
+        if (!textUnderlineWidth.isNull()) { // avoid saving ""
             style.addProperty("style:text-underline-width", textUnderlineWidth);
         }
-    }//if element.hasAttribute( "strikeOut" )
+    } // if element.hasAttribute( "strikeOut" )
 
     QString shadow = element.attribute("text-shadow");
     if (!shadow.isNull()) {
@@ -1059,18 +1054,25 @@ const QString Filterkpr2odf::createTextStyle(const KoXmlElement& element)
     return m_styles.insert(style, "T");
 }
 
-const QString Filterkpr2odf::createListStyle(const KoXmlElement& element)
+const QString Filterkpr2odf::createListStyle(const KoXmlElement &element)
 {
     KoGenStyle style(KoGenStyle::ListAutoStyle);
     style.setAutoStyleInStylesDotXml(m_sticky);
 
-    static const int s_oasisCounterTypes[] = { '\0', '1', 'a', 'A', 'i', 'I',
-            '\0', '\0', // custombullet, custom
-            0x2022, // circle -> small disc
-            0xE00A, // square
-            0x25CF, // disc -> large disc
-            0x27A2  // box -> right-pointing triangle
-                                             };
+    static const int s_oasisCounterTypes[] = {
+        '\0',
+        '1',
+        'a',
+        'A',
+        'i',
+        'I',
+        '\0',
+        '\0', // custombullet, custom
+        0x2022, // circle -> small disc
+        0xE00A, // square
+        0x25CF, // disc -> large disc
+        0x27A2 // box -> right-pointing triangle
+    };
 
     KoXmlElement counter = element.namedItem("COUNTER").toElement();
 
@@ -1090,18 +1092,17 @@ const QString Filterkpr2odf::createListStyle(const KoXmlElement& element)
 
     if (isBullet) {
         QChar bulletChar;
-        if (type == 6) { //STYLE_CUSTOMBULLET
+        if (type == 6) { // STYLE_CUSTOMBULLET
             bulletChar = QChar(counter.attribute("bullet").toInt());
         } else {
-            bulletChar = QChar(s_oasisCounterTypes[ type ]);
+            bulletChar = QChar(s_oasisCounterTypes[type]);
         }
         elementWriter.addAttribute("text:bullet-char", QString(bulletChar));
     } else {
-        if (type != 7) { //STYLE_CUSTOM in 1.6 was not implemented, I assume it's never used
-            elementWriter.addAttribute("style:number-format", s_oasisCounterTypes[ type ]);
+        if (type != 7) { // STYLE_CUSTOM in 1.6 was not implemented, I assume it's never used
+            elementWriter.addAttribute("style:number-format", s_oasisCounterTypes[type]);
         }
-        if (counter.attribute("restart", "0") == "1"
-                || counter.attribute("restart") == "true") {
+        if (counter.attribute("restart", "0") == "1" || counter.attribute("restart") == "true") {
             QString start = counter.attribute("start", "1");
             elementWriter.addAttribute("text:start-value", start);
         }
@@ -1109,10 +1110,10 @@ const QString Filterkpr2odf::createListStyle(const KoXmlElement& element)
 
     elementWriter.addAttribute("style:num-prefix", counter.attribute("lefttext"));
     elementWriter.addAttribute("style:num-suffix", counter.attribute("righttext"));
-    elementWriter.endElement();// text:list-level-style-bullet or text:list-level-style-number
+    elementWriter.endElement(); // text:list-level-style-bullet or text:list-level-style-number
 
     QString align;
-    switch ((Qt::AlignmentFlag) element.attribute("align", "0").toInt()) {
+    switch ((Qt::AlignmentFlag)element.attribute("align", "0").toInt()) {
     case Qt::AlignLeft:
         align = "left";
         break;
@@ -1131,7 +1132,7 @@ const QString Filterkpr2odf::createListStyle(const KoXmlElement& element)
     }
     elementWriter.startElement("text:list-level-properties");
     elementWriter.addAttribute("fo:text-align", align);
-    elementWriter.endElement();//
+    elementWriter.endElement(); //
 
     QString elementContent = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     style.addChildElement("listLevelStyle", elementContent);

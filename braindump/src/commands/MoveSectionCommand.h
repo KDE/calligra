@@ -29,16 +29,17 @@ class SectionGroup;
 class MoveSectionCommand : public KUndo2Command
 {
 public:
-    MoveSectionCommand(Section* _section, SectionGroup* _parent, DocumentModel* _model, Section* _above);
-    MoveSectionCommand(Section* _section, SectionGroup* _parent, DocumentModel* _model, int _idx);
+    MoveSectionCommand(Section *_section, SectionGroup *_parent, DocumentModel *_model, Section *_above);
+    MoveSectionCommand(Section *_section, SectionGroup *_parent, DocumentModel *_model, int _idx);
     virtual void undo();
     virtual void redo();
+
 private:
-    Section* m_section;
-    SectionGroup* m_parent;
-    SectionGroup* m_previousParent;
-    DocumentModel* m_model;
-    Section* m_above;
+    Section *m_section;
+    SectionGroup *m_parent;
+    SectionGroup *m_previousParent;
+    DocumentModel *m_model;
+    Section *m_above;
     int m_idx;
     int m_previousIndex;
 };

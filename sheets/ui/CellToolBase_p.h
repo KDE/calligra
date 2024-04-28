@@ -17,9 +17,7 @@
 // Sheets
 #include "CellToolBase.h"
 
-
 class KUndo2Command;
-
 
 namespace Calligra
 {
@@ -32,14 +30,17 @@ class Sheet;
 class Q_DECL_HIDDEN CellToolBase::Private
 {
 public:
-    Private(CellToolBase* parent) : q(parent) {}
+    Private(CellToolBase *parent)
+        : q(parent)
+    {
+    }
 
     // Inline editor
-    CellEditor* cellEditor;
+    CellEditor *cellEditor;
     // External editor
-    Calligra::Sheets::ExternalEditor* externalEditor;
+    Calligra::Sheets::ExternalEditor *externalEditor;
     // Actions with extended names for the popup menu
-    QHash<QString, QAction*> popupMenuActions;
+    QHash<QString, QAction *> popupMenuActions;
     // Initialization flag.
     bool initialized;
     // For "Selection List..." action
@@ -49,7 +50,7 @@ public:
     Actions *actions;
 
 public:
-    void updateEditor(const Cell& cell);
+    void updateEditor(const Cell &cell);
     /** Directly triggers an action. */
     void triggerAction(const QString &name);
 
@@ -88,14 +89,13 @@ public:
      *                   Again, these are in the order left, top, right, bottom.
      *                   This should be preallocated with a size of at least 4.
      */
-    void retrieveMarkerInfo(const QRect &marker, const QRectF &viewRect,
-                            double positions[], bool paintSides[]);
+    void retrieveMarkerInfo(const QRect &marker, const QRectF &viewRect, double positions[], bool paintSides[]);
 
-    QList<QAction*> popupActionList() const;
+    QList<QAction *> popupActionList() const;
     void createPopupMenuActions();
 
 private:
-    CellToolBase* q;
+    CellToolBase *q;
 };
 
 } // namespace Sheets

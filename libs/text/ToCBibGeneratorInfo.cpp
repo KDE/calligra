@@ -7,14 +7,13 @@
 
 #include "ToCBibGeneratorInfo.h"
 
-#include <KoXmlWriter.h>
 #include <KoUnit.h>
+#include <KoXmlWriter.h>
 
 IndexEntry::IndexEntry(const QString &_styleName, IndexEntry::IndexEntryName _name)
-        :   styleName(_styleName),
-            name(_name)
+    : styleName(_styleName)
+    , name(_name)
 {
-
 }
 
 IndexEntry *IndexEntry::clone()
@@ -25,16 +24,14 @@ IndexEntry *IndexEntry::clone()
 
 IndexEntry::~IndexEntry()
 {
-
 }
 
-
-void IndexEntry::addAttributes(KoXmlWriter* writer) const
+void IndexEntry::addAttributes(KoXmlWriter *writer) const
 {
     Q_UNUSED(writer);
 }
 
-void IndexEntry::saveOdf(KoXmlWriter* writer) const
+void IndexEntry::saveOdf(KoXmlWriter *writer) const
 {
     switch (name) {
     case LINK_START:
@@ -77,7 +74,6 @@ IndexEntryBibliography::IndexEntryBibliography(const QString &_styleName)
     : IndexEntry(_styleName, IndexEntry::BIBLIOGRAPHY)
     , dataField(QString())
 {
-
 }
 
 IndexEntry *IndexEntryBibliography::clone()
@@ -87,15 +83,15 @@ IndexEntry *IndexEntryBibliography::clone()
     return newIndexEntry;
 }
 
-void IndexEntryBibliography::addAttributes(KoXmlWriter* writer) const
+void IndexEntryBibliography::addAttributes(KoXmlWriter *writer) const
 {
     if (!dataField.isNull()) {
         writer->addAttribute("text:bibliography-data-field", dataField);
     }
 }
 
-
-IndexEntrySpan::IndexEntrySpan(const QString &_styleName): IndexEntry(_styleName, IndexEntry::SPAN)
+IndexEntrySpan::IndexEntrySpan(const QString &_styleName)
+    : IndexEntry(_styleName, IndexEntry::SPAN)
 {
 }
 
@@ -106,16 +102,16 @@ IndexEntry *IndexEntrySpan::clone()
     return newIndexEntry;
 }
 
-void IndexEntrySpan::addAttributes(KoXmlWriter* writer) const
+void IndexEntrySpan::addAttributes(KoXmlWriter *writer) const
 {
     if (!text.isNull() && !text.isEmpty()) {
         writer->addTextNode(text);
     }
 }
 
-IndexEntryTabStop::IndexEntryTabStop(const QString &_styleName): IndexEntry(_styleName, IndexEntry::TAB_STOP)
+IndexEntryTabStop::IndexEntryTabStop(const QString &_styleName)
+    : IndexEntry(_styleName, IndexEntry::TAB_STOP)
 {
-
 }
 
 IndexEntry *IndexEntryTabStop::clone()
@@ -126,9 +122,9 @@ IndexEntry *IndexEntryTabStop::clone()
     return newIndexEntry;
 }
 
-void IndexEntryTabStop::addAttributes(KoXmlWriter* writer) const
+void IndexEntryTabStop::addAttributes(KoXmlWriter *writer) const
 {
-    writer->addAttribute("style:leader-char",tab.leaderText);
+    writer->addAttribute("style:leader-char", tab.leaderText);
     // If the value of this attribute is left, the style:position attribute shall also be present.
     // Otherwise, this attribute shall be omitted.
     if (tab.type == QTextOption::LeftTab) {
@@ -140,40 +136,39 @@ void IndexEntryTabStop::addAttributes(KoXmlWriter* writer) const
     }
 }
 
-
-void IndexEntryTabStop::setPosition(const QString& position)
+void IndexEntryTabStop::setPosition(const QString &position)
 {
     m_position = position;
     tab.position = KoUnit::parseValue(position);
 }
 
-void BibliographyEntryTemplate::saveOdf(KoXmlWriter* writer) const
+void BibliographyEntryTemplate::saveOdf(KoXmlWriter *writer) const
 {
     writer->startElement("text:bibliography-entry-template");
-        writer->addAttribute("text:style-name", styleName);
-        writer->addAttribute("text:bibliography-type", bibliographyType);
-        foreach(IndexEntry* e,indexEntries) {
-            e->saveOdf(writer);
-        }
+    writer->addAttribute("text:style-name", styleName);
+    writer->addAttribute("text:bibliography-type", bibliographyType);
+    foreach (IndexEntry *e, indexEntries) {
+        e->saveOdf(writer);
+    }
 
     writer->endElement();
 }
 
-void IndexTitleTemplate::saveOdf(KoXmlWriter* writer) const
+void IndexTitleTemplate::saveOdf(KoXmlWriter *writer) const
 {
     writer->startElement("text:index-title-template");
-        writer->addAttribute("text:style-name", styleName);
-        if (!text.isEmpty() && !text.isNull()) {
-            writer->addTextNode(text);
-        }
+    writer->addAttribute("text:style-name", styleName);
+    if (!text.isEmpty() && !text.isNull()) {
+        writer->addTextNode(text);
+    }
     writer->endElement();
 }
 
-void IndexSourceStyle::saveOdf(KoXmlWriter* writer) const
+void IndexSourceStyle::saveOdf(KoXmlWriter *writer) const
 {
     writer->startElement("text:index-source-style");
     if (!styleName.isNull()) {
-        writer->addAttribute("text:style-name",styleName);
+        writer->addAttribute("text:style-name", styleName);
     }
     writer->endElement();
 }
@@ -191,7 +186,7 @@ IndexSourceStyles::IndexSourceStyles(const IndexSourceStyles &indexSourceStyles)
     }
 }
 
-IndexSourceStyles& IndexSourceStyles::operator=(const IndexSourceStyles &indexSourceStyles)
+IndexSourceStyles &IndexSourceStyles::operator=(const IndexSourceStyles &indexSourceStyles)
 {
     outlineLevel = indexSourceStyles.outlineLevel;
 
@@ -201,20 +196,19 @@ IndexSourceStyles& IndexSourceStyles::operator=(const IndexSourceStyles &indexSo
     return *this;
 }
 
-
-void IndexSourceStyles::saveOdf(KoXmlWriter* writer) const
+void IndexSourceStyles::saveOdf(KoXmlWriter *writer) const
 {
     writer->startElement("text:index-source-styles");
-        writer->addAttribute("text:outline-level", outlineLevel);
-        foreach(const IndexSourceStyle &s, styles) {
-            s.saveOdf(writer);
-        }
+    writer->addAttribute("text:outline-level", outlineLevel);
+    foreach (const IndexSourceStyle &s, styles) {
+        s.saveOdf(writer);
+    }
     writer->endElement();
 }
 
-IndexEntryPageNumber::IndexEntryPageNumber(const QString &_styleName): IndexEntry(_styleName, IndexEntry::PAGE_NUMBER)
+IndexEntryPageNumber::IndexEntryPageNumber(const QString &_styleName)
+    : IndexEntry(_styleName, IndexEntry::PAGE_NUMBER)
 {
-
 }
 
 IndexEntry *IndexEntryPageNumber::clone()
@@ -223,9 +217,9 @@ IndexEntry *IndexEntryPageNumber::clone()
     return newIndexEntry;
 }
 
-IndexEntryLinkEnd::IndexEntryLinkEnd(const QString &_styleName): IndexEntry(_styleName, IndexEntry::LINK_END)
+IndexEntryLinkEnd::IndexEntryLinkEnd(const QString &_styleName)
+    : IndexEntry(_styleName, IndexEntry::LINK_END)
 {
-
 }
 
 IndexEntry *IndexEntryLinkEnd::clone()
@@ -245,7 +239,7 @@ TocEntryTemplate::TocEntryTemplate(const TocEntryTemplate &entryTemplate)
     }
 }
 
-TocEntryTemplate & TocEntryTemplate::operator=(const TocEntryTemplate& entryTemplate)
+TocEntryTemplate &TocEntryTemplate::operator=(const TocEntryTemplate &entryTemplate)
 {
     outlineLevel = entryTemplate.outlineLevel;
     styleName = entryTemplate.styleName;
@@ -257,22 +251,22 @@ TocEntryTemplate & TocEntryTemplate::operator=(const TocEntryTemplate& entryTemp
     return *this;
 }
 
-void TocEntryTemplate::saveOdf(KoXmlWriter* writer) const
+void TocEntryTemplate::saveOdf(KoXmlWriter *writer) const
 {
     writer->startElement("text:table-of-content-entry-template");
-        writer->addAttribute("text:outline-level", outlineLevel);
-        writer->addAttribute("text:style-name", styleName);
+    writer->addAttribute("text:outline-level", outlineLevel);
+    writer->addAttribute("text:style-name", styleName);
 
-        foreach(IndexEntry* e,indexEntries) {
-            e->saveOdf(writer);
-        }
+    foreach (IndexEntry *e, indexEntries) {
+        e->saveOdf(writer);
+    }
 
     writer->endElement();
 }
 
-IndexEntryText::IndexEntryText(const QString &_styleName): IndexEntry(_styleName,IndexEntry::TEXT)
+IndexEntryText::IndexEntryText(const QString &_styleName)
+    : IndexEntry(_styleName, IndexEntry::TEXT)
 {
-
 }
 
 IndexEntry *IndexEntryText::clone()
@@ -284,7 +278,6 @@ IndexEntry *IndexEntryText::clone()
 IndexEntryLinkStart::IndexEntryLinkStart(const QString &_styleName)
     : IndexEntry(_styleName, IndexEntry::LINK_START)
 {
-
 }
 
 IndexEntry *IndexEntryLinkStart::clone()
@@ -292,13 +285,11 @@ IndexEntry *IndexEntryLinkStart::clone()
     return new IndexEntryLinkStart(styleName);
 }
 
-
 IndexEntryChapter::IndexEntryChapter(const QString &_styleName)
     : IndexEntry(_styleName, IndexEntry::CHAPTER)
     , display(QString())
     , outlineLevel(INVALID_OUTLINE_LEVEL)
 {
-
 }
 
 IndexEntry *IndexEntryChapter::clone()
@@ -309,7 +300,7 @@ IndexEntry *IndexEntryChapter::clone()
     return newIndexEntry;
 }
 
-void IndexEntryChapter::addAttributes(KoXmlWriter* writer) const
+void IndexEntryChapter::addAttributes(KoXmlWriter *writer) const
 {
     if (!display.isNull()) {
         writer->addAttribute("text:display", display);
@@ -321,8 +312,9 @@ BibliographyEntryTemplate::BibliographyEntryTemplate()
 {
 }
 
-BibliographyEntryTemplate::BibliographyEntryTemplate(const QString& type, const QList<IndexEntry *>& entries)
-    : indexEntries(entries), bibliographyType(type)
+BibliographyEntryTemplate::BibliographyEntryTemplate(const QString &type, const QList<IndexEntry *> &entries)
+    : indexEntries(entries)
+    , bibliographyType(type)
 {
 }
 
@@ -338,7 +330,7 @@ BibliographyEntryTemplate::BibliographyEntryTemplate(const BibliographyEntryTemp
     bibliographyType = entryTemplate.bibliographyType;
 }
 
-BibliographyEntryTemplate & BibliographyEntryTemplate::operator=(const BibliographyEntryTemplate& entryTemplate)
+BibliographyEntryTemplate &BibliographyEntryTemplate::operator=(const BibliographyEntryTemplate &entryTemplate)
 {
     styleName = entryTemplate.styleName;
     styleId = entryTemplate.styleId;
@@ -350,4 +342,3 @@ BibliographyEntryTemplate & BibliographyEntryTemplate::operator=(const Bibliogra
     bibliographyType = entryTemplate.bibliographyType;
     return *this;
 }
-

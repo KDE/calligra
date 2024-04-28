@@ -40,14 +40,16 @@ class NamedAreaDialog : public ActionDialog
     Q_OBJECT
 
 public:
-    NamedAreaDialog(QWidget* parent, Selection* selection);
+    NamedAreaDialog(QWidget *parent, Selection *selection);
 
     virtual void onSelectionChanged(Selection *) override;
 Q_SIGNALS:
     void requestSelection(const Region &region, Sheet *sheet);
 
 protected:
-    virtual void onApply() override {}
+    virtual void onApply() override
+    {
+    }
 protected Q_SLOTS:
     void slotActivated();
     void slotRemove();
@@ -57,14 +59,14 @@ private:
     void fillData();
 
     Selection *m_selection;
-    QListWidget* m_list;
-    QLabel*      m_rangeName;
-    QPushButton* m_removeButton;
+    QListWidget *m_list;
+    QLabel *m_rangeName;
+    QPushButton *m_removeButton;
 
-    KLineEdit*   m_areaNameEdit;
-    KComboBox*   m_sheets;
-    KLineEdit*   m_cellRange;
-    QPushButton* m_saveButton;
+    KLineEdit *m_areaNameEdit;
+    KComboBox *m_sheets;
+    KLineEdit *m_cellRange;
+    QPushButton *m_saveButton;
 };
 
 } // namespace Sheets

@@ -6,10 +6,11 @@
 #ifndef MUSIC_CORE_STAFFSYSTEM_H
 #define MUSIC_CORE_STAFFSYSTEM_H
 
-#include <QObject>
 #include <QList>
+#include <QObject>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Sheet;
 class Clef;
@@ -30,18 +31,19 @@ public:
     void setIndent(qreal indent);
     qreal lineWidth() const;
     void setLineWidth(qreal width);
-    QList<Clef*> clefs() const;
-    Clef* clef(Staff* staff) const;
-    void setClefs(QList<Clef*> clefs);
+    QList<Clef *> clefs() const;
+    Clef *clef(Staff *staff) const;
+    void setClefs(QList<Clef *> clefs);
 public Q_SLOTS:
     void setTop(qreal top);
     void setFirstBar(int bar);
 Q_SIGNALS:
     void topChanged(qreal top);
     void firstBarChanged(int bar);
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

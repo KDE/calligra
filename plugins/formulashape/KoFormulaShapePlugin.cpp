@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "KoFormulaShapePlugin.h"
-#include "KoFormulaToolFactory.h"
 #include "KoFormulaShapeFactory.h"
+#include "KoFormulaToolFactory.h"
 
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
@@ -16,20 +16,20 @@
 #include "KoM2MMLForumulaTool.h"
 #endif
 
-K_PLUGIN_FACTORY_WITH_JSON(KoFormulaShapePluginFactory, "calligra_shape_formula.json",
-                           registerPlugin<KoFormulaShapePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(KoFormulaShapePluginFactory, "calligra_shape_formula.json", registerPlugin<KoFormulaShapePlugin>();)
 
-KoFormulaShapePlugin::KoFormulaShapePlugin( QObject* parent, const QVariantList& )
-                    : QObject( parent )
+KoFormulaShapePlugin::KoFormulaShapePlugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
 {
-    KoToolRegistry::instance()->add( new KoFormulaToolFactory() );
+    KoToolRegistry::instance()->add(new KoFormulaToolFactory());
 #ifndef _MSC_VER
-    KoToolRegistry::instance()->add( new KoM2MMLFormulaToolFactory());
+    KoToolRegistry::instance()->add(new KoM2MMLFormulaToolFactory());
 #endif
-    KoShapeRegistry::instance()->add( new KoFormulaShapeFactory() );
+    KoShapeRegistry::instance()->add(new KoFormulaShapeFactory());
 }
 
 KoFormulaShapePlugin::~KoFormulaShapePlugin()
-{}
+{
+}
 
 #include "KoFormulaShapePlugin.moc"

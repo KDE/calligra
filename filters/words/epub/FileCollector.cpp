@@ -6,14 +6,13 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "FileCollector.h"
 
 // Qt
-#include <QString>
 #include <QByteArray>
 #include <QList>
+#include <QString>
 
 // Calligra
 #include <KoStore.h>
@@ -23,22 +22,24 @@
 // ================================================================
 //                     class FileCollectorPrivate
 
-
 // Struct FileInfo holds the information about a file inside the EPUB store.
 
-struct FileInfo
-{
+struct FileInfo {
     FileInfo(const QString &id, const QString &fileName, const QByteArray &mimetype, const QByteArray &fileContents, const QString &label)
-        : m_id(id), m_fileName(fileName), m_mimetype(mimetype), m_fileContents(fileContents), m_label(label)
-    {}
+        : m_id(id)
+        , m_fileName(fileName)
+        , m_mimetype(mimetype)
+        , m_fileContents(fileContents)
+        , m_label(label)
+    {
+    }
 
-    QString     m_id;
-    QString     m_fileName;
-    QByteArray  m_mimetype;
-    QByteArray  m_fileContents;
-    QString     m_label;
+    QString m_id;
+    QString m_fileName;
+    QByteArray m_mimetype;
+    QByteArray m_fileContents;
+    QString m_label;
 };
-
 
 class FileCollectorPrivate
 {
@@ -46,11 +47,11 @@ public:
     FileCollectorPrivate();
     ~FileCollectorPrivate();
 
-    QString  filePrefix;        // default: "chapter"
-    QString  fileSuffix;        // default: ".xhtml"
-    QString  pathPrefix;        // default: "OEBPS/"
+    QString filePrefix; // default: "chapter"
+    QString fileSuffix; // default: ".xhtml"
+    QString pathPrefix; // default: "OEBPS/"
 
-    QList<FileCollector::FileInfo*>  m_files;  // Embedded files
+    QList<FileCollector::FileInfo *> m_files; // Embedded files
 };
 
 FileCollectorPrivate::FileCollectorPrivate()
@@ -63,7 +64,6 @@ FileCollectorPrivate::FileCollectorPrivate()
 FileCollectorPrivate::~FileCollectorPrivate()
 {
 }
-
 
 // ================================================================
 //                         class FileCollector
@@ -79,7 +79,6 @@ FileCollector::~FileCollector()
 
     delete d;
 }
-
 
 void FileCollector::setFilePrefix(const QString &prefix)
 {
@@ -111,23 +110,20 @@ QString FileCollector::pathPrefix() const
     return d->pathPrefix;
 }
 
-
 // ----------------------------------------------------------------
 
-void FileCollector::addContentFile(const QString &id, const QString &fileName,
-                                   const QByteArray &mimetype, const QByteArray &fileContents)
+void FileCollector::addContentFile(const QString &id, const QString &fileName, const QByteArray &mimetype, const QByteArray &fileContents)
 {
     addContentFile(id, fileName, mimetype, fileContents, "");
 }
 
-void FileCollector::addContentFile(const QString &id, const QString &fileName,
-                                   const QByteArray &mimetype, const QByteArray &fileContents, const QString &label)
+void FileCollector::addContentFile(const QString &id, const QString &fileName, const QByteArray &mimetype, const QByteArray &fileContents, const QString &label)
 {
     FileInfo *newFile = new FileInfo(id, fileName, mimetype, fileContents, label);
     d->m_files.append(newFile);
 }
 
-QList<FileCollector::FileInfo*>  FileCollector::files() const
+QList<FileCollector::FileInfo *> FileCollector::files() const
 {
     return d->m_files;
 }
@@ -135,7 +131,7 @@ QList<FileCollector::FileInfo*>  FileCollector::files() const
 KoFilter::ConversionStatus FileCollector::writeFiles(KoStore *store)
 {
     // Write contents of added files.
-    foreach(FileInfo *file, d->m_files) {
+    foreach (FileInfo *file, d->m_files) {
         if (!store->open(file->m_fileName)) {
             debugSharedExport << "Can not create" << file->m_fileName;
             return KoFilter::CreationError;
@@ -147,7 +143,5 @@ KoFilter::ConversionStatus FileCollector::writeFiles(KoStore *store)
     return KoFilter::OK;
 }
 
-
 // ----------------------------------------------------------------
 //                         Private functions
-

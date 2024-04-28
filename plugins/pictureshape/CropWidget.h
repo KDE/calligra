@@ -7,9 +7,9 @@
 #ifndef H_CROP_WIDGET_H
 #define H_CROP_WIDGET_H
 
-#include <QWidget>
-#include <QImage>
 #include "SelectionRect.h"
+#include <QImage>
+#include <QWidget>
 
 class PictureShape;
 
@@ -23,7 +23,7 @@ class CropWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit CropWidget(QWidget *parent=0);
+    explicit CropWidget(QWidget *parent = 0);
 
     void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
@@ -31,19 +31,19 @@ public:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
-    void setPictureShape(PictureShape* shape);
+    void setPictureShape(PictureShape *shape);
     void setCropRect(const QRectF &rect);
     void setKeepPictureProportion(bool keepProportion);
     void maximizeCroppedArea();
 
 Q_SIGNALS:
-    void sigCropRegionChanged(const QRectF&, bool undoLast);
+    void sigCropRegionChanged(const QRectF &, bool undoLast);
 
 private:
     void calcImageRect();
     void emitCropRegionChanged();
-    QPointF toUniformCoord(const QPointF& coord) const;
-    QPointF fromUniformCoord(const QPointF& coord) const;
+    QPointF toUniformCoord(const QPointF &coord) const;
+    QPointF fromUniformCoord(const QPointF &coord) const;
 
 private:
     PictureShape *m_pictureShape;

@@ -24,7 +24,7 @@
 namespace Libemf
 {
 
-/** 
+/**
     Simple representation of an EMF File header
 
     See MS-EMF Section 2.3.4.2 for details
@@ -65,7 +65,7 @@ public:
 
 private:
     // Temporary hack to read some bytes.
-    void soakBytes( QDataStream &stream, int numBytes );
+    void soakBytes(QDataStream &stream, int numBytes);
 
     quint32 mType;
     quint32 mSize;
@@ -80,7 +80,7 @@ private:
     quint32 m_nDescription;
     quint32 m_offDescription;
     quint32 m_nPalEntries;
-    QSize mDevice;      // this might need to be converted to something better
+    QSize mDevice; // this might need to be converted to something better
     QSize mMillimeters; // this might need to be converted to something better
 };
 

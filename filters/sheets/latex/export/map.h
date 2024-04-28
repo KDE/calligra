@@ -15,21 +15,21 @@
 **
 ** To receive a copy of the GNU Library General Public License, write to the
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+* Boston, MA 02110-1301, USA.
 **
 */
 
 #ifndef __CALLIGRA_SHEETS_LATEX_MAP_H__
 #define __CALLIGRA_SHEETS_LATEX_MAP_H__
 
+#include <QList> /* for list of format */
+#include <QStack> /* historic list */
 #include <QString>
-#include <QStack>  /* historic list */
-#include <QList>  /* for list of format */
 #include <QTextStream>
 
-#include "xmlparser.h"
 #include "config.h"
 #include "table.h"
+#include "xmlparser.h"
 
 /***********************************************************************/
 /* Class: Map                                                         */
@@ -40,9 +40,9 @@
  * paragraph, its format, etc. The complete text is a list of Map instances.
  * A footnote is a list of paragraph instances (now but not in the "futur").
  */
-class Map: public XmlParser, Config
+class Map : public XmlParser, Config
 {
-    QList<Table*> _tables;
+    QList<Table *> _tables;
 
 public:
     /**
@@ -79,11 +79,9 @@ public:
     /**
      * Write the paragraph in a file.
      */
-    void generate(QTextStream&);
-
+    void generate(QTextStream &);
 
 private:
-
 };
 
 #endif /* __CALLIGRA_SHEETS_LATEX_MAP_H__ */

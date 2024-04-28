@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &ASCIIIMPORT_LOG();
 
 #define debugAsciiImport qCDebug(ASCIIIMPORT_LOG)

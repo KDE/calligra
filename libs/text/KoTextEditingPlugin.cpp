@@ -6,20 +6,20 @@
 
 #include "KoTextEditingPlugin.h"
 
-#include <QTextDocument>
 #include <QTextBlock>
 #include <QTextCursor>
+#include <QTextDocument>
 
 #include "TextDebug.h"
 
 class Q_DECL_HIDDEN KoTextEditingPlugin::Private
 {
 public:
-    QHash<QString, QAction*> actionCollection;
+    QHash<QString, QAction *> actionCollection;
 };
 
 KoTextEditingPlugin::KoTextEditingPlugin()
-        : d(new Private())
+    : d(new Private())
 {
 }
 
@@ -33,7 +33,7 @@ void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) co
     cursor.setPosition(cursorPosition);
     // Protect against trying to select with an invalid cursorPosition
     if (cursor.position() == 0) {
-        errorText<<"Invalid cursor position"<<cursorPosition;
+        errorText << "Invalid cursor position" << cursorPosition;
         return;
     }
     QTextBlock block = cursor.block();
@@ -45,7 +45,8 @@ void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) co
     QString::ConstIterator iter = string.begin();
     while (iter != string.end()) {
         if (iter->isSpace()) {
-            if (space) ;// double spaces belong to the previous word
+            if (space)
+                ; // double spaces belong to the previous word
             else if (pos < cursorPosition)
                 cursor.setPosition(pos + block.position() + 1); // +1 because we don't want to set it on the space itself
             else
@@ -97,7 +98,7 @@ void KoTextEditingPlugin::checkSection(QTextDocument *document, int startPositio
     }
 }
 
-QHash<QString, QAction*> KoTextEditingPlugin::actions() const
+QHash<QString, QAction *> KoTextEditingPlugin::actions() const
 {
     return d->actionCollection;
 }

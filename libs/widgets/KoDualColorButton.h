@@ -38,16 +38,12 @@ class KoColorDisplayRendererInterface;
 class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY( KoColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
-    Q_PROPERTY( KoColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
-    Q_PROPERTY( bool popDialog READ popDialog WRITE setPopDialog)
+    Q_PROPERTY(KoColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
+    Q_PROPERTY(KoColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
+    Q_PROPERTY(bool popDialog READ popDialog WRITE setPopDialog)
 
-
-  public:
-    enum Selection {
-      Foreground,
-      Background
-    };
+public:
+    enum Selection { Foreground, Background };
     Q_ENUM(Selection);
 
     /**
@@ -57,12 +53,13 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
      * @param parent The parent widget of the KoDualColorButton.
      * @param dialogParent The parent widget of the color selection dialog.
      */
-    KoDualColorButton(const KoColor &foregroundColor, const KoColor &backgroundColor,
-                      QWidget *parent = nullptr, QWidget* dialogParent = nullptr );
+    KoDualColorButton(const KoColor &foregroundColor, const KoColor &backgroundColor, QWidget *parent = nullptr, QWidget *dialogParent = nullptr);
 
-    KoDualColorButton(const KoColor &foregroundColor, const KoColor &backgroundColor,
+    KoDualColorButton(const KoColor &foregroundColor,
+                      const KoColor &backgroundColor,
                       const KoColorDisplayRendererInterface *displayRenderer,
-                      QWidget *parent = nullptr, QWidget* dialogParent = nullptr);
+                      QWidget *parent = nullptr,
+                      QWidget *dialogParent = nullptr);
 
     /**
      * Destroys the KoDualColorButton.
@@ -92,43 +89,43 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
      */
     QSize sizeHint() const override;
 
-  public Q_SLOTS:
+public Q_SLOTS:
     /**
      * Sets the foreground color.
      */
-    void setForegroundColor( const KoColor &color );
+    void setForegroundColor(const KoColor &color);
 
     /**
      * Sets the background color.
      */
-    void setBackgroundColor( const KoColor &color );
+    void setBackgroundColor(const KoColor &color);
 
     /**
      * Sets if a dialog with a color chooser should be popped up when clicking
      * If you set this to false then you could connect to the pleasePopDialog signal
      * and pop your own dialog. Just set the current color afterwards.
      */
-    void setPopDialog( bool popDialog );
+    void setPopDialog(bool popDialog);
 
-  Q_SIGNALS:
+Q_SIGNALS:
     /**
      * Emitted when the foreground color is changed.
      */
-    void foregroundColorChanged( const KoColor &color );
+    void foregroundColorChanged(const KoColor &color);
 
     /**
      * Emitted when the background color is changed.
      */
-    void backgroundColorChanged( const KoColor &color );
+    void backgroundColorChanged(const KoColor &color);
 
     /**
      * Emitted when the user clicks one of the two color patches.
      * You should/could pop you own color chooser dialog in response.
      * Also see the popDialog attribute.
      */
-    void pleasePopDialog( const KoColor &color );
+    void pleasePopDialog(const KoColor &color);
 
-  protected:
+protected:
     /**
      * Sets the supplied rectangles to the proper size and position for the
      * current widget size. You can reimplement this to change the layout
@@ -136,20 +133,19 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
      * be at the top right, the reset control will always be at the bottom
      * left, and you must leave at least a 14x14 space in those corners.
      */
-    virtual void metrics( QRect &foregroundRect, QRect &backgroundRect );
+    virtual void metrics(QRect &foregroundRect, QRect &backgroundRect);
 
-    void paintEvent( QPaintEvent *event ) override;
-    void mousePressEvent( QMouseEvent *event ) override;
-    void mouseMoveEvent( QMouseEvent *event ) override;
-    void mouseReleaseEvent( QMouseEvent *event ) override;
-    void dragEnterEvent( QDragEnterEvent *event ) override;
-    void dropEvent( QDropEvent *event ) override;
+    void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
     void changeEvent(QEvent *event) override;
 
-  private:
+private:
     class Private;
     Private *const d;
 };
 
 #endif
-

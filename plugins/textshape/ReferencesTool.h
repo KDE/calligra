@@ -9,8 +9,8 @@
 #define REFERENCESTOOL_H
 
 #include "TextTool.h"
-#include <signal.h>
 #include <QWidget>
+#include <signal.h>
 
 class KoCanvasBase;
 class TableOfContentsConfigure;
@@ -33,7 +33,7 @@ public:
 
     ~ReferencesTool() override;
 
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     void deactivate() override;
 
     void createActions() override;
@@ -46,7 +46,7 @@ public:
 
 protected:
     /// reimplemented from superclass
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
 private Q_SLOTS:
     /// insert a citation
@@ -77,10 +77,11 @@ private Q_SLOTS:
     void customToCGenerated();
     /// insert a Link
     void insertLink();
-    ///insert a bookmark
+    /// insert a bookmark
     void insertBookmark(QString bookmarkName);
     /// validate a bookmark
     bool validateBookmark(QString bookmarkName);
+
 private:
     TableOfContentsConfigure *m_configure;
     SimpleTableOfContentsWidget *m_stocw;
@@ -99,7 +100,7 @@ class LabeledWidget : public QWidget
 {
     Q_OBJECT
 public:
-    enum LabelPosition {INLINE, ABOVE};
+    enum LabelPosition { INLINE, ABOVE };
     LabeledWidget(QAction *action, const QString &label, LabelPosition pos, bool warningLabelRequired);
     virtual ~LabeledWidget();
     void setWarningText(int pos, const QString &warning);
@@ -114,7 +115,7 @@ private Q_SLOTS:
 protected:
     void enterEvent(QEnterEvent *event) override;
 
-private :
+private:
     QLineEdit *m_lineEdit;
     QLabel *m_warningLabel[2];
     QAction *m_action;

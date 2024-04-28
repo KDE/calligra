@@ -17,7 +17,7 @@ namespace Sheets
 class MapBase;
 class SheetBase;
 
-class TestDatetimeFunctions: public QObject
+class TestDatetimeFunctions : public QObject
 {
     Q_OBJECT
 
@@ -60,8 +60,8 @@ private Q_SLOTS:
 
 private:
     MapBase *m_map;
-    SheetBase* m_sheet;
-    Value evaluate(const QString&, Value& ex);
+    SheetBase *m_sheet;
+    Value evaluate(const QString &, Value &ex);
 };
 
 } // namespace Sheets

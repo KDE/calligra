@@ -5,10 +5,8 @@
  */
 
 #include "DebugPigment.h"
-const QLoggingCategory &PIGMENT_log() \
+const QLoggingCategory &PIGMENT_log()
 {
     static const QLoggingCategory category("calligra.lib.pigment");
     return category;
 }
-
-

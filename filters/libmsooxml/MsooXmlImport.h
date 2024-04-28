@@ -43,48 +43,44 @@ class KOMSOOXML_EXPORT MsooXmlImport : public KoOdfExporter
 {
     Q_OBJECT
 public:
-    MsooXmlImport(const QString& bodyContentElement, QObject * parent);
+    MsooXmlImport(const QString &bodyContentElement, QObject *parent);
 
     ~MsooXmlImport() override;
 
-    KoStore* outputStore() const { return m_outputStore; }
+    KoStore *outputStore() const
+    {
+        return m_outputStore;
+    }
 
     //! KoFilter::UsageError is returned if this method is called outside
     //! of the importing process, i.e. not from within parseParts().
-    KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader *reader, const QString& path,
-            MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader *reader, const QString &path, MsooXmlReaderContext *context = 0);
 
     //! KoFilter::UsageError is returned if this method is called outside
     //! of the importing process, i.e. not from within parseParts().
-    KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader *reader, const QString& path,
-            QString& errorMessage,
-            MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader *reader, const QString &path, QString &errorMessage, MsooXmlReaderContext *context = 0);
 
     //! Loads a file from a device
-    KoFilter::ConversionStatus loadAndParseFromDevice(MsooXmlReader* reader, QIODevice* device,
-            MsooXmlReaderContext* context);
+    KoFilter::ConversionStatus loadAndParseFromDevice(MsooXmlReader *reader, QIODevice *device, MsooXmlReaderContext *context);
 
     /*! Copies file @a sourceName from the input archive to the output document
     under @a destinationName name. @return KoFilter::OK on success.
     On failure @a errorMessage is set.
     KoFilter::UsageError is returned if this method is called outside
     of the importing process, i.e. not from within parseParts(). */
-    KoFilter::ConversionStatus copyFile(const QString& sourceName,
-                                        const QString& destinationName,
-                                        bool oleFile);
+    KoFilter::ConversionStatus copyFile(const QString &sourceName, const QString &destinationName, bool oleFile);
 
     /* Creates an image to the resulting odf with the given name */
-    KoFilter::ConversionStatus createImage(const QImage& source,
-                                           const QString& destinationName);
+    KoFilter::ConversionStatus createImage(const QImage &source, const QString &destinationName);
 
     /*! @return image from the file for modifications */
-    KoFilter::ConversionStatus imageFromFile(const QString& sourceName, QImage& image);
+    KoFilter::ConversionStatus imageFromFile(const QString &sourceName, QImage &image);
 
     /*! @return size of image file @a sourceName read from zip archive @a zip.
     Size of the image is returned in @a size.
     @return KoFilter::OK on success.
     On failure @a errorMessage is set. */
-    KoFilter::ConversionStatus imageSize(const QString& sourceName, QSize& size);
+    KoFilter::ConversionStatus imageSize(const QString &sourceName, QSize &size);
 
     //! Helper class to get information about predefined ooxml shapes
     PredefinedShapeHelper m_shapeHelper;
@@ -93,69 +89,86 @@ public:
     void reportProgress(unsigned progress);
 
 protected:
-    KoFilter::ConversionStatus createDocument(KoStore *outputStore,
-                                                      KoOdfWriters *writers) override;
+    KoFilter::ConversionStatus createDocument(KoStore *outputStore, KoOdfWriters *writers) override;
 
-    void writeConfigurationSettings(KoXmlWriter* settings) const override;
+    void writeConfigurationSettings(KoXmlWriter *settings) const override;
 
     bool isPasswordProtectedFile(QString &filename);
-    QTemporaryFile* tryDecryptFile(QString &filename);
+    QTemporaryFile *tryDecryptFile(QString &filename);
 
-    virtual KoFilter::ConversionStatus parseParts(KoOdfWriters *writers,
-            MsooXmlRelationships *relationships, QString& errorMessage) = 0;
+    virtual KoFilter::ConversionStatus parseParts(KoOdfWriters *writers, MsooXmlRelationships *relationships, QString &errorMessage) = 0;
 
     //! KoFilter::UsageError is returned if this method is called outside
     //! of the importing process, i.e. not from within parseParts().
-    KoFilter::ConversionStatus loadAndParseDocument(
-        const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,
-        QString& errorMessage, MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus
+    loadAndParseDocument(const QByteArray &contentType, MsooXmlReader *reader, KoOdfWriters *writers, QString &errorMessage, MsooXmlReaderContext *context = 0);
 
     //! Like @ref loadAndParseDocument(const QByteArray&, MsooXmlReader*, KoOdfWriters*, QString&, MsooXmlReaderContext*)
     //! but file name is provided directly instead of content type
-    KoFilter::ConversionStatus loadAndParseDocumentFromFile(
-        const QString& fileName, MsooXmlReader *reader, KoOdfWriters *writers,
-        QString& errorMessage, MsooXmlReaderContext* context);
+    KoFilter::ConversionStatus
+    loadAndParseDocumentFromFile(const QString &fileName, MsooXmlReader *reader, KoOdfWriters *writers, QString &errorMessage, MsooXmlReaderContext *context);
 
     //! Like @ref loadAndParseDocument(const QByteArray&, MsooXmlReader*, KoOdfWriters*, QString&, MsooXmlReaderContext*)
     //! but return KoFilter::OK if the document for the content type is not found.
-    KoFilter::ConversionStatus loadAndParseDocumentIfExists(
-        const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,
-        QString& errorMessage, MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus loadAndParseDocumentIfExists(const QByteArray &contentType,
+                                                            MsooXmlReader *reader,
+                                                            KoOdfWriters *writers,
+                                                            QString &errorMessage,
+                                                            MsooXmlReaderContext *context = 0);
 
     //! Like @ref loadAndParseDocumentIfExists(const QByteArray&, MsooXmlReader*, KoOdfWriters*, QString&, MsooXmlReaderContext*)
     //! but file name is provided directly instead of content type
-    KoFilter::ConversionStatus loadAndParseDocumentFromFileIfExists(
-        const QString& fileName, MsooXmlReader *reader, KoOdfWriters *writers,
-        QString& errorMessage, MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus loadAndParseDocumentFromFileIfExists(const QString &fileName,
+                                                                    MsooXmlReader *reader,
+                                                                    KoOdfWriters *writers,
+                                                                    QString &errorMessage,
+                                                                    MsooXmlReaderContext *context = 0);
 
     //! @return all part names.
-    QMultiHash<QByteArray, QByteArray> partNames() const { return m_contentTypes; }
+    QMultiHash<QByteArray, QByteArray> partNames() const
+    {
+        return m_contentTypes;
+    }
     //! @return part names associated with @a contentType
-    QList<QByteArray> partNames(const QByteArray& contentType) const { return m_contentTypes.values(contentType); }
+    QList<QByteArray> partNames(const QByteArray &contentType) const
+    {
+        return m_contentTypes.values(contentType);
+    }
 
-    QMap<QString, QVariant> documentProperties() const { return m_documentProperties; }
-    QVariant documentProperty(const QString& propertyName) const { return m_documentProperties.value(propertyName); }
+    QMap<QString, QVariant> documentProperties() const
+    {
+        return m_documentProperties;
+    }
+    QVariant documentProperty(const QString &propertyName) const
+    {
+        return m_documentProperties.value(propertyName);
+    }
 
 protected:
-    KoFilter::ConversionStatus loadAndParse(const QString& filename,
-                                            KoXmlDocument& doc, QString& errorMessage);
+    KoFilter::ConversionStatus loadAndParse(const QString &filename, KoXmlDocument &doc, QString &errorMessage);
 
 private:
     //! Opens file for converting and performs conversions.
     //! @return status of conversion.
-    KoFilter::ConversionStatus openFile(KoOdfWriters *writers, QString& errorMessage);
+    KoFilter::ConversionStatus openFile(KoOdfWriters *writers, QString &errorMessage);
 
-    KoFilter::ConversionStatus loadAndParseDocumentInternal(
-        const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,
-        QString& errorMessage, MsooXmlReaderContext* context, bool *pathFound);
+    KoFilter::ConversionStatus loadAndParseDocumentInternal(const QByteArray &contentType,
+                                                            MsooXmlReader *reader,
+                                                            KoOdfWriters *writers,
+                                                            QString &errorMessage,
+                                                            MsooXmlReaderContext *context,
+                                                            bool *pathFound);
 
-    KoFilter::ConversionStatus loadAndParseDocumentFromFileInternal(
-        const QString& fileName, MsooXmlReader *reader, KoOdfWriters *writers,
-        QString& errorMessage, MsooXmlReaderContext* context, bool *pathFound);
+    KoFilter::ConversionStatus loadAndParseDocumentFromFileInternal(const QString &fileName,
+                                                                    MsooXmlReader *reader,
+                                                                    KoOdfWriters *writers,
+                                                                    QString &errorMessage,
+                                                                    MsooXmlReaderContext *context,
+                                                                    bool *pathFound);
 
-    KZip* m_zip; //!< Input zip file
+    KZip *m_zip; //!< Input zip file
 
-    KoStore* m_outputStore; //!< output store used for copying files
+    KoStore *m_outputStore; //!< output store used for copying files
 
     //! XML from "[Content_Types].xml" file.
     KoXmlDocument m_contentTypesXML;

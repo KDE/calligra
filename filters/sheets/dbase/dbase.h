@@ -11,9 +11,9 @@
 #include <QDataStream>
 #include <QDateTime>
 #include <QFile>
+#include <QList>
 #include <QString>
 #include <QStringList>
-#include <QList>
 
 class DBaseField
 {
@@ -26,29 +26,30 @@ public:
 
 class DBase
 {
-
 public:
     DBase();
     ~DBase();
 
-    QList<DBaseField*> fields;
+    QList<DBaseField *> fields;
 
-    bool load(const QString& filename);
+    bool load(const QString &filename);
     QStringList readRecord(unsigned recno);
     void close();
 
-    unsigned recordCount() {
+    unsigned recordCount()
+    {
         return m_recordCount;
     }
-    int version() {
+    int version()
+    {
         return m_version;
     }
-    QDate lastUpdate() {
+    QDate lastUpdate()
+    {
         return m_lastUpdate;
     }
 
 private:
-
     QFile m_file;
     QDataStream m_stream;
     int m_version;

@@ -36,7 +36,6 @@ class RowHeader;
 class Selection;
 class View;
 
-
 /**
  * The scrollable area showing the cells.
  */
@@ -50,85 +49,101 @@ class CALLIGRA_SHEETS_PART_EXPORT Canvas : public QWidget, public CanvasBase
     Q_OBJECT
 
 public:
-    explicit Canvas(View* view);
+    explicit Canvas(View *view);
     ~Canvas() override;
 
-    View* view() const;
+    View *view() const;
 
     /// reimplemented method from KoCanvasBase
-    QWidget* canvasWidget() override {
+    QWidget *canvasWidget() override
+    {
         return this;
     }
-    const QWidget* canvasWidget() const override {
+    const QWidget *canvasWidget() const override
+    {
         return this;
     }
 
-    Sheet* activeSheet() const override;
-    Calligra::Sheets::Selection* selection() const override;
+    Sheet *activeSheet() const override;
+    Calligra::Sheets::Selection *selection() const override;
     void setCursor(const QCursor &cursor) override;
 
 public Q_SLOTS:
-    void setDocumentOffset(const QPoint& offset) {
+    void setDocumentOffset(const QPoint &offset)
+    {
         CanvasBase::setDocumentOffset(offset);
     }
-    void setDocumentSize(const QSizeF& size) {
+    void setDocumentSize(const QSizeF &size)
+    {
         CanvasBase::setDocumentSize(size);
     }
 
 Q_SIGNALS:
-    /* virtual */ void documentSizeChanged(const QSize&) override;
+    /* virtual */ void documentSizeChanged(const QSize &) override;
 
 protected:
     bool event(QEvent *e) override;
-    void keyPressEvent(QKeyEvent* _ev) override {
+    void keyPressEvent(QKeyEvent *_ev) override
+    {
         CanvasBase::keyPressed(_ev);
     }
-    void paintEvent(QPaintEvent* _ev) override;
-    void mousePressEvent(QMouseEvent* _ev) override;
-    void mouseReleaseEvent(QMouseEvent* _ev) override;
-    void mouseMoveEvent(QMouseEvent* _ev) override;
-    void mouseDoubleClickEvent(QMouseEvent*) override;
-    void focusInEvent(QFocusEvent* _ev) override {
+    void paintEvent(QPaintEvent *_ev) override;
+    void mousePressEvent(QMouseEvent *_ev) override;
+    void mouseReleaseEvent(QMouseEvent *_ev) override;
+    void mouseMoveEvent(QMouseEvent *_ev) override;
+    void mouseDoubleClickEvent(QMouseEvent *) override;
+    void focusInEvent(QFocusEvent *_ev) override
+    {
         CanvasBase::focusIn(_ev);
         QWidget::focusInEvent(_ev);
     }
-    void dragEnterEvent(QDragEnterEvent*) override;
-    void dragMoveEvent(QDragMoveEvent*) override;
-    void dragLeaveEvent(QDragLeaveEvent*) override;
-    void dropEvent(QDropEvent*) override;
+    void dragEnterEvent(QDragEnterEvent *) override;
+    void dragMoveEvent(QDragMoveEvent *) override;
+    void dragLeaveEvent(QDragLeaveEvent *) override;
+    void dropEvent(QDropEvent *) override;
     /// reimplemented method from superclass
-    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override {
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override
+    {
         return CanvasBase::inputMethodQuery(query);
     }
     /// reimplemented method from superclass
-    void inputMethodEvent(QInputMethodEvent *event) override {
+    void inputMethodEvent(QInputMethodEvent *event) override
+    {
         CanvasBase::inputMethodEvent(event);
     }
     /// reimplemented method from superclass
-    void tabletEvent(QTabletEvent *e) override {
+    void tabletEvent(QTabletEvent *e) override
+    {
         CanvasBase::tabletEvent(e);
     }
 
 public:
-    void update() override {
+    void update() override
+    {
         QWidget::update();
     }
-    void update(const QRectF& rect) override {
+    void update(const QRectF &rect) override
+    {
         QWidget::update(rect.toRect());
     }
-    Qt::LayoutDirection layoutDirection() const override {
+    Qt::LayoutDirection layoutDirection() const override
+    {
         return QWidget::layoutDirection();
     }
-    QRectF rect() const override {
+    QRectF rect() const override
+    {
         return QWidget::rect();
     }
-    QSizeF size() const override {
+    QSizeF size() const override
+    {
         return QWidget::size();
     }
-    QPoint mapToGlobal(const QPointF& point) const override {
+    QPoint mapToGlobal(const QPointF &point) const override
+    {
         return QWidget::mapToGlobal(point.toPoint());
     }
-    void updateMicroFocus() override {
+    void updateMicroFocus() override
+    {
         QWidget::updateMicroFocus();
     }
 
@@ -137,19 +152,21 @@ public:
      */
     void validateSelection();
 
-    KoZoomHandler* zoomHandler() const override;
+    KoZoomHandler *zoomHandler() const override;
     bool isViewLoading() const override;
-    SheetView* sheetView(Sheet* sheet) const override;
+    SheetView *sheetView(Sheet *sheet) const override;
     void enableAutoScroll() override;
     void disableAutoScroll() override;
-    void showContextMenu(const QPoint& globalPos) override;
-    ColumnHeader* columnHeader() const override;
-    RowHeader* rowHeader() const override;
+    void showContextMenu(const QPoint &globalPos) override;
+    ColumnHeader *columnHeader() const override;
+    RowHeader *rowHeader() const override;
+
 private:
     void setVertScrollBarPos(qreal pos) override;
     void setHorizScrollBarPos(qreal pos) override;
 
-    bool eventFilter(QObject *o, QEvent *e) override {
+    bool eventFilter(QObject *o, QEvent *e) override
+    {
         return CanvasBase::eventFilter(o, e);
     }
 
@@ -157,7 +174,7 @@ private:
     Q_DISABLE_COPY(Canvas)
 
     class Private;
-    Private * const cd;
+    Private *const cd;
 };
 
 } // namespace Sheets

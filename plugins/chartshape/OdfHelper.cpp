@@ -5,7 +5,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #include "OdfHelper.h"
 
 #include "ChartDebug.h"
@@ -14,54 +13,55 @@
 #include <float.h> // For basic data types characteristics.
 
 // Qt
-#include <QPointF>
 #include <QPainter>
+#include <QPointF>
 #include <QSizeF>
-#include <QTextDocument>
 #include <QStandardItemModel>
+#include <QTextDocument>
 #include <QUrl>
 
 // Calligra
-#include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
-#include <KoEmbeddedDocumentSaver.h>
-#include <KoStore.h>
-#include <KoDocument.h>
-#include <KoShapeSavingContext.h>
-#include <KoViewConverter.h>
-#include <KoXmlReader.h>
-#include <KoXmlWriter.h>
-#include <KoXmlNS.h>
-#include <KoGenStyles.h>
-#include <KoStyleStack.h>
-#include <KoShapeRegistry.h>
-#include <KoTextShapeData.h>
-#include <KoTextDocumentLayout.h>
+#include "kochart_global.h"
+#include <KoBorder.h>
 #include <KoCanvasBase.h>
-#include <KoShapeManager.h>
+#include <KoColorBackground.h>
+#include <KoDocument.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoGenStyles.h>
+#include <KoGradientBackground.h>
+#include <KoHatchBackground.h>
+#include <KoInsets.h>
+#include <KoOdfGradientBackground.h>
+#include <KoOdfGraphicStyles.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfWorkaround.h>
+#include <KoPatternBackground.h>
 #include <KoSelection.h>
 #include <KoShapeBackground.h>
-#include <KoInsets.h>
-#include <KoShapeStrokeModel.h>
-#include <KoColorBackground.h>
-#include <KoShapeStroke.h>
-#include <KoOdfWorkaround.h>
-#include <KoTextDocument.h>
-#include <KoUnit.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeManager.h>
 #include <KoShapePaintingContext.h>
-#include <KoTextShapeDataBase.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeSavingContext.h>
 #include <KoShapeShadow.h>
-#include <KoBorder.h>
-#include <KoHatchBackground.h>
-#include <KoOdfGradientBackground.h>
-#include <KoPatternBackground.h>
-#include <KoGradientBackground.h>
-#include <KoOdfGraphicStyles.h>
-#include "kochart_global.h"
+#include <KoShapeStroke.h>
+#include <KoShapeStrokeModel.h>
+#include <KoStore.h>
+#include <KoStyleStack.h>
+#include <KoTextDocument.h>
+#include <KoTextDocumentLayout.h>
+#include <KoTextShapeData.h>
+#include <KoTextShapeDataBase.h>
+#include <KoUnit.h>
+#include <KoViewConverter.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
-namespace KoChart {
-namespace OdfHelper {
-
+namespace KoChart
+{
+namespace OdfHelper
+{
 
 // HACK: To get correct position also for rotated titles
 QPointF itemPosition(const KoShape *shape)
@@ -69,8 +69,9 @@ QPointF itemPosition(const KoShape *shape)
     return QPointF(shape->transformation().dx(), shape->transformation().dy());
 }
 
-//fo:font-weight attribute are normal, bold, 100, 200, 300, 400, 500, 600, 700, 800 or 900.
-int fromOdfFontWeight(const QString &odfweight) {
+// fo:font-weight attribute are normal, bold, 100, 200, 300, 400, 500, 600, 700, 800 or 900.
+int fromOdfFontWeight(const QString &odfweight)
+{
     if (odfweight.isEmpty() || odfweight == "normal") {
         return QFont::Normal;
     }
@@ -83,21 +84,42 @@ int fromOdfFontWeight(const QString &odfweight) {
         return 50;
     }
     switch (weight) {
-        case 100: weight = 1; break;
-        case 200: weight = 17; break;
-        case 300: weight = 33; break;
-        case 400: weight = 50; break;
-        case 500: weight = 58; break;
-        case 600: weight = 66; break;
-        case 700: weight = 75; break;
-        case 800: weight = 87; break;
-        case 900: weight = 99; break;
-        default: weight = 50; break;
+    case 100:
+        weight = 1;
+        break;
+    case 200:
+        weight = 17;
+        break;
+    case 300:
+        weight = 33;
+        break;
+    case 400:
+        weight = 50;
+        break;
+    case 500:
+        weight = 58;
+        break;
+    case 600:
+        weight = 66;
+        break;
+    case 700:
+        weight = 75;
+        break;
+    case 800:
+        weight = 87;
+        break;
+    case 900:
+        weight = 99;
+        break;
+    default:
+        weight = 50;
+        break;
     }
     return weight;
 }
 
-QString toOdfFontWeight(int weight) {
+QString toOdfFontWeight(int weight)
+{
     QString w;
     if (weight < 8) {
         w = "100";
@@ -121,7 +143,7 @@ QString toOdfFontWeight(int weight) {
     return w;
 }
 
-void saveOdfFont(KoGenStyle &style, const QFont& font, const QColor& color)
+void saveOdfFont(KoGenStyle &style, const QFont &font, const QColor &color)
 {
     style.addProperty("fo:font-family", font.family(), KoGenStyle::TextType);
     style.addPropertyPt("fo:font-size", font.pointSize(), KoGenStyle::TextType);
@@ -130,9 +152,7 @@ void saveOdfFont(KoGenStyle &style, const QFont& font, const QColor& color)
     style.addProperty("fo:font-style", font.italic() ? "italic" : "normal", KoGenStyle::TextType);
 }
 
-QString saveOdfFont(KoGenStyles& mainStyles,
-                    const QFont& font,
-                    const QColor& color)
+QString saveOdfFont(KoGenStyles &mainStyles, const QFont &font, const QColor &color)
 {
     KoGenStyle autoStyle(KoGenStyle::ParagraphAutoStyle, "chart", 0);
     saveOdfFont(autoStyle, font, color);
@@ -141,7 +161,7 @@ QString saveOdfFont(KoGenStyles& mainStyles,
 
 void saveOdfTitleStyle(KoShape *title, KoGenStyle &style, KoShapeSavingContext &context)
 {
-    TextLabelData *titleData = qobject_cast<TextLabelData*>(title->userData());
+    TextLabelData *titleData = qobject_cast<TextLabelData *>(title->userData());
     Q_ASSERT(titleData);
     QTextCursor cursor(titleData->document());
     QFont titleFont = cursor.charFormat().font();
@@ -188,7 +208,7 @@ void saveOdfTitle(KoShape *title, KoXmlWriter &bodyWriter, const char *titleType
     if (!title->isVisible())
         return;
 
-    TextLabelData *titleData = qobject_cast<TextLabelData*>(title->userData());
+    TextLabelData *titleData = qobject_cast<TextLabelData *>(title->userData());
     if (!titleData)
         return;
 
@@ -240,8 +260,7 @@ QSharedPointer<KoShapeBackground> loadOdfFill(KoShape *title, KoShapeLoadingCont
     QSharedPointer<KoShapeBackground> bg;
     if (fill == "solid") {
         bg = QSharedPointer<KoShapeBackground>(new KoColorBackground());
-    }
-    else if (fill == "hatch") {
+    } else if (fill == "hatch") {
         bg = QSharedPointer<KoShapeBackground>(new KoHatchBackground());
     } else if (fill == "gradient") {
         QString styleName = getStyleProperty("fill-gradient-name", context);
@@ -341,7 +360,7 @@ KoShapeShadow *loadOdfShadow(KoShape *title, KoShapeLoadingContext &context)
         shadow->setBlur(blur);
 
         QString opacity = styleStack.property(KoXmlNS::draw, "shadow-opacity");
-        if (! opacity.isEmpty() && opacity.right(1) == "%")
+        if (!opacity.isEmpty() && opacity.right(1) == "%")
             shadowColor.setAlphaF(opacity.leftRef(opacity.length() - 1).toFloat() / 100.0);
         shadow->setColor(shadowColor);
         shadow->setVisible(shadowStyle == "visible");
@@ -366,21 +385,21 @@ KoBorder *loadOdfBorder(KoShape *title, KoShapeLoadingContext &context)
 
 bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingContext &context)
 {
-    TextLabelData *titleData = qobject_cast<TextLabelData*>(title->userData());
+    TextLabelData *titleData = qobject_cast<TextLabelData *>(title->userData());
     if (!titleData)
         return false;
 
     // Following will always return false cause KoTextShapeData::loadOdf will try to load
     // a frame while our text:p is not within a frame. So, let's just not call loadOdf then...
-    //title->loadOdf(titleElement, context);
+    // title->loadOdf(titleElement, context);
 
-    QTextDocument* doc = titleData->document();
+    QTextDocument *doc = titleData->document();
     doc->setPlainText(QString()); // remove default text
     QTextCursor cursor(doc);
     QTextCharFormat charFormat = cursor.charFormat();
 
-    title->setSize(QSize(0,0));
-    title->setPosition(QPointF(0,0));
+    title->setSize(QSize(0, 0));
+    title->setPosition(QPointF(0, 0));
 
     bool autoPosition = !(titleElement.hasAttributeNS(KoXmlNS::svg, "x") && titleElement.hasAttributeNS(KoXmlNS::svg, "y"));
     bool autoSize = !(titleElement.hasAttributeNS(KoXmlNS::svg, "width") && titleElement.hasAttributeNS(KoXmlNS::svg, "height"));
@@ -402,7 +421,7 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
             autoPosition |= styleStack.property(KoXmlNS::style, "auto-position") == "true";
         }
         if (styleStack.hasProperty(KoXmlNS::style, "auto-size")) {
-            autoSize |= styleStack.property(KoXmlNS::style, "auto-size") == "true" ;
+            autoSize |= styleStack.property(KoXmlNS::style, "auto-size") == "true";
         }
         // title->loadStyle(titleElement, context) is protected
         // so we duplicate some code:
@@ -457,7 +476,8 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
             pos.setY(0);
         }
         title->setPosition(pos);
-        debugChartOdf<<"position:"<<"odf:"<<pos<<"title"<<title->position();
+        debugChartOdf << "position:"
+                      << "odf:" << pos << "title" << title->position();
     }
     if (autoSize) {
         titleData->setResizeMethod(KoTextShapeDataBase::AutoResize);
@@ -467,7 +487,8 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
         size.setWidth(KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "width")));
         size.setHeight(KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "height")));
         title->setSize(size);
-        debugChartOdf<<"size:"<<"odf:"<<size<<"title"<<title->size();
+        debugChartOdf << "size:"
+                      << "odf:" << size << "title" << title->size();
     }
 
     // load text
@@ -486,7 +507,7 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
             title->setVisible(true);
         }
     }
-    debugChartOdf<<title->position()<<title->size()<<titleData->document()->toPlainText();
+    debugChartOdf << title->position() << title->size() << titleData->document()->toPlainText();
     return true;
 }
 

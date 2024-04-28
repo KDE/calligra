@@ -8,15 +8,14 @@
 #define DOCXFILE_H
 
 // Qt
-#include <QHash>
 #include <QFlags>
+#include <QHash>
 
 // Calligra
 #include <KoFilter.h>
 
 // This filter
 #include "FileCollector.h"
-
 
 class QString;
 class QByteArray;
@@ -25,7 +24,6 @@ class KoStore;
 
 class OdtTraverserDocxContext;
 class OdfReaderDocxContext;
-
 
 class DocxFile : public FileCollector
 {
@@ -37,24 +35,19 @@ public:
      * addContentFile(), call this function once and it will write the
      * docx to the disk.
      */
-    KoFilter::ConversionStatus  writeDocx(const QString &fileName,
-                                          const QByteArray &appIdentification,
-                                          const OdtTraverserDocxContext &context,
-                                          bool  commentsExist);
+    KoFilter::ConversionStatus
+    writeDocx(const QString &fileName, const QByteArray &appIdentification, const OdtTraverserDocxContext &context, bool commentsExist);
 
     /** When you have created all the content and added it using
      * addContentFile(), call this function once and it will write the
      * docx to the disk. This function is overloaded.
      */
-    KoFilter::ConversionStatus  writeDocx(const QString &fileName,
-                                          const QByteArray &appIdentification,
-                                          const OdfReaderDocxContext &context,
-                                          bool  commentsExist);
+    KoFilter::ConversionStatus writeDocx(const QString &fileName, const QByteArray &appIdentification, const OdfReaderDocxContext &context, bool commentsExist);
 
 private:
     // Private functions
-    KoFilter::ConversionStatus  writeTopLevelRels(KoStore *docxStore);
-    KoFilter::ConversionStatus  writeDocumentRels(KoStore *docxStore);
+    KoFilter::ConversionStatus writeTopLevelRels(KoStore *docxStore);
+    KoFilter::ConversionStatus writeDocumentRels(KoStore *docxStore);
 
 private:
     // data

@@ -22,44 +22,43 @@
 #include <config.h>
 #endif
 
-namespace wvWare {
+namespace wvWare
+{
 
 // Endianness fun
-U16 toLittleEndian( U16 data )
+U16 toLittleEndian(U16 data)
 {
 #if defined(WORDS_BIGENDIAN)
-    return ( ( data & 0x00ffU ) << 8 ) | ( ( data & 0xff00U ) >> 8 );
+    return ((data & 0x00ffU) << 8) | ((data & 0xff00U) >> 8);
 #else
     return data;
 #endif
 }
 
-U16 toBigEndian( U16 data )
+U16 toBigEndian(U16 data)
 {
 #if defined(WORDS_BIGENDIAN)
     return data;
 #else
-    return ( ( data & 0x00ffU ) << 8 ) | ( ( data & 0xff00U ) >> 8 );
+    return ((data & 0x00ffU) << 8) | ((data & 0xff00U) >> 8);
 #endif
 }
 
-U32 toLittleEndian( U32 data )
+U32 toLittleEndian(U32 data)
 {
 #if defined(WORDS_BIGENDIAN)
-    return ( ( data & 0x000000ffU ) << 24 ) | ( ( data & 0x0000ff00U ) <<  8 ) |
-        ( ( data & 0x00ff0000U ) >>  8 ) | ( ( data & 0xff000000U ) >> 24 );
+    return ((data & 0x000000ffU) << 24) | ((data & 0x0000ff00U) << 8) | ((data & 0x00ff0000U) >> 8) | ((data & 0xff000000U) >> 24);
 #else
     return data;
 #endif
 }
 
-U32 toBigEndian( U32 data )
+U32 toBigEndian(U32 data)
 {
 #if defined(WORDS_BIGENDIAN)
     return data;
 #else
-    return ( ( data & 0x000000ffU ) << 24 ) | ( ( data & 0x0000ff00U ) <<  8 ) |
-        ( ( data & 0x00ff0000U ) >>  8 ) | ( ( data & 0xff000000U ) >> 24 );
+    return ((data & 0x000000ffU) << 24) | ((data & 0x0000ff00U) << 8) | ((data & 0x00ff0000U) >> 8) | ((data & 0xff000000U) >> 24);
 #endif
 }
 

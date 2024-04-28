@@ -33,7 +33,7 @@ public:
     ~StateTool();
 
     /// reimplemented
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) ;
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
 
     /// reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
@@ -45,12 +45,13 @@ public:
     /// reimplemented
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 Q_SIGNALS:
-    void shapeChanged(StateShape*);
+    void shapeChanged(StateShape *);
+
 protected:
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    virtual QList<QPointer<QWidget>> createOptionWidgets();
 
 private:
-    StateShape* m_currentShape;
+    StateShape *m_currentShape;
 };
 
 #endif

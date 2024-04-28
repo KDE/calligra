@@ -23,6 +23,7 @@ class CellTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testRichText();
+
 private:
     KoXmlDocument xmlDocument(const QString &content);
 };

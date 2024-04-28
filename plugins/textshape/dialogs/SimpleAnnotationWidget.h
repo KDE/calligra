@@ -12,7 +12,7 @@ class SimpleAnnotationWidget : public QWidget
 
 public:
     explicit SimpleAnnotationWidget(ReviewTool *tool, QWidget *parent = 0);
-    //virtual ~SimpleAnnotationWidget();
+    // virtual ~SimpleAnnotationWidget();
 
 Q_SIGNALS:
     void doneWithFocus();
@@ -20,7 +20,6 @@ Q_SIGNALS:
 private:
     Ui::SimpleAnnotationWidget widget;
     ReviewTool *m_tool;
-
 };
 
 #endif // SIMPLEANNOTATIONWIDGET_H

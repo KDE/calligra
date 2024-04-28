@@ -13,12 +13,12 @@ class KoRdfLocationEditWidgetPrivate;
 
 namespace Marble
 {
-    class MarbleWidget;
-    class LatLonEdit;
+class MarbleWidget;
+class LatLonEdit;
 }
 namespace Ui
 {
-    class KoRdfLocationEditWidget;
+class KoRdfLocationEditWidget;
 }
 
 /**
@@ -28,19 +28,18 @@ namespace Ui
 class KoRdfLocationEditWidget : public QWidget
 {
     Q_OBJECT
-    KoRdfLocationEditWidgetPrivate* const d;
+    KoRdfLocationEditWidgetPrivate *const d;
 
 public:
     KoRdfLocationEditWidget(QWidget *parent, Ui::KoRdfLocationEditWidget *ew);
     ~KoRdfLocationEditWidget();
 
 #ifdef CAN_USE_MARBLE
-   void setupMap(Marble::MarbleWidget* map, Marble::LatLonEdit* xlat, Marble::LatLonEdit* xlong);
+    void setupMap(Marble::MarbleWidget *map, Marble::LatLonEdit *xlat, Marble::LatLonEdit *xlong);
 
 private Q_SLOTS:
     void mouseMoveGeoPosition();
 #endif
-
 };
 
 #endif

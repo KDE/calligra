@@ -14,10 +14,10 @@ class VSDXImport : public KoFilter
 {
     Q_OBJECT
 public:
-    explicit VSDXImport(QObject *parent, const QVariantList&);
+    explicit VSDXImport(QObject *parent, const QVariantList &);
     ~VSDXImport() override;
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };
 
 #endif // VSDXIMPORT_H

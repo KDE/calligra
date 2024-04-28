@@ -9,8 +9,8 @@
 #ifndef TOCGENERATOR_H
 #define TOCGENERATOR_H
 
-#include <QTextBlock>
 #include <QObject>
+#include <QTextBlock>
 
 class KoTextRangeManager;
 class KoTextDocumentLayout;

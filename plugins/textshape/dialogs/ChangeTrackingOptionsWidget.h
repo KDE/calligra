@@ -6,31 +6,30 @@
 #ifndef __CHANGE_TRACKING_OPTIONS_WIDGET_H__
 #define __CHANGE_TRACKING_OPTIONS_WIDGET_H__
 
-#include <ui_ChangeTrackingOptionsWidget.h>
 #include <TextTool.h>
+#include <ui_ChangeTrackingOptionsWidget.h>
 
 class ChangeTrackingOptionsWidget : public QWidget
 {
     Q_OBJECT
-    public:
-        explicit ChangeTrackingOptionsWidget(TextTool *tool,QWidget *parent = 0);
+public:
+    explicit ChangeTrackingOptionsWidget(TextTool *tool, QWidget *parent = 0);
 
-    private Q_SLOTS:
-        void recordChangesChanged(int isChecked);
-        void showChangesChanged(int isChecked);
-        void configureSettingsPressed();
+private Q_SLOTS:
+    void recordChangesChanged(int isChecked);
+    void showChangesChanged(int isChecked);
+    void configureSettingsPressed();
 
-    public Q_SLOTS:
-        void toggleShowChanges(bool on);
-        void toggleRecordChanges(bool on);
-    
-    Q_SIGNALS:
-        void doneWithFocus();
+public Q_SLOTS:
+    void toggleShowChanges(bool on);
+    void toggleRecordChanges(bool on);
 
-    private:
-        Ui::ChangeTrackingOptions widget;
-        TextTool *m_tool;
+Q_SIGNALS:
+    void doneWithFocus();
+
+private:
+    Ui::ChangeTrackingOptions widget;
+    TextTool *m_tool;
 };
 
 #endif
-

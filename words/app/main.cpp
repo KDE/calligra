@@ -22,8 +22,9 @@ int main(int argc, char **argv)
      *
      * See: http://doc.qt.io/qt-5/qloggingcategory.html
      */
-    QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
-                                     "calligra.*.warning=true");
+    QLoggingCategory::setFilterRules(
+        "calligra.*.debug=false\n"
+        "calligra.*.warning=true");
 
     KoApplication app(WORDS_MIME_TYPE, QStringLiteral("calligrawords"), newWordsAboutData, argc, argv);
     KLocalizedString::setApplicationDomain("calligrawords");

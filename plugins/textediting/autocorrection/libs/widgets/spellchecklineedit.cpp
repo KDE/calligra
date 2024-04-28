@@ -10,13 +10,12 @@
 #include <QStyle>
 #include <QStyleOptionFrame>
 
-
 SpellCheckLineEdit::SpellCheckLineEdit(QWidget *parent, const QString &configFile)
     : KRichTextEdit(parent)
 {
-    //setSpellCheckingConfigFileName(configFile);
-    //setSearchSupport(false);
-    //setAllowTabSupport(false);
+    // setSpellCheckingConfigFileName(configFile);
+    // setSearchSupport(false);
+    // setAllowTabSupport(false);
     setAcceptRichText(false);
     setTabChangesFocus(true);
     // widget may not be resized vertically

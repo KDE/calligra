@@ -30,29 +30,31 @@
 
 #include "global.h"
 #include "sharedptr.h"
-#include "utilities.h"
 #include "ustring.h"
+#include "utilities.h"
 #include <vector> // for Word97::PAP
 
 #include "wv2_export.h"
-namespace wvWare {
+namespace wvWare
+{
 
 class OLEStreamReader;
 class OLEStreamWriter;
 class StyleSheet;
 class Style;
 
-namespace Word97 {
+namespace Word97
+{
 
-    /**
-     * The default value for a COLORREF required in TAP and PAP.
-     */
-    const U32 cvAuto = 0xff000000;
+/**
+ * The default value for a COLORREF required in TAP and PAP.
+ */
+const U32 cvAuto = 0xff000000;
 
-    /**
-     * Helper function to convert ico color codes to 24bit COLORREF
-     */
-    U32 icoToCOLORREF(U16 ico);
+/**
+ * Helper function to convert ico color codes to 24bit COLORREF
+ */
+U32 icoToCOLORREF(U16 ico);
 
 /**
  * Font Family Name (FFN), this code is located in the template-Word97.h
@@ -66,7 +68,7 @@ struct FFN {
     /**
      * Simply calls read(...)
      */
-    FFN(OLEStreamReader *stream, Version version, bool preservePos=false);
+    FFN(OLEStreamReader *stream, Version version, bool preservePos = false);
 
     /**
      * This method reads the FFN structure from the stream.
@@ -74,12 +76,12 @@ struct FFN {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, Version version, bool preservePos=false);
+    bool read(OLEStreamReader *stream, Version version, bool preservePos = false);
 
     /**
      * Same as reading, not implemented yet
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -95,27 +97,27 @@ struct FFN {
     /**
      * pitch request
      */
-    U8 prq:2;
+    U8 prq : 2;
 
     /**
      * when 1, font is a TrueType font
      */
-    U8 fTrueType:1;
+    U8 fTrueType : 1;
 
     /**
      * reserved
      */
-    U8 unused1_3:1;
+    U8 unused1_3 : 1;
 
     /**
      * font family id
      */
-    U8 ff:3;
+    U8 ff : 3;
 
     /**
      * reserved
      */
-    U8 unused1_7:1;
+    U8 unused1_7 : 1;
 
     /**
      * base weight of font
@@ -148,7 +150,7 @@ struct FFN {
      * first named font does not exist on this system. Maximal size of xszFfn
      * is 65 characters.
      */
-    //U8 *xszFfn;   //    U8 xszFfn[];
+    // U8 *xszFfn;   //    U8 xszFfn[];
     /**
      * We are using two UStrings here, the alternative string (xszFfnAlt) will
      * contain the alternative font name in case ixchSzAlt is != 0
@@ -166,10 +168,14 @@ private:
 /**
  * Tab Descriptor (TBD)
  */
-struct TBD
-{
-    TBD() : jc( 0 ), tlc( 0 ), unused0_6( 0 ) {}
-    TBD( U8 tbd )
+struct TBD {
+    TBD()
+        : jc(0)
+        , tlc(0)
+        , unused0_6(0)
+    {
+    }
+    TBD(U8 tbd)
     {
         jc = tbd;
         tbd >>= 3;
@@ -186,7 +192,7 @@ struct TBD
      * 3 decimal tab
      * 4 bar
      */
-    U8 jc:3;
+    U8 jc : 3;
 
     /**
      * tab leader code
@@ -196,12 +202,12 @@ struct TBD
      * 3 single line leader
      * 4 heavy line leader
      */
-    U8 tlc:3;
+    U8 tlc : 3;
 
     /**
      * reserved
      */
-    U8 unused0_6:2;
+    U8 unused0_6 : 2;
 };
 
 /**
@@ -210,8 +216,7 @@ struct TBD
  * we combine all the data for one tab into this struct, and the PAP has
  * a vector<TabDescriptor>
  */
-struct TabDescriptor
-{
+struct TabDescriptor {
     /**
      * Position of the tab
      */
@@ -224,11 +229,10 @@ struct TabDescriptor
 }; // TabDescriptor
 
 // There can be only one tab at a given position, no matter what the other options are
-bool operator==( const TabDescriptor& lhs, const TabDescriptor& rhs );
-bool operator!=( const TabDescriptor& lhs, const TabDescriptor& rhs );
-bool operator<( const TabDescriptor& lhs, const TabDescriptor& rhs );
-bool operator>( const TabDescriptor& lhs, const TabDescriptor& rhs );
-
+bool operator==(const TabDescriptor &lhs, const TabDescriptor &rhs);
+bool operator!=(const TabDescriptor &lhs, const TabDescriptor &rhs);
+bool operator<(const TabDescriptor &lhs, const TabDescriptor &rhs);
+bool operator>(const TabDescriptor &lhs, const TabDescriptor &rhs);
 
 /**
  * Date and Time (internal date format) (DTTM)
@@ -241,7 +245,7 @@ struct DTTM {
     /**
      * Simply calls read(...)
      */
-    DTTM(OLEStreamReader *stream, bool preservePos=false);
+    DTTM(OLEStreamReader *stream, bool preservePos = false);
     /**
      * Simply calls readPtr(...)
      */
@@ -253,7 +257,7 @@ struct DTTM {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the struct from a pointer
@@ -263,7 +267,7 @@ struct DTTM {
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -287,27 +291,27 @@ struct DTTM {
     /**
      * minutes (0-59)
      */
-    U16 mint:6;
+    U16 mint : 6;
 
     /**
      * hours (0-23)
      */
-    U16 hr:5;
+    U16 hr : 5;
 
     /**
      * days of month (1-31)
      */
-    U16 dom:5;
+    U16 dom : 5;
 
     /**
      * months (1-12)
      */
-    U16 mon:4;
+    U16 mon : 4;
 
     /**
      * years (1900-2411)-1900
      */
-    U16 yr:9;
+    U16 yr : 9;
 
     /**
      * weekday
@@ -319,13 +323,12 @@ struct DTTM {
      * Friday=5
      * Saturday=6
      */
-    U16 wdy:3;
+    U16 wdy : 3;
 
 }; // DTTM
 
 bool operator==(const DTTM &lhs, const DTTM &rhs);
 bool operator!=(const DTTM &lhs, const DTTM &rhs);
-
 
 /**
  * Document Typography Info (DOPTYPOGRAPHY)
@@ -338,7 +341,7 @@ struct DOPTYPOGRAPHY {
     /**
      * Simply calls read(...)
      */
-    DOPTYPOGRAPHY(OLEStreamReader *stream, bool preservePos=false);
+    DOPTYPOGRAPHY(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the DOPTYPOGRAPHY structure from the stream.
@@ -346,12 +349,12 @@ struct DOPTYPOGRAPHY {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -362,7 +365,7 @@ struct DOPTYPOGRAPHY {
     /**
      * true if we're kerning punctuation
      */
-    U16 fKerningPunct:1;
+    U16 fKerningPunct : 1;
 
     /**
      * Kinsoku method of justification:
@@ -370,7 +373,7 @@ struct DOPTYPOGRAPHY {
      * 1 = compress punctuation
      * 2 = compress punctuation and kana.
      */
-    U16 iJustification:2;
+    U16 iJustification : 2;
 
     /**
      * Level of Kinsoku:
@@ -378,17 +381,17 @@ struct DOPTYPOGRAPHY {
      * 1 = Level 2
      * 2 = Custom
      */
-    U16 iLevelOfKinsoku:2;
+    U16 iLevelOfKinsoku : 2;
 
     /**
      * 2-page-on-1 feature is turned on.
      */
-    U16 f2on1:1;
+    U16 f2on1 : 1;
 
     /**
      * reserved
      */
-    U16 unused0_6:10;
+    U16 unused0_6 : 10;
 
     /**
      * length of rgxchFPunct
@@ -415,7 +418,6 @@ struct DOPTYPOGRAPHY {
 bool operator==(const DOPTYPOGRAPHY &lhs, const DOPTYPOGRAPHY &rhs);
 bool operator!=(const DOPTYPOGRAPHY &lhs, const DOPTYPOGRAPHY &rhs);
 
-
 /**
  * Property Modifier(variant 2) (PRM2)
  */
@@ -427,7 +429,7 @@ struct PRM2 {
     /**
      * Simply calls read(...)
      */
-    PRM2(OLEStreamReader *stream, bool preservePos=false);
+    PRM2(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the PRM2 structure from the stream.
@@ -435,12 +437,12 @@ struct PRM2 {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -451,18 +453,17 @@ struct PRM2 {
     /**
      * set to 1 for variant 2
      */
-    U16 fComplex:1;
+    U16 fComplex : 1;
 
     /**
      * index to a <b>grpprl</b> stored in <b>CLX</b> portion of file.
      */
-    U16 igrpprl:15;
+    U16 igrpprl : 15;
 
 }; // PRM2
 
 bool operator==(const PRM2 &lhs, const PRM2 &rhs);
 bool operator!=(const PRM2 &lhs, const PRM2 &rhs);
-
 
 /**
  * Property Modifier(variant 1) (PRM)
@@ -475,7 +476,7 @@ struct PRM {
     /**
      * Simply calls read(...)
      */
-    PRM(OLEStreamReader *stream, bool preservePos=false);
+    PRM(OLEStreamReader *stream, bool preservePos = false);
     /**
      * Simply calls readPtr(...)
      */
@@ -487,7 +488,7 @@ struct PRM {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the struct from a pointer
@@ -497,7 +498,7 @@ struct PRM {
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -516,23 +517,22 @@ struct PRM {
     /**
      * set to 0 for variant 1
      */
-    U16 fComplex:1;
+    U16 fComplex : 1;
 
     /**
      * index to entry into rgsprmPrm
      */
-    U16 isprm:7;
+    U16 isprm : 7;
 
     /**
      * sprm's operand
      */
-    U16 val:8;
+    U16 val : 8;
 
 }; // PRM
 
 bool operator==(const PRM &lhs, const PRM &rhs);
 bool operator!=(const PRM &lhs, const PRM &rhs);
-
 
 /**
  * Shading Descriptor (SHD)
@@ -545,7 +545,7 @@ struct WV2_EXPORT SHD {
     /**
      * Simply calls read(...)
      */
-    SHD(OLEStreamReader *stream, bool preservePos=false);
+    SHD(OLEStreamReader *stream, bool preservePos = false);
     /**
      * Simply calls readPtr(...)
      */
@@ -557,7 +557,7 @@ struct WV2_EXPORT SHD {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the struct from a pointer
@@ -577,7 +577,7 @@ struct WV2_EXPORT SHD {
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -682,7 +682,6 @@ struct WV2_EXPORT SHD {
 bool operator==(const SHD &lhs, const SHD &rhs);
 bool operator!=(const SHD &lhs, const SHD &rhs);
 
-
 /**
  * Paragraph Height (PHE)
  */
@@ -694,7 +693,7 @@ struct PHE {
     /**
      * Simply calls read(...)
      */
-    PHE(OLEStreamReader *stream, bool preservePos=false);
+    PHE(OLEStreamReader *stream, bool preservePos = false);
     /**
      * Simply calls readPtr(...)
      */
@@ -706,7 +705,7 @@ struct PHE {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the struct from a pointer
@@ -716,7 +715,7 @@ struct PHE {
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -740,28 +739,28 @@ struct PHE {
     /**
      * reserved
      */
-    U16 fSpare:1;
+    U16 fSpare : 1;
 
     /**
      * PHE entry is invalid when == 1
      */
-    U16 fUnk:1;
+    U16 fUnk : 1;
 
     /**
      * when 1, total height of paragraph is known but lines in paragraph have
      * different heights.
      */
-    U16 fDiffLines:1;
+    U16 fDiffLines : 1;
 
     /**
      * reserved
      */
-    U16 unused0_3:5;
+    U16 unused0_3 : 5;
 
     /**
      * when fDiffLines is 0 is number of lines in paragraph
      */
-    U16 clMac:8;
+    U16 clMac : 8;
 
     /**
      * reserved
@@ -786,7 +785,6 @@ struct PHE {
 bool operator==(const PHE &lhs, const PHE &rhs);
 bool operator!=(const PHE &lhs, const PHE &rhs);
 
-
 /**
  * Border Code (BRC)
  */
@@ -798,7 +796,7 @@ struct WV2_EXPORT BRC {
     /**
      * Simply calls read(...)
      */
-    BRC(OLEStreamReader *stream, bool preservePos=false);
+    BRC(OLEStreamReader *stream, bool preservePos = false);
     /**
      * Simply calls readPtr(...)
      */
@@ -810,7 +808,7 @@ struct WV2_EXPORT BRC {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the struct from a pointer (brc80)
@@ -825,7 +823,7 @@ struct WV2_EXPORT BRC {
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -857,7 +855,7 @@ struct WV2_EXPORT BRC {
     /**
      * width of a single line in 1/8 pt, max of 32 pt.
      */
-    U16 dptLineWidth:8;
+    U16 dptLineWidth : 8;
 
     /**
      * border type code:
@@ -889,33 +887,32 @@ struct WV2_EXPORT BRC {
      * codes 64 - 230 represent border art types and are used only for page
      * borders.
      */
-    U16 brcType:8;
+    U16 brcType : 8;
 
     /**
      * Specifies the distance from the text to the border, in points.  For page
      * borders, sprmSPgbProp can specify that this value shall specify the
      * distance from the edge of the page to the border.
      */
-    U16 dptSpace:5;
+    U16 dptSpace : 5;
 
     /**
      * when 1, border is drawn with shadow. Must be 0 when BRC is a substructure
      * of the TC
      */
-    U16 fShadow:1;
+    U16 fShadow : 1;
 
-    U16 fFrame:1;
+    U16 fFrame : 1;
 
     /**
      * reserved
      */
-    U16 unused2_15:9;
+    U16 unused2_15 : 9;
 
 }; // BRC
 
 bool operator==(const BRC &lhs, const BRC &rhs);
 bool operator!=(const BRC &lhs, const BRC &rhs);
-
 
 /**
  * Table Autoformat Look sPecifier (TLP)
@@ -928,7 +925,7 @@ struct TLP {
     /**
      * Simply calls read(...)
      */
-    TLP(OLEStreamReader *stream, bool preservePos=false);
+    TLP(OLEStreamReader *stream, bool preservePos = false);
     /**
      * Simply calls readPtr(...)
      */
@@ -940,7 +937,7 @@ struct TLP {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the struct from a pointer
@@ -950,7 +947,7 @@ struct TLP {
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -1016,62 +1013,61 @@ struct TLP {
     /**
      * when ==1, use the border properties from the selected table look
      */
-    U16 fBorders:1;
+    U16 fBorders : 1;
 
     /**
      * when ==1, use the shading properties from the selected table look
      */
-    U16 fShading:1;
+    U16 fShading : 1;
 
     /**
      * when ==1, use the font from the selected table look
      */
-    U16 fFont:1;
+    U16 fFont : 1;
 
     /**
      * when ==1, use the color from the selected table look
      */
-    U16 fColor:1;
+    U16 fColor : 1;
 
     /**
      * when ==1, do best fit from the selected table look
      */
-    U16 fBestFit:1;
+    U16 fBestFit : 1;
 
     /**
      * when ==1, apply properties from the selected table look to the header
      * rows in the table
      */
-    U16 fHdrRows:1;
+    U16 fHdrRows : 1;
 
     /**
      * when ==1, apply properties from the selected table look to the last
      * row in the table
      */
-    U16 fLastRow:1;
+    U16 fLastRow : 1;
 
     /**
      * when ==1, apply properties from the selected table look to the header
      * columns of the table
      */
-    U16 fHdrCols:1;
+    U16 fHdrCols : 1;
 
     /**
      * when ==1, apply properties from the selected table look to the last
      * column of the table
      */
-    U16 fLastCol:1;
+    U16 fLastCol : 1;
 
     /**
      * unused
      */
-    U16 unused2_9:7;
+    U16 unused2_9 : 7;
 
 }; // TLP
 
 bool operator==(const TLP &lhs, const TLP &rhs);
 bool operator!=(const TLP &lhs, const TLP &rhs);
-
 
 /**
  * Table Cell Descriptors (TC)
@@ -1084,7 +1080,7 @@ struct TC {
     /**
      * Simply calls read(...)
      */
-    TC(OLEStreamReader *stream, bool preservePos=false);
+    TC(OLEStreamReader *stream, bool preservePos = false);
     /**
      * Simply calls readPtr(...)
      */
@@ -1096,7 +1092,7 @@ struct TC {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the struct from a pointer
@@ -1106,7 +1102,7 @@ struct TC {
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -1133,28 +1129,28 @@ struct TC {
      * consolidated and the text within the cells is interpreted as belonging
      * to one text stream for purposes of calculating line breaks.
      */
-    U16 fFirstMerged:1;
+    U16 fFirstMerged : 1;
 
     /**
      * set to 1 when cell has been merged with preceding cell.
      */
-    U16 fMerged:1;
+    U16 fMerged : 1;
 
     /**
      * set to 1 when cell has vertical text flow
      */
-    U16 fVertical:1;
+    U16 fVertical : 1;
 
     /**
      * for a vertical table cell, text flow is bottom to top when 1 and is
      * bottom to top when 0.
      */
-    U16 fBackward:1;
+    U16 fBackward : 1;
 
     /**
      * set to 1 when cell has rotated characters (i.e. uses @font)
      */
-    U16 fRotateFont:1;
+    U16 fRotateFont : 1;
 
     /**
      * set to 1 when cell is vertically merged with the cell(s) above and/or
@@ -1166,7 +1162,7 @@ struct TC {
      * and right boundaries are (nearly) identical (i.e. if corresponding entries
      * in rgdxaCenter of the table rows differ by at most 3).
      */
-    U16 fVertMerge:1;
+    U16 fVertMerge : 1;
 
     /**
      * set to 1 when the cell is the first of a set of vertically merged cells.
@@ -1174,7 +1170,7 @@ struct TC {
      * area belonging to the entire set of vertically merged cells. Vertically
      * merged cells with fVertRestart set to 0 must be empty.
      */
-    U16 fVertRestart:1;
+    U16 fVertRestart : 1;
 
     /**
      * specifies the alignment of the cell contents relative to text flow
@@ -1184,12 +1180,12 @@ struct TC {
      * 1 center
      * 2 bottom
      */
-    U16 vertAlign:2;
+    U16 vertAlign : 2;
 
     /**
      * reserved
      */
-    U16 fUnused:7;
+    U16 fUnused : 7;
 
     /**
      * reserved
@@ -1230,7 +1226,6 @@ struct TC {
 bool operator==(const TC &lhs, const TC &rhs);
 bool operator!=(const TC &lhs, const TC &rhs);
 
-
 /**
  * Table Properties (TAP)
  */
@@ -1242,7 +1237,7 @@ struct TAP : public Shared {
     /**
      * Simply calls read(...)
      */
-    TAP(OLEStreamReader *stream, bool preservePos=false);
+    TAP(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the TAP structure from the stream.
@@ -1250,12 +1245,12 @@ struct TAP : public Shared {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -1265,21 +1260,21 @@ struct TAP : public Shared {
     /**
      * This method applies a grpprl with @param count elements
      */
-    void apply(const U8 *grpprl, U16 count, const Style* style, const StyleSheet* styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    void apply(const U8 *grpprl, U16 count, const Style *style, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * This method applies a whole TAPX to the structure.
      * The reason that we only pass a pointer to the start of the exception
      * structure is, that we don't know the type in the FKP template :}
      */
-    void applyExceptions(const U8 *exceptions, const StyleSheet *styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    void applyExceptions(const U8 *exceptions, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * This method applies one single SPRM. It returns -1 if it wasn't
      * a TAP SPRM and it returns the length of the applied SPRM
      * if it was successful.
      */
-    S16 applyTAPSPRM(const U8* ptr, const Style* style, const StyleSheet* styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    S16 applyTAPSPRM(const U8 *ptr, const Style *style, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * Dumps all fields of this structure (for debugging)
@@ -1364,7 +1359,7 @@ struct TAP : public Shared {
      * 2 - relative to the paragraph bottom of the pragraph that precedes it.
      * 3 - None. The table is not absolutely positioned.
      */
-    U8 pcVert:2;
+    U8 pcVert : 2;
 
     /**
      * Horizontal position code.  Specifies the location of an anchor point for
@@ -1374,7 +1369,7 @@ struct TAP : public Shared {
      * 2 - relative to the left edge of the page
      * 3 - None. The table is not absolutely positioned.
      */
-    U8 pcHorz:2;
+    U8 pcHorz : 2;
 
     /**
      * Specifies the horizontal position of the table relative to the table's
@@ -1408,27 +1403,27 @@ struct TAP : public Shared {
     /**
      * used internally by Word
      */
-    U16 fCaFull:1;
+    U16 fCaFull : 1;
 
     /**
      * used internally by Word
      */
-    U16 fFirstRow:1;
+    U16 fFirstRow : 1;
 
     /**
      * used internally by Word
      */
-    U16 fLastRow:1;
+    U16 fLastRow : 1;
 
     /**
      * used internally by Word
      */
-    U16 fOutline:1;
+    U16 fOutline : 1;
 
     /**
      * reserved
      */
-    U16 unused20_12:12;
+    U16 unused20_12 : 12;
 
     /**
      * count of cells defined for this row. ItcMac must be >= 0 and less than
@@ -1537,7 +1532,6 @@ struct TAP : public Shared {
 bool operator==(const TAP &lhs, const TAP &rhs);
 bool operator!=(const TAP &lhs, const TAP &rhs);
 
-
 /**
  * Tab Descriptor (TBD)
  */
@@ -1546,15 +1540,15 @@ bool operator!=(const TAP &lhs, const TAP &rhs);
  * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
-//struct TBD {
-//    /**
-//     * Creates an empty TBD structure and sets the defaults
-//     */
-//    TBD();
-//    /**
-//     * Simply calls read(...)
-//     */
-//    TBD(OLEStreamReader *stream, bool preservePos=false);
+// struct TBD {
+//     /**
+//      * Creates an empty TBD structure and sets the defaults
+//      */
+//     TBD();
+//     /**
+//      * Simply calls read(...)
+//      */
+//     TBD(OLEStreamReader *stream, bool preservePos=false);
 
 //    /**
 //     * This method reads the TBD structure from the stream.
@@ -1602,9 +1596,8 @@ bool operator!=(const TAP &lhs, const TAP &rhs);
 
 //}; // TBD
 
-//bool operator==(const TBD &lhs, const TBD &rhs);
-//bool operator!=(const TBD &lhs, const TBD &rhs);
-
+// bool operator==(const TBD &lhs, const TBD &rhs);
+// bool operator!=(const TBD &lhs, const TBD &rhs);
 
 /**
  * Autonumbered List Data Descriptor (ANLD)
@@ -1617,7 +1610,7 @@ struct ANLD {
     /**
      * Simply calls read(...)
      */
-    ANLD(OLEStreamReader *stream, bool preservePos=false);
+    ANLD(OLEStreamReader *stream, bool preservePos = false);
     /**
      * Simply calls readPtr(...)
      */
@@ -1629,7 +1622,7 @@ struct ANLD {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the struct from a pointer
@@ -1639,7 +1632,7 @@ struct ANLD {
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -1693,96 +1686,96 @@ struct ANLD {
      * 2 right justify
      * 3 left and right justify
      */
-    U8 jc:2;
+    U8 jc : 2;
 
     /**
      * when ==1, number generated will include previous levels (used for legal
      * numbering)
      */
-    U8 fPrev:1;
+    U8 fPrev : 1;
 
     /**
      * when ==1, number will be displayed using a hanging indent
      */
-    U8 fHang:1;
+    U8 fHang : 1;
 
     /**
      * when ==1, boldness of number will be determined by anld.fBold.
      */
-    U8 fSetBold:1;
+    U8 fSetBold : 1;
 
     /**
      * when ==1, italicness of number will be determined by anld.fItalic
      */
-    U8 fSetItalic:1;
+    U8 fSetItalic : 1;
 
     /**
      * when ==1, anld.fSmallCaps will determine whether number will be displayed
      * in small caps or not.
      */
-    U8 fSetSmallCaps:1;
+    U8 fSetSmallCaps : 1;
 
     /**
      * when ==1, anld.fCaps will determine whether number will be displayed
      * capitalized or not
      */
-    U8 fSetCaps:1;
+    U8 fSetCaps : 1;
 
     /**
      * when ==1, anld.fStrike will determine whether the number will be displayed
      * using strikethrough or not.
      */
-    U8 fSetStrike:1;
+    U8 fSetStrike : 1;
 
     /**
      * when ==1, anld.kul will determine the underlining state of the autonumber.
      */
-    U8 fSetKul:1;
+    U8 fSetKul : 1;
 
     /**
      * when ==1, autonumber will be displayed with a single prefixing space
      * character
      */
-    U8 fPrevSpace:1;
+    U8 fPrevSpace : 1;
 
     /**
      * determines boldness of autonumber when anld.fSetBold == 1.
      */
-    U8 fBold:1;
+    U8 fBold : 1;
 
     /**
      * determines italicness of autonumber when anld.fSetItalic == 1.
      */
-    U8 fItalic:1;
+    U8 fItalic : 1;
 
     /**
      * determines whether autonumber will be displayed using small caps when
      * anld.fSetSmallCaps == 1.
      */
-    U8 fSmallCaps:1;
+    U8 fSmallCaps : 1;
 
     /**
      * determines whether autonumber will be displayed using caps when anld.fSetCaps
      * == 1.
      */
-    U8 fCaps:1;
+    U8 fCaps : 1;
 
     /**
      * determines whether autonumber will be displayed using caps when anld.fSetStrike
      * == 1.
      */
-    U8 fStrike:1;
+    U8 fStrike : 1;
 
     /**
      * determines whether autonumber will be displayed with underlining when
      * anld.fSetKul == 1.
      */
-    U8 kul:3;
+    U8 kul : 3;
 
     /**
      * color of autonumber
      */
-    U8 ico:5;
+    U8 ico : 5;
 
     /**
      * font code of autonumber
@@ -1839,7 +1832,6 @@ struct ANLD {
 bool operator==(const ANLD &lhs, const ANLD &rhs);
 bool operator!=(const ANLD &lhs, const ANLD &rhs);
 
-
 /**
  * Autonumber Level Descriptor (ANLV)
  */
@@ -1851,7 +1843,7 @@ struct ANLV {
     /**
      * Simply calls read(...)
      */
-    ANLV(OLEStreamReader *stream, bool preservePos=false);
+    ANLV(OLEStreamReader *stream, bool preservePos = false);
     /**
      * Simply calls readPtr(...)
      */
@@ -1863,7 +1855,7 @@ struct ANLV {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the struct from a pointer
@@ -1873,7 +1865,7 @@ struct ANLV {
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -1926,96 +1918,96 @@ struct ANLV {
      * 2 right justify
      * 3 left and right justify
      */
-    U8 jc:2;
+    U8 jc : 2;
 
     /**
      * when ==1, number generated will include previous levels (used for legal
      * numbering)
      */
-    U8 fPrev:1;
+    U8 fPrev : 1;
 
     /**
      * when ==1, number will be displayed using a hanging indent
      */
-    U8 fHang:1;
+    U8 fHang : 1;
 
     /**
      * when ==1, boldness of number will be determined by anld.fBold.
      */
-    U8 fSetBold:1;
+    U8 fSetBold : 1;
 
     /**
      * when ==1, italicness of number will be determined by anld.fItalic
      */
-    U8 fSetItalic:1;
+    U8 fSetItalic : 1;
 
     /**
      * when ==1, anld.fSmallCaps will determine whether number will be displayed
      * in small caps or not.
      */
-    U8 fSetSmallCaps:1;
+    U8 fSetSmallCaps : 1;
 
     /**
      * when ==1, anld.fCaps will determine whether number will be displayed
      * capitalized or not
      */
-    U8 fSetCaps:1;
+    U8 fSetCaps : 1;
 
     /**
      * when ==1, anld.fStrike will determine whether the number will be displayed
      * using strikethrough or not.
      */
-    U8 fSetStrike:1;
+    U8 fSetStrike : 1;
 
     /**
      * when ==1, anld.kul will determine the underlining state of the autonumber.
      */
-    U8 fSetKul:1;
+    U8 fSetKul : 1;
 
     /**
      * when ==1, autonumber will be displayed with a single prefixing space
      * character
      */
-    U8 fPrevSpace:1;
+    U8 fPrevSpace : 1;
 
     /**
      * determines boldness of autonumber when anld.fSetBold == 1.
      */
-    U8 fBold:1;
+    U8 fBold : 1;
 
     /**
      * determines italicness of autonumber when anld.fSetItalic == 1.
      */
-    U8 fItalic:1;
+    U8 fItalic : 1;
 
     /**
      * determines whether autonumber will be displayed using small caps when
      * anld.fSetSmallCaps == 1.
      */
-    U8 fSmallCaps:1;
+    U8 fSmallCaps : 1;
 
     /**
      * determines whether autonumber will be displayed using caps when anld.fSetCaps
      * == 1.
      */
-    U8 fCaps:1;
+    U8 fCaps : 1;
 
     /**
      * determines whether autonumber will be displayed using caps when anld.fSetStrike
      * == 1.
      */
-    U8 fStrike:1;
+    U8 fStrike : 1;
 
     /**
      * determines whether autonumber will be displayed with underlining when
      * anld.fSetKul == 1.
      */
-    U8 kul:3;
+    U8 kul : 3;
 
     /**
      * color of autonumber
      */
-    U8 ico:5;
+    U8 ico : 5;
 
     /**
      * font code of autonumber
@@ -2047,7 +2039,6 @@ struct ANLV {
 bool operator==(const ANLV &lhs, const ANLV &rhs);
 bool operator!=(const ANLV &lhs, const ANLV &rhs);
 
-
 /**
  * AutoSummary Analysis (ASUMY)
  */
@@ -2059,7 +2050,7 @@ struct ASUMY {
     /**
      * Simply calls read(...)
      */
-    ASUMY(OLEStreamReader *stream, bool preservePos=false);
+    ASUMY(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the ASUMY structure from the stream.
@@ -2067,12 +2058,12 @@ struct ASUMY {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -2090,7 +2081,6 @@ struct ASUMY {
 bool operator==(const ASUMY &lhs, const ASUMY &rhs);
 bool operator!=(const ASUMY &lhs, const ASUMY &rhs);
 
-
 /**
  * AutoSummary Info (ASUMYI)
  */
@@ -2102,7 +2092,7 @@ struct ASUMYI {
     /**
      * Simply calls read(...)
      */
-    ASUMYI(OLEStreamReader *stream, bool preservePos=false);
+    ASUMYI(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the ASUMYI structure from the stream.
@@ -2110,12 +2100,12 @@ struct ASUMYI {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -2126,12 +2116,12 @@ struct ASUMYI {
     /**
      * true iff the ASUMYI is valid
      */
-    U16 fValid:1;
+    U16 fValid : 1;
 
     /**
      * true iff AutoSummary View is active
      */
-    U16 fView:1;
+    U16 fView : 1;
 
     /**
      * Display method for AutoSummary View:
@@ -2140,18 +2130,18 @@ struct ASUMYI {
      * 2 = Insert into doc
      * 3 = Show in new document
      */
-    U16 iViewBy:2;
+    U16 iViewBy : 2;
 
     /**
      * true if we should update File Properties summary information after
      * the next summarization
      */
-    U16 fUpdateProps:1;
+    U16 fUpdateProps : 1;
 
     /**
      * reserved
      */
-    U16 unused0_5:11;
+    U16 unused0_5 : 11;
 
     /**
      * Dialog summary level
@@ -2173,7 +2163,6 @@ struct ASUMYI {
 bool operator==(const ASUMYI &lhs, const ASUMYI &rhs);
 bool operator!=(const ASUMYI &lhs, const ASUMYI &rhs);
 
-
 /**
  * AnnoTation Reference Descriptor (ATRD)
  */
@@ -2185,7 +2174,7 @@ struct ATRD {
     /**
      * Simply calls read(...)
      */
-    ATRD(OLEStreamReader *stream, bool preservePos=false);
+    ATRD(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the ATRD structure from the stream.
@@ -2193,12 +2182,12 @@ struct ATRD {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -2219,12 +2208,12 @@ struct ATRD {
     /**
      * unused
      */
-    U16 ak:2;
+    U16 ak : 2;
 
     /**
      * unused
      */
-    U16 unused22_2:14;
+    U16 unused22_2 : 14;
 
     /**
      * unused
@@ -2242,7 +2231,6 @@ struct ATRD {
 bool operator==(const ATRD &lhs, const ATRD &rhs);
 bool operator!=(const ATRD &lhs, const ATRD &rhs);
 
-
 /**
  * BreaK Descriptor (BKD)
  */
@@ -2254,7 +2242,7 @@ struct BKD {
     /**
      * Simply calls read(...)
      */
-    BKD(OLEStreamReader *stream, bool preservePos=false);
+    BKD(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the BKD structure from the stream.
@@ -2262,12 +2250,12 @@ struct BKD {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -2291,41 +2279,40 @@ struct BKD {
      */
     S16 dcpDepend;
 
-    U16 icol:8;
+    U16 icol : 8;
 
     /**
      * when 1, this indicates that this is a table break.
      */
-    U16 fTableBreak:1;
+    U16 fTableBreak : 1;
 
     /**
      * when 1, this indicates that this is a column break.
      */
-    U16 fColumnBreak:1;
+    U16 fColumnBreak : 1;
 
     /**
      * used temporarily while word is running.
      */
-    U16 fMarked:1;
+    U16 fMarked : 1;
 
     /**
      * in textbox BKD, when == 1 indicates cpLim of this textbox is not valid
      */
-    U16 fUnk:1;
+    U16 fUnk : 1;
 
     /**
      * in textbox BKD, when == 1 indicates that text overflows the end of
      * this textbox
      */
-    U16 fTextOverflow:1;
+    U16 fTextOverflow : 1;
 
-    U16 unused4_13:3;
+    U16 unused4_13 : 3;
 
 }; // BKD
 
 bool operator==(const BKD &lhs, const BKD &rhs);
 bool operator!=(const BKD &lhs, const BKD &rhs);
-
 
 /**
  * BooKmark First descriptor (BKF)
@@ -2338,7 +2325,7 @@ struct BKF {
     /**
      * Simply calls read(...)
      */
-    BKF(OLEStreamReader *stream, bool preservePos=false);
+    BKF(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the BKF structure from the stream.
@@ -2346,12 +2333,12 @@ struct BKF {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -2372,31 +2359,30 @@ struct BKF {
      * when bkf.fCol is 1, this is the index to the first column of a table
      * column bookmark.
      */
-    U16 itcFirst:7;
+    U16 itcFirst : 7;
 
     /**
      * when 1, this indicates that this bookmark is marking the range of a
      * Macintosh Publisher section.
      */
-    U16 fPub:1;
+    U16 fPub : 1;
 
     /**
      * when bkf.fCol is 1, this is the index to limit column of a table column
      * bookmark.
      */
-    U16 itcLim:7;
+    U16 itcLim : 7;
 
     /**
      * when 1, this bookmark marks a range of columns in a table specified
      * by [bkf.itcFirst, bkf.itcLim).
      */
-    U16 fCol:1;
+    U16 fCol : 1;
 
 }; // BKF
 
 bool operator==(const BKF &lhs, const BKF &rhs);
 bool operator!=(const BKF &lhs, const BKF &rhs);
-
 
 /**
  * BooKmark Lim descriptor (BKL)
@@ -2409,7 +2395,7 @@ struct BKL {
     /**
      * Simply calls read(...)
      */
-    BKL(OLEStreamReader *stream, bool preservePos=false);
+    BKL(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the BKL structure from the stream.
@@ -2417,12 +2403,12 @@ struct BKL {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -2446,7 +2432,6 @@ struct BKL {
 bool operator==(const BKL &lhs, const BKL &rhs);
 bool operator!=(const BKL &lhs, const BKL &rhs);
 
-
 /**
  * Border Code for Windows Word 1.0 (BRC10)
  */
@@ -2458,7 +2443,7 @@ struct BRC10 {
     /**
      * Simply calls read(...)
      */
-    BRC10(OLEStreamReader *stream, bool preservePos=false);
+    BRC10(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the BRC10 structure from the stream.
@@ -2466,12 +2451,12 @@ struct BRC10 {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -2482,40 +2467,39 @@ struct BRC10 {
     /**
      * width of second line of border in pixels
      */
-    U16 dxpLine2Width:3;
+    U16 dxpLine2Width : 3;
 
     /**
      * distance to maintain between both lines of border in pixels
      */
-    U16 dxpSpaceBetween:3;
+    U16 dxpSpaceBetween : 3;
 
     /**
      * width of first border line in pixels
      */
-    U16 dxpLine1Width:3;
+    U16 dxpLine1Width : 3;
 
     /**
      * width of space to maintain between border and text within border. Must
      * be 0 when BRC is a substructure of the TC.
      */
-    U16 dxpSpace:5;
+    U16 dxpSpace : 5;
 
     /**
      * when 1, border is drawn with shadow. Must be 0 when BRC10 is a substructure
      * of the TC.
      */
-    U16 fShadow:1;
+    U16 fShadow : 1;
 
     /**
      * reserved
      */
-    U16 fSpare:1;
+    U16 fSpare : 1;
 
 }; // BRC10
 
 bool operator==(const BRC10 &lhs, const BRC10 &rhs);
 bool operator!=(const BRC10 &lhs, const BRC10 &rhs);
-
 
 /**
  * Bin Table Entry (BTE)
@@ -2528,7 +2512,7 @@ struct BTE {
     /**
      * Simply calls read(...)
      */
-    BTE(OLEStreamReader *stream, bool preservePos=false);
+    BTE(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the BTE structure from the stream.
@@ -2536,12 +2520,12 @@ struct BTE {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -2562,7 +2546,6 @@ struct BTE {
 bool operator==(const BTE &lhs, const BTE &rhs);
 bool operator!=(const BTE &lhs, const BTE &rhs);
 
-
 /**
  * Character Properties (CHP)
  */
@@ -2574,7 +2557,7 @@ struct CHP : public Shared {
     /**
      * Simply calls read(...)
      */
-    CHP(OLEStreamReader *stream, bool preservePos=false);
+    CHP(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the CHP structure from the stream.
@@ -2582,12 +2565,12 @@ struct CHP : public Shared {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -2597,21 +2580,21 @@ struct CHP : public Shared {
     /**
      * This method applies a grpprl with @param count elements
      */
-    void apply(const U8 *grpprl, U16 count, const Style* style, const StyleSheet* styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    void apply(const U8 *grpprl, U16 count, const Style *style, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * This method applies a whole CHPX to the structure.
      * The reason that we only pass a pointer to the start of the exception
      * structure is, that we don't know the type in the FKP template :}
      */
-    void applyExceptions(const U8* exceptions, const Style* paragraphStyle, const StyleSheet* styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    void applyExceptions(const U8 *exceptions, const Style *paragraphStyle, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * This method applies one single SPRM. It returns -1 if it wasn't
      * a CHP SPRM and it returns the length of the applied SPRM
      * if it was successful.
      */
-    S16 applyCHPSPRM(const U8* ptr, const Style* style, const StyleSheet* styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    S16 applyCHPSPRM(const U8 *ptr, const Style *style, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * Dumps all fields of this structure (for debugging)
@@ -2627,80 +2610,80 @@ struct CHP : public Shared {
     /**
      * text is bold when 1 , and not bold when 0.
      */
-    U8 fBold:1;
+    U8 fBold : 1;
 
     /**
      * italic when 1, not italic when 0
      */
-    U8 fItalic:1;
+    U8 fItalic : 1;
 
     /**
      * when 1, text has been deleted and will be displayed with strikethrough
      * when revision marked text is to be displayed
      */
-    U8 fRMarkDel:1;
+    U8 fRMarkDel : 1;
 
     /**
      * outlined when 1, not outlined when 0
      */
-    U8 fOutline:1;
+    U8 fOutline : 1;
 
     /**
      * used internally by Word
      */
-    U8 fFldVanish:1;
+    U8 fFldVanish : 1;
 
     /**
      * displayed with small caps when 1, no small caps when 0
      */
-    U8 fSmallCaps:1;
+    U8 fSmallCaps : 1;
 
     /**
      * displayed with caps when 1, no caps when 0
      */
-    U8 fCaps:1;
+    U8 fCaps : 1;
 
     /**
      * when 1, text has "hidden" format, and is not displayed unless fPagHidden
      * is set in the DOP
      */
-    U8 fVanish:1;
+    U8 fVanish : 1;
 
     /**
      * when 1, text is newly typed since the last time revision marks have
      * been accepted and will be displayed with an underline when revision marked
      * text is to be displayed
      */
-    U8 fRMark:1;
+    U8 fRMark : 1;
 
     /**
      * character is a Word special character when 1, not a special character
      * when 0
      */
-    U8 fSpec:1;
+    U8 fSpec : 1;
 
     /**
      * displayed with strikethrough when 1, no strikethrough when 0
      */
-    U8 fStrike:1;
+    U8 fStrike : 1;
 
     /**
      * embedded object when 1, not an embedded object when 0
      */
-    U8 fObj:1;
+    U8 fObj : 1;
 
     /**
      * character is drawn with a shadow when 1; drawn without shadow when
      * 0
      */
-    U8 fShadow:1;
+    U8 fShadow : 1;
 
     /**
      * character is displayed in lower case when 1. No case transformation
      * is performed when 0. This field may be set to 1 only when chp.fSmallCaps
      * is 1.
      */
-    U8 fLowerCase:1;
+    U8 fLowerCase : 1;
 
     /**
      * when 1, chp.fcPic points to an FFDATA, the data structure binary data
@@ -2708,7 +2691,7 @@ struct CHP : public Shared {
      * when chp.fSpec is also 1 and the special character in the document stream
      * that has this property is a chPicture (0x01).
      */
-    U8 fData:1;
+    U8 fData : 1;
 
     /**
      * when 1, chp.lTagObj specifies a particular object in the object stream
@@ -2718,30 +2701,30 @@ struct CHP : public Shared {
      * character in the document stream that has this property is a chPicture
      * (0x01).
      */
-    U8 fOle2:1;
+    U8 fOle2 : 1;
 
     /**
      * text is embossed when 1 and not embossed when 0
      */
-    U16 fEmboss:1;
+    U16 fEmboss : 1;
 
     /**
      * text is engraved when 1 and not engraved when 0
      */
-    U16 fImprint:1;
+    U16 fImprint : 1;
 
     /**
      * displayed with double strikethrough when 1, no double strikethrough
      * when 0
      */
-    U16 fDStrike:1;
+    U16 fDStrike : 1;
 
-    U16 fUsePgsuSettings:1;
+    U16 fUsePgsuSettings : 1;
 
     /**
      * Reserved
      */
-    U16 unused2_4:12;
+    U16 unused2_4 : 12;
 
     /**
      * Reserved
@@ -2784,7 +2767,7 @@ struct CHP : public Shared {
      * 1 means text in run is superscripted
      * 2 means text in run is subscripted
      */
-    U8 iss:3;
+    U8 iss : 3;
 
     /**
      * underline code:
@@ -2801,12 +2784,12 @@ struct CHP : public Shared {
      * 10 dot dot dash
      * 11 wave
      */
-    U8 kul:4;
+    U8 kul : 4;
 
     /**
      * used by Word internally, not stored in file
      */
-    U8 fSpecSymbol:1;
+    U8 fSpecSymbol : 1;
 
     /**
      * color of text:
@@ -2829,22 +2812,22 @@ struct CHP : public Shared {
      * 16 LtGray
      */
 
-    U8 icoObsolete:5;
+    U8 icoObsolete : 5;
 
     /**
      * reserved
      */
-    U8 unused23_5:1;
+    U8 unused23_5 : 1;
 
     /**
      * used by Word internally, not stored in file
      */
-    U8 fSysVanish:1;
+    U8 fSysVanish : 1;
 
     /**
      * reserved
      */
-    U8 hpScript:1;
+    U8 hpScript : 1;
 
     /**
      * super/subscript position in half points; positive means text is raised;
@@ -3064,30 +3047,30 @@ struct CHP : public Shared {
     /**
      * highlight color (see chp.ico)
      */
-    U16 icoHighlight:5;
+    U16 icoHighlight : 5;
 
     /**
      * when 1, characters are highlighted with color specified by chp.icoHighlight.
      */
-    U16 fHighlight:1;
+    U16 fHighlight : 1;
 
-    U16 kcd:3;
+    U16 kcd : 3;
 
     /**
      * used internally by Word
      */
-    U16 fNavHighlight:1;
+    U16 fNavHighlight : 1;
 
-    U16 fChsDiff:1;
+    U16 fChsDiff : 1;
 
-    U16 fMacChs:1;
+    U16 fMacChs : 1;
 
-    U16 fFtcAsciSym:1;
+    U16 fFtcAsciSym : 1;
 
     /**
      * Reserved
      */
-    U16 reserved_3:3;
+    U16 reserved_3 : 3;
 
     /**
      * when 1, properties have been changed with revision marking on
@@ -3179,13 +3162,12 @@ struct CHP : public Shared {
     /**
      * specifies if the text is vertical or horizontal
      */
-    U16 fTNY:1;
+    U16 fTNY : 1;
 
     /**
      * specifies if the text is scaled to fit the line
      */
-    U16 fTNYCompress:1;
-
+    U16 fTNYCompress : 1;
 
     /**
      * A CP value in the Bullet Pictures document that specifies which picture
@@ -3202,15 +3184,14 @@ struct CHP : public Shared {
      * the size of the picture changes automatically to match the size of the
      * text that follows the bullet.
      */
-    U8 fPicBullet:1;
-    U8 fNoAutoSize:1;
-    U8 pbi_unused:6;
+    U8 fPicBullet : 1;
+    U8 fNoAutoSize : 1;
+    U8 pbi_unused : 6;
 
 }; // CHP
 
 bool operator==(const CHP &lhs, const CHP &rhs);
 bool operator!=(const CHP &lhs, const CHP &rhs);
-
 
 /**
  * Character Property Exceptions (CHPX)
@@ -3220,20 +3201,20 @@ bool operator!=(const CHP &lhs, const CHP &rhs);
  * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
-//struct CHPX {
-//    /**
-//     * Creates an empty CHPX structure and sets the defaults
-//     */
-//    CHPX();
-//    /**
-//     * Simply calls read(...)
-//     */
-//    CHPX(OLEStreamReader *stream, bool preservePos=false);
-//    /**
-//     * Attention: This struct allocates memory on the heap
-//     */
-//    CHPX(const CHPX &rhs);
-//    ~CHPX();
+// struct CHPX {
+//     /**
+//      * Creates an empty CHPX structure and sets the defaults
+//      */
+//     CHPX();
+//     /**
+//      * Simply calls read(...)
+//      */
+//     CHPX(OLEStreamReader *stream, bool preservePos=false);
+//     /**
+//      * Attention: This struct allocates memory on the heap
+//      */
+//     CHPX(const CHPX &rhs);
+//     ~CHPX();
 
 //    CHPX &operator=(const CHPX &rhs);
 
@@ -3268,14 +3249,13 @@ bool operator!=(const CHP &lhs, const CHP &rhs);
 //     */
 //    U8 *grpprl;   //    U8 grpprl[cb];
 
-//private:
-//    void clearInternal();
+// private:
+//     void clearInternal();
 
 //}; // CHPX
 
-//bool operator==(const CHPX &lhs, const CHPX &rhs);
-//bool operator!=(const CHPX &lhs, const CHPX &rhs);
-
+// bool operator==(const CHPX &lhs, const CHPX &rhs);
+// bool operator!=(const CHPX &lhs, const CHPX &rhs);
 
 /**
  * Formatted Disk Page for CHPXs (CHPXFKP)
@@ -3285,20 +3265,20 @@ bool operator!=(const CHP &lhs, const CHP &rhs);
  * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
-//struct CHPXFKP {
-//    /**
-//     * Creates an empty CHPXFKP structure and sets the defaults
-//     */
-//    CHPXFKP();
-//    /**
-//     * Simply calls read(...)
-//     */
-//    CHPXFKP(OLEStreamReader *stream, bool preservePos=false);
-//    /**
-//     * Attention: This struct allocates memory on the heap
-//     */
-//    CHPXFKP(const CHPXFKP &rhs);
-//    ~CHPXFKP();
+// struct CHPXFKP {
+//     /**
+//      * Creates an empty CHPXFKP structure and sets the defaults
+//      */
+//     CHPXFKP();
+//     /**
+//      * Simply calls read(...)
+//      */
+//     CHPXFKP(OLEStreamReader *stream, bool preservePos=false);
+//     /**
+//      * Attention: This struct allocates memory on the heap
+//      */
+//     CHPXFKP(const CHPXFKP &rhs);
+//     ~CHPXFKP();
 
 //    CHPXFKP &operator=(const CHPXFKP &rhs);
 
@@ -3352,14 +3332,13 @@ bool operator!=(const CHP &lhs, const CHP &rhs);
 //     */
 //    U8 crun;
 
-//private:
-//    void clearInternal();
+// private:
+//     void clearInternal();
 
 //}; // CHPXFKP
 
-//bool operator==(const CHPXFKP &lhs, const CHPXFKP &rhs);
-//bool operator!=(const CHPXFKP &lhs, const CHPXFKP &rhs);
-
+// bool operator==(const CHPXFKP &lhs, const CHPXFKP &rhs);
+// bool operator!=(const CHPXFKP &lhs, const CHPXFKP &rhs);
 
 /**
  * Drop Cap Specifier(DCS)
@@ -3372,7 +3351,7 @@ struct DCS {
     /**
      * Simply calls read(...)
      */
-    DCS(OLEStreamReader *stream, bool preservePos=false);
+    DCS(OLEStreamReader *stream, bool preservePos = false);
     /**
      * Simply calls readPtr(...)
      */
@@ -3384,7 +3363,7 @@ struct DCS {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the struct from a pointer
@@ -3394,7 +3373,7 @@ struct DCS {
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -3419,13 +3398,13 @@ struct DCS {
      * 1 normal drop cap
      * 2 drop cap in margin
      */
-    U8 fdct:3;
+    U8 fdct : 3;
 
     /**
      * default value 0
      * count of lines to drop
      */
-    U8 lines:5;
+    U8 lines : 5;
 
     /**
      * reserved
@@ -3436,7 +3415,6 @@ struct DCS {
 
 bool operator==(const DCS &lhs, const DCS &rhs);
 bool operator!=(const DCS &lhs, const DCS &rhs);
-
 
 /**
  * Drawing Object Grid (DOGRID)
@@ -3449,7 +3427,7 @@ struct DOGRID {
     /**
      * Simply calls read(...)
      */
-    DOGRID(OLEStreamReader *stream, bool preservePos=false);
+    DOGRID(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the DOGRID structure from the stream.
@@ -3457,12 +3435,12 @@ struct DOGRID {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -3494,30 +3472,29 @@ struct DOGRID {
      * the number of grid squares (in the y direction) between each gridline
      * drawn on the screen. 0 means don't display any gridlines in the y direction.
      */
-    U16 dyGridDisplay:7;
+    U16 dyGridDisplay : 7;
 
     /**
      * suppress display of gridlines
      */
-    U16 fTurnItOff:1;
+    U16 fTurnItOff : 1;
 
     /**
      * the number of grid squares (in the x direction) between each gridline
      * drawn on the screen. 0 means don't display any gridlines in the y direction.
      */
-    U16 dxGridDisplay:7;
+    U16 dxGridDisplay : 7;
 
     /**
      * if true, the grid will start at the left and top margins and ignore
      * xaGrid and yaGrid.
      */
-    U16 fFollowMargins:1;
+    U16 fFollowMargins : 1;
 
 }; // DOGRID
 
 bool operator==(const DOGRID &lhs, const DOGRID &rhs);
 bool operator!=(const DOGRID &lhs, const DOGRID &rhs);
-
 
 /**
  * Document Properties (DOP) - The Dop97 structure contains document and
@@ -3532,7 +3509,7 @@ struct DOP {
     /**
      * Simply calls read(...)
      */
-    DOP(OLEStreamReader *stream, bool preservePos=false);
+    DOP(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the DOP structure from the stream.
@@ -3540,12 +3517,12 @@ struct DOP {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -3561,24 +3538,24 @@ struct DOP {
      * 1 when facing pages should be printed.
      * Default 0.
      */
-    U16 fFacingPages:1;
+    U16 fFacingPages : 1;
 
     /**
      * 1 when widow control is in effect. 0 when widow control disabled.
      * Default 1.
      */
-    U16 fWidowControl:1;
+    U16 fWidowControl : 1;
 
     /**
      * 1 when doc is a main doc for Print Merge Helper, 0 when not; default=0
      */
-    U16 fPMHMainDoc:1;
+    U16 fPMHMainDoc : 1;
 
     /**
      * Default line suppression storage; 0= form letter line suppression;
      * 1= no line suppression; default=0. No longer used.
      */
-    U16 grfSuppression:2;
+    U16 grfSuppression : 2;
 
     /**
      * Specifies where footnotes are placed on the page when they are
@@ -3594,17 +3571,17 @@ struct DOP {
      * 2 Specifies that footnotes are displayed immediately following the last
      * line of text on the page on which the note reference mark appears.
      */
-    U16 fpc:2;
+    U16 fpc : 2;
 
     /**
      * unused. Default 0.
      */
-    U16 unused0_7:1;
+    U16 unused0_7 : 1;
 
     /**
      * No longer used. Default 0.
      */
-    U16 grpfIhdt:8;
+    U16 grpfIhdt : 8;
 
     /**
      * Specifies when all automatic numbering for the footnote reference marks
@@ -3617,7 +3594,7 @@ struct DOP {
      * 1 Reset to the starting value for each unique section in the document.
      * 2 Reset to the starting value for each unique page in the document.
      */
-    U16 rncFtn:2;
+    U16 rncFtn : 2;
 
     /**
      * For those documents that have an nFib <= 0x00D9, this element specifies
@@ -3625,211 +3602,211 @@ struct DOP {
      * the document, and the first automatically numbered footnotes after each
      * restart point that is specified by the rncFtn element.
      */
-    U16 nFtn:14;
+    U16 nFtn : 14;
 
     /**
      * when 1, indicates that information in the hplcpad should be refreshed
      * since outline has been dirtied
      */
-    U8 fOutlineDirtySave:1;
+    U8 fOutlineDirtySave : 1;
 
     /**
      * reserved
      */
-    U8 unused4_1:7;
+    U8 unused4_1 : 7;
 
     /**
      * when 1, Word believes all pictures recorded in the document were created
      * on a Macintosh
      */
-    U8 fOnlyMacPics:1;
+    U8 fOnlyMacPics : 1;
 
     /**
      * when 1, Word believes all pictures recorded in the document were created
      * in Windows
      */
-    U8 fOnlyWinPics:1;
+    U8 fOnlyWinPics : 1;
 
     /**
      * when 1, document was created as a print merge labels document
      */
-    U8 fLabelDoc:1;
+    U8 fLabelDoc : 1;
 
     /**
      * when 1, Word is allowed to hyphenate words that are capitalized. When
      * 0, capitalized may not be hyphenated
      */
-    U8 fHyphCapitals:1;
+    U8 fHyphCapitals : 1;
 
     /**
      * when 1, Word will hyphenate newly typed text as a background task
      */
-    U8 fAutoHyphen:1;
+    U8 fAutoHyphen : 1;
 
-    U8 fFormNoFields:1;
+    U8 fFormNoFields : 1;
 
     /**
      * when 1, Word will merge styles from its template
      */
-    U8 fLinkStyles:1;
+    U8 fLinkStyles : 1;
 
     /**
      * when 1, Word will mark revisions as the document is edited
      */
-    U8 fRevMarking:1;
+    U8 fRevMarking : 1;
 
     /**
      * always make backup when document saved when 1.
      */
-    U8 fBackup:1;
+    U8 fBackup : 1;
 
     /**
      * when 1, the results of the last Word Count execution (as recorded in
      * several DOP fields) are still exactly correct.
      */
-    U8 fExactCWords:1;
+    U8 fExactCWords : 1;
 
     /**
      * when 1, hidden document contents are displayed.
      */
-    U8 fPagHidden:1;
+    U8 fPagHidden : 1;
 
     /**
      * when 1, field results are displayed, when 0 field codes are displayed.
      */
-    U8 fPagResults:1;
+    U8 fPagResults : 1;
 
     /**
      * when 1, annotations are locked for editing
      */
-    U8 fLockAtn:1;
+    U8 fLockAtn : 1;
 
     /**
      * swap margins on left/right pages when 1.
      */
-    U8 fMirrorMargins:1;
+    U8 fMirrorMargins : 1;
 
     /**
      * reserved
      */
-    U8 unused6_6:1;
+    U8 unused6_6 : 1;
 
     /**
      * when 1, use TrueType fonts by default (flag obeyed only when doc was
      * created by WinWord 2.x)
      */
-    U8 fDfltTrueType:1;
+    U8 fDfltTrueType : 1;
 
     /**
      * when 1, file created with SUPPRESSTOPSPACING=YES in win.ini. (flag
      * obeyed only when doc was created by WinWord 2.x).
      */
-    U8 fPagSuppressTopSpacing:1;
+    U8 fPagSuppressTopSpacing : 1;
 
     /**
      * when 1, document is protected from edit operations
      */
-    U8 fProtEnabled:1;
+    U8 fProtEnabled : 1;
 
     /**
      * when 1, restrict selections to occur only within form fields
      */
-    U8 fDispFormFldSel:1;
+    U8 fDispFormFldSel : 1;
 
     /**
      * when 1, show revision markings on screen
      */
-    U8 fRMView:1;
+    U8 fRMView : 1;
 
     /**
      * when 1, print revision marks when document is printed
      */
-    U8 fRMPrint:1;
+    U8 fRMPrint : 1;
 
     /**
      * reserved
      */
-    U8 unused7_5:1;
+    U8 unused7_5 : 1;
 
     /**
      * when 1, the current revision marking state is locked
      */
-    U8 fLockRev:1;
+    U8 fLockRev : 1;
 
     /**
      * when 1, document contains embedded TrueType fonts
      */
-    U8 fEmbedFonts:1;
+    U8 fEmbedFonts : 1;
 
     /**
      * compatibility option: when 1, don't add automatic tab stops for hanging
      * indent
      */
-    U16 copts_fNoTabForInd:1;
+    U16 copts_fNoTabForInd : 1;
 
     /**
      * compatibility option: when 1, don't add extra space for raised or lowered
      * characters
      */
-    U16 copts_fNoSpaceRaiseLower:1;
+    U16 copts_fNoSpaceRaiseLower : 1;
 
     /**
      * compatibility option: when 1, suppress the paragraph Space Before and
      * Space After options after a page break
      */
-    U16 copts_fSuppressSpbfAfterPageBreak:1;
+    U16 copts_fSuppressSpbfAfterPageBreak : 1;
 
     /**
      * compatibility option: when 1, wrap trailing spaces at the end of a
      * line to the next line
      */
-    U16 copts_fWrapTrailSpaces:1;
+    U16 copts_fWrapTrailSpaces : 1;
 
     /**
      * compatibility option: when 1, print colors as black on non-color printers
      */
-    U16 copts_fMapPrintTextColor:1;
+    U16 copts_fMapPrintTextColor : 1;
 
     /**
      * compatibility option: when 1, don't balance columns for Continuous
      * Section starts
      */
-    U16 copts_fNoColumnBalance:1;
+    U16 copts_fNoColumnBalance : 1;
 
-    U16 copts_fConvMailMergeEsc:1;
+    U16 copts_fConvMailMergeEsc : 1;
 
     /**
      * compatibility option: when 1, suppress extra line spacing at top of
      * page
      */
-    U16 copts_fSupressTopSpacing:1;
+    U16 copts_fSupressTopSpacing : 1;
 
     /**
      * compatibility option: when 1, combine table borders like Word 5.x for
      * the Macintosh
      */
-    U16 copts_fOrigWordTableRules:1;
+    U16 copts_fOrigWordTableRules : 1;
 
     /**
      * compatibility option: when 1, don't blank area between metafile pictures
      */
-    U16 copts_fTransparentMetafiles:1;
+    U16 copts_fTransparentMetafiles : 1;
 
     /**
      * compatibility option: when 1, show hard page or column breaks in frames
      */
-    U16 copts_fShowBreaksInFrames:1;
+    U16 copts_fShowBreaksInFrames : 1;
 
     /**
      * compatibility option: when 1, swap left and right pages on odd facing
      * pages
      */
-    U16 copts_fSwapBordersFacingPgs:1;
+    U16 copts_fSwapBordersFacingPgs : 1;
 
     /**
      * reserved
      */
-    U16 unused8_12:4;
+    U16 unused8_12 : 4;
 
     /**
      * default tab width. Default 720 twips.
@@ -3909,7 +3886,7 @@ struct DOP {
      * 1 Reset to the starting value for each unique section in the document.
      * 2 Reset to the starting value for each unique page in the document.
      */
-    U16 rncEdn:2;
+    U16 rncEdn : 2;
 
     /**
      * For those documents that have an nFib <= 0x00D9, this element specifies
@@ -3917,7 +3894,7 @@ struct DOP {
      * document, and the first automatically numbered endnote after each
      * restart point that is specified by the rncEdn element.
      */
-    U16 nEdn:14;
+    U16 nEdn : 14;
 
     /**
      * Specifies where endnotes are placed on the page when they are referenced
@@ -3927,7 +3904,7 @@ struct DOP {
      * 0 Endnotes placed at the end of the section in which they are referenced.
      * 3 All endnotes are placed at the end of the current document.
      */
-    U16 epc:2;
+    U16 epc : 2;
 
     /**
      * number format code for auto footnotes
@@ -3939,7 +3916,7 @@ struct DOP {
      * [This field is obsoleted by nfcFtnRef2 at 0x1ec (Werner)]
      * [unused14 in [MS-DOC] — v20101219 (uzak)]
      */
-    U16 nfcFtnRef:4;
+    U16 nfcFtnRef : 4;
 
     /**
      * number format code for auto endnotes
@@ -3951,32 +3928,32 @@ struct DOP {
      * [This field is obsoleted by nfcEdnRef2 at 0x1ee (Werner)]
      * [unused15 in [MS-DOC] — v20101219 (uzak)]
      */
-    U16 nfcEdnRef:4;
+    U16 nfcEdnRef : 4;
 
     /**
      * only print data inside of form fields
      */
-    U16 fPrintFormData:1;
+    U16 fPrintFormData : 1;
 
     /**
      * only save document data that is inside of a form field.
      */
-    U16 fSaveFormData:1;
+    U16 fSaveFormData : 1;
 
     /**
      * shade form fields
      */
-    U16 fShadeFormData:1;
+    U16 fShadeFormData : 1;
 
     /**
      * reserved
      */
-    U16 unused54_13:2;
+    U16 unused54_13 : 2;
 
     /**
      * when 1, include footnotes and endnotes in word count
      */
-    U16 fWCFtnEdn:1;
+    U16 fWCFtnEdn : 1;
 
     /**
      * count of lines tallied by last Word Count operation
@@ -4025,12 +4002,12 @@ struct DOP {
      * 1 Outline view
      * 2 Page View
      */
-    U16 wvkSaved:3;
+    U16 wvkSaved : 3;
 
     /**
      * zoom percentage
      */
-    U16 wScaleSaved:9;
+    U16 wScaleSaved : 9;
 
     /**
      * zoom type
@@ -4038,17 +4015,17 @@ struct DOP {
      * 1 Full page
      * 2 Page width
      */
-    U16 zkSaved:2;
+    U16 zkSaved : 2;
 
     /**
      * This is a vertical document (Word 6/95 only)
      */
-    U16 fRotateFontW6:1;
+    U16 fRotateFontW6 : 1;
 
     /**
      * Gutter position for this doc: 0 => side; 1 => top.
      */
-    U16 iGutterPos:1;
+    U16 iGutterPos : 1;
 
     // --------------------
     //  DopBase - END
@@ -4060,102 +4037,102 @@ struct DOP {
     /**
      * (see above)
      */
-    U32 fNoTabForInd:1;
+    U32 fNoTabForInd : 1;
 
     /**
      * (see above)
      */
-    U32 fNoSpaceRaiseLower:1;
+    U32 fNoSpaceRaiseLower : 1;
 
     /**
      * (see above)
      */
-    U32 fSupressSpbfAfterPageBreak:1;
+    U32 fSupressSpbfAfterPageBreak : 1;
 
     /**
      * (see above)
      */
-    U32 fWrapTrailSpaces:1;
+    U32 fWrapTrailSpaces : 1;
 
     /**
      * (see above)
      */
-    U32 fMapPrintTextColor:1;
+    U32 fMapPrintTextColor : 1;
 
     /**
      * (see above)
      */
-    U32 fNoColumnBalance:1;
+    U32 fNoColumnBalance : 1;
 
     /**
      * (see above)
      */
-    U32 fConvMailMergeEsc:1;
+    U32 fConvMailMergeEsc : 1;
 
     /**
      * (see above)
      */
-    U32 fSupressTopSpacing:1;
+    U32 fSupressTopSpacing : 1;
 
     /**
      * (see above)
      */
-    U32 fOrigWordTableRules:1;
+    U32 fOrigWordTableRules : 1;
 
     /**
      * (see above)
      */
-    U32 fTransparentMetafiles:1;
+    U32 fTransparentMetafiles : 1;
 
     /**
      * (see above)
      */
-    U32 fShowBreaksInFrames:1;
+    U32 fShowBreaksInFrames : 1;
 
     /**
      * (see above)
      */
-    U32 fSwapBordersFacingPgs:1;
+    U32 fSwapBordersFacingPgs : 1;
 
     /**
      * (reserved)
      */
-    U32 unused84_12:4;
+    U32 unused84_12 : 4;
 
     /**
      * Suppress extra line spacing at top of page like MacWord5.x
      */
-    U32 fSuppressTopSpacingMac5:1;
+    U32 fSuppressTopSpacingMac5 : 1;
 
     /**
      * Expand/Condense by whole number of points.
      */
-    U32 fTruncDxaExpand:1;
+    U32 fTruncDxaExpand : 1;
 
     /**
      * Print body text before header/footer
      */
-    U32 fPrintBodyBeforeHdr:1;
+    U32 fPrintBodyBeforeHdr : 1;
 
     /**
      * Don't add leading (extra space) between rows of text
      */
-    U32 fNoLeading:1;
+    U32 fNoLeading : 1;
 
     /**
      * (reserved)
      */
-    U32 unused84_20:1;
+    U32 unused84_20 : 1;
 
     /**
      * Use larger small caps like MacWord 5.x
      */
-    U32 fMWSmallCaps:1;
+    U32 fMWSmallCaps : 1;
 
     /**
      * (reserved)
      */
-    U32 unused84_22:10;
+    U32 unused84_22 : 10;
 
     // --------------------
     //  Copts80 - END
@@ -4179,84 +4156,84 @@ struct DOP {
     /**
      * Always set to zero when writing files
      */
-    U16 reserved:1;
+    U16 reserved : 1;
 
     /**
      * Which outline levels are showing in outline view (0 => heading 1 only,
      * 4 => headings 1 through 5, 9 => all levels showing)
      */
-    U16 lvl:4;
+    U16 lvl : 4;
 
     /**
      * Doc has been completely grammar checked
      */
-    U16 fGramAllDone:1;
+    U16 fGramAllDone : 1;
 
     /**
      * No grammar errors exist in doc
      */
-    U16 fGramAllClean:1;
+    U16 fGramAllClean : 1;
 
     /**
      * if you are doing font embedding, you should only embed the characters
      * in the font that are used in the document
      */
-    U16 fSubsetFonts:1;
+    U16 fSubsetFonts : 1;
 
     /**
      * Hide the version created for autoversion
      */
-    U16 fHideLastVersion:1;
+    U16 fHideLastVersion : 1;
 
     /**
      * This file is based upon an HTML file
      */
-    U16 fHtmlDoc:1;
+    U16 fHtmlDoc : 1;
 
     /**
      * Always set to zero when writing files
      */
-    U16 unused410_11:1;
+    U16 unused410_11 : 1;
 
     /**
      * Snap table and page borders to page border
      */
-    U16 fSnapBorder:1;
+    U16 fSnapBorder : 1;
 
     /**
      * Place header inside page border
      */
-    U16 fIncludeHeader:1;
+    U16 fIncludeHeader : 1;
 
     /**
      * Place footer inside page border
      */
-    U16 fIncludeFooter:1;
+    U16 fIncludeFooter : 1;
 
     /**
      * Are we in online view
      */
-    U16 fForcePageSizePag:1;
+    U16 fForcePageSizePag : 1;
 
     /**
      * Are we auto-promoting fonts to >= hpsZoonFontPag?
      */
-    U16 fMinFontSizePag:1;
+    U16 fMinFontSizePag : 1;
 
     /**
      * versioning is turned on
      */
-    U16 fHaveVersions:1;
+    U16 fHaveVersions : 1;
 
     /**
      * autoversioning is enabled
      */
-    U16 fAutoVersion:1;
+    U16 fAutoVersion : 1;
 
     /**
      * Always set to zero when writing files
      */
-    U16 unused412_2:14;
+    U16 unused412_2 : 14;
 
     /**
      * Autosummary info
@@ -4278,17 +4255,17 @@ struct DOP {
     /**
      * Have we prompted for virus protection on this doc?
      */
-    U32 fVirusPrompted:1;
+    U32 fVirusPrompted : 1;
 
     /**
      * If prompted, load safely for this doc?
      */
-    U32 fVirusLoadSafe:1;
+    U32 fVirusLoadSafe : 1;
 
     /**
      * Random session key to sign above bits for a Word session.
      */
-    U32 KeyVirusSession30:30;
+    U32 KeyVirusSession30 : 30;
 
     /**
      * Spare
@@ -4359,7 +4336,6 @@ struct DOP {
 bool operator==(const DOP &lhs, const DOP &rhs);
 bool operator!=(const DOP &lhs, const DOP &rhs);
 
-
 /**
  * Font Family Name (FFN)
  */
@@ -4368,20 +4344,20 @@ bool operator!=(const DOP &lhs, const DOP &rhs);
  * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
-//struct FFN {
-//    /**
-//     * Creates an empty FFN structure and sets the defaults
-//     */
-//    FFN();
-//    /**
-//     * Simply calls read(...)
-//     */
-//    FFN(OLEStreamReader *stream, bool preservePos=false);
-//    /**
-//     * Attention: This struct allocates memory on the heap
-//     */
-//    FFN(const FFN &rhs);
-//    ~FFN();
+// struct FFN {
+//     /**
+//      * Creates an empty FFN structure and sets the defaults
+//      */
+//     FFN();
+//     /**
+//      * Simply calls read(...)
+//      */
+//     FFN(OLEStreamReader *stream, bool preservePos=false);
+//     /**
+//      * Attention: This struct allocates memory on the heap
+//      */
+//     FFN(const FFN &rhs);
+//     ~FFN();
 
 //    FFN &operator=(const FFN &rhs);
 
@@ -4467,14 +4443,13 @@ bool operator!=(const DOP &lhs, const DOP &rhs);
 //     */
 //    U8 *xszFfn;   //    U8 xszFfn[];
 
-//private:
-//    void clearInternal();
+// private:
+//     void clearInternal();
 
 //}; // FFN
 
-//bool operator==(const FFN &lhs, const FFN &rhs);
-//bool operator!=(const FFN &lhs, const FFN &rhs);
-
+// bool operator==(const FFN &lhs, const FFN &rhs);
+// bool operator!=(const FFN &lhs, const FFN &rhs);
 
 /**
  * File Information Block (FIB)
@@ -4487,7 +4462,7 @@ struct FIB {
     /**
      * Simply calls read(...)
      */
-    FIB(OLEStreamReader *stream, bool preservePos=false);
+    FIB(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the FIB structure from the stream.
@@ -4495,12 +4470,12 @@ struct FIB {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Validate FIB.  Don't take warnings too seriously.  It seems that the
@@ -4551,32 +4526,32 @@ struct FIB {
     /**
      * Set if this document is a template
      */
-    U16 fDot:1;
+    U16 fDot : 1;
 
     /**
      * Set if this document is a glossary
      */
-    U16 fGlsy:1;
+    U16 fGlsy : 1;
 
     /**
      * when 1, file is in <b>complex, fast-saved format.</b>
      */
-    U16 fComplex:1;
+    U16 fComplex : 1;
 
     /**
      * set if file contains 1 or more pictures
      */
-    U16 fHasPic:1;
+    U16 fHasPic : 1;
 
     /**
      * count of times file was quicksaved
      */
-    U16 cQuickSaves:4;
+    U16 cQuickSaves : 4;
 
     /**
      * Set if file is encrypted
      */
-    U16 fEncrypted:1;
+    U16 fEncrypted : 1;
 
     /**
      * When 0, this fib refers to the table stream named "0Table", when 1,
@@ -4585,37 +4560,37 @@ struct FIB {
      * have table streams with both names. In that case, this flag must be used
      * to decide which table stream is valid.
      */
-    U16 fWhichTblStm:1;
+    U16 fWhichTblStm : 1;
 
     /**
      * Set when user has recommended that file be read read-only
      */
-    U16 fReadOnlyRecommended:1;
+    U16 fReadOnlyRecommended : 1;
 
     /**
      * Set when file owner has made the file write reserved
      */
-    U16 fWriteReservation:1;
+    U16 fWriteReservation : 1;
 
     /**
      * Set when using extended character set in file
      */
-    U16 fExtChar:1;
+    U16 fExtChar : 1;
 
     /**
      * REVIEW
      */
-    U16 fLoadOverride:1;
+    U16 fLoadOverride : 1;
 
     /**
      * REVIEW
      */
-    U16 fFarEast:1;
+    U16 fFarEast : 1;
 
     /**
      * REVIEW
      */
-    U16 fCrypto:1;
+    U16 fCrypto : 1;
 
     /**
      * This file format it compatible with readers that understand nFib at
@@ -4638,17 +4613,17 @@ struct FIB {
     /**
      * when 1, this file was last saved in the Mac environment
      */
-    U8 fMac:1;
+    U8 fMac : 1;
 
-    U8 fEmptySpecial:1;
+    U8 fEmptySpecial : 1;
 
-    U8 fLoadOverridePage:1;
+    U8 fLoadOverridePage : 1;
 
-    U8 fFutureSavedUndo:1;
+    U8 fFutureSavedUndo : 1;
 
-    U8 fWord97Saved:1;
+    U8 fWord97Saved : 1;
 
-    U8 fSpare0:3;
+    U8 fSpare0 : 3;
 
     /**
      * Default extended character set id for text in document stream. (overridden
@@ -5784,7 +5759,6 @@ struct FIB {
 bool operator==(const FIB &lhs, const FIB &rhs);
 bool operator!=(const FIB &lhs, const FIB &rhs);
 
-
 /**
  * File Information FC/LCB pair (FIBFCLCB)
  */
@@ -5796,7 +5770,7 @@ struct FIBFCLCB {
     /**
      * Simply calls read(...)
      */
-    FIBFCLCB(OLEStreamReader *stream, bool preservePos=false);
+    FIBFCLCB(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the FIBFCLCB structure from the stream.
@@ -5804,12 +5778,12 @@ struct FIBFCLCB {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -5832,7 +5806,6 @@ struct FIBFCLCB {
 bool operator==(const FIBFCLCB &lhs, const FIBFCLCB &rhs);
 bool operator!=(const FIBFCLCB &lhs, const FIBFCLCB &rhs);
 
-
 /**
  * Field Descriptor (FLD)
  */
@@ -5841,15 +5814,15 @@ bool operator!=(const FIBFCLCB &lhs, const FIBFCLCB &rhs);
  * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
-//struct FLD {
-//    /**
-//     * Creates an empty FLD structure and sets the defaults
-//     */
-//    FLD();
-//    /**
-//     * Simply calls read(...)
-//     */
-//    FLD(OLEStreamReader *stream, bool preservePos=false);
+// struct FLD {
+//     /**
+//      * Creates an empty FLD structure and sets the defaults
+//      */
+//     FLD();
+//     /**
+//      * Simply calls read(...)
+//      */
+//     FLD(OLEStreamReader *stream, bool preservePos=false);
 
 //    /**
 //     * This method reads the FLD structure from the stream.
@@ -5904,9 +5877,8 @@ bool operator!=(const FIBFCLCB &lhs, const FIBFCLCB &rhs);
 
 //}; // FLD
 
-//bool operator==(const FLD &lhs, const FLD &rhs);
-//bool operator!=(const FLD &lhs, const FLD &rhs);
-
+// bool operator==(const FLD &lhs, const FLD &rhs);
+// bool operator!=(const FLD &lhs, const FLD &rhs);
 
 /**
  * Footnote Reference Descriptor (FRD)
@@ -5919,7 +5891,7 @@ struct FRD {
     /**
      * Simply calls read(...)
      */
-    FRD(OLEStreamReader *stream, bool preservePos=false);
+    FRD(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the FRD structure from the stream.
@@ -5927,12 +5899,12 @@ struct FRD {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -5954,7 +5926,6 @@ struct FRD {
 bool operator==(const FRD &lhs, const FRD &rhs);
 bool operator!=(const FRD &lhs, const FRD &rhs);
 
-
 /**
  * File Shape Address (FSPA)
  */
@@ -5966,7 +5937,7 @@ struct FSPA {
     /**
      * Simply calls read(...)
      */
-    FSPA(OLEStreamReader *stream, bool preservePos=false);
+    FSPA(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the FSPA structure from the stream.
@@ -5974,12 +5945,12 @@ struct FSPA {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -6024,7 +5995,7 @@ struct FSPA {
      * 1 in the undo doc when shape is from the header doc, 0 otherwise (undefined
      * when not in the undo doc)
      */
-    U16 fHdr:1;
+    U16 fHdr : 1;
 
     /**
      * x position of shape relative to anchor CP
@@ -6034,7 +6005,7 @@ struct FSPA {
      * text)
      * 3 reserved for future use
      */
-    U16 bx:2;
+    U16 bx : 2;
 
     /**
      * y position of shape relative to anchor CP
@@ -6043,7 +6014,7 @@ struct FSPA {
      * 2 relative to text (paragraph for horizontal text; column for vertical
      * text)
      */
-    U16 by:2;
+    U16 by : 2;
 
     /**
      * text wrapping mode
@@ -6055,7 +6026,7 @@ struct FSPA {
      * 5 wrap tightly, but allow holes
      * 6-15 reserved for future use
      */
-    U16 wr:4;
+    U16 wr : 4;
 
     /**
      * text wrapping mode type (valid only for wrapping modes 2 and 4
@@ -6064,25 +6035,25 @@ struct FSPA {
      * 2 wrap only on right
      * 3 wrap only on largest side
      */
-    U16 wrk:4;
+    U16 wrk : 4;
 
     /**
      * when set, temporarily overrides bx, by, forcing the xaLeft, xaRight,
      * yaTop, and yaBottom fields to all be page relative.
      */
-    U16 fRcaSimple:1;
+    U16 fRcaSimple : 1;
 
     /**
      * 1 shape is below text
      * 0 shape is above text
      */
-    U16 fBelowText:1;
+    U16 fBelowText : 1;
 
     /**
      * 1 anchor is locked
      * 0 anchor is not locked
      */
-    U16 fAnchorLock:1;
+    U16 fAnchorLock : 1;
 
     /**
      * count of textboxes in shape (undo doc only)
@@ -6093,7 +6064,6 @@ struct FSPA {
 
 bool operator==(const FSPA &lhs, const FSPA &rhs);
 bool operator!=(const FSPA &lhs, const FSPA &rhs);
-
 
 /**
  * TeXtBoX Story (FTXBXS)
@@ -6106,7 +6076,7 @@ struct FTXBXS {
     /**
      * Simply calls read(...)
      */
-    FTXBXS(OLEStreamReader *stream, bool preservePos=false);
+    FTXBXS(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the FTXBXS structure from the stream.
@@ -6114,12 +6084,12 @@ struct FTXBXS {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -6164,7 +6134,6 @@ struct FTXBXS {
 bool operator==(const FTXBXS &lhs, const FTXBXS &rhs);
 bool operator!=(const FTXBXS &lhs, const FTXBXS &rhs);
 
-
 /**
  * List Format Override (LFO)
  */
@@ -6176,7 +6145,7 @@ struct LFO {
     /**
      * Simply calls read(...)
      */
-    LFO(OLEStreamReader *stream, bool preservePos=false);
+    LFO(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the LFO structure from the stream.
@@ -6184,12 +6153,12 @@ struct LFO {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -6230,7 +6199,6 @@ struct LFO {
 bool operator==(const LFO &lhs, const LFO &rhs);
 bool operator!=(const LFO &lhs, const LFO &rhs);
 
-
 /**
  * List Format Override for a single LeVeL (LFOLVL)
  */
@@ -6242,7 +6210,7 @@ struct LFOLVL {
     /**
      * Simply calls read(...)
      */
-    LFOLVL(OLEStreamReader *stream, bool preservePos=false);
+    LFOLVL(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the LFOLVL structure from the stream.
@@ -6250,12 +6218,12 @@ struct LFOLVL {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -6272,23 +6240,23 @@ struct LFOLVL {
     /**
      * the level to be overridden
      */
-    U8 ilvl:4;
+    U8 ilvl : 4;
 
     /**
      * true if the start-at value is overridden
      */
-    U8 fStartAt:1;
+    U8 fStartAt : 1;
 
     /**
      * true if the formatting is overridden (in which case the LFOLVL should
      * contain a pointer to a LVL)
      */
-    U8 fFormatting:1;
+    U8 fFormatting : 1;
 
     /**
      * reserved
      */
-    U8 unsigned4_6:2;
+    U8 unsigned4_6 : 2;
 
     /**
      * reserved
@@ -6299,7 +6267,6 @@ struct LFOLVL {
 
 bool operator==(const LFOLVL &lhs, const LFOLVL &rhs);
 bool operator!=(const LFOLVL &lhs, const LFOLVL &rhs);
-
 
 /**
  * Line Spacing Descriptor (LSPD)
@@ -6312,7 +6279,7 @@ struct LSPD {
     /**
      * Simply calls read(...)
      */
-    LSPD(OLEStreamReader *stream, bool preservePos=false);
+    LSPD(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the LSPD structure from the stream.
@@ -6320,12 +6287,12 @@ struct LSPD {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -6359,7 +6326,6 @@ struct LSPD {
 bool operator==(const LSPD &lhs, const LSPD &rhs);
 bool operator!=(const LSPD &lhs, const LSPD &rhs);
 
-
 /**
  * LiST Data (on File) (LSTF)
  */
@@ -6371,7 +6337,7 @@ struct LSTF {
     /**
      * Simply calls read(...)
      */
-    LSTF(OLEStreamReader *stream, bool preservePos=false);
+    LSTF(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the LSTF structure from the stream.
@@ -6379,12 +6345,12 @@ struct LSTF {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -6415,18 +6381,18 @@ struct LSTF {
      * true if this is a simple (one-level) list; false if this is a multilevel
      * (nine-level) list.
      */
-    U8 fSimpleList:1;
+    U8 fSimpleList : 1;
 
     /**
      * Word 6 compatibility option: true if the list should start numbering
      * over at the beginning of each section
      */
-    U8 fRestartHdn:1;
+    U8 fRestartHdn : 1;
 
     /**
      * reserved
      */
-    U8 unsigned26_2:6;
+    U8 unsigned26_2 : 6;
 
     /**
      * reserved
@@ -6437,7 +6403,6 @@ struct LSTF {
 
 bool operator==(const LSTF &lhs, const LSTF &rhs);
 bool operator!=(const LSTF &lhs, const LSTF &rhs);
-
 
 /**
  * List LeVeL (on File) (LVLF)
@@ -6450,7 +6415,7 @@ struct LVLF {
     /**
      * Simply calls read(...)
      */
-    LVLF(OLEStreamReader *stream, bool preservePos=false);
+    LVLF(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the LVLF structure from the stream.
@@ -6458,12 +6423,12 @@ struct LVLF {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -6484,41 +6449,41 @@ struct LVLF {
     /**
      * alignment (left, right, or centered) of the paragraph number.
      */
-    U8 jc:2;
+    U8 jc : 2;
 
     /**
      * true (==1) if the level turns all inherited numbers to arabic, false
      * if it preserves their number format code (nfc)
      */
-    U8 fLegal:1;
+    U8 fLegal : 1;
 
     /**
      * true if the level's number sequence is not restarted by higher (more
      * significant) levels in the list
      */
-    U8 fNoRestart:1;
+    U8 fNoRestart : 1;
 
     /**
      * Word 6 compatibility option: equivalent to anld.fPrev (see ANLD)
      */
-    U8 fPrev:1;
+    U8 fPrev : 1;
 
     /**
      * Word 6 compatibility option: equivalent to anld.fPrevSpace (see ANLD)
      */
-    U8 fPrevSpace:1;
+    U8 fPrevSpace : 1;
 
     /**
      * true if this level was from a converted Word 6 document. If it is true,
      * all of the Word 6 compatibility options become valid; otherwise they are
      * ignored.
      */
-    U8 fWord6:1;
+    U8 fWord6 : 1;
 
     /**
      * unused.
      */
-    U8 unused5_7:1;
+    U8 unused5_7 : 1;
 
     /**
      * contains the character offsets into the LVL's XST of the inherited
@@ -6566,7 +6531,6 @@ struct LVLF {
 bool operator==(const LVLF &lhs, const LVLF &rhs);
 bool operator!=(const LVLF &lhs, const LVLF &rhs);
 
-
 /**
  * Window's (METAFILEPICT)
  */
@@ -6578,7 +6542,7 @@ struct METAFILEPICT {
     /**
      * Simply calls read(...)
      */
-    METAFILEPICT(OLEStreamReader *stream, bool preservePos=false);
+    METAFILEPICT(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the METAFILEPICT structure from the stream.
@@ -6586,12 +6550,12 @@ struct METAFILEPICT {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -6652,7 +6616,6 @@ struct METAFILEPICT {
 bool operator==(const METAFILEPICT &lhs, const METAFILEPICT &rhs);
 bool operator!=(const METAFILEPICT &lhs, const METAFILEPICT &rhs);
 
-
 /**
  * Number Revision Mark Data (NUMRM)
  */
@@ -6664,7 +6627,7 @@ struct NUMRM {
     /**
      * Simply calls read(...)
      */
-    NUMRM(OLEStreamReader *stream, bool preservePos=false);
+    NUMRM(OLEStreamReader *stream, bool preservePos = false);
     /**
      * Simply calls readPtr(...)
      */
@@ -6676,7 +6639,7 @@ struct NUMRM {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the struct from a pointer
@@ -6686,7 +6649,7 @@ struct NUMRM {
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -6752,7 +6715,6 @@ struct NUMRM {
 bool operator==(const NUMRM &lhs, const NUMRM &rhs);
 bool operator!=(const NUMRM &lhs, const NUMRM &rhs);
 
-
 /**
  * Embedded Object properties (OBJHEADER)
  */
@@ -6764,7 +6726,7 @@ struct OBJHEADER {
     /**
      * Simply calls read(...)
      */
-    OBJHEADER(OLEStreamReader *stream, bool preservePos=false);
+    OBJHEADER(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the OBJHEADER structure from the stream.
@@ -6772,12 +6734,12 @@ struct OBJHEADER {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -6805,7 +6767,6 @@ struct OBJHEADER {
 bool operator==(const OBJHEADER &lhs, const OBJHEADER &rhs);
 bool operator!=(const OBJHEADER &lhs, const OBJHEADER &rhs);
 
-
 /**
  * Outline LiST Data (OLST)
  */
@@ -6817,7 +6778,7 @@ struct OLST {
     /**
      * Simply calls read(...)
      */
-    OLST(OLEStreamReader *stream, bool preservePos=false);
+    OLST(OLEStreamReader *stream, bool preservePos = false);
     /**
      * Simply calls readPtr(...)
      */
@@ -6829,7 +6790,7 @@ struct OLST {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the struct from a pointer
@@ -6839,7 +6800,7 @@ struct OLST {
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -6896,7 +6857,6 @@ struct OLST {
 bool operator==(const OLST &lhs, const OLST &rhs);
 bool operator!=(const OLST &lhs, const OLST &rhs);
 
-
 /**
  * Paragraph Properties (PAP)
  */
@@ -6908,7 +6868,7 @@ struct PAP : public Shared {
     /**
      * Simply calls read(...)
      */
-    PAP(OLEStreamReader *stream, bool preservePos=false);
+    PAP(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the PAP structure from the stream.
@@ -6916,12 +6876,12 @@ struct PAP : public Shared {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -6931,21 +6891,21 @@ struct PAP : public Shared {
     /**
      * This method applies a grpprl with @param count elements
      */
-    void apply(const U8 *grpprl, U16 count, const Style* style, const StyleSheet* styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    void apply(const U8 *grpprl, U16 count, const Style *style, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * This method applies a whole PAPX to the structure.
      * The reason that we only pass a pointer to the start of the exception
      * structure is, that we don't know the type in the FKP template :}
      */
-    void applyExceptions(const U8 *exceptions, const StyleSheet *styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    void applyExceptions(const U8 *exceptions, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * This method applies one single SPRM. It returns -1 if it wasn't
      * a PAP SPRM and it returns the length of the applied SPRM
      * if it was successful.
      */
-    S16 applyPAPSPRM(const U8* ptr, const Style* style, const StyleSheet* styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    S16 applyPAPSPRM(const U8 *ptr, const Style *style, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * Dumps all fields of this structure (for debugging)
@@ -6988,14 +6948,14 @@ struct PAP : public Shared {
      */
     U8 fPageBreakBefore;
 
-    U8 fBrLnAbove:1;
+    U8 fBrLnAbove : 1;
 
-    U8 fBrLnBelow:1;
+    U8 fBrLnBelow : 1;
 
     /**
      * reserved
      */
-    U8 fUnused:2;
+    U8 fUnused : 2;
 
     /**
      * Vertical position code.  Specifies the location of an anchor point for
@@ -7005,7 +6965,7 @@ struct PAP : public Shared {
      * 2 - relative to the paragraph bottom of the pragraph that precedes it.
      * 3 - None. The table or frame is not absolutely positioned.
      */
-    U8 pcVert:2;
+    U8 pcVert : 2;
 
     /**
      * Horizontal position code.  Specifies the location of an anchor point for
@@ -7015,7 +6975,7 @@ struct PAP : public Shared {
      * 2 - relative to the left edge of the page
      * 3 - None. The table or frame is not absolutely positioned.
      */
-    U8 pcHorz:2;
+    U8 pcHorz : 2;
 
     /**
      * the brcp and brcl fields have been superseded by the newly defined
@@ -7221,16 +7181,16 @@ struct PAP : public Shared {
      */
     U16 wAlignFont;
 
-    U16 fVertical:1;
+    U16 fVertical : 1;
 
-    U16 fBackward:1;
+    U16 fBackward : 1;
 
-    U16 fRotateFont:1;
+    U16 fRotateFont : 1;
 
     /**
      * reserved
      */
-    U16 unused68_3:13;
+    U16 unused68_3 : 13;
 
     /**
      * reserved
@@ -7386,12 +7346,12 @@ struct PAP : public Shared {
     /**
      * height of abs obj; 0 == Auto
      */
-    U16 dyaHeight:15;
+    U16 dyaHeight : 15;
 
     /**
      * 0 = Exact, 1 = At Least
      */
-    U16 fMinHeight:1;
+    U16 fMinHeight : 1;
 
     /**
      * shading
@@ -7477,7 +7437,6 @@ struct PAP : public Shared {
 bool operator==(const PAP &lhs, const PAP &rhs);
 bool operator!=(const PAP &lhs, const PAP &rhs);
 
-
 /**
  * Paragraph Property Exceptions (PAPX)
  */
@@ -7486,15 +7445,15 @@ bool operator!=(const PAP &lhs, const PAP &rhs);
  * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
-//struct PAPX {
-//    /**
-//     * Creates an empty PAPX structure and sets the defaults
-//     */
-//    PAPX();
-//    /**
-//     * Simply calls read(...)
-//     */
-//    PAPX(OLEStreamReader *stream, bool preservePos=false);
+// struct PAPX {
+//     /**
+//      * Creates an empty PAPX structure and sets the defaults
+//      */
+//     PAPX();
+//     /**
+//      * Simply calls read(...)
+//      */
+//     PAPX(OLEStreamReader *stream, bool preservePos=false);
 
 //    /**
 //     * This method reads the PAPX structure from the stream.
@@ -7556,9 +7515,8 @@ bool operator!=(const PAP &lhs, const PAP &rhs);
 
 //}; // PAPX
 
-//bool operator==(const PAPX &lhs, const PAPX &rhs);
-//bool operator!=(const PAPX &lhs, const PAPX &rhs);
-
+// bool operator==(const PAPX &lhs, const PAPX &rhs);
+// bool operator!=(const PAPX &lhs, const PAPX &rhs);
 
 /**
  * Formatted Disk Page for PAPXs (PAPXFKP)
@@ -7568,20 +7526,20 @@ bool operator!=(const PAP &lhs, const PAP &rhs);
  * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
-//struct PAPXFKP {
-//    /**
-//     * Creates an empty PAPXFKP structure and sets the defaults
-//     */
-//    PAPXFKP();
-//    /**
-//     * Simply calls read(...)
-//     */
-//    PAPXFKP(OLEStreamReader *stream, bool preservePos=false);
-//    /**
-//     * Attention: This struct allocates memory on the heap
-//     */
-//    PAPXFKP(const PAPXFKP &rhs);
-//    ~PAPXFKP();
+// struct PAPXFKP {
+//     /**
+//      * Creates an empty PAPXFKP structure and sets the defaults
+//      */
+//     PAPXFKP();
+//     /**
+//      * Simply calls read(...)
+//      */
+//     PAPXFKP(OLEStreamReader *stream, bool preservePos=false);
+//     /**
+//      * Attention: This struct allocates memory on the heap
+//      */
+//     PAPXFKP(const PAPXFKP &rhs);
+//     ~PAPXFKP();
 
 //    PAPXFKP &operator=(const PAPXFKP &rhs);
 
@@ -7640,14 +7598,13 @@ bool operator!=(const PAP &lhs, const PAP &rhs);
 //     */
 //    U8 crun;
 
-//private:
-//    void clearInternal();
+// private:
+//     void clearInternal();
 
 //}; // PAPXFKP
 
-//bool operator==(const PAPXFKP &lhs, const PAPXFKP &rhs);
-//bool operator!=(const PAPXFKP &lhs, const PAPXFKP &rhs);
-
+// bool operator==(const PAPXFKP &lhs, const PAPXFKP &rhs);
+// bool operator!=(const PAPXFKP &lhs, const PAPXFKP &rhs);
 
 /**
  * Piece Descriptor (PCD)
@@ -7660,7 +7617,7 @@ struct PCD {
     /**
      * Simply calls read(...)
      */
-    PCD(OLEStreamReader *stream, bool preservePos=false);
+    PCD(OLEStreamReader *stream, bool preservePos = false);
     /**
      * Simply calls readPtr(...)
      */
@@ -7672,7 +7629,7 @@ struct PCD {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the struct from a pointer
@@ -7682,7 +7639,7 @@ struct PCD {
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -7696,24 +7653,24 @@ struct PCD {
     /**
      * when 1, means that piece contains no end of paragraph marks.
      */
-    U16 fNoParaLast:1;
+    U16 fNoParaLast : 1;
 
     /**
      * used internally by Word
      */
-    U16 fPaphNil:1;
+    U16 fPaphNil : 1;
 
     /**
      * used internally by Word
      */
-    U16 fCopied:1;
+    U16 fCopied : 1;
 
-    U16 unused0_3:5;
+    U16 unused0_3 : 5;
 
     /**
      * used internally by Word
      */
-    U16 fn:8;
+    U16 fn : 8;
 
     /**
      * file offset of beginning of piece. The size of the <b>ith</b> piece can
@@ -7733,7 +7690,6 @@ struct PCD {
 bool operator==(const PCD &lhs, const PCD &rhs);
 bool operator!=(const PCD &lhs, const PCD &rhs);
 
-
 /**
  * Page Descriptor (PGD)
  */
@@ -7745,7 +7701,7 @@ struct PGD {
     /**
      * Simply calls read(...)
      */
-    PGD(OLEStreamReader *stream, bool preservePos=false);
+    PGD(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the PGD structure from the stream.
@@ -7753,12 +7709,12 @@ struct PGD {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -7769,69 +7725,69 @@ struct PGD {
     /**
      * 1 only when footnote is continued from previous page
      */
-    U16 fContinue:1;
+    U16 fContinue : 1;
 
     /**
      * 1 when page is dirty (i.e. pagination cannot be trusted)
      */
-    U16 fUnk:1;
+    U16 fUnk : 1;
 
     /**
      * 1 when right hand side page
      */
-    U16 fRight:1;
+    U16 fRight : 1;
 
     /**
      * 1 when page number must be reset to 1.
      */
-    U16 fPgnRestart:1;
+    U16 fPgnRestart : 1;
 
     /**
      * 1 when section break forced page to be empty.
      */
-    U16 fEmptyPage:1;
+    U16 fEmptyPage : 1;
 
     /**
      * 1 when page contains nothing but footnotes
      */
-    U16 fAllFtn:1;
+    U16 fAllFtn : 1;
 
     /**
      * unused
      */
-    U16 unused0_6:1;
+    U16 unused0_6 : 1;
 
     /**
      * table breaks have been calculated for this page.
      */
-    U16 fTableBreaks:1;
+    U16 fTableBreaks : 1;
 
     /**
      * used temporarily while word is running.
      */
-    U16 fMarked:1;
+    U16 fMarked : 1;
 
     /**
      * column breaks have been calculated for this page.
      */
-    U16 fColumnBreaks:1;
+    U16 fColumnBreaks : 1;
 
     /**
      * page had a table header at the end
      */
-    U16 fTableHeader:1;
+    U16 fTableHeader : 1;
 
     /**
      * page has never been valid since created, must recalculate the bounds
      * of this page. If this is the last page, this PGD may really represent many
      * pages.
      */
-    U16 fNewPage:1;
+    U16 fNewPage : 1;
 
     /**
      * section break code
      */
-    U16 bkc:4;
+    U16 bkc : 4;
 
     /**
      * line number of first line, -1 if no line numbering
@@ -7850,7 +7806,6 @@ struct PGD {
 bool operator==(const PGD &lhs, const PGD &rhs);
 bool operator!=(const PGD &lhs, const PGD &rhs);
 
-
 /**
  * Paragraph Height in a Table (PHE2)
  */
@@ -7862,7 +7817,7 @@ struct PHE2 {
     /**
      * Simply calls read(...)
      */
-    PHE2(OLEStreamReader *stream, bool preservePos=false);
+    PHE2(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the PHE2 structure from the stream.
@@ -7870,12 +7825,12 @@ struct PHE2 {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -7886,17 +7841,17 @@ struct PHE2 {
     /**
      * reserved
      */
-    U32 fSpare:1;
+    U32 fSpare : 1;
 
     /**
      * PHE entry is invalid when == 1
      */
-    U32 fUnk:1;
+    U32 fUnk : 1;
 
     /**
      * if not == 0, used as a hint when finding the next row
      */
-    U32 dcpTtpNext:30;
+    U32 dcpTtpNext : 30;
 
     S32 dxaCol;
 
@@ -7910,7 +7865,6 @@ struct PHE2 {
 bool operator==(const PHE2 &lhs, const PHE2 &rhs);
 bool operator!=(const PHE2 &lhs, const PHE2 &rhs);
 
-
 /**
  * Picture Descriptor (on File) (PICF)
  */
@@ -7922,7 +7876,7 @@ struct PICF : public Shared {
     /**
      * Simply calls read(...)
      */
-    PICF(OLEStreamReader *stream, bool preservePos=false);
+    PICF(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the PICF structure from the stream.
@@ -7930,12 +7884,12 @@ struct PICF : public Shared {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -7945,21 +7899,21 @@ struct PICF : public Shared {
     /**
      * This method applies a grpprl with @param count elements
      */
-    void apply(const U8 *grpprl, U16 count, const Style* style, const StyleSheet* styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    void apply(const U8 *grpprl, U16 count, const Style *style, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * This method applies a whole PICFX to the structure.
      * The reason that we only pass a pointer to the start of the exception
      * structure is, that we don't know the type in the FKP template :}
      */
-    void applyExceptions(const U8 *exceptions, const StyleSheet *styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    void applyExceptions(const U8 *exceptions, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * This method applies one single SPRM. It returns -1 if it wasn't
      * a PICF SPRM and it returns the length of the applied SPRM
      * if it was successful.
      */
-    S16 applyPICFSPRM(const U8* ptr, const Style* style, const StyleSheet* styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    S16 applyPICFSPRM(const U8 *ptr, const Style *style, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * Dumps all fields of this structure (for debugging)
@@ -8067,27 +8021,27 @@ struct PICF : public Shared {
      * 2 double
      * 3 shadow
      */
-    U16 brcl:4;
+    U16 brcl : 4;
 
     /**
      * picture consists of a single frame
      */
-    U16 fFrameEmpty:1;
+    U16 fFrameEmpty : 1;
 
     /**
      * ==1, when picture is just a bitmap
      */
-    U16 fBitmap:1;
+    U16 fBitmap : 1;
 
     /**
      * ==1, when picture is an active OLE object
      */
-    U16 fDrawHatch:1;
+    U16 fDrawHatch : 1;
 
     /**
      * ==1, when picture is just an error message
      */
-    U16 fError:1;
+    U16 fError : 1;
 
     /**
      * bits per pixel
@@ -8095,7 +8049,7 @@ struct PICF : public Shared {
      * 1 monochrome
      * 4 VGA
      */
-    U16 bpp:8;
+    U16 bpp : 8;
 
     /**
      * specification for border above picture
@@ -8140,7 +8094,6 @@ struct PICF : public Shared {
 bool operator==(const PICF &lhs, const PICF &rhs);
 bool operator!=(const PICF &lhs, const PICF &rhs);
 
-
 /**
  * Plex of CPs stored in File (PLCF)
  */
@@ -8149,20 +8102,20 @@ bool operator!=(const PICF &lhs, const PICF &rhs);
  * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
-//struct PLCF {
-//    /**
-//     * Creates an empty PLCF structure and sets the defaults
-//     */
-//    PLCF();
-//    /**
-//     * Simply calls read(...)
-//     */
-//    PLCF(OLEStreamReader *stream, bool preservePos=false);
-//    /**
-//     * Attention: This struct allocates memory on the heap
-//     */
-//    PLCF(const PLCF &rhs);
-//    ~PLCF();
+// struct PLCF {
+//     /**
+//      * Creates an empty PLCF structure and sets the defaults
+//      */
+//     PLCF();
+//     /**
+//      * Simply calls read(...)
+//      */
+//     PLCF(OLEStreamReader *stream, bool preservePos=false);
+//     /**
+//      * Attention: This struct allocates memory on the heap
+//      */
+//     PLCF(const PLCF &rhs);
+//     ~PLCF();
 
 //    PLCF &operator=(const PLCF &rhs);
 
@@ -8198,14 +8151,13 @@ bool operator!=(const PICF &lhs, const PICF &rhs);
 //     */
 //    U8 *rgstruct;   //    U8 rgstruct[];
 
-//private:
-//    void clearInternal();
+// private:
+//     void clearInternal();
 
 //}; // PLCF
 
-//bool operator==(const PLCF &lhs, const PLCF &rhs);
-//bool operator!=(const PLCF &lhs, const PLCF &rhs);
-
+// bool operator==(const PLCF &lhs, const PLCF &rhs);
+// bool operator!=(const PLCF &lhs, const PLCF &rhs);
 
 /**
  * Routing Recipient (RR)
@@ -8218,7 +8170,7 @@ struct RR {
     /**
      * Simply calls read(...)
      */
-    RR(OLEStreamReader *stream, bool preservePos=false);
+    RR(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the RR structure from the stream.
@@ -8226,12 +8178,12 @@ struct RR {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -8254,7 +8206,6 @@ struct RR {
 bool operator==(const RR &lhs, const RR &rhs);
 bool operator!=(const RR &lhs, const RR &rhs);
 
-
 /**
  * Routing Slip (RS)
  */
@@ -8266,7 +8217,7 @@ struct RS {
     /**
      * Simply calls read(...)
      */
-    RS(OLEStreamReader *stream, bool preservePos=false);
+    RS(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the RS structure from the stream.
@@ -8274,12 +8225,12 @@ struct RS {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -8341,7 +8292,6 @@ struct RS {
 bool operator==(const RS &lhs, const RS &rhs);
 bool operator!=(const RS &lhs, const RS &rhs);
 
-
 /**
  * Section Descriptor (SED)
  */
@@ -8353,7 +8303,7 @@ struct SED {
     /**
      * Simply calls read(...)
      */
-    SED(OLEStreamReader *stream, bool preservePos=false);
+    SED(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the SED structure from the stream.
@@ -8361,12 +8311,12 @@ struct SED {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -8405,7 +8355,6 @@ struct SED {
 bool operator==(const SED &lhs, const SED &rhs);
 bool operator!=(const SED &lhs, const SED &rhs);
 
-
 /**
  * Section Properties (SEP)
  */
@@ -8417,7 +8366,7 @@ struct SEP : public Shared {
     /**
      * Simply calls read(...)
      */
-    SEP(OLEStreamReader *stream, bool preservePos=false);
+    SEP(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the SEP structure from the stream.
@@ -8425,12 +8374,12 @@ struct SEP : public Shared {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -8440,21 +8389,21 @@ struct SEP : public Shared {
     /**
      * This method applies a grpprl with @param count elements
      */
-    void apply(const U8 *grpprl, U16 count, const Style* style, const StyleSheet* styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    void apply(const U8 *grpprl, U16 count, const Style *style, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * This method applies a whole SEPX to the structure.
      * The reason that we only pass a pointer to the start of the exception
      * structure is, that we don't know the type in the FKP template :}
      */
-    void applyExceptions(const U8 *exceptions, const StyleSheet *styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    void applyExceptions(const U8 *exceptions, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * This method applies one single SPRM. It returns -1 if it wasn't
      * a SEP SPRM and it returns the length of the applied SPRM
      * if it was successful.
      */
-    S16 applySEPSPRM(const U8* ptr, const Style* style, const StyleSheet* styleSheet, OLEStreamReader* dataStream, WordVersion version);
+    S16 applySEPSPRM(const U8 *ptr, const Style *style, const StyleSheet *styleSheet, OLEStreamReader *dataStream, WordVersion version);
 
     /**
      * Dumps all fields of this structure (for debugging)
@@ -8673,26 +8622,26 @@ struct SEP : public Shared {
      */
     /* NOTE: 3 - whole document (all sections) - not mentioned in the "Word
        Binary File Format (.doc) Structure Specification"*/
-    U16 pgbApplyTo:3;
+    U16 pgbApplyTo : 3;
 
     /**
      * page border depth:
      * 0 in front
      * 1 in back
      */
-    U16 pgbPageDepth:2;
+    U16 pgbPageDepth : 2;
 
     /**
      * Specifies from where the offset of the page border is measured:
      * 0 - offset measured from the text
      * 1 - offset measured from the edge of the page
      */
-    U16 pgbOffsetFrom:3;
+    U16 pgbOffsetFrom : 3;
 
     /**
      * reserved
      */
-    U16 unused74_8:8;
+    U16 unused74_8 : 8;
 
     /**
      * default value is 12240 twipswidth of page
@@ -8828,7 +8777,6 @@ struct SEP : public Shared {
 bool operator==(const SEP &lhs, const SEP &rhs);
 bool operator!=(const SEP &lhs, const SEP &rhs);
 
-
 /**
  * Section Property Exceptions (SEPX)
  */
@@ -8840,7 +8788,7 @@ struct SEPX {
     /**
      * Simply calls read(...)
      */
-    SEPX(OLEStreamReader *stream, bool preservePos=false);
+    SEPX(OLEStreamReader *stream, bool preservePos = false);
     /**
      * Attention: This struct allocates memory on the heap
      */
@@ -8855,12 +8803,12 @@ struct SEPX {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -8877,7 +8825,7 @@ struct SEPX {
      * list of sprms that encodes the differences between the properties of
      * a section and Word's default section properties.
      */
-    U8 *grpprl;   //    U8 grpprl[];
+    U8 *grpprl; //    U8 grpprl[];
 
 private:
     void clearInternal();
@@ -8886,7 +8834,6 @@ private:
 
 bool operator==(const SEPX &lhs, const SEPX &rhs);
 bool operator!=(const SEPX &lhs, const SEPX &rhs);
-
 
 /**
  * STyleSHeet Information (STSHI)
@@ -8899,7 +8846,7 @@ struct STSHI {
     /**
      * Simply calls read(...)
      */
-    STSHI(OLEStreamReader *stream, bool preservePos=false);
+    STSHI(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the STSHI structure from the stream.
@@ -8907,12 +8854,12 @@ struct STSHI {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -8941,12 +8888,12 @@ struct STSHI {
     /**
      * Are built-in stylenames stored?
      */
-    U16 fStdStylenamesWritten:1;
+    U16 fStdStylenamesWritten : 1;
 
     /**
      * Spare flags
      */
-    U16 unused4_2:15;
+    U16 unused4_2 : 15;
 
     /**
      * Max sti known when this file was written
@@ -8973,7 +8920,6 @@ struct STSHI {
 bool operator==(const STSHI &lhs, const STSHI &rhs);
 bool operator!=(const STSHI &lhs, const STSHI &rhs);
 
-
 /**
  * WorK Book (WKB)
  */
@@ -8985,7 +8931,7 @@ struct WKB {
     /**
      * Simply calls read(...)
      */
-    WKB(OLEStreamReader *stream, bool preservePos=false);
+    WKB(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * This method reads the WKB structure from the stream.
@@ -8993,12 +8939,12 @@ struct WKB {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, bool preservePos=false);
+    bool read(OLEStreamReader *stream, bool preservePos = false);
 
     /**
      * Same as reading :)
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -9012,9 +8958,9 @@ struct WKB {
 
     S16 lvl;
 
-    U16 fnpt:4;
+    U16 fnpt : 4;
 
-    U16 fnpd:12;
+    U16 fnpd : 12;
 
     /**
      * unused
@@ -9025,9 +8971,6 @@ struct WKB {
 
 bool operator==(const WKB &lhs, const WKB &rhs);
 bool operator!=(const WKB &lhs, const WKB &rhs);
-
-
-
 
 } // namespace Word97
 

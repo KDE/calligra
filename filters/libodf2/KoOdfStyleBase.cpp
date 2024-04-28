@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "KoOdfStyleBase.h"
 
@@ -14,16 +13,15 @@
 
 // Odflib
 #include "KoXmlStreamReader.h"
-//#include "KoOdfStyleProperties.h"
-//#include "KoOdfTextProperties.h"
-//#include "KoOdfParagraphProperties.h"
-//#include "KoOdfGraphicProperties.h"
+// #include "KoOdfStyleProperties.h"
+// #include "KoOdfTextProperties.h"
+// #include "KoOdfParagraphProperties.h"
+// #include "KoOdfGraphicProperties.h"
 
 #include "Odf2Debug.h"
 
 // ================================================================
 //                         class KoOdfStyleBase
-
 
 class Q_DECL_HIDDEN KoOdfStyleBase::Private
 {
@@ -31,14 +29,14 @@ public:
     Private(KoOdfStyleBase::StyleType type);
     ~Private();
 
-    KoOdfStyleBase::StyleType  type;
+    KoOdfStyleBase::StyleType type;
 
     QString name;
     QString displayName;
 
-    bool    isDefaultStyle;
-    bool    inUse;
-    bool    isFromStylesXml;
+    bool isDefaultStyle;
+    bool inUse;
+    bool isFromStylesXml;
 };
 
 KoOdfStyleBase::Private::Private(KoOdfStyleBase::StyleType type)
@@ -53,9 +51,7 @@ KoOdfStyleBase::Private::~Private()
 {
 }
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfStyleBase::KoOdfStyleBase(KoOdfStyleBase::StyleType type)
     : d(new KoOdfStyleBase::Private(type))
@@ -67,12 +63,10 @@ KoOdfStyleBase::~KoOdfStyleBase()
     delete d;
 }
 
-
 KoOdfStyleBase::StyleType KoOdfStyleBase::type() const
 {
     return d->type;
 }
-
 
 QString KoOdfStyleBase::name() const
 {
@@ -94,7 +88,6 @@ void KoOdfStyleBase::setDisplayName(const QString &name)
     d->displayName = name;
 }
 
-
 bool KoOdfStyleBase::isDefaultStyle() const
 {
     return d->isDefaultStyle;
@@ -104,8 +97,6 @@ void KoOdfStyleBase::setIsDefaultStyle(bool isDefaultStyle)
 {
     d->isDefaultStyle = isDefaultStyle;
 }
-
-
 
 bool KoOdfStyleBase::inUse() const
 {
@@ -126,4 +117,3 @@ void KoOdfStyleBase::setIsFromStylesXml(bool isFromStylesXml)
 {
     d->isFromStylesXml = isFromStylesXml;
 }
-

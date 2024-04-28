@@ -15,22 +15,31 @@ class KarbonCalligraphicPoint
 {
 public:
     KarbonCalligraphicPoint(const QPointF &point, qreal angle, qreal width)
-            : m_point(point), m_angle(angle), m_width(width) {}
+        : m_point(point)
+        , m_angle(angle)
+        , m_width(width)
+    {
+    }
 
-    QPointF point() const {
+    QPointF point() const
+    {
         return m_point;
     }
-    qreal angle() const {
+    qreal angle() const
+    {
         return m_angle;
     }
-    qreal width() const {
+    qreal width() const
+    {
         return m_width;
     }
 
-    void setPoint(const QPointF &point) {
+    void setPoint(const QPointF &point)
+    {
         m_point = point;
     }
-    void setAngle(qreal angle) {
+    void setAngle(qreal angle)
+    {
         m_angle = angle;
     }
 
@@ -79,7 +88,7 @@ public:
     const QRectF lastPieceBoundingRect();
 
     void setSize(const QSizeF &newSize) override;
-    //virtual QPointF normalize();
+    // virtual QPointF normalize();
 
     QPointF normalize() override;
 
@@ -92,9 +101,7 @@ public:
 
 protected:
     // reimplemented
-    void moveHandleAction(int handleId,
-                          const QPointF & point,
-                          Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
+    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
 
     // reimplemented
     void updatePath(const QSizeF &size) override;
@@ -126,4 +133,3 @@ private:
 };
 
 #endif // KARBONCALLIGRAPHICSHAPE_H
-

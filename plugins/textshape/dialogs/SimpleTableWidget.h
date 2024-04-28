@@ -6,12 +6,12 @@
 #ifndef SIMPLETABLEWIDGET_H
 #define SIMPLETABLEWIDGET_H
 
-#include <ui_SimpleTableWidget.h>
-#include <KoListStyle.h>
 #include <KoBorder.h>
+#include <KoListStyle.h>
+#include <ui_SimpleTableWidget.h>
 
-#include <QWidget>
 #include <QTextBlock>
+#include <QWidget>
 
 class TextTool;
 class KoStyleManager;
@@ -26,7 +26,7 @@ public:
 
 public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);
-    void emitTableBorderDataUpdated(int i=0);
+    void emitTableBorderDataUpdated(int i = 0);
     void restartPainting();
     void setBorderColor(const KoColor &);
 

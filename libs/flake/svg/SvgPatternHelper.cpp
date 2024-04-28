@@ -7,14 +7,15 @@
 #include "SvgPatternHelper.h"
 #include "SvgUtil.h"
 
-#include <KoViewConverter.h>
-#include <KoShapePainter.h>
 #include <KoShape.h>
+#include <KoShapePainter.h>
+#include <KoViewConverter.h>
 
 #include <QPainter>
 
 SvgPatternHelper::SvgPatternHelper()
-        : m_patternUnits(ObjectBoundingBox), m_patternContentUnits(UserSpaceOnUse)
+    : m_patternUnits(ObjectBoundingBox)
+    , m_patternContentUnits(UserSpaceOnUse)
 {
 }
 
@@ -52,12 +53,12 @@ QTransform SvgPatternHelper::transform() const
     return m_transform;
 }
 
-void SvgPatternHelper::setPosition(const QPointF & position)
+void SvgPatternHelper::setPosition(const QPointF &position)
 {
     m_position = position;
 }
 
-QPointF SvgPatternHelper::position(const QRectF & objectBound) const
+QPointF SvgPatternHelper::position(const QRectF &objectBound) const
 {
     if (m_patternUnits == UserSpaceOnUse) {
         return m_position;
@@ -66,12 +67,12 @@ QPointF SvgPatternHelper::position(const QRectF & objectBound) const
     }
 }
 
-void SvgPatternHelper::setSize(const QSizeF & size)
+void SvgPatternHelper::setSize(const QSizeF &size)
 {
     m_size = size;
 }
 
-QSizeF SvgPatternHelper::size(const QRectF & objectBound) const
+QSizeF SvgPatternHelper::size(const QRectF &objectBound) const
 {
     if (m_patternUnits == UserSpaceOnUse) {
         return m_size;
@@ -100,7 +101,7 @@ void SvgPatternHelper::setPatternContentViewbox(const QRectF &viewBox)
     m_patternContentViewbox = viewBox;
 }
 
-QImage SvgPatternHelper::generateImage(const QRectF &objectBound, const QList<KoShape*> content)
+QImage SvgPatternHelper::generateImage(const QRectF &objectBound, const QList<KoShape *> content)
 {
     KoViewConverter zoomHandler;
 
@@ -114,7 +115,7 @@ QImage SvgPatternHelper::generateImage(const QRectF &objectBound, const QList<Ko
 
     QTransform viewMatrix;
 
-    if (! m_patternContentViewbox.isNull()) {
+    if (!m_patternContentViewbox.isNull()) {
         viewMatrix.translate(-m_patternContentViewbox.x(), -m_patternContentViewbox.y());
         const qreal xScale = patternSize.width() / m_patternContentViewbox.width();
         const qreal yScale = patternSize.height() / m_patternContentViewbox.height();
@@ -129,7 +130,7 @@ QImage SvgPatternHelper::generateImage(const QRectF &objectBound, const QList<Ko
     QPainter tilePainter(&tile);
     tilePainter.setClipRect(tile.rect());
     tilePainter.setWorldTransform(viewMatrix);
-    //tilePainter.setRenderHint(QPainter::Antialiasing);
+    // tilePainter.setRenderHint(QPainter::Antialiasing);
 
     // paint the content into the tile image
     KoShapePainter shapePainter;

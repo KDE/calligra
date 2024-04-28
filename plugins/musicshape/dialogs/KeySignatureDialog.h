@@ -9,31 +9,34 @@
 #include <ui_KeySignatureDialog.h>
 
 #include <KoDialog.h>
-namespace MusicCore {
-    class KeySignature;
+namespace MusicCore
+{
+class KeySignature;
 }
 
-class KeySignatureDialog : public KoDialog {
+class KeySignatureDialog : public KoDialog
+{
     Q_OBJECT
 public:
     explicit KeySignatureDialog(QWidget *parent = 0);
-    
+
     void setBar(int bar);
     int accidentals();
     void setAccidentals(int accidentals);
-    void setMusicStyle(MusicStyle* style);
+    void setMusicStyle(MusicStyle *style);
     bool updateAllStaves();
-    
+
     bool updateToNextChange();
     bool updateTillEndOfPiece();
-    
+
     int startBar();
     int endBar();
 private Q_SLOTS:
     void accidentalsChanged(int accidentals);
+
 private:
     Ui::KeySignatureDialog widget;
-    MusicCore::KeySignature* m_ks;
+    MusicCore::KeySignature *m_ks;
 };
 
 #endif // KEYSIGNATUREDIALOG_H

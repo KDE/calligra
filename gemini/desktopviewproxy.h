@@ -18,7 +18,7 @@ class DesktopViewProxy : public QObject
 {
     Q_OBJECT
 public:
-    explicit DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent = 0);
+    explicit DesktopViewProxy(MainWindow *mainWindow, KoMainWindow *parent = 0);
     ~DesktopViewProxy() override;
 
 public Q_SLOTS:
@@ -35,7 +35,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif // DESKTOPVIEWPROXY_H

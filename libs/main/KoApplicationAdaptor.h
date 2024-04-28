@@ -10,10 +10,12 @@
 
 #ifndef QT_NO_DBUS
 
-#include <QDBusAbstractAdaptor>
 #include "komain_export.h"
-template<class T> class QList;
-template<class Key, class Value> class QMap;
+#include <QDBusAbstractAdaptor>
+template<class T>
+class QList;
+template<class Key, class Value>
+class QMap;
 
 class QString;
 class KoApplication;
@@ -30,11 +32,11 @@ public:
     ~KoApplicationAdaptor() override;
 
 public Q_SLOTS: // METHODS
-//    /**
-//     * Creates a new document for the given native mimetype
-//     * Use it to create a main window and to load an existing file, if any
-//     */
-//    Q_SCRIPTABLE QString createDocument(const QString &nativeFormat);
+    //    /**
+    //     * Creates a new document for the given native mimetype
+    //     * Use it to create a main window and to load an existing file, if any
+    //     */
+    //    Q_SCRIPTABLE QString createDocument(const QString &nativeFormat);
 
     /**
      * @return a list of references to all the documents
@@ -65,12 +67,11 @@ Q_SIGNALS:
      * emitted when an old document is closed.
      */
     void documentClosed(const QString &ref);
-private:
 
+private:
     KoApplication *m_application;
 };
 
 #endif // QT_NO_DBUS
 
 #endif
-

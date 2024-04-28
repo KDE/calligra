@@ -16,7 +16,6 @@ class RgbCompositeOpDissolve : public KoCompositeOp
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
 
 public:
-
     RgbCompositeOpDissolve(KoColorSpace *cs)
         : KoCompositeOp(cs, COMPOSITE_DISSOLVE, i18n("Dissolve"), "")
     {
@@ -24,10 +23,14 @@ public:
 
     using KoCompositeOp::composite;
 
-    void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                   const quint8 *srcRowStart, qint32 srcRowStride,
-                   const quint8 *maskRowStart, qint32 maskRowStride,
-                   qint32 rows, qint32 numColumns,
+    void composite(quint8 *dstRowStart,
+                   qint32 dstRowStride,
+                   const quint8 *srcRowStart,
+                   qint32 srcRowStride,
+                   const quint8 *maskRowStart,
+                   qint32 maskRowStride,
+                   qint32 rows,
+                   qint32 numColumns,
                    quint8 opacity,
                    const QBitArray &channelFlags) const override
     {
@@ -58,28 +61,30 @@ public:
                 dAlpha = NATIVE_OPACITY_OPAQUE - d[_CSTraits::alpha_pos];
 
                 if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::red_pos))
-                    d[_CSTraits::red_pos] = (channels_type)(((qreal) sAlpha * s[_CSTraits::red_pos] +
-                                                            (NATIVE_OPACITY_OPAQUE - sAlpha) * d[_CSTraits::red_pos]) / NATIVE_OPACITY_OPAQUE + 0.5);
+                    d[_CSTraits::red_pos] = (channels_type)(((qreal)sAlpha * s[_CSTraits::red_pos] + (NATIVE_OPACITY_OPAQUE - sAlpha) * d[_CSTraits::red_pos])
+                                                                / NATIVE_OPACITY_OPAQUE
+                                                            + 0.5);
 
                 if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::green_pos))
-                    d[_CSTraits::green_pos] = (channels_type)(((qreal) sAlpha * s[_CSTraits::green_pos] +
-                                              (NATIVE_OPACITY_OPAQUE - sAlpha) * d[_CSTraits::green_pos]) / NATIVE_OPACITY_OPAQUE + 0.5);
+                    d[_CSTraits::green_pos] =
+                        (channels_type)(((qreal)sAlpha * s[_CSTraits::green_pos] + (NATIVE_OPACITY_OPAQUE - sAlpha) * d[_CSTraits::green_pos])
+                                            / NATIVE_OPACITY_OPAQUE
+                                        + 0.5);
 
                 if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::blue_pos))
-                    d[_CSTraits::blue_pos] = (channels_type)(((qreal) sAlpha * s[_CSTraits::blue_pos] +
-                                             (NATIVE_OPACITY_OPAQUE - sAlpha) * d[_CSTraits::blue_pos]) / NATIVE_OPACITY_OPAQUE + 0.5);
+                    d[_CSTraits::blue_pos] =
+                        (channels_type)(((qreal)sAlpha * s[_CSTraits::blue_pos] + (NATIVE_OPACITY_OPAQUE - sAlpha) * d[_CSTraits::blue_pos])
+                                            / NATIVE_OPACITY_OPAQUE
+                                        + 0.5);
 
                 if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::alpha_pos)) {
                     d[_CSTraits::alpha_pos] = NATIVE_OPACITY_OPAQUE;
                 }
-
             }
             dstRowStart += dstRowStride;
             srcRowStart += srcRowStride;
-
         }
     }
-
 };
 
 #endif

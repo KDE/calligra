@@ -9,18 +9,17 @@
 #define TEXTDOCUMENTSTRUCTUREMODEL_H
 
 #include <QAbstractItemModel>
-#include <QVector>
 #include <QHash>
 #include <QPointer>
+#include <QVector>
 
 class QTextDocument;
 class QTextFrame;
 class QTextBlock;
 class QTextLine;
 
-struct NodeData
-{
-    enum Type {Frame, Block, Line};
+struct NodeData {
+    enum Type { Frame, Block, Line };
 
     Type type;
     union {
@@ -35,24 +34,22 @@ struct NodeData
 };
 Q_DECLARE_TYPEINFO(NodeData, Q_MOVABLE_TYPE);
 
-struct BlockData
-{
-    explicit BlockData(int _nodeIndex) : nodeIndex(_nodeIndex) {}
+struct BlockData {
+    explicit BlockData(int _nodeIndex)
+        : nodeIndex(_nodeIndex)
+    {
+    }
 
     int nodeIndex;
     QHash<int, int> lineNumberTable;
 };
 Q_DECLARE_TYPEINFO(BlockData, Q_MOVABLE_TYPE);
 
-
 class TextDocumentStructureModel : public QAbstractItemModel
 {
     Q_OBJECT
 
-    enum Columns {
-        nameColumn = 0,
-        endColumn
-    };
+    enum Columns { nameColumn = 0, endColumn };
 
 public:
     explicit TextDocumentStructureModel(QObject *parent = 0);
@@ -84,7 +81,7 @@ private:
     mutable QVector<NodeData> m_nodeDataTable;
 
     mutable QHash<int, BlockData> m_blockNumberTable;
-    mutable QHash<QTextFrame*, int> m_frameTable;
+    mutable QHash<QTextFrame *, int> m_frameTable;
 };
 
 #endif // TEXTDOCUMENTSTRUCTUREMODEL_H

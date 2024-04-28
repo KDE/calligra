@@ -11,7 +11,6 @@
 #include "koformula_export.h"
 #include <KoXmlReader.h>
 
-
 class FormulaCursor;
 class QPainterPath;
 class RowElement;
@@ -20,7 +19,8 @@ class RowElement;
  *
  */
 
-class KOFORMULA_EXPORT FixedElement : public BasicElement {
+class KOFORMULA_EXPORT FixedElement : public BasicElement
+{
 public:
     /// The standard constructor
     explicit FixedElement(BasicElement *parent = 0);
@@ -28,30 +28,29 @@ public:
     /// The standard destructor
     ~FixedElement() override;
 
-    bool acceptCursor ( const FormulaCursor& cursor ) override;
+    bool acceptCursor(const FormulaCursor &cursor) override;
 
-    BasicElement* elementBefore(int position) const override;
+    BasicElement *elementBefore(int position) const override;
 
-    BasicElement* elementAfter(int position) const override;
+    BasicElement *elementAfter(int position) const override;
 
-    virtual BasicElement* elementNext(int position) const;
+    virtual BasicElement *elementNext(int position) const;
 
-    QLineF cursorLine ( int position ) const override;
+    QLineF cursorLine(int position) const override;
 
-    bool loadElement(KoXmlElement& tmp, RowElement** child);
+    bool loadElement(KoXmlElement &tmp, RowElement **child);
 
-    QPainterPath selectionRegion ( const int pos1, const int pos2 ) const override;
+    QPainterPath selectionRegion(const int pos1, const int pos2) const override;
 
     /// inherited from BasicElement
-    int positionOfChild(BasicElement* child) const override;
+    int positionOfChild(BasicElement *child) const override;
 
     int endPosition() const override;
 
 protected:
-    bool moveHorSituation(FormulaCursor& newcursor, FormulaCursor& oldcursor,int pos1, int pos2);
-    bool moveVertSituation(FormulaCursor& newcursor, FormulaCursor& oldcursor,int pos1, int pos2);
-    bool moveSingleSituation(FormulaCursor& newcursor, FormulaCursor& oldcursor,int pos);
+    bool moveHorSituation(FormulaCursor &newcursor, FormulaCursor &oldcursor, int pos1, int pos2);
+    bool moveVertSituation(FormulaCursor &newcursor, FormulaCursor &oldcursor, int pos1, int pos2);
+    bool moveSingleSituation(FormulaCursor &newcursor, FormulaCursor &oldcursor, int pos);
 };
 
 #endif // ROWELEMENT_H
-

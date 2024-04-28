@@ -20,7 +20,6 @@ class KoZoomHandler;
 class KActionCollection;
 class QSize;
 
-
 /**
  * This controller class handles zoom levels for any canvas.
  *
@@ -44,18 +43,19 @@ class QSize;
  * except emit the aspectModeChanged signal.
  *
  */
-class KOWIDGETS_EXPORT KoZoomController : public QObject {
-Q_OBJECT
+class KOWIDGETS_EXPORT KoZoomController : public QObject
+{
+    Q_OBJECT
 public:
     /**
-    * Constructor. Create one per canvasController.  The zoomAction is created in the constructor and will
-    * be available to the passed actionCollection for usage by XMLGui.
-    * @param controller the canvasController
-    * @param zoomHandler the zoom handler (viewconverter with setter methods)
-    * @param actionCollection the action collection where the KoZoomAction is added to
-    * @param specialButtons controls which special buttons to show
-    * @param parent the parent QObject
-    */
+     * Constructor. Create one per canvasController.  The zoomAction is created in the constructor and will
+     * be available to the passed actionCollection for usage by XMLGui.
+     * @param controller the canvasController
+     * @param zoomHandler the zoom handler (viewconverter with setter methods)
+     * @param actionCollection the action collection where the KoZoomAction is added to
+     * @param specialButtons controls which special buttons to show
+     * @param parent the parent QObject
+     */
     KoZoomController(KoCanvasController *controller,
                      KoZoomHandler *zoomHandler,
                      KActionCollection *actionCollection,
@@ -114,7 +114,6 @@ public:
      */
     void setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint);
 
-
     /**
      * Convenience function that changes resolution with
      * keeping the centering unchanged
@@ -133,48 +132,47 @@ public:
      */
     void setZoom(KoZoomMode::Mode mode, qreal zoom);
 
-
-  /**
-   * Set Aspect Mode button status and begin a chain of signals
-   */
+    /**
+     * Set Aspect Mode button status and begin a chain of signals
+     */
     void setAspectMode(bool status);
 
     /**
-    * Returns the size of the whole document currently being shown on the canvas.
-    * @returns the document size in points
-    */
+     * Returns the size of the whole document currently being shown on the canvas.
+     * @returns the document size in points
+     */
     QSizeF documentSize() const;
 
     /**
-    * Returns the size of the current page in document coordinates
-    * @returns the page size in points
-    */
+     * Returns the size of the current page in document coordinates
+     * @returns the page size in points
+     */
     QSizeF pageSize() const;
 
 public Q_SLOTS:
     /**
-    * Set the size of the current page in document coordinates which allows zoom modes that use the pageSize
-    * to update.
-    * @param pageSize the new page size in points
-    */
+     * Set the size of the current page in document coordinates which allows zoom modes that use the pageSize
+     * to update.
+     * @param pageSize the new page size in points
+     */
     void setPageSize(const QSizeF &pageSize);
 
     /**
-    * Set the dimensions of where text can appear which allows zoom modes that use the text
-    * to update.
-    * @param min the minimum x value (in document coordinates) where text can appear
-    * @param max the maximum x value (in document coordinates) where text can appear
-    */
+     * Set the dimensions of where text can appear which allows zoom modes that use the text
+     * to update.
+     * @param min the minimum x value (in document coordinates) where text can appear
+     * @param max the maximum x value (in document coordinates) where text can appear
+     */
     void setTextMinMax(qreal min, qreal max);
 
     /**
-    * Set the size of the whole document currently being shown on the canvas.
-    * The document size will be used together with the current zoom level to calculate the size of the
-    * canvas in the canvasController.
-    * @param documentSize the new document size in points
-    * @param recalculateCenter tells canvas controller not to touch
-    *        preferredCenterFraction
-    */
+     * Set the size of the whole document currently being shown on the canvas.
+     * The document size will be used together with the current zoom level to calculate the size of the
+     * canvas in the canvasController.
+     * @param documentSize the new document size in points
+     * @param recalculateCenter tells canvas controller not to touch
+     *        preferredCenterFraction
+     */
     void setDocumentSize(const QSizeF &documentSize, bool recalculateCenter = false);
 
 Q_SIGNALS:
@@ -182,13 +180,13 @@ Q_SIGNALS:
      * This signal is emitted whenever either the zoommode or the zoom level is changed by the user.
      * the application can use the emitted data for persistency purposes.
      */
-    void zoomChanged (KoZoomMode::Mode mode, qreal zoom);
+    void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
 
     /**
      * emitted when the special aspect mode toggle changes.
      * @see KoZoomAction::aspectModeChanged()
      */
-    void aspectModeChanged (bool aspectModeActivated);
+    void aspectModeChanged(bool aspectModeActivated);
 
     /**
      * Signal is triggered when the user clicks the zoom to selection button.
@@ -207,12 +205,12 @@ protected:
 
 private:
     Q_PRIVATE_SLOT(d, void setAvailableSize())
-    Q_PRIVATE_SLOT(d, void requestZoomRelative(const qreal, const QPointF&))
+    Q_PRIVATE_SLOT(d, void requestZoomRelative(const qreal, const QPointF &))
     Q_PRIVATE_SLOT(d, void setZoom(KoZoomMode::Mode, qreal))
-    Q_DISABLE_COPY( KoZoomController )
+    Q_DISABLE_COPY(KoZoomController)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

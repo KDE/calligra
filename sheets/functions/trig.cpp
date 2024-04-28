@@ -37,63 +37,61 @@ Value func_tan(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tanh(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pi(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadtrigonometrymodule.json", TrigonometryModule)
 
-
-TrigonometryModule::TrigonometryModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+TrigonometryModule::TrigonometryModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
-    f = new Function("ACOS",   func_acos);
+    f = new Function("ACOS", func_acos);
     add(f);
-    f = new Function("ACOSH",  func_acosh);
+    f = new Function("ACOSH", func_acosh);
     add(f);
-    f = new Function("ACOT",   func_acot);
+    f = new Function("ACOT", func_acot);
     add(f);
-    f = new Function("ACOTH",  func_acoth);
+    f = new Function("ACOTH", func_acoth);
     add(f);
-    f = new Function("ASIN",   func_asin);
+    f = new Function("ASIN", func_asin);
     add(f);
-    f = new Function("ASINH",  func_asinh);
+    f = new Function("ASINH", func_asinh);
     add(f);
-    f = new Function("ATAN",   func_atan);
+    f = new Function("ATAN", func_atan);
     add(f);
-    f = new Function("ATAN2",  func_atan2);
+    f = new Function("ATAN2", func_atan2);
     f->setParamCount(2);
     add(f);
-    f = new Function("ATANH",  func_atanh);
+    f = new Function("ATANH", func_atanh);
     add(f);
-    f = new Function("COS",    func_cos);
+    f = new Function("COS", func_cos);
     add(f);
-    f = new Function("COSH",   func_cosh);
+    f = new Function("COSH", func_cosh);
     add(f);
-    f = new Function("COT",    func_cot);
+    f = new Function("COT", func_cot);
     add(f);
-    f = new Function("COTH",   func_coth);
+    f = new Function("COTH", func_coth);
     add(f);
-    f = new Function("CSC",    func_csc);
+    f = new Function("CSC", func_csc);
     add(f);
-    f = new Function("CSCH",    func_csch);
+    f = new Function("CSCH", func_csch);
     add(f);
     f = new Function("DEGREES", func_degrees);
     add(f);
     f = new Function("RADIANS", func_radians);
     add(f);
-    f = new Function("SEC",    func_sec);
+    f = new Function("SEC", func_sec);
     add(f);
-    f = new Function("SECH",    func_sech);
+    f = new Function("SECH", func_sech);
     add(f);
-    f = new Function("SIN",    func_sin);
+    f = new Function("SIN", func_sin);
     add(f);
-    f = new Function("SINH",   func_sinh);
+    f = new Function("SINH", func_sinh);
     add(f);
-    f = new Function("TAN",    func_tan);
+    f = new Function("TAN", func_tan);
     add(f);
-    f = new Function("TANH",   func_tanh);
+    f = new Function("TANH", func_tanh);
     add(f);
-    f = new Function("PI",     func_pi);
+    f = new Function("PI", func_pi);
     f->setParamCount(0);
     add(f);
 }
@@ -102,7 +100,6 @@ QString TrigonometryModule::descriptionFileName() const
 {
     return QString("trig.xml");
 }
-
 
 // Function: sin
 Value func_sin(valVector args, ValueCalc *calc, FuncExtra *)
@@ -152,7 +149,7 @@ Value func_acoth(valVector args, ValueCalc *calc, FuncExtra *)
     if (calc->lower(calc->abs(args[0]), Value(1.0)))
         return Value::errorNUM();
 
-    return calc->mul(Value(0.5), calc->ln(calc->div(calc->add(args[0], Value(1.0)) , calc->sub(args[0], Value(1.0)))));
+    return calc->mul(Value(0.5), calc->ln(calc->div(calc->add(args[0], Value(1.0)), calc->sub(args[0], Value(1.0)))));
 }
 
 // Function: asinh

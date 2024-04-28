@@ -29,4 +29,3 @@ private Q_SLOTS:
 };
 
 #endif // DOCUMENTSTRUCTURETEST_H
-

@@ -8,7 +8,6 @@
 #include <QGlobalStatic>
 #include <QString>
 
-
 Q_GLOBAL_STATIC(KoColorSpaceEngineRegistry, s_instance);
 
 struct Q_DECL_HIDDEN KoColorSpaceEngine::Private {
@@ -16,7 +15,8 @@ struct Q_DECL_HIDDEN KoColorSpaceEngine::Private {
     QString name;
 };
 
-KoColorSpaceEngine::KoColorSpaceEngine(const QString& id, const QString& name) : d(new Private)
+KoColorSpaceEngine::KoColorSpaceEngine(const QString &id, const QString &name)
+    : d(new Private)
 {
     d->id = id;
     d->name = name;
@@ -27,12 +27,12 @@ KoColorSpaceEngine::~KoColorSpaceEngine()
     delete d;
 }
 
-const QString& KoColorSpaceEngine::id() const
+const QString &KoColorSpaceEngine::id() const
 {
     return d->id;
 }
 
-const QString& KoColorSpaceEngine::name() const
+const QString &KoColorSpaceEngine::name() const
 {
     return d->name;
 }
@@ -43,12 +43,12 @@ KoColorSpaceEngineRegistry::KoColorSpaceEngineRegistry()
 
 KoColorSpaceEngineRegistry::~KoColorSpaceEngineRegistry()
 {
-    foreach(KoColorSpaceEngine* item, values()) {
+    foreach (KoColorSpaceEngine *item, values()) {
         delete item;
     }
 }
 
-KoColorSpaceEngineRegistry* KoColorSpaceEngineRegistry::instance()
+KoColorSpaceEngineRegistry *KoColorSpaceEngineRegistry::instance()
 {
     return s_instance;
 }

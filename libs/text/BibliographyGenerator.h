@@ -6,8 +6,8 @@
 #ifndef BIBLIOGRAPHYGENERATOR_H
 #define BIBLIOGRAPHYGENERATOR_H
 
-#include <KoBibliographyInfo.h>
 #include "kotext_export.h"
+#include <KoBibliographyInfo.h>
 
 #include <QTextBlock>
 

@@ -5,7 +5,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "OdtReaderDocxBackend.h"
 
@@ -16,23 +15,17 @@
 #include <KoXmlWriter.h>
 
 // This filter
-#include "OdfReaderDocxContext.h"
 #include "DocxExportDebug.h"
-
+#include "OdfReaderDocxContext.h"
 
 #if 0
-#define DEBUG_BACKEND() \
-    debugDocx << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
-    << reader.qualifiedName().toString()
+#define DEBUG_BACKEND() debugDocx << (reader.isStartElement() ? "start" : (reader.isEndElement() ? "end" : "other")) << reader.qualifiedName().toString()
 #else
-#define DEBUG_BACKEND() \
-    //NOTHING
+#define DEBUG_BACKEND() // NOTHING
 #endif
-
 
 // ================================================================
 //                 class OdtReaderDocxBackend
-
 
 OdtReaderDocxBackend::OdtReaderDocxBackend()
     : OdtReaderBackend()
@@ -43,20 +36,18 @@ OdtReaderDocxBackend::~OdtReaderDocxBackend()
 {
 }
 
-
 // ----------------------------------------------------------------
 // ODT document level functions
-
 
 void OdtReaderDocxBackend::elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext*>(context);
+    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext *>(context);
     if (!docxContext) {
         return;
     }
 
-    KoXmlWriter  *writer = docxContext->m_documentWriter;
+    KoXmlWriter *writer = docxContext->m_documentWriter;
     if (reader.isStartElement()) {
         writer->startDocument(0);
 
@@ -66,8 +57,7 @@ void OdtReaderDocxBackend::elementOfficeBody(KoXmlStreamReader &reader, OdfReade
         writer->addAttribute("xmlns:w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
 
         writer->startElement("w:body");
-    }
-    else {
+    } else {
         // FIXME: Do we have to add w:sectPr here always or only sometimes?
 
         writer->endElement(); // w:body

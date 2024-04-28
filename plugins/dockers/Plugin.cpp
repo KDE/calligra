@@ -4,18 +4,17 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "Plugin.h"
-#include "snapguidedocker/SnapGuideDockerFactory.h"
-#include "shapeproperties/ShapePropertiesDockerFactory.h"
 #include "shapecollection/ShapeCollectionDocker.h"
+#include "shapeproperties/ShapePropertiesDockerFactory.h"
+#include "snapguidedocker/SnapGuideDockerFactory.h"
 
 #include <KoDockRegistry.h>
 
 #include <KPluginFactory>
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_docker_defaults.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_docker_defaults.json", registerPlugin<Plugin>();)
 
-Plugin::Plugin(QObject *parent, const QVariantList&)
+Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     Q_UNUSED(parent);
@@ -25,4 +24,3 @@ Plugin::Plugin(QObject *parent, const QVariantList&)
 }
 
 #include <Plugin.moc>
-

@@ -13,20 +13,18 @@
 
 using namespace Calligra::Sheets;
 
-SpecialPasteDialog::SpecialPasteDialog(QWidget* parent)
-        : ActionDialog(parent)
+SpecialPasteDialog::SpecialPasteDialog(QWidget *parent)
+    : ActionDialog(parent)
 {
     setCaption(i18n("Special Paste"));
     setButtonText(Apply, i18n("Paste"));
 
-    QWidget* widget = new QWidget(this);
+    QWidget *widget = new QWidget(this);
     setupUi(widget);
     setMainWidget(widget);
 
-    connect(formatButton, &QAbstractButton::toggled,
-            this, &SpecialPasteDialog::slotToggled);
-    connect(commentButton, &QAbstractButton::toggled,
-            this, &SpecialPasteDialog::slotToggled);
+    connect(formatButton, &QAbstractButton::toggled, this, &SpecialPasteDialog::slotToggled);
+    connect(commentButton, &QAbstractButton::toggled, this, &SpecialPasteDialog::slotToggled);
 }
 
 void SpecialPasteDialog::onApply()
@@ -98,5 +96,3 @@ bool SpecialPasteDialog::opDiv() const
 {
     return divisionButton->isChecked();
 }
-
-

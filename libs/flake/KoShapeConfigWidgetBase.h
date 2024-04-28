@@ -71,7 +71,7 @@ public:
     virtual bool showOnShapeSelect();
 
     /// Creates a command which applies all changes to the opened shape
-    virtual KUndo2Command * createCommand();
+    virtual KUndo2Command *createCommand();
 
 Q_SIGNALS:
     /// is emitted after one of the config options has changed

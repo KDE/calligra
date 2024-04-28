@@ -29,8 +29,8 @@ public:
 
     virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
     virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const;
-    bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const;
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
+    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels();
 };
 
 #endif

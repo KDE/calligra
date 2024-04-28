@@ -11,29 +11,32 @@
 class Q_DECL_HIDDEN KoPathReverseCommand::Private
 {
 public:
-    Private(const QList<KoPathShape*> &p)
-            : paths(p) {
+    Private(const QList<KoPathShape *> &p)
+        : paths(p)
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
 
-    void reverse() {
-        if (! paths.size())
+    void reverse()
+    {
+        if (!paths.size())
             return;
 
-        foreach(KoPathShape* shape, paths) {
+        foreach (KoPathShape *shape, paths) {
             int subpathCount = shape->subpathCount();
             for (int i = 0; i < subpathCount; ++i)
                 shape->reverseSubpath(i);
         }
     }
 
-    QList<KoPathShape*> paths;
+    QList<KoPathShape *> paths;
 };
 
-KoPathReverseCommand::KoPathReverseCommand(const QList<KoPathShape*> &paths, KUndo2Command *parent)
-        : KUndo2Command(parent),
-        d(new Private(paths))
+KoPathReverseCommand::KoPathReverseCommand(const QList<KoPathShape *> &paths, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , d(new Private(paths))
 {
     setText(kundo2_i18n("Reverse paths"));
 }

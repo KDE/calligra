@@ -9,8 +9,8 @@
 
 #include <QFont>
 
-#include "KoGenericRegistry.h"
 #include "KoDockFactoryBase.h"
+#include "KoGenericRegistry.h"
 
 #include "flake_export.h"
 
@@ -23,7 +23,7 @@
  *
  * @see KoCanvasObserverBase
  */
-class FLAKE_EXPORT KoDockRegistry : public KoGenericRegistry<KoDockFactoryBase*>
+class FLAKE_EXPORT KoDockRegistry : public KoGenericRegistry<KoDockFactoryBase *>
 {
 public:
     KoDockRegistry();
@@ -35,7 +35,6 @@ public:
      */
     static KoDockRegistry *instance();
 
-
     /**
      * @brief dockFontSize calculates a smallish font size for dock widgets to use
      * @return the point size in floating point.
@@ -43,13 +42,12 @@ public:
     static QFont dockFont();
 
 private:
-
-    KoDockRegistry(const KoDockRegistry&);
-    KoDockRegistry operator=(const KoDockRegistry&);
+    KoDockRegistry(const KoDockRegistry &);
+    KoDockRegistry operator=(const KoDockRegistry &);
     void init();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

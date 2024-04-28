@@ -5,27 +5,27 @@
  */
 
 #include "KoFormulaToolFactory.h"
-#include "KoFormulaTool.h"
 #include "KoFormulaShape.h"
+#include "KoFormulaTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 
 KoFormulaToolFactory::KoFormulaToolFactory()
-           : KoToolFactoryBase("KoFormulaToolFactoryId")
+    : KoToolFactoryBase("KoFormulaToolFactoryId")
 {
-    setToolTip( i18n( "Formula editing" ) );
-    setToolType( dynamicToolType() );
+    setToolTip(i18n("Formula editing"));
+    setToolType(dynamicToolType());
     setIconName(koIconName("edittext"));
-    setPriority( 1 );
-    setActivationShapeId( KoFormulaShapeId );
+    setPriority(1);
+    setActivationShapeId(KoFormulaShapeId);
 }
 
 KoFormulaToolFactory::~KoFormulaToolFactory()
-{}
-
-KoToolBase* KoFormulaToolFactory::createTool( KoCanvasBase* canvas )
 {
-    return new KoFormulaTool( canvas );
 }
 
+KoToolBase *KoFormulaToolFactory::createTool(KoCanvasBase *canvas)
+{
+    return new KoFormulaTool(canvas);
+}

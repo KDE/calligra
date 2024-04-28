@@ -28,11 +28,10 @@
 // KF5
 #include <KPluginFactory>
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_semanticitem_event.json",
-                           registerPlugin<KoEventSemanticItemPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_semanticitem_event.json", registerPlugin<KoEventSemanticItemPlugin>();)
 
-KoEventSemanticItemPlugin::KoEventSemanticItemPlugin(QObject *parent, const QVariantList &/*args */)
-  : QObject(parent)
+KoEventSemanticItemPlugin::KoEventSemanticItemPlugin(QObject *parent, const QVariantList & /*args */)
+    : QObject(parent)
 {
     KoRdfSemanticItemRegistry::instance()->add(new KoEventSemanticItemFactory());
 }

@@ -11,20 +11,20 @@
 
 #include <KLocalizedString>
 
-#include <KoList.h>
-#include <KoTextEditor.h>
-#include <KoTextEditor_p.h>
-#include <KoTextDocument.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoTextRangeManager.h>
 #include <KoAnchorInlineObject.h>
 #include <KoAnchorTextRange.h>
 #include <KoAnnotation.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoList.h>
 #include <KoSection.h>
-#include <KoSectionUtils.h>
-#include <KoSectionModel.h>
 #include <KoSectionEnd.h>
+#include <KoSectionModel.h>
+#include <KoSectionUtils.h>
 #include <KoShapeController.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
+#include <KoTextEditor_p.h>
+#include <KoTextRangeManager.h>
 
 #include <algorithm>
 
@@ -43,11 +43,8 @@ bool DeleteCommand::SectionDeleteInfo::operator<(const DeleteCommand::SectionDel
     return childIdx > other.childIdx;
 }
 
-DeleteCommand::DeleteCommand(DeleteMode mode,
-                             QTextDocument *document,
-                             KoShapeController *shapeController,
-                             KUndo2Command *parent)
-    : KoTextCommandBase (parent)
+DeleteCommand::DeleteCommand(DeleteMode mode, QTextDocument *document, KoShapeController *shapeController, KUndo2Command *parent)
+    : KoTextCommandBase(parent)
     , m_document(document)
     , m_shapeController(shapeController)
     , m_first(true)
@@ -143,10 +140,7 @@ public:
         for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
             QTextCursor fragmentSelection(caret);
             fragmentSelection.setPosition(qMax(caret.selectionStart(), it.fragment().position()));
-            fragmentSelection.setPosition(
-                qMin(caret.selectionEnd(), it.fragment().position() + it.fragment().length()),
-                QTextCursor::KeepAnchor
-            );
+            fragmentSelection.setPosition(qMin(caret.selectionEnd(), it.fragment().position() + it.fragment().length()), QTextCursor::KeepAnchor);
 
             if (fragmentSelection.anchor() >= fragmentSelection.position()) {
                 continue;
@@ -172,15 +166,9 @@ public:
             foreach (KoSectionEnd *se, closeList) {
                 if (!m_curSectionDelimiters.empty() && m_curSectionDelimiters.last().name == se->name()) {
                     KoSection *section = se->correspondingSection();
-                    int childIdx = KoTextDocument(m_command->m_document).sectionModel()
-                        ->findRowOfChild(section);
+                    int childIdx = KoTextDocument(m_command->m_document).sectionModel()->findRowOfChild(section);
 
-                    m_command->m_sectionsToRemove.push_back(
-                        DeleteCommand::SectionDeleteInfo(
-                            section,
-                            childIdx
-                        )
-                    );
+                    m_command->m_sectionsToRemove.push_back(DeleteCommand::SectionDeleteInfo(section, childIdx));
                     m_curSectionDelimiters.pop_back(); // This section will die
                 } else {
                     m_curSectionDelimiters.push_back(SectionHandle(se->name(), se));
@@ -226,8 +214,7 @@ public:
         }
     }
 
-    enum SectionHandleAction
-    {
+    enum SectionHandleAction {
         SectionClose, ///< Denotes close of the section.
         SectionOpen ///< Denotes start or beginning of the section.
     };
@@ -290,20 +277,11 @@ void DeleteCommand::finalizeSectionHandling(QTextCursor *cur, DeleteVisitor &v)
             fmt.clearProperty(KoParagraphStyle::SectionEndings);
 
             // m_endBlockNum != -1 in this case.
-            QList<KoSectionEnd *> closeListEndBlock = KoSectionUtils::sectionEndings(
-                cur->document()->findBlockByNumber(v.m_endBlockNum).blockFormat());
+            QList<KoSectionEnd *> closeListEndBlock = KoSectionUtils::sectionEndings(cur->document()->findBlockByNumber(v.m_endBlockNum).blockFormat());
 
-            while (!openList.empty() && !closeListEndBlock.empty()
-                && openList.last()->name() == closeListEndBlock.first()->name()) {
-
-                int childIdx = KoTextDocument(m_document)
-                    .sectionModel()->findRowOfChild(openList.back());
-                m_sectionsToRemove.push_back(
-                    DeleteCommand::SectionDeleteInfo(
-                        openList.back(),
-                        childIdx
-                    )
-                );
+            while (!openList.empty() && !closeListEndBlock.empty() && openList.last()->name() == closeListEndBlock.first()->name()) {
+                int childIdx = KoTextDocument(m_document).sectionModel()->findRowOfChild(openList.back());
+                m_sectionsToRemove.push_back(DeleteCommand::SectionDeleteInfo(openList.back(), childIdx));
 
                 openList.pop_back();
                 closeListEndBlock.pop_front();
@@ -417,13 +395,11 @@ void DeleteCommand::doDelete()
     // Ranges
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
 
-    m_rangesToRemove = rangeManager->textRangesChangingWithin(
-        textEditor->document(),
-        textEditor->selectionStart(),
-        textEditor->selectionEnd(),
-        textEditor->selectionStart(),
-        textEditor->selectionEnd()
-    );
+    m_rangesToRemove = rangeManager->textRangesChangingWithin(textEditor->document(),
+                                                              textEditor->selectionStart(),
+                                                              textEditor->selectionEnd(),
+                                                              textEditor->selectionStart(),
+                                                              textEditor->selectionEnd());
 
     foreach (KoTextRange *range, m_rangesToRemove) {
         KoAnchorTextRange *anchorRange = qobject_cast<KoAnchorTextRange *>(range);
@@ -431,8 +407,7 @@ void DeleteCommand::doDelete()
         if (anchorRange) {
             // we should only delete the anchor if the selection is covering it... not if the selection is
             // just adjacent to the anchor. This is more in line with what other wordprocessors do
-            if (anchorRange->position() != textEditor->selectionStart()
-                    && anchorRange->position() != textEditor->selectionEnd()) {
+            if (anchorRange->position() != textEditor->selectionStart() && anchorRange->position() != textEditor->selectionEnd()) {
                 KoShape *shape = anchorRange->anchor()->shape();
                 if (m_shapeController) {
                     KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
@@ -459,7 +434,7 @@ void DeleteCommand::doDelete()
         m_mergePossible = false;
     }
 
-    //FIXME: lets forbid merging of "section affecting" deletions by now
+    // FIXME: lets forbid merging of "section affecting" deletions by now
     if (!m_sectionsToRemove.empty()) {
         m_mergePossible = false;
     }
@@ -505,17 +480,20 @@ bool DeleteCommand::mergeWith(const KUndo2Command *command)
     {
     public:
         UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
-        : KUndo2Command(kundo2_i18n("Text"), parent),
-          m_document(document)
-        {}
+            : KUndo2Command(kundo2_i18n("Text"), parent)
+            , m_document(document)
+        {
+        }
 
-        void undo() override {
+        void undo() override
+        {
             QTextDocument *doc = m_document.data();
             if (doc)
                 doc->undo(KoTextDocument(doc).textEditor()->cursor());
         }
 
-        void redo() override {
+        void redo() override
+        {
             QTextDocument *doc = m_document.data();
             if (doc)
                 doc->redo(KoTextDocument(doc).textEditor()->cursor());
@@ -539,8 +517,8 @@ bool DeleteCommand::mergeWith(const KUndo2Command *command)
     m_invalidInlineObjects += other->m_invalidInlineObjects;
     other->m_invalidInlineObjects.clear();
 
-    for (int i=0; i < command->childCount(); i++)
-        new UndoTextCommand(const_cast<QTextDocument*>(textEditor->document()), this);
+    for (int i = 0; i < command->childCount(); i++)
+        new UndoTextCommand(const_cast<QTextDocument *>(textEditor->document()), this);
 
     return true;
 }
@@ -557,8 +535,7 @@ bool DeleteCommand::checkMerge(const KUndo2Command *command)
         return true;
     }
 
-    if ((other->m_position + other->m_length == m_position)
-            && (m_format == other->m_format)) {
+    if ((other->m_position + other->m_length == m_position) && (m_format == other->m_format)) {
         m_position = other->m_position;
         m_length += other->m_length;
         return true;
@@ -571,7 +548,7 @@ void DeleteCommand::updateListChanges()
     KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
     if (textEditor == 0)
         return;
-    QTextDocument *document = const_cast<QTextDocument*>(textEditor->document());
+    QTextDocument *document = const_cast<QTextDocument *>(textEditor->document());
     QTextCursor tempCursor(document);
     QTextBlock startBlock = document->findBlock(m_position);
     QTextBlock endBlock = document->findBlock(m_position + m_length);

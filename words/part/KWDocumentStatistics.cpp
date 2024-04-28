@@ -1,19 +1,19 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2021 Pierre Ducroquet <pinaraf@pinaraf.info>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KWDocumentStatistics.h"
 #include "KWDocument.h"
 
-#include "frames/KWTextFrameSet.h"
 #include "KoTextDocumentLayout.h"
+#include "frames/KWTextFrameSet.h"
 
-#include <QPointer>
-#include <QTextDocument>
-#include <QTextBlock>
 #include <QDebug>
+#include <QPointer>
+#include <QTextBlock>
+#include <QTextDocument>
 
 class KWDocumentStatisticsPrivate
 {
@@ -32,7 +32,8 @@ public:
 };
 
 KWDocumentStatistics::KWDocumentStatistics(KWDocument *doc)
-	: QObject(doc), d(new KWDocumentStatisticsPrivate())
+    : QObject(doc)
+    , d(new KWDocumentStatisticsPrivate())
 {
     d->document = doc;
     d->running = false;
@@ -45,10 +46,10 @@ KWDocumentStatistics::KWDocumentStatistics(KWDocument *doc)
     connect(d->timer, &QTimer::timeout, this, &KWDocumentStatistics::updateData);
 
     auto newFrame = [this](KWFrameSet *fs) {
-        KWTextFrameSet *tfs = qobject_cast<KWTextFrameSet*>(fs);
+        KWTextFrameSet *tfs = qobject_cast<KWTextFrameSet *>(fs);
         if (tfs) {
             connect(tfs->document(), &QTextDocument::contentsChanged, d->timer, QOverload<>::of(&QTimer::start), Qt::UniqueConnection);
-            KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+            KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(tfs->document()->documentLayout());
             if (lay) {
                 connect(lay, &KoTextDocumentLayout::finishedLayout, d->timer, QOverload<>::of(&QTimer::start), Qt::UniqueConnection);
             }
@@ -57,7 +58,7 @@ KWDocumentStatistics::KWDocumentStatistics(KWDocument *doc)
     // We will have to connect to each frame set when it is created
     connect(d->document->frameLayout(), &KWFrameLayout::newFrameSet, this, newFrame);
     // This ensures that even if the document is entirely reset, we still pick up the main frame set
-    connect(d->document, &KWDocument::pageSetupChanged, this, [this, newFrame](){
+    connect(d->document, &KWDocument::pageSetupChanged, this, [this, newFrame]() {
         if (d->document->mainFrameSet()) {
             newFrame(d->document->mainFrameSet());
         }
@@ -83,7 +84,8 @@ void KWDocumentStatistics::reset()
     d->cjkChars = 0;
 }
 
-float KWDocumentStatistics::fleschScore() const {
+float KWDocumentStatistics::fleschScore() const
+{
     // calculate Flesch reading ease score
     if ((d->sentences == 0) || (d->words == 0))
         return 0;
@@ -92,45 +94,45 @@ float KWDocumentStatistics::fleschScore() const {
 
 int KWDocumentStatistics::charsWithSpace() const
 {
-   return d->charsWithSpace;
+    return d->charsWithSpace;
 }
 
 int KWDocumentStatistics::charsWithoutSpace() const
 {
-   return d->charsWithoutSpace;
+    return d->charsWithoutSpace;
 }
 
 int KWDocumentStatistics::words() const
 {
-   return d->words;
+    return d->words;
 }
 
 int KWDocumentStatistics::sentences() const
 {
-   return d->sentences;
+    return d->sentences;
 }
 
 int KWDocumentStatistics::lines() const
 {
-   return d->lines;
+    return d->lines;
 }
 
 int KWDocumentStatistics::syllables() const
 {
-   return d->syllables;
+    return d->syllables;
 }
 
 int KWDocumentStatistics::paragraphs() const
 {
-   return d->paragraphs;
+    return d->paragraphs;
 }
 
 int KWDocumentStatistics::cjkChars() const
 {
-   return d->cjkChars;
+    return d->cjkChars;
 }
 
-void KWDocumentStatistics::connectNotify(const QMetaMethod& signal)
+void KWDocumentStatistics::connectNotify(const QMetaMethod &signal)
 {
     // If someone connects to refreshed, better be sure we get the data.
     // Otherwise, in the following scenario, stats will be blank:
@@ -161,7 +163,7 @@ void KWDocumentStatistics::updateData()
     reset();
 
     foreach (KWFrameSet *fs, d->document->frameSets()) {
-        QPointer<KWTextFrameSet> tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        QPointer<KWTextFrameSet> tfs = dynamic_cast<KWTextFrameSet *>(fs);
         if (!tfs)
             continue;
 
@@ -174,45 +176,36 @@ void KWDocumentStatistics::updateData()
     d->running = false;
 }
 
-
 void KWDocumentStatistics::computeStatistics(const QTextDocument &doc)
 {
     // parts of words for better counting of syllables:
     // (only use reg exp if necessary -> speed up)
 
-    const QStringList subs_syl {
-        QStringLiteral("cial"),
-        QStringLiteral("tia"),
-        QStringLiteral("cius"),
-        QStringLiteral("cious"),
-        QStringLiteral("giu"),
-        QStringLiteral("ion"),
-        QStringLiteral("iou")
-    };
+    const QStringList subs_syl{QStringLiteral("cial"),
+                               QStringLiteral("tia"),
+                               QStringLiteral("cius"),
+                               QStringLiteral("cious"),
+                               QStringLiteral("giu"),
+                               QStringLiteral("ion"),
+                               QStringLiteral("iou")};
 
-    static const QVector<QRegularExpression> subs_syl_regexp {
-        QRegularExpression("sia$", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("ely$", QRegularExpression::CaseInsensitiveOption)
-    };
+    static const QVector<QRegularExpression> subs_syl_regexp{QRegularExpression("sia$", QRegularExpression::CaseInsensitiveOption),
+                                                             QRegularExpression("ely$", QRegularExpression::CaseInsensitiveOption)};
 
-    const QStringList add_syl {
-        QStringLiteral("ia"),
-        QStringLiteral("riet"),
-        QStringLiteral("dien"),
-        QStringLiteral("iu"),
-        QStringLiteral("io"),
-        QStringLiteral("ii")
-    };
-    static const QVector<QRegularExpression> add_syl_regexp {
-        QRegularExpression("[aeiouym]bl$", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("[aeiou]{3}", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("^mc", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("ism$", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("[^l]lien", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("^coa[dglx].", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("[^gq]ua[^auieo]", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("dnt$", QRegularExpression::CaseInsensitiveOption)
-    };
+    const QStringList add_syl{QStringLiteral("ia"),
+                              QStringLiteral("riet"),
+                              QStringLiteral("dien"),
+                              QStringLiteral("iu"),
+                              QStringLiteral("io"),
+                              QStringLiteral("ii")};
+    static const QVector<QRegularExpression> add_syl_regexp{QRegularExpression("[aeiouym]bl$", QRegularExpression::CaseInsensitiveOption),
+                                                            QRegularExpression("[aeiou]{3}", QRegularExpression::CaseInsensitiveOption),
+                                                            QRegularExpression("^mc", QRegularExpression::CaseInsensitiveOption),
+                                                            QRegularExpression("ism$", QRegularExpression::CaseInsensitiveOption),
+                                                            QRegularExpression("[^l]lien", QRegularExpression::CaseInsensitiveOption),
+                                                            QRegularExpression("^coa[dglx].", QRegularExpression::CaseInsensitiveOption),
+                                                            QRegularExpression("[^gq]ua[^auieo]", QRegularExpression::CaseInsensitiveOption),
+                                                            QRegularExpression("dnt$", QRegularExpression::CaseInsensitiveOption)};
 
     static QRegularExpression punctuation("[!?.,:_\"-]", QRegularExpression::CaseInsensitiveOption);
     static QRegularExpression final_e("e$", QRegularExpression::CaseInsensitiveOption);
@@ -246,8 +239,8 @@ void KWDocumentStatistics::computeStatistics(const QTextDocument &doc)
         d->words += wordlist.count();
         for (QStringList::ConstIterator it1 = wordlist.begin(); it1 != wordlist.end(); ++it1) {
             QString word = *it1;
-            word.remove(punctuation);   // clean word from punctuation
-            if (word.length() <= 3) {  // extension to the original algorithm
+            word.remove(punctuation); // clean word from punctuation
+            if (word.length() <= 3) { // extension to the original algorithm
                 d->syllables++;
                 continue;
             }
@@ -259,7 +252,7 @@ void KWDocumentStatistics::computeStatistics(const QTextDocument &doc)
                     word_syllables--;
                 }
             }
-            for (auto &regexp: subs_syl_regexp) {
+            for (auto &regexp : subs_syl_regexp) {
                 if (word.indexOf(regexp) != -1) {
                     word_syllables--;
                 }
@@ -269,7 +262,7 @@ void KWDocumentStatistics::computeStatistics(const QTextDocument &doc)
                     word_syllables++;
                 }
             }
-            for (auto &regexp: add_syl_regexp) {
+            for (auto &regexp : add_syl_regexp) {
                 if (word.indexOf(regexp) != -1) {
                     word_syllables++;
                 }
@@ -290,13 +283,13 @@ void KWDocumentStatistics::computeStatistics(const QTextDocument &doc)
             continue;
         }
         QChar lastchar = s.at(s.length() - 1);
-        if (! s.isEmpty() && lastchar != QChar('.') && lastchar != QChar('?') && lastchar != QChar('!')) {  // e.g. for headlines
+        if (!s.isEmpty() && lastchar != QChar('.') && lastchar != QChar('?') && lastchar != QChar('!')) { // e.g. for headlines
             s = s + '.';
         }
-        s.replace(multiplePunctuation, ".");    // count "..." as only one "."
-        s.replace(floatingPoint, "0,0");        // don't count floating point numbers as sentences
-        s.replace(acronyms, "*");               // don't count "U.S.A." as three sentences
-        for (int i = 0 ; i < s.length(); ++i) {
+        s.replace(multiplePunctuation, "."); // count "..." as only one "."
+        s.replace(floatingPoint, "0,0"); // don't count floating point numbers as sentences
+        s.replace(acronyms, "*"); // don't count "U.S.A." as three sentences
+        for (int i = 0; i < s.length(); ++i) {
             QChar ch = s[i];
             if (ch == QChar('.') || ch == QChar('?') || ch == QChar('!')) {
                 ++d->sentences;
@@ -319,10 +312,8 @@ int KWDocumentStatistics::countCJKChars(const QString &text)
          * CJK Unified Ideographs: 4E00 - 9FFF (Chinese Traditional & Simplified, Kanji and Hanja
          * Hangul: 0xAC00 - 0xD7AF
          */
-        if ((qChar >= QChar(0x3040) && qChar <= QChar(0x309F))
-                || (qChar >= QChar(0x30A0) && qChar <= QChar(0x30FF))
-                || (qChar >= QChar(0x4E00) && qChar <= QChar(0x9FFF))
-                || (qChar >= QChar(0xAC00) && qChar <= QChar(0xD7AF))) {
+        if ((qChar >= QChar(0x3040) && qChar <= QChar(0x309F)) || (qChar >= QChar(0x30A0) && qChar <= QChar(0x30FF))
+            || (qChar >= QChar(0x4E00) && qChar <= QChar(0x9FFF)) || (qChar >= QChar(0xAC00) && qChar <= QChar(0xD7AF))) {
             count++;
         }
     }

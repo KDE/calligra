@@ -5,17 +5,17 @@
  */
 
 #include "KoLineStyleSelector.h"
-#include "KoLineStyleModel_p.h"
 #include "KoLineStyleItemDelegate_p.h"
+#include "KoLineStyleModel_p.h"
 
-#include <QPen>
 #include <QPainter>
+#include <QPen>
 
 class Q_DECL_HIDDEN KoLineStyleSelector::Private
 {
 public:
     Private(QWidget *parent)
-    : model(new KoLineStyleModel(parent))
+        : model(new KoLineStyleModel(parent))
     {
     }
 
@@ -23,7 +23,8 @@ public:
 };
 
 KoLineStyleSelector::KoLineStyleSelector(QWidget *parent)
-    : QComboBox(parent), d(new Private(this))
+    : QComboBox(parent)
+    , d(new Private(this))
 {
     setModel(d->model);
     setItemDelegate(new KoLineStyleItemDelegate(this));

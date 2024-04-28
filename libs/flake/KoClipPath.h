@@ -28,20 +28,20 @@ public:
     explicit KoClipData(KoPathShape *clipPathShape);
 
     /// Creates clip path data from multiple path shapes, takes ownership of the path shapes
-    explicit KoClipData(const QList<KoPathShape*> &clipPathShapes);
+    explicit KoClipData(const QList<KoPathShape *> &clipPathShapes);
 
     /// Destroys the clip path data
     ~KoClipData();
 
     /// Returns the clip path shapes
-    QList<KoPathShape*> clipPathShapes() const;
+    QList<KoPathShape *> clipPathShapes() const;
 
     /// Gives up ownership of clip path shapes
     void removeClipShapesOwnership();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 /// Clip path used to clip shapes
@@ -70,13 +70,13 @@ public:
     QPainterPath pathForSize(const QSizeF &size) const;
 
     /// Returns the clip path shapes
-    QList<KoPathShape*> clipPathShapes() const;
+    QList<KoPathShape *> clipPathShapes() const;
 
     /**
      * Returns the transformation from the clip data path shapes to the
      * current document coordinates of the specified clipped shape.
-     * If the specified clipped shape is null, the transformation 
-     * from clip data path shapes to shape coordinates of the clipped shape 
+     * If the specified clipped shape is null, the transformation
+     * from clip data path shapes to shape coordinates of the clipped shape
      * at the time of creating this clip path is being returned.
      */
     QTransform clipDataTransformation(KoShape *clippedShape) const;
@@ -86,7 +86,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOCLIPPATH_H

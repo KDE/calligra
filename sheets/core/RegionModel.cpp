@@ -7,23 +7,22 @@
 #include "RegionModel.h"
 
 // Sheets
-#include "engine/Region.h"
 #include "core/Sheet.h"
+#include "engine/Region.h"
 
 using namespace Calligra::Sheets;
 
 class RegionModel::Private
 {
 public:
-    SheetBase* sheet;
+    SheetBase *sheet;
     QRect range;
     bool overwriteMode;
 };
 
-
-RegionModel::RegionModel(const Region& region)
-        : SheetModel(dynamic_cast<Sheet*>(region.lastSheet()))
-        , d(new Private)
+RegionModel::RegionModel(const Region &region)
+    : SheetModel(dynamic_cast<Sheet *>(region.lastSheet()))
+    , d(new Private)
 {
     Q_ASSERT(region.isContiguous());
     Q_ASSERT(!region.isEmpty());

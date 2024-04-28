@@ -9,24 +9,24 @@
 #include "TestProxyModel.h"
 
 // Qt
-#include <QRect>
 #include <QPoint>
+#include <QRect>
 #include <QSize>
 #include <QString>
-#include <QVariant>
 #include <QTest>
+#include <QVariant>
 
 // KoChart
-#include "DataSet.h"
 #include "CellRegion.h"
+#include "DataSet.h"
 
-
-namespace QTest {
-    template<>
-    char *toString(const CellRegion &region)
-    {
-        return qstrdup(region.toString().toLatin1());
-    }
+namespace QTest
+{
+template<>
+char *toString(const CellRegion &region)
+{
+    return qstrdup(region.toString().toLatin1());
+}
 }
 
 using namespace KoChart;
@@ -83,7 +83,7 @@ void TestProxyModel::init()
 
 void TestProxyModel::testWithoutLabels()
 {
-    QList<DataSet*> dataSets;
+    QList<DataSet *> dataSets;
 
     // Horizontal data direction
     m_proxyModel.setDataDirection(Qt::Horizontal);
@@ -121,7 +121,6 @@ void TestProxyModel::testWithoutLabels()
     QCOMPARE(dataSets[3]->customDataRegion(), CellRegion());
     QCOMPARE(dataSets[3]->labelDataRegion(), CellRegion());
     QCOMPARE(dataSets[3]->categoryDataRegion(), CellRegion());
-
 
     // Vertical data direction
     m_proxyModel.setDataDirection(Qt::Vertical);
@@ -168,7 +167,7 @@ void TestProxyModel::testWithoutLabels()
 
 void TestProxyModel::testFirstRowAsLabel()
 {
-    QList<DataSet*> dataSets;
+    QList<DataSet *> dataSets;
 
     // Horizontal data direction
     m_proxyModel.setDataDirection(Qt::Horizontal);
@@ -201,7 +200,6 @@ void TestProxyModel::testFirstRowAsLabel()
     QCOMPARE(dataSets[2]->customDataRegion(), CellRegion());
     QCOMPARE(dataSets[2]->labelDataRegion(), CellRegion());
     QCOMPARE(dataSets[2]->categoryDataRegion(), CellRegion(m_table, QRect(1, 1, 5, 1)));
-
 
     // Vertical data direction
     m_proxyModel.setDataDirection(Qt::Vertical);
@@ -246,7 +244,7 @@ void TestProxyModel::testFirstRowAsLabel()
 
 void TestProxyModel::testFirstColumnAsLabel()
 {
-    QList<DataSet*> dataSets;
+    QList<DataSet *> dataSets;
 
     // Horizontal data direction
     m_proxyModel.setDataDirection(Qt::Horizontal);
@@ -287,7 +285,6 @@ void TestProxyModel::testFirstColumnAsLabel()
     QCOMPARE(dataSets[3]->labelDataRegion(), CellRegion(m_table, QRect(1, 4, 1, 1)));
     QCOMPARE(dataSets[3]->categoryDataRegion(), CellRegion());
 
-
     // Vertical data direction
     m_proxyModel.setDataDirection(Qt::Vertical);
 
@@ -326,7 +323,7 @@ void TestProxyModel::testFirstColumnAsLabel()
 
 void TestProxyModel::testFirstRowAndColumnAsLabels()
 {
-    QList<DataSet*> dataSets;
+    QList<DataSet *> dataSets;
 
     // Horizontal data direction
     m_proxyModel.setDataDirection(Qt::Horizontal);
@@ -360,7 +357,6 @@ void TestProxyModel::testFirstRowAndColumnAsLabels()
     QCOMPARE(dataSets[2]->customDataRegion(), CellRegion());
     QCOMPARE(dataSets[2]->labelDataRegion(), CellRegion(m_table, QRect(1, 4, 1, 1)));
     QCOMPARE(dataSets[0]->categoryDataRegion(), CellRegion(m_table, QRect(2, 1, 4, 1)));
-
 
     // Vertical data direction
     m_proxyModel.setDataDirection(Qt::Vertical);
@@ -400,7 +396,6 @@ void TestProxyModel::testFirstRowAndColumnAsLabels()
 
 void TestProxyModel::testRegionOrder()
 {
-
     CellRegion selection(m_table);
     // Second row
     selection.add(QRect(1, 2, 4, 1));
@@ -412,7 +407,7 @@ void TestProxyModel::testRegionOrder()
     m_proxyModel.setFirstRowIsLabel(false);
     m_proxyModel.reset(selection);
 
-    QList<DataSet*> dataSets = m_proxyModel.dataSets();
+    QList<DataSet *> dataSets = m_proxyModel.dataSets();
 
     QCOMPARE(dataSets.size(), 2);
     QCOMPARE(dataSets[0]->size(), 4);
@@ -441,7 +436,7 @@ void TestProxyModel::testComplexRegions()
     m_proxyModel.setFirstRowIsLabel(false);
     m_proxyModel.reset(selection);
 
-    QList<DataSet*> dataSets = m_proxyModel.dataSets();
+    QList<DataSet *> dataSets = m_proxyModel.dataSets();
 
     QCOMPARE(dataSets.size(), 7);
     QCOMPARE(dataSets[0]->size(), 2);
@@ -524,7 +519,7 @@ void TestProxyModel::testComplexRegions()
 
 void TestProxyModel::testTwoDimensions()
 {
-    QList<DataSet*> dataSets;
+    QList<DataSet *> dataSets;
 
     // Horizontal data direction
     m_proxyModel.setDataDirection(Qt::Horizontal);
@@ -560,7 +555,7 @@ void TestProxyModel::testTwoDimensions()
 
 void TestProxyModel::testThreeDimensions()
 {
-    QList<DataSet*> dataSets;
+    QList<DataSet *> dataSets;
 
     // Horizontal data direction
     m_proxyModel.setDataDirection(Qt::Horizontal);

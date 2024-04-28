@@ -7,19 +7,19 @@
 
 #include "KoCopyController.h"
 
-#include <KoToolBase.h>
 #include <KoCanvasBase.h>
+#include <KoToolBase.h>
 #include <KoToolProxy.h>
 #include <KoToolSelection.h>
 
+#include "KoCopyController_p.h"
 #include <FlakeDebug.h>
 #include <QAction>
-#include "KoCopyController_p.h"
 
 KoCopyControllerPrivate::KoCopyControllerPrivate(KoCopyController *p, KoCanvasBase *c, QAction *a)
-    : parent(p),
-    canvas(c),
-    action(a)
+    : parent(p)
+    , canvas(c)
+    , action(a)
 {
     appHasSelection = false;
 }
@@ -37,8 +37,7 @@ void KoCopyControllerPrivate::cut()
 {
     if (canvas->toolProxy()->hasSelection()) {
         canvas->toolProxy()->cut();
-    }
-    else {
+    } else {
         emit parent->copyRequested();
     }
 }
@@ -48,14 +47,17 @@ void KoCopyControllerPrivate::selectionChanged(bool hasSelection)
     action->setEnabled(appHasSelection || hasSelection);
 }
 
-
 // KoCopyController
 KoCopyController::KoCopyController(KoCanvasBase *canvas, QAction *copyAction)
-    : QObject(copyAction),
-    d(new KoCopyControllerPrivate(this, canvas, copyAction))
+    : QObject(copyAction)
+    , d(new KoCopyControllerPrivate(this, canvas, copyAction))
 {
-    connect(canvas->toolProxy(), &KoToolProxy::selectionChanged, this, [this](bool v) { d->selectionChanged(v); });
-    connect(copyAction, &QAction::triggered, this, [this]() { d->copy(); });
+    connect(canvas->toolProxy(), &KoToolProxy::selectionChanged, this, [this](bool v) {
+        d->selectionChanged(v);
+    });
+    connect(copyAction, &QAction::triggered, this, [this]() {
+        d->copy();
+    });
     hasSelection(false);
 }
 
@@ -67,9 +69,8 @@ KoCopyController::~KoCopyController()
 void KoCopyController::hasSelection(bool selection)
 {
     d->appHasSelection = selection;
-    d->action->setEnabled(d->appHasSelection ||
-                          d->canvas->toolProxy()->hasSelection());
+    d->action->setEnabled(d->appHasSelection || d->canvas->toolProxy()->hasSelection());
 }
 
-//have to include this because of Q_PRIVATE_SLOT
+// have to include this because of Q_PRIVATE_SLOT
 #include "moc_KoCopyController.cpp"

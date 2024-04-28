@@ -7,16 +7,16 @@
 
 #include "KoSection.h"
 
-#include <KoXmlNS.h>
-#include <KoXmlReader.h>
-#include <KoTextSharedLoadingData.h>
-#include <KoShapeSavingContext.h>
-#include <KoXmlWriter.h>
-#include <KoSectionStyle.h>
-#include <KoSectionModel.h>
 #include <KoSectionEnd.h>
+#include <KoSectionModel.h>
+#include <KoSectionStyle.h>
+#include <KoShapeSavingContext.h>
 #include <KoTextDocument.h>
 #include <KoTextInlineRdf.h>
+#include <KoTextSharedLoadingData.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
 #include <QTextBlock>
 
@@ -93,10 +93,7 @@ QString KoSection::name() const
 QPair<int, int> KoSection::bounds() const
 {
     Q_D(const KoSection);
-    return QPair<int, int>(
-        d->boundingCursorStart.position(),
-        d->boundingCursorEnd.position()
-    );
+    return QPair<int, int>(d->boundingCursorStart.position(), d->boundingCursorEnd.position());
 }
 
 int KoSection::level() const
@@ -120,8 +117,7 @@ bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sh
 
         QString newName = element.attributeNS(KoXmlNS::text, "name");
         if (!KoTextDocument(d->document).sectionModel()->setName(this, newName)) {
-            warnText << "Section name \"" << newName
-                << "\" must be unique or is invalid. Resetting it to " << name();
+            warnText << "Section name \"" << newName << "\" must be unique or is invalid. Resetting it to " << name();
         }
 
         d->text_protected = element.attributeNS(KoXmlNS::text, "text-protected");
@@ -135,7 +131,7 @@ bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sh
 
         // lets handle associated xml:id
         if (element.hasAttribute("id")) {
-            KoTextInlineRdf* inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument *>(d->document), this);
+            KoTextInlineRdf *inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument *>(d->document), this);
             if (inlineRdf->loadOdf(element)) {
                 d->inlineRdf = inlineRdf;
             } else {
@@ -156,22 +152,28 @@ void KoSection::saveOdf(KoShapeSavingContext &context) const
     Q_ASSERT(writer);
     writer->startElement("text:section", false);
 
-    if (!d->condition.isEmpty()) writer->addAttribute("text:condition", d->condition);
-    if (!d->display.isEmpty()) writer->addAttribute("text:display", d->condition);
-    if (!d->name.isEmpty()) writer->addAttribute("text:name", d->name);
-    if (!d->text_protected.isEmpty()) writer->addAttribute("text:text-protected", d->text_protected);
-    if (!d->protection_key.isEmpty()) writer->addAttribute("text:protection-key", d->protection_key);
+    if (!d->condition.isEmpty())
+        writer->addAttribute("text:condition", d->condition);
+    if (!d->display.isEmpty())
+        writer->addAttribute("text:display", d->condition);
+    if (!d->name.isEmpty())
+        writer->addAttribute("text:name", d->name);
+    if (!d->text_protected.isEmpty())
+        writer->addAttribute("text:text-protected", d->text_protected);
+    if (!d->protection_key.isEmpty())
+        writer->addAttribute("text:protection-key", d->protection_key);
     if (!d->protection_key_digest_algorithm.isEmpty()) {
         writer->addAttribute("text:protection-key-digest-algorithm", d->protection_key_digest_algorithm);
     }
-    if (!d->style_name.isEmpty()) writer->addAttribute("text:style-name", d->style_name);
+    if (!d->style_name.isEmpty())
+        writer->addAttribute("text:style-name", d->style_name);
 
     if (d->inlineRdf) {
         d->inlineRdf->saveOdf(context, writer);
     }
 }
 
-void KoSection::setSectionEnd(KoSectionEnd* sectionEnd)
+void KoSection::setSectionEnd(KoSectionEnd *sectionEnd)
 {
     Q_D(KoSection);
     d->sectionEnd.reset(sectionEnd);

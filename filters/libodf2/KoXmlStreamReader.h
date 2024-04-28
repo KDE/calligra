@@ -8,15 +8,13 @@
 #ifndef KOXMLSTREAMREADER_H
 #define KOXMLSTREAMREADER_H
 
-
 #include "KoXmlStreamReader.h"
 
-#include <QXmlStreamReader>
-#include <QVector>
 #include <QSharedData>
+#include <QVector>
+#include <QXmlStreamReader>
 
 #include "koodf2_export.h"
-
 
 class QByteArray;
 class QString;
@@ -24,14 +22,13 @@ class QIODevice;
 
 class KoXmlStreamAttributes;
 
-
 /**
  * @brief An XML stream reader based on QXmlStreamReader and with namespace handling better suited to use for ODF in Calligra.
  *
  * Opendocument uses an XML encoding which makes heavy use of
  * namespaces. So normally you would want to compare the qualified
  * name when accessing tagnames and attributes.
- * 
+ *
  * However, in QXmlStreamReader you have to either make an explicit
  * comparison with the namespace URI for every element and attribute
  * or risk that documents that use the correct namespaces but not the
@@ -100,9 +97,8 @@ private:
     bool isSound() const;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 /**
  * @brief KoXmlStreamAttribute is a source-compatible replacement for QXmlStreamAttribute.
@@ -117,10 +113,11 @@ private:
  */
 class KOODF2_EXPORT KoXmlStreamAttribute
 {
-    friend QList<KoXmlStreamAttribute>;       // For the default constructor
-    friend KoXmlStreamAttributes;               // For the normal constructor
+    friend QList<KoXmlStreamAttribute>; // For the default constructor
+    friend KoXmlStreamAttributes; // For the normal constructor
     friend KoXmlStreamReader;
- public:
+
+public:
     ~KoXmlStreamAttribute();
 
     // TODO move that back to the private part
@@ -129,7 +126,7 @@ class KOODF2_EXPORT KoXmlStreamAttribute
     KoXmlStreamAttribute(const QXmlStreamAttribute *attr, const KoXmlStreamReader *reader);
 
     // API taken from QXmlStreamAttribute
-    bool       isDefault() const;
+    bool isDefault() const;
     QStringView name() const;
     QStringView namespaceUri() const;
     QStringView prefix() const;
@@ -140,12 +137,10 @@ class KOODF2_EXPORT KoXmlStreamAttribute
     bool operator!=(const KoXmlStreamAttribute &other) const;
     KoXmlStreamAttribute &operator=(const KoXmlStreamAttribute &other);
 
- private:
-
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 /**
  * @brief KoXmlStreamAttributes is a mostly source-compatible replacement for QXmlStreamAttributes.
@@ -164,7 +159,7 @@ class KOODF2_EXPORT KoXmlStreamAttributes
 {
     friend class KoXmlStreamReader;
 
- public:
+public:
     using const_iterator = const QList<KoXmlStreamAttribute>::const_iterator;
 
     KoXmlStreamAttributes(const KoXmlStreamAttributes &other);
@@ -181,19 +176,19 @@ class KOODF2_EXPORT KoXmlStreamAttributes
     const_iterator end() const;
 
     // Convenience functions taken from QXmlStreamAttributes API
-    void        append(const QString &namespaceUri, const QString &name, const QString &value);
-    void        append(const QXmlStreamAttribute &attribute);
-    void        append(const QString &qualifiedName, const QString &value);
-    bool        hasAttribute(const QString &qualifiedName) const;
-    bool        hasAttribute(const QLatin1String &qualifiedName) const;
-    bool        hasAttribute ( const QString & namespaceUri, const QString & name ) const;
-    QStringView  value ( const QString & namespaceUri, const QString & name ) const;
-    QStringView  value ( const QString & namespaceUri, const QLatin1String & name ) const;
-    QStringView  value ( const QLatin1String & namespaceUri, const QLatin1String & name ) const;
-    QStringView  value(const QString &qualifiedName) const;
-    QStringView  value(const QLatin1String &qualifiedName) const;
+    void append(const QString &namespaceUri, const QString &name, const QString &value);
+    void append(const QXmlStreamAttribute &attribute);
+    void append(const QString &qualifiedName, const QString &value);
+    bool hasAttribute(const QString &qualifiedName) const;
+    bool hasAttribute(const QLatin1String &qualifiedName) const;
+    bool hasAttribute(const QString &namespaceUri, const QString &name) const;
+    QStringView value(const QString &namespaceUri, const QString &name) const;
+    QStringView value(const QString &namespaceUri, const QLatin1String &name) const;
+    QStringView value(const QLatin1String &namespaceUri, const QLatin1String &name) const;
+    QStringView value(const QString &qualifiedName) const;
+    QStringView value(const QLatin1String &qualifiedName) const;
 
- private:
+private:
     // Only available from friend class KoXmlStreamReader.
     KoXmlStreamAttributes(const KoXmlStreamReader *r, const QXmlStreamAttributes &qAttrs);
 
@@ -202,8 +197,6 @@ class KOODF2_EXPORT KoXmlStreamAttributes
     QSharedDataPointer<Private> d;
 };
 
-
 void KOODF2_EXPORT prepareForOdf(KoXmlStreamReader &reader);
-
 
 #endif /* KOXMLSTREAMREADER_H */

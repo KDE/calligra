@@ -21,11 +21,12 @@
 
 #include <KMessageBox>
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
-
-bool Ksp::loadDoc(DocBase *obj, const KoXmlDocument& doc)
+bool Ksp::loadDoc(DocBase *obj, const KoXmlDocument &doc)
 {
     QPointer<KoUpdater> updater;
     if (obj->progressUpdater()) {
@@ -38,7 +39,8 @@ bool Ksp::loadDoc(DocBase *obj, const KoXmlDocument& doc)
     KoXmlElement spread = doc.documentElement();
 
     if (spread.attribute("mime") != "application/x-kspread" && spread.attribute("mime") != "application/vnd.kde.kspread") {
-        obj->setErrorMessage(i18n("Invalid document. Expected mimetype application/x-kspread or application/vnd.kde.kspread, got %1" , spread.attribute("mime")));
+        obj->setErrorMessage(
+            i18n("Invalid document. Expected mimetype application/x-kspread or application/vnd.kde.kspread, got %1", spread.attribute("mime")));
         return false;
     }
 
@@ -46,17 +48,20 @@ bool Ksp::loadDoc(DocBase *obj, const KoXmlDocument& doc)
     int version = spread.attribute("syntaxVersion").toInt(&ok);
     obj->map()->setSyntaxVersion(ok ? version : 0);
     if (obj->map()->syntaxVersion() > CURRENT_SYNTAX_VERSION) {
-        int ret = KMessageBox::warningContinueCancel(
-                      0, i18n("This document was created with a newer version of Calligra Sheets (syntax version: %1)\n"
-                              "When you open it with this version of Calligra Sheets, some information may be lost.", obj->map()->syntaxVersion()),
-                      i18n("File Format Mismatch"), KStandardGuiItem::cont());
+        int ret = KMessageBox::warningContinueCancel(0,
+                                                     i18n("This document was created with a newer version of Calligra Sheets (syntax version: %1)\n"
+                                                          "When you open it with this version of Calligra Sheets, some information may be lost.",
+                                                          obj->map()->syntaxVersion()),
+                                                     i18n("File Format Mismatch"),
+                                                     KStandardGuiItem::cont());
         if (ret == KMessageBox::Cancel) {
             obj->setErrorMessage("USER_CANCELED");
             return false;
         }
     }
 
-    if (updater) updater->setProgress(5);
+    if (updater)
+        updater->setProgress(5);
 
     KoXmlElement defaults = spread.namedItem("defaults").toElement();
     if (!defaults.isNull()) {
@@ -88,14 +93,15 @@ bool Ksp::loadDoc(DocBase *obj, const KoXmlDocument& doc)
         obj->setSpellListIgnoreAll(lst);
     }
 
-    if (updater) updater->setProgress(40);
+    if (updater)
+        updater->setProgress(40);
     // In case of reload (e.g. from konqueror)
     qDeleteAll(obj->map()->sheetList());
     obj->map()->sheetList().clear();
 
     KoXmlElement styles = spread.namedItem("styles").toElement();
     if (!styles.isNull()) {
-        if (!loadStyles (obj->map()->styleManager(), styles)) {
+        if (!loadStyles(obj->map()->styleManager(), styles)) {
             obj->setErrorMessage(i18n("Styles cannot be loaded."));
             return false;
         }
@@ -107,18 +113,20 @@ bool Ksp::loadDoc(DocBase *obj, const KoXmlDocument& doc)
         obj->setErrorMessage(i18n("Invalid document. No map tag."));
         return false;
     }
-    if (!loadMap (obj->map(), mymap)) {
+    if (!loadMap(obj->map(), mymap)) {
         return false;
     }
 
     // named areas
     const KoXmlElement areaname = spread.namedItem("areaname").toElement();
     if (!areaname.isNull())
-        loadNamedAreas (obj->map()->namedAreaManager(), obj->map(), areaname);
+        loadNamedAreas(obj->map()->namedAreaManager(), obj->map(), areaname);
 
-    if (updater) updater->setProgress(90);
+    if (updater)
+        updater->setProgress(90);
     obj->initConfig();
-    if (updater) updater->setProgress(100);
+    if (updater)
+        updater->setProgress(100);
 
     return true;
 }
@@ -142,7 +150,7 @@ QDomDocument Ksp::saveDoc(DocBase *document)
         }
     }
 
-    QDomElement e = saveMap (document->map(), doc);
+    QDomElement e = saveMap(document->map(), doc);
     spread.appendChild(e);
 
     document->setModified(false);
@@ -150,25 +158,22 @@ QDomDocument Ksp::saveDoc(DocBase *document)
     return doc;
 }
 
-
-
-
-void Ksp::loadProtection(ProtectableObject *prot, const KoXmlElement& element)
+void Ksp::loadProtection(ProtectableObject *prot, const KoXmlElement &element)
 {
     if (element.hasAttribute("protected")) {
         const QString passwd = element.attribute("protected");
         QByteArray str(passwd.toUtf8());
-        prot->setProtected (QByteArray::fromBase64(str));
+        prot->setProtected(QByteArray::fromBase64(str));
     }
 }
 
-
-void Ksp::loadNamedAreas(NamedAreaManager *manager, Map *map, const KoXmlElement& parent)
+void Ksp::loadNamedAreas(NamedAreaManager *manager, Map *map, const KoXmlElement &parent)
 {
     KoXmlElement element;
-    forEachElement(element, parent) {
+    forEachElement(element, parent)
+    {
         if (element.tagName() == "reference") {
-            SheetBase* sheet = 0;
+            SheetBase *sheet = 0;
             QString refname;
             int left = 0;
             int right = 0;
@@ -199,7 +204,7 @@ void Ksp::loadNamedAreas(NamedAreaManager *manager, Map *map, const KoXmlElement
     }
 }
 
-QDomElement Ksp::saveNamedAreas(NamedAreaManager *manager, QDomDocument& doc)
+QDomElement Ksp::saveNamedAreas(NamedAreaManager *manager, QDomDocument &doc)
 {
     QDomElement element = doc.createElement("areaname");
     for (const QString &name : manager->areaNames()) {
@@ -224,8 +229,5 @@ QDomElement Ksp::saveNamedAreas(NamedAreaManager *manager, QDomDocument& doc)
     return element;
 }
 
-
-
-
-}  // Sheets
-}  // Calligra
+} // Sheets
+} // Calligra

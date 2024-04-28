@@ -8,8 +8,8 @@
 #include "KoParameterShape.h"
 #include "KoParameterShape_p.h"
 
-#include <QPainter>
 #include <FlakeDebug.h>
+#include <QPainter>
 
 KoParameterShape::KoParameterShape()
     : KoPathShape(*(new KoParameterShapePrivate(this)))
@@ -25,7 +25,7 @@ KoParameterShape::~KoParameterShape()
 {
 }
 
-void KoParameterShape::moveHandle(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
+void KoParameterShape::moveHandle(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     Q_D(KoParameterShape);
     if (handleId >= d->handles.size()) {
@@ -42,8 +42,7 @@ void KoParameterShape::moveHandle(int handleId, const QPointF & point, Qt::Keybo
     d->shapeChanged(ParameterChanged);
 }
 
-
-int KoParameterShape::handleIdAt(const QRectF & rect) const
+int KoParameterShape::handleIdAt(const QRectF &rect) const
 {
     Q_D(const KoParameterShape);
     int handle = -1;
@@ -63,7 +62,7 @@ QPointF KoParameterShape::handlePosition(int handleId) const
     return d->handles.value(handleId);
 }
 
-void KoParameterShape::paintHandles(QPainter & painter, const KoViewConverter & converter, int handleRadius)
+void KoParameterShape::paintHandles(QPainter &painter, const KoViewConverter &converter, int handleRadius)
 {
     Q_D(KoParameterShape);
     applyConversion(painter, converter);
@@ -85,7 +84,7 @@ void KoParameterShape::paintHandles(QPainter & painter, const KoViewConverter & 
     }
 }
 
-void KoParameterShape::paintHandle(QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius)
+void KoParameterShape::paintHandle(QPainter &painter, const KoViewConverter &converter, int handleId, int handleRadius)
 {
     Q_D(KoParameterShape);
     applyConversion(painter, converter);

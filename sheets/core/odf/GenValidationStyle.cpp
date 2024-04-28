@@ -21,19 +21,16 @@ using namespace Calligra::Sheets::Odf;
 
 GenValidationStyles::GenValidationStyles()
 {
-
 }
 
 GenValidationStyles::~GenValidationStyles()
 {
-
 }
 
-QString GenValidationStyles::insert(const GenValidationStyle& style)
+QString GenValidationStyles::insert(const GenValidationStyle &style)
 {
     StyleMap::iterator it = m_styles.find(style);
     if (it == m_styles.end()) {
-
         QString styleName("val");
         styleName = makeUniqueName(styleName);
         m_names.insert(styleName, true);
@@ -42,7 +39,7 @@ QString GenValidationStyles::insert(const GenValidationStyle& style)
     return it.value();
 }
 
-QString GenValidationStyles::makeUniqueName(const QString& base) const
+QString GenValidationStyles::makeUniqueName(const QString &base) const
 {
     int num = 1;
     QString name;
@@ -53,7 +50,7 @@ QString GenValidationStyles::makeUniqueName(const QString& base) const
     return name;
 }
 
-void GenValidationStyles::writeStyle(KoXmlWriter& writer) const
+void GenValidationStyles::writeStyle(KoXmlWriter &writer) const
 {
     if (m_styles.count() > 0) {
         writer.startElement("table:content-validations");
@@ -69,7 +66,7 @@ void GenValidationStyles::writeStyle(KoXmlWriter& writer) const
             writer.addAttribute("table:display", it.key().displayValidationInformation);
 
             const QStringList helpLines = it.key().messageInfo.split('\n', Qt::SkipEmptyParts);
-            for (const QString& helpLine : helpLines) {
+            for (const QString &helpLine : helpLines) {
                 writer.startElement("text:p");
                 writer.addTextNode(helpLine);
                 writer.endElement();
@@ -83,7 +80,7 @@ void GenValidationStyles::writeStyle(KoXmlWriter& writer) const
             writer.addAttribute("table:display", it.key().displayMessage);
 
             const QStringList errorLines = it.key().message.split('\n', Qt::SkipEmptyParts);
-            for (const QString& errorLine : errorLines) {
+            for (const QString &errorLine : errorLines) {
                 writer.startElement("text:p");
                 writer.addTextNode(errorLine);
                 writer.endElement();
@@ -92,7 +89,7 @@ void GenValidationStyles::writeStyle(KoXmlWriter& writer) const
 
             writer.endElement();
         }
-        writer.endElement();//close sheet:content-validation
+        writer.endElement(); // close sheet:content-validation
     }
 }
 
@@ -123,15 +120,15 @@ void GenValidationStyle::initVal(Validity *validity, CalculationSettings *cs)
     }
 }
 
-QString GenValidationStyle::createValidationCondition(Validity* validity, CalculationSettings *cs)
+QString GenValidationStyle::createValidationCondition(Validity *validity, CalculationSettings *cs)
 {
     QString result;
     switch (validity->restriction()) {
     case Validity::NoRestriction:
-        //nothing
+        // nothing
         break;
     case Validity::Text:
-        //doesn't exist into oo spec
+        // doesn't exist into oo spec
         result = "cell-content-is-text()";
         break;
     case Validity::Time:
@@ -154,16 +151,13 @@ QString GenValidationStyle::createValidationCondition(Validity* validity, Calcul
     return result;
 }
 
-QString GenValidationStyle::createListValidationCondition(Validity* validity)
+QString GenValidationStyle::createListValidationCondition(Validity *validity)
 {
-    QString result =
-        "oooc:cell-content-is-in-list(" +
-        validity->validityList().join(";") +
-        ')';
+    QString result = "oooc:cell-content-is-in-list(" + validity->validityList().join(";") + ')';
     return result;
 }
 
-QString GenValidationStyle::createNumberValidationCondition(Validity* validity)
+QString GenValidationStyle::createNumberValidationCondition(Validity *validity)
 {
     QString result;
     if (validity->restriction() == Validity::Number)
@@ -173,58 +167,57 @@ QString GenValidationStyle::createNumberValidationCondition(Validity* validity)
     switch (validity->condition()) {
     case Validity::None:
     case Validity::IsTrueFormula:
-        //nothing
+        // nothing
         break;
     case Validity::Equal:
-        result += "cell-content()"
-                  "=" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat()));
+        result +=
+            "cell-content()"
+            "="
+            + QString::number((double)numToDouble(validity->minimumValue().asFloat()));
         break;
     case Validity::Superior:
-        result += "cell-content()"
-                  ">" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat()));
+        result +=
+            "cell-content()"
+            ">"
+            + QString::number((double)numToDouble(validity->minimumValue().asFloat()));
         break;
     case Validity::Inferior:
-        result += "cell-content()"
-                  "<" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat()));
+        result +=
+            "cell-content()"
+            "<"
+            + QString::number((double)numToDouble(validity->minimumValue().asFloat()));
         break;
     case Validity::SuperiorEqual:
-        result += "cell-content()"
-                  ">=" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat()));
+        result +=
+            "cell-content()"
+            ">="
+            + QString::number((double)numToDouble(validity->minimumValue().asFloat()));
         break;
     case Validity::InferiorEqual:
-        result += "cell-content()"
-                  "<=" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat()));
+        result +=
+            "cell-content()"
+            "<="
+            + QString::number((double)numToDouble(validity->minimumValue().asFloat()));
         break;
     case Validity::Different:
-        result += "cell-content()"
-                  "!=" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat()));
+        result +=
+            "cell-content()"
+            "!="
+            + QString::number((double)numToDouble(validity->minimumValue().asFloat()));
         break;
     case Validity::Between:
-        result += "cell-content-is-between(" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat())) +
-                  ',' +
-                  QString::number((double)numToDouble(validity->maximumValue().asFloat())) +
-                  ')';
+        result += "cell-content-is-between(" + QString::number((double)numToDouble(validity->minimumValue().asFloat())) + ','
+            + QString::number((double)numToDouble(validity->maximumValue().asFloat())) + ')';
         break;
     case Validity::DifferentTo:
-        result += "cell-content-is-not-between(" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat())) +
-                  ',' +
-                  QString::number((double)numToDouble(validity->maximumValue().asFloat())) +
-                  ')';
+        result += "cell-content-is-not-between(" + QString::number((double)numToDouble(validity->minimumValue().asFloat())) + ','
+            + QString::number((double)numToDouble(validity->maximumValue().asFloat())) + ')';
         break;
     }
     return result;
 }
 
-
-QString GenValidationStyle::createTimeValidationCondition(Validity* validity)
+QString GenValidationStyle::createTimeValidationCondition(Validity *validity)
 {
     QString minval = toSaveString(validity->minimumValue(), Value::fmt_Time);
     QString maxval = toSaveString(validity->maximumValue(), Value::fmt_Time);
@@ -233,7 +226,7 @@ QString GenValidationStyle::createTimeValidationCondition(Validity* validity)
     switch (validity->condition()) {
     case Validity::None:
     case Validity::IsTrueFormula:
-        //nothing
+        // nothing
         break;
     case Validity::Equal:
         result += "cell-content()=" + minval;
@@ -263,7 +256,7 @@ QString GenValidationStyle::createTimeValidationCondition(Validity* validity)
     return result;
 }
 
-QString GenValidationStyle::createDateValidationCondition(Validity* validity, CalculationSettings *cs)
+QString GenValidationStyle::createDateValidationCondition(Validity *validity, CalculationSettings *cs)
 {
     QString minval = toSaveString(validity->minimumValue(), Value::fmt_Date, cs);
     QString maxval = toSaveString(validity->maximumValue(), Value::fmt_Date, cs);
@@ -272,7 +265,7 @@ QString GenValidationStyle::createDateValidationCondition(Validity* validity, Ca
     switch (validity->condition()) {
     case Validity::None:
     case Validity::IsTrueFormula:
-        //nothing
+        // nothing
         break;
     case Validity::Equal:
         result += "cell-content()=" + minval;
@@ -302,57 +295,57 @@ QString GenValidationStyle::createDateValidationCondition(Validity* validity, Ca
     return result;
 }
 
-QString GenValidationStyle::createTextValidationCondition(Validity* validity)
+QString GenValidationStyle::createTextValidationCondition(Validity *validity)
 {
     QString result;
     switch (validity->condition()) {
     case Validity::None:
     case Validity::IsTrueFormula:
-        //nothing
+        // nothing
         break;
     case Validity::Equal:
-        result += "oooc:cell-content-text-length()"
-                  "=" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat()));
+        result +=
+            "oooc:cell-content-text-length()"
+            "="
+            + QString::number((double)numToDouble(validity->minimumValue().asFloat()));
         break;
     case Validity::Superior:
-        result += "oooc:cell-content-text-length()"
-                  ">" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat()));
+        result +=
+            "oooc:cell-content-text-length()"
+            ">"
+            + QString::number((double)numToDouble(validity->minimumValue().asFloat()));
         break;
     case Validity::Inferior:
-        result += "oooc:cell-content-text-length()"
-                  "<" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat()));
+        result +=
+            "oooc:cell-content-text-length()"
+            "<"
+            + QString::number((double)numToDouble(validity->minimumValue().asFloat()));
         break;
     case Validity::SuperiorEqual:
-        result += "oooc:cell-content-text-length()"
-                  ">=" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat()));
+        result +=
+            "oooc:cell-content-text-length()"
+            ">="
+            + QString::number((double)numToDouble(validity->minimumValue().asFloat()));
         break;
     case Validity::InferiorEqual:
-        result += "oooc:cell-content-text-length()"
-                  "<=" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat()));
+        result +=
+            "oooc:cell-content-text-length()"
+            "<="
+            + QString::number((double)numToDouble(validity->minimumValue().asFloat()));
         break;
     case Validity::Different:
-        result += "oooc:cell-content-text-length()"
-                  "!=" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat()));
+        result +=
+            "oooc:cell-content-text-length()"
+            "!="
+            + QString::number((double)numToDouble(validity->minimumValue().asFloat()));
         break;
     case Validity::Between:
-        result += "oooc:cell-content-text-length-is-between(" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat())) +
-                  ',' +
-                  QString::number((double)numToDouble(validity->maximumValue().asFloat())) +
-                  ')';
+        result += "oooc:cell-content-text-length-is-between(" + QString::number((double)numToDouble(validity->minimumValue().asFloat())) + ','
+            + QString::number((double)numToDouble(validity->maximumValue().asFloat())) + ')';
         break;
     case Validity::DifferentTo:
-        result += "oooc:cell-content-text-length-is-not-between(" +
-                  QString::number((double)numToDouble(validity->minimumValue().asFloat())) +
-                  ',' +
-                  QString::number((double)numToDouble(validity->maximumValue().asFloat())) +
-                  ')';
+        result += "oooc:cell-content-text-length-is-not-between(" + QString::number((double)numToDouble(validity->minimumValue().asFloat())) + ','
+            + QString::number((double)numToDouble(validity->maximumValue().asFloat())) + ')';
         break;
     }
     return result;

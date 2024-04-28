@@ -6,25 +6,23 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "DocxFile.h"
 
 // Qt
-#include <QString>
 #include <QByteArray>
 #include <QList>
+#include <QString>
 
 // Calligra
-#include <KoXmlWriter.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
+#include <KoXmlWriter.h>
 
 // This filter
-#include "OpcContentTypes.h"
-#include "OdfReaderDocxContext.h"
 #include "DocxExportDebug.h"
-
+#include "OdfReaderDocxContext.h"
+#include "OpcContentTypes.h"
 
 // ================================================================
 //                         class DocxFile
@@ -38,24 +36,21 @@ DocxFile::~DocxFile()
 }
 
 // todo: commentsexist should be probably replaced with qlist qpair later
-KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
-                                               const QByteArray &appIdentification,
-                                               const OdfReaderDocxContext &context,
-                                               bool  commentsExist)
+KoFilter::ConversionStatus
+DocxFile::writeDocx(const QString &fileName, const QByteArray &appIdentification, const OdfReaderDocxContext &context, bool commentsExist)
 {
     Q_UNUSED(context);
 
     m_commentsExist = commentsExist;
     // Create the store and check if everything went well.
     // FIXME: Should docxStore be deleted from a finalizer?
-    KoStore *docxStore = KoStore::createStore(fileName, KoStore::Write,
-                                              appIdentification, KoStore::Auto, false);
+    KoStore *docxStore = KoStore::createStore(fileName, KoStore::Write, appIdentification, KoStore::Auto, false);
     if (!docxStore || docxStore->bad()) {
         warnDocx << "Unable to create output file!";
         delete docxStore;
         return KoFilter::FileNotFound;
     }
-    KoFilter::ConversionStatus  status;
+    KoFilter::ConversionStatus status;
 
     // Write top-level rels
     status = writeTopLevelRels(docxStore);
@@ -79,7 +74,7 @@ KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
     }
 
     // Finally, write the [Content_Types}.xml file.
-    OpcContentTypes  contentTypes;
+    OpcContentTypes contentTypes;
     contentTypes.addDefault("rels", "application/vnd.openxmlformats-package.relationships+xml");
     contentTypes.addDefault("xml", "application/xml");
     foreach (const FileInfo *file, files()) {
@@ -91,12 +86,8 @@ KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
     return status;
 }
 
-
-
-
 // ----------------------------------------------------------------
 //                         Private functions
-
 
 KoFilter::ConversionStatus DocxFile::writeTopLevelRels(KoStore *docxStore)
 {
@@ -118,23 +109,23 @@ KoFilter::ConversionStatus DocxFile::writeTopLevelRels(KoStore *docxStore)
     writer.addAttribute("Id", "rId1");
     writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument");
     writer.addAttribute("Target", "word/document.xml");
-    writer.endElement();  // Relationship
+    writer.endElement(); // Relationship
 
     // Doc props core
-    //writer.startElement("Relationship");
-    //writer.addAttribute("Id", "rId2");
-    //writer.addAttribute("Type", "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties");
-    //writer.addAttribute("Target", "docProps/core.xml");
-    //writer.endElement();  // Relationship
+    // writer.startElement("Relationship");
+    // writer.addAttribute("Id", "rId2");
+    // writer.addAttribute("Type", "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties");
+    // writer.addAttribute("Target", "docProps/core.xml");
+    // writer.endElement();  // Relationship
 
     // Doc props app
-    //writer.startElement("Relationship");
-    //writer.addAttribute("Id", "rId3");
-    //writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties");
-    //writer.addAttribute("Target", "docProps/app.xml");
-    //writer.endElement();  // Relationship
+    // writer.startElement("Relationship");
+    // writer.addAttribute("Id", "rId3");
+    // writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties");
+    // writer.addAttribute("Target", "docProps/app.xml");
+    // writer.endElement();  // Relationship
 
-    writer.endElement();  // Relationships
+    writer.endElement(); // Relationships
     writer.endDocument();
 
     docxStore->close();
@@ -193,10 +184,9 @@ KoFilter::ConversionStatus DocxFile::writeDocumentRels(KoStore *docxStore)
     writer.endElement();
 #endif
 
-    writer.endElement();        // Relationships
+    writer.endElement(); // Relationships
     writer.endDocument();
 
     docxStore->close();
     return KoFilter::OK;
 }
-

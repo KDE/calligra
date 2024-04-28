@@ -8,24 +8,25 @@
 #include "KoSnapProxy.h"
 #include "KoSnapStrategy.h"
 
-#include <KoPathShape.h>
-#include <KoPathPoint.h>
-#include <KoViewConverter.h>
 #include <KoCanvasBase.h>
+#include <KoPathPoint.h>
+#include <KoPathShape.h>
+#include <KoViewConverter.h>
 
 #include <QPainter>
 #include <QPainterPath>
 
 #include <math.h>
 
-
 class Q_DECL_HIDDEN KoSnapGuide::Private
 {
 public:
     Private(KoCanvasBase *parentCanvas)
-        : canvas(parentCanvas), editedShape(0), currentStrategy(0),
-        active(true),
-        snapDistance(10)
+        : canvas(parentCanvas)
+        , editedShape(0)
+        , currentStrategy(0)
+        , active(true)
+        , snapDistance(10)
     {
     }
 
@@ -38,14 +39,14 @@ public:
     KoCanvasBase *canvas;
     KoShape *editedShape;
 
-    QList<KoSnapStrategy*> strategies;
+    QList<KoSnapStrategy *> strategies;
     KoSnapStrategy *currentStrategy;
 
     KoSnapGuide::Strategies usedStrategies;
     bool active;
     int snapDistance;
-    QList<KoPathPoint*> ignoredPoints;
-    QList<KoShape*> ignoredShapes;
+    QList<KoPathPoint *> ignoredPoints;
+    QList<KoShape *> ignoredShapes;
 };
 
 KoSnapGuide::KoSnapGuide(KoCanvasBase *canvas)
@@ -118,20 +119,18 @@ QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers mo
 {
     d->currentStrategy = 0;
 
-    if (! d->active || (modifiers & Qt::ShiftModifier))
+    if (!d->active || (modifiers & Qt::ShiftModifier))
         return mousePosition;
 
     KoSnapProxy proxy(this);
 
     qreal minDistance = HUGE_VAL;
 
-    qreal maxSnapDistance = d->canvas->viewConverter()->viewToDocument(QSizeF(d->snapDistance,
-                d->snapDistance)).width();
+    qreal maxSnapDistance = d->canvas->viewConverter()->viewToDocument(QSizeF(d->snapDistance, d->snapDistance)).width();
 
     foreach (KoSnapStrategy *strategy, d->strategies) {
-        if (d->usedStrategies & strategy->type()
-                || strategy->type() == GridSnapping || strategy->type() == CustomSnapping) {
-            if (! strategy->snap(mousePosition, &proxy, maxSnapDistance))
+        if (d->usedStrategies & strategy->type() || strategy->type() == GridSnapping || strategy->type() == CustomSnapping) {
+            if (!strategy->snap(mousePosition, &proxy, maxSnapDistance))
                 continue;
 
             QPointF snapCandidate = strategy->snappedPosition();
@@ -143,7 +142,7 @@ QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers mo
         }
     }
 
-    if (! d->currentStrategy)
+    if (!d->currentStrategy)
         return mousePosition;
 
     return d->currentStrategy->snappedPosition();
@@ -163,7 +162,7 @@ QRectF KoSnapGuide::boundingRect() const
 
 void KoSnapGuide::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (! d->currentStrategy || ! d->active)
+    if (!d->currentStrategy || !d->active)
         return;
 
     QPainterPath decoration = d->currentStrategy->decoration(converter);
@@ -186,22 +185,22 @@ KoCanvasBase *KoSnapGuide::canvas() const
     return d->canvas;
 }
 
-void KoSnapGuide::setIgnoredPathPoints(const QList<KoPathPoint*> &ignoredPoints)
+void KoSnapGuide::setIgnoredPathPoints(const QList<KoPathPoint *> &ignoredPoints)
 {
     d->ignoredPoints = ignoredPoints;
 }
 
-QList<KoPathPoint*> KoSnapGuide::ignoredPathPoints() const
+QList<KoPathPoint *> KoSnapGuide::ignoredPathPoints() const
 {
     return d->ignoredPoints;
 }
 
-void KoSnapGuide::setIgnoredShapes(const QList<KoShape*> &ignoredShapes)
+void KoSnapGuide::setIgnoredShapes(const QList<KoShape *> &ignoredShapes)
 {
     d->ignoredShapes = ignoredShapes;
 }
 
-QList<KoShape*> KoSnapGuide::ignoredShapes() const
+QList<KoShape *> KoSnapGuide::ignoredShapes() const
 {
     return d->ignoredShapes;
 }
@@ -214,11 +213,10 @@ void KoSnapGuide::reset()
     d->ignoredShapes.clear();
     // remove all custom strategies
     int strategyCount = d->strategies.count();
-    for (int i = strategyCount-1; i >= 0; --i) {
+    for (int i = strategyCount - 1; i >= 0; --i) {
         if (d->strategies[i]->type() == CustomSnapping) {
             delete d->strategies[i];
             d->strategies.removeAt(i);
         }
     }
 }
-

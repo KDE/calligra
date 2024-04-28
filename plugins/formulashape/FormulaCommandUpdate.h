@@ -20,21 +20,21 @@ class KoFormulaShape;
  *
  **/
 
-class FormulaCommandUpdate : public KUndo2Command {
+class FormulaCommandUpdate : public KUndo2Command
+{
 public:
-    FormulaCommandUpdate(KoFormulaShape* shape, FormulaCommand* command);
+    FormulaCommandUpdate(KoFormulaShape *shape, FormulaCommand *command);
 
     /// Execute the command
     void redo() override;
 
     /// Revert the actions done in redo()
     void undo() override;
-    
+
 private:
     /// The BasicElement that owns the newly added Text
-    FormulaCommand* m_command;
-    KoFormulaShape* m_shape;
+    FormulaCommand *m_command;
+    KoFormulaShape *m_shape;
 };
-
 
 #endif // FORMULACOMMANDUPDATE_H

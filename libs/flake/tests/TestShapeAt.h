@@ -17,7 +17,6 @@ private Q_SLOTS:
     // tests
     void test();
     void testShadow();
-
 };
 
 #endif

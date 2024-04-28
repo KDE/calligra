@@ -7,9 +7,7 @@
 #include "Plugin.h"
 #include <KPluginFactory>
 
-
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_pageeffect_example.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_pageeffect_example.json", registerPlugin<Plugin>();)
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
@@ -17,4 +15,3 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
 }
 
 #include "Plugin.moc"
-

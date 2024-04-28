@@ -7,8 +7,8 @@
 #ifndef KWRDFDOCKERTREE_H
 #define KWRDFDOCKERTREE_H
 
-#include <QTreeWidget>
 #include <KoCanvasObserverBase.h>
+#include <QTreeWidget>
 
 class KoDocumentRdf;
 
@@ -39,11 +39,13 @@ public:
     void setDocumentRdf(KoDocumentRdf *rdf);
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas()
+    {
+        m_canvas = 0;
+    }
 
     // for dropping
-    bool dropMimeData(QTreeWidgetItem *parent, int index, const
-                      QMimeData *data, Qt::DropAction action);
+    bool dropMimeData(QTreeWidgetItem *parent, int index, const QMimeData *data, Qt::DropAction action);
 
 protected:
     // for dragging

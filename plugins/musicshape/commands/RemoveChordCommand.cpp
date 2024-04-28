@@ -4,16 +4,18 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "RemoveChordCommand.h"
+#include "../MusicShape.h"
 #include "../core/Chord.h"
 #include "../core/VoiceBar.h"
-#include "../MusicShape.h"
 
 #include <KLocalizedString>
 
 using namespace MusicCore;
 
-RemoveChordCommand::RemoveChordCommand(MusicShape* shape, Chord* chord)
-    : m_chord(chord), m_shape(shape), m_index(m_chord->voiceBar()->indexOfElement(m_chord))
+RemoveChordCommand::RemoveChordCommand(MusicShape *shape, Chord *chord)
+    : m_chord(chord)
+    , m_shape(shape)
+    , m_index(m_chord->voiceBar()->indexOfElement(m_chord))
 {
     if (chord->noteCount() == 0) {
         setText(kundo2_i18n("Remove rest"));

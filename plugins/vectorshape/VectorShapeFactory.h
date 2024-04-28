@@ -5,29 +5,29 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef VECTORSHAPE_FACTORY_H
 #define VECTORSHAPE_FACTORY_H
 
 // Calligra
 #include <KoShapeFactoryBase.h>
 
-
 class KoShape;
 
-class VectorShapeFactory : public KoShapeFactoryBase {
-
+class VectorShapeFactory : public KoShapeFactoryBase
+{
 public:
     /// constructor
     VectorShapeFactory();
-    ~VectorShapeFactory() override {}
+    ~VectorShapeFactory() override
+    {
+    }
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
 
     /// Reimplemented
-    bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const override;
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
 
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels() override;
+    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels() override;
 };
 
 #endif

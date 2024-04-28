@@ -20,4 +20,3 @@ KoTextEditingPlugin *SpellCheckFactory::create() const
 {
     return new SpellCheck();
 }
-

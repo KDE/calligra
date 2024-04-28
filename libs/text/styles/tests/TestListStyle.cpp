@@ -5,16 +5,16 @@
  */
 #include "TestListStyle.h"
 
-#include "styles/KoParagraphStyle.h"
-#include "styles/KoListStyle.h"
-#include "styles/KoListLevelProperties.h"
 #include "KoTextBlockBorderData.h"
 #include "KoTextDocument.h"
+#include "styles/KoListLevelProperties.h"
+#include "styles/KoListStyle.h"
+#include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
 
-#include <QTextDocument>
-#include <QTextCursor>
 #include <QTextBlock>
+#include <QTextCursor>
+#include <QTextDocument>
 #include <QTextList>
 
 #include <QTest>

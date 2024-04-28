@@ -5,8 +5,8 @@
  */
 
 #include "ArtisticTextLoadingContext.h"
-#include "SvgUtil.h"
 #include "SvgGraphicContext.h"
+#include "SvgUtil.h"
 
 #include <KoXmlReader.h>
 #include <QDebug>
@@ -37,14 +37,14 @@ QString ArtisticTextLoadingContext::simplifyText(const QString &text, bool prese
 
 ArtisticTextLoadingContext::OffsetType ArtisticTextLoadingContext::xOffsetType() const
 {
-    if(m_currentAbsolutePosX.data.count())
+    if (m_currentAbsolutePosX.data.count())
         return Absolute;
-    else if(m_currentRelativePosY.data.count())
+    else if (m_currentRelativePosY.data.count())
         return Relative;
     else {
-        if (m_absolutePosX.count() &&  m_absolutePosX.last().data.count())
+        if (m_absolutePosX.count() && m_absolutePosX.last().data.count())
             return Absolute;
-        else if(m_relativePosX.count() && m_relativePosX.last().data.count())
+        else if (m_relativePosX.count() && m_relativePosX.last().data.count())
             return Relative;
     }
     return None;
@@ -52,14 +52,14 @@ ArtisticTextLoadingContext::OffsetType ArtisticTextLoadingContext::xOffsetType()
 
 ArtisticTextLoadingContext::OffsetType ArtisticTextLoadingContext::yOffsetType() const
 {
-    if(m_currentAbsolutePosY.data.count())
+    if (m_currentAbsolutePosY.data.count())
         return Absolute;
-    else if(m_currentRelativePosY.data.count())
+    else if (m_currentRelativePosY.data.count())
         return Relative;
     else {
-        if (m_absolutePosY.count() &&  m_absolutePosY.last().data.count())
+        if (m_absolutePosY.count() && m_absolutePosY.last().data.count())
             return Absolute;
-        else if(m_relativePosY.count() && m_relativePosY.last().data.count())
+        else if (m_relativePosY.count() && m_relativePosY.last().data.count())
             return Relative;
     }
     return None;
@@ -67,7 +67,7 @@ ArtisticTextLoadingContext::OffsetType ArtisticTextLoadingContext::yOffsetType()
 
 CharTransforms ArtisticTextLoadingContext::xOffsets(int count)
 {
-    switch(xOffsetType()) {
+    switch (xOffsetType()) {
     case Absolute: {
         const QPointF origin = textPosition();
         CharTransforms offsets = collectValues(count, m_currentAbsolutePosX, m_absolutePosX);
@@ -86,7 +86,7 @@ CharTransforms ArtisticTextLoadingContext::xOffsets(int count)
 
 CharTransforms ArtisticTextLoadingContext::yOffsets(int count)
 {
-    switch(yOffsetType()) {
+    switch (yOffsetType()) {
     case Absolute: {
         const QPointF origin = textPosition();
         CharTransforms offsets = collectValues(count, m_currentAbsolutePosY, m_absolutePosY);
@@ -171,8 +171,8 @@ CharTransforms ArtisticTextLoadingContext::parseList(const QString &listString, 
     } else {
         CharTransforms values;
         QStringList offsets = QString(listString).replace(',', ' ').simplified().split(' ');
-        foreach(const QString &offset, offsets) {
-            switch(type) {
+        foreach (const QString &offset, offsets) {
+            switch (type) {
             case Number:
                 values.append(offset.toDouble());
                 break;
@@ -199,19 +199,19 @@ CharTransforms ArtisticTextLoadingContext::collectValues(int count, CharTransfor
         collected = current.extract(count);
         // collect values from ancestors
         const int stackCount = stack.count();
-        for(int i = stackCount-1; i >= 0; --i) {
+        for (int i = stackCount - 1; i >= 0; --i) {
             CharTransformState &state = stack[i];
             // determine the number of values we need / can get from this ancestor
             const int copyCount = qMin(count - collected.count(), state.data.count());
             // extract values so they are not consumed more than once
             collected.append(state.extract(copyCount));
             // ok this ancestor had initial data, so we stop collecting values here
-            if(state.hasData) {
-                if(collected.isEmpty())
+            if (state.hasData) {
+                if (collected.isEmpty())
                     collected.append(state.lastTransform);
                 break;
             }
-            if(copyCount == 0)
+            if (copyCount == 0)
                 break;
         }
     }
@@ -221,27 +221,27 @@ CharTransforms ArtisticTextLoadingContext::collectValues(int count, CharTransfor
 void ArtisticTextLoadingContext::printDebug()
 {
     QString indent;
-    foreach(const CharTransformState &state, CharTransformStack(m_absolutePosX) << m_currentAbsolutePosX) {
+    foreach (const CharTransformState &state, CharTransformStack(m_absolutePosX) << m_currentAbsolutePosX) {
         qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }
     indent.clear();
-    foreach(const CharTransformState &state, CharTransformStack(m_absolutePosY) << m_currentAbsolutePosY) {
+    foreach (const CharTransformState &state, CharTransformStack(m_absolutePosY) << m_currentAbsolutePosY) {
         qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }
     indent.clear();
-    foreach(const CharTransformState &state, CharTransformStack(m_relativePosX) << m_currentRelativePosX) {
+    foreach (const CharTransformState &state, CharTransformStack(m_relativePosX) << m_currentRelativePosX) {
         qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }
     indent.clear();
-    foreach(const CharTransformState &state, CharTransformStack(m_relativePosY) << m_currentRelativePosY) {
+    foreach (const CharTransformState &state, CharTransformStack(m_relativePosY) << m_currentRelativePosY) {
         qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }
     indent.clear();
-    foreach(const CharTransformState &state, CharTransformStack(m_rotations) << m_currentRotations) {
+    foreach (const CharTransformState &state, CharTransformStack(m_rotations) << m_currentRotations) {
         qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }

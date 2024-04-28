@@ -11,12 +11,10 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &TEXTSHAPE_LOG();
 
-#define debugTextShape qCDebug(TEXTSHAPE_LOG)<<Q_FUNC_INFO
+#define debugTextShape qCDebug(TEXTSHAPE_LOG) << Q_FUNC_INFO
 #define warnTextShape qCWarning(TEXTSHAPE_LOG)
 #define errorTextShape qCCritical(TEXTSHAPE_LOG)
-
 
 #endif

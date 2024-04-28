@@ -2,7 +2,7 @@
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ */
 
 #ifndef KOCOMPOSITEOPERASE_H_
 #define KOCOMPOSITEOPERASE_H_
@@ -22,9 +22,9 @@ class KoCompositeOpErase : public KoCompositeOp
     typedef typename _CSTraits::channels_type channels_type;
 
 public:
-
-    KoCompositeOpErase(const KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_ERASE, i18n("Erase"), KoCompositeOp::categoryMix()) {
+    KoCompositeOpErase(const KoColorSpace *cs)
+        : KoCompositeOp(cs, COMPOSITE_ERASE, i18n("Erase"), KoCompositeOp::categoryMix())
+    {
     }
 
 public:
@@ -39,7 +39,8 @@ public:
                    qint32 rows,
                    qint32 cols,
                    quint8 U8_opacity,
-                   const QBitArray & channelFlags) const override {
+                   const QBitArray &channelFlags) const override
+    {
         // XXX: How to use channelflags here? It would be cool to
         // erase all green from an image, for example.
         qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
@@ -58,8 +59,7 @@ public:
                     quint8 U8_mask = *mask;
 
                     if (U8_mask != OPACITY_TRANSPARENT_U8) {
-                        srcAlpha = KoColorSpaceMaths<channels_type>::
-                            multiply(srcAlpha, KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_mask));
+                        srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_mask));
                     } else {
                         srcAlpha = 0;
                     }

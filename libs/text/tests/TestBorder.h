@@ -14,11 +14,12 @@ class TestBorder : public QObject
 {
     Q_OBJECT
 public:
-    TestBorder() {}
+    TestBorder()
+    {
+    }
 
 private Q_SLOTS:
     void testBorder();
-
 };
 
 #endif

@@ -28,11 +28,10 @@
 // KF5
 #include <KPluginFactory>
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_semanticitem_location.json",
-                           registerPlugin<KoLocationSemanticItemPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_semanticitem_location.json", registerPlugin<KoLocationSemanticItemPlugin>();)
 
-KoLocationSemanticItemPlugin::KoLocationSemanticItemPlugin(QObject *parent, const QVariantList &/*args */)
-  : QObject(parent)
+KoLocationSemanticItemPlugin::KoLocationSemanticItemPlugin(QObject *parent, const QVariantList & /*args */)
+    : QObject(parent)
 {
     KoRdfSemanticItemRegistry::instance()->add(new KoLocationSemanticItemFactory());
 }

@@ -42,9 +42,7 @@ class QRectF;
  */
 class FLAKE_EXPORT KoCanvasBase
 {
-
 public:
-
     /**
      * The constructor.
      * @param shapeBasedDocument the implementation of the shapeController that the
@@ -54,7 +52,6 @@ public:
     virtual ~KoCanvasBase();
 
 public:
-
     /**
      * retrieve the grid size setting.
      * The grid spacing will be provided in pt.
@@ -68,7 +65,6 @@ public:
      * @return if snap to grid is enabled.
      */
     virtual bool snapToGrid() const = 0;
-
 
     /**
      * set the specified cursor on this canvas
@@ -135,12 +131,18 @@ public:
     /**
      * Return the widget that will be added to the scrollArea.
      */
-    virtual QGraphicsObject *canvasItem() { return 0; }
+    virtual QGraphicsObject *canvasItem()
+    {
+        return 0;
+    }
 
     /**
      * Return the widget that will be added to the scrollArea.
      */
-    virtual const QGraphicsObject *canvasItem() const{ return 0; }
+    virtual const QGraphicsObject *canvasItem() const
+    {
+        return 0;
+    }
 
     /**
      * Return the unit of the current document for initialization of the widgets created
@@ -165,7 +167,8 @@ public:
      * By default the origin of the canvas widget and the position of the
      * document origin are coincident, thus an empty point is returned.
      */
-    virtual QPoint documentOrigin() const {
+    virtual QPoint documentOrigin() const
+    {
         return QPoint(0, 0);
     }
 
@@ -244,7 +247,7 @@ private:
     KoCanvasBase();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOCANVASBASE_H

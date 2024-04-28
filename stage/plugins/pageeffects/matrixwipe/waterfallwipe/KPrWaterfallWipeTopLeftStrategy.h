@@ -14,10 +14,12 @@ class KPrWaterfallWipeTopLeftStrategy : public KPrMatrixWipeStrategy
 public:
     explicit KPrWaterfallWipeTopLeftStrategy(Direction direction);
     ~KPrWaterfallWipeTopLeftStrategy() override;
+
 protected:
     int squareIndex(int x, int y, int columns, int rows) override;
     Direction squareDirection(int x, int y, int columns, int rows) override;
     int maxIndex(int columns, int rows) override;
+
 private:
     Direction m_direction;
 };

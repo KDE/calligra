@@ -7,17 +7,19 @@
 
 #include <QFontMetricsF>
 
-#include "NumberElement.h"
 #include "AttributeManager.h"
+#include "NumberElement.h"
 
-NumberElement::NumberElement( BasicElement* parent ) : TokenElement( parent )
-{}
+NumberElement::NumberElement(BasicElement *parent)
+    : TokenElement(parent)
+{
+}
 
-QRectF NumberElement::renderToPath( const QString& rawString, QPainterPath& path ) const
+QRectF NumberElement::renderToPath(const QString &rawString, QPainterPath &path) const
 {
     AttributeManager manager;
     QFont font = manager.font(this);
-    path.addText( path.currentPosition(), font, rawString );
+    path.addText(path.currentPosition(), font, rawString);
     QFontMetricsF fm(font);
     return fm.boundingRect(rawString);
 }

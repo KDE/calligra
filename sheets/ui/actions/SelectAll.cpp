@@ -14,9 +14,7 @@
 #include <KLocalizedString>
 #include <KStandardAction>
 
-
 using namespace Calligra::Sheets;
-
 
 SelectAll::SelectAll(Actions *actions)
     : CellAction(actions, "selectAll", QString(), QIcon(), i18n("Selects all cells in the current sheet"))
@@ -27,17 +25,15 @@ SelectAll::~SelectAll()
 {
 }
 
-QAction *SelectAll::createAction() {
+QAction *SelectAll::createAction()
+{
     QAction *action = KStandardAction::selectAll(nullptr, nullptr, m_actions->tool());
     connect(action, &QAction::triggered, this, &SelectAll::triggered);
     action->setToolTip(m_tooltip);
     return action;
 }
 
-
 void SelectAll::execute(Selection *selection, Sheet *, QWidget *)
 {
     selection->selectAll();
 }
-
-

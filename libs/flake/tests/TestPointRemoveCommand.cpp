@@ -5,11 +5,11 @@
 */
 #include "TestPointRemoveCommand.h"
 
-#include <QPainterPath>
-#include "KoPathShape.h"
 #include "KoPathPointRemoveCommand.h"
+#include "KoPathShape.h"
 #include "KoShapeController.h"
 #include <MockShapes.h>
+#include <QPainterPath>
 
 #include <QTest>
 

@@ -7,43 +7,44 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 
 #include "KoConfigGridPage.h"
 
+#include <KoAspectButton.h>
+#include <KoComponentData.h>
 #include <KoDocument.h>
 #include <KoGridData.h>
-#include <KoUnitDoubleSpinBox.h>
-#include <KoAspectButton.h>
 #include <KoPart.h>
-#include <KoComponentData.h>
 #include <KoUnit.h>
+#include <KoUnitDoubleSpinBox.h>
 
-#include <kcolorbutton.h>
 #include <KConfigGroup>
+#include <kcolorbutton.h>
 
 #include <QCheckBox>
-#include <QGroupBox>
 #include <QFormLayout>
+#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
 
 class Q_DECL_HIDDEN KoConfigGridPage::Private
 {
 public:
-    Private(KoDocument* doc)
-    : doc(doc)
-    {}
+    Private(KoDocument *doc)
+        : doc(doc)
+    {
+    }
 
     KoDocument *doc;
 
-    KoUnitDoubleSpinBox* spaceHorizUSpin;
-    KoUnitDoubleSpinBox* spaceVertUSpin;
-    QCheckBox* gridChBox;
-    QCheckBox* snapChBox;
-    KColorButton* gridColorBtn;
+    KoUnitDoubleSpinBox *spaceHorizUSpin;
+    KoUnitDoubleSpinBox *spaceVertUSpin;
+    QCheckBox *gridChBox;
+    QCheckBox *snapChBox;
+    KColorButton *gridColorBtn;
     KSharedConfigPtr config;
-    KoAspectButton * bnLinkSpacing;
+    KoAspectButton *bnLinkSpacing;
 };
 
-KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
-: d(new Private(doc))
+KoConfigGridPage::KoConfigGridPage(KoDocument *doc, char *name)
+    : d(new Private(doc))
 {
     setObjectName(name);
 
@@ -52,7 +53,7 @@ KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
     KoUnit unit = d->doc->unit();
     KoGridData &gd = d->doc->gridData();
 
-    QGroupBox* generalGrp = new QGroupBox(i18n("Grid"), this);
+    QGroupBox *generalGrp = new QGroupBox(i18n("Grid"), this);
     QFormLayout *layoutGeneral = new QFormLayout(generalGrp);
     d->gridChBox = new QCheckBox(generalGrp);
     d->gridChBox->setChecked(gd.showGrid());
@@ -64,7 +65,7 @@ KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
     layoutGeneral->addRow(i18n("Snap to grid:"), d->snapChBox);
     layoutGeneral->addRow(i18n("Grid color:"), d->gridColorBtn);
 
-    QGroupBox* spacingGrp = new QGroupBox(i18n("Spacing"), this);
+    QGroupBox *spacingGrp = new QGroupBox(i18n("Spacing"), this);
     QHBoxLayout *hboxLayout = new QHBoxLayout(spacingGrp);
     QFormLayout *layoutSpacingGrp = new QFormLayout();
     d->spaceHorizUSpin = new KoUnitDoubleSpinBox(spacingGrp);
@@ -91,8 +92,8 @@ KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
 
     setValuesFromGrid(d->doc->gridData());
 
-    connect(d->spaceHorizUSpin, &KoUnitDoubleSpinBox::valueChangedPt,this,&KoConfigGridPage::spinBoxHSpacingChanged);
-    connect(d->spaceVertUSpin, &KoUnitDoubleSpinBox::valueChangedPt,this,&KoConfigGridPage::spinBoxVSpacingChanged);
+    connect(d->spaceHorizUSpin, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoConfigGridPage::spinBoxHSpacingChanged);
+    connect(d->spaceVertUSpin, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoConfigGridPage::spinBoxVSpacingChanged);
 }
 
 KoConfigGridPage::~KoConfigGridPage()

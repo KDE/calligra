@@ -14,15 +14,14 @@ class KPrPresentationToolWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KPrPresentationToolWidget( QWidget * parent = 0 );
+    explicit KPrPresentationToolWidget(QWidget *parent = 0);
     Ui::KPrPresentationTool presentationToolUi();
 
 protected:
-    void paintEvent( QPaintEvent *event ) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     Ui::KPrPresentationTool m_uiWidget;
 };
 
 #endif // KPRPRESENTATIONTOOLWIDGET_H
-

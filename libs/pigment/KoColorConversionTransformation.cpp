@@ -2,21 +2,21 @@
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include "KoColorConversionTransformation.h"
 
 #include "KoColorSpace.h"
 
 struct Q_DECL_HIDDEN KoColorConversionTransformation::Private {
-    const KoColorSpace* srcColorSpace;
-    const KoColorSpace* dstColorSpace;
+    const KoColorSpace *srcColorSpace;
+    const KoColorSpace *dstColorSpace;
     Intent renderingIntent;
     ConversionFlags conversionFlags;
 };
 
-KoColorConversionTransformation::KoColorConversionTransformation(const KoColorSpace* srcCs,
-                                                                 const KoColorSpace* dstCs,
+KoColorConversionTransformation::KoColorConversionTransformation(const KoColorSpace *srcCs,
+                                                                 const KoColorSpace *dstCs,
                                                                  Intent renderingIntent,
                                                                  ConversionFlags conversionFlags)
     : d(new Private)
@@ -35,12 +35,12 @@ KoColorConversionTransformation::~KoColorConversionTransformation()
     delete d;
 }
 
-const KoColorSpace* KoColorConversionTransformation::srcColorSpace() const
+const KoColorSpace *KoColorConversionTransformation::srcColorSpace() const
 {
     return d->srcColorSpace;
 }
 
-const KoColorSpace* KoColorConversionTransformation::dstColorSpace() const
+const KoColorSpace *KoColorConversionTransformation::dstColorSpace() const
 {
     return d->dstColorSpace;
 }
@@ -55,13 +55,13 @@ KoColorConversionTransformation::ConversionFlags KoColorConversionTransformation
     return d->conversionFlags;
 }
 
-void KoColorConversionTransformation::setSrcColorSpace(const KoColorSpace* cs) const
+void KoColorConversionTransformation::setSrcColorSpace(const KoColorSpace *cs) const
 {
     Q_ASSERT(*d->srcColorSpace == *cs);
     d->srcColorSpace = cs;
 }
 
-void KoColorConversionTransformation::setDstColorSpace(const KoColorSpace* cs) const
+void KoColorConversionTransformation::setDstColorSpace(const KoColorSpace *cs) const
 {
     Q_ASSERT(*d->dstColorSpace == *cs);
     d->dstColorSpace = cs;

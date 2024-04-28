@@ -9,8 +9,8 @@
 
 #include <KoCompositeOp.h>
 
-#define SCALE_TO_FLOAT( v ) KoColorSpaceMaths< channels_type, float>::scaleToA( v )
-#define SCALE_FROM_FLOAT( v ) KoColorSpaceMaths< float, channels_type>::scaleToA( v )
+#define SCALE_TO_FLOAT(v) KoColorSpaceMaths<channels_type, float>::scaleToA(v)
+#define SCALE_FROM_FLOAT(v) KoColorSpaceMaths<float, channels_type>::scaleToA(v)
 
 template<class _CSTraits>
 class RgbCompositeOpOut : public KoCompositeOp
@@ -19,7 +19,6 @@ class RgbCompositeOpOut : public KoCompositeOp
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
 
 public:
-
     RgbCompositeOpOut(KoColorSpace *cs)
         : KoCompositeOp(cs, COMPOSITE_OUT, i18n("Out"))
     {
@@ -27,10 +26,14 @@ public:
 
     using KoCompositeOp::composite;
 
-    void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                   const quint8 *srcRowStart, qint32 srcRowStride,
-                   const quint8 *maskRowStart, qint32 maskRowStride,
-                   qint32 rows, qint32 numColumns,
+    void composite(quint8 *dstRowStart,
+                   qint32 dstRowStride,
+                   const quint8 *srcRowStart,
+                   qint32 srcRowStride,
+                   const quint8 *maskRowStart,
+                   qint32 maskRowStride,
+                   qint32 rows,
+                   qint32 numColumns,
                    quint8 opacity,
                    const QBitArray &channelFlags) const override
     {
@@ -46,7 +49,7 @@ public:
 
         qint32 i;
 
-        //qreal sAlpha, dAlpha;
+        // qreal sAlpha, dAlpha;
         qreal alpha;
 
         while (rows-- > 0) {
@@ -71,7 +74,6 @@ public:
             dstRowStart += dstRowStride;
             srcRowStart += srcRowStride;
         }
-
     }
 };
 

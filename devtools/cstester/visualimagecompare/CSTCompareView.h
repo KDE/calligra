@@ -8,9 +8,9 @@
 #ifndef CSTCOMPAREVIEW_H
 #define CSTCOMPAREVIEW_H
 
-#include <QWidget>
-#include <QStringList>
 #include <QDir>
+#include <QStringList>
+#include <QWidget>
 
 #ifdef HAS_POPPLER
 #include <poppler-qt6.h>
@@ -28,7 +28,7 @@ public:
     bool open(const QString &inDir1, const QString &inDir2, const QString &pdfDir, const QString &resultFile);
 
 protected:
-    void keyPressEvent(QKeyEvent * event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     int updateResult(int index);

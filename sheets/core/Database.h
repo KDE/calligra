@@ -12,7 +12,6 @@
 
 #include "sheets_core_export.h"
 
-
 namespace Calligra
 {
 namespace Sheets
@@ -35,12 +34,12 @@ public:
      */
     Database();
 
-    Database(const QString& name);
+    Database(const QString &name);
 
     /**
      * Copy Constructor.
      */
-    Database(const Database& other);
+    Database(const Database &other);
 
     /**
      * Destructor.
@@ -92,20 +91,20 @@ public:
     /**
      * \return the actual database cell range
      */
-    const Region& range() const;
+    const Region &range() const;
 
     /**
      * Sets the actual database cell range.
      * \p region has to be contiguous.
      */
-    void setRange(const Region& region);
+    void setRange(const Region &region);
 
-    const Filter& filter() const;
-    void setFilter(const Filter& filter);
+    const Filter &filter() const;
+    void setFilter(const Filter &filter);
 
-    void operator=(const Database& other);
-    bool operator==(const Database& other) const;
-    bool operator<(const Database& other) const;
+    void operator=(const Database &other);
+    bool operator==(const Database &other) const;
+    bool operator<(const Database &other) const;
 
     void dump() const;
 
@@ -119,6 +118,5 @@ private:
 
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Database, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(Calligra::Sheets::Database)
-
 
 #endif // CALLIGRA_SHEETS_DATABASE

@@ -15,13 +15,13 @@ namespace Calligra
 namespace Sheets
 {
 
-class TestEngineeringFunctions: public QObject
+class TestEngineeringFunctions : public QObject
 {
     Q_OBJECT
 
 private Q_SLOTS:
     void initTestCase();
-    
+
     void testBIN2DEC();
     void testBIN2OCT();
     void testBIN2HEX();
@@ -66,9 +66,9 @@ private Q_SLOTS:
     void testOCT2BIN();
     void testOCT2DEC();
     void testOCT2HEX();
-    
+
 private:
-    Value evaluate(const QString&);
+    Value evaluate(const QString &);
 };
 
 } // namespace Sheets

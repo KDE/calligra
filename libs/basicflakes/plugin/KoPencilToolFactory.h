@@ -15,7 +15,7 @@ public:
     KoPencilToolFactory();
     ~KoPencilToolFactory() override;
 
-    KoToolBase * createTool(KoCanvasBase *canvas) override;
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif // _KOPENCILTOOLFACTORY_H_

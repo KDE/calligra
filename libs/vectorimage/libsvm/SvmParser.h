@@ -8,29 +8,26 @@
 #ifndef SVMPARSER_H
 #define SVMPARSER_H
 
-
-#include "SvmGraphicsContext.h"
 #include "SvmAbstractBackend.h"
+#include "SvmGraphicsContext.h"
 #include "kovectorimage_export.h"
 
 class QByteArray;
 class QDataStream;
 
-
 namespace Libsvm
 {
 
-
 class KOVECTORIMAGE_EXPORT SvmParser
 {
- public:
+public:
     SvmParser();
 
     void setBackend(SvmAbstractBackend *backend);
 
     bool parse(const QByteArray &data);
 
- private:
+private:
     void parseRect(QDataStream &stream, QRect &rect);
     void parsePolygon(QDataStream &stream, QPolygon &polygon);
     void parseString(QDataStream &stream, QString &string);
@@ -38,12 +35,10 @@ class KOVECTORIMAGE_EXPORT SvmParser
 
     void dumpAction(QDataStream &stream, quint16 version, quint32 totalSize);
 
- private:
-    SvmGraphicsContext   mContext;
-    SvmAbstractBackend  *mBackend;
+private:
+    SvmGraphicsContext mContext;
+    SvmAbstractBackend *mBackend;
 };
-
-
 }
 
 #endif

@@ -8,10 +8,10 @@
 #ifndef KPRCLICKACTIONDOCKER_H
 #define KPRCLICKACTIONDOCKER_H
 
-#include <QWidget>
+#include <KoCanvasObserverBase.h>
 #include <QMap>
 #include <QPixmap>
-#include <KoCanvasObserverBase.h>
+#include <QWidget>
 
 class KUndo2Command;
 class KoPAViewBase;
@@ -25,20 +25,25 @@ class KPrClickActionDocker : public QWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
-    explicit KPrClickActionDocker( QWidget* parent = 0, Qt::WindowFlags flags = Qt::WindowFlags() );
+    explicit KPrClickActionDocker(QWidget *parent = 0, Qt::WindowFlags flags = Qt::WindowFlags());
 
-    void setView( KoPAViewBase* view );
+    void setView(KoPAViewBase *view);
 
 public Q_SLOTS:
-    void addCommand( KUndo2Command * command );
+    void addCommand(KUndo2Command *command);
 
 private Q_SLOTS:
     /// selection has changed
     void selectionChanged();
 
     /// reimplemented
-    void setCanvas( KoCanvasBase *canvas ) override;
-    void unsetCanvas() override { m_canvas = 0; m_view = 0; }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override
+    {
+        m_canvas = 0;
+        m_view = 0;
+    }
+
 private:
     KoPAViewBase *m_view;
     KPrSoundCollection *m_soundCollection;
@@ -47,4 +52,3 @@ private:
 };
 
 #endif // KPRCLICKACTIONDOCKER_H
-

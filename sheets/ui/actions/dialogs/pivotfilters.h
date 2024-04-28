@@ -13,32 +13,33 @@
 
 class QComboBox;
 
-namespace Calligra{
-    namespace Sheets{
+namespace Calligra
+{
+namespace Sheets
+{
 
-    class Selection;    
-    class PivotFilters : public KoDialog
-    
-    {
+class Selection;
+class PivotFilters : public KoDialog
+
+{
     Q_OBJECT
 
-    public:
-      explicit PivotFilters(QWidget* parent,Selection* selection);
-      QVector<QString> filterData();
-      ~PivotFilters() override;
-    private Q_SLOTS:
-      void activateBoxes();
-      void activateBoxes2();
-      void fillValue();
-      void fillValue2();
-      void fillValue3();
+public:
+    explicit PivotFilters(QWidget *parent, Selection *selection);
+    QVector<QString> filterData();
+    ~PivotFilters() override;
+private Q_SLOTS:
+    void activateBoxes();
+    void activateBoxes2();
+    void fillValue();
+    void fillValue2();
+    void fillValue3();
 
-    
-    private:
-      void selectFields(QComboBox* box);
-      class Private;
-      Private *const d;
-    };
-  }//Sheets
-}//Calligra
+private:
+    void selectFields(QComboBox *box);
+    class Private;
+    Private *const d;
+};
+} // Sheets
+} // Calligra
 #endif // PIVOTFILTERS_H

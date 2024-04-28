@@ -22,7 +22,7 @@
 
 #include <QStyledItemDelegate>
 
-class KPrSlidesSorterItemDelegate: public QStyledItemDelegate
+class KPrSlidesSorterItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:

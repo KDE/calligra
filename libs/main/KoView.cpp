@@ -11,10 +11,10 @@
 // local directory
 #include "KoView_p.h"
 
-#include "KoPart.h"
 #include "KoDockRegistry.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
+#include "KoPart.h"
 
 #ifndef QT_NO_DBUS
 #include "KoViewAdaptor.h"
@@ -22,51 +22,54 @@
 #endif
 
 #include "KoDockFactoryBase.h"
-#include "KoUndoStackAction.h"
+#include "KoDocumentInfo.h"
 #include "KoGlobal.h"
 #include "KoPageLayout.h"
 #include "KoPrintJob.h"
-#include "KoDocumentInfo.h"
+#include "KoUndoStackAction.h"
 
 #include <KoIcon.h>
 
 #include <KActionCollection>
-#include <KLocalizedString>
-#include <MainDebug.h>
-#include <KMessageBox>
-#include <KoNetAccess.h>
-#include <kselectaction.h>
 #include <KConfigGroup>
+#include <KLocalizedString>
+#include <KMessageBox>
 #include <KSharedConfig>
+#include <KoNetAccess.h>
+#include <MainDebug.h>
+#include <kselectaction.h>
 
-#include <QStatusBar>
-#include <QDockWidget>
 #include <QApplication>
-#include <QList>
-#include <QDropEvent>
+#include <QDockWidget>
 #include <QDragEnterEvent>
+#include <QDropEvent>
 #include <QImage>
-#include <QUrl>
+#include <QList>
 #include <QPrintDialog>
+#include <QStatusBar>
+#include <QUrl>
 
-//static
+// static
 QString KoView::newObjectName()
 {
     static int s_viewIFNumber = 0;
-    QString name; name.setNum(s_viewIFNumber++); name.prepend("view_");
+    QString name;
+    name.setNum(s_viewIFNumber++);
+    name.prepend("view_");
     return name;
 }
-
 
 class KoViewPrivate
 {
 public:
-    KoViewPrivate() {
+    KoViewPrivate()
+    {
         tempActiveWidget = 0;
         documentDeleted = false;
         actionAuthor = 0;
     }
-    ~KoViewPrivate() {
+    ~KoViewPrivate()
+    {
     }
 
     QPointer<KoDocument> document; // our KoDocument
@@ -76,37 +79,44 @@ public:
     // since this only happens in ~QObject, and views
     // get deleted by ~KoDocument].
 
-
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
     class StatusBarItem
     {
     public:
         StatusBarItem() // for QValueList
-            : m_widget(nullptr),
-              m_connected(false),
-              m_hidden(false) {}
+            : m_widget(nullptr)
+            , m_connected(false)
+            , m_hidden(false)
+        {
+        }
 
-        StatusBarItem(QWidget * widget, int stretch, bool permanent)
-            : m_widget(widget),
-              m_stretch(stretch),
-              m_permanent(permanent),
-              m_connected(false),
-              m_hidden(false) {}
+        StatusBarItem(QWidget *widget, int stretch, bool permanent)
+            : m_widget(widget)
+            , m_stretch(stretch)
+            , m_permanent(permanent)
+            , m_connected(false)
+            , m_hidden(false)
+        {
+        }
 
-        bool operator==(const StatusBarItem& rhs) const {
+        bool operator==(const StatusBarItem &rhs) const
+        {
             return m_widget == rhs.m_widget;
         }
 
-        bool operator!=(const StatusBarItem& rhs) const {
+        bool operator!=(const StatusBarItem &rhs) const
+        {
             return m_widget != rhs.m_widget;
         }
 
-        QWidget * widget() const {
+        QWidget *widget() const
+        {
             return m_widget;
         }
 
-        void ensureItemShown(QStatusBar * sb) {
+        void ensureItemShown(QStatusBar *sb)
+        {
             Q_ASSERT(m_widget);
             if (!m_connected) {
                 if (m_permanent)
@@ -114,13 +124,14 @@ public:
                 else
                     sb->addWidget(m_widget, m_stretch);
 
-                if(!m_hidden)
+                if (!m_hidden)
                     m_widget->show();
 
                 m_connected = true;
             }
         }
-        void ensureItemHidden(QStatusBar * sb) {
+        void ensureItemHidden(QStatusBar *sb)
+        {
             if (m_connected) {
                 m_hidden = m_widget->isHidden();
                 sb->removeWidget(m_widget);
@@ -128,8 +139,9 @@ public:
                 m_connected = false;
             }
         }
+
     private:
-        QWidget * m_widget;
+        QWidget *m_widget;
         int m_stretch;
         bool m_permanent;
         bool m_connected;
@@ -137,13 +149,13 @@ public:
     };
 
     QList<StatusBarItem> statusBarItems; // Our statusbar items
-    bool inOperation; //in the middle of an operation (no screen refreshing)?
+    bool inOperation; // in the middle of an operation (no screen refreshing)?
     KSelectAction *actionAuthor; // Select action for author profile.
 };
 
 KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
-        : QWidget(parent)
-        , d(new KoViewPrivate)
+    : QWidget(parent)
+    , d(new KoViewPrivate)
 {
     Q_ASSERT(document);
     Q_ASSERT(part);
@@ -162,16 +174,14 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
     setupGlobalActions();
 
-    QStatusBar * sb = statusBar();
+    QStatusBar *sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
-        connect(d->document.data(), &KoDocument::statusBarMessage,
-                this, &KoView::slotActionStatusText);
-        connect(d->document.data(), &KoDocument::clearStatusBarMessage,
-                this, &KoView::slotClearStatusText);
+        connect(d->document.data(), &KoDocument::statusBarMessage, this, &KoView::slotActionStatusText);
+        connect(d->document.data(), &KoDocument::clearStatusBarMessage, this, &KoView::slotClearStatusText);
     }
 
     // add all plugins.
-    foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
+    foreach (const QString &docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
         if (mainWindow())
             mainWindow()->createDockWidget(factory);
@@ -184,7 +194,7 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
      *          only. All actions added later will have the default
      *          context, which is Qt::WindowShortcut!
      */
-    foreach(QAction* action, actionCollection()->actions()) {
+    foreach (QAction *action, actionCollection()->actions()) {
         action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     }
 }
@@ -199,11 +209,9 @@ KoView::~KoView()
     delete d;
 }
 
-
 void KoView::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (event->mimeData()->hasImage()
-            || event->mimeData()->hasUrls()) {
+    if (event->mimeData()->hasImage() || event->mimeData()->hasUrls()) {
         event->accept();
     } else {
         event->ignore();
@@ -222,8 +230,7 @@ void KoView::dropEvent(QDropEvent *event)
             // can hold sometimes (Qt bug?).
             images << image;
         }
-    }
-    else if (event->mimeData()->hasUrls()) {
+    } else if (event->mimeData()->hasUrls()) {
         QList<QUrl> urls = event->mimeData()->urls();
         foreach (const QUrl &url, urls) {
             QImage image;
@@ -231,14 +238,13 @@ void KoView::dropEvent(QDropEvent *event)
             // make sure we download the files before inserting them
             if (!kurl.isLocalFile()) {
                 QString tmpFile;
-                if( KIO::NetAccess::download(kurl, tmpFile, this)) {
+                if (KIO::NetAccess::download(kurl, tmpFile, this)) {
                     image.load(tmpFile);
                     KIO::NetAccess::removeTempFile(tmpFile);
                 } else {
                     KMessageBox::error(this, KIO::NetAccess::lastErrorString());
                 }
-            }
-            else {
+            } else {
                 image.load(kurl.toLocalFile());
             }
             if (!image.isNull()) {
@@ -251,7 +257,6 @@ void KoView::dropEvent(QDropEvent *event)
         addImages(images, event->pos());
     }
 }
-
 
 void KoView::addImages(const QVector<QImage> &, const QPoint &)
 {
@@ -268,10 +273,10 @@ void KoView::setDocumentDeleted()
     d->documentDeleted = true;
 }
 
-void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
+void KoView::addStatusBarItem(QWidget *widget, int stretch, bool permanent)
 {
     KoViewPrivate::StatusBarItem item(widget, stretch, permanent);
-    QStatusBar * sb = statusBar();
+    QStatusBar *sb = statusBar();
     if (sb) {
         item.ensureItemShown(sb);
     }
@@ -283,7 +288,7 @@ void KoView::removeStatusBarItem(QWidget *widget)
     QStatusBar *sb = statusBar();
 
     int itemCount = d->statusBarItems.count();
-    for (int i = itemCount-1; i >= 0; --i) {
+    for (int i = itemCount - 1; i >= 0; --i) {
         KoViewPrivate::StatusBarItem &sbItem = d->statusBarItems[i];
         if (sbItem.widget() == widget) {
             if (sb) {
@@ -295,13 +300,13 @@ void KoView::removeStatusBarItem(QWidget *widget)
     }
 }
 
-KoPrintJob * KoView::createPrintJob()
+KoPrintJob *KoView::createPrintJob()
 {
     warnMain << "Printing not implemented in this application";
     return 0;
 }
 
-KoPrintJob * KoView::createPdfPrintJob()
+KoPrintJob *KoView::createPdfPrintJob()
 {
     return createPrintJob();
 }
@@ -327,7 +332,7 @@ void KoView::setupGlobalActions()
 
     actionCollection()->setDefaultShortcut(undo, QKeySequence::Undo);
     actionCollection()->setDefaultShortcut(redo, QKeySequence::Redo);
-    d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
+    d->actionAuthor = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
     connect(d->actionAuthor, &KSelectAction::textTriggered, this, &KoView::changeAuthorProfile);
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
 
@@ -336,7 +341,7 @@ void KoView::setupGlobalActions()
 
 void KoView::changeAuthorProfile(const QString &profileName)
 {
-    KConfigGroup appAuthorGroup( KSharedConfig::openConfig(), "Author");
+    KConfigGroup appAuthorGroup(KSharedConfig::openConfig(), "Author");
     if (profileName.isEmpty()) {
         appAuthorGroup.writeEntry("active-profile", "");
     } else if (profileName == i18nc("choice for author profile", "Anonymous")) {
@@ -348,15 +353,15 @@ void KoView::changeAuthorProfile(const QString &profileName)
     d->document->documentInfo()->updateParameters();
 }
 
-KoMainWindow * KoView::mainWindow() const
+KoMainWindow *KoView::mainWindow() const
 {
     // It is possible (when embedded inside a Gemini window) that you have a KoMainWindow which
     // is not the top level window. The code below ensures you can still get access to it, even
     // in that case.
-    KoMainWindow* mw = dynamic_cast<KoMainWindow *>(window());
-    QWidget* parent = parentWidget();
+    KoMainWindow *mw = dynamic_cast<KoMainWindow *>(window());
+    QWidget *parent = parentWidget();
     while (!mw && parent) {
-        mw = dynamic_cast<KoMainWindow*>(parent);
+        mw = dynamic_cast<KoMainWindow *>(parent);
         parent = parent->parentWidget();
         if (!parent) {
             break;
@@ -365,7 +370,7 @@ KoMainWindow * KoView::mainWindow() const
     return mw;
 }
 
-QStatusBar * KoView::statusBar() const
+QStatusBar *KoView::statusBar() const
 {
     KoMainWindow *mw = mainWindow();
     return mw ? mw->statusBar() : 0;
@@ -397,11 +402,11 @@ void KoView::slotUpdateAuthorProfileActions()
 
     KConfigGroup authorGroup(KoGlobal::calligraConfig(), "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
-    foreach (const QString &profile , profiles) {
+    foreach (const QString &profile, profiles) {
         d->actionAuthor->addAction(profile);
     }
 
-    KConfigGroup appAuthorGroup( KSharedConfig::openConfig(), "Author");
+    KConfigGroup appAuthorGroup(KSharedConfig::openConfig(), "Author");
     QString profileName = appAuthorGroup.readEntry("active-profile", "");
     if (profileName == "anonymous") {
         d->actionAuthor->setCurrentItem(1);
@@ -412,9 +417,9 @@ void KoView::slotUpdateAuthorProfileActions()
     }
 }
 
-QList<QAction*> KoView::createChangeUnitActions(bool addPixelUnit)
+QList<QAction *> KoView::createChangeUnitActions(bool addPixelUnit)
 {
-    UnitActionGroup* unitActions = new UnitActionGroup(d->document, addPixelUnit, this);
+    UnitActionGroup *unitActions = new UnitActionGroup(d->document, addPixelUnit, this);
     return unitActions->actions();
 }
 

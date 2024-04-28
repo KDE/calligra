@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef KOODF_TEXT_PROPERTIES_H
 #define KOODF_TEXT_PROPERTIES_H
 
@@ -13,15 +12,13 @@
 
 #include "koodf2_export.h"
 
-
 class QString;
 class KoXmlStreamReader;
 class KoXmlWriter;
 
-
 class KOODF2_EXPORT KoOdfTextProperties : public KoOdfStyleProperties
 {
- public:
+public:
     KoOdfTextProperties();
     ~KoOdfTextProperties() override;
 
@@ -31,10 +28,9 @@ class KOODF2_EXPORT KoOdfTextProperties : public KoOdfStyleProperties
     bool readOdf(KoXmlStreamReader &reader) override;
     bool saveOdf(const QString &propertySet, KoXmlWriter *writer) override;
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif

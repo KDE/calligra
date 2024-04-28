@@ -5,16 +5,15 @@
  */
 #include "RecentFileManager.h"
 
+#include <QDebug>
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QDir>
 #include <QUrl>
-#include <QDebug>
 
-#include <KSharedConfig>
-#include <KConfigGroup>
 #include <KConfig>
-
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 // Much of this is a gui-less clone of KRecentFilesAction, so the format of
 // storing recent files is compatible.
@@ -23,7 +22,8 @@ struct RecentFileEntry {
     QString filePath;
 };
 
-class RecentFileManager::Private {
+class RecentFileManager::Private
+{
 public:
     Private()
     {
@@ -43,15 +43,15 @@ public:
 
         KConfigGroup cg = grp;
 
-        if ( cg.name().isEmpty()) {
-            cg = KConfigGroup(cg.config(),"RecentFiles");
+        if (cg.name().isEmpty()) {
+            cg = KConfigGroup(cg.config(), "RecentFiles");
         }
 
         // read file list
         for (int i = 1; i <= maxItems; i++) {
-
             value = cg.readPathEntry(QString("File%1").arg(i), QString());
-            if (value.isEmpty()) continue;
+            if (value.isEmpty())
+                continue;
             url = QUrl(value);
 
             // gemini only handles local files
@@ -67,10 +67,10 @@ public:
                 continue;
             }
 
-            value = QDir::toNativeSeparators( value );
+            value = QDir::toNativeSeparators(value);
 
             // Don't restore where the url is already known (eg. broken config)
-            for (const RecentFileEntry& entry : recents) {
+            for (const RecentFileEntry &entry : recents) {
                 if (entry.filePath == value) {
                     continue;
                 }
@@ -78,28 +78,28 @@ public:
 
             nameValue = cg.readPathEntry(QString("Name%1").arg(i), url.fileName());
 
-            if (!value.isNull())  {
+            if (!value.isNull()) {
                 RecentFileEntry entry;
                 entry.fileName = nameValue;
                 entry.filePath = value;
                 recents << entry;
-           }
+            }
         }
     }
 
-    void saveEntries( const KConfigGroup &grp)
+    void saveEntries(const KConfigGroup &grp)
     {
         KConfigGroup cg = grp;
 
         if (cg.name().isEmpty()) {
-            cg = KConfigGroup(cg.config(),"RecentFiles");
+            cg = KConfigGroup(cg.config(), "RecentFiles");
         }
         cg.deleteGroup();
 
         // write file list
         for (int i = 1; i <= recents.size(); ++i) {
             // i - 1 because we started from 1
-            const RecentFileEntry &item = recents[i-1];
+            const RecentFileEntry &item = recents[i - 1];
             cg.writePathEntry(QString("File%1").arg(i), item.filePath);
             cg.writePathEntry(QString("Name%1").arg(i), item.fileName);
         }
@@ -108,9 +108,6 @@ public:
     int maxItems;
     QList<RecentFileEntry> recents;
 };
-
-
-
 
 RecentFileManager::RecentFileManager(QObject *parent)
     : QObject(parent)
@@ -125,11 +122,10 @@ RecentFileManager::~RecentFileManager()
     delete d;
 }
 
-
 QStringList RecentFileManager::recentFileNames() const
 {
     QStringList files;
-    for(const RecentFileEntry &item : d->recents) {
+    for (const RecentFileEntry &item : d->recents) {
         files << item.fileName;
     }
     return files;
@@ -138,7 +134,7 @@ QStringList RecentFileManager::recentFileNames() const
 QStringList RecentFileManager::recentFiles() const
 {
     QStringList files;
-    for(const RecentFileEntry &item : d->recents) {
+    for (const RecentFileEntry &item : d->recents) {
         files << item.filePath;
     }
     return files;
@@ -152,7 +148,7 @@ void RecentFileManager::addRecent(const QString &_url)
 
     RecentFileEntry newEntry;
     newEntry.filePath = QDir::toNativeSeparators(_url);
-    newEntry.fileName  = QFileInfo(_url).fileName();
+    newEntry.fileName = QFileInfo(_url).fileName();
 
     QMutableListIterator<RecentFileEntry> i(d->recents);
     while (i.hasNext()) {

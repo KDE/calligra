@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "KoOdfStyleProperties.h"
 
@@ -18,19 +17,16 @@
 // ----------------------------------------------------------------
 //                         private class
 
-
 class Q_DECL_HIDDEN KoOdfStyleProperties::Private
 {
 public:
-    Private() {};
-    ~Private() {};
+    Private(){};
+    ~Private(){};
 
-    AttributeSet attributes;  // name, value
+    AttributeSet attributes; // name, value
 };
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfStyleProperties::KoOdfStyleProperties()
     : d(new KoOdfStyleProperties::Private())
@@ -41,7 +37,6 @@ KoOdfStyleProperties::~KoOdfStyleProperties()
 {
     delete d;
 }
-
 
 QString KoOdfStyleProperties::attribute(const QString &property) const
 {
@@ -54,12 +49,10 @@ void KoOdfStyleProperties::setAttribute(const QString &property, const QString &
     d->attributes[property] = value;
 }
 
-
 void KoOdfStyleProperties::clear()
 {
     d->attributes.clear();
 }
-
 
 bool KoOdfStyleProperties::readOdf(KoXmlStreamReader &reader)
 {
@@ -88,12 +81,11 @@ void KoOdfStyleProperties::copyPropertiesFrom(const KoOdfStyleProperties &source
 // ----------------------------------------------------------------
 //                         protected functions
 
-
 bool KoOdfStyleProperties::readAttributes(KoXmlStreamReader &reader)
 {
     copyAttributes(reader, d->attributes);
 
-    //debugOdf2 << "read attributes: " << d->attributes;
+    // debugOdf2 << "read attributes: " << d->attributes;
 
     return true;
 }
@@ -107,9 +99,7 @@ bool KoOdfStyleProperties::saveAttributes(KoXmlWriter *writer)
     return true;
 }
 
-
 // ----------------------------------------------------------------
-
 
 void copyAttributes(KoXmlStreamReader &reader, AttributeSet &attributes)
 {

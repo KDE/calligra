@@ -9,7 +9,7 @@
 
 #include <QtTest>
 
-class SnpTests: public QObject
+class SnpTests : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:

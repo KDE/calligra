@@ -22,47 +22,71 @@
 
 #include "KoPADocument.h"
 
-#include <KoPart.h>
-#include <KoOdf.h> 
 #include <KoComponentData.h>
+#include <KoOdf.h>
+#include <KoPart.h>
 
 #include <KAboutData>
 
 #include <QGraphicsItem>
 
-
 class MockPart : public KoPart
 {
 public:
     MockPart()
-    : KoPart(KoComponentData(KAboutData(QStringLiteral("test"), QStringLiteral("Test"), QStringLiteral("0.0.9"))), 0)
-    {}
-    KoView *createViewInstance(KoDocument* document, QWidget* parent) override { Q_UNUSED(document); Q_UNUSED(parent); return 0; }
-    KoMainWindow *createMainWindow() override { return 0; }
+        : KoPart(KoComponentData(KAboutData(QStringLiteral("test"), QStringLiteral("Test"), QStringLiteral("0.0.9"))), 0)
+    {
+    }
+    KoView *createViewInstance(KoDocument *document, QWidget *parent) override
+    {
+        Q_UNUSED(document);
+        Q_UNUSED(parent);
+        return 0;
+    }
+    KoMainWindow *createMainWindow() override
+    {
+        return 0;
+    }
+
 protected:
-    QGraphicsItem *createCanvasItem(KoDocument* document) override { Q_UNUSED(document); return 0; }
+    QGraphicsItem *createCanvasItem(KoDocument *document) override
+    {
+        Q_UNUSED(document);
+        return 0;
+    }
 };
 
 class MockDocument : public KoPADocument
 {
 public:
     MockDocument()
-    : KoPADocument( new MockPart )
-    {}
-    const char *odfTagName( bool b ) override { return KoOdf::bodyContentElement( KoOdf::Presentation, b ); }
-    KoOdf::DocumentType documentType() const override { return KoOdf::Presentation; }
+        : KoPADocument(new MockPart)
+    {
+    }
+    const char *odfTagName(bool b) override
+    {
+        return KoOdf::bodyContentElement(KoOdf::Presentation, b);
+    }
+    KoOdf::DocumentType documentType() const override
+    {
+        return KoOdf::Presentation;
+    }
 
     /// reimplemented from KoDocument
-    QByteArray nativeFormatMimeType() const override { return ""; }
+    QByteArray nativeFormatMimeType() const override
+    {
+        return "";
+    }
     /// reimplemented from KoDocument
-    QByteArray nativeOasisMimeType() const override {return "";}
+    QByteArray nativeOasisMimeType() const override
+    {
+        return "";
+    }
     /// reimplemented from KoDocument
     QStringList extraNativeMimeTypes() const override
     {
         return QStringList();
     }
-
 };
-
 
 #endif // PAMOCK_H

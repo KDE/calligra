@@ -15,7 +15,7 @@
 **
 ** To receive a copy of the GNU Library General Public License, write to the
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+* Boston, MA 02110-1301, USA.
 **
 */
 
@@ -36,59 +36,52 @@
  * to include, ...). It's the configuration latex file used to include the needed packages,
  * define the paper format, ...
  */
-class FileHeader: public XmlParser
+class FileHeader : public XmlParser
 {
 public:
-    enum TFormat { TF_A3, TF_A4, TF_A5, TF_USLETTER, TF_USLEGAL, TF_SCREEN,
-                   TF_CUSTOM, TF_B3, TF_USEXECUTIVE
-                 };
+    enum TFormat { TF_A3, TF_A4, TF_A5, TF_USLETTER, TF_USLEGAL, TF_SCREEN, TF_CUSTOM, TF_B3, TF_USEXECUTIVE };
     enum TUnit { TMillimeter, TCentimeter, TPoint, TInch };
     enum TOrient { TO_PORTRAIT, TO_LANDSCAPE };
     enum TColonne { TC_NONE, TC_1, TC_2, TC_MORE };
     enum THeadfoot { TH_ALL = 0, TH_XXX = 1, TH_FIRST = 2, TH_EVODD = 3 };
     enum TProcType { TP_NORMAL, TP_DTP };
 
-    static FileHeader* instance(void);
+    static FileHeader *instance(void);
 
 private:
     /* PAPER */
-    TFormat   _format;
-    double    _width,
-    _height;
-    TOrient   _orientation;
-    TColonne  _colonne;
-    double    _columnSpacing;
+    TFormat _format;
+    double _width, _height;
+    TOrient _orientation;
+    TColonne _colonne;
+    double _columnSpacing;
     THeadfoot _headType;
     THeadfoot _footType;
     TProcType _processing;
-    int       _standardPage;
-    double    _footBody;
-    double    _headBody;
+    int _standardPage;
+    double _footBody;
+    double _headBody;
 
     /* PAPERBORDERS */
-    double    _leftBorder,
-    _rightBorder,
-    _bottomBorder,
-    _topBorder;
+    double _leftBorder, _rightBorder, _bottomBorder, _topBorder;
 
     /* ATTRIBUTES */
-    TUnit    _unite;
-    bool     _hasHeader;
-    bool     _hasFooter;
-    bool     _hasTOC;
+    TUnit _unite;
+    bool _hasHeader;
+    bool _hasFooter;
+    bool _hasTOC;
 
     /* FOOTNOTEMGR */
 
     /* DIVERSE */
     /* for special packages to include */
-    bool     _hasColor;
-    bool     _hasUnderline;
-    bool     _hasEnumerate;
-    bool     _hasGraphics;
-    bool     _hasTable;
+    bool _hasColor;
+    bool _hasUnderline;
+    bool _hasEnumerate;
+    bool _hasGraphics;
+    bool _hasTable;
 
 public:
-
     /**
      * Destructor
      */
@@ -97,108 +90,141 @@ public:
     /**
      * Accessors
      */
-    TFormat   getFormat() const {
+    TFormat getFormat() const
+    {
         return _format;
     }
-    TOrient   getOrientation() const {
+    TOrient getOrientation() const
+    {
         return _orientation;
     }
-    TColonne  getColumns() const {
+    TColonne getColumns() const
+    {
         return _colonne;
     }
-    THeadfoot getHeadType() const {
+    THeadfoot getHeadType() const
+    {
         return _headType;
     }
-    THeadfoot getFootType() const {
+    THeadfoot getFootType() const
+    {
         return _footType;
     }
-    TUnit     getUnit() const {
+    TUnit getUnit() const
+    {
         return _unite;
     }
-    TProcType getProcessing() const {
+    TProcType getProcessing() const
+    {
         return _processing;
     }
-    int       getStandardPge() const {
+    int getStandardPge() const
+    {
         return _standardPage;
     }
-    bool      hasHeader() const {
+    bool hasHeader() const
+    {
         return _hasHeader;
     }
-    bool      hasFooter() const {
+    bool hasFooter() const
+    {
         return _hasFooter;
     }
-    bool      hasTOC() const {
+    bool hasTOC() const
+    {
         return _hasTOC;
     }
-    bool      hasColor() const {
+    bool hasColor() const
+    {
         return _hasColor;
     }
-    bool      hasUnderline() const {
+    bool hasUnderline() const
+    {
         return _hasUnderline;
     }
-    bool      hasEnumerate() const {
+    bool hasEnumerate() const
+    {
         return _hasEnumerate;
     }
-    bool      hasGraphics() const {
+    bool hasGraphics() const
+    {
         return _hasGraphics;
     }
-    bool      hasTable() const {
+    bool hasTable() const
+    {
         return _hasTable;
     }
 
     /**
      * Modifiers
      */
-    void setFormat(TFormat f)  {
-        _format       = f;
+    void setFormat(TFormat f)
+    {
+        _format = f;
     }
-    void setFormat(int f)      {
-        _format       = (TFormat) f;
+    void setFormat(int f)
+    {
+        _format = (TFormat)f;
     }
-    void setOrientation(TOrient o)  {
-        _orientation  = o;
+    void setOrientation(TOrient o)
+    {
+        _orientation = o;
     }
-    void setOrientation(int o)      {
-        _orientation  = (TOrient) o;
+    void setOrientation(int o)
+    {
+        _orientation = (TOrient)o;
     }
-    void setColumns(TColonne c) {
-        _colonne      = c;
+    void setColumns(TColonne c)
+    {
+        _colonne = c;
     }
-    void setColumns(int c)      {
-        _colonne      = (TColonne) c;
+    void setColumns(int c)
+    {
+        _colonne = (TColonne)c;
     }
-    void setUnit(int u)      {
-        _unite        = (TUnit) u;
+    void setUnit(int u)
+    {
+        _unite = (TUnit)u;
     }
-    void setProcessing(int p)      {
-        _processing   = (TProcType) p;
+    void setProcessing(int p)
+    {
+        _processing = (TProcType)p;
     }
-    void setStandardPge(int s)      {
+    void setStandardPge(int s)
+    {
         _standardPage = s;
     }
-    void setTOC(int t)      {
-        _hasTOC       = t;
+    void setTOC(int t)
+    {
+        _hasTOC = t;
     }
-    void setHeadType(int ht)     {
-        _headType     = (THeadfoot) ht;
+    void setHeadType(int ht)
+    {
+        _headType = (THeadfoot)ht;
     }
-    void setFootType(int ft)     {
-        _footType     = (THeadfoot) ft;
+    void setFootType(int ft)
+    {
+        _footType = (THeadfoot)ft;
     }
-    void useColor()           {
-        _hasColor     = true;
+    void useColor()
+    {
+        _hasColor = true;
     }
-    void useUnderline()           {
+    void useUnderline()
+    {
         _hasUnderline = true;
     }
-    void useEnumerate()           {
+    void useEnumerate()
+    {
         _hasEnumerate = true;
     }
-    void useGraphics()           {
-        _hasGraphics  = true;
+    void useGraphics()
+    {
+        _hasGraphics = true;
     }
-    void useTable()           {
-        _hasTable     = true;
+    void useTable()
+    {
+        _hasTable = true;
     }
 
     void analyzePaper(const QDomNode);
@@ -210,19 +236,17 @@ protected:
     /**
      * Constructor
      */
-    FileHeader();  /* Ensure singleton */
+    FileHeader(); /* Ensure singleton */
 
-    static FileHeader* _instance; /* singleton */
+    static FileHeader *_instance; /* singleton */
 
 private:
-
     void analyzePaperParam(const QDomNode);
 
-    void generatePaper(QTextStream&);
-    void generateLatinPreamble(QTextStream&);
-    void generateUnicodePreamble(QTextStream&);
-    void generatePackage(QTextStream&);
-
+    void generatePaper(QTextStream &);
+    void generateLatinPreamble(QTextStream &);
+    void generateUnicodePreamble(QTextStream &);
+    void generatePackage(QTextStream &);
 };
 
 #endif /* __CALLIGRA_SHEETS_LATEX_FILEHEADER_H__ */

@@ -7,10 +7,10 @@
 #ifndef REPLACETEXTRANGECOMMAND_H
 #define REPLACETEXTRANGECOMMAND_H
 
-#include <kundo2command.h>
-#include "ArtisticTextTool.h"
 #include "ArtisticTextRange.h"
+#include "ArtisticTextTool.h"
 #include <QPointer>
+#include <kundo2command.h>
 
 class ArtisticTextShape;
 
@@ -20,7 +20,12 @@ class ReplaceTextRangeCommand : public KUndo2Command
 public:
     ReplaceTextRangeCommand(ArtisticTextShape *shape, const QString &text, int from, int count, ArtisticTextTool *tool, KUndo2Command *parent = 0);
     ReplaceTextRangeCommand(ArtisticTextShape *shape, const ArtisticTextRange &text, int from, int count, ArtisticTextTool *tool, KUndo2Command *parent = 0);
-    ReplaceTextRangeCommand(ArtisticTextShape *shape, const QList<ArtisticTextRange> &text, int from, int count, ArtisticTextTool *tool, KUndo2Command *parent = 0);
+    ReplaceTextRangeCommand(ArtisticTextShape *shape,
+                            const QList<ArtisticTextRange> &text,
+                            int from,
+                            int count,
+                            ArtisticTextTool *tool,
+                            KUndo2Command *parent = 0);
 
     void redo() override;
     void undo() override;

@@ -9,59 +9,54 @@
 
 #include "KoPageNavigatorButton_p.h"
 
-#include <KoPAView.h>
+#include <KoIcon.h>
 #include <KoPADocument.h>
 #include <KoPAPage.h>
-#include <KoIcon.h>
+#include <KoPAView.h>
 // KF5
-#include <KLocalizedString>
 #include <KActionCollection>
+#include <KLocalizedString>
 // Qt
-#include <QLabel>
-#include <QHBoxLayout>
-#include <QWheelEvent>
-#include <QEvent>
-#include <QLineEdit>
-#include <QIntValidator>
 #include <QAction>
-
+#include <QEvent>
+#include <QHBoxLayout>
+#include <QIntValidator>
+#include <QLabel>
+#include <QLineEdit>
+#include <QWheelEvent>
 
 static const int maxPageCountPattern = 999;
 
 class KoPageNavigator::Private
 {
-    public:
-        explicit Private(KoPAView *_view)
+public:
+    explicit Private(KoPAView *_view)
         : view(_view)
-        {}
+    {
+    }
 
-        // normal display
-        QLabel* displayLabel;
-        // interactive state
-        KoPageNavigatorButton *gotoFirstPageButton;
-        KoPageNavigatorButton *gotoPreviousPageButton;
-        KoPageNavigatorButton *gotoNextPageButton;
-        KoPageNavigatorButton *gotoLastPageButton;
-        QLineEdit *pageNumberEdit;
-        QIntValidator *pageNumberEditValidator;
+    // normal display
+    QLabel *displayLabel;
+    // interactive state
+    KoPageNavigatorButton *gotoFirstPageButton;
+    KoPageNavigatorButton *gotoPreviousPageButton;
+    KoPageNavigatorButton *gotoNextPageButton;
+    KoPageNavigatorButton *gotoLastPageButton;
+    QLineEdit *pageNumberEdit;
+    QIntValidator *pageNumberEditValidator;
 
-        KoPAView *view;
+    KoPAView *view;
 };
 
-static QString
-displayText(bool isMaster, bool isSlideType, int pageNumber, int pageCount)
+static QString displayText(bool isMaster, bool isSlideType, int pageNumber, int pageCount)
 {
-    return isSlideType ?
-        (isMaster ? i18n("Master Slide %1/%2", pageNumber, pageCount)
-                  : i18n("Slide %1/%2", pageNumber, pageCount)) :
-        (isMaster ? i18n("Master Page %1/%2", pageNumber, pageCount)
-                  : i18n("Page %1/%2", pageNumber, pageCount));
+    return isSlideType ? (isMaster ? i18n("Master Slide %1/%2", pageNumber, pageCount) : i18n("Slide %1/%2", pageNumber, pageCount))
+                       : (isMaster ? i18n("Master Page %1/%2", pageNumber, pageCount) : i18n("Page %1/%2", pageNumber, pageCount));
 }
 
-
 KoPageNavigator::KoPageNavigator(KoPAView *view)
-  : QStackedWidget(view)
-  , d(new Private(view))
+    : QStackedWidget(view)
+    , d(new Private(view))
 {
     const bool isSlideType = (d->view->kopaDocument()->pageType() == KoPageApp::Slide);
 
@@ -74,8 +69,8 @@ KoPageNavigator::KoPageNavigator(KoPAView *view)
     addWidget(d->displayLabel);
 
     // add interactive variant
-    QWidget* controlWidget = new QWidget(this);
-    QHBoxLayout* layout = new QHBoxLayout(controlWidget);
+    QWidget *controlWidget = new QWidget(this);
+    QHBoxLayout *layout = new QHBoxLayout(controlWidget);
     layout->setSpacing(0);
     layout->setContentsMargins({});
 
@@ -110,12 +105,12 @@ KoPageNavigator::KoPageNavigator(KoPAView *view)
 
     KoPADocument *const kopaDocument = d->view->kopaDocument();
     connect(kopaDocument, &KoPADocument::pageAdded, this, &KoPageNavigator::updateDisplayLabel);
-    connect(kopaDocument, QOverload<KoPAPageBase*, int>::of(&KoPADocument::pageRemoved), this, &KoPageNavigator::slotPageRemoved);
+    connect(kopaDocument, QOverload<KoPAPageBase *, int>::of(&KoPADocument::pageRemoved), this, &KoPageNavigator::slotPageRemoved);
     connect(d->view->proxyObject, &KoPAViewProxyObject::activePageChanged, this, &KoPageNavigator::updateDisplayLabel);
 
     // Fix width by the largest needed
     QFontMetrics fontMetrics(font());
-    d->pageNumberEdit->setMinimumWidth(fontMetrics.boundingRect(QString::number(maxPageCountPattern*10)).width()); //one more
+    d->pageNumberEdit->setMinimumWidth(fontMetrics.boundingRect(QString::number(maxPageCountPattern * 10)).width()); // one more
     const int editWidth = widget(Edit)->minimumWidth();
     const int normalWidth = fontMetrics.boundingRect(displayText(false, isSlideType, maxPageCountPattern, maxPageCountPattern)).width();
     const int masterWidth = fontMetrics.boundingRect(displayText(true, isSlideType, maxPageCountPattern, maxPageCountPattern)).width();
@@ -137,7 +132,6 @@ void KoPageNavigator::initActions()
     d->gotoPreviousPageButton->setAction(actionCollection->action(QLatin1String("page_previous")));
     d->gotoNextPageButton->setAction(actionCollection->action(QLatin1String("page_next")));
     d->gotoLastPageButton->setAction(actionCollection->action(QLatin1String("page_last")));
-
 }
 
 void KoPageNavigator::enterEvent(QEnterEvent *event)
@@ -151,7 +145,7 @@ void KoPageNavigator::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
 
-    if (! d->pageNumberEdit->hasFocus()) {
+    if (!d->pageNumberEdit->hasFocus()) {
         setCurrentIndex(Display);
     }
 }
@@ -159,7 +153,7 @@ void KoPageNavigator::leaveEvent(QEvent *event)
 bool KoPageNavigator::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::FocusOut && watched == d->pageNumberEdit) {
-        if (! underMouse()) {
+        if (!underMouse()) {
             setCurrentIndex(Display);
         }
 
@@ -175,7 +169,7 @@ bool KoPageNavigator::eventFilter(QObject *watched, QEvent *event)
         // and the list of pages is ordered by smaller number first,
         // here an increasing delta means going up in the list, so go to
         // smaller page numbers, and vice versa.
-        QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
+        QWheelEvent *wheelEvent = static_cast<QWheelEvent *>(event);
         const int delta = wheelEvent->angleDelta().y();
 
         // trigger the respective actions
@@ -208,7 +202,7 @@ void KoPageNavigator::updateDisplayLabel()
     const int pageNumber = kopaDocument->pageIndex(activePage) + 1;
 
     if (pageNumber > 0) {
-        const bool isMasterPage = (dynamic_cast<KoPAPage*>(activePage) == 0);
+        const bool isMasterPage = (dynamic_cast<KoPAPage *>(activePage) == 0);
 
         const int pageCount = d->view->kopaDocument()->pages(isMasterPage).size();
 
@@ -233,11 +227,11 @@ void KoPageNavigator::onPageNumberEntered()
     KoPADocument *const kopaDocument = d->view->kopaDocument();
     KoPAPageBase *const activePage = d->view->activePage();
 
-    const bool isMasterPage = (dynamic_cast<KoPAPage*>(activePage) == 0);
+    const bool isMasterPage = (dynamic_cast<KoPAPage *>(activePage) == 0);
 
-    const QList<KoPAPageBase*> pages = kopaDocument->pages(isMasterPage);
+    const QList<KoPAPageBase *> pages = kopaDocument->pages(isMasterPage);
 
-    KoPAPageBase* newPage = pages.value(pageNumber-1);
+    KoPAPageBase *newPage = pages.value(pageNumber - 1);
     if (newPage) {
         d->view->proxyObject->updateActivePage(newPage);
     }
@@ -251,7 +245,7 @@ void KoPageNavigator::slotPageRemoved(KoPAPageBase *page, int index)
     } else {
         KoPADocument *const kopaDocument = d->view->kopaDocument();
         const int pageNumber = index == 0 ? 0 : index - 1;
-        KoPAPageBase* newPage = kopaDocument->pages().value(pageNumber);
+        KoPAPageBase *newPage = kopaDocument->pages().value(pageNumber);
         if (newPage && d->view->proxyObject) {
             d->view->proxyObject->updateActivePage(newPage);
         } else {

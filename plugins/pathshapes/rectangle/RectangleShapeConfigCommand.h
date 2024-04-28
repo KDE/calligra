@@ -27,6 +27,7 @@ public:
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
     RectangleShape *m_rectangle;
     qreal m_oldCornerRadiusX;
@@ -36,4 +37,3 @@ private:
 };
 
 #endif // RECTANGLESHAPECONFIGCOMMAND_H
-

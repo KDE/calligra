@@ -23,18 +23,18 @@ public:
      * Use only one type of pages e.g. only master pages or only normal pages
      * if you mix the master pages will only be saved if they are needed for a normal page.
      */
-    KoPAOdfPageSaveHelper( KoPADocument * doc, QList<KoPAPageBase *> pages );
+    KoPAOdfPageSaveHelper(KoPADocument *doc, QList<KoPAPageBase *> pages);
     ~KoPAOdfPageSaveHelper() override;
 
     /// reimplemented
-    KoShapeSavingContext * context( KoXmlWriter * bodyWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver & embeddedSaver ) override;
+    KoShapeSavingContext *context(KoXmlWriter *bodyWriter, KoGenStyles &mainStyles, KoEmbeddedDocumentSaver &embeddedSaver) override;
 
     /// reimplemented
     bool writeBody() override;
 
 private:
-    KoPADocument * m_doc;
-    KoShapeSavingContext  *m_context;
+    KoPADocument *m_doc;
+    KoShapeSavingContext *m_context;
     QList<KoPAPageBase *> m_pages;
     QList<KoPAPageBase *> m_masterPages;
 };

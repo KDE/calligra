@@ -10,8 +10,8 @@
 
 #include <KoShapeApplicationData.h>
 
-#include <QSet>
 #include "stage_export.h"
+#include <QSet>
 
 class KPrShapeAnimation;
 
@@ -21,7 +21,7 @@ public:
     KPrShapeApplicationData();
     ~KPrShapeApplicationData() override;
 
-    QSet<KPrShapeAnimation *> & animations();
+    QSet<KPrShapeAnimation *> &animations();
 
     void setDeleteAnimations(bool enabled);
 
@@ -31,6 +31,4 @@ private:
     bool m_deleteAnimations;
 };
 
-
 #endif
-

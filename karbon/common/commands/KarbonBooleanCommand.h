@@ -18,8 +18,8 @@ class KARBONCOMMON_EXPORT KarbonBooleanCommand : public KUndo2Command
 public:
     enum BooleanOperation {
         Intersection, ///< the intersection of A and B
-        Subtraction,  ///< the subtraction A - B
-        Union,        ///< the union A + B
+        Subtraction, ///< the subtraction A - B
+        Union, ///< the union A + B
         Exclusion
     };
 
@@ -31,16 +31,20 @@ public:
      * @param operation the booelan operation to execute
      * @param parent the parent command used for macro commands
      */
-    explicit KarbonBooleanCommand(KoShapeBasedDocumentBase *controller, KoPathShape* pathA, KoPathShape * pathB,
-                                  BooleanOperation operation, KUndo2Command *parent = 0);
+    explicit KarbonBooleanCommand(KoShapeBasedDocumentBase *controller,
+                                  KoPathShape *pathA,
+                                  KoPathShape *pathB,
+                                  BooleanOperation operation,
+                                  KUndo2Command *parent = 0);
     ~KarbonBooleanCommand() override;
     /// redo the command
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // _KARBONBOOLEANCOMMAND_H_

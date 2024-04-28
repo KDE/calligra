@@ -25,11 +25,11 @@
 #include <QObject>
 #include <QPair>
 #include <QTimeLine>
-#include <QTransform>
 #include <QTimer>
+#include <QTransform>
 
-#include <KoZoomHandler.h>
 #include "KPrShapeAnimations.h"
+#include <KoZoomHandler.h>
 
 class QPainter;
 class QPaintEvent;
@@ -43,35 +43,21 @@ class KPrPageEffectRunner;
 class KPrPage;
 class KPrShapeAnimation;
 
-
 class KPrAnimationDirector : public QObject
 {
     Q_OBJECT
 public:
-    enum Navigation
-    {
-        FirstPage,
-        PreviousPage,
-        PreviousStep,
-        NextStep,
-        NextPage,
-        LastPage
-    };
+    enum Navigation { FirstPage, PreviousPage, PreviousStep, NextStep, NextPage, LastPage };
 
-    enum State
-    {
-        PresentationState,
-        EntryEffectState,
-        EntryAnimationState
-    };
+    enum State { PresentationState, EntryEffectState, EntryAnimationState };
 
-    KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas, const QList<KoPAPageBase*> & pages, KoPAPageBase* currentPage );
+    KPrAnimationDirector(KoPAView *view, KoPACanvas *canvas, const QList<KoPAPageBase *> &pages, KoPAPageBase *currentPage);
     ~KPrAnimationDirector() override;
 
-    void paint(QPainter& painter, const QRectF &paintRect);
-    void paintEvent( QPaintEvent* event );
+    void paint(QPainter &painter, const QRectF &paintRect);
+    void paintEvent(QPaintEvent *event);
 
-    KoViewConverter * viewConverter();
+    KoViewConverter *viewConverter();
 
     /**
      * get the number of pages
@@ -98,12 +84,12 @@ public:
      *
      * @return true if slideshow is finished and should be exited, false otherwise
      */
-    bool navigate( Navigation navigation );
+    bool navigate(Navigation navigation);
 
     /**
      * do the navigation to the page specified
      */
-    void navigateToPage( int index );
+    void navigateToPage(int index);
 
     void deactivate();
 
@@ -111,14 +97,14 @@ public:
 
 protected:
     // set the page to be shon and update the UI
-    void updateActivePage( KoPAPageBase * page );
+    void updateActivePage(KoPAPageBase *page);
 
     /**
      * change the page
      *
      * @return true if slideshow is finished and should be exited, false otherwise
      */
-    bool changePage( Navigation navigation );
+    bool changePage(Navigation navigation);
 
     /**
      * Update to the next step
@@ -133,7 +119,7 @@ protected:
     void previousStep();
 
     // paint the given step to the painter
-    void paintStep( QPainter & painter );
+    void paintStep(QPainter &painter);
 
     /**
      * Finish the running shape animations
@@ -143,7 +129,7 @@ protected:
     /**
      * Start the timeline
      */
-    void startTimeLine( int duration );
+    void startTimeLine(int duration);
 
     // helper method for freeing the resources of the animations
     void clearAnimations();
@@ -163,7 +149,7 @@ protected:
 
 protected Q_SLOTS:
     // update the zoom value
-    void updateZoom( const QSize & size );
+    void updateZoom(const QSize &size);
     // acts on the time line event
     void animate();
 
@@ -171,15 +157,15 @@ protected Q_SLOTS:
     void slotTimelineFinished();
 
 private:
-    KoPAView * m_view;
-    KoPACanvas * m_canvas;
-    QList<KoPAPageBase*> m_pages;
+    KoPAView *m_view;
+    KoPACanvas *m_canvas;
+    QList<KoPAPageBase *> m_pages;
 
     KoZoomHandler m_zoomHandler;
     QPoint m_offset;
     QRect m_pageRect;
 
-    KPrPageEffectRunner * m_pageEffectRunner;
+    KPrPageEffectRunner *m_pageEffectRunner;
     QList<KPrAnimationStep *> m_animations;
     QTimeLine m_timeLine;
     int m_pageIndex;
@@ -187,7 +173,7 @@ private:
     int m_maxShapeDuration;
     // true when there is an animation in this step
     bool m_hasAnimation;
-    KPrAnimationCache * m_animationCache;
+    KPrAnimationCache *m_animationCache;
 
     State m_state;
     QTimer m_autoTransitionTimer;

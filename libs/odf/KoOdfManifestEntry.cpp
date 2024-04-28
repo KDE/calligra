@@ -4,7 +4,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "KoOdfManifestEntry.h"
 
@@ -13,19 +12,16 @@
 class Q_DECL_HIDDEN KoOdfManifestEntry::Private
 {
 public:
-    Private() {};
+    Private(){};
 
-    QString  fullPath;          // manifest:full-path
-    QString  mediaType;         // manifest:media-type
-    QString  version;           // manifest:version  (isNull==true if not present)
+    QString fullPath; // manifest:full-path
+    QString mediaType; // manifest:media-type
+    QString version; // manifest:version  (isNull==true if not present)
 };
-
 
 // ----------------------------------------------------------------
 
-
-KoOdfManifestEntry::KoOdfManifestEntry(const QString &fullPath, const QString &mediaType,
-                                       const QString &version)
+KoOdfManifestEntry::KoOdfManifestEntry(const QString &fullPath, const QString &mediaType, const QString &version)
     : d(new Private())
 {
     d->fullPath = fullPath;
@@ -54,7 +50,6 @@ KoOdfManifestEntry &KoOdfManifestEntry::operator=(const KoOdfManifestEntry &othe
 
     return *this;
 }
-
 
 QString KoOdfManifestEntry::fullPath() const
 {
@@ -85,4 +80,3 @@ void KoOdfManifestEntry::setVersion(const QString &version)
 {
     d->version = version;
 }
-

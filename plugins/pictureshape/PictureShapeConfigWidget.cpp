@@ -5,15 +5,15 @@
  */
 
 #include "PictureShapeConfigWidget.h"
-#include "PictureShape.h"
 #include "PictureDebug.h"
+#include "PictureShape.h"
 
-#include <KoImageData.h>
 #include <KoImageCollection.h>
+#include <KoImageData.h>
 
+#include <KIO/StoredTransferJob>
 #include <kfilewidget.h>
 #include <kjobuidelegate.h>
-#include <KIO/StoredTransferJob>
 
 #include <QGridLayout>
 #include <QImageReader>
@@ -39,7 +39,7 @@ void PictureShapeLoadWaiter::setImageData(KJob *job)
     if (m_pictureShape == 0)
         return; // ugh, the shape got deleted meanwhile (## err, who would set the pointer to null?)
 
-    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
+    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob *>(job);
     Q_ASSERT(transferJob);
 
     if (m_pictureShape->imageCollection()) {
@@ -59,8 +59,8 @@ void PictureShapeLoadWaiter::setImageData(KJob *job)
 // ---------------------------------------------------- //
 
 PictureShapeConfigWidget::PictureShapeConfigWidget()
-    : m_shape(0),
-    m_fileWidget(0)
+    : m_shape(0)
+    , m_fileWidget(0)
 {
 }
 
@@ -71,7 +71,7 @@ PictureShapeConfigWidget::~PictureShapeConfigWidget()
 
 void PictureShapeConfigWidget::open(KoShape *shape)
 {
-    m_shape = dynamic_cast<PictureShape*>(shape);
+    m_shape = dynamic_cast<PictureShape *>(shape);
     Q_ASSERT(m_shape);
     delete m_fileWidget;
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -79,7 +79,7 @@ void PictureShapeConfigWidget::open(KoShape *shape)
     m_fileWidget->setMode(KFile::Files | KFile::ExistingOnly);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
     QList<KFileFilter> imageFilters;
-    for(const QByteArray &mimeType : QImageReader::supportedMimeTypes()) {
+    for (const QByteArray &mimeType : QImageReader::supportedMimeTypes()) {
         imageFilters.append(KFileFilter::fromMimeType(QLatin1String(mimeType)));
     }
     m_fileWidget->setFilters(imageFilters);

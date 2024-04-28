@@ -11,8 +11,8 @@
 
 #ifndef QT_NO_DBUS
 
-#include <QMap>
 #include <QDBusAbstractAdaptor>
+#include <QMap>
 
 class QString;
 
@@ -30,11 +30,10 @@ public:
     ~KoViewAdaptor() override;
 
 public Q_SLOTS: // METHODS
-    Q_SCRIPTABLE QStringList/*DCOPCStringList*/ actions();
+    Q_SCRIPTABLE QStringList /*DCOPCStringList*/ actions();
 
 protected:
     KoView *m_pView;
-
 };
 
 #endif // QT_NO_DBUS

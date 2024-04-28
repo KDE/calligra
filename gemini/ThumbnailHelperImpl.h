@@ -17,15 +17,16 @@ class ThumbnailHelperImpl : public QObject
 {
     Q_OBJECT
 public:
-    explicit ThumbnailHelperImpl(QObject* parent = 0);
+    explicit ThumbnailHelperImpl(QObject *parent = 0);
     ~ThumbnailHelperImpl() override;
 
-    bool convert(const QString& in, const QString& out, int width, int height);
+    bool convert(const QString &in, const QString &out, int width, int height);
+
 private:
     KoPart *m_part;
     KoDocument *m_doc;
 
-    bool m_loadingCompleted :1;
+    bool m_loadingCompleted : 1;
 };
 
 #endif // THUMBNAILHELPERIMPL_H

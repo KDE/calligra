@@ -14,11 +14,11 @@ class QCursor;
 
 namespace KarbonCursor
 {
-    /** needle arraow cursor */
-    QCursor needleArrow();
+/** needle arraow cursor */
+QCursor needleArrow();
 
-    /** needle arrow with four way arrow */
-    QCursor needleMoveArrow();
+/** needle arrow with four way arrow */
+QCursor needleMoveArrow();
 };
 
 #endif // KARBONCURSOR_H

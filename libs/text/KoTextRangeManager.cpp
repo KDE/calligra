@@ -7,18 +7,19 @@
 
 #include "KoTextRangeManager.h"
 
-#include <algorithm>
 #include "KoAnnotation.h"
 #include "KoBookmark.h"
+#include <algorithm>
 
 #include "TextDebug.h"
 
 struct KoTextRangeManagerIndex {
-    QList<KoTextRange*> singlePoints;
-    QList<KoTextRange*> nonOverlapping;
-    QList<KoTextRange*> overlapping;
-    
-    void addToIndex(KoTextRange *r) {
+    QList<KoTextRange *> singlePoints;
+    QList<KoTextRange *> nonOverlapping;
+    QList<KoTextRange *> overlapping;
+
+    void addToIndex(KoTextRange *r)
+    {
         if (!r->hasRange()) {
             if (addInList(r, singlePoints))
                 return;
@@ -30,16 +31,18 @@ struct KoTextRangeManagerIndex {
         addInList(r, overlapping, true);
     }
 
-    void removeFromIndex(KoTextRange *r) {
+    void removeFromIndex(KoTextRange *r)
+    {
         if (!r->hasRange())
             singlePoints.removeOne(r);
-        else 
+        else
             nonOverlapping.removeOne(r);
         overlapping.removeOne(r);
     }
-    
+
 private:
-    bool addInList(KoTextRange *r, QList<KoTextRange*> &list, bool force = false) {
+    bool addInList(KoTextRange *r, QList<KoTextRange *> &list, bool force = false)
+    {
         auto it = list.begin();
         while (it != list.end() && (*it)->rangeStart() < r->rangeStart())
             ++it;
@@ -51,17 +54,18 @@ private:
     }
 };
 
-class KoTextRangeManager::KoTextRangeManagerPrivate {
+class KoTextRangeManager::KoTextRangeManagerPrivate
+{
 public:
     QHash<const QTextDocument *, QSet<KoTextRange *>> m_textRanges;
     QHash<const QTextDocument *, QSet<KoTextRange *>> m_deletedTextRanges; // kept around for undo purposes
 
-    QHash<const QTextDocument *, QHash<const QMetaObject*, KoTextRangeManagerIndex>> indexes;
-
+    QHash<const QTextDocument *, QHash<const QMetaObject *, KoTextRangeManagerIndex>> indexes;
 
     QHash<const QTextDocument *, QList<KoTextRange *>> unfinalizedRanges;
-    
-    void addDocument(const QTextDocument * doc) {
+
+    void addDocument(const QTextDocument *doc)
+    {
         // Should we connect to the QTextDocument::cursorPositionChanged signal to make sure
         // the indexes remain sorted? I still don't see how we could end up with a cursor being
         // moved before another with the current object interfaces, but any mistake in this perception
@@ -76,7 +80,8 @@ public:
 };
 
 KoTextRangeManager::KoTextRangeManager(QObject *parent)
-    : QObject(parent), d(new KoTextRangeManagerPrivate())
+    : QObject(parent)
+    , d(new KoTextRangeManagerPrivate())
 {
 }
 
@@ -85,9 +90,9 @@ KoTextRangeManager::~KoTextRangeManager()
     delete d;
 }
 
-QList < KoTextRange * > KoTextRangeManager::textRanges (const QTextDocument * doc) const
+QList<KoTextRange *> KoTextRangeManager::textRanges(const QTextDocument *doc) const
 {
-     return d->m_textRanges.value(doc).values();
+    return d->m_textRanges.value(doc).values();
 }
 
 void KoTextRangeManager::finalizeTextRanges()
@@ -115,8 +120,8 @@ void KoTextRangeManager::insert(KoTextRange *textRange)
         return;
     }
 
-    QSet<KoTextRange*> &docTextRanges = d->m_textRanges[doc];
-    QSet<KoTextRange*> &docDeletedTextRanges = d->m_deletedTextRanges[doc];
+    QSet<KoTextRange *> &docTextRanges = d->m_textRanges[doc];
+    QSet<KoTextRange *> &docDeletedTextRanges = d->m_deletedTextRanges[doc];
 
     if (docTextRanges.contains(textRange)) {
         return;
@@ -132,8 +137,7 @@ void KoTextRangeManager::insert(KoTextRange *textRange)
     KoBookmark *bookmark = qobject_cast<KoBookmark *>(textRange);
     if (bookmark) {
         m_bookmarkManager.insert(bookmark->name(), bookmark);
-    }
-    else {
+    } else {
         KoAnnotation *annotation = qobject_cast<KoAnnotation *>(textRange);
         if (annotation) {
             m_annotationManager.insert(annotation->name(), annotation);
@@ -154,8 +158,7 @@ void KoTextRangeManager::remove(KoTextRange *textRange)
     KoBookmark *bookmark = dynamic_cast<KoBookmark *>(textRange);
     if (bookmark) {
         m_bookmarkManager.remove(bookmark->name());
-    }
-    else {
+    } else {
         KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(textRange);
         if (annotation) {
             m_annotationManager.remove(annotation->name());
@@ -181,7 +184,7 @@ const KoAnnotationManager *KoTextRangeManager::annotationManager() const
 QList<KoTextRange *> KoTextRangeManager::textRanges() const
 {
     QList<KoTextRange *> allRanges;
-    for (const QSet<KoTextRange*> &docRanges: d->m_textRanges.values()) {
+    for (const QSet<KoTextRange *> &docRanges : d->m_textRanges.values()) {
         allRanges.append(docRanges.values());
     }
     return allRanges;
@@ -193,14 +196,14 @@ QMultiHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(cons
     if (!d->m_textRanges.contains(doc))
         return ranges;
 
-
-    // TODO: this constant is kind of magic. It's the trade-of between comparing each item, and the cost of going through several lists, with varying ordering rules
+        // TODO: this constant is kind of magic. It's the trade-of between comparing each item, and the cost of going through several lists, with varying
+        // ordering rules
 #define INDEX_USAGE_THRESHOLD 10
     if (d->m_textRanges[doc].size() < INDEX_USAGE_THRESHOLD) {
-        const QSet<KoTextRange*> &docRanges = d->m_textRanges.value(doc);
+        const QSet<KoTextRange *> &docRanges = d->m_textRanges.value(doc);
         // qDebug() << "KoTextRangeManager => going to skip the index";
         // On a small set of items, going through the set is going to be faster
-        for (KoTextRange *range: docRanges) {
+        for (KoTextRange *range : docRanges) {
             if (!range->hasRange()) {
                 if (range->rangeStart() >= first && range->rangeStart() <= last) {
                     ranges.insert(range->rangeStart(), range);
@@ -230,8 +233,7 @@ QMultiHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(cons
             }
         }
     } else {
-        for (const auto &docIndex: d->indexes.value(doc).values())
-        {
+        for (const auto &docIndex : d->indexes.value(doc).values()) {
             auto comp = [](KoTextRange *r, int value) {
                 return r->rangeStart() <= value;
             };
@@ -320,16 +322,20 @@ QMultiHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(cons
     return ranges;
 }
 
-QMultiHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTextDocument *doc, QList<const QMetaObject*> types, int first, int last, int matchFirst, int matchLast) const
+QMultiHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTextDocument *doc,
+                                                                            QList<const QMetaObject *> types,
+                                                                            int first,
+                                                                            int last,
+                                                                            int matchFirst,
+                                                                            int matchLast) const
 {
     QMultiHash<int, KoTextRange *> ranges;
     if (!d->m_textRanges.contains(doc))
         return ranges;
 
-    for (const QMetaObject *type: d->indexes.value(doc).keys())
-    {
+    for (const QMetaObject *type : d->indexes.value(doc).keys()) {
         bool found = false;
-        for (const QMetaObject *requestedType: types) {
+        for (const QMetaObject *requestedType : types) {
             if (type->inherits(requestedType)) {
                 found = true;
                 break;

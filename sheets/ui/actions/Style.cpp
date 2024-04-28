@@ -8,14 +8,14 @@
 #include "Style.h"
 #include "Actions.h"
 
-#include "engine/CalculationSettings.h"
-#include "engine/MapBase.h"
 #include "core/CellStorage.h"
 #include "core/Sheet.h"
-#include "ui/commands/StyleCommand.h"
-#include "ui/dialogs/LayoutDialog.h"
+#include "engine/CalculationSettings.h"
+#include "engine/MapBase.h"
 #include "ui/CellEditorBase.h"
 #include "ui/CellToolBase.h"
+#include "ui/commands/StyleCommand.h"
+#include "ui/dialogs/LayoutDialog.h"
 
 #include <KoCanvasBase.h>
 #include <KoColor.h>
@@ -23,9 +23,7 @@
 
 #include <KLocalizedString>
 
-
 using namespace Calligra::Sheets;
-
 
 CellStyle::CellStyle(Actions *actions)
     : DialogCellAction(actions, "cellStyle", i18n("Cell Format..."), koIcon("cell_layout"), i18n("Set the cell formatting"))
@@ -61,21 +59,20 @@ void CellStyle::applyStyle()
     bool multicell = ((range.width() > 1) || (range.height() > 1));
 
     Style style = dlg->style(multicell);
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(m_selection->activeSheet());
     command->add(range);
     command->setStyle(style);
     command->execute(m_selection->canvas());
 }
 
-QAction *CellStyle::createAction() {
+QAction *CellStyle::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Format"));
     res->setShortcut(QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_F));
     return res;
 }
-
-
 
 Bold::Bold(Actions *actions)
     : ToggleableCellAction(actions, "bold", i18n("Bold"), koIcon("format-text-bold"), i18n("Bold"))
@@ -86,7 +83,8 @@ Bold::~Bold()
 {
 }
 
-QAction *Bold::createAction() {
+QAction *Bold::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
     return res;
@@ -94,7 +92,7 @@ QAction *Bold::createAction() {
 
 void Bold::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Font"));
     Style s;
@@ -123,7 +121,8 @@ Italic::~Italic()
 {
 }
 
-QAction *Italic::createAction() {
+QAction *Italic::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
     return res;
@@ -131,7 +130,7 @@ QAction *Italic::createAction() {
 
 void Italic::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Font"));
     Style s;
@@ -160,7 +159,8 @@ Underline::~Underline()
 {
 }
 
-QAction *Underline::createAction() {
+QAction *Underline::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
     return res;
@@ -168,7 +168,7 @@ QAction *Underline::createAction() {
 
 void Underline::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Font"));
     Style s;
@@ -199,7 +199,7 @@ Strikeout::~Strikeout()
 
 void Strikeout::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Font"));
     Style s;
@@ -228,7 +228,8 @@ WrapText::~WrapText()
 {
 }
 
-QAction *WrapText::createAction() {
+QAction *WrapText::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Wrap"));
     return res;
@@ -236,7 +237,7 @@ QAction *WrapText::createAction() {
 
 void WrapText::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Wrap Text"));
     Style s;
@@ -265,7 +266,7 @@ VerticalText::~VerticalText()
 
 void VerticalText::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Vertical Text"));
     Style s;
@@ -283,7 +284,6 @@ bool VerticalText::checkedForSelection(Selection *, const Cell &activeCell)
     return style.verticalText();
 }
 
-
 NumberFormat::NumberFormat(Actions *actions)
     : ToggleableCellAction(actions, "numeric", i18n("Number Format"), QIcon(), i18n("Set the cell formatting to a number"))
 {
@@ -293,7 +293,8 @@ NumberFormat::~NumberFormat()
 {
 }
 
-QAction *NumberFormat::createAction() {
+QAction *NumberFormat::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Number"));
     return res;
@@ -301,7 +302,7 @@ QAction *NumberFormat::createAction() {
 
 void NumberFormat::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Format Number"));
     Style s;
@@ -327,7 +328,8 @@ ScientificFormat::~ScientificFormat()
 {
 }
 
-QAction *ScientificFormat::createAction() {
+QAction *ScientificFormat::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Scientific"));
     return res;
@@ -335,7 +337,7 @@ QAction *ScientificFormat::createAction() {
 
 void ScientificFormat::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Format Scientific"));
     Style s;
@@ -352,9 +354,12 @@ bool ScientificFormat::checkedForSelection(Selection *, const Cell &activeCell)
     return (ft == Format::Scientific);
 }
 
-
 PercentFormat::PercentFormat(Actions *actions)
-    : ToggleableCellAction(actions, "percent", i18n("Percent Format"), koIcon("format-number-percent"), i18n("Set the cell formatting to look like a percentage"))
+    : ToggleableCellAction(actions,
+                           "percent",
+                           i18n("Percent Format"),
+                           koIcon("format-number-percent"),
+                           i18n("Set the cell formatting to look like a percentage"))
 {
 }
 
@@ -362,7 +367,8 @@ PercentFormat::~PercentFormat()
 {
 }
 
-QAction *PercentFormat::createAction() {
+QAction *PercentFormat::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Percent"));
     return res;
@@ -370,7 +376,7 @@ QAction *PercentFormat::createAction() {
 
 void PercentFormat::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Format Percent"));
     Style s;
@@ -385,11 +391,14 @@ bool PercentFormat::checkedForSelection(Selection *, const Cell &activeCell)
     const Style style = activeCell.style();
     Format::Type ft = style.formatType();
     return (ft == Format::Percentage);
-
 }
 
 MoneyFormat::MoneyFormat(Actions *actions)
-    : ToggleableCellAction(actions, "currency", i18n("Money Format"), koIcon("format-currency"), i18n("Set the cell formatting to look like your local currency"))
+    : ToggleableCellAction(actions,
+                           "currency",
+                           i18n("Money Format"),
+                           koIcon("format-currency"),
+                           i18n("Set the cell formatting to look like your local currency"))
 {
 }
 
@@ -397,7 +406,8 @@ MoneyFormat::~MoneyFormat()
 {
 }
 
-QAction *MoneyFormat::createAction() {
+QAction *MoneyFormat::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Money"));
     return res;
@@ -405,7 +415,7 @@ QAction *MoneyFormat::createAction() {
 
 void MoneyFormat::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Format Money"));
     Style s;
@@ -431,7 +441,8 @@ DateFormat::~DateFormat()
 {
 }
 
-QAction *DateFormat::createAction() {
+QAction *DateFormat::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Date"));
     return res;
@@ -439,7 +450,7 @@ QAction *DateFormat::createAction() {
 
 void DateFormat::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Format Date"));
     Style s;
@@ -465,7 +476,8 @@ TimeFormat::~TimeFormat()
 {
 }
 
-QAction *TimeFormat::createAction() {
+QAction *TimeFormat::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Time"));
     return res;
@@ -473,7 +485,7 @@ QAction *TimeFormat::createAction() {
 
 void TimeFormat::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Format Time"));
     Style s;
@@ -490,8 +502,6 @@ bool TimeFormat::checkedForSelection(Selection *, const Cell &activeCell)
     return isTime(ft);
 }
 
-
-
 IncreaseFontSize::IncreaseFontSize(Actions *actions)
     : CellAction(actions, "increaseFontSize", i18n("Increase Font Size"), koIcon("format-font-size-more"), QString())
 {
@@ -505,9 +515,10 @@ void IncreaseFontSize::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
     const Style style = Cell(sheet, selection->cursor()).style();
     const int size = style.fontSize();
-    if (size >= 300) return;
+    if (size >= 300)
+        return;
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Font"));
     Style s;
@@ -530,9 +541,10 @@ void DecreaseFontSize::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
     const Style style = Cell(sheet, selection->cursor()).style();
     const int size = style.fontSize();
-    if (size <= 1) return;
+    if (size <= 1)
+        return;
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Font"));
     Style s;
@@ -542,9 +554,12 @@ void DecreaseFontSize::execute(Selection *selection, Sheet *sheet, QWidget *)
     command->execute(selection->canvas());
 }
 
-
 IncreasePrecision::IncreasePrecision(Actions *actions)
-    : CellAction(actions, "increasePrecision", i18n("Increase Precision"), koIcon("format-precision-more"), i18n("Increase the decimal precision shown onscreen"))
+    : CellAction(actions,
+                 "increasePrecision",
+                 i18n("Increase Precision"),
+                 koIcon("format-precision-more"),
+                 i18n("Increase the decimal precision shown onscreen"))
 {
 }
 
@@ -554,14 +569,18 @@ IncreasePrecision::~IncreasePrecision()
 
 void IncreasePrecision::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    PrecisionCommand* command = new PrecisionCommand();
+    PrecisionCommand *command = new PrecisionCommand();
     command->setSheet(sheet);
     command->add(*selection);
     command->execute(selection->canvas());
 }
 
 DecreasePrecision::DecreasePrecision(Actions *actions)
-    : CellAction(actions, "decreasePrecision", i18n("Decrease Precision"), koIcon("format-precision-less"), i18n("Decrease the decimal precision shown onscreen"))
+    : CellAction(actions,
+                 "decreasePrecision",
+                 i18n("Decrease Precision"),
+                 koIcon("format-precision-less"),
+                 i18n("Decrease the decimal precision shown onscreen"))
 {
 }
 
@@ -571,7 +590,7 @@ DecreasePrecision::~DecreasePrecision()
 
 void DecreasePrecision::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    PrecisionCommand* command = new PrecisionCommand();
+    PrecisionCommand *command = new PrecisionCommand();
     command->setSheet(sheet);
     command->add(*selection);
     command->setDecrease(true);
@@ -579,7 +598,7 @@ void DecreasePrecision::execute(Selection *selection, Sheet *sheet, QWidget *)
 }
 
 PrecisionCommand::PrecisionCommand()
-        : AbstractRegionCommand()
+    : AbstractRegionCommand()
 {
     setDecrease(false);
 }
@@ -589,11 +608,15 @@ bool PrecisionCommand::performCommands()
     Style curStyle = m_sheet->fullCellStorage()->style(boundingRect().left(), boundingRect().top());
     int prec = curStyle.precision();
 
-    if (prec < 0) prec = m_sheet->map()->calculationSettings()->defaultDecimalPrecision();
-    if (prec < 0) prec = 2;
+    if (prec < 0)
+        prec = m_sheet->map()->calculationSettings()->defaultDecimalPrecision();
+    if (prec < 0)
+        prec = 2;
     prec += (m_decrease ? -1 : 1);
-    if (prec > 10) prec = 10;
-    if (prec < 0) prec = 0;
+    if (prec > 10)
+        prec = 10;
+    if (prec < 0)
+        prec = 0;
 
     Style style;
     style.setPrecision(prec);
@@ -610,7 +633,6 @@ void PrecisionCommand::setDecrease(bool decrease)
         setText(kundo2_i18n("Decrease Precision"));
 }
 
-
 DefaultStyle::DefaultStyle(Actions *actions)
     : CellAction(actions, "setDefaultStyle", i18n("Default"), QIcon(), i18n("Resets to the default format"))
 {
@@ -622,7 +644,7 @@ DefaultStyle::~DefaultStyle()
 
 void DefaultStyle::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Set Default Style"));
     Style s;
@@ -631,7 +653,6 @@ void DefaultStyle::execute(Selection *selection, Sheet *sheet, QWidget *)
     command->add(*selection);
     command->execute(selection->canvas());
 }
-
 
 FillColor::FillColor(Actions *actions)
     : CellAction(actions, "backgroundColor", i18n("Background Color"), koIcon("format-fill-color"), i18n("Set the background color"))
@@ -642,7 +663,8 @@ FillColor::~FillColor()
 {
 }
 
-QAction *FillColor::createAction() {
+QAction *FillColor::createAction()
+{
     m_colorAction = new KoColorPopupAction(m_actions->tool());
     m_colorAction->setIcon(m_icon);
     m_colorAction->setToolTip(m_tooltip);
@@ -651,12 +673,13 @@ QAction *FillColor::createAction() {
     return m_colorAction;
 }
 
-void FillColor::triggeredFillColor(const KoColor &color) {
+void FillColor::triggeredFillColor(const KoColor &color)
+{
     CellToolBase *tool = m_actions->tool();
     Selection *selection = tool->selection();
     Sheet *sheet = selection->activeSheet();
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Background Color"));
     Style s;
@@ -665,9 +688,3 @@ void FillColor::triggeredFillColor(const KoColor &color) {
     command->add(*selection);
     command->execute(selection->canvas());
 }
-
-
-
-
-
-

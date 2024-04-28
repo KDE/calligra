@@ -7,13 +7,13 @@
 #include "KPrTextBlockPaintStrategy.h"
 
 #include <QBrush>
-#include <QTransform>
 #include <QPainter>
+#include <QTransform>
 
 #include "KoTextBlockData.h"
 
-#include "StageDebug.h"
 #include "KPrAnimationCache.h"
+#include "StageDebug.h"
 
 KPrTextBlockPaintStrategy::KPrTextBlockPaintStrategy(QTextBlockUserData *blockUserData, KPrAnimationCache *animationCache)
     : m_animationCache(animationCache)
@@ -39,7 +39,7 @@ void KPrTextBlockPaintStrategy::applyStrategy(QPainter *painter)
 {
     QTransform animationTransform = m_animationCache->value(m_textBlockData, "transform", QTransform()).value<QTransform>();
     QTransform transform(painter->transform());
-      if (animationTransform.isScaling()) {
+    if (animationTransform.isScaling()) {
         transform = animationTransform * transform;
     } else {
         transform = transform * animationTransform;

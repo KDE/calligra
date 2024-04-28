@@ -6,22 +6,22 @@
 
 #include "CompositeEffect.h"
 #include "ColorChannelConversion.h"
+#include <KLocalizedString>
 #include <KoFilterEffectRenderContext.h>
 #include <KoViewConverter.h>
-#include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <KLocalizedString>
+#include <KoXmlWriter.h>
 #include <QDebug>
-#include <QRect>
 #include <QPainter>
+#include <QRect>
 
 CompositeEffect::CompositeEffect()
-        : KoFilterEffect(CompositeEffectId, i18n("Composite"))
-        , m_operation(CompositeOver)
+    : KoFilterEffect(CompositeEffectId, i18n("Composite"))
+    , m_operation(CompositeOver)
 {
     setRequiredInputCount(2);
     setMaximalInputCount(2);
-    memset(m_k, 0, 4*sizeof(qreal));
+    memset(m_k, 0, 4 * sizeof(qreal));
 }
 
 CompositeEffect::Operation CompositeEffect::operation() const
@@ -34,14 +34,14 @@ void CompositeEffect::setOperation(Operation op)
     m_operation = op;
 }
 
-const qreal * CompositeEffect::arithmeticValues() const
+const qreal *CompositeEffect::arithmeticValues() const
 {
     return m_k;
 }
 
-void CompositeEffect::setArithmeticValues(qreal * values)
+void CompositeEffect::setArithmeticValues(qreal *values)
 {
-    memcpy(m_k, values, 4*sizeof(qreal));
+    memcpy(m_k, values, 4 * sizeof(qreal));
 }
 
 QImage CompositeEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &) const
@@ -61,8 +61,8 @@ QImage CompositeEffect::processImages(const QVector<QImage> &images, const KoFil
     }
 
     if (m_operation == Arithmetic) {
-        const QRgb *src = (QRgb*)images[1].constBits();
-        QRgb *dst = (QRgb*)result.bits();
+        const QRgb *src = (QRgb *)images[1].constBits();
+        QRgb *dst = (QRgb *)result.bits();
         int w = result.width();
 
         qreal sa, sr, sg, sb;

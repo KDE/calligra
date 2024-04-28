@@ -21,21 +21,25 @@ namespace Sheets
 {
 
 class Q_DECL_HIDDEN Localization::PrivateData : public QSharedData
- {
- public:
+{
+public:
     QLocale locale;
     QString timeSep, dateSepShort, dateSepLong;
     QMap<Format::Type, QString> dateTimeFormats, dateFormats, timeFormats;
     bool includesAMPM;
     QString trueString, falseString;
- };
+};
 class Q_DECL_HIDDEN Localization::Private
 {
 public:
-    Private(Localization::PrivateData *pd = nullptr) : data(pd) {}
+    Private(Localization::PrivateData *pd = nullptr)
+        : data(pd)
+    {
+    }
     QSharedDataPointer<Localization::PrivateData> data;
 };
-}}
+}
+}
 
 using namespace Calligra::Sheets;
 
@@ -104,7 +108,6 @@ QString Localization::name() const
     return d->locale.name();
 }
 
-
 QString Localization::decimalSymbol() const
 {
     return d->locale.decimalPoint();
@@ -140,7 +143,6 @@ QString Localization::dateSeparator(bool longDate) const
     return longDate ? d->dateSepLong : d->dateSepShort;
 }
 
-
 double Localization::readNumber(const QString &str, bool *ok) const
 {
     return d->locale.toDouble(str, ok);
@@ -148,7 +150,8 @@ double Localization::readNumber(const QString &str, bool *ok) const
 
 QDateTime Localization::readDateTime(const QString &str, bool *ok) const
 {
-    if (ok) *ok = false;
+    if (ok)
+        *ok = false;
     QDateTime res;
 
     // Try all the formats.
@@ -157,23 +160,27 @@ QDateTime Localization::readDateTime(const QString &str, bool *ok) const
         if (res.isValid())
             break;
     }
-    if (ok) *ok = res.isValid();
+    if (ok)
+        *ok = res.isValid();
     return res;
 }
 
 QDateTime Localization::readDateTime(const QString &str, const QString &format, bool *ok) const
 {
-    if (ok) *ok = false;
+    if (ok)
+        *ok = false;
     QDateTime res = d->locale.toDateTime(str, format);
     res.setTimeSpec(Qt::UTC);
-    if (ok) *ok = res.isValid();
+    if (ok)
+        *ok = res.isValid();
     return res;
 }
 
 QDate Localization::readDate(const QString &str, bool *ok) const
 {
     QDate res;
-    if (ok) *ok = false;
+    if (ok)
+        *ok = false;
 
     // Try all the formats.
     for (const auto &format : std::as_const(d->dateFormats)) {
@@ -181,25 +188,29 @@ QDate Localization::readDate(const QString &str, bool *ok) const
         if (res.isValid())
             break;
     }
-    if (ok) *ok = res.isValid();
+    if (ok)
+        *ok = res.isValid();
     return res;
 }
 
 QDate Localization::readDate(const QString &str, const QString &format, bool *ok) const
 {
-    if (ok) *ok = false;
+    if (ok)
+        *ok = false;
     QDate res = d->locale.toDate(str, format);
     if (!res.isValid()) {
         res = QDate::fromString(str);
     }
-    if (ok) *ok = res.isValid();
+    if (ok)
+        *ok = res.isValid();
     return res;
 }
 
 Time Localization::readTime(const QString &str, bool *ok) const
 {
     Time res;
-    if (ok) *ok = false;
+    if (ok)
+        *ok = false;
 
     // Try all the formats.
     for (const auto &format : std::as_const(d->timeFormats)) {
@@ -242,11 +253,9 @@ QString Localization::timeToRegExp(const QString &format, bool neg) const
         f.replace("z", "\\d+");
     }
     if (f.contains("ap")) {
-        f.replace("ap", QString("(%1|%2|%3|%4)")
-                  .arg(d->locale.amText().toUpper(),
-                       d->locale.amText().toLower(),
-                       d->locale.pmText().toUpper(),
-                       d->locale.pmText().toLower()));
+        f.replace("ap",
+                  QString("(%1|%2|%3|%4)")
+                      .arg(d->locale.amText().toUpper(), d->locale.amText().toLower(), d->locale.pmText().toUpper(), d->locale.pmText().toLower()));
     }
     return f;
 }
@@ -267,13 +276,15 @@ Time Localization::readTime(const QString &str, const QString &format, bool *ok)
         if (!match.hasMatch() || match.capturedLength() != str.length()) {
             Time time;
             time.setValid(false);
-            if (ok) *ok = false;
+            if (ok)
+                *ok = false;
             return time;
         }
         // just use QTime
         auto qt = d->locale.toTime(str, f);
         Time time(qt);
-        if (ok) *ok = time.isValid();
+        if (ok)
+            *ok = time.isValid();
         return time;
     }
     const auto exp = timeToRegExp(format, true);
@@ -282,15 +293,20 @@ Time Localization::readTime(const QString &str, const QString &format, bool *ok)
     if (!match.hasMatch() || match.capturedLength() != str.length()) {
         Time time;
         time.setValid(false);
-        if (ok) *ok = false;
+        if (ok)
+            *ok = false;
         return time;
     }
 
     QMap<int, int> values;
-    if (format.contains("[h]")) values.insert(format.indexOf("[h]"), 1);
-    if (format.contains("[mm]")) values.insert(format.indexOf("[mm]"), 2);
-    else if (format.contains("mm")) values.insert(format.indexOf("mm"), 2);
-    if (format.contains("ss")) values.insert(format.indexOf("ss"), 3);
+    if (format.contains("[h]"))
+        values.insert(format.indexOf("[h]"), 1);
+    if (format.contains("[mm]"))
+        values.insert(format.indexOf("[mm]"), 2);
+    else if (format.contains("mm"))
+        values.insert(format.indexOf("mm"), 2);
+    if (format.contains("ss"))
+        values.insert(format.indexOf("ss"), 3);
 
     int64_t h = 0;
     int64_t m = 0;
@@ -305,38 +321,41 @@ Time Localization::readTime(const QString &str, const QString &format, bool *ok)
         } else if (!number.isEmpty()) {
             auto type = values.constBegin().value();
             switch (type) {
-                case 1:
-                    h = number.toLong(&succ);
-                    if (!succ) {
-                        Time time;
-                        time.setValid(false);
-                        if (ok) *ok = false;
-                        return time;
-                    }
-                    values.remove(values.key(type));
-                    break;
-                case 2:
-                    m = number.toLong(&succ);
-                    if (!succ) {
-                        Time time;
-                        time.setValid(false);
-                        if (ok) *ok = false;
-                        return time;
-                    }
-                    values.remove(values.key(type));
-                    break;
-                case 3:
-                    s = number.toDouble(&succ);
-                    if (!succ) {
-                        Time time;
-                        time.setValid(false);
-                        if (ok) *ok = false;
-                        return time;
-                    }
-                    values.remove(values.key(type));
-                    break;
-                default:
-                    break;
+            case 1:
+                h = number.toLong(&succ);
+                if (!succ) {
+                    Time time;
+                    time.setValid(false);
+                    if (ok)
+                        *ok = false;
+                    return time;
+                }
+                values.remove(values.key(type));
+                break;
+            case 2:
+                m = number.toLong(&succ);
+                if (!succ) {
+                    Time time;
+                    time.setValid(false);
+                    if (ok)
+                        *ok = false;
+                    return time;
+                }
+                values.remove(values.key(type));
+                break;
+            case 3:
+                s = number.toDouble(&succ);
+                if (!succ) {
+                    Time time;
+                    time.setValid(false);
+                    if (ok)
+                        *ok = false;
+                    return time;
+                }
+                values.remove(values.key(type));
+                break;
+            default:
+                break;
             }
             number.clear();
         }
@@ -345,7 +364,8 @@ Time Localization::readTime(const QString &str, const QString &format, bool *ok)
         const Number dur = (double)h + m / 60.0 + s / 3600;
         return Time(dur);
     }
-    if (ok) *ok = succ;
+    if (ok)
+        *ok = succ;
     return Time(h, m, s);
 }
 
@@ -361,7 +381,6 @@ QString Localization::dateTimeFormat(bool longFormat) const
     res.replace('H', 'h').replace("AP", "ap");
     return res;
 }
-
 
 QString Localization::dateFormat(bool longFormat) const
 {
@@ -408,7 +427,7 @@ QString Localization::currencySymbol() const
 
 int Localization::firstDayOfWeek() const
 {
-    return (int) d->locale.firstDayOfWeek();
+    return (int)d->locale.firstDayOfWeek();
 }
 
 QString Localization::dayName(int day, bool longFormat) const
@@ -420,7 +439,6 @@ QString Localization::monthName(int month, bool longFormat) const
 {
     return d->locale.standaloneMonthName(month, longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
 }
-
 
 QString Localization::translateString(KLocalizedString str) const
 {
@@ -438,7 +456,8 @@ QString Localization::formatNumber(double num, int precision) const
 {
     char fmt = 'f';
     // use scientific format?
-    if ((num > 1e9) || (num < -1e9) || ((num > 0) && (num < 1e-8)) || ((num < 0) && (num > -1e-8))) fmt = 'e';
+    if ((num > 1e9) || (num < -1e9) || ((num > 0) && (num < 1e-8)) || ((num < 0) && (num > -1e-8)))
+        fmt = 'e';
     return d->locale.toString(num, fmt, precision);
 }
 
@@ -456,7 +475,6 @@ QString Localization::formatDoubleNoSep(double val) const
         res.replace(pos, 1, decimalSymbol);
     return res;
 }
-
 
 QString Localization::formatDateTime(const QDateTime &datetime, bool longFormat) const
 {
@@ -539,10 +557,10 @@ QString Localization::formatTime(const Time &time, const QString &format) const
 
 QString Localization::languageName(bool full) const
 {
-    if (full) return d->locale.nativeLanguageName();
+    if (full)
+        return d->locale.nativeLanguageName();
     return d->locale.name();
 }
-
 
 QString Localization::toUpper(const QString &str) const
 {
@@ -554,22 +572,24 @@ QString Localization::toLower(const QString &str) const
     return d->locale.toLower(str);
 }
 
-static QString getSeparator(const QString &str) {
+static QString getSeparator(const QString &str)
+{
     QString sep;
     int stage = 0;
-    for (int i = 0; i < str.length(); ++i)
-    {
+    for (int i = 0; i < str.length(); ++i) {
         if (stage == 0) {
             if (str[i].isLetter())
                 stage++;
             continue;
         }
         if (stage == 1) {
-            if (str[i].isLetter()) continue;
-            stage++;  // no continue here, we want to apply stage2 logic
+            if (str[i].isLetter())
+                continue;
+            stage++; // no continue here, we want to apply stage2 logic
         }
         if (stage == 2) {
-            if (str[i].isLetter()) break;  // we're done
+            if (str[i].isLetter())
+                break; // we're done
             sep += str[i];
         }
     }
@@ -630,14 +650,14 @@ void Localization::updateDateFormats()
     } else {
         d->dateFormats.insert(Format::Date3, fmt.replace("yy", "yyyy"));
     }
-    //long
+    // long
     fmt = longFormat;
     d->dateFormats.insert(Format::Date4, fmt.replace("MMMM", "MMM")); // long day, abrev moth
     fmt = longFormat;
     d->dateFormats.insert(Format::Date5, fmt.replace("dddd", "ddd"));
     d->dateFormats.insert(Format::Date6, fmt.replace("MMMM", "MMM"));
     d->dateFormats.insert(Format::Date7, fmt.replace("yyyy", "yy"));
-    //d->dateFormats.insert(fmt.replace("MMM", "MMMMM")); // special one letter month format
+    // d->dateFormats.insert(fmt.replace("MMM", "MMMMM")); // special one letter month format
 
     // do not localize
     d->dateFormats.insert(Format::DateIso1, "yyyy-MM-dd");
@@ -737,7 +757,8 @@ void Localization::updateTimeFormats()
     d->timeFormats.insert(Format::TimeIso, "hh:mm:ss.z");
 }
 
-void Localization::setLocale(const QLocale &l) {
+void Localization::setLocale(const QLocale &l)
+{
     d->locale = l;
 
     updateDateTimeFormats();
@@ -754,12 +775,13 @@ QDebug operator<<(QDebug dbg, const Calligra::Sheets::Localization *l)
     if (l) {
         return operator<<(dbg, *l);
     }
-    dbg.noquote().nospace()<<"Calligra::Sheets::Localization("<<(void*)l<<')';
+    dbg.noquote().nospace() << "Calligra::Sheets::Localization(" << (void *)l << ')';
     return dbg.quote().space();
 }
 
 QDebug operator<<(QDebug dbg, const Calligra::Sheets::Localization &l)
 {
-    dbg.noquote().nospace()<<"Calligra::Sheets::Localization("<<l.languageName(false)<<" t='"<<l.thousandsSeparator()<<"' d='"<<l.decimalSymbol()<<"')";
+    dbg.noquote().nospace() << "Calligra::Sheets::Localization(" << l.languageName(false) << " t='" << l.thousandsSeparator() << "' d='" << l.decimalSymbol()
+                            << "')";
     return dbg.quote().space();
 }

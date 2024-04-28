@@ -42,40 +42,38 @@ class QString;
 class FLAKE_EXPORT KoFrameShape
 {
 public:
-
     /**
-    * Constructor.
-    *
-    * \param ns The namespace. E.g. KoXmlNS::draw
-    * \param element The tag-name. E.g. "image"
-    */
+     * Constructor.
+     *
+     * \param ns The namespace. E.g. KoXmlNS::draw
+     * \param element The tag-name. E.g. "image"
+     */
     KoFrameShape(const QString &ns, const QString &tag);
 
     /**
-    * Destructor.
-    */
+     * Destructor.
+     */
     virtual ~KoFrameShape();
 
     /**
-    * Loads the content of the draw:frame element and it's children. This
-    * method calls the abstract loadOdfFrameElement() method.
-    *
-    * @return false if loading failed
-    */
+     * Loads the content of the draw:frame element and it's children. This
+     * method calls the abstract loadOdfFrameElement() method.
+     *
+     * @return false if loading failed
+     */
     virtual bool loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 protected:
-
     /**
-    * Abstract method to handle loading of the defined inner element like
-    * e.g. the draw:image element.
-    * @return false if loading failed
-    */
+     * Abstract method to handle loading of the defined inner element like
+     * e.g. the draw:image element.
+     * @return false if loading failed
+     */
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOFRAMESHAPE_H */

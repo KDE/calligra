@@ -43,7 +43,7 @@ public:
     void setCutMode(bool cut);
 
     Region sourceRegion() const;
-    
+
     static QRect adjustPasteArea(QRect sourceRect, QRect pasteArea);
 
     virtual bool isApproved() const;
@@ -82,15 +82,15 @@ protected:
     Region parseSnippet(const QMimeData *mimeData, bool *isCut);
 
 private:
-    bool                m_haveSource;
-    bool                m_haveText;
-    Region              m_sourceRegion;
-    QStringList         m_text;
-    Paste::Mode         m_pasteMode;
-    Paste::Operation    m_operation;
-    bool                m_pasteFC;
-    bool                m_sameApp;
-    bool                m_isCut;
+    bool m_haveSource;
+    bool m_haveText;
+    Region m_sourceRegion;
+    QStringList m_text;
+    Paste::Mode m_pasteMode;
+    Paste::Operation m_operation;
+    bool m_pasteFC;
+    bool m_sameApp;
+    bool m_isCut;
     QVector<AbstractRegionCommand *> m_nestedCommands;
 };
 

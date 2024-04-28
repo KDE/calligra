@@ -22,11 +22,11 @@ class FLAKE_EXPORT KoDockFactoryBase
 public:
     enum DockPosition {
         DockTornOff, ///< Floating as its own top level window
-        DockTop,    ///< Above the central widget
+        DockTop, ///< Above the central widget
         DockBottom, ///< Below the central widget
-        DockRight,  ///< Right of the centra widget
-        DockLeft,   ///< Left of the centra widget
-        DockMinimized  ///< Not docked, but reachable via the menu
+        DockRight, ///< Right of the centra widget
+        DockLeft, ///< Left of the centra widget
+        DockMinimized ///< Not docked, but reachable via the menu
     };
 
     KoDockFactoryBase();
@@ -40,11 +40,13 @@ public:
 
     /// @return the dockers default visibility
     /// Default is true.
-    virtual bool defaultVisible() const {
+    virtual bool defaultVisible() const
+    {
         return true;
     }
     /// Returns true if the dock widget should get a collapsable header.
-    virtual bool isCollapsable() const {
+    virtual bool isCollapsable() const
+    {
         return true;
     }
 
@@ -52,13 +54,14 @@ public:
      * In case the docker is collapsable, returns true if the dock widget
      * will start collapsed by default.
      */
-    virtual bool defaultCollapsed() const {
+    virtual bool defaultCollapsed() const
+    {
         return false;
     }
 
     /// Creates the dock widget
     /// @return the created dock widget
-    virtual QDockWidget* createDockWidget() = 0;
+    virtual QDockWidget *createDockWidget() = 0;
 };
 
 #endif

@@ -50,9 +50,9 @@ CALLIGRA_SHEETS_ENGINE_EXPORT bool isCellReference(const QString &text, int star
  * Generate and return the ODF formula for this cell (\p thisRow, \p thisColumn) based on the formula in the
  * defined cell (\p referencedRow, \p referencedColumn ).
  */
-CALLIGRA_SHEETS_ENGINE_EXPORT QString adjustFormulaReference(const QString& formula, int referencedRow, int referencedColumn, int thisRow, int thisColumn);
+CALLIGRA_SHEETS_ENGINE_EXPORT QString adjustFormulaReference(const QString &formula, int referencedRow, int referencedColumn, int thisRow, int thisColumn);
 
-//Return true when it's a reference to cell from sheet.
+// Return true when it's a reference to cell from sheet.
 CALLIGRA_SHEETS_ENGINE_EXPORT bool localReferenceAnchor(const QString &_ref);
 
 CALLIGRA_SHEETS_ENGINE_EXPORT bool isCellnameCharacter(const QChar &c);

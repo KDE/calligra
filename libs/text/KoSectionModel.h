@@ -1,10 +1,10 @@
 #ifndef KOSECTIONMODEL_H
 #define KOSECTIONMODEL_H
 
-#include <QTextDocument>
 #include <QAbstractItemModel>
-#include <QVector>
 #include <QSet>
+#include <QTextDocument>
+#include <QVector>
 
 #include <KoSection.h>
 #include <KoSectionEnd.h>
@@ -120,7 +120,7 @@ private:
      * stored in @p section already) in position childIdx.
      * Affects only Model Level(@see KoSectionModel).
      */
-    void insertToModel(KoSection* section, int childIdx);
+    void insertToModel(KoSection *section, int childIdx);
     /**
      * Deletes @p section from it's parent (should be
      * stored in @p section already).
@@ -135,9 +135,8 @@ private:
     QHash<KoSection *, QPersistentModelIndex> m_modelIndex;
 
     QVector<KoSection *> m_rootSections;
-
 };
 
 Q_DECLARE_METATYPE(KoSectionModel *)
 
-#endif //KOSECTIONMODEL_H
+#endif // KOSECTIONMODEL_H

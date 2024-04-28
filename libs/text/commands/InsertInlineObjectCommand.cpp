@@ -6,10 +6,10 @@
 
 #include "InsertInlineObjectCommand.h"
 
-#include "KoTextEditor.h"
-#include "KoTextDocument.h"
-#include "KoInlineTextObjectManager.h"
 #include "KoInlineObject.h"
+#include "KoInlineTextObjectManager.h"
+#include "KoTextDocument.h"
+#include "KoTextEditor.h"
 
 InsertInlineObjectCommand::InsertInlineObjectCommand(KoInlineObject *inlineObject, QTextDocument *document, KUndo2Command *parent)
     : KUndo2Command(parent)
@@ -37,8 +37,7 @@ void InsertInlineObjectCommand::redo()
         doc.inlineTextObjectManager()->insertInlineObject(*editor->cursor(), m_inlineObject);
         m_position = editor->cursor()->position();
         m_first = false;
-    }
-    else {
+    } else {
         doc.inlineTextObjectManager()->addInlineObject(m_inlineObject);
     }
     editor->setPosition(m_position);

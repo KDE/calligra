@@ -5,31 +5,30 @@
  */
 
 #include "KWPageSettingsDialog.h"
+#include "KWDocumentColumns.h"
 #include "KWPageStyle.h"
 #include "KWPageStyle_p.h"
-#include "KWDocumentColumns.h"
 
 #include <KWDocument.h>
-#include <commands/KWPageStylePropertiesCommand.h>
-#include <commands/KWNewPageStyleCommand.h>
 #include <commands/KWChangePageStyleCommand.h>
+#include <commands/KWNewPageStyleCommand.h>
+#include <commands/KWPageStylePropertiesCommand.h>
 
 #include <KoUnit.h>
 
-#include <QPushButton>
-#include <QListWidget>
 #include <QInputDialog>
+#include <QListWidget>
+#include <QPushButton>
 
 KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, const KWPage &page)
-        : KoPageLayoutDialog(parent, page.pageStyle().pageLayout()),
-        m_document(document),
-        m_page(page),
-        m_pageStyle(page.pageStyle())
+    : KoPageLayoutDialog(parent, page.pageStyle().pageLayout())
+    , m_document(document)
+    , m_page(page)
+    , m_pageStyle(page.pageStyle())
 {
     Q_ASSERT(document);
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel);
-    connect(buttonBox(), &QDialogButtonBox::clicked,
-            this, &KWPageSettingsDialog::slotButtonClicked);
+    connect(buttonBox(), &QDialogButtonBox::clicked, this, &KWPageSettingsDialog::slotButtonClicked);
     showUnitchooser(true);
     Q_ASSERT(page.isValid());
 
@@ -52,14 +51,14 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     connect(m_deletePageStyleButton, &QAbstractButton::clicked, this, &KWPageSettingsDialog::pageStyleDeleteClicked);
     pageStyleLayout2->addWidget(m_deletePageStyleButton);
     pageStyleLayout2->addStretch();
-    foreach(KPageWidgetItem *item, QList<KPageWidgetItem*>() << columnsPage << stylePage)
+    foreach (KPageWidgetItem *item, QList<KPageWidgetItem *>() << columnsPage << stylePage)
         m_pages[item->name()] = item;
 
     reloadPageStyles();
 
-    showPageSpread(false); //TODO better would be allow n pages to face rather then only 2
+    showPageSpread(false); // TODO better would be allow n pages to face rather then only 2
     showTextDirection(true); // TODO can we hide this in selected usecases? Use the resource manager bidi-check maybe?
-    //showApplyToDocument(true); // TODO uncommand when we can handle it.
+    // showApplyToDocument(true); // TODO uncommand when we can handle it.
 
 #if 0
     bool simpleSetup = m_document->pageCount() == 1
@@ -116,7 +115,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     connect(this, &KoPageLayoutDialog::unitChanged, this, &KWPageSettingsDialog::setDocumentUnit);
 }
 
-KPageWidgetItem* KWPageSettingsDialog::pageItem(const QString &name) const
+KPageWidgetItem *KWPageSettingsDialog::pageItem(const QString &name) const
 {
     return m_pages.value(name);
 }
@@ -154,7 +153,7 @@ void KWPageSettingsDialog::slotApplyClicked()
 
         // its a page spread, which words can handle, so we can safely set the
         // normal page size and assume that the page object will do the right thing
-        lay.width /= (qreal) 2;
+        lay.width /= (qreal)2;
     }
     styleToUpdate.setPageLayout(lay);
     styleToUpdate.setColumns(m_columns->columns());
@@ -164,10 +163,9 @@ void KWPageSettingsDialog::slotApplyClicked()
     m_document->firePageSetupChanged();
 }
 
-void KWPageSettingsDialog::slotButtonClicked(QAbstractButton* button)
+void KWPageSettingsDialog::slotButtonClicked(QAbstractButton *button)
 {
-    if(button == buttonBox()->button(QDialogButtonBox::Apply))
-    {
+    if (button == buttonBox()->button(QDialogButtonBox::Apply)) {
         slotApplyClicked();
     }
 }
@@ -198,17 +196,28 @@ void KWPageSettingsDialog::pageStyleCloneClicked()
     Q_ASSERT(item);
     KWPageStyle pagestyle = m_document->pageManager()->pageStyle(item->text());
     Q_ASSERT(pagestyle.isValid());
-    class Validator : public QValidator {
+    class Validator : public QValidator
+    {
     public:
-        Validator(KWDocument *document) : QValidator(), m_document(document) {}
-        State validate(QString &input, int&) const override {
+        Validator(KWDocument *document)
+            : QValidator()
+            , m_document(document)
+        {
+        }
+        State validate(QString &input, int &) const override
+        {
             return input.trimmed().isEmpty() || m_document->pageManager()->pageStyle(input).isValid() ? Intermediate : Acceptable;
         }
+
     private:
         KWDocument *m_document;
     };
     Validator validator(m_document);
-    QString name = QInputDialog::getText(this, i18n("Clone Page Style"), i18n("Add a new page style with the name:"), QLineEdit::Normal, pagestyle.name() ); // QT5TODO: &validator);
+    QString name = QInputDialog::getText(this,
+                                         i18n("Clone Page Style"),
+                                         i18n("Add a new page style with the name:"),
+                                         QLineEdit::Normal,
+                                         pagestyle.name()); // QT5TODO: &validator);
     if (name.isEmpty())
         return;
     pagestyle.detach(name);

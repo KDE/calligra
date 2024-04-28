@@ -25,45 +25,42 @@
 #include "KPrPageApplicationData.h"
 #include "pageeffects/KPrPageEffect.h"
 
-KPrPageEffectSetCommand::KPrPageEffectSetCommand(KoPAPageBase * page, KPrPageEffect * pageEffect, KUndo2Command *parent)
-: KUndo2Command(parent)
-, m_page( page )
-, m_newPageEffect( pageEffect )
-, m_oldPageEffect( KPrPage::pageData( m_page )->pageEffect() )
-, m_deleteNewPageEffect( true )
+KPrPageEffectSetCommand::KPrPageEffectSetCommand(KoPAPageBase *page, KPrPageEffect *pageEffect, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_page(page)
+    , m_newPageEffect(pageEffect)
+    , m_oldPageEffect(KPrPage::pageData(m_page)->pageEffect())
+    , m_deleteNewPageEffect(true)
 {
-    Q_ASSERT( m_newPageEffect != m_oldPageEffect );
-    if ( m_newPageEffect ) {
-        if ( ! m_oldPageEffect ) {
-            setText( kundo2_i18n( "Create Slide Effect" ) );
+    Q_ASSERT(m_newPageEffect != m_oldPageEffect);
+    if (m_newPageEffect) {
+        if (!m_oldPageEffect) {
+            setText(kundo2_i18n("Create Slide Effect"));
+        } else {
+            setText(kundo2_i18n("Modify Slide Effect"));
         }
-        else {
-            setText( kundo2_i18n( "Modify Slide Effect" ) );
-        }
-    }
-    else {
-        setText( kundo2_i18n( "Delete Slide Effect" ) );
+    } else {
+        setText(kundo2_i18n("Delete Slide Effect"));
     }
 }
 
 KPrPageEffectSetCommand::~KPrPageEffectSetCommand()
 {
-    if ( m_deleteNewPageEffect ) {
+    if (m_deleteNewPageEffect) {
         delete m_newPageEffect;
-    }
-    else {
+    } else {
         delete m_oldPageEffect;
     }
 }
 
 void KPrPageEffectSetCommand::redo()
 {
-    KPrPage::pageData( m_page )->setPageEffect( m_newPageEffect );
+    KPrPage::pageData(m_page)->setPageEffect(m_newPageEffect);
     m_deleteNewPageEffect = false;
 }
 
 void KPrPageEffectSetCommand::undo()
 {
-    KPrPage::pageData( m_page )->setPageEffect( m_oldPageEffect );
+    KPrPage::pageData(m_page)->setPageEffect(m_oldPageEffect);
     m_deleteNewPageEffect = true;
 }

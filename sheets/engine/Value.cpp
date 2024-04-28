@@ -18,14 +18,34 @@ using namespace Calligra::Sheets;
 class ValueArray
 {
 public:
-    ValueArray() : m_size(0, 0) {}
-    ValueArray(const ValueStorage& storage, const QSize& size) : m_size(size), m_storage(storage) {}
+    ValueArray()
+        : m_size(0, 0)
+    {
+    }
+    ValueArray(const ValueStorage &storage, const QSize &size)
+        : m_size(size)
+        , m_storage(storage)
+    {
+    }
 
-    ValueStorage& storage() { return m_storage; }
-    int rows() const { return qMax(m_size.height(), m_storage.rows()); }
-    int columns() const { return qMax(m_size.width(), m_storage.columns()); }
+    ValueStorage &storage()
+    {
+        return m_storage;
+    }
+    int rows() const
+    {
+        return qMax(m_size.height(), m_storage.rows());
+    }
+    int columns() const
+    {
+        return qMax(m_size.width(), m_storage.columns());
+    }
 
-    bool operator==(const ValueArray& a) const { return rows() == a.rows() && columns() == a.columns() && m_storage == a.m_storage; }
+    bool operator==(const ValueArray &a) const
+    {
+        return rows() == a.rows() && columns() == a.columns() && m_storage == a.m_storage;
+    }
+
 private:
     QSize m_size;
     ValueStorage m_storage;
@@ -34,7 +54,6 @@ private:
 class Q_DECL_HIDDEN Value::Private : public QSharedData
 {
 public:
-
     Value::Type type;
     Value::Format format;
 
@@ -44,18 +63,24 @@ public:
         bool b;
         int64_t i;
         Number f;
-        complex<Number>* pc;
-        QString* ps;
-        ValueArray* pa;
+        complex<Number> *pc;
+        QString *ps;
+        ValueArray *pa;
     };
 
     // create empty data
-    Private() : type(Value::Empty), format(Value::fmt_None), ps(0) {}
+    Private()
+        : type(Value::Empty)
+        , format(Value::fmt_None)
+        , ps(0)
+    {
+    }
 
-    Private(const Private& o)
-            : QSharedData(o)
-            , type(o.type)
-            , format(o.format) {
+    Private(const Private &o)
+        : QSharedData(o)
+        , type(o.type)
+        , format(o.format)
+    {
         switch (type) {
         case Value::Empty:
         default:
@@ -84,29 +109,38 @@ public:
     }
 
     // destroys data
-    ~Private() {
+    ~Private()
+    {
         if (this == s_null)
             s_null = 0;
         clear();
     }
 
     // static empty data to be shared
-    static Private* null() {
-        if (!s_null) s_null = new Private;
+    static Private *null()
+    {
+        if (!s_null)
+            s_null = new Private;
         return s_null;
     }
 
     // true if it's null (which is shared)
-    bool isNull() {
+    bool isNull()
+    {
         return this == s_null;
     }
 
     /** Deletes all data. */
-    void clear() {
-        if (type == Value::Array)   delete pa;
-        if (type == Value::Complex) delete pc;
-        if (type == Value::Error)   delete ps;
-        if (type == Value::String)  delete ps;
+    void clear()
+    {
+        if (type == Value::Array)
+            delete pa;
+        if (type == Value::Complex)
+            delete pc;
+        if (type == Value::Error)
+            delete ps;
+        if (type == Value::String)
+            delete ps;
         type = Value::Empty;
         b = 0;
     }
@@ -115,9 +149,9 @@ public:
     void setFormatByType();
 
 private:
-    void operator=(const Value::Private& o);
+    void operator=(const Value::Private &o);
 
-    static Private* s_null;
+    static Private *s_null;
 };
 
 void Value::Private::setFormatByType()
@@ -150,7 +184,7 @@ void Value::Private::setFormatByType()
 }
 
 // to be shared between all empty value
-Value::Private* Value::Private::s_null = 0;
+Value::Private *Value::Private::s_null = 0;
 
 // static things
 namespace
@@ -171,7 +205,7 @@ Value ks_error_value;
 
 // create an empty value
 Value::Value()
-        : d(Private::null())
+    : d(Private::null())
 {
 }
 
@@ -182,41 +216,50 @@ Value::~Value()
 
 // create value of certain type
 Value::Value(Value::Type _type)
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = _type;
     d->setFormatByType();
 }
 
 // copy constructor
-Value::Value(const Value& _value)
-        : d(_value.d)
+Value::Value(const Value &_value)
+    : d(_value.d)
 {
 }
 
 // assignment operator
-Value& Value::operator=(const Value & _value)
+Value &Value::operator=(const Value &_value)
 {
     d = _value.d;
     return *this;
 }
 
 // comparison operator - returns true only if strictly identical, unlike equal()/compare()
-bool Value::operator==(const Value& o) const
+bool Value::operator==(const Value &o) const
 {
     if (d->type != o.d->type)
         return false;
     switch (d->type) {
     // null() (d->b == 1) and empty() (d->b == 0) are equal to this operator
-    case Empty:   return true;
-    case Boolean: return o.d->b == d->b;
-    case Integer: return o.d->i == d->i;
-    case Float:   return compare(o.d->f, d->f) == 0;
-    case Complex: return (!d->pc && !o.d->pc) || ((d->pc && o.d->pc) && (*o.d->pc == *d->pc));
-    case String:  return (!d->ps && !o.d->ps) || ((d->ps && o.d->ps) && (*o.d->ps == *d->ps));
-    case Array:   return (!d->pa && !o.d->pa) || ((d->pa && o.d->pa) && (*o.d->pa == *d->pa));
-    case Error:   return (!d->ps && !o.d->ps) || ((d->ps && o.d->ps) && (*o.d->ps == *d->ps));
-    default: break;
+    case Empty:
+        return true;
+    case Boolean:
+        return o.d->b == d->b;
+    case Integer:
+        return o.d->i == d->i;
+    case Float:
+        return compare(o.d->f, d->f) == 0;
+    case Complex:
+        return (!d->pc && !o.d->pc) || ((d->pc && o.d->pc) && (*o.d->pc == *d->pc));
+    case String:
+        return (!d->ps && !o.d->ps) || ((d->ps && o.d->ps) && (*o.d->ps == *d->ps));
+    case Array:
+        return (!d->pa && !o.d->pa) || ((d->pa && o.d->pa) && (*o.d->pa == *d->pa));
+    case Error:
+        return (!d->ps && !o.d->ps) || ((d->ps && o.d->ps) && (*o.d->ps == *d->ps));
+    default:
+        break;
     }
     warnSheets << "Unhandled type in Value::operator==: " << d->type;
     return false;
@@ -224,7 +267,7 @@ bool Value::operator==(const Value& o) const
 
 // create a boolean value
 Value::Value(bool b)
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = Boolean;
     d->b = b;
@@ -233,7 +276,7 @@ Value::Value(bool b)
 
 // create an integer value
 Value::Value(int64_t i)
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = Integer;
     d->i = i;
@@ -242,7 +285,7 @@ Value::Value(int64_t i)
 
 // create an integer value
 Value::Value(int i)
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = Integer;
     d->i = static_cast<int64_t>(i);
@@ -252,7 +295,7 @@ Value::Value(int i)
 #ifndef Q_OS_WIN
 // create an integer value
 Value::Value(qsizetype i)
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = Integer;
     d->i = i;
@@ -262,7 +305,7 @@ Value::Value(qsizetype i)
 
 // create a floating-point value
 Value::Value(double f)
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = Float;
     d->f = Number(f);
@@ -271,18 +314,17 @@ Value::Value(double f)
 
 // create a floating-point value
 Value::Value(long double f)
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = Float;
     d->f = Number(f);
     d->format = fmt_Number;
 }
 
-
 #ifdef CALLIGRA_SHEETS_HIGH_PRECISION_SUPPORT
 // create a floating-point value
 Value::Value(Number f)
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = Float;
     d->f = f;
@@ -291,8 +333,8 @@ Value::Value(Number f)
 #endif // CALLIGRA_SHEETS_HIGH_PRECISION_SUPPORT
 
 // create a complex number value
-Value::Value(const complex<Number>& c)
-        : d(Private::null())
+Value::Value(const complex<Number> &c)
+    : d(Private::null())
 {
     d->type = Complex;
     d->pc = new complex<Number>(c);
@@ -300,8 +342,8 @@ Value::Value(const complex<Number>& c)
 }
 
 // create a string value
-Value::Value(const QString& s)
-        : d(Private::null())
+Value::Value(const QString &s)
+    : d(Private::null())
 {
     d->type = String;
     d->ps = new QString(s);
@@ -310,7 +352,7 @@ Value::Value(const QString& s)
 
 // create a string value
 Value::Value(const char *s)
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = String;
     d->ps = new QString(s);
@@ -318,11 +360,11 @@ Value::Value(const char *s)
 }
 
 // create a floating-point value from date/time
-Value::Value(const QDateTime& dt, const CalculationSettings* settings)
-        : d(Private::null())
+Value::Value(const QDateTime &dt, const CalculationSettings *settings)
+    : d(Private::null())
 {
     const QDate refDate(settings->referenceDate());
-    const Time refTime(0, 0);    // reference time is midnight
+    const Time refTime(0, 0); // reference time is midnight
     d->type = Float;
     d->f = Number(refDate.daysTo(dt.date()));
     const Time time(dt.time());
@@ -332,9 +374,9 @@ Value::Value(const QDateTime& dt, const CalculationSettings* settings)
 
 // create a floating-point value from time
 Value::Value(const Time &time)
-        : d(Private::null())
+    : d(Private::null())
 {
-    const Time refTime(0, 0);    // reference time is midnight
+    const Time refTime(0, 0); // reference time is midnight
 
     d->type = Float;
     d->f = (refTime + time).duration() / 24.0;
@@ -342,8 +384,8 @@ Value::Value(const Time &time)
 }
 
 // create a floating-point value from date
-Value::Value(const QDate& date, const CalculationSettings* settings)
-        : d(Private::null())
+Value::Value(const QDate &date, const CalculationSettings *settings)
+    : d(Private::null())
 {
     const QDate refDate(settings->referenceDate());
 
@@ -353,8 +395,8 @@ Value::Value(const QDate& date, const CalculationSettings* settings)
 }
 
 // create an array value
-Value::Value(const ValueStorage& array, const QSize& size)
-        : d(Private::null())
+Value::Value(const ValueStorage &array, const QSize &size)
+    : d(Private::null())
 {
     d->type = Array;
     d->pa = new ValueArray(array, size);
@@ -440,7 +482,7 @@ QString Value::asStringWithDoubleQuotes() const
     if (type() == Value::String) {
         if (!(s.startsWith(QLatin1Char('\"')) && s.endsWith(QLatin1Char('\"')))) {
             if (s.startsWith(QLatin1Char('\'')) && s.endsWith(QLatin1Char('\'')))
-                s = s.mid(1, s.length()-2);
+                s = s.mid(1, s.length() - 2);
             s = QLatin1Char('\"') + s + QLatin1Char('\"');
         }
     }
@@ -461,10 +503,10 @@ QVariant Value::asVariant() const
         result = d->b;
         break;
     case Value::Integer:
-        result = (qlonglong) d->i;
+        result = (qlonglong)d->i;
         break;
     case Value::Float:
-        result = (double) numToDouble(d->f);
+        result = (double)numToDouble(d->f);
         break;
     case Value::Complex:
         // FIXME: add support for complex numbers
@@ -476,7 +518,7 @@ QVariant Value::asVariant() const
         break;
     case Value::Array:
         // FIXME: not supported yet
-        //result = ValueArray( d->pa );
+        // result = ValueArray( d->pa );
         break;
     }
 
@@ -484,7 +526,7 @@ QVariant Value::asVariant() const
 }
 
 // set error message
-void Value::setError(const QString& msg)
+void Value::setError(const QString &msg)
 {
     d->clear();
     d->type = Error;
@@ -504,12 +546,12 @@ QString Value::errorMessage() const
 }
 
 // get the value as date/time
-QDateTime Value::asDateTime(const CalculationSettings* settings) const
+QDateTime Value::asDateTime(const CalculationSettings *settings) const
 {
     QDateTime datetime(settings->referenceDate(), QTime(), Qt::UTC);
 
     const int days = asInteger();
-    const int msecs = ::round((numToDouble(asFloat() - double(days))) * 86400000.0);      // 24*60*60*1000
+    const int msecs = ::round((numToDouble(asFloat() - double(days))) * 86400000.0); // 24*60*60*1000
     datetime = datetime.addDays(days);
     datetime = datetime.addMSecs(msecs);
 
@@ -517,7 +559,7 @@ QDateTime Value::asDateTime(const CalculationSettings* settings) const
 }
 
 // get the value as date
-QDate Value::asDate(const CalculationSettings* settings) const
+QDate Value::asDate(const CalculationSettings *settings) const
 {
     QDate dt(settings->referenceDate());
 
@@ -547,54 +589,66 @@ void Value::setFormat(Value::Format fmt)
 
 Value Value::element(unsigned column, unsigned row) const
 {
-    if (d->type != Array) return *this;
-    if (!d->pa) return empty();
+    if (d->type != Array)
+        return *this;
+    if (!d->pa)
+        return empty();
     return d->pa->storage().lookup(column + 1, row + 1);
 }
 
 Value Value::element(unsigned index) const
 {
-    if (d->type != Array) return *this;
-    if (!d->pa) return empty();
+    if (d->type != Array)
+        return *this;
+    if (!d->pa)
+        return empty();
     return d->pa->storage().data(index);
 }
 
-void Value::setElement(unsigned column, unsigned row, const Value& v)
+void Value::setElement(unsigned column, unsigned row, const Value &v)
 {
-    if (d->type != Array) return;
-    if (!d->pa) d->pa = new ValueArray();
+    if (d->type != Array)
+        return;
+    if (!d->pa)
+        d->pa = new ValueArray();
     d->pa->storage().insert(column + 1, row + 1, v);
 }
 
 unsigned Value::columns() const
 {
-    if (d->type != Array) return 1;
-    if (!d->pa) return 1;
+    if (d->type != Array)
+        return 1;
+    if (!d->pa)
+        return 1;
     return d->pa->columns();
 }
 
 unsigned Value::rows() const
 {
-    if (d->type != Array) return 1;
-    if (!d->pa) return 1;
+    if (d->type != Array)
+        return 1;
+    if (!d->pa)
+        return 1;
     return d->pa->rows();
 }
 
 unsigned Value::count() const
 {
-    if (d->type != Array) return 1;
-    if (!d->pa) return 1;
+    if (d->type != Array)
+        return 1;
+    if (!d->pa)
+        return 1;
     return d->pa->storage().count();
 }
 
 // reference to empty value
-const Value& Value::empty()
+const Value &Value::empty()
 {
     return ks_value_empty;
 }
 
 // reference to null value
-const Value& Value::null()
+const Value &Value::null()
 {
     if (!ks_value_null.isNull())
         ks_value_null.d->b = true;
@@ -602,7 +656,7 @@ const Value& Value::null()
 }
 
 // reference to #CIRCLE! error
-const Value& Value::errorCIRCLE()
+const Value &Value::errorCIRCLE()
 {
     if (!ks_error_circle.isError())
         ks_error_circle.setError(i18nc("Error: circular formula dependency", "#CIRCLE!"));
@@ -610,7 +664,7 @@ const Value& Value::errorCIRCLE()
 }
 
 // reference to #DEPEND! error
-const Value& Value::errorDEPEND()
+const Value &Value::errorDEPEND()
 {
     if (!ks_error_depend.isError())
         ks_error_depend.setError(i18nc("Error: broken cell reference", "#DEPEND!"));
@@ -618,7 +672,7 @@ const Value& Value::errorDEPEND()
 }
 
 // reference to #DIV/0! error
-const Value& Value::errorDIV0()
+const Value &Value::errorDIV0()
 {
     if (!ks_error_div0.isError())
         ks_error_div0.setError(i18nc("Error: division by zero", "#DIV/0!"));
@@ -626,7 +680,7 @@ const Value& Value::errorDIV0()
 }
 
 // reference to #N/A error
-const Value& Value::errorNA()
+const Value &Value::errorNA()
 {
     if (!ks_error_na.isError())
         ks_error_na.setError(i18nc("Error: not available", "#N/A"));
@@ -634,7 +688,7 @@ const Value& Value::errorNA()
 }
 
 // reference to #NAME? error
-const Value& Value::errorNAME()
+const Value &Value::errorNAME()
 {
     if (!ks_error_name.isError())
         ks_error_name.setError(i18nc("Error: unknown function name", "#NAME?"));
@@ -642,7 +696,7 @@ const Value& Value::errorNAME()
 }
 
 // reference to #NUM! error
-const Value& Value::errorNUM()
+const Value &Value::errorNUM()
 {
     if (!ks_error_num.isError())
         ks_error_num.setError(i18nc("Error: number out of range", "#NUM!"));
@@ -650,7 +704,7 @@ const Value& Value::errorNUM()
 }
 
 // reference to #NULL! error
-const Value& Value::errorNULL()
+const Value &Value::errorNULL()
 {
     if (!ks_error_null.isError())
         ks_error_null.setError(i18nc("Error: empty intersecting area", "#NULL!"));
@@ -658,7 +712,7 @@ const Value& Value::errorNULL()
 }
 
 // reference to #PARSE! error
-const Value& Value::errorPARSE()
+const Value &Value::errorPARSE()
 {
     if (!ks_error_parse.isError())
         ks_error_parse.setError(i18nc("Error: formula not parseable", "#PARSE!"));
@@ -666,7 +720,7 @@ const Value& Value::errorPARSE()
 }
 
 // reference to #REF! error
-const Value& Value::errorREF()
+const Value &Value::errorREF()
 {
     if (!ks_error_ref.isError())
         ks_error_ref.setError(i18nc("Error: invalid cell/array reference", "#REF!"));
@@ -674,7 +728,7 @@ const Value& Value::errorREF()
 }
 
 // reference to #VALUE! error
-const Value& Value::errorVALUE()
+const Value &Value::errorVALUE()
 {
     if (!ks_error_value.isError())
         ks_error_value.setError(i18nc("Error: wrong (number of) function argument(s)", "#VALUE!"));
@@ -684,8 +738,10 @@ const Value& Value::errorVALUE()
 int Value::compare(Number v1, Number v2)
 {
     Number v3 = v1 - v2;
-    if (v3 > DBL_EPSILON) return 1;
-    if (v3 < -DBL_EPSILON) return -1;
+    if (v3 > DBL_EPSILON)
+        return 1;
+    if (v3 < -DBL_EPSILON)
+        return -1;
     return 0;
 }
 
@@ -696,56 +752,85 @@ bool Value::isZero(Number v)
 
 bool Value::isZero() const
 {
-    if (!isNumber()) return false;
+    if (!isNumber())
+        return false;
     return isZero(asFloat());
 }
 
-bool Value::allowComparison(const Value& v) const
+bool Value::allowComparison(const Value &v) const
 {
     Value::Type t1 = d->type;
     Value::Type t2 = v.type();
 
-    if ((t1 == Empty) && (t2 == Empty)) return true;
-    if ((t1 == Empty) && (t2 == String)) return true;
-    if ((t1 == Empty) && (t2 == Integer)) return true;
-    if ((t1 == Empty) && (t2 == Float)) return true;
-    if ((t1 == Empty) && (t2 == Boolean)) return true;
+    if ((t1 == Empty) && (t2 == Empty))
+        return true;
+    if ((t1 == Empty) && (t2 == String))
+        return true;
+    if ((t1 == Empty) && (t2 == Integer))
+        return true;
+    if ((t1 == Empty) && (t2 == Float))
+        return true;
+    if ((t1 == Empty) && (t2 == Boolean))
+        return true;
 
-    if ((t1 == Boolean) && (t2 == Boolean)) return true;
-    if ((t1 == Boolean) && (t2 == Integer)) return true;
-    if ((t1 == Boolean) && (t2 == Float)) return true;
-    if ((t1 == Boolean) && (t2 == String)) return true;
+    if ((t1 == Boolean) && (t2 == Boolean))
+        return true;
+    if ((t1 == Boolean) && (t2 == Integer))
+        return true;
+    if ((t1 == Boolean) && (t2 == Float))
+        return true;
+    if ((t1 == Boolean) && (t2 == String))
+        return true;
 
-    if ((t1 == Integer) && (t2 == Boolean)) return true;
-    if ((t1 == Integer) && (t2 == Integer)) return true;
-    if ((t1 == Integer) && (t2 == Float)) return true;
-    if ((t1 == Integer) && (t2 == String)) return true;
+    if ((t1 == Integer) && (t2 == Boolean))
+        return true;
+    if ((t1 == Integer) && (t2 == Integer))
+        return true;
+    if ((t1 == Integer) && (t2 == Float))
+        return true;
+    if ((t1 == Integer) && (t2 == String))
+        return true;
 
-    if ((t1 == Float) && (t2 == Boolean)) return true;
-    if ((t1 == Float) && (t2 == Integer)) return true;
-    if ((t1 == Float) && (t2 == Float)) return true;
-    if ((t1 == Float) && (t2 == String)) return true;
+    if ((t1 == Float) && (t2 == Boolean))
+        return true;
+    if ((t1 == Float) && (t2 == Integer))
+        return true;
+    if ((t1 == Float) && (t2 == Float))
+        return true;
+    if ((t1 == Float) && (t2 == String))
+        return true;
 
-    if ((t1 == Complex) && (t2 == Boolean)) return true;
-    if ((t1 == Complex) && (t2 == Integer)) return true;
-    if ((t1 == Complex) && (t2 == Float)) return true;
-    if ((t1 == Complex) && (t2 == String)) return true;
+    if ((t1 == Complex) && (t2 == Boolean))
+        return true;
+    if ((t1 == Complex) && (t2 == Integer))
+        return true;
+    if ((t1 == Complex) && (t2 == Float))
+        return true;
+    if ((t1 == Complex) && (t2 == String))
+        return true;
 
-    if ((t1 == String) && (t2 == Empty)) return true;
-    if ((t1 == String) && (t2 == Boolean)) return true;
-    if ((t1 == String) && (t2 == Integer)) return true;
-    if ((t1 == String) && (t2 == Float)) return true;
-    if ((t1 == String) && (t2 == Complex)) return true;
-    if ((t1 == String) && (t2 == String)) return true;
+    if ((t1 == String) && (t2 == Empty))
+        return true;
+    if ((t1 == String) && (t2 == Boolean))
+        return true;
+    if ((t1 == String) && (t2 == Integer))
+        return true;
+    if ((t1 == String) && (t2 == Float))
+        return true;
+    if ((t1 == String) && (t2 == Complex))
+        return true;
+    if ((t1 == String) && (t2 == String))
+        return true;
 
     // errors can be compared too ...
-    if ((t1 == Error) && (t2 == Error)) return true;
+    if ((t1 == Error) && (t2 == Error))
+        return true;
 
     return false;
 }
 
 // compare values. looks strange in order to be compatible with Excel
-int Value::compare(const Value& v, Qt::CaseSensitivity cs) const
+int Value::compare(const Value &v, Qt::CaseSensitivity cs) const
 {
     Value::Type t1 = d->type;
     Value::Type t2 = v.type();
@@ -767,14 +852,14 @@ int Value::compare(const Value& v, Qt::CaseSensitivity cs) const
     // empty value is always less than string
     // (except when the string is empty)
     if ((t1 == Empty) && (t2 == String))
-        return(v.asString().isEmpty()) ? 0 : -1;
+        return (v.asString().isEmpty()) ? 0 : -1;
 
     // empty vs integer
     if ((t1 == Empty) && (t2 == Integer))
         return -1;
 
     // empty vs float
-    if ((t1  == Empty) && (t2 == Float))
+    if ((t1 == Empty) && (t2 == Float))
         return -1;
 
     // empty vs boolean
@@ -785,8 +870,10 @@ int Value::compare(const Value& v, Qt::CaseSensitivity cs) const
     if ((t1 == Boolean) && (t2 == Boolean)) {
         bool p = asBoolean();
         bool q = v.asBoolean();
-        if (p) return q ? 0 : 1;
-        else return q ? -1 : 0;
+        if (p)
+            return q ? 0 : 1;
+        else
+            return q ? -1 : 0;
     }
 
     // boolean is always greater than integer
@@ -841,7 +928,7 @@ int Value::compare(const Value& v, Qt::CaseSensitivity cs) const
     // string is always greater than empty value
     // (except when the string is empty)
     if ((t1 == String) && (t2 == Empty))
-        return(asString().isEmpty()) ? 0 : 1;
+        return (asString().isEmpty()) ? 0 : 1;
 
     // string is always less than boolean
     if ((t1 == String) && (t2 == Boolean))
@@ -863,69 +950,96 @@ int Value::compare(const Value& v, Qt::CaseSensitivity cs) const
     return 0;
 }
 
-bool Value::equal(const Value& v, Qt::CaseSensitivity cs) const
+bool Value::equal(const Value &v, Qt::CaseSensitivity cs) const
 {
-    if (!allowComparison(v)) return false;
+    if (!allowComparison(v))
+        return false;
     return compare(v, cs) == 0;
 }
 
-bool Value::less(const Value& v, Qt::CaseSensitivity cs) const
+bool Value::less(const Value &v, Qt::CaseSensitivity cs) const
 {
-    if (!allowComparison(v)) return false;
+    if (!allowComparison(v))
+        return false;
     return compare(v, cs) < 0;
 }
 
-bool Value::greater(const Value& v, Qt::CaseSensitivity cs) const
+bool Value::greater(const Value &v, Qt::CaseSensitivity cs) const
 {
-    if (!allowComparison(v)) return false;
+    if (!allowComparison(v))
+        return false;
     return compare(v, cs) > 0;
 }
 
-QTextStream& operator<<(QTextStream& ts, Value::Type type)
+QTextStream &operator<<(QTextStream &ts, Value::Type type)
 {
     switch (type) {
-    case Value::Empty:   ts << "Empty"; break;
-    case Value::Boolean: ts << "Boolean"; break;
-    case Value::Integer: ts << "Integer"; break;
-    case Value::Float:   ts << "Float"; break;
-    case Value::Complex: ts << "Complex"; break;
-    case Value::String:  ts << "String"; break;
-    case Value::Array:   ts << "Array"; break;
-    case Value::Error:   ts << "Error"; break;
-    default: ts << "Unknown!"; break;
+    case Value::Empty:
+        ts << "Empty";
+        break;
+    case Value::Boolean:
+        ts << "Boolean";
+        break;
+    case Value::Integer:
+        ts << "Integer";
+        break;
+    case Value::Float:
+        ts << "Float";
+        break;
+    case Value::Complex:
+        ts << "Complex";
+        break;
+    case Value::String:
+        ts << "String";
+        break;
+    case Value::Array:
+        ts << "Array";
+        break;
+    case Value::Error:
+        ts << "Error";
+        break;
+    default:
+        ts << "Unknown!";
+        break;
     };
     return ts;
 }
 
-QTextStream& operator<<(QTextStream& ts, Value value)
+QTextStream &operator<<(QTextStream &ts, Value value)
 {
     ts << value.type();
     switch (value.type()) {
-    case Value::Empty:   break;
+    case Value::Empty:
+        break;
 
     case Value::Boolean:
         ts << ": ";
-        if (value.asBoolean()) ts << "TRUE";
-        else ts << "FALSE";
+        if (value.asBoolean())
+            ts << "TRUE";
+        else
+            ts << "FALSE";
         break;
 
     case Value::Integer:
-        ts << ": " << value.asInteger(); break;
+        ts << ": " << value.asInteger();
+        break;
 
     case Value::Float:
-        ts << ": " << (double) numToDouble(value.asFloat()); break;
+        ts << ": " << (double)numToDouble(value.asFloat());
+        break;
 
     case Value::Complex: {
         const complex<Number> complex(value.asComplex());
-        ts << ": " << (double) numToDouble(complex.real());
+        ts << ": " << (double)numToDouble(complex.real());
         if (complex.imag() >= 0.0)
             ts << '+';
-        ts << (double) numToDouble(complex.imag()) << 'i';
+        ts << (double)numToDouble(complex.imag()) << 'i';
         break;
     }
 
     case Value::String:
-        ts << ": " << value.asString(); break;
+        ts << ": " << value.asString();
+        break;
 
     case Value::Array: {
         ts << ": {" << value.asString();
@@ -945,9 +1059,11 @@ QTextStream& operator<<(QTextStream& ts, Value value)
     }
 
     case Value::Error:
-        ts << '(' << value.errorMessage() << ')'; break;
+        ts << '(' << value.errorMessage() << ')';
+        break;
 
-    default: break;
+    default:
+        break;
     }
     return ts;
 }
@@ -960,7 +1076,7 @@ namespace Calligra
 {
 namespace Sheets
 {
-size_t qHash(const Value& value, size_t seed)
+size_t qHash(const Value &value, size_t seed)
 {
     switch (value.type()) {
     case Value::Empty:
@@ -990,37 +1106,76 @@ size_t qHash(const Value& value, size_t seed)
   QDebug support
 ****************************************************************************/
 
-QDebug operator<<(QDebug dbg, const Calligra::Sheets::Value& v)
+QDebug operator<<(QDebug dbg, const Calligra::Sheets::Value &v)
 {
     dbg.nospace().noquote() << "Calligra::Sheets::Value(";
     dbg << v.format();
     switch (v.type()) {
-        case Calligra::Sheets::Value::Empty: dbg << ":Empty"; break;
-        case Calligra::Sheets::Value::Boolean:dbg << ":" << (v.asBoolean() ? "true" : "false"); break;
-        case Calligra::Sheets::Value::Integer: dbg << ":" << v.asInteger(); break;
-        case Calligra::Sheets::Value::Float: dbg << ":" << numToDouble(v.asFloat());  break; // FIXME
-        case Calligra::Sheets::Value::Complex: dbg << ":" << "Complex"; break; //TODO
-        case Calligra::Sheets::Value::String: dbg << ":" << v.asString(); break;
-        case Calligra::Sheets::Value::Array: dbg << ":" << "Array"; break; //TODO
-        case Calligra::Sheets::Value::CellRange: dbg << ":" << "CellRange"; break;
-        default: dbg << ":" << v.errorMessage(); break;
+    case Calligra::Sheets::Value::Empty:
+        dbg << ":Empty";
+        break;
+    case Calligra::Sheets::Value::Boolean:
+        dbg << ":" << (v.asBoolean() ? "true" : "false");
+        break;
+    case Calligra::Sheets::Value::Integer:
+        dbg << ":" << v.asInteger();
+        break;
+    case Calligra::Sheets::Value::Float:
+        dbg << ":" << numToDouble(v.asFloat());
+        break; // FIXME
+    case Calligra::Sheets::Value::Complex:
+        dbg << ":"
+            << "Complex";
+        break; // TODO
+    case Calligra::Sheets::Value::String:
+        dbg << ":" << v.asString();
+        break;
+    case Calligra::Sheets::Value::Array:
+        dbg << ":"
+            << "Array";
+        break; // TODO
+    case Calligra::Sheets::Value::CellRange:
+        dbg << ":"
+            << "CellRange";
+        break;
+    default:
+        dbg << ":" << v.errorMessage();
+        break;
     }
     dbg << ')';
     return dbg.space().quote();
 }
 
-QDebug operator<<(QDebug stream, const Calligra::Sheets::Value::Format& f)
+QDebug operator<<(QDebug stream, const Calligra::Sheets::Value::Format &f)
 {
     switch (f) {
-    case Calligra::Sheets::Value::fmt_None:     stream << "None";     break;
-    case Calligra::Sheets::Value::fmt_Boolean:  stream << "Boolean";  break;
-    case Calligra::Sheets::Value::fmt_Number:   stream << "Number";   break;
-    case Calligra::Sheets::Value::fmt_Percent:  stream << "Percent";  break;
-    case Calligra::Sheets::Value::fmt_Money:    stream << "Money";    break;
-    case Calligra::Sheets::Value::fmt_DateTime: stream << "DateTime";     break;
-    case Calligra::Sheets::Value::fmt_Date:     stream << "Date";     break;
-    case Calligra::Sheets::Value::fmt_Time:     stream << "Time";     break;
-    case Calligra::Sheets::Value::fmt_String:   stream << "String";   break;
+    case Calligra::Sheets::Value::fmt_None:
+        stream << "None";
+        break;
+    case Calligra::Sheets::Value::fmt_Boolean:
+        stream << "Boolean";
+        break;
+    case Calligra::Sheets::Value::fmt_Number:
+        stream << "Number";
+        break;
+    case Calligra::Sheets::Value::fmt_Percent:
+        stream << "Percent";
+        break;
+    case Calligra::Sheets::Value::fmt_Money:
+        stream << "Money";
+        break;
+    case Calligra::Sheets::Value::fmt_DateTime:
+        stream << "DateTime";
+        break;
+    case Calligra::Sheets::Value::fmt_Date:
+        stream << "Date";
+        break;
+    case Calligra::Sheets::Value::fmt_Time:
+        stream << "Time";
+        break;
+    case Calligra::Sheets::Value::fmt_String:
+        stream << "String";
+        break;
     }
     return stream;
 }

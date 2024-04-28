@@ -26,7 +26,7 @@ class KoCreateShapesToolPrivate;
  */
 class FLAKE_EXPORT KoCreateShapesTool : public KoInteractionTool
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     /**
      * Create a new tool; typically not called by applications, only by the KoToolManager
@@ -36,7 +36,7 @@ public:
     /// destructor
     ~KoCreateShapesTool() override;
     void mouseReleaseEvent(KoPointerEvent *event) override;
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 

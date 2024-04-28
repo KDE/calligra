@@ -10,64 +10,61 @@
 #include "FormulaEditor.h"
 
 #include "BasicElement.h"
-#include "RowElement.h"
-#include "FixedElement.h"
-#include "NumberElement.h"
-#include "TableElement.h"
-#include "TableDataElement.h"
-#include "TableRowElement.h"
 #include "ElementFactory.h"
-#include "OperatorElement.h"
-#include "IdentifierElement.h"
+#include "FixedElement.h"
 #include "FormulaCommand.h"
 #include "FormulaDebug.h"
+#include "IdentifierElement.h"
+#include "NumberElement.h"
+#include "OperatorElement.h"
+#include "RowElement.h"
+#include "TableDataElement.h"
+#include "TableElement.h"
+#include "TableRowElement.h"
 
+#include <QObject>
 #include <QPainter>
 #include <QPen>
 #include <algorithm>
-#include <QObject>
 
 #include <KLocalizedString>
-#include <kundo2command.h>
 #include <KoOdfLoadingContext.h>
+#include <kundo2command.h>
 
-FormulaEditor::FormulaEditor( FormulaCursor cursor, FormulaData* data )
+FormulaEditor::FormulaEditor(FormulaCursor cursor, FormulaData *data)
 {
-    m_cursor=cursor;
-    m_data=data;
+    m_cursor = cursor;
+    m_data = data;
 }
 
-FormulaEditor::FormulaEditor ( FormulaData* data )
+FormulaEditor::FormulaEditor(FormulaData *data)
 {
-    m_cursor=FormulaCursor(data->formulaElement(),0);
-    m_data=data;
+    m_cursor = FormulaCursor(data->formulaElement(), 0);
+    m_data = data;
 }
 
-
-
-void FormulaEditor::paint( QPainter& painter ) const
+void FormulaEditor::paint(QPainter &painter) const
 {
     m_cursor.paint(painter);
 }
 
-FormulaCommand* FormulaEditor::insertText( const QString& text )
+FormulaCommand *FormulaEditor::insertText(const QString &text)
 {
     FormulaCommand *undo = 0;
     m_inputBuffer = text;
     if (m_cursor.insideToken()) {
-        TokenElement* token=static_cast<TokenElement*>(m_cursor.currentElement());
+        TokenElement *token = static_cast<TokenElement *>(m_cursor.currentElement());
         if (m_cursor.hasSelection()) {
-            undo=new FormulaCommandReplaceText(token,m_cursor.selection().first,m_cursor.selection().second-m_cursor.selection().first,text);
+            undo = new FormulaCommandReplaceText(token, m_cursor.selection().first, m_cursor.selection().second - m_cursor.selection().first, text);
         } else {
-            undo=new FormulaCommandReplaceText(token,m_cursor.position(),0,text);
+            undo = new FormulaCommandReplaceText(token, m_cursor.position(), 0, text);
         }
     } else {
-        TokenElement* token = static_cast<TokenElement*>
-            (ElementFactory::createElement(tokenType(text[0]),0));
-        token->insertText(0,text);
-        undo=insertElement(token);
+        TokenElement *token = static_cast<TokenElement *>(ElementFactory::createElement(tokenType(text[0]), 0));
+        token->insertText(0, text);
+        undo = insertElement(token);
         if (undo) {
-            undo->setRedoCursorPosition(FormulaCursor(token,text.length()));
+            undo->setRedoCursorPosition(FormulaCursor(token, text.length()));
         }
     }
     if (undo) {
@@ -76,51 +73,51 @@ FormulaCommand* FormulaEditor::insertText( const QString& text )
     return undo;
 }
 
-FormulaCommand* FormulaEditor::insertMathML( const QString& data )
+FormulaCommand *FormulaEditor::insertMathML(const QString &data)
 {
     // setup a DOM structure and start the actual loading process
     KoXmlDocument tmpDocument;
-    tmpDocument.setContent( QString(data), false, 0, 0, 0 );
-    BasicElement* element=ElementFactory::createElement(tmpDocument.documentElement().tagName(),0);
-    element->readMathML( tmpDocument.documentElement() );     // and load the new formula
-    FormulaCommand* command=insertElement( element );
-    debugFormula << "Inserting "<< tmpDocument.documentElement().tagName();
-    if (command==0) {
+    tmpDocument.setContent(QString(data), false, 0, 0, 0);
+    BasicElement *element = ElementFactory::createElement(tmpDocument.documentElement().tagName(), 0);
+    element->readMathML(tmpDocument.documentElement()); // and load the new formula
+    FormulaCommand *command = insertElement(element);
+    debugFormula << "Inserting " << tmpDocument.documentElement().tagName();
+    if (command == 0) {
         delete element;
     }
     return command;
 }
 
-FormulaCommand* FormulaEditor::changeTable ( bool insert, bool rows )
+FormulaCommand *FormulaEditor::changeTable(bool insert, bool rows)
 {
-    FormulaCommand* undo;
-    TableDataElement* data=m_cursor.currentElement()->parentTableData();
+    FormulaCommand *undo;
+    TableDataElement *data = m_cursor.currentElement()->parentTableData();
     if (data) {
-        TableElement* table=static_cast<TableElement*>(data->parentElement()->parentElement());
-        int rowNumber=table->childElements().indexOf(data->parentElement());
-        int columnNumber=data->parentElement()->childElements().indexOf(data);
+        TableElement *table = static_cast<TableElement *>(data->parentElement()->parentElement());
+        int rowNumber = table->childElements().indexOf(data->parentElement());
+        int columnNumber = data->parentElement()->childElements().indexOf(data);
         if (rows) {
-            //Changing rows
+            // Changing rows
             if (insert) {
-                undo=new FormulaCommandReplaceRow(formulaData(),cursor(),table,rowNumber,0,1);
+                undo = new FormulaCommandReplaceRow(formulaData(), cursor(), table, rowNumber, 0, 1);
                 if (undo) {
                     undo->setText(kundo2_i18n("Insert row"));
                 }
             } else {
-                undo=new FormulaCommandReplaceRow(formulaData(),cursor(),table,rowNumber,1,0);
+                undo = new FormulaCommandReplaceRow(formulaData(), cursor(), table, rowNumber, 1, 0);
                 if (undo) {
                     undo->setText(kundo2_i18n("Remove row"));
                 }
             }
         } else {
-            //Changing columns
+            // Changing columns
             if (insert) {
-                undo=new FormulaCommandReplaceColumn(formulaData(),cursor(),table,columnNumber,0,1);
+                undo = new FormulaCommandReplaceColumn(formulaData(), cursor(), table, columnNumber, 0, 1);
                 if (undo) {
                     undo->setText(kundo2_i18n("Insert column"));
                 }
             } else {
-                undo=new FormulaCommandReplaceColumn(formulaData(),cursor(),table,columnNumber,1,0);
+                undo = new FormulaCommandReplaceColumn(formulaData(), cursor(), table, columnNumber, 1, 0);
                 if (undo) {
                     undo->setText(kundo2_i18n("Remove column"));
                 }
@@ -132,20 +129,20 @@ FormulaCommand* FormulaEditor::changeTable ( bool insert, bool rows )
     return undo;
 }
 
-FormulaCommand* FormulaEditor::insertElement( BasicElement* element )
+FormulaCommand *FormulaEditor::insertElement(BasicElement *element)
 {
     FormulaCommand *undo = 0;
     if (m_cursor.insideInferredRow()) {
-        RowElement* tmprow=static_cast<RowElement*>(m_cursor.currentElement());
-        QList<BasicElement*> list;
-        list<<element;
+        RowElement *tmprow = static_cast<RowElement *>(m_cursor.currentElement());
+        QList<BasicElement *> list;
+        list << element;
         if (m_cursor.hasSelection()) {
-            undo=new FormulaCommandReplaceElements(tmprow,m_cursor.selection().first,m_cursor.selection().second-m_cursor.selection().first,list,true);
+            undo = new FormulaCommandReplaceElements(tmprow, m_cursor.selection().first, m_cursor.selection().second - m_cursor.selection().first, list, true);
         } else {
-            undo=new FormulaCommandReplaceElements(tmprow,m_cursor.position(),0,list,false);
+            undo = new FormulaCommandReplaceElements(tmprow, m_cursor.position(), 0, list, false);
         }
-    } else if (m_cursor.insideToken() && element->elementType()==Glyph) {
-        //TODO: implement the insertion of glyphs
+    } else if (m_cursor.insideToken() && element->elementType() == Glyph) {
+        // TODO: implement the insertion of glyphs
     }
     if (undo) {
         undo->setText(kundo2_i18n("Insert formula elements."));
@@ -154,29 +151,32 @@ FormulaCommand* FormulaEditor::insertElement( BasicElement* element )
     return undo;
 }
 
-FormulaCommand* FormulaEditor::remove( bool elementBeforePosition )
+FormulaCommand *FormulaEditor::remove(bool elementBeforePosition)
 {
-    FormulaCommand *undo=0;
+    FormulaCommand *undo = 0;
     if (m_cursor.insideInferredRow()) {
-        RowElement* tmprow=static_cast<RowElement*>(m_cursor.currentElement());
+        RowElement *tmprow = static_cast<RowElement *>(m_cursor.currentElement());
         if (m_cursor.isSelecting()) {
-            undo=new FormulaCommandReplaceElements(tmprow,m_cursor.selection().first,m_cursor.selection().second-m_cursor.selection().first,QList<BasicElement*>());
+            undo = new FormulaCommandReplaceElements(tmprow,
+                                                     m_cursor.selection().first,
+                                                     m_cursor.selection().second - m_cursor.selection().first,
+                                                     QList<BasicElement *>());
         } else {
             if (elementBeforePosition && !m_cursor.isHome()) {
-                undo=new FormulaCommandReplaceElements(tmprow,m_cursor.position()-1,1,QList<BasicElement*>());
+                undo = new FormulaCommandReplaceElements(tmprow, m_cursor.position() - 1, 1, QList<BasicElement *>());
             } else if (!elementBeforePosition && !m_cursor.isEnd()) {
-                undo=new FormulaCommandReplaceElements(tmprow,m_cursor.position(),1,QList<BasicElement*>());
+                undo = new FormulaCommandReplaceElements(tmprow, m_cursor.position(), 1, QList<BasicElement *>());
             }
         }
     } else if (m_cursor.insideToken()) {
-        TokenElement* tmptoken=static_cast<TokenElement*>(m_cursor.currentElement());
+        TokenElement *tmptoken = static_cast<TokenElement *>(m_cursor.currentElement());
         if (m_cursor.hasSelection()) {
-            undo=new FormulaCommandReplaceText(tmptoken,m_cursor.selection().first,m_cursor.selection().second-m_cursor.selection().first,"");
+            undo = new FormulaCommandReplaceText(tmptoken, m_cursor.selection().first, m_cursor.selection().second - m_cursor.selection().first, "");
         } else {
             if (elementBeforePosition && !m_cursor.isHome()) {
-                undo=new FormulaCommandReplaceText(tmptoken,m_cursor.position()-1,1,"");
+                undo = new FormulaCommandReplaceText(tmptoken, m_cursor.position() - 1, 1, "");
             } else if (!elementBeforePosition && !m_cursor.isEnd()) {
-                undo=new FormulaCommandReplaceText(tmptoken,m_cursor.position(),1,"");
+                undo = new FormulaCommandReplaceText(tmptoken, m_cursor.position(), 1, "");
             }
         }
     }
@@ -187,13 +187,12 @@ FormulaCommand* FormulaEditor::remove( bool elementBeforePosition )
     return undo;
 }
 
-void FormulaEditor::setData ( FormulaData* data )
+void FormulaEditor::setData(FormulaData *data)
 {
-    m_data=data;
+    m_data = data;
 }
 
-
-FormulaData* FormulaEditor::formulaData() const
+FormulaData *FormulaEditor::formulaData() const
 {
     return m_data;
 }
@@ -203,35 +202,26 @@ QString FormulaEditor::inputBuffer() const
     return m_inputBuffer;
 }
 
-QString FormulaEditor::tokenType ( const QChar& character ) const
+QString FormulaEditor::tokenType(const QChar &character) const
 {
-    QChar::Category chat=character.category();
+    QChar::Category chat = character.category();
     if (character.isNumber()) {
         return "mn";
-    }
-    else if (chat==QChar::Punctuation_Connector ||
-             chat==QChar::Punctuation_Dash ||
-             chat==QChar::Punctuation_Open ||
-             chat==QChar::Punctuation_Close ||
-             chat==QChar::Punctuation_InitialQuote ||
-             chat==QChar::Punctuation_FinalQuote ||
-             chat==QChar::Symbol_Math) {
+    } else if (chat == QChar::Punctuation_Connector || chat == QChar::Punctuation_Dash || chat == QChar::Punctuation_Open || chat == QChar::Punctuation_Close
+               || chat == QChar::Punctuation_InitialQuote || chat == QChar::Punctuation_FinalQuote || chat == QChar::Symbol_Math) {
         return "mo";
-    }
-    else if (character.isLetter()) {
+    } else if (character.isLetter()) {
         return "mi";
     }
     return "mi";
 }
 
-
-FormulaCursor& FormulaEditor::cursor() 
+FormulaCursor &FormulaEditor::cursor()
 {
     return m_cursor;
 }
 
-void FormulaEditor::setCursor ( FormulaCursor& cursor )
+void FormulaEditor::setCursor(FormulaCursor &cursor)
 {
-    m_cursor=cursor;
+    m_cursor = cursor;
 }
-

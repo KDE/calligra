@@ -29,20 +29,20 @@ public:
      * @param parent the parent widget
      * @param header string used as header text in the listview
      */
-    KoRecentDocumentsPane(QWidget* parent, const QString& header);
+    KoRecentDocumentsPane(QWidget *parent, const QString &header);
     ~KoRecentDocumentsPane() override;
 
 protected Q_SLOTS:
-    void selectionChanged(const QModelIndex& index) override;
+    void selectionChanged(const QModelIndex &index) override;
     void openFile() override;
-    void openFile(const QModelIndex& index) override;
+    void openFile(const QModelIndex &index) override;
 
-    void previewResult(KJob* job);
-    void updatePreview(const KFileItem& fileItem, const QPixmap& preview);
-    void updateIcon(const KFileItem& fileItem, const QPixmap& pixmap);
+    void previewResult(KJob *job);
+    void updatePreview(const KFileItem &fileItem, const QPixmap &preview);
+    void updateIcon(const KFileItem &fileItem, const QPixmap &pixmap);
 
 private:
-    KoRecentDocumentsPanePrivate * const d;
+    KoRecentDocumentsPanePrivate *const d;
 };
 
 #endif

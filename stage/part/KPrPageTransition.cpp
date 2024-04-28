@@ -6,17 +6,16 @@
 
 #include "KPrPageTransition.h"
 
-#include <KoXmlReader.h>
 #include <KoGenStyle.h>
-#include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
+#include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
-
+#include <KoXmlReader.h>
 
 KPrPageTransition::KPrPageTransition()
-: m_type(Manual)
-, m_duration(0.0)
+    : m_type(Manual)
+    , m_duration(0.0)
 {
     m_odfNames[Manual] = "manual";
     m_odfNames[Automatic] = "automatic";
@@ -61,10 +60,10 @@ void KPrPageTransition::saveOdfAttributes(KoGenStyle &style) const
 
 bool KPrPageTransition::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    KoOdfStylesReader& stylesReader = context.odfLoadingContext().stylesReader();
-    const KoXmlElement * styleElement = stylesReader.findContentAutoStyle( element.attributeNS( KoXmlNS::draw, "style-name" ), "drawing-page" );
-    if ( styleElement ) {
-        KoXmlElement element = styleElement->namedItemNS( KoXmlNS::style, "drawing-page-properties" ).toElement();
+    KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
+    const KoXmlElement *styleElement = stylesReader.findContentAutoStyle(element.attributeNS(KoXmlNS::draw, "style-name"), "drawing-page");
+    if (styleElement) {
+        KoXmlElement element = styleElement->namedItemNS(KoXmlNS::style, "drawing-page-properties").toElement();
         if (!element.isNull()) {
             if (element.hasAttributeNS(KoXmlNS::presentation, "transition-type")) {
                 m_type = m_odfNames.key(element.attributeNS(KoXmlNS::presentation, "transition-type"));

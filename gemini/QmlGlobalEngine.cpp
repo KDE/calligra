@@ -7,32 +7,31 @@
 
 #include "QmlGlobalEngine.h"
 
-QmlGlobalEngine* QmlGlobalEngine::sm_instance = 0;
+QmlGlobalEngine *QmlGlobalEngine::sm_instance = 0;
 
-QQmlEngine* QmlGlobalEngine::engine() const
+QQmlEngine *QmlGlobalEngine::engine() const
 {
     return m_engine;
 }
 
-void QmlGlobalEngine::setEngine(QQmlEngine* engine)
+void QmlGlobalEngine::setEngine(QQmlEngine *engine)
 {
     m_engine = engine;
 }
 
-QmlGlobalEngine* QmlGlobalEngine::instance()
+QmlGlobalEngine *QmlGlobalEngine::instance()
 {
-    if(!sm_instance) {
+    if (!sm_instance) {
         sm_instance = new QmlGlobalEngine;
     }
     return sm_instance;
 }
 
-QmlGlobalEngine::QmlGlobalEngine() : m_engine(0)
+QmlGlobalEngine::QmlGlobalEngine()
+    : m_engine(0)
 {
-
 }
 
 QmlGlobalEngine::~QmlGlobalEngine()
 {
-
 }

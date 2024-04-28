@@ -24,7 +24,7 @@ class StylesWidget : public QFrame
 {
     Q_OBJECT
 public:
-    explicit StylesWidget(QWidget *parent = 0,  bool paragraphMode=true, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit StylesWidget(QWidget *parent = 0, bool paragraphMode = true, Qt::WindowFlags f = Qt::WindowFlags());
     virtual ~StylesWidget();
 
     virtual QSize sizeHint() const;

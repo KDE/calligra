@@ -10,10 +10,9 @@
 
 #include <KPluginFactory>
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_device_spacenavigator.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_device_spacenavigator.json", registerPlugin<Plugin>();)
 
-Plugin::Plugin(QObject * parent, const QVariantList &)
+Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoInputDeviceHandlerRegistry::instance()->add(new SpaceNavigatorDevice(parent));

@@ -16,11 +16,10 @@ class PdfImport : public KoFilter
     Q_OBJECT
 
 public:
-    PdfImport(QObject* parent, const QVariantList&);
+    PdfImport(QObject *parent, const QVariantList &);
     ~PdfImport() override;
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };
 
 #endif
-

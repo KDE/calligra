@@ -1,7 +1,7 @@
 /** This file is part of the KDE project
  *  SPDX-FileCopyrightText: 2023 dag Andersen <dag.andersen@kdemail.net>
  *  SPDX-License-Identifier: LGPL-2.0-only
-*/
+ */
 
 #include "TestTime.h"
 #include <engine/CS_Time.h>
@@ -15,7 +15,8 @@
 #include <QTime>
 using namespace Calligra::Sheets;
 
-namespace QTest {
+namespace QTest
+{
 
 char *toString(const Number &n)
 {
@@ -89,7 +90,7 @@ void TestTime::positiveConstructors()
     QVERIFY(time.isValid());
     QCOMPARE((double)time.duration(), 25);
     QCOMPARE(time.hours(), 25);
-    QCOMPARE(time.minutes(), 60*25);
+    QCOMPARE(time.minutes(), 60 * 25);
     QCOMPARE(time.seconds(), 0.0);
     QCOMPARE(time.hour(), 1);
     QCOMPARE(time.minute(), 0);
@@ -120,7 +121,7 @@ void TestTime::positiveConstructors()
 
     time = Time(0, 0, 0.001);
     QVERIFY(time.isValid());
-    QCOMPARE((double)time.duration(), 0.001/(60*60));
+    QCOMPARE((double)time.duration(), 0.001 / (60 * 60));
     QCOMPARE(time.hours(), 0);
     QCOMPARE(time.minutes(), 0);
     QCOMPARE(time.hour(), 0);
@@ -143,18 +144,22 @@ void TestTime::casting()
         for (int m = 0; m < 60; ++m) {
             for (int s = 0; s < 60; ++s) {
                 for (int ms = 0; ms < 1000; ++ms) {
-                Time t1(h, m, s, ms);
-                Time t;
-                t.setDuration(t1.duration());
-                QCOMPARE(t.hours(), h);
-                if (t.hour() != h%24) qInfo()<<h<<m<<s<<ms<<t.duration()<<t;
-                QCOMPARE(t.hour(), h%24);
-                if (t.minute() != m) qInfo()<<h<<m<<s<<ms<<t.duration()<<t;
-                QCOMPARE(t.minute(), m);
-                if (t.second() != s) qInfo()<<h<<m<<s<<ms<<t.duration()<<t;
-                QCOMPARE(t.second(), s);
-                if (t.msec() != ms) qInfo()<<h<<m<<s<<ms<<t.duration()<<t;
-                QCOMPARE(t.msec(), ms);
+                    Time t1(h, m, s, ms);
+                    Time t;
+                    t.setDuration(t1.duration());
+                    QCOMPARE(t.hours(), h);
+                    if (t.hour() != h % 24)
+                        qInfo() << h << m << s << ms << t.duration() << t;
+                    QCOMPARE(t.hour(), h % 24);
+                    if (t.minute() != m)
+                        qInfo() << h << m << s << ms << t.duration() << t;
+                    QCOMPARE(t.minute(), m);
+                    if (t.second() != s)
+                        qInfo() << h << m << s << ms << t.duration() << t;
+                    QCOMPARE(t.second(), s);
+                    if (t.msec() != ms)
+                        qInfo() << h << m << s << ms << t.duration() << t;
+                    QCOMPARE(t.msec(), ms);
                 }
             }
         }
@@ -176,7 +181,6 @@ void TestTime::operators()
     time2 += time;
     QVERIFY(time2.isValid());
     QCOMPARE((double)time2.duration(), 3.2);
-
 }
 
 void TestTime::qtime()
@@ -218,7 +222,7 @@ void TestTime::qtime()
     QCOMPARE(qtime.msec(), 0);
 
     time = Time(0, 0, 1.5);
-    QCOMPARE((double)time.duration(), 1.5/3600);
+    QCOMPARE((double)time.duration(), 1.5 / 3600);
     QCOMPARE(time.hour(), 0);
     QCOMPARE(time.minute(), 0);
     QCOMPARE(time.second(), 1);
@@ -242,7 +246,6 @@ void TestTime::qtime()
     QCOMPARE(qtime.minute(), 14);
     QCOMPARE(qtime.second(), 15);
     QCOMPARE(qtime.msec(), 0);
-
 }
 
 void TestTime::negativeDuration()

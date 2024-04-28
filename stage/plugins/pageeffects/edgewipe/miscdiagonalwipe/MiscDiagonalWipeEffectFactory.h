@@ -16,10 +16,7 @@ public:
     ~MiscDiagonalWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType {
-        DoubleBarnDoor,
-        DoubleDiamond
-    };
+    enum SubType { DoubleBarnDoor, DoubleDiamond };
 };
 
 #endif // MISCDIAGONALWIPEEFFECTFACTORY_H

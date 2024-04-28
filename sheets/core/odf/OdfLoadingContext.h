@@ -28,16 +28,19 @@ class OdfLoadingContext
 {
 public:
     explicit OdfLoadingContext(KoOdfLoadingContext &odfContext)
-            : odfContext(odfContext), shapeContext(0) {}
+        : odfContext(odfContext)
+        , shapeContext(0)
+    {
+    }
 
 public:
-    KoOdfLoadingContext& odfContext;
-    KoShapeLoadingContext* shapeContext;
+    KoOdfLoadingContext &odfContext;
+    KoShapeLoadingContext *shapeContext;
     QHash<QString, KoXmlElement> validities;
 };
 
 struct ShapeLoadingData {
-    KoShape* shape;
+    KoShape *shape;
     QPoint startCell;
     QPointF offset;
     Region endCell;

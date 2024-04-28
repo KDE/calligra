@@ -12,30 +12,25 @@
 #define BarnZigZagWipeEffectId "BarnZigZagWipeEffect"
 
 BarnZigZagWipeEffectFactory::BarnZigZagWipeEffectFactory()
-: KPrPageEffectFactory( BarnZigZagWipeEffectId, i18n( "Barn Zig Zag" ) )
+    : KPrPageEffectFactory(BarnZigZagWipeEffectId, i18n("Barn Zig Zag"))
 {
-    addStrategy( new BarnZigZagWipeStrategy( Vertical, "vertical", false ) );
-    addStrategy( new BarnZigZagWipeStrategy( Horizontal, "horizontal", false ) );
-    addStrategy( new BarnZigZagWipeStrategy( VerticalReversed, "vertical", true ) );
-    addStrategy( new BarnZigZagWipeStrategy( HorizontalReversed, "horizontal", true ) );
+    addStrategy(new BarnZigZagWipeStrategy(Vertical, "vertical", false));
+    addStrategy(new BarnZigZagWipeStrategy(Horizontal, "horizontal", false));
+    addStrategy(new BarnZigZagWipeStrategy(VerticalReversed, "vertical", true));
+    addStrategy(new BarnZigZagWipeStrategy(HorizontalReversed, "horizontal", true));
 }
 
 BarnZigZagWipeEffectFactory::~BarnZigZagWipeEffectFactory()
 {
 }
 
-static const KLazyLocalizedString s_subTypes[] = {
-    kli18n( "Vertical" ),
-    kli18n( "Horizontal" ),
-    kli18n( "Vertical Reversed" ),
-    kli18n( "Horizontal Reversed" )
-};
+static const KLazyLocalizedString s_subTypes[] = {kli18n("Vertical"), kli18n("Horizontal"), kli18n("Vertical Reversed"), kli18n("Horizontal Reversed")};
 
 QString BarnZigZagWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return s_subTypes[subType].toString();
     } else {
-        return i18n( "Unknown subtype" );
+        return i18n("Unknown subtype");
     }
 }

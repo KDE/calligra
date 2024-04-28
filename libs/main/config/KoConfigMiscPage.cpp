@@ -8,32 +8,34 @@
 
 #include "KoConfigMiscPage.h"
 
-#include <KoUnit.h>
+#include <KoComponentData.h>
 #include <KoDocument.h>
-#include <KoUnitDoubleSpinBox.h>
 #include <KoDocumentResourceManager.h>
 #include <KoPart.h>
-#include <KoComponentData.h>
+#include <KoUnit.h>
+#include <KoUnitDoubleSpinBox.h>
 
 #include <KComboBox>
 
 #include <KConfig>
 #include <KConfigGroup>
 
+#include <QCheckBox>
 #include <QFormLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QCheckBox>
 #include <QSpinBox>
 
 class Q_DECL_HIDDEN KoConfigMiscPage::Private
 {
 public:
-    Private(KoDocument* doc, KoDocumentResourceManager *documentResources)
-            : doc(doc), docResources(documentResources)
-    {}
+    Private(KoDocument *doc, KoDocumentResourceManager *documentResources)
+        : doc(doc)
+        , docResources(documentResources)
+    {
+    }
 
-    KoDocument* doc;
+    KoDocument *doc;
     KSharedConfigPtr config;
     KoDocumentResourceManager *docResources;
 
@@ -43,14 +45,14 @@ public:
     uint oldHandleRadius;
     QSpinBox *grabSensitivity;
     uint oldGrabSensitivity;
-    KoUnitDoubleSpinBox* pasteOffset;
+    KoUnitDoubleSpinBox *pasteOffset;
     qreal oldPasteOffset;
     QCheckBox *pasteAtCursor;
     bool oldPasteAtCursor;
 };
 
-KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *documentResources, char* name)
-        : d(new Private(doc, documentResources))
+KoConfigMiscPage::KoConfigMiscPage(KoDocument *doc, KoDocumentResourceManager *documentResources, char *name)
+    : d(new Private(doc, documentResources))
 {
     setObjectName(name);
 
@@ -67,9 +69,9 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *d
 
     QFormLayout *miscLayout = new QFormLayout();
 
-    //#################"laurent
-    //don't load unitType from config file because unit is
-    //depend from words file => unit can be different from config file
+    // #################"laurent
+    // don't load unitType from config file because unit is
+    // depend from words file => unit can be different from config file
 
     d->unit = new KComboBox(miscGroupBox);
     d->unit->addItems(KoUnit::listOfUnitNameForUi(KoUnit::HidePixel));
@@ -126,7 +128,7 @@ void KoConfigMiscPage::apply()
 
     uint currentHandleRadius = d->handleRadius->value();
     if (currentHandleRadius != d->oldHandleRadius) {
-        miscGroup.writeEntry( "HandleRadius", currentHandleRadius );
+        miscGroup.writeEntry("HandleRadius", currentHandleRadius);
         d->docResources->setHandleRadius(currentHandleRadius);
     }
 

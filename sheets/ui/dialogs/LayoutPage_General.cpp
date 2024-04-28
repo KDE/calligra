@@ -32,19 +32,19 @@
 
 using namespace Calligra::Sheets;
 
-LayoutPageGeneral::LayoutPageGeneral(QWidget* parent, StyleManager *manager)
-        : QWidget(parent)
-        , m_manager(manager)
+LayoutPageGeneral::LayoutPageGeneral(QWidget *parent, StyleManager *manager)
+    : QWidget(parent)
+    , m_manager(manager)
 {
-    QGridLayout * layout = new QGridLayout(this);
+    QGridLayout *layout = new QGridLayout(this);
 
-    QGroupBox * groupBox = new QGroupBox(this);
+    QGroupBox *groupBox = new QGroupBox(this);
     groupBox->setTitle(i18n("Style"));
 
-    QGridLayout * groupBoxLayout = new QGridLayout(groupBox);
+    QGridLayout *groupBoxLayout = new QGridLayout(groupBox);
     groupBoxLayout->setAlignment(Qt::AlignTop);
 
-    QLabel * label1 = new QLabel(groupBox);
+    QLabel *label1 = new QLabel(groupBox);
     label1->setText(i18nc("Name of the style", "Name:"));
     groupBoxLayout->addWidget(label1, 0, 0);
 
@@ -55,16 +55,14 @@ LayoutPageGeneral::LayoutPageGeneral(QWidget* parent, StyleManager *manager)
     m_nameStatus->hide();
     groupBoxLayout->addWidget(m_nameStatus, 1, 1);
 
-    QLabel * label2 = new QLabel(groupBox);
+    QLabel *label2 = new QLabel(groupBox);
     label2->setText(i18n("Inherit style:"));
     groupBoxLayout->addWidget(label2, 2, 0);
 
     m_parentBox = new KComboBox(false, groupBox);
 
-    connect(m_parentBox, &KComboBox::textActivated,
-            this, &LayoutPageGeneral::parentChanged);
-    connect(m_nameEdit, &QLineEdit::textChanged,
-            this, &LayoutPageGeneral::styleNameChanged);
+    connect(m_parentBox, &KComboBox::textActivated, this, &LayoutPageGeneral::parentChanged);
+    connect(m_nameEdit, &QLineEdit::textChanged, this, &LayoutPageGeneral::styleNameChanged);
 
     groupBoxLayout->addWidget(m_parentBox, 2, 1);
 
@@ -72,7 +70,7 @@ LayoutPageGeneral::LayoutPageGeneral(QWidget* parent, StyleManager *manager)
     m_parentStatus->hide();
     groupBoxLayout->addWidget(m_parentStatus, 3, 1);
 
-    QSpacerItem * spacer = new QSpacerItem(20, 260, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QSpacerItem *spacer = new QSpacerItem(20, 260, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     layout->addWidget(groupBox, 0, 0);
     layout->addItem(spacer, 1, 0);
@@ -84,7 +82,7 @@ LayoutPageGeneral::~LayoutPageGeneral()
 {
 }
 
-void LayoutPageGeneral::styleNameChanged(const QString& name)
+void LayoutPageGeneral::styleNameChanged(const QString &name)
 {
     if ((name != m_name) && (!m_manager->validateStyleName(name))) {
         m_nameStatus->setText(i18n("A style with this name already exists."));
@@ -100,15 +98,14 @@ void LayoutPageGeneral::styleNameChanged(const QString& name)
     }
 }
 
-void LayoutPageGeneral::parentChanged(const QString& parentName)
+void LayoutPageGeneral::parentChanged(const QString &parentName)
 {
     if (m_nameEdit->text() == parentName) {
         m_parentStatus->setText(i18n("A style cannot inherit from itself."));
         m_parentStatus->show();
         emit validDataChanged(false);
     } else if (!m_manager->checkCircle(m_nameEdit->text(), parentName)) {
-        m_parentStatus->setText(i18n("The style cannot inherit from '%1' because of recursive references.",
-                                     m_parentBox->currentText()));
+        m_parentStatus->setText(i18n("The style cannot inherit from '%1' because of recursive references.", m_parentBox->currentText()));
         m_parentStatus->show();
         emit validDataChanged(false);
     } else {
@@ -117,7 +114,7 @@ void LayoutPageGeneral::parentChanged(const QString& parentName)
     }
 }
 
-bool LayoutPageGeneral::apply(CustomStyle * style)
+bool LayoutPageGeneral::apply(CustomStyle *style)
 {
     if (m_nameEdit->isEnabled()) {
         if (style->type() != Style::BUILTIN) {
@@ -154,13 +151,11 @@ void LayoutPageGeneral::loadFrom(const CustomStyle &style)
     m_parentBox->insertItems(1, tmp);
 
     QString parent = style.parentName();
-    if (parent.isNull()) parent = defname;
+    if (parent.isNull())
+        parent = defname;
     m_parentBox->setCurrentIndex(m_parentBox->findText(parent));
 
     bool enableName = (style.type() != Style::BUILTIN);
     m_nameEdit->setEnabled(enableName);
     m_parentBox->setEnabled(enableName);
 }
-
-
-

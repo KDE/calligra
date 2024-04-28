@@ -8,8 +8,8 @@
  */
 #include "KoResourceManager_p.h"
 
-#include <QVariant>
 #include <FlakeDebug.h>
+#include <QVariant>
 
 #include "KoShape.h"
 
@@ -56,7 +56,7 @@ void KoResourceManager::setResource(int key, const KoUnit &unit)
 
 KoColor KoResourceManager::koColorResource(int key) const
 {
-    if (! m_resources.contains(key)) {
+    if (!m_resources.contains(key)) {
         KoColor empty;
         return empty;
     }
@@ -65,12 +65,11 @@ KoColor KoResourceManager::koColorResource(int key) const
 
 KoShape *KoResourceManager::koShapeResource(int key) const
 {
-    if (! m_resources.contains(key))
+    if (!m_resources.contains(key))
         return 0;
 
     return resource(key).value<KoShape *>();
 }
-
 
 KoUnit KoResourceManager::unitResource(int key) const
 {
@@ -79,21 +78,21 @@ KoUnit KoResourceManager::unitResource(int key) const
 
 bool KoResourceManager::boolResource(int key) const
 {
-    if (! m_resources.contains(key))
+    if (!m_resources.contains(key))
         return false;
     return m_resources[key].toBool();
 }
 
 int KoResourceManager::intResource(int key) const
 {
-    if (! m_resources.contains(key))
+    if (!m_resources.contains(key))
         return 0;
     return m_resources[key].toInt();
 }
 
 QString KoResourceManager::stringResource(int key) const
 {
-    if (! m_resources.contains(key)) {
+    if (!m_resources.contains(key)) {
         QString empty;
         return empty;
     }
@@ -102,7 +101,7 @@ QString KoResourceManager::stringResource(int key) const
 
 QSizeF KoResourceManager::sizeResource(int key) const
 {
-    if (! m_resources.contains(key)) {
+    if (!m_resources.contains(key)) {
         QSizeF empty;
         return empty;
     }
@@ -116,7 +115,7 @@ bool KoResourceManager::hasResource(int key) const
 
 void KoResourceManager::clearResource(int key)
 {
-    if (! m_resources.contains(key))
+    if (!m_resources.contains(key))
         return;
     m_resources.remove(key);
 }

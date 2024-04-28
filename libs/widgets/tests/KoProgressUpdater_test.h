@@ -30,7 +30,6 @@ private Q_SLOTS:
     void testFromWeaver();
 
 private:
-
     int jobsdone;
 };
 #endif

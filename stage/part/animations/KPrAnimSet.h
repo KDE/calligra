@@ -30,9 +30,10 @@ public:
     ~KPrAnimSet() override;
 
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
-    bool saveOdf(KoPASavingContext & paContext) const override;
+    bool saveOdf(KoPASavingContext &paContext) const override;
     bool saveAttribute(KoPASavingContext &paContext) const override;
     void init(KPrAnimationCache *animationCache, int step) override;
+
 protected:
     void next(int currentTime) override;
 

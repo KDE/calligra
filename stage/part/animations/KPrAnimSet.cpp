@@ -22,21 +22,21 @@
 
 #include <QString>
 
+#include <KoPASavingContext.h>
+#include <KoShapeLoadingContext.h>
+#include <KoTextBlockData.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
-#include <KoShapeLoadingContext.h>
-#include <KoPASavingContext.h>
-#include <KoTextBlockData.h>
 
 #include "KPrAnimationCache.h"
-#include "KPrTextBlockPaintStrategy.h"
-#include "KPrShapeAnimation.h"
-#include "KoXmlWriter.h"
 #include "KPrDurationParser.h"
+#include "KPrShapeAnimation.h"
+#include "KPrTextBlockPaintStrategy.h"
+#include "KoXmlWriter.h"
 #include "StageDebug.h"
 
 KPrAnimSet::KPrAnimSet(KPrShapeAnimation *shapeAnimation)
-: KPrAnimationBase(shapeAnimation)
+    : KPrAnimationBase(shapeAnimation)
 {
 }
 
@@ -53,8 +53,7 @@ bool KPrAnimSet::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
         m_visible = element.attributeNS(KoXmlNS::smil, "to", "hidden") == "visible";
         retval = true;
         debugStageAnimation << "animate visibility for shape with id" << m_visible;
-    }
-    else {
+    } else {
         warnStageAnimation << "attributeName" << attributeName << "not yet supported";
     }
     KPrAnimationBase::loadOdf(element, context);
@@ -76,11 +75,10 @@ bool KPrAnimSet::saveAttribute(KoPASavingContext &paContext) const
     KPrAnimationBase::saveAttribute(paContext);
     KoXmlWriter &writer = paContext.xmlWriter();
     // Anim set allow only visibility change currently
-    writer.addAttribute("smil:attributeName","visibility");
+    writer.addAttribute("smil:attributeName", "visibility");
     writer.addAttribute("smil:to", m_visible ? "visible" : "hidden");
     return true;
 }
-
 
 void KPrAnimSet::init(KPrAnimationCache *animationCache, int step)
 {

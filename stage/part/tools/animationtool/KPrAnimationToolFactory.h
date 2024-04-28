@@ -11,12 +11,13 @@
 #include <KoToolFactoryBase.h>
 
 /// Factory for the KPrAnimationTool
-class KPrAnimationToolFactory : public KoToolFactoryBase {
+class KPrAnimationToolFactory : public KoToolFactoryBase
+{
 public:
     /// constructor
     KPrAnimationToolFactory();
     ~KPrAnimationToolFactory() override;
 
-    KoToolBase* createTool(KoCanvasBase *canvas) override;
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 #endif

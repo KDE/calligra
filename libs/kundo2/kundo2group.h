@@ -64,7 +64,7 @@ public:
 
     void addStack(KUndo2QStack *stack);
     void removeStack(KUndo2QStack *stack);
-    QList<KUndo2QStack*> stacks() const;
+    QList<KUndo2QStack *> stacks() const;
     KUndo2QStack *activeStack() const;
 
 #ifndef QT_NO_ACTION
@@ -94,7 +94,7 @@ Q_SIGNALS:
 private:
     // from QUndoGroupPrivate
     KUndo2QStack *m_active;
-    QList<KUndo2QStack*> m_stack_list;
+    QList<KUndo2QStack *> m_stack_list;
 
     Q_DISABLE_COPY(KUndo2Group)
 };

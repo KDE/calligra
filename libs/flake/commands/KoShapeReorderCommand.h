@@ -9,8 +9,8 @@
 
 #include "flake_export.h"
 
-#include <kundo2command.h>
 #include <QList>
+#include <kundo2command.h>
 
 class KoShape;
 class KoShapeManager;
@@ -27,15 +27,15 @@ public:
      *  this list naturally must have the same amount of items as the shapes set.
      * @param parent the parent command used for macro commands
      */
-    KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes, KUndo2Command *parent = 0);
+    KoShapeReorderCommand(const QList<KoShape *> &shapes, QList<int> &newIndexes, KUndo2Command *parent = 0);
     ~KoShapeReorderCommand() override;
 
     /// An enum for defining what kind of reordering to use.
-    enum MoveShapeType  {
-        RaiseShape,     ///< raise the selected shape to the level that it is above the shape that is on top of it.
-        LowerShape,     ///< Lower the selected shape to the level that it is below the shape that is below it.
-        BringToFront,   ///< Raise the selected shape to be on top of all shapes.
-        SendToBack      ///< Lower the selected shape to be below all other shapes.
+    enum MoveShapeType {
+        RaiseShape, ///< raise the selected shape to the level that it is above the shape that is on top of it.
+        LowerShape, ///< Lower the selected shape to the level that it is below the shape that is below it.
+        BringToFront, ///< Raise the selected shape to be on top of all shapes.
+        SendToBack ///< Lower the selected shape to be below all other shapes.
     };
 
     /**
@@ -47,8 +47,7 @@ public:
      * @param parent the parent command for grouping purposes.
      * @return command for reordering the shapes or 0 if no reordering happened
      */
-    static KoShapeReorderCommand *createCommand(const QList<KoShape*> &shapes, KoShapeManager *manager,
-            MoveShapeType move, KUndo2Command *parent = 0);
+    static KoShapeReorderCommand *createCommand(const QList<KoShape *> &shapes, KoShapeManager *manager, MoveShapeType move, KUndo2Command *parent = 0);
 
     /// redo the command
     void redo() override;
@@ -56,7 +55,7 @@ public:
     void undo() override;
 
 private:
-    KoShapeReorderCommandPrivate * const d;
+    KoShapeReorderCommandPrivate *const d;
 };
 
 #endif

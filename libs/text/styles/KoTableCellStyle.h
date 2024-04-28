@@ -44,50 +44,36 @@ class KOTEXT_EXPORT KoTableCellStyle : public QObject
 {
     Q_OBJECT
 public:
-    enum CellProtectionFlag {
-        NoProtection,
-        HiddenAndProtected,
-        Protected,
-        FormulaHidden,
-        ProtectedAndFormulaHidden
-    };
+    enum CellProtectionFlag { NoProtection, HiddenAndProtected, Protected, FormulaHidden, ProtectedAndFormulaHidden };
 
-    enum CellTextDirection {
-        Default = 0,
-        LeftToRight,
-        TopToBottom
-    };
+    enum CellTextDirection { Default = 0, LeftToRight, TopToBottom };
 
-    enum RotationAlignment {
-        RAlignNone,
-        RAlignBottom,
-        RAlignTop,
-        RAlignCenter
-    };
+    enum RotationAlignment { RAlignNone, RAlignBottom, RAlignTop, RAlignCenter };
 
     enum Property {
         StyleId = QTextTableCellFormat::UserProperty + 7001,
-        ShrinkToFit,                ///< Shrink the cell content to fit the size
-        Wrap,                       ///< Wrap the text within the cell
-        CellProtection,             ///< The cell protection when the table is protected
-        PrintContent,               ///< Should the content of this cell be printed
-        RepeatContent,              ///< Display the cell content as many times as possible
-        DecimalPlaces,              ///< Count the maximum number of decimal places to display
-        AlignFromType,              ///< Should the alignment property be respected or should the alignment be based on the value type
-        RotationAngle,              ///< Rotation angle of the cell content, in degrees
-        Direction,                  ///< The direction of the text in the cell. This is a CellTextDirection.
-        RotationAlign,              ///< How the edge of the text is aligned after rotation. This is a RotationAlignment
-        TextWritingMode,            ///< KoText::Direction, the direction for writing text in the cell
-        VerticalGlyphOrientation,   ///< bool, specify whether this feature is enabled or not
-        CellBackgroundBrush,        ///< the cell background brush, as QTextFormat::BackgroundBrush is used by paragraphs
-        VerticalAlignment,          ///< the vertical alignment oinside the cell
-        MasterPageName,             ///< Optional name of the master-page
-        InlineRdf,                  ///< Optional KoTextInlineRdf object
-        Borders,                    ///< KoBorder, the borders of this cell
-        Shadow,                     ///< KoShadowStyle, the shadow of this cell
-        CellIsProtected             ///< boolean, if true, the cell is protected against edits
-                                        /// It's not really a property of KoTableCellStyle but defined here for convenience
-        ,LastCellStyleProperty
+        ShrinkToFit, ///< Shrink the cell content to fit the size
+        Wrap, ///< Wrap the text within the cell
+        CellProtection, ///< The cell protection when the table is protected
+        PrintContent, ///< Should the content of this cell be printed
+        RepeatContent, ///< Display the cell content as many times as possible
+        DecimalPlaces, ///< Count the maximum number of decimal places to display
+        AlignFromType, ///< Should the alignment property be respected or should the alignment be based on the value type
+        RotationAngle, ///< Rotation angle of the cell content, in degrees
+        Direction, ///< The direction of the text in the cell. This is a CellTextDirection.
+        RotationAlign, ///< How the edge of the text is aligned after rotation. This is a RotationAlignment
+        TextWritingMode, ///< KoText::Direction, the direction for writing text in the cell
+        VerticalGlyphOrientation, ///< bool, specify whether this feature is enabled or not
+        CellBackgroundBrush, ///< the cell background brush, as QTextFormat::BackgroundBrush is used by paragraphs
+        VerticalAlignment, ///< the vertical alignment oinside the cell
+        MasterPageName, ///< Optional name of the master-page
+        InlineRdf, ///< Optional KoTextInlineRdf object
+        Borders, ///< KoBorder, the borders of this cell
+        Shadow, ///< KoShadowStyle, the shadow of this cell
+        CellIsProtected ///< boolean, if true, the cell is protected against edits
+                        /// It's not really a property of KoTableCellStyle but defined here for convenience
+        ,
+        LastCellStyleProperty
     };
 
     /// Constructor
@@ -95,7 +81,7 @@ public:
     /// Creates a KoTableCellStyle with the given table cell format, and \a parent
     explicit KoTableCellStyle(const QTextTableCellFormat &tableCellFormat, QObject *parent = 0);
     KoTableCellStyle(const KoTableCellStyle &other);
-    KoTableCellStyle& operator=(const KoTableCellStyle &other);
+    KoTableCellStyle &operator=(const KoTableCellStyle &other);
 
     /// Destructor
     ~KoTableCellStyle() override;
@@ -166,13 +152,13 @@ public:
     Qt::Alignment alignment() const;
 
     KoText::Direction textDirection() const;
-    void setTextDirection (KoText::Direction value);
+    void setTextDirection(KoText::Direction value);
 
     void setWrap(bool state);
     bool wrap() const;
 
     CellProtectionFlag cellProtection() const;
-    void setCellProtection (CellProtectionFlag protection);
+    void setCellProtection(CellProtectionFlag protection);
 
     void setPrintContent(bool state);
     bool printContent() const;
@@ -190,7 +176,7 @@ public:
     CellTextDirection direction() const;
 
     void setRotationAlignment(RotationAlignment align);
-    RotationAlignment rotationAlignment () const;
+    RotationAlignment rotationAlignment() const;
 
     void setVerticalGlyphOrientation(bool state);
     bool verticalGlyphOrientation() const;
@@ -198,7 +184,7 @@ public:
     void setBorders(const KoBorder &borders);
     KoBorder borders() const;
 
-    void setShadow (const KoShadowStyle &shadow);
+    void setShadow(const KoShadowStyle &shadow);
     KoShadowStyle shadow() const;
 
     /// set the parent style this one inherits its unset properties from.
@@ -223,7 +209,6 @@ public:
     QString masterPageName() const;
     /// Set the name of the master-page.
     void setMasterPageName(const QString &name);
-
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(const KoTableCellStyle *style);
@@ -278,7 +263,6 @@ public:
      */
     QVariant value(int key) const;
 
-
     /**
      * Set the properties of an edge.
      *
@@ -287,8 +271,7 @@ public:
      * @param totalWidth the thickness of the border. Sum of outerwidth, spacing and innerwidth for double borders
      * @param color the color of the border line(s).
      */
-    void setEdge(KoBorder::BorderSide side, KoBorder::BorderStyle style,
-                 qreal totalWidth, const QColor &color);
+    void setEdge(KoBorder::BorderSide side, KoBorder::BorderStyle style, qreal totalWidth, const QColor &color);
 
     /**
      * Set the properties of a double border.
@@ -330,7 +313,7 @@ Q_SIGNALS:
     void nameChanged(const QString &newName);
 
 protected:
-    KoTableCellStylePrivate * const d_ptr;
+    KoTableCellStylePrivate *const d_ptr;
 
 private:
     /**
@@ -344,7 +327,6 @@ private:
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;
 
-
     /**
      * Set the format properties from an Edge structure
      *
@@ -355,7 +337,6 @@ private:
     void setEdge(KoBorder::BorderSide side, const KoBorder::BorderData &edge, KoBorder::BorderStyle style);
 
     Q_DECLARE_PRIVATE(KoTableCellStyle)
-
 };
 
 Q_DECLARE_METATYPE(KoTableCellStyle *)

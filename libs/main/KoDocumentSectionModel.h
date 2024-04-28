@@ -56,15 +56,16 @@
 @endcode
 
  */
-class KoDocumentSectionModel: public QAbstractItemModel
+class KoDocumentSectionModel : public QAbstractItemModel
 {
-    public:
-
-    explicit KoDocumentSectionModel(QObject *parent = 0) : QAbstractItemModel(parent) {}
+public:
+    explicit KoDocumentSectionModel(QObject *parent = 0)
+        : QAbstractItemModel(parent)
+    {
+    }
 
     /// Extensions to Qt::ItemDataRole.
-    enum ItemDataRole
-    {
+    enum ItemDataRole {
         /// Whether the section is the active one
         ActiveRole = Qt::UserRole + 1,
 
@@ -102,8 +103,7 @@ class KoDocumentSectionModel: public QAbstractItemModel
      * or to compare the translated strings. This makes it hard to robustly extend the
      * properties of document section items.
      */
-    struct Property
-    {
+    struct Property {
         /** i18n-ed name, suitable for displaying */
         QString name;
 
@@ -121,7 +121,7 @@ class KoDocumentSectionModel: public QAbstractItemModel
         is in stasis, a new state is created, and the old one is stored in stateInStasis. When
         stasis ends, the old value is restored and the new one discarded */
         bool canHaveStasis;
-        
+
         /** If the property isMutable and canHaveStasis, indicate whether it is in stasis or not */
         bool isInStasis;
 
@@ -130,27 +130,48 @@ class KoDocumentSectionModel: public QAbstractItemModel
         bool stateInStasis;
 
         /// Default constructor. Use if you want to assign the members manually.
-        Property(): isMutable( false ) { }
+        Property()
+            : isMutable(false)
+        {
+        }
 
         /// Constructor for a mutable property.
-        Property( const QString &n, const QIcon &on, const QIcon &off, bool isOn )
-                : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ), canHaveStasis( false ) { }
-        
+        Property(const QString &n, const QIcon &on, const QIcon &off, bool isOn)
+            : name(n)
+            , isMutable(true)
+            , onIcon(on)
+            , offIcon(off)
+            , state(isOn)
+            , canHaveStasis(false)
+        {
+        }
+
         /** Constructor for a mutable property accepting stasis */
-        Property( const QString &n, const QIcon &on, const QIcon &off, bool isOn,
-                  bool isInStasis, bool stateInStasis )
-                : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ),
-                  canHaveStasis( true ), isInStasis( isInStasis ), stateInStasis( stateInStasis ) { }
+        Property(const QString &n, const QIcon &on, const QIcon &off, bool isOn, bool isInStasis, bool stateInStasis)
+            : name(n)
+            , isMutable(true)
+            , onIcon(on)
+            , offIcon(off)
+            , state(isOn)
+            , canHaveStasis(true)
+            , isInStasis(isInStasis)
+            , stateInStasis(stateInStasis)
+        {
+        }
 
         /// Constructor for a nonmutable property.
-        Property( const QString &n, const QString &s )
-                : name( n ), isMutable( false ), state( s ) { }
+        Property(const QString &n, const QString &s)
+            : name(n)
+            , isMutable(false)
+            , state(s)
+        {
+        }
     };
 
     /** Return this type for PropertiesRole. */
     typedef QList<Property> PropertyList;
 };
 
-Q_DECLARE_METATYPE( KoDocumentSectionModel::PropertyList )
+Q_DECLARE_METATYPE(KoDocumentSectionModel::PropertyList)
 
 #endif

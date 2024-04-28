@@ -25,15 +25,15 @@ using namespace Calligra::Sheets;
 class FunctionCompletion::Private
 {
 public:
-    CellEditor* editor;
+    CellEditor *editor;
     QFrame *completionPopup;
     QListWidget *completionListBox;
-    QLabel* hintLabel;
+    QLabel *hintLabel;
 };
 
-FunctionCompletion::FunctionCompletion(CellEditor* editor)
-        : QObject(editor)
-        , d(new Private)
+FunctionCompletion::FunctionCompletion(CellEditor *editor)
+    : QObject(editor)
+    , d(new Private)
 {
     d->editor = editor;
     d->hintLabel = 0;
@@ -50,9 +50,11 @@ FunctionCompletion::FunctionCompletion(CellEditor* editor)
     d->completionListBox = new QListWidget(d->completionPopup);
     d->completionPopup->setFocusProxy(d->completionListBox);
     d->completionListBox->setFrameStyle(QFrame::NoFrame);
-//   d->completionListBox->setVariableWidth( true );
+    //   d->completionListBox->setVariableWidth( true );
     d->completionListBox->installEventFilter(this);
-    connect(d->completionListBox, &QListWidget::currentRowChanged, this, [this]() { itemSelected(); });
+    connect(d->completionListBox, &QListWidget::currentRowChanged, this, [this]() {
+        itemSelected();
+    });
     // When items are activated on single click, also change the help page on mouse-over, otherwise there is no (easy) way to get
     // the help (with the mouse) without inserting the function
     if (d->completionListBox->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, d->completionListBox)) {
@@ -60,11 +62,10 @@ FunctionCompletion::FunctionCompletion(CellEditor* editor)
         d->completionListBox->setMouseTracking(true);
     }
 
-    connect(d->completionListBox, &QListWidget::itemActivated,
-            this, &FunctionCompletion::doneCompletion);
+    connect(d->completionListBox, &QListWidget::itemActivated, this, &FunctionCompletion::doneCompletion);
     layout->addWidget(d->completionListBox);
 
-    d->hintLabel = new QLabel(0, Qt::FramelessWindowHint | Qt::Tool |  Qt::X11BypassWindowManagerHint);
+    d->hintLabel = new QLabel(0, Qt::FramelessWindowHint | Qt::Tool | Qt::X11BypassWindowManagerHint);
     d->hintLabel->setFrameStyle(QFrame::Plain | QFrame::Box);
     d->hintLabel->setPalette(QToolTip::palette());
     d->hintLabel->setWordWrap(true);
@@ -77,7 +78,7 @@ FunctionCompletion::~FunctionCompletion()
     delete d;
 }
 
-void FunctionCompletion::itemSelected(QListWidgetItem* listItem)
+void FunctionCompletion::itemSelected(QListWidgetItem *listItem)
 {
     QString item;
     if (listItem) {
@@ -89,7 +90,7 @@ void FunctionCompletion::itemSelected(QListWidgetItem* listItem)
         }
     }
 
-    Calligra::Sheets::FunctionDescription* desc;
+    Calligra::Sheets::FunctionDescription *desc;
     desc = Calligra::Sheets::FunctionRepository::self()->functionInfo(item);
     if (!desc) {
         d->hintLabel->hide();
@@ -115,7 +116,7 @@ void FunctionCompletion::itemSelected(QListWidgetItem* listItem)
     d->hintLabel->raise();
 
     // do not show it forever
-    //QTimer::singleShot( 5000, d->hintLabel, SLOT(hide()) );
+    // QTimer::singleShot( 5000, d->hintLabel, SLOT(hide()) );
 }
 
 bool FunctionCompletion::eventFilter(QObject *obj, QEvent *ev)
@@ -124,7 +125,7 @@ bool FunctionCompletion::eventFilter(QObject *obj, QEvent *ev)
         return false;
 
     if (ev->type() == QEvent::KeyPress) {
-        QKeyEvent *ke = static_cast<QKeyEvent*>(ev);
+        QKeyEvent *ke = static_cast<QKeyEvent *>(ev);
         switch (ke->key()) {
         case Qt::Key_Enter:
         case Qt::Key_Return:
@@ -169,7 +170,8 @@ void FunctionCompletion::doneCompletion()
 
 void FunctionCompletion::showCompletion(const QStringList &choices)
 {
-    if (!choices.count()) return;
+    if (!choices.count())
+        return;
 
     d->completionListBox->clear();
     d->completionListBox->addItems(choices);
@@ -177,9 +179,8 @@ void FunctionCompletion::showCompletion(const QStringList &choices)
 
     // size of the pop-up
     d->completionPopup->setMaximumHeight(100);
-    d->completionPopup->resize(d->completionListBox->sizeHint() +
-                               QSize(d->completionListBox->verticalScrollBar()->width() + 4,
-                                     d->completionListBox->horizontalScrollBar()->height() + 4));
+    d->completionPopup->resize(d->completionListBox->sizeHint()
+                               + QSize(d->completionListBox->verticalScrollBar()->width() + 4, d->completionListBox->horizontalScrollBar()->height() + 4));
     QPoint pos = d->editor->globalCursorPosition();
 
     // if popup is partially invisible, move to other position

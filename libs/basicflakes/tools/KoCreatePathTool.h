@@ -32,7 +32,7 @@ public:
      * Constructor for the tool that allows you to create new paths by hand.
      * @param canvas the canvas this tool will be working for.
      */
-    explicit KoCreatePathTool(KoCanvasBase * canvas);
+    explicit KoCreatePathTool(KoCanvasBase *canvas);
     ~KoCreatePathTool() override;
 
     /// reimplemented
@@ -53,17 +53,17 @@ public:
     virtual bool listeningToModifiers();
 
     /**
-    * Returns true if path has been started
-    */
+     * Returns true if path has been started
+     */
     bool pathStarted();
 
 public Q_SLOTS:
     /// reimplemented
-    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     /// reimplemented
     void deactivate() override;
     /// reimplemented
-    void documentResourceChanged(int key, const QVariant & res) override;
+    void documentResourceChanged(int key, const QVariant &res) override;
 
 protected:
     /**
@@ -71,13 +71,13 @@ protected:
      * This method can be overridden and change the behaviour of the tool. In that case the subclass takes ownership of pathShape.
      * It gets only called if there are two or more points in the path.
      */
-    virtual void addPathShape(KoPathShape* pathShape);
+    virtual void addPathShape(KoPathShape *pathShape);
 
 protected:
     /**
-      * This method is called to paint the path. Decorations are drawn by KoCreatePathTool afterwards.
-      */
-    virtual void paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter);
+     * This method is called to paint the path. Decorations are drawn by KoCreatePathTool afterwards.
+     */
+    virtual void paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter);
 
     void endPath();
     void endPathWithoutLastPoint();
@@ -85,7 +85,7 @@ protected:
     void removeLastPoint();
 
     /// reimplemented
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
 private:
     KoShapeStroke *createStroke();

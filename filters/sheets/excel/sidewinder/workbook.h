@@ -9,16 +9,16 @@
 #define SWINDER_WORKBOOK_H
 
 #include <QObject>
-#include <QVariant>
 #include <QRect>
-#include <string>
+#include <QVariant>
 #include <map>
+#include <string>
 
 class KoStore;
 
-
-namespace MSO {
-    class OfficeArtDggContainer;
+namespace MSO
+{
+class OfficeArtDggContainer;
 }
 
 namespace Swinder
@@ -32,14 +32,13 @@ class Workbook : public QObject
 {
     Q_OBJECT
 public:
-
     /**
      * Constructs a new workbook.
      *
      * @a store An optional implementation of the Store class
      * that is used to write content like images to.
      */
-    explicit Workbook(KoStore* store = 0);
+    explicit Workbook(KoStore *store = 0);
 
     /**
      * Destroys the workbook.
@@ -49,7 +48,7 @@ public:
     /**
      * Returns the used KoStore or NULL if not KoStore was set.
     /*/
-    KoStore* store() const;
+    KoStore *store() const;
 
     /**
      * Clears the workbook, i.e. makes it as if it is just constructed.
@@ -59,12 +58,12 @@ public:
     /**
      * Loads the workbook from file. Returns false if error occurred.
      */
-    bool load(const char* filename);
+    bool load(const char *filename);
 
     /**
      * Appends a new sheet.
      */
-    void appendSheet(Sheet* sheet);
+    void appendSheet(Sheet *sheet);
 
     /**
      * Returns the number of worksheet in this workbook. A newly created
@@ -76,7 +75,7 @@ public:
      * Returns a worksheet at given index. If index is invalid (e.g. larger
      * than total number of worksheet), this function returns NULL.
      */
-    Sheet* sheet(unsigned index);
+    Sheet *sheet(unsigned index);
 
     enum PropertyType {
         PIDSI_CODEPAGE = 0x01,
@@ -99,13 +98,13 @@ public:
     QVariant property(PropertyType type, const QVariant &defaultValue = QVariant()) const;
     void setProperty(PropertyType type, const QVariant &value);
 
-    std::map<std::pair<unsigned, QString>, QString>& namedAreas();
+    std::map<std::pair<unsigned, QString>, QString> &namedAreas();
     void setNamedArea(unsigned sheet, const QString &name, const QString &formula);
 
     QList<QRect> filterRanges(unsigned sheet) const;
-    QList<QRect> filterRanges(const Sheet* sheet) const;
-    void addFilterRange(unsigned sheet, const QRect& range);
-    void addFilterRange(const QString& sheet, const QRect& range);
+    QList<QRect> filterRanges(const Sheet *sheet) const;
+    void addFilterRange(unsigned sheet, const QRect &range);
+    void addFilterRange(const QString &sheet, const QRect &range);
 
     int activeTab() const;
     void setActiveTab(int tab);
@@ -116,18 +115,18 @@ public:
     unsigned long password() const;
     void setPassword(unsigned long hash);
 
-    int addFormat(const Format& format);
-    Format* format(int index) const;
+    int addFormat(const Format &format);
+    Format *format(int index) const;
     int formatCount() const;
 
-    void setOfficeArtDggContainer(const MSO::OfficeArtDggContainer& dggContainer);
-    MSO::OfficeArtDggContainer* officeArtDggContainer() const;
+    void setOfficeArtDggContainer(const MSO::OfficeArtDggContainer &dggContainer);
+    MSO::OfficeArtDggContainer *officeArtDggContainer() const;
 
     void setPictureNames(const QMap<QByteArray, QString> pictureNames);
-    QString pictureName(const QByteArray& uid) const;
+    QString pictureName(const QByteArray &uid) const;
 
-    void setColorTable(const QList<QColor>& colorTable);
-    QList< QColor > colorTable() const;
+    void setColorTable(const QList<QColor> &colorTable);
+    QList<QColor> colorTable() const;
     QColor customColor(unsigned index) const;
     QColor color(unsigned index) const;
 
@@ -135,21 +134,11 @@ public:
     void setFont(unsigned index, const FormatFont &font);
 
     QDateTime baseDate() const;
-    void setBaseDate(const QDateTime& baseDate);
+    void setBaseDate(const QDateTime &baseDate);
 
-    enum Version {
-        Excel95,
-        Excel97,
-        Excel2000,
-        Excel2002,
-        Excel2003,
-        Excel2007,
-        Excel2010,
-        Unknown = -1
-    };
+    enum Version { Excel95, Excel97, Excel2000, Excel2002, Excel2003, Excel2007, Excel2010, Unknown = -1 };
     Version version() const;
     void setVersion(Version ver);
-
 
     void emitProgress(int value);
 
@@ -161,14 +150,13 @@ Q_SIGNALS:
 
 private:
     // no copy or assign
-    Workbook(const Workbook&);
-    Workbook& operator=(const Workbook&);
+    Workbook(const Workbook &);
+    Workbook &operator=(const Workbook &);
 
     class Private;
-    Private* d;
+    Private *d;
 };
 
 }
-
 
 #endif // SWINDER_WORKBOOK_H

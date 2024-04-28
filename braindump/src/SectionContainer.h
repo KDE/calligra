@@ -31,26 +31,31 @@ class RootSection;
 class SectionContainer : public KoShapeBasedDocumentBase
 {
 public:
-    SectionContainer(Section* , RootSection* _rootSection);
-    SectionContainer(const SectionContainer& _rhs, Section*);
+    SectionContainer(Section *, RootSection *_rootSection);
+    SectionContainer(const SectionContainer &_rhs, Section *);
+
 private:
-    void initContainer(Section* , RootSection* _rootSection);
+    void initContainer(Section *, RootSection *_rootSection);
+
 public:
-    virtual void addShape(KoShape* shape);
-    virtual void removeShape(KoShape* shape);
+    virtual void addShape(KoShape *shape);
+    virtual void removeShape(KoShape *shape);
+
 public:
-    Section* section();
-    KoShapeLayer* layer();
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context, QList<KoShape*>& shapes);
-    void saveOdf(KoShapeSavingContext & context) const;
+    Section *section();
+    KoShapeLayer *layer();
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, QList<KoShape *> &shapes);
+    void saveOdf(KoShapeSavingContext &context) const;
     QRectF containerBound() const;
+
 private:
-    SectionContainer(const SectionContainer& _rhs);
+    SectionContainer(const SectionContainer &_rhs);
+
 private:
-    Section* m_section;
-    KoShapeLayer* m_layer;
-    RootSection* m_rootSection;
-    SectionShapeContainerModel* m_sectionModel;
+    Section *m_section;
+    KoShapeLayer *m_layer;
+    RootSection *m_rootSection;
+    SectionShapeContainerModel *m_sectionModel;
 };
 
 #endif

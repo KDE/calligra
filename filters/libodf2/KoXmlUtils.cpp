@@ -5,7 +5,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "KoXmlUtils.h"
 
@@ -15,20 +14,18 @@
 // libodf2
 #include "KoXmlStreamReader.h"
 
-
 void readCharacterData(KoXmlStreamReader &reader, QString &result)
 {
     while (!reader.atEnd() && !reader.isEndElement()) {
-	reader.readNext();
+        reader.readNext();
 
         if (reader.isCharacters()) {
-            //debugOdf2 << "Found character data";
-	    result.append(reader.text());
+            // debugOdf2 << "Found character data";
+            result.append(reader.text());
+        } else if (reader.isStartElement()) {
+            // Collect character data recursively and read past the end element.
+            readCharacterData(reader, result);
+            reader.readNext();
         }
-	else if (reader.isStartElement()) {
-	    // Collect character data recursively and read past the end element.
-	    readCharacterData(reader, result);
-	    reader.readNext(); 
-	}
     }
 }

@@ -4,18 +4,18 @@
 
 #include "TestDependencies.h"
 
-#include <QTest>
-#include <QCoreApplication>
 #include <KLocalizedString>
+#include <QCoreApplication>
+#include <QTest>
 
 #include "engine/CellBase.h"
 #include "engine/CellBaseStorage.h"
 #include "engine/DependencyManager.h"
 #include "engine/DependencyManager_p.h"
 #include "engine/Formula.h"
-#include "engine/Value.h"
 #include "engine/MapBase.h"
 #include "engine/SheetBase.h"
+#include "engine/Value.h"
 
 using namespace Calligra::Sheets;
 
@@ -37,7 +37,7 @@ void TestDependencies::testCircleRemoval()
     QCoreApplication::processEvents(); // handle Damages
 
     QCOMPARE(m_storage->value(1, 1), Value::errorCIRCLE());
-    DependencyManager* manager = m_map->dependencyManager();
+    DependencyManager *manager = m_map->dependencyManager();
     QVERIFY(manager->d->consumers.count() == 1);
     QVERIFY(manager->d->providers.count() == 1);
     QList<CellBase> consumers = manager->d->consumers.value(m_sheet)->contains(QRect(1, 1, 1, 1));
@@ -73,13 +73,17 @@ void TestDependencies::testCircles()
 
 void TestDependencies::testDepths()
 {
-    CellBase a1(m_sheet, 1, 1); a1.parseUserInput("5");
-    CellBase a2(m_sheet, 1, 2); a2.parseUserInput("=A1");
-    CellBase a3(m_sheet, 1, 3); a3.parseUserInput("=A2");
-    CellBase a4(m_sheet, 1, 4); a4.parseUserInput("=A1 + A3");
+    CellBase a1(m_sheet, 1, 1);
+    a1.parseUserInput("5");
+    CellBase a2(m_sheet, 1, 2);
+    a2.parseUserInput("=A1");
+    CellBase a3(m_sheet, 1, 3);
+    a3.parseUserInput("=A2");
+    CellBase a4(m_sheet, 1, 4);
+    a4.parseUserInput("=A1 + A3");
 
     QCoreApplication::processEvents(); // handle Damages
-    
+
     QMap<CellBase, int> depths = m_map->dependencyManager()->depths();
     QCOMPARE(depths[a1], 0);
     QCOMPARE(depths[a2], 1);
@@ -88,7 +92,7 @@ void TestDependencies::testDepths()
 
     a2.parseUserInput("");
     QCoreApplication::processEvents(); // handle Damages
-    
+
     depths = m_map->dependencyManager()->depths();
     QCOMPARE(depths[a1], 0);
     QCOMPARE(depths[a2], 0);

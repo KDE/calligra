@@ -6,17 +6,17 @@
 
 #include "SelectionRect.h"
 
-#include <QRectF>
 #include <QPointF>
+#include <QRectF>
 #include <QSizeF>
 #include <limits>
 
-SelectionRect::SelectionRect(const QRectF &rect, qreal handleSize):
-    m_rect(rect),
-    m_aspectRatio(1),
-    m_aConstr(0),
-    m_handleSize(handleSize),
-    m_currentHandle(0)
+SelectionRect::SelectionRect(const QRectF &rect, qreal handleSize)
+    : m_rect(rect)
+    , m_aspectRatio(1)
+    , m_aConstr(0)
+    , m_handleSize(handleSize)
+    , m_currentHandle(0)
 {
     m_lConstr = -std::numeric_limits<qreal>::infinity();
     m_rConstr = std::numeric_limits<qreal>::infinity();
@@ -81,8 +81,7 @@ void SelectionRect::doDragging(const QPointF &pos)
         if (m_rect.bottom() > m_bConstr) {
             m_rect.moveBottom(m_bConstr);
         }
-    }
-    else {
+    } else {
         if (m_currentHandle & TOP_HANDLE) {
             m_rect.setTop(qBound(m_tConstr, pos.y(), m_bConstr));
         }
@@ -110,8 +109,8 @@ void SelectionRect::finishDragging()
 
 SelectionRect::HandleFlags SelectionRect::getHandleFlags(const QPointF &pos) const
 {
-    for(int i=0; i<getNumHandles(); ++i) {
-        if(getHandleRect(getHandleFlags(i)).contains(pos))
+    for (int i = 0; i < getNumHandles(); ++i) {
+        if (getHandleRect(getHandleFlags(i)).contains(pos))
             return getHandleFlags(i);
     }
 
@@ -120,16 +119,23 @@ SelectionRect::HandleFlags SelectionRect::getHandleFlags(const QPointF &pos) con
 
 SelectionRect::HandleFlags SelectionRect::getHandleFlags(int handleIndex) const
 {
-    switch(handleIndex)
-    {
-        case 0: return TOP_LEFT_HANDLE;
-        case 1: return TOP_HANDLE;
-        case 2: return TOP_RIGHT_HANDLE;
-        case 3: return RIGHT_HANDLE;
-        case 4: return BOTTOM_RIGHT_HANDLE;
-        case 5: return BOTTOM_HANDLE;
-        case 6: return BOTTOM_LEFT_HANDLE;
-        case 7: return LEFT_HANDLE;
+    switch (handleIndex) {
+    case 0:
+        return TOP_LEFT_HANDLE;
+    case 1:
+        return TOP_HANDLE;
+    case 2:
+        return TOP_RIGHT_HANDLE;
+    case 3:
+        return RIGHT_HANDLE;
+    case 4:
+        return BOTTOM_RIGHT_HANDLE;
+    case 5:
+        return BOTTOM_HANDLE;
+    case 6:
+        return BOTTOM_LEFT_HANDLE;
+    case 7:
+        return LEFT_HANDLE;
     }
 
     return 0;
@@ -147,15 +153,14 @@ QRectF SelectionRect::getHandleRect(HandleFlags handle) const
     x = (handle & RIGHT_HANDLE) ? m_rect.right() : x;
     y = (handle & BOTTOM_HANDLE) ? m_rect.bottom() : y;
 
-    return QRectF(x-(w/2.0), y-(h/2.0), w, h);
+    return QRectF(x - (w / 2.0), y - (h / 2.0), w, h);
 }
 
 void SelectionRect::fixAspect(HandleFlags handle)
 {
     QRectF oldRect = m_rect;
 
-    switch (handle)
-    {
+    switch (handle) {
     case TOP_HANDLE:
     case BOTTOM_HANDLE:
         m_rect.setWidth((m_rect.height() * m_aConstr) / m_aspectRatio);

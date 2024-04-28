@@ -7,11 +7,11 @@
 
 #include "KoTextOdfSaveHelper.h"
 
-#include <KoXmlWriter.h>
-#include <KoOdf.h>
 #include "KoTextWriter.h"
+#include <KoOdf.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextDocument.h>
+#include <KoXmlWriter.h>
 
 #include <QTextDocument>
 
@@ -38,9 +38,8 @@ struct Q_DECL_HIDDEN KoTextOdfSaveHelper::Private {
 #endif
 };
 
-
 KoTextOdfSaveHelper::KoTextOdfSaveHelper(const QTextDocument *document, int from, int to)
-        : d(new Private(document, from, to))
+    : d(new Private(document, from, to))
 {
 }
 
@@ -55,7 +54,7 @@ bool KoTextOdfSaveHelper::writeBody()
         qSwap(d->to, d->from);
     }
     Q_ASSERT(d->context);
-    KoXmlWriter & bodyWriter = d->context->xmlWriter();
+    KoXmlWriter &bodyWriter = d->context->xmlWriter();
     bodyWriter.startElement("office:body");
     bodyWriter.startElement(KoOdf::bodyContentElement(KoOdf::Text, true));
 
@@ -67,9 +66,7 @@ bool KoTextOdfSaveHelper::writeBody()
     return true;
 }
 
-KoShapeSavingContext * KoTextOdfSaveHelper::context(KoXmlWriter * bodyWriter,
-                                                    KoGenStyles & mainStyles,
-                                                    KoEmbeddedDocumentSaver & embeddedSaver)
+KoShapeSavingContext *KoTextOdfSaveHelper::context(KoXmlWriter *bodyWriter, KoGenStyles &mainStyles, KoEmbeddedDocumentSaver &embeddedSaver)
 {
     d->context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
     return d->context;

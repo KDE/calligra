@@ -10,9 +10,9 @@
 #ifndef KOTEXTDOCUMENT_H
 #define KOTEXTDOCUMENT_H
 
-#include <QTextDocument>
-#include <QPointer>
 #include <QAbstractTextDocumentLayout>
+#include <QPointer>
+#include <QTextDocument>
 #include <QUrl>
 
 #include "KoListStyle.h"
@@ -53,10 +53,10 @@ public:
     /// Returns the document that was passed in the constructor
     QTextDocument *document() const;
 
-    ///Returns the text editor for that document
+    /// Returns the text editor for that document
     KoTextEditor *textEditor() const;
 
-    ///Sets the text editor for the document
+    /// Sets the text editor for the document
     void setTextEditor(KoTextEditor *textEditor);
 
     /// Sets the style manager that defines the named styles in the document
@@ -68,7 +68,7 @@ public:
     /// Sets the change tracker of the document
     void setChangeTracker(KoChangeTracker *changeTracker);
 
-    ///Returns the change tracker of the document
+    /// Returns the change tracker of the document
     KoChangeTracker *changeTracker() const;
 
     void setLineNumberingConfiguration(KoOdfLineNumberingConfiguration *lineNumberingConfiguration);
@@ -76,16 +76,16 @@ public:
     /// @return the notes configuration
     KoOdfLineNumberingConfiguration *lineNumberingConfiguration() const;
 
-    ///Sets the global undo stack
+    /// Sets the global undo stack
     void setUndoStack(KUndo2Stack *undoStack);
 
-    ///Returns the global undo stack
+    /// Returns the global undo stack
     KUndo2Stack *undoStack() const;
 
-    ///Sets the global heading list
+    /// Sets the global heading list
     void setHeadingList(KoList *list);
 
-    ///Returns the global heading list
+    /// Returns the global heading list
     KoList *headingList() const;
 
     /// Sets the lists of the document
@@ -146,7 +146,7 @@ public:
     /// Returns the shapeController
     KoShapeController *shapeController() const;
 
-    QTextFrame* auxillaryFrame();
+    QTextFrame *auxillaryFrame();
 
     /**
      * Specifies if tabs are relative to paragraph indent.

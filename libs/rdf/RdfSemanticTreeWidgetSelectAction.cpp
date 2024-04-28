@@ -13,8 +13,7 @@
 
 #include <kdebug.h>
 
-RdfSemanticTreeWidgetSelectAction::RdfSemanticTreeWidgetSelectAction(QWidget *parent,
-        KoCanvasBase *canvas, hKoRdfSemanticItem si, const QString &name)
+RdfSemanticTreeWidgetSelectAction::RdfSemanticTreeWidgetSelectAction(QWidget *parent, KoCanvasBase *canvas, hKoRdfSemanticItem si, const QString &name)
     : RdfSemanticTreeWidgetAction(parent, canvas, name)
     , si(si)
 {
@@ -33,4 +32,3 @@ void RdfSemanticTreeWidgetSelectAction::activated()
     KoRdfSemanticItemViewSite vs(si, xmlid);
     vs.select(m_canvas);
 }
-

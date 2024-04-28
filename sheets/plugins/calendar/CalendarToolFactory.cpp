@@ -9,17 +9,15 @@
 
 #include "CalendarTool.h"
 
-#include <KPluginFactory>
 #include <KLocalizedString>
+#include <KPluginFactory>
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY_WITH_JSON(CalendarToolPluginFactory, "kspread_plugin_tool_calendar.json",
-                           registerPlugin<CalendarToolFactory>();)
+K_PLUGIN_FACTORY_WITH_JSON(CalendarToolPluginFactory, "kspread_plugin_tool_calendar.json", registerPlugin<CalendarToolFactory>();)
 
-
-CalendarToolFactory::CalendarToolFactory(QObject *, const QVariantList&)
-        : CellToolFactory(CALLIGRA_SHEETS_CALENDAR_TOOL_ID)
+CalendarToolFactory::CalendarToolFactory(QObject *, const QVariantList &)
+    : CellToolFactory(CALLIGRA_SHEETS_CALENDAR_TOOL_ID)
 {
     setToolTip(i18n("Calendar"));
 }
@@ -28,7 +26,7 @@ CalendarToolFactory::~CalendarToolFactory()
 {
 }
 
-KoToolBase* CalendarToolFactory::createTool(KoCanvasBase* canvas)
+KoToolBase *CalendarToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new CalendarTool(canvas);
 }

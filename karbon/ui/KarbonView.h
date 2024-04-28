@@ -21,11 +21,11 @@
 #ifndef __KARBON_VIEW__
 #define __KARBON_VIEW__
 
+#include "KarbonBooleanCommand.h"
 #include <KoPAView.h>
 #include <KoShapeAlignCommand.h>
 #include <KoShapeDistributeCommand.h>
 #include <karbonui_export.h>
-#include "KarbonBooleanCommand.h"
 
 class QDropEvent;
 class QResizeEvent;
@@ -35,7 +35,6 @@ class KarbonDocument;
 
 class KoColor;
 class KoUnit;
-
 
 class KarbonPaletteBarWidget;
 class KarbonPart;
@@ -48,11 +47,11 @@ class KARBONUI_EXPORT KarbonView : public KoPAView
     Q_OBJECT
 
 public:
-    KarbonView(KarbonPart *part, KarbonDocument* doc, QWidget* parent = 0);
+    KarbonView(KarbonPart *part, KarbonDocument *doc, QWidget *parent = 0);
     ~KarbonView() override;
 
     /// Returns the view is attached to
-   KarbonDocument * part() const;
+    KarbonDocument *part() const;
 
     /// Returns the canvas widget of this view
     KoPACanvas *canvasWidget() const;
@@ -64,7 +63,6 @@ public:
     virtual void setCursor(const QCursor &);
     /// Reimplemented from QWidget
     void dropEvent(QDropEvent *e) override;
-
 
     KoCanvasResourceManager *resourceManager() const;
 
@@ -128,8 +126,8 @@ protected:
     void openConfiguration() override;
 
     void updateReadWrite(bool readwrite) override;
-    void resizeEvent(QResizeEvent* event) override;
-    void dragEnterEvent(QDragEnterEvent * event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
 
     void createStrokeDock();
     void createColorDock();
@@ -143,11 +141,10 @@ private:
     void selectionFlip(bool horizontally, bool vertically);
 
     /// Returns a list of all selected path shapes
-    QList<KoPathShape*> selectedPathShapes();
+    QList<KoPathShape *> selectedPathShapes();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // __KARBON_VIEW__
-

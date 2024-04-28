@@ -41,11 +41,11 @@ public:
 
     const MapBase *map() const;
 
-    void remove(SheetBase* sheet);
+    void remove(SheetBase *sheet);
 
-    Region namedArea(const QString& name) const;
-    SheetBase* sheet(const QString& name) const;
-    bool contains(const QString& name) const;
+    Region namedArea(const QString &name) const;
+    SheetBase *sheet(const QString &name) const;
+    bool contains(const QString &name) const;
 
     /**
      * Returns the list of all registered named areas.
@@ -53,7 +53,7 @@ public:
      */
     QList<QString> areaNames() const;
 
-    void regionChanged(const Region& region);
+    void regionChanged(const Region &region);
     void updateAllNamedAreas();
 
 public Q_SLOTS:
@@ -63,18 +63,18 @@ public Q_SLOTS:
      * \param region the cell range to be named
      * \param name the name of the new area
      */
-    void insert(const Region& region, const QString& name);
+    void insert(const Region &region, const QString &name);
 
-    void remove(const QString& name);
+    void remove(const QString &name);
 
 Q_SIGNALS:
-    void namedAreaAdded(const QString&);
-    void namedAreaRemoved(const QString&);
-    void namedAreaModified(const QString&);
+    void namedAreaAdded(const QString &);
+    void namedAreaRemoved(const QString &);
+    void namedAreaModified(const QString &);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

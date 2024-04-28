@@ -7,28 +7,28 @@
 
 namespace RtfReader
 {
-    IgnoredDestination::IgnoredDestination( Reader *reader, AbstractRtfOutput *output, const QString &name ) :
-      Destination( reader, output, name )
-    {
-    }
+IgnoredDestination::IgnoredDestination(Reader *reader, AbstractRtfOutput *output, const QString &name)
+    : Destination(reader, output, name)
+{
+}
 
-    IgnoredDestination::~IgnoredDestination()
-    {
-    }
+IgnoredDestination::~IgnoredDestination()
+{
+}
 
-    void IgnoredDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
-    {
-        Q_UNUSED(controlWord);
-        Q_UNUSED(hasValue);
-        Q_UNUSED(value);
-    }
+void IgnoredDestination::handleControlWord(const QByteArray &controlWord, bool hasValue, const int value)
+{
+    Q_UNUSED(controlWord);
+    Q_UNUSED(hasValue);
+    Q_UNUSED(value);
+}
 
-    void IgnoredDestination::handlePlainText( const QByteArray &plainText )
-    {
-        Q_UNUSED(plainText);
-    }
+void IgnoredDestination::handlePlainText(const QByteArray &plainText)
+{
+    Q_UNUSED(plainText);
+}
 
-    void IgnoredDestination::aboutToEndDestination()
-    {
-    }
+void IgnoredDestination::aboutToEndDestination()
+{
+}
 }

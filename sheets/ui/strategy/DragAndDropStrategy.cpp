@@ -13,9 +13,9 @@
 #include <QMimeData>
 #include <QWidget>
 
-#include "engine/calligra_sheets_limits.h"
 #include "core/Cell.h"
 #include "core/Sheet.h"
+#include "engine/calligra_sheets_limits.h"
 
 #include "../CellToolBase.h"
 #include "../Selection.h"
@@ -26,21 +26,23 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN DragAndDropStrategy::Private
 {
 public:
-    Private() : started(false) { }
+    Private()
+        : started(false)
+    {
+    }
 
     Cell cell;
     QPointF lastPoint;
     bool started;
 };
 
-DragAndDropStrategy::DragAndDropStrategy(CellToolBase *cellTool,
-        const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
-        : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
-        , d(new Private)
+DragAndDropStrategy::DragAndDropStrategy(CellToolBase *cellTool, const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
+    : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
+    , d(new Private)
 {
     d->lastPoint = documentPos;
     Selection *const selection = this->selection();
-    //const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
+    // const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = documentPos /*- (shape ? shape->position() : QPointF(0.0, 0.0))*/;
 
     // In which cell did the user click?
@@ -50,7 +52,8 @@ DragAndDropStrategy::DragAndDropStrategy(CellToolBase *cellTool,
     int row = selection->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
     if (col > KS_colMax || row > KS_rowMax) {
-        debugSheetsUI << "col or row is out of range:" << "col:" << col << " row:" << row;
+        debugSheetsUI << "col or row is out of range:"
+                      << "col:" << col << " row:" << row;
     } else {
         d->cell = Cell(selection->activeSheet(), col, row);
     }
@@ -61,7 +64,7 @@ DragAndDropStrategy::~DragAndDropStrategy()
     delete d;
 }
 
-void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::KeyboardModifiers modifiers)
+void DragAndDropStrategy::handleMouseMove(const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
     if (d->started)
@@ -76,10 +79,11 @@ void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::Keyboa
     int row = selection()->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
     if (col > KS_colMax || row > KS_rowMax) {
-        debugSheetsUI << "col or row is out of range:" << "col:" << col << " row:" << row;
+        debugSheetsUI << "col or row is out of range:"
+                      << "col:" << col << " row:" << row;
     } else if (d->cell == Cell(selection()->activeSheet(), col, row)) {
     } else {
-        QMimeData* mimeData = new QMimeData();
+        QMimeData *mimeData = new QMimeData();
         mimeData->setText(CopyCommand::saveAsPlainText(*selection()));
         QString snippet = CopyCommand::saveAsSnippet(*selection());
         mimeData->setData("application/x-calligra-sheets-snippet", snippet.toUtf8());
@@ -91,9 +95,9 @@ void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::Keyboa
     }
 }
 
-KUndo2Command* DragAndDropStrategy::createCommand()
+KUndo2Command *DragAndDropStrategy::createCommand()
 {
-    //const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
+    // const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = d->lastPoint /*- (shape ? shape->position() : QPointF(0.0, 0.0))*/;
 
     // In which cell did the user click?
@@ -103,7 +107,8 @@ KUndo2Command* DragAndDropStrategy::createCommand()
     int row = selection()->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
     if (col > KS_colMax || row > KS_rowMax) {
-        debugSheetsUI << "col or row is out of range:" << "col:" << col << " row:" << row;
+        debugSheetsUI << "col or row is out of range:"
+                      << "col:" << col << " row:" << row;
     } else if (d->cell == Cell(selection()->activeSheet(), col, row)) {
         selection()->initialize(QPoint(col, row), selection()->activeSheet());
     }

@@ -15,7 +15,7 @@ public:
     KarbonGradientToolFactory();
     ~KarbonGradientToolFactory() override;
 
-    KoToolBase * createTool(KoCanvasBase *canvas) override;
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif // _KARBONGRADIENTTOOLFACTORY_H_

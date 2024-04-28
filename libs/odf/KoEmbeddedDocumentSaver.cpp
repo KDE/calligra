@@ -14,34 +14,34 @@
 #include <OdfDebug.h>
 #include <QUrl>
 
+#include <KoOdfWriteStore.h>
 #include <KoStore.h>
 #include <KoXmlWriter.h>
-#include <KoOdfWriteStore.h>
 
 #include "KoDocumentBase.h"
 #include <KoOdfManifestEntry.h>
-
 
 #define INTERNAL_PROTOCOL "intern"
 
 struct FileEntry {
     QString path;
-    QByteArray mimeType;       // QBA because this is what addManifestEntry wants
+    QByteArray mimeType; // QBA because this is what addManifestEntry wants
     QByteArray contents;
 };
-
 
 class Q_DECL_HIDDEN KoEmbeddedDocumentSaver::Private
 {
 public:
-    Private() {}
+    Private()
+    {
+    }
 
     QHash<QString, int> prefixes; // Used in getFilename();
 
     // These will be saved when saveEmbeddedDocuments() is called.
-    QList<KoDocumentBase*> documents; // Embedded documents
-    QList<FileEntry*> files;    // Embedded files.
-    QList<KoOdfManifestEntry*> manifestEntries;
+    QList<KoDocumentBase *> documents; // Embedded documents
+    QList<FileEntry *> files; // Embedded files.
+    QList<KoOdfManifestEntry *> manifestEntries;
 };
 
 KoEmbeddedDocumentSaver::KoEmbeddedDocumentSaver()
@@ -56,7 +56,6 @@ KoEmbeddedDocumentSaver::~KoEmbeddedDocumentSaver()
     delete d;
 }
 
-
 QString KoEmbeddedDocumentSaver::getFilename(const QString &prefix)
 {
     int index = 1;
@@ -67,11 +66,11 @@ QString KoEmbeddedDocumentSaver::getFilename(const QString &prefix)
     // This inserts prefix into the map if it's not there.
     d->prefixes[prefix] = index + 1;
 
-    //return prefix + QString("%1").arg(index, 4, 10, QChar('0'));
+    // return prefix + QString("%1").arg(index, 4, 10, QChar('0'));
     return prefix + QString("%1").arg(index);
 }
 
-void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoDocumentBase * doc)
+void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoDocumentBase *doc)
 {
     Q_ASSERT(doc);
     d->documents.append(doc);
@@ -93,14 +92,13 @@ void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoDocumentBase 
     }
 
     debugOdf << "saving reference to embedded document as" << ref;
-    writer.addAttribute("xlink:href", /*"#" + */ref);
+    writer.addAttribute("xlink:href", /*"#" + */ ref);
 
     //<draw:object xlink:type="simple" xlink:show="embed"
     //    xlink:actuate="onLoad" xlink:href="#./Object 1"/>
     writer.addAttribute("xlink:type", "simple");
     writer.addAttribute("xlink:show", "embed");
     writer.addAttribute("xlink:actuate", "onLoad");
-
 }
 
 // Examples:
@@ -113,12 +111,10 @@ void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoDocumentBase 
 //       copied since otherwise the actual array may disappear before
 //       the real saving is done.
 //
-void KoEmbeddedDocumentSaver::embedFile(KoXmlWriter &writer, const char *element,
-                                        const QString &path, const QByteArray &mimeType,
-                                        const QByteArray &contents)
+void KoEmbeddedDocumentSaver::embedFile(KoXmlWriter &writer, const char *element, const QString &path, const QByteArray &mimeType, const QByteArray &contents)
 {
     // Put the file in the list of files to be written to the store later.
-    FileEntry  *entry = new FileEntry;
+    FileEntry *entry = new FileEntry;
     entry->mimeType = mimeType;
     entry->path = path;
     entry->contents = contents;
@@ -138,13 +134,12 @@ void KoEmbeddedDocumentSaver::embedFile(KoXmlWriter &writer, const char *element
     writer.endElement();
 }
 
-void KoEmbeddedDocumentSaver::saveFile(const QString &path, const QByteArray &mimeType,
-                                       const QByteArray &contents)
+void KoEmbeddedDocumentSaver::saveFile(const QString &path, const QByteArray &mimeType, const QByteArray &contents)
 {
     // Put the file in the list of files to be written to the store later.
-    FileEntry  *entry = new FileEntry;
+    FileEntry *entry = new FileEntry;
     entry->mimeType = mimeType;
-    entry->path     = path;
+    entry->path = path;
     entry->contents = contents;
     d->files.append(entry);
 
@@ -154,19 +149,17 @@ void KoEmbeddedDocumentSaver::saveFile(const QString &path, const QByteArray &mi
 /**
  *
  */
-void KoEmbeddedDocumentSaver::saveManifestEntry(const QString &fullPath, const QString &mediaType,
-                                                const QString &version)
+void KoEmbeddedDocumentSaver::saveManifestEntry(const QString &fullPath, const QString &mediaType, const QString &version)
 {
     d->manifestEntries.append(new KoOdfManifestEntry(fullPath, mediaType, version));
 }
 
-
-bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContext & documentContext)
+bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContext &documentContext)
 {
     KoStore *store = documentContext.odfStore.store();
 
     // Write embedded documents.
-    foreach(KoDocumentBase *doc, d->documents) {
+    foreach (KoDocumentBase *doc, d->documents) {
         QString path;
         if (doc->isStoredExtern()) {
             debugOdf << " external (don't save) url:" << doc->url().url();
@@ -207,7 +200,7 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContex
             }
             path += doc->url().path();
             if (path.startsWith(QLatin1Char('/'))) {
-                path.remove(0, 1);   // remove leading '/', no wanted in manifest
+                path.remove(0, 1); // remove leading '/', no wanted in manifest
             }
         }
 
@@ -220,7 +213,7 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContex
     }
 
     // Write the embedded files.
-    foreach(FileEntry *entry, d->files) {
+    foreach (FileEntry *entry, d->files) {
         QString path = entry->path;
         debugOdf << "saving" << path;
 
@@ -243,14 +236,14 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContex
 
         // Create the manifest entry.
         if (path.startsWith(QLatin1String("./"))) {
-            path.remove(0, 2);   // remove leading './', not wanted in manifest
+            path.remove(0, 2); // remove leading './', not wanted in manifest
         }
         documentContext.odfStore.manifestWriter()->addManifestEntry(path, entry->mimeType);
     }
 
     // Write the manifest entries.
     KoXmlWriter *manifestWriter = documentContext.odfStore.manifestWriter();
-    foreach(KoOdfManifestEntry *entry, d->manifestEntries) {
+    foreach (KoOdfManifestEntry *entry, d->manifestEntries) {
         manifestWriter->startElement("manifest:file-entry");
         manifestWriter->addAttribute("manifest:version", entry->version());
         manifestWriter->addAttribute("manifest:media-type", entry->mediaType());

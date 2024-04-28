@@ -12,25 +12,24 @@
 
 #include "KoShapeSavingContext.h"
 #include <KoStoreDevice.h>
-#include <QCryptographicHash>
 #include <KoXmlWriter.h>
+#include <QCryptographicHash>
 
 #include <QMap>
-#include <QUrl>
 #include <QMimeDatabase>
 #include <QMimeType>
-
+#include <QUrl>
 
 class VideoCollection::Private
 {
 public:
     ~Private()
     {
-   }
+    }
 
-    QMap<qint64, VideoData*> videos;
+    QMap<qint64, VideoData *> videos;
     // an extra map to find all dataObjects based on the key of a store.
-    QMap<QByteArray, VideoData*> storeVideos;
+    QMap<QByteArray, VideoData *> storeVideos;
 };
 
 VideoCollection::VideoCollection(QObject *parent)
@@ -42,7 +41,7 @@ VideoCollection::VideoCollection(QObject *parent)
 
 VideoCollection::~VideoCollection()
 {
-    foreach(VideoData *id, d->videos) {
+    foreach (VideoData *id, d->videos) {
         id->setCollection(0);
     }
     delete d;
@@ -50,7 +49,7 @@ VideoCollection::~VideoCollection()
 
 bool VideoCollection::completeLoading(KoStore *store)
 {
-    Q_UNUSED( store );
+    Q_UNUSED(store);
     d->storeVideos.clear();
     return true;
 }
@@ -82,7 +81,7 @@ bool VideoCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter
         }
         ++dataIt;
     }
-    saveCounter=0;
+    saveCounter = 0;
     return true;
 }
 
@@ -115,7 +114,7 @@ VideoData *VideoCollection::createVideoData(const QString &href, KoStore *store)
     // This leads to having two keys, one for the store and one for the
     // actual video data. We need the latter so if someone else gets the same
     // video data they can find this data and share (warm fuzzy feeling here)
-    QByteArray storeKey = (QString::number((qint64) store) + href).toLatin1();
+    QByteArray storeKey = (QString::number((qint64)store) + href).toLatin1();
     if (d->storeVideos.contains(storeKey))
         return new VideoData(*(d->storeVideos.value(storeKey)));
 

@@ -9,24 +9,24 @@
 #include "TestDataSet.h"
 
 // Qt
-#include <QRect>
 #include <QPoint>
+#include <QRect>
 #include <QSize>
 #include <QString>
-#include <QVariant>
 #include <QTest>
+#include <QVariant>
 
 // KoChart
-#include "DataSet.h"
 #include "CellRegion.h"
+#include "DataSet.h"
 
-
-namespace QTest {
-    template<>
-    char *toString(const CellRegion &region)
-    {
-        return qstrdup(region.toString().toLatin1());
-    }
+namespace QTest
+{
+template<>
+char *toString(const CellRegion &region)
+{
+    return qstrdup(region.toString().toLatin1());
+}
 }
 
 using namespace KoChart;
@@ -75,7 +75,7 @@ void TestDataSet::initTestCase()
     m_sourceModel1.setData(m_sourceModel1.index(3, 2), 5.3);
     m_sourceModel1.setData(m_sourceModel1.index(3, 3), 6.4);
     m_sourceModel1.setData(m_sourceModel1.index(3, 4), 2.1);
-    
+
     m_sourceModel2.setRowCount(4);
     m_sourceModel2.setColumnCount(5);
 

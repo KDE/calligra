@@ -14,10 +14,10 @@
 #include <QColor>
 #include <QRect>
 
-#include "WmfEnums.h"
-#include "WmfStructs.h"
 #include "WmfDeviceContext.h"
+#include "WmfEnums.h"
 #include "WmfStack.h"
+#include "WmfStructs.h"
 
 class WmfAbstractBackend;
 class QBuffer;
@@ -28,7 +28,6 @@ class QPolygon;
 */
 namespace Libwmf
 {
-
 
 /**
  * WmfParser allows to read WMF files
@@ -44,13 +43,13 @@ public:
     /**
      * Load WMF file. Returns true on success.
      */
-    bool load(const QByteArray& array);
+    bool load(const QByteArray &array);
 
     /**
      * Plays a metafile using @p backend as backend and returns true on success.
      * To draw on a device you have to inherit the class WmfAbstractBackend.
      */
-    bool play(WmfAbstractBackend* backend);
+    bool play(WmfAbstractBackend *backend);
 
     /****************** Object handle *******************/
     /// create an empty object in the object list
@@ -59,7 +58,7 @@ public:
     /****************** misc *******************/
 
     /** Calculate header checksum */
-    static quint16 calcCheckSum(WmfPlaceableHeader*);
+    static quint16 calcCheckSum(WmfPlaceableHeader *);
 
 private:
     //-----------------------------------------------------------------------------
@@ -69,27 +68,27 @@ private:
     void createBoundingBox(QDataStream &st);
 
     /** Handle win-object-handles */
-    bool addHandle(KoWmfHandle*);
+    bool addHandle(KoWmfHandle *);
     void deleteHandle(int);
 
     /** Convert QINT16 points into QPointArray */
-    void pointArray(QDataStream& stream, QPolygon& pa);
+    void pointArray(QDataStream &stream, QPolygon &pa);
 
     /** Conversion between windows color and QColor */
-    QColor qtColor(quint32 color) const {
+    QColor qtColor(quint32 color) const
+    {
         return QColor(color & 0xFF, (color >> 8) & 0xFF, (color >> 16) & 0xFF);
     }
 
     /** Convert (x1,y1) and (x2, y2) positions in angle and angleLength */
-    void xyToAngle(int xStart, int yStart, int xEnd, int yEnd, int& angle, int& aLength);
+    void xyToAngle(int xStart, int yStart, int xEnd, int yEnd, int &angle, int &aLength);
 
     /** Convert windows rasterOp in QT rasterOp */
     QPainter::CompositionMode winToQtComposition(quint16 param) const;
     QPainter::CompositionMode winToQtComposition(quint32 param) const;
 
     /** Converts DIB to BMP */
-    bool dibToBmp(QImage& bmp, QDataStream& stream, quint32 size);
-
+    bool dibToBmp(QImage &bmp, QDataStream &stream, quint32 size);
 
 public:
     // state of the WMF
@@ -121,24 +120,21 @@ private:
     WmfAbstractBackend *m_backend;
 
     // Current state of the drawing
-    WmfDeviceContext  mDeviceContext;
+    WmfDeviceContext mDeviceContext;
 
-    WmfLayout   mLayout;
-    QColor      mTextColor;
-    quint16     mMapMode;
+    WmfLayout mLayout;
+    QColor mTextColor;
+    quint16 mMapMode;
 
     // Memory allocation for WMF file
-    QBuffer*  mBuffer;
-    int    mOffsetFirstRecord;
+    QBuffer *mBuffer;
+    int mOffsetFirstRecord;
 
     // stack of object handle
-    KoWmfHandle**  mObjHandleTab;
-    int    mNbrObject;          // number of object on the stack
-    bool   mStackOverflow;
+    KoWmfHandle **mObjHandleTab;
+    int mNbrObject; // number of object on the stack
+    bool mStackOverflow;
 };
-
-
 }
 
 #endif
-

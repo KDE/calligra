@@ -6,24 +6,24 @@
 
 #include "ParagraphSettingsDialog.h"
 
-#include "ParagraphGeneral.h"
 #include "../TextTool.h"
+#include "ParagraphGeneral.h"
 
+#include <KoList.h>
+#include <KoListLevelProperties.h>
 #include <KoParagraphStyle.h>
 #include <KoTextDocument.h>
-#include <KoList.h>
 #include <KoTextEditor.h>
-#include <KoListLevelProperties.h>
 #include <commands/ParagraphFormattingCommand.h>
 
 #include <QTextBlock>
 #include <QTimer>
 
-ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *editor, QWidget* parent)
-        : KoDialog(parent)
-        , m_tool(tool)
-        , m_editor(editor)
-        , m_styleChanged(false)
+ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *editor, QWidget *parent)
+    : KoDialog(parent)
+    , m_tool(tool)
+    , m_editor(editor)
+    , m_styleChanged(false)
 {
     setCaption(i18n("Paragraph Format"));
     setModal(true);
@@ -34,13 +34,14 @@ ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *e
     m_paragraphGeneral->hideStyleName(true);
     setMainWidget(m_paragraphGeneral);
 
-
     connect(this, &KoDialog::applyClicked, this, &ParagraphSettingsDialog::slotApply);
     connect(this, &KoDialog::okClicked, this, &ParagraphSettingsDialog::slotOk);
     initTabs();
 
     // Do this after initTabs so it doesn't cause signals prematurely
-    connect(m_paragraphGeneral, &ParagraphGeneral::styleChanged, this, [this]() { styleChanged(); });
+    connect(m_paragraphGeneral, &ParagraphGeneral::styleChanged, this, [this]() {
+        styleChanged();
+    });
 }
 
 ParagraphSettingsDialog::~ParagraphSettingsDialog()

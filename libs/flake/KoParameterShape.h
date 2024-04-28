@@ -135,7 +135,7 @@ protected:
      * @param point to move the handle to in shape coordinates
      * @param modifiers used during move to point
      */
-    virtual void moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) = 0;
+    virtual void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) = 0;
 
     /**
      * @brief Update the path of the parameter shape

@@ -12,17 +12,16 @@
 #include "ui_LegendConfigWidget.h"
 
 // KF5
-#include <KLocalizedString>
 #include <KFontChooser>
+#include <KLocalizedString>
 
 // KoChart
-#include "Legend.h"
-#include "FontEditorDialog.h"
-#include "commands/ChartTypeCommand.h"
 #include "ChartDebug.h"
+#include "FontEditorDialog.h"
+#include "Legend.h"
+#include "commands/ChartTypeCommand.h"
 
 using namespace KoChart;
-
 
 class LegendConfigWidget::Private
 {
@@ -30,7 +29,6 @@ public:
     Ui::LegendConfigWidget ui;
 
     FontEditorDialog legendFontEditorDialog;
-
 };
 
 // ================================================================
@@ -44,17 +42,12 @@ LegendConfigWidget::LegendConfigWidget()
     // FIXME: after 3.2 release: Implement fonts dialog
     d->ui.legendEditFontButton->hide();
 
-    connect(d->ui.showLegend, &QAbstractButton::toggled,
-            this,             &LegendConfigWidget::showLegendChanged);
+    connect(d->ui.showLegend, &QAbstractButton::toggled, this, &LegendConfigWidget::showLegendChanged);
 
-    connect(d->ui.legendTitle, &QLineEdit::textChanged,
-            this, &LegendConfigWidget::legendTitleChanged);
-    connect(d->ui.legendOrientation, &QComboBox::activated,
-            this, &LegendConfigWidget::setLegendOrientation);
-    connect(d->ui.legendPosition, &QComboBox::activated,
-            this, &LegendConfigWidget::setLegendPosition);
-    connect(d->ui.legendAlignment, &QComboBox::activated,
-            this, &LegendConfigWidget::setLegendAlignment);
+    connect(d->ui.legendTitle, &QLineEdit::textChanged, this, &LegendConfigWidget::legendTitleChanged);
+    connect(d->ui.legendOrientation, &QComboBox::activated, this, &LegendConfigWidget::setLegendOrientation);
+    connect(d->ui.legendPosition, &QComboBox::activated, this, &LegendConfigWidget::setLegendPosition);
+    connect(d->ui.legendAlignment, &QComboBox::activated, this, &LegendConfigWidget::setLegendAlignment);
 
     createActions();
 }
@@ -64,7 +57,7 @@ LegendConfigWidget::~LegendConfigWidget()
     delete d;
 }
 
-QAction * LegendConfigWidget::createAction()
+QAction *LegendConfigWidget::createAction()
 {
     return 0;
 }
@@ -73,18 +66,34 @@ int toIndex(Position pos)
 {
     int index = 0;
     switch (pos) {
-        case StartPosition: index = 2; break;
-        case TopPosition: index = 1; break;
-        case EndPosition: index = 0; break;
-        case BottomPosition: index = 3; break;
-        case TopStartPosition: index = 4; break;
-        case TopEndPosition: index = 5; break;
-        case BottomStartPosition: index = 6; break;
-        case BottomEndPosition: index = 7; break;
-        case CenterPosition:
-        case FloatingPosition:
-            index = 8;
-            break;
+    case StartPosition:
+        index = 2;
+        break;
+    case TopPosition:
+        index = 1;
+        break;
+    case EndPosition:
+        index = 0;
+        break;
+    case BottomPosition:
+        index = 3;
+        break;
+    case TopStartPosition:
+        index = 4;
+        break;
+    case TopEndPosition:
+        index = 5;
+        break;
+    case BottomStartPosition:
+        index = 6;
+        break;
+    case BottomEndPosition:
+        index = 7;
+        break;
+    case CenterPosition:
+    case FloatingPosition:
+        index = 8;
+        break;
     }
     return index;
 }
@@ -93,11 +102,17 @@ int toIndex(Qt::Alignment align)
 {
     int index = 0;
     switch (align) {
-        case Qt::AlignLeft: index = 0; break;
-        case Qt::AlignCenter: index = 1; break;
-        case Qt::AlignRight: index = 2; break;
-        default:
-            break;
+    case Qt::AlignLeft:
+        index = 0;
+        break;
+    case Qt::AlignCenter:
+        index = 1;
+        break;
+    case Qt::AlignRight:
+        index = 2;
+        break;
+    default:
+        break;
     }
     return index;
 }
@@ -120,7 +135,6 @@ void LegendConfigWidget::updateData()
     }
 }
 
-
 void LegendConfigWidget::setLegendOrientation(int boxEntryIndex)
 {
     emit legendOrientationChanged((Qt::Orientation)boxEntryIndex);
@@ -141,11 +155,17 @@ void LegendConfigWidget::setLegendAlignment(int index)
 {
     Qt::Alignment align = Qt::AlignCenter;
     switch (index) {
-        case 0: align = Qt::AlignLeft; break;
-        case 1: align = Qt::AlignCenter; break;
-        case 2: align = Qt::AlignRight; break;
-        default:
-            break;
+    case 0:
+        align = Qt::AlignLeft;
+        break;
+    case 1:
+        align = Qt::AlignCenter;
+        break;
+    case 2:
+        align = Qt::AlignRight;
+        break;
+    default:
+        break;
     }
     emit legendAlignmentChanged(align);
 }
@@ -154,25 +174,33 @@ void LegendConfigWidget::setLegendPosition(int index)
 {
     Position pos;
     switch (index) {
-        case 0: pos = EndPosition;
-            break;
-        case 1: pos = TopPosition;
-            break;
-        case 2: pos = BottomPosition;
-            break;
-        case 3: pos = StartPosition;
-            break;
-        case 4: pos = TopStartPosition;
-            break;
-        case 5: pos = TopEndPosition;
-            break;
-        case 6: pos = BottomStartPosition;
-            break;
-        case 7: pos = BottomEndPosition;
-            break;
-        default: // manual
-            pos = CenterPosition;
-            break;
+    case 0:
+        pos = EndPosition;
+        break;
+    case 1:
+        pos = TopPosition;
+        break;
+    case 2:
+        pos = BottomPosition;
+        break;
+    case 3:
+        pos = StartPosition;
+        break;
+    case 4:
+        pos = TopStartPosition;
+        break;
+    case 5:
+        pos = TopEndPosition;
+        break;
+    case 6:
+        pos = BottomStartPosition;
+        break;
+    case 7:
+        pos = BottomEndPosition;
+        break;
+    default: // manual
+        pos = CenterPosition;
+        break;
     }
     emit legendPositionChanged(pos);
 }

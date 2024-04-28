@@ -14,12 +14,18 @@ class KoSimpleColorSpaceEngine : public KoColorSpaceEngine
 public:
     KoSimpleColorSpaceEngine();
     ~KoSimpleColorSpaceEngine() override;
-    KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
-                                                                       const KoColorSpace* dstColorSpace,
-                                                                       KoColorConversionTransformation::Intent renderingIntent,
-                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const override;
-    void addProfile(const QString &profile ) override { Q_UNUSED(profile); }
-    void removeProfile(const QString &profile ) override { Q_UNUSED(profile); }
+    KoColorConversionTransformation *createColorTransformation(const KoColorSpace *srcColorSpace,
+                                                               const KoColorSpace *dstColorSpace,
+                                                               KoColorConversionTransformation::Intent renderingIntent,
+                                                               KoColorConversionTransformation::ConversionFlags conversionFlags) const override;
+    void addProfile(const QString &profile) override
+    {
+        Q_UNUSED(profile);
+    }
+    void removeProfile(const QString &profile) override
+    {
+        Q_UNUSED(profile);
+    }
 };
 
 #endif

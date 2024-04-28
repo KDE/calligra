@@ -16,40 +16,37 @@
 #include "FlattenPathPlugin.h"
 #include "KarbonPathFlattenCommand.h"
 
-#include <KoToolManager.h>
-#include <KoCanvasController.h>
 #include <KoCanvasBase.h>
-#include <KoShapeManager.h>
-#include <KoSelection.h>
-#include <KoPathShape.h>
-#include <KoParameterShape.h>
+#include <KoCanvasController.h>
 #include <KoIcon.h>
+#include <KoParameterShape.h>
+#include <KoPathShape.h>
+#include <KoSelection.h>
+#include <KoShapeManager.h>
+#include <KoToolManager.h>
 
-#include <KPluginFactory>
 #include <KActionCollection>
 #include <KLocalizedString>
+#include <KPluginFactory>
 
-#include <QDoubleSpinBox>
-#include <QAction>
-#include <QStandardPaths>
-#include <QGroupBox>
-#include <QLabel>
-#include <QHBoxLayout>
 #include <KConfigGroup>
+#include <QAction>
 #include <QDialogButtonBox>
+#include <QDoubleSpinBox>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QPushButton>
+#include <QStandardPaths>
 #include <QVBoxLayout>
 
-
-K_PLUGIN_FACTORY_WITH_JSON(FlattenPathPluginFactory, "karbon_flattenpath.json",
-                           registerPlugin<FlattenPathPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(FlattenPathPluginFactory, "karbon_flattenpath.json", registerPlugin<FlattenPathPlugin>();)
 
 FlattenPathPlugin::FlattenPathPlugin(QObject *parent, const QVariantList &)
 {
     setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "karbon/plugins/FlattenPathPlugin.rc"), true);
 
-
-    QAction *actionFlattenPath  = new QAction(koIcon("effect_flatten"), i18n("&Flatten Path..."), this);
+    QAction *actionFlattenPath = new QAction(koIcon("effect_flatten"), i18n("&Flatten Path..."), this);
     actionCollection()->addAction("path_flatten", actionFlattenPath);
     connect(actionFlattenPath, &QAction::triggered, this, &FlattenPathPlugin::slotFlattenPath);
 
@@ -59,49 +56,48 @@ FlattenPathPlugin::FlattenPathPlugin(QObject *parent, const QVariantList &)
 
 void FlattenPathPlugin::slotFlattenPath()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape();
-    if (! shape)
+    KoShape *shape = selection->firstSelectedShape();
+    if (!shape)
         return;
 
     // check if we have a path based shape
-    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
-    if (! path)
+    KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
+    if (!path)
         return;
 
     // check if it is no parametric shape
-    KoParameterShape * ps = dynamic_cast<KoParameterShape*>(shape);
+    KoParameterShape *ps = dynamic_cast<KoParameterShape *>(shape);
     if (ps && ps->isParametricShape())
         return;
 
     if (QDialog::Rejected == m_flattenPathDlg->exec())
         return;
 
-    canvasController->canvas()->addCommand(
-        new KarbonPathFlattenCommand(path, m_flattenPathDlg->flatness()));
+    canvasController->canvas()->addCommand(new KarbonPathFlattenCommand(path, m_flattenPathDlg->flatness()));
 }
 
-FlattenDlg::FlattenDlg(QWidget* parent, const char* name)
-        : QDialog(parent)
+FlattenDlg::FlattenDlg(QWidget *parent, const char *name)
+    : QDialog(parent)
 {
     setObjectName(name);
     setModal(true);
     setWindowTitle(i18n("Flatten Path"));
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     QWidget *mainWidget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mainLayout->addWidget(mainWidget);
-    
+
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
 
     // add input fields on the left:
-    QGroupBox* group = new QGroupBox(i18n("Properties"), this);
+    QGroupBox *group = new QGroupBox(i18n("Properties"), this);
 
-    QHBoxLayout* layout = new QHBoxLayout;
+    QHBoxLayout *layout = new QHBoxLayout;
 
     layout->addWidget(new QLabel(i18n("Flatness:")));
     m_flatness = new QDoubleSpinBox(group);
@@ -133,4 +129,3 @@ void FlattenDlg::setFlatness(qreal value)
 }
 
 #include <FlattenPathPlugin.moc>
-

@@ -8,8 +8,8 @@
 #ifndef CALLIGRA_SHEETS_LOCALIZATION
 #define CALLIGRA_SHEETS_LOCALIZATION
 
-#include <QLocale>
 #include <QDebug>
+#include <QLocale>
 
 #include <KLocalizedString>
 #ifndef Q_OS_WIN

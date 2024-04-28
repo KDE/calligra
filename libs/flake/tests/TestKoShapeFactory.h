@@ -20,7 +20,6 @@ private Q_SLOTS:
     void testCreateDefaultShape();
     void testCreateShape();
     void testOdfElement();
-
 };
 
 #endif

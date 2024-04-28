@@ -15,7 +15,6 @@
 class KoProgressUpdater;
 class KoUpdaterPrivate;
 
-
 /**
  * An KoUpdater is a helper for keeping the progress of each subtask up to speed.
  * This class is not thread safe, and it should only be used from one thread.
@@ -32,12 +31,11 @@ class KoUpdaterPrivate;
  *
  * @see KoProgressUpdater::startSubtask()
  */
-class KOWIDGETUTILS_EXPORT KoUpdater : public QObject, public KoProgressProxy {
-
+class KOWIDGETUTILS_EXPORT KoUpdater : public QObject, public KoProgressProxy
+{
     Q_OBJECT
 
 public:
-
     /**
      * Call this when this subtask wants to abort all the actions.
      */
@@ -69,11 +67,10 @@ public:
     int progress() const;
 
 public: // KoProgressProxy implementation
-
     int maximum() const override;
-    void setValue( int value ) override;
-    void setRange( int minimum, int maximum ) override;
-    void setFormat( const QString & format ) override;
+    void setValue(int value) override;
+    void setRange(int minimum, int maximum) override;
+    void setFormat(const QString &format) override;
 
 Q_SIGNALS:
 
@@ -81,15 +78,13 @@ Q_SIGNALS:
     void sigCancel();
 
     /// emitted whenever the subtask has called setProgress on us
-    void sigProgress( int percent );
+    void sigProgress(int percent);
 
 protected:
-
     friend class KoProgressUpdater;
     KoUpdater(KoUpdaterPrivate *p);
 
 public:
-
     QPointer<KoUpdaterPrivate> d;
     int range;
     int min;
@@ -100,9 +95,8 @@ private Q_SLOTS:
     void interrupt();
 
 private:
-
     bool m_interrupted;
-    int  m_progressPercent;
+    int m_progressPercent;
 };
 
 #endif

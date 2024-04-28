@@ -25,15 +25,19 @@ public:
     /// reimplemented
     void setUnit(const KoUnit &unit) override;
     /// reimplemented
-    bool showOnShapeCreate() override { return false; }
+    bool showOnShapeCreate() override
+    {
+        return false;
+    }
     /// reimplemented
-    KUndo2Command * createCommand() override;
+    KUndo2Command *createCommand() override;
 
 private Q_SLOTS:
     void typeChanged();
+
 private:
     Ui::StarShapeConfigWidget widget;
-    StarShape * m_star;
+    StarShape *m_star;
 };
 
 #endif // STARSHAPECONFIGWIDGET_H

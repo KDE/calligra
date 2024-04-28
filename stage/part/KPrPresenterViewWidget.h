@@ -25,17 +25,17 @@ class KPrPresenterViewWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KPrPresenterViewWidget( KPrViewModePresentation *viewMode, const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent=0 );
+    KPrPresenterViewWidget(KPrViewModePresentation *viewMode, const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent = 0);
     ~KPrPresenterViewWidget() override;
-    void setActivePage( KoPAPageBase *page );
-    void setActivePage( int pageIndex );
-    void updateWidget( const QSize &widgetSize, const QSize &canvasSize );
+    void setActivePage(KoPAPageBase *page);
+    void setActivePage(int pageIndex);
+    void updateWidget(const QSize &widgetSize, const QSize &canvasSize);
 
 private Q_SLOTS:
-    void showSlideThumbnails( bool show );
+    void showSlideThumbnails(bool show);
     void requestPreviousSlide();
     void requestNextSlide();
-    void requestChangePage( int index, bool enableMainView );
+    void requestChangePage(int index, bool enableMainView);
 
 private:
     KPrViewModePresentation *m_viewMode;
@@ -51,4 +51,3 @@ private:
 };
 
 #endif
-

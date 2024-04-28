@@ -15,14 +15,7 @@
 class CompositeEffect : public KoFilterEffect
 {
 public:
-    enum Operation {
-        CompositeOver,
-        CompositeIn,
-        CompositeOut,
-        CompositeAtop,
-        CompositeXor,
-        Arithmetic
-    };
+    enum Operation { CompositeOver, CompositeIn, CompositeOut, CompositeAtop, CompositeXor, Arithmetic };
 
     CompositeEffect();
 
@@ -33,10 +26,10 @@ public:
     void setOperation(Operation op);
 
     /// Returns the arithmetic values
-    const qreal * arithmeticValues() const;
+    const qreal *arithmeticValues() const;
 
     /// Sets the arithmetic values
-    void setArithmeticValues(qreal * values);
+    void setArithmeticValues(qreal *values);
 
     /// reimplemented from KoFilterEffect
     QImage processImage(const QImage &image, const KoFilterEffectRenderContext &context) const override;

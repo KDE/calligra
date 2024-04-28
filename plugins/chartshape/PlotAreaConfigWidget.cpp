@@ -15,11 +15,11 @@
 #include <QComboBox>
 #include <QGridLayout>
 #include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QToolButton>
+#include <QLatin1String>
 #include <QMenu>
 #include <QPair>
-#include <QLatin1String>
+#include <QToolButton>
+#include <QVBoxLayout>
 
 // KF5
 #include <KLocalizedString>
@@ -27,51 +27,51 @@
 #include <kfontchooser.h>
 
 // Calligra
-#include <interfaces/KoChartModel.h>
 #include <KoIcon.h>
+#include <interfaces/KoChartModel.h>
 
 // KChart
-#include <KChartChart>
-#include <KChartPosition>
-#include <KChartCartesianAxis>
-#include <KChartGridAttributes>
-#include <KChartPieAttributes>
 #include <KChartAbstractCartesianDiagram>
-#include <KChartLegend>
+#include <KChartCartesianAxis>
+#include <KChartChart>
 #include <KChartDataValueAttributes>
-#include <KChartTextAttributes>
+#include <KChartGridAttributes>
+#include <KChartLegend>
 #include <KChartMarkerAttributes>
 #include <KChartMeasure>
+#include <KChartPieAttributes>
+#include <KChartPosition>
+#include <KChartTextAttributes>
 
 // KoChart
-#include "ChartProxyModel.h"
-#include "PlotArea.h"
-#include "Legend.h"
-#include "DataSet.h"
+#include "AxesConfigWidget.h"
 #include "Axis.h"
-#include "ui_ChartTableEditor.h"
-#include "NewAxisDialog.h"
 #include "AxisScalingDialog.h"
+#include "BubbleDataEditor.h"
+#include "CellRegionDialog.h"
+#include "CellRegionStringValidator.h"
+#include "ChartDebug.h"
+#include "ChartProxyModel.h"
+#include "ChartTableModel.h"
+#include "ConfigSubWidgetBase.h"
+#include "DataSet.h"
+#include "DataSetConfigWidget.h"
 #include "FontEditorDialog.h"
 #include "FormatErrorBarDialog.h"
-#include "CellRegionDialog.h"
-#include "TableEditorDialog.h"
-#include "PieDataEditor.h"
-#include "BubbleDataEditor.h"
-#include "ScatterDataEditor.h"
-#include "StockDataEditor.h"
-#include "commands/ChartTypeCommand.h"
-#include "CellRegionStringValidator.h"
-#include "ChartTableModel.h"
-#include "TableSource.h"
-#include "AxesConfigWidget.h"
-#include "DataSetConfigWidget.h"
+#include "Legend.h"
+#include "NewAxisDialog.h"
 #include "PieConfigWidget.h"
-#include "RingConfigWidget.h"
-#include "StockConfigWidget.h"
+#include "PieDataEditor.h"
+#include "PlotArea.h"
 #include "RadarDataSetConfigWidget.h"
-#include "ConfigSubWidgetBase.h"
-#include "ChartDebug.h"
+#include "RingConfigWidget.h"
+#include "ScatterDataEditor.h"
+#include "StockConfigWidget.h"
+#include "StockDataEditor.h"
+#include "TableEditorDialog.h"
+#include "TableSource.h"
+#include "commands/ChartTypeCommand.h"
+#include "ui_ChartTableEditor.h"
 
 using namespace KoChart;
 
@@ -84,12 +84,12 @@ public:
     PlotAreaConfigWidget *q;
 
     // Basic properties of the chart.
-    ChartType              type;
-    ChartSubtype           subtype;
-    bool                   threeDMode;
+    ChartType type;
+    ChartSubtype subtype;
+    bool threeDMode;
 
-    Ui::PlotAreaConfigWidget  ui;
-    bool                   isExternalDataSource;
+    Ui::PlotAreaConfigWidget ui;
+    bool isExternalDataSource;
 
     // Menus
     QMenu *dataSetBarChartMenu;
@@ -99,77 +99,74 @@ public:
     QMenu *dataSetStockChartMenu;
 
     // chart type selection actions
-    QAction  *normalBarChartAction;
-    QAction  *stackedBarChartAction;
-    QAction  *percentBarChartAction;
+    QAction *normalBarChartAction;
+    QAction *stackedBarChartAction;
+    QAction *percentBarChartAction;
 
-    QAction  *normalLineChartAction;
-    QAction  *stackedLineChartAction;
-    QAction  *percentLineChartAction;
+    QAction *normalLineChartAction;
+    QAction *stackedLineChartAction;
+    QAction *percentLineChartAction;
 
-    QAction  *normalAreaChartAction;
-    QAction  *stackedAreaChartAction;
-    QAction  *percentAreaChartAction;
+    QAction *normalAreaChartAction;
+    QAction *stackedAreaChartAction;
+    QAction *percentAreaChartAction;
 
-    QAction  *circleChartAction;
-    QAction  *ringChartAction;
-    QAction  *radarChartAction;
-    QAction  *filledRadarChartAction;
+    QAction *circleChartAction;
+    QAction *ringChartAction;
+    QAction *radarChartAction;
+    QAction *filledRadarChartAction;
 
-    QAction  *scatterChartAction;
-    QAction  *bubbleChartAction;
+    QAction *scatterChartAction;
+    QAction *bubbleChartAction;
 
-    QAction  *hlcStockChartAction;
-    QAction  *ohlcStockChartAction;
-    QAction  *candlestickStockChartAction;
+    QAction *hlcStockChartAction;
+    QAction *ohlcStockChartAction;
+    QAction *candlestickStockChartAction;
 
-    QAction  *surfaceChartAction;
-    QAction  *ganttChartAction;
+    QAction *surfaceChartAction;
+    QAction *ganttChartAction;
 
     // chart type selection actions for datasets
-    QAction  *dataSetNormalBarChartAction;
-    QAction  *dataSetStackedBarChartAction;
-    QAction  *dataSetPercentBarChartAction;
+    QAction *dataSetNormalBarChartAction;
+    QAction *dataSetStackedBarChartAction;
+    QAction *dataSetPercentBarChartAction;
 
-    QAction  *dataSetNormalLineChartAction;
-    QAction  *dataSetStackedLineChartAction;
-    QAction  *dataSetPercentLineChartAction;
+    QAction *dataSetNormalLineChartAction;
+    QAction *dataSetStackedLineChartAction;
+    QAction *dataSetPercentLineChartAction;
 
-    QAction  *dataSetNormalAreaChartAction;
-    QAction  *dataSetStackedAreaChartAction;
-    QAction  *dataSetPercentAreaChartAction;
+    QAction *dataSetNormalAreaChartAction;
+    QAction *dataSetStackedAreaChartAction;
+    QAction *dataSetPercentAreaChartAction;
 
-    QAction  *dataSetCircleChartAction;
-    QAction  *dataSetRingChartAction;
-    QAction  *dataSetRadarChartAction;
-    QAction  *dataSetFilledRadarChartAction;
-    QAction  *dataSetScatterChartAction;
-    QAction  *dataSetBubbleChartAction;
+    QAction *dataSetCircleChartAction;
+    QAction *dataSetRingChartAction;
+    QAction *dataSetRadarChartAction;
+    QAction *dataSetFilledRadarChartAction;
+    QAction *dataSetScatterChartAction;
+    QAction *dataSetBubbleChartAction;
 
-    QAction  *dataSetHLCStockChartAction;
-    QAction  *dataSetOHLCStockChartAction;
-    QAction  *dataSetCandlestickStockChartAction;
+    QAction *dataSetHLCStockChartAction;
+    QAction *dataSetOHLCStockChartAction;
+    QAction *dataSetCandlestickStockChartAction;
 
-    QAction  *dataSetSurfaceChartAction;
-    QAction  *dataSetGanttChartAction;
+    QAction *dataSetSurfaceChartAction;
+    QAction *dataSetGanttChartAction;
 
     // Table Editor (a.k.a. the data editor)
-    TableEditorDialog    *tableEditorDialog;
+    TableEditorDialog *tableEditorDialog;
     // Source containing all tables the chart uses (name/model pairs)
-    TableSource          *tableSource;
+    TableSource *tableSource;
 
-
-    QList<DataSet*> dataSets;
+    QList<DataSet *> dataSets;
     int selectedDataSet;
     int selectedDataSet_CellRegionDialog;
-
 
     // Dialogs
     CellRegionDialog *cellRegionDialog;
 
     CellRegionStringValidator *cellRegionStringValidator;
 };
-
 
 PlotAreaConfigWidget::Private::Private(PlotAreaConfigWidget *parent)
     : q(parent)
@@ -217,7 +214,6 @@ PlotAreaConfigWidget::Private::~Private()
 {
 }
 
-
 // ================================================================
 //                     class PlotAreaConfigWidget
 
@@ -234,19 +230,19 @@ PlotAreaConfigWidget::PlotAreaConfigWidget()
 
     // Bar charts
     QMenu *barChartMenu = chartTypeMenu->addMenu(ICON1(BarChartType), i18n("Bar Chart"));
-    d->normalBarChartAction  = barChartMenu->addAction(ICON2(BarChartType, NormalChartSubtype), i18n("Normal"));
+    d->normalBarChartAction = barChartMenu->addAction(ICON2(BarChartType, NormalChartSubtype), i18n("Normal"));
     d->stackedBarChartAction = barChartMenu->addAction(ICON2(BarChartType, StackedChartSubtype), i18n("Stacked"));
     d->percentBarChartAction = barChartMenu->addAction(ICON2(BarChartType, PercentChartSubtype), i18n("Percent"));
 
     // Line charts
     QMenu *lineChartMenu = chartTypeMenu->addMenu(ICON1(LineChartType), i18n("Line Chart"));
-    d->normalLineChartAction  = lineChartMenu->addAction(ICON2(LineChartType, NormalChartSubtype), i18n("Normal"));
+    d->normalLineChartAction = lineChartMenu->addAction(ICON2(LineChartType, NormalChartSubtype), i18n("Normal"));
     d->stackedLineChartAction = lineChartMenu->addAction(ICON2(LineChartType, StackedChartSubtype), i18n("Stacked"));
     d->percentLineChartAction = lineChartMenu->addAction(ICON2(LineChartType, PercentChartSubtype), i18n("Percent"));
 
     // Area charts
     QMenu *areaChartMenu = chartTypeMenu->addMenu(ICON1(AreaChartType), i18n("Area Chart"));
-    d->normalAreaChartAction  = areaChartMenu->addAction(ICON2(AreaChartType, NormalChartSubtype), i18n("Normal"));
+    d->normalAreaChartAction = areaChartMenu->addAction(ICON2(AreaChartType, NormalChartSubtype), i18n("Normal"));
     d->stackedAreaChartAction = areaChartMenu->addAction(ICON2(AreaChartType, StackedChartSubtype), i18n("Stacked"));
     d->percentAreaChartAction = areaChartMenu->addAction(ICON2(AreaChartType, PercentChartSubtype), i18n("Percent"));
 
@@ -275,7 +271,7 @@ PlotAreaConfigWidget::PlotAreaConfigWidget()
     QMenu *stockChartMenu = chartTypeMenu->addMenu(ICON1(StockChartType), i18n("Stock Chart"));
     d->candlestickStockChartAction = stockChartMenu->addAction(ICON2(StockChartType, CandlestickChartSubtype), i18n("Candlestick"));
     d->ohlcStockChartAction = stockChartMenu->addAction(ICON2(StockChartType, OpenHighLowCloseChartSubtype), i18n("OpenHighLowClose"));
-    d->hlcStockChartAction  = stockChartMenu->addAction(ICON2(StockChartType, HighLowCloseChartSubtype), i18n("HighLowClose"));
+    d->hlcStockChartAction = stockChartMenu->addAction(ICON2(StockChartType, HighLowCloseChartSubtype), i18n("HighLowClose"));
 
     // Not supported
     d->surfaceChartAction = chartTypeMenu->addAction(i18n("Surface Chart"));
@@ -286,18 +282,14 @@ PlotAreaConfigWidget::PlotAreaConfigWidget()
     d->ui.chartTypeMenu->setMenu(chartTypeMenu);
     d->ui.chartTypeMenu->setIconSize(QSize(32, 32));
 
-    connect(chartTypeMenu, &QMenu::triggered,
-            this,          &PlotAreaConfigWidget::chartTypeSelected);
+    connect(chartTypeMenu, &QMenu::triggered, this, &PlotAreaConfigWidget::chartTypeSelected);
 
-
-    connect(d->ui.threeDLook, &QAbstractButton::toggled,
-            this,             &PlotAreaConfigWidget::setThreeDMode);
+    connect(d->ui.threeDLook, &QAbstractButton::toggled, this, &PlotAreaConfigWidget::setThreeDMode);
 
     connect(d->ui.chartOrientation, &QComboBox::currentIndexChanged, this, &PlotAreaConfigWidget::ui_chartOrientationChanged);
 
     setupDialogs();
     createActions();
-
 }
 
 PlotAreaConfigWidget::~PlotAreaConfigWidget()
@@ -345,57 +337,57 @@ void PlotAreaConfigWidget::deleteSubDialogs(ChartType type)
 {
     if (!chart->usesInternalModelOnly()) {
         switch (type) {
-            case BarChartType:
-            case LineChartType:
-            case AreaChartType:
-            case RingChartType:
-            case RadarChartType:
-            case FilledRadarChartType:
-            case ScatterChartType:
-            case SurfaceChartType:
-            case StockChartType:
-            case CircleChartType:
-                delete d->cellRegionDialog;
-                d->cellRegionDialog = 0;
-                break;
-//             case BubbleChartType:
-//                 delete findChildren<ExternalBubbleDataEditor*>().value(0);
-//                 break;
-            default:
-                delete d->cellRegionDialog;
-                d->cellRegionDialog = 0;
-//                 delete findChildren<ExternalBubbleDataEditor*>().value(0);
-                break;
+        case BarChartType:
+        case LineChartType:
+        case AreaChartType:
+        case RingChartType:
+        case RadarChartType:
+        case FilledRadarChartType:
+        case ScatterChartType:
+        case SurfaceChartType:
+        case StockChartType:
+        case CircleChartType:
+            delete d->cellRegionDialog;
+            d->cellRegionDialog = 0;
+            break;
+            //             case BubbleChartType:
+            //                 delete findChildren<ExternalBubbleDataEditor*>().value(0);
+            //                 break;
+        default:
+            delete d->cellRegionDialog;
+            d->cellRegionDialog = 0;
+            //                 delete findChildren<ExternalBubbleDataEditor*>().value(0);
+            break;
         }
     } else {
         switch (type) {
-            case BarChartType:
-            case LineChartType:
-            case AreaChartType:
-            case RingChartType:
-            case RadarChartType:
-            case FilledRadarChartType:
-            case SurfaceChartType:
-            case StockChartType:
-                delete findChildren<StockDataEditor*>().value(0);
-                break;
-            case CircleChartType:
-                delete findChildren<PieDataEditor*>().value(0);
-                break;
-            case BubbleChartType:
-                delete findChildren<BubbleDataEditor*>().value(0);
-                break;
-            case ScatterChartType:
-                delete findChildren<ScatterDataEditor*>().value(0);
-                break;
-            default:
-                delete d->tableEditorDialog;
-                d->tableEditorDialog = 0;
-                delete findChildren<PieDataEditor*>().value(0);
-                delete findChildren<BubbleDataEditor*>().value(0);
-                delete findChildren<ScatterDataEditor*>().value(0);
-                delete findChildren<StockDataEditor*>().value(0);
-                break;
+        case BarChartType:
+        case LineChartType:
+        case AreaChartType:
+        case RingChartType:
+        case RadarChartType:
+        case FilledRadarChartType:
+        case SurfaceChartType:
+        case StockChartType:
+            delete findChildren<StockDataEditor *>().value(0);
+            break;
+        case CircleChartType:
+            delete findChildren<PieDataEditor *>().value(0);
+            break;
+        case BubbleChartType:
+            delete findChildren<BubbleDataEditor *>().value(0);
+            break;
+        case ScatterChartType:
+            delete findChildren<ScatterDataEditor *>().value(0);
+            break;
+        default:
+            delete d->tableEditorDialog;
+            d->tableEditorDialog = 0;
+            delete findChildren<PieDataEditor *>().value(0);
+            delete findChildren<BubbleDataEditor *>().value(0);
+            delete findChildren<ScatterDataEditor *>().value(0);
+            delete findChildren<StockDataEditor *>().value(0);
+            break;
         }
     }
 }
@@ -407,14 +399,14 @@ void PlotAreaConfigWidget::deactivate()
     d->tableSource = 0;
     ConfigWidgetBase::deactivate();
 }
-void PlotAreaConfigWidget::open(KoShape* shape)
+void PlotAreaConfigWidget::open(KoShape *shape)
 {
     debugChartUiPlotArea;
     ConfigWidgetBase::open(shape);
     if (!chart) {
         return;
     }
-    for (ConfigSubWidgetBase *w : findChildren<ConfigSubWidgetBase*>()) {
+    for (ConfigSubWidgetBase *w : findChildren<ConfigSubWidgetBase *>()) {
         w->open(chart);
     }
 
@@ -431,10 +423,10 @@ void PlotAreaConfigWidget::setupWidgets()
     cartesianAxesConfigWidget()->setChartTypes(types);
     cartesianDataSetConfigWidget()->setChartTypes(types);
 
-    pieConfigWidget()->setChartTypes(QList<ChartType>()<<CircleChartType);
-    ringConfigWidget()->setChartTypes(QList<ChartType>()<<RingChartType);
-    stockConfigWidget()->setChartTypes(QList<ChartType>()<<StockChartType);
-    stockAxesConfigWidget()->setChartTypes(QList<ChartType>()<<StockChartType);
+    pieConfigWidget()->setChartTypes(QList<ChartType>() << CircleChartType);
+    ringConfigWidget()->setChartTypes(QList<ChartType>() << RingChartType);
+    stockConfigWidget()->setChartTypes(QList<ChartType>() << StockChartType);
+    stockAxesConfigWidget()->setChartTypes(QList<ChartType>() << StockChartType);
     radarDataSetConfigWidget()->setChartTypes(QList<ChartType>() << RadarChartType << FilledRadarChartType);
 }
 
@@ -445,98 +437,96 @@ QAction *PlotAreaConfigWidget::createAction()
 
 void PlotAreaConfigWidget::chartTypeSelected(QAction *action)
 {
-    ChartType     type = LastChartType;
-    ChartSubtype  subtype = NoChartSubtype;
+    ChartType type = LastChartType;
+    ChartSubtype subtype = NoChartSubtype;
 
     // Bar charts
     if (action == d->normalBarChartAction) {
-        type    = BarChartType;
+        type = BarChartType;
         subtype = NormalChartSubtype;
     } else if (action == d->stackedBarChartAction) {
-        type    = BarChartType;
+        type = BarChartType;
         subtype = StackedChartSubtype;
     } else if (action == d->percentBarChartAction) {
-        type    = BarChartType;
+        type = BarChartType;
         subtype = PercentChartSubtype;
     }
 
     // Line charts
     else if (action == d->normalLineChartAction) {
-        type    = LineChartType;
+        type = LineChartType;
         subtype = NormalChartSubtype;
     } else if (action == d->stackedLineChartAction) {
-        type    = LineChartType;
+        type = LineChartType;
         subtype = StackedChartSubtype;
     } else if (action == d->percentLineChartAction) {
-        type    = LineChartType;
+        type = LineChartType;
         subtype = PercentChartSubtype;
     }
 
     // Area charts
     else if (action == d->normalAreaChartAction) {
-        type    = AreaChartType;
+        type = AreaChartType;
         subtype = NormalChartSubtype;
     } else if (action == d->stackedAreaChartAction) {
-        type    = AreaChartType;
+        type = AreaChartType;
         subtype = StackedChartSubtype;
     } else if (action == d->percentAreaChartAction) {
-        type    = AreaChartType;
+        type = AreaChartType;
         subtype = PercentChartSubtype;
     }
 
     // also known as polar chart.
     else if (action == d->radarChartAction) {
-        type    = RadarChartType;
+        type = RadarChartType;
         subtype = NormalChartSubtype;
-    }
-    else if (action == d->filledRadarChartAction) {
-        type    = FilledRadarChartType;
+    } else if (action == d->filledRadarChartAction) {
+        type = FilledRadarChartType;
         subtype = NormalChartSubtype;
     }
 
     // Also known as pie chart
     else if (action == d->circleChartAction) {
-        type    = CircleChartType;
+        type = CircleChartType;
         subtype = NoChartSubtype;
-    }
-    else if (action == d->ringChartAction) {
-        type    = RingChartType;
+    } else if (action == d->ringChartAction) {
+        type = RingChartType;
         subtype = NoChartSubtype;
     }
 
     else if (action == d->scatterChartAction) {
-        type    = ScatterChartType;
+        type = ScatterChartType;
         subtype = NoChartSubtype;
     }
 
     // Stock charts
     else if (action == d->hlcStockChartAction) {
-        type    = StockChartType;
+        type = StockChartType;
         subtype = HighLowCloseChartSubtype;
     }
 
     else if (action == d->ohlcStockChartAction) {
-        type    = StockChartType;
+        type = StockChartType;
         subtype = OpenHighLowCloseChartSubtype;
     }
 
     else if (action == d->candlestickStockChartAction) {
-        type    = StockChartType;
+        type = StockChartType;
         subtype = CandlestickChartSubtype;
     }
 
     else if (action == d->bubbleChartAction) {
-        type    = BubbleChartType;
+        type = BubbleChartType;
         subtype = NoChartSubtype;
     }
 
     else if (action == d->surfaceChartAction) {
-        type    = SurfaceChartType;
+        type = SurfaceChartType;
         subtype = NoChartSubtype;
     }
 
     else if (action == d->ganttChartAction) {
-        type    = GanttChartType;
+        type = GanttChartType;
         subtype = NoChartSubtype;
     }
 
@@ -554,7 +544,7 @@ void PlotAreaConfigWidget::setThreeDMode(bool threeD)
 
 void PlotAreaConfigWidget::ui_chartOrientationChanged(int value)
 {
-    emit chartOrientationChanged(static_cast<Qt::Orientation>(value+1));
+    emit chartOrientationChanged(static_cast<Qt::Orientation>(value + 1));
 }
 
 /**
@@ -563,18 +553,17 @@ void PlotAreaConfigWidget::ui_chartOrientationChanged(int value)
 static bool supportsThreeD(ChartType type)
 {
     switch (type) {
-        case BarChartType:
-        case LineChartType:
-        case AreaChartType:
-        case CircleChartType:
-        case BubbleChartType:
-            return true;
-        default:
-            break;
+    case BarChartType:
+    case LineChartType:
+    case AreaChartType:
+    case CircleChartType:
+    case BubbleChartType:
+        return true;
+    default:
+        break;
     }
     return false;
 }
-
 
 void PlotAreaConfigWidget::updateData()
 {
@@ -585,29 +574,29 @@ void PlotAreaConfigWidget::updateData()
         deleteSubDialogs(chart->chartType());
     }
     switch (chart->chartType()) {
-        case CircleChartType:
-            d->ui.stackedWidget->setCurrentIndex(1);
-            break;
-        case StockChartType:
-            d->ui.stackedWidget->setCurrentIndex(2);
-            break;
-        case RadarChartType:
-        case FilledRadarChartType:
-            d->ui.stackedWidget->setCurrentIndex(3);
-            break;
-        case RingChartType:
-            d->ui.stackedWidget->setCurrentIndex(4);
-            break;
-        default:
-            d->ui.stackedWidget->setCurrentIndex(0);
-            break;
+    case CircleChartType:
+        d->ui.stackedWidget->setCurrentIndex(1);
+        break;
+    case StockChartType:
+        d->ui.stackedWidget->setCurrentIndex(2);
+        break;
+    case RadarChartType:
+    case FilledRadarChartType:
+        d->ui.stackedWidget->setCurrentIndex(3);
+        break;
+    case RingChartType:
+        d->ui.stackedWidget->setCurrentIndex(4);
+        break;
+    default:
+        d->ui.stackedWidget->setCurrentIndex(0);
+        break;
     }
     blockSignals(true);
-    debugChartUiPlotArea<<"chart:"<<chart->chartType()<<','<<chart->chartSubType()<<"current:"<<d->type<<','<<d->subtype;
+    debugChartUiPlotArea << "chart:" << chart->chartType() << ',' << chart->chartSubType() << "current:" << d->type << ',' << d->subtype;
     if (d->type != chart->chartType() || d->subtype != chart->chartSubType()) {
         // Set the chart type icon in the chart type button.
         const QLatin1String iconName = chartTypeIconName(chart->chartType(), chart->chartSubType());
-        debugChartUiPlotArea<<iconName;
+        debugChartUiPlotArea << iconName;
         if (iconName.size() > 0) {
             d->ui.chartTypeMenu->setIcon(QIcon::fromTheme(iconName));
         }
@@ -644,35 +633,34 @@ void PlotAreaConfigWidget::updateData()
     }
     blockSignals(false);
 
-    for (ConfigSubWidgetBase *w : findChildren<ConfigSubWidgetBase*>()) {
+    for (ConfigSubWidgetBase *w : findChildren<ConfigSubWidgetBase *>()) {
         w->updateData(d->type, d->subtype);
     }
 }
 
-
 void PlotAreaConfigWidget::slotShowTableEditor()
 {
     if (!chart->usesInternalModelOnly()) {
-        debugChartUiPlotArea<<"external";
+        debugChartUiPlotArea << "external";
         switch (chart->chartType()) {
-//             case BubbleChartType: {
-//                 ExternalBubbleDataEditor *dlg = findChildren<ExternalBubbleDataEditor*>().value(0);
-//                 if (!dlg) {
-//                     dlg = new ExternalBubbleDataEditor(chart, this);
-//                     connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
-//                     connect(dlg, &ExternalBubbleDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
-//                     connect(dlg, &ExternalBubbleDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
-//                     connect(dlg, &ExternalBubbleDataEditor::bubbleDataChanged, this, &PlotAreaConfigWidget::dataSetCustomDataRegionChanged);
-//                 }
-//                 dlg->show();
-//                 dlg->raise();
-//                 return;
-//             }
-            default: {
-                if (!d->cellRegionDialog) {
-                    d->cellRegionDialog = new CellRegionDialog;
-                    // FIXME: CellRegion itself together with a TableSource should now be used
-                    // to validate  the correctness of a table range address.
+            //             case BubbleChartType: {
+            //                 ExternalBubbleDataEditor *dlg = findChildren<ExternalBubbleDataEditor*>().value(0);
+            //                 if (!dlg) {
+            //                     dlg = new ExternalBubbleDataEditor(chart, this);
+            //                     connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
+            //                     connect(dlg, &ExternalBubbleDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
+            //                     connect(dlg, &ExternalBubbleDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
+            //                     connect(dlg, &ExternalBubbleDataEditor::bubbleDataChanged, this, &PlotAreaConfigWidget::dataSetCustomDataRegionChanged);
+            //                 }
+            //                 dlg->show();
+            //                 dlg->raise();
+            //                 return;
+            //             }
+        default: {
+            if (!d->cellRegionDialog) {
+                d->cellRegionDialog = new CellRegionDialog;
+                // FIXME: CellRegion itself together with a TableSource should now be used
+                // to validate  the correctness of a table range address.
 #if 0
                     d->cellRegionStringValidator = new CellRegionStringValidator(spreadSheetModel);
                     d->cellRegionDialog->labelDataRegion->setValidator(d->cellRegionStringValidator);
@@ -680,101 +668,98 @@ void PlotAreaConfigWidget::slotShowTableEditor()
                     d->cellRegionDialog->yDataRegion->setValidator(d->cellRegionStringValidator);
                     d->cellRegionDialog->categoryDataRegion->setValidator(d->cellRegionStringValidator);
 #endif
-                    d->dataSets = chart->plotArea()->dataSets();
-                    d->cellRegionDialog->dataSets->clear();
-                    int i = 1;
-                    foreach (DataSet *dataSet, d->dataSets) {
-                        QString title = dataSet->labelData().toString();
-                        if (title.isEmpty())
-                            title = i18n("Data Set %1", i++);
-                        d->cellRegionDialog->dataSets->addItem(title);
-                    }
-                    ui_dataSetSelectionChanged_CellRegionDialog(0);
-
-                    debugChartUiPlotArea<<"external data source";
-                    connect(d->cellRegionDialog->xDataRegion, &QLineEdit::editingFinished,
-                            this, &PlotAreaConfigWidget::ui_dataSetXDataRegionChanged);
-                    connect(d->cellRegionDialog->yDataRegion, &QLineEdit::editingFinished,
-                            this, &PlotAreaConfigWidget::ui_dataSetYDataRegionChanged);
-                    connect(d->cellRegionDialog->labelDataRegion, &QLineEdit::editingFinished,
-                            this, &PlotAreaConfigWidget::ui_dataSetLabelDataRegionChanged);
-//                     connect(d->cellRegionDialog->bubbleDataRegion, SIGNAL(textEdited(QString)),
-//                             this, SLOT(ui_dataSetCustomDataRegionChanged(QString)));
-                    connect(d->cellRegionDialog->categoryDataRegion, &QLineEdit::editingFinished,
-                            this, &PlotAreaConfigWidget::ui_dataSetCategoryDataRegionChanged);
-                    connect(d->cellRegionDialog->dataSets, &QComboBox::currentIndexChanged,
-                            this, &PlotAreaConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog);
+                d->dataSets = chart->plotArea()->dataSets();
+                d->cellRegionDialog->dataSets->clear();
+                int i = 1;
+                foreach (DataSet *dataSet, d->dataSets) {
+                    QString title = dataSet->labelData().toString();
+                    if (title.isEmpty())
+                        title = i18n("Data Set %1", i++);
+                    d->cellRegionDialog->dataSets->addItem(title);
                 }
-                d->cellRegionDialog->show();
-                d->cellRegionDialog->raise();
-                return;
+                ui_dataSetSelectionChanged_CellRegionDialog(0);
+
+                debugChartUiPlotArea << "external data source";
+                connect(d->cellRegionDialog->xDataRegion, &QLineEdit::editingFinished, this, &PlotAreaConfigWidget::ui_dataSetXDataRegionChanged);
+                connect(d->cellRegionDialog->yDataRegion, &QLineEdit::editingFinished, this, &PlotAreaConfigWidget::ui_dataSetYDataRegionChanged);
+                connect(d->cellRegionDialog->labelDataRegion, &QLineEdit::editingFinished, this, &PlotAreaConfigWidget::ui_dataSetLabelDataRegionChanged);
+                //                     connect(d->cellRegionDialog->bubbleDataRegion, SIGNAL(textEdited(QString)),
+                //                             this, SLOT(ui_dataSetCustomDataRegionChanged(QString)));
+                connect(d->cellRegionDialog->categoryDataRegion, &QLineEdit::editingFinished, this, &PlotAreaConfigWidget::ui_dataSetCategoryDataRegionChanged);
+                connect(d->cellRegionDialog->dataSets,
+                        &QComboBox::currentIndexChanged,
+                        this,
+                        &PlotAreaConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog);
             }
+            d->cellRegionDialog->show();
+            d->cellRegionDialog->raise();
+            return;
+        }
         }
     } else {
-        debugChartUiPlotArea<<"internal only";
+        debugChartUiPlotArea << "internal only";
         switch (chart->chartType()) {
-            case CircleChartType: {
-                PieDataEditor *dlg = findChildren<PieDataEditor*>().value(0);
-                if (!dlg) {
-                    dlg = new PieDataEditor(this);
-                    dlg->setModel(chart->internalModel());
-                    connect(dlg, QOverload<>::of(&KoDialog::finished), dlg, &KoDialog::hide);
-                }
-                dlg->show();
-                dlg->raise();
-                return;
+        case CircleChartType: {
+            PieDataEditor *dlg = findChildren<PieDataEditor *>().value(0);
+            if (!dlg) {
+                dlg = new PieDataEditor(this);
+                dlg->setModel(chart->internalModel());
+                connect(dlg, QOverload<>::of(&KoDialog::finished), dlg, &KoDialog::hide);
             }
-            case BubbleChartType: {
-                BubbleDataEditor *dlg = findChildren<BubbleDataEditor*>().value(0);
-                if (!dlg) {
-                    dlg = new BubbleDataEditor(chart, this);
-                    connect(dlg, QOverload<>::of(&KoDialog::finished), dlg, &KoDialog::hide);
-                    connect(dlg, &BubbleDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
-                    connect(dlg, &BubbleDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
-                    connect(dlg, &BubbleDataEditor::bubbleDataChanged, this, &PlotAreaConfigWidget::dataSetCustomDataRegionChanged);
-                }
-                dlg->show();
-                dlg->raise();
-                return;
+            dlg->show();
+            dlg->raise();
+            return;
+        }
+        case BubbleChartType: {
+            BubbleDataEditor *dlg = findChildren<BubbleDataEditor *>().value(0);
+            if (!dlg) {
+                dlg = new BubbleDataEditor(chart, this);
+                connect(dlg, QOverload<>::of(&KoDialog::finished), dlg, &KoDialog::hide);
+                connect(dlg, &BubbleDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
+                connect(dlg, &BubbleDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
+                connect(dlg, &BubbleDataEditor::bubbleDataChanged, this, &PlotAreaConfigWidget::dataSetCustomDataRegionChanged);
             }
-            case ScatterChartType: {
-                ScatterDataEditor *dlg = findChildren<ScatterDataEditor*>().value(0);
-                if (!dlg) {
-                    dlg = new ScatterDataEditor(chart, this);
-                    connect(dlg, QOverload<>::of(&KoDialog::finished), dlg, &KoDialog::hide);
-                    connect(dlg, &ScatterDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
-                    connect(dlg, &ScatterDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
-                }
-                dlg->show();
-                dlg->raise();
-                return;
+            dlg->show();
+            dlg->raise();
+            return;
+        }
+        case ScatterChartType: {
+            ScatterDataEditor *dlg = findChildren<ScatterDataEditor *>().value(0);
+            if (!dlg) {
+                dlg = new ScatterDataEditor(chart, this);
+                connect(dlg, QOverload<>::of(&KoDialog::finished), dlg, &KoDialog::hide);
+                connect(dlg, &ScatterDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
+                connect(dlg, &ScatterDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
             }
-            case StockChartType: {
-                StockDataEditor *dlg = findChildren<StockDataEditor*>().value(0);
-                if (!dlg) {
-                    dlg = new StockDataEditor(chart, this);
-                    connect(dlg, QOverload<>::of(&KoDialog::finished), dlg, &KoDialog::hide);
-//                     connect(dlg, &StockDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
-//                     connect(dlg, &StockDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
-                }
-                dlg->show();
-                dlg->raise();
-                return;
+            dlg->show();
+            dlg->raise();
+            return;
+        }
+        case StockChartType: {
+            StockDataEditor *dlg = findChildren<StockDataEditor *>().value(0);
+            if (!dlg) {
+                dlg = new StockDataEditor(chart, this);
+                connect(dlg, QOverload<>::of(&KoDialog::finished), dlg, &KoDialog::hide);
+                //                     connect(dlg, &StockDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
+                //                     connect(dlg, &StockDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
             }
-            default: {
-                if (!d->tableEditorDialog) {
-                    d->tableEditorDialog = new TableEditorDialog;
-                    d->tableEditorDialog->setProxyModel(chart->proxyModel());
-                    d->tableEditorDialog->setModel(chart->internalModel());
-                }
-                d->tableEditorDialog->show();
-                d->tableEditorDialog->raise();
-                return;
+            dlg->show();
+            dlg->raise();
+            return;
+        }
+        default: {
+            if (!d->tableEditorDialog) {
+                d->tableEditorDialog = new TableEditorDialog;
+                d->tableEditorDialog->setProxyModel(chart->proxyModel());
+                d->tableEditorDialog->setModel(chart->internalModel());
             }
+            d->tableEditorDialog->show();
+            d->tableEditorDialog->raise();
+            return;
+        }
         }
     }
 }
-
 
 void PlotAreaConfigWidget::slotShowCellRegionDialog()
 {
@@ -792,8 +777,6 @@ void PlotAreaConfigWidget::setupDialogs()
 void PlotAreaConfigWidget::createActions()
 {
 }
-
-
 
 void PlotAreaConfigWidget::ui_dataSetXDataRegionChanged()
 {
@@ -829,13 +812,12 @@ void PlotAreaConfigWidget::ui_dataSetCustomDataRegionChanged()
     if (d->selectedDataSet_CellRegionDialog < 0)
         return;
 
-//     const QString regionString = d->cellRegionDialog->bubbleDataRegion->text();
-//     const CellRegion region(d->tableSource, regionString);
-//     
-//     DataSet *dataSet = d->dataSets[d->selectedDataSet_CellRegionDialog];
-// 
-//     emit dataSetCustomDataRegionChanged(dataSet, region);
-    
+    //     const QString regionString = d->cellRegionDialog->bubbleDataRegion->text();
+    //     const CellRegion region(d->tableSource, regionString);
+    //
+    //     DataSet *dataSet = d->dataSets[d->selectedDataSet_CellRegionDialog];
+    //
+    //     emit dataSetCustomDataRegionChanged(dataSet, region);
 }
 
 void PlotAreaConfigWidget::ui_dataSetCategoryDataRegionChanged()
@@ -873,11 +855,10 @@ void PlotAreaConfigWidget::ui_dataSetLabelDataRegionChanged()
     d->cellRegionDialog->dataSets->setItemText(d->selectedDataSet_CellRegionDialog, title);
 }
 
-
 void PlotAreaConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog(int index)
 {
     // Check for valid index
-    debugChartUiPlotArea<<index<<d->dataSets;
+    debugChartUiPlotArea << index << d->dataSets;
     if (index < 0 || index >= d->dataSets.size())
         return;
 
@@ -887,7 +868,7 @@ void PlotAreaConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog(int index
     blockSignals(d->cellRegionDialog, true);
 
     d->cellRegionDialog->labelDataRegion->setText(dataSet->labelDataRegion().toString());
-    debugChartUiPlotArea<<"dim"<<dimensions;
+    debugChartUiPlotArea << "dim" << dimensions;
     if (dimensions > 1) {
         d->cellRegionDialog->xDataRegion->setEnabled(true);
         d->cellRegionDialog->xDataRegion->setText(dataSet->xDataRegion().toString());
@@ -901,4 +882,3 @@ void PlotAreaConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog(int index
 
     blockSignals(d->cellRegionDialog, false);
 }
-

@@ -7,9 +7,9 @@
 #ifndef KOPOSITIONSELECTOR_H
 #define KOPOSITIONSELECTOR_H
 
-#include <QWidget>
-#include <KoFlake.h>
 #include "kowidgets_export.h"
+#include <KoFlake.h>
+#include <QWidget>
 
 /**
  * Widget to show a set of radio buttons so the user can select a position.
@@ -29,14 +29,14 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented
-    void paintEvent (QPaintEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private Q_SLOTS:
     void positionChanged(int position);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

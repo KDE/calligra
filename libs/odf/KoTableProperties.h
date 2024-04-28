@@ -14,11 +14,11 @@ class KoTableTemplate;
 class TableProperties
 {
 public:
-    TableStyle* tableStyle();
-    void setTableStyle(TableStyle* style);
+    TableStyle *tableStyle();
+    void setTableStyle(TableStyle *style);
 
-    TableTemplate* tableTemplate();
-    void setTableTemplate(KoTableTemplate* tableTemplate);
+    TableTemplate *tableTemplate();
+    void setTableTemplate(KoTableTemplate *tableTemplate);
     TableTemplateFlags templateFlags();
     void setTemplateFlags(TableTemplateFlags templateFlags);
 
@@ -36,10 +36,10 @@ public:
     void setPlainPassword(QString password, QString uri = "http://www.w3.org/2000/09/xmldsig#sha1");
 
 private:
-    void saveOdf(KoXmlWriter* writer, KoGenStyles* styles);
+    void saveOdf(KoXmlWriter *writer, KoGenStyles *styles);
 
-    TableStyle* m_style;
-    TableTemplate* m_template;
+    TableStyle *m_style;
+    TableTemplate *m_template;
     TableTemplateFlags m_templateFlags;
 
     bool m_printable;

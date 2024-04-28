@@ -31,7 +31,6 @@ class KWOdfWriter : public QObject
 {
     Q_OBJECT
 public:
-
     /**
      * Constructor
      * @param document the document this writer will work for.
@@ -51,7 +50,7 @@ public:
 
 private:
     void saveHeaderFooter(KoShapeSavingContext &context);
-    QByteArray serializeHeaderFooter(KoShapeSavingContext &context, KWTextFrameSet* fs);
+    QByteArray serializeHeaderFooter(KoShapeSavingContext &context, KWTextFrameSet *fs);
 
     void calculateZindexOffsets();
     void addShapeToTree(KoShape *shape);

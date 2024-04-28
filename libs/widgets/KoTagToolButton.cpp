@@ -12,8 +12,8 @@
 
 #include "KoTagToolButton.h"
 
-#include <QToolButton>
 #include <QGridLayout>
+#include <QToolButton>
 
 #include <KLocalizedString>
 
@@ -24,18 +24,19 @@
 class KoTagToolButton::Private
 {
 public:
-    QToolButton* tagToolButton;
-    QAction* action_undeleteTag;
-    QAction* action_deleteTag;
-    KoLineEditAction* action_renameTag;
-    QAction* action_purgeTagUndeleteList;
+    QToolButton *tagToolButton;
+    QAction *action_undeleteTag;
+    QAction *action_deleteTag;
+    KoLineEditAction *action_renameTag;
+    QAction *action_purgeTagUndeleteList;
     QString undeleteCandidate;
 };
 
-KoTagToolButton::KoTagToolButton(QWidget* parent)
-    :QWidget(parent), d(new Private())
+KoTagToolButton::KoTagToolButton(QWidget *parent)
+    : QWidget(parent)
+    , d(new Private())
 {
-    QGridLayout* buttonLayout = new QGridLayout(this);
+    QGridLayout *buttonLayout = new QGridLayout(this);
     buttonLayout->setContentsMargins({});
     buttonLayout->setSpacing(0);
 
@@ -45,16 +46,15 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
     d->tagToolButton->setPopupMode(QToolButton::InstantPopup);
     d->tagToolButton->setEnabled(true);
 
-    QMenu* popup = new QMenu(this);
+    QMenu *popup = new QMenu(this);
 
-    KoLineEditAction*  addTagAction = new KoLineEditAction(popup);
+    KoLineEditAction *addTagAction = new KoLineEditAction(popup);
     addTagAction->setPlaceholderText(i18n("New tag"));
     addTagAction->setIcon(koIcon("document-new"));
     addTagAction->closeParentOnTrigger(true);
     popup->addAction(addTagAction);
 
-    connect(addTagAction, QOverload<const QString&>::of(&KoLineEditAction::triggered),
-            this, &KoTagToolButton::newTagRequested);
+    connect(addTagAction, QOverload<const QString &>::of(&KoLineEditAction::triggered), this, &KoTagToolButton::newTagRequested);
 
     d->action_renameTag = new KoLineEditAction(popup);
     d->action_renameTag->setPlaceholderText(i18n("Rename tag"));
@@ -62,8 +62,7 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
     d->action_renameTag->closeParentOnTrigger(true);
     popup->addAction(d->action_renameTag);
 
-    connect(d->action_renameTag, QOverload<const QString&>::of(&KoLineEditAction::triggered),
-            this, &KoTagToolButton::renamingOfCurrentTagRequested);
+    connect(d->action_renameTag, QOverload<const QString &>::of(&KoLineEditAction::triggered), this, &KoTagToolButton::renamingOfCurrentTagRequested);
 
     popup->addSeparator();
 
@@ -72,8 +71,7 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
     d->action_deleteTag->setIcon(koIcon("edit-delete"));
     popup->addAction(d->action_deleteTag);
 
-    connect(d->action_deleteTag, &QAction::triggered,
-            this, &KoTagToolButton::deletionOfCurrentTagRequested);
+    connect(d->action_deleteTag, &QAction::triggered, this, &KoTagToolButton::deletionOfCurrentTagRequested);
 
     popup->addSeparator();
 
@@ -82,8 +80,7 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
     d->action_undeleteTag->setVisible(false);
     popup->addAction(d->action_undeleteTag);
 
-    connect(d->action_undeleteTag, &QAction::triggered,
-            this, &KoTagToolButton::onTagUndeleteClicked);
+    connect(d->action_undeleteTag, &QAction::triggered, this, &KoTagToolButton::onTagUndeleteClicked);
 
     d->action_purgeTagUndeleteList = new QAction(popup);
     d->action_purgeTagUndeleteList->setText(i18n("Clear undelete list"));
@@ -91,11 +88,9 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
     d->action_purgeTagUndeleteList->setVisible(false);
     popup->addAction(d->action_purgeTagUndeleteList);
 
-    connect(d->action_purgeTagUndeleteList, &QAction::triggered,
-            this, &KoTagToolButton::purgingOfTagUndeleteListRequested);
+    connect(d->action_purgeTagUndeleteList, &QAction::triggered, this, &KoTagToolButton::purgingOfTagUndeleteListRequested);
 
-    connect(popup, &QMenu::aboutToShow,
-            this, &KoTagToolButton::popupMenuAboutToShow);
+    connect(popup, &QMenu::aboutToShow, this, &KoTagToolButton::popupMenuAboutToShow);
 
     d->tagToolButton->setMenu(popup);
     buttonLayout->addWidget(d->tagToolButton);
@@ -113,10 +108,10 @@ void KoTagToolButton::readOnlyMode(bool activate)
     d->action_deleteTag->setVisible(activate);
 }
 
-void KoTagToolButton::setUndeletionCandidate(const QString& deletedTagName)
+void KoTagToolButton::setUndeletionCandidate(const QString &deletedTagName)
 {
     d->undeleteCandidate = deletedTagName;
-    d->action_undeleteTag->setText(i18n("Undelete") +" "+ deletedTagName);
+    d->action_undeleteTag->setText(i18n("Undelete") + " " + deletedTagName);
     d->action_undeleteTag->setVisible(!deletedTagName.isEmpty());
     d->action_purgeTagUndeleteList->setVisible(!deletedTagName.isEmpty());
 }
@@ -125,4 +120,3 @@ void KoTagToolButton::onTagUndeleteClicked()
 {
     emit undeletionOfTagRequested(d->undeleteCandidate);
 }
-

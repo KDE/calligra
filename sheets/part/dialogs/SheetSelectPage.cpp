@@ -13,16 +13,16 @@
 using namespace Calligra::Sheets;
 
 SheetSelectPage::SheetSelectPage(QWidget *parent)
-        : QWidget(parent)
+    : QWidget(parent)
 {
     m_ui.setupUi(this);
     setWindowTitle(i18n("Sheets"));
 
-    //disabling automated sorting
+    // disabling automated sorting
     m_ui.ListViewAvailable->setSortingEnabled(false);
     m_ui.ListViewSelected->setSortingEnabled(false);
 
-    //setup icons
+    // setup icons
     m_ui.ButtonSelectAll->setIcon(koIcon("go-last"));
     m_ui.ButtonSelect->setIcon(koIcon("go-next"));
     m_ui.ButtonRemove->setIcon(koIcon("go-previous"));
@@ -33,7 +33,7 @@ SheetSelectPage::SheetSelectPage(QWidget *parent)
     m_ui.ButtonMoveDown->setIcon(koIcon("go-down"));
     m_ui.ButtonMoveBottom->setIcon(koIcon("go-bottom"));
 
-    //connect buttons
+    // connect buttons
     connect(m_ui.ButtonSelectAll, &QAbstractButton::clicked, this, &SheetSelectPage::selectAll);
     connect(m_ui.ButtonSelect, &QAbstractButton::clicked, this, &SheetSelectPage::select);
     connect(m_ui.ButtonRemove, &QAbstractButton::clicked, this, &SheetSelectPage::remove);
@@ -90,25 +90,24 @@ void SheetSelectPage::setOptions( const QMap<QString,QString>& opts )
 }
 */
 
-void SheetSelectPage::setAvailableSheets(const QStringList& sheetlist)
+void SheetSelectPage::setAvailableSheets(const QStringList &sheetlist)
 {
-    foreach(const QString &sname, sheetlist) {
+    foreach (const QString &sname, sheetlist) {
         debugSheets << " adding sheet to list of printed sheets:" << sname;
         this->prependSelectedSheet(sname);
     }
-
 }
 
-bool SheetSelectPage::isValid(QString& /*msg*/)
+bool SheetSelectPage::isValid(QString & /*msg*/)
 {
     // we print the activeSheet() by default if no sheet is selected,
     // so we return true in any case
 
-//   if (ListViewSelected->childCount() < 1)
-//   {
-//     msg = i18n("No sheets selected for printing!");
-//     return false;
-//   }
+    //   if (ListViewSelected->childCount() < 1)
+    //   {
+    //     msg = i18n("No sheets selected for printing!");
+    //     return false;
+    //   }
     return true;
 }
 
@@ -117,12 +116,12 @@ QString SheetSelectPage::printOptionForIndex(unsigned int index)
     return QString("sheetprintorder%1").arg(index);
 }
 
-void SheetSelectPage::prependAvailableSheet(const QString& sheetname)
+void SheetSelectPage::prependAvailableSheet(const QString &sheetname)
 {
     m_ui.ListViewAvailable->insertItem(0, sheetname);
 }
 
-void SheetSelectPage::prependSelectedSheet(const QString& sheetname)
+void SheetSelectPage::prependSelectedSheet(const QString &sheetname)
 {
     m_ui.ListViewSelected->insertItem(0, sheetname);
 }
@@ -156,16 +155,16 @@ void SheetSelectPage::clearSelection()
 
 void SheetSelectPage::selectAll()
 {
-    //we have to add all the stuff in reverse order
-    // because inserted items (prependSelectedSheet) are prepended
+    // we have to add all the stuff in reverse order
+    //  because inserted items (prependSelectedSheet) are prepended
     for (int row = m_ui.ListViewAvailable->count() - 1; row >= 0; --row)
         this->prependSelectedSheet(m_ui.ListViewAvailable->item(row)->text());
 }
 
 void SheetSelectPage::select()
 {
-    //we have to add all the stuff in reverse order
-    // because inserted items (prependSelectedSheet) are prepended
+    // we have to add all the stuff in reverse order
+    //  because inserted items (prependSelectedSheet) are prepended
     for (int row = m_ui.ListViewAvailable->count() - 1; row >= 0; --row)
         if (m_ui.ListViewAvailable->item(row)->isSelected())
             this->prependSelectedSheet(m_ui.ListViewAvailable->item(row)->text());
@@ -186,11 +185,10 @@ void SheetSelectPage::removeAll()
     m_ui.ListViewSelected->clear();
 }
 
-
 void SheetSelectPage::moveTop()
 {
     // moves the selected item to the top of the list
-    QListWidgetItem* item = m_ui.ListViewSelected->takeItem(m_ui.ListViewSelected->currentRow());
+    QListWidgetItem *item = m_ui.ListViewSelected->takeItem(m_ui.ListViewSelected->currentRow());
     m_ui.ListViewSelected->insertItem(0, item);
     m_ui.ListViewSelected->setCurrentItem(item);
 }
@@ -200,7 +198,7 @@ void SheetSelectPage::moveUp()
     // moves the selected item up one row
     int row = m_ui.ListViewSelected->currentRow();
     if (row > 0) {
-        QListWidgetItem* item = m_ui.ListViewSelected->takeItem(row);
+        QListWidgetItem *item = m_ui.ListViewSelected->takeItem(row);
         m_ui.ListViewSelected->insertItem(row - 1, item);
         m_ui.ListViewSelected->setCurrentItem(item);
     }
@@ -211,7 +209,7 @@ void SheetSelectPage::moveDown()
     // moves the selected item down one row
     int row = m_ui.ListViewSelected->currentRow();
     if (row < m_ui.ListViewSelected->count() - 1) {
-        QListWidgetItem* item = m_ui.ListViewSelected->takeItem(row);
+        QListWidgetItem *item = m_ui.ListViewSelected->takeItem(row);
         m_ui.ListViewSelected->insertItem(row + 1, item);
         m_ui.ListViewSelected->setCurrentItem(item);
     }
@@ -220,7 +218,7 @@ void SheetSelectPage::moveDown()
 void SheetSelectPage::moveBottom()
 {
     // moves the selected item to the bottom of the list
-    QListWidgetItem* item = m_ui.ListViewSelected->takeItem(m_ui.ListViewSelected->currentRow());
+    QListWidgetItem *item = m_ui.ListViewSelected->takeItem(m_ui.ListViewSelected->currentRow());
     m_ui.ListViewSelected->addItem(item);
     m_ui.ListViewSelected->setCurrentItem(item);
 }

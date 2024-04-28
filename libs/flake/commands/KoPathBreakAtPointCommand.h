@@ -8,9 +8,9 @@
 #ifndef KOPATHBREAKATPOINTCOMMAND_H
 #define KOPATHBREAKATPOINTCOMMAND_H
 
-#include <kundo2command.h>
-#include <QList>
 #include "KoPathPointData.h"
+#include <QList>
+#include <kundo2command.h>
 
 class KoPathPoint;
 
@@ -37,7 +37,7 @@ public:
 
 private:
     QList<KoPathPointData> m_pointDataList;
-    QList<KoPathPoint*> m_points;
+    QList<KoPathPoint *> m_points;
     // used for storing where to open the subpath. In case it not used for the open
     // status use .second to the store offset caused by a open of a subpath.
     QVector<KoPathPointIndex> m_closedIndex;

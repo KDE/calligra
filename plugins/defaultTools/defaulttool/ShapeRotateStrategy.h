@@ -9,10 +9,10 @@
 
 #include <KoInteractionStrategy.h>
 
+#include <QList>
 #include <QPointF>
 #include <QRectF>
 #include <QTransform>
-#include <QList>
 
 class KoToolBase;
 class KoShape;
@@ -30,25 +30,29 @@ public:
      * @param tool the parent tool which controls this strategy
      * @param clicked the initial point that the user depressed (in pt).
      */
-    ShapeRotateStrategy( KoToolBase *tool, const QPointF &clicked, Qt::MouseButtons buttons );
-    ~ShapeRotateStrategy() override {}
+    ShapeRotateStrategy(KoToolBase *tool, const QPointF &clicked, Qt::MouseButtons buttons);
+    ~ShapeRotateStrategy() override
+    {
+    }
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
-    KUndo2Command* createCommand() override;
-    void finishInteraction( Qt::KeyboardModifiers modifiers ) override { Q_UNUSED( modifiers ); }
-    void paint( QPainter &painter, const KoViewConverter &converter) override;
-    void handleCustomEvent( KoPointerEvent * event ) override;
+    KUndo2Command *createCommand() override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override
+    {
+        Q_UNUSED(modifiers);
+    }
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void handleCustomEvent(KoPointerEvent *event) override;
 
 private:
-    void rotateBy( qreal angle );
+    void rotateBy(qreal angle);
     QRectF m_initialBoundingRect;
     QPointF m_start;
     QTransform m_rotationMatrix;
     QTransform m_initialSelectionMatrix;
     QVector<QTransform> m_oldTransforms;
     QPointF m_rotationCenter;
-    QList<KoShape*> m_selectedShapes;
+    QList<KoShape *> m_selectedShapes;
 };
 
 #endif
-

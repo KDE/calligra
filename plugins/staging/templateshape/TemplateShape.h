@@ -15,11 +15,9 @@
 #include <KoShape.h>
 
 // This shape
-//#include "Foo.h"
-
+// #include "Foo.h"
 
 #define TEMPLATESHAPEID "TemplateShape"
-
 
 class TemplateShape : public QObject, public KoShape
 {
@@ -30,8 +28,7 @@ public:
     virtual ~TemplateShape();
 
     // reimplemented from KoShape
-    virtual void paint(QPainter &painter, const KoViewConverter &converter,
-                       KoShapePaintingContext &paintcontext);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     // reimplemented from KoShape
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented from KoShape
@@ -40,10 +37,8 @@ public:
     // reimplemented from KoShape
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
 
-
 private:
     // Shape members here.  D-pointer is not needed since this is not a library.
 };
-
 
 #endif

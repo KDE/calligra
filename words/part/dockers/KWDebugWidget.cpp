@@ -5,20 +5,20 @@
  */
 
 #include "KWDebugWidget.h"
-#include <frames/KWTextFrameSet.h>
 #include <KWView.h>
-#include <KoTextEditor.h>
+#include <KoElementReference.h>
 #include <KoParagraphStyle.h>
 #include <KoSection.h>
 #include <KoSectionEnd.h>
-#include <KoTextDocument.h>
-#include <KoElementReference.h>
-#include <KoShapeController.h>
 #include <KoSectionUtils.h>
+#include <KoShapeController.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
+#include <frames/KWTextFrameSet.h>
 
 #include <QHBoxLayout>
-#include <QTimer>
 #include <QString>
+#include <QTimer>
 
 KWDebugWidget::KWDebugWidget(QWidget *parent)
     : QWidget(parent)
@@ -99,7 +99,7 @@ void KWDebugWidget::updateData()
     m_label->setText(willShow);
 }
 
-void KWDebugWidget::setCanvas(KWCanvas* canvas)
+void KWDebugWidget::setCanvas(KWCanvas *canvas)
 {
     m_canvas = canvas;
 }

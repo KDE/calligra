@@ -11,10 +11,10 @@ using namespace EnhancedMetafile;
 
 void NoSuch::checkNonExisting()
 {
-    QTest::ignoreMessage( QtWarningMsg, "Request to load file (nosuchfilename.emf) that does not exist" );
+    QTest::ignoreMessage(QtWarningMsg, "Request to load file (nosuchfilename.emf) that does not exist");
     Parser parser;
-    QVERIFY( ! parser.load( QString( "nosuchfilename.emf" ) ) );
+    QVERIFY(!parser.load(QString("nosuchfilename.emf")));
 }
 
-QTEST_MAIN( NoSuch )
+QTEST_MAIN(NoSuch)
 #include <no_such.moc>

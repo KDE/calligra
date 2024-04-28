@@ -14,10 +14,11 @@ class KWDebugDockerFactory : public KoDockFactoryBase
 public:
     KWDebugDockerFactory();
     QString id() const override;
-    QDockWidget* createDockWidget() override;
-    DockPosition defaultDockPosition() const override {
+    QDockWidget *createDockWidget() override;
+    DockPosition defaultDockPosition() const override
+    {
         return DockMinimized;
     }
 };
 
-#endif //KWDEBUGDOCKERFACTORY_H
+#endif // KWDEBUGDOCKERFACTORY_H

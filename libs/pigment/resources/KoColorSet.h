@@ -7,17 +7,18 @@
 #ifndef KOCOLORSET
 #define KOCOLORSET
 
-#include <QObject>
 #include <QColor>
+#include <QObject>
 #include <QVector>
 
-#include "KoResource.h"
 #include "KoColor.h"
+#include "KoResource.h"
 
 struct KoColorSetEntry {
     KoColor color;
     QString name;
-    bool operator==(const KoColorSetEntry& rhs) const {
+    bool operator==(const KoColorSetEntry &rhs) const
+    {
         return color == rhs.color && name == rhs.name;
     }
 };
@@ -30,16 +31,14 @@ class PIGMENTCMS_EXPORT KoColorSet : public QObject, public KoResource
 {
     Q_OBJECT
 public:
-
     enum PaletteType {
         UNKNOWN = 0,
-        GPL,                // GIMP
-        RIFF_PAL,           // RIFF
-        ACT,                // Photoshop binary
-        PSP_PAL,            // PaintShop Pro
-        ACO                 // Photoshop Swatches
+        GPL, // GIMP
+        RIFF_PAL, // RIFF
+        ACT, // Photoshop binary
+        PSP_PAL, // PaintShop Pro
+        ACO // Photoshop Swatches
     };
-
 
     /**
      * Load a color set from a file. This can be a Gimp
@@ -51,14 +50,14 @@ public:
     KoColorSet();
 
     /// Explicit copy constructor (KoResource copy constructor is private)
-    KoColorSet(const KoColorSet& rhs);
+    KoColorSet(const KoColorSet &rhs);
 
     ~KoColorSet() override;
 
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;
-    bool saveToDevice(QIODevice* dev) const override;
+    bool saveToDevice(QIODevice *dev) const override;
 
     QString defaultFileExtension() const override;
 
@@ -66,7 +65,6 @@ public:
     int columnCount();
 
 public:
-
     void add(const KoColorSetEntry &);
     void remove(const KoColorSetEntry &);
     void removeAt(quint32 index);
@@ -74,8 +72,6 @@ public:
     qint32 nColors();
 
 private:
-
-
     bool init();
 
     bool loadGpl();
@@ -90,7 +86,5 @@ private:
     QString m_comment;
     qint32 m_columns;
     QVector<KoColorSetEntry> m_colors;
-
 };
 #endif // KOCOLORSET
-

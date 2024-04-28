@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
-* SPDX-FileCopyrightText: 2009 Thomas Zander <zander@kde.org>
-* SPDX-FileCopyrightText: 2015 Soma Schliszka <soma.schliszka@gmail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ * SPDX-FileCopyrightText: 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * SPDX-FileCopyrightText: 2009 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2015 Soma Schliszka <soma.schliszka@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #ifndef KOTEXTEDITOR_P_H
 #define KOTEXTEDITOR_P_H
@@ -12,9 +12,9 @@
 #include "KoTextEditor.h"
 
 #include "KoTextDocument.h"
+#include "changetracker/KoChangeTracker.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
-#include "changetracker/KoChangeTracker.h"
 
 #include <KLocalizedString>
 #include <kundo2magicstring.h>
@@ -30,17 +30,13 @@ class KUndo2Command;
 class Q_DECL_HIDDEN KoTextEditor::Private
 {
 public:
-    enum State {
-        NoOp,
-        KeyPress,
-        Delete,
-        Format,
-        Custom
-    };
+    enum State { NoOp, KeyPress, Delete, Format, Custom };
 
     explicit Private(KoTextEditor *qq, QTextDocument *document);
 
-    ~Private() {}
+    ~Private()
+    {
+    }
 
     void documentCommandAdded();
     void updateState(State newState, const KUndo2MagicString &title = KUndo2MagicString());
@@ -53,7 +49,7 @@ public:
     KoTextEditor *q;
     QTextCursor caret;
     QTextDocument *document;
-    QStack<KUndo2Command*> commandStack;
+    QStack<KUndo2Command *> commandStack;
     bool addNewCommand;
     bool dummyMacroAdded;
     int customCommandCount;
@@ -70,8 +66,8 @@ class KoTextVisitor
 public:
     /// The ObjectVisitingMode enum marks how was the visited object selected.
     enum ObjectVisitingMode {
-        Partly,     /// The visited object (table, cell, ...) is just @b partly selected. (Eg. just one cell is selected in the visited table)
-        Entirely,   /// The visited object (table, cell, ...) is @b entirely selected.
+        Partly, /// The visited object (table, cell, ...) is just @b partly selected. (Eg. just one cell is selected in the visited table)
+        Entirely, /// The visited object (table, cell, ...) is @b entirely selected.
     };
 
     explicit KoTextVisitor(KoTextEditor *editor)
@@ -80,9 +76,13 @@ public:
     {
     }
 
-    virtual ~KoTextVisitor() {}
+    virtual ~KoTextVisitor()
+    {
+    }
     // called whenever a visit was prevented by editprotection
-    virtual void nonVisit() {}
+    virtual void nonVisit()
+    {
+    }
 
     virtual void visitFragmentSelection(QTextCursor &)
     {
@@ -126,9 +126,19 @@ public:
         }
     }
 
-    bool abortVisiting() { return m_abortVisiting;}
-    void setAbortVisiting(bool abort) {m_abortVisiting = abort;}
-    KoTextEditor * editor() const {return m_editor;}
+    bool abortVisiting()
+    {
+        return m_abortVisiting;
+    }
+    void setAbortVisiting(bool abort)
+    {
+        m_abortVisiting = abort;
+    }
+    KoTextEditor *editor() const
+    {
+        return m_editor;
+    }
+
 private:
     bool m_abortVisiting;
     KoTextEditor *m_editor;
@@ -137,12 +147,21 @@ private:
 class BlockFormatVisitor
 {
 public:
-    BlockFormatVisitor() {}
-    virtual ~BlockFormatVisitor() {}
+    BlockFormatVisitor()
+    {
+    }
+    virtual ~BlockFormatVisitor()
+    {
+    }
 
     virtual void visit(QTextBlock &block) const = 0;
 
-    static void visitSelection(KoTextEditor *editor, const BlockFormatVisitor &visitor, const KUndo2MagicString &title = kundo2_i18n("Format"), bool resetProperties = false, bool registerChange = true) {
+    static void visitSelection(KoTextEditor *editor,
+                               const BlockFormatVisitor &visitor,
+                               const KUndo2MagicString &title = kundo2_i18n("Format"),
+                               bool resetProperties = false,
+                               bool registerChange = true)
+    {
         int start = qMin(editor->position(), editor->anchor());
         int end = qMax(editor->position(), editor->anchor());
 
@@ -155,7 +174,8 @@ public:
             QTextBlockFormat prevFormat = block.blockFormat();
             if (resetProperties) {
                 if (KoTextDocument(editor->document()).styleManager()) {
-                    KoParagraphStyle *old = KoTextDocument(editor->document()).styleManager()->paragraphStyle(block.blockFormat().intProperty(KoParagraphStyle::StyleId));
+                    KoParagraphStyle *old =
+                        KoTextDocument(editor->document()).styleManager()->paragraphStyle(block.blockFormat().intProperty(KoParagraphStyle::StyleId));
                     if (old)
                         old->unapplyStyle(block);
                 }
@@ -173,12 +193,18 @@ public:
 class CharFormatVisitor
 {
 public:
-    CharFormatVisitor() {}
-    virtual ~CharFormatVisitor() {}
+    CharFormatVisitor()
+    {
+    }
+    virtual ~CharFormatVisitor()
+    {
+    }
 
     virtual void visit(QTextCharFormat &format) const = 0;
 
-    static void visitSelection(KoTextEditor *editor, const CharFormatVisitor &visitor, const KUndo2MagicString &title = kundo2_i18n("Format"), bool registerChange = true) {
+    static void
+    visitSelection(KoTextEditor *editor, const CharFormatVisitor &visitor, const KUndo2MagicString &title = kundo2_i18n("Format"), bool registerChange = true)
+    {
         int start = qMin(editor->position(), editor->anchor());
         int end = qMax(editor->position(), editor->anchor());
         if (start == end) { // just set a new one.
@@ -188,7 +214,9 @@ public:
             if (registerChange && KoTextDocument(editor->document()).changeTracker() && KoTextDocument(editor->document()).changeTracker()->recordChanges()) {
                 QTextCharFormat prevFormat(editor->charFormat());
 
-                int changeId = KoTextDocument(editor->document()).changeTracker()->getFormatChangeId(title, format, prevFormat, editor->charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                int changeId = KoTextDocument(editor->document())
+                                   .changeTracker()
+                                   ->getFormatChangeId(title, format, prevFormat, editor->charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt());
                 format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
             }
 
@@ -205,7 +233,7 @@ public:
         // now loop over all blocks that the selection contains and alter the text fragments where applicable.
         while (block.isValid() && block.position() < end) {
             QTextBlock::iterator iter = block.begin();
-            while (! iter.atEnd()) {
+            while (!iter.atEnd()) {
                 QTextFragment fragment = iter.fragment();
                 if (fragment.position() > end)
                     break;
@@ -219,10 +247,13 @@ public:
                 QTextCharFormat format = cursor.charFormat(); // this gets the format one char after the position.
                 visitor.visit(format);
 
-                if (registerChange && KoTextDocument(editor->document()).changeTracker() && KoTextDocument(editor->document()).changeTracker()->recordChanges()) {
+                if (registerChange && KoTextDocument(editor->document()).changeTracker()
+                    && KoTextDocument(editor->document()).changeTracker()->recordChanges()) {
                     QTextCharFormat prevFormat(cursor.charFormat());
 
-                    int changeId = KoTextDocument(editor->document()).changeTracker()->getFormatChangeId(title, format, prevFormat, cursor.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                    int changeId = KoTextDocument(editor->document())
+                                       .changeTracker()
+                                       ->getFormatChangeId(title, format, prevFormat, cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt());
                     format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
                 }
 
@@ -234,18 +265,24 @@ public:
 
                 QTextCharFormat prevFormat(cursor.charFormat());
                 if (registerChange)
-                    editor->registerTrackedChange(cursor,KoGenChange::FormatChange,title, format, prevFormat, false); //this will lead to every fragment having a different change until the change merging in registerTrackedChange checks also for formatChange or not?
+                    editor->registerTrackedChange(cursor,
+                                                  KoGenChange::FormatChange,
+                                                  title,
+                                                  format,
+                                                  prevFormat,
+                                                  false); // this will lead to every fragment having a different change until the change merging in
+                                                          // registerTrackedChange checks also for formatChange or not?
 
                 ++iter;
             }
             block = block.next();
         }
         QVector<QTextCharFormat>::Iterator iter = formats.begin();
-        foreach(QTextCursor cursor, cursors) {
+        foreach (QTextCursor cursor, cursors) {
             cursor.setCharFormat(*iter);
             ++iter;
         }
     }
 };
 
-#endif //KOTEXTEDITOR_P_H
+#endif // KOTEXTEDITOR_P_H

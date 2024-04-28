@@ -12,8 +12,8 @@
 
 #include "flake_export.h"
 
-#include <kundo2command.h>
 #include <QList>
+#include <kundo2command.h>
 
 class KoShape;
 class KoShapeStrokeModel;
@@ -28,7 +28,7 @@ public:
      * @param stroke the new stroke, the same for all given shapes
      * @param parent the parent command used for macro commands
      */
-    KoShapeStrokeCommand(const QList<KoShape*> &shapes, KoShapeStrokeModel *stroke, KUndo2Command *parent = 0);
+    KoShapeStrokeCommand(const QList<KoShape *> &shapes, KoShapeStrokeModel *stroke, KUndo2Command *parent = 0);
 
     /**
      * Command to set new shape strokes.
@@ -36,7 +36,7 @@ public:
      * @param strokes the new strokes, one for each shape
      * @param parent the parent command used for macro commands
      */
-    KoShapeStrokeCommand(const QList<KoShape*> &shapes, const QList<KoShapeStrokeModel*> &strokes, KUndo2Command *parent = 0);
+    KoShapeStrokeCommand(const QList<KoShape *> &shapes, const QList<KoShapeStrokeModel *> &strokes, KUndo2Command *parent = 0);
 
     /**
      * Command to set a new shape stroke.
@@ -44,16 +44,17 @@ public:
      * @param stroke the new stroke
      * @param parent the parent command used for macro commands
      */
-    KoShapeStrokeCommand(KoShape* shape, KoShapeStrokeModel *stroke, KUndo2Command *parent = 0);
+    KoShapeStrokeCommand(KoShape *shape, KoShapeStrokeModel *stroke, KUndo2Command *parent = 0);
 
     ~KoShapeStrokeCommand() override;
     /// redo the command
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

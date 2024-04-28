@@ -5,18 +5,18 @@
  */
 
 #include "TextToolFactory.h"
-#include "TextTool.h"
-#include "TextShape.h"
 #include "AnnotationTextShape.h"
+#include "TextShape.h"
+#include "TextTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 
 TextToolFactory::TextToolFactory()
-        : KoToolFactoryBase("TextToolFactory_ID")
+    : KoToolFactoryBase("TextToolFactory_ID")
 {
     setToolTip(i18n("Text editing"));
-    setToolType(dynamicToolType()+",calligrawords,calligraauthor");
+    setToolType(dynamicToolType() + ",calligrawords,calligraauthor");
     setIconName(koIconName("tool-text"));
     setPriority(1);
     setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);
@@ -26,7 +26,7 @@ TextToolFactory::~TextToolFactory()
 {
 }
 
-KoToolBase * TextToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *TextToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new TextTool(canvas);
 }

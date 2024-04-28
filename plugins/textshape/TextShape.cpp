@@ -8,37 +8,37 @@
  */
 #include "TextShape.h"
 #include "ShrinkToFitShapeContainer.h"
-#include <KoTextSharedLoadingData.h>
 #include "SimpleRootAreaProvider.h"
+#include <KoTextSharedLoadingData.h>
 
-#include <KoTextLayoutRootArea.h>
 #include <KoTextEditor.h>
+#include <KoTextLayoutRootArea.h>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceManager.h>
 #include <KoChangeTracker.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoTextRangeManager.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfWorkaround.h>
+#include <KoPageProvider.h>
 #include <KoParagraphStyle.h>
 #include <KoPostscriptPaintDevice.h>
 #include <KoSelection.h>
-#include <KoShapeLoadingContext.h>
 #include <KoShapeBackground.h>
+#include <KoShapeLoadingContext.h>
 #include <KoShapePaintingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoStyleStack.h>
 #include <KoText.h>
 #include <KoTextDocument.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextPage.h>
+#include <KoTextRangeManager.h>
 #include <KoTextShapeContainerModel.h>
-#include <KoPageProvider.h>
 #include <KoViewConverter.h>
-#include <KoXmlWriter.h>
-#include <KoXmlReader.h>
 #include <KoXmlNS.h>
-#include <KoStyleStack.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>
@@ -51,11 +51,11 @@
 #include <QDebug>
 
 TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager)
-        : KoShapeContainer(new KoTextShapeContainerModel())
-        , KoFrameShape(KoXmlNS::draw, "text-box")
-        , m_pageProvider(0)
-        , m_imageCollection(0)
-        , m_clip(true)
+    : KoShapeContainer(new KoTextShapeContainerModel())
+    , KoFrameShape(KoXmlNS::draw, "text-box")
+    , m_pageProvider(0)
+    , m_imageCollection(0)
+    , m_clip(true)
 {
     setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
@@ -77,17 +77,15 @@ TextShape::~TextShape()
 {
 }
 
-void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,
-                               KoShapePaintingContext &paintContext)
+void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     painter.save();
     applyConversion(painter, converter);
     KoBorder *border = this->border();
 
     if (border) {
-       paintBorder(painter, converter);
-    }
-    else if (paintContext.showTextShapeOutlines) {
+        paintBorder(painter, converter);
+    } else if (paintContext.showTextShapeOutlines) {
         // No need to paint the outlines if there is a real border.
         if (qAbs(rotation()) > 1)
             painter.setRenderHint(QPainter::Antialiasing);
@@ -106,7 +104,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 
     QTextDocument *doc = m_textShapeData->document();
     Q_ASSERT(doc);
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(doc->documentLayout());
     Q_ASSERT(lay);
     lay->showInlineObjectVisualization(paintContext.showInlineObjectVisualization);
 
@@ -175,11 +173,10 @@ QPointF TextShape::convertScreenPos(const QPointF &point) const
     return p + QPointF(0.0, m_textShapeData->documentOffset());
 }
 
-
 QPainterPath TextShape::outline() const
 {
     QPainterPath path;
-    path.addRect(QRectF(QPointF(0,0), size()));
+    path.addRect(QRectF(QPointF(0, 0), size()));
     return path;
 }
 
@@ -193,7 +190,7 @@ QRectF TextShape::outlineRect() const
         }
         return rect | QRectF(QPointF(0, 0), size());
     }
-    return QRectF(QPointF(0,0), size());
+    return QRectF(QPointF(0, 0), size());
 }
 
 void TextShape::shapeChanged(ChangeType type, KoShape *shape)
@@ -207,25 +204,24 @@ void TextShape::shapeChanged(ChangeType type, KoShape *shape)
 
 void TextShape::saveOdf(KoShapeSavingContext &context) const
 {
-    KoXmlWriter & writer = context.xmlWriter();
+    KoXmlWriter &writer = context.xmlWriter();
 
     QString textHeight = additionalAttribute("fo:min-height");
-    const_cast<TextShape*>(this)->removeAdditionalAttribute("fo:min-height");
+    const_cast<TextShape *>(this)->removeAdditionalAttribute("fo:min-height");
     writer.startElement("draw:frame");
     // if the TextShape is wrapped in a shrink to fit container we need to save the geometry of the container as
     // the geometry of the shape might have been changed.
     if (ShrinkToFitShapeContainer *stf = dynamic_cast<ShrinkToFitShapeContainer *>(this->parent())) {
-        stf->saveOdfAttributes(context, OdfSize | OdfPosition | OdfTransformation );
+        stf->saveOdfAttributes(context, OdfSize | OdfPosition | OdfTransformation);
         saveOdfAttributes(context, OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements);
-    }
-    else {
+    } else {
         saveOdfAttributes(context, OdfAllAttributes);
     }
 
     writer.startElement("draw:text-box");
-    if (! textHeight.isEmpty())
+    if (!textHeight.isEmpty())
         writer.addAttribute("fo:min-height", textHeight);
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(m_textShapeData->document()->documentLayout());
     int index = -1;
     if (lay) {
         int i = 0;
@@ -253,8 +249,7 @@ QString TextShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) c
     QString verticalAlign = "top";
     if (vAlign == Qt::AlignBottom) {
         verticalAlign = "bottom";
-    }
-    else if ( vAlign == Qt::AlignVCenter ) {
+    } else if (vAlign == Qt::AlignVCenter) {
         verticalAlign = "middle";
     }
     style.addProperty("draw:textarea-vertical-align", verticalAlign);
@@ -282,12 +277,10 @@ void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &co
     Qt::Alignment alignment(Qt::AlignTop);
     if (verticalAlign == "bottom") {
         alignment = Qt::AlignBottom;
-    }
-    else if (verticalAlign == "justify") {
+    } else if (verticalAlign == "justify") {
         // not yet supported
         alignment = Qt::AlignVCenter;
-    }
-    else if (verticalAlign == "middle") {
+    } else if (verticalAlign == "middle") {
         alignment = Qt::AlignVCenter;
     }
 
@@ -297,8 +290,7 @@ void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &co
     KoTextShapeData::ResizeMethod resize = KoTextShapeData::NoResize;
     if (fitToSize == "true" || fitToSize == "shrink-to-fit") { // second is buggy value from impress
         resize = KoTextShapeData::ShrinkToFitResize;
-    }
-    else {
+    } else {
         // An explicit svg:width or svg:height defined do change the default value (means those value
         // used if not explicit defined otherwise) for auto-grow-height and auto-grow-height. So
         // they are mutable exclusive.
@@ -317,8 +309,7 @@ void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &co
 
         if (autoGrowWidth == "true") {
             resize = autoGrowHeight == "true" ? KoTextShapeData::AutoGrowWidthAndHeight : KoTextShapeData::AutoGrowWidth;
-        }
-        else if (autoGrowHeight == "true") {
+        } else if (autoGrowHeight == "true") {
             resize = KoTextShapeData::AutoGrowHeight;
         }
     }
@@ -338,10 +329,10 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
 #ifndef NWORKAROUND_ODF_BUGS
     KoTextShapeData::ResizeMethod method = m_textShapeData->resizeMethod();
     if (KoOdfWorkaround::fixAutoGrow(method, context)) {
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(m_textShapeData->document()->documentLayout());
         Q_ASSERT(lay);
         if (lay) {
-            SimpleRootAreaProvider *provider = dynamic_cast<SimpleRootAreaProvider*>(lay->provider());
+            SimpleRootAreaProvider *provider = dynamic_cast<SimpleRootAreaProvider *>(lay->provider());
             if (provider) {
                 provider->m_fixAutogrow = true;
             }
@@ -362,8 +353,7 @@ bool TextShape::loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext 
         const KoXmlElement &possibleTableElement(KoXml::namedItemNS(element, KoXmlNS::table, "table"));
         if (possibleTableElement.isNull()) {
             return false;
-        }
-        else {
+        } else {
             return loadOdfFrameElement(possibleTableElement, context);
         }
     }
@@ -395,7 +385,7 @@ void TextShape::update(const QRectF &shape) const
 void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
 {
     Q_UNUSED(asynchronous);
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
     if (m_textShapeData->isDirty()) {
         // Do a simple layout-call which will make sure to relayout till things are done. If more

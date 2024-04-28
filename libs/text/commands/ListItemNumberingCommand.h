@@ -33,7 +33,8 @@ public:
     void undo() override;
 
     /// reimplemnted from KUndo2Command
-    int id() const override {
+    int id() const override
+    {
         return 58450688;
     }
     /// reimplemnted from KUndo2Command

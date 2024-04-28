@@ -8,18 +8,16 @@
 #include "Clear.h"
 #include "Actions.h"
 
-#include "engine/Damages.h"
-#include "engine/MapBase.h"
-#include "engine/Validity.h"
 #include "core/CellStorage.h"
 #include "core/Condition.h"
 #include "core/Sheet.h"
+#include "engine/Damages.h"
+#include "engine/MapBase.h"
+#include "engine/Validity.h"
 
 #include <KLocalizedString>
 
-
 using namespace Calligra::Sheets;
-
 
 ClearAll::ClearAll(Actions *actions)
     : CellAction(actions, "clearAll", i18n("Clear All"), koIcon("deletecell"), i18n("Clear all contents and formatting of the current cell"))
@@ -32,7 +30,7 @@ ClearAll::~ClearAll()
 
 void ClearAll::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    DeleteCommand* command = new DeleteCommand();
+    DeleteCommand *command = new DeleteCommand();
     command->setSheet(sheet);
     command->add(*selection);
     command->execute(selection->canvas());
@@ -52,7 +50,7 @@ void ClearContents::execute(Selection *selection, Sheet *sheet, QWidget *)
     if (sheet->areaIsEmpty(*selection))
         return;
 
-    DataManipulator* command = new DataManipulator();
+    DataManipulator *command = new DataManipulator();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Clear Text"));
     // parsing gets set only so that parseUserInput is called as it should be,
@@ -63,10 +61,9 @@ void ClearContents::execute(Selection *selection, Sheet *sheet, QWidget *)
     command->execute(selection->canvas());
 }
 
-
 DeleteCommand::DeleteCommand(KUndo2Command *parent)
-        : AbstractDataManipulator(parent)
-        , m_mode(Everything)
+    : AbstractDataManipulator(parent)
+    , m_mode(Everything)
 {
     setText(kundo2_i18n("Delete"));
     m_checkLock = true;
@@ -81,7 +78,7 @@ void DeleteCommand::setMode(Mode mode)
     m_mode = mode;
 }
 
-bool DeleteCommand::process(Element* element)
+bool DeleteCommand::process(Element *element)
 {
     // The RecalcManager needs a valid sheet.
     if (!element->sheet())
@@ -126,7 +123,8 @@ bool DeleteCommand::process(Element* element)
 
 bool DeleteCommand::performNonCommandActions()
 {
-    if (m_mode == OnlyCells) return true;
+    if (m_mode == OnlyCells)
+        return true;
 
     ColFormatStorage *cols = m_sheet->columnFormats();
     RowFormatStorage *rows = m_sheet->rowFormats();
@@ -180,5 +178,3 @@ bool DeleteCommand::undoNonCommandActions()
         m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged | SheetDamage::ColumnsChanged | SheetDamage::RowsChanged));
     return true;
 }
-
-

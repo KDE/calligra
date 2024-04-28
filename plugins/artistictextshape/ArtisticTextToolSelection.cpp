@@ -12,19 +12,21 @@
 
 #include <QDebug>
 
-#include <QPainter>
 #include <QFontMetrics>
+#include <QPainter>
 
 ArtisticTextToolSelection::ArtisticTextToolSelection(KoCanvasBase *canvas, QObject *parent)
-    : KoToolSelection(parent), m_canvas(canvas), m_currentShape(0)
-    , m_selectionStart(-1), m_selectionCount(0)
+    : KoToolSelection(parent)
+    , m_canvas(canvas)
+    , m_currentShape(0)
+    , m_selectionStart(-1)
+    , m_selectionCount(0)
 {
     Q_ASSERT(m_canvas);
 }
 
 ArtisticTextToolSelection::~ArtisticTextToolSelection()
 {
-
 }
 
 bool ArtisticTextToolSelection::hasSelection()
@@ -53,7 +55,7 @@ void ArtisticTextToolSelection::selectText(int from, int to)
     repaintDecoration();
 
     const int textCount = m_currentShape->plainText().count();
-    m_selectionStart = qBound(0, from, textCount-1);
+    m_selectionStart = qBound(0, from, textCount - 1);
     m_selectionCount = qBound(from, to, textCount) - m_selectionStart;
 
     repaintDecoration();
@@ -81,7 +83,7 @@ void ArtisticTextToolSelection::paint(QPainter &painter, const KoViewConverter &
     if (!hasSelection())
         return;
 
-    m_currentShape->applyConversion( painter, converter );
+    m_currentShape->applyConversion(painter, converter);
     painter.setPen(Qt::NoPen);
     painter.setBrush(QColor(0, 0, 255, 127));
     painter.drawPath(outline());
@@ -101,7 +103,8 @@ QPainterPath ArtisticTextToolSelection::outline()
     QPolygonF polygon;
 
     QList<ArtisticTextRange> ranges = m_currentShape->text();
-    if (ranges.size() == 0) return outline;
+    if (ranges.size() == 0)
+        return outline;
 
     int globalCharIndex = m_selectionStart;
     int remainingChars = m_selectionCount;
@@ -114,8 +117,8 @@ QPainterPath ArtisticTextToolSelection::outline()
             const qreal angle = m_currentShape->charAngleAt(globalCharIndex);
 
             QTransform charTransform;
-            charTransform.translate( pos.x() - 1, pos.y() );
-            charTransform.rotate( 360. - angle );
+            charTransform.translate(pos.x() - 1, pos.y());
+            charTransform.rotate(360. - angle);
 
             QFontMetricsF metrics(currentRange.font());
 
@@ -133,7 +136,7 @@ QPainterPath ArtisticTextToolSelection::outline()
             const bool atSelectionEnd = remainingChars == 0;
             if (hasYOffset || atRangeEnd || atSelectionEnd) {
                 if (hasYOffset || atRangeEnd) {
-                    const QChar c = currentRange.text().at(charPos.second-1);
+                    const QChar c = currentRange.text().at(charPos.second - 1);
                     const qreal w = metrics.boundingRect(c).width();
                     polygon.prepend(charTransform.map(QPointF(w, -metrics.ascent())));
                     polygon.append(charTransform.map(QPointF(w, metrics.descent())));
@@ -141,8 +144,8 @@ QPainterPath ArtisticTextToolSelection::outline()
                     const QPointF pos = m_currentShape->charPositionAt(globalCharIndex);
                     const qreal angle = m_currentShape->charAngleAt(globalCharIndex);
                     charTransform.reset();
-                    charTransform.translate( pos.x() - 1, pos.y() );
-                    charTransform.rotate( 360. - angle );
+                    charTransform.translate(pos.x() - 1, pos.y());
+                    charTransform.rotate(360. - angle);
                     polygon.prepend(charTransform.map(QPointF(0.0, -metrics.ascent())));
                     polygon.append(charTransform.map(QPointF(0.0, metrics.descent())));
                 }

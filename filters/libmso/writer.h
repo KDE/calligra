@@ -46,11 +46,11 @@ public:
     /**
      * Xml writer that writes into content.xml.
      */
-    KoXmlWriter& xml;
+    KoXmlWriter &xml;
     /**
      * Styles for the document that is being created.
      **/
-    KoGenStyles& styles;
+    KoGenStyles &styles;
     /**
      * Tells if the current output is for styles.xml or content.xml
      **/
@@ -63,8 +63,7 @@ public:
      * @param kostyles The styles for the writer.
      * @param stylexml Defines whether the style is an XML style.
      */
-    Writer(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
-           bool stylexml = false);
+    Writer(KoXmlWriter &xmlWriter, KoGenStyles &kostyles, bool stylexml = false);
     /**
      * Create a new writer with a new coordinate system.
      *
@@ -72,7 +71,7 @@ public:
      * systems are used.  These are defined by specifying a rectangle in the
      * old coordinate system and the equivalent in the new coordinate system.
      */
-    Writer transform(const QRectF& oldCoords, const QRectF &newCoords) const;
+    Writer transform(const QRectF &oldCoords, const QRectF &newCoords) const;
     /**
      * Convert local length to global length.
      *
@@ -97,4 +96,4 @@ public:
     qreal hOffset(qreal offset) const;
 };
 
-#endif //MSO_WRITER_H
+#endif // MSO_WRITER_H

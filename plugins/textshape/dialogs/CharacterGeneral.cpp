@@ -9,27 +9,27 @@
 
 #include "CharacterGeneral.h"
 #include "CharacterHighlighting.h"
-#include "LanguageTab.h"
 #include "FontDecorations.h"
 #include "FormattingPreview.h"
+#include "LanguageTab.h"
 
 #include "StylesCombo.h"
 #include "StylesModel.h"
 
-#include <KoParagraphStyle.h>
-#include <KoStyleThumbnailer.h>
-#include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
+#include <KoParagraphStyle.h>
+#include <KoStyleManager.h>
+#include <KoStyleThumbnailer.h>
 
 #include <QDebug>
 
 CharacterGeneral::CharacterGeneral(QWidget *parent)
-        : QWidget(parent)
-        , m_style(0)
-        , m_styleManager(0)
-        , m_thumbnail(new KoStyleThumbnailer())
-        , m_paragraphStyleModel(new StylesModel(0,StylesModel::ParagraphStyle))
-        , m_characterInheritedStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
+    : QWidget(parent)
+    , m_style(0)
+    , m_styleManager(0)
+    , m_thumbnail(new KoStyleThumbnailer())
+    , m_paragraphStyleModel(new StylesModel(0, StylesModel::ParagraphStyle))
+    , m_characterInheritedStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
 {
     widget.setupUi(this);
     // we don't have next style for character styles
@@ -45,7 +45,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     // inherited style model
     widget.inheritStyle->showEditIcon(false);
     widget.inheritStyle->setStyleIsOriginal(true);
-    //for character General
+    // for character General
     m_characterInheritedStyleModel->setStyleThumbnailer(m_thumbnail);
     widget.inheritStyle->setStylesModel(m_characterInheritedStyleModel);
     widget.inheritStyle->setEnabled(false);
@@ -83,7 +83,7 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style, bool directFormattingMo
         widget.name->setText(style->name());
 
     m_characterHighlighting->setDisplay(style, directFormattingMode);
-    //m_languageTab->setDisplay(style);
+    // m_languageTab->setDisplay(style);
 
     widget.preview->setCharacterStyle(style);
 
@@ -105,12 +105,11 @@ void CharacterGeneral::save(KoCharacterStyle *style)
             return;
         else
             savingStyle = m_style;
-    }
-    else
+    } else
         savingStyle = style;
 
     m_characterHighlighting->save(savingStyle);
-    //m_languageTab->save(savingStyle);
+    // m_languageTab->save(savingStyle);
     savingStyle->setName(widget.name->text());
 
     if (m_style == savingStyle) {
@@ -172,11 +171,10 @@ int CharacterGeneral::nextStyleId()
     int nextStyleIndex = widget.nextStyle->currentIndex();
     QModelIndex paragraphStyleIndex = m_paragraphStyleModel->index(nextStyleIndex);
     quint64 internalId = paragraphStyleIndex.internalId();
-    KoParagraphStyle * paragraphStyle = m_styleManager->paragraphStyle(internalId);
+    KoParagraphStyle *paragraphStyle = m_styleManager->paragraphStyle(internalId);
     if (paragraphStyle) {
         return paragraphStyle->styleId();
-    }
-    else {
+    } else {
         return 0;
     }
 }

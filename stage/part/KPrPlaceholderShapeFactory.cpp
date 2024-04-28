@@ -21,21 +21,23 @@
 
 #include <KLocalizedString>
 
-#include <KoXmlNS.h>
 #include <KoOdfWorkaround.h>
 #include <KoShapeLoadingContext.h>
+#include <KoXmlNS.h>
 
 #include "KPrPlaceholderShape.h"
 #include "StageDebug.h"
 
 KPrPlaceholderShapeFactory::KPrPlaceholderShapeFactory()
-: KoShapeFactoryBase(KPrPlaceholderShapeId, i18n( "Placeholder shape" ) )
+    : KoShapeFactoryBase(KPrPlaceholderShapeId, i18n("Placeholder shape"))
 {
     QStringList elementNames;
-    elementNames << "text-box" << "object" << "image";
-    setXmlElementNames( KoXmlNS::draw, elementNames );
+    elementNames << "text-box"
+                 << "object"
+                 << "image";
+    setXmlElementNames(KoXmlNS::draw, elementNames);
     // use a really high number as we want to be used before the normal shapes try to load it
-    setLoadingPriority( 1000 );
+    setLoadingPriority(1000);
     setHidden(true);
 }
 
@@ -48,15 +50,15 @@ KoShape *KPrPlaceholderShapeFactory::createDefaultShape(KoDocumentResourceManage
     return new KPrPlaceholderShape();
 }
 
-bool KPrPlaceholderShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool KPrPlaceholderShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
     // check parent if placeholder is set to true
     KoXmlNode parent = e.parentNode();
-    if ( !parent.isNull() ) {
+    if (!parent.isNull()) {
         KoXmlElement element = parent.toElement();
-        if ( !element.isNull() ) {
-            bool supported =  element.attributeNS( KoXmlNS::presentation, "placeholder", "false" ) == "true";
+        if (!element.isNull()) {
+            bool supported = element.attributeNS(KoXmlNS::presentation, "placeholder", "false") == "true";
             debugStage << "placeholder:" << supported;
 #ifndef NWORKAROUND_ODF_BUGS
             if (!supported && KoOdfWorkaround::fixPresentationPlaceholder() && element.hasAttributeNS(KoXmlNS::presentation, "class")) {

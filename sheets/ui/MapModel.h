@@ -7,8 +7,8 @@
 #ifndef CALLIGRA_SHEETS_MAP_MODEL
 #define CALLIGRA_SHEETS_MAP_MODEL
 
-#include <QAbstractListModel>
 #include "sheets_ui_export.h"
+#include <QAbstractListModel>
 
 class KUndo2Command;
 
@@ -46,13 +46,13 @@ public Q_SLOTS:
      * Shows \p sheet, if \p hidden is \c false and \p sheet is hidden.
      * \return \c true on success; \c false on failure
      */
-    bool setHidden(Sheet* sheet, bool hidden = true);
+    bool setHidden(Sheet *sheet, bool hidden = true);
 
 Q_SIGNALS:
-    void addCommandRequested(KUndo2Command* command);
+    void addCommandRequested(KUndo2Command *command);
 
 protected:
-    Map* map() const;
+    Map *map() const;
 
 protected Q_SLOTS:
     virtual void addSheet(SheetBase *sheet);
@@ -60,7 +60,7 @@ protected Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

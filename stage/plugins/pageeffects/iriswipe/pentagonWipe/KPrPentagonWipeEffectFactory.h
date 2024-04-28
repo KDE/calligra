@@ -16,12 +16,7 @@ public:
     ~KPrPentagonWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType {
-        Up,
-        UpReverse,
-        Down,
-        DownReverse
-    };
+    enum SubType { Up, UpReverse, Down, DownReverse };
 };
 
 #endif /* KPRPENTAGONWIPEEFFECTFACTORY_H */

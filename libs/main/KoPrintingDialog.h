@@ -6,9 +6,9 @@
 #ifndef KOPRINTINGDIALOG_H
 #define KOPRINTINGDIALOG_H
 
+#include "komain_export.h"
 #include <KoPrintJob.h>
 #include <QList>
-#include "komain_export.h"
 
 class KoShapeManager;
 class KoShape;
@@ -47,7 +47,8 @@ class KoPrintingDialogPrivate;
  * This typically means that the preparePage() makes sure the shapeManager is updated and the correct cliprect
  * is set on the painter().
  */
-class KOMAIN_EXPORT KoPrintingDialog : public KoPrintJob {
+class KOMAIN_EXPORT KoPrintingDialog : public KoPrintJob
+{
     Q_OBJECT
 public:
     /**
@@ -106,7 +107,7 @@ protected:
     /**
      * Implement to return the shapes on the requested page.
      */
-    virtual QList<KoShape*> shapesOnPage(int pageNumber) = 0;
+    virtual QList<KoShape *> shapesOnPage(int pageNumber) = 0;
 
     /**
      * @returns the shapeManager.
@@ -130,19 +131,16 @@ protected:
      * This virtual hook is called at the end of the printing process, either on success of on failure.
      * The method is empty by default.
      */
-    virtual void printingDone() { }
+    virtual void printingDone()
+    {
+    }
 
 private:
-    KoPrintingDialogPrivate * const d;
+    KoPrintingDialogPrivate *const d;
     friend class KoPrintingDialogPrivate;
     Q_PRIVATE_SLOT(d, void preparePage(const QVariant &page))
     Q_PRIVATE_SLOT(d, void printPage(const QVariant &page))
     Q_PRIVATE_SLOT(d, void stopPressed())
 };
 
-
-
-
-
 #endif
-

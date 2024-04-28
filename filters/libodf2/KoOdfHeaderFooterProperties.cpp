@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "KoOdfHeaderFooterProperties.h"
 
@@ -18,23 +17,19 @@
 
 #include "Odf2Debug.h"
 
-
 // ----------------------------------------------------------------
 //                         private class
-
 
 class Q_DECL_HIDDEN KoOdfHeaderFooterProperties::Private
 {
 public:
-    Private() {};
-    ~Private() {};
+    Private(){};
+    ~Private(){};
 
     // NYI: Background Image
 };
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfHeaderFooterProperties::KoOdfHeaderFooterProperties()
     : KoOdfStyleProperties()
@@ -47,12 +42,10 @@ KoOdfHeaderFooterProperties::~KoOdfHeaderFooterProperties()
     delete d;
 }
 
-
 void KoOdfHeaderFooterProperties::clear()
 {
     KoOdfStyleProperties::clear();
 }
-
 
 bool KoOdfHeaderFooterProperties::readOdf(KoXmlStreamReader &reader)
 {

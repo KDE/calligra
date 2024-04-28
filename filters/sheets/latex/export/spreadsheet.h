@@ -15,7 +15,7 @@
 **
 ** To receive a copy of the GNU Library General Public License, write to the
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+* Boston, MA 02110-1301, USA.
 **
 */
 
@@ -25,14 +25,10 @@
 #include <QList>
 #include <QTextStream>
 
-#include "map.h"
 #include "config.h"
+#include "map.h"
 
-enum EGenerate {
-    E_LATEX,
-    E_WORDS,
-    E_CONFIG
-};
+enum EGenerate { E_LATEX, E_WORDS, E_CONFIG };
 
 /***********************************************************************/
 /* Class: Spreadsheet                                                  */
@@ -42,13 +38,12 @@ enum EGenerate {
  * This class hold a whole document with its headers, footers, footnotes, endnotes,
  * content, ... It can generate a latex file.
  */
-class Spreadsheet: public XmlParser, Config
+class Spreadsheet : public XmlParser, Config
 {
-
-    //Paper _paper;
+    // Paper _paper;
     Map _map;
-    //Locale _locale;
-    //AreaName _areaname;
+    // Locale _locale;
+    // AreaName _areaname;
 
 public:
     /**
@@ -72,23 +67,23 @@ public:
     void analyze(const QDomNode);
     void analyze_attr(const QDomNode);
 
-    void generate(QTextStream&, bool);
+    void generate(QTextStream &, bool);
 
 private:
     /**
      * Generate the second part of the preamble
      */
-    void generatePreamble(QTextStream&);
+    void generatePreamble(QTextStream &);
 
     /**
      * Generate the header
      */
-    void  generateTypeHeader(QTextStream&);
+    void generateTypeHeader(QTextStream &);
 
     /**
      * Generate the footer
      */
-    void  generateTypeFooter(QTextStream&);
+    void generateTypeFooter(QTextStream &);
 };
 
 #endif /* __CALLIGRA_SHEETS_LATEX_SPREADSHEET_H__ */

@@ -18,7 +18,8 @@ public:
     SimpleRootAreaProvider(KoTextShapeData *data, TextShape *textshape);
 
     /// reimplemented
-    KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewRootArea) override;
+    KoTextLayoutRootArea *
+    provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewRootArea) override;
 
     void releaseAllAfter(KoTextLayoutRootArea *afterThis) override;
 

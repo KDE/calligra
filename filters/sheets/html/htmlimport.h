@@ -9,12 +9,12 @@
 #ifndef HTMLIMPORT_H
 #define HTMLIMPORT_H
 
-#include <QObject>
 #include <KoFilter.h>
-#include <QDir>
-#include <QUrl>
 #include <QByteArray>
+#include <QDir>
+#include <QObject>
 #include <QStack>
+#include <QUrl>
 #include <QVariantList>
 
 // namespace Calligra::Sheets
@@ -32,10 +32,10 @@ class HTMLImport : public KoFilter
 {
     Q_OBJECT
 public:
-    HTMLImport(QObject* parent, const QVariantList&);
+    HTMLImport(QObject *parent, const QVariantList &);
     virtual ~HTMLImport();
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 
 Q_SIGNALS:
     void completed();
@@ -46,15 +46,15 @@ private:
     bool parseTag(QDomElement e);
     bool createStyle();
     bool createMeta();
+
 private:
     enum State { InNone, InFrameset, InBody, InTable, InRow, InCell };
     QStack<State> m_states;
-    
-    QDir m_inputDir;    
-    KoOdfWriteStore* m_store;
-    KoXmlWriter* m_manifestWriter;
-    KoGenStyles* m_mainStyles;
+
+    QDir m_inputDir;
+    KoOdfWriteStore *m_store;
+    KoXmlWriter *m_manifestWriter;
+    KoGenStyles *m_mainStyles;
 };
 
 #endif
-

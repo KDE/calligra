@@ -27,7 +27,7 @@
 
 #define snprintf c99_snprintf
 
-inline int c99_vsnprintf(char* str, size_t size, const char* format, va_list ap)
+inline int c99_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 {
     int count = -1;
 
@@ -39,7 +39,7 @@ inline int c99_vsnprintf(char* str, size_t size, const char* format, va_list ap)
     return count;
 }
 
-inline int c99_snprintf(char* str, size_t size, const char* format, ...)
+inline int c99_snprintf(char *str, size_t size, const char *format, ...)
 {
     int count;
     va_list ap;
@@ -56,17 +56,17 @@ inline int c99_snprintf(char* str, size_t size, const char* format, ...)
 namespace wvWare
 {
 
-    std::string int2string( int i )
-    {
-        QString s;
-        s.setNum(i);
-        return std::string(s.toLatin1());
-    }
+std::string int2string(int i)
+{
+    QString s;
+    s.setNum(i);
+    return std::string(s.toLatin1());
+}
 
-    std::string uint2string( unsigned int i )
-    {
-        QString s;
-        s.setNum(i);
-        return std::string(s.toLatin1());
-    }
+std::string uint2string(unsigned int i)
+{
+    QString s;
+    s.setNum(i);
+    return std::string(s.toLatin1());
+}
 } // namespace wvWare

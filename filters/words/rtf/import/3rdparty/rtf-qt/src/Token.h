@@ -4,25 +4,26 @@
 #ifndef RTFREADER_TOKEN_H
 #define RTFREADER_TOKEN_H
 
+#include "rtfreader_export.h"
 #include <QByteArray>
 #include <QString>
-#include "rtfreader_export.h"
 namespace RtfReader
 {
-    enum TokenType { OpenGroup, CloseGroup, Control, Plain, Binary, Invalid };
+enum TokenType { OpenGroup, CloseGroup, Control, Plain, Binary, Invalid };
 
-    /**
-      RTF token
-      */
-    class RTFREADER_EXPORT Token {
-      public: /* TODO: convert to getters / setters */
-	void dump() const;
-	TokenType type;
-	QByteArray name;
-	bool hasParameter;
-	QString parameter;
-	QByteArray binaryData;
-    };
+/**
+  RTF token
+  */
+class RTFREADER_EXPORT Token
+{
+public: /* TODO: convert to getters / setters */
+    void dump() const;
+    TokenType type;
+    QByteArray name;
+    bool hasParameter;
+    QString parameter;
+    QByteArray binaryData;
+};
 }
 
 #endif

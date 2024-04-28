@@ -2,7 +2,7 @@
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include "LabF32ColorSpace.h"
 
@@ -22,10 +22,19 @@ LabF32ColorSpace::LabF32ColorSpace(const QString &name, KoColorProfile *p)
     QVector<KoChannelInfo::DoubleRange> uiRanges(icc_p->getFloatUIMinMax());
     Q_ASSERT(uiRanges.size() == 3);
 
-    addChannel(new KoChannelInfo(i18n("Lightness"), 0 * sizeof(float), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(100, 100, 100), uiRanges[0]));
-    addChannel(new KoChannelInfo(i18n("a*"),        1 * sizeof(float), 1, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(150, 150, 150), uiRanges[1]));
-    addChannel(new KoChannelInfo(i18n("b*"),        2 * sizeof(float), 2, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(200, 200, 200), uiRanges[2]));
-    addChannel(new KoChannelInfo(i18n("Alpha"),     3 * sizeof(float), 3, KoChannelInfo::ALPHA, KoChannelInfo::FLOAT32, sizeof(float)));
+    addChannel(new KoChannelInfo(i18n("Lightness"),
+                                 0 * sizeof(float),
+                                 0,
+                                 KoChannelInfo::COLOR,
+                                 KoChannelInfo::FLOAT32,
+                                 sizeof(float),
+                                 QColor(100, 100, 100),
+                                 uiRanges[0]));
+    addChannel(
+        new KoChannelInfo(i18n("a*"), 1 * sizeof(float), 1, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(150, 150, 150), uiRanges[1]));
+    addChannel(
+        new KoChannelInfo(i18n("b*"), 2 * sizeof(float), 2, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), QColor(200, 200, 200), uiRanges[2]));
+    addChannel(new KoChannelInfo(i18n("Alpha"), 3 * sizeof(float), 3, KoChannelInfo::ALPHA, KoChannelInfo::FLOAT32, sizeof(float)));
 
     init();
 
@@ -50,9 +59,9 @@ void LabF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 {
     const KoLabF32Traits::Pixel *p = reinterpret_cast<const KoLabF32Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("Lab");
-    labElt.setAttribute("L", KisDomUtils::toString(KoColorSpaceMaths< KoLabF32Traits::channels_type, qreal>::scaleToA(p->L)));
-    labElt.setAttribute("a", KisDomUtils::toString(KoColorSpaceMaths< KoLabF32Traits::channels_type, qreal>::scaleToA(p->a)));
-    labElt.setAttribute("b", KisDomUtils::toString(KoColorSpaceMaths< KoLabF32Traits::channels_type, qreal>::scaleToA(p->b)));
+    labElt.setAttribute("L", KisDomUtils::toString(KoColorSpaceMaths<KoLabF32Traits::channels_type, qreal>::scaleToA(p->L)));
+    labElt.setAttribute("a", KisDomUtils::toString(KoColorSpaceMaths<KoLabF32Traits::channels_type, qreal>::scaleToA(p->a)));
+    labElt.setAttribute("b", KisDomUtils::toString(KoColorSpaceMaths<KoLabF32Traits::channels_type, qreal>::scaleToA(p->b)));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
@@ -60,37 +69,37 @@ void LabF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 void LabF32ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     KoLabF32Traits::Pixel *p = reinterpret_cast<KoLabF32Traits::Pixel *>(pixel);
-    p->L = KoColorSpaceMaths< qreal, KoLabF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("L")));
-    p->a = KoColorSpaceMaths< qreal, KoLabF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("a")));
-    p->b = KoColorSpaceMaths< qreal, KoLabF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("b")));
+    p->L = KoColorSpaceMaths<qreal, KoLabF32Traits::channels_type>::scaleToA(KisDomUtils::toDouble(elt.attribute("L")));
+    p->a = KoColorSpaceMaths<qreal, KoLabF32Traits::channels_type>::scaleToA(KisDomUtils::toDouble(elt.attribute("a")));
+    p->b = KoColorSpaceMaths<qreal, KoLabF32Traits::channels_type>::scaleToA(KisDomUtils::toDouble(elt.attribute("b")));
     p->alpha = 1.0;
 }
 
 void LabF32ColorSpace::toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const
 {
-    LabToLCH(channelValues[0],channelValues[1],channelValues[2], luma, sat, hue);
+    LabToLCH(channelValues[0], channelValues[1], channelValues[2], luma, sat, hue);
 }
 
-QVector <double> LabF32ColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma) const
+QVector<double> LabF32ColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma) const
 {
-    QVector <double> channelValues(4);
-    LCHToLab(*luma, *sat, *hue, &channelValues[0],&channelValues[1],&channelValues[2]);
-    channelValues[3]=1.0;
+    QVector<double> channelValues(4);
+    LCHToLab(*luma, *sat, *hue, &channelValues[0], &channelValues[1], &channelValues[2]);
+    channelValues[3] = 1.0;
     return channelValues;
 }
 void LabF32ColorSpace::toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const
 {
-    *y =channelValues[0];
-    *u=channelValues[1];
-    *v=channelValues[2];
+    *y = channelValues[0];
+    *u = channelValues[1];
+    *v = channelValues[2];
 }
 
-QVector <double> LabF32ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
+QVector<double> LabF32ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
 {
-    QVector <double> channelValues(4);
-    channelValues[0]=*y;
-    channelValues[1]=*u;
-    channelValues[2]=*v;
-    channelValues[3]=1.0;
+    QVector<double> channelValues(4);
+    channelValues[0] = *y;
+    channelValues[1] = *u;
+    channelValues[2] = *v;
+    channelValues[3] = 1.0;
     return channelValues;
 }

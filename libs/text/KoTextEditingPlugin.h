@@ -6,9 +6,9 @@
 #ifndef KOTEXTEDITINGPLUGIN_H
 #define KOTEXTEDITINGPLUGIN_H
 
-#include <QObject>
-#include <QHash>
 #include "kotext_export.h"
+#include <QHash>
+#include <QObject>
 
 class QAction;
 class QTextDocument;
@@ -83,7 +83,11 @@ public:
      * @param cursorPosition the last altered position in the document.
      * @return New cursor postion
      */
-    virtual int characterInserted(QTextDocument *document, int cursorPosition) { Q_UNUSED(document) return cursorPosition; }
+    virtual int characterInserted(QTextDocument *document, int cursorPosition)
+    {
+        Q_UNUSED(document)
+        return cursorPosition;
+    }
 
     /// can be called when this plugin needs the current position of the textcursor
     virtual void setCurrentCursorPosition(QTextDocument *document, int cursorPosition);
@@ -91,7 +95,7 @@ public:
     /**
      * Retrieves the entire collection of actions for the plugin
      */
-    QHash<QString, QAction*> actions() const;
+    QHash<QString, QAction *> actions() const;
 
 Q_SIGNALS:
     /// emitted when a series of commands is started that together need to become 1 undo action.
@@ -135,7 +139,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

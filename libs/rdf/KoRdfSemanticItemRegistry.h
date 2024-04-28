@@ -39,7 +39,7 @@ class KoCanvasBase;
  * @see KoRdfSemanticItemFactoryBase
  * @see KoRdfSemanticItem
  */
-class KORDF_EXPORT KoRdfSemanticItemRegistry : public KoGenericRegistry<KoRdfSemanticItemFactoryBase*>
+class KORDF_EXPORT KoRdfSemanticItemRegistry : public KoGenericRegistry<KoRdfSemanticItemFactoryBase *>
 {
 public:
     ~KoRdfSemanticItemRegistry();
@@ -75,7 +75,8 @@ public:
      * Create a SemanticItem subclass from the passed mimeData.
      * TODO: support that mimedata could be used for different semantic item classes
      */
-    hKoRdfBasicSemanticItem createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent = 0) const;
+    hKoRdfBasicSemanticItem
+    createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent = 0) const;
 
     /**
      * Returns if a semantic item could be principally created from the passed mimeData.
@@ -83,21 +84,20 @@ public:
      */
     bool canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const;
 
-    void updateSemanticItems(
-        QList<hKoRdfBasicSemanticItem> &semanticItems,
-        const KoDocumentRdf *docRdf,
-        const QString &className,
-        QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0)) const;
+    void updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems,
+                             const KoDocumentRdf *docRdf,
+                             const QString &className,
+                             QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0)) const;
 
     bool isBasic(const QString &className);
 
 private:
     KoRdfSemanticItemRegistry();
-    KoRdfSemanticItemRegistry(const KoRdfSemanticItemRegistry&);
-    KoRdfSemanticItemRegistry operator=(const KoRdfSemanticItemRegistry&);
+    KoRdfSemanticItemRegistry(const KoRdfSemanticItemRegistry &);
+    KoRdfSemanticItemRegistry operator=(const KoRdfSemanticItemRegistry &);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

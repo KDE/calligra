@@ -12,15 +12,16 @@
 class PptxXmlCommentAuthorsReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
-    explicit PptxXmlCommentAuthorsReader(KoOdfWriters* writers);
+    explicit PptxXmlCommentAuthorsReader(KoOdfWriters *writers);
     ~PptxXmlCommentAuthorsReader() override;
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
 
     KoFilter::ConversionStatus read_cmAuthorLst();
     KoFilter::ConversionStatus read_cmAuthor();
+
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 class PptxXmlCommentAuthorsReaderContext : public MSOOXML::MsooXmlReaderContext

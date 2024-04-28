@@ -122,7 +122,7 @@ public:
      * Return the list of all shapes of this model
      * @return the list of all shapes
      */
-    virtual QList<KoShape*> shapes() const = 0;
+    virtual QList<KoShape *> shapes() const = 0;
 
     /**
      * This method is called as a notification that one of the properties of the

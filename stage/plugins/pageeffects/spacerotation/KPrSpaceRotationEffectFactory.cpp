@@ -9,14 +9,14 @@
 #include <KLazyLocalizedString>
 
 #include "KPrSpaceRotationFromBottomStrategy.h"
-#include "KPrSpaceRotationFromTopStrategy.h"
 #include "KPrSpaceRotationFromLeftStrategy.h"
 #include "KPrSpaceRotationFromRightStrategy.h"
+#include "KPrSpaceRotationFromTopStrategy.h"
 
 #define SpaceRotationEffectId "SpaceRotationEffect"
 
 KPrSpaceRotationEffectFactory::KPrSpaceRotationEffectFactory()
-: KPrPageEffectFactory(SpaceRotationEffectId, i18n("Space Rotation"))
+    : KPrPageEffectFactory(SpaceRotationEffectId, i18n("Space Rotation"))
 {
     addStrategy(new KPrSpaceRotationFromBottomStrategy());
     addStrategy(new KPrSpaceRotationFromTopStrategy());
@@ -28,12 +28,7 @@ KPrSpaceRotationEffectFactory::~KPrSpaceRotationEffectFactory()
 {
 }
 
-static const KLazyLocalizedString s_subTypes[] = {
-    kli18n("From Bottom"),
-    kli18n("From Top"),
-    kli18n("From Left"),
-    kli18n("From Right")
-};
+static const KLazyLocalizedString s_subTypes[] = {kli18n("From Bottom"), kli18n("From Top"), kli18n("From Left"), kli18n("From Right")};
 
 QString KPrSpaceRotationEffectFactory::subTypeName(int subType) const
 {

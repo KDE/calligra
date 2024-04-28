@@ -6,29 +6,29 @@
  */
 
 #include "gitplugin.h"
+#include "checkoutcreator.h"
 #include "gitcontroller.h"
 #include "gitlogmodel.h"
-#include "checkoutcreator.h"
 
-#include <QtQml/QtQml>
-#include <QQmlEngine>
-#include <QQmlContext>
 #include <QApplication>
+#include <QQmlContext>
+#include <QQmlEngine>
+#include <QtQml/QtQml>
 
-void GitPlugin::registerTypes(const char* uri)
+void GitPlugin::registerTypes(const char *uri)
 {
     Q_UNUSED(uri)
-    Q_ASSERT( uri == QLatin1String( "Calligra.Gemini.Git" ) );
+    Q_ASSERT(uri == QLatin1String("Calligra.Gemini.Git"));
     qmlRegisterType<GitController>("Calligra.Gemini.Git", 1, 0, "GitController");
     qmlRegisterType<GitLogModel>("Calligra.Gemini.Git", 1, 0, "GitLogModel");
 }
 
-void GitPlugin::initializeEngine(QQmlEngine* engine, const char* uri)
+void GitPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
     Q_UNUSED(uri)
-    Q_ASSERT( uri == QLatin1String( "Calligra.Gemini.Git" ) );
+    Q_ASSERT(uri == QLatin1String("Calligra.Gemini.Git"));
 
-    CheckoutCreator* ac = new CheckoutCreator(qApp);
+    CheckoutCreator *ac = new CheckoutCreator(qApp);
 
     QQmlContext *context = engine->rootContext();
     context->setContextProperty("GitCheckoutCreator", ac);

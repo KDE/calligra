@@ -4,7 +4,6 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-
 #ifndef KORGBU8COLORSPACETESTER_H
 #define KORGBU8COLORSPACETESTER_H
 
@@ -21,4 +20,3 @@ private Q_SLOTS:
 };
 
 #endif
-

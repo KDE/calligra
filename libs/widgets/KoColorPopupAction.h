@@ -25,17 +25,16 @@ class KOWIDGETS_EXPORT KoColorPopupAction : public QAction
 
 public:
     /**
-      * Constructs a KoColorPopupAction with the specified parent.
-      *
-      * @param parent The parent for this action.
-      */
+     * Constructs a KoColorPopupAction with the specified parent.
+     *
+     * @param parent The parent for this action.
+     */
     explicit KoColorPopupAction(QObject *parent = nullptr);
 
     /**
      * Destructor
      */
     ~KoColorPopupAction() override;
-
 
     /// Returns the current color
     QColor currentColor() const;
@@ -45,10 +44,10 @@ public:
 
 public Q_SLOTS:
     /// Sets a new color to be displayed
-    void setCurrentColor( const QColor &color );
+    void setCurrentColor(const QColor &color);
 
     /// Sets a new color to be displayed
-    void setCurrentColor( const KoColor &color );
+    void setCurrentColor(const KoColor &color);
 
     /// update the icon - only needed if you resize the iconsize in the widget that shows the action
     void updateIcon();
@@ -64,14 +63,13 @@ Q_SIGNALS:
 private Q_SLOTS:
     void emitColorChanged();
     void colorWasSelected(const KoColor &color, bool final);
-    void colorWasEdited( const KoColor &color );
-    void opacityWasChanged( int opacity );
+    void colorWasEdited(const KoColor &color);
+    void opacityWasChanged(int opacity);
     void slotTriggered(bool);
 
 private:
     class KoColorPopupActionPrivate;
-    KoColorPopupActionPrivate * const d;
+    KoColorPopupActionPrivate *const d;
 };
 
 #endif
-

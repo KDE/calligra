@@ -12,15 +12,17 @@
 
 #include <QQuickPaintedItem>
 
-namespace Calligra {
-namespace Components {
+namespace Calligra
+{
+namespace Components
+{
 
 class Document;
 
 /**
  * \brief The view provides a View object for viewing Documents.
  *
- * The View object provides a view on a document. 
+ * The View object provides a view on a document.
  */
 
 class View : public QQuickPaintedItem
@@ -35,7 +37,7 @@ class View : public QQuickPaintedItem
      * \set setDocument()
      * \notify documentChanged()
      */
-    Q_PROPERTY(Calligra::Components::Document* document READ document WRITE setDocument NOTIFY documentChanged)
+    Q_PROPERTY(Calligra::Components::Document *document READ document WRITE setDocument NOTIFY documentChanged)
     /**
      * \property zoom
      * \brief The zoom level the view renders the document at.
@@ -55,7 +57,7 @@ public:
      *
      * \param parent The parent item.
      */
-    explicit View(QQuickItem* parent = 0);
+    explicit View(QQuickItem *parent = 0);
     /**
      * Destructor.
      */
@@ -64,16 +66,16 @@ public:
     /**
      * Inherited from QQuickPaintedItem.
      */
-    void paint(QPainter* painter) override;
+    void paint(QPainter *painter) override;
 
     /**
      * Getter for property #document.
      */
-    Document* document() const;
+    Document *document() const;
     /**
      * Setter for property #document.
      */
-    void setDocument(Document* newValue);
+    void setDocument(Document *newValue);
 
     /**
      * Getter for property #zoom.
@@ -91,7 +93,7 @@ Q_SIGNALS:
      * \param url The URL of the link that was clicked. For internal links, the protocol
      * `document://` will be used.
      */
-    void linkClicked(const QUrl& url);
+    void linkClicked(const QUrl &url);
 
     /**
      * Notify signal for property #document.
@@ -106,16 +108,16 @@ protected:
     /**
      * Inherited from QQuickPaintedItem.
      */
-    void geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry) override;
+    void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 } // Namespace Components
 } // Namespace Calligra
 
-Q_DECLARE_METATYPE(Calligra::Components::View*)
+Q_DECLARE_METATYPE(Calligra::Components::View *)
 
 #endif // CALLIGRA_COMPONENTS_VIEW_H

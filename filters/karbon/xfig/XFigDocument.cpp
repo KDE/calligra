@@ -7,11 +7,9 @@
 
 #include "XFigDocument.h"
 
-
-void
-XFigBoxObject::setPoints(const QVector<XFigPoint>& points)
+void XFigBoxObject::setPoints(const QVector<XFigPoint> &points)
 {
-    if (points.count()!=5) {
+    if (points.count() != 5) {
         return;
     }
 
@@ -45,25 +43,39 @@ XFigBoxObject::setPoints(const QVector<XFigPoint>& points)
     m_Height = (maxY - minY + 1);
 }
 
-static void
-fillColorTable( QHash<int, QColor>& colorTable )
+static void fillColorTable(QHash<int, QColor> &colorTable)
 {
-    static const unsigned int colorValues[24] = {
-        // four shades of blue (dark to lighter)
-        0x000090, 0x0000b0, 0x0000d0, 0x87ceff,
-        // three shades of green (dark to lighter)
-        0x009000, 0x00b000, 0x00d000, 0x009090,
-        // three shades of cyan (dark to lighter)
-        0x00b0b0, 0x00d0d0, 0x900000, 0xb00000,
-        // three shades of red (dark to lighter)
-        0xd00000, 0x900090, 0xb000b0, 0xd000d0,
-        // three shades of magenta (dark to lighter)
-        0x803000, 0xa04000, 0xc06000, 0xff8080,
-        // three shades of brown (dark to lighter)
-        0xffa0a0, 0xffc0c0, 0xffe0e0,
-        // gold
-        0xffd700
-    };
+    static const unsigned int colorValues[24] = {// four shades of blue (dark to lighter)
+                                                 0x000090,
+                                                 0x0000b0,
+                                                 0x0000d0,
+                                                 0x87ceff,
+                                                 // three shades of green (dark to lighter)
+                                                 0x009000,
+                                                 0x00b000,
+                                                 0x00d000,
+                                                 0x009090,
+                                                 // three shades of cyan (dark to lighter)
+                                                 0x00b0b0,
+                                                 0x00d0d0,
+                                                 0x900000,
+                                                 0xb00000,
+                                                 // three shades of red (dark to lighter)
+                                                 0xd00000,
+                                                 0x900090,
+                                                 0xb000b0,
+                                                 0xd000d0,
+                                                 // three shades of magenta (dark to lighter)
+                                                 0x803000,
+                                                 0xa04000,
+                                                 0xc06000,
+                                                 0xff8080,
+                                                 // three shades of brown (dark to lighter)
+                                                 0xffa0a0,
+                                                 0xffc0c0,
+                                                 0xffe0e0,
+                                                 // gold
+                                                 0xffd700};
 
     colorTable.insert(0, QColor(Qt::black));
     colorTable.insert(1, QColor(Qt::blue));
@@ -75,24 +87,22 @@ fillColorTable( QHash<int, QColor>& colorTable )
     colorTable.insert(7, QColor(Qt::white));
 
     for (int i = 8; i < 32; i++)
-        colorTable.insert(i, QColor(colorValues[i-8]));
+        colorTable.insert(i, QColor(colorValues[i - 8]));
 }
-
 
 XFigDocument::XFigDocument()
-  : m_PageOrientation(XFigPageOrientationUnknown)
-  , m_CoordSystemOriginType(XFigCoordSystemOriginTypeUnknown)
-  , m_UnitType(XFigUnitTypeUnknown)
-  , m_PageSizeType(XFigPageSizeUnknown)
-  , m_Resolution(1200)
+    : m_PageOrientation(XFigPageOrientationUnknown)
+    , m_CoordSystemOriginType(XFigCoordSystemOriginTypeUnknown)
+    , m_UnitType(XFigUnitTypeUnknown)
+    , m_PageSizeType(XFigPageSizeUnknown)
+    , m_Resolution(1200)
 {
-    fillColorTable( m_ColorTable );
+    fillColorTable(m_ColorTable);
 }
 
-const QColor*
-XFigDocument::color(int id) const
+const QColor *XFigDocument::color(int id) const
 {
     QHash<int, QColor>::ConstIterator it = m_ColorTable.constFind(id);
 
-    return (it!=m_ColorTable.constEnd()) ? &it.value() : 0;
+    return (it != m_ColorTable.constEnd()) ? &it.value() : 0;
 }

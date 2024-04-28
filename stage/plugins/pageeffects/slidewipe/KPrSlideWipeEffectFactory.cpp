@@ -20,38 +20,36 @@
 #define SlideWipeEffectId "SlideWipeEffect"
 
 KPrSlideWipeEffectFactory::KPrSlideWipeEffectFactory()
-: KPrPageEffectFactory( SlideWipeEffectId, i18n( "Slide" ) )
+    : KPrPageEffectFactory(SlideWipeEffectId, i18n("Slide"))
 {
-    addStrategy( new KPrSlideWipeFromTopStrategy() );
-    addStrategy( new KPrSlideWipeFromBottomStrategy() );
-    addStrategy( new KPrSlideWipeFromLeftStrategy() );
-    addStrategy( new KPrSlideWipeFromRightStrategy() );
-    addStrategy( new KPrSlideWipeToTopStrategy() );
-    addStrategy( new KPrSlideWipeToBottomStrategy() );
-    addStrategy( new KPrSlideWipeToLeftStrategy() );
-    addStrategy( new KPrSlideWipeToRightStrategy() );
+    addStrategy(new KPrSlideWipeFromTopStrategy());
+    addStrategy(new KPrSlideWipeFromBottomStrategy());
+    addStrategy(new KPrSlideWipeFromLeftStrategy());
+    addStrategy(new KPrSlideWipeFromRightStrategy());
+    addStrategy(new KPrSlideWipeToTopStrategy());
+    addStrategy(new KPrSlideWipeToBottomStrategy());
+    addStrategy(new KPrSlideWipeToLeftStrategy());
+    addStrategy(new KPrSlideWipeToRightStrategy());
 }
 
 KPrSlideWipeEffectFactory::~KPrSlideWipeEffectFactory()
 {
 }
 
-static const KLazyLocalizedString s_subTypes[] = {
-    kli18n( "From Left" ),
-    kli18n( "From Right" ),
-    kli18n( "From Top" ),
-    kli18n( "From Bottom" ),
-    kli18n( "To Left" ),
-    kli18n( "To Right" ),
-    kli18n( "To Top" ),
-    kli18n( "To Bottom" )
-};
+static const KLazyLocalizedString s_subTypes[] = {kli18n("From Left"),
+                                                  kli18n("From Right"),
+                                                  kli18n("From Top"),
+                                                  kli18n("From Bottom"),
+                                                  kli18n("To Left"),
+                                                  kli18n("To Right"),
+                                                  kli18n("To Top"),
+                                                  kli18n("To Bottom")};
 
 QString KPrSlideWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return s_subTypes[subType].toString();
     } else {
-        return i18n( "Unknown subtype" );
+        return i18n("Unknown subtype");
     }
 }

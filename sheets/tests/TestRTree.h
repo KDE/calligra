@@ -8,7 +8,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class TestRTree: public QObject
+class TestRTree : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:

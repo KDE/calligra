@@ -11,40 +11,38 @@
 #include <QStandardItemModel>
 #include <QUrl>
 
-#include <KSharedConfig>
 #include <KConfigGroup>
 #include <KFileItem>
+#include <KSharedConfig>
 #include <kio/previewjob.h>
 
 #include <KoIcon.h>
 
-
 static const int MAX_RECENTFILES_ENTRIES = 10;
 
-
-enum KoRecentDocumentRoles {
-    PreviewRole = Qt::UserRole
-};
+enum KoRecentDocumentRoles { PreviewRole = Qt::UserRole };
 
 class KoFileListItem : public QStandardItem
 {
 public:
-    KoFileListItem(const QIcon &icon, const QString &text, const KFileItem& item)
-            : QStandardItem(icon, text)
-            , m_fileItem(item){
+    KoFileListItem(const QIcon &icon, const QString &text, const KFileItem &item)
+        : QStandardItem(icon, text)
+        , m_fileItem(item)
+    {
     }
 
-    ~KoFileListItem() override {
+    ~KoFileListItem() override
+    {
     }
 
-    const KFileItem &fileItem() const {
+    const KFileItem &fileItem() const
+    {
         return m_fileItem;
     }
 
 private:
     KFileItem m_fileItem;
 };
-
 
 class KoRecentDocumentsPanePrivate
 {
@@ -55,17 +53,16 @@ public:
 
     ~KoRecentDocumentsPanePrivate()
     {
-        foreach(KJob* job, m_previewJobs)
+        foreach (KJob *job, m_previewJobs)
             job->kill();
     }
 
-    QList<KJob*> m_previewJobs;
+    QList<KJob *> m_previewJobs;
 };
 
-
-KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const QString& header)
-        : KoDetailsPane(parent, header)
-        , d(new KoRecentDocumentsPanePrivate)
+KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget *parent, const QString &header)
+    : KoDetailsPane(parent, header)
+    , d(new KoRecentDocumentsPanePrivate)
 {
     setFocusProxy(m_documentList);
     m_openButton->setText(i18n("Open This Document"));
@@ -82,7 +79,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const QString& hea
     QUrl url;
     QString nameValue;
     KFileItemList fileList;
-    QStandardItem* rootItem = model()->invisibleRootItem();
+    QStandardItem *rootItem = model()->invisibleRootItem();
 
     for (int i = 1; i <= MAX_RECENTFILES_ENTRIES; ++i) {
         fileValue = config.readPathEntry(QString("File%1").arg(i), QString());
@@ -112,13 +109,12 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const QString& hea
         KFileItem fileItem(url);
         fileList.prepend(fileItem);
         const QIcon icon = QIcon::fromTheme(fileItem.iconName());
-        KoFileListItem* item = new KoFileListItem(icon, nameValue, fileItem);
+        KoFileListItem *item = new KoFileListItem(icon, nameValue, fileItem);
         item->setEditable(false);
         rootItem->insertRow(0, item);
     }
 
-
-    //Select the first file
+    // Select the first file
     QModelIndex firstIndex = model()->indexFromItem(model()->item(0));
     m_documentList->selectionModel()->select(firstIndex, QItemSelectionModel::Select);
     m_documentList->selectionModel()->setCurrentIndex(firstIndex, QItemSelectionModel::Select);
@@ -128,8 +124,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const QString& hea
 
     d->m_previewJobs.append(previewJob);
     connect(previewJob, &KJob::result, this, &KoRecentDocumentsPane::previewResult);
-    connect(previewJob, &KIO::PreviewJob::gotPreview,
-            this, &KoRecentDocumentsPane::updateIcon);
+    connect(previewJob, &KIO::PreviewJob::gotPreview, this, &KoRecentDocumentsPane::updateIcon);
 }
 
 KoRecentDocumentsPane::~KoRecentDocumentsPane()
@@ -137,10 +132,10 @@ KoRecentDocumentsPane::~KoRecentDocumentsPane()
     delete d;
 }
 
-void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
+void KoRecentDocumentsPane::selectionChanged(const QModelIndex &index)
 {
     if (index.isValid()) {
-        KoFileListItem* item = static_cast<KoFileListItem*>(model()->itemFromIndex(index));
+        KoFileListItem *item = static_cast<KoFileListItem *>(model()->itemFromIndex(index));
         const KFileItem fileItem = item->fileItem();
 
         m_openButton->setEnabled(true);
@@ -155,8 +150,7 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
 
             d->m_previewJobs.append(previewJob);
             connect(previewJob, &KJob::result, this, &KoRecentDocumentsPane::previewResult);
-            connect(previewJob, &KIO::PreviewJob::gotPreview,
-                    this, &KoRecentDocumentsPane::updatePreview);
+            connect(previewJob, &KIO::PreviewJob::gotPreview, this, &KoRecentDocumentsPane::updatePreview);
 
             // for now set preview to icon
             preview = item->icon().pixmap(PreviewExtent);
@@ -168,15 +162,14 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
 
         if (!fileItem.isNull()) {
             // TODO: think about not displaying Modified/Accessed if not available
-            QString details = QString("<center>%1<br>").arg(fileItem.url().toDisplayString(QUrl::PreferLocalFile)) +
-                "<table border=\"0\">" +
-                i18nc("File modification date and time. %1 is date time",
-                      "<tr><td><b>Modified:</b></td><td>%1</td></tr>",
-                      QString(fileItem.timeString(KFileItem::ModificationTime))) +
-                i18nc("File access date and time. %1 is date time",
-                      "<tr><td><b>Accessed:</b></td><td>%1</td></tr>",
-                      QString(fileItem.timeString(KFileItem::AccessTime))) +
-                "</table></center>";
+            QString details = QString("<center>%1<br>").arg(fileItem.url().toDisplayString(QUrl::PreferLocalFile)) + "<table border=\"0\">"
+                + i18nc("File modification date and time. %1 is date time",
+                        "<tr><td><b>Modified:</b></td><td>%1</td></tr>",
+                        QString(fileItem.timeString(KFileItem::ModificationTime)))
+                + i18nc("File access date and time. %1 is date time",
+                        "<tr><td><b>Accessed:</b></td><td>%1</td></tr>",
+                        QString(fileItem.timeString(KFileItem::AccessTime)))
+                + "</table></center>";
             m_detailsLabel->setHtml(details);
         } else {
             m_detailsLabel->clear();
@@ -194,14 +187,15 @@ void KoRecentDocumentsPane::openFile()
     KoDetailsPane::openFile();
 }
 
-void KoRecentDocumentsPane::openFile(const QModelIndex& index)
+void KoRecentDocumentsPane::openFile(const QModelIndex &index)
 {
-    if (!index.isValid()) return;
+    if (!index.isValid())
+        return;
 
     KConfigGroup cfgGrp(KSharedConfig::openConfig(), "TemplateChooserDialog");
     cfgGrp.writeEntry("LastReturnType", "File");
 
-    KoFileListItem* item = static_cast<KoFileListItem*>(model()->itemFromIndex(index));
+    KoFileListItem *item = static_cast<KoFileListItem *>(model()->itemFromIndex(index));
     KFileItem fileItem = item->fileItem();
 
     if (!fileItem.isNull()) {
@@ -209,21 +203,21 @@ void KoRecentDocumentsPane::openFile(const QModelIndex& index)
     }
 }
 
-void KoRecentDocumentsPane::previewResult(KJob* job)
+void KoRecentDocumentsPane::previewResult(KJob *job)
 {
     d->m_previewJobs.removeOne(job);
 }
 
-void KoRecentDocumentsPane::updatePreview(const KFileItem& fileItem, const QPixmap& preview)
+void KoRecentDocumentsPane::updatePreview(const KFileItem &fileItem, const QPixmap &preview)
 {
     if (preview.isNull()) {
         return;
     }
 
-    QStandardItem* rootItem = model()->invisibleRootItem();
+    QStandardItem *rootItem = model()->invisibleRootItem();
 
     for (int i = 0; i < rootItem->rowCount(); ++i) {
-        KoFileListItem* item = static_cast<KoFileListItem*>(rootItem->child(i));
+        KoFileListItem *item = static_cast<KoFileListItem *>(rootItem->child(i));
         if (item->fileItem().url() == fileItem.url()) {
             item->setData(preview, PreviewRole);
 
@@ -236,7 +230,7 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem& fileItem, const QPixm
     }
 }
 
-void KoRecentDocumentsPane::updateIcon(const KFileItem& fileItem, const QPixmap& pixmap)
+void KoRecentDocumentsPane::updateIcon(const KFileItem &fileItem, const QPixmap &pixmap)
 {
     if (pixmap.isNull()) {
         return;
@@ -245,7 +239,7 @@ void KoRecentDocumentsPane::updateIcon(const KFileItem& fileItem, const QPixmap&
     QStandardItem *rootItem = model()->invisibleRootItem();
 
     for (int i = 0; i < rootItem->rowCount(); ++i) {
-        KoFileListItem *item = static_cast<KoFileListItem*>(rootItem->child(i));
+        KoFileListItem *item = static_cast<KoFileListItem *>(rootItem->child(i));
         if (item->fileItem().url() == fileItem.url()) {
             // ensure squareness
             QImage icon = pixmap.toImage();

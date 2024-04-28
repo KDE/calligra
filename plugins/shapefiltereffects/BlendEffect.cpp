@@ -6,17 +6,17 @@
 
 #include "BlendEffect.h"
 #include "ColorChannelConversion.h"
-#include <KoFilterEffectRenderContext.h>
-#include <KoXmlWriter.h>
-#include <KoXmlReader.h>
 #include <KLocalizedString>
-#include <QRect>
+#include <KoFilterEffectRenderContext.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 #include <QImage>
+#include <QRect>
 #include <math.h>
 
 BlendEffect::BlendEffect()
-        : KoFilterEffect(BlendEffectId, i18n("Blend"))
-        , m_blendMode(Normal)
+    : KoFilterEffect(BlendEffectId, i18n("Blend"))
+    , m_blendMode(Normal)
 {
     setRequiredInputCount(2);
     setMaximalInputCount(2);
@@ -48,8 +48,8 @@ QImage BlendEffect::processImages(const QVector<QImage> &images, const KoFilterE
     if (images.count() != 2) {
         return result;
     }
-    const QRgb *src = (const QRgb*)images[1].constBits();
-    QRgb *dst = (QRgb*)result.bits();
+    const QRgb *src = (const QRgb *)images[1].constBits();
+    QRgb *dst = (QRgb *)result.bits();
     int w = result.width();
 
     qreal sa, sr, sg, sb;

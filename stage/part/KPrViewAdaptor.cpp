@@ -18,30 +18,30 @@
 */
 
 #include "KPrViewAdaptor.h"
-#include "KPrView.h"
-#include "KPrViewModePresentation.h"
 #include "KPrAnimationDirector.h"
 #include "KPrDocument.h"
 #include "KPrNotes.h"
 #include "KPrPage.h"
+#include "KPrView.h"
+#include "KPrViewModePresentation.h"
 #include <KoTextShapeData.h>
 
-#include <QUrl>
 #include <QTextDocument>
+#include <QUrl>
 
-KPrViewAdaptor::KPrViewAdaptor( KPrView* view )
-: KoViewAdaptor( view )
-, m_view( view )
+KPrViewAdaptor::KPrViewAdaptor(KPrView *view)
+    : KoViewAdaptor(view)
+    , m_view(view)
 {
     KPrDocument *doc = m_view->kprDocument();
-    connect( doc, &KPrDocument::activeCustomSlideShowChanged, this, &KPrViewAdaptor::activeCustomSlideShowChanged );
-    connect( doc, &KPrDocument::customSlideShowsModified, this, &KPrViewAdaptor::customSlideShowsModified );
+    connect(doc, &KPrDocument::activeCustomSlideShowChanged, this, &KPrViewAdaptor::activeCustomSlideShowChanged);
+    connect(doc, &KPrDocument::customSlideShowsModified, this, &KPrViewAdaptor::customSlideShowsModified);
 
     // We need to know when the presentation is started and stopped, and when it is navigated
-    connect( m_view->presentationMode(), &KPrViewModePresentation::activated, this, &KPrViewAdaptor::presentationActivated );
-    connect( m_view->presentationMode(), &KPrViewModePresentation::deactivated, this, &KPrViewAdaptor::presentationStopped );
-    connect( m_view->presentationMode(), &KPrViewModePresentation::pageChanged, this, &KPrViewAdaptor::presentationPageChanged );
-    connect( m_view->presentationMode(), &KPrViewModePresentation::stepChanged, this, &KPrViewAdaptor::presentationStepChanged );
+    connect(m_view->presentationMode(), &KPrViewModePresentation::activated, this, &KPrViewAdaptor::presentationActivated);
+    connect(m_view->presentationMode(), &KPrViewModePresentation::deactivated, this, &KPrViewAdaptor::presentationStopped);
+    connect(m_view->presentationMode(), &KPrViewModePresentation::pageChanged, this, &KPrViewAdaptor::presentationPageChanged);
+    connect(m_view->presentationMode(), &KPrViewModePresentation::stepChanged, this, &KPrViewAdaptor::presentationStepChanged);
 }
 
 KPrViewAdaptor::~KPrViewAdaptor()
@@ -62,15 +62,14 @@ QString KPrViewAdaptor::activeCustomSlideShow() const
     return doc->activeCustomSlideShow();
 }
 
-bool KPrViewAdaptor::setActiveCustomSlideShow( const QString &name )
+bool KPrViewAdaptor::setActiveCustomSlideShow(const QString &name)
 {
     // Check that the custom slideshow exists
-    if ( name.isEmpty() || customSlideShows().contains( name ) ) {
+    if (name.isEmpty() || customSlideShows().contains(name)) {
         KPrDocument *doc = m_view->kprDocument();
-        doc->setActiveCustomSlideShow( name );
+        doc->setActiveCustomSlideShow(name);
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -83,35 +82,34 @@ int KPrViewAdaptor::numCustomSlideShowSlides() const
     return doc->slideShow().size();
 }
 
-QString KPrViewAdaptor::pageName( int page ) const
+QString KPrViewAdaptor::pageName(int page) const
 {
     KPrDocument *doc = m_view->kprDocument();
 
     QList<KoPAPageBase *> slideShow = doc->slideShow();
-    if ( page >= 0 && page < slideShow.size() ) {
+    if (page >= 0 && page < slideShow.size()) {
         return slideShow[page]->name();
     }
     return QString();
 }
 
-QString KPrViewAdaptor::pageNotes( int page, const QString &format ) const
+QString KPrViewAdaptor::pageNotes(int page, const QString &format) const
 {
     KPrDocument *doc = m_view->kprDocument();
 
     QList<KoPAPageBase *> slideShow = doc->slideShow();
-    if ( page >= 0 && page < slideShow.size() ) {
-        KPrPage *prPage = dynamic_cast<KPrPage *>( slideShow[page] );
-        Q_ASSERT( 0 != prPage );
-        if ( 0 != prPage ) {
+    if (page >= 0 && page < slideShow.size()) {
+        KPrPage *prPage = dynamic_cast<KPrPage *>(slideShow[page]);
+        Q_ASSERT(0 != prPage);
+        if (0 != prPage) {
             KPrNotes *pageNotes = prPage->pageNotes();
             KoShape *textShape = pageNotes->textShape();
-            KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData *>( textShape->userData() );
-            Q_ASSERT( 0 != textShapeData );
-            if ( 0 != textShapeData ) {
-                if ( format == "plain" ) {
+            KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData *>(textShape->userData());
+            Q_ASSERT(0 != textShapeData);
+            if (0 != textShapeData) {
+                if (format == "plain") {
                     return textShapeData->document()->toPlainText();
-                }
-                else if ( format == "html" ) {
+                } else if (format == "html") {
                     return textShapeData->document()->toHtml();
                 }
             }
@@ -120,25 +118,24 @@ QString KPrViewAdaptor::pageNotes( int page, const QString &format ) const
     return QString();
 }
 
-bool KPrViewAdaptor::exportPageThumbnail( int page, int width, int height,
-                                          const QString &filename, const QString &format, int quality )
+bool KPrViewAdaptor::exportPageThumbnail(int page, int width, int height, const QString &filename, const QString &format, int quality)
 {
     KPrDocument *doc = m_view->kprDocument();
 
     QList<KoPAPageBase *> slideShow = doc->slideShow();
-    if ( page >= 0 && page < slideShow.size() ) {
+    if (page >= 0 && page < slideShow.size()) {
         KoPAPageBase *pageObject = slideShow[page];
-        Q_ASSERT( pageObject );
-        return m_view->exportPageThumbnail( pageObject, QUrl::fromLocalFile( filename ),
-                                            QSize( qMax( 0, width ), qMax( 0, height ) ),
-                                            format.isEmpty() ? QByteArray("PNG") : format.toUtf8(),
-                                            qBound( -1, quality, 100 ) );
-    }
-    else {
+        Q_ASSERT(pageObject);
+        return m_view->exportPageThumbnail(pageObject,
+                                           QUrl::fromLocalFile(filename),
+                                           QSize(qMax(0, width), qMax(0, height)),
+                                           format.isEmpty() ? QByteArray("PNG") : format.toUtf8(),
+                                           qBound(-1, quality, 100));
+    } else {
         return false;
     }
 }
-    
+
 // Presentation control
 
 void KPrViewAdaptor::presentationStart()
@@ -158,50 +155,50 @@ void KPrViewAdaptor::presentationStop()
 
 void KPrViewAdaptor::presentationPrev()
 {
-    if ( m_view->isPresentationRunning() ) {
-        m_view->presentationMode()->navigate( KPrAnimationDirector::PreviousStep );
+    if (m_view->isPresentationRunning()) {
+        m_view->presentationMode()->navigate(KPrAnimationDirector::PreviousStep);
     }
 }
 
 void KPrViewAdaptor::presentationNext()
 {
-    if ( m_view->isPresentationRunning() ) {
-        m_view->presentationMode()->navigate( KPrAnimationDirector::NextStep );
+    if (m_view->isPresentationRunning()) {
+        m_view->presentationMode()->navigate(KPrAnimationDirector::NextStep);
     }
 }
 
 void KPrViewAdaptor::presentationPrevSlide()
 {
-    if ( m_view->isPresentationRunning() ) {
-        m_view->presentationMode()->navigate( KPrAnimationDirector::PreviousPage );
+    if (m_view->isPresentationRunning()) {
+        m_view->presentationMode()->navigate(KPrAnimationDirector::PreviousPage);
     }
 }
 
 void KPrViewAdaptor::presentationNextSlide()
 {
-    if ( m_view->isPresentationRunning() ) {
-        m_view->presentationMode()->navigate( KPrAnimationDirector::NextPage );
+    if (m_view->isPresentationRunning()) {
+        m_view->presentationMode()->navigate(KPrAnimationDirector::NextPage);
     }
 }
 
 void KPrViewAdaptor::presentationFirst()
 {
-    if ( m_view->isPresentationRunning() ) {
-        m_view->presentationMode()->navigate( KPrAnimationDirector::FirstPage );
+    if (m_view->isPresentationRunning()) {
+        m_view->presentationMode()->navigate(KPrAnimationDirector::FirstPage);
     }
 }
 
 void KPrViewAdaptor::presentationLast()
 {
-    if ( m_view->isPresentationRunning() ) {
-        m_view->presentationMode()->navigate( KPrAnimationDirector::LastPage );
+    if (m_view->isPresentationRunning()) {
+        m_view->presentationMode()->navigate(KPrAnimationDirector::LastPage);
     }
 }
 
-void KPrViewAdaptor::gotoPresentationPage( int pg )
+void KPrViewAdaptor::gotoPresentationPage(int pg)
 {
-    if ( m_view->isPresentationRunning() ) {
-        m_view->presentationMode()->navigateToPage( pg );
+    if (m_view->isPresentationRunning()) {
+        m_view->presentationMode()->navigateToPage(pg);
     }
 }
 
@@ -214,40 +211,36 @@ bool KPrViewAdaptor::isPresentationRunning() const
 
 int KPrViewAdaptor::currentPresentationPage() const
 {
-    if ( m_view->isPresentationRunning() ) {
+    if (m_view->isPresentationRunning()) {
         return m_view->presentationMode()->currentPage();
-    }
-    else {
+    } else {
         return -1;
     }
 }
 
 int KPrViewAdaptor::currentPresentationStep() const
 {
-    if ( m_view->isPresentationRunning() ) {
+    if (m_view->isPresentationRunning()) {
         return m_view->presentationMode()->currentStep();
-    }
-    else {
+    } else {
         return -1;
     }
 }
 
 int KPrViewAdaptor::numStepsInPresentationPage() const
 {
-    if ( m_view->isPresentationRunning() ) {
+    if (m_view->isPresentationRunning()) {
         return m_view->presentationMode()->numStepsInPage();
-    }
-    else {
+    } else {
         return -1;
     }
 }
 
 int KPrViewAdaptor::numPresentationPages() const
 {
-    if ( m_view->isPresentationRunning() ) {
+    if (m_view->isPresentationRunning()) {
         return m_view->presentationMode()->numPages();
-    }
-    else {
+    } else {
         return -1;
     }
 }
@@ -257,6 +250,5 @@ int KPrViewAdaptor::numPresentationPages() const
  */
 void KPrViewAdaptor::presentationActivated()
 {
-    emit presentationStarted( numPresentationPages() );
+    emit presentationStarted(numPresentationPages());
 }
-

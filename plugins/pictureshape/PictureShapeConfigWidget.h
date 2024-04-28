@@ -42,7 +42,10 @@ class PictureShapeLoadWaiter : public QObject
 {
     Q_OBJECT
 public:
-    explicit PictureShapeLoadWaiter(PictureShape *shape) : m_pictureShape(shape) { }
+    explicit PictureShapeLoadWaiter(PictureShape *shape)
+        : m_pictureShape(shape)
+    {
+    }
 
 public Q_SLOTS:
     void setImageData(KJob *job);
@@ -51,4 +54,4 @@ private:
     PictureShape *m_pictureShape;
 };
 
-#endif //PICTURESHAPECONFIGWIDGET_H
+#endif // PICTURESHAPECONFIGWIDGET_H

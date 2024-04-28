@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2021 Pierre Ducroquet <pinaraf@pinaraf.info>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -8,22 +8,21 @@
 
 #include <KWDocumentStatistics.h>
 
-#include <KWPageManager.h>
-#include <KWDocument.h>
-#include <KWCanvas.h>
-#include <MockShapes.h>
-#include <KWPage.h>
 #include "frames/KWTextFrameSet.h"
+#include <KWCanvas.h>
+#include <KWDocument.h>
+#include <KWPage.h>
+#include <KWPageManager.h>
+#include <MockShapes.h>
 
 #include "MockPart.h"
 
-#include <QTextDocument>
-#include <QSignalSpy>
-#include <QThread>
 #include <QApplication>
+#include <QSignalSpy>
+#include <QTextDocument>
+#include <QThread>
 
 #include <QtTest>
-
 
 void TestTextStatistics::testTextStatistics()
 {
@@ -31,16 +30,18 @@ void TestTextStatistics::testTextStatistics()
     QSignalSpy spy(doc.statistics(), &KWDocumentStatistics::refreshed);
 
     doc.initEmpty();
-    doc.mainFrameSet()->document()->setHtml("<html><body><p>Test cases for Words statistics</p>"
-                "<p>This document can be used to check Words Dockers->Statistics function. It contains about 159 syllables, 108 words, and 14 sentences. The Flesch reading ease score is &quot;approximately 75.2&quot;. If you make changes to this document, please adjust the numbers above.</p>"
-                "<p>The U.S.A. is a big country, and this is just one sentence, despite the dots.</p>"
-                "<p>#</p>"
-                "<p>The headline gets counted as a sentence, too, even if it does not end with a dot.</p>"
-                "<p>This is exactly one sentence!!!! And this is another one?!?!?! This is finally the last one...</p>"
-                "<p>Floating point numbers: 6.025, 5.96 </p>"
-                "<p>One sentence. Another sentence.</p>"
-                "<p>Second column has a sentence, too.</p>"
-                "</body></html>");
+    doc.mainFrameSet()->document()->setHtml(
+        "<html><body><p>Test cases for Words statistics</p>"
+        "<p>This document can be used to check Words Dockers->Statistics function. It contains about 159 syllables, 108 words, and 14 sentences. The Flesch "
+        "reading ease score is &quot;approximately 75.2&quot;. If you make changes to this document, please adjust the numbers above.</p>"
+        "<p>The U.S.A. is a big country, and this is just one sentence, despite the dots.</p>"
+        "<p>#</p>"
+        "<p>The headline gets counted as a sentence, too, even if it does not end with a dot.</p>"
+        "<p>This is exactly one sentence!!!! And this is another one?!?!?! This is finally the last one...</p>"
+        "<p>Floating point numbers: 6.025, 5.96 </p>"
+        "<p>One sentence. Another sentence.</p>"
+        "<p>Second column has a sentence, too.</p>"
+        "</body></html>");
 
     qApp->processEvents();
     // There is a 2.5s timer before stats are refreshed
@@ -82,6 +83,5 @@ void TestTextStatistics::testListenBehaviour()
     QCOMPARE(spy.count(), 1);
     QCOMPARE(stats->lines(), 1);
 }
-
 
 QTEST_MAIN(TestTextStatistics)

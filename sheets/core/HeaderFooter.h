@@ -22,56 +22,80 @@ class Sheet;
 class CALLIGRA_SHEETS_CORE_EXPORT HeaderFooter
 {
 public:
-    explicit HeaderFooter(Sheet* sheet);
+    explicit HeaderFooter(Sheet *sheet);
     ~HeaderFooter();
 
-    QString headLeft(int _p, int _pages, const QString &_t)const {
-        if (m_headLeft.isNull()) return "";
+    QString headLeft(int _p, int _pages, const QString &_t) const
+    {
+        if (m_headLeft.isNull())
+            return "";
         return completeHeading(m_headLeft, _p, _pages, _t);
     }
-    QString headMid(int _p, int _pages, const QString &_t)const {
-        if (m_headMid.isNull()) return "";
+    QString headMid(int _p, int _pages, const QString &_t) const
+    {
+        if (m_headMid.isNull())
+            return "";
         return completeHeading(m_headMid, _p, _pages, _t);
     }
-    QString headRight(int _p, int _pages, const QString &_t)const {
-        if (m_headRight.isNull()) return "";
+    QString headRight(int _p, int _pages, const QString &_t) const
+    {
+        if (m_headRight.isNull())
+            return "";
         return completeHeading(m_headRight, _p, _pages, _t);
     }
-    QString footLeft(int _p, int _pages, const QString &_t)const {
-        if (m_footLeft.isNull()) return "";
+    QString footLeft(int _p, int _pages, const QString &_t) const
+    {
+        if (m_footLeft.isNull())
+            return "";
         return completeHeading(m_footLeft, _p, _pages, _t);
     }
-    QString footMid(int _p, int _pages, const QString &_t)const {
-        if (m_footMid.isNull()) return "";
+    QString footMid(int _p, int _pages, const QString &_t) const
+    {
+        if (m_footMid.isNull())
+            return "";
         return completeHeading(m_footMid, _p, _pages, _t);
     }
-    QString footRight(int _p, int _pages, const QString &_t)const {
-        if (m_footRight.isNull()) return "";
+    QString footRight(int _p, int _pages, const QString &_t) const
+    {
+        if (m_footRight.isNull())
+            return "";
         return completeHeading(m_footRight, _p, _pages, _t);
     }
 
-    QString headLeft()const {
-        if (m_headLeft.isNull()) return "";
+    QString headLeft() const
+    {
+        if (m_headLeft.isNull())
+            return "";
         return m_headLeft;
     }
-    QString headMid()const {
-        if (m_headMid.isNull()) return "";
+    QString headMid() const
+    {
+        if (m_headMid.isNull())
+            return "";
         return m_headMid;
     }
-    QString headRight()const {
-        if (m_headRight.isNull()) return "";
+    QString headRight() const
+    {
+        if (m_headRight.isNull())
+            return "";
         return m_headRight;
     }
-    QString footLeft()const {
-        if (m_footLeft.isNull()) return "";
+    QString footLeft() const
+    {
+        if (m_footLeft.isNull())
+            return "";
         return m_footLeft;
     }
-    QString footMid()const {
-        if (m_footMid.isNull()) return "";
+    QString footMid() const
+    {
+        if (m_footMid.isNull())
+            return "";
         return m_footMid;
     }
-    QString footRight()const {
-        if (m_footRight.isNull()) return "";
+    QString footRight() const
+    {
+        if (m_footRight.isNull())
+            return "";
         return m_footRight;
     }
 
@@ -96,8 +120,8 @@ public:
     /**
      * Sets the head and foot line of the print out
      */
-    void setHeadFootLine(const QString &_headl, const QString &_headm, const QString &_headr,
-                         const QString &_footl, const QString &_footm, const QString &_footr);
+    void
+    setHeadFootLine(const QString &_headl, const QString &_headm, const QString &_headr, const QString &_footl, const QString &_footm, const QString &_footr);
 
 private:
     /**
@@ -108,7 +132,7 @@ private:
      * @param _pageCount is the total page count.
      * @param _Sheet is the name of the Sheet for which we generate the headings.
      */
-    QString completeHeading(const QString &_data, int _page, int _pageCount, const QString &_sheet) const ;
+    QString completeHeading(const QString &_data, int _page, int _pageCount, const QString &_sheet) const;
 
     Sheet *m_pSheet;
 

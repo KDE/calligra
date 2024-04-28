@@ -10,15 +10,14 @@
 #include <KLocalizedString>
 
 // KoChart
-#include "DataSet.h"
 #include "Axis.h"
 #include "ChartDebug.h"
+#include "DataSet.h"
 
 using namespace KoChart;
 using namespace KChart;
 
-
-DatasetCommand::DatasetCommand(DataSet* dataSet, ChartShape* chart, int section, KUndo2Command *parent)
+DatasetCommand::DatasetCommand(DataSet *dataSet, ChartShape *chart, int section, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_dataSet(dataSet)
     , m_chart(chart)
@@ -58,17 +57,14 @@ void DatasetCommand::redo()
     m_oldType = m_dataSet->chartType();
     m_oldSubtype = m_dataSet->chartSubType();
 
-    if (m_oldShowCategory != m_newShowCategory ||
-        m_oldShowNumber != m_newShowNumber ||
-        m_oldShowPercent != m_newShowPercent ||
-        m_oldShowSymbol != m_newShowSymbol)
-    {
+    if (m_oldShowCategory != m_newShowCategory || m_oldShowNumber != m_newShowNumber || m_oldShowPercent != m_newShowPercent
+        || m_oldShowSymbol != m_newShowSymbol) {
         DataSet::ValueLabelType valueLabelType = m_dataSet->valueLabelType(m_section);
         valueLabelType.category = m_newShowCategory;
         valueLabelType.number = m_newShowNumber;
         valueLabelType.percentage = m_newShowPercent;
         valueLabelType.symbol = m_newShowSymbol;
-        debugChartUiDataSet<<"section:"<<m_section<<m_dataSet->valueLabelType(m_section)<<"->"<<valueLabelType;
+        debugChartUiDataSet << "section:" << m_section << m_dataSet->valueLabelType(m_section) << "->" << valueLabelType;
         m_dataSet->setValueLabelType(valueLabelType, m_section);
     }
     if (m_oldBrushColor != m_newBrushColor) {
@@ -98,17 +94,14 @@ void DatasetCommand::redo()
 
 void DatasetCommand::undo()
 {
-    if (m_oldShowCategory != m_newShowCategory ||
-        m_oldShowNumber != m_newShowNumber ||
-        m_oldShowPercent != m_newShowPercent ||
-        m_oldShowSymbol != m_newShowSymbol)
-    {
+    if (m_oldShowCategory != m_newShowCategory || m_oldShowNumber != m_newShowNumber || m_oldShowPercent != m_newShowPercent
+        || m_oldShowSymbol != m_newShowSymbol) {
         DataSet::ValueLabelType valueLabelType = m_dataSet->valueLabelType(m_section);
         valueLabelType.category = m_oldShowCategory;
         valueLabelType.number = m_oldShowNumber;
         valueLabelType.percentage = m_oldShowPercent;
         valueLabelType.symbol = m_oldShowSymbol;
-        debugChartUiDataSet<<"section:"<<m_section<<m_dataSet->valueLabelType(m_section)<<"->"<<valueLabelType;
+        debugChartUiDataSet << "section:" << m_section << m_dataSet->valueLabelType(m_section) << "->" << valueLabelType;
         m_dataSet->setValueLabelType(valueLabelType, m_section);
     }
     if (m_oldBrushColor != m_newBrushColor) {
@@ -138,7 +131,7 @@ void DatasetCommand::undo()
 
 void DatasetCommand::setDataSetChartType(ChartType type, ChartSubtype subtype)
 {
-    m_newType    = type;
+    m_newType = type;
     m_newSubtype = subtype;
 
     setText(kundo2_i18n("Set Dataset Chart Type"));

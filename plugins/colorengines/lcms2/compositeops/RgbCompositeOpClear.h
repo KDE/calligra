@@ -16,7 +16,6 @@ class RgbCompositeOpClear : public KoCompositeOp
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
 
 public:
-
     RgbCompositeOpClear(KoColorSpace *cs)
         : KoCompositeOp(cs, COMPOSITE_CLEAR, i18n("Clear"), "")
     {
@@ -24,10 +23,14 @@ public:
 
     using KoCompositeOp::composite;
 
-    void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                   const quint8 *srcRowStart, qint32 srcRowStride,
-                   const quint8 *maskRowStart, qint32 maskRowStride,
-                   qint32 rows, qint32 numColumns,
+    void composite(quint8 *dstRowStart,
+                   qint32 dstRowStride,
+                   const quint8 *srcRowStart,
+                   qint32 srcRowStride,
+                   const quint8 *maskRowStart,
+                   qint32 maskRowStride,
+                   qint32 rows,
+                   qint32 numColumns,
                    quint8 opacity,
                    const QBitArray &channelFlags) const override
     {
@@ -58,7 +61,6 @@ public:
             }
         }
     }
-
 };
 
 #endif

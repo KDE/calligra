@@ -11,8 +11,8 @@
 
 using namespace Calligra::Sheets;
 
-ChartDialog::ChartDialog(const QList<KoChart::ChartShape*> &charts, QWidget *parent)
-        : KPageDialog(parent)
+ChartDialog::ChartDialog(const QList<KoChart::ChartShape *> &charts, QWidget *parent)
+    : KPageDialog(parent)
 {
     Q_UNUSED(charts);
 }
@@ -22,9 +22,9 @@ ChartDialog::~ChartDialog()
 }
 
 // static
-QList<KoShapeConfigFactoryBase*> ChartDialog::panels(Map *map)
+QList<KoShapeConfigFactoryBase *> ChartDialog::panels(Map *map)
 {
-    QList<KoShapeConfigFactoryBase*> answer;
+    QList<KoShapeConfigFactoryBase *> answer;
     answer.append(new ChartDatabaseSelectorFactory(map));
     return answer;
 }

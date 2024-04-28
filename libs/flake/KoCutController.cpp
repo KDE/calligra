@@ -14,6 +14,7 @@ KoCutController::KoCutController(KoCanvasBase *canvas, QAction *cutAction)
     : KoCopyController(canvas, cutAction)
 {
     disconnect(cutAction, &QAction::triggered, this, nullptr); // countering the super
-    connect(cutAction, &QAction::triggered, this, [this] () { d->cut(); });
+    connect(cutAction, &QAction::triggered, this, [this]() {
+        d->cut();
+    });
 }
-

@@ -14,8 +14,8 @@ class KoShapeRubberSelectStrategyPrivate : public KoInteractionStrategyPrivate
 {
 public:
     explicit KoShapeRubberSelectStrategyPrivate(KoToolBase *owner)
-        : KoInteractionStrategyPrivate(owner),
-        snapGuide(new KoSnapGuide(owner->canvas()))
+        : KoInteractionStrategyPrivate(owner)
+        , snapGuide(new KoSnapGuide(owner->canvas()))
     {
     }
 
@@ -29,7 +29,8 @@ public:
      * The rectangle is normalized and immutable.
      * @return a rectangle in pt.
      */
-    QRectF selectedRect() const {
+    QRectF selectedRect() const
+    {
         return selectRect.normalized();
     }
 

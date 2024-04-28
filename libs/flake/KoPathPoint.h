@@ -44,9 +44,9 @@ public:
 
     /// the type for identifying part of a KoPathPoint
     enum PointType {
-        Node = 1,          ///< the node point
+        Node = 1, ///< the node point
         ControlPoint1 = 2, ///< the first control point
-        ControlPoint2 = 4,  ///< the second control point
+        ControlPoint2 = 4, ///< the second control point
         All = 7
     };
     Q_DECLARE_FLAGS(PointTypes, PointType)
@@ -71,10 +71,10 @@ public:
     /**
      * @brief Assignment operator.
      */
-    KoPathPoint& operator=(const KoPathPoint &other);
+    KoPathPoint &operator=(const KoPathPoint &other);
 
     /// Compare operator
-    bool operator == (const KoPathPoint &other) const;
+    bool operator==(const KoPathPoint &other) const;
 
     /**
      * @brief Destructor
@@ -205,7 +205,7 @@ public:
      * @brief Sets the parent path shape.
      * @param parent the new parent path shape
      */
-    void setParent(KoPathShape* parent);
+    void setParent(KoPathShape *parent);
 
     /**
      * @brief Get the path shape the point belongs to
@@ -250,9 +250,10 @@ public:
 
 protected:
     friend class KoPathShapePrivate;
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 //   /// a KoSubpath contains a path from a moveTo until a close or a new moveTo

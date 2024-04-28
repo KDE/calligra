@@ -32,10 +32,7 @@ class KoPASavingContext;
 class KPrPageLayout
 {
 public:
-    enum Type {
-        Page,
-        Handout
-    };
+    enum Type { Page, Handout };
 
     KPrPageLayout();
     ~KPrPageLayout();
@@ -45,16 +42,16 @@ public:
      *
      * @param
      * @param
-     * @return 
+     * @return
      */
-    bool loadOdf( const KoXmlElement &element, const QRectF & pageRect );
+    bool loadOdf(const KoXmlElement &element, const QRectF &pageRect);
 
     /**
      * save the page layout to odf
      *
      * @return the style name used for this page layout
      */
-    QString saveOdf( KoPASavingContext & context ) const;
+    QString saveOdf(KoPASavingContext &context) const;
 
     /**
      * Get the placeholders of the layout
@@ -76,14 +73,14 @@ public:
      *
      * The page layouts match if the placeholder are the same.
      */
-    bool operator<( const KPrPageLayout & other ) const;
+    bool operator<(const KPrPageLayout &other) const;
 
     /**
      * @brief Compare layout by content
      *
      * The content is the same when the order of the placeholder objects is the same
      */
-    static bool compareByContent( const KPrPageLayout & pl1, const KPrPageLayout & pl2 );
+    static bool compareByContent(const KPrPageLayout &pl1, const KPrPageLayout &pl2);
 
 private:
     // The display name of the layout

@@ -15,21 +15,21 @@ namespace Sheets
 {
 class Value;
 
-class TestOpenFormula: public QObject
+class TestOpenFormula : public QObject
 {
     Q_OBJECT
 
 private Q_SLOTS:
     void initTestCase();
     void testEvaluation();
-//    void testFormulaConversion();
+    //    void testFormulaConversion();
     void testReferenceLoading();
     void testReferenceSaving();
 
 private:
-    Value evaluate(const QString&, Value&);
-    QString convertToOpenFormula(const QString& expr);
-    QString convertFromOpenFormula(const QString& expr);
+    Value evaluate(const QString &, Value &);
+    QString convertToOpenFormula(const QString &expr);
+    QString convertFromOpenFormula(const QString &expr);
 };
 
 } // namespace Sheets

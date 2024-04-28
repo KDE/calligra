@@ -13,63 +13,61 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #include "RefinePathPlugin.h"
 #include "KarbonPathRefineCommand.h"
 
-#include <KoToolManager.h>
-#include <KoCanvasController.h>
 #include <KoCanvasBase.h>
-#include <KoShapeManager.h>
-#include <KoSelection.h>
-#include <KoPathShape.h>
-#include <KoParameterShape.h>
+#include <KoCanvasController.h>
 #include <KoIcon.h>
+#include <KoParameterShape.h>
+#include <KoPathShape.h>
+#include <KoSelection.h>
+#include <KoShapeManager.h>
+#include <KoToolManager.h>
 
-#include <KPluginFactory>
 #include <KActionCollection>
 #include <KLocalizedString>
+#include <KPluginFactory>
 
+#include <KConfigGroup>
+#include <QAction>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
 #include <QSpinBox>
 #include <QStandardPaths>
-#include <QAction>
-#include <QGroupBox>
-#include <QLabel>
-#include <QHBoxLayout>
-#include <KConfigGroup>
-#include <QDialogButtonBox>
-#include <QPushButton>
 #include <QVBoxLayout>
 
-K_PLUGIN_FACTORY_WITH_JSON(RefinePathPluginFactory, "karbon_refinepath.json",
-                           registerPlugin<RefinePathPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(RefinePathPluginFactory, "karbon_refinepath.json", registerPlugin<RefinePathPlugin>();)
 
 RefinePathPlugin::RefinePathPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "karbon/plugins/RefinePathPlugin.rc"), true);
-    QAction *actionRefinePath  = new QAction(koIcon("effect_refine"), i18n("&Refine Path..."), this);
+    QAction *actionRefinePath = new QAction(koIcon("effect_refine"), i18n("&Refine Path..."), this);
     actionCollection()->addAction("path_refine", actionRefinePath);
     connect(actionRefinePath, &QAction::triggered, this, &RefinePathPlugin::slotRefinePath);
 
-    m_RefinePathDlg = new RefinePathDlg(qobject_cast<QWidget*>(parent));
+    m_RefinePathDlg = new RefinePathDlg(qobject_cast<QWidget *>(parent));
 }
 
 void RefinePathPlugin::slotRefinePath()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape();
-    if (! shape)
+    KoShape *shape = selection->firstSelectedShape();
+    if (!shape)
         return;
 
     // check if we have a path based shape
-    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
-    if (! path)
+    KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
+    if (!path)
         return;
 
     // check if it is no parametric shape
-    KoParameterShape * ps = dynamic_cast<KoParameterShape*>(shape);
+    KoParameterShape *ps = dynamic_cast<KoParameterShape *>(shape);
     if (ps && ps->isParametricShape())
         return;
 
@@ -79,23 +77,23 @@ void RefinePathPlugin::slotRefinePath()
     canvasController->canvas()->addCommand(new KarbonPathRefineCommand(path, m_RefinePathDlg->knots()));
 }
 
-RefinePathDlg::RefinePathDlg(QWidget* parent, const char* name)
-        : QDialog(parent)
+RefinePathDlg::RefinePathDlg(QWidget *parent, const char *name)
+    : QDialog(parent)
 {
     setObjectName(name);
     setModal(true);
     setWindowTitle(i18n("Refine Path"));
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     QWidget *mainWidget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mainLayout->addWidget(mainWidget);
 
-    QGroupBox * group = new QGroupBox(this);
+    QGroupBox *group = new QGroupBox(this);
     group->setTitle(i18n("Properties"));
     mainLayout->addWidget(group);
 
-    QHBoxLayout * hbox = new QHBoxLayout(group);
+    QHBoxLayout *hbox = new QHBoxLayout(group);
     hbox->addWidget(new QLabel(i18n("Subdivisions:"), group));
 
     m_knots = new QSpinBox(group);
@@ -122,4 +120,3 @@ void RefinePathDlg::setKnots(uint value)
 }
 
 #include <RefinePathPlugin.moc>
-

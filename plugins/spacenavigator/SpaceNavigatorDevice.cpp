@@ -5,27 +5,26 @@
  */
 
 #include "SpaceNavigatorDevice.h"
-#include "SpaceNavigatorPollingThread.h"
-#include "SpaceNavigatorEvent.h"
 #include "SpaceNavigatorDebug.h"
+#include "SpaceNavigatorEvent.h"
+#include "SpaceNavigatorPollingThread.h"
 
-#include <KoToolManager.h>
 #include <KoCanvasController.h>
+#include <KoToolManager.h>
 
-#include <spnav.h>
 #include <math.h>
+#include <spnav.h>
 
 #define SpaceNavigatorDevice_ID "SpaceNavigator"
 
-SpaceNavigatorDevice::SpaceNavigatorDevice( QObject * parent )
-: KoInputDeviceHandler( parent, SpaceNavigatorDevice_ID ), m_thread( new SpaceNavigatorPollingThread( this ) )
+SpaceNavigatorDevice::SpaceNavigatorDevice(QObject *parent)
+    : KoInputDeviceHandler(parent, SpaceNavigatorDevice_ID)
+    , m_thread(new SpaceNavigatorPollingThread(this))
 {
-    qRegisterMetaType<Qt::MouseButtons>( "Qt::MouseButtons" );
-    qRegisterMetaType<Qt::MouseButton>( "Qt::MouseButton" );
-    connect( m_thread, &SpaceNavigatorPollingThread::moveEvent,
-            this, &SpaceNavigatorDevice::slotMoveEvent);
-    connect( m_thread, &SpaceNavigatorPollingThread::buttonEvent,
-            this, &SpaceNavigatorDevice::slotButtonEvent);
+    qRegisterMetaType<Qt::MouseButtons>("Qt::MouseButtons");
+    qRegisterMetaType<Qt::MouseButton>("Qt::MouseButton");
+    connect(m_thread, &SpaceNavigatorPollingThread::moveEvent, this, &SpaceNavigatorDevice::slotMoveEvent);
+    connect(m_thread, &SpaceNavigatorPollingThread::buttonEvent, this, &SpaceNavigatorDevice::slotButtonEvent);
 }
 
 SpaceNavigatorDevice::~SpaceNavigatorDevice()
@@ -34,7 +33,7 @@ SpaceNavigatorDevice::~SpaceNavigatorDevice()
 
 bool SpaceNavigatorDevice::start()
 {
-    if( m_thread->isRunning() )
+    if (m_thread->isRunning())
         return true;
 
     m_thread->start();
@@ -44,12 +43,12 @@ bool SpaceNavigatorDevice::start()
 
 bool SpaceNavigatorDevice::stop()
 {
-    if( ! m_thread->isRunning() )
+    if (!m_thread->isRunning())
         return true;
 
     m_thread->stop();
 
-    if( ! m_thread->wait( 500 ) )
+    if (!m_thread->wait(500))
         m_thread->terminate();
 
     spnav_close();
@@ -57,39 +56,35 @@ bool SpaceNavigatorDevice::stop()
     return true;
 }
 
-void SpaceNavigatorDevice::slotMoveEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons buttons )
+void SpaceNavigatorDevice::slotMoveEvent(int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons buttons)
 {
-    SpaceNavigatorEvent e( KoInputDeviceHandlerEvent::PositionChanged );
-    e.setPosition( x, y, z );
-    e.setRotation( rx, ry, rz );
-    e.setButton( Qt::NoButton );
-    e.setButtons( buttons );
-    KoToolManager::instance()->injectDeviceEvent( &e );
+    SpaceNavigatorEvent e(KoInputDeviceHandlerEvent::PositionChanged);
+    e.setPosition(x, y, z);
+    e.setRotation(rx, ry, rz);
+    e.setButton(Qt::NoButton);
+    e.setButtons(buttons);
+    KoToolManager::instance()->injectDeviceEvent(&e);
 
-    if( ! e.isAccepted() )
-    {
+    if (!e.isAccepted()) {
         // no tool wants the event, so do some standard actions
-        KoCanvasController * controller = KoToolManager::instance()->activeCanvasController();
+        KoCanvasController *controller = KoToolManager::instance()->activeCanvasController();
         // check if the z-movement is dominant
-        if( qAbs(z) > qAbs(x) && qAbs(z) > qAbs(y) )
-        {
+        if (qAbs(z) > qAbs(x) && qAbs(z) > qAbs(y)) {
             // zoom
-            controller->zoomBy( controller->preferredCenter().toPoint(), pow(1.01,-z/10) );
-        }
-        else
-        {
+            controller->zoomBy(controller->preferredCenter().toPoint(), pow(1.01, -z / 10));
+        } else {
             // pan
-            controller->pan( QPoint( -x, -y ) );
+            controller->pan(QPoint(-x, -y));
         }
     }
 }
 
-void SpaceNavigatorDevice::slotButtonEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons buttons, Qt::MouseButton button, int type )
+void SpaceNavigatorDevice::slotButtonEvent(int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons buttons, Qt::MouseButton button, int type)
 {
-    SpaceNavigatorEvent e( static_cast<KoInputDeviceHandlerEvent::Type>( type ) );
-    e.setPosition( x, y, z );
-    e.setRotation( rx, ry, rz );
-    e.setButton( button );
-    e.setButtons( buttons );
-    KoToolManager::instance()->injectDeviceEvent( &e );
+    SpaceNavigatorEvent e(static_cast<KoInputDeviceHandlerEvent::Type>(type));
+    e.setPosition(x, y, z);
+    e.setRotation(rx, ry, rz);
+    e.setButton(button);
+    e.setButtons(buttons);
+    KoToolManager::instance()->injectDeviceEvent(&e);
 }

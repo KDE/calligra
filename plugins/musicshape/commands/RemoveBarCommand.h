@@ -8,20 +8,22 @@
 
 #include <kundo2command.h>
 
-namespace MusicCore {
-    class Bar;
+namespace MusicCore
+{
+class Bar;
 }
 class MusicShape;
 
 class RemoveBarCommand : public KUndo2Command
 {
 public:
-    RemoveBarCommand(MusicShape* shape, int barIdx);
+    RemoveBarCommand(MusicShape *shape, int barIdx);
     void redo() override;
     void undo() override;
+
 private:
-    MusicShape* m_shape;
-    MusicCore::Bar* m_bar;
+    MusicShape *m_shape;
+    MusicCore::Bar *m_bar;
     int m_index;
 };
 

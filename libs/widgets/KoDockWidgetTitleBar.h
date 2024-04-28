@@ -13,7 +13,7 @@
  * @short A custom title bar for dock widgets.
  *
  * Allow customization such as collapsable, or hiding text.
- * 
+ *
  * @see KoDockWidgetTitleBarButton
  */
 class KOWIDGETS_EXPORT KoDockWidgetTitleBar : public QWidget
@@ -24,9 +24,9 @@ public:
     ~KoDockWidgetTitleBar() override;
 
     QSize minimumSizeHint() const override; ///< reimplemented from QWidget
-    QSize sizeHint() const override;  ///< reimplemented from QWidget
+    QSize sizeHint() const override; ///< reimplemented from QWidget
 
-    enum TextVisibilityMode {TextCanBeInvisible, FullTextAlwaysVisible};
+    enum TextVisibilityMode { TextCanBeInvisible, FullTextAlwaysVisible };
     /// Define whether the minimal width should ensure that the full text is visible.
     /// textVisibilityMode is FullTextAlwaysVisible by default
     void setTextVisibilityMode(TextVisibilityMode textVisibilityMode);
@@ -39,8 +39,8 @@ public Q_SLOTS:
     void setCollapsable(bool collapsable);
 
 protected:
-    void paintEvent(QPaintEvent* event) override; ///< reimplemented from QWidget
-    void resizeEvent(QResizeEvent* event) override; ///< reimplemented from QWidget
+    void paintEvent(QPaintEvent *event) override; ///< reimplemented from QWidget
+    void resizeEvent(QResizeEvent *event) override; ///< reimplemented from QWidget
 private:
     Q_PRIVATE_SLOT(d, void toggleFloating())
     Q_PRIVATE_SLOT(d, void toggleCollapsed())
@@ -48,7 +48,7 @@ private:
     Q_PRIVATE_SLOT(d, void featuresChanged(QDockWidget::DockWidgetFeatures))
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KODOCKWIDGETTITLEBAR_H_

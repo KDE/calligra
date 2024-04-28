@@ -12,21 +12,21 @@
 
 #include <KLocalizedString>
 
+#include "DummyDocumentLayout.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextLayoutRootArea.h"
-#include "DummyDocumentLayout.h"
 
 #include <KoParagraphStyle.h>
-#include <KoTextPage.h>
-#include <KoTextDocument.h>
-#include <KoTextBlockData.h>
 #include <KoStyleManager.h>
 #include <KoTableOfContentsGeneratorInfo.h>
+#include <KoTextBlockData.h>
+#include <KoTextDocument.h>
+#include <KoTextPage.h>
 
-#include <QTextDocument>
-#include <TextLayoutDebug.h>
 #include <KoBookmark.h>
 #include <KoTextRangeManager.h>
+#include <QTextDocument>
+#include <TextLayoutDebug.h>
 
 #include <algorithm>
 
@@ -59,7 +59,12 @@ void ToCGenerator::setBlock(const QTextBlock &block)
 
 QString ToCGenerator::fetchBookmarkRef(const QTextBlock &block, KoTextRangeManager *textRangeManager)
 {
-    QMultiHash<int, KoTextRange *> ranges = textRangeManager->textRangesChangingWithin(block.document(), {&KoBookmark::staticMetaObject}, block.position(), block.position() + block.length(), block.position(), block.position() + block.length());
+    QMultiHash<int, KoTextRange *> ranges = textRangeManager->textRangesChangingWithin(block.document(),
+                                                                                       {&KoBookmark::staticMetaObject},
+                                                                                       block.position(),
+                                                                                       block.position() + block.length(),
+                                                                                       block.position(),
+                                                                                       block.position() + block.length());
     foreach (KoTextRange *range, ranges) {
         KoBookmark *bookmark = dynamic_cast<KoBookmark *>(range);
         if (bookmark) {
@@ -69,8 +74,7 @@ QString ToCGenerator::fetchBookmarkRef(const QTextBlock &block, KoTextRangeManag
     return QString();
 }
 
-
-static QString removeWhitespacePrefix(const QString& text)
+static QString removeWhitespacePrefix(const QString &text)
 {
     int firstNonWhitespaceCharIndex = 0;
     const int length = text.length();
@@ -79,7 +83,6 @@ static QString removeWhitespacePrefix(const QString& text)
     }
     return text.right(length - firstNonWhitespaceCharIndex);
 }
-
 
 bool ToCGenerator::generate()
 {
@@ -162,7 +165,7 @@ bool ToCGenerator::generate()
     }
     cursor.endEditBlock();
 
-    m_documentLayout->documentChanged(m_block.position(),1,1);
+    m_documentLayout->documentChanged(m_block.position(), 1, 1);
     return m_success;
 }
 
@@ -171,7 +174,6 @@ static bool compareTab(const QVariant &tab1, const QVariant &tab2)
     return tab1.value<KoText::Tab>().position < tab2.value<KoText::Tab>().position;
 }
 
-
 void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlock &block, int &blockId)
 {
     KoStyleManager *styleManager = KoTextDocument(m_document).styleManager();
@@ -179,15 +181,14 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
     QString tocEntryText = block.text();
     tocEntryText.remove(QChar::ObjectReplacementCharacter);
     // some headings contain tabs, replace all occurrences with spaces
-    tocEntryText.replace('\t',' ').remove(QChar(0x200B));
+    tocEntryText.replace('\t', ' ').remove(QChar(0x200B));
     tocEntryText = removeWhitespacePrefix(tocEntryText);
 
     // Add only blocks with text
     if (!tocEntryText.isEmpty()) {
         KoParagraphStyle *tocTemplateStyle = 0;
 
-        if (outlineLevel >= 1 && (outlineLevel-1) < m_ToCInfo->m_entryTemplate.size()
-                    && outlineLevel <= m_ToCInfo->m_outlineLevel) {
+        if (outlineLevel >= 1 && (outlineLevel - 1) < m_ToCInfo->m_entryTemplate.size() && outlineLevel <= m_ToCInfo->m_outlineLevel) {
             // List's index starts with 0, outline level starts with 0
             const TocEntryTemplate *tocEntryTemplate = &m_ToCInfo->m_entryTemplate.at(outlineLevel - 1);
 
@@ -210,110 +211,110 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
             cursor.insertBlock(blockFormat, QTextCharFormat());
 
             QTextBlock tocEntryTextBlock = cursor.block();
-            tocTemplateStyle->applyStyle( tocEntryTextBlock );
+            tocTemplateStyle->applyStyle(tocEntryTextBlock);
 
             KoTextBlockData bd(block);
 
             // save the current style due to hyperlinks
             QTextCharFormat savedCharFormat = cursor.charFormat();
-            foreach (IndexEntry * entry, tocEntryTemplate->indexEntries) {
-                switch(entry->name) {
-                    case IndexEntry::LINK_START: {
-                        //IndexEntryLinkStart *linkStart = static_cast<IndexEntryLinkStart*>(entry);
+            foreach (IndexEntry *entry, tocEntryTemplate->indexEntries) {
+                switch (entry->name) {
+                case IndexEntry::LINK_START: {
+                    // IndexEntryLinkStart *linkStart = static_cast<IndexEntryLinkStart*>(entry);
 
-                        QString target = fetchBookmarkRef(block, m_documentLayout->textRangeManager());
+                    QString target = fetchBookmarkRef(block, m_documentLayout->textRangeManager());
 
-                        if (target.isNull()) {
-                            // generate unique name for the bookmark
-                            target = tocEntryText + "|outline" + QString::number(blockId);
-                            blockId++;
+                    if (target.isNull()) {
+                        // generate unique name for the bookmark
+                        target = tocEntryText + "|outline" + QString::number(blockId);
+                        blockId++;
 
-                            // insert new KoBookmark
-                            QTextCursor blockCursor(block);
-                            KoBookmark *bookmark = new KoBookmark(blockCursor);
-                            bookmark->setName(target);
-                            m_documentLayout->textRangeManager()->insert(bookmark);
-                        }
-
-                        if (!target.isNull()) {
-                            // copy it to alter subset of properties
-                            QTextCharFormat linkCf(savedCharFormat);
-                            linkCf.setAnchor(true);
-                            linkCf.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
-                            linkCf.setAnchorHref('#'+ target);
-
-                            QBrush foreground = linkCf.foreground();
-                            foreground.setColor(Qt::blue);
-
-                            linkCf.setForeground(foreground);
-                            linkCf.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
-                            linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
-                            cursor.setCharFormat(linkCf);
-                        }
-                        break;
+                        // insert new KoBookmark
+                        QTextCursor blockCursor(block);
+                        KoBookmark *bookmark = new KoBookmark(blockCursor);
+                        bookmark->setName(target);
+                        m_documentLayout->textRangeManager()->insert(bookmark);
                     }
-                    case IndexEntry::CHAPTER: {
-                        //IndexEntryChapter *chapter = static_cast<IndexEntryChapter*>(entry);
-                        cursor.insertText(bd.counterText());
-                        break;
-                    }
-                    case IndexEntry::SPAN: {
-                        IndexEntrySpan *span = static_cast<IndexEntrySpan*>(entry);
-                        cursor.insertText(span->text);
-                        break;
-                    }
-                    case IndexEntry::TEXT: {
-                        //IndexEntryText *text = static_cast<IndexEntryText*>(entry);
-                        cursor.insertText(tocEntryText);
-                        break;
-                    }
-                    case IndexEntry::TAB_STOP: {
-                        IndexEntryTabStop *tabEntry = static_cast<IndexEntryTabStop*>(entry);
 
-                        cursor.insertText("\t");
+                    if (!target.isNull()) {
+                        // copy it to alter subset of properties
+                        QTextCharFormat linkCf(savedCharFormat);
+                        linkCf.setAnchor(true);
+                        linkCf.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
+                        linkCf.setAnchorHref('#' + target);
 
-                        QTextBlockFormat blockFormat = cursor.blockFormat();
-                        QList<QVariant> tabList =            (blockFormat.property(KoParagraphStyle::TabPositions)).value<QList<QVariant> >();
+                        QBrush foreground = linkCf.foreground();
+                        foreground.setColor(Qt::blue);
 
-                        if (tabEntry->m_position.isEmpty()) {
-                            tabEntry->tab.position = KoTextLayoutArea::MaximumTabPos;
-                        } // else the position is already parsed into tab.position
-                        tabList.append(QVariant::fromValue<KoText::Tab>(tabEntry->tab));
-                        std::sort(tabList.begin(), tabList.end(), compareTab);
-                        blockFormat.setProperty(KoParagraphStyle::TabPositions, QVariant::fromValue<QList<QVariant> >(tabList));
-                        cursor.setBlockFormat(blockFormat);
-                        break;
+                        linkCf.setForeground(foreground);
+                        linkCf.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
+                        linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
+                        cursor.setCharFormat(linkCf);
                     }
-                    case IndexEntry::PAGE_NUMBER: {
-                        //IndexEntryPageNumber *pageNumber = static_cast<IndexEntryPageNumber*>(entry);
-                        cursor.insertText(resolvePageNumber(block));
-                        break;
-                    }
-                    case IndexEntry::LINK_END: {
-                        //IndexEntryLinkEnd *linkEnd = static_cast<IndexEntryLinkEnd*>(entry);
-                        cursor.setCharFormat(savedCharFormat);
-                        break;
-                    }
-                    default:{
-                        qDebug() << "New or unknown index entry";
-                        break;
-                    }
+                    break;
                 }
-            }// foreach
-            cursor.setCharFormat(savedCharFormat);   // restore the cursor char format
+                case IndexEntry::CHAPTER: {
+                    // IndexEntryChapter *chapter = static_cast<IndexEntryChapter*>(entry);
+                    cursor.insertText(bd.counterText());
+                    break;
+                }
+                case IndexEntry::SPAN: {
+                    IndexEntrySpan *span = static_cast<IndexEntrySpan *>(entry);
+                    cursor.insertText(span->text);
+                    break;
+                }
+                case IndexEntry::TEXT: {
+                    // IndexEntryText *text = static_cast<IndexEntryText*>(entry);
+                    cursor.insertText(tocEntryText);
+                    break;
+                }
+                case IndexEntry::TAB_STOP: {
+                    IndexEntryTabStop *tabEntry = static_cast<IndexEntryTabStop *>(entry);
+
+                    cursor.insertText("\t");
+
+                    QTextBlockFormat blockFormat = cursor.blockFormat();
+                    QList<QVariant> tabList = (blockFormat.property(KoParagraphStyle::TabPositions)).value<QList<QVariant>>();
+
+                    if (tabEntry->m_position.isEmpty()) {
+                        tabEntry->tab.position = KoTextLayoutArea::MaximumTabPos;
+                    } // else the position is already parsed into tab.position
+                    tabList.append(QVariant::fromValue<KoText::Tab>(tabEntry->tab));
+                    std::sort(tabList.begin(), tabList.end(), compareTab);
+                    blockFormat.setProperty(KoParagraphStyle::TabPositions, QVariant::fromValue<QList<QVariant>>(tabList));
+                    cursor.setBlockFormat(blockFormat);
+                    break;
+                }
+                case IndexEntry::PAGE_NUMBER: {
+                    // IndexEntryPageNumber *pageNumber = static_cast<IndexEntryPageNumber*>(entry);
+                    cursor.insertText(resolvePageNumber(block));
+                    break;
+                }
+                case IndexEntry::LINK_END: {
+                    // IndexEntryLinkEnd *linkEnd = static_cast<IndexEntryLinkEnd*>(entry);
+                    cursor.setCharFormat(savedCharFormat);
+                    break;
+                }
+                default: {
+                    qDebug() << "New or unknown index entry";
+                    break;
+                }
+                }
+            } // foreach
+            cursor.setCharFormat(savedCharFormat); // restore the cursor char format
         }
     }
 }
 
 QString ToCGenerator::resolvePageNumber(const QTextBlock &headingBlock)
 {
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(m_document->documentLayout());
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout *>(m_document->documentLayout());
     KoTextLayoutRootArea *rootArea = layout->rootAreaForPosition(headingBlock.position());
     if (rootArea) {
         if (rootArea->page()) {
             return QString::number(rootArea->page()->visiblePageNumber());
-        }
-    else qDebug()<<"had root but no page";
+        } else
+            qDebug() << "had root but no page";
     }
     m_success = false;
     return "###";

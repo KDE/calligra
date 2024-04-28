@@ -9,30 +9,27 @@
 
 #include "StencilBoxDebug.h"
 
-#include <KoShape.h>
 #include <KoDrag.h>
-#include <KoShapeOdfSaveHelper.h>
 #include <KoOdf.h>
-#include <KoShapeLoadingContext.h>
-#include <KoShapeBasedDocumentBase.h>
 #include <KoOdfLoadingContext.h>
-#include <KoStore.h>
 #include <KoOdfReadStore.h>
-#include <KoXmlNS.h>
-#include <KoShapeRegistry.h>
-#include <SvgParser.h>
 #include <KoProperties.h>
+#include <KoShape.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeOdfSaveHelper.h>
+#include <KoShapeRegistry.h>
+#include <KoStore.h>
+#include <KoXmlNS.h>
+#include <SvgParser.h>
 
-#include <QMimeData>
-#include <QIODevice>
 #include <KCompressionDevice>
+#include <QIODevice>
+#include <QMimeData>
 
-StencilShapeFactory::
-StencilShapeFactory(const QString& id,
-                    const QString& name,
-                    const KoProperties* props)
+StencilShapeFactory::StencilShapeFactory(const QString &id, const QString &name, const KoProperties *props)
     : KoShapeFactoryBase(id, name)
     , m_properties(props)
 {
@@ -41,18 +38,16 @@ StencilShapeFactory(const QString& id,
     setFamily("stencil");
 }
 
-StencilShapeFactory::
-~StencilShapeFactory()
+StencilShapeFactory::~StencilShapeFactory()
 {
     delete m_properties;
 }
 
-KoShape* StencilShapeFactory::
-createFromOdf(KoStore* store, KoDocumentResourceManager* documentRes) const
+KoShape *StencilShapeFactory::createFromOdf(KoStore *store, KoDocumentResourceManager *documentRes) const
 {
     KoOdfReadStore odfStore(store);
     QString errorMessage;
-    if (! odfStore.loadAndParse(errorMessage)) {
+    if (!odfStore.loadAndParse(errorMessage)) {
         errorStencilBox << "loading and parsing failed:" << errorMessage << Qt::endl;
         return 0;
     }
@@ -88,17 +83,16 @@ createFromOdf(KoStore* store, KoDocumentResourceManager* documentRes) const
     KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
     KoShapeLoadingContext context(loadingContext, documentRes);
 
-    KoShapeRegistry* registry = KoShapeRegistry::instance();
-    foreach (const QString & id, registry->keys()) {
-        KoShapeFactoryBase* shapeFactory = registry->value(id);
+    KoShapeRegistry *registry = KoShapeRegistry::instance();
+    foreach (const QString &id, registry->keys()) {
+        KoShapeFactoryBase *shapeFactory = registry->value(id);
         shapeFactory->newDocumentResourceManager(documentRes);
     }
 
     return KoShapeRegistry::instance()->createShapeFromOdf(shapeElement, context);
 }
 
-KoShape* StencilShapeFactory::
-createFromSvg(QIODevice* in, KoDocumentResourceManager* documentRes) const
+KoShape *StencilShapeFactory::createFromSvg(QIODevice *in, KoDocumentResourceManager *documentRes) const
 {
     if (!in->open(QIODevice::ReadOnly)) {
         debugStencilBox << "svg file open error";
@@ -113,14 +107,13 @@ createFromSvg(QIODevice* in, KoDocumentResourceManager* documentRes) const
 
     if (!parsed) {
         debugStencilBox << "Error while parsing file: "
-        << "at line " << line << " column: " << col
-        << " message: " << errormessage << Qt::endl;
+                        << "at line " << line << " column: " << col << " message: " << errormessage << Qt::endl;
         return 0;
     }
 
     SvgParser parser(documentRes);
     parser.setXmlBaseDir(id());
-    QList<KoShape*> shapes = parser.parseSvg(inputDoc.documentElement());
+    QList<KoShape *> shapes = parser.parseSvg(inputDoc.documentElement());
     if (shapes.isEmpty())
         return 0;
     if (shapes.count() == 1)
@@ -133,12 +126,11 @@ createFromSvg(QIODevice* in, KoDocumentResourceManager* documentRes) const
     return svgGroup;
 }
 
-KoShape* StencilShapeFactory::
-createDefaultShape(KoDocumentResourceManager* documentResources) const
+KoShape *StencilShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    KoShape* shape = 0;
-    KoStore* store = 0;
-    QIODevice* in = 0;
+    KoShape *shape = 0;
+    KoStore *store = 0;
+    QIODevice *in = 0;
     QString ext = id().mid(id().lastIndexOf('.')).toLower();
     if (ext == ".odg") {
         store = KoStore::createStore(id(), KoStore::Read);
@@ -167,8 +159,7 @@ createDefaultShape(KoDocumentResourceManager* documentResources) const
 }
 
 // StencilShapeFactory shouldn't participate element support detection
-bool StencilShapeFactory::
-supports(const KoXmlElement& e, KoShapeLoadingContext& context) const
+bool StencilShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(e);
     Q_UNUSED(context);

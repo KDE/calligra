@@ -10,26 +10,31 @@
 #define CALLIGRA_SHEETS_STYLE
 
 #include <QBrush>
-#include <QVariant>
 #include <QColor>
 #include <QPen>
 #include <QSharedDataPointer>
+#include <QVariant>
 
 #include "engine/SheetsDebug.h"
 
-#include "sheets_core_export.h"
-#include "engine/Format.h"
 #include "Currency.h"
+#include "engine/Format.h"
+#include "sheets_core_export.h"
 
-static inline size_t qHash(const QColor& color, size_t seed = 0)
-{ return qHash(uint(color.rgb()), seed); }
+static inline size_t qHash(const QColor &color, size_t seed = 0)
+{
+    return qHash(uint(color.rgb()), seed);
+}
 
-static inline size_t qHash(const QPen& pen, size_t seed = 0)
-{ return qHashMulti(seed, pen.color(), pen.style()); }
+static inline size_t qHash(const QPen &pen, size_t seed = 0)
+{
+    return qHashMulti(seed, pen.color(), pen.style());
+}
 
-static inline size_t qHash(const QBrush& brush, size_t seed = 0)
-{ return qHashMulti(seed, brush.color(), uint(brush.style())); }
-
+static inline size_t qHash(const QBrush &brush, size_t seed = 0)
+{
+    return qHashMulti(seed, brush.color(), uint(brush.style()));
+}
 
 class QFont;
 class QTextCharFormat;
@@ -47,9 +52,9 @@ class SubStyle;
 class ValueParser;
 
 // used for preloading OASIS auto styles
-typedef QMap<QString, Style>       Styles;
+typedef QMap<QString, Style> Styles;
 
-CALLIGRA_SHEETS_CORE_EXPORT size_t qHash(const Style& style, size_t seed = 0);
+CALLIGRA_SHEETS_CORE_EXPORT size_t qHash(const Style &style, size_t seed = 0);
 
 /**
  * \ingroup Style
@@ -58,44 +63,20 @@ CALLIGRA_SHEETS_CORE_EXPORT size_t qHash(const Style& style, size_t seed = 0);
 class CALLIGRA_SHEETS_CORE_EXPORT Style
 {
 public:
-    enum HAlign {
-        Left = 1,
-        Center = 2,
-        Right = 3,
-        Justified = 4,
-        HAlignUndefined = 0
-    };
+    enum HAlign { Left = 1, Center = 2, Right = 3, Justified = 4, HAlignUndefined = 0 };
 
-    enum VAlign {
-        Top = 1,
-        Middle = 2,
-        Bottom = 3,
-        VDistributed = 4,
-        VJustified = 5,
-        VAlignUndefined = 0
-    };
+    enum VAlign { Top = 1, Middle = 2, Bottom = 3, VDistributed = 4, VJustified = 5, VAlignUndefined = 0 };
 
-    enum FloatFormat {
-        DefaultFloatFormat = 0,
-        AlwaysSigned = 1,
-        AlwaysUnsigned = 2,
-        OnlyNegSigned = DefaultFloatFormat
-    };
+    enum FloatFormat { DefaultFloatFormat = 0, AlwaysSigned = 1, AlwaysUnsigned = 2, OnlyNegSigned = DefaultFloatFormat };
 
-    enum FloatColor {
-        DefaultFloatColor = 0,
-        NegRed = 1,
-        AllBlack = DefaultFloatColor,
-        NegBrackets = 3,
-        NegRedBrackets = 4
-    };
+    enum FloatColor { DefaultFloatColor = 0, NegRed = 1, AllBlack = DefaultFloatColor, NegBrackets = 3, NegRedBrackets = 4 };
 
     /// The style type
     enum StyleType {
-        BUILTIN,   ///< built-in style (the default style)
-        CUSTOM,    ///< custom style (defined in the StyleManager dialog)
-        AUTO,      ///< automatically generated on cell format changes
-        TENTATIVE  ///< @internal temporary state
+        BUILTIN, ///< built-in style (the default style)
+        CUSTOM, ///< custom style (defined in the StyleManager dialog)
+        AUTO, ///< automatically generated on cell format changes
+        TENTATIVE ///< @internal temporary state
     };
 
     enum Key {
@@ -148,7 +129,7 @@ public:
         FontItalic,
         FontStrike,
         FontUnderline,
-        //misc
+        // misc
         DontPrintText,
         NotProtected,
         HideAll,
@@ -156,133 +137,267 @@ public:
     };
 
     Style();
-    Style(const Style& style);
+    Style(const Style &style);
     virtual ~Style();
 
     virtual StyleType type() const;
 
     QString parentName() const;
-    void setParentName(const QString& name);
+    void setParentName(const QString &name);
 
     void clearAttribute(Key key);
     bool hasAttribute(Key key) const;
-
 
     uint bottomPenValue() const;
     uint rightPenValue() const;
     uint leftPenValue() const;
     uint topPenValue() const;
 
-    QColor  fontColor()       const;
-    QColor  backgroundColor() const;
-    QPen    rightBorderPen()  const;
-    QPen    bottomBorderPen() const;
-    QPen    leftBorderPen()   const;
-    QPen    topBorderPen()    const;
-    QPen    fallDiagonalPen() const;
-    QPen    goUpDiagonalPen() const;
-    QBrush  backgroundBrush() const;
-    QString customFormat()    const;
-    QString prefix()          const;
-    QString postfix()         const;
-    QString fontFamily()      const;
+    QColor fontColor() const;
+    QColor backgroundColor() const;
+    QPen rightBorderPen() const;
+    QPen bottomBorderPen() const;
+    QPen leftBorderPen() const;
+    QPen topBorderPen() const;
+    QPen fallDiagonalPen() const;
+    QPen goUpDiagonalPen() const;
+    QBrush backgroundBrush() const;
+    QString customFormat() const;
+    QString prefix() const;
+    QString postfix() const;
+    QString fontFamily() const;
 
-    HAlign      halign()      const;
-    VAlign      valign()      const;
+    HAlign halign() const;
+    VAlign valign() const;
     FloatFormat floatFormat() const;
-    FloatColor  floatColor()  const;
-    Format::Type  formatType()  const;
+    FloatColor floatColor() const;
+    Format::Type formatType() const;
 
     Currency currency() const;
 
-    QFont  font()         const;
+    QFont font() const;
 
-    bool bold() const { return getBoolValue(FontBold); }
-    bool italic() const { return getBoolValue(FontItalic); }
-    bool underline() const { return getBoolValue(FontUnderline); }
-    bool strikeOut() const { return getBoolValue(FontStrike); }
+    bool bold() const
+    {
+        return getBoolValue(FontBold);
+    }
+    bool italic() const
+    {
+        return getBoolValue(FontItalic);
+    }
+    bool underline() const
+    {
+        return getBoolValue(FontUnderline);
+    }
+    bool strikeOut() const
+    {
+        return getBoolValue(FontStrike);
+    }
 
-    uint   fontFlags()    const;
-    int    fontSize()     const;
-    int    precision()    const;
-    bool   thousandsSep() const { return getBoolValue(ThousandsSep); }
-    int    angle()        const;
-    double indentation()  const;
-    bool   shrinkToFit()  const { return getBoolValue(ShrinkToFit); }
-    bool   verticalText() const { return getBoolValue(VerticalText); }
-    bool   wrapText()     const { return getBoolValue(MultiRow); }
-    bool   printText()    const { return !getBoolValue(DontPrintText); }
-    bool   hideAll()      const { return getBoolValue(HideAll); }
-    bool   hideFormula()  const { return getBoolValue(HideFormula); }
-    bool   notProtected() const { return getBoolValue(NotProtected); }
+    uint fontFlags() const;
+    int fontSize() const;
+    int precision() const;
+    bool thousandsSep() const
+    {
+        return getBoolValue(ThousandsSep);
+    }
+    int angle() const;
+    double indentation() const;
+    bool shrinkToFit() const
+    {
+        return getBoolValue(ShrinkToFit);
+    }
+    bool verticalText() const
+    {
+        return getBoolValue(VerticalText);
+    }
+    bool wrapText() const
+    {
+        return getBoolValue(MultiRow);
+    }
+    bool printText() const
+    {
+        return !getBoolValue(DontPrintText);
+    }
+    bool hideAll() const
+    {
+        return getBoolValue(HideAll);
+    }
+    bool hideFormula() const
+    {
+        return getBoolValue(HideFormula);
+    }
+    bool notProtected() const
+    {
+        return getBoolValue(NotProtected);
+    }
 
-    bool   isDefault()    const;
-    bool   isEmpty()      const;
+    bool isDefault() const;
+    bool isEmpty() const;
 
     bool getBoolValue(Key key) const;
 
 public:
-    void setFont(QFont const & font);
-    void setFontFamily(QString const & fam);
-    void setCurrency(Currency const & currency);
+    void setFont(QFont const &font);
+    void setFontFamily(QString const &fam);
+    void setCurrency(Currency const &currency);
 
-    void setHAlign(HAlign align) { insertSubStyle(HorizontalAlignment, align); }
-    void setVAlign(VAlign align) { insertSubStyle(VerticalAlignment, align); }
-    void setFontBold(bool enable) { insertSubStyle(FontBold, enable); }
-    void setFontItalic(bool enable) { insertSubStyle(FontItalic, enable); }
-    void setFontUnderline(bool enable) { insertSubStyle(FontUnderline, enable); }
-    void setFontStrikeOut(bool enable) { insertSubStyle(FontStrike, enable); }
-    void setFontSize(int size) { insertSubStyle(FontSize, size); }
-    void setFontColor(QColor const & color) { insertSubStyle(FontColor, color); }
-    void setRightBorderPen(QPen const & pen) { insertSubStyle(RightPen, pen); }
-    void setBottomBorderPen(QPen const & pen) { insertSubStyle(BottomPen, pen); }
-    void setLeftBorderPen(QPen const & pen) { insertSubStyle(LeftPen, pen); }
-    void setTopBorderPen(QPen const & pen) { insertSubStyle(TopPen, pen); }
-    void setFallDiagonalPen(QPen const & pen) { insertSubStyle(FallDiagonalPen, pen); }
-    void setGoUpDiagonalPen(QPen const & pen) { insertSubStyle(GoUpDiagonalPen, pen); }
-    void setAngle(int angle) { insertSubStyle(Angle, angle); }
-    void setIndentation(double indent) { insertSubStyle(Indentation, indent); }
-    void setBackgroundBrush(QBrush const & brush) { insertSubStyle(BackgroundBrush, brush); }
-    void setFloatFormat(FloatFormat format) { insertSubStyle(FloatFormatKey, format); }
-    void setFloatColor(FloatColor color) { insertSubStyle(FloatColorKey, color); }
-    void setFormatType(Format::Type format) { insertSubStyle(FormatTypeKey, format); }
-    void setCustomFormat(QString const & strFormat) { insertSubStyle(CustomFormat, strFormat); }
-    void setPrecision(int precision) { insertSubStyle(Precision, precision); }
-    void setThousandsSep(bool thousandsSep) { insertSubStyle(ThousandsSep, thousandsSep); }
-    void setPrefix(QString const & prefix) { insertSubStyle(Prefix, prefix); }
-    void setPostfix(QString const & postfix) { insertSubStyle(Postfix, postfix); }
-    void setWrapText(bool enable) { insertSubStyle(MultiRow, enable); }
-    void setHideAll(bool enable) { insertSubStyle(HideAll, enable); }
-    void setHideFormula(bool enable) { insertSubStyle(HideFormula, enable); }
-    void setNotProtected(bool enable) { insertSubStyle(NotProtected, enable); }
-    void setDontPrintText(bool enable) { insertSubStyle(DontPrintText, enable); }
-    void setVerticalText(bool enable) { insertSubStyle(VerticalText, enable); }
-    void setShrinkToFit(bool enable) {  insertSubStyle(ShrinkToFit, enable); }
-    void setBackgroundColor(QColor const & color) { insertSubStyle(BackgroundColor, color); }
+    void setHAlign(HAlign align)
+    {
+        insertSubStyle(HorizontalAlignment, align);
+    }
+    void setVAlign(VAlign align)
+    {
+        insertSubStyle(VerticalAlignment, align);
+    }
+    void setFontBold(bool enable)
+    {
+        insertSubStyle(FontBold, enable);
+    }
+    void setFontItalic(bool enable)
+    {
+        insertSubStyle(FontItalic, enable);
+    }
+    void setFontUnderline(bool enable)
+    {
+        insertSubStyle(FontUnderline, enable);
+    }
+    void setFontStrikeOut(bool enable)
+    {
+        insertSubStyle(FontStrike, enable);
+    }
+    void setFontSize(int size)
+    {
+        insertSubStyle(FontSize, size);
+    }
+    void setFontColor(QColor const &color)
+    {
+        insertSubStyle(FontColor, color);
+    }
+    void setRightBorderPen(QPen const &pen)
+    {
+        insertSubStyle(RightPen, pen);
+    }
+    void setBottomBorderPen(QPen const &pen)
+    {
+        insertSubStyle(BottomPen, pen);
+    }
+    void setLeftBorderPen(QPen const &pen)
+    {
+        insertSubStyle(LeftPen, pen);
+    }
+    void setTopBorderPen(QPen const &pen)
+    {
+        insertSubStyle(TopPen, pen);
+    }
+    void setFallDiagonalPen(QPen const &pen)
+    {
+        insertSubStyle(FallDiagonalPen, pen);
+    }
+    void setGoUpDiagonalPen(QPen const &pen)
+    {
+        insertSubStyle(GoUpDiagonalPen, pen);
+    }
+    void setAngle(int angle)
+    {
+        insertSubStyle(Angle, angle);
+    }
+    void setIndentation(double indent)
+    {
+        insertSubStyle(Indentation, indent);
+    }
+    void setBackgroundBrush(QBrush const &brush)
+    {
+        insertSubStyle(BackgroundBrush, brush);
+    }
+    void setFloatFormat(FloatFormat format)
+    {
+        insertSubStyle(FloatFormatKey, format);
+    }
+    void setFloatColor(FloatColor color)
+    {
+        insertSubStyle(FloatColorKey, color);
+    }
+    void setFormatType(Format::Type format)
+    {
+        insertSubStyle(FormatTypeKey, format);
+    }
+    void setCustomFormat(QString const &strFormat)
+    {
+        insertSubStyle(CustomFormat, strFormat);
+    }
+    void setPrecision(int precision)
+    {
+        insertSubStyle(Precision, precision);
+    }
+    void setThousandsSep(bool thousandsSep)
+    {
+        insertSubStyle(ThousandsSep, thousandsSep);
+    }
+    void setPrefix(QString const &prefix)
+    {
+        insertSubStyle(Prefix, prefix);
+    }
+    void setPostfix(QString const &postfix)
+    {
+        insertSubStyle(Postfix, postfix);
+    }
+    void setWrapText(bool enable)
+    {
+        insertSubStyle(MultiRow, enable);
+    }
+    void setHideAll(bool enable)
+    {
+        insertSubStyle(HideAll, enable);
+    }
+    void setHideFormula(bool enable)
+    {
+        insertSubStyle(HideFormula, enable);
+    }
+    void setNotProtected(bool enable)
+    {
+        insertSubStyle(NotProtected, enable);
+    }
+    void setDontPrintText(bool enable)
+    {
+        insertSubStyle(DontPrintText, enable);
+    }
+    void setVerticalText(bool enable)
+    {
+        insertSubStyle(VerticalText, enable);
+    }
+    void setShrinkToFit(bool enable)
+    {
+        insertSubStyle(ShrinkToFit, enable);
+    }
+    void setBackgroundColor(QColor const &color)
+    {
+        insertSubStyle(BackgroundColor, color);
+    }
 
     void setDefault();
     void clear();
 
-    static bool compare(const SubStyle* one, const SubStyle* two);
-
+    static bool compare(const SubStyle *one, const SubStyle *two);
 
     /** Returns true if both styles have the same properties */
-    bool operator== (const Style& style) const;
-    inline bool operator!=(const Style& other) const {
+    bool operator==(const Style &style) const;
+    inline bool operator!=(const Style &other) const
+    {
         return !operator==(other);
     }
-    friend CALLIGRA_SHEETS_CORE_EXPORT size_t qHash(const Style& style, size_t seed);
-    void operator=(const Style& style);
-    Style operator-(const Style& style) const;
+    friend CALLIGRA_SHEETS_CORE_EXPORT size_t qHash(const Style &style, size_t seed);
+    void operator=(const Style &style);
+    Style operator-(const Style &style) const;
     /// Insert and replace substyles from style
-    void merge(const Style& style);
+    void merge(const Style &style);
 
     /**
      * The keys, that are contained in this style, but not in \p other and
      * the keys, that are contained in both but differ in value.
      * \return a set of keys, in which this style and \p other differ.
      */
-    QSet<Key> difference(const Style& other) const;
+    QSet<Key> difference(const Style &other) const;
 
     void dump() const;
     QString debugData() const;
@@ -295,13 +410,13 @@ public:
     /** Defined style elements - used when saving the style */
     virtual QSet<Style::Key> definedKeys(const StyleManager *) const;
 
-    virtual void insertSubStyle(Key key, const QVariant& value);
+    virtual void insertSubStyle(Key key, const QVariant &value);
 
 protected:
     QList<SharedSubStyle> subStyles() const;
 
-    SharedSubStyle createSubStyle(Key key, const QVariant& value);
-    void insertSubStyle(const SharedSubStyle& subStyle);
+    SharedSubStyle createSubStyle(Key key, const QVariant &value);
+    void insertSubStyle(const SharedSubStyle &subStyle);
     bool releaseSubStyle(Key key);
 
 private:
@@ -311,8 +426,6 @@ private:
     class Private;
     QSharedDataPointer<Private> d;
 };
-
-
 
 /**
  * \ingroup Style
@@ -327,21 +440,21 @@ public:
      * \param name The name of this style.
      * \param parent The style whose attributes are inherited - the parent style.
      */
-    explicit CustomStyle(const QString& name, CustomStyle* parent = 0);
-	CustomStyle(const CustomStyle& style);
+    explicit CustomStyle(const QString &name, CustomStyle *parent = 0);
+    CustomStyle(const CustomStyle &style);
     ~CustomStyle() override;
-    CustomStyle& operator=(const CustomStyle& other);
+    CustomStyle &operator=(const CustomStyle &other);
 
     StyleType type() const override;
     void setType(StyleType type);
 
-    void setName(QString const & name);
-    QString const & name() const;
+    void setName(QString const &name);
+    QString const &name() const;
 
-    //bool operator==(const CustomStyle& other) const;
-    //inline bool operator!=(const CustomStyle& other) const {
-    //    return !operator==(other);
-    //}
+    // bool operator==(const CustomStyle& other) const;
+    // inline bool operator!=(const CustomStyle& other) const {
+    //     return !operator==(other);
+    // }
 
     /**
      * @return the number of references to this style.
@@ -349,6 +462,7 @@ public:
     int usage() const;
 
     QSet<Style::Key> definedKeys(const StyleManager *) const override;
+
 private:
     friend class StyleManager;
 
@@ -362,7 +476,6 @@ private:
     QSharedDataPointer<Private> d;
 };
 
-
 /**
  * \ingroup Style
  * A single style attribute.
@@ -370,18 +483,31 @@ private:
 class CALLIGRA_SHEETS_CORE_TEST_EXPORT SubStyle : public QSharedData
 {
 public:
-    SubStyle() {}
-    virtual ~SubStyle() {}
-    virtual Style::Key type() const {
+    SubStyle()
+    {
+    }
+    virtual ~SubStyle()
+    {
+    }
+    virtual Style::Key type() const
+    {
         return Style::DefaultStyleKey;
     }
-    virtual void dump() const {
+    virtual void dump() const
+    {
         debugSheetsStyle << debugData();
     }
-    virtual QString debugData(bool withName = true) const {
-        QString out; if (withName) out = name(Style::DefaultStyleKey); return out;
+    virtual QString debugData(bool withName = true) const
+    {
+        QString out;
+        if (withName)
+            out = name(Style::DefaultStyleKey);
+        return out;
     }
-    virtual size_t koHash(size_t seed) const { return ::qHash(uint(type()), seed); }
+    virtual size_t koHash(size_t seed) const
+    {
+        return ::qHash(uint(type()), seed);
+    }
     static QString name(Style::Key key);
 };
 
@@ -393,21 +519,32 @@ public:
 class SharedSubStyle
 {
 public:
-    inline SharedSubStyle() : d(s_defaultStyle.d){}
-    inline SharedSubStyle(SubStyle* subStyle) : d(subStyle) {}
-    inline const SubStyle *operator->() const {
+    inline SharedSubStyle()
+        : d(s_defaultStyle.d)
+    {
+    }
+    inline SharedSubStyle(SubStyle *subStyle)
+        : d(subStyle)
+    {
+    }
+    inline const SubStyle *operator->() const
+    {
         return d.data();
     }
-    inline const SubStyle *data() const {
+    inline const SubStyle *data() const
+    {
         return d.data();
     }
-    inline bool operator<(const SharedSubStyle& o) const {
+    inline bool operator<(const SharedSubStyle &o) const
+    {
         return d.data() < o.d.data();
     }
-    inline bool operator==(const SharedSubStyle& o) const {
+    inline bool operator==(const SharedSubStyle &o) const
+    {
         return d.data() == o.d.data();
     }
-    inline bool operator!() const {
+    inline bool operator!() const
+    {
         return !d;
     }
 
@@ -419,17 +556,31 @@ private:
 class NamedStyle : public SubStyle
 {
 public:
-    NamedStyle(const QString& n) : SubStyle(), name(n) {}
-    Style::Key type() const override {
+    NamedStyle(const QString &n)
+        : SubStyle()
+        , name(n)
+    {
+    }
+    Style::Key type() const override
+    {
         return Style::NamedStyleKey;
     }
-    void dump() const override {
+    void dump() const override
+    {
         debugSheetsStyle << debugData();
     }
-    QString debugData(bool withName = true) const override {
-        QString out; if (withName) out = SubStyle::name(Style::NamedStyleKey) + ' '; out += name; return out;
+    QString debugData(bool withName = true) const override
+    {
+        QString out;
+        if (withName)
+            out = SubStyle::name(Style::NamedStyleKey) + ' ';
+        out += name;
+        return out;
     }
-    size_t koHash(size_t seed) const override { return qHashMulti(seed, uint(type()), name); }
+    size_t koHash(size_t seed) const override
+    {
+        return qHashMulti(seed, uint(type()), name);
+    }
     QString name;
 };
 
@@ -437,18 +588,35 @@ template<class Value1>
 class SubStyleOne : public SubStyle
 {
 public:
-    SubStyleOne(Style::Key type, const Value1& v = Value1()) : SubStyle(), value1(v), m_type(type) {}
-    Style::Key type() const override {
+    SubStyleOne(Style::Key type, const Value1 &v = Value1())
+        : SubStyle()
+        , value1(v)
+        , m_type(type)
+    {
+    }
+    Style::Key type() const override
+    {
         return m_type;
     }
-    void dump() const override {
+    void dump() const override
+    {
         debugSheetsStyle << debugData();
     }
-    QString debugData(bool withName = true) const override {
-        QString out; if (withName) out = name(m_type) + ' '; QDebug qdbg(&out); qdbg << value1; return out;
+    QString debugData(bool withName = true) const override
+    {
+        QString out;
+        if (withName)
+            out = name(m_type) + ' ';
+        QDebug qdbg(&out);
+        qdbg << value1;
+        return out;
     }
-    size_t koHash(size_t seed) const override { return ::qHashMulti(seed, uint(type()), value1); }
+    size_t koHash(size_t seed) const override
+    {
+        return ::qHashMulti(seed, uint(type()), value1);
+    }
     Value1 value1;
+
 private:
     Style::Key m_type;
 };
@@ -460,7 +628,7 @@ Q_DECLARE_TYPEINFO(Calligra::Sheets::Style, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(Calligra::Sheets::CustomStyle, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(Calligra::Sheets::SharedSubStyle, Q_MOVABLE_TYPE);
 
-CALLIGRA_SHEETS_CORE_TEST_EXPORT QDebug operator<<( QDebug dbg, const Calligra::Sheets::Style *style );
-CALLIGRA_SHEETS_CORE_TEST_EXPORT QDebug operator<<( QDebug dbg, const Calligra::Sheets::Style &style );
+CALLIGRA_SHEETS_CORE_TEST_EXPORT QDebug operator<<(QDebug dbg, const Calligra::Sheets::Style *style);
+CALLIGRA_SHEETS_CORE_TEST_EXPORT QDebug operator<<(QDebug dbg, const Calligra::Sheets::Style &style);
 
 #endif // CALLIGRA_SHEETS_STYLE

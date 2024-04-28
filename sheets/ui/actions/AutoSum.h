@@ -8,19 +8,18 @@
 #ifndef CALLIGRA_SHEETS_ACTION_AUTOSUM
 #define CALLIGRA_SHEETS_ACTION_AUTOSUM
 
-
 #include "CellAction.h"
 
 #include "ui/commands/AbstractRegionCommand.h"
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class AutoSum : public CellAction {
-Q_OBJECT
+class AutoSum : public CellAction
+{
+    Q_OBJECT
 public:
     AutoSum(Actions *actions);
     virtual ~AutoSum();
@@ -28,8 +27,6 @@ public:
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
-
-
 
 /**
  * \ingroup Commands
@@ -39,14 +36,17 @@ class AutoSumCommand : public AbstractRegionCommand
 {
 public:
     AutoSumCommand();
-    void setSelection(Selection *selection) { m_selection = selection; }
+    void setSelection(Selection *selection)
+    {
+        m_selection = selection;
+    }
+
 protected:
-    bool process(Element* element) override;
+    bool process(Element *element) override;
     Selection *m_selection;
 };
-
 
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_AUTOSUM
+#endif // CALLIGRA_SHEETS_ACTION_AUTOSUM

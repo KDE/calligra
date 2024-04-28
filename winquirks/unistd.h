@@ -2,22 +2,22 @@
 #define QUIRK_UNISTD_H
 #pragma message("winquirk: no unistd.h!")
 
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <windows.h>
 #include <direct.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <io.h>
+#include <process.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <process.h>
+#include <windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
 
-#include <windef.h>
-#include <winbase.h>
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <winbase.h>
+#include <windef.h>
 
 #define getpid _getpid
 #define popen _popen
@@ -32,7 +32,6 @@ static int gethostname(char *__name, size_t __len) {
 	return 0;
 }
 #endif
-
 
 #define environ _environ
 
@@ -60,21 +59,21 @@ static int gethostname(char *__name, size_t __len) {
 
 #define PATH_SEPARATOR '\\'
 
-#if defined(_MSC_VER)  &&  !defined(S_IREAD)
-#   define S_IFMT   _S_IFMT                     /* File type mask */
-#   define S_IFDIR  _S_IFDIR                    /* Directory */
-#   define S_IFCHR  _S_IFCHR                    /* Character device */
-#   define S_IFFIFO _S_IFFIFO                   /* Pipe */
-#   define S_IFREG  _S_IFREG                    /* Regular file */
-#   define S_IREAD  _S_IREAD                    /* Read permission */
-#   define S_IWRITE _S_IWRITE                   /* Write permission */
-#   define S_IEXEC  _S_IEXEC                    /* Execute permission */
+#if defined(_MSC_VER) && !defined(S_IREAD)
+#define S_IFMT _S_IFMT /* File type mask */
+#define S_IFDIR _S_IFDIR /* Directory */
+#define S_IFCHR _S_IFCHR /* Character device */
+#define S_IFFIFO _S_IFFIFO /* Pipe */
+#define S_IFREG _S_IFREG /* Regular file */
+#define S_IREAD _S_IREAD /* Read permission */
+#define S_IWRITE _S_IWRITE /* Write permission */
+#define S_IEXEC _S_IEXEC /* Execute permission */
 #endif
 
 #define S_IFFIFO 0
 #define S_IFLNK 0
-#define S_IFBLK   0
-#define S_IFSOCK  0
+#define S_IFBLK 0
+#define S_IFSOCK 0
 #define S_IXUSR 0
 #define S_IXGRP 0
 #define S_IXOTH 0
@@ -86,20 +85,19 @@ static int gethostname(char *__name, size_t __len) {
 #define S_ISFIFO(x) 0
 #define S_ISSOCK(x) 0
 #else
-#define	S_ISFIFO(mode) (((mode) & S_IFMT) == S_IFFIFO)
-#define	S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
-#define	S_ISREG(mode)  (((mode) & S_IFMT) == S_IFREG)
-#define	S_ISLNK(mode)  (((mode) & S_IFMT) == S_IFLNK)
-#define	S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
-#define	S_ISCHR(mode)  (((mode) & S_IFMT) == S_IFCHR)
-#define	S_ISBLK(mode)  (((mode) & S_IFMT) == S_IFBLK)
+#define S_ISFIFO(mode) (((mode) & S_IFMT) == S_IFFIFO)
+#define S_ISDIR(mode) (((mode) & S_IFMT) == S_IFDIR)
+#define S_ISREG(mode) (((mode) & S_IFMT) == S_IFREG)
+#define S_ISLNK(mode) (((mode) & S_IFMT) == S_IFLNK)
+#define S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
+#define S_ISCHR(mode) (((mode) & S_IFMT) == S_IFCHR)
+#define S_ISBLK(mode) (((mode) & S_IFMT) == S_IFBLK)
 #endif
 
-
-#define	F_OK	0
-#define	R_OK	4
-#define	W_OK	2
-#define	X_OK	1 
+#define F_OK 0
+#define R_OK 4
+#define W_OK 2
+#define X_OK 1
 
 #ifndef STDIN_FILENO
 #define STDIN_FILENO 0
@@ -114,7 +112,7 @@ static int gethostname(char *__name, size_t __len) {
 #endif
 
 #if _MSC_VER < 1600
-#define ENOTSUP       ENOSYS
+#define ENOTSUP ENOSYS
 #endif
 typedef unsigned int gid_t;
 typedef unsigned int uid_t;
@@ -128,38 +126,37 @@ typedef int mode_t;
 typedef int pid_t;
 #endif
 
+#define getgroups(x, y) 0
 
-#define getgroups(x,y) 0
-
-static uid_t geteuid() {
-	return -2;
+static uid_t geteuid()
+{
+    return -2;
 }
 
-static uid_t getuid() {
-	return -2;
+static uid_t getuid()
+{
+    return -2;
 }
 
 static int readlink(const char *__path, char *__buf, int __buflen)
 {
     if (!__path) {
-      errno = EINVAL;
-      return -1; 
-    }   
-    if ( (__buflen < 0) || ((int)strlen(__path)>(__buflen-1)) )
-    {   
-      errno = ENAMETOOLONG;
-      return -1; 
-    }   
+        errno = EINVAL;
+        return -1;
+    }
+    if ((__buflen < 0) || ((int)strlen(__path) > (__buflen - 1))) {
+        errno = ENAMETOOLONG;
+        return -1;
+    }
     if (access(__path, R_OK) == 0) {
-      /* ok, copy to buf */
-      strncpy(__buf,__path,__buflen);
-      errno = 0;
-      return 0;
-    }   
+        /* ok, copy to buf */
+        strncpy(__buf, __path, __buflen);
+        errno = 0;
+        return 0;
+    }
     errno = ENOENT;
-    return -1; 
+    return -1;
 }
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -168,14 +165,13 @@ extern "C" {
 int setenv(const char *name, const char *value, int overwrite);
 int unsetenv (const char *name);
 #endif
-
 }
-#endif  /* __cplusplus */
+#endif /* __cplusplus */
 
-
-static int sleep(unsigned int sec) {
-	Sleep(sec*1000);
-	return 0;
+static int sleep(unsigned int sec)
+{
+    Sleep(sec * 1000);
+    return 0;
 }
 
 #endif

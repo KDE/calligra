@@ -19,7 +19,7 @@ class QActionGroup;
 class KoInteractionStrategy;
 
 /// This is the tool for the artistic text shape.
-class ArtisticTextTool : public KoToolBase 
+class ArtisticTextTool : public KoToolBase
 {
     Q_OBJECT
 public:
@@ -27,25 +27,25 @@ public:
     ~ArtisticTextTool() override;
 
     /// reimplemented
-    void paint( QPainter &painter, const KoViewConverter &converter ) override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
     /// reimplemented
     void repaintDecorations() override;
     /// reimplemented
-    void mousePressEvent( KoPointerEvent *event ) override ;
+    void mousePressEvent(KoPointerEvent *event) override;
     /// reimplemented
-    void mouseMoveEvent( KoPointerEvent *event ) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented
-    void mouseReleaseEvent( KoPointerEvent *event ) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
     /// reimplemented
     void shortcutOverrideEvent(QKeyEvent *event) override;
     /// reimplemented
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
     /// reimplemented
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     /// reimplemented
     void deactivate() override;
     /// reimplemented
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
     /// reimplemented
     void keyPressEvent(QKeyEvent *event) override;
     /// reimplemented
@@ -68,9 +68,9 @@ public:
     int cursorFromMousePosition(const QPointF &mousePosition);
 
 protected:
-    void enableTextCursor( bool enable );
-    void removeFromTextCursor( int from, unsigned int count );
-    void addToTextCursor( const QString &str );
+    void enableTextCursor(bool enable);
+    void removeFromTextCursor(int from, unsigned int count);
+    void addToTextCursor(const QString &str);
 
 private Q_SLOTS:
     void detachPath();
@@ -81,7 +81,7 @@ private Q_SLOTS:
     void setStartOffset(int offset);
     void toggleFontBold(bool enabled);
     void toggleFontItalic(bool enabled);
-    void anchorChanged(QAction*);
+    void anchorChanged(QAction *);
     void setFontFamily(const QFont &font);
     void setFontSize(int size);
     void setSuperScript();
@@ -94,17 +94,12 @@ Q_SIGNALS:
 
 private:
     void updateActions();
-    void setTextCursorInternal( int textCursor );
+    void setTextCursorInternal(int textCursor);
     void createTextCursorShape();
     void updateTextCursorArea() const;
     void setCurrentShape(ArtisticTextShape *currentShape);
 
-    enum FontProperty {
-        BoldProperty,
-        ItalicProperty,
-        FamilyProperty,
-        SizeProperty
-    };
+    enum FontProperty { BoldProperty, ItalicProperty, FamilyProperty, SizeProperty };
 
     /// Changes the specified font property for the current text selection
     void changeFontProperty(FontProperty property, const QVariant &value);
@@ -119,19 +114,19 @@ private:
     QPainterPath offsetHandleShape();
 
     ArtisticTextToolSelection m_selection; ///< the tools selection
-    ArtisticTextShape * m_currentShape; ///< the current text shape we are working on
-    ArtisticTextShape * m_hoverText;    ///< the text shape the mouse cursor is hovering over
-    KoPathShape * m_hoverPath;          ///< the path shape the mouse cursor is hovering over
-    QPainterPath m_textCursorShape;     ///< our visual text cursor representation
+    ArtisticTextShape *m_currentShape; ///< the current text shape we are working on
+    ArtisticTextShape *m_hoverText; ///< the text shape the mouse cursor is hovering over
+    KoPathShape *m_hoverPath; ///< the path shape the mouse cursor is hovering over
+    QPainterPath m_textCursorShape; ///< our visual text cursor representation
     bool m_hoverHandle;
 
-    QAction * m_detachPath;
-    QAction * m_convertText;
-    QAction * m_fontBold;
-    QAction * m_fontItalic;
-    QAction * m_superScript;
-    QAction * m_subScript;
-    QActionGroup * m_anchorGroup;
+    QAction *m_detachPath;
+    QAction *m_convertText;
+    QAction *m_fontBold;
+    QAction *m_fontItalic;
+    QAction *m_superScript;
+    QAction *m_subScript;
+    QActionGroup *m_anchorGroup;
 
     int m_textCursor;
     QTimer m_blinkingCursor;

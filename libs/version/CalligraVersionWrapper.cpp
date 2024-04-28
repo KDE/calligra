@@ -5,8 +5,8 @@
  */
 #include <CalligraVersionWrapper.h>
 
-#include <calligraversion.h>
 #include <calligragitversion.h>
+#include <calligraversion.h>
 
 QString CalligraVersionWrapper::versionYear()
 {
@@ -26,4 +26,3 @@ QString CalligraVersionWrapper::versionString(bool checkGit)
     }
     return version;
 }
-

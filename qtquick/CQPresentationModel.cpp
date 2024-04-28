@@ -14,17 +14,23 @@
 class CQPresentationModel::Private
 {
 public:
-    Private() : canvas(0), document(0), thumbnailSize(64, 64) { }
+    Private()
+        : canvas(0)
+        , document(0)
+        , thumbnailSize(64, 64)
+    {
+    }
 
-    CQPresentationCanvas* canvas;
-    KPrDocument* document;
+    CQPresentationCanvas *canvas;
+    KPrDocument *document;
 
     QHash<int, QPixmap> thumbnails;
     QSizeF thumbnailSize;
 };
 
-CQPresentationModel::CQPresentationModel(QObject* parent)
-    : QAbstractListModel(parent), d(new Private)
+CQPresentationModel::CQPresentationModel(QObject *parent)
+    : QAbstractListModel(parent)
+    , d(new Private)
 {
     QHash<int, QByteArray> roles;
     roles.insert(ThumbnailRole, "thumbnail");
@@ -34,33 +40,32 @@ CQPresentationModel::CQPresentationModel(QObject* parent)
 CQPresentationModel::~CQPresentationModel()
 {
     delete d;
-
 }
 
-QVariant CQPresentationModel::data(const QModelIndex& index, int role) const
+QVariant CQPresentationModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() && d->document) {
         return QVariant();
     }
 
-    switch(role) {
-        case ThumbnailRole: {
-            if (d->thumbnails.contains(index.row())) {
-                QPixmap thumb = d->thumbnails.value(index.row());
+    switch (role) {
+    case ThumbnailRole: {
+        if (d->thumbnails.contains(index.row())) {
+            QPixmap thumb = d->thumbnails.value(index.row());
 
-                if (!thumb.isNull()) {
-                    return thumb;
-                }
-
-                d->thumbnails.remove(index.row());
+            if (!thumb.isNull()) {
+                return thumb;
             }
 
-            QPixmap pixmap = d->document->pageThumbnail(d->document->pageByIndex(index.row(), false), d->thumbnailSize.toSize());
-            d->thumbnails.insert(index.row(), pixmap);
-            return pixmap;
+            d->thumbnails.remove(index.row());
         }
-        default:
-            break;
+
+        QPixmap pixmap = d->document->pageThumbnail(d->document->pageByIndex(index.row(), false), d->thumbnailSize.toSize());
+        d->thumbnails.insert(index.row(), pixmap);
+        return pixmap;
+    }
+    default:
+        break;
     }
 
     return QVariant();
@@ -71,7 +76,7 @@ QPixmap CQPresentationModel::thumbnail(int index) const
     return data(this->index(index), ThumbnailRole).value<QPixmap>();
 }
 
-int CQPresentationModel::rowCount(const QModelIndex& parent) const
+int CQPresentationModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     if (d->document) {
@@ -81,7 +86,7 @@ int CQPresentationModel::rowCount(const QModelIndex& parent) const
     return 0;
 }
 
-QDeclarativeItem* CQPresentationModel::canvas() const
+QDeclarativeItem *CQPresentationModel::canvas() const
 {
     return d->canvas;
 }
@@ -91,22 +96,21 @@ QSizeF CQPresentationModel::thumbnailSize() const
     return d->thumbnailSize;
 }
 
-void CQPresentationModel::setCanvas(QDeclarativeItem* canvas)
+void CQPresentationModel::setCanvas(QDeclarativeItem *canvas)
 {
-    if (d->canvas != canvas && qobject_cast<CQPresentationCanvas*>(canvas))
-    {
-        d->canvas = qobject_cast<CQPresentationCanvas*>(canvas);
+    if (d->canvas != canvas && qobject_cast<CQPresentationCanvas *>(canvas)) {
+        d->canvas = qobject_cast<CQPresentationCanvas *>(canvas);
         connect(d->canvas, SIGNAL(sourceChanged()), SLOT(canvasSourceChanged()));
         canvasSourceChanged();
         emit canvasChanged();
     }
 }
 
-void CQPresentationModel::setThumbnailSize(const QSizeF& size)
+void CQPresentationModel::setThumbnailSize(const QSizeF &size)
 {
     if (size != d->thumbnailSize) {
         d->thumbnailSize = size;
-        d->thumbnails.clear(); //Size changed, so cache is invalid
+        d->thumbnails.clear(); // Size changed, so cache is invalid
 
         if (d->document) {
             emit dataChanged(index(0, 0), index(d->document->pageCount() - 1));

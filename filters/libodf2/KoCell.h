@@ -28,7 +28,7 @@ class KOODF2_EXPORT KoCell
     friend class KoTable;
 
     KoCell();
-    KoCell& operator=(KoCell&);
+    KoCell &operator=(KoCell &);
 
 public:
     ~KoCell();
@@ -48,8 +48,8 @@ public:
      * Sets the value as defined by element office:value of ODF.
      * \see ODF1.2 office:value §19.386.
      */
-    void setValue(KoCellValue* value);
-    KoCellValue* value() const;
+    void setValue(KoCellValue *value);
+    KoCellValue *value() const;
 
     /**
      * A class KoCellChild represents all the items that can be
@@ -60,18 +60,18 @@ public:
      * \note The order in which the elements are written to ODF
      * is the same in which they were inserted.
      */
-    void appendChild(KoCellChild* child);
+    void appendChild(KoCellChild *child);
 
     /**
      *  Deletes the old list of children in favor of this one.
      */
-    void setChildren(QList<KoCellChild*> children);
+    void setChildren(QList<KoCellChild *> children);
 
     /**
      * Returns all the children appended to the cell.
      * \note the cell is still the owner of those objects
      */
-    QList<KoCellChild*> children() const;
+    QList<KoCellChild *> children() const;
 
     /**
      * \brief Sets the row span of the cell.
@@ -127,10 +127,10 @@ public:
     bool isProtected() const;
 
 private:
-    void saveOdf(KoXmlWriter& writer, KoGenStyles& styles);
+    void saveOdf(KoXmlWriter &writer, KoGenStyles &styles);
 
-    QList<KoCellChild*> m_children;
-    KoCellValue* m_value;
+    QList<KoCellChild *> m_children;
+    KoCellValue *m_value;
     KoCellStyle::Ptr m_style;
 
     int m_rowSpan;

@@ -13,7 +13,8 @@
 // Base
 #include "../TestLoadingBase.h"
 
-namespace KoChart {
+namespace KoChart
+{
 
 class TestLoading : public TestLoadingBase
 {

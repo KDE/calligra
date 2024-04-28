@@ -9,7 +9,6 @@
 
 #include "kundo2_export.h"
 
-
 class KUNDO2_EXPORT KUndo2CommandExtraData
 {
 public:

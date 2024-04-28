@@ -8,8 +8,8 @@
 #define KOODFPASTE_H
 
 #include "KoOdf.h"
-#include "koodf_export.h"
 #include "KoXmlReaderForward.h"
+#include "koodf_export.h"
 
 class QMimeData;
 class QByteArray;

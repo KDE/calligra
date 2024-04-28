@@ -12,7 +12,8 @@
 #include <KoDialog.h>
 
 namespace Calligra;
-  namespace Sheets{
+namespace Sheets
+{
 
 class Selection;
 
@@ -21,7 +22,7 @@ class PivotSubTotals : public KoDialog
     Q_OBJECT
 
 public:
-    explicit PivotSubTotals(QWidget* parent,Selection* selection);
+    explicit PivotSubTotals(QWidget *parent, Selection *selection);
     ~PivotSubTotals();
 
 private:

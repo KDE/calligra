@@ -5,56 +5,48 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "OdfReader.h"
 
 // Qt
-#include <QStringList>
 #include <QBuffer>
+#include <QStringList>
 
 // KF5
 #include <KLocalizedString>
 
 // Calligra
-#include <KoStore.h>
-#include <KoXmlStreamReader.h>
-#include <KoXmlNS.h>
-#include <KoXmlWriter.h>  // For copyXmlElement
 #include <KoOdfReadStore.h>
+#include <KoStore.h>
+#include <KoXmlNS.h>
+#include <KoXmlStreamReader.h>
+#include <KoXmlWriter.h> // For copyXmlElement
 
 // Reader library
+#include "OdfDrawReader.h"
 #include "OdfReaderBackend.h"
 #include "OdfReaderContext.h"
-#include "OdfTextReader.h"
-#include "OdfDrawReader.h"
 #include "OdfReaderDebug.h"
-
+#include "OdfTextReader.h"
 
 static void prepareForOdfInternal(KoXmlStreamReader &reader);
 
-
 #if 0
 static int debugIndent = 0;
-#define DEBUGSTART() \
-    ++debugIndent; \
+#define DEBUGSTART()                                                                                                                                           \
+    ++debugIndent;                                                                                                                                             \
     DEBUG_READING("entering")
-#define DEBUGEND() \
-    DEBUG_READING("exiting"); \
+#define DEBUGEND()                                                                                                                                             \
+    DEBUG_READING("exiting");                                                                                                                                  \
     --debugIndent
-#define DEBUG_READING(param) \
-    debugOdfReader << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
-    << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
-    << reader.qualifiedName().toString()
+#define DEBUG_READING(param)                                                                                                                                   \
+    debugOdfReader << QString("%1").arg(" ", debugIndent * 2) << param << ": "                                                                                 \
+                   << (reader.isStartElement() ? "start" : (reader.isEndElement() ? "end" : "other")) << reader.qualifiedName().toString()
 #else
-#define DEBUGSTART() \
-    // NOTHING
-#define DEBUGEND() \
-    // NOTHING
-#define DEBUG_READING(param) \
-    // NOTHING
+#define DEBUGSTART() // NOTHING
+#define DEBUGEND() // NOTHING
+#define DEBUG_READING(param) // NOTHING
 #endif
-
 
 OdfReader::OdfReader()
     : m_backend(0)
@@ -67,7 +59,6 @@ OdfReader::OdfReader()
 OdfReader::~OdfReader()
 {
 }
-
 
 OdfTextReader *OdfReader::textReader() const
 {
@@ -131,7 +122,7 @@ bool OdfReader::readContent(OdfReaderBackend *backend, OdfReaderContext *context
     prepareForOdfInternal(reader);
 
     reader.setDevice(odfStore->device());
-    bool  foundContent = false;
+    bool foundContent = false;
     while (!reader.atEnd()) {
         reader.readNext();
 
@@ -153,24 +144,20 @@ bool OdfReader::readContent(OdfReaderBackend *backend, OdfReaderContext *context
     //          <office:scripts> 3.12.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "office:automatic-styles") {
             // We already have the styles in the context.  No need to read them again.
             reader.skipCurrentElement();
-        }
-        else if (tagName == "office:body") {
+        } else if (tagName == "office:body") {
             // This is the big one.
             readElementOfficeBody(reader);
-        }
-        else if (tagName == "office:font-face-decls") {
+        } else if (tagName == "office:font-face-decls") {
             // FIXME: Not yet implemented
             reader.skipCurrentElement();
-        }
-        else if (tagName == "office:scripts") {
+        } else if (tagName == "office:scripts") {
             // FIXME: Not yet implemented
             reader.skipCurrentElement();
-        }
-        else {
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -180,7 +167,6 @@ bool OdfReader::readContent(OdfReaderBackend *backend, OdfReaderContext *context
 
     return true;
 }
-
 
 #if 0
 // This is a template function for the reader library.
@@ -216,7 +202,6 @@ void OdfReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
 }
 #endif
 
-
 void OdfReader::readElementOfficeBody(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
@@ -234,17 +219,14 @@ void OdfReader::readElementOfficeBody(KoXmlStreamReader &reader)
     // Of those only <office:text> is present in a text document (odf).
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "office:text") {
             readElementOfficeText(reader);
-        }
-        else if (tagName == "office:spreadsheet") {
+        } else if (tagName == "office:spreadsheet") {
             readElementOfficeSpreadsheet(reader);
-        }
-        else if (tagName == "office:presentation") {
+        } else if (tagName == "office:presentation") {
             readElementOfficePresentation(reader);
-        }
-        else {
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -252,7 +234,6 @@ void OdfReader::readElementOfficeBody(KoXmlStreamReader &reader)
     m_backend->elementOfficeBody(reader, m_context);
     DEBUGEND();
 }
-
 
 // ----------------------------------------------------------------
 //
@@ -266,7 +247,7 @@ void OdfReader::readElementOfficeText(KoXmlStreamReader &reader)
     DEBUGSTART();
 
     errorOdfReader << "Unimplemented function";
-    reader.skipCurrentElement();  
+    reader.skipCurrentElement();
 
     DEBUGEND();
 }
@@ -276,7 +257,7 @@ void OdfReader::readElementOfficeSpreadsheet(KoXmlStreamReader &reader)
     DEBUGSTART();
 
     errorOdfReader << "Unimplemented function";
-    reader.skipCurrentElement();  
+    reader.skipCurrentElement();
 
     DEBUGEND();
 }
@@ -286,15 +267,13 @@ void OdfReader::readElementOfficePresentation(KoXmlStreamReader &reader)
     DEBUGSTART();
 
     errorOdfReader << "Unimplemented function";
-    reader.skipCurrentElement();  
+    reader.skipCurrentElement();
 
     DEBUGEND();
 }
 
-
 // ----------------------------------------------------------------
 //                             Other functions
-
 
 void OdfReader::readUnknownElement(KoXmlStreamReader &reader)
 {
@@ -310,8 +289,7 @@ void OdfReader::readUnknownElement(KoXmlStreamReader &reader)
         // start tag here.
         reader.readNext();
         readParagraphContents(reader);
-    }
-    else {
+    } else {
         while (reader.readNextStartElement()) {
             readTextLevelElement(reader);
         }
@@ -320,7 +298,6 @@ void OdfReader::readUnknownElement(KoXmlStreamReader &reader)
 
     DEBUGEND();
 }
-
 
 // FIXME: Remove this function when it is exported from libs/odf/KoXmlStreamReader.cpp
 //
@@ -364,20 +341,20 @@ static void prepareForOdfInternal(KoXmlStreamReader &reader)
 
     // This list of namespaces is taken from KoXmlReader::fixNamespace()
     // They were generated by old versions of OpenOffice.org.
-    reader.addExtraNamespace("office",    "http://openoffice.org/2000/office");
-    reader.addExtraNamespace("text",      "http://openoffice.org/2000/text");
-    reader.addExtraNamespace("style",     "http://openoffice.org/2000/style");
-    reader.addExtraNamespace("fo",        "http://www.w3.org/1999/XSL/Format");
-    reader.addExtraNamespace("table",     "http://openoffice.org/2000/table");
-    reader.addExtraNamespace("drawing",   "http://openoffice.org/2000/drawing");
+    reader.addExtraNamespace("office", "http://openoffice.org/2000/office");
+    reader.addExtraNamespace("text", "http://openoffice.org/2000/text");
+    reader.addExtraNamespace("style", "http://openoffice.org/2000/style");
+    reader.addExtraNamespace("fo", "http://www.w3.org/1999/XSL/Format");
+    reader.addExtraNamespace("table", "http://openoffice.org/2000/table");
+    reader.addExtraNamespace("drawing", "http://openoffice.org/2000/drawing");
     reader.addExtraNamespace("datastyle", "http://openoffice.org/2000/datastyle");
-    reader.addExtraNamespace("svg",       "http://www.w3.org/2000/svg");
-    reader.addExtraNamespace("chart",     "http://openoffice.org/2000/chart");
-    reader.addExtraNamespace("dr3d",      "http://openoffice.org/2000/dr3d");
-    reader.addExtraNamespace("form",      "http://openoffice.org/2000/form");
-    reader.addExtraNamespace("script",    "http://openoffice.org/2000/script");
-    reader.addExtraNamespace("meta",      "http://openoffice.org/2000/meta");
-    reader.addExtraNamespace("config",    "http://openoffice.org/2001/config");
-    reader.addExtraNamespace("pres",      "http://openoffice.org/2000/presentation");
-    reader.addExtraNamespace("manifest",  "http://openoffice.org/2001/manifest");
+    reader.addExtraNamespace("svg", "http://www.w3.org/2000/svg");
+    reader.addExtraNamespace("chart", "http://openoffice.org/2000/chart");
+    reader.addExtraNamespace("dr3d", "http://openoffice.org/2000/dr3d");
+    reader.addExtraNamespace("form", "http://openoffice.org/2000/form");
+    reader.addExtraNamespace("script", "http://openoffice.org/2000/script");
+    reader.addExtraNamespace("meta", "http://openoffice.org/2000/meta");
+    reader.addExtraNamespace("config", "http://openoffice.org/2001/config");
+    reader.addExtraNamespace("pres", "http://openoffice.org/2000/presentation");
+    reader.addExtraNamespace("manifest", "http://openoffice.org/2001/manifest");
 }

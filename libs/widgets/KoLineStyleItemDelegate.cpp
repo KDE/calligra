@@ -6,10 +6,10 @@
 
 #include "KoLineStyleItemDelegate_p.h"
 
-#include <QPen>
 #include <QPainter>
+#include <QPen>
 
-KoLineStyleItemDelegate::KoLineStyleItemDelegate(QObject * parent)
+KoLineStyleItemDelegate::KoLineStyleItemDelegate(QObject *parent)
     : QAbstractItemDelegate(parent)
 {
 }

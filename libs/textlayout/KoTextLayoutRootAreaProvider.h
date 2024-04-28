@@ -47,7 +47,8 @@ public:
      * @param requestedPosition the position of the new area in the text flow
      * @param isNewArea will contain a boolean to tell whether this is a new area or a recycled one
      */
-    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewArea) = 0;
+    virtual KoTextLayoutRootArea *
+    provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewArea) = 0;
 
     /// Release all root areas that are after the "afterThis" root area
     /// If afterThis == 0 all should be released

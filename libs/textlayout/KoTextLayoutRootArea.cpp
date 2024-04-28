@@ -9,8 +9,8 @@
 #include "FrameIterator.h"
 
 #include <KoShapeContainer.h>
-#include <KoTextShapeData.h>
 #include <KoTextPage.h>
+#include <KoTextShapeData.h>
 
 class Q_DECL_HIDDEN KoTextLayoutRootArea::Private
 {
@@ -29,16 +29,15 @@ public:
 };
 
 KoTextLayoutRootArea::KoTextLayoutRootArea(KoTextDocumentLayout *documentLayout)
-  : KoTextLayoutArea(0, documentLayout)
-  , d(new Private)
+    : KoTextLayoutArea(0, documentLayout)
+    , d(new Private)
 {
 }
 
 KoTextLayoutRootArea::~KoTextLayoutRootArea()
 {
-    if (d->shape)
-    {
-        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(d->shape->userData());
+    if (d->shape) {
+        KoTextShapeData *data = qobject_cast<KoTextShapeData *>(d->shape->userData());
         if (data)
             data->setRootArea(0);
     }
@@ -76,7 +75,7 @@ void KoTextLayoutRootArea::setPage(KoTextPage *textpage)
     d->textpage = textpage;
 }
 
-KoTextPage* KoTextLayoutRootArea::page() const
+KoTextPage *KoTextLayoutRootArea::page() const
 {
     if (d->textpage) {
         return d->textpage;
@@ -85,8 +84,8 @@ KoTextPage* KoTextLayoutRootArea::page() const
     // have a textshape-parent that has a valid KoTextPage. This handles the in Words valid
     // case that the associatedShape is nested in another shape.
     KoTextPage *p = 0;
-    for(KoShape *shape = associatedShape() ? associatedShape()->parent() : 0; shape; shape = shape->parent()) {
-        if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
+    for (KoShape *shape = associatedShape() ? associatedShape()->parent() : 0; shape; shape = shape->parent()) {
+        if (KoTextShapeData *data = qobject_cast<KoTextShapeData *>(shape->userData())) {
             if (KoTextLayoutRootArea *r = data->rootArea())
                 p = r->page();
             break;
@@ -110,7 +109,6 @@ FrameIterator *KoTextLayoutRootArea::nextStartOfArea() const
 {
     return d->nextStartOfArea;
 }
-
 
 KoText::Direction KoTextLayoutRootArea::parentTextDirection() const
 {

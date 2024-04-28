@@ -9,10 +9,8 @@
 #ifndef __SHEETBASE_H__
 #define __SHEETBASE_H__
 
-
-
-#include "sheets_engine_export.h"
 #include "Validity.h"
+#include "sheets_engine_export.h"
 
 #include <QString>
 
@@ -27,21 +25,20 @@ class ValidityStorage;
 class ValueStorage;
 class MapBase;
 
-
 class CALLIGRA_SHEETS_ENGINE_EXPORT SheetBase
 {
 public:
-    enum ChangeRef       { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
+    enum ChangeRef { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
     /**
      * Creates a sheet in \p map with the name \p sheetName.
      */
-    SheetBase(MapBase* map, const QString& sheetName);
+    SheetBase(MapBase *map, const QString &sheetName);
 
     /**
      * Copy constructor.
      * Creates a sheet with the contents and the settings of \p other.
      */
-    SheetBase(const SheetBase& other);
+    SheetBase(const SheetBase &other);
 
     virtual ~SheetBase();
 
@@ -49,13 +46,12 @@ public:
      * \ingroup Storage
      * \return the cell storage
      */
-    CellBaseStorage* cellStorage() const;
+    CellBaseStorage *cellStorage() const;
 
     /**
      * \return the map this sheet belongs to.
      */
-    MapBase* map() const;
-
+    MapBase *map() const;
 
     /**
      * \return the name of this sheet
@@ -74,25 +70,21 @@ public:
      *
      * @see sheetName
      */
-    virtual bool setSheetName(const QString& name);
-
-
+    virtual bool setSheetName(const QString &name);
 
     bool isAutoCalculationEnabled() const;
     void setAutoCalculationEnabled(bool enable);
     bool getFirstLetterUpper() const;
     void setFirstLetterUpper(bool _firstUpper);
 
-
-
-    const FormulaStorage* formulaStorage() const;
-    const ValidityStorage* validityStorage() const;
-    const ValueStorage* valueStorage() const;
+    const FormulaStorage *formulaStorage() const;
+    const ValidityStorage *validityStorage() const;
+    const ValueStorage *valueStorage() const;
 
     /**
      * @return true if this sheet is hidden
      */
-    bool isHidden()const;
+    bool isHidden() const;
 
     /**
      * Hides or shows this sheets
@@ -114,16 +106,16 @@ public:
      * @param ref see ChangeRef
      * @param changedSheet the affected sheet
      */
-    void changeNameCellRef(const QRect& rect, ChangeRef ref, SheetBase *changedSheet);
+    void changeNameCellRef(const QRect &rect, ChangeRef ref, SheetBase *changedSheet);
 
-    void changeNameCellRefs(const QRect& rect, ChangeRef ref);
-
+    void changeNameCellRefs(const QRect &rect, ChangeRef ref);
 
     virtual void showStatusMessage(const QString &message, int timeout = 3000) const;
     /**
      * Called when validation fails.
      */
     virtual bool onValidationFailed(Validity::Action action, const CellBase *cell, const QString &message, const QString &title) const;
+
 protected:
     /**
      * \ingroup Value
@@ -131,28 +123,27 @@ protected:
      * When you change name sheet Sheet1 -> Price
      * for all cell which refers to Sheet1, this function changes the name.
      */
-    void changeCellTabName(QString const & old_name, QString const & new_name);
+    void changeCellTabName(QString const &old_name, QString const &new_name);
 
     /**
      * \ingroup Value
      * \see changeNameCellRef()
      */
-    QPoint changeNameCellRefHelper(const QPoint& pos, const QRect& rect, ChangeRef ref, bool *changed, bool *valid, bool isStart);
+    QPoint changeNameCellRefHelper(const QPoint &pos, const QRect &rect, ChangeRef ref, bool *changed, bool *valid, bool isStart);
 
     /**
      * Used by the child class to override the base storage with the full-featured one.
      */
     void setCellStorage(CellBaseStorage *storage);
+
 private:
     SheetBase &operator=(const SheetBase &) = delete;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 } // namespace Sheets
 } // namespace Calligra
-
 
 #endif

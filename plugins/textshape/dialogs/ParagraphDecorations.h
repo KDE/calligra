@@ -17,8 +17,10 @@ class ParagraphDecorations : public QWidget
     Q_OBJECT
 
 public:
-    explicit ParagraphDecorations(QWidget* parent = 0);
-    ~ParagraphDecorations() override {}
+    explicit ParagraphDecorations(QWidget *parent = 0);
+    ~ParagraphDecorations() override
+    {
+    }
 
     void setDisplay(KoParagraphStyle *style, bool directFormattingMode);
     void save(KoParagraphStyle *style) const;

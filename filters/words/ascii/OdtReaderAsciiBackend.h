@@ -9,18 +9,15 @@
 #define ODTREADERASCIIBACKEND_H
 
 // Calligra
-#include <KoXmlStreamReader.h>
 #include <KoFilter.h>
+#include <KoXmlStreamReader.h>
 #include <OdfTextReaderBackend.h>
-
-
 
 class OdfReaderContext;
 
-
 class OdtReaderAsciiBackend : public OdfTextReaderBackend
 {
- public:
+public:
     explicit OdtReaderAsciiBackend();
     ~OdtReaderAsciiBackend() override;
 
@@ -44,6 +41,5 @@ class OdtReaderAsciiBackend : public OdfTextReaderBackend
 
     void characterData(KoXmlStreamReader &reader, OdfReaderContext *context) override;
 };
-
 
 #endif // ODTREADERASCIIBACKEND_H

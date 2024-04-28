@@ -8,16 +8,15 @@
 #include "CommentShapeFactory.h"
 #include "CommentToolFactory.h"
 
-#include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
+#include <KoToolRegistry.h>
 
 #include <KPluginFactory>
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_shape_comment.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_shape_comment.json", registerPlugin<Plugin>();)
 
-Plugin::Plugin(QObject* parent, const QVariantList&)
-: QObject(parent)
+Plugin::Plugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
 {
     KoShapeRegistry::instance()->add(new CommentShapeFactory());
     KoToolRegistry::instance()->add(new CommentToolFactory());

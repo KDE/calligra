@@ -5,50 +5,43 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "OdtReader.h"
 
 // Qt
-#include <QStringList>
 #include <QBuffer>
+#include <QStringList>
 
 // KF5
 #include <KLocalizedString>
 
 // Calligra
 #include <KoStore.h>
-#include <KoXmlStreamReader.h>
 #include <KoXmlNS.h>
+#include <KoXmlStreamReader.h>
 
 // Reader library
-#include "OdtReaderBackend.h"
 #include "OdfReaderContext.h"
-#include "OdfTextReader.h"
 #include "OdfReaderDebug.h"
-
+#include "OdfTextReader.h"
+#include "OdtReaderBackend.h"
 
 #if 0
 static int debugIndent = 0;
-#define DEBUGSTART() \
-    ++debugIndent; \
+#define DEBUGSTART()                                                                                                                                           \
+    ++debugIndent;                                                                                                                                             \
     DEBUG_READING("entering")
-#define DEBUGEND() \
-    DEBUG_READING("exiting"); \
+#define DEBUGEND()                                                                                                                                             \
+    DEBUG_READING("exiting");                                                                                                                                  \
     --debugIndent
-#define DEBUG_READING(param) \
-    debugOdfReader << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
-    << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
-    << reader.qualifiedName().toString()
+#define DEBUG_READING(param)                                                                                                                                   \
+    debugOdfReader << QString("%1").arg(" ", debugIndent * 2) << param << ": "                                                                                 \
+                   << (reader.isStartElement() ? "start" : (reader.isEndElement() ? "end" : "other")) << reader.qualifiedName().toString()
 #else
-#define DEBUGSTART() \
-    // NOTHING
-#define DEBUGEND() \
-    // NOTHING
-#define DEBUG_READING(param) \
-    // NOTHING
+#define DEBUGSTART() // NOTHING
+#define DEBUGEND() // NOTHING
+#define DEBUG_READING(param) // NOTHING
 #endif
-
 
 OdtReader::OdtReader()
     : OdfReader()
@@ -130,57 +123,40 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
         if (tagName == "office:forms") {
             // FIXME: NYI
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:calculation-settings") {
+        } else if (tagName == "table:calculation-settings") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:consolidation") {
+        } else if (tagName == "table:consolidation") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:content-validation") {
+        } else if (tagName == "table:content-validation") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:database-ranges") {
+        } else if (tagName == "table:database-ranges") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:data-pilot-tables") {
+        } else if (tagName == "table:data-pilot-tables") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:dde-links") {
+        } else if (tagName == "table:dde-links") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:label-ranges") {
+        } else if (tagName == "table:label-ranges") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:named-expressions") {
+        } else if (tagName == "table:named-expressions") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "text:alphabetical-index-auto-mark-file") {
+        } else if (tagName == "text:alphabetical-index-auto-mark-file") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "text:dde-connection-decls") {
+        } else if (tagName == "text:dde-connection-decls") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "text:page-sequence") {
+        } else if (tagName == "text:page-sequence") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "text:sequence-decls") {
+        } else if (tagName == "text:sequence-decls") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "text:tracked-changes") {
+        } else if (tagName == "text:tracked-changes") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "text:user-field-decls") {
+        } else if (tagName == "text:user-field-decls") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "text:variable-decls") {
+        } else if (tagName == "text:variable-decls") {
             reader.skipCurrentElement();
-        }
-        else {
+        } else {
             if (m_textReader) {
                 m_textReader->readTextLevelElement(reader);
-            }
-            else {
+            } else {
                 reader.skipCurrentElement();
             }
         }
@@ -190,7 +166,6 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
     backend->elementOfficeText(reader, m_context);
     DEBUGEND();
 }
-
 
 // ----------------------------------------------------------------
 //                             Other functions

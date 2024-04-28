@@ -22,7 +22,7 @@ class KOMAIN_EXPORT KoDockerManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit KoDockerManager(KoMainWindow* mainWindow);
+    explicit KoDockerManager(KoMainWindow *mainWindow);
     ~KoDockerManager() override;
 
     void resetToolDockerWidgets();
@@ -36,13 +36,12 @@ public Q_SLOTS:
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
-    void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetList);
-
+    void newOptionWidgets(const QList<QPointer<QWidget>> &optionWidgetList);
 
 private:
     Q_PRIVATE_SLOT(d, void restoringDone())
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

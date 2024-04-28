@@ -6,55 +6,55 @@
 
 #include "StencilBoxDocker.h"
 
-#include "StencilBoxDocker_p.h"
-#include "StencilShapeFactory.h"
 #include "CollectionItemModel.h"
 #include "CollectionTreeWidget.h"
 #include "StencilBoxDebug.h"
+#include "StencilBoxDocker_p.h"
+#include "StencilShapeFactory.h"
 
-#include <KoShapeFactoryBase.h>
-#include <KoShapeRegistry.h>
 #include <KoCanvasController.h>
 #include <KoCreateShapesTool.h>
-#include <KoShape.h>
-#include <KoShapeGroup.h>
-#include <KoZoomHandler.h>
-#include <KoShapePaintingContext.h>
-#include <KoProperties.h>
 #include <KoIcon.h>
+#include <KoProperties.h>
+#include <KoShape.h>
+#include <KoShapeFactoryBase.h>
+#include <KoShapeGroup.h>
+#include <KoShapePaintingContext.h>
+#include <KoShapeRegistry.h>
+#include <KoZoomHandler.h>
 
-#include <kiconeffect.h>
-#include <kcolorscheme.h>
-#include <KLocalizedString>
-#include <kdesktopfile.h>
 #include <KConfigGroup>
+#include <KLocalizedString>
 #include <KMessageBox>
-#include <klineedit.h>
 #include <KStatefulBrush>
+#include <kcolorscheme.h>
+#include <kdesktopfile.h>
+#include <kiconeffect.h>
+#include <klineedit.h>
 
-#include <QStandardPaths>
-#include <QVBoxLayout>
-#include <QListView>
-#include <QStandardItemModel>
-#include <QRegularExpression>
-#include <QSortFilterProxyModel>
-#include <QList>
-#include <QSize>
-#include <QToolButton>
+#include <QDesktopServices>
 #include <QDir>
 #include <QFile>
+#include <QList>
+#include <QListView>
 #include <QMenu>
 #include <QPainter>
-#include <QDesktopServices>
 #include <QPixmapCache>
+#include <QRegularExpression>
+#include <QSize>
+#include <QSortFilterProxyModel>
+#include <QStandardItemModel>
+#include <QStandardPaths>
+#include <QToolButton>
+#include <QVBoxLayout>
 
 #define StencilShapeId "StencilShape"
 
-StencilBoxDocker::StencilBoxDocker(QWidget* parent)
+StencilBoxDocker::StencilBoxDocker(QWidget *parent)
     : QDockWidget(parent)
 {
     setWindowTitle(i18n("Stencil Box"));
-    QWidget* mainWidget = new QWidget(this);
+    QWidget *mainWidget = new QWidget(this);
     mainWidget->setAcceptDrops(true);
     setWidget(mainWidget);
 
@@ -100,7 +100,7 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     m_loader = new StencilBoxDockerLoader(this);
     m_loader->moveToThread(&loaderThread);
     connect(&loaderThread, &QThread::started, this, &StencilBoxDocker::threadStarted);
-    connect(this , &StencilBoxDocker::startLoading, m_loader, &StencilBoxDockerLoader::loadShapeCollections);
+    connect(this, &StencilBoxDocker::startLoading, m_loader, &StencilBoxDockerLoader::loadShapeCollections);
     connect(&loaderThread, &QThread::finished, m_loader, &QObject::deleteLater);
     connect(m_loader, &StencilBoxDockerLoader::resultReady, this, &StencilBoxDocker::collectionsLoaded);
     loaderThread.start();
@@ -124,8 +124,7 @@ void StencilBoxDocker::collectionsLoaded()
     m_modelMap = m_loader->m_modelMap;
     m_treeWidget->setFamilyMap(m_modelMap);
     m_treeWidget->regenerateFilteredMap();
-    connect(this, &QDockWidget::dockLocationChanged,
-            this, &StencilBoxDocker::locationChanged);
+    connect(this, &QDockWidget::dockLocationChanged, this, &StencilBoxDocker::locationChanged);
     connect(m_filterLineEdit, &QLineEdit::textEdited, this, &StencilBoxDocker::reapplyFilter);
 
     loaderThread.quit();
@@ -137,10 +136,12 @@ void StencilBoxDocker::manageStencilsFolder()
     QDir().mkpath(destination);
     QFile file(destination + "/readme.txt");
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        debugStencilBox << "could not open" << destination + "/readme.txt" << "for writing";
+        debugStencilBox << "could not open" << destination + "/readme.txt"
+                        << "for writing";
     } else {
         QTextStream out(&file);
-        out << i18n("\
+        out << i18n(
+            "\
 This is the user stencils directory.\n\
 From here you can add / remove stencils for use in the Stencil Box docker.\n\
 \n\
@@ -177,15 +178,15 @@ but it won't look good under small pixels when the stencil stroke is complicated
 
 void StencilBoxDocker::locationChanged(Qt::DockWidgetArea area)
 {
-    switch(area) {
-        case Qt::TopDockWidgetArea:
-        case Qt::BottomDockWidgetArea:
-            break;
-        case Qt::LeftDockWidgetArea:
-        case Qt::RightDockWidgetArea:
-            break;
-        default:
-            break;
+    switch (area) {
+    case Qt::TopDockWidgetArea:
+    case Qt::BottomDockWidgetArea:
+        break;
+    case Qt::LeftDockWidgetArea:
+    case Qt::RightDockWidgetArea:
+        break;
+    default:
+        break;
     }
     m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     m_layout->invalidate();
@@ -200,13 +201,13 @@ void StencilBoxDocker::reapplyFilter()
 /// Load shape collections to m_modelMap and register in the KoShapeRegistry
 void StencilBoxDockerLoader::loadShapeCollections()
 {
-    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("calligra/stencils"), QStandardPaths::LocateDirectory);
-    foreach(const QString& path, dirs)
-    {
+    const QStringList dirs =
+        QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("calligra/stencils"), QStandardPaths::LocateDirectory);
+    foreach (const QString &path, dirs) {
         debugStencilBox << path;
         QDir dir(path);
         QStringList collectionDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-        foreach(const QString & collectionDirName, collectionDirs) {
+        foreach (const QString &collectionDirName, collectionDirs) {
             addCollection(path + QLatin1Char('/') + collectionDirName);
             debugStencilBox << path + collectionDirName;
         }
@@ -214,23 +215,23 @@ void StencilBoxDockerLoader::loadShapeCollections()
     emit resultReady();
 }
 
-bool StencilBoxDockerLoader::addCollection(const QString& path)
+bool StencilBoxDockerLoader::addCollection(const QString &path)
 {
     QDir dir(path);
 
-    if(!dir.exists("collection.desktop"))
+    if (!dir.exists("collection.desktop"))
         return false;
 
     KDesktopFile collection(dir.absoluteFilePath("collection.desktop"));
     KConfigGroup dg = collection.desktopGroup();
     QString family = dg.readEntry("Name");
 
-    if(!m_modelMap.contains(family)) {
-        CollectionItemModel* model = new CollectionItemModel();
+    if (!m_modelMap.contains(family)) {
+        CollectionItemModel *model = new CollectionItemModel();
         m_modelMap.insert(family, model);
     }
 
-    CollectionItemModel* model = m_modelMap[family];
+    CollectionItemModel *model = m_modelMap[family];
     QList<KoCollectionItem> templateList = model->shapeTemplateList();
     QStringList stencils = dir.entryList(QStringList("*.desktop"));
 
@@ -239,22 +240,22 @@ bool StencilBoxDockerLoader::addCollection(const QString& path)
     const QColor blackColor = brushForeground.brush(q->palette()).color();
     const QColor whiteColor = brushBackground.brush(q->palette()).color();
 
-    foreach(const QString & stencil, stencils) {
-        if(stencil == "collection.desktop")
+    foreach (const QString &stencil, stencils) {
+        if (stencil == "collection.desktop")
             continue;
 
         KDesktopFile entry(dir.absoluteFilePath(stencil));
         KConfigGroup content = entry.desktopGroup();
         QString name = content.readEntry("Name");
         bool keepAspectRatio = content.readEntry("CS-KeepAspectRatio", false);
-        KoProperties* props = new KoProperties();
+        KoProperties *props = new KoProperties();
         props->setProperty("keepAspectRatio", keepAspectRatio);
 
         // find data file path
         QString filename = dir.absoluteFilePath(stencil);
         filename.chop(7); // remove 'desktop'
-        static const char * const suffix[3] = { "odg", "svgz", "svg"};
-        static const int suffixCount = sizeof(suffix)/sizeof(suffix[0]);
+        static const char *const suffix[3] = {"odg", "svgz", "svg"};
+        static const int suffixCount = sizeof(suffix) / sizeof(suffix[0]);
 
         QString source;
         for (int i = 0; i < suffixCount; ++i) {
@@ -270,7 +271,7 @@ bool StencilBoxDockerLoader::addCollection(const QString& path)
         }
 
         // register shape factory
-        StencilShapeFactory* factory = new StencilShapeFactory(source, name, props);
+        StencilShapeFactory *factory = new StencilShapeFactory(source, name, props);
         KoShapeRegistry::instance()->add(source, factory);
 
         KoCollectionItem temp;
@@ -287,7 +288,7 @@ bool StencilBoxDockerLoader::addCollection(const QString& path)
             QPixmap pix(22, 22);
             pix.fill(Qt::white);
             if (!QPixmapCache::find(source, &pix)) {
-                KoShape* shape = factory->createDefaultShape();
+                KoShape *shape = factory->createDefaultShape();
                 if (shape) {
                     KoZoomHandler converter;
                     qreal diffx = 20 / converter.documentToViewX(shape->size().width());
@@ -313,15 +314,13 @@ bool StencilBoxDockerLoader::addCollection(const QString& path)
     return true;
 }
 
-void StencilBoxDocker::removeCollection(const QString& family)
+void StencilBoxDocker::removeCollection(const QString &family)
 {
-    if(m_modelMap.contains(family))
-    {
-        CollectionItemModel* model = m_modelMap[family];
+    if (m_modelMap.contains(family)) {
+        CollectionItemModel *model = m_modelMap[family];
         QList<KoCollectionItem> list = model->shapeTemplateList();
-        foreach(const KoCollectionItem & temp, list)
-        {
-            KoShapeFactoryBase* factory = KoShapeRegistry::instance()->get(temp.id);
+        foreach (const KoCollectionItem &temp, list) {
+            KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(temp.id);
             KoShapeRegistry::instance()->remove(temp.id);
             delete factory;
         }

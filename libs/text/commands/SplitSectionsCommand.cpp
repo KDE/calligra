@@ -3,18 +3,18 @@
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
 #include "SplitSectionsCommand.h"
+#include <KoParagraphStyle.h>
 #include <KoSection.h>
 #include <KoSectionEnd.h>
-#include <KoTextDocument.h>
-#include <KoParagraphStyle.h>
-#include <KoTextEditor.h>
 #include <KoSectionUtils.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
 
 #include <KLocalizedString>
 #include <kundo2command.h>
 
 SplitSectionsCommand::SplitSectionsCommand(QTextDocument *document, SplitType type, int splitPosition)
-    : KUndo2Command ()
+    : KUndo2Command()
     , m_first(true)
     , m_document(document)
     , m_type(type)
@@ -34,7 +34,7 @@ SplitSectionsCommand::~SplitSectionsCommand()
 void SplitSectionsCommand::undo()
 {
     KUndo2Command::undo();
-    //FIXME: if it will go to KoTextCommandBase, place UndoRedoFinalizer here
+    // FIXME: if it will go to KoTextCommandBase, place UndoRedoFinalizer here
 
     // All formatting changes will be undone automatically.
     // Model Level is untouched.
@@ -46,7 +46,7 @@ void SplitSectionsCommand::redo()
 
     if (!m_first) {
         KUndo2Command::redo();
-        //FIXME: if it will go to KoTextCommandBase, place UndoRedoFinalizer here
+        // FIXME: if it will go to KoTextCommandBase, place UndoRedoFinalizer here
 
         // All formatting changes will be redone automatically.
         // Model level is untouched.

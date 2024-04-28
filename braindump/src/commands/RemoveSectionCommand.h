@@ -29,13 +29,14 @@ class SectionGroup;
 class RemoveSectionCommand : public KUndo2Command
 {
 public:
-    RemoveSectionCommand(Section* _section, DocumentModel* _model);
+    RemoveSectionCommand(Section *_section, DocumentModel *_model);
     virtual void undo();
     virtual void redo();
+
 private:
-    Section* m_section;
+    Section *m_section;
     SectionGroup *m_parent;
-    DocumentModel* m_model;
+    DocumentModel *m_model;
     int m_index;
 };
 

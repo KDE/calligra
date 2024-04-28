@@ -15,8 +15,8 @@ class MorphologyEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     MorphologyEffectFactory();
-    KoFilterEffect * createFilterEffect() const override;
-    KoFilterEffectConfigWidgetBase * createConfigWidget() const override;
+    KoFilterEffect *createFilterEffect() const override;
+    KoFilterEffectConfigWidgetBase *createConfigWidget() const override;
 };
 
 #endif // MORPHOLOGYEFFECTFACTORY_H

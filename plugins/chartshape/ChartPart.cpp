@@ -13,10 +13,8 @@
 
 #include <KAboutData>
 
-
 ChartPart::ChartPart(QObject *parent)
-    : KoPart(KoComponentData(KAboutData(QStringLiteral("kochart"), QStringLiteral("KoChart"),
-                                        QStringLiteral(CALLIGRA_VERSION_STRING))), parent)
+    : KoPart(KoComponentData(KAboutData(QStringLiteral("kochart"), QStringLiteral("KoChart"), QStringLiteral(CALLIGRA_VERSION_STRING))), parent)
 {
 }
 
@@ -24,7 +22,7 @@ ChartPart::~ChartPart()
 {
 }
 
-KoView * ChartPart::createViewInstance(KoDocument *document, QWidget *parent)
+KoView *ChartPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
     Q_UNUSED(document);
     Q_UNUSED(parent);

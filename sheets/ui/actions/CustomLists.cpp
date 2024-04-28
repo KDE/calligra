@@ -9,21 +9,18 @@
 #include "Actions.h"
 #include "dialogs/ListDialog.h"
 
-#include "engine/CalculationSettings.h"
-#include "engine/Localization.h"
 #include "core/ApplicationSettings.h"
 #include "core/Map.h"
 #include "core/Sheet.h"
+#include "engine/CalculationSettings.h"
+#include "engine/Localization.h"
 #include "ui/commands/AutoFillCommand.h"
 
-#include <QAction>
 #include <KLocalizedString>
 #include <KSharedConfig>
-
+#include <QAction>
 
 using namespace Calligra::Sheets;
-
-
 
 ManageCustomLists::ManageCustomLists(Actions *actions)
     : DialogCellAction(actions, "sortList", i18n("Custom Lists..."), QIcon(), i18n("Create custom lists for sorting or autofill"))
@@ -45,7 +42,6 @@ ActionDialog *ManageCustomLists::createDialog(QWidget *canvasWidget)
     return dlg;
 }
 
-
 void ManageCustomLists::saveChanges(const QStringList &list)
 {
     Map *map = m_selection->activeSheet()->fullMap();
@@ -55,11 +51,6 @@ void ManageCustomLists::saveChanges(const QStringList &list)
     config->group("Parameters").writeEntry("Other list", list);
 
     // TODO do this better
-    delete(AutoFillCommand::other);
+    delete (AutoFillCommand::other);
     AutoFillCommand::other = nullptr;
-
 }
-
-
-
-

@@ -13,15 +13,15 @@
 #ifndef KOTAGCHOOSERWIDGET_H
 #define KOTAGCHOOSERWIDGET_H
 
-#include <QWidget>
 #include "kowidgets_export.h"
+#include <QWidget>
 
 class KOWIDGETS_EXPORT KoTagChooserWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit KoTagChooserWidget(QWidget* parent);
+    explicit KoTagChooserWidget(QWidget *parent);
     ~KoTagChooserWidget() override;
     void setCurrentIndex(int index);
     int findIndexOf(const QString &tagName);
@@ -54,8 +54,7 @@ private Q_SLOTS:
 private:
     /// pimpl because chooser will most likely get upgraded at some point
     class Private;
-    Private* const d;
-
+    Private *const d;
 };
 ;
 

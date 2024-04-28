@@ -16,25 +16,24 @@ class QModelIndex;
 /**
  * @brief The KoTableView class provides a QTableView with fixed columns or rows
  */
-class KOWIDGETS_EXPORT KoTableView: public QTableView
+class KOWIDGETS_EXPORT KoTableView : public QTableView
 {
     Q_OBJECT
 
 public:
     enum ViewMode {
-        FIXED_COLUMNS,  /// The number of columns is fixed
-        FIXED_ROWS     /// The number of rows is fixed
+        FIXED_COLUMNS, /// The number of columns is fixed
+        FIXED_ROWS /// The number of rows is fixed
     };
 
     explicit KoTableView(QWidget *parent = nullptr);
     ~KoTableView() override = default;
 
     /** reimplemented
-    * This will draw a number of rows based on the number of columns if m_viewMode is FIXED_COLUMS
-    * And it will draw a number of columns based on the number of rows if m_viewMode is FIXED_ROWS
-    */
+     * This will draw a number of rows based on the number of columns if m_viewMode is FIXED_COLUMS
+     * And it will draw a number of columns based on the number of rows if m_viewMode is FIXED_ROWS
+     */
     void resizeEvent(QResizeEvent *event) override;
-
 
     void setViewMode(ViewMode mode);
 

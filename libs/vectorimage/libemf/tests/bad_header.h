@@ -9,7 +9,7 @@
 
 #include <QtTest>
 
-class BadHeader: public QObject
+class BadHeader : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:

@@ -19,9 +19,13 @@ class FactoryInit : public Factory
     Q_INTERFACES(KPluginFactory)
 
 public:
-    explicit FactoryInit() : Factory() {}
-    ~FactoryInit() override {}
-
+    explicit FactoryInit()
+        : Factory()
+    {
+    }
+    ~FactoryInit() override
+    {
+    }
 };
 }
 }

@@ -7,13 +7,13 @@
 #include "KPrSpaceRotationFromBottomStrategy.h"
 #include "KPrSpaceRotationEffectFactory.h"
 
-#include <QWidget>
-#include <QPainter>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsView>
+#include <QPainter>
+#include <QWidget>
 
 KPrSpaceRotationFromBottomStrategy::KPrSpaceRotationFromBottomStrategy()
-: KPrPageEffectStrategy(KPrSpaceRotationEffectFactory::FromBottom, "spaceRotation", "bottomToTop", false, true)
+    : KPrPageEffectStrategy(KPrSpaceRotationEffectFactory::FromBottom, "spaceRotation", "bottomToTop", false, true)
 {
 }
 
@@ -39,14 +39,12 @@ void KPrSpaceRotationFromBottomStrategy::next(const KPrPageEffect::Data &data)
     int frame = data.m_timeLine.frameForTime(data.m_currentTime);
     if (frame >= data.m_timeLine.endFrame()) {
         finish(data);
-    }
-    else {
+    } else {
         data.m_oldPageItem->hide();
         data.m_newPageItem->hide();
         if (frame <= 90) {
             data.m_oldPageItem->show();
-        }
-        else {
+        } else {
             data.m_newPageItem->show();
         }
 
@@ -55,10 +53,9 @@ void KPrSpaceRotationFromBottomStrategy::next(const KPrPageEffect::Data &data)
         int h = data.m_widget->size().height() / 2;
         int w = data.m_widget->size().width() / 2;
         m_transform.translate(w, h).rotate(degree, Qt::XAxis).translate(-w, -h);
-        if (frame<=90) {
+        if (frame <= 90) {
             data.m_oldPageItem->setTransform(m_transform);
-        }
-        else {
+        } else {
             data.m_newPageItem->setTransform(m_transform);
         }
     }
@@ -70,4 +67,3 @@ void KPrSpaceRotationFromBottomStrategy::finish(const KPrPageEffect::Data &data)
     data.m_oldPageItem->hide();
     data.m_newPageItem->hide();
 }
-

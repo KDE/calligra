@@ -17,7 +17,6 @@ class TextDocumentStructureModel;
 class KoCanvasBase;
 class QTreeView;
 
-
 class TextDocumentInspectionDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
@@ -25,7 +24,10 @@ public:
     explicit TextDocumentInspectionDocker(QWidget *parent = 0);
     ~TextDocumentInspectionDocker() override;
     /// reimplemented from KoCanvasObserverBase
-    QString observerName() const override { return QStringLiteral("TextDocumentInspectionDocker"); }
+    QString observerName() const override
+    {
+        return QStringLiteral("TextDocumentInspectionDocker");
+    }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
@@ -34,7 +36,7 @@ private Q_SLOTS:
 
 private:
     KoCanvasBase *m_canvas;
-    QTreeView    *m_mainWidget;
+    QTreeView *m_mainWidget;
 
     TextDocumentStructureModel *m_textDocumentStructureModel;
 };

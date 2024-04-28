@@ -5,14 +5,14 @@
  */
 
 #include "KoPathToolFactory.h"
-#include "KoPathTool.h"
 #include "KoPathShape.h"
+#include "KoPathTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 
 KoPathToolFactory::KoPathToolFactory()
-        : KoToolFactoryBase("PathToolFactoryId")
+    : KoToolFactoryBase("PathToolFactoryId")
 {
     setToolTip(i18n("Path editing"));
     setToolType(dynamicToolType());
@@ -25,7 +25,7 @@ KoPathToolFactory::~KoPathToolFactory()
 {
 }
 
-KoToolBase * KoPathToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KoPathToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KoPathTool(canvas);
 }

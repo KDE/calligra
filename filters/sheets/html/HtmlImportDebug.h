@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &HTMLIMPORT_LOG();
 
 #define debugHtml qCDebug(HTMLIMPORT_LOG)

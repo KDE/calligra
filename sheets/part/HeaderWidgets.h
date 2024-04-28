@@ -7,11 +7,10 @@
 #ifndef CALLIGRA_SHEETS_HEADERWIDGETS
 #define CALLIGRA_SHEETS_HEADERWIDGETS
 
-#include <QWidget>
 #include "Headers.h"
+#include <QWidget>
 
 class QRubberBand;
-
 
 namespace Calligra
 {
@@ -31,32 +30,47 @@ public:
     ~ColumnHeaderWidget() override;
 
     void updateColumns(int from, int to) override;
-    QSizeF size() const override { return QWidget::size(); }
-    void setCursor(const QCursor& cursor) override { QWidget::setCursor(cursor); }
-    void scroll(qreal dx, qreal dy) override { QWidget::scroll(dx, dy); }
-    QPalette palette() const override { return QWidget::palette(); }
-    void update() override { QWidget::update(); }
+    QSizeF size() const override
+    {
+        return QWidget::size();
+    }
+    void setCursor(const QCursor &cursor) override
+    {
+        QWidget::setCursor(cursor);
+    }
+    void scroll(qreal dx, qreal dy) override
+    {
+        QWidget::scroll(dx, dy);
+    }
+    QPalette palette() const override
+    {
+        return QWidget::palette();
+    }
+    void update() override
+    {
+        QWidget::update();
+    }
 private Q_SLOTS:
-    void slotAutoScroll(const QPoint& distance);
+    void slotAutoScroll(const QPoint &distance);
 
 protected:
-    void paintEvent(QPaintEvent* _ev) override;
-    void mousePressEvent(QMouseEvent* _ev) override;
-    void mouseReleaseEvent(QMouseEvent* _ev) override;
-    void mouseDoubleClickEvent(QMouseEvent* _ev) override;
-    void mouseMoveEvent(QMouseEvent* _ev) override;
-    void wheelEvent(QWheelEvent*) override;
-    void focusOutEvent(QFocusEvent* ev) override;
-    void resizeEvent(QResizeEvent * _ev) override;
+    void paintEvent(QPaintEvent *_ev) override;
+    void mousePressEvent(QMouseEvent *_ev) override;
+    void mouseReleaseEvent(QMouseEvent *_ev) override;
+    void mouseDoubleClickEvent(QMouseEvent *_ev) override;
+    void mouseMoveEvent(QMouseEvent *_ev) override;
+    void wheelEvent(QWheelEvent *) override;
+    void focusOutEvent(QFocusEvent *ev) override;
+    void resizeEvent(QResizeEvent *_ev) override;
 
     void paintSizeIndicator(int mouseX) override;
     void removeSizeIndicator() override;
-    
+
 private Q_SLOTS:
-    void toolChanged(const QString& toolId);
+    void toolChanged(const QString &toolId);
 
 private:
-    QRubberBand* m_rubberband;
+    QRubberBand *m_rubberband;
 };
 
 /**
@@ -70,30 +84,45 @@ public:
     ~RowHeaderWidget() override;
 
     void updateRows(int from, int to) override;
-    QSizeF size() const override { return QWidget::size(); }
-    void setCursor(const QCursor& cursor) override { QWidget::setCursor(cursor); }
-    void scroll(qreal dx, qreal dy) override { QWidget::scroll(dx, dy); }
-    QPalette palette() const override { return QWidget::palette(); }
-    void update() override { QWidget::update(); }
+    QSizeF size() const override
+    {
+        return QWidget::size();
+    }
+    void setCursor(const QCursor &cursor) override
+    {
+        QWidget::setCursor(cursor);
+    }
+    void scroll(qreal dx, qreal dy) override
+    {
+        QWidget::scroll(dx, dy);
+    }
+    QPalette palette() const override
+    {
+        return QWidget::palette();
+    }
+    void update() override
+    {
+        QWidget::update();
+    }
 private Q_SLOTS:
-    void slotAutoScroll(const QPoint& distance);
+    void slotAutoScroll(const QPoint &distance);
 
 protected:
-    void paintEvent(QPaintEvent* _ev) override;
-    void mousePressEvent(QMouseEvent* _ev) override;
-    void mouseReleaseEvent(QMouseEvent* _ev) override;
-    void mouseMoveEvent(QMouseEvent* _ev) override;
-    void mouseDoubleClickEvent(QMouseEvent* _ev) override;
-    void wheelEvent(QWheelEvent*) override;
-    void focusOutEvent(QFocusEvent* ev) override;
-    
+    void paintEvent(QPaintEvent *_ev) override;
+    void mousePressEvent(QMouseEvent *_ev) override;
+    void mouseReleaseEvent(QMouseEvent *_ev) override;
+    void mouseMoveEvent(QMouseEvent *_ev) override;
+    void mouseDoubleClickEvent(QMouseEvent *_ev) override;
+    void wheelEvent(QWheelEvent *) override;
+    void focusOutEvent(QFocusEvent *ev) override;
+
     void paintSizeIndicator(int mouseY) override;
     void removeSizeIndicator() override;
 private Q_SLOTS:
-    void toolChanged(const QString& toolId);
+    void toolChanged(const QString &toolId);
 
 private:
-    QRubberBand* m_rubberband;
+    QRubberBand *m_rubberband;
 };
 
 /**
@@ -104,19 +133,26 @@ class SelectAllButtonWidget : public QWidget, public SelectAllButton
 {
     Q_OBJECT
 public:
-    explicit SelectAllButtonWidget(CanvasBase* canvasBase);
+    explicit SelectAllButtonWidget(CanvasBase *canvasBase);
     ~SelectAllButtonWidget() override;
 
-    QPalette palette() const override { return QWidget::palette(); }
-    void update() override { QWidget::update(); }
+    QPalette palette() const override
+    {
+        return QWidget::palette();
+    }
+    void update() override
+    {
+        QWidget::update();
+    }
+
 protected:
-    void paintEvent(QPaintEvent* event) override;
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
-    void wheelEvent(QWheelEvent*) override;
+    void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void wheelEvent(QWheelEvent *) override;
 
 private Q_SLOTS:
-    void toolChanged(const QString& toolId);
+    void toolChanged(const QString &toolId);
 };
 
 } // namespace Sheets

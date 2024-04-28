@@ -8,11 +8,11 @@
 #ifndef SIMPLECHARACTERWIDGET_H
 #define SIMPLECHARACTERWIDGET_H
 
-#include <ui_SimpleCharacterWidget.h>
 #include <KoListStyle.h>
+#include <ui_SimpleCharacterWidget.h>
 
-#include <QWidget>
 #include <QTextBlock>
+#include <QWidget>
 
 class TextTool;
 class KoStyleManager;
@@ -33,7 +33,7 @@ public:
 
 public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);
-    void setCurrentFormat(const QTextCharFormat& format, const QTextCharFormat& refBlockCharFormat);
+    void setCurrentFormat(const QTextCharFormat &format, const QTextCharFormat &refBlockCharFormat);
     void setCurrentBlockFormat(const QTextBlockFormat &format);
     void slotCharacterStyleApplied(const KoCharacterStyle *style);
 

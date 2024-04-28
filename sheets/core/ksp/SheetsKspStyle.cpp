@@ -17,34 +17,36 @@
 
 #include <QFont>
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
-namespace Ksp {
-    QPen toPen(KoXmlElement & element);
-    QFont toFont(KoXmlElement & element);
-    QDomElement createElement(const QString & tagName, const QFont & font, QDomDocument & doc);
-    QDomElement createElement(const QString & tagname, const QPen & pen, QDomDocument & doc);
+namespace Ksp
+{
+QPen toPen(KoXmlElement &element);
+QFont toFont(KoXmlElement &element);
+QDomElement createElement(const QString &tagName, const QFont &font, QDomDocument &doc);
+QDomElement createElement(const QString &tagname, const QPen &pen, QDomDocument &doc);
 }
 
-QDomElement Ksp::saveStyles(StyleManager *manager, QDomDocument & doc)
+QDomElement Ksp::saveStyles(StyleManager *manager, QDomDocument &doc)
 {
     QDomElement styles = doc.createElement("styles");
 
     CustomStyle *def = manager->defaultStyle();
-    saveCustomStyle (def, doc, styles, manager);
+    saveCustomStyle(def, doc, styles, manager);
 
     QStringList styleNames = manager->styleNames(false);
-    foreach (QString name, styleNames)
-    {
-        CustomStyle *style = manager->style (name);
-        saveCustomStyle (style, doc, styles, manager);
+    foreach (QString name, styleNames) {
+        CustomStyle *style = manager->style(name);
+        saveCustomStyle(style, doc, styles, manager);
     }
 
     return styles;
 }
 
-bool Ksp::loadStyles (StyleManager *manager, KoXmlElement const & styles)
+bool Ksp::loadStyles(StyleManager *manager, KoXmlElement const &styles)
 {
     bool ok = true;
     CustomStyle *def = manager->defaultStyle();
@@ -59,11 +61,11 @@ bool Ksp::loadStyles (StyleManager *manager, KoXmlElement const & styles)
             return false;
 
         if (name == "Default" && type == Style::BUILTIN) {
-            if (!loadCustomStyle (def, e, name))
+            if (!loadCustomStyle(def, e, name))
                 return false;
             def->setType(Style::BUILTIN);
         } else if (!name.isNull()) {
-            CustomStyle* style = 0;
+            CustomStyle *style = 0;
             if (e.hasAttribute("parent") && e.attribute("parent") == "Default")
                 style = new CustomStyle(name, def);
             else
@@ -88,10 +90,11 @@ bool Ksp::loadStyles (StyleManager *manager, KoXmlElement const & styles)
     QStringList::ConstIterator it;
     for (it = names.begin(); it != names.end(); ++it) {
         if (*it != "Default") {
-            CustomStyle * styleData = manager->style(*it);
+            CustomStyle *styleData = manager->style(*it);
             if (styleData && !styleData->parentName().isNull()) {
                 CustomStyle *pstyle = manager->style(styleData->parentName());
-                if (pstyle) styleData->setParentName(pstyle->name());
+                if (pstyle)
+                    styleData->setParentName(pstyle->name());
             }
         }
     }
@@ -99,16 +102,15 @@ bool Ksp::loadStyles (StyleManager *manager, KoXmlElement const & styles)
     return true;
 }
 
-
-void Ksp::saveStyle(const Style &style, QDomDocument& doc, QDomElement& format, const StyleManager* styleManager)
+void Ksp::saveStyle(const Style &style, QDomDocument &doc, QDomElement &format, const StyleManager *styleManager)
 {
     QSet<Style::Key> keysToStore = style.definedKeys(styleManager);
 
     if (keysToStore.contains(Style::HorizontalAlignment) && style.halign() != Style::HAlignUndefined)
-        format.setAttribute(style.type() == Style::AUTO ? "align" : "alignX", (int) style.halign());
+        format.setAttribute(style.type() == Style::AUTO ? "align" : "alignX", (int)style.halign());
 
     if (keysToStore.contains(Style::VerticalAlignment) && style.valign() != Style::VAlignUndefined)
-        format.setAttribute("alignY", QString::number((int) style.valign()));
+        format.setAttribute("alignY", QString::number((int)style.valign()));
 
     if (keysToStore.contains(Style::BackgroundColor) && style.backgroundColor().isValid())
         format.setAttribute("bgcolor", style.backgroundColor().name());
@@ -132,13 +134,13 @@ void Ksp::saveStyle(const Style &style, QDomDocument& doc, QDomElement& format, 
         format.setAttribute("postfix", style.postfix());
 
     if (keysToStore.contains(Style::FloatFormatKey))
-        format.setAttribute("float", QString::number((int) style.floatFormat()));
+        format.setAttribute("float", QString::number((int)style.floatFormat()));
 
     if (keysToStore.contains(Style::FloatColorKey))
         format.setAttribute("floatcolor", QString::number((int)style.floatColor()));
 
     if (keysToStore.contains(Style::FormatTypeKey))
-        format.setAttribute("format", QString::number((int) style.formatType()));
+        format.setAttribute("format", QString::number((int)style.formatType()));
 
     if (keysToStore.contains(Style::CustomFormat) && !style.customFormat().isEmpty())
         format.setAttribute("custom", style.customFormat());
@@ -167,12 +169,8 @@ void Ksp::saveStyle(const Style &style, QDomDocument& doc, QDomElement& format, 
         format.setAttribute("hideformula", style.hideFormula() ? "yes" : "no");
 
     if (style.type() == Style::AUTO) {
-        if (keysToStore.contains(Style::FontFamily) ||
-                keysToStore.contains(Style::FontSize) ||
-                keysToStore.contains(Style::FontBold) ||
-                keysToStore.contains(Style::FontItalic) ||
-                keysToStore.contains(Style::FontStrike) ||
-                keysToStore.contains(Style::FontUnderline)) {
+        if (keysToStore.contains(Style::FontFamily) || keysToStore.contains(Style::FontSize) || keysToStore.contains(Style::FontBold)
+            || keysToStore.contains(Style::FontItalic) || keysToStore.contains(Style::FontStrike) || keysToStore.contains(Style::FontUnderline)) {
             format.appendChild(createElement("font", style.font(), doc));
         }
     } else { // custom style
@@ -180,19 +178,14 @@ void Ksp::saveStyle(const Style &style, QDomDocument& doc, QDomElement& format, 
             format.setAttribute("font-family", style.fontFamily());
         if (keysToStore.contains(Style::FontSize))
             format.setAttribute("font-size", QString::number(style.fontSize()));
-        if (keysToStore.contains(Style::FontBold) || keysToStore.contains(Style::FontItalic) ||
-                keysToStore.contains(Style::FontUnderline) || keysToStore.contains(Style::FontStrike)) {
-            enum FontFlags {
-                FBold      = 0x01,
-                FUnderline = 0x02,
-                FItalic    = 0x04,
-                FStrike    = 0x08
-            };
+        if (keysToStore.contains(Style::FontBold) || keysToStore.contains(Style::FontItalic) || keysToStore.contains(Style::FontUnderline)
+            || keysToStore.contains(Style::FontStrike)) {
+            enum FontFlags { FBold = 0x01, FUnderline = 0x02, FItalic = 0x04, FStrike = 0x08 };
             int fontFlags = 0;
-            fontFlags |= style.bold()      ? FBold      : 0;
-            fontFlags |= style.italic()    ? FItalic    : 0;
+            fontFlags |= style.bold() ? FBold : 0;
+            fontFlags |= style.italic() ? FItalic : 0;
             fontFlags |= style.underline() ? FUnderline : 0;
-            fontFlags |= style.strikeOut() ? FStrike    : 0;
+            fontFlags |= style.strikeOut() ? FStrike : 0;
             format.setAttribute("font-flags", QString::number(fontFlags));
         }
     }
@@ -202,7 +195,7 @@ void Ksp::saveStyle(const Style &style, QDomDocument& doc, QDomElement& format, 
 
     if (keysToStore.contains(Style::BackgroundBrush)) {
         format.setAttribute("brushcolor", style.backgroundBrush().color().name());
-        format.setAttribute("brushstyle", QString::number((int) style.backgroundBrush().style()));
+        format.setAttribute("brushstyle", QString::number((int)style.backgroundBrush().style()));
     }
 
     if (keysToStore.contains(Style::LeftPen)) {
@@ -230,7 +223,7 @@ void Ksp::saveStyle(const Style &style, QDomDocument& doc, QDomElement& format, 
     }
 
     if (keysToStore.contains(Style::FallDiagonalPen)) {
-        QDomElement fallDiagonal  = doc.createElement("fall-diagonal");
+        QDomElement fallDiagonal = doc.createElement("fall-diagonal");
         fallDiagonal.appendChild(createElement("pen", style.fallDiagonalPen(), doc));
         format.appendChild(fallDiagonal);
     }
@@ -242,25 +235,25 @@ void Ksp::saveStyle(const Style &style, QDomDocument& doc, QDomElement& format, 
     }
 }
 
-bool Ksp::loadStyle(Style *style, KoXmlElement& format)
+bool Ksp::loadStyle(Style *style, KoXmlElement &format)
 {
     if (format.hasAttribute("parent"))
         style->setParentName(format.attribute("parent"));
 
     bool ok;
     if (format.hasAttribute(style->type() == Style::AUTO ? "align" : "alignX")) {
-        Style::HAlign a = (Style::HAlign) format.attribute(style->type() == Style::AUTO ? "align" : "alignX").toInt(&ok);
+        Style::HAlign a = (Style::HAlign)format.attribute(style->type() == Style::AUTO ? "align" : "alignX").toInt(&ok);
         if (!ok)
             return false;
-        if ((unsigned int) a >= 1 && (unsigned int) a <= 4) {
+        if ((unsigned int)a >= 1 && (unsigned int)a <= 4) {
             style->setHAlign(a);
         }
     }
     if (format.hasAttribute("alignY")) {
-        Style::VAlign a = (Style::VAlign) format.attribute("alignY").toInt(&ok);
+        Style::VAlign a = (Style::VAlign)format.attribute("alignY").toInt(&ok);
         if (!ok)
             return false;
-        if ((unsigned int) a >= 1 && (unsigned int) a < 4) {
+        if ((unsigned int)a >= 1 && (unsigned int)a < 4) {
             style->setVAlign(a);
         }
     }
@@ -300,22 +293,23 @@ bool Ksp::loadStyle(Style *style, KoXmlElement& format)
         Style::FloatFormat a = (Style::FloatFormat)format.attribute("float").toInt(&ok);
         if (!ok)
             return false;
-        if ((unsigned int) a >= 1 && (unsigned int) a <= 3) {
+        if ((unsigned int)a >= 1 && (unsigned int)a <= 3) {
             style->setFloatFormat(a);
         }
     }
 
     if (format.hasAttribute("floatcolor")) {
-        Style::FloatColor a = (Style::FloatColor) format.attribute("floatcolor").toInt(&ok);
-        if (!ok) return false;
-        if ((unsigned int) a >= 1 && (unsigned int) a <= 2) {
+        Style::FloatColor a = (Style::FloatColor)format.attribute("floatcolor").toInt(&ok);
+        if (!ok)
+            return false;
+        if ((unsigned int)a >= 1 && (unsigned int)a <= 2) {
             style->setFloatColor(a);
         }
     }
 
     if (format.hasAttribute("format")) {
         int fo = format.attribute("format").toInt(&ok);
-        if (! ok)
+        if (!ok)
             return false;
         style->setFormatType(static_cast<Format::Type>(fo));
     }
@@ -386,12 +380,7 @@ bool Ksp::loadStyle(Style *style, KoXmlElement& format)
             if (!ok)
                 return false;
 
-            enum FontFlags {
-                FBold      = 0x01,
-                FUnderline = 0x02,
-                FItalic    = 0x04,
-                FStrike    = 0x08
-            };
+            enum FontFlags { FBold = 0x01, FUnderline = 0x02, FItalic = 0x04, FStrike = 0x08 };
             style->setFontBold(fontFlags & FBold);
             style->setFontItalic(fontFlags & FItalic);
             style->setFontUnderline(fontFlags & FUnderline);
@@ -410,7 +399,7 @@ bool Ksp::loadStyle(Style *style, KoXmlElement& format)
 
     if (format.hasAttribute("brushstyle")) {
         QBrush brush = style->backgroundBrush();
-        brush.setStyle((Qt::BrushStyle) format.attribute("brushstyle").toInt(&ok));
+        brush.setStyle((Qt::BrushStyle)format.attribute("brushstyle").toInt(&ok));
         if (!ok)
             return false;
         style->setBackgroundBrush(brush);
@@ -473,13 +462,13 @@ bool Ksp::loadStyle(Style *style, KoXmlElement& format)
     return true;
 }
 
-void Ksp::saveCustomStyle(CustomStyle *s, QDomDocument& doc, QDomElement& styles, const StyleManager* styleManager)
+void Ksp::saveCustomStyle(CustomStyle *s, QDomDocument &doc, QDomElement &styles, const StyleManager *styleManager)
 {
     if (s->name().isEmpty())
         return;
 
     QDomElement style(doc.createElement("style"));
-    style.setAttribute("type", QString::number((int) s->type()));
+    style.setAttribute("type", QString::number((int)s->type()));
     if (!s->parentName().isNull())
         style.setAttribute("parent", s->parentName());
     style.setAttribute("name", s->name());
@@ -491,7 +480,7 @@ void Ksp::saveCustomStyle(CustomStyle *s, QDomDocument& doc, QDomElement& styles
     styles.appendChild(style);
 }
 
-bool Ksp::loadCustomStyle(CustomStyle *s, KoXmlElement const & style, QString const & name)
+bool Ksp::loadCustomStyle(CustomStyle *s, KoXmlElement const &style, QString const &name)
 {
     s->setName(name);
 
@@ -502,7 +491,7 @@ bool Ksp::loadCustomStyle(CustomStyle *s, KoXmlElement const & style, QString co
         return false;
 
     bool ok = true;
-    s->setType((Style::StyleType) style.attribute("type").toInt(&ok));
+    s->setType((Style::StyleType)style.attribute("type").toInt(&ok));
     if (!ok)
         return false;
 
@@ -514,8 +503,7 @@ bool Ksp::loadCustomStyle(CustomStyle *s, KoXmlElement const & style, QString co
     return true;
 }
 
-
-QPen Ksp::toPen(KoXmlElement & element)
+QPen Ksp::toPen(KoXmlElement &element)
 {
     bool ok;
     QPen p;
@@ -533,7 +521,7 @@ QPen Ksp::toPen(KoXmlElement & element)
     return p;
 }
 
-QFont Ksp::toFont(KoXmlElement & element)
+QFont Ksp::toFont(KoXmlElement &element)
 {
     QFont f;
     f.setFamily(element.attribute("family"));
@@ -566,12 +554,12 @@ QFont Ksp::toFont(KoXmlElement & element)
         else
     */
     // ######## Not needed anymore in 3.0?
-    //KCharsets::charsets()->setQFont( f, KLocale::global()->charset() );
+    // KCharsets::charsets()->setQFont( f, KLocale::global()->charset() );
 
     return f;
 }
 
-QDomElement Ksp::createElement(const QString & tagName, const QFont & font, QDomDocument & doc)
+QDomElement Ksp::createElement(const QString &tagName, const QFont &font, QDomDocument &doc)
 {
     QDomElement e(doc.createElement(tagName));
 
@@ -586,12 +574,12 @@ QDomElement Ksp::createElement(const QString & tagName, const QFont & font, QDom
         e.setAttribute("underline", "yes");
     if (font.strikeOut())
         e.setAttribute("strikeout", "yes");
-    //e.setAttribute( "charset", KCharsets::charsets()->name( font ) );
+    // e.setAttribute( "charset", KCharsets::charsets()->name( font ) );
 
     return e;
 }
 
-QDomElement Ksp::createElement(const QString & tagname, const QPen & pen, QDomDocument & doc)
+QDomElement Ksp::createElement(const QString &tagname, const QPen &pen, QDomDocument &doc)
 {
     QDomElement e(doc.createElement(tagname));
     e.setAttribute("color", pen.color().name());
@@ -600,8 +588,5 @@ QDomElement Ksp::createElement(const QString & tagname, const QPen & pen, QDomDo
     return e;
 }
 
-
-
-}  // Sheets
-}  // Calligra
-
+} // Sheets
+} // Calligra

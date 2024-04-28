@@ -9,8 +9,9 @@
 
 #include <KoIcon.h>
 
-SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget * parent)
-        : QWidget(parent), m_snapGuide(snapGuide)
+SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide *snapGuide, QWidget *parent)
+    : QWidget(parent)
+    , m_snapGuide(snapGuide)
 {
     widget.setupUi(this);
 
@@ -90,7 +91,7 @@ void SnapGuideConfigWidget::updateControls()
     widget.snapDistance->setValue(m_snapGuide->snapDistance());
 }
 
-void SnapGuideConfigWidget::showEvent(QShowEvent * event)
+void SnapGuideConfigWidget::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event);
     updateControls();

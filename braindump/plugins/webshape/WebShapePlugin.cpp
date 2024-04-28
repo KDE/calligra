@@ -29,13 +29,11 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(WebShapePluginFactory, "braindump_shape_web.json", registerPlugin<WebShapePlugin>();)
 
-
-WebShapePlugin::WebShapePlugin(QObject *parent, const QVariantList&)
+WebShapePlugin::WebShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     // register the shape's factory
-    KoShapeRegistry::instance()->add(
-        new WebShapeFactory());
+    KoShapeRegistry::instance()->add(new WebShapeFactory());
     // we could register more things here in this same plugin.
     KoToolRegistry::instance()->add(new WebToolFactory());
 }

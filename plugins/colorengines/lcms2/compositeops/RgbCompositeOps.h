@@ -48,18 +48,17 @@
 
 const qint32 MAX_CHANNEL_RGB = 3;
 
-#include "RgbCompositeOpIn.h"
-#include "RgbCompositeOpOut.h"
-#include "RgbCompositeOpDiff.h"
 #include "RgbCompositeOpBumpmap.h"
 #include "RgbCompositeOpClear.h"
-#include "RgbCompositeOpDissolve.h"
+#include "RgbCompositeOpColor.h"
 #include "RgbCompositeOpDarken.h"
-#include "RgbCompositeOpLighten.h"
+#include "RgbCompositeOpDiff.h"
+#include "RgbCompositeOpDissolve.h"
 #include "RgbCompositeOpHue.h"
+#include "RgbCompositeOpIn.h"
+#include "RgbCompositeOpLighten.h"
+#include "RgbCompositeOpOut.h"
 #include "RgbCompositeOpSaturation.h"
 #include "RgbCompositeOpValue.h"
-#include "RgbCompositeOpColor.h"
 
 #endif
-

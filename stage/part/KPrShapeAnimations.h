@@ -22,10 +22,10 @@
 #ifndef KPRSHAPEANIMATIONS_H
 #define KPRSHAPEANIMATIONS_H
 
-#include <QList>
-#include <QAbstractTableModel>
-#include "animations/KPrShapeAnimation.h"
 #include "animations/KPrAnimationStep.h"
+#include "animations/KPrShapeAnimation.h"
+#include <QAbstractTableModel>
+#include <QList>
 
 #include "stage_export.h"
 
@@ -38,45 +38,26 @@ class STAGE_EXPORT KPrShapeAnimations : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-
     /// Time to be updated
-    enum TimeUpdated {
-        BeginTime,
-        DurationTime,
-        BothTimes
-    };
+    enum TimeUpdated { BeginTime, DurationTime, BothTimes };
 
     /// column names
-    enum ColumnNames {
-        Group,
-        StepCount,
-        TriggerEvent,
-        Name,
-        ShapeThumbnail,
-        AnimationIcon,
-        StartTime,
-        Duration,
-        AnimationClass,
-        NodeType
-    };
+    enum ColumnNames { Group, StepCount, TriggerEvent, Name, ShapeThumbnail, AnimationIcon, StartTime, Duration, AnimationClass, NodeType };
 
     explicit KPrShapeAnimations(KPrDocument *document, QObject *parent = 0);
     ~KPrShapeAnimations() override;
 
     /// Model Methods
     Qt::ItemFlags flags(const QModelIndex &index) const override;
-    QVariant data(const QModelIndex &index,
-               int role=Qt::DisplayRole) const override;
-    QVariant headerData(int section, Qt::Orientation orientation,
-                     int role=Qt::DisplayRole) const override;
-    int rowCount(const QModelIndex &parent=QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent=QModelIndex()) const override;
-    bool setHeaderData(int, Qt::Orientation, const QVariant&,
-                       int=Qt::EditRole) override {return false;}
-    bool setData(const QModelIndex &index, const QVariant &value,
-                 int role=Qt::EditRole) override;
-
-
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    bool setHeaderData(int, Qt::Orientation, const QVariant &, int = Qt::EditRole) override
+    {
+        return false;
+    }
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
     void init(const QList<KPrAnimationStep *> &animations);
     /**
@@ -128,7 +109,6 @@ public:
      */
     void replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation);
 
-
     /**
      * Get the animations for the given step
      *
@@ -136,8 +116,8 @@ public:
      * @return A map of the shape -> animation if the animation is 0 the shape
      *         is not visible
      */
-/*    QMap<KoShape *, KPrShapeAnimation *> animations( int step ) const;
-*/
+    /*    QMap<KoShape *, KPrShapeAnimation *> animations( int step ) const;
+     */
     /**
      * Get all steps
      */
@@ -243,7 +223,7 @@ public:
     KoShape *shapeByIndex(const QModelIndex &index) const;
 
     /// Return the first animation index for the given shape
-    QModelIndex indexByShape(KoShape* shape) const;
+    QModelIndex indexByShape(KoShape *shape) const;
 
     /**
      * @brief Set begin time for the animation on index
@@ -292,18 +272,15 @@ Q_SIGNALS:
     void onClickEventChanged();
 
 private:
-
     void dump() const;
     QString getAnimationName(KPrShapeAnimation *animation, bool omitSubType = false) const;
     QPixmap getAnimationShapeThumbnail(KPrShapeAnimation *animation) const;
     QPixmap getAnimationIcon(KPrShapeAnimation *animation) const;
     QImage createThumbnail(KoShape *shape, const QSize &thumbSize) const;
-    void setTimeRangeIncrementalChange(KPrShapeAnimation *item, const int begin,
-                                       const int duration, TimeUpdated updatedTimes);
+    void setTimeRangeIncrementalChange(KPrShapeAnimation *item, const int begin, const int duration, TimeUpdated updatedTimes);
     QList<KPrShapeAnimation *> getWithPreviousSiblings(KPrShapeAnimation *animation) const;
     QList<KPrAnimationSubStep *> getSubSteps(int start, int end, KPrAnimationStep *step) const;
-    bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrShapeAnimation::NodeType oldType,
-                                   KPrShapeAnimation::NodeType newType);
+    bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrShapeAnimation::NodeType oldType, KPrShapeAnimation::NodeType newType);
 
     QList<KPrAnimationStep *> m_shapeAnimations;
     KPrShapeAnimation *m_currentEditedAnimation;

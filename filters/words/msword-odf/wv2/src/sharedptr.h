@@ -21,7 +21,8 @@
 
 #include "wv2_export.h"
 
-namespace wvWare {
+namespace wvWare
+{
 
 /**
  * Reference counting for shared objects.  If you derive your object
@@ -40,47 +41,70 @@ namespace wvWare {
  *
  * @author Waldo Bastian <bastian@kde.org>
  */
-class WV2_EXPORT Shared {
+class WV2_EXPORT Shared
+{
 public:
-   /**
-    * Standard constructor.  This will initialize the reference count
-    * on this object to 0
-    */
-   Shared() : count( 0 ) { }
+    /**
+     * Standard constructor.  This will initialize the reference count
+     * on this object to 0
+     */
+    Shared()
+        : count(0)
+    {
+    }
 
-   /**
-    * Copy constructor.  This will @em not actually copy the objects
-    * but it will initialize the reference count on this object to 0
-    */
-   Shared( const Shared & ) : count( 0 ) { }
+    /**
+     * Copy constructor.  This will @em not actually copy the objects
+     * but it will initialize the reference count on this object to 0
+     */
+    Shared(const Shared &)
+        : count(0)
+    {
+    }
 
-   /**
-    * Overloaded assignment operator
-    */
-   Shared &operator=( const Shared & ) { return *this; }
+    /**
+     * Overloaded assignment operator
+     */
+    Shared &operator=(const Shared &)
+    {
+        return *this;
+    }
 
-   /**
-    * Increases the reference count by one
-    */
-   void _Shared_ref() const { count++; }
+    /**
+     * Increases the reference count by one
+     */
+    void _Shared_ref() const
+    {
+        count++;
+    }
 
-   /**
-    * Releases a reference (decreases the reference count by one).  If
-    * the count goes to 0, this object will delete itself
-    */
-   void _Shared_deref() const { if (!--count) delete this; }
+    /**
+     * Releases a reference (decreases the reference count by one).  If
+     * the count goes to 0, this object will delete itself
+     */
+    void _Shared_deref() const
+    {
+        if (!--count)
+            delete this;
+    }
 
-   /**
-    * Return the current number of references held
-    *
-    * @return Number of references
-    */
-   int _Shared_count() const { return count; }
+    /**
+     * Return the current number of references held
+     *
+     * @return Number of references
+     */
+    int _Shared_count() const
+    {
+        return count;
+    }
 
 protected:
-   virtual ~Shared() { }
+    virtual ~Shared()
+    {
+    }
+
 private:
-   mutable int count;
+    mutable int count;
 };
 
 /**
@@ -92,51 +116,111 @@ private:
  *
  * @author Waldo Bastian <bastian@kde.org>
  */
-template< class T >
-struct SharedPtr
-{
+template<class T>
+struct SharedPtr {
 public:
-  SharedPtr()
-    : ptr(0) { }
-  SharedPtr( T* t )
-    : ptr(t) { if ( ptr ) ptr->_Shared_ref(); }
-  SharedPtr( const SharedPtr& p )
-    : ptr(p.ptr) { if ( ptr ) ptr->_Shared_ref(); }
+    SharedPtr()
+        : ptr(0)
+    {
+    }
+    SharedPtr(T *t)
+        : ptr(t)
+    {
+        if (ptr)
+            ptr->_Shared_ref();
+    }
+    SharedPtr(const SharedPtr &p)
+        : ptr(p.ptr)
+    {
+        if (ptr)
+            ptr->_Shared_ref();
+    }
 
-  ~SharedPtr() { if ( ptr ) ptr->_Shared_deref(); }
+    ~SharedPtr()
+    {
+        if (ptr)
+            ptr->_Shared_deref();
+    }
 
-  SharedPtr<T>& operator= ( const SharedPtr<T>& p ) {
-    if ( ptr == p.ptr ) return *this;
-    if ( ptr ) ptr->_Shared_deref();
-    ptr = p.ptr;
-    if ( ptr ) ptr->_Shared_ref();
-    return *this;
-  }
-  SharedPtr<T>& operator= ( T* p ) {
-    if ( ptr == p ) return *this;
-    if ( ptr ) ptr->_Shared_deref();
-    ptr = p;
-    if ( ptr ) ptr->_Shared_ref();
-    return *this;
-  }
-  bool operator== ( const SharedPtr<T>& p ) const { return ( ptr == p.ptr ); }
-  bool operator!= ( const SharedPtr<T>& p ) const { return ( ptr != p.ptr ); }
-  bool operator== ( const T* p ) const { return ( ptr == p ); }
-  bool operator!= ( const T* p ) const { return ( ptr != p ); }
-  bool operator!() const { return ( ptr == 0 ); }
-  operator T*() const { return ptr; }
+    SharedPtr<T> &operator=(const SharedPtr<T> &p)
+    {
+        if (ptr == p.ptr)
+            return *this;
+        if (ptr)
+            ptr->_Shared_deref();
+        ptr = p.ptr;
+        if (ptr)
+            ptr->_Shared_ref();
+        return *this;
+    }
+    SharedPtr<T> &operator=(T *p)
+    {
+        if (ptr == p)
+            return *this;
+        if (ptr)
+            ptr->_Shared_deref();
+        ptr = p;
+        if (ptr)
+            ptr->_Shared_ref();
+        return *this;
+    }
+    bool operator==(const SharedPtr<T> &p) const
+    {
+        return (ptr == p.ptr);
+    }
+    bool operator!=(const SharedPtr<T> &p) const
+    {
+        return (ptr != p.ptr);
+    }
+    bool operator==(const T *p) const
+    {
+        return (ptr == p);
+    }
+    bool operator!=(const T *p) const
+    {
+        return (ptr != p);
+    }
+    bool operator!() const
+    {
+        return (ptr == 0);
+    }
+    operator T *() const
+    {
+        return ptr;
+    }
 
-  T* data() { return ptr; }
-  const T* data() const { return ptr; }
+    T *data()
+    {
+        return ptr;
+    }
+    const T *data() const
+    {
+        return ptr;
+    }
 
-  const T& operator*() const { return *ptr; }
-  T& operator*() { return *ptr; }
-  const T* operator->() const { return ptr; }
-  T* operator->() { return ptr; }
+    const T &operator*() const
+    {
+        return *ptr;
+    }
+    T &operator*()
+    {
+        return *ptr;
+    }
+    const T *operator->() const
+    {
+        return ptr;
+    }
+    T *operator->()
+    {
+        return ptr;
+    }
 
-  int count() const { return ptr->_Shared_count(); } // for debugging purposes
+    int count() const
+    {
+        return ptr->_Shared_count();
+    } // for debugging purposes
 private:
-  T* ptr;
+    T *ptr;
 };
 
 } // namespace wvWare

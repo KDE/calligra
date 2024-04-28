@@ -7,40 +7,37 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 
 #include "KarbonConfigureDialog.h"
 
-#include "KarbonView.h"
-#include "KarbonPart.h"
-#include "KarbonDocument.h"
 #include "KarbonConfigInterfacePage.h"
+#include "KarbonDocument.h"
+#include "KarbonPart.h"
+#include "KarbonView.h"
 
 #include <KoIcon.h>
 
-#include <KoConfigGridPage.h>
-#include <KoConfigDocumentPage.h>
-#include <KoConfigMiscPage.h>
 #include <KoConfigAuthorPage.h>
+#include <KoConfigDocumentPage.h>
+#include <KoConfigGridPage.h>
+#include <KoConfigMiscPage.h>
 
-#include <KLocalizedString>
 #include <KConfigGroup>
+#include <KLocalizedString>
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>
 
-KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
+KarbonConfigureDialog::KarbonConfigureDialog(KarbonView *parent)
     : KPageDialog(parent)
 {
     setFaceType(List);
     setWindowTitle(i18n("Configure"));
-    setStandardButtons( QDialogButtonBox::Ok |
-                        QDialogButtonBox::Cancel |
-                        QDialogButtonBox::RestoreDefaults |
-                        QDialogButtonBox::Apply);
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Apply);
 
     QPushButton *okButton = button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
 
     m_interfacePage = new KarbonConfigInterfacePage(parent);
-    KPageWidgetItem* item = addPage(m_interfacePage, i18n("Interface"));
+    KPageWidgetItem *item = addPage(m_interfacePage, i18n("Interface"));
     item->setHeader(i18n("Interface"));
     item->setIcon(koIcon("preferences-desktop-theme"));
 
@@ -62,7 +59,7 @@ KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
     item->setIcon(koIcon("document-properties"));
 
     m_authorPage = new KoConfigAuthorPage();
-    item = addPage(m_authorPage, i18nc("@title:tab Author page", "Author" ));
+    item = addPage(m_authorPage, i18nc("@title:tab Author page", "Author"));
     item->setHeader(i18n("Author"));
     item->setIcon(koIcon("user-identity"));
 
@@ -82,7 +79,7 @@ void KarbonConfigureDialog::slotApply()
 
 void KarbonConfigureDialog::slotDefault()
 {
-    QWidget* curr = currentPage()->widget();
+    QWidget *curr = currentPage()->widget();
 
     if (curr == m_interfacePage)
         m_interfacePage->slotDefault();
@@ -93,4 +90,3 @@ void KarbonConfigureDialog::slotDefault()
     else if (curr == m_defaultDocPage)
         m_defaultDocPage->slotDefault();
 }
-

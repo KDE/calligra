@@ -13,22 +13,22 @@
 #include "KoCanvasControllerWidget.h"
 #include "KoCanvasControllerWidget_p.h"
 
-#include "KoCanvasControllerWidgetViewport_p.h"
-#include "KoShape.h"
-#include "KoViewConverter.h"
 #include "KoCanvasBase.h"
+#include "KoCanvasControllerWidgetViewport_p.h"
 #include "KoCanvasObserverBase.h"
 #include "KoCanvasSupervisor.h"
+#include "KoShape.h"
 #include "KoToolManager_p.h"
+#include "KoViewConverter.h"
 
 #include <FlakeDebug.h>
+#include <QDockWidget>
+#include <QEvent>
 #include <QMouseEvent>
 #include <QPainter>
-#include <QScrollBar>
-#include <QEvent>
-#include <QDockWidget>
-#include <QTimer>
 #include <QPointer>
+#include <QScrollBar>
+#include <QTimer>
 
 #include <KoConfig.h>
 
@@ -90,20 +90,21 @@ void KoCanvasControllerWidget::Private::resetScrollBars()
     vScroll->setSingleStep(fontheight);
     hScroll->setPageStep(drawW);
     hScroll->setSingleStep(fontheight);
-
 }
 
 void KoCanvasControllerWidget::Private::emitPointerPositionChangedSignals(QEvent *event)
 {
-    if (!canvas) return;
-    if (!canvas->viewConverter()) return;
+    if (!canvas)
+        return;
+    if (!canvas->viewConverter())
+        return;
 
     QPoint pointerPos;
-    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(event);
     if (mouseEvent) {
         pointerPos = mouseEvent->pos();
     } else {
-        QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event);
+        QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent *>(event);
         if (tabletEvent) {
             pointerPos = tabletEvent->pos();
         }
@@ -116,7 +117,6 @@ void KoCanvasControllerWidget::Private::emitPointerPositionChangedSignals(QEvent
     q->proxyObject->emitCanvasMousePositionChanged(pointerPos);
 }
 
-
 #include <QTime>
 
 void KoCanvasControllerWidget::Private::activate()
@@ -125,17 +125,16 @@ void KoCanvasControllerWidget::Private::activate()
     while (parent->parentWidget()) {
         parent = parent->parentWidget();
     }
-    KoCanvasSupervisor *observerProvider = dynamic_cast<KoCanvasSupervisor*>(parent);
+    KoCanvasSupervisor *observerProvider = dynamic_cast<KoCanvasSupervisor *>(parent);
     if (!observerProvider) {
         return;
     }
-    foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
-        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
+    foreach (KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
+        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase *>(docker);
         if (observer) {
             observer->setObservedCanvas(q->canvas());
         }
     }
-
 }
 
 void KoCanvasControllerWidget::Private::unsetCanvas()
@@ -144,12 +143,12 @@ void KoCanvasControllerWidget::Private::unsetCanvas()
     while (parent->parentWidget()) {
         parent = parent->parentWidget();
     }
-    KoCanvasSupervisor *observerProvider = dynamic_cast<KoCanvasSupervisor*>(parent);
+    KoCanvasSupervisor *observerProvider = dynamic_cast<KoCanvasSupervisor *>(parent);
     if (!observerProvider) {
         return;
     }
-    foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
-        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
+    foreach (KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
+        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase *>(docker);
         if (observer && observer->observedCanvas() == q->canvas()) {
             observer->unsetObservedCanvas();
         }
@@ -157,7 +156,7 @@ void KoCanvasControllerWidget::Private::unsetCanvas()
 }
 
 ////////////
-KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent)
+KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection *actionCollection, QWidget *parent)
     : QAbstractScrollArea(parent)
     , KoCanvasController(actionCollection)
     , d(new Private(this))
@@ -172,7 +171,7 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
     setFocusPolicy(Qt::NoFocus);
     setFrameStyle(0);
 
-    //setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    // setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setAutoFillBackground(false);
     /*
       Fixes:   apps starting at zero zoom.
@@ -252,7 +251,7 @@ void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
     setPreferredCenterFractionY(0);
 }
 
-KoCanvasBase* KoCanvasControllerWidget::canvas() const
+KoCanvasBase *KoCanvasControllerWidget::canvas() const
 {
     return d->canvas;
 }
@@ -329,8 +328,7 @@ void KoCanvasControllerWidget::updateCanvasOffsetX()
     if (d->ignoreScrollSignals)
         return;
 
-    setPreferredCenterFractionX((horizontalScrollBar()->value()
-                                 + viewport()->width() / 2.0) / documentSize().width());
+    setPreferredCenterFractionX((horizontalScrollBar()->value() + viewport()->width() / 2.0) / documentSize().width());
 }
 
 void KoCanvasControllerWidget::updateCanvasOffsetY()
@@ -339,14 +337,13 @@ void KoCanvasControllerWidget::updateCanvasOffsetY()
     if (d->ignoreScrollSignals)
         return;
 
-    setPreferredCenterFractionY((verticalScrollBar()->value()
-                                 + verticalScrollBar()->pageStep() / 2.0) / documentSize().height());
+    setPreferredCenterFractionY((verticalScrollBar()->value() + verticalScrollBar()->pageStep() / 2.0) / documentSize().height());
 }
 
 bool KoCanvasControllerWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if (d->canvas && d->canvas->canvasWidget() && (watched == d->canvas->canvasWidget())) {
-         if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
+        if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
             d->emitPointerPositionChangedSignals(event);
         }
     }
@@ -377,17 +374,17 @@ void KoCanvasControllerWidget::ensureVisible(const QRectF &rect, bool smooth)
         jumpHeight = 0;
 
     int horizontalMove = 0;
-    if (currentVisible.width() <= viewRect.width())      // center view
+    if (currentVisible.width() <= viewRect.width()) // center view
         horizontalMove = viewRect.center().x() - currentVisible.center().x();
-    else if (currentVisible.x() > viewRect.x())          // move left
+    else if (currentVisible.x() > viewRect.x()) // move left
         horizontalMove = viewRect.x() - currentVisible.x() - jumpWidth;
-    else if (currentVisible.right() < viewRect.right())  // move right
+    else if (currentVisible.right() < viewRect.right()) // move right
         horizontalMove = viewRect.right() - qMax(0, currentVisible.right() - jumpWidth);
 
     int verticalMove = 0;
-    if (currentVisible.height() <= viewRect.height())       // center view
+    if (currentVisible.height() <= viewRect.height()) // center view
         verticalMove = viewRect.center().y() - currentVisible.center().y();
-    if (currentVisible.y() > viewRect.y())               // move up
+    if (currentVisible.y() > viewRect.y()) // move up
         verticalMove = viewRect.y() - currentVisible.y() - jumpHeight;
     else if (currentVisible.bottom() < viewRect.bottom()) // move down
         verticalMove = viewRect.bottom() - qMax(0, currentVisible.bottom() - jumpHeight);
@@ -446,7 +443,7 @@ void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
     zoomBy(viewRect.center(), scale);
 }
 
-void KoCanvasControllerWidget::setToolOptionWidgets(const QList<QPointer<QWidget> >&widgetMap)
+void KoCanvasControllerWidget::setToolOptionWidgets(const QList<QPointer<QWidget>> &widgetMap)
 {
     emit toolOptionWidgetsChanged(widgetMap);
 }
@@ -575,16 +572,16 @@ void KoCanvasControllerWidget::setMargin(int margin)
 
 QPoint KoCanvasControllerWidget::scrollBarValue() const
 {
-    QScrollBar * hBar = horizontalScrollBar();
-    QScrollBar * vBar = verticalScrollBar();
+    QScrollBar *hBar = horizontalScrollBar();
+    QScrollBar *vBar = verticalScrollBar();
 
     return QPoint(hBar->value(), vBar->value());
 }
 
 void KoCanvasControllerWidget::setScrollBarValue(const QPoint &value)
 {
-    QScrollBar * hBar = horizontalScrollBar();
-    QScrollBar * vBar = verticalScrollBar();
+    QScrollBar *hBar = horizontalScrollBar();
+    QScrollBar *vBar = verticalScrollBar();
 
     hBar->setValue(value.x());
     vBar->setValue(value.y());
@@ -595,5 +592,5 @@ KoCanvasControllerWidget::Private *KoCanvasControllerWidget::priv()
     return d;
 }
 
-//have to include this because of Q_PRIVATE_SLOT
+// have to include this because of Q_PRIVATE_SLOT
 #include "moc_KoCanvasControllerWidget.cpp"

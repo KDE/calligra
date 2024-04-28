@@ -8,26 +8,26 @@
 #ifndef KoDockerManager_p_h
 #define KoDockerManager_p_h
 
-#include "KoDockerManager.h"
 #include "KoDockFactoryBase.h"
+#include "KoDockerManager.h"
 
-#include <KLocalizedString>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KLocalizedString>
 #include <MainDebug.h>
 
 #include "KoToolDocker.h"
 
-#include "KoView.h"
 #include "KoMainWindow.h"
+#include "KoView.h"
 
 class Q_DECL_HIDDEN KoDockerManager::Private
 {
 public:
-    Private(KoMainWindow *mw) :
-        mainWindow(mw)
-        ,ignore(true)
-        ,showOptionsDocker(true)
+    Private(KoMainWindow *mw)
+        : mainWindow(mw)
+        , ignore(true)
+        , showOptionsDocker(true)
     {
     }
 

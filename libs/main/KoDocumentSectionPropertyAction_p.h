@@ -10,8 +10,8 @@
 #include "KoDocumentSectionModel.h"
 #include "KoDocumentSectionView.h"
 
-#include <QPersistentModelIndex>
 #include <QAction>
+#include <QPersistentModelIndex>
 
 /**
  * Internal class for the KoDocumentSectionView widget. Provides a
@@ -20,7 +20,7 @@
  * associated on/off icons to show their state in the
  * KoDocumentSectionView.
  */
-class KoDocumentSectionView::PropertyAction: public QAction
+class KoDocumentSectionView::PropertyAction : public QAction
 {
     typedef QAction super;
     Q_OBJECT
@@ -28,25 +28,28 @@ class KoDocumentSectionView::PropertyAction: public QAction
     int m_num;
     QPersistentModelIndex m_index;
 
-    Q_SIGNALS:
-        void toggled( bool on, const QPersistentModelIndex &index, int property );
+Q_SIGNALS:
+    void toggled(bool on, const QPersistentModelIndex &index, int property);
 
-    public:
-        PropertyAction( int num, const Model::Property &p, const QPersistentModelIndex &index, QObject *parent = 0 )
-            : QAction( parent ), m_property( p ), m_num( num ), m_index( index )
-        {
-            connect( this, &QAction::triggered, this, &PropertyAction::slotTriggered );
-            setText( m_property.name );
-            setIcon( m_property.state.toBool() ? m_property.onIcon : m_property.offIcon );
-        }
+public:
+    PropertyAction(int num, const Model::Property &p, const QPersistentModelIndex &index, QObject *parent = 0)
+        : QAction(parent)
+        , m_property(p)
+        , m_num(num)
+        , m_index(index)
+    {
+        connect(this, &QAction::triggered, this, &PropertyAction::slotTriggered);
+        setText(m_property.name);
+        setIcon(m_property.state.toBool() ? m_property.onIcon : m_property.offIcon);
+    }
 
-    private Q_SLOTS:
-        void slotTriggered()
-        {
-            m_property.state = !m_property.state.toBool();
-            setIcon( m_property.state.toBool() ? m_property.onIcon : m_property.offIcon );
-            emit toggled( m_property.state.toBool(), m_index, m_num );
-        }
+private Q_SLOTS:
+    void slotTriggered()
+    {
+        m_property.state = !m_property.state.toBool();
+        setIcon(m_property.state.toBool() ? m_property.onIcon : m_property.offIcon);
+        emit toggled(m_property.state.toBool(), m_index, m_num);
+    }
 };
 
 #endif

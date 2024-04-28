@@ -8,8 +8,8 @@
 #ifndef SWINDER_WORKSHEETSUBSTREAMHANDLER_H
 #define SWINDER_WORKSHEETSUBSTREAMHANDLER_H
 
-#include "substreamhandler.h"
 #include "formulas.h"
+#include "substreamhandler.h"
 #include <vector>
 
 namespace Swinder
@@ -67,74 +67,73 @@ class AutoFilterRecord;
 class WorksheetSubStreamHandler : public SubStreamHandler, public FormulaDecoder
 {
 public:
-    WorksheetSubStreamHandler(Sheet* sheet, const GlobalsSubStreamHandler* globals);
+    WorksheetSubStreamHandler(Sheet *sheet, const GlobalsSubStreamHandler *globals);
     ~WorksheetSubStreamHandler() override;
-    Sheet* sheet() const;
+    Sheet *sheet() const;
 
-    std::map<unsigned long, Object*>& sharedObjects() const;
-    std::vector<unsigned long>& charts() const;
+    std::map<unsigned long, Object *> &sharedObjects() const;
+    std::vector<unsigned long> &charts() const;
 
-    void handleRecord(Record* record) override;
+    void handleRecord(Record *record) override;
 
 public:
     // from FormulaDecoder
-    const std::vector<QString>& externSheets() const override;
+    const std::vector<QString> &externSheets() const override;
     QString nameFromIndex(unsigned index) const override;
     QString externNameFromIndex(unsigned index) const override;
-    FormulaTokens sharedFormulas(const std::pair<unsigned, unsigned>& formulaCellPos) const override;
-    DataTableRecord* tableRecord(const std::pair<unsigned, unsigned>& formulaCellPos) const override;
+    FormulaTokens sharedFormulas(const std::pair<unsigned, unsigned> &formulaCellPos) const override;
+    DataTableRecord *tableRecord(const std::pair<unsigned, unsigned> &formulaCellPos) const override;
 
 private:
-    void handleBOF(BOFRecord* record);
-    void handleBlank(BlankRecord* record);
-    void handleBoolErr(BoolErrRecord* record);
-    void handleBottomMargin(BottomMarginRecord* record);
-    void handleCalcMode(CalcModeRecord* record);
-    void handleColInfo(ColInfoRecord* record);
-    void handleDataTable(DataTableRecord* record);
-    void handleDimension(DimensionRecord* record);
-    void handleFormula(FormulaRecord* record);
-    void handleFooter(FooterRecord* record);
-    void handleHeader(HeaderRecord* record);
-    void handleLabel(LabelRecord* record);
-    void handleLabelSST(LabelSSTRecord* record);
-    void handleLeftMargin(LeftMarginRecord* record);
-    void handleMergedCells(MergedCellsRecord* record);
-    void handleMulBlank(MulBlankRecord* record);
-    void handleMulRK(MulRKRecord* record);
-    void handleNumber(NumberRecord* record);
-    void handleRightMargin(RightMarginRecord* record);
-    void handleRK(RKRecord* record);
-    void handleRow(RowRecord* record);
-    void handleRString(RStringRecord* record);
-    void handleSharedFormula(SharedFormulaRecord* record);
-    void handleString(StringRecord* record);
-    void handleTopMargin(TopMarginRecord* record);
-    void handleHLink(HLinkRecord* record);
-    void handleNote(NoteRecord* record);
-    void handleObj(ObjRecord* record);
-    void handleTxO(TxORecord* record);
-    void handleDefaultRowHeight(DefaultRowHeightRecord* record);
-    void handleDefaultColWidth(DefaultColWidthRecord* record);
-    void handleSetup(SetupRecord* record);
+    void handleBOF(BOFRecord *record);
+    void handleBlank(BlankRecord *record);
+    void handleBoolErr(BoolErrRecord *record);
+    void handleBottomMargin(BottomMarginRecord *record);
+    void handleCalcMode(CalcModeRecord *record);
+    void handleColInfo(ColInfoRecord *record);
+    void handleDataTable(DataTableRecord *record);
+    void handleDimension(DimensionRecord *record);
+    void handleFormula(FormulaRecord *record);
+    void handleFooter(FooterRecord *record);
+    void handleHeader(HeaderRecord *record);
+    void handleLabel(LabelRecord *record);
+    void handleLabelSST(LabelSSTRecord *record);
+    void handleLeftMargin(LeftMarginRecord *record);
+    void handleMergedCells(MergedCellsRecord *record);
+    void handleMulBlank(MulBlankRecord *record);
+    void handleMulRK(MulRKRecord *record);
+    void handleNumber(NumberRecord *record);
+    void handleRightMargin(RightMarginRecord *record);
+    void handleRK(RKRecord *record);
+    void handleRow(RowRecord *record);
+    void handleRString(RStringRecord *record);
+    void handleSharedFormula(SharedFormulaRecord *record);
+    void handleString(StringRecord *record);
+    void handleTopMargin(TopMarginRecord *record);
+    void handleHLink(HLinkRecord *record);
+    void handleNote(NoteRecord *record);
+    void handleObj(ObjRecord *record);
+    void handleTxO(TxORecord *record);
+    void handleDefaultRowHeight(DefaultRowHeightRecord *record);
+    void handleDefaultColWidth(DefaultColWidthRecord *record);
+    void handleSetup(SetupRecord *record);
     void handleHCenter(HCenterRecord *record);
     void handleVCenter(VCenterRecord *record);
     void handleZoomLevel(ZoomLevelRecord *record);
-    void handleMsoDrawing(MsoDrawingRecord* record);
-    void handleWindow2(Window2Record* record);
-    void handlePassword(PasswordRecord* record);
-    void handleBkHim(BkHimRecord* record);
-    void handleVerticalPageBreaksRecord(Swinder::VerticalPageBreaksRecord* record);
-    void handleHorizontalPageBreaksRecord(Swinder::HorizontalPageBreaksRecord* record);
-    void handleCondFmtRecord(Swinder::CondFmtRecord* record);
-    void handleCFRecord(Swinder::CFRecord* record);
-    void handleAutoFilterRecord(Swinder::AutoFilterRecord* record);
+    void handleMsoDrawing(MsoDrawingRecord *record);
+    void handleWindow2(Window2Record *record);
+    void handlePassword(PasswordRecord *record);
+    void handleBkHim(BkHimRecord *record);
+    void handleVerticalPageBreaksRecord(Swinder::VerticalPageBreaksRecord *record);
+    void handleHorizontalPageBreaksRecord(Swinder::HorizontalPageBreaksRecord *record);
+    void handleCondFmtRecord(Swinder::CondFmtRecord *record);
+    void handleCFRecord(Swinder::CFRecord *record);
+    void handleAutoFilterRecord(Swinder::AutoFilterRecord *record);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Swinder
 
 #endif // SWINDER_WORKSHEETSUBSTREAMHANDLER_H
-

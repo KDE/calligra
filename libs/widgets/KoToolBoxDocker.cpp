@@ -6,15 +6,15 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#include "KoToolBoxDocker_p.h"
-#include "KoToolBox_p.h"
-#include "KoToolBoxScrollArea_p.h"
-#include "KoDockWidgetTitleBar.h"
 #include "KoDockRegistry.h"
+#include "KoDockWidgetTitleBar.h"
+#include "KoToolBoxDocker_p.h"
+#include "KoToolBoxScrollArea_p.h"
+#include "KoToolBox_p.h"
 #include <KLocalizedString>
-#include <QLabel>
 #include <QFontMetrics>
 #include <QFrame>
+#include <QLabel>
 
 KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     : QDockWidget(i18n("Toolbox"))
@@ -25,15 +25,13 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     setWidget(m_scrollArea);
 
     // create title bar
-    KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);
+    KoDockWidgetTitleBar *titleBar = new KoDockWidgetTitleBar(this);
     titleBar->setTextVisibilityMode(KoDockWidgetTitleBar::TextCanBeInvisible);
     titleBar->setToolTip(i18n("Tools"));
     setTitleBarWidget(titleBar);
 
-    connect(this, &QDockWidget::dockLocationChanged,
-            this, &KoToolBoxDocker::updateToolBoxOrientation);
-    connect(this, &QDockWidget::topLevelChanged,
-            this, &KoToolBoxDocker::updateFloating);
+    connect(this, &QDockWidget::dockLocationChanged, this, &KoToolBoxDocker::updateToolBoxOrientation);
+    connect(this, &QDockWidget::topLevelChanged, this, &KoToolBoxDocker::updateFloating);
 }
 
 void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)

@@ -14,7 +14,6 @@ public:
 
 private:
     Ui::AutoCorrectionDialog ui;
-
 };
 
 #endif // AUTOCORRECTIONDIALOG_H

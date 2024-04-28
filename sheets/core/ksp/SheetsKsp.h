@@ -30,22 +30,25 @@ class KoXmlElement;
 class QDomDocument;
 class QDomElement;
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
 class DocBase;
 class Style;
 class Sheet;
 class Cell;
 
-namespace Ksp {
-    CALLIGRA_SHEETS_CORE_EXPORT bool loadDoc(DocBase *obj, const KoXmlDocument& doc);
-    CALLIGRA_SHEETS_CORE_EXPORT QDomDocument saveDoc(DocBase *document);
+namespace Ksp
+{
+CALLIGRA_SHEETS_CORE_EXPORT bool loadDoc(DocBase *obj, const KoXmlDocument &doc);
+CALLIGRA_SHEETS_CORE_EXPORT QDomDocument saveDoc(DocBase *document);
 
-    CALLIGRA_SHEETS_CORE_EXPORT bool loadStyle(Style *style, KoXmlElement& format);
+CALLIGRA_SHEETS_CORE_EXPORT bool loadStyle(Style *style, KoXmlElement &format);
 }
 
-}  // namespace Sheets
-}  // namespace Calligra
+} // namespace Sheets
+} // namespace Calligra
 
-#endif  // SHEETS_KSP
+#endif // SHEETS_KSP

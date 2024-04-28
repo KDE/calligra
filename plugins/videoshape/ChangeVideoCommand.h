@@ -29,4 +29,4 @@ private:
     VideoShape *m_shape;
 };
 
-#endif //CHANGEVIDEOCOMMAND_H
+#endif // CHANGEVIDEOCOMMAND_H

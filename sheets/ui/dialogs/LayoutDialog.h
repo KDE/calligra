@@ -23,9 +23,7 @@
 
 #include "core/Style.h"
 
-
 class KPageWidgetItem;
-
 
 namespace Calligra
 {
@@ -43,7 +41,6 @@ class LayoutPagePosition;
 class LayoutPagePattern;
 class LayoutPageProtection;
 
-
 /**
  * \ingroup UI
  * Dialog to set the cell style.
@@ -52,7 +49,7 @@ class LayoutDialog : public ActionDialog
 {
     Q_OBJECT
 public:
-    LayoutDialog(QWidget* parent, Sheet *sheet, StyleManager* manager, bool isStyle);
+    LayoutDialog(QWidget *parent, Sheet *sheet, StyleManager *manager, bool isStyle);
 
     ~LayoutDialog() override;
 
@@ -65,10 +62,12 @@ public:
     /** Copies the style into the dialog controls. */
     void setCustomStyle(const CustomStyle &style);
 
-    Sheet * getSheet() const {
+    Sheet *getSheet() const
+    {
         return m_sheet;
     }
-    StyleManager * getStyleManager() const {
+    StyleManager *getStyleManager() const
+    {
         return m_styleManager;
     }
 
@@ -79,12 +78,12 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void setOkButtonEnabled(bool enabled);
-protected:
 
+protected:
     void init(bool isStyle);
     virtual void onApply() override;
 
-    LayoutPageGeneral * generalPage;
+    LayoutPageGeneral *generalPage;
     LayoutPageFloat *floatPage;
     LayoutPageBorder *borderPage;
     LayoutPageFont *fontPage;
@@ -92,7 +91,7 @@ protected:
     LayoutPagePattern *patternPage;
     LayoutPageProtection *protectPage;
 
-    KPageWidgetItem* generalHeader, *floatHeader;
+    KPageWidgetItem *generalHeader, *floatHeader;
 
     Sheet *m_sheet;
     StyleManager *m_styleManager;

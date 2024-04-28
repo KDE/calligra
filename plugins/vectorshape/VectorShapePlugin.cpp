@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "VectorShapePlugin.h"
 
@@ -17,14 +16,12 @@
 #include <KoToolRegistry.h>
 
 // VectorShape
-#include "VectorToolFactory.h"
 #include "VectorShapeFactory.h"
+#include "VectorToolFactory.h"
 
+K_PLUGIN_FACTORY_WITH_JSON(VectorShapePluginFactory, "calligra_shape_vector.json", registerPlugin<VectorShapePlugin>();)
 
-K_PLUGIN_FACTORY_WITH_JSON(VectorShapePluginFactory, "calligra_shape_vector.json",
-                 registerPlugin<VectorShapePlugin>();)
-
-VectorShapePlugin::VectorShapePlugin(QObject * parent, const QVariantList &)
+VectorShapePlugin::VectorShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new VectorToolFactory());

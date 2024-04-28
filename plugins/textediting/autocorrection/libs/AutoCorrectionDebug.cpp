@@ -6,10 +6,8 @@
 
 #include "AutoCorrectionDebug.h"
 
-const QLoggingCategory &AUTOCORRECTION_LOG() \
+const QLoggingCategory &AUTOCORRECTION_LOG()
 {
     static const QLoggingCategory category("calligra.lib.autocorrection");
     return category;
 }
-
-

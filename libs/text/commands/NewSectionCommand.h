@@ -10,13 +10,12 @@
 class KoSection;
 class QTextDocument;
 
-//FIXME: why it is not going from KoTextCommandBase?
-// If it will be changed to KoTextCommandBase,
-// don't forget to add UndoRedoFinalizer.
+// FIXME: why it is not going from KoTextCommandBase?
+//  If it will be changed to KoTextCommandBase,
+//  don't forget to add UndoRedoFinalizer.
 class NewSectionCommand : public KUndo2Command
 {
 public:
-
     explicit NewSectionCommand(QTextDocument *document);
     ~NewSectionCommand() override;
 

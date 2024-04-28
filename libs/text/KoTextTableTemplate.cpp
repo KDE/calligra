@@ -8,14 +8,13 @@
 
 #include "KoTextSharedLoadingData.h"
 
-#include <KoShapeLoadingContext.h>
-#include <KoTextSharedSavingData.h>
 #include <KoOdfWorkaround.h>
-#include <KoXmlNS.h>
+#include <KoShapeLoadingContext.h>
 #include <KoTableCellStyle.h>
-#include <KoXmlWriter.h>
+#include <KoTextSharedSavingData.h>
+#include <KoXmlNS.h>
 #include <KoXmlReader.h>
-
+#include <KoXmlWriter.h>
 
 #include "Styles_p.h"
 
@@ -24,32 +23,36 @@
 static const struct {
     KoTextTableTemplate::Property m_property;
     const char *m_element;
-} templateStyles[] = {
-    { KoTextTableTemplate::BackGround,    "background"   },
-    { KoTextTableTemplate::Body,          "body"         },
-    { KoTextTableTemplate::EvenColumns,   "even-columns" },
-    { KoTextTableTemplate::EvenRows,      "even-rows"    },
-    { KoTextTableTemplate::FirstColumn,   "first-column" },
-    { KoTextTableTemplate::FirstRow,      "first-row"    },
-    { KoTextTableTemplate::LastColumn,    "last-column"  },
-    { KoTextTableTemplate::LastRow,       "last-row"     },
-    { KoTextTableTemplate::OddColumns,    "odd-columns"  },
-    { KoTextTableTemplate::OddRows,       "odd-rows"     }
-};
+} templateStyles[] = {{KoTextTableTemplate::BackGround, "background"},
+                      {KoTextTableTemplate::Body, "body"},
+                      {KoTextTableTemplate::EvenColumns, "even-columns"},
+                      {KoTextTableTemplate::EvenRows, "even-rows"},
+                      {KoTextTableTemplate::FirstColumn, "first-column"},
+                      {KoTextTableTemplate::FirstRow, "first-row"},
+                      {KoTextTableTemplate::LastColumn, "last-column"},
+                      {KoTextTableTemplate::LastRow, "last-row"},
+                      {KoTextTableTemplate::OddColumns, "odd-columns"},
+                      {KoTextTableTemplate::OddRows, "odd-rows"}};
 
 static const unsigned int numTemplateStyles = sizeof(templateStyles) / sizeof(*templateStyles);
 
 class Q_DECL_HIDDEN KoTextTableTemplate::Private
 {
 public:
-    Private() { }
+    Private()
+    {
+    }
 
-    ~Private() { }
+    ~Private()
+    {
+    }
 
-    void setProperty(int key, const QVariant &value) {
+    void setProperty(int key, const QVariant &value)
+    {
         stylesPrivate.add(key, value);
     }
-    int propertyInt(int key) const {
+    int propertyInt(int key) const
+    {
         QVariant variant = stylesPrivate.value(key);
         if (variant.isNull())
             return 0;
@@ -60,12 +63,10 @@ public:
     QString name;
 };
 
-
 KoTextTableTemplate::KoTextTableTemplate(QObject *parent)
-    : QObject(parent),
-      d(new Private())
+    : QObject(parent)
+    , d(new Private())
 {
-
 }
 
 KoTextTableTemplate::~KoTextTableTemplate()
@@ -213,7 +214,8 @@ void KoTextTableTemplate::loadOdf(const KoXmlElement *element, KoShapeLoadingCon
 
     if (textSharedData) {
         KoXmlElement styleElem;
-        forEachElement(styleElem, (*element)) {
+        forEachElement(styleElem, (*element))
+        {
             if (styleElem.namespaceURI() == KoXmlNS::table) {
                 for (uint index = 0; index < numTemplateStyles; ++index) {
                     if (templateStyles[index].m_element == styleElem.localName()) {
@@ -228,8 +230,7 @@ void KoTextTableTemplate::loadOdf(const KoXmlElement *element, KoShapeLoadingCon
                             cs = textSharedData->tableCellStyle(styleName, true);
                             if (!cs) {
                                 warnText << "Missing KoTableCellStyle!";
-                            }
-                            else {
+                            } else {
                                 //                debugText << "==> cs.name:" << cs->name();
                                 //                debugText << "==> cs.styleId:" << cs->styleId();
                                 d->stylesPrivate.add(templateStyles[index].m_property, cs->styleId());
@@ -265,7 +266,7 @@ void KoTextTableTemplate::saveOdf(KoXmlWriter *writer, KoTextSharedSavingData *s
         if (d->stylesPrivate.contains(templateStyles[index].m_property)) {
             writer->startElement(QString("table:%1").arg(templateStyles[index].m_element).toLatin1());
             QString savedStyleName = savingData->styleName(d->stylesPrivate.value(templateStyles[index].m_property).toInt());
-            if (! savedStyleName.isEmpty()) {
+            if (!savedStyleName.isEmpty()) {
                 writer->addAttribute("table:style-name", savedStyleName);
             }
 
@@ -273,5 +274,5 @@ void KoTextTableTemplate::saveOdf(KoXmlWriter *writer, KoTextSharedSavingData *s
         }
     }
 
-    writer->endElement(); //table:table-template
+    writer->endElement(); // table:table-template
 }

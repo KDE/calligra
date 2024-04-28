@@ -31,25 +31,23 @@ using namespace Calligra::Sheets;
 
 struct NamedArea {
     QString name;
-    SheetBase* sheet;
+    SheetBase *sheet;
     QRect range;
 };
 
 class Q_DECL_HIDDEN NamedAreaManager::Private
 {
 public:
-    const MapBase* map;
+    const MapBase *map;
     QHash<QString, NamedArea> namedAreas;
 };
 
-NamedAreaManager::NamedAreaManager(const MapBase* map)
-        : d(new Private)
+NamedAreaManager::NamedAreaManager(const MapBase *map)
+    : d(new Private)
 {
     d->map = map;
-    connect(this, &NamedAreaManager::namedAreaAdded,
-            this, &NamedAreaManager::namedAreaModified);
-    connect(this, &NamedAreaManager::namedAreaRemoved,
-            this, &NamedAreaManager::namedAreaModified);
+    connect(this, &NamedAreaManager::namedAreaAdded, this, &NamedAreaManager::namedAreaModified);
+    connect(this, &NamedAreaManager::namedAreaRemoved, this, &NamedAreaManager::namedAreaModified);
 }
 
 NamedAreaManager::~NamedAreaManager()
@@ -62,7 +60,7 @@ const MapBase *NamedAreaManager::map() const
     return d->map;
 }
 
-void NamedAreaManager::insert(const Region& region, const QString& name)
+void NamedAreaManager::insert(const Region &region, const QString &name)
 {
     // NOTE Stefan: Only contiguous regions are supported (OpenDocument compatibility).
     Q_ASSERT(!name.isEmpty());
@@ -75,7 +73,7 @@ void NamedAreaManager::insert(const Region& region, const QString& name)
     emit namedAreaAdded(name);
 }
 
-void NamedAreaManager::remove(const QString& name)
+void NamedAreaManager::remove(const QString &name)
 {
     if (!d->namedAreas.contains(name))
         return;
@@ -85,7 +83,7 @@ void NamedAreaManager::remove(const QString& name)
     emit namedAreaRemoved(name);
 }
 
-void NamedAreaManager::remove(SheetBase* sheet)
+void NamedAreaManager::remove(SheetBase *sheet)
 {
     const QList<NamedArea> namedAreas = d->namedAreas.values();
     for (int i = 0; i < namedAreas.count(); ++i) {
@@ -94,7 +92,7 @@ void NamedAreaManager::remove(SheetBase* sheet)
     }
 }
 
-Calligra::Sheets::Region NamedAreaManager::namedArea(const QString& name) const
+Calligra::Sheets::Region NamedAreaManager::namedArea(const QString &name) const
 {
     if (!d->namedAreas.contains(name))
         return Region();
@@ -102,14 +100,14 @@ Calligra::Sheets::Region NamedAreaManager::namedArea(const QString& name) const
     return Region(namedArea.range, namedArea.sheet);
 }
 
-SheetBase* NamedAreaManager::sheet(const QString& name) const
+SheetBase *NamedAreaManager::sheet(const QString &name) const
 {
     if (!d->namedAreas.contains(name))
         return 0;
     return d->namedAreas.value(name).sheet;
 }
 
-bool NamedAreaManager::contains(const QString& name) const
+bool NamedAreaManager::contains(const QString &name) const
 {
     return d->namedAreas.contains(name);
 }
@@ -119,10 +117,10 @@ QList<QString> NamedAreaManager::areaNames() const
     return d->namedAreas.keys();
 }
 
-void NamedAreaManager::regionChanged(const Region& region)
+void NamedAreaManager::regionChanged(const Region &region)
 {
-    SheetBase* sheet;
-    QVector< QPair<QRectF, QString> > namedAreas;
+    SheetBase *sheet;
+    QVector<QPair<QRectF, QString>> namedAreas;
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
         sheet = (*it)->sheet();
@@ -137,9 +135,9 @@ void NamedAreaManager::regionChanged(const Region& region)
 
 void NamedAreaManager::updateAllNamedAreas()
 {
-    QVector< QPair<QRectF, QString> > namedAreas;
+    QVector<QPair<QRectF, QString>> namedAreas;
     const QRect rect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
-    const QList<SheetBase*> sheets = d->map->sheetList();
+    const QList<SheetBase *> sheets = d->map->sheetList();
     for (int i = 0; i < sheets.count(); ++i) {
         namedAreas = sheets[i]->cellStorage()->namedAreas(Region(rect, sheets[i]));
         for (int j = 0; j < namedAreas.count(); ++j) {
@@ -149,5 +147,3 @@ void NamedAreaManager::updateAllNamedAreas()
         }
     }
 }
-
-

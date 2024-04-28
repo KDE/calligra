@@ -7,9 +7,9 @@
 #ifndef KOPRINTJOB_H
 #define KOPRINTJOB_H
 
-#include <QObject>
-#include <QList>
 #include <QAbstractPrintDialog>
+#include <QList>
+#include <QObject>
 #include <QPrinter>
 
 #include "komain_export.h"
@@ -39,22 +39,25 @@ public:
     /// A policy to allow the printjob to delete itself after its done printing.
     enum RemovePolicy {
         DeleteWhenDone, ///< Delete the job when its done with printing.
-        DoNotDelete     ///< Keep the job around so it can be started again.
+        DoNotDelete ///< Keep the job around so it can be started again.
     };
 
     /// Returns the printer that is used for this print job so others can alter the details of the print-job.
     virtual QPrinter &printer() = 0;
     /// If this print job is used in combination with a printdialog the option widgets this method
     /// returns will be shown in the print dialog.
-    virtual QList<QWidget*> createOptionWidgets() const = 0;
+    virtual QList<QWidget *> createOptionWidgets() const = 0;
 
-    virtual int documentFirstPage() const {
+    virtual int documentFirstPage() const
+    {
         return 1;
     }
-    virtual int documentLastPage() const {
+    virtual int documentLastPage() const
+    {
         return 1;
     }
-    virtual int documentCurrentPage() const {
+    virtual int documentCurrentPage() const
+    {
         return 1;
     }
 

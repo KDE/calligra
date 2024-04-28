@@ -26,7 +26,8 @@ public:
         layoutedMarkupRanges[KoTextBlockData::Grammar] = false;
     }
 
-    ~Private() override {
+    ~Private() override
+    {
         if (border && !border->deref())
             delete border;
         delete paintStrategy;
@@ -43,13 +44,12 @@ public:
     QTextCharFormat labelFormat;
     KoTextBlockBorderData *border;
     KoTextBlockPaintStrategyBase *paintStrategy;
-    QMap<KoTextBlockData::MarkupType, QVector<MarkupRange> > markupRangesMap;
+    QMap<KoTextBlockData::MarkupType, QVector<MarkupRange>> markupRangesMap;
     QMap<KoTextBlockData::MarkupType, bool> layoutedMarkupRanges;
 };
 
 KoTextBlockData::KoTextBlockData(QTextBlock &block)
-    : d(block.userData() ? dynamic_cast<KoTextBlockData::Private *>(block.userData())
-                         : new Private())
+    : d(block.userData() ? dynamic_cast<KoTextBlockData::Private *>(block.userData()) : new Private())
 {
     block.setUserData(d);
 }
@@ -64,7 +64,6 @@ KoTextBlockData::~KoTextBlockData()
 {
     // explicitly do not delete the d-pointer here
 }
-
 
 void KoTextBlockData::appendMarkup(MarkupType type, int firstChar, int lastChar)
 {

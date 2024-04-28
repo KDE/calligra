@@ -43,7 +43,7 @@ public:
      * the currently observed canvas
      * @return observed canvas, can be 0
      */
-    KoCanvasBase* observedCanvas() const;
+    KoCanvasBase *observedCanvas() const;
 
 protected:
     /**
@@ -65,7 +65,7 @@ protected:
     virtual void unsetCanvas() = 0;
 
 private:
-    KoCanvasObserverBasePrivate * const d;
+    KoCanvasObserverBasePrivate *const d;
 };
 
 #endif // KOCANVASOBSERVERBASE_H

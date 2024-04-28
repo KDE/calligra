@@ -21,8 +21,8 @@ class KoGenStyles;
 class DocxXmlFontTableReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    explicit DocxXmlFontTableReaderContext(KoGenStyles& _styles);
-    KoGenStyles* styles;
+    explicit DocxXmlFontTableReaderContext(KoGenStyles &_styles);
+    KoGenStyles *styles;
 };
 
 //! A class reading MSOOXML DOCX markup - fontTable.xml part.
@@ -34,12 +34,12 @@ class DocxXmlFontTableReader : public MSOOXML::MsooXmlReader
 public:
     explicit DocxXmlFontTableReader(KoOdfWriters *writers);
 
-    DocxXmlFontTableReader(QIODevice* io, KoOdfWriters *writers);
+    DocxXmlFontTableReader(QIODevice *io, KoOdfWriters *writers);
 
     ~DocxXmlFontTableReader() override;
 
     //! Reads/parses the file. The output goes mainly to KoGenStyles* KoOdfWriters::mainStyles
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
 
 protected:
     KoFilter::ConversionStatus read_fonts();
@@ -47,7 +47,7 @@ protected:
     KoFilter::ConversionStatus read_family();
     KoFilter::ConversionStatus read_pitch();
 
-    DocxXmlFontTableReaderContext* m_context;
+    DocxXmlFontTableReaderContext *m_context;
 
     KoFontFace m_currentFontFace;
 };

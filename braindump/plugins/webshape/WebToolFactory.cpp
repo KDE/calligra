@@ -21,9 +21,9 @@
 
 #include <KoIcon.h>
 
-#include "WebToolFactory.h"
-#include "WebTool.h"
 #include "WebShape.h"
+#include "WebTool.h"
+#include "WebToolFactory.h"
 
 WebToolFactory::WebToolFactory()
     : KoToolFactoryBase("WebToolFactoryID")
@@ -39,7 +39,7 @@ WebToolFactory::~WebToolFactory()
 {
 }
 
-KoToolBase* WebToolFactory::createTool(KoCanvasBase * canvas)
+KoToolBase *WebToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new WebTool(canvas);
 }

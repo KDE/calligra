@@ -36,12 +36,12 @@ public:
      * @param mimeType used for creating the odf document
      * @param helper helper for saving the body of the odf document
      */
-    bool setOdf(const char * mimeType, KoTextOdfSaveHelper &helper);
+    bool setOdf(const char *mimeType, KoTextOdfSaveHelper &helper);
 
     /**
      * Add additional mimeTypes
      */
-    void setData(const QString & mimeType, const QByteArray & data);
+    void setData(const QString &mimeType, const QByteArray &data);
 
     /**
      * Get the mime data

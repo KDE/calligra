@@ -24,17 +24,15 @@
 // plugin
 #include "KoRdfFoaF.h"
 // KF5
-#include <kdebug.h>
 #include <KLocalizedString>
+#include <kdebug.h>
 // Qt
 #include <QMimeData>
-
 
 KoContactSemanticItemFactory::KoContactSemanticItemFactory()
     : KoRdfSemanticItemFactoryBase("Contact")
 {
 }
-
 
 QString KoContactSemanticItemFactory::className() const
 {
@@ -46,7 +44,9 @@ QString KoContactSemanticItemFactory::classDisplayName() const
     return i18nc("displayname of the semantic item type Contact", "Contact");
 }
 
-void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
+void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems,
+                                                       const KoDocumentRdf *rdf,
+                                                       QSharedPointer<Soprano::Model> m)
 {
     const QString sparqlQuery = QLatin1String(
         "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
@@ -63,9 +63,7 @@ void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemantic
         "    }\n"
         "}\n");
 
-    Soprano::QueryResultIterator it =
-        m->executeQuery(sparqlQuery,
-                        Soprano::Query::QueryLanguageSparql);
+    Soprano::QueryResultIterator it = m->executeQuery(sparqlQuery, Soprano::Query::QueryLanguageSparql);
 
     // lastKnownObjects is used to perform a semantic set diff
     // at return time d->foafObjects will have any new objects and
@@ -76,7 +74,6 @@ void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemantic
     // the DISTINCT sparql keyword
     QSet<QString> uniqfilter;
     while (it.next()) {
-
         QString name = it.binding("name").toString();
         if (uniqfilter.contains(name)) {
             continue;
@@ -104,22 +101,19 @@ void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemantic
     }
 
 #ifndef NDEBUG
-    if (semanticItems.empty() && m->statementCount())
-    {
+    if (semanticItems.empty() && m->statementCount()) {
         kDebug(30015) << "foaf() have data, but no foafs!" << Qt::endl;
         QList<Soprano::Statement> allStatements = m->listStatements().allElements();
-        foreach (Soprano::Statement s, allStatements)
-        {
+        foreach (Soprano::Statement s, allStatements) {
             kDebug(30015) << s;
         }
     }
 #endif
 }
 
-hKoRdfBasicSemanticItem KoContactSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+hKoRdfBasicSemanticItem KoContactSemanticItemFactory::createSemanticItem(const KoDocumentRdf *rdf, QObject *parent)
 {
     return hKoRdfBasicSemanticItem(new KoRdfFoaF(parent, rdf));
-
 }
 
 bool KoContactSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const
@@ -127,10 +121,8 @@ bool KoContactSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMime
     return mimeData->hasFormat(QLatin1String("text/x-vcard"));
 }
 
-hKoRdfBasicSemanticItem KoContactSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData *mimeData,
-                                                                   KoCanvasBase *host,
-                                                                   const KoDocumentRdf *rdf,
-                                                                   QObject *parent) const
+hKoRdfBasicSemanticItem
+KoContactSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *rdf, QObject *parent) const
 {
     const QByteArray ba = mimeData->data(QLatin1String("text/x-vcard"));
     hKoRdfSemanticItem semanticItem = hKoRdfSemanticItem(new KoRdfFoaF(parent, rdf));

@@ -10,23 +10,26 @@
 #include "ImageDataItem.h"
 
 #include <QPixmap>
-#include <QSGSimpleTextureNode>
 #include <QQuickWindow>
+#include <QSGSimpleTextureNode>
 
 using namespace Calligra::Components;
 
 class ImageDataItem::Private
 {
 public:
-    Private() : imageChanged(false)
-    { }
+    Private()
+        : imageChanged(false)
+    {
+    }
 
     QImage data;
     bool imageChanged;
 };
 
-ImageDataItem::ImageDataItem(QQuickItem* parent)
-    : QQuickItem{parent}, d{new Private}
+ImageDataItem::ImageDataItem(QQuickItem *parent)
+    : QQuickItem{parent}
+    , d{new Private}
 {
     setFlag(QQuickItem::ItemHasContents, true);
 }
@@ -41,9 +44,9 @@ QImage ImageDataItem::data() const
     return d->data;
 }
 
-void ImageDataItem::setData(const QImage& newValue)
+void ImageDataItem::setData(const QImage &newValue)
 {
-    if(newValue != d->data) {
+    if (newValue != d->data) {
         d->data = newValue;
         setImplicitWidth(d->data.width());
         setImplicitHeight(d->data.height());
@@ -53,17 +56,17 @@ void ImageDataItem::setData(const QImage& newValue)
     }
 }
 
-QSGNode* ImageDataItem::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData*)
+QSGNode *ImageDataItem::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *)
 {
-    if(d->data.isNull()) {
+    if (d->data.isNull()) {
         return node;
     }
 
     float w = widthValid() ? width() : d->data.width();
     float h = heightValid() ? height() : d->data.height();
 
-    auto texNode = static_cast<QSGSimpleTextureNode*>(node);
-    if(!texNode) {
+    auto texNode = static_cast<QSGSimpleTextureNode *>(node);
+    if (!texNode) {
         texNode = new QSGSimpleTextureNode{};
     }
     texNode->setRect(0, 0, w, h);

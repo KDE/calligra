@@ -9,15 +9,23 @@
 #include "ArtisticTextShape.h"
 #include <KLocalizedString>
 
-ChangeTextFontCommand::ChangeTextFontCommand(ArtisticTextShape * shape, const QFont &font, KUndo2Command *parent)
-    : KUndo2Command(parent), m_shape(shape), m_newFont( font ), m_rangeStart(-1), m_rangeCount(-1)
+ChangeTextFontCommand::ChangeTextFontCommand(ArtisticTextShape *shape, const QFont &font, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_shape(shape)
+    , m_newFont(font)
+    , m_rangeStart(-1)
+    , m_rangeCount(-1)
 {
     Q_ASSERT(m_shape);
-    setText( kundo2_i18n("Change font") );
+    setText(kundo2_i18n("Change font"));
 }
 
 ChangeTextFontCommand::ChangeTextFontCommand(ArtisticTextShape *shape, int from, int count, const QFont &font, KUndo2Command *parent)
-    : KUndo2Command(parent), m_shape(shape), m_newFont( font ), m_rangeStart(from), m_rangeCount(count)
+    : KUndo2Command(parent)
+    , m_shape(shape)
+    , m_newFont(font)
+    , m_rangeStart(from)
+    , m_rangeCount(count)
 {
     Q_ASSERT(m_shape);
 }
@@ -36,7 +44,7 @@ void ChangeTextFontCommand::redo()
         }
     } else {
         m_shape->clear();
-        foreach(const ArtisticTextRange &range, m_newText) {
+        foreach (const ArtisticTextRange &range, m_newText) {
             m_shape->appendText(range);
         }
     }
@@ -45,8 +53,7 @@ void ChangeTextFontCommand::redo()
 void ChangeTextFontCommand::undo()
 {
     m_shape->clear();
-    foreach(const ArtisticTextRange &range, m_oldText) {
+    foreach (const ArtisticTextRange &range, m_oldText) {
         m_shape->appendText(range);
     }
 }
-

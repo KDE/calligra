@@ -20,13 +20,13 @@ public:
     explicit FloodEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
-    bool editFilterEffect(KoFilterEffect * filterEffect) override;
+    bool editFilterEffect(KoFilterEffect *filterEffect) override;
 
 private Q_SLOTS:
     void colorChanged();
 
 private:
-    FloodEffect * m_effect;
+    FloodEffect *m_effect;
     KoColorPopupAction *m_actionStopColor;
 };
 

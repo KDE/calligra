@@ -6,16 +6,18 @@
 
 #include "RoundCornersCommand.h"
 
-#include <KoPathShape.h>
-#include <KoPathSegment.h>
 #include <KoPathPoint.h>
+#include <KoPathSegment.h>
+#include <KoPathShape.h>
 
 #include <KLocalizedString>
 
 #include <math.h>
 
-RoundCornersCommand::RoundCornersCommand(KoPathShape * path, qreal radius, KUndo2Command * parent)
-        : KUndo2Command(parent), m_path(path), m_copy(0)
+RoundCornersCommand::RoundCornersCommand(KoPathShape *path, qreal radius, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_path(path)
+    , m_copy(0)
 {
     Q_ASSERT(path);
 
@@ -55,117 +57,117 @@ void RoundCornersCommand::undo()
 void RoundCornersCommand::roundPath()
 {
     /*
-    * This algorithm is worked out by <kudling AT kde DOT org> to produce similar results as
-    * the "round corners" algorithms found in other applications. Neither code nor
-    * algorithms from any 3rd party is used though.
-    *
-    * We want to replace all corners with round corners having "radius" m_radius.
-    * The algorithm doesn't really produce circular arcs, but that's ok since
-    * the algorithm achieves nice looking results and is generic enough to be applied
-    * to all kind of paths.
-    * Note also, that this algorithm doesn't touch smooth joins (in the sense of
-    * KoPathPoint::isSmooth() ).
-    *
-    * We'll manipulate the input path for bookkeeping purposes and construct a new
-    * temporary path in parallel. We finally replace the input path with the new path.
-    *
-    *
-    * Without restricting generality, let's assume the input path is closed and
-    * contains segments which build a rectangle.
-    *
-    *           2
-    *    O------------O
-    *    |            |        Numbers reflect the segments' order
-    *   3|            |1       in the path. We neglect the "begin"
-    *    |            |        segment here.
-    *    O------------O
-    *           0
-    *
-    * There are three unique steps to process. The second step is processed
-    * many times in a loop.
-    *
-    * 1) Begin
-    *    -----
-    *    Split the first segment of the input path (called "path[0]" here)
-    *    at parameter t
-    *
-    *        t = path[0]->param( m_radius )
-    *
-    *    and move newPath to this new knot. If current segment is too small
-    *    (smaller than 2 * m_radius), we always set t = 0.5 here and in the further
-    *    steps as well.
-    *
-    *    path:                 new path:
-    *
-    *           2
-    *    O------------O
-    *    |            |
-    *  3 |            | 1                    The current segment is marked with "#"s.
-    *    |            |
-    *    O##O#########O        ...O
-    *           0                     0
-    *
-    * 2) Loop
-    *    ----
-    *    The loop step is iterated over all segments. After each appliance the index n
-    *    is incremented and the loop step is reapplied until no untouched segment is left.
-    *
-    *    Split the current segment path[n] of the input path at parameter t
-    *
-    *        t = path[n]->param( path[n]->length() - m_radius )
-    *
-    *    and add the first subsegment of the current segment to newPath.
-    *
-    *    path:                 new path:
-    *
-    *           2
-    *    O------------O
-    *    |            |
-    *  3 |            | 1
-    *    |            |
-    *    O--O######O##O           O------O...
-    *           0                     0
-    *
-    *    Now make the second next segment (the original path[1] segment in our example)
-    *    the current one. Split it at parameter t
-    *
-    *        t = path[n]->param( m_radius )
-    *
-    *    path:                 new path:
-    *
-    *           2
-    *    O------------O
-    *    |            #
-    *  3 |            O 1
-    *    |            #
-    *    O--O------O--O           O------O...
-    *           0                     0
-    *
-    *    Make the first subsegment of the current segment the current one.
-    *
-    *    path:                 new path:
-    *
-    *           2
-    *    O------------O
-    *    |            |
-    *  3 |            O 1                   O
-    *    |            #                    /.1
-    *    O--O------O--O           O------O...
-    *           0                     0
-    *
-    * 3) End
-    *    ---
-    *
-    *    path:                 new path:
-    *
-    *           2                     4
-    *    O--O------O--O        5 .O------O. 3
-    *    |            |         /          \
-    *  3 O            O 1    6 O            O 2
-    *    |            |      7 .\          /
-    *    O--O------O--O        ...O------O. 1
-    *           0                     0
-    */
+     * This algorithm is worked out by <kudling AT kde DOT org> to produce similar results as
+     * the "round corners" algorithms found in other applications. Neither code nor
+     * algorithms from any 3rd party is used though.
+     *
+     * We want to replace all corners with round corners having "radius" m_radius.
+     * The algorithm doesn't really produce circular arcs, but that's ok since
+     * the algorithm achieves nice looking results and is generic enough to be applied
+     * to all kind of paths.
+     * Note also, that this algorithm doesn't touch smooth joins (in the sense of
+     * KoPathPoint::isSmooth() ).
+     *
+     * We'll manipulate the input path for bookkeeping purposes and construct a new
+     * temporary path in parallel. We finally replace the input path with the new path.
+     *
+     *
+     * Without restricting generality, let's assume the input path is closed and
+     * contains segments which build a rectangle.
+     *
+     *           2
+     *    O------------O
+     *    |            |        Numbers reflect the segments' order
+     *   3|            |1       in the path. We neglect the "begin"
+     *    |            |        segment here.
+     *    O------------O
+     *           0
+     *
+     * There are three unique steps to process. The second step is processed
+     * many times in a loop.
+     *
+     * 1) Begin
+     *    -----
+     *    Split the first segment of the input path (called "path[0]" here)
+     *    at parameter t
+     *
+     *        t = path[0]->param( m_radius )
+     *
+     *    and move newPath to this new knot. If current segment is too small
+     *    (smaller than 2 * m_radius), we always set t = 0.5 here and in the further
+     *    steps as well.
+     *
+     *    path:                 new path:
+     *
+     *           2
+     *    O------------O
+     *    |            |
+     *  3 |            | 1                    The current segment is marked with "#"s.
+     *    |            |
+     *    O##O#########O        ...O
+     *           0                     0
+     *
+     * 2) Loop
+     *    ----
+     *    The loop step is iterated over all segments. After each appliance the index n
+     *    is incremented and the loop step is reapplied until no untouched segment is left.
+     *
+     *    Split the current segment path[n] of the input path at parameter t
+     *
+     *        t = path[n]->param( path[n]->length() - m_radius )
+     *
+     *    and add the first subsegment of the current segment to newPath.
+     *
+     *    path:                 new path:
+     *
+     *           2
+     *    O------------O
+     *    |            |
+     *  3 |            | 1
+     *    |            |
+     *    O--O######O##O           O------O...
+     *           0                     0
+     *
+     *    Now make the second next segment (the original path[1] segment in our example)
+     *    the current one. Split it at parameter t
+     *
+     *        t = path[n]->param( m_radius )
+     *
+     *    path:                 new path:
+     *
+     *           2
+     *    O------------O
+     *    |            #
+     *  3 |            O 1
+     *    |            #
+     *    O--O------O--O           O------O...
+     *           0                     0
+     *
+     *    Make the first subsegment of the current segment the current one.
+     *
+     *    path:                 new path:
+     *
+     *           2
+     *    O------------O
+     *    |            |
+     *  3 |            O 1                   O
+     *    |            #                    /.1
+     *    O--O------O--O           O------O...
+     *           0                     0
+     *
+     * 3) End
+     *    ---
+     *
+     *    path:                 new path:
+     *
+     *           2                     4
+     *    O--O------O--O        5 .O------O. 3
+     *    |            |         /          \
+     *  3 O            O 1    6 O            O 2
+     *    |            |      7 .\          /
+     *    O--O------O--O        ...O------O. 1
+     *           0                     0
+     */
 
     // TODO: not sure if we should only touch flat segment joins as the original algorithm
 
@@ -174,7 +176,7 @@ void RoundCornersCommand::roundPath()
     int subpathCount = m_copy->subpathCount();
     for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {
         int pointCount = m_copy->subpathPointCount(subpathIndex);
-        if (! pointCount)
+        if (!pointCount)
             continue;
 
         // check if we have sufficient number of points
@@ -191,13 +193,12 @@ void RoundCornersCommand::roundPath()
         KoPathSegment nextSeg = m_copy->segmentByIndex(KoPathPointIndex(subpathIndex, 0));
         KoPathSegment lastSeg;
 
-        KoPathPoint * currPoint = nextSeg.first();
-        KoPathPoint * firstPoint = 0;
-        KoPathPoint * lastPoint = 0;
+        KoPathPoint *currPoint = nextSeg.first();
+        KoPathPoint *firstPoint = 0;
+        KoPathPoint *lastPoint = 0;
 
         // check if first path point is a smooth join with the closing segment
-        bool firstPointIsCorner = m_copy->isClosedSubpath(subpathIndex)
-                                  && ! currPoint->isSmooth(prevSeg.first(), nextSeg.second());
+        bool firstPointIsCorner = m_copy->isClosedSubpath(subpathIndex) && !currPoint->isSmooth(prevSeg.first(), nextSeg.second());
 
         // Begin: take care of the first path point
         if (firstPointIsCorner) {
@@ -235,11 +236,11 @@ void RoundCornersCommand::roundPath()
         // Loop:
         for (int pointIndex = 1; pointIndex < pointCount; ++pointIndex) {
             nextSeg = m_copy->segmentByIndex(KoPathPointIndex(subpathIndex, pointIndex));
-            if (! nextSeg.isValid())
+            if (!nextSeg.isValid())
                 break;
 
             currPoint = nextSeg.first();
-            if (! currPoint)
+            if (!currPoint)
                 continue;
 
             if (currPoint->isSmooth(prevSeg.first(), nextSeg.second())) {
@@ -275,7 +276,6 @@ void RoundCornersCommand::roundPath()
 
                 prevSeg = nextParts.second;
             }
-
         }
 
         // End: take care of the last path point
@@ -309,7 +309,7 @@ void RoundCornersCommand::roundPath()
     }
 }
 
-KoPathPoint * RoundCornersCommand::addSegment(KoPathShape * p, KoPathSegment & s)
+KoPathPoint *RoundCornersCommand::addSegment(KoPathShape *p, KoPathSegment &s)
 {
     switch (s.degree()) {
     case 1:
@@ -322,28 +322,26 @@ KoPathPoint * RoundCornersCommand::addSegment(KoPathShape * p, KoPathSegment & s
             return p->curveTo(s.second()->controlPoint1(), s.second()->point());
         break;
     case 3:
-        return p->curveTo(s.first()->controlPoint2(),
-                          s.second()->controlPoint1(),
-                          s.second()->point());
+        return p->curveTo(s.first()->controlPoint2(), s.second()->controlPoint1(), s.second()->point());
         break;
     }
     return 0;
 }
 
-void RoundCornersCommand::copyPath(KoPathShape * dst, KoPathShape * src)
+void RoundCornersCommand::copyPath(KoPathShape *dst, KoPathShape *src)
 {
     dst->clear();
 
     int subpathCount = src->subpathCount();
     for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {
         int pointCount = src->subpathPointCount(subpathIndex);
-        if (! pointCount)
+        if (!pointCount)
             continue;
 
-        KoSubpath * subpath = new KoSubpath;
+        KoSubpath *subpath = new KoSubpath;
         for (int pointIndex = 0; pointIndex < pointCount; ++pointIndex) {
-            KoPathPoint * p = src->pointByIndex(KoPathPointIndex(subpathIndex, pointIndex));
-            KoPathPoint * c = new KoPathPoint(*p);
+            KoPathPoint *p = src->pointByIndex(KoPathPointIndex(subpathIndex, pointIndex));
+            KoPathPoint *c = new KoPathPoint(*p);
             c->setParent(dst);
             subpath->append(c);
         }
@@ -363,7 +361,7 @@ QPointF RoundCornersCommand::tangentAtStart(const KoPathSegment &s)
 QPointF RoundCornersCommand::tangentAtEnd(const KoPathSegment &s)
 {
     QVector<QPointF> cp = s.controlPoints();
-    QPointF tn = cp[cp.count()-2] - cp.last();
+    QPointF tn = cp[cp.count() - 2] - cp.last();
     qreal length = sqrt(tn.x() * tn.x() + tn.y() * tn.y());
     return tn / length;
 }

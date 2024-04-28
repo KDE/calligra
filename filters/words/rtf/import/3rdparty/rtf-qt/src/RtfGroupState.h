@@ -6,14 +6,17 @@
 #include "rtfreader_export.h"
 namespace RtfReader
 {
-    class RTFREADER_EXPORT RtfGroupState
+class RTFREADER_EXPORT RtfGroupState
+{
+public:
+    RtfGroupState()
+        : didChangeDestination(false)
+        , endOfFile(false)
     {
-    public:
-	RtfGroupState() : didChangeDestination( false ), endOfFile( false )
-	{}
-	bool didChangeDestination;
-	bool endOfFile;
-    };
+    }
+    bool didChangeDestination;
+    bool endOfFile;
+};
 }
 
 #endif

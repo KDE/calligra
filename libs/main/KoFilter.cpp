@@ -7,33 +7,39 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 
 #include "KoFilter.h"
 
-#include <QFile>
-#include <QUrl>
-#include <MainDebug.h>
-#include <QStack>
 #include "KoFilterManager.h"
 #include "KoUpdater.h"
+#include <MainDebug.h>
+#include <QFile>
+#include <QStack>
+#include <QUrl>
 
 class Q_DECL_HIDDEN KoFilter::Private
 {
 public:
     QPointer<KoUpdater> updater;
 
-    Private() :updater(0) {}
+    Private()
+        : updater(0)
+    {
+    }
 };
 
 KoFilter::KoFilter(QObject *parent)
-    : QObject(parent), m_chain(0), d(new Private)
+    : QObject(parent)
+    , m_chain(0)
+    , d(new Private)
 {
 }
 
 KoFilter::~KoFilter()
 {
-    if (d->updater) d->updater->setProgress(100);
+    if (d->updater)
+        d->updater->setProgress(100);
     delete d;
 }
 
-void KoFilter::setUpdater(const QPointer<KoUpdater>& updater)
+void KoFilter::setUpdater(const QPointer<KoUpdater> &updater)
 {
     if (d->updater && !updater) {
         disconnect(this, &KoFilter::sigProgress, this, &KoFilter::slotProgress);

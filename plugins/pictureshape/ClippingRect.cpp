@@ -6,27 +6,27 @@
 
 #include "ClippingRect.h"
 
-ClippingRect::ClippingRect():
-    top(0),
-    right(1),
-    bottom(1),
-    left(0),
-    uniform(true),
-    inverted(false)
+ClippingRect::ClippingRect()
+    : top(0)
+    , right(1)
+    , bottom(1)
+    , left(0)
+    , uniform(true)
+    , inverted(false)
 {
 }
 
-ClippingRect::ClippingRect(const ClippingRect& rect):
-    top(rect.top),
-    right(rect.right),
-    bottom(rect.bottom),
-    left(rect.left),
-    uniform(rect.uniform),
-    inverted(rect.inverted)
+ClippingRect::ClippingRect(const ClippingRect &rect)
+    : top(rect.top)
+    , right(rect.right)
+    , bottom(rect.bottom)
+    , left(rect.left)
+    , uniform(rect.uniform)
+    , inverted(rect.inverted)
 {
 }
 
-ClippingRect & ClippingRect::operator=(const ClippingRect& rect)
+ClippingRect &ClippingRect::operator=(const ClippingRect &rect)
 {
     top = rect.top;
     right = rect.right;
@@ -37,12 +37,12 @@ ClippingRect & ClippingRect::operator=(const ClippingRect& rect)
     return *this;
 }
 
-ClippingRect::ClippingRect(const QRectF& rect, bool isUniform)
+ClippingRect::ClippingRect(const QRectF &rect, bool isUniform)
 {
     setRect(rect, isUniform);
 }
 
-void ClippingRect::scale(const QSizeF& size, bool isUniform)
+void ClippingRect::scale(const QSizeF &size, bool isUniform)
 {
     top *= size.height();
     right *= size.width();
@@ -51,20 +51,20 @@ void ClippingRect::scale(const QSizeF& size, bool isUniform)
     uniform = isUniform;
 }
 
-void ClippingRect::normalize(const QSizeF& size)
+void ClippingRect::normalize(const QSizeF &size)
 {
     if (!uniform) {
-        scale(QSizeF(1.0/size.width(), 1.0/size.height()), true);
+        scale(QSizeF(1.0 / size.width(), 1.0 / size.height()), true);
     }
 
-    if(inverted) {
+    if (inverted) {
         right = 1.0 - right;
         bottom = 1.0 - bottom;
         inverted = false;
     }
 }
 
-void ClippingRect::setRect(const QRectF& rect, bool isUniform)
+void ClippingRect::setRect(const QRectF &rect, bool isUniform)
 {
     top = rect.top();
     right = rect.right();

@@ -8,10 +8,10 @@
 #ifndef KOPATHPOINTREMOVECOMMAND_H
 #define KOPATHPOINTREMOVECOMMAND_H
 
-#include <kundo2command.h>
-#include <QList>
 #include "KoPathPointData.h"
 #include "flake_export.h"
+#include <QList>
+#include <kundo2command.h>
 
 class KoShapeController;
 class KoPathPointRemoveCommandPrivate;

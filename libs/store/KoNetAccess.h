@@ -10,18 +10,18 @@
 #ifndef KO_NETACCESS_h
 #define KO_NETACCESS_h
 
+#include <KIO/Job> // for KIO::JobFlags
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <kio/global.h>
 #include <kio/udsentry.h>
-#include <KIO/Job> // for KIO::JobFlags
 
 class QWidget;
 
 #include <kostore_export.h>
 
-
-template<typename T, typename K> class QMap;
+template<typename T, typename K>
+class QMap;
 
 class KJob;
 namespace KIO
@@ -58,10 +58,7 @@ class KOSTORE_EXPORT NetAccess : public QObject
     Q_OBJECT
 
 public:
-    enum StatSide {
-        SourceSide,
-        DestinationSide
-    };
+    enum StatSide { SourceSide, DestinationSide };
 
     /**
      * Downloads a file from an arbitrary URL (@p src) to a
@@ -181,9 +178,8 @@ public:
      * @return true if successful, false for failure
      * @deprecated since 5.0, use KIO::file_copy + job->ui()->setWindow() + job->exec() instead
      */
-    static  bool file_copy(const QUrl &src, const QUrl &target, QWidget *window = 0);
-    static  bool copy(const QUrl &src, const QUrl &target,
-            QWidget *window = 0);
+    static bool file_copy(const QUrl &src, const QUrl &target, QWidget *window = 0);
+    static bool copy(const QUrl &src, const QUrl &target, QWidget *window = 0);
 
     /**
      * Alternative method for copying over the network.
@@ -206,27 +202,27 @@ public:
      * @return true if successful, false for failure
      * @deprecated since 5.0, use KIO::copy + job->ui()->setWindow() + job->exec() instead
      */
-    static  bool dircopy(const QUrl &src, const QUrl &target, QWidget *window);
+    static bool dircopy(const QUrl &src, const QUrl &target, QWidget *window);
 
     /**
      * Overloaded method, which takes a list of source URLs
      * @deprecated since 5.0, use KIO::copy + job->ui()->setWindow() + job->exec() instead
      */
-    static   bool dircopy(const QList<QUrl> &src, const QUrl &target, QWidget *window = 0L);
+    static bool dircopy(const QList<QUrl> &src, const QUrl &target, QWidget *window = 0L);
 
     /**
      * Full-fledged equivalent of KIO::move.
      * Moves or renames one file or directory.
      * @deprecated since 5.0, use KIO::move + job->ui()->setWindow() + job->exec() instead
      */
-    static  bool move(const QUrl &src, const QUrl &target, QWidget *window = 0L);
+    static bool move(const QUrl &src, const QUrl &target, QWidget *window = 0L);
 
     /**
      * Full-fledged equivalent of KIO::move.
      * Moves or renames a list of files or directories.
      * @deprecated since 5.0, use KIO::move + job->ui()->setWindow() + job->exec() instead
      */
-    static  bool move(const QList<QUrl> &src, const QUrl &target, QWidget *window = 0L);
+    static bool move(const QList<QUrl> &src, const QUrl &target, QWidget *window = 0L);
 
     /**
      * Tests whether a URL exists.
@@ -245,7 +241,7 @@ public:
      *
      * @deprecated use the StatSide enum instead of the bool source
      */
-    static  bool exists(const QUrl &url, bool source, QWidget *window);
+    static bool exists(const QUrl &url, bool source, QWidget *window);
 
     /**
      * Tests whether a URL exists.
@@ -316,7 +312,7 @@ public:
      * @return true on success, false on failure.
      * @deprecated since 5.0, use KIO::del + job->ui()->setWindow() + job->exec() instead
      */
-    static  bool del(const QUrl &url, QWidget *window);
+    static bool del(const QUrl &url, QWidget *window);
 
     /**
      * Creates a directory in a synchronous way.
@@ -334,7 +330,7 @@ public:
      * @return true on success, false on failure.
      * @deprecated since 5.0, use KIO::mkdir + job->ui()->setWindow() + job->exec() instead
      */
-    static  bool mkdir(const QUrl &url, QWidget *window, int permissions = -1);
+    static bool mkdir(const QUrl &url, QWidget *window, int permissions = -1);
 
     /**
      * Executes a remote process via the fish ioslave in a synchronous way.
@@ -392,6 +388,7 @@ public:
 
 Q_SIGNALS:
     void leaveModality();
+
 private:
     /**
      * Private constructor
@@ -406,10 +403,8 @@ private:
     /**
      * Internal methods
      */
-    bool filecopyInternal(const QUrl &src, const QUrl &target, int permissions,
-                          KIO::JobFlags flags, QWidget *window, bool move);
-    bool dircopyInternal(const QList<QUrl> &src, const QUrl &target,
-                         QWidget *window, bool move);
+    bool filecopyInternal(const QUrl &src, const QUrl &target, int permissions, KIO::JobFlags flags, QWidget *window, bool move);
+    bool dircopyInternal(const QList<QUrl> &src, const QUrl &target, QWidget *window, bool move);
     bool statInternal(const QUrl &url, KIO::StatDetail details, StatSide side, QWidget *window = 0);
 
     bool delInternal(const QUrl &url, QWidget *window = 0);

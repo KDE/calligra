@@ -11,14 +11,11 @@
 
 #include <KLocalizedString>
 
-#include "core/Sheet.h"
 #include "core/Cell.h"
+#include "core/Sheet.h"
 #include "ui/Selection.h"
 
-
-
 using namespace Calligra::Sheets;
-
 
 Subtotals::Subtotals(Actions *actions)
     : CellAction(actions, "subtotals", i18n("&Subtotals..."), QIcon(), i18n("Create different kind of subtotals to a list or database"))
@@ -29,16 +26,22 @@ Subtotals::Subtotals(Actions *actions)
 
 Subtotals::~Subtotals()
 {
-    if (m_dlg) delete m_dlg;
+    if (m_dlg)
+        delete m_dlg;
 }
 
-bool Subtotals::enabledForSelection(Selection *selection, const Cell &) {
-    if (!selection->isContiguous()) return false;
+bool Subtotals::enabledForSelection(Selection *selection, const Cell &)
+{
+    if (!selection->isContiguous())
+        return false;
     // don't allow full rows/columns
-    if (selection->isRowSelected()) return false;
-    if (selection->isColumnSelected()) return false;
+    if (selection->isRowSelected())
+        return false;
+    if (selection->isColumnSelected())
+        return false;
     QRect range = selection->lastRange();
-    if ((range.width() < 2) || (range.height() < 2)) return false;
+    if ((range.width() < 2) || (range.height() < 2))
+        return false;
     return true;
 }
 
@@ -54,7 +57,7 @@ void Subtotals::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidge
 
         int primary = m_dlg->primaryColumn();
         if (m_dlg->removeExisting()) {
-            cmd->setPrimaryColumn(primary);  // not really needed, but we should have something
+            cmd->setPrimaryColumn(primary); // not really needed, but we should have something
             QList<int> cols({primary});
             cmd->setColumns(cols);
             cmd->setSummaryBelow(false);
@@ -76,11 +79,10 @@ void Subtotals::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidge
     m_dlg = nullptr;
 }
 
-
 // Info about one row
 struct SubtotalsRowInfo {
     bool isSubtotalRow;
-    int fromRow, toRow;  // if isSubtotalRow is true
+    int fromRow, toRow; // if isSubtotalRow is true
 
     // if isSubtotalRow is false: the mappings are per columns
     QMap<int, Style> cellStyle;
@@ -88,7 +90,8 @@ struct SubtotalsRowInfo {
     QMap<int, bool> isFormula;
 };
 
-class SubtotalsManipulator::Private {
+class SubtotalsManipulator::Private
+{
 public:
     Private();
     Region m_range;
@@ -120,43 +123,54 @@ SubtotalsManipulator::~SubtotalsManipulator()
     delete d;
 }
 
-void SubtotalsManipulator::setRange(const Region &range) {
+void SubtotalsManipulator::setRange(const Region &range)
+{
     d->m_range = range;
 }
 
-void SubtotalsManipulator::setColumns(QList<int> columns) {
+void SubtotalsManipulator::setColumns(QList<int> columns)
+{
     d->m_columns = columns;
 }
 
-void SubtotalsManipulator::setPrimaryColumn(int col) {
+void SubtotalsManipulator::setPrimaryColumn(int col)
+{
     d->m_primaryColumn = col;
 }
 
-void SubtotalsManipulator::setFuncCode(int code) {
+void SubtotalsManipulator::setFuncCode(int code)
+{
     d->m_funcCode = code;
 }
 
-void SubtotalsManipulator::setIgnoreEmptyColumns(bool ignore) {
+void SubtotalsManipulator::setIgnoreEmptyColumns(bool ignore)
+{
     d->m_ignoreEmptyColumns = ignore;
 }
 
-void SubtotalsManipulator::setSummaryBelow(bool summary) {
+void SubtotalsManipulator::setSummaryBelow(bool summary)
+{
     d->m_summaryBelow = summary;
 }
 
-void SubtotalsManipulator::setSummaryOnly(bool summary) {
+void SubtotalsManipulator::setSummaryOnly(bool summary)
+{
     d->m_summaryOnly = summary;
 }
 
 bool SubtotalsManipulator::preProcess()
 {
-    if (!m_firstrun) return true;  // ran already
+    if (!m_firstrun)
+        return true; // ran already
 
-    if (!d->m_primaryColumn) return false;
-    if (!d->m_columns.size()) return false;
+    if (!d->m_primaryColumn)
+        return false;
+    if (!d->m_columns.size())
+        return false;
 
     QRect rect = d->m_range.lastRange();
-    if (rect.isEmpty()) return false;
+    if (rect.isEmpty())
+        return false;
     SheetBase *bsheet = d->m_range.lastSheet();
     Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
 
@@ -164,12 +178,16 @@ bool SubtotalsManipulator::preProcess()
     int from = rect.top();
     int to = rect.bottom();
     QRect used = sheet->usedArea();
-    if (used.bottom() < to) to = used.bottom();
-    if (used.right() < rect.right()) rect.setRight(used.right());
+    if (used.bottom() < to)
+        to = used.bottom();
+    if (used.right() < rect.right())
+        rect.setRight(used.right());
     int xfrom = rect.left();
     int xto = rect.right();
-    if (d->m_primaryColumn < xfrom) d->m_primaryColumn = xfrom;
-    if (d->m_primaryColumn > xto) d->m_primaryColumn = xto;
+    if (d->m_primaryColumn < xfrom)
+        d->m_primaryColumn = xfrom;
+    if (d->m_primaryColumn > xto)
+        d->m_primaryColumn = xto;
 
     QString lastInput;
     bool gotLastInput = false;
@@ -180,7 +198,8 @@ bool SubtotalsManipulator::preProcess()
         bool containsSubtotal = false;
         for (int x = xfrom; x <= xto; ++x) {
             CellBase cell = CellBase(sheet, x, y);
-            if (!cell.isFormula()) continue;
+            if (!cell.isFormula())
+                continue;
 
             QString text = cell.userInput().toLower();
             if (text.indexOf("subtotal") != -1) {
@@ -188,14 +207,16 @@ bool SubtotalsManipulator::preProcess()
                 break;
             }
         }
-        if (containsSubtotal) continue;
+        if (containsSubtotal)
+            continue;
 
         // Now go by the primary column
         CellBase cell = CellBase(sheet, d->m_primaryColumn, y);
         QString curInput = cell.userInput();
 
         // If we're ignoring empty columns, do that
-        if (d->m_ignoreEmptyColumns && (!curInput.length())) continue;
+        if (d->m_ignoreEmptyColumns && (!curInput.length()))
+            continue;
 
         if (!gotLastInput) {
             lastInput = curInput;
@@ -222,7 +243,7 @@ bool SubtotalsManipulator::preProcess()
         i.isSubtotalRow = false;
 
         for (int col = xfrom; col <= xto; ++col) {
-            Cell cell = Cell(sheet, col, y);   // need the full cell as we're grabbing styles too
+            Cell cell = Cell(sheet, col, y); // need the full cell as we're grabbing styles too
             i.cellStyle[col] = cell.style();
             i.isFormula[col] = cell.isFormula();
             // For formulas, need to store the encoded formula and decode it when moving it - this is so that the references get updated
@@ -256,7 +277,8 @@ bool SubtotalsManipulator::preProcess()
     }
 
     int origRows = to - from + 1;
-    if (rows < origRows) rows = origRows;
+    if (rows < origRows)
+        rows = origRows;
     rect.setHeight(rows);
     add(rect, sheet);
 
@@ -270,15 +292,18 @@ bool SubtotalsManipulator::postProcess()
 
 Value SubtotalsManipulator::newValue(Element *element, int col, int row, bool *parse, Format::Type *)
 {
-    if (!d->rows.count(row)) return Value();
+    if (!d->rows.count(row))
+        return Value();
     *parse = true;
     SubtotalsRowInfo i = d->rows[row];
     if (i.isSubtotalRow) {
-        if (!d->m_columns.contains(col)) return Value();
+        if (!d->m_columns.contains(col))
+            return Value();
         return Value("=SUBTOTAL(" + QString::number(d->m_funcCode) + ";" + CellBase::name(col, i.fromRow) + ":" + CellBase::name(col, i.toRow) + ")");
     }
 
-    if (!i.cellStyle.count(col)) return Value();
+    if (!i.cellStyle.count(col))
+        return Value();
     QString res = i.userInput[col];
     if (i.isFormula[col]) {
         CellBase cell = CellBase(element->sheet(), col, row);
@@ -289,7 +314,8 @@ Value SubtotalsManipulator::newValue(Element *element, int col, int row, bool *p
 
 Style SubtotalsManipulator::newFormat(Element *, int col, int row)
 {
-    if (!d->rows.count(row)) return Style();
+    if (!d->rows.count(row))
+        return Style();
     SubtotalsRowInfo i = d->rows[row];
     if (i.isSubtotalRow) {
         Style s;
@@ -299,9 +325,7 @@ Style SubtotalsManipulator::newFormat(Element *, int col, int row)
         s.setFontUnderline(true);
         return s;
     }
-    if (!i.cellStyle.count(col)) return Style();
+    if (!i.cellStyle.count(col))
+        return Style();
     return i.cellStyle[col];
 }
-
-
-

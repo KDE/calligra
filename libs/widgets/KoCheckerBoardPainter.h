@@ -7,19 +7,19 @@
 #ifndef KOCHECKERBOARDPAINTER_H
 #define KOCHECKERBOARDPAINTER_H
 
-#include <QPixmap>
-#include <QColor>
 #include "kowidgets_export.h"
+#include <QColor>
+#include <QPixmap>
 
 class QPainter;
 
 class KOWIDGETS_EXPORT KoCheckerBoardPainter
 {
 public:
-    explicit KoCheckerBoardPainter( int checkerSize );
-    void setCheckerColors( const QColor &lightColor, const QColor &darkColor );
-    void setCheckerSize( int checkerSize );
-    void paint( QPainter &painter, const QRectF &rect ) const;
+    explicit KoCheckerBoardPainter(int checkerSize);
+    void setCheckerColors(const QColor &lightColor, const QColor &darkColor);
+    void setCheckerSize(int checkerSize);
+    void paint(QPainter &painter, const QRectF &rect) const;
 
 private:
     void createChecker();

@@ -21,17 +21,17 @@ class KPrPresenterViewBaseInterface : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KPrPresenterViewBaseInterface( const QList<KoPAPageBase *> &pages, QWidget *parent = 0 );
+    explicit KPrPresenterViewBaseInterface(const QList<KoPAPageBase *> &pages, QWidget *parent = 0);
 
 public Q_SLOTS:
     /// set the active page to @p page
-    void setActivePage( KoPAPageBase *page );
+    void setActivePage(KoPAPageBase *page);
 
     /// set the active page number to @p pageIndex
-    virtual void setActivePage( int pageIndex );
+    virtual void setActivePage(int pageIndex);
 
 Q_SIGNALS:
-    void activeSlideChanged( KoPAPageBase *page );
+    void activeSlideChanged(KoPAPageBase *page);
 
 protected:
     QList<KoPAPageBase *> m_pages;
@@ -39,4 +39,3 @@ protected:
 };
 
 #endif
-

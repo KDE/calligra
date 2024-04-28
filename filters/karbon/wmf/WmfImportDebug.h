@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &WMFIMPORT_LOG();
 
 #define debugWmf qCDebug(WMFIMPORT_LOG)

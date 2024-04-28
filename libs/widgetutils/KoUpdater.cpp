@@ -11,16 +11,16 @@
 #include "KoUpdaterPrivate_p.h"
 
 KoUpdater::KoUpdater(KoUpdaterPrivate *p)
-    : QObject(p),
-      m_progressPercent(0)
+    : QObject(p)
+    , m_progressPercent(0)
 {
     d = p;
     Q_ASSERT(p);
     Q_ASSERT(!d.isNull());
 
-    connect( this, &KoUpdater::sigCancel, d.data(), &KoUpdaterPrivate::cancel );
-    connect( this, &KoUpdater::sigProgress, d.data(), &KoUpdaterPrivate::setProgress );
-    connect( d.data(), &KoUpdaterPrivate::sigInterrupted, this, &KoUpdater::interrupt );
+    connect(this, &KoUpdater::sigCancel, d.data(), &KoUpdaterPrivate::cancel);
+    connect(this, &KoUpdater::sigProgress, d.data(), &KoUpdaterPrivate::setProgress);
+    connect(d.data(), &KoUpdaterPrivate::sigInterrupted, this, &KoUpdater::interrupt);
 
     setRange(0, 100);
     m_interrupted = false;
@@ -40,12 +40,11 @@ void KoUpdater::setProgress(int percent)
 
     m_progressPercent = percent;
 
-    emit sigProgress( percent );
+    emit sigProgress(percent);
 }
 
 int KoUpdater::progress() const
 {
-
     return m_progressPercent;
 }
 
@@ -59,24 +58,26 @@ int KoUpdater::maximum() const
     return 100;
 }
 
-void KoUpdater::setValue( int value )
+void KoUpdater::setValue(int value)
 {
-
-    if ( value < min ) value = min;
-    if ( value > max ) value = max;
+    if (value < min)
+        value = min;
+    if (value > max)
+        value = max;
     // Go from range to percent
-    if (range == 0) return;
-    setProgress( ((100 * value ) / range) + 1 );
+    if (range == 0)
+        return;
+    setProgress(((100 * value) / range) + 1);
 }
 
-void KoUpdater::setRange( int minimum, int maximum )
+void KoUpdater::setRange(int minimum, int maximum)
 {
     min = minimum - 1;
     max = maximum;
     range = max - min;
 }
 
-void KoUpdater::setFormat( const QString & format )
+void KoUpdater::setFormat(const QString &format)
 {
     Q_UNUSED(format);
     // XXX: Do nothing

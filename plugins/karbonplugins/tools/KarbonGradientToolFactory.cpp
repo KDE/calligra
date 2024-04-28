@@ -7,12 +7,12 @@
 #include "KarbonGradientToolFactory.h"
 #include "KarbonGradientTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 #include <QDebug>
 
 KarbonGradientToolFactory::KarbonGradientToolFactory()
-        : KoToolFactoryBase("KarbonGradientTool")
+    : KoToolFactoryBase("KarbonGradientTool")
 {
     setToolTip(i18n("Gradient editing"));
     setToolType("karbon");
@@ -25,7 +25,7 @@ KarbonGradientToolFactory::~KarbonGradientToolFactory()
 {
 }
 
-KoToolBase * KarbonGradientToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KarbonGradientToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KarbonGradientTool(canvas);
 }

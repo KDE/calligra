@@ -15,8 +15,8 @@ class BlendEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     BlendEffectFactory();
-    KoFilterEffect * createFilterEffect() const override;
-    KoFilterEffectConfigWidgetBase * createConfigWidget() const override;
+    KoFilterEffect *createFilterEffect() const override;
+    KoFilterEffectConfigWidgetBase *createConfigWidget() const override;
 };
 
 #endif // BLENDEFFECTFACTORY_H

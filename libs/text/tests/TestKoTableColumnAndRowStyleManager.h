@@ -14,7 +14,9 @@ class TestKoTableColumnAndRowStyleManager : public QObject
 {
     Q_OBJECT
 public:
-    TestKoTableColumnAndRowStyleManager() {}
+    TestKoTableColumnAndRowStyleManager()
+    {
+    }
 
 private Q_SLOTS:
     // basic testing of the columns insertion and removal

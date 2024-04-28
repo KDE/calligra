@@ -6,16 +6,15 @@
 
 #include "KPrSweepWipeStrategy.h"
 
-#include <math.h>
-#include <QWidget>
 #include <QPainter>
 #include <QPainterPath>
+#include <QWidget>
+#include <math.h>
 
 #include "KPrClockWipeSubpathHelper.h"
 
-
-KPrSweepWipeStrategy::KPrSweepWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse )
-    : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse )
+KPrSweepWipeStrategy::KPrSweepWipeStrategy(int subType, const char *smilType, const char *smilSubType, bool reverse)
+    : KPrPageEffectStrategy(subType, smilType, smilSubType, reverse)
 {
 }
 
@@ -23,25 +22,24 @@ KPrSweepWipeStrategy::~KPrSweepWipeStrategy()
 {
 }
 
-void KPrSweepWipeStrategy::next( const KPrPageEffect::Data &data )
+void KPrSweepWipeStrategy::next(const KPrPageEffect::Data &data)
 {
     data.m_widget->update();
 }
 
-void KPrSweepWipeStrategy::drawSweep( QPainter &p, double angle, double rotationRange, QRect boundingRect, const KPrPageEffect::Data &data )
+void KPrSweepWipeStrategy::drawSweep(QPainter &p, double angle, double rotationRange, QRect boundingRect, const KPrPageEffect::Data &data)
 {
     int width = data.m_widget->width();
     int height = data.m_widget->height();
-    QRect rect( 0, 0, width, height );
+    QRect rect(0, 0, width, height);
 
     double startAngle;
     double endAngle;
 
-    if(rotationRange > 0) {
+    if (rotationRange > 0) {
         startAngle = angle;
         endAngle = startAngle + rotationRange;
-    }
-    else {
+    } else {
         endAngle = angle;
         startAngle = endAngle + rotationRange;
     }
@@ -50,5 +48,5 @@ void KPrSweepWipeStrategy::drawSweep( QPainter &p, double angle, double rotation
     KPrClockWipeSubpathHelper::addSubpathForCircularArc(&clipPath, boundingRect, startAngle, endAngle);
     p.setClipPath(clipPath);
 
-    p.drawPixmap( rect.intersected(boundingRect), data.m_newPage, rect.intersected(boundingRect) );
+    p.drawPixmap(rect.intersected(boundingRect), data.m_newPage, rect.intersected(boundingRect));
 }

@@ -6,15 +6,15 @@
 
 #include "KoRdfBasicSemanticItem.h"
 
-//Calligra
+// Calligra
 #include <KoDocumentRdf.h>
 
 // KF5
 #include <KDebug>
 
-//QT
-#include <QUuid>
+// QT
 #include <QDateTime>
+#include <QUuid>
 
 using namespace Soprano;
 
@@ -51,12 +51,10 @@ QStringList KoRdfBasicSemanticItem::xmlIdList() const
 {
     QStringList ret;
 
-    StatementIterator it = documentRdf()->model()->listStatements(
-        linkingSubject(),
-        Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")),
-        Node(),
-        documentRdf()->manifestRdfNode()
-    );
+    StatementIterator it = documentRdf()->model()->listStatements(linkingSubject(),
+                                                                  Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")),
+                                                                  Node(),
+                                                                  documentRdf()->manifestRdfNode());
     QList<Statement> allStatements = it.allElements();
     foreach (const Soprano::Statement &s, allStatements) {
         QString xmlid = s.object().toString();
@@ -65,13 +63,11 @@ QStringList KoRdfBasicSemanticItem::xmlIdList() const
     return ret;
 }
 
-void KoRdfBasicSemanticItem::updateTriple_remove(const Soprano::LiteralValue &toModify,
-        const QString &predString,
-        const Soprano::Node &explicitLinkingSubject)
+void KoRdfBasicSemanticItem::updateTriple_remove(const Soprano::LiteralValue &toModify, const QString &predString, const Soprano::Node &explicitLinkingSubject)
 {
     QSharedPointer<Soprano::Model> m = documentRdf()->model();
     Node pred = Node::createResourceNode(QUrl(predString));
-    m->removeStatement(explicitLinkingSubject,pred, Node::createLiteralNode(toModify));
+    m->removeStatement(explicitLinkingSubject, pred, Node::createLiteralNode(toModify));
     kDebug(30015) << "Rdf.del subj:" << explicitLinkingSubject;
     kDebug(30015) << "Rdf.del pred:" << pred;
     kDebug(30015) << "Rdf.del  obj:" << Node::createLiteralNode(toModify);
@@ -105,9 +101,7 @@ void KoRdfBasicSemanticItem::updateTriple_remove(const Soprano::LiteralValue &to
     m->removeStatements(removeList);
 }
 
-void KoRdfBasicSemanticItem::updateTriple_add(const Soprano::LiteralValue &toModify,
-                                       const QString &predString,
-                                       const Soprano::Node &explicitLinkingSubject)
+void KoRdfBasicSemanticItem::updateTriple_add(const Soprano::LiteralValue &toModify, const QString &predString, const Soprano::Node &explicitLinkingSubject)
 {
     QSharedPointer<Soprano::Model> m = documentRdf()->model();
     Node pred = Node::createResourceNode(QUrl(predString));
@@ -119,7 +113,6 @@ void KoRdfBasicSemanticItem::updateTriple_add(const Soprano::LiteralValue &toMod
     m->addStatement(explicitLinkingSubject, pred, Node::createLiteralNode(toModify), context());
 }
 
-
 void KoRdfBasicSemanticItem::updateTriple(QString &toModify, const QString &newValue, const QString &predString)
 {
     kDebug(30015) << "tomod:" << toModify << " newV:" << newValue << " pred:" << predString;
@@ -130,17 +123,12 @@ void KoRdfBasicSemanticItem::updateTriple(QString &toModify, const QString &newV
 
 void KoRdfBasicSemanticItem::updateTriple(KDateTime &toModify, const KDateTime &newValue, const QString &predString)
 {
-    updateTriple_remove(Soprano::LiteralValue(toModify.dateTime()),
-                        predString, linkingSubject());
+    updateTriple_remove(Soprano::LiteralValue(toModify.dateTime()), predString, linkingSubject());
     toModify = newValue;
-    updateTriple_add(Soprano::LiteralValue(toModify.dateTime()),
-                     predString, linkingSubject());
+    updateTriple_add(Soprano::LiteralValue(toModify.dateTime()), predString, linkingSubject());
 }
 
-void KoRdfBasicSemanticItem::updateTriple(double &toModify,
-                                   double newValue,
-                                   const QString &predString,
-                                   const Soprano::Node &explicitLinkingSubject)
+void KoRdfBasicSemanticItem::updateTriple(double &toModify, double newValue, const QString &predString, const Soprano::Node &explicitLinkingSubject)
 {
     updateTriple_remove(Soprano::LiteralValue(toModify), predString, explicitLinkingSubject);
     toModify = newValue;

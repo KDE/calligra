@@ -12,15 +12,14 @@
 #ifndef MSOOXMLTHEME_H
 #define MSOOXMLTHEME_H
 
-#include <QHash>
-#include <QVector>
 #include <QColor>
+#include <QHash>
 #include <QMap>
+#include <QVector>
 
 #include <KoGenStyles.h>
 
 #include "komsooxml_export.h"
-
 
 namespace MSOOXML
 {
@@ -34,19 +33,25 @@ class KOMSOOXML_EXPORT DrawingMLColorSchemeItemBase
 public:
     DrawingMLColorSchemeItemBase();
     virtual ~DrawingMLColorSchemeItemBase();
-    DrawingMLColorSchemeItem* toColorItem();
-    DrawingMLColorSchemeSystemItem* toSystemItem();
+    DrawingMLColorSchemeItem *toColorItem();
+    DrawingMLColorSchemeSystemItem *toSystemItem();
     virtual QColor value() const = 0;
-    virtual DrawingMLColorSchemeItemBase* clone() const = 0;
+    virtual DrawingMLColorSchemeItemBase *clone() const = 0;
 };
 
 class KOMSOOXML_EXPORT DrawingMLColorSchemeItem : public DrawingMLColorSchemeItemBase
 {
 public:
     DrawingMLColorSchemeItem();
-    QColor value() const override { return color; }
+    QColor value() const override
+    {
+        return color;
+    }
     QColor color;
-    DrawingMLColorSchemeItem* clone() const override { return new DrawingMLColorSchemeItem(*this); }
+    DrawingMLColorSchemeItem *clone() const override
+    {
+        return new DrawingMLColorSchemeItem(*this);
+    }
 };
 
 class KOMSOOXML_EXPORT DrawingMLColorSchemeSystemItem : public DrawingMLColorSchemeItemBase
@@ -57,10 +62,13 @@ public:
 
     QColor lastColor;
     QString systemColor; //!< ST_SystemColorVal (§20.1.10.58).;
-    DrawingMLColorSchemeSystemItem* clone() const override { return new DrawingMLColorSchemeSystemItem(*this); }
+    DrawingMLColorSchemeSystemItem *clone() const override
+    {
+        return new DrawingMLColorSchemeSystemItem(*this);
+    }
 };
 
-typedef QHash<QString, DrawingMLColorSchemeItemBase*> DrawingMLColorSchemeItemHash;
+typedef QHash<QString, DrawingMLColorSchemeItemBase *> DrawingMLColorSchemeItemHash;
 
 //! Implements color scheme, based on hash. All items are owned by this object.
 class KOMSOOXML_EXPORT DrawingMLColorScheme : public DrawingMLColorSchemeItemHash
@@ -69,17 +77,18 @@ public:
     DrawingMLColorScheme();
     ~DrawingMLColorScheme();
 
-    DrawingMLColorSchemeItemBase* value(const QString& name) const {
+    DrawingMLColorSchemeItemBase *value(const QString &name) const
+    {
         return DrawingMLColorSchemeItemHash::value(name);
     }
 
     /*! @return color value for index. Needed because while PPTX uses lookup by
         name: value(QString&), XLSX uses lookup by index. When index is
         invalid, 0 is returned. */
-    DrawingMLColorSchemeItemBase* value(int index) const;
+    DrawingMLColorSchemeItemBase *value(int index) const;
 
-    DrawingMLColorScheme(const DrawingMLColorScheme& scheme);
-    DrawingMLColorScheme& operator=(const DrawingMLColorScheme& scheme);
+    DrawingMLColorScheme(const DrawingMLColorScheme &scheme);
+    DrawingMLColorScheme &operator=(const DrawingMLColorScheme &scheme);
     //! Name of the color scheme
     QString name;
 };
@@ -115,7 +124,6 @@ public:
     QString name;
 };
 
-
 class KOMSOOXML_EXPORT DrawingMLFillBase
 {
 public:
@@ -123,26 +131,32 @@ public:
     // This function will create the fill style and fill the appropriate styles
     // and filePath if needed.
     // Number is used to index to correct style, color is the color which should be used when making the styles
-    virtual void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color) = 0;
+    virtual void writeStyles(KoGenStyles &styles, KoGenStyle *graphicStyle, const QColor &color) = 0;
 
-    virtual DrawingMLFillBase* clone() const = 0;
+    virtual DrawingMLFillBase *clone() const = 0;
 };
 
 class KOMSOOXML_EXPORT DrawingMLSolidFill : public DrawingMLFillBase
 {
 public:
-    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color) override;
+    void writeStyles(KoGenStyles &styles, KoGenStyle *graphicStyle, const QColor &color) override;
 
-    DrawingMLSolidFill* clone() const override { return new DrawingMLSolidFill(*this); }
+    DrawingMLSolidFill *clone() const override
+    {
+        return new DrawingMLSolidFill(*this);
+    }
 };
 
 class KOMSOOXML_EXPORT DrawingMLBlipFill : public DrawingMLFillBase
 {
 public:
     explicit DrawingMLBlipFill(const QString &filePath);
-    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color) override;
+    void writeStyles(KoGenStyles &styles, KoGenStyle *graphicStyle, const QColor &color) override;
 
-    DrawingMLBlipFill* clone() const override { return new DrawingMLBlipFill(*this); }
+    DrawingMLBlipFill *clone() const override
+    {
+        return new DrawingMLBlipFill(*this);
+    }
 
 private:
     QString m_filePath;
@@ -152,11 +166,18 @@ class KOMSOOXML_EXPORT DrawingMLGradientFill : public DrawingMLFillBase
 {
 public:
     // Simplified gradient constructor
-    DrawingMLGradientFill(const QVector<qreal> &shadeModifier, const QVector<qreal> &tintModifier, const QVector<qreal> &satModifier,
-                          const QVector<int> &alphaModifier, const QVector<int> &gradPositions, const QString &gradAngle);
-    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color) override;
+    DrawingMLGradientFill(const QVector<qreal> &shadeModifier,
+                          const QVector<qreal> &tintModifier,
+                          const QVector<qreal> &satModifier,
+                          const QVector<int> &alphaModifier,
+                          const QVector<int> &gradPositions,
+                          const QString &gradAngle);
+    void writeStyles(KoGenStyles &styles, KoGenStyle *graphicStyle, const QColor &color) override;
 
-    DrawingMLGradientFill* clone() const override { return new DrawingMLGradientFill(*this); }
+    DrawingMLGradientFill *clone() const override
+    {
+        return new DrawingMLGradientFill(*this);
+    }
 
 private:
     QVector<qreal> m_shadeModifier;
@@ -170,15 +191,14 @@ private:
 class KOMSOOXML_EXPORT DrawingMLFormatScheme
 {
 public:
-
     DrawingMLFormatScheme();
     ~DrawingMLFormatScheme();
     QString name;
 
-    DrawingMLFormatScheme(const DrawingMLFormatScheme& format);
-    DrawingMLFormatScheme& operator=(const DrawingMLFormatScheme& format);
+    DrawingMLFormatScheme(const DrawingMLFormatScheme &format);
+    DrawingMLFormatScheme &operator=(const DrawingMLFormatScheme &format);
 
-    QMap<int, DrawingMLFillBase*> fillStyles;
+    QMap<int, DrawingMLFillBase *> fillStyles;
 
     //! Stores the three line styles for use within a theme.
     QList<KoGenStyle> lnStyleLst;
@@ -196,7 +216,6 @@ public:
     DrawingMLFormatScheme formatScheme;
 };
 
-
 } // namespace MSOOXML
 
-#endif //MSOOXMLTHEME_H
+#endif // MSOOXMLTHEME_H

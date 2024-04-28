@@ -9,7 +9,8 @@
 #include <QObject>
 #include <QString>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Part;
 class Clef;
@@ -41,7 +42,7 @@ public:
     /**
      * Returns the part this staff is part of.
      */
-    Part* part();
+    Part *part();
 
     /**
      * Sets the part this staff is part of. You should not call this method after adding the staff to a part using the
@@ -49,7 +50,7 @@ public:
      *
      * @param part the part that this staff is part of
      */
-    void setPart(Part* part);
+    void setPart(Part *part);
 
     /**
      * Returns the spacing in points between this staff and the staff above it.
@@ -87,15 +88,15 @@ public:
      * specified and no clef changes are found in the given bar, this method returns oldClef instead of searching for
      * older clef changes.
      */
-    Clef* lastClefChange(int bar, int time = -1, Clef* oldClef = 0);
-    Clef* lastClefChange(Bar* bar, int time = -1, Clef* oldClef = 0);
-    KeySignature* lastKeySignatureChange(int bar);
-    KeySignature* lastKeySignatureChange(Bar* bar);
-    TimeSignature* lastTimeSignatureChange(int bar);
-    TimeSignature* lastTimeSignatureChange(Bar* bar);
+    Clef *lastClefChange(int bar, int time = -1, Clef *oldClef = 0);
+    Clef *lastClefChange(Bar *bar, int time = -1, Clef *oldClef = 0);
+    KeySignature *lastKeySignatureChange(int bar);
+    KeySignature *lastKeySignatureChange(Bar *bar);
+    TimeSignature *lastTimeSignatureChange(int bar);
+    TimeSignature *lastTimeSignatureChange(Bar *bar);
 
     void updateAccidentals(int fromBar = 0);
-    void updateAccidentals(Bar* fromBar);
+    void updateAccidentals(Bar *fromBar);
 public Q_SLOTS:
     /**
      * Set the spacing between this staff and the staff above it.
@@ -121,9 +122,10 @@ Q_SIGNALS:
     void spacingChanged(qreal spacing);
     void lineCountChanged(int lineCount);
     void lineSpacingChanged(qreal lineSpacing);
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

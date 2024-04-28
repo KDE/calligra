@@ -13,4 +13,3 @@ KoShapeConfigFactoryBase::KoShapeConfigFactoryBase()
 KoShapeConfigFactoryBase::~KoShapeConfigFactoryBase()
 {
 }
-

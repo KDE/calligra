@@ -20,20 +20,19 @@
 #include "LayoutPage_Position.h"
 #include "LayoutWidgets.h"
 
-#include <QButtonGroup>
 #include <KoUnitDoubleSpinBox.h>
+#include <QButtonGroup>
 
 using namespace Calligra::Sheets;
 
-
-LayoutPagePosition::LayoutPagePosition(QWidget* parent, KoUnit unit)
-        : QWidget(parent)
+LayoutPagePosition::LayoutPagePosition(QWidget *parent, KoUnit unit)
+    : QWidget(parent)
 {
     setupUi(this);
     connect(angleRotation, &QAbstractSlider::valueChanged, spinBox3, &QSpinBox::setValue);
     connect(spinBox3, QOverload<int>::of(&QSpinBox::valueChanged), angleRotation, &QAbstractSlider::setValue);
 
-    QButtonGroup* horizontalGroup = new QButtonGroup(this);
+    QButtonGroup *horizontalGroup = new QButtonGroup(this);
     horizontalGroup->addButton(left);
     horizontalGroup->addButton(center);
     horizontalGroup->addButton(right);
@@ -41,7 +40,7 @@ LayoutPagePosition::LayoutPagePosition(QWidget* parent, KoUnit unit)
     connect(horizontalGroup, &QButtonGroup::idClicked, this, &LayoutPagePosition::slotStateChanged);
 
     QGridLayout *grid2 = new QGridLayout(indentGroup);
-    grid2->addItem(new QSpacerItem(0, indentGroup->fontMetrics().height() / 8), 0, 0);  // groupbox title
+    grid2->addItem(new QSpacerItem(0, indentGroup->fontMetrics().height() / 8), 0, 0); // groupbox title
     m_indent = new KoUnitDoubleSpinBox(indentGroup);
     m_indent->setMinimum(0.0);
     m_indent->setMaximum(400.0);
@@ -53,9 +52,9 @@ LayoutPagePosition::LayoutPagePosition(QWidget* parent, KoUnit unit)
     vertical->setStyleKey(Style::VerticalText);
     shrinkToFit->setStyleKey(Style::ShrinkToFit);
 
-    connect(vertical , &QAbstractButton::clicked, this, &LayoutPagePosition::updateElements);
+    connect(vertical, &QAbstractButton::clicked, this, &LayoutPagePosition::updateElements);
     connect(shrinkToFit, &QAbstractButton::clicked, this, &LayoutPagePosition::updateElements);
-    connect(multi , &QAbstractButton::clicked, this, &LayoutPagePosition::updateElements);
+    connect(multi, &QAbstractButton::clicked, this, &LayoutPagePosition::updateElements);
     connect(angleRotation, &QAbstractSlider::valueChanged, this, &LayoutPagePosition::updateElements);
 
     slotStateChanged(0);
@@ -91,17 +90,23 @@ void LayoutPagePosition::apply(Style *style, bool partial)
 
     // Horizontal
     Style::HAlign halign = Style::HAlignUndefined;
-    if (left->isChecked()) halign = Style::Left;
-    else if (center->isChecked()) halign = Style::Center;
-    else if (right->isChecked()) halign = Style::Right;
+    if (left->isChecked())
+        halign = Style::Left;
+    else if (center->isChecked())
+        halign = Style::Center;
+    else if (right->isChecked())
+        halign = Style::Right;
     if (shouldApplyLayoutChange(halign == defaultStyle.halign(), halign != m_halign, partial))
         style->setHAlign(halign);
 
     // Vertical
     Style::VAlign valign = Style::VAlignUndefined;
-    if (top->isChecked()) valign = Style::Top;
-    else if (middle->isChecked()) valign = Style::Middle;
-    else if (bottom->isChecked()) valign = Style::Bottom;
+    if (top->isChecked())
+        valign = Style::Top;
+    else if (middle->isChecked())
+        valign = Style::Middle;
+    else if (bottom->isChecked())
+        valign = Style::Bottom;
     if (shouldApplyLayoutChange(valign == defaultStyle.valign(), valign != m_valign, partial))
         style->setVAlign(valign);
 
@@ -111,9 +116,12 @@ void LayoutPagePosition::apply(Style *style, bool partial)
         style->setAngle(angle);
 
     // Text Option
-    if (multi->isEnabled()) multi->saveTo(*style, partial);
-    if (vertical->isEnabled()) vertical->saveTo(*style, partial);
-    if (shrinkToFit->isEnabled()) shrinkToFit->saveTo(*style, partial);
+    if (multi->isEnabled())
+        multi->saveTo(*style, partial);
+    if (vertical->isEnabled())
+        vertical->saveTo(*style, partial);
+    if (shrinkToFit->isEnabled())
+        shrinkToFit->saveTo(*style, partial);
 
     // Indent
     if (m_indent->isEnabled()) {
@@ -161,6 +169,3 @@ void LayoutPagePosition::loadFrom(const Style &style, bool partial)
 
     updateElements();
 }
-
-
-

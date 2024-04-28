@@ -8,17 +8,16 @@
 #ifndef CALLIGRA_SHEETS_ACTION_SHOW_TABLE_VIEW
 #define CALLIGRA_SHEETS_ACTION_SHOW_TABLE_VIEW
 
-
 #include "CellAction.h"
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class ShowTableView : public CellAction {
-Q_OBJECT
+class ShowTableView : public CellAction
+{
+    Q_OBJECT
 public:
     ShowTableView(Actions *actions);
     virtual ~ShowTableView();
@@ -28,9 +27,7 @@ protected:
     virtual QAction *createAction() override;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_SHOW_TABLE_VIEW
+#endif // CALLIGRA_SHEETS_ACTION_SHOW_TABLE_VIEW

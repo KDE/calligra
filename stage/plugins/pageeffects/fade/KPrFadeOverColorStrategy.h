@@ -18,22 +18,22 @@ public:
     KPrFadeOverColorStrategy();
     ~KPrFadeOverColorStrategy() override;
 
-    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
+    void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine) override;
 
-    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
+    void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data) override;
 
-    void next( const KPrPageEffect::Data &data ) override;
+    void next(const KPrPageEffect::Data &data) override;
 
     void finish(const KPrPageEffect::Data &data) override;
 
     // reimplemented
-    void saveOdfSmilAttributes(KoXmlWriter & xmlWriter) const override;
+    void saveOdfSmilAttributes(KoXmlWriter &xmlWriter) const override;
 
     // reimplemented
-    void saveOdfSmilAttributes(KoGenStyle & style) const override;
+    void saveOdfSmilAttributes(KoGenStyle &style) const override;
 
     // reimplemented
-    void loadOdfSmilAttributes(const KoXmlElement & element) override;
+    void loadOdfSmilAttributes(const KoXmlElement &element) override;
 
 private:
     QColor m_fadeColor;

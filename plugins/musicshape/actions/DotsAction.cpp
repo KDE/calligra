@@ -5,19 +5,19 @@
  */
 #include "DotsAction.h"
 
-#include "../SimpleEntryTool.h"
 #include "../MusicShape.h"
 #include "../Renderer.h"
+#include "../SimpleEntryTool.h"
 
-#include "../core/Chord.h"
-#include "../core/Note.h"
-#include "../core/VoiceBar.h"
-#include "../core/Clef.h"
-#include "../core/Voice.h"
-#include "../core/Sheet.h"
 #include "../core/Bar.h"
+#include "../core/Chord.h"
+#include "../core/Clef.h"
+#include "../core/Note.h"
 #include "../core/Part.h"
+#include "../core/Sheet.h"
 #include "../core/Staff.h"
+#include "../core/Voice.h"
+#include "../core/VoiceBar.h"
 
 #include "../commands/AddDotCommand.h"
 
@@ -30,18 +30,20 @@
 
 using namespace MusicCore;
 
-DotsAction::DotsAction(SimpleEntryTool* tool)
+DotsAction::DotsAction(SimpleEntryTool *tool)
     : AbstractNoteMusicAction(koIcon("music-dottednote"), i18n("Dots"), tool)
 {
 }
 
-void DotsAction::mousePress(Chord* chord, Note* note, qreal distance, const QPointF& pos)
+void DotsAction::mousePress(Chord *chord, Note *note, qreal distance, const QPointF &pos)
 {
-    Q_UNUSED( note );
-    Q_UNUSED( pos );
+    Q_UNUSED(note);
+    Q_UNUSED(pos);
 
-    if (!chord) return;
-    if (distance > 10) return; // bah, magic numbers are ugly....
-    
+    if (!chord)
+        return;
+    if (distance > 10)
+        return; // bah, magic numbers are ugly....
+
     m_tool->addCommand(new AddDotCommand(m_tool->shape(), chord));
 }

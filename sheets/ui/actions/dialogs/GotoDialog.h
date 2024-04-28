@@ -29,7 +29,7 @@ class GotoDialog : public ActionDialog
 {
     Q_OBJECT
 public:
-    GotoDialog(QWidget* parent, const QList<QString> &choices);
+    GotoDialog(QWidget *parent, const QList<QString> &choices);
 
 Q_SIGNALS:
     void gotoCell(const QString &);
@@ -37,7 +37,6 @@ public Q_SLOTS:
     virtual QWidget *defaultWidget() override;
     virtual void onApply() override;
     void textChanged(const QString &_text);
-
 
 protected:
     QComboBox *m_nameCell;

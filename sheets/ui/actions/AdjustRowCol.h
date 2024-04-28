@@ -8,10 +8,7 @@
 #ifndef CALLIGRA_SHEETS_ACTION_ADJUST_ROW_COL
 #define CALLIGRA_SHEETS_ACTION_ADJUST_ROW_COL
 
-
 #include "CellAction.h"
-
-
 
 namespace Calligra
 {
@@ -21,9 +18,9 @@ class ShowColRowDialog;
 class ResizeColumnDialog;
 class ResizeRowDialog;
 
-
-class InsertRemoveRowCol : public CellAction {
-Q_OBJECT
+class InsertRemoveRowCol : public CellAction
+{
+    Q_OBJECT
 public:
     InsertRemoveRowCol(Actions *actions, bool insert, bool row);
     virtual ~InsertRemoveRowCol();
@@ -36,8 +33,9 @@ protected:
     bool m_insert, m_row;
 };
 
-class ShowHideRowCol : public CellAction {
-Q_OBJECT
+class ShowHideRowCol : public CellAction
+{
+    Q_OBJECT
 public:
     ShowHideRowCol(Actions *actions, bool show, bool row);
     virtual ~ShowHideRowCol();
@@ -50,8 +48,9 @@ protected:
     bool m_show, m_row;
 };
 
-class ShowRowColQuery : public CellAction {
-Q_OBJECT
+class ShowRowColQuery : public CellAction
+{
+    Q_OBJECT
 public:
     ShowRowColQuery(Actions *actions, bool row);
     virtual ~ShowRowColQuery();
@@ -63,8 +62,9 @@ protected:
     ShowColRowDialog *m_dlg;
 };
 
-class EqualizeRowCol : public CellAction {
-Q_OBJECT
+class EqualizeRowCol : public CellAction
+{
+    Q_OBJECT
 public:
     EqualizeRowCol(Actions *actions, bool row);
     virtual ~EqualizeRowCol();
@@ -77,8 +77,9 @@ protected:
     bool m_row;
 };
 
-class AdjustRowCol : public CellAction {
-Q_OBJECT
+class AdjustRowCol : public CellAction
+{
+    Q_OBJECT
 public:
     AdjustRowCol(Actions *actions, bool row, bool col);
     virtual ~AdjustRowCol();
@@ -90,8 +91,9 @@ protected:
     bool m_row, m_col;
 };
 
-class ResizeRowCol : public CellAction {
-Q_OBJECT
+class ResizeRowCol : public CellAction
+{
+    Q_OBJECT
 public:
     ResizeRowCol(Actions *actions, bool row);
     virtual ~ResizeRowCol();
@@ -105,11 +107,7 @@ protected:
     ResizeRowDialog *m_dlgRow;
 };
 
-
-
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_ADJUST_ROW_COL
+#endif // CALLIGRA_SHEETS_ACTION_ADJUST_ROW_COL

@@ -32,18 +32,21 @@ class WebToolWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WebToolWidget(WebTool* _tool);
+    explicit WebToolWidget(WebTool *_tool);
 public Q_SLOTS:
     void open(WebShape *shape);
     void save();
+
 private:
     /// reimplemented
-    KUndo2Command * createCommand();
+    KUndo2Command *createCommand();
     WebShape *shape();
+
 private:
     void blockChildSignals(bool block);
+
 private:
-    WebTool* m_tool;
+    WebTool *m_tool;
     WebShape *m_shape;
     Ui::WebShapeConfigWidget m_widget;
 };

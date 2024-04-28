@@ -10,15 +10,14 @@
 
 #include "KoPAPage.h"
 
-KoPADisplayMasterShapesCommand::KoPADisplayMasterShapesCommand( KoPAPage * page, bool display )
-: m_page( page )
-, m_display( display )
+KoPADisplayMasterShapesCommand::KoPADisplayMasterShapesCommand(KoPAPage *page, bool display)
+    : m_page(page)
+    , m_display(display)
 {
-    if ( m_display ) {
-        setText( kundo2_i18n( "Show master shapes" ) );
-    }
-    else {
-        setText( kundo2_i18n( "Hide master shapes" ) );
+    if (m_display) {
+        setText(kundo2_i18n("Show master shapes"));
+    } else {
+        setText(kundo2_i18n("Hide master shapes"));
     }
 }
 
@@ -28,12 +27,12 @@ KoPADisplayMasterShapesCommand::~KoPADisplayMasterShapesCommand()
 
 void KoPADisplayMasterShapesCommand::redo()
 {
-    m_page->setDisplayMasterShapes( m_display );
+    m_page->setDisplayMasterShapes(m_display);
     m_page->update();
 }
 
 void KoPADisplayMasterShapesCommand::undo()
 {
-    m_page->setDisplayMasterShapes( !m_display );
+    m_page->setDisplayMasterShapes(!m_display);
     m_page->update();
 }

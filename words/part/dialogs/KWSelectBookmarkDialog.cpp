@@ -13,8 +13,8 @@
 static QString lastBookMarkItem;
 
 KWSelectBookmark::KWSelectBookmark(const QStringList &nameList, QWidget *parent)
-        : QWidget(parent),
-        parentWidget(parent)
+    : QWidget(parent)
+    , parentWidget(parent)
 {
     widget.setupUi(this);
     widget.bookmarkList->addItems(nameList);
@@ -23,7 +23,7 @@ KWSelectBookmark::KWSelectBookmark(const QStringList &nameList, QWidget *parent)
     const int count = widget.bookmarkList->count();
     if (count > 0) {
         int row = 0;
-        if (! lastBookMarkItem.isNull()) {
+        if (!lastBookMarkItem.isNull()) {
             QList<QListWidgetItem *> items = widget.bookmarkList->findItems(lastBookMarkItem, Qt::MatchExactly);
             if (items.count() > 0)
                 row = widget.bookmarkList->row(items[0]);
@@ -34,8 +34,7 @@ KWSelectBookmark::KWSelectBookmark(const QStringList &nameList, QWidget *parent)
     connect(widget.bookmarkList, &QListWidget::currentRowChanged, this, &KWSelectBookmark::selectionChanged);
     connect(widget.buttonRename, &QAbstractButton::clicked, this, &KWSelectBookmark::slotBookmarkRename);
     connect(widget.buttonDelete, &QAbstractButton::clicked, this, &KWSelectBookmark::slotBookmarkDelete);
-    connect(widget.bookmarkList, &QListWidget::itemActivated,
-            this, &KWSelectBookmark::slotBookmarkItemActivated);
+    connect(widget.bookmarkList, &QListWidget::itemActivated, this, &KWSelectBookmark::slotBookmarkItemActivated);
     selectionChanged(bookmarkRow());
 }
 
@@ -64,12 +63,8 @@ void KWSelectBookmark::slotBookmarkRename()
     QString curName = item->text();
     QString newName = item->text();
     while (true) {
-        newName = QInputDialog::getText(parentWidget,
-                                        i18n("Rename Bookmark"),
-                                        i18n("Please provide a new name for the bookmark"),
-                                        QLineEdit::Normal,
-                                        newName);
-        if (curName != newName && ! newName.isNull()) {
+        newName = QInputDialog::getText(parentWidget, i18n("Rename Bookmark"), i18n("Please provide a new name for the bookmark"), QLineEdit::Normal, newName);
+        if (curName != newName && !newName.isNull()) {
             if (newName.isEmpty())
                 continue;
             QList<QListWidgetItem *> items = widget.bookmarkList->findItems(newName, Qt::MatchExactly);
@@ -102,7 +97,7 @@ void KWSelectBookmark::slotBookmarkItemActivated(QListWidgetItem *item)
 }
 
 KWSelectBookmarkDialog::KWSelectBookmarkDialog(const QStringList &nameList, QWidget *parent)
-        : KoDialog(parent)
+    : KoDialog(parent)
 {
     ui = new KWSelectBookmark(nameList, this);
     setMainWidget(ui);
@@ -112,12 +107,9 @@ KWSelectBookmarkDialog::KWSelectBookmarkDialog(const QStringList &nameList, QWid
     setDefaultButton(Ok);
     showButtonSeparator(true);
     connect(ui, &KWSelectBookmark::bookmarkSelectionChanged, this, &KWSelectBookmarkDialog::selectionChanged);
-    connect(ui, &KWSelectBookmark::bookmarkNameChanged,
-            this, &KWSelectBookmarkDialog::nameChanged);
-    connect(ui, &KWSelectBookmark::bookmarkItemDeleted,
-            this, &KWSelectBookmarkDialog::bookmarkDeleted);
-    connect(ui, &KWSelectBookmark::bookmarkItemDoubleClicked,
-            this, &KWSelectBookmarkDialog::bookmarkDoubleClicked);
+    connect(ui, &KWSelectBookmark::bookmarkNameChanged, this, &KWSelectBookmarkDialog::nameChanged);
+    connect(ui, &KWSelectBookmark::bookmarkItemDeleted, this, &KWSelectBookmarkDialog::bookmarkDeleted);
+    connect(ui, &KWSelectBookmark::bookmarkItemDoubleClicked, this, &KWSelectBookmarkDialog::bookmarkDoubleClicked);
     selectionChanged(ui->bookmarkRow());
 }
 

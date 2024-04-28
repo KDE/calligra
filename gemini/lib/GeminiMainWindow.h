@@ -7,13 +7,13 @@
 #ifndef GEMINIMAINWINDOW_H
 #define GEMINIMAINWINDOW_H
 
-#include <QMainWindow>
 #include "gemini_export.h"
+#include <QMainWindow>
 class QQuickView;
 
 /**
- * \short 
- * 
+ * \short
+ *
  */
 class GEMINI_EXPORT GeminiMainWindow : public QMainWindow
 {
@@ -21,17 +21,10 @@ class GEMINI_EXPORT GeminiMainWindow : public QMainWindow
     Q_PROPERTY(GeminiState currentState READ currentState NOTIFY currentStateChanged)
     Q_PROPERTY(bool fullScreen READ fullScreen WRITE setFullScreen NOTIFY fullScreenChanged)
 public:
-    enum GeminiState {
-        AllStates = -3,
-        UnknownState = -2,
-        NoState = -1,
-        CreateState = 1,
-        EditState = 2,
-        ViewState = 3
-    };
+    enum GeminiState { AllStates = -3, UnknownState = -2, NoState = -1, CreateState = 1, EditState = 2, ViewState = 3 };
     Q_ENUM(GeminiState);
 
-    explicit GeminiMainWindow(QWidget* parent = 0, Qt::WindowFlags flags = Qt::WindowFlags());
+    explicit GeminiMainWindow(QWidget *parent = 0, Qt::WindowFlags flags = Qt::WindowFlags());
     ~GeminiMainWindow() override;
 
     GeminiState currentState() const;
@@ -44,10 +37,10 @@ public:
 
     void changeState(GeminiState newState, bool lockNewState = false);
 
-    void setViewForState(QWidget* widget, GeminiState state);
-    void setViewForState(QQuickView* quickView, GeminiState state);
+    void setViewForState(QWidget *widget, GeminiState state);
+    void setViewForState(QQuickView *quickView, GeminiState state);
 
-    void setEventReceiverForState(QObject* receiver, GeminiState state);
+    void setEventReceiverForState(QObject *receiver, GeminiState state);
 
 Q_SIGNALS:
     void stateLockedChanged();
@@ -59,9 +52,9 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 #ifdef Q_OS_WIN
-    bool winEvent(MSG * message, long * result);
+    bool winEvent(MSG *message, long *result);
 #endif
 };
 

@@ -7,8 +7,8 @@
 #ifndef KWDEBUGWIDGET_H
 #define KWDEBUGWIDGET_H
 
-#include <QWidget>
 #include <KWCanvas.h>
+#include <QWidget>
 
 #include <QLabel>
 #include <QPushButton>
@@ -26,7 +26,7 @@ public:
 
     friend class KWDebugDocker;
 
-    void setCanvas(KWCanvas* canvas);
+    void setCanvas(KWCanvas *canvas);
 
     void unsetCanvas();
 

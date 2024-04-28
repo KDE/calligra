@@ -7,12 +7,12 @@
 #include "KoTextLayoutNoteArea.h"
 
 #include "FrameIterator.h"
-#include "KoStyleManager.h"
 #include "KoParagraphStyle.h"
-#include "KoTextLayoutObstruction.h"
 #include "KoPointedAt.h"
-#include <KoOdfNumberDefinition.h>
+#include "KoStyleManager.h"
+#include "KoTextLayoutObstruction.h"
 #include <KoInlineNote.h>
+#include <KoOdfNumberDefinition.h>
 #include <KoTextDocument.h>
 
 #include <QPainter>
@@ -36,8 +36,8 @@ public:
 };
 
 KoTextLayoutNoteArea::KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout)
-  : KoTextLayoutArea(parent, documentLayout)
-  , d(new Private)
+    : KoTextLayoutArea(parent, documentLayout)
+    , d(new Private)
 {
     Q_ASSERT(note);
     Q_ASSERT(parent);
@@ -78,11 +78,10 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
 
     QString label;
     if (d->isContinuedArea) {
-        if (! notesConfig->footnoteContinuationBackward().isEmpty()) {
+        if (!notesConfig->footnoteContinuationBackward().isEmpty()) {
             label = notesConfig->footnoteContinuationBackward() + " " + d->note->label();
         }
-        setReferenceRect(left(), right(), top() + OVERLAPPREVENTION
-                                    , maximumAllowedBottom() + OVERLAPPREVENTION);
+        setReferenceRect(left(), right(), top() + OVERLAPPREVENTION, maximumAllowedBottom() + OVERLAPPREVENTION);
     } else {
         label = d->note->label();
     }
@@ -139,20 +138,20 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
         QTextLayout::FormatRange contTextRange;
         contTextRange.start = 0;
         contTextRange.length = contNote.length();
-        contTextRange.format = block.charFormat();;
+        contTextRange.format = block.charFormat();
+        ;
         contTextLayouts.append(contTextRange);
         d->postLayout->setFormats(contTextLayouts);
 
         QTextOption contTextOption(Qt::AlignLeft | Qt::AlignAbsolute);
-        //option.setTextDirection();
+        // option.setTextDirection();
         d->postLayout->setTextOption(contTextOption);
         d->postLayout->beginLayout();
         QTextLine contTextLine = d->postLayout->createLine();
         d->postLayout->endLayout();
         contTextLine.setPosition(QPointF(right() - contTextLine.naturalTextWidth(), bottom() - contTextLine.height()));
 
-        documentLayout()->setContinuationObstruction(new
-                                    KoTextLayoutObstruction(contTextLine.naturalTextRect(), false));
+        documentLayout()->setContinuationObstruction(new KoTextLayoutObstruction(contTextLine.naturalTextRect(), false));
     }
     return contNotNeeded;
 }
@@ -170,8 +169,7 @@ KoPointedAt KoTextLayoutNoteArea::hitTest(const QPointF &p, Qt::HitTestAccuracy 
 
     pointedAt = KoTextLayoutArea::hitTest(tmpP, accuracy);
 
-    if (tmpP.x() > left() && tmpP.x() < d->labelWidth && tmpP.y() < top() + d->labelYOffset + d->labelHeight)
-    {
+    if (tmpP.x() > left() && tmpP.x() < d->labelWidth && tmpP.y() < top() + d->labelYOffset + d->labelHeight) {
         pointedAt.noteReference = d->note->getPosInDocument();
         pointedAt.position = tmpP.x();
     }
@@ -181,7 +179,5 @@ KoPointedAt KoTextLayoutNoteArea::hitTest(const QPointF &p, Qt::HitTestAccuracy 
 
 QRectF KoTextLayoutNoteArea::selectionBoundingBox(QTextCursor &cursor) const
 {
-    return KoTextLayoutArea::selectionBoundingBox(cursor).translated(0
-                                        , d->isContinuedArea ? -OVERLAPPREVENTION : 0);
-
+    return KoTextLayoutArea::selectionBoundingBox(cursor).translated(0, d->isContinuedArea ? -OVERLAPPREVENTION : 0);
 }

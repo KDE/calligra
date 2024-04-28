@@ -8,24 +8,24 @@
 #include "KarbonCalligraphicShape.h"
 #include "KarbonCalligraphyOptionWidget.h"
 
-#include <KoPathShape.h>
-#include <KoShapeGroup.h>
-#include <KoPointerEvent.h>
-#include <KoPathPoint.h>
 #include <KoCanvasBase.h>
-#include <KoShapeController.h>
-#include <KoShapeManager.h>
-#include <KoSelection.h>
-#include <KoCurveFit.h>
-#include <KoColorBackground.h>
 #include <KoCanvasResourceManager.h>
 #include <KoColor.h>
-#include <KoShapePaintingContext.h>
+#include <KoColorBackground.h>
+#include <KoCurveFit.h>
 #include <KoFillConfigWidget.h>
+#include <KoPathPoint.h>
+#include <KoPathShape.h>
+#include <KoPointerEvent.h>
+#include <KoSelection.h>
+#include <KoShapeController.h>
+#include <KoShapeGroup.h>
+#include <KoShapeManager.h>
+#include <KoShapePaintingContext.h>
 
+#include <KLocalizedString>
 #include <QAction>
 #include <QDebug>
-#include <KLocalizedString>
 #include <QPainter>
 
 #include <cmath>
@@ -35,13 +35,16 @@ const qreal M_PI = 3.1415927;
 using std::pow;
 using std::sqrt;
 
-
 KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
-        : KoToolBase(canvas), m_shape(0), m_angle(0),
-        m_selectedPath(0), m_isDrawing(false), m_speed(0, 0), m_lastShape(0)
+    : KoToolBase(canvas)
+    , m_shape(0)
+    , m_angle(0)
+    , m_selectedPath(0)
+    , m_isDrawing(false)
+    , m_speed(0, 0)
+    , m_lastShape(0)
 {
-    connect(canvas->shapeManager(), &KoShapeManager::selectionChanged,
-            this, &KarbonCalligraphyTool::updateSelectedPath);
+    connect(canvas->shapeManager(), &KoShapeManager::selectionChanged, this, &KarbonCalligraphyTool::updateSelectedPath);
 
     updateSelectedPath();
 }
@@ -50,13 +53,12 @@ KarbonCalligraphyTool::~KarbonCalligraphyTool()
 {
 }
 
-void KarbonCalligraphyTool::paint(QPainter &painter,
-                                  const KoViewConverter &converter)
+void KarbonCalligraphyTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (m_selectedPath) {
         painter.save();
         painter.setRenderHints(QPainter::Antialiasing, false);
-        painter.setPen(QPen(Qt::red, 0));   // TODO make configurable
+        painter.setPen(QPen(Qt::red, 0)); // TODO make configurable
         QRectF rect = m_selectedPath->boundingRect();
         QPointF p1 = converter.documentToView(rect.topLeft());
         QPointF p2 = converter.documentToView(rect.bottomRight());
@@ -64,14 +66,13 @@ void KarbonCalligraphyTool::paint(QPainter &painter,
         painter.restore();
     }
 
-    if (! m_shape)
+    if (!m_shape)
         return;
 
     painter.save();
 
-    painter.setTransform(m_shape->absoluteTransformation(&converter) *
-                      painter.transform());
-    KoShapePaintingContext paintContext; //FIXME
+    painter.setTransform(m_shape->absoluteTransformation(&converter) * painter.transform());
+    KoShapePaintingContext paintContext; // FIXME
     m_shape->paint(painter, converter, paintContext);
 
     painter.restore();
@@ -89,12 +90,12 @@ void KarbonCalligraphyTool::mousePressEvent(KoPointerEvent *event)
     m_pointCount = 0;
     m_shape = new KarbonCalligraphicShape(m_caps);
     m_shape->setBackground(QSharedPointer<KoShapeBackground>(new KoColorBackground(canvas()->resourceManager()->foregroundColor().toQColor())));
-    //addPoint( event );
+    // addPoint( event );
 }
 
 void KarbonCalligraphyTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (! m_isDrawing)
+    if (!m_isDrawing)
         return;
 
     addPoint(event);
@@ -102,7 +103,7 @@ void KarbonCalligraphyTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KarbonCalligraphyTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (! m_isDrawing)
+    if (!m_isDrawing)
         return;
 
     if (m_pointCount == 0) {
@@ -121,14 +122,14 @@ void KarbonCalligraphyTool::mouseReleaseEvent(KoPointerEvent *event)
         m_isDrawing = false;
         return;
     } else {
-        m_endOfPath = false;    // allow last point being added
-        addPoint(event);        // add last point
+        m_endOfPath = false; // allow last point being added
+        addPoint(event); // add last point
         m_isDrawing = false;
     }
 
     m_shape->simplifyGuidePath();
 
-    KUndo2Command * cmd = canvas()->shapeController()->addShape(m_shape);
+    KUndo2Command *cmd = canvas()->shapeController()->addShape(m_shape);
     if (cmd) {
         m_lastShape = m_shape;
         canvas()->addCommand(cmd);
@@ -180,7 +181,7 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event)
 
 void KarbonCalligraphyTool::setAngle(KoPointerEvent *event)
 {
-    if (! m_useAngle) {
+    if (!m_useAngle) {
         m_angle = (360 - m_customAngle + 90) / 180.0 * M_PI;
         return;
     }
@@ -207,9 +208,7 @@ void KarbonCalligraphyTool::setAngle(KoPointerEvent *event)
     }
 }
 
-
-QPointF KarbonCalligraphyTool::calculateNewPoint(const QPointF &mousePos,
-        QPointF *speed)
+QPointF KarbonCalligraphyTool::calculateNewPoint(const QPointF &mousePos, QPointF *speed)
 {
     if (!m_usePath || !m_selectedPath) { // don't follow path
         QPointF force = mousePos - m_lastPoint;
@@ -233,8 +232,7 @@ QPointF KarbonCalligraphyTool::calculateNewPoint(const QPointF &mousePos,
         t = m_selectedPathOutline.percentAtLength(m_followPathPosition);
     }
 
-    QPointF res = m_selectedPathOutline.pointAtPercent(t)
-                  + m_selectedPath->position();
+    QPointF res = m_selectedPathOutline.pointAtPercent(t) + m_selectedPath->position();
     *speed = res - m_lastPoint;
     return res;
 }
@@ -243,12 +241,12 @@ qreal KarbonCalligraphyTool::calculateWidth(qreal pressure)
 {
     // calculate the modulo of the speed
     qreal speed = std::sqrt(pow(m_speed.x(), 2) + pow(m_speed.y(), 2));
-    qreal thinning =  m_thinning * (speed + 1) / 10.0; // can be negative
+    qreal thinning = m_thinning * (speed + 1) / 10.0; // can be negative
 
     if (thinning > 1)
         thinning = 1;
 
-    if (! m_usePressure)
+    if (!m_usePressure)
         pressure = 1.0;
 
     qreal strokeWidth = m_strokeWidth * pressure * (1 - thinning);
@@ -260,17 +258,13 @@ qreal KarbonCalligraphyTool::calculateWidth(qreal pressure)
     return strokeWidth;
 }
 
-
-qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed,
-        const QPointF &newSpeed)
+qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed, const QPointF &newSpeed)
 {
     // calculate the average of the speed (sum of the normalized values)
     qreal oldLength = QLineF(QPointF(0, 0), oldSpeed).length();
     qreal newLength = QLineF(QPointF(0, 0), newSpeed).length();
-    QPointF oldSpeedNorm = !qFuzzyCompare(oldLength + 1, 1) ?
-                           oldSpeed / oldLength : QPointF(0, 0);
-    QPointF newSpeedNorm = !qFuzzyCompare(newLength + 1, 1) ?
-                           newSpeed / newLength : QPointF(0, 0);
+    QPointF oldSpeedNorm = !qFuzzyCompare(oldLength + 1, 1) ? oldSpeed / oldLength : QPointF(0, 0);
+    QPointF newSpeedNorm = !qFuzzyCompare(newLength + 1, 1) ? newSpeed / newLength : QPointF(0, 0);
     QPointF speed = oldSpeedNorm + newSpeedNorm;
 
     // angle solely based on the speed
@@ -293,7 +287,7 @@ qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed,
     qreal fixedAngle = m_angle;
     // check if the fixed angle needs to be flipped
     qreal diff = fixedAngle - speedAngle;
-    while (diff >= M_PI)   // normalize diff between -180 and 180
+    while (diff >= M_PI) // normalize diff between -180 and 180
         diff -= 2 * M_PI;
     while (diff < -M_PI)
         diff += 2 * M_PI;
@@ -314,7 +308,7 @@ qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed,
     return angle;
 }
 
-void KarbonCalligraphyTool::activate(ToolActivation, const QSet<KoShape*> &)
+void KarbonCalligraphyTool::activate(ToolActivation, const QSet<KoShape *> &)
 {
     useCursor(Qt::CrossCursor);
     m_lastShape = 0;
@@ -329,10 +323,10 @@ void KarbonCalligraphyTool::deactivate()
     }
 }
 
-QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
+QList<QPointer<QWidget>> KarbonCalligraphyTool::createOptionWidgets()
 {
     // if the widget don't exists yet create it
-    QList<QPointer<QWidget> > widgets;
+    QList<QPointer<QWidget>> widgets;
 
     KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
     fillWidget->setWindowTitle(i18n("Fill"));
@@ -340,38 +334,27 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     widgets.append(fillWidget);
 
     KarbonCalligraphyOptionWidget *widget = new KarbonCalligraphyOptionWidget;
-    connect(widget, &KarbonCalligraphyOptionWidget::usePathChanged,
-            this, &KarbonCalligraphyTool::setUsePath);
+    connect(widget, &KarbonCalligraphyOptionWidget::usePathChanged, this, &KarbonCalligraphyTool::setUsePath);
 
-    connect(widget, &KarbonCalligraphyOptionWidget::usePressureChanged,
-            this, &KarbonCalligraphyTool::setUsePressure);
+    connect(widget, &KarbonCalligraphyOptionWidget::usePressureChanged, this, &KarbonCalligraphyTool::setUsePressure);
 
-    connect(widget, &KarbonCalligraphyOptionWidget::useAngleChanged,
-            this, &KarbonCalligraphyTool::setUseAngle);
+    connect(widget, &KarbonCalligraphyOptionWidget::useAngleChanged, this, &KarbonCalligraphyTool::setUseAngle);
 
-    connect(widget, &KarbonCalligraphyOptionWidget::widthChanged,
-            this, &KarbonCalligraphyTool::setStrokeWidth);
+    connect(widget, &KarbonCalligraphyOptionWidget::widthChanged, this, &KarbonCalligraphyTool::setStrokeWidth);
 
-    connect(widget, &KarbonCalligraphyOptionWidget::thinningChanged,
-            this, &KarbonCalligraphyTool::setThinning);
+    connect(widget, &KarbonCalligraphyOptionWidget::thinningChanged, this, &KarbonCalligraphyTool::setThinning);
 
-    connect(widget, &KarbonCalligraphyOptionWidget::angleChanged,
-            this, QOverload<int>::of(&KarbonCalligraphyTool::setAngle));
+    connect(widget, &KarbonCalligraphyOptionWidget::angleChanged, this, QOverload<int>::of(&KarbonCalligraphyTool::setAngle));
 
-    connect(widget, &KarbonCalligraphyOptionWidget::fixationChanged,
-            this, &KarbonCalligraphyTool::setFixation);
+    connect(widget, &KarbonCalligraphyOptionWidget::fixationChanged, this, &KarbonCalligraphyTool::setFixation);
 
-    connect(widget, &KarbonCalligraphyOptionWidget::capsChanged,
-            this, &KarbonCalligraphyTool::setCaps);
+    connect(widget, &KarbonCalligraphyOptionWidget::capsChanged, this, &KarbonCalligraphyTool::setCaps);
 
-    connect(widget, &KarbonCalligraphyOptionWidget::massChanged,
-            this, &KarbonCalligraphyTool::setMass);
+    connect(widget, &KarbonCalligraphyOptionWidget::massChanged, this, &KarbonCalligraphyTool::setMass);
 
-    connect(widget, &KarbonCalligraphyOptionWidget::dragChanged,
-            this, &KarbonCalligraphyTool::setDrag);
+    connect(widget, &KarbonCalligraphyOptionWidget::dragChanged, this, &KarbonCalligraphyTool::setDrag);
 
-    connect(this, &KarbonCalligraphyTool::pathSelectedChanged,
-            widget, &KarbonCalligraphyOptionWidget::setUsePathEnabled);
+    connect(this, &KarbonCalligraphyTool::pathSelectedChanged, widget, &KarbonCalligraphyOptionWidget::setUsePathEnabled);
 
     // add shortcuts
     QAction *action = new QAction(i18n("Calligraphy: increase width"), this);
@@ -436,8 +419,8 @@ void KarbonCalligraphyTool::setDrag(double drag)
 void KarbonCalligraphyTool::setUsePath(bool usePath)
 {
     m_usePath = usePath;
-    //if ( m_selectedPath )
-    //    canvas()->updateCanvas( m_selectedPath->boundingRect() );
+    // if ( m_selectedPath )
+    //     canvas()->updateCanvas( m_selectedPath->boundingRect() );
 }
 
 void KarbonCalligraphyTool::setUsePressure(bool usePressure)
@@ -463,8 +446,7 @@ void KarbonCalligraphyTool::updateSelectedPath()
 
     // null pointer if it the selection isn't a KoPathShape
     // or if the selection is empty
-    m_selectedPath =
-        dynamic_cast<KoPathShape *>(selection->firstSelectedShape());
+    m_selectedPath = dynamic_cast<KoPathShape *>(selection->firstSelectedShape());
 
     // or if it's a KoPathShape but with no or more than one subpaths
     if (m_selectedPath && m_selectedPath->subpathCount() != 1)

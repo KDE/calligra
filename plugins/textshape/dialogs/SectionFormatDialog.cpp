@@ -6,15 +6,15 @@
 
 #include "SectionFormatDialog.h"
 
-#include <KoTextDocument.h>
-#include <KoSectionModel.h>
 #include <KoSection.h>
+#include <KoSectionModel.h>
+#include <KoTextDocument.h>
 #include <KoTextEditor.h>
 
-#include <QIdentityProxyModel>
-#include <QToolTip>
 #include <KColorScheme>
 #include <KLocalizedString>
+#include <QIdentityProxyModel>
+#include <QToolTip>
 
 class SectionFormatDialog::ProxyModel : public QIdentityProxyModel
 {
@@ -58,10 +58,7 @@ public:
 
     KoSection *getSectionByIndex(const QModelIndex &idx) const
     {
-        return sourceModel()->data(
-            mapToSource(idx),
-            KoSectionModel::PointerRole
-        ).value<KoSection *>();
+        return sourceModel()->data(mapToSource(idx), KoSectionModel::PointerRole).value<KoSection *>();
     }
 
 private:
@@ -134,8 +131,7 @@ void SectionFormatDialog::sectionSelected(const QModelIndex &idx)
     // Update widgets
     m_widget.sectionNameLineEdit->setEnabled(true);
     m_widget.sectionNameLineEdit->setText(curSection->name());
-    m_widget.sectionNameLineEdit->setValidator(
-        new SectionNameValidator(this, m_sectionModel, curSection));
+    m_widget.sectionNameLineEdit->setValidator(new SectionNameValidator(this, m_sectionModel, curSection));
 }
 
 void SectionFormatDialog::updateTreeState()
@@ -150,8 +146,7 @@ void SectionFormatDialog::updateTreeState()
         KColorScheme::adjustBackground(pal, KColorScheme::NegativeBackground);
         m_widget.sectionNameLineEdit->setPalette(pal);
 
-        QToolTip::showText(m_widget.sectionNameLineEdit->mapToGlobal(QPoint()),
-                           i18n("Invalid characters or section with such name exists."));
+        QToolTip::showText(m_widget.sectionNameLineEdit->mapToGlobal(QPoint()), i18n("Invalid characters or section with such name exists."));
 
         allOk = false;
     } else {
@@ -163,7 +158,7 @@ void SectionFormatDialog::updateTreeState()
     enableButtonOk(allOk);
 }
 
-inline KoSection* SectionFormatDialog::sectionFromModel(const QModelIndex &idx)
+inline KoSection *SectionFormatDialog::sectionFromModel(const QModelIndex &idx)
 {
     return dynamic_cast<ProxyModel *>(m_widget.sectionTree->model())->getSectionByIndex(idx);
 }

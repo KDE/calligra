@@ -15,27 +15,27 @@ class QTextTable;
 
 class KoDeletedRowData
 {
-    public:
-        explicit KoDeletedRowData(int rowNumber);
+public:
+    explicit KoDeletedRowData(int rowNumber);
 
-        ~KoDeletedRowData();
+    ~KoDeletedRowData();
 
-        int rowNumber();
+    int rowNumber();
 
-        void setRowStyle(KoTableRowStyle *rowStyle);
+    void setRowStyle(KoTableRowStyle *rowStyle);
 
-        KoTableRowStyle *rowStyle();
+    KoTableRowStyle *rowStyle();
 
-        const QVector<KoDeletedCellData *>& deletedCells();
+    const QVector<KoDeletedCellData *> &deletedCells();
 
-        void storeDeletedCells(QTextTable *table);
+    void storeDeletedCells(QTextTable *table);
 
-    private:
-        int row_number;
+private:
+    int row_number;
 
-        KoTableRowStyle *row_style;
+    KoTableRowStyle *row_style;
 
-        QVector<KoDeletedCellData *> deleted_cells;
+    QVector<KoDeletedCellData *> deleted_cells;
 };
 
 #endif

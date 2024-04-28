@@ -17,34 +17,34 @@
 
 // Qt
 #include <QGridLayout>
-#include <QLabel>
 #include <QHBoxLayout>
-#include <QVBoxLayout>
+#include <QLabel>
 #include <QListWidget>
 #include <QPushButton>
 #include <QSplitter>
+#include <QVBoxLayout>
 
 // KF5
 #include <KComboBox>
-#include <klineedit.h>
 #include <KMessageBox>
+#include <klineedit.h>
 #include <kstandardguiitem.h>
 
 #include <KoCanvasBase.h>
 
 // Sheets
+#include "core/Sheet.h"
 #include "engine/MapBase.h"
 #include "engine/NamedAreaManager.h"
-#include "core/Sheet.h"
 #include "ui/Selection.h"
 
 #include "ui/commands/NamedAreaCommand.h"
 
 using namespace Calligra::Sheets;
 
-NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
-        : ActionDialog(parent)
-        , m_selection(selection)
+NamedAreaDialog::NamedAreaDialog(QWidget *parent, Selection *selection)
+    : ActionDialog(parent)
+    , m_selection(selection)
 {
     setButtons(Close);
     setCaption(i18n("Named Areas"));
@@ -56,7 +56,7 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
     setMainWidget(splitter);
 
     // *** LEFT ***
-    QWidget* leftWidget = new QWidget(splitter);
+    QWidget *leftWidget = new QWidget(splitter);
     splitter->addWidget(leftWidget);
     QVBoxLayout *leftLayout = new QVBoxLayout(leftWidget);
     leftLayout->setContentsMargins({});
@@ -74,27 +74,27 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
     leftLayout->addLayout(vboxLayout);
 
     // *** RIGHT ***
-    QFrame* rightWidget = new QFrame(splitter);
+    QFrame *rightWidget = new QFrame(splitter);
     rightWidget->setFrameStyle(QFrame::StyledPanel);
     splitter->addWidget(rightWidget);
 
-    QGridLayout * gridLayout = new QGridLayout(rightWidget);
+    QGridLayout *gridLayout = new QGridLayout(rightWidget);
 
-    QLabel * textLabel4 = new QLabel(rightWidget);
+    QLabel *textLabel4 = new QLabel(rightWidget);
     textLabel4->setText(i18n("Cells:"));
     gridLayout->addWidget(textLabel4, 2, 0);
 
     m_cellRange = new KLineEdit(rightWidget);
     gridLayout->addWidget(m_cellRange, 2, 1);
 
-    QLabel * textLabel1 = new QLabel(rightWidget);
+    QLabel *textLabel1 = new QLabel(rightWidget);
     textLabel1->setText(i18n("Sheet:"));
     gridLayout->addWidget(textLabel1, 1, 0);
 
     m_sheets = new KComboBox(rightWidget);
     gridLayout->addWidget(m_sheets, 1, 1);
 
-    QLabel * textLabel2 = new QLabel(rightWidget);
+    QLabel *textLabel2 = new QLabel(rightWidget);
     textLabel2->setText(i18n("Area name:"));
     gridLayout->addWidget(textLabel2, 0, 0);
 
@@ -119,7 +119,7 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
 
 void NamedAreaDialog::fillData()
 {
-    QListWidgetItem* item = m_list->currentItem();
+    QListWidgetItem *item = m_list->currentItem();
     QString cur = item ? item->text() : QString();
 
     MapBase *map = m_selection->activeSheet()->map();
@@ -136,14 +136,15 @@ void NamedAreaDialog::fillData()
         m_removeButton->setEnabled(true);
         QList<QListWidgetItem *> items = m_list->findItems(cur, Qt::MatchFixedString);
         int idx = 0;
-        if (items.size()) idx = m_list->row(items.front());
+        if (items.size())
+            idx = m_list->row(items.front());
         m_list->setCurrentRow(idx);
     }
 
     m_sheets->clear();
-    const QList<SheetBase*> sheetList = map->sheetList();
+    const QList<SheetBase *> sheetList = map->sheetList();
     for (int i = 0; i < sheetList.count(); ++i) {
-        SheetBase* sheet = sheetList.at(i);
+        SheetBase *sheet = sheetList.at(i);
         if (!sheet)
             continue;
         m_sheets->insertItem(i, sheet->sheetName());
@@ -158,28 +159,30 @@ void NamedAreaDialog::slotActivated()
     m_areaNameEdit->setText(QString());
     m_sheets->setCurrentIndex(0);
     m_cellRange->setText(QString());
-    if (m_list->count() <= 1) return;
+    if (m_list->count() <= 1)
+        return;
 
-    QListWidgetItem* item = m_list->currentItem();
+    QListWidgetItem *item = m_list->currentItem();
     QString name = item->text();
     NamedAreaManager *manager = m_selection->activeSheet()->map()->namedAreaManager();
     Region region = manager->namedArea(name);
-    SheetBase* sheet = manager->sheet(name);
+    SheetBase *sheet = manager->sheet(name);
 
-    if (!sheet || !region.isValid()) return;
+    if (!sheet || !region.isValid())
+        return;
     Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
 
     m_rangeName->setText(i18n("Area: %1", region.name(sheet)));
 
     // fill in the editor
-    m_areaNameEdit->setText(name);   
+    m_areaNameEdit->setText(name);
     m_sheets->setCurrentIndex(m_sheets->findText(sheet->sheetName()));
     m_cellRange->setText(region.name(sheet));
 
     emit requestSelection(region, fullSheet);
 }
 
-void NamedAreaDialog::onSelectionChanged(Selection *) 
+void NamedAreaDialog::onSelectionChanged(Selection *)
 {
     m_cellRange->setText(m_selection->name(m_selection->activeSheet()));
 }
@@ -187,14 +190,13 @@ void NamedAreaDialog::onSelectionChanged(Selection *)
 void NamedAreaDialog::slotRemove()
 {
     const QString question = i18n("Do you really want to remove this named area?");
-    int result = KMessageBox::warningContinueCancel(this, question, i18n("Remove Named Area"),
-                 KStandardGuiItem::del());
+    int result = KMessageBox::warningContinueCancel(this, question, i18n("Remove Named Area"), KStandardGuiItem::del());
     if (result == KMessageBox::Cancel)
         return;
 
-    QListWidgetItem* item = m_list->currentItem();
+    QListWidgetItem *item = m_list->currentItem();
 
-    NamedAreaCommand* command = new NamedAreaCommand();
+    NamedAreaCommand *command = new NamedAreaCommand();
     command->setAreaName(item->text());
     command->setRemove(true);
     command->setSheet(m_selection->activeSheet());
@@ -207,17 +209,18 @@ void NamedAreaDialog::slotSave()
     QString name = m_areaNameEdit->text();
     QString regName = m_cellRange->text();
     MapBase *map = m_selection->activeSheet()->map();
-    SheetBase* baseSheet = map->sheet(m_sheets->currentIndex());
+    SheetBase *baseSheet = map->sheet(m_sheets->currentIndex());
     Sheet *sheet = dynamic_cast<Sheet *>(baseSheet);
 
-    if (!name.length()) return;
+    if (!name.length())
+        return;
     Region region = map->regionFromName(regName, baseSheet);
     if (!region.isValid()) {
         KMessageBox::error(this, i18n("The provided region is not valid."));
         return;
     }
 
-    NamedAreaCommand* command = new NamedAreaCommand();
+    NamedAreaCommand *command = new NamedAreaCommand();
     command->setSheet(sheet);
     command->add(region);
 
@@ -225,7 +228,7 @@ void NamedAreaDialog::slotSave()
     if (m_list->currentRow() == m_list->count() - 1) {
         command->setAreaName(name);
     } else {
-        QListWidgetItem* item = m_list->currentItem();
+        QListWidgetItem *item = m_list->currentItem();
         QString origName = item->text();
         command->setAreaName(origName);
         command->setNewAreaName(name);
@@ -234,4 +237,3 @@ void NamedAreaDialog::slotSave()
 
     fillData();
 }
-

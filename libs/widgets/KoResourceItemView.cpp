@@ -33,8 +33,7 @@ bool KoResourceItemView::viewportEvent(QEvent *event)
     return QTableView::viewportEvent(event);
 }
 
-
-void KoResourceItemView::selectionChanged(const QItemSelection &selected, const QItemSelection &/*deselected*/)
+void KoResourceItemView::selectionChanged(const QItemSelection &selected, const QItemSelection & /*deselected*/)
 {
     if (!selected.isEmpty())
         emit currentResourceChanged(selected.indexes().first());

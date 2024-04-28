@@ -22,8 +22,7 @@ class RTFImport : public KoFilter
     Q_OBJECT
 
 public:
-
-    RTFImport(QObject* parent, const QVariantList&);
+    RTFImport(QObject *parent, const QVariantList &);
 
     /**
      * Convert document from RTF to Words format.
@@ -31,9 +30,7 @@ public:
      * @param to the mimetype for Words
      * @return true if the document was successfully converted
      */
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };
-
-
 
 #endif

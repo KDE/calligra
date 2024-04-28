@@ -8,11 +8,11 @@
 #include "KoCreatePathToolFactory.h"
 #include "KoCreatePathTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 
 KoCreatePathToolFactory::KoCreatePathToolFactory()
-        : KoToolFactoryBase(KoCreatePathTool_ID)
+    : KoToolFactoryBase(KoCreatePathTool_ID)
 {
     setToolTip(i18n("Draw path"));
     setToolType(mainToolType());
@@ -25,7 +25,7 @@ KoCreatePathToolFactory::~KoCreatePathToolFactory()
 {
 }
 
-KoToolBase* KoCreatePathToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KoCreatePathToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KoCreatePathTool(canvas);
 }

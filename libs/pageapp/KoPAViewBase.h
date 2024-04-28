@@ -6,8 +6,8 @@
 #ifndef KOPAVIEWBASE_H
 #define KOPAVIEWBASE_H
 
-#include "KoPageApp.h"
 #include "KoPAViewMode.h"
+#include "KoPageApp.h"
 
 class KoPACanvasBase;
 class KoViewConverter;
@@ -23,10 +23,9 @@ class KoPAViewProxyObject;
 /**
  * Base class defining the View interface the KoPAViewMode class needs.
  */
-class KOPAGEAPP_EXPORT KoPAViewBase {
-
+class KOPAGEAPP_EXPORT KoPAViewBase
+{
 public:
-
     // proxy QObject
     KoPAViewProxyObject *proxyObject;
 
@@ -34,30 +33,30 @@ public:
     virtual ~KoPAViewBase();
 
     /// @return the canvas for the application
-    virtual KoPACanvasBase * kopaCanvas() const = 0;
+    virtual KoPACanvasBase *kopaCanvas() const = 0;
 
     /// @return the document for the application
-    virtual KoPADocument * kopaDocument() const = 0;
+    virtual KoPADocument *kopaDocument() const = 0;
 
     /// XXX
-    virtual KoViewConverter * viewConverter( KoPACanvasBase * canvas );
-    virtual KoViewConverter * viewConverter() const;
-    virtual KoZoomController * zoomController() const = 0;
+    virtual KoViewConverter *viewConverter(KoPACanvasBase *canvas);
+    virtual KoViewConverter *viewConverter() const;
+    virtual KoZoomController *zoomController() const = 0;
 
-    virtual KoZoomHandler * zoomHandler();
+    virtual KoZoomHandler *zoomHandler();
     virtual KoZoomHandler *zoomHandler() const;
 
     /// Set the active page and updates the UI
-    virtual void doUpdateActivePage( KoPAPageBase * page ) = 0;
+    virtual void doUpdateActivePage(KoPAPageBase *page) = 0;
 
     /// Set page shown in the canvas to @p page
-    virtual void setActivePage( KoPAPageBase * page ) = 0;
+    virtual void setActivePage(KoPAPageBase *page) = 0;
 
     /// @return Page that is shown in the canvas
-    virtual KoPAPageBase* activePage() const = 0;
+    virtual KoPAPageBase *activePage() const = 0;
 
     /// XXX
-    virtual void navigatePage( KoPageApp::PageNavigation pageNavigation ) = 0;
+    virtual void navigatePage(KoPageApp::PageNavigation pageNavigation) = 0;
 
     /**
      * @brief Enables/Disables the given actions
@@ -67,7 +66,7 @@ public:
      * @param actions which should be enabled/disabled
      * @param enable new state of the actions
      */
-    virtual void setActionEnabled( int actions, bool enable ) = 0;
+    virtual void setActionEnabled(int actions, bool enable) = 0;
 
     /// XXX
     virtual void updatePageNavigationActions() = 0;
@@ -77,10 +76,10 @@ public:
      *
      * @param mode the new view mode
      */
-    virtual void setViewMode( KoPAViewMode* mode );
+    virtual void setViewMode(KoPAViewMode *mode);
 
     /// @return the active viewMode
-    virtual KoPAViewMode* viewMode() const;
+    virtual KoPAViewMode *viewMode() const;
 
     /// Insert a new page after the current one
     virtual void insertPage() = 0;
@@ -95,36 +94,49 @@ public:
     virtual void setShowRulers(bool show) = 0;
 
 private:
-
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 /**
  * QObject proxy class for handling signals and slots
  */
-class KOPAGEAPP_EXPORT KoPAViewProxyObject : public QObject {
-
+class KOPAGEAPP_EXPORT KoPAViewProxyObject : public QObject
+{
     Q_OBJECT
 
 public:
+    explicit KoPAViewProxyObject(KoPAViewBase *parent);
 
-    explicit KoPAViewProxyObject(KoPAViewBase * parent);
-
-    void emitActivePageChanged() { emit activePageChanged(); }
+    void emitActivePageChanged()
+    {
+        emit activePageChanged();
+    }
 
 public Q_SLOTS:
 
     /// Set the active page and updates the UI
-    void updateActivePage( KoPAPageBase * page ) { m_view->viewMode()->updateActivePage(page); }
+    void updateActivePage(KoPAPageBase *page)
+    {
+        m_view->viewMode()->updateActivePage(page);
+    }
 
     /// Shows/hides the rulers
-    void setShowRulers(bool show) { m_view->setShowRulers(show); }
+    void setShowRulers(bool show)
+    {
+        m_view->setShowRulers(show);
+    }
 
     /// Insert a new page after the current one
-    void insertPage() { m_view->insertPage(); }
+    void insertPage()
+    {
+        m_view->insertPage();
+    }
 
-    void editPaste() { m_view->editPaste(); }
+    void editPaste()
+    {
+        m_view->editPaste();
+    }
 
 Q_SIGNALS:
 
@@ -132,8 +144,7 @@ Q_SIGNALS:
     void activePageChanged();
 
 private:
-
-    KoPAViewBase * m_view;
+    KoPAViewBase *m_view;
 };
 
 #endif // KOPAVIEWBASE_H

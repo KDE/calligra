@@ -6,9 +6,9 @@
 
 #include "importkmailautocorrection.h"
 
+#include <QDebug>
 #include <QFile>
 #include <QXmlStreamReader>
-#include <QDebug>
 
 ImportKMailAutocorrection::ImportKMailAutocorrection()
 {
@@ -20,7 +20,7 @@ bool ImportKMailAutocorrection::import(const QString &fileName, QString &errorMe
 {
     QFile xmlFile(fileName);
     if (!xmlFile.open(QIODevice::ReadOnly)) {
-        qInfo()<<Q_FUNC_INFO<<"failed, not open:"<<fileName;
+        qInfo() << Q_FUNC_INFO << "failed, not open:" << fileName;
         return false;
     }
     QXmlStreamReader xml(&xmlFile);
@@ -33,7 +33,7 @@ bool ImportKMailAutocorrection::import(const QString &fileName, QString &errorMe
 #else
             const QStringView xmlName = xml.name();
 #endif
-            qInfo()<<Q_FUNC_INFO<<xml.name();
+            qInfo() << Q_FUNC_INFO << xml.name();
             if (xmlName == QLatin1String("UpperCaseExceptions")) {
                 if (loadAttribute == All) {
                     while (xml.readNextStartElement()) {
@@ -125,7 +125,7 @@ bool ImportKMailAutocorrection::import(const QString &fileName, QString &errorMe
                     xml.skipCurrentElement();
                 }
             } else if (xmlName == QLatin1String("SuperScript")) {
-                qInfo()<<Q_FUNC_INFO<<1<<"SuperScriptEntries";
+                qInfo() << Q_FUNC_INFO << 1 << "SuperScriptEntries";
                 if (loadAttribute == All || loadAttribute == SuperScript) {
                     while (xml.readNextStartElement()) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -137,7 +137,7 @@ bool ImportKMailAutocorrection::import(const QString &fileName, QString &errorMe
                             const QString find = xml.attributes().value(QStringLiteral("find")).toString();
                             const QString super = xml.attributes().value(QStringLiteral("super")).toString();
                             mSuperScriptEntries.insert(find, super);
-                            qInfo()<<Q_FUNC_INFO<<"add:"<<find<<super<<mSuperScriptEntries;
+                            qInfo() << Q_FUNC_INFO << "add:" << find << super << mSuperScriptEntries;
                             xml.skipCurrentElement();
                         } else {
                             xml.skipCurrentElement();

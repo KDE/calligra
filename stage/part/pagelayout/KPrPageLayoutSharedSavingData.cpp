@@ -27,12 +27,12 @@ KPrPageLayoutSharedSavingData::~KPrPageLayoutSharedSavingData()
 {
 }
 
-void KPrPageLayoutSharedSavingData::addPageLayoutStyle( KPrPageLayout * pageLayout, const QString & styleName )
+void KPrPageLayoutSharedSavingData::addPageLayoutStyle(KPrPageLayout *pageLayout, const QString &styleName)
 {
-    m_pageLayoutToName.insert( pageLayout, styleName );
+    m_pageLayoutToName.insert(pageLayout, styleName);
 }
 
-QString KPrPageLayoutSharedSavingData::pageLayoutStyle( KPrPageLayout * pageLayout )
+QString KPrPageLayoutSharedSavingData::pageLayoutStyle(KPrPageLayout *pageLayout)
 {
-    return m_pageLayoutToName.value( pageLayout, QString() );
+    return m_pageLayoutToName.value(pageLayout, QString());
 }

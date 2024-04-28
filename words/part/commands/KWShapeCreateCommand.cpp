@@ -7,10 +7,10 @@
 
 #include "KWShapeCreateCommand.h"
 
-#include <KoShape.h>
-#include <KoShapeContainer.h>
-#include <KoShapeAnchor.h>
 #include <KWDocument.h>
+#include <KoShape.h>
+#include <KoShapeAnchor.h>
+#include <KoShapeContainer.h>
 
 // class KoShapeCreateCommand::Private
 // {
@@ -21,23 +21,23 @@
 //         shapeParent(shape->parent()),
 //         deleteShape(true) {
 //     }
-//     
+//
 //     ~Private() {
 //         if (deleteShape)
 //             delete shape;
 //     }
-// 
+//
 //     KWDocument *document;
 //     KoShape *shape;
 //     KoShapeContainer *shapeParent;
 //     bool deleteShape;
 // };
 
-KWShapeCreateCommand::KWShapeCreateCommand(KWDocument *doc, KoShape *shape, KUndo2Command *parent):
-    KUndo2Command(parent),
-    m_document(doc),
-    m_shape(shape),
-    m_deleteShape(true)
+KWShapeCreateCommand::KWShapeCreateCommand(KWDocument *doc, KoShape *shape, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_document(doc)
+    , m_shape(shape)
+    , m_deleteShape(true)
 {
     setText(kundo2_i18n("Create shape"));
 }
@@ -52,7 +52,7 @@ KWShapeCreateCommand::~KWShapeCreateCommand()
 void KWShapeCreateCommand::redo()
 {
     KUndo2Command::redo();
-    
+
     if (m_shape->parent())
         m_shape->parent()->addShape(m_shape);
     // the parent has to be there when it is added to the KoShapeBasedDocumentBase
@@ -64,12 +64,12 @@ void KWShapeCreateCommand::redo()
 void KWShapeCreateCommand::undo()
 {
     KUndo2Command::undo();
-    
+
     // the parent has to be there when it is removed from the KoShapeBasedDocumentBase
     m_document->removeShape(m_shape);
-    
+
     if (m_shape->parent())
         m_shape->parent()->removeShape(m_shape);
-    
+
     m_deleteShape = true;
 }

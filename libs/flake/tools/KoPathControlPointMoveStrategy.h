@@ -8,10 +8,10 @@
 #ifndef KOPATHCONTROLPOINTMOVESTRATEGY_H
 #define KOPATHCONTROLPOINTMOVESTRATEGY_H
 
-#include <QPointF>
 #include "KoInteractionStrategy.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
+#include <QPointF>
 
 class KoPathTool;
 
@@ -22,12 +22,11 @@ class KoPathTool;
 class KoPathControlPointMoveStrategy : public KoInteractionStrategy
 {
 public:
-    KoPathControlPointMoveStrategy(KoPathTool *tool, const KoPathPointData &point,
-                                   KoPathPoint::PointType type, const QPointF &pos);
+    KoPathControlPointMoveStrategy(KoPathTool *tool, const KoPathPointData &point, KoPathPoint::PointType type, const QPointF &pos);
     ~KoPathControlPointMoveStrategy() override;
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
-    KUndo2Command* createCommand() override;
+    KUndo2Command *createCommand() override;
 
 private:
     /// the last mouse position
@@ -41,4 +40,3 @@ private:
 };
 
 #endif /* KOPATHCONTROLPOINTMOVESTRATEGY_H */
-

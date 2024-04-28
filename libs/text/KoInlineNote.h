@@ -21,9 +21,9 @@ class KOTEXT_EXPORT KoInlineNote : public KoInlineObject
 public:
     /// The type of note specifies how the application will use the text from the note.
     enum Type {
-        Footnote,      ///< Notes of this type will have their text placed at the bottom of a shape.
-        Endnote,       ///< Notes of this type are used as endnotes in applications that support it.
-        Annotation     ///< Notes of this type will have their text placed in the document margin.
+        Footnote, ///< Notes of this type will have their text placed at the bottom of a shape.
+        Endnote, ///< Notes of this type are used as endnotes in applications that support it.
+        Annotation ///< Notes of this type will have their text placed in the document margin.
     };
 
     /**
@@ -75,21 +75,24 @@ public:
 
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
-    ///reimplemented
+    /// reimplemented
     void saveOdf(KoShapeSavingContext &context) override;
 
     int getPosInDocument() const;
 
 protected:
     /// reimplemented
-    void updatePosition(const QTextDocument *document,
-                                int posInDocument, const QTextCharFormat &format) override;
+    void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format) override;
     /// reimplemented
-    void resize(const QTextDocument *document, QTextInlineObject &object,
-                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
+    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
     /// reimplemented
-    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) override;
+    void paint(QPainter &painter,
+               QPaintDevice *pd,
+               const QTextDocument *document,
+               const QRectF &rect,
+               const QTextInlineObject &object,
+               int posInDocument,
+               const QTextCharFormat &format) override;
 
 private:
     friend class InsertNoteCommand;
@@ -98,7 +101,7 @@ private:
     void setTextFrame(QTextFrame *textFrame);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

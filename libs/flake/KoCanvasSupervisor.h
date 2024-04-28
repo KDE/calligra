@@ -22,7 +22,7 @@ class FLAKE_EXPORT KoCanvasSupervisor
 public:
     KoCanvasSupervisor();
     virtual ~KoCanvasSupervisor();
-    virtual QList<KoCanvasObserverBase*> canvasObservers() const = 0;
+    virtual QList<KoCanvasObserverBase *> canvasObservers() const = 0;
 };
 
 #endif

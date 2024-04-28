@@ -21,7 +21,6 @@ class KoTemplatesPanePrivate;
  */
 class KoTemplatesPane : public KoDetailsPane
 {
-
     Q_OBJECT
 public:
     /**
@@ -31,30 +30,29 @@ public:
      * @param group the group of templates this widget will show.
      * @param defaultTemplate pointer to the default template. Used to select a
      * template when none has been selected before.
-    */
-    KoTemplatesPane(QWidget* parent, const QString& header,
-                    KoTemplateGroup* group, KoTemplate* defaultTemplate);
+     */
+    KoTemplatesPane(QWidget *parent, const QString &header, KoTemplateGroup *group, KoTemplate *defaultTemplate);
     ~KoTemplatesPane() override;
 
     /// Returns true if a template in this group was the last one selected
     bool isSelected();
 
 public Q_SLOTS:
-    void changeAlwaysUseTemplate(KoTemplatesPane* sender, const QString& alwaysUse);
+    void changeAlwaysUseTemplate(KoTemplatesPane *sender, const QString &alwaysUse);
 
 Q_SIGNALS:
     /// Emitted when the always use checkbox is selected
-    void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
+    void alwaysUseChanged(KoTemplatesPane *sender, const QString &alwaysUse);
 
 protected Q_SLOTS:
-    void selectionChanged(const QModelIndex& index) override;
+    void selectionChanged(const QModelIndex &index) override;
 
     void openFile() override;
-    void openFile(const QModelIndex& index) override;
+    void openFile(const QModelIndex &index) override;
     void alwaysUseClicked();
 
 private:
-    KoTemplatesPanePrivate * const d;
+    KoTemplatesPanePrivate *const d;
 };
 
 #endif

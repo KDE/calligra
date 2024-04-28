@@ -8,8 +8,8 @@
 #ifndef _KO_GENERIC_REGISTRY_MODEL_H_
 #define _KO_GENERIC_REGISTRY_MODEL_H_
 
-#include <QAbstractListModel>
 #include "KoGenericRegistry.h"
+#include <QAbstractListModel>
 
 /**
  * This is a model that you can use to display the content of a registry.
@@ -19,15 +19,12 @@
 template<typename T>
 class KoGenericRegistryModel : public QAbstractListModel
 {
-
 public:
-
-    KoGenericRegistryModel(KoGenericRegistry<T>* registry);
+    KoGenericRegistryModel(KoGenericRegistry<T> *registry);
 
     ~KoGenericRegistryModel() override = default;
 
 public:
-
     /**
      * @return the number of elements in the registry
      */
@@ -45,18 +42,18 @@ public:
     T get(const QModelIndex &index) const;
 
 private:
-
-    KoGenericRegistry<T>* m_registry;
+    KoGenericRegistry<T> *m_registry;
 };
 
 // -- Implementation --
 template<typename T>
-KoGenericRegistryModel<T>::KoGenericRegistryModel(KoGenericRegistry<T>* registry) : m_registry(registry)
+KoGenericRegistryModel<T>::KoGenericRegistryModel(KoGenericRegistry<T> *registry)
+    : m_registry(registry)
 {
 }
 
 template<typename T>
-int KoGenericRegistryModel<T>::rowCount(const QModelIndex &/*parent*/) const
+int KoGenericRegistryModel<T>::rowCount(const QModelIndex & /*parent*/) const
 {
     return m_registry->keys().size();
 }

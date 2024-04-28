@@ -6,8 +6,8 @@
 #ifndef KORULERCONTROLLER_H
 #define KORULERCONTROLLER_H
 
-#include <QObject>
 #include "kowidgets_export.h"
+#include <QObject>
 
 class KoRuler;
 class KoCanvasResourceManager;
@@ -34,7 +34,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
     Q_PRIVATE_SLOT(d, void canvasResourceChanged(int))
     Q_PRIVATE_SLOT(d, void indentsChanged())

@@ -8,9 +8,9 @@
 #define CALLIGRAMOBILE_DOCUMENTLISTMODEL_H
 
 #include <QAbstractListModel>
+#include <QDateTime>
 #include <QQmlParserStatus>
 #include <QRunnable>
-#include <QDateTime>
 
 class SearchThread;
 
@@ -39,9 +39,8 @@ public:
 
     enum GroupBy { GroupByName, GroupByDocType };
     Q_ENUM(GroupBy);
-   
-    enum DocumentType
-    {
+
+    enum DocumentType {
         UnknownType,
         TextDocumentType,
         PresentationType,
@@ -50,7 +49,10 @@ public:
     Q_ENUM(DocumentType);
 
     struct DocumentInfo {
-        bool operator==(const DocumentInfo &other) const { return filePath == other.filePath; }
+        bool operator==(const DocumentInfo &other) const
+        {
+            return filePath == other.filePath;
+        }
         QString filePath;
         QString fileName;
         DocumentType docType;
@@ -115,8 +117,11 @@ public:
     ~SearchThread() override;
 
     void run() override;
-    
-    void abort() { m_abort = true; }
+
+    void abort()
+    {
+        m_abort = true;
+    }
 
 Q_SIGNALS:
     void documentFound(const DocumentListModel::DocumentInfo &);
@@ -131,4 +136,3 @@ private:
 };
 
 #endif // CALLIGRAMOBILE_DOCUMENTLISTMODEL_H
-

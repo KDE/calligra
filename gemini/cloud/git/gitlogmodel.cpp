@@ -19,7 +19,9 @@
 
 struct LogEntry {
 public:
-    LogEntry() {}
+    LogEntry()
+    {
+    }
     QString authorName;
     QString authorEmail;
     QDateTime time;
@@ -31,16 +33,18 @@ public:
 class GitLogModel::Private
 {
 public:
-    Private() {}
+    Private()
+    {
+    }
     ~Private()
     {
         qDeleteAll(entries);
     }
     QString repoDir;
-    QList<LogEntry*> entries;
+    QList<LogEntry *> entries;
 };
 
-GitLogModel::GitLogModel(QObject* parent)
+GitLogModel::GitLogModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
@@ -65,7 +69,7 @@ QHash<int, QByteArray> GitLogModel::roleNames() const
 
 int GitLogModel::rowCount(const QModelIndex &parent) const
 {
-    if ( parent.isValid() )
+    if (parent.isValid())
         return 0;
     return d->entries.count();
 }
@@ -73,31 +77,30 @@ int GitLogModel::rowCount(const QModelIndex &parent) const
 QVariant GitLogModel::data(const QModelIndex &index, int role) const
 {
     QVariant data;
-    if(index.isValid() && index.row() < d->entries.count()) {
-        LogEntry * entry = d->entries.at(index.row());
-        switch(role)
-        {
-            case AuthorNameRole:
-                data = entry->authorName;
-                break;
-            case AuthorEmailRole:
-                data = entry->authorEmail;
-                break;
-            case TimeRole:
-                data = entry->time;
-                break;
-            case OIDRole:
-                data = entry->oid;
-                break;
-            case ShortMessageRole:
-                data = entry->shortMessage;
-                break;
-            case MessageRole:
-                data = entry->message;
-                break;
-            default:
-                data = "Unknown Role";
-                break;
+    if (index.isValid() && index.row() < d->entries.count()) {
+        LogEntry *entry = d->entries.at(index.row());
+        switch (role) {
+        case AuthorNameRole:
+            data = entry->authorName;
+            break;
+        case AuthorEmailRole:
+            data = entry->authorEmail;
+            break;
+        case TimeRole:
+            data = entry->time;
+            break;
+        case OIDRole:
+            data = entry->oid;
+            break;
+        case ShortMessageRole:
+            data = entry->shortMessage;
+            break;
+        case MessageRole:
+            data = entry->message;
+            break;
+        default:
+            data = "Unknown Role";
+            break;
         }
     }
     return data;
@@ -108,9 +111,9 @@ QString GitLogModel::repoDir() const
     return d->repoDir;
 }
 
-void GitLogModel::setRepoDir(const QString& repoDir)
+void GitLogModel::setRepoDir(const QString &repoDir)
 {
-    if(d->repoDir != repoDir) {
+    if (d->repoDir != repoDir) {
         d->repoDir = repoDir;
         refreshLog();
         emit repoDirChanged();
@@ -123,27 +126,43 @@ void GitLogModel::refreshLog()
     qDeleteAll(d->entries);
     d->entries.clear();
 
-    git_repository* repository;
+    git_repository *repository;
     int error = git_repository_open(&repository, QString("%1/.git").arg(d->repoDir).toLatin1());
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if (error != 0) {
+        const git_error *err = giterr_last();
+        qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message;
+        return;
+    }
 
     git_revwalk *walker;
     error = git_revwalk_new(&walker, repository);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if (error != 0) {
+        const git_error *err = giterr_last();
+        qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message;
+        return;
+    }
     error = git_revwalk_push_range(walker, "HEAD~100..HEAD");
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if (error != 0) {
+        const git_error *err = giterr_last();
+        qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message;
+        return;
+    }
 
     git_oid oid;
     git_commit *commit = NULL;
     while (git_revwalk_next(&oid, walker) == 0) {
         error = git_commit_lookup(&commit, repository, &oid);
-        if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+        if (error != 0) {
+            const git_error *err = giterr_last();
+            qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message;
+            return;
+        }
 
         const git_signature *author = git_commit_author(commit);
 
-        LogEntry* entry = new LogEntry();
+        LogEntry *entry = new LogEntry();
         entry->authorName = author->name;
-        if(entry->authorName.isEmpty())
+        if (entry->authorName.isEmpty())
             entry->authorName = "Unknown";
         entry->authorEmail = author->email;
 

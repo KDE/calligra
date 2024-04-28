@@ -10,12 +10,12 @@
 #ifndef KOIMAGEDATA_P_H
 #define KOIMAGEDATA_P_H
 
-#include <QUrl>
 #include <QByteArray>
+#include <QDir>
 #include <QImage>
 #include <QPixmap>
 #include <QTimer>
-#include <QDir>
+#include <QUrl>
 
 #include "KoImageData.h"
 
@@ -50,10 +50,10 @@ public:
     static qint64 generateKey(const QByteArray &bytes);
 
     enum DataStoreState {
-        StateEmpty,     ///< No image data, either as url or as QImage
+        StateEmpty, ///< No image data, either as url or as QImage
         StateNotLoaded, ///< Image data is set as Url
-        StateImageLoaded,///< Image data is loaded from Url, so both are present.
-        StateImageOnly  ///< Image data is stored in a QImage. There is no external storage.
+        StateImageLoaded, ///< Image data is loaded from Url, so both are present.
+        StateImageOnly ///< Image data is stored in a QImage. There is no external storage.
     };
 
     KoImageCollection *collection;

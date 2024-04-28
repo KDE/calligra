@@ -11,8 +11,8 @@
 #include "PasteInsertDialog.h"
 
 #include <QGroupBox>
-#include <QVBoxLayout>
 #include <QRadioButton>
+#include <QVBoxLayout>
 
 #include <KLocalizedString>
 
@@ -20,8 +20,8 @@
 
 using namespace Calligra::Sheets;
 
-PasteInsertDialog::PasteInsertDialog(QWidget* parent)
-        : KoDialog(parent)
+PasteInsertDialog::PasteInsertDialog(QWidget *parent)
+    : KoDialog(parent)
 {
     setCaption(i18n("Paste Inserting Cells"));
     setObjectName(QLatin1String("PasteInsertDialog"));
@@ -57,5 +57,3 @@ void PasteInsertDialog::slotOk()
 {
     accept();
 }
-
-

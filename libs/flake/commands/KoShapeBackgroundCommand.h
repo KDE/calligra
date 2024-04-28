@@ -10,9 +10,9 @@
 
 #include "flake_export.h"
 
-#include <kundo2command.h>
 #include <QList>
 #include <QSharedPointer>
+#include <kundo2command.h>
 
 class KoShape;
 class KoShapeBackground;
@@ -27,14 +27,14 @@ public:
      * @param fill the new shape background
      * @param parent the parent command used for macro commands
      */
-    KoShapeBackgroundCommand(const QList<KoShape*> &shapes, QSharedPointer<KoShapeBackground> fill, KUndo2Command *parent = 0);
+    KoShapeBackgroundCommand(const QList<KoShape *> &shapes, QSharedPointer<KoShapeBackground> fill, KUndo2Command *parent = 0);
 
     /**
-    * Command to set a new shape background.
-    * @param shape a single shape that should get the new background.
-    * @param fill the new shape background
-    * @param parent the parent command used for macro commands
-    */
+     * Command to set a new shape background.
+     * @param shape a single shape that should get the new background.
+     * @param fill the new shape background
+     * @param parent the parent command used for macro commands
+     */
     KoShapeBackgroundCommand(KoShape *shape, QSharedPointer<KoShapeBackground> fill, KUndo2Command *parent = 0);
 
     /**
@@ -43,16 +43,17 @@ public:
      * @param fills the new backgrounds, one for each shape
      * @param parent the parent command used for macro commands
      */
-    KoShapeBackgroundCommand(const QList<KoShape*> &shapes, const QList<QSharedPointer<KoShapeBackground> > &fills, KUndo2Command *parent = 0);
+    KoShapeBackgroundCommand(const QList<KoShape *> &shapes, const QList<QSharedPointer<KoShapeBackground>> &fills, KUndo2Command *parent = 0);
 
     ~KoShapeBackgroundCommand() override;
     /// redo the command
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

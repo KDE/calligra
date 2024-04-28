@@ -15,11 +15,10 @@ class KeyImport : public KoFilter
     Q_OBJECT
 
 public:
-
-    KeyImport(QObject *parent, const QVariantList&);
+    KeyImport(QObject *parent, const QVariantList &);
     ~KeyImport() override;
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };
 
 #endif // KEYIMPORT_H

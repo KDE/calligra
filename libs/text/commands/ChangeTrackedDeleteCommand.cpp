@@ -8,22 +8,22 @@
 
 #include "ChangeTrackedDeleteCommand.h"
 
-#include "TextPasteCommand.h"
-#include "ListItemNumberingCommand.h"
 #include "ChangeListCommand.h"
+#include "ListItemNumberingCommand.h"
+#include "TextPasteCommand.h"
 
-#include <KoTextEditor.h>
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
-#include <KoTextDocument.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoShapeController.h>
-#include <KoList.h>
-#include <KoParagraphStyle.h>
-#include <KoTextOdfSaveHelper.h>
-#include <KoTextDrag.h>
-#include <KoOdf.h>
 #include <KoDocumentRdfBase.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoList.h>
+#include <KoOdf.h>
+#include <KoParagraphStyle.h>
+#include <KoShapeController.h>
+#include <KoTextDocument.h>
+#include <KoTextDrag.h>
+#include <KoTextEditor.h>
+#include <KoTextOdfSaveHelper.h>
 
 #include <QTextDocumentFragment>
 
@@ -231,77 +231,77 @@ void ChangeTrackedDeleteCommand::deleteSelection(KoTextEditor *editor)
                 if (anchor)
                     shapesInSelection.push_back(anchor->shape());
         */
-        }
-        checker.setPosition(checker.position());
+}
+checker.setPosition(checker.position());
+}
+
+checker.setPosition(selectionBegin);
+
+if (!KoTextDocument(m_document).changeTracker()->displayChanges()) {
+    QChar charAtPos = m_document.data()->characterAt(checker.position() - 1);
+}
+
+if (KoTextDocument(m_document).changeTracker()->containsInlineChanges(checker.charFormat())) {
+    int changeId = checker.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+    if (KoTextDocument(m_document).changeTracker()->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
+        QTextDocumentFragment prefix = KoTextDocument(m_document).changeTracker()->elementById(changeId)->getDeleteData();
+        selectionBegin -= (KoChangeTracker::fragmentLength(prefix) + 1);
+        KoTextDocument(m_document).changeTracker()->elementById(changeId)->setValid(false);
+        m_removedElements.push_back(changeId);
+    }
+}
+
+checker.setPosition(selectionEnd);
+if (!checker.atEnd()) {
+    QChar charAtPos = m_document.data()->characterAt(checker.position());
+    checker.movePosition(QTextCursor::NextCharacter);
+}
+
+selection->setPosition(selectionBegin);
+selection->setPosition(selectionEnd, QTextCursor::KeepAnchor);
+QTextDocumentFragment deletedFragment;
+changeId = KoTextDocument(m_document).changeTracker()->getDeleteChangeId(i18n("Delete"), deletedFragment, 0);
+KoChangeTrackerElement *element = KoTextDocument(m_document).changeTracker()->elementById(changeId);
+
+QTextCharFormat charFormat;
+charFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+selection->mergeCharFormat(charFormat);
+
+deletedFragment = KoChangeTracker::generateDeleteFragment(*selection);
+element->setDeleteData(deletedFragment);
+
+// Store the position and length. Will be used in updateListChanges()
+m_position = (selection->anchor() < selection->position()) ? selection->anchor() : selection->position();
+m_length = qAbs(selection->anchor() - selection->position());
+
+updateListIds(*editor->cursor());
+
+m_addedChangeElement = changeId;
+
+// Insert the deleted data again after the marker with the charformat set to the change-id
+if (KoTextDocument(m_document).changeTracker()->displayChanges()) {
+    int startPosition = selection->position();
+    KoChangeTracker::insertDeleteFragment(*selection);
+    QTextCursor tempCursor(*selection);
+    tempCursor.setPosition(startPosition);
+    tempCursor.setPosition(selection->position(), QTextCursor::KeepAnchor);
+    // XXX: why was this commented out?
+    // tempCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, fragmentLength(deletedFragment));
+    updateListIds(tempCursor);
+    if (backwards) {
+        selection->movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, KoChangeTracker::fragmentLength(deletedFragment) + 1);
+    }
+} else {
+    if (backwards) {
+        selection->movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 1);
     }
 
-    checker.setPosition(selectionBegin);
-
-    if (!KoTextDocument(m_document).changeTracker()->displayChanges()) {
-        QChar charAtPos = m_document.data()->characterAt(checker.position() - 1);
+    foreach (KoShape *shape, shapesInSelection) {
+        KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
+        shapeDeleteCommand->redo();
+        m_canMerge = false;
     }
-
-    if (KoTextDocument(m_document).changeTracker()->containsInlineChanges(checker.charFormat())) {
-        int changeId = checker.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
-        if (KoTextDocument(m_document).changeTracker()->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
-            QTextDocumentFragment prefix =  KoTextDocument(m_document).changeTracker()->elementById(changeId)->getDeleteData();
-            selectionBegin -= (KoChangeTracker::fragmentLength(prefix) + 1 );
-            KoTextDocument(m_document).changeTracker()->elementById(changeId)->setValid(false);
-            m_removedElements.push_back(changeId);
-        }
-    }
-
-    checker.setPosition(selectionEnd);
-    if (!checker.atEnd()) {
-        QChar charAtPos = m_document.data()->characterAt(checker.position());
-        checker.movePosition(QTextCursor::NextCharacter);
-    }
-
-    selection->setPosition(selectionBegin);
-    selection->setPosition(selectionEnd, QTextCursor::KeepAnchor);
-    QTextDocumentFragment deletedFragment;
-    changeId = KoTextDocument(m_document).changeTracker()->getDeleteChangeId(i18n("Delete"), deletedFragment, 0);
-    KoChangeTrackerElement *element = KoTextDocument(m_document).changeTracker()->elementById(changeId);
-
-    QTextCharFormat charFormat;
-    charFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-    selection->mergeCharFormat(charFormat);
-
-    deletedFragment = KoChangeTracker::generateDeleteFragment(*selection);
-    element->setDeleteData(deletedFragment);
-
-    //Store the position and length. Will be used in updateListChanges()
-    m_position = (selection->anchor() < selection->position()) ? selection->anchor():selection->position();
-    m_length = qAbs(selection->anchor() - selection->position());
-
-    updateListIds(*editor->cursor());
-
-    m_addedChangeElement = changeId;
-
-    //Insert the deleted data again after the marker with the charformat set to the change-id
-    if (KoTextDocument(m_document).changeTracker()->displayChanges()) {
-        int startPosition = selection->position();
-        KoChangeTracker::insertDeleteFragment(*selection);
-        QTextCursor tempCursor(*selection);
-        tempCursor.setPosition(startPosition);
-        tempCursor.setPosition(selection->position(), QTextCursor::KeepAnchor);
-        // XXX: why was this commented out?
-        //tempCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, fragmentLength(deletedFragment));
-        updateListIds(tempCursor);
-        if (backwards) {
-            selection->movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, KoChangeTracker::fragmentLength(deletedFragment) + 1);
-        }
-    } else {
-        if (backwards) {
-            selection->movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor,1);
-        }
-
-        foreach (KoShape *shape, shapesInSelection) {
-            KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
-            shapeDeleteCommand->redo();
-            m_canMerge = false;
-        }
-    }
+}
 }
 
 int ChangeTrackedDeleteCommand::id() const
@@ -309,24 +309,27 @@ int ChangeTrackedDeleteCommand::id() const
     return 98765;
 }
 
-bool ChangeTrackedDeleteCommand::mergeWith( const KUndo2Command *command)
+bool ChangeTrackedDeleteCommand::mergeWith(const KUndo2Command *command)
 {
     class UndoTextCommand : public KUndo2Command
     {
     public:
         UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
-            : KUndo2Command(kundo2_i18n("Text"), parent),
-              m_document(document)
-        {}
+            : KUndo2Command(kundo2_i18n("Text"), parent)
+            , m_document(document)
+        {
+        }
 
-        void undo() {
-            QTextDocument *doc = const_cast<QTextDocument*>(m_document.data());
+        void undo()
+        {
+            QTextDocument *doc = const_cast<QTextDocument *>(m_document.data());
             if (doc)
                 doc->undo(KoTextDocument(doc).textEditor()->cursor());
         }
 
-        void redo() {
-            QTextDocument *doc = const_cast<QTextDocument*>(m_document.data());
+        void redo()
+        {
+            QTextDocument *doc = const_cast<QTextDocument *>(m_document.data());
             if (doc)
                 doc->redo(KoTextDocument(doc).textEditor()->cursor());
         }
@@ -355,7 +358,7 @@ bool ChangeTrackedDeleteCommand::mergeWith( const KUndo2Command *command)
         m_position = other->m_position;
         m_length = other->m_length;
 
-        for(int i=0; i < command->childCount(); i++) {
+        for (int i = 0; i < command->childCount(); i++) {
             new UndoTextCommand(m_document.data(), this);
         }
 
@@ -366,7 +369,8 @@ bool ChangeTrackedDeleteCommand::mergeWith( const KUndo2Command *command)
 
 void ChangeTrackedDeleteCommand::updateListIds(QTextCursor &cursor)
 {
-    if (m_document.isNull()) return;
+    if (m_document.isNull())
+        return;
 
     m_newListIds.clear();
     QTextCursor tempCursor(m_document.data());
@@ -385,7 +389,8 @@ void ChangeTrackedDeleteCommand::updateListIds(QTextCursor &cursor)
 }
 void ChangeTrackedDeleteCommand::updateListChanges()
 {
-    if (m_document.isNull()) return;
+    if (m_document.isNull())
+        return;
 
     QTextCursor tempCursor(m_document.data());
     QTextBlock startBlock = m_document.data()->findBlock(m_position);
@@ -414,7 +419,7 @@ ChangeTrackedDeleteCommand::~ChangeTrackedDeleteCommand()
         removeChangeElement(m_addedChangeElement);
     } else {
         foreach (int changeId, m_removedElements) {
-           removeChangeElement(changeId);
+            removeChangeElement(changeId);
         }
     }
 }

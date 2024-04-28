@@ -16,16 +16,13 @@ class InsertSemanticObjectActionBase : public QAction
 {
     Q_OBJECT
 public:
-    InsertSemanticObjectActionBase(KoCanvasBase *canvas,
-                                   KoDocumentRdf *rdf,
-                                   const QString &name);
+    InsertSemanticObjectActionBase(KoCanvasBase *canvas, KoDocumentRdf *rdf, const QString &name);
     virtual ~InsertSemanticObjectActionBase();
 
 private Q_SLOTS:
     virtual void activated();
 
 protected:
-
     KoCanvasBase *m_canvas;
     KoDocumentRdf *m_rdf;
 };

@@ -7,8 +7,8 @@
 #ifndef KWFACTORY_H
 #define KWFACTORY_H
 
-#include <KPluginFactory>
 #include "words_export.h"
+#include <KPluginFactory>
 
 class KoComponentData;
 
@@ -27,7 +27,7 @@ public:
     ~KWFactory() override;
 
     /// overwritten method from superclass
-    QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args) override;
+    QObject *create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args) override;
 
     static const KoComponentData &componentData();
 

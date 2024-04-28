@@ -13,32 +13,20 @@
 
 #include "koodf_export.h"
 
-#include <QtGlobal>
 #include <QColor>
 #include <QVector>
+#include <QtGlobal>
 
 class KoGenStyle;
 class KoXmlElement;
 
-
 /** structure for columns */
 struct KoColumns {
-    enum SeparatorVerticalAlignment {
-        AlignTop = Qt::AlignTop,
-        AlignVCenter = Qt::AlignVCenter,
-        AlignBottom = Qt::AlignBottom
-    };
+    enum SeparatorVerticalAlignment { AlignTop = Qt::AlignTop, AlignVCenter = Qt::AlignVCenter, AlignBottom = Qt::AlignBottom };
 
-    enum SeparatorStyle {
-        None = Qt::NoPen,
-        Solid = Qt::SolidLine,
-        Dashed = Qt::DashLine,
-        Dotted = Qt::DotLine,
-        DotDashed = Qt::DashDotLine
-    };
+    enum SeparatorStyle { None = Qt::NoPen, Solid = Qt::SolidLine, Dashed = Qt::DashLine, Dotted = Qt::DotLine, DotDashed = Qt::DashDotLine };
 
-    struct ColumnDatum
-    {
+    struct ColumnDatum {
         /** Left indent in points */
         qreal leftMargin;
         /** Right indent in points */
@@ -51,18 +39,22 @@ struct KoColumns {
         /** The relative width */
         int relativeWidth;
 
-        ColumnDatum() {}
+        ColumnDatum()
+        {
+        }
         ColumnDatum(qreal lm, qreal rm, qreal tm, qreal bm, int rw)
-        : leftMargin(lm), rightMargin(rm), topMargin(tm), bottomMargin(bm), relativeWidth(rw) {}
+            : leftMargin(lm)
+            , rightMargin(rm)
+            , topMargin(tm)
+            , bottomMargin(bm)
+            , relativeWidth(rw)
+        {
+        }
 
         bool operator==(const KoColumns::ColumnDatum &rhs) const
         {
-            return
-                (leftMargin == rhs.leftMargin) &&
-                (rightMargin == rhs.rightMargin) &&
-                (topMargin == rhs.topMargin) &&
-                (bottomMargin == rhs.bottomMargin) &&
-                (relativeWidth == rhs.relativeWidth);
+            return (leftMargin == rhs.leftMargin) && (rightMargin == rhs.rightMargin) && (topMargin == rhs.topMargin) && (bottomMargin == rhs.bottomMargin)
+                && (relativeWidth == rhs.relativeWidth);
         }
     };
 
@@ -106,14 +98,14 @@ struct KoColumns {
     qreal totalRelativeWidth() const
     {
         qreal result = 0.0;
-        foreach(const ColumnDatum &c, columnData) {
+        foreach (const ColumnDatum &c, columnData) {
             result += c.relativeWidth;
         }
         return result;
     }
 
-    KOODF_EXPORT static const char * separatorStyleString(KoColumns::SeparatorStyle separatorStyle);
-    KOODF_EXPORT static const char * separatorVerticalAlignmentString(KoColumns::SeparatorVerticalAlignment separatorVerticalAlignment);
+    KOODF_EXPORT static const char *separatorStyleString(KoColumns::SeparatorStyle separatorStyle);
+    KOODF_EXPORT static const char *separatorVerticalAlignmentString(KoColumns::SeparatorVerticalAlignment separatorVerticalAlignment);
     KOODF_EXPORT static KoColumns::SeparatorVerticalAlignment parseSeparatorVerticalAlignment(const QString &value);
     KOODF_EXPORT static QColor parseSeparatorColor(const QString &value);
     KOODF_EXPORT static int parseSeparatorHeight(const QString &value);
@@ -124,4 +116,3 @@ struct KoColumns {
 Q_DECLARE_TYPEINFO(KoColumns::ColumnDatum, Q_MOVABLE_TYPE);
 
 #endif /* KOCOLUMNS_H */
-

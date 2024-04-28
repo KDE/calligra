@@ -11,20 +11,16 @@
 
 #include <KLocalizedString>
 
-#include "engine/ValueConverter.h"
-#include "engine/ValueParser.h"
 #include "core/Cell.h"
 #include "core/CellStorage.h"
 #include "core/Map.h"
 #include "core/Sheet.h"
 #include "core/StyleManager.h"
+#include "engine/ValueConverter.h"
+#include "engine/ValueParser.h"
 #include "ui/Selection.h"
 
-
-
-
 using namespace Calligra::Sheets;
-
 
 SetCondition::SetCondition(Actions *actions)
     : DialogCellAction(actions, "conditional", i18n("Conditional Styles..."), QIcon(), i18n("Set cell style based on certain conditions"))
@@ -34,7 +30,6 @@ SetCondition::SetCondition(Actions *actions)
 SetCondition::~SetCondition()
 {
 }
-
 
 ActionDialog *SetCondition::createDialog(QWidget *canvasWidget)
 {
@@ -83,13 +78,12 @@ void SetCondition::applyCondition()
         ++id;
     }
 
-    ConditionCommand* manipulator = new ConditionCommand();
+    ConditionCommand *manipulator = new ConditionCommand();
     manipulator->setSheet(m_selection->activeSheet());
     manipulator->setConditionList(newList);
     manipulator->add(*m_selection);
     manipulator->execute(m_selection->canvas());
 }
-
 
 // this is inside a Clear submenu, hence 'Conditional'
 ClearCondition::ClearCondition(Actions *actions)
@@ -101,7 +95,8 @@ ClearCondition::~ClearCondition()
 {
 }
 
-QAction *ClearCondition::createAction() {
+QAction *ClearCondition::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Remove Conditional Styles"));
     return res;
@@ -110,27 +105,25 @@ QAction *ClearCondition::createAction() {
 // We're just keeping this enabled for everything, no need to check every selection change
 void ClearCondition::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    ConditionCommand* manipulator = new ConditionCommand();
+    ConditionCommand *manipulator = new ConditionCommand();
     manipulator->setSheet(sheet);
     manipulator->setConditionList({});
     manipulator->add(*selection);
     manipulator->execute(selection->canvas());
 }
 
-
-
 ConditionCommand::ConditionCommand()
-        : AbstractRegionCommand()
+    : AbstractRegionCommand()
 {
 }
 
-bool ConditionCommand::process(Element* element)
+bool ConditionCommand::process(Element *element)
 {
     m_sheet->fullCellStorage()->setConditions(Region(element->rect()), m_conditions);
     return true;
 }
 
-void ConditionCommand::setConditionList(const QList<Conditional>& list)
+void ConditionCommand::setConditionList(const QList<Conditional> &list)
 {
     m_conditions.setConditionList(list);
     if (m_conditions.isEmpty())
@@ -138,4 +131,3 @@ void ConditionCommand::setConditionList(const QList<Conditional>& list)
     else
         setText(kundo2_i18n("Add Conditional Formatting"));
 }
-

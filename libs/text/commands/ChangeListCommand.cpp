@@ -7,23 +7,25 @@
 
 #include "ChangeListCommand.h"
 
+#include <KoList.h>
+#include <KoParagraphStyle.h>
 #include <KoTextBlockData.h>
 #include <KoTextDocument.h>
 #include <QTextCursor>
-#include <KoParagraphStyle.h>
-#include <KoList.h>
 
-#include <KLocalizedString>
 #include "TextDebug.h"
+#include <KLocalizedString>
 
 #define MARGIN_DEFAULT 18 // we consider it the default value
 
-ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLevelProperties &levelProperties,
-                                     KoTextEditor::ChangeListFlags flags, KUndo2Command *parent)
-    : KoTextCommandBase(parent),
-      m_flags(flags),
-      m_first(true),
-      m_alignmentMode(false)
+ChangeListCommand::ChangeListCommand(const QTextCursor &cursor,
+                                     const KoListLevelProperties &levelProperties,
+                                     KoTextEditor::ChangeListFlags flags,
+                                     KUndo2Command *parent)
+    : KoTextCommandBase(parent)
+    , m_flags(flags)
+    , m_first(true)
+    , m_alignmentMode(false)
 {
     setText(kundo2_i18n("Change List"));
 
@@ -47,13 +49,12 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
 
         if (KoListStyle::isNumberingStyle(labelType)) {
             llp.setStartValue(1);
-            llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
+            llp.setRelativeBulletSize(100); // we take the default value for numbering bullets as 100
             if (llp.listItemSuffix().isEmpty()) {
                 llp.setListItemSuffix(".");
             }
-        }
-        else if (labelType == KoListStyle::BulletCharLabelType) {
-            llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
+        } else if (labelType == KoListStyle::BulletCharLabelType) {
+            llp.setRelativeBulletSize(100); // we take the default value for numbering bullets as 100
             llp.setBulletCharacter(levelProperties.bulletCharacter());
         } else if (labelType == KoListStyle::ImageLabelType) {
             llp.setBulletImage(levelProperties.bulletImage());
@@ -65,9 +66,9 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
         llp.setLabelFollowedBy(KoListStyle::ListTab);
         llp.setDisplayLevel(levelProperties.displayLevel());
 
-        llp.setTabStopPosition(MARGIN_DEFAULT*(lev+1));
-        llp.setMargin(MARGIN_DEFAULT*(lev+1));
-        llp.setTextIndent(- MARGIN_DEFAULT);
+        llp.setTabStopPosition(MARGIN_DEFAULT * (lev + 1));
+        llp.setMargin(MARGIN_DEFAULT * (lev + 1));
+        llp.setTextIndent(-MARGIN_DEFAULT);
 
         listStyle.setLevelProperties(llp);
     }
@@ -77,12 +78,11 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
     setText(kundo2_i18n("Change List"));
 }
 
-ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level,
-                                     KoTextEditor::ChangeListFlags flags, KUndo2Command *parent)
-    : KoTextCommandBase(parent),
-      m_flags(flags),
-      m_first(true),
-      m_alignmentMode(false)
+ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level, KoTextEditor::ChangeListFlags flags, KUndo2Command *parent)
+    : KoTextCommandBase(parent)
+    , m_flags(flags)
+    , m_first(true)
+    , m_alignmentMode(false)
 {
     Q_ASSERT(style);
     extractTextBlocks(cursor, level); // don't care about return value
@@ -102,23 +102,22 @@ bool ChangeListCommand::extractTextBlocks(const QTextCursor &cursor, int level, 
 
     QTextBlock block = cursor.block().document()->findBlock(selectionStart);
 
-    bool oneOf = (selectionStart == selectionEnd); //ensures the block containing the cursor is selected in that case
+    bool oneOf = (selectionStart == selectionEnd); // ensures the block containing the cursor is selected in that case
 
     while (block.isValid() && ((block.position() < selectionEnd) || oneOf)) {
         m_blocks.append(block);
         if (block.textList()) {
             KoListLevelProperties prop = KoListLevelProperties::fromTextList(block.textList());
-            m_alignmentMode=prop.alignmentMode();
+            m_alignmentMode = prop.alignmentMode();
             m_formerProperties.insert((m_blocks.size() - 1), prop);
             m_levels.insert((m_blocks.size() - 1), detectLevel(block, level));
             if (prop.labelType() != newLabelType)
                 styleCompletelySetAlready = false;
-        }
-        else {
+        } else {
             KoListLevelProperties prop;
             prop.setLabelType(KoListStyle::None);
             prop.setAlignmentMode(true);
-            m_alignmentMode=prop.alignmentMode();
+            m_alignmentMode = prop.alignmentMode();
             m_formerProperties.insert((m_blocks.size() - 1), prop);
             m_levels.insert((m_blocks.size() - 1), level);
             styleCompletelySetAlready = false;
@@ -149,7 +148,7 @@ bool ChangeListCommand::formatsEqual(const KoListLevelProperties &llp, const QTe
         llp.applyStyle(listFormat);
         return listFormat == format;
     } else {
-        return (int) llp.labelType() == (int) format.style();
+        return (int)llp.labelType() == (int)format.style();
     }
 }
 
@@ -159,7 +158,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
 
     KoList *mergeableList = 0;
     KoList *newList = 0;
-    //First check if we could merge with previous or next list
+    // First check if we could merge with previous or next list
     if (m_flags & KoTextEditor::MergeWithAdjacentList) {
         const auto levelValues = m_levels.values();
         const QSet<int> levels{levelValues.cbegin(), levelValues.cend()};
@@ -177,7 +176,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
         if (!mergeableList) {
             // attempt to merge with next block if previous failed
             isMergeable = true;
-            QTextBlock next = m_blocks.value(m_blocks.size()-1).next();
+            QTextBlock next = m_blocks.value(m_blocks.size() - 1).next();
             foreach (int lev, levels) {
                 KoListLevelProperties llp = listStyle->levelProperties(lev);
                 isMergeable = (isMergeable && next.isValid() && next.textList() && (formatsEqual(llp, next.textList()->format())));
@@ -197,7 +196,8 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
             continue;
         }
         // Then check if we want to modify an existing list.
-        // The behaviour chosen for modifying a list is the following. If the selection contains more than one block, a new list is always created. If the selection only contains one block, the behaviour depends on the flag.
+        // The behaviour chosen for modifying a list is the following. If the selection contains more than one block, a new list is always created. If the
+        // selection only contains one block, the behaviour depends on the flag.
         if ((m_flags & KoTextEditor::ModifyExistingList) && (m_blocks.size() == 1)) {
             m_list.insert(i, document.list(m_blocks.at(i)));
             if (m_list.value(i)) {
@@ -225,7 +225,7 @@ void ChangeListCommand::redo()
     if (!m_first) {
         for (int i = 0; i < m_blocks.size(); ++i) { // We invalidate the lists before calling redo on the QTextDocument
             if (m_actions.value(i) == ChangeListCommand::RemoveList) {
-                //if the block is not part of a list continue
+                // if the block is not part of a list continue
                 if (!m_blocks.at(i).textList()) {
                     continue;
                 }
@@ -243,7 +243,7 @@ void ChangeListCommand::redo()
         UndoRedoFinalizer finalizer(this);
         for (int i = 0; i < m_blocks.size(); ++i) {
             if ((m_actions.value(i) == ChangeListCommand::ModifyExisting) || (m_actions.value(i) == ChangeListCommand::CreateNew)
-                    || (m_actions.value(i) == ChangeListCommand::MergeList)) {
+                || (m_actions.value(i) == ChangeListCommand::MergeList)) {
                 m_list.value(i)->updateStoredList(m_blocks.at(i));
                 KoListStyle *listStyle = m_list.value(i)->style();
                 listStyle->refreshLevelProperties(m_newProperties.value(i));
@@ -260,25 +260,22 @@ void ChangeListCommand::redo()
             KoTextBlockData userData(currentBlock);
             userData.setCounterWidth(-1.0);
         }
-    }
-    else {
+    } else {
         for (int i = 0; i < m_blocks.size(); ++i) {
             if (m_actions.value(i) == ChangeListCommand::RemoveList) {
-                //if the block is not part of a list continue
+                // if the block is not part of a list continue
                 if (!m_blocks.at(i).textList()) {
                     continue;
                 }
                 KoList::remove(m_blocks.at(i));
-            }
-            else if (m_actions.value(i) == ChangeListCommand::ModifyExisting) {
+            } else if (m_actions.value(i) == ChangeListCommand::ModifyExisting) {
                 KoListStyle *listStyle = m_list.value(i)->style();
                 listStyle->setLevelProperties(m_newProperties.value(i));
                 QTextCursor cursor(m_blocks.at(i));
                 QTextBlockFormat format = m_blocks.at(i).blockFormat();
                 format.clearProperty(KoParagraphStyle::UnnumberedListItem);
                 cursor.setBlockFormat(format);
-            }
-            else {
+            } else {
                 //(ChangeListCommand::CreateNew)
                 //(ChangeListCommand::MergeList)
                 m_list.value(i)->add(m_blocks.at(i), m_newProperties.value(i).level());
@@ -300,7 +297,7 @@ void ChangeListCommand::undo()
     for (int i = 0; i < m_blocks.size(); ++i) {
         // command to undo:
         if (m_actions.value(i) == ChangeListCommand::RemoveList) {
-            //if the block is not part of a list continue
+            // if the block is not part of a list continue
             if (!m_blocks.at(i).textList()) {
                 continue;
             }
@@ -317,8 +314,7 @@ void ChangeListCommand::undo()
                     break;
                 }
             }
-        }
-        else if (m_actions.value(i) == ChangeListCommand::ModifyExisting) {
+        } else if (m_actions.value(i) == ChangeListCommand::ModifyExisting) {
             m_list.value(i)->updateStoredList(m_blocks.at(i));
             if ((m_flags & KoTextEditor::ModifyExistingList) && (m_formerProperties.value(i).labelType() != KoListStyle::None)) {
                 KoListStyle *listStyle = m_oldList.value(i)->style();
@@ -332,12 +328,11 @@ void ChangeListCommand::undo()
                     break;
                 }
             }
-        }
-        else {
+        } else {
             //(ChangeListCommand::CreateNew)
             //(ChangeListCommand::MergeList)
 
-            //if the new/merged list replaced an existing list, the pointer to QTextList in oldList needs updating.
+            // if the new/merged list replaced an existing list, the pointer to QTextList in oldList needs updating.
             if ((m_oldList.value(i))) {
                 m_oldList.value(i)->updateStoredList(m_blocks.at(i));
                 for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {

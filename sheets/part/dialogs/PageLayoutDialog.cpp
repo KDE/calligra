@@ -8,11 +8,11 @@
 #include "ui_PageLayoutSheetPage.h"
 
 // Sheets
+#include "core/DocBase.h"
+#include "core/Sheet.h"
 #include "engine/CellBase.h"
 #include "engine/MapBase.h"
 #include "engine/Util.h"
-#include "core/DocBase.h"
-#include "core/Sheet.h"
 
 // commands
 #include "../commands/PageLayoutCommand.h"
@@ -25,7 +25,7 @@ using namespace Calligra::Sheets;
 class PageLayoutDialog::Private
 {
 public:
-    Sheet* sheet;
+    Sheet *sheet;
     Ui::SheetPage sheetPage;
 
 public:
@@ -34,7 +34,7 @@ public:
 
 void PageLayoutDialog::Private::setup()
 {
-    const PrintSettings* settings = sheet->printSettings();
+    const PrintSettings *settings = sheet->printSettings();
     sheetPage.gridCheckBox->setChecked(settings->printGrid());
     sheetPage.commentCheckBox->setChecked(settings->printCommentIndicator());
     sheetPage.formulaCheckBox->setChecked(settings->printFormulaIndicator());
@@ -88,8 +88,7 @@ void PageLayoutDialog::Private::setup()
     QStringList zoomLevels;
     for (int zoomLevel = 25; zoomLevel <= 500; zoomLevel += 25) {
         zoomLevels.append(i18n("%1%", zoomLevel));
-        if (qRound(settings->zoom() * 100) > zoomLevel &&
-                qRound(settings->zoom() * 100) < zoomLevel + 25) {
+        if (qRound(settings->zoom() * 100) > zoomLevel && qRound(settings->zoom() * 100) < zoomLevel + 25) {
             zoomLevels.append(i18n("%1%", qRound(settings->zoom() * 100)));
         }
     }
@@ -119,32 +118,24 @@ void PageLayoutDialog::Private::setup()
         sheetPage.verticalComboBox->setCurrentIndex(qMax(0, pageLimits.height()));
 }
 
-
-PageLayoutDialog::PageLayoutDialog(QWidget* parent, Sheet* sheet)
-        : KoPageLayoutDialog(parent, sheet->printSettings()->pageLayout())
-        , d(new Private)
+PageLayoutDialog::PageLayoutDialog(QWidget *parent, Sheet *sheet)
+    : KoPageLayoutDialog(parent, sheet->printSettings()->pageLayout())
+    , d(new Private)
 {
     showPageSpread(false);
     setUnit(sheet->doc()->unit());
 
-    QWidget* page = new QWidget(this);
+    QWidget *page = new QWidget(this);
     d->sheetPage.setupUi(page);
     addPage(page, i18n("Sheet"));
 
-    connect(d->sheetPage.columnsCheckBox, &QAbstractButton::toggled,
-            d->sheetPage.startColumnComboBox, &QWidget::setEnabled);
-    connect(d->sheetPage.columnsCheckBox, &QAbstractButton::toggled,
-            d->sheetPage.endColumnComboBox, &QWidget::setEnabled);
-    connect(d->sheetPage.rowsCheckBox, &QAbstractButton::toggled,
-            d->sheetPage.startRowComboBox, &QWidget::setEnabled);
-    connect(d->sheetPage.rowsCheckBox, &QAbstractButton::toggled,
-            d->sheetPage.endRowComboBox, &QWidget::setEnabled);
-    connect(d->sheetPage.zoomButton, &QAbstractButton::toggled,
-            d->sheetPage.zoomComboBox, &QWidget::setEnabled);
-    connect(d->sheetPage.pageLimitsButton, &QAbstractButton::toggled,
-            d->sheetPage.horizontalComboBox, &QWidget::setEnabled);
-    connect(d->sheetPage.pageLimitsButton, &QAbstractButton::toggled,
-            d->sheetPage.verticalComboBox, &QWidget::setEnabled);
+    connect(d->sheetPage.columnsCheckBox, &QAbstractButton::toggled, d->sheetPage.startColumnComboBox, &QWidget::setEnabled);
+    connect(d->sheetPage.columnsCheckBox, &QAbstractButton::toggled, d->sheetPage.endColumnComboBox, &QWidget::setEnabled);
+    connect(d->sheetPage.rowsCheckBox, &QAbstractButton::toggled, d->sheetPage.startRowComboBox, &QWidget::setEnabled);
+    connect(d->sheetPage.rowsCheckBox, &QAbstractButton::toggled, d->sheetPage.endRowComboBox, &QWidget::setEnabled);
+    connect(d->sheetPage.zoomButton, &QAbstractButton::toggled, d->sheetPage.zoomComboBox, &QWidget::setEnabled);
+    connect(d->sheetPage.pageLimitsButton, &QAbstractButton::toggled, d->sheetPage.horizontalComboBox, &QWidget::setEnabled);
+    connect(d->sheetPage.pageLimitsButton, &QAbstractButton::toggled, d->sheetPage.verticalComboBox, &QWidget::setEnabled);
 
     d->sheet = sheet;
     d->setup();
@@ -207,16 +198,16 @@ void PageLayoutDialog::accept()
 
     if (applyToDocument()) {
         // Apply to all sheets.
-        KUndo2Command* macroCommand = new KUndo2Command(kundo2_i18n("Set Page Layout"));
-        const QList<SheetBase*> sheets = d->sheet->map()->sheetList();
+        KUndo2Command *macroCommand = new KUndo2Command(kundo2_i18n("Set Page Layout"));
+        const QList<SheetBase *> sheets = d->sheet->map()->sheetList();
         for (SheetBase *bsheet : sheets) {
             Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
-            PageLayoutCommand* command = new PageLayoutCommand(sheet, settings, macroCommand);
+            PageLayoutCommand *command = new PageLayoutCommand(sheet, settings, macroCommand);
             Q_UNUSED(command);
         }
         d->sheet->doc()->addCommand(macroCommand);
     } else {
-        PageLayoutCommand* command = new PageLayoutCommand(d->sheet, settings);
+        PageLayoutCommand *command = new PageLayoutCommand(d->sheet, settings);
         d->sheet->doc()->addCommand(command);
     }
 

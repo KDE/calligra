@@ -27,29 +27,35 @@ public:
     explicit MergeCommand(KUndo2Command *parent = 0);
     ~MergeCommand() override;
 
-    void setMerge(bool merge) {
+    void setMerge(bool merge)
+    {
         m_merge = merge;
     }
-    void setHorizontalMerge(bool state) {
+    void setHorizontalMerge(bool state)
+    {
         m_mergeHorizontal = state;
     }
-    void setVerticalMerge(bool state) {
+    void setVerticalMerge(bool state)
+    {
         m_mergeVertical = state;
     }
 
-    void setSelection(Selection *selection) {
+    void setSelection(Selection *selection)
+    {
         m_selection = selection;
     }
+
 protected:
     bool preProcess() override;
-    bool process(Element*) override;
+    bool process(Element *) override;
 
     KUndo2MagicString name() const;
 
     bool m_merge;
+
 private:
     bool m_mergeHorizontal : 1;
-    bool m_mergeVertical   : 1;
+    bool m_mergeVertical : 1;
     Selection *m_selection;
 };
 

@@ -11,16 +11,13 @@
 
 #include <KLocalizedString>
 
+#include "core/Sheet.h"
 #include "engine/CellBaseStorage.h"
 #include "engine/MapBase.h"
 #include "engine/NamedAreaManager.h"
-#include "core/Sheet.h"
 #include "ui/Selection.h"
 
-
-
 using namespace Calligra::Sheets;
-
 
 Link::Link(Actions *actions)
     : DialogCellAction(actions, "insertHyperlink", i18n("&Link..."), koIcon("insert-link"), i18n("Insert an Internet hyperlink"))
@@ -31,7 +28,6 @@ Link::Link(Actions *actions)
 Link::~Link()
 {
 }
-
 
 ActionDialog *Link::createDialog(QWidget *canvasWidget)
 {
@@ -45,8 +41,9 @@ ActionDialog *Link::createDialog(QWidget *canvasWidget)
 void Link::setLink(const QString &text, const QString &link)
 {
     QString txt = text;
-    if (txt.isEmpty()) txt = link;
-    LinkCommand* command = new LinkCommand(txt, link);
+    if (txt.isEmpty())
+        txt = link;
+    LinkCommand *command = new LinkCommand(txt, link);
     command->setSheet(m_selection->activeSheet());
     command->add(*m_selection);
     command->execute(m_selection->canvas());
@@ -65,9 +62,6 @@ void Link::onSelectionChanged()
     }
 }
 
-
-
-
 // this is inside a Clear submenu, hence 'Link'
 ClearLink::ClearLink(Actions *actions)
     : CellAction(actions, "clearHyperlink", i18n("Link"), koIcon("view-sort-ascending"), i18n("Remove a link"))
@@ -78,7 +72,8 @@ ClearLink::~ClearLink()
 {
 }
 
-QAction *ClearLink::createAction() {
+QAction *ClearLink::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Remove Link"));
     return res;
@@ -87,17 +82,13 @@ QAction *ClearLink::createAction() {
 // We're just keeping this enabled for everything, no need to check every selection change
 void ClearLink::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    LinkCommand* command = new LinkCommand(QString(), QString());
+    LinkCommand *command = new LinkCommand(QString(), QString());
     command->setSheet(sheet);
     command->add(*selection);
     command->execute(selection->canvas());
 }
 
-
-
-
-
-LinkCommand::LinkCommand(const QString& text, const QString& link)
+LinkCommand::LinkCommand(const QString &text, const QString &link)
 {
     newText = text;
     newLink = link;
@@ -105,18 +96,17 @@ LinkCommand::LinkCommand(const QString& text, const QString& link)
     setText(newLink.isEmpty() ? kundo2_i18n("Remove Link") : kundo2_i18n("Set Link"));
 }
 
-bool LinkCommand::process(Element* element)
+bool LinkCommand::process(Element *element)
 {
     QRect range = element->rect();
     for (int col = range.left(); col <= range.right(); ++col)
         for (int row = range.top(); row <= range.bottom(); ++row) {
             Cell cell = Cell(m_sheet, col, row);
-            if (cell.isPartOfMerged()) cell = cell.masterCell();
+            if (cell.isPartOfMerged())
+                cell = cell.masterCell();
 
             cell.parseUserInput(newText);
             cell.setLink(newLink);
         }
     return true;
 }
-
-

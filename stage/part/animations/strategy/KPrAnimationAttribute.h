@@ -20,8 +20,8 @@
 #ifndef KPRANIMATIONATTRIBUTE_H
 #define KPRANIMATIONATTRIBUTE_H
 
-#include <QtGlobal>
 #include <QString>
+#include <QtGlobal>
 
 class KPrAnimationCache;
 class KPrShapeAnimation;
@@ -33,8 +33,9 @@ public:
     virtual ~KPrAnimationAttribute();
     QString attributeName() const;
 
-    virtual void updateCache(KPrAnimationCache * cache, KPrShapeAnimation * shapeAnimation, qreal value) = 0;
-    virtual void initCache(KPrAnimationCache * cache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue) = 0;
+    virtual void updateCache(KPrAnimationCache *cache, KPrShapeAnimation *shapeAnimation, qreal value) = 0;
+    virtual void initCache(KPrAnimationCache *cache, int step, KPrShapeAnimation *shapeAnimation, qreal startValue, qreal endValue) = 0;
+
 protected:
     QString m_attributeName;
 };

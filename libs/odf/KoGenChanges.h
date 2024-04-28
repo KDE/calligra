@@ -20,7 +20,8 @@ class KoXmlWriter;
  * Inspired from KoGenStyles.h
  *
  * Is used to store all the change regions, which will be saved at the beginning of <office:body><office:text> elements
- * We use a container outside the changeTracker, as the change tracker is linked to the document of a TextShapeData and is then not aware of the other TextShapeData.
+ * We use a container outside the changeTracker, as the change tracker is linked to the document of a TextShapeData and is then not aware of the other
+ * TextShapeData.
  *
  */
 class KOODF_EXPORT KoGenChanges
@@ -52,7 +53,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOGENCHANGES_H */

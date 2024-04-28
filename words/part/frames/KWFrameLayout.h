@@ -10,8 +10,8 @@
 #ifndef KWFRAMELAYOUT_H
 #define KWFRAMELAYOUT_H
 
-#include "../Words.h"
 #include "../KWPageStyle.h"
+#include "../Words.h"
 
 #include "../words_export.h"
 
@@ -48,8 +48,10 @@ public:
      * @param pageManager the manager of pages
      * @param frameSets all the framesets registered in the document.
      */
-    KWFrameLayout(const KWPageManager *pageManager, const QList<KWFrameSet*> &frameSets);
-    ~KWFrameLayout() override {}
+    KWFrameLayout(const KWPageManager *pageManager, const QList<KWFrameSet *> &frameSets);
+    ~KWFrameLayout() override
+    {
+    }
     /**
      * As soon as a new page is created you should call this method to auto-create all frames
      * needed on that new page, with a call to layoutFramesOnPage done directly afterwards.
@@ -69,7 +71,8 @@ public:
     static void proposeShapeMove(const KoShape *shape, QPointF &delta, const KWPage &page);
 
     /// Set the document to be passed to new instances of the KWTextFrameSet
-    void setDocument(KWDocument *document) {
+    void setDocument(KWDocument *document)
+    {
         m_document = document;
     }
 
@@ -86,7 +89,7 @@ public:
     QList<KoShape *> sequencedShapesOn(KWFrameSet *fs, int pageNumber) const;
 
     QList<KWTextFrameSet *> getFrameSets(const KWPageStyle &pageStyle) const;
-    KWTextFrameSet* getFrameSet(Words::TextFrameSetType type, const KWPageStyle &pageStyle) const;
+    KWTextFrameSet *getFrameSet(Words::TextFrameSetType type, const KWPageStyle &pageStyle) const;
 
     KWFrame *createCopyFrame(KWFrameSet *fs, const KWPage &page);
 
@@ -106,7 +109,14 @@ private Q_SLOTS:
 
 private:
     struct FrameSets {
-        FrameSets() : oddHeaders(0), evenHeaders(0), oddFooters(0), evenFooters(0), pageBackground(0) {}
+        FrameSets()
+            : oddHeaders(0)
+            , evenHeaders(0)
+            , oddFooters(0)
+            , evenFooters(0)
+            , pageBackground(0)
+        {
+        }
         KWTextFrameSet *oddHeaders;
         KWTextFrameSet *evenHeaders;
         KWTextFrameSet *oddFooters;

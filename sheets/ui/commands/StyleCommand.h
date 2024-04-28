@@ -26,17 +26,24 @@ public:
     explicit StyleCommand(KUndo2Command *parent = 0);
     ~StyleCommand() override;
 
-    void setStyle(const Style &s) { m_style = s; }
-
-    void setHorizontalPen(const QPen& pen) {
-        m_horizontalPen = pen; m_horizontalPenChanged = true;
+    void setStyle(const Style &s)
+    {
+        m_style = s;
     }
-    void setVerticalPen(const QPen& pen) {
-        m_verticalPen = pen; m_verticalPenChanged = true;
+
+    void setHorizontalPen(const QPen &pen)
+    {
+        m_horizontalPen = pen;
+        m_horizontalPenChanged = true;
+    }
+    void setVerticalPen(const QPen &pen)
+    {
+        m_verticalPen = pen;
+        m_verticalPenChanged = true;
     }
 
 protected:
-    bool process(Element*) override;
+    bool process(Element *) override;
 
 private:
     QPen m_horizontalPen;

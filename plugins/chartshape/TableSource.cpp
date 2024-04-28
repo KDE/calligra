@@ -7,8 +7,8 @@
 
 #include "TableSource.h"
 #include <QAbstractItemModel>
-#include <QPointer>
 #include <QMap>
+#include <QPointer>
 #include <QSet>
 #include <Qt>
 
@@ -50,15 +50,15 @@ public:
     QList<int> samEmptyColumns;
 
     /// All tables, with name as unique identifier
-    QMap<QString, Table*> tablesByName;
+    QMap<QString, Table *> tablesByName;
     /// Redundant (but complete!) list of tables, now with model as UID
-    QMap<const QAbstractItemModel*, Table*> tablesByModel;
+    QMap<const QAbstractItemModel *, Table *> tablesByModel;
 
     /// Set of Table instances owned by this TableSource.
     /// This isn't equivalent to Tables in tablesByName or tablesByModel
     /// as a Table isn't deleted when it is removed from this source (the
     /// model pointer is just set to null).
-    QSet<Table*> tables;
+    QSet<Table *> tables;
 };
 
 TableSource::Private::Private(TableSource *parent)
@@ -78,7 +78,7 @@ TableSource::Private::~Private()
 static QAbstractItemModel *getModel(QAbstractItemModel *sheetAccessModel, int col)
 {
     QModelIndex tableIndex = sheetAccessModel->index(0, col);
-    QPointer<QAbstractItemModel> table = sheetAccessModel->data(tableIndex).value< QPointer<QAbstractItemModel> >();
+    QPointer<QAbstractItemModel> table = sheetAccessModel->data(tableIndex).value<QPointer<QAbstractItemModel>>();
 
     return table.data();
 }
@@ -110,14 +110,14 @@ TableSource::~TableSource()
 
 Table *TableSource::get(const QString &tableName) const
 {
-    if(!d->tablesByName.contains(tableName))
+    if (!d->tablesByName.contains(tableName))
         return 0;
     return d->tablesByName[tableName];
 }
 
 Table *TableSource::get(const QAbstractItemModel *model) const
 {
-    if(!d->tablesByModel.contains(model))
+    if (!d->tablesByModel.contains(model))
         return 0;
     return d->tablesByModel[model];
 }
@@ -136,12 +136,9 @@ void TableSource::setSheetAccessModel(QAbstractItemModel *model)
     d->sheetAccessModel = model;
 
     if (model) {
-        connect(model, &QAbstractItemModel::columnsInserted,
-                this,  &TableSource::samColumnsInserted);
-        connect(model, &QAbstractItemModel::columnsAboutToBeRemoved,
-                this,  &TableSource::samColumnsRemoved);
-        connect(model, &QAbstractItemModel::headerDataChanged,
-                this,  &TableSource::samHeaderDataChanged);
+        connect(model, &QAbstractItemModel::columnsInserted, this, &TableSource::samColumnsInserted);
+        connect(model, &QAbstractItemModel::columnsAboutToBeRemoved, this, &TableSource::samColumnsRemoved);
+        connect(model, &QAbstractItemModel::headerDataChanged, this, &TableSource::samHeaderDataChanged);
 
         // Process existing data
         samColumnsInserted(QModelIndex(), 0, model->columnCount() - 1);
@@ -257,5 +254,3 @@ void TableSource::samHeaderDataChanged(Qt::Orientation orientation, int first, i
         rename(table->m_name, newName);
     }
 }
-
-

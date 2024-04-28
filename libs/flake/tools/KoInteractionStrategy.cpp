@@ -6,10 +6,10 @@
  */
 
 #include "KoInteractionStrategy.h"
-#include "KoInteractionStrategy_p.h"
 #include "KoCanvasBase.h"
-#include "KoShapeController.h"
 #include "KoDocumentResourceManager.h"
+#include "KoInteractionStrategy_p.h"
+#include "KoShapeController.h"
 
 #include <kundo2command.h>
 
@@ -22,7 +22,7 @@ void KoInteractionStrategy::cancelInteraction()
 {
     KUndo2Command *cmd = createCommand();
     if (cmd) {
-        cmd->redo(); //some applications rely an redo being called here
+        cmd->redo(); // some applications rely an redo being called here
         cmd->undo();
         delete cmd;
     }

@@ -19,5 +19,4 @@ public:
     KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
-
-#endif 
+#endif

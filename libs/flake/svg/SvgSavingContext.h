@@ -56,7 +56,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // SVGSAVINGCONTEXT_H

@@ -7,8 +7,8 @@
 #include "SpaceNavigatorEvent.h"
 #include <KoPointerEvent.h>
 
-SpaceNavigatorEvent::SpaceNavigatorEvent( KoInputDeviceHandlerEvent::Type type )
-: KoInputDeviceHandlerEvent( type )
+SpaceNavigatorEvent::SpaceNavigatorEvent(KoInputDeviceHandlerEvent::Type type)
+    : KoInputDeviceHandlerEvent(type)
 {
 }
 
@@ -16,23 +16,23 @@ SpaceNavigatorEvent::~SpaceNavigatorEvent()
 {
 }
 
-void SpaceNavigatorEvent::setPosition( int x, int y, int z )
+void SpaceNavigatorEvent::setPosition(int x, int y, int z)
 {
     m_x = x;
     m_y = y;
     m_z = z;
 }
 
-void SpaceNavigatorEvent::setRotation( int rx, int ry, int rz )
+void SpaceNavigatorEvent::setRotation(int rx, int ry, int rz)
 {
     m_rx = rx;
     m_ry = ry;
     m_rz = rz;
 }
 
-KoPointerEvent * SpaceNavigatorEvent::pointerEvent()
+KoPointerEvent *SpaceNavigatorEvent::pointerEvent()
 {
-    if( ! m_event )
-        m_event = new KoPointerEvent( this, m_x, m_y, m_z, m_rx, m_ry, m_rz );
+    if (!m_event)
+        m_event = new KoPointerEvent(this, m_x, m_y, m_z, m_rx, m_ry, m_rz);
     return m_event;
 }

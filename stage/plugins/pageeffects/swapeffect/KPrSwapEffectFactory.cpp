@@ -13,7 +13,7 @@
 #define SwapEffectId "SwapEffect"
 
 KPrSwapEffectFactory::KPrSwapEffectFactory()
-: KPrPageEffectFactory(SwapEffectId, i18n("Swap effect"))
+    : KPrPageEffectFactory(SwapEffectId, i18n("Swap effect"))
 {
     addStrategy(new KPrSwapEffectHorizontalStrategy());
 }
@@ -22,16 +22,13 @@ KPrSwapEffectFactory::~KPrSwapEffectFactory()
 {
 }
 
-static const KLazyLocalizedString s_subTypes[] = {
-    kli18n("Horizontal")
-};
+static const KLazyLocalizedString s_subTypes[] = {kli18n("Horizontal")};
 
 QString KPrSwapEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return s_subTypes[subType].toString();
-    }
-    else {
+    } else {
         return i18n("Unknown subtype");
     }
 }

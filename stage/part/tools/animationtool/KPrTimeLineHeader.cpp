@@ -24,22 +24,22 @@
 
 #include <KLocalizedString>
 
-//Qt Headers
-#include <QPainter>
-#include <QScrollArea>
+// Qt Headers
 #include <QEvent>
+#include <QPainter>
 #include <QResizeEvent>
+#include <QScrollArea>
 #include <QScrollBar>
 #include <QStyle>
 #include <QStyleOptionHeader>
 
-//Default height of the header
+// Default height of the header
 const int HEADER_HEIGHT = 20;
 
 KPrTimeLineHeader::KPrTimeLineHeader(QWidget *parent)
     : QWidget(parent)
 {
-    m_mainView = qobject_cast<KPrAnimationsTimeLineView*>(parent);
+    m_mainView = qobject_cast<KPrAnimationsTimeLineView *>(parent);
     Q_ASSERT(m_mainView);
     setMinimumSize(minimumSizeHint());
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -65,34 +65,35 @@ void KPrTimeLineHeader::paintHeader(QPainter *painter, const int RowHeight)
     int scroll = m_mainView->scrollArea()->horizontalScrollBar()->value();
     QFontMetrics fm(font());
     int minimumSize = fm.boundingRect(QString("W%1W").arg("seconds")).width();
-    if (scroll < (m_mainView->totalWidth()-m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - minimumSize)) {
-        //Seconds Header
+    if (scroll < (m_mainView->totalWidth() - m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - minimumSize)) {
+        // Seconds Header
         QRect rect(0, 0, m_mainView->totalWidth() - m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - scroll, RowHeight);
         paintHeaderItem(painter, rect, i18n("seconds"));
-    } else if (scroll < (m_mainView->totalWidth()-m_mainView->widthOfColumn(KPrShapeAnimations::StartTime)) - 2) {
-        QRect rect(0, 0, m_mainView->totalWidth()-m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - scroll, RowHeight);
+    } else if (scroll < (m_mainView->totalWidth() - m_mainView->widthOfColumn(KPrShapeAnimations::StartTime)) - 2) {
+        QRect rect(0, 0, m_mainView->totalWidth() - m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - scroll, RowHeight);
         paintHeaderItem(painter, rect, QString(""));
     }
     // Paint time scale header
     QRect rect(m_mainView->totalWidth() - m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - scroll,
-               0, m_mainView->widthOfColumn(KPrShapeAnimations::StartTime), RowHeight);
+               0,
+               m_mainView->widthOfColumn(KPrShapeAnimations::StartTime),
+               RowHeight);
     paintHeaderItem(painter, rect, QString());
     paintTimeScale(painter, rect);
-
 }
 
 void KPrTimeLineHeader::paintHeaderItem(QPainter *painter, const QRect &rect, const QString &text)
 {
-    //Paint Background
+    // Paint Background
     QStyleOptionHeader option;
     option.initFrom(this);
     option.rect = rect;
     style()->drawControl(QStyle::CE_HeaderSection, &option, painter, this);
 
-    //Paint Border
+    // Paint Border
     m_mainView->paintItemBorder(painter, palette(), rect);
 
-    //Paint Text
+    // Paint Text
     painter->setPen(palette().buttonText().color());
     painter->drawText(rect, text, QTextOption(Qt::AlignCenter));
 }
@@ -109,13 +110,12 @@ void KPrTimeLineHeader::paintTimeScale(QPainter *painter, const QRect &rect)
     int stepRatio = m_mainView->numberOfSteps() / m_mainView->stepsScale();
     int stepSize = totalWidth / stepRatio;
     // Draw lines on steps and numbers
-    for (int x = 0; x < totalWidth-Padding; x += stepSize) {
+    for (int x = 0; x < totalWidth - Padding; x += stepSize) {
         int z = x + rect.x() + Padding;
         if (z > 0) {
             // Draw numbers
-            qreal number = x/stepSize*stepScale;
-            painter->drawText(((z - 19) > 1 ? (z - 19) : (z - 16)), rect.y(), 38, rect.height(),
-                              Qt::AlignCenter, QString("%1").arg(number));
+            qreal number = x / stepSize * stepScale;
+            painter->drawText(((z - 19) > 1 ? (z - 19) : (z - 16)), rect.y(), 38, rect.height(), Qt::AlignCenter, QString("%1").arg(number));
         }
     }
     // Draw substeps
@@ -135,13 +135,12 @@ bool KPrTimeLineHeader::eventFilter(QObject *target, QEvent *event)
     int ExtraWidth = 10;
     if (QScrollArea *scrollArea = m_mainView->scrollArea()) {
         if (target == scrollArea && event->type() == QEvent::Resize) {
-            if (QResizeEvent *resizeEvent = static_cast<QResizeEvent*>(event)) {
+            if (QResizeEvent *resizeEvent = static_cast<QResizeEvent *>(event)) {
                 QSize size = resizeEvent->size();
                 size.setHeight(sizeHint().height());
                 int width = size.width() + ExtraWidth - scrollArea->verticalScrollBar()->sizeHint().width();
                 size.setWidth(width);
-                setMinimumSize(QSize(m_mainView->totalWidth() - m_mainView->widthOfColumn(KPrShapeAnimations::StartTime),
-                                     size.height()));
+                setMinimumSize(QSize(m_mainView->totalWidth() - m_mainView->widthOfColumn(KPrShapeAnimations::StartTime), size.height()));
                 resize(size);
             }
         }

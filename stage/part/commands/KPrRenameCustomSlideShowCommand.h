@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ * SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #ifndef KPRRENAMECUSTOMSLIDESHOWCOMMAND_H
 #define KPRRENAMECUSTOMSLIDESHOWCOMMAND_H
@@ -17,7 +17,11 @@ class KPrCustomSlideShowsModel;
 class STAGE_TEST_EXPORT KPrRenameCustomSlideShowCommand : public KUndo2Command
 {
 public:
-    KPrRenameCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &oldName, const QString &newName, KUndo2Command *parent = 0);
+    KPrRenameCustomSlideShowCommand(KPrDocument *doc,
+                                    KPrCustomSlideShowsModel *model,
+                                    const QString &oldName,
+                                    const QString &newName,
+                                    KUndo2Command *parent = 0);
 
     ~KPrRenameCustomSlideShowCommand() override;
 

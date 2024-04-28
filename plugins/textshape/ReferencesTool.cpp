@@ -7,35 +7,35 @@
 
 #include "ReferencesTool.h"
 #include "TextShape.h"
-#include "dialogs/SimpleTableOfContentsWidget.h"
-#include "dialogs/SimpleCitationBibliographyWidget.h"
-#include "dialogs/SimpleFootEndNotesWidget.h"
-#include "dialogs/SimpleCaptionsWidget.h"
-#include "dialogs/SimpleLinksWidget.h"
-#include "dialogs/TableOfContentsConfigure.h"
-#include "dialogs/NotesConfigurationDialog.h"
+#include "dialogs/BibliographyConfigureDialog.h"
 #include "dialogs/CitationInsertionDialog.h"
 #include "dialogs/InsertBibliographyDialog.h"
-#include "dialogs/BibliographyConfigureDialog.h"
 #include "dialogs/LinkInsertionDialog.h"
+#include "dialogs/NotesConfigurationDialog.h"
+#include "dialogs/SimpleCaptionsWidget.h"
+#include "dialogs/SimpleCitationBibliographyWidget.h"
+#include "dialogs/SimpleFootEndNotesWidget.h"
+#include "dialogs/SimpleLinksWidget.h"
+#include "dialogs/SimpleTableOfContentsWidget.h"
+#include "dialogs/TableOfContentsConfigure.h"
 
-#include <KoTextLayoutRootArea.h>
+#include <KoBookmark.h>
 #include <KoCanvasBase.h>
-#include <KoTextEditor.h>
+#include <KoIcon.h>
+#include <KoInlineNote.h>
 #include <KoParagraphStyle.h>
 #include <KoTableOfContentsGeneratorInfo.h>
-#include <KoBookmark.h>
-#include <KoInlineNote.h>
 #include <KoTextDocumentLayout.h>
-#include <KoIcon.h>
+#include <KoTextEditor.h>
+#include <KoTextLayoutRootArea.h>
 #include <QMessageBox>
 
-#include <QDebug>
 #include <QAction>
-#include <QTextDocument>
-#include <QLineEdit>
 #include <QBoxLayout>
+#include <QDebug>
+#include <QLineEdit>
 #include <QMenu>
+#include <QTextDocument>
 #include <QWidgetAction>
 
 LabeledWidget::~LabeledWidget() = default;
@@ -51,11 +51,10 @@ LabeledWidget::LabeledWidget(QAction *action, const QString &label, LabelPositio
     m_lineEdit = new QLineEdit();
     if (lb == LabeledWidget::INLINE) { // label followed by line edit
         layout = new QHBoxLayout();
-        l->setIndent(l->style()->pixelMetric(QStyle::PM_SmallIconSize)
-                    + l->style()->pixelMetric(QStyle::PM_MenuPanelWidth) + 4);
-    } else { //Label goes above the text edit
+        l->setIndent(l->style()->pixelMetric(QStyle::PM_SmallIconSize) + l->style()->pixelMetric(QStyle::PM_MenuPanelWidth) + 4);
+    } else { // Label goes above the text edit
         layout = new QVBoxLayout();
-        m_lineEdit->setFixedWidth(300); //TODO : assuming a reasonable width, is there a better way?
+        m_lineEdit->setFixedWidth(300); // TODO : assuming a reasonable width, is there a better way?
     }
     layout->addWidget(l);
     layout->addWidget(m_lineEdit);
@@ -84,7 +83,7 @@ void LabeledWidget::enterEvent(QEnterEvent *event)
     QWidget::enterEvent(event);
 }
 
-void LabeledWidget::setWarningText(int pos, const QString& warning)
+void LabeledWidget::setWarningText(int pos, const QString &warning)
 {
     if (m_warningLabel[pos] == nullptr) {
         return;
@@ -97,10 +96,11 @@ void LabeledWidget::clearLineEdit()
     m_lineEdit->setText("");
 }
 
-ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas),
-    m_configure(0),
-    m_stocw(0),
-    m_canvas(canvas)
+ReferencesTool::ReferencesTool(KoCanvasBase *canvas)
+    : TextTool(canvas)
+    , m_configure(0)
+    , m_stocw(0)
+    , m_canvas(canvas)
 {
     createActions();
 }
@@ -126,8 +126,8 @@ void ReferencesTool::createActions()
     action->setToolTip(i18n("Configure the Table of Contents"));
     connect(action, &QAction::triggered, this, &ReferencesTool::formatTableOfContents);
 
-    action = new QAction(i18n("Insert footnote with auto number"),this);
-    addAction("insert_autofootnote",action);
+    action = new QAction(i18n("Insert footnote with auto number"), this);
+    addAction("insert_autofootnote", action);
     connect(action, &QAction::triggered, this, &ReferencesTool::insertAutoFootNote);
 
     wAction = new QWidgetAction(this);
@@ -137,8 +137,8 @@ void ReferencesTool::createActions()
     addAction("insert_labeledfootnote", wAction);
     connect(w, &LabeledWidget::textTriggered, this, &ReferencesTool::insertLabeledFootNote);
 
-    action = new QAction(i18n("Insert endnote with auto number"),this);
-    addAction("insert_autoendnote",action);
+    action = new QAction(i18n("Insert endnote with auto number"), this);
+    addAction("insert_autoendnote", action);
     connect(action, &QAction::triggered, this, &ReferencesTool::insertAutoEndNote);
 
     wAction = new QWidgetAction(this);
@@ -149,28 +149,28 @@ void ReferencesTool::createActions()
     connect(w, &LabeledWidget::textTriggered, this, &ReferencesTool::insertLabeledEndNote);
 
     action = new QAction(koIcon("configure"), i18n("Settings..."), this);
-    addAction("format_footnotes",action);
+    addAction("format_footnotes", action);
     connect(action, &QAction::triggered, this, &ReferencesTool::showFootnotesConfigureDialog);
 
     action = new QAction(koIcon("configure"), i18n("Settings..."), this);
-    addAction("format_endnotes",action);
+    addAction("format_endnotes", action);
     connect(action, &QAction::triggered, this, &ReferencesTool::showEndnotesConfigureDialog);
 
     action = new QAction(i18n("Insert Citation"), this);
-    addAction("insert_citation",action);
+    addAction("insert_citation", action);
     action->setToolTip(i18n("Insert a citation into the document."));
     connect(action, &QAction::triggered, this, &ReferencesTool::insertCitation);
 
     action = new QAction(i18n("Insert Bibliography"), this);
-    addAction("insert_bibliography",action);
+    addAction("insert_bibliography", action);
     action->setToolTip(i18n("Insert a bibliography into the document."));
 
     action = new QAction(i18n("Insert Custom Bibliography"), this);
     addAction("insert_custom_bibliography", action);
     action->setToolTip(i18n("Insert a custom Bibliography into the document."));
 
-    action = new QAction(i18n("Configure"),this);
-    addAction("configure_bibliography",action);
+    action = new QAction(i18n("Configure"), this);
+    addAction("configure_bibliography", action);
     action->setToolTip(i18n("Configure the bibliography"));
     connect(action, &QAction::triggered, this, &ReferencesTool::configureBibliography);
 
@@ -197,8 +197,7 @@ void ReferencesTool::createActions()
     action->setToolTip(i18n("Manage your Bookmarks. Check where are they pointing to, Delete or Rename."));
 }
 
-
-void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     TextTool::activate(toolActivation, shapes);
 }
@@ -209,9 +208,9 @@ void ReferencesTool::deactivate()
     canvas()->canvasWidget()->setFocus();
 }
 
-QList<QPointer<QWidget> > ReferencesTool::createOptionWidgets()
+QList<QPointer<QWidget>> ReferencesTool::createOptionWidgets()
 {
-    QList<QPointer<QWidget> > widgets;
+    QList<QPointer<QWidget>> widgets;
     m_stocw = new SimpleTableOfContentsWidget(this, 0);
 
     m_sfenw = new SimpleFootEndNotesWidget(this, 0);
@@ -223,7 +222,7 @@ QList<QPointer<QWidget> > ReferencesTool::createOptionWidgets()
     connect(m_stocw, &SimpleTableOfContentsWidget::doneWithFocus, this, &ReferencesTool::returnFocusToCanvas);
 
     // Connect to/with simple citation index option widget
-    //connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    // connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
     // Connect to/with simple citation index option widget
     connect(m_sfenw, &SimpleFootEndNotesWidget::doneWithFocus, this, &ReferencesTool::returnFocusToCanvas);
@@ -241,7 +240,7 @@ QList<QPointer<QWidget> > ReferencesTool::createOptionWidgets()
 
     m_slw->setWindowTitle(i18n("Links and Bookmarks"));
     widgets.append(m_slw);
-    //widgets.insert(i18n("Captions"), scapw);
+    // widgets.insert(i18n("Captions"), scapw);
     connect(textEditor(), &KoTextEditor::cursorPositionChanged, this, &ReferencesTool::updateButtons);
     return widgets;
 }
@@ -334,7 +333,6 @@ void ReferencesTool::updateButtons()
     } else {
         action("format_tableofcontents")->setEnabled(false);
     }
-
 }
 
 KoTextEditor *ReferencesTool::editor()

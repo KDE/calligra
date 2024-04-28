@@ -6,19 +6,20 @@
 #ifndef NOTEENTRYACTION_H
 #define NOTEENTRYACTION_H
 
-#include "AbstractMusicAction.h"
 #include "../core/Global.h"
+#include "AbstractMusicAction.h"
 
 class NoteEntryAction : public AbstractMusicAction
 {
 public:
-    NoteEntryAction(MusicCore::Duration duration, bool isRest, SimpleEntryTool* tool);
+    NoteEntryAction(MusicCore::Duration duration, bool isRest, SimpleEntryTool *tool);
 
-    void renderPreview(QPainter& painter, const QPointF& point) override;
-    void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) override;
+    void renderPreview(QPainter &painter, const QPointF &point) override;
+    void mousePress(MusicCore::Staff *staff, int bar, const QPointF &pos) override;
 
-    void renderKeyboardPreview(QPainter& painter, const MusicCursor& cursor) override;
-    void keyPress(QKeyEvent* event, const MusicCursor& cursor) override;
+    void renderKeyboardPreview(QPainter &painter, const MusicCursor &cursor) override;
+    void keyPress(QKeyEvent *event, const MusicCursor &cursor) override;
+
 private:
     MusicCore::Duration m_duration;
     bool m_isRest;

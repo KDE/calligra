@@ -44,15 +44,15 @@ public:
 
 Q_SIGNALS:
     /**
-    * Signal is triggered when the user clicks the zoom to selection button.
-    * Nothing else happens except that this signal is emitted.
-    */
+     * Signal is triggered when the user clicks the zoom to selection button.
+     * Nothing else happens except that this signal is emitted.
+     */
     void zoomedToSelection();
 
     /**
-    * Signal is triggered when the user clicks the zoom to all button.
-    * Nothing else happens except that this signal is emitted.
-    */
+     * Signal is triggered when the user clicks the zoom to all button.
+     * Nothing else happens except that this signal is emitted.
+     */
     void zoomedToAll();
 
 public Q_SLOTS:
@@ -93,7 +93,7 @@ private Q_SLOTS:
     void requestZoomRelative(const qreal factor, const QPointF &stillPoint);
 
     /// so we know when the page size changed
-    void canvasResourceChanged(int key, const QVariant & value);
+    void canvasResourceChanged(int key, const QVariant &value);
 
     /// zoom in relative to current zoom
     void zoomInRelative();
@@ -106,7 +106,7 @@ private:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KARBONZOOMCONTROLLER_H

@@ -11,32 +11,32 @@
  *
  */
 
-#include "XlsxUtils.h"
 #include "XlsxImport.h"
+#include "XlsxUtils.h"
+#include "XlsxXmlCommentsReader.h"
 #include "XlsxXmlDocumentReader.h"
 #include "XlsxXmlSharedStringsReader.h"
 #include "XlsxXmlStylesReader.h"
-#include "XlsxXmlCommentsReader.h"
 
-#include <MsooXmlUtils.h>
-#include <MsooXmlSchemas.h>
+#include "MsooXmlThemesReader.h"
 #include <MsooXmlContentTypes.h>
 #include <MsooXmlRelationships.h>
-#include "MsooXmlThemesReader.h"
+#include <MsooXmlSchemas.h>
+#include <MsooXmlUtils.h>
 
 #include <memory>
 
 #include <QColor>
 #include <QFile>
 #include <QFont>
-#include <QPen>
 #include <QImage>
+#include <QPen>
 
 #include <KPluginFactory>
 
-#include <KoEmbeddedDocumentSaver.h>
-#include <KoDocumentInfo.h>
 #include <KoDocument.h>
+#include <KoDocumentInfo.h>
+#include <KoEmbeddedDocumentSaver.h>
 #include <KoFilterChain.h>
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
@@ -45,19 +45,18 @@ K_PLUGIN_FACTORY_WITH_JSON(XlsxImportFactory, "calligra_filter_xlsx2ods.json", r
 
 Q_LOGGING_CATEGORY(lcXlsxImport, "calligra.filter.xlsx2ods")
 
-enum XlsxDocumentType {
-    XlsxDocument,
-    XlsxTemplate,
-    XlsxMacroDocument
-};
+enum XlsxDocumentType { XlsxDocument, XlsxTemplate, XlsxMacroDocument };
 
 class XlsxImport::Private
 {
 public:
-    Private() : type(XlsxDocument), macrosEnabled(false) {
+    Private()
+        : type(XlsxDocument)
+        , macrosEnabled(false)
+    {
     }
 
-    const char* mainDocumentContentType() const
+    const char *mainDocumentContentType() const
     {
         if (type == XlsxMacroDocument)
             return MSOOXML::ContentTypes::spreadsheetMacroDocument;
@@ -70,8 +69,9 @@ public:
     bool macrosEnabled;
 };
 
-XlsxImport::XlsxImport(QObject* parent, const QVariantList &)
-        : MSOOXML::MsooXmlImport(QLatin1String("spreadsheet"), parent), d(new Private)
+XlsxImport::XlsxImport(QObject *parent, const QVariantList &)
+    : MSOOXML::MsooXmlImport(QLatin1String("spreadsheet"), parent)
+    , d(new Private)
 {
 }
 
@@ -80,47 +80,41 @@ XlsxImport::~XlsxImport()
     delete d;
 }
 
-bool XlsxImport::acceptsSourceMimeType(const QByteArray& mime) const
+bool XlsxImport::acceptsSourceMimeType(const QByteArray &mime) const
 {
     qCDebug(lcXlsxImport) << "Entering XLSX Import filter: from " << mime;
     if (mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
         d->type = XlsxDocument;
         d->macrosEnabled = false;
-    }
-    else if (mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.template") {
+    } else if (mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.template") {
         d->type = XlsxTemplate;
         d->macrosEnabled = false;
-    }
-    else if (mime == "application/vnd.ms-excel.sheet.macroEnabled") {
+    } else if (mime == "application/vnd.ms-excel.sheet.macroEnabled") {
         d->type = XlsxMacroDocument;
         d->macrosEnabled = true;
-    }
-    else if (mime == "application/vnd.ms-excel.sheet.macroEnabled.12") {
+    } else if (mime == "application/vnd.ms-excel.sheet.macroEnabled.12") {
         d->type = XlsxDocument;
         d->macrosEnabled = true;
-    }
-    else if (mime == "application/vnd.ms-excel.template.macroEnabled.12") {
+    } else if (mime == "application/vnd.ms-excel.template.macroEnabled.12") {
         d->type = XlsxTemplate;
         d->macrosEnabled = true;
-    }
-    else {
+    } else {
         return false;
     }
     return true;
 }
 
-bool XlsxImport::acceptsDestinationMimeType(const QByteArray& mime) const
+bool XlsxImport::acceptsDestinationMimeType(const QByteArray &mime) const
 {
     qCDebug(lcXlsxImport) << "Entering XLSX Import filter: to " << mime;
     return mime == "application/vnd.oasis.opendocument.spreadsheet";
 }
 
-KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
-        MSOOXML::MsooXmlRelationships *relationships, QString& errorMessage)
+KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers, MSOOXML::MsooXmlRelationships *relationships, QString &errorMessage)
 {
     // more here...
     // 0. temporary styles
-//! @todo create styles in XlsxXmlDocumentReader (XLSX defines styles in workbook.xml)
+    //! @todo create styles in XlsxXmlDocumentReader (XLSX defines styles in workbook.xml)
 
     writers->mainStyles->insertRawOdfStyles(
         KoGenStyles::DocumentStyles,
@@ -128,7 +122,9 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         "\n    <style:default-style style:family=\"table-cell\">"
         "\n      <style:table-cell-properties />"
         "\n      <style:paragraph-properties style:tab-stop-distance=\"1.27cm\"/>"
-        "\n      <style:text-properties style:font-name=\"Albany AMT\" fo:language=\"en\" fo:country=\"US\" style:font-name-asian=\"Arial\" style:language-asian=\"zxx\" style:country-asian=\"none\" style:font-name-complex=\"Tahoma\" style:language-complex=\"zxx\" style:country-complex=\"none\"/>"
+        "\n      <style:text-properties style:font-name=\"Albany AMT\" fo:language=\"en\" fo:country=\"US\" style:font-name-asian=\"Arial\" "
+        "style:language-asian=\"zxx\" style:country-asian=\"none\" style:font-name-complex=\"Tahoma\" style:language-complex=\"zxx\" "
+        "style:country-complex=\"none\"/>"
         "\n    </style:default-style>"
         "\n    <number:number-style style:name=\"N0\">"
         "\n      <number:number number:min-integer-digits=\"1\"/>"
@@ -422,7 +418,8 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         "\n    </number:number-style>"
         "\n    <style:style style:name=\"Default\" style:family=\"table-cell\"/>"
         "\n    <style:style style:name=\"Result\" style:family=\"table-cell\" style:parent-style-name=\"Default\">"
-        "\n      <style:text-properties fo:font-style=\"italic\" style:text-underline-style=\"solid\" style:text-underline-width=\"auto\" style:text-underline-color=\"font-color\" fo:font-weight=\"bold\"/>"
+        "\n      <style:text-properties fo:font-style=\"italic\" style:text-underline-style=\"solid\" style:text-underline-width=\"auto\" "
+        "style:text-underline-color=\"font-color\" fo:font-weight=\"bold\"/>"
         "\n    </style:style>"
         "\n    <style:style style:name=\"Result2\" style:family=\"table-cell\" style:parent-style-name=\"Result\" style:data-style-name=\"N104\"/>"
         "\n    <style:style style:name=\"Heading\" style:family=\"table-cell\" style:parent-style-name=\"Default\">"
@@ -433,58 +430,71 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         "\n    <style:style style:name=\"Heading1\" style:family=\"table-cell\" style:parent-style-name=\"Heading\">"
         "\n      <style:table-cell-properties style:rotation-angle=\"90\"/>"
         "\n    </style:style>"
-        "\n    <style:style style:name=\"Excel_20_Built-in_20_Normal\" style:display-name=\"Excel Built-in Normal\" style:family=\"table-cell\" style:parent-style-name=\"Default\" style:data-style-name=\"N5000\">"
-        "\n      <style:table-cell-properties style:cell-protect=\"protected\" style:print-content=\"true\" style:diagonal-bl-tr=\"none\" style:diagonal-tl-br=\"none\" style:text-align-source=\"value-type\" style:repeat-content=\"false\" fo:background-color=\"transparent\" fo:wrap-option=\"no-wrap\" fo:border=\"none\" style:direction=\"ltr\" style:rotation-angle=\"0\" style:rotation-align=\"none\" style:shrink-to-fit=\"false\" style:vertical-align=\"bottom\"/>"
+        "\n    <style:style style:name=\"Excel_20_Built-in_20_Normal\" style:display-name=\"Excel Built-in Normal\" style:family=\"table-cell\" "
+        "style:parent-style-name=\"Default\" style:data-style-name=\"N5000\">"
+        "\n      <style:table-cell-properties style:cell-protect=\"protected\" style:print-content=\"true\" style:diagonal-bl-tr=\"none\" "
+        "style:diagonal-tl-br=\"none\" style:text-align-source=\"value-type\" style:repeat-content=\"false\" fo:background-color=\"transparent\" "
+        "fo:wrap-option=\"no-wrap\" fo:border=\"none\" style:direction=\"ltr\" style:rotation-angle=\"0\" style:rotation-align=\"none\" "
+        "style:shrink-to-fit=\"false\" style:vertical-align=\"bottom\"/>"
         "\n      <style:paragraph-properties fo:margin-left=\"0cm\" style:writing-mode=\"page\"/>"
-        "\n      <style:text-properties fo:color=\"#000000\" style:text-outline=\"false\" style:text-line-through-style=\"none\" style:font-name=\"Calibri\" fo:font-size=\"11pt\" fo:font-style=\"normal\" fo:text-shadow=\"none\" style:text-underline-style=\"none\" fo:font-weight=\"normal\" style:font-size-asian=\"11pt\" style:font-style-asian=\"normal\" style:font-weight-asian=\"normal\" style:font-size-complex=\"11pt\" style:font-style-complex=\"normal\" style:font-weight-complex=\"normal\"/>"
+        "\n      <style:text-properties fo:color=\"#000000\" style:text-outline=\"false\" style:text-line-through-style=\"none\" style:font-name=\"Calibri\" "
+        "fo:font-size=\"11pt\" fo:font-style=\"normal\" fo:text-shadow=\"none\" style:text-underline-style=\"none\" fo:font-weight=\"normal\" "
+        "style:font-size-asian=\"11pt\" style:font-style-asian=\"normal\" style:font-weight-asian=\"normal\" style:font-size-complex=\"11pt\" "
+        "style:font-style-complex=\"normal\" style:font-weight-complex=\"normal\"/>"
         "\n    </style:style>"
-        "\n    <!-- /COPIED -->"
-    );
+        "\n    <!-- /COPIED -->");
 
-    writers->mainStyles->insertRawOdfStyles(
-        KoGenStyles::MasterStyles,
-        "    <!-- COPIED -->"
-        "\n    <style:master-page style:name=\"Default\" style:page-layout-name=\"pm1\">"
-        "\n      <style:header>"
-        "\n        <text:p>"
-        "\n          <text:sheet-name>" "???" "</text:sheet-name>"
-        "\n        </text:p>"
-        "\n      </style:header>"
-        "\n      <style:header-left style:display=\"false\"/>"
-        "\n      <style:footer>"
-        "\n        <text:p>Page <text:page-number>1</text:page-number></text:p>"
-        "\n      </style:footer>"
-        "\n      <style:footer-left style:display=\"false\"/>"
-        "\n    </style:master-page>"
-        "\n    <style:master-page style:name=\"Report\" style:page-layout-name=\"pm2\">"
-        "\n      <style:header>"
-        "\n        <style:region-left>"
-        "\n          <text:p><text:sheet-name>" "???" "</text:sheet-name> (<text:title>" "???" "</text:title>)</text:p>"
-        "\n        </style:region-left>"
-        "\n        <style:region-right>"
-        "\n          <text:p><text:date style:data-style-name=\"N2\" text:date-value=\"2009-07-18\">07/18/2009</text:date>, <text:time>21:48:12</text:time></text:p>"
-        "\n        </style:region-right>"
-        "\n      </style:header>"
-        "\n      <style:header-left style:display=\"false\"/>"
-        "\n      <style:footer>"
-        "\n        <text:p>Page <text:page-number>1</text:page-number> / <text:page-count>99</text:page-count></text:p>"
-        "\n      </style:footer>"
-        "\n      <style:footer-left style:display=\"false\"/>"
-        "\n    </style:master-page>"
-        "\n    <style:master-page style:name=\"PageStyle_5f_Test_20_sheet_20__5f_1\" style:display-name=\"PageStyle_Test sheet _1\" style:page-layout-name=\"pm3\">"
-        "\n      <style:header style:display=\"false\"/>"
-        "\n      <style:header-left style:display=\"false\"/>"
-        "\n      <style:footer style:display=\"false\"/>"
-        "\n      <style:footer-left style:display=\"false\"/>"
-        "\n    </style:master-page>"
-        "\n    <style:master-page style:name=\"PageStyle_5f_Test_20_sheet_20__5f_2\" style:display-name=\"PageStyle_Test sheet _2\" style:page-layout-name=\"pm4\">"
-        "\n      <style:header style:display=\"false\"/>"
-        "\n      <style:header-left style:display=\"false\"/>"
-        "\n      <style:footer style:display=\"false\"/>"
-        "\n      <style:footer-left style:display=\"false\"/>"
-        "\n    </style:master-page>"
-        "\n    <!-- COPIED -->"
-    );
+    writers->mainStyles->insertRawOdfStyles(KoGenStyles::MasterStyles,
+                                            "    <!-- COPIED -->"
+                                            "\n    <style:master-page style:name=\"Default\" style:page-layout-name=\"pm1\">"
+                                            "\n      <style:header>"
+                                            "\n        <text:p>"
+                                            "\n          <text:sheet-name>"
+                                            "???"
+                                            "</text:sheet-name>"
+                                            "\n        </text:p>"
+                                            "\n      </style:header>"
+                                            "\n      <style:header-left style:display=\"false\"/>"
+                                            "\n      <style:footer>"
+                                            "\n        <text:p>Page <text:page-number>1</text:page-number></text:p>"
+                                            "\n      </style:footer>"
+                                            "\n      <style:footer-left style:display=\"false\"/>"
+                                            "\n    </style:master-page>"
+                                            "\n    <style:master-page style:name=\"Report\" style:page-layout-name=\"pm2\">"
+                                            "\n      <style:header>"
+                                            "\n        <style:region-left>"
+                                            "\n          <text:p><text:sheet-name>"
+                                            "???"
+                                            "</text:sheet-name> (<text:title>"
+                                            "???"
+                                            "</text:title>)</text:p>"
+                                            "\n        </style:region-left>"
+                                            "\n        <style:region-right>"
+                                            "\n          <text:p><text:date style:data-style-name=\"N2\" "
+                                            "text:date-value=\"2009-07-18\">07/18/2009</text:date>, <text:time>21:48:12</text:time></text:p>"
+                                            "\n        </style:region-right>"
+                                            "\n      </style:header>"
+                                            "\n      <style:header-left style:display=\"false\"/>"
+                                            "\n      <style:footer>"
+                                            "\n        <text:p>Page <text:page-number>1</text:page-number> / <text:page-count>99</text:page-count></text:p>"
+                                            "\n      </style:footer>"
+                                            "\n      <style:footer-left style:display=\"false\"/>"
+                                            "\n    </style:master-page>"
+                                            "\n    <style:master-page style:name=\"PageStyle_5f_Test_20_sheet_20__5f_1\" style:display-name=\"PageStyle_Test "
+                                            "sheet _1\" style:page-layout-name=\"pm3\">"
+                                            "\n      <style:header style:display=\"false\"/>"
+                                            "\n      <style:header-left style:display=\"false\"/>"
+                                            "\n      <style:footer style:display=\"false\"/>"
+                                            "\n      <style:footer-left style:display=\"false\"/>"
+                                            "\n    </style:master-page>"
+                                            "\n    <style:master-page style:name=\"PageStyle_5f_Test_20_sheet_20__5f_2\" style:display-name=\"PageStyle_Test "
+                                            "sheet _2\" style:page-layout-name=\"pm4\">"
+                                            "\n      <style:header style:display=\"false\"/>"
+                                            "\n      <style:header-left style:display=\"false\"/>"
+                                            "\n      <style:footer style:display=\"false\"/>"
+                                            "\n      <style:footer-left style:display=\"false\"/>"
+                                            "\n    </style:master-page>"
+                                            "\n    <!-- COPIED -->");
 
     writers->mainStyles->insertRawOdfStyles(
         KoGenStyles::StylesXmlAutomaticStyles,
@@ -501,18 +511,23 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         "\n    <style:page-layout style:name=\"pm2\">"
         "\n      <style:page-layout-properties style:writing-mode=\"lr-tb\"/>"
         "\n      <style:header-style>"
-        "\n        <style:header-footer-properties fo:min-height=\"0.751cm\" fo:margin-left=\"0cm\" fo:margin-right=\"0cm\" fo:margin-bottom=\"0.25cm\" fo:border=\"0.088cm solid #000000\" fo:padding=\"0.018cm\" fo:background-color=\"#c0c0c0\">"
+        "\n        <style:header-footer-properties fo:min-height=\"0.751cm\" fo:margin-left=\"0cm\" fo:margin-right=\"0cm\" fo:margin-bottom=\"0.25cm\" "
+        "fo:border=\"0.088cm solid #000000\" fo:padding=\"0.018cm\" fo:background-color=\"#c0c0c0\">"
         "\n          <style:background-image/>"
         "\n        </style:header-footer-properties>"
         "\n      </style:header-style>"
         "\n      <style:footer-style>"
-        "\n        <style:header-footer-properties fo:min-height=\"0.751cm\" fo:margin-left=\"0cm\" fo:margin-right=\"0cm\" fo:margin-top=\"0.25cm\" fo:border=\"0.088cm solid #000000\" fo:padding=\"0.018cm\" fo:background-color=\"#c0c0c0\">"
+        "\n        <style:header-footer-properties fo:min-height=\"0.751cm\" fo:margin-left=\"0cm\" fo:margin-right=\"0cm\" fo:margin-top=\"0.25cm\" "
+        "fo:border=\"0.088cm solid #000000\" fo:padding=\"0.018cm\" fo:background-color=\"#c0c0c0\">"
         "\n          <style:background-image/>"
         "\n        </style:header-footer-properties>"
         "\n      </style:footer-style>"
         "\n    </style:page-layout>"
         "\n    <style:page-layout style:name=\"pm3\">"
-        "\n      <style:page-layout-properties fo:page-width=\"21.001cm\" fo:page-height=\"29.7cm\" style:num-format=\"1\" style:print-orientation=\"portrait\" fo:margin-top=\"1.905cm\" fo:margin-bottom=\"1.905cm\" fo:margin-left=\"1.778cm\" fo:margin-right=\"1.778cm\" style:print-page-order=\"ttb\" style:first-page-number=\"continue\" style:scale-to=\"100%\" style:writing-mode=\"lr-tb\" style:print=\"charts drawings objects zero-values\"/>"
+        "\n      <style:page-layout-properties fo:page-width=\"21.001cm\" fo:page-height=\"29.7cm\" style:num-format=\"1\" "
+        "style:print-orientation=\"portrait\" fo:margin-top=\"1.905cm\" fo:margin-bottom=\"1.905cm\" fo:margin-left=\"1.778cm\" fo:margin-right=\"1.778cm\" "
+        "style:print-page-order=\"ttb\" style:first-page-number=\"continue\" style:scale-to=\"100%\" style:writing-mode=\"lr-tb\" style:print=\"charts "
+        "drawings objects zero-values\"/>"
         "\n      <style:header-style>"
         "\n        <style:header-footer-properties fo:min-height=\"0.75cm\" fo:margin-left=\"0cm\" fo:margin-right=\"0cm\" fo:margin-bottom=\"0.25cm\"/>"
         "\n      </style:header-style>"
@@ -521,7 +536,10 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         "\n      </style:footer-style>"
         "\n    </style:page-layout>"
         "\n    <style:page-layout style:name=\"pm4\">"
-        "\n      <style:page-layout-properties fo:page-width=\"21.59cm\" fo:page-height=\"27.94cm\" style:num-format=\"1\" style:print-orientation=\"portrait\" fo:margin-top=\"1.905cm\" fo:margin-bottom=\"1.905cm\" fo:margin-left=\"1.778cm\" fo:margin-right=\"1.778cm\" style:print-page-order=\"ttb\" style:first-page-number=\"continue\" style:scale-to=\"100%\" style:writing-mode=\"lr-tb\" style:print=\"charts drawings objects zero-values\"/>"
+        "\n      <style:page-layout-properties fo:page-width=\"21.59cm\" fo:page-height=\"27.94cm\" style:num-format=\"1\" "
+        "style:print-orientation=\"portrait\" fo:margin-top=\"1.905cm\" fo:margin-bottom=\"1.905cm\" fo:margin-left=\"1.778cm\" fo:margin-right=\"1.778cm\" "
+        "style:print-page-order=\"ttb\" style:first-page-number=\"continue\" style:scale-to=\"100%\" style:writing-mode=\"lr-tb\" style:print=\"charts "
+        "drawings objects zero-values\"/>"
         "\n      <style:header-style>"
         "\n        <style:header-footer-properties fo:min-height=\"0.75cm\" fo:margin-left=\"0cm\" fo:margin-right=\"0cm\" fo:margin-bottom=\"0.25cm\"/>"
         "\n      </style:header-style>"
@@ -529,8 +547,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         "\n        <style:header-footer-properties fo:min-height=\"0.75cm\" fo:margin-left=\"0cm\" fo:margin-right=\"0cm\" fo:margin-top=\"0.25cm\"/>"
         "\n      </style:footer-style>"
         "\n    </style:page-layout>"
-        "\n    <!-- /COPIED -->"
-    );
+        "\n    <!-- /COPIED -->");
 
     // Todo, find out whether these are defaults for xlsx or whether they can be read somewhere
     writers->body->startElement("table:calculation-settings");
@@ -561,20 +578,17 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     MSOOXML::Utils::splitPathAndFile(spreadPathAndFile, &spreadPath, &spreadFile);
 
     MSOOXML::DrawingMLTheme themes;
-    const QString spreadThemePathAndFile(relationships->targetForType(
-        spreadPath, spreadFile,
-        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
+    const QString spreadThemePathAndFile(
+        relationships->targetForType(spreadPath, spreadFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
     qCDebug(lcXlsxImport) << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
 
     QString spreadThemePath, spreadThemeFile;
     MSOOXML::Utils::splitPathAndFile(spreadThemePathAndFile, &spreadThemePath, &spreadThemeFile);
 
     MSOOXML::MsooXmlThemesReader themesReader(writers);
-    MSOOXML::MsooXmlThemesReaderContext themecontext(themes, relationships, (MSOOXML::MsooXmlImport*)this,
-        spreadThemePath, spreadThemeFile);
+    MSOOXML::MsooXmlThemesReaderContext themecontext(themes, relationships, (MSOOXML::MsooXmlImport *)this, spreadThemePath, spreadThemeFile);
 
-    KoFilter::ConversionStatus status
-        = loadAndParseDocument(&themesReader, spreadThemePathAndFile, errorMessage, &themecontext);
+    KoFilter::ConversionStatus status = loadAndParseDocument(&themesReader, spreadThemePathAndFile, errorMessage, &themecontext);
     Q_UNUSED(status);
     reportProgress(5);
 
@@ -584,13 +598,11 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     {
         // In first round we read color overrides, in 2nd round we can actually use them.
         XlsxXmlStylesReader stylesReader(writers);
-        RETURN_IF_ERROR(loadAndParseDocumentIfExists(
-                            MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &colorContext))
+        RETURN_IF_ERROR(loadAndParseDocumentIfExists(MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &colorContext))
         reportProgress(15);
         XlsxXmlStylesReaderContext context2(styles, false, this, &themes);
         context2.colorIndices = colorContext.colorIndices; // Overriding default colors potentially
-        RETURN_IF_ERROR(loadAndParseDocumentIfExists(
-                            MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context2))
+        RETURN_IF_ERROR(loadAndParseDocumentIfExists(MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context2))
     }
 
     reportProgress(30);
@@ -600,8 +612,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     {
         XlsxXmlSharedStringsReader sharedStringsReader(writers);
         XlsxXmlSharedStringsReaderContext context(sharedStrings, &themes, colorContext.colorIndices);
-        RETURN_IF_ERROR(loadAndParseDocumentIfExists(
-                            MSOOXML::ContentTypes::spreadsheetSharedStrings, &sharedStringsReader, writers, errorMessage, &context))
+        RETURN_IF_ERROR(loadAndParseDocumentIfExists(MSOOXML::ContentTypes::spreadsheetSharedStrings, &sharedStringsReader, writers, errorMessage, &context))
     }
 
     reportProgress(35);
@@ -611,9 +622,13 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     {
         XlsxXmlCommentsReader commentsReader(writers);
         XlsxXmlCommentsReaderContext context(comments, &themes, colorContext.colorIndices);
-        RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
-//! @todo only support "xl/comments1.xml" filename for comments?
-            "xl/comments1.xml", &commentsReader, writers, errorMessage, &context) )
+        RETURN_IF_ERROR(loadAndParseDocumentFromFileIfExists(
+            //! @todo only support "xl/comments1.xml" filename for comments?
+            "xl/comments1.xml",
+            &commentsReader,
+            writers,
+            errorMessage,
+            &context))
     }
 
     reportProgress(40);

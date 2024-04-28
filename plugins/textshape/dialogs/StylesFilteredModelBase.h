@@ -17,11 +17,12 @@
  * QSortFilterProxyModel implementation was a great source of inspiration.
  *
  * It is to be noted that this is in no way a full proxyModel. It is built with several assumptions:
- * - it is used to filter a StylesModel which in turn is a flat list of items. There is only one level of items. (this also means that "parent" QModelIndexes are always invalid)
+ * - it is used to filter a StylesModel which in turn is a flat list of items. There is only one level of items. (this also means that "parent" QModelIndexes
+ * are always invalid)
  * - there is no header in the model.
  * - the model has only one column
  * - only the following methods are used when updating the underlying model's data: resetModel, insertRows, moveRows, removeRows (cf QAbstractItemModel)
-*/
+ */
 
 class StylesFilteredModelBase : public AbstractStylesModel
 {
@@ -31,7 +32,7 @@ public:
 
     /** Re-implement from QAbstractItemModel. */
 
-    QModelIndex index(int row, int column=0, const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const override;
 
     QModelIndex parent(const QModelIndex &child) const override;
 
@@ -49,15 +50,15 @@ public:
     void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer) override;
 
     /** Return a @class QModelIndex for the specified @param style.
-      * @param style may be either a character or paragraph style.
-    */
+     * @param style may be either a character or paragraph style.
+     */
     QModelIndex indexOf(const KoCharacterStyle *style) const override;
 
     /** Returns a QImage which is a preview of the style specified by @param row of the given @param size.
-      * If size isn't specified, the default size of the given @class KoStyleThumbnailer is used.
-    */
+     * If size isn't specified, the default size of the given @class KoStyleThumbnailer is used.
+     */
     QImage stylePreview(int row, const QSize &size = QSize()) override;
-//    virtual QImage stylePreview(QModelIndex &index, const QSize &size = QSize());
+    //    virtual QImage stylePreview(QModelIndex &index, const QSize &size = QSize());
 
     AbstractStylesModel::Type stylesType() const override;
 

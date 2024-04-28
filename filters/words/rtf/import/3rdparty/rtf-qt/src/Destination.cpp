@@ -8,36 +8,38 @@
 
 namespace RtfReader
 {
-    Destination::Destination( Reader *reader, AbstractRtfOutput *output, const QString &name ) :
-     m_name( name ), m_reader(reader), m_output( output )
-    {
-    }
+Destination::Destination(Reader *reader, AbstractRtfOutput *output, const QString &name)
+    : m_name(name)
+    , m_reader(reader)
+    , m_output(output)
+{
+}
 
-    Destination::~Destination()
-    {}
+Destination::~Destination()
+{
+}
 
-    bool Destination::hasName( const QString &name )
-    {
-	return m_name == name;
-    }
+bool Destination::hasName(const QString &name)
+{
+    return m_name == name;
+}
 
-    QString Destination::name() const
-    {
-	return m_name;
-    }
+QString Destination::name() const
+{
+    return m_name;
+}
 
-    void Destination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
-    {
-        Q_UNUSED(controlWord);
-        Q_UNUSED(hasValue);
-        Q_UNUSED(value);
-    }
+void Destination::handleControlWord(const QByteArray &controlWord, bool hasValue, const int value)
+{
+    Q_UNUSED(controlWord);
+    Q_UNUSED(hasValue);
+    Q_UNUSED(value);
+}
 
-    void Destination::handlePlainText( const QByteArray &plainText )
-    {
-        qCDebug(lcRtf) << "plain text:" << plainText << "in" << m_name;
-    };
+void Destination::handlePlainText(const QByteArray &plainText)
+{
+    qCDebug(lcRtf) << "plain text:" << plainText << "in" << m_name;
+};
 
-    void Destination::aboutToEndDestination()
-    {};
+void Destination::aboutToEndDestination(){};
 }

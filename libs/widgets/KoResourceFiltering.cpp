@@ -9,28 +9,28 @@
 
 #include "KoResourceServer.h"
 
-#include <QStringList>
-#include <QString>
 #include <QRegularExpression>
-
+#include <QString>
+#include <QStringList>
 
 class Q_DECL_HIDDEN KoResourceFiltering::Private
 {
 public:
     Private()
-    : isTag("\\[([\\w\\s]+)\\]")
-    , isExactMatch("\"([\\w\\s]+)\"")
-    , searchTokenizer("\\s*,+\\s*")
-    , hasNewFilters(false)
-    , name(true)
-    , filename(true)
-    , resourceServer(0)
-    {}
+        : isTag("\\[([\\w\\s]+)\\]")
+        , isExactMatch("\"([\\w\\s]+)\"")
+        , searchTokenizer("\\s*,+\\s*")
+        , hasNewFilters(false)
+        , name(true)
+        , filename(true)
+        , resourceServer(0)
+    {
+    }
     QRegularExpression isTag;
     QRegularExpression isExactMatch;
     QRegularExpression searchTokenizer;
     bool hasNewFilters;
-    bool name,filename;
+    bool name, filename;
     KoResourceServerBase *resourceServer;
     QStringList tagSetFilenames;
     QStringList includedNames;
@@ -38,25 +38,28 @@ public:
     QString currentTag;
 };
 
-KoResourceFiltering::KoResourceFiltering() : d(new Private())
-{}
+KoResourceFiltering::KoResourceFiltering()
+    : d(new Private())
+{
+}
 
 KoResourceFiltering::~KoResourceFiltering()
 {
     delete d;
 }
 
-void KoResourceFiltering::configure(int filterType, bool enable) {
+void KoResourceFiltering::configure(int filterType, bool enable)
+{
     switch (filterType) {
     case 0:
-        d->name=true;
-        d->filename=enable;
+        d->name = true;
+        d->filename = enable;
         break;
     case 1:
-        d->name=enable;
+        d->name = enable;
         break;
     case 2:
-        d->filename=enable;
+        d->filename = enable;
         break;
     }
 }
@@ -66,7 +69,7 @@ void KoResourceFiltering::setChanged()
     d->hasNewFilters = true;
 }
 
-void KoResourceFiltering::setTagSetFilenames(const QStringList& filenames)
+void KoResourceFiltering::setTagSetFilenames(const QStringList &filenames)
 {
     d->tagSetFilenames = filenames;
     d->excludedNames.clear();
@@ -74,18 +77,17 @@ void KoResourceFiltering::setTagSetFilenames(const QStringList& filenames)
     setChanged();
 }
 
-bool KoResourceFiltering::matchesResource(const QStringList &filteredList,const QStringList &filterList) const
+bool KoResourceFiltering::matchesResource(const QStringList &filteredList, const QStringList &filterList) const
 {
     Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
     foreach (QString filter, filterList) {
         if (!filter.startsWith('"')) {
             foreach (QString filtered, filteredList) {
-                if (filtered.contains(filter,sensitivity)) {
+                if (filtered.contains(filter, sensitivity)) {
                     return true;
                 }
             }
-        }
-        else if (d->name) {
+        } else if (d->name) {
             filter.remove('"');
             if (!filteredList.at(0).compare(filter)) {
                 return true;
@@ -97,8 +99,7 @@ bool KoResourceFiltering::matchesResource(const QStringList &filteredList,const 
 
 void KoResourceFiltering::sanitizeExclusionList()
 {
-   if(!d->includedNames.isEmpty()) {
-
+    if (!d->includedNames.isEmpty()) {
         foreach (const QString &exclusion, d->excludedNames) {
             if (!excludeFilterIsValid(exclusion))
                 d->excludedNames.removeAll(exclusion);
@@ -106,38 +107,36 @@ void KoResourceFiltering::sanitizeExclusionList()
     }
 }
 
-QStringList KoResourceFiltering::tokenizeSearchString(const QString& searchString) const
+QStringList KoResourceFiltering::tokenizeSearchString(const QString &searchString) const
 {
     return searchString.split(d->searchTokenizer, Qt::SkipEmptyParts);
 }
 
-void KoResourceFiltering::populateIncludeExcludeFilters(const QStringList& filteredNames)
+void KoResourceFiltering::populateIncludeExcludeFilters(const QStringList &filteredNames)
 {
     foreach (QString name, filteredNames) {
-        QStringList* target;
+        QStringList *target;
 
-        if(name.startsWith('!')) {
+        if (name.startsWith('!')) {
             name.remove('!');
             target = &d->excludedNames;
         } else {
             target = &d->includedNames;
         }
 
-        if(!name.isEmpty()) {
+        if (!name.isEmpty()) {
             if (name.startsWith('[')) {
                 QRegularExpressionMatch match = d->isTag.match(name);
                 if (match.hasMatch() && d->resourceServer) {
                     name = match.captured(1);
                     (*target) += d->resourceServer->queryResources(name);
                 }
-            }
-            else if (name.startsWith('"')) {
+            } else if (name.startsWith('"')) {
                 QRegularExpressionMatch match = d->isExactMatch.match(name);
                 if (match.hasMatch()) {
                     target->push_back(name);
                 }
-            }
-            else {
+            } else {
                 target->push_back(name);
             }
         }
@@ -164,7 +163,7 @@ void KoResourceFiltering::setFilters(const QString &searchString)
     setChanged();
 }
 
-bool KoResourceFiltering::presetMatchesSearch(KoResource * resource) const
+bool KoResourceFiltering::presetMatchesSearch(KoResource *resource) const
 {
     QList<QString> filteredList;
 
@@ -179,11 +178,11 @@ bool KoResourceFiltering::presetMatchesSearch(KoResource * resource) const
         filteredList.push_back(resourceFileName);
     }
 
-    if (matchesResource(filteredList,d->excludedNames)) {
+    if (matchesResource(filteredList, d->excludedNames)) {
         return false;
     }
 
-    if (matchesResource(filteredList,d->includedNames)) {
+    if (matchesResource(filteredList, d->includedNames)) {
         return true;
     }
 
@@ -210,19 +209,18 @@ void KoResourceFiltering::setExclusions(const QStringList &exclusions)
 
 bool KoResourceFiltering::excludeFilterIsValid(const QString &exclusion)
 {
-    foreach(const QString &inclusion, d->includedNames) {
-        if ((inclusion.startsWith(exclusion)  && exclusion.size() <= inclusion.size())) {
+    foreach (const QString &inclusion, d->includedNames) {
+        if ((inclusion.startsWith(exclusion) && exclusion.size() <= inclusion.size())) {
             return false;
         }
     }
     return true;
 }
 
-QList< KoResource* > KoResourceFiltering::filterResources(QList< KoResource* > resources)
+QList<KoResource *> KoResourceFiltering::filterResources(QList<KoResource *> resources)
 {
-
-    foreach(KoResource* resource, resources) {
-        if(!presetMatchesSearch(resource)) {
+    foreach (KoResource *resource, resources) {
+        if (!presetMatchesSearch(resource)) {
             resources.removeAll(resource);
         }
     }
@@ -240,13 +238,13 @@ void KoResourceFiltering::rebuildCurrentTagFilenames()
     d->tagSetFilenames = d->resourceServer->queryResources(d->currentTag);
 }
 
-void KoResourceFiltering::setCurrentTag(const QString& tagSet)
+void KoResourceFiltering::setCurrentTag(const QString &tagSet)
 {
     d->currentTag = tagSet;
     rebuildCurrentTagFilenames();
 }
 
-void KoResourceFiltering::setResourceServer(KoResourceServerBase* resourceServer)
+void KoResourceFiltering::setResourceServer(KoResourceServerBase *resourceServer)
 {
     d->resourceServer = resourceServer;
 }

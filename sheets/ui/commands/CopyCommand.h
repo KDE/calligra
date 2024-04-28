@@ -7,8 +7,8 @@
 #ifndef CALLIGRA_SHEETS_COPY_COMMAND
 #define CALLIGRA_SHEETS_COPY_COMMAND
 
-#include <QString>
 #include "../sheets_ui_export.h"
+#include <QString>
 
 namespace Calligra
 {
@@ -26,7 +26,7 @@ namespace CopyCommand
  * Saves the cell \p region as a text with coordinates - used for copy/pasting.
  * \param region the cell region to process
  */
-QString CALLIGRA_SHEETS_UI_EXPORT saveAsSnippet(const Region&);
+QString CALLIGRA_SHEETS_UI_EXPORT saveAsSnippet(const Region &);
 
 /**
  * Saves the cell \p region as plain text.

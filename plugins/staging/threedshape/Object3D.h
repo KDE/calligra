@@ -14,9 +14,7 @@
 // Calligra
 #include <KoShape.h>
 
-
 class KoXmlElement;
-
 
 // This is the base class for the 3D objects that are defined in ODF:
 // dr3d:scene, dr3d:cube, dr3d:sphere, dr3d:extrude and
@@ -91,11 +89,9 @@ public:
 
     virtual void saveObjectOdf(KoShapeSavingContext &context) const;
 
-
 protected:
     Object3D *m_parent;
-    QString   m_transform3D;    // Must be a real matrix when we implement drawing.
+    QString m_transform3D; // Must be a real matrix when we implement drawing.
 };
-
 
 #endif

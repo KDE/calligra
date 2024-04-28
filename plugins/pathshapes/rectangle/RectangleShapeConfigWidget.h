@@ -25,7 +25,10 @@ public:
     /// reimplemented
     void setUnit(const KoUnit &unit) override;
     /// reimplemented
-    bool showOnShapeCreate() override { return false; }
+    bool showOnShapeCreate() override
+    {
+        return false;
+    }
     /// reimplemented
     KUndo2Command *createCommand() override;
 

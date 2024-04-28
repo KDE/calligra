@@ -3,7 +3,6 @@
 // SPDX-FileCopyrightText: 2005 Tomas Mecir <mecirt@gmail.com>
 // SPDX-License-Identifier: LGPL-2.0-only
 
-
 #ifndef CALLIGRA_SHEETS_FUNCTION_DESCRIPTION
 #define CALLIGRA_SHEETS_FUNCTION_DESCRIPTION
 
@@ -29,16 +28,19 @@ class CALLIGRA_SHEETS_ENGINE_EXPORT FunctionParameter
 {
 public:
     FunctionParameter();
-    FunctionParameter(const FunctionParameter& param);
-    explicit FunctionParameter(const QDomElement& element);
+    FunctionParameter(const FunctionParameter &param);
+    explicit FunctionParameter(const QDomElement &element);
 
-    QString helpText() const {
+    QString helpText() const
+    {
         return m_help;
     }
-    ParameterType type() const {
+    ParameterType type() const
+    {
         return m_type;
     }
-    bool hasRange() const {
+    bool hasRange() const
+    {
         return m_range;
     }
 
@@ -56,39 +58,49 @@ class CALLIGRA_SHEETS_ENGINE_EXPORT FunctionDescription
 {
 public:
     FunctionDescription();
-    explicit FunctionDescription(const QDomElement& element);
-    FunctionDescription(const FunctionDescription& desc);
+    explicit FunctionDescription(const QDomElement &element);
+    FunctionDescription(const FunctionDescription &desc);
 
-    const QStringList& examples() {
+    const QStringList &examples()
+    {
         return m_examples;
     }
-    const QStringList& syntax() {
+    const QStringList &syntax()
+    {
         return m_syntax;
     }
-    const QStringList& related() {
+    const QStringList &related()
+    {
         return m_related;
     }
-    const QStringList& helpText() const {
+    const QStringList &helpText() const
+    {
         return m_help;
     }
-    QString name() const {
+    QString name() const
+    {
         return m_name;
     }
-    ParameterType type() const {
+    ParameterType type() const
+    {
         return m_type;
     }
 
-    int params() const {
+    int params() const
+    {
         return m_params.count();
     }
-    FunctionParameter& param(int i) {
-        return m_params[ i ];
+    FunctionParameter &param(int i)
+    {
+        return m_params[i];
     }
 
-    void setGroup(const QString& g) {
+    void setGroup(const QString &g)
+    {
         m_group = g;
     }
-    QString group() const {
+    QString group() const
+    {
         return m_group;
     }
 

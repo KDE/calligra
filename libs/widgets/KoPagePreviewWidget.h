@@ -13,11 +13,12 @@
 #include <QWidget>
 
 // Needed for building on Windows (cannot use forward declarations)
-#include <KoPageLayout.h>
 #include <KoColumns.h>
+#include <KoPageLayout.h>
 
 /// A widget to preview the KoPageLayout and KoColumns data structures.
-class KOWIDGETS_EXPORT KoPagePreviewWidget : public QWidget {
+class KOWIDGETS_EXPORT KoPagePreviewWidget : public QWidget
+{
     Q_OBJECT
 public:
     explicit KoPagePreviewWidget(QWidget *parent = nullptr);
@@ -35,7 +36,7 @@ private:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

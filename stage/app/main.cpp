@@ -11,7 +11,7 @@
 
 #include <QLoggingCategory>
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
     /**
      * Disable debug output by default, only log warnings.
@@ -22,8 +22,9 @@ int main( int argc, char **argv )
      *
      * See: http://doc.qt.io/qt-5/qloggingcategory.html
      */
-    QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
-                                     "calligra.*.warning=true");
+    QLoggingCategory::setFilterRules(
+        "calligra.*.debug=false\n"
+        "calligra.*.warning=true");
 
     KoApplication app(STAGE_MIME_TYPE, QStringLiteral("calligrastage"), newKPresenterAboutData, argc, argv);
     KLocalizedString::setApplicationDomain("calligrastage");

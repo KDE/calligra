@@ -15,27 +15,19 @@ class TemplatesModel : public QAbstractListModel
     Q_PROPERTY(QString templateType READ templateType WRITE setTemplateType NOTIFY templateTypeChanged)
     Q_PROPERTY(bool showWide READ showWide WRITE setShowWide NOTIFY showWideChanged)
 public:
-    enum TemplateRoles {
-        TitleRole = Qt::UserRole + 1,
-        DescriptionRole,
-        ColorRole,
-        ThumbnailRole,
-        UrlRole,
-        VariantCountRole,
-        VariantsRole
-    };
-    explicit TemplatesModel(QObject* parent = 0);
+    enum TemplateRoles { TitleRole = Qt::UserRole + 1, DescriptionRole, ColorRole, ThumbnailRole, UrlRole, VariantCountRole, VariantsRole };
+    explicit TemplatesModel(QObject *parent = 0);
     ~TemplatesModel() override;
 
     QHash<int, QByteArray> roleNames() const override;
-    QVariant data(const QModelIndex& index, int role) const override;
-    int rowCount(const QModelIndex& parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    int rowCount(const QModelIndex &parent) const override;
 
     QString templateType() const;
-    void setTemplateType(const QString& newType);
+    void setTemplateType(const QString &newType);
 
     bool showWide() const;
-    void setShowWide(const bool& newValue);
+    void setShowWide(const bool &newValue);
 
 Q_SIGNALS:
     void templateTypeChanged();
@@ -43,7 +35,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif // TEMPLATESMODEL_H

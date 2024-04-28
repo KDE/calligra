@@ -13,9 +13,9 @@
 
 #include "flake_export.h"
 
+#include "KoCanvasController.h"
 #include <QAbstractScrollArea>
 #include <QPointer>
-#include "KoCanvasController.h"
 
 class KoShape;
 class KoCanvasBase;
@@ -27,13 +27,12 @@ class FLAKE_EXPORT KoCanvasControllerWidget : public QAbstractScrollArea, public
 {
     Q_OBJECT
 public:
-
     /**
      * Constructor.
      * @param actionCollection the action collection for this widget
      * @param parent the parent this widget will belong to
      */
-    explicit KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent = 0);
+    explicit KoCanvasControllerWidget(KActionCollection *actionCollection, QWidget *parent = 0);
     ~KoCanvasControllerWidget() override;
 
     /// Reimplemented from QObject
@@ -85,7 +84,7 @@ public:
      *
      * @param widgets the map of widgets
      */
-    void setToolOptionWidgets(const QList<QPointer<QWidget> > &widgets);
+    void setToolOptionWidgets(const QList<QPointer<QWidget>> &widgets);
 
     void zoomIn(const QPoint &center) override;
 
@@ -142,7 +141,7 @@ Q_SIGNALS:
     /**
      * Emit the new tool option widgets to be used with this canvas.
      */
-    void toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &widgets);
+    void toolOptionWidgetsChanged(const QList<QPointer<QWidget>> &widgets);
 
 private Q_SLOTS:
 
@@ -177,7 +176,7 @@ protected:
 private:
     Q_PRIVATE_SLOT(d, void activate())
 
-    Private * const d;
+    Private *const d;
 };
 
 #endif

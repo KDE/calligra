@@ -8,10 +8,8 @@
 #ifndef CALLIGRA_SHEETS_ACTION_BORDER
 #define CALLIGRA_SHEETS_ACTION_BORDER
 
-
 #include "CellAction.h"
 #include "ui/commands/AbstractRegionCommand.h"
-
 
 class KoColor;
 class KoColorPopupAction;
@@ -21,8 +19,9 @@ namespace Calligra
 namespace Sheets
 {
 
-class BorderLeft : public CellAction {
-Q_OBJECT
+class BorderLeft : public CellAction
+{
+    Q_OBJECT
 public:
     BorderLeft(Actions *actions);
     virtual ~BorderLeft();
@@ -32,8 +31,9 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
 
-class BorderRight : public CellAction {
-Q_OBJECT
+class BorderRight : public CellAction
+{
+    Q_OBJECT
 public:
     BorderRight(Actions *actions);
     virtual ~BorderRight();
@@ -43,8 +43,9 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
 
-class BorderTop : public CellAction {
-Q_OBJECT
+class BorderTop : public CellAction
+{
+    Q_OBJECT
 public:
     BorderTop(Actions *actions);
     virtual ~BorderTop();
@@ -54,8 +55,9 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
 
-class BorderBottom : public CellAction {
-Q_OBJECT
+class BorderBottom : public CellAction
+{
+    Q_OBJECT
 public:
     BorderBottom(Actions *actions);
     virtual ~BorderBottom();
@@ -65,8 +67,9 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
 
-class BorderAll : public CellAction {
-Q_OBJECT
+class BorderAll : public CellAction
+{
+    Q_OBJECT
 public:
     BorderAll(Actions *actions);
     virtual ~BorderAll();
@@ -76,8 +79,9 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
 
-class BorderNone : public CellAction {
-Q_OBJECT
+class BorderNone : public CellAction
+{
+    Q_OBJECT
 public:
     BorderNone(Actions *actions);
     virtual ~BorderNone();
@@ -87,8 +91,9 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
 
-class BorderOutline : public CellAction {
-Q_OBJECT
+class BorderOutline : public CellAction
+{
+    Q_OBJECT
 public:
     BorderOutline(Actions *actions);
     virtual ~BorderOutline();
@@ -98,8 +103,9 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
 
-class BorderColor : public CellAction {
-Q_OBJECT
+class BorderColor : public CellAction
+{
+    Q_OBJECT
 public:
     BorderColor(Actions *actions);
     virtual ~BorderColor();
@@ -107,8 +113,11 @@ public:
     QColor selectedColor();
 protected Q_SLOTS:
     void triggeredBorderColor(const KoColor &color);
+
 protected:
-    virtual void execute(Selection *, Sheet *, QWidget *) override {}  // never called
+    virtual void execute(Selection *, Sheet *, QWidget *) override
+    {
+    } // never called
     QAction *createAction() override;
 
     KoColorPopupAction *m_colorAction;
@@ -122,7 +131,8 @@ class BorderColorCommand : public AbstractRegionCommand
 {
 public:
     BorderColorCommand();
-    void setColor(const QColor& color) {
+    void setColor(const QColor &color)
+    {
         m_color = color;
     }
 
@@ -133,10 +143,7 @@ private:
     QColor m_color;
 };
 
-
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_BORDER
+#endif // CALLIGRA_SHEETS_ACTION_BORDER

@@ -7,13 +7,13 @@
 #include "KPrSpaceRotationFromTopStrategy.h"
 #include "KPrSpaceRotationEffectFactory.h"
 
-#include <QWidget>
-#include <QPainter>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsView>
+#include <QPainter>
+#include <QWidget>
 
 KPrSpaceRotationFromTopStrategy::KPrSpaceRotationFromTopStrategy()
-: KPrPageEffectStrategy(KPrSpaceRotationEffectFactory::FromTop, "spaceRotation", "topToBottom", false, true)
+    : KPrPageEffectStrategy(KPrSpaceRotationEffectFactory::FromTop, "spaceRotation", "topToBottom", false, true)
 {
 }
 
@@ -39,15 +39,13 @@ void KPrSpaceRotationFromTopStrategy::next(const KPrPageEffect::Data &data)
     int frame = data.m_timeLine.frameForTime(data.m_currentTime);
     if (frame >= data.m_timeLine.endFrame()) {
         finish(data);
-    }
-    else {
+    } else {
         frame = 180 - frame;
         data.m_oldPageItem->hide();
         data.m_newPageItem->hide();
         if (frame >= 90) {
             data.m_oldPageItem->show();
-        }
-        else {
+        } else {
             data.m_newPageItem->show();
         }
 
@@ -58,8 +56,7 @@ void KPrSpaceRotationFromTopStrategy::next(const KPrPageEffect::Data &data)
         m_transform.translate(w, h).rotate(degree, Qt::XAxis).translate(-w, -h);
         if (frame >= 90) {
             data.m_oldPageItem->setTransform(m_transform);
-        }
-        else {
+        } else {
             data.m_newPageItem->setTransform(m_transform);
         }
     }

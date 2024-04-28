@@ -22,11 +22,15 @@ public:
     /// reimplemented
     void save() override;
     /// reimplemented
-    bool showOnShapeCreate() override { return false; }
+    bool showOnShapeCreate() override
+    {
+        return false;
+    }
     /// reimplemented
-    KUndo2Command * createCommand() override;
+    KUndo2Command *createCommand() override;
 private Q_SLOTS:
     void closeEllipse();
+
 private:
     Ui::EllipseShapeConfigWidget widget;
     EllipseShape *m_ellipse;

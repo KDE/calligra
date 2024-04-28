@@ -15,9 +15,9 @@ class QPushButton;
 class QMenu;
 class KoDialogPrivate;
 
-#include <kowidgets_export.h>
 #include <KConfigGroup>
 #include <kguiitem.h>
+#include <kowidgets_export.h>
 
 #include <QDialog>
 
@@ -112,37 +112,33 @@ class KoDialogPrivate;
  * @author Olivier Goffart <ogoffart at kde.org>
  * @author Tobias Koenig <tokoe@kde.org>
  */
-class KOWIDGETS_EXPORT KoDialog : public QDialog //krazy:exclude=qclasses
+class KOWIDGETS_EXPORT KoDialog : public QDialog // krazy:exclude=qclasses
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(KoDialog)
 
 public:
-
     enum ButtonCode {
-        None    = 0x00000000,
-        Help    = 0x00000001, ///< Show Help button. (this button will run the help set with setHelp)
+        None = 0x00000000,
+        Help = 0x00000001, ///< Show Help button. (this button will run the help set with setHelp)
         Default = 0x00000002, ///< Show Default button.
-        Ok      = 0x00000004, ///< Show Ok button. (this button accept()s the dialog; result set to QDialog::Accepted)
-        Apply   = 0x00000008, ///< Show Apply button.
-        Try     = 0x00000010, ///< Show Try button.
-        Cancel  = 0x00000020, ///< Show Cancel-button. (this button reject()s the dialog; result set to QDialog::Rejected)
-        Close   = 0x00000040, ///< Show Close-button. (this button closes the dialog)
-        Reset   = 0x00000200, ///< Show Reset button
+        Ok = 0x00000004, ///< Show Ok button. (this button accept()s the dialog; result set to QDialog::Accepted)
+        Apply = 0x00000008, ///< Show Apply button.
+        Try = 0x00000010, ///< Show Try button.
+        Cancel = 0x00000020, ///< Show Cancel-button. (this button reject()s the dialog; result set to QDialog::Rejected)
+        Close = 0x00000040, ///< Show Close-button. (this button closes the dialog)
+        Reset = 0x00000200, ///< Show Reset button
         Details = 0x00000400, ///< Show Details button. (this button will show the detail widget set with setDetailsWidget)
-        User1   = 0x00001000, ///< Show User defined button 1.
-        User2   = 0x00002000, ///< Show User defined button 2.
-        User3   = 0x00004000, ///< Show User defined button 3.
+        User1 = 0x00001000, ///< Show User defined button 1.
+        User2 = 0x00002000, ///< Show User defined button 2.
+        User3 = 0x00004000, ///< Show User defined button 3.
         NoDefault = 0x00008000 ///< Used when specifying a default button; indicates that no button should be marked by default.
     };
     Q_ENUM(ButtonCode)
     // TODO KDE5: remove NoDefault and use the value None instead
     Q_DECLARE_FLAGS(ButtonCodes, ButtonCode)
 
-    enum ButtonPopupMode {
-        InstantPopup = 0,
-        DelayedPopup = 1
-    };
+    enum ButtonPopupMode { InstantPopup = 0, DelayedPopup = 1 };
     Q_DECLARE_FLAGS(ButtonPopupModes, ButtonPopupMode)
 
 public:
@@ -393,12 +389,7 @@ public:
      * @var HIGCompliantCaption The base minimum flags required to align a
      * caption with the KDE Human Interface Guidelines
      */
-    enum CaptionFlag {
-        NoCaptionFlags = 0,
-        AppNameCaption = 1,
-        ModifiedCaption = 2,
-        HIGCompliantCaption = AppNameCaption
-    };
+    enum CaptionFlag { NoCaptionFlags = 0, AppNameCaption = 1, ModifiedCaption = 2, HIGCompliantCaption = AppNameCaption };
     Q_DECLARE_FLAGS(CaptionFlags, CaptionFlag)
 
     /**
@@ -421,9 +412,7 @@ public:
      * @param flags
      * @return the created caption
      */
-    static QString makeStandardCaption(const QString &userCaption,
-                                       QWidget *window = 0,
-                                       CaptionFlags flags = HIGCompliantCaption);
+    static QString makeStandardCaption(const QString &userCaption, QWidget *window = 0, CaptionFlags flags = HIGCompliantCaption);
 
     /**
      * Resize every layout manager used in @p widget and its nested children.

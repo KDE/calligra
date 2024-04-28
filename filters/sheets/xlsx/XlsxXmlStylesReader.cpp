@@ -9,17 +9,17 @@
  *
  */
 
-#include "XlsxUtils.h"
 #include "XlsxXmlStylesReader.h"
 #include "XlsxImport.h"
+#include "XlsxUtils.h"
 
 #include "NumberFormatParser.h"
 
+#include <KoGenStyles.h>
+#include <KoXmlWriter.h>
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
-#include <KoXmlWriter.h>
 #include <styles/KoCharacterStyle.h>
-#include <KoGenStyles.h>
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_CLASS XlsxXmlStylesReader
@@ -27,8 +27,8 @@
 
 #include <MsooXmlReader_p.h>
 
-#include <QMap>
 #include <QGlobalStatic>
+#include <QMap>
 #include <memory>
 
 #include <math.h>
@@ -37,43 +37,36 @@
 
 //! @see http://www.w3.org/TR/CSS2/box.html#value-def-border-style
 //! @see http://www.w3.org/TR/CSS2/box.html#value-def-border-width
-KoFilter::ConversionStatus XlsxXmlStylesReader::readAttributes(const QXmlStreamAttributes& attrs, QString& borderStyle)
+KoFilter::ConversionStatus XlsxXmlStylesReader::readAttributes(const QXmlStreamAttributes &attrs, QString &borderStyle)
 {
     QString s;
-//! @todo more styles
+    //! @todo more styles
     TRY_READ_ATTR_WITHOUT_NS_INTO(style, s)
     if (s == QLatin1String("dashed") || s == QLatin1String("dotted") || s == QLatin1String("double")) {
         borderStyle = s;
-    }
-    else if (s == QLatin1String("medium") || s == QLatin1String("thick") || s == QLatin1String("thin"))
-    {
+    } else if (s == QLatin1String("medium") || s == QLatin1String("thick") || s == QLatin1String("thin")) {
         borderStyle = s + " solid";
-    }
-    else if (s == QLatin1String("none")) {
+    } else if (s == QLatin1String("none")) {
         borderStyle = QLatin1String("hidden");
-    }
-    else if (!s.isEmpty()) {
+    } else if (!s.isEmpty()) {
         borderStyle = QLatin1String("solid"); // fallback
     }
     qCDebug(lcXlsxImport) << "style:" << s << "set to:" << borderStyle;
     return KoFilter::OK;
 }
 
-static QColor applyPatternDensity(const QColor& bg, const QColor& fg, qreal percent)
+static QColor applyPatternDensity(const QColor &bg, const QColor &fg, qreal percent)
 {
     QColor result;
 
     if (bg.isValid()) {
-        result = QColor( bg.red() * percent,
-                         bg.green() * percent,
-                         bg.blue() * percent,
-                         bg.alpha() );
+        result = QColor(bg.red() * percent, bg.green() * percent, bg.blue() * percent, bg.alpha());
     }
     if (fg.isValid()) {
-        result = QColor( result.red()   + fg.red() * ( 1.0 - percent ),
-                         result.green() + fg.green() * ( 1.0 - percent ),
-                         result.blue()  + fg.blue() * ( 1.0 - percent ),
-                         bg.isValid() ? bg.alpha() : fg.alpha() );
+        result = QColor(result.red() + fg.red() * (1.0 - percent),
+                        result.green() + fg.green() * (1.0 - percent),
+                        result.blue() + fg.blue() * (1.0 - percent),
+                        bg.isValid() ? bg.alpha() : fg.alpha());
     }
 
     return result;
@@ -85,33 +78,33 @@ XlsxStyles::XlsxStyles()
 {
     // fill the default number formats
     // from Office Open XML Part 4 - Markup Language Reference, p. 1974
-    numberFormatStrings[ 1 ] = QLatin1String( "0" );
-    numberFormatStrings[ 2 ] = QLatin1String( "0.00" );
-    numberFormatStrings[ 3 ] = QLatin1String( "#,##0" );
-    numberFormatStrings[ 4 ] = QLatin1String( "#,##0.00" );
-    numberFormatStrings[ 9 ] = QLatin1String( "0%" );
-    numberFormatStrings[ 10 ] = QLatin1String( "0.00%" );
-    numberFormatStrings[ 11 ] = QLatin1String( "0.00E+00" );
-    numberFormatStrings[ 12 ] = QLatin1String( "# ?/?" );
-    numberFormatStrings[ 13 ] = QLatin1String( "# \?\?/\?\?" );
-    numberFormatStrings[ 14 ] = QLatin1String( "mm-dd-yy" );
-    numberFormatStrings[ 15 ] = QLatin1String( "d-mmm-yy" );
-    numberFormatStrings[ 16 ] = QLatin1String( "d-mmm" );
-    numberFormatStrings[ 17 ] = QLatin1String( "mmm-yy" );
-    numberFormatStrings[ 18 ] = QLatin1String( "h:mm AM/PM" );
-    numberFormatStrings[ 19 ] = QLatin1String( "h:mm:ss AM/PM" );
-    numberFormatStrings[ 20 ] = QLatin1String( "h:mm" );
-    numberFormatStrings[ 21 ] = QLatin1String( "h:mm:ss" );
-    numberFormatStrings[ 22 ] = QLatin1String( "m/d/yy h:mm" );
-    numberFormatStrings[ 37 ] = QLatin1String( "#,##0 ;(#,##0)" );
-    numberFormatStrings[ 38 ] = QLatin1String( "#,##0 ;[Red](#,##0)" );
-    numberFormatStrings[ 39 ] = QLatin1String( "#,##0.00;(#,##0.00)" );
-    numberFormatStrings[ 40 ] = QLatin1String( "#,##0.00;[Red](#,##0.00)" );
-    numberFormatStrings[ 45 ] = QLatin1String( "mm:ss" );
-    numberFormatStrings[ 46 ] = QLatin1String( "[h]:mm:ss" );
-    numberFormatStrings[ 47 ] = QLatin1String( "mmss.0" );
-    numberFormatStrings[ 48 ] = QLatin1String( "##0.0E+0" );
-    numberFormatStrings[ 49 ] = QLatin1String( "@" );
+    numberFormatStrings[1] = QLatin1String("0");
+    numberFormatStrings[2] = QLatin1String("0.00");
+    numberFormatStrings[3] = QLatin1String("#,##0");
+    numberFormatStrings[4] = QLatin1String("#,##0.00");
+    numberFormatStrings[9] = QLatin1String("0%");
+    numberFormatStrings[10] = QLatin1String("0.00%");
+    numberFormatStrings[11] = QLatin1String("0.00E+00");
+    numberFormatStrings[12] = QLatin1String("# ?/?");
+    numberFormatStrings[13] = QLatin1String("# \?\?/\?\?");
+    numberFormatStrings[14] = QLatin1String("mm-dd-yy");
+    numberFormatStrings[15] = QLatin1String("d-mmm-yy");
+    numberFormatStrings[16] = QLatin1String("d-mmm");
+    numberFormatStrings[17] = QLatin1String("mmm-yy");
+    numberFormatStrings[18] = QLatin1String("h:mm AM/PM");
+    numberFormatStrings[19] = QLatin1String("h:mm:ss AM/PM");
+    numberFormatStrings[20] = QLatin1String("h:mm");
+    numberFormatStrings[21] = QLatin1String("h:mm:ss");
+    numberFormatStrings[22] = QLatin1String("m/d/yy h:mm");
+    numberFormatStrings[37] = QLatin1String("#,##0 ;(#,##0)");
+    numberFormatStrings[38] = QLatin1String("#,##0 ;[Red](#,##0)");
+    numberFormatStrings[39] = QLatin1String("#,##0.00;(#,##0.00)");
+    numberFormatStrings[40] = QLatin1String("#,##0.00;[Red](#,##0.00)");
+    numberFormatStrings[45] = QLatin1String("mm:ss");
+    numberFormatStrings[46] = QLatin1String("[h]:mm:ss");
+    numberFormatStrings[47] = QLatin1String("mmss.0");
+    numberFormatStrings[48] = QLatin1String("##0.0E+0");
+    numberFormatStrings[49] = QLatin1String("@");
 }
 
 XlsxStyles::~XlsxStyles()
@@ -128,7 +121,7 @@ XlsxStyles::~XlsxStyles()
 
 void XlsxStyles::setCellFormat(XlsxCellFormat *format, int cellFormatIndex)
 {
-//    format->styles = this;
+    //    format->styles = this;
     delete cellFormats[cellFormatIndex];
     cellFormats[cellFormatIndex] = format;
 }
@@ -136,15 +129,24 @@ void XlsxStyles::setCellFormat(XlsxCellFormat *format, int cellFormatIndex)
 //----------------------------------------------------------
 //! default values based on Annex A, p. 4476
 XlsxCellFormat::XlsxCellFormat()
- : applyAlignment(true), applyBorder(true), applyFill(true), applyFont(true),
-   applyNumberFormat(true), applyProtection(true),
-   borderId(-1), fillId(-1), fontId(-1), numFmtId(-1),
-   pivotButton(false), quotePrefix(false), xfId(-1),
-   horizontalAlignment(GeneralHorizontalAlignment),
-   verticalAlignment(NoVerticalAlignment),
-   wrapText(false),
-   shrinkToFit(false),
-   textRotation(0)
+    : applyAlignment(true)
+    , applyBorder(true)
+    , applyFill(true)
+    , applyFont(true)
+    , applyNumberFormat(true)
+    , applyProtection(true)
+    , borderId(-1)
+    , fillId(-1)
+    , fontId(-1)
+    , numFmtId(-1)
+    , pivotButton(false)
+    , quotePrefix(false)
+    , xfId(-1)
+    , horizontalAlignment(GeneralHorizontalAlignment)
+    , verticalAlignment(NoVerticalAlignment)
+    , wrapText(false)
+    , shrinkToFit(false)
+    , textRotation(0)
 {
 }
 
@@ -155,7 +157,8 @@ XlsxCellFormat::~XlsxCellFormat()
 class ST_HorizontalAlignment_fromStringMap : public QMap<QString, XlsxCellFormat::ST_HorizontalAlignment>
 {
 public:
-    ST_HorizontalAlignment_fromStringMap() {
+    ST_HorizontalAlignment_fromStringMap()
+    {
         insert(QString(), XlsxCellFormat::GeneralHorizontalAlignment);
         insert(QLatin1String("general"), XlsxCellFormat::GeneralHorizontalAlignment);
         insert(QLatin1String("center"), XlsxCellFormat::CenterHorizontalAlignment);
@@ -170,7 +173,7 @@ public:
 
 Q_GLOBAL_STATIC(ST_HorizontalAlignment_fromStringMap, s_ST_HorizontalAlignmentValues)
 
-void XlsxCellFormat::setHorizontalAlignment(const QString& alignment)
+void XlsxCellFormat::setHorizontalAlignment(const QString &alignment)
 {
     horizontalAlignment = s_ST_HorizontalAlignmentValues->value(alignment);
 }
@@ -178,7 +181,8 @@ void XlsxCellFormat::setHorizontalAlignment(const QString& alignment)
 class ST_VerticalAlignment_fromStringMap : public QMap<QString, XlsxCellFormat::ST_VerticalAlignment>
 {
 public:
-    ST_VerticalAlignment_fromStringMap() {
+    ST_VerticalAlignment_fromStringMap()
+    {
         insert(QString(), XlsxCellFormat::NoVerticalAlignment);
         insert(QLatin1String("bottom"), XlsxCellFormat::BottomVerticalAlignment);
         insert(QLatin1String("center"), XlsxCellFormat::CenterVerticalAlignment);
@@ -190,25 +194,26 @@ public:
 
 Q_GLOBAL_STATIC(ST_VerticalAlignment_fromStringMap, s_ST_VerticalAlignmentValues)
 
-void XlsxCellFormat::setVerticalAlignment(const QString& alignment)
+void XlsxCellFormat::setVerticalAlignment(const QString &alignment)
 {
     verticalAlignment = s_ST_VerticalAlignmentValues->value(alignment);
 }
 
 //! CASE #S1600
-void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
+void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle *cellStyle) const
 {
-//! @todo FillHorizontalAlignment, JustifyHorizontalAlignment
+    //! @todo FillHorizontalAlignment, JustifyHorizontalAlignment
     int wrapOption = -1; // "don't know"
     if (wrapText)
         wrapOption = 1;
-    //special case: 255 indicates vertical rotation without rotated characters (I couldn't find that documented though)
+    // special case: 255 indicates vertical rotation without rotated characters (I couldn't find that documented though)
     const bool verticalTtb = textRotation == 255;
     if (verticalTtb)
         cellStyle->addProperty("style:direction", "ttb");
     else if (textRotation != 0) {
         unsigned angle = textRotation;
-        if (angle > 90) angle = 360 - (angle - 90);
+        if (angle > 90)
+            angle = 360 - (angle - 90);
         cellStyle->addProperty("style:rotation-angle", QString::number(angle));
     }
 
@@ -268,16 +273,14 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
 }
 
 //! See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#text-align
-bool XlsxCellFormat::setupCellStyle(
-    const XlsxStyles *styles,
-    KoGenStyle* cellStyle) const
+bool XlsxCellFormat::setupCellStyle(const XlsxStyles *styles, KoGenStyle *cellStyle) const
 {
     qCDebug(lcXlsxImport) << "fontId:" << fontId << "fillId:" << fillId << "borderId:" << borderId;
     if (applyAlignment) {
         setupCellStyleAlignment(cellStyle);
     }
     if (applyFont && fontId >= 0) {
-        KoGenStyle* fontStyle = styles->fontStyle(fontId);
+        KoGenStyle *fontStyle = styles->fontStyle(fontId);
         if (!fontStyle) {
             qCWarning(lcXlsxImport) << "No font with ID:" << fontId;
             return false;
@@ -303,9 +306,11 @@ bool XlsxCellFormat::setupCellStyle(
 
 //----------------------------------------------------------
 
-XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart,
-    XlsxImport* _import, MSOOXML::DrawingMLTheme* _themes)
-        : styles(&_styles), skipFirstPart(_skipFirstPart), import(_import), themes(_themes)
+XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles &_styles, bool _skipFirstPart, XlsxImport *_import, MSOOXML::DrawingMLTheme *_themes)
+    : styles(&_styles)
+    , skipFirstPart(_skipFirstPart)
+    , import(_import)
+    , themes(_themes)
 {
     // This is default array of colors from the spec
     colorIndices.push_back("000000");
@@ -377,17 +382,20 @@ XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool
 class XlsxXmlStylesReader::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
+
 private:
 };
 
 XlsxXmlStylesReader::XlsxXmlStylesReader(KoOdfWriters *writers)
-        : XlsxXmlCommonReader(writers)
-        , m_context(0)
-        , d(new Private)
+    : XlsxXmlCommonReader(writers)
+    , m_context(0)
+    , d(new Private)
 {
     init();
 }
@@ -406,9 +414,9 @@ void XlsxXmlStylesReader::init()
     m_currentCellFormat = 0;
 }
 
-KoFilter::ConversionStatus XlsxXmlStylesReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus XlsxXmlStylesReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<XlsxXmlStylesReaderContext*>(context);
+    m_context = dynamic_cast<XlsxXmlStylesReaderContext *>(context);
     Q_ASSERT(m_context);
     m_colorIndices = m_context->colorIndices;
     m_themes = m_context->themes;
@@ -442,13 +450,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::readInternal()
     for (int i = 0; i < namespaces.count(); i++) {
         qCDebug(lcXlsxImport) << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
-//! @todo find out whether the namespace returned by namespaceUri()
-//!       is exactly the same ref as the element of namespaceDeclarations()
+    //! @todo find out whether the namespace returned by namespaceUri()
+    //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration(QString(), MSOOXML::Schemas::spreadsheetml))) {
         raiseError(i18n("Namespace \"%1\" not found", QLatin1String(MSOOXML::Schemas::spreadsheetml)));
         return KoFilter::WrongFormat;
     }
-//! @todo expect other namespaces too...
+    //! @todo expect other namespaces too...
 
     // Read the style-sheet.
     TRY_READ(styleSheet)
@@ -457,12 +465,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::readInternal()
     // to ODF number-formattings. We do this here cause m_context->styles->numberFormatStrings
     // is filled now, not allowed to change from here on and it greatly improves the performance
     // if we do the whole conversation only once right now and use the result later.
-    for(QMap< int, QString >::ConstIterator it = m_context->styles->numberFormatStrings.constBegin(); it != m_context->styles->numberFormatStrings.constEnd(); ++it) {
-        const KoGenStyle style = NumberFormatParser::parse( it.value(), mainStyles );
-        //m_context->styles->numberFormatStyles[ it.key() ] = style;
-        if ( style.type() != KoGenStyle::ParagraphAutoStyle ) {
-            QString styleName = mainStyles->insert( style, "N" );
-            m_context->styles->numberFormatStyleNames[ it.key() ] = styleName;
+    for (QMap<int, QString>::ConstIterator it = m_context->styles->numberFormatStrings.constBegin(); it != m_context->styles->numberFormatStrings.constEnd();
+         ++it) {
+        const KoGenStyle style = NumberFormatParser::parse(it.value(), mainStyles);
+        // m_context->styles->numberFormatStyles[ it.key() ] = style;
+        if (style.type() != KoGenStyle::ParagraphAutoStyle) {
+            QString styleName = mainStyles->insert(style, "N");
+            m_context->styles->numberFormatStyleNames[it.key()] = styleName;
         }
     }
 
@@ -503,8 +512,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
             if (m_context->skipFirstPart) {
                 TRY_READ_IF(colors)
                 SKIP_UNKNOWN
-            }
-            else {
+            } else {
                 if (counter == 40) {
                     // set the progress by the position of what was read
                     qreal progress = 5 + 25 * device()->pos() / device()->size();
@@ -520,7 +528,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
                 ELSE_TRY_READ_IF(dxfs)
                 SKIP_UNKNOWN
             }
-//! @todo add ELSE_WRONG_FORMAT
+            //! @todo add ELSE_WRONG_FORMAT
         }
     }
     READ_EPILOGUE
@@ -598,13 +606,11 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmts()
     STRING_TO_INT( count, countNumber, "styleSheet/numFmts@count" );
 #endif
 
-    while( !atEnd() )
-    {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if( isStartElement() )
-        {
-            TRY_READ_IF( numFmt )
+        if (isStartElement()) {
+            TRY_READ_IF(numFmt)
             ELSE_WRONG_FORMAT
         }
     }
@@ -632,13 +638,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmt()
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITHOUT_NS( numFmtId )
+    TRY_READ_ATTR_WITHOUT_NS(numFmtId)
     int id = -1;
     STRING_TO_INT(numFmtId, id, "numFmt@numFmtId")
 
-    TRY_READ_ATTR_WITHOUT_NS( formatCode );
+    TRY_READ_ATTR_WITHOUT_NS(formatCode);
     if (id >= 0 && !formatCode.isEmpty()) {
-        m_context->styles->numberFormatStrings[ id ] = formatCode;
+        m_context->styles->numberFormatStrings[id] = formatCode;
     }
 
     readNext();
@@ -680,9 +686,11 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
 {
     READ_PROLOGUE
 
-    auto deleter = [this](KoGenStyle *ptr) { delete ptr; m_currentFontStyle = nullptr; };
+    auto deleter = [this](KoGenStyle *ptr) {
+        delete ptr;
+        m_currentFontStyle = nullptr;
+    };
     auto currentFontStyleSetter = std::unique_ptr<KoGenStyle, decltype(deleter)>(m_currentFontStyle, deleter);
-
 
     m_currentTextStyleProperties = new KoCharacterStyle;
 
@@ -694,7 +702,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
             ELSE_TRY_READ_IF(name)
             ELSE_TRY_READ_IF(b)
             ELSE_TRY_READ_IF(i)
-            else if (name() == QLatin1StringView("color")) {
+            else if (name() == QLatin1StringView("color"))
+            {
                 m_currentColor = QColor();
                 TRY_READ(color)
                 if (m_currentColor.isValid()) {
@@ -708,7 +717,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
             ELSE_TRY_READ_IF(scheme)
             ELSE_TRY_READ_IF(outline)
             SKIP_UNKNOWN
-//! @todo add ELSE_WRONG_FORMAT
+            //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
@@ -819,8 +828,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
     KoGenStyle::copyPropertiesFromStyle(*m_currentBorderStyle, cellStyle, KoGenStyle::TableCellType);
     m_currentCellFormat->setupCellStyleAlignment(&cellStyle);
 
-    m_context->styles->conditionalStyles.insert(m_context->styles->conditionalStyles.size() + 1,
-       mainStyles->insert(cellStyle, "ConditionalStyle"));
+    m_context->styles->conditionalStyles.insert(m_context->styles->conditionalStyles.size() + 1, mainStyles->insert(cellStyle, "ConditionalStyle"));
 
     delete m_currentFontStyle;
     m_currentFontStyle = 0;
@@ -850,7 +858,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
  @note cellStyleXfs: the standard states that both the cell style xf records and cell xf records
        must be read to understand the full set of formatting applied to a cell.
        In MSO, only the cell xf record defines the formatting applied to a cell.
-       See <a href="http://www.documentinteropinitiative.org/implnotes/implementationnotelist.aspx?id=dd2615fe-aa8d-4a06-a415-13389919cf36&specname=ecma-376">here</a>.
+       See <a
+ href="http://www.documentinteropinitiative.org/implnotes/implementationnotelist.aspx?id=dd2615fe-aa8d-4a06-a415-13389919cf36&specname=ecma-376">here</a>.
 */
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_cellXfs()
 {
@@ -920,7 +929,10 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
 
     qCDebug(lcXlsxImport) << "cell format #" << m_cellFormatIndex;
     m_currentCellFormat = new XlsxCellFormat();
-    auto deleter = [this](XlsxCellFormat *ptr) { delete ptr; m_currentCellFormat = nullptr; };
+    auto deleter = [this](XlsxCellFormat *ptr) {
+        delete ptr;
+        m_currentCellFormat = nullptr;
+    };
     auto currentCellFormatSetter = std::unique_ptr<XlsxCellFormat, decltype(deleter)>(m_currentCellFormat, deleter);
 
     // -- read attrs --
@@ -999,7 +1011,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_alignment()
     const uint textRotation = attributes().value("textRotation").toString().toUInt();
     m_currentCellFormat->textRotation = textRotation;
 
-//! @todo more attributes
+    //! @todo more attributes
 
     readNext();
     READ_EPILOGUE
@@ -1124,67 +1136,48 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_patternFill()
     if (p.isEmpty() || p == MsooXmlReader::constNone) {
         // 100% background
         percent = 1;
-    }
-    else if (p == "solid") {
+    } else if (p == "solid") {
         // 100% foreground
         percent = 0;
-    }
-    else if (p.startsWith("dark")) {
+    } else if (p.startsWith("dark")) {
         if (p == "darkDown") {
             percent = 0.5;
-        }
-        else if (p == "darkGray") {
+        } else if (p == "darkGray") {
             percent = 0.25;
-        }
-        else if (p == "darkGrid") {
+        } else if (p == "darkGrid") {
             percent = 0.5;
-        }
-        else if (p == "darkHorizontal") {
+        } else if (p == "darkHorizontal") {
             percent = 0.5;
-        }
-        else if (p == "darkTrellis") {
+        } else if (p == "darkTrellis") {
             percent = 0.25;
-        }
-        else if (p == "darkUp") {
+        } else if (p == "darkUp") {
+            percent = 0.5;
+        } else if (p == "darkVertical") {
             percent = 0.5;
         }
-        else if (p == "darkVertical") {
-            percent = 0.5;
-        }
-    }
-    else if (p.startsWith("light")) {
+    } else if (p.startsWith("light")) {
         if (p == "lightDown") {
             percent = 0.75;
-        }
-        else if (p == "lightGray") {
+        } else if (p == "lightGray") {
             percent = 0.75;
-        }
-        else if (p == "lightGrid") {
+        } else if (p == "lightGrid") {
             percent = 0.5625;
-        }
-        else if (p == "lightHorizontal") {
+        } else if (p == "lightHorizontal") {
             percent = 0.75;
-        }
-        else if (p == "lightTrellis") {
+        } else if (p == "lightTrellis") {
             percent = 0.625;
-        }
-        else if (p == "lightUp") {
+        } else if (p == "lightUp") {
             percent = 0.75;
-        }
-        else if (p == "lightVertical") {
+        } else if (p == "lightVertical") {
             percent = 0.5;
         }
-    }
-    else if (p == "mediumGray") {
+    } else if (p == "mediumGray") {
         percent = 0.5;
-    }
-    else if (p == "gray0625") {
+    } else if (p == "gray0625") {
         percent = 0.9375;
-    }
-    else if (p == "gray125") {
+    } else if (p == "gray125") {
         percent = 0.875;
-    }
-    else {
+    } else {
         qCWarning(lcXlsxImport) << "unknown value" << p << "of patterFill@patternType; defaulting to \"none\"";
         percent = 0;
     }
@@ -1230,20 +1223,17 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_bgColor()
         }
     }
     if (!rgb.isEmpty()) {
-        m_currentBgColor = QString("#" + rgb.right(rgb.length()-2));
+        m_currentBgColor = QString("#" + rgb.right(rgb.length() - 2));
     }
     if (!theme.isEmpty()) {
         // Xlsx seems to switch these indices
-        if (theme == "0" ) {
+        if (theme == "0") {
             theme = "1";
-        }
-        else if (theme == "1" ) {
+        } else if (theme == "1") {
             theme = "0";
-        }
-        else if (theme == "2") {
+        } else if (theme == "2") {
             theme = "3";
-        }
-        else if (theme == "3") {
+        } else if (theme == "3") {
             theme = "2";
         }
         MSOOXML::DrawingMLColorSchemeItemBase *colorItemBase = m_context->themes->colorScheme.value(theme);
@@ -1291,20 +1281,17 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fgColor()
         }
     }
     if (!rgb.isEmpty()) {
-        m_currentFgColor = QString("#" + rgb.right(rgb.length()-2));
+        m_currentFgColor = QString("#" + rgb.right(rgb.length() - 2));
     }
     if (!theme.isEmpty()) {
         // Xlsx seems to switch these indices
-        if (theme == "0" ) {
+        if (theme == "0") {
             theme = "1";
-        }
-        else if (theme == "1" ) {
+        } else if (theme == "1") {
             theme = "0";
-        }
-        else if (theme == "2") {
+        } else if (theme == "2") {
             theme = "3";
-        }
-        else if (theme == "3") {
+        } else if (theme == "3") {
             theme = "2";
         }
         MSOOXML::DrawingMLColorSchemeItemBase *colorItemBase = m_context->themes->colorScheme.value(theme);
@@ -1339,14 +1326,14 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_gradientFill()
     Q_ASSERT(m_currentFillStyle);
     READ_PROLOGUE
 
-//! @todo read attributes for gradientFill
+    //! @todo read attributes for gradientFill
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-//! @todo            TRY_READ_IF(stop)
-//todo            ELSE_WRONG_FORMAT
+            //! @todo            TRY_READ_IF(stop)
+            // todo            ELSE_WRONG_FORMAT
         }
     }
     READ_EPILOGUE
@@ -1420,15 +1407,15 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_border()
         if (isStartElement()) {
             TRY_READ_IF(bottom)
             ELSE_TRY_READ_IF(diagonal)
-//! @todo            ELSE_TRY_READ_IF(end)
-//! @todo (dxf only)            ELSE_TRY_READ_IF(horizontal)
+            //! @todo            ELSE_TRY_READ_IF(end)
+            //! @todo (dxf only)            ELSE_TRY_READ_IF(horizontal)
             ELSE_TRY_READ_IF(left)
-//! @todo            ELSE_TRY_READ_IF(start)
+            //! @todo            ELSE_TRY_READ_IF(start)
             ELSE_TRY_READ_IF(right)
             ELSE_TRY_READ_IF(top)
             SKIP_UNKNOWN
-//! @todo (dxf only)            ELSE_TRY_READ_IF(vertical)
-//todo            ELSE_WRONG_FORMAT
+            //! @todo (dxf only)            ELSE_TRY_READ_IF(vertical)
+            // todo            ELSE_WRONG_FORMAT
         }
     }
 
@@ -1596,7 +1583,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_diagonal()
     }
 
     if (!borderString.isEmpty()) {
-       if (diagonalDirections & DiagonalUp) {
+        if (diagonalDirections & DiagonalUp) {
             m_currentBorderStyle->addProperty("style:diagonal-bl-tr", borderString);
         }
         if (diagonalDirections & DiagonalDown) {
@@ -1676,10 +1663,9 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_rgbColor()
 
     TRY_READ_ATTR_WITHOUT_NS(rgb)
     if (!rgb.isEmpty()) {
-        m_context->colorIndices[m_colorIndex] = rgb.right(rgb.length()-2);
+        m_context->colorIndices[m_colorIndex] = rgb.right(rgb.length() - 2);
     }
     ++m_colorIndex;
     readNext();
     READ_EPILOGUE
 }
-

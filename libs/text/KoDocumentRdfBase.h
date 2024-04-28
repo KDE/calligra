@@ -9,11 +9,11 @@
 
 #include "kotext_export.h"
 
-#include <QObject>
 #include <QMap>
-#include <QString>
 #include <QMetaType>
+#include <QObject>
 #include <QSharedPointer>
+#include <QString>
 
 #include <KoDataCenterBase.h>
 
@@ -22,13 +22,12 @@ class QTextDocument;
 class KoStore;
 class KoXmlWriter;
 
-
 ///**
 // * Dummy definition in case Soprano is not available.
 // */
 namespace Soprano
 {
-    class Model;
+class Model;
 }
 
 /**
@@ -67,7 +66,6 @@ public:
      */
     virtual QStringList idrefList() const;
 
-
     virtual bool loadOasis(KoStore *store);
     virtual bool saveOasis(KoStore *store, KoXmlWriter *manifestWriter);
 
@@ -76,7 +74,6 @@ public:
     bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context) override;
 };
 
-Q_DECLARE_METATYPE(KoDocumentRdfBase*)
+Q_DECLARE_METATYPE(KoDocumentRdfBase *)
 
 #endif
-

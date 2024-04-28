@@ -5,52 +5,45 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "OdsReader.h"
 
 // Qt
-#include <QStringList>
 #include <QBuffer>
+#include <QStringList>
 
 // KF5
 #include <KLocalizedString>
 
 // Calligra
-#include <KoStore.h>
-#include <KoXmlStreamReader.h>
-#include <KoXmlNS.h>
-#include <KoXmlWriter.h>  // For copyXmlElement
 #include <KoOdfReadStore.h>
+#include <KoStore.h>
+#include <KoXmlNS.h>
+#include <KoXmlStreamReader.h>
+#include <KoXmlWriter.h> // For copyXmlElement
 
 // Reader library
-#include "OdsReaderBackend.h"
 #include "OdfReaderContext.h"
-#include "OdfTextReader.h"
 #include "OdfReaderDebug.h"
-
+#include "OdfTextReader.h"
+#include "OdsReaderBackend.h"
 
 #if 0
 static int debugIndent = 0;
-#define DEBUGSTART() \
-    ++debugIndent; \
+#define DEBUGSTART()                                                                                                                                           \
+    ++debugIndent;                                                                                                                                             \
     DEBUG_READING("entering")
-#define DEBUGEND() \
-    DEBUG_READING("exiting"); \
+#define DEBUGEND()                                                                                                                                             \
+    DEBUG_READING("exiting");                                                                                                                                  \
     --debugIndent
-#define DEBUG_READING(param) \
-    debugOdfReader << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
-    << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
-    << reader.qualifiedName().toString()
+#define DEBUG_READING(param)                                                                                                                                   \
+    debugOdfReader << QString("%1").arg(" ", debugIndent * 2) << param << ": "                                                                                 \
+                   << (reader.isStartElement() ? "start" : (reader.isEndElement() ? "end" : "other")) << reader.qualifiedName().toString()
 #else
-#define DEBUGSTART() \
-    // NOTHING
-#define DEBUGEND() \
-    // NOTHING
-#define DEBUG_READING(param) \
-    // NOTHING
+#define DEBUGSTART() // NOTHING
+#define DEBUGEND() // NOTHING
+#define DEBUG_READING(param) // NOTHING
 #endif
-
 
 OdsReader::OdsReader()
     : OdfReader()
@@ -60,7 +53,6 @@ OdsReader::OdsReader()
 OdsReader::~OdsReader()
 {
 }
-
 
 #if 0
 // This is a template function for the reader library.
@@ -95,7 +87,6 @@ void OdsReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
 }
 #endif
 
-
 // Reimplemented from OdfReader
 void OdsReader::readElementOfficeSpreadsheet(KoXmlStreamReader &reader)
 {
@@ -125,62 +116,46 @@ void OdsReader::readElementOfficeSpreadsheet(KoXmlStreamReader &reader)
     // FIXME: For now, only very few of these are handled.
     while (reader.readNextStartElement()) {
         DEBUG_READING("loop-start");
-        
+
         QString tagName = reader.qualifiedName().toString();
         if (tagName == "table:table") {
             if (m_textReader) {
-		// <table:table> is handled in the text reader even in spreadsheets.
+                // <table:table> is handled in the text reader even in spreadsheets.
                 m_textReader->readElementTableTable(reader);
-            }
-            else {
+            } else {
                 reader.skipCurrentElement();
             }
-        }
-        else if (tagName == "table:calculation-settings") {
+        } else if (tagName == "table:calculation-settings") {
             // FIXME: NYI
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:consolidation") {
+        } else if (tagName == "table:consolidation") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:content-validation") {
+        } else if (tagName == "table:content-validation") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:database-ranges") {
+        } else if (tagName == "table:database-ranges") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:data-pilot-tables") {
+        } else if (tagName == "table:data-pilot-tables") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:dde-links") {
+        } else if (tagName == "table:dde-links") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:label-ranges") {
+        } else if (tagName == "table:label-ranges") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:named-expressions") {
+        } else if (tagName == "table:named-expressions") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:tracked-changes") {
+        } else if (tagName == "table:tracked-changes") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "text:alphabetical-index-auto-mark-file") {
+        } else if (tagName == "text:alphabetical-index-auto-mark-file") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "text:dde-connection-decls") {
+        } else if (tagName == "text:dde-connection-decls") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "text:sequence-decls") {
+        } else if (tagName == "text:sequence-decls") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "text:user-field-decls") {
+        } else if (tagName == "text:user-field-decls") {
             reader.skipCurrentElement();
-        }
-        else if (tagName == "text:variable-decls") {
+        } else if (tagName == "text:variable-decls") {
             reader.skipCurrentElement();
-        }
-        else {
-	    reader.skipCurrentElement();
+        } else {
+            reader.skipCurrentElement();
         }
         DEBUG_READING("loop-end");
     }
@@ -188,7 +163,6 @@ void OdsReader::readElementOfficeSpreadsheet(KoXmlStreamReader &reader)
     backend->elementOfficeSpreadsheet(reader, m_context);
     DEBUGEND();
 }
-
 
 // ----------------------------------------------------------------
 //                             Other functions

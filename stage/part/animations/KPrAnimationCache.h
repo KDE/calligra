@@ -21,11 +21,11 @@
 #ifndef KPRANIMATIONCACHE_H
 #define KPRANIMATIONCACHE_H
 
+#include <QList>
 #include <QMap>
+#include <QSizeF>
 #include <QString>
 #include <QVariant>
-#include <QList>
-#include <QSizeF>
 
 class KoShape;
 class QTextBlockUserData;
@@ -171,16 +171,16 @@ public:
     qreal zoom() const;
     void setZoom(const qreal zoom);
     void clear();
+
 private:
-    QList<QMap<KoShape *, QMap<QString, QVariant> > > m_shapeValuesStack;
-    QList<QMap<QTextBlockUserData *, QMap<QString, QVariant> > > m_textBlockDataValuesStack;
-    QMap<KoShape *, QMap<QString, QVariant> > m_currentShapeValues;
-    QMap<QTextBlockUserData *, QMap<QString, QVariant> > m_currentTextBlockDataValues;
+    QList<QMap<KoShape *, QMap<QString, QVariant>>> m_shapeValuesStack;
+    QList<QMap<QTextBlockUserData *, QMap<QString, QVariant>>> m_textBlockDataValuesStack;
+    QMap<KoShape *, QMap<QString, QVariant>> m_currentShapeValues;
+    QMap<QTextBlockUserData *, QMap<QString, QVariant>> m_currentTextBlockDataValues;
     int m_step;
-    QMap<KoShape*, bool> m_next;
+    QMap<KoShape *, bool> m_next;
     QSizeF m_pageSize;
     qreal m_zoom;
 };
-
 
 #endif /* KPRANIMATIONCACHE_H */

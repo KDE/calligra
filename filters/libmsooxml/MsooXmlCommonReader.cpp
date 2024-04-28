@@ -10,21 +10,21 @@
  */
 
 #include "MsooXmlCommonReader.h"
-#include <KoXmlWriter.h>
 #include <KoGenStyles.h>
+#include <KoXmlWriter.h>
 
 #include <QMap>
 
 using namespace MSOOXML;
 
 MsooXmlCommonReader::MsooXmlCommonReader(KoOdfWriters *writers)
-        : MsooXmlReader(writers)
+    : MsooXmlReader(writers)
 {
     init();
 }
 
-MsooXmlCommonReader::MsooXmlCommonReader(QIODevice* io, KoOdfWriters *writers)
-        : MsooXmlReader(io, writers)
+MsooXmlCommonReader::MsooXmlCommonReader(QIODevice *io, KoOdfWriters *writers)
+    : MsooXmlReader(io, writers)
 {
     init();
 }
@@ -45,7 +45,7 @@ void MsooXmlCommonReader::init()
 }
 
 //! CASE #420
-bool MsooXmlCommonReader::isDefaultTocStyle(const QString& name) const
+bool MsooXmlCommonReader::isDefaultTocStyle(const QString &name) const
 {
     if (name == QLatin1String("TOCHeading"))
         return true;
@@ -69,13 +69,14 @@ void MsooXmlCommonReader::setupParagraphStyle()
     }
     body->addAttribute("text:style-name", currentParagraphStyleName);
     m_paragraphStyleNameWritten = true;
-//debugMsooXml << "currentParagraphStyleName:" << currentParagraphStyleName;
+    // debugMsooXml << "currentParagraphStyleName:" << currentParagraphStyleName;
 }
 
 class MediaTypeMap : public QMap<QByteArray, QByteArray>
 {
 public:
-    MediaTypeMap() {
+    MediaTypeMap()
+    {
         insert("bmp", "image/x-bmp");
         insert("gif", "image/gif");
         insert("jpg", "image/jpeg");
@@ -114,7 +115,7 @@ void MsooXmlCommonReader::popCurrentDrawStyle()
 
 Q_GLOBAL_STATIC(MediaTypeMap, g_mediaTypes)
 
-void MsooXmlCommonReader::addManifestEntryForFile(const QString& path)
+void MsooXmlCommonReader::addManifestEntryForFile(const QString &path)
 {
     if (path.isEmpty())
         return;

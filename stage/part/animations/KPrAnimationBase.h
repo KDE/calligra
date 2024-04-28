@@ -20,8 +20,8 @@
 #ifndef KPRANIMATIONBASE_H
 #define KPRANIMATIONBASE_H
 
-#include <QAbstractAnimation>
 #include "KPrAnimationData.h"
+#include <QAbstractAnimation>
 
 class KoXmlElement;
 class KoShapeLoadingContext;
@@ -33,14 +33,7 @@ class KPrShapeAnimation;
 class KPrAnimationBase : public QAbstractAnimation, KPrAnimationData
 {
 public:
-    enum FillType {
-        FillRemove,
-        FillFreeze,
-        FillHold,
-        FillTransition,
-        FillAuto,
-        FillDefault
-    };
+    enum FillType { FillRemove, FillFreeze, FillHold, FillTransition, FillAuto, FillDefault };
     explicit KPrAnimationBase(KPrShapeAnimation *shapeAnimation);
     ~KPrAnimationBase() override;
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
@@ -56,14 +49,14 @@ public:
     using KPrAnimationData::init;
     int animationDuration() const;
     virtual bool saveAttribute(KoPASavingContext &paContext) const;
+
 protected:
     void updateCurrentTime(int currentTime) override;
     virtual void next(int currentTime) = 0;
     void updateCache(const QString &id, const QVariant &value);
 
-
     KPrShapeAnimation *m_shapeAnimation; // we could also use the group() but that would mean we need to cast all the time
-    KPrAnimationCache * m_animationCache;
+    KPrAnimationCache *m_animationCache;
     int m_begin; // in milliseconds
     int m_duration; // in milliseconds
     FillType m_fill;

@@ -5,20 +5,20 @@
  */
 
 #include "KWRunAroundProperties.h"
-#include "KWFrameDialog.h"
 #include "KWDocument.h"
+#include "KWFrameDialog.h"
 #include "frames/KWFrame.h"
 #include "frames/KWTextFrameSet.h"
 
-#include <commands/KoShapeRunAroundCommand.h>
 #include <KoUnit.h>
+#include <commands/KoShapeRunAroundCommand.h>
 
 #include <kundo2command.h>
 
 #include <QButtonGroup>
 
 KWRunAroundProperties::KWRunAroundProperties(FrameConfigSharedState *state)
-        : m_state(state)
+    : m_state(state)
 {
     widget.setupUi(this);
 
@@ -223,6 +223,7 @@ void KWRunAroundProperties::save(KUndo2Command *macro)
     m_state->removeUser();
 }
 
-void KWRunAroundProperties::enoughRunAroundToggled(bool checked) {
+void KWRunAroundProperties::enoughRunAroundToggled(bool checked)
+{
     widget.threshold->setEnabled(checked);
 }

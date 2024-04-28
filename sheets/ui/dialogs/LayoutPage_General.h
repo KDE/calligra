@@ -25,7 +25,6 @@ class KComboBox;
 class KLineEdit;
 class QLabel;
 
-
 namespace Calligra
 {
 namespace Sheets
@@ -44,33 +43,32 @@ class LayoutPageGeneral : public QWidget
     Q_OBJECT
 
 public:
-    LayoutPageGeneral(QWidget * parent, StyleManager *manager);
+    LayoutPageGeneral(QWidget *parent, StyleManager *manager);
     ~LayoutPageGeneral() override;
 
-    bool apply(CustomStyle * style);
+    bool apply(CustomStyle *style);
     void loadFrom(const CustomStyle &style);
 
 Q_SIGNALS:
     void validDataChanged(bool ok);
 
 protected Q_SLOTS:
-    void parentChanged(const QString&);
-    void styleNameChanged(const QString&);
+    void parentChanged(const QString &);
+    void styleNameChanged(const QString &);
 
 private:
-    KComboBox     * m_parentBox;
-    KLineEdit     * m_nameEdit;
-    QLabel        * m_nameStatus;
-    QLabel        * m_parentStatus;
+    KComboBox *m_parentBox;
+    KLineEdit *m_nameEdit;
+    QLabel *m_nameStatus;
+    QLabel *m_parentStatus;
 
     QString m_name;
     QString m_parent;
     StyleManager *m_manager;
 
-    bool checkParent(const QString & parentName);
+    bool checkParent(const QString &parentName);
     bool checkName();
 };
-
 
 } // namespace Sheets
 } // namespace Calligra

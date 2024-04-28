@@ -10,9 +10,9 @@
 
 #include "komain_export.h"
 
-#include <kxmlguiwindow.h>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
+#include <kxmlguiwindow.h>
 
 class KoMainWindowPrivate;
 class KoDocument;
@@ -43,7 +43,6 @@ class KOMAIN_EXPORT KoMainWindow : public KXmlGuiWindow, public KoCanvasSupervis
 {
     Q_OBJECT
 public:
-
     /**
      *  Constructor.
      *
@@ -91,7 +90,7 @@ public:
      * The application should call this to show or hide a toolbar.
      * It also takes care of the corresponding action in the settings menu.
      */
-    void showToolbar(const char * tbName, bool shown);
+    void showToolbar(const char *tbName, bool shown);
 
     /**
      * @return TRUE if the toolbar @p tbName is visible
@@ -131,7 +130,7 @@ public:
     /**
      * Updates the window caption based on the document info and path.
      */
-    void updateCaption(const QString & caption, bool mod);
+    void updateCaption(const QString &caption, bool mod);
     void updateReloadFileAction(KoDocument *doc);
     void updateVersionsFileAction(KoDocument *doc);
 
@@ -143,21 +142,21 @@ public:
      * @param factory the factory used to create the dock widget if needed
      * @return the dock widget specified by @p factory (may be 0)
      */
-    QDockWidget* createDockWidget(KoDockFactoryBase* factory);
+    QDockWidget *createDockWidget(KoDockFactoryBase *factory);
 
     /// Return the list of dock widgets belonging to this main window.
-    QList<QDockWidget*> dockWidgets() const;
+    QList<QDockWidget *> dockWidgets() const;
 
-    QList<KoCanvasObserverBase*> canvasObservers() const override;
+    QList<KoCanvasObserverBase *> canvasObservers() const override;
 
     /**
      * @return the KoDockerManager which is assigned
      * WARNING: this could be 0, if no docker have been assigned yet. In that case create one
-      * and assign it.
+     * and assign it.
      * Note This should only be called by KoView
      * setDockerManager to assign it.
      */
-    KoDockerManager * dockerManager() const;
+    KoDockerManager *dockerManager() const;
 
 Q_SIGNALS:
     /**
@@ -235,8 +234,8 @@ public Q_SLOTS:
     void slotFilePrint();
     void slotFilePrintPreview();
 
-    KoPrintJob* exportToPdf(const QString &pdfFileName = QString());
-    KoPrintJob* exportToPdf(const KoPageLayout &pageLayout, const QString &pdfFileName = QString());
+    KoPrintJob *exportToPdf(const QString &pdfFileName = QString());
+    KoPrintJob *exportToPdf(const KoPageLayout &pageLayout, const QString &pdfFileName = QString());
 
     /**
      * Show a dialog with author and document information.
@@ -336,7 +335,6 @@ public Q_SLOTS:
     bool saveDocument(bool saveas = false, bool silent = false, int specialOutputFlag = 0);
 
 private:
-
     /**
      * This setting indicates who is calling chooseNewDocument.
      * Usually the app will want to
@@ -352,10 +350,10 @@ private:
     /**
      * Create a new empty document.
      */
-    KoPart* createPart() const;
+    KoPart *createPart() const;
 
-    void closeEvent(QCloseEvent * e) override;
-    void resizeEvent(QResizeEvent * e) override;
+    void closeEvent(QCloseEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
 
     /**
      * Ask user about saving changes to the document upon exit.
@@ -403,17 +401,15 @@ private Q_SLOTS:
      */
     virtual void newView();
 
-
-// ---------------------  PartManager
+    // ---------------------  PartManager
 private:
-
     friend class KoPart;
     /**
      * Removes a part from the manager (this does not delete the object) .
      *
      * Sets the active part to 0 if @p part is the activePart() .
      */
-    virtual void removePart( KoPart *part );
+    virtual void removePart(KoPart *part);
 
     /**
      * Sets the active part.
@@ -433,10 +429,9 @@ private Q_SLOTS:
     void slotWidgetDestroyed();
     void slotDocumentTitleModified(const QString &caption, bool mod);
 
-// ---------------------  PartManager
+    // ---------------------  PartManager
 
 private:
-
     void createMainwindowGUI();
 
     /**
@@ -450,11 +445,10 @@ private:
     void saveWindowSettings();
 
     // retrieve the current KoView
-    KoView* currentView() const;
+    KoView *currentView() const;
 
 private:
-
-    KoMainWindowPrivate * const d;
+    KoMainWindowPrivate *const d;
 };
 
 #endif

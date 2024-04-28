@@ -9,16 +9,15 @@
 
 #include <QBitArray>
 
+#include <KoColorSpaceConstants.h>
 #include <KoColorSpaceMaths.h>
 #include <KoCompositeOp.h>
-#include <KoColorSpaceConstants.h>
 
 #define NATIVE_MIN_VALUE KoColorSpaceMathsTraits<channels_type>::min
 #define NATIVE_MAX_VALUE KoColorSpaceMathsTraits<channels_type>::max
 #define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::unitValue
 #define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::zeroValue
 #define NATIVE_ZERO_VALUE KoColorSpaceMathsTraits<channels_type>::zeroValue
-
 
 /**
  * A template base class for all composite op that compose color
@@ -31,10 +30,11 @@ template<class _CSTraits, class _compositeOp, bool _alphaLocked>
 class KoCompositeOpAlphaBase : public KoCompositeOp
 {
     typedef typename _CSTraits::channels_type channels_type;
-public:
 
-    KoCompositeOpAlphaBase(const KoColorSpace * cs, const QString& id, const QString& description, const QString& category)
-            : KoCompositeOp(cs, id, description, category) {
+public:
+    KoCompositeOpAlphaBase(const KoColorSpace *cs, const QString &id, const QString &description, const QString &category)
+        : KoCompositeOp(cs, id, description, category)
+    {
     }
 
 public:
@@ -50,8 +50,8 @@ public:
                    qint32 rows,
                    qint32 cols,
                    quint8 U8_opacity,
-                   const QBitArray & channelFlags) const {
-
+                   const QBitArray &channelFlags) const
+    {
         qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
 
         channels_type opacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_opacity);
@@ -64,8 +64,8 @@ public:
             qint32 columns = cols;
 
             while (columns > 0) {
-
-                channels_type srcAlpha = _CSTraits::alpha_pos == -1 ? NATIVE_OPACITY_OPAQUE : _compositeOp::selectAlpha(srcN[_CSTraits::alpha_pos], dstN[_CSTraits::alpha_pos]);
+                channels_type srcAlpha =
+                    _CSTraits::alpha_pos == -1 ? NATIVE_OPACITY_OPAQUE : _compositeOp::selectAlpha(srcN[_CSTraits::alpha_pos], dstN[_CSTraits::alpha_pos]);
 
                 // apply the alphamask
                 if (mask != 0) {
@@ -76,8 +76,6 @@ public:
                 }
 
                 if (srcAlpha != NATIVE_OPACITY_TRANSPARENT) {
-
-
                     channels_type dstAlpha = _CSTraits::alpha_pos == -1 ? NATIVE_OPACITY_OPAQUE : dstN[_CSTraits::alpha_pos];
 
                     channels_type srcBlend;
@@ -107,7 +105,6 @@ public:
                         srcBlend = KoColorSpaceMaths<channels_type>::divide(srcAlpha, newAlpha);
                     }
                     _compositeOp::composeColorChannels(srcBlend, srcN, dstN, allChannelFlags, channelFlags);
-
                 }
                 columns--;
                 srcN += srcInc;
@@ -132,11 +129,10 @@ public:
                    qint32 rows,
                    qint32 cols,
                    quint8 U8_opacity,
-                   const QBitArray & channelFlags) const
+                   const QBitArray &channelFlags) const
     {
         bool allChannelFlags = channelFlags.isEmpty();
-        if(allChannelFlags)
-        {
+        if (allChannelFlags) {
             composite<alphaLocked, true>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
         } else {
             composite<alphaLocked, false>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
@@ -144,15 +140,15 @@ public:
     }
 
     void composite(quint8 *dstRowStart,
-                           qint32 dststride,
-                           const quint8 *srcRowStart,
-                           qint32 srcstride,
-                           const quint8 *maskRowStart,
-                           qint32 maskstride,
-                           qint32 rows,
-                           qint32 cols,
-                           quint8 U8_opacity,
-                           const QBitArray& channelFlags = QBitArray()) const override
+                   qint32 dststride,
+                   const quint8 *srcRowStart,
+                   qint32 srcstride,
+                   const quint8 *maskRowStart,
+                   qint32 maskstride,
+                   qint32 rows,
+                   qint32 cols,
+                   quint8 U8_opacity,
+                   const QBitArray &channelFlags = QBitArray()) const override
     {
         bool alphaLocked = false;
         if (!channelFlags.isEmpty()) {
@@ -160,8 +156,7 @@ public:
                 alphaLocked = true;
             }
         }
-        if(alphaLocked)
-        {
+        if (alphaLocked) {
             composite<true>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
         } else {
             composite<false>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);

@@ -6,37 +6,36 @@
 
 #include "CalloutShape.h"
 #include "CalloutContainerModel.h"
-#include "CalloutShapeFactory.h"
 #include "CalloutDebug.h"
+#include "CalloutShapeFactory.h"
 
 #include "EnhancedPathCommand.h"
 #include "EnhancedPathFormula.h"
 #include "EnhancedPathHandle.h"
 
-#include <KoXmlNS.h>
-#include <KoXmlWriter.h>
-#include <KoXmlReader.h>
-#include <KoShapeSavingContext.h>
-#include <KoUnit.h>
+#include <KoColorBackground.h>
 #include <KoOdfWorkaround.h>
 #include <KoPathPoint.h>
+#include <KoShapeSavingContext.h>
 #include <KoShapeStroke.h>
-#include <KoColorBackground.h>
+#include <KoUnit.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
 #include <KoShape_p.h>
 
 #include <QPainter>
 #include <QPainterPath>
 
-
 PathShape::PathShape(const QRect &viewBox)
     : EnhancedPathShape(viewBox)
 {
-    qInfo()<<Q_FUNC_INFO<<this;
+    qInfo() << Q_FUNC_INFO << this;
     setShapeId(CalloutPathShapeId);
     // FIXME: shapes needs more fine-grained control of interactions:
     // The tool just checks isEditable() (KoShape::ResizeAllowed|KoShape::MoveAllowed)
-    setAllowedInteractions(KoShape::SelectionAllowed);        
+    setAllowedInteractions(KoShape::SelectionAllowed);
 }
 
 // void PathShape::shapeChanged(ChangeType type, KoShape *shape)
@@ -61,26 +60,26 @@ KoProperties PathShape::parameters() const
     if (m_pathStretchPointY != -1) {
         params.setProperty("path-stretchpoint-y", m_pathStretchPointY);
     }
-    
+
     if (m_mirrorHorizontally) {
         params.setProperty("mirror-horizontal", "true");
     }
     if (m_mirrorVertically) {
         params.setProperty("mirror-vertical", "true");
     }
-    
+
     QString modifiers;
     foreach (qreal modifier, m_modifiers) {
         modifiers += QString::number(modifier) + ' ';
     }
     params.setProperty("modifiers", modifiers.trimmed());
-    
+
     if (m_textArea.count() >= 4) {
         params.setProperty("text-areas", m_textArea.join(" "));
     }
 
     QStringList path;
-    foreach (EnhancedPathCommand * c, m_commands) {
+    foreach (EnhancedPathCommand *c, m_commands) {
         path << c->toString();
     }
     params.setProperty("commands", path);
@@ -98,7 +97,7 @@ KoProperties PathShape::parameters() const
         QString pos = h->positionX() + ' ' + h->positionY();
         handle["draw:handle-position"] = pos;
     }
-    handles.append(QVariant(handle));    
+    handles.append(QVariant(handle));
     params.setProperty("handles", handles);
 
     return params;
@@ -114,8 +113,8 @@ void PathShape::setModifiers(const QList<qreal> &modifiers)
     }
 }
 
-
-void PathShape::setViewBox(const QRect &box) {
+void PathShape::setViewBox(const QRect &box)
+{
     m_viewBox = box;
 }
 
@@ -140,31 +139,31 @@ void PathShape::setParameters(const KoProperties &params)
     QVariant viewboxData;
     params.property("viewBox", viewboxData);
     setViewBox(viewboxData.toRect());
-//     qInfo()<<Q_FUNC_INFO<<"viewBox:"<<m_viewBox;
+    //     qInfo()<<Q_FUNC_INFO<<"viewBox:"<<m_viewBox;
 
     QList<qreal> modifiers = parseModifiers(params.stringProperty("modifiers"));
     Q_ASSERT(modifiers.count() >= 2);
     m_modifiers = modifiers;
-//     qInfo()<<Q_FUNC_INFO<<"modifiers:"<<m_modifiers;
-    
+    //     qInfo()<<Q_FUNC_INFO<<"modifiers:"<<m_modifiers;
+
     setStroke(new KoShapeStroke(1.0));
-    
+
     CalloutShapeFactory::ListType handles = params.property("handles").toList();
     foreach (const QVariant &v, handles) {
         addHandle(v.toMap());
-//         qInfo()<<Q_FUNC_INFO<<"handle:"<<v.toMap();
+        //         qInfo()<<Q_FUNC_INFO<<"handle:"<<v.toMap();
     }
     CalloutShapeFactory::ComplexType formulae = params.property("formulae").toMap();
     CalloutShapeFactory::ComplexType::const_iterator formula = formulae.constBegin();
     CalloutShapeFactory::ComplexType::const_iterator lastFormula = formulae.constEnd();
     for (; formula != lastFormula; ++formula) {
         addFormula(formula.key(), formula.value().toString());
-//         qInfo()<<Q_FUNC_INFO<<"formula:"<<formula.key()<<formula.value().toString();
+        //         qInfo()<<Q_FUNC_INFO<<"formula:"<<formula.key()<<formula.value().toString();
     }
     QStringList commands = params.property("commands").toStringList();
     foreach (const QString &cmd, commands) {
         addCommand(cmd);
-//         qInfo()<<Q_FUNC_INFO<<"command:"<<cmd;
+        //         qInfo()<<Q_FUNC_INFO<<"command:"<<cmd;
     }
     QVariant color;
     if (params.property("background", color)) {
@@ -180,11 +179,10 @@ KoTextShapeDataBase *PathShape::textData() const
     KoTextShapeDataBase *textData = 0;
     KoShape *ts = textShape();
     if (ts) {
-        textData = qobject_cast<KoTextShapeDataBase*>(ts->userData());
+        textData = qobject_cast<KoTextShapeDataBase *>(ts->userData());
     }
     return textData;
 }
-
 
 //-----------------------------------------------------------------
 CalloutShape::CalloutShape(const KoProperties *params)
@@ -228,12 +226,12 @@ void CalloutShape::saveOdf(KoShapeSavingContext &context) const
     m_path->saveEnhancedGeometry(context);
 }
 
-bool CalloutShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool CalloutShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    const KoXmlElement enhancedGeometry(KoXml::namedItemNS(element, KoXmlNS::draw, "enhanced-geometry" ) );
-    if (!enhancedGeometry.isNull() ) {
+    const KoXmlElement enhancedGeometry(KoXml::namedItemNS(element, KoXmlNS::draw, "enhanced-geometry"));
+    if (!enhancedGeometry.isNull()) {
         m_type = enhancedGeometry.attributeNS(KoXmlNS::draw, "type", "callout");
-        
+
         m_path->loadEnhancedGeometry(enhancedGeometry, context);
     }
 
@@ -250,7 +248,7 @@ KoTextShapeDataBase *CalloutShape::textData() const
 void CalloutShape::setTextArea(const QRectF &rect)
 {
     Q_UNUSED(rect);
-    //setPreferredTextRect(rect);
+    // setPreferredTextRect(rect);
 }
 
 QRectF CalloutShape::boundingRect() const
@@ -258,7 +256,6 @@ QRectF CalloutShape::boundingRect() const
     return KoShapeContainer::boundingRect() | m_path->boundingRect();
 }
 
-void CalloutShape::paintComponent(QPainter &/*painter*/, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*paintcontext*/)
+void CalloutShape::paintComponent(QPainter & /*painter*/, const KoViewConverter & /*converter*/, KoShapePaintingContext & /*paintcontext*/)
 {
 }
-

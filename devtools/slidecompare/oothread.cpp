@@ -4,30 +4,30 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 #include "oothread.h"
-#include <QDir>
-#include <QUrl>
-#include <QDebug>
 #include <QDateTime>
+#include <QDebug>
+#include <QDir>
 #include <QRandomGenerator>
+#include <QUrl>
 #include <cstdio>
 
 #define UNX
 #define LINUX
 #define CPPU_ENV gcc3
 #define OSL_DEBUG_LEVEL 0
-#include <cppuhelper/bootstrap.hxx>
-#include <osl/process.h>
-#include <osl/file.hxx>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
- 
+#include <com/sun/star/util/XModifiable.hpp>
+#include <cppuhelper/bootstrap.hxx>
+#include <osl/file.hxx>
+#include <osl/process.h>
+
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::container;
 using namespace com::sun::star::frame;
@@ -38,52 +38,56 @@ using namespace com::sun::star::util;
 using namespace cppu;
 using namespace rtl;
 
-class OoThread::OOConnection {
+class OoThread::OOConnection
+{
 public:
     Reference<XComponentContext> rComponentContext;
     Reference<XMultiComponentFactory> xServiceManager;
     Reference<XComponentLoader> xComponentLoader;
-    OOConnection() {
+    OOConnection()
+    {
         try {
             rComponentContext = Reference<XComponentContext>(bootstrap());
-            xServiceManager = Reference<XMultiComponentFactory>(
-                rComponentContext->getServiceManager());
-            OUString d(
-                    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"));
-            xComponentLoader = Reference<XComponentLoader>(
-                xServiceManager->createInstanceWithContext(d,
-                     rComponentContext), UNO_QUERY_THROW);
-        } catch(Exception &e) {
+            xServiceManager = Reference<XMultiComponentFactory>(rComponentContext->getServiceManager());
+            OUString d(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"));
+            xComponentLoader = Reference<XComponentLoader>(xServiceManager->createInstanceWithContext(d, rComponentContext), UNO_QUERY_THROW);
+        } catch (Exception &e) {
             OString o = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
             qDebug() << "Error in OOConnection(): " << o;
-        } catch(...) {
+        } catch (...) {
             qDebug() << "Unknown error in OOConnection().";
         }
     }
-    ~OOConnection() {
+    ~OOConnection()
+    {
         try {
             if (xComponentLoader.get()) {
                 Reference<XDesktop>::query(xComponentLoader)->terminate();
             }
-        } catch(Exception &e) {
+        } catch (Exception &e) {
             OString o = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
             qDebug() << "Error in ~OOConnection(): " << o;
-        } catch(...) {
+        } catch (...) {
             qDebug() << "Unknown error in ~OOConnection().";
         }
     }
 };
- 
-OoThread::OoThread(QObject* o) :QThread(o), oo(0) {
+
+OoThread::OoThread(QObject *o)
+    : QThread(o)
+    , oo(0)
+{
     qsrand(QDateTime::currentDateTime().toSecsSinceEpoch());
     running = true;
     start();
 }
-OoThread::~OoThread() {
+OoThread::~OoThread()
+{
     stop();
     wait();
 }
-void OoThread::run() {
+void OoThread::run()
+{
     oo = new OOConnection();
     running = oo->xComponentLoader.get() != 0;
     while (running) {
@@ -113,32 +117,35 @@ void OoThread::run() {
     }
     delete oo;
 }
-void OoThread::stop() {
+void OoThread::stop()
+{
     running = false;
     moreWork.wakeAll();
 }
-namespace {
-    QString tmpname() {
-        return QString::number(QRandomGenerator::global()->generate());
-    }
+namespace
+{
+QString tmpname()
+{
+    return QString::number(QRandomGenerator::global()->generate());
 }
-QString
-OoThread::toOdp(const QString& path) {
+}
+QString OoThread::toOdp(const QString &path)
+{
     QDir dir(QDir::temp().filePath("slidecompare-" + QDir::home().dirName()));
     dir.mkpath(dir.absolutePath());
     Conversion c;
     c.from = path;
     do {
-        c.to = dir.absoluteFilePath(tmpname()+".odp");
-    } while(dir.exists(c.to));
+        c.to = dir.absoluteFilePath(tmpname() + ".odp");
+    } while (dir.exists(c.to));
     mutex.lock();
     nextToOdp = c;
     moreWork.wakeAll();
     mutex.unlock();
     return c.to;
 }
-QString
-OoThread::toPng(const QString& path, int pngwidth) {
+QString OoThread::toPng(const QString &path, int pngwidth)
+{
     QDir dir(QDir::temp().filePath("slidecompare-" + QDir::home().dirName()));
     dir.mkpath(dir.absolutePath());
     Conversion c;
@@ -146,7 +153,7 @@ OoThread::toPng(const QString& path, int pngwidth) {
     c.width = pngwidth;
     do {
         c.to = dir.absoluteFilePath(tmpname() + '/');
-    } while(dir.exists(c.to));
+    } while (dir.exists(c.to));
     dir.mkdir(c.to);
     mutex.lock();
     nextToPng = c;
@@ -154,17 +161,16 @@ OoThread::toPng(const QString& path, int pngwidth) {
     mutex.unlock();
     return c.to;
 }
-bool
-OoThread::waitingOrBusy(const QString& path) {
+bool OoThread::waitingOrBusy(const QString &path)
+{
     bool b;
     mutex.lock();
-    b = nextToOdp.to == path || nextToPng.to == path
-        || currentToOdp.to == path || currentToPng.to == path;
+    b = nextToOdp.to == path || nextToPng.to == path || currentToOdp.to == path || currentToPng.to == path;
     mutex.unlock();
     return b;
 }
-void
-OoThread::convertToOdp(const Conversion& c) {
+void OoThread::convertToOdp(const Conversion &c)
+{
     QByteArray fromUrl(QUrl::fromLocalFile(c.from).toEncoded());
     QByteArray toUrl(QUrl::fromLocalFile(c.to).toEncoded());
 
@@ -174,11 +180,8 @@ OoThread::convertToOdp(const Conversion& c) {
     props[0].Name = OUString::createFromAscii("Hidden");
     props[0].Value = Any(true);
     try {
-        Reference<XComponent> xComponent
-                = oo->xComponentLoader->loadComponentFromURL(
-                    OUString::createFromAscii(fromUrl.constData()),
-                    OUString::createFromAscii("_default"),
-                    0, props);
+        Reference<XComponent> xComponent =
+            oo->xComponentLoader->loadComponentFromURL(OUString::createFromAscii(fromUrl.constData()), OUString::createFromAscii("_default"), 0, props);
 
         Sequence<PropertyValue> htmlProps(2);
         htmlProps[0].Name = OUString::createFromAscii("Overwrite");
@@ -195,32 +198,26 @@ OoThread::convertToOdp(const Conversion& c) {
         Reference<XModifiable>::query(xComponent)->setModified(false);
         Reference<XCloseable>::query(xComponent)->close(true);
         Reference<XComponent>::query(xComponent)->dispose();
-    } catch(Exception &e) {
+    } catch (Exception &e) {
         OString o = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
         qDebug() << "Error in toOdp: " << o;
-    } catch(...) {
+    } catch (...) {
         qDebug() << "Unknown error in convertToPng().";
     }
 }
-void
-OoThread::convertToPng(const Conversion& c) {
-    QByteArray fromUrl(QUrl::fromLocalFile(
-            QFileInfo(c.from).absoluteFilePath()).toEncoded());
-    QByteArray toUrl(QUrl::fromLocalFile(
-            QFileInfo(c.to).absoluteFilePath()+"/index.html").toEncoded());
+void OoThread::convertToPng(const Conversion &c)
+{
+    QByteArray fromUrl(QUrl::fromLocalFile(QFileInfo(c.from).absoluteFilePath()).toEncoded());
+    QByteArray toUrl(QUrl::fromLocalFile(QFileInfo(c.to).absoluteFilePath() + "/index.html").toEncoded());
 
-    qDebug() << "converting from '" << fromUrl << "' to '" << toUrl << " "
-            << c.width;
+    qDebug() << "converting from '" << fromUrl << "' to '" << toUrl << " " << c.width;
 
     Sequence<PropertyValue> props(1);
     props[0].Name = OUString::createFromAscii("Hidden");
     props[0].Value = Any(true);
     try {
-        Reference<XComponent> xComponent
-                = oo->xComponentLoader->loadComponentFromURL(
-                    OUString::createFromAscii(fromUrl.constData()),
-                    OUString::createFromAscii("_default"),
-                    0, props);
+        Reference<XComponent> xComponent =
+            oo->xComponentLoader->loadComponentFromURL(OUString::createFromAscii(fromUrl.constData()), OUString::createFromAscii("_default"), 0, props);
 
         Sequence<PropertyValue> pngProps(3);
         pngProps[0].Name = OUString::createFromAscii("Format");
@@ -246,10 +243,10 @@ OoThread::convertToPng(const Conversion& c) {
         Reference<XModifiable>::query(xComponent)->setModified(false);
         Reference<XCloseable>::query(xComponent)->close(true);
         Reference<XComponent>::query(xComponent)->dispose();
-    } catch(Exception &e) {
+    } catch (Exception &e) {
         OString o = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
         qDebug() << "Error in toPng: " << o;
-    } catch(...) {
+    } catch (...) {
         qDebug() << "Unknown error in convertToPng().";
     }
 }

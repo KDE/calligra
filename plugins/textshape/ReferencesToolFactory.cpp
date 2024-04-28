@@ -14,7 +14,7 @@
 #include <KLocalizedString>
 
 ReferencesToolFactory::ReferencesToolFactory()
-        : KoToolFactoryBase("ReferencesToolFactory_ID")
+    : KoToolFactoryBase("ReferencesToolFactory_ID")
 {
     setToolTip(i18n("References"));
     setToolType("calligrawords,calligraauthor");
@@ -27,7 +27,7 @@ ReferencesToolFactory::~ReferencesToolFactory()
 {
 }
 
-KoToolBase * ReferencesToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *ReferencesToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new ReferencesTool(canvas);
 }

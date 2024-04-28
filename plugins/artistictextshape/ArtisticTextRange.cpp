@@ -9,8 +9,12 @@
 #include <QDebug>
 
 ArtisticTextRange::ArtisticTextRange(const QString &text, const QFont &font)
-    : m_text(text), m_font(font), m_letterSpacing(0.0), m_wordSpacing(0.0)
-    , m_baselineShift(None), m_baselineShiftValue(0.0)
+    : m_text(text)
+    , m_font(font)
+    , m_letterSpacing(0.0)
+    , m_wordSpacing(0.0)
+    , m_baselineShift(None)
+    , m_baselineShiftValue(0.0)
 {
 }
 
@@ -38,9 +42,9 @@ void ArtisticTextRange::appendText(const QString &text)
     m_text += text;
 }
 
-void ArtisticTextRange::setFont( const QFont & font )
+void ArtisticTextRange::setFont(const QFont &font)
 {
-    if( m_font == font )
+    if (m_font == font)
         return;
 
     m_font = font;
@@ -68,7 +72,7 @@ ArtisticTextRange ArtisticTextRange::extract(int from, int count)
     extracted.setBaselineShift(m_baselineShift, m_baselineShiftValue);
 
     // remove text
-    m_text.remove(from, count < 0 ? m_text.length()-from : count);
+    m_text.remove(from, count < 0 ? m_text.length() - from : count);
     // remove character transformations
     m_xOffsets = m_xOffsets.mid(0, from);
     m_yOffsets = m_yOffsets.mid(0, from);
@@ -199,7 +203,7 @@ void ArtisticTextRange::printDebug() const
 {
     qDebug() << "text:" << m_text;
     qDebug() << "font:" << m_font;
-    switch(m_xOffsetType) {
+    switch (m_xOffsetType) {
     case AbsoluteOffset:
         qDebug() << "x:" << m_xOffsets;
         break;
@@ -207,7 +211,7 @@ void ArtisticTextRange::printDebug() const
         qDebug() << "dx:" << m_xOffsets;
         break;
     }
-    switch(m_yOffsetType) {
+    switch (m_yOffsetType) {
     case AbsoluteOffset:
         qDebug() << "y:" << m_yOffsets;
         break;

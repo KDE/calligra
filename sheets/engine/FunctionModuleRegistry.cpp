@@ -4,9 +4,9 @@
 
 #include "FunctionModuleRegistry.h"
 
-#include "SheetsDebug.h"
 #include "Function.h"
 #include "FunctionRepository.h"
+#include "SheetsDebug.h"
 
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -37,22 +37,22 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN FunctionModuleRegistry::Private
 {
 public:
-    void registerFunctionModule(FunctionModule* module);
-    void removeFunctionModule(FunctionModule* module);
+    void registerFunctionModule(FunctionModule *module);
+    void removeFunctionModule(FunctionModule *module);
 
 public:
     bool repositoryInitialized;
 };
 
-void FunctionModuleRegistry::Private::registerFunctionModule(FunctionModule* module)
+void FunctionModuleRegistry::Private::registerFunctionModule(FunctionModule *module)
 {
-    const QList<QSharedPointer<Function> > functions = module->functions();
+    const QList<QSharedPointer<Function>> functions = module->functions();
     for (int i = 0; i < functions.count(); ++i) {
         FunctionRepository::self()->add(functions[i]);
     }
     Q_ASSERT(!module->descriptionFileName().isEmpty());
-    const QString fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                    QStringLiteral("calligrasheets/functions/")+module->descriptionFileName());
+    const QString fileName =
+        QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("calligrasheets/functions/") + module->descriptionFileName());
     if (fileName.isEmpty()) {
         debugSheetsFormula << module->descriptionFileName() << "not found.";
         return;
@@ -60,17 +60,16 @@ void FunctionModuleRegistry::Private::registerFunctionModule(FunctionModule* mod
     FunctionRepository::self()->loadFunctionDescriptions(fileName);
 }
 
-void FunctionModuleRegistry::Private::removeFunctionModule(FunctionModule* module)
+void FunctionModuleRegistry::Private::removeFunctionModule(FunctionModule *module)
 {
-    const QList<QSharedPointer<Function> > functions = module->functions();
+    const QList<QSharedPointer<Function>> functions = module->functions();
     for (int i = 0; i < functions.count(); ++i) {
         FunctionRepository::self()->remove(functions[i]);
     }
 }
 
-
 FunctionModuleRegistry::FunctionModuleRegistry()
-        : d(new Private)
+    : d(new Private)
 {
     d->repositoryInitialized = false;
 }
@@ -84,7 +83,7 @@ FunctionModuleRegistry::~FunctionModuleRegistry()
     delete d;
 }
 
-FunctionModuleRegistry* FunctionModuleRegistry::instance()
+FunctionModuleRegistry *FunctionModuleRegistry::instance()
 {
     return s_instance;
 }
@@ -97,7 +96,6 @@ void FunctionModuleRegistry::loadFunctionModules()
 
     const KConfigGroup pluginsConfigGroup = KSharedConfig::openConfig()->group("Plugins");
     for (KPluginMetaData metaData : metaData) {
-
         int version = metaData.rawData().value("X-CalligraSheets-InterfaceVersion").toInt();
         if (version != 0) {
             debugSheetsFormula << "Skipping" << metaData.fileName() << ", because interface version is" << version;
@@ -111,12 +109,11 @@ void FunctionModuleRegistry::loadFunctionModules()
 
         const QString pluginId = metaData.pluginId();
         const QString pluginConfigEnableKey = pluginId + QLatin1String("Enabled");
-        const bool isPluginEnabled = pluginsConfigGroup.hasKey(pluginConfigEnableKey) ?
-            pluginsConfigGroup.readEntry(pluginConfigEnableKey, true) :
-            metaData.isEnabledByDefault();
+        const bool isPluginEnabled =
+            pluginsConfigGroup.hasKey(pluginConfigEnableKey) ? pluginsConfigGroup.readEntry(pluginConfigEnableKey, true) : metaData.isEnabledByDefault();
 
         if (isPluginEnabled) {
-            if(contains(pluginId)) {
+            if (contains(pluginId)) {
                 continue;
             }
             // Plugin enabled, but not registered. Add it.
@@ -138,7 +135,7 @@ void FunctionModuleRegistry::loadFunctionModules()
                 continue;
             }
             // Plugin disabled, but registered. Remove it.
-            FunctionModule* const module = get(pluginId);
+            FunctionModule *const module = get(pluginId);
             // Delay the function registration until the user needs one.
             if (d->repositoryInitialized) {
                 d->removeFunctionModule(module);
@@ -162,7 +159,7 @@ void FunctionModuleRegistry::loadFunctionModules()
     }
 
 #else
-    QList<FunctionModule*> modules;
+    QList<FunctionModule *> modules;
     QObject *parent = 0;
 
     modules << new BitOpsModule(parent);
@@ -179,7 +176,7 @@ void FunctionModuleRegistry::loadFunctionModules()
     modules << new TextModule(parent);
     modules << new TrigonometryModule(parent);
 
-    Q_FOREACH(FunctionModule* module, modules) {
+    Q_FOREACH (FunctionModule *module, modules) {
         add(module->id(), module);
         d->registerFunctionModule(module);
     }
@@ -189,7 +186,7 @@ void FunctionModuleRegistry::loadFunctionModules()
 void FunctionModuleRegistry::registerFunctions()
 {
     d->repositoryInitialized = true;
-    const QList<FunctionModule*> modules = values();
+    const QList<FunctionModule *> modules = values();
     for (int i = 0; i < modules.count(); ++i) {
         d->registerFunctionModule(modules[i]);
     }

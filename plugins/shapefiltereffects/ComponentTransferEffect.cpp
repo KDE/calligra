@@ -6,16 +6,16 @@
 
 #include "ComponentTransferEffect.h"
 #include "ColorChannelConversion.h"
-#include <KoFilterEffectRenderContext.h>
-#include <KoXmlWriter.h>
-#include <KoXmlReader.h>
 #include <KLocalizedString>
-#include <QRect>
+#include <KoFilterEffectRenderContext.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 #include <QImage>
+#include <QRect>
 #include <math.h>
 
 ComponentTransferEffect::ComponentTransferEffect()
-        : KoFilterEffect(ComponentTransferEffectId, i18n("Component transfer"))
+    : KoFilterEffect(ComponentTransferEffectId, i18n("Component transfer"))
 {
 }
 
@@ -93,8 +93,8 @@ QImage ComponentTransferEffect::processImage(const QImage &image, const KoFilter
 {
     QImage result = image;
 
-    const QRgb *src = (const QRgb*)image.constBits();
-    QRgb *dst = (QRgb*)result.bits();
+    const QRgb *src = (const QRgb *)image.constBits();
+    QRgb *dst = (QRgb *)result.bits();
     int w = result.width();
 
     qreal sa, sr, sg, sb;
@@ -157,13 +157,13 @@ qreal ComponentTransferEffect::transferChannel(Channel channel, qreal value) con
         qreal k2 = qMin(k1 + 1, valueCount);
         qreal vk1 = d.tableValues[k1];
         qreal vk2 = d.tableValues[k2];
-        return vk1 + (value - static_cast<qreal>(k1) / valueCount)*valueCount *(vk2 - vk1);
+        return vk1 + (value - static_cast<qreal>(k1) / valueCount) * valueCount * (vk2 - vk1);
     }
     case Discrete: {
         qreal valueCount = d.tableValues.count() - 1;
         if (valueCount < 0.0)
             return value;
-        return d.tableValues[static_cast<int>(value*valueCount)];
+        return d.tableValues[static_cast<int>(value * valueCount)];
     }
     case Linear:
         return d.slope * value + d.intercept;
@@ -213,7 +213,7 @@ void ComponentTransferEffect::loadChannel(Channel channel, const KoXmlElement &e
         d.function = typeStr == "table" ? Table : Discrete;
         QString valueStr = element.attribute("tableValues");
         QStringList values = valueStr.split(QRegularExpression("(\\s+|,)"), Qt::SkipEmptyParts);
-        foreach(const QString &v, values) {
+        foreach (const QString &v, values) {
             d.tableValues.append(v.toDouble());
         }
     } else if (typeStr == "linear") {
@@ -297,7 +297,7 @@ void ComponentTransferEffect::saveChannel(Channel channel, KoXmlWriter &writer)
         writer.addAttribute("type", function == Table ? "table" : "discrete");
         if (currentData.tableValues.count()) {
             QString tableStr;
-            foreach(qreal v, currentData.tableValues) {
+            foreach (qreal v, currentData.tableValues) {
                 tableStr += QString("%1 ").arg(v);
             }
             writer.addAttribute("tableValues", tableStr.trimmed());

@@ -5,13 +5,12 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef KOOASISSETTINGS_H
 #define KOOASISSETTINGS_H
 
-#include <QDomDocument>
-#include "koodf_export.h"
 #include "KoXmlReader.h"
+#include "koodf_export.h"
+#include <QDomDocument>
 
 /**
  * @brief Parse settings.xml file.
@@ -85,10 +84,15 @@ public:
         friend class KoOasisSettings;
         friend class IndexedMap;
         friend class NamedMap;
-        Items(const KoXmlElement& elem, const KoOasisSettings* settings)
-                : m_element(elem), m_settings(settings) {}
+        Items(const KoXmlElement &elem, const KoOasisSettings *settings)
+            : m_element(elem)
+            , m_settings(settings)
+        {
+        }
+
     public:
-        bool isNull() const {
+        bool isNull() const
+        {
             return m_element.isNull();
         }
 
@@ -114,6 +118,7 @@ public:
         bool parseConfigItemBool(const QString &configName, bool defaultValue = false) const;
         short parseConfigItemShort(const QString &configName, short defaultValue = 0) const;
         long parseConfigItemLong(const QString &configName, long defaultValue = 0) const;
+
     private:
         /// @internal
         QString findConfigItem(const QString &item, bool *ok) const;
@@ -121,19 +126,24 @@ public:
         QString findConfigItem(const KoXmlElement &element, const QString &item, bool *ok) const;
 
         KoXmlElement m_element;
-        const KoOasisSettings* m_settings;
+        const KoOasisSettings *m_settings;
     };
 
     /// Internal base class for IndexedMap and NamedMap
     class Map
     {
     public:
-        bool isNull() const {
+        bool isNull() const
+        {
             return m_element.isNull();
         }
+
     protected:
         Map(const KoXmlElement &elem, const KoOasisSettings *settings)
-                : m_element(elem), m_settings(settings) {}
+            : m_element(elem)
+            , m_settings(settings)
+        {
+        }
         const KoXmlElement m_element;
         const KoOasisSettings *m_settings;
     };
@@ -141,9 +151,12 @@ public:
     class KOODF_EXPORT IndexedMap : public Map
     {
         friend class Items;
-        IndexedMap(const KoXmlElement& elem, const KoOasisSettings* settings)
-                : Map(elem, settings) {}
-      public:
+        IndexedMap(const KoXmlElement &elem, const KoOasisSettings *settings)
+            : Map(elem, settings)
+        {
+        }
+
+    public:
         /// Returns an entry in an indexed map
         Items entry(int entryIndex) const;
     };
@@ -152,10 +165,13 @@ public:
     {
         friend class Items;
         NamedMap(const KoXmlElement &elem, const KoOasisSettings *settings)
-                : Map(elem, settings) {}
-      public:
+            : Map(elem, settings)
+        {
+        }
+
+    public:
         /// Returns an entry in a named map
-        Items entry(const QString& entryName) const;
+        Items entry(const QString &entryName) const;
     };
 
 private:
@@ -166,7 +182,7 @@ private:
     const QString m_configNsUri;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

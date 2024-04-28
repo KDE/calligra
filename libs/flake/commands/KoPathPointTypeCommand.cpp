@@ -7,16 +7,13 @@
 
 #include "KoPathPointTypeCommand.h"
 
-#include <KoPathSegment.h>
 #include <KLocalizedString>
+#include <KoPathSegment.h>
 #include <math.h>
 
-KoPathPointTypeCommand::KoPathPointTypeCommand(
-    const QList<KoPathPointData> & pointDataList,
-    PointType pointType,
-    KUndo2Command *parent)
-        : KoPathBaseCommand(parent)
-        , m_pointType(pointType)
+KoPathPointTypeCommand::KoPathPointTypeCommand(const QList<KoPathPointData> &pointDataList, PointType pointType, KUndo2Command *parent)
+    : KoPathBaseCommand(parent)
+    , m_pointType(pointType)
 {
     QList<KoPathPointData>::const_iterator it(pointDataList.begin());
     for (; it != pointDataList.end(); ++it) {
@@ -60,7 +57,7 @@ void KoPathPointTypeCommand::redo()
             KoPathPointIndex pointIndex = it->m_pointData.pointIndex;
             KoPathPointIndex prevIndex;
             KoPathPointIndex nextIndex;
-            KoPathShape * path = it->m_pointData.pathShape;
+            KoPathShape *path = it->m_pointData.pathShape;
             // get previous path node
             if (pointIndex.second > 0)
                 prevIndex = KoPathPointIndex(pointIndex.first, pointIndex.second - 1);
@@ -69,14 +66,13 @@ void KoPathPointTypeCommand::redo()
             // get next node
             if (pointIndex.second < path->subpathPointCount(pointIndex.first) - 1)
                 nextIndex = KoPathPointIndex(pointIndex.first, pointIndex.second + 1);
-            else if (pointIndex.second < path->subpathPointCount(pointIndex.first) - 1
-                     && path->isClosedSubpath(pointIndex.first))
+            else if (pointIndex.second < path->subpathPointCount(pointIndex.first) - 1 && path->isClosedSubpath(pointIndex.first))
                 nextIndex = KoPathPointIndex(pointIndex.first, 0);
 
-            KoPathPoint * prevPoint = path->pointByIndex(prevIndex);
-            KoPathPoint * nextPoint = path->pointByIndex(nextIndex);
+            KoPathPoint *prevPoint = path->pointByIndex(prevIndex);
+            KoPathPoint *nextPoint = path->pointByIndex(nextIndex);
 
-            if (prevPoint && ! point->activeControlPoint1() && appendPointData(KoPathPointData(path, prevIndex))) {
+            if (prevPoint && !point->activeControlPoint1() && appendPointData(KoPathPointData(path, prevIndex))) {
                 KoPathSegment cubic = KoPathSegment(prevPoint, point).toCubic();
                 if (prevPoint->activeControlPoint2()) {
                     prevPoint->setControlPoint2(cubic.first()->controlPoint2());
@@ -84,7 +80,7 @@ void KoPathPointTypeCommand::redo()
                 } else
                     point->setControlPoint1(cubic.second()->controlPoint1());
             }
-            if (nextPoint && ! point->activeControlPoint2() && appendPointData(KoPathPointData(path, nextIndex))) {
+            if (nextPoint && !point->activeControlPoint2() && appendPointData(KoPathPointData(path, nextIndex))) {
                 KoPathSegment cubic = KoPathSegment(point, nextPoint).toCubic();
                 if (nextPoint->activeControlPoint1()) {
                     point->setControlPoint2(cubic.first()->controlPoint2());
@@ -112,8 +108,7 @@ void KoPathPointTypeCommand::redo()
             // the new distance of the control points is the average distance to the node point
             point->setControlPoint1(point->point() + 0.5 * averageLength * (directionC1 - directionC2));
             point->setControlPoint2(point->point() + 0.5 * averageLength * (directionC2 - directionC1));
-        }
-        break;
+        } break;
         case Smooth: {
             properties &= ~KoPathPoint::IsSymmetric;
             properties |= KoPathPoint::IsSmooth;
@@ -130,8 +125,7 @@ void KoPathPointTypeCommand::redo()
             // the new distance of the control points is the average distance to the node point
             point->setControlPoint1(point->point() + 0.5 * dirLengthC1 * (directionC1 - directionC2));
             point->setControlPoint2(point->point() + 0.5 * dirLengthC2 * (directionC2 - directionC1));
-        }
-        break;
+        } break;
         case Corner:
         default:
             properties &= ~KoPathPoint::IsSymmetric;
@@ -194,7 +188,7 @@ void KoPathPointTypeCommand::undoChanges(const QList<PointData> &data)
 bool KoPathPointTypeCommand::appendPointData(KoPathPointData data)
 {
     KoPathPoint *point = data.pathShape->pointByIndex(data.pointIndex);
-    if (! point)
+    if (!point)
         return false;
 
     PointData pointData(data);

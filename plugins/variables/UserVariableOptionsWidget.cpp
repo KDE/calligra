@@ -11,19 +11,19 @@
 
 #include <KoVariableManager.h>
 
+#include <QComboBox>
 #include <QGridLayout>
 #include <QHBoxLayout>
+#include <QInputDialog>
 #include <QLabel>
-#include <QComboBox>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QValidator>
-#include <QInputDialog>
 
 #include <KLocalizedString>
 #include <KMessageBox>
 
-UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable, QWidget *parent)
+UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable *userVariable, QWidget *parent)
     : QWidget(parent)
     , userVariable(userVariable)
 {
@@ -39,8 +39,7 @@ UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable,
     nameEdit->setObjectName(QLatin1String("nameEdit"));
     nameEdit->setMinimumContentsLength(10);
     nameLabel->setBuddy(nameEdit);
-    connect(nameEdit, &QComboBox::currentIndexChanged,
-            this, &UserVariableOptionsWidget::nameChanged);
+    connect(nameEdit, &QComboBox::currentIndexChanged, this, &UserVariableOptionsWidget::nameChanged);
     nameLayout->addWidget(nameEdit);
 
     newButton = new QPushButton(i18n("New"), this);
@@ -120,7 +119,7 @@ void UserVariableOptionsWidget::typeChanged()
     QString value = variableManager()->value(userVariable->name());
     QString type = typeEdit->itemData(typeEdit->currentIndex()).toString();
     variableManager()->setValue(userVariable->name(), value, type);
-    //userVariable->valueChanged();
+    // userVariable->valueChanged();
 }
 
 void UserVariableOptionsWidget::valueChanged()
@@ -128,7 +127,7 @@ void UserVariableOptionsWidget::valueChanged()
     QString value = valueEdit->text();
     QString type = variableManager()->userType(userVariable->name());
     variableManager()->setValue(userVariable->name(), value, type);
-    //userVariable->valueChanged();
+    // userVariable->valueChanged();
 }
 
 void UserVariableOptionsWidget::newClicked()
@@ -136,17 +135,21 @@ void UserVariableOptionsWidget::newClicked()
     class Validator : public QValidator
     {
     public:
-        Validator(KoVariableManager *variableManager) : m_variableManager(variableManager) {}
+        Validator(KoVariableManager *variableManager)
+            : m_variableManager(variableManager)
+        {
+        }
         State validate(QString &input, int &) const override
         {
             QString s = input.trimmed();
             return s.isEmpty() || m_variableManager->userVariables().contains(s) ? Intermediate : Acceptable;
         }
+
     private:
         KoVariableManager *m_variableManager;
     };
     Validator validator(variableManager());
-    QString name = QInputDialog::getText(this, i18n("New Variable"), i18n("Name for new variable:")/*QT5TODO:, &validator*/).trimmed();
+    QString name = QInputDialog::getText(this, i18n("New Variable"), i18n("Name for new variable:") /*QT5TODO:, &validator*/).trimmed();
     if (name.isEmpty()) {
         return;
     }
@@ -162,12 +165,13 @@ void UserVariableOptionsWidget::deleteClicked()
         return;
     }
     if (KMessageBox::questionTwoActions(this,
-            i18n("Delete variable <b>%1</b>?", userVariable->name()),
-            i18n("Delete Variable"),
-            KStandardGuiItem::del(),
-            KStandardGuiItem::cancel(),
-            QString(),
-            KMessageBox::Dangerous | KMessageBox::Notify) != KMessageBox::PrimaryAction) {
+                                        i18n("Delete variable <b>%1</b>?", userVariable->name()),
+                                        i18n("Delete Variable"),
+                                        KStandardGuiItem::del(),
+                                        KStandardGuiItem::cancel(),
+                                        QString(),
+                                        KMessageBox::Dangerous | KMessageBox::Notify)
+        != KMessageBox::PrimaryAction) {
         return;
     }
     variableManager()->remove(userVariable->name());
@@ -188,4 +192,3 @@ void UserVariableOptionsWidget::updateNameEdit()
     nameEdit->setCurrentIndex(qMax(0, names.indexOf(userVariable->name())));
     nameChanged();
 }
-

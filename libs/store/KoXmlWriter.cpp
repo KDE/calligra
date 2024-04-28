@@ -7,9 +7,9 @@
 
 #include "KoXmlWriter.h"
 
-#include <StoreDebug.h>
 #include <QByteArray>
 #include <QStack>
+#include <StoreDebug.h>
 #include <float.h>
 
 static const int s_indentBufferLength = 100;
@@ -18,31 +18,36 @@ static const int s_escapeBufferLen = 10000;
 class Q_DECL_HIDDEN KoXmlWriter::Private
 {
 public:
-    Private(QIODevice* dev_, int indentLevel = 0) : dev(dev_), baseIndentLevel(indentLevel) {}
-    ~Private() {
+    Private(QIODevice *dev_, int indentLevel = 0)
+        : dev(dev_)
+        , baseIndentLevel(indentLevel)
+    {
+    }
+    ~Private()
+    {
         delete[] indentBuffer;
         delete[] escapeBuffer;
-        //TODO: look at if we must delete "dev". For me we must delete it otherwise we will leak it
+        // TODO: look at if we must delete "dev". For me we must delete it otherwise we will leak it
     }
 
-    QIODevice* dev;
+    QIODevice *dev;
     QStack<Tag> tags;
     int baseIndentLevel;
 
-    char* indentBuffer; // maybe make it static, but then it needs a K_GLOBAL_STATIC
+    char *indentBuffer; // maybe make it static, but then it needs a K_GLOBAL_STATIC
     // and would eat 1K all the time... Maybe refcount it :)
-    char* escapeBuffer; // can't really be static if we want to be thread-safe
+    char *escapeBuffer; // can't really be static if we want to be thread-safe
 };
 
-KoXmlWriter::KoXmlWriter(QIODevice* dev, int indentLevel)
-        : d(new Private(dev, indentLevel))
+KoXmlWriter::KoXmlWriter(QIODevice *dev, int indentLevel)
+    : d(new Private(dev, indentLevel))
 {
     init();
 }
 
 void KoXmlWriter::init()
 {
-    d->indentBuffer = new char[ s_indentBufferLength ];
+    d->indentBuffer = new char[s_indentBufferLength];
     memset(d->indentBuffer, ' ', s_indentBufferLength);
     *d->indentBuffer = '\n'; // write newline before indentation, in one go
 
@@ -56,7 +61,7 @@ KoXmlWriter::~KoXmlWriter()
     delete d;
 }
 
-void KoXmlWriter::startDocument(const char* rootElemName, const char* publicId, const char* systemId)
+void KoXmlWriter::startDocument(const char *rootElemName, const char *publicId, const char *systemId)
 {
     Q_ASSERT(d->tags.isEmpty());
     writeCString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -85,7 +90,7 @@ void KoXmlWriter::endDocument()
 bool KoXmlWriter::prepareForChild()
 {
     if (!d->tags.isEmpty()) {
-        Tag& parent = d->tags.top();
+        Tag &parent = d->tags.top();
         if (!parent.hasChildren) {
             closeStartElement(parent);
             parent.hasChildren = true;
@@ -103,7 +108,7 @@ void KoXmlWriter::prepareForTextNode()
 {
     if (d->tags.isEmpty())
         return;
-    Tag& parent = d->tags.top();
+    Tag &parent = d->tags.top();
     if (!parent.hasChildren) {
         closeStartElement(parent);
         parent.hasChildren = true;
@@ -111,7 +116,7 @@ void KoXmlWriter::prepareForTextNode()
     }
 }
 
-void KoXmlWriter::startElement(const char* tagName, bool indentInside)
+void KoXmlWriter::startElement(const char *tagName, bool indentInside)
 {
     Q_ASSERT(tagName != 0);
 
@@ -121,17 +126,16 @@ void KoXmlWriter::startElement(const char* tagName, bool indentInside)
     d->tags.push(Tag(tagName, parentIndent && indentInside));
     writeChar('<');
     writeCString(tagName);
-    //kDebug(s_area) << tagName;
+    // kDebug(s_area) << tagName;
 }
 
-void KoXmlWriter::addCompleteElement(const char* cstr)
+void KoXmlWriter::addCompleteElement(const char *cstr)
 {
     prepareForChild();
     writeCString(cstr);
 }
 
-
-void KoXmlWriter::addCompleteElement(QIODevice* indev)
+void KoXmlWriter::addCompleteElement(QIODevice *indev)
 {
     prepareForChild();
     const bool wasOpen = indev->isOpen();
@@ -149,7 +153,7 @@ void KoXmlWriter::addCompleteElement(QIODevice* indev)
     buffer.resize(MAX_CHUNK_SIZE);
     while (!indev->atEnd()) {
         qint64 len = indev->read(buffer.data(), buffer.size());
-        if (len <= 0)   // e.g. on error
+        if (len <= 0) // e.g. on error
             break;
         d->dev->write(buffer.data(), len);
     }
@@ -164,7 +168,8 @@ void KoXmlWriter::endElement()
     if (d->tags.isEmpty())
         warnStore << "EndElement() was called more times than startElement(). "
                      "The generated XML will be invalid! "
-                     "Please report this bug (by saving the document to another format...)" << Qt::endl;
+                     "Please report this bug (by saving the document to another format...)"
+                  << Qt::endl;
 
     Tag tag = d->tags.pop();
 
@@ -181,26 +186,26 @@ void KoXmlWriter::endElement()
     }
 }
 
-void KoXmlWriter::addTextNode(const QByteArray& cstr)
+void KoXmlWriter::addTextNode(const QByteArray &cstr)
 {
     // Same as the const char* version below, but here we know the size
     prepareForTextNode();
-    char* escaped = escapeForXML(cstr.constData(), cstr.size());
+    char *escaped = escapeForXML(cstr.constData(), cstr.size());
     writeCString(escaped);
     if (escaped != d->escapeBuffer)
         delete[] escaped;
 }
 
-void KoXmlWriter::addTextNode(const char* cstr)
+void KoXmlWriter::addTextNode(const char *cstr)
 {
     prepareForTextNode();
-    char* escaped = escapeForXML(cstr, -1);
+    char *escaped = escapeForXML(cstr, -1);
     writeCString(escaped);
     if (escaped != d->escapeBuffer)
         delete[] escaped;
 }
 
-void KoXmlWriter::addProcessingInstruction(const char* cstr)
+void KoXmlWriter::addProcessingInstruction(const char *cstr)
 {
     prepareForTextNode();
     writeCString("<?");
@@ -208,46 +213,46 @@ void KoXmlWriter::addProcessingInstruction(const char* cstr)
     writeCString("?>");
 }
 
-void KoXmlWriter::addAttribute(const char* attrName, const QByteArray& value)
+void KoXmlWriter::addAttribute(const char *attrName, const QByteArray &value)
 {
     // Same as the const char* one, but here we know the size
     writeChar(' ');
     writeCString(attrName);
     writeCString("=\"");
-    char* escaped = escapeForXML(value.constData(), value.size());
+    char *escaped = escapeForXML(value.constData(), value.size());
     writeCString(escaped);
     if (escaped != d->escapeBuffer)
         delete[] escaped;
     writeChar('"');
 }
 
-void KoXmlWriter::addAttribute(const char* attrName, const char* value)
+void KoXmlWriter::addAttribute(const char *attrName, const char *value)
 {
     writeChar(' ');
     writeCString(attrName);
     writeCString("=\"");
-    char* escaped = escapeForXML(value, -1);
+    char *escaped = escapeForXML(value, -1);
     writeCString(escaped);
     if (escaped != d->escapeBuffer)
         delete[] escaped;
     writeChar('"');
 }
 
-void KoXmlWriter::addAttribute(const char* attrName, double value)
+void KoXmlWriter::addAttribute(const char *attrName, double value)
 {
     QByteArray str;
     str.setNum(value, 'f', 11);
     addAttribute(attrName, str.data());
 }
 
-void KoXmlWriter::addAttribute(const char* attrName, float value)
+void KoXmlWriter::addAttribute(const char *attrName, float value)
 {
     QByteArray str;
     str.setNum(value, 'f', FLT_DIG);
     addAttribute(attrName, str.data());
 }
 
-void KoXmlWriter::addAttributePt(const char* attrName, double value)
+void KoXmlWriter::addAttributePt(const char *attrName, double value)
 {
     QByteArray str;
     str.setNum(value, 'f', 11);
@@ -255,7 +260,7 @@ void KoXmlWriter::addAttributePt(const char* attrName, double value)
     addAttribute(attrName, str.data());
 }
 
-void KoXmlWriter::addAttributePt(const char* attrName, float value)
+void KoXmlWriter::addAttributePt(const char *attrName, float value)
 {
     QByteArray str;
     str.setNum(value, 'f', FLT_DIG);
@@ -266,11 +271,10 @@ void KoXmlWriter::addAttributePt(const char* attrName, float value)
 void KoXmlWriter::writeIndent()
 {
     // +1 because of the leading '\n'
-    d->dev->write(d->indentBuffer, qMin(indentLevel() + 1,
-                                        s_indentBufferLength));
+    d->dev->write(d->indentBuffer, qMin(indentLevel() + 1, s_indentBufferLength));
 }
 
-void KoXmlWriter::writeString(const QString& str)
+void KoXmlWriter::writeString(const QString &str)
 {
     // cachegrind says .utf8() is where most of the time is spent
     const QByteArray cstr = str.toUtf8();
@@ -279,14 +283,14 @@ void KoXmlWriter::writeString(const QString& str)
 
 // In case of a reallocation (ret value != d->buffer), the caller owns the return value,
 // it must delete it (with [])
-char* KoXmlWriter::escapeForXML(const char* source, int length = -1) const
+char *KoXmlWriter::escapeForXML(const char *source, int length = -1) const
 {
     // we're going to be pessimistic on char length; so lets make the outputLength less
     // the amount one char can take: 6
-    char* destBoundary = d->escapeBuffer + s_escapeBufferLen - 6;
-    char* destination = d->escapeBuffer;
-    char* output = d->escapeBuffer;
-    const char* src = source; // src moves, source remains
+    char *destBoundary = d->escapeBuffer + s_escapeBufferLen - 6;
+    char *destination = d->escapeBuffer;
+    char *output = d->escapeBuffer;
+    const char *src = source; // src moves, source remains
     for (;;) {
         if (destination >= destBoundary) {
             // When we come to realize that our escaped string is going to
@@ -294,9 +298,9 @@ char* KoXmlWriter::escapeForXML(const char* source, int length = -1) const
             // we drop the idea of using it, and we allocate a bigger buffer.
             // Note that this if() can only be hit once per call to the method.
             if (length == -1)
-                length = qstrlen(source);   // expensive...
+                length = qstrlen(source); // expensive...
             uint newLength = length * 6 + 1; // worst case. 6 is due to &quot; and &apos;
-            char* buffer = new char[ newLength ];
+            char *buffer = new char[newLength];
             destBoundary = buffer + newLength;
             uint amountOfCharsAlreadyCopied = destination - d->escapeBuffer;
             memcpy(buffer, d->escapeBuffer, amountOfCharsAlreadyCopied);
@@ -350,7 +354,7 @@ char* KoXmlWriter::escapeForXML(const char* source, int length = -1) const
     return output;
 }
 
-void KoXmlWriter::addManifestEntry(const QString& fullPath, const QString& mediaType)
+void KoXmlWriter::addManifestEntry(const QString &fullPath, const QString &mediaType)
 {
     startElement("manifest:file-entry");
     addAttribute("manifest:media-type", mediaType);
@@ -358,43 +362,34 @@ void KoXmlWriter::addManifestEntry(const QString& fullPath, const QString& media
     endElement();
 }
 
-void KoXmlWriter::addConfigItem(const QString & configName, const QString& value)
+void KoXmlWriter::addConfigItem(const QString &configName, const QString &value)
 {
     startElement("config:config-item");
     addAttribute("config:name", configName);
-    addAttribute("config:type",  "string");
+    addAttribute("config:type", "string");
     addTextNode(value);
     endElement();
 }
 
-void KoXmlWriter::addConfigItem(const QString & configName, bool value)
+void KoXmlWriter::addConfigItem(const QString &configName, bool value)
 {
     startElement("config:config-item");
     addAttribute("config:name", configName);
-    addAttribute("config:type",  "boolean");
+    addAttribute("config:type", "boolean");
     addTextNode(value ? "true" : "false");
     endElement();
 }
 
-void KoXmlWriter::addConfigItem(const QString & configName, int value)
+void KoXmlWriter::addConfigItem(const QString &configName, int value)
 {
     startElement("config:config-item");
     addAttribute("config:name", configName);
-    addAttribute("config:type",  "int");
+    addAttribute("config:type", "int");
     addTextNode(QString::number(value));
     endElement();
 }
 
-void KoXmlWriter::addConfigItem(const QString & configName, double value)
-{
-    startElement("config:config-item");
-    addAttribute("config:name", configName);
-    addAttribute("config:type", "double");
-    addTextNode(QString::number(value));
-    endElement();
-}
-
-void KoXmlWriter::addConfigItem(const QString & configName, float value)
+void KoXmlWriter::addConfigItem(const QString &configName, double value)
 {
     startElement("config:config-item");
     addAttribute("config:name", configName);
@@ -403,7 +398,16 @@ void KoXmlWriter::addConfigItem(const QString & configName, float value)
     endElement();
 }
 
-void KoXmlWriter::addConfigItem(const QString & configName, long value)
+void KoXmlWriter::addConfigItem(const QString &configName, float value)
+{
+    startElement("config:config-item");
+    addAttribute("config:name", configName);
+    addAttribute("config:type", "double");
+    addTextNode(QString::number(value));
+    endElement();
+}
+
+void KoXmlWriter::addConfigItem(const QString &configName, long value)
 {
     startElement("config:config-item");
     addAttribute("config:name", configName);
@@ -412,7 +416,7 @@ void KoXmlWriter::addConfigItem(const QString & configName, long value)
     endElement();
 }
 
-void KoXmlWriter::addConfigItem(const QString & configName, short value)
+void KoXmlWriter::addConfigItem(const QString &configName, short value)
 {
     startElement("config:config-item");
     addAttribute("config:name", configName);
@@ -421,13 +425,13 @@ void KoXmlWriter::addConfigItem(const QString & configName, short value)
     endElement();
 }
 
-void KoXmlWriter::addTextSpan(const QString& text)
+void KoXmlWriter::addTextSpan(const QString &text)
 {
     QMap<int, int> tabCache;
     addTextSpan(text, tabCache);
 }
 
-void KoXmlWriter::addTextSpan(const QString& text, const QMap<int, int>& tabCache)
+void KoXmlWriter::addTextSpan(const QString &text, const QMap<int, int> &tabCache)
 {
     int len = text.length();
     int nrSpaces = 0; // number of consecutive spaces
@@ -438,7 +442,7 @@ void KoXmlWriter::addTextSpan(const QString& text, const QMap<int, int>& tabCach
     // Accumulate chars either in str or in nrSpaces (for spaces).
     // Flush str when writing a subelement (for spaces or for another reason)
     // Flush nrSpaces when encountering two or more consecutive spaces
-    for (int i = 0; i < len ; ++i) {
+    for (int i = 0; i < len; ++i) {
         QChar ch = text[i];
         ushort unicode = ch.unicode();
         if (unicode == ' ') {
@@ -457,12 +461,12 @@ void KoXmlWriter::addTextSpan(const QString& text, const QMap<int, int>& tabCach
                     str += ' ';
                     --nrSpaces;
                 }
-                if (nrSpaces > 0) {   // there are more spaces
+                if (nrSpaces > 0) { // there are more spaces
                     if (!str.isEmpty())
                         addTextNode(str);
                     str.clear();
                     startElement("text:s");
-                    if (nrSpaces > 1)   // it's 1 by default
+                    if (nrSpaces > 1) // it's 1 by default
                         addAttribute("text:c", nrSpaces);
                     endElement();
                 }
@@ -505,9 +509,9 @@ void KoXmlWriter::addTextSpan(const QString& text, const QMap<int, int>& tabCach
     if (!str.isEmpty()) {
         addTextNode(str);
     }
-    if (nrSpaces > 0) {   // there are more spaces
+    if (nrSpaces > 0) { // there are more spaces
         startElement("text:s");
-        if (nrSpaces > 1)   // it's 1 by default
+        if (nrSpaces > 1) // it's 1 by default
             addAttribute("text:c", nrSpaces);
         endElement();
     }
@@ -523,10 +527,10 @@ int KoXmlWriter::indentLevel() const
     return d->tags.size() + d->baseIndentLevel;
 }
 
-QList<const char*> KoXmlWriter::tagHierarchy() const
+QList<const char *> KoXmlWriter::tagHierarchy() const
 {
-    QList<const char*> answer;
-    foreach(const Tag & tag, d->tags)
+    QList<const char *> answer;
+    foreach (const Tag &tag, d->tags)
         answer.append(tag.tagName);
 
     return answer;

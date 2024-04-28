@@ -8,11 +8,10 @@
 #include "DialogCellAction.h"
 #include "dialogs/ActionDialog.h"
 
+#include "core/Sheet.h"
 #include "engine/Damages.h"
 #include "engine/MapBase.h"
-#include "core/Sheet.h"
 #include "ui/Selection.h"
-
 
 using namespace Calligra::Sheets;
 
@@ -25,9 +24,9 @@ DialogCellAction::DialogCellAction(Actions *actions, const QString &actionName, 
 
 DialogCellAction::~DialogCellAction()
 {
-    if (m_dlg) delete m_dlg;
+    if (m_dlg)
+        delete m_dlg;
 }
-
 
 void DialogCellAction::execute(Selection *selection, Sheet *, QWidget *canvasWidget)
 {
@@ -40,7 +39,8 @@ void DialogCellAction::execute(Selection *selection, Sheet *, QWidget *canvasWid
 
     if (!m_dlg) {
         m_dlg = createDialog(canvasWidget);
-        if (!m_dlg) return;  // No dialog? Nothing to do.
+        if (!m_dlg)
+            return; // No dialog? Nothing to do.
         connect(m_dlg, &ActionDialog::finished, this, &DialogCellAction::onDialogClosed);
     }
 
@@ -61,29 +61,32 @@ Cell DialogCellAction::activeCell() const
 void DialogCellAction::activeSheetChanged(Sheet *)
 {
     onSelectionChanged();
-    if (m_dlg) m_dlg->onSelectionChanged(m_selection);
+    if (m_dlg)
+        m_dlg->onSelectionChanged(m_selection);
 }
 
 /** This ensures that the UI updates when we change cell content. */
-void DialogCellAction::handleDamages() {
-    if (!m_dlg) return;   // Only if the dialog is active.
+void DialogCellAction::handleDamages()
+{
+    if (!m_dlg)
+        return; // Only if the dialog is active.
     onSelectionChanged();
     m_dlg->onSelectionChanged(m_selection);
 }
 
-void DialogCellAction::selectionChanged(const Region&) {
-    if (!m_dlg) return;   // Only if the dialog is active.
+void DialogCellAction::selectionChanged(const Region &)
+{
+    if (!m_dlg)
+        return; // Only if the dialog is active.
     onSelectionChanged();
     m_dlg->onSelectionChanged(m_selection);
 }
-
 
 void DialogCellAction::onDialogClosed()
 {
-    if (!m_dlg) return;
+    if (!m_dlg)
+        return;
     disconnect(m_dlg, &ActionDialog::finished, this, &DialogCellAction::onDialogClosed);
     m_dlg->deleteLater();
     m_dlg = nullptr;
 }
-
-

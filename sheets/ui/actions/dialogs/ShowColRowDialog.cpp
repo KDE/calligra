@@ -12,17 +12,16 @@
 
 // Qt
 #include <QLabel>
-#include <QVBoxLayout>
 #include <QListWidget>
+#include <QVBoxLayout>
 
 // KF5
 #include <KLocalizedString>
 
-
 using namespace Calligra::Sheets;
 
-ShowColRowDialog::ShowColRowDialog(QWidget* parent, bool rows)
-        : KoDialog(parent)
+ShowColRowDialog::ShowColRowDialog(QWidget *parent, bool rows)
+    : KoDialog(parent)
 {
     setModal(true);
     setButtons(Ok | Cancel);
@@ -46,7 +45,7 @@ ShowColRowDialog::ShowColRowDialog(QWidget* parent, bool rows)
     lay1->addWidget(label);
     lay1->addWidget(list);
 
-    //selection multiple
+    // selection multiple
     list->setSelectionMode(QAbstractItemView::MultiSelection);
     connect(this, &KoDialog::okClicked, this, &ShowColRowDialog::slotOk);
     connect(list, &QListWidget::itemDoubleClicked, this, &ShowColRowDialog::slotDoubleClicked);
@@ -69,7 +68,7 @@ QVector<int> ShowColRowDialog::selectedIndexes() const
 {
     QVector<int> res;
     for (unsigned int i = 0; i < (unsigned int)list->count(); i++)
-        if (list->item(i)->isSelected()) 
+        if (list->item(i)->isSelected())
             res.append(i);
     return res;
 }

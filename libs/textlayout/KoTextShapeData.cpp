@@ -9,26 +9,26 @@
 
 #include "KoTextShapeData.h"
 
+#include "KoTextDocument.h"
+#include "styles/KoParagraphStyle.h"
+#include "styles/KoStyleManager.h"
+#include <KoTextEditor.h>
 #include <KoTextShapeDataBase.h>
 #include <KoTextShapeDataBase_p.h>
-#include "KoTextDocument.h"
-#include <KoTextEditor.h>
-#include "styles/KoStyleManager.h"
-#include "styles/KoParagraphStyle.h"
 
 #include <KoTextLayoutRootArea.h>
 
-#include <QTextDocument>
 #include <QTextBlock>
 #include <QTextCursor>
+#include <QTextDocument>
 
+#include <KoDocumentRdfBase.h>
 #include <KoGenStyle.h>
 #include <KoOdfLoadingContext.h>
+#include <KoShape.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoDocumentRdfBase.h>
 #include <KoStyleStack.h>
-#include <KoShape.h>
 #include <KoUnit.h>
 
 #include <KoXmlNS.h>
@@ -44,15 +44,15 @@ class KoTextShapeDataPrivate : public KoTextShapeDataBasePrivate
 {
 public:
     KoTextShapeDataPrivate()
-            : ownsDocument(true)
-            , topPadding(0)
-            , leftPadding(0)
-            , rightPadding(0)
-            , bottomPadding(0)
-            , direction(KoText::AutoDirection)
-            , textpage(0)
-            , rootArea(0)
-            , paragraphStyle(0)
+        : ownsDocument(true)
+        , topPadding(0)
+        , leftPadding(0)
+        , rightPadding(0)
+        , bottomPadding(0)
+        , direction(KoText::AutoDirection)
+        , textpage(0)
+        , rootArea(0)
+        , paragraphStyle(0)
     {
     }
 
@@ -76,7 +76,6 @@ public:
     KoParagraphStyle *paragraphStyle; // the paragraph style of the shape (part of the graphic style)
 };
 
-
 KoTextShapeData::KoTextShapeData()
     : KoTextShapeDataBase(*(new KoTextShapeDataPrivate()))
 {
@@ -98,7 +97,7 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
 
     // The following avoids the normal case where the glyph metrices are rounded to integers and
     // hinted to the screen by freetype, which you of course don't want for WYSIWYG
-    if (! document->useDesignMetrics())
+    if (!document->useDesignMetrics())
         document->setUseDesignMetrics(true);
 
     KoTextDocument kodoc(document);
@@ -148,7 +147,6 @@ void KoTextShapeData::setDirty()
         d->rootArea->setDirty();
     }
 }
-
 
 bool KoTextShapeData::isDirty() const
 {
@@ -245,7 +243,7 @@ bool KoTextShapeData::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
     KoTextLoader loader(context, shape);
 
     QTextCursor cursor(document());
-    loader.loadBody(element, cursor);   // now let's load the body from the ODF KoXmlElement.
+    loader.loadBody(element, cursor); // now let's load the body from the ODF KoXmlElement.
     KoTextEditor *editor = KoTextDocument(document()).textEditor();
     if (editor) { // at one point we have to get the position from the odf doc instead.
         editor->setPosition(0);
@@ -267,42 +265,41 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
     // load the (text) style of the frame
     const KoXmlElement *style = 0;
     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
-        style = context.odfLoadingContext().stylesReader().findStyle(
-                    element.attributeNS(KoXmlNS::draw, "style-name"), "graphic",
-                    context.odfLoadingContext().useStylesAutoStyles());
+        style = context.odfLoadingContext().stylesReader().findStyle(element.attributeNS(KoXmlNS::draw, "style-name"),
+                                                                     "graphic",
+                                                                     context.odfLoadingContext().useStylesAutoStyles());
         if (!style) {
             warnTextLayout << "graphic style not found:" << element.attributeNS(KoXmlNS::draw, "style-name");
         }
     }
     if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
-        style = context.odfLoadingContext().stylesReader().findStyle(
-                    element.attributeNS(KoXmlNS::presentation, "style-name"), "presentation",
-                    context.odfLoadingContext().useStylesAutoStyles());
+        style = context.odfLoadingContext().stylesReader().findStyle(element.attributeNS(KoXmlNS::presentation, "style-name"),
+                                                                     "presentation",
+                                                                     context.odfLoadingContext().useStylesAutoStyles());
         if (!style) {
             warnTextLayout << "presentation style not found:" << element.attributeNS(KoXmlNS::presentation, "style-name");
         }
     }
 
-
     if (style) {
         KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
         styleStack.save();
-        context.odfLoadingContext().addStyles(style, style->attributeNS(KoXmlNS::style, "family", "graphic").toLocal8Bit().constData());   // Load all parents
+        context.odfLoadingContext().addStyles(style, style->attributeNS(KoXmlNS::style, "family", "graphic").toLocal8Bit().constData()); // Load all parents
         styleStack.setTypeProperties("graphic");
         // Spacing (padding)
-        const QString paddingLeft(styleStack.property(KoXmlNS::fo, "padding-left" ));
+        const QString paddingLeft(styleStack.property(KoXmlNS::fo, "padding-left"));
         if (!paddingLeft.isEmpty()) {
             setLeftPadding(KoUnit::parseValue(paddingLeft));
         }
-        const QString paddingRight(styleStack.property(KoXmlNS::fo, "padding-right" ));
+        const QString paddingRight(styleStack.property(KoXmlNS::fo, "padding-right"));
         if (!paddingRight.isEmpty()) {
             setRightPadding(KoUnit::parseValue(paddingRight));
         }
-        const QString paddingTop(styleStack.property(KoXmlNS::fo, "padding-top" ));
+        const QString paddingTop(styleStack.property(KoXmlNS::fo, "padding-top"));
         if (!paddingTop.isEmpty()) {
             setTopPadding(KoUnit::parseValue(paddingTop));
         }
-        const QString paddingBottom(styleStack.property(KoXmlNS::fo, "padding-bottom" ));
+        const QString paddingBottom(styleStack.property(KoXmlNS::fo, "padding-bottom"));
         if (!paddingBottom.isEmpty()) {
             setBottomPadding(KoUnit::parseValue(paddingBottom));
         }
@@ -329,9 +326,9 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
             }
             paragraphStyles.append(pStyle);
             QString family = style->attributeNS(KoXmlNS::style, "family", "graphic");
-            style = context.odfLoadingContext().stylesReader().findStyle(
-                    style->attributeNS(KoXmlNS::style, "parent-style-name"), family.toLocal8Bit().constData(),
-                    context.odfLoadingContext().useStylesAutoStyles());
+            style = context.odfLoadingContext().stylesReader().findStyle(style->attributeNS(KoXmlNS::style, "parent-style-name"),
+                                                                         family.toLocal8Bit().constData(),
+                                                                         context.odfLoadingContext().useStylesAutoStyles());
         }
         // rather than setting default style and apply to block we just set a final parent
         paragraphStyles.last()->setParentStyle(defaultStyle);

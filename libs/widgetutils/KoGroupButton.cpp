@@ -20,7 +20,8 @@
 class Q_DECL_HIDDEN KoGroupButton::Private
 {
 public:
-    Private(KoGroupButton *qq, const GroupPosition position) : groupPosition(position)
+    Private(KoGroupButton *qq, const GroupPosition position)
+        : groupPosition(position)
     {
         // Make the policy closer to QPushButton's default but horizontal shouldn't be Fixed,
         // otherwise spacing gets broken
@@ -29,13 +30,15 @@ public:
     GroupPosition groupPosition;
 };
 
-KoGroupButton::KoGroupButton(GroupPosition position, QWidget* parent)
- : QToolButton(parent), d(new Private(this, position))
+KoGroupButton::KoGroupButton(GroupPosition position, QWidget *parent)
+    : QToolButton(parent)
+    , d(new Private(this, position))
 {
 }
 
-KoGroupButton::KoGroupButton(QWidget* parent)
- : QToolButton(parent), d(new Private(this, NoGroup))
+KoGroupButton::KoGroupButton(QWidget *parent)
+    : QToolButton(parent)
+    , d(new Private(this, NoGroup))
 {
 }
 
@@ -55,7 +58,7 @@ KoGroupButton::GroupPosition KoGroupButton::groupPosition() const
     return d->groupPosition;
 }
 
-void KoGroupButton::paintEvent(QPaintEvent* event)
+void KoGroupButton::paintEvent(QPaintEvent *event)
 {
     if (groupPosition() == NoGroup) {
         QToolButton::paintEvent(event);
@@ -67,7 +70,7 @@ void KoGroupButton::paintEvent(QPaintEvent* event)
     QStyleOptionToolButton panelOpt = opt;
 
     // Panel
-    QRect& panelRect = panelOpt.rect;
+    QRect &panelRect = panelOpt.rect;
     switch (groupPosition()) {
     case GroupLeft:
         panelRect.setWidth(panelRect.width() * 2);
@@ -127,7 +130,7 @@ void KoGroupButton::paintEvent(QPaintEvent* event)
     // messages so that translators can use Transcript for custom removal.
     // """
     if (!actions().isEmpty()) {
-        QAction* action = actions().constFirst();
+        QAction *action = actions().constFirst();
         setToolTip(i18nc("@info:tooltip of custom triple button", "%1", action->toolTip()));
     }
 }

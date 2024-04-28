@@ -13,25 +13,25 @@ void SnpTests::test1()
 {
     Parser parser;
     DebugOutput output;
-    parser.setOutput( &output );
-    QVERIFY( parser.load( QString("snp-1.emf") ) );
+    parser.setOutput(&output);
+    QVERIFY(parser.load(QString("snp-1.emf")));
 }
 
 void SnpTests::test2()
 {
     Parser parser;
     DebugOutput output;
-    parser.setOutput( &output );
-    QVERIFY( parser.load( QString("snp-2.emf") ) );
+    parser.setOutput(&output);
+    QVERIFY(parser.load(QString("snp-2.emf")));
 }
 
 void SnpTests::test3()
 {
     Parser parser;
     DebugOutput output;
-    parser.setOutput( &output );
-    QVERIFY( parser.load( QString("snp-3.emf") ) );
+    parser.setOutput(&output);
+    QVERIFY(parser.load(QString("snp-3.emf")));
 }
 
-QTEST_MAIN( SnpTests )
+QTEST_MAIN(SnpTests)
 #include <snp_tests.moc>

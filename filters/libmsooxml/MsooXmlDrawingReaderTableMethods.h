@@ -27,9 +27,9 @@ protected:
     KoTable::Ptr m_table;
     QString m_currentTableName;
 
-    MSOOXML::DrawingTableStyle* m_tableStyle;
+    MSOOXML::DrawingTableStyle *m_tableStyle;
     MSOOXML::DrawingTableStyleConverterProperties::Roles m_activeRoles;
 
     MSOOXML::LocalTableStyles m_localTableStyles;
 
-    #include "PresetDrawingMLTables.h"
+#include "PresetDrawingMLTables.h"

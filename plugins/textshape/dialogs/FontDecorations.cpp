@@ -8,9 +8,9 @@
 
 #include "FontDecorations.h"
 
-FontDecorations::FontDecorations(bool uniqueFormat, QWidget* parent)
-        : QWidget(parent),
-        m_uniqueFormat(uniqueFormat)
+FontDecorations::FontDecorations(bool uniqueFormat, QWidget *parent)
+    : QWidget(parent)
+    , m_uniqueFormat(uniqueFormat)
 {
     widget.setupUi(this);
 
@@ -34,8 +34,7 @@ void FontDecorations::setDisplay(KoCharacterStyle *style)
     if (!m_uniqueFormat) {
         widget.hyphenate->setTristate(true);
         widget.hyphenate->setCheckState(Qt::PartiallyChecked);
-    }
-    else
+    } else
         widget.hyphenate->setChecked(style->hasHyphenation());
 }
 
@@ -50,5 +49,4 @@ void FontDecorations::save(KoCharacterStyle *style) const
         else if (widget.hyphenate->checkState() == Qt::Unchecked)
             style->setHasHyphenation(false);
     }
-
 }

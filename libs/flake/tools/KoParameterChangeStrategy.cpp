@@ -14,10 +14,9 @@ KoParameterChangeStrategy::KoParameterChangeStrategy(KoToolBase *tool, KoParamet
 {
 }
 
-KoParameterChangeStrategy::KoParameterChangeStrategy(KoParameterChangeStrategyPrivate& dd)
-: KoInteractionStrategy(dd)
+KoParameterChangeStrategy::KoParameterChangeStrategy(KoParameterChangeStrategyPrivate &dd)
+    : KoInteractionStrategy(dd)
 {
-
 }
 
 KoParameterChangeStrategy::~KoParameterChangeStrategy()
@@ -32,7 +31,7 @@ void KoParameterChangeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt
     d->releasePoint = mouseLocation;
 }
 
-KUndo2Command* KoParameterChangeStrategy::createCommand()
+KUndo2Command *KoParameterChangeStrategy::createCommand()
 {
     Q_D(KoParameterChangeStrategy);
     KoParameterHandleMoveCommand *cmd = 0;
@@ -46,5 +45,3 @@ KUndo2Command* KoParameterChangeStrategy::createCommand()
 void KoParameterChangeStrategy::finishInteraction(Qt::KeyboardModifiers /*modifiers*/)
 {
 }
-
-

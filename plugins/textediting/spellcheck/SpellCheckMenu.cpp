@@ -12,18 +12,18 @@
 #include <KActionMenu>
 #include <KLocalizedString>
 
-#include <QMenu>
 #include <QAction>
+#include <QMenu>
 
 SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spellCheck)
-    : QObject(spellCheck),
-    m_spellCheck(spellCheck),
-    m_speller(speller),
-    m_suggestionsMenuAction(0),
-    m_ignoreWordAction(0),
-    m_addToDictionaryAction(0),
-    m_suggestionsMenu(0),
-    m_currentMisspelledPosition(-1)
+    : QObject(spellCheck)
+    , m_spellCheck(spellCheck)
+    , m_speller(speller)
+    , m_suggestionsMenuAction(0)
+    , m_ignoreWordAction(0)
+    , m_addToDictionaryAction(0)
+    , m_suggestionsMenu(0)
+    , m_currentMisspelledPosition(-1)
 {
     m_suggestionsMenuAction = new KActionMenu(i18n("Spelling"), this);
     m_suggestionsMenu = m_suggestionsMenuAction->menu();
@@ -46,12 +46,11 @@ SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spell
 
 SpellCheckMenu::~SpellCheckMenu()
 {
-
 }
 
-QPair<QString, QAction*> SpellCheckMenu::menuAction()
+QPair<QString, QAction *> SpellCheckMenu::menuAction()
 {
-    return QPair<QString, QAction*>("spelling_suggestions", m_suggestionsMenuAction);
+    return QPair<QString, QAction *>("spelling_suggestions", m_suggestionsMenuAction);
 }
 
 void SpellCheckMenu::createSuggestionsMenu()
@@ -67,7 +66,9 @@ void SpellCheckMenu::createSuggestionsMenu()
         for (int i = 0; i < m_suggestions.count(); ++i) {
             const QString &suggestion = m_suggestions.at(i);
             QAction *action = new QAction(suggestion, m_suggestionsMenu);
-            connect(action, &QAction::triggered, [this, suggestion] { replaceWord(suggestion); });
+            connect(action, &QAction::triggered, [this, suggestion] {
+                replaceWord(suggestion);
+            });
             m_suggestionsMenu->addAction(action);
         }
     }
@@ -98,10 +99,10 @@ void SpellCheckMenu::addWordToDictionary()
     m_currentMisspelledPosition = -1;
 }
 
-void SpellCheckMenu::setMisspelled(const QString &word, int position,int length)
+void SpellCheckMenu::setMisspelled(const QString &word, int position, int length)
 {
     m_currentMisspelled = word;
-    m_lengthMisspelled=length;
+    m_lengthMisspelled = length;
     m_currentMisspelledPosition = position;
 }
 
@@ -134,7 +135,7 @@ void SpellCheckMenu::replaceWord(const QString &suggestion)
     if (suggestion.isEmpty() || m_currentMisspelledPosition < 0)
         return;
 
-    m_spellCheck->replaceWordBySuggestion(suggestion, m_currentMisspelledPosition,m_lengthMisspelled);
+    m_spellCheck->replaceWordBySuggestion(suggestion, m_currentMisspelledPosition, m_lengthMisspelled);
 
     m_currentMisspelled.clear();
     m_currentMisspelledPosition = -1;

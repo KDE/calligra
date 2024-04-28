@@ -14,12 +14,7 @@ public:
     ~KPrHexagonWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType {
-        Horizontal,
-        HorizontalReverse,
-        Vertical,
-        VerticalReverse
-    };
+    enum SubType { Horizontal, HorizontalReverse, Vertical, VerticalReverse };
 };
 
 #endif /* KPRHEXAGONWIPEEFFECTFACTORY_H */

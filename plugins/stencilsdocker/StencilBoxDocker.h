@@ -8,9 +8,9 @@
 #define KOSTENCILBOXDOCKER_H
 
 #include <QDockWidget>
+#include <QIcon>
 #include <QListView>
 #include <QMap>
-#include <QIcon>
 #include <QThread>
 
 class CollectionItemModel;
@@ -29,40 +29,40 @@ class StencilBoxDockerLoader;
 class StencilBoxDocker : public QDockWidget
 {
     Q_OBJECT
-    public:
-        explicit StencilBoxDocker(QWidget* parent = 0);
-        ~StencilBoxDocker() override;
+public:
+    explicit StencilBoxDocker(QWidget *parent = 0);
+    ~StencilBoxDocker() override;
 
-    protected:
-        void removeCollection(const QString& family);
+protected:
+    void removeCollection(const QString &family);
 
-    protected Q_SLOTS:
-        /// Called when the docker changes area
-        void locationChanged(Qt::DockWidgetArea area);
+protected Q_SLOTS:
+    /// Called when the docker changes area
+    void locationChanged(Qt::DockWidgetArea area);
 
-    private:
-        QMap<QString, CollectionItemModel*> m_modelMap;
-        //QMap<QString, QSortFilterProxyModel*> m_proxyMap;
+private:
+    QMap<QString, CollectionItemModel *> m_modelMap;
+    // QMap<QString, QSortFilterProxyModel*> m_proxyMap;
 
-        CollectionTreeWidget *m_treeWidget;
-        QMenu* m_menu;
-        QToolButton* m_button;
-        KLineEdit* m_filterLineEdit;
-        QVBoxLayout* m_layout;
-        QHBoxLayout* m_panelLayout;
+    CollectionTreeWidget *m_treeWidget;
+    QMenu *m_menu;
+    QToolButton *m_button;
+    KLineEdit *m_filterLineEdit;
+    QVBoxLayout *m_layout;
+    QHBoxLayout *m_panelLayout;
 
-        QThread loaderThread;
-        StencilBoxDockerLoader *m_loader;
+    QThread loaderThread;
+    StencilBoxDockerLoader *m_loader;
 
-    private Q_SLOTS:
-        void reapplyFilter();
-        void manageStencilsFolder();
-        //void regenerateProxyMap();
-        void collectionsLoaded();
-        void threadStarted();
+private Q_SLOTS:
+    void reapplyFilter();
+    void manageStencilsFolder();
+    // void regenerateProxyMap();
+    void collectionsLoaded();
+    void threadStarted();
 
-    Q_SIGNALS:
-        void startLoading();
+Q_SIGNALS:
+    void startLoading();
 };
 
-#endif //KOSHAPECOLLECTIONDOCKER_H
+#endif // KOSHAPECOLLECTIONDOCKER_H

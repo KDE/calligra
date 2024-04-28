@@ -11,9 +11,12 @@
 
 #include "kotext_export.h"
 
-class KOTEXT_EXPORT KoUndoableTool {
+class KOTEXT_EXPORT KoUndoableTool
+{
 public:
-    virtual ~KoUndoableTool(){}
+    virtual ~KoUndoableTool()
+    {
+    }
     virtual void setAddUndoCommandAllowed(bool allowed) = 0;
 };
 
@@ -42,7 +45,6 @@ void MyCommand::undo() {
 class KOTEXT_EXPORT KoTextCommandBase : public KUndo2Command
 {
 public:
-
     /// constructor
     explicit KoTextCommandBase(KUndo2Command *parent);
     ~KoTextCommandBase() override;
@@ -59,14 +61,17 @@ public:
     void setAllow(bool set);
 
 protected:
-
     class KOTEXT_EXPORT UndoRedoFinalizer
     {
     public:
-        explicit UndoRedoFinalizer(KoTextCommandBase* parent) : m_parent(parent) {}
+        explicit UndoRedoFinalizer(KoTextCommandBase *parent)
+            : m_parent(parent)
+        {
+        }
         ~UndoRedoFinalizer();
+
     private:
-        KoTextCommandBase* m_parent;
+        KoTextCommandBase *m_parent;
     };
 
     KoUndoableTool *m_tool;

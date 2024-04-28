@@ -16,39 +16,38 @@
 **
 ** To receive a copy of the GNU Library General Public License, write to the
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+* Boston, MA 02110-1301, USA.
 **
 */
 
 #ifndef __CALLIGRA_SHEETS_LATEX_DOCUMENT_H__
 #define __CALLIGRA_SHEETS_LATEX_DOCUMENT_H__
 
-#include <QFile>   /* for QFile class */
+#include <QFile> /* for QFile class */
+#include <QString> /* for QString class */
 #include <QTextStream> /* for QTextStream class */
-#include <QString>  /* for QString class */
 
-#include "xmlparser.h"
 #include "config.h"
 #include "spreadsheet.h"
+#include "xmlparser.h"
 
 class Document : public XmlParser, Config
 {
-    QFile       _file;
+    QFile _file;
     QTextStream _out;
-    QString     _filename;
+    QString _filename;
 
-    //FileHeader  _header;
+    // FileHeader  _header;
     Spreadsheet _document;
 
     /* Options */
-
 
 public:
     /**
      * @param in tar file.
      * @param fileOut Output latex filename.
      */
-    Document(const KoStore* in, QString fileOut);
+    Document(const KoStore *in, QString fileOut);
 
     ~Document() override;
 
@@ -58,7 +57,6 @@ public:
     void generate();
 
 private:
-
 };
 
 #endif /* __CALLIGRA_SHEETS_LATEX_DOCUMENT_H__ */

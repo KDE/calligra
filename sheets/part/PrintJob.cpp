@@ -11,7 +11,6 @@
 #include "View.h"
 #include "dialogs/SheetSelectPage.h"
 
-#include "engine/SheetsDebug.h"
 #include "core/Cell.h"
 #include "core/ColFormatStorage.h"
 #include "core/HeaderFooter.h"
@@ -20,6 +19,7 @@
 #include "core/RowFormatStorage.h"
 #include "core/Sheet.h"
 #include "core/SheetPrint.h"
+#include "engine/SheetsDebug.h"
 
 #include "ui/Selection.h"
 #include "ui/SheetView.h"
@@ -27,8 +27,8 @@
 #include <KoGlobal.h>
 #include <KoShape.h>
 #include <KoShapeManager.h>
-#include <KoZoomHandler.h>
 #include <KoUnit.h>
+#include <KoZoomHandler.h>
 
 #include <KMessageBox>
 
@@ -40,13 +40,13 @@ using namespace Calligra::Sheets;
 class PrintJob::Private
 {
 public:
-    View* view;
-    SheetSelectPage* sheetSelectPage;
+    View *view;
+    SheetSelectPage *sheetSelectPage;
     QVector<Sheet *> sheets;
 
 public:
-    int setupPages(const QPrinter& printer, bool forceRecreation = false);
-    Sheet* getSheetPageNumber(int* sheetPageNumber) const;
+    int setupPages(const QPrinter &printer, bool forceRecreation = false);
+    Sheet *getSheetPageNumber(int *sheetPageNumber) const;
 
     /**
      * Checks whether the page has content to print.
@@ -64,7 +64,7 @@ public:
     void printHeaderFooter(QPainter &painter, Sheet *sheet, int page) const;
 };
 
-int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
+int PrintJob::Private::setupPages(const QPrinter &printer, bool forceRecreation)
 {
     // Create the list of sheet, that should be printed.
     sheets.clear();
@@ -74,14 +74,15 @@ int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
         const QList<SheetBase *> sheetList = view->doc()->map()->sheetList();
         for (int i = 0; i < sheetList.count(); ++i) {
             Sheet *sheet = dynamic_cast<Sheet *>(sheetList[i]);
-            if (sheet) sheets.append(sheet);
+            if (sheet)
+                sheets.append(sheet);
         }
     } else if (sheetSelectPage->m_ui.activeSheetButton->isChecked()) {
         sheets.append(view->activeSheet());
     } else if (sheetSelectPage->m_ui.selectedSheetsButton->isChecked()) {
         const QStringList sheetNames = sheetSelectPage->selectedSheets();
         for (int i = 0; i < sheetNames.count(); ++i) {
-            SheetBase* bsheet = view->doc()->map()->findSheet(sheetNames[i]);
+            SheetBase *bsheet = view->doc()->map()->findSheet(sheetNames[i]);
             Sheet *sheet = bsheet ? dynamic_cast<Sheet *>(bsheet) : nullptr;
             if (!sheet) {
                 warnSheetsUI << i18n("Sheet %1 could not be found for printing", sheetNames[i]);
@@ -114,7 +115,7 @@ int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
     return pageCount;
 }
 
-Sheet* PrintJob::Private::getSheetPageNumber(int* sheetPageNumber) const
+Sheet *PrintJob::Private::getSheetPageNumber(int *sheetPageNumber) const
 {
     Q_ASSERT(sheetPageNumber);
     // Find the sheet specific page number.
@@ -127,10 +128,10 @@ Sheet* PrintJob::Private::getSheetPageNumber(int* sheetPageNumber) const
     return nullptr;
 }
 
-bool PrintJob::Private::pageNeedsPrinting(Sheet * sheet, const QRect& cellRange) const
+bool PrintJob::Private::pageNeedsPrinting(Sheet *sheet, const QRect &cellRange) const
 {
     // TODO Stefan: Is there a better, faster approach?
-    for (int row = cellRange.top(); row <= cellRange.bottom() ; ++row) {
+    for (int row = cellRange.top(); row <= cellRange.bottom(); ++row) {
         for (int col = cellRange.left(); col <= cellRange.right(); ++col) {
             if (Cell(sheet, col, row).needsPrinting()) {
                 return true;
@@ -139,7 +140,7 @@ bool PrintJob::Private::pageNeedsPrinting(Sheet * sheet, const QRect& cellRange)
     }
 
     QRectF shapesBoundingRect;
-    const QList<KoShape*> shapes = sheet->shapes();
+    const QList<KoShape *> shapes = sheet->shapes();
     for (int i = 0; i < shapes.count(); ++i) {
         shapesBoundingRect |= shapes[i]->boundingRect();
     }
@@ -182,70 +183,57 @@ void PrintJob::Private::printHeaderFooter(QPainter &painter, Sheet *sheet, int p
     // print head line left
     textWidth = fontMetrics.boundingRect(headLeft).width();
     if (textWidth > 0) {
-        painter.drawText(leftMarginDistance,
-                         headFootDistance + ascent,
-                         headLeft);
+        painter.drawText(leftMarginDistance, headFootDistance + ascent, headLeft);
     }
 
     // print head line middle
     textWidth = fontMetrics.boundingRect(headMid).width();
     if (textWidth > 0) {
-        painter.drawText((pageLayout.width - textWidth) / 2.0,
-                         headFootDistance + ascent,
-                         headMid);
+        painter.drawText((pageLayout.width - textWidth) / 2.0, headFootDistance + ascent, headMid);
     }
 
     // print head line right
     textWidth = fontMetrics.boundingRect(headRight).width();
     if (textWidth > 0) {
-        painter.drawText(pageLayout.width - textWidth - leftMarginDistance,
-                         headFootDistance + ascent,
-                         headRight);
+        painter.drawText(pageLayout.width - textWidth - leftMarginDistance, headFootDistance + ascent, headRight);
     }
 
     // print foot line left
     textWidth = fontMetrics.boundingRect(footLeft).width();
     if (textWidth > 0) {
-        painter.drawText(leftMarginDistance,
-                         pageLayout.height - headFootDistance,
-                         footLeft);
+        painter.drawText(leftMarginDistance, pageLayout.height - headFootDistance, footLeft);
     }
 
     // print foot line middle
     textWidth = fontMetrics.boundingRect(footMid).width();
     if (textWidth > 0) {
-        painter.drawText((pageLayout.width - textWidth) / 2.0,
-                         pageLayout.height - headFootDistance,
-                         footMid);
+        painter.drawText((pageLayout.width - textWidth) / 2.0, pageLayout.height - headFootDistance, footMid);
     }
 
     // print foot line right
     textWidth = fontMetrics.boundingRect(footRight).width();
     if (textWidth > 0) {
-        painter.drawText(pageLayout.width - textWidth - leftMarginDistance,
-                         pageLayout.height - headFootDistance,
-                         footRight);
+        painter.drawText(pageLayout.width - textWidth - leftMarginDistance, pageLayout.height - headFootDistance, footRight);
     }
 }
 
-
 PrintJob::PrintJob(View *view)
-        : KoPrintingDialog(view)
-        , d(new Private)
+    : KoPrintingDialog(view)
+    , d(new Private)
 {
     d->view = view;
     d->sheetSelectPage = new SheetSelectPage();
 
-    setShapeManager(static_cast<Canvas*>(d->view->canvas())->shapeManager());
+    setShapeManager(static_cast<Canvas *>(d->view->canvas())->shapeManager());
 
     // Setup the pages.
     // Force the creation of pages.
     const int pageCount = d->setupPages(printer(), true);
     printer().setFromTo(1, pageCount);
 
-    //apply page layout parameters
+    // apply page layout parameters
     Sheet *const sheet = d->view->activeSheet();
-    const PrintSettings* settings = sheet->printSettings();
+    const PrintSettings *settings = sheet->printSettings();
     const KoPageLayout pageLayout = settings->pageLayout();
     const KoPageFormat::Format pageFormat = pageLayout.format;
     printer().setPageSize(KoPageFormat::printerPageSize(pageFormat));
@@ -253,23 +241,21 @@ PrintJob::PrintJob(View *view)
         printer().pageLayout().setOrientation(QPageLayout::Landscape);
     else
         printer().pageLayout().setOrientation(QPageLayout::Portrait);
-    printer().setPageMargins({pageLayout.leftMargin, pageLayout.topMargin,
-                             pageLayout.rightMargin, pageLayout.bottomMargin},
-                             QPageLayout::Point);
+    printer().setPageMargins({pageLayout.leftMargin, pageLayout.topMargin, pageLayout.rightMargin, pageLayout.bottomMargin}, QPageLayout::Point);
     printer().setFullPage(true);
 
-    //debugSheetsUI <<"Iterating through available sheets and initializing list of available sheets.";
-    QList<SheetBase*> sheetList = d->view->doc()->map()->sheetList();
+    // debugSheetsUI <<"Iterating through available sheets and initializing list of available sheets.";
+    QList<SheetBase *> sheetList = d->view->doc()->map()->sheetList();
     for (int i = sheetList.count() - 1; i >= 0; --i) {
-        SheetBase* sheet = sheetList[ i ];
-        //debugSheetsUI <<"Adding" << sheet->sheetName();
+        SheetBase *sheet = sheetList[i];
+        // debugSheetsUI <<"Adding" << sheet->sheetName();
         d->sheetSelectPage->prependAvailableSheet(sheet->sheetName());
     }
 }
 
 PrintJob::~PrintJob()
 {
-//     delete d->sheetSelectPage; // QPrintDialog takes ownership
+    //     delete d->sheetSelectPage; // QPrintDialog takes ownership
     delete d;
 }
 
@@ -293,7 +279,7 @@ void PrintJob::startPrinting(RemovePolicy removePolicy)
     const int pageCount = d->setupPages(printer());
 
     // If there's nothing to print and this slot was not called by the print preview dialog ...
-    if (pageCount == 0 && (!sender() || !qobject_cast<QPrintPreviewDialog*>(sender()))) {
+    if (pageCount == 0 && (!sender() || !qobject_cast<QPrintPreviewDialog *>(sender()))) {
         QStringList sheetNames;
         for (Sheet *sheet : d->sheets)
             sheetNames.append(sheet->sheetName());
@@ -314,7 +300,7 @@ QRectF PrintJob::preparePage(int pageNumber)
     // QPainter settings from preparePage() get reverted.
 
     int sheetPageNumber = pageNumber;
-    Sheet* sheet = d->getSheetPageNumber(&sheetPageNumber);
+    Sheet *sheet = d->getSheetPageNumber(&sheetPageNumber);
     if (!sheet)
         return QRectF();
 
@@ -382,8 +368,7 @@ QRectF PrintJob::preparePage(int pageNumber)
         painter().translate(0.0, offset * scale);
         pageRect.moveTop(offset); // scale will be applied below
     }
-    return QRectF(pageRect.left() * scale, pageRect.top() * scale,
-                  pageRect.width() * scale, pageRect.height() * scale);
+    return QRectF(pageRect.left() * scale, pageRect.top() * scale, pageRect.width() * scale, pageRect.height() * scale);
 }
 
 void PrintJob::printPage(int pageNumber, QPainter &painter)
@@ -393,7 +378,7 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
 
     debugSheetsRender << "Printing page" << pageNumber;
     int sheetPageNumber = pageNumber;
-    Sheet* sheet = d->getSheetPageNumber(&sheetPageNumber);
+    Sheet *sheet = d->getSheetPageNumber(&sheetPageNumber);
 
     // Print the cells.
     if (!sheet) {
@@ -458,8 +443,7 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
     // Paint top left part of the repeated columns/rows, if both are present.
     if (repeatedWidth > 0.0 && repeatedHeight > 0.0) {
         const QPointF topLeft(0, 0);
-        const QRect range = QRect(QPoint(repeatedColumns.first, repeatedRows.first),
-                                  QPoint(repeatedColumns.second, repeatedRows.second));
+        const QRect range = QRect(QPoint(repeatedColumns.first, repeatedRows.first), QPoint(repeatedColumns.second, repeatedRows.second));
         const QRectF paintRect(0.0, 0.0, repeatedWidth, repeatedHeight);
         sheetView->setPaintCellRange(range);
         sheetView->paintCells(painter, paintRect, topLeft);
@@ -468,8 +452,7 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
     // Paint top part: the repeated rows, if present.
     if (repeatedHeight > 0.0) {
         const QPointF topLeft(repeatedWidth, 0);
-        const QRect range = QRect(QPoint(cellRange.left(), repeatedRows.first),
-                                  QPoint(cellRange.right(), repeatedRows.second));
+        const QRect range = QRect(QPoint(cellRange.left(), repeatedRows.first), QPoint(cellRange.right(), repeatedRows.second));
         const QRectF paintRect(repeatedWidth, 0.0, pageRect.width(), repeatedHeight);
         sheetView->setPaintCellRange(range);
         sheetView->paintCells(painter, paintRect, topLeft);
@@ -478,8 +461,7 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
     // Paint left part: the repeated columns, if present.
     if (repeatedWidth > 0.0) {
         const QPointF topLeft(0, repeatedHeight);
-        const QRect range = QRect(QPoint(repeatedColumns.first, cellRange.top()),
-                                  QPoint(repeatedColumns.second, cellRange.bottom()));
+        const QRect range = QRect(QPoint(repeatedColumns.first, cellRange.top()), QPoint(repeatedColumns.second, cellRange.bottom()));
         const QRectF paintRect(0.0, repeatedHeight, repeatedWidth, pageRect.height());
         sheetView->setPaintCellRange(range);
         sheetView->paintCells(painter, paintRect, topLeft);
@@ -499,27 +481,25 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
     painter.restore();
 }
 
-QList<KoShape*> PrintJob::shapesOnPage(int pageNumber)
+QList<KoShape *> PrintJob::shapesOnPage(int pageNumber)
 {
     // This method is called only for page preparation; to determine the shapes to wait for.
     int sheetPageNumber = pageNumber;
-    Sheet* sheet = d->getSheetPageNumber(&sheetPageNumber);
+    Sheet *sheet = d->getSheetPageNumber(&sheetPageNumber);
     if (!sheet)
-        return QList<KoShape*>();
+        return QList<KoShape *>();
 
     const QRectF documentArea = sheet->print()->documentArea(sheetPageNumber);
     return shapeManager()->shapesAt(documentArea);
 }
 
-QList<QWidget*> PrintJob::createOptionWidgets() const
+QList<QWidget *> PrintJob::createOptionWidgets() const
 {
-    return QList<QWidget*>() << d->sheetSelectPage;
+    return QList<QWidget *>() << d->sheetSelectPage;
 }
 
 QAbstractPrintDialog::PrintDialogOptions PrintJob::printDialogOptions() const
 {
-    return QAbstractPrintDialog::PrintToFile |
-           QAbstractPrintDialog::PrintSelection |
-           QAbstractPrintDialog::PrintPageRange |
-           QAbstractPrintDialog::PrintCollateCopies;
+    return QAbstractPrintDialog::PrintToFile | QAbstractPrintDialog::PrintSelection | QAbstractPrintDialog::PrintPageRange
+        | QAbstractPrintDialog::PrintCollateCopies;
 }

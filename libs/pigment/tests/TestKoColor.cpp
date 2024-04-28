@@ -2,7 +2,7 @@
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include "TestKoColor.h"
 
@@ -12,10 +12,10 @@
 
 #include "KoColorModelStandardIds.h"
 
+#include "DebugPigment.h"
 #include "KoColor.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
-#include "DebugPigment.h"
 
 bool nearEqualValue(int a, int b)
 {
@@ -26,8 +26,8 @@ void TestKoColor::testForModel(QString model)
 {
     QColor qc(200, 125, 100);
     QList<KoID> depthIDs = KoColorSpaceRegistry::instance()->colorDepthList(model, KoColorSpaceRegistry::AllColorSpaces);
-    foreach(const KoID& depthId, depthIDs) {
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(model, depthId.id() , "");
+    foreach (const KoID &depthId, depthIDs) {
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(model, depthId.id(), "");
         if (cs) {
             KoColor kc(cs);
             kc.fromQColor(qc);
@@ -39,14 +39,14 @@ void TestKoColor::testForModel(QString model)
             KoColor kcu = KoColor::fromXML(elt.firstChildElement(), depthId.id(), QHash<QString, QString>());
             QVERIFY2(*(kc.colorSpace()) == *(kcu.colorSpace()),
                      QString("Not identical color space (colorModelId = %1 depthId = %2) != (colorModelId = %3 depthId = %4) ")
-                     .arg(kc.colorSpace()->colorModelId().id(),
-                          kc.colorSpace()->colorDepthId().id(),
-                          kcu.colorSpace()->colorModelId().id(),
-                          kcu.colorSpace()->colorDepthId().id()).toLatin1());
+                         .arg(kc.colorSpace()->colorModelId().id(),
+                              kc.colorSpace()->colorDepthId().id(),
+                              kcu.colorSpace()->colorModelId().id(),
+                              kcu.colorSpace()->colorDepthId().id())
+                         .toLatin1());
             QVERIFY(cs->difference(kcu.data(), kc.data()) <= 1);
         }
     }
-
 }
 
 void TestKoColor::testSerialization()
@@ -57,7 +57,7 @@ void TestKoColor::testSerialization()
     testForModel(CMYKAColorModelID.id());
     testForModel(GrayAColorModelID.id());
     // we cannot test ycbcr since we cannot ship profiles
-    //testForModel(YCbCrAColorModelID.id());
+    // testForModel(YCbCrAColorModelID.id());
 }
 
 void TestKoColor::testConversion()

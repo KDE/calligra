@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &MUSIC_LOG();
 
 #define debugMusic qCDebug(MUSIC_LOG)

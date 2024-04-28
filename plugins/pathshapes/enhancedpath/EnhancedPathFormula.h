@@ -16,58 +16,79 @@ class FormulaToken
 {
 public:
     /// token types
-    enum Type
-    {
-      TypeUnknown = 0, ///< unknown type
-      TypeNumber,      ///< 14, 3, 1977, 3.141592, 1e10, 5.9e-7
-      TypeOperator,    ///< +, *, /, -
-      TypeReference,   ///< function reference, modifier reference or named variable
-      TypeFunction     ///< function name
+    enum Type {
+        TypeUnknown = 0, ///< unknown type
+        TypeNumber, ///< 14, 3, 1977, 3.141592, 1e10, 5.9e-7
+        TypeOperator, ///< +, *, /, -
+        TypeReference, ///< function reference, modifier reference or named variable
+        TypeFunction ///< function name
     };
 
     /// operator types
     enum Operator {
-        OperatorInvalid,   ///< invalid operator
-        OperatorAdd,       ///< + addition
-        OperatorSub,       ///< - subtraction
-        OperatorMul,       ///< * multiplication
-        OperatorDiv,       ///< / division
-        OperatorLeftPar,   ///< (left parentheses
-        OperatorRightPar,  ///<) right parentheses
-        OperatorComma      ///< , comma
+        OperatorInvalid, ///< invalid operator
+        OperatorAdd, ///< + addition
+        OperatorSub, ///< - subtraction
+        OperatorMul, ///< * multiplication
+        OperatorDiv, ///< / division
+        OperatorLeftPar, ///< (left parentheses
+        OperatorRightPar, ///<) right parentheses
+        OperatorComma ///< , comma
     };
 
     /// Constructs token with given type, text and position
-    explicit FormulaToken(Type type = TypeUnknown, const QString & text = QString(), int position = -1);
+    explicit FormulaToken(Type type = TypeUnknown, const QString &text = QString(), int position = -1);
 
     /// copy constructor
     FormulaToken(const FormulaToken &token);
 
     /// assignment operator
-    FormulaToken& operator=(const FormulaToken &token);
+    FormulaToken &operator=(const FormulaToken &token);
 
     /// Returns the type of the token
-    Type type() const { return m_type; }
+    Type type() const
+    {
+        return m_type;
+    }
     /// Returns the text representation of the token
-    QString text() const { return m_text; }
+    QString text() const
+    {
+        return m_text;
+    }
     /// Returns the position of the token
-    int position() const { return m_position; }
+    int position() const
+    {
+        return m_position;
+    }
 
     /// Returns if the token is a number
-    bool isNumber() const { return m_type == TypeNumber; }
+    bool isNumber() const
+    {
+        return m_type == TypeNumber;
+    }
     /// Returns if the token is a operator, OperatorInvalid if token is no operator
-    bool isOperator() const { return m_type == TypeOperator; }
+    bool isOperator() const
+    {
+        return m_type == TypeOperator;
+    }
     /// Returns if token is a function
-    bool isFunction() const { return m_type == TypeFunction; }
+    bool isFunction() const
+    {
+        return m_type == TypeFunction;
+    }
     /// Returns  if token is a reference
-    bool isReference() const { return m_type == TypeReference; }
+    bool isReference() const
+    {
+        return m_type == TypeReference;
+    }
 
     /// Returns the token converted to qreal
     qreal asNumber() const;
     /// Returns the token as operator
     Operator asOperator() const;
+
 private:
-    Type m_type;    ///< the token type
+    Type m_type; ///< the token type
     QString m_text; ///< the token text representation
     int m_position; ///< the tokens position
 };
@@ -99,15 +120,15 @@ public:
 
     /// The possible error code returned by error()
     enum Error {
-        ErrorNone,    ///< no error
-        ErrorValue,   ///< error when converting value
-        ErrorParse,   ///< parsing error
+        ErrorNone, ///< no error
+        ErrorValue, ///< error when converting value
+        ErrorParse, ///< parsing error
         ErrorCompile, ///< compiling error
-        ErrorName     ///< invalid function name value
+        ErrorName ///< invalid function name value
     };
 
     /// Constructs a new formula from the specified string representation
-    EnhancedPathFormula(const QString &text, EnhancedPathShape * parent);
+    EnhancedPathFormula(const QString &text, EnhancedPathShape *parent);
 
     /// Destroys the formula
     ~EnhancedPathFormula();
@@ -121,12 +142,18 @@ public:
     qreal evaluate();
 
     /// Returns the last occurred error
-    Error error() const { return m_error; }
+    Error error() const
+    {
+        return m_error;
+    }
 
     /// returns string representation of the formula
     QString toString() const;
 
-    void resetCompiled() { m_compiled = false; }
+    void resetCompiled()
+    {
+        m_compiled = false;
+    }
 
 private:
     /// Separates the given formula text into tokens.
@@ -148,9 +175,9 @@ private:
     /// Prints byte code
     void debugOpcodes();
 
-    bool m_valid;    ///< flag that shows if function is valid, i.e the function was compiled successfully
+    bool m_valid; ///< flag that shows if function is valid, i.e the function was compiled successfully
     bool m_compiled; ///< flag that shows if function was compiled
-    Error m_error;   ///< the last occurred error
+    Error m_error; ///< the last occurred error
     QString m_text; ///< the formula text representation
     QList<QVariant> m_constants; ///< constant values
     QList<Opcode> m_codes; ///< the compiled byte code

@@ -13,8 +13,8 @@
 
 class QWidget;
 
-#include <kowidgets_export.h>
 #include <KoCanvasObserverBase.h>
+#include <kowidgets_export.h>
 /**
  * The tool docker shows the tool option widget associated with the
  * current tool and the current canvas.
@@ -32,14 +32,13 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
-
 protected:
-    void resizeEvent(QResizeEvent* event) override; ///< reimplemented from QWidget
+    void resizeEvent(QResizeEvent *event) override; ///< reimplemented from QWidget
 public Q_SLOTS:
     /**
      * Update the option widgets to the argument one, removing the currently set widget.
      */
-    void setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList);
+    void setOptionWidgets(const QList<QPointer<QWidget>> &optionWidgetList);
 
     /**
      * Returns whether the docker has an optionwidget attached
@@ -56,7 +55,7 @@ private:
     Q_PRIVATE_SLOT(d, void locationChanged(Qt::DockWidgetArea area))
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

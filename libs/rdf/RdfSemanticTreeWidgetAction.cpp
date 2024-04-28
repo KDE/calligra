@@ -6,14 +6,13 @@
 
 #include "RdfSemanticTreeWidgetAction.h"
 
+#include <KoCanvasBase.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
-#include <KoCanvasBase.h>
 
-RdfSemanticTreeWidgetAction::RdfSemanticTreeWidgetAction(QWidget *parent,
-        KoCanvasBase *canvas, const QString &name)
-        : QAction(name, parent)
-        , m_canvas(canvas)
+RdfSemanticTreeWidgetAction::RdfSemanticTreeWidgetAction(QWidget *parent, KoCanvasBase *canvas, const QString &name)
+    : QAction(name, parent)
+    , m_canvas(canvas)
 {
     connect(this, SIGNAL(triggered(bool)), this, SLOT(activated()));
 }

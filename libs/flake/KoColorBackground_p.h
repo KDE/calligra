@@ -15,13 +15,11 @@ class KoColorBackgroundPrivate : public KoShapeBackgroundPrivate
 {
 public:
     KoColorBackgroundPrivate()
-    : color(Qt::black)
-    , style(Qt::SolidPattern)
-    {};
+        : color(Qt::black)
+        , style(Qt::SolidPattern){};
 
     QColor color;
     Qt::BrushStyle style;
 };
-
 
 #endif // KOCOLORBACKGROUND_P_H

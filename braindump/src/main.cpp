@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QLoggingCategory>
@@ -25,8 +24,8 @@
 #include <KIconLoader>
 
 #include "AboutData.h"
-#include "MainWindow.h"
 #include "KoGlobal.h"
+#include "MainWindow.h"
 #include "RootSection.h"
 #include "SectionsIO.h"
 
@@ -41,8 +40,9 @@ int main(int argc, char **argv)
      *
      * See: http://doc.qt.io/qt-5/qloggingcategory.html
      */
-    QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
-                                     "calligra.*.warning=true");
+    QLoggingCategory::setFilterRules(
+        "calligra.*.debug=false\n"
+        "calligra.*.warning=true");
 
     QApplication app(argc, argv);
     KLocalizedString::setApplicationDomain("braindump");
@@ -60,9 +60,9 @@ int main(int argc, char **argv)
     KIconLoader::global()->addAppDir("calligra");
     KoGlobal::initialize();
 
-    RootSection* doc = new RootSection;
+    RootSection *doc = new RootSection;
 
-    MainWindow* window = new MainWindow(doc);
+    MainWindow *window = new MainWindow(doc);
     window->setVisible(true);
 
     app.exec();

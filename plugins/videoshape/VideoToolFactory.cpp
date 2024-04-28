@@ -9,11 +9,11 @@
 #include "VideoShape.h"
 #include "VideoTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 
 VideoToolFactory::VideoToolFactory()
-    :KoToolFactoryBase("VideoToolFactoryId")
+    : KoToolFactoryBase("VideoToolFactoryId")
 {
     setToolTip(i18n("Video handling"));
     setIconName(koIconName("video-x-generic"));
@@ -24,10 +24,9 @@ VideoToolFactory::VideoToolFactory()
 
 VideoToolFactory::~VideoToolFactory()
 {
-
 }
 
-KoToolBase* VideoToolFactory::createTool(KoCanvasBase* canvas)
+KoToolBase *VideoToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new VideoTool(canvas);
 }

@@ -9,9 +9,9 @@
  *
  */
 
-#include <QXmlStreamReader>
-#include <QFile>
 #include <QDebug>
+#include <QFile>
+#include <QXmlStreamReader>
 
 #include "../ComplexShapeHandler.h"
 
@@ -91,7 +91,8 @@
 //    </pathLst>
 //  </upArrow>
 
-const QString license = "/*\n\
+const QString license =
+    "/*\n\
  * This file is part of Office 2007 Filters for Calligra\n\
  *\n\
  * SPDX-FileCopyrightText: 2010-2011 Nokia Corporation and /or its subsidiary(-ies).\n\
@@ -127,7 +128,7 @@ int main()
 
     QXmlStreamReader xml(&inputFile);
 
-    enum ReadingState {Beginning, ShapeNameNext, InShapeName};
+    enum ReadingState { Beginning, ShapeNameNext, InShapeName };
     ReadingState state = Beginning;
 
     QXmlStreamAttributes attrs;
@@ -168,28 +169,24 @@ int main()
                 shapeDefinition.clear();
                 pathEquations.clear();
                 shapeAttributes.replace('"', "\\\"");
-                outStream << "attributes[\"" << currentShapeName << "\"]=\"" << shapeAttributes << "\";" << "\n";
+                outStream << "attributes[\"" << currentShapeName << "\"]=\"" << shapeAttributes << "\";"
+                          << "\n";
                 shapeAttributes = "";
-            }
-            else if (xml.isStartElement() && xml.name() == QLatin1StringView("avLst")) {
+            } else if (xml.isStartElement() && xml.name() == QLatin1StringView("avLst")) {
                 shapeDefinition += handler.handle_avLst(&xml);
-            }
-            else if (xml.isStartElement() && xml.name() == QLatin1StringView("gdLst")) {
+            } else if (xml.isStartElement() && xml.name() == QLatin1StringView("gdLst")) {
                 shapeDefinition += handler.handle_gdLst(&xml);
-            }
-            else if (xml.isStartElement() && xml.name() == QLatin1StringView("pathLst")) {
+            } else if (xml.isStartElement() && xml.name() == QLatin1StringView("pathLst")) {
                 shapeAttributes += handler.handle_pathLst(&xml);
                 pathEquations += handler.pathEquationsCreated();
-            }
-            else if (xml.isStartElement() && xml.name() == QLatin1StringView("ahLst")) {
+            } else if (xml.isStartElement() && xml.name() == QLatin1StringView("ahLst")) {
                 xml.skipCurrentElement();
-            }
-            else if (xml.isStartElement() && xml.name() == QLatin1StringView("rect")) {
+            } else if (xml.isStartElement() && xml.name() == QLatin1StringView("rect")) {
                 // draw:text-areas
                 textareas = handler.handle_rect(&xml);
-                outStream << "textareas[\"" << currentShapeName << "\"]=\"" << textareas << "\";" << "\n";
-            }
-            else if (xml.isStartElement() && xml.name() == QLatin1StringView("cxnLst")) {
+                outStream << "textareas[\"" << currentShapeName << "\"]=\"" << textareas << "\";"
+                          << "\n";
+            } else if (xml.isStartElement() && xml.name() == QLatin1StringView("cxnLst")) {
                 xml.skipCurrentElement();
             }
             xml.readNext();

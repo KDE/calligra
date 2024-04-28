@@ -8,8 +8,8 @@
 #define KSPREAD_RECT_STORAGE_UNDO_COMMAND
 
 // Qt
-#include <QVector>
 #include <QPair>
+#include <QVector>
 #include <kundo2command.h>
 
 // Sheets
@@ -42,8 +42,8 @@ public:
 
     void add(const QVector<Pair> &pairs);
 
-    RectStorageUndoCommand& operator<<(const Pair &pair);
-    RectStorageUndoCommand& operator<<(const QVector<Pair> &pairs);
+    RectStorageUndoCommand &operator<<(const Pair &pair);
+    RectStorageUndoCommand &operator<<(const QVector<Pair> &pairs);
 
 private:
     QAbstractItemModel *const m_model;
@@ -52,18 +52,17 @@ private:
 };
 
 template<typename T>
-RectStorageUndoCommand<T>::RectStorageUndoCommand(QAbstractItemModel *const model,
-        int role, KUndo2Command *parent)
-        : KUndo2Command(parent)
-        , m_model(model)
-        , m_role(role)
+RectStorageUndoCommand<T>::RectStorageUndoCommand(QAbstractItemModel *const model, int role, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_model(model)
+    , m_role(role)
 {
 }
 
 template<typename T>
 void RectStorageUndoCommand<T>::undo()
 {
-    SheetModel *const model = static_cast<SheetModel*>(m_model);
+    SheetModel *const model = static_cast<SheetModel *>(m_model);
     for (int i = 0; i < m_undoData.count(); ++i) {
         QVariant data;
         data.setValue(m_undoData[i].second);
@@ -73,20 +72,20 @@ void RectStorageUndoCommand<T>::undo()
 }
 
 template<typename T>
-void RectStorageUndoCommand<T>::add(const QVector<Pair>& pairs)
+void RectStorageUndoCommand<T>::add(const QVector<Pair> &pairs)
 {
     m_undoData << pairs;
 }
 
 template<typename T>
-RectStorageUndoCommand<T>& RectStorageUndoCommand<T>::operator<<(const Pair& pair)
+RectStorageUndoCommand<T> &RectStorageUndoCommand<T>::operator<<(const Pair &pair)
 {
     m_undoData << pair;
     return *this;
 }
 
 template<typename T>
-RectStorageUndoCommand<T>& RectStorageUndoCommand<T>::operator<<(const QVector<Pair>& pairs)
+RectStorageUndoCommand<T> &RectStorageUndoCommand<T>::operator<<(const QVector<Pair> &pairs)
 {
     m_undoData << pairs;
     return *this;

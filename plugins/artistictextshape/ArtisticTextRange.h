@@ -8,26 +8,23 @@
 #ifndef ARTISITICTEXTRANGE_H
 #define ARTISITICTEXTRANGE_H
 
-#include <QString>
-#include <QPointF>
 #include <QFont>
 #include <QList>
+#include <QPointF>
+#include <QString>
 
 /// Represents a range of characters with the same text properties
 class ArtisticTextRange
 {
 public:
-    enum OffsetType {
-        AbsoluteOffset,
-        RelativeOffset
-    };
+    enum OffsetType { AbsoluteOffset, RelativeOffset };
 
     enum BaselineShift {
-        None,     ///< no baseline shift
-        Sub,      ///< subscript baseline shift
-        Super,    ///< superscript baseline shift
-        Percent,  ///< percentage baseline shift
-        Length    ///< absolute baseline shift
+        None, ///< no baseline shift
+        Sub, ///< subscript baseline shift
+        Super, ///< superscript baseline shift
+        Percent, ///< percentage baseline shift
+        Length ///< absolute baseline shift
     };
 
     ArtisticTextRange(const QString &text, const QFont &font);

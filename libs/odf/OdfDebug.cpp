@@ -6,10 +6,8 @@
 
 #include "OdfDebug.h"
 
-const QLoggingCategory &ODF_LOG() \
+const QLoggingCategory &ODF_LOG()
 {
     static const QLoggingCategory category("calligra.lib.odf");
     return category;
 }
-
-

@@ -23,10 +23,10 @@
 
 #include "stage_export.h"
 
-#include <KoPAViewMode.h>
 #include "KPrAnimationDirector.h"
-#include <QTimeLine>
+#include <KoPAViewMode.h>
 #include <QPixmap>
+#include <QTimeLine>
 
 class KPrPage;
 class KPrPageEffect;
@@ -34,29 +34,27 @@ class KPrPageEffectRunner;
 
 class STAGE_EXPORT KPrViewModePreviewPageEffect : public KoPAViewMode
 {
-
     Q_OBJECT
 public:
-    KPrViewModePreviewPageEffect( KoPAViewBase * view, KoPACanvasBase * m_canvas );
+    KPrViewModePreviewPageEffect(KoPAViewBase *view, KoPACanvasBase *m_canvas);
     ~KPrViewModePreviewPageEffect() override;
 
-    void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect) override;
-    void tabletEvent( QTabletEvent *event, const QPointF &point ) override;
-    void mousePressEvent( QMouseEvent *event, const QPointF &point ) override;
-    void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point ) override;
-    void mouseMoveEvent( QMouseEvent *event, const QPointF &point ) override;
-    void mouseReleaseEvent( QMouseEvent *event, const QPointF &point ) override;
-    void shortcutOverrideEvent( QKeyEvent *event ) override;
-    void keyPressEvent( QKeyEvent *event ) override;
-    void keyReleaseEvent( QKeyEvent *event ) override;
-    void wheelEvent( QWheelEvent * event, const QPointF &point ) override;
+    void paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect) override;
+    void tabletEvent(QTabletEvent *event, const QPointF &point) override;
+    void mousePressEvent(QMouseEvent *event, const QPointF &point) override;
+    void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point) override;
+    void mouseMoveEvent(QMouseEvent *event, const QPointF &point) override;
+    void mouseReleaseEvent(QMouseEvent *event, const QPointF &point) override;
+    void shortcutOverrideEvent(QKeyEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+    void wheelEvent(QWheelEvent *event, const QPointF &point) override;
 
-    void activate( KoPAViewMode * previousViewMode ) override;
+    void activate(KoPAViewMode *previousViewMode) override;
     void deactivate() override;
 
     /// reimplemented
-    void updateActivePage( KoPAPageBase *page ) override;
-
+    void updateActivePage(KoPAPageBase *page) override;
 
     /**
      * Set a page effect
@@ -65,7 +63,7 @@ public:
      * @param page The current page used in the preview. If 0 the preview will be x
      * @param prevpage The page coming before @p page
      */
-    void setPageEffect( KPrPageEffect* pageEffect, KPrPage* page, KPrPage* prevpage );
+    void setPageEffect(KPrPageEffect *pageEffect, KPrPage *page, KPrPage *prevpage);
 
 public Q_SLOTS:
     /**
@@ -82,13 +80,13 @@ protected Q_SLOTS:
 private:
     void updatePixmaps();
 
-    KoPAViewMode * m_savedViewMode;
+    KoPAViewMode *m_savedViewMode;
     QTimeLine m_timeLine;
 
-    KPrPageEffect* m_pageEffect;
-    KPrPageEffectRunner* m_pageEffectRunner;
-    KPrPage* m_page;
-    KPrPage* m_prevpage;
+    KPrPageEffect *m_pageEffect;
+    KPrPageEffectRunner *m_pageEffectRunner;
+    KPrPage *m_page;
+    KPrPage *m_prevpage;
 
     QPixmap m_oldPage;
     QPixmap m_newPage;

@@ -6,13 +6,13 @@
 
 #include "StencilListView.h"
 
+#include <QDebug>
 #include <QDragEnterEvent>
 #include <QDropEvent>
-#include <QDebug>
 #include <QMimeData>
 
-StencilListView::StencilListView(QWidget* parent) :
-    QListView(parent)
+StencilListView::StencilListView(QWidget *parent)
+    : QListView(parent)
 {
     int iconSize = style()->pixelMetric(QStyle::PM_IconViewIconSize, 0, this);
     setFocusPolicy(Qt::NoFocus);
@@ -32,15 +32,15 @@ StencilListView::StencilListView(QWidget* parent) :
     setEditTriggers(QAbstractItemView::AnyKeyPressed);
 }
 
-void StencilListView::dragEnterEvent(QDragEnterEvent* event)
+void StencilListView::dragEnterEvent(QDragEnterEvent *event)
 {
-    //debugStencilBox << event->mimeData()->formats();
-    // TODO
+    // debugStencilBox << event->mimeData()->formats();
+    //  TODO
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
 }
 
-void StencilListView::dropEvent(QDropEvent* event)
+void StencilListView::dropEvent(QDropEvent *event)
 {
     // TODO
     event->acceptProposedAction();

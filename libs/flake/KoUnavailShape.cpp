@@ -5,57 +5,55 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "KoUnavailShape.h"
 
 // Qt
-#include <QPen>
+#include <QBuffer>
+#include <QByteArray>
+#include <QDataStream>
 #include <QPainter>
 #include <QPainterPath>
-#include <QByteArray>
-#include <QBuffer>
-#include <QDataStream>
+#include <QPen>
 #include <QPixmap>
+#include <QStandardPaths>
 #include <QStringList>
 #include <QSvgRenderer>
-#include <QStandardPaths>
 
 // Calligra
-#include <KoUnit.h>
-#include <KoStore.h>
-#include <KoXmlReader.h>
-#include <KoXmlWriter.h>
-#include <KoXmlNS.h>
-#include <KoOdfManifestEntry.h>
-#include <KoOdfLoadingContext.h>
-#include <KoEmbeddedDocumentSaver.h>
+#include "KoShapeBackground.h"
+#include "KoShapeContainerDefaultModel.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
-#include "KoShapeContainerDefaultModel.h"
-#include "KoShapeBackground.h"
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfManifestEntry.h>
+#include <KoStore.h>
+#include <KoUnit.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
 #include <FlakeDebug.h>
 
-
 // The XML of a frame looks something like this:
-// 
+//
 // 1. <draw:frame ...attributes...>
 // 2.   <draw:object xlink:href="./Object1" ...more attributes>
 // 3.   <draw:image xlink:href="./ObjectReplacements/Object1" ...more attributes>
 // 4. </draw:frame>
 //
 // or
-// 
+//
 // 1. <draw:frame ...attributes...>
-// 2.   <math:math>...inline xml here...</math:math>    
+// 2.   <math:math>...inline xml here...</math:math>
 // 3.   <draw:image xlink:href="./ObjectReplacements/Object1" ...more attributes>
 // 4. </draw:frame>
 //
 // We define each Xml statement on lines 2 and 3 above as an "object".
 // (Strictly only the first child element is an object in the ODF sense,
 // but we have to have some terminology here.)
-// 
+//
 // In an ODF frame, only the first line, i.e. the first object
 // contains the real contents.  All the rest of the objects are used /
 // shown if we cannot handle the first one.  The most common cases are
@@ -64,7 +62,7 @@
 //
 // Sometimes, e.g. in the case of an embedded document, the reference
 // points not to a file but to a directory structure inside the ODF
-// store. 
+// store.
 //
 // When we load and save in the UnavailShape, we have to be general
 // enough to cover all possible cases of references and inline XML,
@@ -81,12 +79,11 @@
 //        KoEmbeddedDocumentSaver and the KoImageCollection.
 //
 
-
 // An ObjectEntry is used to store information about objects in the
 // frame, as defined above.
 struct ObjectEntry {
     QByteArray objectXmlContents; // the XML tree in the object
-    QString objectName;       // object name in the frame without "./"
+    QString objectName; // object name in the frame without "./"
     // This is extracted from objectXmlContents.
     bool isDir;
     KoOdfManifestEntry *manifestEntry; // manifest entry for the above.
@@ -95,25 +92,23 @@ struct ObjectEntry {
 // A FileEntry is used to store information about embedded files
 // inside (i.e. referred to by) an object.
 struct FileEntry {
-    QString path;           // Normalized filename, i.e. without "./".
+    QString path; // Normalized filename, i.e. without "./".
     QString mimeType;
-    bool  isDir;
+    bool isDir;
     QByteArray contents;
 };
-
 
 class KoUnavailShape::Private
 {
 public:
-    Private(KoUnavailShape* qq);
+    Private(KoUnavailShape *qq);
     ~Private();
 
     void draw(QPainter &painter) const;
     void drawNull(QPainter &painter) const;
 
     void storeObjects(const KoXmlElement &element);
-    void storeXmlRecursive(const KoXmlElement &el, KoXmlWriter &writer,
-                           ObjectEntry *object, QHash<QString, QString> &unknownNamespaces);
+    void storeXmlRecursive(const KoXmlElement &el, KoXmlWriter &writer, ObjectEntry *object, QHash<QString, QString> &unknownNamespaces);
     void storeFile(const QString &filename, KoShapeLoadingContext &context);
     QByteArray loadFile(const QString &filename, KoShapeLoadingContext &context);
 
@@ -122,22 +117,22 @@ public:
     //  - Any embedded files (names, contents) that are referenced by xlink:href
     //  - Whether they are directories, i.e. if they contain a file tree and not just one file.
     //  - The manifest entries
-    QList<ObjectEntry*> objectEntries;
+    QList<ObjectEntry *> objectEntries;
 
     // Embedded files
-    QList<FileEntry*> embeddedFiles; // List of embedded files.
+    QList<FileEntry *> embeddedFiles; // List of embedded files.
 
     // Some cached values.
     QPixmap questionMark;
     QPixmap pixmapPreview;
     QSvgRenderer *scalablePreview;
 
-    KoUnavailShape* q;
+    KoUnavailShape *q;
 };
 
-KoUnavailShape::Private::Private(KoUnavailShape* qq)
-: scalablePreview(new QSvgRenderer())
-, q(qq)
+KoUnavailShape::Private::Private(KoUnavailShape *qq)
+    : scalablePreview(new QSvgRenderer())
+    , q(qq)
 {
     // Get the question mark "icon".
     questionMark.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/pics/questionmark.png"));
@@ -149,30 +144,27 @@ KoUnavailShape::Private::~Private()
     qDeleteAll(embeddedFiles);
 
     // It's a QObject, but we haven't parented it.
-    delete(scalablePreview);
+    delete (scalablePreview);
 }
-
 
 // ----------------------------------------------------------------
 //                         The main class
 
-
 KoUnavailShape::KoUnavailShape()
-: KoFrameShape( "", "" )
-, KoShapeContainer(new KoShapeContainerDefaultModel())
-, d(new Private(this))
+    : KoFrameShape("", "")
+    , KoShapeContainer(new KoShapeContainerDefaultModel())
+    , d(new Private(this))
 {
     setShapeId(KoUnavailShape_SHAPEID);
 
     // Default size of the shape.
-    KoShape::setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 3 ) ) );
+    KoShape::setSize(QSizeF(CM_TO_POINT(5), CM_TO_POINT(3)));
 }
 
 KoUnavailShape::~KoUnavailShape()
 {
     delete d;
 }
-
 
 void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
@@ -188,7 +180,7 @@ void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter, 
             background()->paint(painter, converter, paintContext, p);
         }
     } else {
-        if(shapes().isEmpty()) {
+        if (shapes().isEmpty()) {
             d->draw(painter);
         }
     }
@@ -209,13 +201,11 @@ void KoUnavailShape::Private::draw(QPainter &painter) const
     if (scalablePreview->isValid()) {
         QRect bounds(0, 0, q->boundingRect().width(), q->boundingRect().height());
         scalablePreview->render(&painter, bounds);
-    }
-    else if (!pixmapPreview.isNull()) {
+    } else if (!pixmapPreview.isNull()) {
         QRect bounds(0, 0, q->boundingRect().width(), q->boundingRect().height());
         painter.setRenderHint(QPainter::SmoothPixmapTransform);
         painter.drawPixmap(bounds, pixmapPreview);
-    }
-    else if (q->shapes().isEmpty()) {
+    } else if (q->shapes().isEmpty()) {
         // Draw a nice question mark with a frame around it if there
         // is no other preview image. If there is a contained image
         // shape, we don't need to draw anything.
@@ -229,28 +219,26 @@ void KoUnavailShape::Private::draw(QPainter &painter) const
         //  - the size of the shape if  shapesize < 2cm
         //  - 2 cm                  if  2cm <= shapesize <= 8cm
         //  - shapesize / 4         if  shapesize > 8cm
-        qreal  width = q->size().width();
-        qreal  height = q->size().height();
-        qreal  picSize = CM_TO_POINT(2); // Default size is 2 cm.
+        qreal width = q->size().width();
+        qreal height = q->size().height();
+        qreal picSize = CM_TO_POINT(2); // Default size is 2 cm.
         if (width < CM_TO_POINT(2) || height < CM_TO_POINT(2))
             picSize = qMin(width, height);
         else if (width > CM_TO_POINT(8) && height > CM_TO_POINT(8))
             picSize = qMin(width, height) / qreal(4.0);
 
-        painter.drawPixmap((width - picSize) / qreal(2.0), (height - picSize) / qreal(2.0),
-                           picSize, picSize, questionMark);
+        painter.drawPixmap((width - picSize) / qreal(2.0), (height - picSize) / qreal(2.0), picSize, picSize, questionMark);
 
         // Draw a gray rectangle around the shape.
         painter.setPen(QPen(QColor(172, 196, 206), 0));
-        painter.drawRect(QRectF(QPointF(0,0), q->size()));
-
+        painter.drawRect(QRectF(QPointF(0, 0), q->size()));
     }
     painter.restore();
 }
 
 void KoUnavailShape::Private::drawNull(QPainter &painter) const
 {
-    QRectF  rect(QPointF(0,0), q->size());
+    QRectF rect(QPointF(0, 0), q->size());
     painter.save();
 
     // Draw a simple cross in a rectangle just to indicate that there is something here.
@@ -260,12 +248,10 @@ void KoUnavailShape::Private::drawNull(QPainter &painter) const
     painter.restore();
 }
 
-
 // ----------------------------------------------------------------
 //                         Loading and Saving
 
-
-void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
+void KoUnavailShape::saveOdf(KoShapeSavingContext &context) const
 {
     debugFlake << "START SAVING ##################################################";
 
@@ -275,7 +261,7 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
     writer.startElement("draw:frame");
 
     // See also loadOdf() in loadOdfAttributes.
-    saveOdfAttributes( context, OdfAllAttributes );
+    saveOdfAttributes(context, OdfAllAttributes);
 
     // Write the stored XML to the file, but don't reuse object names.
     int lap = 0;
@@ -292,11 +278,9 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
             // The first lap in the loop is the actual object.  All
             // other laps are replacement objects.
             newName = fileSaver.getFilename("Object ");
-        }
-        else if (lap == 2) {
+        } else if (lap == 2) {
             newName = "ObjectReplacements/" + newName;
-        }
-        else
+        } else
             // FIXME: what should replacement 2 and onwards be called?
             newName = newName + "_";
 
@@ -317,15 +301,14 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 
         // Save embedded files for this object.
         foreach (FileEntry *entry, d->embeddedFiles) {
-            QString  fileName(entry->path);
+            QString fileName(entry->path);
 
             // If we found a file for this object, we need to write it
             // but with the new object name instead of the old one.
             if (!fileName.startsWith(objectName))
                 continue;
 
-            debugFlake << "Object name: " << objectName << "newName: " << newName
-            << "filename: " << fileName << "isDir: " << entry->isDir;
+            debugFlake << "Object name: " << objectName << "newName: " << newName << "filename: " << fileName << "isDir: " << entry->isDir;
 
             fileName.replace(objectName, newName);
             fileName.prepend("./");
@@ -339,20 +322,18 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
         // file, the manifest is already written by saveFile, so skip
         // it here.
         if (object->isDir) {
-            fileSaver.saveManifestEntry(newName + '/', manifestEntry->mediaType(),
-                                        manifestEntry->version());
+            fileSaver.saveManifestEntry(newName + '/', manifestEntry->mediaType(), manifestEntry->version());
         }
     }
 
     writer.endElement(); // draw:frame
 }
 
-
 bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingContext &context)
 {
     debugFlake << "START LOADING ##################################################";
-    //debugFlake << "Loading ODF frame in the KoUnavailShape. Element = "
-    //              << frameElement.tagName();
+    // debugFlake << "Loading ODF frame in the KoUnavailShape. Element = "
+    //               << frameElement.tagName();
 
     loadOdfAttributes(frameElement, context, OdfAllAttributes);
 
@@ -361,9 +342,9 @@ bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingCon
     //       loadOdfFrame() provides.
 
     // Get the manifest.
-    QList<KoOdfManifestEntry*> manifest = context.odfLoadingContext().manifestEntries();
+    QList<KoOdfManifestEntry *> manifest = context.odfLoadingContext().manifestEntries();
 
-#if 0   // Enable to show all manifest entries.
+#if 0 // Enable to show all manifest entries.
     debugFlake << "MANIFEST: ";
     foreach (KoOdfManifestEntry *entry, manifest) {
         debugFlake << entry->mediaType() << entry->fullPath() << entry->version();
@@ -382,8 +363,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingCon
     debugFlake << "----------------------------------------------------------------";
     debugFlake << "After storeObjects():";
     foreach (ObjectEntry *object, d->objectEntries) {
-        debugFlake << "objectXmlContents: " << object->objectXmlContents
-        << "objectName: " << object->objectName;
+        debugFlake << "objectXmlContents: " << object->objectXmlContents << "objectName: " << object->objectName;
         // Note: at this point, isDir and manifestEntry are not set.
 #endif
     }
@@ -419,8 +399,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingCon
                     d->storeFile(entry->fullPath(), context);
                 }
             }
-        }
-        else {
+        } else {
             // A file: save it.
             d->storeFile(objectName, context);
         }
@@ -465,7 +444,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingCon
         }
     }
 
-#if 0   // Enable to get more detailed debug messages
+#if 0 // Enable to get more detailed debug messages
     debugFlake << "Object manifest entries:";
     for (int i = 0; i < d->manifestEntries.size(); ++i) {
         KoOdfManifestEntry *entry = d->manifestEntries.value(i);
@@ -481,14 +460,11 @@ bool KoUnavailShape::loadOdf(const KoXmlElement &frameElement, KoShapeLoadingCon
     return true;
 }
 
-
 // Load the actual contents inside the frame.
-bool KoUnavailShape::loadOdfFrameElement(const KoXmlElement & /*element*/,
-                                         KoShapeLoadingContext &/*context*/)
+bool KoUnavailShape::loadOdfFrameElement(const KoXmlElement & /*element*/, KoShapeLoadingContext & /*context*/)
 {
     return true;
 }
-
 
 // ----------------------------------------------------------------
 //                         Private functions
@@ -506,7 +482,7 @@ void KoUnavailShape::Private::storeObjects(const KoXmlElement &element)
             continue;
         KoXmlElement el = n.toElement();
 
-        ObjectEntry  *object = new ObjectEntry;
+        ObjectEntry *object = new ObjectEntry;
 
         QByteArray contentsTmp;
         QBuffer buffer(&contentsTmp); // the member
@@ -515,7 +491,7 @@ void KoUnavailShape::Private::storeObjects(const KoXmlElement &element)
         // 1. Find out the objectName
         // Save the normalized filename, i.e. without a starting "./".
         // An empty string is saved if no name is found.
-        QString  name = el.attributeNS(KoXmlNS::xlink, "href", QString());
+        QString name = el.attributeNS(KoXmlNS::xlink, "href", QString());
         if (name.startsWith(QLatin1String("./")))
             name.remove(0, 2);
         object->objectName = name;
@@ -527,15 +503,14 @@ void KoUnavailShape::Private::storeObjects(const KoXmlElement &element)
 
         // 3, 4: the isDir and manifestEntry members are not set here,
         // but initialize them anyway. .
-        object->isDir = false;  // Has to be initialized to something.
+        object->isDir = false; // Has to be initialized to something.
         object->manifestEntry = 0;
 
         objectEntries.append(object);
     }
 }
 
-void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWriter &writer,
-                                                ObjectEntry *object, QHash<QString, QString> &unknownNamespaces)
+void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWriter &writer, ObjectEntry *object, QHash<QString, QString> &unknownNamespaces)
 {
     // Start the element;
     // keep the name in a QByteArray so that it stays valid until end element is called.
@@ -543,13 +518,12 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
     writer.startElement(name.constData());
 
     // Copy all the attributes, including namespaces.
-    QList< QPair<QString, QString> >  attributeNames = el.attributeFullNames();
+    QList<QPair<QString, QString>> attributeNames = el.attributeFullNames();
     for (int i = 0; i < attributeNames.size(); ++i) {
         QPair<QString, QString> attrPair(attributeNames.value(i));
         if (attrPair.first.isEmpty()) {
             writer.addAttribute(attrPair.second.toLatin1(), el.attribute(attrPair.second));
-        }
-        else {
+        } else {
             // This somewhat convoluted code is because we need the
             // namespace, not the namespace URI.
             QString nsShort = KoXmlNS::nsURI2NS(attrPair.first.toLatin1());
@@ -565,8 +539,7 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
                 writer.addAttribute(name.toLatin1(), attrPair.first.toLatin1());
             }
             QString attr(nsShort + ':' + attrPair.second);
-            writer.addAttribute(attr.toLatin1(), el.attributeNS(attrPair.first,
-                                                               attrPair.second));
+            writer.addAttribute(attr.toLatin1(), el.attributeNS(attrPair.first, attrPair.second));
         }
     }
 
@@ -576,9 +549,8 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
     for (; !n.isNull(); n = n.nextSibling()) {
         if (n.isElement()) {
             storeXmlRecursive(n.toElement(), writer, object, unknownNamespaces);
-        }
-        else if (n.isText()) {
-            writer.addTextNode(n.toText().data()/*.toUtf8()*/);
+        } else if (n.isText()) {
+            writer.addTextNode(n.toText().data() /*.toUtf8()*/);
         }
     }
 
@@ -639,6 +611,6 @@ QByteArray KoUnavailShape::Private::loadFile(const QString &fileName, KoShapeLoa
     fileContent = store->read(fileSize);
     store->close();
 
-    //debugFlake << "File content: " << fileContent;
+    // debugFlake << "File content: " << fileContent;
     return fileContent;
 }

@@ -9,24 +9,30 @@
 #define KCHART_TABLESOURCE_H
 
 // Qt
-#include <QObject>
 #include <QAbstractItemModel>
+#include <QObject>
 
 // KoChart
 #include "ChartShape.h"
 
-
 class QString;
 
-
-namespace KoChart {
+namespace KoChart
+{
 
 class Table
 {
     friend class TableSource;
+
 public:
-    QAbstractItemModel *model() const { return m_model; }
-    QString name() const { return m_name; }
+    QAbstractItemModel *model() const
+    {
+        return m_model;
+    }
+    QString name() const
+    {
+        return m_name;
+    }
 
 private:
     Table(const QString &name, QAbstractItemModel *model);
@@ -35,7 +41,7 @@ private:
     QAbstractItemModel *m_model;
 };
 
-typedef QMap<QString, Table*> TableMap;
+typedef QMap<QString, Table *> TableMap;
 
 class TableSource : public QObject
 {
@@ -135,7 +141,7 @@ private Q_SLOTS:
     void samColumnsInserted(QModelIndex, int, int);
     void samColumnsRemoved(QModelIndex, int, int);
     void samDataChanged(const QModelIndex &first, const QModelIndex &last);
-    void samHeaderDataChanged(Qt::Orientation, int, int );
+    void samHeaderDataChanged(Qt::Orientation, int, int);
 
 private:
     class Private;

@@ -5,13 +5,15 @@
  */
 
 #include "FilterStackSetCommand.h"
-#include "KoShape.h"
 #include "KoFilterEffectStack.h"
+#include "KoShape.h"
 
 #include <KLocalizedString>
 
 FilterStackSetCommand::FilterStackSetCommand(KoFilterEffectStack *newStack, KoShape *shape, KUndo2Command *parent)
-        : KUndo2Command(parent), m_newFilterStack(newStack), m_shape(shape)
+    : KUndo2Command(parent)
+    , m_newFilterStack(newStack)
+    , m_shape(shape)
 {
     Q_ASSERT(m_shape);
     m_oldFilterStack = m_shape->filterEffectStack();

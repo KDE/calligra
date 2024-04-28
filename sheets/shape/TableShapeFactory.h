@@ -19,9 +19,10 @@ class TableShapePlugin : public QObject
 {
     Q_OBJECT
 public:
-
-    TableShapePlugin(QObject * parent,  const QVariantList &);
-    ~TableShapePlugin() {}
+    TableShapePlugin(QObject *parent, const QVariantList &);
+    ~TableShapePlugin()
+    {
+    }
 };
 
 class TableShapeFactory : public KoShapeFactoryBase

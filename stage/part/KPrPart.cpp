@@ -6,18 +6,18 @@
 
 #include "KPrPart.h"
 
-#include "KPrView.h"
 #include "KPrDocument.h"
 #include "KPrFactory.h"
+#include "KPrView.h"
 
+#include "KPrPageSelectStrategyActive.h"
+#include "KPrShapeManagerDisplayMasterStrategy.h"
+#include <KoCanvasBase.h>
 #include <KoComponentData.h>
 #include <KoPACanvasItem.h>
-#include <KoCanvasBase.h>
-#include <KoShapeRegistry.h>
-#include <KoShapeManager.h>
-#include "KPrShapeManagerDisplayMasterStrategy.h"
-#include "KPrPageSelectStrategyActive.h"
 #include <KoPAPageBase.h>
+#include <KoShapeManager.h>
+#include <KoShapeRegistry.h>
 
 #include <KMessageBox>
 
@@ -37,9 +37,9 @@ void KPrPart::setDocument(KPrDocument *document)
     m_document = document;
 }
 
-KoView * KPrPart::createViewInstance(KoDocument *document, QWidget *parent)
+KoView *KPrPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
-    auto prDocument = qobject_cast<KPrDocument*>(document);
+    auto prDocument = qobject_cast<KPrDocument *>(document);
     KPrView *view = new KPrView(this, prDocument, parent);
     connect(prDocument, &KPrDocument::replaceActivePage, view, &KPrView::replaceActivePage);
     return view;
@@ -47,9 +47,9 @@ KoView * KPrPart::createViewInstance(KoDocument *document, QWidget *parent)
 
 QGraphicsItem *KPrPart::createCanvasItem(KoDocument *document)
 {
-    KoPACanvasItem *canvasItem = new KoPACanvasItem(qobject_cast<KoPADocument*>(document));
-    canvasItem->masterShapeManager()->setPaintingStrategy(new KPrShapeManagerDisplayMasterStrategy(canvasItem->masterShapeManager(),
-                                                                                                   new KPrPageSelectStrategyActive(canvasItem)));
+    KoPACanvasItem *canvasItem = new KoPACanvasItem(qobject_cast<KoPADocument *>(document));
+    canvasItem->masterShapeManager()->setPaintingStrategy(
+        new KPrShapeManagerDisplayMasterStrategy(canvasItem->masterShapeManager(), new KPrPageSelectStrategyActive(canvasItem)));
     return canvasItem;
 }
 
@@ -84,9 +84,8 @@ void KPrPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 
 void KPrPart::showErrorAndDie()
 {
-    KMessageBox::error(0, m_errorMessage, i18n( "Installation Error"));
+    KMessageBox::error(0, m_errorMessage, i18n("Installation Error"));
     // This means "the environment is incorrect" on Windows
     // FIXME: Is this uniform on all platforms?
     QCoreApplication::exit(10);
 }
-

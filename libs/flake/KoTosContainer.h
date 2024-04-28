@@ -16,7 +16,6 @@
 class KoTosContainerPrivate;
 class KoDocumentResourceManager;
 
-
 /**
  * Container that is used to wrap a shape with a text on top.
  * Path shapes inherit from this class to make it possible to have text associated
@@ -39,9 +38,9 @@ public:
 
     /// different kinds of resizing behavior to determine how to treat text overflow
     enum ResizeBehavior {
-        TextFollowsSize,  ///< Text area is same size as content, extra text will be clipped
-        FollowTextSize,   ///< Content shape will get resized if text grows/shrinks
-        IndependentSizes,  ///< The text can get bigger than the content
+        TextFollowsSize, ///< Text area is same size as content, extra text will be clipped
+        FollowTextSize, ///< Content shape will get resized if text grows/shrinks
+        IndependentSizes, ///< The text can get bigger than the content
         TextFollowsPreferredTextRect ///< The size/position of the text area will follow the preferredTextRect property
     };
 
@@ -84,10 +83,10 @@ protected:
     /// constructor
     KoTosContainer(KoTosContainerPrivate &);
 
-    //reimplemented
+    // reimplemented
     void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
-    //reimplemented
+    // reimplemented
     QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const override;
 
     /**

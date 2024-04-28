@@ -16,12 +16,16 @@ class TableDeferredShapeFactory : public KoDeferredShapeFactoryBase
 {
     Q_OBJECT
 public:
-    TableDeferredShapeFactory(QObject *parent, const QVariantList&);
+    TableDeferredShapeFactory(QObject *parent, const QVariantList &);
     ~TableDeferredShapeFactory();
 
-    virtual QString deferredPluginName() { return "spreadsheetshape-deferred"; }
+    virtual QString deferredPluginName()
+    {
+        return "spreadsheetshape-deferred";
+    }
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
+
 private:
     KoShapeFactoryBase *m_stubFactory;
 };

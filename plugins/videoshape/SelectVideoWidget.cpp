@@ -11,9 +11,9 @@
 #include <kfilewidget.h>
 #include <phonon/BackendCapabilities>
 
-#include <QVBoxLayout>
 #include <QCheckBox>
 #include <QUrl>
+#include <QVBoxLayout>
 
 SelectVideoWidget::SelectVideoWidget(QWidget *parent)
     : QWidget(parent)
@@ -31,7 +31,6 @@ SelectVideoWidget::SelectVideoWidget(QWidget *parent)
 
 SelectVideoWidget::~SelectVideoWidget()
 {
-
 }
 
 void SelectVideoWidget::accept()
@@ -44,7 +43,6 @@ void SelectVideoWidget::cancel()
 {
     m_fileWidget->slotCancel();
 }
-
 
 QUrl SelectVideoWidget::selectedUrl() const
 {

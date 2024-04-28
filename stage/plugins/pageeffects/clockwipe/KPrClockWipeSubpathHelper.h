@@ -17,7 +17,7 @@ public:
     KPrClockWipeSubpathHelper();
     virtual ~KPrClockWipeSubpathHelper();
 
-    static void addSubpathForCircularArc(QPainterPath* clipPath, QRect& boundingRect, double startAngle, double endAngle);
+    static void addSubpathForCircularArc(QPainterPath *clipPath, QRect &boundingRect, double startAngle, double endAngle);
 };
 
 #endif // KPRCLOCKWIPESUBPATHHELPER_H

@@ -35,9 +35,8 @@ public:
     void undo() override;
 
 private:
-
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOPATHPOINTMERGECOMMAND_H

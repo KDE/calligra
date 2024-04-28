@@ -12,10 +12,10 @@
 #include <map>
 #include <vector>
 
+#include "decrypt.h"
 #include "excel.h"
 #include "sheet.h"
 #include "workbook.h"
-#include "decrypt.h"
 
 namespace Swinder
 {
@@ -23,13 +23,13 @@ namespace Swinder
 class GlobalsSubStreamHandler::Private
 {
 public:
-    Workbook* workbook;
+    Workbook *workbook;
 
     // version of workbook
     unsigned version;
 
     // mapping from BOF pos to actual Sheet
-    std::map<unsigned, Sheet*> bofMap;
+    std::map<unsigned, Sheet *> bofMap;
 
     // for EXTERNBOOK and EXTERNSHEET
     std::vector<QString> externBookTable;
@@ -43,7 +43,7 @@ public:
     // password protection flag
     // TODO: password hash for record decryption
     bool passwordProtected;
-    RC4Decryption* decryption;
+    RC4Decryption *decryption;
 
     // table of font
     std::vector<FontRecord> fontTable;
@@ -56,17 +56,19 @@ public:
 
     // shared-string table
     std::vector<QString> stringTable;
-    std::vector<std::map<unsigned, FormatFont> > formatRunsTable;
+    std::vector<std::map<unsigned, FormatFont>> formatRunsTable;
 
     // table of Xformat
     std::vector<XFRecord> xfTable;
 
     // list of chart sheets
-    QList< Sheet* > chartSheets;
+    QList<Sheet *> chartSheets;
 };
 
-GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook* workbook, unsigned version)
-        : SubStreamHandler(), FormulaDecoder(), d(new Private)
+GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook *workbook, unsigned version)
+    : SubStreamHandler()
+    , FormulaDecoder()
+    , d(new Private)
 {
     d->workbook = workbook;
     d->version = version;
@@ -80,7 +82,7 @@ GlobalsSubStreamHandler::~GlobalsSubStreamHandler()
     delete d;
 }
 
-Workbook* GlobalsSubStreamHandler::workbook() const
+Workbook *GlobalsSubStreamHandler::workbook() const
 {
     return d->workbook;
 }
@@ -97,24 +99,21 @@ bool GlobalsSubStreamHandler::encryptionTypeSupported() const
 
 void GlobalsSubStreamHandler::decryptionSkipBytes(int count)
 {
-    if (d->decryption) d->decryption->skipBytes(count);
+    if (d->decryption)
+        d->decryption->skipBytes(count);
 }
 
-void GlobalsSubStreamHandler::decryptRecord(unsigned type, unsigned size, unsigned char* buffer)
+void GlobalsSubStreamHandler::decryptRecord(unsigned type, unsigned size, unsigned char *buffer)
 {
-    if (!d->decryption) return;
+    if (!d->decryption)
+        return;
 
-    if (type == BOFRecord::id ||
-        type == FilepassRecord::id ||
-        type == UsrExclRecord::id ||
-        type == FileLockRecord::id ||
-        type == InterfaceHdrRecord::id ||
-        type == RRDInfoRecord::id ||
-        type == RRDHeadRecord::id) {
+    if (type == BOFRecord::id || type == FilepassRecord::id || type == UsrExclRecord::id || type == FileLockRecord::id || type == InterfaceHdrRecord::id
+        || type == RRDInfoRecord::id || type == RRDHeadRecord::id) {
         d->decryption->skipBytes(size);
     } else if (type == BoundSheetRecord::id && size >= 4) { /* skip only first 4 bytes */
         d->decryption->skipBytes(4);
-        d->decryption->decryptBytes(size-4, buffer+4);
+        d->decryption->decryptBytes(size - 4, buffer + 4);
     } else {
         d->decryption->decryptBytes(size, buffer);
     }
@@ -125,9 +124,9 @@ unsigned GlobalsSubStreamHandler::version() const
     return d->version;
 }
 
-Sheet* GlobalsSubStreamHandler::sheetFromPosition(unsigned position) const
+Sheet *GlobalsSubStreamHandler::sheetFromPosition(unsigned position) const
 {
-    std::map<unsigned, Sheet*>::iterator iter = d->bofMap.find(position);
+    std::map<unsigned, Sheet *>::iterator iter = d->bofMap.find(position);
     if (iter != d->bofMap.end())
         return iter->second;
     else
@@ -185,7 +184,7 @@ QString GlobalsSubStreamHandler::valueFormat(unsigned index) const
         return QString();
 }
 
-const std::vector<QString>& GlobalsSubStreamHandler::externSheets() const
+const std::vector<QString> &GlobalsSubStreamHandler::externSheets() const
 {
     return d->externSheetTable;
 }
@@ -202,8 +201,7 @@ QString GlobalsSubStreamHandler::externNameFromIndex(unsigned index) const
 {
     if (index < d->externNameTable.size())
         return d->externNameTable[index];
-    qCWarning(lcSidewinder) << "Invalid index in GlobalsSubStreamHandler::externNameFromIndex index=" << index
-                            << "size=" << d->externNameTable.size();
+    qCWarning(lcSidewinder) << "Invalid index in GlobalsSubStreamHandler::externNameFromIndex index=" << index << "size=" << d->externNameTable.size();
     return QString();
 }
 
@@ -283,37 +281,59 @@ static Pen convertBorderStyle(unsigned style)
 static unsigned convertPatternStyle(unsigned pattern)
 {
     switch (pattern) {
-    case 0x00: return FormatBackground::EmptyPattern;
-    case 0x01: return FormatBackground::SolidPattern;
-    case 0x02: return FormatBackground::Dense4Pattern;
-    case 0x03: return FormatBackground::Dense3Pattern;
-    case 0x04: return FormatBackground::Dense5Pattern;
-    case 0x05: return FormatBackground::HorPattern;
-    case 0x06: return FormatBackground::VerPattern;
-    case 0x07: return FormatBackground::FDiagPattern;
-    case 0x08: return FormatBackground::BDiagPattern;
-    case 0x09: return FormatBackground::Dense1Pattern;
-    case 0x0A: return FormatBackground::Dense2Pattern;
-    case 0x0B: return FormatBackground::HorPattern;
-    case 0x0C: return FormatBackground::VerPattern;
-    case 0x0D: return FormatBackground::FDiagPattern;
-    case 0x0E: return FormatBackground::BDiagPattern;
-    case 0x0F: return FormatBackground::CrossPattern;
-    case 0x10: return FormatBackground::DiagCrossPattern;
-    case 0x11: return FormatBackground::Dense6Pattern;
-    case 0x12: return FormatBackground::Dense7Pattern;
-    default: return FormatBackground::SolidPattern; // fallback
+    case 0x00:
+        return FormatBackground::EmptyPattern;
+    case 0x01:
+        return FormatBackground::SolidPattern;
+    case 0x02:
+        return FormatBackground::Dense4Pattern;
+    case 0x03:
+        return FormatBackground::Dense3Pattern;
+    case 0x04:
+        return FormatBackground::Dense5Pattern;
+    case 0x05:
+        return FormatBackground::HorPattern;
+    case 0x06:
+        return FormatBackground::VerPattern;
+    case 0x07:
+        return FormatBackground::FDiagPattern;
+    case 0x08:
+        return FormatBackground::BDiagPattern;
+    case 0x09:
+        return FormatBackground::Dense1Pattern;
+    case 0x0A:
+        return FormatBackground::Dense2Pattern;
+    case 0x0B:
+        return FormatBackground::HorPattern;
+    case 0x0C:
+        return FormatBackground::VerPattern;
+    case 0x0D:
+        return FormatBackground::FDiagPattern;
+    case 0x0E:
+        return FormatBackground::BDiagPattern;
+    case 0x0F:
+        return FormatBackground::CrossPattern;
+    case 0x10:
+        return FormatBackground::DiagCrossPattern;
+    case 0x11:
+        return FormatBackground::Dense6Pattern;
+    case 0x12:
+        return FormatBackground::Dense7Pattern;
+    default:
+        return FormatBackground::SolidPattern; // fallback
     }
 }
 
 // big task: convert Excel XFormat into Swinder::Format
-const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
+const Format *GlobalsSubStreamHandler::convertedFormat(unsigned index) const
 {
     static const Format blankFormat;
-    if (index >= xformatCount()) return &blankFormat;
+    if (index >= xformatCount())
+        return &blankFormat;
 
-    int& formatIt = d->formatCache[index];
-    if (formatIt) return workbook()->format(formatIt-1);
+    int &formatIt = d->formatCache[index];
+    if (formatIt)
+        return workbook()->format(formatIt - 1);
     Format format;
 
     XFRecord xf = xformat(index);
@@ -322,51 +342,122 @@ const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
     if (valueFormat.isEmpty()) {
         const unsigned ifmt = xf.formatIndex();
         switch (ifmt) {
-        case  0:  valueFormat = "General"; break;
-        case  1:  valueFormat = "0"; break;
-        case  2:  valueFormat = "0.00"; break;
-        case  3:  valueFormat = "#,##0"; break;
-        case  4:  valueFormat = "#,##0.00"; break;
-        case  5:  valueFormat = "\"$\"#,##0_);(\"S\"#,##0)"; break;
-        case  6:  valueFormat = "\"$\"#,##0_);[Red](\"S\"#,##0)"; break;
-        case  7:  valueFormat = "\"$\"#,##0.00_);(\"S\"#,##0.00)"; break;
-        case  8:  valueFormat = "\"$\"#,##0.00_);[Red](\"S\"#,##0.00)"; break;
-        case  9:  valueFormat = "0%"; break;
-        case 10:  valueFormat = "0.00%"; break;
-        case 11:  valueFormat = "0.00E+00"; break;
-        case 12:  valueFormat = "#?/?"; break;
-        case 13:  valueFormat = "#\?\?/\?\?"; break;
-        case 14:  valueFormat = "M/D/YY"; break;
-        case 15:  valueFormat = "D-MMM-YY"; break;
-        case 16:  valueFormat = "D-MMM"; break;
-        case 17:  valueFormat = "MMM-YY"; break;
-        case 18:  valueFormat = "h:mm AM/PM"; break;
-        case 19:  valueFormat = "h:mm:ss AM/PM"; break;
-        case 20:  valueFormat = "h:mm"; break;
-        case 21:  valueFormat = "h:mm:ss"; break;
-        case 22:  valueFormat = "M/D/YY h:mm"; break;
-        case 37:  valueFormat = "_(#,##0_);(#,##0)"; break;
-        case 38:  valueFormat = "_(#,##0_);[Red](#,##0)"; break;
-        case 39:  valueFormat = "_(#,##0.00_);(#,##0)"; break;
-        case 40:  valueFormat = "_(#,##0.00_);[Red](#,##0)"; break;
-        case 41:  valueFormat = "_(\"$\"*#,##0_);_(\"$\"*#,##0_);_(\"$\"*\"-\");(@_)"; break;
-        case 42:  valueFormat = "_(*#,##0_);(*(#,##0);_(*\"-\");_(@_)"; break;
-        case 43:  valueFormat = "_(\"$\"*#,##0.00_);_(\"$\"*#,##0.00_);_(\"$\"*\"-\");(@_)"; break;
-        case 44:  valueFormat = "_(\"$\"*#,##0.00_);_(\"$\"*#,##0.00_);_(\"$\"*\"-\");(@_)"; break;
-        case 45:  valueFormat = "mm:ss"; break;
-        case 46:  valueFormat = "[h]:mm:ss"; break;
-        case 47:  valueFormat = "mm:ss.0"; break;
-        case 48:  valueFormat = "##0.0E+0"; break;
-        case 49:  valueFormat = "@"; break;
+        case 0:
+            valueFormat = "General";
+            break;
+        case 1:
+            valueFormat = "0";
+            break;
+        case 2:
+            valueFormat = "0.00";
+            break;
+        case 3:
+            valueFormat = "#,##0";
+            break;
+        case 4:
+            valueFormat = "#,##0.00";
+            break;
+        case 5:
+            valueFormat = "\"$\"#,##0_);(\"S\"#,##0)";
+            break;
+        case 6:
+            valueFormat = "\"$\"#,##0_);[Red](\"S\"#,##0)";
+            break;
+        case 7:
+            valueFormat = "\"$\"#,##0.00_);(\"S\"#,##0.00)";
+            break;
+        case 8:
+            valueFormat = "\"$\"#,##0.00_);[Red](\"S\"#,##0.00)";
+            break;
+        case 9:
+            valueFormat = "0%";
+            break;
+        case 10:
+            valueFormat = "0.00%";
+            break;
+        case 11:
+            valueFormat = "0.00E+00";
+            break;
+        case 12:
+            valueFormat = "#?/?";
+            break;
+        case 13:
+            valueFormat = "#\?\?/\?\?";
+            break;
+        case 14:
+            valueFormat = "M/D/YY";
+            break;
+        case 15:
+            valueFormat = "D-MMM-YY";
+            break;
+        case 16:
+            valueFormat = "D-MMM";
+            break;
+        case 17:
+            valueFormat = "MMM-YY";
+            break;
+        case 18:
+            valueFormat = "h:mm AM/PM";
+            break;
+        case 19:
+            valueFormat = "h:mm:ss AM/PM";
+            break;
+        case 20:
+            valueFormat = "h:mm";
+            break;
+        case 21:
+            valueFormat = "h:mm:ss";
+            break;
+        case 22:
+            valueFormat = "M/D/YY h:mm";
+            break;
+        case 37:
+            valueFormat = "_(#,##0_);(#,##0)";
+            break;
+        case 38:
+            valueFormat = "_(#,##0_);[Red](#,##0)";
+            break;
+        case 39:
+            valueFormat = "_(#,##0.00_);(#,##0)";
+            break;
+        case 40:
+            valueFormat = "_(#,##0.00_);[Red](#,##0)";
+            break;
+        case 41:
+            valueFormat = "_(\"$\"*#,##0_);_(\"$\"*#,##0_);_(\"$\"*\"-\");(@_)";
+            break;
+        case 42:
+            valueFormat = "_(*#,##0_);(*(#,##0);_(*\"-\");_(@_)";
+            break;
+        case 43:
+            valueFormat = "_(\"$\"*#,##0.00_);_(\"$\"*#,##0.00_);_(\"$\"*\"-\");(@_)";
+            break;
+        case 44:
+            valueFormat = "_(\"$\"*#,##0.00_);_(\"$\"*#,##0.00_);_(\"$\"*\"-\");(@_)";
+            break;
+        case 45:
+            valueFormat = "mm:ss";
+            break;
+        case 46:
+            valueFormat = "[h]:mm:ss";
+            break;
+        case 47:
+            valueFormat = "mm:ss.0";
+            break;
+        case 48:
+            valueFormat = "##0.0E+0";
+            break;
+        case 49:
+            valueFormat = "@";
+            break;
         default: {
-            if (ifmt >= 164 && ifmt <= 392) {  // custom format
+            if (ifmt >= 164 && ifmt <= 392) { // custom format
                 valueFormat = d->formatsTable[ifmt];
             } else {
                 qCDebug(lcSidewinder) << "Unhandled format with index" << xf.formatIndex() << ". Using general format.";
                 valueFormat = "General";
             }
-        }
-        break;
+        } break;
         }
     }
 
@@ -377,40 +468,53 @@ const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
     FormatAlignment alignment;
     switch (xf.horizontalAlignment()) {
     case XFRecord::Left:
-        alignment.setAlignX(Format::Left); break;
+        alignment.setAlignX(Format::Left);
+        break;
     case XFRecord::Right:
-        alignment.setAlignX(Format::Right); break;
+        alignment.setAlignX(Format::Right);
+        break;
     case XFRecord::Centered:
-        alignment.setAlignX(Format::Center); break;
+        alignment.setAlignX(Format::Center);
+        break;
     case XFRecord::Justified:
-        alignment.setAlignX(Format::Justify); break;
+        alignment.setAlignX(Format::Justify);
+        break;
     case XFRecord::Distributed:
-        alignment.setAlignX(Format::Distributed); break;
+        alignment.setAlignX(Format::Distributed);
+        break;
     case XFRecord::Filled:
     case XFRecord::CenteredSelection:
-    default: break;
+    default:
+        break;
         // FIXME still unsupported: CenteredSelection, Filled
     }
 
     switch (xf.verticalAlignment()) {
     case XFRecord::Top:
-        alignment.setAlignY(Format::Top); break;
+        alignment.setAlignY(Format::Top);
+        break;
     case XFRecord::VCentered:
-        alignment.setAlignY(Format::Middle); break;
+        alignment.setAlignY(Format::Middle);
+        break;
     case XFRecord::Bottom:
-        alignment.setAlignY(Format::Bottom); break;
+        alignment.setAlignY(Format::Bottom);
+        break;
     case XFRecord::VJustified:
-        alignment.setAlignY(Format::VJustify); break;
+        alignment.setAlignY(Format::VJustify);
+        break;
     case XFRecord::VDistributed:
-        alignment.setAlignY(Format::VDistributed); break;
-    default: break;
+        alignment.setAlignY(Format::VDistributed);
+        break;
+    default:
+        break;
         // FIXME still unsupported: Justified, Distributed
     }
 
     alignment.setWrap(xf.isTextWrap());
 
     unsigned angle = xf.rotationAngle();
-    if (angle > 90) angle = 360 - (angle - 90);
+    if (angle > 90)
+        angle = 360 - (angle - 90);
     alignment.setRotationAngle(angle);
 
     alignment.setStackedLetters(xf.stackedLetters());
@@ -439,13 +543,13 @@ const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
     pen.color = d->workbook->color(xf.bottomBorderColor());
     borders.setBottomBorder(pen);
 
-    if(xf.isDiagonalTopLeftBorder()) {
+    if (xf.isDiagonalTopLeftBorder()) {
         pen = convertBorderStyle(xf.diagonalBorderStyle());
         pen.color = d->workbook->color(xf.diagonalBorderColor());
         borders.setTopLeftBorder(pen);
     }
 
-    if(xf.isDiagonalBottomLeftBorder()) {
+    if (xf.isDiagonalBottomLeftBorder()) {
         pen = convertBorderStyle(xf.diagonalBorderStyle());
         pen.color = d->workbook->color(xf.diagonalBorderColor());
         borders.setBottomLeftBorder(pen);
@@ -460,60 +564,63 @@ const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
     format.setBackground(background);
 
     formatIt = workbook()->addFormat(format) + 1;
-    return workbook()->format(formatIt-1);
+    return workbook()->format(formatIt - 1);
 }
 
-void GlobalsSubStreamHandler::handleRecord(Record* record)
+void GlobalsSubStreamHandler::handleRecord(Record *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     const unsigned type = record->rtti();
     if (type == BOFRecord::id)
-        handleBOF(static_cast<BOFRecord*>(record));
+        handleBOF(static_cast<BOFRecord *>(record));
     else if (type == BoundSheetRecord::id)
-        handleBoundSheet(static_cast<BoundSheetRecord*>(record));
+        handleBoundSheet(static_cast<BoundSheetRecord *>(record));
     else if (type == ExternBookRecord::id)
-        handleExternBook(static_cast<ExternBookRecord*>(record));
+        handleExternBook(static_cast<ExternBookRecord *>(record));
     else if (type == ExternNameRecord::id)
-        handleExternName(static_cast<ExternNameRecord*>(record));
+        handleExternName(static_cast<ExternNameRecord *>(record));
     else if (type == ExternSheetRecord::id)
-        handleExternSheet(static_cast<ExternSheetRecord*>(record));
+        handleExternSheet(static_cast<ExternSheetRecord *>(record));
     else if (type == FilepassRecord::id)
-        handleFilepass(static_cast<FilepassRecord*>(record));
+        handleFilepass(static_cast<FilepassRecord *>(record));
     else if (type == FormatRecord::id)
-        handleFormat(static_cast<FormatRecord*>(record));
+        handleFormat(static_cast<FormatRecord *>(record));
     else if (type == FontRecord::id)
-        handleFont(static_cast<FontRecord*>(record));
+        handleFont(static_cast<FontRecord *>(record));
     else if (type == NameRecord::id)
-        handleName(static_cast<NameRecord*>(record));
+        handleName(static_cast<NameRecord *>(record));
     else if (type == PaletteRecord::id)
-        handlePalette(static_cast<PaletteRecord*>(record));
+        handlePalette(static_cast<PaletteRecord *>(record));
     else if (type == SSTRecord::id)
-        handleSST(static_cast<SSTRecord*>(record));
+        handleSST(static_cast<SSTRecord *>(record));
     else if (type == XFRecord::id)
-        handleXF(static_cast<XFRecord*>(record));
+        handleXF(static_cast<XFRecord *>(record));
     else if (type == ProtectRecord::id)
-        handleProtect(static_cast<ProtectRecord*>(record));
+        handleProtect(static_cast<ProtectRecord *>(record));
     else if (type == MsoDrawingGroupRecord::id)
-        handleMsoDrawingGroup(static_cast<MsoDrawingGroupRecord*>(record));
+        handleMsoDrawingGroup(static_cast<MsoDrawingGroupRecord *>(record));
     else if (type == Window1Record::id)
-        handleWindow1(static_cast<Window1Record*>(record));
+        handleWindow1(static_cast<Window1Record *>(record));
     else if (type == PasswordRecord::id)
-        handlePassword(static_cast<PasswordRecord*>(record));
+        handlePassword(static_cast<PasswordRecord *>(record));
     else if (type == DateModeRecord::id)
-        handleDateMode(static_cast<DateModeRecord*>(record));
-    else if (type == 0x40) {} //BackupRecord
-    else if (type == 0xA) {} //EofRecord
-    //else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
+        handleDateMode(static_cast<DateModeRecord *>(record));
+    else if (type == 0x40) {
+    } // BackupRecord
+    else if (type == 0xA) {
+    } // EofRecord
+    // else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
     else {
-        //qCDebug(lcSidewinder) << "Unhandled global record with type=" << type << " name=" << record->name();
+        // qCDebug(lcSidewinder) << "Unhandled global record with type=" << type << " name=" << record->name();
     }
-
 }
 
-void GlobalsSubStreamHandler::handleBOF(BOFRecord* record)
+void GlobalsSubStreamHandler::handleBOF(BOFRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     if (record->type() == BOFRecord::Workbook) {
         d->version = record->version();
@@ -522,36 +629,38 @@ void GlobalsSubStreamHandler::handleBOF(BOFRecord* record)
     }
 }
 
-void GlobalsSubStreamHandler::handleBoundSheet(BoundSheetRecord* record)
+void GlobalsSubStreamHandler::handleBoundSheet(BoundSheetRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     switch (record->sheetType()) {
-        case BoundSheetRecord::Chart: // chartsheets are worksheets too
-        case BoundSheetRecord::Worksheet: {
-            // create a new sheet
-            Sheet* sheet = new Sheet(d->workbook);
-            sheet->setName(record->sheetName());
-            sheet->setVisible(record->sheetState() == BoundSheetRecord::Visible);
+    case BoundSheetRecord::Chart: // chartsheets are worksheets too
+    case BoundSheetRecord::Worksheet: {
+        // create a new sheet
+        Sheet *sheet = new Sheet(d->workbook);
+        sheet->setName(record->sheetName());
+        sheet->setVisible(record->sheetState() == BoundSheetRecord::Visible);
 
-            d->workbook->appendSheet(sheet);
+        d->workbook->appendSheet(sheet);
 
-            if(record->sheetType() == BoundSheetRecord::Chart)
-                d->chartSheets << sheet;
+        if (record->sheetType() == BoundSheetRecord::Chart)
+            d->chartSheets << sheet;
 
-            // update bof position map
-            unsigned bofPos = record->bofPosition();
-            d->bofMap[ bofPos ] = sheet;
-        } break;
-        default:
-            qCDebug(lcSidewinder) << "GlobalsSubStreamHandler::handleBoundSheet: Unhandled type=" << record->sheetType();
-            break;
+        // update bof position map
+        unsigned bofPos = record->bofPosition();
+        d->bofMap[bofPos] = sheet;
+    } break;
+    default:
+        qCDebug(lcSidewinder) << "GlobalsSubStreamHandler::handleBoundSheet: Unhandled type=" << record->sheetType();
+        break;
     }
 }
 
-void GlobalsSubStreamHandler::handleDateMode(DateModeRecord* record)
+void GlobalsSubStreamHandler::handleDateMode(DateModeRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     if (record->isBase1904())
         d->workbook->setBaseDate(QDate(1904, 1, 1).startOfDay());
@@ -559,23 +668,26 @@ void GlobalsSubStreamHandler::handleDateMode(DateModeRecord* record)
         d->workbook->setBaseDate(QDate(1899, 12, 30).startOfDay());
 }
 
-void GlobalsSubStreamHandler::handleExternBook(ExternBookRecord* record)
+void GlobalsSubStreamHandler::handleExternBook(ExternBookRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     d->externBookTable.push_back(record->bookName());
 }
 
-void GlobalsSubStreamHandler::handleExternName(ExternNameRecord* record)
+void GlobalsSubStreamHandler::handleExternName(ExternNameRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     d->externNameTable.push_back(record->externName());
 }
 
-void GlobalsSubStreamHandler::handleExternSheet(ExternSheetRecord* record)
+void GlobalsSubStreamHandler::handleExternSheet(ExternSheetRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     d->externSheetTable.resize(record->refCount());
 
@@ -615,9 +727,10 @@ void GlobalsSubStreamHandler::handleExternSheet(ExternSheetRecord* record)
     }
 }
 
-void GlobalsSubStreamHandler::handleFilepass(FilepassRecord* record)
+void GlobalsSubStreamHandler::handleFilepass(FilepassRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     if (record->encryptionType() == FilepassRecord::RC4Encryption && record->encryptionVersionMajor() == 1) {
         d->decryption = new RC4Decryption(record->salt(), record->encryptedVerifier(), record->encryptedVerifierHash());
@@ -626,16 +739,17 @@ void GlobalsSubStreamHandler::handleFilepass(FilepassRecord* record)
             d->decryption = 0;
             qCWarning(lcSidewinder) << "Invalid password";
         } else {
-            d->decryption->setInitialPosition(record->position() + 54+4);
+            d->decryption->setInitialPosition(record->position() + 54 + 4);
         }
     }
 
     d->passwordProtected = true;
 }
 
-void GlobalsSubStreamHandler::handleFont(FontRecord* record)
+void GlobalsSubStreamHandler::handleFont(FontRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     d->fontTable.push_back(*record);
 
@@ -657,20 +771,22 @@ void GlobalsSubStreamHandler::handleFont(FontRecord* record)
     }
 }
 
-void GlobalsSubStreamHandler::handleFormat(FormatRecord* record)
+void GlobalsSubStreamHandler::handleFormat(FormatRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     d->formatsTable[record->index()] = record->formatString();
 }
 
-void GlobalsSubStreamHandler::handleName(NameRecord* record)
+void GlobalsSubStreamHandler::handleName(NameRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     d->nameTable.push_back(record->definedName());
 
-    if(record->m_formula.id() != FormulaToken::Unused) {
+    if (record->m_formula.id() != FormulaToken::Unused) {
         if (record->isBuiltin()) {
             if (record->definedName() == "_FilterDatabase") {
                 if (record->m_formula.id() == FormulaToken::Area3d) {
@@ -686,7 +802,7 @@ void GlobalsSubStreamHandler::handleName(NameRecord* record)
             FormulaTokens tokens;
             tokens.push_back(record->m_formula);
             QString f = decodeFormula(0, 0, false, tokens);
-            if(!f.isEmpty()) {
+            if (!f.isEmpty()) {
                 QString n = record->definedName();
                 d->workbook->setNamedArea(record->sheetIndex(), n, f);
             }
@@ -694,9 +810,10 @@ void GlobalsSubStreamHandler::handleName(NameRecord* record)
     }
 }
 
-void GlobalsSubStreamHandler::handlePalette(PaletteRecord* record)
+void GlobalsSubStreamHandler::handlePalette(PaletteRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     QList<QColor> colorTable;
     for (unsigned i = 0; i < record->count(); ++i)
@@ -704,9 +821,10 @@ void GlobalsSubStreamHandler::handlePalette(PaletteRecord* record)
     d->workbook->setColorTable(colorTable);
 }
 
-void GlobalsSubStreamHandler::handleSST(SSTRecord* record)
+void GlobalsSubStreamHandler::handleSST(SSTRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     d->stringTable.clear();
     d->formatRunsTable.clear();
@@ -722,38 +840,43 @@ void GlobalsSubStreamHandler::handleSST(SSTRecord* record)
     }
 }
 
-void GlobalsSubStreamHandler::handleXF(XFRecord* record)
+void GlobalsSubStreamHandler::handleXF(XFRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     d->xfTable.push_back(*record);
 }
 
-void GlobalsSubStreamHandler::handleProtect(ProtectRecord* record)
+void GlobalsSubStreamHandler::handleProtect(ProtectRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
 
     if (record->isLocked()) {
         qCDebug(lcSidewinder) << "TODO: The workbook is protected but protected workbooks is not supported yet!";
     }
 }
 
-void GlobalsSubStreamHandler::handleWindow1(Window1Record* record)
+void GlobalsSubStreamHandler::handleWindow1(Window1Record *record)
 {
-    d->workbook->setActiveTab( record->itabCur() );
+    d->workbook->setActiveTab(record->itabCur());
 }
 
-void GlobalsSubStreamHandler::handlePassword(PasswordRecord* record)
+void GlobalsSubStreamHandler::handlePassword(PasswordRecord *record)
 {
-    if (!record) return;
-    if (!record->wPassword()) return;
+    if (!record)
+        return;
+    if (!record->wPassword())
+        return;
     qCDebug(lcSidewinder) << "GlobalsSubStreamHandler::handlePassword passwordHash=" << record->wPassword();
     d->workbook->setPassword(record->wPassword());
 }
 
-void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord* record)
+void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord *record)
 {
-    if (!record) return;
+    if (!record)
+        return;
     qCDebug(lcSidewinder) << "GlobalsSubStreamHandler::handleMsoDrawingGroup";
 
     static int validMsoDrawingGroups = 0;
@@ -765,16 +888,14 @@ void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord* recor
 
     d->workbook->setPictureNames(record->pictureNames());
     d->workbook->setOfficeArtDggContainer(record->dggContainer());
-
 }
 
-
-QList< Sheet* >& GlobalsSubStreamHandler::chartSheets()
+QList<Sheet *> &GlobalsSubStreamHandler::chartSheets()
 {
     return d->chartSheets;
 }
 
-KoStore* GlobalsSubStreamHandler::store() const
+KoStore *GlobalsSubStreamHandler::store() const
 {
     return d->workbook->store();
 }

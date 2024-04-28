@@ -10,26 +10,24 @@
 #include "VectorShape.h"
 #include "VectorTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
-
+#include <KoIcon.h>
 
 VectorToolFactory::VectorToolFactory()
     : KoToolFactoryBase("VectorToolFactoryId")
 {
     setToolTip(i18n("Vector Image (EMF/WMF/SVM/SVG) tool"));
     setIconName(koIconNameNeededWithSubs("a generic vector image icon", "x-shape-vectorimage", "application-x-wmf"));
-    setToolType( dynamicToolType() );
-    setPriority( 1 );
-    setActivationShapeId( VectorShape_SHAPEID );
+    setToolType(dynamicToolType());
+    setPriority(1);
+    setActivationShapeId(VectorShape_SHAPEID);
 }
 
 VectorToolFactory::~VectorToolFactory()
 {
 }
 
-KoToolBase* VectorToolFactory::createTool( KoCanvasBase* canvas )
+KoToolBase *VectorToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new VectorTool( canvas );
+    return new VectorTool(canvas);
 }
-

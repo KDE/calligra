@@ -26,7 +26,7 @@ class DocxXmlFootnoteReader : public DocxXmlDocumentReader
 public:
     explicit DocxXmlFootnoteReader(KoOdfWriters *writers);
     ~DocxXmlFootnoteReader() override;
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
 
 protected:
     KoFilter::ConversionStatus read_footnotes();
@@ -35,7 +35,7 @@ protected:
 private:
     void init();
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
-#endif //DOCXXMLFOOTNOTEREADER_H
+#endif // DOCXXMLFOOTNOTEREADER_H

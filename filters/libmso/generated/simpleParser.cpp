@@ -3,14 +3,16 @@
 #include "simpleParser.h"
 using namespace MSO;
 #include "leinputstream.h"
-void MSO::parseRecordHeader(LEInputStream& in, RecordHeader& _s) {
+void MSO::parseRecordHeader(LEInputStream &in, RecordHeader &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.recVer = in.readuint4();
     _s.recInstance = in.readuint12();
     _s.recType = in.readuint16();
     _s.recLen = in.readuint32();
 }
-void MSO::parseCurrentUserAtom(LEInputStream& in, CurrentUserAtom& _s) {
+void MSO::parseCurrentUserAtom(LEInputStream &in, CurrentUserAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -34,7 +36,7 @@ void MSO::parseCurrentUserAtom(LEInputStream& in, CurrentUserAtom& _s) {
     }
     _s.offsetToCurrentEdit = in.readuint32();
     _s.lenUserName = in.readuint16();
-    if (!(((quint16)_s.lenUserName)<=255)) {
+    if (!(((quint16)_s.lenUserName) <= 255)) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.lenUserName)<=255");
     }
     _s.docFileVersion = in.readuint16();
@@ -57,22 +59,23 @@ void MSO::parseCurrentUserAtom(LEInputStream& in, CurrentUserAtom& _s) {
     if (!(((quint32)_s.relVersion) == 0x8 || ((quint32)_s.relVersion) == 0x9)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.relVersion) == 0x8 || ((quint32)_s.relVersion) == 0x9");
     }
-    _s._has_unicodeUserName = _s.rh.recLen>3*_s.lenUserName+0x18;
+    _s._has_unicodeUserName = _s.rh.recLen > 3 * _s.lenUserName + 0x18;
     if (_s._has_unicodeUserName) {
         _c = _s.lenUserName;
         _s.unicodeUserName.resize(_c);
-        for (int _i=0; _i<_c; ++_i) {
+        for (int _i = 0; _i < _c; ++_i) {
             _s.unicodeUserName[_i] = in.readuint16();
         }
     }
-    _s._has_unknown = _s.rh.recLen-0x18-3*_s.lenUserName>0;
+    _s._has_unknown = _s.rh.recLen - 0x18 - 3 * _s.lenUserName > 0;
     if (_s._has_unknown) {
-        _c = _s.rh.recLen-0x18-3*_s.lenUserName;
+        _c = _s.rh.recLen - 0x18 - 3 * _s.lenUserName;
         _s.unknown.resize(_c);
         in.readBytes(_s.unknown);
     }
 }
-void MSO::parseTODOS(LEInputStream& in, TODOS& _s) {
+void MSO::parseTODOS(LEInputStream &in, TODOS &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -82,29 +85,32 @@ void MSO::parseTODOS(LEInputStream& in, TODOS& _s) {
         try {
             _s.anon.append(Byte(&_s));
             parseByte(in, _s.anon.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.anon.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.anon.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseByte(LEInputStream& in, Byte& _s) {
+void MSO::parseByte(LEInputStream &in, Byte &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.b = in.readuint8();
 }
-void MSO::parseZeroByte(LEInputStream& in, ZeroByte& _s) {
+void MSO::parseZeroByte(LEInputStream &in, ZeroByte &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.b = in.readuint8();
     if (!(((quint8)_s.b) == 0)) {
         throw IncorrectValueException(in.getPosition(), "((quint8)_s.b) == 0");
     }
 }
-void MSO::parseCurrentUserStream(LEInputStream& in, CurrentUserStream& _s) {
+void MSO::parseCurrentUserStream(LEInputStream &in, CurrentUserStream &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -115,18 +121,19 @@ void MSO::parseCurrentUserStream(LEInputStream& in, CurrentUserStream& _s) {
         try {
             _s.trailing.append(Byte(&_s));
             parseByte(in, _s.trailing.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.trailing.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.trailing.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseOfficeArtBStoreDelay(LEInputStream& in, OfficeArtBStoreDelay& _s) {
+void MSO::parseOfficeArtBStoreDelay(LEInputStream &in, OfficeArtBStoreDelay &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -136,25 +143,27 @@ void MSO::parseOfficeArtBStoreDelay(LEInputStream& in, OfficeArtBStoreDelay& _s)
         try {
             _s.rgfb.append(OfficeArtBStoreContainerFileBlock(&_s));
             parseOfficeArtBStoreContainerFileBlock(in, _s.rgfb.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgfb.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgfb.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseOfficeArtRecordHeader(LEInputStream& in, OfficeArtRecordHeader& _s) {
+void MSO::parseOfficeArtRecordHeader(LEInputStream &in, OfficeArtRecordHeader &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.recVer = in.readuint4();
     _s.recInstance = in.readuint12();
     _s.recType = in.readuint16();
     _s.recLen = in.readuint32();
 }
-void MSO::parseOfficeArtBlipJPEG(LEInputStream& in, OfficeArtBlipJPEG& _s) {
+void MSO::parseOfficeArtBlipJPEG(LEInputStream &in, OfficeArtBlipJPEG &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -163,7 +172,8 @@ void MSO::parseOfficeArtBlipJPEG(LEInputStream& in, OfficeArtBlipJPEG& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
     }
     if (!(_s.rh.recInstance == 0x46A || _s.rh.recInstance == 0x46B || _s.rh.recInstance == 0x6E2 || _s.rh.recInstance == 0x6E3)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0x46A || _s.rh.recInstance == 0x46B || _s.rh.recInstance == 0x6E2 || _s.rh.recInstance == 0x6E3");
+        throw IncorrectValueException(in.getPosition(),
+                                      "_s.rh.recInstance == 0x46A || _s.rh.recInstance == 0x46B || _s.rh.recInstance == 0x6E2 || _s.rh.recInstance == 0x6E3");
     }
     if (!(_s.rh.recType == 0xF01D)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xF01D");
@@ -178,11 +188,12 @@ void MSO::parseOfficeArtBlipJPEG(LEInputStream& in, OfficeArtBlipJPEG& _s) {
         in.readBytes(_s.rgbUid2);
     }
     _s.tag = in.readuint8();
-    _c = _s.rh.recLen-((_s.rh.recInstance == 0x46A || _s.rh.recInstance == 0x6E2)?17:33);
+    _c = _s.rh.recLen - ((_s.rh.recInstance == 0x46A || _s.rh.recInstance == 0x6E2) ? 17 : 33);
     _s.BLIPFileData.resize(_c);
     in.readBytes(_s.BLIPFileData);
 }
-void MSO::parseOfficeArtBlipPNG(LEInputStream& in, OfficeArtBlipPNG& _s) {
+void MSO::parseOfficeArtBlipPNG(LEInputStream &in, OfficeArtBlipPNG &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -206,11 +217,12 @@ void MSO::parseOfficeArtBlipPNG(LEInputStream& in, OfficeArtBlipPNG& _s) {
         in.readBytes(_s.rgbUid2);
     }
     _s.tag = in.readuint8();
-    _c = _s.rh.recLen-((_s.rh.recInstance==0x6E0)?17:33);
+    _c = _s.rh.recLen - ((_s.rh.recInstance == 0x6E0) ? 17 : 33);
     _s.BLIPFileData.resize(_c);
     in.readBytes(_s.BLIPFileData);
 }
-void MSO::parseOfficeArtBlipDIB(LEInputStream& in, OfficeArtBlipDIB& _s) {
+void MSO::parseOfficeArtBlipDIB(LEInputStream &in, OfficeArtBlipDIB &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -234,11 +246,12 @@ void MSO::parseOfficeArtBlipDIB(LEInputStream& in, OfficeArtBlipDIB& _s) {
         in.readBytes(_s.rgbUid2);
     }
     _s.tag = in.readuint8();
-    _c = _s.rh.recLen-((_s.rh.recInstance==0x7A8)?17:33);
+    _c = _s.rh.recLen - ((_s.rh.recInstance == 0x7A8) ? 17 : 33);
     _s.BLIPFileData.resize(_c);
     in.readBytes(_s.BLIPFileData);
 }
-void MSO::parseOfficeArtBlipTIFF(LEInputStream& in, OfficeArtBlipTIFF& _s) {
+void MSO::parseOfficeArtBlipTIFF(LEInputStream &in, OfficeArtBlipTIFF &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -262,23 +275,26 @@ void MSO::parseOfficeArtBlipTIFF(LEInputStream& in, OfficeArtBlipTIFF& _s) {
         in.readBytes(_s.rgbUid2);
     }
     _s.tag = in.readuint8();
-    _c = _s.rh.recLen-((_s.rh.recInstance==0x6E4)?17:33);
+    _c = _s.rh.recLen - ((_s.rh.recInstance == 0x6E4) ? 17 : 33);
     _s.BLIPFileData.resize(_c);
     in.readBytes(_s.BLIPFileData);
 }
-void MSO::parseRECT(LEInputStream& in, RECT& _s) {
+void MSO::parseRECT(LEInputStream &in, RECT &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.left = in.readint32();
     _s.top = in.readint32();
     _s.right = in.readint32();
     _s.bottom = in.readint32();
 }
-void MSO::parsePOINT(LEInputStream& in, POINT& _s) {
+void MSO::parsePOINT(LEInputStream &in, POINT &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.x = in.readint32();
     _s.y = in.readint32();
 }
-void MSO::parsePowerPointStructs(LEInputStream& in, PowerPointStructs& _s) {
+void MSO::parsePowerPointStructs(LEInputStream &in, PowerPointStructs &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -288,18 +304,19 @@ void MSO::parsePowerPointStructs(LEInputStream& in, PowerPointStructs& _s) {
         try {
             _s.anon.append(PowerPointStruct(&_s));
             parsePowerPointStruct(in, _s.anon.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.anon.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.anon.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseSoundCollectionAtom(LEInputStream& in, SoundCollectionAtom& _s) {
+void MSO::parseSoundCollectionAtom(LEInputStream &in, SoundCollectionAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -316,7 +333,8 @@ void MSO::parseSoundCollectionAtom(LEInputStream& in, SoundCollectionAtom& _s) {
     }
     _s.soundIdSeed = in.readuint32();
 }
-void MSO::parseHeadersFootersAtom(LEInputStream& in, HeadersFootersAtom& _s) {
+void MSO::parseHeadersFootersAtom(LEInputStream &in, HeadersFootersAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -332,10 +350,10 @@ void MSO::parseHeadersFootersAtom(LEInputStream& in, HeadersFootersAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 4");
     }
     _s.formatId = in.readint16();
-    if (!(((qint16)_s.formatId)>=0)) {
+    if (!(((qint16)_s.formatId) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint16)_s.formatId)>=0");
     }
-    if (!(((qint16)_s.formatId)<=13)) {
+    if (!(((qint16)_s.formatId) <= 13)) {
         throw IncorrectValueException(in.getPosition(), "((qint16)_s.formatId)<=13");
     }
     _s.fHasDate = in.readbit();
@@ -347,7 +365,8 @@ void MSO::parseHeadersFootersAtom(LEInputStream& in, HeadersFootersAtom& _s) {
     _s.reserved1 = in.readuint2();
     _s.reserved2 = in.readuint8();
 }
-void MSO::parseUserDateAtom(LEInputStream& in, UserDateAtom& _s) {
+void MSO::parseUserDateAtom(LEInputStream &in, UserDateAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -361,19 +380,20 @@ void MSO::parseUserDateAtom(LEInputStream& in, UserDateAtom& _s) {
     if (!(_s.rh.recType == 0xFBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
-    if (!(_s.rh.recLen<=510)) {
+    if (!(_s.rh.recLen <= 510)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen<=510");
     }
-    _c = _s.rh.recLen/2;
+    _c = _s.rh.recLen / 2;
     _s.userDate.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.userDate[_i] = in.readuint16();
     }
 }
-void MSO::parseHeaderAtom(LEInputStream& in, HeaderAtom& _s) {
+void MSO::parseHeaderAtom(LEInputStream &in, HeaderAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -387,16 +407,17 @@ void MSO::parseHeaderAtom(LEInputStream& in, HeaderAtom& _s) {
     if (!(_s.rh.recType == 0xFBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
-    _c = _s.rh.recLen/2;
+    _c = _s.rh.recLen / 2;
     _s.header.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.header[_i] = in.readuint16();
     }
 }
-void MSO::parseFooterAtom(LEInputStream& in, FooterAtom& _s) {
+void MSO::parseFooterAtom(LEInputStream &in, FooterAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -410,16 +431,17 @@ void MSO::parseFooterAtom(LEInputStream& in, FooterAtom& _s) {
     if (!(_s.rh.recType == 0xFBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
-    _c = _s.rh.recLen/2;
+    _c = _s.rh.recLen / 2;
     _s.footer.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.footer[_i] = in.readuint16();
     }
 }
-void MSO::parsePerSlideHeadersFootersContainer(LEInputStream& in, PerSlideHeadersFootersContainer& _s) {
+void MSO::parsePerSlideHeadersFootersContainer(LEInputStream &in, PerSlideHeadersFootersContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -438,8 +460,9 @@ void MSO::parsePerSlideHeadersFootersContainer(LEInputStream& in, PerSlideHeader
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0)&&(_optionCheck.recLen<=510);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFBA) && (_optionCheck.recLen % 2 == 0)
+            && (_optionCheck.recLen <= 510);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -448,10 +471,10 @@ void MSO::parsePerSlideHeadersFootersContainer(LEInputStream& in, PerSlideHeader
         try {
             _s.userDateAtom = QSharedPointer<UserDateAtom>(new UserDateAtom(&_s));
             parseUserDateAtom(in, *_s.userDateAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.userDateAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.userDateAtom.clear();
             in.rewind(_m);
         }
@@ -460,8 +483,8 @@ void MSO::parsePerSlideHeadersFootersContainer(LEInputStream& in, PerSlideHeader
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 1)&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 1) && (_optionCheck.recType == 0xFBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -470,10 +493,10 @@ void MSO::parsePerSlideHeadersFootersContainer(LEInputStream& in, PerSlideHeader
         try {
             _s.headerAtom = QSharedPointer<HeaderAtom>(new HeaderAtom(&_s));
             parseHeaderAtom(in, *_s.headerAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.headerAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.headerAtom.clear();
             in.rewind(_m);
         }
@@ -482,8 +505,8 @@ void MSO::parsePerSlideHeadersFootersContainer(LEInputStream& in, PerSlideHeader
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 2)&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 2) && (_optionCheck.recType == 0xFBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -492,10 +515,10 @@ void MSO::parsePerSlideHeadersFootersContainer(LEInputStream& in, PerSlideHeader
         try {
             _s.footerAtom = QSharedPointer<FooterAtom>(new FooterAtom(&_s));
             parseFooterAtom(in, *_s.footerAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.footerAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.footerAtom.clear();
             in.rewind(_m);
         }
@@ -504,8 +527,9 @@ void MSO::parsePerSlideHeadersFootersContainer(LEInputStream& in, PerSlideHeader
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0)&&(_optionCheck.recLen<=510);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFBA) && (_optionCheck.recLen % 2 == 0)
+            && (_optionCheck.recLen <= 510);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -514,16 +538,17 @@ void MSO::parsePerSlideHeadersFootersContainer(LEInputStream& in, PerSlideHeader
         try {
             _s.userDateAtom2 = QSharedPointer<UserDateAtom>(new UserDateAtom(&_s));
             parseUserDateAtom(in, *_s.userDateAtom2.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.userDateAtom2.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.userDateAtom2.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseEndDocumentAtom(LEInputStream& in, EndDocumentAtom& _s) {
+void MSO::parseEndDocumentAtom(LEInputStream &in, EndDocumentAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -539,7 +564,8 @@ void MSO::parseEndDocumentAtom(LEInputStream& in, EndDocumentAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0");
     }
 }
-void MSO::parseDocInfoListContainer(LEInputStream& in, DocInfoListContainer& _s) {
+void MSO::parseDocInfoListContainer(LEInputStream &in, DocInfoListContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -559,18 +585,19 @@ void MSO::parseDocInfoListContainer(LEInputStream& in, DocInfoListContainer& _s)
         try {
             _s.rgChildRec.append(DocInfoListSubContainerOrAtom(&_s));
             parseDocInfoListSubContainerOrAtom(in, _s.rgChildRec.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgChildRec.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgChildRec.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseSlideViewInfoAtom(LEInputStream& in, SlideViewInfoAtom& _s) {
+void MSO::parseSlideViewInfoAtom(LEInputStream &in, SlideViewInfoAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -589,7 +616,8 @@ void MSO::parseSlideViewInfoAtom(LEInputStream& in, SlideViewInfoAtom& _s) {
     _s.fSnapToGrid = in.readuint8();
     _s.fSnapToShape = in.readuint8();
 }
-void MSO::parseGuideAtom(LEInputStream& in, GuideAtom& _s) {
+void MSO::parseGuideAtom(LEInputStream &in, GuideAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -609,14 +637,15 @@ void MSO::parseGuideAtom(LEInputStream& in, GuideAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.type) == 0 || ((quint32)_s.type) == 1");
     }
     _s.pos = in.readint32();
-    if (!(((qint32)_s.pos)>=-15840)) {
+    if (!(((qint32)_s.pos) >= -15840)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.pos)>=-15840");
     }
-    if (!(((qint32)_s.pos)<=32255)) {
+    if (!(((qint32)_s.pos) <= 32255)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.pos)<=32255");
     }
 }
-void MSO::parseDocProgTagsContainer(LEInputStream& in, DocProgTagsContainer& _s) {
+void MSO::parseDocProgTagsContainer(LEInputStream &in, DocProgTagsContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -639,18 +668,20 @@ void MSO::parseDocProgTagsContainer(LEInputStream& in, DocProgTagsContainer& _s)
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
-void MSO::parseTextAutoNumberScheme(LEInputStream& in, TextAutoNumberScheme& _s) {
+void MSO::parseTextAutoNumberScheme(LEInputStream &in, TextAutoNumberScheme &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.scheme = in.readuint16();
-    if (!(((quint16)_s.scheme)<=40)) {
+    if (!(((quint16)_s.scheme) <= 40)) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.scheme)<=40");
     }
     _s.startNum = in.readuint16();
-    if (!(((quint16)_s.startNum)>=1)) {
+    if (!(((quint16)_s.startNum) >= 1)) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.startNum)>=1");
     }
 }
-void MSO::parseBlipCollection9Container(LEInputStream& in, BlipCollection9Container& _s) {
+void MSO::parseBlipCollection9Container(LEInputStream &in, BlipCollection9Container &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -673,7 +704,8 @@ void MSO::parseBlipCollection9Container(LEInputStream& in, BlipCollection9Contai
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
-void MSO::parseKinsoku9Atom(LEInputStream& in, Kinsoku9Atom& _s) {
+void MSO::parseKinsoku9Atom(LEInputStream &in, Kinsoku9Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -713,7 +745,8 @@ void MSO::parseKinsoku9Atom(LEInputStream& in, Kinsoku9Atom& _s) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.reservedb) == 0");
     }
 }
-void MSO::parseExHyperlink9Container(LEInputStream& in, ExHyperlink9Container& _s) {
+void MSO::parseExHyperlink9Container(LEInputStream &in, ExHyperlink9Container &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -731,7 +764,8 @@ void MSO::parseExHyperlink9Container(LEInputStream& in, ExHyperlink9Container& _
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parsePresAdvisorFlags9Atom(LEInputStream& in, PresAdvisorFlags9Atom& _s) {
+void MSO::parsePresAdvisorFlags9Atom(LEInputStream &in, PresAdvisorFlags9Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -766,7 +800,8 @@ void MSO::parsePresAdvisorFlags9Atom(LEInputStream& in, PresAdvisorFlags9Atom& _
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.reservedb) == 0");
     }
 }
-void MSO::parseEnvelopeData9Atom(LEInputStream& in, EnvelopeData9Atom& _s) {
+void MSO::parseEnvelopeData9Atom(LEInputStream &in, EnvelopeData9Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -784,7 +819,8 @@ void MSO::parseEnvelopeData9Atom(LEInputStream& in, EnvelopeData9Atom& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseEnvelopeFlags9Atom(LEInputStream& in, EnvelopeFlags9Atom& _s) {
+void MSO::parseEnvelopeFlags9Atom(LEInputStream &in, EnvelopeFlags9Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -819,7 +855,8 @@ void MSO::parseEnvelopeFlags9Atom(LEInputStream& in, EnvelopeFlags9Atom& _s) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.reserved2c) == 0");
     }
 }
-void MSO::parseHTMLDocInfo9Atom(LEInputStream& in, HTMLDocInfo9Atom& _s) {
+void MSO::parseHTMLDocInfo9Atom(LEInputStream &in, HTMLDocInfo9Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -837,8 +874,11 @@ void MSO::parseHTMLDocInfo9Atom(LEInputStream& in, HTMLDocInfo9Atom& _s) {
     _s.unused1 = in.readuint32();
     _s.encoding = in.readuint32();
     _s.frameColorType = in.readuint16();
-    if (!(((quint16)_s.frameColorType) == 0 || ((quint16)_s.frameColorType) == 1 || ((quint16)_s.frameColorType) == 2 || ((quint16)_s.frameColorType) == 3 || ((quint16)_s.frameColorType) == 4 || ((quint16)_s.frameColorType) == 5)) {
-        throw IncorrectValueException(in.getPosition(), "((quint16)_s.frameColorType) == 0 || ((quint16)_s.frameColorType) == 1 || ((quint16)_s.frameColorType) == 2 || ((quint16)_s.frameColorType) == 3 || ((quint16)_s.frameColorType) == 4 || ((quint16)_s.frameColorType) == 5");
+    if (!(((quint16)_s.frameColorType) == 0 || ((quint16)_s.frameColorType) == 1 || ((quint16)_s.frameColorType) == 2 || ((quint16)_s.frameColorType) == 3
+          || ((quint16)_s.frameColorType) == 4 || ((quint16)_s.frameColorType) == 5)) {
+        throw IncorrectValueException(in.getPosition(),
+                                      "((quint16)_s.frameColorType) == 0 || ((quint16)_s.frameColorType) == 1 || ((quint16)_s.frameColorType) == 2 || "
+                                      "((quint16)_s.frameColorType) == 3 || ((quint16)_s.frameColorType) == 4 || ((quint16)_s.frameColorType) == 5");
     }
     _s.screenSize = in.readuint8();
     _s.unused2 = in.readuint8();
@@ -856,7 +896,8 @@ void MSO::parseHTMLDocInfo9Atom(LEInputStream& in, HTMLDocInfo9Atom& _s) {
     }
     _s.unused3 = in.readuint16();
 }
-void MSO::parseHTMLPublishInfo9Container(LEInputStream& in, HTMLPublishInfo9Container& _s) {
+void MSO::parseHTMLPublishInfo9Container(LEInputStream &in, HTMLPublishInfo9Container &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -874,7 +915,8 @@ void MSO::parseHTMLPublishInfo9Container(LEInputStream& in, HTMLPublishInfo9Cont
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseBroadcastDocInfo9Container(LEInputStream& in, BroadcastDocInfo9Container& _s) {
+void MSO::parseBroadcastDocInfo9Container(LEInputStream &in, BroadcastDocInfo9Container &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -892,7 +934,8 @@ void MSO::parseBroadcastDocInfo9Container(LEInputStream& in, BroadcastDocInfo9Co
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseOutlineTextProps9Container(LEInputStream& in, OutlineTextProps9Container& _s) {
+void MSO::parseOutlineTextProps9Container(LEInputStream &in, OutlineTextProps9Container &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -912,24 +955,25 @@ void MSO::parseOutlineTextProps9Container(LEInputStream& in, OutlineTextProps9Co
         try {
             _s.rgOutlineTextProps9Entry.append(OutlineTextProps9Entry(&_s));
             parseOutlineTextProps9Entry(in, _s.rgOutlineTextProps9Entry.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgOutlineTextProps9Entry.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgOutlineTextProps9Entry.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseOutlineTextPropsHeaderExAtom(LEInputStream& in, OutlineTextPropsHeaderExAtom& _s) {
+void MSO::parseOutlineTextPropsHeaderExAtom(LEInputStream &in, OutlineTextPropsHeaderExAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
     }
-    if (!(_s.rh.recInstance<=5)) {
+    if (!(_s.rh.recInstance <= 5)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance<=5");
     }
     if (!(_s.rh.recType == 0xFAF)) {
@@ -938,7 +982,8 @@ void MSO::parseOutlineTextPropsHeaderExAtom(LEInputStream& in, OutlineTextPropsH
     _s.slideIdRef = in.readuint32();
     _s.txType = in.readuint32();
 }
-void MSO::parseStyleTextProp9Atom(LEInputStream& in, StyleTextProp9Atom& _s) {
+void MSO::parseStyleTextProp9Atom(LEInputStream &in, StyleTextProp9Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -961,7 +1006,8 @@ void MSO::parseStyleTextProp9Atom(LEInputStream& in, StyleTextProp9Atom& _s) {
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
-void MSO::parseFontCollection10Container(LEInputStream& in, FontCollection10Container& _s) {
+void MSO::parseFontCollection10Container(LEInputStream &in, FontCollection10Container &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -984,7 +1030,8 @@ void MSO::parseFontCollection10Container(LEInputStream& in, FontCollection10Cont
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
-void MSO::parseGridSpacing10Atom(LEInputStream& in, GridSpacing10Atom& _s) {
+void MSO::parseGridSpacing10Atom(LEInputStream &in, GridSpacing10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -1000,21 +1047,22 @@ void MSO::parseGridSpacing10Atom(LEInputStream& in, GridSpacing10Atom& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x08");
     }
     _s.x = in.readuint32();
-    if (!(((quint32)_s.x)>=23224)) {
+    if (!(((quint32)_s.x) >= 23224)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.x)>=23224");
     }
-    if (!(((quint32)_s.x)<=1179648)) {
+    if (!(((quint32)_s.x) <= 1179648)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.x)<=1179648");
     }
     _s.y = in.readuint32();
-    if (!(((quint32)_s.y)>=23224)) {
+    if (!(((quint32)_s.y) >= 23224)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.y)>=23224");
     }
-    if (!(((quint32)_s.y)<=1179648)) {
+    if (!(((quint32)_s.y) <= 1179648)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.y)<=1179648");
     }
 }
-void MSO::parseAuthorNameAtom(LEInputStream& in, AuthorNameAtom& _s) {
+void MSO::parseAuthorNameAtom(LEInputStream &in, AuthorNameAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1028,17 +1076,18 @@ void MSO::parseAuthorNameAtom(LEInputStream& in, AuthorNameAtom& _s) {
     if (!(_s.rh.recType == 0x0FBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FBA");
     }
-    if (!(_s.rh.recLen<=104)) {
+    if (!(_s.rh.recLen <= 104)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen<=104");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
     _c = _s.rh.recLen;
     _s.authorName.resize(_c);
     in.readBytes(_s.authorName);
 }
-void MSO::parseCommentIndex10Atom(LEInputStream& in, CommentIndex10Atom& _s) {
+void MSO::parseCommentIndex10Atom(LEInputStream &in, CommentIndex10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -1054,15 +1103,16 @@ void MSO::parseCommentIndex10Atom(LEInputStream& in, CommentIndex10Atom& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x08");
     }
     _s.colorIndex = in.readint32();
-    if (!(((qint32)_s.colorIndex)>=0)) {
+    if (!(((qint32)_s.colorIndex) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.colorIndex)>=0");
     }
     _s.commentIndexSeed = in.readint32();
-    if (!(((qint32)_s.commentIndexSeed)>=0)) {
+    if (!(((qint32)_s.commentIndexSeed) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.commentIndexSeed)>=0");
     }
 }
-void MSO::parseFontEmbedFlags10Atom(LEInputStream& in, FontEmbedFlags10Atom& _s) {
+void MSO::parseFontEmbedFlags10Atom(LEInputStream &in, FontEmbedFlags10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -1082,7 +1132,8 @@ void MSO::parseFontEmbedFlags10Atom(LEInputStream& in, FontEmbedFlags10Atom& _s)
     _s.unuseda = in.readuint14();
     _s.unusedb = in.readuint16();
 }
-void MSO::parseCopyrightAtom(LEInputStream& in, CopyrightAtom& _s) {
+void MSO::parseCopyrightAtom(LEInputStream &in, CopyrightAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1096,17 +1147,18 @@ void MSO::parseCopyrightAtom(LEInputStream& in, CopyrightAtom& _s) {
     if (!(_s.rh.recType == 0x0FBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FBA");
     }
-    if (!(_s.rh.recLen<=510)) {
+    if (!(_s.rh.recLen <= 510)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen<=510");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
     _c = _s.rh.recLen;
     _s.copyright.resize(_c);
     in.readBytes(_s.copyright);
 }
-void MSO::parseKeywordsAtom(LEInputStream& in, KeywordsAtom& _s) {
+void MSO::parseKeywordsAtom(LEInputStream &in, KeywordsAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1120,17 +1172,18 @@ void MSO::parseKeywordsAtom(LEInputStream& in, KeywordsAtom& _s) {
     if (!(_s.rh.recType == 0x0FBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FBA");
     }
-    if (!(_s.rh.recLen<=510)) {
+    if (!(_s.rh.recLen <= 510)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen<=510");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
     _c = _s.rh.recLen;
     _s.keywords.resize(_c);
     in.readBytes(_s.keywords);
 }
-void MSO::parseFilterPrivacyFlags10Atom(LEInputStream& in, FilterPrivacyFlags10Atom& _s) {
+void MSO::parseFilterPrivacyFlags10Atom(LEInputStream &in, FilterPrivacyFlags10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -1159,7 +1212,8 @@ void MSO::parseFilterPrivacyFlags10Atom(LEInputStream& in, FilterPrivacyFlags10A
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.reserved2c) == 0x0");
     }
 }
-void MSO::parseOutlineTextProps10Container(LEInputStream& in, OutlineTextProps10Container& _s) {
+void MSO::parseOutlineTextProps10Container(LEInputStream &in, OutlineTextProps10Container &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -1179,18 +1233,19 @@ void MSO::parseOutlineTextProps10Container(LEInputStream& in, OutlineTextProps10
         try {
             _s.rgOutlineTextProps10Entry.append(OutlineTextProps10Entry(&_s));
             parseOutlineTextProps10Entry(in, _s.rgOutlineTextProps10Entry.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgOutlineTextProps10Entry.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgOutlineTextProps10Entry.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseStyleTextProp10Atom(LEInputStream& in, StyleTextProp10Atom& _s) {
+void MSO::parseStyleTextProp10Atom(LEInputStream &in, StyleTextProp10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -1210,18 +1265,19 @@ void MSO::parseStyleTextProp10Atom(LEInputStream& in, StyleTextProp10Atom& _s) {
         try {
             _s.rgStyleTextProp10.append(TextCFException10(&_s));
             parseTextCFException10(in, _s.rgStyleTextProp10.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgStyleTextProp10.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgStyleTextProp10.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseDocToolbarStates10Atom(LEInputStream& in, DocToolbarStates10Atom& _s) {
+void MSO::parseDocToolbarStates10Atom(LEInputStream &in, DocToolbarStates10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -1243,7 +1299,8 @@ void MSO::parseDocToolbarStates10Atom(LEInputStream& in, DocToolbarStates10Atom&
         throw IncorrectValueException(in.getPosition(), "((quint8)_s.reserved) == 0x0");
     }
 }
-void MSO::parseSlideListTable10Container(LEInputStream& in, SlideListTable10Container& _s) {
+void MSO::parseSlideListTable10Container(LEInputStream &in, SlideListTable10Container &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1261,7 +1318,8 @@ void MSO::parseSlideListTable10Container(LEInputStream& in, SlideListTable10Cont
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseDiffTree10Container(LEInputStream& in, DiffTree10Container& _s) {
+void MSO::parseDiffTree10Container(LEInputStream &in, DiffTree10Container &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1279,7 +1337,8 @@ void MSO::parseDiffTree10Container(LEInputStream& in, DiffTree10Container& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseModifyPasswordAtom(LEInputStream& in, ModifyPasswordAtom& _s) {
+void MSO::parseModifyPasswordAtom(LEInputStream &in, ModifyPasswordAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1293,17 +1352,18 @@ void MSO::parseModifyPasswordAtom(LEInputStream& in, ModifyPasswordAtom& _s) {
     if (!(_s.rh.recType == 0x0FBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FBA");
     }
-    if (!(_s.rh.recLen<=510)) {
+    if (!(_s.rh.recLen <= 510)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen<=510");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
     _c = _s.rh.recLen;
     _s.modifyPassword.resize(_c);
     in.readBytes(_s.modifyPassword);
 }
-void MSO::parsePhotoAlbumInfo10Atom(LEInputStream& in, PhotoAlbumInfo10Atom& _s) {
+void MSO::parsePhotoAlbumInfo10Atom(LEInputStream &in, PhotoAlbumInfo10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -1321,16 +1381,24 @@ void MSO::parsePhotoAlbumInfo10Atom(LEInputStream& in, PhotoAlbumInfo10Atom& _s)
     _s.fUseBlackWhite = in.readuint8();
     _s.fHasCaption = in.readuint8();
     _s.layout = in.readuint8();
-    if (!(((quint8)_s.layout) == 0 || ((quint8)_s.layout) == 1 || ((quint8)_s.layout) == 2 || ((quint8)_s.layout) == 3 || ((quint8)_s.layout) == 4 || ((quint8)_s.layout) == 5 || ((quint8)_s.layout) == 6)) {
-        throw IncorrectValueException(in.getPosition(), "((quint8)_s.layout) == 0 || ((quint8)_s.layout) == 1 || ((quint8)_s.layout) == 2 || ((quint8)_s.layout) == 3 || ((quint8)_s.layout) == 4 || ((quint8)_s.layout) == 5 || ((quint8)_s.layout) == 6");
+    if (!(((quint8)_s.layout) == 0 || ((quint8)_s.layout) == 1 || ((quint8)_s.layout) == 2 || ((quint8)_s.layout) == 3 || ((quint8)_s.layout) == 4
+          || ((quint8)_s.layout) == 5 || ((quint8)_s.layout) == 6)) {
+        throw IncorrectValueException(in.getPosition(),
+                                      "((quint8)_s.layout) == 0 || ((quint8)_s.layout) == 1 || ((quint8)_s.layout) == 2 || ((quint8)_s.layout) == 3 || "
+                                      "((quint8)_s.layout) == 4 || ((quint8)_s.layout) == 5 || ((quint8)_s.layout) == 6");
     }
     _s.unused = in.readuint8();
     _s.frameShape = in.readuint16();
-    if (!(((quint16)_s.frameShape) == 0x0000 || ((quint16)_s.frameShape) == 0x0001 || ((quint16)_s.frameShape) == 0x0002 || ((quint16)_s.frameShape) == 0x0003 || ((quint16)_s.frameShape) == 0x0004 || ((quint16)_s.frameShape) == 0x0005 || ((quint16)_s.frameShape) == 0x0006)) {
-        throw IncorrectValueException(in.getPosition(), "((quint16)_s.frameShape) == 0x0000 || ((quint16)_s.frameShape) == 0x0001 || ((quint16)_s.frameShape) == 0x0002 || ((quint16)_s.frameShape) == 0x0003 || ((quint16)_s.frameShape) == 0x0004 || ((quint16)_s.frameShape) == 0x0005 || ((quint16)_s.frameShape) == 0x0006");
+    if (!(((quint16)_s.frameShape) == 0x0000 || ((quint16)_s.frameShape) == 0x0001 || ((quint16)_s.frameShape) == 0x0002 || ((quint16)_s.frameShape) == 0x0003
+          || ((quint16)_s.frameShape) == 0x0004 || ((quint16)_s.frameShape) == 0x0005 || ((quint16)_s.frameShape) == 0x0006)) {
+        throw IncorrectValueException(
+            in.getPosition(),
+            "((quint16)_s.frameShape) == 0x0000 || ((quint16)_s.frameShape) == 0x0001 || ((quint16)_s.frameShape) == 0x0002 || ((quint16)_s.frameShape) == "
+            "0x0003 || ((quint16)_s.frameShape) == 0x0004 || ((quint16)_s.frameShape) == 0x0005 || ((quint16)_s.frameShape) == 0x0006");
     }
 }
-void MSO::parseSmartTagStore11Container(LEInputStream& in, SmartTagStore11Container& _s) {
+void MSO::parseSmartTagStore11Container(LEInputStream &in, SmartTagStore11Container &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1348,7 +1416,8 @@ void MSO::parseSmartTagStore11Container(LEInputStream& in, SmartTagStore11Contai
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseOutlineTextProps11Container(LEInputStream& in, OutlineTextProps11Container& _s) {
+void MSO::parseOutlineTextProps11Container(LEInputStream &in, OutlineTextProps11Container &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1366,7 +1435,8 @@ void MSO::parseOutlineTextProps11Container(LEInputStream& in, OutlineTextProps11
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseBinaryTagDataBlob(LEInputStream& in, BinaryTagDataBlob& _s) {
+void MSO::parseBinaryTagDataBlob(LEInputStream &in, BinaryTagDataBlob &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1384,7 +1454,8 @@ void MSO::parseBinaryTagDataBlob(LEInputStream& in, BinaryTagDataBlob& _s) {
     _s.data.resize(_c);
     in.readBytes(_s.data);
 }
-void MSO::parsePP12DocBinaryTagExtension(LEInputStream& in, PP12DocBinaryTagExtension& _s) {
+void MSO::parsePP12DocBinaryTagExtension(LEInputStream &in, PP12DocBinaryTagExtension &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1418,7 +1489,8 @@ void MSO::parsePP12DocBinaryTagExtension(LEInputStream& in, PP12DocBinaryTagExte
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseSorterViewInfoContainer(LEInputStream& in, SorterViewInfoContainer& _s) {
+void MSO::parseSorterViewInfoContainer(LEInputStream &in, SorterViewInfoContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1436,7 +1508,8 @@ void MSO::parseSorterViewInfoContainer(LEInputStream& in, SorterViewInfoContaine
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseVBAInfoAtom(LEInputStream& in, VBAInfoAtom& _s) {
+void MSO::parseVBAInfoAtom(LEInputStream &in, VBAInfoAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 2)) {
@@ -1461,7 +1534,8 @@ void MSO::parseVBAInfoAtom(LEInputStream& in, VBAInfoAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.version) == 0 || ((quint32)_s.version) == 1 || ((quint32)_s.version) == 2");
     }
 }
-void MSO::parseMasterListWithTextContainer(LEInputStream& in, MasterListWithTextContainer& _s) {
+void MSO::parseMasterListWithTextContainer(LEInputStream &in, MasterListWithTextContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1475,16 +1549,17 @@ void MSO::parseMasterListWithTextContainer(LEInputStream& in, MasterListWithText
     if (!(_s.rh.recType == 0x0FF0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FF0");
     }
-    if (!(_s.rh.recLen%28==0)) {
+    if (!(_s.rh.recLen % 28 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%28==0");
     }
-    _c = _s.rh.recLen/28;
-    for (int _i=0; _i<_c; ++_i) {
+    _c = _s.rh.recLen / 28;
+    for (int _i = 0; _i < _c; ++_i) {
         _s.rgMasterPersistAtom.append(MasterPersistAtom(&_s));
         parseMasterPersistAtom(in, _s.rgMasterPersistAtom[_i]);
     }
 }
-void MSO::parseMasterPersistAtom(LEInputStream& in, MasterPersistAtom& _s) {
+void MSO::parseMasterPersistAtom(LEInputStream &in, MasterPersistAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -1527,7 +1602,8 @@ void MSO::parseMasterPersistAtom(LEInputStream& in, MasterPersistAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.reserved6) == 0");
     }
 }
-void MSO::parseSlideListWithTextContainer(LEInputStream& in, SlideListWithTextContainer& _s) {
+void MSO::parseSlideListWithTextContainer(LEInputStream &in, SlideListWithTextContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -1547,18 +1623,19 @@ void MSO::parseSlideListWithTextContainer(LEInputStream& in, SlideListWithTextCo
         try {
             _s.rgChildRec.append(SlideListWithTextSubContainerOrAtom(&_s));
             parseSlideListWithTextSubContainerOrAtom(in, _s.rgChildRec.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgChildRec.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgChildRec.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseNotesListWithTextContainer(LEInputStream& in, NotesListWithTextContainer& _s) {
+void MSO::parseNotesListWithTextContainer(LEInputStream &in, NotesListWithTextContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -1578,18 +1655,19 @@ void MSO::parseNotesListWithTextContainer(LEInputStream& in, NotesListWithTextCo
         try {
             _s.rgNotesPersistAtom.append(NotesPersistAtom(&_s));
             parseNotesPersistAtom(in, _s.rgNotesPersistAtom.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgNotesPersistAtom.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgNotesPersistAtom.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseNotesPersistAtom(LEInputStream& in, NotesPersistAtom& _s) {
+void MSO::parseNotesPersistAtom(LEInputStream &in, NotesPersistAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -1632,14 +1710,18 @@ void MSO::parseNotesPersistAtom(LEInputStream& in, NotesPersistAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.reserved4) == 0");
     }
 }
-void MSO::parseTextHeaderAtom(LEInputStream& in, TextHeaderAtom& _s) {
+void MSO::parseTextHeaderAtom(LEInputStream &in, TextHeaderAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
     }
-    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4 || _s.rh.recInstance == 5)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4 || _s.rh.recInstance == 5");
+    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4
+          || _s.rh.recInstance == 5)) {
+        throw IncorrectValueException(in.getPosition(),
+                                      "_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || "
+                                      "_s.rh.recInstance == 4 || _s.rh.recInstance == 5");
     }
     if (!(_s.rh.recType == 0xF9F)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xF9F");
@@ -1649,7 +1731,8 @@ void MSO::parseTextHeaderAtom(LEInputStream& in, TextHeaderAtom& _s) {
     }
     _s.textType = in.readuint32();
 }
-void MSO::parseTextCharsAtom(LEInputStream& in, TextCharsAtom& _s) {
+void MSO::parseTextCharsAtom(LEInputStream &in, TextCharsAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1663,16 +1746,17 @@ void MSO::parseTextCharsAtom(LEInputStream& in, TextCharsAtom& _s) {
     if (!(_s.rh.recType == 0xFA0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFA0");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
-    _c = _s.rh.recLen/2;
+    _c = _s.rh.recLen / 2;
     _s.textChars.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.textChars[_i] = in.readuint16();
     }
 }
-void MSO::parseTextBytesAtom(LEInputStream& in, TextBytesAtom& _s) {
+void MSO::parseTextBytesAtom(LEInputStream &in, TextBytesAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1690,7 +1774,8 @@ void MSO::parseTextBytesAtom(LEInputStream& in, TextBytesAtom& _s) {
     _s.textChars.resize(_c);
     in.readBytes(_s.textChars);
 }
-void MSO::parseMasterTextPropAtom(LEInputStream& in, MasterTextPropAtom& _s) {
+void MSO::parseMasterTextPropAtom(LEInputStream &in, MasterTextPropAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -1713,15 +1798,17 @@ void MSO::parseMasterTextPropAtom(LEInputStream& in, MasterTextPropAtom& _s) {
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
-void MSO::parseMasterTextPropRun(LEInputStream& in, MasterTextPropRun& _s) {
+void MSO::parseMasterTextPropRun(LEInputStream &in, MasterTextPropRun &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.count = in.readuint32();
     _s.indentLevel = in.readuint16();
-    if (!(((quint16)_s.indentLevel)<=4)) {
+    if (!(((quint16)_s.indentLevel) <= 4)) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.indentLevel)<=4");
     }
 }
-void MSO::parseStyleTextPropAtom(LEInputStream& in, StyleTextPropAtom& _s) {
+void MSO::parseStyleTextPropAtom(LEInputStream &in, StyleTextPropAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1736,7 +1823,8 @@ void MSO::parseStyleTextPropAtom(LEInputStream& in, StyleTextPropAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFA1");
     }
 }
-void MSO::parseSlideNumberMCAtom(LEInputStream& in, SlideNumberMCAtom& _s) {
+void MSO::parseSlideNumberMCAtom(LEInputStream &in, SlideNumberMCAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -1753,7 +1841,8 @@ void MSO::parseSlideNumberMCAtom(LEInputStream& in, SlideNumberMCAtom& _s) {
     }
     _s.position = in.readint32();
 }
-void MSO::parseDateTimeMCAtom(LEInputStream& in, DateTimeMCAtom& _s) {
+void MSO::parseDateTimeMCAtom(LEInputStream &in, DateTimeMCAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1776,7 +1865,8 @@ void MSO::parseDateTimeMCAtom(LEInputStream& in, DateTimeMCAtom& _s) {
     _s.unused.resize(_c);
     in.readBytes(_s.unused);
 }
-void MSO::parseGenericDateMCAtom(LEInputStream& in, GenericDateMCAtom& _s) {
+void MSO::parseGenericDateMCAtom(LEInputStream &in, GenericDateMCAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -1793,7 +1883,8 @@ void MSO::parseGenericDateMCAtom(LEInputStream& in, GenericDateMCAtom& _s) {
     }
     _s.position = in.readint32();
 }
-void MSO::parseHeaderMCAtom(LEInputStream& in, HeaderMCAtom& _s) {
+void MSO::parseHeaderMCAtom(LEInputStream &in, HeaderMCAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -1810,7 +1901,8 @@ void MSO::parseHeaderMCAtom(LEInputStream& in, HeaderMCAtom& _s) {
     }
     _s.position = in.readint32();
 }
-void MSO::parseFooterMCAtom(LEInputStream& in, FooterMCAtom& _s) {
+void MSO::parseFooterMCAtom(LEInputStream &in, FooterMCAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -1827,7 +1919,8 @@ void MSO::parseFooterMCAtom(LEInputStream& in, FooterMCAtom& _s) {
     }
     _s.position = in.readint32();
 }
-void MSO::parseRTFDateTimeMCAtom(LEInputStream& in, RTFDateTimeMCAtom& _s) {
+void MSO::parseRTFDateTimeMCAtom(LEInputStream &in, RTFDateTimeMCAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1849,7 +1942,8 @@ void MSO::parseRTFDateTimeMCAtom(LEInputStream& in, RTFDateTimeMCAtom& _s) {
     _s.format.resize(_c);
     in.readBytes(_s.format);
 }
-void MSO::parseTextBookmarkAtom(LEInputStream& in, TextBookmarkAtom& _s) {
+void MSO::parseTextBookmarkAtom(LEInputStream &in, TextBookmarkAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -1868,12 +1962,14 @@ void MSO::parseTextBookmarkAtom(LEInputStream& in, TextBookmarkAtom& _s) {
     _s.end = in.readint32();
     _s.bookmarkID = in.readint32();
 }
-void MSO::parseTextRange(LEInputStream& in, TextRange& _s) {
+void MSO::parseTextRange(LEInputStream &in, TextRange &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.begin = in.readint32();
     _s.end = in.readint32();
 }
-void MSO::parseMouseClickTextInteractiveInfoAtom(LEInputStream& in, MouseClickTextInteractiveInfoAtom& _s) {
+void MSO::parseMouseClickTextInteractiveInfoAtom(LEInputStream &in, MouseClickTextInteractiveInfoAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -1890,7 +1986,8 @@ void MSO::parseMouseClickTextInteractiveInfoAtom(LEInputStream& in, MouseClickTe
     }
     parseTextRange(in, _s.range);
 }
-void MSO::parseMouseOverTextInteractiveInfoAtom(LEInputStream& in, MouseOverTextInteractiveInfoAtom& _s) {
+void MSO::parseMouseOverTextInteractiveInfoAtom(LEInputStream &in, MouseOverTextInteractiveInfoAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -1907,33 +2004,37 @@ void MSO::parseMouseOverTextInteractiveInfoAtom(LEInputStream& in, MouseOverText
     }
     parseTextRange(in, _s.range);
 }
-void MSO::parseSlideId(LEInputStream& in, SlideId& _s) {
+void MSO::parseSlideId(LEInputStream &in, SlideId &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.slideId = in.readuint32();
-    if (!(((quint32)_s.slideId)>=100)) {
+    if (!(((quint32)_s.slideId) >= 100)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.slideId)>=100");
     }
-    if (!(((quint32)_s.slideId)<2147483647)) {
+    if (!(((quint32)_s.slideId) < 2147483647)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.slideId)<2147483647");
     }
 }
-void MSO::parseTabStops(LEInputStream& in, TabStops& _s) {
+void MSO::parseTabStops(LEInputStream &in, TabStops &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     _s.count = in.readuint16();
     _c = _s.count;
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.rgTabStop.append(TabStop(&_s));
         parseTabStop(in, _s.rgTabStop[_i]);
     }
 }
-void MSO::parseTabStop(LEInputStream& in, TabStop& _s) {
+void MSO::parseTabStop(LEInputStream &in, TabStop &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.position = in.readint16();
     _s.type = in.readuint16();
 }
-void MSO::parsePFWrapFlags(LEInputStream& in, PFWrapFlags& _s) {
+void MSO::parsePFWrapFlags(LEInputStream &in, PFWrapFlags &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.charWrap = in.readbit();
     _s.wordWrap = in.readbit();
@@ -1941,14 +2042,16 @@ void MSO::parsePFWrapFlags(LEInputStream& in, PFWrapFlags& _s) {
     _s.reserved1 = in.readuint5();
     _s.reserved2 = in.readuint8();
 }
-void MSO::parseColorIndexStruct(LEInputStream& in, ColorIndexStruct& _s) {
+void MSO::parseColorIndexStruct(LEInputStream &in, ColorIndexStruct &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.red = in.readuint8();
     _s.green = in.readuint8();
     _s.blue = in.readuint8();
     _s.index = in.readuint8();
 }
-void MSO::parseBulletFlags(LEInputStream& in, BulletFlags& _s) {
+void MSO::parseBulletFlags(LEInputStream &in, BulletFlags &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.fHasBullet = in.readbit();
     _s.fBulletHasFont = in.readbit();
@@ -1956,7 +2059,8 @@ void MSO::parseBulletFlags(LEInputStream& in, BulletFlags& _s) {
     _s.fBulletHasSize = in.readbit();
     _s.reserved = in.readuint12();
 }
-void MSO::parsePFMasks(LEInputStream& in, PFMasks& _s) {
+void MSO::parsePFMasks(LEInputStream &in, PFMasks &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.hasBullet = in.readbit();
     _s.bulletHasFont = in.readbit();
@@ -1986,7 +2090,8 @@ void MSO::parsePFMasks(LEInputStream& in, PFMasks& _s) {
     _s.bulletHasScheme = in.readbit();
     _s.reserved2 = in.readuint6();
 }
-void MSO::parseCFMasks(LEInputStream& in, CFMasks& _s) {
+void MSO::parseCFMasks(LEInputStream &in, CFMasks &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.bold = in.readbit();
     _s.italic = in.readbit();
@@ -2013,7 +2118,8 @@ void MSO::parseCFMasks(LEInputStream& in, CFMasks& _s) {
     _s.pp11ext = in.readbit();
     _s.reserved = in.readuint5();
 }
-void MSO::parseCFStyle(LEInputStream& in, CFStyle& _s) {
+void MSO::parseCFStyle(LEInputStream &in, CFStyle &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.bold = in.readbit();
     _s.italic = in.readbit();
@@ -2028,7 +2134,8 @@ void MSO::parseCFStyle(LEInputStream& in, CFStyle& _s) {
     _s.pp9rt = in.readuint4();
     _s.unused4 = in.readuint2();
 }
-void MSO::parseFontCollectionContainer(LEInputStream& in, FontCollectionContainer& _s) {
+void MSO::parseFontCollectionContainer(LEInputStream &in, FontCollectionContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -2051,7 +2158,8 @@ void MSO::parseFontCollectionContainer(LEInputStream& in, FontCollectionContaine
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
-void MSO::parseFontEntityAtom(LEInputStream& in, FontEntityAtom& _s) {
+void MSO::parseFontEntityAtom(LEInputStream &in, FontEntityAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2059,7 +2167,7 @@ void MSO::parseFontEntityAtom(LEInputStream& in, FontEntityAtom& _s) {
     if (!(_s.rh.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
     }
-    if (!(_s.rh.recInstance<=128)) {
+    if (!(_s.rh.recInstance <= 128)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance<=128");
     }
     if (!(_s.rh.recType == 0xFB7)) {
@@ -2070,7 +2178,7 @@ void MSO::parseFontEntityAtom(LEInputStream& in, FontEntityAtom& _s) {
     }
     _c = 32;
     _s.lfFaceName.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.lfFaceName[_i] = in.readuint16();
     }
     _s.lfCharSet = in.readuint8();
@@ -2086,7 +2194,8 @@ void MSO::parseFontEntityAtom(LEInputStream& in, FontEntityAtom& _s) {
     }
     _s.lfPitchAndFamily = in.readuint8();
 }
-void MSO::parseFontEmbedDataBlob(LEInputStream& in, FontEmbedDataBlob& _s) {
+void MSO::parseFontEmbedDataBlob(LEInputStream &in, FontEmbedDataBlob &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2094,7 +2203,7 @@ void MSO::parseFontEmbedDataBlob(LEInputStream& in, FontEmbedDataBlob& _s) {
     if (!(_s.rh.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
     }
-    if (!(_s.rh.recInstance<=3)) {
+    if (!(_s.rh.recInstance <= 3)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance<=3");
     }
     if (!(_s.rh.recType == 0xFB8)) {
@@ -2104,7 +2213,8 @@ void MSO::parseFontEmbedDataBlob(LEInputStream& in, FontEmbedDataBlob& _s) {
     _s.data.resize(_c);
     in.readBytes(_s.data);
 }
-void MSO::parseKinsokuAtom(LEInputStream& in, KinsokuAtom& _s) {
+void MSO::parseKinsokuAtom(LEInputStream &in, KinsokuAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -2121,10 +2231,12 @@ void MSO::parseKinsokuAtom(LEInputStream& in, KinsokuAtom& _s) {
     }
     _s.level = in.readuint32();
     if (!(((quint32)_s.level) == 0 || ((quint32)_s.level) == 1 || ((quint32)_s.level) == 2 || ((quint32)_s.level) == 128)) {
-        throw IncorrectValueException(in.getPosition(), "((quint32)_s.level) == 0 || ((quint32)_s.level) == 1 || ((quint32)_s.level) == 2 || ((quint32)_s.level) == 128");
+        throw IncorrectValueException(in.getPosition(),
+                                      "((quint32)_s.level) == 0 || ((quint32)_s.level) == 1 || ((quint32)_s.level) == 2 || ((quint32)_s.level) == 128");
     }
 }
-void MSO::parseKinsokuLeadingAtom(LEInputStream& in, KinsokuLeadingAtom& _s) {
+void MSO::parseKinsokuLeadingAtom(LEInputStream &in, KinsokuLeadingAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2138,16 +2250,17 @@ void MSO::parseKinsokuLeadingAtom(LEInputStream& in, KinsokuLeadingAtom& _s) {
     if (!(_s.rh.recType == 0xFBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
-    _c = _s.rh.recLen/2;
+    _c = _s.rh.recLen / 2;
     _s.kinsokuLeading.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.kinsokuLeading[_i] = in.readuint16();
     }
 }
-void MSO::parseKinsokuFollowingAtom(LEInputStream& in, KinsokuFollowingAtom& _s) {
+void MSO::parseKinsokuFollowingAtom(LEInputStream &in, KinsokuFollowingAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2155,22 +2268,23 @@ void MSO::parseKinsokuFollowingAtom(LEInputStream& in, KinsokuFollowingAtom& _s)
     if (!(_s.rh.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
     }
-    if (!(_s.rh.recInstance == 1 )) {
+    if (!(_s.rh.recInstance == 1)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 1 ");
     }
     if (!(_s.rh.recType == 0xFBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
-    _c = _s.rh.recLen/2;
+    _c = _s.rh.recLen / 2;
     _s.kinsokuFollowing.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.kinsokuFollowing[_i] = in.readuint16();
     }
 }
-void MSO::parseTextSpecialInfoAtom(LEInputStream& in, TextSpecialInfoAtom& _s) {
+void MSO::parseTextSpecialInfoAtom(LEInputStream &in, TextSpecialInfoAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -2193,18 +2307,20 @@ void MSO::parseTextSpecialInfoAtom(LEInputStream& in, TextSpecialInfoAtom& _s) {
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
-void MSO::parseSmartTags(LEInputStream& in, SmartTags& _s) {
+void MSO::parseSmartTags(LEInputStream &in, SmartTags &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     _s.count = in.readuint32();
     _c = _s.count;
     _s.rgSmartTagIndex.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.rgSmartTagIndex[_i] = in.readuint32();
     }
 }
-void MSO::parseExOleEmbedAtom(LEInputStream& in, ExOleEmbedAtom& _s) {
+void MSO::parseExOleEmbedAtom(LEInputStream &in, ExOleEmbedAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -2221,27 +2337,31 @@ void MSO::parseExOleEmbedAtom(LEInputStream& in, ExOleEmbedAtom& _s) {
     }
     _s.exColorFollow = in.readuint32();
     if (!(((quint32)_s.exColorFollow) == 0 || ((quint32)_s.exColorFollow) == 1 || ((quint32)_s.exColorFollow) == 2)) {
-        throw IncorrectValueException(in.getPosition(), "((quint32)_s.exColorFollow) == 0 || ((quint32)_s.exColorFollow) == 1 || ((quint32)_s.exColorFollow) == 2");
+        throw IncorrectValueException(in.getPosition(),
+                                      "((quint32)_s.exColorFollow) == 0 || ((quint32)_s.exColorFollow) == 1 || ((quint32)_s.exColorFollow) == 2");
     }
     _s.fCantLockServer = in.readuint8();
     _s.fNoSizeToServer = in.readuint8();
     _s.fIsTable = in.readuint8();
     _s.unused = in.readuint8();
 }
-void MSO::parsePointStruct(LEInputStream& in, PointStruct& _s) {
+void MSO::parsePointStruct(LEInputStream &in, PointStruct &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.x = in.readint32();
     _s.y = in.readint32();
 }
-void MSO::parseRatioStruct(LEInputStream& in, RatioStruct& _s) {
+void MSO::parseRatioStruct(LEInputStream &in, RatioStruct &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.numer = in.readint32();
     _s.denom = in.readint32();
-    if (!(((qint32)_s.denom)!= 0)) {
+    if (!(((qint32)_s.denom) != 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.denom)!= 0");
     }
 }
-void MSO::parsePersistDirectoryAtom(LEInputStream& in, PersistDirectoryAtom& _s) {
+void MSO::parsePersistDirectoryAtom(LEInputStream &in, PersistDirectoryAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -2264,19 +2384,24 @@ void MSO::parsePersistDirectoryAtom(LEInputStream& in, PersistDirectoryAtom& _s)
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
-void MSO::parseUnknownDocumentContainerChild(LEInputStream& in, UnknownDocumentContainerChild& _s) {
+void MSO::parseUnknownDocumentContainerChild(LEInputStream &in, UnknownDocumentContainerChild &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     parseRecordHeader(in, _s.rh);
-    if (!(_s.rh.recType == 0x416 || _s.rh.recType == 0x41A || _s.rh.recType == 0x101A || _s.rh.recType == 0x1773 || _s.rh.recType == 0x1788 || _s.rh.recType == 0x178c || _s.rh.recType == 0x178d)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x416 || _s.rh.recType == 0x41A || _s.rh.recType == 0x101A || _s.rh.recType == 0x1773 || _s.rh.recType == 0x1788 || _s.rh.recType == 0x178c || _s.rh.recType == 0x178d");
+    if (!(_s.rh.recType == 0x416 || _s.rh.recType == 0x41A || _s.rh.recType == 0x101A || _s.rh.recType == 0x1773 || _s.rh.recType == 0x1788
+          || _s.rh.recType == 0x178c || _s.rh.recType == 0x178d)) {
+        throw IncorrectValueException(in.getPosition(),
+                                      "_s.rh.recType == 0x416 || _s.rh.recType == 0x41A || _s.rh.recType == 0x101A || _s.rh.recType == 0x1773 || _s.rh.recType "
+                                      "== 0x1788 || _s.rh.recType == 0x178c || _s.rh.recType == 0x178d");
     }
     _c = _s.rh.recLen;
     _s.unknown.resize(_c);
     in.readBytes(_s.unknown);
 }
-void MSO::parseUnknownOfficeArtClientDataChild(LEInputStream& in, UnknownOfficeArtClientDataChild& _s) {
+void MSO::parseUnknownOfficeArtClientDataChild(LEInputStream &in, UnknownOfficeArtClientDataChild &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2294,7 +2419,8 @@ void MSO::parseUnknownOfficeArtClientDataChild(LEInputStream& in, UnknownOfficeA
     _s.unknown.resize(_c);
     in.readBytes(_s.unknown);
 }
-void MSO::parseUnknownSlideContainerChild(LEInputStream& in, UnknownSlideContainerChild& _s) {
+void MSO::parseUnknownSlideContainerChild(LEInputStream &in, UnknownSlideContainerChild &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2312,7 +2438,8 @@ void MSO::parseUnknownSlideContainerChild(LEInputStream& in, UnknownSlideContain
     _s.unknown.resize(_c);
     in.readBytes(_s.unknown);
 }
-void MSO::parseUnknownTextContainerChild(LEInputStream& in, UnknownTextContainerChild& _s) {
+void MSO::parseUnknownTextContainerChild(LEInputStream &in, UnknownTextContainerChild &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2330,7 +2457,8 @@ void MSO::parseUnknownTextContainerChild(LEInputStream& in, UnknownTextContainer
     _s.unknown.resize(_c);
     in.readBytes(_s.unknown);
 }
-void MSO::parsePersistDirectoryEntry(LEInputStream& in, PersistDirectoryEntry& _s) {
+void MSO::parsePersistDirectoryEntry(LEInputStream &in, PersistDirectoryEntry &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2338,15 +2466,17 @@ void MSO::parsePersistDirectoryEntry(LEInputStream& in, PersistDirectoryEntry& _
     _s.cPersist = in.readuint12();
     _c = _s.cPersist;
     _s.rgPersistOffset.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.rgPersistOffset[_i] = in.readuint32();
     }
 }
-void MSO::parsePersistIdRef(LEInputStream& in, PersistIdRef& _s) {
+void MSO::parsePersistIdRef(LEInputStream &in, PersistIdRef &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.anon = in.readuint32();
 }
-void MSO::parseSchemeListElementColorSchemeAtom(LEInputStream& in, SchemeListElementColorSchemeAtom& _s) {
+void MSO::parseSchemeListElementColorSchemeAtom(LEInputStream &in, SchemeListElementColorSchemeAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2364,12 +2494,13 @@ void MSO::parseSchemeListElementColorSchemeAtom(LEInputStream& in, SchemeListEle
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x20");
     }
     _c = 8;
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.rgSchemeColor.append(ColorStruct(&_s));
         parseColorStruct(in, _s.rgSchemeColor[_i]);
     }
 }
-void MSO::parseRoundTripOArtTextStyles12Atom(LEInputStream& in, RoundTripOArtTextStyles12Atom& _s) {
+void MSO::parseRoundTripOArtTextStyles12Atom(LEInputStream &in, RoundTripOArtTextStyles12Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2387,7 +2518,8 @@ void MSO::parseRoundTripOArtTextStyles12Atom(LEInputStream& in, RoundTripOArtTex
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseSlideNameAtom(LEInputStream& in, SlideNameAtom& _s) {
+void MSO::parseSlideNameAtom(LEInputStream &in, SlideNameAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2401,16 +2533,17 @@ void MSO::parseSlideNameAtom(LEInputStream& in, SlideNameAtom& _s) {
     if (!(_s.rh.recType == 0x0FBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FBA");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
-    _c = _s.rh.recLen/2;
+    _c = _s.rh.recLen / 2;
     _s.slideName.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.slideName[_i] = in.readuint16();
     }
 }
-void MSO::parseSlideProgTagsContainer(LEInputStream& in, SlideProgTagsContainer& _s) {
+void MSO::parseSlideProgTagsContainer(LEInputStream &in, SlideProgTagsContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -2433,7 +2566,8 @@ void MSO::parseSlideProgTagsContainer(LEInputStream& in, SlideProgTagsContainer&
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
-void MSO::parsePP9SlideBinaryTagExtension(LEInputStream& in, PP9SlideBinaryTagExtension& _s) {
+void MSO::parsePP9SlideBinaryTagExtension(LEInputStream &in, PP9SlideBinaryTagExtension &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2453,7 +2587,7 @@ void MSO::parsePP9SlideBinaryTagExtension(LEInputStream& in, PP9SlideBinaryTagEx
     }
     _c = 7;
     _s.tagName.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.tagName[_i] = in.readuint16();
     }
     parseRecordHeader(in, _s.rhData);
@@ -2472,18 +2606,19 @@ void MSO::parsePP9SlideBinaryTagExtension(LEInputStream& in, PP9SlideBinaryTagEx
         try {
             _s.rgTextMasterStyleAtom.append(TextMasterStyle9Atom(&_s));
             parseTextMasterStyle9Atom(in, _s.rgTextMasterStyleAtom.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgTextMasterStyleAtom.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgTextMasterStyleAtom.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseComment10Container(LEInputStream& in, Comment10Container& _s) {
+void MSO::parseComment10Container(LEInputStream &in, Comment10Container &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2501,7 +2636,8 @@ void MSO::parseComment10Container(LEInputStream& in, Comment10Container& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseComment10Atom(LEInputStream& in, Comment10Atom& _s) {
+void MSO::parseComment10Atom(LEInputStream &in, Comment10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2522,7 +2658,8 @@ void MSO::parseComment10Atom(LEInputStream& in, Comment10Atom& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseLinkedSlide10Atom(LEInputStream& in, LinkedSlide10Atom& _s) {
+void MSO::parseLinkedSlide10Atom(LEInputStream &in, LinkedSlide10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -2540,7 +2677,8 @@ void MSO::parseLinkedSlide10Atom(LEInputStream& in, LinkedSlide10Atom& _s) {
     _s.linkedSlideIdRef = in.readuint32();
     _s.clinkedShapes = in.readint32();
 }
-void MSO::parseLinkedShape10Atom(LEInputStream& in, LinkedShape10Atom& _s) {
+void MSO::parseLinkedShape10Atom(LEInputStream &in, LinkedShape10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -2558,7 +2696,8 @@ void MSO::parseLinkedShape10Atom(LEInputStream& in, LinkedShape10Atom& _s) {
     _s.shapeIdRef = in.readuint32();
     _s.linkedShapeIdRef = in.readuint32();
 }
-void MSO::parseSlideFlags10Atom(LEInputStream& in, SlideFlags10Atom& _s) {
+void MSO::parseSlideFlags10Atom(LEInputStream &in, SlideFlags10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -2578,7 +2717,8 @@ void MSO::parseSlideFlags10Atom(LEInputStream& in, SlideFlags10Atom& _s) {
     _s.unuseda = in.readuint14();
     _s.unusedb = in.readuint16();
 }
-void MSO::parseHashCode10Atom(LEInputStream& in, HashCode10Atom& _s) {
+void MSO::parseHashCode10Atom(LEInputStream &in, HashCode10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -2595,7 +2735,8 @@ void MSO::parseHashCode10Atom(LEInputStream& in, HashCode10Atom& _s) {
     }
     _s.hash = in.readuint32();
 }
-void MSO::parseExtTimeNodeContainer(LEInputStream& in, ExtTimeNodeContainer& _s) {
+void MSO::parseExtTimeNodeContainer(LEInputStream &in, ExtTimeNodeContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2613,7 +2754,8 @@ void MSO::parseExtTimeNodeContainer(LEInputStream& in, ExtTimeNodeContainer& _s)
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseBuildListContainer(LEInputStream& in, BuildListContainer& _s) {
+void MSO::parseBuildListContainer(LEInputStream &in, BuildListContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2631,7 +2773,8 @@ void MSO::parseBuildListContainer(LEInputStream& in, BuildListContainer& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseRoundTripHeaderFooterDefaults12Atom(LEInputStream& in, RoundTripHeaderFooterDefaults12Atom& _s) {
+void MSO::parseRoundTripHeaderFooterDefaults12Atom(LEInputStream &in, RoundTripHeaderFooterDefaults12Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -2652,7 +2795,8 @@ void MSO::parseRoundTripHeaderFooterDefaults12Atom(LEInputStream& in, RoundTripH
     _s.fIncludeSlideNumber = in.readbit();
     _s.reserved = in.readuint4();
 }
-void MSO::parseTagNameAtom(LEInputStream& in, TagNameAtom& _s) {
+void MSO::parseTagNameAtom(LEInputStream &in, TagNameAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2666,16 +2810,17 @@ void MSO::parseTagNameAtom(LEInputStream& in, TagNameAtom& _s) {
     if (!(_s.rh.recType == 0xFBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
-    if (!(_s.rh.recLen%2 == 0 )) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2 == 0 ");
     }
-    _c = _s.rh.recLen/2;
+    _c = _s.rh.recLen / 2;
     _s.tagName.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.tagName[_i] = in.readuint16();
     }
 }
-void MSO::parseTagValueAtom(LEInputStream& in, TagValueAtom& _s) {
+void MSO::parseTagValueAtom(LEInputStream &in, TagValueAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2689,25 +2834,31 @@ void MSO::parseTagValueAtom(LEInputStream& in, TagValueAtom& _s) {
     if (!(_s.rh.recType == 0xFBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
-    _c = _s.rh.recLen/2;
+    _c = _s.rh.recLen / 2;
     _s.tagValue.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.tagValue[_i] = in.readuint16();
     }
 }
-void MSO::parseRoundTripMainMasterRecord(LEInputStream& in, RoundTripMainMasterRecord& _s) {
+void MSO::parseRoundTripMainMasterRecord(LEInputStream &in, RoundTripMainMasterRecord &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     parseRecordHeader(in, _s.rh);
-    if (!(_s.rh.recType == 0x41C || _s.rh.recType == 0x40E || _s.rh.recType == 0x040F || _s.rh.recType == 0x41E || _s.rh.recType == 0x0423 || _s.rh.recType == 0x2B0D || _s.rh.recType == 0x2B0B || _s.rh.recType == 0x041D || _s.rh.recType == 0x2B0C || _s.rh.recType == 0x101D)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x41C || _s.rh.recType == 0x40E || _s.rh.recType == 0x040F || _s.rh.recType == 0x41E || _s.rh.recType == 0x0423 || _s.rh.recType == 0x2B0D || _s.rh.recType == 0x2B0B || _s.rh.recType == 0x041D || _s.rh.recType == 0x2B0C || _s.rh.recType == 0x101D");
+    if (!(_s.rh.recType == 0x41C || _s.rh.recType == 0x40E || _s.rh.recType == 0x040F || _s.rh.recType == 0x41E || _s.rh.recType == 0x0423
+          || _s.rh.recType == 0x2B0D || _s.rh.recType == 0x2B0B || _s.rh.recType == 0x041D || _s.rh.recType == 0x2B0C || _s.rh.recType == 0x101D)) {
+        throw IncorrectValueException(
+            in.getPosition(),
+            "_s.rh.recType == 0x41C || _s.rh.recType == 0x40E || _s.rh.recType == 0x040F || _s.rh.recType == 0x41E || _s.rh.recType == 0x0423 || _s.rh.recType "
+            "== 0x2B0D || _s.rh.recType == 0x2B0B || _s.rh.recType == 0x041D || _s.rh.recType == 0x2B0C || _s.rh.recType == 0x101D");
     }
     _c = _s.rh.recLen;
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseTemplateNameAtom(LEInputStream& in, TemplateNameAtom& _s) {
+void MSO::parseTemplateNameAtom(LEInputStream &in, TemplateNameAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2721,16 +2872,17 @@ void MSO::parseTemplateNameAtom(LEInputStream& in, TemplateNameAtom& _s) {
     if (!(_s.rh.recType == 0x0FBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FBA");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
-    _c = _s.rh.recLen/2;
+    _c = _s.rh.recLen / 2;
     _s.templateName.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.templateName[_i] = in.readuint16();
     }
 }
-void MSO::parseRoundTripSlideSyncInfo12Container(LEInputStream& in, RoundTripSlideSyncInfo12Container& _s) {
+void MSO::parseRoundTripSlideSyncInfo12Container(LEInputStream &in, RoundTripSlideSyncInfo12Container &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2748,7 +2900,8 @@ void MSO::parseRoundTripSlideSyncInfo12Container(LEInputStream& in, RoundTripSli
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseSlideFlags(LEInputStream& in, SlideFlags& _s) {
+void MSO::parseSlideFlags(LEInputStream &in, SlideFlags &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.fMasterObjects = in.readbit();
     _s.fMasterScheme = in.readbit();
@@ -2756,7 +2909,8 @@ void MSO::parseSlideFlags(LEInputStream& in, SlideFlags& _s) {
     _s.unused1 = in.readuint5();
     _s.unused2 = in.readuint8();
 }
-void MSO::parseNotesRoundTripAtom(LEInputStream& in, NotesRoundTripAtom& _s) {
+void MSO::parseNotesRoundTripAtom(LEInputStream &in, NotesRoundTripAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2774,7 +2928,8 @@ void MSO::parseNotesRoundTripAtom(LEInputStream& in, NotesRoundTripAtom& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseHandoutContainer(LEInputStream& in, HandoutContainer& _s) {
+void MSO::parseHandoutContainer(LEInputStream &in, HandoutContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2792,7 +2947,8 @@ void MSO::parseHandoutContainer(LEInputStream& in, HandoutContainer& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseExControlStg(LEInputStream& in, ExControlStg& _s) {
+void MSO::parseExControlStg(LEInputStream &in, ExControlStg &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2810,7 +2966,8 @@ void MSO::parseExControlStg(LEInputStream& in, ExControlStg& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseExOleObjStg(LEInputStream& in, ExOleObjStg& _s) {
+void MSO::parseExOleObjStg(LEInputStream &in, ExOleObjStg &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2828,7 +2985,8 @@ void MSO::parseExOleObjStg(LEInputStream& in, ExOleObjStg& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseUserEditAtom(LEInputStream& in, UserEditAtom& _s) {
+void MSO::parseUserEditAtom(LEInputStream &in, UserEditAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -2863,11 +3021,11 @@ void MSO::parseUserEditAtom(LEInputStream& in, UserEditAtom& _s) {
     }
     _s.persistIdSeed = in.readuint32();
     _s.lastView = in.readuint16();
-    if (!(((quint16)_s.lastView)<=18)) {
+    if (!(((quint16)_s.lastView) <= 18)) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.lastView)<=18");
     }
     _s.unused = in.readuint16();
-    _s._has_encryptSessionPersistIdRef = _s.rh.recLen==32;
+    _s._has_encryptSessionPersistIdRef = _s.rh.recLen == 32;
     if (_s._has_encryptSessionPersistIdRef) {
         _s.encryptSessionPersistIdRef = in.readuint32();
     }
@@ -2877,18 +3035,19 @@ void MSO::parseUserEditAtom(LEInputStream& in, UserEditAtom& _s) {
         try {
             _s.zeroPadding.append(ZeroByte(&_s));
             parseZeroByte(in, _s.zeroPadding.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.zeroPadding.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.zeroPadding.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseVbaProjectStg(LEInputStream& in, VbaProjectStg& _s) {
+void MSO::parseVbaProjectStg(LEInputStream &in, VbaProjectStg &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2906,7 +3065,8 @@ void MSO::parseVbaProjectStg(LEInputStream& in, VbaProjectStg& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseSlideAtom(LEInputStream& in, SlideAtom& _s) {
+void MSO::parseSlideAtom(LEInputStream &in, SlideAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2932,7 +3092,8 @@ void MSO::parseSlideAtom(LEInputStream& in, SlideAtom& _s) {
     parseSlideFlags(in, _s.slideFlags);
     _s.unused = in.readuint16();
 }
-void MSO::parseSlideShowSlideInfoAtom(LEInputStream& in, SlideShowSlideInfoAtom& _s) {
+void MSO::parseSlideShowSlideInfoAtom(LEInputStream &in, SlideShowSlideInfoAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2972,7 +3133,8 @@ void MSO::parseSlideShowSlideInfoAtom(LEInputStream& in, SlideShowSlideInfoAtom&
     _s.unused.resize(_c);
     in.readBytes(_s.unused);
 }
-void MSO::parseSlideShowDocInfoAtom(LEInputStream& in, SlideShowDocInfoAtom& _s) {
+void MSO::parseSlideShowDocInfoAtom(LEInputStream &in, SlideShowDocInfoAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2992,11 +3154,11 @@ void MSO::parseSlideShowDocInfoAtom(LEInputStream& in, SlideShowDocInfoAtom& _s)
     parseColorIndexStruct(in, _s.penColor);
     _s.restartTime = in.readint32();
     _s.startSlide = in.readint16();
-    if (!(((qint16)_s.startSlide)>=0)) {
+    if (!(((qint16)_s.startSlide) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint16)_s.startSlide)>=0");
     }
     _s.endSlide = in.readint16();
-    if (!(((qint16)_s.endSlide)>=0)) {
+    if (!(((qint16)_s.endSlide) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint16)_s.endSlide)>=0");
     }
     _c = 64;
@@ -3014,7 +3176,8 @@ void MSO::parseSlideShowDocInfoAtom(LEInputStream& in, SlideShowDocInfoAtom& _s)
     _s.reserved = in.readuint7();
     _s.unused = in.readuint16();
 }
-void MSO::parseSlideSchemeColorSchemeAtom(LEInputStream& in, SlideSchemeColorSchemeAtom& _s) {
+void MSO::parseSlideSchemeColorSchemeAtom(LEInputStream &in, SlideSchemeColorSchemeAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3032,24 +3195,29 @@ void MSO::parseSlideSchemeColorSchemeAtom(LEInputStream& in, SlideSchemeColorSch
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x20");
     }
     _c = 8;
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.rgSchemeColor.append(ColorStruct(&_s));
         parseColorStruct(in, _s.rgSchemeColor[_i]);
     }
 }
-void MSO::parseRoundTripSlideRecord(LEInputStream& in, RoundTripSlideRecord& _s) {
+void MSO::parseRoundTripSlideRecord(LEInputStream &in, RoundTripSlideRecord &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     parseRecordHeader(in, _s.rh);
-    if (!(_s.rh.recType == 0x40E || _s.rh.recType == 0x40F || _s.rh.recType == 0x41D || _s.rh.recType == 0x3714 || _s.rh.recType == 0x2B0D || _s.rh.recType == 0x2B0B || _s.rh.recType == 0x2B0C || _s.rh.recType == 0x422)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x40E || _s.rh.recType == 0x40F || _s.rh.recType == 0x41D || _s.rh.recType == 0x3714 || _s.rh.recType == 0x2B0D || _s.rh.recType == 0x2B0B || _s.rh.recType == 0x2B0C || _s.rh.recType == 0x422");
+    if (!(_s.rh.recType == 0x40E || _s.rh.recType == 0x40F || _s.rh.recType == 0x41D || _s.rh.recType == 0x3714 || _s.rh.recType == 0x2B0D
+          || _s.rh.recType == 0x2B0B || _s.rh.recType == 0x2B0C || _s.rh.recType == 0x422)) {
+        throw IncorrectValueException(in.getPosition(),
+                                      "_s.rh.recType == 0x40E || _s.rh.recType == 0x40F || _s.rh.recType == 0x41D || _s.rh.recType == 0x3714 || _s.rh.recType "
+                                      "== 0x2B0D || _s.rh.recType == 0x2B0B || _s.rh.recType == 0x2B0C || _s.rh.recType == 0x422");
     }
     _c = _s.rh.recLen;
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseNamedShowsContainer(LEInputStream& in, NamedShowsContainer& _s) {
+void MSO::parseNamedShowsContainer(LEInputStream &in, NamedShowsContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3067,7 +3235,8 @@ void MSO::parseNamedShowsContainer(LEInputStream& in, NamedShowsContainer& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseSummaryContainer(LEInputStream& in, SummaryContainer& _s) {
+void MSO::parseSummaryContainer(LEInputStream &in, SummaryContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3085,7 +3254,8 @@ void MSO::parseSummaryContainer(LEInputStream& in, SummaryContainer& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseDocRoutingSlipAtom(LEInputStream& in, DocRoutingSlipAtom& _s) {
+void MSO::parseDocRoutingSlipAtom(LEInputStream &in, DocRoutingSlipAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3103,7 +3273,8 @@ void MSO::parseDocRoutingSlipAtom(LEInputStream& in, DocRoutingSlipAtom& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parsePrintOptionsAtom(LEInputStream& in, PrintOptionsAtom& _s) {
+void MSO::parsePrintOptionsAtom(LEInputStream &in, PrintOptionsAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3124,7 +3295,8 @@ void MSO::parsePrintOptionsAtom(LEInputStream& in, PrintOptionsAtom& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseRoundTripCustomTableStyles12Atom(LEInputStream& in, RoundTripCustomTableStyles12Atom& _s) {
+void MSO::parseRoundTripCustomTableStyles12Atom(LEInputStream &in, RoundTripCustomTableStyles12Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3142,7 +3314,8 @@ void MSO::parseRoundTripCustomTableStyles12Atom(LEInputStream& in, RoundTripCust
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseRoundTripCompositeMasterId12Atom(LEInputStream& in, RoundTripCompositeMasterId12Atom& _s) {
+void MSO::parseRoundTripCompositeMasterId12Atom(LEInputStream &in, RoundTripCompositeMasterId12Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -3159,14 +3332,16 @@ void MSO::parseRoundTripCompositeMasterId12Atom(LEInputStream& in, RoundTripComp
     }
     _s.compositeMasterId = in.readuint32();
 }
-void MSO::parseColorStruct(LEInputStream& in, ColorStruct& _s) {
+void MSO::parseColorStruct(LEInputStream &in, ColorStruct &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.red = in.readuint8();
     _s.green = in.readuint8();
     _s.blue = in.readuint8();
     _s.unused = in.readuint8();
 }
-void MSO::parseExObjListAtom(LEInputStream& in, ExObjListAtom& _s) {
+void MSO::parseExObjListAtom(LEInputStream &in, ExObjListAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -3182,11 +3357,12 @@ void MSO::parseExObjListAtom(LEInputStream& in, ExObjListAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 4");
     }
     _s.exObjIdSeed = in.readint32();
-    if (!(((qint32)_s.exObjIdSeed)>=1)) {
+    if (!(((qint32)_s.exObjIdSeed) >= 1)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.exObjIdSeed)>=1");
     }
 }
-void MSO::parseExAviMovieContainer(LEInputStream& in, ExAviMovieContainer& _s) {
+void MSO::parseExAviMovieContainer(LEInputStream &in, ExAviMovieContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3204,7 +3380,8 @@ void MSO::parseExAviMovieContainer(LEInputStream& in, ExAviMovieContainer& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseExCDAudioContainer(LEInputStream& in, ExCDAudioContainer& _s) {
+void MSO::parseExCDAudioContainer(LEInputStream &in, ExCDAudioContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3222,7 +3399,8 @@ void MSO::parseExCDAudioContainer(LEInputStream& in, ExCDAudioContainer& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseExControlAtom(LEInputStream& in, ExControlAtom& _s) {
+void MSO::parseExControlAtom(LEInputStream &in, ExControlAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -3239,7 +3417,8 @@ void MSO::parseExControlAtom(LEInputStream& in, ExControlAtom& _s) {
     }
     _s.slideIdRef = in.readuint32();
 }
-void MSO::parseExHyperlinkAtom(LEInputStream& in, ExHyperlinkAtom& _s) {
+void MSO::parseExHyperlinkAtom(LEInputStream &in, ExHyperlinkAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -3256,7 +3435,8 @@ void MSO::parseExHyperlinkAtom(LEInputStream& in, ExHyperlinkAtom& _s) {
     }
     _s.exHyperLinkId = in.readuint32();
 }
-void MSO::parseFriendlyNameAtom(LEInputStream& in, FriendlyNameAtom& _s) {
+void MSO::parseFriendlyNameAtom(LEInputStream &in, FriendlyNameAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3270,16 +3450,17 @@ void MSO::parseFriendlyNameAtom(LEInputStream& in, FriendlyNameAtom& _s) {
     if (!(_s.rh.recType == 0xFBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
-    _c = _s.rh.recLen/2;
+    _c = _s.rh.recLen / 2;
     _s.friendlyName.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.friendlyName[_i] = in.readuint16();
     }
 }
-void MSO::parseTargetAtom(LEInputStream& in, TargetAtom& _s) {
+void MSO::parseTargetAtom(LEInputStream &in, TargetAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3293,16 +3474,17 @@ void MSO::parseTargetAtom(LEInputStream& in, TargetAtom& _s) {
     if (!(_s.rh.recType == 0xFBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
-    _c = _s.rh.recLen/2;
+    _c = _s.rh.recLen / 2;
     _s.target.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.target[_i] = in.readuint16();
     }
 }
-void MSO::parseLocationAtom(LEInputStream& in, LocationAtom& _s) {
+void MSO::parseLocationAtom(LEInputStream &in, LocationAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3316,16 +3498,17 @@ void MSO::parseLocationAtom(LEInputStream& in, LocationAtom& _s) {
     if (!(_s.rh.recType == 0xFBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
-    _c = _s.rh.recLen/2;
+    _c = _s.rh.recLen / 2;
     _s.location.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.location[_i] = in.readuint16();
     }
 }
-void MSO::parseExMCIMovieContainer(LEInputStream& in, ExMCIMovieContainer& _s) {
+void MSO::parseExMCIMovieContainer(LEInputStream &in, ExMCIMovieContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3343,7 +3526,8 @@ void MSO::parseExMCIMovieContainer(LEInputStream& in, ExMCIMovieContainer& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseExMIDIAudioContainer(LEInputStream& in, ExMIDIAudioContainer& _s) {
+void MSO::parseExMIDIAudioContainer(LEInputStream &in, ExMIDIAudioContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3361,7 +3545,8 @@ void MSO::parseExMIDIAudioContainer(LEInputStream& in, ExMIDIAudioContainer& _s)
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseExWAVAudioEmbeddedContainer(LEInputStream& in, ExWAVAudioEmbeddedContainer& _s) {
+void MSO::parseExWAVAudioEmbeddedContainer(LEInputStream &in, ExWAVAudioEmbeddedContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3379,7 +3564,8 @@ void MSO::parseExWAVAudioEmbeddedContainer(LEInputStream& in, ExWAVAudioEmbedded
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseExWAVAudioLinkContainer(LEInputStream& in, ExWAVAudioLinkContainer& _s) {
+void MSO::parseExWAVAudioLinkContainer(LEInputStream &in, ExWAVAudioLinkContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3397,7 +3583,8 @@ void MSO::parseExWAVAudioLinkContainer(LEInputStream& in, ExWAVAudioLinkContaine
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseUnknownExObjListSubContainerChild(LEInputStream& in, UnknownExObjListSubContainerChild& _s) {
+void MSO::parseUnknownExObjListSubContainerChild(LEInputStream &in, UnknownExObjListSubContainerChild &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3415,7 +3602,8 @@ void MSO::parseUnknownExObjListSubContainerChild(LEInputStream& in, UnknownExObj
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseExOleLinkAtom(LEInputStream& in, ExOleLinkAtom& _s) {
+void MSO::parseExOleLinkAtom(LEInputStream &in, ExOleLinkAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -3434,7 +3622,8 @@ void MSO::parseExOleLinkAtom(LEInputStream& in, ExOleLinkAtom& _s) {
     _s.oleUpdateMode = in.readuint32();
     _s.unused = in.readuint32();
 }
-void MSO::parseExOleObjAtom(LEInputStream& in, ExOleObjAtom& _s) {
+void MSO::parseExOleObjAtom(LEInputStream &in, ExOleObjAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x1)) {
@@ -3456,7 +3645,8 @@ void MSO::parseExOleObjAtom(LEInputStream& in, ExOleObjAtom& _s) {
     _s.persistIdRef = in.readuint32();
     _s.unused = in.readuint32();
 }
-void MSO::parseMenuNameAtom(LEInputStream& in, MenuNameAtom& _s) {
+void MSO::parseMenuNameAtom(LEInputStream &in, MenuNameAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3470,14 +3660,15 @@ void MSO::parseMenuNameAtom(LEInputStream& in, MenuNameAtom& _s) {
     if (!(_s.rh.recType == 0x0FBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FBA");
     }
-    if (!(_s.rh.recLen%2 == 0 )) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2 == 0 ");
     }
     _c = _s.rh.recLen;
     _s.menuName.resize(_c);
     in.readBytes(_s.menuName);
 }
-void MSO::parseProgIDAtom(LEInputStream& in, ProgIDAtom& _s) {
+void MSO::parseProgIDAtom(LEInputStream &in, ProgIDAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3491,14 +3682,15 @@ void MSO::parseProgIDAtom(LEInputStream& in, ProgIDAtom& _s) {
     if (!(_s.rh.recType == 0x0FBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FBA");
     }
-    if (!(_s.rh.recLen%2 == 0 )) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2 == 0 ");
     }
     _c = _s.rh.recLen;
     _s.progId.resize(_c);
     in.readBytes(_s.progId);
 }
-void MSO::parseClipboardNameAtom(LEInputStream& in, ClipboardNameAtom& _s) {
+void MSO::parseClipboardNameAtom(LEInputStream &in, ClipboardNameAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3512,14 +3704,15 @@ void MSO::parseClipboardNameAtom(LEInputStream& in, ClipboardNameAtom& _s) {
     if (!(_s.rh.recType == 0x0FBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FBA");
     }
-    if (!(_s.rh.recLen%2 == 0 )) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2 == 0 ");
     }
     _c = _s.rh.recLen;
     _s.clipboardName.resize(_c);
     in.readBytes(_s.clipboardName);
 }
-void MSO::parseMetafileBlob(LEInputStream& in, MetafileBlob& _s) {
+void MSO::parseMetafileBlob(LEInputStream &in, MetafileBlob &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3533,36 +3726,38 @@ void MSO::parseMetafileBlob(LEInputStream& in, MetafileBlob& _s) {
     if (!(_s.rh.recType == 0x0FC1)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FC1");
     }
-    if (!(_s.rh.recLen>16)) {
+    if (!(_s.rh.recLen > 16)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen>16");
     }
     _s.mm = in.readint16();
     _s.xExt = in.readint16();
     _s.yExt = in.readint16();
-    _c = _s.rh.recLen-6;
+    _c = _s.rh.recLen - 6;
     _s.data.resize(_c);
     in.readBytes(_s.data);
 }
-void MSO::parseOfficeArtFDGG(LEInputStream& in, OfficeArtFDGG& _s) {
+void MSO::parseOfficeArtFDGG(LEInputStream &in, OfficeArtFDGG &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.spidMax = in.readuint32();
-    if (!(((quint32)_s.spidMax)<67098623)) {
+    if (!(((quint32)_s.spidMax) < 67098623)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.spidMax)<67098623");
     }
     _s.cidcl = in.readuint32();
-    if (!(((quint32)_s.cidcl)<268435455)) {
+    if (!(((quint32)_s.cidcl) < 268435455)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.cidcl)<268435455");
     }
     _s.cspSaved = in.readuint32();
     _s.cdgSaved = in.readuint32();
 }
-void MSO::parseOfficeArtFDG(LEInputStream& in, OfficeArtFDG& _s) {
+void MSO::parseOfficeArtFDG(LEInputStream &in, OfficeArtFDG &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0x0");
     }
-    if (!(_s.rh.recInstance<=4094)) {
+    if (!(_s.rh.recInstance <= 4094)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance<=4094");
     }
     if (!(_s.rh.recType == 0x0F008)) {
@@ -3574,7 +3769,8 @@ void MSO::parseOfficeArtFDG(LEInputStream& in, OfficeArtFDG& _s) {
     _s.csp = in.readuint32();
     _s.spidCur = in.readuint32();
 }
-void MSO::parseOfficeArtFRITContainer(LEInputStream& in, OfficeArtFRITContainer& _s) {
+void MSO::parseOfficeArtFRITContainer(LEInputStream &in, OfficeArtFRITContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3585,21 +3781,23 @@ void MSO::parseOfficeArtFRITContainer(LEInputStream& in, OfficeArtFRITContainer&
     if (!(_s.rh.recType == 0xF118)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xF118");
     }
-    if (!(_s.rh.recLen==4*_s.rh.recInstance)) {
+    if (!(_s.rh.recLen == 4 * _s.rh.recInstance)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen==4*_s.rh.recInstance");
     }
     _c = _s.rh.recInstance;
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.rgfrit.append(OfficeArtFRIT(&_s));
         parseOfficeArtFRIT(in, _s.rgfrit[_i]);
     }
 }
-void MSO::parseOfficeArtFRIT(LEInputStream& in, OfficeArtFRIT& _s) {
+void MSO::parseOfficeArtFRIT(LEInputStream &in, OfficeArtFRIT &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.fridNew = in.readuint16();
     _s.fridOld = in.readuint16();
 }
-void MSO::parseOfficeArtBStoreContainer(LEInputStream& in, OfficeArtBStoreContainer& _s) {
+void MSO::parseOfficeArtBStoreContainer(LEInputStream &in, OfficeArtBStoreContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -3619,7 +3817,8 @@ void MSO::parseOfficeArtBStoreContainer(LEInputStream& in, OfficeArtBStoreContai
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
-void MSO::parseOfficeArtSpgrContainer(LEInputStream& in, OfficeArtSpgrContainer& _s) {
+void MSO::parseOfficeArtSpgrContainer(LEInputStream &in, OfficeArtSpgrContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -3642,7 +3841,8 @@ void MSO::parseOfficeArtSpgrContainer(LEInputStream& in, OfficeArtSpgrContainer&
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
-void MSO::parseOfficeArtSolverContainer(LEInputStream& in, OfficeArtSolverContainer& _s) {
+void MSO::parseOfficeArtSolverContainer(LEInputStream &in, OfficeArtSolverContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -3659,18 +3859,19 @@ void MSO::parseOfficeArtSolverContainer(LEInputStream& in, OfficeArtSolverContai
         try {
             _s.rgfb.append(OfficeArtSolverContainerFileBlock(&_s));
             parseOfficeArtSolverContainerFileBlock(in, _s.rgfb.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgfb.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgfb.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseOfficeArtFConnectorRule(LEInputStream& in, OfficeArtFConnectorRule& _s) {
+void MSO::parseOfficeArtFConnectorRule(LEInputStream &in, OfficeArtFConnectorRule &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 1)) {
@@ -3692,7 +3893,8 @@ void MSO::parseOfficeArtFConnectorRule(LEInputStream& in, OfficeArtFConnectorRul
     _s.cptiA = in.readuint32();
     _s.cptiB = in.readuint32();
 }
-void MSO::parseOfficeArtFArcRule(LEInputStream& in, OfficeArtFArcRule& _s) {
+void MSO::parseOfficeArtFArcRule(LEInputStream &in, OfficeArtFArcRule &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -3710,7 +3912,8 @@ void MSO::parseOfficeArtFArcRule(LEInputStream& in, OfficeArtFArcRule& _s) {
     _s.ruid = in.readuint32();
     _s.spid = in.readuint32();
 }
-void MSO::parseOfficeArtFCalloutRule(LEInputStream& in, OfficeArtFCalloutRule& _s) {
+void MSO::parseOfficeArtFCalloutRule(LEInputStream &in, OfficeArtFCalloutRule &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -3728,7 +3931,8 @@ void MSO::parseOfficeArtFCalloutRule(LEInputStream& in, OfficeArtFCalloutRule& _
     _s.ruid = in.readuint32();
     _s.spid = in.readuint32();
 }
-void MSO::parseOfficeArtFSPGR(LEInputStream& in, OfficeArtFSPGR& _s) {
+void MSO::parseOfficeArtFSPGR(LEInputStream &in, OfficeArtFSPGR &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x1)) {
@@ -3748,13 +3952,14 @@ void MSO::parseOfficeArtFSPGR(LEInputStream& in, OfficeArtFSPGR& _s) {
     _s.xRight = in.readint32();
     _s.yBottom = in.readint32();
 }
-void MSO::parseOfficeArtFSP(LEInputStream& in, OfficeArtFSP& _s) {
+void MSO::parseOfficeArtFSP(LEInputStream &in, OfficeArtFSP &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x2)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0x2");
     }
-    if (!(_s.rh.recInstance<= 202)) {
+    if (!(_s.rh.recInstance <= 202)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance<= 202");
     }
     if (!(_s.rh.recType == 0x0F00A)) {
@@ -3778,7 +3983,8 @@ void MSO::parseOfficeArtFSP(LEInputStream& in, OfficeArtFSP& _s) {
     _s.fHaveSpt = in.readbit();
     _s.unused1 = in.readuint20();
 }
-void MSO::parseOfficeArtFOPT(LEInputStream& in, OfficeArtFOPT& _s) {
+void MSO::parseOfficeArtFOPT(LEInputStream &in, OfficeArtFOPT &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3790,15 +3996,16 @@ void MSO::parseOfficeArtFOPT(LEInputStream& in, OfficeArtFOPT& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0F00B");
     }
     _c = _s.rh.recInstance;
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.fopt.append(OfficeArtFOPTEChoice(&_s));
         parseOfficeArtFOPTEChoice(in, _s.fopt[_i]);
     }
-    _c = _s.rh.recLen-6*_s.rh.recInstance;
+    _c = _s.rh.recLen - 6 * _s.rh.recInstance;
     _s.complexData.resize(_c);
     in.readBytes(_s.complexData);
 }
-void MSO::parseOfficeArtSecondaryFOPT(LEInputStream& in, OfficeArtSecondaryFOPT& _s) {
+void MSO::parseOfficeArtSecondaryFOPT(LEInputStream &in, OfficeArtSecondaryFOPT &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3810,15 +4017,16 @@ void MSO::parseOfficeArtSecondaryFOPT(LEInputStream& in, OfficeArtSecondaryFOPT&
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xF121");
     }
     _c = _s.rh.recInstance;
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.fopt.append(OfficeArtFOPTEChoice(&_s));
         parseOfficeArtFOPTEChoice(in, _s.fopt[_i]);
     }
-    _c = _s.rh.recLen-6*_s.rh.recInstance;
+    _c = _s.rh.recLen - 6 * _s.rh.recInstance;
     _s.complexData.resize(_c);
     in.readBytes(_s.complexData);
 }
-void MSO::parseOfficeArtTertiaryFOPT(LEInputStream& in, OfficeArtTertiaryFOPT& _s) {
+void MSO::parseOfficeArtTertiaryFOPT(LEInputStream &in, OfficeArtTertiaryFOPT &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3830,69 +4038,76 @@ void MSO::parseOfficeArtTertiaryFOPT(LEInputStream& in, OfficeArtTertiaryFOPT& _
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xF122");
     }
     _c = _s.rh.recInstance;
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.fopt.append(OfficeArtFOPTEChoice(&_s));
         parseOfficeArtFOPTEChoice(in, _s.fopt[_i]);
     }
-    _c = _s.rh.recLen-6*_s.rh.recInstance;
+    _c = _s.rh.recLen - 6 * _s.rh.recInstance;
     _s.complexData.resize(_c);
     in.readBytes(_s.complexData);
 }
-void MSO::parseMSOPATHINFO(LEInputStream& in, MSOPATHINFO& _s) {
+void MSO::parseMSOPATHINFO(LEInputStream &in, MSOPATHINFO &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.type = in.readuint3();
     _s.segments = in.readuint13();
 }
-void MSO::parseFixedPoint(LEInputStream& in, FixedPoint& _s) {
+void MSO::parseFixedPoint(LEInputStream &in, FixedPoint &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.fractional = in.readuint16();
     _s.integral = in.readint16();
 }
-void MSO::parsePVertices_complex(LEInputStream& in, PVertices_complex& _s) {
+void MSO::parsePVertices_complex(LEInputStream &in, PVertices_complex &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     _s.nElems = in.readuint16();
     _s.nElemsAlloc = in.readuint16();
     _s.cbElem = in.readuint16();
-    _c = (_s.cbElem==0xFFF0)?(4 * _s.nElems):(_s.cbElem * _s.nElems);
+    _c = (_s.cbElem == 0xFFF0) ? (4 * _s.nElems) : (_s.cbElem * _s.nElems);
     _s.data.resize(_c);
     in.readBytes(_s.data);
 }
-void MSO::parsePSegmentInfo_complex(LEInputStream& in, PSegmentInfo_complex& _s) {
+void MSO::parsePSegmentInfo_complex(LEInputStream &in, PSegmentInfo_complex &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     _s.nElems = in.readuint16();
     _s.nElemsAlloc = in.readuint16();
     _s.cbElem = in.readuint16();
-    _c = (_s.cbElem==0xFFF0)?(4 * _s.nElems):(_s.cbElem * _s.nElems);
+    _c = (_s.cbElem == 0xFFF0) ? (4 * _s.nElems) : (_s.cbElem * _s.nElems);
     _s.data.resize(_c);
     in.readBytes(_s.data);
 }
-void MSO::parseFillShadeColors_complex(LEInputStream& in, FillShadeColors_complex& _s) {
+void MSO::parseFillShadeColors_complex(LEInputStream &in, FillShadeColors_complex &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     _s.nElems = in.readuint16();
     _s.nElemsAlloc = in.readuint16();
     _s.cbElem = in.readuint16();
-    _c = (_s.cbElem==0xFFF0)?(4 * _s.nElems):(_s.cbElem * _s.nElems);
+    _c = (_s.cbElem == 0xFFF0) ? (4 * _s.nElems) : (_s.cbElem * _s.nElems);
     _s.data.resize(_c);
     in.readBytes(_s.data);
 }
-void MSO::parsePWrapPolygonVertices_complex(LEInputStream& in, PWrapPolygonVertices_complex& _s) {
+void MSO::parsePWrapPolygonVertices_complex(LEInputStream &in, PWrapPolygonVertices_complex &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     _s.nElems = in.readuint16();
     _s.nElemsAlloc = in.readuint16();
     _s.cbElem = in.readuint16();
-    _c = (_s.cbElem==0xFFF0)?(4 * _s.nElems):(_s.cbElem * _s.nElems);
+    _c = (_s.cbElem == 0xFFF0) ? (4 * _s.nElems) : (_s.cbElem * _s.nElems);
     _s.data.resize(_c);
     in.readBytes(_s.data);
 }
-void MSO::parseOfficeArtCOLORREF(LEInputStream& in, OfficeArtCOLORREF& _s) {
+void MSO::parseOfficeArtCOLORREF(LEInputStream &in, OfficeArtCOLORREF &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.red = in.readuint8();
     _s.green = in.readuint8();
@@ -3906,7 +4121,8 @@ void MSO::parseOfficeArtCOLORREF(LEInputStream& in, OfficeArtCOLORREF& _s) {
     _s.unused2 = in.readbit();
     _s.unused3 = in.readbit();
 }
-void MSO::parseOfficeArtChildAnchor(LEInputStream& in, OfficeArtChildAnchor& _s) {
+void MSO::parseOfficeArtChildAnchor(LEInputStream &in, OfficeArtChildAnchor &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -3926,7 +4142,8 @@ void MSO::parseOfficeArtChildAnchor(LEInputStream& in, OfficeArtChildAnchor& _s)
     _s.xRight = in.readint32();
     _s.yBottom = in.readint32();
 }
-void MSO::parseDocOfficeArtClientAnchor(LEInputStream& in, DocOfficeArtClientAnchor& _s) {
+void MSO::parseDocOfficeArtClientAnchor(LEInputStream &in, DocOfficeArtClientAnchor &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -3943,7 +4160,8 @@ void MSO::parseDocOfficeArtClientAnchor(LEInputStream& in, DocOfficeArtClientAnc
     }
     _s.clientAnchor = in.readint32();
 }
-void MSO::parseXlsOfficeArtClientAnchor(LEInputStream& in, XlsOfficeArtClientAnchor& _s) {
+void MSO::parseXlsOfficeArtClientAnchor(LEInputStream &in, XlsOfficeArtClientAnchor &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -3961,48 +4179,49 @@ void MSO::parseXlsOfficeArtClientAnchor(LEInputStream& in, XlsOfficeArtClientAnc
     _s.fMove = in.readbit();
     _s.fSize = in.readbit();
     _s.unused = in.readuint14();
-    _s._has_width = _s.rh.recLen==0x8;
+    _s._has_width = _s.rh.recLen == 0x8;
     if (_s._has_width) {
         _s.width = in.readint32();
     }
-    _s._has_height = _s.rh.recLen==0x8;
+    _s._has_height = _s.rh.recLen == 0x8;
     if (_s._has_height) {
         _s.height = in.readint32();
     }
-    _s._has_colL = _s.rh.recLen==0x12;
+    _s._has_colL = _s.rh.recLen == 0x12;
     if (_s._has_colL) {
         _s.colL = in.readuint16();
     }
-    _s._has_dxL = _s.rh.recLen==0x12;
+    _s._has_dxL = _s.rh.recLen == 0x12;
     if (_s._has_dxL) {
         _s.dxL = in.readint16();
     }
-    _s._has_rwT = _s.rh.recLen==0x12;
+    _s._has_rwT = _s.rh.recLen == 0x12;
     if (_s._has_rwT) {
         _s.rwT = in.readuint16();
     }
-    _s._has_dyT = _s.rh.recLen==0x12;
+    _s._has_dyT = _s.rh.recLen == 0x12;
     if (_s._has_dyT) {
         _s.dyT = in.readint16();
     }
-    _s._has_colR = _s.rh.recLen==0x12;
+    _s._has_colR = _s.rh.recLen == 0x12;
     if (_s._has_colR) {
         _s.colR = in.readuint16();
     }
-    _s._has_dxR = _s.rh.recLen==0x12;
+    _s._has_dxR = _s.rh.recLen == 0x12;
     if (_s._has_dxR) {
         _s.dxR = in.readint16();
     }
-    _s._has_rwB = _s.rh.recLen==0x12;
+    _s._has_rwB = _s.rh.recLen == 0x12;
     if (_s._has_rwB) {
         _s.rwB = in.readuint16();
     }
-    _s._has_dyB = _s.rh.recLen==0x12;
+    _s._has_dyB = _s.rh.recLen == 0x12;
     if (_s._has_dyB) {
         _s.dyB = in.readint16();
     }
 }
-void MSO::parseOfficeArtFPSPL(LEInputStream& in, OfficeArtFPSPL& _s) {
+void MSO::parseOfficeArtFPSPL(LEInputStream &in, OfficeArtFPSPL &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -4021,21 +4240,24 @@ void MSO::parseOfficeArtFPSPL(LEInputStream& in, OfficeArtFPSPL& _s) {
     _s.reserved1 = in.readbit();
     _s.fLast = in.readbit();
 }
-void MSO::parseRectStruct(LEInputStream& in, RectStruct& _s) {
+void MSO::parseRectStruct(LEInputStream &in, RectStruct &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.top = in.readint32();
     _s.left = in.readint32();
     _s.right = in.readint32();
     _s.bottom = in.readint32();
 }
-void MSO::parseSmallRectStruct(LEInputStream& in, SmallRectStruct& _s) {
+void MSO::parseSmallRectStruct(LEInputStream &in, SmallRectStruct &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.top = in.readint16();
     _s.left = in.readint16();
     _s.right = in.readint16();
     _s.bottom = in.readint16();
 }
-void MSO::parseDocOfficeArtClientData(LEInputStream& in, DocOfficeArtClientData& _s) {
+void MSO::parseDocOfficeArtClientData(LEInputStream &in, DocOfficeArtClientData &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -4052,7 +4274,8 @@ void MSO::parseDocOfficeArtClientData(LEInputStream& in, DocOfficeArtClientData&
     }
     _s.clientData = in.readuint32();
 }
-void MSO::parseXlsOfficeArtClientData(LEInputStream& in, XlsOfficeArtClientData& _s) {
+void MSO::parseXlsOfficeArtClientData(LEInputStream &in, XlsOfficeArtClientData &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -4068,7 +4291,8 @@ void MSO::parseXlsOfficeArtClientData(LEInputStream& in, XlsOfficeArtClientData&
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0");
     }
 }
-void MSO::parseShapeFlagsAtom(LEInputStream& in, ShapeFlagsAtom& _s) {
+void MSO::parseShapeFlagsAtom(LEInputStream &in, ShapeFlagsAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4089,7 +4313,8 @@ void MSO::parseShapeFlagsAtom(LEInputStream& in, ShapeFlagsAtom& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseShapeFlags10Atom(LEInputStream& in, ShapeFlags10Atom& _s) {
+void MSO::parseShapeFlags10Atom(LEInputStream &in, ShapeFlags10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4110,7 +4335,8 @@ void MSO::parseShapeFlags10Atom(LEInputStream& in, ShapeFlags10Atom& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseExObjRefAtom(LEInputStream& in, ExObjRefAtom& _s) {
+void MSO::parseExObjRefAtom(LEInputStream &in, ExObjRefAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -4127,7 +4353,8 @@ void MSO::parseExObjRefAtom(LEInputStream& in, ExObjRefAtom& _s) {
     }
     _s.exObjIdRef = in.readuint32();
 }
-void MSO::parseAnimationInfoAtom(LEInputStream& in, AnimationInfoAtom& _s) {
+void MSO::parseAnimationInfoAtom(LEInputStream &in, AnimationInfoAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4148,7 +4375,8 @@ void MSO::parseAnimationInfoAtom(LEInputStream& in, AnimationInfoAtom& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseSoundContainer(LEInputStream& in, SoundContainer& _s) {
+void MSO::parseSoundContainer(LEInputStream &in, SoundContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4166,7 +4394,8 @@ void MSO::parseSoundContainer(LEInputStream& in, SoundContainer& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseInteractiveInfoAtom(LEInputStream& in, InteractiveInfoAtom& _s) {
+void MSO::parseInteractiveInfoAtom(LEInputStream &in, InteractiveInfoAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4186,15 +4415,15 @@ void MSO::parseInteractiveInfoAtom(LEInputStream& in, InteractiveInfoAtom& _s) {
     _s.soundIdRef = in.readuint32();
     _s.exHyperlinkIdRef = in.readuint32();
     _s.action = in.readuint8();
-    if (!(((quint8)_s.action)<8)) {
+    if (!(((quint8)_s.action) < 8)) {
         throw IncorrectValueException(in.getPosition(), "((quint8)_s.action)<8");
     }
     _s.oleVerb = in.readuint8();
-    if (!(((quint8)_s.oleVerb)<3)) {
+    if (!(((quint8)_s.oleVerb) < 3)) {
         throw IncorrectValueException(in.getPosition(), "((quint8)_s.oleVerb)<3");
     }
     _s.jump = in.readuint8();
-    if (!(((quint8)_s.jump)<7)) {
+    if (!(((quint8)_s.jump) < 7)) {
         throw IncorrectValueException(in.getPosition(), "((quint8)_s.jump)<7");
     }
     _s.fAnimated = in.readbit();
@@ -4207,7 +4436,8 @@ void MSO::parseInteractiveInfoAtom(LEInputStream& in, InteractiveInfoAtom& _s) {
     _s.unused.resize(_c);
     in.readBytes(_s.unused);
 }
-void MSO::parseMacroNameAtom(LEInputStream& in, MacroNameAtom& _s) {
+void MSO::parseMacroNameAtom(LEInputStream &in, MacroNameAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4221,14 +4451,15 @@ void MSO::parseMacroNameAtom(LEInputStream& in, MacroNameAtom& _s) {
     if (!(_s.rh.recType == 0xFBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
-    if (!(_s.rh.recLen%2==0)) {
+    if (!(_s.rh.recLen % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
     _c = _s.rh.recLen;
     _s.macroName.resize(_c);
     in.readBytes(_s.macroName);
 }
-void MSO::parsePlaceholderAtom(LEInputStream& in, PlaceholderAtom& _s) {
+void MSO::parsePlaceholderAtom(LEInputStream &in, PlaceholderAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -4248,7 +4479,8 @@ void MSO::parsePlaceholderAtom(LEInputStream& in, PlaceholderAtom& _s) {
     _s.size = in.readuint8();
     _s.unused = in.readuint16();
 }
-void MSO::parseRecolorInfoAtom(LEInputStream& in, RecolorInfoAtom& _s) {
+void MSO::parseRecolorInfoAtom(LEInputStream &in, RecolorInfoAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4266,7 +4498,8 @@ void MSO::parseRecolorInfoAtom(LEInputStream& in, RecolorInfoAtom& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseOutlineTextRefAtom(LEInputStream& in, OutlineTextRefAtom& _s) {
+void MSO::parseOutlineTextRefAtom(LEInputStream &in, OutlineTextRefAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -4282,11 +4515,12 @@ void MSO::parseOutlineTextRefAtom(LEInputStream& in, OutlineTextRefAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 4");
     }
     _s.index = in.readint32();
-    if (!(((qint32)_s.index)>=0)) {
+    if (!(((qint32)_s.index) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.index)>=0");
     }
 }
-void MSO::parseShapeProgsTagContainer(LEInputStream& in, ShapeProgsTagContainer& _s) {
+void MSO::parseShapeProgsTagContainer(LEInputStream &in, ShapeProgsTagContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -4306,18 +4540,19 @@ void MSO::parseShapeProgsTagContainer(LEInputStream& in, ShapeProgsTagContainer&
         try {
             _s.rgChildRec.append(ShapeProgTagsSubContainerOrAtom(&_s));
             parseShapeProgTagsSubContainerOrAtom(in, _s.rgChildRec.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgChildRec.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgChildRec.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parsePP9ShapeBinaryTagExtension(LEInputStream& in, PP9ShapeBinaryTagExtension& _s) {
+void MSO::parsePP9ShapeBinaryTagExtension(LEInputStream &in, PP9ShapeBinaryTagExtension &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4336,7 +4571,7 @@ void MSO::parsePP9ShapeBinaryTagExtension(LEInputStream& in, PP9ShapeBinaryTagEx
     }
     _c = 7;
     _s.tagName.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.tagName[_i] = in.readuint16();
     }
     parseRecordHeader(in, _s.rhData);
@@ -4351,7 +4586,8 @@ void MSO::parsePP9ShapeBinaryTagExtension(LEInputStream& in, PP9ShapeBinaryTagEx
     }
     parseStyleTextProp9Atom(in, _s.styleTextProp9Atom);
 }
-void MSO::parsePP10ShapeBinaryTagExtension(LEInputStream& in, PP10ShapeBinaryTagExtension& _s) {
+void MSO::parsePP10ShapeBinaryTagExtension(LEInputStream &in, PP10ShapeBinaryTagExtension &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4370,7 +4606,7 @@ void MSO::parsePP10ShapeBinaryTagExtension(LEInputStream& in, PP10ShapeBinaryTag
     }
     _c = 8;
     _s.tagName.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.tagName[_i] = in.readuint16();
     }
     parseRecordHeader(in, _s.rhData);
@@ -4387,7 +4623,8 @@ void MSO::parsePP10ShapeBinaryTagExtension(LEInputStream& in, PP10ShapeBinaryTag
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parsePP11ShapeBinaryTagExtension(LEInputStream& in, PP11ShapeBinaryTagExtension& _s) {
+void MSO::parsePP11ShapeBinaryTagExtension(LEInputStream &in, PP11ShapeBinaryTagExtension &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4406,7 +4643,7 @@ void MSO::parsePP11ShapeBinaryTagExtension(LEInputStream& in, PP11ShapeBinaryTag
     }
     _c = 8;
     _s.tagName.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.tagName[_i] = in.readuint16();
     }
     parseRecordHeader(in, _s.rhData);
@@ -4423,7 +4660,8 @@ void MSO::parsePP11ShapeBinaryTagExtension(LEInputStream& in, PP11ShapeBinaryTag
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parseRoundTripNewPlaceHolderId12Atom(LEInputStream& in, RoundTripNewPlaceHolderId12Atom& _s) {
+void MSO::parseRoundTripNewPlaceHolderId12Atom(LEInputStream &in, RoundTripNewPlaceHolderId12Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -4440,7 +4678,8 @@ void MSO::parseRoundTripNewPlaceHolderId12Atom(LEInputStream& in, RoundTripNewPl
     }
     _s.newPlaceHolderId = in.readuint8();
 }
-void MSO::parseRoundTripShapeId12Atom(LEInputStream& in, RoundTripShapeId12Atom& _s) {
+void MSO::parseRoundTripShapeId12Atom(LEInputStream &in, RoundTripShapeId12Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -4457,7 +4696,8 @@ void MSO::parseRoundTripShapeId12Atom(LEInputStream& in, RoundTripShapeId12Atom&
     }
     _s.shapeId = in.readuint32();
 }
-void MSO::parseRoundTripHFPlaceholder12Atom(LEInputStream& in, RoundTripHFPlaceholder12Atom& _s) {
+void MSO::parseRoundTripHFPlaceholder12Atom(LEInputStream &in, RoundTripHFPlaceholder12Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -4474,7 +4714,8 @@ void MSO::parseRoundTripHFPlaceholder12Atom(LEInputStream& in, RoundTripHFPlaceh
     }
     _s.placeHolderId = in.readuint8();
 }
-void MSO::parseRoundTripShapeCheckSumForCustomLayouts12Atom(LEInputStream& in, RoundTripShapeCheckSumForCustomLayouts12Atom& _s) {
+void MSO::parseRoundTripShapeCheckSumForCustomLayouts12Atom(LEInputStream &in, RoundTripShapeCheckSumForCustomLayouts12Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4493,11 +4734,12 @@ void MSO::parseRoundTripShapeCheckSumForCustomLayouts12Atom(LEInputStream& in, R
     }
     _s.shapeCheckSum = in.readuint32();
     _s.textCheckSum = in.readuint32();
-    _c = _s.rh.recLen-8;
+    _c = _s.rh.recLen - 8;
     _s.unknown.resize(_c);
     in.readBytes(_s.unknown);
 }
-void MSO::parseXlsOfficeArtClientTextBox(LEInputStream& in, XlsOfficeArtClientTextBox& _s) {
+void MSO::parseXlsOfficeArtClientTextBox(LEInputStream &in, XlsOfficeArtClientTextBox &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -4513,7 +4755,8 @@ void MSO::parseXlsOfficeArtClientTextBox(LEInputStream& in, XlsOfficeArtClientTe
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0");
     }
 }
-void MSO::parseDocOfficeArtClientTextBox(LEInputStream& in, DocOfficeArtClientTextBox& _s) {
+void MSO::parseDocOfficeArtClientTextBox(LEInputStream &in, DocOfficeArtClientTextBox &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0 || _s.rh.recVer == 0xF)) {
@@ -4530,7 +4773,8 @@ void MSO::parseDocOfficeArtClientTextBox(LEInputStream& in, DocOfficeArtClientTe
     }
     _s.clientTextBox = in.readuint32();
 }
-void MSO::parsePptOfficeArtClientTextBox(LEInputStream& in, PptOfficeArtClientTextBox& _s) {
+void MSO::parsePptOfficeArtClientTextBox(LEInputStream &in, PptOfficeArtClientTextBox &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -4544,7 +4788,7 @@ void MSO::parsePptOfficeArtClientTextBox(LEInputStream& in, PptOfficeArtClientTe
     if (!(_s.rh.recType == 0xF00D)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xF00D");
     }
-    if (!(_s.rh.recLen!=4)) {
+    if (!(_s.rh.recLen != 4)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen!=4");
     }
     qint64 _startPos = in.getPosition();
@@ -4556,18 +4800,21 @@ void MSO::parsePptOfficeArtClientTextBox(LEInputStream& in, PptOfficeArtClientTe
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
-void MSO::parseOfficeArtIDCL(LEInputStream& in, OfficeArtIDCL& _s) {
+void MSO::parseOfficeArtIDCL(LEInputStream &in, OfficeArtIDCL &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.dgid = in.readuint32();
     _s.cspidCur = in.readuint32();
 }
-void MSO::parseOfficeArtFOPTEOPID(LEInputStream& in, OfficeArtFOPTEOPID& _s) {
+void MSO::parseOfficeArtFOPTEOPID(LEInputStream &in, OfficeArtFOPTEOPID &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.opid = in.readuint14();
     _s.fBid = in.readbit();
     _s.fComplex = in.readbit();
 }
-void MSO::parseOfficeArtColorMRUContainer(LEInputStream& in, OfficeArtColorMRUContainer& _s) {
+void MSO::parseOfficeArtColorMRUContainer(LEInputStream &in, OfficeArtColorMRUContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4578,16 +4825,17 @@ void MSO::parseOfficeArtColorMRUContainer(LEInputStream& in, OfficeArtColorMRUCo
     if (!(_s.rh.recType == 0xF11A)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xF11A");
     }
-    if (!(_s.rh.recLen==4*_s.rh.recInstance)) {
+    if (!(_s.rh.recLen == 4 * _s.rh.recInstance)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen==4*_s.rh.recInstance");
     }
     _c = _s.rh.recInstance;
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.rgmsocr.append(MSOCR(&_s));
         parseMSOCR(in, _s.rgmsocr[_i]);
     }
 }
-void MSO::parseMSOCR(LEInputStream& in, MSOCR& _s) {
+void MSO::parseMSOCR(LEInputStream &in, MSOCR &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.red = in.readuint8();
     _s.green = in.readuint8();
@@ -4596,7 +4844,8 @@ void MSO::parseMSOCR(LEInputStream& in, MSOCR& _s) {
     _s.fSchemeIndex = in.readbit();
     _s.unused2 = in.readuint4();
 }
-void MSO::parseOfficeArtSplitMenuColorContainer(LEInputStream& in, OfficeArtSplitMenuColorContainer& _s) {
+void MSO::parseOfficeArtSplitMenuColorContainer(LEInputStream &in, OfficeArtSplitMenuColorContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4614,12 +4863,13 @@ void MSO::parseOfficeArtSplitMenuColorContainer(LEInputStream& in, OfficeArtSpli
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x10");
     }
     _c = 4;
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.smca.append(MSOCR(&_s));
         parseMSOCR(in, _s.smca[_i]);
     }
 }
-void MSO::parsetodo(LEInputStream& in, todo& _s) {
+void MSO::parsetodo(LEInputStream &in, todo &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4628,12 +4878,18 @@ void MSO::parsetodo(LEInputStream& in, todo& _s) {
     _s.anon.resize(_c);
     in.readBytes(_s.anon);
 }
-void MSO::parseFibBase(LEInputStream& in, FibBase& _s) {
+void MSO::parseFibBase(LEInputStream &in, FibBase &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.wIdent = in.readuint16();
     _s.nFib = in.readuint16();
-    if (!(((quint16)_s.nFib) == 0x65 || ((quint16)_s.nFib) == 0x67 || ((quint16)_s.nFib) == 0x68 || ((quint16)_s.nFib) == 0xC0 || ((quint16)_s.nFib) == 0xC1 || ((quint16)_s.nFib) == 0xC2 || ((quint16)_s.nFib) == 0x101 || ((quint16)_s.nFib) == 0x10B || ((quint16)_s.nFib) == 0x10C || ((quint16)_s.nFib) == 0x112)) {
-        throw IncorrectValueException(in.getPosition(), "((quint16)_s.nFib) == 0x65 || ((quint16)_s.nFib) == 0x67 || ((quint16)_s.nFib) == 0x68 || ((quint16)_s.nFib) == 0xC0 || ((quint16)_s.nFib) == 0xC1 || ((quint16)_s.nFib) == 0xC2 || ((quint16)_s.nFib) == 0x101 || ((quint16)_s.nFib) == 0x10B || ((quint16)_s.nFib) == 0x10C || ((quint16)_s.nFib) == 0x112");
+    if (!(((quint16)_s.nFib) == 0x65 || ((quint16)_s.nFib) == 0x67 || ((quint16)_s.nFib) == 0x68 || ((quint16)_s.nFib) == 0xC0 || ((quint16)_s.nFib) == 0xC1
+          || ((quint16)_s.nFib) == 0xC2 || ((quint16)_s.nFib) == 0x101 || ((quint16)_s.nFib) == 0x10B || ((quint16)_s.nFib) == 0x10C
+          || ((quint16)_s.nFib) == 0x112)) {
+        throw IncorrectValueException(in.getPosition(),
+                                      "((quint16)_s.nFib) == 0x65 || ((quint16)_s.nFib) == 0x67 || ((quint16)_s.nFib) == 0x68 || ((quint16)_s.nFib) == 0xC0 || "
+                                      "((quint16)_s.nFib) == 0xC1 || ((quint16)_s.nFib) == 0xC2 || ((quint16)_s.nFib) == 0x101 || ((quint16)_s.nFib) == 0x10B "
+                                      "|| ((quint16)_s.nFib) == 0x10C || ((quint16)_s.nFib) == 0x112");
     }
     _s.unused = in.readuint16();
     _s.lid = in.readuint16();
@@ -4665,7 +4921,8 @@ void MSO::parseFibBase(LEInputStream& in, FibBase& _s) {
     _s.reserved5 = in.readuint32();
     _s.reserved6 = in.readuint32();
 }
-void MSO::parseFibRgW97(LEInputStream& in, FibRgW97& _s) {
+void MSO::parseFibRgW97(LEInputStream &in, FibRgW97 &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.reserved1 = in.readuint16();
     _s.reserved2 = in.readuint16();
@@ -4682,21 +4939,22 @@ void MSO::parseFibRgW97(LEInputStream& in, FibRgW97& _s) {
     _s.reserved13 = in.readuint16();
     _s.lidFE = in.readuint16();
 }
-void MSO::parseFibRgLw97(LEInputStream& in, FibRgLw97& _s) {
+void MSO::parseFibRgLw97(LEInputStream &in, FibRgLw97 &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.cbMac = in.readuint32();
     _s.reserved1 = in.readuint32();
     _s.reserved2 = in.readuint32();
     _s.ccpText = in.readint32();
-    if (!(((qint32)_s.ccpText)>=0)) {
+    if (!(((qint32)_s.ccpText) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.ccpText)>=0");
     }
     _s.ccpFtn = in.readint32();
-    if (!(((qint32)_s.ccpFtn)>=0)) {
+    if (!(((qint32)_s.ccpFtn) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.ccpFtn)>=0");
     }
     _s.ccpHdd = in.readint32();
-    if (!(((qint32)_s.ccpHdd)>=0)) {
+    if (!(((qint32)_s.ccpHdd) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.ccpHdd)>=0");
     }
     _s.reserved3 = in.readuint32();
@@ -4704,19 +4962,19 @@ void MSO::parseFibRgLw97(LEInputStream& in, FibRgLw97& _s) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.reserved3) == 0");
     }
     _s.ccpAtn = in.readint32();
-    if (!(((qint32)_s.ccpAtn)>=0)) {
+    if (!(((qint32)_s.ccpAtn) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.ccpAtn)>=0");
     }
     _s.ccpEdn = in.readint32();
-    if (!(((qint32)_s.ccpEdn)>=0)) {
+    if (!(((qint32)_s.ccpEdn) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.ccpEdn)>=0");
     }
     _s.ccpTxbx = in.readint32();
-    if (!(((qint32)_s.ccpTxbx)>=0)) {
+    if (!(((qint32)_s.ccpTxbx) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.ccpTxbx)>=0");
     }
     _s.ccpHdrTxbx = in.readint32();
-    if (!(((qint32)_s.ccpHdrTxbx)>=0)) {
+    if (!(((qint32)_s.ccpHdrTxbx) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.ccpHdrTxbx)>=0");
     }
     _s.reserved4 = in.readuint32();
@@ -4737,7 +4995,8 @@ void MSO::parseFibRgLw97(LEInputStream& in, FibRgLw97& _s) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.reserved14) == 0");
     }
 }
-void MSO::parseFibRgFcLcb97(LEInputStream& in, FibRgFcLcb97& _s) {
+void MSO::parseFibRgFcLcb97(LEInputStream &in, FibRgFcLcb97 &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.fcStshfOrig = in.readuint32();
     _s.lcbStshfOrig = in.readuint32();
@@ -4926,7 +5185,8 @@ void MSO::parseFibRgFcLcb97(LEInputStream& in, FibRgFcLcb97& _s) {
     _s.fcSttbfUssr = in.readuint32();
     _s.lcbSttbfUssr = in.readuint32();
 }
-void MSO::parseFibRgFcLcb2000(LEInputStream& in, FibRgFcLcb2000& _s) {
+void MSO::parseFibRgFcLcb2000(LEInputStream &in, FibRgFcLcb2000 &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.fcPlcfTch = in.readuint32();
     _s.lcbPlcfTch = in.readuint32();
@@ -4959,7 +5219,8 @@ void MSO::parseFibRgFcLcb2000(LEInputStream& in, FibRgFcLcb2000& _s) {
     _s.fcBkdEdnOld = in.readuint32();
     _s.lcbBkdEdnOld = in.readuint32();
 }
-void MSO::parseFibRgFcLcb2002(LEInputStream& in, FibRgFcLcb2002& _s) {
+void MSO::parseFibRgFcLcb2002(LEInputStream &in, FibRgFcLcb2002 &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.fcUnused1 = in.readuint32();
     _s.lcbUnused1 = in.readuint32();
@@ -5012,7 +5273,8 @@ void MSO::parseFibRgFcLcb2002(LEInputStream& in, FibRgFcLcb2002& _s) {
     _s.fcPlcffactoid = in.readuint32();
     _s.lcbPlcffactoid = in.readuint32();
 }
-void MSO::parseLPStshi(LEInputStream& in, LPStshi& _s) {
+void MSO::parseLPStshi(LEInputStream &in, LPStshi &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -5021,7 +5283,8 @@ void MSO::parseLPStshi(LEInputStream& in, LPStshi& _s) {
     _s.stshi.resize(_c);
     in.readBytes(_s.stshi);
 }
-void MSO::parseLPStd(LEInputStream& in, LPStd& _s) {
+void MSO::parseLPStd(LEInputStream &in, LPStd &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -5029,74 +5292,80 @@ void MSO::parseLPStd(LEInputStream& in, LPStd& _s) {
     _c = _s.cbStd;
     _s.std.resize(_c);
     in.readBytes(_s.std);
-    _s._has_padding = _s.cbStd%2==1;
+    _s._has_padding = _s.cbStd % 2 == 1;
     if (_s._has_padding) {
         _s.padding = in.readuint8();
     }
 }
-void MSO::parsePlcfSed(LEInputStream& in, PlcfSed& _s) {
+void MSO::parsePlcfSed(LEInputStream &in, PlcfSed &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     _c = 2;
     _s.aCP.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.aCP[_i] = in.readuint32();
     }
     _c = 1;
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.aSed.append(Sed(&_s));
         parseSed(in, _s.aSed[_i]);
     }
 }
-void MSO::parseSed(LEInputStream& in, Sed& _s) {
+void MSO::parseSed(LEInputStream &in, Sed &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.fn = in.readuint16();
     _s.fcSepx = in.readint32();
     _s.fnMpr = in.readuint16();
     _s.fcMpr = in.readuint32();
 }
-void MSO::parsePlcfhdd(LEInputStream& in, Plcfhdd& _s) {
+void MSO::parsePlcfhdd(LEInputStream &in, Plcfhdd &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     _c = 13;
     _s.aCP.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.aCP[_i] = in.readuint32();
     }
 }
-void MSO::parsePlcBteChpx(LEInputStream& in, PlcBteChpx& _s) {
+void MSO::parsePlcBteChpx(LEInputStream &in, PlcBteChpx &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     _c = 2;
     _s.aCP.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.aCP[_i] = in.readuint32();
     }
     _c = 1;
     _s.aPnBteChpx.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.aPnBteChpx[_i] = in.readuint32();
     }
 }
-void MSO::parsePlcfBtePapx(LEInputStream& in, PlcfBtePapx& _s) {
+void MSO::parsePlcfBtePapx(LEInputStream &in, PlcfBtePapx &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     _c = 2;
     _s.aCP.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.aCP[_i] = in.readuint32();
     }
     _c = 1;
     _s.aPnBteChpx.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.aPnBteChpx[_i] = in.readuint32();
     }
 }
-void MSO::parseTcg(LEInputStream& in, Tcg& _s) {
+void MSO::parseTcg(LEInputStream &in, Tcg &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -5108,34 +5377,37 @@ void MSO::parseTcg(LEInputStream& in, Tcg& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parsePrcData(LEInputStream& in, PrcData& _s) {
+void MSO::parsePrcData(LEInputStream &in, PrcData &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     _s.cbGrpprl = in.readint16();
-    if (!(((qint16)_s.cbGrpprl)>=0)) {
+    if (!(((qint16)_s.cbGrpprl) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint16)_s.cbGrpprl)>=0");
     }
-    if (!(((qint16)_s.cbGrpprl)<=16290)) {
+    if (!(((qint16)_s.cbGrpprl) <= 16290)) {
         throw IncorrectValueException(in.getPosition(), "((qint16)_s.cbGrpprl)<=16290");
     }
-    if (!(((qint16)_s.cbGrpprl)%2==0)) {
+    if (!(((qint16)_s.cbGrpprl) % 2 == 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint16)_s.cbGrpprl)%2==0");
     }
-    _c = _s.cbGrpprl/2;
-    for (int _i=0; _i<_c; ++_i) {
+    _c = _s.cbGrpprl / 2;
+    for (int _i = 0; _i < _c; ++_i) {
         _s.GrpPrl.append(Sprm(&_s));
         parseSprm(in, _s.GrpPrl[_i]);
     }
 }
-void MSO::parseSprm(LEInputStream& in, Sprm& _s) {
+void MSO::parseSprm(LEInputStream &in, Sprm &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.ispmd = in.readuint9();
     _s.fSpec = in.readbit();
     _s.sgc = in.readuint3();
     _s.spra = in.readuint3();
 }
-void MSO::parsePcdt(LEInputStream& in, Pcdt& _s) {
+void MSO::parsePcdt(LEInputStream &in, Pcdt &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -5144,19 +5416,21 @@ void MSO::parsePcdt(LEInputStream& in, Pcdt& _s) {
         throw IncorrectValueException(in.getPosition(), "((quint8)_s.clxt) == 2");
     }
     _s.lcb = in.readuint32();
-    _c = _s.lcb/8;
-    for (int _i=0; _i<_c; ++_i) {
+    _c = _s.lcb / 8;
+    for (int _i = 0; _i < _c; ++_i) {
         _s.PlcPcd.append(Pcd(&_s));
         parsePcd(in, _s.PlcPcd[_i]);
     }
 }
-void MSO::parseFCompressed(LEInputStream& in, FCompressed& _s) {
+void MSO::parseFCompressed(LEInputStream &in, FCompressed &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.fc = in.readuint30();
     _s.fCompressed = in.readbit();
     _s.r1 = in.readbit();
 }
-void MSO::parsePrm0(LEInputStream& in, Prm0& _s) {
+void MSO::parsePrm0(LEInputStream &in, Prm0 &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.fComplex = in.readbit();
     if (!(((bool)_s.fComplex) == false)) {
@@ -5165,7 +5439,8 @@ void MSO::parsePrm0(LEInputStream& in, Prm0& _s) {
     _s.isprm = in.readuint7();
     _s.val = in.readuint8();
 }
-void MSO::parsePrm1(LEInputStream& in, Prm1& _s) {
+void MSO::parsePrm1(LEInputStream &in, Prm1 &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.fComplex = in.readbit();
     if (!(((bool)_s.fComplex) == true)) {
@@ -5173,7 +5448,8 @@ void MSO::parsePrm1(LEInputStream& in, Prm1& _s) {
     }
     _s.igrpprl = in.readuint15();
 }
-void MSO::parseSttbfFfn(LEInputStream& in, SttbfFfn& _s) {
+void MSO::parseSttbfFfn(LEInputStream &in, SttbfFfn &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -5183,12 +5459,13 @@ void MSO::parseSttbfFfn(LEInputStream& in, SttbfFfn& _s) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.cbExtra) == 0");
     }
     _c = _s.cData;
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.data.append(SttbfFfnEntry(&_s));
         parseSttbfFfnEntry(in, _s.data[_i]);
     }
 }
-void MSO::parseSttbfFfnEntry(LEInputStream& in, SttbfFfnEntry& _s) {
+void MSO::parseSttbfFfnEntry(LEInputStream &in, SttbfFfnEntry &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -5197,82 +5474,89 @@ void MSO::parseSttbfFfnEntry(LEInputStream& in, SttbfFfnEntry& _s) {
     _s.Data.resize(_c);
     in.readBytes(_s.Data);
 }
-void MSO::parseCodePageString(LEInputStream& in, CodePageString& _s) {
+void MSO::parseCodePageString(LEInputStream &in, CodePageString &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     _s.size = in.readuint32();
-    _c = 4*(_s.size/4)+((_s.size%4!=0)?4:0);
+    _c = 4 * (_s.size / 4) + ((_s.size % 4 != 0) ? 4 : 0);
     _s.characters.resize(_c);
     in.readBytes(_s.characters);
 }
-void MSO::parseFILETIME(LEInputStream& in, FILETIME& _s) {
+void MSO::parseFILETIME(LEInputStream &in, FILETIME &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.dwLowDateTime = in.readuint32();
     _s.dwHighDateTime = in.readuint32();
 }
-void MSO::parseClipboardData(LEInputStream& in, ClipboardData& _s) {
+void MSO::parseClipboardData(LEInputStream &in, ClipboardData &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     _s.size = in.readuint32();
     _s.format = in.readuint32();
-    _c = 4*(_s.size/4)+((_s.size%4!=0)?4:0)-4;
+    _c = 4 * (_s.size / 4) + ((_s.size % 4 != 0) ? 4 : 0) - 4;
     _s.data.resize(_c);
     in.readBytes(_s.data);
 }
-void MSO::parsePropertyIdentifierAndOffset(LEInputStream& in, PropertyIdentifierAndOffset& _s) {
+void MSO::parsePropertyIdentifierAndOffset(LEInputStream &in, PropertyIdentifierAndOffset &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.propertyIdentifier = in.readuint32();
     _s.offset = in.readuint32();
 }
-void MSO::parseTypedPropertyValue(LEInputStream& in, TypedPropertyValue& _s) {
+void MSO::parseTypedPropertyValue(LEInputStream &in, TypedPropertyValue &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.type = in.readuint16();
     _s.padding = in.readuint16();
-    _s._has_vt_I2 = _s.type==2;
+    _s._has_vt_I2 = _s.type == 2;
     if (_s._has_vt_I2) {
         _s.vt_I2 = in.readuint16();
     }
-    _s._has_paddingI2 = _s.type==2;
+    _s._has_paddingI2 = _s.type == 2;
     if (_s._has_paddingI2) {
         _s.paddingI2 = in.readuint16();
     }
-    _s._has_vg_ERROR = _s.type==10;
+    _s._has_vg_ERROR = _s.type == 10;
     if (_s._has_vg_ERROR) {
         _s.vg_ERROR = in.readuint32();
     }
-    if (_s.type==30) {
+    if (_s.type == 30) {
         _s.vt_lpstr = QSharedPointer<CodePageString>(new CodePageString(&_s));
         parseCodePageString(in, *_s.vt_lpstr.data());
     }
-    if (_s.type==64) {
+    if (_s.type == 64) {
         _s.vg_FILETIME = QSharedPointer<FILETIME>(new FILETIME(&_s));
         parseFILETIME(in, *_s.vg_FILETIME.data());
     }
-    if (_s.type==71) {
+    if (_s.type == 71) {
         _s.vg_CF = QSharedPointer<ClipboardData>(new ClipboardData(&_s));
         parseClipboardData(in, *_s.vg_CF.data());
     }
 }
-void MSO::parsePropertySet(LEInputStream& in, PropertySet& _s) {
+void MSO::parsePropertySet(LEInputStream &in, PropertySet &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     _s.size = in.readuint32();
     _s.numProperties = in.readuint32();
     _c = _s.numProperties;
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.propertyIdentifierAndOffset.append(PropertyIdentifierAndOffset(&_s));
         parsePropertyIdentifierAndOffset(in, _s.propertyIdentifierAndOffset[_i]);
     }
     _c = _s.numProperties;
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.property.append(TypedPropertyValue(&_s));
         parseTypedPropertyValue(in, _s.property[_i]);
     }
 }
-void MSO::parsePropertySetStream(LEInputStream& in, PropertySetStream& _s) {
+void MSO::parsePropertySetStream(LEInputStream &in, PropertySetStream &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -5294,18 +5578,18 @@ void MSO::parsePropertySetStream(LEInputStream& in, PropertySetStream& _s) {
     _s.fmtID0.resize(_c);
     in.readBytes(_s.fmtID0);
     _s.offset0 = in.readuint32();
-    _s._has_fmtID1 = _s.numPropertySets==2;
+    _s._has_fmtID1 = _s.numPropertySets == 2;
     if (_s._has_fmtID1) {
         _c = 16;
         _s.fmtID1.resize(_c);
         in.readBytes(_s.fmtID1);
     }
-    _s._has_offset1 = _s.numPropertySets==2;
+    _s._has_offset1 = _s.numPropertySets == 2;
     if (_s._has_offset1) {
         _s.offset1 = in.readuint32();
     }
     parsePropertySet(in, _s.propertySet1);
-    if (_s.numPropertySets==2) {
+    if (_s.numPropertySets == 2) {
         _s.propertySet2 = QSharedPointer<PropertySet>(new PropertySet(&_s));
         parsePropertySet(in, *_s.propertySet2.data());
     }
@@ -5315,32 +5599,35 @@ void MSO::parsePropertySetStream(LEInputStream& in, PropertySetStream& _s) {
         try {
             _s.padding.append(Byte(&_s));
             parseByte(in, _s.padding.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.padding.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.padding.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseSummaryInformationPropertySetStream(LEInputStream& in, SummaryInformationPropertySetStream& _s) {
+void MSO::parseSummaryInformationPropertySetStream(LEInputStream &in, SummaryInformationPropertySetStream &_s)
+{
     _s.streamOffset = in.getPosition();
     parsePropertySetStream(in, _s.propertySet);
     if (!(_s.propertySet.version == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.propertySet.version == 0");
     }
 }
-void MSO::parseDocumentSummaryInformationPropertySetStream(LEInputStream& in, DocumentSummaryInformationPropertySetStream& _s) {
+void MSO::parseDocumentSummaryInformationPropertySetStream(LEInputStream &in, DocumentSummaryInformationPropertySetStream &_s)
+{
     _s.streamOffset = in.getPosition();
     parsePropertySetStream(in, _s.propertySet);
     if (!(_s.propertySet.version == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.propertySet.version == 0");
     }
 }
-void MSO::parsePicturesStream(LEInputStream& in, PicturesStream& _s) {
+void MSO::parsePicturesStream(LEInputStream &in, PicturesStream &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -5351,18 +5638,19 @@ void MSO::parsePicturesStream(LEInputStream& in, PicturesStream& _s) {
         try {
             _s.trailing.append(Byte(&_s));
             parseByte(in, _s.trailing.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.trailing.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.trailing.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseOfficeArtMetafileHeader(LEInputStream& in, OfficeArtMetafileHeader& _s) {
+void MSO::parseOfficeArtMetafileHeader(LEInputStream &in, OfficeArtMetafileHeader &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.cbSize = in.readuint32();
     parseRECT(in, _s.rcBounds);
@@ -5371,7 +5659,8 @@ void MSO::parseOfficeArtMetafileHeader(LEInputStream& in, OfficeArtMetafileHeade
     _s.compression = in.readuint8();
     _s.filter = in.readuint8();
 }
-void MSO::parseSoundCollectionContainer(LEInputStream& in, SoundCollectionContainer& _s) {
+void MSO::parseSoundCollectionContainer(LEInputStream &in, SoundCollectionContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -5387,7 +5676,7 @@ void MSO::parseSoundCollectionContainer(LEInputStream& in, SoundCollectionContai
     }
     parseSoundCollectionAtom(in, _s.soundCollectionAtom);
     qint64 _startPos = in.getPosition();
-    int _totalSize = qMin(_s.rh.recLen-12, quint32(in.getSize() - _startPos));
+    int _totalSize = qMin(_s.rh.recLen - 12, quint32(in.getSize() - _startPos));
     _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgSoundContainer.append(SoundContainer(&_s));
@@ -5395,7 +5684,8 @@ void MSO::parseSoundCollectionContainer(LEInputStream& in, SoundCollectionContai
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
-void MSO::parseSlideHeadersFootersContainer(LEInputStream& in, SlideHeadersFootersContainer& _s) {
+void MSO::parseSlideHeadersFootersContainer(LEInputStream &in, SlideHeadersFootersContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -5414,8 +5704,9 @@ void MSO::parseSlideHeadersFootersContainer(LEInputStream& in, SlideHeadersFoote
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0)&&(_optionCheck.recLen<=510);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFBA) && (_optionCheck.recLen % 2 == 0)
+            && (_optionCheck.recLen <= 510);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -5424,10 +5715,10 @@ void MSO::parseSlideHeadersFootersContainer(LEInputStream& in, SlideHeadersFoote
         try {
             _s.userDateAtom = QSharedPointer<UserDateAtom>(new UserDateAtom(&_s));
             parseUserDateAtom(in, *_s.userDateAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.userDateAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.userDateAtom.clear();
             in.rewind(_m);
         }
@@ -5436,8 +5727,8 @@ void MSO::parseSlideHeadersFootersContainer(LEInputStream& in, SlideHeadersFoote
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 2)&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 2) && (_optionCheck.recType == 0xFBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -5446,16 +5737,17 @@ void MSO::parseSlideHeadersFootersContainer(LEInputStream& in, SlideHeadersFoote
         try {
             _s.footerAtom = QSharedPointer<FooterAtom>(new FooterAtom(&_s));
             parseFooterAtom(in, *_s.footerAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.footerAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.footerAtom.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseNotesHeadersFootersContainer(LEInputStream& in, NotesHeadersFootersContainer& _s) {
+void MSO::parseNotesHeadersFootersContainer(LEInputStream &in, NotesHeadersFootersContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -5474,8 +5766,9 @@ void MSO::parseNotesHeadersFootersContainer(LEInputStream& in, NotesHeadersFoote
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0)&&(_optionCheck.recLen<=510);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFBA) && (_optionCheck.recLen % 2 == 0)
+            && (_optionCheck.recLen <= 510);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -5484,10 +5777,10 @@ void MSO::parseNotesHeadersFootersContainer(LEInputStream& in, NotesHeadersFoote
         try {
             _s.userDateAtom = QSharedPointer<UserDateAtom>(new UserDateAtom(&_s));
             parseUserDateAtom(in, *_s.userDateAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.userDateAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.userDateAtom.clear();
             in.rewind(_m);
         }
@@ -5496,8 +5789,8 @@ void MSO::parseNotesHeadersFootersContainer(LEInputStream& in, NotesHeadersFoote
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 1)&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 1) && (_optionCheck.recType == 0xFBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -5506,10 +5799,10 @@ void MSO::parseNotesHeadersFootersContainer(LEInputStream& in, NotesHeadersFoote
         try {
             _s.headerAtom = QSharedPointer<HeaderAtom>(new HeaderAtom(&_s));
             parseHeaderAtom(in, *_s.headerAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.headerAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.headerAtom.clear();
             in.rewind(_m);
         }
@@ -5518,8 +5811,8 @@ void MSO::parseNotesHeadersFootersContainer(LEInputStream& in, NotesHeadersFoote
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 2)&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 2) && (_optionCheck.recType == 0xFBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -5528,21 +5821,23 @@ void MSO::parseNotesHeadersFootersContainer(LEInputStream& in, NotesHeadersFoote
         try {
             _s.footerAtom = QSharedPointer<FooterAtom>(new FooterAtom(&_s));
             parseFooterAtom(in, *_s.footerAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.footerAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.footerAtom.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseScalingStruct(LEInputStream& in, ScalingStruct& _s) {
+void MSO::parseScalingStruct(LEInputStream &in, ScalingStruct &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRatioStruct(in, _s.x);
     parseRatioStruct(in, _s.y);
 }
-void MSO::parseTextPFException9(LEInputStream& in, TextPFException9& _s) {
+void MSO::parseTextPFException9(LEInputStream &in, TextPFException9 &_s)
+{
     _s.streamOffset = in.getPosition();
     parsePFMasks(in, _s.masks);
     if (!(_s.masks.hasBullet == false)) {
@@ -5624,7 +5919,8 @@ void MSO::parseTextPFException9(LEInputStream& in, TextPFException9& _s) {
         parseTextAutoNumberScheme(in, *_s.bulletAutoNumberScheme.data());
     }
 }
-void MSO::parseTextCFException9(LEInputStream& in, TextCFException9& _s) {
+void MSO::parseTextCFException9(LEInputStream &in, TextCFException9 &_s)
+{
     _s.streamOffset = in.getPosition();
     parseCFMasks(in, _s.masks);
     if (!(_s.masks.bold == false)) {
@@ -5694,7 +5990,8 @@ void MSO::parseTextCFException9(LEInputStream& in, TextCFException9& _s) {
         _s.unusedb = in.readuint8();
     }
 }
-void MSO::parseTextDefaults9Atom(LEInputStream& in, TextDefaults9Atom& _s) {
+void MSO::parseTextDefaults9Atom(LEInputStream &in, TextDefaults9Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -5709,7 +6006,8 @@ void MSO::parseTextDefaults9Atom(LEInputStream& in, TextDefaults9Atom& _s) {
     parseTextCFException9(in, _s.cf9);
     parseTextPFException9(in, _s.pf9);
 }
-void MSO::parseKinsoku9Container(LEInputStream& in, Kinsoku9Container& _s) {
+void MSO::parseKinsoku9Container(LEInputStream &in, Kinsoku9Container &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -5728,8 +6026,8 @@ void MSO::parseKinsoku9Container(LEInputStream& in, Kinsoku9Container& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -5738,10 +6036,10 @@ void MSO::parseKinsoku9Container(LEInputStream& in, Kinsoku9Container& _s) {
         try {
             _s.kinsokuLeadingAtom = QSharedPointer<KinsokuLeadingAtom>(new KinsokuLeadingAtom(&_s));
             parseKinsokuLeadingAtom(in, *_s.kinsokuLeadingAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.kinsokuLeadingAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.kinsokuLeadingAtom.clear();
             in.rewind(_m);
         }
@@ -5750,8 +6048,8 @@ void MSO::parseKinsoku9Container(LEInputStream& in, Kinsoku9Container& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 1 )&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 1) && (_optionCheck.recType == 0xFBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -5760,21 +6058,23 @@ void MSO::parseKinsoku9Container(LEInputStream& in, Kinsoku9Container& _s) {
         try {
             _s.kinsokuFollowingAtom = QSharedPointer<KinsokuFollowingAtom>(new KinsokuFollowingAtom(&_s));
             parseKinsokuFollowingAtom(in, *_s.kinsokuFollowingAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.kinsokuFollowingAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.kinsokuFollowingAtom.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseOutlineTextProps9Entry(LEInputStream& in, OutlineTextProps9Entry& _s) {
+void MSO::parseOutlineTextProps9Entry(LEInputStream &in, OutlineTextProps9Entry &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOutlineTextPropsHeaderExAtom(in, _s.outlineTextHeaderAtom);
     parseStyleTextProp9Atom(in, _s.styleTextProp9Atom);
 }
-void MSO::parseTextCFException10(LEInputStream& in, TextCFException10& _s) {
+void MSO::parseTextCFException10(LEInputStream &in, TextCFException10 &_s)
+{
     _s.streamOffset = in.getPosition();
     parseCFMasks(in, _s.masks);
     if (!(_s.masks.bold == false)) {
@@ -5838,7 +6138,8 @@ void MSO::parseTextCFException10(LEInputStream& in, TextCFException10& _s) {
         _s.pp11ext = in.readuint32();
     }
 }
-void MSO::parseTextDefaults10Atom(LEInputStream& in, TextDefaults10Atom& _s) {
+void MSO::parseTextDefaults10Atom(LEInputStream &in, TextDefaults10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -5852,7 +6153,8 @@ void MSO::parseTextDefaults10Atom(LEInputStream& in, TextDefaults10Atom& _s) {
     }
     parseTextCFException10(in, _s.cf10);
 }
-void MSO::parseCommentIndex10Container(LEInputStream& in, CommentIndex10Container& _s) {
+void MSO::parseCommentIndex10Container(LEInputStream &in, CommentIndex10Container &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -5870,8 +6172,9 @@ void MSO::parseCommentIndex10Container(LEInputStream& in, CommentIndex10Containe
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen<=104)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen <= 104)
+            && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -5880,10 +6183,10 @@ void MSO::parseCommentIndex10Container(LEInputStream& in, CommentIndex10Containe
         try {
             _s.authorNameAtom = QSharedPointer<AuthorNameAtom>(new AuthorNameAtom(&_s));
             parseAuthorNameAtom(in, *_s.authorNameAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.authorNameAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.authorNameAtom.clear();
             in.rewind(_m);
         }
@@ -5892,8 +6195,9 @@ void MSO::parseCommentIndex10Container(LEInputStream& in, CommentIndex10Containe
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x2EE5)&&(_optionCheck.recLen == 0x08);
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x2EE5) && (_optionCheck.recLen == 0x08);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -5902,21 +6206,23 @@ void MSO::parseCommentIndex10Container(LEInputStream& in, CommentIndex10Containe
         try {
             _s.authorIndexAtom = QSharedPointer<CommentIndex10Atom>(new CommentIndex10Atom(&_s));
             parseCommentIndex10Atom(in, *_s.authorIndexAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.authorIndexAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.authorIndexAtom.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseOutlineTextProps10Entry(LEInputStream& in, OutlineTextProps10Entry& _s) {
+void MSO::parseOutlineTextProps10Entry(LEInputStream &in, OutlineTextProps10Entry &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOutlineTextPropsHeaderExAtom(in, _s.outlineTextHeaderAtom);
     parseStyleTextProp10Atom(in, _s.styleTextProp10Atom);
 }
-void MSO::parsePP11DocBinaryTagExtension(LEInputStream& in, PP11DocBinaryTagExtension& _s) {
+void MSO::parsePP11DocBinaryTagExtension(LEInputStream &in, PP11DocBinaryTagExtension &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -5949,12 +6255,14 @@ void MSO::parsePP11DocBinaryTagExtension(LEInputStream& in, PP11DocBinaryTagExte
     parseSmartTagStore11Container(in, _s.smartTagStore11);
     parseOutlineTextProps11Container(in, _s.outlineTextProps);
 }
-void MSO::parseUnknownBinaryTag(LEInputStream& in, UnknownBinaryTag& _s) {
+void MSO::parseUnknownBinaryTag(LEInputStream &in, UnknownBinaryTag &_s)
+{
     _s.streamOffset = in.getPosition();
     parseTagNameAtom(in, _s.tagNameAtom);
     parseBinaryTagDataBlob(in, _s.tagData);
 }
-void MSO::parseNoZoomViewInfoAtom(LEInputStream& in, NoZoomViewInfoAtom& _s) {
+void MSO::parseNoZoomViewInfoAtom(LEInputStream &in, NoZoomViewInfoAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -5980,7 +6288,8 @@ void MSO::parseNoZoomViewInfoAtom(LEInputStream& in, NoZoomViewInfoAtom& _s) {
     _s.fDraftMode = in.readuint8();
     _s.unused3 = in.readuint16();
 }
-void MSO::parseVBAInfoContainer(LEInputStream& in, VBAInfoContainer& _s) {
+void MSO::parseVBAInfoContainer(LEInputStream &in, VBAInfoContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -5997,7 +6306,8 @@ void MSO::parseVBAInfoContainer(LEInputStream& in, VBAInfoContainer& _s) {
     }
     parseVBAInfoAtom(in, _s.vbaInfoAtom);
 }
-void MSO::parseNormalViewSetInfoAtom(LEInputStream& in, NormalViewSetInfoAtom& _s) {
+void MSO::parseNormalViewSetInfoAtom(LEInputStream &in, NormalViewSetInfoAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -6027,7 +6337,8 @@ void MSO::parseNormalViewSetInfoAtom(LEInputStream& in, NormalViewSetInfoAtom& _
         throw IncorrectValueException(in.getPosition(), "((quint8)_s.reserved) == 0");
     }
 }
-void MSO::parseTextContainerMeta(LEInputStream& in, TextContainerMeta& _s) {
+void MSO::parseTextContainerMeta(LEInputStream &in, TextContainerMeta &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -6035,32 +6346,33 @@ void MSO::parseTextContainerMeta(LEInputStream& in, TextContainerMeta& _s) {
     parseRecordHeader(in, _choice);
     in.rewind(_m);
     qint64 startPos = in.getPosition();
-    if (startPos == in.getPosition() && ((_choice.recType == 0xFD8)&&(_choice.recLen == 4))) {
+    if (startPos == in.getPosition() && ((_choice.recType == 0xFD8) && (_choice.recLen == 4))) {
         _s.meta = TextContainerMeta::choice242357012(new SlideNumberMCAtom(&_s));
-        parseSlideNumberMCAtom(in, *(SlideNumberMCAtom*)_s.meta.data());
+        parseSlideNumberMCAtom(in, *(SlideNumberMCAtom *)_s.meta.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recType == 0xFF7)&&(_choice.recLen == 8))) {
+    if (startPos == in.getPosition() && ((_choice.recType == 0xFF7) && (_choice.recLen == 8))) {
         _s.meta = TextContainerMeta::choice242357012(new DateTimeMCAtom(&_s));
-        parseDateTimeMCAtom(in, *(DateTimeMCAtom*)_s.meta.data());
+        parseDateTimeMCAtom(in, *(DateTimeMCAtom *)_s.meta.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recType == 0xFF8)&&(_choice.recLen == 4))) {
+    if (startPos == in.getPosition() && ((_choice.recType == 0xFF8) && (_choice.recLen == 4))) {
         _s.meta = TextContainerMeta::choice242357012(new GenericDateMCAtom(&_s));
-        parseGenericDateMCAtom(in, *(GenericDateMCAtom*)_s.meta.data());
+        parseGenericDateMCAtom(in, *(GenericDateMCAtom *)_s.meta.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recType == 0xFF9)&&(_choice.recLen == 4))) {
+    if (startPos == in.getPosition() && ((_choice.recType == 0xFF9) && (_choice.recLen == 4))) {
         _s.meta = TextContainerMeta::choice242357012(new HeaderMCAtom(&_s));
-        parseHeaderMCAtom(in, *(HeaderMCAtom*)_s.meta.data());
+        parseHeaderMCAtom(in, *(HeaderMCAtom *)_s.meta.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recType == 0xFFA)&&(_choice.recLen == 4))) {
+    if (startPos == in.getPosition() && ((_choice.recType == 0xFFA) && (_choice.recLen == 4))) {
         _s.meta = TextContainerMeta::choice242357012(new FooterMCAtom(&_s));
-        parseFooterMCAtom(in, *(FooterMCAtom*)_s.meta.data());
+        parseFooterMCAtom(in, *(FooterMCAtom *)_s.meta.data());
     }
     if (startPos == in.getPosition()) {
         _s.meta = TextContainerMeta::choice242357012(new RTFDateTimeMCAtom(&_s));
-        parseRTFDateTimeMCAtom(in, *(RTFDateTimeMCAtom*)_s.meta.data());
+        parseRTFDateTimeMCAtom(in, *(RTFDateTimeMCAtom *)_s.meta.data());
     }
 }
-void MSO::parseSlidePersistAtom(LEInputStream& in, SlidePersistAtom& _s) {
+void MSO::parseSlidePersistAtom(LEInputStream &in, SlidePersistAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -6095,10 +6407,10 @@ void MSO::parseSlidePersistAtom(LEInputStream& in, SlidePersistAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.reserved4) == 0");
     }
     _s.cTexts = in.readint32();
-    if (!(((qint32)_s.cTexts)>=0)) {
+    if (!(((qint32)_s.cTexts) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.cTexts)>=0");
     }
-    if (!(((qint32)_s.cTexts)<=8)) {
+    if (!(((qint32)_s.cTexts) <= 8)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.cTexts)<=8");
     }
     parseSlideId(in, _s.slideId);
@@ -6107,7 +6419,8 @@ void MSO::parseSlidePersistAtom(LEInputStream& in, SlidePersistAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.reserved5) == 0");
     }
 }
-void MSO::parseTextRuler(LEInputStream& in, TextRuler& _s) {
+void MSO::parseTextRuler(LEInputStream &in, TextRuler &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.fDefaultTabSize = in.readbit();
     _s.fCLevels = in.readbit();
@@ -6177,7 +6490,8 @@ void MSO::parseTextRuler(LEInputStream& in, TextRuler& _s) {
         _s.indent5 = in.readuint16();
     }
 }
-void MSO::parseTextPFException(LEInputStream& in, TextPFException& _s) {
+void MSO::parseTextPFException(LEInputStream &in, TextPFException &_s)
+{
     _s.streamOffset = in.getPosition();
     parsePFMasks(in, _s.masks);
     if (!(_s.masks.bulletBlip == false)) {
@@ -6189,7 +6503,7 @@ void MSO::parseTextPFException(LEInputStream& in, TextPFException& _s) {
     if (!(_s.masks.bulletScheme == false)) {
         throw IncorrectValueException(in.getPosition(), "_s.masks.bulletScheme == false");
     }
-    if (_s.masks.hasBullet||_s.masks.bulletHasFont||_s.masks.bulletHasColor||_s.masks.bulletHasSize) {
+    if (_s.masks.hasBullet || _s.masks.bulletHasFont || _s.masks.bulletHasColor || _s.masks.bulletHasSize) {
         _s.bulletFlags = QSharedPointer<BulletFlags>(new BulletFlags(&_s));
         parseBulletFlags(in, *_s.bulletFlags.data());
     }
@@ -6245,7 +6559,7 @@ void MSO::parseTextPFException(LEInputStream& in, TextPFException& _s) {
     if (_s._has_fontAlign) {
         _s.fontAlign = in.readuint16();
     }
-    if (_s.masks.charWrap||_s.masks.wordWrap||_s.masks.overflow) {
+    if (_s.masks.charWrap || _s.masks.wordWrap || _s.masks.overflow) {
         _s.wrapFlags = QSharedPointer<PFWrapFlags>(new PFWrapFlags(&_s));
         parsePFWrapFlags(in, *_s.wrapFlags.data());
     }
@@ -6254,7 +6568,8 @@ void MSO::parseTextPFException(LEInputStream& in, TextPFException& _s) {
         _s.textDirection = in.readuint16();
     }
 }
-void MSO::parseTextCFException(LEInputStream& in, TextCFException& _s) {
+void MSO::parseTextCFException(LEInputStream &in, TextCFException &_s)
+{
     _s.streamOffset = in.getPosition();
     parseCFMasks(in, _s.masks);
     if (!(_s.masks.pp10ext == false)) {
@@ -6269,7 +6584,8 @@ void MSO::parseTextCFException(LEInputStream& in, TextCFException& _s) {
     if (!(_s.masks.pp11ext == false)) {
         throw IncorrectValueException(in.getPosition(), "_s.masks.pp11ext == false");
     }
-    if (_s.masks.bold || _s.masks.italic || _s.masks.underline || _s.masks.shadow || _s.masks.fehint || _s.masks.kumi || _s.masks.emboss || _s.masks.fHasStyle != 0) {
+    if (_s.masks.bold || _s.masks.italic || _s.masks.underline || _s.masks.shadow || _s.masks.fehint || _s.masks.kumi || _s.masks.emboss
+        || _s.masks.fHasStyle != 0) {
         _s.fontStyle = QSharedPointer<CFStyle>(new CFStyle(&_s));
         parseCFStyle(in, *_s.fontStyle.data());
     }
@@ -6292,10 +6608,10 @@ void MSO::parseTextCFException(LEInputStream& in, TextCFException& _s) {
     _s._has_fontSize = _s.masks.size;
     if (_s._has_fontSize) {
         _s.fontSize = in.readuint16();
-        if (!(((quint16)_s.fontSize)>=1)) {
+        if (!(((quint16)_s.fontSize) >= 1)) {
             throw IncorrectValueException(in.getPosition(), "((quint16)_s.fontSize)>=1");
         }
-        if (!(((quint16)_s.fontSize)<=4000)) {
+        if (!(((quint16)_s.fontSize) <= 4000)) {
             throw IncorrectValueException(in.getPosition(), "((quint16)_s.fontSize)<=4000");
         }
     }
@@ -6306,15 +6622,16 @@ void MSO::parseTextCFException(LEInputStream& in, TextCFException& _s) {
     _s._has_position = _s.masks.position;
     if (_s._has_position) {
         _s.position = in.readint16();
-        if (!(((qint16)_s.position)>=-100)) {
+        if (!(((qint16)_s.position) >= -100)) {
             throw IncorrectValueException(in.getPosition(), "((qint16)_s.position)>=-100");
         }
-        if (!(((qint16)_s.position)<=100)) {
+        if (!(((qint16)_s.position) <= 100)) {
             throw IncorrectValueException(in.getPosition(), "((qint16)_s.position)<=100");
         }
     }
 }
-void MSO::parseFontCollectionEntry(LEInputStream& in, FontCollectionEntry& _s) {
+void MSO::parseFontCollectionEntry(LEInputStream &in, FontCollectionEntry &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -6323,8 +6640,8 @@ void MSO::parseFontCollectionEntry(LEInputStream& in, FontCollectionEntry& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance<=3)&&(_optionCheck.recType == 0xFB8);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance <= 3) && (_optionCheck.recType == 0xFB8);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6333,10 +6650,10 @@ void MSO::parseFontCollectionEntry(LEInputStream& in, FontCollectionEntry& _s) {
         try {
             _s.fontEmbedData1 = QSharedPointer<FontEmbedDataBlob>(new FontEmbedDataBlob(&_s));
             parseFontEmbedDataBlob(in, *_s.fontEmbedData1.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.fontEmbedData1.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.fontEmbedData1.clear();
             in.rewind(_m);
         }
@@ -6345,8 +6662,8 @@ void MSO::parseFontCollectionEntry(LEInputStream& in, FontCollectionEntry& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance<=3)&&(_optionCheck.recType == 0xFB8);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance <= 3) && (_optionCheck.recType == 0xFB8);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6355,10 +6672,10 @@ void MSO::parseFontCollectionEntry(LEInputStream& in, FontCollectionEntry& _s) {
         try {
             _s.fontEmbedData2 = QSharedPointer<FontEmbedDataBlob>(new FontEmbedDataBlob(&_s));
             parseFontEmbedDataBlob(in, *_s.fontEmbedData2.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.fontEmbedData2.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.fontEmbedData2.clear();
             in.rewind(_m);
         }
@@ -6367,8 +6684,8 @@ void MSO::parseFontCollectionEntry(LEInputStream& in, FontCollectionEntry& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance<=3)&&(_optionCheck.recType == 0xFB8);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance <= 3) && (_optionCheck.recType == 0xFB8);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6377,10 +6694,10 @@ void MSO::parseFontCollectionEntry(LEInputStream& in, FontCollectionEntry& _s) {
         try {
             _s.fontEmbedData3 = QSharedPointer<FontEmbedDataBlob>(new FontEmbedDataBlob(&_s));
             parseFontEmbedDataBlob(in, *_s.fontEmbedData3.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.fontEmbedData3.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.fontEmbedData3.clear();
             in.rewind(_m);
         }
@@ -6389,8 +6706,8 @@ void MSO::parseFontCollectionEntry(LEInputStream& in, FontCollectionEntry& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance<=3)&&(_optionCheck.recType == 0xFB8);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance <= 3) && (_optionCheck.recType == 0xFB8);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6399,16 +6716,17 @@ void MSO::parseFontCollectionEntry(LEInputStream& in, FontCollectionEntry& _s) {
         try {
             _s.fontEmbedData4 = QSharedPointer<FontEmbedDataBlob>(new FontEmbedDataBlob(&_s));
             parseFontEmbedDataBlob(in, *_s.fontEmbedData4.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.fontEmbedData4.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.fontEmbedData4.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseKinsokuContainer(LEInputStream& in, KinsokuContainer& _s) {
+void MSO::parseKinsokuContainer(LEInputStream &in, KinsokuContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -6421,16 +6739,17 @@ void MSO::parseKinsokuContainer(LEInputStream& in, KinsokuContainer& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FC8");
     }
     parseKinsokuAtom(in, _s.kinsokuAtom);
-    if (_s.kinsokuAtom.level==2) {
+    if (_s.kinsokuAtom.level == 2) {
         _s.kinsokuLeadingAtom = QSharedPointer<KinsokuLeadingAtom>(new KinsokuLeadingAtom(&_s));
         parseKinsokuLeadingAtom(in, *_s.kinsokuLeadingAtom.data());
     }
-    if (_s.kinsokuAtom.level==2) {
+    if (_s.kinsokuAtom.level == 2) {
         _s.kinsokuFollowingAtom = QSharedPointer<KinsokuFollowingAtom>(new KinsokuFollowingAtom(&_s));
         parseKinsokuFollowingAtom(in, *_s.kinsokuFollowingAtom.data());
     }
 }
-void MSO::parseTextSIException(LEInputStream& in, TextSIException& _s) {
+void MSO::parseTextSIException(LEInputStream &in, TextSIException &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.spell = in.readbit();
     _s.lang = in.readbit();
@@ -6488,12 +6807,14 @@ void MSO::parseTextSIException(LEInputStream& in, TextSIException& _s) {
         parseSmartTags(in, *_s.smartTags.data());
     }
 }
-void MSO::parseTextMasterStyleLevel(LEInputStream& in, TextMasterStyleLevel& _s) {
+void MSO::parseTextMasterStyleLevel(LEInputStream &in, TextMasterStyleLevel &_s)
+{
     _s.streamOffset = in.getPosition();
     parseTextPFException(in, _s.pf);
     parseTextCFException(in, _s.cf);
 }
-void MSO::parseDocumentAtom(LEInputStream& in, DocumentAtom& _s) {
+void MSO::parseDocumentAtom(LEInputStream &in, DocumentAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 1)) {
@@ -6511,25 +6832,30 @@ void MSO::parseDocumentAtom(LEInputStream& in, DocumentAtom& _s) {
     parsePointStruct(in, _s.slideSize);
     parsePointStruct(in, _s.notesSize);
     parseRatioStruct(in, _s.serverZoom);
-    if (!(_s.serverZoom.numer*_s.serverZoom.denom > 0)) {
+    if (!(_s.serverZoom.numer * _s.serverZoom.denom > 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.serverZoom.numer*_s.serverZoom.denom > 0");
     }
     _s.notesMasterPersistIdRef = in.readuint32();
     _s.handoutMasterPersistIdRef = in.readuint32();
     _s.firstSlideNumber = in.readuint16();
-    if (!(((quint16)_s.firstSlideNumber)<10000)) {
+    if (!(((quint16)_s.firstSlideNumber) < 10000)) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.firstSlideNumber)<10000");
     }
     _s.slideSizeType = in.readuint16();
-    if (!(((quint16)_s.slideSizeType) == 0 || ((quint16)_s.slideSizeType) == 1 || ((quint16)_s.slideSizeType) == 2 || ((quint16)_s.slideSizeType) == 3 || ((quint16)_s.slideSizeType) == 4 || ((quint16)_s.slideSizeType) == 5 || ((quint16)_s.slideSizeType) == 6)) {
-        throw IncorrectValueException(in.getPosition(), "((quint16)_s.slideSizeType) == 0 || ((quint16)_s.slideSizeType) == 1 || ((quint16)_s.slideSizeType) == 2 || ((quint16)_s.slideSizeType) == 3 || ((quint16)_s.slideSizeType) == 4 || ((quint16)_s.slideSizeType) == 5 || ((quint16)_s.slideSizeType) == 6");
+    if (!(((quint16)_s.slideSizeType) == 0 || ((quint16)_s.slideSizeType) == 1 || ((quint16)_s.slideSizeType) == 2 || ((quint16)_s.slideSizeType) == 3
+          || ((quint16)_s.slideSizeType) == 4 || ((quint16)_s.slideSizeType) == 5 || ((quint16)_s.slideSizeType) == 6)) {
+        throw IncorrectValueException(
+            in.getPosition(),
+            "((quint16)_s.slideSizeType) == 0 || ((quint16)_s.slideSizeType) == 1 || ((quint16)_s.slideSizeType) == 2 || ((quint16)_s.slideSizeType) == 3 || "
+            "((quint16)_s.slideSizeType) == 4 || ((quint16)_s.slideSizeType) == 5 || ((quint16)_s.slideSizeType) == 6");
     }
     _s.fSaveWithFonts = in.readuint8();
     _s.fOmitTitlePlace = in.readuint8();
     _s.fRightToLeft = in.readuint8();
     _s.fShowComments = in.readuint8();
 }
-void MSO::parseSlideTime10Atom(LEInputStream& in, SlideTime10Atom& _s) {
+void MSO::parseSlideTime10Atom(LEInputStream &in, SlideTime10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -6546,7 +6872,8 @@ void MSO::parseSlideTime10Atom(LEInputStream& in, SlideTime10Atom& _s) {
     }
     parseFILETIME(in, _s.fileTime);
 }
-void MSO::parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTagExtension& _s) {
+void MSO::parsePP12SlideBinaryTagExtension(LEInputStream &in, PP12SlideBinaryTagExtension &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -6565,7 +6892,7 @@ void MSO::parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTag
     }
     _c = 8;
     _s.tagName.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.tagName[_i] = in.readuint16();
     }
     parseRecordHeader(in, _s.rhData);
@@ -6583,7 +6910,8 @@ void MSO::parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTag
         parseRoundTripHeaderFooterDefaults12Atom(in, *_s.roundTripHeaderFooterDefaultsAtom.data());
     }
 }
-void MSO::parseProgStringTagContainer(LEInputStream& in, ProgStringTagContainer& _s) {
+void MSO::parseProgStringTagContainer(LEInputStream &in, ProgStringTagContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -6602,8 +6930,8 @@ void MSO::parseProgStringTagContainer(LEInputStream& in, ProgStringTagContainer&
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 1)&&(_optionCheck.recType == 0xFBA);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 1) && (_optionCheck.recType == 0xFBA);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6612,16 +6940,17 @@ void MSO::parseProgStringTagContainer(LEInputStream& in, ProgStringTagContainer&
         try {
             _s.tagValueAtom = QSharedPointer<TagValueAtom>(new TagValueAtom(&_s));
             parseTagValueAtom(in, *_s.tagValueAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.tagValueAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.tagValueAtom.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseNotesAtom(LEInputStream& in, NotesAtom& _s) {
+void MSO::parseNotesAtom(LEInputStream &in, NotesAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 1)) {
@@ -6640,7 +6969,8 @@ void MSO::parseNotesAtom(LEInputStream& in, NotesAtom& _s) {
     parseSlideFlags(in, _s.slideFlags);
     _s.unused = in.readuint16();
 }
-void MSO::parseExObjListContainer(LEInputStream& in, ExObjListContainer& _s) {
+void MSO::parseExObjListContainer(LEInputStream &in, ExObjListContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -6654,12 +6984,12 @@ void MSO::parseExObjListContainer(LEInputStream& in, ExObjListContainer& _s) {
     if (!(_s.rh.recType == 0x0409)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0409");
     }
-    if (!(_s.rh.recLen>=12)) {
+    if (!(_s.rh.recLen >= 12)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen>=12");
     }
     parseExObjListAtom(in, _s.exObjListAtom);
     qint64 _startPos = in.getPosition();
-    int _totalSize = qMin(_s.rh.recLen-12, quint32(in.getSize() - _startPos));
+    int _totalSize = qMin(_s.rh.recLen - 12, quint32(in.getSize() - _startPos));
     _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgChildRec.append(ExObjListSubContainer(&_s));
@@ -6667,7 +6997,8 @@ void MSO::parseExObjListContainer(LEInputStream& in, ExObjListContainer& _s) {
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
-void MSO::parseExControlContainer(LEInputStream& in, ExControlContainer& _s) {
+void MSO::parseExControlContainer(LEInputStream &in, ExControlContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -6687,8 +7018,9 @@ void MSO::parseExControlContainer(LEInputStream& in, ExControlContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x1)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen%2 == 0 );
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x1) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6697,10 +7029,10 @@ void MSO::parseExControlContainer(LEInputStream& in, ExControlContainer& _s) {
         try {
             _s.menuNameAtom = QSharedPointer<MenuNameAtom>(new MenuNameAtom(&_s));
             parseMenuNameAtom(in, *_s.menuNameAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.menuNameAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.menuNameAtom.clear();
             in.rewind(_m);
         }
@@ -6709,8 +7041,9 @@ void MSO::parseExControlContainer(LEInputStream& in, ExControlContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x2)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen%2 == 0 );
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x2) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6719,10 +7052,10 @@ void MSO::parseExControlContainer(LEInputStream& in, ExControlContainer& _s) {
         try {
             _s.progIdAtom = QSharedPointer<ProgIDAtom>(new ProgIDAtom(&_s));
             parseProgIDAtom(in, *_s.progIdAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.progIdAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.progIdAtom.clear();
             in.rewind(_m);
         }
@@ -6731,8 +7064,9 @@ void MSO::parseExControlContainer(LEInputStream& in, ExControlContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x3)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen%2 == 0 );
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x3) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6741,10 +7075,10 @@ void MSO::parseExControlContainer(LEInputStream& in, ExControlContainer& _s) {
         try {
             _s.clipboardNameAtom = QSharedPointer<ClipboardNameAtom>(new ClipboardNameAtom(&_s));
             parseClipboardNameAtom(in, *_s.clipboardNameAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.clipboardNameAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.clipboardNameAtom.clear();
             in.rewind(_m);
         }
@@ -6753,8 +7087,8 @@ void MSO::parseExControlContainer(LEInputStream& in, ExControlContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x0FC1)&&(_optionCheck.recLen>16);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x0FC1) && (_optionCheck.recLen > 16);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6763,16 +7097,17 @@ void MSO::parseExControlContainer(LEInputStream& in, ExControlContainer& _s) {
         try {
             _s.metafile = QSharedPointer<MetafileBlob>(new MetafileBlob(&_s));
             parseMetafileBlob(in, *_s.metafile.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.metafile.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.metafile.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseExHyperlinkContainer(LEInputStream& in, ExHyperlinkContainer& _s) {
+void MSO::parseExHyperlinkContainer(LEInputStream &in, ExHyperlinkContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -6791,8 +7126,8 @@ void MSO::parseExHyperlinkContainer(LEInputStream& in, ExHyperlinkContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6801,10 +7136,10 @@ void MSO::parseExHyperlinkContainer(LEInputStream& in, ExHyperlinkContainer& _s)
         try {
             _s.friendlyNameAtom = QSharedPointer<FriendlyNameAtom>(new FriendlyNameAtom(&_s));
             parseFriendlyNameAtom(in, *_s.friendlyNameAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.friendlyNameAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.friendlyNameAtom.clear();
             in.rewind(_m);
         }
@@ -6813,8 +7148,8 @@ void MSO::parseExHyperlinkContainer(LEInputStream& in, ExHyperlinkContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 1)&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 1) && (_optionCheck.recType == 0xFBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6823,10 +7158,10 @@ void MSO::parseExHyperlinkContainer(LEInputStream& in, ExHyperlinkContainer& _s)
         try {
             _s.targetAtom = QSharedPointer<TargetAtom>(new TargetAtom(&_s));
             parseTargetAtom(in, *_s.targetAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.targetAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.targetAtom.clear();
             in.rewind(_m);
         }
@@ -6835,8 +7170,8 @@ void MSO::parseExHyperlinkContainer(LEInputStream& in, ExHyperlinkContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 3)&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 3) && (_optionCheck.recType == 0xFBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6845,16 +7180,17 @@ void MSO::parseExHyperlinkContainer(LEInputStream& in, ExHyperlinkContainer& _s)
         try {
             _s.locationAtom = QSharedPointer<LocationAtom>(new LocationAtom(&_s));
             parseLocationAtom(in, *_s.locationAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.locationAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.locationAtom.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseExOleLinkContainer(LEInputStream& in, ExOleLinkContainer& _s) {
+void MSO::parseExOleLinkContainer(LEInputStream &in, ExOleLinkContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -6874,8 +7210,9 @@ void MSO::parseExOleLinkContainer(LEInputStream& in, ExOleLinkContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x1)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen%2 == 0 );
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x1) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6884,10 +7221,10 @@ void MSO::parseExOleLinkContainer(LEInputStream& in, ExOleLinkContainer& _s) {
         try {
             _s.menuNameAtom = QSharedPointer<MenuNameAtom>(new MenuNameAtom(&_s));
             parseMenuNameAtom(in, *_s.menuNameAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.menuNameAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.menuNameAtom.clear();
             in.rewind(_m);
         }
@@ -6896,8 +7233,9 @@ void MSO::parseExOleLinkContainer(LEInputStream& in, ExOleLinkContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x2)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen%2 == 0 );
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x2) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6906,10 +7244,10 @@ void MSO::parseExOleLinkContainer(LEInputStream& in, ExOleLinkContainer& _s) {
         try {
             _s.progIdAtom = QSharedPointer<ProgIDAtom>(new ProgIDAtom(&_s));
             parseProgIDAtom(in, *_s.progIdAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.progIdAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.progIdAtom.clear();
             in.rewind(_m);
         }
@@ -6918,8 +7256,9 @@ void MSO::parseExOleLinkContainer(LEInputStream& in, ExOleLinkContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x3)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen%2 == 0 );
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x3) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6928,10 +7267,10 @@ void MSO::parseExOleLinkContainer(LEInputStream& in, ExOleLinkContainer& _s) {
         try {
             _s.clipboardNameAtom = QSharedPointer<ClipboardNameAtom>(new ClipboardNameAtom(&_s));
             parseClipboardNameAtom(in, *_s.clipboardNameAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.clipboardNameAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.clipboardNameAtom.clear();
             in.rewind(_m);
         }
@@ -6940,8 +7279,8 @@ void MSO::parseExOleLinkContainer(LEInputStream& in, ExOleLinkContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x0FC1)&&(_optionCheck.recLen>16);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x0FC1) && (_optionCheck.recLen > 16);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6950,16 +7289,17 @@ void MSO::parseExOleLinkContainer(LEInputStream& in, ExOleLinkContainer& _s) {
         try {
             _s.metafile = QSharedPointer<MetafileBlob>(new MetafileBlob(&_s));
             parseMetafileBlob(in, *_s.metafile.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.metafile.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.metafile.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseExOleEmbedContainer(LEInputStream& in, ExOleEmbedContainer& _s) {
+void MSO::parseExOleEmbedContainer(LEInputStream &in, ExOleEmbedContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -6979,8 +7319,9 @@ void MSO::parseExOleEmbedContainer(LEInputStream& in, ExOleEmbedContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x1)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen%2 == 0 );
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x1) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -6989,10 +7330,10 @@ void MSO::parseExOleEmbedContainer(LEInputStream& in, ExOleEmbedContainer& _s) {
         try {
             _s.menuNameAtom = QSharedPointer<MenuNameAtom>(new MenuNameAtom(&_s));
             parseMenuNameAtom(in, *_s.menuNameAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.menuNameAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.menuNameAtom.clear();
             in.rewind(_m);
         }
@@ -7001,8 +7342,9 @@ void MSO::parseExOleEmbedContainer(LEInputStream& in, ExOleEmbedContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x2)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen%2 == 0 );
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x2) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -7011,10 +7353,10 @@ void MSO::parseExOleEmbedContainer(LEInputStream& in, ExOleEmbedContainer& _s) {
         try {
             _s.progIdAtom = QSharedPointer<ProgIDAtom>(new ProgIDAtom(&_s));
             parseProgIDAtom(in, *_s.progIdAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.progIdAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.progIdAtom.clear();
             in.rewind(_m);
         }
@@ -7023,8 +7365,9 @@ void MSO::parseExOleEmbedContainer(LEInputStream& in, ExOleEmbedContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x3)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen%2 == 0 );
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x3) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -7033,10 +7376,10 @@ void MSO::parseExOleEmbedContainer(LEInputStream& in, ExOleEmbedContainer& _s) {
         try {
             _s.clipboardNameAtom = QSharedPointer<ClipboardNameAtom>(new ClipboardNameAtom(&_s));
             parseClipboardNameAtom(in, *_s.clipboardNameAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.clipboardNameAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.clipboardNameAtom.clear();
             in.rewind(_m);
         }
@@ -7045,8 +7388,8 @@ void MSO::parseExOleEmbedContainer(LEInputStream& in, ExOleEmbedContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x0FC1)&&(_optionCheck.recLen>16);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x0FC1) && (_optionCheck.recLen > 16);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -7055,16 +7398,17 @@ void MSO::parseExOleEmbedContainer(LEInputStream& in, ExOleEmbedContainer& _s) {
         try {
             _s.metafile = QSharedPointer<MetafileBlob>(new MetafileBlob(&_s));
             parseMetafileBlob(in, *_s.metafile.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.metafile.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.metafile.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseOfficeArtFDGGBlock(LEInputStream& in, OfficeArtFDGGBlock& _s) {
+void MSO::parseOfficeArtFDGGBlock(LEInputStream &in, OfficeArtFDGGBlock &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -7079,13 +7423,14 @@ void MSO::parseOfficeArtFDGGBlock(LEInputStream& in, OfficeArtFDGGBlock& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0F006");
     }
     parseOfficeArtFDGG(in, _s.head);
-    _c = _s.head.cidcl-1;
-    for (int _i=0; _i<_c; ++_i) {
+    _c = _s.head.cidcl - 1;
+    for (int _i = 0; _i < _c; ++_i) {
         _s.Rgidcl.append(OfficeArtIDCL(&_s));
         parseOfficeArtIDCL(in, _s.Rgidcl[_i]);
     }
 }
-void MSO::parseOfficeArtSolverContainerFileBlock(LEInputStream& in, OfficeArtSolverContainerFileBlock& _s) {
+void MSO::parseOfficeArtSolverContainerFileBlock(LEInputStream &in, OfficeArtSolverContainerFileBlock &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -7093,20 +7438,21 @@ void MSO::parseOfficeArtSolverContainerFileBlock(LEInputStream& in, OfficeArtSol
     parseOfficeArtRecordHeader(in, _choice);
     in.rewind(_m);
     qint64 startPos = in.getPosition();
-    if (startPos == in.getPosition() && ((_choice.recVer == 1)&&(_choice.recType == 0xF012)&&(_choice.recLen == 0x18))) {
+    if (startPos == in.getPosition() && ((_choice.recVer == 1) && (_choice.recType == 0xF012) && (_choice.recLen == 0x18))) {
         _s.anon = OfficeArtSolverContainerFileBlock::choice3062460075(new OfficeArtFConnectorRule(&_s));
-        parseOfficeArtFConnectorRule(in, *(OfficeArtFConnectorRule*)_s.anon.data());
+        parseOfficeArtFConnectorRule(in, *(OfficeArtFConnectorRule *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recVer == 0)&&(_choice.recType == 0xF014)&&(_choice.recLen == 8))) {
+    if (startPos == in.getPosition() && ((_choice.recVer == 0) && (_choice.recType == 0xF014) && (_choice.recLen == 8))) {
         _s.anon = OfficeArtSolverContainerFileBlock::choice3062460075(new OfficeArtFArcRule(&_s));
-        parseOfficeArtFArcRule(in, *(OfficeArtFArcRule*)_s.anon.data());
+        parseOfficeArtFArcRule(in, *(OfficeArtFArcRule *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = OfficeArtSolverContainerFileBlock::choice3062460075(new OfficeArtFCalloutRule(&_s));
-        parseOfficeArtFCalloutRule(in, *(OfficeArtFCalloutRule*)_s.anon.data());
+        parseOfficeArtFCalloutRule(in, *(OfficeArtFCalloutRule *)_s.anon.data());
     }
 }
-void MSO::parseRotation(LEInputStream& in, Rotation& _s) {
+void MSO::parseRotation(LEInputStream &in, Rotation &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0004)) {
@@ -7120,7 +7466,8 @@ void MSO::parseRotation(LEInputStream& in, Rotation& _s) {
     }
     parseFixedPoint(in, _s.rotation);
 }
-void MSO::parseProtectionBooleanProperties(LEInputStream& in, ProtectionBooleanProperties& _s) {
+void MSO::parseProtectionBooleanProperties(LEInputStream &in, ProtectionBooleanProperties &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x007F)) {
@@ -7155,7 +7502,8 @@ void MSO::parseProtectionBooleanProperties(LEInputStream& in, ProtectionBooleanP
     _s.fUsefLockAgainstUngrouping = in.readbit();
     _s.unused2 = in.readuint6();
 }
-void MSO::parseITxid(LEInputStream& in, ITxid& _s) {
+void MSO::parseITxid(LEInputStream &in, ITxid &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0080)) {
@@ -7169,7 +7517,8 @@ void MSO::parseITxid(LEInputStream& in, ITxid& _s) {
     }
     _s.iTxid = in.readint32();
 }
-void MSO::parseDxTextLeft(LEInputStream& in, DxTextLeft& _s) {
+void MSO::parseDxTextLeft(LEInputStream &in, DxTextLeft &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0081)) {
@@ -7183,7 +7532,8 @@ void MSO::parseDxTextLeft(LEInputStream& in, DxTextLeft& _s) {
     }
     _s.dxTextLeft = in.readint32();
 }
-void MSO::parseDyTextTop(LEInputStream& in, DyTextTop& _s) {
+void MSO::parseDyTextTop(LEInputStream &in, DyTextTop &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0082)) {
@@ -7197,7 +7547,8 @@ void MSO::parseDyTextTop(LEInputStream& in, DyTextTop& _s) {
     }
     _s.dyTextTop = in.readint32();
 }
-void MSO::parseDxTextRight(LEInputStream& in, DxTextRight& _s) {
+void MSO::parseDxTextRight(LEInputStream &in, DxTextRight &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0083)) {
@@ -7211,7 +7562,8 @@ void MSO::parseDxTextRight(LEInputStream& in, DxTextRight& _s) {
     }
     _s.dxTextRight = in.readint32();
 }
-void MSO::parseDyTextBottom(LEInputStream& in, DyTextBottom& _s) {
+void MSO::parseDyTextBottom(LEInputStream &in, DyTextBottom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0084)) {
@@ -7225,7 +7577,8 @@ void MSO::parseDyTextBottom(LEInputStream& in, DyTextBottom& _s) {
     }
     _s.dyTextBottom = in.readint32();
 }
-void MSO::parseWrapText(LEInputStream& in, WrapText& _s) {
+void MSO::parseWrapText(LEInputStream &in, WrapText &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0085)) {
@@ -7238,11 +7591,12 @@ void MSO::parseWrapText(LEInputStream& in, WrapText& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.wrapText = in.readuint32();
-    if (!(((quint32)_s.wrapText)<5)) {
+    if (!(((quint32)_s.wrapText) < 5)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.wrapText)<5");
     }
 }
-void MSO::parseAnchorText(LEInputStream& in, AnchorText& _s) {
+void MSO::parseAnchorText(LEInputStream &in, AnchorText &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0087)) {
@@ -7255,11 +7609,12 @@ void MSO::parseAnchorText(LEInputStream& in, AnchorText& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.anchorText = in.readuint32();
-    if (!(((quint32)_s.anchorText)<=9)) {
+    if (!(((quint32)_s.anchorText) <= 9)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.anchorText)<=9");
     }
 }
-void MSO::parseTxflTextFlow(LEInputStream& in, TxflTextFlow& _s) {
+void MSO::parseTxflTextFlow(LEInputStream &in, TxflTextFlow &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0088)) {
@@ -7272,11 +7627,12 @@ void MSO::parseTxflTextFlow(LEInputStream& in, TxflTextFlow& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.txflTextFlow = in.readuint32();
-    if (!(((quint32)_s.txflTextFlow)<=5)) {
+    if (!(((quint32)_s.txflTextFlow) <= 5)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.txflTextFlow)<=5");
     }
 }
-void MSO::parseCdirFont(LEInputStream& in, CdirFont& _s) {
+void MSO::parseCdirFont(LEInputStream &in, CdirFont &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0089)) {
@@ -7289,11 +7645,12 @@ void MSO::parseCdirFont(LEInputStream& in, CdirFont& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.cdirFont = in.readuint32();
-    if (!(((quint32)_s.cdirFont)<=3)) {
+    if (!(((quint32)_s.cdirFont) <= 3)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.cdirFont)<=3");
     }
 }
-void MSO::parseHspNext(LEInputStream& in, HspNext& _s) {
+void MSO::parseHspNext(LEInputStream &in, HspNext &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x008A)) {
@@ -7307,7 +7664,8 @@ void MSO::parseHspNext(LEInputStream& in, HspNext& _s) {
     }
     _s.hspNext = in.readuint32();
 }
-void MSO::parseTxdir(LEInputStream& in, Txdir& _s) {
+void MSO::parseTxdir(LEInputStream &in, Txdir &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x008B)) {
@@ -7320,11 +7678,12 @@ void MSO::parseTxdir(LEInputStream& in, Txdir& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.txdir = in.readuint32();
-    if (!(((quint32)_s.txdir)<=2)) {
+    if (!(((quint32)_s.txdir) <= 2)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.txdir)<=2");
     }
 }
-void MSO::parseTextBooleanProperties(LEInputStream& in, TextBooleanProperties& _s) {
+void MSO::parseTextBooleanProperties(LEInputStream &in, TextBooleanProperties &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x00BF)) {
@@ -7351,7 +7710,8 @@ void MSO::parseTextBooleanProperties(LEInputStream& in, TextBooleanProperties& _
     _s.unused6a = in.readuint3();
     _s.unused6b = in.readuint8();
 }
-void MSO::parseCropFromTop(LEInputStream& in, CropFromTop& _s) {
+void MSO::parseCropFromTop(LEInputStream &in, CropFromTop &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0100)) {
@@ -7365,7 +7725,8 @@ void MSO::parseCropFromTop(LEInputStream& in, CropFromTop& _s) {
     }
     parseFixedPoint(in, _s.cropFromTop);
 }
-void MSO::parseCropFromBottom(LEInputStream& in, CropFromBottom& _s) {
+void MSO::parseCropFromBottom(LEInputStream &in, CropFromBottom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0101)) {
@@ -7379,7 +7740,8 @@ void MSO::parseCropFromBottom(LEInputStream& in, CropFromBottom& _s) {
     }
     parseFixedPoint(in, _s.cropFromBottom);
 }
-void MSO::parseCropFromLeft(LEInputStream& in, CropFromLeft& _s) {
+void MSO::parseCropFromLeft(LEInputStream &in, CropFromLeft &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0102)) {
@@ -7393,7 +7755,8 @@ void MSO::parseCropFromLeft(LEInputStream& in, CropFromLeft& _s) {
     }
     parseFixedPoint(in, _s.cropFromLeft);
 }
-void MSO::parseCropFromRight(LEInputStream& in, CropFromRight& _s) {
+void MSO::parseCropFromRight(LEInputStream &in, CropFromRight &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0103)) {
@@ -7407,7 +7770,8 @@ void MSO::parseCropFromRight(LEInputStream& in, CropFromRight& _s) {
     }
     parseFixedPoint(in, _s.cropFromRight);
 }
-void MSO::parsePib(LEInputStream& in, Pib& _s) {
+void MSO::parsePib(LEInputStream &in, Pib &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0104)) {
@@ -7415,7 +7779,8 @@ void MSO::parsePib(LEInputStream& in, Pib& _s) {
     }
     _s.pib = in.readuint32();
 }
-void MSO::parsePibName(LEInputStream& in, PibName& _s) {
+void MSO::parsePibName(LEInputStream &in, PibName &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0105)) {
@@ -7423,7 +7788,8 @@ void MSO::parsePibName(LEInputStream& in, PibName& _s) {
     }
     _s.pibName = in.readuint32();
 }
-void MSO::parsePibFlags(LEInputStream& in, PibFlags& _s) {
+void MSO::parsePibFlags(LEInputStream &in, PibFlags &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0106)) {
@@ -7437,7 +7803,8 @@ void MSO::parsePibFlags(LEInputStream& in, PibFlags& _s) {
     }
     _s.pibFlags = in.readuint32();
 }
-void MSO::parsePictureTransparent(LEInputStream& in, PictureTransparent& _s) {
+void MSO::parsePictureTransparent(LEInputStream &in, PictureTransparent &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0107)) {
@@ -7451,7 +7818,8 @@ void MSO::parsePictureTransparent(LEInputStream& in, PictureTransparent& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.pictureTransparent);
 }
-void MSO::parsePictureContrast(LEInputStream& in, PictureContrast& _s) {
+void MSO::parsePictureContrast(LEInputStream &in, PictureContrast &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0108)) {
@@ -7465,7 +7833,8 @@ void MSO::parsePictureContrast(LEInputStream& in, PictureContrast& _s) {
     }
     _s.pictureContrast = in.readint32();
 }
-void MSO::parsePictureBrightness(LEInputStream& in, PictureBrightness& _s) {
+void MSO::parsePictureBrightness(LEInputStream &in, PictureBrightness &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0109)) {
@@ -7479,7 +7848,8 @@ void MSO::parsePictureBrightness(LEInputStream& in, PictureBrightness& _s) {
     }
     _s.pictureBrightness = in.readint32();
 }
-void MSO::parseBlipBooleanProperties(LEInputStream& in, BlipBooleanProperties& _s) {
+void MSO::parseBlipBooleanProperties(LEInputStream &in, BlipBooleanProperties &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x013F)) {
@@ -7510,7 +7880,8 @@ void MSO::parseBlipBooleanProperties(LEInputStream& in, BlipBooleanProperties& _
     _s.unused2a = in.readbit();
     _s.unused2b = in.readuint8();
 }
-void MSO::parseGeoLeft(LEInputStream& in, GeoLeft& _s) {
+void MSO::parseGeoLeft(LEInputStream &in, GeoLeft &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0140)) {
@@ -7524,7 +7895,8 @@ void MSO::parseGeoLeft(LEInputStream& in, GeoLeft& _s) {
     }
     _s.geoLeft = in.readint32();
 }
-void MSO::parseGeoTop(LEInputStream& in, GeoTop& _s) {
+void MSO::parseGeoTop(LEInputStream &in, GeoTop &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0141)) {
@@ -7538,7 +7910,8 @@ void MSO::parseGeoTop(LEInputStream& in, GeoTop& _s) {
     }
     _s.geoTop = in.readint32();
 }
-void MSO::parseGeoRight(LEInputStream& in, GeoRight& _s) {
+void MSO::parseGeoRight(LEInputStream &in, GeoRight &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0142)) {
@@ -7552,7 +7925,8 @@ void MSO::parseGeoRight(LEInputStream& in, GeoRight& _s) {
     }
     _s.geoRight = in.readint32();
 }
-void MSO::parseGeoBottom(LEInputStream& in, GeoBottom& _s) {
+void MSO::parseGeoBottom(LEInputStream &in, GeoBottom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0143)) {
@@ -7566,7 +7940,8 @@ void MSO::parseGeoBottom(LEInputStream& in, GeoBottom& _s) {
     }
     _s.geoBottom = in.readint32();
 }
-void MSO::parseShapePath(LEInputStream& in, ShapePath& _s) {
+void MSO::parseShapePath(LEInputStream &in, ShapePath &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0144)) {
@@ -7579,11 +7954,12 @@ void MSO::parseShapePath(LEInputStream& in, ShapePath& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.shapePath = in.readuint32();
-    if (!(((quint32)_s.shapePath)<=4)) {
+    if (!(((quint32)_s.shapePath) <= 4)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.shapePath)<=4");
     }
 }
-void MSO::parsePVertices(LEInputStream& in, PVertices& _s) {
+void MSO::parsePVertices(LEInputStream &in, PVertices &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0145)) {
@@ -7591,7 +7967,8 @@ void MSO::parsePVertices(LEInputStream& in, PVertices& _s) {
     }
     _s.pVertices = in.readuint32();
 }
-void MSO::parsePSegmentInfo(LEInputStream& in, PSegmentInfo& _s) {
+void MSO::parsePSegmentInfo(LEInputStream &in, PSegmentInfo &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0146)) {
@@ -7599,7 +7976,8 @@ void MSO::parsePSegmentInfo(LEInputStream& in, PSegmentInfo& _s) {
     }
     _s.pSegmentInfo = in.readuint32();
 }
-void MSO::parseAdjustValue(LEInputStream& in, AdjustValue& _s) {
+void MSO::parseAdjustValue(LEInputStream &in, AdjustValue &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0147)) {
@@ -7613,7 +7991,8 @@ void MSO::parseAdjustValue(LEInputStream& in, AdjustValue& _s) {
     }
     _s.adjustvalue = in.readint32();
 }
-void MSO::parseAdjust2Value(LEInputStream& in, Adjust2Value& _s) {
+void MSO::parseAdjust2Value(LEInputStream &in, Adjust2Value &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0148)) {
@@ -7627,7 +8006,8 @@ void MSO::parseAdjust2Value(LEInputStream& in, Adjust2Value& _s) {
     }
     _s.adjust2value = in.readint32();
 }
-void MSO::parseAdjust3Value(LEInputStream& in, Adjust3Value& _s) {
+void MSO::parseAdjust3Value(LEInputStream &in, Adjust3Value &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0149)) {
@@ -7641,7 +8021,8 @@ void MSO::parseAdjust3Value(LEInputStream& in, Adjust3Value& _s) {
     }
     _s.adjust3value = in.readint32();
 }
-void MSO::parseAdjust4Value(LEInputStream& in, Adjust4Value& _s) {
+void MSO::parseAdjust4Value(LEInputStream &in, Adjust4Value &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x014A)) {
@@ -7655,7 +8036,8 @@ void MSO::parseAdjust4Value(LEInputStream& in, Adjust4Value& _s) {
     }
     _s.adjust4value = in.readint32();
 }
-void MSO::parseAdjust5Value(LEInputStream& in, Adjust5Value& _s) {
+void MSO::parseAdjust5Value(LEInputStream &in, Adjust5Value &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x014B)) {
@@ -7669,7 +8051,8 @@ void MSO::parseAdjust5Value(LEInputStream& in, Adjust5Value& _s) {
     }
     _s.adjust5value = in.readint32();
 }
-void MSO::parseAdjust6Value(LEInputStream& in, Adjust6Value& _s) {
+void MSO::parseAdjust6Value(LEInputStream &in, Adjust6Value &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x014C)) {
@@ -7683,7 +8066,8 @@ void MSO::parseAdjust6Value(LEInputStream& in, Adjust6Value& _s) {
     }
     _s.adjust6value = in.readint32();
 }
-void MSO::parseAdjust7Value(LEInputStream& in, Adjust7Value& _s) {
+void MSO::parseAdjust7Value(LEInputStream &in, Adjust7Value &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x014D)) {
@@ -7697,7 +8081,8 @@ void MSO::parseAdjust7Value(LEInputStream& in, Adjust7Value& _s) {
     }
     _s.adjust7value = in.readint32();
 }
-void MSO::parseAdjust8Value(LEInputStream& in, Adjust8Value& _s) {
+void MSO::parseAdjust8Value(LEInputStream &in, Adjust8Value &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x014E)) {
@@ -7711,7 +8096,8 @@ void MSO::parseAdjust8Value(LEInputStream& in, Adjust8Value& _s) {
     }
     _s.adjust8value = in.readint32();
 }
-void MSO::parseGeometryBooleanProperties(LEInputStream& in, GeometryBooleanProperties& _s) {
+void MSO::parseGeometryBooleanProperties(LEInputStream &in, GeometryBooleanProperties &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x017F)) {
@@ -7742,7 +8128,8 @@ void MSO::parseGeometryBooleanProperties(LEInputStream& in, GeometryBooleanPrope
     _s.unused3b = in.readbit();
     _s.unused4 = in.readuint8();
 }
-void MSO::parseFillType(LEInputStream& in, FillType& _s) {
+void MSO::parseFillType(LEInputStream &in, FillType &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0180)) {
@@ -7755,11 +8142,12 @@ void MSO::parseFillType(LEInputStream& in, FillType& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.fillType = in.readuint32();
-    if (!(((quint32)_s.fillType)<=9)) {
+    if (!(((quint32)_s.fillType) <= 9)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.fillType)<=9");
     }
 }
-void MSO::parseFillColor(LEInputStream& in, FillColor& _s) {
+void MSO::parseFillColor(LEInputStream &in, FillColor &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0181)) {
@@ -7773,7 +8161,8 @@ void MSO::parseFillColor(LEInputStream& in, FillColor& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.fillColor);
 }
-void MSO::parseFillOpacity(LEInputStream& in, FillOpacity& _s) {
+void MSO::parseFillOpacity(LEInputStream &in, FillOpacity &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0182)) {
@@ -7787,7 +8176,8 @@ void MSO::parseFillOpacity(LEInputStream& in, FillOpacity& _s) {
     }
     parseFixedPoint(in, _s.fillOpacity);
 }
-void MSO::parseFillBackColor(LEInputStream& in, FillBackColor& _s) {
+void MSO::parseFillBackColor(LEInputStream &in, FillBackColor &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0183)) {
@@ -7801,7 +8191,8 @@ void MSO::parseFillBackColor(LEInputStream& in, FillBackColor& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.fillBackColor);
 }
-void MSO::parseFillBackOpacity(LEInputStream& in, FillBackOpacity& _s) {
+void MSO::parseFillBackOpacity(LEInputStream &in, FillBackOpacity &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0184)) {
@@ -7815,7 +8206,8 @@ void MSO::parseFillBackOpacity(LEInputStream& in, FillBackOpacity& _s) {
     }
     parseFixedPoint(in, _s.fillBackOpacity);
 }
-void MSO::parseFillCrMod(LEInputStream& in, FillCrMod& _s) {
+void MSO::parseFillCrMod(LEInputStream &in, FillCrMod &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0185)) {
@@ -7829,7 +8221,8 @@ void MSO::parseFillCrMod(LEInputStream& in, FillCrMod& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.fillCrMod);
 }
-void MSO::parseFillBlip(LEInputStream& in, FillBlip& _s) {
+void MSO::parseFillBlip(LEInputStream &in, FillBlip &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0186)) {
@@ -7837,7 +8230,8 @@ void MSO::parseFillBlip(LEInputStream& in, FillBlip& _s) {
     }
     _s.fillBlip = in.readuint32();
 }
-void MSO::parseFillBlipName(LEInputStream& in, FillBlipName& _s) {
+void MSO::parseFillBlipName(LEInputStream &in, FillBlipName &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0187)) {
@@ -7845,7 +8239,8 @@ void MSO::parseFillBlipName(LEInputStream& in, FillBlipName& _s) {
     }
     _s.fillBlipName = in.readuint32();
 }
-void MSO::parseFillBlipFlags(LEInputStream& in, FillBlipFlags& _s) {
+void MSO::parseFillBlipFlags(LEInputStream &in, FillBlipFlags &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0188)) {
@@ -7859,7 +8254,8 @@ void MSO::parseFillBlipFlags(LEInputStream& in, FillBlipFlags& _s) {
     }
     _s.fillBlipFlags = in.readuint32();
 }
-void MSO::parseFillWidth(LEInputStream& in, FillWidth& _s) {
+void MSO::parseFillWidth(LEInputStream &in, FillWidth &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0189)) {
@@ -7873,7 +8269,8 @@ void MSO::parseFillWidth(LEInputStream& in, FillWidth& _s) {
     }
     _s.fillWidth = in.readint32();
 }
-void MSO::parseFillHeight(LEInputStream& in, FillHeight& _s) {
+void MSO::parseFillHeight(LEInputStream &in, FillHeight &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x018A)) {
@@ -7887,7 +8284,8 @@ void MSO::parseFillHeight(LEInputStream& in, FillHeight& _s) {
     }
     _s.fillHeight = in.readint32();
 }
-void MSO::parseFillAngle(LEInputStream& in, FillAngle& _s) {
+void MSO::parseFillAngle(LEInputStream &in, FillAngle &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x018B)) {
@@ -7901,7 +8299,8 @@ void MSO::parseFillAngle(LEInputStream& in, FillAngle& _s) {
     }
     parseFixedPoint(in, _s.fillAngle);
 }
-void MSO::parseFillFocus(LEInputStream& in, FillFocus& _s) {
+void MSO::parseFillFocus(LEInputStream &in, FillFocus &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x018C)) {
@@ -7915,7 +8314,8 @@ void MSO::parseFillFocus(LEInputStream& in, FillFocus& _s) {
     }
     _s.fillFocus = in.readint32();
 }
-void MSO::parseFillToLeft(LEInputStream& in, FillToLeft& _s) {
+void MSO::parseFillToLeft(LEInputStream &in, FillToLeft &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x018D)) {
@@ -7929,7 +8329,8 @@ void MSO::parseFillToLeft(LEInputStream& in, FillToLeft& _s) {
     }
     parseFixedPoint(in, _s.fillToLeft);
 }
-void MSO::parseFillToTop(LEInputStream& in, FillToTop& _s) {
+void MSO::parseFillToTop(LEInputStream &in, FillToTop &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x018E)) {
@@ -7943,7 +8344,8 @@ void MSO::parseFillToTop(LEInputStream& in, FillToTop& _s) {
     }
     parseFixedPoint(in, _s.fillToTop);
 }
-void MSO::parseFillToRight(LEInputStream& in, FillToRight& _s) {
+void MSO::parseFillToRight(LEInputStream &in, FillToRight &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x018F)) {
@@ -7957,7 +8359,8 @@ void MSO::parseFillToRight(LEInputStream& in, FillToRight& _s) {
     }
     parseFixedPoint(in, _s.fillToRight);
 }
-void MSO::parseFillToBottom(LEInputStream& in, FillToBottom& _s) {
+void MSO::parseFillToBottom(LEInputStream &in, FillToBottom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0190)) {
@@ -7971,7 +8374,8 @@ void MSO::parseFillToBottom(LEInputStream& in, FillToBottom& _s) {
     }
     parseFixedPoint(in, _s.fillToBottom);
 }
-void MSO::parseFillRectLeft(LEInputStream& in, FillRectLeft& _s) {
+void MSO::parseFillRectLeft(LEInputStream &in, FillRectLeft &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0191)) {
@@ -7985,7 +8389,8 @@ void MSO::parseFillRectLeft(LEInputStream& in, FillRectLeft& _s) {
     }
     _s.fillRectLeft = in.readint32();
 }
-void MSO::parseFillRectTop(LEInputStream& in, FillRectTop& _s) {
+void MSO::parseFillRectTop(LEInputStream &in, FillRectTop &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0192)) {
@@ -7999,7 +8404,8 @@ void MSO::parseFillRectTop(LEInputStream& in, FillRectTop& _s) {
     }
     _s.fillRectTop = in.readint32();
 }
-void MSO::parseFillRectRight(LEInputStream& in, FillRectRight& _s) {
+void MSO::parseFillRectRight(LEInputStream &in, FillRectRight &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0193)) {
@@ -8013,7 +8419,8 @@ void MSO::parseFillRectRight(LEInputStream& in, FillRectRight& _s) {
     }
     _s.fillRectRight = in.readint32();
 }
-void MSO::parseFillRectBottom(LEInputStream& in, FillRectBottom& _s) {
+void MSO::parseFillRectBottom(LEInputStream &in, FillRectBottom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0194)) {
@@ -8027,7 +8434,8 @@ void MSO::parseFillRectBottom(LEInputStream& in, FillRectBottom& _s) {
     }
     _s.fillRectBottom = in.readint32();
 }
-void MSO::parseFillDztype(LEInputStream& in, FillDztype& _s) {
+void MSO::parseFillDztype(LEInputStream &in, FillDztype &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0195)) {
@@ -8041,7 +8449,8 @@ void MSO::parseFillDztype(LEInputStream& in, FillDztype& _s) {
     }
     _s.fillDztype = in.readint32();
 }
-void MSO::parseFillShadePreset(LEInputStream& in, FillShadePreset& _s) {
+void MSO::parseFillShadePreset(LEInputStream &in, FillShadePreset &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0196)) {
@@ -8055,7 +8464,8 @@ void MSO::parseFillShadePreset(LEInputStream& in, FillShadePreset& _s) {
     }
     _s.fillShadePreset = in.readint32();
 }
-void MSO::parseFillShadeColors(LEInputStream& in, FillShadeColors& _s) {
+void MSO::parseFillShadeColors(LEInputStream &in, FillShadeColors &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0197)) {
@@ -8063,7 +8473,8 @@ void MSO::parseFillShadeColors(LEInputStream& in, FillShadeColors& _s) {
     }
     _s.fillShadeColors = in.readuint32();
 }
-void MSO::parseFillOriginX(LEInputStream& in, FillOriginX& _s) {
+void MSO::parseFillOriginX(LEInputStream &in, FillOriginX &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0198)) {
@@ -8077,7 +8488,8 @@ void MSO::parseFillOriginX(LEInputStream& in, FillOriginX& _s) {
     }
     parseFixedPoint(in, _s.fillOriginX);
 }
-void MSO::parseFillOriginY(LEInputStream& in, FillOriginY& _s) {
+void MSO::parseFillOriginY(LEInputStream &in, FillOriginY &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0199)) {
@@ -8091,7 +8503,8 @@ void MSO::parseFillOriginY(LEInputStream& in, FillOriginY& _s) {
     }
     parseFixedPoint(in, _s.fillOriginY);
 }
-void MSO::parseFillShapeOriginX(LEInputStream& in, FillShapeOriginX& _s) {
+void MSO::parseFillShapeOriginX(LEInputStream &in, FillShapeOriginX &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x019A)) {
@@ -8105,7 +8518,8 @@ void MSO::parseFillShapeOriginX(LEInputStream& in, FillShapeOriginX& _s) {
     }
     parseFixedPoint(in, _s.fillShapeOriginX);
 }
-void MSO::parseFillShapeOriginY(LEInputStream& in, FillShapeOriginY& _s) {
+void MSO::parseFillShapeOriginY(LEInputStream &in, FillShapeOriginY &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x019B)) {
@@ -8119,7 +8533,8 @@ void MSO::parseFillShapeOriginY(LEInputStream& in, FillShapeOriginY& _s) {
     }
     parseFixedPoint(in, _s.fillShapeOriginY);
 }
-void MSO::parseFillColorExt(LEInputStream& in, FillColorExt& _s) {
+void MSO::parseFillColorExt(LEInputStream &in, FillColorExt &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x019E)) {
@@ -8133,7 +8548,8 @@ void MSO::parseFillColorExt(LEInputStream& in, FillColorExt& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.fillColorExt);
 }
-void MSO::parseFillBackColorExt(LEInputStream& in, FillBackColorExt& _s) {
+void MSO::parseFillBackColorExt(LEInputStream &in, FillBackColorExt &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01A2)) {
@@ -8147,7 +8563,8 @@ void MSO::parseFillBackColorExt(LEInputStream& in, FillBackColorExt& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.fillBackColorExt);
 }
-void MSO::parseFillStyleBooleanProperties(LEInputStream& in, FillStyleBooleanProperties& _s) {
+void MSO::parseFillStyleBooleanProperties(LEInputStream &in, FillStyleBooleanProperties &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01BF)) {
@@ -8178,7 +8595,8 @@ void MSO::parseFillStyleBooleanProperties(LEInputStream& in, FillStyleBooleanPro
     _s.unused2a = in.readbit();
     _s.unused2b = in.readuint8();
 }
-void MSO::parseLineColor(LEInputStream& in, LineColor& _s) {
+void MSO::parseLineColor(LEInputStream &in, LineColor &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01C0)) {
@@ -8192,7 +8610,8 @@ void MSO::parseLineColor(LEInputStream& in, LineColor& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.lineColor);
 }
-void MSO::parseLineOpacity(LEInputStream& in, LineOpacity& _s) {
+void MSO::parseLineOpacity(LEInputStream &in, LineOpacity &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01C1)) {
@@ -8205,14 +8624,15 @@ void MSO::parseLineOpacity(LEInputStream& in, LineOpacity& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.lineOpacity = in.readint32();
-    if (!(((qint32)_s.lineOpacity)>=0)) {
+    if (!(((qint32)_s.lineOpacity) >= 0)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.lineOpacity)>=0");
     }
-    if (!(((qint32)_s.lineOpacity)<=65536)) {
+    if (!(((qint32)_s.lineOpacity) <= 65536)) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.lineOpacity)<=65536");
     }
 }
-void MSO::parseLineBackColor(LEInputStream& in, LineBackColor& _s) {
+void MSO::parseLineBackColor(LEInputStream &in, LineBackColor &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01C2)) {
@@ -8220,7 +8640,8 @@ void MSO::parseLineBackColor(LEInputStream& in, LineBackColor& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.lineBackColor);
 }
-void MSO::parseLineFillBlip(LEInputStream& in, LineFillBlip& _s) {
+void MSO::parseLineFillBlip(LEInputStream &in, LineFillBlip &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01C5)) {
@@ -8228,7 +8649,8 @@ void MSO::parseLineFillBlip(LEInputStream& in, LineFillBlip& _s) {
     }
     _s.lineFillBlip = in.readuint32();
 }
-void MSO::parseLineWidth(LEInputStream& in, LineWidth& _s) {
+void MSO::parseLineWidth(LEInputStream &in, LineWidth &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01CB)) {
@@ -8242,7 +8664,8 @@ void MSO::parseLineWidth(LEInputStream& in, LineWidth& _s) {
     }
     _s.lineWidth = in.readuint32();
 }
-void MSO::parseLineStyle(LEInputStream& in, LineStyle& _s) {
+void MSO::parseLineStyle(LEInputStream &in, LineStyle &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01CD)) {
@@ -8256,7 +8679,8 @@ void MSO::parseLineStyle(LEInputStream& in, LineStyle& _s) {
     }
     _s.lineStyle = in.readuint32();
 }
-void MSO::parseLineDashing(LEInputStream& in, LineDashing& _s) {
+void MSO::parseLineDashing(LEInputStream &in, LineDashing &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01CE)) {
@@ -8270,7 +8694,8 @@ void MSO::parseLineDashing(LEInputStream& in, LineDashing& _s) {
     }
     _s.lineDashing = in.readuint32();
 }
-void MSO::parseLineStartArrowhead(LEInputStream& in, LineStartArrowhead& _s) {
+void MSO::parseLineStartArrowhead(LEInputStream &in, LineStartArrowhead &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01D0)) {
@@ -8283,11 +8708,12 @@ void MSO::parseLineStartArrowhead(LEInputStream& in, LineStartArrowhead& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.lineStartArrowhead = in.readuint32();
-    if (!(((quint32)_s.lineStartArrowhead)<=8)) {
+    if (!(((quint32)_s.lineStartArrowhead) <= 8)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.lineStartArrowhead)<=8");
     }
 }
-void MSO::parseLineEndArrowhead(LEInputStream& in, LineEndArrowhead& _s) {
+void MSO::parseLineEndArrowhead(LEInputStream &in, LineEndArrowhead &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01D1)) {
@@ -8300,11 +8726,12 @@ void MSO::parseLineEndArrowhead(LEInputStream& in, LineEndArrowhead& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.lineEndArrowhead = in.readuint32();
-    if (!(((quint32)_s.lineEndArrowhead)<=8)) {
+    if (!(((quint32)_s.lineEndArrowhead) <= 8)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.lineEndArrowhead)<=8");
     }
 }
-void MSO::parseLineStartArrowWidth(LEInputStream& in, LineStartArrowWidth& _s) {
+void MSO::parseLineStartArrowWidth(LEInputStream &in, LineStartArrowWidth &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01D2)) {
@@ -8318,7 +8745,8 @@ void MSO::parseLineStartArrowWidth(LEInputStream& in, LineStartArrowWidth& _s) {
     }
     _s.lineStartArrowWidth = in.readuint32();
 }
-void MSO::parseLineStartArrowLength(LEInputStream& in, LineStartArrowLength& _s) {
+void MSO::parseLineStartArrowLength(LEInputStream &in, LineStartArrowLength &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01D3)) {
@@ -8332,7 +8760,8 @@ void MSO::parseLineStartArrowLength(LEInputStream& in, LineStartArrowLength& _s)
     }
     _s.lineStartArrowLength = in.readuint32();
 }
-void MSO::parseLineEndArrowWidth(LEInputStream& in, LineEndArrowWidth& _s) {
+void MSO::parseLineEndArrowWidth(LEInputStream &in, LineEndArrowWidth &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01D4)) {
@@ -8346,7 +8775,8 @@ void MSO::parseLineEndArrowWidth(LEInputStream& in, LineEndArrowWidth& _s) {
     }
     _s.lineEndArrowWidth = in.readuint32();
 }
-void MSO::parseLineEndArrowLength(LEInputStream& in, LineEndArrowLength& _s) {
+void MSO::parseLineEndArrowLength(LEInputStream &in, LineEndArrowLength &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01D5)) {
@@ -8360,7 +8790,8 @@ void MSO::parseLineEndArrowLength(LEInputStream& in, LineEndArrowLength& _s) {
     }
     _s.lineEndArrowLength = in.readuint32();
 }
-void MSO::parseLineJoinStyle(LEInputStream& in, LineJoinStyle& _s) {
+void MSO::parseLineJoinStyle(LEInputStream &in, LineJoinStyle &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01D6)) {
@@ -8373,11 +8804,12 @@ void MSO::parseLineJoinStyle(LEInputStream& in, LineJoinStyle& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.lineJoinStyle = in.readuint32();
-    if (!(((quint32)_s.lineJoinStyle)<=2)) {
+    if (!(((quint32)_s.lineJoinStyle) <= 2)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.lineJoinStyle)<=2");
     }
 }
-void MSO::parseLineEndCapStyle(LEInputStream& in, LineEndCapStyle& _s) {
+void MSO::parseLineEndCapStyle(LEInputStream &in, LineEndCapStyle &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01D7)) {
@@ -8390,11 +8822,12 @@ void MSO::parseLineEndCapStyle(LEInputStream& in, LineEndCapStyle& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.lineEndCapStyle = in.readuint32();
-    if (!(((quint32)_s.lineEndCapStyle)<=3)) {
+    if (!(((quint32)_s.lineEndCapStyle) <= 3)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.lineEndCapStyle)<=3");
     }
 }
-void MSO::parseLineStyleBooleanProperties(LEInputStream& in, LineStyleBooleanProperties& _s) {
+void MSO::parseLineStyleBooleanProperties(LEInputStream &in, LineStyleBooleanProperties &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x01FF)) {
@@ -8429,7 +8862,8 @@ void MSO::parseLineStyleBooleanProperties(LEInputStream& in, LineStyleBooleanPro
     _s.fUsefLineOpaqueBackColor = in.readbit();
     _s.unused4 = in.readuint6();
 }
-void MSO::parseShadowType(LEInputStream& in, ShadowType& _s) {
+void MSO::parseShadowType(LEInputStream &in, ShadowType &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0200)) {
@@ -8443,7 +8877,8 @@ void MSO::parseShadowType(LEInputStream& in, ShadowType& _s) {
     }
     _s.shadowType = in.readuint32();
 }
-void MSO::parseShadowColor(LEInputStream& in, ShadowColor& _s) {
+void MSO::parseShadowColor(LEInputStream &in, ShadowColor &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0201)) {
@@ -8457,7 +8892,8 @@ void MSO::parseShadowColor(LEInputStream& in, ShadowColor& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.shadowColor);
 }
-void MSO::parseShadowOpacity(LEInputStream& in, ShadowOpacity& _s) {
+void MSO::parseShadowOpacity(LEInputStream &in, ShadowOpacity &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0204)) {
@@ -8471,7 +8907,8 @@ void MSO::parseShadowOpacity(LEInputStream& in, ShadowOpacity& _s) {
     }
     parseFixedPoint(in, _s.shadowOpacity);
 }
-void MSO::parseShadowOffsetX(LEInputStream& in, ShadowOffsetX& _s) {
+void MSO::parseShadowOffsetX(LEInputStream &in, ShadowOffsetX &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0205)) {
@@ -8485,7 +8922,8 @@ void MSO::parseShadowOffsetX(LEInputStream& in, ShadowOffsetX& _s) {
     }
     _s.shadowOffsetX = in.readint32();
 }
-void MSO::parseShadowOffsetY(LEInputStream& in, ShadowOffsetY& _s) {
+void MSO::parseShadowOffsetY(LEInputStream &in, ShadowOffsetY &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0206)) {
@@ -8499,7 +8937,8 @@ void MSO::parseShadowOffsetY(LEInputStream& in, ShadowOffsetY& _s) {
     }
     _s.shadowOffsetY = in.readint32();
 }
-void MSO::parseShadowStyleBooleanProperties(LEInputStream& in, ShadowStyleBooleanProperties& _s) {
+void MSO::parseShadowStyleBooleanProperties(LEInputStream &in, ShadowStyleBooleanProperties &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x023F)) {
@@ -8518,7 +8957,8 @@ void MSO::parseShadowStyleBooleanProperties(LEInputStream& in, ShadowStyleBoolea
     _s.fUsefShadow = in.readbit();
     _s.unused2 = in.readuint14();
 }
-void MSO::parseHspMaster(LEInputStream& in, HspMaster& _s) {
+void MSO::parseHspMaster(LEInputStream &in, HspMaster &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0301)) {
@@ -8532,7 +8972,8 @@ void MSO::parseHspMaster(LEInputStream& in, HspMaster& _s) {
     }
     _s.hspMaster = in.readuint32();
 }
-void MSO::parseCxstyle(LEInputStream& in, Cxstyle& _s) {
+void MSO::parseCxstyle(LEInputStream &in, Cxstyle &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0303)) {
@@ -8545,11 +8986,12 @@ void MSO::parseCxstyle(LEInputStream& in, Cxstyle& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.cxstyle = in.readuint32();
-    if (!(((quint32)_s.cxstyle)<=4)) {
+    if (!(((quint32)_s.cxstyle) <= 4)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.cxstyle)<=4");
     }
 }
-void MSO::parseBWMode(LEInputStream& in, BWMode& _s) {
+void MSO::parseBWMode(LEInputStream &in, BWMode &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0304)) {
@@ -8562,11 +9004,12 @@ void MSO::parseBWMode(LEInputStream& in, BWMode& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.bWMode = in.readuint32();
-    if (!(((quint32)_s.bWMode)<=10)) {
+    if (!(((quint32)_s.bWMode) <= 10)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.bWMode)<=10");
     }
 }
-void MSO::parseShapeBooleanProperties(LEInputStream& in, ShapeBooleanProperties& _s) {
+void MSO::parseShapeBooleanProperties(LEInputStream &in, ShapeBooleanProperties &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x033F)) {
@@ -8605,7 +9048,8 @@ void MSO::parseShapeBooleanProperties(LEInputStream& in, ShapeBooleanProperties&
     _s.unused6 = in.readbit();
     _s.unused7 = in.readuint4();
 }
-void MSO::parseDxyCalloutGap(LEInputStream& in, DxyCalloutGap& _s) {
+void MSO::parseDxyCalloutGap(LEInputStream &in, DxyCalloutGap &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0341)) {
@@ -8619,7 +9063,8 @@ void MSO::parseDxyCalloutGap(LEInputStream& in, DxyCalloutGap& _s) {
     }
     _s.dxyCalloutGap = in.readuint32();
 }
-void MSO::parseSpcoa(LEInputStream& in, Spcoa& _s) {
+void MSO::parseSpcoa(LEInputStream &in, Spcoa &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0342)) {
@@ -8633,7 +9078,8 @@ void MSO::parseSpcoa(LEInputStream& in, Spcoa& _s) {
     }
     _s.spcoa = in.readuint32();
 }
-void MSO::parseSpcod(LEInputStream& in, Spcod& _s) {
+void MSO::parseSpcod(LEInputStream &in, Spcod &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0343)) {
@@ -8647,7 +9093,8 @@ void MSO::parseSpcod(LEInputStream& in, Spcod& _s) {
     }
     _s.spcod = in.readuint32();
 }
-void MSO::parseDxyCalloutDropSpecified(LEInputStream& in, DxyCalloutDropSpecified& _s) {
+void MSO::parseDxyCalloutDropSpecified(LEInputStream &in, DxyCalloutDropSpecified &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0344)) {
@@ -8661,7 +9108,8 @@ void MSO::parseDxyCalloutDropSpecified(LEInputStream& in, DxyCalloutDropSpecifie
     }
     _s.dxyCalloutDropSpecified = in.readuint32();
 }
-void MSO::parseDxyCalloutLengthSpecified(LEInputStream& in, DxyCalloutLengthSpecified& _s) {
+void MSO::parseDxyCalloutLengthSpecified(LEInputStream &in, DxyCalloutLengthSpecified &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0345)) {
@@ -8675,7 +9123,8 @@ void MSO::parseDxyCalloutLengthSpecified(LEInputStream& in, DxyCalloutLengthSpec
     }
     _s.dxyCalloutLengthSpecified = in.readuint32();
 }
-void MSO::parseCalloutBooleanProperties(LEInputStream& in, CalloutBooleanProperties& _s) {
+void MSO::parseCalloutBooleanProperties(LEInputStream &in, CalloutBooleanProperties &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x037F)) {
@@ -8706,7 +9155,8 @@ void MSO::parseCalloutBooleanProperties(LEInputStream& in, CalloutBooleanPropert
     _s.unused2a = in.readbit();
     _s.unused2b = in.readuint8();
 }
-void MSO::parsePWrapPolygonVertices(LEInputStream& in, PWrapPolygonVertices& _s) {
+void MSO::parsePWrapPolygonVertices(LEInputStream &in, PWrapPolygonVertices &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0383)) {
@@ -8714,7 +9164,8 @@ void MSO::parsePWrapPolygonVertices(LEInputStream& in, PWrapPolygonVertices& _s)
     }
     _s.pWrapPolygonVertices = in.readuint32();
 }
-void MSO::parseDxWrapDistLeft(LEInputStream& in, DxWrapDistLeft& _s) {
+void MSO::parseDxWrapDistLeft(LEInputStream &in, DxWrapDistLeft &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0384)) {
@@ -8728,7 +9179,8 @@ void MSO::parseDxWrapDistLeft(LEInputStream& in, DxWrapDistLeft& _s) {
     }
     _s.dxWrapDistLeft = in.readint32();
 }
-void MSO::parseDyWrapDistTop(LEInputStream& in, DyWrapDistTop& _s) {
+void MSO::parseDyWrapDistTop(LEInputStream &in, DyWrapDistTop &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0385)) {
@@ -8742,7 +9194,8 @@ void MSO::parseDyWrapDistTop(LEInputStream& in, DyWrapDistTop& _s) {
     }
     _s.dyWrapDistTop = in.readint32();
 }
-void MSO::parseDxWrapDistRight(LEInputStream& in, DxWrapDistRight& _s) {
+void MSO::parseDxWrapDistRight(LEInputStream &in, DxWrapDistRight &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0386)) {
@@ -8756,7 +9209,8 @@ void MSO::parseDxWrapDistRight(LEInputStream& in, DxWrapDistRight& _s) {
     }
     _s.dxWrapDistRight = in.readint32();
 }
-void MSO::parseDyWrapDistBottom(LEInputStream& in, DyWrapDistBottom& _s) {
+void MSO::parseDyWrapDistBottom(LEInputStream &in, DyWrapDistBottom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0387)) {
@@ -8770,7 +9224,8 @@ void MSO::parseDyWrapDistBottom(LEInputStream& in, DyWrapDistBottom& _s) {
     }
     _s.dyWrapDistBottom = in.readint32();
 }
-void MSO::parseLidRegroup(LEInputStream& in, LidRegroup& _s) {
+void MSO::parseLidRegroup(LEInputStream &in, LidRegroup &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0388)) {
@@ -8784,7 +9239,8 @@ void MSO::parseLidRegroup(LEInputStream& in, LidRegroup& _s) {
     }
     _s.lidRegroup = in.readuint32();
 }
-void MSO::parsePosH(LEInputStream& in, PosH& _s) {
+void MSO::parsePosH(LEInputStream &in, PosH &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x038F)) {
@@ -8798,7 +9254,8 @@ void MSO::parsePosH(LEInputStream& in, PosH& _s) {
     }
     _s.posH = in.readuint32();
 }
-void MSO::parsePosRelH(LEInputStream& in, PosRelH& _s) {
+void MSO::parsePosRelH(LEInputStream &in, PosRelH &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0390)) {
@@ -8812,7 +9269,8 @@ void MSO::parsePosRelH(LEInputStream& in, PosRelH& _s) {
     }
     _s.posRelH = in.readuint32();
 }
-void MSO::parsePosV(LEInputStream& in, PosV& _s) {
+void MSO::parsePosV(LEInputStream &in, PosV &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0391)) {
@@ -8826,7 +9284,8 @@ void MSO::parsePosV(LEInputStream& in, PosV& _s) {
     }
     _s.posV = in.readuint32();
 }
-void MSO::parsePosRelV(LEInputStream& in, PosRelV& _s) {
+void MSO::parsePosRelV(LEInputStream &in, PosRelV &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0392)) {
@@ -8840,7 +9299,8 @@ void MSO::parsePosRelV(LEInputStream& in, PosRelV& _s) {
     }
     _s.posRelV = in.readuint32();
 }
-void MSO::parsePctHR(LEInputStream& in, PctHR& _s) {
+void MSO::parsePctHR(LEInputStream &in, PctHR &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0393)) {
@@ -8854,7 +9314,8 @@ void MSO::parsePctHR(LEInputStream& in, PctHR& _s) {
     }
     _s.pctHR = in.readuint32();
 }
-void MSO::parseAlignHR(LEInputStream& in, AlignHR& _s) {
+void MSO::parseAlignHR(LEInputStream &in, AlignHR &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0394)) {
@@ -8868,7 +9329,8 @@ void MSO::parseAlignHR(LEInputStream& in, AlignHR& _s) {
     }
     _s.alignHR = in.readuint32();
 }
-void MSO::parseDxHeightHR(LEInputStream& in, DxHeightHR& _s) {
+void MSO::parseDxHeightHR(LEInputStream &in, DxHeightHR &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0395)) {
@@ -8882,7 +9344,8 @@ void MSO::parseDxHeightHR(LEInputStream& in, DxHeightHR& _s) {
     }
     _s.dxHeightHR = in.readint32();
 }
-void MSO::parseDxWidthHR(LEInputStream& in, DxWidthHR& _s) {
+void MSO::parseDxWidthHR(LEInputStream &in, DxWidthHR &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0396)) {
@@ -8896,7 +9359,8 @@ void MSO::parseDxWidthHR(LEInputStream& in, DxWidthHR& _s) {
     }
     _s.dxWidthHR = in.readint32();
 }
-void MSO::parseBorderTopColor(LEInputStream& in, BorderTopColor& _s) {
+void MSO::parseBorderTopColor(LEInputStream &in, BorderTopColor &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x039b)) {
@@ -8910,7 +9374,8 @@ void MSO::parseBorderTopColor(LEInputStream& in, BorderTopColor& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.borderTopColor);
 }
-void MSO::parseBorderLeftColor(LEInputStream& in, BorderLeftColor& _s) {
+void MSO::parseBorderLeftColor(LEInputStream &in, BorderLeftColor &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x039c)) {
@@ -8924,7 +9389,8 @@ void MSO::parseBorderLeftColor(LEInputStream& in, BorderLeftColor& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.borderLeftColor);
 }
-void MSO::parseBorderBottomColor(LEInputStream& in, BorderBottomColor& _s) {
+void MSO::parseBorderBottomColor(LEInputStream &in, BorderBottomColor &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x039d)) {
@@ -8938,7 +9404,8 @@ void MSO::parseBorderBottomColor(LEInputStream& in, BorderBottomColor& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.borderBottomColor);
 }
-void MSO::parseBorderRightColor(LEInputStream& in, BorderRightColor& _s) {
+void MSO::parseBorderRightColor(LEInputStream &in, BorderRightColor &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x039e)) {
@@ -8952,7 +9419,8 @@ void MSO::parseBorderRightColor(LEInputStream& in, BorderRightColor& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.borderRightColor);
 }
-void MSO::parseGroupShapeBooleanProperties(LEInputStream& in, GroupShapeBooleanProperties& _s) {
+void MSO::parseGroupShapeBooleanProperties(LEInputStream &in, GroupShapeBooleanProperties &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x03bf)) {
@@ -8997,7 +9465,8 @@ void MSO::parseGroupShapeBooleanProperties(LEInputStream& in, GroupShapeBooleanP
     _s.fUsefIsBullet = in.readbit();
     _s.fUsefLayoutInCell = in.readbit();
 }
-void MSO::parseWzFillId(LEInputStream& in, WzFillId& _s) {
+void MSO::parseWzFillId(LEInputStream &in, WzFillId &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x0403)) {
@@ -9005,7 +9474,8 @@ void MSO::parseWzFillId(LEInputStream& in, WzFillId& _s) {
     }
     _s.wzFillId = in.readint32();
 }
-void MSO::parseDiagramBooleanProperties(LEInputStream& in, DiagramBooleanProperties& _s) {
+void MSO::parseDiagramBooleanProperties(LEInputStream &in, DiagramBooleanProperties &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     if (!(_s.opid.opid == 0x053F)) {
@@ -9034,7 +9504,8 @@ void MSO::parseDiagramBooleanProperties(LEInputStream& in, DiagramBooleanPropert
     _s.unused6a = in.readuint2();
     _s.unused6b = in.readuint8();
 }
-void MSO::parsePptOfficeArtClientAnchor(LEInputStream& in, PptOfficeArtClientAnchor& _s) {
+void MSO::parsePptOfficeArtClientAnchor(LEInputStream &in, PptOfficeArtClientAnchor &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -9049,16 +9520,17 @@ void MSO::parsePptOfficeArtClientAnchor(LEInputStream& in, PptOfficeArtClientAnc
     if (!(_s.rh.recLen == 0x8 || _s.rh.recLen == 0x10)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x8 || _s.rh.recLen == 0x10");
     }
-    if (_s.rh.recLen==0x8) {
+    if (_s.rh.recLen == 0x8) {
         _s.rect1 = QSharedPointer<SmallRectStruct>(new SmallRectStruct(&_s));
         parseSmallRectStruct(in, *_s.rect1.data());
     }
-    if (_s.rh.recLen==0x10) {
+    if (_s.rh.recLen == 0x10) {
         _s.rect2 = QSharedPointer<RectStruct>(new RectStruct(&_s));
         parseRectStruct(in, *_s.rect2.data());
     }
 }
-void MSO::parseAnimationInfoContainer(LEInputStream& in, AnimationInfoContainer& _s) {
+void MSO::parseAnimationInfoContainer(LEInputStream &in, AnimationInfoContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -9077,8 +9549,8 @@ void MSO::parseAnimationInfoContainer(LEInputStream& in, AnimationInfoContainer&
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x7E6);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x7E6);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9087,16 +9559,17 @@ void MSO::parseAnimationInfoContainer(LEInputStream& in, AnimationInfoContainer&
         try {
             _s.animationSound = QSharedPointer<SoundContainer>(new SoundContainer(&_s));
             parseSoundContainer(in, *_s.animationSound.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.animationSound.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.animationSound.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseMouseClickInteractiveInfoContainer(LEInputStream& in, MouseClickInteractiveInfoContainer& _s) {
+void MSO::parseMouseClickInteractiveInfoContainer(LEInputStream &in, MouseClickInteractiveInfoContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -9109,12 +9582,13 @@ void MSO::parseMouseClickInteractiveInfoContainer(LEInputStream& in, MouseClickI
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFF2");
     }
     parseInteractiveInfoAtom(in, _s.interactiveInfoAtom);
-    if (_s.rh.recLen>24) {
+    if (_s.rh.recLen > 24) {
         _s.macroNameAtom = QSharedPointer<MacroNameAtom>(new MacroNameAtom(&_s));
         parseMacroNameAtom(in, *_s.macroNameAtom.data());
     }
 }
-void MSO::parseMouseOverInteractiveInfoContainer(LEInputStream& in, MouseOverInteractiveInfoContainer& _s) {
+void MSO::parseMouseOverInteractiveInfoContainer(LEInputStream &in, MouseOverInteractiveInfoContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -9127,12 +9601,13 @@ void MSO::parseMouseOverInteractiveInfoContainer(LEInputStream& in, MouseOverInt
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFF2");
     }
     parseInteractiveInfoAtom(in, _s.interactiveInfoAtom);
-    if (_s.rh.recLen>24) {
+    if (_s.rh.recLen > 24) {
         _s.macroNameAtom = QSharedPointer<MacroNameAtom>(new MacroNameAtom(&_s));
         parseMacroNameAtom(in, *_s.macroNameAtom.data());
     }
 }
-void MSO::parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, ShapeClientRoundtripDataSubcontainerOrAtom& _s) {
+void MSO::parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream &in, ShapeClientRoundtripDataSubcontainerOrAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -9140,54 +9615,59 @@ void MSO::parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, Sha
     parseOfficeArtRecordHeader(in, _choice);
     in.rewind(_m);
     qint64 startPos = in.getPosition();
-    if (startPos == in.getPosition() && ((_choice.recVer == 0xF)&&(_choice.recInstance == 0 || _choice.recInstance == 1 || _choice.recInstance == 2)&&(_choice.recType == 0x1388))) {
+    if (startPos == in.getPosition()
+        && ((_choice.recVer == 0xF) && (_choice.recInstance == 0 || _choice.recInstance == 1 || _choice.recInstance == 2) && (_choice.recType == 0x1388))) {
         _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new ShapeProgsTagContainer(&_s));
-        parseShapeProgsTagContainer(in, *(ShapeProgsTagContainer*)_s.anon.data());
+        parseShapeProgsTagContainer(in, *(ShapeProgsTagContainer *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0xBDD)&&(_choice.recLen == 1))) {
+    if (startPos == in.getPosition() && ((_choice.recVer == 0) && (_choice.recInstance == 0) && (_choice.recType == 0xBDD) && (_choice.recLen == 1))) {
         _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripNewPlaceHolderId12Atom(&_s));
-        parseRoundTripNewPlaceHolderId12Atom(in, *(RoundTripNewPlaceHolderId12Atom*)_s.anon.data());
+        parseRoundTripNewPlaceHolderId12Atom(in, *(RoundTripNewPlaceHolderId12Atom *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0x41F)&&(_choice.recLen == 4))) {
+    if (startPos == in.getPosition() && ((_choice.recVer == 0) && (_choice.recInstance == 0) && (_choice.recType == 0x41F) && (_choice.recLen == 4))) {
         _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripShapeId12Atom(&_s));
-        parseRoundTripShapeId12Atom(in, *(RoundTripShapeId12Atom*)_s.anon.data());
+        parseRoundTripShapeId12Atom(in, *(RoundTripShapeId12Atom *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0x420)&&(_choice.recLen == 1))) {
+    if (startPos == in.getPosition() && ((_choice.recVer == 0) && (_choice.recInstance == 0) && (_choice.recType == 0x420) && (_choice.recLen == 1))) {
         _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripHFPlaceholder12Atom(&_s));
-        parseRoundTripHFPlaceholder12Atom(in, *(RoundTripHFPlaceholder12Atom*)_s.anon.data());
+        parseRoundTripHFPlaceholder12Atom(in, *(RoundTripHFPlaceholder12Atom *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripShapeCheckSumForCustomLayouts12Atom(&_s));
-        parseRoundTripShapeCheckSumForCustomLayouts12Atom(in, *(RoundTripShapeCheckSumForCustomLayouts12Atom*)_s.anon.data());
+        parseRoundTripShapeCheckSumForCustomLayouts12Atom(in, *(RoundTripShapeCheckSumForCustomLayouts12Atom *)_s.anon.data());
     }
 }
-void MSO::parseShapeProgBinaryTagSubContainerOrAtom(LEInputStream& in, ShapeProgBinaryTagSubContainerOrAtom& _s) {
+void MSO::parseShapeProgBinaryTagSubContainerOrAtom(LEInputStream &in, ShapeProgBinaryTagSubContainerOrAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
     try {
         _s.anon = ShapeProgBinaryTagSubContainerOrAtom::choice2754406405(new PP9ShapeBinaryTagExtension(&_s));
-        parsePP9ShapeBinaryTagExtension(in, *(PP9ShapeBinaryTagExtension*)_s.anon.data());
-    } catch (IncorrectValueException& _x) {
+        parsePP9ShapeBinaryTagExtension(in, *(PP9ShapeBinaryTagExtension *)_s.anon.data());
+    } catch (IncorrectValueException &_x) {
         _s.anon.clear();
         in.rewind(_m);
-    try {
-        _s.anon = ShapeProgBinaryTagSubContainerOrAtom::choice2754406405(new PP10ShapeBinaryTagExtension(&_s));
-        parsePP10ShapeBinaryTagExtension(in, *(PP10ShapeBinaryTagExtension*)_s.anon.data());
-    } catch (IncorrectValueException& _xx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = ShapeProgBinaryTagSubContainerOrAtom::choice2754406405(new PP11ShapeBinaryTagExtension(&_s));
-        parsePP11ShapeBinaryTagExtension(in, *(PP11ShapeBinaryTagExtension*)_s.anon.data());
-    } catch (IncorrectValueException& _xxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-        _s.anon = ShapeProgBinaryTagSubContainerOrAtom::choice2754406405(new UnknownBinaryTag(&_s));
-        parseUnknownBinaryTag(in, *(UnknownBinaryTag*)_s.anon.data());
-    }}}
+        try {
+            _s.anon = ShapeProgBinaryTagSubContainerOrAtom::choice2754406405(new PP10ShapeBinaryTagExtension(&_s));
+            parsePP10ShapeBinaryTagExtension(in, *(PP10ShapeBinaryTagExtension *)_s.anon.data());
+        } catch (IncorrectValueException &_xx) {
+            _s.anon.clear();
+            in.rewind(_m);
+            try {
+                _s.anon = ShapeProgBinaryTagSubContainerOrAtom::choice2754406405(new PP11ShapeBinaryTagExtension(&_s));
+                parsePP11ShapeBinaryTagExtension(in, *(PP11ShapeBinaryTagExtension *)_s.anon.data());
+            } catch (IncorrectValueException &_xxx) {
+                _s.anon.clear();
+                in.rewind(_m);
+                _s.anon = ShapeProgBinaryTagSubContainerOrAtom::choice2754406405(new UnknownBinaryTag(&_s));
+                parseUnknownBinaryTag(in, *(UnknownBinaryTag *)_s.anon.data());
+            }
+        }
+    }
 }
-void MSO::parseOfficeArtClientTextBox(LEInputStream& in, OfficeArtClientTextBox& _s) {
+void MSO::parseOfficeArtClientTextBox(LEInputStream &in, OfficeArtClientTextBox &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -9195,20 +9675,21 @@ void MSO::parseOfficeArtClientTextBox(LEInputStream& in, OfficeArtClientTextBox&
     parseOfficeArtRecordHeader(in, _choice);
     in.rewind(_m);
     qint64 startPos = in.getPosition();
-    if (startPos == in.getPosition() && ((_choice.recVer == 0)&&(_choice.recLen == 0))) {
+    if (startPos == in.getPosition() && ((_choice.recVer == 0) && (_choice.recLen == 0))) {
         _s.anon = OfficeArtClientTextBox::choice2757443956(new XlsOfficeArtClientTextBox(&_s));
-        parseXlsOfficeArtClientTextBox(in, *(XlsOfficeArtClientTextBox*)_s.anon.data());
+        parseXlsOfficeArtClientTextBox(in, *(XlsOfficeArtClientTextBox *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recVer == 0 || _choice.recVer == 0xF)&&(_choice.recLen == 0x4))) {
+    if (startPos == in.getPosition() && ((_choice.recVer == 0 || _choice.recVer == 0xF) && (_choice.recLen == 0x4))) {
         _s.anon = OfficeArtClientTextBox::choice2757443956(new DocOfficeArtClientTextBox(&_s));
-        parseDocOfficeArtClientTextBox(in, *(DocOfficeArtClientTextBox*)_s.anon.data());
+        parseDocOfficeArtClientTextBox(in, *(DocOfficeArtClientTextBox *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = OfficeArtClientTextBox::choice2757443956(new PptOfficeArtClientTextBox(&_s));
-        parsePptOfficeArtClientTextBox(in, *(PptOfficeArtClientTextBox*)_s.anon.data());
+        parsePptOfficeArtClientTextBox(in, *(PptOfficeArtClientTextBox *)_s.anon.data());
     }
 }
-void MSO::parseTextRulerAtom(LEInputStream& in, TextRulerAtom& _s) {
+void MSO::parseTextRulerAtom(LEInputStream &in, TextRulerAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -9222,12 +9703,14 @@ void MSO::parseTextRulerAtom(LEInputStream& in, TextRulerAtom& _s) {
     }
     parseTextRuler(in, _s.textRuler);
 }
-void MSO::parseOfficeArtFOPTE(LEInputStream& in, OfficeArtFOPTE& _s) {
+void MSO::parseOfficeArtFOPTE(LEInputStream &in, OfficeArtFOPTE &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
     _s.op = in.readint32();
 }
-void MSO::parseFib(LEInputStream& in, Fib& _s) {
+void MSO::parseFib(LEInputStream &in, Fib &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -9243,15 +9726,18 @@ void MSO::parseFib(LEInputStream& in, Fib& _s) {
     }
     parseFibRgLw97(in, _s.fibRgLw);
     _s.cbRgFcLcb = in.readuint16();
-    if (!(((quint16)_s.cbRgFcLcb) == 0x5D || ((quint16)_s.cbRgFcLcb) == 0x6C || ((quint16)_s.cbRgFcLcb) == 0x88 || ((quint16)_s.cbRgFcLcb) == 0xA4 || ((quint16)_s.cbRgFcLcb) == 0xB7)) {
-        throw IncorrectValueException(in.getPosition(), "((quint16)_s.cbRgFcLcb) == 0x5D || ((quint16)_s.cbRgFcLcb) == 0x6C || ((quint16)_s.cbRgFcLcb) == 0x88 || ((quint16)_s.cbRgFcLcb) == 0xA4 || ((quint16)_s.cbRgFcLcb) == 0xB7");
+    if (!(((quint16)_s.cbRgFcLcb) == 0x5D || ((quint16)_s.cbRgFcLcb) == 0x6C || ((quint16)_s.cbRgFcLcb) == 0x88 || ((quint16)_s.cbRgFcLcb) == 0xA4
+          || ((quint16)_s.cbRgFcLcb) == 0xB7)) {
+        throw IncorrectValueException(in.getPosition(),
+                                      "((quint16)_s.cbRgFcLcb) == 0x5D || ((quint16)_s.cbRgFcLcb) == 0x6C || ((quint16)_s.cbRgFcLcb) == 0x88 || "
+                                      "((quint16)_s.cbRgFcLcb) == 0xA4 || ((quint16)_s.cbRgFcLcb) == 0xB7");
     }
     parseFibRgFcLcb97(in, _s.fibRgFcLcbBlob);
-    if (_s.cbRgFcLcb>=0x6C) {
+    if (_s.cbRgFcLcb >= 0x6C) {
         _s.fibRgFcLcbBlob2 = QSharedPointer<FibRgFcLcb2000>(new FibRgFcLcb2000(&_s));
         parseFibRgFcLcb2000(in, *_s.fibRgFcLcbBlob2.data());
     }
-    if (_s.cbRgFcLcb>=0x88) {
+    if (_s.cbRgFcLcb >= 0x88) {
         _s.fibRgFcLcbBlob3 = QSharedPointer<FibRgFcLcb2002>(new FibRgFcLcb2002(&_s));
         parseFibRgFcLcb2002(in, *_s.fibRgFcLcbBlob3.data());
     }
@@ -9259,25 +9745,27 @@ void MSO::parseFib(LEInputStream& in, Fib& _s) {
     if (!(((quint16)_s.cswNew) == 0 || ((quint16)_s.cswNew) == 2 || ((quint16)_s.cswNew) == 5)) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.cswNew) == 0 || ((quint16)_s.cswNew) == 2 || ((quint16)_s.cswNew) == 5");
     }
-    _c = 2*_s.cswNew;
+    _c = 2 * _s.cswNew;
     _s.fibRgCswNew.resize(_c);
     in.readBytes(_s.fibRgCswNew);
-    _c = _s.fibRgLw.cbMac-156-8*_s.cbRgFcLcb-2*_s.cswNew;
+    _c = _s.fibRgLw.cbMac - 156 - 8 * _s.cbRgFcLcb - 2 * _s.cswNew;
     _s.trail.resize(_c);
     in.readBytes(_s.trail);
 }
-void MSO::parseSTSH(LEInputStream& in, STSH& _s) {
+void MSO::parseSTSH(LEInputStream &in, STSH &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     parseLPStshi(in, _s.lpstshi);
     _c = 20;
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.rglpstd.append(LPStd(&_s));
         parseLPStd(in, _s.rglpstd[_i]);
     }
 }
-void MSO::parseClx(LEInputStream& in, Clx& _s) {
+void MSO::parseClx(LEInputStream &in, Clx &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -9287,11 +9775,11 @@ void MSO::parseClx(LEInputStream& in, Clx& _s) {
         try {
             _s.RgPrc.append(Pcr(&_s));
             parsePcr(in, _s.RgPrc.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.RgPrc.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.RgPrc.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -9299,7 +9787,8 @@ void MSO::parseClx(LEInputStream& in, Clx& _s) {
     }
     parsePcdt(in, _s.pcdt);
 }
-void MSO::parsePcr(LEInputStream& in, Pcr& _s) {
+void MSO::parsePcr(LEInputStream &in, Pcr &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.clxt = in.readuint8();
     if (!(((quint8)_s.clxt) == 1)) {
@@ -9307,7 +9796,8 @@ void MSO::parsePcr(LEInputStream& in, Pcr& _s) {
     }
     parsePrcData(in, _s.prcData);
 }
-void MSO::parsePrm(LEInputStream& in, Prm& _s) {
+void MSO::parsePrm(LEInputStream &in, Prm &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -9316,14 +9806,15 @@ void MSO::parsePrm(LEInputStream& in, Prm& _s) {
     qint64 startPos = in.getPosition();
     if (startPos == in.getPosition() && ((_choice == false))) {
         _s.prm = Prm::choice1129181155(new Prm0(&_s));
-        parsePrm0(in, *(Prm0*)_s.prm.data());
+        parsePrm0(in, *(Prm0 *)_s.prm.data());
     }
     if (startPos == in.getPosition()) {
         _s.prm = Prm::choice1129181155(new Prm1(&_s));
-        parsePrm1(in, *(Prm1*)_s.prm.data());
+        parsePrm1(in, *(Prm1 *)_s.prm.data());
     }
 }
-void MSO::parseOfficeArtBlipEMF(LEInputStream& in, OfficeArtBlipEMF& _s) {
+void MSO::parseOfficeArtBlipEMF(LEInputStream &in, OfficeArtBlipEMF &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -9347,11 +9838,12 @@ void MSO::parseOfficeArtBlipEMF(LEInputStream& in, OfficeArtBlipEMF& _s) {
         in.readBytes(_s.rgbUid2);
     }
     parseOfficeArtMetafileHeader(in, _s.metafileHeader);
-    _c = _s.rh.recLen-((_s.rh.recInstance==0x3D4)?50:66);
+    _c = _s.rh.recLen - ((_s.rh.recInstance == 0x3D4) ? 50 : 66);
     _s.BLIPFileData.resize(_c);
     in.readBytes(_s.BLIPFileData);
 }
-void MSO::parseOfficeArtBlipWMF(LEInputStream& in, OfficeArtBlipWMF& _s) {
+void MSO::parseOfficeArtBlipWMF(LEInputStream &in, OfficeArtBlipWMF &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -9375,11 +9867,12 @@ void MSO::parseOfficeArtBlipWMF(LEInputStream& in, OfficeArtBlipWMF& _s) {
         in.readBytes(_s.rgbUid2);
     }
     parseOfficeArtMetafileHeader(in, _s.metafileHeader);
-    _c = _s.rh.recLen-((_s.rh.recInstance==0x216)?50:66);
+    _c = _s.rh.recLen - ((_s.rh.recInstance == 0x216) ? 50 : 66);
     _s.BLIPFileData.resize(_c);
     in.readBytes(_s.BLIPFileData);
 }
-void MSO::parseOfficeArtBlipPICT(LEInputStream& in, OfficeArtBlipPICT& _s) {
+void MSO::parseOfficeArtBlipPICT(LEInputStream &in, OfficeArtBlipPICT &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -9403,11 +9896,12 @@ void MSO::parseOfficeArtBlipPICT(LEInputStream& in, OfficeArtBlipPICT& _s) {
         in.readBytes(_s.rgbUid2);
     }
     parseOfficeArtMetafileHeader(in, _s.metafileHeader);
-    _c = _s.rh.recLen-((_s.rh.recInstance==0x542)?50:66);
+    _c = _s.rh.recLen - ((_s.rh.recInstance == 0x542) ? 50 : 66);
     _s.BLIPFileData.resize(_c);
     in.readBytes(_s.BLIPFileData);
 }
-void MSO::parseOfficeArtBlip(LEInputStream& in, OfficeArtBlip& _s) {
+void MSO::parseOfficeArtBlip(LEInputStream &in, OfficeArtBlip &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -9415,36 +9909,39 @@ void MSO::parseOfficeArtBlip(LEInputStream& in, OfficeArtBlip& _s) {
     parseOfficeArtRecordHeader(in, _choice);
     in.rewind(_m);
     qint64 startPos = in.getPosition();
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0x3D4 || _choice.recInstance == 0x3D5)&&(_choice.recType == 0xF01A))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0x3D4 || _choice.recInstance == 0x3D5) && (_choice.recType == 0xF01A))) {
         _s.anon = OfficeArtBlip::choice279968329(new OfficeArtBlipEMF(&_s));
-        parseOfficeArtBlipEMF(in, *(OfficeArtBlipEMF*)_s.anon.data());
+        parseOfficeArtBlipEMF(in, *(OfficeArtBlipEMF *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0x216 || _choice.recInstance == 0x217)&&(_choice.recType == 0xF01B))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0x216 || _choice.recInstance == 0x217) && (_choice.recType == 0xF01B))) {
         _s.anon = OfficeArtBlip::choice279968329(new OfficeArtBlipWMF(&_s));
-        parseOfficeArtBlipWMF(in, *(OfficeArtBlipWMF*)_s.anon.data());
+        parseOfficeArtBlipWMF(in, *(OfficeArtBlipWMF *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0x542 || _choice.recInstance == 0x543)&&(_choice.recType == 0xF01C))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0x542 || _choice.recInstance == 0x543) && (_choice.recType == 0xF01C))) {
         _s.anon = OfficeArtBlip::choice279968329(new OfficeArtBlipPICT(&_s));
-        parseOfficeArtBlipPICT(in, *(OfficeArtBlipPICT*)_s.anon.data());
+        parseOfficeArtBlipPICT(in, *(OfficeArtBlipPICT *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0x46A || _choice.recInstance == 0x46B || _choice.recInstance == 0x6E2 || _choice.recInstance == 0x6E3)&&(_choice.recType == 0xF01D))) {
+    if (startPos == in.getPosition()
+        && ((_choice.recInstance == 0x46A || _choice.recInstance == 0x46B || _choice.recInstance == 0x6E2 || _choice.recInstance == 0x6E3)
+            && (_choice.recType == 0xF01D))) {
         _s.anon = OfficeArtBlip::choice279968329(new OfficeArtBlipJPEG(&_s));
-        parseOfficeArtBlipJPEG(in, *(OfficeArtBlipJPEG*)_s.anon.data());
+        parseOfficeArtBlipJPEG(in, *(OfficeArtBlipJPEG *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0x6E0 || _choice.recInstance == 0x6E1)&&(_choice.recType == 0xF01E))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0x6E0 || _choice.recInstance == 0x6E1) && (_choice.recType == 0xF01E))) {
         _s.anon = OfficeArtBlip::choice279968329(new OfficeArtBlipPNG(&_s));
-        parseOfficeArtBlipPNG(in, *(OfficeArtBlipPNG*)_s.anon.data());
+        parseOfficeArtBlipPNG(in, *(OfficeArtBlipPNG *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0x7A8 || _choice.recInstance == 0x7A9)&&(_choice.recType == 0xF01F))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0x7A8 || _choice.recInstance == 0x7A9) && (_choice.recType == 0xF01F))) {
         _s.anon = OfficeArtBlip::choice279968329(new OfficeArtBlipDIB(&_s));
-        parseOfficeArtBlipDIB(in, *(OfficeArtBlipDIB*)_s.anon.data());
+        parseOfficeArtBlipDIB(in, *(OfficeArtBlipDIB *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = OfficeArtBlip::choice279968329(new OfficeArtBlipTIFF(&_s));
-        parseOfficeArtBlipTIFF(in, *(OfficeArtBlipTIFF*)_s.anon.data());
+        parseOfficeArtBlipTIFF(in, *(OfficeArtBlipTIFF *)_s.anon.data());
     }
 }
-void MSO::parseZoomViewInfoAtom(LEInputStream& in, ZoomViewInfoAtom& _s) {
+void MSO::parseZoomViewInfoAtom(LEInputStream &in, ZoomViewInfoAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -9473,7 +9970,8 @@ void MSO::parseZoomViewInfoAtom(LEInputStream& in, ZoomViewInfoAtom& _s) {
     _s.fDraftMode = in.readuint8();
     _s.unused2 = in.readuint16();
 }
-void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtension& _s) {
+void MSO::parsePP9DocBinaryTagExtension(LEInputStream &in, PP9DocBinaryTagExtension &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -9511,11 +10009,11 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
         try {
             _s.rgTextMasterStyle9.append(TextMasterStyle9Atom(&_s));
             parseTextMasterStyle9Atom(in, _s.rgTextMasterStyle9.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgTextMasterStyle9.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgTextMasterStyle9.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -9525,8 +10023,8 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x07F8);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x07F8);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9535,10 +10033,10 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
         try {
             _s.blipCollectionContainer = QSharedPointer<BlipCollection9Container>(new BlipCollection9Container(&_s));
             parseBlipCollection9Container(in, *_s.blipCollectionContainer.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.blipCollectionContainer.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.blipCollectionContainer.clear();
             in.rewind(_m);
         }
@@ -9547,8 +10045,8 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x00)&&(_optionCheck.recType == 0x0FB0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x00) && (_optionCheck.recType == 0x0FB0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9557,10 +10055,10 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
         try {
             _s.textDefaultsAtom = QSharedPointer<TextDefaults9Atom>(new TextDefaults9Atom(&_s));
             parseTextDefaults9Atom(in, *_s.textDefaultsAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.textDefaultsAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.textDefaultsAtom.clear();
             in.rewind(_m);
         }
@@ -9569,8 +10067,8 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0x2)&&(_optionCheck.recType == 0x0FC8);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0x2) && (_optionCheck.recType == 0x0FC8);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9579,10 +10077,10 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
         try {
             _s.kinsokuContainer = QSharedPointer<Kinsoku9Container>(new Kinsoku9Container(&_s));
             parseKinsoku9Container(in, *_s.kinsokuContainer.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.kinsokuContainer.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.kinsokuContainer.clear();
             in.rewind(_m);
         }
@@ -9593,11 +10091,11 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
         try {
             _s.rgExternalHyperlink9.append(ExHyperlink9Container(&_s));
             parseExHyperlink9Container(in, _s.rgExternalHyperlink9.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgExternalHyperlink9.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgExternalHyperlink9.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -9607,8 +10105,8 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x177A)&&(_optionCheck.recLen == 0x4);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x177A) && (_optionCheck.recLen == 0x4);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9617,10 +10115,10 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
         try {
             _s.presAdvisorFlagsAtom = QSharedPointer<PresAdvisorFlags9Atom>(new PresAdvisorFlags9Atom(&_s));
             parsePresAdvisorFlags9Atom(in, *_s.presAdvisorFlagsAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.presAdvisorFlagsAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.presAdvisorFlagsAtom.clear();
             in.rewind(_m);
         }
@@ -9629,8 +10127,8 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x1785);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x1785);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9639,10 +10137,10 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
         try {
             _s.envelopeDataAtom = QSharedPointer<EnvelopeData9Atom>(new EnvelopeData9Atom(&_s));
             parseEnvelopeData9Atom(in, *_s.envelopeDataAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.envelopeDataAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.envelopeDataAtom.clear();
             in.rewind(_m);
         }
@@ -9651,8 +10149,8 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x1784)&&(_optionCheck.recLen == 4);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x1784) && (_optionCheck.recLen == 4);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9661,10 +10159,10 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
         try {
             _s.envelopeFlagsAtom = QSharedPointer<EnvelopeFlags9Atom>(new EnvelopeFlags9Atom(&_s));
             parseEnvelopeFlags9Atom(in, *_s.envelopeFlagsAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.envelopeFlagsAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.envelopeFlagsAtom.clear();
             in.rewind(_m);
         }
@@ -9673,8 +10171,8 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x177B)&&(_optionCheck.recLen == 0x10);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x177B) && (_optionCheck.recLen == 0x10);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9683,10 +10181,10 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
         try {
             _s.htmlDocInfoAtom = QSharedPointer<HTMLDocInfo9Atom>(new HTMLDocInfo9Atom(&_s));
             parseHTMLDocInfo9Atom(in, *_s.htmlDocInfoAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.htmlDocInfoAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.htmlDocInfoAtom.clear();
             in.rewind(_m);
         }
@@ -9695,8 +10193,8 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x177D);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x177D);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9705,10 +10203,10 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
         try {
             _s.htmlPublishInfoAtom = QSharedPointer<HTMLPublishInfo9Container>(new HTMLPublishInfo9Container(&_s));
             parseHTMLPublishInfo9Container(in, *_s.htmlPublishInfoAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.htmlPublishInfoAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.htmlPublishInfoAtom.clear();
             in.rewind(_m);
         }
@@ -9719,11 +10217,11 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
         try {
             _s.rgBroadcastDocInfo9.append(BroadcastDocInfo9Container(&_s));
             parseBroadcastDocInfo9Container(in, _s.rgBroadcastDocInfo9.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgBroadcastDocInfo9.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgBroadcastDocInfo9.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -9733,8 +10231,8 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x0FAE);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x0FAE);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9743,21 +10241,23 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
         try {
             _s.outlineTextPropsContainer = QSharedPointer<OutlineTextProps9Container>(new OutlineTextProps9Container(&_s));
             parseOutlineTextProps9Container(in, *_s.outlineTextPropsContainer.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.outlineTextPropsContainer.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.outlineTextPropsContainer.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseTextMasterStyle9Level(LEInputStream& in, TextMasterStyle9Level& _s) {
+void MSO::parseTextMasterStyle9Level(LEInputStream &in, TextMasterStyle9Level &_s)
+{
     _s.streamOffset = in.getPosition();
     parseTextPFException9(in, _s.pf9);
     parseTextCFException9(in, _s.cf9);
 }
-void MSO::parseStyleTextProp9(LEInputStream& in, StyleTextProp9& _s) {
+void MSO::parseStyleTextProp9(LEInputStream &in, StyleTextProp9 &_s)
+{
     _s.streamOffset = in.getPosition();
     parseTextPFException9(in, _s.pf9);
     parseTextCFException9(in, _s.cf9);
@@ -9775,7 +10275,8 @@ void MSO::parseStyleTextProp9(LEInputStream& in, StyleTextProp9& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.si.smartTag == false");
     }
 }
-void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExtension& _s) {
+void MSO::parsePP10DocBinaryTagExtension(LEInputStream &in, PP10DocBinaryTagExtension &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -9811,8 +10312,8 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x07D6);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x07D6);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9821,10 +10322,10 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
         try {
             _s.fontCollectionContainer = QSharedPointer<FontCollection10Container>(new FontCollection10Container(&_s));
             parseFontCollection10Container(in, *_s.fontCollectionContainer.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.fontCollectionContainer.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.fontCollectionContainer.clear();
             in.rewind(_m);
         }
@@ -9835,11 +10336,11 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
         try {
             _s.rgTextMasterStyle10.append(TextMasterStyle10Atom(&_s));
             parseTextMasterStyle10Atom(in, _s.rgTextMasterStyle10.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgTextMasterStyle10.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgTextMasterStyle10.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -9849,8 +10350,8 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x0FB4);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x0FB4);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9859,10 +10360,10 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
         try {
             _s.textDefaultsAtom = QSharedPointer<TextDefaults10Atom>(new TextDefaults10Atom(&_s));
             parseTextDefaults10Atom(in, *_s.textDefaultsAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.textDefaultsAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.textDefaultsAtom.clear();
             in.rewind(_m);
         }
@@ -9874,11 +10375,11 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
         try {
             _s.rgCommentIndex10.append(CommentIndex10Container(&_s));
             parseCommentIndex10Container(in, _s.rgCommentIndex10.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgCommentIndex10.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgCommentIndex10.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -9888,8 +10389,9 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x32C8)&&(_optionCheck.recLen == 0x04);
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x32C8) && (_optionCheck.recLen == 0x04);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9898,10 +10400,10 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
         try {
             _s.fontEmbedFlagsAtom = QSharedPointer<FontEmbedFlags10Atom>(new FontEmbedFlags10Atom(&_s));
             parseFontEmbedFlags10Atom(in, *_s.fontEmbedFlagsAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.fontEmbedFlagsAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.fontEmbedFlagsAtom.clear();
             in.rewind(_m);
         }
@@ -9910,8 +10412,9 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x1)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen<=510)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x1) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen <= 510)
+            && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9920,10 +10423,10 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
         try {
             _s.copyrightAtom = QSharedPointer<CopyrightAtom>(new CopyrightAtom(&_s));
             parseCopyrightAtom(in, *_s.copyrightAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.copyrightAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.copyrightAtom.clear();
             in.rewind(_m);
         }
@@ -9932,8 +10435,9 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x2)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen<=510)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x2) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen <= 510)
+            && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9942,10 +10446,10 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
         try {
             _s.keywordsAtom = QSharedPointer<KeywordsAtom>(new KeywordsAtom(&_s));
             parseKeywordsAtom(in, *_s.keywordsAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.keywordsAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.keywordsAtom.clear();
             in.rewind(_m);
         }
@@ -9954,8 +10458,9 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x36B0)&&(_optionCheck.recLen == 0x04);
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x36B0) && (_optionCheck.recLen == 0x04);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9964,10 +10469,10 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
         try {
             _s.filterPrivacyFlagsAtom = QSharedPointer<FilterPrivacyFlags10Atom>(new FilterPrivacyFlags10Atom(&_s));
             parseFilterPrivacyFlags10Atom(in, *_s.filterPrivacyFlagsAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.filterPrivacyFlagsAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.filterPrivacyFlagsAtom.clear();
             in.rewind(_m);
         }
@@ -9976,8 +10481,8 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x0FB3);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x0FB3);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -9986,10 +10491,10 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
         try {
             _s.outlineTextPropsContainer = QSharedPointer<OutlineTextProps10Container>(new OutlineTextProps10Container(&_s));
             parseOutlineTextProps10Container(in, *_s.outlineTextPropsContainer.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.outlineTextPropsContainer.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.outlineTextPropsContainer.clear();
             in.rewind(_m);
         }
@@ -9998,8 +10503,8 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x36B1)&&(_optionCheck.recLen == 0x01);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x36B1) && (_optionCheck.recLen == 0x01);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10008,10 +10513,10 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
         try {
             _s.docToolbarStatesAtom = QSharedPointer<DocToolbarStates10Atom>(new DocToolbarStates10Atom(&_s));
             parseDocToolbarStates10Atom(in, *_s.docToolbarStatesAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.docToolbarStatesAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.docToolbarStatesAtom.clear();
             in.rewind(_m);
         }
@@ -10020,8 +10525,8 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2EF1);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x2EF1);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10030,10 +10535,10 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
         try {
             _s.slideListTableContainer = QSharedPointer<SlideListTable10Container>(new SlideListTable10Container(&_s));
             parseSlideListTable10Container(in, *_s.slideListTableContainer.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideListTableContainer.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideListTableContainer.clear();
             in.rewind(_m);
         }
@@ -10042,8 +10547,8 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2EEC);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x2EEC);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10052,10 +10557,10 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
         try {
             _s.rgDiffTree10Container = QSharedPointer<DiffTree10Container>(new DiffTree10Container(&_s));
             parseDiffTree10Container(in, *_s.rgDiffTree10Container.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgDiffTree10Container.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgDiffTree10Container.clear();
             in.rewind(_m);
         }
@@ -10064,8 +10569,9 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x03)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen<=510)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x03) && (_optionCheck.recType == 0x0FBA)
+            && (_optionCheck.recLen <= 510) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10074,10 +10580,10 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
         try {
             _s.modifyPasswordAtom = QSharedPointer<ModifyPasswordAtom>(new ModifyPasswordAtom(&_s));
             parseModifyPasswordAtom(in, *_s.modifyPasswordAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.modifyPasswordAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.modifyPasswordAtom.clear();
             in.rewind(_m);
         }
@@ -10086,8 +10592,9 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x036B2)&&(_optionCheck.recLen == 0x06);
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x036B2) && (_optionCheck.recLen == 0x06);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10096,20 +10603,22 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
         try {
             _s.photoAlbumInfoAtom = QSharedPointer<PhotoAlbumInfo10Atom>(new PhotoAlbumInfo10Atom(&_s));
             parsePhotoAlbumInfo10Atom(in, *_s.photoAlbumInfoAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.photoAlbumInfoAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.photoAlbumInfoAtom.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseTextMasterStyle10Level(LEInputStream& in, TextMasterStyle10Level& _s) {
+void MSO::parseTextMasterStyle10Level(LEInputStream &in, TextMasterStyle10Level &_s)
+{
     _s.streamOffset = in.getPosition();
     parseTextCFException10(in, _s.cf10);
 }
-void MSO::parseNotesTextViewInfoContainer(LEInputStream& in, NotesTextViewInfoContainer& _s) {
+void MSO::parseNotesTextViewInfoContainer(LEInputStream &in, NotesTextViewInfoContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -10123,7 +10632,8 @@ void MSO::parseNotesTextViewInfoContainer(LEInputStream& in, NotesTextViewInfoCo
     }
     parseZoomViewInfoAtom(in, _s.zoomViewInfo);
 }
-void MSO::parseOutlineViewInfoContainer(LEInputStream& in, OutlineViewInfoContainer& _s) {
+void MSO::parseOutlineViewInfoContainer(LEInputStream &in, OutlineViewInfoContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -10137,7 +10647,8 @@ void MSO::parseOutlineViewInfoContainer(LEInputStream& in, OutlineViewInfoContai
     }
     parseNoZoomViewInfoAtom(in, _s.noZoomViewInfo);
 }
-void MSO::parseNormalViewSetInfoContainer(LEInputStream& in, NormalViewSetInfoContainer& _s) {
+void MSO::parseNormalViewSetInfoContainer(LEInputStream &in, NormalViewSetInfoContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -10154,7 +10665,8 @@ void MSO::parseNormalViewSetInfoContainer(LEInputStream& in, NormalViewSetInfoCo
     }
     parseNormalViewSetInfoAtom(in, _s.normalViewSetInfoAtom);
 }
-void MSO::parseSlideListWithTextSubContainerOrAtom(LEInputStream& in, SlideListWithTextSubContainerOrAtom& _s) {
+void MSO::parseSlideListWithTextSubContainerOrAtom(LEInputStream &in, SlideListWithTextSubContainerOrAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -10165,18 +10677,19 @@ void MSO::parseSlideListWithTextSubContainerOrAtom(LEInputStream& in, SlideListW
         try {
             _s.atoms.append(TextContainer(&_s));
             parseTextContainer(in, _s.atoms.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.atoms.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.atoms.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseOutlineAtom(LEInputStream& in, OutlineAtom& _s) {
+void MSO::parseOutlineAtom(LEInputStream &in, OutlineAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -10185,8 +10698,8 @@ void MSO::parseOutlineAtom(LEInputStream& in, OutlineAtom& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFA6);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFA6);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10195,16 +10708,17 @@ void MSO::parseOutlineAtom(LEInputStream& in, OutlineAtom& _s) {
         try {
             _s.textRulerAtom = QSharedPointer<TextRulerAtom>(new TextRulerAtom(&_s));
             parseTextRulerAtom(in, *_s.textRulerAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.textRulerAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.textRulerAtom.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
+void MSO::parseTextContainer(LEInputStream &in, TextContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -10215,20 +10729,20 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
     parseRecordHeader(in, _choice);
     in.rewind(_m);
     qint64 startPos = in.getPosition();
-    if (startPos == in.getPosition() && ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0xFA0)&&(_choice.recLen%2==0))) {
+    if (startPos == in.getPosition() && ((_choice.recVer == 0) && (_choice.recInstance == 0) && (_choice.recType == 0xFA0) && (_choice.recLen % 2 == 0))) {
         _s.text = TextContainer::choice1060411409(new TextCharsAtom(&_s));
-        parseTextCharsAtom(in, *(TextCharsAtom*)_s.text.data());
+        parseTextCharsAtom(in, *(TextCharsAtom *)_s.text.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0xFA8))) {
+    if (startPos == in.getPosition() && ((_choice.recVer == 0) && (_choice.recInstance == 0) && (_choice.recType == 0xFA8))) {
         _s.text = TextContainer::choice1060411409(new TextBytesAtom(&_s));
-        parseTextBytesAtom(in, *(TextBytesAtom*)_s.text.data());
+        parseTextBytesAtom(in, *(TextBytesAtom *)_s.text.data());
     }
     _m = in.setMark();
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFA1);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFA1);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10237,10 +10751,10 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
         try {
             _s.style = QSharedPointer<StyleTextPropAtom>(new StyleTextPropAtom(&_s));
             parseStyleTextPropAtom(in, *_s.style.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.style.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.style.clear();
             in.rewind(_m);
         }
@@ -10255,7 +10769,7 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
         }
         quint32 sum = 0;
         do {
-        _s.style->rgTextPFRun.append(TextPFRun(_s.style.data()));
+            _s.style->rgTextPFRun.append(TextPFRun(_s.style.data()));
             parseTextPFRun(in, _s.style->rgTextPFRun.last());
             sum += _s.style->rgTextPFRun.last().count;
         } while (sum <= count);
@@ -10272,11 +10786,11 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
         try {
             _s.meta.append(TextContainerMeta(&_s));
             parseTextContainerMeta(in, _s.meta.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.meta.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.meta.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -10286,8 +10800,8 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFA2);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFA2);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10296,10 +10810,10 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
         try {
             _s.master = QSharedPointer<MasterTextPropAtom>(new MasterTextPropAtom(&_s));
             parseMasterTextPropAtom(in, *_s.master.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.master.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.master.clear();
             in.rewind(_m);
         }
@@ -10310,11 +10824,11 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
         try {
             _s.bookmark.append(TextBookmarkAtom(&_s));
             parseTextBookmarkAtom(in, _s.bookmark.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.bookmark.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.bookmark.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -10324,8 +10838,8 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 3)&&(_optionCheck.recInstance == 9)&&(_optionCheck.recType == 0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 3) && (_optionCheck.recInstance == 9) && (_optionCheck.recType == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10334,10 +10848,10 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
         try {
             _s.unknown = QSharedPointer<UnknownTextContainerChild>(new UnknownTextContainerChild(&_s));
             parseUnknownTextContainerChild(in, *_s.unknown.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown.clear();
             in.rewind(_m);
         }
@@ -10346,8 +10860,8 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0xFAA);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0xFAA);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10356,10 +10870,10 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
         try {
             _s.specialinfo = QSharedPointer<TextSpecialInfoAtom>(new TextSpecialInfoAtom(&_s));
             parseTextSpecialInfoAtom(in, *_s.specialinfo.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.specialinfo.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.specialinfo.clear();
             in.rewind(_m);
         }
@@ -10370,11 +10884,11 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
         try {
             _s.interactive.append(TextContainerInteractiveInfo(&_s));
             parseTextContainerInteractiveInfo(in, _s.interactive.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.interactive.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.interactive.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -10384,8 +10898,8 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0xFAA);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0xFAA);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10394,10 +10908,10 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
         try {
             _s.specialinfo2 = QSharedPointer<TextSpecialInfoAtom>(new TextSpecialInfoAtom(&_s));
             parseTextSpecialInfoAtom(in, *_s.specialinfo2.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.specialinfo2.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.specialinfo2.clear();
             in.rewind(_m);
         }
@@ -10406,8 +10920,8 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFA6);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFA6);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10416,10 +10930,10 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
         try {
             _s.textRulerAtom = QSharedPointer<TextRulerAtom>(new TextRulerAtom(&_s));
             parseTextRulerAtom(in, *_s.textRulerAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.textRulerAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.textRulerAtom.clear();
             in.rewind(_m);
         }
@@ -10430,35 +10944,38 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
         try {
             _s.interactive2.append(TextContainerInteractiveInfo(&_s));
             parseTextContainerInteractiveInfo(in, _s.interactive2.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.interactive2.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.interactive2.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseMouseClickTextInfo(LEInputStream& in, MouseClickTextInfo& _s) {
+void MSO::parseMouseClickTextInfo(LEInputStream &in, MouseClickTextInfo &_s)
+{
     _s.streamOffset = in.getPosition();
     parseMouseClickInteractiveInfoContainer(in, _s.interactive);
     parseMouseClickTextInteractiveInfoAtom(in, _s.text);
 }
-void MSO::parseMouseOverTextInfo(LEInputStream& in, MouseOverTextInfo& _s) {
+void MSO::parseMouseOverTextInfo(LEInputStream &in, MouseOverTextInfo &_s)
+{
     _s.streamOffset = in.getPosition();
     parseMouseOverInteractiveInfoContainer(in, _s.interactive);
     parseMouseOverTextInteractiveInfoAtom(in, _s.text);
 }
-void MSO::parseTextPFRun(LEInputStream& in, TextPFRun& _s) {
+void MSO::parseTextPFRun(LEInputStream &in, TextPFRun &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.count = in.readuint32();
-    if (!(((quint32)_s.count)>0)) {
+    if (!(((quint32)_s.count) > 0)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.count)>0");
     }
     _s.indentLevel = in.readuint16();
-    if (!(((quint16)_s.indentLevel)<=4)) {
+    if (!(((quint16)_s.indentLevel) <= 4)) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.indentLevel)<=4");
     }
     parseTextPFException(in, _s.pf);
@@ -10469,15 +10986,17 @@ void MSO::parseTextPFRun(LEInputStream& in, TextPFRun& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.pf.masks.tabStops == false");
     }
 }
-void MSO::parseTextCFRun(LEInputStream& in, TextCFRun& _s) {
+void MSO::parseTextCFRun(LEInputStream &in, TextCFRun &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.count = in.readuint32();
-    if (!(((quint32)_s.count)>0)) {
+    if (!(((quint32)_s.count) > 0)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.count)>0");
     }
     parseTextCFException(in, _s.cf);
 }
-void MSO::parseTextCFExceptionAtom(LEInputStream& in, TextCFExceptionAtom& _s) {
+void MSO::parseTextCFExceptionAtom(LEInputStream &in, TextCFExceptionAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -10491,7 +11010,8 @@ void MSO::parseTextCFExceptionAtom(LEInputStream& in, TextCFExceptionAtom& _s) {
     }
     parseTextCFException(in, _s.cf);
 }
-void MSO::parseDefaultRulerAtom(LEInputStream& in, DefaultRulerAtom& _s) {
+void MSO::parseDefaultRulerAtom(LEInputStream &in, DefaultRulerAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -10541,7 +11061,8 @@ void MSO::parseDefaultRulerAtom(LEInputStream& in, DefaultRulerAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.defaultTextRuler.fIndent5 == true");
     }
 }
-void MSO::parseTextPFExceptionAtom(LEInputStream& in, TextPFExceptionAtom& _s) {
+void MSO::parseTextPFExceptionAtom(LEInputStream &in, TextPFExceptionAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -10556,15 +11077,17 @@ void MSO::parseTextPFExceptionAtom(LEInputStream& in, TextPFExceptionAtom& _s) {
     _s.reserved = in.readuint16();
     parseTextPFException(in, _s.pf);
 }
-void MSO::parseTextSIRun(LEInputStream& in, TextSIRun& _s) {
+void MSO::parseTextSIRun(LEInputStream &in, TextSIRun &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.count = in.readuint32();
-    if (!(((quint32)_s.count)>=1)) {
+    if (!(((quint32)_s.count) >= 1)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.count)>=1");
     }
     parseTextSIException(in, _s.si);
 }
-void MSO::parseTextSIExceptionAtom(LEInputStream& in, TextSIExceptionAtom& _s) {
+void MSO::parseTextSIExceptionAtom(LEInputStream &in, TextSIExceptionAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -10587,64 +11110,70 @@ void MSO::parseTextSIExceptionAtom(LEInputStream& in, TextSIExceptionAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.textSIException.smartTag == false");
     }
 }
-void MSO::parseTextMasterStyleAtom(LEInputStream& in, TextMasterStyleAtom& _s) {
+void MSO::parseTextMasterStyleAtom(LEInputStream &in, TextMasterStyleAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0x0");
     }
-    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4 || _s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 8)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4 || _s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 8");
+    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4
+          || _s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 8)) {
+        throw IncorrectValueException(
+            in.getPosition(),
+            "_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4 || "
+            "_s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 8");
     }
     if (!(_s.rh.recType == 0x0FA3)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FA3");
     }
     _s.cLevels = in.readuint16();
-    if (!(((quint16)_s.cLevels)<=5)) {
+    if (!(((quint16)_s.cLevels) <= 5)) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.cLevels)<=5");
     }
-    _s._has_lstLvl1level = _s.cLevels>0 && _s.rh.recInstance>=5;
+    _s._has_lstLvl1level = _s.cLevels > 0 && _s.rh.recInstance >= 5;
     if (_s._has_lstLvl1level) {
         _s.lstLvl1level = in.readuint16();
     }
-    if (_s.cLevels>0) {
+    if (_s.cLevels > 0) {
         _s.lstLvl1 = QSharedPointer<TextMasterStyleLevel>(new TextMasterStyleLevel(&_s));
         parseTextMasterStyleLevel(in, *_s.lstLvl1.data());
     }
-    _s._has_lstLvl2level = _s.cLevels>1 && _s.rh.recInstance>=5;
+    _s._has_lstLvl2level = _s.cLevels > 1 && _s.rh.recInstance >= 5;
     if (_s._has_lstLvl2level) {
         _s.lstLvl2level = in.readuint16();
     }
-    if (_s.cLevels>1) {
+    if (_s.cLevels > 1) {
         _s.lstLvl2 = QSharedPointer<TextMasterStyleLevel>(new TextMasterStyleLevel(&_s));
         parseTextMasterStyleLevel(in, *_s.lstLvl2.data());
     }
-    _s._has_lstLvl3level = _s.cLevels>2 && _s.rh.recInstance>=5;
+    _s._has_lstLvl3level = _s.cLevels > 2 && _s.rh.recInstance >= 5;
     if (_s._has_lstLvl3level) {
         _s.lstLvl3level = in.readuint16();
     }
-    if (_s.cLevels>2) {
+    if (_s.cLevels > 2) {
         _s.lstLvl3 = QSharedPointer<TextMasterStyleLevel>(new TextMasterStyleLevel(&_s));
         parseTextMasterStyleLevel(in, *_s.lstLvl3.data());
     }
-    _s._has_lstLvl4level = _s.cLevels>3 && _s.rh.recInstance>=5;
+    _s._has_lstLvl4level = _s.cLevels > 3 && _s.rh.recInstance >= 5;
     if (_s._has_lstLvl4level) {
         _s.lstLvl4level = in.readuint16();
     }
-    if (_s.cLevels>3) {
+    if (_s.cLevels > 3) {
         _s.lstLvl4 = QSharedPointer<TextMasterStyleLevel>(new TextMasterStyleLevel(&_s));
         parseTextMasterStyleLevel(in, *_s.lstLvl4.data());
     }
-    _s._has_lstLvl5level = _s.cLevels>4 && _s.rh.recInstance>=5;
+    _s._has_lstLvl5level = _s.cLevels > 4 && _s.rh.recInstance >= 5;
     if (_s._has_lstLvl5level) {
         _s.lstLvl5level = in.readuint16();
     }
-    if (_s.cLevels>4) {
+    if (_s.cLevels > 4) {
         _s.lstLvl5 = QSharedPointer<TextMasterStyleLevel>(new TextMasterStyleLevel(&_s));
         parseTextMasterStyleLevel(in, *_s.lstLvl5.data());
     }
 }
-void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTagExtension& _s) {
+void MSO::parsePP10SlideBinaryTagExtension(LEInputStream &in, PP10SlideBinaryTagExtension &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -10665,7 +11194,7 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
     }
     _c = 8;
     _s.tagName.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
+    for (int _i = 0; _i < _c; ++_i) {
         _s.tagName[_i] = in.readuint16();
     }
     parseRecordHeader(in, _s.rhData);
@@ -10684,11 +11213,11 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
         try {
             _s.rgTextMasterStyleAtom.append(TextMasterStyle10Atom(&_s));
             parseTextMasterStyle10Atom(in, _s.rgTextMasterStyleAtom.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgTextMasterStyleAtom.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgTextMasterStyleAtom.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -10700,11 +11229,11 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
         try {
             _s.rgComment10Container.append(Comment10Container(&_s));
             parseComment10Container(in, _s.rgComment10Container.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgComment10Container.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgComment10Container.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -10714,8 +11243,8 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2EE7)&&(_optionCheck.recLen == 8);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x2EE7) && (_optionCheck.recLen == 8);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10724,10 +11253,10 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
         try {
             _s.linkedSlideAtom = QSharedPointer<LinkedSlide10Atom>(new LinkedSlide10Atom(&_s));
             parseLinkedSlide10Atom(in, *_s.linkedSlideAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.linkedSlideAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.linkedSlideAtom.clear();
             in.rewind(_m);
         }
@@ -10738,11 +11267,11 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
         try {
             _s.rgLinkedShape10Atom.append(LinkedShape10Atom(&_s));
             parseLinkedShape10Atom(in, _s.rgLinkedShape10Atom.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgLinkedShape10Atom.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgLinkedShape10Atom.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -10752,8 +11281,8 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2EEA)&&(_optionCheck.recLen == 4);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x2EEA) && (_optionCheck.recLen == 4);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10762,10 +11291,10 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
         try {
             _s.slideFlagsAtom = QSharedPointer<SlideFlags10Atom>(new SlideFlags10Atom(&_s));
             parseSlideFlags10Atom(in, *_s.slideFlagsAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideFlagsAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideFlagsAtom.clear();
             in.rewind(_m);
         }
@@ -10774,8 +11303,8 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2EEB)&&(_optionCheck.recLen == 8);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x2EEB) && (_optionCheck.recLen == 8);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10784,10 +11313,10 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
         try {
             _s.slideTimeAtom = QSharedPointer<SlideTime10Atom>(new SlideTime10Atom(&_s));
             parseSlideTime10Atom(in, *_s.slideTimeAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideTimeAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideTimeAtom.clear();
             in.rewind(_m);
         }
@@ -10796,8 +11325,8 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x101D);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x101D);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10806,10 +11335,10 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
         try {
             _s.unknown = QSharedPointer<UnknownSlideContainerChild>(new UnknownSlideContainerChild(&_s));
             parseUnknownSlideContainerChild(in, *_s.unknown.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown.clear();
             in.rewind(_m);
         }
@@ -10818,8 +11347,8 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2B00)&&(_optionCheck.recLen == 4);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x2B00) && (_optionCheck.recLen == 4);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10828,10 +11357,10 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
         try {
             _s.hashCodeAtom = QSharedPointer<HashCode10Atom>(new HashCode10Atom(&_s));
             parseHashCode10Atom(in, *_s.hashCodeAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.hashCodeAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.hashCodeAtom.clear();
             in.rewind(_m);
         }
@@ -10840,8 +11369,8 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 1)&&(_optionCheck.recType == 0xF144);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 1) && (_optionCheck.recType == 0xF144);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10850,10 +11379,10 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
         try {
             _s.extTimeNodeContainer = QSharedPointer<ExtTimeNodeContainer>(new ExtTimeNodeContainer(&_s));
             parseExtTimeNodeContainer(in, *_s.extTimeNodeContainer.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.extTimeNodeContainer.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.extTimeNodeContainer.clear();
             in.rewind(_m);
         }
@@ -10862,8 +11391,8 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2B02);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x2B02);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10872,16 +11401,17 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
         try {
             _s.buildListContainer = QSharedPointer<BuildListContainer>(new BuildListContainer(&_s));
             parseBuildListContainer(in, *_s.buildListContainer.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.buildListContainer.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.buildListContainer.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseExObjListSubContainer(LEInputStream& in, ExObjListSubContainer& _s) {
+void MSO::parseExObjListSubContainer(LEInputStream &in, ExObjListSubContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -10889,52 +11419,53 @@ void MSO::parseExObjListSubContainer(LEInputStream& in, ExObjListSubContainer& _
     parseOfficeArtRecordHeader(in, _choice);
     in.rewind(_m);
     qint64 startPos = in.getPosition();
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0)&&(_choice.recType == 0x1006))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0) && (_choice.recType == 0x1006))) {
         _s.anon = ExObjListSubContainer::choice2338534801(new ExAviMovieContainer(&_s));
-        parseExAviMovieContainer(in, *(ExAviMovieContainer*)_s.anon.data());
+        parseExAviMovieContainer(in, *(ExAviMovieContainer *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0)&&(_choice.recType == 0x100E))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0) && (_choice.recType == 0x100E))) {
         _s.anon = ExObjListSubContainer::choice2338534801(new ExCDAudioContainer(&_s));
-        parseExCDAudioContainer(in, *(ExCDAudioContainer*)_s.anon.data());
+        parseExCDAudioContainer(in, *(ExCDAudioContainer *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0)&&(_choice.recType == 0xFEE))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0) && (_choice.recType == 0xFEE))) {
         _s.anon = ExObjListSubContainer::choice2338534801(new ExControlContainer(&_s));
-        parseExControlContainer(in, *(ExControlContainer*)_s.anon.data());
+        parseExControlContainer(in, *(ExControlContainer *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0)&&(_choice.recType == 0xFD7))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0) && (_choice.recType == 0xFD7))) {
         _s.anon = ExObjListSubContainer::choice2338534801(new ExHyperlinkContainer(&_s));
-        parseExHyperlinkContainer(in, *(ExHyperlinkContainer*)_s.anon.data());
+        parseExHyperlinkContainer(in, *(ExHyperlinkContainer *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0)&&(_choice.recType == 0x1007))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0) && (_choice.recType == 0x1007))) {
         _s.anon = ExObjListSubContainer::choice2338534801(new ExMCIMovieContainer(&_s));
-        parseExMCIMovieContainer(in, *(ExMCIMovieContainer*)_s.anon.data());
+        parseExMCIMovieContainer(in, *(ExMCIMovieContainer *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0)&&(_choice.recType == 0x100D))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0) && (_choice.recType == 0x100D))) {
         _s.anon = ExObjListSubContainer::choice2338534801(new ExMIDIAudioContainer(&_s));
-        parseExMIDIAudioContainer(in, *(ExMIDIAudioContainer*)_s.anon.data());
+        parseExMIDIAudioContainer(in, *(ExMIDIAudioContainer *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0x0)&&(_choice.recType == 0x0FCC))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0x0) && (_choice.recType == 0x0FCC))) {
         _s.anon = ExObjListSubContainer::choice2338534801(new ExOleEmbedContainer(&_s));
-        parseExOleEmbedContainer(in, *(ExOleEmbedContainer*)_s.anon.data());
+        parseExOleEmbedContainer(in, *(ExOleEmbedContainer *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0x0)&&(_choice.recType == 0x0FCE))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0x0) && (_choice.recType == 0x0FCE))) {
         _s.anon = ExObjListSubContainer::choice2338534801(new ExOleLinkContainer(&_s));
-        parseExOleLinkContainer(in, *(ExOleLinkContainer*)_s.anon.data());
+        parseExOleLinkContainer(in, *(ExOleLinkContainer *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0)&&(_choice.recType == 0x100F))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0) && (_choice.recType == 0x100F))) {
         _s.anon = ExObjListSubContainer::choice2338534801(new ExWAVAudioEmbeddedContainer(&_s));
-        parseExWAVAudioEmbeddedContainer(in, *(ExWAVAudioEmbeddedContainer*)_s.anon.data());
+        parseExWAVAudioEmbeddedContainer(in, *(ExWAVAudioEmbeddedContainer *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0)&&(_choice.recType == 0x1010))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0) && (_choice.recType == 0x1010))) {
         _s.anon = ExObjListSubContainer::choice2338534801(new ExWAVAudioLinkContainer(&_s));
-        parseExWAVAudioLinkContainer(in, *(ExWAVAudioLinkContainer*)_s.anon.data());
+        parseExWAVAudioLinkContainer(in, *(ExWAVAudioLinkContainer *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = ExObjListSubContainer::choice2338534801(new UnknownExObjListSubContainerChild(&_s));
-        parseUnknownExObjListSubContainerChild(in, *(UnknownExObjListSubContainerChild*)_s.anon.data());
+        parseUnknownExObjListSubContainerChild(in, *(UnknownExObjListSubContainerChild *)_s.anon.data());
     }
 }
-void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _s) {
+void MSO::parseOfficeArtDggContainer(LEInputStream &in, OfficeArtDggContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -10953,8 +11484,8 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recType == 0x0F001);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recType == 0x0F001);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10963,10 +11494,10 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
         try {
             _s.blipStore = QSharedPointer<OfficeArtBStoreContainer>(new OfficeArtBStoreContainer(&_s));
             parseOfficeArtBStoreContainer(in, *_s.blipStore.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.blipStore.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.blipStore.clear();
             in.rewind(_m);
         }
@@ -10975,8 +11506,8 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x3)&&(_optionCheck.recType == 0x0F00B);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x3) && (_optionCheck.recType == 0x0F00B);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -10985,10 +11516,10 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
         try {
             _s.drawingPrimaryOptions = QSharedPointer<OfficeArtFOPT>(new OfficeArtFOPT(&_s));
             parseOfficeArtFOPT(in, *_s.drawingPrimaryOptions.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.drawingPrimaryOptions.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.drawingPrimaryOptions.clear();
             in.rewind(_m);
         }
@@ -10997,8 +11528,8 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 3)&&(_optionCheck.recType == 0xF122);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 3) && (_optionCheck.recType == 0xF122);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11007,10 +11538,10 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
         try {
             _s.drawingTertiaryOptions = QSharedPointer<OfficeArtTertiaryFOPT>(new OfficeArtTertiaryFOPT(&_s));
             parseOfficeArtTertiaryFOPT(in, *_s.drawingTertiaryOptions.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.drawingTertiaryOptions.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.drawingTertiaryOptions.clear();
             in.rewind(_m);
         }
@@ -11019,8 +11550,8 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recType == 0xF11A)&&(_optionCheck.recLen==4*_optionCheck.recInstance);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recType == 0xF11A) && (_optionCheck.recLen == 4 * _optionCheck.recInstance);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11029,10 +11560,10 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
         try {
             _s.colorMRU = QSharedPointer<OfficeArtColorMRUContainer>(new OfficeArtColorMRUContainer(&_s));
             parseOfficeArtColorMRUContainer(in, *_s.colorMRU.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.colorMRU.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.colorMRU.clear();
             in.rewind(_m);
         }
@@ -11041,8 +11572,9 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x4)&&(_optionCheck.recType == 0xF11E)&&(_optionCheck.recLen == 0x10);
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x4) && (_optionCheck.recType == 0xF11E) && (_optionCheck.recLen == 0x10);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11051,10 +11583,10 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
         try {
             _s.splitColors = QSharedPointer<OfficeArtSplitMenuColorContainer>(new OfficeArtSplitMenuColorContainer(&_s));
             parseOfficeArtSplitMenuColorContainer(in, *_s.splitColors.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.splitColors.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.splitColors.clear();
             in.rewind(_m);
         }
@@ -11063,8 +11595,8 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recType == 0x0F001);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recType == 0x0F001);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11073,10 +11605,10 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
         try {
             _s.blipStore2 = QSharedPointer<OfficeArtBStoreContainer>(new OfficeArtBStoreContainer(&_s));
             parseOfficeArtBStoreContainer(in, *_s.blipStore2.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.blipStore2.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.blipStore2.clear();
             in.rewind(_m);
         }
@@ -11085,8 +11617,8 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 3)&&(_optionCheck.recType == 0xF122);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 3) && (_optionCheck.recType == 0xF122);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11095,16 +11627,17 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
         try {
             _s.unknown = QSharedPointer<OfficeArtTertiaryFOPT>(new OfficeArtTertiaryFOPT(&_s));
             parseOfficeArtTertiaryFOPT(in, *_s.unknown.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseOfficeArtFOPTEChoice(LEInputStream& in, OfficeArtFOPTEChoice& _s) {
+void MSO::parseOfficeArtFOPTEChoice(LEInputStream &in, OfficeArtFOPTEChoice &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -11112,512 +11645,513 @@ void MSO::parseOfficeArtFOPTEChoice(LEInputStream& in, OfficeArtFOPTEChoice& _s)
     parseOfficeArtFOPTEOPID(in, _choice);
     in.rewind(_m);
     qint64 startPos = in.getPosition();
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0004)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0004) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new Rotation(&_s));
-        parseRotation(in, *(Rotation*)_s.anon.data());
+        parseRotation(in, *(Rotation *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x007F)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x007F) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new ProtectionBooleanProperties(&_s));
-        parseProtectionBooleanProperties(in, *(ProtectionBooleanProperties*)_s.anon.data());
+        parseProtectionBooleanProperties(in, *(ProtectionBooleanProperties *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0080)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0080) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new ITxid(&_s));
-        parseITxid(in, *(ITxid*)_s.anon.data());
+        parseITxid(in, *(ITxid *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0081)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0081) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new DxTextLeft(&_s));
-        parseDxTextLeft(in, *(DxTextLeft*)_s.anon.data());
+        parseDxTextLeft(in, *(DxTextLeft *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0082)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0082) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new DyTextTop(&_s));
-        parseDyTextTop(in, *(DyTextTop*)_s.anon.data());
+        parseDyTextTop(in, *(DyTextTop *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0083)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0083) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new DxTextRight(&_s));
-        parseDxTextRight(in, *(DxTextRight*)_s.anon.data());
+        parseDxTextRight(in, *(DxTextRight *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0084)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0084) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new DyTextBottom(&_s));
-        parseDyTextBottom(in, *(DyTextBottom*)_s.anon.data());
+        parseDyTextBottom(in, *(DyTextBottom *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0085)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0085) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new WrapText(&_s));
-        parseWrapText(in, *(WrapText*)_s.anon.data());
+        parseWrapText(in, *(WrapText *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0087)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0087) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new AnchorText(&_s));
-        parseAnchorText(in, *(AnchorText*)_s.anon.data());
+        parseAnchorText(in, *(AnchorText *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0088)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0088) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new TxflTextFlow(&_s));
-        parseTxflTextFlow(in, *(TxflTextFlow*)_s.anon.data());
+        parseTxflTextFlow(in, *(TxflTextFlow *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0089)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0089) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new CdirFont(&_s));
-        parseCdirFont(in, *(CdirFont*)_s.anon.data());
+        parseCdirFont(in, *(CdirFont *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x008A)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x008A) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new HspNext(&_s));
-        parseHspNext(in, *(HspNext*)_s.anon.data());
+        parseHspNext(in, *(HspNext *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x008B)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x008B) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new Txdir(&_s));
-        parseTxdir(in, *(Txdir*)_s.anon.data());
+        parseTxdir(in, *(Txdir *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x00BF)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x00BF) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new TextBooleanProperties(&_s));
-        parseTextBooleanProperties(in, *(TextBooleanProperties*)_s.anon.data());
+        parseTextBooleanProperties(in, *(TextBooleanProperties *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0100)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0100) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new CropFromTop(&_s));
-        parseCropFromTop(in, *(CropFromTop*)_s.anon.data());
+        parseCropFromTop(in, *(CropFromTop *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0101)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0101) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new CropFromBottom(&_s));
-        parseCropFromBottom(in, *(CropFromBottom*)_s.anon.data());
+        parseCropFromBottom(in, *(CropFromBottom *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0102)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0102) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new CropFromLeft(&_s));
-        parseCropFromLeft(in, *(CropFromLeft*)_s.anon.data());
+        parseCropFromLeft(in, *(CropFromLeft *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0103)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0103) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new CropFromRight(&_s));
-        parseCropFromRight(in, *(CropFromRight*)_s.anon.data());
+        parseCropFromRight(in, *(CropFromRight *)_s.anon.data());
     }
     if (startPos == in.getPosition() && ((_choice.opid == 0x0104))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new Pib(&_s));
-        parsePib(in, *(Pib*)_s.anon.data());
+        parsePib(in, *(Pib *)_s.anon.data());
     }
     if (startPos == in.getPosition() && ((_choice.opid == 0x0105))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new PibName(&_s));
-        parsePibName(in, *(PibName*)_s.anon.data());
+        parsePibName(in, *(PibName *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0106)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0106) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new PibFlags(&_s));
-        parsePibFlags(in, *(PibFlags*)_s.anon.data());
+        parsePibFlags(in, *(PibFlags *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0107)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0107) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new PictureTransparent(&_s));
-        parsePictureTransparent(in, *(PictureTransparent*)_s.anon.data());
+        parsePictureTransparent(in, *(PictureTransparent *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0108)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0108) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new PictureContrast(&_s));
-        parsePictureContrast(in, *(PictureContrast*)_s.anon.data());
+        parsePictureContrast(in, *(PictureContrast *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0109)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0109) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new PictureBrightness(&_s));
-        parsePictureBrightness(in, *(PictureBrightness*)_s.anon.data());
+        parsePictureBrightness(in, *(PictureBrightness *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x013F)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x013F) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new BlipBooleanProperties(&_s));
-        parseBlipBooleanProperties(in, *(BlipBooleanProperties*)_s.anon.data());
+        parseBlipBooleanProperties(in, *(BlipBooleanProperties *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0140)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0140) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new GeoLeft(&_s));
-        parseGeoLeft(in, *(GeoLeft*)_s.anon.data());
+        parseGeoLeft(in, *(GeoLeft *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0141)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0141) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new GeoTop(&_s));
-        parseGeoTop(in, *(GeoTop*)_s.anon.data());
+        parseGeoTop(in, *(GeoTop *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0142)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0142) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new GeoRight(&_s));
-        parseGeoRight(in, *(GeoRight*)_s.anon.data());
+        parseGeoRight(in, *(GeoRight *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0143)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0143) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new GeoBottom(&_s));
-        parseGeoBottom(in, *(GeoBottom*)_s.anon.data());
+        parseGeoBottom(in, *(GeoBottom *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0144)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0144) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new ShapePath(&_s));
-        parseShapePath(in, *(ShapePath*)_s.anon.data());
+        parseShapePath(in, *(ShapePath *)_s.anon.data());
     }
     if (startPos == in.getPosition() && ((_choice.opid == 0x0145))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new PVertices(&_s));
-        parsePVertices(in, *(PVertices*)_s.anon.data());
+        parsePVertices(in, *(PVertices *)_s.anon.data());
     }
     if (startPos == in.getPosition() && ((_choice.opid == 0x0146))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new PSegmentInfo(&_s));
-        parsePSegmentInfo(in, *(PSegmentInfo*)_s.anon.data());
+        parsePSegmentInfo(in, *(PSegmentInfo *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0147)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0147) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new AdjustValue(&_s));
-        parseAdjustValue(in, *(AdjustValue*)_s.anon.data());
+        parseAdjustValue(in, *(AdjustValue *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0148)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0148) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new Adjust2Value(&_s));
-        parseAdjust2Value(in, *(Adjust2Value*)_s.anon.data());
+        parseAdjust2Value(in, *(Adjust2Value *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0149)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0149) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new Adjust3Value(&_s));
-        parseAdjust3Value(in, *(Adjust3Value*)_s.anon.data());
+        parseAdjust3Value(in, *(Adjust3Value *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x014A)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x014A) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new Adjust4Value(&_s));
-        parseAdjust4Value(in, *(Adjust4Value*)_s.anon.data());
+        parseAdjust4Value(in, *(Adjust4Value *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x014B)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x014B) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new Adjust5Value(&_s));
-        parseAdjust5Value(in, *(Adjust5Value*)_s.anon.data());
+        parseAdjust5Value(in, *(Adjust5Value *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x014C)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x014C) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new Adjust6Value(&_s));
-        parseAdjust6Value(in, *(Adjust6Value*)_s.anon.data());
+        parseAdjust6Value(in, *(Adjust6Value *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x014D)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x014D) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new Adjust7Value(&_s));
-        parseAdjust7Value(in, *(Adjust7Value*)_s.anon.data());
+        parseAdjust7Value(in, *(Adjust7Value *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x014E)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x014E) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new Adjust8Value(&_s));
-        parseAdjust8Value(in, *(Adjust8Value*)_s.anon.data());
+        parseAdjust8Value(in, *(Adjust8Value *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x017F)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x017F) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new GeometryBooleanProperties(&_s));
-        parseGeometryBooleanProperties(in, *(GeometryBooleanProperties*)_s.anon.data());
+        parseGeometryBooleanProperties(in, *(GeometryBooleanProperties *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0180)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0180) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillType(&_s));
-        parseFillType(in, *(FillType*)_s.anon.data());
+        parseFillType(in, *(FillType *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0181)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0181) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillColor(&_s));
-        parseFillColor(in, *(FillColor*)_s.anon.data());
+        parseFillColor(in, *(FillColor *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0182)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0182) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillOpacity(&_s));
-        parseFillOpacity(in, *(FillOpacity*)_s.anon.data());
+        parseFillOpacity(in, *(FillOpacity *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0183)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0183) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillBackColor(&_s));
-        parseFillBackColor(in, *(FillBackColor*)_s.anon.data());
+        parseFillBackColor(in, *(FillBackColor *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0184)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0184) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillBackOpacity(&_s));
-        parseFillBackOpacity(in, *(FillBackOpacity*)_s.anon.data());
+        parseFillBackOpacity(in, *(FillBackOpacity *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0185)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0185) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillCrMod(&_s));
-        parseFillCrMod(in, *(FillCrMod*)_s.anon.data());
+        parseFillCrMod(in, *(FillCrMod *)_s.anon.data());
     }
     if (startPos == in.getPosition() && ((_choice.opid == 0x0186))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillBlip(&_s));
-        parseFillBlip(in, *(FillBlip*)_s.anon.data());
+        parseFillBlip(in, *(FillBlip *)_s.anon.data());
     }
     if (startPos == in.getPosition() && ((_choice.opid == 0x0187))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillBlipName(&_s));
-        parseFillBlipName(in, *(FillBlipName*)_s.anon.data());
+        parseFillBlipName(in, *(FillBlipName *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0188)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0188) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillBlipFlags(&_s));
-        parseFillBlipFlags(in, *(FillBlipFlags*)_s.anon.data());
+        parseFillBlipFlags(in, *(FillBlipFlags *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0189)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0189) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillWidth(&_s));
-        parseFillWidth(in, *(FillWidth*)_s.anon.data());
+        parseFillWidth(in, *(FillWidth *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x018A)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x018A) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillHeight(&_s));
-        parseFillHeight(in, *(FillHeight*)_s.anon.data());
+        parseFillHeight(in, *(FillHeight *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x018B)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x018B) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillAngle(&_s));
-        parseFillAngle(in, *(FillAngle*)_s.anon.data());
+        parseFillAngle(in, *(FillAngle *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x018C)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x018C) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillFocus(&_s));
-        parseFillFocus(in, *(FillFocus*)_s.anon.data());
+        parseFillFocus(in, *(FillFocus *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x018D)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x018D) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillToLeft(&_s));
-        parseFillToLeft(in, *(FillToLeft*)_s.anon.data());
+        parseFillToLeft(in, *(FillToLeft *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x018E)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x018E) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillToTop(&_s));
-        parseFillToTop(in, *(FillToTop*)_s.anon.data());
+        parseFillToTop(in, *(FillToTop *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x018F)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x018F) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillToRight(&_s));
-        parseFillToRight(in, *(FillToRight*)_s.anon.data());
+        parseFillToRight(in, *(FillToRight *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0190)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0190) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillToBottom(&_s));
-        parseFillToBottom(in, *(FillToBottom*)_s.anon.data());
+        parseFillToBottom(in, *(FillToBottom *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0191)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0191) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillRectLeft(&_s));
-        parseFillRectLeft(in, *(FillRectLeft*)_s.anon.data());
+        parseFillRectLeft(in, *(FillRectLeft *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0192)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0192) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillRectTop(&_s));
-        parseFillRectTop(in, *(FillRectTop*)_s.anon.data());
+        parseFillRectTop(in, *(FillRectTop *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0193)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0193) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillRectRight(&_s));
-        parseFillRectRight(in, *(FillRectRight*)_s.anon.data());
+        parseFillRectRight(in, *(FillRectRight *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0194)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0194) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillRectBottom(&_s));
-        parseFillRectBottom(in, *(FillRectBottom*)_s.anon.data());
+        parseFillRectBottom(in, *(FillRectBottom *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0195)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0195) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillDztype(&_s));
-        parseFillDztype(in, *(FillDztype*)_s.anon.data());
+        parseFillDztype(in, *(FillDztype *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0196)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0196) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillShadePreset(&_s));
-        parseFillShadePreset(in, *(FillShadePreset*)_s.anon.data());
+        parseFillShadePreset(in, *(FillShadePreset *)_s.anon.data());
     }
     if (startPos == in.getPosition() && ((_choice.opid == 0x0197))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillShadeColors(&_s));
-        parseFillShadeColors(in, *(FillShadeColors*)_s.anon.data());
+        parseFillShadeColors(in, *(FillShadeColors *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0198)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0198) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillOriginX(&_s));
-        parseFillOriginX(in, *(FillOriginX*)_s.anon.data());
+        parseFillOriginX(in, *(FillOriginX *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0199)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0199) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillOriginY(&_s));
-        parseFillOriginY(in, *(FillOriginY*)_s.anon.data());
+        parseFillOriginY(in, *(FillOriginY *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x019A)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x019A) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillShapeOriginX(&_s));
-        parseFillShapeOriginX(in, *(FillShapeOriginX*)_s.anon.data());
+        parseFillShapeOriginX(in, *(FillShapeOriginX *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x019B)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x019B) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillShapeOriginY(&_s));
-        parseFillShapeOriginY(in, *(FillShapeOriginY*)_s.anon.data());
+        parseFillShapeOriginY(in, *(FillShapeOriginY *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x019E)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x019E) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillColorExt(&_s));
-        parseFillColorExt(in, *(FillColorExt*)_s.anon.data());
+        parseFillColorExt(in, *(FillColorExt *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01A2)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01A2) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillBackColorExt(&_s));
-        parseFillBackColorExt(in, *(FillBackColorExt*)_s.anon.data());
+        parseFillBackColorExt(in, *(FillBackColorExt *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01BF)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01BF) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new FillStyleBooleanProperties(&_s));
-        parseFillStyleBooleanProperties(in, *(FillStyleBooleanProperties*)_s.anon.data());
+        parseFillStyleBooleanProperties(in, *(FillStyleBooleanProperties *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01C0)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01C0) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineColor(&_s));
-        parseLineColor(in, *(LineColor*)_s.anon.data());
+        parseLineColor(in, *(LineColor *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01C1)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01C1) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineOpacity(&_s));
-        parseLineOpacity(in, *(LineOpacity*)_s.anon.data());
+        parseLineOpacity(in, *(LineOpacity *)_s.anon.data());
     }
     if (startPos == in.getPosition() && ((_choice.opid == 0x01C2))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineBackColor(&_s));
-        parseLineBackColor(in, *(LineBackColor*)_s.anon.data());
+        parseLineBackColor(in, *(LineBackColor *)_s.anon.data());
     }
     if (startPos == in.getPosition() && ((_choice.opid == 0x01C5))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineFillBlip(&_s));
-        parseLineFillBlip(in, *(LineFillBlip*)_s.anon.data());
+        parseLineFillBlip(in, *(LineFillBlip *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01CB)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01CB) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineWidth(&_s));
-        parseLineWidth(in, *(LineWidth*)_s.anon.data());
+        parseLineWidth(in, *(LineWidth *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01CD)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01CD) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineStyle(&_s));
-        parseLineStyle(in, *(LineStyle*)_s.anon.data());
+        parseLineStyle(in, *(LineStyle *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01CE)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01CE) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineDashing(&_s));
-        parseLineDashing(in, *(LineDashing*)_s.anon.data());
+        parseLineDashing(in, *(LineDashing *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01D0)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01D0) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineStartArrowhead(&_s));
-        parseLineStartArrowhead(in, *(LineStartArrowhead*)_s.anon.data());
+        parseLineStartArrowhead(in, *(LineStartArrowhead *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01D1)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01D1) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineEndArrowhead(&_s));
-        parseLineEndArrowhead(in, *(LineEndArrowhead*)_s.anon.data());
+        parseLineEndArrowhead(in, *(LineEndArrowhead *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01D2)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01D2) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineStartArrowWidth(&_s));
-        parseLineStartArrowWidth(in, *(LineStartArrowWidth*)_s.anon.data());
+        parseLineStartArrowWidth(in, *(LineStartArrowWidth *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01D3)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01D3) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineStartArrowLength(&_s));
-        parseLineStartArrowLength(in, *(LineStartArrowLength*)_s.anon.data());
+        parseLineStartArrowLength(in, *(LineStartArrowLength *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01D4)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01D4) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineEndArrowWidth(&_s));
-        parseLineEndArrowWidth(in, *(LineEndArrowWidth*)_s.anon.data());
+        parseLineEndArrowWidth(in, *(LineEndArrowWidth *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01D5)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01D5) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineEndArrowLength(&_s));
-        parseLineEndArrowLength(in, *(LineEndArrowLength*)_s.anon.data());
+        parseLineEndArrowLength(in, *(LineEndArrowLength *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01D6)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01D6) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineJoinStyle(&_s));
-        parseLineJoinStyle(in, *(LineJoinStyle*)_s.anon.data());
+        parseLineJoinStyle(in, *(LineJoinStyle *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01D7)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01D7) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineEndCapStyle(&_s));
-        parseLineEndCapStyle(in, *(LineEndCapStyle*)_s.anon.data());
+        parseLineEndCapStyle(in, *(LineEndCapStyle *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x01FF)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x01FF) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LineStyleBooleanProperties(&_s));
-        parseLineStyleBooleanProperties(in, *(LineStyleBooleanProperties*)_s.anon.data());
+        parseLineStyleBooleanProperties(in, *(LineStyleBooleanProperties *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0200)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0200) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new ShadowType(&_s));
-        parseShadowType(in, *(ShadowType*)_s.anon.data());
+        parseShadowType(in, *(ShadowType *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0201)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0201) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new ShadowColor(&_s));
-        parseShadowColor(in, *(ShadowColor*)_s.anon.data());
+        parseShadowColor(in, *(ShadowColor *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0204)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0204) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new ShadowOpacity(&_s));
-        parseShadowOpacity(in, *(ShadowOpacity*)_s.anon.data());
+        parseShadowOpacity(in, *(ShadowOpacity *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0205)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0205) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new ShadowOffsetX(&_s));
-        parseShadowOffsetX(in, *(ShadowOffsetX*)_s.anon.data());
+        parseShadowOffsetX(in, *(ShadowOffsetX *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0206)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0206) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new ShadowOffsetY(&_s));
-        parseShadowOffsetY(in, *(ShadowOffsetY*)_s.anon.data());
+        parseShadowOffsetY(in, *(ShadowOffsetY *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x023F)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x023F) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new ShadowStyleBooleanProperties(&_s));
-        parseShadowStyleBooleanProperties(in, *(ShadowStyleBooleanProperties*)_s.anon.data());
+        parseShadowStyleBooleanProperties(in, *(ShadowStyleBooleanProperties *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0301)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0301) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new HspMaster(&_s));
-        parseHspMaster(in, *(HspMaster*)_s.anon.data());
+        parseHspMaster(in, *(HspMaster *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0303)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0303) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new Cxstyle(&_s));
-        parseCxstyle(in, *(Cxstyle*)_s.anon.data());
+        parseCxstyle(in, *(Cxstyle *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0304)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0304) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new BWMode(&_s));
-        parseBWMode(in, *(BWMode*)_s.anon.data());
+        parseBWMode(in, *(BWMode *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x033F)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x033F) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new ShapeBooleanProperties(&_s));
-        parseShapeBooleanProperties(in, *(ShapeBooleanProperties*)_s.anon.data());
+        parseShapeBooleanProperties(in, *(ShapeBooleanProperties *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0341)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0341) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new DxyCalloutGap(&_s));
-        parseDxyCalloutGap(in, *(DxyCalloutGap*)_s.anon.data());
+        parseDxyCalloutGap(in, *(DxyCalloutGap *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0342)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0342) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new Spcoa(&_s));
-        parseSpcoa(in, *(Spcoa*)_s.anon.data());
+        parseSpcoa(in, *(Spcoa *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0343)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0343) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new Spcod(&_s));
-        parseSpcod(in, *(Spcod*)_s.anon.data());
+        parseSpcod(in, *(Spcod *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0344)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0344) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new DxyCalloutDropSpecified(&_s));
-        parseDxyCalloutDropSpecified(in, *(DxyCalloutDropSpecified*)_s.anon.data());
+        parseDxyCalloutDropSpecified(in, *(DxyCalloutDropSpecified *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0345)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0345) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new DxyCalloutLengthSpecified(&_s));
-        parseDxyCalloutLengthSpecified(in, *(DxyCalloutLengthSpecified*)_s.anon.data());
+        parseDxyCalloutLengthSpecified(in, *(DxyCalloutLengthSpecified *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x037F)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x037F) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new CalloutBooleanProperties(&_s));
-        parseCalloutBooleanProperties(in, *(CalloutBooleanProperties*)_s.anon.data());
+        parseCalloutBooleanProperties(in, *(CalloutBooleanProperties *)_s.anon.data());
     }
     if (startPos == in.getPosition() && ((_choice.opid == 0x0383))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new PWrapPolygonVertices(&_s));
-        parsePWrapPolygonVertices(in, *(PWrapPolygonVertices*)_s.anon.data());
+        parsePWrapPolygonVertices(in, *(PWrapPolygonVertices *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0384)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0384) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new DxWrapDistLeft(&_s));
-        parseDxWrapDistLeft(in, *(DxWrapDistLeft*)_s.anon.data());
+        parseDxWrapDistLeft(in, *(DxWrapDistLeft *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0385)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0385) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new DyWrapDistTop(&_s));
-        parseDyWrapDistTop(in, *(DyWrapDistTop*)_s.anon.data());
+        parseDyWrapDistTop(in, *(DyWrapDistTop *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0386)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0386) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new DxWrapDistRight(&_s));
-        parseDxWrapDistRight(in, *(DxWrapDistRight*)_s.anon.data());
+        parseDxWrapDistRight(in, *(DxWrapDistRight *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0387)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0387) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new DyWrapDistBottom(&_s));
-        parseDyWrapDistBottom(in, *(DyWrapDistBottom*)_s.anon.data());
+        parseDyWrapDistBottom(in, *(DyWrapDistBottom *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0388)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0388) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new LidRegroup(&_s));
-        parseLidRegroup(in, *(LidRegroup*)_s.anon.data());
+        parseLidRegroup(in, *(LidRegroup *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x038F)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x038F) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new PosH(&_s));
-        parsePosH(in, *(PosH*)_s.anon.data());
+        parsePosH(in, *(PosH *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0390)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0390) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new PosRelH(&_s));
-        parsePosRelH(in, *(PosRelH*)_s.anon.data());
+        parsePosRelH(in, *(PosRelH *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0391)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0391) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new PosV(&_s));
-        parsePosV(in, *(PosV*)_s.anon.data());
+        parsePosV(in, *(PosV *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0392)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0392) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new PosRelV(&_s));
-        parsePosRelV(in, *(PosRelV*)_s.anon.data());
+        parsePosRelV(in, *(PosRelV *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0393)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0393) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new PctHR(&_s));
-        parsePctHR(in, *(PctHR*)_s.anon.data());
+        parsePctHR(in, *(PctHR *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0394)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0394) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new AlignHR(&_s));
-        parseAlignHR(in, *(AlignHR*)_s.anon.data());
+        parseAlignHR(in, *(AlignHR *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0395)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0395) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new DxHeightHR(&_s));
-        parseDxHeightHR(in, *(DxHeightHR*)_s.anon.data());
+        parseDxHeightHR(in, *(DxHeightHR *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x0396)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x0396) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new DxWidthHR(&_s));
-        parseDxWidthHR(in, *(DxWidthHR*)_s.anon.data());
+        parseDxWidthHR(in, *(DxWidthHR *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x039b)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x039b) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new BorderTopColor(&_s));
-        parseBorderTopColor(in, *(BorderTopColor*)_s.anon.data());
+        parseBorderTopColor(in, *(BorderTopColor *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x039c)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x039c) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new BorderLeftColor(&_s));
-        parseBorderLeftColor(in, *(BorderLeftColor*)_s.anon.data());
+        parseBorderLeftColor(in, *(BorderLeftColor *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x039d)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x039d) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new BorderBottomColor(&_s));
-        parseBorderBottomColor(in, *(BorderBottomColor*)_s.anon.data());
+        parseBorderBottomColor(in, *(BorderBottomColor *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x039e)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x039e) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new BorderRightColor(&_s));
-        parseBorderRightColor(in, *(BorderRightColor*)_s.anon.data());
+        parseBorderRightColor(in, *(BorderRightColor *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x03bf)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x03bf) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new GroupShapeBooleanProperties(&_s));
-        parseGroupShapeBooleanProperties(in, *(GroupShapeBooleanProperties*)_s.anon.data());
+        parseGroupShapeBooleanProperties(in, *(GroupShapeBooleanProperties *)_s.anon.data());
     }
     if (startPos == in.getPosition() && ((_choice.opid == 0x0403))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new WzFillId(&_s));
-        parseWzFillId(in, *(WzFillId*)_s.anon.data());
+        parseWzFillId(in, *(WzFillId *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.opid == 0x053F)&&(_choice.fBid == false)&&(_choice.fComplex == false))) {
+    if (startPos == in.getPosition() && ((_choice.opid == 0x053F) && (_choice.fBid == false) && (_choice.fComplex == false))) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new DiagramBooleanProperties(&_s));
-        parseDiagramBooleanProperties(in, *(DiagramBooleanProperties*)_s.anon.data());
+        parseDiagramBooleanProperties(in, *(DiagramBooleanProperties *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = OfficeArtFOPTEChoice::choice3165202096(new OfficeArtFOPTE(&_s));
-        parseOfficeArtFOPTE(in, *(OfficeArtFOPTE*)_s.anon.data());
+        parseOfficeArtFOPTE(in, *(OfficeArtFOPTE *)_s.anon.data());
     }
 }
-void MSO::parseOfficeArtClientAnchor(LEInputStream& in, OfficeArtClientAnchor& _s) {
+void MSO::parseOfficeArtClientAnchor(LEInputStream &in, OfficeArtClientAnchor &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -11627,18 +12161,19 @@ void MSO::parseOfficeArtClientAnchor(LEInputStream& in, OfficeArtClientAnchor& _
     qint64 startPos = in.getPosition();
     if (startPos == in.getPosition() && ((_choice.recLen == 0x8 || _choice.recLen == 0x10))) {
         _s.anon = OfficeArtClientAnchor::choice1726903461(new PptOfficeArtClientAnchor(&_s));
-        parsePptOfficeArtClientAnchor(in, *(PptOfficeArtClientAnchor*)_s.anon.data());
+        parsePptOfficeArtClientAnchor(in, *(PptOfficeArtClientAnchor *)_s.anon.data());
     }
     if (startPos == in.getPosition() && ((_choice.recLen == 0x4))) {
         _s.anon = OfficeArtClientAnchor::choice1726903461(new DocOfficeArtClientAnchor(&_s));
-        parseDocOfficeArtClientAnchor(in, *(DocOfficeArtClientAnchor*)_s.anon.data());
+        parseDocOfficeArtClientAnchor(in, *(DocOfficeArtClientAnchor *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = OfficeArtClientAnchor::choice1726903461(new XlsOfficeArtClientAnchor(&_s));
-        parseXlsOfficeArtClientAnchor(in, *(XlsOfficeArtClientAnchor*)_s.anon.data());
+        parseXlsOfficeArtClientAnchor(in, *(XlsOfficeArtClientAnchor *)_s.anon.data());
     }
 }
-void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData& _s) {
+void MSO::parsePptOfficeArtClientData(LEInputStream &in, PptOfficeArtClientData &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -11657,8 +12192,8 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xBDB)&&(_optionCheck.recLen == 1);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xBDB) && (_optionCheck.recLen == 1);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11667,10 +12202,10 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
         try {
             _s.shapeFlagsAtom = QSharedPointer<ShapeFlagsAtom>(new ShapeFlagsAtom(&_s));
             parseShapeFlagsAtom(in, *_s.shapeFlagsAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.shapeFlagsAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.shapeFlagsAtom.clear();
             in.rewind(_m);
         }
@@ -11679,8 +12214,8 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xBDC)&&(_optionCheck.recLen == 1);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xBDC) && (_optionCheck.recLen == 1);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11689,10 +12224,10 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
         try {
             _s.shapeFlags10Atom = QSharedPointer<ShapeFlags10Atom>(new ShapeFlags10Atom(&_s));
             parseShapeFlags10Atom(in, *_s.shapeFlags10Atom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.shapeFlags10Atom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.shapeFlags10Atom.clear();
             in.rewind(_m);
         }
@@ -11701,8 +12236,8 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xBC1)&&(_optionCheck.recLen == 4);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xBC1) && (_optionCheck.recLen == 4);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11711,10 +12246,10 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
         try {
             _s.exObjRefAtom = QSharedPointer<ExObjRefAtom>(new ExObjRefAtom(&_s));
             parseExObjRefAtom(in, *_s.exObjRefAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.exObjRefAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.exObjRefAtom.clear();
             in.rewind(_m);
         }
@@ -11723,8 +12258,8 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x1014);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x1014);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11733,10 +12268,10 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
         try {
             _s.animationInfo = QSharedPointer<AnimationInfoContainer>(new AnimationInfoContainer(&_s));
             parseAnimationInfoContainer(in, *_s.animationInfo.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.animationInfo.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.animationInfo.clear();
             in.rewind(_m);
         }
@@ -11745,8 +12280,8 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFF2);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFF2);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11755,10 +12290,10 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
         try {
             _s.mouseClickInteractiveInfo = QSharedPointer<MouseClickInteractiveInfoContainer>(new MouseClickInteractiveInfoContainer(&_s));
             parseMouseClickInteractiveInfoContainer(in, *_s.mouseClickInteractiveInfo.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.mouseClickInteractiveInfo.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.mouseClickInteractiveInfo.clear();
             in.rewind(_m);
         }
@@ -11767,8 +12302,8 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 1)&&(_optionCheck.recType == 0xFF2);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 1) && (_optionCheck.recType == 0xFF2);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11777,10 +12312,10 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
         try {
             _s.mouseOverInteractiveInfo = QSharedPointer<MouseOverInteractiveInfoContainer>(new MouseOverInteractiveInfoContainer(&_s));
             parseMouseOverInteractiveInfoContainer(in, *_s.mouseOverInteractiveInfo.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.mouseOverInteractiveInfo.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.mouseOverInteractiveInfo.clear();
             in.rewind(_m);
         }
@@ -11791,11 +12326,11 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
         try {
             _s.rgShapeClientRoundtripData0.append(ShapeClientRoundtripDataSubcontainerOrAtom(&_s));
             parseShapeClientRoundtripDataSubcontainerOrAtom(in, _s.rgShapeClientRoundtripData0.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgShapeClientRoundtripData0.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgShapeClientRoundtripData0.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -11805,8 +12340,8 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xBC3)&&(_optionCheck.recLen == 8);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xBC3) && (_optionCheck.recLen == 8);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11815,10 +12350,10 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
         try {
             _s.placeholderAtom = QSharedPointer<PlaceholderAtom>(new PlaceholderAtom(&_s));
             parsePlaceholderAtom(in, *_s.placeholderAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.placeholderAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.placeholderAtom.clear();
             in.rewind(_m);
         }
@@ -11827,8 +12362,8 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFE7);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFE7);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11837,10 +12372,10 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
         try {
             _s.recolorInfoAtom = QSharedPointer<RecolorInfoAtom>(new RecolorInfoAtom(&_s));
             parseRecolorInfoAtom(in, *_s.recolorInfoAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.recolorInfoAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.recolorInfoAtom.clear();
             in.rewind(_m);
         }
@@ -11849,8 +12384,8 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFE8 || _optionCheck.recType == 0x1019);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFE8 || _optionCheck.recType == 0x1019);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11859,10 +12394,10 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
         try {
             _s.unknown1 = QSharedPointer<UnknownOfficeArtClientDataChild>(new UnknownOfficeArtClientDataChild(&_s));
             parseUnknownOfficeArtClientDataChild(in, *_s.unknown1.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown1.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown1.clear();
             in.rewind(_m);
         }
@@ -11873,11 +12408,11 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
         try {
             _s.rgShapeClientRoundtripData.append(ShapeClientRoundtripDataSubcontainerOrAtom(&_s));
             parseShapeClientRoundtripDataSubcontainerOrAtom(in, _s.rgShapeClientRoundtripData.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgShapeClientRoundtripData.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgShapeClientRoundtripData.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -11887,8 +12422,8 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFE8 || _optionCheck.recType == 0x1019);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFE8 || _optionCheck.recType == 0x1019);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -11897,16 +12432,17 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
         try {
             _s.unknown2 = QSharedPointer<UnknownOfficeArtClientDataChild>(new UnknownOfficeArtClientDataChild(&_s));
             parseUnknownOfficeArtClientDataChild(in, *_s.unknown2.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown2.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown2.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseShapeProgBinaryTagContainer(LEInputStream& in, ShapeProgBinaryTagContainer& _s) {
+void MSO::parseShapeProgBinaryTagContainer(LEInputStream &in, ShapeProgBinaryTagContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -11920,11 +12456,13 @@ void MSO::parseShapeProgBinaryTagContainer(LEInputStream& in, ShapeProgBinaryTag
     }
     parseShapeProgBinaryTagSubContainerOrAtom(in, _s.rec);
 }
-void MSO::parseWordDocument(LEInputStream& in, WordDocument& _s) {
+void MSO::parseWordDocument(LEInputStream &in, WordDocument &_s)
+{
     _s.streamOffset = in.getPosition();
     parseFib(in, _s.fib);
 }
-void MSO::parseTable(LEInputStream& in, Table& _s) {
+void MSO::parseTable(LEInputStream &in, Table &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -11940,7 +12478,8 @@ void MSO::parseTable(LEInputStream& in, Table& _s) {
     _s.dop.resize(_c);
     in.readBytes(_s.dop);
 }
-void MSO::parsePcd(LEInputStream& in, Pcd& _s) {
+void MSO::parsePcd(LEInputStream &in, Pcd &_s)
+{
     _s.streamOffset = in.getPosition();
     _s.fNoParaLast = in.readbit();
     _s.fR1 = in.readbit();
@@ -11953,7 +12492,8 @@ void MSO::parsePcd(LEInputStream& in, Pcd& _s) {
     parseFCompressed(in, _s.fc);
     parsePrm(in, _s.prm);
 }
-void MSO::parseOfficeArtFBSE(LEInputStream& in, OfficeArtFBSE& _s) {
+void MSO::parseOfficeArtFBSE(LEInputStream &in, OfficeArtFBSE &_s)
+{
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -11961,8 +12501,12 @@ void MSO::parseOfficeArtFBSE(LEInputStream& in, OfficeArtFBSE& _s) {
     if (!(_s.rh.recVer == 0x2)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0x2");
     }
-    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4 || _s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 0x11 || _s.rh.recInstance == 0x12)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4 || _s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 0x11 || _s.rh.recInstance == 0x12");
+    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4
+          || _s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 0x11 || _s.rh.recInstance == 0x12)) {
+        throw IncorrectValueException(
+            in.getPosition(),
+            "_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4 || "
+            "_s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 0x11 || _s.rh.recInstance == 0x12");
     }
     if (!(_s.rh.recType == 0xF007)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xF007");
@@ -11980,7 +12524,7 @@ void MSO::parseOfficeArtFBSE(LEInputStream& in, OfficeArtFBSE& _s) {
     _s.cbName = in.readuint8();
     _s.unused2 = in.readuint8();
     _s.unused3 = in.readuint8();
-    _s._has_nameData = _s.cbName>0;
+    _s._has_nameData = _s.cbName > 0;
     if (_s._has_nameData) {
         _c = _s.cbName;
         _s.nameData.resize(_c);
@@ -11991,7 +12535,8 @@ void MSO::parseOfficeArtFBSE(LEInputStream& in, OfficeArtFBSE& _s) {
         parseOfficeArtBlip(in, *_s.embeddedBlip.data());
     }
 }
-void MSO::parseOfficeArtBStoreContainerFileBlock(LEInputStream& in, OfficeArtBStoreContainerFileBlock& _s) {
+void MSO::parseOfficeArtBStoreContainerFileBlock(LEInputStream &in, OfficeArtBStoreContainerFileBlock &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -11999,16 +12544,22 @@ void MSO::parseOfficeArtBStoreContainerFileBlock(LEInputStream& in, OfficeArtBSt
     parseOfficeArtRecordHeader(in, _choice);
     in.rewind(_m);
     qint64 startPos = in.getPosition();
-    if (startPos == in.getPosition() && ((_choice.recVer == 0x2)&&(_choice.recInstance == 0 || _choice.recInstance == 1 || _choice.recInstance == 2 || _choice.recInstance == 3 || _choice.recInstance == 4 || _choice.recInstance == 5 || _choice.recInstance == 6 || _choice.recInstance == 7 || _choice.recInstance == 0x11 || _choice.recInstance == 0x12)&&(_choice.recType == 0xF007))) {
+    if (startPos == in.getPosition()
+        && ((_choice.recVer == 0x2)
+            && (_choice.recInstance == 0 || _choice.recInstance == 1 || _choice.recInstance == 2 || _choice.recInstance == 3 || _choice.recInstance == 4
+                || _choice.recInstance == 5 || _choice.recInstance == 6 || _choice.recInstance == 7 || _choice.recInstance == 0x11
+                || _choice.recInstance == 0x12)
+            && (_choice.recType == 0xF007))) {
         _s.anon = OfficeArtBStoreContainerFileBlock::choice2043165903(new OfficeArtFBSE(&_s));
-        parseOfficeArtFBSE(in, *(OfficeArtFBSE*)_s.anon.data());
+        parseOfficeArtFBSE(in, *(OfficeArtFBSE *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = OfficeArtBStoreContainerFileBlock::choice2043165903(new OfficeArtBlip(&_s));
-        parseOfficeArtBlip(in, *(OfficeArtBlip*)_s.anon.data());
+        parseOfficeArtBlip(in, *(OfficeArtBlip *)_s.anon.data());
     }
 }
-void MSO::parseSlideViewInfoInstance(LEInputStream& in, SlideViewInfoInstance& _s) {
+void MSO::parseSlideViewInfoInstance(LEInputStream &in, SlideViewInfoInstance &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -12028,8 +12579,8 @@ void MSO::parseSlideViewInfoInstance(LEInputStream& in, SlideViewInfoInstance& _
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x3FD)&&(_optionCheck.recLen == 0x34);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x3FD) && (_optionCheck.recLen == 0x34);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12038,10 +12589,10 @@ void MSO::parseSlideViewInfoInstance(LEInputStream& in, SlideViewInfoInstance& _
         try {
             _s.zoomViewInfoAtom = QSharedPointer<ZoomViewInfoAtom>(new ZoomViewInfoAtom(&_s));
             parseZoomViewInfoAtom(in, *_s.zoomViewInfoAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.zoomViewInfoAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.zoomViewInfoAtom.clear();
             in.rewind(_m);
         }
@@ -12052,93 +12603,103 @@ void MSO::parseSlideViewInfoInstance(LEInputStream& in, SlideViewInfoInstance& _
         try {
             _s.rgGuideAtom.append(GuideAtom(&_s));
             parseGuideAtom(in, _s.rgGuideAtom.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgGuideAtom.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgGuideAtom.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseDocProgBinaryTagSubContainerOrAtom(LEInputStream& in, DocProgBinaryTagSubContainerOrAtom& _s) {
+void MSO::parseDocProgBinaryTagSubContainerOrAtom(LEInputStream &in, DocProgBinaryTagSubContainerOrAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
     try {
         _s.anon = DocProgBinaryTagSubContainerOrAtom::choice214961565(new PP9DocBinaryTagExtension(&_s));
-        parsePP9DocBinaryTagExtension(in, *(PP9DocBinaryTagExtension*)_s.anon.data());
-    } catch (IncorrectValueException& _x) {
+        parsePP9DocBinaryTagExtension(in, *(PP9DocBinaryTagExtension *)_s.anon.data());
+    } catch (IncorrectValueException &_x) {
         _s.anon.clear();
         in.rewind(_m);
-    try {
-        _s.anon = DocProgBinaryTagSubContainerOrAtom::choice214961565(new PP10DocBinaryTagExtension(&_s));
-        parsePP10DocBinaryTagExtension(in, *(PP10DocBinaryTagExtension*)_s.anon.data());
-    } catch (IncorrectValueException& _xx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = DocProgBinaryTagSubContainerOrAtom::choice214961565(new PP11DocBinaryTagExtension(&_s));
-        parsePP11DocBinaryTagExtension(in, *(PP11DocBinaryTagExtension*)_s.anon.data());
-    } catch (IncorrectValueException& _xxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = DocProgBinaryTagSubContainerOrAtom::choice214961565(new PP12DocBinaryTagExtension(&_s));
-        parsePP12DocBinaryTagExtension(in, *(PP12DocBinaryTagExtension*)_s.anon.data());
-    } catch (IncorrectValueException& _xxxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-        _s.anon = DocProgBinaryTagSubContainerOrAtom::choice214961565(new UnknownBinaryTag(&_s));
-        parseUnknownBinaryTag(in, *(UnknownBinaryTag*)_s.anon.data());
-    }}}}
+        try {
+            _s.anon = DocProgBinaryTagSubContainerOrAtom::choice214961565(new PP10DocBinaryTagExtension(&_s));
+            parsePP10DocBinaryTagExtension(in, *(PP10DocBinaryTagExtension *)_s.anon.data());
+        } catch (IncorrectValueException &_xx) {
+            _s.anon.clear();
+            in.rewind(_m);
+            try {
+                _s.anon = DocProgBinaryTagSubContainerOrAtom::choice214961565(new PP11DocBinaryTagExtension(&_s));
+                parsePP11DocBinaryTagExtension(in, *(PP11DocBinaryTagExtension *)_s.anon.data());
+            } catch (IncorrectValueException &_xxx) {
+                _s.anon.clear();
+                in.rewind(_m);
+                try {
+                    _s.anon = DocProgBinaryTagSubContainerOrAtom::choice214961565(new PP12DocBinaryTagExtension(&_s));
+                    parsePP12DocBinaryTagExtension(in, *(PP12DocBinaryTagExtension *)_s.anon.data());
+                } catch (IncorrectValueException &_xxxx) {
+                    _s.anon.clear();
+                    in.rewind(_m);
+                    _s.anon = DocProgBinaryTagSubContainerOrAtom::choice214961565(new UnknownBinaryTag(&_s));
+                    parseUnknownBinaryTag(in, *(UnknownBinaryTag *)_s.anon.data());
+                }
+            }
+        }
+    }
 }
-void MSO::parseTextMasterStyle9Atom(LEInputStream& in, TextMasterStyle9Atom& _s) {
+void MSO::parseTextMasterStyle9Atom(LEInputStream &in, TextMasterStyle9Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0x0");
     }
-    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4 || _s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 8)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4 || _s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 8");
+    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4
+          || _s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 8)) {
+        throw IncorrectValueException(
+            in.getPosition(),
+            "_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4 || "
+            "_s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 8");
     }
     if (!(_s.rh.recType == 0x0FAD)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FAD");
     }
     _s.cLevels = in.readuint16();
-    if (!(((quint16)_s.cLevels)<=5)) {
+    if (!(((quint16)_s.cLevels) <= 5)) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.cLevels)<=5");
     }
-    if (_s.cLevels>0) {
+    if (_s.cLevels > 0) {
         _s.lstLvl1 = QSharedPointer<TextMasterStyle9Level>(new TextMasterStyle9Level(&_s));
         parseTextMasterStyle9Level(in, *_s.lstLvl1.data());
     }
-    if (_s.cLevels>1) {
+    if (_s.cLevels > 1) {
         _s.lstLvl2 = QSharedPointer<TextMasterStyle9Level>(new TextMasterStyle9Level(&_s));
         parseTextMasterStyle9Level(in, *_s.lstLvl2.data());
     }
-    if (_s.cLevels>2) {
+    if (_s.cLevels > 2) {
         _s.lstLvl3 = QSharedPointer<TextMasterStyle9Level>(new TextMasterStyle9Level(&_s));
         parseTextMasterStyle9Level(in, *_s.lstLvl3.data());
     }
-    if (_s.cLevels>3) {
+    if (_s.cLevels > 3) {
         _s.lstLvl4 = QSharedPointer<TextMasterStyle9Level>(new TextMasterStyle9Level(&_s));
         parseTextMasterStyle9Level(in, *_s.lstLvl4.data());
     }
-    if (_s.cLevels>4) {
+    if (_s.cLevels > 4) {
         _s.lstLvl5 = QSharedPointer<TextMasterStyle9Level>(new TextMasterStyle9Level(&_s));
         parseTextMasterStyle9Level(in, *_s.lstLvl5.data());
     }
 }
-void MSO::parseBlipEntityAtom(LEInputStream& in, BlipEntityAtom& _s) {
+void MSO::parseBlipEntityAtom(LEInputStream &in, BlipEntityAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
     }
-    if (!(_s.rh.recInstance<=128)) {
+    if (!(_s.rh.recInstance <= 128)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance<=128");
     }
     if (!(_s.rh.recType == 0x07F9)) {
@@ -12146,69 +12707,77 @@ void MSO::parseBlipEntityAtom(LEInputStream& in, BlipEntityAtom& _s) {
     }
     _s.winBlipType = in.readuint8();
     if (!(((quint8)_s.winBlipType) == 0x02 || ((quint8)_s.winBlipType) == 0x03 || ((quint8)_s.winBlipType) == 0x05 || ((quint8)_s.winBlipType) == 0x06)) {
-        throw IncorrectValueException(in.getPosition(), "((quint8)_s.winBlipType) == 0x02 || ((quint8)_s.winBlipType) == 0x03 || ((quint8)_s.winBlipType) == 0x05 || ((quint8)_s.winBlipType) == 0x06");
+        throw IncorrectValueException(
+            in.getPosition(),
+            "((quint8)_s.winBlipType) == 0x02 || ((quint8)_s.winBlipType) == 0x03 || ((quint8)_s.winBlipType) == 0x05 || ((quint8)_s.winBlipType) == 0x06");
     }
     _s.unused = in.readuint8();
     parseOfficeArtBStoreContainerFileBlock(in, _s.blip);
 }
-void MSO::parseTextMasterStyle10Atom(LEInputStream& in, TextMasterStyle10Atom& _s) {
+void MSO::parseTextMasterStyle10Atom(LEInputStream &in, TextMasterStyle10Atom &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0x0");
     }
-    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4 || _s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 8)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4 || _s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 8");
+    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4
+          || _s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 8)) {
+        throw IncorrectValueException(
+            in.getPosition(),
+            "_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2 || _s.rh.recInstance == 3 || _s.rh.recInstance == 4 || "
+            "_s.rh.recInstance == 5 || _s.rh.recInstance == 6 || _s.rh.recInstance == 7 || _s.rh.recInstance == 8");
     }
     if (!(_s.rh.recType == 0x0FB2)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FB2");
     }
     _s.cLevels = in.readuint16();
-    if (!(((quint16)_s.cLevels)<=5)) {
+    if (!(((quint16)_s.cLevels) <= 5)) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.cLevels)<=5");
     }
-    _s._has_lstLvl1level = _s.cLevels>0 && _s.rh.recInstance>=5;
+    _s._has_lstLvl1level = _s.cLevels > 0 && _s.rh.recInstance >= 5;
     if (_s._has_lstLvl1level) {
         _s.lstLvl1level = in.readuint16();
     }
-    if (_s.cLevels>0) {
+    if (_s.cLevels > 0) {
         _s.lstLvl1 = QSharedPointer<TextMasterStyle10Level>(new TextMasterStyle10Level(&_s));
         parseTextMasterStyle10Level(in, *_s.lstLvl1.data());
     }
-    _s._has_lstLvl2level = _s.cLevels>1 && _s.rh.recInstance>=5;
+    _s._has_lstLvl2level = _s.cLevels > 1 && _s.rh.recInstance >= 5;
     if (_s._has_lstLvl2level) {
         _s.lstLvl2level = in.readuint16();
     }
-    if (_s.cLevels>1) {
+    if (_s.cLevels > 1) {
         _s.lstLvl2 = QSharedPointer<TextMasterStyle10Level>(new TextMasterStyle10Level(&_s));
         parseTextMasterStyle10Level(in, *_s.lstLvl2.data());
     }
-    _s._has_lstLvl3level = _s.cLevels>2 && _s.rh.recInstance>=5;
+    _s._has_lstLvl3level = _s.cLevels > 2 && _s.rh.recInstance >= 5;
     if (_s._has_lstLvl3level) {
         _s.lstLvl3level = in.readuint16();
     }
-    if (_s.cLevels>2) {
+    if (_s.cLevels > 2) {
         _s.lstLvl3 = QSharedPointer<TextMasterStyle10Level>(new TextMasterStyle10Level(&_s));
         parseTextMasterStyle10Level(in, *_s.lstLvl3.data());
     }
-    _s._has_lstLvl4level = _s.cLevels>3 && _s.rh.recInstance>=5;
+    _s._has_lstLvl4level = _s.cLevels > 3 && _s.rh.recInstance >= 5;
     if (_s._has_lstLvl4level) {
         _s.lstLvl4level = in.readuint16();
     }
-    if (_s.cLevels>3) {
+    if (_s.cLevels > 3) {
         _s.lstLvl4 = QSharedPointer<TextMasterStyle10Level>(new TextMasterStyle10Level(&_s));
         parseTextMasterStyle10Level(in, *_s.lstLvl4.data());
     }
-    _s._has_lstLvl5level = _s.cLevels>4 && _s.rh.recInstance>=5;
+    _s._has_lstLvl5level = _s.cLevels > 4 && _s.rh.recInstance >= 5;
     if (_s._has_lstLvl5level) {
         _s.lstLvl5level = in.readuint16();
     }
-    if (_s.cLevels>4) {
+    if (_s.cLevels > 4) {
         _s.lstLvl5 = QSharedPointer<TextMasterStyle10Level>(new TextMasterStyle10Level(&_s));
         parseTextMasterStyle10Level(in, *_s.lstLvl5.data());
     }
 }
-void MSO::parseTextClientDataSubContainerOrAtom(LEInputStream& in, TextClientDataSubContainerOrAtom& _s) {
+void MSO::parseTextClientDataSubContainerOrAtom(LEInputStream &in, TextClientDataSubContainerOrAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -12216,16 +12785,17 @@ void MSO::parseTextClientDataSubContainerOrAtom(LEInputStream& in, TextClientDat
     parseRecordHeader(in, _choice);
     in.rewind(_m);
     qint64 startPos = in.getPosition();
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0)&&(_choice.recType == 0xF9E))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0) && (_choice.recType == 0xF9E))) {
         _s.anon = TextClientDataSubContainerOrAtom::choice2925155378(new OutlineAtom(&_s));
-        parseOutlineAtom(in, *(OutlineAtom*)_s.anon.data());
+        parseOutlineAtom(in, *(OutlineAtom *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = TextClientDataSubContainerOrAtom::choice2925155378(new TextContainer(&_s));
-        parseTextContainer(in, *(TextContainer*)_s.anon.data());
+        parseTextContainer(in, *(TextContainer *)_s.anon.data());
     }
 }
-void MSO::parseTextContainerInteractiveInfo(LEInputStream& in, TextContainerInteractiveInfo& _s) {
+void MSO::parseTextContainerInteractiveInfo(LEInputStream &in, TextContainerInteractiveInfo &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -12235,14 +12805,15 @@ void MSO::parseTextContainerInteractiveInfo(LEInputStream& in, TextContainerInte
     qint64 startPos = in.getPosition();
     if (startPos == in.getPosition() && ((_choice.recInstance == 0))) {
         _s.interactive = TextContainerInteractiveInfo::choice3752530176(new MouseClickTextInfo(&_s));
-        parseMouseClickTextInfo(in, *(MouseClickTextInfo*)_s.interactive.data());
+        parseMouseClickTextInfo(in, *(MouseClickTextInfo *)_s.interactive.data());
     }
     if (startPos == in.getPosition()) {
         _s.interactive = TextContainerInteractiveInfo::choice3752530176(new MouseOverTextInfo(&_s));
-        parseMouseOverTextInfo(in, *(MouseOverTextInfo*)_s.interactive.data());
+        parseMouseOverTextInfo(in, *(MouseOverTextInfo *)_s.interactive.data());
     }
 }
-void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoContainer& _s) {
+void MSO::parseDocumentTextInfoContainer(LEInputStream &in, DocumentTextInfoContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -12260,8 +12831,8 @@ void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoCont
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0x2)&&(_optionCheck.recType == 0x0FC8);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0x2) && (_optionCheck.recType == 0x0FC8);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12270,10 +12841,10 @@ void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoCont
         try {
             _s.kinsoku = QSharedPointer<KinsokuContainer>(new KinsokuContainer(&_s));
             parseKinsokuContainer(in, *_s.kinsoku.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.kinsoku.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.kinsoku.clear();
             in.rewind(_m);
         }
@@ -12282,8 +12853,8 @@ void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoCont
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x07D5);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x07D5);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12292,10 +12863,10 @@ void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoCont
         try {
             _s.fontCollection = QSharedPointer<FontCollectionContainer>(new FontCollectionContainer(&_s));
             parseFontCollectionContainer(in, *_s.fontCollection.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.fontCollection.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.fontCollection.clear();
             in.rewind(_m);
         }
@@ -12304,8 +12875,8 @@ void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoCont
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x0FA4);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x0FA4);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12314,10 +12885,10 @@ void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoCont
         try {
             _s.textCFDefaultsAtom = QSharedPointer<TextCFExceptionAtom>(new TextCFExceptionAtom(&_s));
             parseTextCFExceptionAtom(in, *_s.textCFDefaultsAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.textCFDefaultsAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.textCFDefaultsAtom.clear();
             in.rewind(_m);
         }
@@ -12326,8 +12897,8 @@ void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoCont
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x0FA5);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x0FA5);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12336,10 +12907,10 @@ void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoCont
         try {
             _s.textPFDefaultsAtom = QSharedPointer<TextPFExceptionAtom>(new TextPFExceptionAtom(&_s));
             parseTextPFExceptionAtom(in, *_s.textPFDefaultsAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.textPFDefaultsAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.textPFDefaultsAtom.clear();
             in.rewind(_m);
         }
@@ -12348,8 +12919,8 @@ void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoCont
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x0FAB);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x0FAB);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12358,10 +12929,10 @@ void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoCont
         try {
             _s.defaultRulerAtom = QSharedPointer<DefaultRulerAtom>(new DefaultRulerAtom(&_s));
             parseDefaultRulerAtom(in, *_s.defaultRulerAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.defaultRulerAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.defaultRulerAtom.clear();
             in.rewind(_m);
         }
@@ -12372,8 +12943,12 @@ void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoCont
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0 || _optionCheck.recInstance == 1 || _optionCheck.recInstance == 2 || _optionCheck.recInstance == 3 || _optionCheck.recInstance == 4 || _optionCheck.recInstance == 5 || _optionCheck.recInstance == 6 || _optionCheck.recInstance == 7 || _optionCheck.recInstance == 8)&&(_optionCheck.recType == 0x0FA3);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0)
+            && (_optionCheck.recInstance == 0 || _optionCheck.recInstance == 1 || _optionCheck.recInstance == 2 || _optionCheck.recInstance == 3
+                || _optionCheck.recInstance == 4 || _optionCheck.recInstance == 5 || _optionCheck.recInstance == 6 || _optionCheck.recInstance == 7
+                || _optionCheck.recInstance == 8)
+            && (_optionCheck.recType == 0x0FA3);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12382,42 +12957,46 @@ void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoCont
         try {
             _s.textMasterStyleAtom2 = QSharedPointer<TextMasterStyleAtom>(new TextMasterStyleAtom(&_s));
             parseTextMasterStyleAtom(in, *_s.textMasterStyleAtom2.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.textMasterStyleAtom2.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.textMasterStyleAtom2.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseSlideProgBinaryTagSubContainerOrAtom(LEInputStream& in, SlideProgBinaryTagSubContainerOrAtom& _s) {
+void MSO::parseSlideProgBinaryTagSubContainerOrAtom(LEInputStream &in, SlideProgBinaryTagSubContainerOrAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
     try {
         _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice4024872665(new PP9SlideBinaryTagExtension(&_s));
-        parsePP9SlideBinaryTagExtension(in, *(PP9SlideBinaryTagExtension*)_s.anon.data());
-    } catch (IncorrectValueException& _x) {
+        parsePP9SlideBinaryTagExtension(in, *(PP9SlideBinaryTagExtension *)_s.anon.data());
+    } catch (IncorrectValueException &_x) {
         _s.anon.clear();
         in.rewind(_m);
-    try {
-        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice4024872665(new PP12SlideBinaryTagExtension(&_s));
-        parsePP12SlideBinaryTagExtension(in, *(PP12SlideBinaryTagExtension*)_s.anon.data());
-    } catch (IncorrectValueException& _xx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice4024872665(new PP10SlideBinaryTagExtension(&_s));
-        parsePP10SlideBinaryTagExtension(in, *(PP10SlideBinaryTagExtension*)_s.anon.data());
-    } catch (IncorrectValueException& _xxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice4024872665(new UnknownBinaryTag(&_s));
-        parseUnknownBinaryTag(in, *(UnknownBinaryTag*)_s.anon.data());
-    }}}
+        try {
+            _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice4024872665(new PP12SlideBinaryTagExtension(&_s));
+            parsePP12SlideBinaryTagExtension(in, *(PP12SlideBinaryTagExtension *)_s.anon.data());
+        } catch (IncorrectValueException &_xx) {
+            _s.anon.clear();
+            in.rewind(_m);
+            try {
+                _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice4024872665(new PP10SlideBinaryTagExtension(&_s));
+                parsePP10SlideBinaryTagExtension(in, *(PP10SlideBinaryTagExtension *)_s.anon.data());
+            } catch (IncorrectValueException &_xxx) {
+                _s.anon.clear();
+                in.rewind(_m);
+                _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice4024872665(new UnknownBinaryTag(&_s));
+                parseUnknownBinaryTag(in, *(UnknownBinaryTag *)_s.anon.data());
+            }
+        }
+    }
 }
-void MSO::parseDrawingGroupContainer(LEInputStream& in, DrawingGroupContainer& _s) {
+void MSO::parseDrawingGroupContainer(LEInputStream &in, DrawingGroupContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -12431,7 +13010,8 @@ void MSO::parseDrawingGroupContainer(LEInputStream& in, DrawingGroupContainer& _
     }
     parseOfficeArtDggContainer(in, _s.OfficeArtDgg);
 }
-void MSO::parseOfficeArtClientData(LEInputStream& in, OfficeArtClientData& _s) {
+void MSO::parseOfficeArtClientData(LEInputStream &in, OfficeArtClientData &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -12439,20 +13019,21 @@ void MSO::parseOfficeArtClientData(LEInputStream& in, OfficeArtClientData& _s) {
     parseOfficeArtRecordHeader(in, _choice);
     in.rewind(_m);
     qint64 startPos = in.getPosition();
-    if (startPos == in.getPosition() && ((_choice.recVer == 0)&&(_choice.recLen == 4))) {
+    if (startPos == in.getPosition() && ((_choice.recVer == 0) && (_choice.recLen == 4))) {
         _s.anon = OfficeArtClientData::choice2520977885(new DocOfficeArtClientData(&_s));
-        parseDocOfficeArtClientData(in, *(DocOfficeArtClientData*)_s.anon.data());
+        parseDocOfficeArtClientData(in, *(DocOfficeArtClientData *)_s.anon.data());
     }
     if (startPos == in.getPosition() && ((_choice.recVer == 0xF))) {
         _s.anon = OfficeArtClientData::choice2520977885(new PptOfficeArtClientData(&_s));
-        parsePptOfficeArtClientData(in, *(PptOfficeArtClientData*)_s.anon.data());
+        parsePptOfficeArtClientData(in, *(PptOfficeArtClientData *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = OfficeArtClientData::choice2520977885(new XlsOfficeArtClientData(&_s));
-        parseXlsOfficeArtClientData(in, *(XlsOfficeArtClientData*)_s.anon.data());
+        parseXlsOfficeArtClientData(in, *(XlsOfficeArtClientData *)_s.anon.data());
     }
 }
-void MSO::parseShapeProgTagsSubContainerOrAtom(LEInputStream& in, ShapeProgTagsSubContainerOrAtom& _s) {
+void MSO::parseShapeProgTagsSubContainerOrAtom(LEInputStream &in, ShapeProgTagsSubContainerOrAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -12462,14 +13043,15 @@ void MSO::parseShapeProgTagsSubContainerOrAtom(LEInputStream& in, ShapeProgTagsS
     qint64 startPos = in.getPosition();
     if (startPos == in.getPosition() && ((_choice.recType == 0x1389))) {
         _s.anon = ShapeProgTagsSubContainerOrAtom::choice42781012(new ProgStringTagContainer(&_s));
-        parseProgStringTagContainer(in, *(ProgStringTagContainer*)_s.anon.data());
+        parseProgStringTagContainer(in, *(ProgStringTagContainer *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = ShapeProgTagsSubContainerOrAtom::choice42781012(new ShapeProgBinaryTagContainer(&_s));
-        parseShapeProgBinaryTagContainer(in, *(ShapeProgBinaryTagContainer*)_s.anon.data());
+        parseShapeProgBinaryTagContainer(in, *(ShapeProgBinaryTagContainer *)_s.anon.data());
     }
 }
-void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
+void MSO::parseDocumentContainer(LEInputStream &in, DocumentContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -12489,8 +13071,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x0409)&&(_optionCheck.recLen>=12);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x0409) && (_optionCheck.recLen >= 12);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12499,10 +13081,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.exObjList = QSharedPointer<ExObjListContainer>(new ExObjListContainer(&_s));
             parseExObjListContainer(in, *_s.exObjList.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.exObjList.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.exObjList.clear();
             in.rewind(_m);
         }
@@ -12512,8 +13094,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0 || _optionCheck.recInstance == 5)&&(_optionCheck.recType == 0x7E4);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0 || _optionCheck.recInstance == 5) && (_optionCheck.recType == 0x7E4);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12522,10 +13104,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.soundCollection = QSharedPointer<SoundCollectionContainer>(new SoundCollectionContainer(&_s));
             parseSoundCollectionContainer(in, *_s.soundCollection.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.soundCollection.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.soundCollection.clear();
             in.rewind(_m);
         }
@@ -12536,8 +13118,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x7D0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x7D0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12546,10 +13128,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.docInfoList = QSharedPointer<DocInfoListContainer>(new DocInfoListContainer(&_s));
             parseDocInfoListContainer(in, *_s.docInfoList.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.docInfoList.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.docInfoList.clear();
             in.rewind(_m);
         }
@@ -12558,8 +13140,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 3)&&(_optionCheck.recType == 0xFD9);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 3) && (_optionCheck.recType == 0xFD9);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12568,10 +13150,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.slideHF = QSharedPointer<SlideHeadersFootersContainer>(new SlideHeadersFootersContainer(&_s));
             parseSlideHeadersFootersContainer(in, *_s.slideHF.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideHF.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideHF.clear();
             in.rewind(_m);
         }
@@ -12580,8 +13162,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 4)&&(_optionCheck.recType == 0xFD9);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 4) && (_optionCheck.recType == 0xFD9);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12590,10 +13172,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.notesHF = QSharedPointer<NotesHeadersFootersContainer>(new NotesHeadersFootersContainer(&_s));
             parseNotesHeadersFootersContainer(in, *_s.notesHF.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.notesHF.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.notesHF.clear();
             in.rewind(_m);
         }
@@ -12602,8 +13184,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0x0)&&(_optionCheck.recType == 0x0FF0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0x0) && (_optionCheck.recType == 0x0FF0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12612,10 +13194,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.slideList = QSharedPointer<SlideListWithTextContainer>(new SlideListWithTextContainer(&_s));
             parseSlideListWithTextContainer(in, *_s.slideList.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideList.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideList.clear();
             in.rewind(_m);
         }
@@ -12624,8 +13206,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 3)&&(_optionCheck.recType == 0xFD9);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 3) && (_optionCheck.recType == 0xFD9);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12634,10 +13216,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.slideHF2 = QSharedPointer<SlideHeadersFootersContainer>(new SlideHeadersFootersContainer(&_s));
             parseSlideHeadersFootersContainer(in, *_s.slideHF2.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideHF2.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideHF2.clear();
             in.rewind(_m);
         }
@@ -12646,8 +13228,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 2)&&(_optionCheck.recType == 0x0FF0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 2) && (_optionCheck.recType == 0x0FF0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12656,10 +13238,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.notesList = QSharedPointer<NotesListWithTextContainer>(new NotesListWithTextContainer(&_s));
             parseNotesListWithTextContainer(in, *_s.notesList.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.notesList.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.notesList.clear();
             in.rewind(_m);
         }
@@ -12668,8 +13250,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 1)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x0401)&&(_optionCheck.recLen == 0x50);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 1) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x0401) && (_optionCheck.recLen == 0x50);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12678,10 +13260,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.slideShowDocInfoAtom = QSharedPointer<SlideShowDocInfoAtom>(new SlideShowDocInfoAtom(&_s));
             parseSlideShowDocInfoAtom(in, *_s.slideShowDocInfoAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideShowDocInfoAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideShowDocInfoAtom.clear();
             in.rewind(_m);
         }
@@ -12690,8 +13272,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x410);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x410);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12700,10 +13282,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.namedShows = QSharedPointer<NamedShowsContainer>(new NamedShowsContainer(&_s));
             parseNamedShowsContainer(in, *_s.namedShows.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.namedShows.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.namedShows.clear();
             in.rewind(_m);
         }
@@ -12712,8 +13294,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x402);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x402);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12722,10 +13304,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.summary = QSharedPointer<SummaryContainer>(new SummaryContainer(&_s));
             parseSummaryContainer(in, *_s.summary.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.summary.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.summary.clear();
             in.rewind(_m);
         }
@@ -12734,8 +13316,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x406);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x406);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12744,10 +13326,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.docRoutingSlipAtom = QSharedPointer<DocRoutingSlipAtom>(new DocRoutingSlipAtom(&_s));
             parseDocRoutingSlipAtom(in, *_s.docRoutingSlipAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.docRoutingSlipAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.docRoutingSlipAtom.clear();
             in.rewind(_m);
         }
@@ -12756,8 +13338,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x1770)&&(_optionCheck.recLen == 5);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x1770) && (_optionCheck.recLen == 5);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12766,10 +13348,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.printOptionsAtom = QSharedPointer<PrintOptionsAtom>(new PrintOptionsAtom(&_s));
             parsePrintOptionsAtom(in, *_s.printOptionsAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.printOptionsAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.printOptionsAtom.clear();
             in.rewind(_m);
         }
@@ -12780,11 +13362,11 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.unknown0.append(UnknownDocumentContainerChild(&_s));
             parseUnknownDocumentContainerChild(in, _s.unknown0.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown0.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown0.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -12794,8 +13376,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0 || _optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x428);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0 || _optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x428);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12804,10 +13386,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.rtCustomTableStylesAtom1 = QSharedPointer<RoundTripCustomTableStyles12Atom>(new RoundTripCustomTableStyles12Atom(&_s));
             parseRoundTripCustomTableStyles12Atom(in, *_s.rtCustomTableStylesAtom1.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rtCustomTableStylesAtom1.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rtCustomTableStylesAtom1.clear();
             in.rewind(_m);
         }
@@ -12818,11 +13400,11 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.unknown1.append(UnknownDocumentContainerChild(&_s));
             parseUnknownDocumentContainerChild(in, _s.unknown1.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown1.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown1.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -12835,11 +13417,11 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.unknown2.append(UnknownDocumentContainerChild(&_s));
             parseUnknownDocumentContainerChild(in, _s.unknown2.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown2.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown2.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -12849,8 +13431,8 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0 || _optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x428);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0 || _optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x428);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12859,10 +13441,10 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.rtCustomTableStylesAtom2 = QSharedPointer<RoundTripCustomTableStyles12Atom>(new RoundTripCustomTableStyles12Atom(&_s));
             parseRoundTripCustomTableStyles12Atom(in, *_s.rtCustomTableStylesAtom2.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rtCustomTableStylesAtom2.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rtCustomTableStylesAtom2.clear();
             in.rewind(_m);
         }
@@ -12873,11 +13455,11 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.unknown4.append(UnknownDocumentContainerChild(&_s));
             parseUnknownDocumentContainerChild(in, _s.unknown4.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown4.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown4.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -12887,8 +13469,12 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance == 0 || _optionCheck.recInstance == 1 || _optionCheck.recInstance == 2 || _optionCheck.recInstance == 3 || _optionCheck.recInstance == 4 || _optionCheck.recInstance == 5 || _optionCheck.recInstance == 6 || _optionCheck.recInstance == 7 || _optionCheck.recInstance == 8)&&(_optionCheck.recType == 0x0FB2);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x0)
+            && (_optionCheck.recInstance == 0 || _optionCheck.recInstance == 1 || _optionCheck.recInstance == 2 || _optionCheck.recInstance == 3
+                || _optionCheck.recInstance == 4 || _optionCheck.recInstance == 5 || _optionCheck.recInstance == 6 || _optionCheck.recInstance == 7
+                || _optionCheck.recInstance == 8)
+            && (_optionCheck.recType == 0x0FB2);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12897,16 +13483,17 @@ void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
         try {
             _s.unknown5 = QSharedPointer<TextMasterStyle10Atom>(new TextMasterStyle10Atom(&_s));
             parseTextMasterStyle10Atom(in, *_s.unknown5.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown5.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown5.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseDocInfoListSubContainerOrAtom(LEInputStream& in, DocInfoListSubContainerOrAtom& _s) {
+void MSO::parseDocInfoListSubContainerOrAtom(LEInputStream &in, DocInfoListSubContainerOrAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -12914,36 +13501,37 @@ void MSO::parseDocInfoListSubContainerOrAtom(LEInputStream& in, DocInfoListSubCo
     parseRecordHeader(in, _choice);
     in.rewind(_m);
     qint64 startPos = in.getPosition();
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0 || _choice.recInstance == 1)&&(_choice.recType == 0x1388))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0 || _choice.recInstance == 1) && (_choice.recType == 0x1388))) {
         _s.anon = DocInfoListSubContainerOrAtom::choice2631814737(new DocProgTagsContainer(&_s));
-        parseDocProgTagsContainer(in, *(DocProgTagsContainer*)_s.anon.data());
+        parseDocProgTagsContainer(in, *(DocProgTagsContainer *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 1)&&(_choice.recType == 0x414)&&(_choice.recLen == 0x1C))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 1) && (_choice.recType == 0x414) && (_choice.recLen == 0x1C))) {
         _s.anon = DocInfoListSubContainerOrAtom::choice2631814737(new NormalViewSetInfoContainer(&_s));
-        parseNormalViewSetInfoContainer(in, *(NormalViewSetInfoContainer*)_s.anon.data());
+        parseNormalViewSetInfoContainer(in, *(NormalViewSetInfoContainer *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 1)&&(_choice.recType == 0x413))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 1) && (_choice.recType == 0x413))) {
         _s.anon = DocInfoListSubContainerOrAtom::choice2631814737(new NotesTextViewInfoContainer(&_s));
-        parseNotesTextViewInfoContainer(in, *(NotesTextViewInfoContainer*)_s.anon.data());
+        parseNotesTextViewInfoContainer(in, *(NotesTextViewInfoContainer *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0 || _choice.recInstance == 1)&&(_choice.recType == 0x407))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0 || _choice.recInstance == 1) && (_choice.recType == 0x407))) {
         _s.anon = DocInfoListSubContainerOrAtom::choice2631814737(new OutlineViewInfoContainer(&_s));
-        parseOutlineViewInfoContainer(in, *(OutlineViewInfoContainer*)_s.anon.data());
+        parseOutlineViewInfoContainer(in, *(OutlineViewInfoContainer *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 0 || _choice.recInstance == 1)&&(_choice.recType == 0x3FA))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 0 || _choice.recInstance == 1) && (_choice.recType == 0x3FA))) {
         _s.anon = DocInfoListSubContainerOrAtom::choice2631814737(new SlideViewInfoInstance(&_s));
-        parseSlideViewInfoInstance(in, *(SlideViewInfoInstance*)_s.anon.data());
+        parseSlideViewInfoInstance(in, *(SlideViewInfoInstance *)_s.anon.data());
     }
-    if (startPos == in.getPosition() && ((_choice.recInstance == 1)&&(_choice.recType == 0x408))) {
+    if (startPos == in.getPosition() && ((_choice.recInstance == 1) && (_choice.recType == 0x408))) {
         _s.anon = DocInfoListSubContainerOrAtom::choice2631814737(new SorterViewInfoContainer(&_s));
-        parseSorterViewInfoContainer(in, *(SorterViewInfoContainer*)_s.anon.data());
+        parseSorterViewInfoContainer(in, *(SorterViewInfoContainer *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = DocInfoListSubContainerOrAtom::choice2631814737(new VBAInfoContainer(&_s));
-        parseVBAInfoContainer(in, *(VBAInfoContainer*)_s.anon.data());
+        parseVBAInfoContainer(in, *(VBAInfoContainer *)_s.anon.data());
     }
 }
-void MSO::parseDocProgBinaryTagContainer(LEInputStream& in, DocProgBinaryTagContainer& _s) {
+void MSO::parseDocProgBinaryTagContainer(LEInputStream &in, DocProgBinaryTagContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -12957,7 +13545,8 @@ void MSO::parseDocProgBinaryTagContainer(LEInputStream& in, DocProgBinaryTagCont
     }
     parseDocProgBinaryTagSubContainerOrAtom(in, _s.rec);
 }
-void MSO::parseSlideProgBinaryTagContainer(LEInputStream& in, SlideProgBinaryTagContainer& _s) {
+void MSO::parseSlideProgBinaryTagContainer(LEInputStream &in, SlideProgBinaryTagContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -12971,7 +13560,8 @@ void MSO::parseSlideProgBinaryTagContainer(LEInputStream& in, SlideProgBinaryTag
     }
     parseSlideProgBinaryTagSubContainerOrAtom(in, _s.rec);
 }
-void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s) {
+void MSO::parseOfficeArtSpContainer(LEInputStream &in, OfficeArtSpContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -12989,8 +13579,9 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x1)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x0F009)&&(_optionCheck.recLen == 0x10);
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x1) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x0F009) && (_optionCheck.recLen == 0x10);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -12999,10 +13590,10 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
         try {
             _s.shapeGroup = QSharedPointer<OfficeArtFSPGR>(new OfficeArtFSPGR(&_s));
             parseOfficeArtFSPGR(in, *_s.shapeGroup.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.shapeGroup.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.shapeGroup.clear();
             in.rewind(_m);
         }
@@ -13012,8 +13603,8 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xF11D)&&(_optionCheck.recLen == 4);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xF11D) && (_optionCheck.recLen == 4);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13022,10 +13613,10 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
         try {
             _s.deletedshape = QSharedPointer<OfficeArtFPSPL>(new OfficeArtFPSPL(&_s));
             parseOfficeArtFPSPL(in, *_s.deletedshape.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.deletedshape.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.deletedshape.clear();
             in.rewind(_m);
         }
@@ -13034,8 +13625,8 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x3)&&(_optionCheck.recType == 0x0F00B);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x3) && (_optionCheck.recType == 0x0F00B);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13044,10 +13635,10 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
         try {
             _s.shapePrimaryOptions = QSharedPointer<OfficeArtFOPT>(new OfficeArtFOPT(&_s));
             parseOfficeArtFOPT(in, *_s.shapePrimaryOptions.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.shapePrimaryOptions.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.shapePrimaryOptions.clear();
             in.rewind(_m);
         }
@@ -13056,8 +13647,8 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 3)&&(_optionCheck.recType == 0xF121);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 3) && (_optionCheck.recType == 0xF121);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13066,10 +13657,10 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
         try {
             _s.shapeSecondaryOptions1 = QSharedPointer<OfficeArtSecondaryFOPT>(new OfficeArtSecondaryFOPT(&_s));
             parseOfficeArtSecondaryFOPT(in, *_s.shapeSecondaryOptions1.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.shapeSecondaryOptions1.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.shapeSecondaryOptions1.clear();
             in.rewind(_m);
         }
@@ -13078,8 +13669,8 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 3)&&(_optionCheck.recType == 0xF122);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 3) && (_optionCheck.recType == 0xF122);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13088,10 +13679,10 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
         try {
             _s.shapeTertiaryOptions1 = QSharedPointer<OfficeArtTertiaryFOPT>(new OfficeArtTertiaryFOPT(&_s));
             parseOfficeArtTertiaryFOPT(in, *_s.shapeTertiaryOptions1.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.shapeTertiaryOptions1.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.shapeTertiaryOptions1.clear();
             in.rewind(_m);
         }
@@ -13100,8 +13691,8 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xF00F)&&(_optionCheck.recLen == 0x10);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xF00F) && (_optionCheck.recLen == 0x10);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13110,10 +13701,10 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
         try {
             _s.childAnchor = QSharedPointer<OfficeArtChildAnchor>(new OfficeArtChildAnchor(&_s));
             parseOfficeArtChildAnchor(in, *_s.childAnchor.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.childAnchor.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.childAnchor.clear();
             in.rewind(_m);
         }
@@ -13122,8 +13713,9 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = ((_optionCheck.recLen == 0x8 || _optionCheck.recLen == 0x10))||((_optionCheck.recLen == 0x4))||((_optionCheck.recLen == 0x8 || _optionCheck.recLen == 0x12));
-    } catch(EOFException& _e) {
+        _possiblyPresent = ((_optionCheck.recLen == 0x8 || _optionCheck.recLen == 0x10)) || ((_optionCheck.recLen == 0x4))
+            || ((_optionCheck.recLen == 0x8 || _optionCheck.recLen == 0x12));
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13132,10 +13724,10 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
         try {
             _s.clientAnchor = QSharedPointer<OfficeArtClientAnchor>(new OfficeArtClientAnchor(&_s));
             parseOfficeArtClientAnchor(in, *_s.clientAnchor.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.clientAnchor.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.clientAnchor.clear();
             in.rewind(_m);
         }
@@ -13144,8 +13736,9 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = ((_optionCheck.recVer == 0)&&(_optionCheck.recLen == 4))||((_optionCheck.recVer == 0xF))||((_optionCheck.recVer == 0)&&(_optionCheck.recLen == 0));
-    } catch(EOFException& _e) {
+        _possiblyPresent = ((_optionCheck.recVer == 0) && (_optionCheck.recLen == 4)) || ((_optionCheck.recVer == 0xF))
+            || ((_optionCheck.recVer == 0) && (_optionCheck.recLen == 0));
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13154,10 +13747,10 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
         try {
             _s.clientData = QSharedPointer<OfficeArtClientData>(new OfficeArtClientData(&_s));
             parseOfficeArtClientData(in, *_s.clientData.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.clientData.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.clientData.clear();
             in.rewind(_m);
         }
@@ -13166,8 +13759,10 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = ((_optionCheck.recVer == 0)&&(_optionCheck.recLen == 0))||((_optionCheck.recVer == 0 || _optionCheck.recVer == 0xF)&&(_optionCheck.recLen == 0x4))||((_optionCheck.recVer == 0 || _optionCheck.recVer == 0xF)&&(_optionCheck.recLen!=4));
-    } catch(EOFException& _e) {
+        _possiblyPresent = ((_optionCheck.recVer == 0) && (_optionCheck.recLen == 0))
+            || ((_optionCheck.recVer == 0 || _optionCheck.recVer == 0xF) && (_optionCheck.recLen == 0x4))
+            || ((_optionCheck.recVer == 0 || _optionCheck.recVer == 0xF) && (_optionCheck.recLen != 4));
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13176,10 +13771,10 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
         try {
             _s.clientTextbox = QSharedPointer<OfficeArtClientTextBox>(new OfficeArtClientTextBox(&_s));
             parseOfficeArtClientTextBox(in, *_s.clientTextbox.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.clientTextbox.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.clientTextbox.clear();
             in.rewind(_m);
         }
@@ -13188,8 +13783,8 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x3)&&(_optionCheck.recType == 0x0F00B);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0x3) && (_optionCheck.recType == 0x0F00B);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13198,10 +13793,10 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
         try {
             _s.shapePrimaryOptions2 = QSharedPointer<OfficeArtFOPT>(new OfficeArtFOPT(&_s));
             parseOfficeArtFOPT(in, *_s.shapePrimaryOptions2.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.shapePrimaryOptions2.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.shapePrimaryOptions2.clear();
             in.rewind(_m);
         }
@@ -13210,8 +13805,8 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 3)&&(_optionCheck.recType == 0xF121);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 3) && (_optionCheck.recType == 0xF121);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13220,10 +13815,10 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
         try {
             _s.shapeSecondaryOptions2 = QSharedPointer<OfficeArtSecondaryFOPT>(new OfficeArtSecondaryFOPT(&_s));
             parseOfficeArtSecondaryFOPT(in, *_s.shapeSecondaryOptions2.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.shapeSecondaryOptions2.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.shapeSecondaryOptions2.clear();
             in.rewind(_m);
         }
@@ -13232,8 +13827,8 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 3)&&(_optionCheck.recType == 0xF122);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 3) && (_optionCheck.recType == 0xF122);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13242,10 +13837,10 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
         try {
             _s.shapeTertiaryOptions2 = QSharedPointer<OfficeArtTertiaryFOPT>(new OfficeArtTertiaryFOPT(&_s));
             parseOfficeArtTertiaryFOPT(in, *_s.shapeTertiaryOptions2.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.shapeTertiaryOptions2.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.shapeTertiaryOptions2.clear();
             in.rewind(_m);
         }
@@ -13254,8 +13849,8 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 3)&&(_optionCheck.recInstance == 9)&&(_optionCheck.recType == 0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 3) && (_optionCheck.recInstance == 9) && (_optionCheck.recType == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13264,16 +13859,17 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
         try {
             _s.unknown = QSharedPointer<UnknownTextContainerChild>(new UnknownTextContainerChild(&_s));
             parseUnknownTextContainerChild(in, *_s.unknown.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseOfficeArtInlineSpContainer(LEInputStream& in, OfficeArtInlineSpContainer& _s) {
+void MSO::parseOfficeArtInlineSpContainer(LEInputStream &in, OfficeArtInlineSpContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -13284,18 +13880,19 @@ void MSO::parseOfficeArtInlineSpContainer(LEInputStream& in, OfficeArtInlineSpCo
         try {
             _s.rgfb.append(OfficeArtBStoreContainerFileBlock(&_s));
             parseOfficeArtBStoreContainerFileBlock(in, _s.rgfb.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgfb.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgfb.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseDocProgTagsSubContainerOrAtom(LEInputStream& in, DocProgTagsSubContainerOrAtom& _s) {
+void MSO::parseDocProgTagsSubContainerOrAtom(LEInputStream &in, DocProgTagsSubContainerOrAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -13305,14 +13902,15 @@ void MSO::parseDocProgTagsSubContainerOrAtom(LEInputStream& in, DocProgTagsSubCo
     qint64 startPos = in.getPosition();
     if (startPos == in.getPosition() && ((_choice.recType == 0x1389))) {
         _s.anon = DocProgTagsSubContainerOrAtom::choice61655436(new ProgStringTagContainer(&_s));
-        parseProgStringTagContainer(in, *(ProgStringTagContainer*)_s.anon.data());
+        parseProgStringTagContainer(in, *(ProgStringTagContainer *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = DocProgTagsSubContainerOrAtom::choice61655436(new DocProgBinaryTagContainer(&_s));
-        parseDocProgBinaryTagContainer(in, *(DocProgBinaryTagContainer*)_s.anon.data());
+        parseDocProgBinaryTagContainer(in, *(DocProgBinaryTagContainer *)_s.anon.data());
     }
 }
-void MSO::parseSlideProgTagsSubContainerOrAtom(LEInputStream& in, SlideProgTagsSubContainerOrAtom& _s) {
+void MSO::parseSlideProgTagsSubContainerOrAtom(LEInputStream &in, SlideProgTagsSubContainerOrAtom &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -13322,14 +13920,15 @@ void MSO::parseSlideProgTagsSubContainerOrAtom(LEInputStream& in, SlideProgTagsS
     qint64 startPos = in.getPosition();
     if (startPos == in.getPosition() && ((_choice.recType == 0x1389))) {
         _s.anon = SlideProgTagsSubContainerOrAtom::choice310259039(new ProgStringTagContainer(&_s));
-        parseProgStringTagContainer(in, *(ProgStringTagContainer*)_s.anon.data());
+        parseProgStringTagContainer(in, *(ProgStringTagContainer *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = SlideProgTagsSubContainerOrAtom::choice310259039(new SlideProgBinaryTagContainer(&_s));
-        parseSlideProgBinaryTagContainer(in, *(SlideProgBinaryTagContainer*)_s.anon.data());
+        parseSlideProgBinaryTagContainer(in, *(SlideProgBinaryTagContainer *)_s.anon.data());
     }
 }
-void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s) {
+void MSO::parseOfficeArtDgContainer(LEInputStream &in, OfficeArtDgContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -13348,8 +13947,9 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0x0)&&(_optionCheck.recInstance<=4094)&&(_optionCheck.recType == 0x0F008)&&(_optionCheck.recLen == 8);
-    } catch(EOFException& _e) {
+        _possiblyPresent =
+            (_optionCheck.recVer == 0x0) && (_optionCheck.recInstance <= 4094) && (_optionCheck.recType == 0x0F008) && (_optionCheck.recLen == 8);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13358,10 +13958,10 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
         try {
             _s.drawingData = QSharedPointer<OfficeArtFDG>(new OfficeArtFDG(&_s));
             parseOfficeArtFDG(in, *_s.drawingData.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.drawingData.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.drawingData.clear();
             in.rewind(_m);
         }
@@ -13370,8 +13970,8 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recType == 0xF118)&&(_optionCheck.recLen==4*_optionCheck.recInstance);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recType == 0xF118) && (_optionCheck.recLen == 4 * _optionCheck.recInstance);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13380,10 +13980,10 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
         try {
             _s.regroupItems = QSharedPointer<OfficeArtFRITContainer>(new OfficeArtFRITContainer(&_s));
             parseOfficeArtFRITContainer(in, *_s.regroupItems.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.regroupItems.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.regroupItems.clear();
             in.rewind(_m);
         }
@@ -13392,8 +13992,8 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x0F003);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x0F003);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13402,10 +14002,10 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
         try {
             _s.groupShape = QSharedPointer<OfficeArtSpgrContainer>(new OfficeArtSpgrContainer(&_s));
             parseOfficeArtSpgrContainer(in, *_s.groupShape.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.groupShape.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.groupShape.clear();
             in.rewind(_m);
         }
@@ -13414,8 +14014,8 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x0F004);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x0F004);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13424,10 +14024,10 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
         try {
             _s.shape = QSharedPointer<OfficeArtSpContainer>(new OfficeArtSpContainer(&_s));
             parseOfficeArtSpContainer(in, *_s.shape.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.shape.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.shape.clear();
             in.rewind(_m);
         }
@@ -13438,11 +14038,11 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
         try {
             _s.deletedShapes.append(OfficeArtSpgrContainerFileBlock(&_s));
             parseOfficeArtSpgrContainerFileBlock(in, _s.deletedShapes.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.deletedShapes.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.deletedShapes.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -13452,8 +14052,8 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recType == 0xF005);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recType == 0xF005);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13462,54 +14062,60 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
         try {
             _s.solvers = QSharedPointer<OfficeArtSolverContainer>(new OfficeArtSolverContainer(&_s));
             parseOfficeArtSolverContainer(in, *_s.solvers.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.solvers.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.solvers.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseOfficeArtSpgrContainerFileBlock(LEInputStream& in, OfficeArtSpgrContainerFileBlock& _s) {
+void MSO::parseOfficeArtSpgrContainerFileBlock(LEInputStream &in, OfficeArtSpgrContainerFileBlock &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
     try {
         _s.anon = OfficeArtSpgrContainerFileBlock::choice4117040(new OfficeArtSpContainer(&_s));
-        parseOfficeArtSpContainer(in, *(OfficeArtSpContainer*)_s.anon.data());
-    } catch (IncorrectValueException& _x) {
+        parseOfficeArtSpContainer(in, *(OfficeArtSpContainer *)_s.anon.data());
+    } catch (IncorrectValueException &_x) {
         _s.anon.clear();
         in.rewind(_m);
-    try {
-        _s.anon = OfficeArtSpgrContainerFileBlock::choice4117040(new OfficeArtSpgrContainer(&_s));
-        parseOfficeArtSpgrContainer(in, *(OfficeArtSpgrContainer*)_s.anon.data());
-    } catch (IncorrectValueException& _xx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = OfficeArtSpgrContainerFileBlock::choice4117040(new OfficeArtFSP(&_s));
-        parseOfficeArtFSP(in, *(OfficeArtFSP*)_s.anon.data());
-    } catch (IncorrectValueException& _xxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = OfficeArtSpgrContainerFileBlock::choice4117040(new OfficeArtFSPGR(&_s));
-        parseOfficeArtFSPGR(in, *(OfficeArtFSPGR*)_s.anon.data());
-    } catch (IncorrectValueException& _xxxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = OfficeArtSpgrContainerFileBlock::choice4117040(new OfficeArtClientAnchor(&_s));
-        parseOfficeArtClientAnchor(in, *(OfficeArtClientAnchor*)_s.anon.data());
-    } catch (IncorrectValueException& _xxxxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-        _s.anon = OfficeArtSpgrContainerFileBlock::choice4117040(new OfficeArtClientData(&_s));
-        parseOfficeArtClientData(in, *(OfficeArtClientData*)_s.anon.data());
-    }}}}}
+        try {
+            _s.anon = OfficeArtSpgrContainerFileBlock::choice4117040(new OfficeArtSpgrContainer(&_s));
+            parseOfficeArtSpgrContainer(in, *(OfficeArtSpgrContainer *)_s.anon.data());
+        } catch (IncorrectValueException &_xx) {
+            _s.anon.clear();
+            in.rewind(_m);
+            try {
+                _s.anon = OfficeArtSpgrContainerFileBlock::choice4117040(new OfficeArtFSP(&_s));
+                parseOfficeArtFSP(in, *(OfficeArtFSP *)_s.anon.data());
+            } catch (IncorrectValueException &_xxx) {
+                _s.anon.clear();
+                in.rewind(_m);
+                try {
+                    _s.anon = OfficeArtSpgrContainerFileBlock::choice4117040(new OfficeArtFSPGR(&_s));
+                    parseOfficeArtFSPGR(in, *(OfficeArtFSPGR *)_s.anon.data());
+                } catch (IncorrectValueException &_xxxx) {
+                    _s.anon.clear();
+                    in.rewind(_m);
+                    try {
+                        _s.anon = OfficeArtSpgrContainerFileBlock::choice4117040(new OfficeArtClientAnchor(&_s));
+                        parseOfficeArtClientAnchor(in, *(OfficeArtClientAnchor *)_s.anon.data());
+                    } catch (IncorrectValueException &_xxxxx) {
+                        _s.anon.clear();
+                        in.rewind(_m);
+                        _s.anon = OfficeArtSpgrContainerFileBlock::choice4117040(new OfficeArtClientData(&_s));
+                        parseOfficeArtClientData(in, *(OfficeArtClientData *)_s.anon.data());
+                    }
+                }
+            }
+        }
+    }
 }
-void MSO::parseDrawingContainer(LEInputStream& in, DrawingContainer& _s) {
+void MSO::parseDrawingContainer(LEInputStream &in, DrawingContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -13523,7 +14129,8 @@ void MSO::parseDrawingContainer(LEInputStream& in, DrawingContainer& _s) {
     }
     parseOfficeArtDgContainer(in, _s.OfficeArtDg);
 }
-void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
+void MSO::parseMainMasterContainer(LEInputStream &in, MainMasterContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -13543,8 +14150,8 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x03F9)&&(_optionCheck.recLen == 0x10);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x03F9) && (_optionCheck.recLen == 0x10);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13553,10 +14160,10 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
         try {
             _s.unknown = QSharedPointer<SlideShowSlideInfoAtom>(new SlideShowSlideInfoAtom(&_s));
             parseSlideShowSlideInfoAtom(in, *_s.unknown.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown.clear();
             in.rewind(_m);
         }
@@ -13567,11 +14174,11 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
         try {
             _s.rgSchemeListElementColorScheme.append(SchemeListElementColorSchemeAtom(&_s));
             parseSchemeListElementColorSchemeAtom(in, _s.rgSchemeListElementColorScheme.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgSchemeListElementColorScheme.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgSchemeListElementColorScheme.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -13583,11 +14190,11 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
         try {
             _s.rgTextMasterStyle.append(TextMasterStyleAtom(&_s));
             parseTextMasterStyleAtom(in, _s.rgTextMasterStyle.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgTextMasterStyle.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgTextMasterStyle.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -13597,8 +14204,8 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x423);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x423);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13607,10 +14214,10 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
         try {
             _s.roundTripOArtTextSTyles12Atom = QSharedPointer<RoundTripOArtTextStyles12Atom>(new RoundTripOArtTextStyles12Atom(&_s));
             parseRoundTripOArtTextStyles12Atom(in, *_s.roundTripOArtTextSTyles12Atom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.roundTripOArtTextSTyles12Atom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.roundTripOArtTextSTyles12Atom.clear();
             in.rewind(_m);
         }
@@ -13619,8 +14226,8 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x03F9)&&(_optionCheck.recLen == 0x10);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x03F9) && (_optionCheck.recLen == 0x10);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13629,10 +14236,10 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
         try {
             _s.slideShowInfoAtom = QSharedPointer<SlideShowSlideInfoAtom>(new SlideShowSlideInfoAtom(&_s));
             parseSlideShowSlideInfoAtom(in, *_s.slideShowInfoAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideShowInfoAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideShowInfoAtom.clear();
             in.rewind(_m);
         }
@@ -13641,8 +14248,8 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFD9);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFD9);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13651,10 +14258,10 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
         try {
             _s.perSlideHeadersFootersContainer = QSharedPointer<PerSlideHeadersFootersContainer>(new PerSlideHeadersFootersContainer(&_s));
             parsePerSlideHeadersFootersContainer(in, *_s.perSlideHeadersFootersContainer.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.perSlideHeadersFootersContainer.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.perSlideHeadersFootersContainer.clear();
             in.rewind(_m);
         }
@@ -13665,8 +14272,8 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 3)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 3) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13675,10 +14282,10 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
         try {
             _s.slideNameAtom = QSharedPointer<SlideNameAtom>(new SlideNameAtom(&_s));
             parseSlideNameAtom(in, *_s.slideNameAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideNameAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideNameAtom.clear();
             in.rewind(_m);
         }
@@ -13687,8 +14294,8 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x1388);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x1388);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13697,10 +14304,10 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
         try {
             _s.slideProgTagsContainer = QSharedPointer<SlideProgTagsContainer>(new SlideProgTagsContainer(&_s));
             parseSlideProgTagsContainer(in, *_s.slideProgTagsContainer.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideProgTagsContainer.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideProgTagsContainer.clear();
             in.rewind(_m);
         }
@@ -13711,11 +14318,11 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
         try {
             _s.rgRoundTripMainMaster.append(RoundTripMainMasterRecord(&_s));
             parseRoundTripMainMasterRecord(in, _s.rgRoundTripMainMaster.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgRoundTripMainMaster.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgRoundTripMainMaster.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -13725,8 +14332,8 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 2)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 2) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13735,10 +14342,10 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
         try {
             _s.templateNameAtom = QSharedPointer<TemplateNameAtom>(new TemplateNameAtom(&_s));
             parseTemplateNameAtom(in, *_s.templateNameAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.templateNameAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.templateNameAtom.clear();
             in.rewind(_m);
         }
@@ -13747,8 +14354,8 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x1388);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x1388);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13757,16 +14364,17 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
         try {
             _s.unknown3 = QSharedPointer<SlideProgTagsContainer>(new SlideProgTagsContainer(&_s));
             parseSlideProgTagsContainer(in, *_s.unknown3.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown3.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown3.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
+void MSO::parseSlideContainer(LEInputStream &in, SlideContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -13786,8 +14394,8 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x03F9)&&(_optionCheck.recLen == 0x10);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x03F9) && (_optionCheck.recLen == 0x10);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13796,10 +14404,10 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
         try {
             _s.slideShowSlideInfoAtom = QSharedPointer<SlideShowSlideInfoAtom>(new SlideShowSlideInfoAtom(&_s));
             parseSlideShowSlideInfoAtom(in, *_s.slideShowSlideInfoAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideShowSlideInfoAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideShowSlideInfoAtom.clear();
             in.rewind(_m);
         }
@@ -13808,8 +14416,8 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFD9);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFD9);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13818,10 +14426,10 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
         try {
             _s.perSlideHFContainer = QSharedPointer<PerSlideHeadersFootersContainer>(new PerSlideHeadersFootersContainer(&_s));
             parsePerSlideHeadersFootersContainer(in, *_s.perSlideHFContainer.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.perSlideHFContainer.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.perSlideHFContainer.clear();
             in.rewind(_m);
         }
@@ -13830,8 +14438,8 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x3714);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x3714);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13840,10 +14448,10 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
         try {
             _s.rtSlideSyncInfo12 = QSharedPointer<RoundTripSlideSyncInfo12Container>(new RoundTripSlideSyncInfo12Container(&_s));
             parseRoundTripSlideSyncInfo12Container(in, *_s.rtSlideSyncInfo12.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rtSlideSyncInfo12.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rtSlideSyncInfo12.clear();
             in.rewind(_m);
         }
@@ -13854,8 +14462,8 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 3)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 3) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13864,10 +14472,10 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
         try {
             _s.slideNameAtom = QSharedPointer<SlideNameAtom>(new SlideNameAtom(&_s));
             parseSlideNameAtom(in, *_s.slideNameAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideNameAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideNameAtom.clear();
             in.rewind(_m);
         }
@@ -13876,8 +14484,8 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x1388);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x1388);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13886,10 +14494,10 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
         try {
             _s.slideProgTagsContainer = QSharedPointer<SlideProgTagsContainer>(new SlideProgTagsContainer(&_s));
             parseSlideProgTagsContainer(in, *_s.slideProgTagsContainer.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideProgTagsContainer.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideProgTagsContainer.clear();
             in.rewind(_m);
         }
@@ -13898,8 +14506,8 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x101D);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x101D);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13908,10 +14516,10 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
         try {
             _s.unknown = QSharedPointer<UnknownSlideContainerChild>(new UnknownSlideContainerChild(&_s));
             parseUnknownSlideContainerChild(in, *_s.unknown.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown.clear();
             in.rewind(_m);
         }
@@ -13922,11 +14530,11 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
         try {
             _s.rgRoundTripSlide.append(RoundTripSlideRecord(&_s));
             parseRoundTripSlideRecord(in, _s.rgRoundTripSlide.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgRoundTripSlide.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgRoundTripSlide.removeLast();
             _atend = true;
             in.rewind(_m);
@@ -13936,8 +14544,8 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x101D);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x101D);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13946,16 +14554,17 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
         try {
             _s.unknown2 = QSharedPointer<UnknownSlideContainerChild>(new UnknownSlideContainerChild(&_s));
             parseUnknownSlideContainerChild(in, *_s.unknown2.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.unknown2.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.unknown2.clear();
             in.rewind(_m);
         }
     }
 }
-void MSO::parseNotesContainer(LEInputStream& in, NotesContainer& _s) {
+void MSO::parseNotesContainer(LEInputStream &in, NotesContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -13975,8 +14584,8 @@ void MSO::parseNotesContainer(LEInputStream& in, NotesContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFD9);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFD9);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -13985,10 +14594,10 @@ void MSO::parseNotesContainer(LEInputStream& in, NotesContainer& _s) {
         try {
             _s.perSlideHFContainer = QSharedPointer<PerSlideHeadersFootersContainer>(new PerSlideHeadersFootersContainer(&_s));
             parsePerSlideHeadersFootersContainer(in, *_s.perSlideHFContainer.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.perSlideHFContainer.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.perSlideHFContainer.clear();
             in.rewind(_m);
         }
@@ -13999,8 +14608,8 @@ void MSO::parseNotesContainer(LEInputStream& in, NotesContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 3)&&(_optionCheck.recType == 0x0FBA)&&(_optionCheck.recLen%2==0);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0) && (_optionCheck.recInstance == 3) && (_optionCheck.recType == 0x0FBA) && (_optionCheck.recLen % 2 == 0);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -14009,10 +14618,10 @@ void MSO::parseNotesContainer(LEInputStream& in, NotesContainer& _s) {
         try {
             _s.slideNameAtom = QSharedPointer<SlideNameAtom>(new SlideNameAtom(&_s));
             parseSlideNameAtom(in, *_s.slideNameAtom.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideNameAtom.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideNameAtom.clear();
             in.rewind(_m);
         }
@@ -14021,8 +14630,8 @@ void MSO::parseNotesContainer(LEInputStream& in, NotesContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x1388);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0x1388);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -14031,10 +14640,10 @@ void MSO::parseNotesContainer(LEInputStream& in, NotesContainer& _s) {
         try {
             _s.slideProgTagsContainer = QSharedPointer<SlideProgTagsContainer>(new SlideProgTagsContainer(&_s));
             parseSlideProgTagsContainer(in, *_s.slideProgTagsContainer.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.slideProgTagsContainer.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.slideProgTagsContainer.clear();
             in.rewind(_m);
         }
@@ -14043,8 +14652,8 @@ void MSO::parseNotesContainer(LEInputStream& in, NotesContainer& _s) {
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFD9);
-    } catch(EOFException& _e) {
+        _possiblyPresent = (_optionCheck.recVer == 0xF) && (_optionCheck.recInstance == 0) && (_optionCheck.recType == 0xFD9);
+    } catch (EOFException &_e) {
         _possiblyPresent = false;
     }
     in.rewind(_m);
@@ -14053,10 +14662,10 @@ void MSO::parseNotesContainer(LEInputStream& in, NotesContainer& _s) {
         try {
             _s.perSlideHFContainer2 = QSharedPointer<PerSlideHeadersFootersContainer>(new PerSlideHeadersFootersContainer(&_s));
             parsePerSlideHeadersFootersContainer(in, *_s.perSlideHFContainer2.data());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.perSlideHFContainer2.clear();
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.perSlideHFContainer2.clear();
             in.rewind(_m);
         }
@@ -14067,18 +14676,19 @@ void MSO::parseNotesContainer(LEInputStream& in, NotesContainer& _s) {
         try {
             _s.rgNotesRoundTripAtom.append(NotesRoundTripAtom(&_s));
             parseNotesRoundTripAtom(in, _s.rgNotesRoundTripAtom.last());
-        } catch(IncorrectValueException& _e) {
+        } catch (IncorrectValueException &_e) {
             _s.rgNotesRoundTripAtom.removeLast();
             _atend = true;
             in.rewind(_m);
-        } catch(EOFException& _e) {
+        } catch (EOFException &_e) {
             _s.rgNotesRoundTripAtom.removeLast();
             _atend = true;
             in.rewind(_m);
         }
     }
 }
-void MSO::parseMasterOrSlideContainer(LEInputStream& in, MasterOrSlideContainer& _s) {
+void MSO::parseMasterOrSlideContainer(LEInputStream &in, MasterOrSlideContainer &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -14088,72 +14698,81 @@ void MSO::parseMasterOrSlideContainer(LEInputStream& in, MasterOrSlideContainer&
     qint64 startPos = in.getPosition();
     if (startPos == in.getPosition() && ((_choice.recType == 0x03F8))) {
         _s.anon = MasterOrSlideContainer::choice2788643208(new MainMasterContainer(&_s));
-        parseMainMasterContainer(in, *(MainMasterContainer*)_s.anon.data());
+        parseMainMasterContainer(in, *(MainMasterContainer *)_s.anon.data());
     }
     if (startPos == in.getPosition()) {
         _s.anon = MasterOrSlideContainer::choice2788643208(new SlideContainer(&_s));
-        parseSlideContainer(in, *(SlideContainer*)_s.anon.data());
+        parseSlideContainer(in, *(SlideContainer *)_s.anon.data());
     }
 }
-void MSO::parsePowerPointStruct(LEInputStream& in, PowerPointStruct& _s) {
+void MSO::parsePowerPointStruct(LEInputStream &in, PowerPointStruct &_s)
+{
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
     try {
         _s.anon = PowerPointStruct::choice394521820(new DocumentContainer(&_s));
-        parseDocumentContainer(in, *(DocumentContainer*)_s.anon.data());
-    } catch (IncorrectValueException& _x) {
+        parseDocumentContainer(in, *(DocumentContainer *)_s.anon.data());
+    } catch (IncorrectValueException &_x) {
         _s.anon.clear();
         in.rewind(_m);
-    try {
-        _s.anon = PowerPointStruct::choice394521820(new MasterOrSlideContainer(&_s));
-        parseMasterOrSlideContainer(in, *(MasterOrSlideContainer*)_s.anon.data());
-    } catch (IncorrectValueException& _xx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = PowerPointStruct::choice394521820(new PersistDirectoryAtom(&_s));
-        parsePersistDirectoryAtom(in, *(PersistDirectoryAtom*)_s.anon.data());
-    } catch (IncorrectValueException& _xxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = PowerPointStruct::choice394521820(new NotesContainer(&_s));
-        parseNotesContainer(in, *(NotesContainer*)_s.anon.data());
-    } catch (IncorrectValueException& _xxxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = PowerPointStruct::choice394521820(new HandoutContainer(&_s));
-        parseHandoutContainer(in, *(HandoutContainer*)_s.anon.data());
-    } catch (IncorrectValueException& _xxxxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = PowerPointStruct::choice394521820(new SlideContainer(&_s));
-        parseSlideContainer(in, *(SlideContainer*)_s.anon.data());
-    } catch (IncorrectValueException& _xxxxxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = PowerPointStruct::choice394521820(new ExOleObjStg(&_s));
-        parseExOleObjStg(in, *(ExOleObjStg*)_s.anon.data());
-    } catch (IncorrectValueException& _xxxxxxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = PowerPointStruct::choice394521820(new ExControlStg(&_s));
-        parseExControlStg(in, *(ExControlStg*)_s.anon.data());
-    } catch (IncorrectValueException& _xxxxxxxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = PowerPointStruct::choice394521820(new VbaProjectStg(&_s));
-        parseVbaProjectStg(in, *(VbaProjectStg*)_s.anon.data());
-    } catch (IncorrectValueException& _xxxxxxxxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-        _s.anon = PowerPointStruct::choice394521820(new UserEditAtom(&_s));
-        parseUserEditAtom(in, *(UserEditAtom*)_s.anon.data());
-    }}}}}}}}}
+        try {
+            _s.anon = PowerPointStruct::choice394521820(new MasterOrSlideContainer(&_s));
+            parseMasterOrSlideContainer(in, *(MasterOrSlideContainer *)_s.anon.data());
+        } catch (IncorrectValueException &_xx) {
+            _s.anon.clear();
+            in.rewind(_m);
+            try {
+                _s.anon = PowerPointStruct::choice394521820(new PersistDirectoryAtom(&_s));
+                parsePersistDirectoryAtom(in, *(PersistDirectoryAtom *)_s.anon.data());
+            } catch (IncorrectValueException &_xxx) {
+                _s.anon.clear();
+                in.rewind(_m);
+                try {
+                    _s.anon = PowerPointStruct::choice394521820(new NotesContainer(&_s));
+                    parseNotesContainer(in, *(NotesContainer *)_s.anon.data());
+                } catch (IncorrectValueException &_xxxx) {
+                    _s.anon.clear();
+                    in.rewind(_m);
+                    try {
+                        _s.anon = PowerPointStruct::choice394521820(new HandoutContainer(&_s));
+                        parseHandoutContainer(in, *(HandoutContainer *)_s.anon.data());
+                    } catch (IncorrectValueException &_xxxxx) {
+                        _s.anon.clear();
+                        in.rewind(_m);
+                        try {
+                            _s.anon = PowerPointStruct::choice394521820(new SlideContainer(&_s));
+                            parseSlideContainer(in, *(SlideContainer *)_s.anon.data());
+                        } catch (IncorrectValueException &_xxxxxx) {
+                            _s.anon.clear();
+                            in.rewind(_m);
+                            try {
+                                _s.anon = PowerPointStruct::choice394521820(new ExOleObjStg(&_s));
+                                parseExOleObjStg(in, *(ExOleObjStg *)_s.anon.data());
+                            } catch (IncorrectValueException &_xxxxxxx) {
+                                _s.anon.clear();
+                                in.rewind(_m);
+                                try {
+                                    _s.anon = PowerPointStruct::choice394521820(new ExControlStg(&_s));
+                                    parseExControlStg(in, *(ExControlStg *)_s.anon.data());
+                                } catch (IncorrectValueException &_xxxxxxxx) {
+                                    _s.anon.clear();
+                                    in.rewind(_m);
+                                    try {
+                                        _s.anon = PowerPointStruct::choice394521820(new VbaProjectStg(&_s));
+                                        parseVbaProjectStg(in, *(VbaProjectStg *)_s.anon.data());
+                                    } catch (IncorrectValueException &_xxxxxxxxx) {
+                                        _s.anon.clear();
+                                        in.rewind(_m);
+                                        _s.anon = PowerPointStruct::choice394521820(new UserEditAtom(&_s));
+                                        parseUserEditAtom(in, *(UserEditAtom *)_s.anon.data());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

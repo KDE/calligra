@@ -9,14 +9,13 @@
 
 #include <KoToolFactoryBase.h>
 
-
 class ReviewToolFactory : public KoToolFactoryBase
 {
 public:
     ReviewToolFactory();
     ~ReviewToolFactory() override;
 
-    KoToolBase * createTool(KoCanvasBase *canvas) override;
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif

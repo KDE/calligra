@@ -56,10 +56,7 @@ public:
     /**
      * The different types of markups.
      */
-    enum MarkupType {
-        Misspell,
-        Grammar
-    };
+    enum MarkupType { Misspell, Grammar };
 
     explicit KoTextBlockData(QTextBlock &block);
     explicit KoTextBlockData(QTextBlockUserData *userData);
@@ -205,10 +202,10 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_TYPEINFO(KoTextBlockData::MarkupRange, Q_MOVABLE_TYPE);
-Q_DECLARE_METATYPE(QTextBlockUserData*)
+Q_DECLARE_METATYPE(QTextBlockUserData *)
 
 #endif

@@ -26,7 +26,6 @@ protected:
     bool event(QEvent *event) override;
 };
 
-
 class TableTool : public CellToolBase
 {
     Q_OBJECT
@@ -34,27 +33,27 @@ class TableTool : public CellToolBase
 public:
     enum ToolType { None, Shape, ColumnHeader, RowHeader, HScrollBar, VScrollBar };
 
-    explicit TableTool(KoCanvasBase* canvas);
+    explicit TableTool(KoCanvasBase *canvas);
     ~TableTool();
 
     void repaintDecorations() override;
     void paint(QPainter &painter, const KoViewConverter &converter) override;
-    Selection* selection() override;
+    Selection *selection() override;
 
 public Q_SLOTS:
-    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     void deactivate() override;
 
-    void slotSelectionChanged(const Region&);
+    void slotSelectionChanged(const Region &);
 
 protected:
-    void mousePressEvent(KoPointerEvent* event) override;
-    void mouseReleaseEvent(KoPointerEvent* event) override;
-    void mouseMoveEvent(KoPointerEvent* event) override;
-    void mouseDoubleClickEvent(KoPointerEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
-    KoInteractionStrategy* createStrategy(KoPointerEvent* event) override;
+    KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
 
     void scrollToCell(const QPoint &location) override;
 
@@ -63,15 +62,15 @@ protected:
     QPointF canvasOffset() const override;
     int maxCol() const override;
     int maxRow() const override;
-    SheetView* sheetView(Sheet* sheet) const override;
+    SheetView *sheetView(Sheet *sheet) const override;
 
     double canvasOffsetX() const override;
     double canvasOffsetY() const override;
 
-    ToolType mouseOn(KoPointerEvent* event);
+    ToolType mouseOn(KoPointerEvent *event);
 
 private Q_SLOTS:
-    void sheetActivated(const QString& sheetName);
+    void sheetActivated(const QString &sheetName);
     void sheetsBtnClicked();
     void importDocument();
     void exportDocument();
@@ -83,14 +82,14 @@ private Q_SLOTS:
 
 private:
     void updateSheetsList();
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
     void activateSheet();
 
 private:
     Q_DISABLE_COPY(TableTool)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

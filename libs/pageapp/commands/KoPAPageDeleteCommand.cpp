@@ -11,10 +11,10 @@
 #include "KoPADocument.h"
 #include "KoPAPageBase.h"
 
-KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBase *page, KUndo2Command *parent )
-: KUndo2Command( parent )
-, m_document( document )
-, m_deletePages(false)
+KoPAPageDeleteCommand::KoPAPageDeleteCommand(KoPADocument *document, KoPAPageBase *page, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_document(document)
+    , m_deletePages(false)
 {
     Q_ASSERT(m_document);
     Q_ASSERT(page);
@@ -22,18 +22,17 @@ KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBa
     Q_ASSERT(index != -1);
     m_pages.insert(index, page);
 
-    if ( page->pageType() == KoPageApp::Slide ) {
-        setText( kundo2_i18nc( "Delete one slide", "Delete slide" ) );
-    }
-    else {
-        setText( kundo2_i18nc( "Delete one page", "Delete page" ) );
+    if (page->pageType() == KoPageApp::Slide) {
+        setText(kundo2_i18nc("Delete one slide", "Delete slide"));
+    } else {
+        setText(kundo2_i18nc("Delete one page", "Delete page"));
     }
 }
 
-KoPAPageDeleteCommand::KoPAPageDeleteCommand(KoPADocument *document, const QList<KoPAPageBase*> &pages, KUndo2Command *parent)
-: KUndo2Command(parent)
-, m_document(document)
-, m_deletePages(false)
+KoPAPageDeleteCommand::KoPAPageDeleteCommand(KoPADocument *document, const QList<KoPAPageBase *> &pages, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_document(document)
+    , m_deletePages(false)
 {
     Q_ASSERT(m_document);
     Q_ASSERT(m_document->pages().count() > pages.count());
@@ -48,8 +47,7 @@ KoPAPageDeleteCommand::KoPAPageDeleteCommand(KoPADocument *document, const QList
 
     if (pages.first()->pageType() == KoPageApp::Slide) {
         setText(kundo2_i18np("Delete slide", "Delete slides", m_pages.count()));
-    }
-    else {
+    } else {
         setText(kundo2_i18np("Delete page", "Delete pages", m_pages.count()));
     }
 }
@@ -79,7 +77,7 @@ void KoPAPageDeleteCommand::redo()
 void KoPAPageDeleteCommand::undo()
 {
     KUndo2Command::undo();
-    QMapIterator<int, KoPAPageBase*> i(m_pages);
+    QMapIterator<int, KoPAPageBase *> i(m_pages);
 
     while (i.hasNext()) {
         i.next();

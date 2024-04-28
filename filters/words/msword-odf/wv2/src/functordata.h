@@ -20,111 +20,114 @@
 #define FUNCTORDATA_H
 
 #include "sharedptr.h"
-#include "wvlog.h"
-#include "wv2_export.h"
 #include "ustring.h"
 #include "word97_generated.h"
+#include "wv2_export.h"
+#include "wvlog.h"
 
 namespace wvWare
 {
-    /**
-     * @internal
-     * Holds all the necessary information for asynchronous header/footer parsing.
-     * The sectionNumber is a 0-based index, the headerMask holds bits of
-     * the Type enum ORed together.
-     */
-    struct WV2_EXPORT HeaderData
+/**
+ * @internal
+ * Holds all the necessary information for asynchronous header/footer parsing.
+ * The sectionNumber is a 0-based index, the headerMask holds bits of
+ * the Type enum ORed together.
+ */
+struct WV2_EXPORT HeaderData {
+    enum Type { HeaderEven = 0x01, HeaderOdd = 0x02, FooterEven = 0x04, FooterOdd = 0x08, HeaderFirst = 0x10, FooterFirst = 0x20 };
+
+    enum Empty { NoHeaderEven = 0xfe, NoFooterEven = 0xfb, NoHeaderFirst = 0x2f, NoFooterFirst = 0x1f };
+
+    HeaderData(int sectionNum)
+        : sectionNumber(sectionNum)
+        , headerMask(HeaderOdd | FooterOdd)
     {
-        enum Type { HeaderEven = 0x01, HeaderOdd = 0x02, FooterEven = 0x04,
-                    FooterOdd = 0x08, HeaderFirst = 0x10, FooterFirst = 0x20 }; 
+    }
 
-        enum Empty { NoHeaderEven = 0xfe, NoFooterEven = 0xfb, 
-                     NoHeaderFirst = 0x2f, NoFooterFirst = 0x1f};
+    int sectionNumber;
+    unsigned char headerMask;
+};
 
-        HeaderData( int sectionNum ) : 
-        sectionNumber( sectionNum ), headerMask( HeaderOdd | FooterOdd ) {}
+/**
+ * @internal
+ * Holds all necessary information for delayed footnote/endnote parsing.
+ */
+struct WV2_EXPORT FootnoteData {
+    enum Type { Footnote, Endnote };
 
-        int sectionNumber;
-        unsigned char headerMask;
-    };
-
-    /**
-     * @internal
-     * Holds all necessary information for delayed footnote/endnote parsing.
-     */
-    struct WV2_EXPORT FootnoteData
+    FootnoteData(Type t, bool autoNum, unsigned int start, unsigned int lim)
+        : type(t)
+        , autoNumbered(autoNum)
+        , startCP(start)
+        , limCP(lim)
     {
-        enum Type { Footnote, Endnote };
+    }
 
-        FootnoteData( Type t, bool autoNum, unsigned int start, unsigned int lim ) :
-                type( t ), autoNumbered( autoNum ), startCP( start ), limCP( lim ) {}
+    Type type;
+    bool autoNumbered;
+    unsigned int startCP;
+    unsigned int limCP;
+};
 
-        Type type;
-        bool autoNumbered;
-        unsigned int startCP;
-        unsigned int limCP;
-    };
-
-    /**
-    * @internal
-    * Holds all necessary information for delayed bookmark parsing.
-    */
-    struct WV2_EXPORT BookmarkData
+/**
+ * @internal
+ * Holds all necessary information for delayed bookmark parsing.
+ */
+struct WV2_EXPORT BookmarkData {
+    BookmarkData(unsigned int start, unsigned int lim, UString nameRef)
+        : startCP(start)
+        , limCP(lim)
+        , name(nameRef)
     {
-        BookmarkData( unsigned int start, unsigned int lim, UString nameRef  ) :
-        startCP( start ), limCP( lim ), name(nameRef) {}
+    }
 
-        unsigned int startCP;
-        unsigned int limCP;
-        UString name;
-    };
+    unsigned int startCP;
+    unsigned int limCP;
+    UString name;
+};
 
-    /**
-     * @internal
-     * Holds all necessary information for delayed annotation parsing.
-     */
-    struct WV2_EXPORT AnnotationData
+/**
+ * @internal
+ * Holds all necessary information for delayed annotation parsing.
+ */
+struct WV2_EXPORT AnnotationData {
+    AnnotationData(unsigned int start, unsigned int lim)
+        : startCP(start)
+        , limCP(lim)
     {
-        AnnotationData( unsigned int start, unsigned int lim ) :
-                startCP( start ), limCP( lim )
-        {
-        }
+    }
 
-        unsigned int startCP;
-        unsigned int limCP;
-    };
+    unsigned int startCP;
+    unsigned int limCP;
+};
 
-    /**
-     * @internal
-     * Keeps track of the table (row) information. Tables are parsed
-     * row by row.
-     */
-    struct WV2_EXPORT TableRowData
-    {
-        TableRowData( unsigned int sp, unsigned int so, unsigned int len,
-                      int subDoc, SharedPtr<const Word97::TAP> sharedTap );
-        ~TableRowData();
+/**
+ * @internal
+ * Keeps track of the table (row) information. Tables are parsed
+ * row by row.
+ */
+struct WV2_EXPORT TableRowData {
+    TableRowData(unsigned int sp, unsigned int so, unsigned int len, int subDoc, SharedPtr<const Word97::TAP> sharedTap);
+    ~TableRowData();
 
-        unsigned int startPiece;
-        unsigned int startOffset;
-        unsigned int length;
-        int subDocument; // int to avoid #including <parser.h> here
-        SharedPtr<const Word97::TAP> tap;
-    };
+    unsigned int startPiece;
+    unsigned int startOffset;
+    unsigned int length;
+    int subDocument; // int to avoid #including <parser.h> here
+    SharedPtr<const Word97::TAP> tap;
+};
 
+/**
+ * @internal
+ * Holds the information about pictures inside the functor.
+ */
+struct WV2_EXPORT PictureData {
+    PictureData(unsigned int fc, SharedPtr<const Word97::PICF> sharedPicf);
+    ~PictureData();
 
-    /**
-     * @internal
-     * Holds the information about pictures inside the functor.
-     */
-    struct WV2_EXPORT PictureData
-    {
-        PictureData( unsigned int fc, SharedPtr<const Word97::PICF> sharedPicf );
-        ~PictureData();
-
-        unsigned int fcPic;
-        SharedPtr<const Word97::PICF> picf;
-    };
+    unsigned int fcPic;
+    SharedPtr<const Word97::PICF> picf;
+};
 
 } // namespace wvWare
 

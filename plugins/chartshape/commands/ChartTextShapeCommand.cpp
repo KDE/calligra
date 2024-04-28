@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2017 Dag Andersen <danders@get2net.dk>
  * SPDX-FileCopyrightText: 2012 Brijesh Patel <brijesh3105@gmail.com>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -16,14 +16,14 @@
 #include "KoShapeSizeCommand.h"
 
 // KoChart
-#include "ChartShape.h"
-#include "ChartLayout.h"
-#include "PlotArea.h"
 #include "ChartDebug.h"
+#include "ChartLayout.h"
+#include "ChartShape.h"
+#include "PlotArea.h"
 
 using namespace KoChart;
 
-ChartTextShapeCommand::ChartTextShapeCommand(KoShape* textShape, ChartShape *chart, bool isVisible, KUndo2Command *parent)
+ChartTextShapeCommand::ChartTextShapeCommand(KoShape *textShape, ChartShape *chart, bool isVisible, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_textShape(textShape)
     , m_chart(chart)

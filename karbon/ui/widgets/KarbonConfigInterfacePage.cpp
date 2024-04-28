@@ -7,26 +7,26 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 
 #include "KarbonConfigInterfacePage.h"
 
-#include "KarbonView.h"
-#include "KarbonPart.h"
 #include "KarbonDocument.h"
 #include "KarbonFactory.h"
+#include "KarbonPart.h"
+#include "KarbonView.h"
 
-#include <KoConfigGridPage.h>
 #include <KoConfigDocumentPage.h>
+#include <KoConfigGridPage.h>
 #include <KoConfigMiscPage.h>
 
-#include <KLocalizedString>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KLocalizedString>
 #include <kcolorbutton.h>
 
-#include <QSpinBox>
 #include <QCheckBox>
-#include <QGroupBox>
 #include <QFormLayout>
+#include <QGroupBox>
+#include <QSpinBox>
 
-KarbonConfigInterfacePage::KarbonConfigInterfacePage(KarbonView* view, char* name)
+KarbonConfigInterfacePage::KarbonConfigInterfacePage(KarbonView *view, char *name)
 {
     setObjectName(name);
 
@@ -38,7 +38,7 @@ KarbonConfigInterfacePage::KarbonConfigInterfacePage(KarbonView* view, char* nam
     m_oldCanvasColor = QColor(Qt::white);
     bool oldShowStatusBar = true;
 
-    QGroupBox* tmpQGroupBox = new QGroupBox(i18n("Interface"), this);
+    QGroupBox *tmpQGroupBox = new QGroupBox(i18n("Interface"), this);
 
     KConfigGroup emptyGroup = m_config->group("GUI");
     m_oldDockerFontSize = emptyGroup.readEntry("palettefontsize", m_oldDockerFontSize);
@@ -69,16 +69,16 @@ KarbonConfigInterfacePage::KarbonConfigInterfacePage(KarbonView* view, char* nam
     m_dockerFontSize->setValue(m_oldDockerFontSize);
     interfaceLayout->addRow(i18n("Palette font size:"), m_dockerFontSize);
 
-// TODO or move or remove?
-//     m_canvasColor = new KColorButton(m_oldCanvasColor, tmpQGroupBox);
-//     interfaceLayout->addRow(i18n("Canvas color:"), m_canvasColor);
+    // TODO or move or remove?
+    //     m_canvasColor = new KColorButton(m_oldCanvasColor, tmpQGroupBox);
+    //     interfaceLayout->addRow(i18n("Canvas color:"), m_canvasColor);
 }
 
 void KarbonConfigInterfacePage::apply()
 {
     bool showStatusBar = m_showStatusBar->isChecked();
 
-    KarbonDocument* part = m_view->part();
+    KarbonDocument *part = m_view->part();
 
     KConfigGroup interfaceGroup = m_config->group("Interface");
 
@@ -106,11 +106,11 @@ void KarbonConfigInterfacePage::apply()
         refreshGUI = true;
     }
 
-//     QColor canvasColor = m_canvasColor->color();
-//     if (canvasColor != m_oldCanvasColor) {
-//         interfaceGroup.writeEntry("CanvasColor", canvasColor);
-//         refreshGUI = true;
-//     }
+    //     QColor canvasColor = m_canvasColor->color();
+    //     if (canvasColor != m_oldCanvasColor) {
+    //         interfaceGroup.writeEntry("CanvasColor", canvasColor);
+    //         refreshGUI = true;
+    //     }
 
     if (refreshGUI)
         part->reorganizeGUI();
@@ -122,4 +122,3 @@ void KarbonConfigInterfacePage::slotDefault()
     m_dockerFontSize->setValue(8);
     m_showStatusBar->setChecked(true);
 }
-

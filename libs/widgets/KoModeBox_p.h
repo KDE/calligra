@@ -12,11 +12,11 @@
 
 #include <KoCanvasObserverBase.h>
 
-#include <QPointer>
+#include <QDockWidget>
+#include <QHash>
 #include <QList>
 #include <QMap>
-#include <QHash>
-#include <QDockWidget>
+#include <QPointer>
 #include <QScrollArea>
 
 #include <KoToolManager.h>
@@ -42,7 +42,8 @@ protected:
  *
  * @see KoToolManager
  */
-class KoModeBox : public QWidget {
+class KoModeBox : public QWidget
+{
     Q_OBJECT
 public:
     /// constructor
@@ -74,14 +75,14 @@ public Q_SLOTS:
      */
     void updateShownTools(const QList<QString> &codes);
 
-    void setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList);
+    void setOptionWidgets(const QList<QPointer<QWidget>> &optionWidgetList);
 
     /// set the canvas this docker should listen to for changes.
     void setCanvas(KoCanvasBase *canvas);
     void unsetCanvas();
 
 private Q_SLOTS:
-    void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);
+    void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *newLayer);
 
     /// add a tool post-initialization. The tool will also be activated.
     void toolAdded(KoToolAction *toolAction, KoCanvasController *canvas);
@@ -112,20 +113,11 @@ public:
     static QString applicationName;
 
 private:
-    enum IconMode {
-        IconAndText,
-        IconOnly
-    };
+    enum IconMode { IconAndText, IconOnly };
 
-    enum VerticalTabsSide {
-        TopSide,
-        BottomSide
-    };
+    enum VerticalTabsSide { TopSide, BottomSide };
 
-    enum HorizontalTabsSide {
-        LeftSide,
-        RightSide
-    };
+    enum HorizontalTabsSide { LeftSide, RightSide };
 
     QIcon createTextIcon(KoToolAction *toolAction) const;
     QIcon createSimpleIcon(KoToolAction *toolAction) const;
@@ -134,7 +126,7 @@ private:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // _KO_TOOLBOX_H_

@@ -11,15 +11,12 @@
 
 #include <KPluginFactory>
 
-
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_shape_plugin.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_shape_plugin.json", registerPlugin<Plugin>();)
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new PluginShapeFactory() );
+    KoShapeRegistry::instance()->add(new PluginShapeFactory());
 }
 
 #include <Plugin.moc>
-

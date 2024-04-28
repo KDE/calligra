@@ -19,6 +19,6 @@ public:
     /// Destructor
     ~KoCreateShapesToolFactory() override;
 
-    KoToolBase* createTool(KoCanvasBase *canvas) override;
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 #endif

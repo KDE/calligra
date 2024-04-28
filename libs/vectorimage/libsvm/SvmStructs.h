@@ -8,9 +8,8 @@
 #ifndef SVMSTRUCT_H
 #define SVMSTRUCT_H
 
-
-#include <QtGlobal>
 #include <QPoint>
+#include <QtGlobal>
 
 class QDataStream;
 
@@ -33,39 +32,35 @@ struct VersionCompat {
     VersionCompat();
     VersionCompat(QDataStream &stream);
 
-    quint16  version;
-    quint32  length;
+    quint16 version;
+    quint32 length;
 };
 
 QDataStream &operator>>(QDataStream &stream, VersionCompat &compat);
-
-
 
 struct Fraction {
     Fraction();
     Fraction(QDataStream &stream);
 
-    quint32  numerator;
-    quint32  denominator;
+    quint32 numerator;
+    quint32 denominator;
 };
 
 QDataStream &operator>>(QDataStream &stream, Fraction &fract);
-
 
 struct MapMode {
     MapMode();
     MapMode(QDataStream &stream);
 
-    VersionCompat  version;
-    quint16        unit;
-    QPoint         origin;
-    Fraction       scaleX;
-    Fraction       scaleY;
-    bool           isSimple;
+    VersionCompat version;
+    quint16 unit;
+    QPoint origin;
+    Fraction scaleX;
+    Fraction scaleY;
+    bool isSimple;
 };
 
 QDataStream &operator>>(QDataStream &stream, MapMode &mm);
-
 
 /**
  * The header of an SVM file.
@@ -74,17 +69,15 @@ struct SvmHeader {
     SvmHeader();
     SvmHeader(QDataStream &stream);
 
-    VersionCompat  versionCompat;
-    quint32        compressionMode;
-    MapMode        mapMode;
-    quint32        width;
-    quint32        height;
-    quint32        actionCount;
+    VersionCompat versionCompat;
+    quint32 compressionMode;
+    MapMode mapMode;
+    quint32 width;
+    quint32 height;
+    quint32 actionCount;
 };
 
 QDataStream &operator>>(QDataStream &stream, SvmHeader &header);
-
-
 }
 
 #endif

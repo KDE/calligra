@@ -22,18 +22,17 @@ class Pdf2OdgImport : public KoFilter
     Q_OBJECT
 
 public:
-    Pdf2OdgImport(QObject* parent, const QVariantList&);
+    Pdf2OdgImport(QObject *parent, const QVariantList &);
     ~Pdf2OdgImport() override;
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 
     KoFilter::ConversionStatus convert(int pageNumber, QFile &in);
     void convert(const KoXmlElement &rootElement, int pageNumber);
-    void buildDocument(const QList<KoShape*> &toplevelShapes, const QList<KoShape*> &shapes, int pageNumber);
+    void buildDocument(const QList<KoShape *> &toplevelShapes, const QList<KoShape *> &shapes, int pageNumber);
 
 private:
     KarbonDocument *m_document;
 };
 
 #endif
-

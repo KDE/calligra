@@ -6,22 +6,22 @@
 
 #include "VideoEventAction.h"
 
-#include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoXmlReader.h>
 
 #include <QUrl>
 
 #include "VideoData.h"
-#include "VideoShape.h"
 #include "VideoDebug.h"
+#include "VideoShape.h"
 
 #include "FullScreenPlayer.h"
 
 VideoEventAction::VideoEventAction(VideoShape *parent)
     : KoEventAction()
-    ,m_shape(parent)
-    ,m_player(0)
+    , m_shape(parent)
+    , m_player(0)
 {
     setId(QString("videoeventaction"));
 }
@@ -44,7 +44,7 @@ void VideoEventAction::saveOdf(KoShapeSavingContext &context) const
 
 void VideoEventAction::start()
 {
-    VideoData *videoData = qobject_cast<VideoData*>(m_shape->userData());
+    VideoData *videoData = qobject_cast<VideoData *>(m_shape->userData());
     Q_ASSERT(videoData);
     m_player = new FullScreenPlayer(videoData->playableUrl());
 }
@@ -52,4 +52,3 @@ void VideoEventAction::start()
 void VideoEventAction::finish()
 {
 }
-

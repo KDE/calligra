@@ -15,22 +15,21 @@
 #include <kdebug.h>
 
 // Calligra
-#include <KoViewConverter.h>
-#include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
-#include <KoShapeSavingContext.h>
-#include <KoXmlWriter.h>
-#include <KoXmlNS.h>
 #include <KoGenStyle.h>
+#include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoViewConverter.h>
+#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 // This shape
-//#include "Foo.h"
-
+// #include "Foo.h"
 
 TemplateShape::TemplateShape()
     : QObject()
     , KoShape()
-      // , m_member()  // initiate members here.
+// , m_member()  // initiate members here.
 {
 }
 
@@ -38,15 +37,13 @@ TemplateShape::~TemplateShape()
 {
 }
 
-void TemplateShape::paint(QPainter &painter, const KoViewConverter &converter,
-                          KoShapePaintingContext &context)
+void TemplateShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context)
 {
     painter.setPen(QPen(QColor(0, 0, 0), 0));
 
     // Example painting code: Draw a rectangle around the shape
     painter.drawRect(converter.documentToView(QRectF(QPoint(0, 0), size())));
 }
-
 
 void TemplateShape::saveOdf(KoShapeSavingContext &context) const
 {
@@ -64,7 +61,7 @@ void TemplateShape::saveOdf(KoShapeSavingContext &context) const
 bool TemplateShape::loadOdf(const KoXmlElement &templateElement, KoShapeLoadingContext &context)
 {
     kDebug(31000) << "========================== Starting Template shape";
-    kDebug(31000) <<"Loading ODF element: " << templateElement.tagName();
+    kDebug(31000) << "Loading ODF element: " << templateElement.tagName();
 
     // Load all standard odf attributes and store into the KoShape
     loadOdfAttributes(templateElement, context, OdfAllAttributes);
@@ -73,7 +70,6 @@ bool TemplateShape::loadOdf(const KoXmlElement &templateElement, KoShapeLoadingC
 
     return true;
 }
-
 
 void TemplateShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
 {

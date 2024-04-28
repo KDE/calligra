@@ -17,11 +17,16 @@
 class Q_DECL_HIDDEN KoPasteController::Private
 {
 public:
-    Private(KoPasteController *p, KoCanvasBase *c, QAction *a) : parent(p), canvas(c), action(a) {
+    Private(KoPasteController *p, KoCanvasBase *c, QAction *a)
+        : parent(p)
+        , canvas(c)
+        , action(a)
+    {
     }
 
-    void paste() {
-        debugFlake <<"Paste!";
+    void paste()
+    {
+        debugFlake << "Paste!";
         canvas->toolProxy()->paste();
     }
 
@@ -29,6 +34,5 @@ public:
     KoCanvasBase *canvas;
     QAction *action;
 };
-
 
 #endif

@@ -6,10 +6,8 @@
 
 #include "StoreDebug.h"
 
-const QLoggingCategory &STORE_LOG() \
+const QLoggingCategory &STORE_LOG()
 {
     static const QLoggingCategory category("calligra.lib.store");
     return category;
 }
-
-

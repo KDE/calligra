@@ -5,22 +5,24 @@
  */
 #include "VoiceElement.h"
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class VoiceElement::Private
 {
 public:
-    Staff* staff;
+    Staff *staff;
     int length;
     qreal x;
     qreal y;
     qreal width;
     qreal height;
-    VoiceBar* voiceBar;
+    VoiceBar *voiceBar;
     qreal beatline;
 };
 
-VoiceElement::VoiceElement(int length) : d(new Private)
+VoiceElement::VoiceElement(int length)
+    : d(new Private)
 {
     d->staff = 0;
     d->length = length;
@@ -37,22 +39,22 @@ VoiceElement::~VoiceElement()
     delete d;
 }
 
-Staff* VoiceElement::staff() const
+Staff *VoiceElement::staff() const
 {
     return d->staff;
 }
 
-void VoiceElement::setStaff(Staff* staff)
+void VoiceElement::setStaff(Staff *staff)
 {
     d->staff = staff;
 }
 
-VoiceBar* VoiceElement::voiceBar() const
+VoiceBar *VoiceElement::voiceBar() const
 {
     return d->voiceBar;
 }
 
-void VoiceElement::setVoiceBar(VoiceBar* voiceBar)
+void VoiceElement::setVoiceBar(VoiceBar *voiceBar)
 {
     d->voiceBar = voiceBar;
 }
@@ -64,7 +66,8 @@ qreal VoiceElement::x() const
 
 void VoiceElement::setX(qreal x)
 {
-    if (d->x == x) return;
+    if (d->x == x)
+        return;
     d->x = x;
     emit xChanged(x);
 }
@@ -76,7 +79,8 @@ qreal VoiceElement::y() const
 
 void VoiceElement::setY(qreal y)
 {
-    if (d->y == y) return;
+    if (d->y == y)
+        return;
     d->y = y;
     emit yChanged(y);
 }
@@ -88,7 +92,8 @@ qreal VoiceElement::width() const
 
 void VoiceElement::setWidth(qreal width)
 {
-    if (d->width == width) return;
+    if (d->width == width)
+        return;
     d->width = width;
     emit widthChanged(width);
 }
@@ -100,7 +105,8 @@ qreal VoiceElement::height() const
 
 void VoiceElement::setHeight(qreal height)
 {
-    if (d->height == height) return;
+    if (d->height == height)
+        return;
     d->height = height;
     emit heightChanged(height);
 }
@@ -112,7 +118,8 @@ int VoiceElement::length() const
 
 void VoiceElement::setLength(int length)
 {
-    if (d->length == length) return;
+    if (d->length == length)
+        return;
     d->length = length;
     emit lengthChanged(length);
 }

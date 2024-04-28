@@ -25,6 +25,7 @@ public:
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
     KoConnectionShape *m_connection;
     KoConnectionShape::Type m_oldType;
@@ -32,4 +33,3 @@ private:
 };
 
 #endif // KoConnectionShapeTypeCommand_H
-

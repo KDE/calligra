@@ -9,8 +9,8 @@
 
 #include <QObject>
 
-#include <KoShape.h>
 #include <KoFrameShape.h>
+#include <KoShape.h>
 
 #define TableShapeId "TableShape"
 
@@ -35,19 +35,24 @@ class TableShape : public QObject, public KoShape, public KoFrameShape
     Q_OBJECT
 
 public:
-    explicit TableShape(KoDocumentResourceManager *resourceManager, KoDocumentBase *parentDoc, int firtColumn = 1, int firstRow = 1, int columns = 2, int rows = 8);
+    explicit TableShape(KoDocumentResourceManager *resourceManager,
+                        KoDocumentBase *parentDoc,
+                        int firtColumn = 1,
+                        int firstRow = 1,
+                        int columns = 2,
+                        int rows = 8);
     ~TableShape() override;
 
     // KoShape interface
-    void paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext) override;
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) override;
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context) override;
-    void saveOdf(KoShapeSavingContext & context) const override;
+    void saveOdf(KoShapeSavingContext &context) const override;
     void setSize(const QSizeF &size) override;
     /**
      * \return the map containing the data for this shape
      */
-    Map* map() const;
+    Map *map() const;
     void setMap();
 
     void clear();
@@ -55,14 +60,14 @@ public:
     /**
      * \return the sheet containing the data for this shape
      */
-    Sheet* sheet() const;
+    Sheet *sheet() const;
 
-    SheetView* sheetView() const;
+    SheetView *sheetView() const;
 
     /**
      * Set the current sheet to the sheet with name \p sheetName .
      */
-    void setSheet(const QString& sheetName);
+    void setSheet(const QString &sheetName);
 
     void setTopLeftOffset(const QPointF &point);
     QPointF topLeftOffset() const;
@@ -73,7 +78,7 @@ public:
     DocBase *document() const;
 
     KoDocumentResourceManager *resourceManager() const;
-    void paintCells(QPainter& painter);
+    void paintCells(QPainter &painter);
 
     /// Used by tool because the tool paints the shape itself
     void setPaintingDisabled(bool disable);
@@ -86,15 +91,16 @@ protected:
     bool loadEmbeddedDocument(KoStore *store, const KoXmlElement &objectElement, KoShapeLoadingContext &context);
 
 private Q_SLOTS:
-    void handleDamages(const QList<Damage*>& damages);
+    void handleDamages(const QList<Damage *> &damages);
 
 private:
-    KoPart* createPart() const;
+    KoPart *createPart() const;
+
 private:
     Q_DISABLE_COPY(TableShape)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

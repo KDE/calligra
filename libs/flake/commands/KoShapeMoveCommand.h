@@ -10,9 +10,9 @@
 
 #include "flake_export.h"
 
-#include <kundo2command.h>
-#include <QVector>
 #include <QPointF>
+#include <QVector>
+#include <kundo2command.h>
 
 class KoShape;
 
@@ -29,8 +29,9 @@ public:
      *  this list naturally must have the same amount of items as the shapes set.
      * @param parent the parent command used for macro commands
      */
-    KoShapeMoveCommand(const QList<KoShape*> &shapes,
-                       const QVector<QPointF> &previousPositions, const QVector<QPointF> &newPositions,
+    KoShapeMoveCommand(const QList<KoShape *> &shapes,
+                       const QVector<QPointF> &previousPositions,
+                       const QVector<QPointF> &newPositions,
                        KUndo2Command *parent = 0);
 
     /**
@@ -46,9 +47,11 @@ public:
      *  This list naturally must have the same amount of items as the @p shapes.
      * @param parent the parent command used for macro commands
      */
-    KoShapeMoveCommand(const QList<KoShape*> &shapes,
-                       const QVector<QPointF> &previousPositions, const QVector<QPointF> &newPositions,
-                       const QVector<QPointF> &previousOffsets, const QVector<QPointF> &newOffsets,
+    KoShapeMoveCommand(const QList<KoShape *> &shapes,
+                       const QVector<QPointF> &previousPositions,
+                       const QVector<QPointF> &newPositions,
+                       const QVector<QPointF> &previousOffsets,
+                       const QVector<QPointF> &newOffsets,
                        KUndo2Command *parent = 0);
     /// Destuctor.
     ~KoShapeMoveCommand() override;
@@ -62,7 +65,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

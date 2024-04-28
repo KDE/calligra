@@ -19,10 +19,10 @@
 #ifndef CALLIGRA_SHEETS_CANVASBASE
 #define CALLIGRA_SHEETS_CANVASBASE
 
+#include <KoCanvasBase.h>
 #include <QRect>
 #include <QSizeF>
 #include <QVariant>
-#include <KoCanvasBase.h>
 
 #include "sheets_part_export.h"
 
@@ -58,25 +58,26 @@ class CALLIGRA_SHEETS_PART_EXPORT CanvasBase : public KoCanvasBase
     friend class View;
     friend class CellTool;
     friend class Canvas;
+
 public:
-    explicit CanvasBase(Doc* doc);
+    explicit CanvasBase(Doc *doc);
     ~CanvasBase() override;
 
-    Doc* doc() const;
+    Doc *doc() const;
 
     // KoCanvasBase interface methods.
     /// reimplemented method from KoCanvasBase
-    void gridSize(qreal* horizontal, qreal* vertical) const override;
+    void gridSize(qreal *horizontal, qreal *vertical) const override;
     /// reimplemented method from KoCanvasBase
     bool snapToGrid() const override;
     /// reimplemented method from KoCanvasBase
-    void addCommand(KUndo2Command* command) override;
+    void addCommand(KUndo2Command *command) override;
     /// reimplemented method from KoCanvasBase
-    KoShapeManager* shapeManager() const override;
+    KoShapeManager *shapeManager() const override;
     /// reimplemented method from KoCanvasBase
-    void updateCanvas(const QRectF& rc) override;
+    void updateCanvas(const QRectF &rc) override;
     /// reimplemented method from KoCanvasBase
-    KoToolProxy* toolProxy() const override;
+    KoToolProxy *toolProxy() const override;
 
     /// reimplemented method from KoCanvasBase
     KoUnit unit() const override;
@@ -86,7 +87,7 @@ public:
     /**
      * @return the usual selection of cells
      */
-    virtual Calligra::Sheets::Selection* selection() const = 0;
+    virtual Calligra::Sheets::Selection *selection() const = 0;
 
     QPointF offset() const;
 
@@ -108,55 +109,68 @@ public:
     /**
      * @return a pointer to the active sheet
      */
-    virtual Sheet* activeSheet() const = 0;
+    virtual Sheet *activeSheet() const = 0;
 
-    void paint(QPainter* painter, const QRectF& painterRect); // maybe add a QRegion overload
+    void paint(QPainter *painter, const QRectF &painterRect); // maybe add a QRegion overload
 
 public:
-    void setDocumentOffset(const QPoint& offset);
-    void setDocumentSize(const QSizeF& size);
+    void setDocumentOffset(const QPoint &offset);
+    void setDocumentSize(const QSizeF &size);
 
 protected:
-    void keyPressed(QKeyEvent* _ev);
-    void mousePressed(KoPointerEvent* _ev);
-    void mouseReleased(KoPointerEvent* _ev);
-    void mouseMoved(KoPointerEvent* _ev);
-    void mouseDoubleClicked(KoPointerEvent* _ev);
-    void focusIn(QFocusEvent*);
+    void keyPressed(QKeyEvent *_ev);
+    void mousePressed(KoPointerEvent *_ev);
+    void mouseReleased(KoPointerEvent *_ev);
+    void mouseMoved(KoPointerEvent *_ev);
+    void mouseDoubleClicked(KoPointerEvent *_ev);
+    void focusIn(QFocusEvent *);
 
-    bool dragEnter(const QMimeData* mimeData);
-    bool dragMove(const QMimeData* mimeData, const QPointF& eventPos, const QObject *source);
+    bool dragEnter(const QMimeData *mimeData);
+    bool dragMove(const QMimeData *mimeData, const QPointF &eventPos, const QObject *source);
     void dragLeave();
-    bool drop(const QMimeData* mimeData, const QPointF& eventPos, const QObject *source);
+    bool drop(const QMimeData *mimeData, const QPointF &eventPos, const QObject *source);
 
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     void inputMethodEvent(QInputMethodEvent *event);
     void tabletEvent(QTabletEvent *e);
 
     bool eventFilter(QObject *o, QEvent *e);
-    virtual ColumnHeader* columnHeader() const { return 0; };
-    virtual RowHeader* rowHeader() const { return 0; };
+    virtual ColumnHeader *columnHeader() const
+    {
+        return 0;
+    };
+    virtual RowHeader *rowHeader() const
+    {
+        return 0;
+    };
 
 public:
     virtual void update() = 0;
-    virtual void update(const QRectF& rect) = 0;
-    virtual void documentSizeChanged(const QSize&) = 0;
+    virtual void update(const QRectF &rect) = 0;
+    virtual void documentSizeChanged(const QSize &) = 0;
     virtual Qt::LayoutDirection layoutDirection() const = 0;
     virtual QRectF rect() const = 0;
     virtual QSizeF size() const = 0;
-    qreal width() const { return size().width(); }
-    qreal height() const { return size().height(); }
-    virtual QPoint mapToGlobal(const QPointF& point) const = 0;
+    qreal width() const
+    {
+        return size().width();
+    }
+    qreal height() const
+    {
+        return size().height();
+    }
+    virtual QPoint mapToGlobal(const QPointF &point) const = 0;
     virtual void updateMicroFocus() = 0;
 
-    virtual KoZoomHandler* zoomHandler() const = 0;
-    KoViewConverter* viewConverter() const override;
+    virtual KoZoomHandler *zoomHandler() const = 0;
+    KoViewConverter *viewConverter() const override;
     virtual bool isViewLoading() const = 0; // not sure if is needed
-    virtual SheetView* sheetView(Sheet* sheet) const = 0;
+    virtual SheetView *sheetView(Sheet *sheet) const = 0;
     virtual void enableAutoScroll() = 0;
     virtual void disableAutoScroll() = 0;
 
-    virtual void showContextMenu(const QPoint& globalPos) = 0;
+    virtual void showContextMenu(const QPoint &globalPos) = 0;
+
 protected:
     /**
      * Returns the range of cells which appear in the specified area of the Canvas widget
@@ -164,7 +178,7 @@ protected:
      *
      * @param area The area (in pixels) on the Canvas widget
      */
-    QRect viewToCellCoordinates(const QRectF& area) const;
+    QRect viewToCellCoordinates(const QRectF &area) const;
 
     /**
      * Calculates the region in view coordinates occupied by a range of cells on
@@ -173,23 +187,24 @@ protected:
      *
      * \param cellRange The range of cells on the current sheet.
      */
-    QRectF cellCoordinatesToView(const QRect& cellRange) const;
+    QRectF cellCoordinatesToView(const QRect &cellRange) const;
 
     // negative values mean max - pos
-    virtual void setVertScrollBarPos(qreal pos) = 0;    
+    virtual void setVertScrollBarPos(qreal pos) = 0;
     virtual void setHorizScrollBarPos(qreal pos) = 0;
+
 private:
     /**
      * Determines the cell at @p point and shows its tooltip.
      * @param point the position for which a tooltip is requested
      */
-    void showToolTip(const QPoint& point);
+    void showToolTip(const QPoint &point);
 
 private:
     Q_DISABLE_COPY(CanvasBase)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

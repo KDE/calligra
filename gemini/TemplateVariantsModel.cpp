@@ -5,13 +5,14 @@
  */
 
 #include "TemplateVariantsModel.h"
+#include <KIconLoader>
 #include <QColor>
 #include <QDebug>
-#include <KIconLoader>
 #include <kicontheme.h>
 struct TemplateVariant {
     TemplateVariant()
-    {}
+    {
+    }
 
     QString name;
     QColor color;
@@ -23,16 +24,18 @@ struct TemplateVariant {
 class TemplateVariantsModel::Private
 {
 public:
-    Private() {}
+    Private()
+    {
+    }
     ~Private()
     {
         qDeleteAll(entries);
     }
 
-    QList<TemplateVariant*> entries;
+    QList<TemplateVariant *> entries;
 };
 
-TemplateVariantsModel::TemplateVariantsModel(QObject* parent)
+TemplateVariantsModel::TemplateVariantsModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private())
 {
@@ -54,48 +57,46 @@ QHash<int, QByteArray> TemplateVariantsModel::roleNames() const
     return roles;
 }
 
-QVariant TemplateVariantsModel::data(const QModelIndex& index, int role) const
+QVariant TemplateVariantsModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
 
-    if(index.isValid() && index.row() > -1 && index.row() < d->entries.count())
-    {
-        TemplateVariant* entry = d->entries.at(index.row());
-        switch(role)
-        {
-            case NameRole:
-                result = entry->name;
-                break;
-            case ColorRole:
-                result = entry->color;
-                break;
-            case ThumbnailRole:
-                result = entry->thumbnail;
-                break;
-            case SwatchRole:
-                result = entry->swatch;
-                break;
-            case UrlRole:
-                result = entry->url;
-                break;
-            default:
-                break;
+    if (index.isValid() && index.row() > -1 && index.row() < d->entries.count()) {
+        TemplateVariant *entry = d->entries.at(index.row());
+        switch (role) {
+        case NameRole:
+            result = entry->name;
+            break;
+        case ColorRole:
+            result = entry->color;
+            break;
+        case ThumbnailRole:
+            result = entry->thumbnail;
+            break;
+        case SwatchRole:
+            result = entry->swatch;
+            break;
+        case UrlRole:
+            result = entry->url;
+            break;
+        default:
+            break;
         }
     }
 
     return result;
 }
 
-int TemplateVariantsModel::rowCount(const QModelIndex& parent) const
+int TemplateVariantsModel::rowCount(const QModelIndex &parent) const
 {
-    if(parent.isValid() || d->entries.count() == 1)
+    if (parent.isValid() || d->entries.count() == 1)
         return 0;
     return d->entries.count();
 }
 
 void TemplateVariantsModel::addVariant(QString name, QString color, QString swatch, QString picture, QString file)
 {
-    TemplateVariant* entry = new TemplateVariant();
+    TemplateVariant *entry = new TemplateVariant();
     d->entries.append(entry);
 
     entry->name = name;
@@ -103,10 +104,9 @@ void TemplateVariantsModel::addVariant(QString name, QString color, QString swat
     entry->swatch = swatch;
     entry->url = file;
 
-    if(picture.at(0) == QChar('/') || picture.at(1) == QChar(':')) {
+    if (picture.at(0) == QChar('/') || picture.at(1) == QChar(':')) {
         entry->thumbnail = picture;
-    }
-    else {
+    } else {
         entry->thumbnail = KIconLoader::global()->iconPath(picture, KIconLoader::Desktop, true);
     }
 }

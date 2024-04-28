@@ -5,34 +5,33 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
-
 #ifndef TEST_KO_INLINE_TEXT_OBJECT_MANAGER_H
 #define TEST_KO_INLINE_TEXT_OBJECT_MANAGER_H
 
 #include <QObject>
 #include <QString>
-#include <QTextDocument>
-#include <QTextCursor>
 #include <QTextCharFormat>
+#include <QTextCursor>
+#include <QTextDocument>
 
 #include <KoInlineObject.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoTextEditor.h>
 #include <KoTextDocument.h>
+#include <KoTextEditor.h>
 
 class DummyInlineObject : public KoInlineObject
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-
     DummyInlineObject(bool propertyListener)
         : KoInlineObject(propertyListener)
         , m_position(-1)
     {
     }
 
-    ~DummyInlineObject() override {}
+    ~DummyInlineObject() override
+    {
+    }
 
     void saveOdf(KoShapeSavingContext &context) override
     {
@@ -40,7 +39,7 @@ public:
         // dummy impl
     }
 
-    bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&) override
+    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override
     {
         // dummy impl
         return false;
@@ -49,12 +48,12 @@ public:
     void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format) override
     {
         Q_UNUSED(format)
-        Q_ASSERT(posInDocument <= document->toPlainText().size()); Q_UNUSED(document);
+        Q_ASSERT(posInDocument <= document->toPlainText().size());
+        Q_UNUSED(document);
         m_position = posInDocument;
     }
 
-    void resize(const QTextDocument *document, QTextInlineObject &object,
-                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override
+    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override
     {
         Q_UNUSED(document)
         Q_UNUSED(object)
@@ -64,8 +63,13 @@ public:
         // dummy impl
     }
 
-    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) override
+    void paint(QPainter &painter,
+               QPaintDevice *pd,
+               const QTextDocument *document,
+               const QRectF &rect,
+               const QTextInlineObject &object,
+               int posInDocument,
+               const QTextCharFormat &format) override
     {
         Q_UNUSED(painter)
         Q_UNUSED(pd)
@@ -85,7 +89,6 @@ public:
 
     QVariant m_property;
     int m_position;
-
 };
 
 class TestKoInlineTextObjectManager : public QObject
@@ -99,7 +102,6 @@ private Q_SLOTS:
     void testRetrieveInlineObject();
     void testRemoveInlineObject();
     void testListenToProperties();
-
 };
 
 #endif // TEST_KO_INLINE_TEXT_OBJECT_MANAGER_H

@@ -9,13 +9,13 @@
 #endif
 
 #include "KoOptimizedCompositeOpFactoryPerArch.h"
-#include "KoOptimizedCompositeOpAlphaDarken32.h"
 #include "KoOptimizedCompositeOpAlphaDarken128.h"
-#include "KoOptimizedCompositeOpOver32.h"
+#include "KoOptimizedCompositeOpAlphaDarken32.h"
 #include "KoOptimizedCompositeOpOver128.h"
+#include "KoOptimizedCompositeOpOver32.h"
 
-#include <QString>
 #include "DebugPigment.h"
+#include <QString>
 
 #include <KoCompositeOpRegistry.h>
 
@@ -60,12 +60,11 @@ KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128>::create<Vc::
 
 inline void printFeatureSupported(const QString &feature, Vc::Implementation impl)
 {
-  dbgPigment << "\t" << feature << "\t---\t" << (Vc::isImplementationSupported(impl) ? "yes" : "no");
+    dbgPigment << "\t" << feature << "\t---\t" << (Vc::isImplementationSupported(impl) ? "yes" : "no");
 }
 
 template<>
-KoReportCurrentArch::ReturnType
-KoReportCurrentArch::create<Vc::CurrentImplementation::current()>(ParamType)
+KoReportCurrentArch::ReturnType KoReportCurrentArch::create<Vc::CurrentImplementation::current()>(ParamType)
 {
     dbgPigment << "Compiled for arch:" << Vc::CurrentImplementation::current();
     dbgPigment << "Features supported:";

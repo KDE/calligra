@@ -14,8 +14,10 @@
 
 #include "Enums.h"
 
-namespace Calligra {
-namespace Components {
+namespace Calligra
+{
+namespace Components
+{
 
 /**
  * \brief Provides a singleton wrapper for global Calligra functionality.
@@ -26,9 +28,9 @@ class Global : public QObject
 {
     Q_OBJECT
 public:
-    explicit Global(QObject* parent = 0);
+    explicit Global(QObject *parent = 0);
 
-    static Q_INVOKABLE int documentType(const QUrl& document);
+    static Q_INVOKABLE int documentType(const QUrl &document);
 };
 
 } // Namespace Components

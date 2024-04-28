@@ -17,22 +17,23 @@ class QSizeF;
 class QRect;
 class QRectF;
 
-namespace KoChart {
+namespace KoChart
+{
 
 class ScreenConversions
 {
 public:
     // pt --> px
-    static qreal ptToPxX(qreal pt, const QPaintDevice* paintDevice);
-    static qreal ptToPxY(qreal pt, const QPaintDevice* paintDevice);
+    static qreal ptToPxX(qreal pt, const QPaintDevice *paintDevice);
+    static qreal ptToPxY(qreal pt, const QPaintDevice *paintDevice);
     static qreal ptToPxX(qreal pt);
     static qreal ptToPxY(qreal pt);
-    static void   scaleFromPtToPx(QPainter &painter);
-    static QPoint scaleFromPtToPx(const QPointF &point, const QPaintDevice* paintDevice);
-    static QSize  scaleFromPtToPx(const QSizeF &size, const QPaintDevice* paintDevice);
-    static QSize  scaleFromPtToPx(const QSizeF &size, QPainter &painter);
-    static QSize  scaleFromPtToPx(const QSizeF &size);
-    static QRect  scaleFromPtToPx(const QRectF &rect, QPainter &painter);
+    static void scaleFromPtToPx(QPainter &painter);
+    static QPoint scaleFromPtToPx(const QPointF &point, const QPaintDevice *paintDevice);
+    static QSize scaleFromPtToPx(const QSizeF &size, const QPaintDevice *paintDevice);
+    static QSize scaleFromPtToPx(const QSizeF &size, QPainter &painter);
+    static QSize scaleFromPtToPx(const QSizeF &size);
+    static QRect scaleFromPtToPx(const QRectF &rect, QPainter &painter);
 
     // px --> pt
     static qreal pxToPtX(qreal px);

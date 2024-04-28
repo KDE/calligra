@@ -9,17 +9,16 @@
 #include "KoPluginLoader.h"
 
 #include <KConfig>
-#include <KSharedConfig>
 #include <KConfigGroup>
 #include <KPluginFactory>
 #include <KPluginMetaData>
+#include <KSharedConfig>
 
 #include <QCoreApplication>
-#include <QJsonObject>
-#include <QPluginLoader>
-#include <QLoggingCategory>
 #include <QDebug>
-
+#include <QJsonObject>
+#include <QLoggingCategory>
+#include <QPluginLoader>
 
 const QLoggingCategory &PLUGIN_LOG()
 {
@@ -30,20 +29,16 @@ const QLoggingCategory &PLUGIN_LOG()
 #define debugPlugin qCDebug(PLUGIN_LOG)
 #define warnPlugin qCWarning(PLUGIN_LOG)
 
-
 class KoPluginLoaderImpl : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     QStringList loadedDirectories;
 };
 
-
-
 Q_GLOBAL_STATIC(KoPluginLoaderImpl, pluginLoaderInstance)
 
-
-void KoPluginLoader::load(const QString & directory, const PluginsConfig &config, QObject* owner)
+void KoPluginLoader::load(const QString &directory, const PluginsConfig &config, QObject *owner)
 {
     // Don't load the same plugins again
     if (pluginLoaderInstance->loadedDirectories.contains(directory)) {
@@ -67,7 +62,7 @@ void KoPluginLoader::load(const QString & directory, const PluginsConfig &config
         if (firstStart) {
             configChanged = true;
         }
-        for(KPluginMetaData metaData : offers) {
+        for (KPluginMetaData metaData : offers) {
             const QString pluginName = metaData.pluginId();
             if (pluginName.isEmpty()) {
                 warnPlugin << "Loading plugin" << metaData.fileName() << "failed, has no X-KDE-PluginInfo-Name.";
@@ -106,7 +101,7 @@ void KoPluginLoader::load(const QString & directory, const PluginsConfig &config
 
     QList<QString> whiteList;
     for (KPluginMetaData metaData : serviceNames) {
-        auto result = KPluginFactory::instantiatePlugin<QObject >(metaData, owner ? owner : pluginLoaderInstance, {});
+        auto result = KPluginFactory::instantiatePlugin<QObject>(metaData, owner ? owner : pluginLoaderInstance, {});
         if (result.plugin) {
             const QString pluginName = metaData.pluginId();
             whiteList << pluginName;
@@ -126,13 +121,13 @@ void KoPluginLoader::load(const QString & directory, const PluginsConfig &config
     }
 }
 
-QList<KPluginFactory *> KoPluginLoader::instantiatePluginFactories(const QString & directory)
+QList<KPluginFactory *> KoPluginLoader::instantiatePluginFactories(const QString &directory)
 {
     QList<KPluginFactory *> pluginFactories;
 
     const QVector<KPluginMetaData> offers = KoPluginLoader::pluginLoaders(directory);
 
-    for(KPluginMetaData metaData : offers) {
+    for (KPluginMetaData metaData : offers) {
         auto result = KPluginFactory::loadFactory(metaData);
 
         if (!result.plugin) {
@@ -160,7 +155,7 @@ QVector<KPluginMetaData> KoPluginLoader::pluginLoaders(const QString &directory,
             QStringList mimeTypes = metaData.mimeTypes();
             mimeTypes += metaData.rawData().value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
             mimeTypes += metaData.rawData().value("X-KDE-NativeMimeType").toString();
-            if (! mimeTypes.contains(mimeType)) {
+            if (!mimeTypes.contains(mimeType)) {
                 return false;
             }
         }

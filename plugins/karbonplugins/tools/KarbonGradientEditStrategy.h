@@ -7,11 +7,11 @@
 #ifndef _KARBONGRADIENTEDITSTRATEGY_H_
 #define _KARBONGRADIENTEDITSTRATEGY_H_
 
-#include <QRectF>
 #include <QBrush>
+#include <QRectF>
 
-#include <KoShapeStroke.h>
 #include <KoGradientBackground.h>
+#include <KoShapeStroke.h>
 
 class QPainter;
 class KUndo2Command;
@@ -31,9 +31,11 @@ public:
     enum SelectionType { None, Handle, Line, Stop };
 
     /// constructs new strategy on the specified shape and target
-    explicit GradientStrategy(KoShape *shape, const QGradient * gradient, Target target);
+    explicit GradientStrategy(KoShape *shape, const QGradient *gradient, Target target);
 
-    virtual ~GradientStrategy() {}
+    virtual ~GradientStrategy()
+    {
+    }
 
     /// painting of the gradient editing handles
     void paint(QPainter &painter, const KoViewConverter &converter, bool selected);
@@ -57,33 +59,38 @@ public:
     void setEditing(bool on);
 
     /// checks if strategy is in editing mode
-    bool isEditing() const {
+    bool isEditing() const
+    {
         return m_editing;
     }
 
     /// create the command for changing the shapes background
-    KUndo2Command * createCommand(KUndo2Command * parent);
+    KUndo2Command *createCommand(KUndo2Command *parent);
 
     /// schedules a repaint of the shape and gradient handles
     void repaint(const KoViewConverter &converter) const;
 
     /// sets the handle radius in pixel used for painting the handles
-    static void setHandleRadius(uint radius) {
+    static void setHandleRadius(uint radius)
+    {
         m_handleRadius = radius;
     }
 
     /// returns the actual handle radius in pixel
-    static uint handleRadius() {
+    static uint handleRadius()
+    {
         return m_handleRadius;
     }
 
     /// Sets the grab sensitivity in pixel used for grabbing handles or lines
-    static void setGrabSensitivity(int grabSensitivity) {
+    static void setGrabSensitivity(int grabSensitivity)
+    {
         m_grabSensitivity = grabSensitivity;
     }
 
     /// Returns the actual grab sensitivity in pixel
-    static int grabSensitivity() {
+    static int grabSensitivity()
+    {
         return m_grabSensitivity;
     }
 
@@ -91,7 +98,7 @@ public:
     QRectF boundingRect(const KoViewConverter &converter) const;
 
     /// returns the actual gradient
-    const QGradient * gradient();
+    const QGradient *gradient();
 
     /// Returns the gradient target
     Target target() const;
@@ -103,7 +110,7 @@ public:
     bool hasSelection() const;
 
     /// Returns the shape associated with the gradient
-    KoShape * shape();
+    KoShape *shape();
 
     /// Returns the type of this gradient strategy
     QGradient::Type type() const;
@@ -142,15 +149,14 @@ protected:
     /// creates an updated brush from the actual data
     virtual QBrush brush() = 0;
 
-    KoShape *m_shape;          ///< the shape we are working on
-    QBrush m_oldBrush;         ///< the old background brush
-    QBrush m_newBrush;         ///< the new background brush
-    QVector<QPointF> m_handles;  ///< the list of handles
-    QGradientStops m_stops;    ///< the gradient stops
-    QTransform m_matrix;          ///< matrix to map handle into document coordinate system
-    KoShapeStroke m_oldStroke;  ///< the old stroke
+    KoShape *m_shape; ///< the shape we are working on
+    QBrush m_oldBrush; ///< the old background brush
+    QBrush m_newBrush; ///< the new background brush
+    QVector<QPointF> m_handles; ///< the list of handles
+    QGradientStops m_stops; ///< the gradient stops
+    QTransform m_matrix; ///< matrix to map handle into document coordinate system
+    KoShapeStroke m_oldStroke; ///< the old stroke
 private:
-
     qreal scalarProduct(const QPointF &p1, const QPointF &p2);
 
     typedef QPair<QPointF, QPointF> StopHandle;
@@ -168,10 +174,10 @@ private:
     bool m_editing; /// the edit mode flag
     Target m_target; ///< the gradient target
     QPair<int, int> m_gradientLine; ///< the handle indices defining the gradient line
-    QPointF m_lastMousePos;    ///< last mouse position
+    QPointF m_lastMousePos; ///< last mouse position
     SelectionType m_selection; ///< the actual selection type
-    int m_selectionIndex;      ///< the actual selection index
-    QGradient::Type m_type;    ///< the gradient strategy type
+    int m_selectionIndex; ///< the actual selection index
+    QGradient::Type m_type; ///< the gradient strategy type
 };
 
 /// Strategy for editing a linear gradient
@@ -179,6 +185,7 @@ class LinearGradientStrategy : public GradientStrategy
 {
 public:
     LinearGradientStrategy(KoShape *shape, const QLinearGradient *gradient, Target target);
+
 private:
     QBrush brush() override;
     enum Handles { start, stop };
@@ -189,6 +196,7 @@ class RadialGradientStrategy : public GradientStrategy
 {
 public:
     RadialGradientStrategy(KoShape *shape, const QRadialGradient *gradient, Target target);
+
 private:
     QBrush brush() override;
     enum Handles { center, focal, radius };
@@ -199,10 +207,10 @@ class ConicalGradientStrategy : public GradientStrategy
 {
 public:
     ConicalGradientStrategy(KoShape *shape, const QConicalGradient *gradient, Target target);
+
 private:
     QBrush brush() override;
     enum Handles { center, direction };
 };
 
 #endif // _KARBONGRADIENTEDITSTRATEGY_H_
-

@@ -32,34 +32,35 @@ class FormulaDocument;
  *
  * @author Martin Pfeiffer <hubipete@gmx.net>
  */
-class KoFormulaShape : public KoShape, public KoFrameShape {
+class KoFormulaShape : public KoShape, public KoFrameShape
+{
 public:
     /// The basic constructor
     explicit KoFormulaShape(KoDocumentResourceManager *documentResourceManager);
-    //KoFormulaShape();
+    // KoFormulaShape();
 
     /// The basic destructor
     ~KoFormulaShape() override;
 
     /// inherited from KoShape
-    void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 
     void updateLayout();
 
     /// @return The element at the point @p p
-    BasicElement* elementAt( const QPointF& p );
+    BasicElement *elementAt(const QPointF &p);
 
     /// Resize the shape.
-    void resize( const QSizeF &size );
+    void resize(const QSizeF &size);
 
     /// @return Get the bounding box of the shape.
-//     QRectF boundingRect() const;
+    //     QRectF boundingRect() const;
 
     /// @return the data shown by the shape
-    FormulaData* formulaData() const;
+    FormulaData *formulaData() const;
 
     /// @return the formularenderer used to paint this shape
-    FormulaRenderer* formulaRenderer() const;
+    FormulaRenderer *formulaRenderer() const;
 
     /**
      * Load a shape from odf - reimplemented from KoShape
@@ -67,9 +68,9 @@ public:
      * @param element element which represents the shape in odf
      * @return false if loading failed
      */
-    bool loadOdf( const KoXmlElement& element, KoShapeLoadingContext& context ) override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
-    bool loadOdfFrameElement(const KoXmlElement& element, KoShapeLoadingContext& context) override;
+    bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     bool loadOdfEmbedded(const KoXmlElement &mathElement, KoShapeLoadingContext &context);
 
     /**
@@ -78,19 +79,18 @@ public:
      * OpenDocument 9.2 Drawing Shapes.
      * @see saveOdfAttributes
      */
-    void saveOdf( KoShapeSavingContext& context ) const override;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
     KoDocumentResourceManager *resourceManager() const;
 
 private:
-    bool loadEmbeddedDocument(KoStore *store,const KoXmlElement &objectElement,
-                              const KoOdfLoadingContext &odfLoadingContext);
+    bool loadEmbeddedDocument(KoStore *store, const KoXmlElement &objectElement, const KoOdfLoadingContext &odfLoadingContext);
 
     /// The data this shape displays
-    FormulaData* m_formulaData;
+    FormulaData *m_formulaData;
 
     /// The renderer that takes care of painting the shape's formula
-    FormulaRenderer* m_formulaRenderer;
+    FormulaRenderer *m_formulaRenderer;
 
     /// True if this formula is inline, i.e. not embedded in a formula document.
     bool m_isInline;

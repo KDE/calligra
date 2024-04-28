@@ -7,16 +7,16 @@
 
 #include "KoMarkerItemDelegate.h"
 
-#include <KoPathShape.h>
 #include <KoMarker.h>
+#include <KoPathShape.h>
 
 #include <QPainter>
 #include <QPainterPath>
 #include <QPen>
 
 KoMarkerItemDelegate::KoMarkerItemDelegate(KoMarkerData::MarkerPosition position, QObject *parent)
-: QAbstractItemDelegate(parent)
-, m_position(position)
+    : QAbstractItemDelegate(parent)
+    , m_position(position)
 {
 }
 
@@ -35,7 +35,7 @@ void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     KoPathShape pathShape;
     pathShape.moveTo(QPointF(option.rect.left(), option.rect.center().y()));
     pathShape.lineTo(QPointF(option.rect.right(), option.rect.center().y()));
-    KoMarker *marker = index.data(Qt::DecorationRole).value<KoMarker*>();
+    KoMarker *marker = index.data(Qt::DecorationRole).value<KoMarker *>();
     if (marker != nullptr) {
         pathShape.setMarker(marker, m_position);
     }
@@ -52,9 +52,9 @@ void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     painter->restore();
 }
 
-QSize KoMarkerItemDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex &index) const
+QSize KoMarkerItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(option)
     Q_UNUSED(index)
-    return QSize(80,30);
+    return QSize(80, 30);
 }

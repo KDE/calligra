@@ -5,20 +5,17 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef TEXTLABELDUMMY_H
 #define TEXTLABELDUMMY_H
 
-
 #include <KoShape.h>
-
 
 class TextLabelDummy : public KoShape
 {
 public:
-    void paint(QPainter&, const KoViewConverter&, KoShapePaintingContext &paintcontext) override;
-    bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&) override;
-    void saveOdf(KoShapeSavingContext&) const override;
+    void paint(QPainter &, const KoViewConverter &, KoShapePaintingContext &paintcontext) override;
+    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override;
+    void saveOdf(KoShapeSavingContext &) const override;
 };
 
 #endif

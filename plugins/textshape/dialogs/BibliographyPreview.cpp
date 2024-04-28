@@ -7,21 +7,20 @@
 #include "BibliographyPreview.h"
 
 #include "KoBibliographyInfo.h"
-#include "KoZoomHandler.h"
 #include "KoTextDocumentLayout.h"
+#include "KoZoomHandler.h"
 #include "TextTool.h"
 
 #include <KoInlineTextObjectManager.h>
 #include <KoParagraphStyle.h>
 #include <KoShapePaintingContext.h>
 
-
-BibliographyPreview::BibliographyPreview(QWidget *parent) :
-    QFrame(parent),
-    m_textShape(0),
-    m_pm(0),
-    m_styleManager(0),
-    m_previewPixSize(QSize(0,0))
+BibliographyPreview::BibliographyPreview(QWidget *parent)
+    : QFrame(parent)
+    , m_textShape(0)
+    , m_pm(0)
+    , m_styleManager(0)
+    , m_previewPixSize(QSize(0, 0))
 {
 }
 
@@ -49,7 +48,7 @@ void BibliographyPreview::paintEvent(QPaintEvent *event)
     p->translate(5.5, 1.5);
     p->setRenderHint(QPainter::Antialiasing);
     QRect rectang = rect();
-    rectang.adjust(-4,-4,-4,-4);
+    rectang.adjust(-4, -4, -4, -4);
 
     if (m_pm) {
         p->drawPixmap(rectang, *m_pm, m_pm->rect());
@@ -69,8 +68,8 @@ void BibliographyPreview::updatePreview(KoBibliographyInfo *newbibInfo)
     KoTextDocument(bibDocument).setStyleManager(m_styleManager);
     KoBibliographyInfo *info = newbibInfo->clone();
 
-    bibFormat.setProperty(KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info) );
-    bibFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument) );
+    bibFormat.setProperty(KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo *>(info));
+    bibFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument *>(bibDocument));
 
     deleteTextShape();
 
@@ -89,22 +88,22 @@ void BibliographyPreview::updatePreview(KoBibliographyInfo *newbibInfo)
     textCharFormat.setProperty(QTextCharFormat::ForegroundBrush, QBrush(Qt::black));
     cursor.setCharFormat(textCharFormat);
 
-    cursor.movePosition(QTextCursor::End,QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
 
     QTextBlockFormat titleBlockFormat;
-    cursor.insertBlock(titleBlockFormat,textCharFormat);
+    cursor.insertBlock(titleBlockFormat, textCharFormat);
     cursor.insertText(info->m_indexTitleTemplate.text);
 
     textCharFormat.setFontPointSize(12);
     textCharFormat.setFontWeight(QFont::Normal);
     QTextBlockFormat blockFormat;
-    cursor.insertBlock(blockFormat,textCharFormat);
-    cursor.insertBlock(blockFormat,textCharFormat);
+    cursor.insertBlock(blockFormat, textCharFormat);
+    cursor.insertBlock(blockFormat, textCharFormat);
     cursor.insertText("CIT01: Title, Author, Organisation, URL");
 
     KoTextDocument(m_textShape->textShapeData()->document()).setStyleManager(m_styleManager);
 
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShape->textShapeData()->document()->documentLayout());
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout *>(m_textShape->textShapeData()->document()->documentLayout());
     connect(lay, &KoTextDocumentLayout::finishedLayout, this, &BibliographyPreview::finishedPreviewLayout);
     if (lay) {
         lay->layout();
@@ -134,7 +133,7 @@ void BibliographyPreview::finishedPreviewLayout()
         } else {
             m_textShape->setSize(m_previewPixSize);
         }
-        KoShapePaintingContext paintContext; //FIXME
+        KoShapePaintingContext paintContext; // FIXME
         m_textShape->paintComponent(p, m_zoomHandler, paintContext);
     }
     emit pixmapGenerated();

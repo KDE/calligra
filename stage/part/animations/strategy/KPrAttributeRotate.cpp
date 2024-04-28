@@ -29,19 +29,19 @@
 #include <QTextDocument>
 #include <QTextLayout>
 
-
-KPrAttributeRotate::KPrAttributeRotate() : KPrAnimationAttribute("rotate")
+KPrAttributeRotate::KPrAttributeRotate()
+    : KPrAnimationAttribute("rotate")
 {
 }
 
 void KPrAttributeRotate::updateCache(KPrAnimationCache *cache, KPrShapeAnimation *shapeAnimation, qreal value)
 {
     qreal tx = 0.0, ty = 0.0;
-    KoShape * shape = shapeAnimation->shape();
+    KoShape *shape = shapeAnimation->shape();
     QTextBlockUserData *textBlockData = shapeAnimation->textBlockUserData();
     QTransform transform;
     if (textBlockData) {
-        if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData())) {
+        if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData *>(shape->userData())) {
             QTextDocument *textDocument = textShapeData->document();
             for (int i = 0; i < textDocument->blockCount(); i++) {
                 QTextBlock textBlock = textDocument->findBlockByNumber(i);
@@ -52,22 +52,21 @@ void KPrAttributeRotate::updateCache(KPrAnimationCache *cache, KPrShapeAnimation
                 }
             }
         }
-    }
-    else {
+    } else {
         tx = shape->size().width() * cache->zoom() / 2;
         ty = shape->size().height() * cache->zoom() / 2;
     }
     transform.translate(tx, ty).rotate(value).translate(-tx, -ty);
-    cache->update(shape, textBlockData,"transform", transform);
+    cache->update(shape, textBlockData, "transform", transform);
 }
 
-void KPrAttributeRotate::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue)
+void KPrAttributeRotate::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation *shapeAnimation, qreal startValue, qreal endValue)
 {
     qreal tx = 0.0, ty = 0.0;
-    KoShape * shape = shapeAnimation->shape();
-    QTextBlockUserData * textBlockData = shapeAnimation->textBlockUserData();
+    KoShape *shape = shapeAnimation->shape();
+    QTextBlockUserData *textBlockData = shapeAnimation->textBlockUserData();
     if (textBlockData) {
-        if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData())) {
+        if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData *>(shape->userData())) {
             QTextDocument *textDocument = textShapeData->document();
             for (int i = 0; i < textDocument->blockCount(); i++) {
                 QTextBlock textBlock = textDocument->findBlockByNumber(i);
@@ -78,8 +77,7 @@ void KPrAttributeRotate::initCache(KPrAnimationCache *animationCache, int step, 
                 }
             }
         }
-    }
-    else {
+    } else {
         tx = shape->size().width() * animationCache->zoom() / 2;
         ty = shape->size().height() * animationCache->zoom() / 2;
     }

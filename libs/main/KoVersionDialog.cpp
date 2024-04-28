@@ -7,8 +7,8 @@
 
 #include "KoVersionDialog.h"
 
-#include "KoMainWindow.h"
 #include "KoDocumentEntry.h"
+#include "KoMainWindow.h"
 #include "KoPart.h"
 
 #include <QFile>
@@ -21,27 +21,26 @@
 #include <QToolButton>
 #include <QTreeWidget>
 
-#include <MainDebug.h>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <MainDebug.h>
 #include <QTemporaryFile>
 
 #include <QTextEdit>
 
-
-KoVersionDialog::KoVersionDialog(QWidget* parent, KoDocument *doc)
-        : KoDialog(parent)
+KoVersionDialog::KoVersionDialog(QWidget *parent, KoDocument *doc)
+    : KoDialog(parent)
 {
     setCaption(i18n("Version"));
     setButtons(Close);
     setDefaultButton(Close);
     m_doc = doc;
 
-    QWidget* page = new QWidget(this);
+    QWidget *page = new QWidget(this);
     setMainWidget(page);
     setModal(true);
 
-    QGridLayout* grid1 = new QGridLayout(page);
+    QGridLayout *grid1 = new QGridLayout(page);
 
     list = new QTreeWidget(page);
     list->setColumnCount(3);
@@ -67,7 +66,6 @@ KoVersionDialog::KoVersionDialog(QWidget* parent, KoDocument *doc)
     m_pOpen = new QPushButton(i18n("&Open"), page);
     grid1->addWidget(m_pOpen, 4, 2);
 
-
     connect(m_pRemove, &QAbstractButton::clicked, this, &KoVersionDialog::slotRemove);
     connect(m_pAdd, &QAbstractButton::clicked, this, &KoVersionDialog::slotAdd);
     connect(m_pOpen, &QAbstractButton::clicked, this, &KoVersionDialog::slotOpen);
@@ -76,7 +74,6 @@ KoVersionDialog::KoVersionDialog(QWidget* parent, KoDocument *doc)
     updateButton();
 
     resize(600, 250);
-
 }
 
 KoVersionDialog::~KoVersionDialog()
@@ -99,7 +96,6 @@ void KoVersionDialog::updateVersionList()
     list->insertTopLevelItems(0, items);
 }
 
-
 void KoVersionDialog::updateButton()
 {
 #if 0
@@ -110,7 +106,7 @@ void KoVersionDialog::updateButton()
 
 void KoVersionDialog::slotAdd()
 {
-    KoVersionModifyDialog * dlg = new KoVersionModifyDialog(this, 0);
+    KoVersionModifyDialog *dlg = new KoVersionModifyDialog(this, 0);
     if (!dlg->exec()) {
         delete dlg;
         return;
@@ -153,13 +149,12 @@ void KoVersionDialog::slotModify()
     if (!version)
         return;
 
-    KoVersionModifyDialog * dlg = new KoVersionModifyDialog(this, version);
+    KoVersionModifyDialog *dlg = new KoVersionModifyDialog(this, version);
     if (dlg->exec()) {
         version->comment = dlg->comment();
         list->currentItem()->setText(2, version->comment);
     }
     delete dlg;
-
 }
 
 void KoVersionDialog::slotOpen()
@@ -185,22 +180,22 @@ void KoVersionDialog::slotOpen()
     tmp.setPermissions(QFile::ReadUser);
     tmp.flush();
 
-    if (!m_doc->documentPart()->mainWindows().isEmpty()) { //open the version in a new window if possible
+    if (!m_doc->documentPart()->mainWindows().isEmpty()) { // open the version in a new window if possible
         KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(m_doc->nativeOasisMimeType());
         if (entry.isEmpty()) {
             entry = KoDocumentEntry::queryByMimeType(m_doc->nativeFormatMimeType());
         }
         Q_ASSERT(!entry.isEmpty());
         QString errorMsg;
-        KoPart *part= entry.createKoPart(&errorMsg);
+        KoPart *part = entry.createKoPart(&errorMsg);
         if (!part) {
             if (!errorMsg.isEmpty())
                 KMessageBox::error(0, errorMsg);
             return;
         }
         KoMainWindow *mainWindow = part->createMainWindow();
-        mainWindow ->openDocument(QUrl::fromLocalFile(tmp.fileName()));
-        mainWindow ->show();
+        mainWindow->openDocument(QUrl::fromLocalFile(tmp.fileName()));
+        mainWindow->show();
     } else {
         m_doc->openUrl(QUrl::fromUserInput(tmp.fileName()));
     }
@@ -209,15 +204,15 @@ void KoVersionDialog::slotOpen()
     slotButtonClicked(Close);
 }
 
-KoVersionModifyDialog::KoVersionModifyDialog(QWidget* parent, KoVersionInfo *info)
-        : KoDialog(parent)
+KoVersionModifyDialog::KoVersionModifyDialog(QWidget *parent, KoVersionInfo *info)
+    : KoDialog(parent)
 {
     setCaption(i18n("Comment"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setModal(true);
 
-    QWidget* page = new QWidget(this);
+    QWidget *page = new QWidget(this);
     setMainWidget(page);
 
     QVBoxLayout *grid1 = new QVBoxLayout(page);
@@ -233,7 +228,6 @@ KoVersionModifyDialog::KoVersionModifyDialog(QWidget* parent, KoVersionInfo *inf
     if (info)
         m_textEdit->setText(info->comment);
     grid1->addWidget(m_textEdit);
-
 }
 
 QString KoVersionModifyDialog::comment() const

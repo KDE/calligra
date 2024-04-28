@@ -19,7 +19,7 @@ class KoCanvasController;
 /// \internal
 class KoZoomTool : public KoInteractionTool
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     /**
      * Create a new tool; typically not called by applications, only by the KoToolManager
@@ -37,11 +37,12 @@ public:
     /// reimplemented method
     void keyReleaseEvent(QKeyEvent *event) override;
     /// reimplemented method
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     /// reimplemented method
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
 
-    void setCanvasController(KoCanvasController *controller) {
+    void setCanvasController(KoCanvasController *controller)
+    {
         m_controller = controller;
     }
 

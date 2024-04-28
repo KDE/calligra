@@ -35,7 +35,7 @@ private:
     bool fillFrameProperties(KWFrame *frame, const KoXmlElement &style);
 
     KWOdfLoader *m_loader;
-    QHash<KoShape *, QString> m_nextShapeNames; // store the 'chain-next-name' 
+    QHash<KoShape *, QString> m_nextShapeNames; // store the 'chain-next-name'
     QList<KoShape *> m_shapesToProcess;
 };
 

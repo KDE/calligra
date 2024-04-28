@@ -10,8 +10,8 @@
 
 #include "KoShapeRubberSelectStrategy.h"
 
-#include <QPointF>
 #include <QPainterPath>
+#include <QPointF>
 
 class KoCreateShapesTool;
 
@@ -27,10 +27,12 @@ public:
      * @param clicked the initial point that the user depressed (in pt).
      */
     KoCreateShapeStrategy(KoCreateShapesTool *tool, const QPointF &clicked);
-    ~KoCreateShapeStrategy() override {}
+    ~KoCreateShapeStrategy() override
+    {
+    }
 
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
-    KUndo2Command* createCommand() override;
+    KUndo2Command *createCommand() override;
     void paint(QPainter &painter, const KoViewConverter &converter) override;
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
 
@@ -41,4 +43,3 @@ private:
 };
 
 #endif
-

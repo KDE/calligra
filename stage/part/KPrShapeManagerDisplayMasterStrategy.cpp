@@ -19,13 +19,13 @@
 
 #include "KPrShapeManagerDisplayMasterStrategy.h"
 
+#include "KPrPageSelectStrategyBase.h"
 #include "KPrPlaceholderShape.h"
 #include <KoPAPageBase.h>
-#include "KPrPageSelectStrategyBase.h"
 
-KPrShapeManagerDisplayMasterStrategy::KPrShapeManagerDisplayMasterStrategy( KoShapeManager * shapeManager, KPrPageSelectStrategyBase * strategy )
-: KoShapeManagerPaintingStrategy( shapeManager )
-, m_strategy( strategy )
+KPrShapeManagerDisplayMasterStrategy::KPrShapeManagerDisplayMasterStrategy(KoShapeManager *shapeManager, KPrPageSelectStrategyBase *strategy)
+    : KoShapeManagerPaintingStrategy(shapeManager)
+    , m_strategy(strategy)
 {
 }
 
@@ -34,9 +34,9 @@ KPrShapeManagerDisplayMasterStrategy::~KPrShapeManagerDisplayMasterStrategy()
     delete m_strategy;
 }
 
-void KPrShapeManagerDisplayMasterStrategy::paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void KPrShapeManagerDisplayMasterStrategy::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
-    if (! dynamic_cast<KPrPlaceholderShape *>(shape)) {
+    if (!dynamic_cast<KPrPlaceholderShape *>(shape)) {
         if (m_strategy->page()->displayShape(shape)) {
             KoShapeManagerPaintingStrategy::paint(shape, painter, converter, paintContext);
         }

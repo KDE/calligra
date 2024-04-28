@@ -9,9 +9,9 @@
 #ifndef KOFONTFACE_H
 #define KOFONTFACE_H
 
-#include <QString>
-#include <QSharedData>
 #include "koodf_export.h"
+#include <QSharedData>
+#include <QString>
 
 class KoXmlWriter;
 class KoFontFacePrivate;
@@ -50,14 +50,11 @@ public:
      */
     bool isNull() const;
 
-    KoFontFace& operator=(const KoFontFace &other);
+    KoFontFace &operator=(const KoFontFace &other);
 
     bool operator==(const KoFontFace &other) const;
 
-    enum Pitch {
-        FixedPitch,
-        VariablePitch
-    };
+    enum Pitch { FixedPitch, VariablePitch };
     //! @todo add enum FamilyGeneric?
 
     QString name() const;

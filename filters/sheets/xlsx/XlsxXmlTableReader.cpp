@@ -9,27 +9,28 @@
  *
  */
 
-#include "XlsxUtils.h"
 #include "XlsxXmlTableReader.h"
+#include "XlsxUtils.h"
 
 #define MSOOXML_CURRENT_CLASS XlsxXmlTableReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
 #include <MsooXmlReader_p.h>
-#include <MsooXmlUtils.h>
 #include <MsooXmlSchemas.h>
+#include <MsooXmlUtils.h>
 
 XlsxXmlTableReaderContext::XlsxXmlTableReaderContext()
-    : headerStyleIndex(-1),
-      dataStyleIndex(-1),
-      totalsRowIndex(-1),
-      headerRowCount(1),
-      totalsRowCount(1)
+    : headerStyleIndex(-1)
+    , dataStyleIndex(-1)
+    , totalsRowIndex(-1)
+    , headerRowCount(1)
+    , totalsRowCount(1)
 {
 }
 
 XlsxXmlTableReader::XlsxXmlTableReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlCommonReader(writers), m_context(0)
+    : MSOOXML::MsooXmlCommonReader(writers)
+    , m_context(0)
 {
 }
 
@@ -37,9 +38,9 @@ XlsxXmlTableReader::~XlsxXmlTableReader()
 {
 }
 
-KoFilter::ConversionStatus XlsxXmlTableReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus XlsxXmlTableReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<XlsxXmlTableReaderContext*>(context);
+    m_context = dynamic_cast<XlsxXmlTableReaderContext *>(context);
     Q_ASSERT(m_context);
 
     readNext();
@@ -61,13 +62,13 @@ KoFilter::ConversionStatus XlsxXmlTableReader::read(MSOOXML::MsooXmlReaderContex
     for (int i = 0; i < namespaces.count(); i++) {
         qCDebug(lcXlsxImport) << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
-//! @todo find out whether the namespace returned by namespaceUri()
-//!       is exactly the same ref as the element of namespaceDeclarations()
+    //! @todo find out whether the namespace returned by namespaceUri()
+    //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration(QString(), MSOOXML::Schemas::spreadsheetml))) {
         raiseError(i18n("Namespace \"%1\" not found", QLatin1String(MSOOXML::Schemas::spreadsheetml)));
         return KoFilter::WrongFormat;
     }
-//! @todo expect other namespaces too...
+    //! @todo expect other namespaces too...
 
     TRY_READ(table)
 
@@ -119,8 +120,7 @@ KoFilter::ConversionStatus XlsxXmlTableReader::read_table()
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if (isStartElement()) {
-        }
+        if (isStartElement()) { }
     }
     READ_EPILOGUE
 }

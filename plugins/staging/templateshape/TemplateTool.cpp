@@ -10,38 +10,37 @@
 #include "TemplateTool.h"
 
 // Qt
-#include <QToolButton>
-#include <QGridLayout>
-#include <QUrl>
 #include <QFileDialog>
+#include <QGridLayout>
+#include <QToolButton>
+#include <QUrl>
 
 // KF5
 #include <KLocalizedString>
 
 // Calligra
 #include <KoCanvasBase.h>
+#include <KoIcon.h>
+#include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
-#include <KoPointerEvent.h>
-#include <KoIcon.h>
 
 // This shape
 #include "TemplateShape.h"
-//#include "ChangeSomethingCommand.h"
+// #include "ChangeSomethingCommand.h"
 
-
-TemplateTool::TemplateTool( KoCanvasBase* canvas )
-    : KoToolBase( canvas ),
-      m_templateshape(0)
+TemplateTool::TemplateTool(KoCanvasBase *canvas)
+    : KoToolBase(canvas)
+    , m_templateshape(0)
 {
 }
 
-void TemplateTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void TemplateTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     Q_UNUSED(toolActivation);
 
     foreach (KoShape *shape, shapes) {
-        m_templateshape = dynamic_cast<TemplateShape*>( shape );
+        m_templateshape = dynamic_cast<TemplateShape *>(shape);
         if (m_templateshape)
             break;
     }
@@ -59,7 +58,7 @@ void TemplateTool::deactivate()
     m_templateshape = 0;
 }
 
-QWidget * TemplateTool::createOptionWidget()
+QWidget *TemplateTool::createOptionWidget()
 {
     // Template: This function should not be implemented if the tool
     // does not have an option widget.
@@ -74,17 +73,15 @@ QWidget * TemplateTool::createOptionWidget()
 
     button = new QToolButton(optionWidget);
     button->setIcon(koIcon("document-open"));
-    button->setToolTip(i18n( "Open"));
+    button->setToolTip(i18n("Open"));
     layout->addWidget(button, 0, 0);
     connect(button, SIGNAL(clicked(bool)), this, SLOT(openPressed()));
 
     return optionWidget;
 }
 
-
 // ----------------------------------------------------------------
 //                         Private slots
-
 
 void TemplateTool::openPressed()
 {
@@ -97,10 +94,8 @@ void TemplateTool::openPressed()
     }
 }
 
-
 // ----------------------------------------------------------------
 //                         Event handling
-
 
 void TemplateTool::mousePressEvent(KoPointerEvent *event)
 {

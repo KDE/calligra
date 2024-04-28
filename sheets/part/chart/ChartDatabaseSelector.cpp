@@ -17,23 +17,23 @@
 #include "core/Map.h"
 #include "core/Sheet.h"
 #include "core/SheetAccessModel.h"
-#include "ui/Selection.h"
 #include "odf/SheetsOdf.h"
+#include "ui/Selection.h"
 
 using namespace Calligra::Sheets;
 
 class ChartDatabaseSelector::Private
 {
 public:
-    Map* map;
-    Selection* selection;
-    KoChart::ChartInterface* shape;
+    Map *map;
+    Selection *selection;
+    KoChart::ChartInterface *shape;
     Ui::ChartDatabaseSelector widget;
 };
 
 ChartDatabaseSelector::ChartDatabaseSelector(Map *map)
-        : KoShapeConfigWidgetBase()
-        , d(new Private)
+    : KoShapeConfigWidgetBase()
+    , d(new Private)
 {
     d->map = map;
     d->selection = 0;
@@ -46,14 +46,14 @@ ChartDatabaseSelector::~ChartDatabaseSelector()
     delete d;
 }
 
-void ChartDatabaseSelector::open(KoShape* shape)
+void ChartDatabaseSelector::open(KoShape *shape)
 {
-    QObject* const object = dynamic_cast<QObject*>(shape);
+    QObject *const object = dynamic_cast<QObject *>(shape);
     Q_ASSERT(object);
     if (!object) {
         return;
     }
-    d->shape = qobject_cast<KoChart::ChartInterface*>(object);
+    d->shape = qobject_cast<KoChart::ChartInterface *>(object);
     Q_ASSERT(d->shape);
 }
 
@@ -61,7 +61,7 @@ void ChartDatabaseSelector::save()
 {
     Sheet *sheet = d->selection->activeSheet();
     const Region selectedRegion = d->map->regionFromName(d->widget.m_cellRegion->text(), sheet);
-    if(!selectedRegion.isValid())
+    if (!selectedRegion.isValid())
         return;
 
     d->shape->setSheetAccessModel(sheet->fullMap()->sheetAccessModel());
@@ -71,10 +71,10 @@ void ChartDatabaseSelector::save()
                     d->widget.m_dataInRows->isChecked() ? Qt::Horizontal : Qt::Vertical);
 }
 
-void ChartDatabaseSelector::showEvent(QShowEvent* event)
+void ChartDatabaseSelector::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event);
     Q_ASSERT(m_resourceManager);
-    d->selection = static_cast<Selection*>(m_resourceManager->resource(::Sheets::CanvasResource::Selection).value<void*>());
+    d->selection = static_cast<Selection *>(m_resourceManager->resource(::Sheets::CanvasResource::Selection).value<void *>());
     d->widget.m_cellRegion->setText(d->selection->Region::name());
 }

@@ -16,9 +16,9 @@
 
 #include "ui/Selection.h"
 
-#include <KoToolManager.h>
-#include <KoInteractionTool.h>
 #include <KoComponentData.h>
+#include <KoInteractionTool.h>
+#include <KoToolManager.h>
 
 using namespace Calligra::Sheets;
 
@@ -38,9 +38,9 @@ void Part::setDocument(Doc *document)
     m_document = document;
 }
 
-KoView* Part::createViewInstance(KoDocument *document, QWidget* parent)
+KoView *Part::createViewInstance(KoDocument *document, QWidget *parent)
 {
-    View *view = new View(this, parent, qobject_cast<Sheets::Doc*>(document));
+    View *view = new View(this, parent, qobject_cast<Sheets::Doc *>(document));
     // If we don't have this here, the next call will die horribly
     KoToolManager::instance()->addController(view->canvasController());
     // explicit switch tool to be sure that the list of option-widgets (CellToolOptionWidget
@@ -49,7 +49,7 @@ KoView* Part::createViewInstance(KoDocument *document, QWidget* parent)
     // We need to set the active sheet, otherwise we will break various other bits of the API
     // which expect your view to actually be ready for interaction after being created (e.g.
     // printing)
-    SheetBase *sheet = qobject_cast<Sheets::Doc*>(document)->map()->sheet(0);
+    SheetBase *sheet = qobject_cast<Sheets::Doc *>(document)->map()->sheet(0);
     Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
     view->setActiveSheet(fullSheet);
     return view;
@@ -57,7 +57,7 @@ KoView* Part::createViewInstance(KoDocument *document, QWidget* parent)
 
 QGraphicsItem *Part::createCanvasItem(KoDocument *document)
 {
-    return new CanvasItem(qobject_cast<Sheets::Doc*>(document));
+    return new CanvasItem(qobject_cast<Sheets::Doc *>(document));
 }
 
 KoMainWindow *Part::createMainWindow()
@@ -65,7 +65,7 @@ KoMainWindow *Part::createMainWindow()
     return new KoMainWindow(SHEETS_MIME_TYPE, componentData());
 }
 
-void Part::openTemplate(const QUrl& url)
+void Part::openTemplate(const QUrl &url)
 {
     m_document->map()->loadingInfo()->setLoadTemplate(true);
     KoPart::openTemplate(url);
@@ -76,8 +76,7 @@ void Part::openTemplate(const QUrl& url)
 void Part::addView(KoView *_view, KoDocument *document)
 {
     KoPart::addView(_view, document);
-    foreach(KoView* view, views()) {
-        static_cast<View*>(view)->selection()->emitCloseEditor(true);
+    foreach (KoView *view, views()) {
+        static_cast<View *>(view)->selection()->emitCloseEditor(true);
     }
 }
-

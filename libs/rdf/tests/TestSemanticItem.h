@@ -7,19 +7,19 @@
 #ifndef TEST_SEMANTIC_ITEM
 #define TEST_SEMANTIC_ITEM
 
-#include <QTest>
-#include <QUuid>
 #include <QString>
+#include <QTest>
+#include <QTextCharFormat>
 #include <QTextDocument>
 #include <QTextTable>
-#include <QTextCharFormat>
+#include <QUuid>
 
-#include <KoRdfSemanticItem.h>
 #include <KoDocumentRdf.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoRdfSemanticItem.h>
+#include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoTextInlineRdf.h>
-#include <KoTextDocument.h>
-#include <KoInlineTextObjectManager.h>
 
 class TestSemanticItem;
 typedef QExplicitlySharedDataPointer<TestSemanticItem> hTestSemanticItem;
@@ -30,7 +30,7 @@ public:
     const QString PREDBASE;
 
     TestSemanticItem(QObject *parent, const KoDocumentRdf *rdf = 0)
-        : KoRdfSemanticItem(parent, const_cast<KoDocumentRdf*>(rdf))
+        : KoRdfSemanticItem(parent, const_cast<KoDocumentRdf *>(rdf))
         , PREDBASE("http://calligra.org/testrdf/")
         , m_uri(QUuid::createUuid().toString())
     {
@@ -43,11 +43,11 @@ public:
         setRdfType(PREDBASE + "testitem");
         Q_ASSERT(documentRdf()->model()->statementCount() > 0);
 
-        updateTriple(m_payload, "payload, payload, payload",  PREDBASE + "payload");
+        updateTriple(m_payload, "payload, payload, payload", PREDBASE + "payload");
     }
 
     TestSemanticItem(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
-        : KoRdfSemanticItem(parent, const_cast<KoDocumentRdf*>(rdf), it)
+        : KoRdfSemanticItem(parent, const_cast<KoDocumentRdf *>(rdf), it)
     {
         m_uri = it.binding("object").toString();
         Q_ASSERT(!m_uri.isNull());
@@ -73,7 +73,7 @@ public:
     {
     }
 
-    virtual void exportToFile(const QString &/*fileName*/ = QString()) const
+    virtual void exportToFile(const QString & /*fileName*/ = QString()) const
     {
     }
 
@@ -88,7 +88,7 @@ public:
     {
         updateTriple(m_name, name, PREDBASE + "name");
         if (documentRdf()) {
-            const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
+            const_cast<KoDocumentRdf *>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
         }
     }
 
@@ -113,24 +113,23 @@ public:
         return m_linkingSubject;
     }
 
-    static QList<hTestSemanticItem> allObjects(KoDocumentRdf* rdf, QSharedPointer<Soprano::Model> model = QSharedPointer<Soprano::Model>(0))
+    static QList<hTestSemanticItem> allObjects(KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> model = QSharedPointer<Soprano::Model>(0))
     {
         QList<hTestSemanticItem> result;
         QSharedPointer<Soprano::Model> m = model ? model : rdf->model();
 
         QString query =
-                "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-                "prefix testrdf: <http://calligra.org/testrdf/> \n"
-                "select distinct ?name ?object ?payload \n"
-                "where { \n"
-                "    ?object rdf:type testrdf:testitem . \n"
-                "    ?object testrdf:name ?name . \n"
-                "    ?object testrdf:payload ?payload \n"
-                "}\n"
-                "    order by  DESC(?name) \n ";
+            "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
+            "prefix testrdf: <http://calligra.org/testrdf/> \n"
+            "select distinct ?name ?object ?payload \n"
+            "where { \n"
+            "    ?object rdf:type testrdf:testitem . \n"
+            "    ?object testrdf:name ?name . \n"
+            "    ?object testrdf:payload ?payload \n"
+            "}\n"
+            "    order by  DESC(?name) \n ";
 
-        Soprano::QueryResultIterator it = m->executeQuery(query,
-                                                          Soprano::Query::QueryLanguageSparql);
+        Soprano::QueryResultIterator it = m->executeQuery(query, Soprano::Query::QueryLanguageSparql);
 
         while (it.next()) {
             hTestSemanticItem item(new TestSemanticItem(0, rdf, it));
@@ -139,25 +138,25 @@ public:
         return result;
     }
 
-    static QList<hTestSemanticItem> findItemsByName(const QString name, KoDocumentRdf* rdf, QSharedPointer<Soprano::Model> model = QSharedPointer<Soprano::Model>(0))
+    static QList<hTestSemanticItem>
+    findItemsByName(const QString name, KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> model = QSharedPointer<Soprano::Model>(0))
     {
         QList<hTestSemanticItem> result;
         QSharedPointer<Soprano::Model> m = model ? model : rdf->model();
 
         QString query(
-                    "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-                    "prefix testrdf: <http://calligra.org/testrdf/> \n"
-                    "select distinct ?name ?object ?payload \n"
-                    "where { \n"
-                    "    ?object rdf:type testrdf:testitem . \n"
-                    "    ?object testrdf:name ?name . \n"
-                    "    ?object testrdf:payload ?payload . \n"
-                    "    filter (?name = %1) "
-                    "}\n"
-                    "    order by  DESC(?name) \n ");
+            "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
+            "prefix testrdf: <http://calligra.org/testrdf/> \n"
+            "select distinct ?name ?object ?payload \n"
+            "where { \n"
+            "    ?object rdf:type testrdf:testitem . \n"
+            "    ?object testrdf:name ?name . \n"
+            "    ?object testrdf:payload ?payload . \n"
+            "    filter (?name = %1) "
+            "}\n"
+            "    order by  DESC(?name) \n ");
 
-        Soprano::QueryResultIterator it = m->executeQuery(query.arg(Soprano::Node::literalToN3(name)),
-                                                          Soprano::Query::QueryLanguageSparql);
+        Soprano::QueryResultIterator it = m->executeQuery(query.arg(Soprano::Node::literalToN3(name)), Soprano::Query::QueryLanguageSparql);
 
         while (it.next()) {
             hTestSemanticItem item(new TestSemanticItem(0, rdf, it));

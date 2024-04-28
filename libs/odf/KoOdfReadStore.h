@@ -26,14 +26,14 @@ class KOODF_EXPORT KoOdfReadStore
 {
 public:
     /// @param store recontents the property of the caller
-    explicit KoOdfReadStore(KoStore* store);
+    explicit KoOdfReadStore(KoStore *store);
 
     ~KoOdfReadStore();
 
     /**
      * Get the store
      */
-    KoStore* store() const;
+    KoStore *store() const;
 
     /**
      * Get the styles
@@ -88,11 +88,11 @@ public:
      * Load a file and parse from a QIODevice
      * filename argument is just used for debug message
      */
-    static bool loadAndParse(QIODevice *fileDevice, KoXmlDocument &doc, QString &errorMessage, const QString& fileName);
+    static bool loadAndParse(QIODevice *fileDevice, KoXmlDocument &doc, QString &errorMessage, const QString &fileName);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOODFREADSTORE_H */

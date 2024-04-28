@@ -37,8 +37,8 @@ public:
     ~DeleteCommand() override;
 
     enum Mode {
-        Everything,     ///< Delete also column and row formats.
-        OnlyCells       ///< Delete only cell contents, styles, etc.
+        Everything, ///< Delete also column and row formats.
+        OnlyCells ///< Delete only cell contents, styles, etc.
     };
     void setMode(Mode mode);
 
@@ -47,10 +47,11 @@ protected:
      * Processes \p element , a Region::Point or a Region::Range .
      * Invoked by performCommands() .
      */
-    bool process(Element* element) override;
+    bool process(Element *element) override;
 
     // dummy
-    Value newValue(Element*, int, int, bool*, Format::Type*) override {
+    Value newValue(Element *, int, int, bool *, Format::Type *) override
+    {
         return Value();
     }
 

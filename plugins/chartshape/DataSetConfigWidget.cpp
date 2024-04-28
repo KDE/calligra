@@ -13,8 +13,8 @@
 
 // Qt
 #include <QAction>
-#include <QMenu>
 #include <QLatin1String>
+#include <QMenu>
 
 // KF5
 #include <KLocalizedString>
@@ -22,42 +22,41 @@
 #include <kfontchooser.h>
 
 // Calligra
-#include <interfaces/KoChartModel.h>
 #include <KoIcon.h>
+#include <interfaces/KoChartModel.h>
 
 // KChart
-#include <KChartChart>
-#include <KChartPosition>
-#include <KChartCartesianAxis>
-#include <KChartGridAttributes>
 #include <KChartAbstractCartesianDiagram>
-#include <KChartLegend>
+#include <KChartCartesianAxis>
+#include <KChartChart>
 #include <KChartDataValueAttributes>
-#include <KChartTextAttributes>
+#include <KChartGridAttributes>
+#include <KChartLegend>
 #include <KChartMarkerAttributes>
 #include <KChartMeasure>
+#include <KChartPosition>
+#include <KChartTextAttributes>
 
 // KoChart
-#include "ChartProxyModel.h"
-#include "PlotArea.h"
-#include "Legend.h"
-#include "DataSet.h"
 #include "Axis.h"
-#include "ui_ChartTableEditor.h"
-#include "NewAxisDialog.h"
 #include "AxisScalingDialog.h"
+#include "CellRegionDialog.h"
+#include "CellRegionStringValidator.h"
+#include "ChartDebug.h"
+#include "ChartProxyModel.h"
+#include "ChartTableModel.h"
+#include "DataSet.h"
 #include "FontEditorDialog.h"
 #include "FormatErrorBarDialog.h"
-#include "CellRegionDialog.h"
+#include "Legend.h"
+#include "NewAxisDialog.h"
+#include "PlotArea.h"
 #include "TableEditorDialog.h"
-#include "commands/ChartTypeCommand.h"
-#include "CellRegionStringValidator.h"
-#include "ChartTableModel.h"
 #include "TableSource.h"
-#include "ChartDebug.h"
+#include "commands/ChartTypeCommand.h"
+#include "ui_ChartTableEditor.h"
 
 using namespace KoChart;
-
 
 class DataSetConfigWidget::Private
 {
@@ -67,8 +66,8 @@ public:
 
     Ui::DataSetConfigWidget ui;
 
-    QList<Axis*> dataSetAxes;
-    QList<DataSet*> dataSets;
+    QList<Axis *> dataSetAxes;
+    QList<DataSet *> dataSets;
     int selectedDataSet;
 
     // Menus
@@ -79,59 +78,59 @@ public:
     QMenu *dataSetStockChartMenu;
 
     // chart type selection actions
-    QAction  *normalBarChartAction;
-    QAction  *stackedBarChartAction;
-    QAction  *percentBarChartAction;
+    QAction *normalBarChartAction;
+    QAction *stackedBarChartAction;
+    QAction *percentBarChartAction;
 
-    QAction  *normalLineChartAction;
-    QAction  *stackedLineChartAction;
-    QAction  *percentLineChartAction;
+    QAction *normalLineChartAction;
+    QAction *stackedLineChartAction;
+    QAction *percentLineChartAction;
 
-    QAction  *normalAreaChartAction;
-    QAction  *stackedAreaChartAction;
-    QAction  *percentAreaChartAction;
+    QAction *normalAreaChartAction;
+    QAction *stackedAreaChartAction;
+    QAction *percentAreaChartAction;
 
-    QAction  *circleChartAction;
-    QAction  *ringChartAction;
-    QAction  *radarChartAction;
-    QAction  *filledRadarChartAction;
+    QAction *circleChartAction;
+    QAction *ringChartAction;
+    QAction *radarChartAction;
+    QAction *filledRadarChartAction;
 
-    QAction  *scatterChartAction;
-    QAction  *bubbleChartAction;
+    QAction *scatterChartAction;
+    QAction *bubbleChartAction;
 
-    QAction  *hlcStockChartAction;
-    QAction  *ohlcStockChartAction;
-    QAction  *candlestickStockChartAction;
+    QAction *hlcStockChartAction;
+    QAction *ohlcStockChartAction;
+    QAction *candlestickStockChartAction;
 
-    QAction  *surfaceChartAction;
-    QAction  *ganttChartAction;
+    QAction *surfaceChartAction;
+    QAction *ganttChartAction;
 
     // chart type selection actions for datasets
-    QAction  *dataSetNormalBarChartAction;
-    QAction  *dataSetStackedBarChartAction;
-    QAction  *dataSetPercentBarChartAction;
+    QAction *dataSetNormalBarChartAction;
+    QAction *dataSetStackedBarChartAction;
+    QAction *dataSetPercentBarChartAction;
 
-    QAction  *dataSetNormalLineChartAction;
-    QAction  *dataSetStackedLineChartAction;
-    QAction  *dataSetPercentLineChartAction;
+    QAction *dataSetNormalLineChartAction;
+    QAction *dataSetStackedLineChartAction;
+    QAction *dataSetPercentLineChartAction;
 
-    QAction  *dataSetNormalAreaChartAction;
-    QAction  *dataSetStackedAreaChartAction;
-    QAction  *dataSetPercentAreaChartAction;
+    QAction *dataSetNormalAreaChartAction;
+    QAction *dataSetStackedAreaChartAction;
+    QAction *dataSetPercentAreaChartAction;
 
-    QAction  *dataSetCircleChartAction;
-    QAction  *dataSetRingChartAction;
-    QAction  *dataSetRadarChartAction;
-    QAction  *dataSetFilledRadarChartAction;
-    QAction  *dataSetScatterChartAction;
-    QAction  *dataSetBubbleChartAction;
+    QAction *dataSetCircleChartAction;
+    QAction *dataSetRingChartAction;
+    QAction *dataSetRadarChartAction;
+    QAction *dataSetFilledRadarChartAction;
+    QAction *dataSetScatterChartAction;
+    QAction *dataSetBubbleChartAction;
 
-    QAction  *dataSetHLCStockChartAction;
-    QAction  *dataSetOHLCStockChartAction;
-    QAction  *dataSetCandlestickStockChartAction;
+    QAction *dataSetHLCStockChartAction;
+    QAction *dataSetOHLCStockChartAction;
+    QAction *dataSetCandlestickStockChartAction;
 
-    QAction  *dataSetSurfaceChartAction;
-    QAction  *dataSetGanttChartAction;
+    QAction *dataSetSurfaceChartAction;
+    QAction *dataSetGanttChartAction;
 
     // marker selection actions for datasets
     QAction *dataSetNoMarkerAction;
@@ -156,7 +155,6 @@ public:
 
     FormatErrorBarDialog formatErrorBarDialog;
 };
-
 
 DataSetConfigWidget::Private::Private(DataSetConfigWidget *parent)
     : formatErrorBarDialog(parent)
@@ -198,19 +196,18 @@ DataSetConfigWidget::Private::Private(DataSetConfigWidget *parent)
     // Default chart type is a bar chart
     dataSetChartTypeMenu->setIcon(ICON1(BarChartType));
 
-
     dataSetBarChartMenu = dataSetChartTypeMenu->addMenu(ICON1(BarChartType), i18n("Bar Chart"));
-    dataSetNormalBarChartAction  = dataSetBarChartMenu->addAction(ICON2(BarChartType, NormalChartSubtype), i18n("Normal"));
+    dataSetNormalBarChartAction = dataSetBarChartMenu->addAction(ICON2(BarChartType, NormalChartSubtype), i18n("Normal"));
     dataSetStackedBarChartAction = dataSetBarChartMenu->addAction(ICON2(BarChartType, StackedChartSubtype), i18n("Stacked"));
     dataSetPercentBarChartAction = dataSetBarChartMenu->addAction(ICON2(BarChartType, PercentChartSubtype), i18n("Percent"));
 
     dataSetLineChartMenu = dataSetChartTypeMenu->addMenu(ICON1(LineChartType), i18n("Line Chart"));
-    dataSetNormalLineChartAction  = dataSetLineChartMenu->addAction(ICON2(LineChartType, NormalChartSubtype), i18n("Normal"));
+    dataSetNormalLineChartAction = dataSetLineChartMenu->addAction(ICON2(LineChartType, NormalChartSubtype), i18n("Normal"));
     dataSetStackedLineChartAction = dataSetLineChartMenu->addAction(ICON2(LineChartType, NormalChartSubtype), i18n("Stacked"));
     dataSetPercentLineChartAction = dataSetLineChartMenu->addAction(ICON2(LineChartType, NormalChartSubtype), i18n("Percent"));
 
     dataSetAreaChartMenu = dataSetChartTypeMenu->addMenu(ICON1(AreaChartType), i18n("Area Chart"));
-    dataSetNormalAreaChartAction  = dataSetAreaChartMenu->addAction(ICON2(AreaChartType, NormalChartSubtype), i18n("Normal"));
+    dataSetNormalAreaChartAction = dataSetAreaChartMenu->addAction(ICON2(AreaChartType, NormalChartSubtype), i18n("Normal"));
     dataSetStackedAreaChartAction = dataSetAreaChartMenu->addAction(ICON2(AreaChartType, StackedChartSubtype), i18n("Stacked"));
     dataSetPercentAreaChartAction = dataSetAreaChartMenu->addAction(ICON2(AreaChartType, PercentChartSubtype), i18n("Percent"));
 
@@ -270,7 +267,7 @@ DataSetConfigWidget::Private::Private(DataSetConfigWidget *parent)
     // Insert error bar button
     ui.formatErrorBar->setEnabled(false);
 
-    connect(ui.datasetBrush, &KColorButton::changed,parent, &DataSetConfigWidget::datasetBrushSelected);
+    connect(ui.datasetBrush, &KColorButton::changed, parent, &DataSetConfigWidget::datasetBrushSelected);
     connect(ui.datasetPen, &KColorButton::changed, parent, &DataSetConfigWidget::datasetPenSelected);
     connect(ui.datasetShowCategory, &QAbstractButton::toggled, parent, &DataSetConfigWidget::ui_datasetShowCategoryChanged);
     connect(ui.datasetShowErrorBar, &QAbstractButton::toggled, parent, &DataSetConfigWidget::ui_datasetShowErrorBarChanged);
@@ -280,7 +277,6 @@ DataSetConfigWidget::Private::Private(DataSetConfigWidget *parent)
     // TODO
     // connect(ui.datasetShowSymbol, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowSymbolChanged(bool)));
 
-
     connect(ui.dataSets, &QComboBox::currentIndexChanged, parent, &DataSetConfigWidget::ui_dataSetSelectionChanged);
     connect(ui.dataSetAxes, &QComboBox::currentIndexChanged, parent, &DataSetConfigWidget::ui_dataSetAxisSelectionChanged);
 }
@@ -289,10 +285,8 @@ DataSetConfigWidget::Private::~Private()
 {
 }
 
-
 // ================================================================
 //                     class DataSetConfigWidget
-
 
 DataSetConfigWidget::DataSetConfigWidget(QWidget *parent)
     : ConfigSubWidgetBase(parent)
@@ -324,9 +318,9 @@ void DataSetConfigWidget::deleteSubDialogs(ChartType type)
     Q_UNUSED(type)
 }
 
-void DataSetConfigWidget::open(ChartShape* shape)
+void DataSetConfigWidget::open(ChartShape *shape)
 {
-    debugChartUiDataSet<<shape;
+    debugChartUiDataSet << shape;
 
     // reset these so we do not risc using old, deleted data
     // these are recalculated in updateData() anyway
@@ -346,10 +340,10 @@ void DataSetConfigWidget::ui_dataSetAxisSelectionChanged(int index)
     if (index < 0 || d->ui.dataSets->currentIndex() >= d->dataSets.count()) {
         return;
     }
-    debugChartUiDataSet<<index<<d->dataSetAxes;
+    debugChartUiDataSet << index << d->dataSetAxes;
     if (index >= d->dataSetAxes.count()) {
         // Add the axis
-        debugChartUiDataSet<<"create secondary y axis";
+        debugChartUiDataSet << "create secondary y axis";
         emit axisAdded(YAxisDimension, i18n("Axistitle"));
     }
     if (index < 0 || index >= d->dataSetAxes.count()) {
@@ -382,20 +376,20 @@ void DataSetConfigWidget::updateMarkers()
     d->dataSetMarkerHorizontalBarAction->setIcon(dataSet->markerIcon(MarkerHorizontalBar));
     d->dataSetMarkerVerticalBarAction->setIcon(dataSet->markerIcon(MarkerVerticalBar));
 
-    switch(dataSet->odfSymbolType()) {
-        case NoSymbol:
-            d->ui.datasetMarkerMenu->setText(i18n("None"));
-            d->ui.datasetMarkerMenu->setIcon(QIcon());
-            break;
-        case NamedSymbol:
-            d->ui.datasetMarkerMenu->setIcon(dataSet->markerIcon(dataSet->markerStyle()));
-            d->ui.datasetMarkerMenu->setText(QString());
-            break;
-        case ImageSymbol:
-        case AutomaticSymbol:
-            d->ui.datasetMarkerMenu->setText(i18n("Auto"));
-            d->ui.datasetMarkerMenu->setIcon(QIcon());
-            break;
+    switch (dataSet->odfSymbolType()) {
+    case NoSymbol:
+        d->ui.datasetMarkerMenu->setText(i18n("None"));
+        d->ui.datasetMarkerMenu->setIcon(QIcon());
+        break;
+    case NamedSymbol:
+        d->ui.datasetMarkerMenu->setIcon(dataSet->markerIcon(dataSet->markerStyle()));
+        d->ui.datasetMarkerMenu->setText(QString());
+        break;
+    case ImageSymbol:
+    case AutomaticSymbol:
+        d->ui.datasetMarkerMenu->setText(i18n("Auto"));
+        d->ui.datasetMarkerMenu->setIcon(QIcon());
+        break;
     }
 }
 void DataSetConfigWidget::ui_dataSetErrorBarTypeChanged()
@@ -413,7 +407,7 @@ void DataSetConfigWidget::ui_dataSetHasChartTypeChanged(bool b)
     if (d->selectedDataSet < 0) {
         return;
     }
-    debugChartUiDataSet<<b;
+    debugChartUiDataSet << b;
     DataSet *dataSet = d->dataSets[d->selectedDataSet];
     Q_ASSERT(dataSet);
     if (!dataSet) {
@@ -431,41 +425,41 @@ void DataSetConfigWidget::dataSetChartTypeSelected(QAction *action)
     if (d->selectedDataSet < 0)
         return;
 
-    debugChartUiDataSet<<action;
+    debugChartUiDataSet << action;
 
-    ChartType     type    = LastChartType;
-    ChartSubtype  subtype = NoChartSubtype;
+    ChartType type = LastChartType;
+    ChartSubtype subtype = NoChartSubtype;
 
     if (action == d->dataSetNormalBarChartAction) {
-        type    = BarChartType;
+        type = BarChartType;
         subtype = NormalChartSubtype;
     } else if (action == d->dataSetStackedBarChartAction) {
-        type    = BarChartType;
+        type = BarChartType;
         subtype = StackedChartSubtype;
     } else if (action == d->dataSetPercentBarChartAction) {
-        type    = BarChartType;
+        type = BarChartType;
         subtype = PercentChartSubtype;
     }
 
     else if (action == d->dataSetNormalLineChartAction) {
-        type    = LineChartType;
+        type = LineChartType;
         subtype = NormalChartSubtype;
     } else if (action == d->dataSetStackedLineChartAction) {
-        type    = LineChartType;
+        type = LineChartType;
         subtype = StackedChartSubtype;
     } else if (action == d->dataSetPercentLineChartAction) {
-        type    = LineChartType;
+        type = LineChartType;
         subtype = PercentChartSubtype;
     }
 
     else if (action == d->dataSetNormalAreaChartAction) {
-        type    = AreaChartType;
+        type = AreaChartType;
         subtype = NormalChartSubtype;
     } else if (action == d->dataSetStackedAreaChartAction) {
-        type    = AreaChartType;
+        type = AreaChartType;
         subtype = StackedChartSubtype;
     } else if (action == d->dataSetPercentAreaChartAction) {
-        type    = AreaChartType;
+        type = AreaChartType;
         subtype = PercentChartSubtype;
     }
 
@@ -482,13 +476,13 @@ void DataSetConfigWidget::dataSetChartTypeSelected(QAction *action)
         type = ScatterChartType;
 
     else if (action == d->dataSetHLCStockChartAction) {
-        type    = StockChartType;
+        type = StockChartType;
         subtype = HighLowCloseChartSubtype;
     } else if (action == d->dataSetStackedAreaChartAction) {
-        type    = StockChartType;
+        type = StockChartType;
         subtype = OpenHighLowCloseChartSubtype;
     } else if (action == d->dataSetCandlestickStockChartAction) {
-        type    = StockChartType;
+        type = StockChartType;
         subtype = CandlestickChartSubtype;
     }
 
@@ -496,8 +490,8 @@ void DataSetConfigWidget::dataSetChartTypeSelected(QAction *action)
         type = BubbleChartType;
 
     // FIXME: Not supported by KoChart yet:
-    //surface
-    //gantt
+    // surface
+    // gantt
 
     DataSet *dataSet = d->dataSets[d->selectedDataSet];
     Q_ASSERT(dataSet);
@@ -526,7 +520,7 @@ void DataSetConfigWidget::datasetMarkerSelected(QAction *action)
         symbolType = NoSymbol;
         type = "None";
     } else if (action == d->dataSetAutomaticMarkerAction) {
-        style = (OdfMarkerStyle) (d->selectedDataSet % numDefaultMarkerTypes);
+        style = (OdfMarkerStyle)(d->selectedDataSet % numDefaultMarkerTypes);
         type = "Auto";
         symbolType = AutomaticSymbol;
     } else if (action == d->dataSetMarkerCircleAction) {
@@ -582,7 +576,7 @@ void DataSetConfigWidget::datasetMarkerSelected(QAction *action)
     updateData(dataSet->chartType(), dataSet->chartSubType());
 }
 
-void DataSetConfigWidget::datasetBrushSelected(const QColor& color)
+void DataSetConfigWidget::datasetBrushSelected(const QColor &color)
 {
     if (d->selectedDataSet < 0)
         return;
@@ -591,7 +585,7 @@ void DataSetConfigWidget::datasetBrushSelected(const QColor& color)
     updateMarkers();
 }
 
-void DataSetConfigWidget::datasetPenSelected(const QColor& color)
+void DataSetConfigWidget::datasetPenSelected(const QColor &color)
 {
     if (d->selectedDataSet < 0)
         return;
@@ -609,8 +603,8 @@ void DataSetConfigWidget::updateData(ChartType chartType, ChartSubtype subtype)
     if (!chartTypes.contains(chartType)) {
         return;
     }
-    QList<DataSet*> newDataSets = chart->plotArea()->dataSets();
-    debugChartUiDataSet<<d->selectedDataSet<<d->dataSets<<':'<<newDataSets;
+    QList<DataSet *> newDataSets = chart->plotArea()->dataSets();
+    debugChartUiDataSet << d->selectedDataSet << d->dataSets << ':' << newDataSets;
 
     blockSignals(true);
     d->dataSetAxes.clear();
@@ -619,29 +613,30 @@ void DataSetConfigWidget::updateData(ChartType chartType, ChartSubtype subtype)
     // Update the chart type specific settings in the "Data Sets" tab
     d->ui.errorBarProperties->hide();
     // TODO: error indication is not implemented
-//     if (chartType == BarChartType || chartType == LineChartType || chartType == AreaChartType || chartType == ScatterChartType) {
-//         d->ui.errorBarProperties->show();
-//     }
-    // TODO 
-//     d->ui.datasetShowSymbol->hide();
-//     if (chartType == LineChartType || chartType == AreaChartType || chartType == ScatterChartType || chartType == RadarChartType || chartType == FilledRadarChartType) {
-//         d->ui.datasetShowSymbol->show();
-//     }
-    
+    //     if (chartType == BarChartType || chartType == LineChartType || chartType == AreaChartType || chartType == ScatterChartType) {
+    //         d->ui.errorBarProperties->show();
+    //     }
+    // TODO
+    //     d->ui.datasetShowSymbol->hide();
+    //     if (chartType == LineChartType || chartType == AreaChartType || chartType == ScatterChartType || chartType == RadarChartType || chartType ==
+    //     FilledRadarChartType) {
+    //         d->ui.datasetShowSymbol->show();
+    //     }
+
     // Make sure we only allow legal chart type combinations
     if (isPolar(chartType)) {
         // TODO: check out this claim:
         // Pie charts and ring charts have no axes but radar charts do.
         // Disable choosing of attached axis if there is none.
         bool hasAxes = !(chartType == CircleChartType || chartType == RingChartType);
-//         d->ui.axisConfiguration->setEnabled(hasAxes);
+        //         d->ui.axisConfiguration->setEnabled(hasAxes);
         d->ui.dataSetAxes->setCurrentIndex(-1);
         d->ui.dataSetAxes->setEnabled(false);
         d->ui.dataSetHasChartType->setEnabled(hasAxes);
         d->ui.dataSetChartTypeMenu->setEnabled(hasAxes);
     } else {
         // All the cartesian chart types have axes.
-//         d->ui.axisConfiguration->setEnabled(true);
+        //         d->ui.axisConfiguration->setEnabled(true);
         d->dataSetAxes.append(chart->plotArea()->yAxis());
         if (chart->plotArea()->secondaryYAxis() && chart->plotArea()->secondaryYAxis()->isVisible()) {
             d->dataSetAxes.append(chart->plotArea()->secondaryYAxis());
@@ -661,7 +656,7 @@ void DataSetConfigWidget::updateData(ChartType chartType, ChartSubtype subtype)
     if (newDataSets != d->dataSets) {
         d->selectedDataSet = 0; // new datasets, select the first
         d->dataSets = newDataSets;
-        debugChartUiDataSet<<"new datasets"<<newDataSets;
+        debugChartUiDataSet << "new datasets" << newDataSets;
     }
     d->ui.dataSets->setCurrentIndex(d->selectedDataSet);
 
@@ -669,7 +664,6 @@ void DataSetConfigWidget::updateData(ChartType chartType, ChartSubtype subtype)
 
     ui_dataSetSelectionChanged(d->selectedDataSet);
 }
-
 
 void DataSetConfigWidget::slotShowFormatErrorBarDialog()
 {
@@ -679,10 +673,8 @@ void DataSetConfigWidget::slotShowFormatErrorBarDialog()
 void DataSetConfigWidget::setupDialogs()
 {
     // Format Error Bars
-    connect(d->ui.formatErrorBar, &QAbstractButton::clicked,
-             this, &DataSetConfigWidget::slotShowFormatErrorBarDialog);
-    connect(&d->formatErrorBarDialog, &QDialog::accepted,
-             this, &DataSetConfigWidget::ui_dataSetErrorBarTypeChanged);
+    connect(d->ui.formatErrorBar, &QAbstractButton::clicked, this, &DataSetConfigWidget::slotShowFormatErrorBarDialog);
+    connect(&d->formatErrorBarDialog, &QDialog::accepted, this, &DataSetConfigWidget::ui_dataSetErrorBarTypeChanged);
 }
 
 void DataSetConfigWidget::createActions()
@@ -692,21 +684,21 @@ void DataSetConfigWidget::createActions()
 void DataSetConfigWidget::ui_dataSetSelectionChanged(int index)
 {
     // Check for valid index
-    debugChartUiDataSet<<index<<d->dataSets;
+    debugChartUiDataSet << index << d->dataSets;
     if (index < 0 || index >= d->dataSets.size()) {
         return;
     }
     blockSignals(true);
 
     DataSet *dataSet = d->dataSets[index];
-    //d->ui.datasetColor->setText(axis->titleText());
+    // d->ui.datasetColor->setText(axis->titleText());
     d->ui.dataSetAxes->setCurrentIndex(d->dataSetAxes.indexOf(dataSet->attachedAxis()));
 
     d->ui.datasetBrush->setColor(dataSet->brush().color());
 
     d->ui.datasetPen->setColor(dataSet->pen().color());
 
-    debugChartUiDataSet<<dataSet->valueLabelType();
+    debugChartUiDataSet << dataSet->valueLabelType();
     d->ui.datasetShowCategory->setChecked(dataSet->valueLabelType().category);
 
     d->ui.dataSetShowNumber->setChecked(dataSet->valueLabelType().number);
@@ -733,8 +725,8 @@ void DataSetConfigWidget::ui_dataSetSelectionChanged(int index)
     if (chartType == LastChartType) {
         chartType = chart->chartType();
     }
-    bool disableMarkers = chartType == BarChartType || chartType == StockChartType || chartType == CircleChartType
-                            || chartType == RingChartType || chartType == BubbleChartType;
+    bool disableMarkers =
+        chartType == BarChartType || chartType == StockChartType || chartType == CircleChartType || chartType == RingChartType || chartType == BubbleChartType;
     d->ui.datasetMarkerMenu->setDisabled(disableMarkers);
 }
 
@@ -743,7 +735,7 @@ void DataSetConfigWidget::ui_datasetShowCategoryChanged(bool b)
     if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count()) {
         return;
     }
-    debugChartUiDataSet<<b;
+    debugChartUiDataSet << b;
     emit datasetShowCategoryChanged(d->dataSets[d->selectedDataSet], b, -1);
 }
 
@@ -752,7 +744,7 @@ void DataSetConfigWidget::ui_datasetShowErrorBarChanged(bool b)
     if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count()) {
         return;
     }
-    debugChartUiDataSet<<b;
+    debugChartUiDataSet << b;
     d->ui.formatErrorBar->setEnabled(b);
 }
 
@@ -761,7 +753,7 @@ void DataSetConfigWidget::ui_dataSetShowNumberChanged(bool b)
     if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count()) {
         return;
     }
-    debugChartUiDataSet<<b;
+    debugChartUiDataSet << b;
     emit dataSetShowNumberChanged(d->dataSets[d->selectedDataSet], b, -1);
 }
 
@@ -770,7 +762,7 @@ void DataSetConfigWidget::ui_datasetShowPercentChanged(bool b)
     if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count()) {
         return;
     }
-    debugChartUiDataSet<<b;
+    debugChartUiDataSet << b;
     emit datasetShowPercentChanged(d->dataSets[d->selectedDataSet], b, -1);
 }
 
@@ -779,6 +771,6 @@ void DataSetConfigWidget::ui_datasetShowSymbolChanged(bool b)
     if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count()) {
         return;
     }
-    debugChartUiDataSet<<b;
+    debugChartUiDataSet << b;
     emit datasetShowSymbolChanged(d->dataSets[d->selectedDataSet], b, -1);
 }

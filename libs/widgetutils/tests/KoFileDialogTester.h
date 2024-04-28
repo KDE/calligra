@@ -8,18 +8,19 @@
 
 #include <QWidget>
 
-namespace Ui {
+namespace Ui
+{
 class KoFileDialogTester;
 }
 
 class KoFileDialogTester : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit KoFileDialogTester(QWidget *parent = 0);
     ~KoFileDialogTester() override;
-    
+
 private Q_SLOTS:
 
     void testOpenFile();

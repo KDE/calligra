@@ -13,7 +13,6 @@
 // KoChart
 #include "kochart_global.h"
 
-
 #if 0
 namespace KChart
 {
@@ -22,7 +21,6 @@ class AbstractDiagram;
 class Chart;
 }
 #endif
-
 
 namespace KoChart
 {

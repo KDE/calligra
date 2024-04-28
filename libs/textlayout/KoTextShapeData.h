@@ -73,33 +73,35 @@ public:
     void setPadding(qreal padding);
 
     /**
-    * Load the TextShape from ODF.
-    *
-    * @see the @a TextShape::loadOdf() method which calls this method.
-    * @see the @a KoTextLoader::loadBody() method which got called by this method
-    * to load the ODF.
-    */
+     * Load the TextShape from ODF.
+     *
+     * @see the @a TextShape::loadOdf() method which calls this method.
+     * @see the @a KoTextLoader::loadBody() method which got called by this method
+     * to load the ODF.
+     */
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData, KoShape *shape = 0);
 
     /**
-    * Load the TextShape from ODF.
-    * Overloaded method provided for your convenience.
-    */
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override {
+     * Load the TextShape from ODF.
+     * Overloaded method provided for your convenience.
+     */
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override
+    {
         return loadOdf(element, context, 0);
     }
 
     /**
-    * Store the TextShape data as ODF.
-    * @see TextShape::saveOdf()
-    */
+     * Store the TextShape data as ODF.
+     * @see TextShape::saveOdf()
+     */
     void saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData, int from = 0, int to = -1) const;
 
     /**
-    * Store the TextShape data as ODF.
-    * Overloaded method provided for your convenience.
-    */
-    void saveOdf(KoShapeSavingContext &context, int from = 0, int to  = -1) const override {
+     * Store the TextShape data as ODF.
+     * Overloaded method provided for your convenience.
+     */
+    void saveOdf(KoShapeSavingContext &context, int from = 0, int to = -1) const override
+    {
         saveOdf(context, 0, from, to);
     }
 

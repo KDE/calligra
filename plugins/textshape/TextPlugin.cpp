@@ -4,31 +4,29 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "TextPlugin.h"
-#include "TextToolFactory.h"
 #include "ReferencesToolFactory.h"
 #include "ReviewToolFactory.h"
+#include "TextToolFactory.h"
 #ifdef CREATE_TEXTDOCUMENT_INSPECTOR
 #include "TextDocumentInspectionDockerFactory.h"
 #endif
-#include "TextShapeFactory.h"
 #include "AnnotationTextShapeFactory.h"
+#include "TextShapeFactory.h"
 
-#include <KoShapeRegistry.h>
 #include <KoDockRegistry.h>
+#include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
 #ifdef CREATE_TEXTDOCUMENT_INSPECTOR
-#include <KSharedConfig>
 #include <KConfigGroup>
+#include <KSharedConfig>
 #endif
 #include <KPluginFactory>
 
-K_PLUGIN_FACTORY_WITH_JSON(TextPluginFactory, "calligra_shape_text.json",
-                 registerPlugin<TextPlugin>();
-)
+K_PLUGIN_FACTORY_WITH_JSON(TextPluginFactory, "calligra_shape_text.json", registerPlugin<TextPlugin>();)
 
-TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
-        : QObject(parent)
+TextPlugin::TextPlugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
 {
     KoToolRegistry::instance()->add(new TextToolFactory());
     KoToolRegistry::instance()->add(new ReviewToolFactory());
@@ -37,8 +35,8 @@ TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
     KoShapeRegistry::instance()->add(new AnnotationTextShapeFactory());
 
 #ifdef CREATE_TEXTDOCUMENT_INSPECTOR
-    KConfigGroup debugConfigGroup( KSharedConfig::openConfig(), "Debug");
-    const bool isInspectorEnabled  = (debugConfigGroup.readEntry("EnableTextDocumentInspector", QString()) == "true");
+    KConfigGroup debugConfigGroup(KSharedConfig::openConfig(), "Debug");
+    const bool isInspectorEnabled = (debugConfigGroup.readEntry("EnableTextDocumentInspector", QString()) == "true");
 
     if (isInspectorEnabled) {
         KoDockRegistry::instance()->add(new TextDocumentInspectionDockerFactory());

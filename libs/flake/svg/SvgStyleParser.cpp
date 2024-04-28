@@ -11,13 +11,13 @@
  */
 
 #include "SvgStyleParser.h"
-#include "SvgLoadingContext.h"
 #include "SvgGraphicContext.h"
+#include "SvgLoadingContext.h"
 #include "SvgUtil.h"
 
-#include <QStringList>
 #include <QColor>
 #include <QGradientStops>
+#include <QStringList>
 
 class Q_DECL_HIDDEN SvgStyleParser::Private
 {
@@ -26,14 +26,31 @@ public:
         : context(loadingContext)
     {
         // the order of the font attributes is important, don't change without reason !!!
-        fontAttributes << "font-family" << "font-size" << "font-weight";
-        fontAttributes << "text-decoration" << "letter-spacing" << "word-spacing" << "baseline-shift";
+        fontAttributes << "font-family"
+                       << "font-size"
+                       << "font-weight";
+        fontAttributes << "text-decoration"
+                       << "letter-spacing"
+                       << "word-spacing"
+                       << "baseline-shift";
         // the order of the style attributes is important, don't change without reason !!!
-        styleAttributes << "color" << "display";
-        styleAttributes << "fill" << "fill-rule" << "fill-opacity";
-        styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
-        styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit";
-        styleAttributes << "opacity" << "filter" << "clip-path" << "clip-rule";
+        styleAttributes << "color"
+                        << "display";
+        styleAttributes << "fill"
+                        << "fill-rule"
+                        << "fill-opacity";
+        styleAttributes << "stroke"
+                        << "stroke-width"
+                        << "stroke-linejoin"
+                        << "stroke-linecap";
+        styleAttributes << "stroke-dasharray"
+                        << "stroke-dashoffset"
+                        << "stroke-opacity"
+                        << "stroke-miterlimit";
+        styleAttributes << "opacity"
+                        << "filter"
+                        << "clip-path"
+                        << "clip-rule";
     }
 
     SvgLoadingContext &context;
@@ -44,7 +61,6 @@ public:
 SvgStyleParser::SvgStyleParser(SvgLoadingContext &context)
     : d(new Private(context))
 {
-
 }
 
 SvgStyleParser::~SvgStyleParser()
@@ -59,7 +75,7 @@ void SvgStyleParser::parseStyle(const SvgStyles &styles)
         return;
 
     // make sure we parse the style attributes in the right order
-    foreach(const QString & command, d->styleAttributes) {
+    foreach (const QString &command, d->styleAttributes) {
         const QString &params = styles.value(command);
         if (params.isEmpty())
             continue;
@@ -74,7 +90,7 @@ void SvgStyleParser::parseFont(const SvgStyles &styles)
         return;
 
     // make sure to only parse font attributes here
-    foreach(const QString & command, d->fontAttributes) {
+    foreach (const QString &command, d->fontAttributes) {
         const QString &params = styles.value(command);
         if (params.isEmpty())
             continue;
@@ -103,7 +119,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         } else {
             // great we have a solid fill
             gc->fillType = SvgGraphicsContext::Solid;
-            parseColor(fillcolor,  params);
+            parseColor(fillcolor, params);
         }
     } else if (command == "fill-rule") {
         if (params == "nonzero")
@@ -169,7 +185,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         gc->opacity = SvgUtil::fromPercentage(params);
     } else if (command == "font-family") {
         QString family = params;
-        family.replace('\'' , ' ');
+        family.replace('\'', ' ');
         gc->font.setFamily(family);
     } else if (command == "font-size") {
         float pointSize = SvgUtil::parseUnitY(gc, params);
@@ -302,21 +318,19 @@ void SvgStyleParser::parseColorStops(QGradient *gradient, const KoXmlElement &e)
                     stopColorStr = inheritedAttribute("stop-color", stop);
                 }
                 parseColor(c, stopColorStr);
-            }
-            else {
+            } else {
                 // try style attr
                 QString style = stop.attribute("style").simplified();
                 const QStringList substyles = style.split(';', Qt::SkipEmptyParts);
                 for (QStringList::ConstIterator it = substyles.begin(); it != substyles.end(); ++it) {
                     QStringList substyle = it->split(':');
                     QString command = substyle[0].trimmed();
-                    QString params  = substyle[1].trimmed();
+                    QString params = substyle[1].trimmed();
                     if (command == "stop-color")
                         parseColor(c, params);
                     if (command == "stop-opacity")
                         c.setAlphaF(params.toDouble());
                 }
-
             }
             QString opacityStr = stop.attribute("stop-opacity");
             if (!opacityStr.isEmpty()) {
@@ -337,12 +351,12 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
     SvgStyles styleMap;
 
     // collect individual presentation style attributes which have the priority 0
-    foreach(const QString &command, d->styleAttributes) {
+    foreach (const QString &command, d->styleAttributes) {
         const QString attribute = e.attribute(command);
         if (!attribute.isEmpty())
             styleMap[command] = attribute;
     }
-    foreach(const QString & command, d->fontAttributes) {
+    foreach (const QString &command, d->fontAttributes) {
         const QString attribute = e.attribute(command);
         if (!attribute.isEmpty())
             styleMap[command] = attribute;
@@ -352,7 +366,7 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
     QStringList cssStyles = d->context.matchingStyles(e);
 
     // collect all css style attributes
-    foreach(const QString &style, cssStyles) {
+    foreach (const QString &style, cssStyles) {
         const QStringList substyles = style.split(';', Qt::SkipEmptyParts);
         if (!substyles.count())
             continue;
@@ -361,7 +375,7 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
             if (substyle.count() != 2)
                 continue;
             QString command = substyle[0].trimmed();
-            QString params  = substyle[1].trimmed();
+            QString params = substyle[1].trimmed();
             // only use style and font attributes
             if (d->styleAttributes.contains(command) || d->fontAttributes.contains(command))
                 styleMap[command] = params;

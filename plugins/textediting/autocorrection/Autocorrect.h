@@ -25,13 +25,31 @@ public:
     void startingSimpleEdit(QTextDocument *document, int cursorPosition) override;
     int characterInserted(QTextDocument *document, int cursorPosition) override;
 
-    void setAutoNumbering(bool b) { m_autoNumbering = b; }
-    void setAutoFormatBulletList(bool b) { m_autoFormatBulletList = b; }
-    void setTrimParagraphs(bool b) { m_trimParagraphs = b; }
+    void setAutoNumbering(bool b)
+    {
+        m_autoNumbering = b;
+    }
+    void setAutoFormatBulletList(bool b)
+    {
+        m_autoFormatBulletList = b;
+    }
+    void setTrimParagraphs(bool b)
+    {
+        m_trimParagraphs = b;
+    }
 
-    bool getTrimParagraphs() const { return m_trimParagraphs; }
-    bool getAutoNumbering() const { return m_autoNumbering; }
-    bool getAutoFormatBulletList() const { return m_autoFormatBulletList; }
+    bool getTrimParagraphs() const
+    {
+        return m_trimParagraphs;
+    }
+    bool getAutoNumbering() const
+    {
+        return m_autoNumbering;
+    }
+    bool getAutoFormatBulletList() const
+    {
+        return m_autoFormatBulletList;
+    }
 
 private Q_SLOTS:
     void setEnabled(bool enable);
@@ -50,7 +68,7 @@ private:
 
 private:
     bool m_trimParagraphs; // remove spaces at beginning and end of paragraphs
-    bool m_autoNumbering; //use autonumbering for numbered paragraphs
+    bool m_autoNumbering; // use autonumbering for numbered paragraphs
     bool m_autoFormatBulletList; // use list formatting for bulleted paragraphs.
 };
 

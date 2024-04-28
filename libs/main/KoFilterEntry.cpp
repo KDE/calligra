@@ -10,17 +10,16 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 #include "KoDocument.h"
 #include "KoFilter.h"
 
-#include <MainDebug.h>
 #include <KoPluginLoader.h>
+#include <MainDebug.h>
 
 #include <KPluginFactory>
 #include <QFile>
 
 #include <limits.h> // UINT_MAX
 
-
 KoFilterEntry::KoFilterEntry(const KPluginMetaData &metaData)
-        : m_metaData(metaData)
+    : m_metaData(metaData)
 {
     QJsonObject metadata = metaData.rawData().value("MetaData").toObject();
     import = metadata.value("X-KDE-Import").toVariant().toStringList();
@@ -52,15 +51,14 @@ QList<KoFilterEntry::Ptr> KoFilterEntry::query()
     return lst;
 }
 
-KoFilter* KoFilterEntry::createFilter(KoFilterChain* chain, QObject* parent)
+KoFilter *KoFilterEntry::createFilter(KoFilterChain *chain, QObject *parent)
 {
     auto result = KPluginFactory::instantiatePlugin<KoFilter>(m_metaData, parent);
     if (!result.plugin) {
         return nullptr;
     }
 
-    KoFilter* filter = result.plugin;
+    KoFilter *filter = result.plugin;
     filter->m_chain = chain;
     return filter;
 }
-

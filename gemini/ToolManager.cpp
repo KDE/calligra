@@ -4,12 +4,11 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "ToolManager.h"
-#include <KoToolRegistry.h>
-#include <KoToolManager.h>
-#include <KoToolBase.h>
 #include <KoCanvasController.h>
+#include <KoToolBase.h>
+#include <KoToolManager.h>
+#include <KoToolRegistry.h>
 #include <QPointer>
 
 class ToolManager::Private
@@ -24,12 +23,11 @@ public:
     QPointer<KoToolBase> currentTool;
 };
 
-ToolManager::ToolManager(QQuickItem* parent)
+ToolManager::ToolManager(QQuickItem *parent)
     : QQuickItem(parent)
     , d(new Private)
 {
-    connect(KoToolManager::instance(), &KoToolManager::changedTool,
-            this, &ToolManager::slotToolChanged);
+    connect(KoToolManager::instance(), &KoToolManager::changedTool, this, &ToolManager::slotToolChanged);
 }
 
 ToolManager::~ToolManager()
@@ -42,20 +40,20 @@ void ToolManager::requestToolChange(QString toolID)
     d->toolManager->switchToolRequested(toolID);
 }
 
-QObject* ToolManager::currentTool() const
+QObject *ToolManager::currentTool() const
 {
     return d->currentTool;
 }
 
-void ToolManager::slotToolChanged(KoCanvasController* canvas, int toolId)
+void ToolManager::slotToolChanged(KoCanvasController *canvas, int toolId)
 {
     Q_UNUSED(canvas);
     Q_UNUSED(toolId);
 
-    if(!d->toolManager)
+    if (!d->toolManager)
         return;
 
     QString id = KoToolManager::instance()->activeToolId();
-    d->currentTool = qobject_cast<KoToolBase*>(KoToolManager::instance()->toolById(canvas->canvas(), id));
+    d->currentTool = qobject_cast<KoToolBase *>(KoToolManager::instance()->toolById(canvas->canvas(), id));
     emit currentToolChanged();
 }

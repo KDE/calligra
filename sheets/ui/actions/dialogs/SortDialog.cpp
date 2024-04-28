@@ -20,8 +20,8 @@
 #include "engine/Localization.h"
 
 // ui
-#include "ui_SortWidget.h"
 #include "ui_SortDetailsWidget.h"
+#include "ui_SortWidget.h"
 
 #include <KoIcon.h>
 
@@ -37,13 +37,11 @@ class SortDialog::Private : public QStyledItemDelegate
 {
 public:
     Private(SortDialog *parent = 0)
-            : QStyledItemDelegate(parent)
+        : QStyledItemDelegate(parent)
     {
     }
 
-    QWidget *createEditor(QWidget *parent,
-                                  const QStyleOptionViewItem &option,
-                                  const QModelIndex &index) const override
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override
     {
         Q_UNUSED(index)
         Q_UNUSED(option)
@@ -63,7 +61,7 @@ public:
         if (!index.isValid()) {
             return;
         }
-        KComboBox *const combo = static_cast<KComboBox*>(editor);
+        KComboBox *const combo = static_cast<KComboBox *>(editor);
         const QAbstractItemModel *const model = index.model();
         const int itemIndex = model->data(index, Qt::UserRole).toInt();
         const bool hasHeader = mainWidget.m_useHeader->isChecked();
@@ -117,10 +115,9 @@ public:
         }
     }
 
-    void setModelData(QWidget *editor, QAbstractItemModel *model,
-                              const QModelIndex &index) const override
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override
     {
-        KComboBox *const combo = static_cast<KComboBox*>(editor);
+        KComboBox *const combo = static_cast<KComboBox *>(editor);
         const int currentIndex = combo->currentIndex();
         model->setData(index, combo->itemText(currentIndex), Qt::DisplayRole);
         model->setData(index, combo->itemData(currentIndex), Qt::UserRole);
@@ -133,9 +130,7 @@ public:
         }
     }
 
-    void updateEditorGeometry(QWidget *editor,
-                                      const QStyleOptionViewItem &option,
-                                      const QModelIndex &index) const override
+    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const override
     {
         Q_UNUSED(index)
         editor->setGeometry(option.rect);
@@ -162,13 +157,15 @@ bool SortDialog::Private::hasHeader(Qt::Orientation orientation) const
 {
     if (orientation == Qt::Horizontal) /* check for column headers */
     {
-        if (!firstRow.size()) return false;
+        if (!firstRow.size())
+            return false;
         for (Value v : firstRow)
             if (!v.isString())
                 return false;
     } else /* check for row headers */
     {
-        if (!firstCol.size()) return false;
+        if (!firstCol.size())
+            return false;
         for (Value v : firstCol)
             if (!v.isString())
                 return false;
@@ -258,7 +255,7 @@ void SortDialog::Private::initCriteria(Qt::Orientation orientation, SortDialog *
     mainWidget.m_downButton->setEnabled(false);
 
     // Adjust the header usage text.
-    if (mainWidget.m_sortHorizontal->isChecked()) /* Sort horizontally */  {
+    if (mainWidget.m_sortHorizontal->isChecked()) /* Sort horizontally */ {
         // data gets sorted horizontally; comparisons per row; columns get exchanged/sorted
         mainWidget.m_useHeader->setText(i18n("&First column contains row headers"));
     } else /* Sort vertically */ {
@@ -267,10 +264,9 @@ void SortDialog::Private::initCriteria(Qt::Orientation orientation, SortDialog *
     }
 }
 
-
-SortDialog::SortDialog(QWidget* parent, QRect rect, const QVector<Value> &firstRow, const QVector<Value> &firstCol)
-        : KoDialog(parent)
-        , d(new Private(this))
+SortDialog::SortDialog(QWidget *parent, QRect rect, const QVector<Value> &firstRow, const QVector<Value> &firstCol)
+    : KoDialog(parent)
+    , d(new Private(this))
 {
     d->rect = rect;
     d->firstRow = firstRow;
@@ -298,24 +294,16 @@ SortDialog::SortDialog(QWidget* parent, QRect rect, const QVector<Value> &firstR
     header->setSectionResizeMode(0, QHeaderView::Stretch);
     d->mainWidget.m_tableWidget->setItemDelegateForColumn(0, d);
 
-    connect(d->mainWidget.m_useHeader, &QAbstractButton::toggled,
-            this, &SortDialog::useHeaderChanged);
-    connect(d->mainWidget.m_sortHorizontal, &QAbstractButton::toggled,
-            this, &SortDialog::orientationChanged);
+    connect(d->mainWidget.m_useHeader, &QAbstractButton::toggled, this, &SortDialog::useHeaderChanged);
+    connect(d->mainWidget.m_sortHorizontal, &QAbstractButton::toggled, this, &SortDialog::orientationChanged);
 
-    connect(d->mainWidget.m_tableWidget, &QTableWidget::itemActivated,
-            this, &SortDialog::itemActivated);
-    connect(d->mainWidget.m_tableWidget, &QTableWidget::itemSelectionChanged,
-            this, &SortDialog::itemSelectionChanged);
+    connect(d->mainWidget.m_tableWidget, &QTableWidget::itemActivated, this, &SortDialog::itemActivated);
+    connect(d->mainWidget.m_tableWidget, &QTableWidget::itemSelectionChanged, this, &SortDialog::itemSelectionChanged);
 
-    connect(d->mainWidget.m_addButton, &QAbstractButton::clicked,
-            this, &SortDialog::addCriterion);
-    connect(d->mainWidget.m_removeButton, &QAbstractButton::clicked,
-            this, &SortDialog::removeCriterion);
-    connect(d->mainWidget.m_upButton, &QAbstractButton::clicked,
-            this, &SortDialog::moveCriterionUp);
-    connect(d->mainWidget.m_downButton, &QAbstractButton::clicked,
-            this, &SortDialog::moveCriterionDown);
+    connect(d->mainWidget.m_addButton, &QAbstractButton::clicked, this, &SortDialog::addCriterion);
+    connect(d->mainWidget.m_removeButton, &QAbstractButton::clicked, this, &SortDialog::removeCriterion);
+    connect(d->mainWidget.m_upButton, &QAbstractButton::clicked, this, &SortDialog::moveCriterionUp);
+    connect(d->mainWidget.m_downButton, &QAbstractButton::clicked, this, &SortDialog::moveCriterionDown);
 
     init();
 }
@@ -336,8 +324,7 @@ void SortDialog::init()
 
         const bool hasHeader = d->hasHeader(Qt::Horizontal);
         d->mainWidget.m_useHeader->setChecked(hasHeader);
-    }
-    else if (!d->firstCol.size()) {
+    } else if (!d->firstCol.size()) {
         d->mainWidget.m_sortVertical->setEnabled(false);
         d->mainWidget.m_sortHorizontal->setChecked(true);
 
@@ -366,19 +353,22 @@ void SortDialog::init()
     slotButtonClicked(Reset);
 }
 
-void SortDialog::setCustomLists(const QStringList &lsts, Localization *locale) {
+void SortDialog::setCustomLists(const QStringList &lsts, Localization *locale)
+{
     QStringList lst;
     QString e;
     for (int month = 1; month <= 12; ++month) {
         e += locale->monthName(month);
-        if (month < 12) e += ", ";
+        if (month < 12)
+            e += ", ";
     }
     lst << e;
 
     e = QString();
     for (int day = 1; day <= 7; ++day) {
         e += locale->dayName(day);
-        if (day < 7) e += ", ";
+        if (day < 7)
+            e += ", ";
     }
     lst << e;
 
@@ -395,19 +385,23 @@ void SortDialog::setCustomLists(const QStringList &lsts, Localization *locale) {
     d->detailsWidget.m_customList->insertItems(0, lst);
 }
 
-bool SortDialog::sortRows() const {
+bool SortDialog::sortRows() const
+{
     return d->mainWidget.m_sortVertical->isChecked();
 }
 
-bool SortDialog::skipFirst() const {
+bool SortDialog::skipFirst() const
+{
     return d->mainWidget.m_useHeader->isChecked();
 }
 
-bool SortDialog::copyFormat() const {
+bool SortDialog::copyFormat() const
+{
     return d->detailsWidget.m_copyLayout->isChecked();
 }
 
-bool SortDialog::isHorizontal() const {
+bool SortDialog::isHorizontal() const
+{
     return d->mainWidget.m_sortHorizontal->isChecked();
 }
 
@@ -426,33 +420,35 @@ QStringList SortDialog::customList() const
     return res;
 }
 
-int SortDialog::criterionCount() const {
+int SortDialog::criterionCount() const
+{
     QTableWidget *const table = d->mainWidget.m_tableWidget;
     return table->rowCount();
 }
 
-int SortDialog::criterionIndex(int row) const {
+int SortDialog::criterionIndex(int row) const
+{
     QTableWidget *const table = d->mainWidget.m_tableWidget;
-    Q_ASSERT ((row >= 0) && (row < table->rowCount()));
+    Q_ASSERT((row >= 0) && (row < table->rowCount()));
 
     return table->item(row, 0)->data(Qt::UserRole).toInt();
 }
 
-Qt::SortOrder SortDialog::criterionSortOrder(int row) const {
+Qt::SortOrder SortDialog::criterionSortOrder(int row) const
+{
     QTableWidget *const table = d->mainWidget.m_tableWidget;
-    Q_ASSERT ((row >= 0) && (row < table->rowCount()));
+    Q_ASSERT((row >= 0) && (row < table->rowCount()));
 
     return table->item(row, 1)->data(Qt::UserRole).value<Qt::SortOrder>();
 }
 
-Qt::CaseSensitivity SortDialog::criterionCaseSensitivity(int row) const {
+Qt::CaseSensitivity SortDialog::criterionCaseSensitivity(int row) const
+{
     QTableWidget *const table = d->mainWidget.m_tableWidget;
-    Q_ASSERT ((row >= 0) && (row < table->rowCount()));
+    Q_ASSERT((row >= 0) && (row < table->rowCount()));
 
     return table->item(row, 2)->data(Qt::UserRole).value<Qt::CaseSensitivity>();
 }
-
-
 
 void SortDialog::orientationChanged(bool horizontal)
 {

@@ -19,10 +19,7 @@
 #include <QClipboard>
 #include <QMimeData>
 
-
-
 using namespace Calligra::Sheets;
-
 
 Copy::Copy(Actions *actions)
     : CellAction(actions, "copy", QString(), QIcon(), i18n("Copy the cell object to the clipboard"))
@@ -33,13 +30,13 @@ Copy::~Copy()
 {
 }
 
-QAction *Copy::createAction() {
+QAction *Copy::createAction()
+{
     QAction *action = KStandardAction::copy(nullptr, nullptr, m_actions->tool());
     connect(action, &QAction::triggered, this, &Copy::triggered);
     action->setToolTip(m_tooltip);
     return action;
 }
-
 
 void Copy::execute(Selection *selection, Sheet *, QWidget *)
 {
@@ -51,14 +48,12 @@ void Copy::execute(Selection *selection, Sheet *, QWidget *)
 
     QString snippet = CopyCommand::saveAsSnippet(*selection);
 
-    QMimeData* mimeData = new QMimeData();
+    QMimeData *mimeData = new QMimeData();
     mimeData->setText(CopyCommand::saveAsPlainText(*selection));
     mimeData->setData("application/x-calligra-sheets-snippet", snippet.toUtf8());
 
     QApplication::clipboard()->setMimeData(mimeData);
 }
-
-
 
 Cut::Cut(Actions *actions)
     : CellAction(actions, "cut", QString(), QIcon(), i18n("Move the cell object to the clipboard"))
@@ -69,13 +64,13 @@ Cut::~Cut()
 {
 }
 
-QAction *Cut::createAction() {
+QAction *Cut::createAction()
+{
     QAction *action = KStandardAction::cut(nullptr, nullptr, m_actions->tool());
     connect(action, &QAction::triggered, this, &Cut::triggered);
     action->setToolTip(m_tooltip);
     return action;
 }
-
 
 void Cut::execute(Selection *selection, Sheet *, QWidget *)
 {
@@ -88,11 +83,9 @@ void Cut::execute(Selection *selection, Sheet *, QWidget *)
     QString snippet = CopyCommand::saveAsSnippet(*selection);
     snippet = "CUT\n" + snippet;
 
-    QMimeData* mimeData = new QMimeData();
+    QMimeData *mimeData = new QMimeData();
     mimeData->setText(CopyCommand::saveAsPlainText(*selection));
     mimeData->setData("application/x-calligra-sheets-snippet", snippet.toUtf8());
 
     QApplication::clipboard()->setMimeData(mimeData);
 }
-
-

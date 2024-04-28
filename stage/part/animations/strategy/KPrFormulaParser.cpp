@@ -18,58 +18,94 @@
  * Boston, MA 02110-1301, USA.
  */
 
- /* heavily based on Ariya's work (see kspread/formula) -- all errors are my own! */
+/* heavily based on Ariya's work (see kspread/formula) -- all errors are my own! */
 
 #include "KPrFormulaParser.h"
 
-#include <QStack>
-#include <QString>
-#include <math.h>
-#include <qmath.h>
 #include "../KPrAnimationCache.h"
 #include "KoShape.h"
 #include "KoTextBlockData.h"
-#include <QTextLayout>
 #include "KoTextShapeData.h"
-#include <QTextDocument>
+#include <QStack>
+#include <QString>
 #include <QTextBlock>
+#include <QTextDocument>
+#include <QTextLayout>
+#include <math.h>
+#include <qmath.h>
 
 static int fopPrecedence(Token::Op op)
 {
     int prec = -1;
     switch (op) {
-    case Token::Caret        : prec = 7; break;
-    case Token::Asterisk     : prec = 5; break;
-    case Token::Slash        : prec = 6; break;
-    case Token::Plus         : prec = 3; break;
-    case Token::Minus        : prec = 3; break;
-    case Token::RightPar     : prec = 0; break;
-    case Token::Comma        : prec = 0; break;
-    case Token::LeftPar      : prec = -1; break;
-    default: prec = -1; break;
+    case Token::Caret:
+        prec = 7;
+        break;
+    case Token::Asterisk:
+        prec = 5;
+        break;
+    case Token::Slash:
+        prec = 6;
+        break;
+    case Token::Plus:
+        prec = 3;
+        break;
+    case Token::Minus:
+        prec = 3;
+        break;
+    case Token::RightPar:
+        prec = 0;
+        break;
+    case Token::Comma:
+        prec = 0;
+        break;
+    case Token::LeftPar:
+        prec = -1;
+        break;
+    default:
+        prec = -1;
+        break;
     }
     return prec;
 }
 
-static Token::Op matchOperator(const QString& text)
+static Token::Op matchOperator(const QString &text)
 {
     Token::Op result = Token::InvalidOp;
 
     if (text.length() == 1) {
         QChar p = text[0];
         switch (p.unicode()) {
-        case '+': result = Token::Plus; break;
-        case '-': result = Token::Minus; break;
-        case '*': result = Token::Asterisk; break;
-        case '/': result = Token::Slash; break;
-        case '^': result = Token::Caret; break;
-        case '(': result = Token::LeftPar; break;
-        case ')': result = Token::RightPar; break;
-        case ',': result = Token::Comma; break;
-        default : result = Token::InvalidOp; break;
+        case '+':
+            result = Token::Plus;
+            break;
+        case '-':
+            result = Token::Minus;
+            break;
+        case '*':
+            result = Token::Asterisk;
+            break;
+        case '/':
+            result = Token::Slash;
+            break;
+        case '^':
+            result = Token::Caret;
+            break;
+        case '(':
+            result = Token::LeftPar;
+            break;
+        case ')':
+            result = Token::RightPar;
+            break;
+        case ',':
+            result = Token::Comma;
+            break;
+        default:
+            result = Token::InvalidOp;
+            break;
         }
     }
-        return result;
+    return result;
 }
 
 // for null token
@@ -95,7 +131,7 @@ Token::Token(const Token &token)
 }
 
 // assignment operator
-Token& Token::operator=(const Token &token)
+Token &Token::operator=(const Token &token)
 {
     m_type = token.m_type;
     m_text = token.m_text;
@@ -107,8 +143,7 @@ QString Token::asIdentifierName() const
 {
     if (isIdentifierName()) {
         return m_text;
-    }
-    else {
+    } else {
         return QString();
     }
 }
@@ -120,14 +155,15 @@ Token::Op Token::asOperator() const
 
 qreal Token::asNumber() const
 {
-        return m_text.toDouble();
+    return m_text.toDouble();
 }
 
 /**********************
     TokenStack
  **********************/
 
-TokenStack::TokenStack(): QVector<Token>()
+TokenStack::TokenStack()
+    : QVector<Token>()
 {
     topIndex = 0;
     ensureSpace();
@@ -154,21 +190,21 @@ Token TokenStack::pop()
     return (topIndex > 0) ? Token(at(--topIndex)) : Token();
 }
 
-const Token& TokenStack::top() const
+const Token &TokenStack::top() const
 {
     return top(0);
 }
 
-const Token& TokenStack::top(unsigned index) const
+const Token &TokenStack::top(unsigned index) const
 {
     if (topIndex > index)
-        return at(topIndex -index - 1);
+        return at(topIndex - index - 1);
     return Token::null;
 }
 
 void TokenStack::ensureSpace()
 {
-    while ((int) topIndex >= size()) {
+    while ((int)topIndex >= size()) {
         resize(size() + 10);
     }
 }
@@ -204,7 +240,7 @@ Tokens KPrFormulaParser::scan(const QString &formula) const
     int tokenStart = 0;
     QString f = formula;
     f.append(QChar());
-    while( state != Finish && i < f.length()) {
+    while (state != Finish && i < f.length()) {
         QChar c = f[i];
         switch (state) {
         case Start:
@@ -213,24 +249,19 @@ Tokens KPrFormulaParser::scan(const QString &formula) const
                 tokenText.append(c);
                 state = InIdentifierName;
                 i++;
-            }
-            else if (c.isNumber() || c == '.') {
+            } else if (c.isNumber() || c == '.') {
                 tokenText.append(c);
                 state = InNumber;
                 i++;
-            }
-            else if (c.isSpace()) {
+            } else if (c.isSpace()) {
                 i++;
-            }
-            else if (c == QChar::Null) {
+            } else if (c == QChar::Null) {
                 state = Finish;
-            }
-            else if (c == '$') {
+            } else if (c == '$') {
                 tokenText.append(c);
                 state = InIdentifierName;
                 i++;
-            }
-            else {
+            } else {
                 Token::Op op = matchOperator(c);
                 if (op == Token::InvalidOp) {
                     parseError = true;
@@ -245,8 +276,7 @@ Tokens KPrFormulaParser::scan(const QString &formula) const
             if (c.isNumber() || c == '.') {
                 tokenText.append(c);
                 i++;
-            }
-            else {
+            } else {
                 tokens.append(Token(Token::Number, tokenText, tokenStart));
                 tokenText.clear();
                 state = Start;
@@ -256,8 +286,7 @@ Tokens KPrFormulaParser::scan(const QString &formula) const
             if (c.isLetter()) {
                 tokenText.append(c);
                 i++;
-            }
-            else {
+            } else {
                 Token t(Token::IdentifierName, tokenText, tokenStart);
                 tokens.append(Token(Token::IdentifierName, tokenText, tokenStart));
                 tokenText.clear();
@@ -297,7 +326,6 @@ void KPrFormulaParser::compile(const Tokens &tokens)
         Token token = (i < tokens.count()) ? tokens[i] : Token(Token::Operator);
         Token::Type tokenType = token.type();
 
-
         // for constants, push immediately to stack
         // generate code to load from a constant
         if (tokenType == Token::Number) {
@@ -317,7 +345,7 @@ void KPrFormulaParser::compile(const Tokens &tokens)
         // for any other operator, try to apply all parsing rules
         else if (tokenType == Token::Operator) {
             // repeat until no more rule applies
-            for (; ;) {
+            for (;;) {
                 bool ruleFound = false;
 
                 // are we entering a function ?
@@ -328,7 +356,6 @@ void KPrFormulaParser::compile(const Tokens &tokens)
                     if (par.asOperator() == Token::LeftPar)
                         if (id.isIdentifierName()) {
                             argStack.push(argCount);
-
                         }
                 }
 
@@ -336,8 +363,7 @@ void KPrFormulaParser::compile(const Tokens &tokens)
                 // id ( arg1 , arg2 -> id ( arg
                 if (!ruleFound)
                     if (syntaxStack.itemCount() >= 5)
-                        if ((token.asOperator() == Token::RightPar) ||
-                                (token.asOperator() == Token::Comma)) {
+                        if ((token.asOperator() == Token::RightPar) || (token.asOperator() == Token::Comma)) {
                             Token arg2 = syntaxStack.top();
                             Token sep = syntaxStack.top(1);
                             Token arg1 = syntaxStack.top(2);
@@ -425,13 +451,24 @@ void KPrFormulaParser::compile(const Tokens &tokens)
                                             syntaxStack.push(b);
                                             switch (op.asOperator()) {
                                                 // simple binary operations
-                                            case Token::Plus:        m_codes.append(Opcode::Add); break;
-                                            case Token::Minus:       m_codes.append(Opcode::Sub); break;
-                                            case Token::Asterisk:    m_codes.append(Opcode::Mul); break;
-                                            case Token::Slash:       m_codes.append(Opcode::Div); break;
-                                            case Token::Caret:       m_codes.append(Opcode::Pow); break;
+                                            case Token::Plus:
+                                                m_codes.append(Opcode::Add);
+                                                break;
+                                            case Token::Minus:
+                                                m_codes.append(Opcode::Sub);
+                                                break;
+                                            case Token::Asterisk:
+                                                m_codes.append(Opcode::Mul);
+                                                break;
+                                            case Token::Slash:
+                                                m_codes.append(Opcode::Div);
+                                                break;
+                                            case Token::Caret:
+                                                m_codes.append(Opcode::Pow);
+                                                break;
 
-                                            default: break;
+                                            default:
+                                                break;
                                             };
                                         }
                                     }
@@ -454,8 +491,7 @@ void KPrFormulaParser::compile(const Tokens &tokens)
                             if (!x.isOperator()) {
                                 if (op1.isOperator()) {
                                     if (op2.isOperator()) {
-                                        if ((op2.asOperator() == Token::Plus) ||
-                                            (op2.asOperator() == Token::Minus)) {
+                                        if ((op2.asOperator() == Token::Plus) || (op2.asOperator() == Token::Minus)) {
                                             ruleFound = true;
                                             syntaxStack.pop();
                                             syntaxStack.pop();
@@ -481,8 +517,7 @@ void KPrFormulaParser::compile(const Tokens &tokens)
                             Token op = syntaxStack.top(1);
                             if (!x.isOperator()) {
                                 if (op.isOperator()) {
-                                    if ((op.asOperator() == Token::Plus) ||
-                                        (op.asOperator() == Token::Minus)) {
+                                    if ((op.asOperator() == Token::Plus) || (op.asOperator() == Token::Minus)) {
                                         ruleFound = true;
                                         syntaxStack.pop();
                                         syntaxStack.pop();
@@ -527,7 +562,7 @@ void KPrFormulaParser::compile(const Tokens &tokens)
         m_codes.clear();
         m_identifier.clear();
         m_functions.clear();
-        m_fcompiled=false;
+        m_fcompiled = false;
     }
 }
 
@@ -607,8 +642,7 @@ qreal KPrFormulaParser::eval(KPrAnimationCache *cache, const qreal time) const
             }
 
             stack.push(identifierToValue(m_identifier[opcode.index], cache, time));
-        }
-            break;
+        } break;
         default:
             break;
         }
@@ -632,7 +666,7 @@ qreal KPrFormulaParser::identifierToValue(const QString &identifier, KPrAnimatio
 {
     if (identifier == "width") {
         if (m_textBlockData) {
-            if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(m_shape->userData())) {
+            if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData *>(m_shape->userData())) {
                 QTextDocument *textDocument = textShapeData->document();
                 for (int i = 0; i < textDocument->blockCount(); i++) {
                     QTextBlock textBlock = textDocument->findBlockByNumber(i);
@@ -642,14 +676,12 @@ qreal KPrFormulaParser::identifierToValue(const QString &identifier, KPrAnimatio
                     }
                 }
             }
-        }
-        else {
+        } else {
             return m_shape->size().width() / cache->pageSize().width();
         }
-    }
-    else if (identifier == "height") {
+    } else if (identifier == "height") {
         if (m_textBlockData) {
-            if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(m_shape->userData())) {
+            if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData *>(m_shape->userData())) {
                 QTextDocument *textDocument = textShapeData->document();
                 for (int i = 0; i < textDocument->blockCount(); i++) {
                     QTextBlock textBlock = textDocument->findBlockByNumber(i);
@@ -659,24 +691,18 @@ qreal KPrFormulaParser::identifierToValue(const QString &identifier, KPrAnimatio
                     }
                 }
             }
-        }
-        else {
+        } else {
             return m_shape->size().height() / cache->pageSize().height();
         }
-    }
-    else if (identifier == "x") {
+    } else if (identifier == "x") {
         return m_shape->position().x() / cache->pageSize().width();
-    }
-    else if (identifier == "y") {
+    } else if (identifier == "y") {
         return m_shape->position().y() / cache->pageSize().height();
-    }
-    else if ((identifier == "$") && (m_type == KPrFormulaParser::Formula) ) {
+    } else if ((identifier == "$") && (m_type == KPrFormulaParser::Formula)) {
         return time;
-    }
-    else if (identifier == "pi") {
+    } else if (identifier == "pi") {
         return M_PI;
-    }
-    else if (identifier == "e") {
+    } else if (identifier == "e") {
         return exp(1.0);
     }
     return 0.0;
@@ -686,32 +712,23 @@ qreal KPrFormulaParser::formulaToValue(const QString &identifier, qreal arg1) co
 {
     if (identifier == "sin") {
         return sin(arg1);
-    }
-    else if (identifier == "cos") {
+    } else if (identifier == "cos") {
         return cos(arg1);
-    }
-    else if (identifier == "abs") {
+    } else if (identifier == "abs") {
         return qAbs(arg1);
-    }
-    else if (identifier == "sqrt") {
+    } else if (identifier == "sqrt") {
         return sqrt(arg1);
-    }
-    else if (identifier == "tan") {
+    } else if (identifier == "tan") {
         return tan(arg1);
-    }
-    else if (identifier == "atan") {
+    } else if (identifier == "atan") {
         return atan(arg1);
-    }
-    else if (identifier == "acos") {
+    } else if (identifier == "acos") {
         return acos(arg1);
-    }
-    else if (identifier == "asin") {
+    } else if (identifier == "asin") {
         return asin(arg1);
-    }
-    else if (identifier == "exp") {
+    } else if (identifier == "exp") {
         return exp(arg1);
-    }
-    else if (identifier == "log") {
+    } else if (identifier == "log") {
         return log(arg1);
     }
     return 0.0;
@@ -721,8 +738,7 @@ qreal KPrFormulaParser::formulaToValue(const QString &identifier, qreal arg1, qr
 {
     if (identifier == "min") {
         return qMin(arg1, arg2);
-    }
-    else if (identifier == "max") {
+    } else if (identifier == "max") {
         return qMax(arg1, arg2);
     }
     return 0.0;

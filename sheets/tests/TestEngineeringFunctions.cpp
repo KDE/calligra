@@ -18,7 +18,7 @@ void TestEngineeringFunctions::initTestCase()
 //  - different algorithms among spreadsheet programs
 //  - precision limitation of floating-point number representation
 //  - accuracy problem due to propagated error in the implementation
-#define CHECK_EVAL(x,y) QCOMPARE(evaluate(x),RoundNumber(y))
+#define CHECK_EVAL(x, y) QCOMPARE(evaluate(x), RoundNumber(y))
 #define ROUND(x) (roundf(1e10 * x) / 1e10)
 
 // round to get at most 10-digits number
@@ -28,7 +28,7 @@ static Value RoundNumber(double f)
 }
 
 // round to get at most 10-digits number
-static Value RoundNumber(const Value& v)
+static Value RoundNumber(const Value &v)
 {
     if (v.isComplex()) {
         const double imag = numToDouble(v.asComplex().imag());
@@ -44,7 +44,7 @@ static Value RoundNumber(const Value& v)
         return v;
 }
 
-Value TestEngineeringFunctions::evaluate(const QString& formula)
+Value TestEngineeringFunctions::evaluate(const QString &formula)
 {
     Formula f;
     QString expr = formula;
@@ -92,15 +92,15 @@ void TestEngineeringFunctions::testCOMPLEX()
 {
     CHECK_EVAL("=IMREAL(COMPLEX(1;-3))", 1.0);
     CHECK_EVAL("=IMAGINARY(COMPLEX(0;-2))", -2.0);
-    CHECK_EVAL("=IMAGINARY(COMPLEX(0;-2;\"i\"))", -2.0 );
+    CHECK_EVAL("=IMAGINARY(COMPLEX(0;-2;\"i\"))", -2.0);
     CHECK_EVAL("=IMREAL(COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOMPLEX(1;-3))", 1.0);
 }
 
 void TestEngineeringFunctions::testCONVERT()
 {
     CHECK_EVAL("=CONVERT(32;\"C\";\"F\")", Value(89.6));
-//     CHECK_EVAL("=CONVERT(3;\"lbm\";\"kg\")", Value(1.3608));
-//     CHECK_EVAL("=CONVERT(7.9;\"cal\";\"J\")", Value(33.0757));
+    //     CHECK_EVAL("=CONVERT(3;\"lbm\";\"kg\")", Value(1.3608));
+    //     CHECK_EVAL("=CONVERT(7.9;\"cal\";\"J\")", Value(33.0757));
     CHECK_EVAL("=COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCONVERT(32;\"C\";\"F\")", Value(89.6));
 }
 
@@ -129,7 +129,7 @@ void TestEngineeringFunctions::testDELTA()
 {
     CHECK_EVAL("DELTA(1.2; 3.4)", Value(0));
     CHECK_EVAL("DELTA(3;3)", Value(1));
-//     CHECK_EVAL("DELTA(1;TRUE)", Value(1));
+    //     CHECK_EVAL("DELTA(1;TRUE)", Value(1));
     CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDELTA(1.2; 3.4)", Value(0));
 }
 
@@ -154,7 +154,7 @@ void TestEngineeringFunctions::testGESTEP()
 {
     CHECK_EVAL("=GESTEP(1.2; 3.4)", Value(0));
     CHECK_EVAL("=GESTEP(3; 3)", Value(1));
-//     CHECK_EVAL("=GESTEP(0.4; TRUE)", Value(0));
+    //     CHECK_EVAL("=GESTEP(0.4; TRUE)", Value(0));
     CHECK_EVAL("=GESTEP(4; 3)", Value(1));
     CHECK_EVAL("=COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETGESTEP(1.2; 3.4)", Value(0));
 }
@@ -179,7 +179,7 @@ void TestEngineeringFunctions::testHEX2OCT()
     CHECK_EVAL("=HEX2OCT(37)", Value("67"));
     CHECK_EVAL("=COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETHEX2OCT(\"a\")", Value("12"));
 }
-    
+
 void TestEngineeringFunctions::testIMABS()
 {
     CHECK_EVAL("=IMABS(COMPLEX(4;3))", 5.0);
@@ -197,11 +197,11 @@ void TestEngineeringFunctions::testIMAGINARY()
 
 void TestEngineeringFunctions::testIMARGUMENT()
 {
-    CHECK_EVAL("=IMARGUMENT(COMPLEX(3;4))",    0.927295218001612);
-    CHECK_EVAL("=IMARGUMENT(COMPLEX(3;-4))",  -0.927295218001612);
-    CHECK_EVAL("=IMARGUMENT(COMPLEX(-3;4))",   2.214297435588180);
+    CHECK_EVAL("=IMARGUMENT(COMPLEX(3;4))", 0.927295218001612);
+    CHECK_EVAL("=IMARGUMENT(COMPLEX(3;-4))", -0.927295218001612);
+    CHECK_EVAL("=IMARGUMENT(COMPLEX(-3;4))", 2.214297435588180);
     CHECK_EVAL("=IMARGUMENT(COMPLEX(-3;-4))", -2.214297435588180);
-    CHECK_EVAL("=COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMARGUMENT(COMPLEX(3;4))",    0.927295218001612);
+    CHECK_EVAL("=COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMARGUMENT(COMPLEX(3;4))", 0.927295218001612);
 }
 
 void TestEngineeringFunctions::testIMCONJUGATE()
@@ -213,7 +213,7 @@ void TestEngineeringFunctions::testIMCONJUGATE()
 
 void TestEngineeringFunctions::testIMCOS()
 {
-    CHECK_EVAL("=IMREAL   ( IMCOS(COMPLEX(1;1)) )",  0.833730025131149);
+    CHECK_EVAL("=IMREAL   ( IMCOS(COMPLEX(1;1)) )", 0.833730025131149);
     CHECK_EVAL("=IMAGINARY( IMCOS(COMPLEX(1;1)) )", -0.988897705762865);
     CHECK_EVAL("=IMREAL(COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMCOS(COMPLEX(1;1)))", 0.833730025131149);
 }
@@ -226,19 +226,19 @@ void TestEngineeringFunctions::testIMCOSH()
 
 void TestEngineeringFunctions::testIMCOT()
 {
-    CHECK_EVAL("=IMREAL   ( IMCOT(COMPLEX(1;1)) )",  0.2176215618544027);
+    CHECK_EVAL("=IMREAL   ( IMCOT(COMPLEX(1;1)) )", 0.2176215618544027);
     CHECK_EVAL("=IMAGINARY( IMCOT(COMPLEX(1;1)) )", -0.8680141428959249);
 }
 
 void TestEngineeringFunctions::testIMCSC()
 {
-    CHECK_EVAL("=IMREAL   ( IMCSC(COMPLEX(1;1)) )",  0.6215180171704284);
+    CHECK_EVAL("=IMREAL   ( IMCSC(COMPLEX(1;1)) )", 0.6215180171704284);
     CHECK_EVAL("=IMAGINARY( IMCSC(COMPLEX(1;1)) )", -0.3039310016284264);
 }
 
 void TestEngineeringFunctions::testIMCSCH()
 {
-    CHECK_EVAL("=IMREAL   ( IMCSCH(COMPLEX(1;1)) )",  0.3039310016284264);
+    CHECK_EVAL("=IMREAL   ( IMCSCH(COMPLEX(1;1)) )", 0.3039310016284264);
     CHECK_EVAL("=IMAGINARY( IMCSCH(COMPLEX(1;1)) )", -0.6215180171704284);
 }
 
@@ -251,28 +251,28 @@ void TestEngineeringFunctions::testIMDIV()
 
 void TestEngineeringFunctions::testIMEXP()
 {
-    CHECK_EVAL("=IMREAL( IMEXP(COMPLEX(1;2)) )",   -1.13120438375681);
+    CHECK_EVAL("=IMREAL( IMEXP(COMPLEX(1;2)) )", -1.13120438375681);
     CHECK_EVAL("=IMAGINARY( IMEXP(COMPLEX(1;2)) )", 2.47172667200482);
     CHECK_EVAL("=IMREAL(COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMEXP(COMPLEX(1;2)))", -1.13120438375681);
 }
 
 void TestEngineeringFunctions::testIMLN()
 {
-    CHECK_EVAL("=IMREAL( IMLN(COMPLEX(1;2)) )",    0.80471895621705);
+    CHECK_EVAL("=IMREAL( IMLN(COMPLEX(1;2)) )", 0.80471895621705);
     CHECK_EVAL("=IMAGINARY( IMLN(COMPLEX(1;2)) )", 1.10714871779409);
     CHECK_EVAL("=IMREAL(COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMLN(COMPLEX(1;2)))", 0.80471895621705);
 }
 
 void TestEngineeringFunctions::testIMLOG10()
 {
-    CHECK_EVAL("=IMREAL(IMLOG10(COMPLEX(1;2)) )",     0.349485002168009);
+    CHECK_EVAL("=IMREAL(IMLOG10(COMPLEX(1;2)) )", 0.349485002168009);
     CHECK_EVAL("=IMAGINARY( IMLOG10(COMPLEX(1;2)) )", 0.480828578784234);
     CHECK_EVAL("=IMREAL(COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMLOG10(COMPLEX(1;2)) )", 0.349485002168009);
 }
 
 void TestEngineeringFunctions::testIMLOG2()
 {
-    CHECK_EVAL("=IMREAL( IMLOG2(COMPLEX(1;2)) )",   1.16096404744368);
+    CHECK_EVAL("=IMREAL( IMLOG2(COMPLEX(1;2)) )", 1.16096404744368);
     CHECK_EVAL("=IMAGINARY(IMLOG2(COMPLEX(1;2)) )", 1.59727796468811);
     CHECK_EVAL("=IMREAL(COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMLOG2(COMPLEX(1;2)) )", 1.16096404744368);
 }
@@ -299,13 +299,13 @@ void TestEngineeringFunctions::testIMREAL()
 
 void TestEngineeringFunctions::testIMSEC()
 {
-    CHECK_EVAL("=IMREAL   ( IMSEC(COMPLEX(1;1)) )",  0.4983370305551868);
-    CHECK_EVAL("=IMAGINARY( IMSEC(COMPLEX(1;1)) )",  0.5910838417210450);
+    CHECK_EVAL("=IMREAL   ( IMSEC(COMPLEX(1;1)) )", 0.4983370305551868);
+    CHECK_EVAL("=IMAGINARY( IMSEC(COMPLEX(1;1)) )", 0.5910838417210450);
 }
 
 void TestEngineeringFunctions::testIMSECH()
 {
-    CHECK_EVAL("=IMREAL   ( IMSECH(COMPLEX(1;1)) )",  0.4983370305551868);
+    CHECK_EVAL("=IMREAL   ( IMSECH(COMPLEX(1;1)) )", 0.4983370305551868);
     CHECK_EVAL("=IMAGINARY( IMSECH(COMPLEX(1;1)) )", -0.5910838417210450);
 }
 
@@ -324,7 +324,7 @@ void TestEngineeringFunctions::testIMSINH()
 
 void TestEngineeringFunctions::testIMSQRT()
 {
-    CHECK_EVAL("=IMREAL(IMSQRT(COMPLEX(1;-2)))",     1.272019649514070);
+    CHECK_EVAL("=IMREAL(IMSQRT(COMPLEX(1;-2)))", 1.272019649514070);
     CHECK_EVAL("=IMAGINARY(IMSQRT(COMPLEX(1;-2)))", -0.786151377757423);
     CHECK_EVAL("=IMREAL(COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMSQRT(COMPLEX(1;-2)))", 1.272019649514070);
 }
@@ -342,8 +342,8 @@ void TestEngineeringFunctions::testIMSUM()
 {
     CHECK_EVAL("=IMREAL(IMSUM(COMPLEX(1;2); COMPLEX(2;3) ))", 3.0);
     CHECK_EVAL("=IMAGINARY(IMSUM( COMPLEX(1;2); COMPLEX(2;3) ))", 5.0);
-//     CHECK_EVAL( "=IMREAL( IMSUM(COMPLEX(1;2);B4:B5))", 6.0 );
-//     CHECK_EVAL( "=IMAGINARY( IMSUM(COMPLEX(1;2);B4:B5))", 9.0 );
+    //     CHECK_EVAL( "=IMREAL( IMSUM(COMPLEX(1;2);B4:B5))", 6.0 );
+    //     CHECK_EVAL( "=IMAGINARY( IMSUM(COMPLEX(1;2);B4:B5))", 9.0 );
     CHECK_EVAL("=IMREAL(COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMSUM(COMPLEX(1;2); COMPLEX(2;3) ))", 3.0);
 }
 

@@ -4,24 +4,28 @@
 
 #include <KoCharacterStyle.h>
 
-#include <QTextDocument>
 #include <QTextBlock>
-#include <QTextCursor>
 #include <QTextCharFormat>
+#include <QTextCursor>
+#include <QTextDocument>
 
 #include <QTest>
 
 class MySpellCheck : public BgSpellCheck
 {
 public:
-    MySpellCheck(QObject *parent = 0) : BgSpellCheck(parent)
+    MySpellCheck(QObject *parent = 0)
+        : BgSpellCheck(parent)
     {
     }
 
-    QString publicFetchMoreText() {
+    QString publicFetchMoreText()
+    {
         return fetchMoreText();
     }
-    void start() override { }
+    void start() override
+    {
+    }
 };
 
 void TestSpellCheck::testFetchMoreText()

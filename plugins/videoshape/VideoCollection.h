@@ -21,9 +21,7 @@ class VideoCollection : public QObject, public KoDataCenterBase
 {
     Q_OBJECT
 public:
-    enum ResouceManager {
-        ResourceId = 75208282
-    };
+    enum ResouceManager { ResourceId = 75208282 };
     /// constructor
     explicit VideoCollection(QObject *parent = 0);
     virtual ~VideoCollection();
@@ -71,14 +69,14 @@ public:
      * Get the number of videos inside the collection
      */
     int count() const;
-    
+
     int saveCounter;
 
 private:
     VideoData *cacheVideo(VideoData *data);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // VIDEOCOLLECTION_H

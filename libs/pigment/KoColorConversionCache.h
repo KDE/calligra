@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ */
 
 #ifndef _KO_COLOR_CONVERSION_CACHE_HPP_
 #define _KO_COLOR_CONVERSION_CACHE_HPP_
@@ -21,6 +21,7 @@ class KoColorConversionCache
 {
 public:
     struct CachedTransformation;
+
 public:
     KoColorConversionCache();
     ~KoColorConversionCache();
@@ -33,8 +34,8 @@ public:
      * @param _renderingIntent the rendering intent
      * @param conversionFlags the conversion flags
      */
-    KoCachedColorConversionTransformation cachedConverter(const KoColorSpace* src,
-                                                          const KoColorSpace* dst,
+    KoCachedColorConversionTransformation cachedConverter(const KoColorSpace *src,
+                                                          const KoColorSpace *dst,
                                                           KoColorConversionTransformation::Intent _renderingIntent,
                                                           KoColorConversionTransformation::ConversionFlags conversionFlags);
 
@@ -44,10 +45,11 @@ public:
      * be invalid and that the cache needs to stop using those pointers.
      * @param src source color space
      */
-    void colorSpaceIsDestroyed(const KoColorSpace* src);
+    void colorSpaceIsDestroyed(const KoColorSpace *src);
+
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 /**
@@ -60,18 +62,20 @@ private:
 class KoCachedColorConversionTransformation
 {
     friend class KoColorConversionCache;
+
 private:
-    KoCachedColorConversionTransformation(KoColorConversionCache* cache,
-                                          KoColorConversionCache::CachedTransformation* transfo);
+    KoCachedColorConversionTransformation(KoColorConversionCache *cache, KoColorConversionCache::CachedTransformation *transfo);
+
 public:
-    KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation&);
+    KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation &);
     ~KoCachedColorConversionTransformation();
+
 public:
-    const KoColorConversionTransformation* transformation() const;
+    const KoColorConversionTransformation *transformation() const;
+
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
-
 
 #endif

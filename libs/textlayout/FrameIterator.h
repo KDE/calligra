@@ -6,8 +6,8 @@
 #ifndef FRAMEITERATOR_H
 #define FRAMEITERATOR_H
 
-#include <QTextFrame>
 #include <QPointer>
+#include <QTextFrame>
 
 class TableIterator;
 class QTextTableCell;
@@ -23,7 +23,7 @@ public:
 
     bool isValid() const;
 
-    bool operator ==(const FrameIterator &other) const;
+    bool operator==(const FrameIterator &other) const;
 
     TableIterator *tableIterator(QTextTable *);
     FrameIterator *subFrameIterator(QTextFrame *);
@@ -36,9 +36,9 @@ public:
     int lineTextStart; // a value of -1 indicate block not processed yet
     QTextBlock::Iterator fragmentIterator;
 
-    TableIterator *currentTableIterator;  //useful if it is pointing to a table
+    TableIterator *currentTableIterator; // useful if it is pointing to a table
 
-    FrameIterator *currentSubFrameIterator;  //useful if it is pointing to a subFrame
+    FrameIterator *currentSubFrameIterator; // useful if it is pointing to a subFrame
 
     int endNoteIndex;
 

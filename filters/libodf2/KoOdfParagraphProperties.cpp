@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "KoOdfParagraphProperties.h"
 
@@ -21,7 +20,6 @@
 // ----------------------------------------------------------------
 //                         private class
 
-
 class Q_DECL_HIDDEN KoOdfParagraphProperties::Private
 {
 public:
@@ -29,8 +27,8 @@ public:
     ~Private();
 
     // NYI: Background Image
-    KoOdfStyleDropCap         *dropCap;
-    QList<KoOdfStyleTabStop*>  tabStops;
+    KoOdfStyleDropCap *dropCap;
+    QList<KoOdfStyleTabStop *> tabStops;
 };
 
 KoOdfParagraphProperties::Private::Private()
@@ -47,9 +45,7 @@ KoOdfParagraphProperties::Private::~Private()
     qDeleteAll(tabStops);
 }
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfParagraphProperties::KoOdfParagraphProperties()
     : KoOdfStyleProperties()
@@ -62,7 +58,6 @@ KoOdfParagraphProperties::~KoOdfParagraphProperties()
     delete d;
 }
 
-
 void KoOdfParagraphProperties::clear()
 {
     KoOdfStyleProperties::clear();
@@ -74,7 +69,6 @@ void KoOdfParagraphProperties::clear()
     }
     qDeleteAll(d->tabStops);
 }
-
 
 bool KoOdfParagraphProperties::readOdf(KoXmlStreamReader &reader)
 {
@@ -92,20 +86,17 @@ bool KoOdfParagraphProperties::readOdf(KoXmlStreamReader &reader)
 
         if (child == "style:background-image") {
             // FIXME: NYI
-        }
-        else if (child == "style:drop-cap") {
+        } else if (child == "style:drop-cap") {
             if (d->dropCap) {
                 d->dropCap->attributes.clear();
-            }
-            else {
+            } else {
                 d->dropCap = new KoOdfStyleDropCap();
             }
             copyAttributes(reader, d->dropCap->attributes);
-        }
-        else if (child == "style:tab-stops") {
+        } else if (child == "style:tab-stops") {
             while (reader.readNextStartElement()) {
                 if (reader.qualifiedName() == QLatin1StringView("style:tab-stop")) {
-                    KoOdfStyleTabStop  *tabStop = new KoOdfStyleTabStop;
+                    KoOdfStyleTabStop *tabStop = new KoOdfStyleTabStop;
 
                     copyAttributes(reader, tabStop->attributes);
                     d->tabStops.append(tabStop);

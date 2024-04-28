@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &VIDEO_LOG();
 
 #define debugVideo qCDebug(VIDEO_LOG)

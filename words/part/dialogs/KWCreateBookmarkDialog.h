@@ -9,8 +9,8 @@
 
 #include <ui_KWCreateBookmark.h>
 
-#include <QStringList>
 #include <KoDialog.h>
+#include <QStringList>
 
 class KWCreateBookmark : public QWidget
 {
@@ -42,4 +42,3 @@ private:
 };
 
 #endif
-

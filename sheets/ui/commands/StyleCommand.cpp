@@ -7,19 +7,19 @@
 // Local
 #include "StyleCommand.h"
 
-#include "engine/Damages.h"
-#include "engine/MapBase.h"
 #include "core/CellStorage.h"
 #include "core/Sheet.h"
+#include "engine/Damages.h"
+#include "engine/MapBase.h"
 
 using namespace Calligra::Sheets;
 
-StyleCommand::StyleCommand(KUndo2Command* parent)
-        : AbstractRegionCommand(parent)
-        , m_horizontalPen(QPen(QColor(), 0, Qt::NoPen))
-        , m_verticalPen(QPen(QColor(), 0, Qt::NoPen))
-        , m_horizontalPenChanged(false)
-        , m_verticalPenChanged(false)
+StyleCommand::StyleCommand(KUndo2Command *parent)
+    : AbstractRegionCommand(parent)
+    , m_horizontalPen(QPen(QColor(), 0, Qt::NoPen))
+    , m_verticalPen(QPen(QColor(), 0, Qt::NoPen))
+    , m_horizontalPenChanged(false)
+    , m_verticalPenChanged(false)
 {
 }
 
@@ -27,7 +27,7 @@ StyleCommand::~StyleCommand()
 {
 }
 
-bool StyleCommand::process(Element* element)
+bool StyleCommand::process(Element *element)
 {
     const QRect range = element->rect();
     CellStorage *cs = m_sheet->fullCellStorage();
@@ -138,5 +138,3 @@ bool StyleCommand::process(Element* element)
     }
     return true;
 }
-
-

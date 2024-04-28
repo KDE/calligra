@@ -42,20 +42,15 @@ class QPolygon;
 class KOVECTORIMAGE_EXPORT KWmf
 {
 public:
-
     // Construction.
 
-    explicit KWmf(
-        unsigned dpi);
+    explicit KWmf(unsigned dpi);
     virtual ~KWmf();
 
     // Called to parse the given file.
 
-    bool parse(
-        const QString &file);
-    bool parse(
-        QDataStream &stream,
-        unsigned size);
+    bool parse(const QString &file);
+    bool parse(QDataStream &stream, unsigned size);
 
     class KOVECTORIMAGE_EXPORT DrawContext
     {
@@ -71,33 +66,16 @@ public:
 
     // Should be protected...
 
-    void brushSet(
-        unsigned color,
-        unsigned style);
-    void penSet(
-        unsigned color,
-        unsigned style,
-        unsigned width);
+    void brushSet(unsigned color, unsigned style);
+    void penSet(unsigned color, unsigned style, unsigned width);
 
 protected:
     // Override to get results of parsing.
 
-    virtual void gotEllipse(
-        const DrawContext &dc,
-        QString type,
-        QPoint topLeft,
-        QSize halfAxes,
-        unsigned startAngle,
-        unsigned stopAngle) = 0;
-    virtual void gotPolygon(
-        const DrawContext &dc,
-        const QPolygon &points) = 0;
-    virtual void gotPolyline(
-        const DrawContext &dc,
-        const QPolygon &points) = 0;
-    virtual void gotRectangle(
-        const DrawContext &dc,
-        const QPolygon &points) = 0;
+    virtual void gotEllipse(const DrawContext &dc, QString type, QPoint topLeft, QSize halfAxes, unsigned startAngle, unsigned stopAngle) = 0;
+    virtual void gotPolygon(const DrawContext &dc, const QPolygon &points) = 0;
+    virtual void gotPolyline(const DrawContext &dc, const QPolygon &points) = 0;
+    virtual void gotRectangle(const DrawContext &dc, const QPolygon &points) = 0;
 
 private:
     // Debug support.
@@ -124,11 +102,13 @@ private:
     class WinObjHandle
     {
     public:
-        virtual ~WinObjHandle() {}
+        virtual ~WinObjHandle()
+        {
+        }
         virtual void apply(KWmf &p) = 0;
     };
 
-    class WinObjBrushHandle: public WinObjHandle
+    class WinObjBrushHandle : public WinObjHandle
     {
     public:
         void apply(KWmf &p) override;
@@ -136,7 +116,7 @@ private:
         unsigned m_style;
     };
 
-    class WinObjPenHandle: public WinObjHandle
+    class WinObjPenHandle : public WinObjHandle
     {
     public:
         void apply(KWmf &p) override;
@@ -147,29 +127,18 @@ private:
 
     WinObjPenHandle *handleCreatePen(void);
     WinObjBrushHandle *handleCreateBrush(void);
-    QList<WinObjHandle *>m_objectHandles;
+    QList<WinObjHandle *> m_objectHandles;
 
     unsigned getColor(S32 color);
-    QPoint normalisePoint(
-        QDataStream &operands);
-    QSize normaliseSize(
-        QDataStream &operands);
-    void genericArc(
-        const QString &type,
-        QDataStream &operands);
+    QPoint normalisePoint(QDataStream &operands);
+    QSize normaliseSize(QDataStream &operands);
+    void genericArc(const QString &type, QDataStream &operands);
 
     // Opcode handling and painter methods.
 
-    void walk(
-        U32 words,
-        QDataStream &stream);
-    void skip(
-        U32 words,
-        QDataStream &operands);
-    void invokeHandler(
-        S16 opcode,
-        U32 words,
-        QDataStream &operands);
+    void walk(U32 words, QDataStream &stream);
+    void skip(U32 words, QDataStream &operands);
+    void invokeHandler(S16 opcode, U32 words, QDataStream &operands);
     /*
         // draw multiple polygons
         void opPolypolygon(U32 words, QDataStream &operands);

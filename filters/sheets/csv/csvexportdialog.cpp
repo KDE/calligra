@@ -8,12 +8,12 @@
 #include "csvexportdialog.h"
 #include "csvexport.h"
 
-#include "sheets/engine/SheetBase.h"
 #include "sheets/core/Map.h"
+#include "sheets/engine/SheetBase.h"
 
+#include <KLocalizedString>
 #include <KMessageBox>
 #include <KSharedConfig>
-#include <KLocalizedString>
 
 #include <QButtonGroup>
 #include <QGroupBox>
@@ -23,11 +23,11 @@
 
 using namespace Calligra::Sheets;
 
-CSVExportDialog::CSVExportDialog(QWidget * parent)
-        : KoDialog(parent),
-        m_dialog(new ExportDialogUI(this)),
-        m_delimiter(","),
-        m_textquote('"')
+CSVExportDialog::CSVExportDialog(QWidget *parent)
+    : KoDialog(parent)
+    , m_dialog(new ExportDialogUI(this))
+    , m_delimiter(",")
+    , m_textquote('"')
 {
     setButtons(KoDialog::Ok | KoDialog::Cancel);
     setDefaultButton(KoDialog::Ok);
@@ -49,16 +49,11 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
     m_delimiterValidator = new QRegularExpressionValidator(rx, m_dialog->m_delimiterBox);
     m_dialog->m_delimiterEdit->setValidator(m_delimiterValidator);
 
-    connect(group, &QButtonGroup::idClicked,
-            this, &CSVExportDialog::delimiterClicked);
-    connect(m_dialog->m_delimiterEdit, &QLineEdit::returnPressed,
-            this, &CSVExportDialog::returnPressed);
-    connect(m_dialog->m_delimiterEdit, &QLineEdit::textChanged,
-            this, &CSVExportDialog::textChanged);
-    connect(m_dialog->m_comboQuote, &QComboBox::textActivated,
-            this, &CSVExportDialog::textquoteSelected);
-    connect(m_dialog->m_selectionOnly, &QAbstractButton::toggled,
-            this, &CSVExportDialog::selectionOnlyChanged);
+    connect(group, &QButtonGroup::idClicked, this, &CSVExportDialog::delimiterClicked);
+    connect(m_dialog->m_delimiterEdit, &QLineEdit::returnPressed, this, &CSVExportDialog::returnPressed);
+    connect(m_dialog->m_delimiterEdit, &QLineEdit::textChanged, this, &CSVExportDialog::textChanged);
+    connect(m_dialog->m_comboQuote, &QComboBox::textActivated, this, &CSVExportDialog::textquoteSelected);
+    connect(m_dialog->m_selectionOnly, &QAbstractButton::toggled, this, &CSVExportDialog::selectionOnlyChanged);
     connect(this, &KoDialog::okClicked, this, &CSVExportDialog::slotOk);
     connect(this, &KoDialog::cancelClicked, this, &CSVExportDialog::slotCancel);
 
@@ -119,12 +114,12 @@ void CSVExportDialog::saveSettings()
     configGroup.sync();
 }
 
-void CSVExportDialog::fillSheet(Map * map)
+void CSVExportDialog::fillSheet(Map *map)
 {
     m_dialog->m_sheetList->clear();
     QListWidgetItem *item;
 
-    for(SheetBase* sheet : map->sheetList()) {
+    for (SheetBase *sheet : map->sheetList()) {
         item = new QListWidgetItem(sheet->sheetName(), m_dialog->m_sheetList);
         item->setCheckState(Qt::Checked);
         m_dialog->m_sheetList->addItem(item);
@@ -151,7 +146,7 @@ QString CSVExportDialog::getSheetDelimiter() const
     return m_dialog->m_sheetDelimiter->text();
 }
 
-bool CSVExportDialog::exportSheet(QString const & sheetName) const
+bool CSVExportDialog::exportSheet(QString const &sheetName) const
 {
     for (int i = 0; i < m_dialog->m_sheetList->count(); ++i) {
         QListWidgetItem *const item = m_dialog->m_sheetList->item(i);
@@ -184,9 +179,8 @@ void CSVExportDialog::returnPressed()
 
 void CSVExportDialog::textChanged(const QString &)
 {
-
     if (m_dialog->m_delimiterEdit->text().isEmpty()) {
-        enableButtonOk(! m_dialog->m_radioOther->isChecked());
+        enableButtonOk(!m_dialog->m_radioOther->isChecked());
         return;
     }
 
@@ -198,8 +192,8 @@ void CSVExportDialog::delimiterClicked(int id)
 {
     enableButtonOk(true);
 
-    //Erase "Other Delimiter" text box if the user has selected one of
-    //the standard options instead (comma, semicolon, tab or space)
+    // Erase "Other Delimiter" text box if the user has selected one of
+    // the standard options instead (comma, semicolon, tab or space)
     if (id != 4)
         m_dialog->m_delimiterEdit->setText("");
 
@@ -217,13 +211,13 @@ void CSVExportDialog::delimiterClicked(int id)
         m_delimiter = " ";
         break;
     case 4: // other
-        enableButtonOk(! m_dialog->m_delimiterEdit->text().isEmpty());
+        enableButtonOk(!m_dialog->m_delimiterEdit->text().isEmpty());
         m_delimiter = m_dialog->m_delimiterEdit->text();
         break;
     }
 }
 
-void CSVExportDialog::textquoteSelected(const QString & mark)
+void CSVExportDialog::textquoteSelected(const QString &mark)
 {
     m_textquote = mark[0];
 }

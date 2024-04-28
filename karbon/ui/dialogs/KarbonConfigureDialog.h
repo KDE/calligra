@@ -29,10 +29,10 @@ public Q_SLOTS:
     void slotDefault();
 
 private:
-    KarbonConfigInterfacePage* m_interfacePage;
-    KoConfigMiscPage* m_miscPage;
-    KoConfigGridPage* m_gridPage;
-    KoConfigDocumentPage* m_defaultDocPage;
+    KarbonConfigInterfacePage *m_interfacePage;
+    KoConfigMiscPage *m_miscPage;
+    KoConfigGridPage *m_gridPage;
+    KoConfigDocumentPage *m_defaultDocPage;
     KoConfigAuthorPage *m_authorPage;
 };
 

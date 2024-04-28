@@ -16,9 +16,9 @@ class MonoFilterEffect : public KoFilterEffect
 public:
     MonoFilterEffect();
     ~MonoFilterEffect() override;
-    void save(KoXmlWriter& writer) override;
-    bool load(const KoXmlElement& element, const KoFilterEffectLoadingContext& context) override;
-    QImage processImage(const QImage& image, const KoFilterEffectRenderContext& context) const override;
+    void save(KoXmlWriter &writer) override;
+    bool load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context) override;
+    QImage processImage(const QImage &image, const KoFilterEffectRenderContext &context) const override;
 };
 
 #endif // MONOFILTEREFFECT_H

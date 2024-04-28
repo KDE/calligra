@@ -6,16 +6,16 @@
 
 #include "ChangeVideoCommand.h"
 
+#include "VideoCollection.h"
 #include "VideoData.h"
 #include "VideoShape.h"
-#include "VideoCollection.h"
 
 #include <KLocalizedString>
 
 ChangeVideoCommand::ChangeVideoCommand(VideoShape *videoShape, VideoData *newVideoData, KUndo2Command *parent)
-    : KUndo2Command(parent),
-      m_newVideoData(newVideoData),
-      m_shape(videoShape)
+    : KUndo2Command(parent)
+    , m_newVideoData(newVideoData)
+    , m_shape(videoShape)
 {
     setText(kundo2_i18n("Change video"));
 
@@ -31,11 +31,11 @@ ChangeVideoCommand::~ChangeVideoCommand()
 void ChangeVideoCommand::redo()
 {
     // we need new here as setUserData deletes the old data
-    m_shape->setUserData(m_newVideoData ? new VideoData(*m_newVideoData): 0);
+    m_shape->setUserData(m_newVideoData ? new VideoData(*m_newVideoData) : 0);
 }
 
 void ChangeVideoCommand::undo()
 {
     // we need new here as setUserData deletes the old data
-    m_shape->setUserData(m_oldVideoData ? new VideoData(*m_oldVideoData): 0);
+    m_shape->setUserData(m_oldVideoData ? new VideoData(*m_oldVideoData) : 0);
 }

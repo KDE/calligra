@@ -12,12 +12,11 @@
 #include "KoCellChild.h"
 #include "koodf2_export.h"
 
-
 /**
  * \class KoRawCellChild
- * \brief This class is a Cell child that can take any given QBuffer 
+ * \brief This class is a Cell child that can take any given QBuffer
  * and will insert its contents blindly.
- * 
+ *
  * Its purpose is to allow the user to insert custom elements or elements for
  * which the appropriate class has not been provided.
  *
@@ -32,7 +31,7 @@ public:
     ~KoRawCellChild() override;
 
 protected:
-    void saveOdf(KoXmlWriter& writer, KoGenStyles& styles) const override;
+    void saveOdf(KoXmlWriter &writer, KoGenStyles &styles) const override;
 
 private:
     QByteArray m_content;

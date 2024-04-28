@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2017 Dag Andersen <danders@get2net.dk>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -11,17 +11,17 @@
 
 // Calligra
 #include "KoShape.h"
+#include "KoShapeManager.h"
 #include "KoShapeMoveCommand.h"
 #include "KoShapeSizeCommand.h"
-#include "KoShapeManager.h"
 
 // KoChart
-#include "ChartShape.h"
-#include "ChartLayout.h"
-#include "PlotArea.h"
 #include "Axis.h"
-#include "ChartTextShapeCommand.h"
 #include "ChartDebug.h"
+#include "ChartLayout.h"
+#include "ChartShape.h"
+#include "ChartTextShapeCommand.h"
+#include "PlotArea.h"
 
 using namespace KoChart;
 
@@ -59,7 +59,7 @@ void AddRemoveAxisCommand::redo()
         m_shapeManager->addShape(m_axis->title(), KoShapeManager::AddWithoutRepaint);
         m_axis->plotArea()->addTitleToLayout();
     } else {
-//         m_shapeManager->remove(m_axis->title());
+        //         m_shapeManager->remove(m_axis->title());
         m_axis->plotArea()->takeAxis(m_axis);
     }
     KUndo2Command::redo();
@@ -73,7 +73,7 @@ void AddRemoveAxisCommand::undo()
     mine = !mine;
     if (m_add) {
         m_axis->plotArea()->takeAxis(m_axis);
-//         m_shapeManager->remove(m_axis->title());
+        //         m_shapeManager->remove(m_axis->title());
     } else {
         m_axis->plotArea()->addAxis(m_axis);
         m_axis->updateKChartAxisPosition();

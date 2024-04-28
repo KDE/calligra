@@ -5,8 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
-
 #include "KoFindMatch.h"
 
 #include <QVariant>
@@ -14,13 +12,18 @@
 class Q_DECL_HIDDEN KoFindMatch::Private : public QSharedData
 {
 public:
-    Private() { }
-    ~Private() { }
+    Private()
+    {
+    }
+    ~Private()
+    {
+    }
     Private(const Private &other)
-            : QSharedData(other),
-            container(other.container),
-            location(other.location)
-    { }
+        : QSharedData(other)
+        , container(other.container)
+        , location(other.location)
+    {
+    }
 
     QVariant container;
     QVariant location;
@@ -82,4 +85,3 @@ void KoFindMatch::setLocation(const QVariant &location)
 {
     d->location = location;
 }
-

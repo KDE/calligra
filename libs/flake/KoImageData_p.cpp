@@ -10,25 +10,27 @@
 #include "KoImageData_p.h"
 #include "KoImageCollection.h"
 
+#include <FlakeDebug.h>
 #include <QApplication>
-#include <QTemporaryFile>
-#include <QImageWriter>
+#include <QBuffer>
 #include <QCryptographicHash>
 #include <QFileInfo>
-#include <FlakeDebug.h>
-#include <QBuffer>
+#include <QImageWriter>
+#include <QTemporaryFile>
 
 KoImageDataPrivate::KoImageDataPrivate(KoImageData *q)
-    : collection(0),
-    errorCode(KoImageData::Success),
-    key(0),
-    refCount(0),
-    dataStoreState(StateEmpty),
-    temporaryFile(0)
+    : collection(0)
+    , errorCode(KoImageData::Success)
+    , key(0)
+    , refCount(0)
+    , dataStoreState(StateEmpty)
+    , temporaryFile(0)
 {
     cleanCacheTimer.setSingleShot(true);
     cleanCacheTimer.setInterval(1000);
-    QObject::connect(&cleanCacheTimer, &QTimer::timeout, q, [this] () { cleanupImageCache(); });
+    QObject::connect(&cleanCacheTimer, &QTimer::timeout, q, [this]() {
+        cleanupImageCache();
+    });
 }
 
 KoImageDataPrivate::~KoImageDataPrivate()
@@ -83,7 +85,7 @@ bool KoImageDataPrivate::saveData(QIODevice &device)
         bool result = writer.write(image);
         device.write(buffer.data(), buffer.size());
         return result;
-      }
+    }
     }
     return false;
 }

@@ -20,7 +20,6 @@ class QTransform;
 class FLAKE_EXPORT KoShapeTransformCommand : public KUndo2Command
 {
 public:
-
     /**
      * A command to transform a selection of shapes to the new state.
      * Each shape passed has an old state and a new state of transformation passed in.
@@ -30,7 +29,10 @@ public:
      * @see KoShape::transformation()
      * @see KoShape::setTransformation()
      */
-    KoShapeTransformCommand(const QList<KoShape*> &shapes, const QVector<QTransform> &oldState, const QVector<QTransform> &newState, KUndo2Command * parent = 0);
+    KoShapeTransformCommand(const QList<KoShape *> &shapes,
+                            const QVector<QTransform> &oldState,
+                            const QVector<QTransform> &newState,
+                            KUndo2Command *parent = 0);
     ~KoShapeTransformCommand() override;
     /// redo the command
     void redo() override;
@@ -39,7 +41,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOSHAPETRANSFORMCOMMAND_H

@@ -3,14 +3,14 @@
  * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 #ifndef KOCOMPOSITEOP_H
 #define KOCOMPOSITEOP_H
 
-#include <QString>
+#include <QBitArray>
 #include <QList>
 #include <QMultiMap>
-#include <QBitArray>
+#include <QString>
 
 #include "pigment_export.h"
 
@@ -37,33 +37,32 @@ public:
     static QString categoryMix();
     static QString categoryMisc();
 
-    struct PIGMENTCMS_EXPORT ParameterInfo
-    {
+    struct PIGMENTCMS_EXPORT ParameterInfo {
         ParameterInfo();
         ParameterInfo(const ParameterInfo &rhs);
-        ParameterInfo& operator=(const ParameterInfo &rhs);
+        ParameterInfo &operator=(const ParameterInfo &rhs);
 
-        quint8*       dstRowStart;
-        qint32        dstRowStride;
-        const quint8* srcRowStart;
-        qint32        srcRowStride;
-        const quint8* maskRowStart;
-        qint32        maskRowStride;
-        qint32        rows;
-        qint32        cols;
-        float         opacity;
-        float         flow;
-        float         _lastOpacityData;
-        float*        lastOpacity;
-        QBitArray     channelFlags;
+        quint8 *dstRowStart;
+        qint32 dstRowStride;
+        const quint8 *srcRowStart;
+        qint32 srcRowStride;
+        const quint8 *maskRowStart;
+        qint32 maskRowStride;
+        qint32 rows;
+        qint32 cols;
+        float opacity;
+        float flow;
+        float _lastOpacityData;
+        float *lastOpacity;
+        QBitArray channelFlags;
 
         void updateOpacityAndAverage(float value);
+
     private:
         inline void copy(const ParameterInfo &rhs);
     };
 
 public:
-
     /**
      * @param cs a pointer to the color space that can be used with this composite op
      * @param id the identifier for this composite op (not user visible)
@@ -72,7 +71,7 @@ public:
      * @param userVisible define whether or not that composite op should be visible in a user
      *                    interface
      */
-    KoCompositeOp(const KoColorSpace * cs, const QString& id, const QString& description, const QString & category = KoCompositeOp::categoryMisc());
+    KoCompositeOp(const KoColorSpace *cs, const QString &id, const QString &description, const QString &category = KoCompositeOp::categoryMisc());
     virtual ~KoCompositeOp();
 
     /**
@@ -86,7 +85,7 @@ public:
     /**
      * @return the color space that can use and own this composite op
      */
-    const KoColorSpace * colorSpace() const;
+    const KoColorSpace *colorSpace() const;
     /**
      * @return the category associated with the composite op
      */
@@ -111,21 +110,26 @@ public:
      * @param opacity transparency with which to blend
      * @param channelFlags a bit array that determines which channels should be processed (channels are in the order of the channels in the colorspace)
      */
-    virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                            const quint8 *srcRowStart, qint32 srcRowStride,
-                            const quint8 *maskRowStart, qint32 maskRowStride,
-                            qint32 rows, qint32 numColumns,
-                            quint8 opacity, const QBitArray& channelFlags=QBitArray()) const;
+    virtual void composite(quint8 *dstRowStart,
+                           qint32 dstRowStride,
+                           const quint8 *srcRowStart,
+                           qint32 srcRowStride,
+                           const quint8 *maskRowStart,
+                           qint32 maskRowStride,
+                           qint32 rows,
+                           qint32 numColumns,
+                           quint8 opacity,
+                           const QBitArray &channelFlags = QBitArray()) const;
 
     /**
-    * Same as previous, but uses a parameter structure
-    */
-    virtual void composite(const ParameterInfo& params) const;
+     * Same as previous, but uses a parameter structure
+     */
+    virtual void composite(const ParameterInfo &params) const;
 
 private:
     KoCompositeOp();
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // KOCOMPOSITEOP_H

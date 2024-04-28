@@ -11,35 +11,34 @@
 #include "Doc.h"
 #include "Part.h"
 
-#include <KoDockRegistry.h>
 #include <KoComponentData.h>
+#include <KoDockRegistry.h>
 #include <KoResourcePaths.h>
-
 
 using namespace Calligra::Sheets;
 
-KoComponentData* Factory::s_global = 0;
-KAboutData* Factory::s_aboutData = 0;
+KoComponentData *Factory::s_global = 0;
+KAboutData *Factory::s_aboutData = 0;
 
 Factory::Factory()
     : KPluginFactory()
 {
-    //debugSheets <<"Factory::Factory()";
-    // Create our instance, so that it becomes KGlobal::instance if the
-    // main app is Calligra Sheets.
+    // debugSheets <<"Factory::Factory()";
+    //  Create our instance, so that it becomes KGlobal::instance if the
+    //  main app is Calligra Sheets.
     (void)global();
 }
 
 Factory::~Factory()
 {
-    //debugSheets <<"Factory::~Factory()";
+    // debugSheets <<"Factory::~Factory()";
     delete s_aboutData;
     s_aboutData = 0;
     delete s_global;
     s_global = 0;
 }
 
-QObject* Factory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args)
+QObject *Factory::create(const char * /*iface*/, QWidget * /*parentWidget*/, QObject *parent, const QVariantList &args)
 {
     Q_UNUSED(args);
     Part *part = new Part(parent);
@@ -48,7 +47,7 @@ QObject* Factory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObje
     return part;
 }
 
-KAboutData* Factory::aboutData()
+KAboutData *Factory::aboutData()
 {
     if (!s_aboutData)
         s_aboutData = newAboutData();

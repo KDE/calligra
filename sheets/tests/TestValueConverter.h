@@ -16,7 +16,7 @@ class CalculationSettings;
 class ValueParser;
 class ValueConverter;
 
-class TestValueConverter: public QObject
+class TestValueConverter : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
@@ -43,9 +43,9 @@ private Q_SLOTS:
     void testAsTime();
 
 private:
-    CalculationSettings* m_calcsettings;
-    ValueParser* m_parser;
-    ValueConverter* m_converter;
+    CalculationSettings *m_calcsettings;
+    ValueParser *m_parser;
+    ValueConverter *m_converter;
     QString m_translationsFile;
 };
 

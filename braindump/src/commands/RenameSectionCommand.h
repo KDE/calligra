@@ -28,12 +28,13 @@ class Section;
 class RenameSectionCommand : public KUndo2Command
 {
 public:
-    RenameSectionCommand(DocumentModel* _model, Section* _section, const QString& _newName);
+    RenameSectionCommand(DocumentModel *_model, Section *_section, const QString &_newName);
     virtual void undo();
     virtual void redo();
+
 private:
-    DocumentModel* m_model;
-    Section* m_section;
+    DocumentModel *m_model;
+    Section *m_section;
     QString m_newName;
     QString m_oldName;
 };

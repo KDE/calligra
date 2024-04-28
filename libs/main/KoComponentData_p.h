@@ -7,8 +7,8 @@
 #ifndef KOCOMPONENTDATA_P_H
 #define KOCOMPONENTDATA_P_H
 
-#include <KSharedConfig>
 #include <KAboutData>
+#include <KSharedConfig>
 
 #include <QSharedData>
 
@@ -17,7 +17,8 @@ class KoComponentDataPrivate : public QSharedData
 public:
     explicit KoComponentDataPrivate(const KAboutData &_aboutData)
         : aboutData(_aboutData)
-        {}
+    {
+    }
 
     KAboutData aboutData;
     KSharedConfig::Ptr sharedConfig;

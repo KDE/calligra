@@ -6,8 +6,8 @@
 #ifndef CLIPCOMMAND_H
 #define CLIPCOMMAND_H
 
-#include <kundo2command.h>
 #include "PictureShape.h"
+#include <kundo2command.h>
 
 class ClipCommand : public KUndo2Command
 {

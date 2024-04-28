@@ -7,15 +7,14 @@
 #ifndef RDF_KORDFSEMANTICTREEWIDGETITEM_H
 #define RDF_KORDFSEMANTICTREEWIDGETITEM_H
 
-#include "kordf_export.h"
 #include "RdfForward.h"
+#include "kordf_export.h"
 // Qt
 #include <QObject>
 #include <QTreeWidgetItem>
 
 class QAction;
 class KoCanvasBase;
-
 
 /**
  * Code wishing to display a list of KoRdfSemanticItem objects can create TreeWidgetItems
@@ -35,13 +34,10 @@ class KORDF_EXPORT KoRdfSemanticTreeWidgetItem : public QObject, public QTreeWid
 protected:
     virtual QString uIObjectName() const = 0;
     void addApplyStylesheetActions(QWidget *parent, QList<QAction *> &actions, KoCanvasBase *host);
-    QAction * createAction(QWidget *parent, KoCanvasBase *host, const QString &text);
+    QAction *createAction(QWidget *parent, KoCanvasBase *host, const QString &text);
 
 public:
-    enum {
-        ColName = 0,
-        ColSize
-    };
+    enum { ColName = 0, ColSize };
 
     explicit KoRdfSemanticTreeWidgetItem(QTreeWidgetItem *parent);
     virtual ~KoRdfSemanticTreeWidgetItem();

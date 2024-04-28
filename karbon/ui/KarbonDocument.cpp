@@ -29,42 +29,42 @@
  */
 
 #include "KarbonDocument.h"
-#include "KarbonPart.h"
 #include "KarbonFactory.h"
-#include "KarbonView.h"
+#include "KarbonPart.h"
 #include "KarbonUiDebug.h"
+#include "KarbonView.h"
 
-#include <KoImageCollection.h>
-#include <KoText.h>
-#include <KoSelection.h>
-#include <KoStyleManager.h>
-#include <KoTextSharedLoadingData.h>
-#include <KoOdfStylesReader.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfReadStore.h>
-#include <KoOdfWriteStore.h>
-#include <KoShapeSavingContext.h>
-#include <KoShapeLoadingContext.h>
-#include <KoGridData.h>
-#include <KoGuidesData.h>
-#include <KoPageLayout.h>
-#include <KoXmlWriter.h>
-#include <KoXmlNS.h>
-#include <KoGenStyles.h>
-#include <KoOasisSettings.h>
-#include <KoMainWindow.h>
 #include <KoCanvasController.h>
-#include <KoToolManager.h>
-#include <KoShapeManager.h>
-#include <KoShapeLayer.h>
-#include <KoShapeRegistry.h>
 #include <KoCanvasResourceManager.h>
 #include <KoDocumentResourceManager.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoStoreDevice.h>
-#include <KoStore.h>
-#include <KoUnit.h>
+#include <KoGenStyles.h>
+#include <KoGridData.h>
+#include <KoGuidesData.h>
+#include <KoImageCollection.h>
+#include <KoMainWindow.h>
+#include <KoOasisSettings.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfReadStore.h>
+#include <KoOdfStylesReader.h>
+#include <KoOdfWriteStore.h>
+#include <KoPageLayout.h>
+#include <KoSelection.h>
+#include <KoShapeLayer.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeManager.h>
 #include <KoShapePainter.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeSavingContext.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
+#include <KoStyleManager.h>
+#include <KoText.h>
+#include <KoTextSharedLoadingData.h>
+#include <KoToolManager.h>
+#include <KoUnit.h>
+#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 #include <SvgShapeFactory.h>
 
 #include <KConfig>
@@ -73,8 +73,8 @@
 #include <kundo2stack.h>
 
 #include <QLocale>
-#include <QRectF>
 #include <QPainter>
+#include <QRectF>
 
 // Make sure an appropriate DTD is available in www/calligra/DTD if changing this value
 // static const char * CURRENT_DTD_VERSION = "1.2";
@@ -83,20 +83,20 @@ class Q_DECL_HIDDEN KarbonDocument::Private
 {
 public:
     Private()
-            : showStatusBar(true),
-              merge(false),
-              maxRecentFiles(10)
-    {}
+        : showStatusBar(true)
+        , merge(false)
+        , maxRecentFiles(10)
+    {
+    }
 
     // KarbonDocument document;  ///< store non-visual doc info
 
-    bool showStatusBar;       ///< enable/disable status bar in attached view(s)
+    bool showStatusBar; ///< enable/disable status bar in attached view(s)
     bool merge;
-    uint maxRecentFiles;      ///< max. number of files shown in open recent menu item
+    uint maxRecentFiles; ///< max. number of files shown in open recent menu item
 };
 
-
-KarbonDocument::KarbonDocument(KarbonPart* part)
+KarbonDocument::KarbonDocument(KarbonPart *part)
     : KoPADocument(part)
     , d(new Private())
 {
@@ -142,8 +142,8 @@ uint KarbonDocument::maxRecentFiles() const
 
 void KarbonDocument::reorganizeGUI()
 {
-    foreach(KoView* view, documentPart()->views()) {
-        KarbonView * kv = qobject_cast<KarbonView*>(view);
+    foreach (KoView *view, documentPart()->views()) {
+        KarbonView *kv = qobject_cast<KarbonView *>(view);
         if (kv) {
             kv->reorganizeGUI();
         }
@@ -161,13 +161,12 @@ void KarbonDocument::initConfig()
         KConfigGroup interfaceGroup = config->group("Interface");
         setAutoSave(interfaceGroup.readEntry("AutoSave", defaultAutoSave() / 60) * 60);
         d->maxRecentFiles = interfaceGroup.readEntry("NbRecentFile", 10);
-        setShowStatusBar(interfaceGroup.readEntry("ShowStatusBar" , true));
+        setShowStatusBar(interfaceGroup.readEntry("ShowStatusBar", true));
         setBackupFile(interfaceGroup.readEntry("BackupFile", true));
     }
     int undos = 30;
 
-    QString defaultUnitSymbol =
-        QLatin1String((QLocale().measurementSystem() == QLocale::ImperialSystem)?"in":"cm");
+    QString defaultUnitSymbol = QLatin1String((QLocale().measurementSystem() == QLocale::ImperialSystem) ? "in" : "cm");
 
     if (config->hasGroup("Misc")) {
         KConfigGroup miscGroup = config->group("Misc");
@@ -176,7 +175,6 @@ void KarbonDocument::initConfig()
     }
     undoStack()->setUndoLimit(undos);
     setUnit(KoUnit::fromSymbol(defaultUnitSymbol));
-
 }
 
 bool KarbonDocument::mergeNativeFormat(const QString &file)
@@ -194,7 +192,7 @@ KoOdf::DocumentType KarbonDocument::documentType() const
     return KoOdf::Graphics;
 }
 
-const char * KarbonDocument::odfTagName(bool withNamespace)
+const char *KarbonDocument::odfTagName(bool withNamespace)
 {
-    return withNamespace ? "office:drawing": "drawing";
+    return withNamespace ? "office:drawing" : "drawing";
 }

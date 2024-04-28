@@ -47,14 +47,14 @@ public:
     KoInsets shapeMargins() const;
 
     /**
-    * Load the text from ODF.
-    */
+     * Load the text from ODF.
+     */
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
 
     /**
-    * Save the text to ODF.
-    */
-    virtual void saveOdf(KoShapeSavingContext &context, int from = 0, int to  = -1) const = 0;
+     * Save the text to ODF.
+     */
+    virtual void saveOdf(KoShapeSavingContext &context, int from = 0, int to = -1) const = 0;
 
     /**
      * Load the style of the element
@@ -129,4 +129,3 @@ private:
 };
 
 #endif
-

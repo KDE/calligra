@@ -15,10 +15,7 @@
 #include <KLocalizedString>
 #include <KSelectAction>
 
-
 using namespace Calligra::Sheets;
-
-
 
 InsertFormula::InsertFormula(Actions *actions)
     : DialogCellAction(actions, "insertFormula", i18n("&Function..."), koIcon("insert-math-expression"), i18n("Insert math expression"))
@@ -32,16 +29,18 @@ InsertFormula::~InsertFormula()
 ActionDialog *InsertFormula::createDialog(QWidget *canvasWidget)
 {
     CellToolBase *tool = m_actions->tool();
-    if (!tool->createEditor()) return nullptr;   // Nothing if we don't have the editor.
+    if (!tool->createEditor())
+        return nullptr; // Nothing if we don't have the editor.
 
     return new FormulaDialog(canvasWidget, m_selection, tool->editor());
 }
 
-void InsertFormula::onEditorDeleted() {
+void InsertFormula::onEditorDeleted()
+{
     onDialogClosed();
 }
 
-void InsertFormula::setFunction (const QString &function)
+void InsertFormula::setFunction(const QString &function)
 {
     m_function = function;
     if (m_dlg) {
@@ -49,9 +48,6 @@ void InsertFormula::setFunction (const QString &function)
         dlg->setFormula(function);
     }
 }
-
-
-
 
 FormulaSelection::FormulaSelection(Actions *actions)
     : CellAction(actions, "formulaSelection", i18n("Formula Selection"), QIcon(), i18n("Insert a function"))
@@ -62,7 +58,8 @@ FormulaSelection::~FormulaSelection()
 {
 }
 
-QAction *FormulaSelection::createAction() {
+QAction *FormulaSelection::createAction()
+{
     KSelectAction *selectAction = new KSelectAction(i18n("Formula Selection"), m_actions->tool());
     selectAction->setToolTip(i18n("Insert a function"));
     QStringList functionList = {"SUM", "AVERAGE", "IF", "COUNT", "MIN", "MAX", i18n("Others...")};
@@ -73,10 +70,11 @@ QAction *FormulaSelection::createAction() {
     return selectAction;
 }
 
-void FormulaSelection::triggerFormulaSelection(const QString& expression)
+void FormulaSelection::triggerFormulaSelection(const QString &expression)
 {
     CellAction *a = m_actions->cellAction("insertFormula");
-    if (!a) return;
+    if (!a)
+        return;
     InsertFormula *ia = dynamic_cast<InsertFormula *>(a);
 
     if (expression != i18n("Others..."))
@@ -84,5 +82,3 @@ void FormulaSelection::triggerFormulaSelection(const QString& expression)
 
     ia->trigger();
 }
-
-

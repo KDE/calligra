@@ -27,6 +27,7 @@ private Q_SLOTS:
     void valueChanged();
     void newClicked();
     void deleteClicked();
+
 private:
     KoVariableManager *variableManager();
     void updateNameEdit();
@@ -39,4 +40,3 @@ private:
 };
 
 #endif
-

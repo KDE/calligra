@@ -7,19 +7,19 @@
 #ifndef __XAMLIMPORT_H__
 #define __XAMLIMPORT_H__
 
+#include "xamlgraphiccontext.h"
 #include <KoFilter.h>
+#include <QByteArray>
 #include <QDomDocument>
 #include <QMap>
 #include <QStack>
-#include <QByteArray>
 #include <QTransform>
-#include <core/KarbonDocument.h>
-#include <core/vgradient.h>
-#include <core/vfill.h>
-#include <core/vstroke.h>
-#include <core/vfillrule.h>
 #include <QVariantList>
-#include "xamlgraphiccontext.h"
+#include <core/KarbonDocument.h>
+#include <core/vfill.h>
+#include <core/vfillrule.h>
+#include <core/vgradient.h>
+#include <core/vstroke.h>
 
 class VGroup;
 
@@ -28,20 +28,21 @@ class XAMLImport : public KoFilter
     Q_OBJECT
 
 public:
-    XAMLImport(QObject* parent, const QVariantList&);
+    XAMLImport(QObject *parent, const QVariantList &);
     virtual ~XAMLImport();
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 protected:
     class GradientHelper
     {
     public:
-        GradientHelper() {
+        GradientHelper()
+        {
             bbox = true;
         }
         VGradient gradient;
-        bool  bbox;
+        bool bbox;
         QTransform gradientTransform;
     };
 
@@ -60,20 +61,20 @@ protected:
     QDomDocument inpdoc;
     QDomDocument outdoc;
     void convert();
-    VObject* createObject(const QDomElement &);
+    VObject *createObject(const QDomElement &);
     void createText(VGroup *, const QDomElement &);
     void parseFont(const QDomElement &);
     // find object with given id in document
-    VObject* findObject(const QString &name);
+    VObject *findObject(const QString &name);
     // find object with given id in given group
-    VObject* findObject(const QString &name, VGroup *);
+    VObject *findObject(const QString &name, VGroup *);
 
 private:
-    KarbonDocument      m_document;
-    QStack<XAMLGraphicsContext*> m_gc;
+    KarbonDocument m_document;
+    QStack<XAMLGraphicsContext *> m_gc;
     QMap<QString, GradientHelper> m_gradients;
-    QMap<QString, QDomElement>  m_paths;
-    KoRect       m_outerRect;
+    QMap<QString, QDomElement> m_paths;
+    KoRect m_outerRect;
 };
 
 #endif

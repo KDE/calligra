@@ -7,15 +7,15 @@
  */
 #include "TestImageCollection.h"
 
-#include <KoImageData.h>
 #include <KoImageCollection.h>
+#include <KoImageData.h>
 #include <KoStore.h>
 
+#include <FlakeDebug.h>
+#include <QBuffer>
 #include <QImage>
 #include <QPixmap>
-#include <QBuffer>
 #include <QUrl>
-#include <FlakeDebug.h>
 
 #include <QTest>
 

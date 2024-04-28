@@ -38,9 +38,10 @@ private Q_SLOTS:
     void testColsAreEqual();
     void testInsertCols();
     void testRemoveCols();
+
 private:
-    Map* m_map;
-    Sheet* m_sheet;
+    Map *m_map;
+    Sheet *m_sheet;
 };
 
 } // namespace Sheets

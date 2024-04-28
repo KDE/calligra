@@ -8,8 +8,8 @@
 #include <QApplication>
 #include <QBasicTimer>
 #include <QModelIndex>
-#include <QPainter>
 #include <QPaintEvent>
+#include <QPainter>
 #include <QPersistentModelIndex>
 #include <QStyleOptionViewItem>
 #include <QTextDocument>
@@ -18,21 +18,23 @@
 
 class Q_DECL_HIDDEN KoItemToolTip::Private
 {
-    public:
-        QTextDocument *document;
-        QPersistentModelIndex index;
-        QPoint pos;
-        QBasicTimer timer;
+public:
+    QTextDocument *document;
+    QPersistentModelIndex index;
+    QPoint pos;
+    QBasicTimer timer;
 
-        Private(): document(0) { }
+    Private()
+        : document(0)
+    {
+    }
 };
 
 KoItemToolTip::KoItemToolTip()
     : d(new Private)
 {
     d->document = new QTextDocument(this);
-    setWindowFlags(Qt::FramelessWindowHint  | Qt::ToolTip
-                  | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
     QApplication::instance()->installEventFilter(this);
 }
 
@@ -47,8 +49,7 @@ void KoItemToolTip::showTip(QWidget *widget, const QPoint &pos, const QStyleOpti
 
     QPoint p = (isVisible() && index == d->index) ? d->pos : pos;
 
-    if (!isVisible() || index != d->index || doc->toHtml() != d->document->toHtml())
-    {
+    if (!isVisible() || index != d->index || doc->toHtml() != d->document->toHtml()) {
         d->pos = p;
         d->index = index;
         delete d->document;
@@ -59,8 +60,7 @@ void KoItemToolTip::showTip(QWidget *widget, const QPoint &pos, const QStyleOpti
         else
             update();
         d->timer.start(10000, this);
-    }
-    else
+    } else
         delete doc;
 }
 
@@ -68,33 +68,33 @@ void KoItemToolTip::updatePosition(QWidget *widget, const QPoint &pos, const QSt
 {
     // Todo update for wayland
 
-    //const QRect drect = QApplication::desktop()->availableGeometry(widget);
-    //const QSize size = sizeHint();
-    //const int width = size.width(), height = size.height();
-    //const QPoint gpos = widget->mapToGlobal(pos);
-    //const QRect irect(widget->mapToGlobal(option.rect.topLeft()), option.rect.size());
+    // const QRect drect = QApplication::desktop()->availableGeometry(widget);
+    // const QSize size = sizeHint();
+    // const int width = size.width(), height = size.height();
+    // const QPoint gpos = widget->mapToGlobal(pos);
+    // const QRect irect(widget->mapToGlobal(option.rect.topLeft()), option.rect.size());
 
-    //int y = gpos.y() + 20;
-    //if (y + height > drect.bottom())
-    //    y = qMax(drect.top(), irect.top() - height);
+    // int y = gpos.y() + 20;
+    // if (y + height > drect.bottom())
+    //     y = qMax(drect.top(), irect.top() - height);
 
-    //int x;
-    //if (gpos.x() + width < drect.right())
-    //    x = gpos.x();
-    //else
-    //    x = qMax(drect.left(), gpos.x() - width);
+    // int x;
+    // if (gpos.x() + width < drect.right())
+    //     x = gpos.x();
+    // else
+    //     x = qMax(drect.left(), gpos.x() - width);
 
-    //move(x, y);
+    // move(x, y);
 
     resize(sizeHint());
- }
+}
 
 QSize KoItemToolTip::sizeHint() const
 {
     return d->document->size().toSize();
 }
 
-void KoItemToolTip::paintEvent(QPaintEvent*)
+void KoItemToolTip::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
     p.begin(this);
@@ -111,18 +111,18 @@ void KoItemToolTip::timerEvent(QTimerEvent *e)
 
 bool KoItemToolTip::eventFilter(QObject *object, QEvent *event)
 {
-    switch(event->type())
-    {
-        case QEvent::KeyPress:
-        case QEvent::KeyRelease:
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-        case QEvent::FocusIn:
-        case QEvent::FocusOut:
-        case QEvent::Enter:
-        case QEvent::Leave:
-            hide();
-        default: break;
+    switch (event->type()) {
+    case QEvent::KeyPress:
+    case QEvent::KeyRelease:
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonRelease:
+    case QEvent::FocusIn:
+    case QEvent::FocusOut:
+    case QEvent::Enter:
+    case QEvent::Leave:
+        hide();
+    default:
+        break;
     }
 
     return QFrame::eventFilter(object, event);

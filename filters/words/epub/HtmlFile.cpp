@@ -6,14 +6,13 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "HtmlFile.h"
 
 // Qt
-#include <QString>
 #include <QByteArray>
 #include <QList>
+#include <QString>
 
 // Calligra
 #include <KoStore.h>
@@ -31,7 +30,6 @@ HtmlFile::~HtmlFile()
 {
 }
 
-
 KoFilter::ConversionStatus HtmlFile::writeHtml(const QString &fileName)
 {
     // Create the store and check if everything went well.
@@ -42,7 +40,7 @@ KoFilter::ConversionStatus HtmlFile::writeHtml(const QString &fileName)
         return KoFilter::FileNotFound;
     }
 
-    KoFilter::ConversionStatus  status;
+    KoFilter::ConversionStatus status;
 
     // Write contents of added files.
     status = FileCollector::writeFiles(htmlStore);
@@ -50,7 +48,6 @@ KoFilter::ConversionStatus HtmlFile::writeHtml(const QString &fileName)
     delete htmlStore;
     return status;
 }
-
 
 // ----------------------------------------------------------------
 //                         Private functions

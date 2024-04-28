@@ -14,15 +14,16 @@
 class Q_DECL_HIDDEN KoShapeManagerPaintingStrategy::Private
 {
 public:
-    Private(KoShapeManager * manager)
-    : shapeManager(manager)
-    {}
+    Private(KoShapeManager *manager)
+        : shapeManager(manager)
+    {
+    }
 
-    KoShapeManager * shapeManager;
+    KoShapeManager *shapeManager;
 };
 
-KoShapeManagerPaintingStrategy::KoShapeManagerPaintingStrategy(KoShapeManager * shapeManager)
-: d(new KoShapeManagerPaintingStrategy::Private(shapeManager))
+KoShapeManagerPaintingStrategy::KoShapeManagerPaintingStrategy(KoShapeManager *shapeManager)
+    : d(new KoShapeManagerPaintingStrategy::Private(shapeManager))
 {
 }
 
@@ -31,28 +32,28 @@ KoShapeManagerPaintingStrategy::~KoShapeManagerPaintingStrategy()
     delete d;
 }
 
-void KoShapeManagerPaintingStrategy::paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void KoShapeManagerPaintingStrategy::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     if (d->shapeManager) {
         painter.save();
         painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
         d->shapeManager->paintShape(shape, painter, converter, paintContext);
-        painter.restore();  // for the matrix
+        painter.restore(); // for the matrix
     }
 }
 
-void KoShapeManagerPaintingStrategy::adapt(KoShape * shape, QRectF & rect)
+void KoShapeManagerPaintingStrategy::adapt(KoShape *shape, QRectF &rect)
 {
     Q_UNUSED(shape);
     Q_UNUSED(rect);
 }
 
-void KoShapeManagerPaintingStrategy::setShapeManager(KoShapeManager * shapeManager)
+void KoShapeManagerPaintingStrategy::setShapeManager(KoShapeManager *shapeManager)
 {
     d->shapeManager = shapeManager;
 }
 
-KoShapeManager * KoShapeManagerPaintingStrategy::shapeManager()
+KoShapeManager *KoShapeManagerPaintingStrategy::shapeManager()
 {
     return d->shapeManager;
 }

@@ -4,13 +4,13 @@
 
 #include "TestRegion.h"
 
-#include <QTest>
 #include <KLocalizedString>
+#include <QTest>
 
-#include "engine/calligra_sheets_limits.h"
 #include "engine/MapBase.h"
 #include "engine/Region.h"
 #include "engine/SheetBase.h"
+#include "engine/calligra_sheets_limits.h"
 
 using namespace Calligra::Sheets;
 
@@ -18,7 +18,7 @@ void TestRegion::initTestCase()
 {
     KLocalizedString::setApplicationDomain("calligrasheets");
     m_map = new MapBase;
-    SheetBase* sheet = m_map->addNewSheet();
+    SheetBase *sheet = m_map->addNewSheet();
     sheet->setSheetName("Sheet1");
     sheet = m_map->addNewSheet();
     sheet->setSheetName("Sheet2");
@@ -117,18 +117,18 @@ void TestRegion::testExtrem()
     Region region2 = m_map->regionFromName("A1:A6553634523563453456356");
     QVERIFY(region2.isValid());
 
-    Region region3 = Region(QRect(1,1,KS_colMax,KS_rowMax), m_map->sheet(0));
+    Region region3 = Region(QRect(1, 1, KS_colMax, KS_rowMax), m_map->sheet(0));
     QVERIFY(region3.isValid());
 
-    Region region4 = Region(QRect(1,1,KS_colMax,KS_rowMax), m_map->sheet(0));
+    Region region4 = Region(QRect(1, 1, KS_colMax, KS_rowMax), m_map->sheet(0));
     QVERIFY(region4.isValid());
-    Region region5 = Region(QRect(1,1,KS_colMax+12345,KS_rowMax+12345), m_map->sheet(0));
+    Region region5 = Region(QRect(1, 1, KS_colMax + 12345, KS_rowMax + 12345), m_map->sheet(0));
     QVERIFY(region5.isValid());
     QCOMPARE(region4.name(), region5.name());
-    
+
     Region region6 = Region(QPoint(KS_colMax, KS_rowMax), m_map->sheet(0));
     QVERIFY(region6.isValid());
-    Region region7 = Region(QPoint(KS_colMax+22, KS_rowMax+22), m_map->sheet(0));
+    Region region7 = Region(QPoint(KS_colMax + 22, KS_rowMax + 22), m_map->sheet(0));
     QVERIFY(region7.isValid());
     QCOMPARE(region6.name(), region7.name());
 }
@@ -140,21 +140,20 @@ void TestRegion::testOps()
     Region row = Region(QRect(QPoint(1, rownum), QPoint(KS_colMax, rownum)));
     Region a1 = row.intersected(empty);
     QVERIFY(a1.isEmpty());
-    Region rect = Region(QRect(QPoint(3,3), QPoint(5,5)));
+    Region rect = Region(QRect(QPoint(3, 3), QPoint(5, 5)));
     Region a2 = row.intersected(rect);
     Region a3 = rect.intersected(row);
     QVERIFY(a2 == a3);
-    Region smallrect = Region(QRect(QPoint(3,4), QPoint(5,4)));
+    Region smallrect = Region(QRect(QPoint(3, 4), QPoint(5, 4)));
     QVERIFY(a2 == smallrect);
 
     QVERIFY(row.isRowSelected(rownum));
     QVERIFY(row.isColumnOrRowSelected());
-    QVERIFY(row.contains(QPoint(789,rownum)));
-    QVERIFY(!row.contains(QPoint(789,rownum+1)));
+    QVERIFY(row.contains(QPoint(789, rownum)));
+    QVERIFY(!row.contains(QPoint(789, rownum + 1)));
 
     QRect bound = empty.boundingRect();
     QVERIFY(bound == QRect());
-
 }
 
 void TestRegion::cleanupTestCase()

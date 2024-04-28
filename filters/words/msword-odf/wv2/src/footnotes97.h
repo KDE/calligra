@@ -20,78 +20,86 @@
 #ifndef FOOTNOTES97_H
 #define FOOTNOTES97_H
 
-#include "global.h"
 #include "functordata.h"
+#include "global.h"
 
-#include <vector>
 #include "wv2_export.h"
+#include <vector>
 
 namespace wvWare
 {
-    namespace Word97
-    {
-        struct FIB;
-        struct FRD;
-    }
-    template<class T> class PLCF;
-    template<class T> class PLCFIterator;
-    class OLEStreamReader;
-    struct FootnoteData;
+namespace Word97
+{
+struct FIB;
+struct FRD;
+}
+template<class T>
+class PLCF;
+template<class T>
+class PLCFIterator;
+class OLEStreamReader;
+struct FootnoteData;
+
+/**
+ * @internal
+ */
+class Footnotes97
+{
+public:
+    Footnotes97(OLEStreamReader *tableStream, const Word97::FIB &fib);
+    ~Footnotes97();
 
     /**
-     * @internal
+     * Get the FootnoteData for the footnote/endnote at @param globalCP.
+     * The @param ok flag is true if a footnote/endnote has been found.
+     * If @param ok is false no footnote/endnote has been found and the
+     * returned FootnoteData structure is invalid.
      */
-    class Footnotes97
-    {
-    public:
-        Footnotes97( OLEStreamReader* tableStream, const Word97::FIB& fib );
-        ~Footnotes97();
+    FootnoteData footnote(U32 globalCP, bool &ok);
 
-        /**
-         * Get the FootnoteData for the footnote/endnote at @param globalCP.
-         * The @param ok flag is true if a footnote/endnote has been found.
-         * If @param ok is false no footnote/endnote has been found and the
-         * returned FootnoteData structure is invalid.
-         */
-        FootnoteData footnote( U32 globalCP, bool& ok );
+    /**
+     * Returns the global CP of the next footnote reference,
+     * 0xffffffff if none exists.
+     */
+    U32 nextFootnote() const;
+    /**
+     * Returns the global CP of the next endnote reference,
+     * 0xffffffff if none exists.
+     */
+    U32 nextEndnote() const;
 
-        /**
-         * Returns the global CP of the next footnote reference,
-         * 0xffffffff if none exists.
-         */
-        U32 nextFootnote() const;
-        /**
-         * Returns the global CP of the next endnote reference,
-         * 0xffffffff if none exists.
-         */
-        U32 nextEndnote() const;
+    /**
+     * Check for unprocessed footnotes/endnotes located before @param
+     * globalCP.  This might be the result of a skipped chunk or
+     * overlapping.  Any unprocessed footnotes/endnotes are skipped.
+     */
+    void check(U32 globalCP);
 
-        /**
-         * Check for unprocessed footnotes/endnotes located before @param
-         * globalCP.  This might be the result of a skipped chunk or
-         * overlapping.  Any unprocessed footnotes/endnotes are skipped.
-         */
-        void check( U32 globalCP );
+private:
+    Footnotes97(const Footnotes97 &rhs);
+    Footnotes97 &operator=(const Footnotes97 &rhs);
 
-    private:
-        Footnotes97( const Footnotes97& rhs );
-        Footnotes97& operator=( const Footnotes97& rhs );
+    // Ugly, but helps to avoid code duplication
+    void init(U32 fcRef,
+              U32 lcbRef,
+              U32 fcTxt,
+              U32 lcbTxt,
+              OLEStreamReader *tableStream,
+              PLCF<Word97::FRD> **ref,
+              PLCFIterator<Word97::FRD> **refIt,
+              std::vector<U32> &txt,
+              std::vector<U32>::const_iterator &txtIt);
 
-        // Ugly, but helps to avoid code duplication
-        void init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamReader* tableStream,
-                   PLCF<Word97::FRD>** ref, PLCFIterator<Word97::FRD>** refIt,
-                   std::vector<U32>& txt, std::vector<U32>::const_iterator& txtIt );
+    PLCF<Word97::FRD> *m_footnoteRef;
+    PLCFIterator<Word97::FRD> *m_footnoteRefIt;
+    std::vector<U32> m_footnoteTxt;
+    std::vector<U32>::const_iterator m_footnoteTxtIt;
 
-        PLCF<Word97::FRD>* m_footnoteRef;
-        PLCFIterator<Word97::FRD>* m_footnoteRefIt;
-        std::vector<U32> m_footnoteTxt;
-        std::vector<U32>::const_iterator m_footnoteTxtIt;
-
-        PLCF<Word97::FRD>* m_endnoteRef;
-        PLCFIterator<Word97::FRD>* m_endnoteRefIt;
-        std::vector<U32> m_endnoteTxt;
-        std::vector<U32>::const_iterator m_endnoteTxtIt;
-    };
+    PLCF<Word97::FRD> *m_endnoteRef;
+    PLCFIterator<Word97::FRD> *m_endnoteRefIt;
+    std::vector<U32> m_endnoteTxt;
+    std::vector<U32>::const_iterator m_endnoteTxtIt;
+};
 
 } // namespace wvWare
 

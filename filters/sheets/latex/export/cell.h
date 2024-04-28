@@ -14,7 +14,7 @@
 **
 ** To receive a copy of the GNU Library General Public License, write to the
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+* Boston, MA 02110-1301, USA.
 **
 */
 
@@ -37,9 +37,8 @@ class Table;
 /**
  * This class hold a cell.
  */
-class Cell: public Format
+class Cell : public Format
 {
-
     /* USEFUL DATA */
     long _row;
     long _col;
@@ -47,7 +46,6 @@ class Cell: public Format
     QString _textDataType;
     QString _result;
     QString _resultDataType;
-
 
 public:
     /**
@@ -60,7 +58,8 @@ public:
      */
     Cell();
 
-    Cell(long row, long col) {
+    Cell(long row, long col)
+    {
         _row = row;
         _col = col;
     }
@@ -75,56 +74,66 @@ public:
 
     /* ==== getters ==== */
 
-    long     getRow() const {
+    long getRow() const
+    {
         return _row;
     }
-    long     getCol() const {
+    long getCol() const
+    {
         return _col;
     }
-    QString  getText() const {
+    QString getText() const
+    {
         return _text;
     }
-    QString  getTextDataType() const {
+    QString getTextDataType() const
+    {
         return _textDataType;
     }
-    QString  getResult() const {
+    QString getResult() const
+    {
         return _result;
     }
-    QString  getResultDataType() const {
+    QString getResultDataType() const
+    {
         return _resultDataType;
     }
 
     /* ==== setters ==== */
-    void setRow(int r) {
+    void setRow(int r)
+    {
         _row = r;
     }
-    void setCol(int c) {
+    void setCol(int c)
+    {
         _col = c;
     }
-    void setText(QString text) {
+    void setText(QString text)
+    {
         _text = text;
     }
-    void setTextDataType(QString dt) {
+    void setTextDataType(QString dt)
+    {
         _textDataType = dt;
     }
-    void setResult(QString result) {
+    void setResult(QString result)
+    {
         _result = result;
     }
-    void setResultDataType(QString dt) {
+    void setResultDataType(QString dt)
+    {
         _resultDataType = dt;
     }
 
     /**
      * Helpful functions
      */
-    void     analyze(const QDomNode) override;
-    void     analyzeText(const QDomNode);
-    void     analyzeResult(const QDomNode);
-    void     generate(QTextStream&, Table*);
+    void analyze(const QDomNode) override;
+    void analyzeText(const QDomNode);
+    void analyzeResult(const QDomNode);
+    void generate(QTextStream &, Table *);
 
 private:
-
 };
 
 #endif /* __CALLIGRA_SHEETS_LATEX_CELL_H__ */
-

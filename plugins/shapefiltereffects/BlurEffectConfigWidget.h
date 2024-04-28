@@ -20,14 +20,14 @@ public:
     explicit BlurEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
-    bool editFilterEffect(KoFilterEffect * filterEffect) override;
+    bool editFilterEffect(KoFilterEffect *filterEffect) override;
 
 private Q_SLOTS:
     void stdDeviationChanged(double stdDeviation);
 
 private:
-    BlurEffect * m_effect;
-    QDoubleSpinBox * m_stdDeviation;
+    BlurEffect *m_effect;
+    QDoubleSpinBox *m_stdDeviation;
 };
 
 #endif // BLUREFFECTCONFIGWIDGET_H

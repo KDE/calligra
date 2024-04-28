@@ -44,7 +44,7 @@ class ConsolidateDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    ConsolidateDialog(QWidget* parent, Selection* selection);
+    ConsolidateDialog(QWidget *parent, Selection *selection);
     ~ConsolidateDialog() override;
 
     QList<Region> sourceRegions() const;

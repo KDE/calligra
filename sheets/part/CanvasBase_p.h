@@ -8,8 +8,8 @@
 #ifndef CANVASBASE_PRIVATE_H
 #define CANVASBASE_PRIVATE_H
 
-#include <QPointer>
 #include "CanvasBase.h"
+#include <QPointer>
 
 class KoShapeManager;
 class KoToolProxy;
@@ -31,7 +31,7 @@ public:
     QPointF offset;
 
     // flake
-    KoShapeManager* shapeManager;
+    KoShapeManager *shapeManager;
     QPointer<KoToolProxy> toolProxy;
 };
 

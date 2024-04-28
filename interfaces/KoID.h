@@ -9,9 +9,9 @@
 #ifndef _KO_ID_H_
 #define _KO_ID_H_
 
-#include <QString>
-#include <QMetaType>
 #include <QDebug>
+#include <QMetaType>
+#include <QString>
 
 #include <KLocalizedString>
 
@@ -22,20 +22,26 @@
 class KoID
 {
 public:
-    KoID() : m_id(), m_name() {}
+    KoID()
+        : m_id()
+        , m_name()
+    {
+    }
 
     /**
      * Construct a KoID with the given id, and name, id is the untranslated
      * official name of the id, name should be translatable as it will be used
      * in the UI.
-     * 
+     *
      * @code
      * KoID("id", i18n("name"))
      * @endcode
      */
-    explicit KoID(const QString & id, const QString & name = QString())
-            : m_id(id),
-            m_name(name) {}
+    explicit KoID(const QString &id, const QString &name = QString())
+        : m_id(id)
+        , m_name(name)
+    {
+    }
 
     /**
      * Use this constructor for static KoID. as KoID("id", ki18n("name"));
@@ -43,10 +49,11 @@ public:
      * important because static objects are constructed before translations
      * are initialized.
      */
-    explicit KoID(const QString & id, const KLocalizedString& name )
-            : m_id(id),
-            m_localizedString(name) {}
-
+    explicit KoID(const QString &id, const KLocalizedString &name)
+        : m_id(id)
+        , m_localizedString(name)
+    {
+    }
 
     KoID(const KoID &rhs)
     {
@@ -60,11 +67,13 @@ public:
         return *this;
     }
 
-    QString id() const {
+    QString id() const
+    {
         return m_id;
     }
 
-    QString name() const {
+    QString name() const
+    {
         if (m_name.isEmpty() && !m_localizedString.isEmpty()) {
             m_name = m_localizedString.toString();
         }
@@ -77,11 +86,9 @@ public:
     friend inline bool operator>(const KoID &, const KoID &);
 
 private:
-
     QString m_id;
     mutable QString m_name;
     KLocalizedString m_localizedString;
-
 };
 
 Q_DECLARE_METATYPE(KoID)
@@ -96,12 +103,10 @@ inline bool operator!=(const KoID &v1, const KoID &v2)
     return v1.m_id != v2.m_id;
 }
 
-
 inline bool operator<(const KoID &v1, const KoID &v2)
 {
     return v1.m_id < v2.m_id;
 }
-
 
 inline bool operator>(const KoID &v1, const KoID &v2)
 {
@@ -114,6 +119,5 @@ inline QDebug operator<<(QDebug dbg, const KoID &id)
 
     return dbg.space();
 }
-
 
 #endif

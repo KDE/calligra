@@ -7,19 +7,22 @@
 
 #include "KoShapeSizeCommand.h"
 
-#include <KoShape.h>
 #include <KLocalizedString>
+#include <KoShape.h>
 
 class Q_DECL_HIDDEN KoShapeSizeCommand::Private
 {
 public:
-    QList<KoShape*> shapes;
+    QList<KoShape *> shapes;
     QVector<QSizeF> previousSizes, newSizes;
 };
 
-KoShapeSizeCommand::KoShapeSizeCommand(const QList<KoShape*> &shapes, const QVector<QSizeF> &previousSizes, const QVector<QSizeF> &newSizes, KUndo2Command *parent)
-        : KUndo2Command(parent),
-        d(new Private())
+KoShapeSizeCommand::KoShapeSizeCommand(const QList<KoShape *> &shapes,
+                                       const QVector<QSizeF> &previousSizes,
+                                       const QVector<QSizeF> &newSizes,
+                                       KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , d(new Private())
 {
     d->previousSizes = previousSizes;
     d->newSizes = newSizes;
@@ -39,7 +42,7 @@ void KoShapeSizeCommand::redo()
 {
     KUndo2Command::redo();
     int i = 0;
-    foreach(KoShape *shape, d->shapes) {
+    foreach (KoShape *shape, d->shapes) {
         shape->update();
         shape->setSize(d->newSizes[i++]);
         shape->update();
@@ -50,7 +53,7 @@ void KoShapeSizeCommand::undo()
 {
     KUndo2Command::undo();
     int i = 0;
-    foreach(KoShape *shape, d->shapes) {
+    foreach (KoShape *shape, d->shapes) {
         shape->update();
         shape->setSize(d->previousSizes[i++]);
         shape->update();

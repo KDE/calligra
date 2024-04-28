@@ -14,21 +14,11 @@
 
 #include <KLocalizedString>
 #include <OdfDebug.h>
-#include <QtGlobal>
 #include <QLocale>
+#include <QtGlobal>
 
 // ensure the same order as in KoUnit::Unit
-static const char* const unitNameList[KoUnit::TypeCount] =
-{
-    "mm",
-    "pt",
-    "in",
-    "cm",
-    "dm",
-    "pi",
-    "cc",
-    "px"
-};
+static const char *const unitNameList[KoUnit::TypeCount] = {"mm", "pt", "in", "cm", "dm", "pi", "cc", "px"};
 
 QString KoUnit::unitDescription(KoUnit::Type type)
 {
@@ -55,8 +45,7 @@ QString KoUnit::unitDescription(KoUnit::Type type)
 }
 
 // grouped by units which are similar
-static const KoUnit::Type typesInUi[KoUnit::TypeCount] =
-{
+static const KoUnit::Type typesInUi[KoUnit::TypeCount] = {
     KoUnit::Millimeter,
     KoUnit::Centimeter,
     KoUnit::Decimeter,
@@ -85,7 +74,7 @@ KoUnit KoUnit::fromListForUi(int index, ListOptions listOptions, qreal factor)
     if ((0 <= index) && (index < KoUnit::TypeCount)) {
         // iterate through all enums and skip the Pixel enum if needed
         for (int i = 0; i < KoUnit::TypeCount; ++i) {
-            if ((listOptions&HidePixel) && (typesInUi[i] == Pixel)) {
+            if ((listOptions & HidePixel) && (typesInUi[i] == Pixel)) {
                 ++index;
                 continue;
             }
@@ -101,7 +90,7 @@ KoUnit KoUnit::fromListForUi(int index, ListOptions listOptions, qreal factor)
 
 int KoUnit::indexInListForUi(ListOptions listOptions) const
 {
-    if ((listOptions&HidePixel) && (m_type == Pixel)) {
+    if ((listOptions & HidePixel) && (m_type == Pixel)) {
         return -1;
     }
 
@@ -109,7 +98,7 @@ int KoUnit::indexInListForUi(ListOptions listOptions) const
 
     int skipped = 0;
     for (int i = 0; i < KoUnit::TypeCount; ++i) {
-        if ((listOptions&HidePixel) && (typesInUi[i] == Pixel)) {
+        if ((listOptions & HidePixel) && (typesInUi[i] == Pixel)) {
             ++skipped;
             continue;
         }
@@ -201,7 +190,7 @@ qreal KoUnit::fromUserValue(const QString &value, bool *ok) const
     return fromUserValue(QLocale().toDouble(value, ok));
 }
 
-qreal KoUnit::parseValue(const QString& _value, qreal defaultVal)
+qreal KoUnit::parseValue(const QString &_value, qreal defaultVal)
 {
     if (_value.isEmpty())
         return defaultVal;
@@ -317,7 +306,6 @@ qreal KoUnit::convertFromUnitToUnit(const qreal value, const KoUnit &fromUnit, c
     default:
         return pt;
     }
-
 }
 
 QString KoUnit::symbol() const
@@ -325,7 +313,7 @@ QString KoUnit::symbol() const
     return QLatin1String(unitNameList[m_type]);
 }
 
-qreal KoUnit::parseAngle(const QString& _value, qreal defaultVal)
+qreal KoUnit::parseAngle(const QString &_value, qreal defaultVal)
 {
     if (_value.isEmpty())
         return defaultVal;
@@ -379,6 +367,5 @@ QDebug operator<<(QDebug debug, const KoUnit &unit)
     Q_UNUSED(unit);
 #endif
     return debug.space();
-
 }
 #endif

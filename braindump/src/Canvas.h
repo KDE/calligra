@@ -21,8 +21,8 @@
 #ifndef _CANVAS_H
 #define _CANVAS_H
 
-#include <QWidget>
 #include <QList>
+#include <QWidget>
 
 #include <KoCanvasBase.h>
 
@@ -35,38 +35,43 @@ class Canvas : public QWidget, public KoCanvasBase
 {
     Q_OBJECT
 public:
-    explicit Canvas(View * view, RootSection * doc, Section* currentSection);
+    explicit Canvas(View *view, RootSection *doc, Section *currentSection);
     ~Canvas();
 
     /// Returns pointer to the KoPADocument
-    RootSection* rootSection() const {
+    RootSection *rootSection() const
+    {
         return m_doc;
     }
 
     /// reimplemented method
     virtual void addCommand(KUndo2Command *command);
     /// reimplemented method
-    virtual KoShapeManager * shapeManager() const;
+    virtual KoShapeManager *shapeManager() const;
     /// reimplemented method
-    virtual void updateCanvas(const QRectF& rc);
+    virtual void updateCanvas(const QRectF &rc);
     /// reimplemented method
     virtual void updateInputMethodInfo();
 
-    KoToolProxy * toolProxy() const {
+    KoToolProxy *toolProxy() const
+    {
         return m_toolProxy;
     }
     KoViewConverter *viewConverter() const;
-    QWidget* canvasWidget() {
+    QWidget *canvasWidget()
+    {
         return this;
     }
-    const QWidget* canvasWidget() const {
+    const QWidget *canvasWidget() const
+    {
         return this;
     }
     KoUnit unit() const;
-    const QPoint & documentOffset() const;
+    const QPoint &documentOffset() const;
     QPoint documentOrigin() const;
 
-    View* koPAView() const {
+    View *koPAView() const
+    {
         return m_view;
     }
 
@@ -82,24 +87,24 @@ public Q_SLOTS:
     void setDocumentOffset(const QPoint &offset);
 
 protected:
-    virtual void focusInEvent(QFocusEvent * event);
+    virtual void focusInEvent(QFocusEvent *event);
 
 Q_SIGNALS:
-    void documentRect(const QRectF&);
+    void documentRect(const QRectF &);
     void canvasReceivedFocus();
 
     /**
      * Emitted when the entire controller size changes
      * @param size the size in widget pixels.
      */
-    void sizeChanged(const QSize & size);
+    void sizeChanged(const QSize &size);
 
     /// Emitted when updateCanvas has been called.
     void canvasUpdated();
 
 protected:
     /// reimplemented method from superclass
-    void paintEvent(QPaintEvent* event);
+    void paintEvent(QPaintEvent *event);
     /// reimplemented method from superclass
     void tabletEvent(QTabletEvent *event);
     /// reimplemented method from superclass
@@ -115,16 +120,16 @@ protected:
     /// reimplemented method from superclass
     void keyReleaseEvent(QKeyEvent *event);
     /// reimplemented method from superclass
-    void wheelEvent(QWheelEvent * event);
+    void wheelEvent(QWheelEvent *event);
     /// reimplemented method from superclass
-    void closeEvent(QCloseEvent * event);
+    void closeEvent(QCloseEvent *event);
     /// reimplemented method from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
     /// reimplemented method from superclass
-    virtual void resizeEvent(QResizeEvent * event);
+    virtual void resizeEvent(QResizeEvent *event);
 
 private:
     void updateOffset();
@@ -133,25 +138,25 @@ private:
      * @param globalPos global position to show the menu at.
      * @param actionList action list to be inserted into the menu
      */
-    void showContextMenu(const QPoint& globalPos, const QList<QAction*>& actionList);
+    void showContextMenu(const QPoint &globalPos, const QList<QAction *> &actionList);
     /// Sets the canvas background color to the given color
     void setBackgroundColor(const QColor &color);
 
-    QPoint widgetToView(const QPoint& p) const;
-    QRect widgetToView(const QRect& r) const;
-    QPoint viewToWidget(const QPoint& p) const;
-    QRect viewToWidget(const QRect& r) const;
+    QPoint widgetToView(const QPoint &p) const;
+    QRect widgetToView(const QRect &r) const;
+    QPoint viewToWidget(const QPoint &p) const;
+    QRect viewToWidget(const QRect &r) const;
+
 private:
     QPoint m_origin;
-    View * m_view;
-    RootSection* m_doc;
-    KoShapeManager * m_shapeManager;
-    KoToolProxy * m_toolProxy;
+    View *m_view;
+    RootSection *m_doc;
+    KoShapeManager *m_shapeManager;
+    KoToolProxy *m_toolProxy;
     QPoint m_documentOffset;
     QPoint m_originalOffset;
     QRectF m_oldDocumentRect;
     QRect m_oldViewDocumentRect;
-
 };
 
 #endif /* KOPACANVAS_H */

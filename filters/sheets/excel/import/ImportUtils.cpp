@@ -12,7 +12,8 @@
 #include <NumberFormatParser.h>
 #include <QRegularExpression>
 
-namespace XlsUtils {
+namespace XlsUtils
+{
 
 Q_LOGGING_CATEGORY(lcExcelImport, "calligra.filter.xls2ods")
 
@@ -51,14 +52,15 @@ QString extractLocale(QString &time)
     return locale;
 }
 
-bool isPercentageFormat(const QString& valueFormat)
+bool isPercentageFormat(const QString &valueFormat)
 {
     int length = valueFormat.length();
-    if (length < 1) return false;
+    if (length < 1)
+        return false;
     return valueFormat[length - 1] == QChar('%');
 }
 
-bool isTimeFormat(const QString& valueFormat)
+bool isTimeFormat(const QString &valueFormat)
 {
     QString vf = valueFormat;
     QString locale = extractLocale(vf);
@@ -71,26 +73,26 @@ bool isTimeFormat(const QString& valueFormat)
     return vf.indexOf(ex) >= 0;
 }
 
-bool isFractionFormat(const QString& valueFormat)
+bool isFractionFormat(const QString &valueFormat)
 {
     QRegularExpression ex("^#[?]+/[0-9?]+$");
     QString vf = removeEscaped(valueFormat);
     return vf.indexOf(ex) >= 0;
 }
 
-bool isDateFormat(const QString& valueFormat)
+bool isDateFormat(const QString &valueFormat)
 {
     return NumberFormatParser::isDateFormat(valueFormat);
 }
 
-
-
-CellFormatKey::CellFormatKey(const Swinder::Format* format, const QString& formula)
-    : format(format), isGeneral(format->valueFormat() == "General"), decimalCount(-1)
+CellFormatKey::CellFormatKey(const Swinder::Format *format, const QString &formula)
+    : format(format)
+    , isGeneral(format->valueFormat() == "General")
+    , decimalCount(-1)
 {
     if (!isGeneral) {
         if (formula.startsWith(QLatin1String("msoxl:="))) { // special cases
-            QRegularExpression roundRegExp( "^msoxl:=ROUND[A-Z]*\\(.*;[\\s]*([0-9]+)[\\s]*\\)$" );
+            QRegularExpression roundRegExp("^msoxl:=ROUND[A-Z]*\\(.*;[\\s]*([0-9]+)[\\s]*\\)$");
             QRegularExpressionMatch match;
             if (formula.indexOf(roundRegExp, 0, &match) >= 0) {
                 bool ok = false;
@@ -105,7 +107,8 @@ CellFormatKey::CellFormatKey(const Swinder::Format* format, const QString& formu
     }
 }
 
-bool CellFormatKey::operator==(const CellFormatKey& b) const {
+bool CellFormatKey::operator==(const CellFormatKey &b) const
+{
     return format == b.format && isGeneral == b.isGeneral && decimalCount == b.decimalCount;
 }
 

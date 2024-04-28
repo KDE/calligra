@@ -6,8 +6,8 @@
 
 #include "RightToLeftPaintingStrategy.h"
 
-#include <QPainter>
 #include <QGraphicsWidget>
+#include <QPainter>
 #include <QWidget>
 
 #include <KoCanvasBase.h>
@@ -22,10 +22,9 @@ public:
     KoCanvasBase *canvas;
 };
 
-
 RightToLeftPaintingStrategy::RightToLeftPaintingStrategy(KoShapeManager *shapeManager, KoCanvasBase *canvas)
-        : KoShapeManagerPaintingStrategy(shapeManager)
-        , d(new Private)
+    : KoShapeManagerPaintingStrategy(shapeManager)
+    , d(new Private)
 {
     d->canvas = canvas;
 }
@@ -35,15 +34,15 @@ RightToLeftPaintingStrategy::~RightToLeftPaintingStrategy()
     delete d;
 }
 
-void RightToLeftPaintingStrategy::paint(KoShape *shape, QPainter &painter,
-                                        const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void RightToLeftPaintingStrategy::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     painter.save();
-    const double width = d->canvas->canvasWidget() ? d->canvas->canvasWidget()->width() :
-                         dynamic_cast<QGraphicsWidget*>(d->canvas->canvasItem()) ? dynamic_cast<QGraphicsWidget*>(d->canvas->canvasItem())->size().width() : 0;
-//    const double offsetX = d->canvas->canvasController()->canvasOffsetX();
-    painter.translate(/*-2 * offsetX*/ + width, 0);
-//     painter.scale(-1, 1);
+    const double width = d->canvas->canvasWidget()                 ? d->canvas->canvasWidget()->width()
+        : dynamic_cast<QGraphicsWidget *>(d->canvas->canvasItem()) ? dynamic_cast<QGraphicsWidget *>(d->canvas->canvasItem())->size().width()
+                                                                   : 0;
+    //    const double offsetX = d->canvas->canvasController()->canvasOffsetX();
+    painter.translate(/*-2 * offsetX*/ +width, 0);
+    //     painter.scale(-1, 1);
 
     painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
 
@@ -51,7 +50,7 @@ void RightToLeftPaintingStrategy::paint(KoShape *shape, QPainter &painter,
         shapeManager()->paintShape(shape, painter, converter, paintContext);
     }
 
-    painter.restore();  // for the matrix
+    painter.restore(); // for the matrix
 }
 
 void RightToLeftPaintingStrategy::adapt(KoShape *shape, QRectF &rect)
@@ -64,5 +63,5 @@ void RightToLeftPaintingStrategy::adapt(KoShape *shape, QRectF &rect)
         const qreal right = width - rect.left();
         rect.setLeft(left);
         rect.setRight(right);*/
-//     rect.translate(/*-2 * offsetX +*/ width, 0);
+    //     rect.translate(/*-2 * offsetX +*/ width, 0);
 }

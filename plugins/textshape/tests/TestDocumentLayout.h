@@ -14,9 +14,9 @@
 #include "../TextShapeLayout.h"
 #include "MockTextShape.h"
 
-#include <KoTextShapeData.h>
-#include <KoTextDocumentLayout.h>
 #include <KoShape.h>
+#include <KoTextDocumentLayout.h>
+#include <KoTextShapeData.h>
 
 class KoStyleManager;
 class QTextDocument;
@@ -27,7 +27,9 @@ class TestDocumentLayout : public QObject
 {
     Q_OBJECT
 public:
-    TestDocumentLayout() {}
+    TestDocumentLayout()
+    {
+    }
 
 private Q_SLOTS:
     void initTestCase();
@@ -49,7 +51,7 @@ private Q_SLOTS:
     void testShapePosition();
     void testShapePosition2();
 
-// Block styles
+    // Block styles
     /// Test top, left, right and bottom margins of paragraphs.
     void testMargins();
     void testMultipageMargins();
@@ -60,7 +62,7 @@ private Q_SLOTS:
     void testPageBreak2();
     void testNonBreakableLines();
 
-// Lists
+    // Lists
     void testBasicList();
     void testNumberedList();
     void testInterruptedLists(); // consecutiveNumbering
@@ -77,9 +79,9 @@ private Q_SLOTS:
     void testCenteredItems();
     void testMultiLevel();
 
-// relativeBulletSize
+    // relativeBulletSize
 
-    //etc
+    // etc
     void testParagOffset();
     void testParagraphBorders();
     void testBorderData();

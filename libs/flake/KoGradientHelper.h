@@ -7,8 +7,8 @@
 #ifndef KO_GRADIENT_HELPER_H
 #define KO_GRADIENT_HELPER_H
 
-#include <flake_export.h>
 #include <QBrush>
+#include <flake_export.h>
 
 class QGradient;
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * SPDX-FileCopyrightText: 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
@@ -9,8 +9,8 @@
 #include "ConnectionTool.h"
 #include <QAction>
 
-ConnectionPointWidget::ConnectionPointWidget(ConnectionTool *tool, QWidget * parent)
-    :QWidget(parent)
+ConnectionPointWidget::ConnectionPointWidget(ConnectionTool *tool, QWidget *parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
     widget.alignLeft->setDefaultAction(tool->action("align-left"));

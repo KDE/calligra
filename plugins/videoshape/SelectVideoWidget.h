@@ -24,10 +24,10 @@ public:
 
     void accept();
     void cancel();
-private:
 
+private:
     KFileWidget *m_fileWidget;
     QCheckBox *m_saveEmbedded;
 };
 
-#endif //SELECTVIDEOWIDGET_H
+#endif // SELECTVIDEOWIDGET_H

@@ -1,9 +1,9 @@
 #include "TestClipToPage.h"
 
-#include <KWDocument.h>
 #include <KWCanvas.h>
-#include <MockShapes.h>
+#include <KWDocument.h>
 #include <KWPage.h>
+#include <MockShapes.h>
 
 #include "MockPart.h"
 

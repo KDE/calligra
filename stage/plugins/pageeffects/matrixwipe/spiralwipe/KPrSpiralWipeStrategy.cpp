@@ -11,37 +11,50 @@ static int getSubType(int firstLeg, bool clockwise, bool reverse)
 {
     if (!reverse) {
         switch (firstLeg) {
-            case 0: return clockwise ? KPrSpiralWipeEffectFactory::ClockwiseTopLeftIn : KPrSpiralWipeEffectFactory::CounterClockwiseTopLeftIn;
-            case 1: return clockwise ? KPrSpiralWipeEffectFactory::ClockwiseTopRightIn : KPrSpiralWipeEffectFactory::CounterClockwiseBottomLeftIn;
-            case 2: return clockwise ? KPrSpiralWipeEffectFactory::ClockwiseBottomRightIn : KPrSpiralWipeEffectFactory::CounterClockwiseBottomRightIn;
-            case 3: return clockwise ? KPrSpiralWipeEffectFactory::ClockwiseBottomLeftIn : KPrSpiralWipeEffectFactory::CounterClockwiseTopRightIn;
+        case 0:
+            return clockwise ? KPrSpiralWipeEffectFactory::ClockwiseTopLeftIn : KPrSpiralWipeEffectFactory::CounterClockwiseTopLeftIn;
+        case 1:
+            return clockwise ? KPrSpiralWipeEffectFactory::ClockwiseTopRightIn : KPrSpiralWipeEffectFactory::CounterClockwiseBottomLeftIn;
+        case 2:
+            return clockwise ? KPrSpiralWipeEffectFactory::ClockwiseBottomRightIn : KPrSpiralWipeEffectFactory::CounterClockwiseBottomRightIn;
+        case 3:
+            return clockwise ? KPrSpiralWipeEffectFactory::ClockwiseBottomLeftIn : KPrSpiralWipeEffectFactory::CounterClockwiseTopRightIn;
         }
     } else {
         switch (firstLeg) {
-            case 0: return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseTopLeftOut : KPrSpiralWipeEffectFactory::CounterClockwiseTopLeftOut;
-            case 1: return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseTopRightOut : KPrSpiralWipeEffectFactory::CounterClockwiseBottomLeftOut;
-            case 2: return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseBottomRightOut : KPrSpiralWipeEffectFactory::CounterClockwiseBottomRightOut;
-            case 3: return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseBottomLeftOut : KPrSpiralWipeEffectFactory::CounterClockwiseTopRightOut;
+        case 0:
+            return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseTopLeftOut : KPrSpiralWipeEffectFactory::CounterClockwiseTopLeftOut;
+        case 1:
+            return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseTopRightOut : KPrSpiralWipeEffectFactory::CounterClockwiseBottomLeftOut;
+        case 2:
+            return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseBottomRightOut : KPrSpiralWipeEffectFactory::CounterClockwiseBottomRightOut;
+        case 3:
+            return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseBottomLeftOut : KPrSpiralWipeEffectFactory::CounterClockwiseTopRightOut;
         }
     }
     // not reached
     return KPrSpiralWipeEffectFactory::ClockwiseTopLeftIn;
 }
 
-static const char * getSmilSubType(int firstLeg, bool clockwise)
+static const char *getSmilSubType(int firstLeg, bool clockwise)
 {
     switch (firstLeg) {
-        case 0: return clockwise ? "topLeftClockwise" : "topLeftCounterClockwise";
-        case 1: return clockwise ? "topRightClockwise" : "bottomLeftCounterClockwise";
-        case 2: return clockwise ? "bottomRightClockwise" : "bottomRightCounterClockwise";
-        default:
-        case 3: return clockwise ? "bottomLeftClockwise" : "topRightCounterClockwise";
+    case 0:
+        return clockwise ? "topLeftClockwise" : "topLeftCounterClockwise";
+    case 1:
+        return clockwise ? "topRightClockwise" : "bottomLeftCounterClockwise";
+    case 2:
+        return clockwise ? "bottomRightClockwise" : "bottomRightCounterClockwise";
+    default:
+    case 3:
+        return clockwise ? "bottomLeftClockwise" : "topRightCounterClockwise";
     }
 }
 
 KPrSpiralWipeStrategy::KPrSpiralWipeStrategy(int firstLeg, bool clockwise, bool reverse)
-    : KPrMatrixWipeStrategy( getSubType(firstLeg, clockwise, reverse), "spiralWipe", getSmilSubType(firstLeg, clockwise), reverse ),
-    m_firstLeg(firstLeg), m_clockwise(clockwise)
+    : KPrMatrixWipeStrategy(getSubType(firstLeg, clockwise, reverse), "spiralWipe", getSmilSubType(firstLeg, clockwise), reverse)
+    , m_firstLeg(firstLeg)
+    , m_clockwise(clockwise)
 {
 }
 
@@ -54,7 +67,8 @@ int KPrSpiralWipeStrategy::squareIndex(int x, int y, int columns, int rows)
     int curRing = qMin(qMin(x, y), qMin(columns - x - 1, rows - y - 1));
     int maxRingSize = (columns + rows - 2) * 2;
     int passed = 0;
-    if (curRing > 0) passed = curRing * (maxRingSize + maxRingSize - (curRing-1) * 8) / 2;
+    if (curRing > 0)
+        passed = curRing * (maxRingSize + maxRingSize - (curRing - 1) * 8) / 2;
     int leg = 0;
     if (m_clockwise) {
         if (y == curRing) {
@@ -74,11 +88,16 @@ int KPrSpiralWipeStrategy::squareIndex(int x, int y, int columns, int rows)
                 leg = 0;
             }
         }
-        if (leg < m_firstLeg) leg += 4;
-        if (leg > m_firstLeg && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? rows : columns) - 2*curRing - 1;
-        if (leg > m_firstLeg+1 && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? columns : rows) - 2*curRing - 1;
-        if (leg > m_firstLeg+2 && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? rows : columns) - 2*curRing - 1;
-        if (leg > 3) leg -= 4;
+        if (leg < m_firstLeg)
+            leg += 4;
+        if (leg > m_firstLeg && leg < m_firstLeg + 4)
+            passed += (m_firstLeg & 1 ? rows : columns) - 2 * curRing - 1;
+        if (leg > m_firstLeg + 1 && leg < m_firstLeg + 4)
+            passed += (m_firstLeg & 1 ? columns : rows) - 2 * curRing - 1;
+        if (leg > m_firstLeg + 2 && leg < m_firstLeg + 4)
+            passed += (m_firstLeg & 1 ? rows : columns) - 2 * curRing - 1;
+        if (leg > 3)
+            leg -= 4;
 
         if (leg == 0) {
             passed += x - curRing;
@@ -107,11 +126,16 @@ int KPrSpiralWipeStrategy::squareIndex(int x, int y, int columns, int rows)
                 leg = 1;
             }
         }
-        if (leg < m_firstLeg) leg += 4;
-        if (leg > m_firstLeg && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? columns : rows) - 2*curRing - 1;
-        if (leg > m_firstLeg+1 && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? rows : columns) - 2*curRing - 1;
-        if (leg > m_firstLeg+2 && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? columns : rows) - 2*curRing - 1;
-        if (leg > 3) leg -= 4;
+        if (leg < m_firstLeg)
+            leg += 4;
+        if (leg > m_firstLeg && leg < m_firstLeg + 4)
+            passed += (m_firstLeg & 1 ? columns : rows) - 2 * curRing - 1;
+        if (leg > m_firstLeg + 1 && leg < m_firstLeg + 4)
+            passed += (m_firstLeg & 1 ? rows : columns) - 2 * curRing - 1;
+        if (leg > m_firstLeg + 2 && leg < m_firstLeg + 4)
+            passed += (m_firstLeg & 1 ? columns : rows) - 2 * curRing - 1;
+        if (leg > 3)
+            leg -= 4;
 
         if (leg == 0) {
             passed += y - curRing;
@@ -130,4 +154,3 @@ int KPrSpiralWipeStrategy::maxIndex(int columns, int rows)
 {
     return columns * rows;
 }
-

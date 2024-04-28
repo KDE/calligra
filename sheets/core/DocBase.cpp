@@ -26,21 +26,23 @@
 #include <KoCanvasResourceIdentities.h>
 #include <KoDocumentResourceManager.h>
 
-#include "engine/ElapsedTime_p.h"
-#include "engine/CalculationSettings.h"
 #include "Map.h"
+#include "engine/CalculationSettings.h"
+#include "engine/ElapsedTime_p.h"
 
-#include "odf/SheetsOdf.h"
 #include "ksp/SheetsKsp.h"
+#include "odf/SheetsOdf.h"
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
 class Q_DECL_HIDDEN DocBase::Private
 {
 public:
     Map *map;
-    static QList<DocBase*> s_docs;
+    static QList<DocBase *> s_docs;
     static int s_docId;
 
     // document properties
@@ -51,10 +53,9 @@ public:
 } // namespace Sheets
 } // namespace Calligra
 
-
 using namespace Calligra::Sheets;
 
-QList<DocBase*> DocBase::Private::s_docs;
+QList<DocBase *> DocBase::Private::s_docs;
 int DocBase::Private::s_docId = 0;
 
 Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
@@ -69,7 +70,7 @@ DocBase::DocBase(KoPart *part)
 
     d->resourceManager->setUndoStack(undoStack());
     QVariant variant;
-    variant.setValue<void*>(d->map->sheetAccessModel());
+    variant.setValue<void *>(d->map->sheetAccessModel());
     d->resourceManager->setResource(::Sheets::CanvasResource::AccessModel, variant);
 
     // Document Url for FILENAME function and page header/footer.
@@ -85,7 +86,7 @@ DocBase::~DocBase()
     delete d;
 }
 
-QList<DocBase*> DocBase::documents()
+QList<DocBase *> DocBase::documents()
 {
     return Private::s_docs;
 }
@@ -101,7 +102,7 @@ Map *DocBase::map() const
     return d->map;
 }
 
-KoDocumentResourceManager* DocBase::resourceManager() const
+KoDocumentResourceManager *DocBase::resourceManager() const
 {
     return d->resourceManager;
 }
@@ -110,11 +111,13 @@ void DocBase::initConfig()
 {
 }
 
-QStringList DocBase::spellListIgnoreAll() const {
+QStringList DocBase::spellListIgnoreAll() const
+{
     return d->spellListIgnoreAll;
 }
 
-void DocBase::setSpellListIgnoreAll(const QStringList &list) {
+void DocBase::setSpellListIgnoreAll(const QStringList &list)
+{
     d->spellListIgnoreAll = list;
 }
 
@@ -124,7 +127,7 @@ bool DocBase::saveOdf(SavingContext &documentContext)
     return Odf::saveDocument(this, documentContext);
 }
 
-bool DocBase::loadOdf(KoOdfReadStore & odfStore)
+bool DocBase::loadOdf(KoOdfReadStore &odfStore)
 {
     return Odf::loadDocument(this, odfStore);
 }
@@ -135,11 +138,10 @@ void DocBase::paintContent(QPainter &, const QRect &)
 
 bool DocBase::loadXML(const KoXmlDocument &doc, KoStore *)
 {
-    return Ksp::loadDoc (this, doc);
+    return Ksp::loadDoc(this, doc);
 }
 
 QDomDocument DocBase::saveXML()
 {
     return Ksp::saveDoc(this);
 }
-

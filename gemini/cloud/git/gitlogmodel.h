@@ -15,14 +15,7 @@ class GitLogModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(QString repoDir READ repoDir WRITE setRepoDir NOTIFY repoDirChanged)
 public:
-    enum CustomRoles {
-        AuthorNameRole = Qt::UserRole + 1,
-        AuthorEmailRole,
-        TimeRole,
-        OIDRole,
-        ShortMessageRole,
-        MessageRole
-    };
+    enum CustomRoles { AuthorNameRole = Qt::UserRole + 1, AuthorEmailRole, TimeRole, OIDRole, ShortMessageRole, MessageRole };
 
     explicit GitLogModel(QObject *parent = 0);
     virtual ~GitLogModel();
@@ -33,7 +26,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     QString repoDir() const;
-    void setRepoDir(const QString& repoDir);
+    void setRepoDir(const QString &repoDir);
 
 public Q_SLOTS:
     void refreshLog();
@@ -43,7 +36,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // CALLIGRAGEMINI_GIT_GITLOGMODEL_H

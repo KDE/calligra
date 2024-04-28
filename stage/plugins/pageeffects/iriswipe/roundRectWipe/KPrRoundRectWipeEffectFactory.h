@@ -14,12 +14,7 @@ public:
     ~KPrRoundRectWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType {
-        Horizontal,
-        HorizontalReverse,
-        Vertical,
-        VerticalReverse
-    };
+    enum SubType { Horizontal, HorizontalReverse, Vertical, VerticalReverse };
 };
 
 #endif /* KPRROUNDRECTWIPEEFFECTFACTORY_H */

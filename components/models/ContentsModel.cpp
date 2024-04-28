@@ -9,8 +9,8 @@
 
 #include "ContentsModel.h"
 
-#include <QSize>
 #include <QGraphicsWidget>
+#include <QSize>
 
 #include <KoCanvasBase.h>
 
@@ -24,17 +24,23 @@ using namespace Calligra::Components;
 class ContentsModel::Private
 {
 public:
-    Private() : useToC{false}, impl{nullptr}, document{nullptr}, thumbnailSize{128, 128}
-    { }
+    Private()
+        : useToC{false}
+        , impl{nullptr}
+        , document{nullptr}
+        , thumbnailSize{128, 128}
+    {
+    }
 
     bool useToC;
-    ContentsModelImpl* impl;
-    Document* document;
+    ContentsModelImpl *impl;
+    Document *document;
     QSize thumbnailSize;
 };
 
-ContentsModel::ContentsModel(QObject* parent)
-    : QAbstractListModel{parent}, d{new Private}
+ContentsModel::ContentsModel(QObject *parent)
+    : QAbstractListModel{parent}
+    , d{new Private}
 {
 }
 
@@ -43,33 +49,33 @@ ContentsModel::~ContentsModel()
     delete d;
 }
 
-QVariant ContentsModel::data(const QModelIndex& index, int role) const
+QVariant ContentsModel::data(const QModelIndex &index, int role) const
 {
-    if(!d->impl || !index.isValid())
+    if (!d->impl || !index.isValid())
         return QVariant();
 
     return d->impl->data(index.row(), static_cast<Role>(role));
 }
 
-int ContentsModel::rowCount(const QModelIndex& parent) const
+int ContentsModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    if(d->impl) {
+    if (d->impl) {
         return d->impl->rowCount();
     }
 
     return 0;
 }
 
-Document* ContentsModel::document() const
+Document *ContentsModel::document() const
 {
     return d->document;
 }
 
-void ContentsModel::setDocument(Document* newDocument)
+void ContentsModel::setDocument(Document *newDocument)
 {
-    if(newDocument != d->document) {
-        if(d->document) {
+    if (newDocument != d->document) {
+        if (d->document) {
             disconnect(d->document, &Document::statusChanged, this, &ContentsModel::updateImpl);
         }
 
@@ -87,12 +93,12 @@ QSize ContentsModel::thumbnailSize() const
     return d->thumbnailSize;
 }
 
-void ContentsModel::setThumbnailSize(const QSize& newValue)
+void ContentsModel::setThumbnailSize(const QSize &newValue)
 {
-    if(newValue != d->thumbnailSize) {
+    if (newValue != d->thumbnailSize) {
         d->thumbnailSize = newValue;
 
-        if(d->impl) {
+        if (d->impl) {
             d->impl->setThumbnailSize(newValue);
             emit dataChanged(index(0), index(d->impl->rowCount() - 1), QVector<int>{} << ThumbnailRole);
         }
@@ -104,7 +110,7 @@ void ContentsModel::setThumbnailSize(const QSize& newValue)
 void ContentsModel::setUseToC(bool newValue)
 {
     beginResetModel();
-    if(d->impl)
+    if (d->impl)
         d->impl->setUseToC(newValue);
     emit useToCChanged();
     endResetModel();
@@ -117,10 +123,10 @@ bool ContentsModel::useToC() const
 
 QImage ContentsModel::thumbnail(int index, int width) const
 {
-    if(!d->impl)
+    if (!d->impl)
         return QImage{};
 
-    if(index < 0 || index >= d->impl->rowCount())
+    if (index < 0 || index >= d->impl->rowCount())
         return QImage{};
 
     return d->impl->thumbnail(index, width);
@@ -132,26 +138,26 @@ void ContentsModel::updateImpl()
     delete d->impl;
     d->impl = nullptr;
 
-    if(d->document && d->document->status() == DocumentStatus::Loaded) {
-        switch(d->document->documentType()) {
-            case DocumentType::TextDocument: {
-                auto textImpl = new TextContentsModelImpl{d->document->koDocument(), dynamic_cast<KoCanvasBase*>(d->document->canvas())};
-                d->impl = textImpl;
-                connect(textImpl, &TextContentsModelImpl::listContentsCompleted, this, &ContentsModel::reset);
-                break;
-            }
-            case DocumentType::Spreadsheet:
-                d->impl = new SpreadsheetContentsModelImpl{d->document->koDocument()};
-                break;
-            case DocumentType::Presentation:
-                d->impl = new PresentationContentsModelImpl{d->document->koDocument()};
-                break;
-            default:
-                break;
+    if (d->document && d->document->status() == DocumentStatus::Loaded) {
+        switch (d->document->documentType()) {
+        case DocumentType::TextDocument: {
+            auto textImpl = new TextContentsModelImpl{d->document->koDocument(), dynamic_cast<KoCanvasBase *>(d->document->canvas())};
+            d->impl = textImpl;
+            connect(textImpl, &TextContentsModelImpl::listContentsCompleted, this, &ContentsModel::reset);
+            break;
+        }
+        case DocumentType::Spreadsheet:
+            d->impl = new SpreadsheetContentsModelImpl{d->document->koDocument()};
+            break;
+        case DocumentType::Presentation:
+            d->impl = new PresentationContentsModelImpl{d->document->koDocument()};
+            break;
+        default:
+            break;
         }
     }
 
-    if(d->impl) {
+    if (d->impl) {
         d->impl->setThumbnailSize(d->thumbnailSize);
         d->impl->setUseToC(d->useToC);
     }

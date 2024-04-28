@@ -17,7 +17,7 @@ class KoDocumentSectionModel;
  * KoDocumentSectionModel: the graphical representation of one item in
  * a KoDocumentSectionView.
  */
-class KoDocumentSectionDelegate: public QAbstractItemDelegate
+class KoDocumentSectionDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
 
@@ -32,17 +32,16 @@ public:
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     void setEditorData(QWidget *editor, const QModelIndex &index) const override;
     void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override;
-    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& index) const override;
+    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 protected:
     bool eventFilter(QObject *object, QEvent *event) override;
-
 
 private:
     typedef KoDocumentSectionModel Model;
     typedef KoDocumentSectionView View;
     class Private;
-    Private* const d;
+    Private *const d;
 
     static QStyleOptionViewItem getOptions(const QStyleOptionViewItem &option, const QModelIndex &index);
     int thumbnailHeight(const QStyleOptionViewItem &option, const QModelIndex &index) const;

@@ -7,14 +7,15 @@
 
 #include "../MusicShape.h"
 
-#include "../core/Note.h"
 #include "../core/Chord.h"
+#include "../core/Note.h"
 #include "../core/VoiceBar.h"
 
 #include <KLocalizedString>
 
-ToggleTiedNoteCommand::ToggleTiedNoteCommand(MusicShape* shape, MusicCore::Note* note)
-    : m_shape(shape), m_note(note)
+ToggleTiedNoteCommand::ToggleTiedNoteCommand(MusicShape *shape, MusicCore::Note *note)
+    : m_shape(shape)
+    , m_note(note)
 {
     setText(kundo2_i18n("Toggle Note Tie"));
 }

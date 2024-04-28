@@ -13,8 +13,8 @@
 #include <KoShapeBasedDocumentBase.h>
 #include <KoShapeUserData.h>
 
-#include "../engine/calligra_sheets_limits.h"
 #include "../engine/SheetBase.h"
+#include "../engine/calligra_sheets_limits.h"
 
 #include "sheets_core_export.h"
 
@@ -57,23 +57,22 @@ class SheetTest;
 /**
  * A sheet contains several cells.
  */
-class CALLIGRA_SHEETS_CORE_EXPORT Sheet : public KoShapeUserData, public SheetBase, public KoShapeBasedDocumentBase,
-        public ProtectableObject
+class CALLIGRA_SHEETS_CORE_EXPORT Sheet : public KoShapeUserData, public SheetBase, public KoShapeBasedDocumentBase, public ProtectableObject
 {
     Q_OBJECT
 public:
-    enum TestType        { Text, Validity, Comment, ConditionalCellAttribute };
+    enum TestType { Text, Validity, Comment, ConditionalCellAttribute };
 
     /**
      * Creates a sheet in \p map with the name \p sheetName.
      */
-    Sheet(Map* map, const QString& sheetName);
+    Sheet(Map *map, const QString &sheetName);
 
     /**
      * Copy constructor.
      * Creates a sheet with the contents and the settings of \p other.
      */
-    Sheet(const Sheet& other);
+    Sheet(const Sheet &other);
 
     /**
      * Destructor.
@@ -83,18 +82,18 @@ public:
     /**
      * \return the full map this sheet belongs to. This is the inherited version of map().
      */
-    Map* fullMap() const;
+    Map *fullMap() const;
 
     /**
      * \return the document this sheet belongs to.
      */
-    DocBase* doc() const;
+    DocBase *doc() const;
 
     SheetModel *model() const;
 
     // KoShapeBasedDocumentBase interface
-    void addShape(KoShape* shape) override;
-    void removeShape(KoShape* shape) override;
+    void addShape(KoShape *shape) override;
+    void removeShape(KoShape *shape) override;
 
     /**
      * Deletes all shapes without emitting shapeRemoved()
@@ -106,11 +105,11 @@ public:
      * Returns the sheet's shapes.
      * \return the shapes this sheet contains
      */
-    QList<KoShape*> shapes() const;
+    QList<KoShape *> shapes() const;
 
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Methods related to sheet properties
+    // BEGIN Methods related to sheet properties
     //
 
     /**
@@ -130,7 +129,7 @@ public:
      * @see TabBar::renameTab
      * @see sheetName
      */
-    virtual bool setSheetName(const QString& name) override;
+    virtual bool setSheetName(const QString &name) override;
 
     /**
      * Returns the layout direction of the sheet.
@@ -211,66 +210,55 @@ public:
 
     struct BackgroundImageProperties {
         BackgroundImageProperties()
-        : repeat(Repeat)
-        , opacity(1.0)
-        , horizontalPosition(HorizontalCenter)
-        , verticalPosition(VerticalCenter)
-        {}
+            : repeat(Repeat)
+            , opacity(1.0)
+            , horizontalPosition(HorizontalCenter)
+            , verticalPosition(VerticalCenter)
+        {
+        }
 
-        enum Repetition {
-            NoRepeat,
-            Repeat,
-            Stretch
-        };
+        enum Repetition { NoRepeat, Repeat, Stretch };
         Repetition repeat;
 
         float opacity;
 
-        enum HorizontalPosition {
-            Left,
-            HorizontalCenter,
-            Right
-        };
+        enum HorizontalPosition { Left, HorizontalCenter, Right };
         HorizontalPosition horizontalPosition;
 
-        enum VerticalPosition {
-            Top,
-            VerticalCenter,
-            Bottom
-        };
+        enum VerticalPosition { Top, VerticalCenter, Bottom };
         VerticalPosition verticalPosition;
 
-        //TODO filterName
+        // TODO filterName
     };
 
     /**
      * Set background image for this sheet
      */
-    void setBackgroundImage( const QImage& image );
+    void setBackgroundImage(const QImage &image);
 
     /**
      * @return The QImage used as the background picture for this sheet
      */
     QImage backgroundImage() const;
 
-    void setBackgroundImageProperties( const BackgroundImageProperties& properties );
+    void setBackgroundImageProperties(const BackgroundImageProperties &properties);
 
     BackgroundImageProperties backgroundImageProperties() const;
 
     //
-    //END Methods related to sheet properties
+    // END Methods related to sheet properties
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Methods related to row formats
+    // BEGIN Methods related to row formats
     //
 
     /**
      * \ingroup ColumnRowFormat
      * \return the row format storage for this sheet.
      */
-    const RowFormatStorage* rowFormats() const;
-    RowFormatStorage* rowFormats();
+    const RowFormatStorage *rowFormats() const;
+    RowFormatStorage *rowFormats();
 
     /**
      * \ingroup ColumnRowFormat
@@ -284,21 +272,20 @@ public:
      */
     void clearRowFormat(int row);
 
-
     //
-    //END Methods related to row formats
+    // END Methods related to row formats
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Methods related to column formats
+    // BEGIN Methods related to column formats
     //
 
     /**
      * \ingroup ColumnRowFormat
      * \return the column format storage for this sheet.
      */
-    const ColFormatStorage* columnFormats() const;
-    ColFormatStorage* columnFormats();
+    const ColFormatStorage *columnFormats() const;
+    ColFormatStorage *columnFormats();
 
     /**
      * \ingroup ColumnRowFormat
@@ -312,26 +299,25 @@ public:
      */
     void clearColumnFormat(int column);
 
-
     //
-    //END Methods related to column formats
+    // END Methods related to column formats
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Methods for Storage access
+    // BEGIN Methods for Storage access
     //
 
     /**
      * \ingroup Storage
      * \return the full cell storage
      */
-    CellStorage* fullCellStorage() const;
+    CellStorage *fullCellStorage() const;
 
-    const CommentStorage* commentStorage() const;
-    const ConditionsStorage* conditionsStorage() const;
-    const FusionStorage* fusionStorage() const;
-    const LinkStorage* linkStorage() const;
-    const StyleStorage* styleStorage() const;
+    const CommentStorage *commentStorage() const;
+    const ConditionsStorage *conditionsStorage() const;
+    const FusionStorage *fusionStorage() const;
+    const LinkStorage *linkStorage() const;
+    const StyleStorage *styleStorage() const;
 
     /**
      * \ingroup Storage
@@ -342,11 +328,11 @@ public:
     QRect usedArea(bool onlyContent = false) const;
 
     //
-    //END Methods for Storage access
+    // END Methods for Storage access
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN UNSORTED METHODS !!!
+    // BEGIN UNSORTED METHODS !!!
     //
 
     /**
@@ -403,7 +389,7 @@ public:
      * \param cellRange the range of cells
      * \return the document area covered by the cells
      */
-    QRectF cellCoordinatesToDocument(const QRect& cellRange) const;
+    QRectF cellCoordinatesToDocument(const QRect &cellRange) const;
 
     /**
      * \ingroup Coordinates
@@ -411,7 +397,7 @@ public:
      * \param area the document area
      * \return the cell range covering the area
      */
-    QRect documentToCellCoordinates(const QRectF& area) const;
+    QRect documentToCellCoordinates(const QRectF &area) const;
 
     /**
      * \ingroup Coordinates
@@ -471,24 +457,24 @@ public:
     virtual bool onValidationFailed(Validity::Action action, const CellBase *cell, const QString &message, const QString &title) const override;
 
     //
-    //END UNSORTED METHODS
+    // END UNSORTED METHODS
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Methods related to manipulations of selected cells
+    // BEGIN Methods related to manipulations of selected cells
     //
 
     /**
      * \ingroup Commands
      */
-    bool areaIsEmpty(const Region& area, TestType _type = Text) ;
- 
+    bool areaIsEmpty(const Region &area, TestType _type = Text);
+
     //
-    //END Methods related to manipulations of selected cells
+    // END Methods related to manipulations of selected cells
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Methods related to column/row operations
+    // BEGIN Methods related to column/row operations
     //
 
     /**
@@ -496,28 +482,28 @@ public:
      * Helper method.
      * \see ShiftManipulator
      */
-    void insertShiftRight(const QRect& rect);
+    void insertShiftRight(const QRect &rect);
 
     /**
      * \ingroup Commands
      * Helper method.
      * \see ShiftManipulator
      */
-    void insertShiftDown(const QRect& rect);
+    void insertShiftDown(const QRect &rect);
 
     /**
      * \ingroup Commands
      * Helper method.
      * \see ShiftManipulator
      */
-    void removeShiftUp(const QRect& rect);
+    void removeShiftUp(const QRect &rect);
 
     /**
      * \ingroup Commands
      * Helper method.
      * \see ShiftManipulator
      */
-    void removeShiftLeft(const QRect& rect);
+    void removeShiftLeft(const QRect &rect);
 
     /**
      * \ingroup ColumnRowFormat
@@ -553,11 +539,11 @@ public:
     void removeRows(int row, int number);
 
     //
-    //END Methods related column/row operations
+    // END Methods related column/row operations
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN UNSORTED METHODS !!!
+    // BEGIN UNSORTED METHODS !!!
     //
 
     /**
@@ -567,20 +553,19 @@ public:
 
     void updateLocale();
 
-
     /**
      * \ingroup Page
      * Print settings.
      */
-    PrintSettings* printSettings() const;
+    PrintSettings *printSettings() const;
 
-    SheetPrint* print() const;
+    SheetPrint *print() const;
 
     /**
      * \ingroup Page
      * Sets the print settings.
      */
-    void setPrintSettings(const PrintSettings& settings, bool forcePaint = false);
+    void setPrintSettings(const PrintSettings &settings, bool forcePaint = false);
 
     /**
      * \ingroup Page
@@ -591,13 +576,13 @@ public:
     /**
      * Applies a database filter.
      */
-    void applyDatabaseFilter(const Database& database);
+    void applyDatabaseFilter(const Database &database);
 #ifndef NDEBUG
     void printDebug();
 #endif
 
     //
-    //END UNSORTED METHODS
+    // END UNSORTED METHODS
     //
     //////////////////////////////////////////////////////////////////////////
 
@@ -635,7 +620,7 @@ Q_SIGNALS:
      * Emitted, if a status \p message should be shown in the status bar
      * for \p timeout msecs.
      */
-    void statusMessage(const QString& message, int timeout) const;
+    void statusMessage(const QString &message, int timeout) const;
 
     /**
      * \ingroup Embedding
@@ -689,7 +674,6 @@ Q_SIGNALS:
     void rowsRemoved(int row, int number);
 
 protected:
-
     //
     //////////////////////////////////////////////////////////////////////////
     //
@@ -698,22 +682,21 @@ protected:
      * \ingroup Commands
      * \see areaIsEmpty()
      */
-    bool cellIsEmpty(const Cell& cell, TestType _type);
+    bool cellIsEmpty(const Cell &cell, TestType _type);
 
 private:
-
     // disable assignment operator
-    void operator=(const Sheet& other);
+    void operator=(const Sheet &other);
 
     friend class SheetTest;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets
 } // namespace Calligra
 
-Q_DECLARE_METATYPE(Calligra::Sheets::Sheet*)
+Q_DECLARE_METATYPE(Calligra::Sheets::Sheet *)
 
-#endif  // CALLIGRA_SHEETS_SHEET
+#endif // CALLIGRA_SHEETS_SHEET

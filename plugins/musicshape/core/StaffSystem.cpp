@@ -7,7 +7,8 @@
 #include "Clef.h"
 #include "Sheet.h"
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class StaffSystem::Private
 {
@@ -17,11 +18,12 @@ public:
     int firstBar;
     qreal indent;
     qreal lineWidth;
-    QList<Clef*> clefs;
+    QList<Clef *> clefs;
 };
 
-StaffSystem::StaffSystem(Sheet* sheet)
-    : QObject(sheet), d(new Private)
+StaffSystem::StaffSystem(Sheet *sheet)
+    : QObject(sheet)
+    , d(new Private)
 {
     d->top = 0.0;
     d->height = 100.0;
@@ -52,7 +54,8 @@ void StaffSystem::setHeight(qreal height)
 
 void StaffSystem::setTop(qreal top)
 {
-    if (d->top == top) return;
+    if (d->top == top)
+        return;
     d->top = top;
     emit topChanged(top);
 }
@@ -64,7 +67,8 @@ int StaffSystem::firstBar() const
 
 void StaffSystem::setFirstBar(int bar)
 {
-    if (d->firstBar == bar) return;
+    if (d->firstBar == bar)
+        return;
     d->firstBar = bar;
     emit firstBarChanged(bar);
 }
@@ -84,14 +88,14 @@ void StaffSystem::setLineWidth(qreal width)
     d->lineWidth = width;
 }
 
-QList<Clef*> StaffSystem::clefs() const
+QList<Clef *> StaffSystem::clefs() const
 {
     return d->clefs;
 }
 
-Clef* StaffSystem::clef(Staff* staff) const
+Clef *StaffSystem::clef(Staff *staff) const
 {
-    foreach (Clef* c, d->clefs) {
+    foreach (Clef *c, d->clefs) {
         if (c->staff() == staff) {
             return c;
         }
@@ -99,7 +103,7 @@ Clef* StaffSystem::clef(Staff* staff) const
     return nullptr;
 }
 
-void StaffSystem::setClefs(QList<Clef*> clefs)
+void StaffSystem::setClefs(QList<Clef *> clefs)
 {
     d->clefs = clefs;
 }

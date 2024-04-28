@@ -16,19 +16,21 @@ class CalloutShapeFactory : public KoShapeFactoryBase
 {
 public:
     CalloutShapeFactory();
-    ~CalloutShapeFactory() override {}
+    ~CalloutShapeFactory() override
+    {
+    }
     KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const override;
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
 
-    typedef QMap<QString, QVariant > ComplexType;
+    typedef QMap<QString, QVariant> ComplexType;
     typedef QList<QVariant> ListType;
 
 private:
     void addCallout();
     void addRoundedCallout();
 
-    KoProperties* dataToProperties(const QStringList &commands, const ListType &handles, const ComplexType &formulae) const;
+    KoProperties *dataToProperties(const QStringList &commands, const ListType &handles, const ComplexType &formulae) const;
     KoProperties *squareProperties() const;
 };
 

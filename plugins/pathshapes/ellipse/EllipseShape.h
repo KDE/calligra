@@ -23,11 +23,10 @@ class EllipseShape : public KoParameterShape, public SvgShape
 {
 public:
     /// the possible ellipse types
-    enum EllipseType
-    {
-        Arc = 0,   ///< an ellipse arc
-        Pie = 1,   ///< an ellipse pie
-        Chord = 2  ///< an ellipse chord
+    enum EllipseType {
+        Arc = 0, ///< an ellipse arc
+        Pie = 1, ///< an ellipse pie
+        Chord = 2 ///< an ellipse chord
     };
 
     EllipseShape();
@@ -103,4 +102,3 @@ private:
 };
 
 #endif /* KOELLIPSESHAPE_H */
-

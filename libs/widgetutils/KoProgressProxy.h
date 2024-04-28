@@ -19,18 +19,18 @@ class QString;
  */
 class KOWIDGETUTILS_EXPORT KoProgressProxy
 {
-
 public:
-	KoProgressProxy() = default;
+    KoProgressProxy() = default;
 
-    virtual ~KoProgressProxy() { }
+    virtual ~KoProgressProxy()
+    {
+    }
 
     virtual int maximum() const = 0;
     virtual void setValue(int value) = 0;
     virtual void setRange(int minimum, int maximum) = 0;
     virtual void setFormat(const QString &format) = 0;
-	Q_DISABLE_COPY(KoProgressProxy)
+    Q_DISABLE_COPY(KoProgressProxy)
 };
-
 
 #endif

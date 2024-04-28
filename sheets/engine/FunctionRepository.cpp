@@ -6,10 +6,10 @@
 // Local
 #include "FunctionRepository.h"
 
-#include "SheetsDebug.h"
 #include "Function.h"
 #include "FunctionDescription.h"
 #include "FunctionModuleRegistry.h"
+#include "SheetsDebug.h"
 
 #include <QDomElement>
 #include <QFile>
@@ -23,14 +23,14 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN FunctionRepository::Private
 {
 public:
-    QHash<QString, QSharedPointer<Function> > functions;
-    QHash<QString, QSharedPointer<Function> > alternates;
-    QHash<QString, FunctionDescription*> descriptions;
+    QHash<QString, QSharedPointer<Function>> functions;
+    QHash<QString, QSharedPointer<Function>> alternates;
+    QHash<QString, FunctionDescription *> descriptions;
     QStringList groups;
     bool initialized;
 };
 
-FunctionRepository* FunctionRepository::self()
+FunctionRepository *FunctionRepository::self()
 {
     if (!s_instance.exists()) {
         *s_instance; // creates the global instance
@@ -39,12 +39,11 @@ FunctionRepository* FunctionRepository::self()
         FunctionModuleRegistry::instance()->registerFunctions();
 
 #ifndef NDEBUG
-        debugSheetsUI << "functions registered:" << s_instance->d->functions.count()
-                      << "descriptions loaded:" << s_instance->d->descriptions.count();
+        debugSheetsUI << "functions registered:" << s_instance->d->functions.count() << "descriptions loaded:" << s_instance->d->descriptions.count();
 
         // Verify, that every function has a description.
         QStringList missingDescriptions;
-        typedef QHash<QString, QSharedPointer<Function> > Functions;
+        typedef QHash<QString, QSharedPointer<Function>> Functions;
         Functions::ConstIterator end = s_instance->d->functions.constEnd();
         for (Functions::ConstIterator it = s_instance->d->functions.constBegin(); it != end; ++it) {
             if (!s_instance->d->descriptions.contains(it.key()))
@@ -52,7 +51,7 @@ FunctionRepository* FunctionRepository::self()
         }
         if (missingDescriptions.count() > 0) {
             debugSheetsUI << "No function descriptions found for:";
-            for (const QString& missingDescription : missingDescriptions) {
+            for (const QString &missingDescription : missingDescriptions) {
                 debugSheetsUI << "\t" << missingDescription;
             }
         }
@@ -62,7 +61,7 @@ FunctionRepository* FunctionRepository::self()
 }
 
 FunctionRepository::FunctionRepository()
-        : d(new Private)
+    : d(new Private)
 {
     d->initialized = false;
 }
@@ -73,9 +72,10 @@ FunctionRepository::~FunctionRepository()
     delete d;
 }
 
-void FunctionRepository::add(const QSharedPointer<Function>& function)
+void FunctionRepository::add(const QSharedPointer<Function> &function)
 {
-    if (!function) return;
+    if (!function)
+        return;
     d->functions.insert(function->name().toUpper(), function);
 
     if (!function->alternateName().isNull()) {
@@ -85,12 +85,14 @@ void FunctionRepository::add(const QSharedPointer<Function>& function)
 
 void FunctionRepository::add(FunctionDescription *desc)
 {
-    if (!desc) return;
-    if (!d->functions.contains(desc->name())) return;
+    if (!desc)
+        return;
+    if (!d->functions.contains(desc->name()))
+        return;
     d->descriptions.insert(desc->name(), desc);
 }
 
-void FunctionRepository::remove(const QSharedPointer<Function>& function)
+void FunctionRepository::remove(const QSharedPointer<Function> &function)
 {
     const QString functionName = function->name().toUpper();
     delete d->descriptions.take(functionName);
@@ -100,24 +102,24 @@ void FunctionRepository::remove(const QSharedPointer<Function>& function)
     }
 }
 
-QSharedPointer<Function> FunctionRepository::function(const QString& name)
+QSharedPointer<Function> FunctionRepository::function(const QString &name)
 {
     const QString n = name.toUpper();
     QSharedPointer<Function> f = d->functions.value(n);
     return !f.isNull() ? f : d->alternates.value(n);
 }
 
-FunctionDescription *FunctionRepository::functionInfo(const QString& name)
+FunctionDescription *FunctionRepository::functionInfo(const QString &name)
 {
     return d->descriptions.value(name.toUpper());
 }
 
 // returns names of function in certain group
-QStringList FunctionRepository::functionNames(const QString& group)
+QStringList FunctionRepository::functionNames(const QString &group)
 {
     QStringList lst;
 
-    for (FunctionDescription* description : d->descriptions) {
+    for (FunctionDescription *description : d->descriptions) {
         if (group.isNull() || (description->group() == group))
             lst.append(description->name());
     }
@@ -126,18 +128,18 @@ QStringList FunctionRepository::functionNames(const QString& group)
     return lst;
 }
 
-const QStringList& FunctionRepository::groups() const
+const QStringList &FunctionRepository::groups() const
 {
     return d->groups;
 }
 
-void FunctionRepository::addGroup(const QString& groupname)
+void FunctionRepository::addGroup(const QString &groupname)
 {
     d->groups.append(groupname);
     d->groups.sort();
 }
 
-void FunctionRepository::loadFunctionDescriptions(const QString& filename)
+void FunctionRepository::loadFunctionDescriptions(const QString &filename)
 {
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly))
@@ -164,7 +166,7 @@ void FunctionRepository::loadFunctionDescriptions(const QString& filename)
                     continue;
                 QDomElement e2 = n2.toElement();
                 if (e2.tagName() == "Function") {
-                    FunctionDescription* desc = new FunctionDescription(e2);
+                    FunctionDescription *desc = new FunctionDescription(e2);
                     desc->setGroup(group);
                     if (d->functions.contains(desc->name()))
                         d->descriptions.insert(desc->name(), desc);

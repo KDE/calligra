@@ -18,31 +18,30 @@ class KToggleAction;
  */
 namespace KoStandardAction
 {
-  /**
-   * The standard actions.
-   */
-  enum StandardAction {
+/**
+ * The standard actions.
+ */
+enum StandardAction {
     ActionNone,
 
     ShowGuides
-  };
+};
 
-  /**
-   * Creates an action corresponding to the
-   * KoStandardAction::StandardAction enum.
-   */
-  KOMAIN_EXPORT QAction* create(StandardAction id, const QObject *receiver, const char *slot, QObject *parent);
+/**
+ * Creates an action corresponding to the
+ * KoStandardAction::StandardAction enum.
+ */
+KOMAIN_EXPORT QAction *create(StandardAction id, const QObject *receiver, const char *slot, QObject *parent);
 
-  /**
-   * This will return the internal name of a given standard action.
-   */
-  KOMAIN_EXPORT const char* name(StandardAction id);
+/**
+ * This will return the internal name of a given standard action.
+ */
+KOMAIN_EXPORT const char *name(StandardAction id);
 
-  /**
-   * Show or hide guide lines
-   */
-  KOMAIN_EXPORT KToggleAction *showGuides(const QObject *receiver, const char *slot, QObject *parent);
+/**
+ * Show or hide guide lines
+ */
+KOMAIN_EXPORT KToggleAction *showGuides(const QObject *receiver, const char *slot, QObject *parent);
 }
 
 #endif // KSTDACTION_H
-

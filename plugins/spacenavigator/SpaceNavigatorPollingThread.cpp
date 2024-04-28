@@ -13,8 +13,9 @@
 
 #include <spnav.h>
 
-SpaceNavigatorPollingThread::SpaceNavigatorPollingThread( QObject * parent )
-: QThread( parent ), m_stopped( false )
+SpaceNavigatorPollingThread::SpaceNavigatorPollingThread(QObject *parent)
+    : QThread(parent)
+    , m_stopped(false)
 {
 }
 
@@ -25,7 +26,7 @@ SpaceNavigatorPollingThread::~SpaceNavigatorPollingThread()
 void SpaceNavigatorPollingThread::run()
 {
     m_stopped = false;
-    if(spnav_open() == -1)
+    if (spnav_open() == -1)
         return;
 
     qreal posfactor = 0.1;
@@ -34,14 +35,11 @@ void SpaceNavigatorPollingThread::run()
     Qt::MouseButtons buttons = Qt::NoButton;
 
     debugSpaceNavigator << "started spacenavigator polling thread";
-    while( ! m_stopped )
-    {
+    while (!m_stopped) {
         spnav_event event;
 
-        if( spnav_poll_event( &event ) )
-        {
-            if( event.type == SPNAV_EVENT_MOTION )
-            {
+        if (spnav_poll_event(&event)) {
+            if (event.type == SPNAV_EVENT_MOTION) {
                 /*
                  * The coordinate system of the space navigator is like the following:
                  * x-axis : from left to right
@@ -54,35 +52,31 @@ void SpaceNavigatorPollingThread::run()
                  * The z-axis would then go from up to down in a right handed coordinate system.
                  * z-axis : from up to down
                  */
-                //debugSpaceNavigator << "got motion event: t("<< event.motion.x << event.motion.y << event.motion.z << ") r(" << event.motion.rx << event.motion.ry << event.motion.rz << ")";
-                currX = static_cast<int>( posfactor * event.motion.x );
-                currY = -static_cast<int>( posfactor * event.motion.z );
-                currZ = -static_cast<int>( posfactor * event.motion.y );
-                currRX = static_cast<int>( posfactor * event.motion.rx );
-                currRY = static_cast<int>( -posfactor * event.motion.rz );
-                currRZ = static_cast<int>( -posfactor * event.motion.ry );
-                emit moveEvent( currX, currY, currZ, currRX, currRY, currRZ, buttons );
-            }
-            else
-            {
+                // debugSpaceNavigator << "got motion event: t("<< event.motion.x << event.motion.y << event.motion.z << ") r(" << event.motion.rx <<
+                // event.motion.ry << event.motion.rz << ")";
+                currX = static_cast<int>(posfactor * event.motion.x);
+                currY = -static_cast<int>(posfactor * event.motion.z);
+                currZ = -static_cast<int>(posfactor * event.motion.y);
+                currRX = static_cast<int>(posfactor * event.motion.rx);
+                currRY = static_cast<int>(-posfactor * event.motion.rz);
+                currRZ = static_cast<int>(-posfactor * event.motion.ry);
+                emit moveEvent(currX, currY, currZ, currRX, currRY, currRZ, buttons);
+            } else {
                 /* SPNAV_EVENT_BUTTON */
                 Qt::MouseButton button = event.button.bnum == 0 ? Qt::LeftButton : Qt::RightButton;
                 KoInputDeviceHandlerEvent::Type type;
-                if( event.button.press )
-                {
-                    //debugSpaceNavigator << "got button press event b(" << event.button.bnum << ")";
+                if (event.button.press) {
+                    // debugSpaceNavigator << "got button press event b(" << event.button.bnum << ")";
                     buttons |= button;
                     type = KoInputDeviceHandlerEvent::ButtonPressed;
-                }
-                else
-                {
-                    //debugSpaceNavigator << "got button release event b(" << event.button.bnum << ")";
+                } else {
+                    // debugSpaceNavigator << "got button release event b(" << event.button.bnum << ")";
                     buttons &= ~button;
                     type = KoInputDeviceHandlerEvent::ButtonReleased;
                 }
-                emit buttonEvent( currX, currY, currZ, currRX, currRY, currRZ, buttons, button, type );
+                emit buttonEvent(currX, currY, currZ, currRX, currRY, currRZ, buttons, button, type);
             }
-            spnav_remove_events( event.type );
+            spnav_remove_events(event.type);
         }
         msleep(10);
     }

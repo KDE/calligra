@@ -7,19 +7,21 @@
 
 #include "dbase.h"
 
-#include <QDateTime>
 #include <QDataStream>
+#include <QDateTime>
 #include <QFile>
 #include <QString>
 #include <QStringList>
 
-DBase::DBase(): m_recordCount(0)
+DBase::DBase()
+    : m_recordCount(0)
 {
 }
 
 DBase::~DBase()
 {
-    while (!fields.isEmpty()) delete fields.takeFirst();
+    while (!fields.isEmpty())
+        delete fields.takeFirst();
     close();
 }
 
@@ -35,9 +37,8 @@ DBase::~DBase()
 //  unsigned char reserved[20]      12-31  reserved info from dBase
 //
 
-bool DBase::load(const QString& filename)
+bool DBase::load(const QString &filename)
 {
-
     m_file.setFileName(filename);
     if (!m_file.open(QIODevice::ReadOnly))
         return false;
@@ -63,7 +64,8 @@ bool DBase::load(const QString& filename)
     m_lastUpdate.setDate(y + 1900, m, d);
 
     // check for valid date
-    if (!m_lastUpdate.isValid()) return false;
+    if (!m_lastUpdate.isValid())
+        return false;
 
     // number of records
     quint32 norec;
@@ -100,27 +102,40 @@ bool DBase::load(const QString& filename)
     // unsigned char field_decimals      17       decimals
     // unsigned char reserved[14]        18-31    reserved for internal dBASE-stuff
 
-    while (!fields.isEmpty()) delete fields.takeFirst();
+    while (!fields.isEmpty())
+        delete fields.takeFirst();
     for (unsigned i = 1; i < m_headerLength / 32; ++i) {
-        DBaseField* field = new DBaseField;
+        DBaseField *field = new DBaseField;
 
         // column-name
         quint8 colname[12];
         for (int j = 0; j < 11; ++j)
             m_stream >> colname[j];
         colname[11] = '\0';
-        field->name = QString((const char*) & colname[0]);
+        field->name = QString((const char *)&colname[0]);
 
         // type of column
         quint8 coltype;
         m_stream >> coltype;
         switch (coltype) {
-        case 'C': field->type = DBaseField::Character; break;
-        case 'N': field->type = DBaseField::Numeric; break;
-        case 'D': field->type = DBaseField::Date; break;
-        case 'M': field->type = DBaseField::Memo; break;
-        case 'L': field->type = DBaseField::Logical; break;
-        default: field->type = DBaseField::Unknown; break;
+        case 'C':
+            field->type = DBaseField::Character;
+            break;
+        case 'N':
+            field->type = DBaseField::Numeric;
+            break;
+        case 'D':
+            field->type = DBaseField::Date;
+            break;
+        case 'M':
+            field->type = DBaseField::Memo;
+            break;
+        case 'L':
+            field->type = DBaseField::Logical;
+            break;
+        default:
+            field->type = DBaseField::Unknown;
+            break;
         }
 
         // fileddataaddress
@@ -183,23 +198,34 @@ QStringList DBase::readRecord(unsigned recno)
             QString str;
             quint8 ch;
             for (unsigned j = 0; j < fields.at(i)->length; ++j) {
-                m_stream >> ch; str += QChar(ch);
+                m_stream >> ch;
+                str += QChar(ch);
             }
             result.append(str);
-        }
-        break;
+        } break;
 
         // Logical
         case DBaseField::Logical: {
             quint8 ch;
             m_stream >> ch;
             switch (ch) {
-            case 'Y': case 'y': case 'T': case 't': result.append("True"); break;
-            case 'N': case 'n': case 'F': case 'f': result.append("False"); break;
-            default: result.append(""); break;
+            case 'Y':
+            case 'y':
+            case 'T':
+            case 't':
+                result.append("True");
+                break;
+            case 'N':
+            case 'n':
+            case 'F':
+            case 'f':
+                result.append("False");
+                break;
+            default:
+                result.append("");
+                break;
             }
-        }
-        break;
+        } break;
 
         // Date, stored as YYYYMMDD
         // Note: convert it to YYYY-MM-DD
@@ -207,19 +233,19 @@ QStringList DBase::readRecord(unsigned recno)
             QString str;
             quint8 ch;
             for (unsigned j = 0; j < fields.at(i)->length; j++) {
-                m_stream >> ch; str += QChar(ch);
+                m_stream >> ch;
+                str += QChar(ch);
             }
             str.insert(6, '-');
             str.insert(4, '-');
             result.append(str);
-        }
-        break;
+        } break;
 
         // Unknown/Unimplemented
         case DBaseField::Unknown:
         case DBaseField::Memo:
         default:
-            result.append("");   // unknown
+            result.append(""); // unknown
             break;
         }
 
@@ -228,5 +254,6 @@ QStringList DBase::readRecord(unsigned recno)
 
 void DBase::close()
 {
-    if (m_file.isOpen()) m_file.close();
+    if (m_file.isOpen())
+        m_file.close();
 }

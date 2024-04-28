@@ -6,10 +6,10 @@
 
 #include "SectionsSplitDialog.h"
 
-#include <KoTextDocument.h>
 #include <KoSection.h>
-#include <KoTextEditor.h>
 #include <KoSectionUtils.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
 
 #include <KLocalizedString>
 

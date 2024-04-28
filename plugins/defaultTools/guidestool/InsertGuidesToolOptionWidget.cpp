@@ -14,11 +14,10 @@ InsertGuidesToolOptionWidget::InsertGuidesToolOptionWidget(QWidget *parent)
 {
     m_widget.setupUi(this);
 
-    m_widget.m_horizontalEdgesCheckBox->setIcon(koIconNeeded("add guides at top & bottom side of page","add-horizontal-edges"));
-    m_widget.m_verticalEdgesCheckBox->setIcon(koIconNeeded("add guides at left & right side of page","add-vertical-edges"));
+    m_widget.m_horizontalEdgesCheckBox->setIcon(koIconNeeded("add guides at top & bottom side of page", "add-horizontal-edges"));
+    m_widget.m_verticalEdgesCheckBox->setIcon(koIconNeeded("add guides at left & right side of page", "add-vertical-edges"));
 
-    connect(m_widget.m_createButton, &QAbstractButton::clicked,
-             this, &InsertGuidesToolOptionWidget::onCreateButtonClicked);
+    connect(m_widget.m_createButton, &QAbstractButton::clicked, this, &InsertGuidesToolOptionWidget::onCreateButtonClicked);
 }
 
 InsertGuidesToolOptionWidget::~InsertGuidesToolOptionWidget()

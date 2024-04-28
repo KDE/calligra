@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2009 Thomas Zander <zander@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ */
 #ifndef KOSHAPECONTAINERPRIVATE_H
 #define KOSHAPECONTAINERPRIVATE_H
 

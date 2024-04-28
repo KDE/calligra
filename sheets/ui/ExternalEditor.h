@@ -5,12 +5,11 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef CALLIGRA_SHEETS_EXTERNAL_EDITOR
 #define CALLIGRA_SHEETS_EXTERNAL_EDITOR
 
-#include <ktextedit.h>
 #include "sheets_ui_export.h"
+#include <ktextedit.h>
 
 class QFocusEvent;
 class QKeyEvent;
@@ -31,13 +30,13 @@ public:
 
     QSize sizeHint() const override;
 
-    void setCellTool(CellToolBase* cellTool);
+    void setCellTool(CellToolBase *cellTool);
 
     int cursorPosition() const;
     void setCursorPosition(int pos);
 
-    QAction* applyAction() const;
-    QAction* cancelAction() const;
+    QAction *applyAction() const;
+    QAction *cancelAction() const;
 Q_SIGNALS:
     void textModified(const QString &text);
 
@@ -59,7 +58,7 @@ private:
     Q_DISABLE_COPY(ExternalEditor)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

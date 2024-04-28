@@ -19,13 +19,13 @@
  * In the constructor the plugin registers a shape and a tool in the KoShapeRegistry
  * so that the applications "know" that the formula plugin exists.
  */
-class KoFormulaShapePlugin : public QObject {
+class KoFormulaShapePlugin : public QObject
+{
     Q_OBJECT
 
 public:
-    KoFormulaShapePlugin( QObject* parent, const QVariantList& );
+    KoFormulaShapePlugin(QObject *parent, const QVariantList &);
     ~KoFormulaShapePlugin() override;
 };
 
 #endif
-

@@ -6,16 +6,16 @@
 
 #include "FilterEffectResource.h"
 #include <KoFilterEffect.h>
-#include <KoFilterEffectStack.h>
-#include <KoFilterEffectRegistry.h>
 #include <KoFilterEffectLoadingContext.h>
+#include <KoFilterEffectRegistry.h>
+#include <KoFilterEffectStack.h>
 #include <KoXmlWriter.h>
 
 #include <QDebug>
 
-#include <QFile>
 #include <QBuffer>
 #include <QCryptographicHash>
+#include <QFile>
 
 double fromPercentage(const QString &s)
 {
@@ -26,7 +26,7 @@ double fromPercentage(const QString &s)
 }
 
 FilterEffectResource::FilterEffectResource(const QString &filename)
-        : KoResource(filename)
+    : KoResource(filename)
 {
 }
 
@@ -34,8 +34,10 @@ bool FilterEffectResource::load()
 {
     QFile file(filename());
 
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) return false;
+    if (file.size() == 0)
+        return false;
+    if (!file.open(QIODevice::ReadOnly))
+        return false;
 
     bool res = loadFromDevice(&file);
 
@@ -79,7 +81,7 @@ QString FilterEffectResource::defaultFileExtension() const
     return QString(".svg");
 }
 
-FilterEffectResource * FilterEffectResource::fromFilterEffectStack(KoFilterEffectStack *filterStack)
+FilterEffectResource *FilterEffectResource::fromFilterEffectStack(KoFilterEffectStack *filterStack)
 {
     if (!filterStack)
         return 0;
@@ -93,7 +95,7 @@ FilterEffectResource * FilterEffectResource::fromFilterEffectStack(KoFilterEffec
 
     buffer.close();
 
-    FilterEffectResource * resource = new FilterEffectResource("");
+    FilterEffectResource *resource = new FilterEffectResource("");
     if (!resource->m_data.setContent(ba)) {
         delete resource;
         return 0;
@@ -102,9 +104,9 @@ FilterEffectResource * FilterEffectResource::fromFilterEffectStack(KoFilterEffec
     return resource;
 }
 
-KoFilterEffectStack * FilterEffectResource::toFilterStack() const
+KoFilterEffectStack *FilterEffectResource::toFilterStack() const
 {
-    KoFilterEffectStack * filterStack = new KoFilterEffectStack();
+    KoFilterEffectStack *filterStack = new KoFilterEffectStack();
     if (!filterStack)
         return 0;
 
@@ -130,12 +132,12 @@ KoFilterEffectStack * FilterEffectResource::toFilterStack() const
 
     KoFilterEffectLoadingContext context(QString(""));
 
-    KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
+    KoFilterEffectRegistry *registry = KoFilterEffectRegistry::instance();
 
     // create the filter effects and add them to the shape
     for (KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
         KoXmlElement primitive = n.toElement();
-        KoFilterEffect * filterEffect = registry->createFilterEffectFromXml(primitive, context);
+        KoFilterEffect *filterEffect = registry->createFilterEffectFromXml(primitive, context);
         if (!filterEffect) {
             qWarning() << "filter effect" << primitive.tagName() << "is not implemented yet";
             continue;
@@ -170,5 +172,4 @@ QByteArray FilterEffectResource::generateMD5() const
         return md5.result();
     }
     return ba;
-
 }

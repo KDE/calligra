@@ -18,19 +18,17 @@
 
 #include "TemplateShape.h"
 
-
-ChangeSomethingCommand::ChangeSomethingCommand(TemplateShape *shape, KoSomethingData *newSomethingData,
-                                               KUndo2Command *parent)
-  : KUndo2Command(parent)
-  , m_shape(shape)
-  , m_oldSomethingData(0)
-  , m_newSomethingData(newSomethingData)
+ChangeSomethingCommand::ChangeSomethingCommand(TemplateShape *shape, KoSomethingData *newSomethingData, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_shape(shape)
+    , m_oldSomethingData(0)
+    , m_newSomethingData(newSomethingData)
 {
     Q_ASSERT(shape);
-    KoSomethingData *oldSomethingData = qobject_cast<KoSomethingData*>(m_shape->userData());
+    KoSomethingData *oldSomethingData = qobject_cast<KoSomethingData *>(m_shape->userData());
 
     // We need new here as setUserData deletes the old data.
-    m_oldSomethingData = oldSomethingData ? new KoSomethingData(*oldSomethingData): 0;
+    m_oldSomethingData = oldSomethingData ? new KoSomethingData(*oldSomethingData) : 0;
     setText(kundo2_i18n("Change something"));
 
     m_oldSize = shape->size();
@@ -51,7 +49,7 @@ void ChangeSomethingCommand::redo()
     m_shape->update();
 
     // We need new here as setUserData deletes the old data
-    m_shape->setUserData(m_newSomethingData ? new KoSomethingData(*m_newSomethingData): 0);
+    m_shape->setUserData(m_newSomethingData ? new KoSomethingData(*m_newSomethingData) : 0);
     m_shape->setSize(m_newSize);
     m_shape->update();
 }
@@ -60,7 +58,7 @@ void ChangeSomethingCommand::undo()
 {
     // We need new here as setUserData deletes the old data
     m_shape->update();
-    m_shape->setUserData(m_oldSomethingData ? new KoSomethingData(*m_oldSomethingData): 0);
+    m_shape->setUserData(m_oldSomethingData ? new KoSomethingData(*m_oldSomethingData) : 0);
     m_shape->setSize(m_oldSize);
     m_shape->update();
 }

@@ -6,7 +6,7 @@
 
 #include "PropertyContainer.h"
 
-PropertyContainer::PropertyContainer(QString name, QObject* parent)
+PropertyContainer::PropertyContainer(QString name, QObject *parent)
     : QObject(parent)
     , m_name(name)
 {

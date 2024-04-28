@@ -10,8 +10,8 @@
 #define KWSTATISTICSDOCKER_H
 
 // Base classes
-#include <QDockWidget>
 #include <KoCanvasObserverBase.h>
+#include <QDockWidget>
 
 // Qt
 #include <QBoxLayout>
@@ -24,7 +24,6 @@
 #include <dockers/KWStatisticsWidget.h>
 
 class KoCanvasBase;
-
 
 class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 {
@@ -43,7 +42,6 @@ private:
     // The statistics widget
     KWStatisticsWidget *m_statisticsWidget;
 
-    
 public Q_SLOTS:
     void ondockLocationChanged(Qt::DockWidgetArea newArea);
 };
@@ -53,8 +51,9 @@ class KWStatisticsDockerFactory : public KoDockFactoryBase
 public:
     KWStatisticsDockerFactory();
     QString id() const override;
-    QDockWidget* createDockWidget() override;
-    DockPosition defaultDockPosition() const override {
+    QDockWidget *createDockWidget() override;
+    DockPosition defaultDockPosition() const override
+    {
         return DockMinimized;
     }
 };

@@ -32,15 +32,16 @@ public:
     ~KPrAnimate() override;
 
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
-    bool saveOdf(KoPASavingContext & paContext) const override;
+    bool saveOdf(KoPASavingContext &paContext) const override;
     void init(KPrAnimationCache *animationCache, int step) override;
     bool saveAttribute(KoPASavingContext &paContext) const override;
+
 protected:
     void next(int currentTime) override;
 
 private:
-    KPrAnimationAttribute * m_attribute;
-    KPrAnimationValue * m_values;
+    KPrAnimationAttribute *m_attribute;
+    KPrAnimationValue *m_values;
 };
 
 #endif /* KPRANIMATE_H */

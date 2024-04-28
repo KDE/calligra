@@ -18,19 +18,19 @@
 
 #include <KLocalizedString>
 
-#include "engine/Damages.h"
+#include "../ui/Selection.h"
 #include "core/Map.h"
 #include "core/Sheet.h"
-#include "../ui/Selection.h"
+#include "engine/Damages.h"
 
 // commands
 #include "../commands/SheetCommands.h"
 
 using namespace Calligra::Sheets;
 
-ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
-        : KoDialog(parent)
-        , m_selection(selection)
+ShowDialog::ShowDialog(QWidget *parent, Selection *selection)
+    : KoDialog(parent)
+    , m_selection(selection)
 {
     setCaption(i18n("Show Sheet"));
     setModal(true);
@@ -53,8 +53,7 @@ ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
     m_listWidget->addItems(tabsList);
     if (!m_listWidget->count())
         enableButtonOk(false);
-    connect(m_listWidget, &QListWidget::itemDoubleClicked,
-            this, &ShowDialog::accept);
+    connect(m_listWidget, &QListWidget::itemDoubleClicked, this, &ShowDialog::accept);
     resize(200, 150);
     setFocus();
 }
@@ -68,10 +67,11 @@ void ShowDialog::accept()
     }
 
     Map *const map = m_selection->activeSheet()->fullMap();
-    KUndo2Command* macroCommand = new KUndo2Command(kundo2_i18n("Show Sheet"));
+    KUndo2Command *macroCommand = new KUndo2Command(kundo2_i18n("Show Sheet"));
     for (int i = 0; i < items.count(); ++i) {
         Sheet *sheet = dynamic_cast<Sheet *>(map->findSheet(items[i]->text()));
-        if (!sheet) continue;
+        if (!sheet)
+            continue;
         new ShowSheetCommand(sheet, macroCommand);
     }
     map->addCommand(macroCommand);

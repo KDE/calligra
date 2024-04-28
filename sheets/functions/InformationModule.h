@@ -20,7 +20,7 @@ class InformationModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    explicit InformationModule(QObject* parent, const QVariantList& args = QVariantList());
+    explicit InformationModule(QObject *parent, const QVariantList &args = QVariantList());
 
     QString descriptionFileName() const override;
 };

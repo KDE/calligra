@@ -8,16 +8,15 @@
 #ifndef CALLIGRA_SHEETS_ACTION_PIVOT
 #define CALLIGRA_SHEETS_ACTION_PIVOT
 
-
 #include "CellAction.h"
-
 
 namespace Calligra
 {
 namespace Sheets
 {
-class Pivot : public CellAction {
-Q_OBJECT
+class Pivot : public CellAction
+{
+    Q_OBJECT
 public:
     Pivot(Actions *actions);
     virtual ~Pivot();
@@ -26,8 +25,7 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
 
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_PIVOT
+#endif // CALLIGRA_SHEETS_ACTION_PIVOT

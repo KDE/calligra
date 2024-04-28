@@ -14,10 +14,9 @@
 
 #include "komsooxml_export.h"
 
-#include <QString>
 #include <KoFilterChain.h>
 #include <KoXmlReader.h>
-
+#include <QString>
 
 namespace MSOOXML
 {

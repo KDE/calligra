@@ -15,12 +15,10 @@ class QString;
 class QTextFormat;
 class QTextDocumentFragment;
 
-
 class KOTEXT_EXPORT KoChangeTrackerElement
 {
 public:
-
-    KoChangeTrackerElement(const KUndo2MagicString& title, KoGenChange::Type type);
+    KoChangeTrackerElement(const KUndo2MagicString &title, KoGenChange::Type type);
 
     KoChangeTrackerElement();
 
@@ -31,7 +29,9 @@ public:
     void setEnabled(bool enabled);
     bool isEnabled() const;
 
-    ///This flag is used when a change is accepted or rejected. When set, the change becomes transparent to functions like KoChangeTracker::isParent,... The KoChangeTrackerElement behaves like it has been destroyed. This is not done because of the undo/redo. A KoChangeTrackerElement can only be destroyed when its accept/reject command is destroyed.
+    /// This flag is used when a change is accepted or rejected. When set, the change becomes transparent to functions like KoChangeTracker::isParent,... The
+    /// KoChangeTrackerElement behaves like it has been destroyed. This is not done because of the undo/redo. A KoChangeTrackerElement can only be destroyed
+    /// when its accept/reject command is destroyed.
     void setAcceptedRejected(bool set);
     bool acceptedRejected();
 
@@ -41,7 +41,7 @@ public:
     void setChangeType(KoGenChange::Type type);
     KoGenChange::Type getChangeType() const;
 
-    void setChangeTitle(const KUndo2MagicString& title);
+    void setChangeTitle(const KUndo2MagicString &title);
     KUndo2MagicString getChangeTitle() const;
 
     void setChangeFormat(const QTextFormat &format);
@@ -51,25 +51,24 @@ public:
     QTextFormat getPrevFormat() const;
 
     bool hasCreator() const;
-    void setCreator(const QString& creator);
+    void setCreator(const QString &creator);
     QString getCreator() const;
 
     bool hasDate() const;
-    void setDate(const QString& date);
+    void setDate(const QString &date);
     QString getDate() const;
 
-    bool hasExtraMetaData()const;
-    void setExtraMetaData(const QString& metaData);
+    bool hasExtraMetaData() const;
+    void setExtraMetaData(const QString &metaData);
     QString getExtraMetaData() const;
 
     bool hasDeleteData() const;
-    void setDeleteData(const QTextDocumentFragment& fragment);
+    void setDeleteData(const QTextDocumentFragment &fragment);
     QTextDocumentFragment getDeleteData() const;
-
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

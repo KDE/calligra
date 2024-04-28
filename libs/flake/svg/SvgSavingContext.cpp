@@ -7,28 +7,30 @@
 #include "SvgSavingContext.h"
 #include "SvgUtil.h"
 
-#include <KoXmlWriter.h>
+#include <KoImageData.h>
 #include <KoShape.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
-#include <KoImageData.h>
+#include <KoXmlWriter.h>
 
 #include <QTemporaryFile>
 
-#include <QImage>
-#include <QTransform>
 #include <QBuffer>
-#include <QHash>
 #include <QFile>
 #include <QFileInfo>
+#include <QHash>
+#include <QImage>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QTransform>
 
 class Q_DECL_HIDDEN SvgSavingContext::Private
 {
 public:
     Private(QIODevice &outputDevice)
-        : output(outputDevice), styleWriter(0), shapeWriter(0)
+        : output(outputDevice)
+        , styleWriter(0)
+        , shapeWriter(0)
         , saveInlineImages(true)
     {
         styleWriter = new KoXmlWriter(&styleBuffer, 1);
@@ -52,7 +54,7 @@ public:
     KoXmlWriter *shapeWriter;
 
     QHash<QString, int> uniqueNames;
-    QHash<const KoShape*, QString> shapeIds;
+    QHash<const KoShape *, QString> shapeIds;
     QTransform userSpaceMatrix;
     bool saveInlineImages;
 };
@@ -87,7 +89,7 @@ QString SvgSavingContext::createUID(const QString &base)
 {
     QString idBase = base.isEmpty() ? "defitem" : base;
     int counter = d->uniqueNames.value(idBase);
-    d->uniqueNames.insert(idBase, counter+1);
+    d->uniqueNames.insert(idBase, counter + 1);
 
     return idBase + QString("%1").arg(counter);
 }
@@ -110,9 +112,9 @@ QString SvgSavingContext::getID(const KoShape *obj)
         } else {
             if (id.isEmpty()) {
                 // differentiate a little between shape types
-                if (dynamic_cast<const KoShapeGroup*>(obj))
+                if (dynamic_cast<const KoShapeGroup *>(obj))
                     id = "group";
-                else if (dynamic_cast<const KoShapeLayer*>(obj))
+                else if (dynamic_cast<const KoShapeLayer *>(obj))
                     id = "layer";
                 else
                     id = "shape";
@@ -139,7 +141,7 @@ bool SvgSavingContext::isSavingInlineImages() const
 
 QString SvgSavingContext::createFileName(const QString &extension)
 {
-    QFile *file = qobject_cast<QFile*>(&d->output);
+    QFile *file = qobject_cast<QFile *>(&d->output);
     if (!file)
         return QString();
 
@@ -191,8 +193,7 @@ QString SvgSavingContext::saveImage(const QImage &image)
 
             if (QFile::copy(imgFile.fileName(), dstFilename)) {
                 return dstFilename;
-            }
-            else {
+            } else {
                 QFile f(imgFile.fileName());
                 f.remove();
             }
@@ -233,8 +234,7 @@ QString SvgSavingContext::saveImage(KoImageData *image)
             // move the temp file to the destination directory
             if (QFile::copy(imgFile.fileName(), dstFilename)) {
                 return dstFilename;
-            }
-            else {
+            } else {
                 QFile f(imgFile.fileName());
                 f.remove();
             }

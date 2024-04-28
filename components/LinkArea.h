@@ -15,20 +15,22 @@
 
 #include "Document.h"
 
-namespace Calligra {
-namespace Components {
+namespace Calligra
+{
+namespace Components
+{
 class LinkArea : public QQuickItem
 {
     Q_OBJECT
-    Q_PROPERTY( Calligra::Components::Document* document READ document WRITE setDocument NOTIFY documentChanged )
-    Q_PROPERTY( float controllerZoom READ controllerZoom WRITE setControllerZoom NOTIFY controllerZoomChanged )
+    Q_PROPERTY(Calligra::Components::Document *document READ document WRITE setDocument NOTIFY documentChanged)
+    Q_PROPERTY(float controllerZoom READ controllerZoom WRITE setControllerZoom NOTIFY controllerZoomChanged)
 
 public:
-    explicit LinkArea(QQuickItem* parent = 0);
+    explicit LinkArea(QQuickItem *parent = 0);
     ~LinkArea() override;
 
-    Calligra::Components::Document* document() const;
-    void setDocument( Calligra::Components::Document* newDocument );
+    Calligra::Components::Document *document() const;
+    void setDocument(Calligra::Components::Document *newDocument);
 
     float controllerZoom() const;
     void setControllerZoom(float newZoom);
@@ -42,13 +44,13 @@ Q_SIGNALS:
     void controllerZoomChanged();
 
 protected:
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
-    void mouseDoubleClickEvent(QMouseEvent* event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 } // Namespace Components
 } // Namespace Calligra

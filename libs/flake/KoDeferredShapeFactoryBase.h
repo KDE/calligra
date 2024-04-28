@@ -26,7 +26,6 @@ class FLAKE_EXPORT KoDeferredShapeFactoryBase : public QObject
 {
     Q_OBJECT
 public:
-
     explicit KoDeferredShapeFactoryBase(QObject *parent);
 
     ~KoDeferredShapeFactoryBase() override;
@@ -59,7 +58,6 @@ public:
      * @see KoShapeTemplate::properties
      */
     virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const;
-
 };
 
 #endif

@@ -19,36 +19,33 @@ class QString;
 
 class KOWIDGETS_EXPORT KoResourceFiltering
 {
-
 public:
     KoResourceFiltering();
     virtual ~KoResourceFiltering();
     void configure(int filterType, bool enable);
     bool hasFilters() const;
     bool filtersHaveChanged() const;
-    void setTagSetFilenames(const QStringList& filenames);
-    void setCurrentTag(const QString& tagSet);
+    void setTagSetFilenames(const QStringList &filenames);
+    void setCurrentTag(const QString &tagSet);
     void rebuildCurrentTagFilenames();
     void setResourceServer(KoResourceServerBase *resourceServer);
-    void setFilters(const QString& searchString);
-    QList<KoResource*> filterResources(QList< KoResource* > resources);
+    void setFilters(const QString &searchString);
+    QList<KoResource *> filterResources(QList<KoResource *> resources);
     void setInclusions(const QStringList &inclusions);
     void setExclusions(const QStringList &exclusions);
 
 private:
-
     void setDoneFiltering();
-    bool presetMatchesSearch(KoResource * resource) const;
+    bool presetMatchesSearch(KoResource *resource) const;
     void setChanged();
     bool excludeFilterIsValid(const QString &exclusion);
-    bool matchesResource(const QStringList& filtered,const QStringList &filterList) const;
-    void populateIncludeExcludeFilters(const QStringList& filteredNames);
+    bool matchesResource(const QStringList &filtered, const QStringList &filterList) const;
+    void populateIncludeExcludeFilters(const QStringList &filteredNames);
     void sanitizeExclusionList();
-    QStringList tokenizeSearchString(const QString& searchString) const;
+    QStringList tokenizeSearchString(const QString &searchString) const;
 
     class Private;
-    Private * const d;
-
+    Private *const d;
 };
 
 #endif // KORESOURCEFILTER_H

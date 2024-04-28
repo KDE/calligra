@@ -9,14 +9,14 @@
 #ifdef HAVE_OPENGL
 #include <QGLFormat>
 #endif
-#include <QGraphicsScene>
-#include <QGraphicsPixmapItem>
-#include <QGraphicsView>
 #include "KPrPageEffect.h"
+#include <QGraphicsPixmapItem>
+#include <QGraphicsScene>
+#include <QGraphicsView>
 
-KPrPageEffectRunner::KPrPageEffectRunner( const QPixmap &oldPage, const QPixmap &newPage, QWidget *w, KPrPageEffect *effect )
-: m_effect( effect )
-, m_data( oldPage, newPage, w )
+KPrPageEffectRunner::KPrPageEffectRunner(const QPixmap &oldPage, const QPixmap &newPage, QWidget *w, KPrPageEffect *effect)
+    : m_effect(effect)
+    , m_data(oldPage, newPage, w)
 {
     if (m_effect->useGraphicsView()) {
         m_data.m_scene = new QGraphicsScene();
@@ -58,7 +58,7 @@ KPrPageEffectRunner::KPrPageEffectRunner( const QPixmap &oldPage, const QPixmap 
         }
 #endif
     }
-    m_effect->setup( m_data, m_data.m_timeLine );
+    m_effect->setup(m_data, m_data.m_timeLine);
 }
 
 KPrPageEffectRunner::~KPrPageEffectRunner()
@@ -67,23 +67,23 @@ KPrPageEffectRunner::~KPrPageEffectRunner()
     delete m_data.m_scene;
 }
 
-bool KPrPageEffectRunner::paint( QPainter &painter )
+bool KPrPageEffectRunner::paint(QPainter &painter)
 {
-    return m_effect->paint( painter, m_data );
+    return m_effect->paint(painter, m_data);
 }
 
-void KPrPageEffectRunner::next( int currentTime )
+void KPrPageEffectRunner::next(int currentTime)
 {
     m_data.m_lastTime = m_data.m_currentTime;
     m_data.m_currentTime = currentTime;
 
-    m_effect->next( m_data );
+    m_effect->next(m_data);
 }
 
 void KPrPageEffectRunner::finish()
 {
     m_data.m_finished = true;
-    m_effect->finish( m_data );
+    m_effect->finish(m_data);
 }
 
 bool KPrPageEffectRunner::isFinished()
@@ -91,24 +91,22 @@ bool KPrPageEffectRunner::isFinished()
     return m_data.m_finished;
 }
 
-const QPixmap & KPrPageEffectRunner::oldPage() const
+const QPixmap &KPrPageEffectRunner::oldPage() const
 {
     return m_data.m_oldPage;
 }
 
-const QPixmap & KPrPageEffectRunner::newPage() const
+const QPixmap &KPrPageEffectRunner::newPage() const
 {
     return m_data.m_newPage;
 }
 
-void KPrPageEffectRunner::setOldPage( const QPixmap & oldPage)
+void KPrPageEffectRunner::setOldPage(const QPixmap &oldPage)
 {
     m_data.m_oldPage = oldPage;
 }
 
-void KPrPageEffectRunner::setNewPage( const QPixmap & newPage)
+void KPrPageEffectRunner::setNewPage(const QPixmap &newPage)
 {
     m_data.m_newPage = newPage;
 }
-
-

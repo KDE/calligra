@@ -9,17 +9,15 @@
 #define ODTREADERDOCXBACKEND_H
 
 // Calligra
-#include <KoXmlStreamReader.h>
 #include <KoFilter.h>
+#include <KoXmlStreamReader.h>
 #include <OdtReaderBackend.h>
-
-
 
 class OdfReaderContext;
 
 class OdtReaderDocxBackend : public OdtReaderBackend
 {
- public:
+public:
     OdtReaderDocxBackend();
     ~OdtReaderDocxBackend() override;
 
@@ -32,8 +30,7 @@ class OdtReaderDocxBackend : public OdtReaderBackend
     // ODT document level functions
 
     void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context) override;
-    //void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
+    // void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
 };
-
 
 #endif // ODTREADERDOCXBACKEND_H

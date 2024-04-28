@@ -11,16 +11,17 @@
 
 #include "core/Sheet.h"
 
-#include <QAction>
 #include <KLocalizedString>
-
+#include <QAction>
 
 using namespace Calligra::Sheets;
 
-
-
 DocumentSettings::DocumentSettings(Actions *actions)
-    : DialogCellAction(actions, "documentSettingsDialog", i18n("Document Settings..."), koIcon("application-vnd.oasis.opendocument.spreadsheet"), i18n("Show document settings dialog"))
+    : DialogCellAction(actions,
+                       "documentSettingsDialog",
+                       i18n("Document Settings..."),
+                       koIcon("application-vnd.oasis.opendocument.spreadsheet"),
+                       i18n("Show document settings dialog"))
 {
 }
 
@@ -32,7 +33,3 @@ ActionDialog *DocumentSettings::createDialog(QWidget *canvasWidget)
 {
     return new DocumentSettingsDialog(m_selection->activeSheet()->map(), canvasWidget);
 }
-
-
-
-

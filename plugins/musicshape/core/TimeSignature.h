@@ -8,7 +8,8 @@
 
 #include "StaffElement.h"
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Staff;
 
@@ -19,15 +20,12 @@ class TimeSignature : public StaffElement
 {
     Q_OBJECT
 public:
-    enum TimeSignatureType {
-        Classical,
-        Number
-    };
+    enum TimeSignatureType { Classical, Number };
 
     /**
      * Create a new time signature instance and place it on a specified staff.
      */
-    TimeSignature(Staff* staff, int startTime, int beats, int beat, TimeSignatureType type = Classical);
+    TimeSignature(Staff *staff, int startTime, int beats, int beat, TimeSignatureType type = Classical);
 
     /**
      * Destructor.
@@ -49,7 +47,7 @@ public:
      */
     TimeSignatureType type() const;
     int priority() const override;
-    
+
     QList<int> beatLengths() const;
 public Q_SLOTS:
     /**
@@ -74,9 +72,10 @@ Q_SIGNALS:
     void beatsChanged(int beats);
     void beatChanged(int beat);
     void typeChanged(MusicCore::TimeSignature::TimeSignatureType type);
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

@@ -69,7 +69,7 @@ public:
      * @param color the color of grid.
      * @see gridColor()
      */
-    void setGridColor(const QColor & color);
+    void setGridColor(const QColor &color);
 
     /**
      * return if grid is visible.
@@ -92,16 +92,16 @@ public:
     void setPaintGridInBackground(bool inBackground);
 
     /// Loads grid data from the given setting xml document
-    bool loadOdfSettings(const KoXmlDocument & settingsDoc);
+    bool loadOdfSettings(const KoXmlDocument &settingsDoc);
 
     /// Saves grid data to the given settings xml writer
     void saveOdfSettings(KoXmlWriter &settingsWriter);
 
     /**
-      * Paint the grid
-      * @param painter the painter
-      * @param converter the view converter
-      * @param area the area in need of updating
+     * Paint the grid
+     * @param painter the painter
+     * @param converter the view converter
+     * @param area the area in need of updating
      */
     void paintGrid(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const;
 
@@ -109,13 +109,11 @@ public:
      * Returns a toggle action that can be added to the menu of your views.
      * @param by passing the canvas the toggle action will automatically update the canvas when its toggled.
      */
-    KToggleAction *gridToggleAction(QWidget* canvas = 0);
+    KToggleAction *gridToggleAction(QWidget *canvas = 0);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
-
 #endif
-

@@ -5,21 +5,18 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "OdfReaderContext.h"
 
 // Calligra
-#include <KoXmlReader.h>
 #include <KoOdfStyleManager.h>
+#include <KoXmlReader.h>
 
 // Odftraverse library
 #include "OdfParser.h"
 
-
 // ----------------------------------------------------------------
 //                 class OdfReaderContext::Private
-
 
 class Q_DECL_HIDDEN OdfReaderContext::Private
 {
@@ -31,19 +28,18 @@ public:
 
     // This data is used for conversion while traversing the content tree.
     // It's created from the store that is given to us at construction time.
-    QHash<QString, QString>    metadata;
-    QHash<QString, QString>    manifest;
-    KoOdfStyleManager         *styleManager;
+    QHash<QString, QString> metadata;
+    QHash<QString, QString> manifest;
+    KoOdfStyleManager *styleManager;
 
     // This data changes while the parsing proceeds.
-    bool  isInsideParagraph;  // True while we are parsing paragraph contents.
+    bool isInsideParagraph; // True while we are parsing paragraph contents.
 
     // This data is created during the reading and can be used after
     // it is finished.
-    QHash<QString, QSizeF>   images;
-    QHash<QString, QString>  mediaFiles;
+    QHash<QString, QSizeF> images;
+    QHash<QString, QString> mediaFiles;
 };
-
 
 OdfReaderContext::Private::Private(KoStore *store)
     : odfStore(store)
@@ -57,10 +53,8 @@ OdfReaderContext::Private::~Private()
     delete styleManager;
 }
 
-
 // ----------------------------------------------------------------
 //                     class OdfReaderContext
-
 
 OdfReaderContext::OdfReaderContext(KoStore *store)
     : d(new OdfReaderContext::Private(store))
@@ -72,7 +66,6 @@ OdfReaderContext::~OdfReaderContext()
     delete d;
 }
 
-
 KoFilter::ConversionStatus OdfReaderContext::analyzeOdfFile()
 {
     if (!d->odfStore) {
@@ -83,7 +76,7 @@ KoFilter::ConversionStatus OdfReaderContext::analyzeOdfFile()
     // Parse input files
 
     OdfParser odfParser;
-    KoFilter::ConversionStatus  status;
+    KoFilter::ConversionStatus status;
 
     // Parse meta.xml into m_metadata
     status = odfParser.parseMetadata(*d->odfStore, &d->metadata);
@@ -102,7 +95,6 @@ KoFilter::ConversionStatus OdfReaderContext::analyzeOdfFile()
 
     return KoFilter::OK;
 }
-
 
 KoStore *OdfReaderContext::odfStore() const
 {
@@ -124,7 +116,6 @@ QHash<QString, QString> OdfReaderContext::manifest() const
     return d->manifest;
 }
 
-
 bool OdfReaderContext::isInsideParagraph() const
 {
     return d->isInsideParagraph;
@@ -135,13 +126,12 @@ void OdfReaderContext::setIsInsideParagraph(bool isInside)
     d->isInsideParagraph = isInside;
 }
 
-
 QHash<QString, QSizeF> OdfReaderContext::images() const
 {
     return d->images;
 }
 
-#if 0  // NYI
+#if 0 // NYI
 QHash<QString, QString> OdfReaderContext::mediaFiles() const
 {
     return d->mediaFiles;

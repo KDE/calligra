@@ -6,21 +6,20 @@
 
 #include "KPrPlaceholderPictureStrategy.h"
 
-#include <QString>
 #include <QFileDialog>
+#include <QString>
 #include <QUrl>
 
-#include <KoImageCollection.h>
 #include <KoDocumentResourceManager.h>
+#include <KoImageCollection.h>
 #include <KoImageData.h>
-#include <KoShape.h>
 #include <KoNetAccess.h>
+#include <KoShape.h>
 
 #include "StageDebug.h"
 
-
 KPrPlaceholderPictureStrategy::KPrPlaceholderPictureStrategy()
-: KPrPlaceholderStrategy( "graphic" )
+    : KPrPlaceholderStrategy("graphic")
 {
 }
 
@@ -30,10 +29,10 @@ KPrPlaceholderPictureStrategy::~KPrPlaceholderPictureStrategy()
 
 KoShape *KPrPlaceholderPictureStrategy::createShape(KoDocumentResourceManager *rm)
 {
-    KoShape * shape = 0;
+    KoShape *shape = 0;
 
     QUrl url = QFileDialog::getOpenFileUrl();
-    if ( !url.isEmpty() ) {
+    if (!url.isEmpty()) {
         shape = KPrPlaceholderStrategy::createShape(rm);
 
         KoImageCollection *collection = rm->imageCollection();
@@ -43,12 +42,12 @@ KoShape *KPrPlaceholderPictureStrategy::createShape(KoDocumentResourceManager *r
         if (KIO::NetAccess::download(url, tmpFile, 0)) {
             QImage image(tmpFile);
             if (!image.isNull()) {
-                //setSuffix(url.prettyUrl());
+                // setSuffix(url.prettyUrl());
                 KoImageData *data = collection->createImageData(image);
                 if (data->isValid()) {
-                    shape->setUserData( data );
+                    shape->setUserData(data);
                     // TODO the pic should be fit into the space provided
-                    shape->setSize( data->imageSize() );
+                    shape->setSize(data->imageSize());
                 }
             }
             KIO::NetAccess::removeTempFile(tmpFile);

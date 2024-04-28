@@ -9,10 +9,10 @@
 
 #include "kotext_export.h"
 
-#include <QMetaType>
 #include <QList>
-#include <QString>
+#include <QMetaType>
 #include <QScopedPointer>
+#include <QString>
 
 class KoShapeSavingContext;
 class KoSection;
@@ -21,7 +21,8 @@ class KoSectionEndPrivate;
 /**
  * Marks the end of the section
  */
-class KOTEXT_EXPORT KoSectionEnd {
+class KOTEXT_EXPORT KoSectionEnd
+{
 public:
     ~KoSectionEnd(); // this is needed for QScopedPointer
 

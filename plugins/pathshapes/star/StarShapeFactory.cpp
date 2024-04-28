@@ -8,13 +8,13 @@
 #include "star/StarShape.h"
 #include "star/StarShapeConfigWidget.h"
 
-#include <KoShapeFactoryBase.h>
-#include <KoShapeStroke.h>
+#include <KoColorBackground.h>
 #include <KoProperties.h>
+#include <KoShapeFactoryBase.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeStroke.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
-#include <KoColorBackground.h>
-#include <KoShapeLoadingContext.h>
 
 #include <KoIcon.h>
 
@@ -26,7 +26,8 @@ StarShapeFactory::StarShapeFactory()
     setToolTip(i18n("A star"));
     setIconName(koIconName("star-shape"));
     QStringList elementNames;
-    elementNames << "regular-polygon" << "custom-shape";
+    elementNames << "regular-polygon"
+                 << "custom-shape";
     setXmlElementNames(KoXmlNS::draw, elementNames);
     setLoadingPriority(5);
 
@@ -108,7 +109,7 @@ KoShape *StarShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 KoShape *StarShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *) const
 {
     StarShape *star = new StarShape();
-    if (! star)
+    if (!star)
         return 0;
 
     star->setCornerCount(params->intProperty("corners", 5));
@@ -126,18 +127,17 @@ KoShape *StarShapeFactory::createShape(const KoProperties *params, KoDocumentRes
     return star;
 }
 
-bool StarShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool StarShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
     if (e.localName() == "regular-polygon" && e.namespaceURI() == KoXmlNS::draw)
         return true;
-    return (e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw
-            && e.attributeNS(KoXmlNS::draw, "engine", "") == "calligra:star");
+    return (e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw && e.attributeNS(KoXmlNS::draw, "engine", "") == "calligra:star");
 }
 
-QList<KoShapeConfigWidgetBase*> StarShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> StarShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> panels;
+    QList<KoShapeConfigWidgetBase *> panels;
     panels.append(new StarShapeConfigWidget());
     return panels;
 }

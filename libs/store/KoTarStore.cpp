@@ -12,43 +12,37 @@
 
 #include <QByteArray>
 
-#include <ktar.h>
-#include <StoreDebug.h>
 #include <QUrl>
+#include <StoreDebug.h>
+#include <ktar.h>
 
 #include <KoNetAccess.h>
 
-KoTarStore::KoTarStore(const QString & _filename, Mode mode, const QByteArray & appIdentification,
-                       bool writeMimetype)
- : KoStore(mode, writeMimetype)
+KoTarStore::KoTarStore(const QString &_filename, Mode mode, const QByteArray &appIdentification, bool writeMimetype)
+    : KoStore(mode, writeMimetype)
 {
-    debugStore << "KoTarStore Constructor filename =" << _filename
-    << " mode = " << int(mode) << Qt::endl;
+    debugStore << "KoTarStore Constructor filename =" << _filename << " mode = " << int(mode) << Qt::endl;
     Q_D(KoStore);
 
     d->localFileName = _filename;
 
     m_pTar = new KTar(_filename, "application/x-gzip");
 
-    init(appIdentification);   // open the targz file and init some vars
+    init(appIdentification); // open the targz file and init some vars
 }
 
-KoTarStore::KoTarStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
-                       bool writeMimetype)
- : KoStore(mode, writeMimetype)
+KoTarStore::KoTarStore(QIODevice *dev, Mode mode, const QByteArray &appIdentification, bool writeMimetype)
+    : KoStore(mode, writeMimetype)
 {
     m_pTar = new KTar(dev);
 
     init(appIdentification);
 }
 
-KoTarStore::KoTarStore(QWidget* window, const QUrl &_url, const QString & _filename, Mode mode,
-                       const QByteArray & appIdentification, bool writeMimetype)
- : KoStore(mode, writeMimetype)
+KoTarStore::KoTarStore(QWidget *window, const QUrl &_url, const QString &_filename, Mode mode, const QByteArray &appIdentification, bool writeMimetype)
+    : KoStore(mode, writeMimetype)
 {
-    debugStore << "KoTarStore Constructor url=" << _url.url(QUrl::PreferLocalFile)
-                  << " filename = " << _filename
-                  << " mode = " << int(mode) << Qt::endl;
+    debugStore << "KoTarStore Constructor url=" << _url.url(QUrl::PreferLocalFile) << " filename = " << _filename << " mode = " << int(mode) << Qt::endl;
     Q_D(KoStore);
 
     d->url = _url;
@@ -65,7 +59,7 @@ KoTarStore::KoTarStore(QWidget* window, const QUrl &_url, const QString & _filen
 
     m_pTar = new KTar(d->localFileName, "application/x-gzip");
 
-    init(appIdentification);   // open the targz file and init some vars
+    init(appIdentification); // open the targz file and init some vars
 }
 
 KoTarStore::~KoTarStore()
@@ -88,8 +82,8 @@ QStringList KoTarStore::directoryList() const
 {
     QStringList retval;
     const KArchiveDirectory *directory = m_pTar->directory();
-    foreach(const QString &name, directory->entries()) {
-        const KArchiveEntry* fileArchiveEntry = m_pTar->directory()->entry(name);
+    foreach (const QString &name, directory->entries()) {
+        const KArchiveEntry *fileArchiveEntry = m_pTar->directory()->entry(name);
         if (fileArchiveEntry->isDirectory()) {
             retval << name;
         }
@@ -97,7 +91,7 @@ QStringList KoTarStore::directoryList() const
     return retval;
 }
 
-QByteArray KoTarStore::completeMagic(const QByteArray& appMimetype)
+QByteArray KoTarStore::completeMagic(const QByteArray &appMimetype)
 {
     debugStore << "QCString KoTarStore::completeMagic( const QCString& appMimetype )********************";
     QByteArray res("Calligra ");
@@ -134,7 +128,7 @@ bool KoTarStore::doFinalize()
 // When reading, d->stream comes directly from KArchiveFile::device()
 // When writing, d->stream buffers the data into m_byteArray
 
-bool KoTarStore::openWrite(const QString& /*name*/)
+bool KoTarStore::openWrite(const QString & /*name*/)
 {
     Q_D(KoStore);
     // Prepare memory buffer for writing
@@ -144,10 +138,10 @@ bool KoTarStore::openWrite(const QString& /*name*/)
     return true;
 }
 
-bool KoTarStore::openRead(const QString& name)
+bool KoTarStore::openRead(const QString &name)
 {
     Q_D(KoStore);
-    const KArchiveEntry * entry = m_pTar->directory()->entry(name);
+    const KArchiveEntry *entry = m_pTar->directory()->entry(name);
     if (entry == 0) {
         return false;
     }
@@ -155,7 +149,7 @@ bool KoTarStore::openRead(const QString& name)
         warnStore << name << " is a directory !";
         return false;
     }
-    KArchiveFile * f = (KArchiveFile *) entry;
+    KArchiveFile *f = (KArchiveFile *)entry;
     m_byteArray.resize(0);
     delete d->stream;
     d->stream = f->createDevice();
@@ -172,11 +166,11 @@ bool KoTarStore::closeWrite()
     m_byteArray.resize(d->size); // TODO: check if really needed
     if (!m_pTar->writeFile(d->fileName, m_byteArray, 0100644, QStringLiteral("user"), QStringLiteral("group")))
         warnStore << "Failed to write " << d->fileName;
-    m_byteArray.resize(0);   // save memory
+    m_byteArray.resize(0); // save memory
     return true;
 }
 
-bool KoTarStore::enterRelativeDirectory(const QString& dirName)
+bool KoTarStore::enterRelativeDirectory(const QString &dirName)
 {
     Q_D(KoStore);
     if (d->mode == Read) {
@@ -186,7 +180,7 @@ bool KoTarStore::enterRelativeDirectory(const QString& dirName)
         }
         const KArchiveEntry *entry = m_currentDir->entry(dirName);
         if (entry && entry->isDirectory()) {
-            m_currentDir = dynamic_cast<const KArchiveDirectory*>(entry);
+            m_currentDir = dynamic_cast<const KArchiveDirectory *>(entry);
             return m_currentDir != 0;
         }
         return false;
@@ -194,7 +188,7 @@ bool KoTarStore::enterRelativeDirectory(const QString& dirName)
         return true;
 }
 
-bool KoTarStore::enterAbsoluteDirectory(const QString& path)
+bool KoTarStore::enterAbsoluteDirectory(const QString &path)
 {
     Q_D(KoStore);
     if (path.isEmpty()) {
@@ -202,14 +196,14 @@ bool KoTarStore::enterAbsoluteDirectory(const QString& path)
         return true;
     }
     if (d->mode == Read) {
-        m_currentDir = dynamic_cast<const KArchiveDirectory*>(m_pTar->directory()->entry(path));
+        m_currentDir = dynamic_cast<const KArchiveDirectory *>(m_pTar->directory()->entry(path));
         Q_ASSERT(m_currentDir);
         return m_currentDir != 0;
     } else
         return true;
 }
 
-bool KoTarStore::fileExists(const QString& absPath) const
+bool KoTarStore::fileExists(const QString &absPath) const
 {
     return m_pTar->directory()->entry(absPath) != 0;
 }

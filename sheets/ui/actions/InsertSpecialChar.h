@@ -8,28 +8,27 @@
 #ifndef CALLIGRA_SHEETS_ACTION_INSERT_SPECIAL_CHAR
 #define CALLIGRA_SHEETS_ACTION_INSERT_SPECIAL_CHAR
 
-
 #include "DialogCellAction.h"
 
 namespace Calligra
 {
 namespace Sheets
 {
-class InsertSpecialChar : public DialogCellAction {
-Q_OBJECT
+class InsertSpecialChar : public DialogCellAction
+{
+    Q_OBJECT
 public:
     InsertSpecialChar(Actions *actions);
     virtual ~InsertSpecialChar();
 
 protected Q_SLOTS:
-    void specialChar(QChar character, const QString& fontName);
+    void specialChar(QChar character, const QString &fontName);
 
 protected:
     virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
 };
 
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_INSERT_SPECIAL_CHAR
+#endif // CALLIGRA_SHEETS_ACTION_INSERT_SPECIAL_CHAR

@@ -22,8 +22,8 @@
 
 #include <kundo2command.h>
 
-#include "stage_export.h"
 #include "animations/KPrShapeAnimation.h"
+#include "stage_export.h"
 
 class KPrDocument;
 
@@ -31,7 +31,7 @@ class KPrDocument;
 class STAGE_EXPORT KPrReplaceAnimationCommand : public KUndo2Command
 {
 public:
-    KPrReplaceAnimationCommand(KPrDocument *doc, KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation, KUndo2Command *parent=0);
+    KPrReplaceAnimationCommand(KPrDocument *doc, KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation, KUndo2Command *parent = 0);
 
     ~KPrReplaceAnimationCommand() override;
 
@@ -41,10 +41,7 @@ public:
     void undo() override;
 
 private:
-    enum AnimationDelete  {
-        DeleteOld,
-        DeleteNew
-    };
+    enum AnimationDelete { DeleteOld, DeleteNew };
     KPrShapeAnimation *m_oldAnimation;
     KPrShapeAnimation *m_newAnimation;
     KPrDocument *m_document;

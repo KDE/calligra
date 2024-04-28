@@ -5,24 +5,29 @@
  */
 
 #include "EnhancedPathHandle.h"
-#include "EnhancedPathShape.h"
 #include "EnhancedPathParameter.h"
+#include "EnhancedPathShape.h"
+#include <KoOdfWorkaround.h>
+#include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
-#include <KoXmlNS.h>
-#include <KoShapeLoadingContext.h>
-#include <KoOdfWorkaround.h>
 
 #include <math.h>
 
 EnhancedPathHandle::EnhancedPathHandle(EnhancedPathShape *parent)
-: m_parent(parent)
-, m_positionX(0), m_positionY(0)
-, m_minimumX(0), m_minimumY(0)
-, m_maximumX(0), m_maximumY(0)
-, m_polarX(0), m_polarY(0)
-, m_minRadius(0), m_maxRadius(0)
+    : m_parent(parent)
+    , m_positionX(0)
+    , m_positionY(0)
+    , m_minimumX(0)
+    , m_minimumY(0)
+    , m_maximumX(0)
+    , m_maximumY(0)
+    , m_polarX(0)
+    , m_polarY(0)
+    , m_minRadius(0)
+    , m_maxRadius(0)
 {
     Q_ASSERT(m_parent);
 }
@@ -60,7 +65,7 @@ QPointF EnhancedPathHandle::position()
 
 void EnhancedPathHandle::changePosition(const QPointF &position)
 {
-    if (! hasPosition())
+    if (!hasPosition())
         return;
 
     QPointF constrainedPosition(position);
@@ -70,7 +75,7 @@ void EnhancedPathHandle::changePosition(const QPointF &position)
         QPointF polarCenter(m_polarX->evaluate(), m_polarY->evaluate());
         QPointF diff = constrainedPosition - polarCenter;
         // compute the polar radius
-        qreal radius = sqrt(diff.x()*diff.x() + diff.y()*diff.y());
+        qreal radius = sqrt(diff.x() * diff.x() + diff.y() * diff.y());
         // compute the polar angle
         qreal angle = atan2(diff.y(), diff.x());
         if (angle < 0.0)
@@ -114,7 +119,7 @@ void EnhancedPathHandle::setRangeY(EnhancedPathParameter *minY, EnhancedPathPara
     m_maximumY = maxY;
 }
 
-void EnhancedPathHandle::setPolarCenter(EnhancedPathParameter* polarX, EnhancedPathParameter* polarY)
+void EnhancedPathHandle::setPolarCenter(EnhancedPathParameter *polarX, EnhancedPathParameter *polarY)
 {
     m_polarX = polarX;
     m_polarY = polarY;
@@ -131,9 +136,9 @@ bool EnhancedPathHandle::isPolar() const
     return m_polarX && m_polarY;
 }
 
-void EnhancedPathHandle::saveOdf(KoShapeSavingContext & context) const
+void EnhancedPathHandle::saveOdf(KoShapeSavingContext &context) const
 {
-    if (! hasPosition())
+    if (!hasPosition())
         return;
     context.xmlWriter().startElement("draw:handle");
     context.xmlWriter().addAttribute("draw:handle-position", m_positionX->toString() + ' ' + m_positionY->toString());
@@ -156,7 +161,7 @@ void EnhancedPathHandle::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().endElement(); // draw:handle
 }
 
-bool EnhancedPathHandle::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool EnhancedPathHandle::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     if (element.localName() != "handle" || element.namespaceURI() != KoXmlNS::draw)
         return false;
@@ -186,12 +191,12 @@ bool EnhancedPathHandle::loadOdf(const KoXmlElement & element, KoShapeLoadingCon
     } else {
         QString minX = element.attributeNS(KoXmlNS::draw, "handle-range-x-minimum");
         QString maxX = element.attributeNS(KoXmlNS::draw, "handle-range-x-maximum");
-        if (! minX.isEmpty() && ! maxX.isEmpty())
+        if (!minX.isEmpty() && !maxX.isEmpty())
             setRangeX(m_parent->parameter(minX), m_parent->parameter(maxX));
 
         QString minY = element.attributeNS(KoXmlNS::draw, "handle-range-y-minimum");
         QString maxY = element.attributeNS(KoXmlNS::draw, "handle-range-y-maximum");
-        if (! minY.isEmpty() && ! maxY.isEmpty())
+        if (!minY.isEmpty() && !maxY.isEmpty())
             setRangeY(m_parent->parameter(minY), m_parent->parameter(maxY));
     }
 

@@ -21,8 +21,10 @@ class CharacterHighlighting : public QWidget
     Q_OBJECT
 
 public:
-    explicit CharacterHighlighting(QWidget* parent = 0);
-    ~CharacterHighlighting() override {}
+    explicit CharacterHighlighting(QWidget *parent = 0);
+    ~CharacterHighlighting() override
+    {
+    }
 
     void setDisplay(KoCharacterStyle *style, bool directFormattingMode);
     void save(KoCharacterStyle *style);
@@ -38,7 +40,6 @@ Q_SIGNALS:
     void textColorChanged(QColor);
     void backgroundColorChanged(QColor);
     void charStyleChanged();
-
 
 private Q_SLOTS:
     void underlineTypeChanged(int item);

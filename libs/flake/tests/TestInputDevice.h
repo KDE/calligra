@@ -25,7 +25,6 @@ private Q_SLOTS:
     void testMouse();
     void testStylus();
     void testEraser();
-    
 };
 
 #endif /* TESTINPUTDEVICE_H */

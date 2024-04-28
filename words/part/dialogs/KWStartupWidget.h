@@ -8,9 +8,9 @@
 
 #include <ui_KWStartupWidget.h>
 
-#include <KoUnit.h>
-#include <KoPageLayout.h>
 #include <KoColumns.h>
+#include <KoPageLayout.h>
+#include <KoUnit.h>
 
 #include <QWidget>
 

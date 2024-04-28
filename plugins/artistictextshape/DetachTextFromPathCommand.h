@@ -7,8 +7,8 @@
 #ifndef DETACHTEXTFROMPATHCOMMAND_H
 #define DETACHTEXTFROMPATHCOMMAND_H
 
-#include <kundo2command.h>
 #include <QPainterPath>
+#include <kundo2command.h>
 
 class ArtisticTextShape;
 class KoPathShape;
@@ -16,14 +16,15 @@ class KoPathShape;
 class DetachTextFromPathCommand : public KUndo2Command
 {
 public:
-    explicit DetachTextFromPathCommand( ArtisticTextShape * textShape, KUndo2Command * parent = 0 );
+    explicit DetachTextFromPathCommand(ArtisticTextShape *textShape, KUndo2Command *parent = 0);
     /// reimplemented from KUndo2Command
     void redo() override;
     /// reimplemented from KUndo2Command
     void undo() override;
+
 private:
-    ArtisticTextShape * m_textShape;
-    KoPathShape * m_pathShape;
+    ArtisticTextShape *m_textShape;
+    KoPathShape *m_pathShape;
     QPainterPath m_path;
 };
 

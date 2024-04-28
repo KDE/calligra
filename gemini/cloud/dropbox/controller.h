@@ -11,10 +11,10 @@
 
 #include <QObject>
 
-#include "3rdparty/networkcontroller.h"
-#include "3rdparty/listmodel.h"
-#include "3rdparty/folderitem.h"
 #include "3rdparty/filetransferitem.h"
+#include "3rdparty/folderitem.h"
+#include "3rdparty/listmodel.h"
+#include "3rdparty/networkcontroller.h"
 #include "3rdparty/options.h"
 
 class QAction;
@@ -34,7 +34,7 @@ public:
     QList<FolderItem *> m_deleted_list;
 
 private:
-    QHash<QString, ListModel*> m_cache;
+    QHash<QString, ListModel *> m_cache;
     QList<QString> m_move_cache;
 
     NetworkController *m_networkcontroller;
@@ -52,7 +52,7 @@ private:
     void start_delete_items();
     void start_move_items();
 
-    QAction* m_uploadMostRecentAction;
+    QAction *m_uploadMostRecentAction;
 
 Q_SIGNALS:
     void needAuthenticateChanged();
@@ -60,7 +60,7 @@ Q_SIGNALS:
     void network_error(QString error);
     void folderfinished();
     void setcheckindexchanged(uint index);
-    void progressBarChanged(const int &percent, const double &speed,const qint64 &sent_received);
+    void progressBarChanged(const int &percent, const double &speed, const qint64 &sent_received);
     void nothingtotransfer();
     void startTransfer();
     void stopTransfer();
@@ -82,15 +82,15 @@ Q_SIGNALS:
 public Q_SLOTS:
     void authenticate(QString, QString);
     void getlistoffolder(QString folder_name = "");
-    void getfolder(const QVariantMap&);
+    void getfolder(const QVariantMap &);
     void folder_model_clear();
-    void setFolderRoot(const QString&);
+    void setFolderRoot(const QString &);
     bool isRootDir() const;
     void backtoRootDir();
     bool is_multi_selection() const;
     void setMultiSelection();
-    void setCheck(const int &, const bool&);
-    void transfer(const QString&, const bool&);
+    void setCheck(const int &, const bool &);
+    void transfer(const QString &, const bool &);
     void transfer_process();
     void current_transfer_stop_and_cancel();
     void updown_finished();
@@ -102,41 +102,43 @@ public Q_SLOTS:
     void getfolder_done();
     void refresh_current_folder();
     void delete_selected_items();
-    void delete_finished(const bool&);
-    void createnewfolder(const QString&);
-    void renamefileorfolder(const QString&,const QString&);
+    void delete_finished(const bool &);
+    void createnewfolder(const QString &);
+    void renamefileorfolder(const QString &, const QString &);
     void transfer_clear_log();
-    void start_shares(const QString&);
+    void start_shares(const QString &);
     void start_transfer_process();
-    void createnewfolder_finished(const bool&);
-    void renamenewfolder_finished(const bool&);
+    void createnewfolder_finished(const bool &);
+    void renamenewfolder_finished(const bool &);
     void add_move_files_folders_to_cache();
     void move_files_folders_to_clear_cache();
     void start_move_files_folders();
-    void movefilesfolders_finished(const bool&);
-    bool filesize_is_valid(const QString&) const;
+    void movefilesfolders_finished(const bool &);
+    bool filesize_is_valid(const QString &) const;
     bool need_authenticate() const;
     void accountinfo();
     QString getcurrentdir() const;
-    double parseDouble(const QString&) const;
-    bool is_duplicated_file_folder(const QString&) const;
+    double parseDouble(const QString &) const;
+    bool is_duplicated_file_folder(const QString &) const;
     void commit_orientation();
-    QString get_file_size(const QString&) const;
+    QString get_file_size(const QString &) const;
     bool is_push_notification() const;
 
     void add_copy_files_folders_to_cache();
     void copy_files_folders_to_clear_cache();
     void start_copy_files_folders();
     void start_copy_items();
-    void copyfilesfolders_finished(const bool&);
+    void copyfilesfolders_finished(const bool &);
 
     void oauth_v1_request_token();
     void oauth_v1_access_token();
 
-    QString dropboxFolder() { return NetworkController::Dropbox_Folder(); };
-    QAction* uploadMostRecentAction();
+    QString dropboxFolder()
+    {
+        return NetworkController::Dropbox_Folder();
+    };
+    QAction *uploadMostRecentAction();
     void uploadMostRecent();
 };
 
 #endif // CONTROLLER_H
-

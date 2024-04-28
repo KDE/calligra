@@ -7,8 +7,8 @@
 #ifndef COMPONENTTRANSFEREFFECTCONFIGWIDGET_H
 #define COMPONENTTRANSFEREFFECTCONFIGWIDGET_H
 
-#include "KoFilterEffectConfigWidgetBase.h"
 #include "ComponentTransferEffect.h"
+#include "KoFilterEffectConfigWidgetBase.h"
 
 class KoFilterEffect;
 class QDoubleSpinBox;
@@ -23,7 +23,7 @@ public:
     explicit ComponentTransferEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
-    bool editFilterEffect(KoFilterEffect * filterEffect) override;
+    bool editFilterEffect(KoFilterEffect *filterEffect) override;
 
 private Q_SLOTS:
     void slopeChanged(double slope);
@@ -35,19 +35,20 @@ private Q_SLOTS:
     void channelSelected(int channel);
     void tableValuesChanged();
     void discreteValuesChanged();
+
 private:
     void updateControls();
 
-    ComponentTransferEffect * m_effect;
-    KComboBox * m_function;
-    QStackedWidget * m_stack;
-    KLineEdit * m_tableValues;
-    KLineEdit * m_discreteValues;
-    QDoubleSpinBox * m_slope;
-    QDoubleSpinBox * m_intercept;
-    QDoubleSpinBox * m_amplitude;
-    QDoubleSpinBox * m_exponent;
-    QDoubleSpinBox * m_offset;
+    ComponentTransferEffect *m_effect;
+    KComboBox *m_function;
+    QStackedWidget *m_stack;
+    KLineEdit *m_tableValues;
+    KLineEdit *m_discreteValues;
+    QDoubleSpinBox *m_slope;
+    QDoubleSpinBox *m_intercept;
+    QDoubleSpinBox *m_amplitude;
+    QDoubleSpinBox *m_exponent;
+    QDoubleSpinBox *m_offset;
     ComponentTransferEffect::Channel m_currentChannel;
 };
 

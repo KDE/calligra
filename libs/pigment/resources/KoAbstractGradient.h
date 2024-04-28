@@ -24,37 +24,42 @@ public:
     explicit KoAbstractGradient(const QString &filename);
     ~KoAbstractGradient() override;
 
-    virtual KoAbstractGradient* clone() const = 0;
+    virtual KoAbstractGradient *clone() const = 0;
 
-    bool load() override {
+    bool load() override
+    {
         return false;
     }
 
-    bool loadFromDevice(QIODevice *) override {
+    bool loadFromDevice(QIODevice *) override
+    {
         return false;
     }
 
-    bool save() override {
+    bool save() override
+    {
         return false;
     }
 
-    bool saveToDevice(QIODevice*) const override {
+    bool saveToDevice(QIODevice *) const override
+    {
         return false;
     }
 
     /**
-    * Creates a QGradient from the gradient.
-    * The resulting QGradient might differ from original gradient
-    */
-    virtual QGradient* toQGradient() const {
+     * Creates a QGradient from the gradient.
+     * The resulting QGradient might differ from original gradient
+     */
+    virtual QGradient *toQGradient() const
+    {
         return new QGradient();
     }
 
     /// gets the color at position 0 <= t <= 1
-    virtual void colorAt(KoColor&, qreal t) const;
+    virtual void colorAt(KoColor &, qreal t) const;
 
-    void setColorSpace(KoColorSpace* colorSpace);
-    const KoColorSpace * colorSpace() const;
+    void setColorSpace(KoColorSpace *colorSpace);
+    const KoColorSpace *colorSpace() const;
 
     void setSpread(QGradient::Spread spreadMethod);
     QGradient::Spread spread() const;
@@ -70,9 +75,9 @@ public:
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
-Q_DECLARE_METATYPE(KoAbstractGradient*)
+Q_DECLARE_METATYPE(KoAbstractGradient *)
 
 #endif // KOABSTRACTGRADIENT_H

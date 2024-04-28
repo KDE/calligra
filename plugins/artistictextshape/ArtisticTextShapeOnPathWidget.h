@@ -9,8 +9,9 @@
 
 #include <QWidget>
 
-namespace Ui {
-    class ArtisticTextShapeOnPathWidget;
+namespace Ui
+{
+class ArtisticTextShapeOnPathWidget;
 }
 
 class ArtisticTextTool;

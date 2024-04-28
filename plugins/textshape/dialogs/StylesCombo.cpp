@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ */
 #include "StylesCombo.h"
 #include <KoStyleThumbnailer.h>
 
@@ -17,11 +17,11 @@
 #include <QDebug>
 
 StylesCombo::StylesCombo(QWidget *parent)
-    : QComboBox(parent),
-      m_stylesModel(0),
-      m_view(new QListView()),
-      m_selectedItem(-1),
-      m_originalStyle(true)
+    : QComboBox(parent)
+    , m_stylesModel(0)
+    , m_view(new QListView())
+    , m_selectedItem(-1)
+    , m_originalStyle(true)
 {
     // Force "Base" background to white, so the background is consistent with the one
     // of the preview area in the style manager. Also the usual document text colors
@@ -35,7 +35,7 @@ StylesCombo::StylesCombo(QWidget *parent)
     palette.setColor(QPalette::Text, QColor(Qt::black));
     setPalette(palette);
 
-    setMinimumSize(50,32);
+    setMinimumSize(50, 32);
 
     m_view->setMinimumWidth(250);
     m_view->setMouseTracking(true);
@@ -49,10 +49,10 @@ StylesCombo::StylesCombo(QWidget *parent)
     connect(delegate, &StylesDelegate::clickedInItem, this, &StylesCombo::slotItemClicked);
     setItemDelegate(delegate);
 
-//    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSelectionChanged(int)));
+    //    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSelectionChanged(int)));
 
     QComboBox::setEditable(true);
-    setIconSize(QSize(0,0));
+    setIconSize(QSize(0, 0));
 
     StylesComboPreview *preview = new StylesComboPreview(this);
     QComboBox::setEditable(true);
@@ -68,8 +68,7 @@ void StylesCombo::setStyleIsOriginal(bool original)
     m_originalStyle = original;
     if (!original) {
         m_preview->setAddButtonShown(true);
-    }
-    else {
+    } else {
         m_preview->setAddButtonShown(false);
     }
 }
@@ -86,8 +85,8 @@ void StylesCombo::setEditable(bool editable)
         // Create a StylesComboPreview instead of a QLineEdit
         // Compared to QComboBox::setEditable, we might be missing the SH_ComboBox_Popup code though...
         // If a style needs this, then we'll need to call QComboBox::setEditable and then setLineEdit again
-        StylesComboPreview *edit = new StylesComboPreview( this );
-        setLineEdit( edit );
+        StylesComboPreview *edit = new StylesComboPreview(this);
+        setLineEdit(edit);
     } else {
         QComboBox::setEditable(editable);
     }
@@ -102,19 +101,18 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
         // As some StylesCombo features rely on the StylesComboPreview, we reject
         // this order here.
         delete edit;
-        StylesComboPreview* preview = new StylesComboPreview(this);
+        StylesComboPreview *preview = new StylesComboPreview(this);
         edit = preview;
     }
 
     QComboBox::setLineEdit(edit);
-    m_preview = qobject_cast<StylesComboPreview*>(edit);
+    m_preview = qobject_cast<StylesComboPreview *>(edit);
 
     if (m_preview) {
         connect(m_preview, &StylesComboPreview::resized, this, &StylesCombo::slotUpdatePreview);
         connect(m_preview, &StylesComboPreview::newStyleRequested, this, &StylesCombo::newStyleRequested);
         connect(m_preview, &StylesComboPreview::clicked, this, &StylesCombo::slotPreviewClicked);
     }
-
 }
 
 void StylesCombo::slotSelectionChanged(int index)
@@ -122,19 +120,20 @@ void StylesCombo::slotSelectionChanged(int index)
     m_selectedItem = index;
     m_preview->setPreview(m_stylesModel->stylePreview(index, m_preview->availableSize()));
     update();
-//    emit selectionChanged(index);
+    //    emit selectionChanged(index);
 }
 
 void StylesCombo::slotItemClicked(const QModelIndex &index)
 {
-    //this slot allows us to emit a selected signal. There is a bit of redundancy if the item clicked was indeed a new selection, where we also emit the selectionChanged signal from the slot above.
+    // this slot allows us to emit a selected signal. There is a bit of redundancy if the item clicked was indeed a new selection, where we also emit the
+    // selectionChanged signal from the slot above.
     m_selectedItem = index.row();
     m_preview->setPreview(m_stylesModel->stylePreview(m_selectedItem, m_preview->availableSize()));
     m_currentIndex = index;
     update();
     emit selected(m_selectedItem);
     emit selected(index);
-    hidePopup(); //the editor event has accepted the mouseReleased event. Call hidePopup ourselves then.
+    hidePopup(); // the editor event has accepted the mouseReleased event. Call hidePopup ourselves then.
 }
 
 void StylesCombo::slotUpdatePreview()
@@ -156,13 +155,13 @@ void StylesCombo::slotPreviewClicked()
 bool StylesCombo::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonRelease && object == view()->viewport()) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        //If what follows isn't a HACK then I have no clue what is!!!!
-        //The item delegate editorEvent method is not sent MouseButtonRelease events.
-        //This is because the QComboBox installs an event filter on the view and calls
-        //popup->hide() on MouseButtonRelease to dismiss the view. Since we installed an event filter on the view
-        //ourselves, we can prevent hiding the popup. We have to call itemDelegate->editorEvent
-        //manually though.
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+        // If what follows isn't a HACK then I have no clue what is!!!!
+        // The item delegate editorEvent method is not sent MouseButtonRelease events.
+        // This is because the QComboBox installs an event filter on the view and calls
+        // popup->hide() on MouseButtonRelease to dismiss the view. Since we installed an event filter on the view
+        // ourselves, we can prevent hiding the popup. We have to call itemDelegate->editorEvent
+        // manually though.
         QModelIndex index = view()->indexAt(mouseEvent->pos());
         QModelIndex buddy = m_stylesModel->buddy(index);
         QStyleOptionViewItem options;
@@ -189,10 +188,11 @@ void StylesCombo::slotModelReset()
     m_view->reset();
 }
 
-void StylesCombo::showEditIcon(bool show){
-    StylesDelegate *delegate = dynamic_cast<StylesDelegate*>(itemDelegate());
+void StylesCombo::showEditIcon(bool show)
+{
+    StylesDelegate *delegate = dynamic_cast<StylesDelegate *>(itemDelegate());
     Q_ASSERT(delegate);
-    if (!delegate) { //the following should never get called as we are creating a StylesDelegate on the constructor;
+    if (!delegate) { // the following should never get called as we are creating a StylesDelegate on the constructor;
         StylesDelegate *delegate = new StylesDelegate();
         connect(delegate, &StylesDelegate::needsUpdate, m_view, QOverload<const QModelIndex &>::of(&QListView::update));
         connect(delegate, &StylesDelegate::styleManagerButtonClicked, this, &StylesCombo::slotShowDia);

@@ -28,14 +28,17 @@ public:
 
     void saveOdf(KoShapeSavingContext &context) override;
 
-    void updatePosition(const QTextDocument *document,
-                                int posInDocument, const QTextCharFormat &format) override;
+    void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format) override;
 
-    void resize(const QTextDocument *document, QTextInlineObject &object,
-                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
+    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
 
-    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) override;
+    void paint(QPainter &painter,
+               QPaintDevice *pd,
+               const QTextDocument *document,
+               const QRectF &rect,
+               const QTextInlineObject &object,
+               int posInDocument,
+               const QTextCharFormat &format) override;
 };
 
 #endif /* KOTEXTSOFTPAGEBREAK_H */

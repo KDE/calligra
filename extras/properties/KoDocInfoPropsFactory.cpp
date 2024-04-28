@@ -10,10 +10,10 @@
 
 #include <KPluginFactory>
 
-static QObject* createDocInfoPropsPage(QWidget* w, QObject* parent, const KPluginMetaData &data, const QVariantList& args)
+static QObject *createDocInfoPropsPage(QWidget *w, QObject *parent, const KPluginMetaData &data, const QVariantList &args)
 {
     Q_UNUSED(w);
-    KPropertiesDialog* props = qobject_cast<KPropertiesDialog *>(parent);
+    KPropertiesDialog *props = qobject_cast<KPropertiesDialog *>(parent);
     Q_ASSERT(props);
     return new KoDocumentInfoPropsPage(props, args);
 }

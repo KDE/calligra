@@ -31,7 +31,6 @@ protected:
     void showEvent(QShowEvent *event) override;
 
 private:
-
     Ui_SnapGuideConfigWidget widget;
     KoSnapGuide *m_snapGuide;
 };

@@ -19,8 +19,10 @@ class ListLevelWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ListLevelWidget(QWidget* parent = 0);
-    ~ListLevelWidget() override {}
+    explicit ListLevelWidget(QWidget *parent = 0);
+    ~ListLevelWidget() override
+    {
+    }
 
     void setDisplay(const KoListLevelProperties &props);
     void save(KoListLevelProperties &props) const;

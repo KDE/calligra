@@ -10,8 +10,8 @@
 #include <QPainter>
 
 InitialsCommentShape::InitialsCommentShape()
-: KoShape()
-, m_active(true)
+    : KoShape()
+    , m_active(true)
 {
 }
 
@@ -19,26 +19,25 @@ InitialsCommentShape::~InitialsCommentShape()
 {
 }
 
-void InitialsCommentShape::saveOdf(KoShapeSavingContext& /*context*/) const
+void InitialsCommentShape::saveOdf(KoShapeSavingContext & /*context*/) const
 {
 }
 
-bool InitialsCommentShape::loadOdf(const KoXmlElement& /*element*/, KoShapeLoadingContext& /*context*/)
+bool InitialsCommentShape::loadOdf(const KoXmlElement & /*element*/, KoShapeLoadingContext & /*context*/)
 {
     return false;
 }
 
-void InitialsCommentShape::paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
+void InitialsCommentShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     applyConversion(painter, converter);
 
     QLinearGradient gradient(initialsBoxPoint, QPointF(0, initialsBoxSize.height()));
     qreal lighterPos = 0.0;
     qreal darkerPos = 0.0;
-    if(!m_active){
+    if (!m_active) {
         darkerPos = 1.0;
-    }
-    else {
+    } else {
         lighterPos = 1.0;
     }
     gradient.setColorAt(lighterPos, QColor(Qt::yellow));
@@ -61,7 +60,6 @@ void InitialsCommentShape::setInitials(const QString &initials)
 QString InitialsCommentShape::initials()
 {
     return m_initials;
-
 }
 
 bool InitialsCommentShape::isActive() const
@@ -79,4 +77,3 @@ void InitialsCommentShape::toogleActive()
     setActive(!m_active);
     update();
 }
-

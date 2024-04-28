@@ -11,10 +11,13 @@
 
 class KoTextEditingPlugin;
 
-class AutocorrectFactory : public KoTextEditingFactory {
+class AutocorrectFactory : public KoTextEditingFactory
+{
 public:
     explicit AutocorrectFactory();
-    ~AutocorrectFactory() override {}
+    ~AutocorrectFactory() override
+    {
+    }
 
     KoTextEditingPlugin *create() const override;
 };

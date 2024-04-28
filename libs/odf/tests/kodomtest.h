@@ -7,20 +7,20 @@
 #ifndef KODOMTEST_H
 #define KODOMTEST_H
 
+#include "KoXmlReader.h"
 #include <QByteArray>
 #include <QObject>
-#include "KoXmlReader.h"
 
-class KoDomTest: public QObject
+class KoDomTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
     void testQDom();
     void testKoDom();
+
 private:
     KoXmlDocument m_doc;
 };
 
 #endif
-

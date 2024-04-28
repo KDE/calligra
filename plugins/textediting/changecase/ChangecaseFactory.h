@@ -11,10 +11,13 @@
 
 class KoTextEditingPlugin;
 
-class ChangecaseFactory : public KoTextEditingFactory {
+class ChangecaseFactory : public KoTextEditingFactory
+{
 public:
     explicit ChangecaseFactory();
-    ~ChangecaseFactory() override {}
+    ~ChangecaseFactory() override
+    {
+    }
 
     KoTextEditingPlugin *create() const override;
 };

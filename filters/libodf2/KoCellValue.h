@@ -10,8 +10,8 @@
 class KoXmlWriter;
 
 #include <QList>
-#include <QString>
 #include <QPair>
+#include <QString>
 
 class KoCellValue
 {
@@ -19,11 +19,11 @@ public:
     KoCellValue();
     virtual ~KoCellValue();
 
-    void saveOdf(KoXmlWriter& writer) const;
+    void saveOdf(KoXmlWriter &writer) const;
 
 protected:
-    virtual QString type() const =0;
-    virtual QList< QPair<QString, QString> > attributes() const =0;
+    virtual QString type() const = 0;
+    virtual QList<QPair<QString, QString>> attributes() const = 0;
 };
 
 #endif

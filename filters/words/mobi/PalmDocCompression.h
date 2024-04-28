@@ -17,7 +17,7 @@ public:
     PalmDocCompression();
     ~PalmDocCompression();
 
-    void compressContent (QByteArray input, QByteArray &output, QList<qint32> &recordOffset);
+    void compressContent(QByteArray input, QByteArray &output, QList<qint32> &recordOffset);
 
 private:
     void startCompressing(QByteArray input, QDataStream &out, QList<qint32> &recordOffset);
@@ -26,7 +26,6 @@ private:
     const int m_winSize;
     const int m_buffSize;
     const int m_maxBlockSize;
-
 };
 
 #endif // PALMDOCCOMPRESSION_H

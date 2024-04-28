@@ -2,7 +2,7 @@
  *  SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.bet
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 // The file lut.h comes from http://bitbucket.org/cyrille/lut, keep it as much untouched as possible for easier sync
 
@@ -13,8 +13,9 @@
 
 #define _USE_QT_TYPES_
 
-namespace Ko {
-  #include "lut.h"
+namespace Ko
+{
+#include "lut.h"
 }
 
 #endif

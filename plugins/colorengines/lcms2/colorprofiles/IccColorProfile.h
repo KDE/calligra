@@ -2,13 +2,13 @@
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef _KO_ICC_COLOR_PROFILE_H_
 #define _KO_ICC_COLOR_PROFILE_H_
 
-#include "KoColorProfile.h"
 #include "KoChannelInfo.h"
+#include "KoColorProfile.h"
 
 class LcmsColorProfileContainer;
 
@@ -18,7 +18,6 @@ class LcmsColorProfileContainer;
 class IccColorProfile : public KoColorProfile
 {
 public:
-
     using KoColorProfile::save;
 
     /**
@@ -33,6 +32,7 @@ public:
         ~Data();
         QByteArray rawData();
         void setRawData(const QByteArray &);
+
     private:
         struct Private;
         QScopedPointer<Private> const d;
@@ -46,6 +46,7 @@ public:
     public:
         Container();
         virtual ~Container();
+
     public:
         virtual QString name() const = 0;
         virtual QString info() const = 0;
@@ -56,14 +57,14 @@ public:
         virtual bool isSuitableForPrinting() const = 0;
         virtual bool isSuitableForDisplay() const = 0;
         virtual bool hasColorants() const = 0;
-        virtual QVector <double> getColorantsXYZ() const = 0;
-        virtual QVector <double> getColorantsxyY() const = 0;
-        virtual QVector <double> getWhitePointXYZ() const = 0;
-        virtual QVector <double> getWhitePointxyY() const = 0;
-        virtual QVector <double> getEstimatedTRC() const = 0;
+        virtual QVector<double> getColorantsXYZ() const = 0;
+        virtual QVector<double> getColorantsxyY() const = 0;
+        virtual QVector<double> getWhitePointXYZ() const = 0;
+        virtual QVector<double> getWhitePointxyY() const = 0;
+        virtual QVector<double> getEstimatedTRC() const = 0;
     };
-public:
 
+public:
     explicit IccColorProfile(const QString &fileName = QString());
     explicit IccColorProfile(const QByteArray &rawData);
     IccColorProfile(const IccColorProfile &rhs);
@@ -75,8 +76,8 @@ public:
     virtual bool save();
 
     /**
-    * @return an array with the raw data of the profile
-    */
+     * @return an array with the raw data of the profile
+     */
     QByteArray rawData() const override;
     bool valid() const override;
     float version() const override;
@@ -89,15 +90,15 @@ public:
     bool supportsRelative() const override;
     bool hasColorants() const override;
     bool hasTRC() const override;
-    QVector <qreal> getColorantsXYZ() const override;
-    QVector <qreal> getColorantsxyY() const override;
-    QVector <qreal> getWhitePointXYZ() const override;
-    QVector <qreal> getWhitePointxyY() const override;
-    QVector <qreal> getEstimatedTRC() const override;
-    void linearizeFloatValue(QVector <qreal> & Value) const override;
-    void delinearizeFloatValue(QVector <qreal> & Value) const override;
-    void linearizeFloatValueFast(QVector <qreal> & Value) const override;
-    void delinearizeFloatValueFast(QVector <qreal> & Value) const override;
+    QVector<qreal> getColorantsXYZ() const override;
+    QVector<qreal> getColorantsxyY() const override;
+    QVector<qreal> getWhitePointXYZ() const override;
+    QVector<qreal> getWhitePointxyY() const override;
+    QVector<qreal> getEstimatedTRC() const override;
+    void linearizeFloatValue(QVector<qreal> &Value) const override;
+    void delinearizeFloatValue(QVector<qreal> &Value) const override;
+    void linearizeFloatValueFast(QVector<qreal> &Value) const override;
+    void delinearizeFloatValueFast(QVector<qreal> &Value) const override;
     bool operator==(const KoColorProfile &) const override;
     QString type() const override
     {
@@ -115,11 +116,14 @@ public:
 
 protected:
     void setRawData(const QByteArray &rawData);
+
 public:
     LcmsColorProfileContainer *asLcms() const;
+
 protected:
     bool init();
     void calculateFloatUIMinMax(void);
+
 private:
     struct Private;
     QScopedPointer<Private> d;

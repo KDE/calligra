@@ -2,8 +2,8 @@
 #define TESTTEXTFRAMESORTING_H
 
 #include <QObject>
-#include <qtest_kde.h>
 #include <QtTest>
+#include <qtest_kde.h>
 
 class KWTextFrame;
 class KWTextFrameSet;
@@ -26,8 +26,8 @@ private Q_SLOTS:
     void testCopyAfterTextSorting();
 
 private:
-    KWTextFrame* createFrame(const QPointF &position, KWTextFrameSet &fs);
-    KWFrame* createCopyFrame(const QPointF &position, KoShape *orig, KWTextFrameSet &fs);
+    KWTextFrame *createFrame(const QPointF &position, KWTextFrameSet &fs);
+    KWFrame *createCopyFrame(const QPointF &position, KoShape *orig, KWTextFrameSet &fs);
 };
 
 #endif

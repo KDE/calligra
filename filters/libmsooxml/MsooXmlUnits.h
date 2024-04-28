@@ -17,39 +17,40 @@
 #include <QString>
 
 // conversion from twips (http://en.wikipedia.org/wiki/Twip)
-#define TWIP_TO_DM(tw) ((tw)*0.000176389)
-#define TWIP_TO_CM(tw) ((tw)*0.001763889)
-#define TWIP_TO_MM(tw) ((tw)*0.017638889)
-#define TWIP_TO_POINT(tw) ((tw)*0.05)
-#define TWIP_TO_INCH(tw) ((tw)*0.000694444)
-#define TWIP_TO_PI(tw) ((tw)*0.004166667)
-#define TWIP_TO_CC(tw) ((tw)*0.00389404975957)
-#define TWIP_TO_PX(tw) ((tw)*0.066798611)
+#define TWIP_TO_DM(tw) ((tw) * 0.000176389)
+#define TWIP_TO_CM(tw) ((tw) * 0.001763889)
+#define TWIP_TO_MM(tw) ((tw) * 0.017638889)
+#define TWIP_TO_POINT(tw) ((tw) * 0.05)
+#define TWIP_TO_INCH(tw) ((tw) * 0.000694444)
+#define TWIP_TO_PI(tw) ((tw) * 0.004166667)
+#define TWIP_TO_CC(tw) ((tw) * 0.00389404975957)
+#define TWIP_TO_PX(tw) ((tw) * 0.066798611)
 
 // conversion to twips
-#define DM_TO_TWIP(dm) ((dm)*5669.28776738)
-#define CM_TO_TWIP(cm) ((cm)*566.929098146)
-#define MM_TO_TWIP(mm) ((mm)*56.6929130287)
-#define POINT_TO_TWIP(pt) ((pt)*20.0)
-#define INCH_TO_TWIP(in) ((in)*1440.0)
-#define PI_TO_TWIP(pi) ((pi)*240.0)
-#define CC_TO_TWIP(cc) ((cc)*256.80206)
-#define PX_TO_TWIP(px) ((px)*14.970371)
+#define DM_TO_TWIP(dm) ((dm) * 5669.28776738)
+#define CM_TO_TWIP(cm) ((cm) * 566.929098146)
+#define MM_TO_TWIP(mm) ((mm) * 56.6929130287)
+#define POINT_TO_TWIP(pt) ((pt) * 20.0)
+#define INCH_TO_TWIP(in) ((in) * 1440.0)
+#define PI_TO_TWIP(pi) ((pi) * 240.0)
+#define CC_TO_TWIP(cc) ((cc) * 256.80206)
+#define PX_TO_TWIP(px) ((px) * 14.970371)
 
 // EMU conversion (ECMA-376, 20.1.2.1: EMU Unit of Measurement)
 //! Converts emu value (integer or double) to cm
-#define EMU_TO_CM(emu) ((emu)/360000.0)
+#define EMU_TO_CM(emu) ((emu) / 360000.0)
 
 //! Converts emu value (integer or double) to inches
-#define EMU_TO_INCH(emu) ((emu)/914400.0)
+#define EMU_TO_INCH(emu) ((emu) / 914400.0)
 
 //! Converts emu value (integer or double) to points
-#define EMU_TO_POINT(emu) ((emu)/12700.0)
+#define EMU_TO_POINT(emu) ((emu) / 12700.0)
 
 namespace MSOOXML
 {
 
-namespace Utils {
+namespace Utils
+{
 
 //! Performs EMU conversion and returns string.
 inline QString cmString(qreal cm)
@@ -63,19 +64,19 @@ inline QString cmString(qreal cm)
     "0" and "" is converted to "0cm".
     @return empty string on error. */
 //! CASE \#P505
-KOMSOOXML_EXPORT QString EMU_to_ODF(const QString& emuValue);
+KOMSOOXML_EXPORT QString EMU_to_ODF(const QString &emuValue);
 
 //! Converts TWIP Unit of Measurement to cm.
 /*! Converts value expressed in TWIPs  to ODF-compliant "0.000cm" unit.
     "0" and "" is converted to "0cm".
     @return empty string on error. */
-KOMSOOXML_EXPORT QString TWIP_to_ODF(const QString& twipValue);
+KOMSOOXML_EXPORT QString TWIP_to_ODF(const QString &twipValue);
 
 //! ECMA-376, 17.18.23 ST_EighthPointMeasure (Measurement in Eighths of a Point), p. 1540
 /*! Converts eighths of a point (equivalent to 1/576th of an inch) to point
     to ODF-compliant "0.000pt" unit.
     @return empty string on failure. */
-KOMSOOXML_EXPORT QString ST_EighthPointMeasure_to_ODF(const QString& value);
+KOMSOOXML_EXPORT QString ST_EighthPointMeasure_to_ODF(const QString &value);
 
 //! ECMA-376, 22.9.2.14 ST_TwipsMeasure (Measurement in Twentieths of a Point), p. 4339
 /*! Converts:
@@ -84,10 +85,10 @@ KOMSOOXML_EXPORT QString ST_EighthPointMeasure_to_ODF(const QString& value);
     The conversion's target is ODF-compliant "0.000xx" unit, where xx is "mm", "cm", "pt", etc.
     For case 1 it is always "pt".
     @return empty string on error. */
-KOMSOOXML_EXPORT QString ST_TwipsMeasure_to_pt(const QString& value);
+KOMSOOXML_EXPORT QString ST_TwipsMeasure_to_pt(const QString &value);
 
 //! Like ST_TwipsMeasure_to_pt() but for case 1 always converts to "cm".
-KOMSOOXML_EXPORT QString ST_TwipsMeasure_to_cm(const QString& value);
+KOMSOOXML_EXPORT QString ST_TwipsMeasure_to_cm(const QString &value);
 
 //! ECMA-376, 22.9.2.12 ST_PositiveUniversalMeasure (Positive Universal Measurement), p. 4340
 /*! Converts number+unit of measurement into ODF-compliant number+unit.
@@ -95,10 +96,10 @@ KOMSOOXML_EXPORT QString ST_TwipsMeasure_to_cm(const QString& value);
     Values with units mm, cm, in, pt, pi are just copied.
     Values with "pc" (another name for Pica) are replaced with "pi".
     @return empty string on error. */
-KOMSOOXML_EXPORT QString ST_PositiveUniversalMeasure_to_ODF(const QString& value);
+KOMSOOXML_EXPORT QString ST_PositiveUniversalMeasure_to_ODF(const QString &value);
 
 //! Like ST_PositiveUniversalMeasure_to_ODF(const QString&) but always converts to cm.
-KOMSOOXML_EXPORT QString ST_PositiveUniversalMeasure_to_cm(const QString& value);
+KOMSOOXML_EXPORT QString ST_PositiveUniversalMeasure_to_cm(const QString &value);
 
 } // Utils
 } // MSOOXML
@@ -116,7 +117,7 @@ inline QString EMU_TO_INCH_STRING(int emu)
 }
 
 // px conversion
-#define PT_TO_PX(pt) ((pt)*1.33597222222)
-#define PX_TO_CM(px) ((px)*0.0264)
+#define PT_TO_PX(pt) ((pt) * 1.33597222222)
+#define PX_TO_CM(px) ((px) * 0.0264)
 
 #endif /* MSOOXML_UNITS_H */

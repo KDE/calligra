@@ -25,12 +25,12 @@ public:
     ~ToolDocker();
 
 protected:
-    virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget
+    virtual void resizeEvent(QResizeEvent *event); ///< reimplemented from QWidget
 public Q_SLOTS:
     /**
      * Update the option widgets to the argument one, removing the currently set widget.
      */
-    void setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList);
+    void setOptionWidgets(const QList<QPointer<QWidget>> &optionWidgetList);
 
     /**
      * Returns whether the docker has an optionwidget attached
@@ -43,7 +43,7 @@ private:
     Q_PRIVATE_SLOT(d, void locationChanged(Qt::DockWidgetArea area))
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

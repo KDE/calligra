@@ -7,8 +7,8 @@
 #ifndef KWRUNAROUNDPROPERTIES_H
 #define KWRUNAROUNDPROPERTIES_H
 
-#include <ui_KWRunAroundProperties.h>
 #include <dialogs/KWShapeConfigFactory.h>
+#include <ui_KWRunAroundProperties.h>
 
 #include <KoShapeConfigWidgetBase.h>
 
@@ -35,7 +35,8 @@ public:
     void save(KUndo2Command *command);
 
     /// reimplemented
-    bool showOnShapeCreate() override {
+    bool showOnShapeCreate() override
+    {
         return true;
     }
 

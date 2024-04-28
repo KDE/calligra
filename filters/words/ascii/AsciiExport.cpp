@@ -17,29 +17,26 @@
 #include <KPluginFactory>
 
 // Calligra
-#include <KoStore.h>
 #include <KoFilterChain.h>
+#include <KoStore.h>
 
 // Filter libraries
+#include "OdfTextReader.h"
 #include "OdtReader.h"
 #include "OdtReaderBackend.h"
-#include "OdfTextReader.h"
 
 // This filter
-#include "OdtReaderAsciiBackend.h"
-#include "OdfReaderAsciiContext.h"
 #include "AsciiExportDebug.h"
+#include "OdfReaderAsciiContext.h"
+#include "OdtReaderAsciiBackend.h"
 
-
-K_PLUGIN_FACTORY_WITH_JSON(AsciiExportFactory, "calligra_filter_odt2ascii.json",
-			   registerPlugin<AsciiExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(AsciiExportFactory, "calligra_filter_odt2ascii.json", registerPlugin<AsciiExport>();)
 
 // Needed to instantiate the plugin factory.
 #include "AsciiExport.moc"
 
-
 AsciiExport::AsciiExport(QObject *parent, const QVariantList &)
-: KoFilter(parent)
+    : KoFilter(parent)
 {
 }
 
@@ -47,7 +44,7 @@ AsciiExport::~AsciiExport()
 {
 }
 
-KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus AsciiExport::convert(const QByteArray &from, const QByteArray &to)
 {
     // Check for types
     if (from != "application/vnd.oasis.opendocument.text" || to != "text/plain") {
@@ -55,8 +52,7 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
     }
 
     // Open the infile and return an error if it fails.
-    KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
-                                             "", KoStore::Auto);
+    KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read, "", KoStore::Auto);
 
     if (!odfStore->open("mimetype")) {
         errorAsciiExport << "Unable to open input file!" << Qt::endl;
@@ -67,21 +63,21 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
 
     // Create output file.
     QFile outfile(m_chain->outputFile());
-    if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text )) {
+    if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text)) {
         errorAsciiExport << "Unable to open output file!" << Qt::endl;
         outfile.close();
         return KoFilter::FileNotFound;
     }
 
     // The actual conversion
-    OdfReaderAsciiContext  asciiContext(odfStore, outfile);
+    OdfReaderAsciiContext asciiContext(odfStore, outfile);
 
-    OdtReaderBackend       odtBackend;        // Use generic backend for document level
-    OdtReaderAsciiBackend  asciiTextBackend;  // Special backend for this filter for text level
+    OdtReaderBackend odtBackend; // Use generic backend for document level
+    OdtReaderAsciiBackend asciiTextBackend; // Special backend for this filter for text level
 
     // Create all necessary readers
-    OdtReader              odtReader;
-    OdfTextReader          odfTextReader;
+    OdtReader odtReader;
+    OdfTextReader odfTextReader;
     odfTextReader.setBackend(&asciiTextBackend);
     odtReader.setTextReader(&odfTextReader);
 

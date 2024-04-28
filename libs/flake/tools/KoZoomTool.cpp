@@ -10,17 +10,18 @@
 
 #include <QStandardPaths>
 
-#include "KoZoomStrategy.h"
-#include "KoZoomToolWidget.h"
-#include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
+#include "KoPointerEvent.h"
+#include "KoZoomStrategy.h"
+#include "KoZoomToolWidget.h"
 
 #include <FlakeDebug.h>
 
 KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
-        : KoInteractionTool(canvas),
-        m_temporary(false), m_zoomInMode(true)
+    : KoInteractionTool(canvas)
+    , m_temporary(false)
+    , m_zoomInMode(true)
 {
     QPixmap inPixmap, outPixmap;
     inPixmap.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/cursors/zoom_in_cursor.png"));
@@ -68,7 +69,7 @@ void KoZoomTool::keyReleaseEvent(QKeyEvent *event)
     KoInteractionTool::keyReleaseEvent(event);
 }
 
-void KoZoomTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
+void KoZoomTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &)
 {
     m_temporary = toolActivation == TemporaryActivation;
     updateCursor(false);

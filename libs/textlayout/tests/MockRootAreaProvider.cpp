@@ -17,18 +17,19 @@ MockRootAreaProvider::MockRootAreaProvider()
 {
 }
 
-KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraint, int requestedPosition, bool *isNewRootArea)
+KoTextLayoutRootArea *
+MockRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraint, int requestedPosition, bool *isNewRootArea)
 {
     Q_UNUSED(constraint);
     if (maxPosition > 0 && requestedPosition > maxPosition) {
-        qInfo()<<"To many area requests:"<<maxPosition<<requestedPosition;
+        qInfo() << "To many area requests:" << maxPosition << requestedPosition;
         return 0; // guard against loop
     }
     m_askedForMoreThenOneArea |= (m_areas.count() > 1);
     *isNewRootArea = !m_areas.contains(requestedPosition);
     if (!m_areas.contains(requestedPosition)) {
         m_areas.insert(requestedPosition, new KoTextLayoutRootArea(documentLayout));
-        qInfo()<<"New area provided:"<<requestedPosition;
+        qInfo() << "New area provided:" << requestedPosition;
     }
     return m_areas.value(requestedPosition);
 }
@@ -62,7 +63,7 @@ void MockRootAreaProvider::setSuggestedRect(QRectF rect)
 QList<KoTextLayoutObstruction *> MockRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)
 {
     Q_UNUSED(rootArea);
-    QList<KoTextLayoutObstruction*> obstructions;
+    QList<KoTextLayoutObstruction *> obstructions;
     return obstructions;
 }
 

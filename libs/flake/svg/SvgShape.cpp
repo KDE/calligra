@@ -6,17 +6,16 @@
 
 #include "SvgShape.h"
 
-
 SvgShape::~SvgShape()
 {
 }
 
-bool SvgShape::saveSvg(SvgSavingContext &/*context*/)
+bool SvgShape::saveSvg(SvgSavingContext & /*context*/)
 {
     return false;
 }
 
-bool SvgShape::loadSvg(const KoXmlElement &/*element*/, SvgLoadingContext &/*context*/)
+bool SvgShape::loadSvg(const KoXmlElement & /*element*/, SvgLoadingContext & /*context*/)
 {
     return false;
 }

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    SPDX-FileCopyrightText: 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                  Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
    SPDX-FileCopyrightText: 2006 Martin Pfeiffer <hubipete@gmx.net>
    SPDX-FileCopyrightText: 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
@@ -9,29 +9,31 @@
 
 #include "SpaceElement.h"
 #include "AttributeManager.h"
-#include <QPainter>
 #include <QBrush>
+#include <QPainter>
 
-SpaceElement::SpaceElement( BasicElement* parent ) : BasicElement( parent )
-{}
-
-void SpaceElement::paint( QPainter& painter, AttributeManager* )
+SpaceElement::SpaceElement(BasicElement *parent)
+    : BasicElement(parent)
 {
-    painter.setBrush( QBrush( Qt::lightGray, Qt::DiagCrossPattern ) );
-    painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
 }
 
-void SpaceElement::layout( const AttributeManager* am )
+void SpaceElement::paint(QPainter &painter, AttributeManager *)
 {
-    qreal height =  am->doubleOf( "height", this ); 
-    setHeight( height + am->doubleOf( "depth", this ) );
-    setWidth( am->doubleOf( "width", this ) );
-    setBaseLine( height );
+    painter.setBrush(QBrush(Qt::lightGray, Qt::DiagCrossPattern));
+    painter.drawRect(QRectF(0.0, 0.0, width(), height()));
 }
 
-QString SpaceElement::attributesDefaultValue( const QString& attribute ) const
+void SpaceElement::layout(const AttributeManager *am)
 {
-    if( attribute == "width" || attribute == "height" || attribute == "depth" )
+    qreal height = am->doubleOf("height", this);
+    setHeight(height + am->doubleOf("depth", this));
+    setWidth(am->doubleOf("width", this));
+    setBaseLine(height);
+}
+
+QString SpaceElement::attributesDefaultValue(const QString &attribute) const
+{
+    if (attribute == "width" || attribute == "height" || attribute == "depth")
         return "0.0";
     else
         return "auto";

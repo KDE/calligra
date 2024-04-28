@@ -21,30 +21,30 @@ class CQCanvasController : public QObject, public KoCanvasController
 {
     Q_OBJECT
 public:
-    explicit CQCanvasController(KActionCollection* actionCollection);
+    explicit CQCanvasController(KActionCollection *actionCollection);
     virtual ~CQCanvasController();
 
     virtual void setVastScrolling(qreal factor);
     virtual void setZoomWithWheel(bool zoom);
-    virtual void updateDocumentSize(const QSize& sz, bool recalculateCenter);
-    virtual void setScrollBarValue(const QPoint& value);
+    virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter);
+    virtual void setScrollBarValue(const QPoint &value);
     virtual QPoint scrollBarValue() const;
-    virtual void pan(const QPoint& distance);
+    virtual void pan(const QPoint &distance);
     virtual QPointF preferredCenter() const;
-    virtual void setPreferredCenter(const QPointF& viewPoint);
+    virtual void setPreferredCenter(const QPointF &viewPoint);
     virtual void recenterPreferred();
-    virtual void zoomTo(const QRect& rect);
-    virtual void zoomBy(const QPoint& center, qreal zoom);
-    virtual void zoomOut(const QPoint& center);
-    virtual void zoomIn(const QPoint& center);
-    virtual void ensureVisible(KoShape* shape);
-    virtual void ensureVisible(const QRectF& rect, bool smooth);
+    virtual void zoomTo(const QRect &rect);
+    virtual void zoomBy(const QPoint &center, qreal zoom);
+    virtual void zoomOut(const QPoint &center);
+    virtual void zoomIn(const QPoint &center);
+    virtual void ensureVisible(KoShape *shape);
+    virtual void ensureVisible(const QRectF &rect, bool smooth);
     virtual int canvasOffsetY() const;
     virtual int canvasOffsetX() const;
     virtual int visibleWidth() const;
     virtual int visibleHeight() const;
-    virtual KoCanvasBase* canvas() const;
-    virtual void setCanvas(KoCanvasBase* canvas);
+    virtual KoCanvasBase *canvas() const;
+    virtual void setCanvas(KoCanvasBase *canvas);
     virtual void setDrawShadow(bool drawShadow);
     virtual QSize viewportSize() const;
     virtual void scrollContentsBy(int dx, int dy);
@@ -57,9 +57,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // CQCANVASCONTROLLER_H
-
-

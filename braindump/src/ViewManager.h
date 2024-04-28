@@ -31,16 +31,17 @@ class View;
 class ViewManager
 {
 public:
-    explicit ViewManager(RootSection*);
-    void addShape(Section* section, KoShape* shape);
-    void removeShape(Section* section, KoShape* shape);
-    void addView(View*);
-    void removeView(View*);
-    void viewHasFocus(View* view);
+    explicit ViewManager(RootSection *);
+    void addShape(Section *section, KoShape *shape);
+    void removeShape(Section *section, KoShape *shape);
+    void addView(View *);
+    void removeView(View *);
+    void viewHasFocus(View *view);
+
 private:
-    View* m_lastViewInFocus;
-    QList<View*> m_views;
-    RootSection* m_rootSection;
+    View *m_lastViewInFocus;
+    QList<View *> m_views;
+    RootSection *m_rootSection;
 };
 
 #endif

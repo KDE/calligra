@@ -7,8 +7,8 @@
 #ifndef KOELEMENTREFERENCE_H
 #define KOELEMENTREFERENCE_H
 
-#include <QSharedDataPointer>
 #include <QSharedData>
+#include <QSharedDataPointer>
 #include <QUuid>
 
 #include "KoXmlReaderForward.h"
@@ -20,7 +20,6 @@ class KoXmlWriter;
 class KoElementReferenceData : public QSharedData
 {
 public:
-
     KoElementReferenceData()
     {
         xmlid = QUuid::createUuid().toString();
@@ -34,7 +33,9 @@ public:
     {
     }
 
-    ~KoElementReferenceData() {}
+    ~KoElementReferenceData()
+    {
+    }
 
     QString xmlid;
 };
@@ -52,17 +53,9 @@ public:
 class KOODF_EXPORT KoElementReference
 {
 public:
+    enum GenerationOption { UUID = 0, Counter = 1 };
 
-    enum GenerationOption {
-        UUID = 0,
-        Counter = 1
-    };
-
-    enum SaveOption {
-        XmlId = 0x0,
-        DrawId = 0x1,
-        TextId = 0x2
-    };
+    enum SaveOption { XmlId = 0x0, DrawId = 0x1, TextId = 0x2 };
     Q_DECLARE_FLAGS(SaveOptions, SaveOption)
 
     KoElementReference();
@@ -106,12 +99,9 @@ public:
      */
     void invalidate();
 
-
 private:
-
     QSharedDataPointer<KoElementReferenceData> d;
 };
-
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoElementReference::SaveOptions)
 

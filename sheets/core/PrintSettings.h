@@ -40,7 +40,7 @@ public:
     /**
      * Constructor.
      */
-    PrintSettings(const PrintSettings& other);
+    PrintSettings(const PrintSettings &other);
 
     /**
      * Destructor.
@@ -51,9 +51,9 @@ public:
      * \return the page layout associated with this document (margins, pageSize, etc).
      * \see KoPageLayout
      */
-    const KoPageLayout& pageLayout() const;
+    const KoPageLayout &pageLayout() const;
 
-    void setPageLayout(const KoPageLayout& pageLayout);
+    void setPageLayout(const KoPageLayout &pageLayout);
 
     void setPageFormat(KoPageFormat::Format format);
     void setPageOrientation(KoPageFormat::Orientation orientation);
@@ -173,57 +173,58 @@ public:
     bool centerVertically() const;
     void setCenterVertically(bool center);
 
-    const Region& printRegion() const;
-    void setPrintRegion(const Region& region);
-    void addPrintRange(const QRect& range);
+    const Region &printRegion() const;
+    void setPrintRegion(const Region &region);
+    void addPrintRange(const QRect &range);
 
     double zoom() const;
     void setZoom(double zoom);
-    const QSize& pageLimits() const;
-    void setPageLimits(const QSize& pageLimits);
+    const QSize &pageLimits() const;
+    void setPageLimits(const QSize &pageLimits);
 
     /**
      * Returns the columns, which are printed on each page.
      * Returns QPair (0, 0) if nothing is defined.
      */
-    const QPair<int, int>& repeatedColumns() const;
+    const QPair<int, int> &repeatedColumns() const;
 
     /**
      * Sets the columns to be printed on each page.
      * Only the x-values of the points are used
      * Set it to QPair (0, 0) to undefine it
      */
-    void setRepeatedColumns(const QPair<int, int>& repeatedColumns);
+    void setRepeatedColumns(const QPair<int, int> &repeatedColumns);
 
     /**
      * Returns the rows, which are printed on each page.
      * Returns QPair (0, 0) if nothing is defined
      */
-    const QPair<int, int>& repeatedRows() const;
+    const QPair<int, int> &repeatedRows() const;
 
     /**
      * Sets the rows to be printed on each page.
      * Only the y-values of the points are used
      * Set it to QPair (0, 0) to undefine it
      */
-    void setRepeatedRows(const QPair<int, int>& repeatedRows);
+    void setRepeatedRows(const QPair<int, int> &repeatedRows);
 
     /**
      * Assignment operator.
      */
-    void operator=(const PrintSettings& settings);
+    void operator=(const PrintSettings &settings);
 
     /**
      * Equality operator.
      */
-    bool operator==(const PrintSettings& other) const;
-    inline bool operator!=(const PrintSettings& other) const {
+    bool operator==(const PrintSettings &other) const;
+    inline bool operator!=(const PrintSettings &other) const
+    {
         return !operator==(other);
     }
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

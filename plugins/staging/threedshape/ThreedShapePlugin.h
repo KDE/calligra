@@ -12,13 +12,11 @@
 #include <QObject>
 #include <QVariantList>
 
-
 class ThreedShapePlugin : public QObject
 {
     Q_OBJECT
 public:
-    ThreedShapePlugin(QObject *parent, const QVariantList&);
+    ThreedShapePlugin(QObject *parent, const QVariantList &);
 };
-
 
 #endif

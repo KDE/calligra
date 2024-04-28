@@ -7,20 +7,18 @@
 
 #include "TextDocumentInspectionDocker.h"
 
+#include "KoTextShapeData.h"
 #include "TextDocumentStructureModel.h"
 #include "TextShape.h"
-#include "KoTextShapeData.h"
 //
-#include <KoShapeManager.h>
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
+#include <KoShapeManager.h>
 // Qt
 #include <QDebug>
 #include <QTreeView>
 
-
-
-TextDocumentInspectionDocker::TextDocumentInspectionDocker(QWidget * parent)
+TextDocumentInspectionDocker::TextDocumentInspectionDocker(QWidget *parent)
     : QDockWidget(parent)
     , m_canvas(nullptr)
     , m_mainWidget(new QTreeView(this))
@@ -29,7 +27,7 @@ TextDocumentInspectionDocker::TextDocumentInspectionDocker(QWidget * parent)
     setWindowTitle(QLatin1String("TextDocument Inspector"));
     setWidget(m_mainWidget);
 
-//     m_mainWidget->setRootIsDecorated(false);
+    //     m_mainWidget->setRootIsDecorated(false);
     m_mainWidget->setAllColumnsShowFocus(true);
     m_mainWidget->setUniformRowHeights(true);
     m_mainWidget->setAlternatingRowColors(true);
@@ -40,7 +38,6 @@ TextDocumentInspectionDocker::~TextDocumentInspectionDocker()
 {
 }
 
-
 void TextDocumentInspectionDocker::setCanvas(KoCanvasBase *canvas)
 {
     setEnabled(canvas != 0);
@@ -50,13 +47,12 @@ void TextDocumentInspectionDocker::setCanvas(KoCanvasBase *canvas)
     }
 
     m_canvas = canvas;
-    if (! m_canvas) {
+    if (!m_canvas) {
         m_textDocumentStructureModel->setTextDocument(0);
         return;
     }
 
-    connect(m_canvas->shapeManager(), &KoShapeManager::selectionChanged,
-            this, &TextDocumentInspectionDocker::onShapeSelectionChanged);
+    connect(m_canvas->shapeManager(), &KoShapeManager::selectionChanged, this, &TextDocumentInspectionDocker::onShapeSelectionChanged);
 
     onShapeSelectionChanged();
 }
@@ -70,7 +66,7 @@ void TextDocumentInspectionDocker::unsetCanvas()
 
 void TextDocumentInspectionDocker::onShapeSelectionChanged()
 {
-    QTextDocument* textDocument = 0;
+    QTextDocument *textDocument = 0;
 
     // TODO: big fail: shapeManager of a canvas still emits signals after unsetCanvas()
     // was called on us. And at least by the current API dox there is no way in unsetCanvas()
@@ -81,7 +77,7 @@ void TextDocumentInspectionDocker::onShapeSelectionChanged()
     if (m_canvas) {
         KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
         if (shape) {
-            TextShape *textShape = dynamic_cast<TextShape*>(shape);
+            TextShape *textShape = dynamic_cast<TextShape *>(shape);
             if (textShape) {
                 textDocument = textShape->textShapeData()->document();
             }

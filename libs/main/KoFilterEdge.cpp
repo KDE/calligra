@@ -8,31 +8,32 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 #include "KoFilterVertex.h"
 #include "PriorityQueue_p.h"
 
-namespace CalligraFilter {
+namespace CalligraFilter
+{
 
-Edge::Edge(Vertex* vertex, KoFilterEntry::Ptr filterEntry) :
-        m_vertex(vertex), m_filterEntry(filterEntry), d(0)
+Edge::Edge(Vertex *vertex, KoFilterEntry::Ptr filterEntry)
+    : m_vertex(vertex)
+    , m_filterEntry(filterEntry)
+    , d(0)
 {
 }
 
-void Edge::relax(const Vertex* predecessor, PriorityQueue<Vertex>& queue)
+void Edge::relax(const Vertex *predecessor, PriorityQueue<Vertex> &queue)
 {
     if (!m_vertex || !predecessor || !m_filterEntry)
         return;
     if (m_vertex->setKey(predecessor->key() + m_filterEntry->weight)) {
-        queue.keyDecreased(m_vertex);   // maintain the heap property
+        queue.keyDecreased(m_vertex); // maintain the heap property
         m_vertex->setPredecessor(predecessor);
     }
 }
 
-void Edge::dump(const QByteArray& indent) const
+void Edge::dump(const QByteArray &indent) const
 {
     if (m_vertex)
-        debugFilter << indent << "Edge -> '" << m_vertex->mimeType()
-        << "' (" << m_filterEntry->weight << ")" << Qt::endl;
+        debugFilter << indent << "Edge -> '" << m_vertex->mimeType() << "' (" << m_filterEntry->weight << ")" << Qt::endl;
     else
-        debugFilter << indent << "Edge -> '(null)' ("
-        << m_filterEntry->weight << ")" << Qt::endl;
+        debugFilter << indent << "Edge -> '(null)' (" << m_filterEntry->weight << ")" << Qt::endl;
 }
 
 }

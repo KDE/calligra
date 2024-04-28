@@ -35,24 +35,23 @@
 
 #include <QString>
 
-K_PLUGIN_FACTORY_WITH_JSON(SvgExportFactory, "calligra_filter_karbon2svg.json",
-                           registerPlugin<SvgExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(SvgExportFactory, "calligra_filter_karbon2svg.json", registerPlugin<SvgExport>();)
 
-SvgExport::SvgExport(QObject*parent, const QVariantList&)
+SvgExport::SvgExport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus SvgExport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus SvgExport::convert(const QByteArray &from, const QByteArray &to)
 {
     if (to != "image/svg+xml" || from != "application/vnd.oasis.opendocument.graphics")
         return KoFilter::NotImplemented;
 
-    KoDocument * document = m_chain->inputDocument();
+    KoDocument *document = m_chain->inputDocument();
     if (!document)
         return KoFilter::ParsingError;
 
-    KarbonDocument * karbonPart = dynamic_cast<KarbonDocument*>(document);
+    KarbonDocument *karbonPart = dynamic_cast<KarbonDocument *>(document);
     if (!karbonPart)
         return KoFilter::WrongFormat;
 

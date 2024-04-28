@@ -17,11 +17,9 @@ KoShapeBackgroundPrivate::~KoShapeBackgroundPrivate()
 }
 
 KoShapeBackground::KoShapeBackground(KoShapeBackgroundPrivate &dd)
-    :d_ptr(&dd)
+    : d_ptr(&dd)
 {
 }
-
-
 
 KoShapeBackground::KoShapeBackground()
     : d_ptr(new KoShapeBackgroundPrivate())

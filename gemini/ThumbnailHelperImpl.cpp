@@ -14,15 +14,15 @@
 #include <KoPart.h>
 #include <KoStore.h>
 
-#include <QTimer>
-#include <QImage>
 #include <QApplication>
-#include <QPainter>
+#include <QImage>
 #include <QMimeType>
+#include <QPainter>
+#include <QTimer>
 
 // static const int minThumbnailSize = 400;
 
-ThumbnailHelperImpl::ThumbnailHelperImpl(QObject* parent)
+ThumbnailHelperImpl::ThumbnailHelperImpl(QObject *parent)
     : QObject(parent)
     , m_part(0)
     , m_doc(0)
@@ -31,11 +31,11 @@ ThumbnailHelperImpl::ThumbnailHelperImpl(QObject* parent)
 
 ThumbnailHelperImpl::~ThumbnailHelperImpl()
 {
-    if(m_doc)
+    if (m_doc)
         m_doc->deleteLater();
 }
 
-bool ThumbnailHelperImpl::convert(const QString& in, const QString& out, int width, int height)
+bool ThumbnailHelperImpl::convert(const QString &in, const QString &out, int width, int height)
 {
     // Other locations for thumbnails use the embedded thumbnails. This
     // application specifically exists to ensure less crashes in situations
@@ -66,14 +66,14 @@ bool ThumbnailHelperImpl::convert(const QString& in, const QString& out, int wid
         return false;
     }
 
-    while(m_doc->isLoading()) {
+    while (m_doc->isLoading()) {
         qApp->processEvents();
     }
 
     // render the page on a bigger pixmap and use smoothScale,
     // looks better than directly scaling with the QPainter (malte)
-    //const bool usePassedSize = (width > minThumbnailSize && height > minThumbnailSize);
-    //const QSize size = usePassedSize ? QSize(width, height) : QSize(minThumbnailSize, minThumbnailSize);
+    // const bool usePassedSize = (width > minThumbnailSize && height > minThumbnailSize);
+    // const QSize size = usePassedSize ? QSize(width, height) : QSize(minThumbnailSize, minThumbnailSize);
     const QSize size = QSize(width, height);
     image = m_doc->generatePreview(size * 2).toImage().scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 

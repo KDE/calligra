@@ -6,27 +6,26 @@
 
 #include "KPrPicturesImport.h"
 
-#include <KoShapeFactoryBase.h>
-#include <KoShapeRegistry.h>
-#include <KoShapeLayer.h>
-#include <KoImageData.h>
 #include <KoImageCollection.h>
-#include <KoPAPage.h>
+#include <KoImageData.h>
 #include <KoPAMasterPage.h>
+#include <KoPAPage.h>
 #include <KoPAPageInsertCommand.h>
+#include <KoShapeFactoryBase.h>
+#include <KoShapeLayer.h>
+#include <KoShapeRegistry.h>
 
 #include "KPrDocument.h"
 #include "KPrView.h"
 #include "StageDebug.h"
 
 #include <KIO/StoredTransferJob>
-#include <kundo2command.h>
 #include <KoDocumentResourceManager.h>
+#include <kundo2command.h>
 
 #include <QFileDialog>
-#include <QUrl>
 #include <QImageReader>
-
+#include <QUrl>
 
 KPrPicturesImport::KPrPicturesImport()
 {
@@ -40,7 +39,7 @@ void KPrPicturesImport::import(KPrView *view)
         // TODO: think about using KoFileDialog everywhere, after extending it to support remote urls
         QFileDialog *dialog = new QFileDialog();
         QStringList imageMimeTypes;
-        foreach(const QByteArray &mimeType, QImageReader::supportedMimeTypes()) {
+        foreach (const QByteArray &mimeType, QImageReader::supportedMimeTypes()) {
             imageMimeTypes << QLatin1String(mimeType);
         }
         dialog->setMimeTypeFilters(imageMimeTypes);
@@ -54,7 +53,7 @@ void KPrPicturesImport::import(KPrView *view)
         // TODO there should be a progress bar
         // instead of the progress bar opening for each loaded picture
         m_currentPage = view->activePage();
-        KoPAPage *activePage = dynamic_cast<KoPAPage*>(m_currentPage);
+        KoPAPage *activePage = dynamic_cast<KoPAPage *>(m_currentPage);
         if (activePage) {
             m_masterPage = activePage->masterPage();
 
@@ -62,8 +61,7 @@ void KPrPicturesImport::import(KPrView *view)
             m_cmd = new KUndo2Command(kundo2_i18n("Insert Pictures"));
             import();
         }
-    }
-    else {
+    } else {
         warnStage << "picture shape factory not found";
     }
 }
@@ -74,8 +72,7 @@ void KPrPicturesImport::import()
         //  TODO check that a picture was added.
         m_doc->addCommand(m_cmd);
         // TODO activate first added page doUpdateActivePage(page);
-    }
-    else {
+    } else {
         QUrl url(m_urls.takeAt(0));
         // todo calculate the correct size so that the image is centered to
         KIO::StoredTransferJob *job(KIO::storedGet(url, KIO::NoReload, {}));
@@ -88,7 +85,7 @@ void KPrPicturesImport::pictureImported(KJob *job)
 {
     KoShape *shape = m_factory->createDefaultShape();
     if (shape) {
-        KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
+        KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob *>(job);
         Q_ASSERT(transferJob);
         KoImageData *imageData = m_doc->resourceManager()->imageCollection()->createImageData(transferJob->data());
         if (imageData->isValid()) {
@@ -106,7 +103,7 @@ void KPrPicturesImport::pictureImported(KJob *job)
             shape->setSize(imageSize);
 
             // center the picture on the page
-            QPointF pos( pageSize.width() / 2- imageSize.width() / 2, pageSize.height() / 2 - imageSize.height() / 2 );
+            QPointF pos(pageSize.width() / 2 - imageSize.width() / 2, pageSize.height() / 2 - imageSize.height() / 2);
             shape->setPosition(pos);
 
             KoPAPageBase *page = m_doc->newPage(m_masterPage);
@@ -115,18 +112,15 @@ void KPrPicturesImport::pictureImported(KJob *job)
                 layer->addShape(shape);
                 new KoPAPageInsertCommand(m_doc, page, m_currentPage, m_cmd);
                 m_currentPage = page;
-            }
-            else {
+            } else {
                 delete page;
                 delete shape;
             }
-        }
-        else {
+        } else {
             warnStage << "imageData not valid";
             delete shape;
         }
-    }
-    else {
+    } else {
         warnStage << "shape not created";
     }
     import();

@@ -7,9 +7,9 @@
 #ifndef FORMULATOOLWIDGET_H
 #define FORMULATOOLWIDGET_H
 
-#include <QTabWidget>
-#include <QMenu>
 #include "ui_FormulaToolWidget.h"
+#include <QMenu>
+#include <QTabWidget>
 
 class KoFormulaTool;
 class QTableWidgetItem;
@@ -22,29 +22,30 @@ class QTableWidgetItem;
  * widget provides two buttons - save and load formula. For saving and loading it
  * uses the loadOdf() and saveOdf() methods of KoFormulaShape.
  */
-class FormulaToolWidget : public QTabWidget, Ui::mainTabWidget {
-Q_OBJECT
+class FormulaToolWidget : public QTabWidget, Ui::mainTabWidget
+{
+    Q_OBJECT
 public:
     /// Standard constructor
-    explicit FormulaToolWidget( KoFormulaTool* tool, QWidget* parent = 0 );
+    explicit FormulaToolWidget(KoFormulaTool *tool, QWidget *parent = 0);
 
     /// Standard destructor
     ~FormulaToolWidget() override;
 
     /// Set the KoFormulaTool @p tool this options widget belongs to
-    void setFormulaTool( KoFormulaTool* tool );
+    void setFormulaTool(KoFormulaTool *tool);
 
 public Q_SLOTS:
-    void insertSymbol(QTableWidgetItem* item);
+    void insertSymbol(QTableWidgetItem *item);
 
 private:
-    void setupButton(QToolButton* button, QMenu& menu, const QString& text, QList<QString>, int length=8);
+    void setupButton(QToolButton *button, QMenu &menu, const QString &text, QList<QString>, int length = 8);
 
     static QList<QString> symbolsInRange(int start, int length);
-    
+
 private:
     /// The KoFormulaTool this options widget belongs to
-    KoFormulaTool* m_tool;
+    KoFormulaTool *m_tool;
 
     QMenu m_scriptsMenu;
     QMenu m_fractionMenu;

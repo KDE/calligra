@@ -45,20 +45,18 @@
 
 // This has been added to the template file, as the mapping is
 // non-trivial. Shaheed: Please check the implementation
-Word97::BRC toWord97(const Word95::BRC &s) {
-
+Word97::BRC toWord97(const Word95::BRC &s)
+{
     Word97::BRC ret;
 
     // Check the BRC documentation
-    if ( s.dxpLineWidth < 6 ) {
+    if (s.dxpLineWidth < 6) {
         ret.dptLineWidth = s.dxpLineWidth * 6;
         ret.brcType = s.brcType;
-    }
-    else if ( s.dxpLineWidth == 6 ) {
+    } else if (s.dxpLineWidth == 6) {
         ret.dptLineWidth = 6; // what's the default?
         ret.brcType = 6; // dotted
-    }
-    else { // s.dxpLineWidth == 7
+    } else { // s.dxpLineWidth == 7
         ret.dptLineWidth = 6; // what's the default?
         ret.brcType = 7;
     }
@@ -72,16 +70,16 @@ Word97::STSHI toWord97(const Word95::STSHI &s)
 {
     Word97::STSHI ret;
 
-    ret.cstd=s.cstd;
-    ret.cbSTDBaseInFile=s.cbSTDBaseInFile;
-    ret.fStdStylenamesWritten=s.fStdStylenamesWritten;
-    ret.unused4_2=s.unused4_2;
-    ret.stiMaxWhenSaved=s.stiMaxWhenSaved;
-    ret.istdMaxFixedWhenSaved=s.istdMaxFixedWhenSaved;
-    ret.nVerBuiltInNamesWhenSaved=s.nVerBuiltInNamesWhenSaved;
-    ret.rgftcStandardChpStsh[0]=s.ftcStandardChpStsh;
-    ret.rgftcStandardChpStsh[1]=s.ftcStandardChpStsh; // fake them
-    ret.rgftcStandardChpStsh[2]=s.ftcStandardChpStsh; // fake them
+    ret.cstd = s.cstd;
+    ret.cbSTDBaseInFile = s.cbSTDBaseInFile;
+    ret.fStdStylenamesWritten = s.fStdStylenamesWritten;
+    ret.unused4_2 = s.unused4_2;
+    ret.stiMaxWhenSaved = s.stiMaxWhenSaved;
+    ret.istdMaxFixedWhenSaved = s.istdMaxFixedWhenSaved;
+    ret.nVerBuiltInNamesWhenSaved = s.nVerBuiltInNamesWhenSaved;
+    ret.rgftcStandardChpStsh[0] = s.ftcStandardChpStsh;
+    ret.rgftcStandardChpStsh[1] = s.ftcStandardChpStsh; // fake them
+    ret.rgftcStandardChpStsh[2] = s.ftcStandardChpStsh; // fake them
 
     return ret;
 }

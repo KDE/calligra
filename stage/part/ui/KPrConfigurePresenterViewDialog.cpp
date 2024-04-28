@@ -11,33 +11,33 @@
 
 #include <KLocalizedString>
 
-#include "StageDebug.h"
 #include "KPrDocument.h"
+#include "StageDebug.h"
 
-KPrConfigurePresenterViewDialog::KPrConfigurePresenterViewDialog( KPrDocument *document, QWidget *parent )
-    : KoDialog( parent )
-    , m_document( document )
+KPrConfigurePresenterViewDialog::KPrConfigurePresenterViewDialog(KPrDocument *document, QWidget *parent)
+    : KoDialog(parent)
+    , m_document(document)
 {
-    QWidget *widget = new QWidget( this );
+    QWidget *widget = new QWidget(this);
 
-    ui.setupUi( widget );
+    ui.setupUi(widget);
 
-    for (auto screen: qGuiApp->screens()) {
+    for (auto screen : qGuiApp->screens()) {
         if (screen == qGuiApp->primaryScreen()) {
-            ui.monitorComboBox->addItem( i18n( "Monitor %1 (primary)", screen->name() ) );
+            ui.monitorComboBox->addItem(i18n("Monitor %1 (primary)", screen->name()));
         } else {
-            ui.monitorComboBox->addItem( i18n( "Monitor %1", screen->name() ) );
+            ui.monitorComboBox->addItem(i18n("Monitor %1", screen->name()));
         }
     }
 
-    if ( qGuiApp->screens().count() <= 1 )
-        ui.presenterViewCheckBox->setEnabled( false );
+    if (qGuiApp->screens().count() <= 1)
+        ui.presenterViewCheckBox->setEnabled(false);
 
-    setMainWidget( widget );
+    setMainWidget(widget);
 
-    setCaption( i18n( "Configure Presenter View" ) );
+    setCaption(i18n("Configure Presenter View"));
 
-    ui.monitorComboBox->setCurrentIndex( document->presentationMonitor() );
+    ui.monitorComboBox->setCurrentIndex(document->presentationMonitor());
     ui.presenterViewCheckBox->setChecked(document->isPresenterViewEnabled());
 }
 
@@ -48,5 +48,5 @@ int KPrConfigurePresenterViewDialog::presentationMonitor()
 
 bool KPrConfigurePresenterViewDialog::presenterViewEnabled()
 {
-    return ( ui.presenterViewCheckBox->checkState() == Qt::Checked );
+    return (ui.presenterViewCheckBox->checkState() == Qt::Checked);
 }

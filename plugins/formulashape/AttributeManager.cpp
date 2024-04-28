@@ -10,12 +10,12 @@
 #include "ElementFactory.h"
 #include "FormulaDebug.h"
 
+#include <KoPostscriptPaintDevice.h>
 #include <KoUnit.h>
 #include <KoViewConverter.h>
-#include <KoPostscriptPaintDevice.h>
 
-#include <QFontMetricsF>
 #include <QColor>
+#include <QFontMetricsF>
 #include <QRegularExpression>
 
 //// Copied from calligra KoUnit.h
@@ -27,20 +27,20 @@
 //// 1 cc = 12 dd
 //// Note: I don't use division but multiplication with the inverse value
 //// because it's faster ;p (Werner)
-//#define POINT_TO_MM(px) ((px)*0.352777167)
-//#define MM_TO_POINT(mm) ((mm)*2.83465058)
-//#define POINT_TO_CM(px) ((px)*0.0352777167)
-//#define CM_TO_POINT(cm) ((cm)*28.3465058)
-//#define POINT_TO_DM(px) ((px)*0.00352777167)
-//#define DM_TO_POINT(dm) ((dm)*283.465058)
-//#define POINT_TO_INCH(px) ((px)*0.01388888888889)
-//#define INCH_TO_POINT(inch) ((inch)*72.0)
-//#define MM_TO_INCH(mm) ((mm)*0.039370147)
-//#define INCH_TO_MM(inch) ((inch)*25.399956)
-//#define POINT_TO_PI(px)((px)*0.083333333)
-//#define POINT_TO_CC(px)((px)*0.077880997)
-//#define PI_TO_POINT(pi)((pi)*12)
-//#define CC_TO_POINT(cc)((cc)*12.840103)
+// #define POINT_TO_MM(px) ((px)*0.352777167)
+// #define MM_TO_POINT(mm) ((mm)*2.83465058)
+// #define POINT_TO_CM(px) ((px)*0.0352777167)
+// #define CM_TO_POINT(cm) ((cm)*28.3465058)
+// #define POINT_TO_DM(px) ((px)*0.00352777167)
+// #define DM_TO_POINT(dm) ((dm)*283.465058)
+// #define POINT_TO_INCH(px) ((px)*0.01388888888889)
+// #define INCH_TO_POINT(inch) ((inch)*72.0)
+// #define MM_TO_INCH(mm) ((mm)*0.039370147)
+// #define INCH_TO_MM(inch) ((inch)*25.399956)
+// #define POINT_TO_PI(px)((px)*0.083333333)
+// #define POINT_TO_CC(px)((px)*0.077880997)
+// #define PI_TO_POINT(pi)((pi)*12)
+// #define CC_TO_POINT(cc)((cc)*12.840103)
 
 AttributeManager::AttributeManager()
 {
@@ -48,184 +48,177 @@ AttributeManager::AttributeManager()
 }
 
 AttributeManager::~AttributeManager()
-{}
+{
+}
 
-QString AttributeManager::findValue( const QString& attribute, const BasicElement* element ) const
+QString AttributeManager::findValue(const QString &attribute, const BasicElement *element) const
 {
     // check if the current element has a value assigned
-    QString value = element->attribute( attribute );
-    if( !value.isEmpty() ) {
-//         debugFormula << "checking for attribute "<<attribute <<" returning (s)"<<value;
+    QString value = element->attribute(attribute);
+    if (!value.isEmpty()) {
+        //         debugFormula << "checking for attribute "<<attribute <<" returning (s)"<<value;
         return value;
     }
     // if not, check if any of the parent elements inherits a value
-    BasicElement* tmpParent = element->parentElement();
-    while( tmpParent )
-    {
-        value = tmpParent->inheritsAttribute( attribute );
-        if( !value.isEmpty() ) {
-//             debugFormula << "checking for attribute "<<attribute <<" returning (p)"<<value;
+    BasicElement *tmpParent = element->parentElement();
+    while (tmpParent) {
+        value = tmpParent->inheritsAttribute(attribute);
+        if (!value.isEmpty()) {
+            //             debugFormula << "checking for attribute "<<attribute <<" returning (p)"<<value;
             return value;
-        }
-        else {
+        } else {
             tmpParent = tmpParent->parentElement();
         }
     }
 
     // if not, return the default value of the attribute
-//     debugFormula << "checking for attribute "<<attribute <<" returning (d) "<<element->attributesDefaultValue( attribute );
-    return element->attributesDefaultValue( attribute );
+    //     debugFormula << "checking for attribute "<<attribute <<" returning (d) "<<element->attributesDefaultValue( attribute );
+    return element->attributesDefaultValue(attribute);
 }
 
-bool AttributeManager::boolOf( const QString& attribute,
-                               const BasicElement* element ) const
+bool AttributeManager::boolOf(const QString &attribute, const BasicElement *element) const
 {
-    return findValue( attribute, element ) == "true";
+    return findValue(attribute, element) == "true";
 }
 
-qreal AttributeManager::doubleOf( const QString& attribute,
-                                  const BasicElement* element ) const
+qreal AttributeManager::doubleOf(const QString &attribute, const BasicElement *element) const
 {
-
-    return lengthToPixels(parseUnit( findValue( attribute, element ), element ), element, attribute);
+    return lengthToPixels(parseUnit(findValue(attribute, element), element), element, attribute);
 }
 
-QList<qreal> AttributeManager::doubleListOf( const QString& attribute,
-                                             const BasicElement* element ) const
+QList<qreal> AttributeManager::doubleListOf(const QString &attribute, const BasicElement *element) const
 {
     QList<qreal> doubleList;
-    QStringList tmp = findValue( attribute, element ).split( ' ' );
-    foreach( const QString &doubleValue, tmp )
-        doubleList << lengthToPixels( parseUnit( doubleValue, element ), element, attribute);
+    QStringList tmp = findValue(attribute, element).split(' ');
+    foreach (const QString &doubleValue, tmp)
+        doubleList << lengthToPixels(parseUnit(doubleValue, element), element, attribute);
 
     return doubleList;
 }
 
-QString AttributeManager::stringOf( const QString& attribute, const BasicElement* element  ) const
+QString AttributeManager::stringOf(const QString &attribute, const BasicElement *element) const
 {
-    return findValue( attribute, element );
+    return findValue(attribute, element);
 }
 
-QColor AttributeManager::colorOf( const QString& attribute, const BasicElement* element  ) const
+QColor AttributeManager::colorOf(const QString &attribute, const BasicElement *element) const
 {
-    QString tmpColor = findValue( attribute, element );
-    if( attribute == "mathbackground" && tmpColor.isEmpty() )
+    QString tmpColor = findValue(attribute, element);
+    if (attribute == "mathbackground" && tmpColor.isEmpty())
         return Qt::transparent;
 
-    return QColor( tmpColor );
+    return QColor(tmpColor);
 }
 
-Align AttributeManager::alignOf( const QString& attribute, const BasicElement* element  ) const
+Align AttributeManager::alignOf(const QString &attribute, const BasicElement *element) const
 {
-    return parseAlign( findValue( attribute, element ) );
+    return parseAlign(findValue(attribute, element));
 }
 
-QList<Align> AttributeManager::alignListOf( const QString& attribute,
-                                            const BasicElement* element  ) const
+QList<Align> AttributeManager::alignListOf(const QString &attribute, const BasicElement *element) const
 {
     QList<Align> alignList;
-    QStringList tmpList = findValue( attribute, element ).split( ' ' );
+    QStringList tmpList = findValue(attribute, element).split(' ');
 
-    foreach( const QString &tmp, tmpList )
-        alignList << parseAlign( tmp );
+    foreach (const QString &tmp, tmpList)
+        alignList << parseAlign(tmp);
 
     return alignList;
 }
 
-Qt::PenStyle AttributeManager::penStyleOf( const QString& attribute,
-                                           const BasicElement* element  ) const
+Qt::PenStyle AttributeManager::penStyleOf(const QString &attribute, const BasicElement *element) const
 {
-    return parsePenStyle( findValue( attribute, element ) );
+    return parsePenStyle(findValue(attribute, element));
 }
 
-QList<Qt::PenStyle> AttributeManager::penStyleListOf( const QString& attribute,
-                                                      const BasicElement* element  ) const
+QList<Qt::PenStyle> AttributeManager::penStyleListOf(const QString &attribute, const BasicElement *element) const
 {
     QList<Qt::PenStyle> penStyleList;
-    QStringList tmpList = findValue( attribute, element ).split( ' ' );
+    QStringList tmpList = findValue(attribute, element).split(' ');
 
-    foreach( const QString &tmp, tmpList )
-        penStyleList << parsePenStyle( tmp );
+    foreach (const QString &tmp, tmpList)
+        penStyleList << parsePenStyle(tmp);
 
     return penStyleList;
 }
 
-int AttributeManager::scriptLevel( const BasicElement* parent, int index ) const
+int AttributeManager::scriptLevel(const BasicElement *parent, int index) const
 {
     ElementType parentType = parent->elementType();
     int current_scaleLevel = parent->scaleLevel();
 
     /** First check for types where all children are scaled */
-    switch(parentType) {
-        case Fraction:
-            if( parent->displayStyle() == false )
-                return current_scaleLevel+1;
-            else
-                return current_scaleLevel;
-        case Style: {
-            QString tmp = parent->attribute( "scriptlevel" );
-            if( tmp.startsWith( '+' ) )
-                    return current_scaleLevel + tmp.remove(0,1).toInt();
-            if( tmp.startsWith( '-' ) )
-                    return current_scaleLevel - tmp.remove(0,1).toInt();
-            return tmp.toInt();
-        }
-        case MultiScript:
+    switch (parentType) {
+    case Fraction:
+        if (parent->displayStyle() == false)
             return current_scaleLevel + 1;
-        case Table:
-            return current_scaleLevel + 1;
-        default:
-            break;
+        else
+            return current_scaleLevel;
+    case Style: {
+        QString tmp = parent->attribute("scriptlevel");
+        if (tmp.startsWith('+'))
+            return current_scaleLevel + tmp.remove(0, 1).toInt();
+        if (tmp.startsWith('-'))
+            return current_scaleLevel - tmp.remove(0, 1).toInt();
+        return tmp.toInt();
     }
-    if( index == 0) return current_scaleLevel;
+    case MultiScript:
+        return current_scaleLevel + 1;
+    case Table:
+        return current_scaleLevel + 1;
+    default:
+        break;
+    }
+    if (index == 0)
+        return current_scaleLevel;
     /** Now check for types where the first child isn't scaled, but the rest are */
-    switch(parentType) {
-            case SubScript:
-            case SupScript:
-            case SubSupScript:
-                return current_scaleLevel + 1;
-            case Under:
-                if( boolOf("accentunder", parent) )
-                    return current_scaleLevel + 1;
-                else
-                    return current_scaleLevel;
-            case Over:
-                if( boolOf("accent", parent) )
-                    return current_scaleLevel + 1;
-                else
-                    return current_scaleLevel;
-            case UnderOver:
-                if( (index == 1 && boolOf("accentunder", parent)) || (index == 2 && boolOf("accent", parent)) )
-                    return current_scaleLevel + 1;
-                else
-                    return current_scaleLevel;
-            case Root:
-                /* second argument to root is the base */
-                return current_scaleLevel + 1;
-            default:
-                return current_scaleLevel;
+    switch (parentType) {
+    case SubScript:
+    case SupScript:
+    case SubSupScript:
+        return current_scaleLevel + 1;
+    case Under:
+        if (boolOf("accentunder", parent))
+            return current_scaleLevel + 1;
+        else
+            return current_scaleLevel;
+    case Over:
+        if (boolOf("accent", parent))
+            return current_scaleLevel + 1;
+        else
+            return current_scaleLevel;
+    case UnderOver:
+        if ((index == 1 && boolOf("accentunder", parent)) || (index == 2 && boolOf("accent", parent)))
+            return current_scaleLevel + 1;
+        else
+            return current_scaleLevel;
+    case Root:
+        /* second argument to root is the base */
+        return current_scaleLevel + 1;
+    default:
+        return current_scaleLevel;
     }
 }
 
-qreal AttributeManager::lineThickness( const BasicElement* element ) const
+qreal AttributeManager::lineThickness(const BasicElement *element) const
 {
     QFontMetricsF fm(font(element));
-    return fm.height() * 0.06 ;
+    return fm.height() * 0.06;
 }
 
-qreal AttributeManager::layoutSpacing( const BasicElement* element  ) const
+qreal AttributeManager::layoutSpacing(const BasicElement *element) const
 {
     QFontMetricsF fm(font(element));
-//    return fm.height() * 0.166667 ;
-    return fm.height() * 0.05 ;
+    //    return fm.height() * 0.166667 ;
+    return fm.height() * 0.05;
 }
 
-qreal AttributeManager::lengthToPixels( Length length, const BasicElement* element, const QString &attribute) const
+qreal AttributeManager::lengthToPixels(Length length, const BasicElement *element, const QString &attribute) const
 {
-    if(length.value == 0)
+    if (length.value == 0)
         return 0;
 
-    switch(length.unit) {
+    switch (length.unit) {
     case Length::Em: {
         QFontMetricsF fm(font(element));
         return fm.height() * length.value;
@@ -235,10 +228,10 @@ qreal AttributeManager::lengthToPixels( Length length, const BasicElement* eleme
         return fm.xHeight() * length.value;
     }
     case Length::Percentage:
-        return lengthToPixels( parseUnit( element->attributesDefaultValue(attribute), element),element, attribute) * length.value / 100.0;
-    case Length::Px: //pixels
+        return lengthToPixels(parseUnit(element->attributesDefaultValue(attribute), element), element, attribute) * length.value / 100.0;
+    case Length::Px: // pixels
         return length.value;
-    case Length::In:  /* Note for the units below we assume point == pixel.  */
+    case Length::In: /* Note for the units below we assume point == pixel.  */
         return INCH_TO_POINT(length.value);
     case Length::Cm:
         return CM_TO_POINT(length.value);
@@ -254,8 +247,7 @@ qreal AttributeManager::lengthToPixels( Length length, const BasicElement* eleme
     }
 }
 
-Length AttributeManager::parseUnit( const QString& value,
-                                    const BasicElement* element ) const
+Length AttributeManager::parseUnit(const QString &value, const BasicElement *element) const
 {
     Q_UNUSED(element)
     Length length;
@@ -275,44 +267,35 @@ Length AttributeManager::parseUnit( const QString& value,
         return length;
 
     length.value = number;
-    if(!unit.isEmpty()) {
+    if (!unit.isEmpty()) {
         if (unit == "em") {
             length.unit = Length::Mm;
             length.type = Length::Relative;
-        }
-        else if (unit == "ex") {
+        } else if (unit == "ex") {
             length.unit = Length::Ex;
             length.type = Length::Relative;
-        }
-        else if (unit == "px") {
+        } else if (unit == "px") {
             length.unit = Length::Px;
             length.type = Length::Pixel;
-        }
-        else if (unit == "in") {
+        } else if (unit == "in") {
             length.unit = Length::In;
             length.type = Length::Absolute;
-        }
-        else if (unit == "cm") {
+        } else if (unit == "cm") {
             length.unit = Length::Cm;
             length.type = Length::Absolute;
-        }
-        else if (unit == "mm") {
+        } else if (unit == "mm") {
             length.unit = Length::Mm;
             length.type = Length::Absolute;
-        }
-        else if (unit == "pt") {
+        } else if (unit == "pt") {
             length.unit = Length::Pt;
             length.type = Length::Relative;
-        }
-        else if (unit == "pc") {
+        } else if (unit == "pc") {
             length.unit = Length::Pc;
             length.type = Length::Relative;
-        }
-        else if (unit == "%") {
+        } else if (unit == "%") {
             length.unit = Length::Percentage;
             length.type = Length::Relative;
-        }
-        else {
+        } else {
             length.unit = Length::None;
             length.type = Length::NoType;
         }
@@ -321,39 +304,38 @@ Length AttributeManager::parseUnit( const QString& value,
     return length;
 }
 
-Align AttributeManager::parseAlign( const QString& value ) const
+Align AttributeManager::parseAlign(const QString &value) const
 {
-    if( value == "right" )
+    if (value == "right")
         return Right;
-    else if( value == "left" )
+    else if (value == "left")
         return Left;
-    else if( value == "center" )
+    else if (value == "center")
         return Center;
-    else if( value == "top" )
+    else if (value == "top")
         return Top;
-    else if( value == "bottom" )
+    else if (value == "bottom")
         return Bottom;
-    else if( value == "baseline" )
+    else if (value == "baseline")
         return BaseLine;
-    else if( value == "axis" )
+    else if (value == "axis")
         return Axis;
     else
         return InvalidAlign;
 }
 
-Qt::PenStyle AttributeManager::parsePenStyle( const QString& value ) const
+Qt::PenStyle AttributeManager::parsePenStyle(const QString &value) const
 {
-    if( value == "solid" )
+    if (value == "solid")
         return Qt::SolidLine;
-    else if( value == "dashed" )
+    else if (value == "dashed")
         return Qt::DashLine;
     else
         return Qt::NoPen;
 }
 
-QFont AttributeManager::font( const BasicElement* element ) const
+QFont AttributeManager::font(const BasicElement *element) const
 {
-
     // TODO process the mathvariant values partly
     // normal -> do nothing.
     // if contains bold -> font.setBold( true )
@@ -361,73 +343,72 @@ QFont AttributeManager::font( const BasicElement* element ) const
     // if contains sans-serif setStyleHint( SansSerif ) --> Helvetica
 
     QFont font;
-    Length unit = parseUnit( findValue( "fontsize", element ), element );
-    if ( unit.type == Length::Absolute ) {
-        font.setPointSizeF( lengthToPixels( unit,  element,  "fontsize" ) );
-    } else if ( unit.type == Length::Relative ) {
-        font.setPointSizeF( lengthToPixels( unit,  element,  "fontsize" ) * element->scaleFactor() );
-    } else if ( unit.type == Length::Pixel ) {
-        font.setPixelSize( lengthToPixels( unit,  element,  "fontsize" ) * element->scaleFactor() );
+    Length unit = parseUnit(findValue("fontsize", element), element);
+    if (unit.type == Length::Absolute) {
+        font.setPointSizeF(lengthToPixels(unit, element, "fontsize"));
+    } else if (unit.type == Length::Relative) {
+        font.setPointSizeF(lengthToPixels(unit, element, "fontsize") * element->scaleFactor());
+    } else if (unit.type == Length::Pixel) {
+        font.setPixelSize(lengthToPixels(unit, element, "fontsize") * element->scaleFactor());
     }
     return font;
 }
 
-void AttributeManager::setViewConverter( KoViewConverter* converter )
+void AttributeManager::setViewConverter(KoViewConverter *converter)
 {
     m_viewConverter = converter;
 }
 
-qreal AttributeManager::maxHeightOfChildren( const BasicElement* element ) const
+qreal AttributeManager::maxHeightOfChildren(const BasicElement *element) const
 {
     qreal maxHeight = 0.0;
-    foreach( BasicElement* tmp, element->childElements() )
-        maxHeight = qMax( maxHeight, tmp->height() );
+    foreach (BasicElement *tmp, element->childElements())
+        maxHeight = qMax(maxHeight, tmp->height());
 
     return maxHeight;
 }
 
-qreal AttributeManager::maxWidthOfChildren( const BasicElement* element  ) const
+qreal AttributeManager::maxWidthOfChildren(const BasicElement *element) const
 {
     qreal maxWidth = 0.0;
-    foreach( BasicElement* tmp, element->childElements() )
-        maxWidth = qMax( maxWidth, tmp->width() );
+    foreach (BasicElement *tmp, element->childElements())
+        maxWidth = qMax(maxWidth, tmp->width());
 
     return maxWidth;
 }
-qreal AttributeManager::parseMathSpace( const QString& value, const BasicElement * element )  const
+qreal AttributeManager::parseMathSpace(const QString &value, const BasicElement *element) const
 {
     QFontMetricsF fm(font(element));
     qreal conversionEmToPixels = fm.xHeight();
 
-    if( value == "negativeveryverythinmathspace" )
-        return -1*conversionEmToPixels*0.055556;
-    else if( value == "negativeverythinmathspace" )
-        return -1*conversionEmToPixels*0.111111;
-    else if( value == "negativethinmathspace" )
-        return -1*conversionEmToPixels*0.166667;
-    else if( value == "negativemediummathspace" )
-        return -1*conversionEmToPixels*0.222222;
-    else if( value == "negativethickmathspace" )
-        return -1*conversionEmToPixels*0.277778;
-    else if( value == "negativeverythickmathspace" )
-        return -1*conversionEmToPixels*0.333333;
-    else if( value == "negativeveryverythickmathspace" )
-        return -1*conversionEmToPixels*0.388889;
-    else if( value == "veryverythinmathspace" )
-        return conversionEmToPixels*0.055556;
-    else if( value == "verythinmathspace" )
-        return conversionEmToPixels*0.111111;
-    else if( value == "thinmathspace" )
-        return conversionEmToPixels*0.166667;
-    else if( value == "mediummathspace" )
-        return conversionEmToPixels*0.222222;
-    else if( value == "thickmathspace" )
-        return conversionEmToPixels*0.277778;
-    else if( value == "verythickmathspace" )
-        return conversionEmToPixels*0.333333;
-    else if( value == "veryverythickmathspace" )
-        return conversionEmToPixels*0.388889;
+    if (value == "negativeveryverythinmathspace")
+        return -1 * conversionEmToPixels * 0.055556;
+    else if (value == "negativeverythinmathspace")
+        return -1 * conversionEmToPixels * 0.111111;
+    else if (value == "negativethinmathspace")
+        return -1 * conversionEmToPixels * 0.166667;
+    else if (value == "negativemediummathspace")
+        return -1 * conversionEmToPixels * 0.222222;
+    else if (value == "negativethickmathspace")
+        return -1 * conversionEmToPixels * 0.277778;
+    else if (value == "negativeverythickmathspace")
+        return -1 * conversionEmToPixels * 0.333333;
+    else if (value == "negativeveryverythickmathspace")
+        return -1 * conversionEmToPixels * 0.388889;
+    else if (value == "veryverythinmathspace")
+        return conversionEmToPixels * 0.055556;
+    else if (value == "verythinmathspace")
+        return conversionEmToPixels * 0.111111;
+    else if (value == "thinmathspace")
+        return conversionEmToPixels * 0.166667;
+    else if (value == "mediummathspace")
+        return conversionEmToPixels * 0.222222;
+    else if (value == "thickmathspace")
+        return conversionEmToPixels * 0.277778;
+    else if (value == "verythickmathspace")
+        return conversionEmToPixels * 0.333333;
+    else if (value == "veryverythickmathspace")
+        return conversionEmToPixels * 0.388889;
     else
         return 0;
 }
-

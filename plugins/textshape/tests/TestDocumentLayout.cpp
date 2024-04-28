@@ -7,12 +7,12 @@
  */
 #include "TestDocumentLayout.h"
 
-#include <KoParagraphStyle.h>
-#include <KoListStyle.h>
 #include <KoListLevelProperties.h>
+#include <KoListStyle.h>
+#include <KoParagraphStyle.h>
 #include <KoStyleManager.h>
-#include <KoTextBlockData.h>
 #include <KoTextBlockBorderData.h>
+#include <KoTextBlockData.h>
 #include <KoTextDocument.h>
 
 #include <QtGui>
@@ -21,14 +21,17 @@
 
 #define FRAME_SPACING 10.0
 
-
 void TestDocumentLayout::initTestCase()
 {
     m_shape1 = 0;
     m_doc = 0;
     m_layout = 0;
 
-    m_loremIpsum = QString("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.");
+    m_loremIpsum = QString(
+        "Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut "
+        "wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum "
+        "iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto "
+        "odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.");
 }
 
 void TestDocumentLayout::initForNewTest(const QString &initText)
@@ -42,7 +45,7 @@ void TestDocumentLayout::initForNewTest(const QString &initText)
     Q_ASSERT(m_layout);
     m_doc = m_layout->document();
     Q_ASSERT(m_doc);
-    m_doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false)); //do it manually since we do not load the appDefaultStyle
+    m_doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false)); // do it manually since we do not load the appDefaultStyle
     m_textLayout = new TextShapeLayout(m_layout);
     m_layout->setLayout(m_textLayout);
     m_styleManager = new KoStyleManager();
@@ -68,7 +71,7 @@ void TestDocumentLayout::testLineBreaking()
     m_layout->layout();
     QTextLayout *blockLayout = m_block.layout();
 
-    //QCOMPARE(blockLayout->lineCount(), 16);
+    // QCOMPARE(blockLayout->lineCount(), 16);
     QCOMPARE(blockLayout->lineForTextPosition(1).width(), 200.0);
 }
 
@@ -92,7 +95,7 @@ void TestDocumentLayout::testMultiFrameLineBreaking()
     QVERIFY(line.y() > m_shape1->size().height()); // it has to be outside of m_shape1
     const qreal topOfFrame2 = line.y();
     line = blockLayout->lineAt(4);
-    //qDebug() << line.y() - topOfFrame2 - 14.4;
+    // qDebug() << line.y() - topOfFrame2 - 14.4;
     QVERIFY(qAbs(line.y() - topOfFrame2 - 14.4) < 0.125);
 }
 
@@ -125,7 +128,7 @@ void TestDocumentLayout::testBasicLineSpacing()
         // actually done using fixed point arithmetic. This is due to embedded
         // considerations, and offers general performance benefits across all
         // platforms.
-        //qDebug() << i << qAbs(line.y() - i * lineSpacing12);
+        // qDebug() << i << qAbs(line.y() - i * lineSpacing12);
         QVERIFY(qAbs(line.y() - i * lineSpacing12) < ROUNDING);
     }
 
@@ -138,7 +141,7 @@ void TestDocumentLayout::testBasicLineSpacing()
     for (int i = 0; i < 15; i++) {
         line = blockLayout->lineAt(i);
         QVERIFY(line.isValid());
-        //qDebug() << i << qAbs(line.y() - i * lineSpacing12);
+        // qDebug() << i << qAbs(line.y() - i * lineSpacing12);
         QVERIFY(qAbs(line.y() - i * lineSpacing12) < ROUNDING);
     }
 
@@ -156,10 +159,10 @@ void TestDocumentLayout::testBasicLineSpacing()
 
     for (int i = 2; i < 15; i++) {
         line = blockLayout->lineAt(i);
-//qDebug() << "i: " << i << " gives: " << line.y() << " + " <<  line.ascent() << ", " << line.descent() << " = " << line.height();
+        // qDebug() << "i: " << i << " gives: " << line.y() << " + " <<  line.ascent() << ", " << line.descent() << " = " << line.height();
         QVERIFY(qAbs(line.y() - (lineSpacing12 + lineSpacing18 + (i - 2) * lineSpacing12)) < ROUNDING);
     }
-// Test widget to show what we have
+    // Test widget to show what we have
     /*
         class Widget : public QWidget {
           public:
@@ -198,7 +201,7 @@ void TestDocumentLayout::testBasicLineSpacing2()
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout();
-    //qDebug() << blockLayout->lineAt(0).y();
+    // qDebug() << blockLayout->lineAt(0).y();
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - 28.8) < ROUNDING);
 }
 
@@ -216,7 +219,7 @@ void TestDocumentLayout::testAdvancedLineSpacing()
     QCOMPARE(block.blockFormat().doubleProperty(KoParagraphStyle::PercentLineHeight), 80.0);
 
     block = block.next();
-    QVERIFY(block.isValid()); //line2
+    QVERIFY(block.isValid()); // line2
     style.setLineHeightAbsolute(28.0); // removes the percentage
     style.applyStyle(block);
 
@@ -252,17 +255,17 @@ void TestDocumentLayout::testAdvancedLineSpacing()
     block = m_doc->begin().next(); // line2
     QVERIFY(block.isValid());
     blockLayout = block.layout();
-    //qDebug() << blockLayout->lineAt(0).y();
+    // qDebug() << blockLayout->lineAt(0).y();
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - (12.0 * 0.8)) < ROUNDING);
     block = block.next(); // line3
     QVERIFY(block.isValid());
     blockLayout = block.layout();
-    //qDebug() << blockLayout->lineAt(0).y();
+    // qDebug() << blockLayout->lineAt(0).y();
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.6 + 28.0)) < ROUNDING);
     block = block.next(); // line4
     QVERIFY(block.isValid());
     blockLayout = block.layout();
-    //qDebug() << blockLayout->lineAt(0).y();
+    // qDebug() << blockLayout->lineAt(0).y();
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - (37.6 + 40)) < ROUNDING);
     block = block.next(); // line5
     QVERIFY(block.isValid());
@@ -272,14 +275,14 @@ void TestDocumentLayout::testAdvancedLineSpacing()
     block = block.next(); // line6
     QVERIFY(block.isValid());
     blockLayout = block.layout();
-    //qDebug() << blockLayout->lineAt(0).y();
+    // qDebug() << blockLayout->lineAt(0).y();
     QCOMPARE(blockLayout->lineAt(0).y(), 92.0 + 12 + 8);
 
     qreal height = blockLayout->lineAt(0).height();
     block = block.next(); // line 7
     QVERIFY(block.isValid());
     blockLayout = block.layout();
-    //qDebug() << blockLayout->lineAt(0).y();
+    // qDebug() << blockLayout->lineAt(0).y();
     QCOMPARE(blockLayout->lineAt(0).y(), 112 + height);
 }
 
@@ -311,7 +314,7 @@ void TestDocumentLayout::testMargins()
     cursor.insertText("\n");
     bf.setTopMargin(12);
     cursor.setBlockFormat(bf);
-    cursor.insertText(m_loremIpsum);// create second parag
+    cursor.insertText(m_loremIpsum); // create second parag
     m_layout->layout();
     QCOMPARE(blockLayout->lineAt(0).x(), 0.0); // parag 1
     QCOMPARE(blockLayout->lineAt(0).width(), 185.0);
@@ -323,10 +326,10 @@ void TestDocumentLayout::testMargins()
     QCOMPARE(layout->lineAt(0).width(), 185.0);
 
     QTextLine lastLineOfParag1 = blockLayout->lineAt(blockLayout->lineCount() - 1);
-    QTextLine firstLineOfParag2 =  layout->lineAt(0);
+    QTextLine firstLineOfParag2 = layout->lineAt(0);
     const qreal FONTSIZE = 12.0;
     const qreal BottomParag1 = lastLineOfParag1.y() + (FONTSIZE * 1.2);
-    QVERIFY(qAbs(firstLineOfParag2.y() - BottomParag1  - 12.0) < ROUNDING);
+    QVERIFY(qAbs(firstLineOfParag2.y() - BottomParag1 - 12.0) < ROUNDING);
 }
 
 void TestDocumentLayout::testMultipageMargins()
@@ -367,13 +370,13 @@ void TestDocumentLayout::testMultipageMargins()
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // second parag
-    //qDebug() << blockLayout->lineAt(0).y() << "=" << (12.0 * 1.2 + 100.0 + 20.0);
+    // qDebug() << blockLayout->lineAt(0).y() << "=" << (12.0 * 1.2 + 100.0 + 20.0);
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - (12.0 * 1.2 + 100.0 + 20.0)) < ROUNDING);
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // thirth parag
     // the 10 in the next line is hardcoded distance between frames.
-    //qDebug() << blockLayout->lineAt(0).y() << "=" << m_shape1->size().height() + FRAME_SPACING;
+    // qDebug() << blockLayout->lineAt(0).y() << "=" << m_shape1->size().height() + FRAME_SPACING;
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - (m_shape1->size().height() + FRAME_SPACING)) < ROUNDING);
 
     /* TODO
@@ -526,7 +529,7 @@ void TestDocumentLayout::testPageBreak()
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 3
-    //qDebug() << qAbs(blockLayout->lineAt(0).y());
+    // qDebug() << qAbs(blockLayout->lineAt(0).y());
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - 64.4) < ROUNDING);
     block = block.next();
     QVERIFY(block.isValid());
@@ -542,7 +545,7 @@ void TestDocumentLayout::testPageBreak2()
     QTextCursor cursor(block);
     QTextBlockFormat bf = cursor.blockFormat();
     bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysAfter);
-//bf.setPageBreakPolicy(PageBreak_AlwaysBefore);
+    // bf.setPageBreakPolicy(PageBreak_AlwaysBefore);
     cursor.setBlockFormat(bf);
     block = block.next();
     QVERIFY(block.isValid());
@@ -572,7 +575,7 @@ void TestDocumentLayout::testPageBreak2()
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 3
-    //qDebug() << qAbs(blockLayout->lineAt(0).y());
+    // qDebug() << qAbs(blockLayout->lineAt(0).y());
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - 64.4) < ROUNDING);
     block = block.next();
     QVERIFY(block.isValid());
@@ -662,8 +665,8 @@ void TestDocumentLayout::testParagraphBorders()
     QCOMPARE(blockLayout->lineAt(0).width(), 200.0 - 8.0 - 11.0);
     block = block.next();
     blockLayout = block.layout();
-    //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10)) < ROUNDING);  // 14.4 is 12 pt font + 20% linespacing
+    // qDebug() << blockLayout->lineAt(0).y();
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10)) < ROUNDING); // 14.4 is 12 pt font + 20% linespacing
 
     // borders + padding create the total inset.
     bf.setProperty(KoParagraphStyle::LeftPadding, 5.0);
@@ -680,12 +683,12 @@ void TestDocumentLayout::testParagraphBorders()
     QCOMPARE(blockLayout->lineAt(0).width(), 200.0 - 8.0 - 11.0 - 5.0 * 2);
     block = block.next();
     blockLayout = block.layout();
-    //qDebug() << blockLayout->lineAt(0).y();
+    // qDebug() << blockLayout->lineAt(0).y();
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10 + 5.0 * 2)) < ROUNDING);
 
     // borders are positioned outside the padding, lets check that to be the case.
     block = m_doc->begin();
-    KoTextBlockData *data  = dynamic_cast<KoTextBlockData*>(block.userData());
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(data);
     KoTextBlockBorderData *border = data->border();
     QVERIFY(border);
@@ -714,7 +717,7 @@ void TestDocumentLayout::testParagraphBorders()
     QCOMPARE(blockLayout->lineAt(0).width(), 200.0 - 8.0 - 11.0 - (5.0 + 2.0) * 2);
     block = block.next();
     blockLayout = block.layout();
-    //qDebug() << blockLayout->lineAt(0).y();
+    // qDebug() << blockLayout->lineAt(0).y();
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10 + (5.0 + 2.0) * 2)) < ROUNDING);
 
     // and last, make the 2 qreal border have a blank space in the middle.
@@ -732,7 +735,7 @@ void TestDocumentLayout::testParagraphBorders()
     QCOMPARE(blockLayout->lineAt(0).width(), 200.0 - 8.0 - 11.0 - (5.0 + 2.0 + 3.0) * 2);
     block = block.next();
     blockLayout = block.layout();
-    //qDebug() << blockLayout->lineAt(0).y();
+    // qDebug() << blockLayout->lineAt(0).y();
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10 + (5.0 + 2.0 + 3.0) * 2)) < ROUNDING);
 }
 
@@ -758,7 +761,7 @@ void TestDocumentLayout::testBorderData()
     m_layout->layout();
 
     block = m_doc->begin().next();
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(data);
     KoTextBlockBorderData *border = data->border();
     QVERIFY(border);
@@ -791,7 +794,7 @@ void TestDocumentLayout::testBorderData()
     QCOMPARE(data->counterPosition(), QPointF(3, 24.4));
 
     block = block.next();
-    data = dynamic_cast<KoTextBlockData*>(block.userData());
+    data = dynamic_cast<KoTextBlockData *>(block.userData());
     QCOMPARE(data->counterPosition(), QPointF(3, 53.8));
 }
 
@@ -815,7 +818,8 @@ void TestDocumentLayout::testEmptyParag()
 
 void TestDocumentLayout::testDropCaps()
 {
-    initForNewTest(QString("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam\nsome more text")); // some not too long text so the dropcap will be bigger than the block
+    initForNewTest(QString("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam\nsome more text")); // some not too long text so the dropcap will
+                                                                                                                   // be bigger than the block
 
     KoParagraphStyle style;
     style.setDropCaps(false);
@@ -829,7 +833,7 @@ void TestDocumentLayout::testDropCaps()
     m_layout->layout();
 
     // dummy version, caps is still false.
-    QTextLayout *blockLayout =block.layout();
+    QTextLayout *blockLayout = block.layout();
     QVERIFY(blockLayout->lineCount() > 2);
     QTextLine line = blockLayout->lineAt(0);
     QVERIFY(line.textLength() > 3);

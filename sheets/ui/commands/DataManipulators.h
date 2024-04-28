@@ -2,13 +2,12 @@
 // SPDX-FileCopyrightText: 2006 Tomas Mecir <mecirt@gmail.com>
 // SPDX-License-Identifier: LGPL-2.0-only
 
-
 #ifndef CALLIGRA_SHEETS_DATA_MANIPULATORS
 #define CALLIGRA_SHEETS_DATA_MANIPULATORS
 
 #include "AbstractRegionCommand.h"
-#include "engine/Value.h"
 #include "engine/Format.h"
+#include "engine/Value.h"
 
 namespace Calligra
 {
@@ -27,17 +26,17 @@ public:
     explicit AbstractDataManipulator(KUndo2Command *parent = 0);
     ~AbstractDataManipulator() override;
 
-    bool process(Element* element) override;
+    bool process(Element *element) override;
 
 protected:
     /** Return new value. row/col are relative to sheet, not element.
     If the function sets *parse to true, the value will be treated as an
     user-entered string and parsed by Cell. */
-    virtual Value newValue(Element *element, int col, int row,
-                           bool *parse, Format::Type *fmtType) = 0;
+    virtual Value newValue(Element *element, int col, int row, bool *parse, Format::Type *fmtType) = 0;
 
     /** do we want to change this cell ? */
-    virtual bool wantChange(Element *element, int col, int row) {
+    virtual bool wantChange(Element *element, int col, int row)
+    {
         Q_UNUSED(element)
         Q_UNUSED(col)
         Q_UNUSED(row)
@@ -54,23 +53,25 @@ class CALLIGRA_SHEETS_UI_EXPORT AbstractDFManipulator : public AbstractDataManip
 public:
     explicit AbstractDFManipulator(KUndo2Command *parent = 0);
     ~AbstractDFManipulator() override;
-    bool process(Element* element) override;
+    bool process(Element *element) override;
 
     /** returns whether this manipulator changes formats */
-    bool changeFormat() {
+    bool changeFormat()
+    {
         return m_changeformat;
     }
     /** set whether this manipulator changes formats */
-    void setChangeFormat(bool chf) {
+    void setChangeFormat(bool chf)
+    {
         m_changeformat = chf;
     }
+
 protected:
     /** this method should return new format for a given cell */
     virtual Style newFormat(Element *element, int col, int row) = 0;
 
     bool m_changeformat : 1;
 };
-
 
 /**
  * \ingroup Commands
@@ -81,25 +82,30 @@ class CALLIGRA_SHEETS_UI_EXPORT DataManipulator : public AbstractDataManipulator
 public:
     explicit DataManipulator(KUndo2Command *parent = 0);
     ~DataManipulator() override;
-    void setParsing(bool val) {
+    void setParsing(bool val)
+    {
         m_parsing = val;
     }
-    void setExpandMatrix(bool expand) {
+    void setExpandMatrix(bool expand)
+    {
         m_expandMatrix = expand;
     }
     /** set the values for the range. Can be either a single value, or
     a value array */
-    void setValue(Value val) {
+    void setValue(Value val)
+    {
         m_data = val;
     }
     /** If set, all cells shall be switched to this format. If parsing is
     true, the resulting value may end up being different. */
-    void setFormat(Format::Type fmtType) {
+    void setFormat(Format::Type fmtType)
+    {
         m_format = fmtType;
     }
+
 protected:
     bool preProcess() override;
-    bool process(Element* element) override;
+    bool process(Element *element) override;
     Value newValue(Element *element, int col, int row, bool *, Format::Type *) override;
     bool wantChange(Element *element, int col, int row) override;
 
@@ -108,7 +114,6 @@ protected:
     bool m_parsing : 1;
     bool m_expandMatrix : 1;
 };
-
 
 /**
  * \ingroup Commands
@@ -120,13 +125,14 @@ public:
     enum Direction { ShiftRight, ShiftBottom };
     explicit ShiftManipulator(KUndo2Command *parent = 0);
     ~ShiftManipulator() override;
-    void setDirection(Direction direction) {
+    void setDirection(Direction direction)
+    {
         m_direction = direction;
     }
     void setRemove(bool remove);
 
 protected:
-    bool process(Element*) override;
+    bool process(Element *) override;
     bool undoNonCommandActions() override;
 
 private:
@@ -139,4 +145,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif  // CALLIGRA_SHEETS_DATA_MANIPULATORS
+#endif // CALLIGRA_SHEETS_DATA_MANIPULATORS

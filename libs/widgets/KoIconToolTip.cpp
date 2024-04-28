@@ -15,21 +15,21 @@
 
 // #include <WidgetsDebug.h>
 
-QTextDocument *KoIconToolTip::createDocument( const QModelIndex &index )
+QTextDocument *KoIconToolTip::createDocument(const QModelIndex &index)
 {
-    QTextDocument *doc = new QTextDocument( this );
+    QTextDocument *doc = new QTextDocument(this);
 
-    QImage thumb = index.data( KoResourceModel::LargeThumbnailRole ).value<QImage>();
-    doc->addResource( QTextDocument::ImageResource, QUrl( "data:thumbnail" ), thumb );
+    QImage thumb = index.data(KoResourceModel::LargeThumbnailRole).value<QImage>();
+    doc->addResource(QTextDocument::ImageResource, QUrl("data:thumbnail"), thumb);
 
-    QString name = index.data( Qt::DisplayRole ).toString();
+    QString name = index.data(Qt::DisplayRole).toString();
 
-    const QString image = QString( "<image src=\"data:thumbnail\">" );
-    const QString body = QString( "<h3 align=\"center\">%1</h3>" ).arg( name ) + image;
-    const QString html = QString( "<html><body>%1</body></html>" ).arg( body );
+    const QString image = QString("<image src=\"data:thumbnail\">");
+    const QString body = QString("<h3 align=\"center\">%1</h3>").arg(name) + image;
+    const QString html = QString("<html><body>%1</body></html>").arg(body);
 
-    doc->setHtml( html );
-    doc->setTextWidth( qMin( doc->size().width(), qreal(500.0) ) );
+    doc->setHtml(html);
+    doc->setTextWidth(qMin(doc->size().width(), qreal(500.0)));
 
     return doc;
 }

@@ -4,7 +4,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef KPRANIMATIONSELECTORWIDGET_H
 #define KPRANIMATIONSELECTORWIDGET_H
 
@@ -28,8 +27,7 @@ class KPrAnimationSelectorWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KPrAnimationSelectorWidget(KPrShapeAnimationDocker *docker, KPrPredefinedAnimationsLoader *animationsData,
-                                        QWidget *parent = 0);
+    explicit KPrAnimationSelectorWidget(KPrShapeAnimationDocker *docker, KPrPredefinedAnimationsLoader *animationsData, QWidget *parent = 0);
     ~KPrAnimationSelectorWidget() override;
 
     /**
@@ -70,7 +68,7 @@ private Q_SLOTS:
      *
      * @param index of the animation selected
      */
-    void setAnimation(const QModelIndex& index);
+    void setAnimation(const QModelIndex &index);
 
     /**
      * @brief Automatic preview checkbox state has changed

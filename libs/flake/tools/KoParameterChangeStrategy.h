@@ -7,8 +7,8 @@
 #ifndef KOPARAMETERCHANGESTRATEGY_H
 #define KOPARAMETERCHANGESTRATEGY_H
 
-#include "flake_export.h"
 #include "KoInteractionStrategy.h"
+#include "flake_export.h"
 #include <QPointF>
 
 class KoParameterShape;
@@ -29,7 +29,7 @@ public:
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
-    KUndo2Command* createCommand() override;
+    KUndo2Command *createCommand() override;
 
 protected:
     /// constructor

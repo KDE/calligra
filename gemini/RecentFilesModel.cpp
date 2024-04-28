@@ -7,16 +7,15 @@
 
 #include "RecentFileManager.h"
 
+#include <QDateTime>
 #include <QFile>
 #include <QFileInfo>
-#include <QDateTime>
 
-class RecentFilesModel::Private {
+class RecentFilesModel::Private
+{
 public:
-
     RecentFileManager *recentFileManager;
 };
-
 
 RecentFilesModel::RecentFilesModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -41,10 +40,10 @@ QHash<int, QByteArray> RecentFilesModel::roleNames() const
     return roles;
 }
 
-int RecentFilesModel::rowCount(const QModelIndex &/*parent*/) const
+int RecentFilesModel::rowCount(const QModelIndex & /*parent*/) const
 {
     if (d->recentFileManager)
-       return d->recentFileManager->size();
+        return d->recentFileManager->size();
     else
         return 0;
 }
@@ -52,16 +51,15 @@ int RecentFilesModel::rowCount(const QModelIndex &/*parent*/) const
 QVariant RecentFilesModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
-    if (!d->recentFileManager) return result;
-    if (index.isValid())
-    {
+    if (!d->recentFileManager)
+        return result;
+    if (index.isValid()) {
         Q_ASSERT(index.row() < d->recentFileManager->size());
 
         QString key = d->recentFileManager->recentFileName(index.row());
         QString value = d->recentFileManager->recentFile(index.row());
 
-        switch(role)
-        {
+        switch (role) {
         case ImageRole:
             result = QString("image://recentimage/%1").arg(value);
             break;
@@ -73,8 +71,7 @@ QVariant RecentFilesModel::data(const QModelIndex &index, int role) const
             break;
         case NameRole:
             result = key;
-        case DateRole:
-        {
+        case DateRole: {
             QFile f(value);
             if (f.exists()) {
                 QFileInfo fi(value);
@@ -93,10 +90,8 @@ QVariant RecentFilesModel::headerData(int section, Qt::Orientation orientation, 
 {
     Q_UNUSED(orientation);
     QVariant result;
-    if (section == 0)
-    {
-        switch(role)
-        {
+    if (section == 0) {
+        switch (role) {
         case ImageRole:
             result = QString("Thumbnail");
             break;
@@ -122,7 +117,7 @@ QObject *RecentFilesModel::recentFileManager() const
 void RecentFilesModel::setRecentFileManager(QObject *recentFileManager)
 {
     disconnect(d->recentFileManager);
-    d->recentFileManager = qobject_cast<RecentFileManager*>(recentFileManager);
+    d->recentFileManager = qobject_cast<RecentFileManager *>(recentFileManager);
     connect(d->recentFileManager, &RecentFileManager::recentFilesListChanged, this, &RecentFilesModel::recentFilesListChanged);
     emit recentFileManagerChanged();
 }

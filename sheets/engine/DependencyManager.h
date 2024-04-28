@@ -8,8 +8,8 @@
 #ifndef CALLIGRA_SHEETS_DEPENDENCY_MANAGER
 #define CALLIGRA_SHEETS_DEPENDENCY_MANAGER
 
-#include "sheets_engine_export.h"
 #include "Region.h"
+#include "sheets_engine_export.h"
 
 #include <QObject>
 
@@ -53,12 +53,12 @@ public:
      * The caller has to take care of that, because each and every
      * cell in \p region is traversed.
      */
-    void regionChanged(const Region& region);
+    void regionChanged(const Region &region);
 
     /**
      * Updates the whole \p map.
      */
-    void updateAllDependencies(const MapBase* map, Updater *updater = 0);
+    void updateAllDependencies(const MapBase *map, Updater *updater = 0);
 
     /**
      * Returns the cell depths.
@@ -76,13 +76,13 @@ public:
      *
      * \return region consuming \p cell 's value
      */
-    Region consumingRegion(const CellBase& cell) const;
+    Region consumingRegion(const CellBase &cell) const;
 
     /**
      * Returns the region, that is reduced to those parts of \p region, that provide values.
      * \return region providing values for others
      */
-    Region reduceToProvidingRegion(const Region& region) const;
+    Region reduceToProvidingRegion(const Region &region) const;
 
     /**
      * Adjusts formulas after cut & paste operations or column/row insertions/deletions.
@@ -90,10 +90,10 @@ public:
      * \param movedRegion the region, that was moved
      * \param destination the new upper left corner of the region
      */
-    void regionMoved(const Region& movedRegion, const CellBase& destination);
+    void regionMoved(const Region &movedRegion, const CellBase &destination);
 
 public Q_SLOTS:
-    void namedAreaModified(const QString&);
+    void namedAreaModified(const QString &);
 
     /**
      * Called after a sheet was added.
@@ -113,13 +113,13 @@ protected:
      *
      * \see regionMoved()
      */
-    void updateFormula(const CellBase& cell, const Region::Element* oldLocation, const Region::Point& offset);
+    void updateFormula(const CellBase &cell, const Region::Element *oldLocation, const Region::Point &offset);
 
 private:
     Q_DISABLE_COPY(DependencyManager)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

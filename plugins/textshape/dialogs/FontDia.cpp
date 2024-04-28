@@ -20,14 +20,14 @@
 #include <KLocalizedString>
 
 #include <QTextBlock>
-#include <QTextFragment>
-#include <QTextDocument>
 #include <QTextCursor>
+#include <QTextDocument>
+#include <QTextFragment>
 
-FontDia::FontDia(KoTextEditor *editor, QWidget* parent)
-        : KoDialog(parent)
-        , m_editor(editor)
-        , m_styleChanged(false)
+FontDia::FontDia(KoTextEditor *editor, QWidget *parent)
+    : KoDialog(parent)
+    , m_editor(editor)
+    , m_styleChanged(false)
 {
     m_initialFormat = m_editor->charFormat();
 
@@ -46,7 +46,9 @@ FontDia::FontDia(KoTextEditor *editor, QWidget* parent)
     initTabs();
 
     // Do this after initTabs so it doesn't cause signals prematurely
-    connect(m_characterGeneral, &CharacterGeneral::styleChanged, this, [this]() { styleChanged(); });
+    connect(m_characterGeneral, &CharacterGeneral::styleChanged, this, [this]() {
+        styleChanged();
+    });
 }
 
 void FontDia::initTabs()

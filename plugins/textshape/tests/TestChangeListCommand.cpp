@@ -1,19 +1,18 @@
 #include "TestChangeListCommand.h"
-#include "tests/MockShapes.h"
 #include "../commands/ChangeListCommand.h"
+#include "tests/MockShapes.h"
 
-#include <KoListStyle.h>
 #include <KoListLevelProperties.h>
+#include <KoListStyle.h>
 #include <KoStyleManager.h>
 #include <KoTextDocument.h>
 
-#include <TextTool.h>
 #include <KoCanvasBase.h>
+#include <TextTool.h>
 
-#include <QTextDocument>
 #include <QTextCursor>
+#include <QTextDocument>
 #include <QTextList>
-
 
 void TestChangeListCommand::addList()
 {
@@ -38,7 +37,7 @@ void TestChangeListCommand::addList()
     QVERIFY(block.textList() == 0);
 
     QTextListFormat format = tl->format();
-    QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DecimalItem);
+    QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int)KoListStyle::DecimalItem);
 
     cursor.setPosition(block.position());
     ChangeListCommand clc2(cursor, KoListStyle::Bullet);
@@ -85,9 +84,9 @@ void TestChangeListCommand::addListWithLevel2()
     QVERIFY(block.textList() == 0);
 
     QTextListFormat format = tl->format();
-    QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int) KoListStyle::Bullet);
-    QCOMPARE(format.intProperty(KoListStyle::DisplayLevel), (int) 2);
-    QCOMPARE(format.intProperty(KoListStyle::Level), (int) 2);
+    QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int)KoListStyle::Bullet);
+    QCOMPARE(format.intProperty(KoListStyle::DisplayLevel), (int)2);
+    QCOMPARE(format.intProperty(KoListStyle::Level), (int)2);
 }
 
 void TestChangeListCommand::removeList()
@@ -207,7 +206,7 @@ void TestChangeListCommand::joinList2()
     QVERIFY(tl);
     block = block.next();
     QCOMPARE(tl, block.textList());
-    QCOMPARE(tl->format().intProperty(QTextListFormat::ListStyle), (int) KoListStyle::Bullet);
+    QCOMPARE(tl->format().intProperty(QTextListFormat::ListStyle), (int)KoListStyle::Bullet);
 
     // now apply the 'DecimalItem' on 'parag3' and expect it to join with the list already set on 'parag4'
     block = doc.lastBlock(); // parag4
@@ -223,7 +222,7 @@ void TestChangeListCommand::joinList2()
     QVERIFY(block.textList());
     QVERIFY(block.textList() != tl);
     QVERIFY(block.textList() == numberedList);
-    QCOMPARE(numberedList->format().intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DecimalItem);
+    QCOMPARE(numberedList->format().intProperty(QTextListFormat::ListStyle), (int)KoListStyle::DecimalItem);
 }
 
 void TestChangeListCommand::splitList()

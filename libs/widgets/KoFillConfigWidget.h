@@ -10,8 +10,8 @@
 
 #include "kowidgets_export.h"
 
-#include <QWidget>
 #include <QSharedPointer>
+#include <QWidget>
 
 class KoCanvasBase;
 class KoShapeBackground;
@@ -21,12 +21,8 @@ class KoShape;
 class KOWIDGETS_EXPORT KoFillConfigWidget : public QWidget
 {
     Q_OBJECT
-    enum StyleButton {
-        None,
-        Solid,
-        Gradient,
-        Pattern
-    };
+    enum StyleButton { None, Solid, Gradient, Pattern };
+
 public:
     explicit KoFillConfigWidget(QWidget *parent);
     ~KoFillConfigWidget() override;
@@ -37,7 +33,7 @@ public:
 
     /// Returns the list of the selected shape
     /// If you need to use only one shape, call currentShape()
-    virtual QList<KoShape*> currentShapes();
+    virtual QList<KoShape *> currentShapes();
 
     /// Returns the first selected shape of the resource
     virtual KoShape *currentShape();
@@ -58,12 +54,13 @@ private Q_SLOTS:
 
 protected:
     virtual void shapeChanged();
+
 private:
     /// update the widget with the KoShape background
     void updateWidget(KoShape *shape);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // FILLCONFIGWIDGET_H

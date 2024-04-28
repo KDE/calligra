@@ -10,18 +10,19 @@
 
 #include "sheets_core_export.h"
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
 class Sheet;
-
-
 
 /** Convenience class for formats */
 class CALLIGRA_SHEETS_CORE_EXPORT ColFormat
 {
 public:
-    ColFormat() {
+    ColFormat()
+    {
         hidden = false;
         filtered = false;
         hasPageBreak = false;
@@ -34,7 +35,6 @@ public:
     bool hasPageBreak;
 };
 
-
 /** first and last col are both inclusive in all functions */
 class CALLIGRA_SHEETS_CORE_EXPORT ColFormatStorage
 {
@@ -42,35 +42,35 @@ public:
     explicit ColFormatStorage(Sheet *sheet);
     ~ColFormatStorage();
 
-    Sheet* sheet() const;
+    Sheet *sheet() const;
 
     /** Width of the given col. firstCol and lastCol are set to the first and last col that share the same width. */
-    double colWidth(int col, int* lastCol = 0, int* firstCol = 0) const;
+    double colWidth(int col, int *lastCol = 0, int *firstCol = 0) const;
     void setColWidth(int firstCol, int lastCol, double width);
 
-    bool isHidden(int col, int* lastCol = 0, int* firstCol = 0) const;
+    bool isHidden(int col, int *lastCol = 0, int *firstCol = 0) const;
     void setHidden(int firstCol, int lastCol, bool hidden);
 
-    bool isFiltered(int col, int* lastCol = 0, int* firstCol = 0) const;
+    bool isFiltered(int col, int *lastCol = 0, int *firstCol = 0) const;
     void setFiltered(int firstCol, int lastCol, bool filtered);
 
-    bool isHiddenOrFiltered(int col, int* lastCol = 0, int* firstCol = 0) const;
+    bool isHiddenOrFiltered(int col, int *lastCol = 0, int *firstCol = 0) const;
 
-    double visibleWidth(int col, int* lastCol = 0, int* firstCol = 0) const;
+    double visibleWidth(int col, int *lastCol = 0, int *firstCol = 0) const;
 
     double totalColWidth(int firstCol, int lastCol) const;
     double totalVisibleColWidth(int firstCol, int lastCol) const;
 
-    int colForPosition(double ypos, double * topOfCol = 0) const;
+    int colForPosition(double ypos, double *topOfCol = 0) const;
 
-    bool hasPageBreak(int col, int* lastCol = 0, int* firstCol = 0) const;
+    bool hasPageBreak(int col, int *lastCol = 0, int *firstCol = 0) const;
     void setPageBreak(int firstCol, int lastCol, bool pageBreak);
 
     /** Convenience function - sets everything at once. */
-    void setColFormat (int firstCol, int lastCol, const ColFormat &f);
+    void setColFormat(int firstCol, int lastCol, const ColFormat &f);
     ColFormat getColFormat(int col) const;
 
-    bool isDefaultCol(int col, int* lastCol = 0, int* firstCol = 0) const;
+    bool isDefaultCol(int col, int *lastCol = 0, int *firstCol = 0) const;
     void setDefault(int firstCol, int lastCol);
     int lastNonDefaultCol() const;
 
@@ -88,16 +88,15 @@ public:
      */
     void removeCols(int col, int number);
 
-    ColFormatStorage& operator=(const ColFormatStorage& r);
-private:
-    ColFormatStorage(const ColFormatStorage&);
-    class Private;
-    Private * const d;
-};
+    ColFormatStorage &operator=(const ColFormatStorage &r);
 
+private:
+    ColFormatStorage(const ColFormatStorage &);
+    class Private;
+    Private *const d;
+};
 
 } // namespace Sheets
 } // namespace Calligra
 
 #endif // CALLIGRA_SHEETS_COLFORMATSTORAGE_H
-

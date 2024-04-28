@@ -24,84 +24,94 @@
 #ifndef TABLEHANDLER_H
 #define TABLEHANDLER_H
 
-#include <wv2/src/word97_generated.h> // for TAP
-#include <wv2/src/handlers.h>
-#include <QObject>
-#include <QString>
-#include <QRectF>
 #include <QList>
+#include <QObject>
+#include <QRectF>
+#include <QString>
+#include <wv2/src/handlers.h>
+#include <wv2/src/word97_generated.h> // for TAP
 
-#include <KoXmlWriter.h>
 #include <KoGenStyles.h>
+#include <KoXmlWriter.h>
 
 class Document;
 
 namespace wvWare
 {
-    namespace Word97 {
-        struct TC;
-        struct SHD;
-    }
+namespace Word97
+{
+struct TC;
+struct SHD;
+}
 }
 
 namespace Words
 {
-    typedef const wvWare::TableRowFunctor* TableRowFunctorPtr;
-    typedef wvWare::SharedPtr<const wvWare::Word97::TAP> TAPptr;
+typedef const wvWare::TableRowFunctor *TableRowFunctorPtr;
+typedef wvWare::SharedPtr<const wvWare::Word97::TAP> TAPptr;
 
-    /**
-     * Data for a given table row.  This struct is used by the Table struct.
-     */
-    struct Row
+/**
+ * Data for a given table row.  This struct is used by the Table struct.
+ */
+struct Row {
+    Row()
+        : functorPtr(0L)
+        , tap(0L)
     {
-        Row() : functorPtr(0L), tap(0L)  {}     // QValueList wants that one
-        Row(TableRowFunctorPtr ptr, TAPptr _tap) : functorPtr(ptr), tap(_tap) {}
-        ~Row() {}
+    } // QValueList wants that one
+    Row(TableRowFunctorPtr ptr, TAPptr _tap)
+        : functorPtr(ptr)
+        , tap(_tap)
+    {
+    }
+    ~Row()
+    {
+    }
 
-        TableRowFunctorPtr functorPtr; //a functor called to parse the content
-        TAPptr tap; //Table Properties
-    };
+    TableRowFunctorPtr functorPtr; // a functor called to parse the content
+    TAPptr tap; // Table Properties
+};
+
+/**
+ * Data for a given table, stored between the 'tableRowFound' callback
+ * during text parsing and the final generation of table cells.
+ */
+struct Table {
+    Table();
 
     /**
-     * Data for a given table, stored between the 'tableRowFound' callback
-     * during text parsing and the final generation of table cells.
+     * Add cell edge position into the cache for a given table.  Keep them
+     * sorted.
      */
-    struct Table {
-        Table();
+    void cacheCellEdge(int cellEdge);
 
-        /**
-         * Add cell edge position into the cache for a given table.  Keep them
-         * sorted.
-         */
-        void cacheCellEdge(int cellEdge);
+    /**
+     * Lookup a cell edge from the cache of cell edges.
+     * @return the column number
+     */
+    int columnNumber(int cellEdge) const;
 
-        /**
-         * Lookup a cell edge from the cache of cell edges.
-         * @return the column number
-         */
-        int columnNumber(int cellEdge) const;
+    bool floating; // table inside of an absolutely positioned frame
+    QString name; // words's grpMgr attribute
+    QList<Row> rows; // need to use QValueList to benefit from implicit sharing
+    TAPptr tap; // table properties
 
-        bool floating;   // table inside of an absolutely positioned frame
-        QString name;    // words's grpMgr attribute
-        QList<Row> rows; // need to use QValueList to benefit from implicit sharing
-        TAPptr tap;      // table properties
-
-        // Word has a very flexible concept of columns: each row can vary the
-        // edges of each column.  We must map this onto a set of fixed-width
-        // columns by defining columns on each edge, and then using joined
-        // cells to model the original Word cells.  We accumulate all the known
-        // edges for a given table in an array.
-        // NOTE: don't use unsigned int.  Value can be negative (relative to
-        // margin...).
-        QList<int> m_cellEdges;
-    };
+    // Word has a very flexible concept of columns: each row can vary the
+    // edges of each column.  We must map this onto a set of fixed-width
+    // columns by defining columns on each edge, and then using joined
+    // cells to model the original Word cells.  We accumulate all the known
+    // edges for a given table in an array.
+    // NOTE: don't use unsigned int.  Value can be negative (relative to
+    // margin...).
+    QList<int> m_cellEdges;
+};
 }
 
 class WordsTableHandler : public QObject, public wvWare::TableHandler
 {
     Q_OBJECT
 public:
-    WordsTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
+    WordsTableHandler(KoXmlWriter *bodyWriter, KoGenStyles *mainStyles);
 
     //////// TableHandler interface
     void tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TAP> tap) override;
@@ -110,35 +120,36 @@ public:
     void tableCellEnd() override;
 
     ///////// Our own interface
-    Document* document() const {
+    Document *document() const
+    {
         return m_document;
     }
-    void setDocument(Document* document) {
+    void setDocument(Document *document)
+    {
         m_document = document;
     }
 
-    void tableStart(Words::Table* table);
+    void tableStart(Words::Table *table);
     void tableEnd();
 
 protected:
     double rowHeight() const;
 
 private:
-
     /**
      * Table can be present in {header, footer, footnote, endnote, body}.  Ask
      * texthandler for the current writer.
      * @return current writer.
      */
-    KoXmlWriter* currentWriter() const;
+    KoXmlWriter *currentWriter() const;
 
     // The document owning this table handler.
-    Document* m_document;
+    Document *m_document;
 
-    Words::Table* m_currentTable;
+    Words::Table *m_currentTable;
 
-    KoXmlWriter* m_bodyWriter;
-    KoGenStyles* m_mainStyles;
+    KoXmlWriter *m_bodyWriter;
+    KoGenStyles *m_mainStyles;
 
     int m_row;
     int m_column;

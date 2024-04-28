@@ -10,8 +10,8 @@
 
 #include "flake_export.h"
 
-#include <QSize>
 #include <QMetaType>
+#include <QSize>
 
 #include <KoShapeUserData.h>
 
@@ -52,7 +52,10 @@ public:
     ~KoImageData() override;
     KoImageData(const KoImageData &imageData);
     KoImageData &operator=(const KoImageData &other);
-    inline bool operator!=(const KoImageData &other) const { return !operator==(other); }
+    inline bool operator!=(const KoImageData &other) const
+    {
+        return !operator==(other);
+    }
     bool operator==(const KoImageData &other) const;
 
     void setImage(const QString &location, KoStore *store, KoImageCollection *collection = 0);
@@ -97,12 +100,14 @@ public:
     bool isValid() const;
 
     /// \internal
-    KoImageDataPrivate *priv() { return d; }
+    KoImageDataPrivate *priv()
+    {
+        return d;
+    }
 
 private:
     friend class KoImageCollection;
     friend class TestImageCollection;
-
 
     explicit KoImageData(KoImageDataPrivate *priv);
 
@@ -115,12 +120,11 @@ private:
     void setImage(const QImage &image, KoImageCollection *collection = 0);
     void setImage(const QByteArray &imageData, KoImageCollection *collection = 0);
 
-
 private:
     KoImageDataPrivate *d;
     Q_PRIVATE_SLOT(d, void cleanupImageCache())
 };
 
-Q_DECLARE_METATYPE(KoImageData*)
+Q_DECLARE_METATYPE(KoImageData *)
 
 #endif

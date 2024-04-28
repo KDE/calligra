@@ -27,9 +27,11 @@
 
 #include <QTest>
 
-
-void TestCustomSlideShows::populateDoc(MockDocument &doc, QList<KoPAPageBase*> &slideList1, QList<KoPAPageBase*> &slideList2,
-                                       QString &customShowName1, QString &customShowName2)
+void TestCustomSlideShows::populateDoc(MockDocument &doc,
+                                       QList<KoPAPageBase *> &slideList1,
+                                       QList<KoPAPageBase *> &slideList2,
+                                       QString &customShowName1,
+                                       QString &customShowName2)
 {
     KoPAMasterPage *master1 = new KoPAMasterPage();
     doc.insertPage(master1, 0);
@@ -38,7 +40,7 @@ void TestCustomSlideShows::populateDoc(MockDocument &doc, QList<KoPAPageBase*> &
     doc.insertPage(page1, 0);
 
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
-    KoPAMasterPage * m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
+    KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
     QVERIFY(p1 != 0);
     QVERIFY(m1 != 0);
@@ -55,14 +57,14 @@ void TestCustomSlideShows::populateDoc(MockDocument &doc, QList<KoPAPageBase*> &
     KoPAPage *page5 = new KoPAPage(master1);
     doc.insertPage(page5, 0);
 
-    //Create List 1 2 4 1 5
+    // Create List 1 2 4 1 5
     slideList1.append(page1);
     slideList1.append(page2);
     slideList1.append(page4);
     slideList1.append(page1);
     slideList1.append(page5);
 
-    //Create List 1 2 3 4 5
+    // Create List 1 2 3 4 5
     slideList2.append(page1);
     slideList2.append(page2);
     slideList2.append(page3);
@@ -80,8 +82,8 @@ void TestCustomSlideShows::insertCustomSlideShow()
 {
     // create some slide shows and insert then then test if you can access them again
     MockDocument doc;
-    QList<KoPAPageBase*> slideList1;
-    QList<KoPAPageBase*> slideList2;
+    QList<KoPAPageBase *> slideList1;
+    QList<KoPAPageBase *> slideList2;
     QString customShowName1;
     QString customShowName2;
     populateDoc(doc, slideList1, slideList2, customShowName1, customShowName2);
@@ -94,8 +96,8 @@ void TestCustomSlideShows::removeCustomSlideShow()
     // create some slide shows and insert then then test if you can access them again
     // then remove a´the slideshows again and test of they are no longer there
     MockDocument doc;
-    QList<KoPAPageBase*> slideList1;
-    QList<KoPAPageBase*> slideList2;
+    QList<KoPAPageBase *> slideList1;
+    QList<KoPAPageBase *> slideList2;
     QString customShowName1;
     QString customShowName2;
     populateDoc(doc, slideList1, slideList2, customShowName1, customShowName2);
@@ -111,8 +113,8 @@ void TestCustomSlideShows::updateCustomSlideShow()
     // modify a slide show and update it
     // test if you get the updated slide show
     MockDocument doc;
-    QList<KoPAPageBase*> slideList1;
-    QList<KoPAPageBase*> slideList2;
+    QList<KoPAPageBase *> slideList1;
+    QList<KoPAPageBase *> slideList2;
     QString customShowName1;
     QString customShowName2;
     populateDoc(doc, slideList1, slideList2, customShowName1, customShowName2);
@@ -129,8 +131,8 @@ void TestCustomSlideShows::customSlideShowsNames()
     // insert different slide shows
     // test if you get the correct name of the slide shows
     MockDocument doc;
-    QList<KoPAPageBase*> slideList1;
-    QList<KoPAPageBase*> slideList2;
+    QList<KoPAPageBase *> slideList1;
+    QList<KoPAPageBase *> slideList2;
     QString customShowName1;
     QString customShowName2;
     populateDoc(doc, slideList1, slideList2, customShowName1, customShowName2);
@@ -159,7 +161,7 @@ void TestCustomSlideShows::addSlideToAllCustomSlideShows()
     doc.insertPage(page1, 0);
 
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
-    KoPAMasterPage * m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
+    KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
     QVERIFY(p1 != 0);
     QVERIFY(m1 != 0);
@@ -176,16 +178,16 @@ void TestCustomSlideShows::addSlideToAllCustomSlideShows()
     KoPAPage *page5 = new KoPAPage(master1);
     doc.insertPage(page5, 0);
 
-    QList<KoPAPageBase*> slideList1;
-    QList<KoPAPageBase*> slideList2;
+    QList<KoPAPageBase *> slideList1;
+    QList<KoPAPageBase *> slideList2;
 
-    //Create List 1 2 4 1
+    // Create List 1 2 4 1
     slideList1.append(page1);
     slideList1.append(page2);
     slideList1.append(page4);
     slideList1.append(page1);
 
-    //Create List 1 2 3 4
+    // Create List 1 2 3 4
     slideList2.append(page1);
     slideList2.append(page2);
     slideList2.append(page3);
@@ -217,7 +219,7 @@ void TestCustomSlideShows::addSlidesToAllCustomSlideShows()
     doc.insertPage(page1, 0);
 
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
-    KoPAMasterPage * m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
+    KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
     QVERIFY(p1 != 0);
     QVERIFY(m1 != 0);
@@ -234,15 +236,15 @@ void TestCustomSlideShows::addSlidesToAllCustomSlideShows()
     KoPAPage *page5 = new KoPAPage(master1);
     doc.insertPage(page5, 0);
 
-    QList<KoPAPageBase*> slideList1;
-    QList<KoPAPageBase*> slideList2;
+    QList<KoPAPageBase *> slideList1;
+    QList<KoPAPageBase *> slideList2;
 
-    //Create List 1 2 1
+    // Create List 1 2 1
     slideList1.append(page1);
     slideList1.append(page2);
     slideList1.append(page1);
 
-    //Create List 1 2 3
+    // Create List 1 2 3
     slideList2.append(page1);
     slideList2.append(page2);
     slideList2.append(page3);
@@ -253,7 +255,7 @@ void TestCustomSlideShows::addSlidesToAllCustomSlideShows()
     doc.customSlideShows()->insert(customShowName1, slideList1);
     doc.customSlideShows()->insert(customShowName2, slideList2);
 
-    QList<KoPAPageBase*> slideAddList;
+    QList<KoPAPageBase *> slideAddList;
     slideAddList.append(page4);
     slideAddList.append(page5);
 
@@ -279,7 +281,7 @@ void TestCustomSlideShows::removeSlideFromAllCustomSlideShows()
     doc.insertPage(page1, 0);
 
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
-    KoPAMasterPage * m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
+    KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
     QVERIFY(p1 != 0);
     QVERIFY(m1 != 0);
@@ -296,17 +298,17 @@ void TestCustomSlideShows::removeSlideFromAllCustomSlideShows()
     KoPAPage *page5 = new KoPAPage(master1);
     doc.insertPage(page5, 0);
 
-    QList<KoPAPageBase*> slideList1;
-    QList<KoPAPageBase*> slideList2;
+    QList<KoPAPageBase *> slideList1;
+    QList<KoPAPageBase *> slideList2;
 
-    //Create List 1 2 4 1 5
+    // Create List 1 2 4 1 5
     slideList1.append(page1);
     slideList1.append(page2);
     slideList1.append(page4);
     slideList1.append(page1);
     slideList1.append(page5);
 
-    //Create List 1 2 3 4 5
+    // Create List 1 2 3 4 5
     slideList2.append(page1);
     slideList2.append(page2);
     slideList2.append(page3);
@@ -338,7 +340,7 @@ void TestCustomSlideShows::removeSlidesFromAllCustomSlideShows()
     doc.insertPage(page1, 0);
 
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
-    KoPAMasterPage * m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
+    KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
     QVERIFY(p1 != 0);
     QVERIFY(m1 != 0);
@@ -355,23 +357,22 @@ void TestCustomSlideShows::removeSlidesFromAllCustomSlideShows()
     KoPAPage *page5 = new KoPAPage(master1);
     doc.insertPage(page5, 0);
 
-    QList<KoPAPageBase*> slideList1;
-    QList<KoPAPageBase*> slideList2;
+    QList<KoPAPageBase *> slideList1;
+    QList<KoPAPageBase *> slideList2;
 
-    //Create List 1 2 4 1 5
+    // Create List 1 2 4 1 5
     slideList1.append(page1);
     slideList1.append(page2);
     slideList1.append(page4);
     slideList1.append(page1);
     slideList1.append(page5);
 
-    //Create List 1 2 3 4 5
+    // Create List 1 2 3 4 5
     slideList2.append(page1);
     slideList2.append(page2);
     slideList2.append(page3);
     slideList2.append(page4);
     slideList2.append(page5);
-
 
     QString customShowName1 = "test 1";
     QString customShowName2 = "test 2";
@@ -379,7 +380,7 @@ void TestCustomSlideShows::removeSlidesFromAllCustomSlideShows()
     doc.customSlideShows()->insert(customShowName1, slideList1);
     doc.customSlideShows()->insert(customShowName2, slideList2);
 
-    QList<KoPAPageBase*> slideRemoveList;
+    QList<KoPAPageBase *> slideRemoveList;
     slideRemoveList.append(page4);
     slideRemoveList.append(page5);
 

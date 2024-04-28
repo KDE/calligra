@@ -8,32 +8,32 @@
 */
 
 #include "KoShapeManager.h"
-#include "KoShapeManager_p.h"
-#include "KoSelection.h"
-#include "KoToolManager.h"
-#include "KoPointerEvent.h"
-#include "KoShape.h"
-#include "KoShape_p.h"
 #include "KoCanvasBase.h"
-#include "KoShapeContainer.h"
-#include "KoShapeStrokeModel.h"
-#include "KoShapeGroup.h"
-#include "KoToolProxy.h"
-#include "KoShapeManagerPaintingStrategy.h"
-#include "KoShapeShadow.h"
-#include "KoShapeLayer.h"
-#include "KoFilterEffect.h"
-#include "KoFilterEffectStack.h"
-#include "KoFilterEffectRenderContext.h"
-#include "KoShapeBackground.h"
-#include <KoRTree.h>
 #include "KoClipPath.h"
+#include "KoFilterEffect.h"
+#include "KoFilterEffectRenderContext.h"
+#include "KoFilterEffectStack.h"
+#include "KoPointerEvent.h"
+#include "KoSelection.h"
+#include "KoShape.h"
+#include "KoShapeBackground.h"
+#include "KoShapeContainer.h"
+#include "KoShapeGroup.h"
+#include "KoShapeLayer.h"
+#include "KoShapeManagerPaintingStrategy.h"
+#include "KoShapeManager_p.h"
 #include "KoShapePaintingContext.h"
+#include "KoShapeShadow.h"
+#include "KoShapeStrokeModel.h"
+#include "KoShape_p.h"
+#include "KoToolManager.h"
+#include "KoToolProxy.h"
+#include <KoRTree.h>
 
+#include <FlakeDebug.h>
 #include <QPainter>
 #include <QPainterPath>
 #include <QTimer>
-#include <FlakeDebug.h>
 
 #include <algorithm>
 
@@ -43,7 +43,7 @@ void KoShapeManager::Private::updateTree()
     DetectCollision detector;
     bool selectionModified = false;
     bool anyModified = false;
-    foreach(KoShape *shape, aggregate4update) {
+    foreach (KoShape *shape, aggregate4update) {
         if (shapeIndexesBeforeUpdate.contains(shape))
             detector.detect(tree, shape, shapeIndexesBeforeUpdate[shape]);
         selectionModified = selectionModified || selection->isSelected(shape);
@@ -75,13 +75,13 @@ void KoShapeManager::Private::updateTree()
 
 void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
-    QList<KoShape*> shapes = group->shapes();
+    QList<KoShape *> shapes = group->shapes();
     std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-    foreach(KoShape *child, shapes) {
+    foreach (KoShape *child, shapes) {
         // we paint recursively here, so we do not have to check recursively for visibility
         if (!child->isVisible())
             continue;
-        KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup*>(child);
+        KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup *>(child);
         if (childGroup) {
             paintGroup(childGroup, painter, converter, paintContext);
         } else {
@@ -93,7 +93,7 @@ void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter,
 }
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &shapes)
-        : d(new Private(this, canvas))
+    : d(new Private(this, canvas))
 {
     Q_ASSERT(d->canvas); // not optional.
     connect(d->selection, &KoSelection::selectionChanged, this, &KoShapeManager::selectionChanged);
@@ -101,7 +101,7 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &sha
 }
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
-        : d(new Private(this, canvas))
+    : d(new Private(this, canvas))
 {
     Q_ASSERT(d->canvas); // not optional.
     connect(d->selection, &KoSelection::selectionChanged, this, &KoShapeManager::selectionChanged);
@@ -109,27 +109,26 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
 
 KoShapeManager::~KoShapeManager()
 {
-    foreach(KoShape *shape, d->shapes) {
+    foreach (KoShape *shape, d->shapes) {
         shape->priv()->removeShapeManager(this);
     }
-    foreach(KoShape *shape, d->additionalShapes) {
+    foreach (KoShape *shape, d->additionalShapes) {
         shape->priv()->removeShapeManager(this);
     }
     delete d;
 }
 
-
 void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
 {
-    //clear selection
+    // clear selection
     d->selection->deselectAll();
-    foreach(KoShape *shape, d->shapes) {
+    foreach (KoShape *shape, d->shapes) {
         shape->priv()->removeShapeManager(this);
     }
     d->aggregate4update.clear();
     d->tree.clear();
     d->shapes.clear();
-    foreach(KoShape *shape, shapes) {
+    foreach (KoShape *shape, shapes) {
         addShape(shape, repaint);
     }
 }
@@ -140,7 +139,7 @@ void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
         return;
     shape->priv()->addShapeManager(this);
     d->shapes.append(shape);
-    if (! dynamic_cast<KoShapeGroup*>(shape) && ! dynamic_cast<KoShapeLayer*>(shape)) {
+    if (!dynamic_cast<KoShapeGroup *>(shape) && !dynamic_cast<KoShapeLayer *>(shape)) {
         QRectF br(shape->boundingRect());
         d->tree.insert(br, shape);
     }
@@ -149,7 +148,7 @@ void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
     }
 
     // add the children of a KoShapeContainer
-    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(shape);
 
     if (container) {
         foreach (KoShape *containerShape, container->shapes()) {
@@ -187,7 +186,7 @@ void KoShapeManager::remove(KoShape *shape)
     d->shapes.removeAll(shape);
 
     // remove the children of a KoShapeContainer
-    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(shape);
     if (container) {
         foreach (KoShape *containerShape, container->shapes()) {
             remove(containerShape);
@@ -210,10 +209,10 @@ void KoShapeManager::removeAdditional(KoShape *shape)
 void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, bool forPrint)
 {
     d->updateTree();
-    painter.setPen(Qt::NoPen);  // painters by default have a black stroke, lets turn that off.
+    painter.setPen(Qt::NoPen); // painters by default have a black stroke, lets turn that off.
     painter.setBrush(Qt::NoBrush);
 
-    QList<KoShape*> unsortedShapes;
+    QList<KoShape *> unsortedShapes;
     if (painter.hasClipping()) {
         QRectF rect = converter.viewToDocument(painter.clipRegion().boundingRect());
         unsortedShapes = d->tree.intersects(rect);
@@ -224,7 +223,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
 
     // filter all hidden shapes from the list
     // also filter shapes with a parent which has filter effects applied
-    QList<KoShape*> sortedShapes;
+    QList<KoShape *> sortedShapes;
     foreach (KoShape *shape, unsortedShapes) {
         if (!shape->isVisible(true))
             continue;
@@ -260,7 +259,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
         KoClipPath::applyClipping(shape, painter, converter);
 
         // let the painting strategy paint the shape
-        KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
+        KoShapePaintingContext paintContext(d->canvas, forPrint); // FIXME
         d->strategy->paint(shape, painter, converter, paintContext);
 
         painter.restore();
@@ -277,8 +276,8 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
     painter.restore();
 #endif
 
-    if (! forPrint) {
-        KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
+    if (!forPrint) {
+        KoShapePaintingContext paintContext(d->canvas, forPrint); // FIXME
         d->selection->paint(painter, converter, paintContext);
     }
 }
@@ -287,7 +286,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
 {
     qreal transparency = shape->transparency(true);
     if (transparency > 0.0) {
-        painter.setOpacity(1.0-transparency);
+        painter.setOpacity(1.0 - transparency);
     }
 
     if (shape->shadow()) {
@@ -316,7 +315,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
 
         // Initialize the buffer image
         QImage sourceGraphic(zoomedClipRegion.size().toSize(), QImage::Format_ARGB32_Premultiplied);
-        sourceGraphic.fill(qRgba(0,0,0,0));
+        sourceGraphic.fill(qRgba(0, 0, 0, 0));
 
         QHash<QString, QImage> imageBuffers;
 
@@ -325,13 +324,13 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
         if (requiredStdInputs.contains("SourceGraphic") || requiredStdInputs.contains("SourceAlpha")) {
             // Init the buffer painter
             QPainter imagePainter(&sourceGraphic);
-            imagePainter.translate(-1.0f*clippingOffset);
+            imagePainter.translate(-1.0f * clippingOffset);
             imagePainter.setPen(Qt::NoPen);
             imagePainter.setBrush(Qt::NoBrush);
             imagePainter.setRenderHint(QPainter::Antialiasing, painter.testRenderHint(QPainter::Antialiasing));
 
             // Paint the shape on the image
-            KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
+            KoShapeGroup *group = dynamic_cast<KoShapeGroup *>(shape);
             if (group) {
                 // the childrens matrix contains the groups matrix as well
                 // so we have to compensate for that before painting the children
@@ -351,7 +350,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
         }
         if (requiredStdInputs.contains("SourceAlpha")) {
             QImage sourceAlpha = sourceGraphic.convertToFormat(QImage::Format_Alpha8);
-            sourceAlpha.fill(qRgba(0,0,0,255));
+            sourceAlpha.fill(qRgba(0, 0, 0, 255));
             imageBuffers.insert("SourceAlpha", sourceAlpha);
         }
         if (requiredStdInputs.contains("FillPaint")) {
@@ -359,10 +358,10 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
             if (shape->background()) {
                 QPainter fillPainter(&fillPaint);
                 QPainterPath fillPath;
-                fillPath.addRect(fillPaint.rect().adjusted(-1,-1,1,1));
+                fillPath.addRect(fillPaint.rect().adjusted(-1, -1, 1, 1));
                 shape->background()->paint(fillPainter, converter, paintContext, fillPath);
             } else {
-                fillPaint.fill(qRgba(0,0,0,0));
+                fillPaint.fill(qRgba(0, 0, 0, 0));
             }
             imageBuffers.insert("FillPaint", fillPaint);
         }
@@ -374,7 +373,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
         renderContext.setShapeBoundingBox(shapeBound);
 
         QImage result;
-        QList<KoFilterEffect*> filterEffects = shape->filterEffectStack()->filterEffects();
+        QList<KoFilterEffect *> filterEffects = shape->filterEffectStack()->filterEffects();
         // Filter
         foreach (KoFilterEffect *filterEffect, filterEffects) {
             QRectF filterRegion = filterEffect->filterRectForBoundingRect(shapeBound);
@@ -393,7 +392,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
                 }
             } else {
                 QVector<QImage> inputImages;
-                foreach(const QString &input, filterEffect->inputs()) {
+                foreach (const QString &input, filterEffect->inputs()) {
                     QImage image = imageBuffers.value(input);
                     if (!image.isNull())
                         inputImages.append(imageBuffers.value(input));
@@ -418,14 +417,14 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
 KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelection selection, bool omitHiddenShapes)
 {
     d->updateTree();
-    QList<KoShape*> sortedShapes(d->tree.contains(position));
+    QList<KoShape *> sortedShapes(d->tree.contains(position));
     std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     KoShape *firstUnselectedShape = 0;
     for (int count = sortedShapes.count() - 1; count >= 0; count--) {
         KoShape *shape = sortedShapes.at(count);
-        if (omitHiddenShapes && ! shape->isVisible(true))
+        if (omitHiddenShapes && !shape->isVisible(true))
             continue;
-        if (! shape->hitTest(position))
+        if (!shape->hitTest(position))
             continue;
 
         switch (selection) {
@@ -438,7 +437,7 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
                 return shape;
             break;
         case KoFlake::Unselected:
-            if (! d->selection->isSelected(shape))
+            if (!d->selection->isSelected(shape))
                 return shape;
             break;
         case KoFlake::NextUnselected:
@@ -446,7 +445,7 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
             if (d->selection->isSelected(shape))
                 continue;
             // memorize the first unselected shape
-            if (! firstUnselectedShape)
+            if (!firstUnselectedShape)
                 firstUnselectedShape = shape;
             // check if the shape above is selected
             if (count + 1 < sortedShapes.count() && d->selection->isSelected(sortedShapes.at(count + 1)))
@@ -466,19 +465,18 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
 }
 
 QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenShapes)
-{ 
+{
     d->updateTree();
-    QList<KoShape*> intersectedShapes(d->tree.intersects(rect));
-    
+    QList<KoShape *> intersectedShapes(d->tree.intersects(rect));
+
     for (int count = intersectedShapes.count() - 1; count >= 0; count--) {
-     
         KoShape *shape = intersectedShapes.at(count);
-       
-        if (omitHiddenShapes && ! shape->isVisible(true)) {
+
+        if (omitHiddenShapes && !shape->isVisible(true)) {
             intersectedShapes.removeAt(count);
         } else {
             const QPainterPath outline = shape->absoluteTransformation(0).map(shape->outline());
-            if (! outline.intersects(rect) && ! outline.contains(rect)) { 
+            if (!outline.intersects(rect) && !outline.contains(rect)) {
                 intersectedShapes.removeAt(count);
             }
         }
@@ -505,26 +503,28 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
     d->aggregate4update.insert(shape);
     d->shapeIndexesBeforeUpdate.insert(shape, shape->zIndex());
 
-    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(shape);
     if (container) {
-        foreach(KoShape *child, container->shapes())
+        foreach (KoShape *child, container->shapes())
             notifyShapeChanged(child);
     }
     if (wasEmpty && !d->aggregate4update.isEmpty())
-        QTimer::singleShot(100, this, [this] () { d->updateTree(); });
+        QTimer::singleShot(100, this, [this]() {
+            d->updateTree();
+        });
     emit shapeChanged(shape);
 }
 
-QList<KoShape*> KoShapeManager::shapes() const
+QList<KoShape *> KoShapeManager::shapes() const
 {
     return d->shapes;
 }
 
-QList<KoShape*> KoShapeManager::topLevelShapes() const
+QList<KoShape *> KoShapeManager::topLevelShapes() const
 {
-    QList<KoShape*> shapes;
+    QList<KoShape *> shapes;
     // get all toplevel shapes
-    foreach(KoShape *shape, d->shapes) {
+    foreach (KoShape *shape, d->shapes) {
         if (shape->parent() == 0) {
             shapes.append(shape);
         }
@@ -539,20 +539,20 @@ KoSelection *KoShapeManager::selection() const
 
 void KoShapeManager::suggestChangeTool(KoPointerEvent *event)
 {
-    QList<KoShape*> shapes;
+    QList<KoShape *> shapes;
 
     KoShape *clicked = shapeAt(event->point);
     if (clicked) {
-        if (! selection()->isSelected(clicked)) {
+        if (!selection()->isSelected(clicked)) {
             selection()->deselectAll();
             selection()->select(clicked);
         }
         shapes.append(clicked);
     }
 
-    QList<KoShape*> shapes2;
+    QList<KoShape *> shapes2;
     foreach (KoShape *shape, shapes) {
-        QSet<KoShape*> delegates = shape->toolDelegates();
+        QSet<KoShape *> delegates = shape->toolDelegates();
         if (delegates.isEmpty()) {
             shapes2.append(shape);
         } else {
@@ -561,8 +561,7 @@ void KoShapeManager::suggestChangeTool(KoPointerEvent *event)
             }
         }
     }
-    KoToolManager::instance()->switchToolRequested(
-        KoToolManager::instance()->preferredToolForSelection(shapes2));
+    KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(shapes2));
 }
 
 void KoShapeManager::setPaintingStrategy(KoShapeManagerPaintingStrategy *strategy)
@@ -576,5 +575,5 @@ KoCanvasBase *KoShapeManager::canvas()
     return d->canvas;
 }
 
-//have to include this because of Q_PRIVATE_SLOT
+// have to include this because of Q_PRIVATE_SLOT
 #include "moc_KoShapeManager.cpp"

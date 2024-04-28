@@ -8,11 +8,7 @@
 #ifndef CALLIGRA_SHEETS_ACTION_FORMULA
 #define CALLIGRA_SHEETS_ACTION_FORMULA
 
-
-
 #include "DialogCellAction.h"
-
-
 
 namespace Calligra
 {
@@ -21,39 +17,41 @@ namespace Sheets
 
 class FormulaDialog;
 
-class InsertFormula : public DialogCellAction {
-Q_OBJECT
+class InsertFormula : public DialogCellAction
+{
+    Q_OBJECT
 public:
     InsertFormula(Actions *actions);
     virtual ~InsertFormula();
 
     virtual void onEditorDeleted() override;
 
-    void setFunction (const QString &function);
+    void setFunction(const QString &function);
+
 protected:
     virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
 
     QString m_function;
 };
 
-
-class FormulaSelection : public CellAction {
-Q_OBJECT
+class FormulaSelection : public CellAction
+{
+    Q_OBJECT
 public:
     FormulaSelection(Actions *actions);
     virtual ~FormulaSelection();
 
 protected Q_SLOTS:
-    void triggerFormulaSelection(const QString& expression);
+    void triggerFormulaSelection(const QString &expression);
 
 protected:
-    virtual void execute(Selection *, Sheet *, QWidget *) override {}  // never called
+    virtual void execute(Selection *, Sheet *, QWidget *) override
+    {
+    } // never called
     QAction *createAction() override;
 };
-
-
 
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_FORMULA
+#endif // CALLIGRA_SHEETS_ACTION_FORMULA

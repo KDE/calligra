@@ -45,7 +45,7 @@ public:
     KoRdfSemanticItem(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it);
     virtual ~KoRdfSemanticItem();
 
-    static QList<hKoRdfSemanticItem> fromList(const QList< hKoRdfBasicSemanticItem > &lst);
+    static QList<hKoRdfSemanticItem> fromList(const QList<hKoRdfBasicSemanticItem> &lst);
 
 protected:
     /**

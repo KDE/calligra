@@ -9,9 +9,9 @@
 #ifndef KO_DPI_h
 #define KO_DPI_h
 
-#include <QStringList>
 #include <QFont>
 #include <QMap>
+#include <QStringList>
 
 #include "kowidgets_export.h"
 
@@ -23,15 +23,18 @@ class KOWIDGETS_EXPORT KoDpi
 public:
     KoDpi();
     /// For KoApplication
-    static void initialize()  {
+    static void initialize()
+    {
         (void)self(); // I don't want to make KoDpi instances public, so self() is private
     }
 
-    static int dpiX() {
+    static int dpiX()
+    {
         return self()->m_dpiX;
     }
 
-    static int dpiY() {
+    static int dpiY()
+    {
         return self()->m_dpiY;
     }
 
@@ -41,8 +44,7 @@ public:
     ~KoDpi() = default;
 
 private:
-    static KoDpi* self();
-
+    static KoDpi *self();
 
     int m_dpiX;
     int m_dpiY;

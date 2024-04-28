@@ -8,20 +8,19 @@
 
 #include <KLocalizedString>
 
-#include "KoPAPage.h"
 #include "KoPADocument.h"
+#include "KoPAPage.h"
 
-KoPAChangeMasterPageCommand::KoPAChangeMasterPageCommand( KoPADocument *document, KoPAPage * page, KoPAMasterPage * masterPage )
-: m_document( document )
-, m_page( page )
-, m_oldMasterPage( page->masterPage() )
-, m_newMasterPage( masterPage )
+KoPAChangeMasterPageCommand::KoPAChangeMasterPageCommand(KoPADocument *document, KoPAPage *page, KoPAMasterPage *masterPage)
+    : m_document(document)
+    , m_page(page)
+    , m_oldMasterPage(page->masterPage())
+    , m_newMasterPage(masterPage)
 {
-    if ( m_page->pageType() == KoPageApp::Slide ) {
-        setText( kundo2_i18n( "Change master slide" ) );
-    }
-    else {
-        setText( kundo2_i18n( "Change master page" ) );
+    if (m_page->pageType() == KoPageApp::Slide) {
+        setText(kundo2_i18n("Change master slide"));
+    } else {
+        setText(kundo2_i18n("Change master page"));
     }
 }
 
@@ -31,13 +30,12 @@ KoPAChangeMasterPageCommand::~KoPAChangeMasterPageCommand()
 
 void KoPAChangeMasterPageCommand::redo()
 {
-    m_page->setMasterPage( m_newMasterPage );
+    m_page->setMasterPage(m_newMasterPage);
     m_document->emitUpdate(m_page);
 }
 
 void KoPAChangeMasterPageCommand::undo()
 {
-    m_page->setMasterPage( m_oldMasterPage );
+    m_page->setMasterPage(m_oldMasterPage);
     m_document->emitUpdate(m_page);
 }
-

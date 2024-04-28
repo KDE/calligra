@@ -6,14 +6,13 @@
 
 #include <KLocalizedString>
 
-#include <KoTextEditor.h>
-#include <KoTextDocument.h>
-#include <KoInlineTextObjectManager.h>
 #include <KoInlineNote.h>
-
+#include <KoInlineTextObjectManager.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
 
 InsertNoteCommand::InsertNoteCommand(KoInlineNote::Type type, QTextDocument *document)
-    : KUndo2Command ()
+    : KUndo2Command()
     , m_document(document)
     , m_first(true)
 {

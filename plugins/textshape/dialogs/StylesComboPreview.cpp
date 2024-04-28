@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2011 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ */
 
 /*
  * This class is heavily inspired by QLineEdit, so here goes credit because credit is due (from klineedit.h):
@@ -22,14 +22,14 @@
 
 #include <KoIcon.h>
 
+#include <QFocusEvent>
 #include <QImage>
+#include <QKeyEvent>
 #include <QLineEdit>
 #include <QModelIndex>
-#include <QPainter>
-#include <QPaintEvent>
-#include <QFocusEvent>
 #include <QMouseEvent>
-#include <QKeyEvent>
+#include <QPaintEvent>
+#include <QPainter>
 #include <QPushButton>
 #include <QString>
 
@@ -37,11 +37,11 @@
 
 #include <QDebug>
 
-StylesComboPreview::StylesComboPreview(QWidget *parent) :
-    QLineEdit(parent),
-    m_renamingNewStyle(false),
-    m_shouldAddNewStyle(false),
-    m_addButton(0)
+StylesComboPreview::StylesComboPreview(QWidget *parent)
+    : QLineEdit(parent)
+    , m_renamingNewStyle(false)
+    , m_shouldAddNewStyle(false)
+    , m_addButton(0)
 {
     init();
 }
@@ -60,10 +60,10 @@ void StylesComboPreview::init()
     }
 
     m_addButton = new QPushButton(this);
-    m_addButton->setCursor( Qt::ArrowCursor );
+    m_addButton->setCursor(Qt::ArrowCursor);
     m_addButton->setIcon(koIcon("list-add"));
     m_addButton->setFlat(true);
-    m_addButton->setMinimumSize(16,16);
+    m_addButton->setMinimumSize(16, 16);
     m_addButton->setMaximumSize(16, 16);
     m_addButton->setToolTip(i18n("Create a new style with the current properties"));
     connect(m_addButton, &QAbstractButton::clicked, this, &StylesComboPreview::addNewStyle);
@@ -79,7 +79,7 @@ void StylesComboPreview::updateAddButton()
 
     const QSize geom = size();
     const int buttonWidth = m_addButton->size().width();
-    m_addButton->move(geom.width() - buttonWidth , (geom.height()-m_addButton->size().height())/2);
+    m_addButton->move(geom.width() - buttonWidth, (geom.height() - m_addButton->size().height()) / 2);
 }
 
 void StylesComboPreview::setAddButtonShown(bool show)
@@ -89,7 +89,7 @@ void StylesComboPreview::setAddButtonShown(bool show)
 
 QSize StylesComboPreview::availableSize() const
 {
-    return QSize(contentsRect().width()- m_addButton->width(), contentsRect().height()); ///TODO dynamic resizing when button shown/hidden.
+    return QSize(contentsRect().width() - m_addButton->width(), contentsRect().height()); /// TODO dynamic resizing when button shown/hidden.
 }
 
 void StylesComboPreview::setPreview(const QImage &image)
@@ -102,14 +102,14 @@ bool StylesComboPreview::isAddButtonShown() const
     return m_addButton != 0;
 }
 
-void StylesComboPreview::resizeEvent( QResizeEvent * ev )
+void StylesComboPreview::resizeEvent(QResizeEvent *ev)
 {
     QLineEdit::resizeEvent(ev);
     emit resized();
     updateAddButton();
 }
 
-void StylesComboPreview::keyPressEvent( QKeyEvent *e )
+void StylesComboPreview::keyPressEvent(QKeyEvent *e)
 {
     if (m_shouldAddNewStyle && e->key() == Qt::Key_Escape) {
         m_renamingNewStyle = false;
@@ -117,16 +117,14 @@ void StylesComboPreview::keyPressEvent( QKeyEvent *e )
         setReadOnly(true);
         setText(QString());
         e->accept();
-    }
-    else if (m_shouldAddNewStyle && (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)) {
+    } else if (m_shouldAddNewStyle && (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)) {
         m_renamingNewStyle = false;
         m_shouldAddNewStyle = false;
         emit newStyleRequested(text());
         setReadOnly(true);
         setText(QString());
         e->accept();
-    }
-    else {
+    } else {
         QLineEdit::keyPressEvent(e);
     }
 }
@@ -145,8 +143,7 @@ void StylesComboPreview::focusOutEvent(QFocusEvent *e)
         setReadOnly(true);
         m_renamingNewStyle = false;
         setText(QString());
-    }
-    else {
+    } else {
         QLineEdit::focusOutEvent(e);
     }
 }
@@ -159,15 +156,14 @@ void StylesComboPreview::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
-void StylesComboPreview::paintEvent( QPaintEvent *ev )
+void StylesComboPreview::paintEvent(QPaintEvent *ev)
 {
     if (!m_renamingNewStyle) {
         QLineEdit::paintEvent(ev);
         QPainter p(this);
         p.setClipRect(ev->rect());
         p.drawImage(contentsRect().topLeft(), m_stylePreview);
-    }
-    else {
+    } else {
         QLineEdit::paintEvent(ev);
     }
 }

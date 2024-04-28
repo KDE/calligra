@@ -8,7 +8,7 @@
 #include "KPrSnakeWipeEffectFactory.h"
 
 KPrSnakeWipeTopLeftDiagonalStrategy::KPrSnakeWipeTopLeftDiagonalStrategy()
-    : KPrSnakeWipeDiagonalStrategy( KPrSnakeWipeEffectFactory::FromTopLeft, "snakeWipe", "topLeftDiagonal", false )
+    : KPrSnakeWipeDiagonalStrategy(KPrSnakeWipeEffectFactory::FromTopLeft, "snakeWipe", "topLeftDiagonal", false)
 {
 }
 
@@ -21,4 +21,3 @@ int KPrSnakeWipeTopLeftDiagonalStrategy::squareIndex(int x, int y, int columns, 
     Q_UNUSED(columns);
     return m_indices[x * rows + y];
 }
-

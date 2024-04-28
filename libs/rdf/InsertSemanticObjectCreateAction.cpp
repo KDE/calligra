@@ -8,21 +8,18 @@
 #include "KoDocumentRdf.h"
 
 #include "KoCanvasBase.h"
-#include "KoToolProxy.h"
 #include "KoTextEditor.h"
+#include "KoToolProxy.h"
 
-#include <kdebug.h>
 #include <KLocalizedString>
+#include <kdebug.h>
 #include <kpagedialog.h>
 
 #include <QVBoxLayout>
 
-InsertSemanticObjectCreateAction::InsertSemanticObjectCreateAction(
-    KoCanvasBase *canvas,
-    KoDocumentRdf *rdf,
-    const QString &name)
-        : InsertSemanticObjectActionBase(canvas, rdf, name),
-        m_semanticClass(name)
+InsertSemanticObjectCreateAction::InsertSemanticObjectCreateAction(KoCanvasBase *canvas, KoDocumentRdf *rdf, const QString &name)
+    : InsertSemanticObjectActionBase(canvas, rdf, name)
+    , m_semanticClass(name)
 {
 }
 
@@ -38,8 +35,7 @@ void InsertSemanticObjectCreateAction::activated()
     widget->setLayout(lay);
     lay->setMargin(0);
     kDebug(30015) << "semanticClass:" << m_semanticClass;
-    hKoRdfSemanticItem semItem(static_cast<KoRdfSemanticItem *>(
-	m_rdf->createSemanticItem(m_semanticClass, m_rdf).data()));
+    hKoRdfSemanticItem semItem(static_cast<KoRdfSemanticItem *>(m_rdf->createSemanticItem(m_semanticClass, m_rdf).data()));
     QWidget *w = semItem->createEditor(widget);
     lay->addWidget(w);
     KPageDialog dialog(m_canvas->canvasWidget());

@@ -5,19 +5,19 @@
  */
 
 #include "KoPatternBackground.h"
+#include "KoImageCollection.h"
+#include "KoImageData.h"
 #include "KoShapeBackground_p.h"
 #include "KoShapeSavingContext.h"
-#include "KoImageData.h"
-#include "KoImageCollection.h"
-#include <KoStyleStack.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
-#include <KoXmlNS.h>
-#include <KoOdfLoadingContext.h>
 #include <KoOdfGraphicStyles.h>
+#include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
+#include <KoStyleStack.h>
 #include <KoUnit.h>
 #include <KoViewConverter.h>
+#include <KoXmlNS.h>
 
 #include <FlakeDebug.h>
 
@@ -36,11 +36,13 @@ public:
     {
     }
 
-    ~KoPatternBackgroundPrivate() override {
+    ~KoPatternBackgroundPrivate() override
+    {
         delete imageData;
     }
 
-    QSizeF targetSize() const {
+    QSizeF targetSize() const
+    {
         QSizeF size = imageData->imageSize();
         if (targetImageSizePercent.width() > 0.0)
             size.setWidth(0.01 * targetImageSizePercent.width() * size.width());
@@ -54,7 +56,8 @@ public:
         return size;
     }
 
-    QPointF offsetFromRect(const QRectF &fillRect, const QSizeF &imageSize) const {
+    QPointF offsetFromRect(const QRectF &fillRect, const QSizeF &imageSize) const
+    {
         QPointF offset;
         switch (refPoint) {
         case KoPatternBackground::TopLeft:
@@ -110,16 +113,14 @@ public:
     QSizeF targetImageSizePercent;
     QPointF refPointOffsetPercent;
     QPointF tileRepeatOffsetPercent;
-    KoImageCollection * imageCollection;
-    KoImageData * imageData;
+    KoImageCollection *imageCollection;
+    KoImageData *imageData;
 };
-
 
 // ----------------------------------------------------------------
 
-
-KoPatternBackground::KoPatternBackground(KoImageCollection * imageCollection)
-        : KoShapeBackground(*(new KoPatternBackgroundPrivate()))
+KoPatternBackground::KoPatternBackground(KoImageCollection *imageCollection)
+    : KoShapeBackground(*(new KoPatternBackgroundPrivate()))
 {
     Q_D(KoPatternBackground);
     d->imageCollection = imageCollection;
@@ -128,7 +129,7 @@ KoPatternBackground::KoPatternBackground(KoImageCollection * imageCollection)
 
 KoPatternBackground::~KoPatternBackground()
 {
-    //Q_D(KoPatternBackground);
+    // Q_D(KoPatternBackground);
 }
 
 void KoPatternBackground::setTransform(const QTransform &matrix)
@@ -236,10 +237,10 @@ QSizeF KoPatternBackground::patternOriginalSize() const
     return d->imageData->imageSize();
 }
 
-void KoPatternBackground::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
+void KoPatternBackground::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext & /*context*/, const QPainterPath &fillPath) const
 {
     Q_D(const KoPatternBackground);
-    if (! d->imageData)
+    if (!d->imageData)
         return;
 
     painter.save();
@@ -291,7 +292,7 @@ void KoPatternBackground::paint(QPainter &painter, const KoViewConverter &conver
 void KoPatternBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
     Q_D(KoPatternBackground);
-    if (! d->imageData)
+    if (!d->imageData)
         return;
 
     switch (d->repeat) {
@@ -309,15 +310,33 @@ void KoPatternBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &con
     if (d->repeat == Tiled) {
         QString refPointId = "top-left";
         switch (d->refPoint) {
-        case TopLeft: refPointId = "top-left"; break;
-        case Top: refPointId = "top"; break;
-        case TopRight: refPointId = "top-right"; break;
-        case Left: refPointId = "left"; break;
-        case Center: refPointId = "center"; break;
-        case Right: refPointId = "right"; break;
-        case BottomLeft: refPointId = "bottom-left"; break;
-        case Bottom: refPointId = "bottom"; break;
-        case BottomRight: refPointId = "bottom-right"; break;
+        case TopLeft:
+            refPointId = "top-left";
+            break;
+        case Top:
+            refPointId = "top";
+            break;
+        case TopRight:
+            refPointId = "top-right";
+            break;
+        case Left:
+            refPointId = "left";
+            break;
+        case Center:
+            refPointId = "center";
+            break;
+        case Right:
+            refPointId = "right";
+            break;
+        case BottomLeft:
+            refPointId = "bottom-left";
+            break;
+        case Bottom:
+            refPointId = "bottom";
+            break;
+        case BottomRight:
+            refPointId = "bottom-right";
+            break;
         }
         style.addProperty("draw:fill-image-ref-point", refPointId);
         if (d->refPointOffsetPercent.x() > 0.0)
@@ -352,7 +371,7 @@ bool KoPatternBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &
 {
     Q_D(KoPatternBackground);
     KoStyleStack &styleStack = context.styleStack();
-    if (! styleStack.hasProperty(KoXmlNS::draw, "fill"))
+    if (!styleStack.hasProperty(KoXmlNS::draw, "fill"))
         return false;
 
     QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
@@ -361,8 +380,8 @@ bool KoPatternBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &
 
     QString styleName = styleStack.property(KoXmlNS::draw, "fill-image-name");
 
-    KoXmlElement* e = context.stylesReader().drawStyles("fill-image").value(styleName);
-    if (! e)
+    KoXmlElement *e = context.stylesReader().drawStyles("fill-image").value(styleName);
+    if (!e)
         return false;
 
     const QString href = e->attributeNS(KoXmlNS::xlink, "href", QString());
@@ -371,7 +390,7 @@ bool KoPatternBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &
 
     delete d->imageData;
     d->imageData = d->imageCollection->createImageData(href, context.store());
-    if (! d->imageData)
+    if (!d->imageData)
         return false;
 
     // read the pattern repeat style

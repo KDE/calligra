@@ -13,25 +13,24 @@
 
 using namespace MusicCore;
 
-PartDetailsDialog::PartDetailsDialog(Part* part, QWidget* parent)
+PartDetailsDialog::PartDetailsDialog(Part *part, QWidget *parent)
     : KoDialog(parent)
 {
     setCaption(i18n("Part details"));
-    QWidget* w = new QWidget(this);
+    QWidget *w = new QWidget(this);
     widget.setupUi(w);
     setMainWidget(w);
-    
+
     widget.nameEdit->setText(part->name());
     widget.shortNameEdit->setText(part->shortName());
     widget.staffCount->setValue(part->staffCount());
 }
 
-void PartDetailsDialog::showDialog(MusicTool *tool, Part* part, QWidget* parent)
+void PartDetailsDialog::showDialog(MusicTool *tool, Part *part, QWidget *parent)
 {
     PartDetailsDialog dlg(part, parent);
     if (dlg.exec() == QDialog::Accepted) {
-        tool->addCommand(new ChangePartDetailsCommand(tool->shape(), part, dlg.widget.nameEdit->text(),
-                                                        dlg.widget.shortNameEdit->text(),
-                                                        dlg.widget.staffCount->value()));
+        tool->addCommand(
+            new ChangePartDetailsCommand(tool->shape(), part, dlg.widget.nameEdit->text(), dlg.widget.shortNameEdit->text(), dlg.widget.staffCount->value()));
     }
 }

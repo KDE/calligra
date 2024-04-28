@@ -16,7 +16,16 @@
 class FLAKE_EXPORT KoShapeRunAroundCommand : public KUndo2Command
 {
 public:
-    KoShapeRunAroundCommand(KoShape *shape, KoShape::TextRunAroundSide side, int runThrough, qreal distanceLeft, qreal distanceTop, qreal distanceRight, qreal distanceBottom, qreal threshold, KoShape::TextRunAroundContour contour, KUndo2Command *parent = 0);
+    KoShapeRunAroundCommand(KoShape *shape,
+                            KoShape::TextRunAroundSide side,
+                            int runThrough,
+                            qreal distanceLeft,
+                            qreal distanceTop,
+                            qreal distanceRight,
+                            qreal distanceBottom,
+                            qreal threshold,
+                            KoShape::TextRunAroundContour contour,
+                            KUndo2Command *parent = 0);
     ~KoShapeRunAroundCommand() override;
 
     /// redo the command
@@ -26,7 +35,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOSHAPERUNAROUNDCOMMAND_H */

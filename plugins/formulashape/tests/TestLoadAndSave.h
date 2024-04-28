@@ -47,7 +47,7 @@ private Q_SLOTS:
     void fontStyle();
     void color_data();
     void color();
-    
+
     // General layout elements
     void rowElement_data();
     void rowElement();
@@ -89,15 +89,14 @@ private Q_SLOTS:
     void tableElement();
     void trElement_data();
     void trElement();
-    //void labeledtrElement_data();
-    //void labeledtrElement();
+    // void labeledtrElement_data();
+    // void labeledtrElement();
     void tdElement_data();
     void tdElement();
 
     // Enlivening elements
     void actionElement_data();
     void actionElement();
-    
 };
 
 #endif // _TESTLOADANDSAVE_H_

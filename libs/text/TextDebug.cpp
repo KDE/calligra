@@ -6,10 +6,8 @@
 
 #include "TextDebug.h"
 
-const QLoggingCategory &TEXT_LOG() \
+const QLoggingCategory &TEXT_LOG()
 {
     static const QLoggingCategory category("calligra.lib.text");
     return category;
 }
-
-

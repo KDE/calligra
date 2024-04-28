@@ -8,7 +8,7 @@
 #include "KPrSnakeWipeEffectFactory.h"
 
 KPrSnakeWipeBottomRightHorizontalStrategy::KPrSnakeWipeBottomRightHorizontalStrategy()
-    : KPrMatrixWipeStrategy( KPrSnakeWipeEffectFactory::FromBottom, "snakeWipe", "topLeftHorizontal", true, true )
+    : KPrMatrixWipeStrategy(KPrSnakeWipeEffectFactory::FromBottom, "snakeWipe", "topLeftHorizontal", true, true)
 {
 }
 
@@ -19,7 +19,8 @@ KPrSnakeWipeBottomRightHorizontalStrategy::~KPrSnakeWipeBottomRightHorizontalStr
 int KPrSnakeWipeBottomRightHorizontalStrategy::squareIndex(int x, int y, int columns, int rows)
 {
     int X = x;
-    if (y & 1) X = columns - x - 1;
+    if (y & 1)
+        X = columns - x - 1;
     return X + (rows - y - 1) * columns;
 }
 
@@ -28,12 +29,13 @@ KPrMatrixWipeStrategy::Direction KPrSnakeWipeBottomRightHorizontalStrategy::squa
     Q_UNUSED(x);
     Q_UNUSED(columns);
     Q_UNUSED(rows);
-    if (y & 1) return RightToLeft;
-    else return LeftToRight;
+    if (y & 1)
+        return RightToLeft;
+    else
+        return LeftToRight;
 }
 
 int KPrSnakeWipeBottomRightHorizontalStrategy::maxIndex(int columns, int rows)
 {
     return columns * rows;
 }
-

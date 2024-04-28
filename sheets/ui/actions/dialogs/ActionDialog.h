@@ -32,13 +32,20 @@ public:
     ~ActionDialog() override;
 
     /** Called if selection changes. */
-    virtual void onSelectionChanged(Selection *) {}
+    virtual void onSelectionChanged(Selection *)
+    {
+    }
 
 protected:
     virtual void onApply() = 0;
-    virtual void onClose() {}
+    virtual void onClose()
+    {
+    }
     /** Widget with the default focus. */
-    virtual QWidget *defaultWidget() { return nullptr; }
+    virtual QWidget *defaultWidget()
+    {
+        return nullptr;
+    }
 
     virtual void showEvent(QShowEvent *event) override;
 private Q_SLOTS:

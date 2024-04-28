@@ -7,9 +7,9 @@
  */
 #include "TestKoTableColumnAndRowStyleManager.h"
 
+#include "../KoTableColumnAndRowStyleManager.h"
 #include "styles/KoTableColumnStyle.h"
 #include "styles/KoTableRowStyle.h"
-#include "../KoTableColumnAndRowStyleManager.h"
 
 #include <QTest>
 
@@ -25,7 +25,7 @@ void TestKoTableColumnAndRowStyleManager::testColumns()
     manager.setColumnStyle(2, *style2);
 
     QVERIFY(manager.columnStyle(0) == *style1);
-    //column 1 is a default inited style
+    // column 1 is a default inited style
     QVERIFY(manager.columnStyle(2) == *style2);
 
     manager.insertColumns(1, 2, *style3);
@@ -33,7 +33,7 @@ void TestKoTableColumnAndRowStyleManager::testColumns()
     QVERIFY(manager.columnStyle(0) == *style1);
     QVERIFY(manager.columnStyle(1) == *style3);
     QVERIFY(manager.columnStyle(2) == *style3);
-    //column 3 is a default inited style
+    // column 3 is a default inited style
     QVERIFY(manager.columnStyle(4) == *style2);
 
     manager.removeColumns(2, 2);
@@ -62,7 +62,7 @@ void TestKoTableColumnAndRowStyleManager::testRows()
     QVERIFY(manager.rowStyle(0) == *style1);
     QVERIFY(manager.rowStyle(1) == *style3);
     QVERIFY(manager.rowStyle(2) == *style3);
-    //row 3 is a default inited style
+    // row 3 is a default inited style
     QVERIFY(manager.rowStyle(4) == *style2);
 
     manager.removeRows(2, 2);

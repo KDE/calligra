@@ -10,7 +10,7 @@
 #include "ListItemsHelper.h"
 
 ListsSpinBox::ListsSpinBox(QWidget *parent)
-        : QSpinBox(parent)
+    : QSpinBox(parent)
 {
 }
 
@@ -20,7 +20,7 @@ void ListsSpinBox::setNumberFormat(const KoOdfNumberDefinition &format)
     update();
 }
 
-void ListsSpinBox::setLetterSynchronization (bool value)
+void ListsSpinBox::setLetterSynchronization(bool value)
 {
     m_format.setLetterSynchronization(value);
 }

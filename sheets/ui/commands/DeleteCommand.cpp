@@ -6,18 +6,18 @@
 
 #include "DeleteCommand.h"
 
-#include "engine/Damages.h"
-#include "engine/MapBase.h"
-#include "engine/Validity.h"
 #include "core/CellStorage.h"
 #include "core/Condition.h"
 #include "core/Sheet.h"
+#include "engine/Damages.h"
+#include "engine/MapBase.h"
+#include "engine/Validity.h"
 
 using namespace Calligra::Sheets;
 
 DeleteCommand::DeleteCommand(KUndo2Command *parent)
-        : AbstractDataManipulator(parent)
-        , m_mode(Everything)
+    : AbstractDataManipulator(parent)
+    , m_mode(Everything)
 {
     setText(kundo2_i18n("Delete"));
     m_checkLock = true;
@@ -32,7 +32,7 @@ void DeleteCommand::setMode(Mode mode)
     m_mode = mode;
 }
 
-bool DeleteCommand::process(Element* element)
+bool DeleteCommand::process(Element *element)
 {
     // The RecalcManager needs a valid sheet.
     if (!element->sheet())
@@ -77,7 +77,8 @@ bool DeleteCommand::process(Element* element)
 
 bool DeleteCommand::performNonCommandActions()
 {
-    if (m_mode == OnlyCells) return true;
+    if (m_mode == OnlyCells)
+        return true;
 
     ColFormatStorage *cols = m_sheet->columnFormats();
     RowFormatStorage *rows = m_sheet->rowFormats();
@@ -131,4 +132,3 @@ bool DeleteCommand::undoNonCommandActions()
         m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged | SheetDamage::ColumnsChanged | SheetDamage::RowsChanged));
     return true;
 }
-

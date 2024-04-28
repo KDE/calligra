@@ -39,12 +39,12 @@ class KOTEXT_EXPORT KoTableColumnStyle
 public:
     enum Property {
         StyleId = QTextTableFormat::UserProperty + 1,
-        ColumnWidth,         ///< Column width.
+        ColumnWidth, ///< Column width.
         RelativeColumnWidth, ///< Relative column width.
-        OptimalColumnWidth,  ///< Use optimal column width
-        BreakBefore,         ///< If true, insert a frame break before this table
-        BreakAfter,          ///< If true, insert a frame break after this table
-        MasterPageName       ///< Optional name of the master-page
+        OptimalColumnWidth, ///< Use optimal column width
+        BreakBefore, ///< If true, insert a frame break before this table
+        BreakAfter, ///< If true, insert a frame break after this table
+        MasterPageName ///< Optional name of the master-page
     };
 
     /// Constructor

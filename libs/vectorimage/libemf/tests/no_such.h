@@ -9,7 +9,7 @@
 
 #include <QtTest>
 
-class NoSuch: public QObject
+class NoSuch : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:

@@ -66,7 +66,6 @@ public:
     bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context) override;
 
 protected:
-
     void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
     void updatePath(const QSizeF &size) override;
     void createPoints(int requiredPointCount);
@@ -78,5 +77,3 @@ private:
 };
 
 #endif /* KORECTANGLESHAPE_H */
-
-

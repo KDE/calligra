@@ -6,25 +6,24 @@
 
 #include "KoRdfFoaF.h"
 #include "KoDocumentRdf.h"
-#include "KoTextRdfCore.h"
 #include "KoRdfFoaFTreeWidgetItem.h"
-#include <QUuid>
+#include "KoTextRdfCore.h"
 #include <QTemporaryFile>
+#include <QUuid>
 #include <kdebug.h>
 #include <kfiledialog.h>
 
 #ifdef KDEPIMLIBS_FOUND
-#include <akonadi/collectiondialog.h>
-#include <akonadi/itemcreatejob.h>
 #include <akonadi/collection.h>
+#include <akonadi/collectiondialog.h>
 #include <akonadi/item.h>
+#include <akonadi/itemcreatejob.h>
 #include <kabc/addressee.h>
 #include <kabc/phonenumber.h>
 #include <kabc/vcardconverter.h>
 #endif
 
 using namespace Soprano;
-
 
 KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *rdf)
     : KoRdfSemanticItem(parent, rdf)
@@ -34,12 +33,12 @@ KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *rdf)
 KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
     : KoRdfSemanticItem(parent, rdf, it)
 {
-    m_uri      = it.binding("person").toString();
-    m_name     = it.binding("name").toString();
-    m_nick     = KoTextRdfCore::optionalBindingAsString(it, "nick");
+    m_uri = it.binding("person").toString();
+    m_name = it.binding("name").toString();
+    m_nick = KoTextRdfCore::optionalBindingAsString(it, "nick");
     m_homePage = KoTextRdfCore::optionalBindingAsString(it, "homepage");
     m_imageUrl = KoTextRdfCore::optionalBindingAsString(it, "img");
-    m_phone    = KoTextRdfCore::optionalBindingAsString(it, "phone");
+    m_phone = KoTextRdfCore::optionalBindingAsString(it, "phone");
     kDebug(30015) << "+++xmlid:" << it.binding("xmlid").toString();
 }
 
@@ -48,13 +47,12 @@ KoRdfFoaF::~KoRdfFoaF()
     kDebug(30015) << "~KoRdfFoaF() this:" << this << " name:" << name();
 }
 
-
 QString KoRdfFoaF::name() const
 {
     return m_name;
 }
 
-QWidget* KoRdfFoaF::createEditor(QWidget * parent)
+QWidget *KoRdfFoaF::createEditor(QWidget *parent)
 {
     QWidget *ret = new QWidget(parent);
     editWidget.setupUi(ret);
@@ -80,7 +78,7 @@ void KoRdfFoaF::updateFromEditorData()
     updateTriple(m_homePage, editWidget.url->text(), predBase + "homepage");
     updateTriple(m_phone, editWidget.phone->text(), predBase + "phone");
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
+        const_cast<KoDocumentRdf *>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 }
 
@@ -108,7 +106,7 @@ void KoRdfFoaF::exportToMime(QMimeData *md) const
 {
     QTemporaryFile file;
     if (file.open()) {
-        //QString mimeType = "text/directory"; // text/x-vcard";
+        // QString mimeType = "text/directory"; // text/x-vcard";
         exportToFile(file.fileName());
         QByteArray ba = KoTextRdfCore::fileToByteArray(file.fileName());
         md->setData("text/directory", ba);
@@ -125,21 +123,11 @@ void KoRdfFoaF::exportToMime(QMimeData *md) const
 QList<hKoSemanticStylesheet> KoRdfFoaF::stylesheets() const
 {
     QList<hKoSemanticStylesheet> stylesheets;
-    stylesheets.append(
-        createSystemStylesheet("143c1ba3-d7bb-440b-8528-7f07d2eff5f2",
-                               "name", "%NAME%"));
-    stylesheets.append(
-        createSystemStylesheet("2fad34d1-42a0-4b10-b17e-a87db5208f6d",
-                               "nick", "%NICK%"));
-    stylesheets.append(
-        createSystemStylesheet("0dd5878d-95c5-47e5-a777-63ec36da3b9a",
-                               "name, phone", "%NAME%, %PHONE%"));
-    stylesheets.append(
-        createSystemStylesheet("9cbeb4a6-34c5-49b2-b3ef-b94277db0c59",
-                               "nick, phone", "%NICK%, %PHONE%"));
-    stylesheets.append(
-        createSystemStylesheet("47025a4a-5da5-4a32-8d89-14c03658631d",
-                               "name, (homepage), phone", "%NAME%, (%HOMEPAGE%), %PHONE%"));
+    stylesheets.append(createSystemStylesheet("143c1ba3-d7bb-440b-8528-7f07d2eff5f2", "name", "%NAME%"));
+    stylesheets.append(createSystemStylesheet("2fad34d1-42a0-4b10-b17e-a87db5208f6d", "nick", "%NICK%"));
+    stylesheets.append(createSystemStylesheet("0dd5878d-95c5-47e5-a777-63ec36da3b9a", "name, phone", "%NAME%, %PHONE%"));
+    stylesheets.append(createSystemStylesheet("9cbeb4a6-34c5-49b2-b3ef-b94277db0c59", "nick, phone", "%NICK%, %PHONE%"));
+    stylesheets.append(createSystemStylesheet("47025a4a-5da5-4a32-8d89-14c03658631d", "name, (homepage), phone", "%NAME%, (%HOMEPAGE%), %PHONE%"));
     return stylesheets;
 }
 
@@ -177,7 +165,7 @@ void KoRdfFoaF::saveToKABC()
     collectionDialog.setMimeTypeFilter(QStringList() << KABC::Addressee::mimeType());
     collectionDialog.setAccessRightsFilter(Akonadi::Collection::CanCreateItem);
     collectionDialog.setDescription(i18n("Select an address book for saving:"));
-    if (! collectionDialog.exec()) {
+    if (!collectionDialog.exec()) {
         return;
     }
 
@@ -190,12 +178,12 @@ void KoRdfFoaF::saveToKABC()
     item.setMimeType(KABC::Addressee::mimeType());
 
     Akonadi::ItemCreateJob *itemCreateJob = new Akonadi::ItemCreateJob(item, collection);
-    connect(itemCreateJob, SIGNAL(result(KJob*)), SLOT(onCreateJobFinished(KJob*)));
+    connect(itemCreateJob, SIGNAL(result(KJob *)), SLOT(onCreateJobFinished(KJob *)));
 #endif
 }
 
 #ifdef KDEPIMLIBS_FOUND
-void KoRdfFoaF::onCreateJobFinished( KJob *job )
+void KoRdfFoaF::onCreateJobFinished(KJob *job)
 {
     if (job->error()) {
         kDebug(30015) << "Could not add entry:" << name();
@@ -205,18 +193,13 @@ void KoRdfFoaF::onCreateJobFinished( KJob *job )
 }
 #endif
 
-
 void KoRdfFoaF::exportToFile(const QString &fileNameConst) const
 {
     QString fileName = fileNameConst;
 
 #ifdef KDEPIMLIBS_FOUND
     if (!fileName.size()) {
-        fileName = KFileDialog::getSaveFileName(
-                       KUrl("kfiledialog:///ExportDialog"),
-                       "*.vcf|vCard files",
-                       0,
-                       "Export to selected vCard file");
+        fileName = KFileDialog::getSaveFileName(KUrl("kfiledialog:///ExportDialog"), "*.vcf|vCard files", 0, "Export to selected vCard file");
 
         if (!fileName.size()) {
             kDebug(30015) << "no filename given, cancel export..";

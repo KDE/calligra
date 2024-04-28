@@ -29,7 +29,6 @@ class KPrTimeLineHeader;
 class QColor;
 class KPrAnimationGroupProxyModel;
 
-
 /**
  Animations Time Line Widget for groups of time related animations
  it depends on KPrTimeLineHeader and KPrTimeLineView
@@ -49,24 +48,24 @@ public:
     void resizeEvent(QResizeEvent *event) override;
 
     /**
-      * Return the filter model for animation groups
-      *
-      * @return a KPrAnimationGroupProxyModel pointer
-      */
+     * Return the filter model for animation groups
+     *
+     * @return a KPrAnimationGroupProxyModel pointer
+     */
     KPrAnimationGroupProxyModel *model();
 
     /**
-      * Return the main model for animations
-      *
-      * @return an KPrShapeAnimations pointer
-      */
+     * Return the main model for animations
+     *
+     * @return an KPrShapeAnimations pointer
+     */
     KPrShapeAnimations *animationsModel();
 
     /**
-      * Return the current index
-      *
-      * @return a QModelIndex holding current index
-      */
+     * Return the current index
+     *
+     * @return a QModelIndex holding current index
+     */
     QModelIndex currentIndex();
 
     /**
@@ -89,10 +88,10 @@ public:
 
 Q_SIGNALS:
     /// emitted if an item is clicked (return index of the item clicked)
-    void clicked(const QModelIndex&);
+    void clicked(const QModelIndex &);
 
     /// emitted if an item time range has changed (return the index of the item changed)
-    void timeValuesChanged(const QModelIndex&);
+    void timeValuesChanged(const QModelIndex &);
 
     /// emitted if the layout has changed
     void layoutChanged();
@@ -114,7 +113,7 @@ public Q_SLOTS:
     void adjustScale();
 
     /// helper slot to emit timeValuesChanged signal mapping index to the main model
-    void notifyTimeValuesChanged(const QModelIndex& index);
+    void notifyTimeValuesChanged(const QModelIndex &index);
 
     /// helper slot to emit customContextMenuRequested signal mapping pos to the parent widget
     void requestContextMenu(QPoint pos);
@@ -136,15 +135,20 @@ protected:
     int totalWidth() const;
 
     /// Returns selected row and column
-    int selectedRow() const {return m_selectedRow;}
-    int selectedColumn() const {return m_selectedColumn;}
+    int selectedRow() const
+    {
+        return m_selectedRow;
+    }
+    int selectedColumn() const
+    {
+        return m_selectedColumn;
+    }
 
     /// Helper method to paint border for items on the view
     void paintItemBorder(QPainter *painter, const QPalette &palette, const QRect &rect);
 
     /// Scroll area that contains the view
     QScrollArea *scrollArea() const;
-
 
     /// Helper methods to manage the time scales in view and header
     int numberOfSteps() const;

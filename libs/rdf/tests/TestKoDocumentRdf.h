@@ -5,8 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
-
 #ifndef TEST_KO_DOCUMENT_RDF_H
 #define TEST_KO_DOCUMENT_RDF_H
 
@@ -17,12 +15,11 @@ class KoDocumentRdf;
 class TestKoDocumentRdf : public QObject
 {
     Q_OBJECT
-    
+
 private Q_SLOTS:
-    
+
     void testCreate();
     void testRememberNewInlineRdfObject();
-
 };
 
 #endif // TEST_KO_DOCUMENT_RDF_H

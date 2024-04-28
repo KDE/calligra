@@ -14,11 +14,11 @@
 #include "KoText.h"
 #include "kotext_export.h"
 
-#include <KoXmlReaderForward.h>
 #include <KoBorder.h>
+#include <KoXmlReaderForward.h>
 
-#include <QVariant>
 #include <QTextFormat>
+#include <QVariant>
 
 extern QVariant val;
 class KoShadowStyle;
@@ -45,125 +45,125 @@ public:
         // Every 10 properties, the decimal number shown indicates the decimal offset over the QTextFormat::UserProperty enum value
         StyleId = QTextFormat::UserProperty + 1,
         // Linespacing properties
-        PercentLineHeight,  ///< this property is used for a percentage of the highest character on that line
-        FixedLineHeight,    ///< this property is used to use a non-default line height
-        MinimumLineHeight,  ///< this property is used to have a minimum line spacing
-        LineSpacing,        ///< Hard leader height.
-        LineSpacingFromFont,  ///< if false, use fontsize (in pt) solely, otherwise respect font settings
-        AlignLastLine,      ///< When the paragraph is justified, what to do with the last word line
-        WidowThreshold,     ///< If 'keep together'=false, amount of lines to keep it anyway.
-        OrphanThreshold,   ///< If 'keep together'=false, amount of lines to keep it anyway.
-        DropCaps, /*10*/   ///< defines if a paragraph renders its first char(s) with drop-caps
+        PercentLineHeight, ///< this property is used for a percentage of the highest character on that line
+        FixedLineHeight, ///< this property is used to use a non-default line height
+        MinimumLineHeight, ///< this property is used to have a minimum line spacing
+        LineSpacing, ///< Hard leader height.
+        LineSpacingFromFont, ///< if false, use fontsize (in pt) solely, otherwise respect font settings
+        AlignLastLine, ///< When the paragraph is justified, what to do with the last word line
+        WidowThreshold, ///< If 'keep together'=false, amount of lines to keep it anyway.
+        OrphanThreshold, ///< If 'keep together'=false, amount of lines to keep it anyway.
+        DropCaps,
+        /*10*/ ///< defines if a paragraph renders its first char(s) with drop-caps
         DropCapsLength, ///< Number of glyphs to show as drop-caps
-        DropCapsLines,  ///< Number of lines that the drop-caps span
-        DropCapsDistance,   ///< Distance between drop caps and text
-        DropCapsTextStyle,  ///< Text style of dropped chars.
-        FollowDocBaseline,  ///< If true the baselines will be aligned with the doc-wide grid
+        DropCapsLines, ///< Number of lines that the drop-caps span
+        DropCapsDistance, ///< Distance between drop caps and text
+        DropCapsTextStyle, ///< Text style of dropped chars.
+        FollowDocBaseline, ///< If true the baselines will be aligned with the doc-wide grid
 
         // border stuff
-        HasLeftBorder,  ///< If true, paint a border on the left
-        HasTopBorder,   ///< If true, paint a border on the top
+        HasLeftBorder, ///< If true, paint a border on the left
+        HasTopBorder, ///< If true, paint a border on the top
         HasRightBorder, ///< If true, paint a border on the right
-        HasBottomBorder,///< If true, paint a border on the bottom
-        BorderLineWidth, /*20*/ ///< Thickness of inner-border
-        SecondBorderLineWidth,  ///< Thickness of outer-border
+        HasBottomBorder, ///< If true, paint a border on the bottom
+        BorderLineWidth,
+        /*20*/ ///< Thickness of inner-border
+        SecondBorderLineWidth, ///< Thickness of outer-border
         DistanceToSecondBorder, ///< Distance between inner and outer border
-        LeftPadding,    ///< distance between text and border
-        TopPadding,     ///< distance between text and border
-        RightPadding,   ///< distance between text and border
-        BottomPadding,   ///< distance between text and border
-        LeftBorderWidth,        ///< The thickness of the border, or 0 if there is no border
-        LeftInnerBorderWidth,   ///< In case of style being 'double' the thickness of the inner border line
-        LeftBorderSpacing,      ///< In case of style being 'double' the space between the inner and outer border lines
-        LeftBorderStyle, /*30*/ ///< The border style. (see BorderStyle)
-        LeftBorderColor,        ///< The border Color
-        TopBorderWidth,         ///< The thickness of the border, or 0 if there is no border
-        TopInnerBorderWidth,    ///< In case of style being 'double' the thickness of the inner border line
-        TopBorderSpacing,       ///< In case of style being 'double' the space between the inner and outer border lines
-        TopBorderStyle,         ///< The border style. (see BorderStyle)
-        TopBorderColor,         ///< The border Color
-        RightBorderWidth,       ///< The thickness of the border, or 0 if there is no border
-        RightInnerBorderWidth,  ///< In case of style being 'double' the thickness of the inner border line
-        RightBorderSpacing,     ///< In case of style being 'double' the space between the inner and outer border lines
-        RightBorderStyle, /*40*/ ///< The border style. (see BorderStyle)
-        RightBorderColor,       ///< The border Color
-        BottomBorderWidth,      ///< The thickness of the border, or 0 if there is no border
+        LeftPadding, ///< distance between text and border
+        TopPadding, ///< distance between text and border
+        RightPadding, ///< distance between text and border
+        BottomPadding, ///< distance between text and border
+        LeftBorderWidth, ///< The thickness of the border, or 0 if there is no border
+        LeftInnerBorderWidth, ///< In case of style being 'double' the thickness of the inner border line
+        LeftBorderSpacing, ///< In case of style being 'double' the space between the inner and outer border lines
+        LeftBorderStyle,
+        /*30*/ ///< The border style. (see BorderStyle)
+        LeftBorderColor, ///< The border Color
+        TopBorderWidth, ///< The thickness of the border, or 0 if there is no border
+        TopInnerBorderWidth, ///< In case of style being 'double' the thickness of the inner border line
+        TopBorderSpacing, ///< In case of style being 'double' the space between the inner and outer border lines
+        TopBorderStyle, ///< The border style. (see BorderStyle)
+        TopBorderColor, ///< The border Color
+        RightBorderWidth, ///< The thickness of the border, or 0 if there is no border
+        RightInnerBorderWidth, ///< In case of style being 'double' the thickness of the inner border line
+        RightBorderSpacing, ///< In case of style being 'double' the space between the inner and outer border lines
+        RightBorderStyle,
+        /*40*/ ///< The border style. (see BorderStyle)
+        RightBorderColor, ///< The border Color
+        BottomBorderWidth, ///< The thickness of the border, or 0 if there is no border
         BottomInnerBorderWidth, ///< In case of style being 'double' the thickness of the inner border line
-        BottomBorderSpacing,    ///< In case of style being 'double' the space between the inner and outer border lines
-        BottomBorderStyle,      ///< The border style. (see BorderStyle)
-        BottomBorderColor,      ///< The border Color
+        BottomBorderSpacing, ///< In case of style being 'double' the space between the inner and outer border lines
+        BottomBorderStyle, ///< The border style. (see BorderStyle)
+        BottomBorderColor, ///< The border Color
 
         // lists
-        ListStyleId,            ///< Style Id of associated list style
-        ListStartValue,         ///< Int with the list-value that that parag will have. Ignored if this is not a list.
-        RestartListNumbering,   ///< boolean to indicate that this paragraph will have numbering restart at the list-start. Ignored if this is not a list.
-        ListLevel, /*50*/       ///< int with the list-level that the paragraph will get when this is a list (numbered paragraphs)
-        IsListHeader,           ///< bool, if true the paragraph shows up as a list item, but w/o a list label.
-        UnnumberedListItem,     ///< bool. if true this paragraph is part of a list but is not numbered
+        ListStyleId, ///< Style Id of associated list style
+        ListStartValue, ///< Int with the list-value that that parag will have. Ignored if this is not a list.
+        RestartListNumbering, ///< boolean to indicate that this paragraph will have numbering restart at the list-start. Ignored if this is not a list.
+        ListLevel,
+        /*50*/ ///< int with the list-level that the paragraph will get when this is a list (numbered paragraphs)
+        IsListHeader, ///< bool, if true the paragraph shows up as a list item, but w/o a list label.
+        UnnumberedListItem, ///< bool. if true this paragraph is part of a list but is not numbered
 
-        AutoTextIndent,         ///< bool, says whether the paragraph is auto-indented or not
+        AutoTextIndent, ///< bool, says whether the paragraph is auto-indented or not
 
-        TabStopDistance,        ///< Double, Length. specifies that there's a tab stop every n inches
+        TabStopDistance, ///< Double, Length. specifies that there's a tab stop every n inches
         ///< (after the last of the TabPositions, if any)
-        TabPositions,           ///< A list of tab positions
+        TabPositions, ///< A list of tab positions
         TextProgressionDirection,
 
-        MasterPageName,         ///< Optional name of the master-page
+        MasterPageName, ///< Optional name of the master-page
 
-        OutlineLevel,            ///< Outline level for headings
+        OutlineLevel, ///< Outline level for headings
         DefaultOutlineLevel,
 
         // numbering
-        LineNumbering,         /*60*/   ///< bool, specifies whether lines should be numbered in this paragraph
+        LineNumbering,
+        /*60*/ ///< bool, specifies whether lines should be numbered in this paragraph
         LineNumberStartValue, ///< integer value that specifies the number for the first line in the paragraph
-        SectionStartings,            ///< list of section definitions
-        SectionEndings,               ///< list <end of a named section>
-// do 15.5.24
-// continue at 15.5.28
-        ForceDisablingList,       ///< bool, for compatibility with the weird text:enable-numbering attribute not used anymore by OpenOffice.org
+        SectionStartings, ///< list of section definitions
+        SectionEndings, ///< list <end of a named section>
+        // do 15.5.24
+        // continue at 15.5.28
+        ForceDisablingList, ///< bool, for compatibility with the weird text:enable-numbering attribute not used anymore by OpenOffice.org
 
         // other properties
-        BackgroundTransparency,   ///< qreal between 0 and 1, background transparency
-        SnapToLayoutGrid,         ///< bool, snap the paragraph to the layout grid of the page
-        JoinBorder,               ///< bool, whether a border for one paragraph is to be extended around the following paragraph
-        RegisterTrue,             ///< bool, align lines on both sides of a printed text
-        StrictLineBreak,          ///< bool, if true, line breaks are forbidden between some characters
-        JustifySingleWord,        ///< bool, if true, a single word will be justified
-        BreakBefore,              ///< KoText::TextBreakProperty, whether there is a page/column break before the paragraphs
-        BreakAfter,               ///< KoText::TextBreakProperty, whether there is a page/column break after the paragraphs
-        AutomaticWritingMode,     ///< bool
-        PageNumber,               ///< int, 0 means auto (ie. previous page number + 1), N sets up a new page number
-        TextAutoSpace,            ///< AutoSpace, indicating whether to add space between portions of Asian, Western and complex texts
-        KeepWithNext,             ///< Try to keep this block with its following block on the same page
-        KeepHyphenation,          ///< bool, whether both parts of a hyphenated word shall lie within a single page
-        HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
-        PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
-        VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
-        HiddenByTable,        ///< don't let this paragraph have any height
+        BackgroundTransparency, ///< qreal between 0 and 1, background transparency
+        SnapToLayoutGrid, ///< bool, snap the paragraph to the layout grid of the page
+        JoinBorder, ///< bool, whether a border for one paragraph is to be extended around the following paragraph
+        RegisterTrue, ///< bool, align lines on both sides of a printed text
+        StrictLineBreak, ///< bool, if true, line breaks are forbidden between some characters
+        JustifySingleWord, ///< bool, if true, a single word will be justified
+        BreakBefore, ///< KoText::TextBreakProperty, whether there is a page/column break before the paragraphs
+        BreakAfter, ///< KoText::TextBreakProperty, whether there is a page/column break after the paragraphs
+        AutomaticWritingMode, ///< bool
+        PageNumber, ///< int, 0 means auto (ie. previous page number + 1), N sets up a new page number
+        TextAutoSpace, ///< AutoSpace, indicating whether to add space between portions of Asian, Western and complex texts
+        KeepWithNext, ///< Try to keep this block with its following block on the same page
+        KeepHyphenation, ///< bool, whether both parts of a hyphenated word shall lie within a single page
+        HyphenationLadderCount, ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
+        PunctuationWrap, ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
+        VerticalAlignment, ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
+        HiddenByTable, ///< don't let this paragraph have any height
 
-        NormalLineHeight,         ///< bool, internal property for reserved usage
+        NormalLineHeight, ///< bool, internal property for reserved usage
         BibliographyData,
 
-        TableOfContentsData,      // set when block is instead a TableOfContents
-        GeneratedDocument,  // set when block is instead a generated document
-        Shadow,                    //< KoShadowStyle, the shadow of this paragraph
-        NextStyle,                  ///< holds the styleId of the style to be used on a new paragraph
-        ParagraphListStyleId,        ///< this holds the listStyleId of the list got from style:list-style-name property from ODF 1.2
-        EndCharStyle           // QSharedPointer<KoCharacterStyle>  used when final line is empty
+        TableOfContentsData, // set when block is instead a TableOfContents
+        GeneratedDocument, // set when block is instead a generated document
+        Shadow, //< KoShadowStyle, the shadow of this paragraph
+        NextStyle, ///< holds the styleId of the style to be used on a new paragraph
+        ParagraphListStyleId, ///< this holds the listStyleId of the list got from style:list-style-name property from ODF 1.2
+        EndCharStyle // QSharedPointer<KoCharacterStyle>  used when final line is empty
     };
 
     enum AutoSpace {
-        NoAutoSpace,              ///< space should not be added between portions of Asian, Western and complex texts
-        IdeographAlpha            ///< space should be added between portions of Asian, Western and complex texts
+        NoAutoSpace, ///< space should not be added between portions of Asian, Western and complex texts
+        IdeographAlpha ///< space should be added between portions of Asian, Western and complex texts
     };
 
-    enum VerticalAlign {
-        VAlignAuto,
-        VAlignBaseline,
-        VAlignBottom,
-        VAlignMiddle,
-        VAlignTop
-    };
+    enum VerticalAlign { VAlignAuto, VAlignBaseline, VAlignBottom, VAlignMiddle, VAlignTop };
 
     /// Constructor
     KoParagraphStyle(QObject *parent = 0);
@@ -241,7 +241,6 @@ public:
      * @see setLineSpacingFromFont
      */
     bool lineSpacingFromFont() const;
-
 
     /**
      * For paragraphs that are justified the last line alignment is specified here.
@@ -534,7 +533,6 @@ public:
     /// Set the name of the master-page.
     void setMasterPageName(const QString &name);
 
-
     /// Set the list start value
     void setListStartValue(int value);
     /// Returns the list start value
@@ -581,7 +579,6 @@ public:
      */
     void setDefaultOutlineLevel(int outline);
 
-
     /**
      * 15.5.30: The text:number-lines attribute controls whether or not lines are numbered
      */
@@ -607,7 +604,7 @@ public:
      * or a table cell.
      */
     KoShadowStyle shadow() const;
-    void setShadow (const KoShadowStyle &shadow);
+    void setShadow(const KoShadowStyle &shadow);
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(const KoParagraphStyle *style);
@@ -626,14 +623,14 @@ public:
      * the character style (where relevant) to the target block formats.
      */
     void applyStyle(QTextBlock &block, bool applyListStyle = true) const;
-/*
-    /// return the character "properties" for this paragraph style, Note it does not inherit
-    KoCharacterStyle *characterStyle();
-    /// return the character "properties" for this paragraph style, Note it does not inherit
-    const KoCharacterStyle *characterStyle() const;
-    /// set the character "properties" for this paragraph style
-    void setCharacterStyle(KoCharacterStyle *style);
-*/
+    /*
+        /// return the character "properties" for this paragraph style, Note it does not inherit
+        KoCharacterStyle *characterStyle();
+        /// return the character "properties" for this paragraph style, Note it does not inherit
+        const KoCharacterStyle *characterStyle() const;
+        /// set the character "properties" for this paragraph style
+        void setCharacterStyle(KoCharacterStyle *style);
+    */
     /**
      * Returns the list style for this paragraph style.
      * @see KoListStyle::isValid()
@@ -665,8 +662,7 @@ public:
      * @param element the element containing the style
      * @param loadParents true = use the stylestack, false = use just the element
      */
-    void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context,
-                bool loadParents = false);
+    void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context, bool loadParents = false);
 
     void saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const;
 
@@ -706,9 +702,8 @@ public:
      */
     bool isApplied() const;
 
-
 Q_SIGNALS:
-    void styleApplied(const KoParagraphStyle*);
+    void styleApplied(const KoParagraphStyle *);
 
 private:
     /**
@@ -723,7 +718,7 @@ private:
     QColor propertyColor(int key) const;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 Q_DECLARE_METATYPE(KoParagraphStyle *)
 Q_DECLARE_METATYPE(const KoParagraphStyle *)

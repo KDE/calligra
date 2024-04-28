@@ -4,16 +4,18 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "RemoveBarCommand.h"
-#include <KLocalizedString>
 #include "../core/Bar.h"
 #include "../core/Sheet.h"
+#include <KLocalizedString>
 
 #include "../MusicShape.h"
 
 using namespace MusicCore;
 
-RemoveBarCommand::RemoveBarCommand(MusicShape* shape, int barIdx)
-    : m_shape(shape), m_bar(m_shape->sheet()->bar(barIdx)), m_index(barIdx)
+RemoveBarCommand::RemoveBarCommand(MusicShape *shape, int barIdx)
+    : m_shape(shape)
+    , m_bar(m_shape->sheet()->bar(barIdx))
+    , m_index(barIdx)
 {
     setText(kundo2_i18n("Remove bar"));
 }

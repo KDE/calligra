@@ -22,12 +22,14 @@ class KOTEXTLAYOUT_EXPORT KoCharAreaInfo
 {
 public:
     KoCharAreaInfo()
-    {}
+    {
+    }
 
-    KoCharAreaInfo(const QRectF& _rect, const QChar& _character)
-    : rect(_rect)
-    , character(_character)
-    {}
+    KoCharAreaInfo(const QRectF &_rect, const QChar &_character)
+        : rect(_rect)
+        , character(_character)
+    {
+    }
 
     /// Area from the point of view of text selection markup.
     QRectF rect;

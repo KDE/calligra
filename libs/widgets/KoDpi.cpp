@@ -17,7 +17,7 @@
 
 Q_GLOBAL_STATIC(KoDpi, s_instance)
 
-KoDpi* KoDpi::self()
+KoDpi *KoDpi::self()
 {
     return s_instance;
 }
@@ -39,8 +39,8 @@ KoDpi::KoDpi()
 
 void KoDpi::setDPI(int x, int y)
 {
-    //debugWidgets << x <<"," << y;
-    KoDpi* s = self();
+    // debugWidgets << x <<"," << y;
+    KoDpi *s = self();
     s->m_dpiX = x;
     s->m_dpiY = y;
 }

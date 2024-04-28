@@ -4,33 +4,41 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "Chord.h"
+#include "Bar.h"
+#include "Clef.h"
 #include "Note.h"
+#include "Sheet.h"
 #include "Staff.h"
 #include "VoiceBar.h"
-#include "Clef.h"
-#include "Bar.h"
-#include "Sheet.h"
 
 #include <QList>
 
 #include <climits>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
-namespace {
-    struct Beam {
-        Beam(Chord* chord) : beamStart(chord), beamEnd(chord), beamType(BeamFlag) {}
-        Chord* beamStart;
-        Chord* beamEnd;
-        BeamType beamType;
-    };
+namespace
+{
+struct Beam {
+    Beam(Chord *chord)
+        : beamStart(chord)
+        , beamEnd(chord)
+        , beamType(BeamFlag)
+    {
+    }
+    Chord *beamStart;
+    Chord *beamEnd;
+    BeamType beamType;
+};
 }
 
-class Chord::Private {
+class Chord::Private
+{
 public:
     Duration duration;
     int dots;
-    QList<Note*> notes;
+    QList<Note *> notes;
     StemDirection stemDirection;
     qreal stemLength;
     QList<Beam> beams;
@@ -39,26 +47,28 @@ public:
 static qreal calcStemLength(Duration duration)
 {
     switch (duration) {
-        case BreveNote:
-        case WholeNote:
-            return 0;
-        case HalfNote:
-        case QuarterNote:
-        case EighthNote:
-            return 3.5;
-        case SixteenthNote:
-            return 4;
-        case ThirtySecondNote:
-            return 4.75;
-        case SixtyFourthNote:
-            return 5.5;
-        case HundredTwentyEighthNote:
-            return 6.25;
+    case BreveNote:
+    case WholeNote:
+        return 0;
+    case HalfNote:
+    case QuarterNote:
+    case EighthNote:
+        return 3.5;
+    case SixteenthNote:
+        return 4;
+    case ThirtySecondNote:
+        return 4.75;
+    case SixtyFourthNote:
+        return 5.5;
+    case HundredTwentyEighthNote:
+        return 6.25;
     }
     return 0;
 }
 
-Chord::Chord(Duration duration, int dots) : VoiceElement(), d(new Private)
+Chord::Chord(Duration duration, int dots)
+    : VoiceElement()
+    , d(new Private)
 {
     d->duration = duration;
     d->dots = dots;
@@ -68,12 +78,13 @@ Chord::Chord(Duration duration, int dots) : VoiceElement(), d(new Private)
     int baseLength = durationToTicks(duration);
     int length = baseLength;
     for (int i = 0; i < dots; i++) {
-        length += baseLength >> (i+1);
+        length += baseLength >> (i + 1);
     }
     setLength(length);
 }
 
-Chord::Chord(Staff* staff, Duration duration, int dots) : d(new Private)
+Chord::Chord(Staff *staff, Duration duration, int dots)
+    : d(new Private)
 {
     d->duration = duration;
     d->dots = dots;
@@ -83,7 +94,7 @@ Chord::Chord(Staff* staff, Duration duration, int dots) : d(new Private)
     int baseLength = durationToTicks(duration);
     int length = baseLength;
     for (int i = 0; i < dots; i++) {
-        length += baseLength >> (i+1);
+        length += baseLength >> (i + 1);
     }
     setLength(length);
     setStaff(staff);
@@ -102,9 +113,9 @@ qreal Chord::width() const
     bool hasConflict = false;
     bool haveAccidentals = false;
 
-    foreach (Note* n, d->notes) {
+    foreach (Note *n, d->notes) {
         int pitch = n->pitch();
-        if (pitch == lastPitch+1) {
+        if (pitch == lastPitch + 1) {
             hasConflict = true;
         }
         lastPitch = pitch;
@@ -114,10 +125,11 @@ qreal Chord::width() const
         }
     }
 
-    if (hasConflict) w += 6;
+    if (hasConflict)
+        w += 6;
 
     if (d->dots) {
-        w += 2 + 3*d->dots;
+        w += 2 + 3 * d->dots;
     }
 
     if (haveAccidentals) {
@@ -135,9 +147,9 @@ qreal Chord::beatline() const
     bool hasConflict = false;
     bool haveAccidentals = false;
 
-    foreach (Note* n, d->notes) {
+    foreach (Note *n, d->notes) {
         int pitch = n->pitch();
-        if (pitch == lastPitch+1) {
+        if (pitch == lastPitch + 1) {
             hasConflict = true;
         }
         lastPitch = pitch;
@@ -147,7 +159,8 @@ qreal Chord::beatline() const
         }
     }
 
-    if (hasConflict) bl += 6;
+    if (hasConflict)
+        bl += 6;
     if (haveAccidentals) {
         bl += 10;
     }
@@ -162,13 +175,14 @@ Duration Chord::duration() const
 
 void Chord::setDuration(Duration duration)
 {
-    if (d->duration == duration) return;
+    if (d->duration == duration)
+        return;
     d->duration = duration;
     d->stemLength = calcStemLength(duration);
     int baseLength = durationToTicks(d->duration);
     int length = baseLength;
     for (int i = 0; i < d->dots; i++) {
-        length += baseLength >> (i+1);
+        length += baseLength >> (i + 1);
     }
     setLength(length);
     emit durationChanged(duration);
@@ -181,12 +195,13 @@ int Chord::dots() const
 
 void Chord::setDots(int dots)
 {
-    if (d->dots == dots) return;
+    if (d->dots == dots)
+        return;
     d->dots = dots;
     int baseLength = durationToTicks(d->duration);
     int length = baseLength;
     for (int i = 0; i < dots; i++) {
-        length += baseLength >> (i+1);
+        length += baseLength >> (i + 1);
     }
     setLength(length);
     emit dotsChanged(dots);
@@ -197,24 +212,25 @@ int Chord::noteCount() const
     return d->notes.size();
 }
 
-Note* Chord::note(int index) const
+Note *Chord::note(int index) const
 {
-    Q_ASSERT( index >= 0 && index < noteCount() );
+    Q_ASSERT(index >= 0 && index < noteCount());
     return d->notes[index];
 }
 
-Note* Chord::addNote(Staff* staff, int pitch, int accidentals)
+Note *Chord::addNote(Staff *staff, int pitch, int accidentals)
 {
     Note *n = new Note(this, staff, pitch, accidentals);
     addNote(n);
     return n;
 }
 
-void Chord::addNote(Note* note)
+void Chord::addNote(Note *note)
 {
-    Q_ASSERT( note );
+    Q_ASSERT(note);
     note->setParent(this);
-    if (!staff()) setStaff(note->staff());
+    if (!staff())
+        setStaff(note->staff());
     for (int i = 0; i < d->notes.size(); i++) {
         if (d->notes[i]->pitch() > note->pitch()) {
             d->notes.insert(i, note);
@@ -226,18 +242,18 @@ void Chord::addNote(Note* note)
 
 void Chord::removeNote(int index, bool deleteNote)
 {
-    Q_ASSERT( index >= 0 && index < noteCount() );
-    Note* n = d->notes.takeAt(index);
+    Q_ASSERT(index >= 0 && index < noteCount());
+    Note *n = d->notes.takeAt(index);
     if (deleteNote) {
         delete n;
     }
 }
 
-void Chord::removeNote(Note* note, bool deleteNote)
+void Chord::removeNote(Note *note, bool deleteNote)
 {
-    Q_ASSERT( note );
+    Q_ASSERT(note);
     int index = d->notes.indexOf(note);
-    Q_ASSERT( index != -1 );
+    Q_ASSERT(index != -1);
     removeNote(index, deleteNote);
 }
 
@@ -248,18 +264,21 @@ qreal Chord::y() const
     }
 
     qreal top = 1e9;
-    Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
+    Clef *clef = staff()->lastClefChange(voiceBar()->bar(), 0);
 
-    foreach (Note* n, d->notes) {
+    foreach (Note *n, d->notes) {
         int line = 10;
-        if (clef) line = clef->pitchToLine(n->pitch());
+        if (clef)
+            line = clef->pitchToLine(n->pitch());
 
-        Staff* s = n->staff();
+        Staff *s = n->staff();
         line--;
         qreal y = s->top() + line * s->lineSpacing() / 2;
-        if (y < top) top = y;
+        if (y < top)
+            top = y;
     }
-    if (staff()) top -= staff()->top();
+    if (staff())
+        top -= staff()->top();
     return top;
 }
 
@@ -271,19 +290,22 @@ qreal Chord::height() const
 
     qreal top = 1e9;
     qreal bottom = -1e9;
-    Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
+    Clef *clef = staff()->lastClefChange(voiceBar()->bar(), 0);
 
-    foreach (Note* n, d->notes) {
+    foreach (Note *n, d->notes) {
         int line = 10;
-        if (clef) line = clef->pitchToLine(n->pitch());
+        if (clef)
+            line = clef->pitchToLine(n->pitch());
 
-        Staff* s = n->staff();
+        Staff *s = n->staff();
         line--;
         qreal y = s->top() + line * s->lineSpacing() / 2;
-        if (y < top) top = y;
+        if (y < top)
+            top = y;
         line += 2;
         y = s->top() + line * s->lineSpacing() / 2;
-        if (y > bottom) bottom = y;
+        if (y > bottom)
+            bottom = y;
     }
     if (staff()) {
         top -= staff()->top();
@@ -298,9 +320,9 @@ qreal Chord::stemX() const
     bool hasConflict = false;
     bool haveAccidentals = false;
 
-    foreach (Note* n, d->notes) {
+    foreach (Note *n, d->notes) {
         int pitch = n->pitch();
-        if (pitch == lastPitch+1) {
+        if (pitch == lastPitch + 1) {
             hasConflict = true;
         }
         lastPitch = pitch;
@@ -329,15 +351,17 @@ qreal Chord::topNoteY() const
     }
 
     qreal top = 1e9;
-    Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
+    Clef *clef = staff()->lastClefChange(voiceBar()->bar(), 0);
 
-    foreach (Note* n, d->notes) {
+    foreach (Note *n, d->notes) {
         int line = 10;
-        if (clef) line = clef->pitchToLine(n->pitch());
+        if (clef)
+            line = clef->pitchToLine(n->pitch());
 
-        Staff* s = n->staff();
+        Staff *s = n->staff();
         qreal y = s->top() + line * s->lineSpacing() / 2;
-        if (y < top) top = y;
+        if (y < top)
+            top = y;
     }
     return top;
 }
@@ -349,42 +373,46 @@ qreal Chord::bottomNoteY() const
     }
 
     qreal bottom = -1e9;
-    Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
+    Clef *clef = staff()->lastClefChange(voiceBar()->bar(), 0);
 
-    foreach (Note* n, d->notes) {
+    foreach (Note *n, d->notes) {
         int line = 10;
-        if (clef) line = clef->pitchToLine(n->pitch());
+        if (clef)
+            line = clef->pitchToLine(n->pitch());
 
-        Staff* s = n->staff();
+        Staff *s = n->staff();
         qreal y = s->top() + line * s->lineSpacing() / 2;
-        if (y > bottom) bottom = y;
+        if (y > bottom)
+            bottom = y;
     }
     return bottom;
 }
 
 qreal Chord::stemEndY(bool interpolateBeams) const
 {
-    if (d->notes.size() == 0) return staff()->center();
+    if (d->notes.size() == 0)
+        return staff()->center();
 
     if (beamType(0) == BeamContinue && interpolateBeams) {
         // in the middle of a beam, interpolate stem length from beam
         qreal sx = beamStart(0)->stemX(), ex = beamEnd(0)->stemX();
         qreal sy = beamStart(0)->stemEndY(), ey = beamEnd(0)->stemEndY();
-        qreal dydx = (ey-sy) / (ex-sx);
+        qreal dydx = (ey - sy) / (ex - sx);
 
         return (stemX() - sx) * dydx + sy;
     }
 
-    Staff* topStaff = nullptr;
-    Staff* bottomStaff = nullptr;
+    Staff *topStaff = nullptr;
+    Staff *bottomStaff = nullptr;
     qreal top = 1e9, bottom = -1e9;
-    Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
+    Clef *clef = staff()->lastClefChange(voiceBar()->bar(), 0);
 
-    foreach (Note* n, d->notes) {
+    foreach (Note *n, d->notes) {
         int line = 10;
-        if (clef) line = clef->pitchToLine(n->pitch());
+        if (clef)
+            line = clef->pitchToLine(n->pitch());
 
-        Staff* s = n->staff();
+        Staff *s = n->staff();
         qreal y = s->top() + line * s->lineSpacing() / 2;
         if (y > bottom) {
             bottom = y;
@@ -396,8 +424,8 @@ qreal Chord::stemEndY(bool interpolateBeams) const
         }
     }
 
-    Q_ASSERT( topStaff );
-    Q_ASSERT( bottomStaff );
+    Q_ASSERT(topStaff);
+    Q_ASSERT(bottomStaff);
 
     if (stemDirection() == StemUp) {
         qreal pos = top - topStaff->lineSpacing() * stemLength();
@@ -419,7 +447,7 @@ qreal Chord::beamDirection() const
     if (beamType(0) == BeamStart || beamType(0) == BeamEnd || beamType(0) == BeamContinue) {
         qreal sx = beamStart(0)->stemX(), ex = beamEnd(0)->stemX();
         qreal sy = beamStart(0)->stemEndY(), ey = beamEnd(0)->stemEndY();
-        qreal dydx = (ey-sy) / (ex-sx);
+        qreal dydx = (ey - sy) / (ex - sx);
         return dydx;
     } else {
         return 0;
@@ -438,16 +466,16 @@ void Chord::setStemDirection(StemDirection direction)
 
 StemDirection Chord::desiredStemDirection() const
 {
-    VoiceBar* vb = voiceBar();
-    Bar* bar = vb->bar();
+    VoiceBar *vb = voiceBar();
+    Bar *bar = vb->bar();
     int barIdx = bar->sheet()->indexOfBar(bar);
 
     int topLine = 0, bottomLine = 0;
     qreal topy = 1e9, bottomy = -1e9;
     for (int n = 0; n < noteCount(); n++) {
-        Note* note = this->note(n);
-        Staff * s = note->staff();
-        Clef* clef = s->lastClefChange(barIdx);
+        Note *note = this->note(n);
+        Staff *s = note->staff();
+        Clef *clef = s->lastClefChange(barIdx);
         int line = clef->pitchToLine(note->pitch());
         qreal ypos = s->top() + line * s->lineSpacing() / 2;
         if (ypos < topy) {
@@ -481,59 +509,74 @@ qreal Chord::desiredStemLength() const
 int Chord::beamCount() const
 {
     switch (d->duration) {
-        case HundredTwentyEighthNote:   return 5;
-        case SixtyFourthNote:           return 4;
-        case ThirtySecondNote:          return 3;
-        case SixteenthNote:             return 2;
-        case EighthNote:                return 1;
-        default:                        return 0;
+    case HundredTwentyEighthNote:
+        return 5;
+    case SixtyFourthNote:
+        return 4;
+    case ThirtySecondNote:
+        return 3;
+    case SixteenthNote:
+        return 2;
+    case EighthNote:
+        return 1;
+    default:
+        return 0;
     }
 }
 
-const Chord* Chord::beamStart(int index) const
+const Chord *Chord::beamStart(int index) const
 {
-    if (d->beams.size() <= index) return this;
+    if (d->beams.size() <= index)
+        return this;
     return d->beams[index].beamStart;
 }
 
-const Chord* Chord::beamEnd(int index) const
+const Chord *Chord::beamEnd(int index) const
 {
-    if (d->beams.size() <= index) return this;
+    if (d->beams.size() <= index)
+        return this;
     return d->beams[index].beamEnd;
 }
 
-Chord* Chord::beamStart(int index)
+Chord *Chord::beamStart(int index)
 {
-    if (d->beams.size() <= index) return this;
+    if (d->beams.size() <= index)
+        return this;
     return d->beams[index].beamStart;
 }
 
-Chord* Chord::beamEnd(int index)
+Chord *Chord::beamEnd(int index)
 {
-    if (d->beams.size() <= index) return this;
+    if (d->beams.size() <= index)
+        return this;
     return d->beams[index].beamEnd;
 }
 
 BeamType Chord::beamType(int index) const
 {
-    if (d->beams.size() <= index) return BeamFlag;
+    if (d->beams.size() <= index)
+        return BeamFlag;
     return d->beams[index].beamType;
 }
 
-void Chord::setBeam(int index, Chord* beamStart, Chord* beamEnd, BeamType type)
+void Chord::setBeam(int index, Chord *beamStart, Chord *beamEnd, BeamType type)
 {
-    Q_ASSERT( index < beamCount() );
+    Q_ASSERT(index < beamCount());
     while (d->beams.size() <= index) {
         d->beams.append(Beam(this));
     }
     d->beams[index].beamStart = beamStart;
     d->beams[index].beamEnd = beamEnd;
     if (beamStart == this && beamEnd == this) {
-        if (type != BeamFlag && type != BeamForwardHook && type != BeamBackwardHook) type = BeamFlag;
+        if (type != BeamFlag && type != BeamForwardHook && type != BeamBackwardHook)
+            type = BeamFlag;
         d->beams[index].beamType = type;
-    } else if (beamStart == this) d->beams[index].beamType = BeamStart;
-    else if (beamEnd == this) d->beams[index].beamType = BeamEnd;
-    else d->beams[index].beamType = BeamContinue;
+    } else if (beamStart == this)
+        d->beams[index].beamType = BeamStart;
+    else if (beamEnd == this)
+        d->beams[index].beamType = BeamEnd;
+    else
+        d->beams[index].beamType = BeamContinue;
 }
 
 } // namespace MusicCore

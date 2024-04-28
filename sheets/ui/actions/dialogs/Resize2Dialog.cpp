@@ -23,11 +23,10 @@
 // Calligra
 #include <KoUnitDoubleSpinBox.h>
 
-
 using namespace Calligra::Sheets;
 
-ResizeRowDialog::ResizeRowDialog(QWidget* parent, KoUnit unit)
-        : KoDialog(parent)
+ResizeRowDialog::ResizeRowDialog(QWidget *parent, KoUnit unit)
+    : KoDialog(parent)
 {
     setCaption(i18n("Resize Row"));
     setModal(true);
@@ -36,10 +35,10 @@ ResizeRowDialog::ResizeRowDialog(QWidget* parent, KoUnit unit)
     QWidget *page = new QWidget();
     setMainWidget(page);
 
-    QGridLayout* gridLayout = new QGridLayout(page);
+    QGridLayout *gridLayout = new QGridLayout(page);
     gridLayout->setColumnStretch(1, 1);
 
-    QLabel * label1 = new QLabel(page);
+    QLabel *label1 = new QLabel(page);
     label1->setText(i18n("Height:"));
     gridLayout->addWidget(label1, 0, 0);
 
@@ -73,8 +72,8 @@ void ResizeRowDialog::slotDefault()
     m_pHeight->changeValue(defaultHeight);
 }
 
-ResizeColumnDialog::ResizeColumnDialog(QWidget* parent, KoUnit unit)
-        : KoDialog(parent)
+ResizeColumnDialog::ResizeColumnDialog(QWidget *parent, KoUnit unit)
+    : KoDialog(parent)
 {
     setCaption(i18n("Resize Column"));
     setModal(true);
@@ -83,10 +82,10 @@ ResizeColumnDialog::ResizeColumnDialog(QWidget* parent, KoUnit unit)
     QWidget *page = new QWidget();
     setMainWidget(page);
 
-    QGridLayout* gridLayout = new QGridLayout(page);
+    QGridLayout *gridLayout = new QGridLayout(page);
     gridLayout->setColumnStretch(1, 1);
 
-    QLabel * label1 = new QLabel(page);
+    QLabel *label1 = new QLabel(page);
     label1->setText(i18n("Width:"));
     gridLayout->addWidget(label1, 0, 0);
 
@@ -98,7 +97,6 @@ ResizeColumnDialog::ResizeColumnDialog(QWidget* parent, KoUnit unit)
 
     connect(this, &KoDialog::okClicked, this, &ResizeColumnDialog::slotOk);
     connect(this, &KoDialog::defaultClicked, this, &ResizeColumnDialog::slotDefault);
-
 }
 
 void ResizeColumnDialog::setColWidth(double width)
@@ -116,9 +114,7 @@ void ResizeColumnDialog::slotDefault()
     m_pWidth->changeValue(defaultWidth);
 }
 
-
 void ResizeColumnDialog::slotOk()
 {
     accept();
 }
-

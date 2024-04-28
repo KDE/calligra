@@ -17,7 +17,7 @@ class KPrConfigurePresenterViewDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    explicit KPrConfigurePresenterViewDialog( KPrDocument *document, QWidget *parent=0 );
+    explicit KPrConfigurePresenterViewDialog(KPrDocument *document, QWidget *parent = 0);
 
     int presentationMonitor();
     bool presenterViewEnabled();
@@ -30,4 +30,3 @@ private:
 };
 
 #endif // KPRCONFIGUREPRESENTERVIEWDIALOG_H
-

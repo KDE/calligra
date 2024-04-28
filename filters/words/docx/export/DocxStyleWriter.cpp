@@ -9,15 +9,15 @@
 #include "DocxStyleWriter.h"
 
 // Qt
-#include <QByteArray>
 #include <QBuffer>
+#include <QByteArray>
 
 // Calligra
+#include <KoOdfStyle.h>
+#include <KoOdfStyleManager.h>
+#include <KoOdfStyleProperties.h>
 #include <KoXmlWriter.h>
 #include <OdfReaderContext.h>
-#include <KoOdfStyleManager.h>
-#include <KoOdfStyle.h>
-#include <KoOdfStyleProperties.h>
 
 // This filter
 #include "DocxStyleHelper.h"
@@ -50,9 +50,9 @@ void DocxStyleWriter::read()
     m_documentWriter->addAttribute("xmlns:r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
     m_documentWriter->addAttribute("xmlns:w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
 
-    QList<KoOdfStyle*> defaultStyles = manager->defaultStyles();
+    QList<KoOdfStyle *> defaultStyles = manager->defaultStyles();
     m_documentWriter->startElement("w:docDefaults");
-    foreach (KoOdfStyle* style, defaultStyles) {
+    foreach (KoOdfStyle *style, defaultStyles) {
         if (!style->isFromStylesXml()) {
             continue;
         }
@@ -68,8 +68,7 @@ void DocxStyleWriter::read()
             m_documentWriter->endElement(); // w:rPr
             m_documentWriter->endElement(); // w:pPr
             m_documentWriter->endElement(); // w:pPrDefault
-        }
-        else if (family == "text") {
+        } else if (family == "text") {
             m_documentWriter->startElement("w:rPrDefault");
             m_documentWriter->startElement("w:rPr");
             KoOdfStyleProperties *textProperties = style->properties("style:text-properties");
@@ -80,8 +79,8 @@ void DocxStyleWriter::read()
     }
     m_documentWriter->endElement(); // w:docDefaults
 
-    QList<KoOdfStyle*> styles = manager->styles();
-    foreach (KoOdfStyle* style, styles) {
+    QList<KoOdfStyle *> styles = manager->styles();
+    foreach (KoOdfStyle *style, styles) {
         if (!style->isFromStylesXml()) {
             continue;
         }
@@ -120,8 +119,7 @@ void DocxStyleWriter::read()
             DocxStyleHelper::handleTextStyles(&properties, m_documentWriter);
             m_documentWriter->endElement(); // w:rPr
             m_documentWriter->endElement(); // w:style
-        }
-        else if (family == "text") {
+        } else if (family == "text") {
             m_documentWriter->startElement("w:style");
             m_documentWriter->addAttribute("w:type", "character");
             m_documentWriter->addAttribute("w:styleId", style->name());

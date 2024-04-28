@@ -8,8 +8,8 @@
 #ifndef KWCANVASITEM_H
 #define KWCANVASITEM_H
 
-#include "KWDocument.h"
 #include "KWCanvasBase.h"
+#include "KWDocument.h"
 #include "KWViewMode.h"
 #include "words_export.h"
 
@@ -47,22 +47,26 @@ public:
     bool snapToGrid() const override;
 
     /// reimplemented method from superclass
-    QWidget *canvasWidget() override {
+    QWidget *canvasWidget() override
+    {
         return 0;
     }
 
     /// reimplemented method from superclass
-    const QWidget *canvasWidget() const override {
+    const QWidget *canvasWidget() const override
+    {
         return 0;
     }
 
     /// reimplemented method from superclass
-    QGraphicsObject *canvasItem() override {
+    QGraphicsObject *canvasItem() override
+    {
         return this;
     }
 
     /// reimplemented method from superclass
-    const QGraphicsObject *canvasItem() const override {
+    const QGraphicsObject *canvasItem() const override
+    {
         return this;
     }
 
@@ -92,7 +96,7 @@ Q_SIGNALS:
     /// Emitted when updateCanvas has been called.
     void canvasUpdated();
 
-protected: //QGraphicsWidget
+protected: // QGraphicsWidget
     /// reimplemented method from superclass
     void keyPressEvent(QKeyEvent *e) override;
 
@@ -128,7 +132,10 @@ protected: //QGraphicsWidget
     void inputMethodEvent(QInputMethodEvent *event) override;
 
     /// reimplemented method from superclass
-    void updateCanvasInternal(const QRectF &clip) override { update(clip); }
+    void updateCanvasInternal(const QRectF &clip) override
+    {
+        update(clip);
+    }
 
 private Q_SLOTS:
     /// Called whenever there was a page added/removed or simply resized.

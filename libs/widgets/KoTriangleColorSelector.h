@@ -14,47 +14,51 @@
 class KoColor;
 class KoColorDisplayRendererInterface;
 
-
-class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
+class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget
+{
     Q_OBJECT
-    public:
-        explicit KoTriangleColorSelector(QWidget *parent);
-        explicit KoTriangleColorSelector(const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent);
-        ~KoTriangleColorSelector() override;
-    protected: // events
-        void paintEvent( QPaintEvent * event ) override;
-        void resizeEvent( QResizeEvent * event ) override;
-        void mouseReleaseEvent( QMouseEvent * event ) override;
-        void mousePressEvent( QMouseEvent * event ) override;
-        void mouseMoveEvent( QMouseEvent * event ) override;
-    public:
-        int hue() const;
-        int value() const;
-        int saturation() const;
-        KoColor color() const;
+public:
+    explicit KoTriangleColorSelector(QWidget *parent);
+    explicit KoTriangleColorSelector(const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent);
+    ~KoTriangleColorSelector() override;
 
-    public Q_SLOTS:
-        void setHue(int h);
-        void setValue(int v);
-        void setSaturation(int s);
-        void setHSV(int h, int s, int v);
+protected: // events
+    void paintEvent(QPaintEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
-        void setColor(const KoColor& );
+public:
+    int hue() const;
+    int value() const;
+    int saturation() const;
+    KoColor color() const;
 
-    Q_SIGNALS:
-        void colorChanged(const KoColor& );
+public Q_SLOTS:
+    void setHue(int h);
+    void setValue(int v);
+    void setSaturation(int s);
+    void setHSV(int h, int s, int v);
 
-    private Q_SLOTS:
-        void configurationChanged();
-    private:
-        void tellColorChanged();
-        void generateTriangle();
-        void generateWheel();
-        void updateTriangleCircleParameters();
-        void selectColorAt(int x, int y, bool checkInWheel = true);
-    private:
-        struct Private;
-        Private* const d;
+    void setColor(const KoColor &);
+
+Q_SIGNALS:
+    void colorChanged(const KoColor &);
+
+private Q_SLOTS:
+    void configurationChanged();
+
+private:
+    void tellColorChanged();
+    void generateTriangle();
+    void generateWheel();
+    void updateTriangleCircleParameters();
+    void selectColorAt(int x, int y, bool checkInWheel = true);
+
+private:
+    struct Private;
+    Private *const d;
 };
 
 #endif

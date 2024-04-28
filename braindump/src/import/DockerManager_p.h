@@ -8,32 +8,38 @@
 #ifndef DockerManager_p_h
 #define DockerManager_p_h
 
-#include <QList>
 #include <QGridLayout>
+#include <QList>
 
-#include <KToolBar>
 #include <KLocalizedString>
+#include <KToolBar>
 
 #include "DockerManager.h"
 #include "KoDockFactoryBase.h"
-#include "ToolDocker.h"
 #include "MainWindow.h"
+#include "ToolDocker.h"
 
 class ToolDockerFactory : public KoDockFactoryBase
 {
 public:
-    ToolDockerFactory() : KoDockFactoryBase() { }
+    ToolDockerFactory()
+        : KoDockFactoryBase()
+    {
+    }
 
-    QString id() const {
+    QString id() const
+    {
         return "sharedtooldocker";
     }
 
-    QDockWidget* createDockWidget() {
-        ToolDocker * dockWidget = new ToolDocker();
+    QDockWidget *createDockWidget()
+    {
+        ToolDocker *dockWidget = new ToolDocker();
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const
+    {
         return DockRight;
     }
 };
@@ -41,17 +47,23 @@ public:
 class ToolBarsDockerFactory : public KoDockFactoryBase
 {
 public:
-    ToolBarsDockerFactory() : KoDockFactoryBase() { }
+    ToolBarsDockerFactory()
+        : KoDockFactoryBase()
+    {
+    }
 
-    QString id() const {
+    QString id() const
+    {
         return "ToolBarDocker";
     }
 
-    QDockWidget* createDockWidget() {
+    QDockWidget *createDockWidget()
+    {
         return new QDockWidget(i18n("Tool Bars"));
     }
 
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const
+    {
         return DockTop;
     }
 };
@@ -59,10 +71,11 @@ public:
 class DockerManager::Private
 {
 public:
-    Private(MainWindow *mw) :
-        dockedToolBarsLayout(0)
+    Private(MainWindow *mw)
+        : dockedToolBarsLayout(0)
         , mainWindow(mw)
-        , ignore(true) {
+        , ignore(true)
+    {
     }
 
     ToolDocker *toolOptionsDocker;
@@ -72,22 +85,24 @@ public:
     MainWindow *mainWindow;
     bool ignore;
 
-    void moveToolBarsBack() {
-        foreach(KToolBar * toolBar, toolBarList) {
+    void moveToolBarsBack()
+    {
+        foreach (KToolBar *toolBar, toolBarList) {
             mainWindow->addToolBar(toolBar);
         }
         toolBarList.clear();
     }
 
-    void moveToolBars() {
-        if(ignore)
+    void moveToolBars()
+    {
+        if (ignore)
             return;
 
         // Move toolbars to docker or back depending on visibility of docker
-        if(toolBarsDocker->isVisible()) {
+        if (toolBarsDocker->isVisible()) {
             QList<KToolBar *> tmpList = mainWindow->toolBars();
             toolBarList.append(tmpList);
-            foreach(KToolBar * toolBar, tmpList) {
+            foreach (KToolBar *toolBar, tmpList) {
                 dockedToolBarsLayout->addWidget(toolBar);
             }
         } else {

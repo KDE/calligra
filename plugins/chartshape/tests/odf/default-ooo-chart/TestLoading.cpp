@@ -11,10 +11,10 @@
 #include "TestLoading.h"
 
 // KoChart
-#include "TableSource.h"
 #include "CellRegion.h"
-#include "PlotArea.h"
 #include "Legend.h"
+#include "PlotArea.h"
+#include "TableSource.h"
 
 using namespace KoChart;
 
@@ -40,20 +40,17 @@ void TestLoading::testDataSets()
 {
     Table *table = internalTable();
     QVERIFY(table);
-                              // y data
-    testDataSetCellRegions(0, CellRegion(table, QRect(2, 2, 1, 4)),
-                              // series label
-                              CellRegion(table, QRect(2, 1, 1, 1)),
-                              // categories (specified in x-axis)
-                              CellRegion(table, QRect(1, 2, 1, 4)));
+    // y data
+    testDataSetCellRegions(0,
+                           CellRegion(table, QRect(2, 2, 1, 4)),
+                           // series label
+                           CellRegion(table, QRect(2, 1, 1, 1)),
+                           // categories (specified in x-axis)
+                           CellRegion(table, QRect(1, 2, 1, 4)));
 
-    testDataSetCellRegions(1, CellRegion(table, QRect(3, 2, 1, 4)),
-                              CellRegion(table, QRect(3, 1, 1, 1)),
-                              CellRegion(table, QRect(1, 2, 1, 4)) );
+    testDataSetCellRegions(1, CellRegion(table, QRect(3, 2, 1, 4)), CellRegion(table, QRect(3, 1, 1, 1)), CellRegion(table, QRect(1, 2, 1, 4)));
 
-    testDataSetCellRegions(2, CellRegion(table, QRect(4, 2, 1, 4)),
-                              CellRegion(table, QRect(4, 1, 1, 1)),
-                              CellRegion(table, QRect(1, 2, 1, 4)) );
+    testDataSetCellRegions(2, CellRegion(table, QRect(4, 2, 1, 4)), CellRegion(table, QRect(4, 1, 1, 1)), CellRegion(table, QRect(1, 2, 1, 4)));
 }
 
 void TestLoading::testPlotArea()
@@ -64,7 +61,9 @@ void TestLoading::testPlotArea()
 void TestLoading::testLegend()
 {
     testElementIsVisible(m_chart->legend(), true);
-    testLegendElements(QStringList() << "Spalte 1" << "Spalte 2" << "Spalte 3");
+    testLegendElements(QStringList() << "Spalte 1"
+                                     << "Spalte 2"
+                                     << "Spalte 3");
 }
 
 QTEST_MAIN(TestLoading)

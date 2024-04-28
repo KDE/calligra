@@ -7,17 +7,17 @@
 
 namespace RtfReader
 {
-    InfoCreatedTimeDestination::InfoCreatedTimeDestination( Reader *reader, AbstractRtfOutput *output, const QString &name ) :
-      InfoTimeDestination( reader, output, name )
-    {
-    }
+InfoCreatedTimeDestination::InfoCreatedTimeDestination(Reader *reader, AbstractRtfOutput *output, const QString &name)
+    : InfoTimeDestination(reader, output, name)
+{
+}
 
-    InfoCreatedTimeDestination::~InfoCreatedTimeDestination()
-    {
-    }
+InfoCreatedTimeDestination::~InfoCreatedTimeDestination()
+{
+}
 
-    void InfoCreatedTimeDestination::aboutToEndDestination()
-    {
-	m_output->setCreatedDateTime( dateTime() );
-    }
+void InfoCreatedTimeDestination::aboutToEndDestination()
+{
+    m_output->setCreatedDateTime(dateTime());
+}
 }

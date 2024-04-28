@@ -9,9 +9,9 @@
 #ifndef KWSTATUSBAR_H
 #define KWSTATUSBAR_H
 
-#include <QPointer>
 #include <QMap>
 #include <QObject>
+#include <QPointer>
 
 class QPoint;
 class QAction;
@@ -34,10 +34,9 @@ class KWStatusBar : public QObject
 {
     Q_OBJECT
 public:
-
     /**
-    * Destructor.
-    */
+     * Destructor.
+     */
     ~KWStatusBar() override;
 
     static void addViewControls(QStatusBar *statusBar, KWView *view);
@@ -54,9 +53,9 @@ private Q_SLOTS:
     void updatePageSize();
     void updateCursorPosition();
     void gotoLine();
-    void updateMousePosition(const QPoint&);
-    void canvasResourceChanged(int, const QVariant&);
-    void updateCurrentTool(KoCanvasController*);
+    void updateMousePosition(const QPoint &);
+    void canvasResourceChanged(int, const QVariant &);
+    void updateCurrentTool(KoCanvasController *);
     void createZoomWidget();
     void showPage(bool visible);
     void showPageStyle(bool visible);
@@ -69,20 +68,20 @@ private Q_SLOTS:
 
 private:
     /**
-    * Constructor.
-    *
-    * \param statusBar The parent statusbar this statusbar is child
-    * of. We will embed our own widgets into this statusbar.
-    * \param view The Words view instance the statusbar belongs to. Each
-    * KWStatusBar instance belongs to exactly one view.
-    */
-    KWStatusBar(QStatusBar *statusBar, KWView* view);
+     * Constructor.
+     *
+     * \param statusBar The parent statusbar this statusbar is child
+     * of. We will embed our own widgets into this statusbar.
+     * \param view The Words view instance the statusbar belongs to. Each
+     * KWStatusBar instance belongs to exactly one view.
+     */
+    KWStatusBar(QStatusBar *statusBar, KWView *view);
 
     void setCurrentView(KWView *view);
 
     QStatusBar *m_statusbar;
     QPointer<KWView> m_currentView;
-    QMap<KWView*, QWidget*> m_zoomWidgets;
+    QMap<KWView *, QWidget *> m_zoomWidgets;
     QPointer<KoCanvasControllerProxyObject> m_controller;
     int m_currentPageNumber;
     QAction *m_zoomAction;
@@ -94,7 +93,7 @@ private:
     KWStatusBarEditItem *m_lineLabel;
     QLabel *m_mousePosLabel;
     KSqueezedTextLabel *m_statusLabel;
-    QList<KWView*> m_views;
+    QList<KWView *> m_views;
 };
 
 #endif

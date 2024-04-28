@@ -5,20 +5,15 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "OdfReaderAsciiContext.h"
 
 // Calligra
-#include <KoXmlReader.h>
 #include <KoOdfStyleManager.h>
-
-
-
+#include <KoXmlReader.h>
 
 // ----------------------------------------------------------------
 //                     class OdfReaderAsciiContext
-
 
 OdfReaderAsciiContext::OdfReaderAsciiContext(KoStore *store, QFile &file)
     : OdfReaderContext(store)
@@ -29,4 +24,3 @@ OdfReaderAsciiContext::OdfReaderAsciiContext(KoStore *store, QFile &file)
 OdfReaderAsciiContext::~OdfReaderAsciiContext()
 {
 }
-

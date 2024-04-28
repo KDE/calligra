@@ -8,12 +8,11 @@
 #ifndef KOTOOLBOXFACTORY_H
 #define KOTOOLBOXFACTORY_H
 
-#include <KoDockFactoryBase.h>
 #include "kowidgets_export.h"
+#include <KoDockFactoryBase.h>
 
-#include <QString>
 #include <QDockWidget>
-
+#include <QString>
 
 /**
  * Factory class to create a new KoToolBox that contains the buttons
@@ -27,8 +26,11 @@ public:
 
     QString id() const override;
     KoDockFactoryBase::DockPosition defaultDockPosition() const override;
-    QDockWidget* createDockWidget() override;
-    bool isCollapsable() const override { return false; }
+    QDockWidget *createDockWidget() override;
+    bool isCollapsable() const override
+    {
+        return false;
+    }
 };
 
 #endif

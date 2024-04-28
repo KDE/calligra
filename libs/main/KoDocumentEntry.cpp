@@ -7,9 +7,9 @@
 
 #include "KoDocumentEntry.h"
 
-#include "KoPart.h"
 #include "KoDocument.h"
 #include "KoFilter.h"
+#include "KoPart.h"
 #include <MainDebug.h>
 
 #include <KoPluginLoader.h>
@@ -25,14 +25,13 @@ KoDocumentEntry::KoDocumentEntry()
 }
 
 KoDocumentEntry::KoDocumentEntry(const KPluginMetaData &metaData)
-        : m_metaData(metaData)
+    : m_metaData(metaData)
 {
 }
 
 KoDocumentEntry::~KoDocumentEntry()
 {
 }
-
 
 QJsonObject KoDocumentEntry::metaData() const
 {
@@ -47,32 +46,36 @@ QString KoDocumentEntry::fileName() const
 /**
  * @return TRUE if the service pointer is null
  */
-bool KoDocumentEntry::isEmpty() const {
+bool KoDocumentEntry::isEmpty() const
+{
     return !m_metaData.isValid();
 }
 
 /**
  * @return name of the associated service
  */
-QString KoDocumentEntry::name() const {
+QString KoDocumentEntry::name() const
+{
     return m_metaData.name();
 }
 
 /**
  *  Mimetypes (and other service types) which this document can handle.
  */
-QStringList KoDocumentEntry::mimeTypes() const {
+QStringList KoDocumentEntry::mimeTypes() const
+{
     return m_metaData.mimeTypes();
 }
 
 /**
  *  @return TRUE if the document can handle the requested mimetype.
  */
-bool KoDocumentEntry::supportsMimeType(const QString & _mimetype) const {
+bool KoDocumentEntry::supportsMimeType(const QString &_mimetype) const
+{
     return mimeTypes().contains(_mimetype);
 }
 
-KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
+KoPart *KoDocumentEntry::createKoPart(QString *errorMsg) const
 {
     if (!m_metaData.isValid()) {
         return 0;
@@ -88,7 +91,7 @@ KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
     return result.plugin;
 }
 
-KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
+KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString &mimetype)
 {
     QList<KoDocumentEntry> vec = query(mimetype);
 
@@ -100,12 +103,13 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
         if (vec.isEmpty()) {
             // Still no match. Either the mimetype itself is unknown, or we have no service for it.
             // Help the user debugging stuff by providing some more diagnostics
-            //if (!KServiceType::serviceType(mimetype)) {
+            // if (!KServiceType::serviceType(mimetype)) {
             //    errorMain << "Unknown Calligra MimeType " << mimetype << "." << Qt::endl;
             //    errorMain << "Check your installation (for instance, run 'kde4-config --path mime' and check the result)." << Qt::endl;
             //} else {
             //    errorMain << "Found no Calligra part able to handle " << mimetype << "!" << Qt::endl;
-            //    errorMain << "Check your installation (does the desktop file have X-KDE-NativeMimeType and Calligra/Part, did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << Qt::endl;
+            //    errorMain << "Check your installation (does the desktop file have X-KDE-NativeMimeType and Calligra/Part, did you install Calligra in a
+            //    different prefix than KDE, without adding the prefix to /etc/kderc ?)" << Qt::endl;
             //}
             return KoDocumentEntry();
         }
@@ -119,21 +123,20 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
     return KoDocumentEntry(vec[0]);
 }
 
-QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
+QList<KoDocumentEntry> KoDocumentEntry::query(const QString &mimetype)
 {
-
     QList<KoDocumentEntry> lst;
 
     // Query the trader
     const auto metaDatas = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mimetype);
 
-    for(const auto &metadata : metaDatas) {
+    for (const auto &metadata : metaDatas) {
         lst.append(KoDocumentEntry(metadata));
     }
 
     if (lst.count() > 1 && !mimetype.isEmpty()) {
         warnMain << "KoDocumentEntry::query " << mimetype << " got " << lst.count() << " offers!";
-        foreach(const KoDocumentEntry &entry, lst) {
+        foreach (const KoDocumentEntry &entry, lst) {
             warnMain << entry.name();
         }
     }

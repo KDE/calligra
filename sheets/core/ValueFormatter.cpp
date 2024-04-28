@@ -13,42 +13,46 @@
 #include "Localization.h"
 #include "ValueConverter.h"
 
-#include <float.h>
 #include <QRegularExpression>
+#include <float.h>
 
 using namespace Calligra::Sheets;
 
-ValueFormatter::ValueFormatter(const ValueConverter* converter)
-        : m_converter(converter)
+ValueFormatter::ValueFormatter(const ValueConverter *converter)
+    : m_converter(converter)
 {
 }
 
-const CalculationSettings* ValueFormatter::settings() const
+const CalculationSettings *ValueFormatter::settings() const
 {
     return m_converter->settings();
 }
 
-Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int precision,
-                                 Style::FloatFormat floatFormat, const QString &prefix,
-                                 const QString &postfix, const QString &currencySymbol,
-                                 const QString &formatString, bool thousandsSep)
+Value ValueFormatter::formatText(const Value &value,
+                                 Format::Type fmtType,
+                                 int precision,
+                                 Style::FloatFormat floatFormat,
+                                 const QString &prefix,
+                                 const QString &postfix,
+                                 const QString &currencySymbol,
+                                 const QString &formatString,
+                                 bool thousandsSep)
 {
     if (value.isError())
         return Value(value.errorMessage());
 
-    //if we have an array, use its first element
+    // if we have an array, use its first element
     if (value.isArray())
-        return formatText(value.element(0, 0), fmtType, precision,
-                          floatFormat, prefix, postfix, currencySymbol, formatString, thousandsSep);
+        return formatText(value.element(0, 0), fmtType, precision, floatFormat, prefix, postfix, currencySymbol, formatString, thousandsSep);
 
     Value result;
 
-    //step 1: determine formatting that will be used
+    // step 1: determine formatting that will be used
     fmtType = determineFormatting(value, fmtType);
-    //step 2: format the value !
+    // step 2: format the value !
     bool ok = false;
 
-    //text
+    // text
     if (fmtType == Format::Text) {
         QString str = m_converter->asString(value).asString();
         if (!str.isEmpty() && str[0] == '\'')
@@ -60,7 +64,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
         ok = true;
     }
 
-    //datetime
+    // datetime
     else if (Format::isDateTime(fmtType)) {
         Value dateValue = m_converter->asDateTime(value, &ok);
         if (ok) {
@@ -69,7 +73,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
         }
     }
 
-    //date
+    // date
     else if (Format::isDate(fmtType)) {
         Value dateValue = m_converter->asDate(value, &ok);
         if (ok) {
@@ -78,7 +82,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
         }
     }
 
-    //time
+    // time
     else if (Format::isTime(fmtType)) {
         Value timeValue = m_converter->asDateTime(value, &ok);
         if (ok) {
@@ -87,7 +91,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
         }
     }
 
-    //fraction
+    // fraction
     else if (Format::isFraction(fmtType)) {
         Value fractionValue = m_converter->asFloat(value, &ok);
         if (ok) {
@@ -96,7 +100,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
         }
     }
 
-    //another
+    // another
     else {
         // complex
         if (value.isComplex()) {
@@ -131,16 +135,15 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
     if (!postfix.isEmpty())
         result = Value(result.asString() + ' ' + postfix);
 
-    //debugSheets <<"ValueFormatter says:" << str;
+    // debugSheets <<"ValueFormatter says:" << str;
     return result;
 }
 
-Format::Type ValueFormatter::determineFormatting(const Value &value,
-        Format::Type fmtType)
+Format::Type ValueFormatter::determineFormatting(const Value &value, Format::Type fmtType)
 {
-    //now, everything depends on whether the formatting is Generic or not
+    // now, everything depends on whether the formatting is Generic or not
     if (fmtType == Format::Generic) {
-        //here we decide based on value's format...
+        // here we decide based on value's format...
         Value::Format fmt = value.format();
         switch (fmt) {
         case Value::fmt_None:
@@ -155,8 +158,7 @@ Format::Type ValueFormatter::determineFormatting(const Value &value,
                 fmtType = Format::Scientific;
             else
                 fmtType = Format::Number;
-            }
-            break;
+        } break;
         case Value::fmt_Percent:
             fmtType = Format::Percentage;
             break;
@@ -173,20 +175,20 @@ Format::Type ValueFormatter::determineFormatting(const Value &value,
             fmtType = Format::DurationHourShort; // meant to be [hh]:mm
             break;
         case Value::fmt_String:
-            //this should never happen
+            // this should never happen
             fmtType = Format::Text;
             break;
         };
         return fmtType;
     } else {
-        //we'll mostly want to use the given formatting, the only exception
-        //being Boolean values
+        // we'll mostly want to use the given formatting, the only exception
+        // being Boolean values
 
-        //TODO: is this correct? We may also want to convert bools to 1s and 0s
-        //if we want to display a number...
+        // TODO: is this correct? We may also want to convert bools to 1s and 0s
+        // if we want to display a number...
 
-        //TODO: what to do about Custom formatting? We don't support it as of now,
-        //  but we'll have it ... one day, that is ...
+        // TODO: what to do about Custom formatting? We don't support it as of now,
+        //   but we'll have it ... one day, that is ...
         if (value.isBoolean())
             return Format::Text;
         else
@@ -194,19 +196,17 @@ Format::Type ValueFormatter::determineFormatting(const Value &value,
     }
 }
 
-
-QString ValueFormatter::removeTrailingZeros(const QString& str, const QString &currencySymbol, const QString& decimalSymbol)
+QString ValueFormatter::removeTrailingZeros(const QString &str, const QString &currencySymbol, const QString &decimalSymbol)
 {
     if (!str.contains(decimalSymbol))
-        //no decimal symbol -> nothing to do
+        // no decimal symbol -> nothing to do
         return str;
 
     int start = 0;
     int cslen = currencySymbol.length();
     if (str.indexOf('%') != -1)
         start = 2;
-    else if (str.indexOf(currencySymbol) ==
-             ((int)(str.length() - cslen)))
+    else if (str.indexOf(currencySymbol) == ((int)(str.length() - cslen)))
         start = cslen + 1;
     else if ((start = str.indexOf('E')) != -1)
         start = str.length() - start;
@@ -230,22 +230,26 @@ QString ValueFormatter::removeTrailingZeros(const QString& str, const QString &c
 }
 
 // TODO - this will likely need to be all done better.
-QString ValueFormatter::createNumberFormat(Number value, int precision,
-        Format::Type fmt, Style::FloatFormat floatFormat, const QString& currencySymbol,
-        const QString& _formatString, bool thousandsSep)
+QString ValueFormatter::createNumberFormat(Number value,
+                                           int precision,
+                                           Format::Type fmt,
+                                           Style::FloatFormat floatFormat,
+                                           const QString &currencySymbol,
+                                           const QString &_formatString,
+                                           bool thousandsSep)
 {
     QString prefix, postfix;
     QString formatString(_formatString);
 
     int numExpDigits = 0; // QString::number() will be used
     // try to split formatstring into prefix, formatstring and postfix.
-    if (!formatString.isEmpty() ) {
-        QRegularExpression re( QLatin1String( "^([^0#.,E+]*)([0#.,E+]*)(.*)$" ) );
-        QRegularExpressionMatch match = re.match( formatString );
-        if(match.hasMatch()) {
-            prefix = match.captured( 1 );
-            formatString = match.captured( 2 );
-            postfix = match.captured( 3 );
+    if (!formatString.isEmpty()) {
+        QRegularExpression re(QLatin1String("^([^0#.,E+]*)([0#.,E+]*)(.*)$"));
+        QRegularExpressionMatch match = re.match(formatString);
+        if (match.hasMatch()) {
+            prefix = match.captured(1);
+            formatString = match.captured(2);
+            postfix = match.captured(3);
         }
         if (formatString.isEmpty()) {
             return prefix + postfix;
@@ -281,7 +285,7 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
     if ((floatFormat == Style::AlwaysUnsigned) && (value < 0.0))
         value *= -1.0;
 
-    //multiply value by 100 for percentage format
+    // multiply value by 100 for percentage format
     if (fmt == Format::Percentage)
         value *= 100;
 
@@ -290,13 +294,15 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
     if (fmt != Format::Scientific) {
         // this will avoid displaying negative zero, i.e "-0.0000"
         // TODO: is this really a good solution?
-        if (fabs(value) < DBL_EPSILON) value = 0.0;
+        if (fabs(value) < DBL_EPSILON)
+            value = 0.0;
 
-        double m[] = { 1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10 };
+        double m[] = {1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10};
         double mm = (p > 10) ? ::pow(10.0, p) : m[p];
         bool neg = value < 0;
         value = floor(numToDouble(fabs(value)) * mm + 0.5) / mm;
-        if (neg) value = -value;
+        if (neg)
+            value = -value;
     }
 
     double val = numToDouble(value);
@@ -306,7 +312,7 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         break;
     case Format::Percentage:
         localizedNumber = m_converter->settings()->locale()->formatNumber(val, p);
-        if(!postfix.endsWith('%')) // percent formattings needs to end with a "%"-sign
+        if (!postfix.endsWith('%')) // percent formattings needs to end with a "%"-sign
             postfix += '%';
         break;
     case Format::Money:
@@ -336,14 +342,14 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         }
         break;
     }
-    default :
-        //other formatting?
-        // This happens with Format::Custom...
+    default:
+        // other formatting?
+        //  This happens with Format::Custom...
         debugSheets << "Wrong usage of ValueFormatter::createNumberFormat fmt=" << fmt << "";
         break;
     }
 
-    //prepend positive sign if needed
+    // prepend positive sign if needed
     if ((floatFormat == Style::AlwaysSigned) && value >= 0)
         if (m_converter->settings()->locale()->positiveSign().isEmpty())
             localizedNumber = '+' + localizedNumber;
@@ -356,7 +362,8 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
             if (decimalSymbol.isNull())
                 decimalSymbol = '.';
             QString currency = currencySymbol;
-            if (!currency.length()) currency = m_converter->settings()->locale()->currencySymbol();
+            if (!currency.length())
+                currency = m_converter->settings()->locale()->currencySymbol();
             localizedNumber = removeTrailingZeros(localizedNumber, currencySymbol, decimalSymbol);
         }
 
@@ -370,7 +377,7 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
     }
 
     // remove negative sign if prefix already ends with '-'
-    if (!prefix.isEmpty() && prefix[prefix.length()-1] == '-' && !localizedNumber.isEmpty() && localizedNumber[0] == '-') {
+    if (!prefix.isEmpty() && prefix[prefix.length() - 1] == '-' && !localizedNumber.isEmpty() && localizedNumber[0] == '-') {
         localizedNumber = localizedNumber.mid(1);
     }
 
@@ -388,7 +395,7 @@ QString ValueFormatter::fractionFormat(Number value, Format::Type fmtType)
 
     /* return w/o fraction part if not necessary */
     if (result == 0)
-        return prefix + QString::number((double) numToDouble(value));
+        return prefix + QString::number((double)numToDouble(value));
 
     switch (fmtType) {
     case Format::fraction_half:
@@ -423,15 +430,12 @@ QString ValueFormatter::fractionFormat(Number value, Format::Type fmtType)
         break;
     default:
         debugSheets << "Error in Fraction format";
-        return prefix + QString::number((double) numToDouble(value));
+        return prefix + QString::number((double)numToDouble(value));
         break;
     } /* switch */
 
-
     /* handle halves, quarters, tenths, ... */
-    if (fmtType != Format::fraction_three_digits
-            && fmtType != Format::fraction_two_digits
-            && fmtType != Format::fraction_one_digit) {
+    if (fmtType != Format::fraction_three_digits && fmtType != Format::fraction_two_digits && fmtType != Format::fraction_one_digit) {
         Number calc = 0;
         int index1 = 0;
         Number diff = result;
@@ -442,17 +446,15 @@ QString ValueFormatter::fractionFormat(Number value, Format::Type fmtType)
                 diff = fabs(result - calc);
             }
         }
-        if (index1 == 0) return prefix + QString("%1").arg((double) floor(numToDouble(value)));
-        if (index1 == index) return prefix + QString("%1").arg((double) floor(numToDouble(value)) + 1);
+        if (index1 == 0)
+            return prefix + QString("%1").arg((double)floor(numToDouble(value)));
+        if (index1 == index)
+            return prefix + QString("%1").arg((double)floor(numToDouble(value)) + 1);
         if (floor(numToDouble(value)) == 0)
             return prefix + QString("%1/%2").arg(index1).arg(index);
 
-        return prefix + QString("%1 %2/%3")
-               .arg((double) floor(numToDouble(value)))
-               .arg(index1)
-               .arg(index);
+        return prefix + QString("%1 %2/%3").arg((double)floor(numToDouble(value))).arg(index1).arg(index);
     }
-
 
     /* handle Format::fraction_one_digit, Format::fraction_two_digit and Format::fraction_three_digit style */
     double target = numToDouble(result);
@@ -478,21 +480,18 @@ QString ValueFormatter::fractionFormat(Number value, Format::Type fmtType)
     }
 
     if (bestNumerator == 0)
-        return prefix + QString().setNum((double) floor(numToDouble(value)));
+        return prefix + QString().setNum((double)floor(numToDouble(value)));
     else if (bestDenominator == bestNumerator)
-        return prefix + QString().setNum((double) floor(numToDouble(value + 1)));
+        return prefix + QString().setNum((double)floor(numToDouble(value + 1)));
     else {
         if (floor(numToDouble(value)) == 0)
             return prefix + QString("%1/%2").arg(bestNumerator).arg(bestDenominator);
         else
-            return prefix + QString("%1 %2/%3")
-                   .arg((double)floor(numToDouble(value)))
-                   .arg(bestNumerator)
-                   .arg(bestDenominator);
+            return prefix + QString("%1 %2/%3").arg((double)floor(numToDouble(value))).arg(bestNumerator).arg(bestDenominator);
     }
 }
 
-QString ValueFormatter::timeFormat(const QDateTime &_dt, Format::Type fmtType, const QString& formatString)
+QString ValueFormatter::timeFormat(const QDateTime &_dt, Format::Type fmtType, const QString &formatString)
 {
     const auto locale = m_converter->settings()->locale();
     auto format = formatString;
@@ -588,17 +587,17 @@ QString ValueFormatter::timeFormat(const QDateTime &_dt, Format::Type fmtType, c
 #endif
 }
 
-QString ValueFormatter::dateTimeFormat(const QDateTime &_dt, Format::Type fmtType, const QString& formatString )
+QString ValueFormatter::dateTimeFormat(const QDateTime &_dt, Format::Type fmtType, const QString &formatString)
 {
-    if( !formatString.isEmpty() ) {
-        if (formatString.contains("MMMMM")) {               // if we have the special extra-short month in the format string
+    if (!formatString.isEmpty()) {
+        if (formatString.contains("MMMMM")) { // if we have the special extra-short month in the format string
             auto fmt = formatString;
             fmt.replace("MMMMM", "X");
             int monthPos = fmt.indexOf('X');
-            QString before = fmt.left(monthPos);                               // get string before and after the extra-short month sign
+            QString before = fmt.left(monthPos); // get string before and after the extra-short month sign
             QString after = fmt.right(fmt.size() - monthPos - 1);
-            QString monthShort = _dt.toString("MMM").left(1);                           // format the month as extra-short (only 1st letter)
-            return _dt.toString(before) + monthShort + _dt.toString(after);         // and construct the final date
+            QString monthShort = _dt.toString("MMM").left(1); // format the month as extra-short (only 1st letter)
+            return _dt.toString(before) + monthShort + _dt.toString(after); // and construct the final date
         }
         Localization *locale = m_converter->settings()->locale();
         return locale->formatDateTime(_dt, formatString);
@@ -607,24 +606,24 @@ QString ValueFormatter::dateTimeFormat(const QDateTime &_dt, Format::Type fmtTyp
     QString format = locale->dateTimeFormat(fmtType);
     if (format.isEmpty()) {
         // just in case...
-        warnSheets<<Q_FUNC_INFO<<"WARN: Unknown format"<<_dt<<"fmtType:"<<fmtType;
+        warnSheets << Q_FUNC_INFO << "WARN: Unknown format" << _dt << "fmtType:" << fmtType;
         format = locale->dateTimeFormat(Format::DateTimeShort); // use a sane default
         Q_ASSERT(!format.isEmpty());
     }
     return dateTimeFormat(_dt, fmtType, format);
 }
 
-QString ValueFormatter::dateFormat(const QDate &date, Format::Type fmtType, const QString& formatString )
+QString ValueFormatter::dateFormat(const QDate &date, Format::Type fmtType, const QString &formatString)
 {
-    if( !formatString.isEmpty() ) {
-        if (formatString.contains("MMMMM")) {               // if we have the special extra-short month in the format string
+    if (!formatString.isEmpty()) {
+        if (formatString.contains("MMMMM")) { // if we have the special extra-short month in the format string
             auto fmt = formatString;
             fmt.replace("MMMMM", "X");
             int monthPos = fmt.indexOf('X');
-            QString before = fmt.left(monthPos);                               // get string before and after the extra-short month sign
+            QString before = fmt.left(monthPos); // get string before and after the extra-short month sign
             QString after = fmt.right(formatString.size() - monthPos - 1);
-            QString monthShort = date.toString("MMM").left(1);                           // format the month as extra-short (only 1st letter)
-            return date.toString(before) + monthShort + date.toString(after);         // and construct the final date
+            QString monthShort = date.toString("MMM").left(1); // format the month as extra-short (only 1st letter)
+            return date.toString(before) + monthShort + date.toString(after); // and construct the final date
         }
         Localization *locale = m_converter->settings()->locale();
         return locale->formatDate(date, formatString);
@@ -637,10 +636,11 @@ QString ValueFormatter::dateFormat(const QDate &date, Format::Type fmtType, cons
     return dateFormat(date, fmtType, format);
 }
 
-QString ValueFormatter::complexFormat(const Value& value, int precision,
+QString ValueFormatter::complexFormat(const Value &value,
+                                      int precision,
                                       Format::Type formatType,
                                       Style::FloatFormat floatFormat,
-                                      const QString& currencySymbol,
+                                      const QString &currencySymbol,
                                       bool thousandsSep)
 {
     // FIXME Stefan: percentage, currency and scientific formats!

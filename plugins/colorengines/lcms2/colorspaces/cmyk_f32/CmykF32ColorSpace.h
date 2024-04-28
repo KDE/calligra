@@ -2,7 +2,7 @@
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef KIS_COLORSPACE_CMYK_F32_H_
 #define KIS_COLORSPACE_CMYK_F32_H_
@@ -13,7 +13,7 @@
 
 struct KoCmykF32Traits;
 
-#define TYPE_CMYKA_FLT        (FLOAT_SH(1)|COLORSPACE_SH(PT_CMYK)|EXTRA_SH(1)|CHANNELS_SH(4)|BYTES_SH(4))
+#define TYPE_CMYKA_FLT (FLOAT_SH(1) | COLORSPACE_SH(PT_CMYK) | EXTRA_SH(1) | CHANNELS_SH(4) | BYTES_SH(4))
 
 class CmykF32ColorSpace : public LcmsColorSpace<KoCmykF32Traits>
 {
@@ -36,12 +36,12 @@ public:
 
     void colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const override;
 
-    void colorFromXML(quint8* pixel, const QDomElement& elt) const override;
-    
+    void colorFromXML(quint8 *pixel, const QDomElement &elt) const override;
+
     void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const override;
-    QVector <double> fromHSY( qreal *hue, qreal *sat, qreal *luma) const override;
+    QVector<double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
     void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const override;
-    QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
+    QVector<double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
 
     static QString colorSpaceId()
     {
@@ -57,7 +57,6 @@ public:
 class CmykF32ColorSpaceFactory : public LcmsColorSpaceFactory
 {
 public:
-
     CmykF32ColorSpaceFactory()
         : LcmsColorSpaceFactory(TYPE_CMYKA_FLT, cmsSigCmykData)
     {

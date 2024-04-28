@@ -7,18 +7,18 @@
 
 #include "TestCell.h"
 
-#include <KoStore.h>
-#include <KoOdfStylesReader.h>
-#include <KoOdfLoadingContext.h>
-#include <KoShapeLoadingContext.h>
 #include <KoDocumentResourceManager.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfStylesReader.h>
+#include <KoShapeLoadingContext.h>
+#include <KoStore.h>
 
-#include <engine/Value.h>
 #include <core/CellStorage.h>
 #include <core/Map.h>
 #include <core/Sheet.h>
 #include <core/odf/OdfLoadingContext.h>
 #include <core/odf/SheetsOdf.h>
+#include <engine/Value.h>
 
 #include <QTest>
 
@@ -27,7 +27,11 @@ using namespace Calligra::Sheets;
 KoXmlDocument CellTest::xmlDocument(const QString &content)
 {
     KoXmlDocument document;
-    QString xml = "<table:table-cell xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" >" + content + "</table:table-cell>";
+    QString xml =
+        "<table:table-cell xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" "
+        "xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" "
+        "xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" >"
+        + content + "</table:table-cell>";
     bool ok = document.setContent(xml, true);
     return ok ? document : KoXmlDocument();
 }
@@ -51,8 +55,8 @@ void CellTest::testRichText()
     QString cellStyleName;
 
     Map map;
-    Sheet* sheet = dynamic_cast<Sheet *>(map.addNewSheet());
-    CellStorage* storage = sheet->fullCellStorage();
+    Sheet *sheet = dynamic_cast<Sheet *>(map.addNewSheet());
+    CellStorage *storage = sheet->fullCellStorage();
     storage->setValue(1, 1, Value(1));
 
     Cell cell = storage->firstInRow(1);

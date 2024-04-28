@@ -10,22 +10,25 @@
 
 #include <QTest>
 
-static QString const KoXmlNS_office() {
+static QString const KoXmlNS_office()
+{
     return QStringLiteral("urn:oasis:names:tc:opendocument:xmlns:office:1.0");
 }
-static QString const KoXmlNS_text() {
+static QString const KoXmlNS_text()
+{
     return QStringLiteral("urn:oasis:names:tc:opendocument:xmlns:text:1.0");
 }
 
-//static void debugElemNS( const QDomElement& elem )
+// static void debugElemNS( const QDomElement& elem )
 //{
-//    qDebug( "nodeName=%s tagName=%s localName=%s prefix=%s namespaceURI=%s", elem.nodeName().latin1(), elem.tagName().latin1(), elem.localName().latin1(), elem.prefix().latin1(), elem.namespaceURI().latin1() );
-//}
-
+//     qDebug( "nodeName=%s tagName=%s localName=%s prefix=%s namespaceURI=%s", elem.nodeName().latin1(), elem.tagName().latin1(), elem.localName().latin1(),
+//     elem.prefix().latin1(), elem.namespaceURI().latin1() );
+// }
 
 void KoDomTest::initTestCase()
 {
-    QLoggingCategory::setFilterRules("*.debug=false\n"
+    QLoggingCategory::setFilterRules(
+        "*.debug=false\n"
         "calligra.lib.store=true");
 
     const QByteArray xml = QByteArray("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -37,14 +40,12 @@ void KoDomTest::initTestCase()
                            "<o:body><p text:style-name=\"L1\">foobar</p><p>2nd</p></o:body><o:styles></o:styles>\n"
                            "</o:document-content>\n";
     QVERIFY(m_doc.setContent(xml, true /* namespace processing */));
-
 }
-
 
 void KoDomTest::testQDom()
 {
     KoXmlElement docElem = m_doc.documentElement();
-    //debugElemNS( docElem );
+    // debugElemNS( docElem );
     QCOMPARE(docElem.nodeName(), QString("o:document-content"));
     QCOMPARE(docElem.tagName(), QString("document-content"));
     QCOMPARE(docElem.localName(), QString("document-content"));
@@ -53,25 +54,24 @@ void KoDomTest::testQDom()
 
     KoXmlElement elem = KoXml::namedItemNS(docElem, KoXmlNS_office().toUtf8(), "body");
 
-    //debugElemNS( elem );
+    // debugElemNS( elem );
     QCOMPARE(elem.tagName(), QString("body"));
     QCOMPARE(elem.localName(), QString("body"));
     QCOMPARE(elem.prefix(), QString("o"));
     QCOMPARE(elem.namespaceURI(), KoXmlNS_office());
 
     KoXmlNode n = elem.firstChild();
-    for (; !n.isNull() ; n = n.nextSibling()) {
+    for (; !n.isNull(); n = n.nextSibling()) {
         if (!n.isElement())
             continue;
         KoXmlElement e = n.toElement();
-        //debugElemNS( e );
+        // debugElemNS( e );
         QCOMPARE(e.tagName(), QString("p"));
         QCOMPARE(e.localName(), QString("p"));
         QVERIFY(e.prefix().isEmpty());
         QCOMPARE(e.namespaceURI(), KoXmlNS_text());
     }
 }
-
 
 void KoDomTest::testKoDom()
 {
@@ -99,7 +99,8 @@ void KoDomTest::testKoDom()
 
     int count = 0;
     KoXmlElement elem;
-    forEachElement(elem, body) {
+    forEachElement(elem, body)
+    {
         QCOMPARE(elem.localName(), QString("p"));
         QCOMPARE(elem.namespaceURI(), KoXmlNS_text());
         ++count;
@@ -112,6 +113,5 @@ void KoDomTest::testKoDom()
     // qDebug( "%s", qPrintable( styleName ) );
     QCOMPARE(styleName, QString("L1"));
 }
-
 
 QTEST_MAIN(KoDomTest)

@@ -22,9 +22,9 @@
 #ifndef KPRSHAPEANIMATION_H
 #define KPRSHAPEANIMATION_H
 
-#include <QParallelAnimationGroup>
 #include "KPrAnimationData.h"
 #include <QPair>
+#include <QParallelAnimationGroup>
 
 #include "stage_export.h"
 
@@ -41,25 +41,11 @@ class STAGE_EXPORT KPrShapeAnimation : public QParallelAnimationGroup, KPrAnimat
 {
     Q_OBJECT
 public:
-
     /// Node Type (Trigger Event of the animation)
-    enum NodeType {
-        OnClick,
-        AfterPrevious,
-        WithPrevious
-    };
+    enum NodeType { OnClick, AfterPrevious, WithPrevious };
 
     /// Animation class
-    enum PresetClass {
-        None,
-        Entrance,
-        Exit,
-        Emphasis,
-        Custom,
-        MotionPath,
-        OleAction,
-        MediaCall
-    };
+    enum PresetClass { None, Entrance, Exit, Emphasis, Custom, MotionPath, OleAction, MediaCall };
 
     KPrShapeAnimation(KoShape *shape, QTextBlockUserData *textBlockData);
     ~KPrShapeAnimation() override;
@@ -77,15 +63,15 @@ public:
     /**
      * Read the value from the first KPrAnimationBase object
      */
-    //QPair<KoShape *, KoTextBlockData *> animationShape() const;
+    // QPair<KoShape *, KoTextBlockData *> animationShape() const;
 
     /**
-      * Return the begin and end time of the animation as a QPair
-      */
+     * Return the begin and end time of the animation as a QPair
+     */
     virtual QPair<int, int> timeRange() const;
     /**
-      * Return global duration of the shape animation
-      */
+     * Return global duration of the shape animation
+     */
     virtual int globalDuration() const;
 
     /**

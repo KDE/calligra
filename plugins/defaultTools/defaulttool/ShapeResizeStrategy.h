@@ -7,12 +7,12 @@
 #ifndef SHAPERESIZESTRATEGY_H
 #define SHAPERESIZESTRATEGY_H
 
-#include <KoInteractionStrategy.h>
 #include <KoFlake.h>
+#include <KoInteractionStrategy.h>
 
-#include <QPointF>
 #include <QList>
 #include <QMap>
+#include <QPointF>
 #include <QTransform>
 
 class KoToolBase;
@@ -35,12 +35,13 @@ public:
     ~ShapeResizeStrategy() override;
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
-    KUndo2Command* createCommand() override;
+    KUndo2Command *createCommand() override;
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
-    void paint( QPainter &painter, const KoViewConverter &converter) override;
-    void handleCustomEvent( KoPointerEvent * event ) override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void handleCustomEvent(KoPointerEvent *event) override;
+
 private:
-    void resizeBy( const QPointF &center, qreal zoomX, qreal zoomY );
+    void resizeBy(const QPointF &center, qreal zoomX, qreal zoomY);
 
     QPointF m_start;
     QVector<QPointF> m_startPositions;
@@ -53,9 +54,8 @@ private:
     QVector<QTransform> m_oldTransforms;
     QVector<QTransform> m_transformations;
     QPointF m_lastScale;
-    QList<KoShape*> m_selectedShapes;
-    QMap<KoShape*, ChartResizeStrategy*> m_chartShapes;
+    QList<KoShape *> m_selectedShapes;
+    QMap<KoShape *, ChartResizeStrategy *> m_chartShapes;
 };
 
 #endif
-

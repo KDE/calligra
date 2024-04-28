@@ -62,7 +62,7 @@ bool FrameIterator::isValid() const
     return m_frame;
 }
 
-bool FrameIterator::operator ==(const FrameIterator &other) const
+bool FrameIterator::operator==(const FrameIterator &other) const
 {
     if (it != other.it)
         return false;
@@ -83,10 +83,10 @@ bool FrameIterator::operator ==(const FrameIterator &other) const
 
 TableIterator *FrameIterator::tableIterator(QTextTable *table)
 {
-    if(table == 0) {
+    if (table == 0) {
         delete currentTableIterator;
         currentTableIterator = 0;
-    } else if(currentTableIterator == 0) {
+    } else if (currentTableIterator == 0) {
         currentTableIterator = new TableIterator(table);
         currentTableIterator->masterPageName = masterPageName;
     }
@@ -95,10 +95,10 @@ TableIterator *FrameIterator::tableIterator(QTextTable *table)
 
 FrameIterator *FrameIterator::subFrameIterator(QTextFrame *subFrame)
 {
-    if(subFrame == 0) {
+    if (subFrame == 0) {
         delete currentSubFrameIterator;
         currentSubFrameIterator = 0;
-    } else if(currentSubFrameIterator == 0) {
+    } else if (currentSubFrameIterator == 0) {
         currentSubFrameIterator = new FrameIterator(subFrame);
         currentSubFrameIterator->masterPageName = masterPageName;
     }

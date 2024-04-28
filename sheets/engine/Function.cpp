@@ -16,11 +16,11 @@ public:
     FunctionPtr ptr;
     int paramMin, paramMax;
     bool acceptArray;
-    bool ne;   // need FunctionExtra* when called ?
+    bool ne; // need FunctionExtra* when called ?
 };
 
-Function::Function(const QString& name, FunctionPtr ptr)
-        : d(new Private)
+Function::Function(const QString &name, FunctionPtr ptr)
+    : d(new Private)
 {
     d->name = name;
     d->ptr = ptr;
@@ -59,11 +59,14 @@ void Function::setParamCount(int min, int max)
 bool Function::paramCountOkay(int count)
 {
     // less than needed
-    if (count < d->paramMin) return false;
+    if (count < d->paramMin)
+        return false;
     // no upper limit
-    if (d->paramMax == -1) return true;
+    if (d->paramMax == -1)
+        return true;
     // more than needed
-    if (count > d->paramMax) return false;
+    if (count > d->paramMax)
+        return false;
     // okay otherwise
     return true;
 }
@@ -99,7 +102,8 @@ Value Function::exec(valVector args, ValueCalc *calc, FuncExtra *extra)
                 mustExpandArray = true;
         }
 
-    if (!d->ptr) return Value::errorVALUE();
+    if (!d->ptr)
+        return Value::errorVALUE();
 
     // perform the actual array expansion if need be
 
@@ -109,10 +113,14 @@ Value Function::exec(valVector args, ValueCalc *calc, FuncExtra *extra)
         int cols = 0;
         for (int i = 0; i < args.count(); ++i) {
             int x = 1;
-            if (extra) x = extra->ranges[i].rows();
-            if (x > rows) rows = x;
-            if (extra) x = extra->ranges[i].columns();
-            if (x > cols) cols = x;
+            if (extra)
+                x = extra->ranges[i].rows();
+            if (x > rows)
+                rows = x;
+            if (extra)
+                x = extra->ranges[i].columns();
+            if (x > cols)
+                cols = x;
         }
         // allocate the resulting array
         Value res(Value::Array);
@@ -125,8 +133,7 @@ Value Function::exec(valVector args, ValueCalc *calc, FuncExtra *extra)
                 for (int i = 0; i < args.count(); ++i) {
                     int r = extra->ranges[i].rows();
                     int c = extra->ranges[i].columns();
-                    vals[i] = args[i].isArray() ?
-                              args[i].element(col % c, row % r) : args[i];
+                    vals[i] = args[i].isArray() ? args[i].element(col % c, row % r) : args[i];
 
                     // adjust the FuncExtra structure to refer to the correct cells
                     extra2.ranges[i].col1 += col;
@@ -144,7 +151,10 @@ Value Function::exec(valVector args, ValueCalc *calc, FuncExtra *extra)
 }
 
 FunctionCaller::FunctionCaller(FunctionPtr ptr, const valVector &args, ValueCalc *calc, FuncExtra *extra)
-    : m_ptr(ptr), m_args(args), m_calc(calc), m_extra(extra)
+    : m_ptr(ptr)
+    , m_args(args)
+    , m_calc(calc)
+    , m_extra(extra)
 {
 }
 

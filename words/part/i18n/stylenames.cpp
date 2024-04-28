@@ -58,4 +58,3 @@ i18nc("Style name", "Blue Traditional");
 i18nc("Style name", "Gray Traditional");
 i18nc("Style name", "Blue Top and Bottom");
 i18nc("Style name", "Gray Top and Bottom");
-

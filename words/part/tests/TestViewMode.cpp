@@ -5,8 +5,8 @@
 */
 #include "TestViewMode.h"
 
-#include <KWPageManager.h>
 #include <KWPage.h>
+#include <KWPageManager.h>
 #include <KoZoomHandler.h>
 
 #include <kdebug.h>
@@ -33,7 +33,7 @@ void TestViewMode::testBasicConversion()
     QCOMPARE(viewMode.pageSpreadMode(), false);
     QCOMPARE(viewMode.contents(), QSizeF(0, 0));
 
-    pageManager.appendPage(); //one A4 page.
+    pageManager.appendPage(); // one A4 page.
     viewMode.pageSetupChanged();
     QCOMPARE(viewMode.pageTops().count(), 1);
     QCOMPARE(viewMode.pageSpreadMode(), false);
@@ -99,7 +99,7 @@ void TestViewMode::testClipRectForPageSpread()
 {
     KWPageManager pageManager;
 
-    //set up as a page spread;
+    // set up as a page spread;
     KoPageLayout pageLayout = pageManager.defaultPageStyle().pageLayout();
     pageLayout.leftMargin = -1;
     pageLayout.rightMargin = -1;
@@ -161,7 +161,7 @@ void TestViewMode::testPageSetupChanged()
 {
     KWPageManager pageManager;
 
-    //set up as a page spread;
+    // set up as a page spread;
     KoPageLayout pageLayout = pageManager.defaultPageStyle().pageLayout();
     pageLayout.leftMargin = -1;
     pageLayout.rightMargin = -1;

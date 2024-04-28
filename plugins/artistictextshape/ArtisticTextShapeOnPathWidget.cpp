@@ -5,8 +5,8 @@
  */
 
 #include "ArtisticTextShapeOnPathWidget.h"
-#include "ui_ArtisticTextShapeOnPathWidget.h"
 #include "ArtisticTextTool.h"
+#include "ui_ArtisticTextShapeOnPathWidget.h"
 #include <QAction>
 
 ArtisticTextShapeOnPathWidget::ArtisticTextShapeOnPathWidget(ArtisticTextTool *tool, QWidget *parent)
@@ -28,7 +28,7 @@ ArtisticTextShapeOnPathWidget::~ArtisticTextShapeOnPathWidget()
 
 void ArtisticTextShapeOnPathWidget::updateWidget()
 {
-    ArtisticTextToolSelection *selection = dynamic_cast<ArtisticTextToolSelection*>(m_textTool->selection());
+    ArtisticTextToolSelection *selection = dynamic_cast<ArtisticTextToolSelection *>(m_textTool->selection());
     if (!selection)
         return;
 
@@ -37,7 +37,7 @@ void ArtisticTextShapeOnPathWidget::updateWidget()
         return;
 
     ui->startOffset->blockSignals(true);
-    ui->startOffset->setValue( static_cast<int>( currentText->startOffset() * 100.0 ) );
+    ui->startOffset->setValue(static_cast<int>(currentText->startOffset() * 100.0));
     ui->startOffset->setEnabled(currentText->isOnPath());
     ui->startOffset->blockSignals(false);
 }

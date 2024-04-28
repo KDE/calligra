@@ -7,11 +7,11 @@
 #include "KoPencilToolFactory.h"
 #include "KoPencilTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 
 KoPencilToolFactory::KoPencilToolFactory()
-        : KoToolFactoryBase("KoPencilTool")
+    : KoToolFactoryBase("KoPencilTool")
 {
     setToolTip(i18n("Freehand path"));
     setToolType("karbon");
@@ -24,8 +24,7 @@ KoPencilToolFactory::~KoPencilToolFactory()
 {
 }
 
-KoToolBase * KoPencilToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KoPencilToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KoPencilTool(canvas);
 }
-

@@ -9,48 +9,47 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "DataSet.h"
 #include "ChartDebug.h"
 
 // Qt
 #include <QAbstractItemModel>
-#include <QString>
-#include <QPen>
 #include <QColor>
 #include <QPainter>
+#include <QPen>
+#include <QString>
 
 // KF5
 #include <KLocalizedString>
 
 // KChart
-#include <KChartDataValueAttributes>
-#include <KChartPieAttributes>
-#include <KChartTextAttributes>
-#include <KChartRelativePosition>
-#include <KChartPosition>
-#include <KChartAbstractDiagram>
-#include <KChartMeasure>
 #include "KChartModel.h"
+#include <KChartAbstractDiagram>
+#include <KChartDataValueAttributes>
+#include <KChartMeasure>
+#include <KChartPieAttributes>
+#include <KChartPosition>
+#include <KChartRelativePosition>
+#include <KChartTextAttributes>
 
 // KoChart
 #include "Axis.h"
+#include "OdfLoadingHelper.h"
 #include "PlotArea.h"
 #include "Surface.h"
-#include "OdfLoadingHelper.h"
 
 // Calligra
-#include <KoXmlNS.h>
-#include <KoOdfGraphicStyles.h>
-#include <KoStyleStack.h>
-#include <KoXmlReader.h>
-#include <KoShapeLoadingContext.h>
-#include <KoShapeSavingContext.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfWorkaround.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
+#include <KoOdfGraphicStyles.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfWorkaround.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoStyleStack.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
 using namespace KoChart;
@@ -59,48 +58,44 @@ const int numDefaultMarkerTypes = 15;
 
 // These are the values that are defined for chart:symbol-name
 // Ref: ODF 1.2 20.54 chart:symbol-name, page 716
-const QByteArray symbolNames[] = {
-    "square",
-    "diamond",
-    "arrow-down",
-    "arrow-up",
-    "arrow-right",
-    "arrow-left",
-    "bow-tie",
-    "hourglass",
-    "circle",
-    "star",
-    "x",
-    "plus",
-    "asterisk",
-    "horizontal-bar",
-    "vertical-bar"
-};
+const QByteArray symbolNames[] = {"square",
+                                  "diamond",
+                                  "arrow-down",
+                                  "arrow-up",
+                                  "arrow-right",
+                                  "arrow-left",
+                                  "bow-tie",
+                                  "hourglass",
+                                  "circle",
+                                  "star",
+                                  "x",
+                                  "plus",
+                                  "asterisk",
+                                  "horizontal-bar",
+                                  "vertical-bar"};
 
-const KChart::MarkerAttributes::MarkerStyle defaultMarkerTypes[]= {
-    KChart::MarkerAttributes::MarkerSquare,     // 0
-    KChart::MarkerAttributes::MarkerDiamond,    // 1
-    KChart::MarkerAttributes::MarkerArrowDown,  // 2
-    KChart::MarkerAttributes::MarkerArrowUp,    // 3
-    KChart::MarkerAttributes::MarkerArrowRight, // 4
-    KChart::MarkerAttributes::MarkerArrowLeft,  // 5
-    KChart::MarkerAttributes::MarkerBowTie,     // 6
-    KChart::MarkerAttributes::MarkerHourGlass,  // 7
-    KChart::MarkerAttributes::MarkerCircle,     // 8
-    KChart::MarkerAttributes::MarkerStar,       // 9
-    KChart::MarkerAttributes::MarkerX,          // 10
-    KChart::MarkerAttributes::MarkerCross,      // 11
-    KChart::MarkerAttributes::MarkerAsterisk,   // 12
-    KChart::MarkerAttributes::MarkerHorizontalBar,// 13
-    KChart::MarkerAttributes::MarkerVerticalBar, // 14
+const KChart::MarkerAttributes::MarkerStyle defaultMarkerTypes[] = {KChart::MarkerAttributes::MarkerSquare, // 0
+                                                                    KChart::MarkerAttributes::MarkerDiamond, // 1
+                                                                    KChart::MarkerAttributes::MarkerArrowDown, // 2
+                                                                    KChart::MarkerAttributes::MarkerArrowUp, // 3
+                                                                    KChart::MarkerAttributes::MarkerArrowRight, // 4
+                                                                    KChart::MarkerAttributes::MarkerArrowLeft, // 5
+                                                                    KChart::MarkerAttributes::MarkerBowTie, // 6
+                                                                    KChart::MarkerAttributes::MarkerHourGlass, // 7
+                                                                    KChart::MarkerAttributes::MarkerCircle, // 8
+                                                                    KChart::MarkerAttributes::MarkerStar, // 9
+                                                                    KChart::MarkerAttributes::MarkerX, // 10
+                                                                    KChart::MarkerAttributes::MarkerCross, // 11
+                                                                    KChart::MarkerAttributes::MarkerAsterisk, // 12
+                                                                    KChart::MarkerAttributes::MarkerHorizontalBar, // 13
+                                                                    KChart::MarkerAttributes::MarkerVerticalBar, // 14
 
-    // Not used:
-    KChart::MarkerAttributes::MarkerRing,
-    KChart::MarkerAttributes::MarkerFastCross,
-    KChart::MarkerAttributes::Marker1Pixel,
-    KChart::MarkerAttributes::Marker4Pixels,
-    KChart::MarkerAttributes::NoMarker
-};
+                                                                    // Not used:
+                                                                    KChart::MarkerAttributes::MarkerRing,
+                                                                    KChart::MarkerAttributes::MarkerFastCross,
+                                                                    KChart::MarkerAttributes::Marker1Pixel,
+                                                                    KChart::MarkerAttributes::Marker4Pixels,
+                                                                    KChart::MarkerAttributes::NoMarker};
 
 static KChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style);
 
@@ -109,23 +104,40 @@ static KChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style);
 class MarkerPainterDummyDiagram : public KChart::AbstractDiagram
 {
 public:
-    MarkerPainterDummyDiagram() {}
-    void doPaintMarker( QPainter* painter,
-                        const KChart::MarkerAttributes& markerAttributes,
-                        const QBrush& brush, const QPen& pen,
-                        const QPointF& point, const QSizeF& size );
+    MarkerPainterDummyDiagram()
+    {
+    }
+    void doPaintMarker(QPainter *painter,
+                       const KChart::MarkerAttributes &markerAttributes,
+                       const QBrush &brush,
+                       const QPen &pen,
+                       const QPointF &point,
+                       const QSizeF &size);
+
 public: // abstract KChart::AbstractDiagram API
-    void paint ( KChart::PaintContext* /*paintContext*/ ) override {}
-    void resize ( const QSizeF& /*area*/ ) override {}
+    void paint(KChart::PaintContext * /*paintContext*/) override
+    {
+    }
+    void resize(const QSizeF & /*area*/) override
+    {
+    }
+
 protected: // abstract KChart::AbstractDiagram API
-    const QPair<QPointF, QPointF> calculateDataBoundaries() const override { return QPair<QPointF, QPointF>(); }
+    const QPair<QPointF, QPointF> calculateDataBoundaries() const override
+    {
+        return QPair<QPointF, QPointF>();
+    }
 };
 
-void MarkerPainterDummyDiagram::doPaintMarker(QPainter* painter, const KChart::MarkerAttributes& markerAttributes, const QBrush& brush, const QPen& pen, const QPointF& point, const QSizeF& size)
+void MarkerPainterDummyDiagram::doPaintMarker(QPainter *painter,
+                                              const KChart::MarkerAttributes &markerAttributes,
+                                              const QBrush &brush,
+                                              const QPen &pen,
+                                              const QPointF &point,
+                                              const QSizeF &size)
 {
     paintMarker(painter, markerAttributes, brush, pen, point, size);
 }
-
 
 class DataSet::Private
 {
@@ -133,12 +145,12 @@ public:
     Private(DataSet *parent, int dataSetNr);
     ~Private();
 
-    void         updateSize();
-    bool         hasOwnChartType() const;
-    ChartType    effectiveChartType() const;
-    bool         isValidDataPoint(const QPoint &point) const;
-    QVariant     data(const CellRegion &region, int index, int role) const;
-    QString      formatData(const CellRegion &region, int index, int role) const;
+    void updateSize();
+    bool hasOwnChartType() const;
+    ChartType effectiveChartType() const;
+    bool isValidDataPoint(const QPoint &point) const;
+    QVariant data(const CellRegion &region, int index, int role) const;
+    QString formatData(const CellRegion &region, int index, int role) const;
 
     QBrush defaultBrush() const;
     QBrush defaultBrush(int section) const;
@@ -172,10 +184,10 @@ public:
     void dataChanged(KChartModel::DataRole role, const QRect &rect) const;
     void setAttributesAccordingToType();
 
-    DataSet      *parent;
+    DataSet *parent;
 
-    ChartType     chartType;
-    ChartSubtype  chartSubType;
+    ChartType chartType;
+    ChartSubtype chartSubType;
 
     Axis *attachedAxis;
     QString axisName;
@@ -216,9 +228,9 @@ public:
     // The different CellRegions for a dataset
     // Note: These are all 1-dimensional, i.e. vectors.
     CellRegion labelDataRegion; // one cell that holds the label
-    CellRegion yDataRegion;     // normal y values
-    CellRegion xDataRegion;     // x values -- only for scatter & bubble charts
-    CellRegion customDataRegion;// used for bubble width in bubble charts
+    CellRegion yDataRegion; // normal y values
+    CellRegion xDataRegion; // x values -- only for scatter & bubble charts
+    CellRegion customDataRegion; // used for bubble width in bubble charts
     // FIXME: Remove category region from DataSet - this is not the place
     // it belongs to.
     CellRegion categoryDataRegion; // x labels -- same for all datasets
@@ -239,32 +251,32 @@ public:
     KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat;
 };
 
-DataSet::Private::Private(DataSet *parent, int dataSetNr) :
-    parent(parent),
-    chartType(LastChartType),
-    chartSubType(NoChartSubtype),
-    attachedAxis(0),
-    showMeanValue(false),
-    showLowerErrorIndicator(false),
-    showUpperErrorIndicator(false),
-    errorPercentage(0.0),
-    errorMargin(0.0),
-    lowerErrorLimit(0.0),
-    upperErrorLimit(0.0),
-    penIsSet(false),
-    brushIsSet(false),
-    pen(QPen(Qt::black)),
-    brush(QColor(Qt::white)),
-    dataValueAttributes(defaultDataValueAttributes()),
-    num(dataSetNr),
-    kdChartModel(0),
-    size(0),
-    defaultLabel(i18n("Series %1", dataSetNr + 1)),
-    symbolID(0),
-    odfSymbolType(AutomaticSymbol),
-    markersUsed(false),
-    loadedDimensions(0),
-    numericStyleFormat(0)
+DataSet::Private::Private(DataSet *parent, int dataSetNr)
+    : parent(parent)
+    , chartType(LastChartType)
+    , chartSubType(NoChartSubtype)
+    , attachedAxis(0)
+    , showMeanValue(false)
+    , showLowerErrorIndicator(false)
+    , showUpperErrorIndicator(false)
+    , errorPercentage(0.0)
+    , errorMargin(0.0)
+    , lowerErrorLimit(0.0)
+    , upperErrorLimit(0.0)
+    , penIsSet(false)
+    , brushIsSet(false)
+    , pen(QPen(Qt::black))
+    , brush(QColor(Qt::white))
+    , dataValueAttributes(defaultDataValueAttributes())
+    , num(dataSetNr)
+    , kdChartModel(0)
+    , size(0)
+    , defaultLabel(i18n("Series %1", dataSetNr + 1))
+    , symbolID(0)
+    , odfSymbolType(AutomaticSymbol)
+    , markersUsed(false)
+    , loadedDimensions(0)
+    , numericStyleFormat(0)
 {
 }
 
@@ -300,15 +312,13 @@ KChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes() const
     attr.setTextAttributes(textAttr);
     // Set positive value position
     KChart::RelativePosition positivePosition = attr.positivePosition();
-    if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
+    if (chartType == KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
         positivePosition.setAlignment(Qt::AlignCenter);
         positivePosition.setReferencePosition(KChartEnums::PositionCenter);
-    }
-    else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
+    } else if (chartType == KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
         positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
         positivePosition.setReferencePosition(KChartEnums::PositionNorth);
-    }
-    else {
+    } else {
         positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
         positivePosition.setReferencePosition(KChartEnums::PositionNorthWest);
     }
@@ -318,15 +328,13 @@ KChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes() const
 
     // Set negative value position
     KChart::RelativePosition negativePosition = attr.negativePosition();
-    if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
+    if (chartType == KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
         negativePosition.setAlignment(Qt::AlignCenter);
         negativePosition.setReferencePosition(KChartEnums::PositionCenter);
-    }
-    else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
+    } else if (chartType == KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
         negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
         negativePosition.setReferencePosition(KChartEnums::PositionSouth);
-    }
-    else {
+    } else {
         negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
         negativePosition.setReferencePosition(KChartEnums::PositionSouthWest);
     }
@@ -372,7 +380,6 @@ bool DataSet::Private::hasOwnChartType() const
 {
     return chartType != LastChartType;
 }
-
 
 /**
  * Returns the effective chart type of this data set, i.e.
@@ -425,12 +432,12 @@ QVariant DataSet::Private::data(const CellRegion &region, int index, int role) c
 
     // Remove, since it makes Calligra Sheets crash when inserting a chart for
     // a 1x1 cell region.
-    //Q_ASSERT(validDataPoint);
+    // Q_ASSERT(validDataPoint);
     if (!validDataPoint)
         return QVariant();
 
     // The top-left point is (1,1). (0,y) or (x,0) refers to header data.
-    const bool verticalHeaderData   = dataPoint.x() == 0;
+    const bool verticalHeaderData = dataPoint.x() == 0;
     const bool horizontalHeaderData = dataPoint.y() == 0;
     const int row = dataPoint.y() - 1;
     const int col = dataPoint.x() - 1;
@@ -442,7 +449,7 @@ QVariant DataSet::Private::data(const CellRegion &region, int index, int role) c
         data = model->headerData(col, Qt::Horizontal, role);
     else {
         const QModelIndex &index = model->index(row, col);
-        //Q_ASSERT(index.isValid());
+        // Q_ASSERT(index.isValid());
         if (index.isValid())
             data = model->data(index, role);
     }
@@ -457,8 +464,8 @@ QString DataSet::Private::formatData(const CellRegion &region, int index, int ro
         // Don't use v.toString() else a double/float would lose precision
         // and something like "36.5207" would become "36.520660888888912".
         QTextStream ts(&s);
-        //ts.setRealNumberNotation(QTextStream::FixedNotation);
-        //ts.setRealNumberPrecision();
+        // ts.setRealNumberNotation(QTextStream::FixedNotation);
+        // ts.setRealNumberPrecision();
         ts << v.toDouble();
     } else {
         s = v.toString();
@@ -494,8 +501,7 @@ QPen DataSet::Private::defaultPen() const
 {
     QPen pen(Qt::black);
     ChartType chartType = effectiveChartType();
-    if (chartType == LineChartType ||
-         chartType == ScatterChartType) {
+    if (chartType == LineChartType || chartType == ScatterChartType) {
         if (penIsSet) {
             pen = pen;
         } else {
@@ -504,7 +510,6 @@ QPen DataSet::Private::defaultPen() const
     }
     return pen;
 }
-
 
 DataSet::DataSet(int dataSetNr)
     : d(new Private(this, dataSetNr))
@@ -519,7 +524,6 @@ DataSet::~DataSet()
 
     delete d;
 }
-
 
 ChartType DataSet::chartType() const
 {
@@ -590,15 +594,13 @@ void DataSet::Private::setAttributesAccordingToType()
 {
     KChart::DataValueAttributes attr = dataValueAttributes;
     KChart::RelativePosition positivePosition = attr.positivePosition();
-    if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
+    if (chartType == KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
         positivePosition.setAlignment(Qt::AlignCenter);
         positivePosition.setReferencePosition(KChartEnums::PositionCenter);
-    }
-    else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
+    } else if (chartType == KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
         positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
         positivePosition.setReferencePosition(KChartEnums::PositionNorth);
-    }
-    else {
+    } else {
         positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
         positivePosition.setReferencePosition(KChartEnums::PositionNorthWest);
     }
@@ -608,15 +610,13 @@ void DataSet::Private::setAttributesAccordingToType()
 
     // Set negative value position
     KChart::RelativePosition negativePosition = attr.negativePosition();
-    if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
+    if (chartType == KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
         negativePosition.setAlignment(Qt::AlignCenter);
         negativePosition.setReferencePosition(KChartEnums::PositionCenter);
-    }
-    else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
+    } else if (chartType == KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
         negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
         negativePosition.setReferencePosition(KChartEnums::PositionSouth);
-    }
-    else {
+    } else {
         negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
         negativePosition.setReferencePosition(KChartEnums::PositionSouthWest);
     }
@@ -629,15 +629,13 @@ void DataSet::Private::setAttributesAccordingToType()
         Q_ASSERT(sectionsDataValueAttributes.contains(i));
         KChart::DataValueAttributes attr = sectionsDataValueAttributes[i];
         KChart::RelativePosition positivePosition = attr.positivePosition();
-        if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
+        if (chartType == KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
             positivePosition.setAlignment(Qt::AlignCenter);
             positivePosition.setReferencePosition(KChartEnums::PositionCenter);
-        }
-        else if (chartType ==  KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
+        } else if (chartType == KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
             positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
             positivePosition.setReferencePosition(KChartEnums::PositionNorth);
-        }
-        else {
+        } else {
             positivePosition.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
             positivePosition.setReferencePosition(KChartEnums::PositionNorthWest);
         }
@@ -647,15 +645,13 @@ void DataSet::Private::setAttributesAccordingToType()
 
         // Set negative value position
         KChart::RelativePosition negativePosition = attr.negativePosition();
-        if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
+        if (chartType == KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
             negativePosition.setAlignment(Qt::AlignCenter);
             negativePosition.setReferencePosition(KChartEnums::PositionCenter);
-        }
-        else if (chartType == KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
+        } else if (chartType == KoChart::BarChartType && chartSubType == KoChart::NormalChartSubtype) {
             negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
             negativePosition.setReferencePosition(KChartEnums::PositionSouth);
-        }
-        else {
+        } else {
             negativePosition.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
             negativePosition.setReferencePosition(KChartEnums::PositionSouthWest);
         }
@@ -666,13 +662,12 @@ void DataSet::Private::setAttributesAccordingToType()
     }
 }
 
-
 void DataSet::setChartType(ChartType type)
 {
     if (type == d->chartType)
         return;
 
-    Axis  *axis = d->attachedAxis;
+    Axis *axis = d->attachedAxis;
     if (axis)
         axis->detachDataSet(this);
 
@@ -683,16 +678,16 @@ void DataSet::setChartType(ChartType type)
         axis->attachDataSet(this);
 
     switch (type) {
-        case LineChartType:
-        case AreaChartType:
-        case ScatterChartType:
-        case RadarChartType:
-        case FilledRadarChartType:
-            d->markersUsed = true;
-            break;
-        default:
-            d->markersUsed = false;
-            break;
+    case LineChartType:
+    case AreaChartType:
+    case ScatterChartType:
+    case RadarChartType:
+    case FilledRadarChartType:
+        d->markersUsed = true;
+        break;
+    default:
+        d->markersUsed = false;
+        break;
     }
 }
 
@@ -709,7 +704,6 @@ void DataSet::setChartSubType(ChartSubtype subType)
 
     axis->attachDataSet(this);
 }
-
 
 void DataSet::setAttachedAxis(Axis *axis)
 {
@@ -734,12 +728,12 @@ OdfMarkerStyle DataSet::markerStyle() const
 
 QIcon DataSet::markerIcon(OdfMarkerStyle markerStyle)
 {
-    QPixmap markerPixmap(16,16);
-    markerPixmap.fill(QColor(255,255,255,0));
+    QPixmap markerPixmap(16, 16);
+    markerPixmap.fill(QColor(255, 255, 255, 0));
     QPainter painter(&markerPixmap);
     KChart::MarkerAttributes matt;
     matt.setMarkerStyle(odf2kdMarker(markerStyle));
-    MarkerPainterDummyDiagram().doPaintMarker(&painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
+    MarkerPainterDummyDiagram().doPaintMarker(&painter, matt, brush(), pen(), QPointF(7, 7), QSizeF(12, 12));
     QIcon markerIcon = QIcon(markerPixmap);
     return markerIcon;
 }
@@ -774,7 +768,7 @@ QBrush DataSet::brush(int section) const
 
 KChart::PieAttributes DataSet::pieAttributes(int section) const
 {
-    if(d->sectionsPieAttributes.contains(section))
+    if (d->sectionsPieAttributes.contains(section))
         return d->sectionsPieAttributes[section];
     return pieAttributes();
 }
@@ -787,8 +781,8 @@ qreal DataSet::Private::maxBubbleSize() const
     // cashing
     qreal max = 0.0;
     Q_ASSERT(kdChartModel);
-    QList<DataSet*> dataSets = kdChartModel->dataSets();
-    foreach(DataSet *dataSet, dataSets)
+    QList<DataSet *> dataSets = kdChartModel->dataSets();
+    foreach (DataSet *dataSet, dataSets)
         for (int i = 0; i < dataSet->size(); i++)
             max = qMax(max, dataSet->customData(i).toReal());
     return max;
@@ -812,16 +806,14 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
     case BarChartType:
     case CircleChartType:
     case RingChartType:
-    case StockChartType:
-    {
+    case StockChartType: {
         Q_ASSERT(attr.isVisible());
         ma.setMarkerStyle(KChart::MarkerAttributes::MarkerSquare);
         ma.setMarkerSize(QSize(10, 10));
         ma.setVisible(true); // For legend
         break;
     }
-    case BubbleChartType:
-    {
+    case BubbleChartType: {
         Q_ASSERT(attachedAxis());
         Q_ASSERT(attachedAxis()->plotArea());
         ma.setMarkerStyle(KChart::MarkerAttributes::MarkerCircle);
@@ -844,19 +836,19 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
     default:
         Q_ASSERT(attr.isVisible());
         switch (d->odfSymbolType) {
-            case NoSymbol:
-                ma.setVisible(false);
-                break;
-            case ImageSymbol: // Not supported
-            case AutomaticSymbol:
-                ma.setMarkerStyle(odf2kdMarker((OdfMarkerStyle)(d->num % numDefaultMarkerTypes)));
-                ma.setMarkerSize(QSize(10, 10));
-                ma.setVisible(true);
-                [[fallthrough]];
-            case NamedSymbol:
-                ma.setMarkerStyle(odf2kdMarker((OdfMarkerStyle)d->symbolID));
-                ma.setVisible(true);
-                break;
+        case NoSymbol:
+            ma.setVisible(false);
+            break;
+        case ImageSymbol: // Not supported
+        case AutomaticSymbol:
+            ma.setMarkerStyle(odf2kdMarker((OdfMarkerStyle)(d->num % numDefaultMarkerTypes)));
+            ma.setMarkerSize(QSize(10, 10));
+            ma.setVisible(true);
+            [[fallthrough]];
+        case NamedSymbol:
+            ma.setMarkerStyle(odf2kdMarker((OdfMarkerStyle)d->symbolID));
+            ma.setVisible(true);
+            break;
         }
         break;
     }
@@ -869,7 +861,8 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
     ValueLabelType type = valueLabelType(section);
     if (type.category) {
         QString s = categoryData(section, Qt::DisplayRole).toString().trimmed();
-        if (!s.isEmpty()) dataLabel += s + QLatin1Char(' ');
+        if (!s.isEmpty())
+            dataLabel += s + QLatin1Char(' ');
     }
     if (type.number) {
         QString s;
@@ -878,7 +871,8 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
         } else {
             s = d->formatData(d->yDataRegion, section, Qt::DisplayRole);
         }
-        if (!s.isEmpty()) dataLabel += s + QLatin1Char(' ');
+        if (!s.isEmpty())
+            dataLabel += s + QLatin1Char(' ');
     }
     if (type.percentage) {
         bool ok;
@@ -887,7 +881,7 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
             value = customData(section, Qt::EditRole).toDouble(&ok);
             if (ok) {
                 qreal sum = 0.0;
-                for(int i = 0; i < d->customDataRegion.cellCount(); ++i) {
+                for (int i = 0; i < d->customDataRegion.cellCount(); ++i) {
                     sum += customData(i, Qt::EditRole).toDouble();
                 }
                 if (sum == 0.0)
@@ -899,7 +893,7 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
             value = yData(section, Qt::EditRole).toDouble(&ok);
             if (ok) {
                 qreal sum = 0.0;
-                for(int i = 0; i < d->yDataRegion.cellCount(); ++i) {
+                for (int i = 0; i < d->yDataRegion.cellCount(); ++i) {
                     sum += yData(i, Qt::EditRole).toDouble();
                 }
                 if (sum == 0.0)
@@ -960,16 +954,15 @@ void DataSet::setPen(const QPen &pen)
     d->penIsSet = true;
     if (d->kdChartModel)
         d->kdChartModel->dataSetChanged(this);
-//     KChart::MarkerAttributes ma(d->dataValueAttributes.markerAttributes());
-//     ma.setPen(pen);
-//     d->dataValueAttributes.setMarkerAttributes(ma);
-//     for (QMap< int, KChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
-//           it != d->sectionsDataValueAttributes.end(); ++it){
-//         KChart::MarkerAttributes mattr(it->markerAttributes());
-//         mattr.setMarkerColor(pen.color());
-//         it->setMarkerAttributes(mattr);
-//     }
-
+    //     KChart::MarkerAttributes ma(d->dataValueAttributes.markerAttributes());
+    //     ma.setPen(pen);
+    //     d->dataValueAttributes.setMarkerAttributes(ma);
+    //     for (QMap< int, KChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
+    //           it != d->sectionsDataValueAttributes.end(); ++it){
+    //         KChart::MarkerAttributes mattr(it->markerAttributes());
+    //         mattr.setMarkerColor(pen.color());
+    //         it->setMarkerAttributes(mattr);
+    //     }
 }
 
 void DataSet::setBrush(const QBrush &brush)
@@ -978,21 +971,21 @@ void DataSet::setBrush(const QBrush &brush)
     d->brushIsSet = true;
     if (d->kdChartModel)
         d->kdChartModel->dataSetChanged(this);
-//     KChart::MarkerAttributes ma(d->dataValueAttributes.markerAttributes());
-//     ma.setMarkerColor(brush.color());
-//     d->dataValueAttributes.setMarkerAttributes(ma);
-//     for (QMap< int, KChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
-//           it != d->sectionsDataValueAttributes.end(); ++it){
-//         KChart::MarkerAttributes mattr(it->markerAttributes());
-//         mattr.setMarkerColor(brush.color());
-//         it->setMarkerAttributes(mattr);
-//     }
+    //     KChart::MarkerAttributes ma(d->dataValueAttributes.markerAttributes());
+    //     ma.setMarkerColor(brush.color());
+    //     d->dataValueAttributes.setMarkerAttributes(ma);
+    //     for (QMap< int, KChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
+    //           it != d->sectionsDataValueAttributes.end(); ++it){
+    //         KChart::MarkerAttributes mattr(it->markerAttributes());
+    //         mattr.setMarkerColor(brush.color());
+    //         it->setMarkerAttributes(mattr);
+    //     }
 }
 
 void DataSet::setPieExplodeFactor(int factor)
 {
     d->pieAttributes.setExplodeFactor((qreal)factor / (qreal)100);
-    if(d->kdChartModel)
+    if (d->kdChartModel)
         d->kdChartModel->dataSetChanged(this);
 }
 
@@ -1006,9 +999,9 @@ void DataSet::setPen(int section, const QPen &pen)
     if (d->kdChartModel)
         d->kdChartModel->dataSetChanged(this, KChartModel::PenDataRole, section);
     d->insertDataValueAttributeSectionIfNecessary(section);
-//     KChart::MarkerAttributes mas(d->sectionsDataValueAttributes[section].markerAttributes());
-//     mas.setPen(pen);
-//     d->sectionsDataValueAttributes[section].setMarkerAttributes(mas);
+    //     KChart::MarkerAttributes mas(d->sectionsDataValueAttributes[section].markerAttributes());
+    //     mas.setPen(pen);
+    //     d->sectionsDataValueAttributes[section].setMarkerAttributes(mas);
 }
 
 void DataSet::setBrush(int section, const QBrush &brush)
@@ -1021,9 +1014,9 @@ void DataSet::setBrush(int section, const QBrush &brush)
     if (d->kdChartModel)
         d->kdChartModel->dataSetChanged(this, KChartModel::BrushDataRole, section);
     d->insertDataValueAttributeSectionIfNecessary(section);
-//     KChart::MarkerAttributes mas(d->sectionsDataValueAttributes[section].markerAttributes());
-//     mas.setMarkerColor(brush.color());
-//     d->sectionsDataValueAttributes[section].setMarkerAttributes(mas);
+    //     KChart::MarkerAttributes mas(d->sectionsDataValueAttributes[section].markerAttributes());
+    //     mas.setMarkerColor(brush.color());
+    //     d->sectionsDataValueAttributes[section].setMarkerAttributes(mas);
 }
 
 void DataSet::setMarkerStyle(OdfMarkerStyle style)
@@ -1119,7 +1112,7 @@ QVariant DataSet::xData(int index, int role) const
     // ODF spec says bubble charts *must* have xdata, ydata and bubble width.
     // However LO allows for no xdata in which case it used data index (as we do here).
     QVariant data = d->data(d->xDataRegion, index, role);
-    if (data.isValid() && data.canConvert< double >() && data.convert(QVariant::Double) )
+    if (data.isValid() && data.canConvert<double>() && data.convert(QVariant::Double))
         return data;
     return QVariant(index + 1);
 }
@@ -1143,10 +1136,10 @@ QVariant DataSet::customData(int index, int role) const
 
 QVariant DataSet::categoryData(int index, int role) const
 {
-     // There's no cell that holds this category's data
-     // (i.e., the region is either too short or simply empty)
-//     if (!d->categoryDataRegion.hasPointAtIndex(index))
-//         return QString::number(index + 1);
+    // There's no cell that holds this category's data
+    // (i.e., the region is either too short or simply empty)
+    //     if (!d->categoryDataRegion.hasPointAtIndex(index))
+    //         return QString::number(index + 1);
 
     if (d->categoryDataRegion.rects().isEmpty()) {
         // There's no cell that holds this category's data
@@ -1232,7 +1225,6 @@ CellRegion DataSet::labelDataRegion() const
     return d->labelDataRegion;
 }
 
-
 void DataSet::setXDataRegion(const CellRegion &region)
 {
     d->xDataRegion = region;
@@ -1277,7 +1269,6 @@ void DataSet::setLabelDataRegion(const CellRegion &region)
     if (d->kdChartModel)
         d->kdChartModel->dataSetChanged(this);
 }
-
 
 int DataSet::size() const
 {
@@ -1344,11 +1335,9 @@ void DataSet::setValueLabelType(const ValueLabelType &type, int section /* = -1 
     d->valueLabelType[section] = type;
 
     // This is a reference, not a copy!
-    KChart::DataValueAttributes &attr = section >= 0 ?
-                                         d->sectionsDataValueAttributes[section] :
-                                         d->dataValueAttributes;
+    KChart::DataValueAttributes &attr = section >= 0 ? d->sectionsDataValueAttributes[section] : d->dataValueAttributes;
 
-    KChart::TextAttributes ta (attr.textAttributes());
+    KChart::TextAttributes ta(attr.textAttributes());
 
     ta.setVisible(!type.noLabel());
 
@@ -1375,8 +1364,13 @@ DataSet::ValueLabelType DataSet::valueLabelType(int section /* = -1 */) const
     return ValueLabelType();
 }
 
-bool loadBrushAndPen(KoStyleStack &styleStack, KoShapeLoadingContext &context,
-                     const KoXmlElement &n, QBrush& brush, bool& brushLoaded, QPen& pen, bool& penLoaded)
+bool loadBrushAndPen(KoStyleStack &styleStack,
+                     KoShapeLoadingContext &context,
+                     const KoXmlElement &n,
+                     QBrush &brush,
+                     bool &brushLoaded,
+                     QPen &pen,
+                     bool &penLoaded)
 {
     if (n.hasAttributeNS(KoXmlNS::chart, "style-name")) {
         KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
@@ -1407,10 +1401,10 @@ bool loadBrushAndPen(KoStyleStack &styleStack, KoShapeLoadingContext &context,
     }
 
 #ifndef NWORKAROUND_ODF_BUGS
-    if(! penLoaded) {
+    if (!penLoaded) {
         penLoaded = KoOdfWorkaround::fixMissingStroke(pen, n, context);
     }
-    if(! brushLoaded) {
+    if (!brushLoaded) {
         QColor fixedColor = KoOdfWorkaround::fixMissingFillColor(n, context);
         if (fixedColor.isValid()) {
             brush = fixedColor;
@@ -1422,22 +1416,22 @@ bool loadBrushAndPen(KoStyleStack &styleStack, KoShapeLoadingContext &context,
 }
 
 /**
-* The valueLabelType can be read from a few different places;
-*   - chart:data-label
-*   - chart:data-point
-*   - chart:series
-*   - chart:plot-area
-*
-* Since we somehow need to merge e.g. a global one defined at the plot-area
-* together with a local one defined in a series we need to make sure to
-* fetch + change only what is redefined + reapply.
-*
-* The question is if this is 100% the correct thing to do or if we
-* need more logic that e.g. differs between where the data-labels got
-* defined? It would make sense but there is no information about that
-* available and it seems OO.org/LO just save redundant information
-* here at least with pie-charts...
-*/
+ * The valueLabelType can be read from a few different places;
+ *   - chart:data-label
+ *   - chart:data-point
+ *   - chart:series
+ *   - chart:plot-area
+ *
+ * Since we somehow need to merge e.g. a global one defined at the plot-area
+ * together with a local one defined in a series we need to make sure to
+ * fetch + change only what is redefined + reapply.
+ *
+ * The question is if this is 100% the correct thing to do or if we
+ * need more logic that e.g. differs between where the data-labels got
+ * defined? It would make sense but there is no information about that
+ * available and it seems OO.org/LO just save redundant information
+ * here at least with pie-charts...
+ */
 void DataSet::Private::readValueLabelType(KoStyleStack &styleStack, int section /* = -1 */)
 {
     DataSet::ValueLabelType type = parent->valueLabelType(section);
@@ -1457,7 +1451,7 @@ void DataSet::Private::readValueLabelType(KoStyleStack &styleStack, int section 
 
     const QString symbol = styleStack.property(KoXmlNS::chart, "data-label-symbol");
     if (!symbol.isNull()) {
-        warnChartOdf<<"data-label-symbol not supported";
+        warnChartOdf << "data-label-symbol not supported";
         type.symbolIsLoaded = true;
         type.symbol = (symbol == "true");
     }
@@ -1465,8 +1459,7 @@ void DataSet::Private::readValueLabelType(KoStyleStack &styleStack, int section 
     parent->setValueLabelType(type, section);
 }
 
-bool DataSet::loadOdf(const KoXmlElement &n,
-                      KoShapeLoadingContext &context)
+bool DataSet::loadOdf(const KoXmlElement &n, KoShapeLoadingContext &context)
 {
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
     KoOdfStylesReader &stylesReader = odfLoadingContext.stylesReader();
@@ -1480,14 +1473,14 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         const QString dataStyleName = stylElement->attributeNS(KoXmlNS::style, "data-style-name", QString());
         if (!dataStyleName.isEmpty()) {
             if (stylesReader.dataFormats().contains(dataStyleName)) {
-                QPair<KoOdfNumberStyles::NumericStyleFormat, KoXmlElement*> dataStylePair = stylesReader.dataFormats()[dataStyleName];
+                QPair<KoOdfNumberStyles::NumericStyleFormat, KoXmlElement *> dataStylePair = stylesReader.dataFormats()[dataStyleName];
                 delete d->numericStyleFormat;
                 d->numericStyleFormat = new KoOdfNumberStyles::NumericStyleFormat(dataStylePair.first);
             }
         }
     }
 
-    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData(OdfLoadingHelperId);
+    OdfLoadingHelper *helper = (OdfLoadingHelper *)context.sharedData(OdfLoadingHelperId);
     // OOo assumes that if we use an internal model only, the columns are
     // interpreted as consecutive data series. Thus we can (and must) ignore
     // any chart:cell-range-address attribute associated with a series or
@@ -1539,15 +1532,14 @@ bool DataSet::loadOdf(const KoXmlElement &n,
     if ((scatterChart || bubbleChart) && n.hasChildNodes()) {
         int domainCount = 0;
         KoXmlNode cn = n.firstChild();
-        while (!cn.isNull()){
+        while (!cn.isNull()) {
             KoXmlElement elem = cn.toElement();
             const QString name = elem.tagName();
             if (name == "domain" && elem.hasAttributeNS(KoXmlNS::table, "cell-range-address") && !ignoreCellRanges) {
                 if ((domainCount == 0 && scatterChart) || (domainCount == 1 && bubbleChart)) {
                     const QString region = elem.attributeNS(KoXmlNS::table, "cell-range-address", QString());
                     setXDataRegion(CellRegion(helper->tableSource, region));
-                }
-                else {
+                } else {
                     const QString region = elem.attributeNS(KoXmlNS::table, "cell-range-address", QString());
                     setYDataRegion(CellRegion(helper->tableSource, region));
                 }
@@ -1566,8 +1558,7 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         const CellRegion region(helper->tableSource, regionString);
         if (bubbleChart) {
             setCustomDataRegion(region);
-        }
-        else {
+        } else {
             setYDataRegion(region);
         }
 
@@ -1605,11 +1596,9 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         if (name == "automatic") {
             d->odfSymbolType = AutomaticSymbol;
             d->symbolID = d->num % numDefaultMarkerTypes;
-        }
-        else if (name == "named-symbol") {
+        } else if (name == "named-symbol") {
             d->odfSymbolType = NamedSymbol;
             if (styleStack.hasProperty(KoXmlNS::chart, "symbol-name")) {
-
                 const QString type = styleStack.property(KoXmlNS::chart, "symbol-name");
                 if (type == "square")
                     d->symbolID = 0;
@@ -1648,16 +1637,17 @@ bool DataSet::loadOdf(const KoXmlElement &n,
             d->odfSymbolType = NoSymbol;
         } else if (name == "image") {
             // TODO: Not supported by KChart
-            warnChartOdf<<"symbol-type = image not supported";
+            warnChartOdf << "symbol-type = image not supported";
         } else {
-            errorChartOdf<<"Unknown symbol-type"<<name;
+            errorChartOdf << "Unknown symbol-type" << name;
         }
     }
 
     // load data points
     KoXmlElement m;
     int loadedDataPointCount = 0;
-    forEachElement (m, n) {
+    forEachElement(m, n)
+    {
         if (m.namespaceURI() != KoXmlNS::chart)
             continue;
         if (m.localName() != "data-point")
@@ -1671,14 +1661,14 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         bool brushLoaded = false;
         bool penLoaded = false;
         loadBrushAndPen(styleStack, context, m, brush, brushLoaded, pen, penLoaded);
-        if(penLoaded)
+        if (penLoaded)
             setPen(loadedDataPointCount, pen);
-        if(brushLoaded)
+        if (brushLoaded)
             setBrush(loadedDataPointCount, brush);
 
-        //load pie explode factor
+        // load pie explode factor
         styleStack.setTypeProperties("chart");
-        if(styleStack.hasProperty(KoXmlNS::chart, "pie-offset"))
+        if (styleStack.hasProperty(KoXmlNS::chart, "pie-offset"))
             setPieExplodeFactor(loadedDataPointCount, styleStack.property(KoXmlNS::chart, "pie-offset").toInt());
 
         d->readValueLabelType(styleStack, loadedDataPointCount);
@@ -1695,7 +1685,7 @@ bool DataSet::loadSeriesIntoDataset(const KoXmlElement &n, KoShapeLoadingContext
     styleStack.clear();
     odfLoadingContext.fillStyleStack(n, KoXmlNS::chart, "style-name", "chart");
 
-    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData(OdfLoadingHelperId);
+    OdfLoadingHelper *helper = (OdfLoadingHelper *)context.sharedData(OdfLoadingHelperId);
     // OOo assumes that if we use an internal model only, the columns are
     // interpreted as consecutive data series. Thus we can (and must) ignore
     // any chart:cell-range-address attribute associated with a series or
@@ -1705,9 +1695,9 @@ bool DataSet::loadSeriesIntoDataset(const KoXmlElement &n, KoShapeLoadingContext
     bool ignoreCellRanges = false;
     styleStack.setTypeProperties("chart");
 
-    if (n.hasChildNodes()){
+    if (n.hasChildNodes()) {
         KoXmlNode cn = n.firstChild();
-        while (!cn.isNull()){
+        while (!cn.isNull()) {
             KoXmlElement elem = cn.toElement();
             const QString name = elem.tagName();
             if (name == "domain" && elem.hasAttributeNS(KoXmlNS::table, "cell-range-address") && !ignoreCellRanges) {
@@ -1716,22 +1706,19 @@ bool DataSet::loadSeriesIntoDataset(const KoXmlElement &n, KoShapeLoadingContext
                     const QString region = elem.attributeNS(KoXmlNS::table, "cell-range-address", QString());
                     setXDataRegion(CellRegion(helper->tableSource, region));
                     ++d->loadedDimensions;
-                }
-                else if (d->loadedDimensions == 1) {
+                } else if (d->loadedDimensions == 1) {
                     const QString region = elem.attributeNS(KoXmlNS::table, "cell-range-address", QString());
                     // as long as there is not default table for missing data series the same region is used twice
                     // to ensure the diagram is displayed, even if not as expected from o office or ms office
                     setYDataRegion(CellRegion(helper->tableSource, region));
                     ++d->loadedDimensions;
-                }
-                else if (d->loadedDimensions == 2) {
+                } else if (d->loadedDimensions == 2) {
                     const QString region = elem.attributeNS(KoXmlNS::table, "cell-range-address", QString());
                     // as long as there is not default table for missing data series the same region is used twice
                     // to ensure the diagram is displayed, even if not as expected from o office or ms office
                     setCustomDataRegion(CellRegion(helper->tableSource, region));
                     ++d->loadedDimensions;
                 }
-
             }
             cn = cn.nextSibling();
         }
@@ -1743,14 +1730,12 @@ bool DataSet::loadSeriesIntoDataset(const KoXmlElement &n, KoShapeLoadingContext
         if (d->loadedDimensions == 0) {
             setYDataRegion(CellRegion(region));
             ++d->loadedDimensions;
-        }
-        else if (d->loadedDimensions == 1) {
+        } else if (d->loadedDimensions == 1) {
             // as long as there is not default table for missing data series the same region is used twice
             // to ensure the diagram is displayed, even if not as expected from o office or ms office
             setYDataRegion(CellRegion(region));
             ++d->loadedDimensions;
-        }
-        else if (d->loadedDimensions == 2) {
+        } else if (d->loadedDimensions == 2) {
             // As long as there is no default table for missing data
             // series the same region is used twice to ensure the
             // diagram is displayed, even if not as expected from open
@@ -1759,7 +1744,7 @@ bool DataSet::loadSeriesIntoDataset(const KoXmlElement &n, KoShapeLoadingContext
             ++d->loadedDimensions;
         }
     }
-    //store the cell address corresponding to the label of the correct data series
+    // store the cell address corresponding to the label of the correct data series
     if (d->loadedDimensions == 2 && n.hasAttributeNS(KoXmlNS::chart, "label-cell-address") && !ignoreCellRanges) {
         const QString region = n.attributeNS(KoXmlNS::chart, "label-cell-address", QString());
         setLabelDataRegion(CellRegion(helper->tableSource, region));
@@ -1780,7 +1765,7 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     KoGenStyle style(KoGenStyle::ChartAutoStyle, "chart");
 
     if (pieAttributes().explode()) {
-        const int pieExplode = (int)(pieAttributes().explodeFactor()*100);
+        const int pieExplode = (int)(pieAttributes().explodeFactor() * 100);
         style.addProperty("chart:pie-offset", pieExplode, KoGenStyle::ChartType);
     }
 
@@ -1797,49 +1782,79 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
         }
         style.addProperty("chart:data-label-text", type.category ? "true" : "false");
         // TODO Not supported, should we write back if loaded?
-//         if (type.symbolIsLoaded) {
-//             style.addProperty("chart:data-label-symbol", type.symbol ? "true" : "false");
-//         }
+        //         if (type.symbolIsLoaded) {
+        //             style.addProperty("chart:data-label-symbol", type.symbol ? "true" : "false");
+        //         }
     }
     if (d->markersUsed) {
         switch (d->odfSymbolType) {
-            case NoSymbol:
+        case NoSymbol:
+            break;
+        case NamedSymbol: {
+            QString symbolType = "named-symbol";
+            QString symbolName;
+            switch (d->symbolID) {
+            case MarkerSquare:
+                symbolName = "square";
                 break;
-            case NamedSymbol: {
-                QString symbolType = "named-symbol";
-                QString symbolName;
-                switch (d->symbolID) {
-                    case MarkerSquare: symbolName = "square"; break;
-                    case MarkerDiamond: symbolName = "diamond"; break;
-                    case MarkerArrowDown: symbolName = "arrow-down"; break;
-                    case MarkerArrowUp: symbolName = "arrow-up"; break;
-                    case MarkerArrowRight: symbolName = "arrow-right"; break;
-                    case MarkerArrowLeft: symbolName = "arrow-left"; break;
-                    case MarkerBowTie: symbolName = "bow-tie"; break;
-                    case MarkerHourGlass: symbolName = "hourglass"; break;
-                    case MarkerCircle: symbolName = "circle"; break;
-                    case MarkerStar: symbolName = "star"; break;
-                    case MarkerX: symbolName = 'x'; break;
-                    case MarkerCross: symbolName = "plus"; break;
-                    case MarkerAsterisk: symbolName = "asterisk"; break;
-                    case MarkerHorizontalBar: symbolName = "horizontal-bar"; break;
-                    case MarkerVerticalBar: symbolName = "vertical-bar"; break;
-                    default:
-                        break;
-                }
-                if (!symbolName.isEmpty()) {
-                    style.addProperty("chart:symbol-type", symbolType, KoGenStyle::ChartType);
-                    style.addProperty("chart:symbol-name", symbolName, KoGenStyle::ChartType);
-                }
+            case MarkerDiamond:
+                symbolName = "diamond";
                 break;
-            }
-            case ImageSymbol: // TODO: Not supported
-            case AutomaticSymbol:
-                style.addProperty("chart:symbol-type", "automatic", KoGenStyle::ChartType);
+            case MarkerArrowDown:
+                symbolName = "arrow-down";
+                break;
+            case MarkerArrowUp:
+                symbolName = "arrow-up";
+                break;
+            case MarkerArrowRight:
+                symbolName = "arrow-right";
+                break;
+            case MarkerArrowLeft:
+                symbolName = "arrow-left";
+                break;
+            case MarkerBowTie:
+                symbolName = "bow-tie";
+                break;
+            case MarkerHourGlass:
+                symbolName = "hourglass";
+                break;
+            case MarkerCircle:
+                symbolName = "circle";
+                break;
+            case MarkerStar:
+                symbolName = "star";
+                break;
+            case MarkerX:
+                symbolName = 'x';
+                break;
+            case MarkerCross:
+                symbolName = "plus";
+                break;
+            case MarkerAsterisk:
+                symbolName = "asterisk";
+                break;
+            case MarkerHorizontalBar:
+                symbolName = "horizontal-bar";
+                break;
+            case MarkerVerticalBar:
+                symbolName = "vertical-bar";
                 break;
             default:
-                Q_ASSERT(false);
                 break;
+            }
+            if (!symbolName.isEmpty()) {
+                style.addProperty("chart:symbol-type", symbolType, KoGenStyle::ChartType);
+                style.addProperty("chart:symbol-name", symbolName, KoGenStyle::ChartType);
+            }
+            break;
+        }
+        case ImageSymbol: // TODO: Not supported
+        case AutomaticSymbol:
+            style.addProperty("chart:symbol-type", "automatic", KoGenStyle::ChartType);
+            break;
+        default:
+            Q_ASSERT(false);
+            break;
         }
     }
 
@@ -1878,7 +1893,7 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
         bodyWriter.addAttribute("chart:attached-axis", d->attachedAxis->name());
     }
     if (chartType() == KoChart::CircleChartType || chartType() == KoChart::RingChartType) {
-        for (int j=0; j<yDataRegion().cellCount(); ++j) {
+        for (int j = 0; j < yDataRegion().cellCount(); ++j) {
             bodyWriter.startElement("chart:data-point");
 
             KoGenStyle dps(KoGenStyle::GraphicAutoStyle, "chart");
@@ -1886,7 +1901,7 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
             dps.addProperty("draw:fill-color", brush(j).color().name(), KoGenStyle::GraphicType);
 
             const QString styleName = mainStyles.insert(dps, "ch");
-            bodyWriter.addAttribute("chart:style-name", styleName );
+            bodyWriter.addAttribute("chart:style-name", styleName);
 
             bodyWriter.endElement();
         }
@@ -1912,7 +1927,8 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     bodyWriter.endElement(); // chart:series
 }
 
-static KChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style) {
+static KChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style)
+{
     switch (style) {
     case MarkerSquare:
         return KChart::MarkerAttributes::MarkerSquare;
@@ -1982,24 +1998,28 @@ QDebug operator<<(QDebug dbg, const KoChart::DataSet *ds)
             cat << ds->categoryData(i);
         }
         QString axis = ds->attachedAxis() ? ds->attachedAxis()->name() : "0x0";
-        return dbg.nospace()<<endl
-        <<"\tDataSet[chart:"<<ds->chartType()<<" axis:"<<axis<<" size:"<<ds->size()<<" label:"<<ds->labelData()<<endl
-        <<"\t  X:"<<ds->xDataRegion().toString()<<':'<<x<<endl
-        <<"\t  Y:"<<ds->yDataRegion().toString()<<':'<<y<<endl
-        <<"\t  Cust:"<<ds->customDataRegion().toString()<<':'<<cust<<endl
-        <<"\t  Cat:"<<ds->categoryDataRegion().toString()<<':'<<cat<<endl
-        <<"\t]";
+        return dbg.nospace() << endl
+                             << "\tDataSet[chart:" << ds->chartType() << " axis:" << axis << " size:" << ds->size() << " label:" << ds->labelData() << endl
+                             << "\t  X:" << ds->xDataRegion().toString() << ':' << x << endl
+                             << "\t  Y:" << ds->yDataRegion().toString() << ':' << y << endl
+                             << "\t  Cust:" << ds->customDataRegion().toString() << ':' << cust << endl
+                             << "\t  Cat:" << ds->categoryDataRegion().toString() << ':' << cat << endl
+                             << "\t]";
     }
-    return dbg.noquote()<<"DataSet(0x0)";
+    return dbg.noquote() << "DataSet(0x0)";
 }
 
 QDebug operator<<(QDebug dbg, const KoChart::DataSet::ValueLabelType &v)
 {
     QStringList lst;
-    if (v.number) lst << "N";
-    if (v.percentage) lst << "%";
-    if (v.category) lst << "C";
-    if (v.symbol) lst << "S";
+    if (v.number)
+        lst << "N";
+    if (v.percentage)
+        lst << "%";
+    if (v.category)
+        lst << "C";
+    if (v.symbol)
+        lst << "S";
     QString s = lst.isEmpty() ? QString("None") : lst.join(',');
     dbg.nospace() << "ValueLabelType[" << s << ']';
     return dbg.space();

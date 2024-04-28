@@ -5,7 +5,6 @@
   SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
-
 #include "WmfDeviceContext.h"
 #include "WmfEnums.h"
 
@@ -13,19 +12,16 @@
 
 #include <VectorImageDebug.h>
 
-
 /**
    Namespace for Windows Metafile (WMF) classes
 */
 namespace Libwmf
 {
 
-
 WmfDeviceContext::WmfDeviceContext()
 {
     reset();
 }
-
 
 void WmfDeviceContext::reset()
 {
@@ -36,7 +32,7 @@ void WmfDeviceContext::reset()
     escapement = 0;
     orientation = 0;
     height = 0;
-    //Palette
+    // Palette
     pen = QPen(Qt::black);
     clipRegion = QRegion();
 
@@ -44,32 +40,31 @@ void WmfDeviceContext::reset()
     backgroundColor = QColor(Qt::white);
     currentPosition = QPoint(0, 0);
     foregroundTextColor = QColor(Qt::black);
-    //Output Surface**  (what is this good for?  Mixing colors?)
+    // Output Surface**  (what is this good for?  Mixing colors?)
     viewportExt = QSize();
     viewportOrg = QPoint();
     windowExt = QSize();
     windowOrg = QPoint();
 
     // Graphic Properties
-    bgMixMode = 0;// FIXME: Check the real default
-    //Break extra space
-    //Font mapping mode
-    rop = 0;// FIXME: Check the real default
-    layoutMode = 0;// FIXME: Check the real default
-    //Mapping mode
+    bgMixMode = 0; // FIXME: Check the real default
+    // Break extra space
+    // Font mapping mode
+    rop = 0; // FIXME: Check the real default
+    layoutMode = 0; // FIXME: Check the real default
+    // Mapping mode
     polyFillMode = Libwmf::ALTERNATE;
-    //Stretchblt mode
-    textAlign = 0;// FIXME: Check the real default
-    //Text extra space
+    // Stretchblt mode
+    textAlign = 0; // FIXME: Check the real default
+    // Text extra space
 
-    changedItems = 0xffffffff;  // Everything changed the first time.
+    changedItems = 0xffffffff; // Everything changed the first time.
 
     // Derivative values.
     m_windowExtIsSet = false;
     m_viewportExtIsSet = false;
     m_worldTransform.reset();
 }
-
 
 // General note about coordinate spaces and transforms:
 //
@@ -92,7 +87,6 @@ void WmfDeviceContext::reset()
 // Transform in lack of a better word. (Some sources call it the Device Transform.)
 //
 
-
 // FIXME:
 // To change those functions it's better to have
 // a large set of WMF files. WMF special case includes :
@@ -100,7 +94,6 @@ void WmfDeviceContext::reset()
 // - change the origin or the scale in the middle of the drawing
 // - negative width or height
 // and relative/absolute coordinate
-
 
 void WmfDeviceContext::recalculateWorldTransform()
 {
@@ -120,8 +113,7 @@ void WmfDeviceContext::recalculateWorldTransform()
         debugVectorImage << "Scale for Window -> Viewport"
                       << windowViewportScaleX << windowViewportScaleY;
 #endif
-    }
-    else {
+    } else {
         // At most one of window and viewport ext is set: Use same width for window and viewport
         windowViewportScaleX = qreal(1.0);
         windowViewportScaleY = qreal(1.0);
@@ -131,7 +123,7 @@ void WmfDeviceContext::recalculateWorldTransform()
     }
 
     // Negative window extensions mean flip the picture.  Handle this here.
-    bool  flip = false;
+    bool flip = false;
     qreal midpointX = 0.0;
     qreal midpointY = 0.0;
     qreal scaleX = 1.0;
@@ -151,7 +143,7 @@ void WmfDeviceContext::recalculateWorldTransform()
         m_worldTransform.translate(midpointX, midpointY);
         m_worldTransform.scale(scaleX, scaleY);
         m_worldTransform.translate(-midpointX, -midpointY);
-        //debugVectorImage << "After flipping for window" << m_worldTransform;
+        // debugVectorImage << "After flipping for window" << m_worldTransform;
     }
 
     // Calculate the world transform.
@@ -159,19 +151,16 @@ void WmfDeviceContext::recalculateWorldTransform()
     m_worldTransform.scale(windowViewportScaleX, windowViewportScaleY);
     if (m_viewportExtIsSet) {
         m_worldTransform.translate(viewportOrg.x(), viewportOrg.y());
-    } 
-    else {
+    } else {
         // If viewport is not set, but window is *and* the window
         // width/height is negative, then we must compensate for this.
         // If the width/height is positive, we already did it with the
         // first translate before the scale() above.
-        if (windowExt.width() < 0) 
+        if (windowExt.width() < 0)
             m_worldTransform.translate(windowOrg.x() + windowExt.width(), qreal(0.0));
-        if (windowExt.height() < 0) 
+        if (windowExt.height() < 0)
             m_worldTransform.translate(qreal(0.0), windowOrg.y() + windowExt.height());
     }
-    //debugVectorImage << "After window viewport calculation" << m_worldTransform;
+    // debugVectorImage << "After window viewport calculation" << m_worldTransform;
 }
-
-
 }

@@ -40,14 +40,14 @@ public:
     /**
      * Constructor.
      */
-    Solver(QObject* parent, const QVariantList& args);
+    Solver(QObject *parent, const QVariantList &args);
 
     /**
      * Destructor.
      */
     ~Solver();
 
-    double evaluate(const gsl_vector* vector, void* parameters);
+    double evaluate(const gsl_vector *vector, void *parameters);
 
 protected Q_SLOTS:
     /**
@@ -66,7 +66,7 @@ private:
     Q_DISABLE_COPY(Solver)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Plugins

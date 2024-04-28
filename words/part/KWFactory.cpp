@@ -12,22 +12,22 @@
 #include <KIconLoader>
 
 #include <KWPart.h>
+#include <KoComponentData.h>
 #include <KoDockRegistry.h>
 #include <KoDocumentRdfBase.h>
-#include <KoToolRegistry.h>
 #include <KoMainWindow.h>
-#include <KoComponentData.h>
+#include <KoToolRegistry.h>
 
 #ifdef SHOULD_BUILD_RDF
-#include <KoDocumentRdf.h>
-#include <KoSemanticStylesheetsEditor.h>
 #include "dockers/KWRdfDocker.h"
 #include "dockers/KWRdfDockerFactory.h"
+#include <KoDocumentRdf.h>
+#include <KoSemanticStylesheetsEditor.h>
 #endif
 
-#include "pagetool/KWPageToolFactory.h"
-#include "dockers/KWStatisticsDocker.h"
 #include "dockers/KWNavigationDockerFactory.h"
+#include "dockers/KWStatisticsDocker.h"
+#include "pagetool/KWPageToolFactory.h"
 
 #ifndef NDEBUG
 #include "dockers/KWDebugDockerFactory.h"
@@ -40,7 +40,7 @@ KWFactory::KWFactory()
 {
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is Words.
-    (void) componentData();
+    (void)componentData();
 }
 
 KWFactory::~KWFactory()
@@ -49,7 +49,7 @@ KWFactory::~KWFactory()
     s_componentData = 0;
 }
 
-QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args)
+QObject *KWFactory::create(const char * /*iface*/, QWidget * /*parentWidget*/, QObject *parent, const QVariantList &args)
 {
     Q_UNUSED(args);
 
@@ -77,7 +77,7 @@ const KoComponentData &KWFactory::componentData()
 #endif
 
 #ifdef SHOULD_BUILD_RDF
-// TODO reenable after release
+        // TODO reenable after release
         dockRegistry->add(new KWRdfDockerFactory());
 #endif
     }

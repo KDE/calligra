@@ -7,19 +7,19 @@
  */
 #include "rdf_test.h"
 
-#include <QTest>
-#include <QUuid>
 #include <QString>
+#include <QTest>
+#include <QTextCharFormat>
 #include <QTextDocument>
 #include <QTextTable>
-#include <QTextCharFormat>
+#include <QUuid>
 
-#include <KoRdfSemanticItem.h>
-#include <KoDocumentRdf.h>
-#include <KoTextEditor.h>
 #include <KoBookmark.h>
-#include <KoTextInlineRdf.h>
+#include <KoDocumentRdf.h>
+#include <KoRdfSemanticItem.h>
 #include <KoTextDocument.h>
+#include <KoTextEditor.h>
+#include <KoTextInlineRdf.h>
 #include <KoTextRangeManager.h>
 
 #include "TestSemanticItem.h"
@@ -30,16 +30,12 @@ const QString lorem(
     "exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n"
     "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla"
     "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia"
-    "deserunt mollit anim id est laborum.\n"
-    );
+    "deserunt mollit anim id est laborum.\n");
 
-
-QString RdfTest::insertTableWithSemItem(KoTextEditor &editor,
-                               KoDocumentRdf &rdfDoc,
-                               const QString name)
+QString RdfTest::insertTableWithSemItem(KoTextEditor &editor, KoDocumentRdf &rdfDoc, const QString name)
 {
-    editor.insertTable(5,10);
-#define TABLESIZE (5*10)
+    editor.insertTable(5, 10);
+#define TABLESIZE (5 * 10)
     const QTextTable *table = editor.currentTable();
 
     QTextCursor cur(editor.document());
@@ -60,11 +56,10 @@ QString RdfTest::insertTableWithSemItem(KoTextEditor &editor,
 
     hTestSemanticItem testItem(new TestSemanticItem(0, &rdfDoc));
     testItem->setName(name);
-    Soprano::Statement st(
-                testItem->linkingSubject(), // subject
-                Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")), // predicate
-                Soprano::Node::createLiteralNode(newId), // object
-                rdfDoc.manifestRdfNode()); // manifest datastore
+    Soprano::Statement st(testItem->linkingSubject(), // subject
+                          Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")), // predicate
+                          Soprano::Node::createLiteralNode(newId), // object
+                          rdfDoc.manifestRdfNode()); // manifest datastore
     rdfDoc.model()->addStatement(st);
     rdfDoc.rememberNewInlineRdfObject(inlineRdf);
 
@@ -102,13 +97,13 @@ void RdfTest::testCreateMarkers()
     editor.insertText(lorem);
 
     // verify that the bookmark marks the table and only that
-    QPair<int,int> position = rdfDoc.findExtent(newId);
-    QCOMPARE(position.first, 2*(lorem.length()+1));
-    QCOMPARE(position.second, 2*(lorem.length()+1)+TABLESIZE-1);
+    QPair<int, int> position = rdfDoc.findExtent(newId);
+    QCOMPARE(position.first, 2 * (lorem.length() + 1));
+    QCOMPARE(position.second, 2 * (lorem.length() + 1) + TABLESIZE - 1);
 
     editor.setPosition(position.first + 1);
-    QPair<int,int> position2 = rdfDoc.findExtent(&editor);
-    qDebug()<<position<<position2;
+    QPair<int, int> position2 = rdfDoc.findExtent(&editor);
+    qDebug() << position << position2;
     QCOMPARE(position, position2);
 
     // check that the id is as we expect
@@ -146,11 +141,11 @@ void RdfTest::testFindMarkers()
     QList<hTestSemanticItem> semItems = TestSemanticItem::allObjects(&rdfDoc);
     Q_ASSERT(semItems.length() == 1);
 
-    foreach(hTestSemanticItem semItem, semItems) {
+    foreach (hTestSemanticItem semItem, semItems) {
         QStringList xmlidlist = semItem->xmlIdList();
 
         Q_ASSERT(xmlidlist.length() == 1);
-        foreach(const QString xmlid, xmlidlist) {
+        foreach (const QString xmlid, xmlidlist) {
             Q_ASSERT(idList.contains(xmlid));
             QPair<int, int> position = rdfDoc.findExtent(xmlid);
 

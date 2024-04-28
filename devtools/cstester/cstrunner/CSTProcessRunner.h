@@ -37,7 +37,7 @@ private:
     int m_concurrentProcesses;
     QMap<QProcess *, QString> m_processes;
     QList<QString> m_documents;
-    QMap<int, QList<QString> > m_killed;
+    QMap<int, QList<QString>> m_killed;
 };
 
 #endif /* CSTPROCESSRUNNER_H */

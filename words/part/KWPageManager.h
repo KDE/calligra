@@ -8,11 +8,11 @@
 #ifndef KW_PAGEMANAGER_H
 #define KW_PAGEMANAGER_H
 
-#include "words_export.h"
 #include "KWPageStyle.h"
+#include "words_export.h"
 
-#include <KoPageLayout.h>
 #include <KoInsets.h>
+#include <KoPageLayout.h>
 
 #include <QList>
 #include <QPointF>
@@ -20,7 +20,6 @@
 class KWPage;
 class KoShape;
 class KWPageManagerPrivate;
-
 
 /**
  * The Page Manager manages all the pages a document contains and separates all the frames
@@ -203,13 +202,16 @@ public:
      */
     KWPage last();
 
-    KWPageManagerPrivate *priv() { return d; }
+    KWPageManagerPrivate *priv()
+    {
+        return d;
+    }
 
 private:
     /// disable copy constructor and assignment operator
     Q_DISABLE_COPY(KWPageManager)
 
-    KWPageManagerPrivate * const d;
+    KWPageManagerPrivate *const d;
 };
 
 #endif

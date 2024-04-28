@@ -28,9 +28,9 @@
 #include <wv2/src/wv2version.h>
 
 #if defined(WV2_IS_VERSION)
-#  if WV2_IS_VERSION( 0, 2, 5 )
-#    define IMAGE_IMPORT 1
-#  endif
+#if WV2_IS_VERSION(0, 2, 5)
+#define IMAGE_IMPORT 1
+#endif
 #endif
 
 #endif // VERSIONMAGIC_H

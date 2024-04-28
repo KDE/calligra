@@ -27,8 +27,8 @@
 
 #include <QTransform>
 
-
-KPrAttributeY::KPrAttributeY() : KPrAnimationAttribute("y")
+KPrAttributeY::KPrAttributeY()
+    : KPrAnimationAttribute("y")
 {
 }
 
@@ -43,9 +43,9 @@ void KPrAttributeY::updateCache(KPrAnimationCache *cache, KPrShapeAnimation *sha
     cache->update(shape, shapeAnimation->textBlockUserData(), "transform", transform);
 }
 
-void KPrAttributeY::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue)
+void KPrAttributeY::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation *shapeAnimation, qreal startValue, qreal endValue)
 {
-    KoShape * shape = shapeAnimation->shape();
+    KoShape *shape = shapeAnimation->shape();
     qreal v1 = (startValue * animationCache->pageSize().height() - shape->position().y()) * animationCache->zoom();
     qreal v2 = (endValue * animationCache->pageSize().height() - shape->position().y()) * animationCache->zoom();
     animationCache->init(step, shape, shapeAnimation->textBlockUserData(), "transform", QTransform().translate(0, v1));

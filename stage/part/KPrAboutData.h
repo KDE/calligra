@@ -13,18 +13,16 @@
 
 #include <calligraversion.h>
 
-
-KAboutData * newKPresenterAboutData()
+KAboutData *newKPresenterAboutData()
 {
-    KAboutData *aboutData = new KAboutData(
-        QStringLiteral("calligrastage"),
-        i18nc("application name", "Calligra Stage"),
-        QStringLiteral(CALLIGRA_VERSION_STRING),
-        i18n("Presentation Tool"),
-        KAboutLicense::LGPL,
-        i18n("Copyright 1998-%1, The Stage Team", QStringLiteral(CALLIGRA_YEAR)),
-        QString(),
-        QStringLiteral("https://www.calligra.org/stage/"));
+    KAboutData *aboutData = new KAboutData(QStringLiteral("calligrastage"),
+                                           i18nc("application name", "Calligra Stage"),
+                                           QStringLiteral(CALLIGRA_VERSION_STRING),
+                                           i18n("Presentation Tool"),
+                                           KAboutLicense::LGPL,
+                                           i18n("Copyright 1998-%1, The Stage Team", QStringLiteral(CALLIGRA_YEAR)),
+                                           QString(),
+                                           QStringLiteral("https://www.calligra.org/stage/"));
     aboutData->setProductName("calligrastage"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
 #if KCOREADDONS_VERSION >= 0x051600
@@ -32,7 +30,7 @@ KAboutData * newKPresenterAboutData()
 #endif
     aboutData->addAuthor(i18n("Thorsten Zachmann"), i18n("Former maintainer"), "zachmann@kde.org");
     aboutData->addAuthor(i18n("Laurent Montel"), i18n("Former maintainer"), "montel@kde.org");
-    aboutData->addAuthor(i18n("Reginald Stadlbauer"),i18n("Original author"), "reggie@kde.org");
+    aboutData->addAuthor(i18n("Reginald Stadlbauer"), i18n("Original author"), "reggie@kde.org");
     aboutData->addAuthor(i18n("Werner Trobin"), QString(), "trobin@kde.org");
     aboutData->addAuthor(i18n("David Faure"), QString(), "faure@kde.org");
     aboutData->addAuthor(i18n("Toshitaka Fujioka"), QString(), "fujioka@kde.org");
@@ -51,8 +49,7 @@ KAboutData * newKPresenterAboutData()
     aboutData->addAuthor(i18n("Sven Langkamp "), QString(), "sven.langkamp@gmail.com");
     aboutData->addAuthor(i18n("Timothée Lacroix "), QString(), "dakeyras.khan@gmail.com");
     // standard ki18n translator strings
-    aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
-                             i18nc("EMAIL OF TRANSLATORS", "Your emails"));
+    aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"), i18nc("EMAIL OF TRANSLATORS", "Your emails"));
 
     return aboutData;
 }

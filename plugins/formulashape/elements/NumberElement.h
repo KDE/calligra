@@ -17,7 +17,8 @@
  * MathML spec. The number element holds the number to be painted as a sequence
  * of TextElement and/or GlyphElements.
  */
-class KOFORMULA_EXPORT NumberElement : public TokenElement {
+class KOFORMULA_EXPORT NumberElement : public TokenElement
+{
 public:
     /// Standard constructor
     explicit NumberElement(BasicElement *parent = 0);
@@ -26,7 +27,7 @@ public:
     ElementType elementType() const override;
 
     /// Process @p raw and render it to @p path
-    QRectF renderToPath( const QString& raw, QPainterPath& path ) const override;
+    QRectF renderToPath(const QString &raw, QPainterPath &path) const override;
 };
 
 #endif // NUMBERELEMENT_H

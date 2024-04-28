@@ -11,8 +11,8 @@
 #include <KoShapeContainer.h>
 #include <KoTextShapeData.h>
 
-#include <QTextDocument>
 #include <QPainter>
+#include <QTextDocument>
 
 class KoInlineTextObjectManager;
 class KoTextRangeManager;
@@ -23,19 +23,17 @@ class AnnotationTextShape : public TextShape
 {
 public:
     // Some constants
-    static const qreal  HeaderSpace; // The space needed for the annotation header.
-    static const qreal  HeaderFontSize;
+    static const qreal HeaderSpace; // The space needed for the annotation header.
+    static const qreal HeaderFontSize;
 
     // For now we should give these parameters for TextShape.
-    AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager,
-                        KoTextRangeManager *textRangeManager);
+    AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager);
     ~AnnotationTextShape() override;
 
     void setAnnotationTextData(KoTextShapeData *textShape);
 
     // reimplemented
-    void paintComponent(QPainter &painter, const KoViewConverter &converter,
-                        KoShapePaintingContext &paintcontext) override;
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 
     /**
      * From KoShape reimplemented method to load the TextShape from ODF.
@@ -69,7 +67,7 @@ private:
 
     QString m_creator;
     QString m_date;
-    QString m_dateString;       // another way of storing the date. Not sure when it is used.
+    QString m_dateString; // another way of storing the date. Not sure when it is used.
 };
 
 #endif // ANNOTATIONTEXTSHAPE_H

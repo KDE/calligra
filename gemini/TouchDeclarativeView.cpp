@@ -5,11 +5,11 @@
  */
 #include "TouchDeclarativeView.h"
 
-#include <QWidget>
-#include <QSurfaceFormat>
-#include <QResizeEvent>
 #include <QApplication>
 #include <QQuickItem>
+#include <QResizeEvent>
+#include <QSurfaceFormat>
+#include <QWidget>
 
 #include <gemini/ViewModeSwitchEvent.h>
 
@@ -19,15 +19,15 @@ TouchDeclarativeView::TouchDeclarativeView(QWindow *parent)
     , m_canvasWidget(0)
     , m_GLInitialized(false)
 {
-//     setCacheMode(QQuickView::CacheNone);
-//     setViewportUpdateMode(QQuickView::FullViewportUpdate);
+    //     setCacheMode(QQuickView::CacheNone);
+    //     setViewportUpdateMode(QQuickView::FullViewportUpdate);
 
-//     setFlag(Qt::WA_AcceptTouchEvents);
-//     setAttribute(Qt::WA_OpaquePaintEvent);
-//     setAttribute(Qt::WA_NoSystemBackground);
-//     viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
-//     viewport()->setAttribute(Qt::WA_NoSystemBackground);
-//     installEventFilter(this);
+    //     setFlag(Qt::WA_AcceptTouchEvents);
+    //     setAttribute(Qt::WA_OpaquePaintEvent);
+    //     setAttribute(Qt::WA_NoSystemBackground);
+    //     viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+    //     viewport()->setAttribute(Qt::WA_NoSystemBackground);
+    //     installEventFilter(this);
 }
 
 TouchDeclarativeView::TouchDeclarativeView(const QUrl &url, QWindow *parent)
@@ -36,19 +36,19 @@ TouchDeclarativeView::TouchDeclarativeView(const QUrl &url, QWindow *parent)
     , m_canvasWidget(0)
     , m_GLInitialized(false)
 {
-//     setCacheMode(QQuickView::CacheNone);
-//     setViewportUpdateMode(QQuickView::FullViewportUpdate);
+    //     setCacheMode(QQuickView::CacheNone);
+    //     setViewportUpdateMode(QQuickView::FullViewportUpdate);
 
-//     QSurfaceFormat format;
-//     format.setSampleBuffers(true);
-//     setFormat(format);
+    //     QSurfaceFormat format;
+    //     format.setSampleBuffers(true);
+    //     setFormat(format);
 
-//     setAttribute(Qt::WA_AcceptTouchEvents);
-//     setAttribute(Qt::WA_OpaquePaintEvent);
-//     setAttribute(Qt::WA_NoSystemBackground);
-//     viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
-//     viewport()->setAttribute(Qt::WA_NoSystemBackground);
-//     installEventFilter(this);
+    //     setAttribute(Qt::WA_AcceptTouchEvents);
+    //     setAttribute(Qt::WA_OpaquePaintEvent);
+    //     setAttribute(Qt::WA_NoSystemBackground);
+    //     viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+    //     viewport()->setAttribute(Qt::WA_NoSystemBackground);
+    //     installEventFilter(this);
 }
 
 TouchDeclarativeView::~TouchDeclarativeView()
@@ -56,15 +56,15 @@ TouchDeclarativeView::~TouchDeclarativeView()
     m_canvasWidget = 0;
 }
 
-QWidget* TouchDeclarativeView::canvasWidget() const
+QWidget *TouchDeclarativeView::canvasWidget() const
 {
     return m_canvasWidget.data();
 }
 
 void TouchDeclarativeView::setCanvasWidget(QWidget *canvasWidget)
 {
-    m_canvasWidget = canvasWidget;// qobject_cast<KisOpenGLCanvas2*>(canvasWidget);
-    connect(m_canvasWidget, SIGNAL(destroyed(QObject*)), this, SLOT(resetInitialized()));
+    m_canvasWidget = canvasWidget; // qobject_cast<KisOpenGLCanvas2*>(canvasWidget);
+    connect(m_canvasWidget, SIGNAL(destroyed(QObject *)), this, SLOT(resetInitialized()));
     emit canvasWidgetChanged();
 }
 
@@ -88,14 +88,14 @@ void TouchDeclarativeView::setDrawCanvas(bool drawCanvas)
 
 // void TouchDeclarativeView::drawBackground(QPainter *painter, const QRectF &rect)
 // {
-// 
+//
 //     if (painter->paintEngine()->type() != QPaintEngine::OpenGL2) {
 //         qWarning("OpenGLScene: drawBackground needs a "
 //                  "QGLWidget to be set as viewport on the "
 //                  "graphics view");
 //         return;
 //     }
-// 
+//
 //     if (m_drawCanvas && m_canvasWidget) {
 //         if (!m_GLInitialized) {
 //             //m_canvasWidget->initializeCheckerShader();
@@ -108,19 +108,18 @@ void TouchDeclarativeView::setDrawCanvas(bool drawCanvas)
 //     else {
 //         QQuickView::drawBackground(painter, rect);
 //     }
-// 
+//
 // }
-
 
 // void TouchDeclarativeView::resizeEvent(QResizeEvent *event)
 // {
 //     if (m_canvasWidget) {
 //         //m_canvasWidget->coordinatesConverter()->setCanvasWidgetSize(event->size());
 //     }
-// 
+//
 //     QQuickView::resizeEvent(event);
 // }
-// 
+//
 // bool TouchDeclarativeView::event( QEvent* event )
 // {
 //     switch(static_cast<int>(event->type())) {
@@ -154,7 +153,7 @@ void TouchDeclarativeView::setDrawCanvas(bool drawCanvas)
 //     }
 //     return QQuickView::event( event );
 // }
-// 
+//
 // bool TouchDeclarativeView::eventFilter(QObject* watched, QEvent* e)
 // {
 //     switch(static_cast<int>(e->type())) {
@@ -178,7 +177,7 @@ void TouchDeclarativeView::setDrawCanvas(bool drawCanvas)
 //         default:
 //             break;
 //     }
-// 
-// 
+//
+//
 //     return QQuickView::eventFilter(watched, e);
 // }

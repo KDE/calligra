@@ -8,8 +8,8 @@
 #ifndef KOZOOMACTION_H
 #define KOZOOMACTION_H
 
-#include <kselectaction.h>
 #include <KoZoomMode.h>
+#include <kselectaction.h>
 
 #include "kowidgets_export.h"
 
@@ -27,20 +27,19 @@ class KOWIDGETS_EXPORT KoZoomAction : public KSelectAction
     Q_OBJECT
     Q_PROPERTY(qreal effectiveZoom READ effectiveZoom NOTIFY zoomChanged)
 public:
-
-  /**
-   * Creates a new zoom action.
-   * @param zoomModes which zoom modes that should be shown
-   * @param text The text that will be displayed.
-   * @param parent The action's parent object.
-   */
-    KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent);
+    /**
+     * Creates a new zoom action.
+     * @param zoomModes which zoom modes that should be shown
+     * @param text The text that will be displayed.
+     * @param parent The action's parent object.
+     */
+    KoZoomAction(KoZoomMode::Modes zoomModes, const QString &text, QObject *parent);
     ~KoZoomAction() override;
 
     /**
      * Reimplemented from QWidgetAction.
      */
-    QWidget* createWidget(QWidget* parent) override;
+    QWidget *createWidget(QWidget *parent) override;
 
     enum SpecialButton {
         AspectMode = 1, ///< changing aspect mode
@@ -54,7 +53,7 @@ public:
      * This should be called immediately after calling the constructor.
      * @param buttons mask of the special button flags to enable
      */
-    void setSpecialButtons( SpecialButtons buttons );
+    void setSpecialButtons(SpecialButtons buttons);
 
     qreal effectiveZoom() const;
 
@@ -80,70 +79,70 @@ public:
 
 public Q_SLOTS:
 
-  /**
-   * Sets the zoom. If zoom not yet on the list of zoom values, it will be inserted
-   * into the list at proper place so that the values remain sorted.
-   * emits zoomChanged
-   */
-    void setZoom( qreal zoom );
+    /**
+     * Sets the zoom. If zoom not yet on the list of zoom values, it will be inserted
+     * into the list at proper place so that the values remain sorted.
+     * emits zoomChanged
+     */
+    void setZoom(qreal zoom);
 
-  /**
-   * Change the zoom modes that should be shown
-   */
-    void setZoomModes( KoZoomMode::Modes zoomModes );
+    /**
+     * Change the zoom modes that should be shown
+     */
+    void setZoomModes(KoZoomMode::Modes zoomModes);
 
-  /**
-   * Change the zoom to a closer look than current
-   * Zoom mode will be CONSTANT afterwards
-   * emits zoomChanged
-   */
-    void zoomIn( );
+    /**
+     * Change the zoom to a closer look than current
+     * Zoom mode will be CONSTANT afterwards
+     * emits zoomChanged
+     */
+    void zoomIn();
 
-  /**
-   * Change the zoom to a wider look than current
-   * Zoom mode will be CONSTANT afterwards
-   * emits zoomChanged
-   */
-    void zoomOut( );
+    /**
+     * Change the zoom to a wider look than current
+     * Zoom mode will be CONSTANT afterwards
+     * emits zoomChanged
+     */
+    void zoomOut();
 
-  /**
-   * Set the actual zoom value used in the app. This is needed when using @ref zoomIn() , @ref zoomOut() and/or when
-   * plugged into the viewbar.
-   */
+    /**
+     * Set the actual zoom value used in the app. This is needed when using @ref zoomIn() , @ref zoomOut() and/or when
+     * plugged into the viewbar.
+     */
     void setEffectiveZoom(qreal zoom);
 
-  /**
-   * Change the selected zoom mode.
-   */
-    void setSelectedZoomMode( KoZoomMode::Mode mode );
+    /**
+     * Change the selected zoom mode.
+     */
+    void setSelectedZoomMode(KoZoomMode::Mode mode);
 
-  /**
-   * Change status of "Use same aspect as pixels" button
-   * (emits aspectModeChanged(bool) after the change, ALWAYS)
-   */
+    /**
+     * Change status of "Use same aspect as pixels" button
+     * (emits aspectModeChanged(bool) after the change, ALWAYS)
+     */
     void setAspectMode(bool status);
 
 protected Q_SLOTS:
 
-    void triggered( const QString& text );
+    void triggered(const QString &text);
     void sliderValueChanged(int value);
 
 Q_SIGNALS:
 
-  /**
-   * Signal zoomChanged is triggered when user changes the zoom value, either by
-   * choosing it from the list or by entering new value.
-   * @param mode The selected zoom mode
-   * @param zoom the zoom, only defined if @p mode is KoZoomMode::ZOOM_CONSTANT
-   */
-    void zoomChanged( KoZoomMode::Mode mode, qreal zoom );
+    /**
+     * Signal zoomChanged is triggered when user changes the zoom value, either by
+     * choosing it from the list or by entering new value.
+     * @param mode The selected zoom mode
+     * @param zoom the zoom, only defined if @p mode is KoZoomMode::ZOOM_CONSTANT
+     */
+    void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
 
-  /**
-   * Signal aspectModeChanged is triggered when the user toggles the widget.
-   * Nothing else happens except that this signal is emitted.
-   * @param status Whether the special aspect mode is on
-   */
-    void aspectModeChanged( bool status );
+    /**
+     * Signal aspectModeChanged is triggered when the user toggles the widget.
+     * Nothing else happens except that this signal is emitted.
+     * @param status Whether the special aspect mode is on
+     */
+    void aspectModeChanged(bool status);
 
     /**
      * Signal is triggered when the user clicks the zoom to selection button.
@@ -205,15 +204,15 @@ public:
 
 protected:
     /// Regenerates the action's items
-    void regenerateItems( const qreal zoom, bool asCurrent = false );
+    void regenerateItems(const qreal zoom, bool asCurrent = false);
 
 private:
     void syncSliderWithZoom();
 
-    Q_DISABLE_COPY( KoZoomAction )
+    Q_DISABLE_COPY(KoZoomAction)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoZoomAction::SpecialButtons)

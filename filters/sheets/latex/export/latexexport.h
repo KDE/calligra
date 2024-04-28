@@ -7,11 +7,11 @@
 #ifndef __LATEXEXPORT_H__
 #define __LATEXEXPORT_H__
 
-#include <QString>
-#include <QTextStream>
+#include <QByteArray>
 #include <QFile>
 #include <QObject>
-#include <QByteArray>
+#include <QString>
+#include <QTextStream>
 
 #include <KoFilter.h>
 #include <KoStore.h>
@@ -19,14 +19,15 @@
 
 class LATEXExport : public KoFilter
 {
-
     Q_OBJECT
 
 public:
-    LATEXExport(QObject* parent, const QVariantList&);
-    ~LATEXExport() override {}
+    LATEXExport(QObject *parent, const QVariantList &);
+    ~LATEXExport() override
+    {
+    }
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };
 
 #endif /* __LATEXExport_H__ */

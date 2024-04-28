@@ -11,8 +11,8 @@
 
 #include "MsooXmlDocPropertiesReader.h"
 #include "MsooXmlSchemas.h"
-#include <MsooXmlUtils.h>
 #include <KoXmlWriter.h>
+#include <MsooXmlUtils.h>
 
 #define MSOOXML_CURRENT_NS "cp"
 #define MSOOXML_CURRENT_CLASS MsooXmlDocPropertiesReader
@@ -22,7 +22,8 @@
 
 using namespace MSOOXML;
 
-MsooXmlDocPropertiesReader::MsooXmlDocPropertiesReader(KoOdfWriters* writers) : MsooXmlReader(writers)
+MsooXmlDocPropertiesReader::MsooXmlDocPropertiesReader(KoOdfWriters *writers)
+    : MsooXmlReader(writers)
 {
     elemMap.insert(QLatin1String("dc:creator"), QLatin1String("meta:initial-creator"));
     elemMap.insert(QLatin1String("cp:lastModifiedBy"), QLatin1String("dc:creator"));
@@ -35,8 +36,7 @@ MsooXmlDocPropertiesReader::MsooXmlDocPropertiesReader(KoOdfWriters* writers) : 
     elemMap.insert(QLatin1String("cp:revision"), QLatin1String("meta:editing-cycles"));
 }
 
-
-KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read(MsooXmlReaderContext*)
+KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read(MsooXmlReaderContext *)
 {
     debugMsooXml << "=============================";
 
@@ -57,13 +57,13 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read(MsooXmlReaderContext
     for (int i = 0; i < namespaces.count(); i++) {
         debugMsooXml << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
-//! @todo find out whether the namespace returned by namespaceUri()
-//!       is exactly the same ref as the element of namespaceDeclarations()
+    //! @todo find out whether the namespace returned by namespaceUri()
+    //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration("cp", MSOOXML::Schemas::core_properties))) {
         raiseError(i18n("Namespace \"%1\" not found", QLatin1String(MSOOXML::Schemas::core_properties)));
         return KoFilter::WrongFormat;
     }
-//! @todo expect other namespaces too...
+    //! @todo expect other namespaces too...
 
     debugMsooXml << qualifiedName();
     TRY_READ(coreProperties)
@@ -86,7 +86,7 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read_coreProperties()
             while (!isEndElement() && !isCharacters())
                 readNext();
 
-            const QMap<QString,QString>::ConstIterator it = elemMap.constFind(qn);
+            const QMap<QString, QString>::ConstIterator it = elemMap.constFind(qn);
             if (it == elemMap.constEnd()) {
                 debugMsooXml << "Unknown metadata ignored:" << qn;
                 while (!isEndElement())
@@ -95,9 +95,9 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read_coreProperties()
             }
             debugMsooXml << "Found:" << it.key() << "Mapped to:" << it.value();
             const QString t = text().toString();
-            //can't use qPrintable() the string has to remain valid until endElement is called
-            //which we can't do if we call qPrintable, the QByteArray falls out of scope after
-            //the statement in which it is used
+            // can't use qPrintable() the string has to remain valid until endElement is called
+            // which we can't do if we call qPrintable, the QByteArray falls out of scope after
+            // the statement in which it is used
             QByteArray elementArray = it.value().toLocal8Bit();
             meta->startElement(elementArray.constData());
             meta->addTextNode(t.toUtf8());
@@ -109,4 +109,3 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read_coreProperties()
 
     READ_EPILOGUE
 }
-

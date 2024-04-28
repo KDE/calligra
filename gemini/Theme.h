@@ -8,9 +8,9 @@
 #ifndef THEME_H
 #define THEME_H
 
+#include <QIcon>
 #include <QObject>
 #include <QVariantMap>
-#include <QIcon>
 
 class Theme : public QObject
 {
@@ -111,7 +111,7 @@ class Theme : public QObject
      */
     Q_PROPERTY(QString fontPath READ fontPath WRITE setFontPath NOTIFY fontPathChanged)
 public:
-    explicit Theme(QObject* parent = 0);
+    explicit Theme(QObject *parent = 0);
     ~Theme() override;
 
     /**
@@ -121,7 +121,7 @@ public:
     /**
      * Setter for property #id.
      */
-    void setId(const QString& newValue);
+    void setId(const QString &newValue);
 
     /**
      * Getter for property #name.
@@ -130,7 +130,7 @@ public:
     /**
      * Setter for property #name.
      */
-    void setName(const QString& newValue);
+    void setName(const QString &newValue);
 
     /**
      * Getter for property #inherits.
@@ -139,7 +139,7 @@ public:
     /**
      * Setter for property #inherits.
      */
-    void setInherits(const QString& newValue);
+    void setInherits(const QString &newValue);
 
     /**
      * Getter for property #colors.
@@ -148,7 +148,7 @@ public:
     /**
      * Setter for property #colors.
      */
-    void setColors(const QVariantMap& newValue);
+    void setColors(const QVariantMap &newValue);
 
     /**
      * Getter for property #sizes.
@@ -157,7 +157,7 @@ public:
     /**
      * Setter for property #sizes.
      */
-    void setSizes(const QVariantMap& newValue);
+    void setSizes(const QVariantMap &newValue);
 
     /**
      * Getter for property #fonts.
@@ -166,7 +166,7 @@ public:
     /**
      * Setter for property #fonts.
      */
-    void setFonts(const QVariantMap& newValue);
+    void setFonts(const QVariantMap &newValue);
 
     /**
      * Getter for property #iconPath.
@@ -175,7 +175,7 @@ public:
     /**
      * Setter for property #iconPath.
      */
-    void setIconPath(const QString& newValue);
+    void setIconPath(const QString &newValue);
 
     /**
      * Getter for property #imagePath.
@@ -184,7 +184,7 @@ public:
     /**
      * Setter for property #imagePath.
      */
-    void setImagePath(const QString& newValue);
+    void setImagePath(const QString &newValue);
 
     /**
      * Getter for property #fontPath.
@@ -193,7 +193,7 @@ public:
     /**
      * Setter for property #fontPath.
      */
-    void setFontPath(const QString& newValue);
+    void setFontPath(const QString &newValue);
 
     /**
      * Get a single color from the theme.
@@ -201,34 +201,34 @@ public:
      * \param name The color to get.
      * \return The color asked for, or a default color if it is not defined in the theme.
      */
-    Q_INVOKABLE QColor color(const QString& name);
+    Q_INVOKABLE QColor color(const QString &name);
     /**
      * Get a single size value from the theme.
      */
-    Q_INVOKABLE float size(const QString& name);
+    Q_INVOKABLE float size(const QString &name);
     /**
      * Get an icon from the theme.
      */
-    Q_INVOKABLE QUrl icon(const QString& name, bool useSystemFallback = false);
+    Q_INVOKABLE QUrl icon(const QString &name, bool useSystemFallback = false);
     /**
      * Get an icon from the theme.
      */
-    Q_INVOKABLE QIcon iconActual(const QString& name);
+    Q_INVOKABLE QIcon iconActual(const QString &name);
     /**
      * Get a font from the theme.
      */
-    Q_INVOKABLE QFont font(const QString& name);
+    Q_INVOKABLE QFont font(const QString &name);
     /**
      * Get an image from the theme.
      */
-    Q_INVOKABLE QUrl image(const QString& name);
+    Q_INVOKABLE QUrl image(const QString &name);
     /**
      * Adjust a pixel size according to what it would be given that is what the pixel would
      * be on a 1080p monitor
      */
-    Q_INVOKABLE int adjustedPixel(const int& pixel) const;
+    Q_INVOKABLE int adjustedPixel(const int &pixel) const;
 
-    static Theme* load(const QString& id, QObject* parent = 0);
+    static Theme *load(const QString &id, QObject *parent = 0);
 
 Q_SIGNALS:
     void idChanged();
@@ -243,11 +243,11 @@ Q_SIGNALS:
     void fontCacheRebuilt();
 
 protected:
-    bool eventFilter(QObject*, QEvent*) override;
+    bool eventFilter(QObject *, QEvent *) override;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // THEME_H

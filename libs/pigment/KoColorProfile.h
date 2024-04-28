@@ -2,14 +2,14 @@
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef _KO_COLOR_PROFILE_H_
 #define _KO_COLOR_PROFILE_H_
 
 #include <QString>
-#include <QVector>
 #include <QVariant>
+#include <QVector>
 
 #include "pigment_export.h"
 
@@ -18,20 +18,19 @@
  */
 class PIGMENTCMS_EXPORT KoColorProfile
 {
-
 public:
-
     /**
      * @param fileName file name to load or save that profile
      */
     explicit KoColorProfile(const QString &fileName = QString());
-    KoColorProfile(const KoColorProfile& profile);
+    KoColorProfile(const KoColorProfile &profile);
     virtual ~KoColorProfile();
 
     /**
      * @return the type of this profile (icc, ctlcs etc)
      */
-    virtual QString type() const {
+    virtual QString type() const
+    {
         return QString();
     }
 
@@ -43,7 +42,7 @@ public:
      * Data that shall be changed like a palette or hdr information such as exposure
      * must be duplicated while cloning.
      */
-    virtual KoColorProfile* clone() const = 0;
+    virtual KoColorProfile *clone() const = 0;
 
     /**
      * Load the profile in memory.
@@ -120,24 +119,24 @@ public:
     /**
      * @return a qvector <double>(9) with the RGB colorants in XYZ
      */
-    virtual QVector <qreal> getColorantsXYZ() const = 0;
+    virtual QVector<qreal> getColorantsXYZ() const = 0;
     /**
      * @return a qvector <double>(9) with the RGB colorants in xyY
      */
-    virtual QVector <qreal> getColorantsxyY() const = 0;
+    virtual QVector<qreal> getColorantsxyY() const = 0;
     /**
      * @return a qvector <double>(3) with the whitepoint in XYZ
      */
-    virtual QVector <qreal> getWhitePointXYZ() const = 0;
+    virtual QVector<qreal> getWhitePointXYZ() const = 0;
     /**
      * @return a qvector <double>(3) with the whitepoint in xyY
      */
-    virtual QVector <qreal> getWhitePointxyY() const = 0;
-    
+    virtual QVector<qreal> getWhitePointxyY() const = 0;
+
     /**
      * @return estimated gamma for RGB and Grayscale profiles
      */
-    virtual QVector <qreal> getEstimatedTRC() const = 0;
+    virtual QVector<qreal> getEstimatedTRC() const = 0;
 
     /**
      * @return if the profile has a TRC(required for linearisation).
@@ -147,26 +146,27 @@ public:
      * Linearizes first 3 values of QVector, leaving other values unchanged.
      * Returns the same QVector if it is not possible to linearize.
      */
-    virtual void linearizeFloatValue(QVector <qreal> & Value) const = 0;
+    virtual void linearizeFloatValue(QVector<qreal> &Value) const = 0;
     /**
      * Delinearizes first 3 values of QVector, leaving other values unchanged.
      * Returns the same QVector if it is not possible to delinearize.
      * Effectively undoes LinearizeFloatValue.
      */
-    virtual void delinearizeFloatValue(QVector <qreal> & Value) const = 0;
+    virtual void delinearizeFloatValue(QVector<qreal> &Value) const = 0;
     /**
      * More imprecise versions of the above(limited to 16bit, and can't
      * delinearize above 1.0.) Use this for filters and images.
      */
-    virtual void linearizeFloatValueFast(QVector <qreal> & Value) const = 0;
-    virtual void delinearizeFloatValueFast(QVector <qreal> & Value) const = 0;
-    
-    virtual bool operator==(const KoColorProfile&) const = 0;
+    virtual void linearizeFloatValueFast(QVector<qreal> &Value) const = 0;
+    virtual void delinearizeFloatValueFast(QVector<qreal> &Value) const = 0;
+
+    virtual bool operator==(const KoColorProfile &) const = 0;
 
     /**
      * @return an array with the raw data of the profile
      */
-    virtual QByteArray rawData() const {
+    virtual QByteArray rawData() const
+    {
         return QByteArray();
     }
 
@@ -190,7 +190,7 @@ protected:
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

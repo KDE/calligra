@@ -17,8 +17,8 @@ class KoParameterShapePrivate : public KoPathShapePrivate
 {
 public:
     explicit KoParameterShapePrivate(KoParameterShape *shape)
-        : KoPathShapePrivate(shape),
-        parametric(true)
+        : KoPathShapePrivate(shape)
+        , parametric(true)
     {
     }
 

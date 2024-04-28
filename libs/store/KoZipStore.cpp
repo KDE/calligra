@@ -11,44 +11,37 @@
 #include <QBuffer>
 #include <QByteArray>
 
-#include <kzip.h>
 #include <StoreDebug.h>
+#include <kzip.h>
 
-#include <QUrl>
 #include <KoNetAccess.h>
+#include <QUrl>
 
-KoZipStore::KoZipStore(const QString & _filename, Mode mode, const QByteArray & appIdentification,
-                       bool writeMimetype)
-  : KoStore(mode, writeMimetype)
+KoZipStore::KoZipStore(const QString &_filename, Mode mode, const QByteArray &appIdentification, bool writeMimetype)
+    : KoStore(mode, writeMimetype)
 {
-    debugStore << "KoZipStore Constructor filename =" << _filename
-    << " mode = " << int(mode)
-    << " mimetype = " << appIdentification << Qt::endl;
+    debugStore << "KoZipStore Constructor filename =" << _filename << " mode = " << int(mode) << " mimetype = " << appIdentification << Qt::endl;
     Q_D(KoStore);
 
     d->localFileName = _filename;
 
     m_pZip = new KZip(_filename);
 
-    init(appIdentification);   // open the zip file and init some vars
+    init(appIdentification); // open the zip file and init some vars
 }
 
-KoZipStore::KoZipStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
-                       bool writeMimetype)
-  : KoStore(mode, writeMimetype)
+KoZipStore::KoZipStore(QIODevice *dev, Mode mode, const QByteArray &appIdentification, bool writeMimetype)
+    : KoStore(mode, writeMimetype)
 {
     m_pZip = new KZip(dev);
     init(appIdentification);
 }
 
-KoZipStore::KoZipStore(QWidget* window, const QUrl &_url, const QString & _filename, Mode mode,
-                       const QByteArray & appIdentification, bool writeMimetype)
-  : KoStore(mode, writeMimetype)
+KoZipStore::KoZipStore(QWidget *window, const QUrl &_url, const QString &_filename, Mode mode, const QByteArray &appIdentification, bool writeMimetype)
+    : KoStore(mode, writeMimetype)
 {
-    debugStore << "KoZipStore Constructor url" << _url.url(QUrl::PreferLocalFile)
-    << " filename = " << _filename
-    << " mode = " << int(mode)
-    << " mimetype = " << appIdentification << Qt::endl;
+    debugStore << "KoZipStore Constructor url" << _url.url(QUrl::PreferLocalFile) << " filename = " << _filename << " mode = " << int(mode)
+               << " mimetype = " << appIdentification << Qt::endl;
     Q_D(KoStore);
 
     d->url = _url;
@@ -64,7 +57,7 @@ KoZipStore::KoZipStore(QWidget* window, const QUrl &_url, const QString & _filen
     }
 
     m_pZip = new KZip(d->localFileName);
-    init(appIdentification);   // open the zip file and init some vars
+    init(appIdentification); // open the zip file and init some vars
 }
 
 KoZipStore::~KoZipStore()
@@ -84,7 +77,7 @@ KoZipStore::~KoZipStore()
     }
 }
 
-void KoZipStore::init(const QByteArray& appIdentification)
+void KoZipStore::init(const QByteArray &appIdentification)
 {
     Q_D(KoStore);
 
@@ -95,7 +88,7 @@ void KoZipStore::init(const QByteArray& appIdentification)
         return;
 
     if (d->mode == Write) {
-        //debugStore <<"KoZipStore::init writing mimetype" << appIdentification;
+        // debugStore <<"KoZipStore::init writing mimetype" << appIdentification;
 
         m_pZip->setCompression(KZip::NoCompression);
         m_pZip->setExtraField(KZip::NoExtraField);
@@ -117,7 +110,7 @@ void KoZipStore::setCompressionEnabled(bool e)
     if (e) {
         m_pZip->setCompression(KZip::DeflateCompression);
     } else {
-        m_pZip->setCompression(KZip::NoCompression);        
+        m_pZip->setCompression(KZip::NoCompression);
     }
 }
 
@@ -126,17 +119,17 @@ bool KoZipStore::doFinalize()
     return m_pZip->close();
 }
 
-bool KoZipStore::openWrite(const QString& name)
+bool KoZipStore::openWrite(const QString &name)
 {
     Q_D(KoStore);
     d->stream = 0; // Don't use!
     return m_pZip->prepareWriting(name, "", "" /*m_pZip->rootDir()->user(), m_pZip->rootDir()->group()*/, 0);
 }
 
-bool KoZipStore::openRead(const QString& name)
+bool KoZipStore::openRead(const QString &name)
 {
     Q_D(KoStore);
-    const KArchiveEntry * entry = m_pZip->directory()->entry(name);
+    const KArchiveEntry *entry = m_pZip->directory()->entry(name);
     if (entry == 0) {
         return false;
     }
@@ -145,18 +138,19 @@ bool KoZipStore::openRead(const QString& name)
         return false;
     }
     // Must cast to KZipFileEntry, not only KArchiveFile, because device() isn't virtual!
-    const KZipFileEntry * f = static_cast<const KZipFileEntry *>(entry);
+    const KZipFileEntry *f = static_cast<const KZipFileEntry *>(entry);
     delete d->stream;
     d->stream = f->createDevice();
     d->size = f->size();
     return true;
 }
 
-qint64 KoZipStore::write(const char* _data, qint64 _len)
+qint64 KoZipStore::write(const char *_data, qint64 _len)
 {
     Q_D(KoStore);
-    if (_len == 0) return 0;
-    //debugStore <<"KoZipStore::write" << _len;
+    if (_len == 0)
+        return 0;
+    // debugStore <<"KoZipStore::write" << _len;
 
     if (!d->isOpen) {
         errorStore << "KoStore: You must open before writing" << Qt::endl;
@@ -168,7 +162,7 @@ qint64 KoZipStore::write(const char* _data, qint64 _len)
     }
 
     d->size += _len;
-    if (m_pZip->writeData(_data, _len))     // writeData returns a bool!
+    if (m_pZip->writeData(_data, _len)) // writeData returns a bool!
         return _len;
     return 0;
 }
@@ -177,8 +171,8 @@ QStringList KoZipStore::directoryList() const
 {
     QStringList retval;
     const KArchiveDirectory *directory = m_pZip->directory();
-    foreach(const QString &name, directory->entries()) {
-        const KArchiveEntry* fileArchiveEntry = m_pZip->directory()->entry(name);
+    foreach (const QString &name, directory->entries()) {
+        const KArchiveEntry *fileArchiveEntry = m_pZip->directory()->entry(name);
         if (fileArchiveEntry->isDirectory()) {
             retval << name;
         }
@@ -193,7 +187,7 @@ bool KoZipStore::closeWrite()
     return m_pZip->finishWriting(d->size);
 }
 
-bool KoZipStore::enterRelativeDirectory(const QString& dirName)
+bool KoZipStore::enterRelativeDirectory(const QString &dirName)
 {
     Q_D(KoStore);
     if (d->mode == Read) {
@@ -203,7 +197,7 @@ bool KoZipStore::enterRelativeDirectory(const QString& dirName)
         }
         const KArchiveEntry *entry = m_currentDir->entry(dirName);
         if (entry && entry->isDirectory()) {
-            m_currentDir = dynamic_cast<const KArchiveDirectory*>(entry);
+            m_currentDir = dynamic_cast<const KArchiveDirectory *>(entry);
             return m_currentDir != 0;
         }
         return false;
@@ -211,18 +205,18 @@ bool KoZipStore::enterRelativeDirectory(const QString& dirName)
         return true;
 }
 
-bool KoZipStore::enterAbsoluteDirectory(const QString& path)
+bool KoZipStore::enterAbsoluteDirectory(const QString &path)
 {
     if (path.isEmpty()) {
         m_currentDir = 0;
         return true;
     }
-    m_currentDir = dynamic_cast<const KArchiveDirectory*>(m_pZip->directory()->entry(path));
+    m_currentDir = dynamic_cast<const KArchiveDirectory *>(m_pZip->directory()->entry(path));
     Q_ASSERT(m_currentDir);
     return m_currentDir != 0;
 }
 
-bool KoZipStore::fileExists(const QString& absPath) const
+bool KoZipStore::fileExists(const QString &absPath) const
 {
     const KArchiveEntry *entry = m_pZip->directory()->entry(absPath);
     return entry && entry->isFile();

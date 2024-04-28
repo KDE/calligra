@@ -12,22 +12,22 @@
 // Local
 #include "MapAdaptor.h"
 
-#include "engine/SheetsDebug.h"
 #include "core/Map.h"
 #include "core/Sheet.h"
+#include "engine/SheetsDebug.h"
 
 using namespace Calligra::Sheets;
 
-MapAdaptor::MapAdaptor(Map* map)
-        : QDBusAbstractAdaptor(map)
+MapAdaptor::MapAdaptor(Map *map)
+    : QDBusAbstractAdaptor(map)
 {
     setAutoRelaySignals(true);
     m_map = map;
 }
 
-QString MapAdaptor::sheet(const QString& name)
+QString MapAdaptor::sheet(const QString &name)
 {
-    SheetBase* t = m_map->findSheet(name);
+    SheetBase *t = m_map->findSheet(name);
     if (!t)
         return QString();
 
@@ -37,7 +37,7 @@ QString MapAdaptor::sheet(const QString& name)
 
 QString MapAdaptor::sheetByIndex(int index)
 {
-    SheetBase* t = m_map->sheetList().at(index);
+    SheetBase *t = m_map->sheetList().at(index);
     if (!t) {
         debugSheets << "+++++ No table found at index" << index;
         return QString();
@@ -57,7 +57,7 @@ int MapAdaptor::sheetCount() const
 QStringList MapAdaptor::sheetNames() const
 {
     QStringList names;
-    for (SheetBase* bsheet : m_map->sheetList()) {
+    for (SheetBase *bsheet : m_map->sheetList()) {
         Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
         names.append(sheet->objectName());
     }
@@ -67,19 +67,19 @@ QStringList MapAdaptor::sheetNames() const
 QStringList MapAdaptor::sheets()
 {
     QStringList t;
-    for (SheetBase* bsheet : m_map->sheetList()) {
+    for (SheetBase *bsheet : m_map->sheetList()) {
         Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
         t.append(sheet->objectName());
     }
     return t;
 }
 
-QString MapAdaptor::insertSheet(const QString& name)
+QString MapAdaptor::insertSheet(const QString &name)
 {
     if (m_map->findSheet(name))
         return sheet(name);
 
-    SheetBase* t = m_map->addNewSheet();
+    SheetBase *t = m_map->addNewSheet();
     t->setSheetName(name);
 
     return sheet(name);

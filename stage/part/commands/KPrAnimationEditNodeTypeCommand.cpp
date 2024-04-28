@@ -17,20 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #include "KPrAnimationEditNodeTypeCommand.h"
 #include "KPrShapeAnimations.h"
 
-KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrShapeAnimation::NodeType oldType,
+KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation,
+                                                                 KPrShapeAnimation::NodeType oldType,
                                                                  KPrShapeAnimation::NodeType newType,
-                                                                 KPrShapeAnimations *animationModel, KUndo2Command *parent)
+                                                                 KPrShapeAnimations *animationModel,
+                                                                 KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_animation(animation)
     , m_newType(newType)
     , m_oldType(oldType)
     , m_model(animationModel)
 {
-    setText(kundo2_i18n("Edit animation trigger event" ) );
+    setText(kundo2_i18n("Edit animation trigger event"));
 }
 
 KPrAnimationEditNodeTypeCommand::~KPrAnimationEditNodeTypeCommand()

@@ -6,12 +6,11 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef KCHART_GLOBAL_H
 #define KCHART_GLOBAL_H
 
-#include <QLatin1String>
 #include <QDebug>
+#include <QLatin1String>
 
 #include <KoTextShapeData.h>
 typedef KoTextShapeData TextLabelData;
@@ -24,30 +23,29 @@ enum ChartType {
     BarChartType,
     LineChartType,
     AreaChartType,
-    CircleChartType,		// Pie in KChart
+    CircleChartType, // Pie in KChart
     RingChartType,
     ScatterChartType,
-    RadarChartType,		    // Polar in KChart
-    FilledRadarChartType,   // Polar in KChart
+    RadarChartType, // Polar in KChart
+    FilledRadarChartType, // Polar in KChart
     StockChartType,
     BubbleChartType,
     SurfaceChartType,
     GanttChartType,
-    LastChartType               // Not an actual type, just a place holder
+    LastChartType // Not an actual type, just a place holder
 };
-const int NUM_CHARTTYPES = int (LastChartType);
+const int NUM_CHARTTYPES = int(LastChartType);
 
 bool isPolar(ChartType type);
 bool isCartesian(ChartType type);
 
-
 // Chart subtypes, applicable to Bar, Line, Area, and Radar
 enum ChartSubtype {
-    NoChartSubtype,             // for charts with no subtypes
-    NormalChartSubtype,         // For bar, line, area and radar charts
+    NoChartSubtype, // for charts with no subtypes
+    NormalChartSubtype, // For bar, line, area and radar charts
     StackedChartSubtype,
     PercentChartSubtype,
-    HighLowCloseChartSubtype,               // For stock charts
+    HighLowCloseChartSubtype, // For stock charts
     OpenHighLowCloseChartSubtype,
     CandlestickChartSubtype
 };
@@ -59,15 +57,9 @@ QLatin1String chartTypeIconName(ChartType type, ChartSubtype subtype);
 #define ICON1(charttype) QIcon::fromTheme(chartTypeIconName(charttype, NoChartSubtype))
 #define ICON2(charttype, chartsubtype) QIcon::fromTheme(chartTypeIconName(charttype, chartsubtype))
 
+enum AxisDimension { XAxisDimension, YAxisDimension, ZAxisDimension };
 
-enum AxisDimension {
-    XAxisDimension,
-    YAxisDimension,
-    ZAxisDimension
-};
-
-struct ChartTypeOptions
-{
+struct ChartTypeOptions {
     ChartSubtype subtype;
 };
 
@@ -85,12 +77,7 @@ enum Position {
     FloatingPosition
 };
 
-enum LegendExpansion {
-    HighLegendExpansion,
-    WideLegendExpansion,
-    BalancedLegendExpansion,
-    CustomLegendExpansion
-};
+enum LegendExpansion { HighLegendExpansion, WideLegendExpansion, BalancedLegendExpansion, CustomLegendExpansion };
 
 enum ErrorCategory {
     NoErrorCategory,
@@ -115,37 +102,32 @@ enum ItemType {
     SecondaryYAxisTitleType = 23
 };
 
-enum OdfSymbolType {
-    NoSymbol,
-    AutomaticSymbol,
-    NamedSymbol,
-    ImageSymbol
-};
+enum OdfSymbolType { NoSymbol, AutomaticSymbol, NamedSymbol, ImageSymbol };
 
 // From odf spec:
 // The values of the chart:symbol-name attribute are:
 // square, diamond, arrow-down, arrow-up, arrow-right, arrow-left, bow-tie, hourglass, circle, star, x, plus, asterisk, horizontal-bar or vertical-bar
 enum OdfMarkerStyle {
-    MarkerSquare         = 0,
-    MarkerDiamond        = 1,
-    MarkerArrowDown      = 2,
-    MarkerArrowUp        = 3,
-    MarkerArrowRight     = 4,
-    MarkerArrowLeft      = 5,
-    MarkerBowTie         = 6,
-    MarkerHourGlass      = 7,
-    MarkerCircle         = 8,
-    MarkerStar           = 9,
-    MarkerX              = 10,
-    MarkerCross          = 11,
-    MarkerAsterisk       = 12,
-    MarkerHorizontalBar  = 13,
-    MarkerVerticalBar    = 14,
+    MarkerSquare = 0,
+    MarkerDiamond = 1,
+    MarkerArrowDown = 2,
+    MarkerArrowUp = 3,
+    MarkerArrowRight = 4,
+    MarkerArrowLeft = 5,
+    MarkerBowTie = 6,
+    MarkerHourGlass = 7,
+    MarkerCircle = 8,
+    MarkerStar = 9,
+    MarkerX = 10,
+    MarkerCross = 11,
+    MarkerAsterisk = 12,
+    MarkerHorizontalBar = 13,
+    MarkerVerticalBar = 14,
     // NOTE: These are not odf
-    MarkerRing           = 15,
-    MarkerFastCross      = 16,
-    Marker1Pixel         = 17,
-    Marker4Pixels        = 18
+    MarkerRing = 15,
+    MarkerFastCross = 16,
+    Marker1Pixel = 17,
+    Marker4Pixels = 18
 };
 
 } // Namespace KoChart

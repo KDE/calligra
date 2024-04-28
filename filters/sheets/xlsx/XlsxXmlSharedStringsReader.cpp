@@ -9,12 +9,12 @@
  *
  */
 
-#include "XlsxUtils.h"
 #include "XlsxXmlSharedStringsReader.h"
+#include "XlsxUtils.h"
 
+#include <KoXmlWriter.h>
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
-#include <KoXmlWriter.h>
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_CLASS XlsxXmlSharedStringsReader
@@ -24,26 +24,32 @@
 
 // -------------------------------------------------------------
 
-XlsxXmlSharedStringsReaderContext::XlsxXmlSharedStringsReaderContext(QVector<QString>& _strings, MSOOXML::DrawingMLTheme* _themes,
-    QVector<QString>& _colorIndices)
-        : strings(&_strings), themes(_themes), colorIndices(_colorIndices)
+XlsxXmlSharedStringsReaderContext::XlsxXmlSharedStringsReaderContext(QVector<QString> &_strings,
+                                                                     MSOOXML::DrawingMLTheme *_themes,
+                                                                     QVector<QString> &_colorIndices)
+    : strings(&_strings)
+    , themes(_themes)
+    , colorIndices(_colorIndices)
 {
 }
 
 class XlsxXmlSharedStringsReader::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
+
 private:
 };
 
 XlsxXmlSharedStringsReader::XlsxXmlSharedStringsReader(KoOdfWriters *writers)
-        : XlsxXmlCommonReader(writers)
-        , m_context(0)
-        , d(new Private)
+    : XlsxXmlCommonReader(writers)
+    , m_context(0)
+    , d(new Private)
 {
     init();
 }
@@ -59,9 +65,9 @@ void XlsxXmlSharedStringsReader::init()
     m_index = 0;
 }
 
-KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<XlsxXmlSharedStringsReaderContext*>(context);
+    m_context = dynamic_cast<XlsxXmlSharedStringsReaderContext *>(context);
     Q_ASSERT(m_context);
     m_colorIndices = m_context->colorIndices;
     m_themes = m_context->themes;
@@ -95,13 +101,13 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::readInternal()
     for (int i = 0; i < namespaces.count(); i++) {
         qCDebug(lcXlsxImport) << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
-//! @todo find out whether the namespace returned by namespaceUri()
-//!       is exactly the same ref as the element of namespaceDeclarations()
+    //! @todo find out whether the namespace returned by namespaceUri()
+    //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration(QString(), MSOOXML::Schemas::spreadsheetml))) {
         raiseError(i18n("Namespace \"%1\" not found", QLatin1String(MSOOXML::Schemas::spreadsheetml)));
         return KoFilter::WrongFormat;
     }
-//! @todo expect other namespaces too...
+    //! @todo expect other namespaces too...
 
     TRY_READ(sst)
     qCDebug(lcXlsxImport) << "===========finished============";
@@ -120,8 +126,8 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_sst()
 
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(count)
-//! @todo use uniqueCount attr?
-//    TRY_READ_ATTR_WITHOUT_NS(uniqueCount)
+    //! @todo use uniqueCount attr?
+    //    TRY_READ_ATTR_WITHOUT_NS(uniqueCount)
     bool ok = true;
     const uint countNumber = count.isEmpty() ? 0 : count.toUInt(&ok);
     if (!ok) {
@@ -173,7 +179,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
     QByteArray siData;
     QBuffer siBuffer(&siData);
     siBuffer.open(QIODevice::WriteOnly);
-    KoXmlWriter siWriter(&siBuffer, 0/*indentation*/);
+    KoXmlWriter siWriter(&siBuffer, 0 /*indentation*/);
     MSOOXML::Utils::XmlWriteBuffer buf;
     body = buf.setWriter(&siWriter);
 
@@ -185,9 +191,9 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
             TRY_READ_IF(t)
             ELSE_TRY_READ_IF(r)
             SKIP_UNKNOWN
-//! @todo support phoneticPr
-//! @todo support rPh
-            //ELSE_WRONG_FORMAT
+            //! @todo support phoneticPr
+            //! @todo support rPh
+            // ELSE_WRONG_FORMAT
         }
     }
 

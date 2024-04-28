@@ -5,19 +5,19 @@
  */
 
 #include "DocumentManager.h"
-#include "Settings.h"
-#include "RecentFileManager.h"
 #include "ProgressProxy.h"
+#include "RecentFileManager.h"
+#include "Settings.h"
 
 #include <KWPart.h>
 #include <KoDocument.h>
 #include <KoDocumentEntry.h>
 
-#include <libs/pigment/KoColor.h>
 #include <KoColorSpaceRegistry.h>
+#include <libs/pigment/KoColor.h>
 
-#include <stage/part/KPrDocument.h>
 #include <part/KWDocument.h>
+#include <stage/part/KPrDocument.h>
 
 #include <QMimeType>
 
@@ -32,13 +32,14 @@ public:
         , recentFileManager(0)
         , importingDocument(false)
         , temporaryFile(false)
-    { }
+    {
+    }
 
-    ProgressProxy* proxy;
+    ProgressProxy *proxy;
     QPointer<KoDocument> document;
     QPointer<KoPart> part;
-    Settings* settingsManager;
-    RecentFileManager* recentFileManager;
+    Settings *settingsManager;
+    RecentFileManager *recentFileManager;
 
     QString saveAsFilename;
     QString openDocumentFilename;
@@ -49,17 +50,17 @@ public:
 
 DocumentManager *DocumentManager::sm_instance = 0;
 
-KoDocument* DocumentManager::document() const
+KoDocument *DocumentManager::document() const
 {
     return d->document;
 }
 
-QObject* DocumentManager::doc() const
+QObject *DocumentManager::doc() const
 {
     return d->document;
 }
 
-KoPart* DocumentManager::part(const QString& type)
+KoPart *DocumentManager::part(const QString &type)
 {
     Q_UNUSED(type)
     if (!d->part)
@@ -67,22 +68,22 @@ KoPart* DocumentManager::part(const QString& type)
     return d->part;
 }
 
-ProgressProxy* DocumentManager::progressProxy() const
+ProgressProxy *DocumentManager::progressProxy() const
 {
     return d->proxy;
 }
 
-Settings* DocumentManager::settingsManager() const
+Settings *DocumentManager::settingsManager() const
 {
     return d->settingsManager;
 }
 
-void DocumentManager::setSettingsManager(Settings* newManager)
+void DocumentManager::setSettingsManager(Settings *newManager)
 {
     d->settingsManager = newManager;
 }
 
-void DocumentManager::setDocAndPart(KoDocument* document, KoPart* part)
+void DocumentManager::setDocAndPart(KoDocument *document, KoPart *part)
 {
     d->document = document;
     d->part = part;
@@ -91,14 +92,14 @@ void DocumentManager::setDocAndPart(KoDocument* document, KoPart* part)
     connect(document, &QObject::destroyed, this, &DocumentManager::aboutToDeleteDocument);
 }
 
-RecentFileManager* DocumentManager::recentFileManager() const
+RecentFileManager *DocumentManager::recentFileManager() const
 {
     return d->recentFileManager;
 }
 
 bool DocumentManager::isTemporaryFile() const
 {
-    if(d->document->url().isEmpty()) {
+    if (d->document->url().isEmpty()) {
         return true;
     }
     return d->temporaryFile;
@@ -114,7 +115,7 @@ void DocumentManager::newDocument(int width, int height, float resolution)
     QTimer::singleShot(300, this, &DocumentManager::delayedNewDocument);
 }
 
-void DocumentManager::newDocument(const QVariantMap& options)
+void DocumentManager::newDocument(const QVariantMap &options)
 {
     closeDocument();
 
@@ -125,11 +126,10 @@ void DocumentManager::newDocument(const QVariantMap& options)
 void DocumentManager::delayedNewDocument()
 {
     QString filetype;
-    if(d->newDocOptions.value("type", WORDS_MIME_TYPE).toString() == WORDS_MIME_TYPE) {
+    if (d->newDocOptions.value("type", WORDS_MIME_TYPE).toString() == WORDS_MIME_TYPE) {
         filetype = "odt";
         d->document = new KWDocument(part(WORDS_MIME_TYPE));
-    }
-    else {
+    } else {
         filetype = "odp";
         d->document = new KPrDocument(part(STAGE_MIME_TYPE));
     }
@@ -138,31 +138,25 @@ void DocumentManager::delayedNewDocument()
     part()->setDocument(d->document);
     connect(d->document.data(), &QObject::destroyed, this, &DocumentManager::aboutToDeleteDocument);
 
-    if(d->newDocOptions.isEmpty())
-    {
-        //d->document->newImage("Untitled", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8());
-        //d->document->image()->setResolution(d->newDocResolution, d->newDocResolution);
-        //d->document->setUrl(QUrl("Untitled.kra"));
-    }
-    else
-    {
-        //QString name = d->newDocOptions.value("name", "Untitled").toString();
-        //int width = d->newDocOptions.value("width").toInt();
-        //int height = d->newDocOptions.value("height").toInt();
-        // internal resolution is pixels per point, not ppi
-        //float res = d->newDocOptions.value("resolution", 72.0f).toFloat() / 72.0f;
+    if (d->newDocOptions.isEmpty()) {
+        // d->document->newImage("Untitled", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8());
+        // d->document->image()->setResolution(d->newDocResolution, d->newDocResolution);
+        // d->document->setUrl(QUrl("Untitled.kra"));
+    } else {
+        // QString name = d->newDocOptions.value("name", "Untitled").toString();
+        // int width = d->newDocOptions.value("width").toInt();
+        // int height = d->newDocOptions.value("height").toInt();
+        //  internal resolution is pixels per point, not ppi
+        // float res = d->newDocOptions.value("resolution", 72.0f).toFloat() / 72.0f;
 
         QString colorModelId = d->newDocOptions.value("colorModelId").toString();
         QString colorDepthId = d->newDocOptions.value("colorDepthId").toString();
         QString colorProfileId = d->newDocOptions.value("colorProfileId").toString();
 
-        const KoColorSpace* profile;
-        if(colorModelId.isEmpty() || colorDepthId.isEmpty() || colorProfileId.isEmpty())
-        {
+        const KoColorSpace *profile;
+        if (colorModelId.isEmpty() || colorDepthId.isEmpty() || colorProfileId.isEmpty()) {
             profile = KoColorSpaceRegistry::instance()->rgb8();
-        }
-        else
-        {
+        } else {
             profile = KoColorSpaceRegistry::instance()->colorSpace(colorModelId, colorDepthId, colorProfileId);
         }
 
@@ -178,7 +172,7 @@ void DocumentManager::delayedNewDocument()
     emit documentChanged();
 }
 
-void DocumentManager::openDocument(const QString& document, bool import)
+void DocumentManager::openDocument(const QString &document, bool import)
 {
     closeDocument();
     d->openDocumentFilename = document;
@@ -222,8 +216,7 @@ void DocumentManager::closeDocument()
 
 bool DocumentManager::save()
 {
-    if (d->document->save())
-    {
+    if (d->document->save()) {
         d->recentFileManager->addRecent(d->document->url().toLocalFile());
         d->settingsManager->setCurrentFile(d->document->url().toLocalFile());
         emit documentSaved();
@@ -265,7 +258,7 @@ void DocumentManager::setTemporaryFile(bool temp)
     emit documentSaved();
 }
 
-DocumentManager* DocumentManager::instance()
+DocumentManager *DocumentManager::instance()
 {
     if (!sm_instance) {
         sm_instance = new DocumentManager(QCoreApplication::instance());
@@ -274,8 +267,9 @@ DocumentManager* DocumentManager::instance()
     return sm_instance;
 }
 
-DocumentManager::DocumentManager(QObject* parent)
-    : QObject(parent), d(new Private)
+DocumentManager::DocumentManager(QObject *parent)
+    : QObject(parent)
+    , d(new Private)
 {
     d->proxy = new ProgressProxy(this);
     d->recentFileManager = new RecentFileManager(this);
@@ -285,4 +279,3 @@ DocumentManager::~DocumentManager()
 {
     delete d;
 }
-

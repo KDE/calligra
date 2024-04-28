@@ -8,11 +8,11 @@
 #include "KoZoomToolFactory.h"
 #include "KoZoomTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 
 KoZoomToolFactory::KoZoomToolFactory()
-        : KoToolFactoryBase("KoZoomToolId")
+    : KoToolFactoryBase("KoZoomToolId")
 {
     setToolTip(i18n("Zoom"));
     setToolType(navigationToolType());

@@ -5,10 +5,8 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef KOCHART_CONFIGSUBWIDGETBASE
 #define KOCHART_CONFIGSUBWIDGETBASE
-
 
 #include "ChartShape.h"
 
@@ -49,7 +47,6 @@ private Q_SLOTS:
     void removeSubDialogs(KoChart::ChartType type, KoChart::ChartType prev = LastChartType);
 };
 
-}  // namespace KoChart
-
+} // namespace KoChart
 
 #endif // KOCHART_CONFIGSUBWIDGETBASE

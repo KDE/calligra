@@ -8,8 +8,8 @@
 #define KSPREAD_STYLE_STORAGE_UNDO_COMMAND
 
 // Qt
-#include <QVector>
 #include <QPair>
+#include <QVector>
 #include <kundo2command.h>
 
 // Sheets
@@ -40,8 +40,8 @@ public:
 
     void add(const QVector<Pair> &pairs);
 
-    StyleStorageUndoCommand& operator<<(const Pair &pair);
-    StyleStorageUndoCommand& operator<<(const QVector<Pair> &pairs);
+    StyleStorageUndoCommand &operator<<(const Pair &pair);
+    StyleStorageUndoCommand &operator<<(const QVector<Pair> &pairs);
 
 private:
     StyleStorage *const m_storage;
@@ -49,8 +49,8 @@ private:
 };
 
 StyleStorageUndoCommand::StyleStorageUndoCommand(StyleStorage *storage, KUndo2Command *parent)
-        : KUndo2Command(parent)
-        , m_storage(storage)
+    : KUndo2Command(parent)
+    , m_storage(storage)
 {
 }
 
@@ -63,18 +63,18 @@ void StyleStorageUndoCommand::undo()
     KUndo2Command::undo(); // undo possible child commands
 }
 
-void StyleStorageUndoCommand::add(const QVector<Pair>& pairs)
+void StyleStorageUndoCommand::add(const QVector<Pair> &pairs)
 {
     m_undoData << pairs;
 }
 
-StyleStorageUndoCommand& StyleStorageUndoCommand::operator<<(const Pair& pair)
+StyleStorageUndoCommand &StyleStorageUndoCommand::operator<<(const Pair &pair)
 {
     m_undoData << pair;
     return *this;
 }
 
-StyleStorageUndoCommand& StyleStorageUndoCommand::operator<<(const QVector<Pair>& pairs)
+StyleStorageUndoCommand &StyleStorageUndoCommand::operator<<(const QVector<Pair> &pairs)
 {
     m_undoData << pairs;
     return *this;

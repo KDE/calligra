@@ -10,8 +10,8 @@
 
 #include "kotext_export.h"
 
-#include <QObject>
 #include <QList>
+#include <QObject>
 
 class KoAnnotation;
 class KoAnnotationManagerPrivate;
@@ -62,7 +62,7 @@ public Q_SLOTS:
     void rename(const QString &oldName, const QString &newName);
 
 private:
-    KoAnnotationManagerPrivate * const d;
+    KoAnnotationManagerPrivate *const d;
 };
 
 #endif

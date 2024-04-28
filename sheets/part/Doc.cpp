@@ -22,22 +22,22 @@
 
 #include <QPainter>
 
-#include <KSharedConfig>
 #include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <KoChartInterface.h>
 #include <KoComponentData.h>
 #include <KoShapeRegistry.h>
-#include <KoZoomHandler.h>
 #include <KoUnit.h>
+#include <KoZoomHandler.h>
 
-#include "engine/SheetsDebug.h"
-#include "engine/FunctionModuleRegistry.h"
 #include "core/Map.h"
 #include "core/PrintSettings.h"
 #include "core/Sheet.h"
 #include "core/SheetPrint.h"
 #include "core/StyleManager.h"
+#include "engine/FunctionModuleRegistry.h"
+#include "engine/SheetsDebug.h"
 
 // ui
 #include "ui/SheetView.h"
@@ -56,11 +56,11 @@ class Q_DECL_HIDDEN Doc::Private
 {
 public:
     Map *map;
-    static QList<Doc*> s_docs;
+    static QList<Doc *> s_docs;
     static int s_docId;
 
     // document properties
-    bool configLoadFromFile       : 1;
+    bool configLoadFromFile : 1;
     SheetAccessModel *sheetAccessModel;
     KoDocumentResourceManager *resourceManager;
 };
@@ -71,12 +71,12 @@ public:
  *
  *****************************************************************************/
 
-QList<Doc*> Doc::Private::s_docs;
+QList<Doc *> Doc::Private::s_docs;
 int Doc::Private::s_docId = 0;
 
 Doc::Doc(KoPart *part)
-        : DocBase(part)
-        , dd(new Private)
+    : DocBase(part)
+    , dd(new Private)
 {
     Q_ASSERT(part);
     connect(map(), &Map::sheetAdded, this, &Doc::sheetAdded);
@@ -96,14 +96,13 @@ Doc::Doc(KoPart *part)
     // Init chart shape factory with Calligra Sheets' specific configuration panels.
     KoShapeFactoryBase *chartShape = KoShapeRegistry::instance()->value(ChartShapeId);
     if (chartShape) {
-        QList<KoShapeConfigFactoryBase*> panels = ChartDialog::panels(map());
+        QList<KoShapeConfigFactoryBase *> panels = ChartDialog::panels(map());
         chartShape->setOptionPanels(panels);
     } else {
         warnSheets << "chart shape factory not found";
     }
 
-    connect(map(), &Map::commandAdded,
-            this, &KoDocument::addCommand);
+    connect(map(), &Map::commandAdded, this, &KoDocument::addCommand);
 
     // Load the function modules.
     FunctionModuleRegistry::instance()->loadFunctionModules();
@@ -111,7 +110,7 @@ Doc::Doc(KoPart *part)
 
 Doc::~Doc()
 {
-    //don't save config when words is embedded into konqueror
+    // don't save config when words is embedded into konqueror
     saveConfig();
 
     delete dd;
@@ -151,29 +150,27 @@ int Doc::supportedSpecialFormats() const
     return KoDocument::supportedSpecialFormats();
 }
 
-bool Doc::completeSaving(KoStore* _store)
+bool Doc::completeSaving(KoStore *_store)
 {
     Q_UNUSED(_store);
     return true;
 }
 
-
 QDomDocument Doc::saveXML()
 {
     /* don't pull focus away from the editor if this is just a background
        autosave */
-    if (!isAutosaving()) {/* FIXME
-        foreach(KoView* view, views())
-        static_cast<View *>(view)->selection()->emitCloseEditor(true);
-        */
+    if (!isAutosaving()) { /* FIXME
+         foreach(KoView* view, views())
+         static_cast<View *>(view)->selection()->emitCloseEditor(true);
+         */
         emit closeEditor(true);
     }
 
     return DocBase::saveXML();
 }
 
-
-bool Doc::completeLoading(KoStore* store)
+bool Doc::completeLoading(KoStore *store)
 {
     debugSheets << "------------------------ COMPLETING --------------------";
 
@@ -184,18 +181,17 @@ bool Doc::completeLoading(KoStore* store)
     return ok;
 }
 
-
-void Doc::addIgnoreWordAllList(const QStringList & _lst)
+void Doc::addIgnoreWordAllList(const QStringList &_lst)
 {
     setSpellListIgnoreAll(_lst);
 }
 
-void Doc::paintContent(QPainter& painter, const QRect& rect)
+void Doc::paintContent(QPainter &painter, const QRect &rect)
 {
     paintContent(painter, rect, 0);
 }
 
-void Doc::paintContent(QPainter& painter, const QRect& rect, Sheet* _sheet)
+void Doc::paintContent(QPainter &painter, const QRect &rect, Sheet *_sheet)
 {
     if (rect.isEmpty()) {
         return;
@@ -218,7 +214,7 @@ void Doc::paintContent(QPainter& painter, const QRect& rect, Sheet* _sheet)
 
     QPainter pixmapPainter(&thumbnail);
     pixmapPainter.setClipRect(QRect(QPoint(0, 0), thumbnail.size()));
-    sheetView.paintCells(pixmapPainter, QRect(0, 0, pageLayout.width, pageLayout.height), QPointF(0,0));
+    sheetView.paintCells(pixmapPainter, QRect(0, 0, pageLayout.width, pageLayout.height), QPointF(0, 0));
 
     // The pixmap gets scaled to fit the rectangle.
     painter.drawPixmap(rect & QRect(0, 0, 100, 100), thumbnail);
@@ -229,11 +225,12 @@ void Doc::updateAllViews()
     emit updateView();
 }
 
-void Doc::addIgnoreWordAll(const QString & word)
+void Doc::addIgnoreWordAll(const QString &word)
 {
     QStringList lst = spellListIgnoreAll();
-    if (lst.indexOf(word) >= 0) return;
-    
+    if (lst.indexOf(word) >= 0)
+        return;
+
     lst.append(word);
     setSpellListIgnoreAll(lst);
 }
@@ -254,11 +251,12 @@ bool Doc::configLoadFromFile() const
     return dd->configLoadFromFile;
 }
 
-void Doc::sheetAdded(SheetBase* sheet)
+void Doc::sheetAdded(SheetBase *sheet)
 {
 #ifndef QT_NO_DBUS
     Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
-    if (!fullSheet) return;
+    if (!fullSheet)
+        return;
     new SheetAdaptor(fullSheet);
     QString dbusPath('/' + fullSheet->map()->objectName() + '/' + fullSheet->objectName());
     if (fullSheet->parent() && !fullSheet->parent()->objectName().isEmpty()) {

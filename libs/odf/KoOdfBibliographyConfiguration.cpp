@@ -5,31 +5,67 @@
  */
 #include "KoOdfBibliographyConfiguration.h"
 
-#include <OdfDebug.h>
 #include "KoXmlNS.h"
 #include "KoXmlWriter.h"
+#include <OdfDebug.h>
 
 #include <QList>
 
-const QList<QString> KoOdfBibliographyConfiguration::bibTypes = QList<QString>() << "article" << "book" << "booklet" << "conference"
-                                                                     << "email" << "inbook" << "incollection"
-                                                                     << "inproceedings" << "journal" << "manual"
-                                                                     << "mastersthesis" << "misc" << "phdthesis"
-                                                                     << "proceedings" << "techreport" << "unpublished"
-                                                                     << "www" << "custom1" << "custom2"
-                                                                     << "custom3" << "custom4" << "custom5";
+const QList<QString> KoOdfBibliographyConfiguration::bibTypes = QList<QString>() << "article"
+                                                                                 << "book"
+                                                                                 << "booklet"
+                                                                                 << "conference"
+                                                                                 << "email"
+                                                                                 << "inbook"
+                                                                                 << "incollection"
+                                                                                 << "inproceedings"
+                                                                                 << "journal"
+                                                                                 << "manual"
+                                                                                 << "mastersthesis"
+                                                                                 << "misc"
+                                                                                 << "phdthesis"
+                                                                                 << "proceedings"
+                                                                                 << "techreport"
+                                                                                 << "unpublished"
+                                                                                 << "www"
+                                                                                 << "custom1"
+                                                                                 << "custom2"
+                                                                                 << "custom3"
+                                                                                 << "custom4"
+                                                                                 << "custom5";
 
-const QList<QString> KoOdfBibliographyConfiguration::bibDataFields = QList<QString>() << "address" << "annote" << "author"
-                                                                          << "bibliography-type" << "booktitle"
-                                                                          << "chapter" << "custom1" << "custom2"
-                                                                          << "custom3" << "custom4" << "custom5"
-                                                                          << "edition" << "editor" << "howpublished"
-                                                                          << "identifier" << "institution" << "isbn"
-                                                                          << "issn" << "journal" << "month" << "note"
-                                                                          << "number" << "organizations" << "pages"
-                                                                          << "publisher" << "report-type" << "school"
-                                                                          << "series" << "title" << "url" << "volume"
-                                                                          << "year";
+const QList<QString> KoOdfBibliographyConfiguration::bibDataFields = QList<QString>() << "address"
+                                                                                      << "annote"
+                                                                                      << "author"
+                                                                                      << "bibliography-type"
+                                                                                      << "booktitle"
+                                                                                      << "chapter"
+                                                                                      << "custom1"
+                                                                                      << "custom2"
+                                                                                      << "custom3"
+                                                                                      << "custom4"
+                                                                                      << "custom5"
+                                                                                      << "edition"
+                                                                                      << "editor"
+                                                                                      << "howpublished"
+                                                                                      << "identifier"
+                                                                                      << "institution"
+                                                                                      << "isbn"
+                                                                                      << "issn"
+                                                                                      << "journal"
+                                                                                      << "month"
+                                                                                      << "note"
+                                                                                      << "number"
+                                                                                      << "organizations"
+                                                                                      << "pages"
+                                                                                      << "publisher"
+                                                                                      << "report-type"
+                                                                                      << "school"
+                                                                                      << "series"
+                                                                                      << "title"
+                                                                                      << "url"
+                                                                                      << "volume"
+                                                                                      << "year";
 
 class Q_DECL_HIDDEN KoOdfBibliographyConfiguration::Private
 {
@@ -57,7 +93,8 @@ KoOdfBibliographyConfiguration::~KoOdfBibliographyConfiguration()
 }
 
 KoOdfBibliographyConfiguration::KoOdfBibliographyConfiguration(const KoOdfBibliographyConfiguration &other)
-    : QObject(), d(new Private())
+    : QObject()
+    , d(new Private())
 {
     *this = other;
 }
@@ -74,27 +111,22 @@ KoOdfBibliographyConfiguration &KoOdfBibliographyConfiguration::operator=(const 
     return *this;
 }
 
-
 void KoOdfBibliographyConfiguration::loadOdf(const KoXmlElement &element)
 {
     d->prefix = element.attributeNS(KoXmlNS::text, "prefix", QString());
     d->suffix = element.attributeNS(KoXmlNS::text, "suffix", QString());
-    d->numberedEntries = (element.attributeNS(KoXmlNS::text, "numbered-entries", QString("false")) == "true")
-                         ? true : false;
-    d->sortByPosition = (element.attributeNS(KoXmlNS::text, "sort-by-position", QString("true")) == "true")
-                        ? true : false;
+    d->numberedEntries = (element.attributeNS(KoXmlNS::text, "numbered-entries", QString("false")) == "true") ? true : false;
+    d->sortByPosition = (element.attributeNS(KoXmlNS::text, "sort-by-position", QString("true")) == "true") ? true : false;
     d->sortAlgorithm = element.attributeNS(KoXmlNS::text, "sort-algorithm", QString());
 
-    for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling())
-    {
+    for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
         KoXmlElement child = node.toElement();
 
         if (child.namespaceURI() == KoXmlNS::text && child.localName() == "sort-key") {
             QString key = child.attributeNS(KoXmlNS::text, "key", QString());
-            Qt::SortOrder order = (child.attributeNS(KoXmlNS::text, "sort-ascending", "true") == "true")
-                    ? (Qt::AscendingOrder): (Qt::DescendingOrder);
-            if(!key.isNull() && KoOdfBibliographyConfiguration::bibDataFields.contains(key)) {
-                d->sortKeys << QPair<QString, Qt::SortOrder>(key,order);
+            Qt::SortOrder order = (child.attributeNS(KoXmlNS::text, "sort-ascending", "true") == "true") ? (Qt::AscendingOrder) : (Qt::DescendingOrder);
+            if (!key.isNull() && KoOdfBibliographyConfiguration::bibDataFields.contains(key)) {
+                d->sortKeys << QPair<QString, Qt::SortOrder>(key, order);
             }
         }
     }
@@ -120,10 +152,10 @@ void KoOdfBibliographyConfiguration::saveOdf(KoXmlWriter *writer) const
     writer->addAttribute("text:sort-by-position", d->sortByPosition ? "true" : "false");
 
     foreach (const SortKeyPair &key, d->sortKeys) {
-            writer->startElement("text:sort-key");
-            writer->addAttribute("text:key", key.first);
-            writer->addAttribute("text:sort-ascending",key.second);
-            writer->endElement();
+        writer->startElement("text:sort-key");
+        writer->addAttribute("text:key", key.first);
+        writer->addAttribute("text:sort-ascending", key.second);
+        writer->endElement();
     }
     writer->endElement();
 }

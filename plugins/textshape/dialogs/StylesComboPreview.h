@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2011 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ */
 
 #ifndef STYLESCOMBOPREVIEW_H
 #define STYLESCOMBOPREVIEW_H
@@ -20,7 +20,7 @@ class StylesComboPreview : public QLineEdit
 {
     Q_OBJECT
 
-    Q_PROPERTY( bool showAddButton READ isAddButtonShown WRITE setAddButtonShown )
+    Q_PROPERTY(bool showAddButton READ isAddButtonShown WRITE setAddButtonShown)
 
 public:
     explicit StylesComboPreview(QWidget *parent = 0);

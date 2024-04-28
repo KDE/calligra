@@ -29,22 +29,21 @@ public:
     explicit ReviewTool(KoCanvasBase *canvas);
     ~ReviewTool() override;
 
-    void mouseReleaseEvent(KoPointerEvent* event) override;
-    void mouseMoveEvent(KoPointerEvent* event) override;
-    void mousePressEvent(KoPointerEvent* event) override;
-    void paint(QPainter& painter, const KoViewConverter& converter) override;
-    void keyPressEvent(QKeyEvent* event) override;
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mousePressEvent(KoPointerEvent *event) override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     void deactivate() override;
     void createActions() override;
 
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
 public Q_SLOTS:
     void removeAnnotation();
 
 private:
-
     KoTextEditor *m_textEditor;
     KoTextShapeData *m_textShapeData;
     KoCanvasBase *m_canvas;

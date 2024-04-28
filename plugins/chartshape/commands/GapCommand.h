@@ -13,7 +13,6 @@
 // KoChart
 #include "kochart_global.h"
 
-
 namespace KoChart
 {
 

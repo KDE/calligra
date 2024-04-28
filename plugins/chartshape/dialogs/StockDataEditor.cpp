@@ -7,27 +7,30 @@
 
 #include "StockDataEditor.h"
 
-#include <QSortFilterProxyModel>
 #include <QAbstractTableModel>
 #include <QAction>
+#include <QSortFilterProxyModel>
 
 #include <KoIcon.h>
 
-#include "ChartShape.h"
 #include "CellRegion.h"
-#include "ChartTableModel.h"
 #include "ChartDebug.h"
+#include "ChartShape.h"
+#include "ChartTableModel.h"
 
-
-
-namespace KoChart {
+namespace KoChart
+{
 
 class DataProxy : public QSortFilterProxyModel
 {
 public:
     ChartShape *chart;
 
-    DataProxy(QObject *parent = 0) : QSortFilterProxyModel(parent), chart(0) {}
+    DataProxy(QObject *parent = 0)
+        : QSortFilterProxyModel(parent)
+        , chart(0)
+    {
+    }
 
     Qt::ItemFlags flags(const QModelIndex &index) const override
     {
@@ -60,7 +63,7 @@ public:
     }
     bool insertRows(int row, int count, const QModelIndex &parent) override
     {
-        debugChartUiStock<<row;
+        debugChartUiStock << row;
         Q_UNUSED(count);
         Q_UNUSED(parent);
 
@@ -80,7 +83,6 @@ public:
     }
 };
 
-
 StockDataEditor::StockDataEditor(ChartShape *chart, QWidget *parent)
     : KoDialog(parent)
     , m_chart(chart)
@@ -91,12 +93,11 @@ StockDataEditor::StockDataEditor(ChartShape *chart, QWidget *parent)
     m_ui.setupUi(w);
     setMainWidget(w);
 
-    //m_ui.tableView->verticalHeader()->hide();
+    // m_ui.tableView->verticalHeader()->hide();
 
     m_insertRowAboveAction = new QAction(m_ui.insertRowAbove->icon(), i18n("Insert Row Above"), m_ui.tableView);
     m_insertRowBelowAction = new QAction(m_ui.insertRowBelow->icon(), i18n("Insert Row Below"), m_ui.tableView);
     m_deleteAction = new QAction(m_ui.deleteSelection->icon(), i18n("Delete Row"), m_ui.tableView);
-
 
     m_ui.tableView->addAction(m_insertRowAboveAction);
     m_ui.tableView->addAction(m_insertRowBelowAction);
@@ -113,7 +114,7 @@ StockDataEditor::StockDataEditor(ChartShape *chart, QWidget *parent)
 
     connect(m_ui.insertRowAbove, &QAbstractButton::clicked, this, &StockDataEditor::slotInsertRowAbove);
     connect(m_ui.insertRowBelow, &QAbstractButton::clicked, this, &StockDataEditor::slotInsertRowBelow);
-    connect(m_ui.deleteSelection,&QAbstractButton::clicked, this, &StockDataEditor::slotDeleteSelection);
+    connect(m_ui.deleteSelection, &QAbstractButton::clicked, this, &StockDataEditor::slotDeleteSelection);
 
     connect(m_insertRowAboveAction, &QAction::triggered, this, &StockDataEditor::slotInsertRowAbove);
     connect(m_insertRowBelowAction, &QAction::triggered, this, &StockDataEditor::slotInsertRowBelow);
@@ -128,7 +129,6 @@ StockDataEditor::StockDataEditor(ChartShape *chart, QWidget *parent)
     enableActions();
 
     resize(sizeHint().expandedTo(QSize(600, 300)));
-
 }
 
 StockDataEditor::~StockDataEditor()
@@ -137,7 +137,7 @@ StockDataEditor::~StockDataEditor()
 
 void StockDataEditor::slotInsertRowAbove()
 {
-    debugChartUiStock<<m_ui.tableView->currentIndex();
+    debugChartUiStock << m_ui.tableView->currentIndex();
     int pos = m_ui.tableView->currentIndex().row();
     if (pos < 0) {
         pos = 0;
@@ -147,7 +147,7 @@ void StockDataEditor::slotInsertRowAbove()
 
 void StockDataEditor::slotInsertRowBelow()
 {
-    debugChartUiStock<<m_ui.tableView->currentIndex();
+    debugChartUiStock << m_ui.tableView->currentIndex();
     int pos = m_ui.tableView->currentIndex().row() + 1;
     if (pos == 0) {
         pos = m_dataModel->rowCount();

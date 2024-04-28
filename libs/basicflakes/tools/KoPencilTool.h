@@ -27,25 +27,25 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter) override;
     void repaintDecorations() override;
 
-    void mousePressEvent(KoPointerEvent *event) override ;
+    void mousePressEvent(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
     void mouseReleaseEvent(KoPointerEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
 
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     void deactivate() override;
 
 protected:
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
     /**
      * Add path shape to document.
      * This method can be overridden and change the behaviour of the tool. In that case the subclass takes ownership of pathShape.
      * It gets only called, if there are two or more points in the path.
      */
-    virtual void addPathShape(KoPathShape* path, bool closePath);
+    virtual void addPathShape(KoPathShape *path, bool closePath);
 
-    KoShapeStroke* createStroke();
+    KoShapeStroke *createStroke();
     void setFittingError(qreal fittingError);
     qreal getFittingError();
 
@@ -53,14 +53,14 @@ private Q_SLOTS:
     void selectMode(int mode);
     void setOptimize(int state);
     void setDelta(double delta);
-private:
 
+private:
     qreal lineAngle(const QPointF &p1, const QPointF &p2);
-    void addPoint(const QPointF & point);
+    void addPoint(const QPointF &point);
     void finish(bool closePath);
 
     /// returns the nearest existing path point
-    KoPathPoint* endPointAtPosition(const QPointF &position);
+    KoPathPoint *endPointAtPosition(const QPointF &position);
 
     /// Connects given path with the ones we hit when starting/finishing
     bool connectPaths(KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd);
@@ -76,9 +76,9 @@ private:
 
     QVector<QPointF> m_points; // the raw points
 
-    KoPathShape * m_shape;
+    KoPathShape *m_shape;
     KoPathPoint *m_existingStartPoint; ///< an existing path point we started a new path at
-    KoPathPoint *m_existingEndPoint;   ///< an existing path point we finished a new path at
+    KoPathPoint *m_existingEndPoint; ///< an existing path point we finished a new path at
     KoPathPoint *m_hoveredPoint; ///< an existing path end point the mouse is hovering on
     KoStrokeConfigWidget *m_strokeWidget;
 };

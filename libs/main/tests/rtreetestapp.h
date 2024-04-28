@@ -9,9 +9,9 @@
 
 #define CALLIGRA_RTREE_DEBUG
 
-#include <QMainWindow>
-#include <QList>
 #include <QFile>
+#include <QList>
+#include <QMainWindow>
 
 #include "KoRTree.h"
 #include "Tool.h"
@@ -24,12 +24,16 @@ class Data
 {
 public:
     Data(QRectF rect)
-            : m_rect(rect) {}
+        : m_rect(rect)
+    {
+    }
 
-    QRectF boundingBox() const {
+    QRectF boundingBox() const
+    {
         return m_rect;
     }
-    void paint(QPainter & p) {
+    void paint(QPainter &p)
+    {
         p.save();
         QPen pen(Qt::black);
         p.setPen(pen);
@@ -41,19 +45,20 @@ private:
     QRectF m_rect;
 };
 
-
 class Canvas : public QWidget
 {
     Q_OBJECT
 
 public:
     Canvas();
-    ~Canvas() override {}
+    ~Canvas() override
+    {
+    }
 
     void updateCanvas();
-    void insert(QRectF & rect);
-    void select(QRectF & rect);
-    void remove(QRectF & rect);
+    void insert(QRectF &rect);
+    void select(QRectF &rect);
+    void remove(QRectF &rect);
 
 public Q_SLOTS:
     void selectInsertTool();
@@ -71,16 +76,16 @@ protected:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
 
-    void paintEvent(QPaintEvent * e) override;
+    void paintEvent(QPaintEvent *e) override;
 
 private:
     qreal m_zoom;
-    QSet<Data*> m_rects;
-    QList<Data*> m_found;
+    QSet<Data *> m_rects;
+    QList<Data *> m_found;
     QRectF m_insertRect;
     bool m_buttonPressed;
-    KoRTree<Data*> m_rtree;
-    Tool * m_tool;
+    KoRTree<Data *> m_rtree;
+    Tool *m_tool;
     CreateTool m_createTool;
     SelectTool m_selectTool;
     RemoveTool m_removeTool;
@@ -90,7 +95,6 @@ private:
     int m_listId;
     bool m_paintTree;
 };
-
 
 class MainWindow : public QMainWindow
 {
@@ -108,25 +112,25 @@ private:
     void createToolBars();
     void createStatusBar();
 
-    Canvas * m_canvas;
+    Canvas *m_canvas;
 
-    QMenu * m_fileMenu;
-    QMenu * m_editMenu;
-    QMenu * m_helpMenu;
+    QMenu *m_fileMenu;
+    QMenu *m_editMenu;
+    QMenu *m_helpMenu;
 
-    QAction * m_aboutAct;
-    QAction * m_aboutQtAct;
-    QAction * m_quitAct;
+    QAction *m_aboutAct;
+    QAction *m_aboutQtAct;
+    QAction *m_quitAct;
 
-    QAction * m_insertAct;
-    QAction * m_selectAct;
-    QAction * m_removeAct;
-    QAction * m_clearAct;
+    QAction *m_insertAct;
+    QAction *m_selectAct;
+    QAction *m_removeAct;
+    QAction *m_clearAct;
     QActionGroup *m_toolAct;
 
-    QAction * m_replayAct;
-    QAction * m_debugAct;
-    QAction * m_paintTreeAct;
+    QAction *m_replayAct;
+    QAction *m_debugAct;
+    QAction *m_paintTreeAct;
 };
 
 #endif

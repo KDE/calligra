@@ -15,9 +15,13 @@ class KWFactoryInit : public KWFactory
     Q_INTERFACES(KPluginFactory)
 
 public:
-    explicit KWFactoryInit() : KWFactory() {}
-    ~KWFactoryInit() override {}
-
+    explicit KWFactoryInit()
+        : KWFactory()
+    {
+    }
+    ~KWFactoryInit() override
+    {
+    }
 };
 
 #endif // KWFACTORYINIT_H

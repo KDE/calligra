@@ -6,10 +6,10 @@
  */
 #include "KoOdfNotesConfiguration.h"
 
-#include <OdfDebug.h>
+#include "KoOdfNumberDefinition.h"
 #include "KoXmlNS.h"
 #include "KoXmlWriter.h"
-#include "KoOdfNumberDefinition.h"
+#include <OdfDebug.h>
 
 class Q_DECL_HIDDEN KoOdfNotesConfiguration::Private
 {
@@ -28,7 +28,6 @@ public:
     KoOdfNotesConfiguration::FootnotesPosition footnotesPosition;
     QString footnotesContinuationForward;
     QString footnotesContinuationBackward;
-
 };
 
 KoOdfNotesConfiguration::KoOdfNotesConfiguration(NoteClass noteClass)
@@ -62,7 +61,8 @@ KoOdfNotesConfiguration::~KoOdfNotesConfiguration()
 }
 
 KoOdfNotesConfiguration::KoOdfNotesConfiguration(const KoOdfNotesConfiguration &other)
-    : QObject(), d(new Private())
+    : QObject()
+    , d(new Private())
 {
     d->noteClass = other.d->noteClass;
     d->citationTextStyleName = other.d->citationTextStyleName;
@@ -78,7 +78,6 @@ KoOdfNotesConfiguration::KoOdfNotesConfiguration(const KoOdfNotesConfiguration &
     d->footnotesPosition = other.d->footnotesPosition;
     d->footnotesContinuationForward = other.d->footnotesContinuationForward;
     d->footnotesContinuationBackward = other.d->footnotesContinuationBackward;
-
 }
 
 KoOdfNotesConfiguration &KoOdfNotesConfiguration::operator=(const KoOdfNotesConfiguration &other)
@@ -101,7 +100,6 @@ KoOdfNotesConfiguration &KoOdfNotesConfiguration::operator=(const KoOdfNotesConf
     return *this;
 }
 
-
 void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
 {
     d->citationTextStyleName = element.attributeNS(KoXmlNS::text, "citation-style-name", d->citationTextStyleName);
@@ -115,25 +113,20 @@ void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
     QString numberingScheme = element.attributeNS(KoXmlNS::text, "start-numbering-at", "document");
     if (numberingScheme == "document") {
         d->numberingScheme = BeginAtDocument;
-    }
-    else if (numberingScheme == "chapter") {
+    } else if (numberingScheme == "chapter") {
         d->numberingScheme = BeginAtChapter;
-    }
-    else if (numberingScheme == "page") {
+    } else if (numberingScheme == "page") {
         d->numberingScheme = BeginAtPage;
     }
 
-    QString footnotesPosition  = element.attributeNS(KoXmlNS::text, "footnotes-position", "page");
+    QString footnotesPosition = element.attributeNS(KoXmlNS::text, "footnotes-position", "page");
     if (footnotesPosition == "text") {
         d->footnotesPosition = Text;
-    }
-    else if (footnotesPosition == "page") {
+    } else if (footnotesPosition == "page") {
         d->footnotesPosition = Page;
-    }
-    else if (footnotesPosition == "section") {
+    } else if (footnotesPosition == "section") {
         d->footnotesPosition = Section;
-    }
-    else if (footnotesPosition == "document") {
+    } else if (footnotesPosition == "document") {
         d->footnotesPosition = Document;
     }
 
@@ -155,18 +148,27 @@ void KoOdfNotesConfiguration::saveOdf(KoXmlWriter *writer) const
 
     if (d->noteClass == Footnote) {
         writer->addAttribute("text:note-class", "footnote");
-    }
-    else if (d->noteClass == Endnote) {
+    } else if (d->noteClass == Endnote) {
         writer->addAttribute("text:note-class", "endnote");
     }
-    if (!d->citationTextStyleName.isNull()) {writer->addAttribute("text:citation-style-name", d->citationTextStyleName); }
-    if (!d->citationBodyTextStyleName.isNull()) {writer->addAttribute("text:citation-body-style-name", d->citationBodyTextStyleName); }
-    if (!d->defaultNoteParagraphStyleName.isNull()) {writer->addAttribute("text:default-style-name", d->defaultNoteParagraphStyleName); }
-    if (!d->masterPageName.isNull()) {writer->addAttribute("text:master-page-name", d->masterPageName); }
-    if (d->startValue != 0) { writer->addAttribute("text:start-value", d->startValue); }
+    if (!d->citationTextStyleName.isNull()) {
+        writer->addAttribute("text:citation-style-name", d->citationTextStyleName);
+    }
+    if (!d->citationBodyTextStyleName.isNull()) {
+        writer->addAttribute("text:citation-body-style-name", d->citationBodyTextStyleName);
+    }
+    if (!d->defaultNoteParagraphStyleName.isNull()) {
+        writer->addAttribute("text:default-style-name", d->defaultNoteParagraphStyleName);
+    }
+    if (!d->masterPageName.isNull()) {
+        writer->addAttribute("text:master-page-name", d->masterPageName);
+    }
+    if (d->startValue != 0) {
+        writer->addAttribute("text:start-value", d->startValue);
+    }
 
     d->numberFormat.saveOdf(writer);
-    switch(d->numberingScheme) {
+    switch (d->numberingScheme) {
     case BeginAtDocument:
         writer->addAttribute("text:start-numbering-at", "document");
         break;
@@ -177,7 +179,7 @@ void KoOdfNotesConfiguration::saveOdf(KoXmlWriter *writer) const
         writer->addAttribute("text:start-numbering-at", "page");
         break;
     }
-    switch(d->footnotesPosition) {
+    switch (d->footnotesPosition) {
     case Text:
         writer->addAttribute("text:footnotes-position", "text");
         break;
@@ -202,15 +204,13 @@ void KoOdfNotesConfiguration::saveOdf(KoXmlWriter *writer) const
         writer->endElement();
     }
 
-    writer->endElement(); //text:notes-configuration
+    writer->endElement(); // text:notes-configuration
 }
-
 
 KoOdfNotesConfiguration::NoteClass KoOdfNotesConfiguration::noteClass() const
 {
     return d->noteClass;
 }
-
 
 void *KoOdfNotesConfiguration::citationTextStyle() const
 {
@@ -276,7 +276,6 @@ void KoOdfNotesConfiguration::setStartValue(int startValue)
 {
     d->startValue = qMax(1, startValue);
 }
-
 
 KoOdfNumberDefinition KoOdfNotesConfiguration::numberFormat() const
 {

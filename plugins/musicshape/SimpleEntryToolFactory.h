@@ -6,7 +6,6 @@
 #ifndef SIMPLEENTRY_TOOL_FACTORY
 #define SIMPLEENTRY_TOOL_FACTORY
 
-
 #include <KoToolFactoryBase.h>
 
 class SimpleEntryToolFactory : public KoToolFactoryBase
@@ -15,8 +14,7 @@ public:
     SimpleEntryToolFactory();
     ~SimpleEntryToolFactory() override;
 
-    KoToolBase* createTool( KoCanvasBase* canvas ) override;
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
-
 
 #endif

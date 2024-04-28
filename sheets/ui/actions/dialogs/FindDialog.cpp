@@ -83,7 +83,6 @@ FindOption::searchDirectionValue FindOption::searchDirection() const
         return Row;
 }
 
-
 void FindOption::slotMoreOptions()
 {
     if (m_findExtension->isHidden()) {
@@ -102,7 +101,7 @@ bool FindOption::searchInAllSheet() const
 }
 
 FindDlg::FindDlg(QWidget *parent, const QString &name, long options, const QStringList &findStrings, bool hasSelection)
-        : KFindDialog(parent, options, findStrings, hasSelection)
+    : KFindDialog(parent, options, findStrings, hasSelection)
 {
     setObjectName(name);
     m_findOptions = new FindOption(findExtension());
@@ -125,9 +124,8 @@ bool FindDlg::searchInAllSheet() const
     return m_findOptions->searchInAllSheet();
 }
 
-
 SearchDlg::SearchDlg(QWidget *parent, const QString &name, long options, const QStringList &findStrings, const QStringList &replaceStrings, bool hasSelection)
-        : KReplaceDialog(parent, options, findStrings, replaceStrings, hasSelection)
+    : KReplaceDialog(parent, options, findStrings, replaceStrings, hasSelection)
 {
     setObjectName(name);
     m_findOptions = new FindOption(findExtension());

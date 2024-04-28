@@ -4,15 +4,17 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "AddBarsCommand.h"
-#include "../core/Sheet.h"
 #include "../MusicShape.h"
+#include "../core/Sheet.h"
 
 #include <KLocalizedString>
 
 using namespace MusicCore;
 
-AddBarsCommand::AddBarsCommand(MusicShape* shape, int bars)
-    : m_sheet(shape->sheet()), m_bars(bars), m_shape(shape)
+AddBarsCommand::AddBarsCommand(MusicShape *shape, int bars)
+    : m_sheet(shape->sheet())
+    , m_bars(bars)
+    , m_shape(shape)
 {
     setText(kundo2_i18n("Add measures"));
 }

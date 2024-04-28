@@ -9,17 +9,17 @@
 
 #include <kundo2command.h>
 
-#include "KWShapeConfigFactory.h"
-#include "KWFrameConnectSelector.h"
-#include "KWRunAroundProperties.h"
 #include "KWAnchoringProperties.h"
 #include "KWCanvas.h"
+#include "KWFrameConnectSelector.h"
+#include "KWRunAroundProperties.h"
+#include "KWShapeConfigFactory.h"
 #include "frames/KWFrameSet.h"
 
 KWFrameDialog::KWFrameDialog(const QList<KoShape *> &shapes, KWDocument *document, KWCanvas *canvas)
-        : KPageDialog(canvas)
-        , m_frameConnectSelector(0)
-        , m_canvas(canvas)
+    : KPageDialog(canvas)
+    , m_frameConnectSelector(0)
+    , m_canvas(canvas)
 {
     m_state = new FrameConfigSharedState(document);
     setFaceType(Tabbed);
@@ -67,9 +67,11 @@ void KWFrameDialog::okClicked()
             , m_anchoringProperties(anchoringProperties)
             , m_first(true)
             , m_canvas(canvas)
-        {}
+        {
+        }
 
-        void redo() override {
+        void redo() override
+        {
             if (m_first) {
                 m_first = false;
                 KUndo2Command::redo();
@@ -85,7 +87,7 @@ void KWFrameDialog::okClicked()
 
     MasterCommand *macro = new MasterCommand(m_anchoringProperties, m_canvas);
 
-    //these we can just add as children as they don't deal with kotexteditor
+    // these we can just add as children as they don't deal with kotexteditor
     m_runAroundProperties->save(macro);
 
     m_canvas->addCommand(macro);
@@ -104,4 +106,3 @@ QList<KoShapeConfigFactoryBase *> KWFrameDialog::panels(KWDocument *doc)
     answer.append(new KWRunAroundPropertiesFactory(state));
     return answer;
 }
-

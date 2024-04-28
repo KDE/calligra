@@ -9,9 +9,9 @@
 
 #include <KoFilter.h>
 #include <KoXmlReader.h>
-#include <QVariant>
-#include <QTransform>
 #include <QStack>
+#include <QTransform>
+#include <QVariant>
 
 class KoXmlWriter;
 
@@ -20,23 +20,23 @@ class KarbonImport : public KoFilter
     Q_OBJECT
 
 public:
-    KarbonImport(QObject* parent, const QVariantList&);
+    KarbonImport(QObject *parent, const QVariantList &);
     ~KarbonImport() override;
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 
 protected:
-    bool parseRoot(QIODevice* io);
+    bool parseRoot(QIODevice *io);
 
     bool convert(const KoXmlDocument &);
-    bool loadXML(const KoXmlElement& doc);
+    bool loadXML(const KoXmlElement &doc);
 
     QString loadStyle(const KoXmlElement &element);
     void loadCommon(const KoXmlElement &element, bool ignoreTransform = false);
     QString loadStroke(const KoXmlElement &element);
     QString loadFill(const KoXmlElement &element);
     QColor loadColor(const KoXmlElement &element);
-    QVector<qreal> loadDashes(const KoXmlElement& element);
+    QVector<qreal> loadDashes(const KoXmlElement &element);
     QString loadGradient(const KoXmlElement &element);
     void loadColorStops(const KoXmlElement &element);
     QString loadPattern(const KoXmlElement &element);

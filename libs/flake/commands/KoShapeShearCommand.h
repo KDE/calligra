@@ -10,8 +10,8 @@
 
 #include "flake_export.h"
 
-#include <kundo2command.h>
 #include <QList>
+#include <kundo2command.h>
 
 class KoShape;
 class KoShapeShearCommandPrivate;
@@ -32,7 +32,12 @@ public:
      * @param newShearYs a list with the same amount of items as shapes with the new values.
      * @param parent the parent command used for macro commands
      */
-    KoShapeShearCommand(const QList<KoShape*> &shapes, const QList<qreal> &previousShearXs, const QList<qreal> &previousShearYs, const QList<qreal> &newShearXs, const QList<qreal> &newShearYs, KUndo2Command *parent = 0);
+    KoShapeShearCommand(const QList<KoShape *> &shapes,
+                        const QList<qreal> &previousShearXs,
+                        const QList<qreal> &previousShearYs,
+                        const QList<qreal> &newShearXs,
+                        const QList<qreal> &newShearYs,
+                        KUndo2Command *parent = 0);
 
     ~KoShapeShearCommand() override;
     /// redo the command
@@ -41,7 +46,7 @@ public:
     void undo() override;
 
 private:
-    KoShapeShearCommandPrivate * const d;
+    KoShapeShearCommandPrivate *const d;
 };
 
 #endif

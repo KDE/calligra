@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  *   SPDX-FileCopyrightText: 2006 Thorsten Zachmann <zachmann@kde.org>
  *   SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
- * 
+ *
  *   SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -15,7 +15,9 @@ class KoParameterChangeStrategyPrivate : public KoInteractionStrategyPrivate
 {
 public:
     KoParameterChangeStrategyPrivate(KoToolBase *owner, KoParameterShape *paramShape, int handle)
-        : KoInteractionStrategyPrivate(owner), parameterShape(paramShape), handleId(handle)
+        : KoInteractionStrategyPrivate(owner)
+        , parameterShape(paramShape)
+        , handleId(handle)
         , startPoint(paramShape->shapeToDocument(paramShape->handlePosition(handle)))
         , lastModifierUsed(Qt::KeyboardModifiers())
     {
@@ -23,9 +25,9 @@ public:
         // change when just clicking a handle without moving the mouse
         releasePoint = startPoint;
     }
-    KoParameterShape * const parameterShape; ///< the parametric shape we are working on
-    const int handleId;                      ///< the id of the control point
-    const QPointF startPoint;                ///< the starting position of the control point
+    KoParameterShape *const parameterShape; ///< the parametric shape we are working on
+    const int handleId; ///< the id of the control point
+    const QPointF startPoint; ///< the starting position of the control point
     QPointF releasePoint;
     Qt::KeyboardModifiers lastModifierUsed;
 };

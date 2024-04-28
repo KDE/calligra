@@ -12,7 +12,10 @@ class Q_DECL_HIDDEN KoInputDeviceHandlerEvent::Private
 {
 public:
     Private()
-            : button(Qt::NoButton), buttons(Qt::NoButton) {}
+        : button(Qt::NoButton)
+        , buttons(Qt::NoButton)
+    {
+    }
 
     KoInputDeviceHandlerEvent::Type type;
     Qt::MouseButton button;
@@ -20,9 +23,9 @@ public:
 };
 
 KoInputDeviceHandlerEvent::KoInputDeviceHandlerEvent(Type type, const QInputDevice *dev)
-        : QInputEvent(static_cast<QEvent::Type>(type), dev)
-        , m_event(nullptr)
-        , d(new Private())
+    : QInputEvent(static_cast<QEvent::Type>(type), dev)
+    , m_event(nullptr)
+    , d(new Private())
 {
     m_modState = QApplication::keyboardModifiers();
 }

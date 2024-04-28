@@ -9,19 +9,17 @@
 #define ODFDRAWREADERBACKEND_H
 
 // Calligra
-#include <KoXmlStreamReader.h>
 #include <KoFilter.h>
+#include <KoXmlStreamReader.h>
 
 // this library
-#include "koodfreader_export.h"
 #include "OdfDrawReader.h"
-
+#include "koodfreader_export.h"
 
 class QByteArray;
 class QSizeF;
 class KoStore;
 class OdfReaderContext;
-
 
 /** @brief A default backend for the OdfDrawReader class.
  *
@@ -42,36 +40,36 @@ class OdfReaderContext;
  */
 class KOODFREADER_EXPORT OdfDrawReaderBackend
 {
- public:
+public:
     explicit OdfDrawReaderBackend();
     virtual ~OdfDrawReaderBackend();
 
     // ----------------------------------------------------------------
     // Dr3d functions
 
-    DECLARE_BACKEND_FUNCTION(Dr3dScene);   // ODF 1.2  10.5.2
-    DECLARE_BACKEND_FUNCTION(Dr3dLight);   // ODF 1.2  10.5.3
-    DECLARE_BACKEND_FUNCTION(Dr3dCube);    // ODF 1.2  10.5.4
-    DECLARE_BACKEND_FUNCTION(Dr3dSphere);  // ODF 1.2  10.5.5
+    DECLARE_BACKEND_FUNCTION(Dr3dScene); // ODF 1.2  10.5.2
+    DECLARE_BACKEND_FUNCTION(Dr3dLight); // ODF 1.2  10.5.3
+    DECLARE_BACKEND_FUNCTION(Dr3dCube); // ODF 1.2  10.5.4
+    DECLARE_BACKEND_FUNCTION(Dr3dSphere); // ODF 1.2  10.5.5
     DECLARE_BACKEND_FUNCTION(Dr3dExtrude); // ODF 1.2  10.5.6
-    DECLARE_BACKEND_FUNCTION(Dr3dRotate);  // ODF 1.2  10.5.7
+    DECLARE_BACKEND_FUNCTION(Dr3dRotate); // ODF 1.2  10.5.7
 
     // ----------------------------------------------------------------
     // Draw functions
 
     DECLARE_BACKEND_FUNCTION(DrawA);
 
-    DECLARE_BACKEND_FUNCTION(DrawRect);            // ODF 1.2  10.3.2
-    DECLARE_BACKEND_FUNCTION(DrawLine);            // ODF 1.2  10.3.3
-    DECLARE_BACKEND_FUNCTION(DrawPolyline);        // ODF 1.2  10.3.4
-    DECLARE_BACKEND_FUNCTION(DrawPolygon);         // ODF 1.2  10.3.5
-    DECLARE_BACKEND_FUNCTION(DrawRegularPolygon);  // ODF 1.2  10.3.6
-    DECLARE_BACKEND_FUNCTION(DrawPath);            // ODF 1.2  10.3.7
-    DECLARE_BACKEND_FUNCTION(DrawCircle);          // ODF 1.2  10.3.8
-    DECLARE_BACKEND_FUNCTION(DrawEllipse);         // ODF 1.2  10.3.9
-    DECLARE_BACKEND_FUNCTION(DrawConnector);       // ODF 1.2  10.3.10
-    DECLARE_BACKEND_FUNCTION(DrawCaption);         // ODF 1.2  10.3.11
-    DECLARE_BACKEND_FUNCTION(DrawMeasure);         // ODF 1.2  10.3.12
+    DECLARE_BACKEND_FUNCTION(DrawRect); // ODF 1.2  10.3.2
+    DECLARE_BACKEND_FUNCTION(DrawLine); // ODF 1.2  10.3.3
+    DECLARE_BACKEND_FUNCTION(DrawPolyline); // ODF 1.2  10.3.4
+    DECLARE_BACKEND_FUNCTION(DrawPolygon); // ODF 1.2  10.3.5
+    DECLARE_BACKEND_FUNCTION(DrawRegularPolygon); // ODF 1.2  10.3.6
+    DECLARE_BACKEND_FUNCTION(DrawPath); // ODF 1.2  10.3.7
+    DECLARE_BACKEND_FUNCTION(DrawCircle); // ODF 1.2  10.3.8
+    DECLARE_BACKEND_FUNCTION(DrawEllipse); // ODF 1.2  10.3.9
+    DECLARE_BACKEND_FUNCTION(DrawConnector); // ODF 1.2  10.3.10
+    DECLARE_BACKEND_FUNCTION(DrawCaption); // ODF 1.2  10.3.11
+    DECLARE_BACKEND_FUNCTION(DrawMeasure); // ODF 1.2  10.3.12
 
     // ----------------------------------------------------------------
     // Frames
@@ -80,10 +78,9 @@ class KOODFREADER_EXPORT OdfDrawReaderBackend
     DECLARE_BACKEND_FUNCTION(DrawObject);
     DECLARE_BACKEND_FUNCTION(DrawObjectOle);
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif // ODFDRAWREADERBACKEND_H

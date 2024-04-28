@@ -3,7 +3,6 @@
 // SPDX-FileCopyrightText: 2005 Tomas Mecir <mecirt@gmail.com>
 // SPDX-License-Identifier: LGPL-2.0-only
 
-
 #ifndef CALLIGRA_SHEETS_FUNCTIONS
 #define CALLIGRA_SHEETS_FUNCTIONS
 
@@ -13,7 +12,6 @@
 #include "Value.h"
 
 #include "sheets_engine_export.h"
-
 
 namespace Calligra
 {
@@ -27,23 +25,25 @@ typedef QVector<Value> valVector;
 
 struct rangeInfo {
     int col1, col2, row1, row2;
-    int columns() {
+    int columns()
+    {
         return col2 - col1 + 1;
     }
-    int rows() {
+    int rows()
+    {
         return row2 - row1 + 1;
     }
 };
 struct FuncExtra {
     // here we'll add all the extras a function may need
-    Function* function;
+    Function *function;
     QVector<rangeInfo> ranges;
     QVector<Region> regions;
     SheetBase *sheet;
     int myrow, mycol;
 };
 
-typedef Value(*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
+typedef Value (*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
 
 /**
  * \ingroup Value
@@ -52,7 +52,7 @@ typedef Value(*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
 class CALLIGRA_SHEETS_ENGINE_EXPORT Function
 {
 public:
-    Function(const QString& name, FunctionPtr ptr);
+    Function(const QString &name, FunctionPtr ptr);
     virtual ~Function();
     /**
     setParamCount sets allowed parameter count for a function.
@@ -70,7 +70,7 @@ public:
     QString name() const;
     QString localizedName() const;
     QString helpText() const;
-    void setHelpText(const QString& text);
+    void setHelpText(const QString &text);
     Value exec(valVector args, ValueCalc *calc, FuncExtra *extra = 0);
 
     QString alternateName() const;
@@ -80,14 +80,15 @@ private:
     Q_DISABLE_COPY(Function)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 /**
  * \ingroup Value
  * A helper-class to call a function.
  */
-class CALLIGRA_SHEETS_ENGINE_EXPORT FunctionCaller {
+class CALLIGRA_SHEETS_ENGINE_EXPORT FunctionCaller
+{
 public:
     FunctionPtr m_ptr;
     valVector m_args;

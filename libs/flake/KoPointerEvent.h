@@ -22,13 +22,11 @@ class QGraphicsSceneWheelEvent;
 
 #include "flake_export.h"
 
-struct KoTouchPoint
-{
+struct KoTouchPoint {
     QTouchEvent::TouchPoint touchPoint;
     // the point in document coordinates
     QPointF lastPoint;
     QPointF point;
-
 };
 
 Q_DECLARE_TYPEINFO(KoTouchPoint, Q_MOVABLE_TYPE);
@@ -94,10 +92,9 @@ public:
 
     KoPointerEvent(KoInputDeviceHandlerEvent *event, int x, int y, int z = 0, int rx = 0, int ry = 0, int rz = 0);
 
-    KoPointerEvent(KoPointerEvent *event, const QPointF& point);
+    KoPointerEvent(KoPointerEvent *event, const QPointF &point);
 
     KoPointerEvent(const KoPointerEvent &rhs);
-
 
     ~KoPointerEvent();
 
@@ -106,7 +103,8 @@ public:
      * Acceptance signifies that you have handled this event and found it useful, the effect
      * of that will be that the event will not be handled to other event handlers.
      */
-    inline void accept() {
+    inline void accept()
+    {
         m_event->accept();
     }
 
@@ -115,7 +113,8 @@ public:
      * Ignoring this event means you have not handled it and want to allow other event
      * handlers to try to handle it.
      */
-    inline void ignore() {
+    inline void ignore()
+    {
         m_event->ignore();
     }
 
@@ -126,12 +125,14 @@ public:
     Qt::KeyboardModifiers modifiers() const;
 
     /// return if the event has been accepted.
-    inline bool isAccepted() const {
+    inline bool isAccepted() const
+    {
         return m_event->isAccepted();
     }
 
     /// return if this event was spontaneous (see QMouseEvent::spontaneous())
-    inline bool spontaneous() const {
+    inline bool spontaneous() const
+    {
         return m_event->spontaneous();
     }
 
@@ -246,15 +247,15 @@ protected:
     friend class KisScratchPadEventFilter;
     /// called by KoToolProxy to set which button was pressed.
     void setTabletButton(Qt::MouseButton button);
+
 private:
-    KoPointerEvent& operator=(const KoPointerEvent &rhs);
+    KoPointerEvent &operator=(const KoPointerEvent &rhs);
 
     // for the d-pointer police; we want to make accessors to the event inline, so this one stays here.
     QEvent *m_event;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif
-

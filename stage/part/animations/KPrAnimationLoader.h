@@ -36,6 +36,7 @@ public:
 
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     QList<KPrAnimationStep *> animations();
+
 protected:
     bool loadOdfAnimation(KPrAnimationStep **animationStep, const KoXmlElement &element, KoShapeLoadingContext &context);
 

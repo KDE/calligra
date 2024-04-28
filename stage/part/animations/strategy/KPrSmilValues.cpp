@@ -19,8 +19,8 @@
 
 #include "KPrSmilValues.h"
 
-#include "KPrShapeAnimations.h"
 #include "KPrFormulaParser.h"
+#include "KPrShapeAnimations.h"
 #include "StageDebug.h"
 
 #include "KoXmlWriter.h"
@@ -46,8 +46,7 @@ qreal KPrSmilValues::value(qreal time) const
 
     if (m_formulaParser) {
         value = m_formulaParser->eval(m_cache, time);
-    }
-    else {
+    } else {
         for (int i = 0; i < m_values.size(); i++) {
             if (time > m_times.at(i) && (m_times.at(i + 1) - m_times.at(i))) {
                 value1 = m_values.at(i).eval(m_cache);
@@ -55,8 +54,7 @@ qreal KPrSmilValues::value(qreal time) const
                 value = (time - m_times.at(i)) * (value2 - value1);
                 value = value / (m_times.at(i + 1) - m_times.at(i));
                 value += value1;
-            }
-            else if (time == m_times.at(i)){
+            } else if (time == m_times.at(i)) {
                 value = m_values.at(i).eval(m_cache);
             }
         }
@@ -95,10 +93,9 @@ bool KPrSmilValues::loadValues(const QString &values, const QString &keyTimes, c
     // keyTimes
     if (keyTimes.isEmpty()) {
         for (int i = 0; i < m_values.size(); i++) {
-            m_times.append(qreal(i)/qreal(m_values.size()));
+            m_times.append(qreal(i) / qreal(m_values.size()));
         }
-    }
-    else {
+    } else {
         QStringList keyTimesList = keyTimes.split(QLatin1Char(';'));
         if (valuesList.size() != keyTimesList.size()) {
             return false;
@@ -114,18 +111,22 @@ bool KPrSmilValues::loadValues(const QString &values, const QString &keyTimes, c
     }
 
     // keySplines
-    if (m_calcMode ==  KPrAnimationValue::spline) {
+    if (m_calcMode == KPrAnimationValue::spline) {
         warnStageAnimation << "keySpline not yes supported";
-//         QStringList keySplinesList = keySplines.split(QLatin1Char(';'));
+        //         QStringList keySplinesList = keySplines.split(QLatin1Char(';'));
     }
     return true;
 }
 
-bool KPrSmilValues::loadFormula(const QString &values, const QString &keyTimes, const QString &keySplines, KPrAnimationValue::SmilCalcMode calcMode, const QString &formula)
+bool KPrSmilValues::loadFormula(const QString &values,
+                                const QString &keyTimes,
+                                const QString &keySplines,
+                                KPrAnimationValue::SmilCalcMode calcMode,
+                                const QString &formula)
 {
     bool retval = loadValues(values, keyTimes, keySplines, calcMode);
 
-    //formula
+    // formula
     if (!formula.isEmpty()) {
         m_formulaParser = new KPrFormulaParser(formula, m_shape, m_textBlockData, KPrFormulaParser::Formula);
         if (!m_formulaParser->valid()) {
@@ -151,7 +152,7 @@ bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
         }
     }
     writer.addAttribute("smil:values", values);
-    //Formula
+    // Formula
     if (m_formulaParser) {
         QString formula = m_formulaParser->formula();
         if (!formula.isEmpty()) {

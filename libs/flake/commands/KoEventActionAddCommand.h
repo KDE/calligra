@@ -7,8 +7,8 @@
 #ifndef KOEVENTACTIONADDCOMMAND_H
 #define KOEVENTACTIONADDCOMMAND_H
 
-#include <kundo2command.h>
 #include "flake_export.h"
+#include <kundo2command.h>
 
 class KoShape;
 class KoEventAction;
@@ -27,7 +27,7 @@ public:
     void undo() override;
 
 private:
-    KoEventActionAddCommandPrivate * const d;
+    KoEventActionAddCommandPrivate *const d;
 };
 
 #endif /* KOEVENTACTIONADDCOMMAND_H */

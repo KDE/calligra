@@ -20,8 +20,8 @@
 #ifndef _ROOT_SECTION_H_
 #define _ROOT_SECTION_H_
 
-#include <QObject>
 #include <QMap>
+#include <QObject>
 
 #include "SectionGroup.h"
 
@@ -37,23 +37,24 @@ class RootSection : public QObject, public SectionGroup
 public:
     RootSection();
     ~RootSection();
-    ViewManager* viewManager();
-    SectionsIO* sectionsIO();
-    void addCommand(Section* , KUndo2Command* command);
-    void createActions(KActionCollection*);
-    KUndo2Stack* undoStack(); // TODO remove when it is again possible to hide the undo stack
-    void setCurrentSection(Section*);  // TODO when the command stack is hidden again, remove
+    ViewManager *viewManager();
+    SectionsIO *sectionsIO();
+    void addCommand(Section *, KUndo2Command *command);
+    void createActions(KActionCollection *);
+    KUndo2Stack *undoStack(); // TODO remove when it is again possible to hide the undo stack
+    void setCurrentSection(Section *); // TODO when the command stack is hidden again, remove
 Q_SIGNALS:
     /// This signal is emitted when a command is executed in the undo stack
     void commandExecuted();
 private Q_SLOTS:
     void undoIndexChanged(int idx);
+
 private:
-    KUndo2Stack* m_undoStack;
-    ViewManager* m_viewManager;
-    SectionsIO* m_sectionsSaver;
-    QMap<const KUndo2Command*, Section* > m_commandsMap;
-    Section* m_currentSection; // TODO when the command stack is hidden again, remove
+    KUndo2Stack *m_undoStack;
+    ViewManager *m_viewManager;
+    SectionsIO *m_sectionsSaver;
+    QMap<const KUndo2Command *, Section *> m_commandsMap;
+    Section *m_currentSection; // TODO when the command stack is hidden again, remove
 };
 
 #endif

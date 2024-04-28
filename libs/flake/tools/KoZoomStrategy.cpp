@@ -6,18 +6,18 @@
  */
 
 #include "KoZoomStrategy.h"
-#include "KoShapeRubberSelectStrategy_p.h"
-#include "KoZoomTool.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
+#include "KoShapeRubberSelectStrategy_p.h"
 #include "KoViewConverter.h"
+#include "KoZoomTool.h"
 
 #include <FlakeDebug.h>
 
 KoZoomStrategy::KoZoomStrategy(KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked)
-        : KoShapeRubberSelectStrategy(tool, clicked, false),
-        m_controller(controller),
-        m_forceZoomOut(false)
+    : KoShapeRubberSelectStrategy(tool, clicked, false)
+    , m_controller(controller)
+    , m_forceZoomOut(false)
 {
 }
 

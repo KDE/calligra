@@ -9,9 +9,8 @@
 #ifndef KORESOURCETAGSTORE_H
 #define KORESOURCETAGSTORE_H
 
-
-#include <WidgetsDebug.h>
 #include "kowidgets_export.h"
+#include <WidgetsDebug.h>
 
 class KoResourceServerBase;
 class KoResource;
@@ -23,11 +22,10 @@ class QString;
 class KOWIDGETS_EXPORT KoResourceTagStore
 {
 public:
-
     /**
-    * Constructs a KoResourceTagging object
-    *
-    */
+     * Constructs a KoResourceTagging object
+     *
+     */
     explicit KoResourceTagStore(KoResourceServerBase *resourceServer);
     ~KoResourceTagStore();
 
@@ -38,18 +36,18 @@ public:
 
     /// Add the given tag to the tag store. The resource can be empty, in which case
     /// the tag is added but unused
-    void addTag(KoResource* resource, const QString& tag);
+    void addTag(KoResource *resource, const QString &tag);
 
     /// Remove the given tag for the given resource.
-    void delTag(KoResource* resource, const QString& tag);
+    void delTag(KoResource *resource, const QString &tag);
 
-    void delTag(const QString& tag);
+    void delTag(const QString &tag);
 
     /// @return a list of all the tags in this store
     QStringList tagNamesList() const;
 
     /// Return a list of filenames for the given tag
-    QStringList searchTag(const QString& query) const;
+    QStringList searchTag(const QString &query) const;
 
     void loadTags();
     void serializeTags();
@@ -70,8 +68,7 @@ private:
     QStringList removeAdjustedFileNames(QStringList fileNamesList) const;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif // KORESOURCETAGSTORE_H

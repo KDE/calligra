@@ -25,7 +25,8 @@
 
 #include <KoShapeContainer.h>
 
-FreeLayout::FreeLayout() : Layout("freelayout")
+FreeLayout::FreeLayout()
+    : Layout("freelayout")
 {
 }
 
@@ -40,15 +41,15 @@ QRectF FreeLayout::boundingBox() const
     return b.adjusted(-margin, -margin, margin, margin);
 }
 
-void FreeLayout::shapeAdded(KoShape*)
+void FreeLayout::shapeAdded(KoShape *)
 {
 }
 
-void FreeLayout::shapeRemoved(KoShape*)
+void FreeLayout::shapeRemoved(KoShape *)
 {
 }
 
-void FreeLayout::shapeGeometryChanged(KoShape*)
+void FreeLayout::shapeGeometryChanged(KoShape *)
 {
 }
 
@@ -57,7 +58,8 @@ void FreeLayout::relayout()
     emit(boundingBoxChanged(boundingBox()));
 }
 
-FreeLayoutFactory::FreeLayoutFactory() : LayoutFactory("freelayout", i18n("Free"))
+FreeLayoutFactory::FreeLayoutFactory()
+    : LayoutFactory("freelayout", i18n("Free"))
 {
 }
 
@@ -65,7 +67,7 @@ FreeLayoutFactory::~FreeLayoutFactory()
 {
 }
 
-Layout* FreeLayoutFactory::createLayout() const
+Layout *FreeLayoutFactory::createLayout() const
 {
     return new FreeLayout;
 }

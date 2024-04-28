@@ -8,30 +8,28 @@
 #ifndef CALLIGRA_SHEETS_ACTION_CUSTOM_LISTS
 #define CALLIGRA_SHEETS_ACTION_CUSTOM_LISTS
 
-
 #include "DialogCellAction.h"
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class ManageCustomLists : public DialogCellAction {
-Q_OBJECT
+class ManageCustomLists : public DialogCellAction
+{
+    Q_OBJECT
 public:
     ManageCustomLists(Actions *actions);
     virtual ~ManageCustomLists();
 
 protected Q_SLOTS:
     void saveChanges(const QStringList &list);
+
 protected:
     ActionDialog *createDialog(QWidget *canvasWidget) override;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_CUSTOM_LISTS
+#endif // CALLIGRA_SHEETS_ACTION_CUSTOM_LISTS

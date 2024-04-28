@@ -18,14 +18,14 @@
 
 #include "fonts.h"
 #include "olestream.h"
-#include "word97_generated.h"
 #include "utilities.h"
+#include "word97_generated.h"
 
 #include "wvlog.h"
 
 using namespace wvWare;
 
-FontCollection::FontCollection( OLEStreamReader* reader, const Word97::FIB& fib )
+FontCollection::FontCollection(OLEStreamReader *reader, const Word97::FIB &fib)
 {
     m_fallbackFont = new Word97::FFN();
     if (!m_fallbackFont) {
@@ -35,12 +35,12 @@ FontCollection::FontCollection( OLEStreamReader* reader, const Word97::FIB& fib 
     m_fallbackFont->xszFfn = "Helvetica";
 
     reader->push();
-    reader->seek( fib.fcSttbfffn );
+    reader->seek(fib.fcSttbfffn);
 
-    if ( fib.nFib < Word8nFib ) { // older than Word97
+    if (fib.nFib < Word8nFib) { // older than Word97
         int bytesLeft = reader->readU16() - 2;
-        while ( bytesLeft > 0 ) {
-            Word97::FFN* ffn = new Word97::FFN( reader, Word97::FFN::Word95, false );
+        while (bytesLeft > 0) {
+            Word97::FFN *ffn = new Word97::FFN(reader, Word97::FFN::Word95, false);
 
             if (!ffn) {
                 wvlog << "Error: FFN allocation!";
@@ -48,18 +48,17 @@ FontCollection::FontCollection( OLEStreamReader* reader, const Word97::FIB& fib 
                 return;
             }
 
-            m_fonts.push_back( ffn );
+            m_fonts.push_back(ffn);
             bytesLeft -= ffn->cbFfnM1 + 1;
         }
-    }
-    else { // Word97 or newer
+    } else { // Word97 or newer
         const U16 count = reader->readU16();
         const U16 extraData = reader->readU16();
-        if ( extraData != 0 ) {
+        if (extraData != 0) {
             wvlog << "Huh?? Found STTBF extra data within the STTBF of FFNs" << Qt::endl;
         }
-        for ( int i = 0; i < count; ++i ) {
-            Word97::FFN* ffn = new Word97::FFN( reader, Word97::FFN::Word97, false );
+        for (int i = 0; i < count; ++i) {
+            Word97::FFN *ffn = new Word97::FFN(reader, Word97::FFN::Word97, false);
 
             if (!ffn) {
                 wvlog << "Error: FFN allocation!";
@@ -67,39 +66,38 @@ FontCollection::FontCollection( OLEStreamReader* reader, const Word97::FIB& fib 
                 return;
             }
 
-            m_fonts.push_back( ffn );
+            m_fonts.push_back(ffn);
         }
     }
 
-    if ( reader->tell() - fib.fcSttbfffn != fib.lcbSttbfffn ) {
-        wvlog << "Warning: Didn't read lcbSttbfffn bytes: read=" << reader->tell() - fib.fcSttbfffn
-              << " lcbSttbfffn=" << fib.lcbSttbfffn << Qt::endl;
+    if (reader->tell() - fib.fcSttbfffn != fib.lcbSttbfffn) {
+        wvlog << "Warning: Didn't read lcbSttbfffn bytes: read=" << reader->tell() - fib.fcSttbfffn << " lcbSttbfffn=" << fib.lcbSttbfffn << Qt::endl;
     }
     reader->pop();
 }
 
 FontCollection::~FontCollection()
 {
-    std::for_each( m_fonts.begin(), m_fonts.end(), Delete<Word97::FFN>() );
+    std::for_each(m_fonts.begin(), m_fonts.end(), Delete<Word97::FFN>());
     delete m_fallbackFont;
 }
 
-const Word97::FFN& FontCollection::font( S16 ftc ) const
+const Word97::FFN &FontCollection::font(S16 ftc) const
 {
-    if ( ftc >= 0 && static_cast<U16>( ftc ) < m_fonts.size() ) {
-        return *m_fonts[ ftc ];
+    if (ftc >= 0 && static_cast<U16>(ftc) < m_fonts.size()) {
+        return *m_fonts[ftc];
     }
     return *m_fallbackFont;
 }
 
 void FontCollection::dump() const
 {
-    std::vector<Word97::FFN*>::const_iterator it = m_fonts.begin();
-    std::vector<Word97::FFN*>::const_iterator end = m_fonts.end();
-    for ( ; it != end; ++it ) {
-        wvlog << "Font: xszFfn='" << ( *it )->xszFfn.ascii() << "'" << Qt::endl;
-        if ( !( *it )->xszFfnAlt.isEmpty() ) {
-            wvlog << "      xszFfnAlt='" << ( *it )->xszFfnAlt.ascii() << "'" << Qt::endl;
+    std::vector<Word97::FFN *>::const_iterator it = m_fonts.begin();
+    std::vector<Word97::FFN *>::const_iterator end = m_fonts.end();
+    for (; it != end; ++it) {
+        wvlog << "Font: xszFfn='" << (*it)->xszFfn.ascii() << "'" << Qt::endl;
+        if (!(*it)->xszFfnAlt.isEmpty()) {
+            wvlog << "      xszFfnAlt='" << (*it)->xszFfnAlt.ascii() << "'" << Qt::endl;
         }
     }
 }

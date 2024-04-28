@@ -7,8 +7,8 @@
 #ifndef KOTEXTPASTE_H
 #define KOTEXTPASTE_H
 
-#include <KoOdfPaste.h>
 #include "kotext_export.h"
+#include <KoOdfPaste.h>
 
 class KoTextEditor;
 class KoShapeController;
@@ -18,7 +18,7 @@ class KoCanvasBase;
 #include <QSharedPointer>
 namespace Soprano
 {
-    class Model;
+class Model;
 }
 
 class KOTEXT_EXPORT KoTextPaste : public KoOdfPaste
@@ -40,7 +40,7 @@ protected:
     bool process(const KoXmlElement &body, KoOdfReadStore &odfStore) override;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOTEXTPASTE_H */

@@ -30,7 +30,6 @@ public:
     virtual ~BraindumpQuickStatesPlugin();
 
 private:
-
 };
 
 #endif

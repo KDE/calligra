@@ -10,15 +10,15 @@
  */
 
 #include "MsooXmlRelationships.h"
-#include "MsooXmlRelationshipsReader.h"
 #include "MsooXmlImport.h"
+#include "MsooXmlRelationshipsReader.h"
 
 #include <KoOdfExporter.h>
 
 #include <KLocalizedString>
 
-#include <QSet>
 #include "MsooXmlDebug.h"
+#include <QSet>
 
 using namespace MSOOXML;
 
@@ -28,19 +28,20 @@ public:
     Private()
     {
     }
-    ~Private() {
+    ~Private()
+    {
     }
-    KoFilter::ConversionStatus loadRels(const QString& path, const QString& file);
+    KoFilter::ConversionStatus loadRels(const QString &path, const QString &file);
 
-    MsooXmlImport* importer;
-    KoOdfWriters* writers;
+    MsooXmlImport *importer;
+    KoOdfWriters *writers;
     QString *errorMessage;
     QMap<QString, QString> rels;
     QMap<QString, QString> targetsForTypes;
     QSet<QString> loadedFiles;
 };
 
-KoFilter::ConversionStatus MsooXmlRelationships::Private::loadRels(const QString& path, const QString& file)
+KoFilter::ConversionStatus MsooXmlRelationships::Private::loadRels(const QString &path, const QString &file)
 {
     debugMsooXml << (path + '/' + file) << "...";
     loadedFiles.insert(path + '/' + file);
@@ -48,12 +49,11 @@ KoFilter::ConversionStatus MsooXmlRelationships::Private::loadRels(const QString
     MsooXmlRelationshipsReader reader(writers);
 
     const QString realPath(path + "/_rels/" + file + ".rels");
-    return importer->loadAndParseDocument(
-               &reader, realPath, *errorMessage, &context);
+    return importer->loadAndParseDocument(&reader, realPath, *errorMessage, &context);
 }
 
-MsooXmlRelationships::MsooXmlRelationships(MsooXmlImport& importer, KoOdfWriters *writers, QString& errorMessage)
-        : d(new Private)
+MsooXmlRelationships::MsooXmlRelationships(MsooXmlImport &importer, KoOdfWriters *writers, QString &errorMessage)
+    : d(new Private)
 {
     d->importer = &importer;
     d->writers = writers;
@@ -65,7 +65,7 @@ MsooXmlRelationships::~MsooXmlRelationships()
     delete d;
 }
 
-unsigned MsooXmlRelationships::targetCountWithWord(const QString& searchTerm)
+unsigned MsooXmlRelationships::targetCountWithWord(const QString &searchTerm)
 {
     unsigned count = 0;
     QMapIterator<QString, QString> i(d->rels);
@@ -78,8 +78,7 @@ unsigned MsooXmlRelationships::targetCountWithWord(const QString& searchTerm)
     return count;
 }
 
-
-QString MsooXmlRelationships::target(const QString& path, const QString& file, const QString& id)
+QString MsooXmlRelationships::target(const QString &path, const QString &file, const QString &id)
 {
     const QString key(MsooXmlRelationshipsReader::relKey(path, file, id));
     const QString result(d->rels.value(key));
@@ -97,17 +96,16 @@ QString MsooXmlRelationships::target(const QString& path, const QString& file, c
     return d->rels.value(key);
 }
 
-QString MsooXmlRelationships::targetForType(const QString& path, const QString& file, const QString& relType)
+QString MsooXmlRelationships::targetForType(const QString &path, const QString &file, const QString &relType)
 {
     const QString filePath = path + QLatin1Char('/') + file;
     const QString key(MsooXmlRelationshipsReader::targetKey(filePath, relType));
-    //debugMsooXml << key;
+    // debugMsooXml << key;
     const QString target(d->targetsForTypes.value(key));
     if (!target.isEmpty())
         return target;
     if (d->loadedFiles.contains(filePath)) {
-        *d->errorMessage = i18n("Could not find target for relationship \"%1\" in file \"%2\"",
-                                relType, filePath);
+        *d->errorMessage = i18n("Could not find target for relationship \"%1\" in file \"%2\"", relType, filePath);
         return QString(); // cannot be found
     }
     if (d->loadRels(path, file) != KoFilter::OK) {

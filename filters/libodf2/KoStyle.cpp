@@ -8,9 +8,8 @@
 
 #include <KoGenStyles.h>
 
-
 KoStyle::KoStyle()
-: m_autoStyleInStylesDotXml(false)
+    : m_autoStyleInStylesDotXml(false)
 {
 }
 
@@ -40,21 +39,19 @@ bool KoStyle::autoStyleInStylesDotXml() const
 
 KoGenStyles::InsertionFlags KoStyle::insertionFlags() const
 {
-    if(m_name.isEmpty()) {
+    if (m_name.isEmpty()) {
         return KoGenStyles::NoFlag;
-    }
-    else {
+    } else {
         return KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates;
     }
 }
 
-QString KoStyle::saveOdf(KoGenStyles& styles) const
+QString KoStyle::saveOdf(KoGenStyles &styles) const
 {
     KoGenStyle::Type type;
-    if(m_name.isEmpty()) {
+    if (m_name.isEmpty()) {
         type = automaticstyleType();
-    }
-    else {
+    } else {
         type = styleType();
     }
     KoGenStyle style(type, styleFamilyName());
@@ -62,7 +59,7 @@ QString KoStyle::saveOdf(KoGenStyles& styles) const
     style.setAutoStyleInStylesDotXml(m_autoStyleInStylesDotXml);
 
     QString styleName = m_name;
-    if(styleName.isEmpty()) {
+    if (styleName.isEmpty()) {
         styleName = defaultPrefix();
     }
 

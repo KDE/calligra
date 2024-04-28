@@ -7,31 +7,32 @@
 #include "KoColumnStyle.h"
 #include <KoGenStyle.h>
 
-namespace {
-    class BreakStyleMap : public QMap<KoColumnStyle::BreakType, QString>
+namespace
+{
+class BreakStyleMap : public QMap<KoColumnStyle::BreakType, QString>
+{
+public:
+    BreakStyleMap()
     {
-    public:
-        BreakStyleMap()
-        {
-            insert(KoColumnStyle::NoBreak, QString());
-            insert(KoColumnStyle::AutoBreak, "auto");
-            insert(KoColumnStyle::ColumnBreak, "column");
-            insert(KoColumnStyle::PageBreak, "page");
-        }
-    } breakStyleMap;
+        insert(KoColumnStyle::NoBreak, QString());
+        insert(KoColumnStyle::AutoBreak, "auto");
+        insert(KoColumnStyle::ColumnBreak, "column");
+        insert(KoColumnStyle::PageBreak, "page");
+    }
+} breakStyleMap;
 
-    const QString prefix = "col";
-    const char familyName[] = "table-column";
+const QString prefix = "col";
+const char familyName[] = "table-column";
 }
 
 KOSTYLE_DECLARE_SHARED_POINTER_IMPL(KoColumnStyle)
 
 KoColumnStyle::KoColumnStyle()
-: KoStyle()
-, m_breakAfter(NoBreak)
-, m_breakBefore(NoBreak)
-, m_width(15)
-, m_widthType(ExactWidth)
+    : KoStyle()
+    , m_breakAfter(NoBreak)
+    , m_breakBefore(NoBreak)
+    , m_width(15)
+    , m_widthType(ExactWidth)
 {
 }
 
@@ -94,29 +95,29 @@ KoGenStyle::Type KoColumnStyle::automaticstyleType() const
     return KoGenStyle::TableColumnAutoStyle;
 }
 
-const char* KoColumnStyle::styleFamilyName() const
+const char *KoColumnStyle::styleFamilyName() const
 {
     return familyName;
 }
 
-void KoColumnStyle::prepareStyle(KoGenStyle& style) const
+void KoColumnStyle::prepareStyle(KoGenStyle &style) const
 {
-    if(m_breakAfter != NoBreak) {
+    if (m_breakAfter != NoBreak) {
         style.addProperty("fo:break-after", breakStyleMap.value(m_breakAfter));
     }
-    if(m_breakBefore != NoBreak) {
+    if (m_breakBefore != NoBreak) {
         style.addProperty("fo:break-before", breakStyleMap.value(m_breakBefore));
     }
 
-    switch(m_widthType) {
-        case MinimumWidth:
-            style.addPropertyPt("style:min-column-width", m_width);
-            break;
-        case ExactWidth:
-            style.addPropertyPt("style:column-width", m_width);
-            break;
-        case OptimalWidth:
-            style.addProperty("style:use-optimal-column-width", "true");
-            break;
+    switch (m_widthType) {
+    case MinimumWidth:
+        style.addPropertyPt("style:min-column-width", m_width);
+        break;
+    case ExactWidth:
+        style.addPropertyPt("style:column-width", m_width);
+        break;
+    case OptimalWidth:
+        style.addProperty("style:use-optimal-column-width", "true");
+        break;
     }
 }

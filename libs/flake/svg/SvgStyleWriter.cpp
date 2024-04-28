@@ -24,24 +24,24 @@
 #include "SvgSavingContext.h"
 #include "SvgUtil.h"
 
-#include <KoShape.h>
-#include <KoPathShape.h>
+#include <KoClipPath.h>
+#include <KoColorBackground.h>
 #include <KoFilterEffect.h>
 #include <KoFilterEffectStack.h>
-#include <KoColorBackground.h>
 #include <KoGradientBackground.h>
+#include <KoPathShape.h>
 #include <KoPatternBackground.h>
+#include <KoShape.h>
 #include <KoShapeStroke.h>
-#include <KoClipPath.h>
 #include <KoXmlWriter.h>
 
 #include <QBuffer>
 #include <QGradient>
 #include <QLinearGradient>
-#include <QPainterPath>
-#include <QRadialGradient>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QPainterPath>
+#include <QRadialGradient>
 
 void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {
@@ -49,7 +49,7 @@ void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
     saveSvgStroke(shape, context);
     saveSvgEffects(shape, context);
     saveSvgClipping(shape, context);
-    if (! shape->isVisible())
+    if (!shape->isVisible())
         context.shapeWriter().addAttribute("display", "none");
     if (shape->transparency() > 0.0)
         context.shapeWriter().addAttribute("opacity", 1.0 - shape->transparency());
@@ -57,28 +57,28 @@ void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 
 void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
 {
-    if (! shape->background()) {
+    if (!shape->background()) {
         context.shapeWriter().addAttribute("fill", "none");
     }
 
-    QSharedPointer<KoColorBackground>  cbg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
+    QSharedPointer<KoColorBackground> cbg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
     if (cbg) {
         context.shapeWriter().addAttribute("fill", cbg->color().name());
         if (cbg->color().alphaF() < 1.0)
             context.shapeWriter().addAttribute("fill-opacity", cbg->color().alphaF());
     }
-    QSharedPointer<KoGradientBackground>  gbg = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
+    QSharedPointer<KoGradientBackground> gbg = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
     if (gbg) {
         QString gradientId = saveSvgGradient(gbg->gradient(), gbg->transform(), context);
         context.shapeWriter().addAttribute("fill", "url(#" + gradientId + ")");
     }
-    QSharedPointer<KoPatternBackground>  pbg = qSharedPointerDynamicCast<KoPatternBackground>(shape->background());
+    QSharedPointer<KoPatternBackground> pbg = qSharedPointerDynamicCast<KoPatternBackground>(shape->background());
     if (pbg) {
         const QString patternId = saveSvgPattern(pbg, shape, context);
         context.shapeWriter().addAttribute("fill", "url(#" + patternId + ")");
     }
 
-    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
+    KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
     if (path && shape->background()) {
         // non-zero is default, so only write fillrule if evenodd is set
         if (path->fillRule() == Qt::OddEvenFill)
@@ -88,8 +88,8 @@ void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
 
 void SvgStyleWriter::saveSvgStroke(KoShape *shape, SvgSavingContext &context)
 {
-    const KoShapeStroke * line = dynamic_cast<const KoShapeStroke*>(shape->stroke());
-    if (! line)
+    const KoShapeStroke *line = dynamic_cast<const KoShapeStroke *>(shape->stroke());
+    if (!line)
         return;
 
     QString strokeStr("none");
@@ -142,11 +142,11 @@ void SvgStyleWriter::saveSvgStroke(KoShape *shape, SvgSavingContext &context)
 
 void SvgStyleWriter::saveSvgEffects(KoShape *shape, SvgSavingContext &context)
 {
-    KoFilterEffectStack * filterStack = shape->filterEffectStack();
+    KoFilterEffectStack *filterStack = shape->filterEffectStack();
     if (!filterStack)
         return;
 
-    QList<KoFilterEffect*> filterEffects = filterStack->filterEffects();
+    QList<KoFilterEffect *> filterEffects = filterStack->filterEffects();
     if (!filterEffects.count())
         return;
 
@@ -177,7 +177,7 @@ void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
     context.styleWriter().addAttribute("clipPathUnits", "userSpaceOnUse");
 
     context.styleWriter().startElement("path");
-    context.styleWriter().addAttribute("d", path->toString(path->absoluteTransformation(0)*context.userSpaceTransform()));
+    context.styleWriter().addAttribute("d", path->toString(path->absoluteTransformation(0) * context.userSpaceTransform()));
     context.styleWriter().endElement(); // path
 
     context.styleWriter().endElement(); // clipPath
@@ -189,7 +189,7 @@ void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
 
 void SvgStyleWriter::saveSvgColorStops(const QGradientStops &colorStops, SvgSavingContext &context)
 {
-    foreach(const QGradientStop &stop, colorStops) {
+    foreach (const QGradientStop &stop, colorStops) {
         context.styleWriter().startElement("stop");
         context.styleWriter().addAttribute("stop-color", stop.second.name());
         context.styleWriter().addAttribute("offset", stop.first);
@@ -200,21 +200,17 @@ void SvgStyleWriter::saveSvgColorStops(const QGradientStops &colorStops, SvgSavi
 
 QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransform &gradientTransform, SvgSavingContext &context)
 {
-    if (! gradient)
+    if (!gradient)
         return QString();
 
     Q_ASSERT(gradient->coordinateMode() == QGradient::ObjectBoundingMode);
 
-    const QString spreadMethod[3] = {
-        QString("pad"),
-        QString("reflect"),
-        QString("repeat")
-    };
+    const QString spreadMethod[3] = {QString("pad"), QString("reflect"), QString("repeat")};
 
     const QString uid = context.createUID("gradient");
 
     if (gradient->type() == QGradient::LinearGradient) {
-        const QLinearGradient * g = static_cast<const QLinearGradient*>(gradient);
+        const QLinearGradient *g = static_cast<const QLinearGradient *>(gradient);
         context.styleWriter().startElement("linearGradient");
         context.styleWriter().addAttribute("id", uid);
         context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
@@ -228,7 +224,7 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
         saveSvgColorStops(gradient->stops(), context);
         context.styleWriter().endElement();
     } else if (gradient->type() == QGradient::RadialGradient) {
-        const QRadialGradient * g = static_cast<const QRadialGradient*>(gradient);
+        const QRadialGradient *g = static_cast<const QRadialGradient *>(gradient);
         context.styleWriter().startElement("radialGradient");
         context.styleWriter().addAttribute("id", uid);
         context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
@@ -243,7 +239,7 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
         saveSvgColorStops(gradient->stops(), context);
         context.styleWriter().endElement();
     } else if (gradient->type() == QGradient::ConicalGradient) {
-        const QConicalGradient * g = static_cast<const QConicalGradient*>(gradient);
+        const QConicalGradient *g = static_cast<const QConicalGradient *>(gradient);
         context.styleWriter().startElement("conicalGradient");
         context.styleWriter().addAttribute("id", uid);
         context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
@@ -335,7 +331,7 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
     if (pattern->pattern().save(&buffer, "PNG")) {
         QMimeDatabase db;
         const QString mimeType = db.mimeTypeForData(ba).name();
-        context.styleWriter().addAttribute("xlink:href", "data:"+ mimeType + ";base64," + ba.toBase64());
+        context.styleWriter().addAttribute("xlink:href", "data:" + mimeType + ";base64," + ba.toBase64());
     }
 
     context.styleWriter().endElement(); // image

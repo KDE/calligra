@@ -14,10 +14,11 @@ class KWNavigationDockerFactory : public KoDockFactoryBase
 public:
     KWNavigationDockerFactory();
     QString id() const override;
-    QDockWidget* createDockWidget() override;
-    DockPosition defaultDockPosition() const override {
+    QDockWidget *createDockWidget() override;
+    DockPosition defaultDockPosition() const override
+    {
         return DockMinimized;
     }
 };
 
-#endif //KWNAVIGATIONDOCKERFACTORY_H
+#endif // KWNAVIGATIONDOCKERFACTORY_H

@@ -12,11 +12,11 @@ class QString;
 
 namespace KoTemplates
 {
-    /**
-     * Removes all spaces from the given string, not just from
-     * start and end.
-     */
-     QString trimmed(const QString &string);
+/**
+ * Removes all spaces from the given string, not just from
+ * start and end.
+ */
+QString trimmed(const QString &string);
 }
 
 #endif

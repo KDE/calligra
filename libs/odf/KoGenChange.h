@@ -7,9 +7,9 @@
 #ifndef KOGENCHANGE_H
 #define KOGENCHANGE_H
 
+#include "koodf_export.h"
 #include <QMap>
 #include <QString>
-#include "koodf_export.h"
 
 #include <OdfDebug.h>
 
@@ -31,17 +31,9 @@ public:
      * If there is a still missing add it here so that it is possible to use the same
      * saving code in all applications.
      */
-    enum Type {
-        InsertChange,
-        FormatChange,
-        DeleteChange,
-        UNKNOWN = 9999
-    };
+    enum Type { InsertChange, FormatChange, DeleteChange, UNKNOWN = 9999 };
 
-    enum ChangeFormat {
-        ODF_1_2,
-        DELTAXML
-    };
+    enum ChangeFormat { ODF_1_2, DELTAXML };
 
     /**
      * Start the definition of a new change. Its name will be set later by KoGenChanges::insert(),
@@ -52,40 +44,48 @@ public:
     ~KoGenChange();
 
     /// Set the type of this change
-    void setType(KoGenChange::Type type) {
+    void setType(KoGenChange::Type type)
+    {
         m_type = type;
     }
 
     /// set the format to be used to save changes
-    void setChangeFormat(KoGenChange::ChangeFormat changeFormat) {
+    void setChangeFormat(KoGenChange::ChangeFormat changeFormat)
+    {
         m_changeFormat = changeFormat;
     }
 
     /// Return the type of this style
-    Type type() const {
+    Type type() const
+    {
         return m_type;
     }
 
     /// Return the format to be used to save changes
-    KoGenChange::ChangeFormat changeFormat() const {
+    KoGenChange::ChangeFormat changeFormat() const
+    {
         return m_changeFormat;
     }
 
     /// Add a property to the style
-    void addChangeMetaData(const QString &propName, const QString &propValue) {
+    void addChangeMetaData(const QString &propName, const QString &propValue)
+    {
         m_changeMetaData.insert(propName, propValue);
     }
 
     /// Overloaded version of addProperty that takes a char*, usually for "..."
-    void addChangeMetaData(const QString &propName, const char *propValue) {
+    void addChangeMetaData(const QString &propName, const char *propValue)
+    {
         m_changeMetaData.insert(propName, propValue);
     }
     /// Overloaded version of addProperty that converts an int to a string
-    void addChangeMetaData(const QString &propName, int propValue) {
+    void addChangeMetaData(const QString &propName, int propValue)
+    {
         m_changeMetaData.insert(propName, QString::number(propValue));
     }
     /// Overloaded version of addProperty that converts a bool to a string (false/true)
-    void addChangeMetaData(const QString &propName, bool propValue) {
+    void addChangeMetaData(const QString &propName, bool propValue)
+    {
         m_changeMetaData.insert(propName, propValue ? "true" : "false");
     }
 
@@ -108,7 +108,8 @@ public:
      *
      * The value of @p elementName isn't used, except that it must be unique.
      */
-    void addChildElement(const QString &elementName, const QString &elementContents) {
+    void addChildElement(const QString &elementName, const QString &elementContents)
+    {
         m_literalData.insert(elementName, elementContents);
     }
 
@@ -132,7 +133,8 @@ public:
     bool operator==(const KoGenChange &other) const;
 
 private:
-    QString changeMetaData(const QString &propName) const {
+    QString changeMetaData(const QString &propName) const
+    {
         QMap<QString, QString>::const_iterator it = m_changeMetaData.find(propName);
         if (it != m_changeMetaData.end())
             return it.value();

@@ -7,16 +7,17 @@
 
 #ifndef KISKINECTICSCROLLER_H
 #define KISKINECTICSCROLLER_H
-#include <kowidgetutils_export.h>
 #include <QScroller>
+#include <kowidgetutils_export.h>
 
 class QAbstractScrollArea;
 
 /* This is a convenience namespace for setting up global kinetic scrolling
  * with consistent settings across various UI elements within Krita. */
 
-namespace KoKineticScroller {
-KOWIDGETUTILS_EXPORT QScroller* createPreconfiguredScroller(QAbstractScrollArea *target);
+namespace KoKineticScroller
+{
+KOWIDGETUTILS_EXPORT QScroller *createPreconfiguredScroller(QAbstractScrollArea *target);
 
 KOWIDGETUTILS_EXPORT QScroller::ScrollerGestureType getConfiguredGestureType();
 

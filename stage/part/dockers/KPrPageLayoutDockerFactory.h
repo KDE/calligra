@@ -28,7 +28,7 @@ public:
     KPrPageLayoutDockerFactory();
 
     QString id() const;
-    QDockWidget* createDockWidget();
+    QDockWidget *createDockWidget();
     DockPosition defaultDockPosition() const;
 };
 

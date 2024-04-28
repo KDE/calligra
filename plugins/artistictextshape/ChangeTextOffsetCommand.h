@@ -14,13 +14,14 @@ class ArtisticTextShape;
 class ChangeTextOffsetCommand : public KUndo2Command
 {
 public:
-    ChangeTextOffsetCommand( ArtisticTextShape * textShape, qreal oldOffset, qreal newOffset, KUndo2Command * parent = 0 );
+    ChangeTextOffsetCommand(ArtisticTextShape *textShape, qreal oldOffset, qreal newOffset, KUndo2Command *parent = 0);
     /// reimplemented from KUndo2Command
     void redo() override;
     /// reimplemented from KUndo2Command
     void undo() override;
+
 private:
-    ArtisticTextShape * m_textShape;
+    ArtisticTextShape *m_textShape;
     qreal m_oldOffset;
     qreal m_newOffset;
 };

@@ -2,13 +2,13 @@
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef KORGBU16COLORSPACE_H_
 #define KORGBU16COLORSPACE_H_
 
-#include "LcmsColorSpace.h"
 #include "KoColorModelStandardIds.h"
+#include "LcmsColorSpace.h"
 
 struct KoBgrU16Traits;
 
@@ -33,23 +33,23 @@ public:
 
     void colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const override;
 
-    void colorFromXML(quint8* pixel, const QDomElement& elt) const override;
+    void colorFromXML(quint8 *pixel, const QDomElement &elt) const override;
     void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const override;
-    QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
+    QVector<double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
     void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const override;
-    QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
+    QVector<double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
 
     static QString colorSpaceId()
     {
         return QString("RGBA16");
     }
-
 };
 
 class RgbU16ColorSpaceFactory : public LcmsColorSpaceFactory
 {
 public:
-    RgbU16ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_BGRA_16, cmsSigRgbData)
+    RgbU16ColorSpaceFactory()
+        : LcmsColorSpaceFactory(TYPE_BGRA_16, cmsSigRgbData)
     {
     }
     QString id() const override
@@ -85,7 +85,7 @@ public:
 
     QString defaultProfile() const override
     {
-        return "sRGB-elle-V2-g10.icc";//this is a linear space, because 16bit is enough to only enjoy advantages of linear space
+        return "sRGB-elle-V2-g10.icc"; // this is a linear space, because 16bit is enough to only enjoy advantages of linear space
     }
 };
 

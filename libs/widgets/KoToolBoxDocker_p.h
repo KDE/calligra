@@ -26,7 +26,10 @@ public:
     /// reimplemented from KoCanvasObserverBase
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
-    QString observerName() const override { return QStringLiteral("KoToolBoxDocker"); }
+    QString observerName() const override
+    {
+        return QStringLiteral("KoToolBoxDocker");
+    }
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

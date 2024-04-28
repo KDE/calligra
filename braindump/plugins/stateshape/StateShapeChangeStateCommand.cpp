@@ -19,9 +19,13 @@
 #include "StateShapeChangeStateCommand.h"
 #include "StateShape.h"
 
-StateShapeChangeStateCommand::StateShapeChangeStateCommand(StateShape* _shape, const QString& _newCategoryId, const QString& _newStateId) : m_shape(_shape), m_newCategoryId(_newCategoryId), m_newStateId(_newStateId), m_oldCategoryId(m_shape->categoryId()), m_oldStateId(m_shape->stateId())
+StateShapeChangeStateCommand::StateShapeChangeStateCommand(StateShape *_shape, const QString &_newCategoryId, const QString &_newStateId)
+    : m_shape(_shape)
+    , m_newCategoryId(_newCategoryId)
+    , m_newStateId(_newStateId)
+    , m_oldCategoryId(m_shape->categoryId())
+    , m_oldStateId(m_shape->stateId())
 {
-
 }
 
 void StateShapeChangeStateCommand::undo()

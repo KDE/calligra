@@ -6,21 +6,20 @@
  */
 
 #include "OdfTextTrackStyles.h"
-#include "KoTextDocument.h"
-#include "KoParagraphStyle.h"
 #include "KoCharacterStyle.h"
+#include "KoParagraphStyle.h"
+#include "KoTextDocument.h"
 
-#include <QTextDocument>
 #include "TextDebug.h"
-
+#include <QTextDocument>
 
 QHash<QObject *, OdfTextTrackStyles *> OdfTextTrackStyles::instances;
 
 OdfTextTrackStyles *OdfTextTrackStyles::instance(KoStyleManager *manager)
 {
-    if (! instances.contains(manager)) {
+    if (!instances.contains(manager)) {
         instances[manager] = new OdfTextTrackStyles(manager);
-        connect(manager,&QObject::destroyed,instances[manager], &OdfTextTrackStyles::styleManagerDied);
+        connect(manager, &QObject::destroyed, instances[manager], &OdfTextTrackStyles::styleManagerDied);
     }
 
     return instances[manager];
@@ -28,9 +27,9 @@ OdfTextTrackStyles *OdfTextTrackStyles::instance(KoStyleManager *manager)
 
 void OdfTextTrackStyles::registerDocument(QTextDocument *qDoc)
 {
-    if (! m_documents.contains(qDoc)) {
+    if (!m_documents.contains(qDoc)) {
         m_documents.append(qDoc);
-        connect(qDoc,&QObject::destroyed, this, &OdfTextTrackStyles::documentDied);
+        connect(qDoc, &QObject::destroyed, this, &OdfTextTrackStyles::documentDied);
     }
 }
 
@@ -42,16 +41,20 @@ void OdfTextTrackStyles::unregisterDocument(QTextDocument *qDoc)
 }
 
 OdfTextTrackStyles::OdfTextTrackStyles(KoStyleManager *manager)
-        : QObject(manager)
-        , m_styleManager(manager)
-        , m_changeCommand(0)
+    : QObject(manager)
+    , m_styleManager(manager)
+    , m_changeCommand(0)
 {
     connect(manager, &KoStyleManager::editHasBegun, this, &OdfTextTrackStyles::beginEdit);
     connect(manager, &KoStyleManager::editHasEnded, this, &OdfTextTrackStyles::endEdit);
-    connect(manager, &KoStyleManager::characterStyleHasChanged,
-            this,    QOverload<int,const KoCharacterStyle*,const KoCharacterStyle*>::of(&OdfTextTrackStyles::recordStyleChange));
-    connect(manager, &KoStyleManager::paragraphStyleHasChanged,
-            this,    QOverload<int,const KoParagraphStyle*,const KoParagraphStyle*>::of(&OdfTextTrackStyles::recordStyleChange));
+    connect(manager,
+            &KoStyleManager::characterStyleHasChanged,
+            this,
+            QOverload<int, const KoCharacterStyle *, const KoCharacterStyle *>::of(&OdfTextTrackStyles::recordStyleChange));
+    connect(manager,
+            &KoStyleManager::paragraphStyleHasChanged,
+            this,
+            QOverload<int, const KoParagraphStyle *, const KoParagraphStyle *>::of(&OdfTextTrackStyles::recordStyleChange));
 }
 
 OdfTextTrackStyles::~OdfTextTrackStyles()
@@ -67,7 +70,7 @@ void OdfTextTrackStyles::beginEdit()
 void OdfTextTrackStyles::endEdit()
 {
     if (m_documents.length() > 0) {
-        KUndo2Stack *undoStack= KoTextDocument(m_documents.first()).undoStack();
+        KUndo2Stack *undoStack = KoTextDocument(m_documents.first()).undoStack();
         if (undoStack) {
             undoStack->push(m_changeCommand);
         }
@@ -89,7 +92,7 @@ void OdfTextTrackStyles::recordStyleChange(int id, const KoParagraphStyle *origS
 
 void OdfTextTrackStyles::recordStyleChange(int id, const KoCharacterStyle *origStyle, const KoCharacterStyle *newStyle)
 {
-   m_changeCommand->changedStyle(id);
+    m_changeCommand->changedStyle(id);
 
     if (origStyle != newStyle) {
         m_changeCommand->origStyle(origStyle->clone());

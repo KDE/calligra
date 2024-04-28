@@ -17,7 +17,6 @@ class QTextDocument;
 class InsertNoteCommand : public KUndo2Command
 {
 public:
-
     InsertNoteCommand(KoInlineNote::Type type, QTextDocument *document);
     ~InsertNoteCommand() override;
 
@@ -25,6 +24,7 @@ public:
     void redo() override;
 
     KoInlineNote *m_inlineNote;
+
 private:
     QPointer<QTextDocument> m_document;
     bool m_first;

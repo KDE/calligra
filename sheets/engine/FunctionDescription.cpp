@@ -13,7 +13,7 @@
 
 using namespace Calligra::Sheets;
 
-static ParameterType toType(const QString& type)
+static ParameterType toType(const QString &type)
 {
     if (type == "Boolean")
         return KSpread_Boolean;
@@ -72,16 +72,16 @@ FunctionParameter::FunctionParameter()
     m_range = false;
 }
 
-FunctionParameter::FunctionParameter(const FunctionParameter& param)
+FunctionParameter::FunctionParameter(const FunctionParameter &param)
 {
     m_help = param.m_help;
     m_type = param.m_type;
     m_range = param.m_range;
 }
 
-FunctionParameter::FunctionParameter(const QDomElement& element)
+FunctionParameter::FunctionParameter(const QDomElement &element)
 {
-    m_type  = KSpread_Float;
+    m_type = KSpread_Float;
     m_range = false;
 
     QDomNode n = element.firstChild();
@@ -105,7 +105,7 @@ FunctionDescription::FunctionDescription()
     m_type = KSpread_Float;
 }
 
-FunctionDescription::FunctionDescription(const QDomElement& element)
+FunctionDescription::FunctionDescription(const QDomElement &element)
 {
     QDomNode n = element.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
@@ -137,7 +137,7 @@ FunctionDescription::FunctionDescription(const QDomElement& element)
     }
 }
 
-FunctionDescription::FunctionDescription(const FunctionDescription& desc)
+FunctionDescription::FunctionDescription(const FunctionDescription &desc)
 {
     m_examples = desc.m_examples;
     m_related = desc.m_related;
@@ -177,8 +177,7 @@ QString FunctionDescription::toQML() const
         text += "<h2>" + i18n("Parameters") + "</h2><ul>";
         QList<FunctionParameter>::ConstIterator it = m_params.begin();
         for (; it != m_params.end(); ++it) {
-            text += i18n("<li><b>Comment:</b> %1", (*it).helpText()) +
-                    i18n("<br><b>Type:</b> %1", toString((*it).type(), (*it).hasRange()));
+            text += i18n("<li><b>Comment:</b> %1", (*it).helpText()) + i18n("<br><b>Type:</b> %1", toString((*it).type(), (*it).hasRange()));
         }
         text += "</ul>";
     }

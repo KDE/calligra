@@ -30,7 +30,9 @@ class FLAKE_EXPORT KoViewConverter
 {
 public:
     KoViewConverter();
-    virtual ~KoViewConverter() {}
+    virtual ~KoViewConverter()
+    {
+    }
 
     /**
      * Convert a coordinate in pt to pixels.
@@ -61,14 +63,14 @@ public:
      * @param documentSize the size in pt.
      * @return the size in pixels.
      */
-    virtual QSizeF documentToView(const QSizeF& documentSize) const;
+    virtual QSizeF documentToView(const QSizeF &documentSize) const;
 
     /**
      * Convert a size in pixels to pt.
      * @param viewSize the size in pixels.
      * @return the size in pt.
      */
-    virtual QSizeF viewToDocument(const QSizeF& viewSize) const;
+    virtual QSizeF viewToDocument(const QSizeF &viewSize) const;
 
     /**
      * Convert a single x coordinate in pt to pixels.

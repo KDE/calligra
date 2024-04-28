@@ -10,13 +10,15 @@
 #include <QObject>
 #include <QVariantList>
 
-class PathShapesPlugin : public QObject {
+class PathShapesPlugin : public QObject
+{
     Q_OBJECT
 
 public:
     PathShapesPlugin(QObject *parent, const QVariantList &);
-    ~PathShapesPlugin() override {}
-
+    ~PathShapesPlugin() override
+    {
+    }
 };
 
 #endif

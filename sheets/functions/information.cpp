@@ -15,8 +15,8 @@
 
 #include <CalligraVersionWrapper.h>
 
-#include <QDir>
 #include <KLocalizedString>
+#include <QDir>
 
 #include "engine/CalculationSettings.h"
 #include "engine/CellBase.h"
@@ -55,9 +55,8 @@ Value func_version(valVector args, ValueCalc *calc, FuncExtra *);
 
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadinformationmodule.json", InformationModule)
 
-
-InformationModule::InformationModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+InformationModule::InformationModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
@@ -127,7 +126,7 @@ QString InformationModule::descriptionFileName() const
 // Function: ERROR.TYPE
 Value func_errortype(valVector args, ValueCalc *, FuncExtra *)
 {
-    if (! args[0].isError()) {
+    if (!args[0].isError()) {
         // its an error if the argument isn't an error...
         return Value::errorVALUE();
     }
@@ -173,21 +172,21 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         return Value(CalligraVersionWrapper::versionString());
 
     if (type == "numfile") {
-/*
-        KoApplication *app = qobject_cast<KoApplication*>(qApp);
-        if(! app) {
-           return Value(0);
-        } else {
+        /*
+                KoApplication *app = qobject_cast<KoApplication*>(qApp);
+                if(! app) {
+                   return Value(0);
+                } else {
 
-            QSet<QString> nameList;
-            QList<KoPart*> parts = app->partList();
-            for(KoPart* part : parts) {
-                nameList.insert(part->document()->objectName());
-            }
-            return Value(nameList.size());
-        }
-*/
-        return Value::errorVALUE();   // let's just declare this unsupported for now
+                    QSet<QString> nameList;
+                    QList<KoPart*> parts = app->partList();
+                    for(KoPart* part : parts) {
+                        nameList.insert(part->document()->objectName());
+                    }
+                    return Value(nameList.size());
+                }
+        */
+        return Value::errorVALUE(); // let's just declare this unsupported for now
     }
 
     if (type == "recalc") {
@@ -234,13 +233,13 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         OSVERSIONINFO versionInfo;
         SYSTEM_INFO sysInfo;
         QString architecture;
-        
+
         versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-        
+
         GetVersionEx(&versionInfo);
         GetSystemInfo(&sysInfo);
-        
-        switch(sysInfo.wProcessorArchitecture) {
+
+        switch (sysInfo.wProcessorArchitecture) {
         case PROCESSOR_ARCHITECTURE_AMD64:
             architecture = QString("x86_64");
             break;
@@ -253,9 +252,9 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         default:
             architecture = QString("unknown");
         }
-        
+
         QString os = QString("Windows %1.%2 (%3)").arg(versionInfo.dwMajorVersion).arg(versionInfo.dwMinorVersion).arg(architecture);
-        
+
         return Value(os);
 #endif
     }
@@ -284,7 +283,8 @@ Value func_istext(valVector args, ValueCalc *, FuncExtra *)
 // Function: ISREF
 Value func_isref(valVector args, ValueCalc * /*calc*/, FuncExtra *e)
 {
-    if (args[0].isError()) return args[0];  // errors pass through
+    if (args[0].isError())
+        return args[0]; // errors pass through
     // no reference ?
     if ((e == 0) || (e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1))
         return Value(false);
@@ -307,15 +307,13 @@ Value func_isnum(valVector args, ValueCalc *, FuncExtra *)
 // Function: ISTIME
 Value func_istime(valVector args, ValueCalc *, FuncExtra *)
 {
-    return Value((args[0].format() == Value::fmt_Time)
-                 || (args[0].format() == Value::fmt_DateTime));
+    return Value((args[0].format() == Value::fmt_Time) || (args[0].format() == Value::fmt_DateTime));
 }
 
 // Function: ISDATE
 Value func_isdate(valVector args, ValueCalc *, FuncExtra *)
 {
-    return Value((args[0].format() == Value::fmt_Date)
-                 || (args[0].format() == Value::fmt_DateTime));
+    return Value((args[0].format() == Value::fmt_Date) || (args[0].format() == Value::fmt_DateTime));
 }
 
 // Function: ISODD
@@ -347,8 +345,7 @@ Value func_isformula(valVector args, ValueCalc *calc, FuncExtra *e)
 // Function: ISERR
 Value func_iserr(valVector args, ValueCalc *, FuncExtra *)
 {
-    return Value((args[0].isError() &&
-                  (args[0].errorMessage() != Value::errorNA().errorMessage())));
+    return Value((args[0].isError() && (args[0].errorMessage() != Value::errorNA().errorMessage())));
 }
 
 // Function: ISERROR
@@ -360,8 +357,7 @@ Value func_iserror(valVector args, ValueCalc *, FuncExtra *)
 // Function: ISNA
 Value func_isna(valVector args, ValueCalc *, FuncExtra *)
 {
-    return Value((args[0].isError() &&
-                  (args[0].errorMessage() == Value::errorNA().errorMessage())));
+    return Value((args[0].isError() && (args[0].errorMessage() == Value::errorNA().errorMessage())));
 }
 
 // Function: TYPE
@@ -391,7 +387,7 @@ Value func_filename(valVector, ValueCalc *calc, FuncExtra *)
 
 Value func_formula(valVector, ValueCalc *, FuncExtra *e)
 {
-    if(e->ranges[0].col1 < 1 || e->ranges[0].row1 < 1)
+    if (e->ranges[0].col1 < 1 || e->ranges[0].row1 < 1)
         return Value::errorVALUE();
     const Calligra::Sheets::CellBase c(e->sheet, e->ranges[0].col1, e->ranges[0].row1);
     if (c.isNull())

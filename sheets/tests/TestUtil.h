@@ -12,7 +12,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class TestUtil: public QObject
+class TestUtil : public QObject
 {
     Q_OBJECT
 
@@ -25,4 +25,3 @@ private Q_SLOTS:
 } // namespace Calligra
 
 #endif // CALLIGRA_SHEETS_TEST_UTIL
-

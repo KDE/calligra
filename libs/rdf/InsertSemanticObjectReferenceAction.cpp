@@ -8,23 +8,20 @@
 
 #include "KoDocumentRdf.h"
 
-#include <KoCanvasBase.h>
-#include <KoToolProxy.h>
-#include <KoTextEditor.h>
 #include "KoRdfSemanticTreeWidgetItem.h"
+#include <KoCanvasBase.h>
+#include <KoTextEditor.h>
+#include <KoToolProxy.h>
 
-#include <kdebug.h>
 #include <KLocalizedString>
+#include <kdebug.h>
 #include <kpagedialog.h>
 
-#include <QVBoxLayout>
 #include <QLabel>
+#include <QVBoxLayout>
 
-InsertSemanticObjectReferenceAction::InsertSemanticObjectReferenceAction(
-    KoCanvasBase *canvas,
-    KoDocumentRdf *rdf,
-    const QString &name)
-        : InsertSemanticObjectActionBase(canvas, rdf, name)
+InsertSemanticObjectReferenceAction::InsertSemanticObjectReferenceAction(KoCanvasBase *canvas, KoDocumentRdf *rdf, const QString &name)
+    : InsertSemanticObjectActionBase(canvas, rdf, name)
 {
 }
 
@@ -44,7 +41,7 @@ void InsertSemanticObjectReferenceAction::activated()
     lay->addWidget(label);
     QTreeWidget *tree = new QTreeWidget(widget);
     KoRdfSemanticTree td = KoRdfSemanticTree::createTree(tree);
-    td.update(const_cast<KoDocumentRdf*>(m_rdf));
+    td.update(const_cast<KoDocumentRdf *>(m_rdf));
     lay->addWidget(tree);
 
     KPageDialog dialog(m_canvas->canvasWidget());
@@ -53,7 +50,7 @@ void InsertSemanticObjectReferenceAction::activated()
 
     if (dialog.exec() == KPageDialog::Accepted && tree->currentItem()) {
         QTreeWidgetItem *item = tree->currentItem();
-        if (KoRdfSemanticTreeWidgetItem *ditem = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(item)) {
+        if (KoRdfSemanticTreeWidgetItem *ditem = dynamic_cast<KoRdfSemanticTreeWidgetItem *>(item)) {
             kDebug(30015) << "InsertSemanticObjectReferenceAction::activated... item:" << item;
             ditem->insert(m_canvas);
         }

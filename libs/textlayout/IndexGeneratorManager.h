@@ -6,10 +6,9 @@
 #ifndef INDEXGENERATORMANAGER_H
 #define INDEXGENERATORMANAGER_H
 
-
-#include <QObject>
-#include <QMetaType>
 #include <QHash>
+#include <QMetaType>
+#include <QObject>
 #include <QTimer>
 
 class QTextDocument;
@@ -22,6 +21,7 @@ class IndexGeneratorManager : public QObject
     Q_OBJECT
 private:
     explicit IndexGeneratorManager(QTextDocument *document);
+
 public:
     ~IndexGeneratorManager() override;
 
@@ -39,7 +39,7 @@ private Q_SLOTS:
 
 private:
     enum State {
-        Resting,  // We are not doing anything, and don't need to either
+        Resting, // We are not doing anything, and don't need to either
         FirstRunNeeded, // We would like to update the indexes, with dummy pg nums
         FirstRun, // Updating indexes, so prevent layout and ignore documentChanged()
         FirstRunLayouting, // KoTextDocumentLayout is layouting so sit still

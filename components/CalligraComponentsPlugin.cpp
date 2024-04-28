@@ -10,22 +10,22 @@
 #include "CalligraComponentsPlugin.h"
 
 #include "Document.h"
-#include "View.h"
-#include "Global.h"
-#include "ViewController.h"
 #include "Enums.h"
+#include "Global.h"
 #include "ImageDataItem.h"
-#include "models/ContentsModel.h"
 #include "LinkArea.h"
+#include "View.h"
+#include "ViewController.h"
+#include "models/ContentsModel.h"
 
 using namespace Calligra::Components;
 
-QObject* singletonFactory(QQmlEngine*, QJSEngine*)
+QObject *singletonFactory(QQmlEngine *, QJSEngine *)
 {
     return new Calligra::Components::Global{};
 }
 
-void CalligraComponentsPlugin::registerTypes(const char* uri)
+void CalligraComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String{"org.kde.calligra"});
 

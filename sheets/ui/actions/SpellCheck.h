@@ -9,23 +9,23 @@
 #ifndef CALLIGRA_SHEETS_ACTION_SPELLCHECK
 #define CALLIGRA_SHEETS_ACTION_SPELLCHECK
 
-
 #include "CellAction.h"
 #include <sonnet/backgroundchecker.h>
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class SpellChecker : public Sonnet::BackgroundChecker {
-Q_OBJECT
+class SpellChecker : public Sonnet::BackgroundChecker
+{
+    Q_OBJECT
 public:
     SpellChecker(QObject *parent);
     ~SpellChecker();
 
     void check(Selection *selection, Sheet *sheet, QWidget *canvasWidget);
+
 protected:
     QString fetchMoreText() override;
     void finishedCurrentFeed() override;
@@ -41,9 +41,9 @@ private:
     Private *d;
 };
 
-
-class SpellCheck : public CellAction {
-Q_OBJECT
+class SpellCheck : public CellAction
+{
+    Q_OBJECT
 public:
     SpellCheck(Actions *actions);
     virtual ~SpellCheck();
@@ -55,8 +55,7 @@ private:
     SpellChecker *checker;
 };
 
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_SPELLCHECK
+#endif // CALLIGRA_SHEETS_ACTION_SPELLCHECK

@@ -9,17 +9,17 @@
 
 #include <Charting.h>
 
+#include "cell.h"
+#include "excel.h"
+#include "format.h"
 #include "formulas.h"
 #include "records.h"
-#include "format.h"
-#include "value.h"
-#include "cell.h"
 #include "sheet.h"
+#include "value.h"
 #include "workbook.h"
-#include "excel.h"
 
-#include <string>
 #include <iostream>
+#include <string>
 #include <vector>
 
 #include <QList>
@@ -28,7 +28,7 @@
 
 namespace MSO
 {
-    class OfficeArtDgContainer;
+class OfficeArtDgContainer;
 }
 
 namespace Swinder
@@ -40,7 +40,6 @@ namespace Swinder
 class Object
 {
 public:
-
     /// The object type.
     enum Type {
         Group = 0x0000,
@@ -71,11 +70,13 @@ public:
     virtual ~Object();
 
     /// Returns the object type.
-    Type type() const {
+    Type type() const
+    {
         return m_type;
     }
     /// Returns the unique object identifier.
-    unsigned long id() const {
+    unsigned long id() const
+    {
         return m_id;
     }
 
@@ -90,23 +91,30 @@ protected:
     unsigned long m_id;
 };
 
-
 /**
  * Note objects used to store comments attached to a cell or revision.
  */
 class NoteObject : public Object
 {
 public:
-    NoteObject(unsigned long id) : Object(Note, id) {}
-    ~NoteObject() override {}
+    NoteObject(unsigned long id)
+        : Object(Note, id)
+    {
+    }
+    ~NoteObject() override
+    {
+    }
     /// Returns the comment.
-    QString note() const {
+    QString note() const
+    {
         return m_note;
     }
     /// Set the comment.
-    void setNote(const QString &n) {
+    void setNote(const QString &n)
+    {
         m_note = n;
     }
+
 private:
     QString m_note;
 };
@@ -117,16 +125,29 @@ private:
 class ChartObject : public Object
 {
 public:
-    KoChart::Chart* m_chart;
+    KoChart::Chart *m_chart;
 
-    explicit ChartObject(unsigned long id) : Object(Chart, id), m_chart(new KoChart::Chart) {}
-    ~ChartObject() override { delete m_chart; }
-    bool operator==(const ChartObject &other) const { return this == &other; }
-    bool operator!=(const ChartObject &other) const { return ! (*this == other); }
+    explicit ChartObject(unsigned long id)
+        : Object(Chart, id)
+        , m_chart(new KoChart::Chart)
+    {
+    }
+    ~ChartObject() override
+    {
+        delete m_chart;
+    }
+    bool operator==(const ChartObject &other) const
+    {
+        return this == &other;
+    }
+    bool operator!=(const ChartObject &other) const
+    {
+        return !(*this == other);
+    }
 
 private:
-    ChartObject(const ChartObject& co);
-    ChartObject& operator=(const ChartObject& co);
+    ChartObject(const ChartObject &co);
+    ChartObject &operator=(const ChartObject &co);
 };
 
 /**
@@ -135,15 +156,22 @@ private:
 class OfficeArtObject
 {
 public:
-    explicit OfficeArtObject(const MSO::OfficeArtSpContainer& object, quint32 index = 0);
+    explicit OfficeArtObject(const MSO::OfficeArtSpContainer &object, quint32 index = 0);
     ~OfficeArtObject();
     MSO::OfficeArtSpContainer object() const;
-    void setText(const TxORecord& text);
+    void setText(const TxORecord &text);
     TxORecord text() const;
     void setIndex(quint32 index);
     quint32 index() const;
-    bool operator==(const OfficeArtObject& other) const { return this == &other; }
-    bool operator!=(const OfficeArtObject& other) const { return !(*this == other); }
+    bool operator==(const OfficeArtObject &other) const
+    {
+        return this == &other;
+    }
+    bool operator!=(const OfficeArtObject &other) const
+    {
+        return !(*this == other);
+    }
+
 private:
     MSO::OfficeArtSpContainer m_object;
     TxORecord m_text;

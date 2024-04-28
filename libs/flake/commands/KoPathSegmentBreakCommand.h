@@ -8,9 +8,9 @@
 #ifndef KOPATHSEGMENTBREAKCOMMAND_H
 #define KOPATHSEGMENTBREAKCOMMAND_H
 
-#include <kundo2command.h>
-#include "KoPathShape.h"
 #include "KoPathPointData.h"
+#include "KoPathShape.h"
+#include <kundo2command.h>
 
 /// The undo / redo command for breaking a subpath by removing the segment
 class KoPathSegmentBreakCommand : public KUndo2Command
@@ -31,6 +31,7 @@ public:
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
     KoPathPointData m_pointData;
     KoPathPointIndex m_startIndex;

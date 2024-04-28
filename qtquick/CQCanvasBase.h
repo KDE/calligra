@@ -19,7 +19,7 @@ class CQCanvasBase : public QDeclarativeItem
     Q_PROPERTY(qreal shapeTransparency READ shapeTransparency WRITE setShapeTransparency NOTIFY shapeTransparencyChanged)
 
 public:
-    explicit CQCanvasBase(QDeclarativeItem* parent);
+    explicit CQCanvasBase(QDeclarativeItem *parent);
     virtual ~CQCanvasBase();
 
     CQCanvasController *canvasController() const;
@@ -30,13 +30,13 @@ public:
     virtual void setShapeTransparency(qreal newTransparency);
 public Q_SLOTS:
     virtual void setSource(const QString &source);
-    virtual void render(QPainter* painter, const QRectF& target) = 0;
+    virtual void render(QPainter *painter, const QRectF &target) = 0;
 
 Q_SIGNALS:
     void sourceChanged();
     void shapeTransparencyChanged();
     void canvasControllerChanged();
-    void positionShouldChange(const QPoint& pos);
+    void positionShouldChange(const QPoint &pos);
 
     void loadingBegun();
     void loadingFinished();
@@ -49,9 +49,9 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
-Q_DECLARE_METATYPE(CQCanvasBase*);
+Q_DECLARE_METATYPE(CQCanvasBase *);
 
 #endif // CQCANVASBASE_H

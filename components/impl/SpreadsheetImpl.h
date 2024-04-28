@@ -12,29 +12,31 @@
 
 #include "DocumentImpl.h"
 
-namespace Calligra {
-namespace Components {
+namespace Calligra
+{
+namespace Components
+{
 
-class SpreadsheetImpl  : public DocumentImpl
+class SpreadsheetImpl : public DocumentImpl
 {
     Q_OBJECT
 public:
-    explicit SpreadsheetImpl(QObject* parent = 0);
+    explicit SpreadsheetImpl(QObject *parent = 0);
     ~SpreadsheetImpl() override;
 
-    bool load(const QUrl& url) override;
+    bool load(const QUrl &url) override;
     int currentIndex() override;
     void setCurrentIndex(int newValue) override;
     int indexCount() const override;
     QUrl urlAtPoint(QPoint point) override;
-    QObject* part() const override;
+    QObject *part() const override;
 
 private Q_SLOTS:
-    void updateDocumentSize(const QSize& size);
+    void updateDocumentSize(const QSize &size);
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 } // Namespace Components

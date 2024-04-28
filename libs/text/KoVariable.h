@@ -50,7 +50,8 @@ public:
      * attributes from the ODF file (if applicable), so it would be useful to synchronize
      * the property names based on that.
      */
-    virtual void setProperties(const KoProperties *props) {
+    virtual void setProperties(const KoProperties *props)
+    {
         Q_UNUSED(props);
     }
 
@@ -59,7 +60,8 @@ public:
      * of manipulating these options so the text-tool can use it to show that to the user.
      * Note that all manipulations should have a direct effect on the variable itself.
      */
-    virtual QWidget *createOptionsWidget() {
+    virtual QWidget *createOptionsWidget()
+    {
         return 0;
     }
 
@@ -79,13 +81,17 @@ protected:
     int positionInDocument() const;
 
     /// reimplemented
-    void resize(const QTextDocument *document, QTextInlineObject &object,
-                int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
+    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
+
 private:
-    void updatePosition(const QTextDocument *document,
-                        int posInDocument, const QTextCharFormat &format) override;
-    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-               const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) override;
+    void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format) override;
+    void paint(QPainter &painter,
+               QPaintDevice *pd,
+               const QTextDocument *document,
+               const QRectF &rect,
+               const QTextInlineObject &object,
+               int posInDocument,
+               const QTextCharFormat &format) override;
 
 private Q_SLOTS:
     void documentDestroyed();

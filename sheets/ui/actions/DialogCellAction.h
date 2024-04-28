@@ -8,7 +8,6 @@
 #ifndef CALLIGRA_SHEETS_DIALOG_CELL_ACTION
 #define CALLIGRA_SHEETS_DIALOG_CELL_ACTION
 
-
 #include "CellAction.h"
 
 namespace Calligra
@@ -22,16 +21,17 @@ class ActionDialog;
  * Subclass of CellAction and a base class of all the actions that use a non-modal dialog.
  */
 
-class DialogCellAction : public CellAction {
-Q_OBJECT
+class DialogCellAction : public CellAction
+{
+    Q_OBJECT
 public:
     DialogCellAction(Actions *actions, const QString &actionName, const QString &caption, const QIcon &icon, const QString &tooltip);
     virtual ~DialogCellAction();
 
 protected Q_SLOTS:
     void onDialogClosed();
-    void activeSheetChanged(Sheet* sheet);
-    void selectionChanged(const Region& region);
+    void activeSheetChanged(Sheet *sheet);
+    void selectionChanged(const Region &region);
     void handleDamages();
 
 protected:
@@ -39,7 +39,9 @@ protected:
 
     virtual ActionDialog *createDialog(QWidget *canvasWidget) = 0;
     /** Called when the selection changes. Also called when opening the dialog, to simplify the logic. */
-    virtual void onSelectionChanged() {}
+    virtual void onSelectionChanged()
+    {
+    }
 
     Cell activeCell() const;
 
@@ -47,8 +49,7 @@ protected:
     Selection *m_selection;
 };
 
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_DIALOG_CELL_ACTION
+#endif // CALLIGRA_SHEETS_DIALOG_CELL_ACTION

@@ -10,18 +10,17 @@
 #include "pivotfilters.h"
 #include "ui_pivotmain.h"
 
-#include<QMessageBox>
+#include <QMessageBox>
 
+#include "core/Cell.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
+#include "core/Style.h"
 #include "engine/CellBaseStorage.h"
 #include "engine/Value.h"
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
-#include "core/Cell.h"
-#include "core/Map.h"
-#include "core/Style.h"
-#include "core/Sheet.h"
 #include "ui/Selection.h"
-
 
 using namespace Calligra::Sheets;
 
@@ -34,28 +33,27 @@ public:
     QVector<QString> retVect;
     QVector<Value> posVect;
     QVector<QString> filterVect;
-    Sheet* filterSheet;
+    Sheet *filterSheet;
     int filtersize;
 };
-PivotMain::PivotMain(QWidget* parent, Selection* selection) :
-    KoDialog(parent),
-    d(new Private)
+PivotMain::PivotMain(QWidget *parent, Selection *selection)
+    : KoDialog(parent)
+    , d(new Private)
 {
-    QWidget* widget = new QWidget(this);
+    QWidget *widget = new QWidget(this);
     d->mainWidget.setupUi(widget);
     setMainWidget(widget);
-    d->selection=selection;
+    d->selection = selection;
     setCaption(i18n("Pivot Table Configuration Window"));
-    
-    //Adding Buttons
-    setButtons(Ok|Cancel|User2);
+
+    // Adding Buttons
+    setButtons(Ok | Cancel | User2);
     setButtonGuiItem(User2, KGuiItem(i18n("Add Filter")));
 
-    enableButton(User2,true);
-    enableButton(Ok,true);
+    enableButton(User2, true);
+    enableButton(Ok, true);
     d->mainWidget.TotalRows->setChecked(true);
     d->mainWidget.TotalColumns->setChecked(true);
-
 
     d->mainWidget.Labels->setSelectionMode(QAbstractItemView::ExtendedSelection);
     d->mainWidget.Labels->setDragEnabled(true);
@@ -85,123 +83,118 @@ PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     d->mainWidget.selectOption->addItem("devsq");
 
     extractColumnNames();
-    connect(this,&KoDialog::user2Clicked,this,&PivotMain::on_AddFilter_clicked);
+    connect(this, &KoDialog::user2Clicked, this, &PivotMain::on_AddFilter_clicked);
     connect(this, &KoDialog::okClicked, this, &PivotMain::on_Ok_clicked);
-    connect(d->mainWidget.Rows,&QListWidget::itemChanged,this,&PivotMain::rows_itemChanged);
-    connect(d->mainWidget.Labels,&QListWidget::itemChanged,this,&PivotMain::labels_itemChanged);
-    connect(d->mainWidget.Columns,&QListWidget::itemChanged,this,&PivotMain::columns_itemChanged);
-    connect(d->mainWidget.Values,&QListWidget::itemChanged,this,&PivotMain::values_itemChanged);
-  
+    connect(d->mainWidget.Rows, &QListWidget::itemChanged, this, &PivotMain::rows_itemChanged);
+    connect(d->mainWidget.Labels, &QListWidget::itemChanged, this, &PivotMain::labels_itemChanged);
+    connect(d->mainWidget.Columns, &QListWidget::itemChanged, this, &PivotMain::columns_itemChanged);
+    connect(d->mainWidget.Values, &QListWidget::itemChanged, this, &PivotMain::values_itemChanged);
 }
 
 void PivotMain::rows_itemChanged(QListWidgetItem *item)
 {
-   for(int i=0;i<d->mainWidget.Labels->count();i++){
-        if(d->mainWidget.Labels->item(i)->text()==item->text()){
+    for (int i = 0; i < d->mainWidget.Labels->count(); i++) {
+        if (d->mainWidget.Labels->item(i)->text() == item->text()) {
             d->mainWidget.Labels->takeItem(i);
         }
-      }
-    for(int i=0;i<d->mainWidget.Columns->count();i++){
-        if(d->mainWidget.Columns->item(i)->text()==item->text()){
+    }
+    for (int i = 0; i < d->mainWidget.Columns->count(); i++) {
+        if (d->mainWidget.Columns->item(i)->text() == item->text()) {
             d->mainWidget.Columns->takeItem(i);
         }
-      }
-    for(int i=0;i<d->mainWidget.Values->count();i++){
-        if(d->mainWidget.Values->item(i)->text()==item->text()){
+    }
+    for (int i = 0; i < d->mainWidget.Values->count(); i++) {
+        if (d->mainWidget.Values->item(i)->text() == item->text()) {
             d->mainWidget.Values->takeItem(i);
         }
-      }
+    }
 }
 
 void PivotMain::labels_itemChanged(QListWidgetItem *item)
 {
-   for(int i=0;i<d->mainWidget.Rows->count();i++){
-        if(d->mainWidget.Rows->item(i)->text()==item->text()){
+    for (int i = 0; i < d->mainWidget.Rows->count(); i++) {
+        if (d->mainWidget.Rows->item(i)->text() == item->text()) {
             d->mainWidget.Rows->takeItem(i);
         }
-      }
-    for(int i=0;i<d->mainWidget.Columns->count();i++){
-        if(d->mainWidget.Columns->item(i)->text()==item->text()){
+    }
+    for (int i = 0; i < d->mainWidget.Columns->count(); i++) {
+        if (d->mainWidget.Columns->item(i)->text() == item->text()) {
             d->mainWidget.Columns->takeItem(i);
         }
-      }
-    for(int i=0;i<d->mainWidget.Values->count();i++){
-        if(d->mainWidget.Values->item(i)->text()==item->text()){
+    }
+    for (int i = 0; i < d->mainWidget.Values->count(); i++) {
+        if (d->mainWidget.Values->item(i)->text() == item->text()) {
             d->mainWidget.Values->takeItem(i);
         }
-      }
+    }
 }
 
 void PivotMain::columns_itemChanged(QListWidgetItem *item)
 {
-   for(int i=0;i<d->mainWidget.Labels->count();i++){
-        if(d->mainWidget.Labels->item(i)->text()==item->text()){
+    for (int i = 0; i < d->mainWidget.Labels->count(); i++) {
+        if (d->mainWidget.Labels->item(i)->text() == item->text()) {
             d->mainWidget.Labels->takeItem(i);
         }
-      }
-    for(int i=0;i<d->mainWidget.Rows->count();i++){
-        if(d->mainWidget.Rows->item(i)->text()==item->text()){
+    }
+    for (int i = 0; i < d->mainWidget.Rows->count(); i++) {
+        if (d->mainWidget.Rows->item(i)->text() == item->text()) {
             d->mainWidget.Rows->takeItem(i);
         }
-      }
-    for(int i=0;i<d->mainWidget.Values->count();i++){
-        if(d->mainWidget.Values->item(i)->text()==item->text()){
+    }
+    for (int i = 0; i < d->mainWidget.Values->count(); i++) {
+        if (d->mainWidget.Values->item(i)->text() == item->text()) {
             d->mainWidget.Values->takeItem(i);
         }
-      }
+    }
 }
 
 void PivotMain::values_itemChanged(QListWidgetItem *item)
 {
-   for(int i=0;i<d->mainWidget.Labels->count();i++){
-        if(d->mainWidget.Labels->item(i)->text()==item->text()){
+    for (int i = 0; i < d->mainWidget.Labels->count(); i++) {
+        if (d->mainWidget.Labels->item(i)->text() == item->text()) {
             d->mainWidget.Labels->takeItem(i);
         }
-      }
-    for(int i=0;i<d->mainWidget.Columns->count();i++){
-        if(d->mainWidget.Columns->item(i)->text()==item->text()){
+    }
+    for (int i = 0; i < d->mainWidget.Columns->count(); i++) {
+        if (d->mainWidget.Columns->item(i)->text() == item->text()) {
             d->mainWidget.Columns->takeItem(i);
         }
-      }
-    for(int i=0;i<d->mainWidget.Rows->count();i++){
-        if(d->mainWidget.Rows->item(i)->text()==item->text()){
+    }
+    for (int i = 0; i < d->mainWidget.Rows->count(); i++) {
+        if (d->mainWidget.Rows->item(i)->text() == item->text()) {
             d->mainWidget.Rows->takeItem(i);
         }
-      }
+    }
 }
-
-
-
 
 PivotMain::~PivotMain()
 {
     delete d;
-}//PivotMain
+} // PivotMain
 
-//Function to read the title of every column and add it to Labels.
+// Function to read the title of every column and add it to Labels.
 void PivotMain::extractColumnNames()
 {
     Sheet *const sheet = dynamic_cast<Sheet *>(d->selection->lastSheet());
     const QRect range = d->selection->lastRange();
-    
+
     int r = range.right();
     int row = range.top();
 
     Cell cell;
-    QListWidgetItem * item;
+    QListWidgetItem *item;
     QString text;
-    
+
     for (int i = range.left(); i <= r; ++i) {
         cell = Cell(sheet, i, row);
         text = cell.displayText();
-       
-	if(text.length() >0)
-	{
-        item = new QListWidgetItem(text);
-	item->setFlags(item->flags());
-        d->mainWidget.Labels->addItem(item);
-	}  
-    }  
+
+        if (text.length() > 0) {
+            item = new QListWidgetItem(text);
+            item->setFlags(item->flags());
+            d->mainWidget.Labels->addItem(item);
+        }
+    }
 }
 
 /*//When the option button is clicked, a dialog for setting options appears
@@ -214,171 +207,146 @@ void PivotMain::on_Options_clicked()
 }//on_Options_Clicked
 */
 
-//When add filter button is clicked, the dialog box for filtering data appears
+// When add filter button is clicked, the dialog box for filtering data appears
 void PivotMain::on_AddFilter_clicked()
 {
+    PivotFilters *pFilters = new PivotFilters(this, d->selection);
+    pFilters->setModal(true);
+    pFilters->exec();
+    d->filterVect = pFilters->filterData();
+} // on_AddFilter_clicked
 
-        PivotFilters *pFilters=new PivotFilters(this,d->selection);
-        pFilters->setModal(true);
-        pFilters->exec();
-	d->filterVect=pFilters->filterData();
-}//on_AddFilter_clicked
-
-//The function receives the data from Add Filter and filters the data. The filtered sheet is then used to further processing
-Sheet* PivotMain::filter()
+// The function receives the data from Add Filter and filters the data. The filtered sheet is then used to further processing
+Sheet *PivotMain::filter()
 {
-  
-  Sheet *const sheet1 = dynamic_cast<Sheet *>(d->selection->lastSheet());
-  const QRect range2 = d->selection->lastRange();
-  
-  Map *mymap=sheet1->fullMap();
-  Sheet* sheet2 = dynamic_cast<Sheet *>(mymap->createSheet("Filtered Sheet"));
-  
-  
-  int r= range2.right();
-  int b=range2.bottom();
-  int row=range2.top();
-  QVector<int> filtered;
-  
-  
-  if(d->filterVect.count()<3)
-      return sheet1;
-  
-  
-  for(int k=row+1;k<=b;k++)
-  {
-      bool pass=true;
+    Sheet *const sheet1 = dynamic_cast<Sheet *>(d->selection->lastSheet());
+    const QRect range2 = d->selection->lastRange();
 
-      if(d->filterVect.count()==3)
-      {
-	  pass=checkCondition(d->filterVect.at(0),d->filterVect.at(1),d->filterVect.at(2),k);
-      }
-      else if(d->filterVect.count()==7)
-      {
-	 
-	  if(d->filterVect.at(3)=="And")
-	    pass= checkCondition(d->filterVect.at(0),d->filterVect.at(1),d->filterVect.at(2),k) && 
-				checkCondition(d->filterVect.at(4),d->filterVect.at(5),d->filterVect.at(6),k);
-      
-	  if(d->filterVect.at(3)=="Or") 
-	      pass=  checkCondition(d->filterVect.at(0),d->filterVect.at(1),d->filterVect.at(2),k) || 
-				checkCondition(d->filterVect.at(4),d->filterVect.at(5),d->filterVect.at(6),k);
-				
-	  
-      }
-      
-      else if(d->filterVect.count()==11)
-      {
-	  
-	  if(d->filterVect.at(3)=="And")
-	    pass= checkCondition(d->filterVect.at(0),d->filterVect.at(1),d->filterVect.at(2),k) && 
-				checkCondition(d->filterVect.at(4),d->filterVect.at(5),d->filterVect.at(6),k);
-			
-      
-	  if(d->filterVect.at(3)=="Or") 
-	    pass=  checkCondition(d->filterVect.at(0),d->filterVect.at(1),d->filterVect.at(2),k) || 
-				checkCondition(d->filterVect.at(4),d->filterVect.at(5),d->filterVect.at(6),k);
-				
+    Map *mymap = sheet1->fullMap();
+    Sheet *sheet2 = dynamic_cast<Sheet *>(mymap->createSheet("Filtered Sheet"));
 
-	  if(d->filterVect.at(7)=="And")
-	      pass= pass && checkCondition(d->filterVect.at(9),d->filterVect.at(10),d->filterVect.at(11),k);
-				
-      
-	  if(d->filterVect.at(7)=="Or") 
-	    pass=  pass || checkCondition(d->filterVect.at(4),d->filterVect.at(5),d->filterVect.at(6),k);
-				
-	  }
-      
-      if(pass==true)
-	filtered.append(k);
+    int r = range2.right();
+    int b = range2.bottom();
+    int row = range2.top();
+    QVector<int> filtered;
+
+    if (d->filterVect.count() < 3)
+        return sheet1;
+
+    for (int k = row + 1; k <= b; k++) {
+        bool pass = true;
+
+        if (d->filterVect.count() == 3) {
+            pass = checkCondition(d->filterVect.at(0), d->filterVect.at(1), d->filterVect.at(2), k);
+        } else if (d->filterVect.count() == 7) {
+            if (d->filterVect.at(3) == "And")
+                pass = checkCondition(d->filterVect.at(0), d->filterVect.at(1), d->filterVect.at(2), k)
+                    && checkCondition(d->filterVect.at(4), d->filterVect.at(5), d->filterVect.at(6), k);
+
+            if (d->filterVect.at(3) == "Or")
+                pass = checkCondition(d->filterVect.at(0), d->filterVect.at(1), d->filterVect.at(2), k)
+                    || checkCondition(d->filterVect.at(4), d->filterVect.at(5), d->filterVect.at(6), k);
+
+        }
+
+        else if (d->filterVect.count() == 11) {
+            if (d->filterVect.at(3) == "And")
+                pass = checkCondition(d->filterVect.at(0), d->filterVect.at(1), d->filterVect.at(2), k)
+                    && checkCondition(d->filterVect.at(4), d->filterVect.at(5), d->filterVect.at(6), k);
+
+            if (d->filterVect.at(3) == "Or")
+                pass = checkCondition(d->filterVect.at(0), d->filterVect.at(1), d->filterVect.at(2), k)
+                    || checkCondition(d->filterVect.at(4), d->filterVect.at(5), d->filterVect.at(6), k);
+
+            if (d->filterVect.at(7) == "And")
+                pass = pass && checkCondition(d->filterVect.at(9), d->filterVect.at(10), d->filterVect.at(11), k);
+
+            if (d->filterVect.at(7) == "Or")
+                pass = pass || checkCondition(d->filterVect.at(4), d->filterVect.at(5), d->filterVect.at(6), k);
+        }
+
+        if (pass == true)
+            filtered.append(k);
     }
 
-      for(int j=1;j<=r;j++)
-	Cell(sheet2,j,1).setValue(Cell(sheet1,j,1).value());
-      for(int i=0;i<filtered.count();i++)
-      {
-	for(int j=1;j<=r;j++)
-	{
-	  Cell(sheet2,j,i+2).setValue(Cell(sheet1,j,filtered.at(i)).value());
-	}
-      }
-  d->filtersize=filtered.count()+1;
-  return sheet2;
+    for (int j = 1; j <= r; j++)
+        Cell(sheet2, j, 1).setValue(Cell(sheet1, j, 1).value());
+    for (int i = 0; i < filtered.count(); i++) {
+        for (int j = 1; j <= r; j++) {
+            Cell(sheet2, j, i + 2).setValue(Cell(sheet1, j, filtered.at(i)).value());
+        }
+    }
+    d->filtersize = filtered.count() + 1;
+    return sheet2;
 }
 
-//This helps the filter function in analyzing the data(condition) received from Add Filter dialog.
-bool PivotMain::checkCondition(const QString &field , const QString &condition, const QString &value, int line)
+// This helps the filter function in analyzing the data(condition) received from Add Filter dialog.
+bool PivotMain::checkCondition(const QString &field, const QString &condition, const QString &value, int line)
 {
-  Sheet *const sheet1 = dynamic_cast<Sheet *>(d->selection->lastSheet());
-  const QRect range2 = d->selection->lastRange();
-  int r= range2.right();
-  //int b=range2.bottom();
-  int row=range2.top();
-  
-  QVector<QString> vect;
-  
-  for(int i=range2.left();i<=r;i++) {
-    vect.append(Cell(sheet1,i,row).displayText());  
-  }
+    Sheet *const sheet1 = dynamic_cast<Sheet *>(d->selection->lastSheet());
+    const QRect range2 = d->selection->lastRange();
+    int r = range2.right();
+    // int b=range2.bottom();
+    int row = range2.top();
 
-    if(condition==">"){
-      if(Cell(sheet1,vect.indexOf(field)+1,line).displayText() > value){
-		 
+    QVector<QString> vect;
 
-		  return true;
-      }
-      else
-	    return false;
+    for (int i = range2.left(); i <= r; i++) {
+        vect.append(Cell(sheet1, i, row).displayText());
     }
-	
-    if(condition=="<"){
-      if(Cell(sheet1,vect.indexOf(field)+1,line).displayText() < value){
-	return true;}
-      else
-		  return false;
+
+    if (condition == ">") {
+        if (Cell(sheet1, vect.indexOf(field) + 1, line).displayText() > value) {
+            return true;
+        } else
+            return false;
     }
-		  
-    if(condition== "=="){
-      if(Cell(sheet1,vect.indexOf(field)+1,line).displayText() == value)
-		  return true;
-      else
-		  return false;
+
+    if (condition == "<") {
+        if (Cell(sheet1, vect.indexOf(field) + 1, line).displayText() < value) {
+            return true;
+        } else
+            return false;
     }
-      
-    if(condition=="!="){
-      if(Cell(sheet1,vect.indexOf(field)+1,line).displayText() != value)
-		  return true;
-      else
-		  return false;
+
+    if (condition == "==") {
+        if (Cell(sheet1, vect.indexOf(field) + 1, line).displayText() == value)
+            return true;
+        else
+            return false;
+    }
+
+    if (condition == "!=") {
+        if (Cell(sheet1, vect.indexOf(field) + 1, line).displayText() != value)
+            return true;
+        else
+            return false;
     }
     return false;
-    
-}//checkCondition
 
+} // checkCondition
 
-
-//The core function which summarizes the data and forms the pivot table.
+// The core function which summarizes the data and forms the pivot table.
 void PivotMain::Summarize()
 {
     Sheet *const lastSheet = dynamic_cast<Sheet *>(d->selection->lastSheet());
-    if (!lastSheet) return;
-    Map* myMap = lastSheet->fullMap();
-    const QRect range3=d->selection->lastRange();
-    Sheet* sheet = dynamic_cast<Sheet *>(myMap->createSheet("Filtered Sheet"));
-    
-    sheet=filter();
-    if(sheet==d->selection->lastSheet())
-    {
-      d->filtersize=range3.bottom();
+    if (!lastSheet)
+        return;
+    Map *myMap = lastSheet->fullMap();
+    const QRect range3 = d->selection->lastRange();
+    Sheet *sheet = dynamic_cast<Sheet *>(myMap->createSheet("Filtered Sheet"));
+
+    sheet = filter();
+    if (sheet == d->selection->lastSheet()) {
+        d->filtersize = range3.bottom();
     }
-    const QRect range(1,1,d->selection->lastRange().right(),d->filtersize);
-    
+    const QRect range(1, 1, d->selection->lastRange().right(), d->filtersize);
+
     QColor color;
     color.setBlue(50);
     QPen pen(color);
-    
 
-    Style st,st2,st3,str,stl,stb,stt;
+    Style st, st2, st3, str, stl, stb, stt;
     st.setFontUnderline(true);
     st3.setBackgroundColor("lightGray");
     st.setRightBorderPen(pen);
@@ -389,372 +357,311 @@ void PivotMain::Summarize()
     stl.setLeftBorderPen(pen);
     stt.setTopBorderPen(pen);
     stb.setBottomBorderPen(pen);
-    
-    
-    static int z=1;
-    
-    Sheet* mySheet = dynamic_cast<Sheet *>(myMap->createSheet("Pivot Sheet"+QString::number(z++)));
-    
+
+    static int z = 1;
+
+    Sheet *mySheet = dynamic_cast<Sheet *>(myMap->createSheet("Pivot Sheet" + QString::number(z++)));
+
     int r = range.right();
-    int row=range.top();
-    int bottom=range.bottom();
+    int row = range.top();
+    int bottom = range.bottom();
     Cell cell;
-    
-    ValueConverter *c=0;
-    
+
+    ValueConverter *c = 0;
+
     Value res(0);
-    ValueCalc *calc= new ValueCalc(c);
-    
-    QVector<Value> vect;    
+    ValueCalc *calc = new ValueCalc(c);
+
+    QVector<Value> vect;
     for (int i = 1; i <= r; ++i) {
-	cell= Cell(sheet,i,row);
-	vect.append(Value(cell.value()));
+        cell = Cell(sheet, i, row);
+        vect.append(Value(cell.value()));
     }
 
-  d->func=d->mainWidget.selectOption->currentText();//check for the function to be performed
-  
-  //For Creating QLists for Rows,Columns,Values and PageField
-  int counter;
-  QListWidgetItem *item1;
-  QList<QListWidgetItem *> rowList, columnList, valueList;
-  
-  counter= d->mainWidget.Rows->count();
-  for(int i=0;i<counter;i++)
-  {
-	
-        item1=d->mainWidget.Rows->item(i);
+    d->func = d->mainWidget.selectOption->currentText(); // check for the function to be performed
+
+    // For Creating QLists for Rows,Columns,Values and PageField
+    int counter;
+    QListWidgetItem *item1;
+    QList<QListWidgetItem *> rowList, columnList, valueList;
+
+    counter = d->mainWidget.Rows->count();
+    for (int i = 0; i < counter; i++) {
+        item1 = d->mainWidget.Rows->item(i);
         rowList.append(item1);
-    
-  }
-  counter= d->mainWidget.Columns->count();
-  for(int i=0;i<counter;i++)
-  {
-	
-        item1=d->mainWidget.Columns->item(i);
-        columnList.append(item1); 
-  }
-  /*counter= d->mainWidget.PageFields->count();
-  for(int i=0;i<counter;i++)
-  {
-        item1=d->mainWidget.PageFields->item(i);
-        pageList.append(item1);
-  }*/
-  counter= d->mainWidget.Values->count();
-  for(int i=0;i<counter;i++)
-  {
-        item1=d->mainWidget.Values->item(i);
-        valueList.append(item1); 
-  }
-  
-  //Summarization using vectors
-  int rowpos=-1,colpos=-1,valpos=-1;
-  QVector<Value> rowVector,columnVector,valueVector;
-  QVector<QVector<Value> > rowVectorArr(rowList.size()),columnVectorArr(columnList.size());
-  QVector<int> rowposVect,colposVect,valposVect;
-  
-  for(int i=0;i<rowList.size();i++)
-  {
-      rowpos=vect.indexOf(Value(rowList.at(i)->text()));
-      for(int j=row+1;j<=bottom;j++)
-      {
-	cell =Cell(sheet,rowpos+1,j);
-	if(rowVector.contains(Value(cell.value()))==0)
-	{
-	  rowVector.append(Value(cell.value()));
-	  rowVectorArr[i].append(Value(cell.value()));
-      
-	}  
-      }
-      rowposVect.append(rowpos);
-  }
-    
-  for(int i=0;i<columnList.size();i++)
-  {
-      colpos=vect.indexOf(Value(columnList.at(i)->text()));
-      for(int j=row+1;j<=bottom;j++)
-      {
-	cell =Cell(sheet,colpos+1,j);
-	if(columnVector.contains(Value(cell.value()))==0)
-	{
- 	columnVector.append(Value(cell.value()));
-	columnVectorArr[i].append(Value(cell.value()));
-	}
-      }
-      colposVect.append(colpos);
-  }
-  
- int count=1,count2=0,prevcount=1;
-  QVector<QVector<Value> > rowVect(rowposVect.count());
-  for(int i=0;i<rowposVect.count();i++)
-  {
-    for(int j=i+1;j<rowposVect.count();j++)
-    {
-      count*=rowVectorArr[j].count();
     }
-    for(int k=0;k<(rowVectorArr[i].count())*prevcount;k++)
-    {
-     for(int m=0;m<count;m++)
-     Cell(mySheet,((k)*count)+1+colposVect.count()+m,i+1).setValue(rowVectorArr[i].at(k%rowVectorArr[i].count()));
-     
-     
-     for(int l=0;l<count;l++)
-	rowVect[i].append(rowVectorArr[i].at(k%rowVectorArr[i].count()));
-      
-      count2++;
+    counter = d->mainWidget.Columns->count();
+    for (int i = 0; i < counter; i++) {
+        item1 = d->mainWidget.Columns->item(i);
+        columnList.append(item1);
     }
-    prevcount=count2;
-    count=1;
-    count2=0;
-  }
+    /*counter= d->mainWidget.PageFields->count();
+    for(int i=0;i<counter;i++)
+    {
+          item1=d->mainWidget.PageFields->item(i);
+          pageList.append(item1);
+    }*/
+    counter = d->mainWidget.Values->count();
+    for (int i = 0; i < counter; i++) {
+        item1 = d->mainWidget.Values->item(i);
+        valueList.append(item1);
+    }
 
-  count=1,count2=0,prevcount=1;
-  QVector<QVector<Value> > colVect(colposVect.count());
-  for(int i=0;i<colposVect.count();i++)
-  {
-    for(int j=i+1;j<colposVect.count();j++)
-    {
-      count*=columnVectorArr[j].count();
-    }
-    for(int k=0;k<(columnVectorArr[i].count())*prevcount;k++)
-    {
-      for(int m=0;m<count;m++) 
-      Cell(mySheet,i+1,((k)*count)+1+rowposVect.count()+m).setValue(columnVectorArr[i].at(k%columnVectorArr[i].count()));
-   
-      for(int l=0;l<count;l++)
-	colVect[i].append(columnVectorArr[i].at(k%columnVectorArr[i].count()));
-      
-      count2++;
-    }
-    
-    
-    prevcount=count2;
-    count=1;
-    count2=0;
-  }
- 
-  for(int i=0;i<valueList.size();i++)
-  {
-     valpos=vect.indexOf(Value(valueList.at(i)->text()));
-     valposVect.append(valpos);    
-  }
-  
-  
-  const QString title = d->func + QLatin1Char('-') + valueList.at(0)->text();
-  Cell(mySheet,1,1).setValue(Value(title));
-  Cell(mySheet,1,1).setStyle(st);
-  for(int l=0;l<rowVect[0].count();l++)
-  {
-    for(int m=0;m<colVect[0].count();m++)
-      {
+    // Summarization using vectors
+    int rowpos = -1, colpos = -1, valpos = -1;
+    QVector<Value> rowVector, columnVector, valueVector;
+    QVector<QVector<Value>> rowVectorArr(rowList.size()), columnVectorArr(columnList.size());
+    QVector<int> rowposVect, colposVect, valposVect;
 
-	      QVector<Value> aggregate;
-	      for(int k=row+1;k<=bottom;k++)
-	      {
-		int flag=0;
-		for(int i=0;i<rowposVect.count();i++)
-		{
-		  for(int j=0;j<colposVect.count();j++)
-		    {
- 
-		      if(!(Cell(sheet,rowposVect.at(i)+1,k).value()==rowVect[i].at(l) && Cell(sheet,colposVect.at(j)+1,k).value()==colVect[j].at(m)))
-			flag=1;
-		      
-		    }
-		  }
-		if(flag==0)
-		aggregate.append(Cell(sheet,valpos+1,k).value());
-	      }
-		if(d->func!="average")
-		calc->arrayWalk(aggregate,res,calc->awFunc(d->func),Value(0));
- 		
-		else
-		{
-		  calc->arrayWalk(aggregate,res,calc->awFunc("sum"),Value(0));
-		  if(aggregate.count()!=0)
-		  res=calc->div(res,aggregate.count());
-		  
-		}
-		Cell(mySheet,l+colposVect.count()+1,m+rowposVect.count()+1).setValue(res);
-		if(m%2==0)
-		  //Cell(mySheet,l+colposVect.count()+1,m+rowposVect.count()+1).setStyle(st3);
-		
-		aggregate.clear();
-		res=Value(0);
-	    
-      }
+    for (int i = 0; i < rowList.size(); i++) {
+        rowpos = vect.indexOf(Value(rowList.at(i)->text()));
+        for (int j = row + 1; j <= bottom; j++) {
+            cell = Cell(sheet, rowpos + 1, j);
+            if (rowVector.contains(Value(cell.value())) == 0) {
+                rowVector.append(Value(cell.value()));
+                rowVectorArr[i].append(Value(cell.value()));
+            }
+        }
+        rowposVect.append(rowpos);
     }
-  
-  
-  //For Adding the functions: Total Rows & Total Columns
-  int colmult=1,rowmult=1;
-  
-  for(int x=0;x<columnList.size();x++)
-  colmult*=columnVectorArr[x].count();
-  
-  for(int x=0;x<rowList.size();x++)
-  rowmult*=rowVectorArr[x].count();
-  
-  
-  
-  
-  //Totalling Columns
-  
-  if(d->mainWidget.TotalColumns->isChecked())
-  {
-    
-  Cell(mySheet,1,rowList.size()+colmult+1).setValue(Value("Total Column"));
-  
-  for(int z=columnList.size()+1;z<=rowmult+columnList.size();z++)
-  {
-    QVector<Value> vector;
-    for(int y=rowList.size()+1;y<=colmult+rowList.size();y++)
-    {
-      vector.append(Cell(mySheet,z,y).value());
-      
+
+    for (int i = 0; i < columnList.size(); i++) {
+        colpos = vect.indexOf(Value(columnList.at(i)->text()));
+        for (int j = row + 1; j <= bottom; j++) {
+            cell = Cell(sheet, colpos + 1, j);
+            if (columnVector.contains(Value(cell.value())) == 0) {
+                columnVector.append(Value(cell.value()));
+                columnVectorArr[i].append(Value(cell.value()));
+            }
+        }
+        colposVect.append(colpos);
     }
-    if(d->func!="average")
-      calc->arrayWalk(vector,res,calc->awFunc(d->func),Value(0));
-    else
-    {
-      calc->arrayWalk(vector,res,calc->awFunc("sum"),Value(0));
-      if(vector.count()!=0)
-	  res=calc->div(res,vector.count());
+
+    int count = 1, count2 = 0, prevcount = 1;
+    QVector<QVector<Value>> rowVect(rowposVect.count());
+    for (int i = 0; i < rowposVect.count(); i++) {
+        for (int j = i + 1; j < rowposVect.count(); j++) {
+            count *= rowVectorArr[j].count();
+        }
+        for (int k = 0; k < (rowVectorArr[i].count()) * prevcount; k++) {
+            for (int m = 0; m < count; m++)
+                Cell(mySheet, ((k)*count) + 1 + colposVect.count() + m, i + 1).setValue(rowVectorArr[i].at(k % rowVectorArr[i].count()));
+
+            for (int l = 0; l < count; l++)
+                rowVect[i].append(rowVectorArr[i].at(k % rowVectorArr[i].count()));
+
+            count2++;
+        }
+        prevcount = count2;
+        count = 1;
+        count2 = 0;
     }
-    
-    
-    Cell(mySheet,z,rowList.size()+colmult+1).setValue(res);
-    res=Value(0);
-    
-  }
-  }
-  
-  
-  //Totalling Rows
-  if(d->mainWidget.TotalRows->isChecked())
-  {
-    
-  Cell(mySheet,columnList.size()+rowmult+1,1).setValue(Value("Total Row"));
-    
-  for(int z=rowList.size()+1;z<=colmult+rowList.size();z++)
-  {
-    QVector<Value> vector;
-    for(int y=columnList.size()+1;y<=rowmult+columnList.size();y++)
-    {
-      vector.append(Cell(mySheet,y,z).value());
-      
+
+    count = 1, count2 = 0, prevcount = 1;
+    QVector<QVector<Value>> colVect(colposVect.count());
+    for (int i = 0; i < colposVect.count(); i++) {
+        for (int j = i + 1; j < colposVect.count(); j++) {
+            count *= columnVectorArr[j].count();
+        }
+        for (int k = 0; k < (columnVectorArr[i].count()) * prevcount; k++) {
+            for (int m = 0; m < count; m++)
+                Cell(mySheet, i + 1, ((k)*count) + 1 + rowposVect.count() + m).setValue(columnVectorArr[i].at(k % columnVectorArr[i].count()));
+
+            for (int l = 0; l < count; l++)
+                colVect[i].append(columnVectorArr[i].at(k % columnVectorArr[i].count()));
+
+            count2++;
+        }
+
+        prevcount = count2;
+        count = 1;
+        count2 = 0;
     }
-    
-    if(d->func!="average")
-      calc->arrayWalk(vector,res,calc->awFunc(d->func),Value(0));
-    else
-    {
-      calc->arrayWalk(vector,res,calc->awFunc("sum"),Value(0));
-      if(vector.count()!=0)
-	  res=calc->div(res,vector.count());
+
+    for (int i = 0; i < valueList.size(); i++) {
+        valpos = vect.indexOf(Value(valueList.at(i)->text()));
+        valposVect.append(valpos);
     }
-    
-    Cell(mySheet,columnList.size()+rowmult+1,z).setValue(res);
-    res=Value(0);
-     
-  }
-  }
-  
-  //Clearing Vectors
-  rowVector.clear();
-  columnVector.clear();
-  valueVector.clear();
-  rowposVect.clear();
-  colposVect.clear();
-  valposVect.clear();
-  
-  //Adding built sheet to myMap for viewing
-  clean(mySheet);
-  styling(mySheet);
-  myMap->addSheet(mySheet);
-  
-}//Summarize
+
+    const QString title = d->func + QLatin1Char('-') + valueList.at(0)->text();
+    Cell(mySheet, 1, 1).setValue(Value(title));
+    Cell(mySheet, 1, 1).setStyle(st);
+    for (int l = 0; l < rowVect[0].count(); l++) {
+        for (int m = 0; m < colVect[0].count(); m++) {
+            QVector<Value> aggregate;
+            for (int k = row + 1; k <= bottom; k++) {
+                int flag = 0;
+                for (int i = 0; i < rowposVect.count(); i++) {
+                    for (int j = 0; j < colposVect.count(); j++) {
+                        if (!(Cell(sheet, rowposVect.at(i) + 1, k).value() == rowVect[i].at(l)
+                              && Cell(sheet, colposVect.at(j) + 1, k).value() == colVect[j].at(m)))
+                            flag = 1;
+                    }
+                }
+                if (flag == 0)
+                    aggregate.append(Cell(sheet, valpos + 1, k).value());
+            }
+            if (d->func != "average")
+                calc->arrayWalk(aggregate, res, calc->awFunc(d->func), Value(0));
+
+            else {
+                calc->arrayWalk(aggregate, res, calc->awFunc("sum"), Value(0));
+                if (aggregate.count() != 0)
+                    res = calc->div(res, aggregate.count());
+            }
+            Cell(mySheet, l + colposVect.count() + 1, m + rowposVect.count() + 1).setValue(res);
+            if (m % 2 == 0)
+                // Cell(mySheet,l+colposVect.count()+1,m+rowposVect.count()+1).setStyle(st3);
+
+                aggregate.clear();
+            res = Value(0);
+        }
+    }
+
+    // For Adding the functions: Total Rows & Total Columns
+    int colmult = 1, rowmult = 1;
+
+    for (int x = 0; x < columnList.size(); x++)
+        colmult *= columnVectorArr[x].count();
+
+    for (int x = 0; x < rowList.size(); x++)
+        rowmult *= rowVectorArr[x].count();
+
+    // Totalling Columns
+
+    if (d->mainWidget.TotalColumns->isChecked()) {
+        Cell(mySheet, 1, rowList.size() + colmult + 1).setValue(Value("Total Column"));
+
+        for (int z = columnList.size() + 1; z <= rowmult + columnList.size(); z++) {
+            QVector<Value> vector;
+            for (int y = rowList.size() + 1; y <= colmult + rowList.size(); y++) {
+                vector.append(Cell(mySheet, z, y).value());
+            }
+            if (d->func != "average")
+                calc->arrayWalk(vector, res, calc->awFunc(d->func), Value(0));
+            else {
+                calc->arrayWalk(vector, res, calc->awFunc("sum"), Value(0));
+                if (vector.count() != 0)
+                    res = calc->div(res, vector.count());
+            }
+
+            Cell(mySheet, z, rowList.size() + colmult + 1).setValue(res);
+            res = Value(0);
+        }
+    }
+
+    // Totalling Rows
+    if (d->mainWidget.TotalRows->isChecked()) {
+        Cell(mySheet, columnList.size() + rowmult + 1, 1).setValue(Value("Total Row"));
+
+        for (int z = rowList.size() + 1; z <= colmult + rowList.size(); z++) {
+            QVector<Value> vector;
+            for (int y = columnList.size() + 1; y <= rowmult + columnList.size(); y++) {
+                vector.append(Cell(mySheet, y, z).value());
+            }
+
+            if (d->func != "average")
+                calc->arrayWalk(vector, res, calc->awFunc(d->func), Value(0));
+            else {
+                calc->arrayWalk(vector, res, calc->awFunc("sum"), Value(0));
+                if (vector.count() != 0)
+                    res = calc->div(res, vector.count());
+            }
+
+            Cell(mySheet, columnList.size() + rowmult + 1, z).setValue(res);
+            res = Value(0);
+        }
+    }
+
+    // Clearing Vectors
+    rowVector.clear();
+    columnVector.clear();
+    valueVector.clear();
+    rowposVect.clear();
+    colposVect.clear();
+    valposVect.clear();
+
+    // Adding built sheet to myMap for viewing
+    clean(mySheet);
+    styling(mySheet);
+    myMap->addSheet(mySheet);
+
+} // Summarize
 
 QVector<QString> PivotMain::ValueData(const QString &str)
 {
-      SheetBase *const sheet = d->selection->lastSheet();
-      const QRect range = d->selection->lastRange();
-      
-      int row = range.top();
-      int bottom = range.bottom();
-      int r=range.right();
-      
-      ValueConverter *conv=0;
-    
-      for (int i = range.left(); i <= r; ++i) {
-	d->posVect.append(CellBase(sheet,i,row).value());
-      }
-      
-      int position=d->posVect.indexOf(Value(str));
-     
-      for(int j=row+1;j<=bottom;j++)
-      {
-	if(!CellBase(sheet,position+1,j).value().isString())
-	{
-	
-	  if(d->retVect.contains(QString::number(conv->toInteger(CellBase(sheet,position+1,j).value())))==0)
-       d->retVect.append(QString::number(conv->toInteger(CellBase(sheet,position+1,j).value())));
-	}
-	else if(d->retVect.contains(conv->toString(CellBase(sheet,position+1,j).value()))==0)
-	   d->retVect.append(conv->toString(CellBase(sheet,position+1,j).value()));
-      }
-      return d->retVect;
-}//ValueData
+    SheetBase *const sheet = d->selection->lastSheet();
+    const QRect range = d->selection->lastRange();
 
-void PivotMain::clean(Sheet* sheet)
-{
-  ValueConverter *conv=0;
-  int lastRow=sheet->cellStorage()->rows();
-  int lastColumn=sheet->cellStorage()->columns();
-  for(int i=d->mainWidget.Rows->count()+1;i<=lastRow+1;i++){
-    int temp=0;
-    for(int j=d->mainWidget.Columns->count()+1;j<=lastColumn;j++){
-    if(conv->toInteger(Cell(sheet,j,i).value()) != 0){
-	  temp=1;
-	  break;
-	}
-      }
-	if(temp==0){
-	  sheet->cellStorage()->removeRows(i);
-	  i--;
-	  lastRow--;
-      }
+    int row = range.top();
+    int bottom = range.bottom();
+    int r = range.right();
+
+    ValueConverter *conv = 0;
+
+    for (int i = range.left(); i <= r; ++i) {
+        d->posVect.append(CellBase(sheet, i, row).value());
     }
-    
-    
-    
-  lastRow=sheet->cellStorage()->rows();
-  lastColumn=sheet->cellStorage()->columns();
-  for(int i=d->mainWidget.Columns->count()+1;i<=lastColumn;i++){
-    int temp=0;
-    for(int j=d->mainWidget.Rows->count()+1;j<=lastRow;j++){
-    if(conv->toInteger(Cell(sheet,i,j).value()) != 0){
-	  temp=1;
-	  break;
-	}
-      }
-	if(temp==0){
-	  sheet->cellStorage()->removeColumns(i);
-	  i--;
-	  lastColumn--;
-	}
-    } 
-    
+
+    int position = d->posVect.indexOf(Value(str));
+
+    for (int j = row + 1; j <= bottom; j++) {
+        if (!CellBase(sheet, position + 1, j).value().isString()) {
+            if (d->retVect.contains(QString::number(conv->toInteger(CellBase(sheet, position + 1, j).value()))) == 0)
+                d->retVect.append(QString::number(conv->toInteger(CellBase(sheet, position + 1, j).value())));
+        } else if (d->retVect.contains(conv->toString(CellBase(sheet, position + 1, j).value())) == 0)
+            d->retVect.append(conv->toString(CellBase(sheet, position + 1, j).value()));
+    }
+    return d->retVect;
+} // ValueData
+
+void PivotMain::clean(Sheet *sheet)
+{
+    ValueConverter *conv = 0;
+    int lastRow = sheet->cellStorage()->rows();
+    int lastColumn = sheet->cellStorage()->columns();
+    for (int i = d->mainWidget.Rows->count() + 1; i <= lastRow + 1; i++) {
+        int temp = 0;
+        for (int j = d->mainWidget.Columns->count() + 1; j <= lastColumn; j++) {
+            if (conv->toInteger(Cell(sheet, j, i).value()) != 0) {
+                temp = 1;
+                break;
+            }
+        }
+        if (temp == 0) {
+            sheet->cellStorage()->removeRows(i);
+            i--;
+            lastRow--;
+        }
+    }
+
+    lastRow = sheet->cellStorage()->rows();
+    lastColumn = sheet->cellStorage()->columns();
+    for (int i = d->mainWidget.Columns->count() + 1; i <= lastColumn; i++) {
+        int temp = 0;
+        for (int j = d->mainWidget.Rows->count() + 1; j <= lastRow; j++) {
+            if (conv->toInteger(Cell(sheet, i, j).value()) != 0) {
+                temp = 1;
+                break;
+            }
+        }
+        if (temp == 0) {
+            sheet->cellStorage()->removeColumns(i);
+            i--;
+            lastColumn--;
+        }
+    }
 }
 
-void PivotMain::styling(Sheet* mySheet)
+void PivotMain::styling(Sheet *mySheet)
 {
-    int lastRow=mySheet->cellStorage()->rows();
-    int lastColumn=mySheet->cellStorage()->columns();
+    int lastRow = mySheet->cellStorage()->rows();
+    int lastColumn = mySheet->cellStorage()->columns();
     QColor color;
     color.setBlue(50);
     QPen pen(color);
-    
-    Style st,st2,st3,str,stl,stb,stt;
+
+    Style st, st2, st3, str, stl, stb, stt;
     st.setFontUnderline(true);
     st3.setBackgroundColor("lightGray");
     st.setRightBorderPen(pen);
@@ -765,40 +672,35 @@ void PivotMain::styling(Sheet* mySheet)
     stl.setLeftBorderPen(pen);
     stt.setTopBorderPen(pen);
     stb.setBottomBorderPen(pen);
-    
-    
-    for( int i=1;i<=lastRow;i++){
-      Cell(mySheet,d->mainWidget.Columns->count(),i).setStyle(str);
-      Cell(mySheet,lastColumn,i).setStyle(str);
-    }
-    for( int i=d->mainWidget.Rows->count()+1;i<=lastRow;i++){
-      for(int j=d->mainWidget.Columns->count()+1;j<=lastColumn;j++){
-	if(i%2==0)
-	  Cell(mySheet,j,i).setStyle(st3);
-      }
-    }
-    for( int i=1;i<=lastColumn;i++){
-      Cell(mySheet,i,d->mainWidget.Rows->count()).setStyle(stb);
-      Cell(mySheet,i,lastRow).setStyle(stb);
-    }
-   
-       
-}
 
+    for (int i = 1; i <= lastRow; i++) {
+        Cell(mySheet, d->mainWidget.Columns->count(), i).setStyle(str);
+        Cell(mySheet, lastColumn, i).setStyle(str);
+    }
+    for (int i = d->mainWidget.Rows->count() + 1; i <= lastRow; i++) {
+        for (int j = d->mainWidget.Columns->count() + 1; j <= lastColumn; j++) {
+            if (i % 2 == 0)
+                Cell(mySheet, j, i).setStyle(st3);
+        }
+    }
+    for (int i = 1; i <= lastColumn; i++) {
+        Cell(mySheet, i, d->mainWidget.Rows->count()).setStyle(stb);
+        Cell(mySheet, i, lastRow).setStyle(stb);
+    }
+}
 
 void PivotMain::Reset()
 {
-  d->mainWidget.Rows->clear();
-  d->mainWidget.Values->clear();
-  d->mainWidget.Columns->clear();
-  //d->mainWidget.PageFields->clear();
-  extractColumnNames();
-}//Reset
+    d->mainWidget.Rows->clear();
+    d->mainWidget.Values->clear();
+    d->mainWidget.Columns->clear();
+    // d->mainWidget.PageFields->clear();
+    extractColumnNames();
+} // Reset
 void PivotMain::on_Ok_clicked()
 {
-  
-  Summarize();
-  QMessageBox msgBox;
-  msgBox.setText("Pivot Tables Built");
-  msgBox.exec();
-}//on_Ok_clicked
+    Summarize();
+    QMessageBox msgBox;
+    msgBox.setText("Pivot Tables Built");
+    msgBox.exec();
+} // on_Ok_clicked

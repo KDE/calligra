@@ -10,17 +10,17 @@
 
 #include <KoCanvasResourceManager.h>
 
-#include <kwindowsystem.h>
-#include <kfinddialog.h>
-#include <kfind.h>
 #include <KLocalizedString>
+#include <kfind.h>
+#include <kfinddialog.h>
+#include <kwindowsystem.h>
 
-#include <QTextDocument>
-#include <QTextCursor>
-#include <QTimer>
+#include "TextDebug.h"
 #include <QAction>
 #include <QRegularExpression>
-#include "TextDebug.h"
+#include <QTextCursor>
+#include <QTextDocument>
+#include <QTimer>
 
 #include "KoFind.h"
 #include "KoText.h"
@@ -28,42 +28,48 @@
 class InUse
 {
 public:
-    InUse(bool & variable)
-            : m_variable(variable) {
+    InUse(bool &variable)
+        : m_variable(variable)
+    {
         m_variable = true;
     }
-    ~InUse() {
+    ~InUse()
+    {
         m_variable = false;
     }
 
 private:
-    bool & m_variable;
+    bool &m_variable;
 };
 
 KoFindPrivate::KoFindPrivate(KoFind *find, KoCanvasResourceManager *crp, QWidget *w)
-        : findNext(0)
-        , findPrev(0)
-        , q(find)
-        , provider(crp)
-        , findStrategy(w)
-        , replaceStrategy(w)
-        , strategy(&findStrategy)
-        , document(0)
-        , restarted(false)
-        , start(false)
-        , inFind(false)
-        , findDirection(0)
-        , findForward(crp)
-        , findBackward(crp)
+    : findNext(0)
+    , findPrev(0)
+    , q(find)
+    , provider(crp)
+    , findStrategy(w)
+    , replaceStrategy(w)
+    , strategy(&findStrategy)
+    , document(0)
+    , restarted(false)
+    , start(false)
+    , inFind(false)
+    , findDirection(0)
+    , findForward(crp)
+    , findBackward(crp)
 {
-    QObject::connect(findStrategy.dialog(), &KFindDialog::okClicked, q, [this] () { startFind(); });
-    QObject::connect(replaceStrategy.dialog(), &KFindDialog::okClicked, q, [this] () { startReplace(); });
+    QObject::connect(findStrategy.dialog(), &KFindDialog::okClicked, q, [this]() {
+        startFind();
+    });
+    QObject::connect(replaceStrategy.dialog(), &KFindDialog::okClicked, q, [this]() {
+        startReplace();
+    });
 }
 
 void KoFindPrivate::resourceChanged(int key, const QVariant &variant)
 {
     if (key == KoText::CurrentTextDocument) {
-        document = static_cast<QTextDocument*>(variant.value<void*>());
+        document = static_cast<QTextDocument *>(variant.value<void *>());
         if (!inFind) {
             start = true;
         }
@@ -137,12 +143,12 @@ void KoFindPrivate::startReplace()
     parseSettingsAndFind();
 }
 
-void KoFindPrivate::findDocumentSetNext(QTextDocument * document)
+void KoFindPrivate::findDocumentSetNext(QTextDocument *document)
 {
     emit q->findDocumentSetNext(document);
 }
 
-void KoFindPrivate::findDocumentSetPrevious(QTextDocument * document)
+void KoFindPrivate::findDocumentSetPrevious(QTextDocument *document)
 {
     emit q->findDocumentSetPrevious(document);
 }
@@ -205,7 +211,7 @@ void KoFindPrivate::parseSettingsAndFind()
             endPosition = lastKnownPosition;
             startPosition = lastKnownPosition;
         }
-        //debugText << "start" << lastKnownPosition.position();
+        // debugText << "start" << lastKnownPosition.position();
     }
 
     QRegularExpression regExp;
@@ -221,9 +227,9 @@ void KoFindPrivate::parseSettingsAndFind()
         cursor = document->find(pattern, lastKnownPosition, flags);
     }
 
-    //debugText << "r" << restarted << "c > e" << ( document == startDocument && cursor > endPosition ) << ( startDocument == document && findDirection->positionReached(  cursor, endPosition ) )<< "e" << cursor.atEnd() << "n" << cursor.isNull();
-    if ((((document == startDocument) && restarted) || selectedText)
-            && (cursor.isNull() || findDirection->positionReached(cursor, endPosition))) {
+    // debugText << "r" << restarted << "c > e" << ( document == startDocument && cursor > endPosition ) << ( startDocument == document &&
+    // findDirection->positionReached(  cursor, endPosition ) )<< "e" << cursor.atEnd() << "n" << cursor.isNull();
+    if ((((document == startDocument) && restarted) || selectedText) && (cursor.isNull() || findDirection->positionReached(cursor, endPosition))) {
         restarted = false;
         strategy->displayFinalDialog();
         lastKnownPosition = startPosition;

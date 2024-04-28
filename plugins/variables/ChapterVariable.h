@@ -8,8 +8,8 @@
 
 #include <QObject>
 
-#include <KoVariable.h>
 #include <KoTextPage.h>
+#include <KoVariable.h>
 
 class KoShapeSavingContext;
 
@@ -23,10 +23,10 @@ public:
     ChapterVariable();
 
     // reimplemented
-    QWidget* createOptionsWidget() override;
+    QWidget *createOptionsWidget() override;
     void readProperties(const KoProperties *props);
-    void saveOdf(KoShapeSavingContext & context) override;
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context) override;
+    void saveOdf(KoShapeSavingContext &context) override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
 private Q_SLOTS:
     void formatChanged(int format);
@@ -35,13 +35,7 @@ private Q_SLOTS:
 private:
     void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
 
-    enum FormatTypes {
-        ChapterName,
-        ChapterNumber,
-        ChapterNumberName,
-        ChapterPlainNumber,
-        ChapterPlainNumberName
-    };
+    enum FormatTypes { ChapterName, ChapterNumber, ChapterNumberName, ChapterPlainNumber, ChapterPlainNumberName };
 
     FormatTypes m_format;
     int m_level;

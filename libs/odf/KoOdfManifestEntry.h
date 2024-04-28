@@ -9,9 +9,7 @@
 
 #include "koodf_export.h"
 
-
 class QString;
-
 
 // A class that holds a manifest:file-entry.
 class KOODF_EXPORT KoOdfManifestEntry
@@ -34,8 +32,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif /* KOODFMANIFEST_H */

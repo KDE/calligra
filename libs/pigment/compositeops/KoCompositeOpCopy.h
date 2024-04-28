@@ -4,7 +4,7 @@
  *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef KO_COMPOSITE_OP_COPY_H
 #define KO_COMPOSITE_OP_COPY_H
@@ -15,17 +15,15 @@
  */
 class KoCompositeOpCopy : public KoCompositeOp
 {
-
     using KoCompositeOp::composite;
 
 public:
-
-    explicit KoCompositeOpCopy(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_COPY, i18n("Copy"), KoCompositeOp::categoryMix()) {
+    explicit KoCompositeOpCopy(KoColorSpace *cs)
+        : KoCompositeOp(cs, COMPOSITE_COPY, i18n("Copy"), KoCompositeOp::categoryMix())
+    {
     }
 
 public:
-
     void composite(quint8 *dstRowStart,
                    qint32 dstRowStride,
                    const quint8 *srcRowStart,
@@ -35,12 +33,12 @@ public:
                    qint32 rows,
                    qint32 numColumns,
                    quint8 opacity,
-                   const QBitArray & channelFlags) const {
-
+                   const QBitArray &channelFlags) const
+    {
         Q_UNUSED(channelFlags);
         Q_UNUSED(opacity);
 
-        const KoColorSpace* cs = colorSpace();
+        const KoColorSpace *cs = colorSpace();
         qint32 bytesPerPixel = cs->pixelSize();
 
         qint32 srcInc = (srcRowStride == 0) ? 0 : bytesPerPixel;
@@ -49,15 +47,15 @@ public:
         const quint8 *src = srcRowStart;
         const quint8 *mask = maskRowStart;
 
-        if (maskRowStart != 0){
+        if (maskRowStart != 0) {
             while (rows > 0) {
-                quint8* dstN = dst;
-                const quint8* srcN = src;
-                const quint8* maskN = mask;
+                quint8 *dstN = dst;
+                const quint8 *srcN = src;
+                const quint8 *maskN = mask;
                 qint32 columns = numColumns;
 
                 while (columns > 0) {
-                    if (*maskN != 0){
+                    if (*maskN != 0) {
                         memcpy(dstN, srcN, bytesPerPixel);
                     }
 
@@ -72,11 +70,10 @@ public:
                 mask += maskRowStride;
                 --rows;
             }
-        }
-        else {
+        } else {
             while (rows > 0) {
                 if (srcInc == 0) {
-                    quint8* dstN = dst;
+                    quint8 *dstN = dst;
                     qint32 columns = numColumns;
                     while (columns > 0) {
                         memcpy(dstN, src, bytesPerPixel);
@@ -88,7 +85,7 @@ public:
                 }
 
                 // XXX: what is the reason for this code? I think we should copy the alpha channel as well.
-                //if (opacity != OPACITY_OPAQUE) {
+                // if (opacity != OPACITY_OPAQUE) {
                 //    cs->multiplyAlpha(dst, opacity, numColumns);
                 //}
 

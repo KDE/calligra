@@ -8,8 +8,8 @@
 #ifndef KOFINDMATCH_H
 #define KOFINDMATCH_H
 
-#include <QSharedDataPointer>
 #include "komain_export.h"
+#include <QSharedDataPointer>
 
 class QVariant;
 

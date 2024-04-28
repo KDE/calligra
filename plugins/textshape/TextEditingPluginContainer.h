@@ -6,8 +6,8 @@
 #ifndef TEXTEDITINGPLUGINCONTAINER_H
 #define TEXTEDITINGPLUGINCONTAINER_H
 
-#include <QObject>
 #include <QHash>
+#include <QObject>
 #include <QString>
 #include <QVariant>
 
@@ -20,30 +20,30 @@ class TextEditingPluginContainer : public QObject
 {
     Q_OBJECT
 public:
-    enum ResourceManagerId {
-        ResourceId = 345681743
-    };
+    enum ResourceManagerId { ResourceId = 345681743 };
 
     explicit TextEditingPluginContainer(QObject *parent = 0);
     ~TextEditingPluginContainer() override;
 
     KoTextEditingPlugin *spellcheck() const;
 
-    KoTextEditingPlugin *plugin(const QString &pluginId) const {
+    KoTextEditingPlugin *plugin(const QString &pluginId) const
+    {
         if (m_textEditingPlugins.contains(pluginId)) {
             return m_textEditingPlugins.value(pluginId);
         }
         return 0;
     }
 
-    QList<KoTextEditingPlugin*> values() const {
+    QList<KoTextEditingPlugin *> values() const
+    {
         return m_textEditingPlugins.values();
     }
 
 private:
-    QHash<QString, KoTextEditingPlugin*> m_textEditingPlugins;
+    QHash<QString, KoTextEditingPlugin *> m_textEditingPlugins;
 };
 
-Q_DECLARE_METATYPE(TextEditingPluginContainer*)
+Q_DECLARE_METATYPE(TextEditingPluginContainer *)
 
 #endif

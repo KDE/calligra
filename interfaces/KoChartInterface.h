@@ -7,16 +7,13 @@
 #ifndef KOCHART_INTERFACE
 #define KOCHART_INTERFACE
 
-
-#include <QtPlugin>
 #include <Qt>
-
+#include <QtPlugin>
 
 #define ChartShapeId "ChartShape"
 
 class QAbstractItemModel;
 class QString;
-
 
 namespace KoChart
 {
@@ -27,7 +24,9 @@ namespace KoChart
 class ChartInterface
 {
 public:
-    virtual ~ChartInterface() {}
+    virtual ~ChartInterface()
+    {
+    }
 
     /**
      * Sets the SheetAccessModel to be used by this chart. Use this method if
@@ -35,7 +34,7 @@ public:
      *
      * See sheets/SheetAccessModel.h for details.
      */
-    virtual void setSheetAccessModel(QAbstractItemModel* model) = 0;
+    virtual void setSheetAccessModel(QAbstractItemModel *model) = 0;
 
     /**
      * Re-initializes the chart with data from an arbitrary region.
@@ -46,10 +45,7 @@ public:
      * @param dataDirection      orientation of a data set. Qt::Horizontal means a row is
      *                           to be interpreted as one data set, columns with Qt::Vertical.
      */
-    virtual void reset(const QString& region,
-                       bool firstRowIsLabel,
-                       bool firstColumnIsLabel,
-                       Qt::Orientation dataDirection) = 0;
+    virtual void reset(const QString &region, bool firstRowIsLabel, bool firstColumnIsLabel, Qt::Orientation dataDirection) = 0;
 };
 
 } // namespace KoChart
@@ -57,4 +53,3 @@ public:
 Q_DECLARE_INTERFACE(KoChart::ChartInterface, "org.calligra.KoChart.ChartInterface:1.0")
 
 #endif // KOCHART_INTERFACE
-

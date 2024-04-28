@@ -39,44 +39,44 @@ public:
     void repaintDecorations() override;
 
 public Q_SLOTS:
-    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     void deactivate() override;
 
 private Q_SLOTS:
 
     /**
-      * @brief Reload motion path shapes (For all shapes with motion paths on current page)
-      */
+     * @brief Reload motion path shapes (For all shapes with motion paths on current page)
+     */
     void reloadMotionPaths();
 
     /**
-      * @brief Verify if a motion path shape has changed (to update the canvas)
-      */
+     * @brief Verify if a motion path shape has changed (to update the canvas)
+     */
     void verifyMotionPathChanged(KoShape *shape);
 
 protected:
     QRectF handlesSize();
 
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
     /**
-      * @brief Load motion path shapes (For all shapes with motion paths on current page)
-      */
+     * @brief Load motion path shapes (For all shapes with motion paths on current page)
+     */
     void initMotionPathShapes();
 
     /**
-      * @brief Add motion path shape to the motion path shapes manager
-      */
+     * @brief Add motion path shape to the motion path shapes manager
+     */
     virtual void addPathShape(KoPathShape *pathShape);
 
     /**
-      * @brief Helper method to get the current page size
-      */
+     * @brief Helper method to get the current page size
+     */
     QSizeF getPageSize();
 
     /**
-      * @brief remove motion paths of motion path manager and helper maps
-      */
+     * @brief remove motion paths of motion path manager and helper maps
+     */
     void cleanMotionPathManager();
 
 private:

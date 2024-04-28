@@ -21,16 +21,23 @@
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H
 
-#include <exception>
 #include <QString>
+#include <exception>
 
 class InvalidFormatException : public std::exception
 {
 public:
     const QString msg;
-    InvalidFormatException() {}
-    explicit InvalidFormatException(const QString &m) :msg(m) {}
-    ~InvalidFormatException() throw() override {}
+    InvalidFormatException()
+    {
+    }
+    explicit InvalidFormatException(const QString &m)
+        : msg(m)
+    {
+    }
+    ~InvalidFormatException() throw() override
+    {
+    }
 };
 
 #endif

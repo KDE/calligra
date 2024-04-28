@@ -10,21 +10,21 @@
 #include <KoConfig.h>
 #include <KoResourcePaths.h>
 
-#include <QPaintDevice>
 #include <QFont>
-#include <QFontInfo>
 #include <QFontDatabase>
+#include <QFontInfo>
 #include <QGlobalStatic>
+#include <QPaintDevice>
 
-#include <WidgetsDebug.h>
+#include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
-#include <KConfig>
+#include <WidgetsDebug.h>
 
 Q_GLOBAL_STATIC(KoGlobal, s_instance)
 
-KoGlobal* KoGlobal::self()
+KoGlobal *KoGlobal::self()
 {
     return s_instance;
 }
@@ -36,7 +36,7 @@ KoGlobal::KoGlobal()
     // Fixes a bug where values from some config files are not picked up
     // due to  KSharedConfig::openConfig() being initialized before paths have been set up above.
     // NOTE: Values set without a sync() call before KoGlobal has been initialized will not stick
-     KSharedConfig::openConfig()->reparseConfiguration();
+    KSharedConfig::openConfig()->reparseConfiguration();
 }
 
 KoGlobal::~KoGlobal()
@@ -55,8 +55,8 @@ QFont KoGlobal::_defaultFont()
         Q_ASSERT(m_pointSize != -1);
         font.setPointSize(m_pointSize);
     }
-    //debugWidgets<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize();
-    //debugWidgets<<"font.name() :"<<font.family ();
+    // debugWidgets<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize();
+    // debugWidgets<<"font.name() :"<<font.family ();
     return font;
 }
 
@@ -81,8 +81,7 @@ void KoGlobal::createListOfLanguages()
 
     QMap<QString, bool> seenLanguages;
     const QStringList langlist = config.groupList();
-    for (QStringList::ConstIterator itall = langlist.begin();
-            itall != langlist.end(); ++itall) {
+    for (QStringList::ConstIterator itall = langlist.begin(); itall != langlist.end(); ++itall) {
         const QString tag = *itall;
         const QString name = config.group(tag).readEntry("Name", tag);
         // e.g. name is "French" and tag is "fr"
@@ -98,10 +97,8 @@ void KoGlobal::createListOfLanguages()
     // Many of them are already in all_languages but all_languages doesn't
     // currently have en_GB or en_US etc.
 
-    const QStringList translationList = KoResourcePaths::findAllResources("locale",
-                                        QString::fromLatin1("*/kf5_entry.desktop"));
-    for (QStringList::ConstIterator it = translationList.begin();
-            it != translationList.end(); ++it) {
+    const QStringList translationList = KoResourcePaths::findAllResources("locale", QString::fromLatin1("*/kf5_entry.desktop"));
+    for (QStringList::ConstIterator it = translationList.begin(); it != translationList.end(); ++it) {
         // Extract the language tag from the directory name
         QString tag = *it;
         int index = tag.lastIndexOf('/');
@@ -117,9 +114,8 @@ void KoGlobal::createListOfLanguages()
             m_langMap.insert(name, tag);
 
             // enable this if writing a third way of finding languages below
-            //seenLanguages.insert( tag, true );
+            // seenLanguages.insert( tag, true );
         }
-
     }
 
     // #### We also might not have an entry for a language where spellchecking is supported,
@@ -127,9 +123,9 @@ void KoGlobal::createListOfLanguages()
     // How to add them?
 }
 
-QString KoGlobal::tagOfLanguage(const QString & _lang)
+QString KoGlobal::tagOfLanguage(const QString &_lang)
 {
-    const LanguageMap& map = self()->m_langMap;
+    const LanguageMap &map = self()->m_langMap;
     QMap<QString, QString>::ConstIterator it = map.find(_lang);
     if (it != map.end())
         return *it;
@@ -138,7 +134,7 @@ QString KoGlobal::tagOfLanguage(const QString & _lang)
 
 QString KoGlobal::languageFromTag(const QString &langTag)
 {
-    const LanguageMap& map = self()->m_langMap;
+    const LanguageMap &map = self()->m_langMap;
     QMap<QString, QString>::ConstIterator it = map.begin();
     const QMap<QString, QString>::ConstIterator end = map.end();
     for (; it != end; ++it)
@@ -149,7 +145,7 @@ QString KoGlobal::languageFromTag(const QString &langTag)
     return langTag;
 }
 
-KConfig* KoGlobal::_calligraConfig()
+KConfig *KoGlobal::_calligraConfig()
 {
     if (!m_calligraConfig) {
         m_calligraConfig = new KConfig("calligrarc");

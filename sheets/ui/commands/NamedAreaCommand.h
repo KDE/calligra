@@ -31,11 +31,12 @@ public:
      */
     ~NamedAreaCommand() override;
 
-    void setAreaName(const QString& name);
-    void setNewAreaName(const QString& name);
+    void setAreaName(const QString &name);
+    void setNewAreaName(const QString &name);
     void setRemove(bool remove);
 
     bool preProcess() override;
+
 protected:
     bool performNonCommandActions() override;
     bool undoNonCommandActions() override;
@@ -44,7 +45,7 @@ private:
     QString m_areaName;
     QString m_newAreaName;
     Region m_oldArea;
-    bool m_remove      : 1;
+    bool m_remove : 1;
 };
 
 } // namespace Sheets

@@ -16,8 +16,13 @@ class KarbonFactoryInit : public KarbonFactory
     Q_INTERFACES(KPluginFactory)
 
 public:
-    explicit KarbonFactoryInit() : KarbonFactory() {}
-    ~KarbonFactoryInit() override {}
+    explicit KarbonFactoryInit()
+        : KarbonFactory()
+    {
+    }
+    ~KarbonFactoryInit() override
+    {
+    }
 };
 
 #endif

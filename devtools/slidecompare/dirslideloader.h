@@ -7,40 +7,53 @@
 #define DIRSLIDELOADER_H
 
 #include "slideloader.h"
-#include <QFileSystemWatcher>
-#include <QDir>
-#include <QTimer>
 #include <QDateTime>
 #include <QDebug>
+#include <QDir>
+#include <QFileSystemWatcher>
+#include <QTimer>
 
-class DirSlideLoader : public SlideLoader {
+class DirSlideLoader : public SlideLoader
+{
 private:
-Q_OBJECT
+    Q_OBJECT
 
-    class Slide {
+    class Slide
+    {
     private:
         QImage image;
+
     public:
         int version;
         QDateTime lastModified;
         QString path;
         QImage scaledImage;
 
-        Slide() :version(0) {}
-        Slide(const Slide& s) { version = 0; *this = s; }
-        explicit Slide(const QString& p) {
+        Slide()
+            : version(0)
+        {
+        }
+        Slide(const Slide &s)
+        {
+            version = 0;
+            *this = s;
+        }
+        explicit Slide(const QString &p)
+        {
             path = p;
             lastModified = QFileInfo(path).lastModified();
             version = 1;
         }
-        bool operator==(const Slide& slide) const {
-            return slide.lastModified == lastModified
-                && slide.path == path;
+        bool operator==(const Slide &slide) const
+        {
+            return slide.lastModified == lastModified && slide.path == path;
         }
-        bool operator!=(const Slide& slide) const {
+        bool operator!=(const Slide &slide) const
+        {
             return !(slide == *this);
         }
-        void operator=(const Slide& slide) {
+        void operator=(const Slide &slide)
+        {
             if (slide != *this) {
                 version++;
                 path = slide.path;
@@ -49,27 +62,29 @@ Q_OBJECT
                 scaledImage = QImage();
             }
         }
-        const QImage& getImage() {
+        const QImage &getImage()
+        {
             if (image.isNull()) {
                 image.load(path);
             }
             return image;
         }
-        QPixmap getPixmap(const QSize& maxsize) {
+        QPixmap getPixmap(const QSize &maxsize)
+        {
             QPixmap pixmap;
-            const QImage& image = getImage();
-            if (image.isNull()) return pixmap;
+            const QImage &image = getImage();
+            if (image.isNull())
+                return pixmap;
             if (image.width() > maxsize.width()) {
                 // scale to a smaller pixmap
                 if (scaledImage.width() != maxsize.width()) {
-                    scaledImage = image.scaled(maxsize, Qt::KeepAspectRatio,
-                                               Qt::SmoothTransformation);
+                    scaledImage = image.scaled(maxsize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
                 }
                 pixmap = QPixmap::fromImage(scaledImage);
             } else {
                 pixmap = QPixmap::fromImage(image);
             }
-            return pixmap; 
+            return pixmap;
         }
     };
 
@@ -81,29 +96,31 @@ Q_OBJECT
     int numberofslides;
     QSize slidesize;
 
-    QSize calculateSlideSize() {
+    QSize calculateSlideSize()
+    {
         QSize size;
-        for (int i=0; size.isEmpty() && i<slides.size(); ++i) {
+        for (int i = 0; size.isEmpty() && i < slides.size(); ++i) {
             size = slides[i].getImage().size();
         }
         return size;
     }
 private Q_SLOTS:
-    void slotDirectoryChanged(const QString &) {
+    void slotDirectoryChanged(const QString &)
+    {
         if (!fileSystemDelay.isActive()) {
             fileSystemDelay.setSingleShot(true);
             fileSystemDelay.start(100);
-            connect(&fileSystemDelay, SIGNAL(timeout()),
-                    this, SLOT(slotUpdateSlides()));
+            connect(&fileSystemDelay, SIGNAL(timeout()), this, SLOT(slotUpdateSlides()));
         }
     }
-    void slotUpdateSlides() {
+    void slotUpdateSlides()
+    {
         QDir dir(slidedir);
         QVector<Slide> newslides;
         if (numberofslides >= 0) {
             newslides.resize(numberofslides);
             // loop over all files
-            for (int slideNumber=0; slideNumber<numberofslides; ++slideNumber) {
+            for (int slideNumber = 0; slideNumber < numberofslides; ++slideNumber) {
                 QString name = slideNamePattern.arg(slideNumber);
                 if (dir.exists(name)) {
                     newslides[slideNumber] = dir.absoluteFilePath(name);
@@ -111,13 +128,13 @@ private Q_SLOTS:
             }
         } else {
             QRegExp pattern(QString(slideNamePattern).replace("%1", "(\\d+)"));
-            foreach (const QString& name, dir.entryList()) {
+            foreach (const QString &name, dir.entryList()) {
                 if (pattern.indexIn(name) != -1) {
                     bool ok;
                     int slideNumber = pattern.cap(1).toInt(&ok);
                     if (ok) {
                         if (newslides.size() <= slideNumber) {
-                           newslides.resize(slideNumber+1);
+                            newslides.resize(slideNumber + 1);
                         }
                         newslides[slideNumber] = dir.absoluteFilePath(name);
                     }
@@ -129,13 +146,17 @@ private Q_SLOTS:
             emit slidesChanged();
         }
     }
+
 public:
-    DirSlideLoader(QObject* parent = 0) :SlideLoader(parent), watcher(this) {
+    DirSlideLoader(QObject *parent = 0)
+        : SlideLoader(parent)
+        , watcher(this)
+    {
         numberofslides = -1;
-        connect(&watcher, SIGNAL(directoryChanged(QString)),
-               this, SLOT(slotDirectoryChanged(QString)));
+        connect(&watcher, SIGNAL(directoryChanged(QString)), this, SLOT(slotDirectoryChanged(QString)));
     }
-    void setSlideDir(const QString& path) {
+    void setSlideDir(const QString &path)
+    {
         if (slidedir != path) {
             if (!slidedir.isEmpty()) {
                 watcher.removePath(slidedir);
@@ -145,31 +166,39 @@ public:
             slotDirectoryChanged(path);
         }
     }
-    void setSlideNamePattern(const QString& pattern) {
+    void setSlideNamePattern(const QString &pattern)
+    {
         slideNamePattern = pattern;
         slotDirectoryChanged(slidedir);
     }
-    void setNumberOfSlides(int n) {
+    void setNumberOfSlides(int n)
+    {
         numberofslides = n;
         slotUpdateSlides();
     }
-    int numberOfSlides() {
-        return (numberofslides >= 0) ?numberofslides :slides.size();
+    int numberOfSlides()
+    {
+        return (numberofslides >= 0) ? numberofslides : slides.size();
     }
-    void setSlideSize(const QSize& size) {
+    void setSlideSize(const QSize &size)
+    {
         slidesize = size;
     }
-    QSize slideSize() {
+    QSize slideSize()
+    {
         if (slidesize.isEmpty()) {
             return calculateSlideSize();
         }
         return slidesize;
     }
-    int slideVersion(int position) {
+    int slideVersion(int position)
+    {
         return slides.value(position).version;
     }
-    QPixmap loadSlide(int position, const QSize& maxsize) {
-        if (position < 0 || position >= slides.size()) return QPixmap();
+    QPixmap loadSlide(int position, const QSize &maxsize)
+    {
+        if (position < 0 || position >= slides.size())
+            return QPixmap();
         return slides[position].getPixmap(maxsize);
     }
 };

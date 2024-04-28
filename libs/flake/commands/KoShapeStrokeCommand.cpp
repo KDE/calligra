@@ -16,42 +16,44 @@
 class Q_DECL_HIDDEN KoShapeStrokeCommand::Private
 {
 public:
-    Private() {}
+    Private()
+    {
+    }
     ~Private()
     {
-        foreach(KoShapeStrokeModel* stroke, oldStrokes) {
+        foreach (KoShapeStrokeModel *stroke, oldStrokes) {
             if (stroke && !stroke->deref())
                 delete stroke;
         }
     }
 
-    void addOldStroke(KoShapeStrokeModel * oldStroke)
+    void addOldStroke(KoShapeStrokeModel *oldStroke)
     {
         if (oldStroke)
             oldStroke->ref();
         oldStrokes.append(oldStroke);
     }
 
-    void addNewStroke(KoShapeStrokeModel * newStroke)
+    void addNewStroke(KoShapeStrokeModel *newStroke)
     {
         if (newStroke)
             newStroke->ref();
         newStrokes.append(newStroke);
     }
 
-    QList<KoShape*> shapes;                ///< the shapes to set stroke for
-    QList<KoShapeStrokeModel*> oldStrokes; ///< the old strokes, one for each shape
-    QList<KoShapeStrokeModel*> newStrokes; ///< the new strokes to set
+    QList<KoShape *> shapes; ///< the shapes to set stroke for
+    QList<KoShapeStrokeModel *> oldStrokes; ///< the old strokes, one for each shape
+    QList<KoShapeStrokeModel *> newStrokes; ///< the new strokes to set
 };
 
-KoShapeStrokeCommand::KoShapeStrokeCommand(const QList<KoShape*> &shapes, KoShapeStrokeModel *stroke, KUndo2Command *parent)
+KoShapeStrokeCommand::KoShapeStrokeCommand(const QList<KoShape *> &shapes, KoShapeStrokeModel *stroke, KUndo2Command *parent)
     : KUndo2Command(parent)
     , d(new Private())
 {
     d->shapes = shapes;
 
     // save old strokes
-    foreach(KoShape *shape, d->shapes) {
+    foreach (KoShape *shape, d->shapes) {
         d->addOldStroke(shape->stroke());
         d->addNewStroke(stroke);
     }
@@ -59,28 +61,26 @@ KoShapeStrokeCommand::KoShapeStrokeCommand(const QList<KoShape*> &shapes, KoShap
     setText(kundo2_i18n("Set stroke"));
 }
 
-KoShapeStrokeCommand::KoShapeStrokeCommand(const QList<KoShape*> &shapes,
-        const QList<KoShapeStrokeModel*> &strokes,
-        KUndo2Command *parent)
-        : KUndo2Command(parent)
-        , d(new Private())
+KoShapeStrokeCommand::KoShapeStrokeCommand(const QList<KoShape *> &shapes, const QList<KoShapeStrokeModel *> &strokes, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , d(new Private())
 {
     Q_ASSERT(shapes.count() == strokes.count());
 
     d->shapes = shapes;
 
     // save old strokes
-    foreach(KoShape *shape, shapes)
+    foreach (KoShape *shape, shapes)
         d->addOldStroke(shape->stroke());
-    foreach (KoShapeStrokeModel * stroke, strokes)
+    foreach (KoShapeStrokeModel *stroke, strokes)
         d->addNewStroke(stroke);
 
     setText(kundo2_i18n("Set stroke"));
 }
 
-KoShapeStrokeCommand::KoShapeStrokeCommand(KoShape* shape, KoShapeStrokeModel *stroke, KUndo2Command *parent)
-        : KUndo2Command(parent)
-        , d(new Private())
+KoShapeStrokeCommand::KoShapeStrokeCommand(KoShape *shape, KoShapeStrokeModel *stroke, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , d(new Private())
 {
     d->shapes.append(shape);
     d->addNewStroke(stroke);
@@ -97,8 +97,8 @@ KoShapeStrokeCommand::~KoShapeStrokeCommand()
 void KoShapeStrokeCommand::redo()
 {
     KUndo2Command::redo();
-    QList<KoShapeStrokeModel*>::ConstIterator strokeIt = d->newStrokes.constBegin();
-    foreach(KoShape *shape, d->shapes) {
+    QList<KoShapeStrokeModel *>::ConstIterator strokeIt = d->newStrokes.constBegin();
+    foreach (KoShape *shape, d->shapes) {
         shape->update();
         shape->setStroke(*strokeIt);
         shape->update();
@@ -109,8 +109,8 @@ void KoShapeStrokeCommand::redo()
 void KoShapeStrokeCommand::undo()
 {
     KUndo2Command::undo();
-    QList<KoShapeStrokeModel*>::ConstIterator strokeIt = d->oldStrokes.constBegin();
-    foreach(KoShape *shape, d->shapes) {
+    QList<KoShapeStrokeModel *>::ConstIterator strokeIt = d->oldStrokes.constBegin();
+    foreach (KoShape *shape, d->shapes) {
         shape->update();
         shape->setStroke(*strokeIt);
         shape->update();

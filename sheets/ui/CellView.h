@@ -50,18 +50,12 @@ class CALLIGRA_SHEETS_UI_EXPORT CellView
     friend class SheetView;
 
 public:
-    CellView(SheetView* sheetView, int col, int row);
-    CellView(const CellView& other);
+    CellView(SheetView *sheetView, int col, int row);
+    CellView(const CellView &other);
     virtual ~CellView();
-    CellView& operator=(const CellView& other);
+    CellView &operator=(const CellView &other);
 
-    enum Border {
-        NoBorder     = 0x0,
-        LeftBorder   = 0x1,
-        RightBorder  = 0x2,
-        TopBorder    = 0x4,
-        BottomBorder = 0x8
-    };
+    enum Border { NoBorder = 0x0, LeftBorder = 0x1, RightBorder = 0x2, TopBorder = 0x4, BottomBorder = 0x8 };
     Q_DECLARE_FLAGS(Borders, Border)
 
     /**
@@ -75,7 +69,7 @@ public:
      * \param clipRegion the clip region
      * \param coordinate the top left coordinate (scroll offset dependent)
      */
-    void paintCellBackground(QPainter& painter, const QRegion &clipRegion, const QPointF& coordinate) const;
+    void paintCellBackground(QPainter &painter, const QRegion &clipRegion, const QPointF &coordinate) const;
 
     /**
      * Paints the cell.
@@ -86,9 +80,12 @@ public:
      * \param cell the Cell
      * \param sheetView the sheet view
      */
-    virtual void paintCellContents(const QRectF& paintRegion, QPainter& painter, const QRegion &clipRegion,
-                           const QPointF& coordinate,
-                           const Cell& cell, SheetView* sheetView) const;
+    virtual void paintCellContents(const QRectF &paintRegion,
+                                   QPainter &painter,
+                                   const QRegion &clipRegion,
+                                   const QPointF &coordinate,
+                                   const Cell &cell,
+                                   SheetView *sheetView) const;
 
     /**
      * Paints the cell custom borders, the page borders, diagonal lines.
@@ -100,10 +97,13 @@ public:
      * \param cell the Cell
      * \param sheetView the SheetView
      */
-    void paintCellBorders(const QRectF& paintRegion, QPainter& painter, const QRegion &clipRegion,
-                          const QPointF& coordinate,
-                          const QRect& cellRange,
-                          const Cell& cell, SheetView* sheetView) const;
+    void paintCellBorders(const QRectF &paintRegion,
+                          QPainter &painter,
+                          const QRegion &clipRegion,
+                          const QPointF &coordinate,
+                          const QRect &cellRange,
+                          const Cell &cell,
+                          SheetView *sheetView) const;
 
     /**
      * Paints the default cell borders.
@@ -116,10 +116,14 @@ public:
      * \param cell the Cell
      * \param sheetView the SheetView
      */
-    void paintDefaultBorders(QPainter& painter, const QRegion &clipRegion, const QRectF &paintRegion,
-                             const QPointF& coordinate,
-                             Borders paintBorder, const QRect& cellRange,
-                             const Cell& cell, SheetView* sheetView) const;
+    void paintDefaultBorders(QPainter &painter,
+                             const QRegion &clipRegion,
+                             const QRectF &paintRegion,
+                             const QPointF &coordinate,
+                             Borders paintBorder,
+                             const QRect &cellRange,
+                             const Cell &cell,
+                             SheetView *sheetView) const;
 
     /**
      * \return width of the text
@@ -136,9 +140,9 @@ public:
      */
     QRectF textRect() const;
 
-    QString testAnchor(SheetView* sheetView, const Cell& cell, qreal x, qreal y) const;
+    QString testAnchor(SheetView *sheetView, const Cell &cell, qreal x, qreal y) const;
 
-    bool hitTestFilterButton(const Cell& cell, const QRect& cellRect, const QPoint& position) const;
+    bool hitTestFilterButton(const Cell &cell, const QRect &cellRect, const QPoint &position) const;
 
     qreal cellHeight() const;
     qreal cellWidth() const;
@@ -146,6 +150,7 @@ public:
     bool dimensionFits() const;
 
     void detach();
+
 protected:
     /**
      * \ingroup Layout
@@ -155,7 +160,7 @@ protected:
      * breaks lines of the text to fit it into the cell, obscures neighbouring
      * cells, if necessary.
      */
-    void makeLayout(SheetView* sheetView, const Cell& cell);
+    void makeLayout(SheetView *sheetView, const Cell &cell);
 
     /**
      * \ingroup Layout
@@ -173,7 +178,7 @@ protected:
      *
      * \internal Called from makeLayout().
      */
-    void textOffset(const QFontMetricsF& fontMetrics, const Cell& cell);
+    void textOffset(const QFontMetricsF &fontMetrics, const Cell &cell);
 
     /**
      * \ingroup Layout
@@ -182,7 +187,7 @@ protected:
      *
      * \internal Called from makeLayout().
      */
-    void obscureHorizontalCells(SheetView* sheetView, const Cell& cell);
+    void obscureHorizontalCells(SheetView *sheetView, const Cell &cell);
 
     /**
      * \ingroup Layout
@@ -191,7 +196,7 @@ protected:
      *
      * \internal Called from makeLayout().
      */
-    void obscureVerticalCells(SheetView* sheetView, const Cell& cell);
+    void obscureVerticalCells(SheetView *sheetView, const Cell &cell);
 
     /**
      * Adjust the output text, so that it only holds the part that can be
@@ -206,83 +211,77 @@ protected:
      *
      * \internal Called from paintText().
      */
-    QString textDisplaying(const QFontMetricsF& fontMetrics, const Cell& cell);
+    QString textDisplaying(const QFontMetricsF &fontMetrics, const Cell &cell);
 
     /**
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
      */
-    void paintCustomBorders(QPainter& painter, const QRectF &paintRegion,
-                            const QPointF& coordinate, Borders paintBorder,
-                            bool rtl) const;
+    void paintCustomBorders(QPainter &painter, const QRectF &paintRegion, const QPointF &coordinate, Borders paintBorder, bool rtl) const;
 
     /**
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
      */
-    void paintPageBorders(QPainter& painter, const QPointF &coordinate,
-                          Borders paintBorder, const Cell& cell) const;
+    void paintPageBorders(QPainter &painter, const QPointF &coordinate, Borders paintBorder, const Cell &cell) const;
 
     /**
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
      */
-    void paintText(QPainter& painter, const QPointF& coordinate, const Cell& cell) const;
+    void paintText(QPainter &painter, const QPointF &coordinate, const Cell &cell) const;
 
     /**
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
      */
-    void paintMoreTextIndicator(QPainter& painter, const QPointF& coordinate) const;
+    void paintMoreTextIndicator(QPainter &painter, const QPointF &coordinate) const;
 
     /**
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
      */
-    void paintCommentIndicator(QPainter& painter, const QPointF& coordinate,
-                               const Cell& cell) const;
+    void paintCommentIndicator(QPainter &painter, const QPointF &coordinate, const Cell &cell) const;
 
     /**
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
      */
-    void paintFormulaIndicator(QPainter& painter, const QPointF& coordinate, const Cell& cell) const;
+    void paintFormulaIndicator(QPainter &painter, const QPointF &coordinate, const Cell &cell) const;
 
     /**
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
      */
-    void paintMatrixElementIndicator(QPainter& painter, const QPointF& coordinate, const Cell& cell) const;
+    void paintMatrixElementIndicator(QPainter &painter, const QPointF &coordinate, const Cell &cell) const;
 
     /**
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
      */
-    void paintCellDiagonalLines(QPainter& painter, const QPointF& coordinate) const;
+    void paintCellDiagonalLines(QPainter &painter, const QPointF &coordinate) const;
 
     /**
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
      */
-    void paintFilterButton(QPainter& painter, const QPointF& coordinate,
-                           const Cell& cell, SheetView* sheetView) const;
+    void paintFilterButton(QPainter &painter, const QPointF &coordinate, const Cell &cell, SheetView *sheetView) const;
 
-    void drawText(QPainter& painter, const QStringList& textLines,
-                  const Cell& cell, qreal lineSpacing = 0) const;
+    void drawText(QPainter &painter, const QStringList &textLines, const Cell &cell, qreal lineSpacing = 0) const;
 
     /**
      * Default CellView used by SheetView.
      */
-    CellView(SheetView* sheetView);
+    CellView(SheetView *sheetView);
 
     class Private;
     QExplicitlySharedDataPointer<Private> d;

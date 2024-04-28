@@ -9,12 +9,12 @@
 
 #include <KoToolRegistry.h>
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 #include <QDebug>
 
 KarbonCalligraphyToolFactory::KarbonCalligraphyToolFactory()
-        : KoToolFactoryBase("KarbonCalligraphyTool")
+    : KoToolFactoryBase("KarbonCalligraphyTool")
 {
     setToolTip(i18n("Calligraphy"));
     setToolType("karbon");
@@ -27,7 +27,7 @@ KarbonCalligraphyToolFactory::~KarbonCalligraphyToolFactory()
 {
 }
 
-KoToolBase * KarbonCalligraphyToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KarbonCalligraphyToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KarbonCalligraphyTool(canvas);
 }

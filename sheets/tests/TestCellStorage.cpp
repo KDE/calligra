@@ -18,8 +18,8 @@ using namespace Calligra::Sheets;
 void CellStorageTest::testMergedCellsInsertRowBug()
 {
     Map map;
-    Sheet* sheet = dynamic_cast<Sheet *>(map.addNewSheet());
-    CellStorage* storage = sheet->fullCellStorage();
+    Sheet *sheet = dynamic_cast<Sheet *>(map.addNewSheet());
+    CellStorage *storage = sheet->fullCellStorage();
 
     // | 1 | 4 |
     // |-------|

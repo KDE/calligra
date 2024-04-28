@@ -27,49 +27,49 @@ class QString;
 namespace wvWare
 {
 
-    class ListInfo;
-    class ListInfoProvider;
+class ListInfo;
+class ListInfoProvider;
+
+/**
+ * A tiny helper class to wrap the PAP and any additional information
+ * we want to pass to the consumer. Right now we have a ListInfo object
+ * if the paragraph belongs to some list.
+ */
+class WV2_EXPORT ParagraphProperties : public Shared
+{
+public:
+    ParagraphProperties();
+    explicit ParagraphProperties(const Word97::PAP &pap);
+    ParagraphProperties(const ParagraphProperties &rhs);
+    ~ParagraphProperties() override;
+
+    Word97::PAP &pap();
+    const Word97::PAP &pap() const;
+    /**
+     * If this paragraph belongs to a list, the ListInfo object will be
+     * valid and contain useful information about the formatting of the
+     * list counter. @return 0 if the paragraph is not inside of a list
+     */
+    const ListInfo *listInfo() const;
 
     /**
-     * A tiny helper class to wrap the PAP and any additional information
-     * we want to pass to the consumer. Right now we have a ListInfo object
-     * if the paragraph belongs to some list.
+     * Set the name of the bullet picture into ListInfo.
      */
-    class WV2_EXPORT ParagraphProperties : public Shared
-    {
-    public:
-        ParagraphProperties();
-        explicit ParagraphProperties( const Word97::PAP& pap );
-        ParagraphProperties( const ParagraphProperties& rhs );
-        ~ParagraphProperties() override;
+    void setBulletPictureName(const QString &name);
 
-        Word97::PAP& pap();
-        const Word97::PAP& pap() const;
-        /**
-         * If this paragraph belongs to a list, the ListInfo object will be
-         * valid and contain useful information about the formatting of the
-         * list counter. @return 0 if the paragraph is not inside of a list
-         */
-        const ListInfo* listInfo() const;
+    /**
+     * @internal
+     * @param list info provider
+     * @param pragraph mark's CHPs
+     */
+    void createListInfo(ListInfoProvider &listInfoProvider, Word97::CHP &chp);
 
-        /**
-         * Set the name of the bullet picture into ListInfo.
-         */
-        void setBulletPictureName(const QString& name);
+private:
+    ParagraphProperties &operator=(const ParagraphProperties &rhs);
 
-        /**
-         * @internal
-         * @param list info provider
-         * @param pragraph mark's CHPs
-         */
-        void createListInfo( ListInfoProvider& listInfoProvider, Word97::CHP& chp );
-
-    private:
-        ParagraphProperties& operator=( const ParagraphProperties& rhs );
-
-        Word97::PAP m_pap;
-        ListInfo* m_listInfo;
-    };
+    Word97::PAP m_pap;
+    ListInfo *m_listInfo;
+};
 
 } // namespace wvWare
 

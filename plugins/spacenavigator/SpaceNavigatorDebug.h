@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &SPACENAVIGATOR_LOG();
 
 #define debugSpaceNavigator qCDebug(SPACENAVIGATOR_LOG)

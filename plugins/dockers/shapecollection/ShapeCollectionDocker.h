@@ -7,12 +7,12 @@
 #define KOSHAPECOLLECTIONDOCKER_H
 
 #include <QDockWidget>
-#include <QModelIndex>
-#include <QMap>
 #include <QIcon>
+#include <QMap>
+#include <QModelIndex>
 
-#include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
+#include <KoDockFactoryBase.h>
 
 class ShapeCollectionDockerFactory : public KoDockFactoryBase
 {
@@ -20,7 +20,7 @@ public:
     ShapeCollectionDockerFactory();
 
     QString id() const override;
-    QDockWidget* createDockWidget() override;
+    QDockWidget *createDockWidget() override;
     DockPosition defaultDockPosition() const override
     {
         return DockRight;
@@ -41,33 +41,31 @@ class ShapeCollectionDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
-
-    explicit ShapeCollectionDocker(QWidget* parent = 0);
+    explicit ShapeCollectionDocker(QWidget *parent = 0);
 
     /// reimplemented
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
-
 protected Q_SLOTS:
     /**
-         * Activates the shape creation tool when a shape is selected.
-         */
-    void activateShapeCreationTool(const QModelIndex& index);
-    void activateShapeCreationToolFromQuick(const QModelIndex& index);
+     * Activates the shape creation tool when a shape is selected.
+     */
+    void activateShapeCreationTool(const QModelIndex &index);
+    void activateShapeCreationToolFromQuick(const QModelIndex &index);
 
     /**
-         * Changes the current shape collection
-         */
+     * Changes the current shape collection
+     */
     void activateShapeCollection(QListWidgetItem *item);
 
     /**
-         * Called when a collection is added from the add collection menu
-         */
+     * Called when a collection is added from the add collection menu
+     */
     void loadCollection();
 
     /// Called when an error occurred while loading a collection
-    void onLoadingFailed(const QString& reason);
+    void onLoadingFailed(const QString &reason);
 
     /// Called when loading of a collection is finished
     void onLoadingFinished();
@@ -80,31 +78,31 @@ protected Q_SLOTS:
 
 protected:
     /**
-         * Load the default calligra shapes
-         */
+     * Load the default calligra shapes
+     */
     void loadDefaultShapes();
 
     /**
-         * Add a collection to the docker
-         */
-    bool addCollection(const QString& id, const QString& title, CollectionItemModel* model);
-    void removeCollection(const QString& id);
+     * Add a collection to the docker
+     */
+    bool addCollection(const QString &id, const QString &title, CollectionItemModel *model);
+    void removeCollection(const QString &id);
 
     /**
-         * Builds the menu for the Add Collection Button
-         */
+     * Builds the menu for the Add Collection Button
+     */
     void buildAddCollectionMenu();
 
     /// Generate an icon from @p shape
-    QIcon generateShapeIcon(KoShape* shape);
+    QIcon generateShapeIcon(KoShape *shape);
 
 private:
-    void scanCollectionDir(const QString& dirName, QMenu* menu);
+    void scanCollectionDir(const QString &dirName, QMenu *menu);
 
 private:
     QListView *m_quickView;
     QToolButton *m_moreShapes;
-    QMenu* m_moreShapesContainer;
+    QMenu *m_moreShapesContainer;
     QListWidget *m_collectionChooser;
     QListView *m_collectionView;
     QToolButton *m_closeCollectionButton;
@@ -112,7 +110,7 @@ private:
     QSpacerItem *m_spacer;
     QGridLayout *m_layout;
 
-    QMap<QString, CollectionItemModel*> m_modelMap;
+    QMap<QString, CollectionItemModel *> m_modelMap;
 };
 
-#endif //KOSHAPECOLLECTIONDOCKER_H
+#endif // KOSHAPECOLLECTIONDOCKER_H

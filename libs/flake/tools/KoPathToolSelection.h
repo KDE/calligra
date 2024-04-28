@@ -10,8 +10,8 @@
 #ifndef KOPATHTOOLSELECTION_H
 #define KOPATHTOOLSELECTION_H
 
-#include <KoToolSelection.h>
 #include <KoPathShape.h>
+#include <KoToolSelection.h>
 
 class KoPathTool;
 class KoPathPoint;
@@ -20,11 +20,11 @@ class KoViewConverter;
 class QPainter;
 
 /**
-* @brief Handle the selection of points
-*
-* This class handles the selection of points. It makes sure
-* the canvas is repainted when the selection changes.
-*/
+ * @brief Handle the selection of points
+ *
+ * This class handles the selection of points. It makes sure
+ * the canvas is repainted when the selection changes.
+ */
 class FLAKE_EXPORT KoPathToolSelection : public KoToolSelection
 {
     Q_OBJECT
@@ -38,23 +38,23 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter);
 
     /**
-    * @brief Add a point to the selection
-    *
-    * @param point to add to the selection
-    * @param clear if true the selection will be cleared before adding the point
-    */
+     * @brief Add a point to the selection
+     *
+     * @param point to add to the selection
+     * @param clear if true the selection will be cleared before adding the point
+     */
     void add(KoPathPoint *point, bool clear);
 
     /**
-    * @brief Remove a point form the selection
-    *
-    * @param point to remove from the selection
-    */
+     * @brief Remove a point form the selection
+     *
+     * @param point to remove from the selection
+     */
     void remove(KoPathPoint *point);
 
     /**
-    * @brief Clear the selection
-    */
+     * @brief Clear the selection
+     */
     void clear();
 
     /**
@@ -66,67 +66,67 @@ public:
     void selectPoints(const QRectF &rect, bool clearSelection);
 
     /**
-    * @brief Get the number of path objects in the selection
-    *
-    * @return number of path object in the point selection
-    */
+     * @brief Get the number of path objects in the selection
+     *
+     * @return number of path object in the point selection
+     */
     int objectCount() const;
 
     /**
-    * @brief Get the number of path points in the selection
-    *
-    * @return number of points in the selection
-    */
+     * @brief Get the number of path points in the selection
+     *
+     * @return number of points in the selection
+     */
     int size() const;
 
     /**
-    * @brief Check if a point is in the selection
-    *
-    * @return true when the point is in the selection, false otherwise
-    */
+     * @brief Check if a point is in the selection
+     *
+     * @return true when the point is in the selection, false otherwise
+     */
     bool contains(KoPathPoint *point);
 
     /**
-    * @brief Get all selected points
-    *
-    * @return set of selected points
-    */
+     * @brief Get all selected points
+     *
+     * @return set of selected points
+     */
     const QSet<KoPathPoint *> &selectedPoints() const;
 
     /**
-    * @brief Get the point data of all selected points
-    *
-    * This is subject to change
-    */
+     * @brief Get the point data of all selected points
+     *
+     * This is subject to change
+     */
     QList<KoPathPointData> selectedPointsData() const;
 
     /**
-    * @brief Get the point data of all selected segments
-    *
-    * This is subject to change
-    */
+     * @brief Get the point data of all selected segments
+     *
+     * This is subject to change
+     */
     QList<KoPathPointData> selectedSegmentsData() const;
 
     /// Returns list of selected shapes
-    QList<KoPathShape*> selectedShapes() const;
+    QList<KoPathShape *> selectedShapes() const;
 
     /// Sets list of selected shapes
-    void setSelectedShapes(const QList<KoPathShape*> shapes);
+    void setSelectedShapes(const QList<KoPathShape *> shapes);
 
     /**
-    * @brief trigger a repaint
-    */
+     * @brief trigger a repaint
+     */
     void repaint();
 
     /**
-    * @brief Update the selection to contain only valid points
-    *
-    * This function checks which points are no longer valid and removes them
-    * from the selection.
-    * If e.g. some points are selected and the shape which contains the points
-    * is removed by undo, the points are no longer valid and have therefore to
-    * be removed from the selection.
-    */
+     * @brief Update the selection to contain only valid points
+     *
+     * This function checks which points are no longer valid and removes them
+     * from the selection.
+     * If e.g. some points are selected and the shape which contains the points
+     * is removed by undo, the points are no longer valid and have therefore to
+     * be removed from the selection.
+     */
     void update();
 
     /// reimplemented from KoToolSelection
@@ -136,12 +136,12 @@ Q_SIGNALS:
     void selectionChanged();
 
 private:
-    typedef QMap<KoPathShape *, QSet<KoPathPoint *> > PathShapePointMap;
+    typedef QMap<KoPathShape *, QSet<KoPathPoint *>> PathShapePointMap;
 
     QSet<KoPathPoint *> m_selectedPoints;
     PathShapePointMap m_shapePointMap;
     KoPathTool *m_tool;
-    QList<KoPathShape*> m_selectedShapes;
+    QList<KoPathShape *> m_selectedShapes;
 };
 
 #endif // PATHTOOLSELECTION_H

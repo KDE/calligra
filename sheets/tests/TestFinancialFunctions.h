@@ -15,7 +15,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class TestFinancialFunctions: public QObject
+class TestFinancialFunctions : public QObject
 {
     Q_OBJECT
 
@@ -25,7 +25,7 @@ private Q_SLOTS:
     void testACCRINTM();
     void testAMORDEGRC();
     void testAMORLINC();
-    void testCOMPOUND();   // no ODF tests available
+    void testCOMPOUND(); // no ODF tests available
     void testCONTINUOUS(); // no ODF tests available
     void testCOUPDAYBS();
     void testCOUPDAYS();
@@ -46,11 +46,11 @@ private Q_SLOTS:
     void testEURO();
     void testEUROCONVERT();
     void testFV();
-//   void testFV_ANNUITY(); // k
+    //   void testFV_ANNUITY(); // k
     void testFVSCHEDULE();
     void testINTRATE();
     void testIPMT();
-//   void testIRR();        // to be implemented
+    //   void testIRR();        // to be implemented
     void testISPMT();
     void testLEVELCOUPON();
     void testMDURATION();
@@ -58,15 +58,15 @@ private Q_SLOTS:
     void testNOMINAL();
     void testNPER();
     void testNPV();
-//   void testODDFPRICE();  // to be implemented
-//   void testODDFYIELD();  // to be implemented
+    //   void testODDFPRICE();  // to be implemented
+    //   void testODDFYIELD();  // to be implemented
     void testODDLPRICE();
     void testODDLYIELD();
     void testPDURATION();
     void testPMT();
     void testPPMT();
-//   void testPRICE();      // to be implemented
-//   void testPRICEDISC();  // to be implemented
+    //   void testPRICE();      // to be implemented
+    //   void testPRICEDISC();  // to be implemented
     void testPRICEMAT();
     void testPV();
     void testPV_ANNUITY(); // no ODF test available
@@ -81,14 +81,14 @@ private Q_SLOTS:
     void testVDB();
     void testXIRR();
     void testXNPV();
-//   void testYIELD();      // to be implemented
+    //   void testYIELD();      // to be implemented
     void testYIELDDISC();
     void testYIELDMAT();
     void testZEROCOUPON();
 
-// private:
-//   Value evaluate(const QString&);
-//   Value evaluateShort(const QString&);
+    // private:
+    //   Value evaluate(const QString&);
+    //   Value evaluateShort(const QString&);
 };
 
 } // namespace Sheets

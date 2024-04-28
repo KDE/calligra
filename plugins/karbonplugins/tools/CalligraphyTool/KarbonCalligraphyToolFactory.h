@@ -15,7 +15,7 @@ public:
     KarbonCalligraphyToolFactory();
     ~KarbonCalligraphyToolFactory() override;
 
-    KoToolBase * createTool(KoCanvasBase *canvas) override;
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif // _KARBONCALLIGRAPHYTOOLFACTORY_H_

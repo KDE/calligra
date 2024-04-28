@@ -8,17 +8,16 @@
 #ifndef CALLIGRA_SHEETS_ACTION_DOCUMENT_SETTINGS
 #define CALLIGRA_SHEETS_ACTION_DOCUMENT_SETTINGS
 
-
 #include "DialogCellAction.h"
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class DocumentSettings : public DialogCellAction {
-Q_OBJECT
+class DocumentSettings : public DialogCellAction
+{
+    Q_OBJECT
 public:
     DocumentSettings(Actions *actions);
     virtual ~DocumentSettings();
@@ -27,9 +26,7 @@ protected:
     virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_DOCUMENT_SETTINGS
+#endif // CALLIGRA_SHEETS_ACTION_DOCUMENT_SETTINGS

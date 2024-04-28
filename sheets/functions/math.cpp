@@ -17,7 +17,6 @@
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
 
-
 // needed by MDETERM and MINVERSE
 // Don't show this warning: it's an issue in eigen
 #ifdef __GNUC__
@@ -63,13 +62,13 @@ Value func_maxa(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mdeterm(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_min(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mina(valVector args, ValueCalc *calc, FuncExtra *);
-Value func_minverse(valVector args, ValueCalc* calc, FuncExtra*);
+Value func_minverse(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mmult(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mod(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mround(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mult(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_multinomial(valVector args, ValueCalc *calc, FuncExtra *);
-Value func_munit(valVector args, ValueCalc* calc, FuncExtra*);
+Value func_munit(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_odd(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pow(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_quotient(valVector args, ValueCalc *calc, FuncExtra *);
@@ -94,20 +93,17 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sum(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_suma(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumif(valVector args, ValueCalc *calc, FuncExtra *);
-Value func_sumifs(valVector args, ValueCalc *calc, FuncExtra *);     //here
+Value func_sumifs(valVector args, ValueCalc *calc, FuncExtra *); // here
 Value func_sumsq(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_transpose(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_trunc(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 // Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *);
-
 
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadmathmodule.json", MathModule)
 
-
-MathModule::MathModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+MathModule::MathModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
@@ -117,234 +113,234 @@ MathModule::MathModule(QObject* parent, const QVariantList&)
     */
 
     // functions that don't take array parameters
-    f = new Function("ABS",           func_abs);
+    f = new Function("ABS", func_abs);
     add(f);
-    f = new Function("CEIL",          func_ceil);
+    f = new Function("CEIL", func_ceil);
     add(f);
-    f = new Function("CEILING",       func_ceiling);
+    f = new Function("CEILING", func_ceiling);
     f->setParamCount(1, 3);
     add(f);
-    f = new Function("CUR",           func_cur);
+    f = new Function("CUR", func_cur);
     add(f);
-    f = new Function("EPS",           func_eps);
+    f = new Function("EPS", func_eps);
     f->setParamCount(0);
     add(f);
-    f = new Function("EVEN",          func_even);
+    f = new Function("EVEN", func_even);
     add(f);
-    f = new Function("EXP",           func_exp);
+    f = new Function("EXP", func_exp);
     add(f);
-    f = new Function("FACT",          func_fact);
+    f = new Function("FACT", func_fact);
     add(f);
-    f = new Function("FACTDOUBLE",    func_factdouble);
+    f = new Function("FACTDOUBLE", func_factdouble);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFACTDOUBLE");
     add(f);
-    f = new Function("FIB",           func_fib);  // Calligra Sheets-specific, like Quattro-Pro's FIB
+    f = new Function("FIB", func_fib); // Calligra Sheets-specific, like Quattro-Pro's FIB
     add(f);
-    f = new Function("FLOOR",         func_floor);
+    f = new Function("FLOOR", func_floor);
     f->setParamCount(1, 3);
     add(f);
-    f = new Function("GAMMA",         func_gamma);
+    f = new Function("GAMMA", func_gamma);
     add(f);
-    f = new Function("INT",           func_int);
+    f = new Function("INT", func_int);
     add(f);
-    f = new Function("INV",           func_inv);
+    f = new Function("INV", func_inv);
     add(f);
-    f = new Function("LN",            func_ln);
+    f = new Function("LN", func_ln);
     add(f);
-    f = new Function("LOG",           func_logn);
+    f = new Function("LOG", func_logn);
     f->setParamCount(1, 2);
     add(f);
-    f = new Function("LOG2",          func_log2);
+    f = new Function("LOG2", func_log2);
     add(f);
-    f = new Function("LOG10",         func_log10);
+    f = new Function("LOG10", func_log10);
     add(f);
-    f = new Function("LOGN",          func_logn);
+    f = new Function("LOGN", func_logn);
     f->setParamCount(2);
     add(f);
-    f = new Function("MOD",           func_mod);
+    f = new Function("MOD", func_mod);
     f->setParamCount(2);
     add(f);
-    f = new Function("MROUND",        func_mround);
+    f = new Function("MROUND", func_mround);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMROUND");
     f->setParamCount(2);
     add(f);
-    f = new Function("MULTINOMIAL",   func_multinomial);
+    f = new Function("MULTINOMIAL", func_multinomial);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMULTINOMIAL");
     f->setParamCount(1, -1);
     add(f);
-    f = new Function("ODD",           func_odd);
+    f = new Function("ODD", func_odd);
     add(f);
-    f = new Function("POW",         func_pow);
+    f = new Function("POW", func_pow);
     f->setParamCount(2);
     add(f);
-    f = new Function("POWER",         func_pow);
+    f = new Function("POWER", func_pow);
     f->setParamCount(2);
     add(f);
-    f = new Function("QUOTIENT",      func_quotient);
+    f = new Function("QUOTIENT", func_quotient);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETQUOTIENT");
     f->setParamCount(2);
     add(f);
-    f = new Function("RAND",          func_rand);
+    f = new Function("RAND", func_rand);
     f->setParamCount(0);
     add(f);
     f = new Function("RANDBERNOULLI", func_randbernoulli);
     add(f);
-    f = new Function("RANDBETWEEN",   func_randbetween);
+    f = new Function("RANDBETWEEN", func_randbetween);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETRANDBETWEEN");
     f->setParamCount(2);
     add(f);
-    f = new Function("RANDBINOM",     func_randbinom);
+    f = new Function("RANDBINOM", func_randbinom);
     f->setParamCount(2);
     add(f);
-    f = new Function("RANDEXP",       func_randexp);
+    f = new Function("RANDEXP", func_randexp);
     add(f);
-    f = new Function("RANDNEGBINOM",  func_randnegbinom);
+    f = new Function("RANDNEGBINOM", func_randnegbinom);
     f->setParamCount(2);
     add(f);
-    f = new Function("RANDNORM",      func_randnorm);
+    f = new Function("RANDNORM", func_randnorm);
     f->setParamCount(2);
     add(f);
-    f = new Function("RANDPOISSON",   func_randpoisson);
+    f = new Function("RANDPOISSON", func_randpoisson);
     add(f);
-    f = new Function("ROOTN",         func_rootn);
+    f = new Function("ROOTN", func_rootn);
     f->setParamCount(2);
     add(f);
-    f = new Function("ROUND",         func_round);
+    f = new Function("ROUND", func_round);
     f->setParamCount(1, 2);
     add(f);
-    f = new Function("ROUNDDOWN",     func_rounddown);
+    f = new Function("ROUNDDOWN", func_rounddown);
     f->setParamCount(1, 2);
     add(f);
-    f = new Function("ROUNDUP",       func_roundup);
+    f = new Function("ROUNDUP", func_roundup);
     f->setParamCount(1, 2);
     add(f);
-    f = new Function("SIGN",          func_sign);
+    f = new Function("SIGN", func_sign);
     add(f);
-    f = new Function("SQRT",          func_sqrt);
+    f = new Function("SQRT", func_sqrt);
     add(f);
-    f = new Function("SQRTPI",        func_sqrtpi);
+    f = new Function("SQRTPI", func_sqrtpi);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETSQRTPI");
     add(f);
-    f = new Function("TRUNC",         func_trunc);
+    f = new Function("TRUNC", func_trunc);
     f->setParamCount(1, 2);
     add(f);
 
     // functions that operate over arrays
-    f = new Function("COUNT",         func_count);
+    f = new Function("COUNT", func_count);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("COUNTA",        func_counta);
+    f = new Function("COUNTA", func_counta);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("COUNTBLANK",    func_countblank);
+    f = new Function("COUNTBLANK", func_countblank);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("COUNTIF",       func_countif);
+    f = new Function("COUNTIF", func_countif);
     f->setParamCount(2);
     f->setAcceptArray();
     f->setNeedsExtra(true);
     add(f);
-    f = new Function("COUNTIFS",         func_countifs);
+    f = new Function("COUNTIFS", func_countifs);
     f->setParamCount(2, -1);
     f->setAcceptArray();
     f->setNeedsExtra(true);
     add(f);
-    f = new Function("DIV",           func_div);
+    f = new Function("DIV", func_div);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("G_PRODUCT",     func_kproduct);  // Gnumeric compatibility
+    f = new Function("G_PRODUCT", func_kproduct); // Gnumeric compatibility
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("GCD",           func_gcd);
+    f = new Function("GCD", func_gcd);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETGCD");
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("KPRODUCT",      func_kproduct);
+    f = new Function("KPRODUCT", func_kproduct);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("LCM",           func_lcm);
+    f = new Function("LCM", func_lcm);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETLCM");
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("MAX",           func_max);
+    f = new Function("MAX", func_max);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("MAXA",          func_maxa);
+    f = new Function("MAXA", func_maxa);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("MDETERM",          func_mdeterm);
+    f = new Function("MDETERM", func_mdeterm);
     f->setParamCount(1);
     f->setAcceptArray();
     add(f);
-    f = new Function("MIN",           func_min);
+    f = new Function("MIN", func_min);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("MINA",          func_mina);
+    f = new Function("MINA", func_mina);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("MINVERSE",         func_minverse);
+    f = new Function("MINVERSE", func_minverse);
     f->setParamCount(1);
     f->setAcceptArray();
     add(f);
-    f = new Function("MMULT",          func_mmult);
+    f = new Function("MMULT", func_mmult);
     f->setParamCount(2);
     f->setAcceptArray();
     add(f);
-    f = new Function("MULTIPLY",      func_product);   // same as PRODUCT
+    f = new Function("MULTIPLY", func_product); // same as PRODUCT
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("MUNIT",         func_munit);
+    f = new Function("MUNIT", func_munit);
     f->setParamCount(1);
     add(f);
-    f = new Function("PRODUCT",       func_product);
+    f = new Function("PRODUCT", func_product);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("SERIESSUM",     func_seriessum);
+    f = new Function("SERIESSUM", func_seriessum);
     f->setParamCount(3, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("SUM",           func_sum);
+    f = new Function("SUM", func_sum);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("SUMA",          func_suma);
+    f = new Function("SUMA", func_suma);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("SUBTOTAL",      func_subtotal);
+    f = new Function("SUBTOTAL", func_subtotal);
     f->setParamCount(2);
     f->setAcceptArray();
     f->setNeedsExtra(true);
     add(f);
-    f = new Function("SUMIF",         func_sumif);
+    f = new Function("SUMIF", func_sumif);
     f->setParamCount(2, 3);
     f->setAcceptArray();
     f->setNeedsExtra(true);
     add(f);
-    f = new Function("SUMIFS",         func_sumifs);
+    f = new Function("SUMIFS", func_sumifs);
     f->setParamCount(3, -1);
     f->setAcceptArray();
     f->setNeedsExtra(true);
     add(f);
-    f = new Function("SUMSQ",         func_sumsq);
+    f = new Function("SUMSQ", func_sumsq);
     f->setParamCount(1, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("TRANSPOSE",     func_transpose);
+    f = new Function("TRANSPOSE", func_transpose);
     f->setParamCount(1);
     f->setAcceptArray();
     add(f);
@@ -354,7 +350,6 @@ QString MathModule::descriptionFileName() const
 {
     return QString("math.xml");
 }
-
 
 // Function: SQRT
 Value func_sqrt(valVector args, ValueCalc *calc, FuncExtra *)
@@ -416,7 +411,7 @@ Value func_ceiling(valVector args, ValueCalc *calc, FuncExtra *)
         res = args[1];
     else
         res = calc->gequal(number, Value(0.0)) ? Value(1.0) : Value(-1.0);
-    bool mode = (args.count() >= 3) ? calc->isZero (args[2]) : true;
+    bool mode = (args.count() >= 3) ? calc->isZero(args[2]) : true;
 
     // short-circuit, and allow CEILING(0;0) to give 0 (which is correct)
     // instead of DIV0 error
@@ -433,11 +428,11 @@ Value func_ceiling(valVector args, ValueCalc *calc, FuncExtra *)
     Value rud = calc->roundDown(d);
     if (calc->approxEqual(rud, d))
         d = calc->mul(rud, res);
-    else
-    {
+    else {
         // positive number or mode is 0 - round up
-        if ((!mode) || calc->gequal (number, Value(0))) rud = calc->roundUp(d);
-        d = calc->mul (rud, res);
+        if ((!mode) || calc->gequal(number, Value(0)))
+            rud = calc->roundUp(d);
+        d = calc->mul(rud, res);
     }
 
     return d;
@@ -485,7 +480,7 @@ Value func_gamma(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ln
 Value func_ln(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if ((args [0].isNumber() == false) || args[0].asFloat() <= 0)
+    if ((args[0].isNumber() == false) || args[0].asFloat() <= 0)
         return Value::errorNUM();
     return calc->ln(args[0]);
 }
@@ -493,22 +488,22 @@ Value func_ln(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: LOGn
 Value func_logn(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args [0].isError())
-        return args [0];
-    if (args [0].isEmpty())
+    if (args[0].isError())
+        return args[0];
+    if (args[0].isEmpty())
         return Value::errorNUM();
-    if (args [0].isNumber() == false)
+    if (args[0].isNumber() == false)
         return Value::errorVALUE();
     if (args[0].asFloat() <= 0)
         return Value::errorNUM();
     if (args.count() == 2) {
-        if (args [1].isError())
-            return args [1];
-        if (args [1].isEmpty())
+        if (args[1].isError())
+            return args[1];
+        if (args[1].isEmpty())
             return Value::errorNUM();
-        if (args [1].isNumber() == false)
+        if (args[1].isNumber() == false)
             return Value::errorVALUE();
-        if (args [1].asFloat() <= 0)
+        if (args[1].asFloat() <= 0)
             return Value::errorNUM();
         return calc->log(args[0], args[1]);
     } else
@@ -524,9 +519,9 @@ Value func_log2(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: LOG10
 Value func_log10(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args [0].isError())
-        return args [0];
-    if ((args [0].isNumber() == false) || (args[0].asFloat() <= 0))
+    if (args[0].isError())
+        return args[0];
+    if ((args[0].isNumber() == false) || (args[0].asFloat() <= 0))
         return Value::errorNUM();
     return calc->log(args[0]);
 }
@@ -559,20 +554,20 @@ Value func_sumif(valVector args, ValueCalc *calc, FuncExtra *e)
     }
 }
 
-//Function: SUMIFS
+// Function: SUMIFS
 Value func_sumifs(valVector args, ValueCalc *calc, FuncExtra *e)
 {
-    int lim = (int) (args.count()-1)/2;
+    int lim = (int)(args.count() - 1) / 2;
 
     QList<Value> c_Range;
     QStringList condition;
     QList<Condition> cond;
 
-    c_Range.append(args.value(0));           //first element - range to be operated on
+    c_Range.append(args.value(0)); // first element - range to be operated on
 
     for (int i = 1; i < args.count(); i += 2) {
         c_Range.append(args[i]);
-        condition.append(calc->conv()->asString(args[i+1]).asString());
+        condition.append(calc->conv()->asString(args[i + 1]).asString());
         Condition c;
         calc->getCond(c, Value(condition.last()));
         cond.append(c);
@@ -600,8 +595,7 @@ Value func_seriessum(valVector args, ValueCalc *calc, FuncExtra *)
     double res = 0.0;
 
     if (fX != 0.0) {
-
-        for (unsigned int i = 0 ; i < args[3].count(); i++) {
+        for (unsigned int i = 0; i < args[3].count(); i++) {
             res += args[3].element(i).asFloat() * pow(fX, fN);
             fN += fM;
         }
@@ -685,7 +679,6 @@ Value func_quotient(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(res);
 }
 
-
 // Function: eps
 Value func_eps(valVector, ValueCalc *calc, FuncExtra *)
 {
@@ -702,8 +695,8 @@ Value func_randbinom(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // this function will not support arbitrary precision
 
-    double d  = numToDouble(calc->conv()->toFloat(args[0]));
-    int    tr = calc->conv()->toInteger(args[1]);
+    double d = numToDouble(calc->conv()->toFloat(args[0]));
+    int tr = calc->conv()->toInteger(args[1]);
 
     if (d < 0 || d > 1)
         return Value::errorVALUE();
@@ -713,7 +706,7 @@ Value func_randbinom(valVector args, ValueCalc *calc, FuncExtra *)
 
     // taken from gnumeric
     double x = pow(1 - d, tr);
-    double r = (double) rand() / (RAND_MAX + 1.0);
+    double r = (double)rand() / (RAND_MAX + 1.0);
     double t = x;
     int i = 0;
 
@@ -730,8 +723,8 @@ Value func_randnegbinom(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // this function will not support arbitrary precision
 
-    double d  = numToDouble(calc->conv()->toFloat(args[0]));
-    int    f = calc->conv()->toInteger(args[1]);
+    double d = numToDouble(calc->conv()->toFloat(args[0]));
+    int f = calc->conv()->toInteger(args[1]);
 
     if (d < 0 || d > 1)
         return Value::errorVALUE();
@@ -739,15 +732,14 @@ Value func_randnegbinom(valVector args, ValueCalc *calc, FuncExtra *)
     if (f < 0)
         return Value::errorVALUE();
 
-
     // taken from Gnumeric
     double x = pow(d, f);
-    double r = (double) rand() / (RAND_MAX + 1.0);
+    double r = (double)rand() / (RAND_MAX + 1.0);
     double t = x;
     int i = 0;
 
     while (r > t) {
-        x *= (((f + i) * (1 - d)) / (1 + i)) ;
+        x *= (((f + i) * (1 - d)) / (1 + i));
         i++;
         t += x;
     }
@@ -766,8 +758,8 @@ Value func_randnorm(valVector args, ValueCalc *calc, FuncExtra *)
     Value mu = args[0];
     Value sigma = args[1];
 
-    //using polar form of the Box-Muller transformation
-    //refer to http://www.taygeta.com/random/gaussian.html for more info
+    // using polar form of the Box-Muller transformation
+    // refer to http://www.taygeta.com/random/gaussian.html for more info
 
     Value x1, x2, w;
     do {
@@ -777,13 +769,13 @@ Value func_randnorm(valVector args, ValueCalc *calc, FuncExtra *)
         x1 = calc->sub(x1, 1);
         x1 = calc->sub(x2, 1);
         w = calc->add(calc->sqr(x1), calc->sqr(x2));
-    } while (calc->gequal(w, Value(1.0)));    // w >= 1.0
+    } while (calc->gequal(w, Value(1.0))); // w >= 1.0
 
-    //sqrt ((-2.0 * log (w)) / w) :
+    // sqrt ((-2.0 * log (w)) / w) :
     w = calc->sqrt(calc->div(calc->mul(Value(-2.0), calc->ln(w)), w));
     Value res = calc->mul(x1, w);
 
-    res = calc->add(calc->mul(res, sigma), mu);    // res*sigma + mu
+    res = calc->add(calc->mul(res, sigma), mu); // res*sigma + mu
     return res;
 }
 
@@ -793,14 +785,14 @@ Value func_randpoisson(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
 
     // taken from Gnumeric...
-    Value x = calc->exp(calc->mul(Value(-1), args[0]));     // e^(-A)
+    Value x = calc->exp(calc->mul(Value(-1), args[0])); // e^(-A)
     Value r = calc->random();
     Value t = x;
     int i = 0;
 
-    while (calc->greater(r, t)) {    // r > t
-        x = calc->mul(x, calc->div(args[0], i + 1));    // x *= (A/(i+1))
-        t = calc->add(t, x);     //t += x
+    while (calc->greater(r, t)) { // r > t
+        x = calc->mul(x, calc->div(args[0], i + 1)); // x *= (A/(i+1))
+        t = calc->add(t, x); // t += x
         i++;
     }
 
@@ -885,8 +877,7 @@ Value func_mround(valVector args, ValueCalc *calc, FuncExtra *)
     Value m = args[1];
 
     // signs must be the same
-    if ((calc->greater(d, Value(0)) && calc->lower(m, Value(0)))
-            || (calc->lower(d, Value(0)) && calc->greater(m, Value(0))))
+    if ((calc->greater(d, Value(0)) && calc->lower(m, Value(0))) || (calc->lower(d, Value(0)) && calc->greater(m, Value(0))))
         return Value::errorVALUE();
 
     int sign = 1;
@@ -902,9 +893,9 @@ Value func_mround(valVector args, ValueCalc *calc, FuncExtra *)
     Value div = calc->sub(d, mod);
 
     Value result = div;
-    if (calc->gequal(mod, calc->div(m, Value(2))))  // mod >= m/2
-        result = calc->add(result, m);      // result += m
-    result = calc->mul(result, sign);     // add the sign
+    if (calc->gequal(mod, calc->div(m, Value(2)))) // mod >= m/2
+        result = calc->add(result, m); // result += m
+    result = calc->mul(result, sign); // add the sign
 
     return result;
 }
@@ -978,11 +969,13 @@ Value func_trunc(valVector args, ValueCalc *calc, FuncExtra *)
     Value val = args[0];
 
     bool negative = (calc->sign(val) < 0);
-    if (negative) val = calc->abs(val);
+    if (negative)
+        val = calc->abs(val);
 
     Value digits = (args.count() == 2) ? args[1] : Value(0);
     Value res = calc->roundDown(val, digits);
-    if (negative) res = calc->mul(res, -1);
+    if (negative)
+        res = calc->mul(res, -1);
     return res;
 }
 
@@ -1038,7 +1031,7 @@ Value func_countifs(valVector args, ValueCalc *calc, FuncExtra *e)
     if ((e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1))
         return Value::errorNA();
 
-    int lim = (int) (args.count()-1)/2; 
+    int lim = (int)(args.count() - 1) / 2;
 
     QList<Value> c_Range;
     QStringList condition;
@@ -1046,7 +1039,7 @@ Value func_countifs(valVector args, ValueCalc *calc, FuncExtra *e)
 
     for (int i = 0; i < args.count(); i += 2) {
         c_Range.append(args[i]);
-        condition.append(calc->conv()->asString(args[i+1]).asString());
+        condition.append(calc->conv()->asString(args[i + 1]).asString());
         Condition c;
         calc->getCond(c, Value(condition.last()));
         cond.append(c);
@@ -1156,7 +1149,7 @@ Value func_lcm(valVector args, ValueCalc *calc, FuncExtra *)
     return result;
 }
 
-static Eigen::MatrixXd convert(const Value& matrix, ValueCalc *calc)
+static Eigen::MatrixXd convert(const Value &matrix, ValueCalc *calc)
 {
     const int rows = matrix.rows(), cols = matrix.columns();
     Eigen::MatrixXd eMatrix(rows, cols);
@@ -1168,7 +1161,7 @@ static Eigen::MatrixXd convert(const Value& matrix, ValueCalc *calc)
     return eMatrix;
 }
 
-static Value convert(const Eigen::MatrixXd& eMatrix)
+static Value convert(const Eigen::MatrixXd &eMatrix)
 {
     const int rows = eMatrix.rows(), cols = eMatrix.cols();
     Value matrix(Value::Array);
@@ -1181,7 +1174,7 @@ static Value convert(const Eigen::MatrixXd& eMatrix)
 }
 
 // Function: MDETERM
-Value func_mdeterm(valVector args, ValueCalc* calc, FuncExtra*)
+Value func_mdeterm(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value matrix = args[0];
     if (matrix.columns() != matrix.rows() || matrix.rows() < 1)
@@ -1193,7 +1186,7 @@ Value func_mdeterm(valVector args, ValueCalc* calc, FuncExtra*)
 }
 
 // Function: MINVERSE
-Value func_minverse(valVector args, ValueCalc* calc, FuncExtra*)
+Value func_minverse(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value matrix = args[0];
     if (matrix.columns() != matrix.rows() || matrix.rows() < 1)
@@ -1214,14 +1207,14 @@ Value func_mmult(valVector args, ValueCalc *calc, FuncExtra *)
     const Eigen::MatrixXd eMatrix1 = convert(args[0], calc);
     const Eigen::MatrixXd eMatrix2 = convert(args[1], calc);
 
-    if (eMatrix1.cols() != eMatrix2.rows())    // row/column counts must match
+    if (eMatrix1.cols() != eMatrix2.rows()) // row/column counts must match
         return Value::errorVALUE();
 
     return convert(eMatrix1 * eMatrix2);
 }
 
 // Function: MUNIT
-Value func_munit(valVector args, ValueCalc* calc, FuncExtra*)
+Value func_munit(valVector args, ValueCalc *calc, FuncExtra *)
 {
     const int dim = calc->conv()->asInteger(args[0]).asInteger();
     if (dim < 1)
@@ -1251,7 +1244,7 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
 
     // exclude manually hidden rows. http://tools.oasis-open.org/issues/browse/OFFICE-2030
     bool excludeHiddenRows = false;
-    if(function > 100) {
+    if (function > 100) {
         excludeHiddenRows = true;
         function = function % 100; // translate e.g. 106 to 6.
     }
@@ -1263,7 +1256,7 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
             const bool setAllEmpty = excludeHiddenRows && e->sheet->rowIsHidden(r);
             for (int c = c1; c <= c2; ++c) {
                 // put an empty value to all cells in a hidden row
-                if(setAllEmpty) {
+                if (setAllEmpty) {
                     range.setElement(c - c1, r - r1, empty);
                     continue;
                 }
@@ -1309,14 +1302,16 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
         break;
     case 10: // Var
         f = FunctionRepository::self()->function("VAR");
-        if (!f) return Value::errorVALUE();
+        if (!f)
+            return Value::errorVALUE();
         a.resize(1);
         a[0] = range;
         res = f->exec(a, calc, 0);
         break;
     case 11: // VarP
         f = FunctionRepository::self()->function("VARP");
-        if (!f) return Value::errorVALUE();
+        if (!f)
+            return Value::errorVALUE();
         a.resize(1);
         a[0] = range;
         res = f->exec(a, calc, 0);

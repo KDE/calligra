@@ -43,8 +43,7 @@ class FLAKE_EXPORT KoSnapGuide
 {
 public:
     /// the different possible snap Strategies
-    enum Strategy
-    {
+    enum Strategy {
         OrthogonalSnapping = 1,
         NodeSnapping = 2,
         ExtensionSnapping = 4,
@@ -106,23 +105,23 @@ public:
     KoCanvasBase *canvas() const;
 
     /// Sets a list of path points to ignore
-    void setIgnoredPathPoints(const QList<KoPathPoint*> &ignoredPoints);
+    void setIgnoredPathPoints(const QList<KoPathPoint *> &ignoredPoints);
 
     /// Returns list of ignored points
-    QList<KoPathPoint*> ignoredPathPoints() const;
+    QList<KoPathPoint *> ignoredPathPoints() const;
 
     /// Sets list of ignored shapes
-    void setIgnoredShapes(const QList<KoShape*> &ignoredShapes);
+    void setIgnoredShapes(const QList<KoShape *> &ignoredShapes);
 
     /// Returns list of ignored shapes
-    QList<KoShape*> ignoredShapes() const;
+    QList<KoShape *> ignoredShapes() const;
 
     /// Resets the snap guide
     void reset();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoSnapGuide::Strategies)

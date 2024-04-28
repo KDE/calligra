@@ -21,9 +21,9 @@
 #ifndef KPRANIMATIONSTEP_H
 #define KPRANIMATIONSTEP_H
 
-#include <QSequentialAnimationGroup>
 #include "KPrAnimationData.h"
 #include "stage_export.h"
+#include <QSequentialAnimationGroup>
 
 class KoPASavingContext;
 
@@ -35,7 +35,7 @@ public:
 
     void init(KPrAnimationCache *animationCache, int step) override;
 
-    virtual bool saveOdf(KoPASavingContext & paContext) const;
+    virtual bool saveOdf(KoPASavingContext &paContext) const;
     virtual void deactivate();
 };
 

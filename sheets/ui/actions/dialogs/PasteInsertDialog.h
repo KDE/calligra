@@ -27,12 +27,13 @@ class PasteInsertDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    PasteInsertDialog(QWidget* parent);
+    PasteInsertDialog(QWidget *parent);
 
     bool checkedRight() const;
     bool checkedBottom() const;
 public Q_SLOTS:
     void slotOk();
+
 private:
     QRadioButton *rb1;
     QRadioButton *rb2;

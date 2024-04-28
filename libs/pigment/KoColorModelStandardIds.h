@@ -2,7 +2,7 @@
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef _KO_COLOR_MODEL_STANDARD_IDS_H_
 #define _KO_COLOR_MODEL_STANDARD_IDS_H_

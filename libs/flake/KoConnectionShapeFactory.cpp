@@ -12,14 +12,14 @@
 #include "KoConnectionShape.h"
 #include "KoConnectionShapeConfigWidget.h"
 
-#include <KoXmlNS.h>
-#include <KoIcon.h>
 #include <KLocalizedString>
-#include <KoShapeStroke.h>
+#include <KoIcon.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeStroke.h>
+#include <KoXmlNS.h>
 
 KoConnectionShapeFactory::KoConnectionShapeFactory()
-        : KoShapeFactoryBase(KOCONNECTIONSHAPEID, i18n("Tie"))
+    : KoShapeFactoryBase(KOCONNECTIONSHAPEID, i18n("Tie"))
 {
     setToolTip(i18n("A connection between two other shapes"));
     setIconName(koIconName("x-shape-connection"));
@@ -28,23 +28,23 @@ KoConnectionShapeFactory::KoConnectionShapeFactory()
     setHidden(true); // Don't show this shape in collections. Only ConnectionTool should create
 }
 
-KoShape* KoConnectionShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
+KoShape *KoConnectionShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
-    KoConnectionShape * shape = new KoConnectionShape();
+    KoConnectionShape *shape = new KoConnectionShape();
     shape->setStroke(new KoShapeStroke());
     shape->setShapeId(KoPathShapeId);
     return shape;
 }
 
-bool KoConnectionShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool KoConnectionShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
     return (e.localName() == "connector" && e.namespaceURI() == KoXmlNS::draw);
 }
 
-QList<KoShapeConfigWidgetBase*> KoConnectionShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> KoConnectionShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> panels;
+    QList<KoShapeConfigWidgetBase *> panels;
     panels.append(new KoConnectionShapeConfigWidget());
     return panels;
 }

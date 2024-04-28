@@ -12,11 +12,11 @@
 
 namespace Phonon
 {
-    class MediaObject;
-    class VideoWidget;
-    class AudioOutput;
-    class SeekSlider;
-    class VolumeSlider;
+class MediaObject;
+class VideoWidget;
+class AudioOutput;
+class SeekSlider;
+class VolumeSlider;
 }
 
 class QUrl;
@@ -46,9 +46,8 @@ protected Q_SLOTS:
     void updatePlaybackTime(qint64 currentTime);
 
 protected:
-    void keyPressEvent(QKeyEvent *event) override; ///reimplemented
-    void mousePressEvent(QMouseEvent *event) override; ///reimplemented
-
+    void keyPressEvent(QKeyEvent *event) override; /// reimplemented
+    void mousePressEvent(QMouseEvent *event) override; /// reimplemented
 
     Phonon::MediaObject *m_mediaObject;
     Phonon::VideoWidget *m_videoWidget;

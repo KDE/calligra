@@ -15,7 +15,7 @@ class KoToolBoxButton : public QToolButton
 {
     Q_OBJECT
 public:
-    explicit KoToolBoxButton(KoToolAction *toolAction, QWidget * parent);
+    explicit KoToolBoxButton(KoToolAction *toolAction, QWidget *parent);
     void setHighlightColor();
 
 private Q_SLOTS:

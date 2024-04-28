@@ -8,22 +8,22 @@
 #include "BibliographyTemplate.h"
 
 #include <BibliographyGenerator.h>
+#include <KLocalizedString>
 #include <KoBibliographyInfo.h>
 #include <KoOdfBibliographyConfiguration.h>
-#include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
-#include <KLocalizedString>
+#include <KoStyleManager.h>
 
-BibliographyTemplate::BibliographyTemplate(KoStyleManager *manager):
-    m_manager(manager)
+BibliographyTemplate::BibliographyTemplate(KoStyleManager *manager)
+    : m_manager(manager)
 {
     Q_ASSERT(manager);
 }
 
 QList<KoBibliographyInfo *> BibliographyTemplate::templates()
 {
-    //if you are adding your own custom styles specifically for bibliography, add it as an unused style in KoStyleManager
-    // when the bibliography is used the style will be automatically move to the usedStyle section
+    // if you are adding your own custom styles specifically for bibliography, add it as an unused style in KoStyleManager
+    //  when the bibliography is used the style will be automatically move to the usedStyle section
 
     QList<KoBibliographyInfo *> predefinedTemplates;
     KoBibliographyInfo *firstTemplate = new KoBibliographyInfo();
@@ -32,7 +32,7 @@ QList<KoBibliographyInfo *> BibliographyTemplate::templates()
     firstTemplate->m_indexTitleTemplate.styleId = m_manager->defaultBibliographyTitleStyle()->styleId();
     firstTemplate->m_indexTitleTemplate.styleName = m_manager->defaultBibliographyTitleStyle()->name();
 
-    foreach(const QString &bibType, KoOdfBibliographyConfiguration::bibTypes) {
+    foreach (const QString &bibType, KoOdfBibliographyConfiguration::bibTypes) {
         firstTemplate->m_entryTemplate[bibType].styleId = m_manager->defaultBibliographyEntryStyle(bibType)->styleId();
         firstTemplate->m_entryTemplate[bibType].styleName = m_manager->defaultBibliographyEntryStyle(bibType)->name();
     }
@@ -44,7 +44,7 @@ QList<KoBibliographyInfo *> BibliographyTemplate::templates()
     secondTemplate->m_indexTitleTemplate.styleId = m_manager->defaultBibliographyTitleStyle()->styleId();
     secondTemplate->m_indexTitleTemplate.styleName = m_manager->defaultBibliographyTitleStyle()->name();
 
-    foreach(const QString &bibType, KoOdfBibliographyConfiguration::bibTypes) {
+    foreach (const QString &bibType, KoOdfBibliographyConfiguration::bibTypes) {
         secondTemplate->m_entryTemplate[bibType].styleId = m_manager->defaultBibliographyEntryStyle(bibType)->styleId();
         secondTemplate->m_entryTemplate[bibType].styleName = m_manager->defaultBibliographyEntryStyle(bibType)->name();
     }
@@ -61,7 +61,7 @@ void BibliographyTemplate::moveTemplateToUsed(KoBibliographyInfo *info)
         m_manager->moveToUsedStyles(info->m_indexTitleTemplate.styleId);
     }
 
-    foreach(const QString &bibType, KoOdfBibliographyConfiguration::bibTypes) {
+    foreach (const QString &bibType, KoOdfBibliographyConfiguration::bibTypes) {
         if (m_manager->unusedStyle(info->m_entryTemplate[bibType].styleId)) {
             m_manager->moveToUsedStyles(info->m_entryTemplate[bibType].styleId);
         }

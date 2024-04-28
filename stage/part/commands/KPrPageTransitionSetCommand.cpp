@@ -24,20 +24,20 @@
 #include "KPrPage.h"
 
 KPrPageTransitionSetCommand::KPrPageTransitionSetCommand(KoPAPageBase *page, const KPrPageTransition &transition, KUndo2Command *parent)
-: KUndo2Command(parent)
-, m_page( page )
-, m_new(transition)
+    : KUndo2Command(parent)
+    , m_page(page)
+    , m_new(transition)
 {
-    m_old = KPrPage::pageData( m_page )->pageTransition();
+    m_old = KPrPage::pageData(m_page)->pageTransition();
     setText(kundo2_i18n("Modify Slide Transition"));
 }
 
 void KPrPageTransitionSetCommand::redo()
 {
-    KPrPage::pageData( m_page )->setPageTransition(m_new);
+    KPrPage::pageData(m_page)->setPageTransition(m_new);
 }
 
 void KPrPageTransitionSetCommand::undo()
 {
-    KPrPage::pageData( m_page )->setPageTransition(m_old);
+    KPrPage::pageData(m_page)->setPageTransition(m_old);
 }

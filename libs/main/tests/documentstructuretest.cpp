@@ -10,10 +10,10 @@
 
 #include <KoDocument.h>
 #include <KoDocumentInfo.h>
-#include <KoStore.h>
-#include <KoXmlReader.h>
 #include <KoOdfReadStore.h>
+#include <KoStore.h>
 #include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
 // May the testing begin
 DocumentStructureTest::DocumentStructureTest()
@@ -50,12 +50,12 @@ static KoDocumentInfo *loadDocumentInfo(const QString &odt)
     KoDocumentInfo *documentInfo = new KoDocumentInfo;
     QString error;
     if (!odfReadStore.loadAndParse("meta.xml", metaDoc, error)) {
-	delete store;
+        delete store;
         delete documentInfo;
         return 0;
     }
     if (!documentInfo->loadOasis(metaDoc)) {
-	delete store;
+        delete store;
         delete documentInfo;
         return 0;
     }
@@ -131,7 +131,6 @@ void DocumentStructureTest::singleDocumentContents()
     // Should probably test if the document loads fine, but then the test would then depend
     // on kotext. See libs/kotext/opendocument/tests/TestLoading.cpp::documentFromOdt.
     delete documentInfo;
-
 }
 
 int main(int argc, char *argv[])

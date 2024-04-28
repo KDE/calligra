@@ -10,8 +10,8 @@
 #ifndef KPRDECLARATIONS_H
 #define KPRDECLARATIONS_H
 
-#include <QString>
 #include <QHash>
+#include <QString>
 #include <QVariant>
 
 class KoXmlElement;
@@ -24,11 +24,7 @@ public:
     /**
      * Presentation declaration type
      */
-    enum Type {
-        Footer,
-        Header,
-        DateTime
-    };
+    enum Type { Footer, Header, DateTime };
 
     /**
      * Constructor
@@ -60,7 +56,7 @@ public:
     const QString declaration(Type type, const QString &key);
 
 private:
-    QHash<Type, QHash<QString /*key*/, QVariant /*data*/> > m_declarations;
+    QHash<Type, QHash<QString /*key*/, QVariant /*data*/>> m_declarations;
 };
 
 #endif /* KPRDECLARATIONS_H */

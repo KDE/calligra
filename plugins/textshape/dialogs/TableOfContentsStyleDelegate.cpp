@@ -10,8 +10,8 @@
 
 #include <QSpinBox>
 
-TableOfContentsStyleDelegate::TableOfContentsStyleDelegate():
-    QStyledItemDelegate()
+TableOfContentsStyleDelegate::TableOfContentsStyleDelegate()
+    : QStyledItemDelegate()
 {
 }
 
@@ -19,12 +19,10 @@ QSize TableOfContentsStyleDelegate::sizeHint(const QStyleOptionViewItem &option,
 {
     Q_UNUSED(option);
     Q_UNUSED(index);
-    return QSize(250,48);
+    return QSize(250, 48);
 }
 
-QWidget *TableOfContentsStyleDelegate::createEditor(QWidget *parent,
-                                                    const QStyleOptionViewItem &/* option */,
-                                                    const QModelIndex &/* index */) const
+QWidget *TableOfContentsStyleDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem & /* option */, const QModelIndex & /* index */) const
 {
     QSpinBox *editor = new QSpinBox(parent);
     editor->setMinimum(0);
@@ -33,29 +31,26 @@ QWidget *TableOfContentsStyleDelegate::createEditor(QWidget *parent,
     return editor;
 }
 
-void TableOfContentsStyleDelegate::setEditorData(QWidget *editor,
-                                                 const QModelIndex &index) const
+void TableOfContentsStyleDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
     int value = index.model()->data(index, Qt::EditRole).toInt();
-    QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
+    QSpinBox *spinBox = static_cast<QSpinBox *>(editor);
     spinBox->setMinimum(0);
     spinBox->setMaximum(10);
     spinBox->setSpecialValueText(i18n("Disabled"));
     spinBox->setValue(value);
 }
 
-void TableOfContentsStyleDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
-                                                const QModelIndex &index) const
+void TableOfContentsStyleDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
-    QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
+    QSpinBox *spinBox = static_cast<QSpinBox *>(editor);
     spinBox->interpretText();
     int value = spinBox->value();
 
     model->setData(index, value, Qt::EditRole);
 }
 
-void TableOfContentsStyleDelegate::updateEditorGeometry(QWidget *editor,
-                                                        const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+void TableOfContentsStyleDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex & /* index */) const
 {
     editor->setGeometry(option.rect);
 }

@@ -17,10 +17,13 @@ class EnhancedPathShapeFactory : public KoShapeFactoryBase
 public:
     /// constructor
     EnhancedPathShapeFactory();
-    ~EnhancedPathShapeFactory() override {}
+    ~EnhancedPathShapeFactory() override
+    {
+    }
     KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const override;
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
+
 private:
     void addCross();
     void addArrow();
@@ -28,11 +31,9 @@ private:
     void addCircularArrow();
     void addGearhead();
 
-    typedef QMap<QString, QVariant > ComplexType;
+    typedef QMap<QString, QVariant> ComplexType;
     typedef QList<QVariant> ListType;
-    KoProperties* dataToProperties(const QString &modifiers, const QStringList &commands,
-        const ListType &handles, const ComplexType &formulae) const;
-
+    KoProperties *dataToProperties(const QString &modifiers, const QStringList &commands, const ListType &handles, const ComplexType &formulae) const;
 };
 
 #endif // KOENHANCEDPATHSHAPEFACTORY_H

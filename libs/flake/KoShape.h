@@ -10,17 +10,17 @@
 #ifndef KOSHAPE_H
 #define KOSHAPE_H
 
-#include "KoFlake.h"
 #include "KoConnectionPoint.h"
+#include "KoFlake.h"
 
-#include <QSharedPointer>
-#include <QSet>
 #include <QMetaType>
+#include <QSet>
+#include <QSharedPointer>
 
-#include <KoXmlReaderForward.h>
 #include <KoShapeBackground.h>
+#include <KoXmlReaderForward.h>
 
-//#include <KoSnapData.h>
+// #include <KoSnapData.h>
 
 #include "flake_export.h"
 
@@ -47,7 +47,6 @@ class KoShapePaintingContext;
 class KoShapeAnchor;
 class KoBorder;
 struct KoInsets;
-
 
 /**
  *
@@ -99,11 +98,11 @@ public:
     enum ChangeType {
         PositionChanged, ///< used after a setPosition()
         RotationChanged, ///< used after a setRotation()
-        ScaleChanged,   ///< used after a scale()
-        ShearChanged,   ///< used after a shear()
-        SizeChanged,    ///< used after a setSize()
-        GenericMatrixChange,    ///< used after the matrix was changed without knowing which property explicitly changed
-        ParentChanged,   ///< used after a setParent()
+        ScaleChanged, ///< used after a scale()
+        ShearChanged, ///< used after a shear()
+        SizeChanged, ///< used after a setSize()
+        GenericMatrixChange, ///< used after the matrix was changed without knowing which property explicitly changed
+        ParentChanged, ///< used after a setParent()
         CollisionDetected, ///< used when another shape moved in our boundingrect
         Deleted, ///< the shape was deleted
         StrokeChanged, ///< the shapes stroke has changed
@@ -123,39 +122,36 @@ public:
 
     /// The behavior text should do when intersecting this shape.
     enum TextRunAroundSide {
-        BiggestRunAroundSide,   ///< Run other text around the side that has the most space
-        LeftRunAroundSide,      ///< Run other text around the left side of the frame
-        RightRunAroundSide,     ///< Run other text around the right side of the frame
-        EnoughRunAroundSide,      ///< Run other text dynamically around both sides of the shape, provided there is sufficient space left
-        BothRunAroundSide,      ///< Run other text around both sides of the shape
-        NoRunAround,            ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
-        RunThrough              ///< The text will completely ignore the frame and layout as if it was not there
+        BiggestRunAroundSide, ///< Run other text around the side that has the most space
+        LeftRunAroundSide, ///< Run other text around the left side of the frame
+        RightRunAroundSide, ///< Run other text around the right side of the frame
+        EnoughRunAroundSide, ///< Run other text dynamically around both sides of the shape, provided there is sufficient space left
+        BothRunAroundSide, ///< Run other text around both sides of the shape
+        NoRunAround, ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
+        RunThrough ///< The text will completely ignore the frame and layout as if it was not there
     };
 
     /// The behavior text should do when intersecting this shape.
     enum TextRunAroundContour {
-        ContourBox,     /// Run other text around a bounding rect of the outline
-        ContourFull,   ///< Run other text around also on the inside
-        ContourOutside   ///< Run other text around only on the outside
+        ContourBox, /// Run other text around a bounding rect of the outline
+        ContourFull, ///< Run other text around also on the inside
+        ContourOutside ///< Run other text around only on the outside
     };
 
     /**
      * TODO
      */
-    enum RunThroughLevel {
-        Background,
-        Foreground
-    };
+    enum RunThroughLevel { Background, Foreground };
 
     /// Fine grained control of allowed user interactions
     enum AllowedInteraction {
-        MoveAllowed = 1,            ///< Moving the shape is allowed
-        ResizeAllowed = 2,          ///< Resizing the shape is allowed
-        ShearingAllowed = 4,        ///< Sharing the shape is allowed
-        RotationAllowed = 8,        ///< Rotating the shape is allowed
-        SelectionAllowed = 16,      ///< Selecting the shape is allowed
-        ContentChangeAllowed = 32,  ///< Editing the content is allowed
-        DeletionAllowed = 64        ///< Deleting the shape is allowed
+        MoveAllowed = 1, ///< Moving the shape is allowed
+        ResizeAllowed = 2, ///< Resizing the shape is allowed
+        ShearingAllowed = 4, ///< Sharing the shape is allowed
+        RotationAllowed = 8, ///< Rotating the shape is allowed
+        SelectionAllowed = 16, ///< Selecting the shape is allowed
+        ContentChangeAllowed = 32, ///< Editing the content is allowed
+        DeletionAllowed = 64 ///< Deleting the shape is allowed
     };
     Q_DECLARE_FLAGS(AllowedInteractions, AllowedInteraction)
     Q_FLAGS(AllowedInteractions)
@@ -190,7 +186,7 @@ public:
 
     /**
      * @brief Paint the shape's border
-     * This is a helper function that could be called from the paint() method of all shapes. 
+     * This is a helper function that could be called from the paint() method of all shapes.
      * @param painter used for painting the shape
      * @param converter to convert between internal and view coordinates.
      * @see applyConversion()
@@ -498,7 +494,6 @@ public:
      */
     qreal minimumHeight() const;
 
-
     /**
      * Set the background of the shape.
      * A shape background can be a plain color, a gradient, a pattern, be fully transparent
@@ -536,7 +531,7 @@ public:
      * Returns the shape level transparency.
      * @param recursive when true takes the parents transparency into account
      */
-    qreal transparency(bool recursive=false) const;
+    qreal transparency(bool recursive = false) const;
 
     /**
      * Retrieve the z-coordinate of this shape.
@@ -699,16 +694,16 @@ public:
         ChildZPassThrough ///< children are considered equal to this shape
     };
 
-   /**
-    * Returns if during compareShapeZIndex() how this shape portrays the values
-    * of its children. The default behaviour is to let this shape's z values take
-    * the place of its children values, so you get a parent/child relationship.
-    * The children are naturally still ordered relatively to their z values
-    *
-    * But for special cases (like Calligra's TextShape) it can be overloaded to return
-    * ChildZPassThrough which means the children keep their own z values
-    * @returns the z order policy of this shape
-    */
+    /**
+     * Returns if during compareShapeZIndex() how this shape portrays the values
+     * of its children. The default behaviour is to let this shape's z values take
+     * the place of its children values, so you get a parent/child relationship.
+     * The children are naturally still ordered relatively to their z values
+     *
+     * But for special cases (like Calligra's TextShape) it can be overloaded to return
+     * ChildZPassThrough which means the children keep their own z values
+     * @returns the z order policy of this shape
+     */
     virtual ChildZOrderPolicy childZOrderPolicy();
 
     /**
@@ -742,7 +737,7 @@ public:
      * Normally this would be the same as outline() if there is a fill (background) set on the
      * shape and empty if not.  However, a shape could reimplement this to return an outline
      * even if no fill is defined. A typical example of this would be the picture shape
-     * which has a picture but almost never a background. 
+     * which has a picture but almost never a background.
      *
      * @returns the outline of the shape in the form of a path.
      */
@@ -782,7 +777,7 @@ public:
     void setClipPath(KoClipPath *clipPath);
 
     /// Returns the currently set clip path or 0 if there is no clip path set
-    KoClipPath * clipPath() const;
+    KoClipPath *clipPath() const;
 
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will
@@ -1008,7 +1003,7 @@ public:
     bool hasDependee(KoShape *shape) const;
 
     /// Returns list of shapes depending on this shape
-    QList<KoShape*> dependees() const;
+    QList<KoShape *> dependees() const;
 
     /// Returns additional snap data the shape wants to have snapping to
     virtual KoSnapData snapData() const;
@@ -1090,19 +1085,19 @@ public:
      * Notice that if the set is non-empty 'this' shape is no longer looked at. You can choose
      * to add itself to the set too.
      */
-    QSet<KoShape*> toolDelegates() const;
+    QSet<KoShape *> toolDelegates() const;
 
     /**
      * Set the tool delegates.
      * @param delegates the new delegates.
      * @see toolDelegates()
      */
-    void setToolDelegates(const QSet<KoShape*> &delegates);
+    void setToolDelegates(const QSet<KoShape *> &delegates);
 
     /**
      * Return the hyperlink for this shape.
      */
-    QString hyperLink () const;
+    QString hyperLink() const;
 
     /**
      * Set hyperlink for this shape.
@@ -1155,17 +1150,17 @@ protected:
     /* ** loading saving helper methods */
     /// attributes from ODF 1.1 chapter 9.2.15 Common Drawing Shape Attributes
     enum OdfAttribute {
-        OdfTransformation = 1,       ///< Store transformation information
-        OdfSize = 2,                 ///< Store size information
-        OdfPosition = 8,             ///< Store position
+        OdfTransformation = 1, ///< Store transformation information
+        OdfSize = 2, ///< Store size information
+        OdfPosition = 8, ///< Store position
         OdfAdditionalAttributes = 4, ///< Store additional attributes of the shape
         OdfCommonChildElements = 16, ///< Event actions and connection points
-        OdfLayer = 64,               ///< Store layer name
-        OdfStyle = 128,              ///< Store the style
-        OdfId = 256,                 ///< Store the unique ID
-        OdfName = 512,               ///< Store the name of the shape
-        OdfZIndex = 1024,            ///< Store the z-index
-        OdfViewbox = 2048,           ///< Store the viewbox
+        OdfLayer = 64, ///< Store layer name
+        OdfStyle = 128, ///< Store the style
+        OdfId = 256, ///< Store the unique ID
+        OdfName = 512, ///< Store the name of the shape
+        OdfZIndex = 1024, ///< Store the z-index
+        OdfViewbox = 2048, ///< Store the viewbox
 
         /// A mask for all mandatory attributes
         OdfMandatories = OdfLayer | OdfStyle | OdfId | OdfName | OdfZIndex,

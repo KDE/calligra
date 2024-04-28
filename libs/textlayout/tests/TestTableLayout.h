@@ -25,7 +25,9 @@ class TestTableLayout : public QObject
 {
     Q_OBJECT
 public:
-    TestTableLayout() {}
+    TestTableLayout()
+    {
+    }
 
 private Q_SLOTS:
     void initTestCase();
@@ -74,10 +76,10 @@ private Q_SLOTS:
     void testColumnWidthRelative();
 
     /**
-      * Test fixed row height. The row is smaller then the text that is within the cells. Expected
-      * is that the resulting table will still match to the available space and won't be spread
-      * over multiple pages. This tests for bug #275409.
-      */
+     * Test fixed row height. The row is smaller then the text that is within the cells. Expected
+     * is that the resulting table will still match to the available space and won't be spread
+     * over multiple pages. This tests for bug #275409.
+     */
     void testRowHeightFixed();
 
     /**
@@ -108,8 +110,14 @@ private Q_SLOTS:
 
 private:
     QTextCursor setupTest();
-    void setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText, KoTableStyle* tableStyle = 0);
-    QTextTable *addTable(QTextCursor cursor, int rows, int columns, KoTableStyle* tableStyle = 0);
+    void setupTest(const QString &mergedText,
+                   const QString &topRightText,
+                   const QString &midRightText,
+                   const QString &bottomLeftText,
+                   const QString &bottomMidText,
+                   const QString &bottomRightText,
+                   KoTableStyle *tableStyle = 0);
+    QTextTable *addTable(QTextCursor cursor, int rows, int columns, KoTableStyle *tableStyle = 0);
 
 private:
     QTextDocument *m_doc;

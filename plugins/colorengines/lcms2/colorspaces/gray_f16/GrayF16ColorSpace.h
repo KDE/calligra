@@ -6,11 +6,11 @@
 #ifndef COLORSPACE_GRAYSCALE_F16_H_
 #define COLORSPACE_GRAYSCALE_F16_H_
 
+#include "LcmsColorSpace.h"
 #include <KLocalizedString>
 #include <KoColorModelStandardIds.h>
-#include "LcmsColorSpace.h"
 
-#define TYPE_GRAYA_HALF_FLT         (FLOAT_SH(1)|COLORSPACE_SH(PT_GRAY)|EXTRA_SH(1)|CHANNELS_SH(1)|BYTES_SH(2))
+#define TYPE_GRAYA_HALF_FLT (FLOAT_SH(1) | COLORSPACE_SH(PT_GRAY) | EXTRA_SH(1) | CHANNELS_SH(1) | BYTES_SH(2))
 
 struct KoGrayF16Traits;
 
@@ -38,12 +38,12 @@ public:
 
     void colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const override;
 
-    void colorFromXML(quint8* pixel, const QDomElement& elt) const override;
-    
+    void colorFromXML(quint8 *pixel, const QDomElement &elt) const override;
+
     void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const override;
-    QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
+    QVector<double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
     void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const override;
-    QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
+    QVector<double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
 
     static QString colorSpaceId()
     {

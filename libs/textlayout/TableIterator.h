@@ -6,8 +6,8 @@
 #ifndef TABLEITERATOR_H
 #define TABLEITERATOR_H
 
-#include <QVector>
 #include <QString>
+#include <QVector>
 
 class FrameIterator;
 class KoTextLayoutArea;
@@ -40,7 +40,7 @@ public:
     ~TableIterator();
 
     /// Compare this iterator to another.
-    bool operator ==(const TableIterator &other) const;
+    bool operator==(const TableIterator &other) const;
 
     /**
      * Returns a frame iterator that iterates over the frames in a given column.
@@ -62,7 +62,7 @@ public:
     /// Header row positions.
     QVector<qreal> headerRowPositions; // we will only fill those of header rows
     /// Rows of header cell areas.
-    QVector<QVector<KoTextLayoutArea *> > headerCellAreas;
+    QVector<QVector<KoTextLayoutArea *>> headerCellAreas;
     /// The name of the master-page that is used for this table.
     QString masterPageName;
 };

@@ -8,17 +8,15 @@
 #include "KoZoomMode.h"
 #include <KLocalizedString>
 
-const std::vector<std::optional<KLazyLocalizedString>> KoZoomMode::modes = {
-    kli18n("%1%"),
-    kli18n("Fit Page Width"),
-    kli18n("Fit Page"),
-    std::nullopt,
-    kli18n("Actual Pixels"),
-    std::nullopt,
-    std::nullopt,
-    std::nullopt,
-    kli18n("Fit Text Width")
-};
+const std::vector<std::optional<KLazyLocalizedString>> KoZoomMode::modes = {kli18n("%1%"),
+                                                                            kli18n("Fit Page Width"),
+                                                                            kli18n("Fit Page"),
+                                                                            std::nullopt,
+                                                                            kli18n("Actual Pixels"),
+                                                                            std::nullopt,
+                                                                            std::nullopt,
+                                                                            std::nullopt,
+                                                                            kli18n("Fit Text Width")};
 
 qreal KoZoomMode::minimumZoomValue = 0.2;
 qreal KoZoomMode::maximumZoomValue = 5.0;
@@ -29,18 +27,18 @@ QString KoZoomMode::toString(Mode mode)
     return m ? m->toString() : QString{};
 }
 
-KoZoomMode::Mode KoZoomMode::toMode(const QString& mode)
+KoZoomMode::Mode KoZoomMode::toMode(const QString &mode)
 {
-    if(mode == modes[ZOOM_WIDTH]->toString())
+    if (mode == modes[ZOOM_WIDTH]->toString())
         return ZOOM_WIDTH;
-    else if(mode == modes[ZOOM_PAGE]->toString())
+    else if (mode == modes[ZOOM_PAGE]->toString())
         return ZOOM_PAGE;
-    else if(mode == modes[ZOOM_PIXELS]->toString())
+    else if (mode == modes[ZOOM_PIXELS]->toString())
         return ZOOM_PIXELS;
-    else if(mode == modes[ZOOM_TEXT]->toString())
+    else if (mode == modes[ZOOM_TEXT]->toString())
         return ZOOM_TEXT;
     else
-       return ZOOM_CONSTANT;
+        return ZOOM_CONSTANT;
     // we return ZOOM_CONSTANT else because then we can pass '10%' or '15%'
     // or whatever, it's automatically converted. ZOOM_CONSTANT is
     // changeable, whereas all other zoom modes (non-constants) are normal

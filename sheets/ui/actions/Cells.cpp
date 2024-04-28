@@ -14,10 +14,7 @@
 
 #include <KLocalizedString>
 
-
-
 using namespace Calligra::Sheets;
-
 
 CellsInsert::CellsInsert(Actions *actions)
     : CellAction(actions, "insertCell", i18n("Insert Cells..."), koIcon("insertcell"), i18n("Insert a blank cell into the spreadsheet"))
@@ -27,10 +24,12 @@ CellsInsert::CellsInsert(Actions *actions)
 
 CellsInsert::~CellsInsert()
 {
-    if (m_dlg) delete m_dlg;
+    if (m_dlg)
+        delete m_dlg;
 }
 
-QAction *CellsInsert::createAction() {
+QAction *CellsInsert::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Insert Cells..."));
     return res;
@@ -43,18 +42,18 @@ void CellsInsert::execute(Selection *selection, Sheet *sheet, QWidget *canvasWid
     if (m_dlg->exec() == QDialog::Accepted) {
         AbstractRegionCommand *cmd = nullptr;
         if (m_dlg->moveRowsChecked()) {
-            ShiftManipulator* manipulator = new ShiftManipulator();
+            ShiftManipulator *manipulator = new ShiftManipulator();
             cmd = manipulator;
             manipulator->setDirection(ShiftManipulator::ShiftRight);
         } else if (m_dlg->moveColumnsChecked()) {
-            ShiftManipulator* manipulator = new ShiftManipulator();
+            ShiftManipulator *manipulator = new ShiftManipulator();
             cmd = manipulator;
             manipulator->setDirection(ShiftManipulator::ShiftBottom);
         } else if (m_dlg->insertRowsChecked()) {
-            InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+            InsertDeleteRowManipulator *manipulator = new InsertDeleteRowManipulator();
             cmd = manipulator;
         } else if (m_dlg->insertColumnsChecked()) {
-            InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+            InsertDeleteColumnManipulator *manipulator = new InsertDeleteColumnManipulator();
             cmd = manipulator;
         }
         if (cmd) {
@@ -62,13 +61,11 @@ void CellsInsert::execute(Selection *selection, Sheet *sheet, QWidget *canvasWid
             cmd->add(*selection);
             cmd->execute(selection->canvas());
         }
-    }    
+    }
 
     delete m_dlg;
     m_dlg = nullptr;
 }
-
-
 
 CellsRemove::CellsRemove(Actions *actions)
     : CellAction(actions, "deleteCell", i18n("Remove Cells..."), koIcon("removecell"), i18n("Removes the cells from the spreadsheet"))
@@ -78,16 +75,16 @@ CellsRemove::CellsRemove(Actions *actions)
 
 CellsRemove::~CellsRemove()
 {
-    if (m_dlg) delete m_dlg;
+    if (m_dlg)
+        delete m_dlg;
 }
 
-QAction *CellsRemove::createAction() {
+QAction *CellsRemove::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Remove Cells..."));
     return res;
 }
-
-
 
 void CellsRemove::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
@@ -96,21 +93,21 @@ void CellsRemove::execute(Selection *selection, Sheet *sheet, QWidget *canvasWid
     if (m_dlg->exec() == QDialog::Accepted) {
         AbstractRegionCommand *cmd = nullptr;
         if (m_dlg->moveRowsChecked()) {
-            ShiftManipulator* manipulator = new ShiftManipulator();
+            ShiftManipulator *manipulator = new ShiftManipulator();
             cmd = manipulator;
             manipulator->setDirection(ShiftManipulator::ShiftRight);
             manipulator->setRemove(true);
         } else if (m_dlg->moveColumnsChecked()) {
-            ShiftManipulator* manipulator = new ShiftManipulator();
+            ShiftManipulator *manipulator = new ShiftManipulator();
             cmd = manipulator;
             manipulator->setDirection(ShiftManipulator::ShiftBottom);
             manipulator->setRemove(true);
         } else if (m_dlg->insertRowsChecked()) {
-            InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+            InsertDeleteRowManipulator *manipulator = new InsertDeleteRowManipulator();
             cmd = manipulator;
             manipulator->setDelete(true);
         } else if (m_dlg->insertColumnsChecked()) {
-            InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+            InsertDeleteColumnManipulator *manipulator = new InsertDeleteColumnManipulator();
             cmd = manipulator;
             manipulator->setDelete(true);
         }
@@ -119,12 +116,8 @@ void CellsRemove::execute(Selection *selection, Sheet *sheet, QWidget *canvasWid
             cmd->add(*selection);
             cmd->execute(selection->canvas());
         }
-    }    
+    }
 
     delete m_dlg;
     m_dlg = nullptr;
 }
-
-
-
-

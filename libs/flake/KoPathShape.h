@@ -15,8 +15,8 @@
 #include <QMetaType>
 #include <QTransform>
 
-#include "KoTosContainer.h"
 #include "KoMarkerData.h"
+#include "KoTosContainer.h"
 
 #define KoPathShapeId "KoPathShape"
 
@@ -105,7 +105,7 @@ public:
 
     // basically the same as loadOdf but adapted to the contour cases
     // tag needs to be either contour-polygon or contour-path from another shape
-    bool loadContourOdf(const KoXmlElement & element, KoShapeLoadingContext &context, const QSizeF &scaleFactor);
+    bool loadContourOdf(const KoXmlElement &element, KoShapeLoadingContext &context, const QSizeF &scaleFactor);
 
     /** basically the equivalent saveOdf but adapted to the contour cases
      * @param context saving context
@@ -175,7 +175,6 @@ public:
      */
     KoPathPoint *arcTo(qreal rx, qreal ry, qreal startAngle, qreal sweepAngle);
 
-
     /**
      * @brief Closes the current subpath
      */
@@ -208,7 +207,7 @@ public:
      * @param rect the rectangle the requested points are in
      * @return list of points within the rectangle
      */
-    QList<KoPathPoint*> pointsAt(const QRectF &rect) const;
+    QList<KoPathPoint *> pointsAt(const QRectF &rect) const;
 
     /**
      * @brief Returns the list of path segments within the given rectangle.
@@ -406,7 +405,7 @@ public:
      * @param separatedPaths the list which contains the separated path shapes
      * @return true if separating the path was successful, false otherwise
      */
-    bool separate(QList<KoPathShape*> &separatedPaths);
+    bool separate(QList<KoPathShape *> &separatedPaths);
 
     /**
      * Returns the specific path shape id.
@@ -480,7 +479,7 @@ protected:
      * This makes sure that also if the newSize isNull that there will be a
      * very small size of 0.000001 pixels
      */
-    QTransform resizeMatrix( const QSizeF &newSize ) const;
+    QTransform resizeMatrix(const QSizeF &newSize) const;
 
     KoSubpathList m_subpaths;
 
@@ -488,6 +487,6 @@ private:
     Q_DECLARE_PRIVATE(KoPathShape)
 };
 
-Q_DECLARE_METATYPE(KoPathShape*)
+Q_DECLARE_METATYPE(KoPathShape *)
 
 #endif /* KOPATHSHAPE_H */

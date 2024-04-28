@@ -10,9 +10,9 @@
 #include <QSharedData>
 #include <QVariant>
 
-#include "sheets_core_export.h"
-#include "engine/Value.h"
 #include "engine/Validity.h"
+#include "engine/Value.h"
+#include "sheets_core_export.h"
 
 class QString;
 
@@ -36,22 +36,20 @@ class ValueParser;
 class CALLIGRA_SHEETS_CORE_EXPORT Conditional
 {
 public:
-
-    Value          value1;
-    Value          value2;
-    QString        styleName;
+    Value value1;
+    Value value2;
+    QString styleName;
     Validity::Type cond;
-    QString        baseCellAddress;
+    QString baseCellAddress;
 
     Conditional();
 
     bool operator==(const Conditional &other) const;
 };
 
-
 class Conditions;
-size_t qHash(const Conditions& conditions, size_t seed = 0);
-size_t qHash(const Conditional& condition, size_t seed = 0);
+size_t qHash(const Conditions &conditions, size_t seed = 0);
+size_t qHash(const Conditional &condition, size_t seed = 0);
 
 /**
  * \class Conditions
@@ -69,7 +67,7 @@ public:
     /**
      * Copy Constructor.
      */
-    Conditions(const Conditions& other);
+    Conditions(const Conditions &other);
 
     /**
      * Destructor.
@@ -94,11 +92,11 @@ public:
     /**
      * Replace the current list of conditions with this new one
      */
-    void setConditionList(const QList<Conditional> & list);
+    void setConditionList(const QList<Conditional> &list);
 
     /**
-      * Add a new condition.
-      */
+     * Add a new condition.
+     */
     void addCondition(Conditional cond);
 
     /**
@@ -111,15 +109,17 @@ public:
      * Set an optional default style. This style is returned by testConditions if none of
      * the conditions matches.
      */
-    void setDefaultStyle(const Style& style);
+    void setDefaultStyle(const Style &style);
 
     /// \note implementation to make QMap happy (which is needed by RectStorage)
-    bool operator<(const Conditions& conditions) const {
+    bool operator<(const Conditions &conditions) const
+    {
         return qHash(*this) < qHash(conditions);
     }
-    void operator=(const Conditions& other);
-    bool operator==(const Conditions& other) const;
-    inline bool operator!=(const Conditions& other) const {
+    void operator=(const Conditions &other);
+    bool operator==(const Conditions &other) const;
+    inline bool operator!=(const Conditions &other) const
+    {
         return !operator==(other);
     }
 
@@ -134,9 +134,9 @@ private:
      *
      * \return true if one of the conditions is true, false if not.
      */
-    bool currentCondition(const CellBase& cell, Conditional & condition) const;
+    bool currentCondition(const CellBase &cell, Conditional &condition) const;
 
-    bool isTrueFormula(const CellBase& cell, const QString& formula, const QString& baseCellAddress) const;
+    bool isTrueFormula(const CellBase &cell, const QString &formula, const QString &baseCellAddress) const;
 
     class Private;
     QSharedDataPointer<Private> d;

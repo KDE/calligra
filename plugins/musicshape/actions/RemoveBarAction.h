@@ -13,7 +13,7 @@ class RemoveBarAction : public AbstractMusicAction
 public:
     explicit RemoveBarAction(SimpleEntryTool *tool);
 
-    void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) override;
+    void mousePress(MusicCore::Staff *staff, int bar, const QPointF &pos) override;
 };
 
 #endif // REMOVEBARACTION_H

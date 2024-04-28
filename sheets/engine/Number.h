@@ -69,11 +69,13 @@ namespace Sheets
 {
 
 /**
-The Number class holds a single floating-point number. At the moment, it's just a wrapper for long double, but it's going to support GnuMP or something eventually.
+The Number class holds a single floating-point number. At the moment, it's just a wrapper for long double, but it's going to support GnuMP or something
+eventually.
 
 The class is made so that if high precision is not desired, a "typedef long double Number" will revert us back to doubles.
 
-The class will be able to format itself into a string, using provided locale settings. (TODO: how to handle this so that parsing/formatting works even if we typedef this class out?)
+The class will be able to format itself into a string, using provided locale settings. (TODO: how to handle this so that parsing/formatting works even if we
+typedef this class out?)
 
 Out-of-class methods for computations are provided
 */
@@ -82,58 +84,63 @@ class CALLIGRA_SHEETS_ENGINE_EXPORT Number
 {
 public:
     enum Type {
-        Float  // GnuMP will be here as well, eventually
+        Float // GnuMP will be here as well, eventually
     };
 
     // constructors
     Number();
-    explicit Number(int num); //krazy:exclude=explicit
-    explicit Number(long double num); //krazy:exclude=explicit
+    explicit Number(int num); // krazy:exclude=explicit
+    explicit Number(long double num); // krazy:exclude=explicit
 
-    Number(const Number& n);
+    Number(const Number &n);
 
     ~Number();
 
     long double asFloat() const;
 
     // set/get
-    Number& operator= (const Number &n);
+    Number &operator=(const Number &n);
 
     // basic operations
-    Number operator+ (const Number &n) const;
-    Number operator- (const Number &n) const;
+    Number operator+(const Number &n) const;
+    Number operator-(const Number &n) const;
     Number operator*(const Number &n) const;
-    Number operator/ (const Number &n) const;
+    Number operator/(const Number &n) const;
 
-    void operator+= (const Number &n);
-    void operator-= (const Number &n);
-    void operator*= (const Number &n);
-    void operator/= (const Number &n);
+    void operator+=(const Number &n);
+    void operator-=(const Number &n);
+    void operator*=(const Number &n);
+    void operator/=(const Number &n);
 
-    void operator++ () {
-        return operator+= (1);
+    void operator++()
+    {
+        return operator+=(1);
     }
-    void operator-- () {
-        return operator-= (1);
+    void operator--()
+    {
+        return operator-=(1);
     }
 
     // unary -
-    Number operator- () const;
+    Number operator-() const;
 
     Number mod(const Number &n) const;
 
     // comparison
-    bool operator<= (const Number &n) const;
-    bool operator< (const Number &n) const;
-    bool operator== (const Number &n) const;
-    bool operator!= (const Number &n) const {
-        return (!operator== (n));
+    bool operator<=(const Number &n) const;
+    bool operator<(const Number &n) const;
+    bool operator==(const Number &n) const;
+    bool operator!=(const Number &n) const
+    {
+        return (!operator==(n));
     }
-    bool operator>= (const Number &n) const {
-        return (!operator< (n));
+    bool operator>=(const Number &n) const
+    {
+        return (!operator<(n));
     }
-    bool operator> (const Number &n) const {
-        return (!operator<= (n));
+    bool operator>(const Number &n) const
+    {
+        return (!operator<=(n));
     }
 
     // absolute value
@@ -173,24 +180,24 @@ private:
     class Private;
     QSharedDataPointer<Private> d;
 
-};  // class Number
+}; // class Number
 
-// conversion to double ... when we add the option to #define the Number class as double, this routine should be kept in place, and it should simply return its parameter
-// usage of this function should eventually be removed, because places that use it are not ready for high precision support
+// conversion to double ... when we add the option to #define the Number class as double, this routine should be kept in place, and it should simply return its
+// parameter usage of this function should eventually be removed, because places that use it are not ready for high precision support
 CALLIGRA_SHEETS_ENGINE_EXPORT long double numToDouble(Number n);
 
 // external operators, so that we can do things like 4+a without having to create temporary objects
 // not provided for complex numbers, as we won't be using them often like that
-Number operator+ (long double n1, const Number &n2);
-Number operator- (long double n1, const Number &n2);
+Number operator+(long double n1, const Number &n2);
+Number operator-(long double n1, const Number &n2);
 Number operator*(long double n1, const Number &n2);
-Number operator/ (long double n1, const Number &n2);
-bool operator<= (long double n1, const Number &n2);
-bool operator< (long double n1, const Number &n2);
-bool operator== (long double n1, const Number &n2);
-bool operator!= (long double n1, const Number &n2);
-bool operator>= (long double n1, const Number &n2);
-bool operator> (long double n1, const Number &n2);
+Number operator/(long double n1, const Number &n2);
+bool operator<=(long double n1, const Number &n2);
+bool operator<(long double n1, const Number &n2);
+bool operator==(long double n1, const Number &n2);
+bool operator!=(long double n1, const Number &n2);
+bool operator>=(long double n1, const Number &n2);
+bool operator>(long double n1, const Number &n2);
 
 // external versions of the functions
 Number fmod(const Number &n1, const Number &n2);

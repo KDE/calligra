@@ -9,9 +9,9 @@
 #ifndef KO_GRADIENT_EDIT_WIDGET_H
 #define KO_GRADIENT_EDIT_WIDGET_H
 
-#include <kowidgets_export.h>
 #include <KoCheckerBoardPainter.h>
 #include <QWidget>
+#include <kowidgets_export.h>
 
 class KoSliderCombo;
 class QComboBox;
@@ -31,16 +31,13 @@ class KOWIDGETS_EXPORT KoGradientEditWidget : public QWidget
     Q_OBJECT
 
 public:
-    enum GradientTarget {
-        StrokeGradient,
-        FillGradient
-    };
+    enum GradientTarget { StrokeGradient, FillGradient };
 
     /**
      * Creates a new gradient tab widget with the given parent.
      * @param parent the widgets parent
      */
-    explicit KoGradientEditWidget(QWidget* parent = nullptr);
+    explicit KoGradientEditWidget(QWidget *parent = nullptr);
 
     /// Destroys the widget
     ~KoGradientEditWidget() override = default;
@@ -49,7 +46,7 @@ public:
      * Sets a new gradient to edit.
      * @param gradient the gradient to edit
      */
-    void setGradient(const QGradient & gradient);
+    void setGradient(const QGradient &gradient);
 
     /// Returns the gradient target (fill/stroke)
     GradientTarget target();
@@ -93,6 +90,7 @@ protected Q_SLOTS:
     void addGradientToPredefs();
     void opacityChanged(qreal value, bool final);
     void stopChanged();
+
 protected:
     void setupUI();
     void updateUI();
@@ -108,7 +106,7 @@ private:
     KoSliderCombo *m_opacity;
     QDoubleSpinBox *m_stopPosition;
     QToolButton *m_stopColor;
-    qreal m_gradOpacity;    ///< the gradient opacity
+    qreal m_gradOpacity; ///< the gradient opacity
     int m_stopIndex; ///< the index of the selected gradient stop
     KoCheckerBoardPainter m_checkerPainter;
     QGradient::Type m_type;

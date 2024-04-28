@@ -8,14 +8,13 @@
 
 #include "ui_BibliographyConfigureDialog.h"
 
-#include <QDialog>
-#include <QTextDocument>
 #include <QComboBox>
-#include <QRadioButton>
+#include <QDialog>
 #include <QHBoxLayout>
+#include <QRadioButton>
+#include <QTextDocument>
 
 #include "KoOdfBibliographyConfiguration.h"
-
 
 class BibliographyConfigureDialog : public QDialog
 {
@@ -53,7 +52,6 @@ private:
     QRadioButton *m_ascButton;
     QRadioButton *m_dscButton;
     QHBoxLayout *m_layout;
-
 };
 
 #endif // BIBLIOGRAPHYCONFIGUREDIALOG_H

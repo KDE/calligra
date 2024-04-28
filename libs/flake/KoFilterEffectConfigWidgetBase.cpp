@@ -7,6 +7,6 @@
 #include "KoFilterEffectConfigWidgetBase.h"
 
 KoFilterEffectConfigWidgetBase::KoFilterEffectConfigWidgetBase(QWidget *parent)
-: QWidget(parent)
+    : QWidget(parent)
 {
 }

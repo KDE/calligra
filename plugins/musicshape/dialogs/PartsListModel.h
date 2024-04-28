@@ -8,9 +8,10 @@
 
 #include <QAbstractListModel>
 
-namespace MusicCore {
-    class Sheet;
-    class Part;
+namespace MusicCore
+{
+class Sheet;
+class Part;
 }
 
 class PartsListModel : public QAbstractListModel
@@ -19,13 +20,14 @@ class PartsListModel : public QAbstractListModel
 public:
     explicit PartsListModel(MusicCore::Sheet *sheet);
 
-    int rowCount(const QModelIndex & parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 private Q_SLOTS:
-    void partAdded(int index, MusicCore::Part* part);
-    void partRemoved(int index, MusicCore::Part* part);
+    void partAdded(int index, MusicCore::Part *part);
+    void partRemoved(int index, MusicCore::Part *part);
+
 private:
-    MusicCore::Sheet* m_sheet;
+    MusicCore::Sheet *m_sheet;
 };
 
 #endif // MUSIC_PARTSLISTMODEL_H

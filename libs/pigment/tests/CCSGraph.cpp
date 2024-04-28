@@ -2,25 +2,24 @@
  *  SPDX-FileCopyrightText: 2007-2008 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
+#include <QCoreApplication>
 #include <QFile>
 #include <QProcess>
 #include <QTemporaryFile>
-#include <QCoreApplication>
 
 #include <DebugPigment.h>
 
-#include "KoColorSpaceRegistry.h"
 #include "KoColorConversionSystem.h"
+#include "KoColorSpaceRegistry.h"
 
-#include <iostream>
-#include <QCommandLineParser>
 #include <QCommandLineOption>
+#include <QCommandLineParser>
+#include <iostream>
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-
     QCoreApplication app(argc, argv);
 
     QCommandLineParser parser;
@@ -29,10 +28,20 @@ int main(int argc, char** argv)
     parser.addHelpOption();
     // Initialize the list of options
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("graphs"), i18n("return the list of available graphs")));
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("graph"), i18n("specify the type of graph (see --graphs to get the full list, the default is full)"), QLatin1String("type"), QLatin1String("full")));
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("key"), i18n("specify the key of the source color space"), QLatin1String("key"), QLatin1String("")));
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("key"), i18n("specify the key of the destination color space"), QLatin1String("key"), QLatin1String("")));
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("output"), i18n("specify the output (can be ps or dot, the default is ps)"), QLatin1String("type"), QLatin1String("ps")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("graph"),
+                                        i18n("specify the type of graph (see --graphs to get the full list, the default is full)"),
+                                        QLatin1String("type"),
+                                        QLatin1String("full")));
+    parser.addOption(
+        QCommandLineOption(QStringList() << QLatin1String("key"), i18n("specify the key of the source color space"), QLatin1String("key"), QLatin1String("")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("key"),
+                                        i18n("specify the key of the destination color space"),
+                                        QLatin1String("key"),
+                                        QLatin1String("")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("output"),
+                                        i18n("specify the output (can be ps or dot, the default is ps)"),
+                                        QLatin1String("type"),
+                                        QLatin1String("ps")));
     parser.addPositionalArgument(QLatin1String("outputfile"), i18n("name of the output file"));
     parser.process(app); // PORTING SCRIPT: move this to after any parser.addOption
 
@@ -83,11 +92,12 @@ int main(int argc, char** argv)
         }
         QTextStream out(&file);
         out << dot;
-        const QStringList args{ "-T" + outputType, file.fileName(), outputFileName };
+        const QStringList args{"-T" + outputType, file.fileName(), outputFileName};
         file.close();
 
         if (QProcess::execute(QStringLiteral("dot"), args) != 0) {
-            errorPigment << "An error has occurred when executing : 'dot" <<  args.join(u' ') << "' the most likely cause is that 'dot' command is missing, and that you should install graphviz (from http://www.graphiz.org)";
+            errorPigment << "An error has occurred when executing : 'dot" << args.join(u' ')
+                         << "' the most likely cause is that 'dot' command is missing, and that you should install graphviz (from http://www.graphiz.org)";
         }
     } else {
         errorPigment << "Unknown output type : " << outputType;

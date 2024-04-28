@@ -8,17 +8,16 @@
 #ifndef CALLIGRA_SHEETS_ACTION_PAGEBREAK
 #define CALLIGRA_SHEETS_ACTION_PAGEBREAK
 
-
 #include "CellAction.h"
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class PageBreakColumn : public ToggleableCellAction {
-Q_OBJECT
+class PageBreakColumn : public ToggleableCellAction
+{
+    Q_OBJECT
 public:
     PageBreakColumn(Actions *actions);
     virtual ~PageBreakColumn();
@@ -30,8 +29,9 @@ protected:
     virtual bool enabledForSelection(Selection *selection, const Cell &activeCell) override;
 };
 
-class PageBreakRow : public ToggleableCellAction {
-Q_OBJECT
+class PageBreakRow : public ToggleableCellAction
+{
+    Q_OBJECT
 public:
     PageBreakRow(Actions *actions);
     virtual ~PageBreakRow();
@@ -43,8 +43,7 @@ protected:
     virtual bool enabledForSelection(Selection *selection, const Cell &activeCell) override;
 };
 
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_PAGEBREAK
+#endif // CALLIGRA_SHEETS_ACTION_PAGEBREAK

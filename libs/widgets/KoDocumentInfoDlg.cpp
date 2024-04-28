@@ -10,80 +10,87 @@
 #include "ui_koDocumentInfoAboutWidget.h"
 #include "ui_koDocumentInfoAuthorWidget.h"
 
-#include "KoDocumentInfo.h"
 #include "KoDocumentBase.h"
+#include "KoDocumentInfo.h"
 #include "KoGlobal.h"
 #include "KoPageWidgetItem.h"
 #include <KoDocumentRdfBase.h>
 #include <KoIcon.h>
 
-#include <KLocalizedString>
 #include <KIconLoader>
+#include <KLocalizedString>
 
 #include <KMessageBox>
-#include <kmainwindow.h>
 #include <KoDialog.h>
+#include <kmainwindow.h>
 
-#include <QUrl>
-#include <QLineEdit>
 #include <QDateTime>
+#include <QLineEdit>
 #include <QMimeDatabase>
 #include <QMimeType>
-
+#include <QUrl>
 
 // see KoIcon.h
 #define koSmallIcon(name) (QIcon::fromTheme(name).pixmap(KIconLoader::StdSizes::SizeSmall))
 
-
 class KoPageWidgetItemAdapter : public KPageWidgetItem
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     KoPageWidgetItemAdapter(KoPageWidgetItem *item)
-      : KPageWidgetItem(item->widget(), item->name())
-      , m_item(item)
+        : KPageWidgetItem(item->widget(), item->name())
+        , m_item(item)
     {
         setHeader(item->name());
         setIcon(QIcon::fromTheme(item->iconName()));
     }
-    ~KoPageWidgetItemAdapter() override { delete m_item; }
+    ~KoPageWidgetItemAdapter() override
+    {
+        delete m_item;
+    }
 
-    bool shouldDialogCloseBeVetoed() { return m_item->shouldDialogCloseBeVetoed(); }
-    void apply() { m_item->apply(); }
+    bool shouldDialogCloseBeVetoed()
+    {
+        return m_item->shouldDialogCloseBeVetoed();
+    }
+    void apply()
+    {
+        m_item->apply();
+    }
 
 private:
-    KoPageWidgetItem * const m_item;
+    KoPageWidgetItem *const m_item;
 };
-
 
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
 public:
-    KoDocumentInfoDlgPrivate() :
-        toggleEncryption(false),
-        applyToggleEncryption(false),
-        documentSaved(false) {}
+    KoDocumentInfoDlgPrivate()
+        : toggleEncryption(false)
+        , applyToggleEncryption(false)
+        , documentSaved(false)
+    {
+    }
     ~KoDocumentInfoDlgPrivate() = default;
 
-    KoDocumentInfo* info;
-    QList<KPageWidgetItem*> pages;
-    Ui::KoDocumentInfoAboutWidget* aboutUi;
-    Ui::KoDocumentInfoAuthorWidget* authorUi;
+    KoDocumentInfo *info;
+    QList<KPageWidgetItem *> pages;
+    Ui::KoDocumentInfoAboutWidget *aboutUi;
+    Ui::KoDocumentInfoAuthorWidget *authorUi;
 
     bool toggleEncryption;
     bool applyToggleEncryption;
     bool documentSaved;
 };
 
-
-KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
+KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo *docInfo)
     : KPageDialog(parent)
     , d(new KoDocumentInfoDlgPrivate)
 {
     d->info = docInfo;
 
     setWindowTitle(i18n("Document Information"));
-//    setInitialSize(QSize(500, 500));
+    //    setInitialSize(QSize(500, 500));
     setFaceType(KPageDialog::List);
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     button(QDialogButtonBox::Ok)->setDefault(true);
@@ -102,7 +109,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     page->setHeader(i18n("General"));
 
     // Ugly hack, the mimetype should be a parameter, instead
-    KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
+    KoDocumentBase *doc = dynamic_cast<KoDocumentBase *>(d->info->parent());
     if (doc) {
         QMimeDatabase db;
         QMimeType mime = db.mimeTypeForName(doc->mimeType());
@@ -144,8 +151,8 @@ KoDocumentInfoDlg::~KoDocumentInfoDlg()
 void KoDocumentInfoDlg::accept()
 {
     // check if any pages veto the close
-    foreach(KPageWidgetItem* item, d->pages) {
-        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
+    foreach (KPageWidgetItem *item, d->pages) {
+        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter *>(item);
         if (page) {
             if (page->shouldDialogCloseBeVetoed()) {
                 return;
@@ -155,8 +162,8 @@ void KoDocumentInfoDlg::accept()
 
     // all fine, go and apply
     saveAboutData();
-    foreach(KPageWidgetItem* item, d->pages) {
-        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
+    foreach (KPageWidgetItem *item, d->pages) {
+        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter *>(item);
         if (page) {
             page->apply();
         }
@@ -172,7 +179,7 @@ bool KoDocumentInfoDlg::isDocumentSaved()
 
 void KoDocumentInfoDlg::initAboutTab()
 {
-    KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
+    KoDocumentBase *doc = dynamic_cast<KoDocumentBase *>(d->info->parent());
 
     if (doc) {
         d->aboutUi->filePathLabel->setText(doc->localFilePath());
@@ -195,11 +202,9 @@ void KoDocumentInfoDlg::initAboutTab()
             d->aboutUi->lblType->setText(docmime.comment());
     }
     if (!d->info->aboutInfo("creation-date").isEmpty()) {
-        QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"),
-                                            Qt::ISODate);
+        QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"), Qt::ISODate);
         QString s = QLocale().toString(t);
-        d->aboutUi->lblCreated->setText(s + ", " +
-                                        d->info->aboutInfo("initial-creator"));
+        d->aboutUi->lblCreated->setText(s + ", " + d->info->aboutInfo("initial-creator"));
     }
 
     if (!d->info->aboutInfo("date").isEmpty()) {
@@ -234,12 +239,10 @@ void KoDocumentInfoDlg::initAboutTab()
         }
     } else {
         d->aboutUi->lblEncrypted->setText(i18n("This document does not support encryption"));
-        d->aboutUi->pbEncrypt->setEnabled( false );
+        d->aboutUi->pbEncrypt->setEnabled(false);
     }
-    connect(d->aboutUi->pbReset, &QAbstractButton::clicked,
-            this, &KoDocumentInfoDlg::slotResetMetaData);
-    connect(d->aboutUi->pbEncrypt, &QAbstractButton::clicked,
-            this, &KoDocumentInfoDlg::slotToggleEncryption);
+    connect(d->aboutUi->pbReset, &QAbstractButton::clicked, this, &KoDocumentInfoDlg::slotResetMetaData);
+    connect(d->aboutUi->pbEncrypt, &QAbstractButton::clicked, this, &KoDocumentInfoDlg::slotToggleEncryption);
 }
 
 void KoDocumentInfoDlg::initAuthorTab()
@@ -269,7 +272,7 @@ void KoDocumentInfoDlg::saveAboutData()
     d->applyToggleEncryption = d->toggleEncryption;
 }
 
-void KoDocumentInfoDlg::hideEvent( QHideEvent *event )
+void KoDocumentInfoDlg::hideEvent(QHideEvent *event)
 {
     Q_UNUSED(event);
 
@@ -283,11 +286,9 @@ void KoDocumentInfoDlg::slotResetMetaData()
     d->info->resetMetaData();
 
     if (!d->info->aboutInfo("creation-date").isEmpty()) {
-        QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"),
-                                            Qt::ISODate);
+        QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"), Qt::ISODate);
         QString s = QLocale().toString(t);
-        d->aboutUi->lblCreated->setText(s + ", " +
-                                        d->info->aboutInfo("initial-creator"));
+        d->aboutUi->lblCreated->setText(s + ", " + d->info->aboutInfo("initial-creator"));
     }
 
     if (!d->info->aboutInfo("date").isEmpty()) {
@@ -301,7 +302,7 @@ void KoDocumentInfoDlg::slotResetMetaData()
 
 void KoDocumentInfoDlg::slotToggleEncryption()
 {
-    KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
+    KoDocumentBase *doc = dynamic_cast<KoDocumentBase *>(d->info->parent());
     if (!doc)
         return;
 
@@ -335,45 +336,42 @@ void KoDocumentInfoDlg::saveEncryption()
     if (!d->applyToggleEncryption)
         return;
 
-    KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
+    KoDocumentBase *doc = dynamic_cast<KoDocumentBase *>(d->info->parent());
     if (!doc)
         return;
 
-    KMainWindow* mainWindow = dynamic_cast< KMainWindow* >(parent());
+    KMainWindow *mainWindow = dynamic_cast<KMainWindow *>(parent());
 
     bool saveas = doc->url().isEmpty();
     if (doc->specialOutputFlag() == KoDocumentBase::SaveEncrypted) {
         // Decrypt
-        if (KMessageBox::warningContinueCancel(
-                    this,
-                    i18n("<qt>Decrypting the document will remove the password protection from it."
-                         "<p>Do you still want to decrypt the file?</qt>"),
-                    i18n("Confirm Decrypt"),
-                    KGuiItem(i18n("Decrypt")),
-                    KStandardGuiItem::cancel(),
-                    "DecryptConfirmation"
-                    ) != KMessageBox::Continue) {
+        if (KMessageBox::warningContinueCancel(this,
+                                               i18n("<qt>Decrypting the document will remove the password protection from it."
+                                                    "<p>Do you still want to decrypt the file?</qt>"),
+                                               i18n("Confirm Decrypt"),
+                                               KGuiItem(i18n("Decrypt")),
+                                               KStandardGuiItem::cancel(),
+                                               "DecryptConfirmation")
+            != KMessageBox::Continue) {
             return;
         }
         doc->setOutputMimeType(doc->outputMimeType(), doc->specialOutputFlag() & ~KoDocumentBase::SaveEncrypted);
         if (!mainWindow) {
-            KMessageBox::information(
-                        this,
-                        i18n("<qt>Your document could not be saved automatically."
-                             "<p>To complete the decryption, please save the document.</qt>"),
-                        i18n("Save Document"),
-                        "DecryptSaveMessage");
+            KMessageBox::information(this,
+                                     i18n("<qt>Your document could not be saved automatically."
+                                          "<p>To complete the decryption, please save the document.</qt>"),
+                                     i18n("Save Document"),
+                                     "DecryptSaveMessage");
             return;
         }
-        if (KMessageBox::questionTwoActions(
-                    this,
-                    i18n("<qt>To complete the decryption the document needs to be saved."
-                         "<p>Do you want to save the document now?</qt>"),
-                    i18n("Save Document"),
-                    KStandardGuiItem::save(),
-                    KStandardGuiItem::dontSave(),
-                    "DecryptSaveConfirmation"
-                    ) != KMessageBox::PrimaryAction) {
+        if (KMessageBox::questionTwoActions(this,
+                                            i18n("<qt>To complete the decryption the document needs to be saved."
+                                                 "<p>Do you want to save the document now?</qt>"),
+                                            i18n("Save Document"),
+                                            KStandardGuiItem::save(),
+                                            KStandardGuiItem::dontSave(),
+                                            "DecryptSaveConfirmation")
+            != KMessageBox::PrimaryAction) {
             return;
         }
         // Force saveas so user can decide if overwrite the encrypted file or not
@@ -386,14 +384,15 @@ void KoDocumentInfoDlg::saveEncryption()
             QMimeType mime = db.mimeTypeForName(doc->mimeType());
             QString comment = mime.isValid() ? mime.comment() : i18n("%1 (unknown file type)", QString::fromLatin1(doc->mimeType()));
             if (KMessageBox::warningContinueCancel(
-                        this,
-                        i18n("<qt>The document is currently saved as %1. The document needs to be changed to <b>OASIS OpenDocument</b> to be encrypted."
-                             "<p>Do you want to change the file to OASIS OpenDocument?</qt>", QString("<b>%1</b>").arg(comment)),
-                        i18n("Change Filetype"),
-                        KGuiItem(i18n("Change")),
-                        KStandardGuiItem::cancel(),
-                        "EncryptChangeFiletypeConfirmation"
-                        ) != KMessageBox::Continue) {
+                    this,
+                    i18n("<qt>The document is currently saved as %1. The document needs to be changed to <b>OASIS OpenDocument</b> to be encrypted."
+                         "<p>Do you want to change the file to OASIS OpenDocument?</qt>",
+                         QString("<b>%1</b>").arg(comment)),
+                    i18n("Change Filetype"),
+                    KGuiItem(i18n("Change")),
+                    KStandardGuiItem::cancel(),
+                    "EncryptChangeFiletypeConfirmation")
+                != KMessageBox::Continue) {
                 return;
             }
             doc->resetURL();
@@ -401,23 +400,22 @@ void KoDocumentInfoDlg::saveEncryption()
         doc->setMimeType(doc->nativeOasisMimeType());
         doc->setOutputMimeType(doc->nativeOasisMimeType(), KoDocumentBase::SaveEncrypted);
         if (!mainWindow) {
-            KMessageBox::information(
-                        this,
-                        i18n("<qt>Your document could not be saved automatically."
-                             "<p>To complete the encryption, please save the document.</qt>"),
-                        i18n("Save Document"),
-                        "EncryptSaveMessage");
+            KMessageBox::information(this,
+                                     i18n("<qt>Your document could not be saved automatically."
+                                          "<p>To complete the encryption, please save the document.</qt>"),
+                                     i18n("Save Document"),
+                                     "EncryptSaveMessage");
             return;
         }
         if (KMessageBox::questionTwoActions(
-                    this,
-                    i18n("<qt>The document has been changed since it was opened. To complete the encryption the document needs to be saved."
-                         "<p>Do you want to save the document now?</qt>"),
-                    i18n("Save Document"),
-                    KStandardGuiItem::save(),
-                    KStandardGuiItem::dontSave(),
-                    "EncryptSaveConfirmation"
-                    ) != KMessageBox::PrimaryAction) {
+                this,
+                i18n("<qt>The document has been changed since it was opened. To complete the encryption the document needs to be saved."
+                     "<p>Do you want to save the document now?</qt>"),
+                i18n("Save Document"),
+                KStandardGuiItem::save(),
+                KStandardGuiItem::dontSave(),
+                "EncryptSaveConfirmation")
+            != KMessageBox::PrimaryAction) {
             return;
         }
         saveas = true; // Force saveas because save will silently fail when doc is not modified
@@ -430,7 +428,7 @@ void KoDocumentInfoDlg::saveEncryption()
     d->documentSaved = !doc->url().isEmpty();
 }
 
-QList<KPageWidgetItem*> KoDocumentInfoDlg::pages() const
+QList<KPageWidgetItem *> KoDocumentInfoDlg::pages() const
 {
     return d->pages;
 }
@@ -439,11 +437,11 @@ void KoDocumentInfoDlg::setReadOnly(bool ro)
 {
     d->aboutUi->meComments->setReadOnly(ro);
 
-    Q_FOREACH(KPageWidgetItem* page, d->pages) {
-        Q_FOREACH(QLineEdit* le, page->widget()->findChildren<QLineEdit *>()) {
+    Q_FOREACH (KPageWidgetItem *page, d->pages) {
+        Q_FOREACH (QLineEdit *le, page->widget()->findChildren<QLineEdit *>()) {
             le->setReadOnly(ro);
         }
-        Q_FOREACH(QPushButton* le, page->widget()->findChildren<QPushButton *>()) {
+        Q_FOREACH (QPushButton *le, page->widget()->findChildren<QPushButton *>()) {
             le->setDisabled(ro);
         }
     }
@@ -451,7 +449,7 @@ void KoDocumentInfoDlg::setReadOnly(bool ro)
 
 void KoDocumentInfoDlg::addPageItem(KoPageWidgetItem *item)
 {
-    KPageWidgetItem * page = new KoPageWidgetItemAdapter(item);
+    KPageWidgetItem *page = new KoPageWidgetItemAdapter(item);
 
     addPage(page);
     d->pages.append(page);

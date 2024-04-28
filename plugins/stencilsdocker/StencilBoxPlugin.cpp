@@ -8,13 +8,12 @@
 
 #include "StencilBoxDockerFactory.h"
 
-#include <KoDockRegistry.h>
 #include <KPluginFactory>
+#include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_docker_stencils.json",
-                           registerPlugin<StencilBoxPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_docker_stencils.json", registerPlugin<StencilBoxPlugin>();)
 
-StencilBoxPlugin::StencilBoxPlugin(QObject *parent, const QVariantList&)
+StencilBoxPlugin::StencilBoxPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     Q_UNUSED(parent);

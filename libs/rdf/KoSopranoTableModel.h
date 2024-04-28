@@ -39,7 +39,6 @@ class KoSopranoTableModel : public QAbstractTableModel
     bool isInlineRdf(const Soprano::Statement &st) const;
 
 public:
-
     explicit KoSopranoTableModel(KoDocumentRdf *rdf);
 
     /**
@@ -49,14 +48,14 @@ public:
     QSharedPointer<Soprano::Model> model() const;
 
     enum {
-        ColIsValid = 0,  // Is this triple valid
-        ColSubj,         // subject
-        ColPred,         // predicate
-        ColObj,          // object
-        ColObjType,      // string for type, eg, URI, Literal, Blank Node
-        ColObjXsdType,   // XSD type URI for object
-        ColCtx,          // Graph context for triple
-        ColCount         // NOT A COLUMN but the size.
+        ColIsValid = 0, // Is this triple valid
+        ColSubj, // subject
+        ColPred, // predicate
+        ColObj, // object
+        ColObjType, // string for type, eg, URI, Literal, Blank Node
+        ColObjXsdType, // XSD type URI for object
+        ColCtx, // Graph context for triple
+        ColCount // NOT A COLUMN but the size.
     };
 
     /**

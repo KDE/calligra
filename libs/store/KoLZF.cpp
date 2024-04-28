@@ -10,46 +10,47 @@
 #include <QByteArray>
 #include <QDebug>
 
+namespace KoLZF
+{
 
-namespace KoLZF {
+#define HASH_LOG 12
+#define HASH_SIZE (1 << HASH_LOG)
+#define HASH_MASK (HASH_SIZE - 1)
 
-#define HASH_LOG  12
-#define HASH_SIZE (1<< HASH_LOG)
-#define HASH_MASK  (HASH_SIZE-1)
-
-static void UPDATE_HASH(quint32 &v, const quint8 *p) {
+static void UPDATE_HASH(quint32 &v, const quint8 *p)
+{
     quint16 a, b;
     memcpy(&a, p, sizeof(quint16));
     memcpy(&b, p + 1, sizeof(quint16));
     v = a ^ b ^ (a >> (16 - HASH_LOG));
 }
 
-#define MAX_COPY       32
-#define MAX_LEN       264  /* 256 + 8 */
+#define MAX_COPY 32
+#define MAX_LEN 264 /* 256 + 8 */
 #define MAX_DISTANCE 8192
 
 // Lossless compression using LZF algorithm, this is faster on modern CPU than
 // the original implementation in http://liblzf.plan9.de/
-int compress(const void* input, int length, void* output, int maxout)
+int compress(const void *input, int length, void *output, int maxout)
 {
     if (input == 0 || length < 1 || output == 0 || maxout < 2) {
         return 0;
     }
 
-    const quint8* ip = (const quint8*) input;
-    const quint8* ip_limit = ip + length - MAX_COPY - 4;
-    quint8* op = (quint8*) output;
-    const quint8* last_op = (quint8*) output + maxout - 1;
+    const quint8 *ip = (const quint8 *)input;
+    const quint8 *ip_limit = ip + length - MAX_COPY - 4;
+    quint8 *op = (quint8 *)output;
+    const quint8 *last_op = (quint8 *)output + maxout - 1;
 
-    const quint8* htab[HASH_SIZE];
-    const quint8** hslot;
+    const quint8 *htab[HASH_SIZE];
+    const quint8 **hslot;
     quint32 hval;
 
-    quint8* ref;
+    quint8 *ref;
     qint32 copy;
     qint32 len;
     qint32 distance;
-    quint8* anchor;
+    quint8 *anchor;
 
     /* initializes hash table */
     for (hslot = htab; hslot < htab + HASH_SIZE; ++hslot) {
@@ -65,7 +66,7 @@ int compress(const void* input, int length, void* output, int maxout)
         /* find potential match */
         UPDATE_HASH(hval, ip);
         hslot = htab + (hval & HASH_MASK);
-        ref = (quint8*) * hslot;
+        ref = (quint8 *)*hslot;
 
         /* update hash table */
         *hslot = ip;
@@ -90,7 +91,7 @@ int compress(const void* input, int length, void* output, int maxout)
             goto literal;
 
         /* here we have 3-byte matches */
-        anchor = (quint8*)ip;
+        anchor = (quint8 *)ip;
         len = 3;
         ref += 3;
         ip += 3;
@@ -99,14 +100,22 @@ int compress(const void* input, int length, void* output, int maxout)
         if (ip < ip_limit - MAX_LEN) {
             while (len < MAX_LEN - 8) {
                 /* unroll 8 times */
-                if (*ref++ != *ip++) break;
-                if (*ref++ != *ip++) break;
-                if (*ref++ != *ip++) break;
-                if (*ref++ != *ip++) break;
-                if (*ref++ != *ip++) break;
-                if (*ref++ != *ip++) break;
-                if (*ref++ != *ip++) break;
-                if (*ref++ != *ip++) break;
+                if (*ref++ != *ip++)
+                    break;
+                if (*ref++ != *ip++)
+                    break;
+                if (*ref++ != *ip++)
+                    break;
+                if (*ref++ != *ip++)
+                    break;
+                if (*ref++ != *ip++)
+                    break;
+                if (*ref++ != *ip++)
+                    break;
+                if (*ref++ != *ip++)
+                    break;
+                if (*ref++ != *ip++)
+                    break;
                 len += 8;
             }
             --ip;
@@ -173,7 +182,7 @@ int compress(const void* input, int length, void* output, int maxout)
     }
 
     /* left-over as literal copy */
-    ip_limit = (const quint8*)input + length;
+    ip_limit = (const quint8 *)input + length;
 
     // TODO: smart calculation to see here if enough output is left
 
@@ -206,10 +215,10 @@ int compress(const void* input, int length, void* output, int maxout)
         --op;
     }
 
-    return op - (quint8*)output;
+    return op - (quint8 *)output;
 }
 
-int decompress(const void* input, int length, void* output, int maxout)
+int decompress(const void *input, int length, void *output, int maxout)
 {
     if (input == 0 || length < 1) {
         return 0;
@@ -218,11 +227,11 @@ int decompress(const void* input, int length, void* output, int maxout)
         return 0;
     }
 
-    const quint8* ip = (const quint8*) input;
-    const quint8* ip_limit  = ip + length - 1;
-    quint8* op = (quint8*) output;
-    quint8* op_limit = op + maxout;
-    quint8* ref;
+    const quint8 *ip = (const quint8 *)input;
+    const quint8 *ip_limit = ip + length - 1;
+    quint8 *op = (quint8 *)output;
+    quint8 *op_limit = op + maxout;
+    quint8 *ref;
 
     while (ip < ip_limit) {
         quint32 ctrl = (*ip) + 1;
@@ -247,7 +256,7 @@ int decompress(const void* input, int length, void* output, int maxout)
                         *op++ = *ip++;
                         --ctrl;
 
-                        for (;ctrl; --ctrl)
+                        for (; ctrl; --ctrl)
                             *op++ = *ip++;
                     }
                 }
@@ -278,13 +287,12 @@ int decompress(const void* input, int length, void* output, int maxout)
         }
     }
 
-    return op - (quint8*)output;
+    return op - (quint8 *)output;
 }
 
-
-QByteArray compress(const QByteArray& input)
+QByteArray compress(const QByteArray &input)
 {
-    const void* const in_data = (const void*) input.constData();
+    const void *const in_data = (const void *)input.constData();
     unsigned int in_len = (unsigned int)input.size();
 
     QByteArray output;
@@ -299,14 +307,14 @@ QByteArray compress(const QByteArray& input)
     output[4] = 1;
 
     unsigned int out_len = in_len - 1;
-    unsigned char* out_data = (unsigned char*) output.data() + 5;
+    unsigned char *out_data = (unsigned char *)output.data() + 5;
 
     unsigned int len = compress(in_data, in_len, out_data, out_len);
 
     if ((len > out_len) || (len == 0)) {
         // output buffer is too small, likely because the data can't
         // be compressed. so here just copy without compression
-        output.replace(5, output.size()-5, input);
+        output.replace(5, output.size() - 5, input);
 
         // flag must indicate "uncompressed block"
         output[4] = 0;
@@ -321,7 +329,7 @@ QByteArray compress(const QByteArray& input)
 }
 
 // will not squeeze output
-void decompress(const QByteArray& input, QByteArray& output)
+void decompress(const QByteArray &input, QByteArray &output)
 {
     Q_ASSERT(input.size() >= 5);
 
@@ -339,9 +347,9 @@ void decompress(const QByteArray& input, QByteArray& output)
     quint8 flag = (quint8)input[4];
 
     // prepare for lzf
-    const void* const in_data = (const void*)(input.constData() + 5);
+    const void *const in_data = (const void *)(input.constData() + 5);
     unsigned int in_len = (unsigned int)input.size() - 5;
-    unsigned char* out_data = (unsigned char*) output.data();
+    unsigned char *out_data = (unsigned char *)output.data();
     unsigned int out_len = (unsigned int)unpack_size;
 
     if (flag == 0) {

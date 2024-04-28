@@ -16,14 +16,7 @@ public:
     ~KPrDoubleFanWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType {
-        FanOutVertical,
-        FanOutHorizontal,
-        FanInVertical,
-        FanInHorizontal,
-        FanInVerticalReverse,
-        FanInHorizontalReverse
-    };
+    enum SubType { FanOutVertical, FanOutHorizontal, FanInVertical, FanInHorizontal, FanInVerticalReverse, FanInHorizontalReverse };
 };
 
 #endif /* KPRDOUBLEFANWIPEEFFECTFACTORY_H */

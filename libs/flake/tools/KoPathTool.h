@@ -11,10 +11,10 @@
 #define KOPATHTOOL_H
 
 #include "KoPathShape.h"
-#include "KoToolBase.h"
 #include "KoPathToolSelection.h"
-#include <QList>
+#include "KoToolBase.h"
 #include <QCursor>
+#include <QList>
 
 class QButtonGroup;
 class KoCanvasBase;
@@ -51,7 +51,7 @@ public:
     /// reimplemented
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
     /// reimplemented
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     /// reimplemented
     void deactivate() override;
 
@@ -59,26 +59,26 @@ public:
     void deleteSelection() override;
 
     /// reimplemented
-    KoToolSelection* selection() override;
+    KoToolSelection *selection() override;
 
     /// repaints the specified rect
     void repaint(const QRectF &repaintRect);
 
 public Q_SLOTS:
-    void documentResourceChanged(int key, const QVariant & res) override;
+    void documentResourceChanged(int key, const QVariant &res) override;
 
 Q_SIGNALS:
     void typeChanged(int types);
-    void pathChanged(KoPathShape* path); // TODO this is unused, can we remove this one?
+    void pathChanged(KoPathShape *path); // TODO this is unused, can we remove this one?
 protected:
     /// reimplemented
-    QList<QPointer<QWidget> >  createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
 protected:
     struct PathSegment;
 
     void updateOptionsWidget();
-    PathSegment* segmentAtPoint(const QPointF &point);
+    PathSegment *segmentAtPoint(const QPointF &point);
 
 protected Q_SLOTS:
     void pointTypeChanged(QAction *type);
@@ -102,8 +102,8 @@ protected:
     QCursor m_selectCursor;
 
 protected:
-    KoPathToolHandle * m_activeHandle;       ///< the currently active handle
-    int m_handleRadius;    ///< the radius of the control point handles
+    KoPathToolHandle *m_activeHandle; ///< the currently active handle
+    int m_handleRadius; ///< the radius of the control point handles
     uint m_grabSensitivity; ///< the grab sensitivity
     QPointF m_lastPoint; ///< needed for interaction strategy
     PathSegment *m_activeSegment;

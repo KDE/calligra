@@ -12,20 +12,20 @@
 /**
  * Register the applivations canvas resources here
  * to make them accessible by plugins.
- * 
+ *
  * @see KoCanvasResourceManager::CanvasResource
  */
 
 namespace Sheets
 {
-    namespace CanvasResource
-    {
-        enum Identities {
-            Selection = KoCanvasResourceManager::SheetsStart, ///< the cell selection
-            MapResource, ///< the document data
-            AccessModel  ///< the data table access model 
-        };
-    }
+namespace CanvasResource
+{
+enum Identities {
+    Selection = KoCanvasResourceManager::SheetsStart, ///< the cell selection
+    MapResource, ///< the document data
+    AccessModel ///< the data table access model
+};
+}
 }
 
 #endif

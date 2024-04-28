@@ -11,20 +11,18 @@
 #include "ui/actions/dialogs/AddNamedAreaDialog.h"
 #include "ui/actions/dialogs/NamedAreaDialog.h"
 
-#include <QAction>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <QAction>
 
+#include "core/Sheet.h"
 #include "engine/MapBase.h"
 #include "engine/NamedAreaManager.h"
-#include "core/Sheet.h"
 #include "ui/Selection.h"
 
 #include "ui/commands/NamedAreaCommand.h"
 
-
 using namespace Calligra::Sheets;
-
 
 AddNamedArea::AddNamedArea(Actions *actions)
     : DialogCellAction(actions, "setAreaName", i18n("Area Name..."), QIcon(), i18n("Set a name for a region of the spreadsheet"))
@@ -34,7 +32,6 @@ AddNamedArea::AddNamedArea(Actions *actions)
 AddNamedArea::~AddNamedArea()
 {
 }
-
 
 void AddNamedArea::addArea(const QString &name)
 {
@@ -48,23 +45,26 @@ void AddNamedArea::addArea(const QString &name)
         return; // nothing to do
     }
 
-    NamedAreaCommand* command = 0;
+    NamedAreaCommand *command = 0;
     bool okay = true;
     bool replace = false;
 
     if (manager->contains(name)) {
         replace = true;
-        const QString question = i18n("The named area '%1' already exists.\n"
-                                      "Do you want to replace it?", name);
-        int result = KMessageBox::warningContinueCancel(m_dlg, question, i18n("Replace Named Area"),
-                     KStandardGuiItem::overwrite());
-        if (result == KMessageBox::Cancel) okay = false;
+        const QString question = i18n(
+            "The named area '%1' already exists.\n"
+            "Do you want to replace it?",
+            name);
+        int result = KMessageBox::warningContinueCancel(m_dlg, question, i18n("Replace Named Area"), KStandardGuiItem::overwrite());
+        if (result == KMessageBox::Cancel)
+            okay = false;
     }
 
     if (okay) {
         command = new NamedAreaCommand();
         command->setSheet(m_selection->activeSheet());
-        if (replace) command->setText(kundo2_i18n("Replace Named Area"));
+        if (replace)
+            command->setText(kundo2_i18n("Replace Named Area"));
         command->setAreaName(name);
         command->add(region);
         command->execute(m_selection->canvas());
@@ -75,13 +75,9 @@ void AddNamedArea::addArea(const QString &name)
 ActionDialog *AddNamedArea::createDialog(QWidget *canvasWidget)
 {
     AddNamedAreaDialog *dlg = new AddNamedAreaDialog(canvasWidget);
-    connect (dlg, &AddNamedAreaDialog::addArea, this, &AddNamedArea::addArea);
+    connect(dlg, &AddNamedAreaDialog::addArea, this, &AddNamedArea::addArea);
     return dlg;
 }
-
-
-
-
 
 ManageNamedAreas::ManageNamedAreas(Actions *actions)
     : DialogCellAction(actions, "namedAreaDialog", i18n("Named Areas..."), koIcon("bookmarks"), i18n("Edit or select named areas"))
@@ -92,7 +88,8 @@ ManageNamedAreas::~ManageNamedAreas()
 {
 }
 
-QAction *ManageNamedAreas::createAction() {
+QAction *ManageNamedAreas::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_G));
     res->setIconText(i18n("Named Areas"));
@@ -113,5 +110,3 @@ void ManageNamedAreas::updateSelection(const Region &region, Sheet *sheet)
     m_selection->initialize(region);
     m_selection->emitModified();
 }
-
-

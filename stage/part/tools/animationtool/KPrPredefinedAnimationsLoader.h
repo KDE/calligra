@@ -7,9 +7,9 @@
 #ifndef KPRPREDEFINEDANIMATIONSLOADER_H
 #define KPRPREDEFINEDANIMATIONSLOADER_H
 
-#include <QObject>
-#include <QMap>
 #include <KoXmlReader.h>
+#include <QMap>
+#include <QObject>
 
 class KPrShapeAnimation;
 class KoXmlElement;
@@ -53,8 +53,7 @@ public:
      * @param context KoShapeLoadingContext class
      * @param animShape Shape that holds the animation
      */
-    KPrShapeAnimation *loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context,
-                                             KoShape *animShape = 0);
+    KPrShapeAnimation *loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context, KoShape *animShape = 0);
 
 private:
     /**
@@ -68,35 +67,35 @@ private:
     void readDefaultAnimations();
 
     /**
-      * Return a printable animation name using animation id
-      *
-      * @param id QString holding the animation id
-      * @return a QString holding the name
-      */
+     * Return a printable animation name using animation id
+     *
+     * @param id QString holding the animation id
+     * @return a QString holding the name
+     */
     QString animationName(const QString &id) const;
 
     /**
-      * Return the animation class icon (Ex of classes: zoom, swivel, appear, etc)
-      *
-      * @param id QString holding the animation id
-      * @return a QIcon depending on animation class
-      */
+     * Return the animation class icon (Ex of classes: zoom, swivel, appear, etc)
+     *
+     * @param id QString holding the animation id
+     * @return a QIcon depending on animation class
+     */
     QIcon loadAnimationIcon(const QString &id);
 
     /**
-      * Return the animation sub type icon (Ex of subtypes: up, down, from left, etc)
-      *
-      * @param id QString holding the animation id
-      * @return a QIcon depending on animation sub type
-      */
+     * Return the animation sub type icon (Ex of subtypes: up, down, from left, etc)
+     *
+     * @param id QString holding the animation id
+     * @return a QIcon depending on animation sub type
+     */
     QIcon loadSubTypeIcon(const QString &mainId, const QString &subTypeId);
 
     /**
-      * Return an animation icon created using the motion path
-      *
-      * @param id QString holding the animation id
-      * @return a QIcon depending on motion path
-      */
+     * Return an animation icon created using the motion path
+     *
+     * @param id QString holding the animation id
+     * @return a QIcon depending on motion path
+     */
     QIcon loadMotionPathIcon(const KoXmlElement &element);
 
     /**
@@ -111,8 +110,8 @@ private:
 
     QList<KPrShapeAnimation *> m_animations;
     QList<KoXmlElement> m_animationContext;
-    QMap<QString, KPrCollectionItemModel*> m_modelMap;
-    QMap<QString, KPrCollectionItemModel*> m_subModelMap;
+    QMap<QString, KPrCollectionItemModel *> m_modelMap;
+    QMap<QString, KPrCollectionItemModel *> m_subModelMap;
     QList<QListWidgetItem *> m_mainItemsCollection;
     bool m_isInitialized;
 };

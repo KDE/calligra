@@ -46,7 +46,7 @@ class QTextBlock;
  * the counter will increase. If you want a paragraph to be on a sub level you do however need to
  * create a new paragraph-style when another listLevel set.
  */
-class  KOTEXT_EXPORT KoListStyle : public QObject
+class KOTEXT_EXPORT KoListStyle : public QObject
 {
     Q_OBJECT
 public:
@@ -68,49 +68,48 @@ public:
     /// further properties
     enum Property {
         // Housekeeping
-        Level = QTextFormat::UserProperty + 1000,          ///< list nesting level, is 1 or higher, or zero when implied
-        ListId,         ///< A group of lists together are called 1 (user intended) list in ODF. Store the listId here
-        StyleId,        ///< The id stored in the listFormat to link the list to this style.
-        IsOutline,      ///< If true then this list is an outline list (for header paragraphs)
+        Level = QTextFormat::UserProperty + 1000, ///< list nesting level, is 1 or higher, or zero when implied
+        ListId, ///< A group of lists together are called 1 (user intended) list in ODF. Store the listId here
+        StyleId, ///< The id stored in the listFormat to link the list to this style.
+        IsOutline, ///< If true then this list is an outline list (for header paragraphs)
 
         // Label
         NumberFormat, ///< The KoOdfNumberFormat::FormattingSpecification
         ListItemPrefix, ///< The text to be printed before the listItem
         ListItemSuffix, ///< The text to be printed after the listItem
-        StartValue,     ///< First value to use
-        DisplayLevel,   ///< show this many parent levels. Is always lower than the (implied) level.
-        CharacterStyleId,///< CharacterStyle used for markup of the counter
+        StartValue, ///< First value to use
+        DisplayLevel, ///< show this many parent levels. Is always lower than the (implied) level.
+        CharacterStyleId, ///< CharacterStyle used for markup of the counter
         CharacterProperties, ///< This stores the character properties of the list style
-        BulletCharacter,///< an int with the unicode value of the character (for CustomCharItem)
-        RelativeBulletSize,     ///< size in percent relative to the height of the text
+        BulletCharacter, ///< an int with the unicode value of the character (for CustomCharItem)
+        RelativeBulletSize, ///< size in percent relative to the height of the text
         LetterSynchronization, ///< If letters are used for numbering, when true increment all at the same time. (aa, bb)
-        Width,          ///< The width, in pt, of  a picture bullet.
-        Height,         ///< The height, in pt, of a picture bullet.
-        BulletImage,    ///< Bullet image stored as a key for lookup in the imageCollection
+        Width, ///< The width, in pt, of  a picture bullet.
+        Height, ///< The height, in pt, of a picture bullet.
+        BulletImage, ///< Bullet image stored as a key for lookup in the imageCollection
 
         // Geometry mode
-        AlignmentMode,   ///< Is true if list-level-position-and-space-mode=label-alignment
+        AlignmentMode, ///< Is true if list-level-position-and-space-mode=label-alignment
 
         // Geometry properties for old mode
-        Indent,         ///< The space (margin) to include for all paragraphs
-        MinimumWidth,   ///< The minimum width, in pt, of the listItem including the prefix/suffix.
+        Indent, ///< The space (margin) to include for all paragraphs
+        MinimumWidth, ///< The minimum width, in pt, of the listItem including the prefix/suffix.
         MinimumDistance, ///< The minimum distance, in pt, between the counter and the text
 
         // Geometry properties for label-alignment mode
-        Alignment,      ///< Alignment of the counter
-        Margin,         ///< Stores the margin of the list - not ODF but convenience when auto generating new levels
+        Alignment, ///< Alignment of the counter
+        Margin, ///< Stores the margin of the list - not ODF but convenience when auto generating new levels
         MarginIncrease, ///< Stores the margin increase of the list
-        TextIndent,     ///< Stores the text indent of list item
-        LabelFollowedBy,  ///< Label followed by one of the enums ListLabelFollowedBy
-        TabStopPosition   ///< Specifies the additional tab stops
+        TextIndent, ///< Stores the text indent of list item
+        LabelFollowedBy, ///< Label followed by one of the enums ListLabelFollowedBy
+        TabStopPosition ///< Specifies the additional tab stops
     };
     Q_ENUM(Property)
 
-    enum ListLabelFollowedBy
-    {
-        ListTab,  ///< Label is followed by a list tab
-        Space,    ///< Label followed by a Space
-        Nothing      ///< Nothing is present between label and the text
+    enum ListLabelFollowedBy {
+        ListTab, ///< Label is followed by a list tab
+        Space, ///< Label followed by a Space
+        Nothing ///< Nothing is present between label and the text
     };
 
     /**
@@ -189,7 +188,7 @@ public:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOdf(KoShapeLoadingContext& context, const KoXmlElement& style = KoXmlElement());
+    void loadOdf(KoShapeLoadingContext &context, const KoXmlElement &style = KoXmlElement());
 
     /**
      * Save the style to a KoGenStyle object using the OpenDocument format
@@ -223,7 +222,7 @@ private:
     void refreshLevelProperties(const KoListLevelProperties &properties);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_METATYPE(KoListStyle *)

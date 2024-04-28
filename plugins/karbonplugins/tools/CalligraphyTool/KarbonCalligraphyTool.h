@@ -7,8 +7,8 @@
 #ifndef KARBONCALLIGRAPHYTOOL_H
 #define KARBONCALLIGRAPHYTOOL_H
 
-#include <KoToolBase.h>
 #include <KoPathShape.h>
+#include <KoToolBase.h>
 #include <QPainterPath>
 #include <QPointer>
 
@@ -24,13 +24,13 @@ public:
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    void mousePressEvent(KoPointerEvent *event) override ;
+    void mousePressEvent(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
     void mouseReleaseEvent(KoPointerEvent *event) override;
 
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     void deactivate() override;
 
 Q_SIGNALS:
@@ -42,10 +42,10 @@ private Q_SLOTS:
     void setUseAngle(bool useAngle);
     void setStrokeWidth(double width);
     void setThinning(double thinning);
-    void setAngle(int angle);   // set theangle in degrees
+    void setAngle(int angle); // set theangle in degrees
     void setFixation(double fixation);
     void setCaps(double caps);
-    void setMass(double mass);     // set the mass in user friendly format
+    void setMass(double mass); // set the mass in user friendly format
     void setDrag(double drag);
 
     void updateSelectedPath();
@@ -66,18 +66,18 @@ private:
     // used to determine if the device supports tilt
     bool m_deviceSupportsTilt;
 
-    bool m_usePath;         // follow selected path
-    bool m_usePressure;     // use tablet pressure
-    bool m_useAngle;        // use tablet angle
+    bool m_usePath; // follow selected path
+    bool m_usePressure; // use tablet pressure
+    bool m_useAngle; // use tablet angle
     qreal m_strokeWidth;
     qreal m_lastWidth;
-    qreal m_customAngle;   // angle set by the user
-    qreal m_angle;  // angle to use, may use the device angle, in radians!!!
+    qreal m_customAngle; // angle set by the user
+    qreal m_angle; // angle to use, may use the device angle, in radians!!!
     qreal m_fixation;
     qreal m_thinning;
     qreal m_caps;
-    qreal m_mass;  // in raw format (not user friendly)
-    qreal m_drag;  // from 0.0 to 1.0
+    qreal m_mass; // in raw format (not user friendly)
+    qreal m_drag; // from 0.0 to 1.0
 
     KoPathShape *m_selectedPath;
     QPainterPath m_selectedPathOutline;

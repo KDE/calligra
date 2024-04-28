@@ -10,22 +10,21 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #include "SeriesDialog.h"
 
-#include <KMessageBox>
 #include <KLocalizedString>
+#include <KMessageBox>
 
+#include <QDoubleSpinBox>
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QHBoxLayout>
-#include <QGridLayout>
 #include <QLabel>
-#include <QDoubleSpinBox>
 
 using namespace Calligra::Sheets;
 
-SeriesDialog::SeriesDialog(QWidget* parent)
-        : ActionDialog(parent)
+SeriesDialog::SeriesDialog(QWidget *parent)
+    : ActionDialog(parent)
 {
     setCaption(i18n("Series"));
     setObjectName(QLatin1String("SeriesDialog"));
@@ -36,7 +35,7 @@ SeriesDialog::SeriesDialog(QWidget* parent)
 
     QVBoxLayout *grid1 = new QVBoxLayout(page);
 
-    QGroupBox* gb1 = new QGroupBox(i18n("Insert Values"), page);
+    QGroupBox *gb1 = new QGroupBox(i18n("Insert Values"), page);
     QHBoxLayout *gb1layout = new QHBoxLayout(gb1);
     column = new QRadioButton(i18n("Vertical"), gb1);
     column->setWhatsThis(i18n("Insert the series vertically, one below the other"));
@@ -47,26 +46,28 @@ SeriesDialog::SeriesDialog(QWidget* parent)
     gb1layout->addWidget(column);
     gb1layout->addWidget(row);
 
-    QGroupBox* gb2 = new QGroupBox(i18n("Type"), page);
+    QGroupBox *gb2 = new QGroupBox(i18n("Type"), page);
     QHBoxLayout *gb2layout = new QHBoxLayout(gb2);
     linear = new QRadioButton(i18n("Linear (2,4,6,...)"), gb2);
-    linear->setWhatsThis(i18n("Generate a series from 'start' to 'end' and for each step add "
-                              "the value provided in step. This creates a series where each value "
-                              "is 'step' larger than the value before it."));
+    linear->setWhatsThis(
+        i18n("Generate a series from 'start' to 'end' and for each step add "
+             "the value provided in step. This creates a series where each value "
+             "is 'step' larger than the value before it."));
     geometric = new QRadioButton(i18n("Geometric (2,4,8,...)"), gb2);
-    geometric->setWhatsThis(i18n("Generate a series from 'start' to 'end' and for each step multiply "
-                                 "the value with the value provided in step. Using a step of 5 produces a list like: "
-                                 "5, 25, 125, 625 since 5 multiplied by 5 (step) equals 25, and that multiplied by 5 equals 125, "
-                                 "which multiplied by the same step-value of 5 equals 625."));
+    geometric->setWhatsThis(
+        i18n("Generate a series from 'start' to 'end' and for each step multiply "
+             "the value with the value provided in step. Using a step of 5 produces a list like: "
+             "5, 25, 125, 625 since 5 multiplied by 5 (step) equals 25, and that multiplied by 5 equals 125, "
+             "which multiplied by the same step-value of 5 equals 625."));
     linear->setChecked(true);
 
     gb2layout->addWidget(linear);
     gb2layout->addWidget(geometric);
 
-    QGroupBox* gb = new QGroupBox(i18n("Parameters"), page);
+    QGroupBox *gb = new QGroupBox(i18n("Parameters"), page);
     QGridLayout *gb_layout = new QGridLayout(gb);
 
-    QLabel* label = new QLabel(i18n("Start value:"), gb);
+    QLabel *label = new QLabel(i18n("Start value:"), gb);
     gb_layout->addWidget(label, 0, 0);
     start = new QDoubleSpinBox(gb);
     start->setValue(0.0);
@@ -114,13 +115,15 @@ void SeriesDialog::onApply()
             return;
         }
         if (m_dstart > m_dend && m_dstep >= 1.0) {
-            KMessageBox::error(this, i18n("End value must be greater than the start "
-                                          "value or the step must be less than '1'."));
+            KMessageBox::error(this,
+                               i18n("End value must be greater than the start "
+                                    "value or the step must be less than '1'."));
             return;
         }
         if (m_dstart == 0.0 || m_dend == 0.0 || m_dstep == 0.0) {
-            KMessageBox::error(this, i18n("None of the Start, Stop or Step values "
-                                          "may be equal to zero."));
+            KMessageBox::error(this,
+                               i18n("None of the Start, Stop or Step values "
+                                    "may be equal to zero."));
             return;
         }
         if (m_dstep == 1.0) {
@@ -135,22 +138,24 @@ void SeriesDialog::onApply()
 
     if (isLinear) { // Linear
         if (m_dstep == 0.0) {
-            KMessageBox::error(this, i18n("The step value must be greater than zero; "
-                                          "otherwise, the linear series is infinite."));
+            KMessageBox::error(this,
+                               i18n("The step value must be greater than zero; "
+                                    "otherwise, the linear series is infinite."));
             return;
         }
         if ((m_dstep > 0.0) && (m_dend < m_dstart)) {
-            KMessageBox::error(this, i18n("If the start value is greater than the "
-                                          "end value the step must be less than zero."));
+            KMessageBox::error(this,
+                               i18n("If the start value is greater than the "
+                                    "end value the step must be less than zero."));
             return;
         }
         if ((m_dstep < 0.0) && (m_dstart <= m_dend)) {
-            KMessageBox::error(this, i18n("If the step is negative, the start value "
-                                          "must be greater then the end value."));
+            KMessageBox::error(this,
+                               i18n("If the step is negative, the start value "
+                                    "must be greater then the end value."));
             return;
         }
     }
 
     emit insertSeries(m_dstart, m_dend, m_dstep, column->isChecked(), isLinear);
 }
-

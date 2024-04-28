@@ -8,26 +8,22 @@
 #ifndef KCHART_PROXYMODEL_H
 #define KCHART_PROXYMODEL_H
 
-
 #define INTERNAL_TABLE_NAME "ChartTable"
 
-
 // KoChart
-#include "ChartShape.h"
 #include "CellRegion.h"
-
+#include "ChartShape.h"
 
 namespace KoChart
 {
-    class ChartModel;
+class ChartModel;
 }
-
 
 // Qt
 #include <QAbstractTableModel>
 
-
-namespace KoChart {
+namespace KoChart
+{
 
 /**
  * @brief The ChartProxyModel is a factory for the DataSet's and decorates the ChartTableModel.
@@ -51,13 +47,7 @@ public:
      * This enum may be extended at a later point to store and retrieve
      * attributes.
      */
-    enum DataRole {
-        XDataRole = Qt::UserRole,
-        YDataRole,
-        CustomDataRole,
-        LabelDataRole,
-        CategoryDataRole
-    };
+    enum DataRole { XDataRole = Qt::UserRole, YDataRole, CustomDataRole, LabelDataRole, CategoryDataRole };
 
     /**
      * Re-initializes the model with data from an arbitrary region.
@@ -79,8 +69,8 @@ public:
     CellRegion cellRangeAddress() const;
 
     /**
-    * Load series from ODF
-    */
+     * Load series from ODF
+     */
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, ChartType type);
     void saveOdf(KoShapeSavingContext &context) const;
 
@@ -127,7 +117,7 @@ public:
     bool firstRowIsLabel() const;
     bool firstColumnIsLabel() const;
     Qt::Orientation dataDirection();
-    
+
     /**
      * @see setCategoryDataRegion()
      */
@@ -144,17 +134,17 @@ public:
     /**
      * A list of all data sets that are currently being used in the chart.
      */
-    QList<DataSet*> dataSets() const;
+    QList<DataSet *> dataSets() const;
 
     /**
      * Insert @p count number of rows at position @p row.
-     * 
+     *
      * Effectively adds DataSet(s) to the model
      */
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     /**
      * Remove @p count number of rows at position @p row.
-     * 
+     *
      * Effectively removes DataSet(s) from the model
      */
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
@@ -200,7 +190,7 @@ public Q_SLOTS:
     /**
      * Connected to dataChanged() signal of source models in TableSource.
      */
-    virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+    virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 
     /**
      * Called by the TableSource whenever a table is added to it.
@@ -218,7 +208,7 @@ public Q_SLOTS:
 
     /**
      * Set manual control to @p value
-     * 
+     *
      * If false, dataset structure is recalculated on changes to base data.
      */
     void setManualControl(bool value);

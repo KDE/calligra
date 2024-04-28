@@ -33,38 +33,37 @@ public:
     /**
      * Adds \p function to the repository.
      */
-    void add(const QSharedPointer<Function>& function);
+    void add(const QSharedPointer<Function> &function);
     void add(FunctionDescription *desc);
 
     /**
      * Removes \p function from the repository.
      * The Function object and the appropriate description will be destroyed.
      */
-    void remove(const QSharedPointer<Function>& function);
+    void remove(const QSharedPointer<Function> &function);
 
-    QSharedPointer<Function> function(const QString& name);
+    QSharedPointer<Function> function(const QString &name);
 
-    FunctionDescription *functionInfo(const QString& name);
+    FunctionDescription *functionInfo(const QString &name);
 
     /** return functions within a group, or all if no group given */
-    QStringList functionNames(const QString& group = QString());
+    QStringList functionNames(const QString &group = QString());
 
     const QStringList &groups() const;
-    void addGroup(const QString& groupname);
+    void addGroup(const QString &groupname);
 
     /**
      * Loads function descriptions from an XML file.
      */
-    void loadFunctionDescriptions(const QString& filename);
+    void loadFunctionDescriptions(const QString &filename);
 
 private:
-
     class Private;
-    Private * const d;
+    Private *const d;
 
     // no copy or assign
-    FunctionRepository(const FunctionRepository&);
-    FunctionRepository& operator=(const FunctionRepository&);
+    FunctionRepository(const FunctionRepository &);
+    FunctionRepository &operator=(const FunctionRepository &);
 };
 
 } // namespace Sheets

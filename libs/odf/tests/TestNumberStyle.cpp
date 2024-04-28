@@ -6,21 +6,22 @@
 #include "TestNumberStyle.h"
 
 #include <KoOdfNumberStyles.h>
-#include <QTest>
 #include <QLoggingCategory>
+#include <QTest>
 
 #include "OdfDebug.h"
 QString escapeLocals(const QString &text)
 {
     QString t(text);
-    t.replace(',','.');
+    t.replace(',', '.');
     return t;
 }
 
 void TestNumberStyle::initTestCase()
 {
-    QLoggingCategory::setFilterRules("*.debug=false\n"
-            "calligra.lib.odf=true");
+    QLoggingCategory::setFilterRules(
+        "*.debug=false\n"
+        "calligra.lib.odf=true");
 }
 
 void TestNumberStyle::testEmpty()

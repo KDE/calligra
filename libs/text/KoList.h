@@ -11,8 +11,8 @@
 
 #include <QMetaType>
 #include <QPointer>
-#include <QVector>
 #include <QTextList>
+#include <QVector>
 
 class KoListPrivate;
 
@@ -26,10 +26,7 @@ class KOTEXT_EXPORT KoList : public QObject
 {
     Q_OBJECT
 public:
-    enum Type {
-        TextList,
-        NumberedParagraph
-    };
+    enum Type { TextList, NumberedParagraph };
 
     /// Constructor
     KoList(const QTextDocument *document, KoListStyle *style, Type type = TextList);
@@ -49,7 +46,7 @@ public:
      * or after this block is part of a list that follows \a style, this block is
      * added to that list. If required a new KoList is created.
      * Returns the KoList that this block was added to.
-    */
+     */
     static KoList *applyStyle(const QTextBlock &block, KoListStyle *style, int level);
 
     /// Sets the style of this list
@@ -62,7 +59,7 @@ public:
     bool contains(QTextList *textList) const;
 
     /// Returns the QTextLists that form this list
-    QVector<QPointer<QTextList> > textLists() const;
+    QVector<QPointer<QTextList>> textLists() const;
 
     QVector<KoListStyle::ListIdType> textListIds() const;
 
@@ -75,12 +72,12 @@ public:
     void setListContinuedFrom(KoList *list);
 
 private:
-    KoListPrivate * const d;
+    KoListPrivate *const d;
 
     Q_PRIVATE_SLOT(d, void styleChanged(int))
 };
 
-Q_DECLARE_METATYPE(KoList*)
-Q_DECLARE_METATYPE(QList<KoList*>)
+Q_DECLARE_METATYPE(KoList *)
+Q_DECLARE_METATYPE(QList<KoList *>)
 
 #endif // KOLIST_H

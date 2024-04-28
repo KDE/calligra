@@ -5,16 +5,14 @@
 */
 
 #include "InsertSemanticObjectActionBase.h"
-#include <KoTextEditor.h>
 #include <KoCanvasBase.h>
 #include <KoTextDocument.h>
+#include <KoTextEditor.h>
 
-InsertSemanticObjectActionBase::InsertSemanticObjectActionBase(KoCanvasBase *canvas,
-        KoDocumentRdf *rdf,
-        const QString &name)
-        : QAction(name, canvas->canvasWidget()),
-        m_canvas(canvas),
-        m_rdf(rdf)
+InsertSemanticObjectActionBase::InsertSemanticObjectActionBase(KoCanvasBase *canvas, KoDocumentRdf *rdf, const QString &name)
+    : QAction(name, canvas->canvasWidget())
+    , m_canvas(canvas)
+    , m_rdf(rdf)
 {
     connect(this, SIGNAL(triggered(bool)), this, SLOT(activated()));
 }

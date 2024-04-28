@@ -33,6 +33,7 @@ public:
     /// Execute the zoom
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
     void cancelInteraction() override;
+
 private:
     KoCanvasController *m_controller;
 
@@ -41,4 +42,3 @@ private:
 };
 
 #endif
-

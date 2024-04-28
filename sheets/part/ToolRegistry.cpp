@@ -10,9 +10,9 @@
 
 #include <engine/SheetsDebug.h>
 
-#include <KSharedConfig>
 #include <KConfigGroup>
 #include <KPluginFactory>
+#include <KSharedConfig>
 
 #include <KoPluginLoader.h>
 #include <KoToolRegistry.h>
@@ -21,15 +21,13 @@ Q_GLOBAL_STATIC(Calligra::Sheets::ToolRegistry, s_instance)
 
 using namespace Calligra::Sheets;
 
-
 class Q_DECL_HIDDEN ToolRegistry::Private
 {
 public:
 };
 
-
 ToolRegistry::ToolRegistry()
-        : d(new Private)
+    : d(new Private)
 {
     // Add the built-in cell tool.
     KoToolRegistry::instance()->add(new CellToolFactory("KSpreadCellToolId"));
@@ -42,7 +40,7 @@ ToolRegistry::~ToolRegistry()
     delete d;
 }
 
-ToolRegistry* ToolRegistry::instance()
+ToolRegistry *ToolRegistry::instance()
 {
     return s_instance;
 }
@@ -77,9 +75,8 @@ void ToolRegistry::loadTools()
             continue;
         }
         const QString pluginConfigEnableKey = metaData.pluginId() + QLatin1String("Enabled");
-        const bool isPluginEnabled = pluginsConfigGroup.hasKey(pluginConfigEnableKey) ?
-            pluginsConfigGroup.readEntry(pluginConfigEnableKey, true) :
-            metaData.isEnabledByDefault();
+        const bool isPluginEnabled =
+            pluginsConfigGroup.hasKey(pluginConfigEnableKey) ? pluginsConfigGroup.readEntry(pluginConfigEnableKey, true) : metaData.isEnabledByDefault();
 
         if (isPluginEnabled) {
             // Tool already registered?
@@ -92,12 +89,12 @@ void ToolRegistry::loadTools()
             toolFactory->setToolTip(metaData.description());
             KoToolRegistry::instance()->add(toolFactory);
         } else {
-           // Tool not registered?
-           if (!KoToolRegistry::instance()->contains(toolFactory->id())) {
-               continue;
-           }
-           delete KoToolRegistry::instance()->value(toolFactory->id());
-           KoToolRegistry::instance()->remove(toolFactory->id());
+            // Tool not registered?
+            if (!KoToolRegistry::instance()->contains(toolFactory->id())) {
+                continue;
+            }
+            delete KoToolRegistry::instance()->value(toolFactory->id());
+            KoToolRegistry::instance()->remove(toolFactory->id());
         }
     }
 }

@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "KoOdfPageLayoutProperties.h"
 
@@ -21,21 +20,18 @@
 // ----------------------------------------------------------------
 //                         private class
 
-
 class Q_DECL_HIDDEN KoOdfPageLayoutProperties::Private
 {
 public:
-    Private() {};
-    ~Private() {};
+    Private(){};
+    ~Private(){};
 
     // NYI: Background Image
     // NYI: Columns
     // NYI: Footnote sep
 };
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfPageLayoutProperties::KoOdfPageLayoutProperties()
     : KoOdfStyleProperties()
@@ -48,12 +44,10 @@ KoOdfPageLayoutProperties::~KoOdfPageLayoutProperties()
     delete d;
 }
 
-
 void KoOdfPageLayoutProperties::clear()
 {
     KoOdfStyleProperties::clear();
 }
-
 
 bool KoOdfPageLayoutProperties::readOdf(KoXmlStreamReader &reader)
 {
@@ -71,11 +65,9 @@ bool KoOdfPageLayoutProperties::readOdf(KoXmlStreamReader &reader)
 
         if (child == "style:background-image") {
             // FIXME: NYI
-        }
-        else if (child == "style:columns") {
+        } else if (child == "style:columns") {
             // FIXME: NYI
-        }
-        else if (child == "text:footnote-sep") {
+        } else if (child == "text:footnote-sep") {
             // FIXME: NYI
         }
 

@@ -8,8 +8,8 @@
 #define KWNAVIGATIONDOCKER_H
 
 // Base classes
-#include <QDockWidget>
 #include <KoCanvasObserverBase.h>
+#include <QDockWidget>
 
 class KWNavigationWidget;
 class KoCanvasBase;
@@ -31,4 +31,4 @@ private:
     KWNavigationWidget *m_navigationWidget;
 };
 
-#endif //KWNAVIGATIONDOCKER_H
+#endif // KWNAVIGATIONDOCKER_H

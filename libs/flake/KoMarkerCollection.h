@@ -9,10 +9,10 @@
 
 #include "flake_export.h"
 
-#include <QObject>
-#include <QList>
 #include <QHash>
+#include <QList>
 #include <QMetaType>
+#include <QObject>
 
 class KoMarker;
 class KoXmlElement;
@@ -27,9 +27,9 @@ public:
 
     bool loadOdf(KoShapeLoadingContext &context);
     // For now we only save the used markers and that is done with a KoSharedSavingData when a marker usage is encountered.
-    //void saveOdf(KoShapeSavingContext &context) const;
+    // void saveOdf(KoShapeSavingContext &context) const;
 
-    QList<KoMarker*> markers() const;
+    QList<KoMarker *> markers() const;
 
     /**
      * Add marker to collection
@@ -42,15 +42,15 @@ public:
      * @param marker Marker to add
      * @return pointer to marker that should be used. This might be different to the marker passed
      */
-    KoMarker * addMarker(KoMarker *marker);
+    KoMarker *addMarker(KoMarker *marker);
 
 private:
     /// load the markers that are available per default.
     void loadDefaultMarkers();
-    void loadOdfMarkers(const QHash<QString, KoXmlElement*> &markers, KoShapeLoadingContext &context, QHash<QString, KoMarker*> &lookupTable);
+    void loadOdfMarkers(const QHash<QString, KoXmlElement *> &markers, KoShapeLoadingContext &context, QHash<QString, KoMarker *> &lookupTable);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_METATYPE(KoMarkerCollection *)

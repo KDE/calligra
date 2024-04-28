@@ -10,8 +10,8 @@
 #include "KoColorConversions.h"
 #include <KoCompositeOp.h>
 
-#define SCALE_TO_FLOAT( v ) KoColorSpaceMaths< channels_type, float>::scaleToA( v )
-#define SCALE_FROM_FLOAT( v ) KoColorSpaceMaths< float, channels_type>::scaleToA( v )
+#define SCALE_TO_FLOAT(v) KoColorSpaceMaths<channels_type, float>::scaleToA(v)
+#define SCALE_FROM_FLOAT(v) KoColorSpaceMaths<float, channels_type>::scaleToA(v)
 
 template<class _CSTraits>
 class RgbCompositeOpHue : public KoCompositeOp
@@ -20,7 +20,6 @@ class RgbCompositeOpHue : public KoCompositeOp
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
 
 public:
-
     RgbCompositeOpHue(KoColorSpace *cs)
         : KoCompositeOp(cs, COMPOSITE_HUE, i18n("Hue"), "")
     {
@@ -28,10 +27,14 @@ public:
 
     using KoCompositeOp::composite;
 
-    void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                   const quint8 *srcRowStart, qint32 srcRowStride,
-                   const quint8 *maskRowStart, qint32 maskRowStride,
-                   qint32 rows, qint32 numColumns,
+    void composite(quint8 *dstRowStart,
+                   qint32 dstRowStride,
+                   const quint8 *srcRowStart,
+                   qint32 srcRowStride,
+                   const quint8 *maskRowStart,
+                   qint32 maskRowStride,
+                   qint32 rows,
+                   qint32 numColumns,
                    quint8 opacity,
                    const QBitArray &channelFlags) const override
     {
@@ -53,13 +56,12 @@ public:
                 if (mask != 0) {
                     if (*mask != OPACITY_OPAQUE_U8) {
                         channels_type tmpOpacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(*mask);
-                        srcAlpha =  KoColorSpaceMaths<channels_type>::multiply(srcAlpha, tmpOpacity);
+                        srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, tmpOpacity);
                     }
                     mask++;
                 }
 
                 if (srcAlpha != NATIVE_OPACITY_TRANSPARENT) {
-
                     if (opacity != OPACITY_OPAQUE_U8) {
                         channels_type tmpOpacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(opacity);
                         srcAlpha = KoColorSpaceMaths<channels_type>::multiply(src[_CSTraits::alpha_pos], tmpOpacity);

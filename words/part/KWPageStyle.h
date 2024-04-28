@@ -197,7 +197,10 @@ public:
     void loadOdf(KoOdfLoadingContext &context, const KoXmlElement &masterNode, const KoXmlElement &style, KoDocumentResourceManager *documentResources);
 
     bool operator==(const KWPageStyle &other) const;
-    inline bool operator!=(const KWPageStyle &other) const { return ! operator==(other); }
+    inline bool operator!=(const KWPageStyle &other) const
+    {
+        return !operator==(other);
+    }
     uint hash() const;
 
     /// internal

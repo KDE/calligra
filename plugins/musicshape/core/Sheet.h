@@ -9,7 +9,8 @@
 #include <QObject>
 #include <QString>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Part;
 class PartGroup;
@@ -31,7 +32,7 @@ public:
     /**
      * Constructor, this will create a sheet containing no parts.
      */
-    explicit Sheet(QObject* parent = 0);
+    explicit Sheet(QObject *parent = 0);
 
     /**
      * Destructor.
@@ -48,14 +49,14 @@ public:
      *
      * @param index the index of the part to return
      */
-    Part* part(int index);
+    Part *part(int index);
 
     /**
      * Returns the index of the given part, or -1 if the part is not found.
      *
      * @param part the part to search for
      */
-    int partIndex(Part* part);
+    int partIndex(Part *part);
 
     /**
      * Adds a new part to this sheet. The part will have the given name, and will be added after all currently
@@ -63,7 +64,7 @@ public:
      *
      * @param name the name of the part to create
      */
-    Part* addPart(const QString& name);
+    Part *addPart(const QString &name);
 
     /**
      * Adds an existing part to this sheet. The part should not have been added to any other sheet, as adding a
@@ -72,7 +73,7 @@ public:
      *
      * @param part the part to add to the sheet
      */
-    void addPart(Part* part);
+    void addPart(Part *part);
 
     /**
      * Inserts a new part into this sheet. The part will be inserted before the part with index before, and be names
@@ -81,7 +82,7 @@ public:
      * @param before index of the part before which to insert a new part
      * @param name the name of the part to create
      */
-    Part* insertPart(int before, const QString& name);
+    Part *insertPart(int before, const QString &name);
 
     /**
      * Inserts an existing part into this sheet. The part  should not have been added to any other sheet, as adding
@@ -91,7 +92,7 @@ public:
      * @param before index of the part before which to insert the new part
      * @param part the part to insert into the sheet
      */
-    void insertPart(int before, Part* part);
+    void insertPart(int before, Part *part);
 
     /**
      * Removes the part with the given index from this sheet. If deletePart is true, the part will also be deleted, if
@@ -109,7 +110,7 @@ public:
      * @param part the part to remove
      * @param deletePart should the part that is removed also be deleted
      */
-    void removePart(Part* part, bool deletePart = true);
+    void removePart(Part *part, bool deletePart = true);
 
     /**
      * Returns the number of groups in this sheet.
@@ -121,7 +122,7 @@ public:
      *
      * @param index the index of the part group to return
      */
-    PartGroup* partGroup(int index);
+    PartGroup *partGroup(int index);
 
     /**
      * Adds a new part group to this sheet. The part group starts at the part indexed firstPart, and ends at the part
@@ -130,7 +131,7 @@ public:
      * @param firstPart the index of the first part that is part of the new part group
      * @param lastPart the index of the last part that is part of the new part group
      */
-    PartGroup* addPartGroup(int firstPart, int lastPart);
+    PartGroup *addPartGroup(int firstPart, int lastPart);
 
     /**
      * Adds an existing part group to this sheet. A part group should only be added to one sheet as the sheet
@@ -139,7 +140,7 @@ public:
      *
      * @param group the group to add to this sheet
      */
-    void addPartGroup(PartGroup* group);
+    void addPartGroup(PartGroup *group);
 
     /**
      * Removes a part group from this sheet. If deleteGroup is false the group is not only removed from the sheet but
@@ -148,7 +149,7 @@ public:
      * @param group the group to remove from this sheet
      * @param deleteGroup should the group be deleted after removing it
      */
-    void removePartGroup(PartGroup* group, bool deleteGroup = true);
+    void removePartGroup(PartGroup *group, bool deleteGroup = true);
 
     /**
      * Returns the number of bars/measures in this piece of music.
@@ -160,9 +161,9 @@ public:
      *
      * @param index the index of the bar to return.
      */
-    Bar* bar(int index);
+    Bar *bar(int index);
 
-    int indexOfBar(Bar* bar);
+    int indexOfBar(Bar *bar);
 
     /**
      * Adds count new bars at the end of this piece of music.
@@ -174,21 +175,21 @@ public:
     /**
      * Adds a new bar at the end of this piece of music.
      */
-    Bar* addBar();
+    Bar *addBar();
 
     /**
      * Adds an existing bar at the end of this piece of music.
      *
      * @param bar the bar to add
      */
-    void addBar(Bar* bar);
+    void addBar(Bar *bar);
 
     /**
      * Inserts a new bar before the bar with index before.
      *
      * @param before the index of the bar before which to insert the new bar.
      */
-    Bar* insertBar(int before);
+    Bar *insertBar(int before);
 
     /**
      * Inserts an existing bar before the bar with index before.
@@ -196,7 +197,7 @@ public:
      * @param before the index of the bar before which to insert the bar.
      * @param bar the bar to insert
      */
-    void insertBar(int before, Bar* bar);
+    void insertBar(int before, Bar *bar);
 
     /**
      * Removes a bar from the sheet. If deleteBar is true the bar is not only removed but also deleted.
@@ -216,18 +217,19 @@ public:
      */
     void removeBars(int index, int count, bool deleteBar = true);
 
-    StaffSystem* staffSystem(int index);
+    StaffSystem *staffSystem(int index);
 
     void setStaffSystemCount(int count);
     int staffSystemCount();
-    
+
     void updateAccidentals();
 Q_SIGNALS:
-    void partAdded(int index, MusicCore::Part* part);
-    void partRemoved(int index, MusicCore::Part* part);
+    void partAdded(int index, MusicCore::Part *part);
+    void partRemoved(int index, MusicCore::Part *part);
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

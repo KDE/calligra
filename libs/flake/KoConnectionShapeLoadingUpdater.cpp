@@ -8,9 +8,9 @@
 
 #include "KoConnectionShape.h"
 
-KoConnectionShapeLoadingUpdater::KoConnectionShapeLoadingUpdater(KoConnectionShape * connectionShape, ConnectionPosition position)
-: m_connectionShape(connectionShape)
-, m_position(position)
+KoConnectionShapeLoadingUpdater::KoConnectionShapeLoadingUpdater(KoConnectionShape *connectionShape, ConnectionPosition position)
+    : m_connectionShape(connectionShape)
+    , m_position(position)
 {
 }
 
@@ -18,7 +18,7 @@ KoConnectionShapeLoadingUpdater::~KoConnectionShapeLoadingUpdater()
 {
 }
 
-void KoConnectionShapeLoadingUpdater::update(KoShape * shape)
+void KoConnectionShapeLoadingUpdater::update(KoShape *shape)
 {
     if (m_position == First) {
         m_connectionShape->connectFirst(shape, m_connectionShape->firstConnectionId());

@@ -9,11 +9,11 @@
 
 #include "kotext_export.h"
 
-#include <QMetaType>
 #include <QList>
-#include <QString>
+#include <QMetaType>
 #include <QPair>
 #include <QScopedPointer>
+#include <QString>
 #include <QTextCursor>
 
 class KoXmlElement;

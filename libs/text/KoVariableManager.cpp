@@ -17,7 +17,9 @@ class KoVariableManagerPrivate
 {
 public:
     KoVariableManagerPrivate()
-            : lastId(KoInlineObject::VariableManagerStart) { }
+        : lastId(KoInlineObject::VariableManagerStart)
+    {
+    }
     KoInlineTextObjectManager *inlineObjectManager;
     QHash<QString, int> variableMapping;
     QHash<int, QString> userTypes;
@@ -27,7 +29,7 @@ public:
 };
 
 KoVariableManager::KoVariableManager(KoInlineTextObjectManager *inlineObjectManager)
-        : d(new KoVariableManagerPrivate)
+    : d(new KoVariableManagerPrivate)
 {
     d->inlineObjectManager = inlineObjectManager;
 }
@@ -124,7 +126,8 @@ void KoVariableManager::loadOdf(const KoXmlElement &bodyElement)
     if (element.isNull())
         return;
     KoXmlElement e;
-    forEachElement(e, element) {
+    forEachElement(e, element)
+    {
         if (e.namespaceURI() != KoXmlNS::text || e.localName() != "user-field-decl")
             continue;
         const QString name = e.attributeNS(KoXmlNS::text, "name");

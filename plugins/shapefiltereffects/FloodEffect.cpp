@@ -7,14 +7,14 @@
 #include "FloodEffect.h"
 #include "KoFilterEffectRenderContext.h"
 #include "KoViewConverter.h"
-#include "KoXmlWriter.h"
 #include "KoXmlReader.h"
+#include "KoXmlWriter.h"
 #include <KLocalizedString>
 #include <QPainter>
 
 FloodEffect::FloodEffect()
-        : KoFilterEffect(FloodEffectId, i18n("Flood fill"))
-        , m_color(Qt::black)
+    : KoFilterEffect(FloodEffectId, i18n("Flood fill"))
+    , m_color(Qt::black)
 {
 }
 

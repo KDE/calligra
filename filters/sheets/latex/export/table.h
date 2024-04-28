@@ -16,20 +16,20 @@
 **
 ** To receive a copy of the GNU Library General Public License, write to the
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+* Boston, MA 02110-1301, USA.
 **
 */
 
 #ifndef __CALLIGRA_SHEETS_LATEX_TABLE_H__
 #define __CALLIGRA_SHEETS_LATEX_TABLE_H__
 
-#include <QString>
 #include <QList>
+#include <QString>
 #include <QTextStream>
 
-#include "xmlparser.h"
 #include "config.h"
-//#include "cell.h"
+#include "xmlparser.h"
+// #include "cell.h"
 
 class Cell;
 class Column;
@@ -44,11 +44,11 @@ class Row;
  * frame, ...). It use a special latex package.
  * The color table and the border of the tables is not yet supported.
  */
-class Table: public XmlParser, Config
+class Table : public XmlParser, Config
 {
-    QList<Row*> _rows;
-    QList<Column*> _columns;
-    QList<Cell*> _cells;
+    QList<Row *> _rows;
+    QList<Column *> _columns;
+    QList<Cell *> _cells;
 
     /* USEFUL DATA */
     int _maxRow, _maxCol; /* Size of the table (nb of cell) */
@@ -97,68 +97,89 @@ public:
      * getters
      */
 
-    int getMaxRow() const {
+    int getMaxRow() const
+    {
         return _maxRow;
     }
-    int getMaxColumn() const {
+    int getMaxColumn() const
+    {
         return _maxCol;
     }
-    QString getName() const {
+    QString getName() const
+    {
         return _name;
     }
-    QString getFormat() const {
+    QString getFormat() const
+    {
         return _format;
     }
-    QString getOrientation() const {
+    QString getOrientation() const
+    {
         return _orientation;
     }
-    long getBorderRight() const {
+    long getBorderRight() const
+    {
         return _borderRight;
     }
-    long getBorderLeft() const {
+    long getBorderLeft() const
+    {
         return _borderLeft;
     }
-    long getBorderBottom() const {
+    long getBorderBottom() const
+    {
         return _borderBottom;
     }
-    long getBorderTop() const {
+    long getBorderTop() const
+    {
         return _borderTop;
     }
 
-    bool isColumnNumber() const {
+    bool isColumnNumber() const
+    {
         return _columnNumber;
     }
-    bool isBorders() const {
+    bool isBorders() const
+    {
         return _borders;
     }
-    bool isHide() const {
+    bool isHide() const
+    {
         return _hide;
     }
-    bool isHideZero() const {
+    bool isHideZero() const
+    {
         return _hideZero;
     }
-    bool isFirstletterupper() const {
+    bool isFirstletterupper() const
+    {
         return _firstletterupper;
     }
-    bool isGrid() const {
+    bool isGrid() const
+    {
         return _grid;
     }
-    bool isPrintGrid() const {
+    bool isPrintGrid() const
+    {
         return _printGrid;
     }
-    bool isPrintCommentIndicator() const {
+    bool isPrintCommentIndicator() const
+    {
         return _printCommentIndicator;
     }
-    bool isPrintFormulaIndicator() const {
+    bool isPrintFormulaIndicator() const
+    {
         return _printFormulaIndicator;
     }
-    bool isShowFormula() const {
+    bool isShowFormula() const
+    {
         return _showFormula;
     }
-    bool isShowFormulaIndicator() const {
+    bool isShowFormulaIndicator() const
+    {
         return _showFormulaIndicator;
     }
-    bool isLCMode() const {
+    bool isLCMode() const
+    {
         return _lcMode;
     }
 
@@ -167,62 +188,81 @@ public:
      */
     void setMaxRow(int r);
     void setMaxColumn(int c);
-    void setName(QString name) {
+    void setName(QString name)
+    {
         _name = name;
     }
-    void setFormat(QString format) {
+    void setFormat(QString format)
+    {
         _format = format;
     }
-    void setOrientation(QString orient) {
+    void setOrientation(QString orient)
+    {
         _orientation = orient;
     }
-    void setBorderRight(long br) {
+    void setBorderRight(long br)
+    {
         _borderRight = br;
     }
-    void setBorderLeft(long bl) {
+    void setBorderLeft(long bl)
+    {
         _borderLeft = bl;
     }
-    void setBorderBottom(long bb) {
+    void setBorderBottom(long bb)
+    {
         _borderBottom = bb;
     }
-    void setBorderTop(long bt) {
+    void setBorderTop(long bt)
+    {
         _borderTop = bt;
     }
 
-    void setColumnNumber() {
+    void setColumnNumber()
+    {
         _columnNumber = true;
     }
-    void setBorders() {
+    void setBorders()
+    {
         _borders = true;
     }
-    void setHide() {
+    void setHide()
+    {
         _hide = true;
     }
-    void setHideZero() {
+    void setHideZero()
+    {
         _hideZero = true;
     }
-    void setFirstletterupper() {
+    void setFirstletterupper()
+    {
         _firstletterupper = true;
     }
-    void setGrid() {
+    void setGrid()
+    {
         _grid = true;
     }
-    void setPrintGrid() {
+    void setPrintGrid()
+    {
         _printGrid = true;
     }
-    void setPrintCommentIndicator() {
+    void setPrintCommentIndicator()
+    {
         _printCommentIndicator = true;
     }
-    void setPrintFormulaIndicator() {
+    void setPrintFormulaIndicator()
+    {
         _printFormulaIndicator = true;
     }
-    void setShowFormula() {
+    void setShowFormula()
+    {
         _showFormula = true;
     }
-    void setShowFormulaIndicator() {
+    void setShowFormulaIndicator()
+    {
         _showFormulaIndicator = true;
     }
-    void setLCMode() {
+    void setLCMode()
+    {
         _lcMode = true;
     }
 
@@ -236,32 +276,31 @@ public:
      * @param col Cell column.
      * @param row Row cell.
      */
-    Cell* searchCell(int col, int row);
+    Cell *searchCell(int col, int row);
 
     /**
      * Return one specific column which describes the format of the column.
      *
      * @param col the column.
      */
-    Column* searchColumn(int col);
+    Column *searchColumn(int col);
 
     /**
      * Return one specific row which describes the format of the row.
      *
      * @param row The row number.
      */
-    Row* searchRow(int row);
+    Row *searchRow(int row);
 
-    void     analyze(const QDomNode);
-    void     analyzePaper(const QDomNode);
-    void     generate(QTextStream&);
+    void analyze(const QDomNode);
+    void analyzePaper(const QDomNode);
+    void generate(QTextStream &);
 
 private:
-    void generateCell(QTextStream&, int, int);
-    void generateTableHeader(QTextStream&);
-    void generateTopLineBorder(QTextStream&, int);
-    void generateBottomLineBorder(QTextStream&, int);
+    void generateCell(QTextStream &, int, int);
+    void generateTableHeader(QTextStream &);
+    void generateTopLineBorder(QTextStream &, int);
+    void generateBottomLineBorder(QTextStream &, int);
 };
 
 #endif /* __CALLIGRA_SHEETS_LATEX_TABLE_H__ */
-

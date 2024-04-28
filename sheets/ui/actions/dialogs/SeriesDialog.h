@@ -31,15 +31,29 @@ class SeriesDialog : public ActionDialog
 {
     Q_OBJECT
 public:
+    SeriesDialog(QWidget *parent);
 
-    SeriesDialog(QWidget* parent);
+    double dstep() const
+    {
+        return m_dstep;
+    }
+    double dstart() const
+    {
+        return m_dstart;
+    }
+    double dend() const
+    {
+        return m_dend;
+    }
 
-    double dstep() const { return m_dstep; }
-    double dstart() const { return m_dstart; }
-    double dend() const { return m_dend; }
-
-    bool isColumn() const { return column->isChecked(); }
-    bool isLinear() const { return linear->isChecked(); }
+    bool isColumn() const
+    {
+        return column->isChecked();
+    }
+    bool isLinear() const
+    {
+        return linear->isChecked();
+    }
 
 Q_SIGNALS:
     void insertSeries(double start, double end, double step, bool isColumn, bool isLinear);
@@ -47,16 +61,16 @@ Q_SIGNALS:
 protected:
     virtual void onApply() override;
 
-    QDoubleSpinBox* start;
-    QDoubleSpinBox* end;
-    QDoubleSpinBox* step;
+    QDoubleSpinBox *start;
+    QDoubleSpinBox *end;
+    QDoubleSpinBox *step;
 
-    QRadioButton* column;
-    QRadioButton* row;
-    QRadioButton* linear;
-    QRadioButton* geometric;
-    QPoint  marker;
-    
+    QRadioButton *column;
+    QRadioButton *row;
+    QRadioButton *linear;
+    QRadioButton *geometric;
+    QPoint marker;
+
     double m_dstep, m_dend, m_dstart;
 };
 

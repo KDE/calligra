@@ -30,26 +30,26 @@ class KPrPresentationTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    explicit KPrPresentationTool( KPrViewModePresentation &viewMode );
+    explicit KPrPresentationTool(KPrViewModePresentation &viewMode);
     ~KPrPresentationTool() override;
 
     bool wantsAutoScroll() const override;
 
-    void paint( QPainter &painter, const KoViewConverter &converter ) override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    void mousePressEvent( KoPointerEvent *event ) override;
-    void mouseDoubleClickEvent( KoPointerEvent *event ) override;
-    void mouseMoveEvent( KoPointerEvent *event ) override;
-    void mouseReleaseEvent( KoPointerEvent *event ) override;
-    void keyPressEvent( QKeyEvent *event ) override;
-    void keyReleaseEvent( QKeyEvent *event ) override;
-    void wheelEvent( KoPointerEvent * event ) override;
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+    void wheelEvent(KoPointerEvent *event) override;
 
     KPrPresentationStrategyBase *strategy();
-    KPrViewModePresentation & viewModePresentation();
+    KPrViewModePresentation &viewModePresentation();
 
 public Q_SLOTS:
-    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     void deactivate() override;
     void highlightPresentation();
     void drawOnPresentation();
@@ -58,8 +58,8 @@ public Q_SLOTS:
 
 private:
     void finishEventActions();
-    void switchStrategy( KPrPresentationStrategyBase * strategy );
-    bool eventFilter( QObject * obj, QEvent * event ) override;
+    void switchStrategy(KPrPresentationStrategyBase *strategy);
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
     /**
      * Returns true if shape is a TextShape and event->point is over hyperlink
@@ -67,7 +67,7 @@ private:
      * @param shape the shape fhich is searched for hyperlink
      * @param hyperLink the string which is filled with hyperlink url
      */
-    bool checkHyperlink(KoPointerEvent *event, KoShape * shape, QString & hyperLink);
+    bool checkHyperlink(KoPointerEvent *event, KoShape *shape, QString &hyperLink);
 
     /**
      * Runs url string defined inside hyperlink
@@ -75,12 +75,12 @@ private:
      */
     void runHyperlink(const QString &hyperLink);
 
-    KPrViewModePresentation & m_viewMode;
+    KPrViewModePresentation &m_viewMode;
     QSet<KoEventAction *> m_eventActions;
 
-    KPrPresentationToolWidget * m_presentationToolWidget;
-    QFrame * m_frame;
-    KPrPresentationStrategyBase * m_strategy;
+    KPrPresentationToolWidget *m_presentationToolWidget;
+    QFrame *m_frame;
+    KPrPresentationStrategyBase *m_strategy;
 
 #ifndef QT_NO_DBUS
     KPrPresentationToolAdaptor *m_bus;

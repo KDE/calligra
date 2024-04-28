@@ -10,30 +10,36 @@
  */
 #include "KoTableColumnStyle.h"
 
+#include "KoTextDocument.h"
+#include "Styles_p.h"
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
-#include "Styles_p.h"
-#include "KoTextDocument.h"
 
 #include "TextDebug.h"
 
 #include <QTextTable>
 #include <QTextTableFormat>
 
-#include <KoUnit.h>
-#include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
+#include <KoStyleStack.h>
+#include <KoUnit.h>
 #include <KoXmlNS.h>
 
 class Q_DECL_HIDDEN KoTableColumnStyle::Private : public QSharedData
 {
 public:
-    Private() : QSharedData(), parentStyle(0) {}
-
-    ~Private() {
+    Private()
+        : QSharedData()
+        , parentStyle(0)
+    {
     }
 
-    void setProperty(int key, const QVariant &value) {
+    ~Private()
+    {
+    }
+
+    void setProperty(int key, const QVariant &value)
+    {
         stylesPrivate.add(key, value);
     }
 
@@ -42,15 +48,14 @@ public:
     StylePrivate stylesPrivate;
 };
 
-
 KoTableColumnStyle::KoTableColumnStyle()
-        :  d(new Private())
+    : d(new Private())
 {
-    Q_ASSERT (d);
+    Q_ASSERT(d);
 }
 
 KoTableColumnStyle::KoTableColumnStyle(const KoTableColumnStyle &rhs)
-        : d(rhs.d)
+    : d(rhs.d)
 {
 }
 
@@ -174,7 +179,7 @@ void KoTableColumnStyle::setBreakBefore(KoText::KoTextBreakProperty state)
 
 KoText::KoTextBreakProperty KoTableColumnStyle::breakBefore() const
 {
-    return (KoText::KoTextBreakProperty) propertyInt(BreakBefore);
+    return (KoText::KoTextBreakProperty)propertyInt(BreakBefore);
 }
 
 void KoTableColumnStyle::setBreakAfter(KoText::KoTextBreakProperty state)
@@ -184,7 +189,7 @@ void KoTableColumnStyle::setBreakAfter(KoText::KoTextBreakProperty state)
 
 KoText::KoTextBreakProperty KoTableColumnStyle::breakAfter() const
 {
-    return (KoText::KoTextBreakProperty) propertyInt(BreakAfter);
+    return (KoText::KoTextBreakProperty)propertyInt(BreakAfter);
 }
 
 KoTableColumnStyle *KoTableColumnStyle::parentStyle() const
@@ -243,18 +248,17 @@ void KoTableColumnStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContex
         d->name = element->attributeNS(KoXmlNS::style, "name", QString());
 
     QString masterPage = element->attributeNS(KoXmlNS::style, "master-page-name", QString());
-    if (! masterPage.isEmpty()) {
+    if (!masterPage.isEmpty()) {
         setMasterPageName(masterPage);
     }
     context.styleStack().save();
     QString family = element->attributeNS(KoXmlNS::style, "family", "table-column");
-    context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
+    context.addStyles(element, family.toLocal8Bit().constData()); // Load all parents - only because we don't support inheritance.
 
-    context.styleStack().setTypeProperties("table-column");   // load all style attributes from "style:table-column-properties"
-    loadOdfProperties(context.styleStack());   // load the KoTableColumnStyle from the stylestack
+    context.styleStack().setTypeProperties("table-column"); // load all style attributes from "style:table-column-properties"
+    loadOdfProperties(context.styleStack()); // load the KoTableColumnStyle from the stylestack
     context.styleStack().restore();
 }
-
 
 void KoTableColumnStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
@@ -298,7 +302,7 @@ void KoTableColumnStyle::removeDuplicates(const KoTableColumnStyle &other)
 void KoTableColumnStyle::saveOdf(KoGenStyle &style) const
 {
     QList<int> keys = d->stylesPrivate.keys();
-    foreach(int key, keys) {
+    foreach (int key, keys) {
         if (key == KoTableColumnStyle::BreakBefore) {
             style.addProperty("fo:break-before", KoText::textBreakToString(breakBefore()), KoGenStyle::TableColumnType);
         } else if (key == KoTableColumnStyle::BreakAfter) {

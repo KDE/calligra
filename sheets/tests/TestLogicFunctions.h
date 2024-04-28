@@ -16,7 +16,7 @@ namespace Sheets
 class MapBase;
 class SheetBase;
 
-class TestLogicFunctions: public QObject
+class TestLogicFunctions : public QObject
 {
     Q_OBJECT
 
@@ -32,10 +32,11 @@ private Q_SLOTS:
     void testOR();
     void testTRUE();
     void testXOR();
+
 private:
     MapBase *m_map;
-    SheetBase* m_sheet;
-    Value evaluate(const QString&, Value& ex);
+    SheetBase *m_sheet;
+    Value evaluate(const QString &, Value &ex);
 };
 
 } // namespace Sheets

@@ -10,11 +10,11 @@
 
 #include <QDateTime>
 
-#include "sheets_core_export.h"
 #include "Style.h"
+#include "sheets_core_export.h"
 
-#include "engine/Number.h"
 #include "engine/Format.h"
+#include "engine/Number.h"
 
 namespace Calligra
 {
@@ -34,12 +34,12 @@ public:
     /**
      * Constructor.
      */
-    explicit ValueFormatter(const ValueConverter* converter);
+    explicit ValueFormatter(const ValueConverter *converter);
 
     /**
      * Returns the calculation settings this ValueFormatter uses.
      */
-    const CalculationSettings* settings() const;
+    const CalculationSettings *settings() const;
 
     /**
      * Creates a textual representation of \p value with the explicit given
@@ -54,33 +54,34 @@ public:
      * \param formatString the Qt format string
      * \param thousandsSep whether to use thousands separator
      */
-    Value formatText(const Value& value,
-                     Format::Type formatType, int precision = -1,
+    Value formatText(const Value &value,
+                     Format::Type formatType,
+                     int precision = -1,
                      Style::FloatFormat floatFormat = Style::OnlyNegSigned,
-                     const QString& prefix = QString(),
-                     const QString& postfix = QString(),
-                     const QString& currencySymbol = QString(),
-                     const QString& formatString = QString(),
+                     const QString &prefix = QString(),
+                     const QString &postfix = QString(),
+                     const QString &currencySymbol = QString(),
+                     const QString &formatString = QString(),
                      bool thousandsSep = true);
 
-//NOTE: All dates must be formatted using dateTimeFormat
+    // NOTE: All dates must be formatted using dateTimeFormat
     /**
      * Format @p date in accordance with @p formatString.
      * If @p formatString is empty, the date is formatted using @p formatType
      */
-    QString dateFormat(const QDate& date, Format::Type formatType, const QString& formatString = QString() );
+    QString dateFormat(const QDate &date, Format::Type formatType, const QString &formatString = QString());
 
     /**
      * Format @p time in accordance with @p formatString.
      * If @p formatString is empty, the time is formatted using @p formatType
      */
-    QString timeFormat(const QDateTime& time, Format::Type formatType, const QString& formatString = QString() );
+    QString timeFormat(const QDateTime &time, Format::Type formatType, const QString &formatString = QString());
 
     /**
      * Format the dattime @p time in accordance with @p formatString.
      * If @p formatString is empty, the time is formatted using @p formatType
      */
-    QString dateTimeFormat(const QDateTime& time, Format::Type formatType, const QString& formatString = QString());
+    QString dateTimeFormat(const QDateTime &time, Format::Type formatType, const QString &formatString = QString());
 
     /**
      * Determines the formatting type that should be used to format this value
@@ -88,10 +89,9 @@ public:
      * \param value the value
      * \param formatType the value format, e.g. number, date
      */
-    Format::Type determineFormatting(const Value& value, Format::Type formatType);
+    Format::Type determineFormatting(const Value &value, Format::Type formatType);
 
 protected:
-
     /**
      * Creates a number format.
      * \param value the value
@@ -102,11 +102,12 @@ protected:
      * \param formatString the Qt format string
      * \param thousandsSep whether to use thousands separator
      */
-    QString createNumberFormat(Number value, int precision,
+    QString createNumberFormat(Number value,
+                               int precision,
                                Format::Type formatType,
                                Style::FloatFormat floatFormat,
-                               const QString& currencySymbol,
-                               const QString& formatString,
+                               const QString &currencySymbol,
+                               const QString &formatString,
                                bool thousandsSep);
 
     /**
@@ -125,24 +126,21 @@ protected:
      * \param currencySymbol the currency symbol
      * \param thousandsSep whether to use thousands separator
      */
-    QString complexFormat(const Value& value, int precision,
-                          Format::Type formatType,
-                          Style::FloatFormat floatFormat,
-                          const QString& currencySymbol,
-                          bool thousandsSep);
+    QString
+    complexFormat(const Value &value, int precision, Format::Type formatType, Style::FloatFormat floatFormat, const QString &currencySymbol, bool thousandsSep);
 
     /**
      * Removes the trailing zeros and the decimal symbol \p decimalSymbol in
      * \p string , if necessary.
      * \return the truncated string
      */
-    QString removeTrailingZeros(const QString& string, const QString &currencySymbol, const QString& decimalSymbol);
+    QString removeTrailingZeros(const QString &string, const QString &currencySymbol, const QString &decimalSymbol);
 
 private:
-    const ValueConverter* m_converter;
+    const ValueConverter *m_converter;
 };
 
 } // namespace Sheets
 } // namespace Calligra
 
-#endif  //CALLIGRA_SHEETS_VALUE_FORMATTER
+#endif // CALLIGRA_SHEETS_VALUE_FORMATTER

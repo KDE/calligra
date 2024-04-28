@@ -25,7 +25,6 @@ class CharacterSelectDialog : public ActionDialog
     Q_OBJECT
 
 public:
-
     // constructor
     CharacterSelectDialog(QWidget *parent, const QString &_font);
     ~CharacterSelectDialog() override;
@@ -36,7 +35,7 @@ Q_SIGNALS:
      * @param character the character that the user selected
      * @param font the font name that was selected when the user inserted the character.
      */
-    void insertChar(QChar character , const QString &font);
+    void insertChar(QChar character, const QString &font);
 
 protected:
     virtual QWidget *defaultWidget() override;
@@ -51,7 +50,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

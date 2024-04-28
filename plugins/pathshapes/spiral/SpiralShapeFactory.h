@@ -17,10 +17,12 @@ class SpiralShapeFactory : public KoShapeFactoryBase
 public:
     /// constructor
     SpiralShapeFactory();
-    ~SpiralShapeFactory() override {}
+    ~SpiralShapeFactory() override
+    {
+    }
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
-    bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const override;
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels() override;
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
+    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels() override;
 };
 
 #endif /* KOSPIRALSHAPEFACTORY_H */

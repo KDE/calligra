@@ -7,21 +7,21 @@
  */
 
 #include "KoPanTool.h"
-#include "KoToolBase_p.h"
-#include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
 #include "KoCanvasControllerWidget.h"
+#include "KoPointerEvent.h"
+#include "KoToolBase_p.h"
 #include "KoViewConverter.h"
 
+#include <FlakeDebug.h>
 #include <QKeyEvent>
 #include <QScrollBar>
-#include <FlakeDebug.h>
 
 KoPanTool::KoPanTool(KoCanvasBase *canvas)
-        : KoToolBase(canvas),
-        m_controller(0),
-        m_temporary(false)
+    : KoToolBase(canvas)
+    , m_controller(0)
+    , m_temporary(false)
 {
 }
 
@@ -62,28 +62,28 @@ void KoPanTool::mouseReleaseEvent(KoPointerEvent *event)
 void KoPanTool::keyPressEvent(QKeyEvent *event)
 {
     // XXX: Make widget-independent!
-    KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(m_controller);
+    KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget *>(m_controller);
     if (!canvasControllerWidget) {
         return;
     }
     switch (event->key()) {
-        case Qt::Key_Up:
-            m_controller->pan(QPoint(0, -canvasControllerWidget->verticalScrollBar()->singleStep()));
-            break;
-        case Qt::Key_Down:
-            m_controller->pan(QPoint(0, canvasControllerWidget->verticalScrollBar()->singleStep()));
-            break;
-        case Qt::Key_Left:
-            m_controller->pan(QPoint(-canvasControllerWidget->horizontalScrollBar()->singleStep(), 0));
-            break;
-        case Qt::Key_Right:
-            m_controller->pan(QPoint(canvasControllerWidget->horizontalScrollBar()->singleStep(), 0));
-            break;
+    case Qt::Key_Up:
+        m_controller->pan(QPoint(0, -canvasControllerWidget->verticalScrollBar()->singleStep()));
+        break;
+    case Qt::Key_Down:
+        m_controller->pan(QPoint(0, canvasControllerWidget->verticalScrollBar()->singleStep()));
+        break;
+    case Qt::Key_Left:
+        m_controller->pan(QPoint(-canvasControllerWidget->horizontalScrollBar()->singleStep(), 0));
+        break;
+    case Qt::Key_Right:
+        m_controller->pan(QPoint(canvasControllerWidget->horizontalScrollBar()->singleStep(), 0));
+        break;
     }
     event->accept();
 }
 
-void KoPanTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
+void KoPanTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &)
 {
     if (m_controller == 0) {
         emit done();
@@ -93,7 +93,7 @@ void KoPanTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
     useCursor(QCursor(Qt::OpenHandCursor));
 }
 
-void KoPanTool::customMoveEvent(KoPointerEvent * event)
+void KoPanTool::customMoveEvent(KoPointerEvent *event)
 {
     m_controller->pan(QPoint(-event->x(), -event->y()));
     event->accept();
@@ -113,4 +113,3 @@ void KoPanTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     mousePressEvent(event);
 }
-

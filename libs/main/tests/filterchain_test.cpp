@@ -50,26 +50,25 @@ int main(int /*argc*/, char ** /*argv*/)
     if (!chain)
         qCritical() << "Hmm... why didn't we find a chain?" << Qt::endl;
     else {
-        qDebug() << "Chain for 'text/csv' -> closest part is available ("
-        << mimeType << "), OK" << Qt::endl;
+        qDebug() << "Chain for 'text/csv' -> closest part is available (" << mimeType << "), OK" << Qt::endl;
         chain->dump();
     }
 
     qDebug() << "Checking mimeFilter() for Import:";
-    QStringList list = KoFilterManager::mimeFilter("application/vnd.oasis.opendocument.text",  KoFilterManager::Import);
-    Q_FOREACH(const QString& it, list)
+    QStringList list = KoFilterManager::mimeFilter("application/vnd.oasis.opendocument.text", KoFilterManager::Import);
+    Q_FOREACH (const QString &it, list)
         qDebug() << "" << it;
     qDebug() << "" << list.count() << " entries.";
 
     qDebug() << "Checking mimeFilter() for Export:";
-    list = KoFilterManager::mimeFilter("application/vnd.oasis.opendocument.text",  KoFilterManager::Export);
-    Q_FOREACH(const QString& it, list)
+    list = KoFilterManager::mimeFilter("application/vnd.oasis.opendocument.text", KoFilterManager::Export);
+    Q_FOREACH (const QString &it, list)
         qDebug() << "" << it;
     qDebug() << "" << list.count() << " entries.";
 
     qDebug() << "Checking KoShell's mimeFilter():";
     list = KoFilterManager::mimeFilter();
-    Q_FOREACH(const QString& it, list)
+    Q_FOREACH (const QString &it, list)
         qDebug() << "" << it;
     qDebug() << "" << list.count() << " entries.";
 

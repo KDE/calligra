@@ -21,21 +21,20 @@
 #include "SheetsOdf.h"
 #include "SheetsOdfPrivate.h"
 
-#include "engine/NamedAreaManager.h"
 #include "engine/CalculationSettings.h"
+#include "engine/NamedAreaManager.h"
 
 #include "CellStorage.h"
-#include "DocBase.h"
+#include "ColFormatStorage.h"
 #include "Condition.h"
+#include "DataFilter.h"
+#include "Database.h"
+#include "DocBase.h"
 #include "LoadingInfo.h"
 #include "Map.h"
-#include "ColFormatStorage.h"
 #include "RowFormatStorage.h"
 #include "Sheet.h"
 #include "StyleManager.h"
-#include "Database.h"
-#include "DataFilter.h"
-
 
 #include <KoCharacterStyle.h>
 #include <KoGenStyles.h>
@@ -47,50 +46,60 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-
 // This file contains functionality to load/save a Map
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
-namespace Odf {
-    void fixupStyle(KoCharacterStyle* style);
-    QHash<QString, KoXmlElement> preloadValidities(const KoXmlElement& body);
+namespace Odf
+{
+void fixupStyle(KoCharacterStyle *style);
+QHash<QString, KoXmlElement> preloadValidities(const KoXmlElement &body);
 }
 
-void Odf::fixupStyle(KoCharacterStyle* style)
+void Odf::fixupStyle(KoCharacterStyle *style)
 {
     style->removeHardCodedDefaults();
 
     QTextCharFormat format;
     style->applyStyle(format);
     switch (style->underlineStyle()) {
-        case KoCharacterStyle::NoLineStyle:
-            format.setUnderlineStyle(QTextCharFormat::NoUnderline); break;
-        case KoCharacterStyle::SolidLine:
-            format.setUnderlineStyle(QTextCharFormat::SingleUnderline); break;
-        case KoCharacterStyle::DottedLine:
-            format.setUnderlineStyle(QTextCharFormat::DotLine); break;
-        case KoCharacterStyle::DashLine:
-            format.setUnderlineStyle(QTextCharFormat::DashUnderline); break;
-        case KoCharacterStyle::DotDashLine:
-            format.setUnderlineStyle(QTextCharFormat::DashDotLine); break;
-        case KoCharacterStyle::DotDotDashLine:
-            format.setUnderlineStyle(QTextCharFormat::DashDotDotLine); break;
-        case KoCharacterStyle::LongDashLine:
-            format.setUnderlineStyle(QTextCharFormat::DashUnderline); break;
-        case KoCharacterStyle::WaveLine:
-            format.setUnderlineStyle(QTextCharFormat::WaveUnderline); break;
+    case KoCharacterStyle::NoLineStyle:
+        format.setUnderlineStyle(QTextCharFormat::NoUnderline);
+        break;
+    case KoCharacterStyle::SolidLine:
+        format.setUnderlineStyle(QTextCharFormat::SingleUnderline);
+        break;
+    case KoCharacterStyle::DottedLine:
+        format.setUnderlineStyle(QTextCharFormat::DotLine);
+        break;
+    case KoCharacterStyle::DashLine:
+        format.setUnderlineStyle(QTextCharFormat::DashUnderline);
+        break;
+    case KoCharacterStyle::DotDashLine:
+        format.setUnderlineStyle(QTextCharFormat::DashDotLine);
+        break;
+    case KoCharacterStyle::DotDotDashLine:
+        format.setUnderlineStyle(QTextCharFormat::DashDotDotLine);
+        break;
+    case KoCharacterStyle::LongDashLine:
+        format.setUnderlineStyle(QTextCharFormat::DashUnderline);
+        break;
+    case KoCharacterStyle::WaveLine:
+        format.setUnderlineStyle(QTextCharFormat::WaveUnderline);
+        break;
     }
     style->copyProperties(format);
 }
 
-bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfContext)
+bool Odf::loadMap(Map *map, const KoXmlElement &body, KoOdfLoadingContext &odfContext)
 {
     map->setLoading(true);
     map->loadingInfo()->setFileFormat(LoadingInfo::OpenDocument);
 
-    //load in first
+    // load in first
     loadStyleTemplate(map->styleManager(), odfContext.stylesReader(), map);
 
     OdfLoadingContext tableContext(odfContext);
@@ -99,14 +108,14 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
     // load text styles for rich-text content and TOS
     KoShapeLoadingContext shapeContext(tableContext.odfContext, map->resourceManager());
     tableContext.shapeContext = &shapeContext;
-    KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
+    KoTextSharedLoadingData *sharedData = new KoTextSharedLoadingData();
     sharedData->loadOdfStyles(shapeContext, map->textStyleManager());
 
-    fixupStyle((KoCharacterStyle*)map->textStyleManager()->defaultParagraphStyle());
-    for (KoCharacterStyle* style : sharedData->characterStyles(true)) {
+    fixupStyle((KoCharacterStyle *)map->textStyleManager()->defaultParagraphStyle());
+    for (KoCharacterStyle *style : sharedData->characterStyles(true)) {
         fixupStyle(style);
     }
-    for (KoCharacterStyle* style : sharedData->characterStyles(false)) {
+    for (KoCharacterStyle *style : sharedData->characterStyles(false)) {
         fixupStyle(style);
     }
     shapeContext.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
@@ -115,34 +124,33 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
     variant.setValue(map->textStyleManager());
     map->resourceManager()->setResource(KoText::StyleManager, variant);
 
-
     // load default column style
-    const KoXmlElement* defaultColumnStyle = odfContext.stylesReader().defaultStyle("table-column");
+    const KoXmlElement *defaultColumnStyle = odfContext.stylesReader().defaultStyle("table-column");
     if (defaultColumnStyle) {
-//       debugSheets <<"style:default-style style:family=\"table-column\"";
+        //       debugSheets <<"style:default-style style:family=\"table-column\"";
         KoStyleStack styleStack;
         styleStack.push(*defaultColumnStyle);
         styleStack.setTypeProperties("table-column");
         if (styleStack.hasProperty(KoXmlNS::style, "column-width")) {
             const double width = KoUnit::parseValue(styleStack.property(KoXmlNS::style, "column-width"), -1.0);
             if (width != -1.0) {
-//           debugSheets <<"\tstyle:column-width:" << width;
+                //           debugSheets <<"\tstyle:column-width:" << width;
                 map->setDefaultColumnWidth(width);
             }
         }
     }
 
     // load default row style
-    const KoXmlElement* defaultRowStyle = odfContext.stylesReader().defaultStyle("table-row");
+    const KoXmlElement *defaultRowStyle = odfContext.stylesReader().defaultStyle("table-row");
     if (defaultRowStyle) {
-//       debugSheets <<"style:default-style style:family=\"table-row\"";
+        //       debugSheets <<"style:default-style style:family=\"table-row\"";
         KoStyleStack styleStack;
         styleStack.push(*defaultRowStyle);
         styleStack.setTypeProperties("table-row");
         if (styleStack.hasProperty(KoXmlNS::style, "row-height")) {
             const double height = KoUnit::parseValue(styleStack.property(KoXmlNS::style, "row-height"), -1.0);
             if (height != -1.0) {
-//           debugSheets <<"\tstyle:row-height:" << height;
+                //           debugSheets <<"\tstyle:row-height:" << height;
                 map->setDefaultRowHeight(height);
             }
         }
@@ -166,8 +174,8 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
     while (!sheetNode.isNull()) {
         KoXmlElement sheetElement = sheetNode.toElement();
         if (!sheetElement.isNull()) {
-            //debugSheets<<"  Odf::loadMap tableElement is not null";
-            //debugSheets<<"tableElement.nodeName() :"<<sheetElement.nodeName();
+            // debugSheets<<"  Odf::loadMap tableElement is not null";
+            // debugSheets<<"tableElement.nodeName() :"<<sheetElement.nodeName();
 
             // make it slightly faster
             KoXml::load(sheetElement);
@@ -175,7 +183,7 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
             if (sheetElement.nodeName() == "table:table") {
                 if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
                     const QString sheetName = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
-                    SheetBase* sheet = map->addNewSheet(sheetName);
+                    SheetBase *sheet = map->addNewSheet(sheetName);
                     sheet->setSheetName(sheetName);
                     overallRowCount += KoXml::childNodesCount(sheetElement);
                 }
@@ -186,12 +194,11 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
         KoXml::unload(sheetElement);
         sheetNode = sheetNode.nextSibling();
     }
-    map->setOverallRowsCounter(overallRowCount);   // used for loading progress info
+    map->setOverallRowsCounter(overallRowCount); // used for loading progress info
 
-    //pre-load auto styles
+    // pre-load auto styles
     QHash<QString, Conditions> conditionalStyles;
-    Styles autoStyles = loadAutoStyles(map->styleManager(), odfContext.stylesReader(),
-                        conditionalStyles, map->calculationSettings()->locale());
+    Styles autoStyles = loadAutoStyles(map->styleManager(), odfContext.stylesReader(), conditionalStyles, map->calculationSettings()->locale());
 
     // load the sheet
     sheetNode = body.firstChild();
@@ -201,11 +208,11 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
             // make it slightly faster
             KoXml::load(sheetElement);
 
-            //debugSheets<<"tableElement.nodeName() bis :"<<sheetElement.nodeName();
+            // debugSheets<<"tableElement.nodeName() bis :"<<sheetElement.nodeName();
             if (sheetElement.nodeName() == "table:table") {
                 if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
                     QString name = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
-                    SheetBase* sheet = map->findSheet(name);
+                    SheetBase *sheet = map->findSheet(name);
                     Sheet *fullSheet = sheet ? dynamic_cast<Sheet *>(sheet) : nullptr;
                     if (fullSheet)
                         loadSheet(fullSheet, sheetElement, tableContext, autoStyles, conditionalStyles);
@@ -223,11 +230,11 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
         map->addNewSheet();
     }
 
-    //delete any styles which were not used
+    // delete any styles which were not used
     map->styleManager()->clearOasisStyles();
 
     // Load databases. This needs the sheets to be loaded.
-    loadDatabaseRanges(map, body);    // table:database-ranges
+    loadDatabaseRanges(map, body); // table:database-ranges
     loadNamedAreas(map->namedAreaManager(), body); // table:named-expressions
 
     map->setLoading(false);
@@ -243,7 +250,7 @@ void Odf::loadMapSettings(Map *map, const KoOasisSettings &settings)
     KoOasisSettings::NamedMap sheetsMap = firstView.namedMap("Tables");
     debugSheets << " loadMapSettings( KoOasisSettings &settings ) exist :" << !sheetsMap.isNull();
     if (!sheetsMap.isNull()) {
-        for (SheetBase* sheet : map->sheetList()) {
+        for (SheetBase *sheet : map->sheetList()) {
             Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
             loadSheetSettings(fullSheet, sheetsMap);
         }
@@ -258,7 +265,7 @@ void Odf::loadMapSettings(Map *map, const KoOasisSettings &settings)
     }
 }
 
-bool Odf::saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
+bool Odf::saveMap(Map *map, KoXmlWriter &xmlWriter, KoShapeSavingContext &savingContext)
 {
     // Saving the custom cell styles including the default cell style.
     saveStyles(map->styleManager(), savingContext.mainStyles(), map->calculationSettings()->locale());
@@ -287,7 +294,7 @@ bool Odf::saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savi
 
     OdfSavingContext tableContext(savingContext);
 
-    for (SheetBase* sheet : map->sheetList()) {
+    for (SheetBase *sheet : map->sheetList()) {
         Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
         saveSheet(fullSheet, tableContext);
     }
@@ -299,13 +306,12 @@ bool Odf::saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savi
     return true;
 }
 
-
 // Table shape is here too, as the code is rather similar to Map load/save
 
 bool Odf::loadTableShape(Sheet *sheet, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     // pre-load auto styles
-    KoOdfLoadingContext& odfContext = context.odfLoadingContext();
+    KoOdfLoadingContext &odfContext = context.odfLoadingContext();
     OdfLoadingContext tableContext(odfContext);
     QHash<QString, Conditions> conditionalStyles;
     Map *map = sheet->fullMap();
@@ -325,7 +331,7 @@ bool Odf::loadTableShape(Sheet *sheet, const KoXmlElement &element, KoShapeLoadi
 
 void Odf::saveTableShape(Sheet *sheet, KoShapeSavingContext &context)
 {
-    const Map* map = sheet->fullMap();
+    const Map *map = sheet->fullMap();
     // Saving the custom cell styles including the default cell style.
     saveStyles(map->styleManager(), context.mainStyles(), sheet->map()->calculationSettings()->locale());
 
@@ -346,14 +352,16 @@ void Odf::saveTableShape(Sheet *sheet, KoShapeSavingContext &context)
     tableContext.valStyle.writeStyle(context.xmlWriter());
 }
 
-void Odf::loadNamedAreas(NamedAreaManager *manager, const KoXmlElement& body)
+void Odf::loadNamedAreas(NamedAreaManager *manager, const KoXmlElement &body)
 {
     KoXmlNode namedAreas = KoXml::namedItemNS(body, KoXmlNS::table, "named-expressions");
-    if (namedAreas.isNull()) return;
+    if (namedAreas.isNull())
+        return;
 
     debugSheetsODF << "Loading named areas...";
     KoXmlElement element;
-    forEachElement(element, namedAreas) {
+    forEachElement(element, namedAreas)
+    {
         if (element.namespaceURI() != KoXmlNS::table)
             continue;
         if (element.localName() == "named-range") {
@@ -367,12 +375,12 @@ void Odf::loadNamedAreas(NamedAreaManager *manager, const KoXmlElement& body)
 
             // Handle the case where the table:base-cell-address does contain the referenced sheetname
             // while it's missing in the table:cell-range-address. See bug #194386 for an example.
-            SheetBase* fallbackSheet = 0;
+            SheetBase *fallbackSheet = 0;
             if (!base.isEmpty()) {
                 Region region = manager->map()->regionFromName(loadRegion(base));
                 fallbackSheet = region.lastSheet();
             }
-            
+
             const QString name = element.attributeNS(KoXmlNS::table, "name", QString());
             const QString range = element.attributeNS(KoXmlNS::table, "cell-range-address", QString());
             debugSheetsODF << "Named area found, name:" << name << ", area:" << range;
@@ -391,10 +399,11 @@ void Odf::loadNamedAreas(NamedAreaManager *manager, const KoXmlElement& body)
     }
 }
 
-void Odf::saveNamedAreas(const NamedAreaManager *manager, KoXmlWriter& xmlWriter)
+void Odf::saveNamedAreas(const NamedAreaManager *manager, KoXmlWriter &xmlWriter)
 {
-   QList<QString> areas = manager->areaNames();
-   if (areas.isEmpty()) return;
+    QList<QString> areas = manager->areaNames();
+    if (areas.isEmpty())
+        return;
 
     Region region;
     xmlWriter.startElement("table:named-expressions");
@@ -410,11 +419,12 @@ void Odf::saveNamedAreas(const NamedAreaManager *manager, KoXmlWriter& xmlWriter
     xmlWriter.endElement();
 }
 
-bool Odf::loadDatabaseRanges(Map *map, const KoXmlElement& body)
+bool Odf::loadDatabaseRanges(Map *map, const KoXmlElement &body)
 {
     const KoXmlNode databaseRanges = KoXml::namedItemNS(body, KoXmlNS::table, "database-ranges");
     KoXmlElement element;
-    forEachElement(element, databaseRanges) {
+    forEachElement(element, databaseRanges)
+    {
         if (element.namespaceURI() != KoXmlNS::table)
             continue;
         if (element.localName() == "database-range") {
@@ -425,7 +435,7 @@ bool Odf::loadDatabaseRanges(Map *map, const KoXmlElement& body)
             const Region region = database.range();
             if (!region.isValid())
                 continue;
-            SheetBase* sheet = region.lastSheet();
+            SheetBase *sheet = region.lastSheet();
             if (!sheet)
                 continue;
             Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
@@ -435,11 +445,11 @@ bool Odf::loadDatabaseRanges(Map *map, const KoXmlElement& body)
     return true;
 }
 
-void Odf::saveDatabaseRanges(Map *map, KoXmlWriter& xmlWriter)
+void Odf::saveDatabaseRanges(Map *map, KoXmlWriter &xmlWriter)
 {
-    QVector< QPair<QRectF, Database> > databases;
+    QVector<QPair<QRectF, Database>> databases;
     const Region region(QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)));
-    const QList<SheetBase*>& sheets = map->sheetList();
+    const QList<SheetBase *> &sheets = map->sheetList();
     for (int i = 0; i < sheets.count(); ++i) {
         Sheet *fullSheet = dynamic_cast<Sheet *>(sheets[i]);
         databases << fullSheet->fullCellStorage()->databases(region);
@@ -458,12 +468,12 @@ void Odf::saveDatabaseRanges(Map *map, KoXmlWriter& xmlWriter)
     xmlWriter.endElement();
 }
 
-Database Odf::loadDatabase(const KoXmlElement& element, const Map* map, bool *ok)
+Database Odf::loadDatabase(const KoXmlElement &element, const Map *map, bool *ok)
 {
     *ok = true;
     Database db;
-//    if (element.hasAttributeNS(KoXmlNS::table, "name"))
-//        db.setName (element.attributeNS(KoXmlNS::table, "name", QString()));
+    //    if (element.hasAttributeNS(KoXmlNS::table, "name"))
+    //        db.setName (element.attributeNS(KoXmlNS::table, "name", QString()));
     if (element.hasAttributeNS(KoXmlNS::table, "is-selection")) {
         bool val = (element.attributeNS(KoXmlNS::table, "is-selection", "false") == "true");
         db.setIsSelection(val);
@@ -482,9 +492,9 @@ Database Odf::loadDatabase(const KoXmlElement& element, const Map* map, bool *ok
     }
     if (element.hasAttributeNS(KoXmlNS::table, "orientation")) {
         if (element.attributeNS(KoXmlNS::table, "orientation", "row") == "column")
-            db.setOrientation (Qt::Orientation::Horizontal);
+            db.setOrientation(Qt::Orientation::Horizontal);
         else
-            db.setOrientation (Qt::Orientation::Vertical);
+            db.setOrientation(Qt::Orientation::Vertical);
     }
     if (element.hasAttributeNS(KoXmlNS::table, "contains-header")) {
         bool val = (element.attributeNS(KoXmlNS::table, "contains-header", "true") == "true");
@@ -502,7 +512,7 @@ Database Odf::loadDatabase(const KoXmlElement& element, const Map* map, bool *ok
             *ok = false;
             return db;
         }
-        db.setRange (range);
+        db.setRange(range);
     }
     if (element.hasAttributeNS(KoXmlNS::table, "refresh-delay")) {
         bool okay = false;
@@ -511,10 +521,11 @@ Database Odf::loadDatabase(const KoXmlElement& element, const Map* map, bool *ok
             *ok = false;
             return db;
         }
-        db.setRefreshDelay (delay);
+        db.setRefreshDelay(delay);
     }
     KoXmlElement child;
-    forEachElement(child, element) {
+    forEachElement(child, element)
+    {
         if (child.namespaceURI() != KoXmlNS::table)
             continue;
         if (child.localName() == "database-source-sql") {
@@ -526,7 +537,7 @@ Database Odf::loadDatabase(const KoXmlElement& element, const Map* map, bool *ok
         } else if (child.localName() == "sort") {
             // TODO
         } else if (child.localName() == "filter") {
-            Calligra::Sheets::Filter filter = loadDatabaseFilter (child, map, ok);
+            Calligra::Sheets::Filter filter = loadDatabaseFilter(child, map, ok);
             if (!*ok) {
                 *ok = false;
                 return db;
@@ -539,13 +550,13 @@ Database Odf::loadDatabase(const KoXmlElement& element, const Map* map, bool *ok
     return db;
 }
 
-void Odf::saveDatabase(const Database &database, KoXmlWriter& xmlWriter)
+void Odf::saveDatabase(const Database &database, KoXmlWriter &xmlWriter)
 {
     if (database.range().isEmpty())
         return;
     xmlWriter.startElement("table:database-range");
-//    if (!database.name().isNull())
-//        xmlWriter.addAttribute("table:name", database.name());
+    //    if (!database.name().isNull())
+    //        xmlWriter.addAttribute("table:name", database.name());
     if (database.isSelection())
         xmlWriter.addAttribute("table:is-selection", "true");
     if (database.onUpdateKeepStyles())
@@ -569,9 +580,10 @@ void Odf::saveDatabase(const Database &database, KoXmlWriter& xmlWriter)
     xmlWriter.endElement();
 }
 
-void Odf::saveDatabaseFilter(const Filter &filter, KoXmlWriter& xmlWriter)
+void Odf::saveDatabaseFilter(const Filter &filter, KoXmlWriter &xmlWriter)
 {
-    if (filter.isEmpty()) return;
+    if (filter.isEmpty())
+        return;
 
     xmlWriter.startElement("table:filter");
     Region r = filter.targetRangeAddress();
@@ -588,7 +600,7 @@ void Odf::saveDatabaseFilter(const Filter &filter, KoXmlWriter& xmlWriter)
     xmlWriter.endElement();
 }
 
-Filter Odf::loadDatabaseFilter(const KoXmlElement& element, const Map* map, bool *ok)
+Filter Odf::loadDatabaseFilter(const KoXmlElement &element, const Map *map, bool *ok)
 {
     *ok = false;
     Filter res;
@@ -617,57 +629,89 @@ Filter Odf::loadDatabaseFilter(const KoXmlElement& element, const Map* map, bool
     }
 
     KoXmlElement conditionElement;
-    forEachElement(conditionElement, element) {
+    forEachElement(conditionElement, element)
+    {
         // Check if this is the correct element. loadDatabaseCondition will return nullptr if it's not.
         AbstractCondition *cond = loadDatabaseCondition(conditionElement);
-        if (!cond) continue;
-        res.setRootCondition (cond);
+        if (!cond)
+            continue;
+        res.setRootCondition(cond);
         break;
     }
     *ok = true;
     return res;
 }
 
-static QString operationName(AbstractCondition::Comparison op) {
+static QString operationName(AbstractCondition::Comparison op)
+{
     switch (op) {
-        case AbstractCondition::Comparison::Match:  return "match";
-        case AbstractCondition::Comparison::NotMatch: return "!match";
-        case AbstractCondition::Comparison::Equal: return "=";
-        case AbstractCondition::Comparison::NotEqual: return "!=";
-        case AbstractCondition::Comparison::Less: return "<";
-        case AbstractCondition::Comparison::Greater: return ">";
-        case AbstractCondition::Comparison::LessOrEqual: return "<=";
-        case AbstractCondition::Comparison::GreaterOrEqual: return ">=";
-        case AbstractCondition::Comparison::Empty: return "empty";
-        case AbstractCondition::Comparison::NotEmpty: return "!empty";
-        case AbstractCondition::Comparison::TopValues: return "top values";
-        case AbstractCondition::Comparison::BottomValues: return "bottom values";
-        case AbstractCondition::Comparison::TopPercent: return "top percent";
-        case AbstractCondition::Comparison::BottomPercent: return "bottom percent";
+    case AbstractCondition::Comparison::Match:
+        return "match";
+    case AbstractCondition::Comparison::NotMatch:
+        return "!match";
+    case AbstractCondition::Comparison::Equal:
+        return "=";
+    case AbstractCondition::Comparison::NotEqual:
+        return "!=";
+    case AbstractCondition::Comparison::Less:
+        return "<";
+    case AbstractCondition::Comparison::Greater:
+        return ">";
+    case AbstractCondition::Comparison::LessOrEqual:
+        return "<=";
+    case AbstractCondition::Comparison::GreaterOrEqual:
+        return ">=";
+    case AbstractCondition::Comparison::Empty:
+        return "empty";
+    case AbstractCondition::Comparison::NotEmpty:
+        return "!empty";
+    case AbstractCondition::Comparison::TopValues:
+        return "top values";
+    case AbstractCondition::Comparison::BottomValues:
+        return "bottom values";
+    case AbstractCondition::Comparison::TopPercent:
+        return "top percent";
+    case AbstractCondition::Comparison::BottomPercent:
+        return "bottom percent";
     }
     return QString();
 }
 
-static AbstractCondition::Comparison operationFromName(const QString &name) {
-    if (name == "match") return AbstractCondition::Comparison::Match;
-    if (name == "!match") return AbstractCondition::Comparison::NotMatch;
-    if (name == "=") return AbstractCondition::Comparison::Equal;
-    if (name == "!=") return AbstractCondition::Comparison::NotEqual;
-    if (name == "<") return AbstractCondition::Comparison::Less;
-    if (name == ">") return AbstractCondition::Comparison::Greater;
-    if (name == "<=") return AbstractCondition::Comparison::LessOrEqual;
-    if (name == ">=") return AbstractCondition::Comparison::GreaterOrEqual;
-    if (name == "empty") return AbstractCondition::Comparison::Empty;
-    if (name == "!empty") return AbstractCondition::Comparison::NotEmpty;
-    if (name == "top values") return AbstractCondition::Comparison::TopValues;
-    if (name == "bottom values") return AbstractCondition::Comparison::BottomValues;
-    if (name == "top percent") return AbstractCondition::Comparison::TopPercent;
-    if (name == "bottom percent") return AbstractCondition::Comparison::BottomPercent;
+static AbstractCondition::Comparison operationFromName(const QString &name)
+{
+    if (name == "match")
+        return AbstractCondition::Comparison::Match;
+    if (name == "!match")
+        return AbstractCondition::Comparison::NotMatch;
+    if (name == "=")
+        return AbstractCondition::Comparison::Equal;
+    if (name == "!=")
+        return AbstractCondition::Comparison::NotEqual;
+    if (name == "<")
+        return AbstractCondition::Comparison::Less;
+    if (name == ">")
+        return AbstractCondition::Comparison::Greater;
+    if (name == "<=")
+        return AbstractCondition::Comparison::LessOrEqual;
+    if (name == ">=")
+        return AbstractCondition::Comparison::GreaterOrEqual;
+    if (name == "empty")
+        return AbstractCondition::Comparison::Empty;
+    if (name == "!empty")
+        return AbstractCondition::Comparison::NotEmpty;
+    if (name == "top values")
+        return AbstractCondition::Comparison::TopValues;
+    if (name == "bottom values")
+        return AbstractCondition::Comparison::BottomValues;
+    if (name == "top percent")
+        return AbstractCondition::Comparison::TopPercent;
+    if (name == "bottom percent")
+        return AbstractCondition::Comparison::BottomPercent;
     debugSheets << "table:operator: unknown value";
     return AbstractCondition::Comparison::Match;
 }
 
-void Odf::saveDatabaseCondition(AbstractCondition *condition, KoXmlWriter& xmlWriter)
+void Odf::saveDatabaseCondition(AbstractCondition *condition, KoXmlWriter &xmlWriter)
 {
     if (condition->allowsChildren()) {
         const char *elname;
@@ -675,18 +719,22 @@ void Odf::saveDatabaseCondition(AbstractCondition *condition, KoXmlWriter& xmlWr
             elname = "table:filter-and";
         else if (condition->type() == AbstractCondition::Or)
             elname = "table:filter-or";
-        else return;
-        QList<AbstractCondition*> children = condition->children();
-        if (!children.count()) return;
+        else
+            return;
+        QList<AbstractCondition *> children = condition->children();
+        if (!children.count())
+            return;
 
         xmlWriter.startElement(elname);
         for (int i = 0; i < children.count(); ++i)
             saveDatabaseCondition(children[i], xmlWriter);
         xmlWriter.endElement();
     } else {
-        if (condition->isEmpty()) return;
+        if (condition->isEmpty())
+            return;
         Filter::Condition *cond = dynamic_cast<Filter::Condition *>(condition);
-        if (!cond) return;
+        if (!cond)
+            return;
 
         xmlWriter.startElement("table:filter-condition");
         xmlWriter.addAttribute("table:field-number", cond->fieldNumber);
@@ -701,7 +749,8 @@ void Odf::saveDatabaseCondition(AbstractCondition *condition, KoXmlWriter& xmlWr
     }
 }
 
-AbstractCondition *Odf::loadDatabaseCondition(const KoXmlElement& element) {
+AbstractCondition *Odf::loadDatabaseCondition(const KoXmlElement &element)
+{
     if (element.namespaceURI() != KoXmlNS::table)
         return nullptr;
 
@@ -709,9 +758,11 @@ AbstractCondition *Odf::loadDatabaseCondition(const KoXmlElement& element) {
         Calligra::Sheets::Filter::And *cond = new Calligra::Sheets::Filter::And();
 
         KoXmlElement child;
-        forEachElement(child, element) {
+        forEachElement(child, element)
+        {
             AbstractCondition *childCond = loadDatabaseCondition(child);
-            if (childCond) cond->list.append (childCond);
+            if (childCond)
+                cond->list.append(childCond);
         }
         return cond;
     }
@@ -719,9 +770,11 @@ AbstractCondition *Odf::loadDatabaseCondition(const KoXmlElement& element) {
         Calligra::Sheets::Filter::Or *cond = new Calligra::Sheets::Filter::Or();
 
         KoXmlElement child;
-        forEachElement(child, element) {
+        forEachElement(child, element)
+        {
             AbstractCondition *childCond = loadDatabaseCondition(child);
-            if (childCond) cond->list.append (childCond);
+            if (childCond)
+                cond->list.append(childCond);
         }
         return cond;
     }
@@ -762,18 +815,17 @@ AbstractCondition *Odf::loadDatabaseCondition(const KoXmlElement& element) {
     return nullptr;
 }
 
-
-
 // static
-QHash<QString, KoXmlElement> Odf::preloadValidities(const KoXmlElement& body)
+QHash<QString, KoXmlElement> Odf::preloadValidities(const KoXmlElement &body)
 {
     QHash<QString, KoXmlElement> validities;
     KoXmlNode validation = KoXml::namedItemNS(body, KoXmlNS::table, "content-validations");
     debugSheets << "validation.isNull?" << validation.isNull();
     if (!validation.isNull()) {
         KoXmlElement element;
-        forEachElement(element, validation) {
-            if (element.tagName() ==  "content-validation" && element.namespaceURI() == KoXmlNS::table) {
+        forEachElement(element, validation)
+        {
+            if (element.tagName() == "content-validation" && element.namespaceURI() == KoXmlNS::table) {
                 const QString name = element.attributeNS(KoXmlNS::table, "name", QString());
                 validities.insert(name, element);
                 debugSheets << " validation found:" << name;
@@ -785,9 +837,5 @@ QHash<QString, KoXmlElement> Odf::preloadValidities(const KoXmlElement& body)
     return validities;
 }
 
-
-
-
-}  // Sheets
-}  // Calligra
-
+} // Sheets
+} // Calligra

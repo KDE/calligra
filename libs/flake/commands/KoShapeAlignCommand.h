@@ -10,8 +10,8 @@
 
 #include "flake_export.h"
 
-#include <kundo2command.h>
 #include <QList>
+#include <kundo2command.h>
 
 class KoShape;
 class QRectF;
@@ -22,12 +22,12 @@ class FLAKE_EXPORT KoShapeAlignCommand : public KUndo2Command
 public:
     /// The different alignment options for this command
     enum Align {
-        HorizontalLeftAlignment,    ///< Align left
-        HorizontalCenterAlignment,  ///< Align Centered horizontally
-        HorizontalRightAlignment,   ///< Align Right
-        VerticalBottomAlignment,    ///< Align bottom
-        VerticalCenterAlignment,    ///< Align centered vertically
-        VerticalTopAlignment        ///< Align top
+        HorizontalLeftAlignment, ///< Align left
+        HorizontalCenterAlignment, ///< Align Centered horizontally
+        HorizontalRightAlignment, ///< Align Right
+        VerticalBottomAlignment, ///< Align bottom
+        VerticalCenterAlignment, ///< Align centered vertically
+        VerticalTopAlignment ///< Align top
     };
     /**
      * Command to align a set of shapes in a rect
@@ -36,15 +36,16 @@ public:
      * @param boundingRect the rect the shape will be aligned in
      * @param parent the parent command used for macro commands
      */
-    KoShapeAlignCommand(const QList<KoShape*> &shapes, Align align, const QRectF &boundingRect, KUndo2Command *parent = 0);
+    KoShapeAlignCommand(const QList<KoShape *> &shapes, Align align, const QRectF &boundingRect, KUndo2Command *parent = 0);
     ~KoShapeAlignCommand() override;
     /// redo the command
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

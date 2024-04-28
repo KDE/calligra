@@ -9,18 +9,22 @@
 
 #include "../core/Sheet.h"
 
-MusicWidget::MusicWidget(QWidget* parent)
-    : QWidget(parent), m_renderer(&m_style), m_sheet(0), m_scale(1.0), m_lastSystem(0)
+MusicWidget::MusicWidget(QWidget *parent)
+    : QWidget(parent)
+    , m_renderer(&m_style)
+    , m_sheet(0)
+    , m_scale(1.0)
+    , m_lastSystem(0)
 {
 }
 
-void MusicWidget::setSheet(MusicCore::Sheet* sheet)
+void MusicWidget::setSheet(MusicCore::Sheet *sheet)
 {
     m_sheet = sheet;
     engrave();
 }
 
-MusicCore::Sheet* MusicWidget::sheet() const
+MusicCore::Sheet *MusicWidget::sheet() const
 {
     return m_sheet;
 }
@@ -43,9 +47,10 @@ void MusicWidget::engrave()
     }
 }
 
-void MusicWidget::paintEvent(QPaintEvent*)
+void MusicWidget::paintEvent(QPaintEvent *)
 {
-    if (!m_sheet) return;
+    if (!m_sheet)
+        return;
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::TextAntialiasing);
@@ -54,7 +59,7 @@ void MusicWidget::paintEvent(QPaintEvent*)
     m_renderer.renderSheet(painter, m_sheet, 0, m_lastSystem);
 }
 
-void MusicWidget::resizeEvent(QResizeEvent*)
+void MusicWidget::resizeEvent(QResizeEvent *)
 {
     engrave();
 }

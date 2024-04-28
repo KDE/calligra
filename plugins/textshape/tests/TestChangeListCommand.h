@@ -8,7 +8,9 @@ class TestChangeListCommand : public QObject
 {
     Q_OBJECT
 public:
-    TestChangeListCommand() {}
+    TestChangeListCommand()
+    {
+    }
 
 private Q_SLOTS:
     void addList();

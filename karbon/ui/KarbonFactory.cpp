@@ -18,17 +18,16 @@
 
 #include "KarbonFactory.h"
 
-#include "KarbonPart.h"
-#include "KarbonDocument.h"
 #include "KarbonAboutData.h"
+#include "KarbonDocument.h"
+#include "KarbonPart.h"
 
 #include <KoComponentData.h>
 #include <KoPluginLoader.h>
 
 #include <KIconLoader>
 
-
-KoComponentData* KarbonFactory::s_global = 0;
+KoComponentData *KarbonFactory::s_global = 0;
 
 KarbonFactory::KarbonFactory()
     : KPluginFactory()
@@ -40,17 +39,17 @@ KarbonFactory::~KarbonFactory()
 {
 }
 
-QObject* KarbonFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args)
+QObject *KarbonFactory::create(const char * /*iface*/, QWidget * /*parentWidget*/, QObject *parent, const QVariantList &args)
 {
     Q_UNUSED(args);
 
     KarbonPart *part = new KarbonPart(parent);
-    KarbonDocument* doc = new KarbonDocument(part);
+    KarbonDocument *doc = new KarbonDocument(part);
     part->setDocument(doc);
     return part;
 }
 
-const KSharedConfig::Ptr& KarbonFactory::karbonConfig()
+const KSharedConfig::Ptr &KarbonFactory::karbonConfig()
 {
     return global().config();
 }

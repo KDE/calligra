@@ -20,8 +20,8 @@
 #ifndef KPRPAGELAYOUTWIDGET_H
 #define KPRPAGELAYOUTWIDGET_H
 
-#include <QWidget>
 #include <QMap>
+#include <QWidget>
 
 class QListWidget;
 class QListWidgetItem;
@@ -32,24 +32,24 @@ class KPrPageLayoutWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KPrPageLayoutWidget( QWidget* parent = 0);
+    explicit KPrPageLayoutWidget(QWidget *parent = 0);
 
-    void setView( KPrView* view );
+    void setView(KPrView *view);
 
 public Q_SLOTS:
     void slotActivePageChanged();
-    void slotItemPressed( QListWidgetItem * item );
-    void slotCurrentItemChanged( QListWidgetItem * item, QListWidgetItem * previous );
+    void slotItemPressed(QListWidgetItem *item);
+    void slotCurrentItemChanged(QListWidgetItem *item, QListWidgetItem *previous);
 
 private:
-    QListWidgetItem * addLayout( KPrPageLayout * layout );
-    void applyLayout( QListWidgetItem * item );
-    KPrView* m_view;
-    QListWidget * m_layoutsView;
+    QListWidgetItem *addLayout(KPrPageLayout *layout);
+    void applyLayout(QListWidgetItem *item);
+    KPrView *m_view;
+    QListWidget *m_layoutsView;
     QMap<KPrPageLayout *, QListWidgetItem *> m_layout2item;
-    // store the last item which was active so we can detect that 
+    // store the last item which was active so we can detect that
     // the already selected item was clicked again.
-    QListWidgetItem * m_previousItem;
+    QListWidgetItem *m_previousItem;
 };
 
 #endif /* KPRPAGELAYOUTWIDGET_H */

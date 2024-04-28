@@ -89,21 +89,21 @@ void TestKoLZF::testArrayDecompressionNullPointerOutput()
     QCOMPARE(uncompressedDataLength, 0);
 }
 
-Q_DECLARE_METATYPE(char*)
+Q_DECLARE_METATYPE(char *)
 
 void TestKoLZF::testArrayRoundtripDifferentSizes_data()
 {
-    QTest::addColumn<char*>("data");
+    QTest::addColumn<char *>("data");
     QTest::addColumn<int>("size");
     QTest::addColumn<char>("canary");
 
-    static const char canary[] = {'\0',  '\xFF'};
-    static const int canaryCount = sizeof( canary ) / sizeof( canary[0] );
+    static const char canary[] = {'\0', '\xFF'};
+    static const int canaryCount = sizeof(canary) / sizeof(canary[0]);
     static const int fillMethodCount = 2;
-    static const char * const fillMethodName[fillMethodCount] = {"uni",  "series"};
+    static const char *const fillMethodName[fillMethodCount] = {"uni", "series"};
 
-    for(int c = 0; c < canaryCount; ++c) {
-        for(int i = 1; i < 512; ++i) {
+    for (int c = 0; c < canaryCount; ++c) {
+        for (int i = 1; i < 512; ++i) {
             for (int f = 0; f < 2; ++f) {
                 char *data = new char[i];
                 if (f == 0) {
@@ -114,9 +114,8 @@ void TestKoLZF::testArrayRoundtripDifferentSizes_data()
                     }
                 }
 
-                QByteArray ba = QByteArray::number(i)+'-'+QByteArray(1, canary[c]).toHex()+'-'+QByteArray(fillMethodName[f]);
-                QTest::newRow(ba.constData())
-                    << data << i << canary[c];
+                QByteArray ba = QByteArray::number(i) + '-' + QByteArray(1, canary[c]).toHex() + '-' + QByteArray(fillMethodName[f]);
+                QTest::newRow(ba.constData()) << data << i << canary[c];
             }
         }
     }
@@ -124,11 +123,11 @@ void TestKoLZF::testArrayRoundtripDifferentSizes_data()
 
 void TestKoLZF::testArrayRoundtripDifferentSizes()
 {
-    QFETCH(char*, data);
+    QFETCH(char *, data);
     QFETCH(int, size);
     QFETCH(char, canary);
 
-    char * compressedData = new char[size+1];
+    char *compressedData = new char[size + 1];
     compressedData[size] = canary;
 
     // try
@@ -139,28 +138,26 @@ void TestKoLZF::testArrayRoundtripDifferentSizes()
     const bool compressed = (compressedDataLength != 0);
     // done with testing if not compressed
     if (!compressed) {
-        delete [] data;
-        delete [] compressedData;
+        delete[] data;
+        delete[] compressedData;
         return;
     }
 
     // now try uncompressing
-    char * uncompressedData = new char[size+1];
+    char *uncompressedData = new char[size + 1];
     uncompressedData[size] = canary;
 
-    const int uncompressedDataLength =
-        KoLZF::decompress(compressedData, compressedDataLength, uncompressedData, size);
+    const int uncompressedDataLength = KoLZF::decompress(compressedData, compressedDataLength, uncompressedData, size);
 
     QVERIFY(uncompressedDataLength != 0);
     QCOMPARE(uncompressedDataLength, size);
-    QCOMPARE(memcmp(uncompressedData, data, size), 0 );
+    QCOMPARE(memcmp(uncompressedData, data, size), 0);
     QCOMPARE(uncompressedData[size], canary);
 
-    delete [] data;
-    delete [] compressedData;
-    delete [] uncompressedData;
+    delete[] data;
+    delete[] compressedData;
+    delete[] uncompressedData;
 }
-
 
 void TestKoLZF::testByteArrayCompressionEmpty()
 {
@@ -182,7 +179,7 @@ void TestKoLZF::testByteArrayCompressionEmpty()
 
 void TestKoLZF::testByteArrayDecompressionEmpty()
 {
-    const char emptyCompressedRaw[5] = { 0x00, 0x00, 0x00, 0x00, 0x00 };
+    const char emptyCompressedRaw[5] = {0x00, 0x00, 0x00, 0x00, 0x00};
     const QByteArray emptyCompressed = QByteArray::fromRawData(emptyCompressedRaw, 5);
 
     QByteArray uncompressed;
@@ -199,9 +196,9 @@ void TestKoLZF::testByteArrayRoundtripDifferentSizes_data()
     QTest::addColumn<QByteArray>("data");
 
     static const int fillMethodCount = 2;
-    static const char * const fillMethodName[fillMethodCount] = {"uni",  "series"};
+    static const char *const fillMethodName[fillMethodCount] = {"uni", "series"};
 
-    for(int i = 0; i < 512; ++i) {
+    for (int i = 0; i < 512; ++i) {
         for (int f = 0; f < 2; ++f) {
             QByteArray data;
 
@@ -213,7 +210,7 @@ void TestKoLZF::testByteArrayRoundtripDifferentSizes_data()
                     data[b] = b % 256;
                 }
             }
-            QByteArray ba = QByteArray::number(i)+'-'+fillMethodName[f];
+            QByteArray ba = QByteArray::number(i) + '-' + fillMethodName[f];
             QTest::newRow(ba.constData()) << data;
         }
     }
@@ -230,6 +227,5 @@ void TestKoLZF::testByteArrayRoundtripDifferentSizes()
 
     QCOMPARE(uncompressed, data);
 }
-
 
 QTEST_GUILESS_MAIN(TestKoLZF)

@@ -27,12 +27,13 @@ public:
     KUndo2Command *createCommand() override;
     // reimplemnted from KoInteractionStrategy
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
+
 private:
-    ArtisticTextShape *m_text;      ///< the text shape we are working on
-    KoPathShape *m_baselineShape;   ///< path shape the text is put on
-    qreal m_oldStartOffset;         ///< the initial start offset
-    QList<qreal> m_segmentLengths;  ///< cached lengths of baseline path segments
-    qreal m_totalLength;            ///< total length of baseline path
+    ArtisticTextShape *m_text; ///< the text shape we are working on
+    KoPathShape *m_baselineShape; ///< path shape the text is put on
+    qreal m_oldStartOffset; ///< the initial start offset
+    QList<qreal> m_segmentLengths; ///< cached lengths of baseline path segments
+    qreal m_totalLength; ///< total length of baseline path
 };
 
 #endif // MOVESTARTOFFSETSTRATEGY_H

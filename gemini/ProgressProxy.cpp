@@ -14,13 +14,13 @@ public:
 };
 
 ProgressProxy::ProgressProxy(QObject *parent)
-    : QObject(parent), d(new Private)
+    : QObject(parent)
+    , d(new Private)
 {
 }
 
 ProgressProxy::~ProgressProxy()
 {
-
 }
 
 QString ProgressProxy::taskName() const
@@ -28,9 +28,9 @@ QString ProgressProxy::taskName() const
     return d->taskName;
 }
 
-void ProgressProxy::setFormat(const QString& format)
+void ProgressProxy::setFormat(const QString &format)
 {
-    if ( format != d->taskName ) {
+    if (format != d->taskName) {
         d->taskName = format;
         emit taskNameChanged();
     }
@@ -59,4 +59,3 @@ int ProgressProxy::maximum() const
 {
     return d->maximum;
 }
-

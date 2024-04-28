@@ -28,12 +28,10 @@ Value func_inttobool(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_booltoint(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ToString(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadconversionmodule.json", ConversionModule)
 
-
-ConversionModule::ConversionModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+ConversionModule::ConversionModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
@@ -81,7 +79,6 @@ QString ConversionModule::descriptionFileName() const
 {
     return QString("conversion.xml");
 }
-
 
 // Function: POLR
 Value func_polr(valVector args, ValueCalc *calc, FuncExtra *)
@@ -167,10 +164,7 @@ Value func_roman(valVector args, ValueCalc *calc, FuncExtra *)
     // There is an optional argument, but the specification only covers the case
     // where it is zero for conciseness, and zero is the default. So we just
     // ignore it.
-    QString result = RNThousands[(value / 1000)] +
-                     RNHundreds[(value / 100) % 10] +
-                     RNTens[(value / 10) % 10] +
-                     RNUnits[(value) % 10];
+    QString result = RNThousands[(value / 1000)] + RNHundreds[(value / 100) % 10] + RNTens[(value / 10) % 10] + RNUnits[(value) % 10];
     return Value(result);
 }
 
@@ -179,13 +173,20 @@ Value func_roman(valVector args, ValueCalc *calc, FuncExtra *)
 int func_arabic_helper(QChar c)
 {
     switch (c.toUpper().unicode()) {
-    case 'M': return 1000;
-    case 'D': return 500;
-    case 'C': return 100;
-    case 'L': return 50;
-    case 'X': return 10;
-    case 'V': return 5;
-    case 'I': return 1;
+    case 'M':
+        return 1000;
+    case 'D':
+        return 500;
+    case 'C':
+        return 100;
+    case 'L':
+        return 50;
+    case 'X':
+        return 10;
+    case 'V':
+        return 5;
+    case 'I':
+        return 1;
     }
     return -1;
 }
@@ -194,20 +195,26 @@ int func_arabic_helper(QChar c)
 Value func_arabic(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString roman = calc->conv()->asString(args[0]).asString();
-    if (roman.isEmpty()) return Value::errorVALUE();
+    if (roman.isEmpty())
+        return Value::errorVALUE();
 
     int val = 0, lastd = 0, d = 0;
 
     for (int i = 0; i < roman.length(); i++) {
         d = func_arabic_helper(roman[i]);
-        if (d < 0) return Value::errorVALUE();
+        if (d < 0)
+            return Value::errorVALUE();
 
-        if (lastd < d) val -= lastd;
-        else val += lastd;
+        if (lastd < d)
+            val -= lastd;
+        else
+            val += lastd;
         lastd = d;
     }
-    if (lastd < d) val -= lastd;
-    else val += lastd;
+    if (lastd < d)
+        val -= lastd;
+    else
+        val += lastd;
 
     return Value(val);
 }
@@ -221,7 +228,8 @@ void func_a2c_helper(ValueCalc *calc, QString &s, Value val)
                 func_a2c_helper(calc, s, val.element(col, row));
     } else {
         int v = calc->conv()->asInteger(val).asInteger();
-        if (v == 0) return;
+        if (v == 0)
+            return;
         QChar c(v);
         s = s + c;
     }
@@ -264,4 +272,3 @@ Value func_ToString(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 #include "conversion.moc"
-

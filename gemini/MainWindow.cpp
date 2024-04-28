@@ -7,81 +7,81 @@
  */
 
 #include "MainWindow.h"
-#include <QHBoxLayout>
 #include "desktopviewproxy.h"
+#include <QHBoxLayout>
 
+#include <QAction>
 #include <QApplication>
-#include <QResizeEvent>
-#include <QQuickWidget>
-#include <QQmlContext>
-#include <QQmlEngine>
-#include <QGraphicsObject>
 #include <QDir>
 #include <QFile>
-#include <QMessageBox>
-#include <QToolButton>
-#include <QMenuBar>
-#include <QAction>
 #include <QFileInfo>
-#include <QUrl>
+#include <QGraphicsObject>
+#include <QMenuBar>
+#include <QMessageBox>
+#include <QQmlContext>
+#include <QQmlEngine>
+#include <QQuickWidget>
+#include <QResizeEvent>
 #include <QStandardPaths>
+#include <QToolButton>
+#include <QUrl>
 
 #include <KActionCollection>
-#include <KToolBar>
-#include <KMessageBox>
 #include <KConfigGroup>
+#include <KMessageBox>
 #include <KSharedConfig>
+#include <KToolBar>
 
-#include <gemini/ViewModeSwitchEvent.h>
+#include <KoAbstractGradient.h>
 #include <KoCanvasBase.h>
-#include <KoToolManager.h>
-#include <KoMainWindow.h>
-#include <KoGlobal.h>
-#include <KoDocumentInfo.h>
-#include <KoView.h>
-#include <KoPart.h>
+#include <KoDialog.h>
 #include <KoDocumentEntry.h>
+#include <KoDocumentInfo.h>
+#include <KoFileDialog.h>
 #include <KoFilterManager.h>
+#include <KoGlobal.h>
+#include <KoIcon.h>
+#include <KoMainWindow.h>
+#include <KoPart.h>
+#include <KoToolManager.h>
+#include <KoView.h>
+#include <KoZoomController.h>
+#include <gemini/ViewModeSwitchEvent.h>
 #include <part/KWFactory.h>
 #include <stage/part/KPrDocument.h>
 #include <stage/part/KPrFactory.h>
 #include <stage/part/KPrViewModePresentation.h>
-#include <KoAbstractGradient.h>
-#include <KoZoomController.h>
-#include <KoFileDialog.h>
-#include <KoDialog.h>
-#include <KoIcon.h>
 
-#include "PropertyContainer.h"
-#include "RecentFileManager.h"
-#include "DocumentManager.h"
-#include "QmlGlobalEngine.h"
-#include "Settings.h"
-#include "Theme.h"
-#include "DocumentListModel.h"
-#include "Constants.h"
-#include "SimpleTouchArea.h"
-#include "ToolManager.h"
-#include "ParagraphStylesModel.h"
-#include "KeyboardModel.h"
-#include "ScribbleArea.h"
-#include "RecentImageImageProvider.h"
-#include "RecentFilesModel.h"
-#include "TemplatesModel.h"
 #include "CloudAccountsModel.h"
+#include "Constants.h"
+#include "DocumentListModel.h"
+#include "DocumentManager.h"
+#include "KeyboardModel.h"
+#include "ParagraphStylesModel.h"
+#include "PropertyContainer.h"
+#include "QmlGlobalEngine.h"
+#include "RecentFileManager.h"
+#include "RecentFilesModel.h"
+#include "RecentImageImageProvider.h"
+#include "ScribbleArea.h"
+#include "Settings.h"
+#include "SimpleTouchArea.h"
+#include "TemplatesModel.h"
+#include "Theme.h"
+#include "ToolManager.h"
 
 #ifdef Q_OS_WIN
 // Slate mode/docked detection stuff
-#include <Windows.h>
 #include <Shellapi.h>
+#include <Windows.h>
 #define SM_CONVERTIBLESLATEMODE 0x2003
-#define SM_SYSTEMDOCKED         0x2004
+#define SM_SYSTEMDOCKED 0x2004
 #endif
 
 class MainWindow::Private
 {
 public:
-    Private(MainWindow* qq)
+    Private(MainWindow *qq)
         : q(qq)
         , allowClose(true)
         , touchView(0)
@@ -111,43 +111,43 @@ public:
         fullScreenThrottle->setInterval(500);
         fullScreenThrottle->setSingleShot(true);
     }
-    MainWindow* q;
+    MainWindow *q;
     bool allowClose;
-    QQuickWidget* touchView;
+    QQuickWidget *touchView;
     QPointer<KoMainWindow> desktopView;
-    QObject* currentView;
+    QObject *currentView;
     Settings *settings;
 
     bool slateMode;
     bool docked;
     QString currentTouchPage;
-    KoView* touchKoView;
-    QObject* touchEventReceiver;
-    KoView* desktopKoView;
-    DesktopViewProxy* desktopViewProxy;
+    KoView *touchKoView;
+    QObject *touchEventReceiver;
+    KoView *desktopKoView;
+    DesktopViewProxy *desktopViewProxy;
 
     bool forceDesktop;
     bool forceTouch;
     bool temporaryFile;
-    ViewModeSynchronisationObject* syncObject;
+    ViewModeSynchronisationObject *syncObject;
 
-    QAction* toDesktop;
-    QAction* toTouch;
-    QToolButton* switcher;
-    QAction* alternativeSaveAction;
-    QTimer* fullScreenThrottle;
+    QAction *toDesktop;
+    QAction *toTouch;
+    QToolButton *switcher;
+    QAction *alternativeSaveAction;
+    QTimer *fullScreenThrottle;
 
-    void shouldAcceptTouchEvents(QWidget* widget) {
+    void shouldAcceptTouchEvents(QWidget *widget)
+    {
         // See https://bugreports.qt.io/browse/QTBUG-66718
         static QVersionNumber qtVersion = QVersionNumber::fromString(qVersion());
         static bool shouldWidgetAcceptTouchEvents = qtVersion > QVersionNumber(5, 9, 3) && qtVersion.normalized() != QVersionNumber(5, 10);
-        if(shouldWidgetAcceptTouchEvents)
-        {
+        if (shouldWidgetAcceptTouchEvents) {
             widget->setAttribute(Qt::WA_AcceptTouchEvents, true);
         }
     }
 
-    void initTouchView(QObject* parent)
+    void initTouchView(QObject *parent)
     {
         touchView = new QQuickWidget();
         shouldAcceptTouchEvents(touchView);
@@ -156,11 +156,11 @@ public:
         touchView->engine()->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
         touchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
 
-        settings = new Settings( q );
-        DocumentManager::instance()->setSettingsManager( settings );
+        settings = new Settings(q);
+        DocumentManager::instance()->setSettingsManager(settings);
         touchView->engine()->rootContext()->setContextProperty("DocumentManager", DocumentManager::instance());
         touchView->engine()->rootContext()->setContextProperty("Settings", settings);
-        touchView->engine()->rootContext()->setContextProperty("Constants", new Constants( q ));
+        touchView->engine()->rootContext()->setContextProperty("Constants", new Constants(q));
         touchView->engine()->rootContext()->setContextProperty("RecentFileManager", DocumentManager::instance()->recentFileManager());
         touchView->engine()->rootContext()->setContextProperty("WORDS_MIME_TYPE", QString(WORDS_MIME_TYPE));
         touchView->engine()->rootContext()->setContextProperty("STAGE_MIME_TYPE", QString(STAGE_MIME_TYPE));
@@ -171,7 +171,7 @@ public:
         // Corrects for mismatched case errors in path (qtdeclarative fails to load)
         wchar_t buffer[1024];
         QString absolute = appdir.absolutePath();
-        DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
+        DWORD rv = ::GetShortPathName((wchar_t *)absolute.utf16(), buffer, 1024);
         rv = ::GetLongPathName(buffer, buffer, 1024);
         QString correctedPath((QChar *)buffer);
         appdir.setPath(correctedPath);
@@ -196,22 +196,22 @@ public:
         QFileInfo fi(mainqml);
 
         touchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
-        touchView->setResizeMode( QQuickWidget::SizeRootObjectToView );
+        touchView->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
         toDesktop = new QAction(q);
         toDesktop->setEnabled(true);
         toDesktop->setText(tr("Switch to Desktop"));
         // useful for monkey-testing to crash...
-        //toDesktop->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
-        //q->addAction(toDesktop);
-        //connect(toDesktop, SIGNAL(triggered(bool)), q, SLOT(switchDesktopForced()));
+        // toDesktop->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
+        // q->addAction(toDesktop);
+        // connect(toDesktop, SIGNAL(triggered(bool)), q, SLOT(switchDesktopForced()));
         connect(toDesktop, &QAction::triggered, q, &MainWindow::switchToDesktop);
         touchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
     }
 
     void initDesktopView()
     {
-        if(settings->currentFile().isEmpty()) {
+        if (settings->currentFile().isEmpty()) {
             return;
         }
         // Initialize all Calligra directories etc.
@@ -219,14 +219,14 @@ public:
 
         // The default theme is not what we want for Gemini
         KConfigGroup group(KSharedConfig::openConfig(), "theme");
-        if(group.readEntry("Theme", "no-theme-is-set") == QLatin1String("no-theme-is-set")) {
+        if (group.readEntry("Theme", "no-theme-is-set") == QLatin1String("no-theme-is-set")) {
             group.writeEntry("Theme", "Krita-dark");
         }
 
-        if(settings->currentFileClass() == WORDS_MIME_TYPE) {
+        if (settings->currentFileClass() == WORDS_MIME_TYPE) {
             qApp->setApplicationName("calligrawords");
             desktopView = new KoMainWindow(WORDS_MIME_TYPE, KWFactory::componentData());
-        } else if(settings->currentFileClass() == STAGE_MIME_TYPE) {
+        } else if (settings->currentFileClass() == STAGE_MIME_TYPE) {
             qApp->setApplicationName("calligrastage");
             desktopView = new KoMainWindow(STAGE_MIME_TYPE, KPrFactory::componentData());
         } else {
@@ -240,7 +240,7 @@ public:
         toTouch->setText(tr("Switch to Touch"));
         toTouch->setIcon(koIcon("system-reboot"));
         toTouch->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_S);
-        //connect(toTouch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchTouchForced()));
+        // connect(toTouch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchTouchForced()));
         connect(toTouch, &QAction::triggered, q, &MainWindow::switchToTouch);
         desktopView->actionCollection()->addAction("SwitchToTouchView", toTouch);
         switcher = new QToolButton();
@@ -248,7 +248,7 @@ public:
         switcher->setText(tr("Switch to Touch"));
         switcher->setIcon(koIcon("system-reboot"));
         switcher->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-        //connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchDesktopForced()));
+        // connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchDesktopForced()));
         connect(switcher, &QAbstractButton::clicked, q, &MainWindow::switchToTouch);
         desktopView->menuBar()->setCornerWidget(switcher);
 
@@ -266,10 +266,15 @@ public:
     void altSaveQuery();
 };
 
-MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags )
-    : QMainWindow( parent, flags ), d( new Private(this) )
+MainWindow::MainWindow(QStringList fileNames, QWidget *parent, Qt::WindowFlags flags)
+    : QMainWindow(parent, flags)
+    , d(new Private(this))
 {
-    qmlRegisterUncreatableType<PropertyContainer>("org.calligra", 1, 0, "PropertyContainer", "Contains properties and naively extends QML to support dynamic properties");
+    qmlRegisterUncreatableType<PropertyContainer>("org.calligra",
+                                                  1,
+                                                  0,
+                                                  "PropertyContainer",
+                                                  "Contains properties and naively extends QML to support dynamic properties");
     qmlRegisterType<Theme>("org.calligra", 1, 0, "Theme");
     qmlRegisterType<DocumentListModel>("org.calligra", 1, 0, "DocumentListModel");
     qmlRegisterType<SimpleTouchArea>("org.calligra", 1, 0, "SimpleTouchArea");
@@ -281,16 +286,16 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<TemplatesModel>("org.calligra", 1, 0, "TemplatesModel");
     qmlRegisterType<CloudAccountsModel>("org.calligra", 1, 0, "CloudAccountsModel");
     qRegisterMetaType<KPrViewModePresentation>();
-    qRegisterMetaType<QAction*>();
+    qRegisterMetaType<QAction *>();
 
-    qApp->setActiveWindow( this );
+    qApp->setActiveWindow(this);
     setWindowTitle(i18n("Calligra Gemini"));
-    setWindowIcon(koIcon("calligragemini"));//gemini"));
-    resize(qApp->primaryScreen()->availableGeometry().size() * 3/4);
+    setWindowIcon(koIcon("calligragemini")); // gemini"));
+    resize(qApp->primaryScreen()->availableGeometry().size() * 3 / 4);
     d->shouldAcceptTouchEvents(this);
 
-    foreach(const QString &fileName, fileNames) {
-        DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
+    foreach (const QString &fileName, fileNames) {
+        DocumentManager::instance()->recentFileManager()->addRecent(QDir::current().absoluteFilePath(fileName));
     }
 
     connect(DocumentManager::instance(), &DocumentManager::documentChanged, this, &MainWindow::documentChanged);
@@ -305,29 +310,29 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     // Really, this allows us to show the pleasant welcome screen from Touch
     switchToTouch();
 
-    if(!fileNames.isEmpty()) {
-        //It feels a little hacky, but call a QML function to open files.
-        //This saves a lot of hassle required to change state for loading dialogs etc.
+    if (!fileNames.isEmpty()) {
+        // It feels a little hacky, but call a QML function to open files.
+        // This saves a lot of hassle required to change state for loading dialogs etc.
         QMetaObject::invokeMethod(d->touchView->rootObject(), "openFile", Q_ARG(QVariant, fileNames.at(0)));
     }
 }
 
 void MainWindow::resetWindowTitle()
 {
-    KoDocument* document = DocumentManager::instance()->document();
+    KoDocument *document = DocumentManager::instance()->document();
     if (!document)
         return;
     QUrl url = document->url();
     QString fileName = url.fileName();
-    if(url.scheme() == "temp" || url.isEmpty())
+    if (url.scheme() == "temp" || url.isEmpty())
         fileName = i18n("Untitled");
 
     KoDialog::CaptionFlags flags = KoDialog::HIGCompliantCaption;
-    if ( document->isModified() ) {
+    if (document->isModified()) {
         flags |= KoDialog::ModifiedCaption;
     }
 
-    setWindowTitle( KoDialog::makeStandardCaption(fileName, this, flags) );
+    setWindowTitle(KoDialog::makeStandardCaption(fileName, this, flags));
 }
 
 void MainWindow::switchDesktopForced()
@@ -350,8 +355,7 @@ void MainWindow::switchToTouch()
     timer.start();
     qDebug() << "Switching to touch";
 
-    if (d->toTouch)
-    {
+    if (d->toTouch) {
         d->toTouch->setEnabled(false);
         d->switcher->setEnabled(false);
     }
@@ -359,9 +363,9 @@ void MainWindow::switchToTouch()
     d->syncObject = new ViewModeSynchronisationObject;
 
     if (d->desktopView && centralWidget() == d->desktopView) {
-        if (KoView* view = d->desktopView->rootView()) {
-            //Notify the view we are switching away from that we are about to switch away from it
-            //giving it the possibility to set up the synchronisation object.
+        if (KoView *view = d->desktopView->rootView()) {
+            // Notify the view we are switching away from that we are about to switch away from it
+            // giving it the possibility to set up the synchronisation object.
             ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, view, d->touchView, d->syncObject);
             QApplication::sendEvent(view, &aboutToSwitchEvent);
         }
@@ -377,11 +381,10 @@ void MainWindow::switchToTouch()
     if (d->slateMode) {
         if (d->syncObject->initialized)
             QTimer::singleShot(50, this, &MainWindow::touchChange);
-    }
-    else
+    } else
         QTimer::singleShot(50, this, &MainWindow::touchChange);
 
-    //qDebug() << "milliseconds to switch to touch:" << timer.elapsed();
+    // qDebug() << "milliseconds to switch to touch:" << timer.elapsed();
 }
 
 void MainWindow::touchChange()
@@ -389,24 +392,22 @@ void MainWindow::touchChange()
     if (centralWidget() != d->touchView || !d->syncObject)
         return;
 
-    if (d->desktopView)
-    {
-        //if (/*!d->touchKoView ||*/ !d->touchView->canvasWidget())
+    if (d->desktopView) {
+        // if (/*!d->touchKoView ||*/ !d->touchView->canvasWidget())
         //{
-        //    QTimer::singleShot(100, this, SLOT(touchChange()));
-        //    return;
-        //}
+        //     QTimer::singleShot(100, this, SLOT(touchChange()));
+        //     return;
+        // }
         qApp->processEvents();
-        KoView* view = d->desktopView->rootView();
-        //Notify the new view that we just switched to it, passing our synchronisation object
-        //so it can use those values to sync with the old view.
+        KoView *view = d->desktopView->rootView();
+        // Notify the new view that we just switched to it, passing our synchronisation object
+        // so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToTouchModeEvent, view, d->touchView, d->syncObject);
         QApplication::sendEvent(d->touchEventReceiver, &switchedEvent);
         d->syncObject = 0;
         qApp->processEvents();
     }
-    if (d->toDesktop)
-    {
+    if (d->toDesktop) {
         qApp->processEvents();
         d->toDesktop->setEnabled(true);
     }
@@ -421,9 +422,9 @@ void MainWindow::switchToDesktop()
     if (d->toDesktop)
         d->toDesktop->setEnabled(false);
 
-    ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
+    ViewModeSynchronisationObject *syncObject = new ViewModeSynchronisationObject;
 
-    KoView* view = 0;
+    KoView *view = 0;
     if (d->desktopView) {
         view = d->desktopView->rootView();
     }
@@ -432,21 +433,20 @@ void MainWindow::switchToDesktop()
         return;
     }
 
-    //Notify the view we are switching away from that we are about to switch away from it
-    //giving it the possibility to set up the synchronisation object.
+    // Notify the view we are switching away from that we are about to switch away from it
+    // giving it the possibility to set up the synchronisation object.
     ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, d->touchView, view, syncObject);
     QApplication::sendEvent(d->touchEventReceiver, &aboutToSwitchEvent);
     qApp->processEvents();
 
-    if (d->currentTouchPage == "MainPage")
-    {
+    if (d->currentTouchPage == "MainPage") {
         d->touchView->setParent(0);
         d->touchView->setVisible(false);
         setCentralWidget(d->desktopView);
     }
 
-    //Notify the new view that we just switched to it, passing our synchronisation object
-    //so it can use those values to sync with the old view.
+    // Notify the new view that we just switched to it, passing our synchronisation object
+    // so it can use those values to sync with the old view.
     ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->touchView, view, syncObject);
     QApplication::sendEvent(view, &switchedEvent);
 
@@ -454,24 +454,24 @@ void MainWindow::switchToDesktop()
     d->toTouch->setEnabled(true);
     d->switcher->setEnabled(true);
 
-    //qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
+    // qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }
 
-void MainWindow::setDocAndPart(QObject* document, QObject* part)
+void MainWindow::setDocAndPart(QObject *document, QObject *part)
 {
-    if(DocumentManager::instance()->document()) {
+    if (DocumentManager::instance()->document()) {
         disconnect(DocumentManager::instance()->document(), &KoDocument::modified, this, &MainWindow::resetWindowTitle);
     }
     qDebug() << "Attempting to set doc and part to" << document << "and" << part;
-    d->touchEventReceiver = d->touchView->rootObject()->findChild<QQuickItem*>("controllerItem");
-    DocumentManager::instance()->setDocAndPart(qobject_cast<KoDocument*>(document), qobject_cast<KoPart*>(part));
-    if(DocumentManager::instance()->document()) {
+    d->touchEventReceiver = d->touchView->rootObject()->findChild<QQuickItem *>("controllerItem");
+    DocumentManager::instance()->setDocAndPart(qobject_cast<KoDocument *>(document), qobject_cast<KoPart *>(part));
+    if (DocumentManager::instance()->document()) {
         connect(DocumentManager::instance()->document(), &KoDocument::modified, this, &MainWindow::resetWindowTitle);
     }
-    if(document && part && !d->settings->currentFile().isEmpty()) {
-        QAction* undo = qobject_cast<KoPart*>(part)->views().at(0)->action("edit_undo");
+    if (document && part && !d->settings->currentFile().isEmpty()) {
+        QAction *undo = qobject_cast<KoPart *>(part)->views().at(0)->action("edit_undo");
         d->touchView->rootContext()->setContextProperty("undoaction", undo);
-        QAction* redo = qobject_cast<KoPart*>(part)->views().at(0)->action("edit_redo");
+        QAction *redo = qobject_cast<KoPart *>(part)->views().at(0)->action("edit_redo");
         d->touchView->rootContext()->setContextProperty("redoaction", redo);
     }
     resetWindowTitle();
@@ -485,19 +485,19 @@ void MainWindow::documentChanged()
         qApp->processEvents();
     }
     d->initDesktopView();
-    if(d->desktopView) {
+    if (d->desktopView) {
         d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
         qApp->processEvents();
         d->desktopKoView = d->desktopView->rootView();
         emit desktopKoViewChanged();
-    //    d->desktopKoView->setQtMainWindow(d->desktopView);
-    //    connect(d->desktopKoView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
-    //    connect(d->desktopKoView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
-    //    KWView* wordsview = qobject_cast<KWView*>(d->desktopView->rootView());
-    //    if(wordsview) {
-    //        connect(wordsview->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-    //                this, SLOT(resourceChanged(int, const QVariant&)));
-    //    }
+        //    d->desktopKoView->setQtMainWindow(d->desktopView);
+        //    connect(d->desktopKoView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+        //    connect(d->desktopKoView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
+        //    KWView* wordsview = qobject_cast<KWView*>(d->desktopView->rootView());
+        //    if(wordsview) {
+        //        connect(wordsview->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+        //                this, SLOT(resourceChanged(int, const QVariant&)));
+        //    }
         if (!d->forceTouch && !d->slateMode)
             switchToDesktop();
     }
@@ -528,54 +528,50 @@ void MainWindow::setCurrentTouchPage(QString newPage)
     d->currentTouchPage = newPage;
     emit currentTouchPageChanged();
 
-    if (newPage == "MainPage")
-    {
-        if (!d->forceTouch && !d->slateMode)
-        {
+    if (newPage == "MainPage") {
+        if (!d->forceTouch && !d->slateMode) {
             // Just loaded to desktop, do nothing
-        }
-        else
-        {
-            //QTimer::singleShot(3000, this, SLOT(adjustZoomOnDocumentChangedAndStuff()));
+        } else {
+            // QTimer::singleShot(3000, this, SLOT(adjustZoomOnDocumentChangedAndStuff()));
         }
     }
 }
 
-void MainWindow::setAlternativeSaveAction(QAction* altAction)
+void MainWindow::setAlternativeSaveAction(QAction *altAction)
 {
     // if mainwindow exists, and alt action exists, remove alt action from current mainwindow
-    if(d->desktopView && d->alternativeSaveAction) {
+    if (d->desktopView && d->alternativeSaveAction) {
         d->desktopView->actionCollection()->removeAction(d->alternativeSaveAction);
         d->desktopView->actionCollection()->action("file_save")->disconnect(d->alternativeSaveAction);
     }
     d->alternativeSaveAction = altAction;
     // if mainwindow exists, set alt action into current mainwindow
-    if(d->desktopView && d->alternativeSaveAction) {
-        QAction* cloudSave = d->desktopView->actionCollection()->addAction("cloud_save", d->alternativeSaveAction);
-        KToolBar* tb = d->desktopView->toolBar("mainToolBar");
-        if(tb) {
+    if (d->desktopView && d->alternativeSaveAction) {
+        QAction *cloudSave = d->desktopView->actionCollection()->addAction("cloud_save", d->alternativeSaveAction);
+        KToolBar *tb = d->desktopView->toolBar("mainToolBar");
+        if (tb) {
             tb->removeAction(cloudSave);
             // find the action /after/ the save action (because we want the alt save there, not before it)
-            QAction* saveAction = d->desktopView->actionCollection()->action("file_save");
-            QAction* afterSave = 0;
+            QAction *saveAction = d->desktopView->actionCollection()->action("file_save");
+            QAction *afterSave = 0;
             bool useNext = false;
-            Q_FOREACH(QAction* action, tb->actions()) {
-                if(useNext) {
+            Q_FOREACH (QAction *action, tb->actions()) {
+                if (useNext) {
                     afterSave = action;
                     break;
                 }
-                if(action == saveAction) {
+                if (action == saveAction) {
                     useNext = true;
                 }
             }
-            if(afterSave) {
+            if (afterSave) {
                 tb->insertAction(afterSave, cloudSave);
             } else {
                 tb->addAction(cloudSave);
             }
         }
     }
-    if(d->alternativeSaveAction) {
+    if (d->alternativeSaveAction) {
         // disabled for a start - this is called on load completion, so let's just assume we're not ready to reupload yet
         d->alternativeSaveAction->setEnabled(false);
     }
@@ -583,7 +579,7 @@ void MainWindow::setAlternativeSaveAction(QAction* altAction)
 
 void MainWindow::enableAltSaveAction()
 {
-    if(d->alternativeSaveAction) {
+    if (d->alternativeSaveAction) {
         d->alternativeSaveAction->setEnabled(true);
     }
 }
@@ -597,17 +593,13 @@ void MainWindow::openFile()
         QJsonObject json = entry.metaData();
         QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
 
-        mimeFilter << KoFilterManager::mimeFilter(WORDS_MIME_TYPE,
-                                                  KoFilterManager::Import,
-                                                  mimeTypes);
+        mimeFilter << KoFilterManager::mimeFilter(WORDS_MIME_TYPE, KoFilterManager::Import, mimeTypes);
     }
     entry = KoDocumentEntry::queryByMimeType(STAGE_MIME_TYPE);
     if (!entry.isEmpty()) {
         QJsonObject json = entry.metaData();
         QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
-        mimeFilter << KoFilterManager::mimeFilter(STAGE_MIME_TYPE,
-                                                  KoFilterManager::Import,
-                                                  mimeTypes);
+        mimeFilter << KoFilterManager::mimeFilter(STAGE_MIME_TYPE, KoFilterManager::Import, mimeTypes);
     }
 
     KoFileDialog dialog(d->desktopView, KoFileDialog::OpenFile, "OpenDocument");
@@ -615,7 +607,7 @@ void MainWindow::openFile()
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     dialog.setMimeTypeFilters(mimeFilter);
     QString filename = dialog.filename();
-    if(!filename.isEmpty()) {
+    if (!filename.isEmpty()) {
         QMetaObject::invokeMethod(d->touchView->rootObject(), "openFile", Q_ARG(QVariant, filename), Q_ARG(QVariant, 0));
     }
 }
@@ -638,19 +630,17 @@ bool MainWindow::fullScreen() const
 
 void MainWindow::setFullScreen(bool newValue)
 {
-    if(newValue) {
-        if(d->fullScreenThrottle->isActive()) {
+    if (newValue) {
+        if (d->fullScreenThrottle->isActive()) {
             // not a good thing... you need to avoid this happening. This exists to avoid a death-loop,
             // such as what might happen if readermode is enabled when the window is not maximised
             // as this causes a resize loop which makes readermode switch between enabled and disabled,
             // which in turn makes fullScreen be set and reset all the time... very bad, so let's try
             // and avoid that.
-        }
-        else {
+        } else {
             setWindowState(windowState() | Qt::WindowFullScreen);
         }
-    }
-    else {
+    } else {
         // this is really unpleasant... however, fullscreen is very twitchy, and exiting it as below
         // will cause an inconsistent state, so we simply assume exiting fullscreen leaves you maximised.
         // It isn't optimal, but it is the best state for now, this has taken too long to work out.
@@ -662,7 +652,7 @@ void MainWindow::setFullScreen(bool newValue)
     emit fullScreenChanged();
 }
 
-QObject* MainWindow::desktopKoView() const
+QObject *MainWindow::desktopKoView() const
 {
     return d->desktopKoView;
 }
@@ -672,19 +662,19 @@ int MainWindow::lastScreen() const
     return qApp->screens().size() - 1;
 }
 
-void MainWindow::resourceChanged(int key, const QVariant& v)
+void MainWindow::resourceChanged(int key, const QVariant &v)
 {
     Q_UNUSED(key)
     Q_UNUSED(v)
-    if(centralWidget() == d->touchView)
+    if (centralWidget() == d->touchView)
         return;
 }
 
-void MainWindow::resourceChangedTouch(int key, const QVariant& v)
+void MainWindow::resourceChangedTouch(int key, const QVariant &v)
 {
     Q_UNUSED(key)
     Q_UNUSED(v)
-    if(centralWidget() == d->desktopView)
+    if (centralWidget() == d->desktopView)
         return;
 }
 
@@ -701,8 +691,7 @@ void MainWindow::closeWindow()
             d->allowClose = d->queryClose();
     }
 
-    if (d->allowClose)
-    {
+    if (d->allowClose) {
         d->altSaveQuery();
         d->settings->setCurrentFile("");
     }
@@ -721,24 +710,24 @@ bool MainWindow::Private::queryClose()
         auto url = DocumentManager::instance()->document()->defaultUrl();
 
         int res = KMessageBox::warningTwoActionsCancel(q,
-                  i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", url.fileName()),
-                  QString(),
-                  KStandardGuiItem::save(),
-                  KStandardGuiItem::discard());
+                                                       i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", url.fileName()),
+                                                       QString(),
+                                                       KStandardGuiItem::save(),
+                                                       KStandardGuiItem::discard());
 
         switch (res) {
-        case KMessageBox::PrimaryAction : {
+        case KMessageBox::PrimaryAction: {
             if (DocumentManager::instance()->isTemporaryFile() && !desktopViewProxy->fileSaveAs())
                 return false;
             if (!DocumentManager::instance()->save())
                 return false;
             break;
         }
-        case KMessageBox::SecondaryAction :
+        case KMessageBox::SecondaryAction:
             DocumentManager::instance()->document()->removeAutoSaveFiles();
-            DocumentManager::instance()->document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
+            DocumentManager::instance()->document()->setModified(false); // Now when queryClose() is called by closeEvent it won't do anything.
             break;
-        default : // case KMessageBox::Cancel :
+        default: // case KMessageBox::Cancel :
             return false;
         }
     }
@@ -747,29 +736,31 @@ bool MainWindow::Private::queryClose()
 
 void MainWindow::Private::altSaveQuery()
 {
-    if(alternativeSaveAction && alternativeSaveAction->isEnabled())
-    {
-        int res = KMessageBox::warningTwoActions(q, i18n("<p>The cloud copy of the document is out of date. Do you want to upload a new copy?</p>"), {}, KGuiItem(i18nc("@action:button", "Upload")), KStandardGuiItem::cancel());
+    if (alternativeSaveAction && alternativeSaveAction->isEnabled()) {
+        int res = KMessageBox::warningTwoActions(q,
+                                                 i18n("<p>The cloud copy of the document is out of date. Do you want to upload a new copy?</p>"),
+                                                 {},
+                                                 KGuiItem(i18nc("@action:button", "Upload")),
+                                                 KStandardGuiItem::cancel());
         switch (res) {
-        case KMessageBox::PrimaryAction : {
+        case KMessageBox::PrimaryAction: {
             alternativeSaveAction->trigger();
-            while(alternativeSaveAction->isEnabled()) {
+            while (alternativeSaveAction->isEnabled()) {
                 qApp->processEvents();
             }
             break;
         }
-        case KMessageBox::SecondaryAction :
+        case KMessageBox::SecondaryAction:
         default:
             break;
         }
     }
 }
 
-void MainWindow::closeEvent(QCloseEvent* event)
+void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (centralWidget() == d->desktopView)
-    {
-        KoDocument* document = DocumentManager::instance()->document();
+    if (centralWidget() == d->desktopView) {
+        KoDocument *document = DocumentManager::instance()->document();
         if (document && document->isLoading()) {
             event->ignore();
             return;
@@ -786,13 +777,12 @@ MainWindow::~MainWindow()
 }
 
 #ifdef Q_OS_WIN
-bool MainWindow::winEvent( MSG * message, long * result )
+bool MainWindow::winEvent(MSG *message, long *result)
 {
-    if (message && message->message == WM_SETTINGCHANGE && message->lParam)
-    {
-        if (wcscmp(TEXT("ConvertibleSlateMode"), (TCHAR *) message->lParam) == 0)
+    if (message && message->message == WM_SETTINGCHANGE && message->lParam) {
+        if (wcscmp(TEXT("ConvertibleSlateMode"), (TCHAR *)message->lParam) == 0)
             d->notifySlateModeChange();
-        else if (wcscmp(TEXT("SystemDockMode"), (TCHAR *) message->lParam) == 0)
+        else if (wcscmp(TEXT("SystemDockMode"), (TCHAR *)message->lParam) == 0)
             d->notifyDockingModeChange();
         *result = 0;
         return true;
@@ -806,21 +796,17 @@ void MainWindow::Private::notifySlateModeChange()
 #ifdef Q_OS_WIN
     bool bSlateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
 
-    if (slateMode != bSlateMode)
-    {
+    if (slateMode != bSlateMode) {
         slateMode = bSlateMode;
         emit q->slateModeChanged();
-        if (forceTouch || (slateMode && !forceDesktop))
-        {
+        if (forceTouch || (slateMode && !forceDesktop)) {
             if (!toTouch || (toTouch && toTouch->isEnabled()))
                 q->switchToTouch();
+        } else {
+            q->switchToDesktop();
         }
-        else
-        {
-                q->switchToDesktop();
-        }
-        //qDebug() << "Slate mode is now" << slateMode;
-    } 
+        // qDebug() << "Slate mode is now" << slateMode;
+    }
 #endif
 }
 
@@ -829,10 +815,9 @@ void MainWindow::Private::notifyDockingModeChange()
 #ifdef Q_OS_WIN
     bool bDocked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
 
-    if (docked != bDocked)
-    {
+    if (docked != bDocked) {
         docked = bDocked;
-        //qDebug() << "Docking mode is now" << docked;
+        // qDebug() << "Docking mode is now" << docked;
     }
 #endif
 }

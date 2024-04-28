@@ -7,10 +7,10 @@
 
 #include "ValueCalc.h"
 
-#include "CellBase.h"
-#include "ValueConverter.h"
 #include "CalculationSettings.h"
+#include "CellBase.h"
 #include "SheetsDebug.h"
+#include "ValueConverter.h"
 
 #include <QRegularExpression>
 #include <cfloat>
@@ -18,18 +18,15 @@
 
 using namespace Calligra::Sheets;
 
-
 //
 // helper: gammaHelper
 //
 // args[0] = value
 // args[1] = & reflect
 //
-static double GammaHelp(double& x, bool& reflect)
+static double GammaHelp(double &x, bool &reflect)
 {
-    double c[6] = { 76.18009173, -86.50532033    , 24.01409822,
-                    -1.231739516,   0.120858003E-2, -0.536382E-5
-                  };
+    double c[6] = {76.18009173, -86.50532033, 24.01409822, -1.231739516, 0.120858003E-2, -0.536382E-5};
     if (x >= 1.0) {
         reflect = false;
         x -= 1.0;
@@ -49,7 +46,8 @@ static double GammaHelp(double& x, bool& reflect)
     return res;
 }
 
-static Value toValue(Number value) {
+static Value toValue(Number value)
+{
     // Can the result be represented as an integer?
     const auto min = static_cast<Number>(std::numeric_limits<int64_t>::min());
     const auto max = static_cast<Number>(std::numeric_limits<int64_t>::max());
@@ -61,7 +59,6 @@ static Value toValue(Number value) {
     }
     return Value(value);
 }
-
 
 // Array-walk functions registered on ValueCalc object
 
@@ -115,7 +112,8 @@ void awMax(ValueCalc *c, Value &res, Value val, Value)
         if (res.isEmpty()) {
             res = val;
         } else {
-            if (c->greater(val, res)) res = val;
+            if (c->greater(val, res))
+                res = val;
         }
     }
 }
@@ -142,7 +140,8 @@ void awMin(ValueCalc *c, Value &res, Value val, Value)
     if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString())) {
         if (res.isEmpty())
             res = val;
-        else if (c->lower(val, res)) res = val;
+        else if (c->lower(val, res))
+            res = val;
     }
 }
 
@@ -171,27 +170,25 @@ void awProdA(ValueCalc *c, Value &res, Value val, Value)
 }
 
 // sum of squares of deviations, used to compute standard deviation
-void awDevSq(ValueCalc *c, Value &res, Value val,
-             Value avg)
+void awDevSq(ValueCalc *c, Value &res, Value val, Value avg)
 {
     if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()) && (!val.isError()))
         res = c->add(res, c->sqr(c->sub(val, avg)));
 }
 
 // sum of squares of deviations, used to compute standard deviation
-void awDevSqA(ValueCalc *c, Value &res, Value val,
-              Value avg)
+void awDevSqA(ValueCalc *c, Value &res, Value val, Value avg)
 {
     if (!val.isEmpty())
         res = c->add(res, c->sqr(c->sub(val, avg)));
 }
 
-
 // ***********************
 // ****** ValueCalc ******
 // ***********************
 
-ValueCalc::ValueCalc(ValueConverter* c): converter(c)
+ValueCalc::ValueCalc(ValueConverter *c)
+    : converter(c)
 {
     // initialize the random number generator
     srand(time(0));
@@ -213,15 +210,17 @@ ValueCalc::ValueCalc(ValueConverter* c): converter(c)
     registerAwFunc("devsqa", awDevSqA);
 }
 
-const CalculationSettings* ValueCalc::settings() const
+const CalculationSettings *ValueCalc::settings() const
 {
     return converter->settings();
 }
 
 Value ValueCalc::add(const Value &a, const Value &b)
 {
-    if (a.isError()) return a;
-    if (b.isError()) return b;
+    if (a.isError())
+        return a;
+    if (b.isError())
+        return b;
     if (a.isArray() || b.isArray())
         return twoArrayMap(a, &ValueCalc::add, b);
 
@@ -238,8 +237,10 @@ Value ValueCalc::add(const Value &a, const Value &b)
 
 Value ValueCalc::sub(const Value &a, const Value &b)
 {
-    if (a.isError()) return a;
-    if (b.isError()) return b;
+    if (a.isError())
+        return a;
+    if (b.isError())
+        return b;
     if (a.isArray() || b.isArray())
         return twoArrayMap(a, &ValueCalc::sub, b);
 
@@ -256,15 +257,17 @@ Value ValueCalc::sub(const Value &a, const Value &b)
 
 Value ValueCalc::mul(const Value &a, const Value &b)
 {
-    if (a.isError()) return a;
-    if (b.isError()) return b;
+    if (a.isError())
+        return a;
+    if (b.isError())
+        return b;
     // This operation is only defined for an array if it is multiplied
     // with a number, that however is commutative, thus swap parameters
     // if necessary.
     if (a.isArray() && !b.isArray())
-       return arrayMap(a, &ValueCalc::mul, b);
+        return arrayMap(a, &ValueCalc::mul, b);
     if (b.isArray() && !a.isArray())
-       return arrayMap(b, &ValueCalc::mul, a);
+        return arrayMap(b, &ValueCalc::mul, a);
 
     Number aa, bb;
     aa = converter->toFloat(a);
@@ -279,10 +282,12 @@ Value ValueCalc::mul(const Value &a, const Value &b)
 
 Value ValueCalc::div(const Value &a, const Value &b)
 {
-    if (a.isError()) return a;
-    if (b.isError()) return b;
+    if (a.isError())
+        return a;
+    if (b.isError())
+        return b;
     if (a.isArray() && !b.isArray())
-       return arrayMap(a, &ValueCalc::div, b);
+        return arrayMap(a, &ValueCalc::div, b);
 
     Number aa, bb;
     aa = converter->toFloat(a);
@@ -301,10 +306,12 @@ Value ValueCalc::div(const Value &a, const Value &b)
 
 Value ValueCalc::mod(const Value &a, const Value &b)
 {
-    if (a.isError()) return a;
-    if (b.isError()) return b;
+    if (a.isError())
+        return a;
+    if (b.isError())
+        return b;
     if (a.isArray() && !b.isArray())
-       return arrayMap(a, &ValueCalc::mod, b);
+        return arrayMap(a, &ValueCalc::mod, b);
 
     Number aa, bb;
     aa = converter->toFloat(a);
@@ -318,12 +325,15 @@ Value ValueCalc::mod(const Value &a, const Value &b)
         // can't simply use fixed increases/decreases, because the implementation
         // of fmod may differ on various platforms, and we should always return
         // the same results ...
-        if ((bb > 0) && (aa < 0))  // result must be positive here
-            while (m < 0) m += bb;
+        if ((bb > 0) && (aa < 0)) // result must be positive here
+            while (m < 0)
+                m += bb;
         if (bb < 0) { // result must be negative here, but not lower than bb
             // bb is negative, hence the following two are correct
-            while (m < bb) m -= bb;  // same as m+=fabs(bb)
-            while (m > 0) m += bb;   // same as m-=fabs(bb)
+            while (m < bb)
+                m -= bb; // same as m+=fabs(bb)
+            while (m > 0)
+                m += bb; // same as m-=fabs(bb)
         }
 
         res = Value(m);
@@ -337,10 +347,12 @@ Value ValueCalc::mod(const Value &a, const Value &b)
 
 Value ValueCalc::pow(const Value &a, const Value &b)
 {
-    if (a.isError()) return a;
-    if (b.isError()) return b;
+    if (a.isError())
+        return a;
+    if (b.isError())
+        return b;
     if (a.isArray() && !b.isArray())
-       return arrayMap(a, &ValueCalc::pow, b);
+        return arrayMap(a, &ValueCalc::pow, b);
 
     Number aa, bb;
     aa = converter->toFloat(a);
@@ -355,13 +367,15 @@ Value ValueCalc::pow(const Value &a, const Value &b)
 
 Value ValueCalc::sqr(const Value &a)
 {
-    if (a.isError()) return a;
+    if (a.isError())
+        return a;
     return mul(a, a);
 }
 
 Value ValueCalc::sqrt(const Value &a)
 {
-    if (a.isError()) return a;
+    if (a.isError())
+        return a;
     Value res = Value(::pow((qreal)converter->toFloat(a), 0.5));
     if (a.isNumber() || a.isEmpty())
         res.setFormat(a.format());
@@ -371,7 +385,8 @@ Value ValueCalc::sqrt(const Value &a)
 
 Value ValueCalc::add(const Value &a, Number b)
 {
-    if (a.isError()) return a;
+    if (a.isError())
+        return a;
     Value res = toValue(converter->toFloat(a) + b);
 
     if (a.isNumber() || a.isEmpty())
@@ -382,7 +397,8 @@ Value ValueCalc::add(const Value &a, Number b)
 
 Value ValueCalc::sub(const Value &a, Number b)
 {
-    if (a.isError()) return a;
+    if (a.isError())
+        return a;
     Value res = toValue(converter->toFloat(a) - b);
 
     if (a.isNumber() || a.isEmpty())
@@ -393,7 +409,8 @@ Value ValueCalc::sub(const Value &a, Number b)
 
 Value ValueCalc::mul(const Value &a, Number b)
 {
-    if (a.isError()) return a;
+    if (a.isError())
+        return a;
     Value res = toValue(converter->toFloat(a) * b);
 
     if (a.isNumber() || a.isEmpty())
@@ -404,7 +421,8 @@ Value ValueCalc::mul(const Value &a, Number b)
 
 Value ValueCalc::div(const Value &a, Number b)
 {
-    if (a.isError()) return a;
+    if (a.isError())
+        return a;
     Value res;
     if (b == 0.0)
         return Value::errorDIV0();
@@ -419,7 +437,8 @@ Value ValueCalc::div(const Value &a, Number b)
 
 Value ValueCalc::pow(const Value &a, Number b)
 {
-    if (a.isError()) return a;
+    if (a.isError())
+        return a;
     Value res = Value(::pow(converter->toFloat(a), b));
 
     if (a.isNumber() || a.isEmpty())
@@ -430,19 +449,22 @@ Value ValueCalc::pow(const Value &a, Number b)
 
 Value ValueCalc::abs(const Value &a)
 {
-    if (a.isError()) return a;
+    if (a.isError())
+        return a;
     return toValue(fabs(converter->toFloat(a)));
 }
 
 bool ValueCalc::isZero(const Value &a)
 {
-    if (a.isError()) return false;
+    if (a.isError())
+        return false;
     return (converter->toFloat(a) == 0.0);
 }
 
 bool ValueCalc::isEven(const Value &a)
 {
-    if (a.isError()) return false;
+    if (a.isError())
+        return false;
     if (gequal(a, Value(0))) {
         return ((converter->toInteger(roundDown(a)) % 2) == 0);
     } else {
@@ -472,7 +494,7 @@ bool ValueCalc::approxEqual(const Value &a, const Value &b)
     if (aa == bb)
         return true;
     Number x = aa - bb;
-    return (x < 0.0 ? -x : x)  < ((aa < 0.0 ? -aa : aa) * 1e-14);
+    return (x < 0.0 ? -x : x) < ((aa < 0.0 ? -aa : aa) * 1e-14);
 }
 
 bool ValueCalc::greater(const Value &a, const Value &b)
@@ -536,15 +558,19 @@ bool ValueCalc::strLower(const Value &a, const Value &b, bool CalcS)
 
 bool ValueCalc::naturalEqual(const Value &a, const Value &b, bool CalcS)
 {
-    if (a.isNumber() && b.isNumber()) return approxEqual(a, b);
-    if (a.allowComparison(b)) return a.equal(b, CalcS ? Qt::CaseSensitive : Qt::CaseInsensitive);
+    if (a.isNumber() && b.isNumber())
+        return approxEqual(a, b);
+    if (a.allowComparison(b))
+        return a.equal(b, CalcS ? Qt::CaseSensitive : Qt::CaseInsensitive);
     return strEqual(a, b, CalcS);
 }
 
 bool ValueCalc::naturalGreater(const Value &a, const Value &b, bool CalcS)
 {
-    if (a.isNumber() && b.isNumber()) return greater(a, b);
-    if (a.allowComparison(b)) return a.greater(b, CalcS ? Qt::CaseSensitive : Qt::CaseInsensitive);
+    if (a.isNumber() && b.isNumber())
+        return greater(a, b);
+    if (a.allowComparison(b))
+        return a.greater(b, CalcS ? Qt::CaseSensitive : Qt::CaseInsensitive);
     return strGreater(a, b, CalcS);
 }
 
@@ -563,20 +589,17 @@ bool ValueCalc::naturalLequal(const Value &a, const Value &b, bool CalcS)
     return (naturalLower(a, b, CalcS) || naturalEqual(a, b, CalcS));
 }
 
-Value ValueCalc::roundDown(const Value &a,
-                           const Value &digits)
+Value ValueCalc::roundDown(const Value &a, const Value &digits)
 {
     return roundDown(a, converter->asInteger(digits).asInteger());
 }
 
-Value ValueCalc::roundUp(const Value &a,
-                         const Value &digits)
+Value ValueCalc::roundUp(const Value &a, const Value &digits)
 {
     return roundUp(a, converter->asInteger(digits).asInteger());
 }
 
-Value ValueCalc::round(const Value &a,
-                       const Value &digits)
+Value ValueCalc::round(const Value &a, const Value &digits)
 {
     return round(a, converter->asInteger(digits).asInteger());
 }
@@ -650,14 +673,14 @@ Value ValueCalc::round(const Value &a, int digits)
 int ValueCalc::sign(const Value &a)
 {
     Number val = converter->toFloat(a);
-    if (val == 0) return 0;
-    if (val > 0) return 1;
+    if (val == 0)
+        return 0;
+    if (val > 0)
+        return 1;
     return -1;
 }
 
-
-Value ValueCalc::log(const Value &number,
-                     const Value &base)
+Value ValueCalc::log(const Value &number, const Value &base)
 {
     Number logbase = converter->toFloat(base);
     if (logbase == 1.0)
@@ -722,7 +745,7 @@ Value ValueCalc::eps()
 
 Value ValueCalc::random(Number range)
 {
-    return Value(range *(double) rand() / (RAND_MAX + 1.0));
+    return Value(range * (double)rand() / (RAND_MAX + 1.0));
 }
 
 Value ValueCalc::random(Value range)
@@ -737,13 +760,11 @@ Value ValueCalc::fact(const Value &which)
     return fact(converter->asInteger(which).asInteger());
 }
 
-Value ValueCalc::fact(const Value &which,
-                      const Value &end)
+Value ValueCalc::fact(const Value &which, const Value &end)
 {
     // we can simply use integers - no one is going to compute factorial of
     // anything bigger than 2^64
-    return fact(converter->asInteger(which).asInteger(),
-                converter->asInteger(end).asInteger());
+    return fact(converter->asInteger(which).asInteger(), converter->asInteger(end).asInteger());
 }
 
 Value ValueCalc::fact(int which, int end)
@@ -802,11 +823,13 @@ Value ValueCalc::gcd(const Value &a, const Value &b)
     Value aa = round(a);
     Value bb = round(b);
 
-    if (approxEqual(aa, bb)) return aa;
+    if (approxEqual(aa, bb))
+        return aa;
 
-    if (aa.isZero()) return bb;
-    if (bb.isZero()) return aa;
-
+    if (aa.isZero())
+        return bb;
+    if (bb.isZero())
+        return aa;
 
     if (greater(aa, bb))
         return gcd(bb, mod(aa, bb));
@@ -819,13 +842,16 @@ Value ValueCalc::lcm(const Value &a, const Value &b)
     Value aa = round(a);
     Value bb = round(b);
 
-    if (approxEqual(aa, bb)) return aa;
+    if (approxEqual(aa, bb))
+        return aa;
 
-    if (aa.isZero()) return bb;
-    if (bb.isZero()) return aa;
+    if (aa.isZero())
+        return bb;
+    if (bb.isZero())
+        return aa;
 
     Value g = gcd(aa, bb);
-    if (g.isZero())  // GCD is zero for some weird reason
+    if (g.isZero()) // GCD is zero for some weird reason
         return mul(aa, bb);
 
     return div(mul(aa, bb), g);
@@ -833,7 +859,8 @@ Value ValueCalc::lcm(const Value &a, const Value &b)
 
 Value ValueCalc::base(const Value &val, int base, int prec, int minLength)
 {
-    if (prec < 0) prec = 2;
+    if (prec < 0)
+        prec = 2;
     if ((base < 2) || (base > 36))
         return Value::errorVALUE();
 
@@ -843,11 +870,12 @@ Value ValueCalc::base(const Value &val, int base, int prec, int minLength)
         result = result.rightJustified(minLength, QChar('0'));
 
     if (prec > 0) {
-        result += '.'; value = value - (int)numToDouble(value);
+        result += '.';
+        value = value - (int)numToDouble(value);
 
         int ix;
         for (int i = 0; i < prec; ++i) {
-            ix = (int) numToDouble(value * base);
+            ix = (int)numToDouble(value * base);
             result += "0123456789abcdefghijklmnopqrstuvwxyz"[ix];
             value = base * (value - (double)ix / base);
         }
@@ -860,12 +888,11 @@ Value ValueCalc::fromBase(const Value &val, int base)
 {
     QString str = converter->asString(val).asString();
     bool ok;
-    int64_t num = (int64_t) str.toLongLong(&ok, base);
+    int64_t num = (int64_t)str.toLongLong(&ok, base);
     if (ok)
         return Value(num);
     return Value::errorVALUE();
 }
-
 
 Value ValueCalc::sin(const Value &number)
 {
@@ -1055,7 +1082,7 @@ Value ValueCalc::phi(Value x)
     return mul(constant, exp(div(x2neg, 2.0)));
 }
 
-static double taylor_helper(double* pPolynom, uint nMax, double x)
+static double taylor_helper(double *pPolynom, uint nMax, double x)
 {
     double nVal = pPolynom[nMax];
     for (int i = nMax - 1; i >= 0; --i) {
@@ -1064,14 +1091,12 @@ static double taylor_helper(double* pPolynom, uint nMax, double x)
     return nVal;
 }
 
-
 inline bool approxEqual(double a, double b)
 {
     if (a == b)
         return true;
     double x = a - b;
-    return (x < 0.0 ? -x : x)
-           < ((a < 0.0 ? -a : a) *(1.0 / (16777216.0 * 16777216.0)));
+    return (x < 0.0 ? -x : x) < ((a < 0.0 ? -a : a) * (1.0 / (16777216.0 * 16777216.0)));
 }
 
 inline double approxFloor(double a)
@@ -1089,29 +1114,27 @@ Value ValueCalc::gauss(Value xx)
 {
     double x = converter->toFloat(xx);
 
-    double t0[] = { 0.39894228040143268, -0.06649038006690545,  0.00997355701003582,
-                    -0.00118732821548045,  0.00011543468761616, -0.00000944465625950,
-                    0.00000066596935163, -0.00000004122667415,  0.00000000227352982,
-                    0.00000000011301172,  0.00000000000511243, -0.00000000000021218
-                  };
-    double t2[] = { 0.47724986805182079,  0.05399096651318805, -0.05399096651318805,
-                    0.02699548325659403, -0.00449924720943234, -0.00224962360471617,
-                    0.00134977416282970, -0.00011783742691370, -0.00011515930357476,
-                    0.00003704737285544,  0.00000282690796889, -0.00000354513195524,
-                    0.00000037669563126,  0.00000019202407921, -0.00000005226908590,
-                    -0.00000000491799345,  0.00000000366377919, -0.00000000015981997,
-                    -0.00000000017381238,  0.00000000002624031,  0.00000000000560919,
-                    -0.00000000000172127, -0.00000000000008634,  0.00000000000007894
-                  };
-    double t4[] = { 0.49996832875816688,  0.00013383022576489, -0.00026766045152977,
-                    0.00033457556441221, -0.00028996548915725,  0.00018178605666397,
-                    -0.00008252863922168,  0.00002551802519049, -0.00000391665839292,
-                    -0.00000074018205222,  0.00000064422023359, -0.00000017370155340,
-                    0.00000000909595465,  0.00000000944943118, -0.00000000329957075,
-                    0.00000000029492075,  0.00000000011874477, -0.00000000004420396,
-                    0.00000000000361422,  0.00000000000143638, -0.00000000000045848
-                  };
-    double asympt[] = { -1.0, 1.0, -3.0, 15.0, -105.0 };
+    double t0[] = {0.39894228040143268,
+                   -0.06649038006690545,
+                   0.00997355701003582,
+                   -0.00118732821548045,
+                   0.00011543468761616,
+                   -0.00000944465625950,
+                   0.00000066596935163,
+                   -0.00000004122667415,
+                   0.00000000227352982,
+                   0.00000000011301172,
+                   0.00000000000511243,
+                   -0.00000000000021218};
+    double t2[] = {0.47724986805182079,  0.05399096651318805,  -0.05399096651318805, 0.02699548325659403,  -0.00449924720943234, -0.00224962360471617,
+                   0.00134977416282970,  -0.00011783742691370, -0.00011515930357476, 0.00003704737285544,  0.00000282690796889,  -0.00000354513195524,
+                   0.00000037669563126,  0.00000019202407921,  -0.00000005226908590, -0.00000000491799345, 0.00000000366377919,  -0.00000000015981997,
+                   -0.00000000017381238, 0.00000000002624031,  0.00000000000560919,  -0.00000000000172127, -0.00000000000008634, 0.00000000000007894};
+    double t4[] = {0.49996832875816688,  0.00013383022576489, -0.00026766045152977, 0.00033457556441221,  -0.00028996548915725, 0.00018178605666397,
+                   -0.00008252863922168, 0.00002551802519049, -0.00000391665839292, -0.00000074018205222, 0.00000064422023359,  -0.00000017370155340,
+                   0.00000000909595465,  0.00000000944943118, -0.00000000329957075, 0.00000000029492075,  0.00000000011874477,  -0.00000000004420396,
+                   0.00000000000361422,  0.00000000000143638, -0.00000000000045848};
+    double asympt[] = {-1.0, 1.0, -3.0, 15.0, -105.0};
 
     double xAbs = fabs(x);
     uint xShort = static_cast<uint>(approxFloor(xAbs)); // approxFloor taken from OOo
@@ -1145,157 +1168,72 @@ Value ValueCalc::gaussinv(Value xx)
     if (fabs(q) <= .425) {
         t = 0.180625 - q * q;
 
-        z =
-            q *
-            (
-                (
-                    (
-                        (
-                            (
-                                (
-                                    (
-                                        t * 2509.0809287301226727 + 33430.575583588128105
-                                    )
-                                    * t + 67265.770927008700853
-                                )
-                                * t + 45921.953931549871457
-                            )
-                            * t + 13731.693765509461125
-                        )
-                        * t + 1971.5909503065514427
-                    )
-                    * t + 133.14166789178437745
-                )
-                * t + 3.387132872796366608
-            )
-            /
-            (
-                (
-                    (
-                        (
-                            (
-                                (
-                                    (
-                                        t * 5226.495278852854561 + 28729.085735721942674
-                                    )
-                                    * t + 39307.89580009271061
-                                )
-                                * t + 21213.794301586595867
-                            )
-                            * t + 5394.1960214247511077
-                        )
-                        * t + 687.1870074920579083
-                    )
-                    * t + 42.313330701600911252
-                )
-                * t + 1.0
-            );
+        z = q
+            * (((((((t * 2509.0809287301226727 + 33430.575583588128105) * t + 67265.770927008700853) * t + 45921.953931549871457) * t + 13731.693765509461125)
+                     * t
+                 + 1971.5909503065514427)
+                    * t
+                + 133.14166789178437745)
+                   * t
+               + 3.387132872796366608)
+            / (((((((t * 5226.495278852854561 + 28729.085735721942674) * t + 39307.89580009271061) * t + 21213.794301586595867) * t + 5394.1960214247511077) * t
+                 + 687.1870074920579083)
+                    * t
+                + 42.313330701600911252)
+                   * t
+               + 1.0);
 
     } else {
-        if (q > 0)  t = 1 - x;
-        else    t = x;
+        if (q > 0)
+            t = 1 - x;
+        else
+            t = x;
 
-        t =::sqrt(-::log(t));
+        t = ::sqrt(-::log(t));
 
         if (t <= 5.0) {
             t += -1.6;
 
-            z =
-                (
-                    (
-                        (
-                            (
-                                (
-                                    (
-                                        (
-                                            t * 7.7454501427834140764e-4 + 0.0227238449892691845833
-                                        )
-                                        * t + 0.24178072517745061177
-                                    )
-                                    * t + 1.27045825245236838258
-                                )
-                                * t + 3.64784832476320460504
-                            )
-                            * t + 5.7694972214606914055
-                        )
-                        * t + 4.6303378461565452959
-                    )
-                    * t + 1.42343711074968357734
-                )
-                /
-                (
-                    (
-                        (
-                            (
-                                (
-                                    (
-                                        (
-                                            t * 1.05075007164441684324e-9 + 5.475938084995344946e-4
-                                        )
-                                        * t + 0.0151986665636164571966
-                                    )
-                                    * t + 0.14810397642748007459
-                                )
-                                * t + 0.68976733498510000455
-                            )
-                            * t + 1.6763848301838038494
-                        )
-                        * t + 2.05319162663775882187
-                    )
-                    * t + 1.0
-                );
+            z = (((((((t * 7.7454501427834140764e-4 + 0.0227238449892691845833) * t + 0.24178072517745061177) * t + 1.27045825245236838258) * t
+                    + 3.64784832476320460504)
+                       * t
+                   + 5.7694972214606914055)
+                      * t
+                  + 4.6303378461565452959)
+                     * t
+                 + 1.42343711074968357734)
+                / (((((((t * 1.05075007164441684324e-9 + 5.475938084995344946e-4) * t + 0.0151986665636164571966) * t + 0.14810397642748007459) * t
+                      + 0.68976733498510000455)
+                         * t
+                     + 1.6763848301838038494)
+                        * t
+                    + 2.05319162663775882187)
+                       * t
+                   + 1.0);
 
         } else {
             t += -5.0;
 
-            z =
-                (
-                    (
-                        (
-                            (
-                                (
-                                    (
-                                        (
-                                            t * 2.01033439929228813265e-7 + 2.71155556874348757815e-5
-                                        )
-                                        * t + 0.0012426609473880784386
-                                    )
-                                    * t + 0.026532189526576123093
-                                )
-                                * t + 0.29656057182850489123
-                            )
-                            * t + 1.7848265399172913358
-                        )
-                        * t + 5.4637849111641143699
-                    )
-                    * t + 6.6579046435011037772
-                )
-                /
-                (
-                    (
-                        (
-                            (
-                                (
-                                    (
-                                        (
-                                            t * 2.04426310338993978564e-15 + 1.4215117583164458887e-7
-                                        )
-                                        * t + 1.8463183175100546818e-5
-                                    )
-                                    * t + 7.868691311456132591e-4
-                                )
-                                * t + 0.0148753612908506148525
-                            )
-                            * t + 0.13692988092273580531
-                        )
-                        * t + 0.59983220655588793769
-                    )
-                    * t + 1.0
-                );
-
+            z = (((((((t * 2.01033439929228813265e-7 + 2.71155556874348757815e-5) * t + 0.0012426609473880784386) * t + 0.026532189526576123093) * t
+                    + 0.29656057182850489123)
+                       * t
+                   + 1.7848265399172913358)
+                      * t
+                  + 5.4637849111641143699)
+                     * t
+                 + 6.6579046435011037772)
+                / (((((((t * 2.04426310338993978564e-15 + 1.4215117583164458887e-7) * t + 1.8463183175100546818e-5) * t + 7.868691311456132591e-4) * t
+                      + 0.0148753612908506148525)
+                         * t
+                     + 0.13692988092273580531)
+                        * t
+                    + 0.59983220655588793769)
+                       * t
+                   + 1.0);
         }
 
-        if (q < 0.0) z = -z;
+        if (q < 0.0)
+            z = -z;
     }
 
     return Value(z);
@@ -1312,10 +1250,10 @@ Value ValueCalc::GetGamma(Value value)
 
     double gamma = GammaHelp(val, reflect);
 
-    gamma = ::pow(val + 5.5, val + 0.5) * gamma /::exp(val + 5.5);
+    gamma = ::pow(val + 5.5, val + 0.5) * gamma / ::exp(val + 5.5);
 
     if (reflect)
-        gamma = M_PI * val / (gamma*::sin(M_PI * val));
+        gamma = M_PI * val / (gamma * ::sin(M_PI * val));
 
     return Value(gamma);
 }
@@ -1326,9 +1264,9 @@ Value ValueCalc::GetLogGamma(Value _x)
 
     bool bReflect;
     double G = GammaHelp(x, bReflect);
-    G = (x + 0.5)*::log(x + 5.5) +::log(G) - (x + 5.5);
+    G = (x + 0.5) * ::log(x + 5.5) + ::log(G) - (x + 5.5);
     if (bReflect)
-        G = ::log(M_PI * x) - G -::log(::sin(M_PI * x));
+        G = ::log(M_PI * x) - G - ::log(::sin(M_PI * x));
     return Value(G);
 }
 
@@ -1406,17 +1344,17 @@ Value ValueCalc::GetGammaDist(Value _x, Value _alpha, Value _beta)
     // B. L. Shea
     // Applied Statistics, Vol. 37, No. 3 (1988), pp. 466-473
 
-// TODO - normal approx
+    // TODO - normal approx
 
-    double x     = numToDouble(converter->toFloat(_x));       // x
-    double alpha = numToDouble(converter->toFloat(_alpha));   // alpha
-    double beta  = numToDouble(converter->toFloat(_beta));    // beta
+    double x = numToDouble(converter->toFloat(_x)); // x
+    double alpha = numToDouble(converter->toFloat(_alpha)); // alpha
+    double beta = numToDouble(converter->toFloat(_beta)); // beta
 
     // debug info
-//   debugSheets<<"GetGammaDist( x="<<x<<", alpha="<<alpha<<", beta="<<beta<<" )";
+    //   debugSheets<<"GetGammaDist( x="<<x<<", alpha="<<alpha<<", beta="<<beta<<" )";
 
     int lower_tail = 1; //
-    int pearson;      // flag is set if pearson was used
+    int pearson; // flag is set if pearson was used
 
     const static double xlarge = 1.0e+37;
 
@@ -1425,7 +1363,7 @@ Value ValueCalc::GetGammaDist(Value _x, Value _alpha, Value _beta)
     long n;
 
     x /= beta;
-//   debugSheets<<"-> x=x/beta ="<<x;
+    //   debugSheets<<"-> x=x/beta ="<<x;
 
     // check constraints
     if (x <= 0.0)
@@ -1438,12 +1376,12 @@ Value ValueCalc::GetGammaDist(Value _x, Value _alpha, Value _beta)
 
         pearson = 1; // set flag -> use pearson's series expansion.
         res = alpha * ::log(x) - x - ::log(GetGamma(Value(alpha + 1.0)).asFloat());
-//     debugSheets<<"Pearson  res="<<res;
+        //     debugSheets<<"Pearson  res="<<res;
 
         //                 x           x           x
         // sum = 1.0 + --------- +  --------- * --------- + ...
         //              alpha+1      alpha+1     alpha+2
-        c   = 1.0;
+        c = 1.0;
         sum = 1.0;
         a = alpha;
         do {
@@ -1455,10 +1393,10 @@ Value ValueCalc::GetGammaDist(Value _x, Value _alpha, Value _beta)
         // x >= max( 1, alpha)
         pearson = 0; // clear flag -> use a continued fraction expansion
 
-// TODO use GetLogGamma?
+        // TODO use GetLogGamma?
         res = alpha * ::log(x) - x - ::log(GetGamma(Value(alpha)).asFloat());
 
-//     debugSheets<<"Continued fraction expression res="<<res;
+        //     debugSheets<<"Continued fraction expression res="<<res;
 
         //
         //
@@ -1471,18 +1409,18 @@ Value ValueCalc::GetGammaDist(Value _x, Value _alpha, Value _beta)
         pn3 = x + 1.0;
         pn4 = x * b;
         sum = pn3 / pn4;
-        for (n = 1; ; ++n) {
-//       debugSheets<<"n="<<n<<" sum="<< sum;
+        for (n = 1;; ++n) {
+            //       debugSheets<<"n="<<n<<" sum="<< sum;
             a += 1.0; // =   n+1 -alpha
             b += 2.0; // = 2(n+1)-alph+x
             an = a * n;
             pn5 = b * pn3 - an * pn1;
             pn6 = b * pn4 - an * pn2;
-//       debugSheets<<"a ="<<a<<" an="<<an<<" b="<<b<<" pn5="<<pn5<<" pn6="<<pn6;
+            //       debugSheets<<"a ="<<a<<" an="<<an<<" b="<<b<<" pn5="<<pn5<<" pn6="<<pn6;
             if (fabs(pn6) > 0.0) {
                 osum = sum;
                 sum = pn5 / pn6;
-//         debugSheets<<"sum ="<<sum<<" osum="<<osum;
+                //         debugSheets<<"sum ="<<sum<<" osum="<<osum;
                 if (fabs(osum - sum) <= DBL_EPSILON * fmin(1.0, sum))
                     break;
             }
@@ -1510,10 +1448,9 @@ Value ValueCalc::GetGammaDist(Value _x, Value _alpha, Value _beta)
         return Value(-1 * ::expm1(res));
 }
 
-Value ValueCalc::GetBeta(Value _x, Value _alpha,
-                         Value _beta)
+Value ValueCalc::GetBeta(Value _x, Value _alpha, Value _beta)
 {
-//   debugSheets<<"GetBeta: x= " << _x << " alpha= " << _alpha << " beta=" << _beta;
+    //   debugSheets<<"GetBeta: x= " << _x << " alpha= " << _alpha << " beta=" << _beta;
     if (equal(_beta, Value(1.0)))
         return pow(_x, _alpha);
     else if (equal(_alpha, Value(1.0)))
@@ -1542,7 +1479,8 @@ Value ValueCalc::GetBeta(Value _x, Value _alpha,
         cf = 0.0;
     else {
         double a1, b1, a2, b2, fnorm, rm, apl2m, d2m, d2m1, cfnew;
-        a1 = 1.0; b1 = 1.0;
+        a1 = 1.0;
+        b1 = 1.0;
         b2 = 1.0 - (fA + fB) * x / (fA + 1.0);
         if (b2 == 0.0) {
             a2 = b2;
@@ -1555,7 +1493,7 @@ Value ValueCalc::GetBeta(Value _x, Value _alpha,
         }
         cfnew = 1.0;
         for (uint j = 1; j <= 100; ++j) {
-            rm = (double) j;
+            rm = (double)j;
             apl2m = fA + 2.0 * rm;
             d2m = rm * (fB - rm) * x / ((apl2m - 1.0) * apl2m);
             d2m1 = -(fA + rm) * (fA + fB + rm) * x / (apl2m * (apl2m + 1.0));
@@ -1575,10 +1513,9 @@ Value ValueCalc::GetBeta(Value _x, Value _alpha,
         if (fB < fEps)
             b1 = 1.0E30;
         else
-            b1 = ::exp(numToDouble(GetLogGamma(Value(fA)).asFloat() + GetLogGamma(Value(fB)).asFloat() -
-                                   GetLogGamma(Value(fA + fB)).asFloat()));
+            b1 = ::exp(numToDouble(GetLogGamma(Value(fA)).asFloat() + GetLogGamma(Value(fB)).asFloat() - GetLogGamma(Value(fA + fB)).asFloat()));
 
-        cf *= ::pow(x, fA)*::pow(1.0 - x, fB) / (fA * b1);
+        cf *= ::pow(x, fA) * ::pow(1.0 - x, fB) / (fA * b1);
     }
     if (bReflect)
         return Value(1.0 - cf);
@@ -1587,7 +1524,6 @@ Value ValueCalc::GetBeta(Value _x, Value _alpha,
 }
 
 // ------------------------------------------------------
-
 
 /*
  *
@@ -1604,41 +1540,63 @@ Value ValueCalc::GetBeta(Value _x, Value _alpha,
 static double ccmath_gaml(double x)
 {
     double g, h = 0; /* NB must be called with 0<=x<29 */
-    for (g = 1.; x < 30. ; g *= x, x += 1.) h = x * x;
+    for (g = 1.; x < 30.; g *= x, x += 1.)
+        h = x * x;
     g = (x - .5) * log(x) - x + .918938533204672 - log(g);
-    g += (1. - (1. / 6. - (1. / 3. - 1. / (4.*h)) / (7.*h)) / (5.*h)) / (12.*x);
+    g += (1. - (1. / 6. - (1. / 3. - 1. / (4. * h)) / (7. * h)) / (5. * h)) / (12. * x);
     return g;
 }
 
 static double ccmath_psi(int m)
 {
-    double s = -.577215664901533; int k;
-    for (k = 1; k < m ; ++k) s += 1. / k;
+    double s = -.577215664901533;
+    int k;
+    for (k = 1; k < m; ++k)
+        s += 1. / k;
     return s;
 }
 
 static double ccmath_ibes(double v, double x)
 {
-    double y, s = 0., t = 0., tp; int p, m;
-    y = x - 9.; if (y > 0.) y *= y; tp = v * v * .2 + 25.;
+    double y, s = 0., t = 0., tp;
+    int p, m;
+    y = x - 9.;
+    if (y > 0.)
+        y *= y;
+    tp = v * v * .2 + 25.;
     if (y < tp) {
-        x /= 2.; m = (int)x;
-        if (x > 0.) s = t = exp(v * log(x) - ccmath_gaml(v + 1.));
+        x /= 2.;
+        m = (int)x;
+        if (x > 0.)
+            s = t = exp(v * log(x) - ccmath_gaml(v + 1.));
         else {
-            if (v > 0.) return 0.; else if (v == 0.) return 1.;
+            if (v > 0.)
+                return 0.;
+            else if (v == 0.)
+                return 1.;
         }
         for (p = 1, x *= x;; ++p) {
-            t *= x / (p * (v += 1.)); s += t;
-            if (p > m && t < 1.e-13*s) break;
+            t *= x / (p * (v += 1.));
+            s += t;
+            if (p > m && t < 1.e-13 * s)
+                break;
         }
     } else {
         double u, a0 = 1.57079632679490;
-        s = t = 1. / sqrt(x * a0); x *= 2.; u = 0.;
-        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14 ; ++p, y += 1.) {
-            t *= (v + y) * (v - y) / (p * x); if (y > v && fabs(t) >= tp) break;
-            if (!(p&1)) s += t; else u -= t;
+        s = t = 1. / sqrt(x * a0);
+        x *= 2.;
+        u = 0.;
+        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14; ++p, y += 1.) {
+            t *= (v + y) * (v - y) / (p * x);
+            if (y > v && fabs(t) >= tp)
+                break;
+            if (!(p & 1))
+                s += t;
+            else
+                u -= t;
         }
-        x /= 2.; s = cosh(x) * s + sinh(x) * u;
+        x /= 2.;
+        s = cosh(x) * s + sinh(x) * u;
     }
     return s;
 }
@@ -1647,49 +1605,90 @@ static double ccmath_kbes(double v, double x)
 {
     double y, s, t, tp, f, a0 = 1.57079632679490;
     int p, k, m;
-    if (x == 0.) return HUGE_VAL;
-    y = x - 10.5; if (y > 0.) y *= y; tp = 25. + .185 * v * v;
+    if (x == 0.)
+        return HUGE_VAL;
+    y = x - 10.5;
+    if (y > 0.)
+        y *= y;
+    tp = 25. + .185 * v * v;
     if (y < tp && modf(v + .5, &t) != 0.) {
         y = 1.5 + .5 * v;
         if (x < y) {
-            x /= 2.; m = (int)x; tp = t = exp(v * log(x) - ccmath_gaml(v + 1.));
+            x /= 2.;
+            m = (int)x;
+            tp = t = exp(v * log(x) - ccmath_gaml(v + 1.));
             if (modf(v, &y) == 0.) {
-                k = (int)y; tp *= v;
-                f = 2.*log(x) - ccmath_psi(1) - ccmath_psi(k + 1);
-                t /= 2.; if (!(k&1)) t = -t; s = f * t;
+                k = (int)y;
+                tp *= v;
+                f = 2. * log(x) - ccmath_psi(1) - ccmath_psi(k + 1);
+                t /= 2.;
+                if (!(k & 1))
+                    t = -t;
+                s = f * t;
                 for (p = 1, x *= x;; ++p) {
                     f -= 1. / p + 1. / (v += 1.);
-                    t *= x / (p * v); s += (y = t * f);
-                    if (p > m && fabs(y) < 1.e-14) break;
+                    t *= x / (p * v);
+                    s += (y = t * f);
+                    if (p > m && fabs(y) < 1.e-14)
+                        break;
                 }
                 if (k > 0) {
-                    x = -x; s += (t = 1. / (tp * 2.));
-                    for (p = 1, --k; k > 0 ; ++p, --k) s += (t *= x / (p * k));
+                    x = -x;
+                    s += (t = 1. / (tp * 2.));
+                    for (p = 1, --k; k > 0; ++p, --k)
+                        s += (t *= x / (p * k));
                 }
             } else {
-                f = 1. / (t * v * 2.); t *= a0 / sin(2.*a0 * v); s = f - t;
+                f = 1. / (t * v * 2.);
+                t *= a0 / sin(2. * a0 * v);
+                s = f - t;
                 for (p = 1, x *= x, tp = v;; ++p) {
-                    t *= x / (p * (v += 1.)); f *= -x / (p * (tp -= 1.));
-                    s += (y = f - t); if (p > m && fabs(y) < 1.e-14) break;
+                    t *= x / (p * (v += 1.));
+                    f *= -x / (p * (tp -= 1.));
+                    s += (y = f - t);
+                    if (p > m && fabs(y) < 1.e-14)
+                        break;
                 }
             }
         } else {
             double tq, h, w, z, r;
-            t = 12. / pow(x, .333); k = (int)(t * t); y = 2.*(x + k);
-            m = (int)v; v -= m; tp = v * v - .25; v += 1.; tq = v * v - .25;
-            for (s = h = 1., r = f = z = w = 0.; k > 0 ; --k, y -= 2.) {
-                t = (y * h - (k + 1) * z) / (k - 1 - tp / k); z = h; f += (h = t);
-                t = (y * s - (k + 1) * w) / (k - 1 - tq / k); w = s; r += (s = t);
+            t = 12. / pow(x, .333);
+            k = (int)(t * t);
+            y = 2. * (x + k);
+            m = (int)v;
+            v -= m;
+            tp = v * v - .25;
+            v += 1.;
+            tq = v * v - .25;
+            for (s = h = 1., r = f = z = w = 0.; k > 0; --k, y -= 2.) {
+                t = (y * h - (k + 1) * z) / (k - 1 - tp / k);
+                z = h;
+                f += (h = t);
+                t = (y * s - (k + 1) * w) / (k - 1 - tq / k);
+                w = s;
+                r += (s = t);
             }
-            t = sqrt(a0 / x) * exp(-x); s *= t / r; h *= t / f; x /= 2.; if (m == 0) s = h;
-            for (k = 1; k < m ; ++k) {
-                t = v * s / x + h; h = s; s = t; v += 1.;
+            t = sqrt(a0 / x) * exp(-x);
+            s *= t / r;
+            h *= t / f;
+            x /= 2.;
+            if (m == 0)
+                s = h;
+            for (k = 1; k < m; ++k) {
+                t = v * s / x + h;
+                h = s;
+                s = t;
+                v += 1.;
             }
         }
     } else {
-        s = t = sqrt(a0 / x); x *= 2.;
-        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14 ; ++p, y += 1.) {
-            t *= (v + y) * (v - y) / (p * x); if (y > v && fabs(t) >= tp) break; s += t;
+        s = t = sqrt(a0 / x);
+        x *= 2.;
+        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14; ++p, y += 1.) {
+            t *= (v + y) * (v - y) / (p * x);
+            if (y > v && fabs(t) >= tp)
+                break;
+            s += t;
         }
         s *= exp(-x / 2.);
     }
@@ -1698,28 +1697,46 @@ static double ccmath_kbes(double v, double x)
 
 static double ccmath_jbes(double v, double x)
 {
-    double y, s = 0., t = 0., tp; int p, m;
-    y = x - 8.5; if (y > 0.) y *= y; tp = v * v / 4. + 13.69;
+    double y, s = 0., t = 0., tp;
+    int p, m;
+    y = x - 8.5;
+    if (y > 0.)
+        y *= y;
+    tp = v * v / 4. + 13.69;
     if (y < tp) {
-        x /= 2.; m = (int)x;
-        if (x > 0.) s = t = exp(v * log(x) - ccmath_gaml(v + 1.));
+        x /= 2.;
+        m = (int)x;
+        if (x > 0.)
+            s = t = exp(v * log(x) - ccmath_gaml(v + 1.));
         else {
-            if (v > 0.) return 0.; else if (v == 0.) return 1.;
+            if (v > 0.)
+                return 0.;
+            else if (v == 0.)
+                return 1.;
         }
         for (p = 1, x *= -x;; ++p) {
-            t *= x / (p * (v += 1.)); s += t;
-            if (p > m && fabs(t) < 1.e-13) break;
+            t *= x / (p * (v += 1.));
+            s += t;
+            if (p > m && fabs(t) < 1.e-13)
+                break;
         }
     } else {
         double u, a0 = 1.57079632679490;
-        s = t = 1. / sqrt(x * a0); x *= 2.; u = 0.;
-        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14 ; ++p, y += 1.) {
-            t *= (v + y) * (v - y) / (p * x); if (y > v && fabs(t) >= tp) break;
-            if (!(p&1)) {
-                t = -t; s += t;
-            } else u -= t;
+        s = t = 1. / sqrt(x * a0);
+        x *= 2.;
+        u = 0.;
+        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14; ++p, y += 1.) {
+            t *= (v + y) * (v - y) / (p * x);
+            if (y > v && fabs(t) >= tp)
+                break;
+            if (!(p & 1)) {
+                t = -t;
+                s += t;
+            } else
+                u -= t;
         }
-        y = x / 2. - (v + .5) * a0; s = cos(y) * s + sin(y) * u;
+        y = x / 2. - (v + .5) * a0;
+        s = cos(y) * s + sin(y) * u;
     }
     return s;
 }
@@ -1728,50 +1745,72 @@ static double ccmath_nbes(double v, double x)
 {
     double y, s, t, tp, u, f, a0 = 3.14159265358979;
     int p, k, m;
-    y = x - 8.5; if (y > 0.) y *= y; tp = v * v / 4. + 13.69;
+    y = x - 8.5;
+    if (y > 0.)
+        y *= y;
+    tp = v * v / 4. + 13.69;
     if (y < tp) {
-        if (x == 0.) return HUGE_VAL;
-        x /= 2.; m = (int)x; u = t = exp(v * log(x) - ccmath_gaml(v + 1.));
+        if (x == 0.)
+            return HUGE_VAL;
+        x /= 2.;
+        m = (int)x;
+        u = t = exp(v * log(x) - ccmath_gaml(v + 1.));
         if (modf(v, &y) == 0.) {
-            k = (int)y; u *= v;
-            f = 2.*log(x) - ccmath_psi(1) - ccmath_psi(k + 1);
-            t /= a0; x *= -x; s = f * t;
+            k = (int)y;
+            u *= v;
+            f = 2. * log(x) - ccmath_psi(1) - ccmath_psi(k + 1);
+            t /= a0;
+            x *= -x;
+            s = f * t;
             for (p = 1;; ++p) {
                 f -= 1. / p + 1. / (v += 1.);
-                t *= x / (p * v); s += (y = t * f); if (p > m && fabs(y) < 1.e-13) break;
+                t *= x / (p * v);
+                s += (y = t * f);
+                if (p > m && fabs(y) < 1.e-13)
+                    break;
             }
             if (k > 0) {
-                x = -x; s -= (t = 1. / (u * a0));
-                for (p = 1, --k; k > 0 ; ++p, --k) s -= (t *= x / (p * k));
+                x = -x;
+                s -= (t = 1. / (u * a0));
+                for (p = 1, --k; k > 0; ++p, --k)
+                    s -= (t *= x / (p * k));
             }
         } else {
-            f = 1. / (t * v * a0); t /= tan(a0 * v); s = t - f;
+            f = 1. / (t * v * a0);
+            t /= tan(a0 * v);
+            s = t - f;
             for (p = 1, x *= x, u = v;; ++p) {
-                t *= -x / (p * (v += 1.)); f *= x / (p * (u -= 1.));
-                s += (y = t - f); if (p > m && fabs(y) < 1.e-13) break;
+                t *= -x / (p * (v += 1.));
+                f *= x / (p * (u -= 1.));
+                s += (y = t - f);
+                if (p > m && fabs(y) < 1.e-13)
+                    break;
             }
         }
     } else {
-        x *= 2.; s = t = 2. / sqrt(x * a0); u = 0.;
-        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14 ; ++p, y += 1.) {
-            t *= (v + y) * (v - y) / (p * x); if (y > v && fabs(t) > tp) break;
-            if (!(p&1)) {
-                t = -t; s += t;
-            } else u += t;
+        x *= 2.;
+        s = t = 2. / sqrt(x * a0);
+        u = 0.;
+        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14; ++p, y += 1.) {
+            t *= (v + y) * (v - y) / (p * x);
+            if (y > v && fabs(t) > tp)
+                break;
+            if (!(p & 1)) {
+                t = -t;
+                s += t;
+            } else
+                u += t;
         }
-        y = (x - (v + .5) * a0) / 2.; s = sin(y) * s + cos(y) * u;
+        y = (x - (v + .5) * a0) / 2.;
+        s = sin(y) * s + cos(y) * u;
     }
     return s;
 }
 
-
 /* ---------- end of CCMATH code ---------- */
 
-template <typename func_ptr>
-Value CalcBessel(
-    func_ptr       *func,
-    ValueConverter *converter,
-    Value v, Value x)
+template<typename func_ptr>
+Value CalcBessel(func_ptr *func, ValueConverter *converter, Value v, Value x)
 {
     double vv = numToDouble(converter->toFloat(v));
     double xx = numToDouble(converter->toFloat(x));
@@ -1802,7 +1841,6 @@ Value ValueCalc::besseln(Value v, Value x)
     return CalcBessel(ccmath_nbes, converter, v, x);
 }
 
-
 // ------------------------------------------------------
 
 Value ValueCalc::erf(Value x)
@@ -1817,10 +1855,10 @@ Value ValueCalc::erfc(Value x)
 
 // ------------------------------------------------------
 
-void ValueCalc::arrayWalk(const Value &range,
-                          Value &res, arrayWalkFunc func, Value param)
+void ValueCalc::arrayWalk(const Value &range, Value &res, arrayWalkFunc func, Value param)
 {
-    if (res.isError()) return;
+    if (res.isError())
+        return;
     if (!range.isArray()) {
         func(this, res, range, param);
         return;
@@ -1839,22 +1877,22 @@ void ValueCalc::arrayWalk(const Value &range,
     }
 }
 
-void ValueCalc::arrayWalk(QVector<Value> &range,
-                          Value &res, arrayWalkFunc func, Value param)
+void ValueCalc::arrayWalk(QVector<Value> &range, Value &res, arrayWalkFunc func, Value param)
 {
-    if (res.isError()) return;
+    if (res.isError())
+        return;
     for (int i = 0; i < range.count(); ++i)
         arrayWalk(range[i], res, func, param);
 }
 
 Value ValueCalc::arrayMap(const Value &array, arrayMapFunc func, const Value &param)
 {
-    Value res( Value::Array );
+    Value res(Value::Array);
     for (unsigned row = 0; row < array.rows(); ++row) {
         for (unsigned col = 0; col < array.columns(); ++col) {
-            Value element = array.element( col, row );
-            Value _res = (this->*func)( element, param );
-            res.setElement( col, row, _res );
+            Value element = array.element(col, row);
+            Value _res = (this->*func)(element, param);
+            res.setElement(col, row, _res);
         }
     }
     return res;
@@ -1862,26 +1900,26 @@ Value ValueCalc::arrayMap(const Value &array, arrayMapFunc func, const Value &pa
 
 Value ValueCalc::twoArrayMap(const Value &array1, arrayMapFunc func, const Value &array2)
 {
-    Value res( Value::Array );
+    Value res(Value::Array);
     // Map each element in one array with the respective element in the other array
     unsigned rows = qMax(array1.rows(), array2.rows());
     unsigned columns = qMax(array1.columns(), array2.columns());
     for (unsigned row = 0; row < rows; ++row) {
         for (unsigned col = 0; col < columns; ++col) {
             // Value::element() will return an empty value if element(col, row) does not exist.
-            Value element1 = array1.element( col, row );
-            Value element2 = array2.element( col, row );
-            Value _res = (this->*func)( element1, element2 );
-            res.setElement( col, row, _res );
+            Value element1 = array1.element(col, row);
+            Value element2 = array2.element(col, row);
+            Value _res = (this->*func)(element1, element2);
+            res.setElement(col, row, _res);
         }
     }
     return res;
 }
 
-void ValueCalc::twoArrayWalk(const Value &a1, const Value &a2,
-                             Value &res, arrayWalkFunc func)
+void ValueCalc::twoArrayWalk(const Value &a1, const Value &a2, Value &res, arrayWalkFunc func)
 {
-    if (res.isError()) return;
+    if (res.isError())
+        return;
     if (!a1.isArray()) {
         func(this, res, a1, a2);
         return;
@@ -1909,10 +1947,10 @@ void ValueCalc::twoArrayWalk(const Value &a1, const Value &a2,
         }
 }
 
-void ValueCalc::twoArrayWalk(QVector<Value> &a1,
-                             QVector<Value> &a2, Value &res, arrayWalkFunc func)
+void ValueCalc::twoArrayWalk(QVector<Value> &a1, QVector<Value> &a2, Value &res, arrayWalkFunc func)
 {
-    if (res.isError()) return;
+    if (res.isError())
+        return;
     if (a1.count() != a2.count()) {
         res = Value::errorVALUE();
         return;
@@ -1959,18 +1997,18 @@ Value ValueCalc::sumsq(const Value &range, bool full)
 
 Value ValueCalc::sumIf(const Value &range, const Condition &cond)
 {
-    if(range.isError())
+    if (range.isError())
         return range;
 
     if (!range.isArray()) {
         if (matches(cond, range.element(0, 0))) {
-            //debugSheets<<"return non array value "<<range;
+            // debugSheets<<"return non array value "<<range;
             return range;
         }
         return Value(0.0);
     }
 
-    //if we are here, we have an array
+    // if we are here, we have an array
     Value res(0);
     Value tmp;
 
@@ -1982,11 +2020,11 @@ Value ValueCalc::sumIf(const Value &range, const Condition &cond)
 
             if (v.isArray())
                 tmp = sumIf(v, cond);
-            if (tmp.isNumber()) {// only add numbers, no conversion from string allowed
+            if (tmp.isNumber()) { // only add numbers, no conversion from string allowed
                 res = add(res, tmp);
             } else if (matches(cond, v)) {
-                if (v.isNumber()) {// only add numbers, no conversion from string allowed
-                    //debugSheets<<"add "<<v;
+                if (v.isNumber()) { // only add numbers, no conversion from string allowed
+                    // debugSheets<<"add "<<v;
                     res = add(res, v);
                 }
             }
@@ -1997,18 +2035,18 @@ Value ValueCalc::sumIf(const Value &range, const Condition &cond)
 
 Value ValueCalc::sumIf(const CellBase &sumRangeStart, const Value &range, const Condition &cond)
 {
-    if(range.isError())
+    if (range.isError())
         return range;
 
     if (!range.isArray()) {
         if (matches(cond, range.element(0, 0))) {
-            //debugSheets<<"return non array value "<<range;
+            // debugSheets<<"return non array value "<<range;
             return sumRangeStart.value();
         }
         return Value(0.0);
     }
 
-    //if we are here, we have an array
+    // if we are here, we have an array
     Value res(0);
     Value tmp;
 
@@ -2022,7 +2060,7 @@ Value ValueCalc::sumIf(const CellBase &sumRangeStart, const Value &range, const 
 
             if (matches(cond, v)) {
                 Value val = CellBase(sumRangeStart.sheet(), sumRangeStart.column() + c, sumRangeStart.row() + r).value();
-                if (val.isNumber()) {// only add numbers, no conversion from string allowed
+                if (val.isNumber()) { // only add numbers, no conversion from string allowed
                     res = add(res, val);
                 }
             }
@@ -2033,7 +2071,7 @@ Value ValueCalc::sumIf(const CellBase &sumRangeStart, const Value &range, const 
 
 Value ValueCalc::sumIfs(const CellBase &sumRangeStart, QList<Value> range, QList<Condition> cond, const float limit)
 {
-    if(range[0].isError())
+    if (range[0].isError())
         return range[0];
 
     Value res(0);
@@ -2043,13 +2081,12 @@ Value ValueCalc::sumIfs(const CellBase &sumRangeStart, QList<Value> range, QList
     unsigned int cols = range[0].columns();
     for (unsigned int r = 0; r < rows; ++r) {
         for (unsigned int c = 0; c < cols; ++c) {
-            for (unsigned int i = 1; i <= limit ; ++i) {
-
-                if(range[i].isError())
+            for (unsigned int i = 1; i <= limit; ++i) {
+                if (range[i].isError())
                     return range[0];
 
                 if (!range[i].isArray()) {
-                    if (matches(cond[i-1], range[i].element(0, 0))) {
+                    if (matches(cond[i - 1], range[i].element(0, 0))) {
                         return sumRangeStart.value();
                     }
                     return Value(0.0);
@@ -2060,13 +2097,13 @@ Value ValueCalc::sumIfs(const CellBase &sumRangeStart, QList<Value> range, QList
                     return Value::errorVALUE();
                 }
 
-                if (!matches(cond[i-1], v)) {
+                if (!matches(cond[i - 1], v)) {
                     val = Value(0.0);
                     break;
                 }
                 val = range[0].element(c, r);
             }
-            if (val.isNumber()) {// only add numbers, no conversion from string allowed
+            if (val.isNumber()) { // only add numbers, no conversion from string allowed
                 res = add(res, val);
             }
         }
@@ -2076,7 +2113,7 @@ Value ValueCalc::sumIfs(const CellBase &sumRangeStart, QList<Value> range, QList
 
 Value ValueCalc::averageIf(const Value &range, const Condition &cond)
 {
-    if(range.isError())
+    if (range.isError())
         return range;
 
     if (!range.isArray()) {
@@ -2098,11 +2135,11 @@ Value ValueCalc::averageIf(const Value &range, const Condition &cond)
 
             if (v.isArray())
                 tmp = averageIf(v, cond);
-            if (tmp.isNumber()) {// only add numbers, no conversion from string allowed
+            if (tmp.isNumber()) { // only add numbers, no conversion from string allowed
                 res = add(res, tmp);
             } else if (matches(cond, v)) {
-                if (v.isNumber()) {// only add numbers, no conversion from string allowed
-                    //debugSheets<<"add "<<v;
+                if (v.isNumber()) { // only add numbers, no conversion from string allowed
+                    // debugSheets<<"add "<<v;
                     res = add(res, v);
                     ++cnt;
                 }
@@ -2115,7 +2152,7 @@ Value ValueCalc::averageIf(const Value &range, const Condition &cond)
 
 Value ValueCalc::averageIf(const CellBase &avgRangeStart, const Value &range, const Condition &cond)
 {
-    if(range.isError())
+    if (range.isError())
         return range;
 
     if (!range.isArray()) {
@@ -2139,8 +2176,8 @@ Value ValueCalc::averageIf(const CellBase &avgRangeStart, const Value &range, co
 
             if (matches(cond, v)) {
                 Value val = CellBase(avgRangeStart.sheet(), avgRangeStart.column() + c, avgRangeStart.row() + r).value();
-                if (val.isNumber()) {// only add numbers, no conversion from string allowed
-                    //debugSheets<<"add "<<val;
+                if (val.isNumber()) { // only add numbers, no conversion from string allowed
+                    // debugSheets<<"add "<<val;
                     res = add(res, val);
                     ++cnt;
                 }
@@ -2153,7 +2190,7 @@ Value ValueCalc::averageIf(const CellBase &avgRangeStart, const Value &range, co
 
 Value ValueCalc::averageIfs(const CellBase &avgRangeStart, QList<Value> range, QList<Condition> cond, const float limit)
 {
-    if(range[0].isError())
+    if (range[0].isError())
         return range[0];
 
     Value res(0);
@@ -2165,13 +2202,12 @@ Value ValueCalc::averageIfs(const CellBase &avgRangeStart, QList<Value> range, Q
     for (unsigned int r = 0; r < rows; ++r) {
         for (unsigned int c = 0; c < cols; ++c) {
             bool flag = true;
-            for (unsigned int i = 1; i <= limit ; ++i) {
-
-                if(range[i].isError())
+            for (unsigned int i = 1; i <= limit; ++i) {
+                if (range[i].isError())
                     return range[0];
 
                 if (!range[i].isArray()) {
-                    if (matches(cond[i-1], range[i].element(0, 0))) {
+                    if (matches(cond[i - 1], range[i].element(0, 0))) {
                         return avgRangeStart.value();
                     }
                     return Value(0.0);
@@ -2182,7 +2218,7 @@ Value ValueCalc::averageIfs(const CellBase &avgRangeStart, QList<Value> range, Q
                     return Value::errorVALUE();
                 }
 
-                if (!matches(cond[i-1], v)) {
+                if (!matches(cond[i - 1], v)) {
                     flag = false;
                     val = Value(0.0);
                     break;
@@ -2193,7 +2229,7 @@ Value ValueCalc::averageIfs(const CellBase &avgRangeStart, QList<Value> range, Q
                 ++cnt;
                 flag = true;
             }
-            if (val.isNumber()) {// only add numbers, no conversion from string allowed
+            if (val.isNumber()) { // only add numbers, no conversion from string allowed
                 res = add(res, val);
             }
         }
@@ -2244,7 +2280,7 @@ Value ValueCalc::countIfs(const CellBase &cntRangeStart, QList<Value> range, QLi
     if (!range[0].isArray())
         return Value(0.0);
 
-    if(range[0].isError())
+    if (range[0].isError())
         return range[0];
 
     Value res(0);
@@ -2254,9 +2290,8 @@ Value ValueCalc::countIfs(const CellBase &cntRangeStart, QList<Value> range, QLi
     for (unsigned int r = 0; r < rows; ++r) {
         for (unsigned int c = 0; c < cols; ++c) {
             bool flag = true;
-            for (unsigned int i = 0; i <= limit ; ++i) {
-
-                if(range[i].isError())
+            for (unsigned int i = 0; i <= limit; ++i) {
+                if (range[i].isError())
                     return range[0];
 
                 if (!range[i].isArray()) {
@@ -2311,7 +2346,7 @@ Value ValueCalc::max(const Value &range, bool full)
 Value ValueCalc::max(QVector<Value> range, bool full)
 {
     Value res;
-    arrayWalk(range, res, full ? awMaxA: awMax, Value(0));
+    arrayWalk(range, res, full ? awMaxA : awMax, Value(0));
     return res;
 }
 
@@ -2329,8 +2364,7 @@ Value ValueCalc::min(QVector<Value> range, bool full)
     return res;
 }
 
-Value ValueCalc::product(const Value &range, Value init,
-                         bool full)
+Value ValueCalc::product(const Value &range, Value init, bool full)
 {
     Value res = init;
     if (isZero(init)) { // special handling of a zero, due to excel-compat
@@ -2342,8 +2376,7 @@ Value ValueCalc::product(const Value &range, Value init,
     return res;
 }
 
-Value ValueCalc::product(QVector<Value> range,
-                         Value init, bool full)
+Value ValueCalc::product(QVector<Value> range, Value init, bool full)
 {
     Value res = init;
     if (isZero(init)) { // special handling of a zero, due to excel-compat
@@ -2360,8 +2393,7 @@ Value ValueCalc::stddev(const Value &range, bool full)
     return stddev(range, avg(range, full), full);
 }
 
-Value ValueCalc::stddev(const Value &range, Value avg,
-                        bool full)
+Value ValueCalc::stddev(const Value &range, Value avg, bool full)
 {
     Value res;
     int cnt = count(range, full);
@@ -2374,8 +2406,7 @@ Value ValueCalc::stddev(QVector<Value> range, bool full)
     return stddev(range, avg(range, full), full);
 }
 
-Value ValueCalc::stddev(QVector<Value> range,
-                        Value avg, bool full)
+Value ValueCalc::stddev(QVector<Value> range, Value avg, bool full)
 {
     Value res;
     int cnt = count(range, full);
@@ -2388,8 +2419,7 @@ Value ValueCalc::stddevP(const Value &range, bool full)
     return stddevP(range, avg(range, full), full);
 }
 
-Value ValueCalc::stddevP(const Value &range, Value avg,
-                         bool full)
+Value ValueCalc::stddevP(const Value &range, Value avg, bool full)
 {
     Value res;
     int cnt = count(range, full);
@@ -2402,8 +2432,7 @@ Value ValueCalc::stddevP(QVector<Value> range, bool full)
     return stddevP(range, avg(range, full), full);
 }
 
-Value ValueCalc::stddevP(QVector<Value> range,
-                         Value avg, bool full)
+Value ValueCalc::stddevP(QVector<Value> range, Value avg, bool full)
 {
     Value res;
     int cnt = count(range, full);
@@ -2493,7 +2522,7 @@ void ValueCalc::getCond(Condition &cond, Value val)
         cond.type = string;
         cond.stringValue = text;
     }
-    //TODO: date values
+    // TODO: date values
 }
 
 bool ValueCalc::matches(const Condition &cond, Value val)
@@ -2504,27 +2533,33 @@ bool ValueCalc::matches(const Condition &cond, Value val)
         Number d = converter->toFloat(val);
         switch (cond.comp) {
         case isEqual:
-            if (approxEqual(Value(d), Value(cond.value))) return true;
+            if (approxEqual(Value(d), Value(cond.value)))
+                return true;
             break;
 
         case isLess:
-            if (d < cond.value) return true;
+            if (d < cond.value)
+                return true;
             break;
 
         case isGreater:
-            if (d > cond.value) return true;
+            if (d > cond.value)
+                return true;
             break;
 
         case lessEqual:
-            if (d <= cond.value) return true;
+            if (d <= cond.value)
+                return true;
             break;
 
         case greaterEqual:
-            if (d >= cond.value) return true;
+            if (d >= cond.value)
+                return true;
             break;
 
         case notEqual:
-            if (d != cond.value) return true;
+            if (d != cond.value)
+                return true;
             break;
 
         default:
@@ -2534,31 +2569,38 @@ bool ValueCalc::matches(const Condition &cond, Value val)
         QString d = converter->asString(val).asString();
         switch (cond.comp) {
         case isEqual:
-            if (d == cond.stringValue) return true;
+            if (d == cond.stringValue)
+                return true;
             break;
 
         case isLess:
-            if (d < cond.stringValue) return true;
+            if (d < cond.stringValue)
+                return true;
             break;
 
         case isGreater:
-            if (d > cond.stringValue) return true;
+            if (d > cond.stringValue)
+                return true;
             break;
 
         case lessEqual:
-            if (d <= cond.stringValue) return true;
+            if (d <= cond.stringValue)
+                return true;
             break;
 
         case greaterEqual:
-            if (d >= cond.stringValue) return true;
+            if (d >= cond.stringValue)
+                return true;
             break;
 
         case notEqual:
-            if (d != cond.stringValue) return true;
+            if (d != cond.stringValue)
+                return true;
             break;
 
         case stringMatch:
-            if (d.toLower() == cond.stringValue.toLower()) return true;
+            if (d.toLower() == cond.stringValue.toLower())
+                return true;
             break;
 
         case regexMatch: {
@@ -2577,7 +2619,6 @@ bool ValueCalc::matches(const Condition &cond, Value val)
                 return true;
             }
         } break;
-
         }
     }
     return false;
@@ -2585,9 +2626,7 @@ bool ValueCalc::matches(const Condition &cond, Value val)
 
 // the days360 method does implement the 30/360days method as used in e.g. the YEARFRAC function
 // TODO this duplicates the func_days360, maybe merge the algorithms?
-int ValueCalc::days360(int day1, int month1, int year1, bool leapYear1,
-                     int day2, int month2, int year2, bool leapYear2,
-                     bool usaMethod)
+int ValueCalc::days360(int day1, int month1, int year1, bool leapYear1, int day2, int month2, int year2, bool leapYear2, bool usaMethod)
 {
     if (usaMethod) { // US method
         if (day1 == 31) {
@@ -2595,13 +2634,11 @@ int ValueCalc::days360(int day1, int month1, int year1, bool leapYear1,
             if (day2 == 31) {
                 day2 = 30;
             }
-        }
-        else if (day1 == 30 && day2 == 31) {
+        } else if (day1 == 30 && day2 == 31) {
             day2 = 30;
-        }
-        else if (month1 == 2 && (day1 == 29 || (day1 == 28 && ! leapYear1))) {
+        } else if (month1 == 2 && (day1 == 29 || (day1 == 28 && !leapYear1))) {
             day1 = 30;
-            if (month2 == 2 && (day2 == 29 || (day2 == 28 && ! leapYear2))) {
+            if (month2 == 2 && (day2 == 29 || (day2 == 28 && !leapYear2))) {
                 day2 = 30;
             }
         }
@@ -2616,9 +2653,8 @@ int ValueCalc::days360(int day1, int month1, int year1, bool leapYear1,
     return day2 + month2 * 30 + year2 * 360 - day1 - month1 * 30 - year1 * 360;
 }
 
-
 // days360
-int ValueCalc::days360(const QDate& _date1, const QDate& _date2, bool european)
+int ValueCalc::days360(const QDate &_date1, const QDate &_date2, bool european)
 {
     int day1, month1, year1, day2, month2, year2;
 
@@ -2633,9 +2669,7 @@ int ValueCalc::days360(const QDate& _date1, const QDate& _date2, bool european)
     return days360(day1, month1, year1, QDate::isLeapYear(_date1.year()), day2, month2, year2, QDate::isLeapYear(_date2.year()), !european);
 }
 
-
-
-Value ValueCalc::yearFrac(const QDate& startDate, const QDate& endDate, int basis)
+Value ValueCalc::yearFrac(const QDate &startDate, const QDate &endDate, int basis)
 {
     QDate date1 = startDate;
     QDate date2 = endDate;
@@ -2653,7 +2687,7 @@ Value ValueCalc::yearFrac(const QDate& startDate, const QDate& endDate, int basi
 
     int days = date1.daysTo(date2);
 
-//   debugSheetsFormula <<"date1 =" << date1 <<"    date2 =" << date2 <<"    days =" << days <<"    basis =" << basis;
+    //   debugSheetsFormula <<"date1 =" << date1 <<"    date2 =" << date2 <<"    days =" << days <<"    basis =" << basis;
 
     long double res = 0;
     long double peryear = 0;
@@ -2669,11 +2703,14 @@ Value ValueCalc::yearFrac(const QDate& startDate, const QDate& endDate, int basi
         if (QDate(date1.year() + 1, date1.month(), date1.day()) >= date2) {
             nYears = 1;
             peryear = 365;
-            if (QDate::isLeapYear(date1.year()) && date1.month() <= 2) peryear = 366;
-            else if (QDate::isLeapYear(date2.year()) && date2.month() > 2) peryear = 366;
-            else if (date2.month() == 2 && date2.day() == 29) peryear = 366;
+            if (QDate::isLeapYear(date1.year()) && date1.month() <= 2)
+                peryear = 366;
+            else if (QDate::isLeapYear(date2.year()) && date2.month() > 2)
+                peryear = 366;
+            else if (date2.month() == 2 && date2.day() == 29)
+                peryear = 366;
         }
-        peryear = peryear / (long double) nYears;
+        peryear = peryear / (long double)nYears;
         nYears = 0;
         break;
     }
@@ -2698,7 +2735,7 @@ Value ValueCalc::yearFrac(const QDate& startDate, const QDate& endDate, int basi
     }
     default: {
         // NASD 30/360
-        //basis = 0;
+        // basis = 0;
 
         // calc datedif360 (start, end, US)
         days = days360(date1, date2, 0);
@@ -2707,9 +2744,7 @@ Value ValueCalc::yearFrac(const QDate& startDate, const QDate& endDate, int basi
     }
     }
 
-    res = (long double)(nYears) + (long double)days / (long double) peryear;
-//   debugSheetsFormula<<"getYearFrac res="<<res;
+    res = (long double)(nYears) + (long double)days / (long double)peryear;
+    //   debugSheetsFormula<<"getYearFrac res="<<res;
     return Value(res);
 }
-
-

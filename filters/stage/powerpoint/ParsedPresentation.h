@@ -20,21 +20,22 @@ public:
     MSO::SummaryInformationPropertySetStream summaryInfo;
     // map persistObjectIds to stream offsets
     QMap<quint32, quint32> persistDirectory;
-    const MSO::DocumentContainer* documentContainer;
-    const MSO::NotesContainer* notesMaster;
-    const MSO::HandoutContainer* handoutMaster;
-    QVector<const MSO::MasterOrSlideContainer*> masters;
-    QVector<const MSO::SlideContainer*> slides;
-    QVector<const MSO::NotesContainer*> notes;
+    const MSO::DocumentContainer *documentContainer;
+    const MSO::NotesContainer *notesMaster;
+    const MSO::HandoutContainer *handoutMaster;
+    QVector<const MSO::MasterOrSlideContainer *> masters;
+    QVector<const MSO::SlideContainer *> slides;
+    QVector<const MSO::NotesContainer *> notes;
 
-    ParsedPresentation() {
+    ParsedPresentation()
+    {
         documentContainer = 0;
         notesMaster = 0;
         handoutMaster = 0;
     }
 
-    const MSO::MasterOrSlideContainer* getMaster(const MSO::SlideContainer* slide) const;
-    bool parse(POLE::Storage& storage);
+    const MSO::MasterOrSlideContainer *getMaster(const MSO::SlideContainer *slide) const;
+    bool parse(POLE::Storage &storage);
 };
 
 #endif // PARSEDPRESENTATION_H

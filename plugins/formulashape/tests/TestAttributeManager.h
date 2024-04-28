@@ -6,10 +6,13 @@
 class AttributeManager;
 class BasicElement;
 
-class TestAttributeManager : public QObject {
-Q_OBJECT
+class TestAttributeManager : public QObject
+{
+    Q_OBJECT
 public:
-    TestAttributeManager() {}
+    TestAttributeManager()
+    {
+    }
 
 private Q_SLOTS:
     void initTestCase();
@@ -20,8 +23,8 @@ private Q_SLOTS:
     void testColorConversion();
 
 private:
-    AttributeManager* m_attributeManager;
-    BasicElement* m_basicElement;
+    AttributeManager *m_attributeManager;
+    BasicElement *m_basicElement;
 };
 
 #endif

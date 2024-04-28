@@ -15,14 +15,14 @@
 
 #include <WidgetsDebug.h>
 
-#include <QVariant>
-#include <QTextOption>
-#include <QTextDocument>
+#include <QLocale>
 #include <QTextBlock>
 #include <QTextBlockFormat>
-#include <QTextLayout>
 #include <QTextCursor>
-#include <QLocale>
+#include <QTextDocument>
+#include <QTextLayout>
+#include <QTextOption>
+#include <QVariant>
 
 #include <KoRuler.h>
 
@@ -37,20 +37,21 @@ class Q_DECL_HIDDEN KoRulerController::Private
 {
 public:
     Private(KoRuler *r, KoCanvasResourceManager *crp)
-            : ruler(r),
-            resourceManager(crp),
-            lastPosition(-1),
-            originalTabIndex(-2),
-            currentTabIndex(-2) {
+        : ruler(r)
+        , resourceManager(crp)
+        , lastPosition(-1)
+        , originalTabIndex(-2)
+        , currentTabIndex(-2)
+    {
     }
 
-    void canvasResourceChanged(int key) {
-        if (key != KoText::CurrentTextPosition && key != KoText::CurrentTextDocument
-            && key != KoCanvasResourceManager::ActiveRange)
+    void canvasResourceChanged(int key)
+    {
+        if (key != KoText::CurrentTextPosition && key != KoText::CurrentTextDocument && key != KoCanvasResourceManager::ActiveRange)
             return;
 
         QTextBlock block = currentBlock();
-        if (! block.isValid()) {
+        if (!block.isValid()) {
             ruler->setShowIndents(false);
             ruler->setShowTabs(false);
             return;
@@ -71,8 +72,8 @@ public:
 
         QList<KoRuler::Tab> tabs;
         QVariant variant = format.property(KoParagraphStyle::TabPositions);
-        if (! variant.isNull()) {
-            foreach(const QVariant & var, qvariant_cast<QList<QVariant> >(variant)) {
+        if (!variant.isNull()) {
+            foreach (const QVariant &var, qvariant_cast<QList<QVariant>>(variant)) {
                 KoText::Tab textTab = var.value<KoText::Tab>();
                 KoRuler::Tab tab;
                 tab.position = textTab.position;
@@ -81,19 +82,20 @@ public:
             }
         }
         qreal tabStopDistance = format.doubleProperty(KoParagraphStyle::TabStopDistance);
-/*        if (tabStopDistance <= 0) {
-// kotextdocumentlayout hardly reachable from here :(
-    tabStopDistance = block.document()->documentLayout()->defaultTabSpacing();
-        } */
+        /*        if (tabStopDistance <= 0) {
+        // kotextdocumentlayout hardly reachable from here :(
+            tabStopDistance = block.document()->documentLayout()->defaultTabSpacing();
+                } */
         ruler->updateTabs(tabs, tabStopDistance);
 
         ruler->setShowIndents(true);
         ruler->setShowTabs(true);
     }
 
-    void indentsChanged() {
+    void indentsChanged()
+    {
         QTextBlock block = currentBlock();
-        if (! block.isValid())
+        if (!block.isValid())
             return;
         QTextCursor cursor(block);
         QTextBlockFormat bf = cursor.blockFormat();
@@ -103,11 +105,12 @@ public:
         cursor.setBlockFormat(bf);
     }
 
-    void tabChanged(int originalIndex, KoRuler::Tab *tab) {
+    void tabChanged(int originalIndex, KoRuler::Tab *tab)
+    {
         QVariant docVar = resourceManager->resource(KoText::CurrentTextDocument);
         if (docVar.isNull())
             return;
-        QTextDocument *doc = static_cast<QTextDocument*>(docVar.value<void*>());
+        QTextDocument *doc = static_cast<QTextDocument *>(docVar.value<void *>());
         if (doc == nullptr)
             return;
         const int position = resourceManager->intResource(KoText::CurrentTextPosition);
@@ -155,7 +158,7 @@ public:
         QVector<KoText::Tab> sortedList = tabList;
         std::sort(sortedList.begin(), sortedList.end(), compareTabs);
         QList<QVariant> list;
-        foreach(const KoText::Tab & tab, sortedList) {
+        foreach (const KoText::Tab &tab, sortedList) {
             QVariant v;
             v.setValue(tab);
             list.append(v);
@@ -164,27 +167,30 @@ public:
         cursor.mergeBlockFormat(bf);
     }
 
-    QTextBlock currentBlock() {
+    QTextBlock currentBlock()
+    {
         QVariant docVar = resourceManager->resource(KoText::CurrentTextDocument);
         if (docVar.isNull())
             return QTextBlock();
-        QTextDocument *doc = static_cast<QTextDocument*>(docVar.value<void*>());
+        QTextDocument *doc = static_cast<QTextDocument *>(docVar.value<void *>());
         if (doc == nullptr)
             return QTextBlock();
         return doc->findBlock(resourceManager->intResource(KoText::CurrentTextPosition));
     }
 
-    bool relativeTabs() {
+    bool relativeTabs()
+    {
         QVariant docVar = resourceManager->resource(KoText::CurrentTextDocument);
         if (docVar.isNull())
             return false;
-        QTextDocument *doc = static_cast<QTextDocument*>(docVar.value<void*>());
+        QTextDocument *doc = static_cast<QTextDocument *>(docVar.value<void *>());
         if (doc == nullptr)
             return false;
         return KoTextDocument(doc).relativeTabs();
     }
 
-    void tabChangeInitiated() {
+    void tabChangeInitiated()
+    {
         tabList.clear();
         originalTabIndex = -2;
     }

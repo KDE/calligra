@@ -1,9 +1,9 @@
 /* This file is part of the KDE project
-*
-* SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ *
+ * SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #ifndef KPRSLIDESSORTERDOCUMENTMODEL_H
 #define KPRSLIDESSORTERDOCUMENTMODEL_H
@@ -20,7 +20,7 @@ class KoPAPageBase;
  * view/model framework. It supports copy and move of slides, and include a context
  * menu to present options when dropping.
  */
-class KPrSlidesSorterDocumentModel: public QAbstractListModel
+class KPrSlidesSorterDocumentModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
@@ -43,7 +43,7 @@ public:
 
     QStringList mimeTypes() const override;
 
-    QMimeData* mimeData(const QModelIndexList &indexes) const override;
+    QMimeData *mimeData(const QModelIndexList &indexes) const override;
 
     Qt::DropActions supportedDragActions() const override;
     Qt::DropActions supportedDropActions() const override;
@@ -52,7 +52,7 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 
     /**
      * Drop selected slides (copy/move) if a modifier key is pressed
@@ -69,7 +69,7 @@ public:
      / @param index the index of the slide to be retrieved
      * @return a Page in the document if it was found or a null pointer if not.
      */
-    KoPAPageBase* pageByIndex(const QModelIndex &index) const;
+    KoPAPageBase *pageByIndex(const QModelIndex &index) const;
 
     /**
      * @brief Deletes a given list of slides from the current document
@@ -115,9 +115,9 @@ public Q_SLOTS:
     void update();
 
 private:
-    //A reference to current document
+    // A reference to current document
     KoPADocument *m_document;
-    //A reference to Slides sorter class
+    // A reference to Slides sorter class
     KPrViewModeSlidesSorter *m_viewModeSlidesSorter;
 };
 

@@ -11,19 +11,19 @@
 
 #include "CSThumbProviderTables.h"
 
-#include <sheets/part/Doc.h>
-#include <sheets/core/Sheet.h>
+#include <KoPAUtil.h>
+#include <KoShapePainter.h>
+#include <KoZoomHandler.h>
+#include <QPainter>
 #include <sheets/core/Map.h>
 #include <sheets/core/PrintSettings.h>
+#include <sheets/core/Sheet.h>
 #include <sheets/core/SheetPrint.h>
+#include <sheets/part/Doc.h>
 #include <sheets/ui/SheetView.h>
-#include <KoZoomHandler.h>
-#include <KoShapePainter.h>
-#include <KoPAUtil.h>
-#include <QPainter>
 
 CSThumbProviderTables::CSThumbProviderTables(Calligra::Sheets::Doc *doc)
-: m_doc(doc)
+    : m_doc(doc)
 {
 }
 
@@ -35,7 +35,7 @@ QVector<QImage> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
 {
     QVector<QImage> thumbnails;
     if (0 != m_doc->map()) {
-        for (Calligra::Sheets::SheetBase* bsheet : m_doc->map()->sheetList()) {
+        for (Calligra::Sheets::SheetBase *bsheet : m_doc->map()->sheetList()) {
             QImage thumbnail(thumbSize, QImage::Format_RGB32);
             thumbnail.fill(QColor(Qt::white).rgb());
             QPainter p(&thumbnail);
@@ -70,7 +70,9 @@ QVector<QImage> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
 
             const Qt::LayoutDirection direction = sheet->layoutDirection();
 
-            KoShapePainter shapePainter(direction == Qt::LeftToRight ? (KoShapeManagerPaintingStrategy *)0 : (KoShapeManagerPaintingStrategy *)0 /*RightToLeftPaintingStrategy(shapeManager, d->canvas)*/);
+            KoShapePainter shapePainter(direction == Qt::LeftToRight
+                                            ? (KoShapeManagerPaintingStrategy *)0
+                                            : (KoShapeManagerPaintingStrategy *)0 /*RightToLeftPaintingStrategy(shapeManager, d->canvas)*/);
             shapePainter.setShapes(sheet->shapes());
             shapePainter.paint(p, zoomHandler);
 

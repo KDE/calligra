@@ -9,15 +9,14 @@
 #include "TestShapeContainer.h"
 #include <MockShapes.h>
 
-#include <KoShape.h>
-#include <KoShapeGroupCommand.h>
-#include <KoShapeUngroupCommand.h>
-#include <KoShapeTransformCommand.h>
-#include <KoShapeGroup.h>
 #include <KoSelection.h>
+#include <KoShape.h>
+#include <KoShapeGroup.h>
+#include <KoShapeGroupCommand.h>
+#include <KoShapeTransformCommand.h>
+#include <KoShapeUngroupCommand.h>
 
 #include <QTest>
-
 
 void TestShapeContainer::testModel()
 {
@@ -104,15 +103,15 @@ void TestShapeContainer::testScaling()
     shape2->setSize(QSizeF(30., 10.));
     shape2->setPosition(QPointF(10., 40.));
 
-    QList<KoShape*> groupedShapes;
+    QList<KoShape *> groupedShapes;
     groupedShapes.append(shape1);
     groupedShapes.append(shape2);
 
     KoShapeGroup *group = new KoShapeGroup();
-    KoShapeGroupCommand* groupCommand = KoShapeGroupCommand::createCommand(group, groupedShapes);
+    KoShapeGroupCommand *groupCommand = KoShapeGroupCommand::createCommand(group, groupedShapes);
     groupCommand->redo();
 
-    QList<KoShape*> transformShapes;
+    QList<KoShape *> transformShapes;
     transformShapes.append(groupedShapes);
 
     QTransform matrix;
@@ -120,33 +119,33 @@ void TestShapeContainer::testScaling()
 
     QVector<QTransform> oldTransformations;
     QVector<QTransform> newTransformations;
-    foreach(const KoShape* shape, transformShapes) {
+    foreach (const KoShape *shape, transformShapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
         QTransform globalTransform = shape->absoluteTransformation(0);
         QTransform localTransform = globalTransform * matrix * globalTransform.inverted();
-        newTransformations.append(localTransform*oldTransform);
+        newTransformations.append(localTransform * oldTransform);
     }
 
     QVector<QPointF> oldPositions;
-    for(int i=0; i< transformShapes.size(); i++) {
+    for (int i = 0; i < transformShapes.size(); i++) {
         oldPositions.append(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner));
     }
 
-    KoShapeTransformCommand* transformCommand;
+    KoShapeTransformCommand *transformCommand;
     transformCommand = new KoShapeTransformCommand(transformShapes, oldTransformations, newTransformations);
     transformCommand->redo();
 
-    for(int i=0; i< transformShapes.size(); i++) {
-        QCOMPARE(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner), oldPositions.at(i)*0.5);
+    for (int i = 0; i < transformShapes.size(); i++) {
+        QCOMPARE(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner), oldPositions.at(i) * 0.5);
     }
 
     transformShapes.takeLast();
-    KoShapeUngroupCommand* ungroupCmd = new KoShapeUngroupCommand(group, transformShapes);
+    KoShapeUngroupCommand *ungroupCmd = new KoShapeUngroupCommand(group, transformShapes);
     ungroupCmd->redo();
 
-    for(int i=0; i< transformShapes.size(); i++) {
-        QCOMPARE(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner), oldPositions.at(i)*0.5);
+    for (int i = 0; i < transformShapes.size(); i++) {
+        QCOMPARE(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner), oldPositions.at(i) * 0.5);
     }
 }
 
@@ -161,18 +160,18 @@ void TestShapeContainer::testScaling2()
     shape2->setPosition(QPointF(10., 40.));
     shape2->setSize(QSizeF(30., 10.));
 
-    QList<KoShape*> groupedShapes;
+    QList<KoShape *> groupedShapes;
     groupedShapes.append(shape1);
     groupedShapes.append(shape2);
 
     KoShapeGroup *group = new KoShapeGroup();
-    KoShapeGroupCommand* groupCommand = KoShapeGroupCommand::createCommand(group, groupedShapes);
+    KoShapeGroupCommand *groupCommand = KoShapeGroupCommand::createCommand(group, groupedShapes);
     groupCommand->redo();
 
-    KoSelection* selection = new KoSelection();
+    KoSelection *selection = new KoSelection();
     selection->select(shape1, true);
 
-    QList<KoShape*> transformShapes;
+    QList<KoShape *> transformShapes;
     transformShapes.append(selection->selectedShapes());
 
     QTransform matrix;
@@ -180,32 +179,32 @@ void TestShapeContainer::testScaling2()
 
     QVector<QTransform> oldTransformations;
     QVector<QTransform> newTransformations;
-    foreach(const KoShape* shape, transformShapes) {
+    foreach (const KoShape *shape, transformShapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
-        newTransformations.append(oldTransform*matrix);
+        newTransformations.append(oldTransform * matrix);
     }
 
     QVector<QPointF> oldPositions;
-    for(int i=0; i< transformShapes.size(); i++) {
+    for (int i = 0; i < transformShapes.size(); i++) {
         oldPositions.append(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner));
     }
 
-    KoShapeTransformCommand* transformCommand;
+    KoShapeTransformCommand *transformCommand;
     transformCommand = new KoShapeTransformCommand(transformShapes, oldTransformations, newTransformations);
     transformCommand->redo();
 
     QRectF r1(shape1->absolutePosition(KoFlake::TopLeftCorner), shape1->absolutePosition(KoFlake::BottomRightCorner));
     QRectF r2(shape2->absolutePosition(KoFlake::TopLeftCorner), shape2->absolutePosition(KoFlake::BottomRightCorner));
-    QSizeF shapeSize=r1.united(r2).size();
+    QSizeF shapeSize = r1.united(r2).size();
 
     selection = new KoSelection();
     selection->select(shape1, true);
     QSizeF selecSize = selection->size();
 
-    bool works=false;
-    if(qFuzzyCompare(selecSize.width(), shapeSize.width()) && qFuzzyCompare(selecSize.height(), shapeSize.height()))
-        works=true;
+    bool works = false;
+    if (qFuzzyCompare(selecSize.width(), shapeSize.width()) && qFuzzyCompare(selecSize.height(), shapeSize.height()))
+        works = true;
     QCOMPARE(works, true);
 }
 

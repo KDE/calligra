@@ -6,15 +6,14 @@
 */
 
 #include "InsertSpecialChar.h"
-#include "Actions.h"
 #include "./dialogs/CharacterSelectDialog.h"
+#include "Actions.h"
 
 #include "core/CellStorage.h"
 #include "core/Sheet.h"
 #include "ui/CellEditorBase.h"
 #include "ui/CellToolBase.h"
 #include "ui/Selection.h"
-
 
 #include <QApplication>
 #include <QKeyEvent>
@@ -26,9 +25,12 @@
 using namespace Calligra::Sheets;
 
 InsertSpecialChar::InsertSpecialChar(Actions *actions)
-    : DialogCellAction(actions, "insertSpecialChar", i18n("S&pecial Character..."), koIcon("character-set"), i18n("Insert one or more symbols or letters not found on the keyboard"))
+    : DialogCellAction(actions,
+                       "insertSpecialChar",
+                       i18n("S&pecial Character..."),
+                       koIcon("character-set"),
+                       i18n("Insert one or more symbols or letters not found on the keyboard"))
 {
-
 }
 
 InsertSpecialChar::~InsertSpecialChar()
@@ -44,7 +46,7 @@ ActionDialog *InsertSpecialChar::createDialog(QWidget *canvasWidget)
     return dlg;
 }
 
-void InsertSpecialChar::specialChar(QChar character, const QString& fontName)
+void InsertSpecialChar::specialChar(QChar character, const QString &fontName)
 {
     Sheet *sheet = m_selection->activeSheet();
     const Style style = Cell(sheet, m_selection->cursor()).style();
@@ -60,5 +62,3 @@ void InsertSpecialChar::specialChar(QChar character, const QString& fontName)
     }
     QApplication::sendEvent(tool->editor()->widget(), &keyEvent);
 }
-
-

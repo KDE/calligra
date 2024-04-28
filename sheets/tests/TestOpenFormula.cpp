@@ -8,18 +8,22 @@
 
 #include <QTest>
 
+#include <core/Cell.h>
+#include <core/odf/SheetsOdf.h>
 #include <engine/Formula.h>
 #include <engine/FunctionModuleRegistry.h>
 #include <engine/Value.h>
-#include <core/Cell.h>
-#include <core/odf/SheetsOdf.h>
 
 using namespace Calligra::Sheets;
 
 // because we may need to promote expected value from integer to float
-#define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
+#define CHECK_EVAL(x, y)                                                                                                                                       \
+    {                                                                                                                                                          \
+        Value z(y);                                                                                                                                            \
+        QCOMPARE(evaluate(x, z), (z));                                                                                                                         \
+    }
 
-Value TestOpenFormula::evaluate(const QString& formula, Value& ex)
+Value TestOpenFormula::evaluate(const QString &formula, Value &ex)
 {
     Formula f;
     QString expr = formula;
@@ -39,7 +43,7 @@ Value TestOpenFormula::evaluate(const QString& formula, Value& ex)
 namespace QTest
 {
 template<>
-char *toString(const Value& value)
+char *toString(const Value &value)
 {
     QString message;
     QTextStream ts(&message, QIODevice::WriteOnly);
@@ -54,14 +58,14 @@ char *toString(const Value& value)
         QCOMPARE(convertFromOpenFormula(y),QString(x)); }
 */
 
-QString TestOpenFormula::convertToOpenFormula(const QString& expr)
+QString TestOpenFormula::convertToOpenFormula(const QString &expr)
 {
     // TODO - formula encoding is done differently (needs a valid cell), use that!
     QString formula = QString(); /* Cell().encodeFormula(expr); */
     return formula;
 }
 
-QString TestOpenFormula::convertFromOpenFormula(const QString& expr)
+QString TestOpenFormula::convertFromOpenFormula(const QString &expr)
 {
     QString formula = Cell().decodeFormula(expr);
     return formula;
@@ -77,55 +81,55 @@ void TestOpenFormula::testEvaluation()
 {
     // tests from the OpenFormula testing suite:
     // note that these get auto-generated using generate-openformula-tests
-    CHECK_EVAL("=(1/3)*3=1", Value(true));  // row 51
-    CHECK_EVAL("=(\"4\" & \"5\")+2", Value(47));  // row 57
-    CHECK_EVAL("=2+(\"4\" & \"5\")", Value(47));  // row 58
-    CHECK_EVAL("=1+2", Value(3));  // row 63
-    CHECK_EVAL("=3-1", Value(2));  // row 65
-    CHECK_EVAL("=5--2", Value(7));  // row 67
-    CHECK_EVAL("=3*4", Value(12));  // row 68
-    CHECK_EVAL("=2+3*4", Value(14));  // row 70
-    CHECK_EVAL("=6/3", Value(2));  // row 71
-    CHECK_EVAL("=5/2", Value(2.5));  // row 72
-    CHECK_EVAL("=ISERROR(1/0)", Value(true));  // row 73
-    CHECK_EVAL("=2^3", Value(8));  // row 74
-    CHECK_EVAL("=9^0.5", Value(3));  // row 75
-    CHECK_EVAL("=(-5)^3", Value(-125));  // row 76
-    CHECK_EVAL("=4^-1", Value(0.25));  // row 77
-    CHECK_EVAL("=5^0", Value(1));  // row 78
-    CHECK_EVAL("=0^5", Value(0));  // row 79
-    CHECK_EVAL("=2+3*4^2", Value(50));  // row 80
-    CHECK_EVAL("=-2^2", Value(4));  // row 81
-    CHECK_EVAL("=1=1", Value(true));  // row 82
-    CHECK_EVAL("=1=0", Value(false));  // row 84
-    CHECK_EVAL("=3=3.0001", Value(false));  // row 85
-// Not passed for line 86.
-    CHECK_EVAL("=\"Hi\"=\"Bye\"", Value(false));  // row 87
-    CHECK_EVAL("=FALSE()=FALSE()", Value(true));  // row 88
-    CHECK_EVAL("=TRUE()=FALSE()", Value(false));  // row 89
-    CHECK_EVAL("=\"5\"=5", Value(false));  // row 90
-    CHECK_EVAL("=TRUE()=1", Value(false));  // row 91
-// Not passed for line 92.
-// Not passed for line 93.
-    CHECK_EVAL("=1<>1", Value(false));  // row 94
-    CHECK_EVAL("=1<>2", Value(true));  // row 95
-    CHECK_EVAL("=1<>\"1\"", Value(true));  // row 96
-// Not passed for line 97.
-    CHECK_EVAL("=5<6", Value(true));  // row 98
-    CHECK_EVAL("=5<=6", Value(true));  // row 99
-    CHECK_EVAL("=5>6", Value(false));  // row 100
-    CHECK_EVAL("=5>=6", Value(false));  // row 101
-    CHECK_EVAL("=\"A\"<\"B\"", Value(true));  // row 102
-// Not passed for line 103.
-    CHECK_EVAL("=\"AA\">\"A\"", Value(true));  // row 104
-    CHECK_EVAL("=\"Hi \" & \"there\"", Value("Hi there"));  // row 107
-    CHECK_EVAL("=\"H\" & \"\"", Value("H"));  // row 108
-// Not passed for line 109.
-    CHECK_EVAL("=50%", Value(0.5));  // row 111
-    CHECK_EVAL("=20+50%", Value(20.5));  // row 112
-    CHECK_EVAL("=+5", Value(5));  // row 113
-    CHECK_EVAL("=+\"Hello\"", Value("Hello"));  // row 114
-    CHECK_EVAL("=-\"7\"", Value(-7));  // row 116
+    CHECK_EVAL("=(1/3)*3=1", Value(true)); // row 51
+    CHECK_EVAL("=(\"4\" & \"5\")+2", Value(47)); // row 57
+    CHECK_EVAL("=2+(\"4\" & \"5\")", Value(47)); // row 58
+    CHECK_EVAL("=1+2", Value(3)); // row 63
+    CHECK_EVAL("=3-1", Value(2)); // row 65
+    CHECK_EVAL("=5--2", Value(7)); // row 67
+    CHECK_EVAL("=3*4", Value(12)); // row 68
+    CHECK_EVAL("=2+3*4", Value(14)); // row 70
+    CHECK_EVAL("=6/3", Value(2)); // row 71
+    CHECK_EVAL("=5/2", Value(2.5)); // row 72
+    CHECK_EVAL("=ISERROR(1/0)", Value(true)); // row 73
+    CHECK_EVAL("=2^3", Value(8)); // row 74
+    CHECK_EVAL("=9^0.5", Value(3)); // row 75
+    CHECK_EVAL("=(-5)^3", Value(-125)); // row 76
+    CHECK_EVAL("=4^-1", Value(0.25)); // row 77
+    CHECK_EVAL("=5^0", Value(1)); // row 78
+    CHECK_EVAL("=0^5", Value(0)); // row 79
+    CHECK_EVAL("=2+3*4^2", Value(50)); // row 80
+    CHECK_EVAL("=-2^2", Value(4)); // row 81
+    CHECK_EVAL("=1=1", Value(true)); // row 82
+    CHECK_EVAL("=1=0", Value(false)); // row 84
+    CHECK_EVAL("=3=3.0001", Value(false)); // row 85
+    // Not passed for line 86.
+    CHECK_EVAL("=\"Hi\"=\"Bye\"", Value(false)); // row 87
+    CHECK_EVAL("=FALSE()=FALSE()", Value(true)); // row 88
+    CHECK_EVAL("=TRUE()=FALSE()", Value(false)); // row 89
+    CHECK_EVAL("=\"5\"=5", Value(false)); // row 90
+    CHECK_EVAL("=TRUE()=1", Value(false)); // row 91
+    // Not passed for line 92.
+    // Not passed for line 93.
+    CHECK_EVAL("=1<>1", Value(false)); // row 94
+    CHECK_EVAL("=1<>2", Value(true)); // row 95
+    CHECK_EVAL("=1<>\"1\"", Value(true)); // row 96
+    // Not passed for line 97.
+    CHECK_EVAL("=5<6", Value(true)); // row 98
+    CHECK_EVAL("=5<=6", Value(true)); // row 99
+    CHECK_EVAL("=5>6", Value(false)); // row 100
+    CHECK_EVAL("=5>=6", Value(false)); // row 101
+    CHECK_EVAL("=\"A\"<\"B\"", Value(true)); // row 102
+    // Not passed for line 103.
+    CHECK_EVAL("=\"AA\">\"A\"", Value(true)); // row 104
+    CHECK_EVAL("=\"Hi \" & \"there\"", Value("Hi there")); // row 107
+    CHECK_EVAL("=\"H\" & \"\"", Value("H")); // row 108
+    // Not passed for line 109.
+    CHECK_EVAL("=50%", Value(0.5)); // row 111
+    CHECK_EVAL("=20+50%", Value(20.5)); // row 112
+    CHECK_EVAL("=+5", Value(5)); // row 113
+    CHECK_EVAL("=+\"Hello\"", Value("Hello")); // row 114
+    CHECK_EVAL("=-\"7\"", Value(-7)); // row 116
     /*
      These are currently disabled, due to being locale specific.
      CHECK_EVAL("=DATE(2005;1;3)=DATEVALUE(\"2005-01-03\")", Value(true));  // row 118
@@ -148,7 +152,6 @@ void TestOpenFormula::testEvaluation()
       CHECK_EVAL("=DAY(\"5/21/06\")", Value(21));  // row 135
       CHECK_EVAL("=DAY(\"5-21-06\")", Value(21));  // row 136
     */
-
 }
 
 /*
@@ -181,25 +184,25 @@ void TestOpenFormula::testFormulaConversion()
 
 void TestOpenFormula::testReferenceLoading()
 {
-    QCOMPARE(Odf::loadRegion(".A1"),                         QString("A1"));
-    QCOMPARE(Odf::loadRegion(".A1:.A4"),                     QString("A1:A4"));
-    QCOMPARE(Odf::loadRegion(".A$1:.$A4"),                   QString("A$1:$A4"));
-    QCOMPARE(Odf::loadRegion("Sheet2.A1"),                   QString("Sheet2!A1"));
-    QCOMPARE(Odf::loadRegion("'Sheet 2'.A1"),                QString("'Sheet 2'!A1"));
-    QCOMPARE(Odf::loadRegion("Sheet2.A1:Sheet2.B4"),         QString("Sheet2!A1:B4"));
-    QCOMPARE(Odf::loadRegion("'Sheet 2'.A1:'Sheet 2'.B4"),   QString("'Sheet 2'!A1:B4"));
-    QCOMPARE(Odf::loadRegion("$Sheet2.A1:$Sheet2.B4"),       QString("Sheet2!A1:B4"));
+    QCOMPARE(Odf::loadRegion(".A1"), QString("A1"));
+    QCOMPARE(Odf::loadRegion(".A1:.A4"), QString("A1:A4"));
+    QCOMPARE(Odf::loadRegion(".A$1:.$A4"), QString("A$1:$A4"));
+    QCOMPARE(Odf::loadRegion("Sheet2.A1"), QString("Sheet2!A1"));
+    QCOMPARE(Odf::loadRegion("'Sheet 2'.A1"), QString("'Sheet 2'!A1"));
+    QCOMPARE(Odf::loadRegion("Sheet2.A1:Sheet2.B4"), QString("Sheet2!A1:B4"));
+    QCOMPARE(Odf::loadRegion("'Sheet 2'.A1:'Sheet 2'.B4"), QString("'Sheet 2'!A1:B4"));
+    QCOMPARE(Odf::loadRegion("$Sheet2.A1:$Sheet2.B4"), QString("Sheet2!A1:B4"));
     QCOMPARE(Odf::loadRegion("$'Sheet 2'.A1:$'Sheet 2'.B4"), QString("'Sheet 2'!A1:B4"));
 }
 
 void TestOpenFormula::testReferenceSaving()
 {
-    QCOMPARE(Odf::saveRegion("A1"),              QString(".A1"));
-    QCOMPARE(Odf::saveRegion("A1:A4"),           QString(".A1:.A4"));
-    QCOMPARE(Odf::saveRegion("A$1:$A4"),         QString(".A$1:.$A4"));
-    QCOMPARE(Odf::saveRegion("Sheet2!A1"),       QString("Sheet2.A1"));
-    QCOMPARE(Odf::saveRegion("'Sheet 2'!A1"),    QString("'Sheet 2'.A1"));
-    QCOMPARE(Odf::saveRegion("Sheet2!A1:B4"),    QString("Sheet2.A1:Sheet2.B4"));
+    QCOMPARE(Odf::saveRegion("A1"), QString(".A1"));
+    QCOMPARE(Odf::saveRegion("A1:A4"), QString(".A1:.A4"));
+    QCOMPARE(Odf::saveRegion("A$1:$A4"), QString(".A$1:.$A4"));
+    QCOMPARE(Odf::saveRegion("Sheet2!A1"), QString("Sheet2.A1"));
+    QCOMPARE(Odf::saveRegion("'Sheet 2'!A1"), QString("'Sheet 2'.A1"));
+    QCOMPARE(Odf::saveRegion("Sheet2!A1:B4"), QString("Sheet2.A1:Sheet2.B4"));
     QCOMPARE(Odf::saveRegion("'Sheet 2'!A1:B4"), QString("'Sheet 2'.A1:'Sheet 2'.B4"));
 }
 

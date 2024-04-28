@@ -24,13 +24,12 @@
 // KChart
 
 // KoChart
+#include "ChartDebug.h"
 #include "ChartProxyModel.h"
 #include "DataSet.h"
 #include "PlotArea.h"
-#include "ChartDebug.h"
 
 using namespace KoChart;
-
 
 class RadarDataSetConfigWidget::Private
 {
@@ -42,7 +41,7 @@ public:
 
     Ui::RadarDataSetConfigWidget ui;
 
-    QList<DataSet*> dataSets;
+    QList<DataSet *> dataSets;
     int selectedDataSet;
 
     // marker selection actions for datasets
@@ -66,7 +65,6 @@ public:
     QAction *dataSetMarkerHorizontalBarAction;
     QAction *dataSetMarkerVerticalBarAction;
 };
-
 
 RadarDataSetConfigWidget::Private::Private(RadarDataSetConfigWidget *parent)
     : q(parent)
@@ -106,7 +104,7 @@ RadarDataSetConfigWidget::Private::Private(RadarDataSetConfigWidget *parent)
     ui.datasetMarkerMenu->setMenu(datasetMarkerMenu);
     connect(datasetMarkerMenu, &QMenu::triggered, parent, &RadarDataSetConfigWidget::datasetMarkerSelected);
 
-    connect(ui.datasetBrush, &KColorButton::changed,parent, &RadarDataSetConfigWidget::datasetBrushSelected);
+    connect(ui.datasetBrush, &KColorButton::changed, parent, &RadarDataSetConfigWidget::datasetBrushSelected);
     connect(ui.datasetPen, &KColorButton::changed, parent, &RadarDataSetConfigWidget::datasetPenSelected);
     connect(ui.datasetShowCategory, &QAbstractButton::toggled, parent, &RadarDataSetConfigWidget::ui_datasetShowCategoryChanged);
     connect(ui.dataSetShowNumber, &QAbstractButton::toggled, parent, &RadarDataSetConfigWidget::ui_dataSetShowNumberChanged);
@@ -114,19 +112,15 @@ RadarDataSetConfigWidget::Private::Private(RadarDataSetConfigWidget *parent)
     // TODO KChart does not support
     // connect(ui.datasetShowSymbol, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowSymbolChanged(bool)));
 
-
     connect(ui.dataSets, &QComboBox::currentIndexChanged, parent, &RadarDataSetConfigWidget::ui_dataSetSelectionChanged);
-
 }
 
 RadarDataSetConfigWidget::Private::~Private()
 {
 }
 
-
 // ================================================================
 //                     class RadarDataSetConfigWidget
-
 
 RadarDataSetConfigWidget::RadarDataSetConfigWidget(QWidget *parent)
     : ConfigSubWidgetBase(parent)
@@ -152,9 +146,9 @@ void RadarDataSetConfigWidget::deleteSubDialogs(ChartType type)
     Q_UNUSED(type)
 }
 
-void RadarDataSetConfigWidget::open(ChartShape* shape)
+void RadarDataSetConfigWidget::open(ChartShape *shape)
 {
-    debugChartUiDataSet<<shape;
+    debugChartUiDataSet << shape;
 
     d->dataSets.clear();
 
@@ -183,20 +177,20 @@ void RadarDataSetConfigWidget::updateMarkers()
     d->dataSetMarkerHorizontalBarAction->setIcon(dataSet->markerIcon(MarkerHorizontalBar));
     d->dataSetMarkerVerticalBarAction->setIcon(dataSet->markerIcon(MarkerVerticalBar));
 
-    switch(dataSet->odfSymbolType()) {
-        case NoSymbol:
-            d->ui.datasetMarkerMenu->setText(i18n("None"));
-            d->ui.datasetMarkerMenu->setIcon(QIcon());
-            break;
-        case NamedSymbol:
-            d->ui.datasetMarkerMenu->setIcon(dataSet->markerIcon(dataSet->markerStyle()));
-            d->ui.datasetMarkerMenu->setText(QString());
-            break;
-        case ImageSymbol:
-        case AutomaticSymbol:
-            d->ui.datasetMarkerMenu->setText(i18n("Auto"));
-            d->ui.datasetMarkerMenu->setIcon(QIcon());
-            break;
+    switch (dataSet->odfSymbolType()) {
+    case NoSymbol:
+        d->ui.datasetMarkerMenu->setText(i18n("None"));
+        d->ui.datasetMarkerMenu->setIcon(QIcon());
+        break;
+    case NamedSymbol:
+        d->ui.datasetMarkerMenu->setIcon(dataSet->markerIcon(dataSet->markerStyle()));
+        d->ui.datasetMarkerMenu->setText(QString());
+        break;
+    case ImageSymbol:
+    case AutomaticSymbol:
+        d->ui.datasetMarkerMenu->setText(i18n("Auto"));
+        d->ui.datasetMarkerMenu->setIcon(QIcon());
+        break;
     }
 }
 
@@ -213,7 +207,7 @@ void RadarDataSetConfigWidget::datasetMarkerSelected(QAction *action)
         type = "None";
         symbolType = NoSymbol;
     } else if (action == d->dataSetAutomaticMarkerAction) {
-        style = (OdfMarkerStyle) (d->selectedDataSet % numDefaultMarkerTypes);
+        style = (OdfMarkerStyle)(d->selectedDataSet % numDefaultMarkerTypes);
         type = "Auto";
         symbolType = AutomaticSymbol;
     } else if (action == d->dataSetMarkerCircleAction) {
@@ -267,7 +261,7 @@ void RadarDataSetConfigWidget::datasetMarkerSelected(QAction *action)
     emit dataSetMarkerChanged(dataSet, symbolType, style);
 }
 
-void RadarDataSetConfigWidget::datasetBrushSelected(const QColor& color)
+void RadarDataSetConfigWidget::datasetBrushSelected(const QColor &color)
 {
     if (d->selectedDataSet < 0)
         return;
@@ -276,7 +270,7 @@ void RadarDataSetConfigWidget::datasetBrushSelected(const QColor& color)
     updateMarkers();
 }
 
-void RadarDataSetConfigWidget::datasetPenSelected(const QColor& color)
+void RadarDataSetConfigWidget::datasetPenSelected(const QColor &color)
 {
     if (d->selectedDataSet < 0)
         return;
@@ -296,7 +290,7 @@ void RadarDataSetConfigWidget::updateData(ChartType chartType, ChartSubtype subt
     d->ui.dataSets->clear();
 
     // always update, in case titles have changed
-    QList<DataSet*> newDataSets = chart->plotArea()->dataSets();
+    QList<DataSet *> newDataSets = chart->plotArea()->dataSets();
     foreach (DataSet *dataSet, newDataSets) {
         QString title = dataSet->labelData().toString();
         if (title.isEmpty())
@@ -306,7 +300,7 @@ void RadarDataSetConfigWidget::updateData(ChartType chartType, ChartSubtype subt
     if (newDataSets != d->dataSets) {
         d->selectedDataSet = 0; // new datasets, select the first
         d->dataSets = newDataSets;
-        debugChartUiDataSet<<"new datasets"<<newDataSets;
+        debugChartUiDataSet << "new datasets" << newDataSets;
     }
     d->ui.dataSets->setCurrentIndex(d->selectedDataSet);
 
@@ -318,7 +312,7 @@ void RadarDataSetConfigWidget::updateData(ChartType chartType, ChartSubtype subt
 void RadarDataSetConfigWidget::ui_dataSetSelectionChanged(int index)
 {
     // Check for valid index
-    debugChartUiDataSet<<index<<d->dataSets;
+    debugChartUiDataSet << index << d->dataSets;
     if (index < 0 || index >= d->dataSets.size()) {
         return;
     }
@@ -350,7 +344,7 @@ void RadarDataSetConfigWidget::ui_datasetShowCategoryChanged(bool b)
     if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count()) {
         return;
     }
-    debugChartUiDataSet<<b;
+    debugChartUiDataSet << b;
     emit datasetShowCategoryChanged(d->dataSets[d->selectedDataSet], b, -1);
 }
 
@@ -359,7 +353,7 @@ void RadarDataSetConfigWidget::ui_dataSetShowNumberChanged(bool b)
     if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count()) {
         return;
     }
-    debugChartUiDataSet<<b;
+    debugChartUiDataSet << b;
     emit dataSetShowNumberChanged(d->dataSets[d->selectedDataSet], b, -1);
 }
 
@@ -368,7 +362,7 @@ void RadarDataSetConfigWidget::ui_datasetShowPercentChanged(bool b)
     if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count()) {
         return;
     }
-    debugChartUiDataSet<<b;
+    debugChartUiDataSet << b;
     emit datasetShowPercentChanged(d->dataSets[d->selectedDataSet], b, -1);
 }
 
@@ -377,6 +371,6 @@ void RadarDataSetConfigWidget::ui_datasetShowSymbolChanged(bool b)
     if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count()) {
         return;
     }
-    debugChartUiDataSet<<b;
+    debugChartUiDataSet << b;
     emit datasetShowSymbolChanged(d->dataSets[d->selectedDataSet], b, -1);
 }

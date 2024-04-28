@@ -10,8 +10,8 @@
 #include <QStyledItemDelegate>
 
 /** This is an internal class, used for the preview of styles in the dropdown of the @class StylesCombo.
-  * This class is also responsible for drawing and handling the buttons to call the style manager or to delete a style.
-  * NB. Deleting a style is currently not supported, therefore the button has been disabled. */
+ * This class is also responsible for drawing and handling the buttons to call the style manager or to delete a style.
+ * NB. Deleting a style is currently not supported, therefore the button has been disabled. */
 
 class StylesDelegate : public QStyledItemDelegate
 {
@@ -20,12 +20,10 @@ class StylesDelegate : public QStyledItemDelegate
 public:
     StylesDelegate();
 
-    void paint(QPainter *painter, const QStyleOptionViewItem &option,
-                            const QModelIndex &index) const override;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
-    bool editorEvent(QEvent *event, QAbstractItemModel *model,
-                            const QStyleOptionViewItem &option, const QModelIndex &index) override;
+    bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) override;
     void setEditButtonEnable(bool enable);
 
 Q_SIGNALS:

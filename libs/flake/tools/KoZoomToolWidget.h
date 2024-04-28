@@ -6,9 +6,9 @@
 #ifndef KOZOOMTOOLWIDGET_H
 #define KOZOOMTOOLWIDGET_H
 
-#include <QWidget>
-#include <QPixmap>
 #include "ui_KoZoomToolWidget.h"
+#include <QPixmap>
+#include <QWidget>
 
 class KoZoomTool;
 
@@ -16,7 +16,7 @@ class KoZoomToolWidget : public QWidget, Ui::ZoomToolWidget
 {
     Q_OBJECT
 public:
-    explicit KoZoomToolWidget(KoZoomTool* tool, QWidget *parent = 0);
+    explicit KoZoomToolWidget(KoZoomTool *tool, QWidget *parent = 0);
     ~KoZoomToolWidget() override;
 
 protected:

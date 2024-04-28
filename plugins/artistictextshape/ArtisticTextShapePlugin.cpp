@@ -13,14 +13,13 @@
 
 #include <KPluginFactory>
 
-K_PLUGIN_FACTORY_WITH_JSON(ArtisticTextShapePluginFactory, "calligra_shape_artistictext.json",
-                 registerPlugin<ArtisticTextShapePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(ArtisticTextShapePluginFactory, "calligra_shape_artistictext.json", registerPlugin<ArtisticTextShapePlugin>();)
 
-ArtisticTextShapePlugin::ArtisticTextShapePlugin( QObject * parent, const QVariantList & )
+ArtisticTextShapePlugin::ArtisticTextShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new ArtisticTextShapeFactory() );
-    KoToolRegistry::instance()->add( new ArtisticTextToolFactory() );
+    KoShapeRegistry::instance()->add(new ArtisticTextShapeFactory());
+    KoToolRegistry::instance()->add(new ArtisticTextToolFactory());
 }
 
 ArtisticTextShapePlugin::~ArtisticTextShapePlugin()

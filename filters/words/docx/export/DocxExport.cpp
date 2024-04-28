@@ -17,28 +17,25 @@
 #include <KPluginFactory>
 
 // Calligra
-#include <KoStore.h>
 #include <KoFilterChain.h>
+#include <KoStore.h>
 #include <KoXmlWriter.h>
 
 // Filter libraries
 #include "OdtReader.h"
 
 // This filter
+#include "DocxExportDebug.h"
 #include "DocxFile.h"
 #include "DocxStyleWriter.h"
 #include "OdfReaderDocxContext.h"
-#include "OdtReaderDocxBackend.h"
 #include "OdfTextReaderDocxBackend.h"
-#include "DocxExportDebug.h"
+#include "OdtReaderDocxBackend.h"
 
-
-K_PLUGIN_FACTORY_WITH_JSON(DocxExportFactory, "calligra_filter_odt2docx.json",
-			   registerPlugin<DocxExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(DocxExportFactory, "calligra_filter_odt2docx.json", registerPlugin<DocxExport>();)
 
 // Needed to instantiate the plugin factory.
 #include "DocxExport.moc"
-
 
 DocxExport::DocxExport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
@@ -49,17 +46,15 @@ DocxExport::~DocxExport()
 {
 }
 
-KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus DocxExport::convert(const QByteArray &from, const QByteArray &to)
 {
     // Check for types
-    if (from != "application/vnd.oasis.opendocument.text"
-        || to != "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+    if (from != "application/vnd.oasis.opendocument.text" || to != "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
         return KoFilter::NotImplemented;
     }
 
     // Open the infile and return an error if it fails.
-    KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
-                                             "", KoStore::Auto);
+    KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read, "", KoStore::Auto);
     if (!odfStore->open("mimetype")) {
         errorDocx << "Unable to open input file!" << Qt::endl;
         delete odfStore;
@@ -72,15 +67,15 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     // Collects all the parts of the docx file and writes the result at the end.
     DocxFile docxFile;
 
-    OdfReaderDocxContext      docxBackendContext(odfStore, &docxFile);
+    OdfReaderDocxContext docxBackendContext(odfStore, &docxFile);
 
     // The backends
-    OdtReaderDocxBackend      docxBackend;
-    OdfTextReaderDocxBackend  docxTextBackend;
+    OdtReaderDocxBackend docxBackend;
+    OdfTextReaderDocxBackend docxTextBackend;
 
     // The readers
-    OdtReader                 odtReader;
-    OdfTextReader             odfTextReader;
+    OdtReader odtReader;
+    OdfTextReader odfTextReader;
     odfTextReader.setBackend(&docxTextBackend);
     odtReader.setTextReader(&odfTextReader);
 
@@ -88,14 +83,11 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
         return KoFilter::ParsingError;
     }
 
-    DocxStyleWriter           styleWriter(&docxBackendContext);
+    DocxStyleWriter styleWriter(&docxBackendContext);
     styleWriter.read();
 
     // Add the styles to the docx file.
-    docxFile.addContentFile("", "/word/styles.xml",
-                            "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml",
-                            styleWriter.documentContent());
-
+    docxFile.addContentFile("", "/word/styles.xml", "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml", styleWriter.documentContent());
 
     if (!odtReader.readContent(&docxBackend, &docxBackendContext)) {
         return KoFilter::ParsingError;
@@ -114,13 +106,12 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
         commentWriter.addCompleteElement(docxBackendContext.commentsContent());
         commentWriter.endElement(); // w:comments
         commentWriter.endDocument();
-        docxFile.addContentFile("", "/word/comments.xml",
-                                "application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml",
-                                tempArray);
+        docxFile.addContentFile("", "/word/comments.xml", "application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml", tempArray);
     }
 
     // Add the newly converted document contents to the docx file.
-    docxFile.addContentFile("", "/word/document.xml",
+    docxFile.addContentFile("",
+                            "/word/document.xml",
                             "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
                             docxBackendContext.documentContent());
 

@@ -6,36 +6,35 @@
 */
 
 #include "PictureTool.h"
-#include "PictureShape.h"
 #include "ChangeImageCommand.h"
 #include "ClipCommand.h"
 #include "CropWidget.h"
+#include "PictureShape.h"
 
-#include <QUrl>
 #include <QFileDialog>
 #include <QImageReader>
+#include <QUrl>
 
-#include <KLocalizedString>
 #include <KIO/StoredTransferJob>
+#include <KLocalizedString>
 
-#include <KoIcon.h>
 #include <KoCanvasBase.h>
+#include <KoDocumentResourceManager.h>
+#include <KoFilterEffect.h>
+#include <KoFilterEffectConfigWidgetBase.h>
+#include <KoFilterEffectRegistry.h>
+#include <KoFilterEffectStack.h>
+#include <KoIcon.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
-#include <KoSelection.h>
-#include <KoShapeManager.h>
-#include <KoShapeController.h>
-#include <KoDocumentResourceManager.h>
 #include <KoPointerEvent.h>
-#include <KoFilterEffect.h>
-#include <KoFilterEffectRegistry.h>
-#include <KoFilterEffectConfigWidgetBase.h>
-#include <KoFilterEffectStack.h>
+#include <KoSelection.h>
+#include <KoShapeController.h>
+#include <KoShapeManager.h>
 
 #include "ui_wdgPictureTool.h"
 
-struct PictureToolUI: public QWidget, public Ui::PictureTool
-{
+struct PictureToolUI : public QWidget, public Ui::PictureTool {
     PictureToolUI()
     {
         setupUi(this);
@@ -55,19 +54,19 @@ struct PictureToolUI: public QWidget, public Ui::PictureTool
 
 // ---------------------------------------------------- //
 
-PictureTool::PictureTool(KoCanvasBase* canvas)
-    : KoToolBase(canvas),
-      m_pictureshape(0),
-      m_pictureToolUI(0)
+PictureTool::PictureTool(KoCanvasBase *canvas)
+    : KoToolBase(canvas)
+    , m_pictureshape(0)
+    , m_pictureToolUI(0)
 {
 }
 
-void PictureTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void PictureTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     Q_UNUSED(toolActivation);
 
     foreach (KoShape *shape, shapes) {
-        if ((m_pictureshape = dynamic_cast<PictureShape*>(shape)))
+        if ((m_pictureshape = dynamic_cast<PictureShape *>(shape)))
             break;
     }
 
@@ -92,10 +91,10 @@ void PictureTool::deactivate()
 QWidget *PictureTool::createOptionWidget()
 {
     m_pictureToolUI = new PictureToolUI();
-    m_pictureToolUI->cmbColorMode->addItem(i18n("Standard")  , PictureShape::Standard);
-    m_pictureToolUI->cmbColorMode->addItem(i18n("Greyscale") , PictureShape::Greyscale);
+    m_pictureToolUI->cmbColorMode->addItem(i18n("Standard"), PictureShape::Standard);
+    m_pictureToolUI->cmbColorMode->addItem(i18n("Greyscale"), PictureShape::Greyscale);
     m_pictureToolUI->cmbColorMode->addItem(i18n("Monochrome"), PictureShape::Mono);
-    m_pictureToolUI->cmbColorMode->addItem(i18n("Watermark") , PictureShape::Watermark);
+    m_pictureToolUI->cmbColorMode->addItem(i18n("Watermark"), PictureShape::Watermark);
     m_pictureToolUI->bnImageFile->setIcon(koIcon("document-open"));
 
     updateControlElements();
@@ -118,7 +117,7 @@ void PictureTool::updateControlElements()
 {
     if (m_pictureshape) {
         QSizeF imageSize = m_pictureshape->imageData()->imageSize();
-        PictureShape::ColorMode mode      = m_pictureshape->colorMode();
+        PictureShape::ColorMode mode = m_pictureshape->colorMode();
         ClippingRect clippingRect(m_pictureshape->cropRect());
 
         clippingRect.right = 1.0 - clippingRect.right;
@@ -151,7 +150,7 @@ void PictureTool::changeUrlPressed()
     // TODO: think about using KoFileDialog everywhere, after extending it to support remote urls
     QFileDialog *dialog = new QFileDialog();
     QStringList imageMimeTypes;
-    foreach(const QByteArray &mimeType, QImageReader::supportedMimeTypes()) {
+    foreach (const QByteArray &mimeType, QImageReader::supportedMimeTypes()) {
         imageMimeTypes << QLatin1String(mimeType);
     }
     dialog->setMimeTypeFilters(imageMimeTypes);
@@ -181,7 +180,7 @@ void PictureTool::cropEditFieldsChanged()
     m_pictureToolUI->cropWidget->setCropRect(clippingRect.toRect());
 }
 
-void PictureTool::cropRegionChanged(const QRectF& rect, bool undoPrev)
+void PictureTool::cropRegionChanged(const QRectF &rect, bool undoPrev)
 {
     if (undoPrev) {
         canvas()->shapeController()->resourceManager()->undoStack()->undo();
@@ -197,7 +196,7 @@ void PictureTool::cropRegionChanged(const QRectF& rect, bool undoPrev)
 void PictureTool::colorModeChanged(int cmbIndex)
 {
     PictureShape::ColorMode mode = (PictureShape::ColorMode)m_pictureToolUI->cmbColorMode->itemData(cmbIndex).toInt();
-    ChangeImageCommand     *cmd  = new ChangeImageCommand(m_pictureshape, mode);
+    ChangeImageCommand *cmd = new ChangeImageCommand(m_pictureshape, mode);
     canvas()->addCommand(cmd);
     // connect after adding the command to the undo stack to prevent a
     // call to "updateControlElements()" at this point
@@ -224,11 +223,11 @@ void PictureTool::setImageData(KJob *job)
     if (m_pictureshape == 0)
         return; // ugh, the user deselected the image in between. We should move this code to main anyway redesign it
 
-    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
+    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob *>(job);
     Q_ASSERT(transferJob);
     if (m_pictureshape->imageCollection()) {
-        KoImageData        *data = m_pictureshape->imageCollection()->createImageData(transferJob->data());
-        ChangeImageCommand *cmd  = new ChangeImageCommand(m_pictureshape, data);
+        KoImageData *data = m_pictureshape->imageCollection()->createImageData(transferJob->data());
+        ChangeImageCommand *cmd = new ChangeImageCommand(m_pictureshape, data);
         // connect before adding the command, so that "updateControlElements()" is executed
         // when the command is added to the undo stack.
         connect(cmd, &ChangeImageCommand::sigExecuted, this, &PictureTool::updateControlElements);

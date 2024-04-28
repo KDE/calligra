@@ -13,17 +13,16 @@
 
 #include <calligraversion.h>
 
-KAboutData * newWordsAboutData()
+KAboutData *newWordsAboutData()
 {
-    KAboutData * aboutData = new KAboutData(
-        QStringLiteral("calligrawords"),
-        i18nc("application name", "Calligra Words"),
-        QStringLiteral(CALLIGRA_VERSION_STRING),
-        i18n("Word processor"),
-        KAboutLicense::LGPL,
-        i18n("Copyright 1998-%1, The Words Team", QStringLiteral(CALLIGRA_YEAR)),
-        QString(),
-        QStringLiteral("https://www.calligra.org/words/"));
+    KAboutData *aboutData = new KAboutData(QStringLiteral("calligrawords"),
+                                           i18nc("application name", "Calligra Words"),
+                                           QStringLiteral(CALLIGRA_VERSION_STRING),
+                                           i18n("Word processor"),
+                                           KAboutLicense::LGPL,
+                                           i18n("Copyright 1998-%1, The Words Team", QStringLiteral(CALLIGRA_YEAR)),
+                                           QString(),
+                                           QStringLiteral("https://www.calligra.org/words/"));
     aboutData->setProductName("calligrawords"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
 #if KCOREADDONS_VERSION >= 0x051600
@@ -68,8 +67,7 @@ KAboutData * newWordsAboutData()
     aboutData->addAuthor(i18n("Michael Johnson"), i18n("Filter"));
     aboutData->addAuthor(i18n("Fatcow Web Hosting"), i18n("Page break icon"), "https://www.fatcow.com/free-icons");
     // standard ki18n translator strings
-    aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
-                             i18nc("EMAIL OF TRANSLATORS", "Your emails"));
+    aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"), i18nc("EMAIL OF TRANSLATORS", "Your emails"));
     return aboutData;
 }
 

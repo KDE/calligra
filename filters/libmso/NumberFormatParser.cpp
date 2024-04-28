@@ -23,7 +23,7 @@
 #include <QColor>
 #include <QPalette>
 
-QColor NumberFormatParser::color(const QString& name)
+QColor NumberFormatParser::color(const QString &name)
 {
     if (name.startsWith(QLatin1String("color"), Qt::CaseInsensitive)) {
         bool ok = false;
@@ -39,69 +39,44 @@ QLocale NumberFormatParser::locale(int langid)
     return MSO::localeForLangId(langid);
 }
 
-#define SET_TYPE_OR_RETURN( TYPE ) { \
-if (type == KoGenStyle::NumericDateStyle && TYPE == KoGenStyle::NumericTimeStyle)                \
-{                                                                                                \
-}                                                                                                \
-else if (type == KoGenStyle::NumericDateStyle && TYPE == KoGenStyle::NumericNumberStyle)         \
-{                                                                                                \
-}                                                                                                \
-else if (type == KoGenStyle::NumericTimeStyle && TYPE == KoGenStyle::NumericNumberStyle)         \
-{                                                                                                \
-}                                                                                                \
-else if (type == KoGenStyle::NumericTimeStyle && TYPE == KoGenStyle::NumericDateStyle)           \
-{                                                                                                \
-    type = TYPE;                                                                                 \
-}                                                                                                \
-else if (type == KoGenStyle::NumericPercentageStyle && TYPE == KoGenStyle::NumericNumberStyle)   \
-{                                                                                                \
-}                                                                                                \
-else if (type == KoGenStyle::NumericNumberStyle && TYPE == KoGenStyle::NumericPercentageStyle)   \
-{                                                                                                \
-    type = TYPE;                                                                                 \
-}                                                                                                \
-else if (type == KoGenStyle::NumericCurrencyStyle && TYPE == KoGenStyle::NumericNumberStyle)     \
-{                                                                                                \
-}                                                                                                \
-else if (type == KoGenStyle::NumericNumberStyle && TYPE == KoGenStyle::NumericCurrencyStyle)     \
-{                                                                                                \
-    type = TYPE;                                                                                 \
-}                                                                                                \
-else if (type == KoGenStyle::NumericFractionStyle && TYPE == KoGenStyle::NumericNumberStyle)     \
-{                                                                                                \
-}                                                                                                \
-else if (type == KoGenStyle::NumericNumberStyle && TYPE == KoGenStyle::NumericFractionStyle)     \
-{                                                                                                \
-    type = TYPE;                                                                                 \
-}                                                                                                \
-else if (type == KoGenStyle::NumericScientificStyle && TYPE == KoGenStyle::NumericNumberStyle)   \
-{                                                                                                \
-}                                                                                                \
-else if (type == KoGenStyle::NumericNumberStyle && TYPE == KoGenStyle::NumericScientificStyle)   \
-{                                                                                                \
-    type = TYPE;                                                                                 \
-}                                                                                                \
-else if (type != KoGenStyle::ParagraphAutoStyle && type != TYPE)                                 \
-{                                                                                                \
-    return KoGenStyle(KoGenStyle::ParagraphAutoStyle);                                           \
-}                                                                                                \
-else                                                                                             \
-{                                                                                                \
-    type = TYPE;                                                                                 \
-}                                                                                                \
-}
+#define SET_TYPE_OR_RETURN(TYPE)                                                                                                                               \
+    {                                                                                                                                                          \
+        if (type == KoGenStyle::NumericDateStyle && TYPE == KoGenStyle::NumericTimeStyle) {                                                                    \
+        } else if (type == KoGenStyle::NumericDateStyle && TYPE == KoGenStyle::NumericNumberStyle) {                                                           \
+        } else if (type == KoGenStyle::NumericTimeStyle && TYPE == KoGenStyle::NumericNumberStyle) {                                                           \
+        } else if (type == KoGenStyle::NumericTimeStyle && TYPE == KoGenStyle::NumericDateStyle) {                                                             \
+            type = TYPE;                                                                                                                                       \
+        } else if (type == KoGenStyle::NumericPercentageStyle && TYPE == KoGenStyle::NumericNumberStyle) {                                                     \
+        } else if (type == KoGenStyle::NumericNumberStyle && TYPE == KoGenStyle::NumericPercentageStyle) {                                                     \
+            type = TYPE;                                                                                                                                       \
+        } else if (type == KoGenStyle::NumericCurrencyStyle && TYPE == KoGenStyle::NumericNumberStyle) {                                                       \
+        } else if (type == KoGenStyle::NumericNumberStyle && TYPE == KoGenStyle::NumericCurrencyStyle) {                                                       \
+            type = TYPE;                                                                                                                                       \
+        } else if (type == KoGenStyle::NumericFractionStyle && TYPE == KoGenStyle::NumericNumberStyle) {                                                       \
+        } else if (type == KoGenStyle::NumericNumberStyle && TYPE == KoGenStyle::NumericFractionStyle) {                                                       \
+            type = TYPE;                                                                                                                                       \
+        } else if (type == KoGenStyle::NumericScientificStyle && TYPE == KoGenStyle::NumericNumberStyle) {                                                     \
+        } else if (type == KoGenStyle::NumericNumberStyle && TYPE == KoGenStyle::NumericScientificStyle) {                                                     \
+            type = TYPE;                                                                                                                                       \
+        } else if (type != KoGenStyle::ParagraphAutoStyle && type != TYPE) {                                                                                   \
+            return KoGenStyle(KoGenStyle::ParagraphAutoStyle);                                                                                                 \
+        } else {                                                                                                                                               \
+            type = TYPE;                                                                                                                                       \
+        }                                                                                                                                                      \
+    }
 
-#define FINISH_PLAIN_TEXT_PART {             \
-if (!plainText.isEmpty()) {		     \
-    hadPlainText = true;                     \
-    xmlWriter.startElement("number:text");   \
-    xmlWriter.addTextNode(plainText );       \
-    xmlWriter.endElement();                  \
-    plainText.clear();                       \
-}                                            \
-}
+#define FINISH_PLAIN_TEXT_PART                                                                                                                                 \
+    {                                                                                                                                                          \
+        if (!plainText.isEmpty()) {                                                                                                                            \
+            hadPlainText = true;                                                                                                                               \
+            xmlWriter.startElement("number:text");                                                                                                             \
+            xmlWriter.addTextNode(plainText);                                                                                                                  \
+            xmlWriter.endElement();                                                                                                                            \
+            plainText.clear();                                                                                                                                 \
+        }                                                                                                                                                      \
+    }
 
-static KoGenStyle styleFromTypeAndBuffer(KoGenStyle::Type type, const QBuffer& buffer)
+static KoGenStyle styleFromTypeAndBuffer(KoGenStyle::Type type, const QBuffer &buffer)
 {
     KoGenStyle result(type);
 
@@ -111,15 +86,14 @@ static KoGenStyle styleFromTypeAndBuffer(KoGenStyle::Type type, const QBuffer& b
     return result;
 }
 
-KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyles* styles,
-				     KoGenStyle::Type type)
+KoGenStyle NumberFormatParser::parse(const QString &origNumberFormat, KoGenStyles *styles, KoGenStyle::Type type)
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter xmlWriter(&buffer);
 
     QString plainText;
-    QMultiMap< QString, QString > conditions;
+    QMultiMap<QString, QString> conditions;
     QString condition;
 
     // This is for the month vs. minutes-context.
@@ -130,65 +104,51 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
     QString numberFormat = origNumberFormat;
 
     for (int i = 0; i < numberFormat.length(); ++i) {
-        const char c = numberFormat[ i ].toLatin1();
+        const char c = numberFormat[i].toLatin1();
         bool isSpecial = true;
 
-        const bool isLong       = (i < numberFormat.length() - 1
-				   && numberFormat[ i + 1 ] == c);
-        const bool isLonger     = (isLong
-				   && i < numberFormat.length() - 2
-				   && numberFormat[ i + 2 ] == c);
-        const bool isLongest    = (isLonger
-				   && i < numberFormat.length() - 3
-				   && numberFormat[ i + 3 ] == c);
-        const bool isWayTooLong = (isLongest
-				   && i < numberFormat.length() - 4
-				   && numberFormat[ i + 4 ] == c);
+        const bool isLong = (i < numberFormat.length() - 1 && numberFormat[i + 1] == c);
+        const bool isLonger = (isLong && i < numberFormat.length() - 2 && numberFormat[i + 2] == c);
+        const bool isLongest = (isLonger && i < numberFormat.length() - 3 && numberFormat[i + 3] == c);
+        const bool isWayTooLong = (isLongest && i < numberFormat.length() - 4 && numberFormat[i + 4] == c);
 
         switch (c) {
             // condition or color or locale or elapsed format
         case '[': {
-            const char ch = (i < numberFormat.length() - 1) ? numberFormat[ ++i ].toLatin1() : ']';
+            const char ch = (i < numberFormat.length() - 1) ? numberFormat[++i].toLatin1() : ']';
             if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
                 // color code
                 QString colorName;
-                while (i < numberFormat.length() && numberFormat[ i ] != QLatin1Char(']'))
-                    colorName += numberFormat[ i++ ];
+                while (i < numberFormat.length() && numberFormat[i] != QLatin1Char(']'))
+                    colorName += numberFormat[i++];
 
                 const QColor color = NumberFormatParser::color(colorName);
                 if (color.isValid()) {
                     xmlWriter.startElement("style:text-properties");
                     xmlWriter.addAttribute("fo:color", color.name());
                     xmlWriter.endElement();
-                }
-                else if ((colorName == "hh") || (colorName == "h") ||
-                         (colorName == "mm") || (colorName == "m") ||
-                         (colorName == "ss") || (colorName == "s")) {
+                } else if ((colorName == "hh") || (colorName == "h") || (colorName == "mm") || (colorName == "m") || (colorName == "ss")
+                           || (colorName == "s")) {
                     // was actually time in 'elapsed format'
-                    numberFormat.insert(i+1, colorName);
+                    numberFormat.insert(i + 1, colorName);
                 }
-            } else if (ch == '$'
-		       && i < numberFormat.length() - 2
-		       && numberFormat[ i + 1 ].toLatin1() != '-')
-	    {
+            } else if (ch == '$' && i < numberFormat.length() - 2 && numberFormat[i + 1].toLatin1() != '-') {
                 SET_TYPE_OR_RETURN(KoGenStyle::NumericCurrencyStyle);
                 ++i;
 
-		// currency code
+                // currency code
                 QString currency;
-                while (i < numberFormat.length()
-		       && numberFormat[ i ] != QLatin1Char(']')
-		       && numberFormat[ i ] != QLatin1Char('-'))
-                    currency += numberFormat[ i++ ];
+                while (i < numberFormat.length() && numberFormat[i] != QLatin1Char(']') && numberFormat[i] != QLatin1Char('-'))
+                    currency += numberFormat[i++];
 
                 QString language;
                 QString country;
 
-                if (numberFormat[ i ] == QLatin1Char('-')) {
+                if (numberFormat[i] == QLatin1Char('-')) {
                     ++i;
                     QString localeId;
-                    while (i < numberFormat.length() && numberFormat[ i ] != QLatin1Char(']'))
-                        localeId += numberFormat[ i++ ];
+                    while (i < numberFormat.length() && numberFormat[i] != QLatin1Char(']'))
+                        localeId += numberFormat[i++];
                     const QLocale locale = NumberFormatParser::locale(localeId.toInt(0, 16));
                     language = locale.name();
                     language = language.left(language.indexOf(QLatin1String("_")));
@@ -208,19 +168,16 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
                 xmlWriter.endElement();
             } else {
                 // unknown - no idea, skip
-                while (i < numberFormat.length() && numberFormat[ i ] != QLatin1Char(']'))
+                while (i < numberFormat.length() && numberFormat[i] != QLatin1Char(']'))
                     ++i;
             }
-        }
-        break;
-
+        } break;
 
         // underscore: ignore the next char
         case '_':
             plainText += QLatin1Char(' ');
             ++i;
             break;
-
 
             // asterisk: ignore
         case '*':
@@ -246,11 +203,8 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
             SET_TYPE_OR_RETURN(KoGenStyle::NumericNumberStyle)
             FINISH_PLAIN_TEXT_PART
             // do following only if we are really a number and not part of another KoGenStyle like a date or time formatting
-            if (type == KoGenStyle::NumericNumberStyle
-		|| type == KoGenStyle::NumericFractionStyle
-		|| type == KoGenStyle::NumericScientificStyle
-		|| type == KoGenStyle::NumericCurrencyStyle)
-	    {
+            if (type == KoGenStyle::NumericNumberStyle || type == KoGenStyle::NumericFractionStyle || type == KoGenStyle::NumericScientificStyle
+                || type == KoGenStyle::NumericCurrencyStyle) {
                 bool grouping = false;
                 bool gotDot = false;
                 bool gotE = false;
@@ -261,7 +215,7 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
                 int numeratorDigits = 0;
                 int denominatorDigits = 0;
 
-                char ch = numberFormat[ i ].toLatin1();
+                char ch = numberFormat[i].toLatin1();
                 do {
                     if (ch == '.') {
                         gotDot = true;
@@ -270,8 +224,9 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
                     } else if (ch == 'E' || ch == 'e') {
                         SET_TYPE_OR_RETURN(KoGenStyle::NumericScientificStyle);
 
-                        if (i >= numberFormat.length() - 1) break;
-                        const char chN = numberFormat[ i + 1 ].toLatin1();
+                        if (i >= numberFormat.length() - 1)
+                            break;
+                        const char chN = numberFormat[i + 1].toLatin1();
                         if (chN == '-' || chN == '+') {
                             gotE = true;
                             ++i;
@@ -294,23 +249,20 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
                         gotFraction = true;
                     }
 
-                    if (i >= numberFormat.length() - 1) break;
-                    ch = numberFormat[ ++i ].toLatin1();
+                    if (i >= numberFormat.length() - 1)
+                        break;
+                    ch = numberFormat[++i].toLatin1();
 
                     if (ch == ' ') {
                         // Spaces are not allowed - but there is an exception:
                         // if this is a fraction. Let's check for '?' or '/'
-                        const char c = numberFormat[ i + 1 ].toLatin1();
+                        const char c = numberFormat[i + 1].toLatin1();
                         if (c == '?' || c == '/')
-                            ch = numberFormat[ ++i ].toLatin1();
+                            ch = numberFormat[++i].toLatin1();
                     }
-                } while (i < numberFormat.length()
-			 && (ch == '.' || ch == ',' || ch == '#' || ch == '0'
-			     || ch == 'E' || ch == 'e' || ch == '?' || ch == '/'));
+                } while (i < numberFormat.length() && (ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' || ch == '/'));
 
-                if (!(ch == '.' || ch == ',' || ch == '#' || ch == '0'
-		      || ch == 'E' || ch == 'e' || ch == '?' || ch == '/'))
-		{
+                if (!(ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' || ch == '/')) {
                     --i;
                 }
 
@@ -339,13 +291,11 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
             }
             break;
 
-
             // Everything related to date/time
             // AM/PM
         case 'A':
         case 'a':
-            if (numberFormat.mid(i, 5).toLower() == QLatin1String("am/pm") ||
-                    numberFormat.mid(i, 3).toLower() == QLatin1String("a/p")) {
+            if (numberFormat.mid(i, 5).toLower() == QLatin1String("am/pm") || numberFormat.mid(i, 3).toLower() == QLatin1String("a/p")) {
                 SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
                 FINISH_PLAIN_TEXT_PART;
                 xmlWriter.startElement("number:am-pm");
@@ -355,7 +305,6 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
                 i += 2;
             }
             break;
-
 
             // hours, long or short
         case 'H':
@@ -370,7 +319,6 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
             xmlWriter.endElement();
             break;
 
-
             // minutes or months, depending on context
         case 'M':
         case 'm':
@@ -379,14 +327,12 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
                 SET_TYPE_OR_RETURN(KoGenStyle::NumericDateStyle)
                 FINISH_PLAIN_TEXT_PART;
                 xmlWriter.startElement("number:month");
-                const bool isReallyReallyLong = (isWayTooLong
-						 && i < numberFormat.length() - 4
-						 && numberFormat[ i + 4 ] == c);
+                const bool isReallyReallyLong = (isWayTooLong && i < numberFormat.length() - 4 && numberFormat[i + 4] == c);
                 if (isLongest && !isReallyReallyLong)
                     xmlWriter.addAttribute("number:style", "long");
                 if (isWayTooLong) {
-		    // If the month format is "mmmmm" then it's the
-		    // extra-short format of month.
+                    // If the month format is "mmmmm" then it's the
+                    // extra-short format of month.
                     xmlWriter.addAttribute("calligra:number-length", "extra-short");
                 }
                 xmlWriter.addAttribute("number:textual", "true");
@@ -414,11 +360,11 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
 
                     // So, let's look ahead:
                     for (int j = i + 1; j < numberFormat.length(); ++j) {
-                        const char ch = numberFormat[ i ].toLatin1();
-                        if (ch == 's' || ch == 'S') {   // minutes
+                        const char ch = numberFormat[i].toLatin1();
+                        if (ch == 's' || ch == 'S') { // minutes
                             break;
                         }
-                        if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))) {   // months
+                        if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))) { // months
                             continue;
                         }
                         minutes = false;
@@ -445,7 +391,6 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
                 }
             }
             break;
-
 
             // day (of week)
         case 'D':
@@ -523,8 +468,7 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
             buffer.open(QIODevice::WriteOnly);
             type = KoGenStyle::ParagraphAutoStyle;
             hadPlainText = false;
-        }
-        break;
+        } break;
 
         // text-content
         case '@':
@@ -537,15 +481,15 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
             // quote - plain text block
         case '"':
             isSpecial = false;
-            while (i < numberFormat.length() - 1 && numberFormat[ ++i ] != QLatin1Char('"'))
-                plainText += numberFormat[ i ];
+            while (i < numberFormat.length() - 1 && numberFormat[++i] != QLatin1Char('"'))
+                plainText += numberFormat[i];
             break;
 
             // backslash escapes the next char
         case '\\':
             isSpecial = false;
             if (i < numberFormat.length() - 1) {
-                plainText += numberFormat[ ++i ];
+                plainText += numberFormat[++i];
             }
             break;
 
@@ -613,34 +557,31 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
     return styleFromTypeAndBuffer(type, buffer);
 }
 
-bool NumberFormatParser::isDateFormat(const QString& numberFormat)
+bool NumberFormatParser::isDateFormat(const QString &numberFormat)
 {
     // this is for the month vs. minutes-context
     bool justHadHours = false;
 
     for (int i = 0; i < numberFormat.length(); ++i) {
-        const char c = numberFormat[ i ].toLatin1();
+        const char c = numberFormat[i].toLatin1();
         bool isSpecial = true;
 
-        const bool isLong = i < numberFormat.length() - 1 && numberFormat[ i + 1 ] == c;
-        const bool isLonger = isLong && i < numberFormat.length() - 2 && numberFormat[ i + 2 ] == c;
-        const bool isLongest = isLonger && i < numberFormat.length() - 3 && numberFormat[ i + 3 ] == c;
+        const bool isLong = i < numberFormat.length() - 1 && numberFormat[i + 1] == c;
+        const bool isLonger = isLong && i < numberFormat.length() - 2 && numberFormat[i + 2] == c;
+        const bool isLongest = isLonger && i < numberFormat.length() - 3 && numberFormat[i + 3] == c;
         Q_UNUSED(isLongest);
         switch (c) {
             // condition or color or locale...
         case '[': {
-            //don't care, skip
-            while (i < numberFormat.length() && numberFormat[ i ] != QLatin1Char(']'))
+            // don't care, skip
+            while (i < numberFormat.length() && numberFormat[i] != QLatin1Char(']'))
                 ++i;
-        }
-        break;
-
+        } break;
 
         // underscore: ignore the next char
         case '_':
             ++i;
             break;
-
 
             // asterisk: ignore
         case '*':
@@ -650,7 +591,7 @@ bool NumberFormatParser::isDateFormat(const QString& numberFormat)
 
             // percentage
         case '%':
-            //SET_TYPE_OR_RETURN(KoGenStyle::NumericPercentageStyle);
+            // SET_TYPE_OR_RETURN(KoGenStyle::NumericPercentageStyle);
             break;
 
             // a number
@@ -659,38 +600,32 @@ bool NumberFormatParser::isDateFormat(const QString& numberFormat)
         case '#':
         case '0':
         case '?': {
-            //SET_TYPE_OR_RETURN(KoGenStyle::NumericNumberStyle)
-            char ch = numberFormat[ i ].toLatin1();
+            // SET_TYPE_OR_RETURN(KoGenStyle::NumericNumberStyle)
+            char ch = numberFormat[i].toLatin1();
             do {
-                if (i >= numberFormat.length() - 1) break;
-                ch = numberFormat[ ++i ].toLatin1();
+                if (i >= numberFormat.length() - 1)
+                    break;
+                ch = numberFormat[++i].toLatin1();
 
                 if (ch == ' ') {
                     // spaces are not allowed - but there's an exception: if
                     // this is a fraction. Let's check for '?' or '/'
-                    const char c = numberFormat[ i + 1 ].toLatin1();
+                    const char c = numberFormat[i + 1].toLatin1();
                     if (c == '?' || c == '/')
-                        ch = numberFormat[ ++i ].toLatin1();
+                        ch = numberFormat[++i].toLatin1();
                 }
-            } while (i < numberFormat.length()
-		     && (ch == '.' || ch == ',' || ch == '#' || ch == '0'
-			 || ch == 'E' || ch == 'e' || ch == '?' || ch == '/'));
+            } while (i < numberFormat.length() && (ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' || ch == '/'));
 
-            if (!(ch == '.' || ch == ',' || ch == '#' || ch == '0'
-		  || ch == 'E' || ch == 'e' || ch == '?' || ch == '/'))
-	    {
+            if (!(ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' || ch == '/')) {
                 --i;
             }
-        }
-        break;
+        } break;
 
             // Everything related to date/time
             // AM/PM
         case 'A':
         case 'a':
-            if (numberFormat.mid(i, 5).toLower() == QLatin1String("am/pm")
-		|| numberFormat.mid(i, 3).toLower() == QLatin1String("a/p"))
-	    {
+            if (numberFormat.mid(i, 5).toLower() == QLatin1String("am/pm") || numberFormat.mid(i, 3).toLower() == QLatin1String("a/p")) {
                 // SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
                 if (numberFormat.mid(i, 5).toLower() == QLatin1String("am/pm"))
                     i += 2;
@@ -701,12 +636,11 @@ bool NumberFormatParser::isDateFormat(const QString& numberFormat)
             // hours, long or short
         case 'H':
         case 'h':
-            //SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
+            // SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
             if (isLong) {
                 ++i;
             }
             break;
-
 
             // minutes or months, depending on context
         case 'M':
@@ -719,7 +653,7 @@ bool NumberFormatParser::isDateFormat(const QString& numberFormat)
             // otherwise it's the month
             else {
                 if (justHadHours) {
-                    //SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
+                    // SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
                 } else {
                     // On the next iteration, we might see whether there're
                     // seconds or something else. Let's just default to
@@ -727,18 +661,18 @@ bool NumberFormatParser::isDateFormat(const QString& numberFormat)
                     bool minutes = true;
                     // so let's look ahead:
                     for (int j = i + 1; j < numberFormat.length(); ++j) {
-                        const char ch = numberFormat[ i ].toLatin1();
-                        if (ch == 's' || ch == 'S') {   // minutes
+                        const char ch = numberFormat[i].toLatin1();
+                        if (ch == 's' || ch == 'S') { // minutes
                             break;
                         }
-                        if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))) {   // months
+                        if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))) { // months
                             continue;
                         }
                         minutes = false;
                         break;
                     }
                     if (minutes) {
-                        //SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
+                        // SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
                     } else {
                         return true;
                     }
@@ -748,7 +682,6 @@ bool NumberFormatParser::isDateFormat(const QString& numberFormat)
                 }
             }
             break;
-
 
             // day (of week)
         case 'D':
@@ -780,7 +713,7 @@ bool NumberFormatParser::isDateFormat(const QString& numberFormat)
             // quote - plain text block
         case '"':
             isSpecial = false;
-            while (i < numberFormat.length() - 1 && numberFormat[ ++i ] != QLatin1Char('"'))
+            while (i < numberFormat.length() - 1 && numberFormat[++i] != QLatin1Char('"'))
                 /* empty */;
             break;
 

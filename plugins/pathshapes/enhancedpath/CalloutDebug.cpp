@@ -9,13 +9,12 @@
 #include <KoPathPoint.h>
 #include <KoProperties.h>
 
-
 QDebug operator<<(QDebug dbg, KoPathPoint *p)
 {
     if (p) {
         dbg << p->point();
     } else {
-        dbg << (void*)p;
+        dbg << (void *)p;
     }
     return dbg;
 }
@@ -25,7 +24,7 @@ QDebug operator<<(QDebug dbg, KoSubpath *p)
     if (p) {
         dbg << *p;
     } else {
-        dbg << (void*)p;
+        dbg << (void *)p;
     }
     return dbg;
 }

@@ -8,8 +8,8 @@
 #ifndef KPRNOTES_H
 #define KPRNOTES_H
 
-#include <KoPageLayout.h>
 #include <KoPAPageBase.h>
+#include <KoPageLayout.h>
 
 class KoShape;
 class KoImageCollection;
@@ -19,7 +19,7 @@ class KPrPage;
 class KPrNotes : public KoPAPageBase
 {
 public:
-    KPrNotes( KPrPage * page, KPrDocument * document );
+    KPrNotes(KPrPage *page, KPrDocument *document);
     ~KPrNotes() override;
 
     /// Get the main text note shape for this presentation notes
@@ -32,12 +32,12 @@ public:
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /// reimplemented
-    void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext) override;
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 
     /// Get the page layout for this presentation notes
     KoPageLayout &pageLayout() override;
 
-    const KoPageLayout& pageLayout() const override;
+    const KoPageLayout &pageLayout() const override;
 
     /// update the page thumbnail to reflect current page
     void updatePageThumbnail();
@@ -45,19 +45,19 @@ public:
     /// reimplemented
     bool displayMasterShapes() override;
     /// reimplemented
-    void setDisplayMasterShapes( bool ) override;
+    void setDisplayMasterShapes(bool) override;
     /// reimplemented
     bool displayMasterBackground() override;
     /// reimplemented
-    void setDisplayMasterBackground( bool ) override;
+    void setDisplayMasterBackground(bool) override;
     /// reimplemented
     bool displayShape(KoShape *shape) const override;
 
-    QImage thumbImage(const QSize& = QSize(512, 512)) override;
+    QImage thumbImage(const QSize & = QSize(512, 512)) override;
     /// reimplemented
-    virtual QPixmap generateThumbnail( const QSize& );
+    virtual QPixmap generateThumbnail(const QSize &);
     /// reimplemented
-    void paintPage( QPainter & painter, KoZoomHandler & zoomHandler ) override;
+    void paintPage(QPainter &painter, KoZoomHandler &zoomHandler) override;
 
 private:
     KoShape *m_textShape;
@@ -65,8 +65,7 @@ private:
     KoPageLayout m_pageLayout;
     KPrPage *m_page;
     KPrDocument *m_doc;
-    KoImageCollection * m_imageCollection;
+    KoImageCollection *m_imageCollection;
 };
 
 #endif // KPRNOTES_H
-

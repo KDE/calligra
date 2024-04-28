@@ -14,10 +14,10 @@
 template<typename channels_type, typename pixel_type>
 struct AlphaDarkenCompositor128 {
     struct OptionalParams {
-        OptionalParams(const KoCompositeOp::ParameterInfo& params)
-        : flow(params.flow)
-        , averageOpacity(*params.lastOpacity * params.flow)
-        , premultipliedOpacity(params.opacity * params.flow)
+        OptionalParams(const KoCompositeOp::ParameterInfo &params)
+            : flow(params.flow)
+            , averageOpacity(*params.lastOpacity * params.flow)
+            , premultipliedOpacity(params.opacity * params.flow)
         {
         }
         float flow;
@@ -48,8 +48,8 @@ struct AlphaDarkenCompositor128 {
     template<bool haveMask, bool src_aligned, Vc::Implementation _impl>
     static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const OptionalParams &oparams)
     {
-        const Pixel *sp = reinterpret_cast<const Pixel*>(src);
-        Pixel *dp = reinterpret_cast<Pixel*>(dst);
+        const Pixel *sp = reinterpret_cast<const Pixel *>(src);
+        Pixel *dp = reinterpret_cast<Pixel *>(dst);
 
         Vc::float_v src_c1;
         Vc::float_v src_c2;
@@ -57,7 +57,7 @@ struct AlphaDarkenCompositor128 {
         Vc::float_v src_alpha;
 
         const Vc::float_v::IndexType indexes(Vc::IndexesFromZero);
-        Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> data(const_cast<Pixel*>(sp));
+        Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> data(const_cast<Pixel *>(sp));
         (src_c1, src_c2, src_c3, src_alpha) = data[indexes];
 
         Vc::float_v msk_norm_alpha;
@@ -65,8 +65,7 @@ struct AlphaDarkenCompositor128 {
             const Vc::float_v uint8Rec1((float)1.0 / 255.0);
             Vc::float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
             msk_norm_alpha = mask_vec * uint8Rec1 * src_alpha;
-        }
-        else {
+        } else {
             msk_norm_alpha = src_alpha;
         }
         Vc::float_v opacity_vec(oparams.premultipliedOpacity);
@@ -90,8 +89,7 @@ struct AlphaDarkenCompositor128 {
                 dst_c1 = (src_c1 - dst_c1) * src_alpha + dst_c1;
                 dst_c2 = (src_c2 - dst_c2) * src_alpha + dst_c2;
                 dst_c3 = (src_c3 - dst_c3) * src_alpha + dst_c3;
-            }
-            else {
+            } else {
                 dst_c1(empty_dst_pixels_mask) = src_c1;
                 dst_c2(empty_dst_pixels_mask) = src_c2;
                 dst_c3(empty_dst_pixels_mask) = src_c3;
@@ -100,8 +98,7 @@ struct AlphaDarkenCompositor128 {
                 dst_c2(not_empty_dst_pixels_mask) = (src_c2 - dst_c2) * src_alpha + dst_c2;
                 dst_c3(not_empty_dst_pixels_mask) = (src_c3 - dst_c3) * src_alpha + dst_c3;
             }
-        }
-        else {
+        } else {
             dst_c1 = src_c1;
             dst_c2 = src_c2;
             dst_c3 = src_c3;
@@ -113,16 +110,14 @@ struct AlphaDarkenCompositor128 {
             Vc::float_v average_opacity_vec(oparams.averageOpacity);
             Vc::float_m fullFlowAlpha_mask = average_opacity_vec > dst_alpha;
             fullFlowAlpha(fullFlowAlpha_mask) = (average_opacity_vec - src_alpha) * (dst_alpha / average_opacity_vec) + src_alpha;
-        }
-        else {
+        } else {
             Vc::float_m fullFlowAlpha_mask = opacity_vec > dst_alpha;
             fullFlowAlpha(fullFlowAlpha_mask) = (opacity_vec - dst_alpha) * msk_norm_alpha + dst_alpha;
         }
 
         if (oparams.flow == 1.0) {
             dst_alpha = fullFlowAlpha;
-        }
-        else {
+        } else {
             Vc::float_v zeroFlowAlpha = src_alpha + dst_alpha - src_alpha * dst_alpha;
             Vc::float_v flow_norm_vec(oparams.flow);
             dst_alpha = (fullFlowAlpha - zeroFlowAlpha) * flow_norm_vec + zeroFlowAlpha;
@@ -133,14 +128,14 @@ struct AlphaDarkenCompositor128 {
     /**
      * Composes one pixel of the source into the destination
      */
-    template <bool haveMask, Vc::Implementation _impl>
+    template<bool haveMask, Vc::Implementation _impl>
     static ALWAYS_INLINE void compositeOnePixelScalar(const quint8 *s, quint8 *d, const quint8 *mask, float opacity, const OptionalParams &oparams)
     {
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
 
-        const channels_type *src = reinterpret_cast<const channels_type*>(s);
-        channels_type *dst = reinterpret_cast<channels_type*>(d);
+        const channels_type *src = reinterpret_cast<const channels_type *>(s);
+        channels_type *dst = reinterpret_cast<channels_type *>(d);
 
         float dstAlphaNorm = dst[alpha_pos];
 
@@ -156,8 +151,8 @@ struct AlphaDarkenCompositor128 {
             dst[1] = lerp(dst[1], src[1], srcAlphaNorm);
             dst[2] = lerp(dst[2], src[2], srcAlphaNorm);
         } else {
-            const pixel_type *s = reinterpret_cast<const pixel_type*>(src);
-            pixel_type *d = reinterpret_cast<pixel_type*>(dst);
+            const pixel_type *s = reinterpret_cast<const pixel_type *>(src);
+            pixel_type *d = reinterpret_cast<pixel_type *>(dst);
             *d = *s;
         }
 
@@ -190,17 +185,19 @@ template<Vc::Implementation _impl>
 class KoOptimizedCompositeOpAlphaDarken128 : public KoCompositeOp
 {
 public:
-    KoOptimizedCompositeOpAlphaDarken128(const KoColorSpace* cs)
-        : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken"), KoCompositeOp::categoryMix()) {}
+    KoOptimizedCompositeOpAlphaDarken128(const KoColorSpace *cs)
+        : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken"), KoCompositeOp::categoryMix())
+    {
+    }
 
     using KoCompositeOp::composite;
 
-    virtual void composite(const KoCompositeOp::ParameterInfo& params) const
+    virtual void composite(const KoCompositeOp::ParameterInfo &params) const
     {
-        if(params.maskRowStart) {
-            KoStreamedMath<_impl>::template genericComposite128<true, true, AlphaDarkenCompositor128<float, quint32> >(params);
+        if (params.maskRowStart) {
+            KoStreamedMath<_impl>::template genericComposite128<true, true, AlphaDarkenCompositor128<float, quint32>>(params);
         } else {
-            KoStreamedMath<_impl>::template genericComposite128<false, true, AlphaDarkenCompositor128<float, quint32> >(params);
+            KoStreamedMath<_impl>::template genericComposite128<false, true, AlphaDarkenCompositor128<float, quint32>>(params);
         }
     }
 };

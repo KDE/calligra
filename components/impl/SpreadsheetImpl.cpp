@@ -19,38 +19,41 @@
 #include <KoFindText.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
-#include <KoZoomController.h>
 #include <KoViewConverter.h>
-#include <sheets/part/Part.h>
-#include <sheets/part/Doc.h>
-#include <sheets/part/CanvasItem.h>
+#include <KoZoomController.h>
+#include <libs/textlayout/KoTextShapeData.h>
 #include <sheets/core/Map.h>
 #include <sheets/core/Sheet.h>
-#include <libs/textlayout/KoTextShapeData.h>
 #include <sheets/engine/Damages.h>
+#include <sheets/part/CanvasItem.h>
+#include <sheets/part/Doc.h>
+#include <sheets/part/Part.h>
 
 using namespace Calligra::Components;
 
 class SpreadsheetImpl::Private
 {
 public:
-    Private() : part{nullptr}, document{nullptr}
-    { }
+    Private()
+        : part{nullptr}
+        , document{nullptr}
+    {
+    }
 
-    Calligra::Sheets::Part* part;
-    Calligra::Sheets::Doc* document;
-    Calligra::Sheets::CanvasItem* canvas;
+    Calligra::Sheets::Part *part;
+    Calligra::Sheets::Doc *document;
+    Calligra::Sheets::CanvasItem *canvas;
     int currentSheet;
 
-    QList< QPair< QRectF, QUrl > > links;
+    QList<QPair<QRectF, QUrl>> links;
 
-    QList<KoShape*> deepShapeFind(const QList<KoShape*> &shapes)
+    QList<KoShape *> deepShapeFind(const QList<KoShape *> &shapes)
     {
-        QList<KoShape*> allShapes;
-        for(KoShape* shape : shapes) {
+        QList<KoShape *> allShapes;
+        for (KoShape *shape : shapes) {
             allShapes.append(shape);
-            KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
-            if(container) {
+            KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(shape);
+            if (container) {
                 allShapes.append(deepShapeFind(container->shapes()));
             }
         }
@@ -61,24 +64,23 @@ public:
     {
         links.clear();
 
-        if(!canvas || !canvas->activeSheet())
+        if (!canvas || !canvas->activeSheet())
             return;
         const auto shapes = canvas->activeSheet()->shapes();
-        for(const KoShape* shape : shapes) {
-            if(!shape->hyperLink().isEmpty()) {
+        for (const KoShape *shape : shapes) {
+            if (!shape->hyperLink().isEmpty()) {
                 QRectF rect = shape->boundingRect();
-                for (KoShapeContainer* parent = shape->parent();
-                     parent; parent = parent->parent()) {
+                for (KoShapeContainer *parent = shape->parent(); parent; parent = parent->parent()) {
                     rect.translate(parent->position());
                 }
                 links.append(QPair<QRectF, QUrl>(rect, QUrl(shape->hyperLink())));
             }
         }
 
-        QList<QTextDocument*> texts;
+        QList<QTextDocument *> texts;
         KoFindText::findTextInShapes(canvas->activeSheet()->shapes(), texts);
-        QList<KoShape*> allShapes = deepShapeFind(canvas->activeSheet()->shapes());
-        for(QTextDocument* text : std::as_const(texts)) {
+        QList<KoShape *> allShapes = deepShapeFind(canvas->activeSheet()->shapes());
+        for (QTextDocument *text : std::as_const(texts)) {
             QTextBlock block = text->rootFrame()->firstCursorPosition().block();
             for (; block.isValid(); block = block.next()) {
                 block.begin();
@@ -87,18 +89,16 @@ public:
                     QTextFragment fragment = it.fragment();
                     if (fragment.isValid()) {
                         QTextCharFormat format = fragment.charFormat();
-                        if(format.isAnchor()) {
+                        if (format.isAnchor()) {
                             // This is an anchor, store target and position...
                             QRectF rect = getFragmentPosition(block, fragment);
-                            for(KoShape* shape : std::as_const(allShapes)) {
-                                KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+                            for (KoShape *shape : std::as_const(allShapes)) {
+                                KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());
                                 if (!shapeData)
                                     continue;
-                                if(shapeData->document() == text)
-                                {
+                                if (shapeData->document() == text) {
                                     rect.translate(shape->position());
-                                    for (KoShapeContainer* parent = shape->parent();
-                                         parent; parent = parent->parent()) {
+                                    for (KoShapeContainer *parent = shape->parent(); parent; parent = parent->parent()) {
                                         rect.translate(parent->position());
                                     }
                                     break;
@@ -117,10 +117,9 @@ public:
         // TODO this only produces a position for the first part, if the link spans more than one line...
         // Need to sort that somehow, unfortunately probably by slapping this code into the above function.
         // For now leave it like this, more important things are needed.
-        QTextLayout* layout = block.layout();
+        QTextLayout *layout = block.layout();
         QTextLine line = layout->lineForTextPosition(fragment.position() - block.position());
-        if(!line.isValid())
-        {
+        if (!line.isValid()) {
             // fragment has no valid position and consequently no line...
             return QRectF();
         }
@@ -135,10 +134,11 @@ public:
     static const float wiggleFactor;
 };
 
-const float Calligra::Components::SpreadsheetImpl::Private::wiggleFactor{ 4.f };
+const float Calligra::Components::SpreadsheetImpl::Private::wiggleFactor{4.f};
 
-SpreadsheetImpl::SpreadsheetImpl(QObject* parent)
-    : DocumentImpl{parent}, d{new Private}
+SpreadsheetImpl::SpreadsheetImpl(QObject *parent)
+    : DocumentImpl{parent}
+    , d{new Private}
 {
     setDocumentType(DocumentType::Spreadsheet);
 }
@@ -148,7 +148,7 @@ SpreadsheetImpl::~SpreadsheetImpl()
     delete d;
 }
 
-bool SpreadsheetImpl::load(const QUrl& url)
+bool SpreadsheetImpl::load(const QUrl &url)
 {
     delete d->part;
     delete d->document;
@@ -160,7 +160,7 @@ bool SpreadsheetImpl::load(const QUrl& url)
 
     bool retval = d->document->openUrl(url);
 
-    d->canvas = static_cast<Calligra::Sheets::CanvasItem*>(d->part->canvasItem(d->document));
+    d->canvas = static_cast<Calligra::Sheets::CanvasItem *>(d->part->canvasItem(d->document));
 
     createAndSetCanvasController(d->canvas);
     createAndSetZoomController(d->canvas);
@@ -168,7 +168,7 @@ bool SpreadsheetImpl::load(const QUrl& url)
 
     Calligra::Sheets::SheetBase *bsheet = d->document->map()->sheet(0);
     Calligra::Sheets::Sheet *sheet = dynamic_cast<Calligra::Sheets::Sheet *>(bsheet);
-    if(sheet) {
+    if (sheet) {
         updateDocumentSize(sheet->documentSize().toSize());
     }
 
@@ -190,7 +190,7 @@ int SpreadsheetImpl::currentIndex()
 
 void SpreadsheetImpl::setCurrentIndex(int newValue)
 {
-    if(newValue != currentIndex()) {
+    if (newValue != currentIndex()) {
         Calligra::Sheets::SheetBase *bsheet = d->document->map()->sheet(newValue);
         Calligra::Sheets::Sheet *sheet = dynamic_cast<Calligra::Sheets::Sheet *>(bsheet);
         d->canvas->setActiveSheet(sheet);
@@ -199,9 +199,10 @@ void SpreadsheetImpl::setCurrentIndex(int newValue)
     }
 }
 
-void SpreadsheetImpl::updateDocumentSize(const QSize& size)
+void SpreadsheetImpl::updateDocumentSize(const QSize &size)
 {
-    QRectF activeRect = d->canvas->viewConverter()->documentToView(d->canvas->activeSheet()->cellCoordinatesToDocument(d->canvas->activeSheet()->usedArea(true)));
+    QRectF activeRect =
+        d->canvas->viewConverter()->documentToView(d->canvas->activeSheet()->cellCoordinatesToDocument(d->canvas->activeSheet()->usedArea(true)));
     zoomController()->setDocumentSize(activeRect.size(), false);
     setDocumentSize(activeRect.size().toSize());
 }
@@ -213,24 +214,20 @@ int SpreadsheetImpl::indexCount() const
 
 QUrl SpreadsheetImpl::urlAtPoint(QPoint point)
 {
-    for( const QPair< QRectF, QUrl >& link : d->links )
-    {
-        QRectF hitTarget{
-            link.first.x() - Private::wiggleFactor,
-            link.first.y() - Private::wiggleFactor,
-            link.first.width() + Private::wiggleFactor * 2,
-            link.first.height() + Private::wiggleFactor * 2
-        };
+    for (const QPair<QRectF, QUrl> &link : d->links) {
+        QRectF hitTarget{link.first.x() - Private::wiggleFactor,
+                         link.first.y() - Private::wiggleFactor,
+                         link.first.width() + Private::wiggleFactor * 2,
+                         link.first.height() + Private::wiggleFactor * 2};
 
-        if( hitTarget.contains( point ) )
-        {
+        if (hitTarget.contains(point)) {
             return link.second;
         }
     }
     return QUrl();
 }
 
-QObject* SpreadsheetImpl::part() const
+QObject *SpreadsheetImpl::part() const
 {
     return d->part;
 }

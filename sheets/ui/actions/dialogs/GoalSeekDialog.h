@@ -33,7 +33,7 @@ class GoalSeekDialog : public KoDialog
     Q_OBJECT
 
 public:
-    GoalSeekDialog(QWidget* parent, Selection* selection);
+    GoalSeekDialog(QWidget *parent, Selection *selection);
     ~GoalSeekDialog() override;
 
     QString selectorValue(int id);

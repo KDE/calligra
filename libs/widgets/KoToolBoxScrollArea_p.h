@@ -7,15 +7,15 @@
 #ifndef KO_TOOLBOX_SCROLL_AREA_H
 #define KO_TOOLBOX_SCROLL_AREA_H
 
-#include "KoToolBox_p.h"
 #include "KoToolBoxLayout_p.h"
+#include "KoToolBox_p.h"
 
+#include <KoKineticScroller.h>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QScroller>
 #include <QStyleOption>
 #include <QToolButton>
-#include <KoKineticScroller.h>
 
 class KoToolBoxScrollArea : public QScrollArea
 {
@@ -87,7 +87,10 @@ public:
     }
 
 public Q_SLOTS:
-    void slotScrollerStateChange(QScroller::State state){ KoKineticScroller::updateCursor(this, state); }
+    void slotScrollerStateChange(QScroller::State state)
+    {
+        KoKineticScroller::updateCursor(this, state);
+    }
 
 protected:
     bool event(QEvent *event) override

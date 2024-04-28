@@ -9,24 +9,23 @@
 
 #include <QDebug>
 #include <QImage>
-#include <QPainter>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QPainter>
 
 #include <KoDocumentEntry.h>
-#include <KoPart.h>
-#include <KoPADocument.h>
-#include <KoPAPageBase.h>
 #include <KoDocumentInfo.h>
 #include <KoGlobal.h>
+#include <KoPADocument.h>
+#include <KoPAPageBase.h>
+#include <KoPart.h>
 
 #include <okular/core/page.h>
 
 #include <KLocalizedString>
 
-
-OkularOdpGenerator::OkularOdpGenerator( QObject *parent, const QVariantList &args )
-    : Okular::Generator( parent, args )
+OkularOdpGenerator::OkularOdpGenerator(QObject *parent, const QVariantList &args)
+    : Okular::Generator(parent, args)
 {
     m_doc = 0;
 }
@@ -35,7 +34,7 @@ OkularOdpGenerator::~OkularOdpGenerator()
 {
 }
 
-bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::Page*> &pages )
+bool OkularOdpGenerator::loadDocument(const QString &fileName, QVector<Okular::Page *> &pages)
 {
     const QString mimetype = QMimeDatabase().mimeTypeForFile(fileName).name();
 
@@ -48,7 +47,7 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
         return 0;
     }
 
-    KoPADocument* doc = qobject_cast<KoPADocument*>(part->document());
+    KoPADocument *doc = qobject_cast<KoPADocument *>(part->document());
     m_doc = doc;
     const QUrl url = QUrl::fromLocalFile(fileName);
     doc->setCheckAutoSaveFile(false);
@@ -59,41 +58,40 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
     doc->setReadWrite(false);
     doc->setAutoSave(0);
 
-
     int pageCount = m_doc->pageCount();
-    for(int i = 0; i < pageCount; i++) {
-        KoPAPageBase* kprpage = m_doc->pages().value(i);
+    for (int i = 0; i < pageCount; i++) {
+        KoPAPageBase *kprpage = m_doc->pages().value(i);
         if (!kprpage) {
             continue;
         }
         QSize size = kprpage->size().toSize();
 
-        Okular::Page * page = new Okular::Page( i, size.width(), size.height(), Okular::Rotation0 );
+        Okular::Page *page = new Okular::Page(i, size.width(), size.height(), Okular::Rotation0);
         pages.append(page);
     }
 
     const KoDocumentInfo *documentInfo = m_doc->documentInfo();
-    m_documentInfo.set( Okular::DocumentInfo::MimeType, mimetype );
-    m_documentInfo.set( Okular::DocumentInfo::Producer, documentInfo->originalGenerator() );
-    m_documentInfo.set( Okular::DocumentInfo::Title,       documentInfo->aboutInfo("title") );
-    m_documentInfo.set( Okular::DocumentInfo::Subject,     documentInfo->aboutInfo("subject") );
-    m_documentInfo.set( Okular::DocumentInfo::Keywords,     documentInfo->aboutInfo("keyword") );
-    m_documentInfo.set( Okular::DocumentInfo::Description, documentInfo->aboutInfo("description") );
-    m_documentInfo.set( "language",    KoGlobal::languageFromTag(documentInfo->aboutInfo("language")),  i18n("Language"));
+    m_documentInfo.set(Okular::DocumentInfo::MimeType, mimetype);
+    m_documentInfo.set(Okular::DocumentInfo::Producer, documentInfo->originalGenerator());
+    m_documentInfo.set(Okular::DocumentInfo::Title, documentInfo->aboutInfo("title"));
+    m_documentInfo.set(Okular::DocumentInfo::Subject, documentInfo->aboutInfo("subject"));
+    m_documentInfo.set(Okular::DocumentInfo::Keywords, documentInfo->aboutInfo("keyword"));
+    m_documentInfo.set(Okular::DocumentInfo::Description, documentInfo->aboutInfo("description"));
+    m_documentInfo.set("language", KoGlobal::languageFromTag(documentInfo->aboutInfo("language")), i18n("Language"));
 
     const QString creationDate = documentInfo->aboutInfo("creation-date");
     if (!creationDate.isEmpty()) {
         QDateTime t = QDateTime::fromString(creationDate, Qt::ISODate);
-        m_documentInfo.set( Okular::DocumentInfo::CreationDate, QLocale().toString(t, QLocale::ShortFormat) );
+        m_documentInfo.set(Okular::DocumentInfo::CreationDate, QLocale().toString(t, QLocale::ShortFormat));
     }
-    m_documentInfo.set( Okular::DocumentInfo::Creator,  documentInfo->aboutInfo("initial-creator") );
+    m_documentInfo.set(Okular::DocumentInfo::Creator, documentInfo->aboutInfo("initial-creator"));
 
     const QString modificationDate = documentInfo->aboutInfo("date");
     if (!modificationDate.isEmpty()) {
         QDateTime t = QDateTime::fromString(modificationDate, Qt::ISODate);
-        m_documentInfo.set( Okular::DocumentInfo::ModificationDate, QLocale().toString(t, QLocale::ShortFormat) );
+        m_documentInfo.set(Okular::DocumentInfo::ModificationDate, QLocale().toString(t, QLocale::ShortFormat));
     }
-    m_documentInfo.set( Okular::DocumentInfo::Author, documentInfo->aboutInfo("creator") );
+    m_documentInfo.set(Okular::DocumentInfo::Author, documentInfo->aboutInfo("creator"));
 
     return true;
 }
@@ -113,24 +111,24 @@ bool OkularOdpGenerator::canGeneratePixmap() const
     return true;
 }
 
-void OkularOdpGenerator::generatePixmap( Okular::PixmapRequest *request )
+void OkularOdpGenerator::generatePixmap(Okular::PixmapRequest *request)
 {
-    QPixmap* pix;
+    QPixmap *pix;
     if (!m_doc) {
         pix = new QPixmap(request->width(), request->height());
         QPainter painter(pix);
-        painter.fillRect(0 ,0 , request->width(), request->height(), Qt::white);
+        painter.fillRect(0, 0, request->width(), request->height(), Qt::white);
     } else {
-        KoPAPageBase* page = m_doc->pages().value(request->pageNumber());
+        KoPAPageBase *page = m_doc->pages().value(request->pageNumber());
         pix = new QPixmap(page->thumbnail(QSize(request->width(), request->height())));
     }
 
-   request->page()->setPixmap( request->observer(), pix );
+    request->page()->setPixmap(request->observer(), pix);
 
-    signalPixmapRequestDone( request );
+    signalPixmapRequestDone(request);
 }
 
-Okular::DocumentInfo OkularOdpGenerator::generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const
+Okular::DocumentInfo OkularOdpGenerator::generateDocumentInfo(const QSet<Okular::DocumentInfo::Key> &keys) const
 {
     Q_UNUSED(keys);
 

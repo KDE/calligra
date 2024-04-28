@@ -6,7 +6,6 @@
 #ifndef MUSIC_SHAPE_FACTORY
 #define MUSIC_SHAPE_FACTORY
 
-
 #include <KoShapeFactoryBase.h>
 #include <QVariantList>
 
@@ -17,20 +16,22 @@ class MusicShapePlugin : public QObject
     Q_OBJECT
 
 public:
-
-    MusicShapePlugin( QObject * parent,  const QVariantList& );
-    ~MusicShapePlugin() override {}
-
+    MusicShapePlugin(QObject *parent, const QVariantList &);
+    ~MusicShapePlugin() override
+    {
+    }
 };
 
 class MusicShapeFactory : public KoShapeFactoryBase
 {
 public:
     MusicShapeFactory();
-    ~MusicShapeFactory() override {}
+    ~MusicShapeFactory() override
+    {
+    }
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
-    bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const override;
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
 };
 
 #endif

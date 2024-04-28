@@ -19,24 +19,24 @@
 
 #include "KPrPlaceholderShape.h"
 
-#include <QPainter>
-#include <QTextOption>
+#include <KoOdfWorkaround.h>
 #include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
-#include <KoOdfWorkaround.h>
+#include <QPainter>
+#include <QTextOption>
 
 #include "KPrPlaceholderStrategy.h"
 
 KPrPlaceholderShape::KPrPlaceholderShape()
-: m_strategy( 0 )
+    : m_strategy(0)
 {
 }
 
-KPrPlaceholderShape::KPrPlaceholderShape( const QString & presentationClass )
-: m_strategy( 0 )
+KPrPlaceholderShape::KPrPlaceholderShape(const QString &presentationClass)
+    : m_strategy(0)
 {
-    m_strategy = KPrPlaceholderStrategy::create( presentationClass );
+    m_strategy = KPrPlaceholderStrategy::create(presentationClass);
 }
 
 KPrPlaceholderShape::~KPrPlaceholderShape()
@@ -44,22 +44,21 @@ KPrPlaceholderShape::~KPrPlaceholderShape()
     delete m_strategy;
 }
 
-void KPrPlaceholderShape::paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
+void KPrPlaceholderShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
-    QRectF rect( QPointF( 0, 0 ), size() );
-    if ( m_strategy ) {
-        m_strategy->paint( painter, converter, rect, paintcontext);
-    }
-    else {
-        applyConversion( painter, converter );
+    QRectF rect(QPointF(0, 0), size());
+    if (m_strategy) {
+        m_strategy->paint(painter, converter, rect, paintcontext);
+    } else {
+        applyConversion(painter, converter);
         QPen pen(Qt::gray, 0);
-        pen.setStyle( Qt::DashLine );
-        painter.setPen( pen );
-        painter.drawRect( rect );
+        pen.setStyle(Qt::DashLine);
+        painter.setPen(pen);
+        painter.drawRect(rect);
     }
 }
 
-bool KPrPlaceholderShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+bool KPrPlaceholderShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     loadOdfAttributes(element, context, OdfAdditionalAttributes);
 
@@ -68,35 +67,35 @@ bool KPrPlaceholderShape::loadOdf( const KoXmlElement & element, KoShapeLoadingC
 #endif
     delete m_strategy;
 
-    m_strategy = KPrPlaceholderStrategy::create( additionalAttribute( "presentation:class" ) );
-    if ( m_strategy == 0 ) {
+    m_strategy = KPrPlaceholderStrategy::create(additionalAttribute("presentation:class"));
+    if (m_strategy == 0) {
         return false;
     }
 
     // first check if we can create a placeholder before we load the attributes
     loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfGeometry | OdfCommonChildElements);
-    m_strategy->loadOdf( element, context );
+    m_strategy->loadOdf(element, context);
 
     return true;
 }
 
-void KPrPlaceholderShape::saveOdf( KoShapeSavingContext & context ) const
+void KPrPlaceholderShape::saveOdf(KoShapeSavingContext &context) const
 {
-    KoXmlWriter & writer = context.xmlWriter();
-    writer.startElement( "draw:frame" );
-    saveOdfAttributes( context, OdfAllAttributes );
-    if ( m_strategy ) {
-        m_strategy->saveOdf( context );
+    KoXmlWriter &writer = context.xmlWriter();
+    writer.startElement("draw:frame");
+    saveOdfAttributes(context, OdfAllAttributes);
+    if (m_strategy) {
+        m_strategy->saveOdf(context);
     }
-    saveOdfCommonChildElements( context );
+    saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
 }
 
 KoShape *KPrPlaceholderShape::createShape(KoDocumentResourceManager *documentResources)
 {
-    Q_ASSERT( m_strategy );
-    KoShape * shape = 0;
-    if ( m_strategy ) {
+    Q_ASSERT(m_strategy);
+    KoShape *shape = 0;
+    if (m_strategy) {
         shape = m_strategy->createShape(documentResources);
     }
     return shape;
@@ -104,14 +103,14 @@ KoShape *KPrPlaceholderShape::createShape(KoDocumentResourceManager *documentRes
 
 void KPrPlaceholderShape::initStrategy(KoDocumentResourceManager *documentResources)
 {
-    Q_ASSERT( m_strategy );
-    if ( m_strategy ) {
+    Q_ASSERT(m_strategy);
+    if (m_strategy) {
         m_strategy->init(documentResources);
     }
 }
 
-KoShapeUserData * KPrPlaceholderShape::userData() const
+KoShapeUserData *KPrPlaceholderShape::userData() const
 {
-    Q_ASSERT( m_strategy );
+    Q_ASSERT(m_strategy);
     return m_strategy ? m_strategy->userData() : 0;
 }

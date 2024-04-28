@@ -8,8 +8,8 @@
 #define TABLEOFCONTENTSENTYMODEL_H
 
 #include <QAbstractTableModel>
-#include <QStringList>
 #include <QPair>
+#include <QStringList>
 
 class KoStyleManager;
 class KoTableOfContentsGeneratorInfo;
@@ -26,8 +26,8 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
-    QModelIndex index(int row, int column=0, const QModelIndex &parent = QModelIndex()) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override ;
+    QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
     void saveData();
 
@@ -35,8 +35,7 @@ Q_SIGNALS:
     void tocEntryDataChanged();
 
 private:
-
-    QList <QPair <QString, int> > m_tocEntries; //first contains the text that will appear in table view, and second one is the styleId
+    QList<QPair<QString, int>> m_tocEntries; // first contains the text that will appear in table view, and second one is the styleId
     KoStyleManager *m_styleManager;
     KoTableOfContentsGeneratorInfo *m_tocInfo;
 };

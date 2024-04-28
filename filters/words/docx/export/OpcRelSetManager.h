@@ -5,21 +5,18 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef KOODF_OPC_RELSET_MANAGER_H
 #define KOODF_OPC_RELSET_MANAGER_H
 
 #include "koodf_export.h"
 
-
 class QString;
 class KoStore;
 class OpcRelSet;
 
-
 class OpcRelSetManager
 {
- public:
+public:
     OpcRelSetManager();
     ~OpcRelSetManager();
 
@@ -34,10 +31,9 @@ class OpcRelSetManager
     bool loadRelSets(KoStore *odfStore);
     bool saveRelSets(KoStore *odfStore);
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif

@@ -8,25 +8,24 @@
 
 #include "TextShapeDebug.h"
 
+#include <KoColorBackground.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoTextRangeManager.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapePaintingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoViewConverter.h>
-#include <KoXmlWriter.h>
-#include <KoXmlReader.h>
-#include <KoXmlNS.h>
 #include <KoTextLoader.h>
-#include <KoColorBackground.h>
+#include <KoTextRangeManager.h>
+#include <KoViewConverter.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
 #include <QFont>
 #include <QPainter>
 #include <QPen>
 #include <QTextLayout>
 
-AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager,
-                                         KoTextRangeManager *textRangeManager)
+AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager)
     : TextShape(inlineTextObjectManager, textRangeManager)
     , m_creator()
     , m_date()
@@ -53,15 +52,14 @@ void AnnotationTextShape::setAnnotationTextData(KoTextShapeData *textShapeData)
     m_textShapeData->setResizeMethod(KoTextShapeData::AutoGrowHeight);
 }
 
-void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,
-                                         KoShapePaintingContext &paintcontext)
+void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
     if (paintcontext.showAnnotations) {
         TextShape::paintComponent(painter, converter, paintcontext);
         QRectF clipRect = outlineRect();
 
         // Paint creator and of creation of the annotation.
-        QPen peninfo (Qt::darkYellow);
+        QPen peninfo(Qt::darkYellow);
         QFont serifFont("Times", HeaderFontSize, QFont::Bold);
         painter.setPen(peninfo);
         painter.setFont(serifFont);
@@ -74,7 +72,7 @@ void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverte
 
 bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    //debugTextShape << "****** Start Load odf ******";
+    // debugTextShape << "****** Start Load odf ******";
 
     KoTextLoader textLoader(context);
     QTextCursor cursor(textShapeData()->document());
@@ -82,29 +80,26 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
     const QString localName(element.localName());
 
     if (localName == "annotation") {
-
         // FIXME: Load more attributes here
 
         // Load the metadata (author, date) and contents here.
         KoXmlElement el;
-        forEachElement(el, element) {
+        forEachElement(el, element)
+        {
             if (el.localName() == "creator" && el.namespaceURI() == KoXmlNS::dc) {
                 m_creator = el.text();
                 if (m_creator.isEmpty()) {
                     m_creator = "Unknown";
                 }
-            }
-            else if (el.localName() == "date" && el.namespaceURI() == KoXmlNS::dc) {
+            } else if (el.localName() == "date" && el.namespaceURI() == KoXmlNS::dc) {
                 m_date = el.text();
-            }
-            else if (el.localName() == "datestring" && el.namespaceURI() == KoXmlNS::meta) {
+            } else if (el.localName() == "datestring" && el.namespaceURI() == KoXmlNS::meta) {
                 m_dateString = el.text();
             }
         }
         textLoader.loadBody(element, cursor);
-        //debugTextShape << "****** End Load ******";
-    }
-    else {
+        // debugTextShape << "****** End Load ******";
+    } else {
         // something pretty weird going on...
         return false;
     }
@@ -113,7 +108,7 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
 
 void AnnotationTextShape::saveOdf(KoShapeSavingContext &context) const
 {
-    //debugTextShape << " ****** Start saving annotation shape **********";
+    // debugTextShape << " ****** Start saving annotation shape **********";
     KoXmlWriter *writer = &context.xmlWriter();
 
     writer->startElement("dc:creator", false);

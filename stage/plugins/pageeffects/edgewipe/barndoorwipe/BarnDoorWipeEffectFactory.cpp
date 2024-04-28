@@ -13,38 +13,36 @@
 #define BarnDoorWipeEffectId "BarnDoorWipeEffect"
 
 BarnDoorWipeEffectFactory::BarnDoorWipeEffectFactory()
-: KPrPageEffectFactory( BarnDoorWipeEffectId, i18n( "Barn Door" ) )
+    : KPrPageEffectFactory(BarnDoorWipeEffectId, i18n("Barn Door"))
 {
-    addStrategy( new BarnDoorWipeStrategy( Vertical, "vertical", false ) );
-    addStrategy( new BarnDoorWipeStrategy( VerticalReverse, "vertical", true ) );
-    addStrategy( new BarnDoorWipeStrategy( Horizontal, "horizontal", false ) );
-    addStrategy( new BarnDoorWipeStrategy( HorizontalReverse, "horizontal", true ) );
-    addStrategy( new BarnDoorWipeStrategy( DiagonalBottomLeft, "diagonalBottomLeft", false ) );
-    addStrategy( new BarnDoorWipeStrategy( DiagonalBottomLeftReverse, "diagonalBottomLeft", true ) );
-    addStrategy( new BarnDoorWipeStrategy( DiagonalTopLeft, "diagonalTopLeft", false ) );
-    addStrategy( new BarnDoorWipeStrategy( DiagonalTopLeftReverse, "diagonalTopLeft", true ) );
+    addStrategy(new BarnDoorWipeStrategy(Vertical, "vertical", false));
+    addStrategy(new BarnDoorWipeStrategy(VerticalReverse, "vertical", true));
+    addStrategy(new BarnDoorWipeStrategy(Horizontal, "horizontal", false));
+    addStrategy(new BarnDoorWipeStrategy(HorizontalReverse, "horizontal", true));
+    addStrategy(new BarnDoorWipeStrategy(DiagonalBottomLeft, "diagonalBottomLeft", false));
+    addStrategy(new BarnDoorWipeStrategy(DiagonalBottomLeftReverse, "diagonalBottomLeft", true));
+    addStrategy(new BarnDoorWipeStrategy(DiagonalTopLeft, "diagonalTopLeft", false));
+    addStrategy(new BarnDoorWipeStrategy(DiagonalTopLeftReverse, "diagonalTopLeft", true));
 }
 
 BarnDoorWipeEffectFactory::~BarnDoorWipeEffectFactory()
 {
 }
 
-static const KLazyLocalizedString s_subTypes[] = {
-    kli18n( "Vertical" ),
-    kli18n( "Vertical Reverse" ),
-    kli18n( "Horizontal" ),
-    kli18n( "Horizontal Reverse" ),
-    kli18n( "Diagonal Bottom Left" ),
-    kli18n( "Diagonal Bottom Left Reverse" ),
-    kli18n( "Diagonal Top Left" ),
-    kli18n( "Diagonal Top Left Reverse" )
-};
+static const KLazyLocalizedString s_subTypes[] = {kli18n("Vertical"),
+                                                  kli18n("Vertical Reverse"),
+                                                  kli18n("Horizontal"),
+                                                  kli18n("Horizontal Reverse"),
+                                                  kli18n("Diagonal Bottom Left"),
+                                                  kli18n("Diagonal Bottom Left Reverse"),
+                                                  kli18n("Diagonal Top Left"),
+                                                  kli18n("Diagonal Top Left Reverse")};
 
 QString BarnDoorWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return s_subTypes[subType].toString();
     } else {
-        return i18n( "Unknown subtype" );
+        return i18n("Unknown subtype");
     }
 }

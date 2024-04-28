@@ -8,23 +8,22 @@
 #ifndef QMLGLOBALENGINE_H
 #define QMLGLOBALENGINE_H
 
-
 class QQmlEngine;
 class QmlGlobalEngine
 {
 public:
-    QQmlEngine* engine() const;
-    void setEngine(QQmlEngine* engine);
+    QQmlEngine *engine() const;
+    void setEngine(QQmlEngine *engine);
 
-    static QmlGlobalEngine* instance();
+    static QmlGlobalEngine *instance();
 
 private:
     QmlGlobalEngine();
     ~QmlGlobalEngine();
 
-    QQmlEngine* m_engine;
+    QQmlEngine *m_engine;
 
-    static QmlGlobalEngine* sm_instance;
+    static QmlGlobalEngine *sm_instance;
 };
 
 #endif // QMLGLOBALENGINE_H

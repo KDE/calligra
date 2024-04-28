@@ -8,7 +8,8 @@
 
 #include <QObject>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Staff;
 class VoiceBar;
@@ -34,17 +35,17 @@ public:
      * Returns the staff this music element should be displayed on. It can also be nullptr, for example if the element
      * should not be visible.
      */
-    Staff* staff() const;
+    Staff *staff() const;
 
     /**
      * Sets the staff this element should be displayed on.
      *
      * @param staff the new staff this element should be displayed on
      */
-    void setStaff(Staff* staff);
+    void setStaff(Staff *staff);
 
-    VoiceBar* voiceBar() const;
-    void setVoiceBar(VoiceBar* voiceBar);
+    VoiceBar *voiceBar() const;
+    void setVoiceBar(VoiceBar *voiceBar);
 
     /**
      * Returns the x position of this musical element. The x position of an element is measured relative to the left
@@ -72,7 +73,7 @@ public:
      * Returns the duration of this musical elements in ticks.
      */
     int length() const;
-    
+
     /**
      * Returns the beatline of this element. This is an x position relative to the start of the element.
      */
@@ -108,7 +109,7 @@ protected Q_SLOTS:
      * @param height the new height of this musical element
      */
     void setHeight(qreal height);
-    
+
     void setBeatline(qreal beatline);
 Q_SIGNALS:
     void xChanged(qreal x);
@@ -116,9 +117,10 @@ Q_SIGNALS:
     void lengthChanged(int length);
     void widthChanged(qreal width);
     void heightChanged(qreal height);
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

@@ -11,8 +11,8 @@
 #ifndef KODATACENTER_H
 #define KODATACENTER_H
 
-#include <QtGlobal>
 #include "flake_export.h"
+#include <QtGlobal>
 
 class KoShapeSavingContext;
 class KoStore;

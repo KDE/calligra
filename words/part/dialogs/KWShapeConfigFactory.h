@@ -26,11 +26,13 @@ public:
     void addUser();
     void removeUser();
 
-    KWDocument *document() const {
+    KWDocument *document() const
+    {
         return m_document;
     }
 
-    bool keepAspectRatio() const {
+    bool keepAspectRatio() const
+    {
         return m_protectAspectRatio;
     }
     void setKeepAspectRatio(bool on);
@@ -49,8 +51,13 @@ class KWFrameConnectSelectorFactory : public KoShapeConfigFactoryBase
 {
 public:
     /// constructor
-    explicit KWFrameConnectSelectorFactory(FrameConfigSharedState *state) : m_state(state) {}
-    ~KWFrameConnectSelectorFactory() override {}
+    explicit KWFrameConnectSelectorFactory(FrameConfigSharedState *state)
+        : m_state(state)
+    {
+    }
+    ~KWFrameConnectSelectorFactory() override
+    {
+    }
 
     /// reimplemented method from superclass
     KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape) override;
@@ -60,7 +67,8 @@ public:
     /// reimplemented method from superclass
     bool showForShapeId(const QString &id) const override;
     /// reimplemented method from superclass
-    int sortingOrder() const override {
+    int sortingOrder() const override
+    {
         return 15;
     }
 
@@ -73,15 +81,21 @@ class KWAnchoringFactory : public KoShapeConfigFactoryBase
 {
 public:
     /// constructor
-    explicit KWAnchoringFactory(FrameConfigSharedState *state) : m_state(state) {}
-    ~KWAnchoringFactory() override {}
+    explicit KWAnchoringFactory(FrameConfigSharedState *state)
+        : m_state(state)
+    {
+    }
+    ~KWAnchoringFactory() override
+    {
+    }
 
     /// reimplemented method from superclass
     KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape) override;
     /// reimplemented method from superclass
     QString name() const override;
     /// reimplemented method from superclass
-    int sortingOrder() const override {
+    int sortingOrder() const override
+    {
         return 0;
     }
     /// reimplemented method from superclass
@@ -96,8 +110,13 @@ class KWRunAroundPropertiesFactory : public KoShapeConfigFactoryBase
 {
 public:
     /// constructor
-    explicit KWRunAroundPropertiesFactory(FrameConfigSharedState *state) : m_state(state) {}
-    ~KWRunAroundPropertiesFactory() override {}
+    explicit KWRunAroundPropertiesFactory(FrameConfigSharedState *state)
+        : m_state(state)
+    {
+    }
+    ~KWRunAroundPropertiesFactory() override
+    {
+    }
 
     /// reimplemented method from superclass
     KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape) override;
@@ -107,13 +126,13 @@ public:
     bool showForShapeId(const QString &id) const override;
 
     /// reimplemented method from superclass
-    int sortingOrder() const override {
+    int sortingOrder() const override
+    {
         return 5;
     }
 
 private:
     FrameConfigSharedState *m_state;
 };
-
 
 #endif

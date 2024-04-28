@@ -14,12 +14,12 @@
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
 
+#include <QAbstractEventDispatcher>
 #include <QApplication>
 #include <QEventLoop>
-#include <QAbstractEventDispatcher>
 
 CSThumbProviderStage::CSThumbProviderStage(KoPADocument *doc)
-: m_doc(doc)
+    : m_doc(doc)
 {
 }
 
@@ -30,20 +30,20 @@ CSThumbProviderStage::~CSThumbProviderStage()
 QVector<QImage> CSThumbProviderStage::createThumbnails(const QSize &thumbSize)
 {
     //// make sure all is rendered before painting
-    //int i = 100;
-    //while (QCoreApplication::eventDispatcher()->hasPendingEvents() && i > 0) {
-    //    --i;
-    //    QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-    //}
+    // int i = 100;
+    // while (QCoreApplication::eventDispatcher()->hasPendingEvents() && i > 0) {
+    //     --i;
+    //     QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+    // }
 
     QVector<QImage> thumbnails;
-    foreach(KoPAPageBase *page, m_doc->pages(false)) {
+    foreach (KoPAPageBase *page, m_doc->pages(false)) {
         thumbnails.append(m_doc->pageThumbImage(page, thumbSize));
     }
 
     // make sure there are no events this fixes a crash on shutdown
-    //i = 100;
-    //while (QCoreApplication::eventDispatcher()->hasPendingEvents() && i > 0) {
+    // i = 100;
+    // while (QCoreApplication::eventDispatcher()->hasPendingEvents() && i > 0) {
     //    --i;
     //    QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     //}

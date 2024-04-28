@@ -26,13 +26,13 @@ class KPrPresenterViewInterface : public KPrPresenterViewBaseInterface
 {
     Q_OBJECT
 public:
-    KPrPresenterViewInterface( const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent = 0 );
+    KPrPresenterViewInterface(const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent = 0);
 
-    void setPreviewSize( const QSize &size );
+    void setPreviewSize(const QSize &size);
 
 public Q_SLOTS:
     /// reimplemented
-    void setActivePage( int pageIndex ) override;
+    void setActivePage(int pageIndex) override;
 
 private:
     KoPACanvas *m_canvas;
@@ -44,4 +44,3 @@ private:
 };
 
 #endif
-

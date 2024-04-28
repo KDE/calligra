@@ -14,15 +14,15 @@
 
 class DBaseImport : public KoFilter
 {
-
     Q_OBJECT
 
 public:
+    DBaseImport(QObject *parent, const QVariantList &);
+    ~DBaseImport() override
+    {
+    }
 
-    DBaseImport(QObject *parent, const QVariantList&);
-    ~DBaseImport() override {}
-
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };
 
 #endif // __DBASEIMPORT_H

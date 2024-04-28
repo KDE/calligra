@@ -21,8 +21,8 @@ class KWPageSettingsDialog : public KoPageLayoutDialog
 {
     Q_OBJECT
 public:
-    explicit KWPageSettingsDialog(QWidget *parent, KWDocument * document, const KWPage &page);
-    KPageWidgetItem* pageItem(const QString &name) const;
+    explicit KWPageSettingsDialog(QWidget *parent, KWDocument *document, const KWPage &page);
+    KPageWidgetItem *pageItem(const QString &name) const;
 
 protected:
     void accept() override;
@@ -30,12 +30,13 @@ protected:
 
 private Q_SLOTS:
     void slotApplyClicked();
-    void slotButtonClicked(QAbstractButton* button);
+    void slotButtonClicked(QAbstractButton *button);
     void setDocumentUnit(const KoUnit &unit);
     void onDocumentUnitChange(const KoUnit &unit);
     void pageStyleCloneClicked();
     void pageStyleDeleteClicked();
     void pageStyleCurrentRowChanged(int row);
+
 private:
     KWDocument *m_document;
     KWPage m_page;
@@ -43,7 +44,7 @@ private:
     KWDocumentColumns *m_columns;
     QListWidget *m_pageStylesView;
     QPushButton *m_clonePageStyleButton, *m_deletePageStyleButton;
-    QMap<QString, KPageWidgetItem*> m_pages;
+    QMap<QString, KPageWidgetItem *> m_pages;
     QString m_prevSelectedPageStyle;
 
     void reloadPageStyles();

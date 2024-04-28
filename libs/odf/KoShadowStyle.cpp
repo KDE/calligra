@@ -9,9 +9,8 @@
 
 #include <KoUnit.h>
 
-
 // KoShadowStyle private class
-class KoShadowStylePrivate: public QSharedData
+class KoShadowStylePrivate : public QSharedData
 {
 public:
     KoShadowStylePrivate();
@@ -30,7 +29,9 @@ KoShadowStylePrivate::~KoShadowStylePrivate()
 
 // KoShadowStyle::ShadowData structure
 KoShadowStyle::ShadowData::ShadowData()
-    : color(), offset(0, 0), radius(0.0)
+    : color()
+    , offset(0, 0)
+    , radius(0.0)
 {
 }
 
@@ -62,8 +63,7 @@ bool KoShadowStyle::operator==(const KoShadowStyle &other) const
     if (shadowCount() != other.shadowCount())
         return false;
 
-    foreach (const ShadowData &data, d->shadows)
-    {
+    foreach (const ShadowData &data, d->shadows) {
         if (!other.d->shadows.contains(data))
             return false;
     }
@@ -76,7 +76,7 @@ bool KoShadowStyle::operator!=(const KoShadowStyle &other) const
 }
 
 // load value string as specified by CSS2 §7.16.5 "text-shadow"
-bool KoShadowStyle::loadOdf (const QString &data)
+bool KoShadowStyle::loadOdf(const QString &data)
 {
     if (data == QLatin1String("none"))
         return true;
@@ -107,7 +107,7 @@ bool KoShadowStyle::loadOdf (const QString &data)
         // "Each shadow effect must specify a shadow offset and may optionally
         // specify a blur radius and a shadow color.", from CSS2 §7.16.5 "text-shadow"
         // But for some reason also no offset has been accepted before. TODO: which?
-        if (! words.isEmpty()) {
+        if (!words.isEmpty()) {
             if ((words.length() < 2) || (words.length() > 3))
                 return false;
 
@@ -148,4 +148,3 @@ QString KoShadowStyle::saveOdf() const
     }
     return parts.join(QLatin1String(","));
 }
-

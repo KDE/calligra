@@ -19,7 +19,7 @@ class KoPAMasterPage;
 class KoPAChangeMasterPageCommand : public KUndo2Command
 {
 public:
-    KoPAChangeMasterPageCommand( KoPADocument *document, KoPAPage * page, KoPAMasterPage * masterPage );
+    KoPAChangeMasterPageCommand(KoPADocument *document, KoPAPage *page, KoPAMasterPage *masterPage);
     ~KoPAChangeMasterPageCommand() override;
 
     /// redo the command
@@ -29,9 +29,9 @@ public:
 
 private:
     KoPADocument *m_document;
-    KoPAPage * m_page;
-    KoPAMasterPage * m_oldMasterPage;
-    KoPAMasterPage * m_newMasterPage;
+    KoPAPage *m_page;
+    KoPAMasterPage *m_oldMasterPage;
+    KoPAMasterPage *m_newMasterPage;
 };
 
 #endif /* KOPACHANGEMASTERPAGECOMMAND_H */

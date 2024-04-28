@@ -6,12 +6,12 @@
 
 #include "KoTextLayoutEndNotesArea.h"
 
-#include "KoTextLayoutNoteArea.h"
-#include "KoInlineTextObjectManager.h"
-#include "KoInlineNote.h"
-#include "KoPointedAt.h"
 #include "FrameIterator.h"
 #include "KoCharAreaInfo.h"
+#include "KoInlineNote.h"
+#include "KoInlineTextObjectManager.h"
+#include "KoPointedAt.h"
+#include "KoTextLayoutNoteArea.h"
 
 #include <KoTextDocument.h>
 
@@ -39,8 +39,8 @@ public:
 };
 
 KoTextLayoutEndNotesArea::KoTextLayoutEndNotesArea(KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout)
-  : KoTextLayoutArea(parent, documentLayout)
-  , d(new Private)
+    : KoTextLayoutArea(parent, documentLayout)
+    , d(new Private)
 {
     d->endNoteAutoCount = 0;
 }
@@ -65,9 +65,8 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
 
     KoInlineTextObjectManager *manager = KoTextDocument(documentLayout()->document()).inlineTextObjectManager();
     QList<KoInlineNote *> list = QList<KoInlineNote *>(manager->endNotes());
-    std::sort(list.begin(), list.end(), beforeThan); //making a list of endnotes in the order they appear
-    while (cursor->endNoteIndex < list.length())
-    {
+    std::sort(list.begin(), list.end(), beforeThan); // making a list of endnotes in the order they appear
+    while (cursor->endNoteIndex < list.length()) {
         KoInlineNote *note = list[cursor->endNoteIndex];
         if (note->autoNumbering()) {
             note->setAutoNumber(d->endNoteAutoCount++);
@@ -100,8 +99,7 @@ KoPointedAt KoTextLayoutEndNotesArea::hitTest(const QPointF &p, Qt::HitTestAccur
     int endNoteIndex = 0;
     while (endNoteIndex < d->endNoteAreas.length()) {
         // check if p is over end notes area
-        if (p.y() > d->endNoteAreas[endNoteIndex]->top()
-                && p.y() < d->endNoteAreas[endNoteIndex]->bottom()) {
+        if (p.y() > d->endNoteAreas[endNoteIndex]->top() && p.y() < d->endNoteAreas[endNoteIndex]->bottom()) {
             pointedAt = d->endNoteAreas[endNoteIndex]->hitTest(p, accuracy);
             return pointedAt;
         }
@@ -114,17 +112,16 @@ QVector<KoCharAreaInfo> KoTextLayoutEndNotesArea::generateCharAreaInfos() const
 {
     QVector<KoCharAreaInfo> result;
 
-    if (d->startOfArea == 0) {// We have not been layouted yet
+    if (d->startOfArea == 0) { // We have not been layouted yet
         return result;
     }
 
-    foreach(KoTextLayoutNoteArea *area, d->endNoteAreas) {
+    foreach (KoTextLayoutNoteArea *area, d->endNoteAreas) {
         result.append(area->generateCharAreaInfos());
     }
 
     return result;
 }
-
 
 QRectF KoTextLayoutEndNotesArea::selectionBoundingBox(QTextCursor &cursor) const
 {
@@ -151,9 +148,9 @@ void KoTextLayoutEndNotesArea::paint(QPainter *painter, const KoTextDocumentLayo
         int left = 2;
         int right = 150;
         int shiftDown = 10;
-        painter->drawLine(left, top()+shiftDown, right, top()+shiftDown);
+        painter->drawLine(left, top() + shiftDown, right, top() + shiftDown);
     }
-    foreach(KoTextLayoutNoteArea *area, d->endNoteAreas) {
+    foreach (KoTextLayoutNoteArea *area, d->endNoteAreas) {
         area->paint(painter, context);
     }
 }

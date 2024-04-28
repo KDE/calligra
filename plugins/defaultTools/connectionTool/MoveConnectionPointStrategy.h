@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * SPDX-FileCopyrightText: 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
@@ -8,8 +8,8 @@
 #ifndef MOVECONNECTIONPOINTSTRATEGY_H
 #define MOVECONNECTIONPOINTSTRATEGY_H
 
-#include <KoInteractionStrategy.h>
 #include <KoConnectionPoint.h>
+#include <KoInteractionStrategy.h>
 #include <QPointF>
 
 class KoShape;

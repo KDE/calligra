@@ -5,51 +5,53 @@
  */
 
 #include "FilterEffectEditWidget.h"
-#include "FilterEffectResource.h"
-#include "FilterResourceServerProvider.h"
-#include "FilterInputChangeCommand.h"
 #include "FilterAddCommand.h"
+#include "FilterEffectResource.h"
+#include "FilterInputChangeCommand.h"
 #include "FilterRemoveCommand.h"
+#include "FilterResourceServerProvider.h"
 #include "FilterStackSetCommand.h"
-#include "KoGenericRegistryModel.h"
-#include "KoFilterEffectRegistry.h"
-#include "KoFilterEffect.h"
-#include "KoFilterEffectStack.h"
-#include "KoFilterEffectConfigWidgetBase.h"
-#include "KoShape.h"
 #include "KoCanvasBase.h"
+#include "KoFilterEffect.h"
+#include "KoFilterEffectConfigWidgetBase.h"
+#include "KoFilterEffectRegistry.h"
+#include "KoFilterEffectStack.h"
+#include "KoGenericRegistryModel.h"
 #include "KoResourceModel.h"
 #include "KoResourceServerAdapter.h"
+#include "KoShape.h"
 
 #include <KoIcon.h>
 
-#include <QInputDialog>
 #include <QDebug>
+#include <QInputDialog>
 
 #include <QGraphicsItem>
 #include <QSet>
 
 FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
-    : QWidget(parent), m_scene(new FilterEffectScene(this))
-    , m_shape(0), m_canvas(0), m_effects(0)
+    : QWidget(parent)
+    , m_scene(new FilterEffectScene(this))
+    , m_shape(0)
+    , m_canvas(0)
+    , m_effects(0)
 {
     setupUi(this);
 
-    FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
-    KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();
+    FilterResourceServerProvider *serverProvider = FilterResourceServerProvider::instance();
+    KoResourceServer<FilterEffectResource> *server = serverProvider->filterEffectServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<FilterEffectResource>(server));
 
     presets->setResourceAdapter(adapter);
     presets->setDisplayMode(KoResourceSelector::TextMode);
     presets->setColumnCount(1);
 
-    connect(presets, &KoResourceSelector::resourceSelected,
-            this, &FilterEffectEditWidget::presetSelected);
+    connect(presets, &KoResourceSelector::resourceSelected, this, &FilterEffectEditWidget::presetSelected);
 
-    connect(presets, &KoResourceSelector::resourceApplied,
-            this, &FilterEffectEditWidget::presetSelected);
+    connect(presets, &KoResourceSelector::resourceApplied, this, &FilterEffectEditWidget::presetSelected);
 
-    KoGenericRegistryModel<KoFilterEffectFactoryBase*> * filterEffectModel = new KoGenericRegistryModel<KoFilterEffectFactoryBase*>(KoFilterEffectRegistry::instance());
+    KoGenericRegistryModel<KoFilterEffectFactoryBase *> *filterEffectModel =
+        new KoGenericRegistryModel<KoFilterEffectFactoryBase *>(KoFilterEffectRegistry::instance());
 
     effectSelector->setModel(filterEffectModel);
     removeEffect->setIcon(koIcon("list-remove"));
@@ -76,8 +78,7 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     view->setRenderHint(QPainter::Antialiasing, true);
     view->setResizeAnchor(QGraphicsView::AnchorViewCenter);
 
-    connect(m_scene, &FilterEffectScene::connectionCreated,
-            this, &FilterEffectEditWidget::connectionCreated);
+    connect(m_scene, &FilterEffectScene::connectionCreated, this, &FilterEffectEditWidget::connectionCreated);
     connect(m_scene, QOverload<>::of(&FilterEffectScene::selectionChanged), this, &FilterEffectEditWidget::sceneSelectionChanged);
 
     QSet<ConnectionSource::SourceType> inputs;
@@ -89,13 +90,12 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     inputs << ConnectionSource::StrokePaint;
 
     m_defaultSourceSelector = new KComboBox(this);
-    foreach(ConnectionSource::SourceType source, inputs) {
+    foreach (ConnectionSource::SourceType source, inputs) {
         m_defaultSourceSelector->addItem(ConnectionSource::typeToString(source));
     }
     m_defaultSourceSelector->hide();
     m_defaultSourceSelector->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    connect(m_defaultSourceSelector, QOverload<int>::of(&KComboBox::currentIndexChanged),
-            this, &FilterEffectEditWidget::defaultSourceChanged);
+    connect(m_defaultSourceSelector, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &FilterEffectEditWidget::defaultSourceChanged);
 }
 
 FilterEffectEditWidget::~FilterEffectEditWidget()
@@ -105,7 +105,7 @@ FilterEffectEditWidget::~FilterEffectEditWidget()
     }
 }
 
-void FilterEffectEditWidget::editShape(KoShape *shape, KoCanvasBase * canvas)
+void FilterEffectEditWidget::editShape(KoShape *shape, KoCanvasBase *canvas)
 {
     if (!m_shape) {
         delete m_effects;
@@ -135,13 +135,13 @@ void FilterEffectEditWidget::fitScene()
     view->fitInView(bbox, Qt::KeepAspectRatio);
 }
 
-void FilterEffectEditWidget::resizeEvent(QResizeEvent * event)
+void FilterEffectEditWidget::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
     fitScene();
 }
 
-void FilterEffectEditWidget::showEvent(QShowEvent * event)
+void FilterEffectEditWidget::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event);
     fitScene();
@@ -149,17 +149,17 @@ void FilterEffectEditWidget::showEvent(QShowEvent * event)
 
 void FilterEffectEditWidget::addSelectedEffect()
 {
-    KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
-    KoFilterEffectFactoryBase * factory = registry->values()[effectSelector->currentIndex()];
+    KoFilterEffectRegistry *registry = KoFilterEffectRegistry::instance();
+    KoFilterEffectFactoryBase *factory = registry->values()[effectSelector->currentIndex()];
     if (!factory)
         return;
 
-    KoFilterEffect * effect = factory->createFilterEffect();
+    KoFilterEffect *effect = factory->createFilterEffect();
     if (!effect)
         return;
 
     if (m_shape) {
-        if (! m_shape->filterEffectStack()) {
+        if (!m_shape->filterEffectStack()) {
             m_effects->appendFilterEffect(effect);
             m_canvas->addCommand(new FilterStackSetCommand(m_effects, m_shape));
         } else {
@@ -180,19 +180,19 @@ void FilterEffectEditWidget::removeSelectedItem()
         return;
 
     QList<InputChangeData> changeData;
-    QList<KoFilterEffect*> filterEffects = m_effects->filterEffects();
+    QList<KoFilterEffect *> filterEffects = m_effects->filterEffects();
     int effectIndexToDelete = -1;
 
-    const ConnectionSource &item  = selectedItems.first();
-    KoFilterEffect * effect = item.effect();
+    const ConnectionSource &item = selectedItems.first();
+    KoFilterEffect *effect = item.effect();
     if (item.type() == ConnectionSource::Effect) {
         int effectIndex = filterEffects.indexOf(effect);
         // adjust inputs of all following effects in the stack
         for (int i = effectIndex + 1; i < filterEffects.count(); ++i) {
-            KoFilterEffect * nextEffect = filterEffects[i];
+            KoFilterEffect *nextEffect = filterEffects[i];
             QList<QString> inputs = nextEffect->inputs();
             int inputIndex = 0;
-            foreach(const QString &input, inputs) {
+            foreach (const QString &input, inputs) {
                 if (input == effect->output()) {
                     InputChangeData data(nextEffect, inputIndex, input, "");
                     changeData.append(data);
@@ -207,7 +207,7 @@ void FilterEffectEditWidget::removeSelectedItem()
         QString outputName = ConnectionSource::typeToString(item.type());
         QList<QString> inputs = effect->inputs();
         int inputIndex = 0;
-        foreach(const QString &input, inputs) {
+        foreach (const QString &input, inputs) {
             if (input == outputName) {
                 InputChangeData data(effect, inputIndex, input, "");
                 changeData.append(data);
@@ -216,13 +216,13 @@ void FilterEffectEditWidget::removeSelectedItem()
         }
     }
 
-    KUndo2Command * cmd = new KUndo2Command();
+    KUndo2Command *cmd = new KUndo2Command();
     if (changeData.count()) {
-        KUndo2Command * subCmd = new FilterInputChangeCommand(changeData, m_shape, cmd);
+        KUndo2Command *subCmd = new FilterInputChangeCommand(changeData, m_shape, cmd);
         cmd->setText(subCmd->text());
     }
     if (effectIndexToDelete >= 0) {
-        KUndo2Command * subCmd = new FilterRemoveCommand(effectIndexToDelete, m_effects, m_shape, cmd);
+        KUndo2Command *subCmd = new FilterRemoveCommand(effectIndexToDelete, m_effects, m_shape, cmd);
         cmd->setText(subCmd->text());
     }
     if (m_canvas && m_shape) {
@@ -237,7 +237,7 @@ void FilterEffectEditWidget::removeSelectedItem()
 
 void FilterEffectEditWidget::connectionCreated(ConnectionSource source, ConnectionTarget target)
 {
-    QList<KoFilterEffect*> filterEffects = m_effects->filterEffects();
+    QList<KoFilterEffect *> filterEffects = m_effects->filterEffects();
 
     int targetEffectIndex = filterEffects.indexOf(target.effect());
     if (targetEffectIndex < 0)
@@ -261,7 +261,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
                 // output is named but if there is an effect with the same
                 // output name, we have to rename the source output
                 for (int i = sourceEffectIndex + 1; i < targetEffectIndex; ++i) {
-                    KoFilterEffect * effect = filterEffects[i];
+                    KoFilterEffect *effect = filterEffects[i];
                     if (effect->output() == sourceName) {
                         renameOutput = true;
                         break;
@@ -270,7 +270,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
             }
             if (renameOutput) {
                 QSet<QString> uniqueOutputNames;
-                foreach(KoFilterEffect *effect, filterEffects) {
+                foreach (KoFilterEffect *effect, filterEffects) {
                     uniqueOutputNames.insert(effect->output());
                 }
                 int index = 0;
@@ -283,9 +283,9 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
                 source.effect()->setOutput(newOutputName);
                 // adjust following effects
                 for (int i = sourceEffectIndex + 1; i < targetEffectIndex; ++i) {
-                    KoFilterEffect * effect = filterEffects[i];
+                    KoFilterEffect *effect = filterEffects[i];
                     int inputIndex = 0;
-                    foreach(const QString &input, effect->inputs()) {
+                    foreach (const QString &input, effect->inputs()) {
                         if (input.isEmpty() && (i == sourceEffectIndex + 1 || input == sourceName)) {
                             InputChangeData data(effect, inputIndex, input, newOutputName);
                             changeData.append(data);
@@ -314,7 +314,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
     }
 
     if (changeData.count()) {
-        KUndo2Command * cmd = new FilterInputChangeCommand(changeData, m_shape);
+        KUndo2Command *cmd = new FilterInputChangeCommand(changeData, m_shape);
         if (m_canvas) {
             m_canvas->addCommand(cmd);
         } else {
@@ -332,22 +332,18 @@ void FilterEffectEditWidget::addToPresets()
         return;
 
     bool ok = false;
-    QString effectName = QInputDialog::getText(this, i18n("Effect name"),
-                                               i18n("Please enter a name for the filter effect"),
-                                               QLineEdit::Normal,
-                                               QString(),
-                                               &ok);
+    QString effectName = QInputDialog::getText(this, i18n("Effect name"), i18n("Please enter a name for the filter effect"), QLineEdit::Normal, QString(), &ok);
     if (!ok)
         return;
 
-    FilterEffectResource * resource = FilterEffectResource::fromFilterEffectStack(m_effects);
+    FilterEffectResource *resource = FilterEffectResource::fromFilterEffectStack(m_effects);
     if (!resource)
         return;
 
     resource->setName(effectName);
 
-    FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
-    KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();
+    FilterResourceServerProvider *serverProvider = FilterResourceServerProvider::instance();
+    KoResourceServer<FilterEffectResource> *server = serverProvider->filterEffectServer();
 
     QString savePath = server->saveLocation();
 
@@ -370,11 +366,11 @@ void FilterEffectEditWidget::removeFromPresets()
     if (!presets->count()) {
         return;
     }
-    FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
+    FilterResourceServerProvider *serverProvider = FilterResourceServerProvider::instance();
     if (!serverProvider) {
         return;
     }
-    KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();
+    KoResourceServer<FilterEffectResource> *server = serverProvider->filterEffectServer();
     if (!server) {
         return;
     }
@@ -389,16 +385,16 @@ void FilterEffectEditWidget::removeFromPresets()
 
 void FilterEffectEditWidget::presetSelected(KoResource *resource)
 {
-    FilterEffectResource * effectResource = dynamic_cast<FilterEffectResource*>(resource);
+    FilterEffectResource *effectResource = dynamic_cast<FilterEffectResource *>(resource);
     if (!effectResource)
         return;
 
-    KoFilterEffectStack * filterStack = effectResource->toFilterStack();
+    KoFilterEffectStack *filterStack = effectResource->toFilterStack();
     if (!filterStack)
         return;
 
     if (m_shape) {
-        KUndo2Command * cmd = new FilterStackSetCommand(filterStack, m_shape);
+        KUndo2Command *cmd = new FilterStackSetCommand(filterStack, m_shape);
         if (m_canvas) {
             m_canvas->addCommand(cmd);
         } else {
@@ -417,11 +413,11 @@ void FilterEffectEditWidget::presetSelected(KoResource *resource)
 void FilterEffectEditWidget::addWidgetForItem(ConnectionSource item)
 {
     // get the filter effect from the item
-    KoFilterEffect * filterEffect = item.effect();
+    KoFilterEffect *filterEffect = item.effect();
     if (item.type() != ConnectionSource::Effect)
         filterEffect = 0;
 
-    KoFilterEffect * currentEffect = m_currentItem.effect();
+    KoFilterEffect *currentEffect = m_currentItem.effect();
     if (m_currentItem.type() != ConnectionSource::Effect)
         currentEffect = 0;
 
@@ -435,9 +431,9 @@ void FilterEffectEditWidget::addWidgetForItem(ConnectionSource item)
 
     m_currentItem = item;
 
-    KoFilterEffectConfigWidgetBase * currentPanel = 0;
+    KoFilterEffectConfigWidgetBase *currentPanel = 0;
 
-    if (! filterEffect) {
+    if (!filterEffect) {
         if (item.type() != ConnectionSource::Effect) {
             configStack->insertWidget(0, m_defaultSourceSelector);
             m_defaultSourceSelector->blockSignals(true);
@@ -445,24 +441,24 @@ void FilterEffectEditWidget::addWidgetForItem(ConnectionSource item)
             m_defaultSourceSelector->blockSignals(false);
             m_defaultSourceSelector->show();
         }
-    }  else if (!currentEffect || currentEffect->id() != filterEffect->id()) {
+    } else if (!currentEffect || currentEffect->id() != filterEffect->id()) {
         // when a shape is set and is differs from the previous one
         // get the config widget and insert it into the option widget
 
-        KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
-        KoFilterEffectFactoryBase * factory = registry->value(filterEffect->id());
+        KoFilterEffectRegistry *registry = KoFilterEffectRegistry::instance();
+        KoFilterEffectFactoryBase *factory = registry->value(filterEffect->id());
         if (!factory)
             return;
 
         currentPanel = factory->createConfigWidget();
-        if (! currentPanel)
+        if (!currentPanel)
             return;
 
         configStack->insertWidget(0, currentPanel);
         connect(currentPanel, &KoFilterEffectConfigWidgetBase::filterChanged, this, &FilterEffectEditWidget::filterChanged);
     }
 
-    currentPanel = qobject_cast<KoFilterEffectConfigWidgetBase*>(configStack->widget(0));
+    currentPanel = qobject_cast<KoFilterEffectConfigWidgetBase *>(configStack->widget(0));
     if (currentPanel)
         currentPanel->editFilterEffect(filterEffect);
 }
@@ -488,7 +484,7 @@ void FilterEffectEditWidget::defaultSourceChanged(int index)
     if (m_currentItem.type() == ConnectionSource::Effect)
         return;
 
-    KoFilterEffect * filterEffect = m_currentItem.effect();
+    KoFilterEffect *filterEffect = m_currentItem.effect();
     if (!filterEffect)
         return;
 
@@ -500,14 +496,14 @@ void FilterEffectEditWidget::defaultSourceChanged(int index)
 
     InputChangeData data;
     int inputIndex = 0;
-    foreach(const QString &input, filterEffect->inputs()) {
+    foreach (const QString &input, filterEffect->inputs()) {
         if (input == oldInput || (effectIndex == 0 && oldInput == defInput)) {
             data = InputChangeData(filterEffect, inputIndex, input, newInput);
             break;
         }
         inputIndex++;
     }
-    KUndo2Command * cmd = new FilterInputChangeCommand(data, m_shape);
+    KUndo2Command *cmd = new FilterInputChangeCommand(data, m_shape);
     if (m_canvas && m_shape) {
         m_canvas->addCommand(cmd);
     } else {

@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef KOODF_PARAGRAPH_PROPERTIES_H
 #define KOODF_PARAGRAPH_PROPERTIES_H
 
@@ -13,31 +12,26 @@
 
 #include "koodf2_export.h"
 
-
 class QString;
 class KoXmlStreamReader;
 class KoXmlWriter;
 
-
-struct KoOdfStyleDropCap
-{
+struct KoOdfStyleDropCap {
     AttributeSet attributes;
 };
 
-struct KoOdfStyleTabStop
-{
+struct KoOdfStyleTabStop {
     AttributeSet attributes;
 };
-
 
 class KOODF2_EXPORT KoOdfParagraphProperties : public KoOdfStyleProperties
 {
- public:
+public:
     KoOdfParagraphProperties();
     ~KoOdfParagraphProperties() override;
 
-    KoOdfStyleDropCap         &dropCap();
-    QList<KoOdfStyleTabStop>  &tabStops();
+    KoOdfStyleDropCap &dropCap();
+    QList<KoOdfStyleTabStop> &tabStops();
 
     // Inherited from KoOdfStyleProperties
     void clear() override;
@@ -45,10 +39,9 @@ class KOODF2_EXPORT KoOdfParagraphProperties : public KoOdfStyleProperties
     bool readOdf(KoXmlStreamReader &reader) override;
     bool saveOdf(const QString &propertySet, KoXmlWriter *writer) override;
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif

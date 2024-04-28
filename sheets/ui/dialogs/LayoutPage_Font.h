@@ -19,9 +19,8 @@
 #ifndef CALLIGRA_SHEETS_LAYOUT_PAGE_FONT
 #define CALLIGRA_SHEETS_LAYOUT_PAGE_FONT
 
-#include <QWidget>
 #include "ui_FontWidget.h"
-
+#include <QWidget>
 
 namespace Calligra
 {
@@ -38,24 +37,21 @@ class LayoutPageFont : public QWidget, public Ui::FontWidget
 {
     Q_OBJECT
 public:
-    LayoutPageFont(QWidget* parent);
+    LayoutPageFont(QWidget *parent);
 
-    void apply(Style * style, bool partial);
+    void apply(Style *style, bool partial);
     void loadFrom(const Style &style, bool partial);
 
 private Q_SLOTS:
-    void      display_example();
-    void      slotSetTextColor(const QColor &_color);
+    void display_example();
+    void slotSetTextColor(const QColor &_color);
 
 private:
-
     QString m_family;
     int m_size;
     QColor m_color;
     bool m_colorChanged;
 };
-
-
 
 } // namespace Sheets
 } // namespace Calligra

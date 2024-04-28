@@ -8,9 +8,8 @@
 #ifndef KOPATHPOINTMOVESTRATEGY_H
 #define KOPATHPOINTMOVESTRATEGY_H
 
-#include <QPointF>
 #include "KoInteractionStrategy.h"
-
+#include <QPointF>
 
 class KoPathTool;
 
@@ -35,4 +34,3 @@ private:
 };
 
 #endif /* KOPATHPOINTMOVESTRATEGY_H */
-

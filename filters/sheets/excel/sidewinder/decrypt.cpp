@@ -9,8 +9,11 @@
 
 using namespace Swinder;
 
-RC4Decryption::RC4Decryption(const QByteArray& salt, const QByteArray& encryptedVerifier, const QByteArray& encryptedVerifierHash)
-    : m_salt(salt), m_encryptedVerifier(encryptedVerifier), m_encryptedVerifierHash(encryptedVerifierHash), m_rc4(0)
+RC4Decryption::RC4Decryption(const QByteArray &salt, const QByteArray &encryptedVerifier, const QByteArray &encryptedVerifierHash)
+    : m_salt(salt)
+    , m_encryptedVerifier(encryptedVerifier)
+    , m_encryptedVerifierHash(encryptedVerifierHash)
+    , m_rc4(0)
 {
 }
 
@@ -19,14 +22,14 @@ RC4Decryption::~RC4Decryption()
     delete m_rc4;
 }
 
-static QByteArray md5sum(const QByteArray& data)
+static QByteArray md5sum(const QByteArray &data)
 {
     return QCryptographicHash::hash(data, QCryptographicHash::Md5);
 }
 
-bool RC4Decryption::checkPassword(const QString& password)
+bool RC4Decryption::checkPassword(const QString &password)
 {
-    QByteArray unicodePassword(reinterpret_cast<const char*>(password.utf16()), password.length() * 2); // depends on correct host-byte order
+    QByteArray unicodePassword(reinterpret_cast<const char *>(password.utf16()), password.length() * 2); // depends on correct host-byte order
 
     QByteArray h0 = md5sum(unicodePassword);
     QByteArray trunc = h0.left(5);
@@ -68,24 +71,27 @@ unsigned char RC4Decryption::nextCryptByte()
 
 void RC4Decryption::skipBytes(unsigned count)
 {
-    for (unsigned i = 0; i < count; ++i) nextCryptByte();
+    for (unsigned i = 0; i < count; ++i)
+        nextCryptByte();
 }
 
-void RC4Decryption::decryptBytes(unsigned count, unsigned char* data)
+void RC4Decryption::decryptBytes(unsigned count, unsigned char *data)
 {
     for (unsigned i = 0; i < count; ++i) {
         data[i] ^= nextCryptByte();
     }
 }
 
-RC4::RC4(const QByteArray& passwordHash, unsigned blockNr)
-    : m_i(0), m_j(0)
+RC4::RC4(const QByteArray &passwordHash, unsigned blockNr)
+    : m_i(0)
+    , m_j(0)
 {
     QByteArray key = passwordHash.left(5);
     key.append(blockNr & 0xff).append((blockNr >> 8) & 0xff).append((blockNr >> 16) & 0xff).append((blockNr >> 24) & 0xff);
     key = md5sum(key);
 
-    for (int i = 0; i < 256; i++) m_s[i] = i;
+    for (int i = 0; i < 256; i++)
+        m_s[i] = i;
     for (int i = 0, j = 0; i < 256; i++) {
         j = (j + m_s[i] + key[i % key.length()]) & 0xff;
         qSwap(m_s[i], m_s[j]);
@@ -100,9 +106,10 @@ unsigned char RC4::nextByte()
     return m_s[(m_s[m_i] + m_s[m_j]) & 0xff];
 }
 
-QByteArray RC4::decrypt(const QByteArray& d)
+QByteArray RC4::decrypt(const QByteArray &d)
 {
-    QByteArray r; r.resize(d.size());
+    QByteArray r;
+    r.resize(d.size());
     for (int i = 0; i < d.size(); i++) {
         r[i] = d[i] ^ nextByte();
     }

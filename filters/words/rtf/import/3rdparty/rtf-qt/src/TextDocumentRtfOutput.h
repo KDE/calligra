@@ -11,117 +11,117 @@ class QTextCursor;
 class QTextDocument;
 class QTextImageFormat;
 
+#include "rtfreader_export.h"
 #include <QStack>
 #include <QTextCharFormat>
-#include "rtfreader_export.h"
 namespace RtfReader
 {
-    class Reader;
+class Reader;
 
-    class RTFREADER_EXPORT TextDocumentRtfOutput: public AbstractRtfOutput
-    {
-    public:
-        explicit TextDocumentRtfOutput( QTextDocument *document );
+class RTFREADER_EXPORT TextDocumentRtfOutput : public AbstractRtfOutput
+{
+public:
+    explicit TextDocumentRtfOutput(QTextDocument *document);
 
-        ~TextDocumentRtfOutput() override;
+    ~TextDocumentRtfOutput() override;
 
-        void startGroup() override;
+    void startGroup() override;
 
-        void endGroup() override;
+    void endGroup() override;
 
-        void appendText( const QByteArray &text ) override;
-        void appendText( const QString &text ) override;
+    void appendText(const QByteArray &text) override;
+    void appendText(const QString &text) override;
 
-        void insertPar() override;
+    void insertPar() override;
 
-        void insertTab() override;
+    void insertTab() override;
 
-        void insertLeftQuote() override;
-        void insertRightQuote() override;
-        void insertLeftDoubleQuote() override;
-        void insertRightDoubleQuote() override;
+    void insertLeftQuote() override;
+    void insertRightQuote() override;
+    void insertLeftDoubleQuote() override;
+    void insertRightDoubleQuote() override;
 
-        void insertEnDash() override;
-        void insertEmDash() override;
+    void insertEnDash() override;
+    void insertEmDash() override;
 
-        void insertEnSpace() override;
-        void insertEmSpace() override;
+    void insertEnSpace() override;
+    void insertEmSpace() override;
 
-        void insertBullet() override;
+    void insertBullet() override;
 
-        void setFontItalic( const int value ) override;
+    void setFontItalic(const int value) override;
 
-        void setFontBold( const int value ) override;
+    void setFontBold(const int value) override;
 
-        void setFontUnderline( const int value ) override;
+    void setFontUnderline(const int value) override;
 
-        void setFontStrikeout( const bool value ) override;
+    void setFontStrikeout(const bool value) override;
 
-        void setFontPointSize( const int pointSize ) override;
+    void setFontPointSize(const int pointSize) override;
 
-        void setForegroundColour( const int colourIndex ) override;
-        void setHighlightColour( const int colourIndex ) override;
-        void setParagraphPatternBackgroundColour( const int colourIndex ) override;
+    void setForegroundColour(const int colourIndex) override;
+    void setHighlightColour(const int colourIndex) override;
+    void setParagraphPatternBackgroundColour(const int colourIndex) override;
 
-        void setFont( const int fontIndex ) override;
+    void setFont(const int fontIndex) override;
 
-        void setDefaultFont( const int fontIndex ) override;
+    void setDefaultFont(const int fontIndex) override;
 
-        void setFontSuperscript() override;
-        void setFontSubscript() override;
+    void setFontSuperscript() override;
+    void setFontSubscript() override;
 
-        void setTextDirectionLeftToRight() override;
-        void setTextDirectionRightToLeft() override;
+    void setTextDirectionLeftToRight() override;
+    void setTextDirectionRightToLeft() override;
 
-        void appendToColourTable( const QColor &colour ) override;
+    void appendToColourTable(const QColor &colour) override;
 
-        void insertFontTableEntry( FontTableEntry fontTableEntry, quint32 fontTableIndex ) override;
-        void insertStyleSheetTableEntry( quint32 stylesheetTableIndex, StyleSheetTableEntry stylesheetTableEntry ) override;
+    void insertFontTableEntry(FontTableEntry fontTableEntry, quint32 fontTableIndex) override;
+    void insertStyleSheetTableEntry(quint32 stylesheetTableIndex, StyleSheetTableEntry stylesheetTableEntry) override;
 
-        void resetParagraphFormat() override;
-        void resetCharacterProperties() override;
+    void resetParagraphFormat() override;
+    void resetCharacterProperties() override;
 
-        void setParagraphAlignmentLeft() override;
-        void setParagraphAlignmentCentred() override;
-        void setParagraphAlignmentJustified() override;
-        void setParagraphAlignmentRight() override;
+    void setParagraphAlignmentLeft() override;
+    void setParagraphAlignmentCentred() override;
+    void setParagraphAlignmentJustified() override;
+    void setParagraphAlignmentRight() override;
 
-        void setFirstLineIndent( const int twips ) override;
-        void setLeftIndent( const int twips ) override;
-        void setRightIndent( const int twips ) override;
+    void setFirstLineIndent(const int twips) override;
+    void setLeftIndent(const int twips) override;
+    void setRightIndent(const int twips) override;
 
-        void createImage( const QByteArray &data, const QTextImageFormat &format ) override;
+    void createImage(const QByteArray &data, const QTextImageFormat &format) override;
 
-        void setPageHeight( const int pageHeight ) override;
-        void setPageWidth( const int pageWidth ) override;
+    void setPageHeight(const int pageHeight) override;
+    void setPageWidth(const int pageWidth) override;
 
-        void setSpaceBefore( const int twips ) override;
-        void setSpaceAfter( const int twips ) override;
+    void setSpaceBefore(const int twips) override;
+    void setSpaceAfter(const int twips) override;
 
-    protected:
-        // The text cursor on the document being generated
-        QTextCursor *m_cursor;
+protected:
+    // The text cursor on the document being generated
+    QTextCursor *m_cursor;
 
-        QStack<QTextCharFormat> m_textCharFormatStack;
+    QStack<QTextCharFormat> m_textCharFormatStack;
 
-        QTextBlockFormat m_paragraphFormat;
+    QTextBlockFormat m_paragraphFormat;
 
-        QList<QColor> m_colourTable;
+    QList<QColor> m_colourTable;
 
-        QHash<int, FontTableEntry> m_fontTable;
-        int m_defaultFontIndex;
-        bool m_haveSetFont;
+    QHash<int, FontTableEntry> m_fontTable;
+    int m_defaultFontIndex;
+    bool m_haveSetFont;
 
-        QHash<int, StyleSheetTableEntry> m_stylesheetTable;
+    QHash<int, StyleSheetTableEntry> m_stylesheetTable;
 
-        QTextDocument *m_document;
-        QStringConverter::Encoding m_encoding;
+    QTextDocument *m_document;
+    QStringConverter::Encoding m_encoding;
 
-        /**
-          Convenience routine to convert a size in twips into pixels
-        */
-        qreal pixelsFromTwips( const int twips );
-    };
+    /**
+      Convenience routine to convert a size in twips into pixels
+    */
+    qreal pixelsFromTwips(const int twips);
+};
 }
 
 #endif

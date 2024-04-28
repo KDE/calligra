@@ -17,7 +17,7 @@
 // Qt
 #include <QSharedData>
 
-//TODO: rework this documentation
+// TODO: rework this documentation
 /**
  * @short Base class for C++ objects which represent Rdf at a higher level.
  * @author Ben Martin <ben.martin@kogmbh.com>
@@ -44,7 +44,6 @@ public:
     KoRdfBasicSemanticItem(QObject *parent, const KoDocumentRdf *rdf);
     KoRdfBasicSemanticItem(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it);
     virtual ~KoRdfBasicSemanticItem();
-
 
 protected:
     /**
@@ -157,21 +156,17 @@ private:
      * rounding errors into account for the value you are intending to
      * remove.
      */
-    void updateTriple_remove(const Soprano::LiteralValue &toModify,
-                             const QString &predString,
-                             const Soprano::Node& explicitLinkingSubject);
+    void updateTriple_remove(const Soprano::LiteralValue &toModify, const QString &predString, const Soprano::Node &explicitLinkingSubject);
 
     /**
      * After updateTriple() calls remove() it can set toModify to the
      * new value and call this method to add the new value to the Rdf
      * store.
      */
-    void updateTriple_add(const Soprano::LiteralValue &toModify,
-                          const QString &predString,
-                          const Soprano::Node &explicitLinkingSubject);
+    void updateTriple_add(const Soprano::LiteralValue &toModify, const QString &predString, const Soprano::Node &explicitLinkingSubject);
 
 protected:
-    const KoDocumentRdf *m_rdf;    //< For access to the Rdf model during CRUD operations
+    const KoDocumentRdf *m_rdf; //< For access to the Rdf model during CRUD operations
     Soprano::Node m_context; //< This determines the Rdf/XML file the Rdf is stored in (see context())
 };
 

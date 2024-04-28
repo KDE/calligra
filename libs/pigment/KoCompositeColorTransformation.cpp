@@ -8,16 +8,14 @@
 
 #include <QVector>
 
-
-struct Q_DECL_HIDDEN KoCompositeColorTransformation::Private
-{
-    ~Private() {
+struct Q_DECL_HIDDEN KoCompositeColorTransformation::Private {
+    ~Private()
+    {
         qDeleteAll(transformations);
     }
 
-    QVector<KoColorTransformation*> transformations;
+    QVector<KoColorTransformation *> transformations;
 };
-
 
 KoCompositeColorTransformation::KoCompositeColorTransformation(Mode mode)
     : m_d(new Private)
@@ -39,9 +37,9 @@ void KoCompositeColorTransformation::appendTransform(KoColorTransformation *tran
 
 void KoCompositeColorTransformation::transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
 {
-    QVector<KoColorTransformation*>::const_iterator begin = m_d->transformations.constBegin();
-    QVector<KoColorTransformation*>::const_iterator it = begin;
-    QVector<KoColorTransformation*>::const_iterator end = m_d->transformations.constEnd();
+    QVector<KoColorTransformation *>::const_iterator begin = m_d->transformations.constBegin();
+    QVector<KoColorTransformation *>::const_iterator it = begin;
+    QVector<KoColorTransformation *>::const_iterator end = m_d->transformations.constEnd();
 
     for (; it != end; ++it) {
         if (it == begin) {
@@ -52,7 +50,7 @@ void KoCompositeColorTransformation::transform(const quint8 *src, quint8 *dst, q
     }
 }
 
-KoColorTransformation* KoCompositeColorTransformation::createOptimizedCompositeTransform(const QVector<KoColorTransformation*> transforms)
+KoColorTransformation *KoCompositeColorTransformation::createOptimizedCompositeTransform(const QVector<KoColorTransformation *> transforms)
 {
     KoColorTransformation *finalTransform = 0;
 
@@ -62,9 +60,7 @@ KoColorTransformation* KoCompositeColorTransformation::createOptimizedCompositeT
     }
 
     if (numValidTransforms > 1) {
-        KoCompositeColorTransformation *compositeTransform =
-            new KoCompositeColorTransformation(
-                KoCompositeColorTransformation::INPLACE);
+        KoCompositeColorTransformation *compositeTransform = new KoCompositeColorTransformation(KoCompositeColorTransformation::INPLACE);
 
         foreach (KoColorTransformation *t, transforms) {
             if (t) {

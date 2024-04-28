@@ -7,13 +7,13 @@
 #include "KPrSpaceRotationFromLeftStrategy.h"
 #include "KPrSpaceRotationEffectFactory.h"
 
-#include <QWidget>
-#include <QPainter>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsView>
+#include <QPainter>
+#include <QWidget>
 
 KPrSpaceRotationFromLeftStrategy::KPrSpaceRotationFromLeftStrategy()
-: KPrPageEffectStrategy(KPrSpaceRotationEffectFactory::FromLeft, "spaceRotation", "leftToRight", false, true)
+    : KPrPageEffectStrategy(KPrSpaceRotationEffectFactory::FromLeft, "spaceRotation", "leftToRight", false, true)
 {
 }
 
@@ -39,15 +39,13 @@ void KPrSpaceRotationFromLeftStrategy::next(const KPrPageEffect::Data &data)
     int frame = data.m_timeLine.frameForTime(data.m_currentTime);
     if (frame >= data.m_timeLine.endFrame()) {
         finish(data);
-    }
-    else {
+    } else {
         frame = 180 - frame;
         data.m_oldPageItem->hide();
         data.m_newPageItem->hide();
         if (frame >= 90) {
             data.m_oldPageItem->show();
-        }
-        else {
+        } else {
             data.m_newPageItem->show();
         }
 
@@ -58,8 +56,7 @@ void KPrSpaceRotationFromLeftStrategy::next(const KPrPageEffect::Data &data)
         m_transform.translate(w, h).rotate(degree, Qt::YAxis).translate(-w, -h);
         if (frame >= 90) {
             data.m_oldPageItem->setTransform(m_transform);
-        }
-        else {
+        } else {
             data.m_newPageItem->setTransform(m_transform);
         }
     }

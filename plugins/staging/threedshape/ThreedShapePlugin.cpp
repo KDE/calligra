@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "ThreedShapePlugin.h"
 
@@ -13,23 +12,20 @@
 #include <KPluginFactory>
 
 // Calligra libs
-#include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
+#include <KoToolRegistry.h>
 
 // 3D shape
 #include "ThreedShapeFactory.h"
-//#include "ThreedToolFactory.h"
+// #include "ThreedToolFactory.h"
 
-
-K_PLUGIN_FACTORY_WITH_JSON(ThreedShapePluginFactory, "calligra_shape_threed.json",
-                           registerPlugin<ThreedShapePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(ThreedShapePluginFactory, "calligra_shape_threed.json", registerPlugin<ThreedShapePlugin>();)
 
 ThreedShapePlugin::ThreedShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new ThreedShapeFactory() );
-    //KoToolRegistry::instance()->add( new ThreedToolFactory() );
+    KoShapeRegistry::instance()->add(new ThreedShapeFactory());
+    // KoToolRegistry::instance()->add( new ThreedToolFactory() );
 }
-
 
 #include <ThreedShapePlugin.moc>

@@ -29,13 +29,13 @@ class KPrShapeManagerDisplayMasterStrategy : public KoShapeManagerPaintingStrate
 {
 public:
     /**
-     * 
+     *
      */
-    KPrShapeManagerDisplayMasterStrategy( KoShapeManager * shapeManager, KPrPageSelectStrategyBase * strategy );
+    KPrShapeManagerDisplayMasterStrategy(KoShapeManager *shapeManager, KPrPageSelectStrategyBase *strategy);
     ~KPrShapeManagerDisplayMasterStrategy() override;
 
     /// reimplemented
-    void paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
+    void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
 
 private:
     KPrPageSelectStrategyBase *m_strategy;

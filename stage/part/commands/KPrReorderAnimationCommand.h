@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KPRREORDERANIMATIONCOMMAND_H
 #define KPRREORDERANIMATIONCOMMAND_H
 
@@ -31,14 +30,17 @@ class KPrShapeAnimation;
 class STAGE_EXPORT KPrReorderAnimationCommand : public KUndo2Command
 {
 public:
-    KPrReorderAnimationCommand(KPrShapeAnimations *shapeAnimationsModel, KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation, KUndo2Command *parent = 0);
+    KPrReorderAnimationCommand(KPrShapeAnimations *shapeAnimationsModel,
+                               KPrShapeAnimation *oldAnimation,
+                               KPrShapeAnimation *newAnimation,
+                               KUndo2Command *parent = 0);
 
     ~KPrReorderAnimationCommand() override;
 
     /// redo the command
-    void redo () override;
+    void redo() override;
     /// revert the actions done in redo
-    void undo () override;
+    void undo() override;
 
 private:
     KPrShapeAnimations *m_shapeAnimationsModel;

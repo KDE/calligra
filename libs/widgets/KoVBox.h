@@ -15,7 +15,7 @@ class QChildEvent;
 
 /**
  * A container widget which arranges its children vertically.
- * 
+ *
  * When using a KoVBox you don't need to create a layout nor
  * to add the child widgets to it.
  *
@@ -67,7 +67,6 @@ public:
     QSize minimumSizeHint() const override;
 
 protected:
-
     void childEvent(QChildEvent *ev) override;
 
 private:

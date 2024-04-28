@@ -24,8 +24,8 @@ void KoInputDeviceHandlerRegistry::init()
     config.group = "calligra";
     KoPluginLoader::load(QStringLiteral("calligra/devices"), config);
 
-    foreach(const QString & id, keys()) {
-        KoInputDeviceHandler * d = value(id);
+    foreach (const QString &id, keys()) {
+        KoInputDeviceHandler *d = value(id);
         if (d)
             d->start();
     }
@@ -33,21 +33,21 @@ void KoInputDeviceHandlerRegistry::init()
 
 KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
 {
-    foreach(const QString & id, keys()) {
-        KoInputDeviceHandler * d = value(id);
+    foreach (const QString &id, keys()) {
+        KoInputDeviceHandler *d = value(id);
         if (d) {
             d->stop();
         }
     }
-    foreach(const QString &id, keys()) {
+    foreach (const QString &id, keys()) {
         get(id)->deleteLater();
     }
     // just leak on exit -- we get into trouble for explicitly
     // deleting stuff from static objects, like registries
-    //qDeleteAll(doubleEntries());
+    // qDeleteAll(doubleEntries());
 }
 
-KoInputDeviceHandlerRegistry* KoInputDeviceHandlerRegistry::instance()
+KoInputDeviceHandlerRegistry *KoInputDeviceHandlerRegistry::instance()
 {
     if (!s_instance.exists()) {
         s_instance->init();

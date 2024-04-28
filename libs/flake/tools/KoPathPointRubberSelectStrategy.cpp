@@ -13,16 +13,16 @@
 #include "KoPathToolSelection.h"
 
 KoPathPointRubberSelectStrategy::KoPathPointRubberSelectStrategy(KoPathTool *tool, const QPointF &clicked)
-        : KoShapeRubberSelectStrategy(tool, clicked)
-        , m_tool(tool)
+    : KoShapeRubberSelectStrategy(tool, clicked)
+    , m_tool(tool)
 {
 }
 
 void KoPathPointRubberSelectStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     Q_D(KoShapeRubberSelectStrategy);
-    KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
-    if (! selection)
+    KoPathToolSelection *selection = dynamic_cast<KoPathToolSelection *>(m_tool->selection());
+    if (!selection)
         return;
 
     selection->selectPoints(d->selectedRect(), !(modifiers & Qt::ControlModifier));

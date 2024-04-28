@@ -5,21 +5,21 @@
  */
 #ifndef LINKINSERTDIALOG
 #define LINKINSERTDIALOG
-#include <ui_LinkInsertionDialog.h>
-#include <QDialog>
-#include <qnetworkreply.h>
-#include <qnetworkaccessmanager.h>
-#include <QWidget>
 #include <KoBookmarkManager.h>
-#include <KoTextRangeManager.h>
 #include <KoTextDocument.h>
+#include <KoTextRangeManager.h>
+#include <QDialog>
 #include <QListWidget>
+#include <QWidget>
+#include <qnetworkaccessmanager.h>
+#include <qnetworkreply.h>
+#include <ui_LinkInsertionDialog.h>
 #define FETCH_TIMEOUT 5000
 
 class LinkInsertionDialog : public QDialog
 {
     Q_OBJECT
-public :
+public:
     explicit LinkInsertionDialog(KoTextEditor *editor, QWidget *parent = 0);
     ~LinkInsertionDialog() override;
 
@@ -34,21 +34,21 @@ public Q_SLOTS:
     void updateTitleDownloadProgress(qint64, qint64);
     void fetchTitleTimeout();
     /**
-    * Verifies the text entered in the four line edits : Weblink URL, Weblink text,
-    * Bookmark name and Bookmark text. The "Ok" button is enabled only if the input
-    * is valid. 
-    * @param text is the text to be verified.
-    */
+     * Verifies the text entered in the four line edits : Weblink URL, Weblink text,
+     * Bookmark name and Bookmark text. The "Ok" button is enabled only if the input
+     * is valid.
+     * @param text is the text to be verified.
+     */
     void enableDisableButtons(QString text);
 
     /**
-    * Once all the line edits for a tab have been verified, the OK button is enabled.
-    * If the tab is switched, the validity of OK should be recalculated for the new tab. 
-    * @param text is the current active tab.
-    */
+     * Once all the line edits for a tab have been verified, the OK button is enabled.
+     * If the tab is switched, the validity of OK should be recalculated for the new tab.
+     * @param text is the current active tab.
+     */
     void checkInsertEnableValidity(int);
 
-private :
+private:
     Ui::LinkInsertionDialog dlg;
     KoTextEditor *m_editor;
     const KoBookmarkManager *m_bookmarkManager;
@@ -59,8 +59,8 @@ private :
     QTimer m_timeoutTimer;
     void accept() override;
     void sendRequest();
-    void insertBookmarkLink(const QString &URL, const QString& text);
-    void insertHyperlink(QString &linkURL, const QString& linkText);
+    void insertBookmarkLink(const QString &URL, const QString &text);
+    void insertHyperlink(QString &linkURL, const QString &linkText);
     void displayInlineWarning(const QString &title, QLabel *label) const;
     bool exists(const QString &) const;
 };

@@ -35,14 +35,9 @@ class PreferenceDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    enum {
-        InterfacePage = 2,
-        OpenSavePage = 4,
-        SpellCheckerPage = 8,
-        PluginPage = 16
-    };
+    enum { InterfacePage = 2, OpenSavePage = 4, SpellCheckerPage = 8, PluginPage = 16 };
 
-    explicit PreferenceDialog(View* view);
+    explicit PreferenceDialog(View *view);
     ~PreferenceDialog() override;
 
     void openPage(int flags);
@@ -57,7 +52,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

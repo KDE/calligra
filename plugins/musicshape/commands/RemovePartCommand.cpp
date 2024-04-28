@@ -4,19 +4,19 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "RemovePartCommand.h"
-#include "../core/Sheet.h"
-#include "../core/Part.h"
 #include "../MusicShape.h"
+#include "../core/Part.h"
+#include "../core/Sheet.h"
 
 #include "KLocalizedString"
 
 using namespace MusicCore;
 
-RemovePartCommand::RemovePartCommand(MusicShape* shape, Part* part)
-    : m_sheet(part->sheet()),
-    m_part(part),
-    m_shape(shape),
-    m_partIndex(m_sheet->partIndex(part))
+RemovePartCommand::RemovePartCommand(MusicShape *shape, Part *part)
+    : m_sheet(part->sheet())
+    , m_part(part)
+    , m_shape(shape)
+    , m_partIndex(m_sheet->partIndex(part))
 {
     setText(kundo2_i18n("Remove part"));
 }

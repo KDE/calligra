@@ -14,7 +14,7 @@ class Plugin : public QObject
 {
     Q_OBJECT
 public:
-    Plugin(QObject* parent, const QVariantList&);
+    Plugin(QObject *parent, const QVariantList &);
 };
 
 #endif // PLUGIN_H

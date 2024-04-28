@@ -21,20 +21,24 @@
 
 using namespace wvWare;
 
-ParagraphProperties::ParagraphProperties() : m_listInfo( 0 )
+ParagraphProperties::ParagraphProperties()
+    : m_listInfo(0)
 {
 }
 
-ParagraphProperties::ParagraphProperties( const Word97::PAP& pap ) :
-    m_pap( pap ), m_listInfo( 0 )
+ParagraphProperties::ParagraphProperties(const Word97::PAP &pap)
+    : m_pap(pap)
+    , m_listInfo(0)
 {
 }
 
-ParagraphProperties::ParagraphProperties( const ParagraphProperties& rhs ) :
-    Shared( rhs ), m_pap( rhs.pap() ), m_listInfo( 0 )
+ParagraphProperties::ParagraphProperties(const ParagraphProperties &rhs)
+    : Shared(rhs)
+    , m_pap(rhs.pap())
+    , m_listInfo(0)
 {
-    if ( rhs.listInfo() )
-        m_listInfo = new ListInfo( *rhs.listInfo() );
+    if (rhs.listInfo())
+        m_listInfo = new ListInfo(*rhs.listInfo());
 }
 
 ParagraphProperties::~ParagraphProperties()
@@ -42,30 +46,30 @@ ParagraphProperties::~ParagraphProperties()
     delete m_listInfo;
 }
 
-Word97::PAP& ParagraphProperties::pap()
+Word97::PAP &ParagraphProperties::pap()
 {
     return m_pap;
 }
 
-const Word97::PAP& ParagraphProperties::pap() const
+const Word97::PAP &ParagraphProperties::pap() const
 {
     return m_pap;
 }
 
-const ListInfo* ParagraphProperties::listInfo() const
+const ListInfo *ParagraphProperties::listInfo() const
 {
     return m_listInfo;
 }
 
-void ParagraphProperties::setBulletPictureName(const QString& name)
+void ParagraphProperties::setBulletPictureName(const QString &name)
 {
     m_listInfo->setBulletPictureName(name);
 }
 
-void ParagraphProperties::createListInfo( ListInfoProvider& listInfoProvider, Word97::CHP& chp)
+void ParagraphProperties::createListInfo(ListInfoProvider &listInfoProvider, Word97::CHP &chp)
 {
-    if ( m_listInfo || !listInfoProvider.isValid( m_pap.ilfo, m_pap.nLvlAnm ) ) {
+    if (m_listInfo || !listInfoProvider.isValid(m_pap.ilfo, m_pap.nLvlAnm)) {
         return;
     }
-    m_listInfo = new ListInfo( m_pap, chp, listInfoProvider );
+    m_listInfo = new ListInfo(m_pap, chp, listInfoProvider);
 }

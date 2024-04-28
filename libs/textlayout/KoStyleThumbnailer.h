@@ -57,9 +57,9 @@ public:
      * The created thumbnail is cached.
      */
     QImage thumbnail(KoParagraphStyle *style,
-                     const QSize &size = QSize(), bool recreateThumbnail = false,
-                     KoStyleThumbnailerFlags flags =
-                          KoStyleThumbnailerFlags(CenterAlignThumbnail | UseStyleNameText | ScaleThumbnailFont));
+                     const QSize &size = QSize(),
+                     bool recreateThumbnail = false,
+                     KoStyleThumbnailerFlags flags = KoStyleThumbnailerFlags(CenterAlignThumbnail | UseStyleNameText | ScaleThumbnailFont));
 
     /**
      * @returns a thumbnail representing the @param characterStyle applied on the given @param paragraphStyle, constrained into the @param size.
@@ -69,10 +69,11 @@ public:
      * If @param recreateThumbnail is true, do not return the cached thumbnail if it exist, but recreate a new one.
      * The created thumbnail is cached.
      */
-    QImage thumbnail(KoCharacterStyle *characterStyle, KoParagraphStyle *paragraphStyle = 0,
-                     const QSize &size = QSize(), bool recreateThumbnail = false,
-                     KoStyleThumbnailerFlags flags =
-                          KoStyleThumbnailerFlags(CenterAlignThumbnail | UseStyleNameText | ScaleThumbnailFont));
+    QImage thumbnail(KoCharacterStyle *characterStyle,
+                     KoParagraphStyle *paragraphStyle = 0,
+                     const QSize &size = QSize(),
+                     bool recreateThumbnail = false,
+                     KoStyleThumbnailerFlags flags = KoStyleThumbnailerFlags(CenterAlignThumbnail | UseStyleNameText | ScaleThumbnailFont));
 
     /**
      * Sets the size of the thumbnails returned by the @fn thumbnail with no size arguments.
@@ -101,7 +102,7 @@ private:
     void removeFromCache(const QString &expr);
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

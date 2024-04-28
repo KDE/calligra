@@ -9,9 +9,8 @@
 
 #include <KoBorder.h>
 
-#include "koodf2_export.h"
 #include "KoStyle.h"
-
+#include "koodf2_export.h"
 
 /**
  * \class KoCellStyle
@@ -28,9 +27,9 @@ public:
 
     ~KoCellStyle() override;
 
-    KoBorder* borders();
+    KoBorder *borders();
 
-    void setBackgroundColor(const QColor& color);
+    void setBackgroundColor(const QColor &color);
     QColor backgroundColor() const;
 
     void setBackgroundOpacity(qreal opacity);
@@ -49,24 +48,24 @@ public:
     void setBottomPadding(qreal padding);
 
     QString verticalAlign() const;
-    void setVerticalAlign(const QString& align);
+    void setVerticalAlign(const QString &align);
 
     bool glyphOrientation() const;
     void setGlyphOrientation(bool orientation);
 
-    void setTextStyle(const KoGenStyle& style);
-    void setParagraphStyle(const KoGenStyle& style);
+    void setTextStyle(const KoGenStyle &style);
+    void setParagraphStyle(const KoGenStyle &style);
     KoGenStyle styleProperties() const;
 
 protected:
-    void prepareStyle( KoGenStyle& style ) const override;
+    void prepareStyle(KoGenStyle &style) const override;
     QString defaultPrefix() const override;
     KoGenStyle::Type styleType() const override;
     KoGenStyle::Type automaticstyleType() const override;
-    const char* styleFamilyName() const override;
+    const char *styleFamilyName() const override;
 
 private:
-    KoBorder* m_borders;
+    KoBorder *m_borders;
     QColor m_backgroundColor;
     qreal m_backgroundOpacity;
 

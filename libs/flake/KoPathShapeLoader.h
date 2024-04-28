@@ -31,7 +31,7 @@ public:
     void parseSvg(const QString &svgInputData, bool process = false);
 
 private:
-    KoPathShapeLoaderPrivate* const d;
+    KoPathShapeLoaderPrivate *const d;
 };
 
 #endif // _KOPATHSHAPELOADER_H_

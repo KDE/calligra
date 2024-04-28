@@ -13,7 +13,6 @@
 // KoChart
 #include "kochart_global.h"
 
-
 #if 0
 namespace KChart
 {
@@ -22,7 +21,6 @@ class AbstractDiagram;
 class Chart;
 }
 #endif
-
 
 namespace KoChart
 {
@@ -36,7 +34,7 @@ public:
     /**
      * Constructor.
      */
-    AxisCommand(Axis* axis, ChartShape* chart);
+    AxisCommand(Axis *axis, ChartShape *chart);
 
     /**
      * Destructor.
@@ -63,7 +61,7 @@ public:
     void setAxisSubStepWidth(qreal width);
     void setAxisUseAutomaticStepWidth(bool automatic);
     void setAxisUseAutomaticSubStepWidth(bool automatic);
-    void setAxisLabelsFont(const QFont& font);
+    void setAxisLabelsFont(const QFont &font);
     void setAxisPosition(const QString &pos);
     void setAxisLabelsPosition(const QString &pos);
 

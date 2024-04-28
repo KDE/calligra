@@ -14,7 +14,8 @@ class KoFontFacePrivate : public QSharedData
 {
 public:
     KoFontFacePrivate(const QString &_name)
-    : name(_name), pitch(KoFontFace::VariablePitch)
+        : name(_name)
+        , pitch(KoFontFace::VariablePitch)
     {
     }
 
@@ -22,7 +23,7 @@ public:
     {
     }
 
-    void saveOdf(KoXmlWriter* xmlWriter) const
+    void saveOdf(KoXmlWriter *xmlWriter) const
     {
         xmlWriter->startElement("style:font-face");
         xmlWriter->addAttribute("style:name", name);
@@ -35,21 +36,20 @@ public:
         xmlWriter->endElement(); // style:font-face
     }
 
-    QString name;            //!< for style:name attribute
-    QString family;          //!< for svg:font-family attribute
-    QString familyGeneric;   //!< for style:font-family-generic attribute
-    QString style;           //!< for svg:font-style attribute
+    QString name; //!< for style:name attribute
+    QString family; //!< for svg:font-family attribute
+    QString familyGeneric; //!< for style:font-family-generic attribute
+    QString style; //!< for svg:font-style attribute
     KoFontFace::Pitch pitch; //!< for style:font-pitch attribute
 };
 
-
 KoFontFace::KoFontFace(const QString &_name)
- : d(new KoFontFacePrivate(_name))
+    : d(new KoFontFacePrivate(_name))
 {
 }
 
 KoFontFace::KoFontFace(const KoFontFace &other)
- : d(other.d)
+    : d(other.d)
 {
 }
 
@@ -102,9 +102,8 @@ QString KoFontFace::familyGeneric() const
 
 void KoFontFace::setFamilyGeneric(const QString &familyGeneric)
 {
-    if (familyGeneric == "decorative" || familyGeneric == "modern"
-            || familyGeneric == "roman" || familyGeneric == "script"
-            || familyGeneric == "swiss" || familyGeneric == "system") {
+    if (familyGeneric == "decorative" || familyGeneric == "modern" || familyGeneric == "roman" || familyGeneric == "script" || familyGeneric == "swiss"
+        || familyGeneric == "system") {
         d->familyGeneric = familyGeneric;
     }
 }
@@ -129,7 +128,7 @@ void KoFontFace::setPitch(KoFontFace::Pitch pitch)
     d->pitch = pitch;
 }
 
-void KoFontFace::saveOdf(KoXmlWriter* xmlWriter) const
+void KoFontFace::saveOdf(KoXmlWriter *xmlWriter) const
 {
     Q_ASSERT(!isNull());
     if (isNull()) {

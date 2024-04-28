@@ -9,25 +9,24 @@
 #include "MusicShape.h"
 #include "MusicTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
-
+#include <KoIcon.h>
 
 MusicToolFactory::MusicToolFactory()
     : KoToolFactoryBase("MusicToolFactoryId")
 {
-    setToolTip( i18n( "Music editing, parts" ) );
+    setToolTip(i18n("Music editing, parts"));
     setIconName(koIconName("musicshape"));
-    setToolType( dynamicToolType() );
-    setPriority( 2 );
-    setActivationShapeId( MusicShapeId );
+    setToolType(dynamicToolType());
+    setPriority(2);
+    setActivationShapeId(MusicShapeId);
 }
 
 MusicToolFactory::~MusicToolFactory()
 {
 }
 
-KoToolBase* MusicToolFactory::createTool( KoCanvasBase* canvas )
+KoToolBase *MusicToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new MusicTool( canvas );
+    return new MusicTool(canvas);
 }

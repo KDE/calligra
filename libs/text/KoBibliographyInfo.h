@@ -6,18 +6,23 @@
 #ifndef KOBIBLIOGRAPHYINFO_H
 #define KOBIBLIOGRAPHYINFO_H
 
+#include "ToCBibGeneratorInfo.h"
 #include "kotext_export.h"
 #include <KoXmlReaderForward.h>
-#include "ToCBibGeneratorInfo.h"
 
 class KoTextSharedLoadingData;
 class KoXmlWriter;
 
-class KOTEXT_EXPORT BibliographyGeneratorInterface {
+class KOTEXT_EXPORT BibliographyGeneratorInterface
+{
 public:
-    BibliographyGeneratorInterface() {}
-    virtual ~BibliographyGeneratorInterface() {}
-    //virtual void setMaxTabPosition(qreal maxTabPosition) = 0;
+    BibliographyGeneratorInterface()
+    {
+    }
+    virtual ~BibliographyGeneratorInterface()
+    {
+    }
+    // virtual void setMaxTabPosition(qreal maxTabPosition) = 0;
 };
 
 class KOTEXT_EXPORT KoBibliographyInfo

@@ -27,18 +27,18 @@ class LinkDialog : public ActionDialog
 {
     Q_OBJECT
 public:
-    explicit LinkDialog(QWidget* parent, const QList<QString> &links);
+    explicit LinkDialog(QWidget *parent, const QList<QString> &links);
     ~LinkDialog() override;
 
     QString text() const;
     QString link() const;
 
 Q_SIGNALS:
-    void applyLink(const QString& text, const QString& link);
+    void applyLink(const QString &text, const QString &link);
 
 public Q_SLOTS:
-    void setText(const QString& text);
-    void setLink(const QString& link);
+    void setText(const QString &text);
+    void setLink(const QString &link);
 
 protected:
     virtual void onApply() override;
@@ -47,7 +47,7 @@ private:
     Q_DISABLE_COPY(LinkDialog)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

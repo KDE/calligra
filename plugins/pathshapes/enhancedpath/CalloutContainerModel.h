@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2018 Dag Andersen <danders@get2net.dk>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -10,8 +10,8 @@
 #include "KoShapeContainerDefaultModel.h"
 
 #include <QHash>
-#include <QSizeF>
 #include <QPointF>
+#include <QSizeF>
 #include <QTransform>
 
 class KoShapeContainer;
@@ -41,7 +41,7 @@ private:
     QSizeF m_prevSize;
     QPointF m_prevPosition;
     bool m_resizing;
-    QHash<KoShape*, bool> m_ignore;
+    QHash<KoShape *, bool> m_ignore;
 };
 
 #endif /* CALLOUTCONTAINERMODEL_H */

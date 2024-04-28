@@ -10,10 +10,9 @@
 
 #include <KPluginFactory>
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligrastagetoolanimation.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligrastagetoolanimation.json", registerPlugin<Plugin>();)
 
-Plugin::Plugin(QObject * parent, const QVariantList &)
+Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new KPrAnimationToolFactory());

@@ -21,9 +21,9 @@
 
 #include <QWidget>
 
-#include "engine/Value.h"
-#include "engine/Format.h"
 #include "core/Currency.h"
+#include "engine/Format.h"
+#include "engine/Value.h"
 
 class KComboBox;
 class KLineEdit;
@@ -31,7 +31,6 @@ class QLabel;
 class QListWidget;
 class QRadioButton;
 class QSpinBox;
-
 
 namespace Calligra
 {
@@ -42,7 +41,6 @@ class Style;
 class Localization;
 class ValueFormatter;
 
-
 /**
  * \ingroup UI
  * Dialog page to select the value formatting.
@@ -52,7 +50,7 @@ class LayoutPageFloat : public QWidget
     Q_OBJECT
 public:
     LayoutPageFloat(QWidget *parent, Localization *locale, ValueFormatter *formatter);
-    void apply(Style * style, bool partial);
+    void apply(Style *style, bool partial);
     void loadFrom(const Style &style, bool partial);
 
 public Q_SLOTS:
@@ -65,21 +63,20 @@ public Q_SLOTS:
     void slotChangeValue(int);
     void formatChanged(int);
     void currencyChanged(const QString &);
-protected:
 
+protected:
     /**
      * Draws a pixmap showing a text consisting of two parts, @p _string1 and @p _string2 .
      * The parts' colors are given by @p _color1 and @p _color2 .
      */
-    QPixmap paintFormatPixmap(const char *_string1, const QColor & _color1,
-                               const char *_string2, const QColor & _color2);
+    QPixmap paintFormatPixmap(const char *_string1, const QColor &_color1, const char *_string2, const QColor &_color2);
 
-    KLineEdit* postfix;
-    QSpinBox* precision;
-    KLineEdit* prefix;
+    KLineEdit *postfix;
+    QSpinBox *precision;
+    KLineEdit *prefix;
     KComboBox *format;
     KComboBox *currency;
-    QLabel    *currencyLabel;
+    QLabel *currencyLabel;
     QRadioButton *generic;
     QRadioButton *number;
     QRadioButton *percent;
@@ -91,8 +88,8 @@ protected:
     QRadioButton *time;
     QRadioButton *textFormat;
     QRadioButton *customFormat;
-    QListWidget  *listFormat;
-    KLineEdit* customFormatEdit;
+    QListWidget *listFormat;
+    KLineEdit *customFormatEdit;
     QLabel *exampleLabel;
     Format::Type cellFormatType, newFormatType;
     int cellFormatColor;
@@ -105,14 +102,12 @@ protected:
     Currency m_currency;
     QList<QString> m_currencies;
 
-    QPixmap* formatOnlyNegSignedPixmap;
-    QPixmap* formatRedOnlyNegSignedPixmap;
-    QPixmap* formatRedNeverSignedPixmap;
-    QPixmap* formatAlwaysSignedPixmap;
-    QPixmap* formatRedAlwaysSignedPixmap;
+    QPixmap *formatOnlyNegSignedPixmap;
+    QPixmap *formatRedOnlyNegSignedPixmap;
+    QPixmap *formatRedNeverSignedPixmap;
+    QPixmap *formatAlwaysSignedPixmap;
+    QPixmap *formatRedAlwaysSignedPixmap;
 };
-
-
 
 } // namespace Sheets
 } // namespace Calligra

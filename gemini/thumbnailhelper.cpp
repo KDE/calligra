@@ -5,17 +5,17 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#include <QFile>
-#include <QDir>
-#include <QProcessEnvironment>
-#include <QDebug>
-#include <QTimer>
-#include <QCommandLineParser>
 #include <QApplication>
+#include <QCommandLineParser>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QProcessEnvironment>
+#include <QTimer>
 
 #include <KAboutData>
-#include <KLocalizedString>
 #include <KCrash>
+#include <KLocalizedString>
 
 #include <calligraversion.h>
 
@@ -25,10 +25,10 @@
 #include <windows.h>
 #endif
 
-int main( int argc, char** argv )
+int main(int argc, char **argv)
 {
 #ifdef Q_OS_WIN
-    SetErrorMode(SEM_NOGPFAULTERRORBOX); 
+    SetErrorMode(SEM_NOGPFAULTERRORBOX);
 #endif
 
     // needed as kdelibs4support linking plugins seem to inject activated drkonqi
@@ -71,10 +71,10 @@ int main( int argc, char** argv )
     if (!env.contains("XDG_DATA_DIRS")) {
         _putenv_s("XDG_DATA_DIRS", QString(appdir.absolutePath() + "/share").toLocal8Bit());
     }
-    _putenv_s("PATH", QString(appdir.absolutePath() + "/bin" + ";"
-              + appdir.absolutePath() + "/lib" + ";"
-              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
-              + appdir.absolutePath()).toLocal8Bit());
+    _putenv_s("PATH",
+              QString(appdir.absolutePath() + "/bin" + ";" + appdir.absolutePath() + "/lib" + ";" + appdir.absolutePath() + "/lib" + "/kde4" + ";"
+                      + appdir.absolutePath())
+                  .toLocal8Bit());
 
     app.addLibraryPath(appdir.absolutePath());
     app.addLibraryPath(appdir.absolutePath() + "/bin");
@@ -87,13 +87,11 @@ int main( int argc, char** argv )
     // Only create the thunbnail if:
     // 1) The infile exists and
     // 2) The outfile does /not/ exist
-    if(!QFile::exists(inFile)) {
+    if (!QFile::exists(inFile)) {
         qDebug() << "The document you are attempting to create a thumbnail of does not exist on disk:" << inFile;
-    }
-    else if(QFile::exists(outFile)) {
+    } else if (QFile::exists(outFile)) {
         qDebug() << "The thumbnail file you are asking to have used already exists on disk. We will refuse to overwrite it." << outFile;
-    }
-    else {
+    } else {
         ThumbnailHelperImpl helper;
         helper.convert(inFile, outFile, parser.value("width").toInt(), parser.value("height").toInt());
     }

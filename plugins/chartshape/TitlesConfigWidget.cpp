@@ -15,8 +15,6 @@
 
 using namespace KoChart;
 
-
-
 TitlesConfigWidget::TitlesConfigWidget()
 {
     setObjectName("TitlesConfigWdget");
@@ -45,6 +43,3 @@ void TitlesConfigWidget::updateData()
 
     blockSignals(false);
 }
-
-
-

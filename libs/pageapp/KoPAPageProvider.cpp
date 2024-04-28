@@ -9,8 +9,8 @@
 #include "KoPATextPage.h"
 
 KoPAPageProvider::KoPAPageProvider()
-: m_pageNumber(0)
-, m_page(0)
+    : m_pageNumber(0)
+    , m_page(0)
 {
 }
 
@@ -18,13 +18,13 @@ KoPAPageProvider::~KoPAPageProvider()
 {
 }
 
-KoTextPage * KoPAPageProvider::page(KoShape * shape)
+KoTextPage *KoPAPageProvider::page(KoShape *shape)
 {
     Q_UNUSED(shape);
     return new KoPATextPage(m_pageNumber, m_page);
 }
 
-void KoPAPageProvider::setPageData( int pageNumber, KoPAPageBase *page )
+void KoPAPageProvider::setPageData(int pageNumber, KoPAPageBase *page)
 {
     m_pageNumber = pageNumber;
     m_page = page;

@@ -10,13 +10,11 @@
 
 #include "dialogs/DatabaseDialog.h"
 
-#include <QAction>
 #include <KLocalizedString>
 #include <KMessageBox>
-
+#include <QAction>
 
 using namespace Calligra::Sheets;
-
 
 InsertFromDatabase::InsertFromDatabase(Actions *actions)
     : DialogCellAction(actions, "insertFromDatabase", i18n("From &Database..."), koIcon("network-server-database"), i18n("Insert data from a SQL database"))
@@ -28,7 +26,8 @@ InsertFromDatabase::~InsertFromDatabase()
 {
 }
 
-QAction *InsertFromDatabase::createAction() {
+QAction *InsertFromDatabase::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Database"));
     return res;
@@ -44,13 +43,12 @@ void InsertFromDatabase::execute(Selection *selection, Sheet *sheet, QWidget *ca
 #ifndef QT_NO_SQL
     QStringList str = QSqlDatabase::drivers();
     if (str.isEmpty()) {
-        KMessageBox::error(canvasWidget, i18n("No database drivers available. To use this feature you need "
-                           "to install the necessary Qt database drivers."));
+        KMessageBox::error(canvasWidget,
+                           i18n("No database drivers available. To use this feature you need "
+                                "to install the necessary Qt database drivers."));
         return;
     }
 
     DialogCellAction::execute(selection, sheet, canvasWidget);
 #endif
 }
-
-

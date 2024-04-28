@@ -7,11 +7,10 @@
 #ifndef __rdf_KoSopranoTableModelDelegate_h__
 #define __rdf_KoSopranoTableModelDelegate_h__
 
-
 #include <QItemDelegate>
+#include <QModelIndex>
 #include <QStyledItemDelegate>
 #include <QWidget>
-#include <QModelIndex>
 
 /**
  * @short The Object-Type column really needs to be restricted to only URI, Literal etc.
@@ -22,11 +21,9 @@ class KoSopranoTableModelDelegate : public QStyledItemDelegate
     Q_OBJECT
 public:
     explicit KoSopranoTableModelDelegate(QObject *parent);
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-                          const QModelIndex &index) const;
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void setEditorData(QWidget *editor, const QModelIndex &index) const;
-    void setModelData(QWidget *editor, QAbstractItemModel *model,
-                      const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 
 private Q_SLOTS:
     void emitCommitData();

@@ -13,12 +13,16 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN Number::Private : public QSharedData
 {
 public:
-    Private() {
+    Private()
+    {
         type = Number::Float;
         f = 0;
     }
 
-    Private(const Private &o) : QSharedData(o), type(o.type) {
+    Private(const Private &o)
+        : QSharedData(o)
+        , type(o.type)
+    {
         switch (type) {
         case Number::Float:
             f = o.f;
@@ -33,12 +37,15 @@ public:
     };
 
     // static empty data to be shared
-    static Private* null() {
-        if (!s_null) s_null = new Private; return s_null;
+    static Private *null()
+    {
+        if (!s_null)
+            s_null = new Private;
+        return s_null;
     }
 
 private:
-    void operator=(const Number::Private& o);
+    void operator=(const Number::Private &o);
     static Private *s_null;
 };
 
@@ -47,28 +54,28 @@ Number::Private *Number::Private::s_null = 0;
 // constructors
 
 Number::Number()
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = Number::Float;
     d->f = 0.0;
 }
 
 Number::Number(int num)
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = Number::Float;
-    d->f = (long double) num;
+    d->f = (long double)num;
 }
 
 Number::Number(long double num)
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = Number::Float;
     d->f = num;
 }
 
-Number::Number(const Number& n)
-        : d(n.d)
+Number::Number(const Number &n)
+    : d(n.d)
 {
 }
 
@@ -79,12 +86,11 @@ Number::~Number()
 }
 
 // set/get
-Number& Number::operator= (const Number & n)
+Number &Number::operator=(const Number &n)
 {
     d = n.d;
     return *this;
 }
-
 
 long double Number::asFloat() const
 {
@@ -92,12 +98,12 @@ long double Number::asFloat() const
 }
 
 // basic operations
-Number Number::operator+ (const Number &n) const
+Number Number::operator+(const Number &n) const
 {
     return Number(d->f + n.d->f);
 }
 
-Number Number::operator- (const Number &n) const
+Number Number::operator-(const Number &n) const
 {
     return Number(d->f - n.d->f);
 }
@@ -107,48 +113,48 @@ Number Number::operator*(const Number &n) const
     return Number(d->f * n.d->f);
 }
 
-Number Number::operator/ (const Number &n) const
+Number Number::operator/(const Number &n) const
 {
     return Number(d->f / n.d->f);
 }
 
-void Number::operator+= (const Number & n)
+void Number::operator+=(const Number &n)
 {
     d->f += n.d->f;
 }
 
-void Number::operator-= (const Number & n)
+void Number::operator-=(const Number &n)
 {
     d->f -= n.d->f;
 }
 
-void Number::operator*= (const Number & n)
+void Number::operator*=(const Number &n)
 {
     d->f *= n.d->f;
 }
 
-void Number::operator/= (const Number & n)
+void Number::operator/=(const Number &n)
 {
     d->f /= n.d->f;
 }
 
-Number Number::operator- () const
+Number Number::operator-() const
 {
     return -(d->f);
 }
 
 // comparison
-bool Number::operator<= (const Number &n) const
+bool Number::operator<=(const Number &n) const
 {
     return (d->f <= n.d->f);
 }
 
-bool Number::operator< (const Number &n) const
+bool Number::operator<(const Number &n) const
 {
     return (d->f < n.d->f);
 }
 
-bool Number::operator== (const Number &n) const
+bool Number::operator==(const Number &n) const
 {
     return (d->f == n.d->f);
 }
@@ -230,7 +236,6 @@ Number Number::atan2(const Number &y, const Number &x)
     return Number(::atan2(y.d->f, x.d->f));
 }
 
-
 // hyperbolic functions
 Number Number::sinh() const
 {
@@ -276,11 +281,11 @@ long double numToDouble(Number n)
 
 // external operators, so that we can do things like 4+a without having to create temporary objects
 // not provided for complex numbers, as we won't be using them often like that
-Number operator+ (long double n1, const Number &n2)
+Number operator+(long double n1, const Number &n2)
 {
     return n2 + n1;
 }
-Number operator- (long double n1, const Number &n2)
+Number operator-(long double n1, const Number &n2)
 {
     return (n2 - n1).neg();
 }
@@ -288,31 +293,31 @@ Number operator*(long double n1, const Number &n2)
 {
     return n2 * n1;
 }
-Number operator/ (long double n1, const Number &n2)
+Number operator/(long double n1, const Number &n2)
 {
     return Number(n1) / n2; /* TODO optimize perhaps */
 }
-bool operator<= (long double n1, const Number &n2)
+bool operator<=(long double n1, const Number &n2)
 {
     return (n2 >= n1);
 }
-bool operator< (long double n1, const Number &n2)
+bool operator<(long double n1, const Number &n2)
 {
     return (n2 > n1);
 }
-bool operator== (long double n1, const Number &n2)
+bool operator==(long double n1, const Number &n2)
 {
     return (n2 == n1);
 }
-bool operator!= (long double n1, const Number &n2)
+bool operator!=(long double n1, const Number &n2)
 {
     return (n2 != n1);
 }
-bool operator>= (long double n1, const Number &n2)
+bool operator>=(long double n1, const Number &n2)
 {
     return (n2 <= n1);
 }
-bool operator> (long double n1, const Number &n2)
+bool operator>(long double n1, const Number &n2)
 {
     return (n2 < n1);
 }

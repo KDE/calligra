@@ -25,12 +25,10 @@ Value func_or(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_true(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_xor(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadlogicmodule.json", LogicModule)
 
-
-LogicModule::LogicModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+LogicModule::LogicModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
@@ -79,15 +77,13 @@ QString LogicModule::descriptionFileName() const
     return QString("logic.xml");
 }
 
-
 // helper for most logical functions
-static bool asBool(Value val, ValueCalc *calc, bool* ok = 0)
+static bool asBool(Value val, ValueCalc *calc, bool *ok = 0)
 {
     return calc->conv()->asBoolean(val, ok).asBoolean();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-
 
 //
 // ArrayWalker: AND
@@ -98,7 +94,6 @@ void awAnd(ValueCalc *calc, Value &res, Value value, Value)
         res = Value(asBool(value, calc));
 }
 
-
 //
 // ArrayWalker: OR
 //
@@ -107,7 +102,6 @@ void awOr(ValueCalc *calc, Value &res, Value value, Value)
     if (!res.asBoolean())
         res = Value(asBool(value, calc));
 }
-
 
 //
 // ArrayWalker: XOR
@@ -119,7 +113,6 @@ void awXor(ValueCalc *calc, Value &count, Value value, Value)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-
 
 //
 // Function: AND
@@ -134,14 +127,13 @@ Value func_and(valVector args, ValueCalc *calc, FuncExtra *)
     }
     for (int i = 0; i < cnt; ++i) {
         calc->arrayWalk(args[i], result, awAnd, Value(0));
-        if (! result.asBoolean())
+        if (!result.asBoolean())
             // if any value is false, return false
             return result;
     }
     // nothing is false -> return true
     return result;
 }
-
 
 //
 // Function: FALSE
@@ -150,7 +142,6 @@ Value func_false(valVector, ValueCalc *, FuncExtra *)
 {
     return Value(false);
 }
-
 
 //
 // Function: IF
@@ -178,7 +169,6 @@ Value func_if(valVector args, ValueCalc *calc, FuncExtra *)
     }
 }
 
-
 //
 // Function: IFERROR
 //
@@ -188,7 +178,6 @@ Value func_iferror(valVector args, ValueCalc *, FuncExtra *)
         return args[1];
     return args[0];
 }
-
 
 //
 // Function: IFNA
@@ -200,16 +189,14 @@ Value func_ifna(valVector args, ValueCalc *, FuncExtra *)
     return args[0];
 }
 
-
 //
 // Function: NAND
 //
 Value func_nand(valVector args, ValueCalc *calc, FuncExtra *extra)
 {
     // AND in reverse
-    return Value(! func_and(args, calc, extra).asBoolean());
+    return Value(!func_and(args, calc, extra).asBoolean());
 }
-
 
 //
 // Function: NOR
@@ -217,9 +204,8 @@ Value func_nand(valVector args, ValueCalc *calc, FuncExtra *extra)
 Value func_nor(valVector args, ValueCalc *calc, FuncExtra *extra)
 {
     // OR in reverse
-    return Value(! func_or(args, calc, extra).asBoolean());
+    return Value(!func_or(args, calc, extra).asBoolean());
 }
-
 
 //
 // Function: NOT
@@ -231,10 +217,10 @@ Value func_not(valVector args, ValueCalc *calc, FuncExtra *)
 
     bool ok = true;
     bool val = !asBool(args[0], calc, &ok);
-    if (!ok) return Value::errorVALUE();
+    if (!ok)
+        return Value::errorVALUE();
     return Value(val);
 }
-
 
 //
 // Function: OR
@@ -257,7 +243,6 @@ Value func_or(valVector args, ValueCalc *calc, FuncExtra *)
     return result;
 }
 
-
 //
 // Function: TRUE
 //
@@ -265,7 +250,6 @@ Value func_true(valVector, ValueCalc *, FuncExtra *)
 {
     return Value(true);
 }
-
 
 //
 // Function: XOR

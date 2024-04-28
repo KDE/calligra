@@ -12,8 +12,8 @@
 #ifndef MSOOXMLTHEMESREADER_H
 #define MSOOXMLTHEMESREADER_H
 
-#include <QHash>
 #include <QColor>
+#include <QHash>
 #include <QMap>
 
 #include <KoGenStyles.h>
@@ -29,12 +29,14 @@ namespace MSOOXML
 class KOMSOOXML_EXPORT MsooXmlThemesReaderContext : public MsooXmlReaderContext
 {
 public:
-    MsooXmlThemesReaderContext(DrawingMLTheme& t, MSOOXML::MsooXmlRelationships* rel,
-			       MSOOXML::MsooXmlImport* imp,
-			       const QString &pathName, const QString &fileName);
-    DrawingMLTheme * const theme;
+    MsooXmlThemesReaderContext(DrawingMLTheme &t,
+                               MSOOXML::MsooXmlRelationships *rel,
+                               MSOOXML::MsooXmlImport *imp,
+                               const QString &pathName,
+                               const QString &fileName);
+    DrawingMLTheme *const theme;
     MSOOXML::MsooXmlRelationships *relationships;
-    MSOOXML::MsooXmlImport        *import;
+    MSOOXML::MsooXmlImport *import;
     QString path;
     QString file;
 };
@@ -52,7 +54,7 @@ public:
     ~MsooXmlThemesReader() override;
 
     //! Reads/parses the file. The output goes mainly to KoGenStyles* KoOdfWriters::mainStyles
-    KoFilter::ConversionStatus read(MsooXmlReaderContext* context = 0) override;
+    KoFilter::ConversionStatus read(MsooXmlReaderContext *context = 0) override;
 
 protected:
     KoFilter::ConversionStatus readInternal();
@@ -66,13 +68,13 @@ protected:
 
     KoFilter::ConversionStatus read_clrScheme();
     KoFilter::ConversionStatus read_color(); //!< helper
-    DrawingMLColorSchemeItemBase* m_currentColor_local; //!< used by *Clr()
+    DrawingMLColorSchemeItemBase *m_currentColor_local; //!< used by *Clr()
 
     KoFilter::ConversionStatus read_fmtScheme();
     KoFilter::ConversionStatus read_fontScheme();
     KoFilter::ConversionStatus read_clrMap();
 
-    KoFilter::ConversionStatus fillStyleReadHelper(int& index);
+    KoFilter::ConversionStatus fillStyleReadHelper(int &index);
     KoFilter::ConversionStatus read_bgFillStyleLst();
     KoFilter::ConversionStatus read_fillStyleLst();
     KoFilter::ConversionStatus read_majorFont();
@@ -91,20 +93,20 @@ protected:
 private:
     void init();
 
-    MsooXmlThemesReaderContext* m_context;
+    MsooXmlThemesReaderContext *m_context;
 
-    typedef KoFilter::ConversionStatus(MsooXmlThemesReader::*ReadMethod)();
+    typedef KoFilter::ConversionStatus (MsooXmlThemesReader::*ReadMethod)();
     QHash<QString, ReadMethod> m_readMethods;
     QHash<QString, QString> m_colorSchemeIndices;
     bool m_clrScheme_initialized;
     bool m_color_initialized;
 
-    MSOOXML::MsooXmlRelationships* m_relationships;
-    MSOOXML::MsooXmlImport* m_import;
+    MSOOXML::MsooXmlRelationships *m_relationships;
+    MSOOXML::MsooXmlImport *m_import;
     QString m_path;
     QString m_file;
 };
 
 } // namespace MSOOXML
 
-#endif //MSOOXMLTHEMESREADER_H
+#endif // MSOOXMLTHEMESREADER_H

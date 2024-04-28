@@ -27,18 +27,20 @@ public:
     bool save() override;
 
     /// reimplemented from KoResource
-    bool saveToDevice(QIODevice* dev) const override;
+    bool saveToDevice(QIODevice *dev) const override;
 
     /// reimplemented from KoResource
     QString defaultFileExtension() const override;
 
     /// Creates resource from given filter effect stack
-    static FilterEffectResource * fromFilterEffectStack(KoFilterEffectStack *filterStack);
+    static FilterEffectResource *fromFilterEffectStack(KoFilterEffectStack *filterStack);
 
     /// Creates a new filter stack from this filter resource
-    KoFilterEffectStack * toFilterStack() const;
+    KoFilterEffectStack *toFilterStack() const;
+
 protected:
     QByteArray generateMD5() const override;
+
 private:
     QDomDocument m_data;
 };

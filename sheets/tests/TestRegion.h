@@ -27,7 +27,7 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
-    MapBase* m_map;
+    MapBase *m_map;
 };
 
 } // namespace Sheets

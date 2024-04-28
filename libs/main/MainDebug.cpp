@@ -6,17 +6,14 @@
 
 #include "MainDebug.h"
 
-const QLoggingCategory &MAIN_LOG() \
+const QLoggingCategory &MAIN_LOG()
 {
     static const QLoggingCategory category("calligra.lib.main");
     return category;
 }
 
-const QLoggingCategory &FILTER_LOG() \
+const QLoggingCategory &FILTER_LOG()
 {
     static const QLoggingCategory category("calligra.lib.filter");
     return category;
 }
-
-
-

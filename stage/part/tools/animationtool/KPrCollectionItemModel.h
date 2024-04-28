@@ -9,22 +9,21 @@
 #ifndef KPRCOLLECTIONITEMMODEL_H
 #define KPRCOLLECTIONITEMMODEL_H
 
-#include <QAbstractItemModel>
-#include <QVector>
-#include <QString>
-#include <QIcon>
 #include <KoXmlReader.h>
+#include <QAbstractItemModel>
+#include <QIcon>
+#include <QString>
+#include <QVector>
 
 /**
  * Struct containing the information stored in CollectionItemModel item
  */
-struct KPrCollectionItem
-{
-    QString id;                     //animation id
-    QString name;                   //animation name (text to be displayed on animations view)
-    QString toolTip;                // text of animation tool tip
-    QIcon icon;                     // icon of the animation type
-    KoXmlElement animationContext;  //xml data used to instantiate animations of this type
+struct KPrCollectionItem {
+    QString id; // animation id
+    QString name; // animation name (text to be displayed on animations view)
+    QString toolTip; // text of animation tool tip
+    QIcon icon; // icon of the animation type
+    KoXmlElement animationContext; // xml data used to instantiate animations of this type
 };
 
 Q_DECLARE_TYPEINFO(KPrCollectionItem, Q_MOVABLE_TYPE);
@@ -36,8 +35,8 @@ class KPrCollectionItemModel : public QAbstractListModel
 public:
     explicit KPrCollectionItemModel(QObject *parent = 0);
 
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     Qt::DropActions supportedDragActions() const override;
 
@@ -48,7 +47,10 @@ public:
      */
     void setAnimationClassList(const QVector<KPrCollectionItem> &newlist);
 
-    QVector<KPrCollectionItem> animationClassList() const {return m_animationClassList;}
+    QVector<KPrCollectionItem> animationClassList() const
+    {
+        return m_animationClassList;
+    }
 
     /**
      * @brief Return the xml context for the animation on index

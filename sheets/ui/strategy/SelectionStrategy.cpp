@@ -6,11 +6,11 @@
 
 #include "SelectionStrategy.h"
 
-#include "engine/calligra_sheets_limits.h"
-#include "core/Sheet.h"
 #include "../CellEditorBase.h"
 #include "../CellToolBase.h"
 #include "../Selection.h"
+#include "core/Sheet.h"
+#include "engine/calligra_sheets_limits.h"
 
 using namespace Calligra::Sheets;
 
@@ -20,10 +20,9 @@ public:
     Cell startCell;
 };
 
-SelectionStrategy::SelectionStrategy(CellToolBase *cellTool,
-                                     const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
-        : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
-        , d(new Private)
+SelectionStrategy::SelectionStrategy(CellToolBase *cellTool, const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
+    : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
+    , d(new Private)
 {
     d->startCell = Cell();
 
@@ -55,7 +54,8 @@ SelectionStrategy::SelectionStrategy(CellToolBase *cellTool,
     const int row = sheet->topRow(position.y(), ypos);
     // Check boundaries.
     if (col > KS_colMax || row > KS_rowMax) {
-        debugSheetsUI << "col or row is out of range:" << "col:" << col << " row:" << row;
+        debugSheetsUI << "col or row is out of range:"
+                      << "col:" << col << " row:" << row;
     } else {
         d->startCell = Cell(sheet, col, row);
         if (selection->referenceSelectionMode()) {
@@ -104,8 +104,7 @@ SelectionStrategy::~SelectionStrategy()
     delete d;
 }
 
-void SelectionStrategy::handleMouseMove(const QPointF &documentPos,
-                                        Qt::KeyboardModifiers modifiers)
+void SelectionStrategy::handleMouseMove(const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
 {
 #if 0 // CALLIGRA_SHEETS_WIP_DRAG_REFERENCE_SELECTION
     Q_UNUSED(modifiers);

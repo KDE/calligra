@@ -29,21 +29,19 @@ public:
     /**
      * Constructor.
      */
-    HyperlinkStrategy(CellToolBase *cellTool,
-                      const QPointF& position, Qt::KeyboardModifiers modifiers,
-                      const QString& url, const QRectF& textRect);
+    HyperlinkStrategy(CellToolBase *cellTool, const QPointF &position, Qt::KeyboardModifiers modifiers, const QString &url, const QRectF &textRect);
 
     /**
      * Destructor.
      */
     ~HyperlinkStrategy() override;
 
-    void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

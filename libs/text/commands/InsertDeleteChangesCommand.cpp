@@ -7,11 +7,11 @@
 #include "InsertDeleteChangesCommand.h"
 
 #include "KoChangeTrackerElement.h"
-#include <KoTextDocument.h>
 #include <KoChangeTracker.h>
+#include <KoTextDocument.h>
 
-#include <QVector>
 #include <QTextDocument>
+#include <QVector>
 
 #include <algorithm>
 
@@ -25,7 +25,6 @@ void InsertDeleteChangesCommand::redo()
 {
     insertDeleteChanges();
 }
-
 
 void InsertDeleteChangesCommand::insertDeleteChanges()
 {

@@ -11,11 +11,15 @@
 
 #include "TestKspreadCommon.h"
 
-#define CHECK_EVAL(x,y) { Value z(RoundNumber(y)); QCOMPARE(evaluate(x,z), (z)); }
+#define CHECK_EVAL(x, y)                                                                                                                                       \
+    {                                                                                                                                                          \
+        Value z(RoundNumber(y));                                                                                                                               \
+        QCOMPARE(evaluate(x, z), (z));                                                                                                                         \
+    }
 #define ROUND(x) (roundf(1e10 * x) / 1e10)
 
 // round to get at most 10-digits number
-static Value RoundNumber(const Value& v)
+static Value RoundNumber(const Value &v)
 {
     if (v.isNumber()) {
         double d = numToDouble(v.asFloat());
@@ -26,7 +30,7 @@ static Value RoundNumber(const Value& v)
         return v;
 }
 
-Value TestDatabaseFunctions::evaluate(const QString& formula, Value& ex)
+Value TestDatabaseFunctions::evaluate(const QString &formula, Value &ex)
 {
     Formula f(m_map->sheet(0));
     QString expr = formula;
@@ -49,8 +53,8 @@ void TestDatabaseFunctions::initTestCase()
     FunctionModuleRegistry::instance()->loadFunctionModules();
     m_map = new MapBase;
     m_map->addNewSheet();
-    SheetBase* sheet = m_map->sheet(0);
-    CellBaseStorage* storage = sheet->cellStorage();
+    SheetBase *sheet = m_map->sheet(0);
+    CellBaseStorage *storage = sheet->cellStorage();
 
     // TESTDB = A18:I31
     m_map->namedAreaManager()->insert(Region(QRect(QPoint(1, 18), QPoint(9, 31)), sheet), "TESTDB");
@@ -60,9 +64,19 @@ void TestDatabaseFunctions::initTestCase()
         storage->setValue(1, row, Value((double)::pow(2.0, row - 19)));
     // B18:B31
     storage->setValue(2, 18, Value("Constellation"));
-    QList<QString> constellations = QList<QString>() << "Cancer" << "Canis Major" << "Canis Minor"
-                                    << "Carina" << "Draco" << "Eridanus" << "Gemini" << "Hercules" << "Orion" << "Phoenix"
-                                    << "Scorpio" << "Ursa Major" << "Ursa Minor";
+    QList<QString> constellations = QList<QString>() << "Cancer"
+                                                     << "Canis Major"
+                                                     << "Canis Minor"
+                                                     << "Carina"
+                                                     << "Draco"
+                                                     << "Eridanus"
+                                                     << "Gemini"
+                                                     << "Hercules"
+                                                     << "Orion"
+                                                     << "Phoenix"
+                                                     << "Scorpio"
+                                                     << "Ursa Major"
+                                                     << "Ursa Minor";
     for (int i = 0; i < constellations.count(); ++i)
         storage->setValue(2, 19 + i, Value(constellations[i]));
     // C18:C31

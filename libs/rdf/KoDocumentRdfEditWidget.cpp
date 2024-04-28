@@ -9,24 +9,23 @@
 #include <ui_KoDocumentRdfEditWidget.h>
 
 #include "KoDocumentRdf.h"
-#include "KoRdfSemanticItemRegistry.h"
 #include "KoRdfPrefixMapping.h"
-#include "KoSopranoTableModelDelegate.h"
-#include "KoSopranoTableModel.h"
+#include "KoRdfSemanticItemRegistry.h"
 #include "KoRdfSemanticTreeWidgetItem.h"
+#include "KoSopranoTableModel.h"
+#include "KoSopranoTableModelDelegate.h"
 // main
 #include <KoDocument.h>
 #include <KoIcon.h>
 // KF5
+#include <KLocalizedString>
+#include <KMessageBox>
 #include <kdebug.h>
 #include <kmenu.h>
-#include <KMessageBox>
-#include <KLocalizedString>
 // Qt
 #include <QComboBox>
 #include <QPointer>
 #include <QSortFilterProxyModel>
-
 
 static const char SemanticItemClassId[] = "Ko_semanticItemClass";
 
@@ -39,19 +38,18 @@ class KoRdfPrefixMappingTreeWidgetItem : public QTreeWidgetItem
 {
     KoRdfPrefixMapping *m_mapping;
     QString m_key;
+
 public:
-    enum {
-        ColKey = 0,
-        ColValue = 1,
-        ColSize
-    };
+    enum { ColKey = 0, ColValue = 1, ColSize };
     KoRdfPrefixMappingTreeWidgetItem(KoRdfPrefixMapping *mapping, const QString &key, int type = Type)
         : QTreeWidgetItem(type)
         , m_mapping(mapping)
-        , m_key(key) {
+        , m_key(key)
+    {
         setFlags(QTreeWidgetItem::flags() | Qt::ItemIsEditable);
     }
-    virtual void setData(int column, int role, const QVariant &value) {
+    virtual void setData(int column, int role, const QVariant &value)
+    {
         m_mapping->dump();
         kDebug(30015) << "m_key:" << m_key << " value:" << value;
         if (column == ColKey) {
@@ -65,7 +63,8 @@ public:
         }
         QTreeWidgetItem::setData(column, role, value);
     }
-    virtual QVariant data(int column, int role) const {
+    virtual QVariant data(int column, int role) const
+    {
         if (role != Qt::DisplayRole && role != Qt::EditRole) {
             return QVariant();
         }
@@ -77,7 +76,8 @@ public:
         }
         return QTreeWidgetItem::data(column, role);
     }
-    void removeFromMapping() {
+    void removeFromMapping()
+    {
         m_mapping->remove(m_key);
     }
 };
@@ -88,7 +88,7 @@ public:
     QWidget *m_widget;
     KoDocumentRdf *m_rdf;
     Ui::KoDocumentRdfEditWidget *m_ui;
-    QHash<QString, QComboBox*> m_defaultStylesheetComboBoxMap;
+    QHash<QString, QComboBox *> m_defaultStylesheetComboBoxMap;
     KoSopranoTableModel *m_tripleModel;
     KoSopranoTableModel *m_sparqlResultModel;
     QSortFilterProxyModel *m_tripleProxyModel;
@@ -103,7 +103,8 @@ public:
         m_widget = new QWidget();
         m_ui->setupUi(m_widget);
     }
-    ~KoDocumentRdfEditWidgetPrivate() {
+    ~KoDocumentRdfEditWidgetPrivate()
+    {
         delete m_ui;
     }
 
@@ -119,20 +120,18 @@ public:
         m_ui->m_tripleView->hideColumn(KoSopranoTableModel::ColObjXsdType);
         m_ui->m_tripleView->horizontalHeader()->setResizeMode(KoSopranoTableModel::ColSubj, QHeaderView::Stretch);
         m_ui->m_tripleView->horizontalHeader()->setResizeMode(KoSopranoTableModel::ColPred, QHeaderView::Stretch);
-        m_ui->m_tripleView->horizontalHeader()->setResizeMode(KoSopranoTableModel::ColObj,  QHeaderView::Stretch);
-        m_ui->m_tripleView->horizontalHeader()->setResizeMode(KoSopranoTableModel::ColCtx,  QHeaderView::Stretch);
+        m_ui->m_tripleView->horizontalHeader()->setResizeMode(KoSopranoTableModel::ColObj, QHeaderView::Stretch);
+        m_ui->m_tripleView->horizontalHeader()->setResizeMode(KoSopranoTableModel::ColCtx, QHeaderView::Stretch);
         m_ui->m_tripleView->setItemDelegate(new KoSopranoTableModelDelegate(m_tripleProxyModel));
         // setup namespace page
         QTreeWidget *v = m_ui->m_namespaceView;
         v->setColumnCount(KoRdfPrefixMappingTreeWidgetItem::ColSize);
         v->sortItems(KoRdfPrefixMappingTreeWidgetItem::ColValue, Qt::DescendingOrder);
-        v->header()->setResizeMode(KoRdfPrefixMappingTreeWidgetItem::ColKey,
-                                   QHeaderView::ResizeToContents);
+        v->header()->setResizeMode(KoRdfPrefixMappingTreeWidgetItem::ColKey, QHeaderView::ResizeToContents);
         KoRdfPrefixMapping *mapping = m_rdf->prefixMapping();
-        const QMap<QString,QString> &m = m_rdf->prefixMapping()->mappings();
-        for (QMap<QString,QString>::const_iterator mi = m.begin(); mi != m.end(); ++mi) {
-            KoRdfPrefixMappingTreeWidgetItem *item =
-                    new KoRdfPrefixMappingTreeWidgetItem(mapping, mi.key());
+        const QMap<QString, QString> &m = m_rdf->prefixMapping()->mappings();
+        for (QMap<QString, QString>::const_iterator mi = m.begin(); mi != m.end(); ++mi) {
+            KoRdfPrefixMappingTreeWidgetItem *item = new KoRdfPrefixMappingTreeWidgetItem(mapping, mi.key());
             v->addTopLevelItem(item);
         }
         // setup semantic page
@@ -141,7 +140,8 @@ public:
         m_semanticItemsTree.update(m_rdf);
     }
 
-    void buildComboBox(QComboBox *w, hKoRdfSemanticItem si) {
+    void buildComboBox(QComboBox *w, hKoRdfSemanticItem si)
+    {
         if (!si) {
             return;
         }
@@ -169,28 +169,31 @@ public:
         w->setCurrentIndex(activeSheetIndex);
     }
 
-    void clearTriplesSelection() {
+    void clearTriplesSelection()
+    {
         m_ui->m_tripleView->selectionModel()->clear();
     }
 
-    void selectTriples(int row) {
+    void selectTriples(int row)
+    {
         m_ui->m_tripleView->selectRow(row);
     }
 
-    void selectTriples(const QModelIndex &mi,
-                       QItemSelectionModel::SelectionFlags command = QItemSelectionModel::Select) {
+    void selectTriples(const QModelIndex &mi, QItemSelectionModel::SelectionFlags command = QItemSelectionModel::Select)
+    {
         m_ui->m_tripleView->selectionModel()->select(mi, command | QItemSelectionModel::Rows);
     }
 
-    void selectTriples(const QModelIndexList &ml,
-                       QItemSelectionModel::SelectionFlags command = QItemSelectionModel::Select) {
+    void selectTriples(const QModelIndexList &ml, QItemSelectionModel::SelectionFlags command = QItemSelectionModel::Select)
+    {
         Q_UNUSED(command);
         foreach (const QModelIndex &mi, ml) {
             selectTriples(mi);
         }
     }
 
-    QModelIndexList mapFromSource(QModelIndexList mil) const {
+    QModelIndexList mapFromSource(QModelIndexList mil) const
+    {
         QModelIndexList ret;
         foreach (const QModelIndex &idx, mil) {
             QModelIndex pidx = m_tripleProxyModel->mapFromSource(idx);
@@ -199,17 +202,20 @@ public:
         return ret;
     }
 
-    QModelIndex mapFromSource(QModelIndex idx) const {
+    QModelIndex mapFromSource(QModelIndex idx) const
+    {
         QModelIndex pidx = m_tripleProxyModel->mapFromSource(idx);
         return pidx;
     }
 
-    QModelIndex mapToSource(const QModelIndex proxyIndex) const {
+    QModelIndex mapToSource(const QModelIndex proxyIndex) const
+    {
         QModelIndex sidx = m_tripleProxyModel->mapToSource(proxyIndex);
         return sidx;
     }
 
-    QModelIndexList mapToSource(const QModelIndexList proxyList) const {
+    QModelIndexList mapToSource(const QModelIndexList proxyList) const
+    {
         QModelIndexList ret;
         foreach (const QModelIndex &idx, proxyList) {
             QModelIndex sidx = m_tripleProxyModel->mapToSource(idx);
@@ -219,8 +225,7 @@ public:
     }
 };
 
-
-KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
+KoDocumentRdfEditWidget::KoDocumentRdfEditWidget(KoDocumentRdf *docRdf)
     : d(new KoDocumentRdfEditWidgetPrivate(docRdf))
 {
     d->setupWidget();
@@ -234,9 +239,8 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
             continue;
         }
 
-        QLabel *semanticItemLabel =
-            new QLabel(KoRdfSemanticItemRegistry::instance()->classDisplayName(semanticItemName));
-        styleSheetsGridLayout->addWidget(semanticItemLabel, row, 0, Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        QLabel *semanticItemLabel = new QLabel(KoRdfSemanticItemRegistry::instance()->classDisplayName(semanticItemName));
+        styleSheetsGridLayout->addWidget(semanticItemLabel, row, 0, Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
 
         QComboBox *defaultStylesheetComboBox = new QComboBox;
         d->m_defaultStylesheetComboBoxMap.insert(semanticItemName, defaultStylesheetComboBox);
@@ -247,8 +251,7 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
         styleSheetsGridLayout->addWidget(setStylesheetButton, row, 2);
         connect(setStylesheetButton, SIGNAL(clicked()), SLOT(onDefaultSheetButtonClicked()));
 
-	hKoRdfSemanticItem templateItem(static_cast<KoRdfSemanticItem *>(
-	    docRdf->createSemanticItem(semanticItemName, this).data()));
+        hKoRdfSemanticItem templateItem(static_cast<KoRdfSemanticItem *>(docRdf->createSemanticItem(semanticItemName, this).data()));
         d->buildComboBox(defaultStylesheetComboBox, templateItem);
 
         ++row;
@@ -261,19 +264,16 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
     styleSheetsGridLayout->addWidget(setAllStylesheetsButton, row, 2);
     connect(setAllStylesheetsButton, SIGNAL(clicked()), SLOT(onDefaultAllSheetButtonClicked()));
 
-
     connect(d->m_ui->newTripleButton, SIGNAL(clicked()), this, SLOT(addTriple()));
     connect(d->m_ui->copyTripleButton, SIGNAL(clicked()), this, SLOT(copyTriples()));
     connect(d->m_ui->deleteTripleButton, SIGNAL(clicked()), this, SLOT(deleteTriples()));
     connect(d->m_ui->newNamespaceButton, SIGNAL(clicked()), this, SLOT(addNamespace()));
     connect(d->m_ui->deleteNamespaceButton, SIGNAL(clicked()), this, SLOT(deleteNamespace()));
     d->m_ui->m_semanticView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(d->m_ui->m_semanticView, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(showSemanticViewContextMenu(QPoint)));
+    connect(d->m_ui->m_semanticView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showSemanticViewContextMenu(QPoint)));
     connect(d->m_ui->m_sparqlExecute, SIGNAL(clicked()), this, SLOT(sparqlExecute()));
 
-    connect(docRdf, SIGNAL(semanticObjectUpdated(hKoRdfBasicSemanticItem)),
-            this, SLOT(semanticObjectUpdated(hKoRdfBasicSemanticItem)));
+    connect(docRdf, SIGNAL(semanticObjectUpdated(hKoRdfBasicSemanticItem)), this, SLOT(semanticObjectUpdated(hKoRdfBasicSemanticItem)));
 }
 
 KoDocumentRdfEditWidget::~KoDocumentRdfEditWidget()
@@ -281,8 +281,7 @@ KoDocumentRdfEditWidget::~KoDocumentRdfEditWidget()
     delete d;
 }
 
-
-QWidget* KoDocumentRdfEditWidget::widget()
+QWidget *KoDocumentRdfEditWidget::widget()
 {
     return d->m_widget;
 }
@@ -292,15 +291,15 @@ bool KoDocumentRdfEditWidget::shouldDialogCloseBeVetoed()
     bool ret = false;
     if (int invalidCount = d->m_tripleModel->invalidStatementCount()) {
         kDebug(30015) << "invalidCount:" << invalidCount;
-        int dialogRet = KMessageBox::warningContinueCancel(
-                    this, i18ncp("statement is an Rdf related term",
-                                 "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>",
-                                 "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>",
-                                 invalidCount),
-                    i18nc("statement is an Rdf related term", "Discard invalid statements?"),
-                    KStandardGuiItem::cont(),
-                    KStandardGuiItem::cancel(),
-                    "InvalidTriplesInDocInfoDialog");
+        int dialogRet = KMessageBox::warningContinueCancel(this,
+                                                           i18ncp("statement is an Rdf related term",
+                                                                  "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>",
+                                                                  "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>",
+                                                                  invalidCount),
+                                                           i18nc("statement is an Rdf related term", "Discard invalid statements?"),
+                                                           KStandardGuiItem::cont(),
+                                                           KStandardGuiItem::cancel(),
+                                                           "InvalidTriplesInDocInfoDialog");
         if (dialogRet == KMessageBox::Cancel) {
             ret = true;
             QModelIndexList invalidList = d->m_tripleModel->invalidStatementList();
@@ -308,8 +307,7 @@ bool KoDocumentRdfEditWidget::shouldDialogCloseBeVetoed()
                 d->m_ui->m_tripleView->selectionModel()->clear();
                 foreach (QModelIndex idx, invalidList) {
                     QModelIndex pidx = d->mapFromSource(idx);
-                    d->m_ui->m_tripleView->selectionModel()->select(
-                                pidx, QItemSelectionModel::Select);
+                    d->m_ui->m_tripleView->selectionModel()->select(pidx, QItemSelectionModel::Select);
                 }
 
                 QModelIndex pidx = d->mapFromSource(invalidList.first());
@@ -325,13 +323,12 @@ void KoDocumentRdfEditWidget::apply()
 {
     KoDocumentRdf *rdf = d->m_rdf;
 
-    QHash<QString, QComboBox*>::ConstIterator it = d->m_defaultStylesheetComboBoxMap.constBegin();
-    QHash<QString, QComboBox*>::ConstIterator end = d->m_defaultStylesheetComboBoxMap.constEnd();
-    for( ; it != end; ++it) {
+    QHash<QString, QComboBox *>::ConstIterator it = d->m_defaultStylesheetComboBoxMap.constBegin();
+    QHash<QString, QComboBox *>::ConstIterator end = d->m_defaultStylesheetComboBoxMap.constEnd();
+    for (; it != end; ++it) {
         const QString &semanticClass = it.key();
         QComboBox *comboBox = it.value();
-	hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(
-	    rdf->createSemanticItem(semanticClass).data()));
+        hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(rdf->createSemanticItem(semanticClass).data()));
         si->defaultStylesheet(stylesheetFromComboBox(comboBox));
     }
 }
@@ -356,9 +353,9 @@ void KoDocumentRdfEditWidget::semanticObjectUpdated(hKoRdfBasicSemanticItem item
 void KoDocumentRdfEditWidget::showSemanticViewContextMenu(const QPoint &position)
 {
     QPointer<KMenu> menu = new KMenu(0);
-    QList<QAction*> actions;
+    QList<QAction *> actions;
     if (QTreeWidgetItem *baseitem = d->m_ui->m_semanticView->itemAt(position)) {
-        if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(baseitem)) {
+        if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem *>(baseitem)) {
             actions = item->actions(menu);
         }
     }
@@ -419,8 +416,7 @@ void KoDocumentRdfEditWidget::addNamespace()
     KoRdfPrefixMapping *mapping = m_rdf->prefixMapping();
     mapping->insert(key, value);
     kDebug(30015) << "adding key:" << key << " value:" << value;
-    KoRdfPrefixMappingTreeWidgetItem* item =
-            new KoRdfPrefixMappingTreeWidgetItem(mapping, key);
+    KoRdfPrefixMappingTreeWidgetItem *item = new KoRdfPrefixMappingTreeWidgetItem(mapping, key);
     v->addTopLevelItem(item);
     v->setCurrentItem(item);
     v->editItem(item);
@@ -432,8 +428,7 @@ void KoDocumentRdfEditWidget::deleteNamespace()
     QList<QTreeWidgetItem *> sel = v->selectedItems();
     kDebug(30015) << "selection.sz:" << sel.size();
     foreach (QTreeWidgetItem *item, sel) {
-        if (KoRdfPrefixMappingTreeWidgetItem *ritem
-                = dynamic_cast<KoRdfPrefixMappingTreeWidgetItem *>(item)) {
+        if (KoRdfPrefixMappingTreeWidgetItem *ritem = dynamic_cast<KoRdfPrefixMappingTreeWidgetItem *>(item)) {
             ritem->removeFromMapping();
         }
         v->invisibleRootItem()->removeChild(item);
@@ -446,8 +441,7 @@ void KoDocumentRdfEditWidget::sparqlExecute()
     QString sparql = d->m_ui->m_sparqlQuery->toPlainText();
     QSharedPointer<Soprano::Model> m = d->m_rdf->model();
     kDebug(30015) << "running SPARQL query:" << sparql;
-    Soprano::QueryResultIterator qrIter =
-            m->executeQuery(sparql, Soprano::Query::QueryLanguageSparql);
+    Soprano::QueryResultIterator qrIter = m->executeQuery(sparql, Soprano::Query::QueryLanguageSparql);
     QList<Soprano::BindingSet> bindings = qrIter.allBindings();
     QTableWidget *tableWidget = d->m_ui->m_sparqlResultView;
     tableWidget->setSortingEnabled(false);
@@ -478,7 +472,7 @@ hKoSemanticStylesheet KoDocumentRdfEditWidget::stylesheetFromComboBox(QComboBox 
 {
     QAbstractItemModel *m = w->model();
     QVariant ud = m->data(m->index(w->currentIndex(), 0), Qt::UserRole);
-    KoSemanticStylesheet *ss = ud.value<KoSemanticStylesheet*>();
+    KoSemanticStylesheet *ss = ud.value<KoSemanticStylesheet *>();
     hKoSemanticStylesheet ret(ss);
     return ret;
 }
@@ -491,8 +485,7 @@ void KoDocumentRdfEditWidget::applyStylesheetFromComboBox(QComboBox *comboBox) c
     kDebug(30015) << "changing default stylesheet to:" << stylesheetName;
     hKoSemanticStylesheet ss = stylesheetFromComboBox(comboBox);
     const QString semanticItemClass = comboBox->property(SemanticItemClassId).toString();
-    hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(
-	rdf->createSemanticItem(semanticItemClass).data()));
+    hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(rdf->createSemanticItem(semanticItemClass).data()));
     if (si) {
         si->defaultStylesheet(ss);
     }
@@ -511,7 +504,7 @@ void KoDocumentRdfEditWidget::applyStylesheetFromComboBox(QComboBox *comboBox) c
 //
 void KoDocumentRdfEditWidget::onDefaultSheetButtonClicked()
 {
-    QPushButton *pushButton = qobject_cast<QPushButton*>(sender());
+    QPushButton *pushButton = qobject_cast<QPushButton *>(sender());
     Q_ASSERT(pushButton);
     const QString semanticItemClass = pushButton->property(SemanticItemClassId).toString();
     QComboBox *comboBox = d->m_defaultStylesheetComboBoxMap.value(semanticItemClass);
@@ -521,7 +514,7 @@ void KoDocumentRdfEditWidget::onDefaultSheetButtonClicked()
 
 void KoDocumentRdfEditWidget::onDefaultAllSheetButtonClicked()
 {
-    foreach(QComboBox* comboBox, d->m_defaultStylesheetComboBoxMap) {
+    foreach (QComboBox *comboBox, d->m_defaultStylesheetComboBoxMap) {
         applyStylesheetFromComboBox(comboBox);
     }
 }

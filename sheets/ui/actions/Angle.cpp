@@ -14,15 +14,12 @@
 #include "core/Cell.h"
 #include "core/Style.h"
 #include "ui/Selection.h"
-#include "ui/commands/StyleCommand.h"
 #include "ui/commands/RowColumnManipulators.h"
+#include "ui/commands/StyleCommand.h"
 
 #include "KoCanvasBase.h"
 
-
-
 using namespace Calligra::Sheets;
-
 
 Angle::Angle(Actions *actions)
     : DialogCellAction(actions, "changeAngle", i18n("Change Angle..."), QIcon(), i18n("Change the angle that cell contents are printed"))
@@ -33,12 +30,12 @@ Angle::~Angle()
 {
 }
 
-QAction *Angle::createAction() {
+QAction *Angle::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Angle"));
     return res;
 }
-
 
 ActionDialog *Angle::createDialog(QWidget *canvasWidget)
 {
@@ -49,7 +46,7 @@ ActionDialog *Angle::createDialog(QWidget *canvasWidget)
 
 void Angle::onSelectionChanged()
 {
-    Cell cell= activeCell();
+    Cell cell = activeCell();
     int angle = -1 * cell.style().angle();
     AngleDialog *dlg = dynamic_cast<AngleDialog *>(m_dlg);
     dlg->setAngle(angle);
@@ -58,22 +55,20 @@ void Angle::onSelectionChanged()
 void Angle::adjustAngle(int angle)
 {
     Sheet *sheet = m_selection->activeSheet();
-    KUndo2Command* macroCommand = new KUndo2Command(kundo2_i18n("Change Angle"));
+    KUndo2Command *macroCommand = new KUndo2Command(kundo2_i18n("Change Angle"));
 
-    StyleCommand* manipulator = new StyleCommand(macroCommand);
+    StyleCommand *manipulator = new StyleCommand(macroCommand);
     manipulator->setSheet(sheet);
     Style s;
     s.setAngle(-1 * angle);
     manipulator->setStyle(s);
     manipulator->add(*m_selection);
 
-    AdjustColumnRowManipulator* manipulator2 = new AdjustColumnRowManipulator(macroCommand);
+    AdjustColumnRowManipulator *manipulator2 = new AdjustColumnRowManipulator(macroCommand);
     manipulator2->setSheet(sheet);
     manipulator2->setAdjustColumn(true);
     manipulator2->setAdjustRow(true);
     manipulator2->add(*m_selection);
 
-    m_selection->canvas()->addCommand (macroCommand);
+    m_selection->canvas()->addCommand(macroCommand);
 }
-
-

@@ -9,14 +9,14 @@
 
 #include <QWidget>
 
-#include <KoXmlWriter.h>
-#include <KoXmlReader.h>
 #include <KoGenStyle.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
-KPrPageEffectStrategy::KPrPageEffectStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse, bool graphicsView )
-: m_subType( subType )
-, m_smilData( smilType, smilSubType, reverse )
-, m_graphicsView(graphicsView)
+KPrPageEffectStrategy::KPrPageEffectStrategy(int subType, const char *smilType, const char *smilSubType, bool reverse, bool graphicsView)
+    : m_subType(subType)
+    , m_smilData(smilType, smilSubType, reverse)
+    , m_graphicsView(graphicsView)
 {
 }
 
@@ -29,40 +29,40 @@ int KPrPageEffectStrategy::subType() const
     return m_subType;
 }
 
-void KPrPageEffectStrategy::finish( const KPrPageEffect::Data &data )
+void KPrPageEffectStrategy::finish(const KPrPageEffect::Data &data)
 {
     data.m_widget->update();
 }
 
-void KPrPageEffectStrategy::saveOdfSmilAttributes( KoXmlWriter & xmlWriter ) const
+void KPrPageEffectStrategy::saveOdfSmilAttributes(KoXmlWriter &xmlWriter) const
 {
-    xmlWriter.addAttribute( "smil:type", m_smilData.type );
-    xmlWriter.addAttribute( "smil:subtype", m_smilData.subType );
-    if ( m_smilData.reverse ) {
-        xmlWriter.addAttribute( "smil:direction", "reverse" );
+    xmlWriter.addAttribute("smil:type", m_smilData.type);
+    xmlWriter.addAttribute("smil:subtype", m_smilData.subType);
+    if (m_smilData.reverse) {
+        xmlWriter.addAttribute("smil:direction", "reverse");
     }
 }
 
-void KPrPageEffectStrategy::saveOdfSmilAttributes( KoGenStyle & style ) const
+void KPrPageEffectStrategy::saveOdfSmilAttributes(KoGenStyle &style) const
 {
-    style.addProperty( "smil:type", m_smilData.type );
-    style.addProperty( "smil:subtype", m_smilData.subType );
-    if ( m_smilData.reverse ) {
-        style.addProperty( "smil:direction", "reverse" );
+    style.addProperty("smil:type", m_smilData.type);
+    style.addProperty("smil:subtype", m_smilData.subType);
+    if (m_smilData.reverse) {
+        style.addProperty("smil:direction", "reverse");
     }
 }
 
-void KPrPageEffectStrategy::loadOdfSmilAttributes( const KoXmlElement & element )
+void KPrPageEffectStrategy::loadOdfSmilAttributes(const KoXmlElement &element)
 {
-    Q_UNUSED( element );
+    Q_UNUSED(element);
 }
 
-const QString & KPrPageEffectStrategy::smilType() const
+const QString &KPrPageEffectStrategy::smilType() const
 {
     return m_smilData.type;
 }
 
-const QString & KPrPageEffectStrategy::smilSubType() const
+const QString &KPrPageEffectStrategy::smilSubType() const
 {
     return m_smilData.subType;
 }

@@ -15,13 +15,15 @@ class VideoShapeFactory : public KoShapeFactoryBase
 {
 public:
     VideoShapeFactory();
-    ~VideoShapeFactory() {}
+    ~VideoShapeFactory()
+    {
+    }
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
 
     /// reimplemented
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels() override;
+    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels() override;
     void newDocumentResourceManager(KoDocumentResourceManager *manager) const override;
 };
 

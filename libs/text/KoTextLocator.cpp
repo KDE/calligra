@@ -6,18 +6,18 @@
 
 #include "KoTextLocator.h"
 
-#include "KoTextReference.h"
 #include "KoTextPage.h"
+#include "KoTextReference.h"
 #include "styles/KoListStyle.h"
 
 #include <KoShape.h>
 
 #include "TextDebug.h"
-#include <QTextDocument>
-#include <QTextList>
-#include <QTextInlineObject>
 #include <QTextBlock>
 #include <QTextCursor>
+#include <QTextDocument>
+#include <QTextInlineObject>
+#include <QTextList>
 
 // Include Q_UNSUSED classes, for building on Windows
 #include <KoShapeLoadingContext.h>
@@ -26,8 +26,17 @@
 class Q_DECL_HIDDEN KoTextLocator::Private
 {
 public:
-    Private(KoTextLocator *q) : q(q), document(0), dirty(false), cursorPosition(0), chapterPosition(-1), pageNumber(0) { }
-    void update() {
+    Private(KoTextLocator *q)
+        : q(q)
+        , document(0)
+        , dirty(false)
+        , cursorPosition(0)
+        , chapterPosition(-1)
+        , pageNumber(0)
+    {
+    }
+    void update()
+    {
         if (dirty == false)
             return;
         dirty = false;
@@ -50,17 +59,18 @@ public:
             }
             block = block.previous();
         }
-/*
-        KoShape *shape = shapeForPosition(document, cursorPosition);
-        if (shape == 0)
-            pageNumber = -1;
-        else {
-            KoTextShapeData *data = static_cast<KoTextShapeData*>(shape->userData());
-            KoTextPage* page = data->page();
-            pageNumber = page->pageNumber();
-        }
-*/        if (pageTmp != pageNumber || chapterTmp != chapterPosition) {
-            foreach(KoTextReference* reference, listeners)
+        /*
+                KoShape *shape = shapeForPosition(document, cursorPosition);
+                if (shape == 0)
+                    pageNumber = -1;
+                else {
+                    KoTextShapeData *data = static_cast<KoTextShapeData*>(shape->userData());
+                    KoTextPage* page = data->page();
+                    pageNumber = page->pageNumber();
+                }
+        */
+        if (pageTmp != pageNumber || chapterTmp != chapterPosition) {
+            foreach (KoTextReference *reference, listeners)
                 reference->variableMoved(0, 0);
         }
     }
@@ -72,13 +82,12 @@ public:
     int chapterPosition;
     int pageNumber;
 
-    QList<KoTextReference*> listeners;
+    QList<KoTextReference *> listeners;
 };
 
-
 KoTextLocator::KoTextLocator()
-        : KoInlineObject(false),
-        d(new Private(this))
+    : KoInlineObject(false)
+    , d(new Private(this))
 {
 }
 
@@ -94,7 +103,7 @@ void KoTextLocator::updatePosition(const QTextDocument *document, int posInDocum
         d->dirty = true;
         d->document = document;
         d->cursorPosition = posInDocument;
-//debugText <<"KoTextLocator page:" << pageNumber() <<", chapter:" << chapter() <<", '" << word() <<"'";
+        // debugText <<"KoTextLocator page:" << pageNumber() <<", chapter:" << chapter() <<", '" << word() <<"'";
     }
 }
 
@@ -109,7 +118,7 @@ void KoTextLocator::resize(const QTextDocument *document, QTextInlineObject &obj
     object.setDescent(0);
 }
 
-void KoTextLocator::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, const QTextInlineObject &, int , const QTextCharFormat &)
+void KoTextLocator::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, const QTextInlineObject &, int, const QTextCharFormat &)
 {
     // nothing to paint.
 }
@@ -138,7 +147,7 @@ QString KoTextLocator::word() const
 {
     if (d->document == 0) // layout never started
         return QString();
-    QTextCursor cursor(const_cast<QTextDocument*>(d->document));
+    QTextCursor cursor(const_cast<QTextDocument *>(d->document));
     cursor.setPosition(d->cursorPosition);
     cursor.movePosition(QTextCursor::NextWord);
     cursor.movePosition(QTextCursor::WordLeft, QTextCursor::KeepAnchor);

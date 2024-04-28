@@ -31,7 +31,7 @@ class KoPAPageBase;
 class STAGE_EXPORT KPrPageTransitionSetCommand : public KUndo2Command
 {
 public:
-    KPrPageTransitionSetCommand(KoPAPageBase * page, const KPrPageTransition &transition, KUndo2Command *parent = nullptr);
+    KPrPageTransitionSetCommand(KoPAPageBase *page, const KPrPageTransition &transition, KUndo2Command *parent = nullptr);
 
     /// redo the command
     void redo() override;

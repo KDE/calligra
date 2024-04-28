@@ -8,11 +8,9 @@
 #ifndef CALLIGRA_SHEETS_ACTION_AUTOFORMAT
 #define CALLIGRA_SHEETS_ACTION_AUTOFORMAT
 
-
 #include "DialogCellAction.h"
 
 #include "ui/commands/AbstractRegionCommand.h"
-
 
 class KoXmlDocument;
 
@@ -21,7 +19,6 @@ namespace Calligra
 namespace Sheets
 {
 class Style;
-
 
 /**
  * \ingroup Commands
@@ -40,41 +37,36 @@ public:
      */
     ~AutoFormatCommand() override;
 
-    void setStyles(const QList<Style>& styles);
+    void setStyles(const QList<Style> &styles);
 
 protected:
-    bool process(Element* element) override;
+    bool process(Element *element) override;
 
 private:
     QList<Style> m_styles;
 };
 
-
-
 class AutoFormatDialog;
 
-class AutoFormat : public DialogCellAction {
-Q_OBJECT
+class AutoFormat : public DialogCellAction
+{
+    Q_OBJECT
 public:
     AutoFormat(Actions *actions);
     virtual ~AutoFormat();
 protected Q_SLOTS:
     void applyFormat(const QString &format);
+
 protected:
     ActionDialog *createDialog(QWidget *canvasWidget) override;
-    QList<Style> parseXML(const KoXmlDocument& doc, bool *ok);
+    QList<Style> parseXML(const KoXmlDocument &doc, bool *ok);
     bool enabledForSelection(Selection *selection, const Cell &) override;
 
     QMap<QString, QString> m_xmls;
     QWidget *m_canvasWidget;
 };
 
-
-
-
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_AUTOFORMAT
+#endif // CALLIGRA_SHEETS_ACTION_AUTOFORMAT

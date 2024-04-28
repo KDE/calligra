@@ -10,13 +10,15 @@ class Q_DECL_HIDDEN KoInputDeviceHandler::Private
 {
 public:
     Private(const QString &devId)
-            : id(devId) {
+        : id(devId)
+    {
     }
     const QString id;
 };
 
-KoInputDeviceHandler::KoInputDeviceHandler(QObject * parent, const QString &id)
-        : QObject(parent), d(new Private(id))
+KoInputDeviceHandler::KoInputDeviceHandler(QObject *parent, const QString &id)
+    : QObject(parent)
+    , d(new Private(id))
 {
 }
 

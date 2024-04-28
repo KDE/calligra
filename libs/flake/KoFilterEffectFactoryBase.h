@@ -17,31 +17,30 @@ class QString;
 class FLAKE_EXPORT KoFilterEffectFactoryBase
 {
 public:
-
     /**
-    * Create the new factory
-    * @param id a string that will be used internally for referencing the filter effect
-    * @param name the user visible name of the filter effect this factory creates
-    */
+     * Create the new factory
+     * @param id a string that will be used internally for referencing the filter effect
+     * @param name the user visible name of the filter effect this factory creates
+     */
     KoFilterEffectFactoryBase(const QString &id, const QString &name);
     virtual ~KoFilterEffectFactoryBase();
 
     /**
-    * Returns the id for the filter this factory creates.
-    * @return the id for the filter this factory creates
-    */
+     * Returns the id for the filter this factory creates.
+     * @return the id for the filter this factory creates
+     */
     QString id() const;
 
     /**
-    * Returns the user visible (and translated) name to be seen by the user.
-    * @return the user visible (and translated) name to be seen by the user
-    */
+     * Returns the user visible (and translated) name to be seen by the user.
+     * @return the user visible (and translated) name to be seen by the user
+     */
     QString name() const;
 
     /**
-    * This method should be implemented by factories to create a filter effect.
-    * @return a new filter effect
-    */
+     * This method should be implemented by factories to create a filter effect.
+     * @return a new filter effect
+     */
     virtual KoFilterEffect *createFilterEffect() const = 0;
 
     /**
@@ -52,7 +51,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOFILTEREFFECTFACTORY_H

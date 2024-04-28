@@ -7,50 +7,51 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 
 #include "KoConfigDocumentPage.h"
 
+#include <KoComponentData.h>
 #include <KoDocument.h>
 #include <KoPart.h>
-#include <KoComponentData.h>
 
-#include <KLocalizedString>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KLocalizedString>
 
-#include <QFormLayout>
 #include <QCheckBox>
+#include <QFormLayout>
 #include <QGroupBox>
 #include <QSpinBox>
 
 class Q_DECL_HIDDEN KoConfigDocumentPage::Private
 {
 public:
-    Private(KoDocument* doc)
-    : doc(doc)
-    {}
+    Private(KoDocument *doc)
+        : doc(doc)
+    {
+    }
 
-    KoDocument* doc;
+    KoDocument *doc;
     KSharedConfigPtr config;
 
-    QSpinBox* autoSave;
+    QSpinBox *autoSave;
     int oldAutoSave;
     QCheckBox *createBackupFile;
     bool oldBackupFile;
 };
 
-KoConfigDocumentPage::KoConfigDocumentPage(KoDocument* doc, char* name)
-: d(new Private(doc))
+KoConfigDocumentPage::KoConfigDocumentPage(KoDocument *doc, char *name)
+    : d(new Private(doc))
 {
     setObjectName(name);
 
     d->config = d->doc->documentPart()->componentData().config();
 
-    QGroupBox* gbDocumentSettings = new QGroupBox(i18n("Document Settings"), this);
+    QGroupBox *gbDocumentSettings = new QGroupBox(i18n("Document Settings"), this);
     QFormLayout *layout = new QFormLayout(gbDocumentSettings);
 
     d->oldAutoSave = doc->defaultAutoSave() / 60;
 
     d->oldBackupFile = true;
 
-    if(d->config->hasGroup("Interface")) {
+    if (d->config->hasGroup("Interface")) {
         KConfigGroup interfaceGroup = d->config->group("Interface");
         d->oldAutoSave = interfaceGroup.readEntry("AutoSave", d->oldAutoSave);
         d->oldBackupFile = interfaceGroup.readEntry("BackupFile", d->oldBackupFile);

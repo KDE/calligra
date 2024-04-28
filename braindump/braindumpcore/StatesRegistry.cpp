@@ -3,13 +3,13 @@
 
 #include "StatesRegistry.h"
 
+#include <QDebug>
+#include <QDir>
+#include <QDirIterator>
 #include <QDomDocument>
 #include <QFile>
 #include <QFileInfo>
-#include <QDir>
 #include <QStandardPaths>
-#include <QDirIterator>
-#include <QDebug>
 
 #include <KLocalizedString>
 
@@ -18,24 +18,24 @@
 #include "StateCategory_p.h"
 
 struct Q_DECL_HIDDEN StatesRegistry::Private {
-    static StatesRegistry* s_instance;
-    QMap<QString, StateCategory*> categories;
-    void parseStatesRC(const QString& _filename);
+    static StatesRegistry *s_instance;
+    QMap<QString, StateCategory *> categories;
+    void parseStatesRC(const QString &_filename);
 };
 
-StatesRegistry* StatesRegistry::Private::s_instance = 0;
+StatesRegistry *StatesRegistry::Private::s_instance = 0;
 
-void StatesRegistry::Private::parseStatesRC(const QString& _filename)
+void StatesRegistry::Private::parseStatesRC(const QString &_filename)
 {
     QDomDocument doc;
     QFile file(_filename);
-    if(!file.open(QIODevice::ReadOnly)) {
+    if (!file.open(QIODevice::ReadOnly)) {
         qCritical() << "Can't open " << _filename;
         return;
     }
     QString errMsg;
     int line, column;
-    if(!doc.setContent(&file, &errMsg, &line, &column)) {
+    if (!doc.setContent(&file, &errMsg, &line, &column)) {
         qCritical() << "At (" << line << ", " << column << ") " << errMsg;
         file.close();
         return;
@@ -45,43 +45,43 @@ void StatesRegistry::Private::parseStatesRC(const QString& _filename)
     QDir directory = QFileInfo(_filename).absoluteDir();
 
     QDomElement docElem = doc.documentElement();
-    if(docElem.nodeName() != "states") {
+    if (docElem.nodeName() != "states") {
         qCritical() << "Invalid state file";
         return;
     }
     QDomNode nCat = docElem.firstChild();
-    while(!nCat.isNull()) {
+    while (!nCat.isNull()) {
         QDomElement eCat = nCat.toElement(); // try to convert the node to an element.
-        if(!eCat.isNull() && eCat.tagName() == "category") {
+        if (!eCat.isNull() && eCat.tagName() == "category") {
             QString catId = eCat.attribute("id");
             QString catName = eCat.attribute("name");
             int catPriority = eCat.attribute("priority", "1000").toInt();
-            StateCategory* category = 0;
-            if(catId.isEmpty()) {
+            StateCategory *category = 0;
+            if (catId.isEmpty()) {
                 qCritical() << "Missing category id";
             } else {
-                if(categories.contains(catId)) {
+                if (categories.contains(catId)) {
                     category = categories[catId];
-                } else if(!catName.isEmpty()) {
+                } else if (!catName.isEmpty()) {
                     category = new StateCategory(catId, i18n(catName.toUtf8()), catPriority);
                     categories[catId] = category;
                 }
-                if(category) {
+                if (category) {
                     // Parse the states
                     QDomNode nState = eCat.firstChild();
-                    while(!nState.isNull()) {
+                    while (!nState.isNull()) {
                         QDomElement eState = nState.toElement();
-                        if(!eState.isNull() && eState.tagName() == "state") {
+                        if (!eState.isNull() && eState.tagName() == "state") {
                             QString stateId = eState.attribute("id");
                             QString stateName = eState.attribute("name");
                             QString stateFilename = eState.attribute("filename");
                             int statePriority = eState.attribute("priority", "1000").toInt();
-                            if(stateId.isEmpty() || stateName.isEmpty() || stateFilename.isEmpty()) {
+                            if (stateId.isEmpty() || stateName.isEmpty() || stateFilename.isEmpty()) {
                                 qCritical() << "Missing attribute: id = " << stateId << " name = " << stateName << " filename = " << stateFilename;
                             } else {
                                 QString file = directory.absoluteFilePath(stateFilename);
-                                if(QFileInfo(file).exists()) {
-                                    if(category->d->states.contains(stateId)) {
+                                if (QFileInfo(file).exists()) {
+                                    if (category->d->states.contains(stateId)) {
                                         delete category->d->states[stateId];
                                     }
                                     qDebug() << "Adding state id = " << stateId << " name = " << stateName << " filename = " << stateFilename;
@@ -106,20 +106,20 @@ void StatesRegistry::Private::parseStatesRC(const QString& _filename)
     }
 }
 
-StatesRegistry::StatesRegistry() : d(new Private)
+StatesRegistry::StatesRegistry()
+    : d(new Private)
 {
     QStringList statesFilenames;
-    const QStringList stateFileDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                                                "calligra_shape_state/states/",
-                                                                QStandardPaths::LocateDirectory);
-    Q_FOREACH(const QString &dir, stateFileDirs) {
+    const QStringList stateFileDirs =
+        QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "calligra_shape_state/states/", QStandardPaths::LocateDirectory);
+    Q_FOREACH (const QString &dir, stateFileDirs) {
         QDirIterator iter(dir, QStringList() << QStringLiteral("*.xml"));
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             statesFilenames.append(iter.next());
         }
     }
 
-    foreach(const QString & filename, statesFilenames) {
+    foreach (const QString &filename, statesFilenames) {
         qDebug() << "Load state: " << filename;
         d->parseStatesRC(filename);
     }
@@ -130,9 +130,9 @@ StatesRegistry::~StatesRegistry()
     delete d;
 }
 
-const StatesRegistry* StatesRegistry::instance()
+const StatesRegistry *StatesRegistry::instance()
 {
-    if(!Private::s_instance) {
+    if (!Private::s_instance) {
         Private::s_instance = new StatesRegistry;
     }
     return Private::s_instance;
@@ -143,26 +143,28 @@ QList<QString> StatesRegistry::categorieIds() const
     return d->categories.keys();
 }
 
-QList<QString> StatesRegistry::stateIds(const QString& _id) const
+QList<QString> StatesRegistry::stateIds(const QString &_id) const
 {
     Q_ASSERT(d->categories.contains(_id));
     return d->categories[_id]->stateIds();
 }
 
-const State* StatesRegistry::state(const QString& _category, const QString& _state) const
+const State *StatesRegistry::state(const QString &_category, const QString &_state) const
 {
-    if(d->categories.contains(_category)) return d->categories[_category]->state(_state);
+    if (d->categories.contains(_category))
+        return d->categories[_category]->state(_state);
     qWarning() << "No category " << _category << " found among " << d->categories.keys();
     return 0;
 }
 
-const State* StatesRegistry::nextState(const State* _state) const
+const State *StatesRegistry::nextState(const State *_state) const
 {
-    if(_state) {
-        QList<const State*> states = _state->category()->d->states.values();
+    if (_state) {
+        QList<const State *> states = _state->category()->d->states.values();
         int idx = states.indexOf(_state);
         idx += 1;
-        if(idx >= states.count()) idx = 0;
+        if (idx >= states.count())
+            idx = 0;
         return states[idx];
     }
     return 0;

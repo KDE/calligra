@@ -20,7 +20,8 @@
 
 class KoShape;
 
-namespace KoChart {
+namespace KoChart
+{
 
 class ChartShape;
 class Table;
@@ -44,10 +45,10 @@ public:
     // 2) Data Sets
     void testDataSetCellRegions(int dataSetNr,
                                 CellRegion yDataRegion,
-                                CellRegion labelDataRegion    = CellRegion(),
+                                CellRegion labelDataRegion = CellRegion(),
                                 CellRegion categoryDataRegion = CellRegion(),
-                                CellRegion xDataRegion        = CellRegion(),
-                                CellRegion customDataRegion   = CellRegion());
+                                CellRegion xDataRegion = CellRegion(),
+                                CellRegion customDataRegion = CellRegion());
 
     // 3) Internal Table
     void testHasOnlyInternalTable();
@@ -61,8 +62,8 @@ public:
     // 5) Axes
     void testAxisTitle(Axis *axis, const QString &text);
 
-    Table* internalTable();
-    TableSource* tableSource();
+    Table *internalTable();
+    TableSource *tableSource();
 
     ChartShape *m_chart;
 };
@@ -93,9 +94,10 @@ protected Q_SLOTS:
 
 } // namespace KoChart
 
-namespace QTest {
-    template<>
-    char *toString(const KoChart::CellRegion &region);
+namespace QTest
+{
+template<>
+char *toString(const KoChart::CellRegion &region);
 }
 
 #endif // KCHART_TESTLOADING_BASE

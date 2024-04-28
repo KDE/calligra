@@ -11,11 +11,11 @@
 #include <QPair>
 #include <QVector>
 
-#include "engine/StorageBase.h"
 #include "engine/Region.h"
+#include "engine/StorageBase.h"
 
-#include "sheets_core_export.h"
 #include "Style.h"
+#include "sheets_core_export.h"
 
 namespace Calligra
 {
@@ -39,15 +39,15 @@ class CALLIGRA_SHEETS_CORE_EXPORT StyleStorage : public QObject, public StorageB
     Q_OBJECT
 
 public:
-    explicit StyleStorage(Map* map);
-    StyleStorage(const StyleStorage& other);
+    explicit StyleStorage(Map *map);
+    StyleStorage(const StyleStorage &other);
     ~StyleStorage() override;
 
     /**
      * Composes the style for \p point. All substyles intersecting \p point are considered.
      * \return the Style at the position \p point .
      */
-    Style contains(const QPoint& point) const;
+    Style contains(const QPoint &point) const;
 
     /**
      * Composes the style for \p rect. Only substyles which fill out \p rect completely are
@@ -56,7 +56,7 @@ public:
      * \return the Style for the area \p rect .
      * \see intersects
      */
-    Style contains(const QRect& rect) const;
+    Style contains(const QRect &rect) const;
 
     /**
      * Composes the style for \p rect. All substyles which intersect \p rect are considered.
@@ -64,14 +64,14 @@ public:
      * \return the Style for the area \p rect .
      * \see contains
      */
-    Style intersects(const QRect& rect) const;
+    Style intersects(const QRect &rect) const;
 
     /**
      * Collects all substyle/range pairs, that intersect \p rect. With this data one can
      * reconstruct the former state of the storage after modification.
      * \return all substyle/range pairs intersecting \p rect
      */
-    QVector< QPair<QRectF, SharedSubStyle> > currentData(const Region& rect) const;
+    QVector<QPair<QRectF, SharedSubStyle>> currentData(const Region &rect) const;
 
     /**
      * Returns the area, which got a style attached.
@@ -83,7 +83,7 @@ public:
      * \return the OpenDocument column/row default cell styles
      * \ingroup OpenDocument
      */
-   void saveCreateDefaultStyles(int& maxCols, int& maxRows, QMap<int, Style> &columnDefaultStyles, QMap<int, Style> &rowDefaultStyles) const;
+    void saveCreateDefaultStyles(int &maxCols, int &maxRows, QMap<int, Style> &columnDefaultStyles, QMap<int, Style> &rowDefaultStyles) const;
 
     /**
      * Returns the index of the first cell style in \p row or zero
@@ -102,17 +102,17 @@ public:
     /**
      * Assigns \p subStyle to the area \p rect .
      */
-    void insert(const QRect& rect, const SharedSubStyle& subStyle, bool markRegionChanged = true);
+    void insert(const QRect &rect, const SharedSubStyle &subStyle, bool markRegionChanged = true);
 
     /**
      * Assigns the substyles contained in \p style to the area \p region .
      */
-    void insert(const Region& region, const Style& style);
+    void insert(const Region &region, const Style &style);
 
     /**
      * Replaces the current styles with those in \p styles
      */
-    void load(const QList<QPair<Region, Style> >& styles);
+    void load(const QList<QPair<Region, Style>> &styles);
 
     /**
      * Inserts \p number rows at the position \p position .
@@ -142,32 +142,31 @@ public:
      * Shifts the rows right of \p rect to the right by the width of \p rect .
      * It extends or shifts rectangles, respectively.
      */
-    void insertShiftRight(const QRect& rect) override;
+    void insertShiftRight(const QRect &rect) override;
 
     /**
      * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
      * It extends or shifts rectangles, respectively.
      */
-    void insertShiftDown(const QRect& rect) override;
+    void insertShiftDown(const QRect &rect) override;
 
     /**
      * Shifts the rows left of \p rect to the left by the width of \p rect .
      * It shrinks or shifts rectangles, respectively.
      * \return the former rectangle/data pairs
      */
-    void removeShiftLeft(const QRect& rect) override;
+    void removeShiftLeft(const QRect &rect) override;
 
     /**
      * Shifts the columns on top of \p rect to the top by the height of \p rect .
      * It shrinks or shifts rectangles, respectively.
      * \return the former rectangle/data pairs
      */
-    void removeShiftUp(const QRect& rect) override;
+    void removeShiftUp(const QRect &rect) override;
 
-    const QVector< QPair<QRectF, SharedSubStyle> > &undoData() const;
+    const QVector<QPair<QRectF, SharedSubStyle>> &undoData() const;
 
     void resetUndo() override;
-
 
 protected Q_SLOTS:
     void garbageCollection();
@@ -177,27 +176,27 @@ protected:
      * Triggers all necessary actions after a change of \p rect .
      * Adds the substyles in \p rect to the list of possible garbage.
      */
-    void regionChanged(const QRect& rect);
+    void regionChanged(const QRect &rect);
 
     /**
      * Composes a style of \p substyles .
      * \return the composed style
      */
-    Style composeStyle(const QList<SharedSubStyle>& subStyles) const;
+    Style composeStyle(const QList<SharedSubStyle> &subStyles) const;
 
     /**
      * Convenience method.
      * \return the StyleManager
      */
-    StyleManager* styleManager() const;
+    StyleManager *styleManager() const;
 
 private:
     friend class StyleStorageLoaderJob;
     // disable assignment
-    void operator=(const StyleStorage& other);
+    void operator=(const StyleStorage &other);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

@@ -8,17 +8,17 @@
 #include "KoGridData.h"
 #include "KoViewConverter.h"
 
-#include <KoUnit.h>
 #include <KoOasisSettings.h>
+#include <KoUnit.h>
 #include <KoXmlWriter.h>
 
 #include <KoIcon.h>
 
-#include <ktoggleaction.h>
+#include <FlakeDebug.h>
 #include <KLocalizedString>
 #include <QPainter>
 #include <QRectF>
-#include <FlakeDebug.h>
+#include <ktoggleaction.h>
 
 #define DEFAULT_GRID_SIZE_MM 5.0
 
@@ -26,13 +26,13 @@ class Q_DECL_HIDDEN KoGridData::Private
 {
 public:
     Private()
-        : snapToGrid(false),
-        showGrid(false),
-        paintGridInBackground(false),
-        gridX(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
-        gridY(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
-        gridColor(Qt::lightGray),
-        toggleGridAction(0)
+        : snapToGrid(false)
+        , showGrid(false)
+        , paintGridInBackground(false)
+        , gridX(MM_TO_POINT(DEFAULT_GRID_SIZE_MM))
+        , gridY(MM_TO_POINT(DEFAULT_GRID_SIZE_MM))
+        , gridColor(Qt::lightGray)
+        , toggleGridAction(0)
     {
     }
 
@@ -50,7 +50,7 @@ public:
 };
 
 KoGridData::KoGridData()
-        : d(new Private())
+    : d(new Private())
 {
 }
 
@@ -90,7 +90,7 @@ QColor KoGridData::gridColor() const
     return d->gridColor;
 }
 
-void KoGridData::setGridColor(const QColor & color)
+void KoGridData::setGridColor(const QColor &color)
 {
     d->gridColor = color;
 }
@@ -121,41 +121,37 @@ void KoGridData::setPaintGridInBackground(bool inBackground)
 
 void KoGridData::paintGrid(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const
 {
-    if (! showGrid())
+    if (!showGrid())
         return;
 
     painter.setPen(QPen(gridColor(), 0));
 
     qreal x = 0.0;
     do {
-        painter.drawLine(converter.documentToView(QPointF(x, area.top())),
-                         converter.documentToView(QPointF(x, area.bottom())));
+        painter.drawLine(converter.documentToView(QPointF(x, area.top())), converter.documentToView(QPointF(x, area.bottom())));
         x += gridX();
     } while (x <= area.right());
 
-    x = - gridX();
+    x = -gridX();
     while (x >= area.left()) {
-        painter.drawLine(converter.documentToView(QPointF(x, area.top())),
-                         converter.documentToView(QPointF(x, area.bottom())));
+        painter.drawLine(converter.documentToView(QPointF(x, area.top())), converter.documentToView(QPointF(x, area.bottom())));
         x -= gridX();
     };
 
     qreal y = 0.0;
     do {
-        painter.drawLine(converter.documentToView(QPointF(area.left(), y)),
-                         converter.documentToView(QPointF(area.right(), y)));
+        painter.drawLine(converter.documentToView(QPointF(area.left(), y)), converter.documentToView(QPointF(area.right(), y)));
         y += gridY();
     } while (y <= area.bottom());
 
-    y = - gridY();
+    y = -gridY();
     while (y >= area.top()) {
-        painter.drawLine(converter.documentToView(QPointF(area.left(), y)),
-                         converter.documentToView(QPointF(area.right(), y)));
+        painter.drawLine(converter.documentToView(QPointF(area.left(), y)), converter.documentToView(QPointF(area.right(), y)));
         y -= gridY();
     };
 }
 
-bool KoGridData::loadOdfSettings(const KoXmlDocument & settingsDoc)
+bool KoGridData::loadOdfSettings(const KoXmlDocument &settingsDoc)
 {
     KoOasisSettings settings(settingsDoc);
     KoOasisSettings::Items viewSettings = settings.itemSet("ooo:view-settings");
@@ -204,9 +200,9 @@ void KoGridData::saveOdfSettings(KoXmlWriter &settingsWriter)
     }
 }
 
-KToggleAction *KoGridData::gridToggleAction(QWidget* canvas)
+KToggleAction *KoGridData::gridToggleAction(QWidget *canvas)
 {
-    if (! d->toggleGridAction) {
+    if (!d->toggleGridAction) {
         d->toggleGridAction = new KToggleAction(koIcon("view-grid"), i18n("Show Grid"), 0);
         d->toggleGridAction->setToolTip(i18n("Shows or hides grid"));
         d->toggleGridAction->setChecked(d->showGrid);

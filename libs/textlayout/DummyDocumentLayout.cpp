@@ -15,7 +15,7 @@
 
 // ------------------- DummyDocumentLayout --------------------
 DummyDocumentLayout::DummyDocumentLayout(QTextDocument *doc)
-        : QAbstractTextDocumentLayout(doc)
+    : QAbstractTextDocumentLayout(doc)
 {
     setPaintDevice(new KoPostscriptPaintDevice());
 }
@@ -44,16 +44,15 @@ void DummyDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLay
     Q_UNUSED(context);
 }
 
-
 int DummyDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
 {
     Q_UNUSED(point);
     Q_UNUSED(accuracy);
-    Q_ASSERT(false); //we should not call this method.
+    Q_ASSERT(false); // we should not call this method.
     return -1;
 }
 
-QRectF DummyDocumentLayout::frameBoundingRect(QTextFrame*) const
+QRectF DummyDocumentLayout::frameBoundingRect(QTextFrame *) const
 {
     return QRectF();
 }

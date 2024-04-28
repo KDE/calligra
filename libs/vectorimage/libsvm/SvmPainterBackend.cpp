@@ -4,29 +4,26 @@
   SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
-
 // Own
 #include "SvmPainterBackend.h"
 
 // Qt
-#include <QPoint>
-#include <QRect>
-#include <QPolygon>
-#include <QString>
 #include <QPainter>
 #include <QPainterPath>
+#include <QPoint>
+#include <QPolygon>
+#include <QRect>
+#include <QString>
 
 // Libsvm
 #include "SvmEnums.h"
-#include "SvmStructs.h"
 #include "SvmGraphicsContext.h"
+#include "SvmStructs.h"
 
 // lib
 #include "VectorImageDebug.h"
 
-
 #define DEBUG_SVMPAINT 0
-
 
 /**
    Namespace for StarView Metafile (SVM) classes
@@ -44,14 +41,13 @@ SvmPainterBackend::~SvmPainterBackend()
 {
 }
 
-
 void SvmPainterBackend::init(const SvmHeader &header)
 {
     // This is restored in cleanup().
     m_painter->save();
 
-    qreal  scaleX = qreal( m_outputSize.width() )  / header.width;
-    qreal  scaleY = qreal( m_outputSize.height() ) / header.height;
+    qreal scaleX = qreal(m_outputSize.width()) / header.width;
+    qreal scaleY = qreal(m_outputSize.height()) / header.height;
 
 #if DEBUG_SVMPAINT
     debugVectorImage << "scale before:" << scaleX << ", " << scaleY;
@@ -59,7 +55,7 @@ void SvmPainterBackend::init(const SvmHeader &header)
 
     // Keep aspect ratio.  Use the smaller value so that we don't get
     // an overflow in any direction.
-#if 0   // Set this to 1 to keep aspect ratio.
+#if 0 // Set this to 1 to keep aspect ratio.
     if ( scaleX > scaleY )
         scaleX = scaleY;
     else
@@ -72,12 +68,12 @@ void SvmPainterBackend::init(const SvmHeader &header)
 
     // Transform the SVM object so that it fits in the shape as much
     // as possible.  The topleft will be the top left of the shape.
-    m_painter->scale( scaleX, scaleY );
-    //m_painter->translate(-header->bounds().left(), -header->bounds().top());
+    m_painter->scale(scaleX, scaleY);
+    // m_painter->translate(-header->bounds().left(), -header->bounds().top());
 
     m_outputTransform = m_painter->transform();
-    //m_worldTransform = QTransform();
-    
+    // m_worldTransform = QTransform();
+
     m_painter->setRenderHint(QPainter::Antialiasing);
     m_painter->setRenderHint(QPainter::TextAntialiasing);
 }
@@ -92,38 +88,35 @@ void SvmPainterBackend::eof()
 {
 }
 
-
 // ----------------------------------------------------------------
 //                         Graphics output
 
-
-void SvmPainterBackend::rect( SvmGraphicsContext &context, const QRect &rect )
+void SvmPainterBackend::rect(SvmGraphicsContext &context, const QRect &rect)
 {
     updateFromGraphicscontext(context);
     m_painter->drawRect(rect);
 }
 
-void SvmPainterBackend::polyLine( SvmGraphicsContext &context, const QPolygon &polyline )
+void SvmPainterBackend::polyLine(SvmGraphicsContext &context, const QPolygon &polyline)
 {
     updateFromGraphicscontext(context);
     m_painter->drawPolyline(polyline);
 }
 
-void SvmPainterBackend::polygon( SvmGraphicsContext &context, const QPolygon &polygon )
+void SvmPainterBackend::polygon(SvmGraphicsContext &context, const QPolygon &polygon)
 {
     updateFromGraphicscontext(context);
     m_painter->drawPolygon(polygon);
 }
 
-void SvmPainterBackend::polyPolygon(SvmGraphicsContext &context,
-                                    const QList<QPolygon> &polyPolygon)
+void SvmPainterBackend::polyPolygon(SvmGraphicsContext &context, const QList<QPolygon> &polyPolygon)
 {
     updateFromGraphicscontext(context);
 
-    QPainterPath  path;
+    QPainterPath path;
 
     path.setFillRule(Qt::OddEvenFill);
-    //path.setFillRule(Qt::WindingFill);
+    // path.setFillRule(Qt::WindingFill);
     foreach (const QPolygon &polygon, polyPolygon) {
         path.addPolygon(polygon);
     }
@@ -131,9 +124,12 @@ void SvmPainterBackend::polyPolygon(SvmGraphicsContext &context,
 }
 
 void SvmPainterBackend::textArray(SvmGraphicsContext &context,
-                                  const QPoint &point, const QString &string,
-                                  quint16 startIndex, quint16 len,
-                                  quint32 dxArrayLen, qint32 *dxArray)
+                                  const QPoint &point,
+                                  const QString &string,
+                                  quint16 startIndex,
+                                  quint16 len,
+                                  quint32 dxArrayLen,
+                                  qint32 *dxArray)
 {
     updateFromGraphicscontext(context);
 
@@ -149,7 +145,6 @@ void SvmPainterBackend::textArray(SvmGraphicsContext &context,
     m_painter->restore();
 }
 
-
 // ----------------------------------------------------------------
 //                         Private functions
 
@@ -160,8 +155,7 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
         if (context.lineColorSet) {
             pen.setColor(context.lineColor);
             pen.setStyle(Qt::SolidLine);
-        }
-        else
+        } else
             pen.setStyle(Qt::NoPen);
         m_painter->setPen(pen);
 #if DEBUG_SVMPAINT
@@ -173,8 +167,7 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
         if (context.fillColorSet) {
             brush.setColor(context.fillColor);
             brush.setStyle(Qt::SolidPattern);
-        }
-        else
+        } else
             brush.setStyle(Qt::NoBrush);
         m_painter->setBrush(brush);
 #if DEBUG_SVMPAINT
@@ -209,7 +202,4 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
     // Reset all changes until next time.
     context.changedItems = 0;
 }
-
-
-
 }

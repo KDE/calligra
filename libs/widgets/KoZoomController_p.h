@@ -15,15 +15,21 @@
 #include <KLocalizedString>
 #include <WidgetsDebug.h>
 
-#include <KoZoomHandler.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
+#include <KoZoomHandler.h>
 
 class Q_DECL_HIDDEN KoZoomController::Private
 {
 public:
     Private(KoZoomController *p, KoZoomAction::SpecialButtons specialButtons)
-        : canvasController(0), zoomHandler(0), action(0), textMinX(1), textMaxX(600), fitMargin(0), parent(p)
+        : canvasController(0)
+        , zoomHandler(0)
+        , action(0)
+        , textMinX(1)
+        , textMaxX(600)
+        , fitMargin(0)
+        , parent(p)
     {
         action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), p);
         action->setSpecialButtons(specialButtons);
@@ -33,16 +39,16 @@ public:
     /// so we know when the canvasController changes size
     void setAvailableSize()
     {
-        if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
+        if (zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
             setZoom(KoZoomMode::ZOOM_WIDTH, -1);
-        if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
+        if (zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
             setZoom(KoZoomMode::ZOOM_PAGE, -1);
-        if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_TEXT)
+        if (zoomHandler->zoomMode() == KoZoomMode::ZOOM_TEXT)
             setZoom(KoZoomMode::ZOOM_TEXT, -1);
     }
 
     /// when the canvas controller wants us to change zoom
-    void requestZoomRelative(const qreal factor, const QPointF& stillPoint)
+    void requestZoomRelative(const qreal factor, const QPointF &stillPoint)
     {
         parent->setZoom(KoZoomMode::ZOOM_CONSTANT, factor * zoomHandler->zoom(), stillPoint);
     }
@@ -52,10 +58,7 @@ public:
         parent->setZoom(mode, zoom);
     }
 
-    void init(KoCanvasController *co,
-              KoZoomHandler *zh,
-              KActionCollection *actionCollection,
-              bool createZoomShortcuts);
+    void init(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, bool createZoomShortcuts);
 
     KoCanvasController *canvasController;
     KoZoomHandler *zoomHandler;

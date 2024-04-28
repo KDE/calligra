@@ -9,8 +9,8 @@
 #include "ChartToolFactory.h"
 
 // KoChart
-#include "ChartTool.h"
 #include "ChartShape.h"
+#include "ChartTool.h"
 
 // Calligra
 #include <KoIcon.h>
@@ -18,19 +18,16 @@
 // KF5
 #include <KLocalizedString>
 
-
-
 using namespace KoChart;
-
 
 ChartToolFactory::ChartToolFactory()
     : KoToolFactoryBase("ChartToolFactory_ID")
 {
-    setToolTip (i18n("Chart editing"));
-    setToolType (dynamicToolType());
+    setToolTip(i18n("Chart editing"));
+    setToolType(dynamicToolType());
     setIconName(koIconNameNeededWithSubs("enables editing of a given chart of any type", "edit-chart", "office-chart-bar"));
-    setPriority (1);
-    setActivationShapeId (ChartShapeId);
+    setPriority(1);
+    setActivationShapeId(ChartShapeId);
 }
 
 ChartToolFactory::~ChartToolFactory()
@@ -41,5 +38,3 @@ KoToolBase *ChartToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new ChartTool(canvas);
 }
-
-

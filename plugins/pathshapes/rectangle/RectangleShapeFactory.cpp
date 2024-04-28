@@ -5,16 +5,16 @@
  */
 
 #include "RectangleShapeFactory.h"
+#include "KoShapeStroke.h"
 #include "RectangleShape.h"
 #include "RectangleShapeConfigWidget.h"
-#include "KoShapeStroke.h"
-#include <KoXmlNS.h>
-#include <KoXmlReader.h>
 #include <KoGradientBackground.h>
 #include <KoShapeLoadingContext.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 
 RectangleShapeFactory::RectangleShapeFactory()
     : KoShapeFactoryBase(RectangleShapeId, i18n("Rectangle"))
@@ -24,7 +24,7 @@ RectangleShapeFactory::RectangleShapeFactory()
     setFamily("geometric");
     setLoadingPriority(1);
 
-    QList<QPair<QString, QStringList> > elementNamesList;
+    QList<QPair<QString, QStringList>> elementNamesList;
     elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("rect")));
     elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("rect")));
     setXmlElements(elementNamesList);
@@ -37,7 +37,7 @@ KoShape *RectangleShapeFactory::createDefaultShape(KoDocumentResourceManager *) 
     rect->setStroke(new KoShapeStroke(1.0));
     rect->setShapeId(KoPathShapeId);
 
-    QLinearGradient *gradient = new QLinearGradient(QPointF(0,0), QPointF(1,1));
+    QLinearGradient *gradient = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
     gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
 
     gradient->setColorAt(0.0, Qt::white);
@@ -47,16 +47,15 @@ KoShape *RectangleShapeFactory::createDefaultShape(KoDocumentResourceManager *) 
     return rect;
 }
 
-bool RectangleShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &/*context*/) const
+bool RectangleShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext & /*context*/) const
 {
     Q_UNUSED(e);
     return (e.localName() == "rect" && e.namespaceURI() == KoXmlNS::draw);
 }
 
-QList<KoShapeConfigWidgetBase*> RectangleShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> RectangleShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> panels;
+    QList<KoShapeConfigWidgetBase *> panels;
     panels.append(new RectangleShapeConfigWidget());
     return panels;
 }
-

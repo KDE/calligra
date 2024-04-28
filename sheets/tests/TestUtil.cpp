@@ -16,8 +16,9 @@ void TestUtil::testDecodeFormula_data()
 
     QTest::newRow("exponent") << "=(   (PI()/16)  *   ([.N102]*POWER([.J102];2))  *  (POWER(1.6E-019;2))   * (  1/ (1.6E-019*[.E102]*1000*9.1E-031) )     )"
                               << "=(   (PI()/16)  *   (N102*POWER(J102;2))  *  (POWER(1.6E-019;2))   * (  1/ (1.6E-019*E102*1000*9.1E-031) )     )";
-    QTest::newRow("strange range") << "=['file:///Users/twacks/Library/Mail Downloads/Town Council/07-08 budgetFlat2%2525ColaSemiFinal-PropC.xls'#$'TH  3_7_2 proposed no p_s  _2_'.F21]"
-                                   << "='file:///Users/twacks/Library/Mail Downloads/Town Council/07-08 budgetFlat2%2525ColaSemiFinal-PropC.xls'#$'TH  3_7_2 proposed no p_s  _2_'!F21";
+    QTest::newRow("strange range")
+        << "=['file:///Users/twacks/Library/Mail Downloads/Town Council/07-08 budgetFlat2%2525ColaSemiFinal-PropC.xls'#$'TH  3_7_2 proposed no p_s  _2_'.F21]"
+        << "='file:///Users/twacks/Library/Mail Downloads/Town Council/07-08 budgetFlat2%2525ColaSemiFinal-PropC.xls'#$'TH  3_7_2 proposed no p_s  _2_'!F21";
     QTest::newRow("handle !") << "=#ref!#ref!"
                               << "=#ref!#ref!";
 }

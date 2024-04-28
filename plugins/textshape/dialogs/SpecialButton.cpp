@@ -8,22 +8,22 @@
 
 #include <QFrame>
 #include <QHBoxLayout>
-#include <QPixmap>
-#include <QLabel>
 #include <QHideEvent>
+#include <QLabel>
+#include <QPixmap>
 #include <QShowEvent>
 
 #include <QDebug>
 
 SpecialButton::SpecialButton(QWidget *parent)
-    : QFrame(parent),
-      m_stylesWidget(0),
-      m_preview(0)
+    : QFrame(parent)
+    , m_stylesWidget(0)
+    , m_preview(0)
 {
     setFrameShape(QFrame::StyledPanel);
     setFrameShadow(QFrame::Sunken);
 
-    setMinimumSize(50,32);
+    setMinimumSize(50, 32);
     setMaximumHeight(25);
 
     m_preview = new QLabel();
@@ -86,8 +86,7 @@ void SpecialButton::mousePressEvent(QMouseEvent *)
 {
     if (!isPopupVisible) {
         showPopup();
-    }
-    else {
+    } else {
         hidePopup();
     }
 }

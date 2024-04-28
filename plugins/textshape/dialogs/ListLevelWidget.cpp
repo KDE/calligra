@@ -10,10 +10,10 @@
 
 #include <KoListLevelProperties.h>
 
-#include <QPainter>
 #include <QDebug>
-#include <QPaintEvent>
 #include <QGridLayout>
+#include <QPaintEvent>
+#include <QPainter>
 
 static void drawMeasureArrow(QPainter &painter, int x, int y, bool pointRight)
 {
@@ -25,7 +25,7 @@ static void drawMeasureArrow(QPainter &painter, int x, int y, bool pointRight)
         --x; // makes arrow more pointy
         painter.drawLine(x, y, x - d, y + d);
         painter.drawLine(x, y, x - d, y - d);
-    }  else {
+    } else {
         ++x; // makes arrow more pointy
         painter.drawLine(x, y, x + d, y + d);
         painter.drawLine(x, y, x + d, y - d);
@@ -35,7 +35,9 @@ static void drawMeasureArrow(QPainter &painter, int x, int y, bool pointRight)
 class LabelDrawingWidget : public QWidget
 {
 public:
-    LabelDrawingWidget() : QWidget(), m_align(2)
+    LabelDrawingWidget()
+        : QWidget()
+        , m_align(2)
     {
     }
 
@@ -55,7 +57,7 @@ protected:
         pen.setWidthF(2.0);
         painter.setPen(pen);
 
-        int x = width() / 2 + 30 * (m_align -1);
+        int x = width() / 2 + 30 * (m_align - 1);
 
         // the |< arrow
         drawMeasureArrow(painter, x, 5, false);
@@ -66,7 +68,7 @@ protected:
     int m_align;
 };
 
-ListLevelWidget::ListLevelWidget(QWidget* parent)
+ListLevelWidget::ListLevelWidget(QWidget *parent)
     : QWidget(parent)
 {
     widget.setupUi(this);
@@ -75,7 +77,7 @@ ListLevelWidget::ListLevelWidget(QWidget* parent)
 
     QGridLayout *bulletLayout = new QGridLayout();
     m_charSelect = new KCharSelect(0, 0, KCharSelect::FontCombo | KCharSelect::BlockCombos | KCharSelect::CharacterTable | KCharSelect::DetailBrowser);
-    bulletLayout->addWidget(m_charSelect, 0,0);
+    bulletLayout->addWidget(m_charSelect, 0, 0);
     widget.bulletTab->setLayout(bulletLayout);
 
     widget.geometryGrid->addWidget(m_label = new LabelDrawingWidget, 4, 0);
@@ -138,8 +140,7 @@ void ListLevelWidget::alignmentChanged(int a)
 
 void ListLevelWidget::numberFormatChanged(int index)
 {
-    widget.synchro->setEnabled(index == KoOdfNumberDefinition::AlphabeticLowerCase 
-                            || index ==KoOdfNumberDefinition::AlphabeticUpperCase);
+    widget.synchro->setEnabled(index == KoOdfNumberDefinition::AlphabeticLowerCase || index == KoOdfNumberDefinition::AlphabeticUpperCase);
 }
 
 void ListLevelWidget::setDisplay(const KoListLevelProperties &props)
@@ -166,7 +167,7 @@ void ListLevelWidget::setDisplay(const KoListLevelProperties &props)
     widget.suffix->setText(props.listItemSuffix());
     widget.displayLevels->setValue(props.displayLevel());
 
-    switch(props.labelType()) {
+    switch (props.labelType()) {
     case KoListStyle::BulletCharLabelType:
         widget.tabWidget->setCurrentIndex(1);
         break;
@@ -190,7 +191,7 @@ void ListLevelWidget::save(KoListLevelProperties &props) const
         props.clearTabStopPosition();
     }
 
-    switch(widget.tabWidget->currentIndex()) {
+    switch (widget.tabWidget->currentIndex()) {
     case 0:
         props.setLabelType(KoListStyle::NumberLabelType);
         props.setNumberFormat(KoOdfNumberDefinition::FormatSpecification(widget.format->currentIndex()));

@@ -38,14 +38,16 @@ class KoShape;
 class RememberPositionCommand : public KUndo2Command
 {
 public:
-    explicit RememberPositionCommand(const QList<KoShape*>& _shapes, KUndo2Command *cmd = 0);
+    explicit RememberPositionCommand(const QList<KoShape *> &_shapes, KUndo2Command *cmd = 0);
     virtual ~RememberPositionCommand();
+
 public:
     virtual void undo();
     /// Will do nothing
     virtual void redo();
+
 private:
-    QMap<KoShape*, QRectF> m_shapesToGeom;
+    QMap<KoShape *, QRectF> m_shapesToGeom;
 };
 
 #endif

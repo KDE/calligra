@@ -6,11 +6,11 @@
  */
 #include "KoOdfLineNumberingConfiguration.h"
 
-#include <OdfDebug.h>
-#include "KoXmlNS.h"
-#include "KoUnit.h"
-#include "KoXmlWriter.h"
 #include "KoOdfNumberDefinition.h"
+#include "KoUnit.h"
+#include "KoXmlNS.h"
+#include "KoXmlWriter.h"
+#include <OdfDebug.h>
 
 class Q_DECL_HIDDEN KoOdfLineNumberingConfiguration::Private
 {
@@ -46,7 +46,8 @@ KoOdfLineNumberingConfiguration::~KoOdfLineNumberingConfiguration()
 }
 
 KoOdfLineNumberingConfiguration::KoOdfLineNumberingConfiguration(const KoOdfLineNumberingConfiguration &other)
-    : QObject(), d(new Private())
+    : QObject()
+    , d(new Private())
 {
     d->lineNumberingEnabled = other.d->lineNumberingEnabled;
     d->numberFormat = other.d->numberFormat;
@@ -78,7 +79,6 @@ KoOdfLineNumberingConfiguration &KoOdfLineNumberingConfiguration::operator=(cons
     return *this;
 }
 
-
 void KoOdfLineNumberingConfiguration::loadOdf(const KoXmlElement &element)
 {
     d->lineNumberingEnabled = element.attributeNS(KoXmlNS::text, "number-lines", "true") == "true";
@@ -89,14 +89,11 @@ void KoOdfLineNumberingConfiguration::loadOdf(const KoXmlElement &element)
     QString position = element.attributeNS(KoXmlNS::text, "position", "left");
     if (position == "left") {
         d->position = Left;
-    }
-    else if (position == "right") {
+    } else if (position == "right") {
         d->position = Right;
-    }
-    else if (position == "inner") {
+    } else if (position == "inner") {
         d->position = Inner;
-    }
-    else if (position == "outer") {
+    } else if (position == "outer") {
         d->position = Outer;
     }
 
@@ -105,12 +102,12 @@ void KoOdfLineNumberingConfiguration::loadOdf(const KoXmlElement &element)
     d->countLinesInTextBoxes = element.attributeNS(KoXmlNS::text, "count-in-text-boxes", "false") == "true";
     d->restartNumberingOnEveryPage = element.attributeNS(KoXmlNS::text, "restart-on-page", "false") == "true";
 
-    if(element.hasChildNodes()) {
+    if (element.hasChildNodes()) {
         KoXmlNode node = element.firstChild();
-        while(!node.isNull()) {
-            if(node.isElement()) {
+        while (!node.isNull()) {
+            if (node.isElement()) {
                 KoXmlElement nodeElement = node.toElement();
-                if(nodeElement.localName() == "linenumber-separator") {
+                if (nodeElement.localName() == "linenumber-separator") {
                     d->separator = nodeElement.text();
                     d->separatorIncrement = KoUnit::parseValue(element.attributeNS(KoXmlNS::text, "increment", "10"));
                     break;
@@ -119,8 +116,6 @@ void KoOdfLineNumberingConfiguration::loadOdf(const KoXmlElement &element)
             node = node.nextSibling();
         }
     }
-
-
 }
 
 void KoOdfLineNumberingConfiguration::saveOdf(KoXmlWriter *writer) const
@@ -131,7 +126,7 @@ void KoOdfLineNumberingConfiguration::saveOdf(KoXmlWriter *writer) const
         writer->addAttribute("text:style-name", d->textStyle);
     }
     writer->addAttribute("text:increment", d->increment);
-    switch(d->position) {
+    switch (d->position) {
     case Left:
         break; // this is default, don't save
     case Right:
@@ -144,13 +139,23 @@ void KoOdfLineNumberingConfiguration::saveOdf(KoXmlWriter *writer) const
         writer->addAttribute("text:position", "outer");
         break;
     }
-    if (d->offset != 10) { writer->addAttribute("text:offset", d->offset);  }
-    if (d->countEmptyLines) { writer->addAttribute("text:count-empty-lines", d->countEmptyLines); }
-    if (d->countLinesInTextBoxes) { writer->addAttribute("text:count-in-text-boxes", d->countLinesInTextBoxes);  }
-    if (d->restartNumberingOnEveryPage) { writer->addAttribute("text:restart-on-page", d->restartNumberingOnEveryPage); }
+    if (d->offset != 10) {
+        writer->addAttribute("text:offset", d->offset);
+    }
+    if (d->countEmptyLines) {
+        writer->addAttribute("text:count-empty-lines", d->countEmptyLines);
+    }
+    if (d->countLinesInTextBoxes) {
+        writer->addAttribute("text:count-in-text-boxes", d->countLinesInTextBoxes);
+    }
+    if (d->restartNumberingOnEveryPage) {
+        writer->addAttribute("text:restart-on-page", d->restartNumberingOnEveryPage);
+    }
     if (!d->separator.isNull()) {
         writer->startElement("txt:linenumber-separator");
-        if (d->separatorIncrement != 10) { writer->addAttribute("text:increment", d->separatorIncrement); }
+        if (d->separatorIncrement != 10) {
+            writer->addAttribute("text:increment", d->separatorIncrement);
+        }
         writer->addTextNode(d->separator);
         writer->endElement();
     }
@@ -265,4 +270,3 @@ void KoOdfLineNumberingConfiguration::setSeparatorIncrement(int separatorIncreme
 {
     d->separatorIncrement = separatorIncrement;
 }
-

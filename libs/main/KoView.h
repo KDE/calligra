@@ -8,9 +8,9 @@
 #ifndef __koView_h__
 #define __koView_h__
 
-#include <QWidget>
-#include <KXMLGUIClient>
 #include "komain_export.h"
+#include <KXMLGUIClient>
+#include <QWidget>
 
 class KoPart;
 class KoDocument;
@@ -57,15 +57,14 @@ public:
 
     // QWidget overrides
 protected:
-
-    void dragEnterEvent(QDragEnterEvent * event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
 
     /**
      * dropEvent by default calls addImages. Your KoView subclass might
      * override dropEvent and if your app can also handle images, call this
      * method.
      */
-    void dropEvent(QDropEvent * event) override;
+    void dropEvent(QDropEvent *event) override;
 
     // KoView api
 
@@ -79,7 +78,6 @@ protected:
     virtual void addImages(const QVector<QImage> &imageList, const QPoint &insertAt);
 
 public:
-
     /**
      *  Retrieves the document object of this view.
      */
@@ -95,14 +93,14 @@ public:
      * be constructed that is capable of doing the printing.
      * The default implementation returns 0, which silently cancels printing.
      */
-    virtual KoPrintJob * createPrintJob();
+    virtual KoPrintJob *createPrintJob();
 
     /**
      * In order to export the document represented by this view a new print job should
      * be constructed that is capable of doing the printing.
      * The default implementation call createPrintJob.
      */
-    virtual KoPrintJob * createPdfPrintJob();
+    virtual KoPrintJob *createPdfPrintJob();
 
     /**
      * @return the page layout to be used for printing.
@@ -119,12 +117,12 @@ public:
     /**
      * @return the KoMainWindow in which this view is currently.
      */
-    KoMainWindow * mainWindow() const;
+    KoMainWindow *mainWindow() const;
 
-   /**
+    /**
      * @return the statusbar of the KoMainWindow in which this view is currently.
      */
-    QStatusBar * statusBar() const;
+    QStatusBar *statusBar() const;
 
     /**
      * This adds a widget to the statusbar for this view.
@@ -137,12 +135,12 @@ public:
      * But you can create a KStatusBarLabel with a dummy id instead, and use
      * it directly, to get the same look and feel.
      */
-    void addStatusBarItem(QWidget * widget, int stretch = 0, bool permanent = false);
+    void addStatusBarItem(QWidget *widget, int stretch = 0, bool permanent = false);
 
     /**
      * Remove a widget from the statusbar for this view.
      */
-    void removeStatusBarItem(QWidget * widget);
+    void removeStatusBarItem(QWidget *widget);
 
     /**
      * You have to implement this method and disable/enable certain functionality (actions for example) in
@@ -156,7 +154,7 @@ public:
     virtual KoZoomController *zoomController() const = 0;
 
     /// create a list of actions that when activated will change the unit on the document.
-    QList<QAction*> createChangeUnitActions(bool addPixelUnit = false);
+    QList<QAction *> createChangeUnitActions(bool addPixelUnit = false);
 
     /**
      * @brief guiActivateEvent is called when the window activates a view. Reimplement this for any special behaviour.
@@ -183,7 +181,6 @@ public Q_SLOTS:
     void slotUpdateAuthorProfileActions();
 
 protected:
-
     /**
      * Generate a name for this view.
      */
@@ -195,7 +192,7 @@ protected Q_SLOTS:
 
 private:
     virtual void setupGlobalActions(void);
-    KoViewPrivate * const d;
+    KoViewPrivate *const d;
 };
 
 #endif

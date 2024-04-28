@@ -19,24 +19,23 @@
 #ifndef OLESTORAGE_H
 #define OLESTORAGE_H
 
-#include <string>
-#include <list>
 #include <deque>
+#include <list>
+#include <string>
 
 #include "wv2_export.h"
 
 // Forward declarations
-namespace POLE {
-    class Storage;
+namespace POLE
+{
+class Storage;
 }
 
 // We have removed libgsf, and require a replacement for WV2SeekType
-typedef enum
-{
-  WV2_SEEK_CUR, //< From current position
-  WV2_SEEK_SET, //< Absolute position
+typedef enum {
+    WV2_SEEK_CUR, //< From current position
+    WV2_SEEK_SET, //< Absolute position
 } WV2SeekType;
-
 
 namespace wvWare
 {
@@ -62,7 +61,7 @@ public:
      * Specify a name for the storage. Note: It will *not* be opened
      * right now, call @see open() to do that
      */
-    explicit OLEStorage( const std::string& fileName );
+    explicit OLEStorage(const std::string &fileName);
 
     /**
      * Destroy the current storage. Open streams on it will
@@ -75,7 +74,7 @@ public:
      * Opening a storage twice won't do any harm.
      * @return true if opening was successful
      */
-    bool open( Mode mode );
+    bool open(Mode mode);
 
     /**
      * Closes the current storage (no-op if we don't have one ;)
@@ -95,7 +94,7 @@ public:
      * e.g. if the storage is opened in WriteOnly mode.
      * Note: The ownership is transferred to you!
      */
-    OLEStreamReader* createStreamReader( const std::string& stream );
+    OLEStreamReader *createStreamReader(const std::string &stream);
 
     /** TODO reimplement this
      * Opens a stream for writing (you get 0 if it failed, e.g. if
@@ -103,22 +102,22 @@ public:
      * Note: The ownership is transferred to you!
      * Note2: Don't try to pass names with a '/' in it :)
      */
-    OLEStreamWriter* createStreamWriter( const std::string& stream );
+    OLEStreamWriter *createStreamWriter(const std::string &stream);
 
 private:
     /**
      * we don't want to allow copying
      */
-    OLEStorage( const OLEStorage& rhs );
+    OLEStorage(const OLEStorage &rhs);
     /**
      * we don't want to allow assigning
      */
-    OLEStorage& operator=( const OLEStorage& rhs );
+    OLEStorage &operator=(const OLEStorage &rhs);
 
     /**
      *  Pointer to a Storage object which we are providing a Facade for.
      */
-    POLE::Storage* m_storage;
+    POLE::Storage *m_storage;
 
     std::string m_fileName;
 
@@ -127,7 +126,7 @@ private:
      * the streams for bookkeeping issues. If the user forgets
      * to delete the OLEStreams we do it on closing.
      */
-    std::list<OLEStream*> m_streams;
+    std::list<OLEStream *> m_streams;
 };
 
 } // namespace wvWare

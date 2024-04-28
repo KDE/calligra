@@ -6,7 +6,8 @@
 #include "PartGroup.h"
 #include "Sheet.h"
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class PartGroup::Private
 {
@@ -19,7 +20,9 @@ public:
     bool commonBarLines;
 };
 
-PartGroup::PartGroup(Sheet* sheet, int firstPart, int lastPart) : QObject(sheet), d(new Private)
+PartGroup::PartGroup(Sheet *sheet, int firstPart, int lastPart)
+    : QObject(sheet)
+    , d(new Private)
 {
     d->symbol = DefaultSymbol;
     d->firstPart = firstPart;
@@ -32,9 +35,9 @@ PartGroup::~PartGroup()
     delete d;
 }
 
-Sheet* PartGroup::sheet()
+Sheet *PartGroup::sheet()
 {
-    return qobject_cast<Sheet*>(parent());
+    return qobject_cast<Sheet *>(parent());
 }
 
 int PartGroup::firstPart() const
@@ -44,8 +47,9 @@ int PartGroup::firstPart() const
 
 void PartGroup::setFirstPart(int index)
 {
-    Q_ASSERT( index >= 0 && index < sheet()->partCount() );
-    if (d->firstPart == index) return;
+    Q_ASSERT(index >= 0 && index < sheet()->partCount());
+    if (d->firstPart == index)
+        return;
     d->firstPart = index;
     emit firstPartChanged(index);
 }
@@ -57,8 +61,9 @@ int PartGroup::lastPart() const
 
 void PartGroup::setLastPart(int index)
 {
-    Q_ASSERT( index >= 0 && index < sheet()->partCount() );
-    if (d->lastPart == index) return;
+    Q_ASSERT(index >= 0 && index < sheet()->partCount());
+    if (d->lastPart == index)
+        return;
     d->lastPart = index;
     emit lastPartChanged(index);
 }
@@ -70,10 +75,12 @@ QString PartGroup::name() const
 
 void PartGroup::setName(const QString &name)
 {
-    if (d->name == name) return;
+    if (d->name == name)
+        return;
     d->name = name;
     emit nameChanged(name);
-    if (d->shortName.isNull()) emit shortNameChanged(name);
+    if (d->shortName.isNull())
+        emit shortNameChanged(name);
 }
 
 QString PartGroup::shortName(bool useFull) const
@@ -85,9 +92,10 @@ QString PartGroup::shortName(bool useFull) const
     }
 }
 
-void PartGroup::setShortName(const QString& shortName)
+void PartGroup::setShortName(const QString &shortName)
 {
-    if (d->shortName == shortName) return;
+    if (d->shortName == shortName)
+        return;
     d->shortName = shortName;
     emit shortNameChanged(shortName);
 }
@@ -99,7 +107,8 @@ PartGroup::GroupSymbol PartGroup::symbol() const
 
 void PartGroup::setSymbol(GroupSymbol symbol)
 {
-    if (d->symbol == symbol) return;
+    if (d->symbol == symbol)
+        return;
     d->symbol = symbol;
     emit symbolChanged(symbol);
 }
@@ -111,7 +120,8 @@ bool PartGroup::commonBarLines() const
 
 void PartGroup::setCommonBarLines(bool commonBarLines)
 {
-    if (d->commonBarLines == commonBarLines) return;
+    if (d->commonBarLines == commonBarLines)
+        return;
     d->commonBarLines = commonBarLines;
     emit commonBarLinesChanged(commonBarLines);
 }

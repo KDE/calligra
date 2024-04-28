@@ -12,8 +12,8 @@
 
 // KoChart
 #include "ChartShape.h"
-#include "PlotArea.h"
 #include "Legend.h"
+#include "PlotArea.h"
 
 using namespace KoChart;
 
@@ -35,7 +35,10 @@ void TestLoading::testPlotArea()
 void TestLoading::testLegend()
 {
     testElementIsVisible(m_chart->legend(), true);
-    testLegendElements(QStringList() << "Row 1" << "Row 2" << "Row 3" << "Row 4");
+    testLegendElements(QStringList() << "Row 1"
+                                     << "Row 2"
+                                     << "Row 3"
+                                     << "Row 4");
 }
 
 QTEST_MAIN(TestLoading)

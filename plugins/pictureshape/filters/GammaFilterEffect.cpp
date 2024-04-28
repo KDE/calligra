@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #include "GammaFilterEffect.h"
 #include <KoFilterEffectRenderContext.h>
 
@@ -23,18 +22,18 @@ GammaFilterEffect::~GammaFilterEffect()
 {
 }
 
-void GammaFilterEffect::save(KoXmlWriter& /*writer*/)
+void GammaFilterEffect::save(KoXmlWriter & /*writer*/)
 {
 }
 
-bool GammaFilterEffect::load(const KoXmlElement& /*element*/, const KoFilterEffectLoadingContext& /*context*/)
+bool GammaFilterEffect::load(const KoXmlElement & /*element*/, const KoFilterEffectLoadingContext & /*context*/)
 {
     return true;
 }
 
 void GammaFilterEffect::setGamma(qreal gamma)
 {
-    m_gamma =gamma;
+    m_gamma = gamma;
 }
 
 qreal GammaFilterEffect::gamma() const
@@ -42,9 +41,9 @@ qreal GammaFilterEffect::gamma() const
     return m_gamma;
 }
 
-QImage GammaFilterEffect::processImage(const QImage& image, const KoFilterEffectRenderContext& context) const
+QImage GammaFilterEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &context) const
 {
-    if (m_gamma<=0)
+    if (m_gamma <= 0)
         return image;
 
     QImage result = image.convertToFormat(QImage::Format_ARGB32);
@@ -53,11 +52,11 @@ QImage GammaFilterEffect::processImage(const QImage& image, const KoFilterEffect
     const int left = context.filterRegion().left();
     const int right = context.filterRegion().right();
     const int width = result.width();
-    const QRgb *src = (const QRgb*)image.constBits();
-    QRgb *dst = (QRgb*)result.bits();
+    const QRgb *src = (const QRgb *)image.constBits();
+    QRgb *dst = (QRgb *)result.bits();
 
     const int max = 255;
-    const qreal invMax = 1.0/ max;
+    const qreal invMax = 1.0 / max;
     const qreal invGamma = m_gamma > 0 && m_gamma <= 10.0 ? 1 / m_gamma : 1.0;
 
     for (int row = context.filterRegion().top(); row < bottom; ++row) {

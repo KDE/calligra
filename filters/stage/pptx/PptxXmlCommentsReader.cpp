@@ -11,12 +11,12 @@
 #define MSOOXML_CURRENT_NS "p"
 #define MSOOXML_CURRENT_CLASS PptxCommentsReader
 
-#include <writeodf/writeodfoffice.h>
-#include <writeodf/writeodfdc.h>
-#include <writeodf/helpers.h>
 #include <MsooXmlReader_p.h>
-#include <MsooXmlUtils.h>
 #include <MsooXmlUnits.h>
+#include <MsooXmlUtils.h>
+#include <writeodf/helpers.h>
+#include <writeodf/writeodfdc.h>
+#include <writeodf/writeodfoffice.h>
 
 using namespace writeodf;
 
@@ -29,12 +29,12 @@ public:
     QMap<int, QString> texts;
     QMap<int, QPoint> positions;
     QMap<int, QString> dates;
-    PptxXmlCommentsReaderContext* context;
+    PptxXmlCommentsReaderContext *context;
 };
 
-PptxXmlCommentsReader::PptxXmlCommentsReader(KoOdfWriters* writers)
-: MsooXmlCommonReader(writers)
-, d( new Private() )
+PptxXmlCommentsReader::PptxXmlCommentsReader(KoOdfWriters *writers)
+    : MsooXmlCommonReader(writers)
+    , d(new Private())
 {
     d->currentComment = 0;
 }
@@ -44,9 +44,9 @@ PptxXmlCommentsReader::~PptxXmlCommentsReader()
     delete d;
 }
 
-KoFilter::ConversionStatus PptxXmlCommentsReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus PptxXmlCommentsReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    d->context = dynamic_cast<PptxXmlCommentsReaderContext*>(context);
+    d->context = dynamic_cast<PptxXmlCommentsReaderContext *>(context);
     Q_ASSERT(d->context);
 
     readNext();
@@ -57,7 +57,7 @@ KoFilter::ConversionStatus PptxXmlCommentsReader::read(MSOOXML::MsooXmlReaderCon
     readNext();
     KoFilter::ConversionStatus result = read_cmLst();
     Q_ASSERT(result == KoFilter::OK);
-    if( result == KoFilter::OK ) {
+    if (result == KoFilter::OK) {
         saveOdfComments();
     }
 
@@ -66,15 +66,15 @@ KoFilter::ConversionStatus PptxXmlCommentsReader::read(MSOOXML::MsooXmlReaderCon
 
 void PptxXmlCommentsReader::saveOdfComments()
 {
-    for(int i = 0; i < d->currentComment; ++i) {
+    for (int i = 0; i < d->currentComment; ++i) {
         office_annotation annotation(body);
 
         QPoint position = d->positions.value(i);
-        //FIXME according to the documentation these measurements are EMUs
-        //but I still get wrong values and that's why I multiply by 1500
+        // FIXME according to the documentation these measurements are EMUs
+        // but I still get wrong values and that's why I multiply by 1500
         const int fixmeFactor = 1500;
-        annotation.set_svg_x(EMU_TO_CM_STRING(position.x()*fixmeFactor));
-        annotation.set_svg_y(EMU_TO_CM_STRING(position.y()*fixmeFactor));
+        annotation.set_svg_x(EMU_TO_CM_STRING(position.x() * fixmeFactor));
+        annotation.set_svg_y(EMU_TO_CM_STRING(position.y() * fixmeFactor));
 
         annotation.add_dc_creator().addTextNode(d->authors.value(i));
         annotation.add_dc_date().addTextNode(d->dates.value(i));
@@ -110,7 +110,7 @@ KoFilter::ConversionStatus PptxXmlCommentsReader::read_cm()
 {
     READ_PROLOGUE
 
-    QXmlStreamAttributes attrs( attributes() );
+    QXmlStreamAttributes attrs(attributes());
 
     TRY_READ_ATTR_WITHOUT_NS(authorId)
     const QString author = d->context->authors.value(authorId.toInt());
@@ -146,7 +146,7 @@ KoFilter::ConversionStatus PptxXmlCommentsReader::read_extLst()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-//             TRY_READ_IF(ext)
+            //             TRY_READ_IF(ext)
         }
     }
 
@@ -160,12 +160,12 @@ KoFilter::ConversionStatus PptxXmlCommentsReader::read_pos()
 {
     READ_PROLOGUE
 
-    QXmlStreamAttributes attrs( attributes() );
+    QXmlStreamAttributes attrs(attributes());
 
     READ_ATTR_WITHOUT_NS(x);
     READ_ATTR_WITHOUT_NS(y);
 
-    d->positions.insert(d->currentComment, QPoint(x.toInt(),y.toInt()));
+    d->positions.insert(d->currentComment, QPoint(x.toInt(), y.toInt()));
 
     while (!atEnd()) {
         readNext();
@@ -186,20 +186,18 @@ KoFilter::ConversionStatus PptxXmlCommentsReader::read_text()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isCharacters()) {
-            d->texts.insert( d->currentComment, text().toString());
+            d->texts.insert(d->currentComment, text().toString());
         }
     }
 
     READ_EPILOGUE
 }
 
-
 PptxXmlCommentsReaderContext::PptxXmlCommentsReaderContext()
-: MsooXmlReaderContext()
+    : MsooXmlReaderContext()
 {
 }
 
 PptxXmlCommentsReaderContext::~PptxXmlCommentsReaderContext()
 {
 }
-

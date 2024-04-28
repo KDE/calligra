@@ -14,52 +14,65 @@
 #include <KoConfig.h>
 
 #include "KoColorSpace.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoID.h"
 #include "pigment_export.h"
-#include "KoColorSpaceRegistry.h"
 
 class PIGMENTCMS_EXPORT KoBasicHistogramProducer : public KoHistogramProducer
 {
 public:
-    explicit KoBasicHistogramProducer(const KoID& id, int channelCount, int nrOfBins);
-    explicit KoBasicHistogramProducer(const KoID& id, int nrOfBins, const KoColorSpace *colorSpace);
-    ~KoBasicHistogramProducer() override {}
+    explicit KoBasicHistogramProducer(const KoID &id, int channelCount, int nrOfBins);
+    explicit KoBasicHistogramProducer(const KoID &id, int nrOfBins, const KoColorSpace *colorSpace);
+    ~KoBasicHistogramProducer() override
+    {
+    }
 
     void clear() override;
 
-    void setView(qreal from, qreal size) override {
-        m_from = from; m_width = size;
+    void setView(qreal from, qreal size) override
+    {
+        m_from = from;
+        m_width = size;
     }
 
-    const KoID& id() const override {
+    const KoID &id() const override
+    {
         return m_id;
     }
-    QList<KoChannelInfo *> channels() override {
+    QList<KoChannelInfo *> channels() override
+    {
         return m_colorSpace->channels();
     }
-    qint32 numberOfBins() override {
+    qint32 numberOfBins() override
+    {
         return m_nrOfBins;
     }
-    qreal viewFrom() const override {
+    qreal viewFrom() const override
+    {
         return m_from;
     }
-    qreal viewWidth() const override {
+    qreal viewWidth() const override
+    {
         return m_width;
     }
 
-    qint32 count() override {
+    qint32 count() override
+    {
         return m_count;
     }
 
-    qint32 getBinAt(int channel, int position) override {
+    qint32 getBinAt(int channel, int position) override
+    {
         return m_bins.at(externalToInternal(channel)).at(position);
     }
 
-    qint32 outOfViewLeft(int channel) override {
+    qint32 outOfViewLeft(int channel) override
+    {
         return m_outLeft.at(externalToInternal(channel));
     }
 
-    qint32 outOfViewRight(int channel) override {
+    qint32 outOfViewRight(int channel) override
+    {
         return m_outRight.at(externalToInternal(channel));
     }
 
@@ -71,7 +84,8 @@ protected:
      * exotic spaces might want to override this (see makeExternalToInternal source for
      * those assumptions)
      **/
-    virtual int externalToInternal(int ext) {
+    virtual int externalToInternal(int ext)
+    {
         if (channels().count() > 0 && m_external.count() == 0) // Set up the translation table
             makeExternalToInternal();
         return m_external.at(ext);
@@ -92,10 +106,11 @@ protected:
 class PIGMENTCMS_EXPORT KoBasicU8HistogramProducer : public KoBasicHistogramProducer
 {
 public:
-    KoBasicU8HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
-    void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
+    KoBasicU8HistogramProducer(const KoID &id, const KoColorSpace *colorSpace);
+    void addRegionToBin(const quint8 *pixels, const quint8 *selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
     QString positionToString(qreal pos) const override;
-    qreal maximalZoom() const override {
+    qreal maximalZoom() const override
+    {
         return 1.0;
     }
 };
@@ -103,8 +118,8 @@ public:
 class PIGMENTCMS_EXPORT KoBasicU16HistogramProducer : public KoBasicHistogramProducer
 {
 public:
-    KoBasicU16HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
-    void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
+    KoBasicU16HistogramProducer(const KoID &id, const KoColorSpace *colorSpace);
+    void addRegionToBin(const quint8 *pixels, const quint8 *selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
     QString positionToString(qreal pos) const override;
     qreal maximalZoom() const override;
 };
@@ -112,19 +127,18 @@ public:
 class PIGMENTCMS_EXPORT KoBasicF32HistogramProducer : public KoBasicHistogramProducer
 {
 public:
-    KoBasicF32HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
-    void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
+    KoBasicF32HistogramProducer(const KoID &id, const KoColorSpace *colorSpace);
+    void addRegionToBin(const quint8 *pixels, const quint8 *selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
     QString positionToString(qreal pos) const override;
     qreal maximalZoom() const override;
 };
-
 
 #ifdef HAVE_OPENEXR
 class PIGMENTCMS_EXPORT KoBasicF16HalfHistogramProducer : public KoBasicHistogramProducer
 {
 public:
-    KoBasicF16HalfHistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
-    virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
+    KoBasicF16HalfHistogramProducer(const KoID &id, const KoColorSpace *colorSpace);
+    virtual void addRegionToBin(const quint8 *pixels, const quint8 *selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
     virtual QString positionToString(qreal pos) const override;
     virtual qreal maximalZoom() const override;
 };
@@ -136,29 +150,38 @@ public:
  * Factories with Producers in the code because they are incompatible types, and
  * in the GUI we actually only need a producer's name, not a factory's.
  */
-template<class T> class KoBasicHistogramProducerFactory : public KoHistogramProducerFactory
+template<class T>
+class KoBasicHistogramProducerFactory : public KoHistogramProducerFactory
 {
 public:
-    KoBasicHistogramProducerFactory(const KoID& id, const QString& modelId, const QString& depthId )
-            : KoHistogramProducerFactory(id), m_modelId(modelId), m_depthId(depthId) {
+    KoBasicHistogramProducerFactory(const KoID &id, const QString &modelId, const QString &depthId)
+        : KoHistogramProducerFactory(id)
+        , m_modelId(modelId)
+        , m_depthId(depthId)
+    {
     }
-    ~KoBasicHistogramProducerFactory() override {}
+    ~KoBasicHistogramProducerFactory() override
+    {
+    }
 
-    KoHistogramProducer *generate() override {
+    KoHistogramProducer *generate() override
+    {
         KoHistogramProducer *producer = 0;
         const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(m_modelId, m_depthId, 0);
         if (cs) {
             producer = new T(KoID(id(), name()), cs);
         }
         return producer;
-
     }
-    bool isCompatibleWith(const KoColorSpace* colorSpace) const override {
+    bool isCompatibleWith(const KoColorSpace *colorSpace) const override
+    {
         return colorSpace->colorModelId().id() == m_modelId || colorSpace->colorDepthId().id() == m_depthId;
     }
-    float preferrednessLevelWith(const KoColorSpace* colorSpace) const override {
-        return 0.5 * ( (colorSpace->colorModelId().id() == m_modelId) + (colorSpace->colorDepthId().id() == m_depthId) );
+    float preferrednessLevelWith(const KoColorSpace *colorSpace) const override
+    {
+        return 0.5 * ((colorSpace->colorModelId().id() == m_modelId) + (colorSpace->colorDepthId().id() == m_depthId));
     }
+
 protected:
     QString m_modelId, m_depthId;
 };
@@ -173,50 +196,56 @@ class PIGMENTCMS_EXPORT KoGenericRGBHistogramProducer : public KoBasicHistogramP
 {
 public:
     KoGenericRGBHistogramProducer();
-    void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
+    void addRegionToBin(const quint8 *pixels, const quint8 *selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
     QString positionToString(qreal pos) const override;
     qreal maximalZoom() const override;
     QList<KoChannelInfo *> channels() override;
+
 protected:
     QList<KoChannelInfo *> m_channelsList;
 };
 
 /** KoGenericRGBHistogramProducer his special Factory that isCompatibleWith everything. */
-class  PIGMENTCMS_EXPORT KoGenericRGBHistogramProducerFactory : public KoHistogramProducerFactory
+class PIGMENTCMS_EXPORT KoGenericRGBHistogramProducerFactory : public KoHistogramProducerFactory
 {
 public:
     KoGenericRGBHistogramProducerFactory();
 
-    ~KoGenericRGBHistogramProducerFactory() override {}
+    ~KoGenericRGBHistogramProducerFactory() override
+    {
+    }
 
-    KoHistogramProducer *generate() override {
+    KoHistogramProducer *generate() override
+    {
         return new KoGenericRGBHistogramProducer();
     }
 
-    bool isCompatibleWith(const KoColorSpace*) const override {
+    bool isCompatibleWith(const KoColorSpace *) const override
+    {
         return true;
     }
 
-    float preferrednessLevelWith(const KoColorSpace*) const override {
+    float preferrednessLevelWith(const KoColorSpace *) const override
+    {
         return 0.0;
     }
 };
-
 
 /**
  * This is a Producer (with associated factory) that converts the pixels of the colorspace
  * to L*a*b*, and then does its counting.
  * It isCompatibleWith all colorspaces
  **/
-class  PIGMENTCMS_EXPORT KoGenericLabHistogramProducer : public KoBasicHistogramProducer
+class PIGMENTCMS_EXPORT KoGenericLabHistogramProducer : public KoBasicHistogramProducer
 {
 public:
     KoGenericLabHistogramProducer();
     ~KoGenericLabHistogramProducer() override;
-    void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
+    void addRegionToBin(const quint8 *pixels, const quint8 *selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
     QString positionToString(qreal pos) const override;
     qreal maximalZoom() const override;
     QList<KoChannelInfo *> channels() override;
+
 protected:
     QList<KoChannelInfo *> m_channelsList;
 };
@@ -226,20 +255,24 @@ class /*PIGMENTCMS_EXPORT*/ KoGenericLabHistogramProducerFactory : public KoHist
 {
 public:
     KoGenericLabHistogramProducerFactory();
-    ~KoGenericLabHistogramProducerFactory() override {}
+    ~KoGenericLabHistogramProducerFactory() override
+    {
+    }
 
-    KoHistogramProducer *generate() override {
+    KoHistogramProducer *generate() override
+    {
         return new KoGenericLabHistogramProducer();
     }
 
-    bool isCompatibleWith(const KoColorSpace*) const override {
+    bool isCompatibleWith(const KoColorSpace *) const override
+    {
         return true;
     }
 
-    float preferrednessLevelWith(const KoColorSpace*) const override {
+    float preferrednessLevelWith(const KoColorSpace *) const override
+    {
         return 0.0;
     }
 };
-
 
 #endif // _Ko_BASIC_HISTOGRAM_PRODUCERS_

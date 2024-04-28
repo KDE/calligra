@@ -23,7 +23,9 @@ class WORDS_EXPORT KWViewModePreview : public KWViewMode
 public:
     /// constructor
     explicit KWViewModePreview();
-    ~KWViewModePreview() override {}
+    ~KWViewModePreview() override
+    {
+    }
 
     QPointF documentToView(const QPointF &point, KoViewConverter *viewConverter) const override;
     QPointF viewToDocument(const QPointF &point, KoViewConverter *viewConverter) const override;
@@ -34,22 +36,26 @@ public:
      * You can set the preferred pages per row here.
      * @param num the new number of pages per row
      */
-    void setPagesPerRow(int num) {
+    void setPagesPerRow(int num)
+    {
         m_pagesPerRow = num;
     }
     /**
      * @return the number of pages we are showing per row
      */
-    int pagesPerRow() const {
+    int pagesPerRow() const
+    {
         return m_pagesPerRow;
     }
 
     /// return a string identification of this viewMode
-    static const QString viewMode() {
+    static const QString viewMode()
+    {
         return "ModePreview";
     }
     /// return a string identification of this viewMode
-    const QString type() const override {
+    const QString type() const override
+    {
         return KWViewModePreview::viewMode();
     }
     QVector<ViewMap> mapExposedRects(const QRectF &viewRect, KoViewConverter *viewConverter) const override;

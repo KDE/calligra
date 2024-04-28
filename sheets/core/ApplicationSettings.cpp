@@ -18,16 +18,16 @@ public:
     MethodOfCalc calcMethod;
     QStringList sortingList;
     double indentValue;
-    bool verticalScrollBar      : 1;
-    bool horizontalScrollBar    : 1;
-    bool columnHeader           : 1;
-    bool rowHeader              : 1;
-    bool showStatusBar          : 1;
-    bool showTabBar             : 1;
+    bool verticalScrollBar : 1;
+    bool horizontalScrollBar : 1;
+    bool columnHeader : 1;
+    bool rowHeader : 1;
+    bool showStatusBar : 1;
+    bool showTabBar : 1;
 };
 
 ApplicationSettings::ApplicationSettings()
-        : d(new Private)
+    : d(new Private)
 {
     d->gridColor = Qt::lightGray;
     d->pageOutlineColor = Qt::red;
@@ -53,7 +53,7 @@ void ApplicationSettings::setShowVerticalScrollBar(bool show)
     d->verticalScrollBar = show;
 }
 
-bool ApplicationSettings::showVerticalScrollBar()const
+bool ApplicationSettings::showVerticalScrollBar() const
 {
     return d->verticalScrollBar;
 }
@@ -63,7 +63,7 @@ void ApplicationSettings::setShowHorizontalScrollBar(bool show)
     d->horizontalScrollBar = show;
 }
 
-bool ApplicationSettings::showHorizontalScrollBar()const
+bool ApplicationSettings::showHorizontalScrollBar() const
 {
     return d->horizontalScrollBar;
 }
@@ -93,7 +93,7 @@ bool ApplicationSettings::showRowHeader() const
     return d->rowHeader;
 }
 
-void ApplicationSettings::setGridColor(const QColor& color)
+void ApplicationSettings::setGridColor(const QColor &color)
 {
     d->gridColor = color;
 }
@@ -133,7 +133,7 @@ void ApplicationSettings::setShowTabBar(bool tabbar)
     d->showTabBar = tabbar;
 }
 
-bool ApplicationSettings::showTabBar()const
+bool ApplicationSettings::showTabBar() const
 {
     return d->showTabBar;
 }
@@ -163,7 +163,7 @@ QColor ApplicationSettings::pageOutlineColor() const
     return d->pageOutlineColor;
 }
 
-void ApplicationSettings::changePageOutlineColor(const QColor& color)
+void ApplicationSettings::changePageOutlineColor(const QColor &color)
 {
     d->pageOutlineColor = color;
 }
@@ -177,4 +177,3 @@ void ApplicationSettings::setSortingList(const QStringList &lst)
 {
     d->sortingList = lst;
 }
-

@@ -8,8 +8,8 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 #ifndef KOTEXTSHAREDSAVINGDATA_H
 #define KOTEXTSHAREDSAVINGDATA_H
 
-#include <KoSharedSavingData.h>
 #include "kotext_export.h"
+#include <KoSharedSavingData.h>
 
 #include <QMap>
 #include <QSharedPointer>
@@ -25,7 +25,6 @@ class Model;
 
 class QString;
 
-
 class KOTEXT_EXPORT KoTextSharedSavingData : public KoSharedSavingData
 {
 public:
@@ -34,7 +33,7 @@ public:
 
     void setGenChanges(KoGenChanges &changes);
 
-    KoGenChanges& genChanges() const;
+    KoGenChanges &genChanges() const;
 
     void addRdfIdMapping(const QString &oldid, const QString &newid);
     QMap<QString, QString> getRdfIdMapping() const;
@@ -72,7 +71,6 @@ public:
     QList<QString> styleNames() const;
 
 private:
-
     class Private;
     QScopedPointer<Private> d;
 };

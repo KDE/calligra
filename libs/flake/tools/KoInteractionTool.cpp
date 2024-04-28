@@ -6,11 +6,11 @@
 */
 
 #include "KoInteractionTool.h"
-#include "KoInteractionTool_p.h"
-#include "KoToolBase_p.h"
-#include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
+#include "KoInteractionTool_p.h"
 #include "KoPanTool.h"
+#include "KoPointerEvent.h"
+#include "KoToolBase_p.h"
 
 KoInteractionTool::KoInteractionTool(KoCanvasBase *canvas)
     : KoToolBase(*(new KoInteractionToolPrivate(this, canvas)))
@@ -69,10 +69,8 @@ void KoInteractionTool::keyPressEvent(QKeyEvent *event)
 {
     Q_D(KoInteractionTool);
     event->ignore();
-    if (d->currentStrategy &&
-            (event->key() == Qt::Key_Control ||
-             event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift ||
-             event->key() == Qt::Key_Meta)) {
+    if (d->currentStrategy
+        && (event->key() == Qt::Key_Control || event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift || event->key() == Qt::Key_Meta)) {
         d->currentStrategy->handleMouseMove(d->lastPoint, event->modifiers());
         event->accept();
     }
@@ -87,9 +85,7 @@ void KoInteractionTool::keyReleaseEvent(QKeyEvent *event)
     } else if (event->key() == Qt::Key_Escape) {
         cancelCurrentStrategy();
         event->accept();
-    } else if (event->key() == Qt::Key_Control ||
-               event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift ||
-               event->key() == Qt::Key_Meta) {
+    } else if (event->key() == Qt::Key_Control || event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift || event->key() == Qt::Key_Meta) {
         d->currentStrategy->handleMouseMove(d->lastPoint, event->modifiers());
     }
 }

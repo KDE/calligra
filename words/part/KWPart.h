@@ -27,7 +27,7 @@ public:
 
     ~KWPart() override;
 
-    QGraphicsItem *createCanvasItem(KoDocument *document) override; ///reimplemented
+    QGraphicsItem *createCanvasItem(KoDocument *document) override; /// reimplemented
 
     void setDocument(KWDocument *document);
     KWDocument *document() const;
@@ -41,11 +41,10 @@ public:
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false) override;
 
 private Q_SLOTS:
-     void showErrorAndDie();
+    void showErrorAndDie();
 
 protected:
-
-    KoView *createViewInstance(KoDocument *document, QWidget *parent) override; ///reimplemented
+    KoView *createViewInstance(KoDocument *document, QWidget *parent) override; /// reimplemented
     virtual void setupViewInstance(KWDocument *document, KWView *view);
 
     KWDocument *m_document;

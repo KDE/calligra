@@ -21,17 +21,17 @@ public:
     explicit CompositeEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
-    bool editFilterEffect(KoFilterEffect * filterEffect) override;
+    bool editFilterEffect(KoFilterEffect *filterEffect) override;
 
 private Q_SLOTS:
     void valueChanged();
     void operationChanged(int index);
 
 private:
-    CompositeEffect * m_effect;
-    KComboBox * m_operation;
-    QDoubleSpinBox * m_k[4];
-    QWidget * m_arithmeticWidget;
+    CompositeEffect *m_effect;
+    KComboBox *m_operation;
+    QDoubleSpinBox *m_k[4];
+    QWidget *m_arithmeticWidget;
 };
 
 #endif // COMPOSITEEFFECTCONFIGWIDGET_H

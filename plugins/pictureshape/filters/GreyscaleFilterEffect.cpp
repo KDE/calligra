@@ -5,14 +5,13 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #include "GreyscaleFilterEffect.h"
 #include <KoFilterEffectRenderContext.h>
 
 #include <QImage>
 
 GreyscaleFilterEffect::GreyscaleFilterEffect()
-: KoFilterEffect(GreyscaleFilterEffectId, "Grayscale effect")
+    : KoFilterEffect(GreyscaleFilterEffectId, "Grayscale effect")
 {
 }
 
@@ -20,16 +19,16 @@ GreyscaleFilterEffect::~GreyscaleFilterEffect()
 {
 }
 
-void GreyscaleFilterEffect::save(KoXmlWriter& /*writer*/)
+void GreyscaleFilterEffect::save(KoXmlWriter & /*writer*/)
 {
 }
 
-bool GreyscaleFilterEffect::load(const KoXmlElement& /*element*/, const KoFilterEffectLoadingContext& /*context*/)
+bool GreyscaleFilterEffect::load(const KoXmlElement & /*element*/, const KoFilterEffectLoadingContext & /*context*/)
 {
     return true;
 }
 
-QImage GreyscaleFilterEffect::processImage(const QImage& image, const KoFilterEffectRenderContext& context) const
+QImage GreyscaleFilterEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &context) const
 {
     QImage result = image.convertToFormat(QImage::Format_ARGB32);
 
@@ -37,8 +36,8 @@ QImage GreyscaleFilterEffect::processImage(const QImage& image, const KoFilterEf
     const int left = context.filterRegion().left();
     const int right = context.filterRegion().right();
     const int width = result.width();
-    const QRgb *src = (const QRgb*)image.constBits();
-    QRgb *dst = (QRgb*)result.bits();
+    const QRgb *src = (const QRgb *)image.constBits();
+    QRgb *dst = (QRgb *)result.bits();
 
     for (int row = context.filterRegion().top(); row < bottom; ++row) {
         for (int col = left; col < right; ++col) {

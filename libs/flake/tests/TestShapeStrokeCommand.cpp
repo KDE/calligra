@@ -1,23 +1,23 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2008 Jan Hambrecht <jaham@gmx.net>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ * SPDX-FileCopyrightText: 2008 Jan Hambrecht <jaham@gmx.net>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 #include "TestShapeStrokeCommand.h"
 
-#include <MockShapes.h>
-#include "KoShapeStrokeModel.h"
 #include "KoShapeStroke.h"
 #include "KoShapeStrokeCommand.h"
+#include "KoShapeStrokeModel.h"
+#include <MockShapes.h>
 
 #include <QTest>
 
 void TestShapeStrokeCommand::refCounting()
 {
-    MockShape * shape1 = new MockShape();
+    MockShape *shape1 = new MockShape();
     KoShapeStrokeModel *whiteStroke = new KoShapeStroke(1.0, QColor(Qt::white));
     KoShapeStrokeModel *blackStroke = new KoShapeStroke(1.0, QColor(Qt::black));
-    KoShapeStrokeModel *redStroke   = new KoShapeStroke(1.0, QColor(Qt::red));
+    KoShapeStrokeModel *redStroke = new KoShapeStroke(1.0, QColor(Qt::red));
 
     shape1->setStroke(whiteStroke);
     QVERIFY(shape1->stroke() == whiteStroke);

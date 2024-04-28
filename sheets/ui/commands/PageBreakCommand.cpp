@@ -6,18 +6,18 @@
 
 #include "PageBreakCommand.h"
 
-#include "engine/Damages.h"
-#include "engine/MapBase.h"
 #include "core/ColFormatStorage.h"
 #include "core/RowFormatStorage.h"
 #include "core/Sheet.h"
 #include "core/SheetPrint.h"
+#include "engine/Damages.h"
+#include "engine/MapBase.h"
 
 using namespace Calligra::Sheets;
 
 PageBreakCommand::PageBreakCommand(KUndo2Command *parent)
-        : AbstractRegionCommand(parent)
-        , m_mode(BreakBeforeColumn)
+    : AbstractRegionCommand(parent)
+    , m_mode(BreakBeforeColumn)
 {
 }
 
@@ -30,14 +30,12 @@ void PageBreakCommand::setMode(Mode mode)
     m_mode = mode;
 }
 
-bool PageBreakCommand::setRangeBreak(Sheet *sheet, const QRect range, bool enable) {
-    if (m_mode == BreakBeforeColumn && range.left() > 1)
-    {
+bool PageBreakCommand::setRangeBreak(Sheet *sheet, const QRect range, bool enable)
+{
+    if (m_mode == BreakBeforeColumn && range.left() > 1) {
         sheet->columnFormats()->setPageBreak(range.left(), range.left(), enable);
         sheet->print()->updateHorizontalPageParameters(range.left() - 1);
-    }
-    else if (m_mode == BreakBeforeRow && range.top() > 1)
-    {
+    } else if (m_mode == BreakBeforeRow && range.top() > 1) {
         sheet->rowFormats()->setPageBreak(range.top(), range.top(), enable);
         sheet->print()->updateVerticalPageParameters(range.top() - 1);
     }
@@ -73,4 +71,3 @@ bool PageBreakCommand::undoNonCommandActions()
 
     return true;
 }
-

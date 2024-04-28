@@ -9,8 +9,8 @@
 #include <QPen>
 
 KoLineStyleModel::KoLineStyleModel(QObject *parent)
-    : QAbstractListModel(parent),
-    m_hasTempStyle(false)
+    : QAbstractListModel(parent)
+    , m_hasTempStyle(false)
 {
     // add standard dash patterns
     for (int i = Qt::NoPen; i < Qt::CustomDashLine; i++) {
@@ -19,7 +19,7 @@ KoLineStyleModel::KoLineStyleModel(QObject *parent)
     }
 }
 
-int KoLineStyleModel::rowCount(const QModelIndex &/*parent*/) const
+int KoLineStyleModel::rowCount(const QModelIndex & /*parent*/) const
 {
     return m_styles.count() + (m_hasTempStyle ? 1 : 0);
 }
@@ -27,9 +27,9 @@ int KoLineStyleModel::rowCount(const QModelIndex &/*parent*/) const
 QVariant KoLineStyleModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
-         return QVariant();
+        return QVariant();
 
-    switch(role) {
+    switch (role) {
     case Qt::DecorationRole: {
         QPen pen(Qt::black);
         pen.setWidth(2);

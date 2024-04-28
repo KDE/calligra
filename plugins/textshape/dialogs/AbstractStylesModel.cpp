@@ -6,8 +6,8 @@
 
 #include "AbstractStylesModel.h"
 
-AbstractStylesModel::AbstractStylesModel(QObject *parent) :
-    QAbstractItemModel(parent),
-    m_styleThumbnailer(0)
+AbstractStylesModel::AbstractStylesModel(QObject *parent)
+    : QAbstractItemModel(parent)
+    , m_styleThumbnailer(0)
 {
 }

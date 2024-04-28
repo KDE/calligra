@@ -12,7 +12,6 @@
 
 #include "koformula_export.h"
 
-
 extern const KOFORMULA_EXPORT QLoggingCategory &FORMULA_LOG();
 
 #define debugFormula qCDebug(FORMULA_LOG)

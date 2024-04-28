@@ -6,8 +6,8 @@
 
 #include "KoTextRange.h"
 
-#include "KoTextRangeManager.h"
 #include "KoTextInlineRdf.h"
+#include "KoTextRangeManager.h"
 
 #include "TextDebug.h"
 #include <QTextCursor>
@@ -81,7 +81,6 @@ KoTextRangePrivate::~KoTextRangePrivate()
     delete rdf;
 }
 
-
 KoTextRange::~KoTextRange()
 {
     if (d->manager) {
@@ -153,12 +152,12 @@ QString KoTextRange::text() const
     return d->positionOnlyMode ? QString() : d->cursor.selectedText();
 }
 
-void KoTextRange::setInlineRdf(KoTextInlineRdf* rdf)
+void KoTextRange::setInlineRdf(KoTextInlineRdf *rdf)
 {
     d->rdf = rdf;
 }
 
-KoTextInlineRdf* KoTextRange::inlineRdf() const
+KoTextInlineRdf *KoTextRange::inlineRdf() const
 {
     return d->rdf;
 }

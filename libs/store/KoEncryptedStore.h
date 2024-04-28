@@ -22,12 +22,9 @@ struct KoEncryptedStore_EncryptionData;
 class KoEncryptedStore : public KoStore
 {
 public:
-    KoEncryptedStore(const QString &filename, Mode mode, const QByteArray &appIdentification,
-                     bool writeMimetype);
-    KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray &appIdentification,
-                     bool writeMimetype);
-    KoEncryptedStore(QWidget *window, const QUrl &url, const QString &filename, Mode mode,
-                     const QByteArray &appIdentification, bool writeMimetype);
+    KoEncryptedStore(const QString &filename, Mode mode, const QByteArray &appIdentification, bool writeMimetype);
+    KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray &appIdentification, bool writeMimetype);
+    KoEncryptedStore(QWidget *window, const QUrl &url, const QString &filename, Mode mode, const QByteArray &appIdentification, bool writeMimetype);
     ~KoEncryptedStore();
 
     /*
@@ -53,7 +50,6 @@ public:
     QStringList directoryList() const override;
 
 protected:
-
     void init(const QByteArray &appIdentification);
     bool doFinalize() override;
     bool openWrite(const QString &name) override;
@@ -86,7 +82,7 @@ protected:
     void savePasswordInKWallet();
 
 private:
-    QByteArray decryptFile(QByteArray & encryptedFile, KoEncryptedStore_EncryptionData & encData, QByteArray & password);
+    QByteArray decryptFile(QByteArray &encryptedFile, KoEncryptedStore_EncryptionData &encData, QByteArray &password);
 
     /** returns true if the file should be encrypted, false otherwise **/
     bool isToBeEncrypted(const QString &fullpath);
@@ -104,6 +100,7 @@ protected:
     /** In "Read" mode this pointer is pointing to the
     current directory in the archive to speed up the verification process */
     const KArchiveDirectory *m_currentDir;
+
 private:
     Q_DECLARE_PRIVATE(KoStore)
 };

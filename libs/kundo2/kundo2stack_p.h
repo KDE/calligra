@@ -42,9 +42,9 @@
 #ifndef KUNDO2STACK_P_H
 #define KUNDO2STACK_P_H
 
+#include <QAction>
 #include <QList>
 #include <QString>
-#include <QAction>
 
 #include "kundo2stack.h"
 
@@ -64,8 +64,11 @@ class KUndo2Command;
 class KUndo2CommandPrivate
 {
 public:
-    KUndo2CommandPrivate() : id(-1) {}
-    QList<KUndo2Command*> child_list;
+    KUndo2CommandPrivate()
+        : id(-1)
+    {
+    }
+    QList<KUndo2Command *> child_list;
     QString actionText;
     KUndo2MagicString text;
     int id;
@@ -83,6 +86,7 @@ public:
     KUndo2Action(const QString &textTemplate, const QString &defaultText, QObject *parent = 0);
 public Q_SLOTS:
     void setPrefixedText(const QString &text);
+
 private:
     QString m_textTemplate;
     QString m_defaultText;

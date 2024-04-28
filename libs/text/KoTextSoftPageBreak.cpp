@@ -10,8 +10,8 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
-#include <QTextInlineObject>
 #include <QPainter>
+#include <QTextInlineObject>
 
 // Include Q_UNSUSED classes, for building on Windows
 #include <KoShapeLoadingContext.h>
@@ -38,16 +38,14 @@ void KoTextSoftPageBreak::saveOdf(KoShapeSavingContext &context)
     writer.endElement();
 }
 
-void KoTextSoftPageBreak::updatePosition(const QTextDocument *document,
-                                         int posInDocument, const QTextCharFormat &format)
+void KoTextSoftPageBreak::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(document)
     Q_UNUSED(posInDocument)
     Q_UNUSED(format)
 }
 
-void KoTextSoftPageBreak::resize(const QTextDocument *document, QTextInlineObject &object,
-                                 int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
+void KoTextSoftPageBreak::resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     Q_UNUSED(document)
     Q_UNUSED(object)
@@ -59,8 +57,13 @@ void KoTextSoftPageBreak::resize(const QTextDocument *document, QTextInlineObjec
     object.setDescent(0);
 }
 
-void KoTextSoftPageBreak::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                                const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format)
+void KoTextSoftPageBreak::paint(QPainter &painter,
+                                QPaintDevice *pd,
+                                const QTextDocument *document,
+                                const QRectF &rect,
+                                const QTextInlineObject &object,
+                                int posInDocument,
+                                const QTextCharFormat &format)
 {
     Q_UNUSED(painter)
     Q_UNUSED(pd)

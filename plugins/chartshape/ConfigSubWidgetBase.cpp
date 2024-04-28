@@ -5,7 +5,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #include "ConfigSubWidgetBase.h"
 
 using namespace KoChart;
@@ -14,7 +13,6 @@ ConfigSubWidgetBase::ConfigSubWidgetBase(QWidget *parent)
     : QWidget(parent)
     , chart(0)
 {
-    
 }
 
 ConfigSubWidgetBase::ConfigSubWidgetBase(QList<ChartType> types, QWidget *parent)
@@ -22,12 +20,10 @@ ConfigSubWidgetBase::ConfigSubWidgetBase(QList<ChartType> types, QWidget *parent
     , chart(0)
     , chartTypes(types)
 {
-    
 }
 
 ConfigSubWidgetBase::~ConfigSubWidgetBase()
 {
-
 }
 
 void ConfigSubWidgetBase::setChartTypes(QList<ChartType> types)
@@ -69,7 +65,7 @@ void ConfigSubWidgetBase::blockSignals(bool block)
 
 void ConfigSubWidgetBase::blockSignals(QWidget *w, bool block)
 {
-    QList<QWidget*> lst = w->findChildren<QWidget*>();
+    QList<QWidget *> lst = w->findChildren<QWidget *>();
     for (int i = 0; i < lst.count(); ++i) {
         lst.at(i)->blockSignals(block);
     }

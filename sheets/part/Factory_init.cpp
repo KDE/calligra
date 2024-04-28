@@ -6,4 +6,3 @@
 
 #include "Factory_init.h"
 #include "moc_Factory_init.cpp"
-

@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &LATEX_LOG();
 
 #define debugLatex qCDebug(LATEX_LOG)

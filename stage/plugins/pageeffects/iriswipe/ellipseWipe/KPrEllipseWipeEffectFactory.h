@@ -16,14 +16,7 @@ public:
     ~KPrEllipseWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType {
-        Circle,
-        CircleReverse,
-        Horizontal,
-        HorizontalReverse,
-        Vertical,
-        VerticalReverse
-    };
+    enum SubType { Circle, CircleReverse, Horizontal, HorizontalReverse, Vertical, VerticalReverse };
 };
 
 #endif /* KPRELLIPSEWIPEEFFECTFACTORY_H */

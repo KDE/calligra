@@ -12,9 +12,9 @@
 
 #include "PluginShape.h"
 
-#include <KoXmlNS.h>
-#include <KoShapeLoadingContext.h>
 #include "KoShapeBasedDocumentBase.h"
+#include <KoShapeLoadingContext.h>
+#include <KoXmlNS.h>
 
 #include <KLocalizedString>
 
@@ -22,7 +22,7 @@ PluginShapeFactory::PluginShapeFactory()
     : KoShapeFactoryBase(PLUGINSHAPEID, i18n("Plugin Placeholder"))
 {
     setToolTip(i18n("Plugin Placeholder, embedded or fullscreen"));
-    //setIcon("video-x-generic");
+    // setIcon("video-x-generic");
     setXmlElementNames(KoXmlNS::draw, QStringList("plugin"));
     setLoadingPriority(1);
     setHidden(true);
@@ -41,5 +41,3 @@ bool PluginShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &
     Q_UNUSED(context);
     return e.localName() == "plugin" && e.namespaceURI() == KoXmlNS::draw;
 }
-
-

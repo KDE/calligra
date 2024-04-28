@@ -17,7 +17,10 @@ using namespace Calligra::Sheets;
 class CharacterSelectDialog::Private
 {
 public:
-    Private() : charSelect(0) {}
+    Private()
+        : charSelect(0)
+    {
+    }
     KCharSelect *charSelect;
 };
 
@@ -26,13 +29,13 @@ public:
 /******************************************************************/
 
 CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const QString &_font)
-        : ActionDialog(parent),
-        d(new Private())
+    : ActionDialog(parent)
+    , d(new Private())
 {
     setCaption(i18n("Select Character"));
     setObjectName("SpecialCharDialog");
 
-    QWidget *page = mainWidget()/*plainPage()*/;
+    QWidget *page = mainWidget() /*plainPage()*/;
 
     QGridLayout *grid = new QGridLayout(page);
     grid->setContentsMargins({});
@@ -42,7 +45,7 @@ CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const QString &_fo
     d->charSelect->setCurrentFont(QFont(_font));
     connect(d->charSelect, &KCharSelect::charSelected, this, &CharacterSelectDialog::slotDoubleClicked);
     d->charSelect->resize(d->charSelect->sizeHint());
-//     d->charSelect->enableFontCombo( true );
+    //     d->charSelect->enableFontCombo( true );
     grid->addWidget(d->charSelect, 0, 0);
 
     grid->addItem(new QSpacerItem(d->charSelect->width(), 0), 0, 0);
@@ -73,7 +76,7 @@ void CharacterSelectDialog::onApply()
     emit insertChar(chr(), font());
 }
 
-QWidget *CharacterSelectDialog::defaultWidget() 
+QWidget *CharacterSelectDialog::defaultWidget()
 {
     return d->charSelect;
 }

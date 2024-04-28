@@ -13,16 +13,20 @@
 
 #include "MsooXmlDebug.h"
 
-#include <KoOdfWriteStore.h>
-#include <KoStoreDevice.h>
 #include <KoFilterChain.h>
 #include <KoGenStyles.h>
+#include <KoOdfWriteStore.h>
+#include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 
 #include <memory>
 
 KoOdfWriters::KoOdfWriters()
-        : content(0), body(0), meta(0), manifest(0), mainStyles(0)
+    : content(0)
+    , body(0)
+    , meta(0)
+    , manifest(0)
+    , mainStyles(0)
 {
 }
 
@@ -31,15 +35,17 @@ KoOdfWriters::KoOdfWriters()
 class Q_DECL_HIDDEN KoOdfExporter::Private
 {
 public:
-    Private() {}
+    Private()
+    {
+    }
     QByteArray bodyContentElement;
 };
 
 //------------------------------------------
 
-KoOdfExporter::KoOdfExporter(const QString& bodyContentElement, QObject* parent)
-        : KoFilter(parent)
-        , d(new Private)
+KoOdfExporter::KoOdfExporter(const QString &bodyContentElement, QObject *parent)
+    : KoFilter(parent)
+    , d(new Private)
 {
     d->bodyContentElement = QByteArray("office:") + bodyContentElement.toLatin1();
 }
@@ -49,7 +55,7 @@ KoOdfExporter::~KoOdfExporter()
     delete d;
 }
 
-KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray &from, const QByteArray &to)
 {
     // check for proper conversion
     if (!acceptsSourceMimeType(from)) {
@@ -61,7 +67,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
         return KoFilter::NotImplemented;
     }
 
-    //create output files
+    // create output files
     std::unique_ptr<KoStore> outputStore(KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip));
     if (!outputStore || outputStore->bad()) {
         warnMsooXml << "Unable to open output file!";
@@ -90,8 +96,8 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     KoXmlWriter manifestWriter(&manifestBuf);
     writers.manifest = &manifestWriter;
 
-    //open contentWriter & bodyWriter *temp* writers
-    //so we can write picture files while we parse
+    // open contentWriter & bodyWriter *temp* writers
+    // so we can write picture files while we parse
     QBuffer contentBuf;
     KoXmlWriter contentWriter(&contentBuf);
     writers.content = &contentWriter;
@@ -103,32 +109,32 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     bodyWriter.startElement("office:body");
     bodyWriter.startElement(d->bodyContentElement.constData());
 
-    RETURN_IF_ERROR( createDocument(outputStore.get(), &writers) )
+    RETURN_IF_ERROR(createDocument(outputStore.get(), &writers))
 
-    //save the office:automatic-styles & and fonts in content.xml
+    // save the office:automatic-styles & and fonts in content.xml
     mainStyles.saveOdfStyles(KoGenStyles::FontFaceDecls, &contentWriter);
     mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, &contentWriter);
 
-    //close tags in body
-    bodyWriter.endElement();//office:*
-    bodyWriter.endElement();//office:body
+    // close tags in body
+    bodyWriter.endElement(); // office:*
+    bodyWriter.endElement(); // office:body
 
-    //now create real content/body writers & dump the information there
-    KoXmlWriter* realContentWriter = oasisStore.contentWriter();
+    // now create real content/body writers & dump the information there
+    KoXmlWriter *realContentWriter = oasisStore.contentWriter();
     if (!realContentWriter) {
         warnMsooXml << "Error creating the content writer.";
         return KoFilter::CreationError;
     }
     realContentWriter->addCompleteElement(&contentBuf);
 
-    KoXmlWriter* realBodyWriter = oasisStore.bodyWriter();
+    KoXmlWriter *realBodyWriter = oasisStore.bodyWriter();
     if (!realBodyWriter) {
         warnMsooXml << "Error creating the body writer.";
         return KoFilter::CreationError;
     }
     realBodyWriter->addCompleteElement(&bodyBuf);
 
-    //now close content & body writers
+    // now close content & body writers
     if (!oasisStore.closeContentWriter()) {
         warnMsooXml << "Error closing content.";
         return KoFilter::CreationError;
@@ -136,9 +142,9 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
 
     debugMsooXml << "closed content & body writers.";
 
-    //create the manifest file
-    KoXmlWriter* realManifestWriter = oasisStore.manifestWriter(to);
-    //create the styles.xml file
+    // create the manifest file
+    KoXmlWriter *realManifestWriter = oasisStore.manifestWriter(to);
+    // create the styles.xml file
     mainStyles.saveOdfStylesDotXml(outputStore.get(), realManifestWriter);
     realManifestWriter->addManifestEntry("content.xml", "text/xml");
     realManifestWriter->addCompleteElement(&manifestBuf);
@@ -152,7 +158,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     }
 
     KoStoreDevice settingsDev(outputStore.get());
-    KoXmlWriter* settings = KoOdfWriteStore::createOasisXmlWriter(&settingsDev, "office:document-settings");
+    KoXmlWriter *settings = KoOdfWriteStore::createOasisXmlWriter(&settingsDev, "office:document-settings");
     settings->startElement("office:settings");
     settings->startElement("config:config-item-set");
     settings->addAttribute("config:name", "ooo:configuration-settings");
@@ -167,16 +173,16 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
         return KoFilter::CreationError;
     }
 
-    //create meta.xml
+    // create meta.xml
     if (!outputStore->open("meta.xml")) {
         return KoFilter::CreationError;
     }
     KoStoreDevice metaDev(outputStore.get());
-    KoXmlWriter* meta = KoOdfWriteStore::createOasisXmlWriter(&metaDev, "office:document-meta");
+    KoXmlWriter *meta = KoOdfWriteStore::createOasisXmlWriter(&metaDev, "office:document-meta");
     meta->startElement("office:meta");
     meta->addCompleteElement(&buf);
-    meta->endElement(); //office:meta
-    meta->endElement(); //office:document-meta
+    meta->endElement(); // office:meta
+    meta->endElement(); // office:document-meta
     meta->endDocument();
     delete meta;
     if (!outputStore->close()) {

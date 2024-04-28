@@ -8,10 +8,10 @@
 #ifndef KCHART_NEW_AXIS_DIALOG_H
 #define KCHART_NEW_AXIS_DIALOG_H
 
-
 #include "ui_NewAxisDialog.h"
 
-namespace KoChart {
+namespace KoChart
+{
 
 class NewAxisDialog : public QDialog, public Ui::NewAxisDialog
 {

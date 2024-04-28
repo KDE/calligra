@@ -10,16 +10,23 @@
 #include <KLocalizedString>
 
 AddTextRangeCommand::AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const QString &text, int from)
-    : m_tool(tool), m_shape(shape), m_plainText(text), m_formattedText(QString(), QFont()), m_from(from)
+    : m_tool(tool)
+    , m_shape(shape)
+    , m_plainText(text)
+    , m_formattedText(QString(), QFont())
+    , m_from(from)
 {
-    setText( kundo2_i18n("Add text range") );
+    setText(kundo2_i18n("Add text range"));
     m_oldFormattedText = shape->text();
 }
 
 AddTextRangeCommand::AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const ArtisticTextRange &text, int from)
-    : m_tool(tool), m_shape(shape), m_formattedText(text), m_from(from)
+    : m_tool(tool)
+    , m_shape(shape)
+    , m_formattedText(text)
+    , m_from(from)
 {
-    setText( kundo2_i18n("Add text range") );
+    setText(kundo2_i18n("Add text range"));
     m_oldFormattedText = shape->text();
 }
 
@@ -27,7 +34,7 @@ void AddTextRangeCommand::redo()
 {
     KUndo2Command::redo();
 
-    if ( !m_shape )
+    if (!m_shape)
         return;
 
     if (m_plainText.isEmpty())
@@ -47,11 +54,11 @@ void AddTextRangeCommand::undo()
 {
     KUndo2Command::undo();
 
-    if ( ! m_shape )
+    if (!m_shape)
         return;
 
     m_shape->clear();
-    foreach(const ArtisticTextRange &range, m_oldFormattedText) {
+    foreach (const ArtisticTextRange &range, m_oldFormattedText) {
         m_shape->appendText(range);
     }
     if (m_tool) {

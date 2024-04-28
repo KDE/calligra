@@ -5,24 +5,24 @@
  */
 
 #include "ReviewToolFactory.h"
+#include "AnnotationTextShape.h"
 #include "ReviewTool.h"
 #include "TextShape.h"
-#include "AnnotationTextShape.h"
 
 #include <KoCanvasBase.h>
-#include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
+#include <KoShapeController.h>
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 
 #include <QDebug>
 
 ReviewToolFactory::ReviewToolFactory()
-        : KoToolFactoryBase("ReviewToolFactory_ID")
+    : KoToolFactoryBase("ReviewToolFactory_ID")
 {
     setToolTip(i18n("Review"));
-    setToolType(dynamicToolType()+",calligrawords,calligraauthor");
+    setToolType(dynamicToolType() + ",calligrawords,calligraauthor");
     setIconName(koIconName("tool_review"));
     setPriority(30);
 

@@ -12,23 +12,21 @@
 
 #include "PictureToolFactory.h"
 
-
 PictureToolFactory::PictureToolFactory()
     : KoToolFactoryBase("PictureToolFactoryId")
 {
-    setToolTip( i18n( "Picture editing" ) );
+    setToolTip(i18n("Picture editing"));
     setIconName(koIconName("x-shape-image"));
-    setToolType( dynamicToolType() );
-    setPriority( 1 );
-    setActivationShapeId( PICTURESHAPEID );
+    setToolType(dynamicToolType());
+    setPriority(1);
+    setActivationShapeId(PICTURESHAPEID);
 }
 
 PictureToolFactory::~PictureToolFactory()
 {
 }
 
-KoToolBase* PictureToolFactory::createTool( KoCanvasBase* canvas )
+KoToolBase *PictureToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new PictureTool( canvas );
+    return new PictureTool(canvas);
 }
-

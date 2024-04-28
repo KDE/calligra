@@ -8,9 +8,9 @@
 #ifndef CALLIGRA_SHEETS_SHEET_COMMANDS
 #define CALLIGRA_SHEETS_SHEET_COMMANDS
 
+#include "../sheets_ui_export.h"
 #include <QString>
 #include <kundo2command.h>
-#include "../sheets_ui_export.h"
 
 namespace Calligra
 {
@@ -26,17 +26,16 @@ class Sheet;
 class CALLIGRA_SHEETS_UI_EXPORT RenameSheetCommand : public KUndo2Command
 {
 public:
-    RenameSheetCommand(Sheet* sheet, const QString &name);
+    RenameSheetCommand(Sheet *sheet, const QString &name);
 
     void redo() override;
     void undo() override;
 
 protected:
-    Sheet* sheet;
+    Sheet *sheet;
     QString oldName;
     QString newName;
 };
-
 
 /**
  * \ingroup Commands
@@ -45,16 +44,15 @@ protected:
 class CALLIGRA_SHEETS_UI_EXPORT HideSheetCommand : public KUndo2Command
 {
 public:
-    explicit HideSheetCommand(Sheet* sheet);
+    explicit HideSheetCommand(Sheet *sheet);
 
     void redo() override;
     void undo() override;
 
 protected:
-    MapBase* map;
+    MapBase *map;
     QString sheetName;
 };
-
 
 /**
  * \ingroup Commands
@@ -63,16 +61,15 @@ protected:
 class CALLIGRA_SHEETS_UI_EXPORT ShowSheetCommand : public KUndo2Command
 {
 public:
-    explicit ShowSheetCommand(Sheet* sheet, KUndo2Command* parent = 0);
+    explicit ShowSheetCommand(Sheet *sheet, KUndo2Command *parent = 0);
 
     void redo() override;
     void undo() override;
 
 protected:
-    MapBase* map;
+    MapBase *map;
     QString sheetName;
 };
-
 
 /**
  * \ingroup Commands
@@ -81,16 +78,15 @@ protected:
 class CALLIGRA_SHEETS_UI_EXPORT AddSheetCommand : public KUndo2Command
 {
 public:
-    explicit AddSheetCommand(Sheet* sheet);
+    explicit AddSheetCommand(Sheet *sheet);
 
     void redo() override;
     void undo() override;
 
 protected:
-    Sheet*  m_sheet;
-    bool    m_firstrun;
+    Sheet *m_sheet;
+    bool m_firstrun;
 };
-
 
 /**
  * \ingroup Commands
@@ -101,17 +97,16 @@ class CALLIGRA_SHEETS_UI_EXPORT DuplicateSheetCommand : public KUndo2Command
 public:
     explicit DuplicateSheetCommand();
 
-    void setSheet(Sheet* sheet);
+    void setSheet(Sheet *sheet);
 
     void redo() override;
     void undo() override;
 
 protected:
-    Sheet* m_oldSheet;
-    Sheet* m_newSheet;
+    Sheet *m_oldSheet;
+    Sheet *m_newSheet;
     bool m_firstrun;
 };
-
 
 /**
  * \ingroup Commands
@@ -120,16 +115,15 @@ protected:
 class CALLIGRA_SHEETS_UI_EXPORT RemoveSheetCommand : public KUndo2Command
 {
 public:
-    explicit RemoveSheetCommand(Sheet* sheet);
+    explicit RemoveSheetCommand(Sheet *sheet);
 
     void redo() override;
     void undo() override;
 
 protected:
-    Sheet* sheet;
-    MapBase* map;
+    Sheet *sheet;
+    MapBase *map;
 };
-
 
 /**
  * \ingroup Commands
@@ -155,8 +149,8 @@ public:
     void undo() override;
 
 protected:
-    Sheet* sheet;
-    MapBase* map;
+    Sheet *sheet;
+    MapBase *map;
     Qt::LayoutDirection oldDirection, newDirection;
     bool oldAutoCalc, newAutoCalc;
     bool oldShowGrid, newShowGrid;

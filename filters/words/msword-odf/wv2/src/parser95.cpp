@@ -23,10 +23,10 @@
 
 using namespace wvWare;
 
-Parser95::Parser95( OLEStorage* storage, OLEStreamReader* wordDocument ) :
-    Parser9x( storage, wordDocument, Word95::toWord97( Word95::FIB( wordDocument, true ) ) )
+Parser95::Parser95(OLEStorage *storage, OLEStreamReader *wordDocument)
+    : Parser9x(storage, wordDocument, Word95::toWord97(Word95::FIB(wordDocument, true)))
 {
-    if ( !isOk() )
+    if (!isOk())
         return;
 
     // Initialize the remaining data structures
@@ -39,8 +39,6 @@ Parser95::~Parser95()
 
 void Parser95::init()
 {
-    if ( m_fib.ccpHdd != 0 )
-        m_headers = new Headers95( m_fib.ccpHdd, m_fib.fcPlcfhdd, m_fib.lcbPlcfhdd,
-                                   m_fib.fcPlcfsed, m_fib.lcbPlcfsed,
-                                   m_table, m_properties->dop().grpfIhdt );
+    if (m_fib.ccpHdd != 0)
+        m_headers = new Headers95(m_fib.ccpHdd, m_fib.fcPlcfhdd, m_fib.lcbPlcfhdd, m_fib.fcPlcfsed, m_fib.lcbPlcfsed, m_table, m_properties->dop().grpfIhdt);
 }

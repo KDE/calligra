@@ -9,10 +9,10 @@
 #ifndef KOSHAPEFACTORYBASE_H
 #define KOSHAPEFACTORYBASE_H
 
-#include <QObject>
-#include <QStringList>
-#include <QString>
 #include <QList>
+#include <QObject>
+#include <QString>
+#include <QStringList>
 
 #include "flake_export.h"
 
@@ -34,16 +34,17 @@ class KoDocumentResourceManager;
  * and an icon for use in the user interface.
  */
 struct FLAKE_EXPORT KoShapeTemplate {
-    KoShapeTemplate() {
+    KoShapeTemplate()
+    {
         properties = 0;
         order = 0;
     }
-    QString id;         ///< The id of the shape
-    QString templateId;         ///< The id of this particular template - only has to be unique with the shape
-    QString name;       ///< The name to be shown for this template
-    QString family;       ///< The family of the shape (possible values are: "funny","arrow")
-    QString toolTip;    ///< The tooltip text for the template
-    QString iconName;       ///< Icon name
+    QString id; ///< The id of the shape
+    QString templateId; ///< The id of this particular template - only has to be unique with the shape
+    QString name; ///< The name to be shown for this template
+    QString family; ///< The family of the shape (possible values are: "funny","arrow")
+    QString toolTip; ///< The tooltip text for the template
+    QString iconName; ///< Icon name
     /**
      * The properties which, when passed to the KoShapeFactoryBase::createShape() method
      * result in the shape this template represents.
@@ -79,7 +80,6 @@ class FLAKE_EXPORT KoShapeFactoryBase : public QObject
 {
     Q_OBJECT
 public:
-
     /**
      * Create the new factory
      * @param id a string that will be used internally for referencing the shape, for
@@ -97,8 +97,9 @@ public:
      * behind all app specific panels.
      * This is a separate list as set by setOptionPanels() and fetched by panelFactories()
      */
-    virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels() {
-        return QList<KoShapeConfigWidgetBase*>();
+    virtual QList<KoShapeConfigWidgetBase *> createShapeOptionPanels()
+    {
+        return QList<KoShapeConfigWidgetBase *>();
     }
 
     /**
@@ -116,13 +117,13 @@ public:
      *  @endcode
      * @see panelFactories()
      */
-    void setOptionPanels(const QList<KoShapeConfigFactoryBase*> &panelFactories);
+    void setOptionPanels(const QList<KoShapeConfigFactoryBase *> &panelFactories);
 
     /**
      * Return the app-specific panels.
      * @see setOptionPanels()
      */
-    QList<KoShapeConfigFactoryBase*> panelFactories() const;
+    QList<KoShapeConfigFactoryBase *> panelFactories() const;
 
     /**
      * return the id for the shape this factory creates.
@@ -160,7 +161,7 @@ public:
     /**
      * The list of namespaces to the supported elements the factory supports.
      */
-    QList<QPair<QString, QStringList> > odfElements() const;
+    QList<QPair<QString, QStringList>> odfElements() const;
 
     /// returns true if this shapeFactory is able to load the ODF type
     /// started at argument element. ('draw:line' / 'draw:frame' / etc)
@@ -184,7 +185,7 @@ public:
      *
      * FIXME: this method is only used by Tables. We should refactor so
      * it is no longer necessary.
-     * 
+     *
      * NOTE: this actually is also used somehow to create the imagecollection
      *        for the picture shape?
      *
@@ -234,7 +235,6 @@ public:
     virtual KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 protected:
-
     /**
      * Add a template with the properties of a specific type of shape this factory can generate
      * using the createShape() method. The factory will take ownership of the properties object
@@ -291,7 +291,7 @@ protected:
      * urn:oasis:names:tc:opendocument:xmlns:text:1.0,
      * take it from KoXmlNS.h) to a list of elementName of the element itself, like "path"
      */
-    void setXmlElements(const QList<QPair<QString, QStringList> > &elementNamesList);
+    void setXmlElements(const QList<QPair<QString, QStringList>> &elementNamesList);
 
     /**
      * The hidden boolean requests if the shape should be hidden in the
@@ -302,7 +302,6 @@ protected:
     void setHidden(bool hidden);
 
 private:
-
     void getDeferredPlugin();
 
 private Q_SLOTS:
@@ -311,9 +310,8 @@ private Q_SLOTS:
     void pruneDocumentResourceManager(QObject *);
 
 private:
-
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

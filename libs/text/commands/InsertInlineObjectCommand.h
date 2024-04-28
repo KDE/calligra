@@ -22,8 +22,8 @@ public:
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
-private:
 
+private:
     KoInlineObject *m_inlineObject;
     QTextDocument *m_document;
     bool m_deleteInlineObject;

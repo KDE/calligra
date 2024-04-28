@@ -7,23 +7,23 @@
 #include "SimpleTableOfContentsWidget.h"
 #include "ReferencesTool.h"
 #include "TableOfContentsConfigure.h"
-#include "TableOfContentsTemplate.h"
 #include "TableOfContentsPreview.h"
+#include "TableOfContentsTemplate.h"
 
-#include <KoTextEditor.h>
-#include <KoTableOfContentsGeneratorInfo.h>
 #include <KoIcon.h>
+#include <KoTableOfContentsGeneratorInfo.h>
+#include <KoTextEditor.h>
 
 #include <QAction>
 #include <QDebug>
 
-#include <QWidget>
 #include <QMenu>
+#include <QWidget>
 
 SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent)
-        : QWidget(parent),
-        m_blockSignals(false),
-        m_referenceTool(tool)
+    : QWidget(parent)
+    , m_blockSignals(false)
+    , m_referenceTool(tool)
 {
     widget.setupUi(this);
     Q_ASSERT(tool);
@@ -60,15 +60,17 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
     foreach (KoTableOfContentsGeneratorInfo *info, m_templateList) {
         TableOfContentsPreview *preview = new TableOfContentsPreview();
         preview->setStyleManager(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
-        preview->setPreviewSize(QSize(200,120));
+        preview->setPreviewSize(QSize(200, 120));
         preview->updatePreview(info);
-        connect(preview, &TableOfContentsPreview::pixmapGenerated, this, [this, index] { pixmapReady(index); });
+        connect(preview, &TableOfContentsPreview::pixmapGenerated, this, [this, index] {
+            pixmapReady(index);
+        });
         m_previewGenerator.append(preview);
         ++index;
 
-        //put dummy pixmaps until the actual pixmap previews are generated and added in pixmapReady()
-        if (! widget.addToC->hasItemId(index)) {
-            QPixmap pmm(QSize(200,120));
+        // put dummy pixmaps until the actual pixmap previews are generated and added in pixmapReady()
+        if (!widget.addToC->hasItemId(index)) {
+            QPixmap pmm(QSize(200, 120));
             pmm.fill(Qt::white);
             widget.addToC->addItem(m_chooser, pmm, index);
         }
@@ -76,7 +78,11 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
     if (widget.addToC->isFirstTimeMenuShown()) {
         widget.addToC->addSeparator();
         widget.addToC->addAction(m_referenceTool->action("insert_configure_tableofcontents"));
-        connect(m_referenceTool->action("insert_configure_tableofcontents"), &QAction::triggered, this, &SimpleTableOfContentsWidget::insertCustomToC, Qt::UniqueConnection);
+        connect(m_referenceTool->action("insert_configure_tableofcontents"),
+                &QAction::triggered,
+                this,
+                &SimpleTableOfContentsWidget::insertCustomToC,
+                Qt::UniqueConnection);
         widget.addToC->addAction(m_referenceTool->action("format_tableofcontents"));
     }
 }

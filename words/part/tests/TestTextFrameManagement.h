@@ -2,8 +2,8 @@
 #define TESTTEXTFRAMEMANAGEMENT_H
 
 #include <QObject>
-#include <qtest_kde.h>
 #include <QtTest>
+#include <qtest_kde.h>
 
 class KWTextFrame;
 class KWTextFrameSet;
@@ -19,7 +19,7 @@ private Q_SLOTS:
     void testFrameRemoval();
 
 private:
-    KWTextFrame* createFrame(const QPointF &position, KWTextFrameSet &fs);
+    KWTextFrame *createFrame(const QPointF &position, KWTextFrameSet &fs);
 };
 
 #endif

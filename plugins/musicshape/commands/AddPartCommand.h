@@ -8,21 +8,24 @@
 
 #include <kundo2command.h>
 
-namespace MusicCore {
-    class Sheet;
-    class Part;
+namespace MusicCore
+{
+class Sheet;
+class Part;
 }
 class MusicShape;
 
-class AddPartCommand : public KUndo2Command {
+class AddPartCommand : public KUndo2Command
+{
 public:
-    explicit AddPartCommand(MusicShape* shape);
+    explicit AddPartCommand(MusicShape *shape);
     void redo() override;
     void undo() override;
+
 private:
-    MusicCore::Sheet* m_sheet;
-    MusicCore::Part* m_part;
-    MusicShape* m_shape;
+    MusicCore::Sheet *m_sheet;
+    MusicCore::Part *m_part;
+    MusicShape *m_shape;
 };
 
 #endif // ADDPARTCOMMAND_H

@@ -7,8 +7,8 @@
 #ifndef KOENHANCEDPATHHANDLE_H
 #define KOENHANCEDPATHHANDLE_H
 
-#include <QPointF>
 #include <KoXmlReaderForward.h>
+#include <QPointF>
 
 class EnhancedPathShape;
 class EnhancedPathParameter;
@@ -27,7 +27,7 @@ public:
      *
      * Note that an empty handle is not valid, as long as there are no
      * positional parameters set with setPosition.
-    */
+     */
     explicit EnhancedPathHandle(EnhancedPathShape *parent);
 
     /// Destroys the handle
@@ -89,7 +89,7 @@ public:
      * If both parameters are valid pointers, then the handle behaves like
      * a polar handle. This means the x-coordinate of the position represents
      * an angle in degree and the y-coordinate a radius.
-     * 
+     *
      * @param polarX the polar center x-coordinate
      * @param polarY the polar center y-coordinate
      */
@@ -114,14 +114,14 @@ private:
     /// Returns if handle is polar
     bool isPolar() const;
     EnhancedPathShape *m_parent; ///< the enhanced path shape owning this handle
-    EnhancedPathParameter *m_positionX; ///< the position x-coordinate 
+    EnhancedPathParameter *m_positionX; ///< the position x-coordinate
     EnhancedPathParameter *m_positionY; ///< the position y-coordinate
-    EnhancedPathParameter *m_minimumX;  ///< the minimum x-coordinate
-    EnhancedPathParameter *m_minimumY;  ///< the minimum y-coordinate
-    EnhancedPathParameter *m_maximumX;  ///< the maximum x-coordinate
-    EnhancedPathParameter *m_maximumY;  ///< the maximum y-coordinate
-    EnhancedPathParameter *m_polarX;    ///< the polar center x-coordinate
-    EnhancedPathParameter *m_polarY;    ///< the polar center y-coordinate
+    EnhancedPathParameter *m_minimumX; ///< the minimum x-coordinate
+    EnhancedPathParameter *m_minimumY; ///< the minimum y-coordinate
+    EnhancedPathParameter *m_maximumX; ///< the maximum x-coordinate
+    EnhancedPathParameter *m_maximumY; ///< the maximum y-coordinate
+    EnhancedPathParameter *m_polarX; ///< the polar center x-coordinate
+    EnhancedPathParameter *m_polarY; ///< the polar center y-coordinate
     EnhancedPathParameter *m_minRadius; ///< the minimum polar radius
     EnhancedPathParameter *m_maxRadius; ///< the maximum polar radius
 };

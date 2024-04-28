@@ -8,8 +8,8 @@
 #define KWDEBUGDOCKER_H
 
 // Base classes
-#include <QDockWidget>
 #include <KoCanvasObserverBase.h>
+#include <QDockWidget>
 
 class KWDebugWidget;
 class KoCanvasBase;
@@ -25,9 +25,8 @@ public:
     void unsetCanvas() override;
 
 private:
-
     // The debug widget
     KWDebugWidget *m_debugWidget;
 };
 
-#endif //KWDEBUGDOCKER_H
+#endif // KWDEBUGDOCKER_H

@@ -4,8 +4,8 @@
 
 #include "TestStyleStorage.h"
 
-#include <core/StyleStorage.h>
 #include <core/Map.h>
+#include <core/StyleStorage.h>
 
 #include <QTest>
 
@@ -14,7 +14,10 @@ using namespace Calligra::Sheets;
 class MyStyleStorage : public StyleStorage
 {
 public:
-    MyStyleStorage(Map* map) : StyleStorage(map) {}
+    MyStyleStorage(Map *map)
+        : StyleStorage(map)
+    {
+    }
     using StyleStorage::garbageCollection;
 };
 
@@ -30,21 +33,21 @@ void TestStyleStorage::testGarbageCollection()
     SharedSubStyle style2(new SubStyleOne<QColor>(Style::BackgroundColor, c2));
     // we need to do this for multiple cells, so hopefully we'll end up with substyles that are for the same cell but not in the same leafnode in the rtree
     for (int i = 0; i < 100; i++)
-        storage.insert(rect.adjusted(10*i, 0, 10*i, 0), style1);
+        storage.insert(rect.adjusted(10 * i, 0, 10 * i, 0), style1);
     for (int i = 0; i < 100; i++)
-        QCOMPARE(storage.contains(rect.adjusted(10*i, 0, 10*i, 0)).backgroundColor(), c1);
+        QCOMPARE(storage.contains(rect.adjusted(10 * i, 0, 10 * i, 0)).backgroundColor(), c1);
     for (int i = 0; i < 100; i++)
-        storage.insert(rect.adjusted(10*i, 0, 10*i, 0), style2);
+        storage.insert(rect.adjusted(10 * i, 0, 10 * i, 0), style2);
     for (int i = 0; i < 100; i++)
-        QCOMPARE(storage.contains(rect.adjusted(10*i, 0, 10*i, 0)).backgroundColor(), c2);
+        QCOMPARE(storage.contains(rect.adjusted(10 * i, 0, 10 * i, 0)).backgroundColor(), c2);
     for (int i = 0; i < 100; i++)
-        storage.insert(rect.adjusted(10*i, 0, 10*i, 0), style1);
+        storage.insert(rect.adjusted(10 * i, 0, 10 * i, 0), style1);
     for (int i = 0; i < 100; i++)
-        QCOMPARE(storage.contains(rect.adjusted(10*i, 0, 10*i, 0)).backgroundColor(), c1);
+        QCOMPARE(storage.contains(rect.adjusted(10 * i, 0, 10 * i, 0)).backgroundColor(), c1);
     for (int j = 0; j < 1000; j++) {
         storage.garbageCollection();
         for (int i = 0; i < 100; i++)
-            QCOMPARE(storage.contains(rect.adjusted(10*i, 0, 10*i, 0)).backgroundColor(), c1);
+            QCOMPARE(storage.contains(rect.adjusted(10 * i, 0, 10 * i, 0)).backgroundColor(), c1);
     }
 }
 

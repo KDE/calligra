@@ -11,12 +11,11 @@
 
 // KoChart
 #include "Axis.h"
-#include "ChartShape.h"
 #include "ChartDebug.h"
+#include "ChartShape.h"
 
-
-namespace KoChart {
-
+namespace KoChart
+{
 
 GapCommand::GapCommand(Axis *axis, ChartShape *chart)
     : m_axis(axis)

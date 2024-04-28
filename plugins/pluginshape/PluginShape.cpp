@@ -7,16 +7,15 @@
 
 #include "PluginShape.h"
 
-#include <KoViewConverter.h>
-#include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoXmlWriter.h>
+#include <KoViewConverter.h>
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
-#include <QPainter>
 #include <KLocalizedString>
-
+#include <QPainter>
 
 PluginShape::PluginShape()
     : KoFrameShape(KoXmlNS::draw, "plugin")
@@ -30,7 +29,7 @@ PluginShape::~PluginShape()
 
 void PluginShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
-    QRectF pixelsF = converter.documentToView(QRectF(QPointF(0,0), size()));
+    QRectF pixelsF = converter.documentToView(QRectF(QPointF(0, 0), size()));
     painter.fillRect(pixelsF, QColor(Qt::yellow));
     painter.setPen(QPen(Qt::blue, 0));
     QString mimetype = i18n("Unknown");
@@ -57,7 +56,7 @@ void PluginShape::saveOdf(KoShapeSavingContext &context) const
     writer.addAttribute("xlink:actuate", m_xlinkactuate);
     writer.addAttribute("xlink:href", m_xlinkhref);
 
-    QMap<QString,QString>::const_iterator itr = m_drawParams.constBegin();
+    QMap<QString, QString>::const_iterator itr = m_drawParams.constBegin();
     while (itr != m_drawParams.constEnd()) {
         writer.startElement("draw:param", true);
         writer.addAttribute("draw:name", itr.key());
@@ -68,7 +67,6 @@ void PluginShape::saveOdf(KoShapeSavingContext &context) const
     writer.endElement(); // draw:plugin
     saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
-
 }
 
 bool PluginShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -80,26 +78,26 @@ bool PluginShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &co
 bool PluginShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_UNUSED(context);
-    if(element.isNull()) {
+    if (element.isNull()) {
         return false;
     }
 
-    if(element.localName() == "plugin") {
-        m_mimetype  = element.attributeNS(KoXmlNS::draw, "mime-type");
-        m_xlinktype  = element.attributeNS(KoXmlNS::xlink, "type");
-        m_xlinkshow  = element.attributeNS(KoXmlNS::xlink, "show");
-        m_xlinkactuate  = element.attributeNS(KoXmlNS::xlink, "actuate");
-        m_xlinkhref  = element.attributeNS(KoXmlNS::xlink, "href");
+    if (element.localName() == "plugin") {
+        m_mimetype = element.attributeNS(KoXmlNS::draw, "mime-type");
+        m_xlinktype = element.attributeNS(KoXmlNS::xlink, "type");
+        m_xlinkshow = element.attributeNS(KoXmlNS::xlink, "show");
+        m_xlinkactuate = element.attributeNS(KoXmlNS::xlink, "actuate");
+        m_xlinkhref = element.attributeNS(KoXmlNS::xlink, "href");
         m_drawParams.clear();
-        if(element.hasChildNodes()) {
+        if (element.hasChildNodes()) {
             KoXmlNode node = element.firstChild();
-            while(!node.isNull()) {
-                if(node.isElement()) {
+            while (!node.isNull()) {
+                if (node.isElement()) {
                     KoXmlElement nodeElement = node.toElement();
-                    if(nodeElement.localName() == "param") {
+                    if (nodeElement.localName() == "param") {
                         QString name = nodeElement.attributeNS(KoXmlNS::draw, "name");
-                        if(!name.isEmpty()) {
-                            m_drawParams.insert(name,nodeElement.attributeNS(KoXmlNS::draw, "value"));
+                        if (!name.isEmpty()) {
+                            m_drawParams.insert(name, nodeElement.attributeNS(KoXmlNS::draw, "value"));
                         }
                     }
                 }

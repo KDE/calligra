@@ -7,8 +7,8 @@
 #ifndef KARBONCALLIGRAPHYOPTIONWIDGET_H
 #define KARBONCALLIGRAPHYOPTIONWIDGET_H
 
-#include <QWidget>
 #include <QMap>
+#include <QWidget>
 
 class KComboBox;
 class QCheckBox;
@@ -57,7 +57,6 @@ private Q_SLOTS:
     void updateCurrentProfile();
     void saveProfileAs();
     void removeProfile();
-
 
 private:
     // TODO: maybe make it a hash?? <QString, QVariant>
@@ -113,13 +112,13 @@ private:
     QCheckBox *m_usePath;
     QCheckBox *m_usePressure;
     QCheckBox *m_useAngle;
-    QDoubleSpinBox  *m_widthBox;
-    QDoubleSpinBox  *m_thinningBox;
-    QSpinBox        *m_angleBox;
-    QDoubleSpinBox  *m_capsBox;
-    QDoubleSpinBox  *m_fixationBox;
-    QDoubleSpinBox  *m_massBox;
-    QDoubleSpinBox  *m_dragBox;
+    QDoubleSpinBox *m_widthBox;
+    QDoubleSpinBox *m_thinningBox;
+    QSpinBox *m_angleBox;
+    QDoubleSpinBox *m_capsBox;
+    QDoubleSpinBox *m_fixationBox;
+    QDoubleSpinBox *m_massBox;
+    QDoubleSpinBox *m_dragBox;
 
     QToolButton *m_saveButton;
     QToolButton *m_removeButton;

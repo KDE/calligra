@@ -18,21 +18,9 @@ class KoTextSharedSavingData;
 
 class KOTEXT_EXPORT KoTextTableTemplate : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    enum Property {
-        StyleId = 0,
-        BackGround,
-        Body,
-        EvenColumns,
-        EvenRows,
-        FirstColumn,
-        FirstRow,
-        LastColumn,
-        LastRow,
-        OddColumns,
-        OddRows
-    };
+    enum Property { StyleId = 0, BackGround, Body, EvenColumns, EvenRows, FirstColumn, FirstRow, LastColumn, LastRow, OddColumns, OddRows };
 
     int background() const;
     void setBackground(int styleId);
@@ -95,12 +83,9 @@ public:
      */
     void saveOdf(KoXmlWriter *writer, KoTextSharedSavingData *savingData) const;
 
-
 private:
     class Private;
-    Private * const d;
-
+    Private *const d;
 };
 
-
-#endif //KOTEXTTABLETEMPLATE_H
+#endif // KOTEXTTABLETEMPLATE_H

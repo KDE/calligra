@@ -7,12 +7,12 @@
 
 #include "FormattingButton.h"
 
-#include <QMenu>
 #include <QFrame>
-#include <QLabel>
 #include <QGridLayout>
-#include <QWidgetAction>
+#include <QLabel>
+#include <QMenu>
 #include <QResizeEvent>
+#include <QWidgetAction>
 
 #include <QDebug>
 
@@ -20,15 +20,24 @@ class ContentWidget : public QFrame
 {
     Q_OBJECT
 public:
-    ContentWidget() : QFrame(){}
+    ContentWidget()
+        : QFrame()
+    {
+    }
+
 protected:
-    void resizeEvent(QResizeEvent *event) override { QFrame::resizeEvent(event); if (event->oldSize().isValid()) emit readyAfterResize();}
+    void resizeEvent(QResizeEvent *event) override
+    {
+        QFrame::resizeEvent(event);
+        if (event->oldSize().isValid())
+            emit readyAfterResize();
+    }
 
 Q_SIGNALS:
     void readyAfterResize();
 };
 
-//This class is a helper to add a label
+// This class is a helper to add a label
 class LabelAction : public QWidgetAction
 {
 public:
@@ -37,13 +46,13 @@ public:
 };
 
 LabelAction::LabelAction(const QString &label)
- : QWidgetAction(0)
+    : QWidgetAction(0)
 {
     m_label = new QLabel(label);
     setDefaultWidget(m_label);
 }
 
-//This class is the main place where the expanding grid is done
+// This class is the main place where the expanding grid is done
 class ItemChooserAction : public QWidgetAction
 {
     Q_OBJECT
@@ -59,9 +68,9 @@ public:
 };
 
 ItemChooserAction::ItemChooserAction(int columns)
- : QWidgetAction(0)
- , m_cnt(0)
- , m_columns(columns)
+    : QWidgetAction(0)
+    , m_cnt(0)
+    , m_columns(columns)
 {
     QFrame *ow = new ContentWidget;
     QGridLayout *l = new QGridLayout();
@@ -76,7 +85,7 @@ ItemChooserAction::ItemChooserAction(int columns)
     m_containerLayout = new QGridLayout();
     m_containerLayout->setSpacing(4);
     m_containerLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
-    m_containerLayout->setColumnStretch(columns-1, 1); // make sure the items are left when less than full row
+    m_containerLayout->setColumnStretch(columns - 1, 1); // make sure the items are left when less than full row
     m_widget->setLayout(m_containerLayout);
 
     setDefaultWidget(ow);
@@ -130,7 +139,7 @@ FormattingButton::FormattingButton(QWidget *parent)
 
 void FormattingButton::setItemsBackground(ItemChooserAction *chooser, const QColor &color)
 {
-    if(chooser) {
+    if (chooser) {
         foreach (QObject *o, chooser->defaultWidget()->children()) {
             QWidget *w = qobject_cast<QWidget *>(o);
             if (w) {
@@ -141,7 +150,7 @@ void FormattingButton::setItemsBackground(ItemChooserAction *chooser, const QCol
                 break;
             }
         }
-        qobject_cast<QFrame *>(chooser->defaultWidget())->setFrameStyle(QFrame::StyledPanel|QFrame::Sunken);
+        qobject_cast<QFrame *>(chooser->defaultWidget())->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     }
 }
 
@@ -159,11 +168,11 @@ ItemChooserAction *FormattingButton::addItemChooser(int columns, const QString &
 
 void FormattingButton::addItem(ItemChooserAction *chooser, const QPixmap &pm, int id, const QString &toolTip)
 {
-    //Note: Do not use 0 as the item id, because that will break the m_lastId functionality
+    // Note: Do not use 0 as the item id, because that will break the m_lastId functionality
     Q_ASSERT(id != 0);
 
     if (m_styleMap.contains(id)) {
-        QToolButton *button = dynamic_cast<QToolButton *> (m_styleMap.value(id));
+        QToolButton *button = dynamic_cast<QToolButton *>(m_styleMap.value(id));
         if (button) {
             button->setIcon(QIcon(pm));
             button->setIconSize(pm.size());
@@ -182,11 +191,11 @@ void FormattingButton::addItem(ItemChooserAction *chooser, const QPixmap &pm, in
 QAction *FormattingButton::addItemMenuItem(ItemChooserAction *chooser, int id, const QString &text)
 {
     Q_UNUSED(chooser);
-    //Note: Do not use 0 as the item id, because that will break the m_lastId functionality
+    // Note: Do not use 0 as the item id, because that will break the m_lastId functionality
     Q_ASSERT(id != 0);
 
     if (m_styleMap.contains(id)) {
-        QToolButton *button = dynamic_cast<QToolButton *> (m_styleMap.value(id));
+        QToolButton *button = dynamic_cast<QToolButton *>(m_styleMap.value(id));
         if (button) {
             QAction *a = new QAction(text, nullptr);
             button->addAction(a);
@@ -209,7 +218,7 @@ void FormattingButton::removeLastItem(ItemChooserAction *chooser)
     m_styleMap.remove(id);
     b->deleteLater();
     if (m_lastId == id) {
-Q_ASSERT(false);//oops
+        Q_ASSERT(false); // oops
     }
 }
 
@@ -231,11 +240,11 @@ void FormattingButton::itemSelected()
     }
 
     if (sender() == this && m_lastId == 0) {
-        //menu not yet populated
+        // menu not yet populated
         return;
     }
 
-    if(sender() != this) {
+    if (sender() != this) {
         m_lastId = m_styleMap.key(sender());
     }
     m_menu->hide();
@@ -256,7 +265,7 @@ void FormattingButton::recalcMenuSize()
 {
     m_menu->setSeparatorsCollapsible(!m_menu->separatorsCollapsible()); // invalidates menu cache
     m_menu->setSeparatorsCollapsible(!m_menu->separatorsCollapsible()); // of action rects
-    m_menu->grab();// helps recalc size
+    m_menu->grab(); // helps recalc size
     m_menu->setMaximumSize(m_menu->sizeHint());
 }
 

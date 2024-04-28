@@ -8,9 +8,9 @@
 #ifndef KPRHTMLEXPORT_H
 #define KPRHTMLEXPORT_H
 
-#include <QUrl>
-#include <QStringList>
 #include <QObject>
+#include <QStringList>
+#include <QUrl>
 
 class KPrView;
 class KoPAPageBase;
@@ -21,24 +21,32 @@ class KPrHtmlExport : public QObject
     Q_OBJECT
 public:
     struct Parameter {
-        Parameter() {}
+        Parameter()
+        {
+        }
 
-        Parameter(const QUrl &styleUrl, KPrView *kprView, const QList<KoPAPageBase*> &slides, const QUrl &destination,
-                  const QString &author, const QString &title, const QStringList &slidesNames, bool openBrowser)
-                      : styleUrl(styleUrl)
-                      , kprView(kprView)
-                      , slides(slides)
-                      , destination(destination)
-                      , author(author)
-                      , title(title)
-                      , slidesNames(slidesNames)
-                      , openBrowser(openBrowser)
+        Parameter(const QUrl &styleUrl,
+                  KPrView *kprView,
+                  const QList<KoPAPageBase *> &slides,
+                  const QUrl &destination,
+                  const QString &author,
+                  const QString &title,
+                  const QStringList &slidesNames,
+                  bool openBrowser)
+            : styleUrl(styleUrl)
+            , kprView(kprView)
+            , slides(slides)
+            , destination(destination)
+            , author(author)
+            , title(title)
+            , slidesNames(slidesNames)
+            , openBrowser(openBrowser)
         {
         }
 
         QUrl styleUrl;
         KPrView *kprView;
-        QList<KoPAPageBase*> slides;
+        QList<KoPAPageBase *> slides;
         QUrl destination;
         QString author;
         QString title;

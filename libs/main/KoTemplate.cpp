@@ -13,14 +13,31 @@
 
 #include <KIconLoader>
 
-
-KoTemplate::KoTemplate(const QString &name, const QString &description, const QString &file,
-                       const QString &picture, const QString &fileName, const QString &_measureSystem,
-                       const QString &color, const QString &swatch, const QString &variantName, bool wide,
-                       bool hidden, bool touched) :
-        m_name(name), m_descr(description), m_file(file), m_picture(picture), m_fileName(fileName),
-        m_color(color), m_swatch(swatch), m_variantName(variantName), m_wide(wide),
-        m_hidden(hidden), m_touched(touched), m_cached(false), m_measureSystem(_measureSystem)
+KoTemplate::KoTemplate(const QString &name,
+                       const QString &description,
+                       const QString &file,
+                       const QString &picture,
+                       const QString &fileName,
+                       const QString &_measureSystem,
+                       const QString &color,
+                       const QString &swatch,
+                       const QString &variantName,
+                       bool wide,
+                       bool hidden,
+                       bool touched)
+    : m_name(name)
+    , m_descr(description)
+    , m_file(file)
+    , m_picture(picture)
+    , m_fileName(fileName)
+    , m_color(color)
+    , m_swatch(swatch)
+    , m_variantName(variantName)
+    , m_wide(wide)
+    , m_hidden(hidden)
+    , m_touched(touched)
+    , m_cached(false)
+    , m_measureSystem(_measureSystem)
 {
 }
 
@@ -29,7 +46,7 @@ const QPixmap &KoTemplate::loadPicture()
     if (m_cached)
         return m_pixmap;
     m_cached = true;
-    if (m_picture[ 0 ] == '/') {
+    if (m_picture[0] == '/') {
         QImage img(m_picture);
         if (img.isNull()) {
             qWarning() << "Couldn't find icon " << m_picture;
@@ -47,4 +64,3 @@ const QPixmap &KoTemplate::loadPicture()
         return m_pixmap;
     }
 }
-

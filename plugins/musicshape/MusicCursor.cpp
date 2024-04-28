@@ -13,7 +13,7 @@
 
 using namespace MusicCore;
 
-MusicCursor::MusicCursor(Sheet* sheet, QObject* parent)
+MusicCursor::MusicCursor(Sheet *sheet, QObject *parent)
     : QObject(parent)
     , m_sheet(sheet)
     , m_staff(sheet->part(0)->staff(0))
@@ -28,7 +28,7 @@ void MusicCursor::moveRight()
 {
     m_element++;
     if (m_element > m_staff->part()->voice(m_voice)->bar(m_sheet->bar(m_bar))->elementCount()) {
-        if (m_bar < m_sheet->barCount()-1) {
+        if (m_bar < m_sheet->barCount() - 1) {
             m_bar++;
             m_element = 0;
         }
@@ -63,7 +63,7 @@ void MusicCursor::setVoice(int voice)
     m_voice = voice;
 }
 
-VoiceBar* MusicCursor::voiceBar() const
+VoiceBar *MusicCursor::voiceBar() const
 {
     return m_staff->part()->voice(m_voice)->bar(m_sheet->bar(m_bar));
 }

@@ -13,8 +13,10 @@
 
 #include "CSThumbProvider.h"
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 class Doc;
 }
 }

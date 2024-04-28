@@ -122,7 +122,7 @@ protected Q_SLOTS:
     void initializeView();
 
 private:
-    KPrView* m_view;
+    KPrView *m_view;
     KPrAnimationsTimeLineView *m_timeLineView;
     KPrAnimationGroupProxyModel *m_timeLineModel;
     QComboBox *m_triggerEventList;

@@ -63,15 +63,15 @@ public:
         AuthorInitials,
         Chapter, ///< Chapter (number, name, number and name, plain number, plain number and name) variables.
 
-        KarbonStart = 1000,      ///< Base number for Karbon specific values.
-        KexiStart = 2000,        ///< Base number for Kexi specific values.
-        FlowStart = 3000,        ///< Base number for Flow specific values.
-        PlanStart = 4000,        ///< Base number for Plan specific values.
-        StageStart = 5000,       ///< Base number for Stage specific values.
-        WordsStart = 6000,       ///< Base number for Words specific values.
+        KarbonStart = 1000, ///< Base number for Karbon specific values.
+        KexiStart = 2000, ///< Base number for Kexi specific values.
+        FlowStart = 3000, ///< Base number for Flow specific values.
+        PlanStart = 4000, ///< Base number for Plan specific values.
+        StageStart = 5000, ///< Base number for Stage specific values.
+        WordsStart = 6000, ///< Base number for Words specific values.
         VariableManagerStart = 7000, ///< Start of numbers reserved for the KoVariableManager
-        UserGet = 12000,         ///< User defined variable user-field-get
-        UserInput = 12001        ///< User defined variable user-field-input
+        UserGet = 12000, ///< User defined variable user-field-get
+        UserInput = 12001 ///< User defined variable user-field-input
     };
 
     /**
@@ -101,7 +101,9 @@ public:
      * has been set, but before the text has been layouted.
      * The default implementation does nothing.
      */
-    virtual void setup() {}
+    virtual void setup()
+    {
+    }
 
     /**
      * Save this inlineObject as ODF
@@ -135,8 +137,7 @@ public:
      * @param pd the postscript-paintdevice that all text is rendered on. Use this for QFont and related
      *  classes so the inline object can be reused on any paintdevice.
      */
-    virtual void resize(const QTextDocument *document, QTextInlineObject &object,
-                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) = 0;
+    virtual void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) = 0;
 
     /**
      * Paint the inline-object-base using the provided painter within the rectangle specified by rect.
@@ -151,8 +152,13 @@ public:
      * @param rect the rectangle inside which the variable can paint itself.  Painting outside the rect
      *    will give various problems with regards to repainting issues.
      */
-    virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) = 0;
+    virtual void paint(QPainter &painter,
+                       QPaintDevice *pd,
+                       const QTextDocument *document,
+                       const QRectF &rect,
+                       const QTextInlineObject &object,
+                       int posInDocument,
+                       const QTextCharFormat &format) = 0;
 
     /**
      * Overwrite this if you are interested in propertychanges.
@@ -208,7 +214,7 @@ public:
      *
      * @return false if loading failed
      */
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) =  0;
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
 
 protected:
     explicit KoInlineObject(KoInlineObjectPrivate &, bool propertyChangeListener = false);

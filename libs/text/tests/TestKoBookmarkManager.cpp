@@ -6,31 +6,31 @@
  */
 #include "TestKoBookmarkManager.h"
 
-#include <QTest>
-#include <QString>
-#include <QTextDocument>
 #include <QList>
+#include <QString>
+#include <QTest>
+#include <QTextDocument>
 
-#include <KoTextEditor.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoBookmarkManager.h>
 #include <KoBookmark.h>
+#include <KoBookmarkManager.h>
+#include <KoInlineTextObjectManager.h>
 #include <KoTextDocument.h>
+#include <KoTextEditor.h>
 
 void TestKoBookmarkManager::testCreation()
 {
     KoBookmarkManager *manager = new KoBookmarkManager();
     Q_ASSERT(manager);
 
-    KoBookmark* bm = manager->bookmark("bla");
-    Q_ASSERT(bm == 0); Q_UNUSED(bm);
+    KoBookmark *bm = manager->bookmark("bla");
+    Q_ASSERT(bm == 0);
+    Q_UNUSED(bm);
 
     QList<QString> bmlist = manager->bookmarkNameList();
     Q_ASSERT(bmlist.isEmpty());
 
     delete manager;
 }
-
 
 void TestKoBookmarkManager::testInsertAndRetrieve()
 {
@@ -45,7 +45,8 @@ void TestKoBookmarkManager::testInsertAndRetrieve()
     manager.insert("another2", new KoBookmark(cursor));
 
     KoBookmark *bm = manager.bookmark("start!");
-    Q_ASSERT(bm == mark); Q_UNUSED(bm);
+    Q_ASSERT(bm == mark);
+    Q_UNUSED(bm);
 }
 
 void TestKoBookmarkManager::testRemove()

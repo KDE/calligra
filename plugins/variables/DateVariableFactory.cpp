@@ -14,7 +14,7 @@
 #include <KLocalizedString>
 
 DateVariableFactory::DateVariableFactory()
-        : KoInlineObjectFactoryBase("date", TextVariable)
+    : KoInlineObjectFactoryBase("date", TextVariable)
 {
     KoInlineObjectTemplate var;
     var.id = "fixed";
@@ -27,7 +27,8 @@ DateVariableFactory::DateVariableFactory()
     addTemplate(var);
 
     QStringList elementNames;
-    elementNames << "date" << "time";
+    elementNames << "date"
+                 << "time";
     setOdfElementNames(KoXmlNS::text, elementNames);
 }
 

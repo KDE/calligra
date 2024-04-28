@@ -26,7 +26,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #include "SheetsKsp.h"
 #include "SheetsKspPrivate.h"
 
@@ -34,10 +33,10 @@
 
 #include <KoXmlReader.h>
 
-#include "engine/calligra_sheets_limits.h"
+#include "engine/CS_Time.h"
 #include "engine/CalculationSettings.h"
 #include "engine/Localization.h"
-#include "engine/CS_Time.h"
+#include "engine/calligra_sheets_limits.h"
 
 #include "Cell.h"
 #include "Condition.h"
@@ -46,16 +45,18 @@
 
 #include "float.h"
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
-namespace Ksp {
-    bool loadCellData(Cell *cell, const KoXmlElement & text, const QString &_dataType);
-    bool saveCellResult(Cell *cell, QDomDocument& doc, QDomElement& result, QString str);
+namespace Ksp
+{
+bool loadCellData(Cell *cell, const KoXmlElement &text, const QString &_dataType);
+bool saveCellResult(Cell *cell, QDomDocument &doc, QDomElement &result, QString str);
 }
 
-
-Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
+Cell Ksp::loadCell(const KoXmlElement &cell, Sheet *sheet)
 {
     bool ok;
 
@@ -64,9 +65,11 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
     // cell belongs.
     //
     int row = cell.attribute("row").toInt(&ok);
-    if (!ok) return Cell();
+    if (!ok)
+        return Cell();
     int column = cell.attribute("column").toInt(&ok);
-    if (!ok) return Cell();
+    if (!ok)
+        return Cell();
 
     // Validation
     if (row < 1 || row > KS_rowMax) {
@@ -89,7 +92,8 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
         int mergedYCells = 0;
         if (formatElement.hasAttribute("colspan")) {
             int i = formatElement.attribute("colspan").toInt(&ok);
-            if (!ok) return Cell();
+            if (!ok)
+                return Cell();
             // Validation
             if (i < 0 || i > KS_spanMax) {
                 debugSheets << "Value out of range Cell::colspan=" << i;
@@ -101,7 +105,8 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
 
         if (formatElement.hasAttribute("rowspan")) {
             int i = formatElement.attribute("rowspan").toInt(&ok);
-            if (!ok) return Cell();
+            if (!ok)
+                return Cell();
             // Validation
             if (i < 0 || i > KS_spanMax) {
                 debugSheets << "Value out of range Cell::rowspan=" << i;
@@ -146,7 +151,7 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
     KoXmlElement comment = cell.namedItem("comment").toElement();
     if (!comment.isNull()) {
         QString t = comment.text();
-        //t = t.trimmed();
+        // t = t.trimmed();
         res.setComment(t);
     }
 
@@ -159,11 +164,10 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
     KoXmlElement text = cell.namedItem("text").toElement();
 
     if (!text.isNull()) {
-
         /* older versions mistakenly put the datatype attribute on the cell instead
            of the text. Just move it over in case we're parsing an old document */
         QString dataType;
-        if (cell.hasAttribute("dataType"))     // new docs
+        if (cell.hasAttribute("dataType")) // new docs
             dataType = cell.attribute("dataType");
 
         KoXmlElement result = cell.namedItem("result").toElement();
@@ -197,11 +201,11 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
                     res.setValue(value);
                 } else {
                     QStringView view{t};
-                    int pos   = t.indexOf('/');
-                    int year  = view.mid(0, pos).toInt();
-                    int pos1  = t.indexOf('/', pos + 1);
+                    int pos = t.indexOf('/');
+                    int year = view.mid(0, pos).toInt();
+                    int pos1 = t.indexOf('/', pos + 1);
                     int month = view.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
-                    int day   = view.right(t.length() - pos1 - 1).toInt();
+                    int day = view.right(t.length() - pos1 - 1).toInt();
                     QDate date(year, month, day);
                     if (date.isValid())
                         res.setValue(Value(date, sheet->map()->calculationSettings()));
@@ -214,16 +218,16 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
                     value.setFormat(Value::fmt_Time);
                     res.setValue(value);
                 } else {
-                    int hours   = -1;
+                    int hours = -1;
                     int minutes = -1;
-                    int second  = -1;
+                    int second = -1;
                     int pos, pos1;
                     QStringView view(t);
-                    pos   = t.indexOf(':');
+                    pos = t.indexOf(':');
                     hours = view.mid(0, pos).toInt();
-                    pos1  = t.indexOf(':', pos + 1);
+                    pos1 = t.indexOf(':', pos + 1);
                     minutes = view.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
-                    second  = view.right(t.length() - pos1 - 1).toInt();
+                    second = view.right(t.length() - pos1 - 1).toInt();
                     Time time(hours, minutes, second);
                     if (time.isValid())
                         res.setValue(Value(time));
@@ -237,9 +241,9 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
     return res;
 }
 
-bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_dataType)
+bool Ksp::loadCellData(Cell *cell, const KoXmlElement &text, const QString &_dataType)
 {
-    //TODO: use converter()->asString() to generate userInput()
+    // TODO: use converter()->asString() to generate userInput()
 
     QString t = text.text();
     t = t.trimmed();
@@ -271,8 +275,7 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
             } else if (ch == '>') {
                 if (inside_tag) {
                     inside_tag = false;
-                    if (tag.startsWith(QLatin1String("a href=\""), Qt::CaseSensitive) &&
-                        tag.endsWith(QLatin1Char('"'))) {
+                    if (tag.startsWith(QLatin1String("a href=\""), Qt::CaseSensitive) && tag.endsWith(QLatin1Char('"'))) {
                         qml_link.remove(0, 8).chop(1);
                     }
                     tag.clear();
@@ -294,7 +297,7 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
         QString dataType = _dataType;
 
         if (dataType.isNull()) {
-            if (text.hasAttribute("dataType")) {   // new docs
+            if (text.hasAttribute("dataType")) { // new docs
                 dataType = text.attribute("dataType");
             } else { // old docs: do the ugly solution of parsing the text
                 // ...except for date/time
@@ -310,7 +313,7 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
         }
 
         if (newStyleLoading) {
-            Localization* locale = sett->locale();
+            Localization *locale = sett->locale();
             // boolean ?
             if (dataType == "Bool")
                 cell->setValue(Value(t.toLower() == "true"));
@@ -319,16 +322,16 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
             else if (dataType == "Num") {
                 bool ok = false;
                 if (t.contains('.'))
-                    cell->setValue(Value(t.toDouble(&ok)));      // We save in non-localized format
+                    cell->setValue(Value(t.toDouble(&ok))); // We save in non-localized format
                 else
-                    cell->setValue(Value((int64_t) t.toLongLong(&ok)));
+                    cell->setValue(Value((int64_t)t.toLongLong(&ok)));
                 if (!ok) {
                     warnSheets << "Couldn't parse '" << t << "' as number.";
                 }
                 /* We will need to localize the text version of the number */
 
                 /* KLocale::formatNumber requires the precision we want to return.
-                */
+                 */
                 int precision = t.length() - t.indexOf('.') - 1;
 
                 if (cell->style().formatType() == Format::Percentage) {
@@ -355,7 +358,7 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
                 int month = view.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
                 int day = view.right(t.length() - pos1 - 1).toInt();
                 cell->setValue(Value(QDate(year, month, day), sett));
-                if (cell->value().asDate(sett).isValid())   // Should always be the case for new docs
+                if (cell->value().asDate(sett).isValid()) // Should always be the case for new docs
                     cell->setUserInput(locale->formatDate(cell->value().asDate(sett), false));
                 else { // This happens with old docs, when format is set wrongly to date
                     cell->parseUserInput(t);
@@ -375,7 +378,7 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
                 minutes = view.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
                 second = view.right(t.length() - pos1 - 1).toInt();
                 cell->setValue(Value(Time(hours, minutes, second)));
-                if (cell->value().asTime().isValid())    // Should always be the case for new docs
+                if (cell->value().asTime().isValid()) // Should always be the case for new docs
                     cell->setUserInput(locale->formatTime(cell->value().asTime(), true));
                 else { // This happens with old docs, when format is set wrongly to time
                     cell->parseUserInput(t);
@@ -396,8 +399,7 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
     return true;
 }
 
-
-QDomElement Ksp::saveCell(Cell *obj, QDomDocument& doc, int xOffset, int yOffset, bool era)
+QDomElement Ksp::saveCell(Cell *obj, QDomDocument &doc, int xOffset, int yOffset, bool era)
 {
     // Save the position of this cell
     QDomElement cell = doc.createElement("cell");
@@ -408,8 +410,8 @@ QDomElement Ksp::saveCell(Cell *obj, QDomDocument& doc, int xOffset, int yOffset
     // Save the formatting information
     //
     QDomElement formatElement(doc.createElement("format"));
-    saveStyle (obj->style(), doc, formatElement, obj->fullSheet()->fullMap()->styleManager());
-    if (formatElement.hasChildNodes() || formatElement.attributes().length())   // don't save empty tags
+    saveStyle(obj->style(), doc, formatElement, obj->fullSheet()->fullMap()->styleManager());
+    if (formatElement.hasChildNodes() || formatElement.attributes().length()) // don't save empty tags
         cell.appendChild(formatElement);
 
     if (obj->doesMergeCells()) {
@@ -428,7 +430,7 @@ QDomElement Ksp::saveCell(Cell *obj, QDomDocument& doc, int xOffset, int yOffset
 
     Validity validity = obj->validity();
     if (!validity.isEmpty()) {
-        QDomElement validityElement = saveValidity (doc, &validity, obj->sheet()->map()->converter());
+        QDomElement validityElement = saveValidity(doc, &validity, obj->sheet()->map()->converter());
         if (!validityElement.isNull())
             cell.appendChild(validityElement);
     }
@@ -471,14 +473,14 @@ QDomElement Ksp::saveCell(Cell *obj, QDomDocument& doc, int xOffset, int yOffset
             cell.appendChild(txt);
         }
     }
-    if (cell.hasChildNodes() || cell.attributes().length() > 2)   // don't save empty tags
+    if (cell.hasChildNodes() || cell.attributes().length() > 2) // don't save empty tags
         // (the >2 is due to "row" and "column" attributes)
         return cell;
     else
         return QDomElement();
 }
 
-bool Ksp::saveCellResult(Cell *cell, QDomDocument& doc, QDomElement& result, QString str)
+bool Ksp::saveCellResult(Cell *cell, QDomDocument &doc, QDomElement &result, QString str)
 {
     QString dataType = "Other"; // fallback
 
@@ -525,7 +527,5 @@ bool Ksp::saveCellResult(Cell *cell, QDomDocument& doc, QDomElement& result, QSt
     return true; /* really isn't much of a way for this function to fail */
 }
 
-
-
-}  // Sheets
-}  // Calligra
+} // Sheets
+} // Calligra

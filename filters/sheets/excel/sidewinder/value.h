@@ -7,16 +7,14 @@
 #ifndef SWINDER_VALUE_H
 #define SWINDER_VALUE_H
 
+#include "format.h"
 #include <iostream>
 #include <map>
-#include "format.h"
 
 namespace Swinder
 {
 
 class ValueData;
-
-
 
 /**
  * Provides a wrapper for cell value.
@@ -29,9 +27,7 @@ class ValueData;
 
 class Value
 {
-
 public:
-
     typedef enum {
         Empty,
         Boolean,
@@ -40,7 +36,7 @@ public:
         String,
         RichText,
         CellRange, // not used yet
-        Array,     // not used yet
+        Array, // not used yet
         Error
     } Type;
 
@@ -62,7 +58,7 @@ public:
     /**
      * Creates a copy from another value.
      */
-    Value(const Value& _value);
+    Value(const Value &_value);
 
     /**
      * Assigns from another value.
@@ -70,15 +66,15 @@ public:
      * Because the data is implicitly shared, such assignment is very fast and
      * doesn't consume additional memory.
      */
-    Value& operator= (const Value& _value);
-    
+    Value &operator=(const Value &_value);
+
     bool operator==(const Value &other) const;
     bool operator!=(const Value &other) const;
 
     /**
      * Assigns from another value. Same as above.
      */
-    Value& assign(const Value& _value);
+    Value &assign(const Value &_value);
 
     /**
      * Creates a boolean value.
@@ -98,12 +94,12 @@ public:
     /**
      * Create a string value.
      */
-    explicit Value(const QString& s);
+    explicit Value(const QString &s);
 
     /**
      * Create a richtext value
      */
-    Value(const QString& s, const std::map<unsigned, FormatFont>& formatRuns);
+    Value(const QString &s, const std::map<unsigned, FormatFont> &formatRuns);
 
     /**
      * Returns the type of the value.
@@ -113,28 +109,32 @@ public:
     /**
      * Returns true if empty.
      */
-    bool isEmpty() const {
+    bool isEmpty() const
+    {
         return type() == Empty;
     }
 
     /**
      * Returns true if the type of this value is Boolean.
      */
-    bool isBoolean() const {
+    bool isBoolean() const
+    {
         return type() == Boolean;
     }
 
     /**
      * Returns true if the type of this value is integer.
      */
-    bool isInteger() const {
+    bool isInteger() const
+    {
         return type() == Integer;
     }
 
     /**
      * Returns true if the type of this value is floating-point.
      */
-    bool isFloat() const {
+    bool isFloat() const
+    {
         return type() == Float;
     }
 
@@ -142,39 +142,44 @@ public:
      * Returns true if the type of this value is either
      * integer or floating-point.
      */
-    bool isNumber() const {
+    bool isNumber() const
+    {
         return (type() == Integer) || (type() == Float);
     }
 
     /**
      * Returns true if the type of this value is string.
      */
-    bool isString() const {
+    bool isString() const
+    {
         return type() == String;
     }
 
     /**
      * Returns true if the type of this value is richtext.
      */
-    bool isRichText() const {
+    bool isRichText() const
+    {
         return type() == RichText;
     }
 
     /**
      * Returns true if the type of this value is string or richtext.
      */
-    bool isText() const {
+    bool isText() const
+    {
         return type() == String || type() == RichText;
     }
 
     /**
      * Returns true if this value holds error information.
      */
-    bool isError() const {
+    bool isError() const
+    {
         return type() == Error;
     }
 
-    void setValue(const Value& v);
+    void setValue(const Value &v);
 
     /**
      * Sets this value to boolean value.
@@ -194,17 +199,17 @@ public:
     /**
      * Sets this value to string value.
      */
-    void setValue(const QString& s);
+    void setValue(const QString &s);
 
     /**
      * Sets this value to richtext value.
      */
-    void setValue(const QString& s, const std::map<unsigned, FormatFont>& formatRuns);
+    void setValue(const QString &s, const std::map<unsigned, FormatFont> &formatRuns);
 
     /**
      * Sets this value to hold error message.
      */
-    void setError(const QString& msg);
+    void setError(const QString &msg);
 
     /**
      * Returns the boolean value of this value.
@@ -258,21 +263,21 @@ public:
     /**
      * Returns constant reference to empty value.
      */
-    static const Value& empty();
+    static const Value &empty();
 
     /**
      * Returns constant reference to \#DIV/0! error.
      *
      * This is used to indicate that a formula divides by 0 (zero).
      */
-    static const Value& errorDIV0();
+    static const Value &errorDIV0();
 
     /**
      * Returns constant reference to \#N/A error.
      *
      * This is to indicate that  a value is not available to a function.
      */
-    static const Value& errorNA();
+    static const Value &errorNA();
 
     /**
      * Returns constant reference to \#NAME? error.
@@ -281,28 +286,28 @@ public:
      * recognized, possibly a misspelled name or name that
      * does not exist.
      */
-    static const Value& errorNAME();
+    static const Value &errorNAME();
 
     /**
      * Returns constant reference to \#NUM! error.
      *
      * This is to indicate a problem with a number in a formula.
      */
-    static const Value& errorNUM();
+    static const Value &errorNUM();
 
     /**
      * Returns constant reference to \#NULL! error.
      *
      * This is to indicate that two area do not intersect.
      */
-    static const Value& errorNULL();
+    static const Value &errorNULL();
 
     /**
      * Returns constant reference to \#REF! error.
      *
      * This is used to indicate an invalid cell reference.
      */
-    static const Value& errorREF();
+    static const Value &errorREF();
 
     /**
      * Returns constant reference to \#VALUE! error.
@@ -310,17 +315,16 @@ public:
      * This is to indicate that wrong type of argument or operand
      * is used, usually within a function call, e.g SIN("some text").
      */
-    static const Value& errorVALUE();
+    static const Value &errorVALUE();
 
 protected:
-
-    ValueData* d; // can't never be 0
+    ValueData *d; // can't never be 0
 };
 
 /**
  * Dumps value to output stream, useful for debugging.
  */
-std::ostream& operator<<(std::ostream& s, Value value);
+std::ostream &operator<<(std::ostream &s, Value value);
 
 } // namespace Swinder
 

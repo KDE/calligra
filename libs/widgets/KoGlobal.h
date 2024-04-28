@@ -9,9 +9,9 @@
 #ifndef KOGLOBAL_H
 #define KOGLOBAL_H
 
-#include <QStringList>
 #include <QFont>
 #include <QMap>
+#include <QStringList>
 
 #include "kowidgets_export.h"
 
@@ -23,7 +23,8 @@ public:
     KoGlobal();
 
     /// For KoApplication
-    static void initialize()  {
+    static void initialize()
+    {
         (void)self(); // I don't want to make KGlobal instances public, so self() is private
     }
     /**
@@ -32,7 +33,8 @@ public:
      * except that it is guaranteed to have a point size set,
      * never a pixel size (see @ref QFont).
      */
-    static QFont defaultFont()  {
+    static QFont defaultFont()
+    {
         return self()->_defaultFont();
     }
 
@@ -42,40 +44,43 @@ public:
      * so this is the centralization of the KConfig object so that the file is
      * parsed only once
      */
-    static KConfig* calligraConfig() {
+    static KConfig *calligraConfig()
+    {
         return self()->_calligraConfig();
     }
 
     /// Return the list of available languages, in their displayable form
     /// (translated names)
-    static QStringList listOfLanguages() {
+    static QStringList listOfLanguages()
+    {
         return self()->_listOfLanguages();
     }
     /// Return the list of available languages, in their internal form
     /// e.g. "fr" or "en_US", here called "tag"
-    static QStringList listOfLanguageTags() {
+    static QStringList listOfLanguageTags()
+    {
         return self()->_listOfLanguageTags();
     }
     /// For a given language display name, return its tag
-    static QString tagOfLanguage(const QString & _lang);
+    static QString tagOfLanguage(const QString &_lang);
     /// For a given language tag, return its display name
     static QString languageFromTag(const QString &_lang);
 
     ~KoGlobal();
 
 private:
-    static KoGlobal* self();
+    static KoGlobal *self();
 
     QFont _defaultFont();
     QStringList _listOfLanguages();
     QStringList _listOfLanguageTags();
-    KConfig* _calligraConfig();
+    KConfig *_calligraConfig();
     void createListOfLanguages();
 
     int m_pointSize;
     typedef QMap<QString, QString> LanguageMap;
     LanguageMap m_langMap; // display-name -> language tag
-    KConfig* m_calligraConfig;
+    KConfig *m_calligraConfig;
     // No BC problem here, constructor is private, feel free to add members
 
     friend class this_is_a_singleton; // work around gcc warning

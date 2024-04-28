@@ -6,13 +6,13 @@
 
 #include "KoVBox.h"
 
-#include <QEvent>
 #include <QApplication>
+#include <QEvent>
 #include <QVBoxLayout>
 
 KoVBox::KoVBox(QWidget *parent)
-    : QFrame(parent),
-      d(0)
+    : QFrame(parent)
+    , d(0)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setSpacing(0);
@@ -82,4 +82,3 @@ void KoVBox::setMargin(int margin)
 {
     layout()->setContentsMargins(margin, margin, margin, margin);
 }
-

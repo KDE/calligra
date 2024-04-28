@@ -11,29 +11,29 @@
 
 #include <QDebug>
 
-#include <QUrl>
-#include <QUrlQuery>
 #include <QMimeDatabase>
 #include <QPluginLoader>
+#include <QUrl>
+#include <QUrlQuery>
 
-#include <KoPluginLoader.h>
 #include <KPluginMetaData>
+#include <KoPluginLoader.h>
 
 // For the mimetype names
+#include <KPrDocument.h>
 #include <KWDocument.h>
 #include <sheets/core/DocBase.h>
-#include <KPrDocument.h>
 
 using namespace Calligra::Components;
 
-static const QStringList staticTextTypes{ "application/pdf" };
+static const QStringList staticTextTypes{"application/pdf"};
 
-Calligra::Components::Global::Global(QObject* parent)
+Calligra::Components::Global::Global(QObject *parent)
     : QObject{parent}
 {
 }
 
-int Global::documentType(const QUrl& document)
+int Global::documentType(const QUrl &document)
 {
     int result = DocumentType::Unknown;
 
@@ -44,32 +44,29 @@ int Global::documentType(const QUrl& document)
     const QUrlQuery query(document);
 
     // First, check if the URL gives us specific information on this topic (such as asking for a new file)
-    if(query.hasQueryItem("mimetype")) {
+    if (query.hasQueryItem("mimetype")) {
         QString mime = query.queryItemValue("mimetype");
-        if(mime == WORDS_MIME_TYPE) {
+        if (mime == WORDS_MIME_TYPE) {
             result = DocumentType::TextDocument;
-        }
-        else if(mime == SHEETS_MIME_TYPE) {
+        } else if (mime == SHEETS_MIME_TYPE) {
             result = DocumentType::Spreadsheet;
-        }
-        else if(mime == STAGE_MIME_TYPE) {
+        } else if (mime == STAGE_MIME_TYPE) {
             result = DocumentType::Presentation;
         }
-    }
-    else {
+    } else {
         QMimeType mime = QMimeDatabase{}.mimeTypeForUrl(document);
 
         // TODO: see if KoPluginLoader could provide this info via some metadata query instead
         const auto metaDatas = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mime.name());
 
         for (const auto &metaData : metaDatas) {
-            if(metaData.fileName().contains("words")) {
+            if (metaData.fileName().contains("words")) {
                 result = DocumentType::TextDocument;
                 break;
-            } else if(metaData.fileName().contains("sheets")) {
+            } else if (metaData.fileName().contains("sheets")) {
                 result = DocumentType::Spreadsheet;
                 break;
-            } else if(metaData.fileName().contains("stage")) {
+            } else if (metaData.fileName().contains("stage")) {
                 result = DocumentType::Presentation;
                 break;
             }

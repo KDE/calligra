@@ -17,26 +17,26 @@
 */
 
 #include "associatedstrings.h"
-#include "ustring.h"
 #include "olestream.h"
+#include "ustring.h"
 #include "word_helper.h"
 #include "wvlog.h"
 
 using namespace wvWare;
 
-AssociatedStrings::AssociatedStrings( U32 fcSttbfAssoc, U32 lcbSttbfAssoc, U16 lid, OLEStreamReader* tableStream ) :
-    m_sttbf( 0 )
+AssociatedStrings::AssociatedStrings(U32 fcSttbfAssoc, U32 lcbSttbfAssoc, U16 lid, OLEStreamReader *tableStream)
+    : m_sttbf(0)
 {
     tableStream->push();
-    tableStream->seek( fcSttbfAssoc );
-    m_sttbf = new STTBF( lid, tableStream );
-    if ( tableStream->tell() - fcSttbfAssoc != lcbSttbfAssoc )
+    tableStream->seek(fcSttbfAssoc);
+    m_sttbf = new STTBF(lid, tableStream);
+    if (tableStream->tell() - fcSttbfAssoc != lcbSttbfAssoc)
         wvlog << "Warning: Associated strings have a different size than expected!" << Qt::endl;
     tableStream->pop();
 }
 
-AssociatedStrings::AssociatedStrings( const AssociatedStrings& rhs ) :
-    m_sttbf( new STTBF( *rhs.m_sttbf ) )
+AssociatedStrings::AssociatedStrings(const AssociatedStrings &rhs)
+    : m_sttbf(new STTBF(*rhs.m_sttbf))
 {
 }
 
@@ -47,45 +47,45 @@ AssociatedStrings::~AssociatedStrings()
 
 UString AssociatedStrings::associatedTemplate() const
 {
-    return m_sttbf->stringAt( 1 );
+    return m_sttbf->stringAt(1);
 }
 
 UString AssociatedStrings::title() const
 {
-    return m_sttbf->stringAt( 2 );
+    return m_sttbf->stringAt(2);
 }
 
 UString AssociatedStrings::subject() const
 {
-    return m_sttbf->stringAt( 3 );
+    return m_sttbf->stringAt(3);
 }
 
 UString AssociatedStrings::keywords() const
 {
-    return m_sttbf->stringAt( 4 );
+    return m_sttbf->stringAt(4);
 }
 
 UString AssociatedStrings::comments() const
 {
-    return m_sttbf->stringAt( 5 );
+    return m_sttbf->stringAt(5);
 }
 
 UString AssociatedStrings::author() const
 {
-    return m_sttbf->stringAt( 6 );
+    return m_sttbf->stringAt(6);
 }
 
 UString AssociatedStrings::lastRevBy() const
 {
-    return m_sttbf->stringAt( 7 );
+    return m_sttbf->stringAt(7);
 }
 
 UString AssociatedStrings::dataDocument() const
 {
-    return m_sttbf->stringAt( 8 );
+    return m_sttbf->stringAt(8);
 }
 
 UString AssociatedStrings::headerDocument() const
 {
-    return m_sttbf->stringAt( 9 );
+    return m_sttbf->stringAt(9);
 }

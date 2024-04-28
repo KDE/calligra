@@ -14,7 +14,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class TestBitopsFunctions: public QObject
+class TestBitopsFunctions : public QObject
 {
     Q_OBJECT
 
@@ -25,8 +25,9 @@ private Q_SLOTS:
     void testBITXOR();
     void testBITLSHIFT();
     void testBITRSHIFT();
+
 private:
-    Value evaluate(const QString&, Value& ex);
+    Value evaluate(const QString &, Value &ex);
 };
 
 } // namespace Sheets

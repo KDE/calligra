@@ -8,8 +8,8 @@
 #define KOSNAPDATA_H
 
 #include <KoPathSegment.h>
-#include <flake_export.h>
 #include <QVector>
+#include <flake_export.h>
 
 /**
  * This class is used to provide additional data to the snap guide.
@@ -45,4 +45,4 @@ private:
     QList<KoPathSegment> m_segments;
 };
 
-#endif //KOSNAPDATA_H
+#endif // KOSNAPDATA_H

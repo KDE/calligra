@@ -33,17 +33,17 @@ KPrPageData::~KPrPageData()
     }
 }
 
-KPrShapeAnimations & KPrPageData::animations()
+KPrShapeAnimations &KPrPageData::animations()
 {
     return m_animations;
 }
 
-KPrPlaceholders & KPrPageData::placeholders()
+KPrPlaceholders &KPrPageData::placeholders()
 {
     return m_placeholders;
 }
 
-const KPrPlaceholders & KPrPageData::placeholders() const
+const KPrPlaceholders &KPrPageData::placeholders() const
 {
     return m_placeholders;
 }

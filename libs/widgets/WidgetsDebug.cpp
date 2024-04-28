@@ -6,10 +6,8 @@
 
 #include "WidgetsDebug.h"
 
-const QLoggingCategory &WIDGETS_LOG() \
+const QLoggingCategory &WIDGETS_LOG()
 {
     static const QLoggingCategory category("calligra.lib.widgets");
     return category;
 }
-
-

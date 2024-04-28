@@ -4,8 +4,8 @@
 
 #include "TestPageTextInfo.h"
 
-#include <KWPageManager.h>
 #include <KWPage.h>
+#include <KWPageManager.h>
 #include <KWPageTextInfo.h>
 
 void TestPageTextInfo::init()

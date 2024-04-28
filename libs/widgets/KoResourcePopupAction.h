@@ -29,7 +29,7 @@ public:
      * @param gradientResourceAdapter A pointer to gradient resource adapter.
      * @param parent The parent for this action.
      */
-    explicit KoResourcePopupAction(QSharedPointer<KoAbstractResourceServerAdapter>gradientResourceAdapter, QObject *parent = 0);
+    explicit KoResourcePopupAction(QSharedPointer<KoAbstractResourceServerAdapter> gradientResourceAdapter, QObject *parent = 0);
 
     /**
      * Destructor
@@ -41,7 +41,7 @@ public:
 
 Q_SIGNALS:
     /// Emitted when a resource was selected
-    void resourceSelected(QSharedPointer<KoShapeBackground>  background);
+    void resourceSelected(QSharedPointer<KoShapeBackground> background);
 
 public Q_SLOTS:
     void updateIcon();
@@ -51,7 +51,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KORESOURCEPOPUPACTION_H */

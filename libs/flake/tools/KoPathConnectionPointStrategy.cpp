@@ -8,11 +8,11 @@
  */
 
 #include "KoPathConnectionPointStrategy.h"
-#include "KoPathConnectionPointStrategy_p.h"
-#include "KoConnectionShape.h"
 #include "KoCanvasBase.h"
-#include "KoShapeManager.h"
+#include "KoConnectionShape.h"
+#include "KoPathConnectionPointStrategy_p.h"
 #include "KoShapeConnectionChangeCommand.h"
+#include "KoShapeManager.h"
 
 #include <float.h>
 #include <math.h>
@@ -38,8 +38,8 @@ void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation
     d->newConnectionShape = 0;
     d->newConnectionId = InvalidConnectionPointId;
 
-    QRectF roi(mouseLocation - QPointF(MAX_DISTANCE, MAX_DISTANCE), QSizeF(2*MAX_DISTANCE, 2*MAX_DISTANCE));
-    QList<KoShape*> shapes = d->tool->canvas()->shapeManager()->shapesAt(roi, true);
+    QRectF roi(mouseLocation - QPointF(MAX_DISTANCE, MAX_DISTANCE), QSizeF(2 * MAX_DISTANCE, 2 * MAX_DISTANCE));
+    QList<KoShape *> shapes = d->tool->canvas()->shapeManager()->shapesAt(roi, true);
     if (shapes.count() < 2) {
         // we are not near any other shape, so remove the corresponding connection
         if (d->handleId == 0)
@@ -54,13 +54,13 @@ void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation
         KoShape *nearestShape = 0;
         int nearestPointId = InvalidConnectionPointId;
 
-        foreach(KoShape* shape, shapes) {
+        foreach (KoShape *shape, shapes) {
             // we do not want to connect to ourself
             if (shape == d->connectionShape)
                 continue;
 
             KoConnectionPoints connectionPoints = shape->connectionPoints();
-            if (! connectionPoints.count()) {
+            if (!connectionPoints.count()) {
                 QSizeF size = shape->size();
                 connectionPoints[-1] = QPointF(0.0, 0.0);
                 connectionPoints[-2] = QPointF(size.width(), 0.0);
@@ -74,7 +74,7 @@ void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation
             QPointF localMousePosition = shape->absoluteTransformation(0).inverted().map(mouseLocation);
             KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
             KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
-            for(; cp != lastCp; ++cp) {
+            for (; cp != lastCp; ++cp) {
                 QPointF difference = localMousePosition - cp.value().position;
                 qreal distance = difference.x() * difference.x() + difference.y() * difference.y();
                 if (distance > MAX_DISTANCE_SQR)
@@ -108,7 +108,7 @@ void KoPathConnectionPointStrategy::finishInteraction(Qt::KeyboardModifiers modi
     KoParameterChangeStrategy::finishInteraction(modifiers);
 }
 
-KUndo2Command* KoPathConnectionPointStrategy::createCommand()
+KUndo2Command *KoPathConnectionPointStrategy::createCommand()
 {
     Q_D(KoPathConnectionPointStrategy);
 
@@ -125,7 +125,12 @@ KUndo2Command* KoPathConnectionPointStrategy::createCommand()
         return 0;
 
     // change connection
-    new KoShapeConnectionChangeCommand(d->connectionShape, static_cast<KoConnectionShape::HandleId>(d->handleId),
-                                       d->oldConnectionShape, d->oldConnectionId, d->newConnectionShape, d->newConnectionId, cmd);
+    new KoShapeConnectionChangeCommand(d->connectionShape,
+                                       static_cast<KoConnectionShape::HandleId>(d->handleId),
+                                       d->oldConnectionShape,
+                                       d->oldConnectionId,
+                                       d->newConnectionShape,
+                                       d->newConnectionId,
+                                       cmd);
     return cmd;
 }

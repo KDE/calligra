@@ -9,19 +9,17 @@
 #include "KoFind.h"
 #include "KoFind_p.h"
 
-#include <KoCanvasResourceManager.h>
 #include <KActionCollection>
+#include <KoCanvasResourceManager.h>
 #include <QAction>
 
-
 KoFind::KoFind(QWidget *parent, KoCanvasResourceManager *canvasResourceManager, KActionCollection *ac)
-        : QObject(parent)
-        , d(new KoFindPrivate(this, canvasResourceManager, parent))
+    : QObject(parent)
+    , d(new KoFindPrivate(this, canvasResourceManager, parent))
 {
-    connect(canvasResourceManager, &KoCanvasResourceManager::canvasResourceChanged,
-            this, [this] (int a, const QVariant &b) {
-                d->resourceChanged(a, b);
-            });
+    connect(canvasResourceManager, &KoCanvasResourceManager::canvasResourceChanged, this, [this](int a, const QVariant &b) {
+        d->resourceChanged(a, b);
+    });
     ac->addAction(KStandardAction::Find, "edit_find", this, SLOT(findActivated()));
     d->findNext = ac->addAction(KStandardAction::FindNext, "edit_findnext", this, SLOT(findNextActivated()));
     d->findNext->setEnabled(false);
@@ -35,5 +33,5 @@ KoFind::~KoFind()
     delete d;
 }
 
-//have to include this because of Q_PRIVATE_SLOT
+// have to include this because of Q_PRIVATE_SLOT
 #include "moc_KoFind.cpp"

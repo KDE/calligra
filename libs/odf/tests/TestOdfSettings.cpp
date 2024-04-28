@@ -2,14 +2,16 @@
 
 #include <QObject>
 
-#include <KoXmlReader.h>
 #include <KoOasisSettings.h>
+#include <KoXmlReader.h>
 
 class TestOdfSettings : public QObject
 {
     Q_OBJECT
 public:
-    TestOdfSettings() { }
+    TestOdfSettings()
+    {
+    }
 
 private Q_SLOTS:
     void initTestCase();
@@ -25,13 +27,14 @@ private:
 
 void TestOdfSettings::initTestCase()
 {
-    QLoggingCategory::setFilterRules("*.debug=false\n"
+    QLoggingCategory::setFilterRules(
+        "*.debug=false\n"
         "calligra.lib.odf=true");
 
     const QString xml =
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
         "<office:document-settings xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\""
-                " xmlns:config=\"urn:oasis:names:tc:opendocument:xmlns:config:1.0\">"
+        " xmlns:config=\"urn:oasis:names:tc:opendocument:xmlns:config:1.0\">"
         "<office:settings>"
         "<config:config-item-set config:name=\"view-settings\">"
         "<config:config-item config:name=\"unit\" config:type=\"string\">mm</config:config-item>"
@@ -49,7 +52,7 @@ void TestOdfSettings::initTestCase()
         "</office:settings>"
         "</office:document-settings>";
 
-    bool ok = doc.setContent( xml, true /* namespace processing */ );
+    bool ok = doc.setContent(xml, true /* namespace processing */);
     QVERIFY(ok);
     settings = new KoOasisSettings(doc);
 }
@@ -78,7 +81,7 @@ void TestOdfSettings::testIndexedMap()
     KoOasisSettings::Items firstView = viewMap.entry(0);
     QVERIFY(!firstView.isNull());
     const short zoomFactor = firstView.parseConfigItemShort("ZoomFactor");
-    QCOMPARE(zoomFactor, (short) 100);
+    QCOMPARE(zoomFactor, (short)100);
     KoOasisSettings::Items secondView = viewMap.entry(1);
     QVERIFY(secondView.isNull());
 }

@@ -12,16 +12,17 @@
 
 #include "KoResourceServerPolicies.h"
 
-
 /**
  * The KoResourceServerObserver class provides a interface to observe a KoResourceServer.
  * To receive notifications it needs to be added to the resource server.
  */
-template <class T, class Policy = PointerStoragePolicy<T> >
+template<class T, class Policy = PointerStoragePolicy<T>>
 class KoResourceServerObserver
 {
 public:
-    virtual ~KoResourceServerObserver() {}
+    virtual ~KoResourceServerObserver()
+    {
+    }
     typedef typename Policy::PointerType PointerType;
 
     virtual void unsetResourceServer() = 0;
@@ -44,22 +45,21 @@ public:
      */
     virtual void resourceChanged(PointerType resource) = 0;
 
-     /**
+    /**
      * Will be called by the resource server when resources are added or removed
      * from a tag category
      */
-    virtual void syncTaggedResourceView()=0;
+    virtual void syncTaggedResourceView() = 0;
 
-     /**
+    /**
      * Will be called by the resource server when a new tag category has been created
      */
-    virtual void syncTagAddition(const QString& tag)=0;
+    virtual void syncTagAddition(const QString &tag) = 0;
 
-     /**
+    /**
      * Will be called by the resource server when a new tag category has been deleted
      */
-    virtual void syncTagRemoval(const QString& tag)=0;
-
+    virtual void syncTagRemoval(const QString &tag) = 0;
 };
 
 #endif // KORESOURCESERVEROBSERVER_H

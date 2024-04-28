@@ -12,11 +12,12 @@ class TestSectionStyle : public QObject
 {
     Q_OBJECT
 public:
-    TestSectionStyle() {}
+    TestSectionStyle()
+    {
+    }
 
 private Q_SLOTS:
     void testSectionStyle();
-
 };
 
 #endif // TESTSECTIONSTYLE_H

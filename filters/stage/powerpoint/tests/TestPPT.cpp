@@ -8,31 +8,30 @@
 #include "PptToOdp.h"
 #include "pole.h"
 #include <KoOdf.h>
+#include <QBuffer>
 #include <QDebug>
 #include <QDir>
-#include <QBuffer>
 #include <QTest>
 
+namespace
+{
 
-namespace {
-
-class TestRun {
+class TestRun
+{
 public:
     QString inputFilePath;
     QString referenceDirPath;
-    void convert(QBuffer& buffer, KoStore::Backend backend);
-    void compareFiles(KoStore* created, const QString& path);
-    QByteArray readFile(const QString& path);
+    void convert(QBuffer &buffer, KoStore::Backend backend);
+    void compareFiles(KoStore *created, const QString &path);
+    QByteArray readFile(const QString &path);
     void test();
 };
 
 }
 
-void
-TestRun::convert(QBuffer& buffer, KoStore::Backend backend) {
-    KoStore* output = KoStore::createStore(&buffer, KoStore::Write,
-                                           KoOdf::mimeType(KoOdf::Presentation),
-                                           backend);
+void TestRun::convert(QBuffer &buffer, KoStore::Backend backend)
+{
+    KoStore *output = KoStore::createStore(&buffer, KoStore::Write, KoOdf::mimeType(KoOdf::Presentation), backend);
     POLE::Storage storage(inputFilePath.toLatin1());
     QVERIFY(storage.open());
     PptToOdp ppttoodp;
@@ -40,8 +39,8 @@ TestRun::convert(QBuffer& buffer, KoStore::Backend backend) {
     QVERIFY(status == KoFilter::OK);
 }
 
-QByteArray
-TestRun::readFile(const QString& path) {
+QByteArray TestRun::readFile(const QString &path)
+{
     QFile f(referenceDirPath + path);
     f.open(QIODevice::ReadOnly);
     QByteArray data = f.readAll();
@@ -49,8 +48,8 @@ TestRun::readFile(const QString& path) {
     return data;
 }
 
-void
-TestRun::compareFiles(KoStore* input, const QString& path) {
+void TestRun::compareFiles(KoStore *input, const QString &path)
+{
     QVERIFY(input->hasFile(path));
     QVERIFY(input->open(path));
     const QByteArray created = input->read(input->size());
@@ -72,11 +71,11 @@ TestRun::compareFiles(KoStore* input, const QString& path) {
     QVERIFY(b.atEnd());
     // Skip this test, as long as all lines are identical it is ok
     // On windows the sizes may differ due to \r\n newlines
-    //QVERIFY(reference.size() == created.size());
+    // QVERIFY(reference.size() == created.size());
 }
 
-void
-TestRun::test() {
+void TestRun::test()
+{
     inputFilePath = QFINDTESTDATA("data/diagram.ppt");
     referenceDirPath = QFINDTESTDATA("data/diagram_odp/");
     const KoStore::Backend backend = KoStore::Tar;
@@ -85,9 +84,7 @@ TestRun::test() {
     qDebug() << buffer.isOpen();
     buffer.close();
     qDebug() << buffer.size();
-    KoStore* input = KoStore::createStore(&buffer, KoStore::Read,
-                                          KoOdf::mimeType(KoOdf::Presentation),
-                                          backend);
+    KoStore *input = KoStore::createStore(&buffer, KoStore::Read, KoOdf::mimeType(KoOdf::Presentation), backend);
     compareFiles(input, "content.xml");
     compareFiles(input, "styles.xml");
     compareFiles(input, "meta.xml");
@@ -95,8 +92,8 @@ TestRun::test() {
     compareFiles(input, "META-INF/manifest.xml");
 }
 
-void
-TestPPT::testPPT() {
+void TestPPT::testPPT()
+{
     TestRun test;
     test.test();
     QVERIFY(true);

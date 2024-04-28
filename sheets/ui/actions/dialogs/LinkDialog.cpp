@@ -19,14 +19,14 @@
 #include <KoIcon.h>
 
 #include <KComboBox>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KPageWidget>
 #include <kdesktopfile.h>
 #include <klineedit.h>
-#include <KMessageBox>
-#include <KLocalizedString>
-#include <KPageWidget>
 #include <krecentdocument.h>
-#include <kurlrequester.h>
 #include <kurlcompletion.h>
+#include <kurlrequester.h>
 
 using namespace Calligra::Sheets;
 
@@ -35,25 +35,25 @@ class LinkDialog::Private
 public:
     QString text;
     KPageWidget *pages;
-    QWidget* internetPage;
-    QLineEdit* internetText;
-    QLineEdit* internetLink;
-    QWidget* mailPage;
-    QLineEdit* mailText;
-    QLineEdit* mailLink;
-    QLineEdit* mailSubject;
-    QWidget* filePage;
-    QLineEdit* fileText;
-    KUrlRequester* fileLink;
-    QWidget* cellPage;
-    QLineEdit* cellText;
-    KComboBox* cellLink;
-    KPageWidgetItem* p1, *p2, *p3, *p4;
+    QWidget *internetPage;
+    QLineEdit *internetText;
+    QLineEdit *internetLink;
+    QWidget *mailPage;
+    QLineEdit *mailText;
+    QLineEdit *mailLink;
+    QLineEdit *mailSubject;
+    QWidget *filePage;
+    QLineEdit *fileText;
+    KUrlRequester *fileLink;
+    QWidget *cellPage;
+    QLineEdit *cellText;
+    KComboBox *cellLink;
+    KPageWidgetItem *p1, *p2, *p3, *p4;
 };
 
-LinkDialog::LinkDialog(QWidget* parent, const QList<QString> &links)
-        : ActionDialog(parent)
-        , d(new Private)
+LinkDialog::LinkDialog(QWidget *parent, const QList<QString> &links)
+    : ActionDialog(parent)
+    , d(new Private)
 {
     setWindowTitle(i18n("Insert Link"));
     setButtonText(Apply, i18n("Insert Link"));
@@ -67,7 +67,7 @@ LinkDialog::LinkDialog(QWidget* parent, const QList<QString> &links)
     d->p1 = d->pages->addPage(d->internetPage, i18n("Internet"));
     d->p1->setHeader(i18n("Link to Internet Address"));
     d->p1->setIcon(koIcon("internet-web-browser"));
-    QVBoxLayout* iLayout = new QVBoxLayout(d->internetPage);
+    QVBoxLayout *iLayout = new QVBoxLayout(d->internetPage);
     iLayout->addWidget(new QLabel(i18n("Text to display:"), d->internetPage));
     d->internetText = new QLineEdit(d->internetPage);
     iLayout->addWidget(d->internetText);
@@ -75,23 +75,21 @@ LinkDialog::LinkDialog(QWidget* parent, const QList<QString> &links)
     d->internetLink = new QLineEdit(d->internetPage);
     iLayout->addWidget(d->internetLink);
     iLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    connect(d->internetText, &QLineEdit::textChanged, this,
-            &LinkDialog::setText);
+    connect(d->internetText, &QLineEdit::textChanged, this, &LinkDialog::setText);
 
     // link for e-mail
     d->mailPage = new QWidget();
     d->p2 = d->pages->addPage(d->mailPage, i18n("Email"));
     d->p2->setHeader(i18n("Link to Email Address"));
     d->p2->setIcon(koIcon("internet-mail"));
-    QVBoxLayout* mLayout = new QVBoxLayout(d->mailPage);
+    QVBoxLayout *mLayout = new QVBoxLayout(d->mailPage);
     mLayout->addWidget(new QLabel(i18n("Text to display:"), d->mailPage));
     d->mailText = new QLineEdit(d->mailPage);
     mLayout->addWidget(d->mailText);
     mLayout->addWidget(new QLabel(i18n("Email address:"), d->mailPage));
     d->mailLink = new QLineEdit(d->mailPage);
     mLayout->addWidget(d->mailLink);
-    connect(d->mailText, &QLineEdit::textChanged, this,
-            &LinkDialog::setText);
+    connect(d->mailText, &QLineEdit::textChanged, this, &LinkDialog::setText);
     mLayout->addWidget(new QLabel(i18n("Subject:"), d->mailPage));
     d->mailSubject = new QLineEdit(d->mailPage);
     mLayout->addWidget(d->mailSubject);
@@ -102,7 +100,7 @@ LinkDialog::LinkDialog(QWidget* parent, const QList<QString> &links)
     d->p3 = d->pages->addPage(d->filePage, i18n("File"));
     d->p3->setHeader(i18n("Link to File"));
     d->p3->setIcon(koIcon("system-file-manager"));
-    QVBoxLayout* fLayout = new QVBoxLayout(d->filePage);
+    QVBoxLayout *fLayout = new QVBoxLayout(d->filePage);
     fLayout->addWidget(new QLabel(i18n("Text to display:"), d->filePage));
     d->fileText = new QLineEdit(d->filePage);
     fLayout->addWidget(d->fileText);
@@ -112,15 +110,13 @@ LinkDialog::LinkDialog(QWidget* parent, const QList<QString> &links)
     d->fileLink->completionObject()->setReplaceEnv(true);
     fLayout->addWidget(d->fileLink);
     fLayout->addWidget(new QLabel(i18n("Recent file:"), d->filePage));
-    KComboBox* recentFile = new KComboBox(d->filePage);
+    KComboBox *recentFile = new KComboBox(d->filePage);
     recentFile->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     recentFile->setMinimumContentsLength(40);
     fLayout->addWidget(recentFile);
     fLayout->addItem(new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
-    connect(d->fileText, &QLineEdit::textChanged, this,
-            &LinkDialog::setText);
-    connect(recentFile, &KComboBox::textHighlighted,
-                     d->fileLink->lineEdit(), &QLineEdit::setText);
+    connect(d->fileText, &QLineEdit::textChanged, this, &LinkDialog::setText);
+    connect(recentFile, &KComboBox::textHighlighted, d->fileLink->lineEdit(), &QLineEdit::setText);
 
     // populate recent files
     int index = 0;
@@ -142,7 +138,7 @@ LinkDialog::LinkDialog(QWidget* parent, const QList<QString> &links)
     d->p4 = d->pages->addPage(d->cellPage, i18n("Cell"));
     d->p4->setHeader(i18n("Link to Cell"));
     d->p4->setIcon(koIcon("table"));
-    QVBoxLayout* cLayout = new QVBoxLayout(d->cellPage);
+    QVBoxLayout *cLayout = new QVBoxLayout(d->cellPage);
     cLayout->addWidget(new QLabel(i18n("Text to display:"), d->cellPage));
     d->cellText = new QLineEdit(d->cellPage);
     cLayout->addWidget(d->cellText);
@@ -153,8 +149,7 @@ LinkDialog::LinkDialog(QWidget* parent, const QList<QString> &links)
 
     cLayout->addWidget(d->cellLink);
     cLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    connect(d->cellText, &QLineEdit::textChanged, this,
-            &LinkDialog::setText);
+    connect(d->cellText, &QLineEdit::textChanged, this, &LinkDialog::setText);
 
     d->internetText->setFocus();
     resize(400, 300);
@@ -186,7 +181,7 @@ QString LinkDialog::link() const
             if (str.indexOf("mailto:") == -1)
                 str.prepend("mailto:");
         const QString subject = d->mailSubject->text().trimmed();
-        if (! subject.isEmpty())
+        if (!subject.isEmpty())
             str.append(QString("?subject=%1").arg(QString(QUrl::toPercentEncoding(subject))));
     } else if (d->pages->currentPage() == d->p3) {
         QUrl url = d->fileLink->url();
@@ -195,7 +190,7 @@ QString LinkDialog::link() const
         } else {
             str = d->fileText->text();
             if (!str.isEmpty())
-                if (! str.contains(QRegularExpression("^(file|mailto|http|https|ftp):")))
+                if (!str.contains(QRegularExpression("^(file|mailto|http|https|ftp):")))
                     str.prepend("file://");
         }
     } else if (d->pages->currentPage() == d->p4) {
@@ -205,7 +200,7 @@ QString LinkDialog::link() const
     return str;
 }
 
-void LinkDialog::setText(const QString& text)
+void LinkDialog::setText(const QString &text)
 {
     d->text = text;
 
@@ -228,7 +223,7 @@ void LinkDialog::setText(const QString& text)
 
 // link must be complete, e.g. "http://www.calligra.org" instead of
 // "www.calligra.org" only, since protocol is used to decide which page to show
-void LinkDialog::setLink(const QString& link)
+void LinkDialog::setLink(const QString &link)
 {
     d->internetLink->clear();
     d->mailLink->clear();
@@ -268,7 +263,8 @@ void LinkDialog::setLink(const QString& link)
 
     if (link.startsWith(QLatin1String("file:/"))) {
         QString s = link.mid(6);
-        while (s.startsWith(QLatin1String("//"))) s.remove(0, 1);
+        while (s.startsWith(QLatin1String("//")))
+            s.remove(0, 1);
         d->fileLink->lineEdit()->setText(s);
         d->pages->setCurrentPage(d->p3);
         return;
@@ -283,4 +279,3 @@ void LinkDialog::onApply()
 {
     emit applyLink(text(), link());
 }
-

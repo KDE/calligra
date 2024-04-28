@@ -7,8 +7,8 @@
 #ifndef KOPACHANGEPAGELAYOUTCOMMAND_H
 #define KOPACHANGEPAGELAYOUTCOMMAND_H
 
-#include <kundo2command.h>
 #include "KoPageLayout.h"
+#include <kundo2command.h>
 
 class KoPADocument;
 class KoPAMasterPage;
@@ -19,7 +19,11 @@ class KoPAMasterPage;
 class KoPAChangePageLayoutCommand : public KUndo2Command
 {
 public:
-    KoPAChangePageLayoutCommand( KoPADocument *document, KoPAMasterPage *page, const KoPageLayout &newPageLayout, bool applyToDocument, KUndo2Command *parent = 0 );
+    KoPAChangePageLayoutCommand(KoPADocument *document,
+                                KoPAMasterPage *page,
+                                const KoPageLayout &newPageLayout,
+                                bool applyToDocument,
+                                KUndo2Command *parent = 0);
     ~KoPAChangePageLayoutCommand() override;
 
     /// redo the command
@@ -34,4 +38,3 @@ private:
 };
 
 #endif /* KOPACHANGEPAGELAYOUTCOMMAND_H */
-

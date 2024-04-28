@@ -56,7 +56,6 @@ class KoShapeContainerPrivate;
 class FLAKE_EXPORT KoShapeContainer : public KoShape
 {
 public:
-
     /**
      * Constructor with custom model to be used for maintaining the list of children.
      * For all the normal cases you don't need a custom model. Use the default constructor in this case.
@@ -143,7 +142,7 @@ public:
      * Return the allowed interactions set for this container
      * If we (or our parent(s)) are not visible, no interaction is allowed.
      * If we have a model the model is called, else the childs interaction flags is returned.
-     * 
+     *
      * @see KoShapeContainerModel::allowedInteractions()
      */
     KoShape::AllowedInteractions allowedInteractions(const KoShape *child) const;
@@ -177,7 +176,6 @@ public:
      */
     bool inheritsTransform(const KoShape *shape) const;
 
-
     /// reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 
@@ -201,7 +199,7 @@ public:
      * Return the list of all child shapes.
      * @return the list of all child shapes
      */
-    QList<KoShape*> shapes() const;
+    QList<KoShape *> shapes() const;
 
     /**
      * return the model for this container
@@ -215,7 +213,9 @@ protected:
      * This method will be called just after the child has been added/removed.
      * The default implementation is empty.
      */
-    virtual void shapeCountChanged() { }
+    virtual void shapeCountChanged()
+    {
+    }
 
     void shapeChanged(ChangeType type, KoShape *shape = 0) override;
 

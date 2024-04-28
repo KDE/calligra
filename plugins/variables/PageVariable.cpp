@@ -10,28 +10,28 @@
 
 #include "VariablesDebug.h"
 
-#include <KoXmlReader.h>
-#include <KoXmlWriter.h>
 #include <KoProperties.h>
 #include <KoShape.h>
-#include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
-#include <KoXmlNS.h>
-#include <KoTextLayoutRootArea.h>
-#include <KoTextDocumentLayout.h>
+#include <KoShapeSavingContext.h>
 #include <KoTextDocument.h>
+#include <KoTextDocumentLayout.h>
+#include <KoTextLayoutRootArea.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
+#include <QAbstractTextDocumentLayout>
 #include <QFontMetricsF>
 #include <QTextDocument>
-#include <QAbstractTextDocumentLayout>
 #include <QTextInlineObject>
 
 PageVariable::PageVariable()
-        : KoVariable(true),
-        m_type(PageNumber),
-        m_pageselect(KoTextPage::CurrentPage),
-        m_pageadjust(0),
-        m_fixed(false)
+    : KoVariable(true)
+    , m_type(PageNumber)
+    , m_pageselect(KoTextPage::CurrentPage)
+    , m_pageadjust(0)
+    , m_fixed(false)
 {
 }
 
@@ -85,7 +85,7 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject &obje
             }
         }
 #endif
-        page = document->resource(KoTextDocument::LayoutTextPage, KoTextDocument::LayoutTextPageUrl).value<KoTextPage*>();
+        page = document->resource(KoTextDocument::LayoutTextPage, KoTextDocument::LayoutTextPageUrl).value<KoTextPage *>();
     }
     int pagenumber = 0;
 
@@ -97,13 +97,13 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject &obje
             // the text is not yet layouted therefore we don't get the rootArea
             // if we don't do that we get an endless change of the variable.
             QString currentValue = value();
-            if (currentValue.isEmpty() || ! m_fixed) {
+            if (currentValue.isEmpty() || !m_fixed) {
                 pagenumber = page->visiblePageNumber(m_pageselect, m_pageadjust);
                 KoOdfNumberDefinition defaultDefinition; // FIXME Should fetch from pagestyle
                 QString newValue = pagenumber >= 0 ? m_numberFormat.formattedNumber(pagenumber, &defaultDefinition) : QString();
                 // only update value when changed
                 if (currentValue != newValue) {
-                     setValue(newValue);
+                    setValue(newValue);
                 }
             }
         }
@@ -120,7 +120,7 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject &obje
     KoVariable::resize(document, object, posInDocument, format, pd);
 }
 
-void PageVariable::saveOdf(KoShapeSavingContext & context)
+void PageVariable::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
     switch (m_type) {
@@ -167,7 +167,7 @@ void PageVariable::saveOdf(KoShapeSavingContext & context)
     }
 }
 
-bool PageVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
+bool PageVariable::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_UNUSED(context);
     const QString localName(element.localName());

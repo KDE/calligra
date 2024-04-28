@@ -9,13 +9,13 @@
 #include "CellBase.h"
 #include "CellBaseStorage.h"
 #include "DependencyManager.h"
+#include "ElapsedTime_p.h"
 #include "Formula.h"
 #include "FormulaStorage.h"
 #include "MapBase.h"
 #include "SheetBase.h"
 #include "Updater.h"
 #include "Value.h"
-#include "ElapsedTime_p.h"
 
 using namespace Calligra::Sheets;
 
@@ -27,7 +27,7 @@ public:
      *
      * \see RecalcManager::regionChanged
      */
-    void cellsToCalculate(const Region& region);
+    void cellsToCalculate(const Region &region);
 
     /**
      * Finds all cells in \p sheet , that have got a formula and hence need
@@ -37,12 +37,12 @@ public:
      * \see RecalcManager::recalcMap
      * \see RecalcManager::recalcSheet
      */
-    void cellsToCalculate(SheetBase* sheet = 0);
+    void cellsToCalculate(SheetBase *sheet = 0);
 
     /**
      * Helper function for cellsToCalculate(const Region&) and cellsToCalculate(SheetBase*).
      */
-    void cellsToCalculate(const Region& region, QSet<CellBase>& cells) const;
+    void cellsToCalculate(const Region &region, QSet<CellBase> &cells) const;
 
     /*
      * Stores cells ordered by its reference depth.
@@ -60,11 +60,11 @@ public:
      * \li depth(A3) = 2
      */
     QMultiMap<int, CellBase> cells;
-    const MapBase* map;
+    const MapBase *map;
     bool active;
 };
 
-void RecalcManager::Private::cellsToCalculate(const Region& region)
+void RecalcManager::Private::cellsToCalculate(const Region &region)
 {
     if (region.isEmpty())
         return;
@@ -82,7 +82,7 @@ void RecalcManager::Private::cellsToCalculate(const Region& region)
     }
 }
 
-void RecalcManager::Private::cellsToCalculate(SheetBase* sheet)
+void RecalcManager::Private::cellsToCalculate(SheetBase *sheet)
 {
     // retrieve the cell depths
     QMap<CellBase, int> depths = map->dependencyManager()->depths();
@@ -110,12 +110,12 @@ void RecalcManager::Private::cellsToCalculate(SheetBase* sheet)
     }
 }
 
-void RecalcManager::Private::cellsToCalculate(const Region& region, QSet<CellBase>& cells) const
+void RecalcManager::Private::cellsToCalculate(const Region &region, QSet<CellBase> &cells) const
 {
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
         const QRect range = (*it)->rect();
-        SheetBase* sheet = (*it)->sheet();
+        SheetBase *sheet = (*it)->sheet();
         for (int col = range.left(); col <= range.right(); ++col) {
             for (int row = range.top(); row <= range.bottom(); ++row) {
                 CellBase cell(sheet, col, row);
@@ -138,10 +138,10 @@ void RecalcManager::Private::cellsToCalculate(const Region& region, QSet<CellBas
 }
 
 RecalcManager::RecalcManager(MapBase *const map)
-        : QObject()
-        , d(new Private)
+    : QObject()
+    , d(new Private)
 {
-    d->map  = map;
+    d->map = map;
     d->active = false;
 }
 
@@ -150,7 +150,7 @@ RecalcManager::~RecalcManager()
     delete d;
 }
 
-void RecalcManager::regionChanged(const Region& region)
+void RecalcManager::regionChanged(const Region &region)
 {
     if (d->active || region.isEmpty())
         return;
@@ -162,7 +162,7 @@ void RecalcManager::regionChanged(const Region& region)
     d->active = false;
 }
 
-void RecalcManager::recalcSheet(SheetBase* const sheet)
+void RecalcManager::recalcSheet(SheetBase *const sheet)
 {
     if (d->active)
         return;
@@ -224,7 +224,7 @@ void RecalcManager::recalc(Updater *updater)
         if (!cells.value(c).formula().isValid())
             continue;
 
-        SheetBase* sheet = cells.value(c).sheet();
+        SheetBase *sheet = cells.value(c).sheet();
 
         // evaluate the formula and set the result
         Value result = cells.value(c).formula().eval();
@@ -249,7 +249,7 @@ void RecalcManager::recalc(Updater *updater)
     if (updater)
         updater->setProgress(100);
 
-//     dump();
+    //     dump();
     d->cells.clear();
 }
 
@@ -259,7 +259,8 @@ void RecalcManager::dump() const
     for (auto it(d->cells.constBegin()); it != end; ++it) {
         CellBase cell = it.value();
         QString cellName = cell.name();
-        while (cellName.count() < 4) cellName.prepend(' ');
+        while (cellName.count() < 4)
+            cellName.prepend(' ');
         debugSheetsFormula << "depth(" << cellName << " ) =" << it.key();
     }
 }

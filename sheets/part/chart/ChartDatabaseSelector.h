@@ -31,16 +31,17 @@ public:
     void save() override;
 
     /// reimplemented
-    bool showOnShapeCreate() override {
+    bool showOnShapeCreate() override
+    {
         return true;
     }
 
 protected:
-    void showEvent(QShowEvent* event) override;
+    void showEvent(QShowEvent *event) override;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

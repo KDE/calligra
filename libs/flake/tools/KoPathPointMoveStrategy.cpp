@@ -9,16 +9,16 @@
 #include "KoPathPointMoveStrategy.h"
 #include "KoInteractionStrategy_p.h"
 
-#include "commands/KoPathPointMoveCommand.h"
+#include "KoCanvasBase.h"
 #include "KoPathTool.h"
 #include "KoPathToolSelection.h"
 #include "KoSnapGuide.h"
-#include "KoCanvasBase.h"
+#include "commands/KoPathPointMoveCommand.h"
 
 KoPathPointMoveStrategy::KoPathPointMoveStrategy(KoPathTool *tool, const QPointF &pos)
-    : KoInteractionStrategy(*(new KoInteractionStrategyPrivate(tool))),
-    m_originalPosition(pos),
-    m_tool(tool)
+    : KoInteractionStrategy(*(new KoInteractionStrategyPrivate(tool)))
+    , m_originalPosition(pos)
+    , m_tool(tool)
 {
 }
 
@@ -40,8 +40,8 @@ void KoPathPointMoveStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
             move.setX(0);
     }
 
-    KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
-    if (! selection)
+    KoPathToolSelection *selection = dynamic_cast<KoPathToolSelection *>(m_tool->selection());
+    if (!selection)
         return;
 
     KoPathPointMoveCommand cmd(selection->selectedPointsData(), move - m_move);
@@ -54,12 +54,12 @@ void KoPathPointMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     Q_UNUSED(modifiers);
 }
 
-KUndo2Command* KoPathPointMoveStrategy::createCommand()
+KUndo2Command *KoPathPointMoveStrategy::createCommand()
 {
     m_tool->canvas()->updateCanvas(m_tool->canvas()->snapGuide()->boundingRect());
 
-    KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
-    if (! selection)
+    KoPathToolSelection *selection = dynamic_cast<KoPathToolSelection *>(m_tool->selection());
+    if (!selection)
         return 0;
 
     KUndo2Command *cmd = 0;

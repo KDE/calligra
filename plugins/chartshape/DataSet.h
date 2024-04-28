@@ -8,37 +8,37 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef KCHART_DATASET_H
 #define KCHART_DATASET_H
 
-
 // Qt
-#include <QPen>
 #include <QDebug>
+#include <QPen>
 
 // KoChart
-#include "ChartShape.h"
 #include "CellRegion.h"
+#include "ChartShape.h"
 
-namespace KChart {
-    class DataValueAttributes;
-    class PieAttributes;
-    class MarkerAttributes;
+namespace KChart
+{
+class DataValueAttributes;
+class PieAttributes;
+class MarkerAttributes;
 }
 
 class KoShapeLoadingContext;
 
-namespace KoChart {
+namespace KoChart
+{
 
 class KChartModel;
 
 /**
  * @brief The DataSet class stores properties of a single data series.
- * 
+ *
  * A global chart type can be overridden by setting a specific type
  * on a data series.
- * 
+ *
  * To change properties of a single data point inside a data series,
  * use section's like for example \a brush(int section) where the
  * section refers to the data-point number.
@@ -51,15 +51,16 @@ public:
     ~DataSet();
 
     // Getter methods
-    QString       title() const;
-    ChartType     chartType() const;
-    ChartSubtype  chartSubType() const;
-    Axis         *attachedAxis() const;
+    QString title() const;
+    ChartType chartType() const;
+    ChartSubtype chartSubType() const;
+    Axis *attachedAxis() const;
 
     /**
      * Describes ODF attribute chart:data-label-number from §15.32.3
      */
-    class ValueLabelType {
+    class ValueLabelType
+    {
     public:
         /// Show value as number.
         bool number;
@@ -87,10 +88,14 @@ public:
             , categoryIsLoaded(false)
             , symbol(symbol)
             , symbolIsLoaded(false)
-        {}
+        {
+        }
 
         /// Returns true if no label will be displayed.
-        bool noLabel() const { return !number && !percentage && !category && !symbol; }
+        bool noLabel() const
+        {
+            return !number && !percentage && !category && !symbol;
+        }
     };
 
     /**
@@ -116,8 +121,8 @@ public:
      * \param section The data point to set this type for. -1 will set
      * a series-wide value
      */
-    void setMarkerAttributes(const KChart::MarkerAttributes& attribs, int section = -1);
-    
+    void setMarkerAttributes(const KChart::MarkerAttributes &attribs, int section = -1);
+
     /**
      * \return the MarkerAttributes.
      * \see ValueLabelType
@@ -128,15 +133,15 @@ public:
     KChart::MarkerAttributes getMarkerAttributes(int section = -1) const;
 
     // Graphics properties for the visualization of this dataset.
-    QPen   pen() const;
+    QPen pen() const;
     QBrush brush() const;
     QIcon markerIcon(OdfMarkerStyle markerStyle);
     KChart::PieAttributes pieAttributes() const;
-    QPen   pen(int section) const;
+    QPen pen(int section) const;
     QBrush brush(int section) const;
     KChart::PieAttributes pieAttributes(int section) const;
     KChart::DataValueAttributes dataValueAttributes(int section = -1) const;
-    int    number() const;
+    int number() const;
 
     bool showMeanValue() const;
     QPen meanValuePen() const;
@@ -155,7 +160,7 @@ public:
     void setOdfSymbolType(OdfSymbolType type);
     OdfMarkerStyle markerStyle() const;
     void setMarkerStyle(OdfMarkerStyle style);
-   
+
     // Setter methods
     void setChartType(ChartType type);
     void setChartSubType(ChartSubtype type);
@@ -259,8 +264,7 @@ private:
 
 } // Namespace KoChart
 
-QDebug operator<<(QDebug dbg, const KoChart::DataSet* ds);
+QDebug operator<<(QDebug dbg, const KoChart::DataSet *ds);
 QDebug operator<<(QDebug dbg, const KoChart::DataSet::ValueLabelType &v);
 
 #endif // KCHART_DATASET_H
-

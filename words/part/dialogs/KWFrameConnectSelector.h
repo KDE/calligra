@@ -7,8 +7,8 @@
 #ifndef KWFRAMECONNECTSELECTOR_H
 #define KWFRAMECONNECTSELECTOR_H
 
-#include <ui_KWFrameConnectSelector.h>
 #include <dialogs/KWShapeConfigFactory.h>
+#include <ui_KWFrameConnectSelector.h>
 
 #include <KoShapeConfigWidgetBase.h>
 
@@ -32,7 +32,8 @@ public:
     void save() override;
 
     /// reimplemented
-    bool showOnShapeCreate() override {
+    bool showOnShapeCreate() override
+    {
         return true;
     }
 
@@ -44,7 +45,7 @@ private Q_SLOTS:
 private:
     Ui::KWFrameConnectSelector widget;
 
-    QList<KWFrameSet*> m_frameSets;
+    QList<KWFrameSet *> m_frameSets;
     QList<QTreeWidgetItem *> m_items;
     FrameConfigSharedState *m_state;
     KoShape *m_shape;

@@ -17,18 +17,25 @@
 
 #include <FlakeDebug.h>
 
-#include <KoStore.h>
-#include <KoGenStyles.h>
-#include <KoOdfWriteStore.h>
-#include <KoXmlWriter.h>
+#include "KoShapeSavingContext.h"
 #include <KoDocumentBase.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include "KoShapeSavingContext.h"
+#include <KoGenStyles.h>
+#include <KoOdfWriteStore.h>
+#include <KoStore.h>
+#include <KoXmlWriter.h>
 
-class KoDragPrivate {
+class KoDragPrivate
+{
 public:
-    KoDragPrivate() : mimeData(0) { }
-    ~KoDragPrivate() { delete mimeData; }
+    KoDragPrivate()
+        : mimeData(0)
+    {
+    }
+    ~KoDragPrivate()
+    {
+        delete mimeData;
+    }
     QMimeData *mimeData;
 };
 
@@ -45,8 +52,12 @@ KoDrag::~KoDrag()
 bool KoDrag::setOdf(const char *mimeType, KoDragOdfSaveHelper &helper)
 {
     struct Finally {
-        Finally(KoStore *s) : store(s) { }
-        ~Finally() {
+        Finally(KoStore *s)
+            : store(s)
+        {
+        }
+        ~Finally()
+        {
             delete store;
         }
         KoStore *store;
@@ -80,9 +91,8 @@ bool KoDrag::setOdf(const char *mimeType, KoDragOdfSaveHelper &helper)
 
     odfStore.closeContentWriter();
 
-    //add manifest line for content.xml
+    // add manifest line for content.xml
     manifestWriter->addManifestEntry("content.xml", "text/xml");
-
 
     if (!mainStyles.saveOdfStylesDotXml(store, manifestWriter)) {
         return false;
@@ -128,7 +138,7 @@ void KoDrag::addToClipboard()
     }
 }
 
-QMimeData * KoDrag::mimeData()
+QMimeData *KoDrag::mimeData()
 {
     QMimeData *mimeData = d->mimeData;
     d->mimeData = 0;

@@ -7,9 +7,9 @@
 #ifndef KORESOURCE_H
 #define KORESOURCE_H
 
+#include <QHash>
 #include <QImage>
 #include <QString>
-#include <QHash>
 
 #include <pigment_export.h>
 
@@ -23,7 +23,6 @@ class QDomElement;
 class PIGMENTCMS_EXPORT KoResource
 {
 public:
-
     /**
      * Creates a new KoResource object using @p filename.  No file is opened
      * in the constructor, you have to call load.
@@ -33,7 +32,7 @@ public:
     explicit KoResource(const QString &filename);
     virtual ~KoResource();
 
-    bool operator ==(const KoResource &other) const
+    bool operator==(const KoResource &other) const
     {
         return other.md5() == md5();
     }
@@ -51,7 +50,7 @@ public:
      *@return true if saving the resource succeeded.
      */
     virtual bool save() = 0;
-    virtual bool saveToDevice(QIODevice* dev) const;
+    virtual bool saveToDevice(QIODevice *dev) const;
 
     /**
      * @returns a QImage thumbnail image representing this resource.
@@ -69,14 +68,14 @@ public:
 
     /// @return the full path to this resource
     QString filename() const;
-    void setFilename(const QString& filename);
+    void setFilename(const QString &filename);
 
     /// @return the name of the file without the path
     QString shortFilename() const;
 
     /// @return the user-visible name of the resource
     QString name() const;
-    void setName(const QString& name);
+    void setName(const QString &name);
 
     /// @return true if the resource is ready for use
     bool valid() const;
@@ -86,7 +85,6 @@ public:
     virtual QString defaultFileExtension() const;
 
 protected:
-
     /// override generateMD5 and in your resource subclass
     virtual QByteArray generateMD5() const;
 
@@ -98,7 +96,7 @@ protected:
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 static inline bool operator==(const KoResource &resource1, const KoResource &resource2)
@@ -112,4 +110,3 @@ static inline size_t qHash(const KoResource &resource, size_t seed = 0)
 }
 
 #endif // KORESOURCE_H_
-

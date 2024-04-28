@@ -21,8 +21,8 @@
 #ifndef KPRPLACEHOLDER_H
 #define KPRPLACEHOLDER_H
 
-#include <QString>
 #include <QRectF>
+#include <QString>
 
 #include "KoXmlReaderForward.h"
 class KoXmlWriter;
@@ -37,11 +37,11 @@ public:
      * @brief Load the presentation:placeholder
      *
      * as OO uses absolute values and in stage we use relative values for the placeholders
-     * we need to pass the page size in case the placeholder is saved in absolute values so it 
+     * we need to pass the page size in case the placeholder is saved in absolute values so it
      * can be converted to relative ones.
      */
-    bool loadOdf( const KoXmlElement &element, const QRectF & pageSize );
-    void saveOdf( KoXmlWriter & xmlWriter );
+    bool loadOdf(const KoXmlElement &element, const QRectF &pageSize);
+    void saveOdf(KoXmlWriter &xmlWriter);
 
     QString presentationObject() const;
 
@@ -50,7 +50,7 @@ public:
      *
      * @param pageSize The size of the page
      */
-    QRectF rect( const QSizeF & pageSize );
+    QRectF rect(const QSizeF &pageSize);
 
     /**
      * Fix wrongly saved data from OO
@@ -63,29 +63,29 @@ public:
      *   <presentation:placeholder presentation:object="object" svg:x="14.309cm" svg:y="5.838cm" svg:width="-0.585cm" svg:height="6.311cm"/>
      *   <presentation:placeholder presentation:object="object" svg:x="14.309cm" svg:y="12.748cm" svg:width="-0.585cm" svg:height="-0.601cm"/>
      * </style:presentation-page-layout>
-     * 
+     *
      */
-    void fix( const QRectF & rect );
+    void fix(const QRectF &rect);
 
     /**
-     * Check the placeholders are identical 
+     * Check the placeholders are identical
      */
-    bool operator==( const KPrPlaceholder & other ) const;
+    bool operator==(const KPrPlaceholder &other) const;
 
-    bool operator<( const KPrPlaceholder & other ) const;
+    bool operator<(const KPrPlaceholder &other) const;
 
     /**
      * Compare the position of the placeholder
      */
-    static bool comparePosition( const KPrPlaceholder & p1, const KPrPlaceholder & p2 );
+    static bool comparePosition(const KPrPlaceholder &p1, const KPrPlaceholder &p2);
 
 private:
-    qreal percent( const KoXmlElement & element, const char * type, qreal absolute );
+    qreal percent(const KoXmlElement &element, const char *type, qreal absolute);
 
     QString m_presentationObject;
     /**
      * Describes the position on the page as a relative value to the page size
-     * So the values should be between 0 and 100 might be bigger but does not make 
+     * So the values should be between 0 and 100 might be bigger but does not make
      * much sense.
      */
     QRectF m_relativeSize;

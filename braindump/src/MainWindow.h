@@ -20,8 +20,8 @@
 #ifndef _MAINWINDOW_H_
 #define _MAINWINDOW_H_
 
-#include <kxmlguiwindow.h>
 #include <KoCanvasSupervisor.h>
+#include <kxmlguiwindow.h>
 
 class DockerManager;
 class RootSection;
@@ -33,32 +33,37 @@ class MainWindow : public KXmlGuiWindow, public KoCanvasSupervisor
 {
     Q_OBJECT
 public:
-    MainWindow(RootSection* document);
+    MainWindow(RootSection *document);
     ~MainWindow();
+
 public:
-    QDockWidget* createDockWidget(KoDockFactoryBase* factory);
-    DockerManager* dockerManager();
-    void addStatusBarItem(QWidget* _widget, int _stretch, View* _view);
-    void removeStatusBarItem(QWidget*);
+    QDockWidget *createDockWidget(KoDockFactoryBase *factory);
+    DockerManager *dockerManager();
+    void addStatusBarItem(QWidget *_widget, int _stretch, View *_view);
+    void removeStatusBarItem(QWidget *);
+
 private:
     void setupActions();
+
 public:
-    void activateView(View* view);
-    QList<KoCanvasObserverBase*> canvasObservers() const;
+    void activateView(View *view);
+    QList<KoCanvasObserverBase *> canvasObservers() const;
 public Q_SLOTS:
     void forceDockTabFonts();
+
 protected:
     void closeEvent(QCloseEvent *e);
+
 private:
-    RootSection* m_doc;
-    View* view;
-    View* m_activeView;
-    QMap<QString, QDockWidget*> m_dockWidgetMap;
-    QList<QDockWidget*> m_dockWidgets;
-    KActionMenu* m_dockWidgetMenu;
-    DockerManager* m_dockerManager;
+    RootSection *m_doc;
+    View *view;
+    View *m_activeView;
+    QMap<QString, QDockWidget *> m_dockWidgetMap;
+    QList<QDockWidget *> m_dockWidgets;
+    KActionMenu *m_dockWidgetMenu;
+    DockerManager *m_dockerManager;
     struct StatusBarItem;
-    QMap<View*, QList<StatusBarItem*> > m_statusBarItems;
+    QMap<View *, QList<StatusBarItem *>> m_statusBarItems;
 };
 
 #endif

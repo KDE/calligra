@@ -6,9 +6,9 @@
 
 #include "PsCommentLexer.h"
 
-#include <stdlib.h>
-#include <ctype.h>
 #include <QStringList>
+#include <ctype.h>
+#include <stdlib.h>
 
 #define CATEGORY_WHITESPACE -1
 #define CATEGORY_ALPHA -2
@@ -31,7 +31,8 @@ int iswhitespace(char c)
 
 int isSpecial(char c)
 {
-    return (c == '*') || (c == '_') || (c == '?') || (c == '~') || (c == '-') || (c == '^') || (c == '`') || (c == '!') || (c == '.') || (c == '@') || (c == '&') || (c == '$') || (c == '=');
+    return (c == '*') || (c == '_') || (c == '?') || (c == '~') || (c == '-') || (c == '^') || (c == '`') || (c == '!') || (c == '.') || (c == '@')
+        || (c == '&') || (c == '$') || (c == '=');
 }
 
 int isletterhex(char c)
@@ -39,12 +40,15 @@ int isletterhex(char c)
     return (c == 'A') || (c == 'B') || (c == 'C') || (c == 'D') || (c == 'E') || (c == 'F');
 }
 
-const char*statetoa(State state)
+const char *statetoa(State state)
 {
     switch (state) {
-    case State_Comment : return "comment";
-    case State_CommentEncodedChar : return "encoded char (comment)";
-    default : return "unknown";
+    case State_Comment:
+        return "comment";
+    case State_CommentEncodedChar:
+        return "encoded char (comment)";
+    default:
+        return "unknown";
     }
 }
 
@@ -55,18 +59,16 @@ typedef struct {
     Action action;
 } Transition;
 
-static const Transition transitions[] = {
-    { State_Comment, '\n', State_Start, Action_Output},
-    { State_Comment, '\r', State_Start, Action_Output},
-    { State_Comment, '\\', State_CommentEncodedChar, Action_InitTemp},
-    { State_Comment, CATEGORY_ANY, State_Comment, Action_Copy},
-    { State_CommentEncodedChar, '\\', State_Comment, Action_Copy},
-    { State_CommentEncodedChar, CATEGORY_DIGIT, State_CommentEncodedChar, Action_CopyTemp},
-    { State_CommentEncodedChar, CATEGORY_ANY, State_Comment, Action_DecodeUnget},
-    { State_Start, '%', State_Comment, Action_Ignore},
-    { State_Start, CATEGORY_ANY, State_Start, Action_Ignore},
-    { State_Start, STOP, State_Start, Action_Abort}
-};
+static const Transition transitions[] = {{State_Comment, '\n', State_Start, Action_Output},
+                                         {State_Comment, '\r', State_Start, Action_Output},
+                                         {State_Comment, '\\', State_CommentEncodedChar, Action_InitTemp},
+                                         {State_Comment, CATEGORY_ANY, State_Comment, Action_Copy},
+                                         {State_CommentEncodedChar, '\\', State_Comment, Action_Copy},
+                                         {State_CommentEncodedChar, CATEGORY_DIGIT, State_CommentEncodedChar, Action_CopyTemp},
+                                         {State_CommentEncodedChar, CATEGORY_ANY, State_Comment, Action_DecodeUnget},
+                                         {State_Start, '%', State_Comment, Action_Ignore},
+                                         {State_Start, CATEGORY_ANY, State_Start, Action_Ignore},
+                                         {State_Start, STOP, State_Start, Action_Abort}};
 
 PSCommentLexer::PSCommentLexer()
 {
@@ -75,7 +77,7 @@ PSCommentLexer::~PSCommentLexer()
 {
 }
 
-bool PSCommentLexer::parse(QIODevice& fin)
+bool PSCommentLexer::parse(QIODevice &fin)
 {
     char c;
 
@@ -87,7 +89,7 @@ bool PSCommentLexer::parse(QIODevice& fin)
     while (!fin.atEnd()) {
         fin.getChar(&c);
 
-//    qDebug ("got %c", c);
+        //    qDebug ("got %c", c);
 
         State newState;
         Action action;
@@ -95,39 +97,39 @@ bool PSCommentLexer::parse(QIODevice& fin)
         nextStep(c, &newState, &action);
 
         switch (action) {
-        case Action_Copy :
+        case Action_Copy:
             m_buffer.append(c);
             break;
-        case Action_CopyOutput :
+        case Action_CopyOutput:
             m_buffer.append(c);
             doOutput();
             break;
-        case Action_Output :
+        case Action_Output:
             doOutput();
             break;
-        case Action_OutputUnget :
+        case Action_OutputUnget:
             doOutput();
             fin.ungetChar(c);
             break;
-        case Action_Ignore :
+        case Action_Ignore:
             /* ignore */
             break;
-        case Action_Abort :
-            qWarning("state %s / %s char %c (%d)" , statetoa(m_curState), statetoa(newState), c, c);
+        case Action_Abort:
+            qWarning("state %s / %s char %c (%d)", statetoa(m_curState), statetoa(newState), c, c);
             parsingAborted();
             return false;
             break;
-        case Action_InitTemp :
+        case Action_InitTemp:
             m_temp.clear();
             break;
-        case Action_CopyTemp :
+        case Action_CopyTemp:
             m_temp.append(c);
             break;
-        case Action_DecodeUnget :
+        case Action_DecodeUnget:
             m_buffer.append(decode());
             fin.ungetChar(c);
             break;
-        default :
+        default:
             qWarning("unknown action: %d ", action);
         }
 
@@ -140,9 +142,10 @@ bool PSCommentLexer::parse(QIODevice& fin)
 
 void PSCommentLexer::doOutput()
 {
-    if (m_buffer.length() == 0) return;
+    if (m_buffer.length() == 0)
+        return;
     switch (m_curState) {
-    case State_Comment :
+    case State_Comment:
         gotComment(m_buffer.toLatin1());
         break;
     default:
@@ -189,14 +192,29 @@ void PSCommentLexer::nextStep(char c, State *newState, Action *newAction)
 
         if (trans.oldState == m_curState) {
             switch (trans.c) {
-            case CATEGORY_WHITESPACE : found = isspace(c); break;
-            case CATEGORY_ALPHA : found = isalpha(c); break;
-            case CATEGORY_DIGIT : found = isdigit(c); break;
-            case CATEGORY_SPECIAL : found = isSpecial(c); break;
-            case CATEGORY_LETTERHEX : found = isletterhex(c); break;
-            case CATEGORY_INTTOOLONG : found = m_buffer.length() > MAX_INTLEN; break;
-            case CATEGORY_ANY : found = true; break;
-            default : found = (trans.c == c);
+            case CATEGORY_WHITESPACE:
+                found = isspace(c);
+                break;
+            case CATEGORY_ALPHA:
+                found = isalpha(c);
+                break;
+            case CATEGORY_DIGIT:
+                found = isdigit(c);
+                break;
+            case CATEGORY_SPECIAL:
+                found = isSpecial(c);
+                break;
+            case CATEGORY_LETTERHEX:
+                found = isletterhex(c);
+                break;
+            case CATEGORY_INTTOOLONG:
+                found = m_buffer.length() > MAX_INTLEN;
+                break;
+            case CATEGORY_ANY:
+                found = true;
+                break;
+            default:
+                found = (trans.c == c);
             }
 
             if (found) {
@@ -207,7 +225,6 @@ void PSCommentLexer::nextStep(char c, State *newState, Action *newAction)
             }
         }
 
-
         i++;
     }
 }
@@ -215,7 +232,7 @@ void PSCommentLexer::nextStep(char c, State *newState, Action *newAction)
 uchar PSCommentLexer::decode()
 {
     uchar value = m_temp.toString().toShort(nullptr, 8);
-//  qDebug ("got encoded char %c",value);
+    //  qDebug ("got encoded char %c",value);
     return value;
 }
 
@@ -226,7 +243,7 @@ const int addSize = 10;
 
 StringBuffer::StringBuffer()
 {
-    m_buffer = (char*)calloc(initialSize, sizeof(char));
+    m_buffer = (char *)calloc(initialSize, sizeof(char));
     m_length = 0;
     m_capacity = initialSize;
 }
@@ -245,7 +262,8 @@ void StringBuffer::append(char c)
 
 void StringBuffer::clear()
 {
-    for (uint i = 0; i < m_length; i++) m_buffer[i] = '\0';
+    for (uint i = 0; i < m_length; i++)
+        m_buffer[i] = '\0';
     m_length = 0;
 }
 
@@ -257,13 +275,15 @@ QString StringBuffer::toString() const
 
 void StringBuffer::ensureCapacity(int p_capacity)
 {
-    if (m_capacity >= p_capacity) return;
+    if (m_capacity >= p_capacity)
+        return;
 
     int newSize = m_capacity + addSize;
-    if (p_capacity > newSize) newSize = p_capacity;
+    if (p_capacity > newSize)
+        newSize = p_capacity;
 
-    char* oldBuffer = m_buffer;
-    char *newBuffer = (char*)calloc(newSize, sizeof(char));
+    char *oldBuffer = m_buffer;
+    char *newBuffer = (char *)calloc(newSize, sizeof(char));
     strcpy(newBuffer, m_buffer);
     free(oldBuffer);
     m_buffer = newBuffer;
@@ -299,28 +319,39 @@ QString StringBuffer::mid(uint index, uint len) const
 }
 
 /* BoundingBoxExtractor */
-BoundingBoxExtractor:: BoundingBoxExtractor() : m_llx(0), m_lly(0), m_urx(0), m_ury(0) {}
-BoundingBoxExtractor::~BoundingBoxExtractor() {}
+BoundingBoxExtractor::BoundingBoxExtractor()
+    : m_llx(0)
+    , m_lly(0)
+    , m_urx(0)
+    , m_ury(0)
+{
+}
+BoundingBoxExtractor::~BoundingBoxExtractor()
+{
+}
 
 void BoundingBoxExtractor::gotComment(const char *value)
 {
     QString data(value);
-    if (data.indexOf("%BoundingBox:") == -1) return;
+    if (data.indexOf("%BoundingBox:") == -1)
+        return;
 
     getRectangle(value, m_llx, m_lly, m_urx, m_ury);
 }
 
-bool BoundingBoxExtractor::getRectangle(const char* input, int &llx, int &lly, int &urx, int &ury)
+bool BoundingBoxExtractor::getRectangle(const char *input, int &llx, int &lly, int &urx, int &ury)
 {
-    if (input == nullptr) return false;
+    if (input == nullptr)
+        return false;
 
     QString s(input);
-    if (s.contains("(atend)")) return false;
+    if (s.contains("(atend)"))
+        return false;
 
     s.remove("%BoundingBox:");
     QStringList values = s.split(' ');
     qDebug("size is %d", values.size());
-//  if (values.size() < 5) return false;
+    //  if (values.size() < 5) return false;
     llx = values[0].toInt();
     lly = values[1].toInt();
     urx = values[2].toInt();
@@ -328,4 +359,3 @@ bool BoundingBoxExtractor::getRectangle(const char* input, int &llx, int &lly, i
 
     return true;
 }
-

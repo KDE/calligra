@@ -14,8 +14,8 @@
 #ifndef CALLIGRA_SHEETS_FORMULA_DIALOG
 #define CALLIGRA_SHEETS_FORMULA_DIALOG
 
-#include <kcompletion.h>
 #include "ActionDialog.h"
+#include <kcompletion.h>
 
 #include <QModelIndex>
 #include <QStringListModel>
@@ -47,18 +47,20 @@ class FormulaDialog : public ActionDialog
 {
     Q_OBJECT
 public:
-    FormulaDialog(QWidget* parent, Selection* selection, CellEditorBase* editor, const QString& expression = QString());
+    FormulaDialog(QWidget *parent, Selection *selection, CellEditorBase *editor, const QString &expression = QString());
     ~FormulaDialog() override;
-    void setFormula (const QString& expression);
+    void setFormula(const QString &expression);
+
 protected:
     virtual void onApply() override;
     virtual void onClose() override;
+
 private:
     /**
      * Turns the @p text into a parameter that koscript can understand. The type
      * of this parameter is extracted by looking at parameter number @p param in @ref #m_desc.
      */
-    QString createParameter(const QString& _text, int param);
+    QString createParameter(const QString &_text, int param);
     /**
      * Reads the text out of @ref #firstElement and friends and creates a parameter
      * list for the function.
@@ -70,18 +72,18 @@ private Q_SLOTS:
      * Called if a function name was selected but not double clicked.
      * This will just show the help page for the function.
      */
-    void slotSelected(const QString& function = QString());
+    void slotSelected(const QString &function = QString());
     /**
      * Called if a function name was selected but not double clicked.
      * This will just show the help page for the function.
      */
-    void slotIndexSelected(const QModelIndex& index);
+    void slotIndexSelected(const QModelIndex &index);
     /**
      * Called if the user clicked on one of the "related function"
      * This will switch the active function and show help page
      * of the function as well.
      */
-    void slotShowFunction(const QUrl& functionUrl);
+    void slotShowFunction(const QUrl &functionUrl);
     /**
      * Called if the user double clicked on some method name.
      * That will switch into editing mode, allowing the user
@@ -91,11 +93,11 @@ private Q_SLOTS:
     /**
      * Called if a category of methods has been selected.
      */
-    void slotActivated(const QString& category);
+    void slotActivated(const QString &category);
     /**
      * Called if the text of @ref #firstElement, @ref #secondElement etc. changes.
      */
-    void slotChangeText(const QString& text);
+    void slotChangeText(const QString &text);
     /**
      * Connected to @ref View to get notified if the selection in the
      * sheet changes.
@@ -109,7 +111,7 @@ private Q_SLOTS:
     /**
      * Called if the user changes some character in @ref #searchFunct.
      */
-    void slotSearchText(const QString& text);
+    void slotSearchText(const QString &text);
     /**
      * Called if the user pressed return in @ref #searchFunct.
      */
@@ -119,14 +121,15 @@ public:
     /**
      * Find out which widget got focus.
      */
-    bool eventFilter(QObject* obj, QEvent* ev) override;
-private:
-    Selection* m_selection;
-    CellEditorBase* m_editor;
+    bool eventFilter(QObject *obj, QEvent *ev) override;
 
-    QTabWidget* m_tabwidget;
-    QTextBrowser* m_browser;
-    QWidget* m_input;
+private:
+    Selection *m_selection;
+    CellEditorBase *m_editor;
+
+    QTabWidget *m_tabwidget;
+    QTextBrowser *m_browser;
+    QWidget *m_input;
 
     QPushButton *selectFunction;
     KComboBox *typeFunction;
@@ -138,11 +141,11 @@ private:
     KLineEdit *searchFunct;
     KCompletion listFunct;
 
-    QLabel* label1;
-    QLabel* label2;
-    QLabel* label3;
-    QLabel* label4;
-    QLabel* label5;
+    QLabel *label1;
+    QLabel *label2;
+    QLabel *label3;
+    QLabel *label4;
+    QLabel *label5;
     KLineEdit *firstElement;
     KLineEdit *secondElement;
     KLineEdit *thirdElement;
@@ -153,7 +156,7 @@ private:
      * It may happen that a lineedit does not have qt focus but
      * logical focus but not the other way round.
      */
-    KLineEdit* m_focus;
+    KLineEdit *m_focus;
 
     int m_column;
     int m_row;
@@ -169,7 +172,7 @@ private:
      */
     bool refresh_result;
 
-    Calligra::Sheets::FunctionDescription* m_desc;
+    Calligra::Sheets::FunctionDescription *m_desc;
 };
 
 } // namespace Sheets

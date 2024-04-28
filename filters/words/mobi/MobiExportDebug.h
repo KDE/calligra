@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &MOBIEXPORT_LOG();
 
 #define debugMobi qCDebug(MOBIEXPORT_LOG)

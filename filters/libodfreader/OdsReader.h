@@ -16,10 +16,9 @@
 #include <KoXmlStreamReader.h>
 
 // this library
-#include "koodfreader_export.h"
 #include "OdfReader.h"
 #include "OdfReaderInternals.h"
-
+#include "koodfreader_export.h"
 
 class QSizeF;
 
@@ -30,7 +29,6 @@ class OdsReaderBackend;
 class OdfReaderContext;
 
 class OdfTextReader;
-
 
 /** @brief Read the XML tree of the content of an ODS file.
  *
@@ -55,18 +53,18 @@ class OdfTextReader;
  */
 class KOODFREADER_EXPORT OdsReader : public OdfReader
 {
- public:
+public:
     OdsReader();
     ~OdsReader() override;
 
- protected:
+protected:
     // All readElement*() are named after the full qualifiedName of
     // the element in ODF that they handle.
 
     // ODS document level functions
     DECLARE_READER_FUNCTION(OfficeSpreadsheet) override;
 
- private:
+private:
     // Not much here. Most are already in OdfReader.
 };
 

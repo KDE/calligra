@@ -9,13 +9,13 @@
 #include <QMouseEvent>
 #include <QPainter>
 
-ScribbleArea::ScribbleArea(QQuickItem* parent)
+ScribbleArea::ScribbleArea(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , scribbling(false)
     , myPenWidth(10)
     , myPenColor(QColor(242, 178, 0))
 {
-    setAcceptedMouseButtons(Qt::LeftButton);\
+    setAcceptedMouseButtons(Qt::LeftButton);
     image = QImage(width(), height(), QImage::Format_ARGB32_Premultiplied);
     image.fill(Qt::transparent);
 }
@@ -34,7 +34,7 @@ QColor ScribbleArea::color() const
     return myPenColor;
 }
 
-void ScribbleArea::setColor(const QColor& newColor)
+void ScribbleArea::setColor(const QColor &newColor)
 {
     myPenColor = newColor;
     emit colorChanged();
@@ -45,22 +45,22 @@ int ScribbleArea::penWidth() const
     return myPenWidth;
 }
 
-void ScribbleArea::setPenWidth(const int& newWidth)
+void ScribbleArea::setPenWidth(const int &newWidth)
 {
     myPenWidth = newWidth;
     emit penWidthChanged();
 }
 
-bool ScribbleArea::event(QEvent* event)
+bool ScribbleArea::event(QEvent *event)
 {
-    if(event->type() == QEvent::Resize) {
+    if (event->type() == QEvent::Resize) {
         image = QImage(width(), height(), QImage::Format_ARGB32_Premultiplied);
         image.fill(Qt::transparent);
     }
     return QQuickPaintedItem::event(event);
 }
 
-void ScribbleArea::mousePressEvent(QMouseEvent* event)
+void ScribbleArea::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         lastPoint = event->pos();
@@ -69,13 +69,13 @@ void ScribbleArea::mousePressEvent(QMouseEvent* event)
     }
 }
 
-void ScribbleArea::mouseMoveEvent(QMouseEvent* event)
+void ScribbleArea::mouseMoveEvent(QMouseEvent *event)
 {
     if ((event->buttons() & Qt::LeftButton) && scribbling)
         drawLineTo(event->pos());
 }
 
-void ScribbleArea::mouseReleaseEvent(QMouseEvent* event)
+void ScribbleArea::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton && scribbling) {
         drawLineTo(event->pos());
@@ -84,26 +84,24 @@ void ScribbleArea::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
-void ScribbleArea::paint(QPainter* painter)
+void ScribbleArea::paint(QPainter *painter)
 {
     painter->drawImage(boundingRect(), image);
 }
 
-void ScribbleArea::drawLineTo(const QPointF& endPoint)
+void ScribbleArea::drawLineTo(const QPointF &endPoint)
 {
-    if(image.isNull()) {
+    if (image.isNull()) {
         image = QImage(width(), height(), QImage::Format_ARGB32_Premultiplied);
         image.fill(Qt::transparent);
     }
     QPainter painter(&image);
-    painter.setPen(QPen(myPenColor, myPenWidth, Qt::SolidLine, Qt::RoundCap,
-                        Qt::RoundJoin));
+    painter.setPen(QPen(myPenColor, myPenWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.drawLine(lastPoint, endPoint);
     painter.end();
 
     int rad = (myPenWidth / 2) + 2;
-    update(QRectF(lastPoint, endPoint).normalized()
-                                    .adjusted(-rad, -rad, +rad, +rad).toRect());
+    update(QRectF(lastPoint, endPoint).normalized().adjusted(-rad, -rad, +rad, +rad).toRect());
     lastPoint = endPoint;
 }

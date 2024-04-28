@@ -9,9 +9,9 @@
 
 #include "KoTextCommandBase.h"
 
-#include <QTextBlock>
-#include <QList>
 #include <QHash>
+#include <QList>
+#include <QTextBlock>
 
 class KoList;
 
@@ -21,11 +21,7 @@ class KoList;
 class ChangeListLevelCommand : public KoTextCommandBase
 {
 public:
-    enum CommandType {
-        IncreaseLevel,
-        DecreaseLevel,
-        SetLevel
-    };
+    enum CommandType { IncreaseLevel, DecreaseLevel, SetLevel };
 
     /**
      * Change the list property of 'block'.
@@ -43,7 +39,8 @@ public:
     void undo() override;
 
     /// reimplemnted from KUndo2Command
-    int id() const override {
+    int id() const override
+    {
         return 58450689;
     }
     /// reimplemnted from KUndo2Command
@@ -56,7 +53,7 @@ private:
     int m_coefficient;
 
     QList<QTextBlock> m_blocks;
-    QHash<int, KoList*> m_lists;
+    QHash<int, KoList *> m_lists;
     QHash<int, int> m_levels;
 
     bool m_first;

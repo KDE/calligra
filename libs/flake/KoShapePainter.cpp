@@ -9,24 +9,25 @@
 #include "KoShapePainter.h"
 
 #include "KoCanvasBase.h"
+#include "KoShape.h"
+#include "KoShapeContainer.h"
+#include "KoShapeGroup.h"
 #include "KoShapeManager.h"
 #include "KoShapeManagerPaintingStrategy.h"
-#include "KoShape.h"
-#include "KoViewConverter.h"
 #include "KoShapeStrokeModel.h"
-#include "KoShapeGroup.h"
-#include "KoShapeContainer.h"
+#include "KoViewConverter.h"
 
 #include <KoUnit.h>
 
-#include <QPainter>
 #include <QImage>
+#include <QPainter>
 
 class SimpleCanvas : public KoCanvasBase
 {
 public:
     SimpleCanvas()
-        : KoCanvasBase(0), m_shapeManager(new KoShapeManager(this))
+        : KoCanvasBase(0)
+        , m_shapeManager(new KoShapeManager(this))
     {
     }
 
@@ -57,7 +58,7 @@ public:
         return m_shapeManager;
     }
 
-    void updateCanvas(const QRectF&) override
+    void updateCanvas(const QRectF &) override
     {
     }
 
@@ -86,9 +87,13 @@ public:
         return KoUnit(KoUnit::Point);
     }
 
-    void updateInputMethodInfo() override {}
+    void updateInputMethodInfo() override
+    {
+    }
 
-    void setCursor(const QCursor &) override {}
+    void setCursor(const QCursor &) override
+    {
+    }
 
 private:
     KoShapeManager *m_shapeManager;
@@ -102,8 +107,11 @@ public:
     {
     }
 
-    ~Private() { delete canvas; }
-    SimpleCanvas * canvas;
+    ~Private()
+    {
+        delete canvas;
+    }
+    SimpleCanvas *canvas;
 };
 
 KoShapePainter::KoShapePainter(KoShapeManagerPaintingStrategy *strategy)
@@ -120,7 +128,7 @@ KoShapePainter::~KoShapePainter()
     delete d;
 }
 
-void KoShapePainter::setShapes(const QList<KoShape*> &shapes)
+void KoShapePainter::setShapes(const QList<KoShape *> &shapes)
 {
     d->canvas->shapeManager()->setShapes(shapes, KoShapeManager::AddWithoutRepaint);
 }
@@ -158,7 +166,7 @@ void KoShapePainter::paint(QPainter &painter, const QRect &painterRect, const QR
     painter.setPen(QPen(Qt::NoPen));
     painter.setBrush(Qt::NoBrush);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setClipRect(painterRect.adjusted(-1,-1,1,1));
+    painter.setClipRect(painterRect.adjusted(-1, -1, 1, 1));
 
     // convert document rectangle to view coordinates
     QRectF zoomedBound = converter.documentToView(documentRect);
@@ -189,7 +197,7 @@ QRectF KoShapePainter::contentRect() const
     foreach (KoShape *shape, d->canvas->shapeManager()->shapes()) {
         if (!shape->isVisible(true))
             continue;
-        if (dynamic_cast<KoShapeGroup*>(shape))
+        if (dynamic_cast<KoShapeGroup *>(shape))
             continue;
 
         QRectF shapeRect = shape->boundingRect();

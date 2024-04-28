@@ -14,9 +14,9 @@
 #include "words_export.h"
 
 #include <KoShape.h>
-#include <KoShapeSavingContext.h>
-#include <KoShapeApplicationData.h>
 #include <KoShapeAnchor.h>
+#include <KoShapeApplicationData.h>
+#include <KoShapeSavingContext.h>
 
 class KWFrameSet;
 
@@ -42,7 +42,8 @@ public:
      * Each frame will be rendered by a shape which also holds the position etc.
      * @return the shape that represents this frame.
      */
-    KoShape *shape() const {
+    KoShape *shape() const
+    {
         return m_shape;
     }
 
@@ -50,17 +51,19 @@ public:
      * Return the parent frameset.
      * @return the parent frameset
      */
-    KWFrameSet *frameSetxx() const {
+    KWFrameSet *frameSetxx() const
+    {
         return m_frameSet;
     }
 
-    qreal anchoredFrameOffset() const {
+    qreal anchoredFrameOffset() const
+    {
         return m_anchoredFrameOffset;
     }
-    void setAnchoredFrameOffset(qreal offset) {
+    void setAnchoredFrameOffset(qreal offset)
+    {
         m_anchoredFrameOffset = offset;
     }
-
 
 private:
     KoShape *m_shape;

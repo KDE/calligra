@@ -3,25 +3,24 @@
  *  SPDX-FileCopyrightText: 2007 Emanuele Tamponi <emanuele@valinor.it>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef KOCOLORSPACEABSTRACT_H
 #define KOCOLORSPACEABSTRACT_H
 
-#include <QBitArray>
 #include <KLocalizedString>
+#include <QBitArray>
 
-#include <KoColorSpace.h>
-#include <KoColorProfile.h>
-#include <KoColorSpaceMaths.h>
-#include <KoColorSpaceRegistry.h>
 #include "KoFallBackColorTransformation.h"
 #include "KoLabDarkenColorTransformation.h"
 #include "KoMixColorsOpImpl.h"
+#include <KoColorProfile.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceMaths.h>
+#include <KoColorSpaceRegistry.h>
 
 #include "KoConvolutionOpImpl.h"
 #include "KoInvertColorTransformation.h"
-
 
 /**
  * This in an implementation of KoColorSpace which can be used as a base for colorspaces with as many
@@ -37,107 +36,132 @@ template<class _CSTrait>
 class KoColorSpaceAbstract : public KoColorSpace
 {
 public:
-    KoColorSpaceAbstract(const QString &id, const QString &name) :
-        KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>()) {
+    KoColorSpaceAbstract(const QString &id, const QString &name)
+        : KoColorSpace(id, name, new KoMixColorsOpImpl<_CSTrait>(), new KoConvolutionOpImpl<_CSTrait>())
+    {
     }
 
-    quint32 colorChannelCount() const override {
+    quint32 colorChannelCount() const override
+    {
         if (_CSTrait::alpha_pos == -1)
             return _CSTrait::channels_nb;
         else
             return _CSTrait::channels_nb - 1;
     }
 
-    quint32 channelCount() const override {
+    quint32 channelCount() const override
+    {
         return _CSTrait::channels_nb;
     }
 
-    quint32 pixelSize() const override {
+    quint32 pixelSize() const override
+    {
         return _CSTrait::pixelSize;
     }
 
-    QString channelValueText(const quint8 *pixel, quint32 channelIndex) const override {
+    QString channelValueText(const quint8 *pixel, quint32 channelIndex) const override
+    {
         return _CSTrait::channelValueText(pixel, channelIndex);
     }
 
-    QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const override {
+    QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const override
+    {
         return _CSTrait::normalisedChannelValueText(pixel, channelIndex);
     }
 
-    void normalisedChannelsValue(const quint8 *pixel, QVector<qreal> &channels) const override {
+    void normalisedChannelsValue(const quint8 *pixel, QVector<qreal> &channels) const override
+    {
         return _CSTrait::normalisedChannelsValue(pixel, channels);
     }
 
-    void fromNormalisedChannelsValue(quint8 *pixel, const QVector<qreal> &values) const override {
+    void fromNormalisedChannelsValue(quint8 *pixel, const QVector<qreal> &values) const override
+    {
         return _CSTrait::fromNormalisedChannelsValue(pixel, values);
     }
 
-    quint8 scaleToU8(const quint8 * srcPixel, qint32 channelIndex) const override {
+    quint8 scaleToU8(const quint8 *srcPixel, qint32 channelIndex) const override
+    {
         typename _CSTrait::channels_type c = _CSTrait::nativeArray(srcPixel)[channelIndex];
         return KoColorSpaceMaths<typename _CSTrait::channels_type, quint8>::scaleToA(c);
     }
 
-    void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const override {
+    void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const override
+    {
         _CSTrait::singleChannelPixel(dstPixel, srcPixel, channelIndex);
     }
 
-    quint8 opacityU8(const quint8 * U8_pixel) const override {
+    quint8 opacityU8(const quint8 *U8_pixel) const override
+    {
         return _CSTrait::opacityU8(U8_pixel);
     }
 
-    qreal opacityF(const quint8 * U8_pixel) const override {
+    qreal opacityF(const quint8 *U8_pixel) const override
+    {
         return _CSTrait::opacityF(U8_pixel);
     }
 
-    void setOpacity(quint8 * pixels, quint8 alpha, qint32 nPixels) const override {
+    void setOpacity(quint8 *pixels, quint8 alpha, qint32 nPixels) const override
+    {
         _CSTrait::setOpacity(pixels, alpha, nPixels);
     }
 
-    void setOpacity(quint8 * pixels, qreal alpha, qint32 nPixels) const override {
+    void setOpacity(quint8 *pixels, qreal alpha, qint32 nPixels) const override
+    {
         _CSTrait::setOpacity(pixels, alpha, nPixels);
     }
 
-    void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const override {
+    void multiplyAlpha(quint8 *pixels, quint8 alpha, qint32 nPixels) const override
+    {
         _CSTrait::multiplyAlpha(pixels, alpha, nPixels);
     }
 
-    void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const override {
+    void applyAlphaU8Mask(quint8 *pixels, const quint8 *alpha, qint32 nPixels) const override
+    {
         _CSTrait::applyAlphaU8Mask(pixels, alpha, nPixels);
     }
 
-    void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const override {
+    void applyInverseAlphaU8Mask(quint8 *pixels, const quint8 *alpha, qint32 nPixels) const override
+    {
         _CSTrait::applyInverseAlphaU8Mask(pixels, alpha, nPixels);
     }
 
-    void applyAlphaNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const override {
+    void applyAlphaNormedFloatMask(quint8 *pixels, const float *alpha, qint32 nPixels) const override
+    {
         _CSTrait::applyAlphaNormedFloatMask(pixels, alpha, nPixels);
     }
 
-    void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const override {
+    void applyInverseNormedFloatMask(quint8 *pixels, const float *alpha, qint32 nPixels) const override
+    {
         _CSTrait::applyInverseAlphaNormedFloatMask(pixels, alpha, nPixels);
     }
 
-    quint8 intensity8(const quint8 * src) const override {
+    quint8 intensity8(const quint8 *src) const override
+    {
         QColor c;
         const_cast<KoColorSpaceAbstract<_CSTrait> *>(this)->toQColor(src, &c);
         return static_cast<quint8>((c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11) + 0.5);
     }
 
-    KoColorTransformation* createInvertTransformation() const override {
+    KoColorTransformation *createInvertTransformation() const override
+    {
         return new KoInvertColorTransformation(this);
     }
 
-    KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const override {
-        return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(""), new KoLabDarkenColorTransformation<quint16>(shade, compensate, compensation, KoColorSpaceRegistry::instance()->lab16("")));
+    KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const override
+    {
+        return new KoFallBackColorTransformation(
+            this,
+            KoColorSpaceRegistry::instance()->lab16(""),
+            new KoLabDarkenColorTransformation<quint16>(shade, compensate, compensation, KoColorSpaceRegistry::instance()->lab16("")));
     }
 
     bool convertPixelsTo(const quint8 *src,
-                                 quint8 *dst, const KoColorSpace *dstColorSpace,
-                                 quint32 numPixels,
-                                 KoColorConversionTransformation::Intent renderingIntent,
-                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const override
+                         quint8 *dst,
+                         const KoColorSpace *dstColorSpace,
+                         quint32 numPixels,
+                         KoColorConversionTransformation::Intent renderingIntent,
+                         KoColorConversionTransformation::ConversionFlags conversionFlags) const override
     {
-        
         // check whether we have the same profile and color model, but only a different bit
         // depth; in that case we don't convert as such, but scale
         bool scaleOnly = false;
@@ -145,22 +169,20 @@ public:
         // Note: getting the id() is really, really expensive, so only do that if
         // we are sure there is a difference between the colorspaces
         if (!(*this == *dstColorSpace)) {
-            scaleOnly = dstColorSpace->colorModelId().id() == colorModelId().id() &&
-                         dstColorSpace->colorDepthId().id() != colorDepthId().id() &&
-                         dstColorSpace->profile()->name()   == profile()->name();
+            scaleOnly = dstColorSpace->colorModelId().id() == colorModelId().id() && dstColorSpace->colorDepthId().id() != colorDepthId().id()
+                && dstColorSpace->profile()->name() == profile()->name();
         }
-        
-        if (scaleOnly && dynamic_cast<const KoColorSpaceAbstract*>(dstColorSpace)) {
+
+        if (scaleOnly && dynamic_cast<const KoColorSpaceAbstract *>(dstColorSpace)) {
             typedef typename _CSTrait::channels_type channels_type;
-            
-            switch(dstColorSpace->channels().at(0)->channelValueType())
-            {
+
+            switch (dstColorSpace->channels().at(0)->channelValueType()) {
             case KoChannelInfo::UINT8:
                 scalePixels<_CSTrait::pixelSize, 1, channels_type, quint8>(src, dst, numPixels);
                 return true;
-//             case KoChannelInfo::INT8:
-//                 scalePixels<_CSTrait::pixelSize, 1, channels_type, qint8>(src, dst, numPixels);
-//                 return true;
+                //             case KoChannelInfo::INT8:
+                //                 scalePixels<_CSTrait::pixelSize, 1, channels_type, qint8>(src, dst, numPixels);
+                //                 return true;
             case KoChannelInfo::UINT16:
                 scalePixels<_CSTrait::pixelSize, 2, channels_type, quint16>(src, dst, numPixels);
                 return true;
@@ -174,20 +196,21 @@ public:
                 break;
             }
         }
-        
+
         return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent, conversionFlags);
     }
-    
+
 private:
     template<int srcPixelSize, int dstChannelSize, class TSrcChannel, class TDstChannel>
-    void scalePixels(const quint8* src, quint8* dst, quint32 numPixels) const {
+    void scalePixels(const quint8 *src, quint8 *dst, quint32 numPixels) const
+    {
         qint32 dstPixelSize = dstChannelSize * _CSTrait::channels_nb;
-        
-        for(quint32 i=0; i<numPixels; ++i) {
-            const TSrcChannel* srcPixel = reinterpret_cast<const TSrcChannel*>(src + i * srcPixelSize);
-            TDstChannel*       dstPixel = reinterpret_cast<TDstChannel*>(dst + i * dstPixelSize);
-            
-            for(quint32 c=0; c<_CSTrait::channels_nb; ++c)
+
+        for (quint32 i = 0; i < numPixels; ++i) {
+            const TSrcChannel *srcPixel = reinterpret_cast<const TSrcChannel *>(src + i * srcPixelSize);
+            TDstChannel *dstPixel = reinterpret_cast<TDstChannel *>(dst + i * dstPixelSize);
+
+            for (quint32 c = 0; c < _CSTrait::channels_nb; ++c)
                 dstPixel[c] = Arithmetic::scale<TDstChannel>(srcPixel[c]);
         }
     }

@@ -12,11 +12,7 @@
 
 #include "core/Cell.h"
 
-
-
 using namespace Calligra::Sheets;
-
-
 
 Fill::Fill(Actions *actions, FillManipulator::Direction dir)
     : CellAction(actions, actionName(dir), actionCaption(dir), QIcon(), QString())
@@ -28,10 +24,9 @@ Fill::~Fill()
 {
 }
 
-
 void Fill::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    FillManipulator* command = new FillManipulator();
+    FillManipulator *command = new FillManipulator();
     command->setSheet(sheet);
     command->setDirection(m_dir);
     command->add(*selection);
@@ -40,19 +35,26 @@ void Fill::execute(Selection *selection, Sheet *sheet, QWidget *)
 
 bool Fill::enabledForSelection(Selection *selection, const Cell &)
 {
-    if (selection->isSingular()) return false;
-    if (selection->isColumnSelected()) return false;
-    if (selection->isRowSelected()) return false;
+    if (selection->isSingular())
+        return false;
+    if (selection->isColumnSelected())
+        return false;
+    if (selection->isRowSelected())
+        return false;
     return true;
 }
 
 QString Fill::actionName(FillManipulator::Direction dir)
 {
     switch (dir) {
-    case FillManipulator::Up:    return "fillUp";
-    case FillManipulator::Down:  return "fillDown";
-    case FillManipulator::Left:  return "fillLeft";
-    case FillManipulator::Right: return "fillRight";
+    case FillManipulator::Up:
+        return "fillUp";
+    case FillManipulator::Down:
+        return "fillDown";
+    case FillManipulator::Left:
+        return "fillLeft";
+    case FillManipulator::Right:
+        return "fillRight";
     };
     return QString();
 }
@@ -60,17 +62,17 @@ QString Fill::actionName(FillManipulator::Direction dir)
 QString Fill::actionCaption(FillManipulator::Direction dir)
 {
     switch (dir) {
-    case FillManipulator::Up:    return i18n("Fill &Up");
-    case FillManipulator::Down:  return i18n("Fill &Down");
-    case FillManipulator::Left:  return i18n("Fill &Left");
-    case FillManipulator::Right: return i18n("Fill &Right");
+    case FillManipulator::Up:
+        return i18n("Fill &Up");
+    case FillManipulator::Down:
+        return i18n("Fill &Down");
+    case FillManipulator::Left:
+        return i18n("Fill &Left");
+    case FillManipulator::Right:
+        return i18n("Fill &Right");
     };
     return QString();
 }
-
-
-
-
 
 FillManipulator::FillManipulator()
 {
@@ -83,17 +85,24 @@ FillManipulator::~FillManipulator()
 {
 }
 
-Value FillManipulator::newValue(Element *element, int col, int row,
-                                bool *parse, Format::Type *fmtType)
+Value FillManipulator::newValue(Element *element, int col, int row, bool *parse, Format::Type *fmtType)
 {
     Q_UNUSED(fmtType);
     const int targetRow = row;
     const int targetCol = col;
     switch (m_dir) {
-    case Up:    row = element->rect().bottom(); break;
-    case Down:  row = element->rect().top();    break;
-    case Left:  col = element->rect().right();  break;
-    case Right: col = element->rect().left();   break;
+    case Up:
+        row = element->rect().bottom();
+        break;
+    case Down:
+        row = element->rect().top();
+        break;
+    case Left:
+        col = element->rect().right();
+        break;
+    case Right:
+        col = element->rect().left();
+        break;
     };
     Cell cell(m_sheet, col, row); // the reference cell
     if (cell.isFormula()) {
@@ -106,11 +115,18 @@ Value FillManipulator::newValue(Element *element, int col, int row,
 Style FillManipulator::newFormat(Element *element, int col, int row)
 {
     switch (m_dir) {
-    case Up:    row = element->rect().bottom(); break;
-    case Down:  row = element->rect().top();    break;
-    case Left:  col = element->rect().right();  break;
-    case Right: col = element->rect().left();   break;
+    case Up:
+        row = element->rect().bottom();
+        break;
+    case Down:
+        row = element->rect().top();
+        break;
+    case Left:
+        col = element->rect().right();
+        break;
+    case Right:
+        col = element->rect().left();
+        break;
     };
     return Cell(m_sheet, col, row).style();
 }
-

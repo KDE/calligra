@@ -18,8 +18,8 @@
 // KoChart
 #include "ChartShape.h"
 
-
-namespace KoChart {
+namespace KoChart
+{
 
 class Legend : public QObject, public KoShape
 {
@@ -66,7 +66,7 @@ Q_SIGNALS:
     void updateConfigWidget();
 
 private Q_SLOTS:
-    void slotChartTypeChanged(KoChart::ChartType chartType );
+    void slotChartTypeChanged(KoChart::ChartType chartType);
     void slotKdLegendChanged();
 
 private:
@@ -77,4 +77,3 @@ private:
 }
 
 #endif // KCHART_LEGEND_H
-

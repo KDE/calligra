@@ -6,7 +6,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "CellRegion.h"
 
@@ -16,13 +15,12 @@
 // Qt
 #include <QPoint>
 #include <QRect>
-#include <QVector>
 #include <QStringList>
+#include <QVector>
 
 // KoChart
-#include "TableSource.h"
 #include "ChartDebug.h"
-
+#include "TableSource.h"
 
 using std::pow;
 using namespace KoChart;
@@ -32,13 +30,13 @@ using namespace KoChart;
 class Parser
 {
 public:
-    Parser(const QString & input)
+    Parser(const QString &input)
         : m_pos(m_input.constEnd())
     {
         m_input = input;
         if (m_input.contains(":.")) {
             // FIXME
-            warnChartParse<<"Handle 'DotDoubleDot' in input string";
+            warnChartParse << "Handle 'DotDoubleDot' in input string";
             m_input.replace(QStringLiteral(":."), QChar(':'));
         }
         m_delimiter.append(QChar::fromLatin1('.'));
@@ -47,15 +45,27 @@ public:
         m_delimiter.append(QChar::fromLatin1(' '));
     }
     bool parse();
-    QList< QRect > getResult() const { return m_result; }
-    QString tableName() const { return m_tableName; }
+    QList<QRect> getResult() const
+    {
+        return m_result;
+    }
+    QString tableName() const
+    {
+        return m_tableName;
+    }
 
 private:
-    struct Token
-    {
-        enum TokenType{ Dot = 0, DoubleDot = 1, Space = 2, Spacer = 3, Identifier = 4, End };
-        Token(TokenType type, const QString & identifier): m_type(type), m_identifier(identifier){}
-        Token(): m_type(End) {}
+    struct Token {
+        enum TokenType { Dot = 0, DoubleDot = 1, Space = 2, Spacer = 3, Identifier = 4, End };
+        Token(TokenType type, const QString &identifier)
+            : m_type(type)
+            , m_identifier(identifier)
+        {
+        }
+        Token()
+            : m_type(End)
+        {
+        }
         TokenType m_type;
         QString m_identifier;
     };
@@ -85,13 +95,13 @@ public:
 private:
     QString m_input;
     QString::ConstIterator m_pos;
-    QList< QRect > m_result;
+    QList<QRect> m_result;
     Token m_currentToken;
     QRect m_currentRect;
     QPoint m_currentPoint;
     QString m_tableName;
     int m_index;
-    QVector< QChar > m_delimiter;
+    QVector<QChar> m_delimiter;
 };
 
 void Parser::setTableName(const QString &name)
@@ -99,11 +109,10 @@ void Parser::setTableName(const QString &name)
     QString strippedName = name;
     if (name.startsWith(QChar::fromLatin1('$')))
         strippedName.remove(0, 1);
-    if (m_tableName.isEmpty())        
+    if (m_tableName.isEmpty())
         m_tableName = strippedName;
-    else
-        if (strippedName != m_tableName)
-            debugChartParse << "More than one sheet referenced, this is currently not supported";
+    else if (strippedName != m_tableName)
+        debugChartParse << "More than one sheet referenced, this is currently not supported";
 }
 
 bool Parser::parse()
@@ -119,15 +128,15 @@ Parser::Token Parser::parseToken()
 {
     Token::TokenType type = Token::End;
     if (m_pos != m_input.constEnd()) {
-        switch(m_delimiter.indexOf(*m_pos)) {
-        case(0):
+        switch (m_delimiter.indexOf(*m_pos)) {
+        case (0):
             type = Token::Dot;
             break;
-        case(1):
+        case (1):
             type = Token::DoubleDot;
             break;
-        case(2):
-        case(3):
+        case (2):
+        case (3):
             type = Token::Space;
             break;
         default:
@@ -154,8 +163,7 @@ Parser::Token Parser::parseToken()
             ++m_pos;
             ++m_index;
         }
-    }
-    else {
+    } else {
         int startPos = m_index;
         for (; m_pos != m_input.constEnd() && !m_delimiter.contains(*m_pos); ++m_pos, ++m_index)
             ;
@@ -168,7 +176,7 @@ Parser::Token Parser::parseToken()
     }
 
     Token t(type, identifier);
-    debugChartParse<<toString(t);
+    debugChartParse << toString(t);
     return t;
 }
 
@@ -203,30 +211,34 @@ bool Parser::parseRegion()
         const QPoint topLeft = m_currentPoint;
         m_currentToken = parseToken();
         res &= parseRegion2();
-        //m_currentToken = parseToken();
+        // m_currentToken = parseToken();
         m_result.append(QRect(topLeft, m_currentPoint));
-        debugChartParse << "DoubleDot"<<"result:"<<m_result;
-    }
-    else {
+        debugChartParse << "DoubleDot"
+                        << "result:" << m_result;
+    } else {
         m_result.append(QRect(m_currentPoint, m_currentPoint));
-        debugChartParse << "NoDoubleDot"<<"result:"<<m_result;;
+        debugChartParse << "NoDoubleDot"
+                        << "result:" << m_result;
+        ;
     }
-    
+
     if (m_currentToken.m_type == Token::Space) {
         res &= parseRegionList();
     } else if (m_currentToken.m_type == Token::End) {
-        debugChartParse<<"ParseRegion:"<<res<<toString(m_currentToken)<<m_result;;
+        debugChartParse << "ParseRegion:" << res << toString(m_currentToken) << m_result;
+        ;
         return res;
     } else {
         res = false;
     }
-    debugChartParse<<"ParseRegion:"<<res<<toString(m_currentToken)<<m_result;;
+    debugChartParse << "ParseRegion:" << res << toString(m_currentToken) << m_result;
+    ;
     return res;
 }
 
 bool Parser::parseRegion2()
 {
-    //debugChart << "ParseRegion2";
+    // debugChart << "ParseRegion2";
     bool res = true;
 
     if (m_currentToken.m_type != Token::Identifier && m_currentToken.m_type != Token::Dot)
@@ -235,35 +247,29 @@ bool Parser::parseRegion2()
     const QString firstIdentifier = m_currentToken.m_type != Token::Dot ? m_currentToken.m_identifier : tableName();
     if (m_currentToken.m_type != Token::Dot)
         m_currentToken = parseToken();
-    if (m_currentToken.m_type == Token::Dot)
-    {
+    if (m_currentToken.m_type == Token::Dot) {
         m_currentToken = parseToken();
-        if (m_currentToken.m_type == Token::Identifier)
-        {
+        if (m_currentToken.m_type == Token::Identifier) {
             static QRegularExpression regEx(QString::fromLatin1("^([$]*)([A-Z]+)([$]*)([0-9]+)$"));
             auto match = regEx.match(m_currentToken.m_identifier);
             m_currentPoint = QPoint(CellRegion::rangeStringToInt(match.captured(2)), match.captured(4).toInt());
-            //debugChart << "FUN" << regEx.cap(2) << " " << regEx.cap(4);
+            // debugChart << "FUN" << regEx.cap(2) << " " << regEx.cap(4);
             setTableName(firstIdentifier);
-        }
-        else
+        } else
             res = false;
-    }
-    else
-    {
+    } else {
         QRegularExpression regEx(QString::fromLatin1("^([$]*)([A-Z]+)([$]*)([0-9]+)$"));
         auto match = regEx.match(firstIdentifier);
-        //debugChart << "FUN" << regEx.cap(2) << " " << regEx.cap(4);
+        // debugChart << "FUN" << regEx.cap(2) << " " << regEx.cap(4);
         m_currentPoint = QPoint(CellRegion::rangeStringToInt(match.captured(2)), match.captured(4).toInt());
     }
-    //debugChart << "TableName "<< m_tableName;
-    //debugChart << firstIdentifier;
-    //debugChart << "Point" << m_currentPoint;
-    //debugChart << m_currentToken.m_identifier;
-    //debugChart << m_currentToken.m_type;
+    // debugChart << "TableName "<< m_tableName;
+    // debugChart << firstIdentifier;
+    // debugChart << "Point" << m_currentPoint;
+    // debugChart << m_currentToken.m_identifier;
+    // debugChart << m_currentToken.m_type;
 
     return res;
-
 }
 
 // bool Parser::parsePoint()
@@ -285,7 +291,7 @@ bool Parser::parseRegion2()
 /************************ENDRegionParser*******************************/
 
 static QString columnName(uint column);
-//static int rangeCharToInt(char c);
+// static int rangeCharToInt(char c);
 
 /**
  * Makes sure that quotes are added if name contains spaces or special
@@ -293,14 +299,13 @@ static QString columnName(uint column);
  */
 static QString formatTableName(const QString &name)
 {
-    static const QList<QChar> specialChars =
-        QList<QChar>() << ' ' << '\t' << '-' << '\'';
+    static const QList<QChar> specialChars = QList<QChar>() << ' ' << '\t' << '-' << '\'';
 
     bool containsSpecialChars = false;
-    foreach(QChar c, specialChars)
+    foreach (QChar c, specialChars)
         containsSpecialChars = containsSpecialChars || name.contains(c);
 
-    if(containsSpecialChars)
+    if (containsSpecialChars)
         return QLatin1Char('\'') + name + QLatin1Char('\'');
 
     return name;
@@ -332,13 +337,12 @@ public:
     // orientations (hor / vert).
     QVector<QRect> rects;
 
-    QRect          boundingRect;
+    QRect boundingRect;
     // NOTE: Don't forget to extend operator=() if you add new members
 
     /// Table this region is in (name/model pair provided by TableSource)
     Table *table;
 };
-
 
 CellRegion::Private::Private()
 {
@@ -349,10 +353,8 @@ CellRegion::Private::~Private()
 {
 }
 
-
 // ================================================================
 //                         Class CellRegion
-
 
 CellRegion::CellRegion()
     : d(new Private())
@@ -366,7 +368,7 @@ CellRegion::CellRegion(const CellRegion &region)
     *this = region;
 }
 
-CellRegion::CellRegion(TableSource *source, const QString& regions)
+CellRegion::CellRegion(TableSource *source, const QString &regions)
     : d(new Private())
 {
     // A dollar sign before a part of the address means that this part
@@ -377,49 +379,49 @@ CellRegion::CellRegion(TableSource *source, const QString& regions)
     Parser parser(regions);
     const bool success = parser.parse();
     if (!success)
-        warnChart << "Parsing cell region failed:"<<regions;
+        warnChart << "Parsing cell region failed:" << regions;
 
     QVector<QRect> rects = parser.getResult().toVector();
     for (int i = 0; i < rects.count(); ++i) {
         add(rects.at(i));
     }
     d->table = source->get(parser.tableName());
-//     QStringList regionsList = regions.split(' ', Qt::SkipEmptyParts);
-//     Q_FOREACH(const QString& region, regionsList) {
-//       QString searchStr = QString(region).remove('$');
-//       QRegExp regEx;
-// 
-//       QStringList regionList = searchStr.split(';');
-//       Q_FOREACH(const QString &region, regionList) {
-//           const bool isPoint = !region.contains(':');
-//           if (isPoint)
-//               regEx = QRegExp("(|.*\\.)([A-Z]+)([0-9]+)");
-//           else // support range-notations like Sheet1.D2:Sheet1.F2 Sheet1.D2:F2 D2:F2
-//               regEx = QRegExp ("(|.*\\.)([A-Z]+)([0-9]+)\\:(|.*\\.)([A-Z]+)([0-9]+)");
-// 
-//           // Check if region string is valid (e.g. not empty)
-//           if (regEx.indexIn(region) >= 0) {
-//               // It is possible for a cell-range-address as defined in ODF to contain
-//               // references to cells of more than one sheet. This, however, we ignore
-//               // here. We do not support more than one table in a cell region.
-//               // Also we do not support regions spanned over different sheets. For us
-//               // everything is either on no sheet or on the same sheet.
-//               QString sheetName = regEx.cap(1);
-//               if (sheetName.endsWith("."))
-//                   sheetName = sheetName.left(sheetName.length() - 1);
-//               // TODO: Support for multiple tables in one region
-//               d->table = source->get(unformatTableName(sheetName));
-// 
-//               QPoint topLeft(rangeStringToInt(regEx.cap(2)), regEx.cap(3).toInt());
-//               if (isPoint) {
-//                   d->rects.append(QRect(topLeft, QSize(1, 1)));
-//               } else {
-//                   QPoint bottomRight(rangeStringToInt(regEx.cap(5)), regEx.cap(6).toInt());
-//                   d->rects.append(QRect(topLeft, bottomRight));
-//               }
-//           }
-//       }
-//     }
+    //     QStringList regionsList = regions.split(' ', Qt::SkipEmptyParts);
+    //     Q_FOREACH(const QString& region, regionsList) {
+    //       QString searchStr = QString(region).remove('$');
+    //       QRegExp regEx;
+    //
+    //       QStringList regionList = searchStr.split(';');
+    //       Q_FOREACH(const QString &region, regionList) {
+    //           const bool isPoint = !region.contains(':');
+    //           if (isPoint)
+    //               regEx = QRegExp("(|.*\\.)([A-Z]+)([0-9]+)");
+    //           else // support range-notations like Sheet1.D2:Sheet1.F2 Sheet1.D2:F2 D2:F2
+    //               regEx = QRegExp ("(|.*\\.)([A-Z]+)([0-9]+)\\:(|.*\\.)([A-Z]+)([0-9]+)");
+    //
+    //           // Check if region string is valid (e.g. not empty)
+    //           if (regEx.indexIn(region) >= 0) {
+    //               // It is possible for a cell-range-address as defined in ODF to contain
+    //               // references to cells of more than one sheet. This, however, we ignore
+    //               // here. We do not support more than one table in a cell region.
+    //               // Also we do not support regions spanned over different sheets. For us
+    //               // everything is either on no sheet or on the same sheet.
+    //               QString sheetName = regEx.cap(1);
+    //               if (sheetName.endsWith("."))
+    //                   sheetName = sheetName.left(sheetName.length() - 1);
+    //               // TODO: Support for multiple tables in one region
+    //               d->table = source->get(unformatTableName(sheetName));
+    //
+    //               QPoint topLeft(rangeStringToInt(regEx.cap(2)), regEx.cap(3).toInt());
+    //               if (isPoint) {
+    //                   d->rects.append(QRect(topLeft, QSize(1, 1)));
+    //               } else {
+    //                   QPoint bottomRight(rangeStringToInt(regEx.cap(5)), regEx.cap(6).toInt());
+    //                   d->rects.append(QRect(topLeft, bottomRight));
+    //               }
+    //           }
+    //       }
+    //     }
 }
 
 CellRegion::CellRegion(Table *table, const QPoint &point)
@@ -440,7 +442,7 @@ CellRegion::CellRegion(Table *table, const QVector<QRect> &rects)
     : d(new Private())
 {
     d->table = table;
-    foreach(const QRect& rect, rects)
+    foreach (const QRect &rect, rects)
         add(rect);
 }
 
@@ -455,21 +457,19 @@ CellRegion::~CellRegion()
     delete d;
 }
 
-
-CellRegion& CellRegion::operator = (const CellRegion& region)
+CellRegion &CellRegion::operator=(const CellRegion &region)
 {
-    d->rects        = region.d->rects;
+    d->rects = region.d->rects;
     d->boundingRect = region.d->boundingRect;
-    d->table        = region.d->table;
+    d->table = region.d->table;
 
     return *this;
 }
 
-bool CellRegion::operator == (const CellRegion &other) const
+bool CellRegion::operator==(const CellRegion &other) const
 {
     return d->rects == other.d->rects;
 }
-
 
 Table *CellRegion::table() const
 {
@@ -493,7 +493,7 @@ QString CellRegion::sheetName() const
 
 bool CellRegion::isValid() const
 {
-    return d->rects.size() > 0 && d->table ;
+    return d->rects.size() > 0 && d->table;
 }
 
 QString CellRegion::Private::pointToString(const QPoint &point) const
@@ -533,7 +533,6 @@ QString CellRegion::toString() const
     return result;
 }
 
-
 bool CellRegion::contains(const QPoint &point, bool proper) const
 {
     foreach (const QRect &rect, d->rects) {
@@ -558,12 +557,11 @@ bool CellRegion::intersects(const CellRegion &other) const
 {
     // If both regions lie within only one table and these tables
     // are different, they trivially do not intersect.
-    if (table() && other.table() &&
-         table() != other.table())
+    if (table() && other.table() && table() != other.table())
         return false;
 
     foreach (const QRect &r, d->rects) {
-        foreach(const QRect &_r, other.d->rects) {
+        foreach (const QRect &_r, other.d->rects) {
             if (r.intersects(_r))
                 return true;
         }
@@ -588,9 +586,9 @@ Qt::Orientation CellRegion::orientation() const
 {
     foreach (const QRect &rect, d->rects) {
         if (rect.width() > 1)
-                return Qt::Horizontal;
+            return Qt::Horizontal;
         if (rect.height() > 1)
-                return Qt::Vertical;
+            return Qt::Vertical;
     }
 
     // Default if region is only one cell
@@ -615,9 +613,8 @@ int CellRegion::cellCount() const
     if (orientation() == Qt::Horizontal) {
         foreach (const QRect &rect, d->rects)
             count += rect.width();
-    }
-    else {
-        foreach(const QRect &rect, d->rects)
+    } else {
+        foreach (const QRect &rect, d->rects)
             count += rect.height();
     }
     return count;
@@ -688,8 +685,7 @@ QPoint CellRegion::pointAtIndex(int index) const
 
             // add number of indices in current rectangle to total index count
             i += rect.width();
-        }
-        else {
+        } else {
             // Found it!
             // Index refers to point in current rectangle
             if (i + rect.height() > index) {
@@ -790,9 +786,9 @@ QString CellRegion::columnName(uint column)
     if (column < 1 || column > 32767)
         return QString("@@@");
 
-    QString   str;
-    unsigned  digits = 1;
-    unsigned  offset = 0;
+    QString str;
+    unsigned digits = 1;
+    unsigned offset = 0;
 
     column--;
 

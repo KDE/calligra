@@ -8,22 +8,21 @@
 #include "DockerManager.h"
 #include "DockerManager_p.h"
 
-#include <QList>
 #include <QGridLayout>
+#include <QList>
 
 #include "KoDockFactoryBase.h"
 
-#include "ToolDocker.h"
 #include "MainWindow.h"
-
+#include "ToolDocker.h"
 
 DockerManager::DockerManager(MainWindow *mainWindow)
-    : QObject(mainWindow), d(new Private(mainWindow))
+    : QObject(mainWindow)
+    , d(new Private(mainWindow))
 {
     ToolDockerFactory toolDockerFactory;
     ToolBarsDockerFactory toolBarsDockerFactory;
-    d->toolOptionsDocker =
-        qobject_cast<ToolDocker*>(mainWindow->createDockWidget(&toolDockerFactory));
+    d->toolOptionsDocker = qobject_cast<ToolDocker *>(mainWindow->createDockWidget(&toolDockerFactory));
     Q_ASSERT(d->toolOptionsDocker);
     d->toolOptionsDocker->setVisible(false);
 
@@ -49,7 +48,7 @@ DockerManager::~DockerManager()
     delete d;
 }
 
-void DockerManager::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetMap)
+void DockerManager::newOptionWidgets(const QList<QPointer<QWidget>> &optionWidgetMap)
 {
     d->toolOptionsDocker->setOptionWidgets(optionWidgetMap);
 }

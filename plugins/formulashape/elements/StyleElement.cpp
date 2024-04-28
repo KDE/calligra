@@ -6,8 +6,10 @@
 
 #include "StyleElement.h"
 
-StyleElement::StyleElement( BasicElement* parent ) : RowElement( parent )
-{}
+StyleElement::StyleElement(BasicElement *parent)
+    : RowElement(parent)
+{
+}
 
 ElementType StyleElement::elementType() const
 {

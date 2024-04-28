@@ -7,10 +7,10 @@
 #include "importlibreofficeautocorrection.h"
 
 #include <KZip>
+#include <QDebug>
 #include <QDomDocument>
 #include <QFile>
 #include <QTemporaryDir>
-#include <QDebug>
 
 ImportLibreOfficeAutocorrection::ImportLibreOfficeAutocorrection()
 {
@@ -49,7 +49,7 @@ bool ImportLibreOfficeAutocorrection::import(const QString &fileName, QString &e
         return true;
     } else {
         errorMessage = QStringLiteral("Archive cannot be opened in read mode.");
-        qWarning()<<Q_FUNC_INFO << "Impossible to open archive file"<<fileName<<errorMessage;
+        qWarning() << Q_FUNC_INFO << "Impossible to open archive file" << fileName << errorMessage;
         return false;
     }
 }
@@ -60,17 +60,17 @@ void ImportLibreOfficeAutocorrection::importAutoCorrectionFile()
     const KArchiveDirectory *archiveDirectory = mArchive->directory();
     // Replace word
     if (!importFile(DOCUMENT, archiveDirectory)) {
-        qWarning()<<Q_FUNC_INFO << " Impossible to import DOCUMENT"<<mArchive->fileName();
+        qWarning() << Q_FUNC_INFO << " Impossible to import DOCUMENT" << mArchive->fileName();
     }
 
     // No tread as end of line
     if (!importFile(SENTENCE, archiveDirectory)) {
-        qWarning()<<Q_FUNC_INFO << " Impossible to import SENTENCE"<<mArchive->fileName();
+        qWarning() << Q_FUNC_INFO << " Impossible to import SENTENCE" << mArchive->fileName();
     }
 
     // Two upper letter
     if (!importFile(WORD, archiveDirectory)) {
-        qWarning()<<Q_FUNC_INFO << " Impossible to import WORD"<<mArchive->fileName();
+        qWarning() << Q_FUNC_INFO << " Impossible to import WORD" << mArchive->fileName();
     }
 }
 
@@ -98,13 +98,13 @@ bool ImportLibreOfficeAutocorrection::importFile(Type type, const KArchiveDirect
         archiveFile->copyTo(mTempDir->path());
         QFile file(mTempDir->path() + QLatin1Char('/') + archiveFileName);
         if (!file.open(QIODevice::ReadOnly)) {
-            qWarning()<<Q_FUNC_INFO << "Impossible to open " << file.fileName();
+            qWarning() << Q_FUNC_INFO << "Impossible to open " << file.fileName();
         }
         QDomDocument doc;
         if (loadDomElement(doc, &file)) {
             QDomElement list = doc.documentElement();
             if (list.isNull()) {
-                qWarning()<<Q_FUNC_INFO << "No list defined in " << type;
+                qWarning() << Q_FUNC_INFO << "No list defined in " << type;
             } else {
                 for (QDomElement e = list.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
                     const QString tag = e.tagName();
@@ -129,7 +129,7 @@ bool ImportLibreOfficeAutocorrection::importFile(Type type, const KArchiveDirect
                             break;
                         }
                     } else {
-                        qWarning()<<Q_FUNC_INFO << " unknown tag " << tag;
+                        qWarning() << Q_FUNC_INFO << " unknown tag " << tag;
                     }
                 }
             }
@@ -146,7 +146,7 @@ bool ImportLibreOfficeAutocorrection::loadDomElement(QDomDocument &doc, QFile *f
     int errorRow;
     int errorCol;
     if (!doc.setContent(file, &errorMsg, &errorRow, &errorCol)) {
-        qWarning()<<Q_FUNC_INFO << "Unable to load document.Parse error in line " << errorRow << ", col " << errorCol << ": " << errorMsg;
+        qWarning() << Q_FUNC_INFO << "Unable to load document.Parse error in line " << errorRow << ", col " << errorCol << ": " << errorMsg;
         return false;
     }
     return true;

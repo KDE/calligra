@@ -51,9 +51,9 @@
 #include <KoZoomHandler.h>
 
 // Sheets
-#include "engine/SheetsDebug.h"
 #include "core/Cell.h"
 #include "core/Sheet.h"
+#include "engine/SheetsDebug.h"
 #include "ui/Selection.h"
 
 #define MIN_SIZE 10
@@ -73,9 +73,9 @@ public:
  ****************************************************************/
 
 Canvas::Canvas(View *view)
-        : QWidget(view)
-        , CanvasBase(view ? view->doc() : 0)
-        , cd(new Private)
+    : QWidget(view)
+    , CanvasBase(view ? view->doc() : 0)
+    , cd(new Private)
 {
     cd->view = view;
 
@@ -85,28 +85,28 @@ Canvas::Canvas(View *view)
     QWidget::setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
 
-    installEventFilter(this);   // for TAB key processing, otherwise focus change
+    installEventFilter(this); // for TAB key processing, otherwise focus change
     setAcceptDrops(true);
     setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
 }
 
 Canvas::~Canvas()
 {
-    foreach (QAction* action, actions()) {
+    foreach (QAction *action, actions()) {
         removeAction(action);
     }
 
     delete cd;
 }
 
-View* Canvas::view() const
+View *Canvas::view() const
 {
     return cd->view;
 }
 
 void Canvas::validateSelection()
 {
-     Sheet * const sheet = activeSheet();
+    Sheet *const sheet = activeSheet();
     if (!sheet)
         return;
 
@@ -132,7 +132,7 @@ void Canvas::validateSelection()
             const double xpos = sheet->columnPosition(cell.column()) + cell.width();
             const double ypos = sheet->rowPosition(cell.row()) + cell.height();
             const QPointF position = QPointF(xpos, ypos) - offset();
-            QToolTip::showText( view()->mapToGlobal( QPoint( position.x(), position.y() ) ), resultText );
+            QToolTip::showText(view()->mapToGlobal(QPoint(position.x(), position.y())), resultText);
         } else {
             QToolTip::hideText();
         }
@@ -141,11 +141,10 @@ void Canvas::validateSelection()
     }
 }
 
-
-void Canvas::mousePressEvent(QMouseEvent* event)
+void Canvas::mousePressEvent(QMouseEvent *event)
 {
-    //KoPointerEvent pev(event, QPointF());
-    //mousePressed(&pev);
+    // KoPointerEvent pev(event, QPointF());
+    // mousePressed(&pev);
 
     QMouseEvent *const origEvent = event;
     QPointF documentPosition;
@@ -166,7 +165,7 @@ void Canvas::mousePressEvent(QMouseEvent* event)
         debugSheets << "newEvent->globalPos():" << event->globalPos();
     }
 
-#if 0  // This is disabled for now as per irc, as it blocks resize.
+#if 0 // This is disabled for now as per irc, as it blocks resize.
     // If the celltool is not active and we initiate a click on something that is not a flake element, we need
     // to reactivate the cell tool. THis is a temporary solution, pending the flake updates.
     if (KoToolManager::instance()->activeToolId() != "KSpreadCellToolId")
@@ -175,7 +174,7 @@ void Canvas::mousePressEvent(QMouseEvent* event)
 #endif
 
     // flake
-    if(d->toolProxy) {
+    if (d->toolProxy) {
         d->toolProxy->mousePressEvent(event, documentPosition);
 
         if (!event->isAccepted() && event->button() == Qt::RightButton) {
@@ -188,12 +187,12 @@ void Canvas::mousePressEvent(QMouseEvent* event)
     }
 }
 
-void Canvas::showContextMenu(const QPoint& globalPos)
+void Canvas::showContextMenu(const QPoint &globalPos)
 {
     view()->unplugActionList("toolproxy_action_list");
     view()->plugActionList("toolproxy_action_list", toolProxy()->popupActionList());
     if (KXMLGUIFactory *factory = view()->factory()) {
-        QMenu* menu = dynamic_cast<QMenu*>(factory->container("default_canvas_popup", view()));
+        QMenu *menu = dynamic_cast<QMenu *>(factory->container("default_canvas_popup", view()));
         // Only show the menu, if there are items. The plugged action list counts as one action.
         if (menu && menu->actions().count() > 1) {
             menu->exec(globalPos);
@@ -201,10 +200,10 @@ void Canvas::showContextMenu(const QPoint& globalPos)
     }
 }
 
-void Canvas::mouseReleaseEvent(QMouseEvent* event)
+void Canvas::mouseReleaseEvent(QMouseEvent *event)
 {
-//    KoPointerEvent pev(event, QPointF());
-//    mouseReleased(&pev);
+    //    KoPointerEvent pev(event, QPointF());
+    //    mouseReleased(&pev);
 
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
@@ -217,18 +216,18 @@ void Canvas::mouseReleaseEvent(QMouseEvent* event)
     }
 
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy)
         d->toolProxy->mouseReleaseEvent(event, documentPosition);
 
     if (layoutDirection() == Qt::RightToLeft) {
-       delete event;
+        delete event;
     }
 }
 
-void Canvas::mouseMoveEvent(QMouseEvent* event)
+void Canvas::mouseMoveEvent(QMouseEvent *event)
 {
-//    KoPointerEvent pev(event, QPointF());
-//    mouseMoved(&pev);
+    //    KoPointerEvent pev(event, QPointF());
+    //    mouseMoved(&pev);
 
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
@@ -241,18 +240,18 @@ void Canvas::mouseMoveEvent(QMouseEvent* event)
     }
 
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy)
         d->toolProxy->mouseMoveEvent(event, documentPosition);
 
     if (layoutDirection() == Qt::RightToLeft) {
-       delete event;
+        delete event;
     }
 }
 
-void Canvas::mouseDoubleClickEvent(QMouseEvent* event)
+void Canvas::mouseDoubleClickEvent(QMouseEvent *event)
 {
-//    KoPointerEvent pev(event, QPointF());
-//    mouseDoubleClicked(&pev);
+    //    KoPointerEvent pev(event, QPointF());
+    //    mouseDoubleClicked(&pev);
 
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
@@ -271,7 +270,7 @@ void Canvas::mouseDoubleClickEvent(QMouseEvent* event)
         // TODO: figure out a way to make the flake's functionality work. It'd likely require turning the main app
         // widget into a KoShape or something along those lines.
         if (KoToolManager::instance()->activeToolId() != "KSpreadCellToolId") {
-            if (!shapeManager()->shapeAt (documentPosition, KoFlake::ShapeOnTop)) {
+            if (!shapeManager()->shapeAt(documentPosition, KoFlake::ShapeOnTop)) {
                 KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
                 return;
             }
@@ -281,34 +280,33 @@ void Canvas::mouseDoubleClickEvent(QMouseEvent* event)
     }
 
     if (layoutDirection() == Qt::RightToLeft) {
-       // delete event;
+        // delete event;
     }
-
 }
 
 bool Canvas::event(QEvent *e)
 {
-    if(toolProxy()) {
+    if (toolProxy()) {
         toolProxy()->processEvent(e);
     }
     return QWidget::event(e);
 }
 
-void Canvas::paintEvent(QPaintEvent* event)
+void Canvas::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     paint(&painter, event->rect());
     event->accept();
 }
 
-void Canvas::dragEnterEvent(QDragEnterEvent* event)
+void Canvas::dragEnterEvent(QDragEnterEvent *event)
 {
     if (CanvasBase::dragEnter(event->mimeData())) {
         event->acceptProposedAction();
     }
 }
 
-void Canvas::dragMoveEvent(QDragMoveEvent* event)
+void Canvas::dragMoveEvent(QDragMoveEvent *event)
 {
     if (CanvasBase::dragMove(event->mimeData(), event->pos(), event->source())) {
         event->acceptProposedAction();
@@ -317,7 +315,7 @@ void Canvas::dragMoveEvent(QDragMoveEvent* event)
     }
 }
 
-void Canvas::dragLeaveEvent(QDragLeaveEvent*)
+void Canvas::dragLeaveEvent(QDragLeaveEvent *)
 {
     CanvasBase::dragLeave();
 }
@@ -333,22 +331,24 @@ void Canvas::dropEvent(QDropEvent *event)
 
 void Canvas::setVertScrollBarPos(qreal pos)
 {
-    if (pos < 0) pos = view()->vertScrollBar()->maximum() - pos;
+    if (pos < 0)
+        pos = view()->vertScrollBar()->maximum() - pos;
     view()->vertScrollBar()->setValue((int)pos);
 }
 
 void Canvas::setHorizScrollBarPos(qreal pos)
 {
-    if (pos < 0) pos = view()->horzScrollBar()->maximum() - pos;
+    if (pos < 0)
+        pos = view()->horzScrollBar()->maximum() - pos;
     view()->horzScrollBar()->setValue((int)pos);
 }
 
-KoZoomHandler* Canvas::zoomHandler() const
+KoZoomHandler *Canvas::zoomHandler() const
 {
     return view()->zoomHandler();
 }
 
-Sheet* Canvas::activeSheet() const
+Sheet *Canvas::activeSheet() const
 {
     return view()->activeSheet();
 }
@@ -358,22 +358,22 @@ bool Canvas::isViewLoading() const
     return view()->isLoading();
 }
 
-SheetView* Canvas::sheetView(Sheet* sheet) const
+SheetView *Canvas::sheetView(Sheet *sheet) const
 {
     return view()->sheetView(sheet);
 }
 
-Calligra::Sheets::Selection* Canvas::selection() const
+Calligra::Sheets::Selection *Canvas::selection() const
 {
     return view()->selection();
 }
 
-ColumnHeader* Canvas::columnHeader() const
+ColumnHeader *Canvas::columnHeader() const
 {
     return view()->columnHeader();
 }
 
-RowHeader* Canvas::rowHeader() const
+RowHeader *Canvas::rowHeader() const
 {
     return view()->rowHeader();
 }

@@ -5,13 +5,13 @@
  */
 
 #include "SvgCssHelper.h"
-#include <KoXmlReader.h>
 #include <FlakeDebug.h>
+#include <KoXmlReader.h>
 #include <QPair>
 
 /// Token types used for tokenizing complex selectors
 enum CssTokenType {
-    SelectorToken,  ///< a selector token
+    SelectorToken, ///< a selector token
     CombinatorToken ///< a combinator token
 };
 
@@ -22,16 +22,24 @@ typedef QPair<CssTokenType, QString> CssToken;
 class CssSelectorBase
 {
 public:
-    virtual ~CssSelectorBase() {}
+    virtual ~CssSelectorBase()
+    {
+    }
     /// Matches the given element
     virtual bool match(const KoXmlElement &) = 0;
     /// Returns string representation of selector
-    virtual QString toString() const { return QString(); }
+    virtual QString toString() const
+    {
+        return QString();
+    }
     /**
      * Returns priority of selector
      * see http://www.w3.org/TR/1998/REC-CSS2-19980512/cascade.html#specificity
      */
-    virtual int priority() { return 0; }
+    virtual int priority()
+    {
+        return 0;
+    }
 };
 
 /// Universal selector, matching anything
@@ -54,7 +62,7 @@ class TypeSelector : public CssSelectorBase
 {
 public:
     TypeSelector(const QString &type)
-    : m_type(type)
+        : m_type(type)
     {
     }
     bool match(const KoXmlElement &e) override
@@ -79,7 +87,7 @@ class IdSelector : public CssSelectorBase
 {
 public:
     IdSelector(const QString &id)
-    : m_id(id)
+        : m_id(id)
     {
         if (id.startsWith('#'))
             m_id = id.mid(1);
@@ -90,12 +98,13 @@ public:
     }
     QString toString() const override
     {
-        return '#'+m_id;
+        return '#' + m_id;
     }
     int priority() override
     {
         return 100;
     }
+
 private:
     QString m_id;
 };
@@ -105,31 +114,31 @@ class AttributeSelector : public CssSelectorBase
 {
 public:
     AttributeSelector(const QString &attribute)
-    : m_type(Unknown)
+        : m_type(Unknown)
     {
         QString pattern = attribute;
         if (pattern.startsWith('['))
-            pattern.remove(0,1);
+            pattern.remove(0, 1);
         if (pattern.endsWith(']'))
-            pattern.remove(pattern.length()-1,1);
+            pattern.remove(pattern.length() - 1, 1);
         int equalPos = pattern.indexOf('=');
         if (equalPos == -1) {
             m_type = Exists;
             m_attribute = pattern;
-        } else if (equalPos > 0){
-            if (pattern[equalPos-1] == '~') {
-                m_attribute = pattern.left(equalPos-1);
+        } else if (equalPos > 0) {
+            if (pattern[equalPos - 1] == '~') {
+                m_attribute = pattern.left(equalPos - 1);
                 m_type = InList;
-            } else if(pattern[equalPos-1] == '|') {
-                m_attribute = pattern.left(equalPos-1) + '-';
+            } else if (pattern[equalPos - 1] == '|') {
+                m_attribute = pattern.left(equalPos - 1) + '-';
                 m_type = StartsWith;
             } else {
                 m_attribute = pattern.left(equalPos);
                 m_type = Equals;
             }
-            m_value = pattern.mid(equalPos+1);
+            m_value = pattern.mid(equalPos + 1);
             if (m_value.startsWith(QLatin1Char('"')))
-                m_value.remove(0,1);
+                m_value.remove(0, 1);
             if (m_value.endsWith(QLatin1Char('"')))
                 m_value.chop(1);
         }
@@ -137,24 +146,22 @@ public:
 
     bool match(const KoXmlElement &e) override
     {
-        switch(m_type) {
-            case Exists:
-                return e.hasAttribute(m_attribute);
-                break;
-            case Equals:
-                return e.attribute(m_attribute) == m_value;
-                break;
-            case InList:
-                {
-                    QStringList tokens = e.attribute(m_attribute).split(' ', Qt::SkipEmptyParts);
-                    return tokens.contains(m_value);
-                }
-                break;
-            case StartsWith:
-                return e.attribute(m_attribute).startsWith(m_value);
-                break;
-            default:
-                return false;
+        switch (m_type) {
+        case Exists:
+            return e.hasAttribute(m_attribute);
+            break;
+        case Equals:
+            return e.attribute(m_attribute) == m_value;
+            break;
+        case InList: {
+            QStringList tokens = e.attribute(m_attribute).split(' ', Qt::SkipEmptyParts);
+            return tokens.contains(m_value);
+        } break;
+        case StartsWith:
+            return e.attribute(m_attribute).startsWith(m_value);
+            break;
+        default:
+            return false;
         }
     }
     QString toString() const override
@@ -179,10 +186,10 @@ public:
 
 private:
     enum MatchType {
-        Unknown,   ///< unknown    -> error state
-        Exists,    ///< [att]      -> attribute exists
-        Equals,    ///< [att=val]  -> attribute value matches exactly val
-        InList,    ///< [att~=val] -> attribute is whitespace separated list where one is val
+        Unknown, ///< unknown    -> error state
+        Exists, ///< [att]      -> attribute exists
+        Equals, ///< [att=val]  -> attribute value matches exactly val
+        InList, ///< [att~=val] -> attribute is whitespace separated list where one is val
         StartsWith ///< [att|=val] -> attribute starts with val-
     };
     QString m_attribute;
@@ -195,7 +202,7 @@ class PseudoClassSelector : public CssSelectorBase
 {
 public:
     PseudoClassSelector(const QString &pseudoClass)
-    : m_pseudoClass(pseudoClass)
+        : m_pseudoClass(pseudoClass)
     {
     }
 
@@ -207,7 +214,7 @@ public:
                 return false;
             }
             KoXmlNode firstChild = parent.firstChild();
-            while(!firstChild.isElement() || firstChild.isNull()) {
+            while (!firstChild.isElement() || firstChild.isNull()) {
                 firstChild = firstChild.nextSibling();
             }
             return firstChild == e;
@@ -233,7 +240,7 @@ class CssSimpleSelector : public CssSelectorBase
 {
 public:
     CssSimpleSelector(const QString &token)
-    : m_token(token)
+        : m_token(token)
     {
         compile();
     }
@@ -244,7 +251,7 @@ public:
 
     bool match(const KoXmlElement &e) override
     {
-        foreach(CssSelectorBase *s, m_selectors) {
+        foreach (CssSelectorBase *s, m_selectors) {
             if (!s->match(e))
                 return false;
         }
@@ -255,7 +262,7 @@ public:
     QString toString() const override
     {
         QString str;
-        foreach(CssSelectorBase *s, m_selectors) {
+        foreach (CssSelectorBase *s, m_selectors) {
             str += s->toString();
         }
         return str;
@@ -263,7 +270,7 @@ public:
     int priority() override
     {
         int p = 0;
-        foreach(CssSelectorBase *s, m_selectors) {
+        foreach (CssSelectorBase *s, m_selectors) {
             p += s->priority();
         }
         return p;
@@ -277,16 +284,7 @@ private:
             return;
         }
 
-        enum {
-            Start,
-            Finish,
-            Bad,
-            InType,
-            InId,
-            InAttribute,
-            InClassAttribute,
-            InPseudoClass
-        } state;
+        enum { Start, Finish, Bad, InType, InId, InAttribute, InClassAttribute, InPseudoClass } state;
 
         // add terminator to string
         QString expr = m_token + QChar();
@@ -296,71 +294,71 @@ private:
         QString token;
         QString sep("#[:.");
         // split into base selectors
-        while((state != Finish) && (state != Bad) && (i < expr.length())) {
+        while ((state != Finish) && (state != Bad) && (i < expr.length())) {
             QChar ch = expr[i];
-            switch(state) {
-                case Start:
+            switch (state) {
+            case Start:
+                token += ch;
+                if (ch == '#')
+                    state = InId;
+                else if (ch == '[')
+                    state = InAttribute;
+                else if (ch == ':')
+                    state = InPseudoClass;
+                else if (ch == '.')
+                    state = InClassAttribute;
+                else if (ch != '*')
+                    state = InType;
+                break;
+            case InAttribute:
+                if (ch.isNull()) {
+                    // reset state and token string
+                    state = Finish;
+                    token.clear();
+                    continue;
+                } else {
                     token += ch;
-                    if (ch == '#')
-                        state = InId;
-                    else if (ch == '[')
-                        state = InAttribute;
-                    else if (ch == ':')
-                        state = InPseudoClass;
-                    else if (ch == '.')
-                        state = InClassAttribute;
-                    else if (ch != '*')
-                        state = InType;
-                    break;
-                case InAttribute:
-                    if (ch.isNull()) {
-                        // reset state and token string
-                        state = Finish;
+                    if (ch == ']') {
+                        m_selectors.append(new AttributeSelector(token));
+                        state = Start;
                         token.clear();
-                        continue;
-                    } else {
+                    }
+                }
+                break;
+            case InType:
+            case InId:
+            case InClassAttribute:
+            case InPseudoClass:
+                // are we at the start of the next selector or even finished?
+                if (sep.contains(ch) || ch.isNull()) {
+                    if (state == InType)
+                        m_selectors.append(new TypeSelector(token));
+                    else if (state == InId)
+                        m_selectors.append(new IdSelector(token));
+                    else if (state == InClassAttribute)
+                        m_selectors.append(new AttributeSelector("[class~=" + token.mid(1) + ']'));
+                    else if (state == InPseudoClass) {
+                        m_selectors.append(new PseudoClassSelector(token));
+                    }
+                    // reset state and token string
+                    state = ch.isNull() ? Finish : Start;
+                    token.clear();
+                    continue;
+                } else {
+                    // append character to current token
+                    if (!ch.isNull())
                         token += ch;
-                        if (ch == ']') {
-                            m_selectors.append(new AttributeSelector(token));
-                            state = Start;
-                            token.clear();
-                        }
-                    }
-                    break;
-                case InType:
-                case InId:
-                case InClassAttribute:
-                case InPseudoClass:
-                    // are we at the start of the next selector or even finished?
-                    if (sep.contains(ch) || ch.isNull()) {
-                        if (state == InType)
-                            m_selectors.append(new TypeSelector(token));
-                        else if (state == InId)
-                            m_selectors.append(new IdSelector(token));
-                        else if ( state == InClassAttribute)
-                            m_selectors.append(new AttributeSelector("[class~="+token.mid(1)+']'));
-                        else if (state == InPseudoClass) {
-                            m_selectors.append(new PseudoClassSelector(token));
-                        }
-                        // reset state and token string
-                        state = ch.isNull() ? Finish : Start;
-                        token.clear();
-                        continue;
-                    } else {
-                        // append character to current token
-                        if (!ch.isNull())
-                            token += ch;
-                    }
-                    break;
-                case Bad:
-                default:
-                    break;
+                }
+                break;
+            case Bad:
+            default:
+                break;
             }
             i++;
         }
     }
 
-    QList<CssSelectorBase*> m_selectors;
+    QList<CssSelectorBase *> m_selectors;
     QString m_token;
 };
 
@@ -381,9 +379,8 @@ public:
         QString str;
         int selectorCount = m_selectors.count();
         if (selectorCount) {
-            for(int i = 0; i < selectorCount-1; ++i) {
-                str += m_selectors[i]->toString() +
-                       m_combinators[i];
+            for (int i = 0; i < selectorCount - 1; ++i) {
+                str += m_selectors[i]->toString() + m_combinators[i];
             }
             str += m_selectors.last()->toString();
         }
@@ -395,28 +392,28 @@ public:
         int selectorCount = m_selectors.count();
         int combinatorCount = m_combinators.length();
         // check count of selectors and combinators
-        if (selectorCount-combinatorCount != 1)
+        if (selectorCount - combinatorCount != 1)
             return false;
 
         KoXmlElement currentElement = e;
 
         // match in reverse order
-        for(int i = 0; i < selectorCount; ++i) {
-            CssSelectorBase * curr = m_selectors[selectorCount-1-i];
+        for (int i = 0; i < selectorCount; ++i) {
+            CssSelectorBase *curr = m_selectors[selectorCount - 1 - i];
             if (!curr->match(currentElement)) {
                 return false;
             }
             // last selector and still there -> rule matched completely
-            if(i == selectorCount-1)
+            if (i == selectorCount - 1)
                 return true;
 
-            CssSelectorBase * next = m_selectors[selectorCount-1-i-1];
-            QChar combinator = m_combinators[combinatorCount-1-i];
+            CssSelectorBase *next = m_selectors[selectorCount - 1 - i - 1];
+            QChar combinator = m_combinators[combinatorCount - 1 - i];
             if (combinator == ' ') {
                 bool matched = false;
                 // descendant combinator
                 KoXmlNode parent = currentElement.parentNode();
-                while(!parent.isNull()) {
+                while (!parent.isNull()) {
                     currentElement = parent.toElement();
                     if (next->match(currentElement)) {
                         matched = true;
@@ -424,7 +421,7 @@ public:
                     }
                     parent = currentElement.parentNode();
                 }
-                if(!matched)
+                if (!matched)
                     return false;
             } else if (combinator == '>') {
                 // child selector
@@ -439,7 +436,7 @@ public:
                 }
             } else if (combinator == '+') {
                 KoXmlNode neighbor = currentElement.previousSibling();
-                while(!neighbor.isNull() && !neighbor.isElement())
+                while (!neighbor.isNull() && !neighbor.isElement())
                     neighbor = neighbor.previousSibling();
                 if (neighbor.isNull() || !neighbor.isElement())
                     return false;
@@ -458,7 +455,7 @@ public:
     int priority() override
     {
         int p = 0;
-        foreach(CssSelectorBase *s, m_selectors) {
+        foreach (CssSelectorBase *s, m_selectors) {
             p += s->priority();
         }
         return p;
@@ -467,8 +464,8 @@ public:
 private:
     void compile(const QList<CssToken> &tokens)
     {
-        foreach(const CssToken &token, tokens) {
-            if(token.first == SelectorToken) {
+        foreach (const CssToken &token, tokens) {
+            if (token.first == SelectorToken) {
                 m_selectors.append(new CssSimpleSelector(token.second));
             } else {
                 m_combinators += token.second;
@@ -477,11 +474,11 @@ private:
     }
 
     QString m_combinators;
-    QList<CssSelectorBase*> m_selectors;
+    QList<CssSelectorBase *> m_selectors;
 };
 
 /// A group of selectors (comma separated in css style sheet)
-typedef QList<CssSelectorBase*> SelectorGroup;
+typedef QList<CssSelectorBase *> SelectorGroup;
 /// A css rule consisting of group of selectors corresponding to a style
 typedef QPair<SelectorGroup, QString> CssRule;
 
@@ -490,7 +487,7 @@ class SvgCssHelper::Private
 public:
     ~Private()
     {
-        foreach(const CssRule &rule, cssRules) {
+        foreach (const CssRule &rule, cssRules) {
             qDeleteAll(rule.first);
         }
     }
@@ -500,8 +497,8 @@ public:
         SelectorGroup group;
 
         QStringList selectors = pattern.split(',', Qt::SkipEmptyParts);
-        for (int i = 0; i < selectors.count(); ++i ) {
-            CssSelectorBase * selector = compileSelector(selectors[i].simplified());
+        for (int i = 0; i < selectors.count(); ++i) {
+            CssSelectorBase *selector = compileSelector(selectors[i].simplified());
             if (selector)
                 group.append(selector);
         }
@@ -512,12 +509,7 @@ public:
     {
         // add terminator to string
         QString expr = selector + QChar();
-        enum {
-            Finish,
-            Bad,
-            InCombinator,
-            InSelector
-        } state;
+        enum { Finish, Bad, InCombinator, InSelector } state;
 
         QChar combinator;
         int selectorStart = 0;
@@ -535,42 +527,42 @@ public:
         int i = 1;
 
         // split into simple selectors and combinators
-        while((state != Finish) && (state != Bad) && (i < expr.length())) {
+        while ((state != Finish) && (state != Bad) && (i < expr.length())) {
             QChar ch = expr[i];
-            switch(state) {
-                case InCombinator:
-                    // consume as long as there a combinator characters
-                    if( ch == '>' || ch == '+') {
-                        if( ! combinator.isSpace() ) {
-                            // two non whitespace combinators in sequence are not allowed
-                            state = Bad;
-                        } else {
-                            // switch combinator
-                            combinator = ch;
-                        }
-                    } else if (!ch.isSpace()) {
-                        tokenList.append(CssToken(CombinatorToken, combinator));
-                        state = InSelector;
-                        selectorStart = i;
-                        combinator = QChar();
-                    }
-                    break;
-                case InSelector:
-                    // consume as long as there a non combinator characters
-                    if (ch.isSpace() || ch == '>' || ch == '+') {
-                        state = InCombinator;
+            switch (state) {
+            case InCombinator:
+                // consume as long as there a combinator characters
+                if (ch == '>' || ch == '+') {
+                    if (!combinator.isSpace()) {
+                        // two non whitespace combinators in sequence are not allowed
+                        state = Bad;
+                    } else {
+                        // switch combinator
                         combinator = ch;
-                    } else if (ch.isNull()) {
-                        state = Finish;
                     }
-                    if (state != InSelector) {
-                        QString simpleSelector = selector.mid(selectorStart, i-selectorStart);
-                        tokenList.append(CssToken(SelectorToken, simpleSelector));
-                    }
-                    break;
-                case Bad:
-                default:
-                    break;
+                } else if (!ch.isSpace()) {
+                    tokenList.append(CssToken(CombinatorToken, combinator));
+                    state = InSelector;
+                    selectorStart = i;
+                    combinator = QChar();
+                }
+                break;
+            case InSelector:
+                // consume as long as there a non combinator characters
+                if (ch.isSpace() || ch == '>' || ch == '+') {
+                    state = InCombinator;
+                    combinator = ch;
+                } else if (ch.isNull()) {
+                    state = Finish;
+                }
+                if (state != InSelector) {
+                    QString simpleSelector = selector.mid(selectorStart, i - selectorStart);
+                    tokenList.append(CssToken(SelectorToken, simpleSelector));
+                }
+                break;
+            case Bad:
+            default:
+                break;
             }
             i++;
         }
@@ -578,7 +570,7 @@ public:
         return tokenList;
     }
 
-    CssSelectorBase * compileSelector(const QString &selector)
+    CssSelectorBase *compileSelector(const QString &selector)
     {
         QList<CssToken> tokenList = tokenize(selector);
         if (tokenList.isEmpty())
@@ -599,7 +591,7 @@ public:
 };
 
 SvgCssHelper::SvgCssHelper()
-: d(new Private())
+    : d(new Private())
 {
 }
 
@@ -626,13 +618,14 @@ void SvgCssHelper::parseStylesheet(const KoXmlElement &e)
         return;
 
     // remove comments
-    QRegularExpression commentExp(QStringLiteral("\\/\\*.*\\*\\/"), QRegularExpression::DotMatchesEverythingOption | QRegularExpression::InvertedGreedinessOption);
+    QRegularExpression commentExp(QStringLiteral("\\/\\*.*\\*\\/"),
+                                  QRegularExpression::DotMatchesEverythingOption | QRegularExpression::InvertedGreedinessOption);
     data.remove(commentExp);
 
     QStringList defs = data.split('}', Qt::SkipEmptyParts);
     for (int i = 0; i < defs.count(); ++i) {
         QStringList def = defs[i].split('{');
-        if( def.count() != 2 )
+        if (def.count() != 2)
             continue;
         QString pattern = def[0].simplified();
         if (pattern.isEmpty())
@@ -641,7 +634,7 @@ void SvgCssHelper::parseStylesheet(const KoXmlElement &e)
         if (style.isEmpty())
             break;
         QStringList selectors = pattern.split(',', Qt::SkipEmptyParts);
-        for (int i = 0; i < selectors.count(); ++i ) {
+        for (int i = 0; i < selectors.count(); ++i) {
             QString selector = selectors[i].simplified();
             d->cssStyles[selector] = style;
         }
@@ -654,8 +647,8 @@ QStringList SvgCssHelper::matchStyles(const KoXmlElement &element) const
 {
     QMap<int, QString> prioritizedRules;
     // match rules to element
-    foreach(const CssRule &rule, d->cssRules) {
-        foreach(CssSelectorBase *s, rule.first) {
+    foreach (const CssRule &rule, d->cssRules) {
+        foreach (CssSelectorBase *s, rule.first) {
             bool matched = s->match(element);
             if (matched)
                 prioritizedRules[s->priority()] = rule.second;

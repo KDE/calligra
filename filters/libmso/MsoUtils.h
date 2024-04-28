@@ -21,13 +21,11 @@ namespace MSO
 {
 
 //! @return QColor value for DefaultIndexColor
-QColor defaultIndexedColor( int index );
+QColor defaultIndexedColor(int index);
 
 //! @return QLocale for the give language id
 QLocale localeForLangId(int langid);
 
-
 }; // namespace MSO
-
 
 #endif /* MSOUTILS_H */

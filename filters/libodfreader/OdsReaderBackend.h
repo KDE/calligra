@@ -9,21 +9,19 @@
 #define ODSREADERBACKEND_H
 
 // Calligra
-#include <KoXmlStreamReader.h>
 #include <KoFilter.h>
+#include <KoXmlStreamReader.h>
 
 // this library
-#include "koodfreader_export.h"
-#include "OdsReader.h"
 #include "OdfReaderBackend.h"
 #include "OdfReaderInternals.h"
-
+#include "OdsReader.h"
+#include "koodfreader_export.h"
 
 class QByteArray;
 class QSizeF;
 class KoStore;
 class OdfReaderContext;
-
 
 /** @brief A default backend for the OdsReader class.
  *
@@ -57,7 +55,7 @@ class OdfReaderContext;
  */
 class KOODFREADER_EXPORT OdsReaderBackend : public OdfReaderBackend
 {
- public:
+public:
     explicit OdsReaderBackend();
     ~OdsReaderBackend() override;
 
@@ -66,10 +64,9 @@ class KOODFREADER_EXPORT OdsReaderBackend : public OdfReaderBackend
 
     DECLARE_BACKEND_FUNCTION(OfficeSpreadsheet);
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif // ODSREADERBACKEND_H

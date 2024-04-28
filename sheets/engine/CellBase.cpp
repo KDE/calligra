@@ -26,11 +26,9 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Local
 #include "CellBase.h"
 #include "CellBaseStorage.h"
-#include "calligra_sheets_limits.h"
 #include "Formula.h"
 #include "MapBase.h"
 #include "NamedAreaManager.h"
@@ -39,28 +37,32 @@
 #include "Value.h"
 #include "ValueConverter.h"
 #include "ValueParser.h"
-
+#include "calligra_sheets_limits.h"
 
 using namespace Calligra::Sheets;
 
 class Q_DECL_HIDDEN CellBase::Private : public QSharedData
 {
 public:
-    Private() : sheet(0), column(0), row(0) {}
+    Private()
+        : sheet(0)
+        , column(0)
+        , row(0)
+    {
+    }
 
-    SheetBase*  sheet;
-    unsigned int    column;
-    unsigned int    row;
+    SheetBase *sheet;
+    unsigned int column;
+    unsigned int row;
 };
 
-
 CellBase::CellBase()
-        : d(0)
+    : d(0)
 {
 }
 
-CellBase::CellBase(SheetBase* sheet, unsigned int col, unsigned int row)
-        : d(new Private)
+CellBase::CellBase(SheetBase *sheet, unsigned int col, unsigned int row)
+    : d(new Private)
 {
     Q_ASSERT(sheet != 0);
     Q_ASSERT_X(1 <= col && col <= KS_colMax, __FUNCTION__, QString("%1 out of bounds").arg(col).toLocal8Bit());
@@ -70,8 +72,8 @@ CellBase::CellBase(SheetBase* sheet, unsigned int col, unsigned int row)
     d->row = row;
 }
 
-CellBase::CellBase(SheetBase* sheet, const QPoint& pos)
-        : d(new Private)
+CellBase::CellBase(SheetBase *sheet, const QPoint &pos)
+    : d(new Private)
 {
     Q_ASSERT(sheet != 0);
     Q_ASSERT_X(1 <= pos.x() && pos.x() <= KS_colMax, __FUNCTION__, QString("%1 out of bounds").arg(pos.x()).toLocal8Bit());
@@ -81,8 +83,8 @@ CellBase::CellBase(SheetBase* sheet, const QPoint& pos)
     d->row = pos.y();
 }
 
-CellBase::CellBase(const CellBase& other)
-        : d(other.d)
+CellBase::CellBase(const CellBase &other)
+    : d(other.d)
 {
 }
 
@@ -96,7 +98,7 @@ bool CellBase::isNull() const
 }
 
 // Return the sheet that this cell belongs to.
-SheetBase* CellBase::sheet() const
+SheetBase *CellBase::sheet() const
 {
     Q_ASSERT(!isNull());
     return d->sheet;
@@ -109,7 +111,7 @@ int CellBase::column() const
     // can save you (could have saved me!) the hassle of some very
     // obscure bugs.
     Q_ASSERT(!isNull());
-    Q_ASSERT(1 <= d->column);   //&& d->column <= KS_colMax );
+    Q_ASSERT(1 <= d->column); //&& d->column <= KS_colMax );
     return d->column;
 }
 
@@ -120,7 +122,7 @@ int CellBase::row() const
     // can save you (could have saved me!) the hassle of some very
     // obscure bugs.
     Q_ASSERT(!isNull());
-    Q_ASSERT(1 <= d->row);   //&& d->row <= KS_rowMax );
+    Q_ASSERT(1 <= d->row); //&& d->row <= KS_rowMax );
     return d->row;
 }
 
@@ -164,17 +166,14 @@ QString CellBase::columnName() const
     return columnName(column());
 }
 
-
-
 // Return the value of this cell.
 const Value CellBase::value() const
 {
     return sheet()->cellStorage()->value(d->column, d->row);
 }
 
-
 // Set the value of this cell.
-void CellBase::setValue(const Value& value)
+void CellBase::setValue(const Value &value)
 {
     sheet()->cellStorage()->setValue(d->column, d->row, value);
 }
@@ -184,12 +183,13 @@ Formula CellBase::formula() const
     return sheet()->cellStorage()->formula(d->column, d->row);
 }
 
-void CellBase::setFormula(const Formula& formula)
+void CellBase::setFormula(const Formula &formula)
 {
     sheet()->cellStorage()->setFormula(column(), row(), formula);
     // Also set the existing value - this is needed for undo to receive the correct data
     // The error will be cleared as soon as dependency updates run
-    if (!formula.isEmpty()) setValue(Value::errorDEPEND());
+    if (!formula.isEmpty())
+        setValue(Value::errorDEPEND());
 }
 
 void CellBase::setCellValue(const Value &value)
@@ -209,7 +209,7 @@ QString CellBase::userInput() const
     return sheet()->cellStorage()->userInput(d->column, d->row);
 }
 
-void CellBase::setUserInput(const QString& string)
+void CellBase::setUserInput(const QString &string)
 {
     if (!string.isEmpty() && (string[0] == '=')) {
         // set the formula
@@ -224,10 +224,9 @@ void CellBase::setUserInput(const QString& string)
         // set the value
         sheet()->cellStorage()->setUserInput(column(), row(), string);
     }
-
 }
 
-Value CellBase::parsedUserInput(const QString& text)
+Value CellBase::parsedUserInput(const QString &text)
 {
     // Parses the text and return the appropriate value.
     Value value = sheet()->map()->parser()->parse(text);
@@ -241,7 +240,7 @@ Value CellBase::parsedUserInput(const QString& text)
 }
 
 // parses the text
-void CellBase::parseUserInput(const QString& text)
+void CellBase::parseUserInput(const QString &text)
 {
     // empty string?
     if (text.isEmpty()) {
@@ -255,14 +254,14 @@ void CellBase::parseUserInput(const QString& text)
         formula.setExpression(text);
         setFormula(formula);
 
-/*  This most likely isn't needed anymore ...
-        // parse the formula and check for errors
-        if (!formula.isValid()) {
-            sheet()->showStatusMessage(i18n("Parsing of formula in cell %1 failed.", fullName()));
-            setValue(Value::errorPARSE());
-            return;
-        }
-*/
+        /*  This most likely isn't needed anymore ...
+                // parse the formula and check for errors
+                if (!formula.isValid()) {
+                    sheet()->showStatusMessage(i18n("Parsing of formula in cell %1 failed.", fullName()));
+                    setValue(Value::errorPARSE());
+                    return;
+                }
+        */
         return;
     }
 
@@ -285,7 +284,7 @@ void CellBase::parseUserInput(const QString& text)
         Validity validity = this->validity();
         if (!validity.testValidity(this)) {
             debugSheetsODF << "Validation failed";
-            //reapply old value if action == stop
+            // reapply old value if action == stop
             setFormula(oldFormula);
             setUserInput(oldUserInput);
             setValue(oldValue);
@@ -293,7 +292,7 @@ void CellBase::parseUserInput(const QString& text)
     }
 }
 
-void CellBase::setRawUserInput(const QString& string)
+void CellBase::setRawUserInput(const QString &string)
 {
     if (!string.isEmpty() && string[0] == '=') {
         // set the formula
@@ -305,8 +304,6 @@ void CellBase::setRawUserInput(const QString& string)
         sheet()->cellStorage()->setUserInput(d->column, d->row, string);
     }
 }
-
-
 
 bool CellBase::isEmpty() const
 {
@@ -340,7 +337,7 @@ QString CellBase::comment() const
     return sheet()->cellStorage()->comment(d->column, d->row);
 }
 
-void CellBase::setComment(const QString& comment)
+void CellBase::setComment(const QString &comment)
 {
     sheet()->cellStorage()->setComment(d->column, d->row, comment);
 }
@@ -354,7 +351,6 @@ void CellBase::setValidity(Validity validity)
 {
     sheet()->cellStorage()->setValidity(Region(cellPosition()), validity);
 }
-
 
 QString CellBase::encodeFormula(bool fixedReferences) const
 {
@@ -435,7 +431,7 @@ QString CellBase::encodeFormula(bool fixedReferences) const
         }
         }
     }
-    //debugSheets << result;
+    // debugSheets << result;
     return result;
 }
 
@@ -456,7 +452,7 @@ QString CellBase::decodeFormula(const QString &_text) const
             while (pos < length && _text[pos] != quote) {
                 erg += _text[pos++];
                 // Allow escaped double quotes (\")
-                if (pos < length && _text[pos] == '\\' && _text[pos+1] == quote) {
+                if (pos < length && _text[pos] == '\\' && _text[pos + 1] == quote) {
                     erg += _text[pos++];
                     erg += _text[pos++];
                 }
@@ -477,7 +473,8 @@ QString CellBase::decodeFormula(const QString &_text) const
 
             int col = 0;
             unsigned int oldPos = pos;
-            while (pos < length && (_text[pos].isDigit() || _text[pos] == '-')) ++pos;
+            while (pos < length && (_text[pos].isDigit() || _text[pos] == '-'))
+                ++pos;
             if (pos != oldPos)
                 col = QStringView{_text}.mid(oldPos, pos - oldPos).toInt();
             if (!abs1 && !era1 && (!isNull()))
@@ -492,7 +489,8 @@ QString CellBase::decodeFormula(const QString &_text) const
 
             int _row = 0;
             oldPos = pos;
-            while (pos < length && (_text[pos].isDigit() || _text[pos] == '-')) ++pos;
+            while (pos < length && (_text[pos].isDigit() || _text[pos] == '-'))
+                ++pos;
             if (pos != oldPos)
                 _row = QStringView{_text}.mid(oldPos, pos - oldPos).toInt();
             if (!abs2 && !era2 && (!isNull()))
@@ -505,7 +503,7 @@ QString CellBase::decodeFormula(const QString &_text) const
             } else {
                 if (abs1)
                     erg += '$';
-                erg += CellBase::columnName(col); //Get column text
+                erg += CellBase::columnName(col); // Get column text
 
                 if (abs2)
                     erg += '$';
@@ -518,28 +516,17 @@ QString CellBase::decodeFormula(const QString &_text) const
     return erg;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // Return the symbolic name of any column.
 //
 // static
 QString CellBase::columnName(unsigned int column)
 {
-    if (column < 1)     //|| column > KS_colMax)
+    if (column < 1) //|| column > KS_colMax)
         return QString("@@@");
 
-    QString   str;
-    unsigned  digits = 1;
-    unsigned  offset = 0;
+    QString str;
+    unsigned digits = 1;
+    unsigned offset = 0;
 
     --column;
 
@@ -552,13 +539,13 @@ QString CellBase::columnName(unsigned int column)
     return str;
 }
 
-CellBase& CellBase::operator=(const CellBase & other)
+CellBase &CellBase::operator=(const CellBase &other)
 {
     d = other.d;
     return *this;
 }
 
-bool CellBase::operator<(const CellBase& other) const
+bool CellBase::operator<(const CellBase &other) const
 {
     if (sheet() != other.sheet())
         return sheet() < other.sheet(); // pointers!
@@ -567,14 +554,12 @@ bool CellBase::operator<(const CellBase& other) const
     return ((row() == other.row()) && (column() < other.column()));
 }
 
-bool CellBase::operator==(const CellBase& other) const
+bool CellBase::operator==(const CellBase &other) const
 {
     return (row() == other.row() && column() == other.column() && sheet() == other.sheet());
 }
 
 bool CellBase::operator!() const
 {
-    return (!d);   // isNull()
+    return (!d); // isNull()
 }
-
-

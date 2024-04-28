@@ -2,13 +2,13 @@
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef LabF32ColorSpace_H_
 #define LabF32ColorSpace_H_
 
-#include "LcmsColorSpace.h"
 #include "KoColorModelStandardIds.h"
+#include "LcmsColorSpace.h"
 
 // XXX: implement normalizedChannelValues?
 
@@ -40,11 +40,11 @@ public:
 
     void colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const override;
 
-    void colorFromXML(quint8* pixel, const QDomElement& elt) const override;
+    void colorFromXML(quint8 *pixel, const QDomElement &elt) const override;
     void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const override;
-    QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
+    QVector<double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
     void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const override;
-    QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
+    QVector<double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
 
     bool hasHighDynamicRange() const override
     {
@@ -83,7 +83,6 @@ public:
     KoID colorDepthId() const override
     {
         return Float32BitsColorDepthID;
-
     }
     int referenceDepth() const override
     {

@@ -20,12 +20,11 @@
 #include <kfontaction.h>
 #include <kfontsizeaction.h>
 
+#include "KoCanvasBase.h"
 #include "KoColor.h"
 #include "KoColorPopupAction.h"
-#include "KoCanvasBase.h"
 
 using namespace Calligra::Sheets;
-
 
 Font::Font(Actions *actions)
     : CellAction(actions, "font", i18n("Select Font..."), QIcon(), i18n("Set the cell font"))
@@ -36,7 +35,8 @@ Font::~Font()
 {
 }
 
-QAction *Font::createAction() {
+QAction *Font::createAction()
+{
     m_fontAction = new KFontAction(m_caption, m_actions->tool());
     m_fontAction->setToolTip(m_tooltip);
     m_fontAction->setIconText(i18n("Font"));
@@ -44,17 +44,19 @@ QAction *Font::createAction() {
     return m_fontAction;
 }
 
-void Font::updateOnChange(Selection *, const Cell &activeCell) {
+void Font::updateOnChange(Selection *, const Cell &activeCell)
+{
     const Style style = activeCell.style();
     m_fontAction->setFont(style.fontFamily());
 }
 
-void Font::triggeredFont(const QString &name) {
+void Font::triggeredFont(const QString &name)
+{
     CellToolBase *tool = m_actions->tool();
     Selection *selection = tool->selection();
     Sheet *sheet = selection->activeSheet();
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Font"));
     Style s;
@@ -73,7 +75,6 @@ void Font::triggeredFont(const QString &name) {
     }
 }
 
-
 FontSize::FontSize(Actions *actions)
     : CellAction(actions, "fontSize", i18n("Select Font Size"), QIcon(), i18n("Set the cell font size"))
 {
@@ -83,7 +84,8 @@ FontSize::~FontSize()
 {
 }
 
-QAction *FontSize::createAction() {
+QAction *FontSize::createAction()
+{
     m_fontAction = new KFontSizeAction(m_caption, m_actions->tool());
     m_fontAction->setIconText(i18n("Font Size"));
     m_fontAction->setToolTip(m_tooltip);
@@ -91,17 +93,19 @@ QAction *FontSize::createAction() {
     return m_fontAction;
 }
 
-void FontSize::updateOnChange(Selection *, const Cell &activeCell) {
+void FontSize::updateOnChange(Selection *, const Cell &activeCell)
+{
     const Style style = activeCell.style();
     m_fontAction->setFontSize(style.fontSize());
 }
 
-void FontSize::triggeredSize(int size) {
+void FontSize::triggeredSize(int size)
+{
     CellToolBase *tool = m_actions->tool();
     Selection *selection = tool->selection();
     Sheet *sheet = selection->activeSheet();
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Font"));
     Style s;
@@ -119,9 +123,7 @@ void FontSize::triggeredSize(int size) {
     } else {
         canvas->canvasWidget()->setFocus();
     }
-
 }
-
 
 FontColor::FontColor(Actions *actions)
     : CellAction(actions, "textColor", i18n("Text Color"), koIcon("format-text-color"), i18n("Set the text color"))
@@ -132,7 +134,8 @@ FontColor::~FontColor()
 {
 }
 
-QAction *FontColor::createAction() {
+QAction *FontColor::createAction()
+{
     m_fontAction = new KoColorPopupAction(m_actions->tool());
 
     m_fontAction->setText(m_caption);
@@ -142,12 +145,13 @@ QAction *FontColor::createAction() {
     return m_fontAction;
 }
 
-void FontColor::triggeredColor(const KoColor &color) {
+void FontColor::triggeredColor(const KoColor &color)
+{
     CellToolBase *tool = m_actions->tool();
     Selection *selection = tool->selection();
     Sheet *sheet = selection->activeSheet();
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Text Color"));
     Style s;
@@ -157,10 +161,8 @@ void FontColor::triggeredColor(const KoColor &color) {
     command->execute(selection->canvas());
 }
 
-void FontColor::updateOnChange(Selection *, const Cell &activeCell) {
+void FontColor::updateOnChange(Selection *, const Cell &activeCell)
+{
     const Style style = activeCell.style();
     m_fontAction->setCurrentColor(style.fontColor());
-
 }
-
-

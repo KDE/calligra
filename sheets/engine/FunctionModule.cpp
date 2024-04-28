@@ -13,13 +13,12 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN FunctionModule::Private
 {
 public:
-    QList<QSharedPointer<Function> > functions;
+    QList<QSharedPointer<Function>> functions;
 };
 
-
-FunctionModule::FunctionModule(QObject* parent)
-        : QObject(parent)
-        , d(new Private)
+FunctionModule::FunctionModule(QObject *parent)
+    : QObject(parent)
+    , d(new Private)
 {
 }
 
@@ -28,14 +27,14 @@ FunctionModule::~FunctionModule()
     delete d;
 }
 
-QList<QSharedPointer<Function> > FunctionModule::functions() const
+QList<QSharedPointer<Function>> FunctionModule::functions() const
 {
     return d->functions;
 }
 
 bool FunctionModule::isRemovable()
 {
-    QList<Function*> checkedFunctions;
+    QList<Function *> checkedFunctions;
     QWeakPointer<Function> weakPointer;
     while (d->functions.count() != 0) {
         weakPointer = d->functions.last().toWeakRef();
@@ -45,7 +44,7 @@ bool FunctionModule::isRemovable()
             d->functions.append(weakPointer.toStrongRef());
             // The failing on was used, so we do not put it in twice.
             checkedFunctions.removeLast();
-            for (Function* function : checkedFunctions) {
+            for (Function *function : checkedFunctions) {
                 // It is okay to recreate the shared pointers, as they were not used.
                 d->functions.append(QSharedPointer<Function>(function));
             }
@@ -60,7 +59,7 @@ QString FunctionModule::id() const
     return descriptionFileName();
 }
 
-void FunctionModule::add(Function* function)
+void FunctionModule::add(Function *function)
 {
     if (!function) {
         return;

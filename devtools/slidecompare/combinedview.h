@@ -14,34 +14,36 @@ class KPresenterSlideLoader;
 class OoThread;
 class QGridLayout;
 
-class CombinedView : public QWidget {
+class CombinedView : public QWidget
+{
 private:
-Q_OBJECT
-    QList<SlideView*> slideViews;
-    DirSlideLoader * const ooodploader;
-    KPresenterSlideLoader * const koodploader;
-    DirSlideLoader * const oopptloader;
-    KPresenterSlideLoader * const kopptloader;
-    SlideView * const ooodpview;
-    SlideView * const koodpview;
-    SlideView * const oopptview;
-    SlideView * const kopptview;
-    OoThread * const oothread;
-    QGridLayout * const layout;
+    Q_OBJECT
+    QList<SlideView *> slideViews;
+    DirSlideLoader *const ooodploader;
+    KPresenterSlideLoader *const koodploader;
+    DirSlideLoader *const oopptloader;
+    KPresenterSlideLoader *const kopptloader;
+    SlideView *const ooodpview;
+    SlideView *const koodpview;
+    SlideView *const oopptview;
+    SlideView *const kopptview;
+    OoThread *const oothread;
+    QGridLayout *const layout;
     QString ooodpresult;
     QString nextodpfile;
 
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
-    void addSlideView(SlideView* slideview);
+    void addSlideView(SlideView *slideview);
 private Q_SLOTS:
     void slotSetView(qreal zoomFactor, int h, int v);
-    void slotHandleOoOdp(const QString& path);
-    void slotHandleOoPng(const QString& path);
+    void slotHandleOoOdp(const QString &path);
+    void slotHandleOoPng(const QString &path);
+
 public:
-    explicit CombinedView(QWidget* parent=0);
+    explicit CombinedView(QWidget *parent = 0);
     ~CombinedView();
-    void openFile(const QString& path);
+    void openFile(const QString &path);
 };
 
 #endif

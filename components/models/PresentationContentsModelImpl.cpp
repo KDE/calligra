@@ -9,9 +9,9 @@
 
 #include "PresentationContentsModelImpl.h"
 
-#include <stage/part/KPrDocument.h>
 #include <KoPAPageBase.h>
 #include <KoPageLayout.h>
+#include <stage/part/KPrDocument.h>
 
 using namespace Calligra::Components;
 
@@ -19,18 +19,19 @@ class PresentationContentsModelImpl::Private
 {
 public:
     Private()
-    { }
+    {
+    }
 
-    KPrDocument* document;
+    KPrDocument *document;
 
     QHash<int, QImage> thumbnails;
     QSize thumbnailSize;
 };
 
-PresentationContentsModelImpl::PresentationContentsModelImpl(KoDocument* document)
+PresentationContentsModelImpl::PresentationContentsModelImpl(KoDocument *document)
     : d{new Private}
 {
-    d->document = qobject_cast<KPrDocument*>(document);
+    d->document = qobject_cast<KPrDocument *>(document);
     Q_ASSERT(d->document);
 }
 
@@ -46,33 +47,33 @@ int PresentationContentsModelImpl::rowCount() const
 
 QVariant PresentationContentsModelImpl::data(int index, ContentsModel::Role role) const
 {
-    KoPAPageBase* page = d->document->pageByIndex(index, false);
-    switch(role) {
-        case ContentsModel::TitleRole:
-            return QString("%1: %2").arg(index + 1).arg(page->name());
-        case ContentsModel::LevelRole:
-            return 0;
-        case ContentsModel::ThumbnailRole: {
-            if(d->thumbnails.contains(index)) {
-                return d->thumbnails.value(index);
-            }
-
-            if(d->thumbnailSize.isNull()) {
-                return QImage{};
-            }
-
-            QImage thumb = page->thumbImage(d->thumbnailSize);
-            d->thumbnails.insert(index, thumb);
-            return thumb;
+    KoPAPageBase *page = d->document->pageByIndex(index, false);
+    switch (role) {
+    case ContentsModel::TitleRole:
+        return QString("%1: %2").arg(index + 1).arg(page->name());
+    case ContentsModel::LevelRole:
+        return 0;
+    case ContentsModel::ThumbnailRole: {
+        if (d->thumbnails.contains(index)) {
+            return d->thumbnails.value(index);
         }
-        case ContentsModel::ContentIndexRole:
-            return index;
-        default:
-            return QVariant();
+
+        if (d->thumbnailSize.isNull()) {
+            return QImage{};
+        }
+
+        QImage thumb = page->thumbImage(d->thumbnailSize);
+        d->thumbnails.insert(index, thumb);
+        return thumb;
+    }
+    case ContentsModel::ContentIndexRole:
+        return index;
+    default:
+        return QVariant();
     }
 }
 
-void PresentationContentsModelImpl::setThumbnailSize(const QSize& size)
+void PresentationContentsModelImpl::setThumbnailSize(const QSize &size)
 {
     d->thumbnailSize = size;
     d->thumbnails.clear();
@@ -80,7 +81,7 @@ void PresentationContentsModelImpl::setThumbnailSize(const QSize& size)
 
 QImage PresentationContentsModelImpl::thumbnail(int index, int width) const
 {
-    KoPAPageBase* page = d->document->pageByIndex(index, false);
+    KoPAPageBase *page = d->document->pageByIndex(index, false);
     QSize thumbSize{width, int((page->pageLayout().height / page->pageLayout().width) * width)};
     return page->thumbImage(thumbSize);
 }

@@ -14,9 +14,11 @@ class KPrSpiralWipeStrategy : public KPrMatrixWipeStrategy
 public:
     KPrSpiralWipeStrategy(int firstLeg, bool clockwise, bool reverse);
     ~KPrSpiralWipeStrategy() override;
+
 protected:
     int maxIndex(int columns, int rows) override;
     int squareIndex(int x, int y, int columns, int rows) override;
+
 private:
     int m_firstLeg;
     bool m_clockwise;

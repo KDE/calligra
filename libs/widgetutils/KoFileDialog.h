@@ -10,11 +10,10 @@
 #include "kowidgetutils_export.h"
 
 #include <QFileDialog>
-#include <QString>
-#include <QUrl>
-#include <QStringList>
 #include <QList>
-
+#include <QString>
+#include <QStringList>
+#include <QUrl>
 
 /**
  * Wrapper around QFileDialog providing native file dialogs
@@ -25,15 +24,7 @@ class KOWIDGETUTILS_EXPORT KoFileDialog : public QObject
     Q_OBJECT
 
 public:
-    enum DialogType {
-        OpenFile,
-        OpenFiles,
-        OpenDirectory,
-        ImportFile,
-        ImportFiles,
-        ImportDirectory,
-        SaveFile
-    };
+    enum DialogType { OpenFile, OpenFiles, OpenDirectory, ImportFile, ImportFiles, ImportDirectory, SaveFile };
 
     /**
      * @brief constructor
@@ -45,9 +36,7 @@ public:
      * @return The name of the entry user selected in the file dialog
      *
      */
-    KoFileDialog(QWidget *parent,
-                 KoFileDialog::DialogType type,
-                 const QString &dialogName);
+    KoFileDialog(QWidget *parent, KoFileDialog::DialogType type, const QString &dialogName);
 
     ~KoFileDialog() override;
 
@@ -88,10 +77,8 @@ public:
      * @param filterList
      * @param defaultFilter
      */
-    void setNameFilters(const QStringList &filterList,
-                        QString defaultFilter = QString());
-    void setMimeTypeFilters(const QStringList &filterList,
-                            QString defaultFilter = QString());
+    void setNameFilters(const QStringList &filterList, QString defaultFilter = QString());
+    void setMimeTypeFilters(const QStringList &filterList, QString defaultFilter = QString());
     void setHideNameFilterDetailsOption();
 
     QStringList nameFilters() const;
@@ -130,13 +117,10 @@ private:
     QString getUsedDir(const QString &dialogName);
     void saveUsedDir(const QString &fileName, const QString &dialogName);
 
-    const QStringList getFilterStringListFromMime(const QStringList &mimeList,
-                                                  bool withAllSupportedEntry = false);
-
-
+    const QStringList getFilterStringListFromMime(const QStringList &mimeList, bool withAllSupportedEntry = false);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOFILEDIALOG_H */

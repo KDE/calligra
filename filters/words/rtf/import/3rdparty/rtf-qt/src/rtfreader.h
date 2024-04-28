@@ -8,40 +8,39 @@
 #include <QDebug>
 #include <QFile>
 #include <QObject>
-#include <QTextFormat>
 #include <QStack>
 #include <QTextDocument>
+#include <QTextFormat>
 
 #include "Destination.h"
-#include "Tokenizer.h"
 #include "RtfGroupState.h"
+#include "Tokenizer.h"
 #include "rtfreader_export.h"
 /**
    Namespace for the public interface for the RtfReader classes
 */
 namespace RtfReader
 {
-    class AbstractRtfOutput;
-    class RtfProperty;
-    class Reader;
+class AbstractRtfOutput;
+class RtfProperty;
+class Reader;
 
-  /**
-     Reader for RTF formatted documents
+/**
+   Reader for RTF formatted documents
 
-     This class provides a simple API for reading documents 
-     encoded in the Microsoft Rich Text Format (RTF).
+   This class provides a simple API for reading documents
+   encoded in the Microsoft Rich Text Format (RTF).
 
-     TODO: add spec reference
-  */
-  class RTFREADER_EXPORT  Reader : public QObject
-  {
+   TODO: add spec reference
+*/
+class RTFREADER_EXPORT Reader : public QObject
+{
     Q_OBJECT
-  public:
-
+public:
     /**
        Normal constructor
     */
-    explicit Reader( QObject *parent = 0 );
+    explicit Reader(QObject *parent = 0);
 
     /**
        Open a document
@@ -50,7 +49,7 @@ namespace RtfReader
 
        \return true if the document was successfully opened, otherwise false
     */
-    bool open( const QString &filename );
+    bool open(const QString &filename);
 
     /**
        Close the open document
@@ -69,24 +68,23 @@ namespace RtfReader
     /**
        Parse the document
 
-       \param output pointer to an output implementation       
+       \param output pointer to an output implementation
     */
-    bool parseTo( AbstractRtfOutput *output );
+    bool parseTo(AbstractRtfOutput *output);
 
     ~Reader() override;
 
     /////////////////////////////////////////////////
     //
-    // Callback functions 
+    // Callback functions
     //
     ////////////////////////////////////////////////
     void startInfo();
 
-    void todo( RtfReader::RtfProperty *property );
-    void todoDest( RtfReader::RtfProperty *property );
+    void todo(RtfReader::RtfProperty *property);
+    void todoDest(RtfReader::RtfProperty *property);
 
-  private:
-
+private:
     /////////////////////////////////////////////////
     //
     // Implementation details
@@ -101,17 +99,17 @@ namespace RtfReader
     bool parseFileHeader();
 
     // check the file header for format / version compatibility
-    bool headerFormatIsKnown( const QString &tokenName, int tokenValue );
+    bool headerFormatIsKnown(const QString &tokenName, int tokenValue);
 
     // parse the body of the document
     void parseDocument();
 
     // Change the destination
-    void changeDestination( const QString &destinationName );
+    void changeDestination(const QString &destinationName);
 
     // Destination factory
-    Destination *makeDestination( const QString &destinationName );
-    
+    Destination *makeDestination(const QString &destinationName);
+
     /////////////////////////////////////////////////
     //
     // Member variables below
@@ -126,17 +124,15 @@ namespace RtfReader
 
     // The output strategy
     AbstractRtfOutput *m_output;
-   
+
     // The destination stack
-    QStack<Destination*> m_destinationStack;
+    QStack<Destination *> m_destinationStack;
 
     QStack<RtfGroupState> m_stateStack;
 
     // debug things
     QString m_debugIndent;
-
-  };
+};
 }
 
 #endif
-

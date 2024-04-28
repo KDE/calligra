@@ -9,11 +9,9 @@
 #define ODFTEXTREADERDOCXBACKEND_H
 
 // Calligra
-#include <KoXmlStreamReader.h>
 #include <KoFilter.h>
+#include <KoXmlStreamReader.h>
 #include <OdfTextReaderBackend.h>
-
-
 
 class KoOdfStyleProperties;
 class OdfReaderContext;
@@ -21,7 +19,7 @@ class OdfReaderDocxContext;
 
 class OdfTextReaderDocxBackend : public OdfTextReaderBackend
 {
- public:
+public:
     OdfTextReaderDocxBackend();
     ~OdfTextReaderDocxBackend() override;
 
@@ -44,12 +42,12 @@ class OdfTextReaderDocxBackend : public OdfTextReaderBackend
 
     void characterData(KoXmlStreamReader &reader, OdfReaderContext *context) override;
 
- private:
+private:
     void startRun(const KoXmlStreamReader &reader, OdfReaderDocxContext *context);
     void endRun(OdfReaderDocxContext *context);
 
- private:
-    int m_insideSpanLevel;    // Number of nexted <text:span> levels.
+private:
+    int m_insideSpanLevel; // Number of nexted <text:span> levels.
     int m_currentOutlineLevel;
     int m_commentIndex;
     bool m_writeComment;
@@ -59,6 +57,5 @@ class OdfTextReaderDocxBackend : public OdfTextReaderBackend
     KoOdfStyleProperties *m_currentParagraphTextProperties;
     QString m_currentParagraphParent;
 };
-
 
 #endif // ODFTEXTREADERDOCXBACKEND_H

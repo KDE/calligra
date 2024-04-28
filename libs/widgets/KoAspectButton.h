@@ -14,7 +14,8 @@
  * This button gives a visual indication of weather the 'aspect ratio' is locked.
  * Typically you would use this alongside 2 spinboxes with a value like a width and height.
  */
-class KOWIDGETS_EXPORT KoAspectButton : public QAbstractButton {
+class KOWIDGETS_EXPORT KoAspectButton : public QAbstractButton
+{
     Q_OBJECT
 public:
     /// constructor
@@ -42,13 +43,13 @@ Q_SIGNALS:
 protected:
     /// reimplemented
     void mouseReleaseEvent(QMouseEvent *) override;
-    void paintEvent (QPaintEvent *) override;
-    QSize sizeHint () const override;
-    void keyReleaseEvent (QKeyEvent *e) override;
+    void paintEvent(QPaintEvent *) override;
+    QSize sizeHint() const override;
+    void keyReleaseEvent(QKeyEvent *e) override;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

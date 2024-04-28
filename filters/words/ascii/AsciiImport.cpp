@@ -10,31 +10,31 @@
 
 #include "AsciiImport.h"
 
-#include <QFile>
-#include <QTextDocument>
-#include <QTextCursor>
 #include <QApplication>
+#include <QFile>
+#include <QTextCursor>
+#include <QTextDocument>
 
 #include <KPluginFactory>
 
 #include <CalligraVersionWrapper.h>
+#include <KoCharacterStyle.h>
+#include <KoEmbeddedDocumentSaver.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
-#include <KoStore.h>
-#include <KoOdfWriteStore.h>
 #include <KoGenStyles.h>
-#include <KoXmlWriter.h>
-#include <KoStyleManager.h>
-#include <KoParagraphStyle.h>
-#include <KoCharacterStyle.h>
 #include <KoOdfLoadingContext.h>
-#include <KoShapeLoadingContext.h>
-#include <KoEmbeddedDocumentSaver.h>
-#include <KoShapeSavingContext.h>
-#include <KoTextWriter.h>
+#include <KoOdfWriteStore.h>
+#include <KoParagraphStyle.h>
 #include <KoProgressUpdater.h>
-#include <KoUpdater.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoStore.h>
+#include <KoStyleManager.h>
 #include <KoTextDocumentLayout.h>
+#include <KoTextWriter.h>
+#include <KoUpdater.h>
+#include <KoXmlWriter.h>
 
 #include "AsciiImportDebug.h"
 #include "ImportDialog.h"
@@ -46,13 +46,12 @@
 // If defined then the output will be written to OpenDocument ODT rather then
 // accessing the Calligra Words API direct. Using the additional ODT-roundtrip
 // is slower then using the Calligra Words API direct.
-//#define OUTPUT_AS_ODT_FILE
+// #define OUTPUT_AS_ODT_FILE
 
-K_PLUGIN_FACTORY_WITH_JSON(AsciiImportFactory, "calligra_filter_ascii2words.json",
-                           registerPlugin<AsciiImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(AsciiImportFactory, "calligra_filter_ascii2words.json", registerPlugin<AsciiImport>();)
 
 AsciiImport::AsciiImport(QObject *parent, const QVariantList &)
-: KoFilter(parent)
+    : KoFilter(parent)
 {
 }
 
@@ -60,7 +59,7 @@ AsciiImport::~AsciiImport()
 {
 }
 
-KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus AsciiImport::convert(const QByteArray &from, const QByteArray &to)
 {
     // check for proper conversion
     if (to != "application/vnd.oasis.opendocument.text" || from != "text/plain") {
@@ -75,14 +74,14 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     }
 
 #ifdef OUTPUT_AS_ODT_FILE
-    
+
 #else
-    KoDocument* document = m_chain->outputDocument();
+    KoDocument *document = m_chain->outputDocument();
     if (!document)
         return KoFilter::StupidError;
-    KWDocument *outputDoc = qobject_cast<KWDocument*>(document);
+    KWDocument *outputDoc = qobject_cast<KWDocument *>(document);
     outputDoc->setOutputMimeType(to);
-    //outputDoc->setSaveInBatchMode(true);
+    // outputDoc->setSaveInBatchMode(true);
 
     QPointer<KoUpdater> loadUpdater = outputDoc->progressUpdater()->startSubtask(2, "load");
     loadUpdater->setRange(0, in.size());
@@ -98,7 +97,10 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     int paragraphStrategy = 0;
     if (!m_chain->manager()->getBatchMode()) {
         QPointer<AsciiImportDialog> dialog = new AsciiImportDialog(QApplication::activeWindow());
-        if (!dialog->exec()) { in.close(); return KoFilter::UserCancelled; }
+        if (!dialog->exec()) {
+            in.close();
+            return KoFilter::UserCancelled;
+        }
         paragraphStrategy = dialog->getParagraphStrategy();
     }
 
@@ -109,12 +111,12 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         delete store;
         return KoFilter::FileNotFound;
     }
-    
+
     debugAsciiImport << "created store.";
     KoOdfWriteStore odfStore(store);
     odfStore.manifestWriter(to);
 
-    KoXmlWriter* contentWriter = odfStore.contentWriter();
+    KoXmlWriter *contentWriter = odfStore.contentWriter();
     if (!contentWriter) {
         delete store;
         return KoFilter::CreationError;
@@ -138,7 +140,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 
     name = mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
 #else
-    KoStyleManager *styleManager = outputDoc->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
+    KoStyleManager *styleManager = outputDoc->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager *>();
     KoParagraphStyle *p = styleManager->defaultParagraphStyle();
     p->setFontFamily("dejavu sans mono");
     p->setFontPointSize(10);
@@ -146,9 +148,9 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 
     outputDoc->appendPage();
     QTextDocument *doc = outputDoc->mainFrameSet()->document();
-    //doc->setDefaultFont(p->font());
+    // doc->setDefaultFont(p->font());
 
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(doc->documentLayout());
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout *>(doc->documentLayout());
     Q_ASSERT(lay);
     lay->setBlockLayout(true);
     connect(lay, &KoTextDocumentLayout::layoutProgressChanged, layoutUpdater.data(), &KoUpdater::setProgress);
@@ -157,7 +159,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     cursor.beginEditBlock();
 
     QTextCharFormat charFormat;
-    ((KoCharacterStyle*)p)->applyStyle(charFormat);
+    ((KoCharacterStyle *)p)->applyStyle(charFormat);
     cursor.setCharFormat(charFormat);
 #endif
 
@@ -175,7 +177,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
                     break;
                 paragraph += line + ' ';
                 int lastPos = line.length() - 1;
-                int maxCheck = lastPos >= 10 ? 10: lastPos + 1;
+                int maxCheck = lastPos >= 10 ? 10 : lastPos + 1;
                 QChar lastChar;
                 // Skip a maximum of 10 quotes (or similar) at the end of the line
                 for (int i = 0; i < maxCheck; ++i, --lastPos) {
@@ -206,7 +208,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
             }
         }
     } break;
-    case 2: { // Empty Line: Line-break if the line is empty.  
+    case 2: { // Empty Line: Line-break if the line is empty.
         while (!stream.atEnd()) {
             QString paragraph;
             do {
@@ -214,7 +216,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
                 if (line.isEmpty())
                     break;
                 paragraph.append(line + ' ');
-            } while(true);
+            } while (true);
             if (!paragraph.isNull()) {
                 QString s = paragraph.simplified();
 #ifdef OUTPUT_AS_ODT_FILE
@@ -255,7 +257,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 #ifdef OUTPUT_AS_ODT_FILE
     bodyWriter->endElement(); // office:text
     bodyWriter->endElement(); // office:body
-    
+
     mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
     odfStore.closeContentWriter();
 
@@ -266,7 +268,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     }
     if (store->open("meta.xml")) {
         KoStoreDevice dev(store);
-        KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-meta");
+        KoXmlWriter *xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-meta");
         xmlWriter->startElement("office:meta");
         xmlWriter->startElement("meta:generator");
         xmlWriter->addTextNode(QString("Calligra %1").arg(CalligraVersionWrapper::versionString()));
@@ -279,7 +281,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         xmlWriter->endDocument();
         delete xmlWriter;
         if (store->close())
-            odfStore.manifestWriter()->addManifestEntry("meta.xml", "text/xml" );
+            odfStore.manifestWriter()->addManifestEntry("meta.xml", "text/xml");
     }
     if (!odfStore.closeManifestWriter()) {
         warnAsciiImport << "Error while trying to write 'META-INF/manifest.xml'. Partition full?";

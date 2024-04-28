@@ -16,17 +16,19 @@ class State;
 class BRAINDUMPCORE_EXPORT StateCategory
 {
     friend class StatesRegistry;
-    StateCategory(const QString& _id, const QString& _name, int _priority);
+    StateCategory(const QString &_id, const QString &_name, int _priority);
     ~StateCategory();
+
 public:
-    const QString& name() const;
-    const QString& id() const;
+    const QString &name() const;
+    const QString &id() const;
     QList<QString> stateIds() const;
-    const State* state(const QString&) const;
+    const State *state(const QString &) const;
     int priority() const;
+
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

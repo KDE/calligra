@@ -26,17 +26,14 @@ namespace Sheets
 class CALLIGRA_SHEETS_ENGINE_EXPORT ProtectableObject
 {
 public:
-    enum Mode {
-        Lock,
-        Unlock
-    };
+    enum Mode { Lock, Unlock };
 
     ProtectableObject();
 
     /**
      * Copy constructor. Needs to be defined because of the dummy operator=.
      */
-    ProtectableObject(const ProtectableObject& other);
+    ProtectableObject(const ProtectableObject &other);
 
     /**
      * Retrieves the password hash.
@@ -65,7 +62,7 @@ public:
 
 private:
     // disable assignment operator
-    void operator=(const ProtectableObject&);
+    void operator=(const ProtectableObject &);
 
     QByteArray passwordHash(const QString &password) const;
     QByteArray m_password;

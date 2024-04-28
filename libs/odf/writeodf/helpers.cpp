@@ -7,10 +7,11 @@
 
 using namespace writeodf;
 
-namespace {
-template <typename T>
-void
-addTab(T& e, int ref) {
+namespace
+{
+template<typename T>
+void addTab(T &e, int ref)
+{
     text_tab tab = e.add_text_tab();
     if (ref >= 0) {
         tab.set_text_tab_ref(ref);
@@ -18,7 +19,7 @@ addTab(T& e, int ref) {
 }
 }
 
-void writeodf::addTextSpan(group_paragraph_content& content, const QString& text, const QMap<int, int>& tabCache)
+void writeodf::addTextSpan(group_paragraph_content &content, const QString &text, const QMap<int, int> &tabCache)
 {
     int len = text.length();
     int nrSpaces = 0; // number of consecutive spaces
@@ -29,7 +30,7 @@ void writeodf::addTextSpan(group_paragraph_content& content, const QString& text
     // Accumulate chars either in str or in nrSpaces (for spaces).
     // Flush str when writing a subelement (for spaces or for another reason)
     // Flush nrSpaces when encountering two or more consecutive spaces
-    for (int i = 0; i < len ; ++i) {
+    for (int i = 0; i < len; ++i) {
         const QChar ch = text[i];
         ushort unicode = ch.unicode();
         if (unicode == ' ') {
@@ -49,13 +50,13 @@ void writeodf::addTextSpan(group_paragraph_content& content, const QString& text
                     str += ' ';
                     --nrSpaces;
                 }
-                if (nrSpaces > 0) {   // there are more spaces
+                if (nrSpaces > 0) { // there are more spaces
                     if (!str.isEmpty()) {
                         content.addTextNode(str);
                     }
                     str.clear();
                     text_s s = content.add_text_s();
-                    if (nrSpaces > 1) {  // it's 1 by default
+                    if (nrSpaces > 1) { // it's 1 by default
                         s.set_text_c(nrSpaces);
                     }
                 }
@@ -69,7 +70,7 @@ void writeodf::addTextSpan(group_paragraph_content& content, const QString& text
                     content.addTextNode(str);
                 }
                 str.clear();
-                addTab(content, tabCache.contains(i) ?tabCache[i] + 1 :-1);
+                addTab(content, tabCache.contains(i) ? tabCache[i] + 1 : -1);
                 break;
             // gracefully handle \f form feed in text input.
             // otherwise the xml will not be valid.
@@ -96,9 +97,9 @@ void writeodf::addTextSpan(group_paragraph_content& content, const QString& text
     if (!str.isEmpty()) {
         content.addTextNode(str);
     }
-    if (nrSpaces > 0) {   // there are more spaces
+    if (nrSpaces > 0) { // there are more spaces
         text_s s = content.add_text_s();
-        if (nrSpaces > 1) {  // it's 1 by default
+        if (nrSpaces > 1) { // it's 1 by default
             s.set_text_c(nrSpaces);
         }
     }

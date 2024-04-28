@@ -13,9 +13,9 @@
 
 #include <QDebug>
 
-ValidParentStylesProxyModel::ValidParentStylesProxyModel(QObject *parent):
-    StylesFilteredModelBase(parent),
-    m_styleManager(0)
+ValidParentStylesProxyModel::ValidParentStylesProxyModel(QObject *parent)
+    : StylesFilteredModelBase(parent)
+    , m_styleManager(0)
 {
 }
 
@@ -28,14 +28,13 @@ void ValidParentStylesProxyModel::setStyleManager(KoStyleManager *sm)
 
 void ValidParentStylesProxyModel::createMapping()
 {
-
     if (!m_styleManager || !m_sourceModel) {
         return;
     }
     m_sourceToProxy.clear();
     m_proxyToSource.clear();
 
-    for(int i = 0; i < m_sourceModel->rowCount(QModelIndex()); ++i) {
+    for (int i = 0; i < m_sourceModel->rowCount(QModelIndex()); ++i) {
         QModelIndex index = m_sourceModel->index(i, 0, QModelIndex());
         int id = (int)index.internalId();
         KoParagraphStyle *paragraphStyle = m_styleManager->paragraphStyle(id);
@@ -47,11 +46,10 @@ void ValidParentStylesProxyModel::createMapping()
                 testStyle = testStyle->parentStyle();
             }
             if (!ok) {
-                continue; //we cannot inherit ourself even indirectly through the parent chain
+                continue; // we cannot inherit ourself even indirectly through the parent chain
             }
-            m_proxyToSource.append(i); //the style is ok for parenting
-        }
-        else {
+            m_proxyToSource.append(i); // the style is ok for parenting
+        } else {
             KoCharacterStyle *characterStyle = m_styleManager->characterStyle(id);
             if (characterStyle) {
                 bool ok = true;
@@ -61,14 +59,14 @@ void ValidParentStylesProxyModel::createMapping()
                     testStyle = testStyle->parentStyle();
                 }
                 if (!ok) {
-                    continue; //we cannot inherit ourself even indirectly through the parent chain
+                    continue; // we cannot inherit ourself even indirectly through the parent chain
                 }
-                m_proxyToSource.append(i); //the style is ok for parenting
+                m_proxyToSource.append(i); // the style is ok for parenting
             }
         }
     }
     m_sourceToProxy.fill(-1, m_sourceModel->rowCount(QModelIndex()));
-    for(int i = 0; i < m_proxyToSource.count(); ++i) {
+    for (int i = 0; i < m_proxyToSource.count(); ++i) {
         m_sourceToProxy[m_proxyToSource.at(i)] = i;
     }
 }

@@ -7,27 +7,27 @@
 
 #include "KoPABackgroundTool.h"
 
-//Qt includes
+// Qt includes
 #include <QList>
 
 // KF5
 #include <KLocalizedString>
 
-//Calligra includes
-#include <KoPACanvasBase.h>
+// Calligra includes
 #include <KoCanvasResourceManager.h>
-#include <KoPAViewBase.h>
+#include <KoPACanvasBase.h>
 #include <KoPAPageBase.h> // this is needed to make setResource work correctly
+#include <KoPAViewBase.h>
 #include <KoPointerEvent.h>
-#include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoShapeManager.h>
 
-#include "KoPAMasterPageDocker.h"
 #include "KoPABackgroundToolWidget.h"
+#include "KoPAMasterPageDocker.h"
 #include <KoPADocument.h>
 
-KoPABackgroundTool::KoPABackgroundTool( KoCanvasBase *canvas )
-: KoToolBase( canvas )
+KoPABackgroundTool::KoPABackgroundTool(KoCanvasBase *canvas)
+    : KoToolBase(canvas)
 {
     m_view = static_cast<KoPACanvasBase *>(canvas)->koPAView();
 }
@@ -36,58 +36,56 @@ KoPABackgroundTool::~KoPABackgroundTool()
 {
 }
 
-
-void KoPABackgroundTool::paint( QPainter &/*painter*/, const KoViewConverter &/*converter*/)
+void KoPABackgroundTool::paint(QPainter & /*painter*/, const KoViewConverter & /*converter*/)
 {
 }
 
-void KoPABackgroundTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
+void KoPABackgroundTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &)
 {
     Q_UNUSED(toolActivation);
 
     canvas()->shapeManager()->selection()->deselectAll();
-    canvas()->resourceManager()->setResource( KoPageApp::CurrentPage, m_view->activePage() );
+    canvas()->resourceManager()->setResource(KoPageApp::CurrentPage, m_view->activePage());
 
-    connect( m_view->proxyObject, &KoPAViewProxyObject::activePageChanged, this, &KoPABackgroundTool::slotActivePageChanged );
+    connect(m_view->proxyObject, &KoPAViewProxyObject::activePageChanged, this, &KoPABackgroundTool::slotActivePageChanged);
 }
 
 void KoPABackgroundTool::deactivate()
 {
-    disconnect( m_view->proxyObject, &KoPAViewProxyObject::activePageChanged, this, &KoPABackgroundTool::slotActivePageChanged );
-    canvas()->resourceManager()->clearResource( KoPageApp::CurrentPage );
+    disconnect(m_view->proxyObject, &KoPAViewProxyObject::activePageChanged, this, &KoPABackgroundTool::slotActivePageChanged);
+    canvas()->resourceManager()->clearResource(KoPageApp::CurrentPage);
 }
 
-void KoPABackgroundTool::mousePressEvent( KoPointerEvent *event )
+void KoPABackgroundTool::mousePressEvent(KoPointerEvent *event)
 {
     event->ignore();
 }
 
-void KoPABackgroundTool::mouseMoveEvent( KoPointerEvent *event )
+void KoPABackgroundTool::mouseMoveEvent(KoPointerEvent *event)
 {
     event->ignore();
 }
 
-void KoPABackgroundTool::mouseReleaseEvent( KoPointerEvent *event )
+void KoPABackgroundTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     event->ignore();
 }
 
 void KoPABackgroundTool::slotActivePageChanged()
 {
-    canvas()->resourceManager()->setResource( KoPageApp::CurrentPage, m_view->activePage() );
+    canvas()->resourceManager()->setResource(KoPageApp::CurrentPage, m_view->activePage());
 }
 
-KoPAViewBase * KoPABackgroundTool::view() const
+KoPAViewBase *KoPABackgroundTool::view() const
 {
     return m_view;
 }
 
-QList<QPointer<QWidget> > KoPABackgroundTool::createOptionWidgets()
+QList<QPointer<QWidget>> KoPABackgroundTool::createOptionWidgets()
 {
-    KoPABackgroundToolWidget * widget = new KoPABackgroundToolWidget( this );
-    QList<QPointer<QWidget> > widgets;
-    const QString title =
-        (m_view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Background") : i18n("Background");
+    KoPABackgroundToolWidget *widget = new KoPABackgroundToolWidget(this);
+    QList<QPointer<QWidget>> widgets;
+    const QString title = (m_view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Background") : i18n("Background");
     widget->setWindowTitle(title);
     widgets.append(widget);
     widgets.append(m_addOnWidgets);

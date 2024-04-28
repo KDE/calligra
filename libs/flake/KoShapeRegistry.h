@@ -16,13 +16,12 @@
 class KoShape;
 class KoShapeLoadingContext;
 
-
 /**
  * This singleton class keeps a register of all available flake shapes,
  * or rather, of the factories that applications can use to create flake
  * shape objects.
  */
-class FLAKE_EXPORT KoShapeRegistry : public KoGenericRegistry<KoShapeFactoryBase*>
+class FLAKE_EXPORT KoShapeRegistry : public KoGenericRegistry<KoShapeFactoryBase *>
 {
 public:
     KoShapeRegistry();
@@ -59,14 +58,14 @@ public:
      * @param elementName the tag name of the element
      * @return the list of shape factories supporting the specified xml element
      */
-    QList<KoShapeFactoryBase*> factoriesForElement(const QString &nameSpace, const QString &elementName);
+    QList<KoShapeFactoryBase *> factoriesForElement(const QString &nameSpace, const QString &elementName);
 
 private:
-    KoShapeRegistry(const KoShapeRegistry&);
-    KoShapeRegistry operator=(const KoShapeRegistry&);
+    KoShapeRegistry(const KoShapeRegistry &);
+    KoShapeRegistry operator=(const KoShapeRegistry &);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

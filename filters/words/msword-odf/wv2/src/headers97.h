@@ -24,27 +24,26 @@
 
 namespace wvWare
 {
+/**
+ * @internal
+ * A tiny helper class to move some header/footer code out of the parser.
+ * Might not be ultra-elegant, but I don't like it if the parser code
+ * grows too much.
+ */
+class Headers97 : public Headers
+{
+public:
+    Headers97(U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 lcbPlcfsed, OLEStreamReader *tableStream);
+
     /**
-     * @internal
-     * A tiny helper class to move some header/footer code out of the parser.
-     * Might not be ultra-elegant, but I don't like it if the parser code
-     * grows too much.
+     * Returns the header if there is any for the given mask. If we didn't find
+     * any header the pair's values are 0, 0.
      */
-    class Headers97 : public Headers
-    {
-    public:
-        Headers97( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 lcbPlcfsed,
-                   OLEStreamReader* tableStream );
+    std::pair<U32, U32> findHeader(int sectionNumber, unsigned char mask) const override;
 
-        /**
-         * Returns the header if there is any for the given mask. If we didn't find
-         * any header the pair's values are 0, 0.
-         */
-        std::pair<U32, U32> findHeader( int sectionNumber, unsigned char mask ) const override;
-
-    private:
-        int maskToOffset( unsigned char mask ) const;
-    };
+private:
+    int maskToOffset(unsigned char mask) const;
+};
 
 } // namespace wvWare
 

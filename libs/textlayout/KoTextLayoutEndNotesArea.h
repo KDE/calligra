@@ -13,7 +13,6 @@
 
 class QRectF;
 
-
 /**
  * When laying out text it happens in areas that can occupy space of various size.
  */
@@ -38,7 +37,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

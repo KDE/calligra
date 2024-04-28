@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-class TestDeleteSlidesCommand: public QObject
+class TestDeleteSlidesCommand : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:

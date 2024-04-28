@@ -8,19 +8,22 @@
 
 #include <kundo2command.h>
 
-namespace MusicCore {
-    class Chord;
+namespace MusicCore
+{
+class Chord;
 }
 class MusicShape;
 
-class RemoveChordCommand : public KUndo2Command {
+class RemoveChordCommand : public KUndo2Command
+{
 public:
-    RemoveChordCommand(MusicShape* shape, MusicCore::Chord* chord);
+    RemoveChordCommand(MusicShape *shape, MusicCore::Chord *chord);
     void redo() override;
     void undo() override;
+
 private:
-    MusicCore::Chord* m_chord;
-    MusicShape* m_shape;
+    MusicCore::Chord *m_chord;
+    MusicShape *m_shape;
     int m_index;
 };
 

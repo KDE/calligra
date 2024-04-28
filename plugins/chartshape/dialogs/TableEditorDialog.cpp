@@ -18,21 +18,20 @@
 #include <KoIcon.h>
 
 // KoChart
+#include "ChartDebug.h"
 #include "ChartProxyModel.h"
 #include "ChartTableView.h"
-#include "ChartDebug.h"
 
-//Other
+// Other
 #include <algorithm>
-
 
 using namespace KoChart;
 
 TableEditorDialog::TableEditorDialog()
-    : QDialog( 0 )
-    , m_tableView( new ChartTableView )
+    : QDialog(0)
+    , m_tableView(new ChartTableView)
 {
-    setupUi( this );
+    setupUi(this);
 
     m_proxyModel = 0;
     init();
@@ -43,10 +42,9 @@ TableEditorDialog::~TableEditorDialog()
     delete m_tableView;
 }
 
-
 void TableEditorDialog::init()
 {
-    tableViewContainer->addWidget( m_tableView );
+    tableViewContainer->addWidget(m_tableView);
 
     const QIcon insertRowAboveIcon = koIcon("edit-table-insert-row-above");
     const QIcon insertRowBelowIcon = koIcon("edit-table-insert-row-below");
@@ -55,17 +53,16 @@ void TableEditorDialog::init()
     const QIcon deleteSelectionIcon = koIcon("edit-delete");
 
     // Create actions.
-    m_insertRowAboveAction    = new QAction( insertRowAboveIcon, i18n( "Insert Above" ), m_tableView );
-    m_insertRowBelowAction    = new QAction( insertRowBelowIcon, i18n( "Insert Below" ), m_tableView );
-    m_insertColumnLeftAction = new QAction( insertColLeftIcon, i18n( "Insert Before" ), m_tableView );
-    m_insertColumnRightAction = new QAction( insertColRightIcon, i18n( "Insert After" ), m_tableView );
-    m_deleteSelectionAction = new QAction( deleteSelectionIcon, i18n( "Delete Selection" ), m_tableView );
-
+    m_insertRowAboveAction = new QAction(insertRowAboveIcon, i18n("Insert Above"), m_tableView);
+    m_insertRowBelowAction = new QAction(insertRowBelowIcon, i18n("Insert Below"), m_tableView);
+    m_insertColumnLeftAction = new QAction(insertColLeftIcon, i18n("Insert Before"), m_tableView);
+    m_insertColumnRightAction = new QAction(insertColRightIcon, i18n("Insert After"), m_tableView);
+    m_deleteSelectionAction = new QAction(deleteSelectionIcon, i18n("Delete Selection"), m_tableView);
 
     // Initially, no index is selected. Deletion only works with legal
     // selections.  They will automatically be enabled when an index
     // is selected.
-    deleteSelection->setEnabled( false );
+    deleteSelection->setEnabled(false);
 
     // Buttons
     connect(insertRowAbove, &QAbstractButton::pressed, this, &TableEditorDialog::slotInsertRowAbovePressed);
@@ -75,85 +72,82 @@ void TableEditorDialog::init()
     connect(deleteSelection, &QAbstractButton::pressed, this, &TableEditorDialog::slotDeleteSelectionPressed);
 
     // Context Menu Actions
-    connect(m_insertRowAboveAction,    &QAction::triggered, this, &TableEditorDialog::slotInsertRowAbovePressed);
-    connect(m_insertRowBelowAction,    &QAction::triggered, this, &TableEditorDialog::slotInsertRowBelowPressed);
+    connect(m_insertRowAboveAction, &QAction::triggered, this, &TableEditorDialog::slotInsertRowAbovePressed);
+    connect(m_insertRowBelowAction, &QAction::triggered, this, &TableEditorDialog::slotInsertRowBelowPressed);
     connect(m_insertColumnLeftAction, &QAction::triggered, this, &TableEditorDialog::slotInsertColumnLeftPressed);
     connect(m_insertColumnRightAction, &QAction::triggered, this, &TableEditorDialog::slotInsertColumnRightPressed);
     connect(m_deleteSelectionAction, &QAction::triggered, this, &TableEditorDialog::slotDeleteSelectionPressed);
-    connect(m_tableView,  &ChartTableView::currentIndexChanged, this, &TableEditorDialog::slotCurrentIndexChanged);
+    connect(m_tableView, &ChartTableView::currentIndexChanged, this, &TableEditorDialog::slotCurrentIndexChanged);
 
     // We only need to connect one of the data direction buttons, since they are mutually exclusive.
     connect(dataSetsInRows, &QAbstractButton::toggled, this, &TableEditorDialog::slotDataSetsInRowsToggled);
 
     // FIXME: QAction to create a separator??
-    QAction *separator = new QAction( m_tableView );
-    separator->setSeparator( true );
+    QAction *separator = new QAction(m_tableView);
+    separator->setSeparator(true);
 
     // Add all the actions to the view.
-    m_tableView->addAction( m_insertRowAboveAction );
-    m_tableView->addAction( m_insertRowBelowAction );
-    m_tableView->addAction( m_insertColumnLeftAction );
-    m_tableView->addAction( m_insertColumnRightAction );
-    m_tableView->addAction( m_deleteSelectionAction );
+    m_tableView->addAction(m_insertRowAboveAction);
+    m_tableView->addAction(m_insertRowBelowAction);
+    m_tableView->addAction(m_insertColumnLeftAction);
+    m_tableView->addAction(m_insertColumnRightAction);
+    m_tableView->addAction(m_deleteSelectionAction);
 
-    m_tableView->setContextMenuPolicy( Qt::ActionsContextMenu );
+    m_tableView->setContextMenuPolicy(Qt::ActionsContextMenu);
 
     // Initialize the contents of the controls
     slotUpdateDialog();
 }
 
-void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
+void TableEditorDialog::setProxyModel(ChartProxyModel *proxyModel)
 {
-    if ( m_proxyModel == proxyModel )
+    if (m_proxyModel == proxyModel)
         return;
 
     // Disconnect the old proxy model.
     if (m_proxyModel) {
-        m_proxyModel->disconnect( this );
+        m_proxyModel->disconnect(this);
     }
 
     m_proxyModel = proxyModel;
 
     // Connect the new proxy model.
-    if ( m_proxyModel ) {
-        connect( m_proxyModel,       &QAbstractItemModel::modelReset,
-                 this,               &TableEditorDialog::slotUpdateDialog );
+    if (m_proxyModel) {
+        connect(m_proxyModel, &QAbstractItemModel::modelReset, this, &TableEditorDialog::slotUpdateDialog);
     }
 
     slotUpdateDialog();
 }
 
-void TableEditorDialog::setModel( QAbstractItemModel *model )
+void TableEditorDialog::setModel(QAbstractItemModel *model)
 {
-    m_tableView->setModel( model );
+    m_tableView->setModel(model);
     connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &TableEditorDialog::slotSelectionChanged);
 }
 
 void TableEditorDialog::slotUpdateDialog()
 {
-    if ( !m_proxyModel )
+    if (!m_proxyModel)
         return;
 
-    switch ( m_proxyModel->dataDirection() ) {
+    switch (m_proxyModel->dataDirection()) {
     case Qt::Horizontal:
-        dataSetsInRows->setChecked( true );
+        dataSetsInRows->setChecked(true);
         break;
     case Qt::Vertical:
-        dataSetsInColumns->setChecked( true );
+        dataSetsInColumns->setChecked(true);
         break;
     default:
         warnChart << "Unrecognized value for data direction: " << m_proxyModel->dataDirection();
     }
 }
 
-
 // ----------------------------------------------------------------
 //                             slots
 
-
 void TableEditorDialog::slotInsertRowAbovePressed()
 {
-    Q_ASSERT( m_tableView->model() );
+    Q_ASSERT(m_tableView->model());
 
     QAbstractItemModel *model = m_tableView->model();
     QModelIndex currIndex = m_tableView->currentIndex();
@@ -171,13 +165,13 @@ void TableEditorDialog::slotInsertRowAbovePressed()
             model->setData(model->index(row, i), 1.0);
         }
         m_tableView->scrollTo(model->index(row, 0));
-        m_tableView->selectionModel()->setCurrentIndex(model->index(row, 0), QItemSelectionModel::Clear|QItemSelectionModel::SelectCurrent);
+        m_tableView->selectionModel()->setCurrentIndex(model->index(row, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
     }
 }
 
 void TableEditorDialog::slotInsertRowBelowPressed()
 {
-    Q_ASSERT( m_tableView->model() );
+    Q_ASSERT(m_tableView->model());
 
     QAbstractItemModel *model = m_tableView->model();
     QModelIndex currIndex = m_tableView->currentIndex();
@@ -195,18 +189,19 @@ void TableEditorDialog::slotInsertRowBelowPressed()
             model->setData(model->index(row, i), 1.0);
         }
         m_tableView->scrollTo(model->index(row, 0));
-        m_tableView->selectionModel()->setCurrentIndex(model->index(row, 0), QItemSelectionModel::Clear|QItemSelectionModel::SelectCurrent);
+        m_tableView->selectionModel()->setCurrentIndex(model->index(row, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
     }
 }
 
 void TableEditorDialog::slotInsertColumnRightPressed()
 {
-    Q_ASSERT( m_tableView->model() );
+    Q_ASSERT(m_tableView->model());
 
     QAbstractItemModel *model = m_tableView->model();
     QModelIndex currIndex = m_tableView->currentIndex();
 
-    int col = model->columnCount();;
+    int col = model->columnCount();
+    ;
     if (currIndex.isValid()) {
         col = currIndex.column() + 1;
     }
@@ -219,13 +214,13 @@ void TableEditorDialog::slotInsertColumnRightPressed()
             model->setData(model->index(i, col), 1.0);
         }
         m_tableView->scrollTo(model->index(0, col));
-        m_tableView->selectionModel()->setCurrentIndex(model->index(0, col), QItemSelectionModel::Clear|QItemSelectionModel::SelectCurrent);
+        m_tableView->selectionModel()->setCurrentIndex(model->index(0, col), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
     }
 }
 
 void TableEditorDialog::slotInsertColumnLeftPressed()
 {
-    Q_ASSERT( m_tableView->model() );
+    Q_ASSERT(m_tableView->model());
 
     QAbstractItemModel *model = m_tableView->model();
     QModelIndex currIndex = m_tableView->currentIndex();
@@ -243,7 +238,7 @@ void TableEditorDialog::slotInsertColumnLeftPressed()
             model->setData(model->index(i, col), 1.0);
         }
         m_tableView->scrollTo(model->index(0, col));
-        m_tableView->selectionModel()->setCurrentIndex(model->index(0, col), QItemSelectionModel::Clear|QItemSelectionModel::SelectCurrent);
+        m_tableView->selectionModel()->setCurrentIndex(model->index(0, col), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
     }
 }
 
@@ -256,43 +251,43 @@ void TableEditorDialog::slotDeleteSelectionPressed()
     }
 }
 
-void TableEditorDialog::deleteSelectedRowsOrColumns( Qt::Orientation orientation )
+void TableEditorDialog::deleteSelectedRowsOrColumns(Qt::Orientation orientation)
 {
     // Note: In the following, both rows and columns will be referred to
     // as "row", for ease of reading this code.
-    Q_ASSERT( m_tableView->model() );
+    Q_ASSERT(m_tableView->model());
 
     const QModelIndexList selectedIndexes = m_tableView->selectionModel()->selectedIndexes();
-    if ( selectedIndexes.isEmpty() )
+    if (selectedIndexes.isEmpty())
         return;
 
     QList<int> rowsToBeRemoved;
     // Make sure we don't delete a row twice, as indexes can exist
     // multiple times for one row
-    foreach( const QModelIndex &index, selectedIndexes ) {
+    foreach (const QModelIndex &index, selectedIndexes) {
         const int row = orientation == Qt::Horizontal ? index.row() : index.column();
-        if ( !rowsToBeRemoved.contains( row ) )
-            rowsToBeRemoved.append( row );
+        if (!rowsToBeRemoved.contains(row))
+            rowsToBeRemoved.append(row);
     }
 
     // Use std::greater<int>() as comparator to remove rows in reversed order
     // to not change the indexes of the selected rows
-    std::sort( rowsToBeRemoved.begin(), rowsToBeRemoved.end(), std::greater<int>() );
+    std::sort(rowsToBeRemoved.begin(), rowsToBeRemoved.end(), std::greater<int>());
 
-    foreach( int row, rowsToBeRemoved ) {
-        Q_ASSERT( row >= 0 );
-        if ( orientation == Qt::Horizontal )
-            m_tableView->model()->removeRow( row );
+    foreach (int row, rowsToBeRemoved) {
+        Q_ASSERT(row >= 0);
+        if (orientation == Qt::Horizontal)
+            m_tableView->model()->removeRow(row);
         else
-            m_tableView->model()->removeColumn( row );
+            m_tableView->model()->removeColumn(row);
     }
     // Deselect the deleted rows
-    m_tableView->setCurrentIndex( QModelIndex() );
+    m_tableView->setCurrentIndex(QModelIndex());
 }
 
-void TableEditorDialog::slotCurrentIndexChanged( const QModelIndex &index )
+void TableEditorDialog::slotCurrentIndexChanged(const QModelIndex &index)
 {
-    qInfo()<<Q_FUNC_INFO<<index;
+    qInfo() << Q_FUNC_INFO << index;
     if (!index.isValid()) {
         m_insertRowAboveAction->setEnabled(true);
         insertRowAbove->setEnabled(true);
@@ -352,8 +347,8 @@ void TableEditorDialog::slotSelectionChanged()
     deleteSelection->setEnabled(!disableDelete);
 }
 
-void TableEditorDialog::slotDataSetsInRowsToggled( bool enabled )
+void TableEditorDialog::slotDataSetsInRowsToggled(bool enabled)
 {
-    Q_ASSERT( m_proxyModel );
-    m_proxyModel->setDataDirection( enabled ? Qt::Horizontal : Qt::Vertical );
+    Q_ASSERT(m_proxyModel);
+    m_proxyModel->setDataDirection(enabled ? Qt::Horizontal : Qt::Vertical);
 }

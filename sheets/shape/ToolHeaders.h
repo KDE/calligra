@@ -26,19 +26,22 @@ class Sheet;
 namespace Tool
 {
 
-
 class ColumnHeader
 {
 public:
     explicit ColumnHeader();
     virtual ~ColumnHeader();
 
-    int markerColumn() const {
-        return  m_iSelectionAnchor;
+    int markerColumn() const
+    {
+        return m_iSelectionAnchor;
     }
     void equalizeColumn(double resize);
 
-    void setSheet(Sheet *sheet) { m_sheet = sheet; }
+    void setSheet(Sheet *sheet)
+    {
+        m_sheet = sheet;
+    }
 
     /// The geometry in document coordinates
     void setGeometry(const QRectF &geometry);
@@ -50,16 +53,16 @@ public:
 
     QPalette palette() const;
 
-    void setHeaderFont(const QFont& font);
+    void setHeaderFont(const QFont &font);
     QFont headerFont() const;
 
-    void paint(QPainter* painter, const QRectF& painterRect);
+    void paint(QPainter *painter, const QRectF &painterRect);
 
-    void mousePress(KoPointerEvent* _ev);
-    void mouseRelease(KoPointerEvent* _ev);
-    void mouseDoubleClick(KoPointerEvent* _ev);
-    void mouseMove(KoPointerEvent* _ev);
-    void resize(const QSizeF& size, const QSizeF& oldSize);
+    void mousePress(KoPointerEvent *_ev);
+    void mouseRelease(KoPointerEvent *_ev);
+    void mouseDoubleClick(KoPointerEvent *_ev);
+    void mouseMove(KoPointerEvent *_ev);
+    void resize(const QSizeF &size, const QSizeF &oldSize);
     void paintSizeIndicator(KoPointerEvent *event);
     void removeSizeIndicator();
 
@@ -111,7 +114,7 @@ protected:
      * The user may resize columns by dragging the mouse around the XBorder widget.
      * This is the column over which the user pressed the mouse button. This column is going
      * to be resized.
-      */
+     */
     int m_iResizedColumn;
 
     /**
@@ -141,12 +144,16 @@ public:
     explicit RowHeader();
     virtual ~RowHeader();
 
-    int markerRow() const {
-        return  m_iSelectionAnchor;
+    int markerRow() const
+    {
+        return m_iSelectionAnchor;
     }
     void equalizeRow(double resize);
 
-    void setSheet(Sheet *sheet) { m_sheet = sheet; }
+    void setSheet(Sheet *sheet)
+    {
+        m_sheet = sheet;
+    }
 
     /// The geometry in document coordinates
     void setGeometry(const QRectF &geometry);
@@ -158,19 +165,19 @@ public:
 
     QPalette palette() const;
 
-    void setHeaderFont(const QFont& font);
+    void setHeaderFont(const QFont &font);
     QFont headerFont() const;
 
-    void paint(QPainter* painter, const QRectF& painterRect);
+    void paint(QPainter *painter, const QRectF &painterRect);
 
-    void mousePress(KoPointerEvent* _ev);
-    void mouseRelease(KoPointerEvent* _ev);
-    void mouseDoubleClick(KoPointerEvent* _ev);
-    void mouseMove(KoPointerEvent* _ev);
+    void mousePress(KoPointerEvent *_ev);
+    void mouseRelease(KoPointerEvent *_ev);
+    void mouseDoubleClick(KoPointerEvent *_ev);
+    void mouseMove(KoPointerEvent *_ev);
     void paintSizeIndicator(KoPointerEvent *event);
     void removeSizeIndicator();
 
-    void doToolChanged(const QString& toolId);
+    void doToolChanged(const QString &toolId);
 
     void setSelection(Selection *selection);
     void setScrollBars(QScrollBar *hbar, QScrollBar *vbar);

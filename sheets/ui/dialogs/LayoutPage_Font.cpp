@@ -23,32 +23,24 @@
 
 using namespace Calligra::Sheets;
 
-
-LayoutPageFont::LayoutPageFont(QWidget* parent)
-        : QWidget(parent)
+LayoutPageFont::LayoutPageFont(QWidget *parent)
+    : QWidget(parent)
 {
     setupUi(this);
 
-    connect(textColorButton, &KColorButton::changed,
-            this, &LayoutPageFont::slotSetTextColor);
+    connect(textColorButton, &KColorButton::changed, this, &LayoutPageFont::slotSetTextColor);
 
-    connect(family_combo, &QListWidget::currentTextChanged,
-            this, &LayoutPageFont::display_example);
+    connect(family_combo, &QListWidget::currentTextChanged, this, &LayoutPageFont::display_example);
 
-    connect(size_spinner, qOverload<int>(&QSpinBox::valueChanged),
-            this, &LayoutPageFont::display_example);
+    connect(size_spinner, qOverload<int>(&QSpinBox::valueChanged), this, &LayoutPageFont::display_example);
 
-    connect(weight_combo, qOverload<int>(&QComboBox::activated),
-            this, &LayoutPageFont::display_example);
+    connect(weight_combo, qOverload<int>(&QComboBox::activated), this, &LayoutPageFont::display_example);
 
-    connect(style_combo, qOverload<int>(&QComboBox::activated),
-            this, &LayoutPageFont::display_example);
+    connect(style_combo, qOverload<int>(&QComboBox::activated), this, &LayoutPageFont::display_example);
 
-    connect(strike, &QAbstractButton::clicked,
-            this, &LayoutPageFont::display_example);
+    connect(strike, &QAbstractButton::clicked, this, &LayoutPageFont::display_example);
 
-    connect(underline, &QAbstractButton::clicked,
-            this, &LayoutPageFont::display_example);
+    connect(underline, &QAbstractButton::clicked, this, &LayoutPageFont::display_example);
 
     example_label->setText(i18n("Dolor Ipse"));
 
@@ -63,7 +55,7 @@ void LayoutPageFont::slotSetTextColor(const QColor &)
     m_colorChanged = true;
 }
 
-void LayoutPageFont::apply(Style * style, bool partial)
+void LayoutPageFont::apply(Style *style, bool partial)
 {
     Style defaultStyle;
 
@@ -149,7 +141,7 @@ void LayoutPageFont::loadFrom(const Style &style, bool partial)
 
     // font color
     m_colorChanged = false;
-    m_color = style.fontColor();  // default or the chosen one
+    m_color = style.fontColor(); // default or the chosen one
     textColorButton->setColor(m_color);
 }
 
@@ -160,17 +152,19 @@ void LayoutPageFont::display_example()
     auto items = family_combo->selectedItems();
     QString family = items.size() ? items[0]->text() : defaultStyle.fontFamily();
     int fontSize = size_spinner->value();
-    if (!fontSize) fontSize = defaultStyle.fontSize();
+    if (!fontSize)
+        fontSize = defaultStyle.fontSize();
 
     QFont f(family, fontSize);
-    if (weight_combo->currentIndex() == 2) f.setBold(true);
-    if (style_combo->currentIndex() == 2) f.setItalic(true);
-    if (underline->checkState() == Qt::Checked) f.setUnderline(true);
-    if (strike->checkState() == Qt::Checked) f.setStrikeOut(true);
+    if (weight_combo->currentIndex() == 2)
+        f.setBold(true);
+    if (style_combo->currentIndex() == 2)
+        f.setItalic(true);
+    if (underline->checkState() == Qt::Checked)
+        f.setUnderline(true);
+    if (strike->checkState() == Qt::Checked)
+        f.setStrikeOut(true);
 
     example_label->setFont(f);
     example_label->repaint();
 }
-
-
-

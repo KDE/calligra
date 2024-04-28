@@ -11,8 +11,6 @@
 // Qt
 #include <QVector3D>
 
-
 QVector3D odfToVector3D(QString &string);
-
 
 #endif

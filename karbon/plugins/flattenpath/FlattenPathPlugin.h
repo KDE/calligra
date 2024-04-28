@@ -20,7 +20,9 @@ class FlattenPathPlugin : public QObject, public KXMLGUIClient
     Q_OBJECT
 public:
     FlattenPathPlugin(QObject *parent, const QVariantList &);
-    ~FlattenPathPlugin() override {}
+    ~FlattenPathPlugin() override
+    {
+    }
 
 private Q_SLOTS:
     void slotFlattenPath();
@@ -36,14 +38,13 @@ class FlattenDlg : public QDialog
     Q_OBJECT
 
 public:
-    explicit FlattenDlg(QWidget* parent = 0L, const char* name = 0L);
+    explicit FlattenDlg(QWidget *parent = 0L, const char *name = 0L);
 
     qreal flatness() const;
     void setFlatness(qreal value);
 
 private:
-    QDoubleSpinBox* m_flatness;
+    QDoubleSpinBox *m_flatness;
 };
 
 #endif
-

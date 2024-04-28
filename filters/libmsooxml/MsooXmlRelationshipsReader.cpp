@@ -13,7 +13,7 @@
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 
-//#define MSOOXML_CURRENT_NS
+// #define MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_CLASS MsooXmlRelationshipsReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
@@ -21,28 +21,33 @@
 
 using namespace MSOOXML;
 
-MsooXmlRelationshipsReaderContext::MsooXmlRelationshipsReaderContext(
-    const QString& _path, const QString& _file, QMap<QString, QString>& _rels,
-    QMap<QString, QString>& _targetsForTypes)
-        : path(_path), file(_file)
-        , rels(&_rels), targetsForTypes(&_targetsForTypes)
+MsooXmlRelationshipsReaderContext::MsooXmlRelationshipsReaderContext(const QString &_path,
+                                                                     const QString &_file,
+                                                                     QMap<QString, QString> &_rels,
+                                                                     QMap<QString, QString> &_targetsForTypes)
+    : path(_path)
+    , file(_file)
+    , rels(&_rels)
+    , targetsForTypes(&_targetsForTypes)
 {
 }
 
 class MsooXmlRelationshipsReader::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
     QString pathAndFile;
 };
 
 MsooXmlRelationshipsReader::MsooXmlRelationshipsReader(KoOdfWriters *writers)
-        : MSOOXML::MsooXmlReader(writers)
-        , m_context(0)
-        , d(new Private)
+    : MSOOXML::MsooXmlReader(writers)
+    , m_context(0)
+    , d(new Private)
 {
     init();
 }
@@ -56,9 +61,9 @@ void MsooXmlRelationshipsReader::init()
 {
 }
 
-KoFilter::ConversionStatus MsooXmlRelationshipsReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus MsooXmlRelationshipsReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<MsooXmlRelationshipsReaderContext*>(context);
+    m_context = dynamic_cast<MsooXmlRelationshipsReaderContext *>(context);
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
     if (result == KoFilter::OK)
@@ -145,17 +150,18 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationship()
     READ_ATTR_WITHOUT_NS(Target)
     QString fixedPath(m_context->path);
     while (Target.startsWith(QLatin1String("../"))) {
-        //debugMsooXml << "- Target:" << Target << "fixedPath:" << fixedPath;
+        // debugMsooXml << "- Target:" << Target << "fixedPath:" << fixedPath;
         Target.remove(0, 3);
         fixedPath.truncate(fixedPath.lastIndexOf('/'));
-        //debugMsooXml << "= Target:" << Target << "fixedPath:" << fixedPath;
+        // debugMsooXml << "= Target:" << Target << "fixedPath:" << fixedPath;
     }
-    //debugMsooXml << "adding rel:";
-    //debugMsooXml << d->pathAndFile + Id;
-    //debugMsooXml << fixedPath + '/' + Target;
+    // debugMsooXml << "adding rel:";
+    // debugMsooXml << d->pathAndFile + Id;
+    // debugMsooXml << fixedPath + '/' + Target;
 
     m_context->rels->insert(d->pathAndFile + Id, fixedPath + '/' + Target);
-    //debugMsooXml << "added target" << Target << "for type" << Type << "path=" << fixedPath << "key=" << targetKey(m_context->path + '/' + m_context->file, Type);
+    // debugMsooXml << "added target" << Target << "for type" << Type << "path=" << fixedPath << "key=" << targetKey(m_context->path + '/' + m_context->file,
+    // Type);
     m_context->targetsForTypes->insert(targetKey(m_context->path + '/' + m_context->file, Type), fixedPath + '/' + Target);
 
     readNext();

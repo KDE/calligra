@@ -20,28 +20,28 @@ class DocumentManager : public QObject
 {
     Q_OBJECT
 public:
-    KoDocument* document() const;
-    Q_INVOKABLE  QObject* doc() const;
-    KoPart* part(const QString& type = WORDS_MIME_TYPE);
-    ProgressProxy* progressProxy() const;
-    Settings* settingsManager() const;
-    void setSettingsManager(Settings* newManager);
-    RecentFileManager* recentFileManager() const;
+    KoDocument *document() const;
+    Q_INVOKABLE QObject *doc() const;
+    KoPart *part(const QString &type = WORDS_MIME_TYPE);
+    ProgressProxy *progressProxy() const;
+    Settings *settingsManager() const;
+    void setSettingsManager(Settings *newManager);
+    RecentFileManager *recentFileManager() const;
     bool isTemporaryFile() const;
 
-    Q_INVOKABLE void setDocAndPart(KoDocument* document, KoPart* part);
+    Q_INVOKABLE void setDocAndPart(KoDocument *document, KoPart *part);
 
 public Q_SLOTS:
     void newDocument(int width, int height, float resolution);
-    void newDocument(const QVariantMap& options);
-    void openDocument(const QString& document, bool import = false);
+    void newDocument(const QVariantMap &options);
+    void openDocument(const QString &document, bool import = false);
     void closeDocument();
     bool save();
     void saveAs(const QString &filename, const QString &mimetype);
     void reload();
     void setTemporaryFile(bool temp);
 
-    static DocumentManager* instance();
+    static DocumentManager *instance();
 
 Q_SIGNALS:
     void documentChanged();
@@ -53,7 +53,7 @@ private:
     ~DocumentManager() override;
 
     class Private;
-    Private * const d;
+    Private *const d;
 
     static DocumentManager *sm_instance;
 

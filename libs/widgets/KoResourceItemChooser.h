@@ -80,11 +80,10 @@ public:
     /// shows the preview converted to grayscale
     void setGrayscalePreview(bool grayscale);
 
-
     /// sets the visibility of tagging KlineEdits.
     void showTaggingBar(bool show);
 
-    ///Set a proxy model with will be used to filter the resources
+    /// Set a proxy model with will be used to filter the resources
     void setProxyModel(QAbstractProxyModel *proxyModel);
 
     QSize viewSize() const;
@@ -121,8 +120,6 @@ protected:
 private:
     void updateButtonState();
     void updatePreview(KoResource *resource);
-
-
 
     void resizeEvent(QResizeEvent *event) override;
 

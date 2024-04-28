@@ -10,37 +10,35 @@
 
 #include "KPrClockWipeStrategy.h"
 
-#define PinWheelWipeEffectId  "PinWheelWipeEffect"
+#define PinWheelWipeEffectId "PinWheelWipeEffect"
 
 KPrPinWheelWipeEffectFactory::KPrPinWheelWipeEffectFactory()
-: KPrPageEffectFactory( PinWheelWipeEffectId, i18n( "Pin Wheel" ) )
+    : KPrPageEffectFactory(PinWheelWipeEffectId, i18n("Pin Wheel"))
 {
-    addStrategy( new KPrClockWipeStrategy( 270, 2, TwoBladeVerticalClockwise, "pinWheelWipe", "twoBladeVertical", false ) );
-    addStrategy( new KPrClockWipeStrategy( 0, 2, TwoBladeHorizontalClockwise, "pinWheelWipe", "twoBladeHorizontal", false ) );
-    addStrategy( new KPrClockWipeStrategy( 0, 4, FourBladeClockwise, "pinWheelWipe", "fourBlade", false ) );
-    addStrategy( new KPrClockWipeStrategy( 270, 2, TwoBladeVerticalCounterClockwise, "pinWheelWipe", "twoBladeVertical", true ) );
-    addStrategy( new KPrClockWipeStrategy( 0, 2, TwoBladeHorizontalCounterClockwise, "pinWheelWipe", "twoBladeHorizontal", true ) );
-    addStrategy( new KPrClockWipeStrategy( 0, 4, FourBladeCounterClockwise, "pinWheelWipe", "fourBlade", true ) );
+    addStrategy(new KPrClockWipeStrategy(270, 2, TwoBladeVerticalClockwise, "pinWheelWipe", "twoBladeVertical", false));
+    addStrategy(new KPrClockWipeStrategy(0, 2, TwoBladeHorizontalClockwise, "pinWheelWipe", "twoBladeHorizontal", false));
+    addStrategy(new KPrClockWipeStrategy(0, 4, FourBladeClockwise, "pinWheelWipe", "fourBlade", false));
+    addStrategy(new KPrClockWipeStrategy(270, 2, TwoBladeVerticalCounterClockwise, "pinWheelWipe", "twoBladeVertical", true));
+    addStrategy(new KPrClockWipeStrategy(0, 2, TwoBladeHorizontalCounterClockwise, "pinWheelWipe", "twoBladeHorizontal", true));
+    addStrategy(new KPrClockWipeStrategy(0, 4, FourBladeCounterClockwise, "pinWheelWipe", "fourBlade", true));
 }
 
 KPrPinWheelWipeEffectFactory::~KPrPinWheelWipeEffectFactory()
 {
 }
 
-static const KLazyLocalizedString s_subTypes[] = {
-    kli18n( "Two Blades Vertical Clockwise" ),
-    kli18n( "Two Blades Horizontal Clockwise" ),
-    kli18n( "Four Blades Horizontal Clockwise" ),
-    kli18n( "Two Blades Vertical Counterclockwise" ),
-    kli18n( "Two Blades Horizontal Counterclockwise" ),
-    kli18n( "Four Blades Horizontal Counterclockwise" )
-};
+static const KLazyLocalizedString s_subTypes[] = {kli18n("Two Blades Vertical Clockwise"),
+                                                  kli18n("Two Blades Horizontal Clockwise"),
+                                                  kli18n("Four Blades Horizontal Clockwise"),
+                                                  kli18n("Two Blades Vertical Counterclockwise"),
+                                                  kli18n("Two Blades Horizontal Counterclockwise"),
+                                                  kli18n("Four Blades Horizontal Counterclockwise")};
 
 QString KPrPinWheelWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return s_subTypes[subType].toString();
     } else {
-        return i18n( "Unknown subtype" );
+        return i18n("Unknown subtype");
     }
 }

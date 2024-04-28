@@ -27,13 +27,19 @@
 #include <QStatusBar>
 
 struct MainWindow::StatusBarItem {
-    StatusBarItem(QWidget* _widget, int _strech, bool _permanent) : m_widget(_widget), m_stretch(_strech), m_permanent(_permanent), m_visible(false) {
+    StatusBarItem(QWidget *_widget, int _strech, bool _permanent)
+        : m_widget(_widget)
+        , m_stretch(_strech)
+        , m_permanent(_permanent)
+        , m_visible(false)
+    {
     }
-    void ensureItemShown(QStatusBar * sb) {
+    void ensureItemShown(QStatusBar *sb)
+    {
         Q_ASSERT(m_widget);
         Q_ASSERT(sb);
-        if(!m_visible) {
-            if(m_permanent) {
+        if (!m_visible) {
+            if (m_permanent) {
                 sb->addPermanentWidget(m_widget, m_stretch);
             } else {
                 sb->addWidget(m_widget, m_stretch);
@@ -42,15 +48,16 @@ struct MainWindow::StatusBarItem {
             m_widget->show();
         }
     }
-    void ensureItemHidden(QStatusBar * sb) {
+    void ensureItemHidden(QStatusBar *sb)
+    {
         Q_ASSERT(sb);
-        if(m_visible) {
+        if (m_visible) {
             sb->removeWidget(m_widget);
             m_visible = false;
             m_widget->hide();
         }
     }
-    QWidget* m_widget;
+    QWidget *m_widget;
     int m_stretch;
     bool m_permanent;
     bool m_visible;

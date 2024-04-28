@@ -7,11 +7,11 @@
 #include "LocationComboBox.h"
 
 // Sheets
+#include "Selection.h"
+#include "core/Sheet.h"
 #include "engine/CellBaseStorage.h"
 #include "engine/MapBase.h"
 #include "engine/NamedAreaManager.h"
-#include "core/Sheet.h"
-#include "Selection.h"
 // #include "SheetsDebug.h"
 
 #include "commands/NamedAreaCommand.h"
@@ -23,19 +23,19 @@
 using namespace Calligra::Sheets;
 
 LocationComboBox::LocationComboBox(QWidget *_parent)
-        : KComboBox(true, _parent)
-        , m_selection(0)
+    : KComboBox(true, _parent)
+    , m_selection(0)
 {
     setCompletionObject(&completionList, true);
     setCompletionMode(KCompletion::CompletionAuto);
 
-    connect(this, &LocationComboBox::textActivated,
-            this, &LocationComboBox::slotActivateItem);
+    connect(this, &LocationComboBox::textActivated, this, &LocationComboBox::slotActivateItem);
 }
 
 void LocationComboBox::setSelection(Selection *selection)
 {
-    if (m_selection == selection) return;
+    if (m_selection == selection)
+        return;
 
     completionList.clear();
     clear();
@@ -54,7 +54,7 @@ void LocationComboBox::setSelection(Selection *selection)
     if (m_selection) {
         insertItem(0, QString());
         updateAddress();
-        Sheet* sheet = m_selection->activeSheet();
+        Sheet *sheet = m_selection->activeSheet();
         if (sheet) {
             slotActiveSheetChanged(sheet);
         } else {
@@ -66,8 +66,9 @@ void LocationComboBox::setSelection(Selection *selection)
 
 void LocationComboBox::slotActiveSheetChanged(Sheet *sheet)
 {
-    if (!sheet) return;
-    disconnect(this, SLOT(slotActiveSheetChanged(Sheet*)));
+    if (!sheet)
+        return;
+    disconnect(this, SLOT(slotActiveSheetChanged(Sheet *)));
 
     NamedAreaManager *manager = sheet->map()->namedAreaManager();
     const QList<QString> areaNames = manager->areaNames();
@@ -80,13 +81,14 @@ void LocationComboBox::slotActiveSheetChanged(Sheet *sheet)
 
 void LocationComboBox::updateAddress()
 {
-    if (!m_selection) return;
+    if (!m_selection)
+        return;
 
     QString address;
     Selection *const selection = m_selection;
     Sheet *const sheet = m_selection->activeSheet();
     if (sheet) {
-        const QVector< QPair<QRectF, QString> > names = sheet->cellStorage()->namedAreas(*selection);
+        const QVector<QPair<QRectF, QString>> names = sheet->cellStorage()->namedAreas(*selection);
         {
             QRect range = selection->lastRange();
             for (int i = 0; i < names.size(); i++) {
@@ -99,8 +101,7 @@ void LocationComboBox::updateAddress()
     if (sheet && sheet->getLcMode()) {
         const QRect lastRange = selection->lastRange();
         if (selection->isSingular()) {
-            address = 'L' + QString::number(lastRange.y()) +
-            'C' + QString::number(lastRange.x());
+            address = 'L' + QString::number(lastRange.y()) + 'C' + QString::number(lastRange.x());
         } else {
             address = QString::number(lastRange.height()) + "Lx";
             address += QString::number(lastRange.width()) + 'C';
@@ -145,7 +146,8 @@ void LocationComboBox::removeCompletionItem(const QString &_item)
 
 void LocationComboBox::slotActivateItem()
 {
-    if (!m_selection) return;
+    if (!m_selection)
+        return;
 
     if (activateItem()) {
         m_selection->scrollToCursor();
@@ -154,7 +156,8 @@ void LocationComboBox::slotActivateItem()
 
 bool LocationComboBox::activateItem()
 {
-    if (!m_selection) return false;
+    if (!m_selection)
+        return false;
 
     Selection *const selection = m_selection;
 
@@ -188,7 +191,7 @@ bool LocationComboBox::activateItem()
         }
     }
     if (validName) {
-        NamedAreaCommand* command = new NamedAreaCommand();
+        NamedAreaCommand *command = new NamedAreaCommand();
         command->setSheet(selection->activeSheet());
         command->setAreaName(text);
         command->add(Region(selection->lastRange(), selection->activeSheet()));
@@ -200,10 +203,10 @@ bool LocationComboBox::activateItem()
     return false;
 }
 
-
-void LocationComboBox::keyPressEvent(QKeyEvent * _ev)
+void LocationComboBox::keyPressEvent(QKeyEvent *_ev)
 {
-    if (!m_selection) return;
+    if (!m_selection)
+        return;
 
     Selection *const selection = m_selection;
 
@@ -226,8 +229,7 @@ void LocationComboBox::keyPressEvent(QKeyEvent * _ev)
             return;
         }
         _ev->accept(); // QKeyEvent
-    }
-    break;
+    } break;
     // Escape pressed, restore original value
     case Qt::Key_Escape:
         updateAddress();

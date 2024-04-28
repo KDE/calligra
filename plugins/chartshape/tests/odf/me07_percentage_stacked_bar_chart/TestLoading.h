@@ -12,7 +12,8 @@
 
 #include <QStandardItemModel>
 
-namespace KoChart {
+namespace KoChart
+{
 
 class TestLoading : public TestLoadingBase
 {

@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef KOODF_STYLE_BASE_H
 #define KOODF_STYLE_BASE_H
 
@@ -17,10 +16,9 @@ class QString;
 class KoXmlStreamReader;
 class KoXmlWriter;
 
-
 class KOODF2_EXPORT KoOdfStyleBase
 {
- public:
+public:
     enum StyleType {
         StyleStyle,
         PageLayout
@@ -50,10 +48,9 @@ class KOODF2_EXPORT KoOdfStyleBase
     virtual bool readOdf(KoXmlStreamReader &reader) = 0;
     virtual bool saveOdf(KoXmlWriter *writer) = 0;
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif

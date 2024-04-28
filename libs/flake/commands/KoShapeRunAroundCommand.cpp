@@ -6,32 +6,41 @@
 
 #include "KoShapeRunAroundCommand.h"
 
-#include <QString>
-#include <KLocalizedString>
 #include "KoShape.h"
+#include <KLocalizedString>
+#include <QString>
 
 class Q_DECL_HIDDEN KoShapeRunAroundCommand::Private
 {
 public:
-    Private(KoShape *s, KoShape::TextRunAroundSide side, int runThrough, qreal distanceLeft, qreal distanceTop, qreal distanceRight, qreal distanceBottom, qreal threshold, KoShape::TextRunAroundContour contour)
-    : shape(s)
-    , newSide(side)
-    , newRunThrough(runThrough)
-    , newDistanceLeft(distanceLeft)
-    , newDistanceTop(distanceTop)
-    , newDistanceRight(distanceRight)
-    , newDistanceBottom(distanceBottom)
-    , newThreshold(threshold)
-    , newContour(contour)
-    , oldSide(shape->textRunAroundSide())
-    , oldRunThrough(shape->runThrough())
-    , oldDistanceLeft(shape->textRunAroundDistanceLeft())
-    , oldDistanceTop(shape->textRunAroundDistanceTop())
-    , oldDistanceRight(shape->textRunAroundDistanceRight())
-    , oldDistanceBottom(shape->textRunAroundDistanceBottom())
-    , oldThreshold(shape->textRunAroundThreshold())
-    , oldContour(shape->textRunAroundContour())
-    {}
+    Private(KoShape *s,
+            KoShape::TextRunAroundSide side,
+            int runThrough,
+            qreal distanceLeft,
+            qreal distanceTop,
+            qreal distanceRight,
+            qreal distanceBottom,
+            qreal threshold,
+            KoShape::TextRunAroundContour contour)
+        : shape(s)
+        , newSide(side)
+        , newRunThrough(runThrough)
+        , newDistanceLeft(distanceLeft)
+        , newDistanceTop(distanceTop)
+        , newDistanceRight(distanceRight)
+        , newDistanceBottom(distanceBottom)
+        , newThreshold(threshold)
+        , newContour(contour)
+        , oldSide(shape->textRunAroundSide())
+        , oldRunThrough(shape->runThrough())
+        , oldDistanceLeft(shape->textRunAroundDistanceLeft())
+        , oldDistanceTop(shape->textRunAroundDistanceTop())
+        , oldDistanceRight(shape->textRunAroundDistanceRight())
+        , oldDistanceBottom(shape->textRunAroundDistanceBottom())
+        , oldThreshold(shape->textRunAroundThreshold())
+        , oldContour(shape->textRunAroundContour())
+    {
+    }
 
     KoShape *shape;
     KoShape::TextRunAroundSide newSide;
@@ -52,16 +61,25 @@ public:
     KoShape::TextRunAroundContour oldContour;
 };
 
-KoShapeRunAroundCommand::KoShapeRunAroundCommand(KoShape *shape, KoShape::TextRunAroundSide side, int runThrough, qreal distanceLeft, qreal distanceTop, qreal distanceRight, qreal distanceBottom, qreal threshold, KoShape::TextRunAroundContour contour, KUndo2Command *parent)
-: KUndo2Command(parent)
-, d(new Private(shape, side, runThrough, distanceLeft, distanceTop, distanceRight, distanceBottom, threshold, contour))
+KoShapeRunAroundCommand::KoShapeRunAroundCommand(KoShape *shape,
+                                                 KoShape::TextRunAroundSide side,
+                                                 int runThrough,
+                                                 qreal distanceLeft,
+                                                 qreal distanceTop,
+                                                 qreal distanceRight,
+                                                 qreal distanceBottom,
+                                                 qreal threshold,
+                                                 KoShape::TextRunAroundContour contour,
+                                                 KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , d(new Private(shape, side, runThrough, distanceLeft, distanceTop, distanceRight, distanceBottom, threshold, contour))
 {
     setText(kundo2_i18n("Change Shape RunAround"));
 }
 
 KoShapeRunAroundCommand::~KoShapeRunAroundCommand()
 {
-   delete d;
+    delete d;
 }
 
 void KoShapeRunAroundCommand::redo()

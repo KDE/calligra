@@ -30,49 +30,55 @@ class Layout : public QObject
 {
     Q_OBJECT
 public:
-    explicit Layout(const QString& _id);
+    explicit Layout(const QString &_id);
     virtual ~Layout();
+
 public:
-    const QString& id() const;
+    const QString &id() const;
+
 public:
-    void replaceLayout(Layout* layout);
-    void addShapes(QList<KoShape*> _shapes);
-    void addShape(KoShape* _shape);
-    void removeShape(KoShape* _shape);
+    void replaceLayout(Layout *layout);
+    void addShapes(QList<KoShape *> _shapes);
+    void addShape(KoShape *_shape);
+    void removeShape(KoShape *_shape);
     virtual QRectF boundingBox() const;
+
 protected:
-    const QList<KoShape*>& shapes() const;
+    const QList<KoShape *> &shapes() const;
+
 protected:
     /**
      * This function is called when a list of shapes is added to the layout.
      *
      * The default implementation call shapeAdded for each shape
      */
-    virtual void shapesAdded(QList<KoShape*> _shape);
+    virtual void shapesAdded(QList<KoShape *> _shape);
     /**
      * This function is called when a shape is added to the layout.
      */
-    virtual void shapeAdded(KoShape* _shape) = 0;
+    virtual void shapeAdded(KoShape *_shape) = 0;
     /**
      * This function is called when a shape is removed to the layout.
      */
-    virtual void shapeRemoved(KoShape* _shape) = 0;
+    virtual void shapeRemoved(KoShape *_shape) = 0;
     /**
      * This function is called when a shape geometry is changed.
      */
-    virtual void shapeGeometryChanged(KoShape* _shape) = 0;
+    virtual void shapeGeometryChanged(KoShape *_shape) = 0;
     /**
      * This function is called when the layout is expected to update the position of shapes
      */
     virtual void relayout() = 0;
+
 protected:
     // Reimplemented from QObject
-    virtual bool event(QEvent * e);
+    virtual bool event(QEvent *e);
 Q_SIGNALS:
-    void boundingBoxChanged(const QRectF& _rect);
+    void boundingBoxChanged(const QRectF &_rect);
+
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

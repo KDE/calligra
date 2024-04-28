@@ -10,38 +10,33 @@
 #include <KLocalizedString>
 #include <klazylocalizedstring.h>
 
-#include "KPrBarWipeFromTopStrategy.h"
-#include "KPrBarWipeFromLeftStrategy.h"
 #include "KPrBarWipeFromBottomStrategy.h"
+#include "KPrBarWipeFromLeftStrategy.h"
 #include "KPrBarWipeFromRightStrategy.h"
+#include "KPrBarWipeFromTopStrategy.h"
 
 #define BarWipeEffectId "BarWipeEffect"
 
 KPrBarWipeEffectFactory::KPrBarWipeEffectFactory()
-: KPrPageEffectFactory( BarWipeEffectId, i18n( "Bar" ) )
+    : KPrPageEffectFactory(BarWipeEffectId, i18n("Bar"))
 {
-    addStrategy( new KPrBarWipeFromTopStrategy() );
-    addStrategy( new KPrBarWipeFromBottomStrategy() );
-    addStrategy( new KPrBarWipeFromLeftStrategy() );
-    addStrategy( new KPrBarWipeFromRightStrategy() );
+    addStrategy(new KPrBarWipeFromTopStrategy());
+    addStrategy(new KPrBarWipeFromBottomStrategy());
+    addStrategy(new KPrBarWipeFromLeftStrategy());
+    addStrategy(new KPrBarWipeFromRightStrategy());
 }
 
 KPrBarWipeEffectFactory::~KPrBarWipeEffectFactory()
 {
 }
 
-static const KLazyLocalizedString s_subTypes[] = {
-    kli18n( "From Left" ),
-    kli18n( "From Top" ),
-    kli18n( "From Right" ),
-    kli18n( "From Bottom" )
-};
+static const KLazyLocalizedString s_subTypes[] = {kli18n("From Left"), kli18n("From Top"), kli18n("From Right"), kli18n("From Bottom")};
 
 QString KPrBarWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return s_subTypes[subType].toString();
     } else {
-        return i18n( "Unknown subtype" );
+        return i18n("Unknown subtype");
     }
 }

@@ -2,17 +2,17 @@
  * SPDX-FileCopyrightText: 2015 Stefano Bonicatti <smjert@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 #include "KoHashGeneratorProvider.h"
 
-#include <QMutexLocker>
 #include <QGlobalStatic>
+#include <QMutexLocker>
 
 #include "KoMD5Generator.h"
 
 KoHashGeneratorProvider *KoHashGeneratorProvider::instance_var = 0;
 Q_GLOBAL_STATIC(KoHashGeneratorProvider, s_instance);
-    
+
 KoHashGeneratorProvider::KoHashGeneratorProvider()
 {
     // Initialize default generators
@@ -35,8 +35,7 @@ void KoHashGeneratorProvider::setGenerator(const QString &algorithm, KoHashGener
     if (hashGenerators.contains(algorithm)) {
         delete hashGenerators.take(algorithm);
         hashGenerators[algorithm] = generator;
-    }
-    else
+    } else
         hashGenerators.insert(algorithm, generator);
 }
 

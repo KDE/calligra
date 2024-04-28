@@ -26,29 +26,28 @@
 
 #include <QDebug>
 
-
 StylesDelegate::StylesDelegate()
-    : QStyledItemDelegate(),
-      m_editButtonPressed(false),
-      m_deleteButtonPressed(false),
-      m_enableEditButton(true)
+    : QStyledItemDelegate()
+    , m_editButtonPressed(false)
+    , m_deleteButtonPressed(false)
+    , m_enableEditButton(true)
 {
     m_buttonSize = 16;
     m_buttonDistance = 2;
 }
 
-void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optionV1,
-                            const QModelIndex &index) const
+void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optionV1, const QModelIndex &index) const
 {
     QStyleOptionViewItem option = optionV1;
     initStyleOption(&option, index);
     if (!index.data(AbstractStylesModel::isTitleRole).toBool()) {
         QStyledItemDelegate::paint(painter, option, index);
 
-        //the following is needed to find out if the view has vertical scrollbars. If there is no view just paint and do not attempt to draw the control buttons.
-        //this is needed because it seems that the option.rect given does not exclude the vertical scrollBar. This means that we can draw the button in an area that is going to be covered by the vertical scrollBar.
-        const QAbstractItemView *view = static_cast<const QAbstractItemView*>(option.widget);
-        if (!view){
+        // the following is needed to find out if the view has vertical scrollbars. If there is no view just paint and do not attempt to draw the control
+        // buttons. this is needed because it seems that the option.rect given does not exclude the vertical scrollBar. This means that we can draw the button
+        // in an area that is going to be covered by the vertical scrollBar.
+        const QAbstractItemView *view = static_cast<const QAbstractItemView *>(option.widget);
+        if (!view) {
             return;
         }
         QScrollBar *scrollBar = view->verticalScrollBar();
@@ -61,10 +60,10 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
             return;
         }
         // Delete style button.
-        int dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) - m_buttonSize - m_buttonDistance -2;
-        int dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
-        int dx2 = -m_buttonSize - m_buttonDistance -2;
-        int dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
+        int dx1 = option.rect.width() - qMin(option.rect.height() - 2, m_buttonSize) - m_buttonSize - m_buttonDistance - 2;
+        int dy1 = 1 + (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
+        int dx2 = -m_buttonSize - m_buttonDistance - 2;
+        int dy2 = -1 - (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
         /* TODO: when we can safely delete styles, re-enable this
     QStyleOptionButton optDel;
     if (!m_deleteButtonPressed) {
@@ -76,13 +75,13 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     view->style()->drawControl(QStyle::CE_PushButton, &optDel, painter, 0);
 */
         // Open style manager dialog button.
-        if (!m_enableEditButton) {  // when we don't want edit icon
+        if (!m_enableEditButton) { // when we don't want edit icon
             return;
         }
-        dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) -2;
-        dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
+        dx1 = option.rect.width() - qMin(option.rect.height() - 2, m_buttonSize) - 2;
+        dy1 = 1 + (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
         dx2 = -2;
-        dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
+        dy2 = -1 - (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
         QStyleOptionButton optEdit;
         if (!m_editButtonPressed) {
             optEdit.state |= QStyle::State_Enabled;
@@ -91,8 +90,7 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         optEdit.features |= QStyleOptionButton::Flat;
         optEdit.rect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
         view->style()->drawControl(QStyle::CE_PushButton, &optEdit, painter, 0);
-    }
-    else {
+    } else {
         const QString category = index.data().toString();
         const QRect optRect = option.rect;
         QFont font(QApplication::font());
@@ -100,7 +98,7 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         const QFontMetrics fontMetrics = QFontMetrics(font);
         QColor outlineColor = option.palette.text().color();
         outlineColor.setAlphaF(0.35);
-        //BEGIN: top left corner
+        // BEGIN: top left corner
         {
             painter->save();
             painter->setPen(QPen(outlineColor, 0));
@@ -110,8 +108,8 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
             painter->drawArc(arc, 1440, 1440);
             painter->restore();
         }
-        //END: top left corner
-        //BEGIN: left vertical line
+        // END: top left corner
+        // BEGIN: left vertical line
         {
             QPoint start(optRect.topLeft());
             start.ry() += 3;
@@ -122,8 +120,8 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
             gradient.setColorAt(1, Qt::transparent);
             painter->fillRect(QRect(start, QSize(1, fontMetrics.height() + 5)), gradient);
         }
-        //END: left vertical line
-        //BEGIN: horizontal line
+        // END: left vertical line
+        // BEGIN: horizontal line
         {
             QPoint start(optRect.topLeft());
             start.rx() += 3;
@@ -131,8 +129,8 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
             horizontalGradTop.rx() += optRect.width() - 6;
             painter->fillRect(QRect(start, QSize(optRect.width() - 6, 1)), outlineColor);
         }
-        //END: horizontal line
-        //BEGIN: top right corner
+        // END: horizontal line
+        // BEGIN: top right corner
         {
             painter->save();
             painter->setPen(QPen(outlineColor, 0));
@@ -143,8 +141,8 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
             painter->drawArc(arc, 0, 1440);
             painter->restore();
         }
-        //END: top right corner
-        //BEGIN: right vertical line
+        // END: top right corner
+        // BEGIN: right vertical line
         {
             QPoint start(optRect.topRight());
             start.ry() += 3;
@@ -155,8 +153,8 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
             gradient.setColorAt(1, Qt::transparent);
             painter->fillRect(QRect(start, QSize(1, fontMetrics.height() + 5)), gradient);
         }
-        //END: right vertical line
-        //BEGIN: text
+        // END: right vertical line
+        // BEGIN: text
         {
             QRect textRect(option.rect);
             textRect.setTop(textRect.top() + 7);
@@ -171,7 +169,7 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
             painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, category);
             painter->restore();
         }
-        //END: text
+        // END: text
     }
 }
 
@@ -187,11 +185,12 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
     QStyleOptionViewItem option = optionV1;
     initStyleOption(&option, index);
 
-    //the following is needed to find out if the view has vertical scrollbars. If not just paint and do not attempt to draw the control buttons.
-    //this is needed because it seems that the option.rect given does not exclude the vertical scrollBar. This means that we can draw the button in an area that is going to be covered by the vertical scrollBar.
+    // the following is needed to find out if the view has vertical scrollbars. If not just paint and do not attempt to draw the control buttons.
+    // this is needed because it seems that the option.rect given does not exclude the vertical scrollBar. This means that we can draw the button in an area
+    // that is going to be covered by the vertical scrollBar.
 
-    const QAbstractItemView *view = static_cast<const QAbstractItemView*>(option.widget);
-    if (!view){
+    const QAbstractItemView *view = static_cast<const QAbstractItemView *>(option.widget);
+    if (!view) {
         return false;
     }
     QScrollBar *scrollBar = view->verticalScrollBar();
@@ -201,29 +200,28 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
     }
 
     if (event->type() == QEvent::MouseButtonPress) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        int dx1 = option.rect.width()- qMin(option.rect.height()-2, m_buttonSize) - m_buttonSize - m_buttonDistance -2;
-        int dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
-        int dx2 = - m_buttonSize - m_buttonDistance -2;
-        int dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
-/*TODO: when we can safely delete styles, re-enable this
-        QRect delRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
-        if (delRect.contains(mouseEvent->pos())) {
-            m_deleteButtonPressed = true;
-        }
-        else {
-            m_deleteButtonPressed = false;
-        }
-*/
-        dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) -2;
-        dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+        int dx1 = option.rect.width() - qMin(option.rect.height() - 2, m_buttonSize) - m_buttonSize - m_buttonDistance - 2;
+        int dy1 = 1 + (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
+        int dx2 = -m_buttonSize - m_buttonDistance - 2;
+        int dy2 = -1 - (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
+        /*TODO: when we can safely delete styles, re-enable this
+                QRect delRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
+                if (delRect.contains(mouseEvent->pos())) {
+                    m_deleteButtonPressed = true;
+                }
+                else {
+                    m_deleteButtonPressed = false;
+                }
+        */
+        dx1 = option.rect.width() - qMin(option.rect.height() - 2, m_buttonSize) - 2;
+        dy1 = 1 + (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
         dx2 = -2;
-        dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
+        dy2 = -1 - (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
         QRect editRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
-        if (editRect.contains(mouseEvent->pos())){
+        if (editRect.contains(mouseEvent->pos())) {
             m_editButtonPressed = true;
-        }
-        else {
+        } else {
             m_editButtonPressed = false;
         }
         emit needsUpdate(index);
@@ -233,52 +231,54 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         m_editButtonPressed = false;
         emit needsUpdate(index);
 
-        if (index.flags() == Qt::NoItemFlags) { //if the item is NoItemFlagged, it means it is a separator in the view. In that case, we should not close the combo's drop down.
+        if (index.flags() == Qt::NoItemFlags) { // if the item is NoItemFlagged, it means it is a separator in the view. In that case, we should not close the
+                                                // combo's drop down.
             return true;
         }
 
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        int dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) - m_buttonSize - m_buttonDistance -2;
-        int dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
-        int dx2 = - m_buttonSize - m_buttonDistance -2;
-        int dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
-/*TODO: when we can safely delete styles, re-enable this
-        QRect delRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
-        if (delRect.contains(mouseEvent->pos())) {
-            emit deleteStyleButtonClicked(index);
-            return true;
-        }
-*/
-        dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) -2;
-        dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+        int dx1 = option.rect.width() - qMin(option.rect.height() - 2, m_buttonSize) - m_buttonSize - m_buttonDistance - 2;
+        int dy1 = 1 + (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
+        int dx2 = -m_buttonSize - m_buttonDistance - 2;
+        int dy2 = -1 - (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
+        /*TODO: when we can safely delete styles, re-enable this
+                QRect delRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
+                if (delRect.contains(mouseEvent->pos())) {
+                    emit deleteStyleButtonClicked(index);
+                    return true;
+                }
+        */
+        dx1 = option.rect.width() - qMin(option.rect.height() - 2, m_buttonSize) - 2;
+        dy1 = 1 + (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
         dx2 = -2;
-        dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
+        dy2 = -1 - (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
         QRect editRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
-        if (editRect.contains(mouseEvent->pos())){
+        if (editRect.contains(mouseEvent->pos())) {
             emit styleManagerButtonClicked(index);
             return true;
         }
         emit clickedInItem(index);
-        return true; //returning true here means the QComboBox mouseRelease code will not get called. The effect of it is that hidePopup will not get called. StylesCombo calls it in the corresponding slot.
+        return true; // returning true here means the QComboBox mouseRelease code will not get called. The effect of it is that hidePopup will not get called.
+                     // StylesCombo calls it in the corresponding slot.
     }
     if (event->type() == QEvent::MouseMove) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        int dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) - m_buttonSize - m_buttonDistance -2;
-        int dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
-        int dx2 = - m_buttonSize - m_buttonDistance -2;
-        int dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
-/*TODO: when we can safely delete styles, re-enable this
-        QRect delRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
-        if (!delRect.contains(mouseEvent->pos())) {
-            m_deleteButtonPressed = false;
-        }
-*/
-        dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) -2;
-        dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+        int dx1 = option.rect.width() - qMin(option.rect.height() - 2, m_buttonSize) - m_buttonSize - m_buttonDistance - 2;
+        int dy1 = 1 + (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
+        int dx2 = -m_buttonSize - m_buttonDistance - 2;
+        int dy2 = -1 - (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
+        /*TODO: when we can safely delete styles, re-enable this
+                QRect delRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
+                if (!delRect.contains(mouseEvent->pos())) {
+                    m_deleteButtonPressed = false;
+                }
+        */
+        dx1 = option.rect.width() - qMin(option.rect.height() - 2, m_buttonSize) - 2;
+        dy1 = 1 + (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
         dx2 = -2;
-        dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
+        dy2 = -1 - (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
         QRect editRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
-        if (!editRect.contains(mouseEvent->pos())){
+        if (!editRect.contains(mouseEvent->pos())) {
             m_editButtonPressed = false;
         }
         emit needsUpdate(index);

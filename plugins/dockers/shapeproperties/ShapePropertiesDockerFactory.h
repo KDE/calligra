@@ -17,9 +17,8 @@ public:
     ShapePropertiesDockerFactory();
 
     QString id() const override;
-    QDockWidget* createDockWidget() override;
+    QDockWidget *createDockWidget() override;
     DockPosition defaultDockPosition() const override;
-
 };
 
 #endif // SHAPEPROPERTIESDOCKERFACTORY_H

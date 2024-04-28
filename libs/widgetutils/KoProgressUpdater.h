@@ -8,9 +8,9 @@
 
 #include "kowidgetutils_export.h"
 
-#include <QString>
 #include <QObject>
 #include <QPointer>
+#include <QString>
 
 class KoUpdater;
 class KoProgressProxy;
@@ -55,18 +55,13 @@ class KOWIDGETUTILS_EXPORT KoProgressUpdater : public QObject
 {
     Q_OBJECT
 public:
-
-    enum Mode {
-        Threaded,
-        Unthreaded
-    };
+    enum Mode { Threaded, Unthreaded };
 
     /**
      * Constructor.
      * @param progressBar the progress bar to update.
      */
-    explicit KoProgressUpdater(KoProgressProxy *progressBar, Mode mode = Threaded,
-                               QTextStream *output = 0);
+    explicit KoProgressUpdater(KoProgressProxy *progressBar, Mode mode = Threaded, QTextStream *output = 0);
 
     /// destructor
     ~KoProgressUpdater() override;
@@ -95,8 +90,7 @@ public:
      * are packed in a QPointer so you can check whether they have
      * been deleted before dereferencing.
      */
-    QPointer<KoUpdater> startSubtask(int weight=1,
-                                     const QString &name = QString());
+    QPointer<KoUpdater> startSubtask(int weight = 1, const QString &name = QString());
 
     /**
      * Cancelling the action will make each subtask be marked as 'interrupted' and
@@ -130,14 +124,8 @@ private Q_SLOTS:
     void updateUi();
 
 private:
-
     class Private;
     Private *const d;
-
 };
 
-
-
-
 #endif
-

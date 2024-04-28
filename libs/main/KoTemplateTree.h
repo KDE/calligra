@@ -8,20 +8,20 @@
 #ifndef koTemplateTree_h
 #define koTemplateTree_h
 
-#include <QList>
 #include "komain_export.h"
+#include <QList>
 
 class KoTemplate;
 class KoTemplateGroup;
 
 class KOMAIN_EXPORT KoTemplateTree
 {
-
 public:
     explicit KoTemplateTree(const QString &templatesResourcePath, bool readTree = false);
     ~KoTemplateTree();
 
-    QString templatesResourcePath() const {
+    QString templatesResourcePath() const
+    {
         return m_templatesResourcePath;
     }
     void readTemplateTree();
@@ -30,23 +30,27 @@ public:
     void add(KoTemplateGroup *g);
     KoTemplateGroup *find(const QString &name) const;
 
-    KoTemplateGroup *defaultGroup() const {
+    KoTemplateGroup *defaultGroup() const
+    {
         return m_defaultGroup;
     }
-    KoTemplate *defaultTemplate() const {
+    KoTemplate *defaultTemplate() const
+    {
         return m_defaultTemplate;
     }
 
-    QList<KoTemplateGroup*> groups () const { return m_groups; }
+    QList<KoTemplateGroup *> groups() const
+    {
+        return m_groups;
+    }
 
 private:
     void readGroups();
     void readTemplates();
-    void writeTemplate(KoTemplate *t, KoTemplateGroup *group,
-                       const QString &localDir);
+    void writeTemplate(KoTemplate *t, KoTemplateGroup *group, const QString &localDir);
 
     QString m_templatesResourcePath;
-    QList<KoTemplateGroup*> m_groups;
+    QList<KoTemplateGroup *> m_groups;
     KoTemplateGroup *m_defaultGroup;
     KoTemplate *m_defaultTemplate;
 };

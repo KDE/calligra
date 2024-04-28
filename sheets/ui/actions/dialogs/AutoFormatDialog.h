@@ -29,7 +29,7 @@ class AutoFormatDialog : public ActionDialog
 {
     Q_OBJECT
 public:
-    explicit AutoFormatDialog(QWidget* parent);
+    explicit AutoFormatDialog(QWidget *parent);
     ~AutoFormatDialog() override;
 
     void setList(const QMap<QString, QPixmap> &list);
@@ -41,9 +41,10 @@ private Q_SLOTS:
 
 protected:
     virtual void onApply() override;
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

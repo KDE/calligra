@@ -21,18 +21,19 @@ class QIODevice;
  * The binary data for those sounds are saved in this class.
  */
 
-/* 
+/*
  * TODO needs a file for playing, store it as a tmp file
  */
-class STAGE_EXPORT KPrSoundData {
+class STAGE_EXPORT KPrSoundData
+{
 public:
     /**
      * The storage location
      */
     enum StorageLocation {
-        SaveRelativeUrl,        ///< in the odf use a relative (to document) xlink:href, if possible
-        SaveAbsoluteUrl,        ///< in the odf use a fully specified xlink:href
-        SaveInStore            ///< Save the sound data in the ODF store
+        SaveRelativeUrl, ///< in the odf use a relative (to document) xlink:href, if possible
+        SaveAbsoluteUrl, ///< in the odf use a fully specified xlink:href
+        SaveInStore ///< Save the sound data in the ODF store
     };
 
     /**
@@ -87,18 +88,16 @@ public:
      */
     bool isTaggedForSaving();
 
-
     bool operator==(const KPrSoundData &other) const;
 
     /**
      * Get the collection used
      */
-    KPrSoundCollection * soundCollection();
+    KPrSoundCollection *soundCollection();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif
-

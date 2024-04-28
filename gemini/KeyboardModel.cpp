@@ -8,9 +8,9 @@
 
 struct Key {
     explicit Key(QString keyText, KeyboardModel::KeyType key = KeyboardModel::NormalKey, float size = 1.0f)
-        : text(keyText),
-          keyType(key),
-          width(size)
+        : text(keyText)
+        , keyType(key)
+        , width(size)
     {
     }
 
@@ -23,15 +23,13 @@ class KeyboardModel::Private
 {
 public:
     Private()
-        : mode(NormalMode),
-          currentKeys(&normalKeys),
-          useBuiltIn(true)
-    {
+        : mode(NormalMode)
+        , currentKeys(&normalKeys)
+        , useBuiltIn(true){
 #ifdef Q_OS_WIN
-        //useBuiltIn = false;
+    // useBuiltIn = false;
 #endif
-    }
-    KeyboardMode mode;
+          } KeyboardMode mode;
     QList<Key> *currentKeys;
     QList<Key> normalKeys;
     QList<Key> capitalKeys;
@@ -39,8 +37,9 @@ public:
     bool useBuiltIn;
 };
 
-KeyboardModel::KeyboardModel(QObject* parent)
-    : QAbstractListModel(parent), d(new Private)
+KeyboardModel::KeyboardModel(QObject *parent)
+    : QAbstractListModel(parent)
+    , d(new Private)
 {
 }
 
@@ -60,15 +59,14 @@ QHash<int, QByteArray> KeyboardModel::roleNames() const
 
 void KeyboardModel::classBegin()
 {
-
 }
 
 void KeyboardModel::componentComplete()
 {
-    //Set up keys
+    // Set up keys
 
-    //Normal mode
-    //First row
+    // Normal mode
+    // First row
     d->normalKeys.append(Key("q"));
     d->normalKeys.append(Key("w"));
     d->normalKeys.append(Key("e"));
@@ -80,7 +78,7 @@ void KeyboardModel::componentComplete()
     d->normalKeys.append(Key("o"));
     d->normalKeys.append(Key("p"));
     d->normalKeys.append(Key(QChar(0x232B), BackspaceKey, 2.0f));
-    //Second row
+    // Second row
     d->normalKeys.append(Key("", SpacerKey, 0.5f));
     d->normalKeys.append(Key("a"));
     d->normalKeys.append(Key("s"));
@@ -93,7 +91,7 @@ void KeyboardModel::componentComplete()
     d->normalKeys.append(Key("l"));
     d->normalKeys.append(Key("'"));
     d->normalKeys.append(Key(QChar(0x23CE), EnterKey, 1.5f));
-    //Third row
+    // Third row
     d->normalKeys.append(Key(QChar(0x21E7), ShiftKey));
     d->normalKeys.append(Key("z"));
     d->normalKeys.append(Key("x"));
@@ -106,17 +104,17 @@ void KeyboardModel::componentComplete()
     d->normalKeys.append(Key("."));
     d->normalKeys.append(Key("?"));
     d->normalKeys.append(Key(QChar(0x21E7), ShiftKey));
-    //Fourth row
+    // Fourth row
     d->normalKeys.append(Key("&123", NumericModeKey, 2.f));
-    //d->normalKeys.append(Key("Ctrl", SpacerKey));
-    //d->normalKeys.append(Key(QChar(0x263A), SpacerKey));
+    // d->normalKeys.append(Key("Ctrl", SpacerKey));
+    // d->normalKeys.append(Key(QChar(0x263A), SpacerKey));
     d->normalKeys.append(Key(" ", NormalKey, 6.f));
     d->normalKeys.append(Key(QChar(0x2190), LeftArrowKey, 2.f));
     d->normalKeys.append(Key(QChar(0x2192), RightArrowKey, 2.f));
-    //d->normalKeys.append(Key("Close", CloseKey));
+    // d->normalKeys.append(Key("Close", CloseKey));
 
-    //Capital mode
-    //First row
+    // Capital mode
+    // First row
     d->capitalKeys.append(Key("Q"));
     d->capitalKeys.append(Key("W"));
     d->capitalKeys.append(Key("E"));
@@ -128,7 +126,7 @@ void KeyboardModel::componentComplete()
     d->capitalKeys.append(Key("O"));
     d->capitalKeys.append(Key("P"));
     d->capitalKeys.append(Key(QChar(0x232B), BackspaceKey, 2.0f));
-    //Second row
+    // Second row
     d->capitalKeys.append(Key("", SpacerKey, 0.5f));
     d->capitalKeys.append(Key("A"));
     d->capitalKeys.append(Key("S"));
@@ -141,7 +139,7 @@ void KeyboardModel::componentComplete()
     d->capitalKeys.append(Key("L"));
     d->capitalKeys.append(Key("\""));
     d->capitalKeys.append(Key(QChar(0x23CE), EnterKey, 1.5f));
-    //Third row
+    // Third row
     d->capitalKeys.append(Key(QChar(0x21E7), ShiftKey));
     d->capitalKeys.append(Key("Z"));
     d->capitalKeys.append(Key("X"));
@@ -154,18 +152,18 @@ void KeyboardModel::componentComplete()
     d->capitalKeys.append(Key(":"));
     d->capitalKeys.append(Key("!"));
     d->capitalKeys.append(Key(QChar(0x21E7), ShiftKey));
-    //Fourth row
+    // Fourth row
     d->capitalKeys.append(Key("&123", NumericModeKey, 2.f));
-    //d->capitalKeys.append(Key("Ctrl", SpacerKey));
-    //d->capitalKeys.append(Key(QChar(0x263A), SpacerKey));
+    // d->capitalKeys.append(Key("Ctrl", SpacerKey));
+    // d->capitalKeys.append(Key(QChar(0x263A), SpacerKey));
     d->capitalKeys.append(Key(" ", NormalKey, 6.f));
     d->capitalKeys.append(Key(QChar(0x2190), LeftArrowKey, 2.f));
     d->capitalKeys.append(Key(QChar(0x2192), RightArrowKey, 2.f));
-    //d->capitalKeys.append(Key("Close", CloseKey));
+    // d->capitalKeys.append(Key("Close", CloseKey));
 
-    //Capital mode
-    //First row
-    //d->numericKeys.append(Key(QChar(0x21B9), SpacerKey));
+    // Capital mode
+    // First row
+    // d->numericKeys.append(Key(QChar(0x21B9), SpacerKey));
     d->numericKeys.append(Key("!"));
     d->numericKeys.append(Key("@"));
     d->numericKeys.append(Key("#"));
@@ -176,10 +174,10 @@ void KeyboardModel::componentComplete()
     d->numericKeys.append(Key("1"));
     d->numericKeys.append(Key("2"));
     d->numericKeys.append(Key("3"));
-    //d->numericKeys.append(Key("", SpacerKey, 0.5f));
+    // d->numericKeys.append(Key("", SpacerKey, 0.5f));
     d->numericKeys.append(Key(QChar(0x232B), BackspaceKey, 2.f));
-    //Second row
-    //d->numericKeys.append(Key("", SpacerKey));
+    // Second row
+    // d->numericKeys.append(Key("", SpacerKey));
     d->numericKeys.append(Key("("));
     d->numericKeys.append(Key(")"));
     d->numericKeys.append(Key("-"));
@@ -190,10 +188,10 @@ void KeyboardModel::componentComplete()
     d->numericKeys.append(Key("4"));
     d->numericKeys.append(Key("5"));
     d->numericKeys.append(Key("6"));
-    //d->numericKeys.append(Key("", SpacerKey, 0.5f));
+    // d->numericKeys.append(Key("", SpacerKey, 0.5f));
     d->numericKeys.append(Key(QChar(0x23CE), EnterKey, 2.f));
-    //Third row
-    //d->numericKeys.append(Key("", SpacerKey));
+    // Third row
+    // d->numericKeys.append(Key("", SpacerKey));
     d->numericKeys.append(Key("\\"));
     d->numericKeys.append(Key(";"));
     d->numericKeys.append(Key(":"));
@@ -205,10 +203,10 @@ void KeyboardModel::componentComplete()
     d->numericKeys.append(Key("8"));
     d->numericKeys.append(Key("9"));
     d->numericKeys.append(Key("", SpacerKey, 1.f));
-    //Fourth row
+    // Fourth row
     d->numericKeys.append(Key("&123", NumericModeKey, 2.f));
-    //d->numericKeys.append(Key("Ctrl", SpacerKey));
-    //d->numericKeys.append(Key(QChar(0x263A), SpacerKey));
+    // d->numericKeys.append(Key("Ctrl", SpacerKey));
+    // d->numericKeys.append(Key(QChar(0x263A), SpacerKey));
     d->numericKeys.append(Key(QChar(0x2190), LeftArrowKey, 1.5f));
     d->numericKeys.append(Key(" ", NormalKey, 2.5f));
     d->numericKeys.append(Key("", SpacerKey, 0.5f));
@@ -216,29 +214,29 @@ void KeyboardModel::componentComplete()
     d->numericKeys.append(Key("."));
     d->numericKeys.append(Key("", SpacerKey, .5f));
     d->numericKeys.append(Key(QChar(0x2192), RightArrowKey, 1.5f));
-    //d->numericKeys.append(Key("Close", CloseKey));
+    // d->numericKeys.append(Key("Close", CloseKey));
 }
 
-QVariant KeyboardModel::data(const QModelIndex& index, int role) const
+QVariant KeyboardModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
 
-    switch(role) {
-        case TextRole:
-            return d->currentKeys->at(index.row()).text;
-        case TypeRole:
-            return QVariant::fromValue<int>(d->currentKeys->at(index.row()).keyType);
-        case WidthRole:
-            return d->currentKeys->at(index.row()).width;
-        default:
-            break;
+    switch (role) {
+    case TextRole:
+        return d->currentKeys->at(index.row()).text;
+    case TypeRole:
+        return QVariant::fromValue<int>(d->currentKeys->at(index.row()).keyType);
+    case WidthRole:
+        return d->currentKeys->at(index.row()).width;
+    default:
+        break;
     }
 
     return QVariant();
 }
 
-int KeyboardModel::rowCount(const QModelIndex& parent) const
+int KeyboardModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return d->currentKeys->count();
@@ -257,16 +255,16 @@ void KeyboardModel::setKeyboardMode(KeyboardModel::KeyboardMode mode)
         beginRemoveRows(QModelIndex(), 0, d->currentKeys->count() - 1);
         endRemoveRows();
 
-        switch(d->mode) {
-            case NormalMode:
-                d->currentKeys = &d->normalKeys;
-                break;
-            case CapitalMode:
-                d->currentKeys = &d->capitalKeys;
-                break;
-            case NumericMode:
-                d->currentKeys = &d->numericKeys;
-                break;
+        switch (d->mode) {
+        case NormalMode:
+            d->currentKeys = &d->normalKeys;
+            break;
+        case CapitalMode:
+            d->currentKeys = &d->capitalKeys;
+            break;
+        case NumericMode:
+            d->currentKeys = &d->numericKeys;
+            break;
         }
 
         beginInsertRows(QModelIndex(), 0, d->currentKeys->count() - 1);

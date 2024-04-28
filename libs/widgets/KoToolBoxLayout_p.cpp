@@ -9,6 +9,6 @@
 
 KoToolBoxLayout::~KoToolBoxLayout()
 {
-    qDeleteAll( m_sections );
+    qDeleteAll(m_sections);
     m_sections.clear();
 }

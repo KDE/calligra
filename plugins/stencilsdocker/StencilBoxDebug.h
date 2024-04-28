@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &STENCILBOX_LOG();
 
 #define debugStencilBox qCDebug(STENCILBOX_LOG)

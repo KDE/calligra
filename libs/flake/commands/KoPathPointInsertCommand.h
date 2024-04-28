@@ -8,10 +8,10 @@
 #ifndef KOPATHPOINTINSERTCOMMAND_H
 #define KOPATHPOINTINSERTCOMMAND_H
 
-#include <kundo2command.h>
-#include <QList>
 #include "KoPathPointData.h"
 #include "flake_export.h"
+#include <QList>
+#include <kundo2command.h>
 
 class KoPathPointInsertCommandPrivate;
 class KoPathPoint;
@@ -40,10 +40,10 @@ public:
     void undo() override;
 
     /// Returns list of inserted points
-    QList<KoPathPoint*> insertedPoints() const;
+    QList<KoPathPoint *> insertedPoints() const;
 
 private:
-    KoPathPointInsertCommandPrivate * const d;
+    KoPathPointInsertCommandPrivate *const d;
 };
 
 #endif // KOPATHPOINTINSERTCOMMAND_H

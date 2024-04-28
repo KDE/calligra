@@ -8,8 +8,8 @@
 #ifndef KPRFACTORY_H
 #define KPRFACTORY_H
 
-#include <KPluginFactory>
 #include "stage_export.h"
+#include <KPluginFactory>
 
 class KAboutData;
 class KoComponentData;
@@ -21,14 +21,14 @@ public:
     explicit KPrFactory();
     ~KPrFactory() override;
 
-    QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args) override;
+    QObject *create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args) override;
     static const KoComponentData &componentData();
 
-    static KAboutData* aboutData();
+    static KAboutData *aboutData();
 
 private:
-    static KoComponentData* s_instance;
-    static KAboutData* s_aboutData;
+    static KoComponentData *s_instance;
+    static KAboutData *s_aboutData;
 };
 
 #endif

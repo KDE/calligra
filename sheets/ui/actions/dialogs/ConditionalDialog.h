@@ -31,30 +31,29 @@ class ConditionalWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ConditionalWidget(QWidget * parent = 0, const char * name = 0, Qt::WindowFlags fl = Qt::WindowFlags());
+    explicit ConditionalWidget(QWidget *parent = 0, const char *name = 0, Qt::WindowFlags fl = Qt::WindowFlags());
     ~ConditionalWidget() override;
 
-    KComboBox * m_condition_1;
-    KComboBox * m_style_1;
-    KLineEdit * m_firstValue_1;
-    KLineEdit * m_secondValue_1;
+    KComboBox *m_condition_1;
+    KComboBox *m_style_1;
+    KLineEdit *m_firstValue_1;
+    KLineEdit *m_secondValue_1;
 
-    KComboBox * m_condition_2;
-    KComboBox * m_style_2;
-    KLineEdit * m_firstValue_2;
-    KLineEdit * m_secondValue_2;
+    KComboBox *m_condition_2;
+    KComboBox *m_style_2;
+    KLineEdit *m_firstValue_2;
+    KLineEdit *m_secondValue_2;
 
-    KComboBox * m_condition_3;
-    KComboBox * m_style_3;
-    KLineEdit * m_firstValue_3;
-    KLineEdit * m_secondValue_3;
+    KComboBox *m_condition_3;
+    KComboBox *m_style_3;
+    KLineEdit *m_firstValue_3;
+    KLineEdit *m_secondValue_3;
 
 public Q_SLOTS:
     void slotTextChanged1(const QString &);
     void slotTextChanged2(const QString &);
     void slotTextChanged3(const QString &);
 };
-
 
 /**
  * \ingroup UI
@@ -64,7 +63,7 @@ class ConditionalDialog : public ActionDialog
 {
     Q_OBJECT
 public:
-    ConditionalDialog(QWidget* parent);
+    ConditionalDialog(QWidget *parent);
 
     void init();
 
@@ -83,16 +82,14 @@ Q_SIGNALS:
 protected:
     virtual void onApply() override;
 
-    ConditionalWidget * m_dlg;
-    Validity::Type   m_result;
+    ConditionalWidget *m_dlg;
+    Validity::Type m_result;
 
 private:
-    Validity::Type typeOfCondition(KComboBox const * const cb) const;
+    Validity::Type typeOfCondition(KComboBox const *const cb) const;
 
-    bool checkInputData(KLineEdit const * const edit1,
-                        KLineEdit const * const edit2);
+    bool checkInputData(KLineEdit const *const edit1, KLineEdit const *const edit2);
     bool checkInputData();
-
 };
 
 } // namespace Sheets

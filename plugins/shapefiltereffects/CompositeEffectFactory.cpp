@@ -11,16 +11,16 @@
 #include <KLocalizedString>
 
 CompositeEffectFactory::CompositeEffectFactory()
-        : KoFilterEffectFactoryBase(CompositeEffectId, i18n("Composite"))
+    : KoFilterEffectFactoryBase(CompositeEffectId, i18n("Composite"))
 {
 }
 
-KoFilterEffect * CompositeEffectFactory::createFilterEffect() const
+KoFilterEffect *CompositeEffectFactory::createFilterEffect() const
 {
     return new CompositeEffect();
 }
 
-KoFilterEffectConfigWidgetBase * CompositeEffectFactory::createConfigWidget() const
+KoFilterEffectConfigWidgetBase *CompositeEffectFactory::createConfigWidget() const
 {
     return new CompositeEffectConfigWidget();
 }

@@ -9,7 +9,7 @@
 
 #include <QtTest>
 
-class PyEmfTests: public QObject
+class PyEmfTests : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:

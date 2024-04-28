@@ -7,14 +7,13 @@
 #ifndef __rdf_KoRdfPrefixMapping_h__
 #define __rdf_KoRdfPrefixMapping_h__
 
-#include "kordf_export.h"
 #include "RdfForward.h"
+#include "kordf_export.h"
 // Qt
-#include <QSharedPointer>
-#include <QObject>
 #include <QMap>
+#include <QObject>
+#include <QSharedPointer>
 #include <QString>
-
 
 class KoRdfPrefixMappingPrivate;
 
@@ -34,7 +33,8 @@ class KoRdfPrefixMappingPrivate;
 class KORDF_EXPORT KoRdfPrefixMapping : public QObject
 {
     Q_OBJECT
-    KoRdfPrefixMappingPrivate * const d;
+    KoRdfPrefixMappingPrivate *const d;
+
 public:
     explicit KoRdfPrefixMapping(KoDocumentRdf *rdf);
     ~KoRdfPrefixMapping();

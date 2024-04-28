@@ -8,43 +8,45 @@
 #include "priorityqueue_test.h"
 #include <PriorityQueue_p.h>
 #include <QList>
-#include <ctime>
 #include <QTest>
+#include <ctime>
 
-struct Node
-{
-    Node(unsigned int key) : m_key(key), m_index(0) {}
+struct Node {
+    Node(unsigned int key)
+        : m_key(key)
+        , m_index(0)
+    {
+    }
 
-    unsigned int key() const {
+    unsigned int key() const
+    {
         return m_key;
     }
-    void setKey(unsigned int key) {
+    void setKey(unsigned int key)
+    {
         m_key = key;
     }
 
-    int index() const {
+    int index() const
+    {
         return m_index;
     }
-    void setIndex(int i) {
+    void setIndex(int i)
+    {
         m_index = i;
     }
+
 private:
     unsigned int m_key;
     int m_index;
 };
 
-static const char* const keys[] =
-{
-    "one",  "two", "three",  "four", "five",
-    "six", "seven", "eight", "nine", "ten",
-    "eleven", "twelve", 0
-};
-
+static const char *const keys[] = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", 0};
 
 void PriorityQueue_test::testQueue()
 {
-    QList<Node*> list;
-    QHash<QByteArray, Node*> dict;
+    QList<Node *> list;
+    QHash<QByteArray, Node *> dict;
 
     CalligraFilter::PriorityQueue<Node> queue;
 
@@ -59,14 +61,13 @@ void PriorityQueue_test::testQueue()
 
     qDebug() << "##### Queue 1:";
     queue.dump();
-    QCOMPARE((int) queue.count(), list.count());
+    QCOMPARE((int)queue.count(), list.count());
     QCOMPARE(queue.isEmpty(), false);
     QCOMPARE(queue.extractMinimum()->index(), 0);
 
-
     qDebug() << "##### Queue 2:";
     CalligraFilter::PriorityQueue<Node> queue2(dict);
-    //queue2.dump();
+    // queue2.dump();
 
     Node *n = list.at(6);
     qDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();

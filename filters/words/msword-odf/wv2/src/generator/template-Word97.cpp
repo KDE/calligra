@@ -42,104 +42,119 @@
 ### Everything you add in here will be added to the generated code
 @@namespace-start@@
 // FFN implementation, located in template-Word97.cpp
-FFN::FFN() {
+FFN::FFN()
+{
     clearInternal();
 }
 
-FFN::FFN(OLEStreamReader *stream, Version version, bool preservePos) {
+FFN::FFN(OLEStreamReader *stream, Version version, bool preservePos)
+{
     clearInternal();
     read(stream, version, preservePos);
 }
 
-bool FFN::read(OLEStreamReader *stream, Version version, bool preservePos) {
-
+bool FFN::read(OLEStreamReader *stream, Version version, bool preservePos)
+{
     U8 shifterU8;
 
-    if(preservePos)
+    if (preservePos)
         stream->push();
 
-    cbFfnM1=stream->readU8();
-    shifterU8=stream->readU8();
-    prq=shifterU8;
-    shifterU8>>=2;
-    fTrueType=shifterU8;
-    shifterU8>>=1;
-    unused1_3=shifterU8;
-    shifterU8>>=1;
-    ff=shifterU8;
-    shifterU8>>=3;
-    unused1_7=shifterU8;
-    wWeight=stream->readS16();
-    chs=stream->readU8();
-    ixchSzAlt=stream->readU8();
+    cbFfnM1 = stream->readU8();
+    shifterU8 = stream->readU8();
+    prq = shifterU8;
+    shifterU8 >>= 2;
+    fTrueType = shifterU8;
+    shifterU8 >>= 1;
+    unused1_3 = shifterU8;
+    shifterU8 >>= 1;
+    ff = shifterU8;
+    shifterU8 >>= 3;
+    unused1_7 = shifterU8;
+    wWeight = stream->readS16();
+    chs = stream->readU8();
+    ixchSzAlt = stream->readU8();
 
     U8 remainingSize = cbFfnM1 - 5;
 
-    if ( version == Word97 ) {
-        for(int _i=0; _i<(10); ++_i)
-            panose[_i]=stream->readU8();
-        for(int _i=0; _i<(24); ++_i)
-            fs[_i]=stream->readU8();
+    if (version == Word97) {
+        for (int _i = 0; _i < (10); ++_i)
+            panose[_i] = stream->readU8();
+        for (int _i = 0; _i < (24); ++_i)
+            fs[_i] = stream->readU8();
         remainingSize -= 34;
 
         // Remaining size in bytes -> shorts
         remainingSize /= 2;
-        XCHAR* string = new XCHAR[ remainingSize ];
-        for ( int i = 0; i < remainingSize; ++i )
-            string[ i ] = stream->readU16();
-        if ( ixchSzAlt == 0 )
-            xszFfn = UString( reinterpret_cast<const wvWare::UChar *>( string ), remainingSize - 1 );
+        XCHAR *string = new XCHAR[remainingSize];
+        for (int i = 0; i < remainingSize; ++i)
+            string[i] = stream->readU16();
+        if (ixchSzAlt == 0)
+            xszFfn = UString(reinterpret_cast<const wvWare::UChar *>(string), remainingSize - 1);
         else {
-            xszFfn = UString( reinterpret_cast<const wvWare::UChar *>( string ), ixchSzAlt - 1 );
-            xszFfnAlt = UString( reinterpret_cast<const wvWare::UChar *>( &string[ ixchSzAlt ] ), remainingSize - 1 - ixchSzAlt );
+            xszFfn = UString(reinterpret_cast<const wvWare::UChar *>(string), ixchSzAlt - 1);
+            xszFfnAlt = UString(reinterpret_cast<const wvWare::UChar *>(&string[ixchSzAlt]), remainingSize - 1 - ixchSzAlt);
         }
-        delete [] string;
-    }
-    else {
-        U8* string = new U8[ remainingSize ];
-        stream->read( string, remainingSize );
+        delete[] string;
+    } else {
+        U8 *string = new U8[remainingSize];
+        stream->read(string, remainingSize);
         // ###### Assume plain latin1 strings, maybe we'll have to use a textconverter here...
-        if ( ixchSzAlt == 0 )
-            xszFfn = UString( reinterpret_cast<char*>( string ) );
+        if (ixchSzAlt == 0)
+            xszFfn = UString(reinterpret_cast<char *>(string));
         else {
-            xszFfn = UString( reinterpret_cast<char*>( string ) ); // The strings are 0-terminated, according to the SPEC
-            xszFfnAlt = UString( reinterpret_cast<char*>( &string[ ixchSzAlt ] ) );
+            xszFfn = UString(reinterpret_cast<char *>(string)); // The strings are 0-terminated, according to the SPEC
+            xszFfnAlt = UString(reinterpret_cast<char *>(&string[ixchSzAlt]));
         }
-        delete [] string;
+        delete[] string;
     }
 
-    if(preservePos)
+    if (preservePos)
         stream->pop();
     return true;
 }
 
-void FFN::clear() {
+void FFN::clear()
+{
     clearInternal();
 }
 
-void FFN::clearInternal() {
-    cbFfnM1=0;
-    prq=0;
-    fTrueType=0;
-    unused1_3=0;
-    ff=0;
-    unused1_7=0;
-    wWeight=0;
-    chs=0;
-    ixchSzAlt=0;
-    for(int _i=0; _i<(10); ++_i)
-        panose[_i]=0;
-    for(int _i=0; _i<(24); ++_i)
-        fs[_i]=0;
+void FFN::clearInternal()
+{
+    cbFfnM1 = 0;
+    prq = 0;
+    fTrueType = 0;
+    unused1_3 = 0;
+    ff = 0;
+    unused1_7 = 0;
+    wWeight = 0;
+    chs = 0;
+    ixchSzAlt = 0;
+    for (int _i = 0; _i < (10); ++_i)
+        panose[_i] = 0;
+    for (int _i = 0; _i < (24); ++_i)
+        fs[_i] = 0;
     xszFfn = UString::null;
     xszFfnAlt = UString::null;
 }
 
 // There can be only one tab at a given position, no matter what the other options are
-bool operator==( const TabDescriptor& lhs, const TabDescriptor& rhs ) { return lhs.dxaTab == rhs.dxaTab; }
-bool operator!=( const TabDescriptor& lhs, const TabDescriptor& rhs ) { return lhs.dxaTab != rhs.dxaTab; }
-bool operator<( const TabDescriptor& lhs, const TabDescriptor& rhs ) { return lhs.dxaTab < rhs.dxaTab; }
-bool operator>( const TabDescriptor& lhs, const TabDescriptor& rhs ) { return lhs.dxaTab > rhs.dxaTab; }
+bool operator==(const TabDescriptor &lhs, const TabDescriptor &rhs)
+{
+    return lhs.dxaTab == rhs.dxaTab;
+}
+bool operator!=(const TabDescriptor &lhs, const TabDescriptor &rhs)
+{
+    return lhs.dxaTab != rhs.dxaTab;
+}
+bool operator<(const TabDescriptor &lhs, const TabDescriptor &rhs)
+{
+    return lhs.dxaTab < rhs.dxaTab;
+}
+bool operator>(const TabDescriptor &lhs, const TabDescriptor &rhs)
+{
+    return lhs.dxaTab > rhs.dxaTab;
+}
 
 ### This tag "expands" to all the structs :)
 @@generated-code@@

@@ -8,13 +8,14 @@
 #include <QColorDialog>
 #include <QPainter>
 
-ColorDisplayLabel::ColorDisplayLabel(QWidget *parent):QLabel(parent), labelColor(255,255,0)
+ColorDisplayLabel::ColorDisplayLabel(QWidget *parent)
+    : QLabel(parent)
+    , labelColor(255, 255, 0)
 {
 }
 
 ColorDisplayLabel::~ColorDisplayLabel()
 {
-
 }
 
 void ColorDisplayLabel::paintEvent(QPaintEvent *event)
@@ -25,7 +26,7 @@ void ColorDisplayLabel::paintEvent(QPaintEvent *event)
     painter.drawRect(rect().x(), rect().y(), rect().width(), rect().height());
 }
 
-const QColor& ColorDisplayLabel::color() const
+const QColor &ColorDisplayLabel::color() const
 {
     return labelColor;
 }
@@ -35,7 +36,13 @@ void ColorDisplayLabel::setColor(const QColor &color)
     labelColor = color;
 }
 
-ChangeConfigureDialog::ChangeConfigureDialog(const QColor &insertionColor, const QColor &deletionColor, const QColor &formatChangeColor, const QString &authorName, KoChangeTracker::ChangeSaveFormat changeSaveFormat, QWidget *parent):QDialog(parent)
+ChangeConfigureDialog::ChangeConfigureDialog(const QColor &insertionColor,
+                                             const QColor &deletionColor,
+                                             const QColor &formatChangeColor,
+                                             const QString &authorName,
+                                             KoChangeTracker::ChangeSaveFormat changeSaveFormat,
+                                             QWidget *parent)
+    : QDialog(parent)
 {
     ui.setupUi(this);
     ui.insertionColorDisplayLabel->setColor(insertionColor);
@@ -67,17 +74,17 @@ KoChangeTracker::ChangeSaveFormat ChangeConfigureDialog::saveFormat()
     }
 }
 
-const QColor& ChangeConfigureDialog::getInsertionBgColor()
+const QColor &ChangeConfigureDialog::getInsertionBgColor()
 {
     return ui.insertionColorDisplayLabel->color();
 }
 
-const QColor& ChangeConfigureDialog::getDeletionBgColor()
+const QColor &ChangeConfigureDialog::getDeletionBgColor()
 {
     return ui.deletionColorDisplayLabel->color();
 }
 
-const QColor& ChangeConfigureDialog::getFormatChangeBgColor()
+const QColor &ChangeConfigureDialog::getFormatChangeBgColor()
 {
     return ui.formatColorDisplayLabel->color();
 }
@@ -132,19 +139,19 @@ void ChangeConfigureDialog::colorSelect(ChangeType type)
 
 void ChangeConfigureDialog::updatePreviewText(void)
 {
-    //update the insertion-text
+    // update the insertion-text
     if (ui.previewTextEdit->find(i18n("This is a line of inserted text."))) {
         ui.previewTextEdit->setTextBackgroundColor(ui.insertionColorDisplayLabel->color());
         ui.previewTextEdit->moveCursor(QTextCursor::Start);
     }
 
-    //update the deletion-text
+    // update the deletion-text
     if (ui.previewTextEdit->find(i18n("This is a line of deleted text."))) {
         ui.previewTextEdit->setTextBackgroundColor(ui.deletionColorDisplayLabel->color());
         ui.previewTextEdit->moveCursor(QTextCursor::Start);
     }
 
-    //update the format-change-text
+    // update the format-change-text
     if (ui.previewTextEdit->find(i18n("This is a line of text whose format has been changed."))) {
         ui.previewTextEdit->setTextBackgroundColor(ui.formatColorDisplayLabel->color());
         ui.previewTextEdit->moveCursor(QTextCursor::Start);
@@ -153,6 +160,4 @@ void ChangeConfigureDialog::updatePreviewText(void)
 
 ChangeConfigureDialog::~ChangeConfigureDialog()
 {
-
 }
-

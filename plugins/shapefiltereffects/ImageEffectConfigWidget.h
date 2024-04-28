@@ -20,14 +20,14 @@ public:
     explicit ImageEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
-    bool editFilterEffect(KoFilterEffect * filterEffect) override;
+    bool editFilterEffect(KoFilterEffect *filterEffect) override;
 
 private Q_SLOTS:
     void selectImage();
 
 private:
-    ImageEffect * m_effect;
-    QLabel * m_image;
+    ImageEffect *m_effect;
+    QLabel *m_image;
 };
 
 #endif // IMAGEEFFECTCONFIGWIDGET_H

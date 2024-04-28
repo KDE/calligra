@@ -11,16 +11,16 @@
 #include <KLocalizedString>
 
 ConvolveMatrixEffectFactory::ConvolveMatrixEffectFactory()
-        : KoFilterEffectFactoryBase(ConvolveMatrixEffectId, i18n("Convolve Matrix"))
+    : KoFilterEffectFactoryBase(ConvolveMatrixEffectId, i18n("Convolve Matrix"))
 {
 }
 
-KoFilterEffect * ConvolveMatrixEffectFactory::createFilterEffect() const
+KoFilterEffect *ConvolveMatrixEffectFactory::createFilterEffect() const
 {
     return new ConvolveMatrixEffect();
 }
 
-KoFilterEffectConfigWidgetBase * ConvolveMatrixEffectFactory::createConfigWidget() const
+KoFilterEffectConfigWidgetBase *ConvolveMatrixEffectFactory::createConfigWidget() const
 {
     return new ConvolveMatrixEffectConfigWidget();
 }

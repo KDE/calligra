@@ -19,26 +19,27 @@
 
 #include "KPrAttributeWidth.h"
 #include "../KPrAnimationCache.h"
-#include "KoShape.h"
 #include "KPrShapeAnimations.h"
+#include "KoShape.h"
 #include "KoTextShapeData.h"
-#include <QTextDocument>
 #include <QTextBlock>
+#include <QTextDocument>
 #include <QTextLayout>
 
-KPrAttributeWidth::KPrAttributeWidth() : KPrAnimationAttribute("width")
+KPrAttributeWidth::KPrAttributeWidth()
+    : KPrAnimationAttribute("width")
 {
 }
 
 void KPrAttributeWidth::updateCache(KPrAnimationCache *cache, KPrShapeAnimation *shapeAnimation, qreal value)
 {
     qreal tx = 0.0, ty = 0.0;
-    KoShape * shape = shapeAnimation->shape();
+    KoShape *shape = shapeAnimation->shape();
     QTextBlockUserData *textBlockData = shapeAnimation->textBlockUserData();
     QTransform transform;
 
     if (textBlockData) {
-        if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData())) {
+        if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData *>(shape->userData())) {
             QTextDocument *textDocument = textShapeData->document();
             for (int i = 0; i < textDocument->blockCount(); i++) {
                 QTextBlock textBlock = textDocument->findBlockByNumber(i);
@@ -50,24 +51,23 @@ void KPrAttributeWidth::updateCache(KPrAnimationCache *cache, KPrShapeAnimation 
                 }
             }
         }
-    }
-    else {
+    } else {
         value = value * cache->pageSize().width() / shape->size().width();
         tx = shape->size().width() * cache->zoom() / 2;
         ty = shape->size().height() * cache->zoom() / 2;
     }
-                    transform.translate(tx, ty).scale(value, 1).translate(-tx, -ty);
+    transform.translate(tx, ty).scale(value, 1).translate(-tx, -ty);
     cache->update(shape, textBlockData, "transform", transform);
 }
 
-void KPrAttributeWidth::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue)
+void KPrAttributeWidth::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation *shapeAnimation, qreal startValue, qreal endValue)
 {
     qreal v1 = 0.0, v2 = 0.0, tx = 0.0, ty = 0.0;
-    KoShape * shape = shapeAnimation->shape();
+    KoShape *shape = shapeAnimation->shape();
     QTextBlockUserData *textBlockData = shapeAnimation->textBlockUserData();
 
     if (textBlockData) {
-        if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData())) {
+        if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData *>(shape->userData())) {
             QTextDocument *textDocument = textShapeData->document();
             for (int i = 0; i < textDocument->blockCount(); i++) {
                 QTextBlock textBlock = textDocument->findBlockByNumber(i);
@@ -80,8 +80,7 @@ void KPrAttributeWidth::initCache(KPrAnimationCache *animationCache, int step, K
                 }
             }
         }
-    }
-    else {
+    } else {
         v1 = startValue * animationCache->pageSize().width() / shape->size().width();
         v2 = endValue * animationCache->pageSize().width() / shape->size().width();
         tx = shape->size().width() * animationCache->zoom() / 2;

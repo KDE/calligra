@@ -8,10 +8,10 @@
 #ifndef __ko_document_entry_h__
 #define __ko_document_entry_h__
 
-#include <QList>
-#include <QString>
-#include <QSharedPointer>
 #include <KPluginMetaData>
+#include <QList>
+#include <QSharedPointer>
+#include <QString>
 
 #include "komain_export.h"
 
@@ -24,7 +24,6 @@ class KoPart;
  */
 class KOMAIN_EXPORT KoDocumentEntry
 {
-
 public:
     /**
      * Represents an invalid entry (as returned by queryByMimeType for instance)
@@ -59,13 +58,13 @@ public:
     /**
      *  @return TRUE if the document can handle the requested mimetype.
      */
-    bool supportsMimeType(const QString & _mimetype) const;
+    bool supportsMimeType(const QString &_mimetype) const;
 
     /**
      *  Uses the factory of the component to create
      *  a part. If that is not possible, 0 is returned.
      */
-    KoPart *createKoPart(QString* errorMsg = 0) const;
+    KoPart *createKoPart(QString *errorMsg = 0) const;
 
     /**
      *  This function will query ksycoca to find all available components for the requested mimetype.
@@ -75,7 +74,7 @@ public:
      *                 You can use it to set additional restrictions on the available
      *                 components.
      */
-    static QList<KoDocumentEntry> query(const QString &  mimetype = QString());
+    static QList<KoDocumentEntry> query(const QString &mimetype = QString());
 
     /**
      *  This is a convenience function.
@@ -83,7 +82,7 @@ public:
      *  @return a document entry for the Calligra component that supports
      *          the requested mimetype and fits the user best.
      */
-    static KoDocumentEntry queryByMimeType(const QString & mimetype);
+    static KoDocumentEntry queryByMimeType(const QString &mimetype);
 
 private:
     KPluginMetaData m_metaData;

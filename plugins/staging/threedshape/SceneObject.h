@@ -9,8 +9,8 @@
 #define THREEDSHAPE_H
 
 // Qt
-#include <QObject>
 #include <QList>
+#include <QObject>
 
 // Calligra
 #include <Ko3dScene.h>
@@ -19,15 +19,15 @@
 // Shape
 #include "Object3D.h"
 
-
 #define THREEDSHAPEID "ThreedShape"
-
 
 class SceneObject : public Object3D //, public QObject
 #if IMPLEMENT_AS_SHAPECONTAINER
-    , public KoShapeContainer
+    ,
+                    public KoShapeContainer
 #else
-    , public KoShape
+    ,
+                    public KoShape
 #endif
 {
 public:
@@ -40,12 +40,10 @@ public:
     ~SceneObject() override;
 
     /// reimplemented from KoShapeContainer
-    void paintComponent(QPainter &painter, const KoViewConverter &converter,
-                                KoShapePaintingContext &paintcontext) override;
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 
     // reimplemented from KoShape
-    void paint(QPainter &painter, const KoViewConverter &converter,
-                       KoShapePaintingContext &context) override;
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context) override;
     // reimplemented from KoShape
     void saveOdf(KoShapeSavingContext &context) const override;
     // reimplemented from KoShape
@@ -62,11 +60,10 @@ public:
 
 private:
     // View attributes
-    bool       m_topLevel;
-    Ko3dScene *m_threeDParams;    // Camera and rendering parameters plus lightsources.
+    bool m_topLevel;
+    Ko3dScene *m_threeDParams; // Camera and rendering parameters plus lightsources.
 
-    QList<Object3D*> m_objects;
+    QList<Object3D *> m_objects;
 };
-
 
 #endif

@@ -41,7 +41,7 @@ private:
     QToolButton *m_prevButton;
     QToolButton *m_nextButton;
     QToolButton *m_choosePalette;
-    KarbonPaletteWidget * m_colorBar;
+    KarbonPaletteWidget *m_colorBar;
 
     KoColorSet m_documentColors;
     KoResourceServerAdapter<KoColorSet> m_palettes;

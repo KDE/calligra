@@ -13,7 +13,6 @@
 
 class KoCanvasBase;
 
-
 class KORDF_EXPORT RdfSemanticTreeWidgetAction : public QAction
 {
     Q_OBJECT

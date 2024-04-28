@@ -4,9 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // This is used by actions, as well as by ui/dialogs/LayoutDialog and ui/strategy/MergeStrategy
-
 
 // Local
 #include "MergeCommand.h"
@@ -14,20 +12,20 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
-#include "engine/Damages.h"
 #include "core/Cell.h"
 #include "core/Map.h"
 #include "core/Sheet.h"
+#include "engine/Damages.h"
 #include "ui/Selection.h"
 
 using namespace Calligra::Sheets;
 
-MergeCommand::MergeCommand(KUndo2Command* parent)
-        : AbstractRegionCommand(parent),
-        m_merge(true),
-        m_mergeHorizontal(false),
-        m_mergeVertical(false),
-        m_selection(0)
+MergeCommand::MergeCommand(KUndo2Command *parent)
+    : AbstractRegionCommand(parent)
+    , m_merge(true)
+    , m_mergeHorizontal(false)
+    , m_mergeVertical(false)
+    , m_selection(0)
 {
     m_checkLock = true;
 }
@@ -36,7 +34,7 @@ MergeCommand::~MergeCommand()
 {
 }
 
-bool MergeCommand::process(Element* element)
+bool MergeCommand::process(Element *element)
 {
     if (element->isRow() || element->isColumn()) {
         // TODO Stefan: remove these elements?!
@@ -44,17 +42,17 @@ bool MergeCommand::process(Element* element)
     }
 
     QRect range = element->rect();
-    int left   = range.left();
-    int right  = range.right();
-    int top    = range.top();
+    int left = range.left();
+    int right = range.right();
+    int top = range.top();
     int bottom = range.bottom();
     int height = range.height();
-    int width  = range.width();
+    int width = range.width();
 
     if (m_merge) {
         if (m_mergeHorizontal) {
             for (int row = top; row <= bottom; ++row) {
-                Cell cell = Cell(m_sheet,  left, row);
+                Cell cell = Cell(m_sheet, left, row);
                 cell.mergeCells(left, row, width - 1, 0);
             }
         } else if (m_mergeVertical) {
@@ -63,12 +61,12 @@ bool MergeCommand::process(Element* element)
                 cell.mergeCells(col, top, 0, height - 1);
             }
         } else {
-            Cell cell = Cell(m_sheet,  left, top);
+            Cell cell = Cell(m_sheet, left, top);
             cell.mergeCells(left, top, width - 1, height - 1);
         }
     } else {
-        Cell cell = Cell(m_sheet,  left, top);
-        cell.mergeCells(left, top, width - 1, height - 1, true);  // dissociate
+        Cell cell = Cell(m_sheet, left, top);
+        cell.mergeCells(left, top, width - 1, height - 1, true); // dissociate
     }
 
     // adjust selection
@@ -104,5 +102,3 @@ bool MergeCommand::preProcess()
 
     return true;
 }
-
-

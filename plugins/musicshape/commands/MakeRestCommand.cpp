@@ -4,17 +4,18 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "MakeRestCommand.h"
+#include "../MusicShape.h"
 #include "../core/Chord.h"
 #include "../core/Note.h"
 #include "../core/VoiceBar.h"
-#include "../MusicShape.h"
 
 #include <KLocalizedString>
 
 using namespace MusicCore;
 
-MakeRestCommand::MakeRestCommand(MusicShape* shape, Chord* chord)
-    : m_chord(chord), m_shape(shape)
+MakeRestCommand::MakeRestCommand(MusicShape *shape, Chord *chord)
+    : m_chord(chord)
+    , m_shape(shape)
 {
     setText(kundo2_i18n("Convert chord to rest"));
     for (int i = 0; i < chord->noteCount(); i++) {
@@ -24,7 +25,7 @@ MakeRestCommand::MakeRestCommand(MusicShape* shape, Chord* chord)
 
 void MakeRestCommand::redo()
 {
-    foreach (Note* n, m_notes) {
+    foreach (Note *n, m_notes) {
         m_chord->removeNote(n, false);
     }
     m_chord->voiceBar()->updateAccidentals();
@@ -34,7 +35,7 @@ void MakeRestCommand::redo()
 
 void MakeRestCommand::undo()
 {
-    foreach (Note* n, m_notes) {
+    foreach (Note *n, m_notes) {
         m_chord->addNote(n);
     }
     m_chord->voiceBar()->updateAccidentals();

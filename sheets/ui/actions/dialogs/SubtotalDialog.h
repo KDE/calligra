@@ -6,7 +6,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef CALLIGRA_SHEETS_SUBTOTAL_DIALOG
 #define CALLIGRA_SHEETS_SUBTOTAL_DIALOG
 
@@ -27,7 +26,7 @@ class SubtotalDialog : public KoDialog
     Q_OBJECT
 
 public:
-    SubtotalDialog(QWidget* parent, Selection* selection);
+    SubtotalDialog(QWidget *parent, Selection *selection);
     ~SubtotalDialog() override;
 
     bool removeExisting() const;

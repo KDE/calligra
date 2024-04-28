@@ -14,6 +14,7 @@ class KPrSnakeWipeTopRightDiagonalStrategy : public KPrSnakeWipeDiagonalStrategy
 public:
     KPrSnakeWipeTopRightDiagonalStrategy();
     ~KPrSnakeWipeTopRightDiagonalStrategy() override;
+
 protected:
     int squareIndex(int x, int y, int columns, int rows) override;
 };

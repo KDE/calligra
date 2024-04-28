@@ -7,30 +7,29 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #include "ConditionalDialog.h"
 
 #include <KComboBox>
-#include <klineedit.h>
-#include <KMessageBox>
 #include <KLocalizedString>
+#include <KMessageBox>
+#include <klineedit.h>
 
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QGridLayout>
 
 using namespace Calligra::Sheets;
 
-ConditionalWidget::ConditionalWidget(QWidget* parent, const char* /*name*/, Qt::WindowFlags fl)
-        : QWidget(parent, fl)
+ConditionalWidget::ConditionalWidget(QWidget *parent, const char * /*name*/, Qt::WindowFlags fl)
+    : QWidget(parent, fl)
 {
-    QGridLayout * Form1Layout = new QGridLayout(this);
+    QGridLayout *Form1Layout = new QGridLayout(this);
 
-    QGroupBox * groupBox1_3 = new QGroupBox(this);
-    QGridLayout * groupBox1_3Layout = new QGridLayout(groupBox1_3);
+    QGroupBox *groupBox1_3 = new QGroupBox(this);
+    QGridLayout *groupBox1_3Layout = new QGridLayout(groupBox1_3);
     groupBox1_3Layout->setAlignment(Qt::AlignTop);
 
-    QLabel * textLabel1_3 = new QLabel(groupBox1_3);
+    QLabel *textLabel1_3 = new QLabel(groupBox1_3);
     groupBox1_3Layout->addWidget(textLabel1_3, 0, 0);
 
     m_condition_3 = new KComboBox(groupBox1_3);
@@ -48,25 +47,25 @@ ConditionalWidget::ConditionalWidget(QWidget* parent, const char* /*name*/, Qt::
     m_style_3->setEnabled(false);
     groupBox1_3Layout->addWidget(m_style_3, 1, 1);
 
-    QLabel * textLabel2_3 = new QLabel(groupBox1_3);
+    QLabel *textLabel2_3 = new QLabel(groupBox1_3);
     groupBox1_3Layout->addWidget(textLabel2_3, 1, 0);
 
-    QSpacerItem * spacer = new QSpacerItem(41, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QSpacerItem *spacer = new QSpacerItem(41, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     groupBox1_3Layout->addItem(spacer, 1, 2);
-    QSpacerItem * spacer_2 = new QSpacerItem(61, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QSpacerItem *spacer_2 = new QSpacerItem(61, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     groupBox1_3Layout->addItem(spacer_2, 1, 3);
 
     Form1Layout->addWidget(groupBox1_3, 2, 0);
 
-    QGroupBox * groupBox1_2 = new QGroupBox(this);
+    QGroupBox *groupBox1_2 = new QGroupBox(this);
 
-    QGridLayout * groupBox1_2Layout = new QGridLayout(groupBox1_2);
+    QGridLayout *groupBox1_2Layout = new QGridLayout(groupBox1_2);
     groupBox1_2Layout->setAlignment(Qt::AlignTop);
 
-    QLabel * textLabel1_2 = new QLabel(groupBox1_2);
+    QLabel *textLabel1_2 = new QLabel(groupBox1_2);
     groupBox1_2Layout->addWidget(textLabel1_2, 0, 0);
 
-    QLabel * textLabel2_2 = new QLabel(groupBox1_2);
+    QLabel *textLabel2_2 = new QLabel(groupBox1_2);
     groupBox1_2Layout->addWidget(textLabel2_2, 1, 0);
 
     m_condition_2 = new KComboBox(groupBox1_2);
@@ -86,21 +85,21 @@ ConditionalWidget::ConditionalWidget(QWidget* parent, const char* /*name*/, Qt::
 
     groupBox1_2Layout->addWidget(m_secondValue_2, 0, 3);
 
-    QSpacerItem * spacer_3 = new QSpacerItem(41, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QSpacerItem *spacer_3 = new QSpacerItem(41, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     groupBox1_2Layout->addItem(spacer_3, 1, 2);
-    QSpacerItem * spacer_4 = new QSpacerItem(61, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QSpacerItem *spacer_4 = new QSpacerItem(61, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     groupBox1_2Layout->addItem(spacer_4, 1, 3);
     Form1Layout->addWidget(groupBox1_2, 1, 0);
 
-    QGroupBox * groupBox1_1 = new QGroupBox(this);
+    QGroupBox *groupBox1_1 = new QGroupBox(this);
 
-    QGridLayout * groupBox1_1Layout = new QGridLayout(groupBox1_1);
+    QGridLayout *groupBox1_1Layout = new QGridLayout(groupBox1_1);
     groupBox1_1Layout->setAlignment(Qt::AlignTop);
 
-    QLabel * textLabel1_1 = new QLabel(groupBox1_1);
+    QLabel *textLabel1_1 = new QLabel(groupBox1_1);
     groupBox1_1Layout->addWidget(textLabel1_1, 0, 0);
 
-    QLabel * textLabel2_1 = new QLabel(groupBox1_1);
+    QLabel *textLabel2_1 = new QLabel(groupBox1_1);
     groupBox1_1Layout->addWidget(textLabel2_1, 1, 0);
 
     m_condition_1 = new KComboBox(groupBox1_1);
@@ -118,16 +117,16 @@ ConditionalWidget::ConditionalWidget(QWidget* parent, const char* /*name*/, Qt::
     m_secondValue_1->setEnabled(false);
     groupBox1_1Layout->addWidget(m_secondValue_1, 0, 3);
 
-    QSpacerItem * spacer_5 = new QSpacerItem(41, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QSpacerItem *spacer_5 = new QSpacerItem(41, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     groupBox1_1Layout->addItem(spacer_5, 1, 2);
-    QSpacerItem * spacer_6 = new QSpacerItem(61, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QSpacerItem *spacer_6 = new QSpacerItem(61, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     groupBox1_1Layout->addItem(spacer_6, 1, 3);
 
     Form1Layout->addWidget(groupBox1_1, 0, 0);
     resize(QSize(702, 380).expandedTo(minimumSizeHint()));
 
     QStringList list;
-    list += i18n("<none>");   // krazy:exclude=i18ncheckarg
+    list += i18n("<none>"); // krazy:exclude=i18ncheckarg
     list += i18n("equal to");
     list += i18n("greater than");
     list += i18n("less than");
@@ -163,9 +162,9 @@ ConditionalWidget::~ConditionalWidget()
 {
 }
 
-void ConditionalWidget::slotTextChanged1(const QString & text)
+void ConditionalWidget::slotTextChanged1(const QString &text)
 {
-    if (text == i18n("<none>")) {   // krazy:exclude=i18ncheckarg
+    if (text == i18n("<none>")) { // krazy:exclude=i18ncheckarg
         m_firstValue_1->setEnabled(false);
         m_secondValue_1->setEnabled(false);
         m_style_1->setEnabled(false);
@@ -182,9 +181,9 @@ void ConditionalWidget::slotTextChanged1(const QString & text)
     }
 }
 
-void ConditionalWidget::slotTextChanged2(const QString & text)
+void ConditionalWidget::slotTextChanged2(const QString &text)
 {
-    if (text == i18n("<none>")) {   // krazy:exclude=i18ncheckarg
+    if (text == i18n("<none>")) { // krazy:exclude=i18ncheckarg
         m_firstValue_2->setEnabled(false);
         m_secondValue_2->setEnabled(false);
         m_style_2->setEnabled(false);
@@ -201,9 +200,9 @@ void ConditionalWidget::slotTextChanged2(const QString & text)
     }
 }
 
-void ConditionalWidget::slotTextChanged3(const QString & text)
+void ConditionalWidget::slotTextChanged3(const QString &text)
 {
-    if (text == i18n("<none>")) {   // krazy:exclude=i18ncheckarg
+    if (text == i18n("<none>")) { // krazy:exclude=i18ncheckarg
         m_firstValue_3->setEnabled(false);
         m_secondValue_3->setEnabled(false);
         m_style_3->setEnabled(false);
@@ -223,9 +222,9 @@ void ConditionalWidget::slotTextChanged3(const QString & text)
  * ConditionalDialog
  * Sets conditional cell formattings.
  */
-ConditionalDialog::ConditionalDialog(QWidget* parent)
-        : ActionDialog(parent),
-        m_dlg(new ConditionalWidget(this))
+ConditionalDialog::ConditionalDialog(QWidget *parent)
+    : ActionDialog(parent)
+    , m_dlg(new ConditionalWidget(this))
 {
     setCaption(i18n("Conditional Styles"));
 
@@ -263,27 +262,27 @@ void ConditionalDialog::clear()
 
 void ConditionalDialog::setValueRow(int id, Validity::Type type, const QString &val1, const QString &val2, const QString &style)
 {
-    KComboBox * cb  = nullptr;
-    KComboBox * sb  = nullptr;
-    KLineEdit * kl1 = nullptr;
-    KLineEdit * kl2 = nullptr;
+    KComboBox *cb = nullptr;
+    KComboBox *sb = nullptr;
+    KLineEdit *kl1 = nullptr;
+    KLineEdit *kl2 = nullptr;
 
     switch (id) {
     case 1:
-        cb  = m_dlg->m_condition_1;
-        sb  = m_dlg->m_style_1;
+        cb = m_dlg->m_condition_1;
+        sb = m_dlg->m_style_1;
         kl1 = m_dlg->m_firstValue_1;
         kl2 = m_dlg->m_secondValue_1;
         break;
     case 2:
-        cb  = m_dlg->m_condition_2;
-        sb  = m_dlg->m_style_2;
+        cb = m_dlg->m_condition_2;
+        sb = m_dlg->m_style_2;
         kl1 = m_dlg->m_firstValue_2;
         kl2 = m_dlg->m_secondValue_2;
         break;
     case 3:
-        cb  = m_dlg->m_condition_3;
-        sb  = m_dlg->m_style_3;
+        cb = m_dlg->m_condition_3;
+        sb = m_dlg->m_style_3;
         kl1 = m_dlg->m_firstValue_3;
         kl2 = m_dlg->m_secondValue_3;
         break;
@@ -297,41 +296,41 @@ void ConditionalDialog::setValueRow(int id, Validity::Type type, const QString &
     }
 
     switch (type) {
-    case Validity::None :
+    case Validity::None:
     case Validity::IsTrueFormula: // was unhandled
         cb->setCurrentIndex(0);
         break;
 
-    case Validity::Equal :
+    case Validity::Equal:
         cb->setCurrentIndex(1);
         break;
 
-    case Validity::Superior :
+    case Validity::Superior:
         cb->setCurrentIndex(2);
         break;
 
-    case Validity::Inferior :
+    case Validity::Inferior:
         cb->setCurrentIndex(3);
         break;
 
-    case Validity::SuperiorEqual :
+    case Validity::SuperiorEqual:
         cb->setCurrentIndex(4);
         break;
 
-    case Validity::InferiorEqual :
+    case Validity::InferiorEqual:
         cb->setCurrentIndex(5);
         break;
 
-    case Validity::Between :
+    case Validity::Between:
         cb->setCurrentIndex(6);
         kl2->setText(val2);
         break;
 
-    case Validity::Different :
+    case Validity::Different:
         cb->setCurrentIndex(7);
         kl2->setText(val2);
         break;
-    case Validity::DifferentTo :
+    case Validity::DifferentTo:
         cb->setCurrentIndex(8);
         break;
     }
@@ -344,29 +343,40 @@ void ConditionalDialog::setValueRow(int id, Validity::Type type, const QString &
 
     cb->setEnabled(true);
     // Enable the next condition too
-    if (id == 1) m_dlg->m_condition_2->setEnabled(true);
-    if (id == 2) m_dlg->m_condition_3->setEnabled(true);
+    if (id == 1)
+        m_dlg->m_condition_2->setEnabled(true);
+    if (id == 2)
+        m_dlg->m_condition_3->setEnabled(true);
 }
 
-Validity::Type ConditionalDialog::typeOfCondition(KComboBox const * const cb) const
+Validity::Type ConditionalDialog::typeOfCondition(KComboBox const *const cb) const
 {
     switch (cb->currentIndex()) {
-    case 0 : return Validity::None;
-    case 1 : return Validity::Equal;
-    case 2 : return Validity::Superior;
-    case 3 : return Validity::Inferior;
-    case 4 : return Validity::SuperiorEqual;
-    case 5 : return Validity::InferiorEqual;
-    case 6 : return Validity::Between;
-    case 7 : return Validity::Different;
-    case 8 : return Validity::DifferentTo;
-    default: break;
+    case 0:
+        return Validity::None;
+    case 1:
+        return Validity::Equal;
+    case 2:
+        return Validity::Superior;
+    case 3:
+        return Validity::Inferior;
+    case 4:
+        return Validity::SuperiorEqual;
+    case 5:
+        return Validity::InferiorEqual;
+    case 6:
+        return Validity::Between;
+    case 7:
+        return Validity::Different;
+    case 8:
+        return Validity::DifferentTo;
+    default:
+        break;
     }
     return Validity::None;
 }
 
-bool ConditionalDialog::checkInputData(KLineEdit const * const edit1,
-                                       KLineEdit const * const edit2)
+bool ConditionalDialog::checkInputData(KLineEdit const *const edit1, KLineEdit const *const edit2)
 {
     bool b1 = false;
     bool b2 = false;
@@ -400,34 +410,49 @@ bool ConditionalDialog::checkInputData()
     return true;
 }
 
-Validity::Type ConditionalDialog::getType(int id) {
-    if (id == 1) return typeOfCondition(m_dlg->m_condition_1);
-    if (id == 2) return typeOfCondition(m_dlg->m_condition_2);
-    if (id == 3) return typeOfCondition(m_dlg->m_condition_3);
+Validity::Type ConditionalDialog::getType(int id)
+{
+    if (id == 1)
+        return typeOfCondition(m_dlg->m_condition_1);
+    if (id == 2)
+        return typeOfCondition(m_dlg->m_condition_2);
+    if (id == 3)
+        return typeOfCondition(m_dlg->m_condition_3);
     return Validity::None;
 }
 
-QString ConditionalDialog::getValue1(int id) {
-    if (id == 1) return m_dlg->m_firstValue_1->text();
-    if (id == 2) return m_dlg->m_firstValue_2->text();
-    if (id == 3) return m_dlg->m_firstValue_3->text();
+QString ConditionalDialog::getValue1(int id)
+{
+    if (id == 1)
+        return m_dlg->m_firstValue_1->text();
+    if (id == 2)
+        return m_dlg->m_firstValue_2->text();
+    if (id == 3)
+        return m_dlg->m_firstValue_3->text();
     return QString();
 }
 
-QString ConditionalDialog::getValue2(int id) {
-    if (id == 1) return m_dlg->m_secondValue_1->text();
-    if (id == 2) return m_dlg->m_secondValue_2->text();
-    if (id == 3) return m_dlg->m_secondValue_3->text();
+QString ConditionalDialog::getValue2(int id)
+{
+    if (id == 1)
+        return m_dlg->m_secondValue_1->text();
+    if (id == 2)
+        return m_dlg->m_secondValue_2->text();
+    if (id == 3)
+        return m_dlg->m_secondValue_3->text();
     return QString();
 }
 
-QString ConditionalDialog::getStyleName(int id) {
-    if (id == 1) return m_dlg->m_style_1->currentText();
-    if (id == 2) return m_dlg->m_style_2->currentText();
-    if (id == 3) return m_dlg->m_style_3->currentText();
+QString ConditionalDialog::getStyleName(int id)
+{
+    if (id == 1)
+        return m_dlg->m_style_1->currentText();
+    if (id == 2)
+        return m_dlg->m_style_2->currentText();
+    if (id == 3)
+        return m_dlg->m_style_3->currentText();
     return QString();
 }
-
 
 void ConditionalDialog::onApply()
 {

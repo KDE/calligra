@@ -1,17 +1,17 @@
 /* This file is part of the KDE project
-*
-* SPDX-FileCopyrightText: 2008 Peter Penz <peter.penz19@gmail.com>
-* SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ *
+ * SPDX-FileCopyrightText: 2008 Peter Penz <peter.penz19@gmail.com>
+ * SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #ifndef KOVIEWITEMCONTEXTBAR_H
 #define KOVIEWITEMCONTEXTBAR_H
 
-#include <QObject>
 #include "kowidgets_export.h"
 #include <QModelIndex>
+#include <QObject>
 
 class QAbstractItemView;
 class QToolButton;
@@ -41,7 +41,7 @@ public:
      * @return a QToolButton, so it could be connected to a slot.
      */
     QToolButton *addContextButton(const QString &text, const QString &iconName);
-    //Returns the index of the item under the mouse cursor
+    // Returns the index of the item under the mouse cursor
     QModelIndex currentIndex();
 
     int preferredWidth();
@@ -66,7 +66,7 @@ private Q_SLOTS:
     /** Hide context bar if the selectem item has been removed */
     void slotRowsRemoved(const QModelIndex &parent, int start, int end);
     /** Updates context bar buttons state*/
-    void updateHoverUi(const QModelIndex& index);
+    void updateHoverUi(const QModelIndex &index);
     void showContextBar(const QRect &rect);
     /** Updates Selection Button state*/
     void updateToggleSelectionButton();
@@ -80,7 +80,7 @@ private:
     QWidget *m_ContextBar;
     QToolButton *m_ToggleSelectionButton;
     QHBoxLayout *m_Layout;
-    QList <QToolButton*> m_contextBarButtons;
+    QList<QToolButton *> m_contextBarButtons;
     bool m_showToggleButton;
 };
 

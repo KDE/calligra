@@ -1,15 +1,15 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2009-2010 Pierre Stirnweiss <pstirnweiss@googlemail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ * SPDX-FileCopyrightText: 2009-2010 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #ifndef TRACKEDCHANGEMANAGER_H
 #define TRACKEDCHANGEMANAGER_H
 
 #include <ui_TrackedChangeManager.h>
 
-//#include <KoDialog.h>
+// #include <KoDialog.h>
 #include <QWidget>
 
 class TrackedChangeModel;
@@ -20,7 +20,7 @@ class TrackedChangeManager : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TrackedChangeManager(QWidget *parent=0);
+    explicit TrackedChangeManager(QWidget *parent = 0);
     ~TrackedChangeManager() override;
 
     void setModel(TrackedChangeModel *model);

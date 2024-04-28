@@ -25,21 +25,21 @@
  * SPDX-FileCopyrightText: 2007 Matthias Kretz <kretz@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ */
 
 #include "KarbonPart.h"
 
-#include "KarbonView.h"
-#include "ProxyView.h"
 #include "KarbonDocument.h"
 #include "KarbonFactory.h"
 #include "KarbonPaletteBarWidget.h"
+#include "KarbonView.h"
+#include "ProxyView.h"
 
-#include <KoCanvasResourceManager.h>
+#include <KConfigGroup>
 #include <KoCanvasBase.h>
+#include <KoCanvasResourceManager.h>
 #include <KoComponentData.h>
 #include <KoPAPageBase.h>
-#include <KConfigGroup>
 
 #include <QVBoxLayout>
 
@@ -53,9 +53,9 @@ KarbonPart::~KarbonPart()
 {
 }
 
-KoView * KarbonPart::createViewInstance(KoDocument *_document, QWidget *parent)
+KoView *KarbonPart::createViewInstance(KoDocument *_document, QWidget *parent)
 {
-    KarbonDocument *doc = qobject_cast<KarbonDocument*>(_document);
+    KarbonDocument *doc = qobject_cast<KarbonDocument *>(_document);
     ProxyView *view = new ProxyView(this, doc, parent);
 
     KarbonView *result = new KarbonView(this, doc, view);
@@ -78,7 +78,7 @@ KoMainWindow *KarbonPart::createMainWindow()
     return new KoMainWindow(KARBON_MIME_TYPE, componentData());
 }
 
-void KarbonPart::openTemplate(const QUrl& url)
+void KarbonPart::openTemplate(const QUrl &url)
 {
     KoPart::openTemplate(url);
 

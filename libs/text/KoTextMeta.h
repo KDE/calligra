@@ -19,8 +19,8 @@ class KOTEXT_EXPORT KoTextMeta : public KoInlineObject
     Q_OBJECT
 public:
     enum BookmarkType {
-        StartBookmark,      ///< start position
-        EndBookmark         ///< end position
+        StartBookmark, ///< start position
+        EndBookmark ///< end position
     };
 
     /**
@@ -37,14 +37,17 @@ public:
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /// reimplemented from super
-    void updatePosition(const QTextDocument *document,
-                                int posInDocument, const QTextCharFormat &format) override;
+    void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format) override;
     /// reimplemented from super
-    void resize(const QTextDocument *document, QTextInlineObject &object,
-                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
+    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
     /// reimplemented from super
-    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) override;
+    void paint(QPainter &painter,
+               QPaintDevice *pd,
+               const QTextDocument *document,
+               const QRectF &rect,
+               const QTextInlineObject &object,
+               int posInDocument,
+               const QTextCharFormat &format) override;
 
     void setType(BookmarkType type);
 
@@ -54,7 +57,7 @@ public:
     void setEndBookmark(KoTextMeta *bookmark);
 
     /// @return the end bookmark if the type is StartBookmark
-    KoTextMeta* endBookmark() const;
+    KoTextMeta *endBookmark() const;
 
     /// @return the exact cursor position of this bookmark in document
     int position() const;
@@ -65,4 +68,3 @@ private:
 };
 
 #endif
-

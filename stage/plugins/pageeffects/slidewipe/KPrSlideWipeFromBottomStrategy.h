@@ -15,11 +15,11 @@ public:
     KPrSlideWipeFromBottomStrategy();
     ~KPrSlideWipeFromBottomStrategy() override;
 
-    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
+    void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine) override;
 
-    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
+    void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data) override;
 
-    void next( const KPrPageEffect::Data &data ) override;
+    void next(const KPrPageEffect::Data &data) override;
 };
 
 #endif // KPRSLIDEWIPEFROMBOTTOMSTRATEGY_H

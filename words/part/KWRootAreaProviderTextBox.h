@@ -28,8 +28,9 @@ public:
     void releaseAllAfter(KoTextLayoutRootArea *afterThis) override;
     void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea) override;
     QRectF suggestRect(KoTextLayoutRootArea *rootArea) override;
+
 private:
-    QList<KoTextLayoutRootArea*> m_rootAreaCache;
+    QList<KoTextLayoutRootArea *> m_rootAreaCache;
 };
 
 #endif

@@ -9,20 +9,20 @@
 
 #include "KoColorSetWidget.h"
 
-#include <QTimer>
 #include <QApplication>
-#include <QSize>
-#include <QToolButton>
-#include <QHBoxLayout>
 #include <QCheckBox>
-#include <QFrame>
-#include <QLabel>
-#include <QMouseEvent>
-#include <QMenu>
-#include <QWidgetAction>
 #include <QDir>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QMenu>
+#include <QMouseEvent>
 #include <QPointer>
 #include <QScrollArea>
+#include <QSize>
+#include <QTimer>
+#include <QToolButton>
+#include <QWidgetAction>
 
 #include <KLocalizedString>
 #include <WidgetsDebug.h>
@@ -31,7 +31,8 @@
 
 class KoColorPatch;
 
-class Q_DECL_HIDDEN KoColorSetWidget::KoColorSetWidgetPrivate {
+class Q_DECL_HIDDEN KoColorSetWidget::KoColorSetWidgetPrivate
+{
 public:
     KoColorSetWidget *thePublic;
     QPointer<KoColorSet> colorSet;

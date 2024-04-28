@@ -4,23 +4,22 @@
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
-#include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
+#include <KoShapeRegistry.h>
 
 #include "PathShapesPlugin.h"
-#include "star/StarShapeFactory.h"
-#include "rectangle/RectangleShapeFactory.h"
 #include "ellipse/EllipseShapeFactory.h"
-#include "spiral/SpiralShapeFactory.h"
-#include "enhancedpath/EnhancedPathShapeFactory.h"
 #include "enhancedpath/CalloutShapeFactory.h"
+#include "enhancedpath/EnhancedPathShapeFactory.h"
+#include "rectangle/RectangleShapeFactory.h"
+#include "spiral/SpiralShapeFactory.h"
+#include "star/StarShapeFactory.h"
 
 #include <KPluginFactory>
 
-K_PLUGIN_FACTORY_WITH_JSON(PathShapesPluginFactory, "calligra_shape_paths.json",
-                           registerPlugin<PathShapesPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PathShapesPluginFactory, "calligra_shape_paths.json", registerPlugin<PathShapesPlugin>();)
 
-PathShapesPlugin::PathShapesPlugin(QObject *parent, const QVariantList&)
+PathShapesPlugin::PathShapesPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoShapeRegistry::instance()->add(new StarShapeFactory());

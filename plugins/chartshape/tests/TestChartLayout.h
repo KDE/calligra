@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * 
+ *
  * SPDX-FileCopyrightText: 2017 Dag Andersen <danders@get2net.dk>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -15,11 +15,12 @@ class KoShape;
 
 class KoDocumentResourceManager;
 
-namespace KoChart {
-    class ChartShape;
-    class ChartLayout;
-    class PlotArea;
-    class Legend;
+namespace KoChart
+{
+class ChartShape;
+class ChartLayout;
+class PlotArea;
+class Legend;
 }
 
 class TestChartLayout : public QObject
@@ -40,6 +41,7 @@ private Q_SLOTS:
 private:
     bool compareLayout(const QString &test = QString());
     void updateRects();
+
 private:
     QtMessageHandler msgHandler;
     KoDocumentResourceManager *drm;
@@ -64,7 +66,6 @@ private:
     QRectF secondaryXAxisTitleRect;
     KoShape *secondaryYAxisTitle;
     QRectF secondaryYAxisTitleRect;
-
 };
 
 #endif // KCHART_TESTCHARTLAYOUT_H

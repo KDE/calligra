@@ -26,10 +26,8 @@ void TestTableSource::init()
 
     QStandardItem *table3 = new QStandardItem;
     QStandardItem *table4 = new QStandardItem;
-    table3->setData(QVariant::fromValue(QPointer<QAbstractItemModel>(&m_table3)),
-                    Qt::DisplayRole);
-    table4->setData(QVariant::fromValue(QPointer<QAbstractItemModel>(&m_table4)),
-                    Qt::DisplayRole);
+    table3->setData(QVariant::fromValue(QPointer<QAbstractItemModel>(&m_table3)), Qt::DisplayRole);
+    table4->setData(QVariant::fromValue(QPointer<QAbstractItemModel>(&m_table4)), Qt::DisplayRole);
 
     m_sheetAccessModel.setItem(0, 0, table3);
     m_sheetAccessModel.setHeaderData(0, Qt::Horizontal, "Table3");
@@ -62,13 +60,13 @@ void TestTableSource::testRenaming()
 void TestTableSource::testRemoval()
 {
     m_source.remove("Table1");
-    QCOMPARE(m_source.get("Table1"), (Table*)0);
+    QCOMPARE(m_source.get("Table1"), (Table *)0);
     QVERIFY(m_source.get("Table2"));
     QCOMPARE(m_source.get("Table2")->model(), &m_table2);
 
     m_source.remove("Table2");
-    QCOMPARE(m_source.get("Table1"), (Table*)0);
-    QCOMPARE(m_source.get("Table2"), (Table*)0);
+    QCOMPARE(m_source.get("Table1"), (Table *)0);
+    QCOMPARE(m_source.get("Table2"), (Table *)0);
 }
 
 void TestTableSource::testAdding_SAM()
@@ -97,13 +95,13 @@ void TestTableSource::testRenaming_SAM()
 void TestTableSource::testRemoval_SAM()
 {
     m_sheetAccessModel.removeColumns(0, 1);
-    QCOMPARE(m_source.get("Table3"), (Table*)0);
+    QCOMPARE(m_source.get("Table3"), (Table *)0);
     QVERIFY(m_source.get("Table4"));
     QCOMPARE(m_source.get("Table4")->model(), &m_table4);
 
     m_sheetAccessModel.removeColumns(0, 1);
-    QCOMPARE(m_source.get("Table3"), (Table*)0);
-    QCOMPARE(m_source.get("Table4"), (Table*)0);
+    QCOMPARE(m_source.get("Table3"), (Table *)0);
+    QCOMPARE(m_source.get("Table4"), (Table *)0);
 }
 
 QTEST_MAIN(TestTableSource)

@@ -26,8 +26,8 @@ void Tool::mousePressEvent(QMouseEvent *e)
     m_rect.setSize(QSize(0, 0));
 }
 
-CreateTool::CreateTool(Canvas * canvas)
-        : Tool(canvas)
+CreateTool::CreateTool(Canvas *canvas)
+    : Tool(canvas)
 {
 }
 
@@ -44,7 +44,7 @@ void CreateTool::mouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-void CreateTool::paint(QPainter & p)
+void CreateTool::paint(QPainter &p)
 {
     if (m_buttonPressed == true) {
         p.save();
@@ -55,9 +55,8 @@ void CreateTool::paint(QPainter & p)
     }
 }
 
-
-SelectTool::SelectTool(Canvas * canvas)
-        : Tool(canvas)
+SelectTool::SelectTool(Canvas *canvas)
+    : Tool(canvas)
 {
 }
 
@@ -74,7 +73,7 @@ void SelectTool::mouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-void SelectTool::paint(QPainter & p)
+void SelectTool::paint(QPainter &p)
 {
     if (m_buttonPressed == true) {
         p.save();
@@ -86,9 +85,8 @@ void SelectTool::paint(QPainter & p)
     }
 }
 
-
-RemoveTool::RemoveTool(Canvas * canvas)
-        : Tool(canvas)
+RemoveTool::RemoveTool(Canvas *canvas)
+    : Tool(canvas)
 {
 }
 
@@ -105,7 +103,7 @@ void RemoveTool::mouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-void RemoveTool::paint(QPainter & p)
+void RemoveTool::paint(QPainter &p)
 {
     if (m_buttonPressed == true) {
         p.save();
@@ -116,4 +114,3 @@ void RemoveTool::paint(QPainter & p)
         p.restore();
     }
 }
-

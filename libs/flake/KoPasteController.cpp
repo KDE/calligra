@@ -14,11 +14,13 @@
 #include <QAction>
 
 KoPasteController::KoPasteController(KoCanvasBase *canvas, QAction *pasteAction)
-    : QObject(pasteAction),
-    d(new Private(this, canvas, pasteAction))
+    : QObject(pasteAction)
+    , d(new Private(this, canvas, pasteAction))
 {
-    //connect(canvas->toolProxy(), SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
-    connect(pasteAction, &QAction::triggered, this, [this] () { d->paste(); });
+    // connect(canvas->toolProxy(), SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
+    connect(pasteAction, &QAction::triggered, this, [this]() {
+        d->paste();
+    });
 }
 
 KoPasteController::~KoPasteController()
@@ -26,5 +28,5 @@ KoPasteController::~KoPasteController()
     delete d;
 }
 
-//have to include this because of Q_PRIVATE_SLOT
+// have to include this because of Q_PRIVATE_SLOT
 #include "moc_KoPasteController.cpp"

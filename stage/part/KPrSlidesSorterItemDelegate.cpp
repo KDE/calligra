@@ -19,7 +19,7 @@
 
 #include "KPrSlidesSorterItemDelegate.h"
 
-//Qt headers
+// Qt headers
 #include <QPainter>
 
 KPrSlidesSorterItemDelegate::KPrSlidesSorterItemDelegate(QObject *parent)
@@ -41,7 +41,7 @@ void KPrSlidesSorterItemDelegate::paint(QPainter *painter, const QStyleOptionVie
     QString slideNumber = QString("%1").arg(index.row() + 1);
     QRect slideNumberRect = option.rect;
     slideNumberRect.setLeft(option.rect.left() + 5);
-    int offSet = option.rect.height() > 0 ? 600 / option.rect.height(): 0;
+    int offSet = option.rect.height() > 0 ? 600 / option.rect.height() : 0;
     slideNumberRect.setTop(option.rect.top() + 5 - offSet);
     slideNumberRect.setBottom(slideNumberRect.top() + fm.height());
     slideNumberRect.setRight(option.rect.left() + 30);

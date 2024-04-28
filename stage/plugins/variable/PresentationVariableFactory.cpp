@@ -37,7 +37,9 @@ PresentationVariableFactory::PresentationVariableFactory()
     addTemplate(var2);
 
     QStringList elementNames;
-    elementNames << "footer" << "header" << "date-time";
+    elementNames << "footer"
+                 << "header"
+                 << "date-time";
     setOdfElementNames(KoXmlNS::presentation, elementNames);
 }
 
@@ -48,4 +50,3 @@ KoInlineObject *PresentationVariableFactory::createInlineObject(const KoProperti
         var->setProperties(properties);
     return var;
 }
-

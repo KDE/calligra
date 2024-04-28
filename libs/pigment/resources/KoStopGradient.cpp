@@ -10,21 +10,21 @@
 
 #include <cfloat>
 
-#include <QColor>
-#include <QFile>
-#include <QDomDocument>
 #include <QBuffer>
+#include <QColor>
+#include <QDomDocument>
+#include <QFile>
 
-#include <KLocalizedString>
 #include <DebugPigment.h>
+#include <KLocalizedString>
 
 #include "KoColorSpaceRegistry.h"
 #include "KoMixColorsOp.h"
 
-#include <math.h>
 #include <KoColorModelStandardIds.h>
+#include <math.h>
 
-KoStopGradient::KoStopGradient(const QString& filename)
+KoStopGradient::KoStopGradient(const QString &filename)
     : KoAbstractGradient(filename)
 {
 }
@@ -33,7 +33,7 @@ KoStopGradient::~KoStopGradient()
 {
 }
 
-KoAbstractGradient* KoStopGradient::clone() const
+KoAbstractGradient *KoStopGradient::clone() const
 {
     return new KoStopGradient(*this);
 }
@@ -62,8 +62,7 @@ bool KoStopGradient::loadFromDevice(QIODevice *dev)
     QBuffer buf(&ba);
     if (strExt == ".kgr") {
         loadKarbonGradient(&buf);
-    }
-    else if (strExt == ".svg") {
+    } else if (strExt == ".svg") {
         loadSvgGradient(&buf);
     }
     if (m_stops.count() >= 2) {
@@ -76,7 +75,7 @@ bool KoStopGradient::loadFromDevice(QIODevice *dev)
 bool KoStopGradient::save()
 {
     QFile fileOut(filename());
-    if (! fileOut.open(QIODevice::WriteOnly))
+    if (!fileOut.open(QIODevice::WriteOnly))
         return false;
 
     bool retval = saveToDevice(&fileOut);
@@ -85,9 +84,9 @@ bool KoStopGradient::save()
     return retval;
 }
 
-QGradient* KoStopGradient::toQGradient() const
+QGradient *KoStopGradient::toQGradient() const
 {
-    QGradient* gradient;
+    QGradient *gradient;
 
     switch (type()) {
     case QGradient::LinearGradient: {
@@ -113,14 +112,14 @@ QGradient* KoStopGradient::toQGradient() const
     QColor color;
     for (QList<KoGradientStop>::const_iterator i = m_stops.begin(); i != m_stops.end(); ++i) {
         i->second.toQColor(&color);
-        gradient->setColorAt(i->first , color);
+        gradient->setColorAt(i->first, color);
     }
     return gradient;
 }
 
-void KoStopGradient::colorAt(KoColor& dst, qreal t) const
+void KoStopGradient::colorAt(KoColor &dst, qreal t) const
 {
-    if (! m_stops.count())
+    if (!m_stops.count())
         return;
     if (t <= m_stops.first().first || m_stops.count() == 1) {
         // we have only one stop or t is before the first stop
@@ -142,17 +141,17 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
                 break;
         }
 
-        //if ( !(*buffer.colorSpace() == *colorSpace())) {
-        //    buffer = KoColor(colorSpace());
-        //}
-        //hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
-        const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
+        // if ( !(*buffer.colorSpace() == *colorSpace())) {
+        //     buffer = KoColor(colorSpace());
+        // }
+        // hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
+        const KoColorSpace *mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
 
-        const KoGradientStop& leftStop = *(stop - 1);
-        const KoGradientStop& rightStop = *(stop);
-        
+        const KoGradientStop &leftStop = *(stop - 1);
+        const KoGradientStop &rightStop = *(stop);
+
         KoColor startDummy, endDummy;
-        if (mixSpace){
+        if (mixSpace) {
             startDummy = KoColor(leftStop.second, mixSpace);
             endDummy = KoColor(rightStop.second, mixSpace);
         } else {
@@ -174,15 +173,13 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
         colorWeights[0] = static_cast<quint8>((1.0 - localT) * 255 + 0.5);
         colorWeights[1] = 255 - colorWeights[0];
 
-
-        //check if our mixspace exists, it doesn't at startup.
-        if (mixSpace){
-            if ( !(*buffer.colorSpace() == *mixSpace)) {
+        // check if our mixspace exists, it doesn't at startup.
+        if (mixSpace) {
+            if (!(*buffer.colorSpace() == *mixSpace)) {
                 buffer = KoColor(mixSpace);
             }
             mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-        }
-        else {
+        } else {
             buffer = KoColor(colorSpace());
             colorSpace()->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
         }
@@ -191,32 +188,32 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
     }
 }
 
-KoStopGradient * KoStopGradient::fromQGradient(QGradient * gradient)
+KoStopGradient *KoStopGradient::fromQGradient(QGradient *gradient)
 {
-    if (! gradient)
+    if (!gradient)
         return 0;
 
-    KoStopGradient * newGradient = new KoStopGradient("");
+    KoStopGradient *newGradient = new KoStopGradient("");
     newGradient->setType(gradient->type());
     newGradient->setSpread(gradient->spread());
 
     switch (gradient->type()) {
     case QGradient::LinearGradient: {
-        QLinearGradient * g = static_cast<QLinearGradient*>(gradient);
+        QLinearGradient *g = static_cast<QLinearGradient *>(gradient);
         newGradient->m_start = g->start();
         newGradient->m_stop = g->finalStop();
         newGradient->m_focalPoint = g->start();
         break;
     }
     case QGradient::RadialGradient: {
-        QRadialGradient * g = static_cast<QRadialGradient*>(gradient);
+        QRadialGradient *g = static_cast<QRadialGradient *>(gradient);
         newGradient->m_start = g->center();
         newGradient->m_stop = g->center() + QPointF(g->radius(), 0);
         newGradient->m_focalPoint = g->focalPoint();
         break;
     }
     case QGradient::ConicalGradient: {
-        QConicalGradient * g = static_cast<QConicalGradient*>(gradient);
+        QConicalGradient *g = static_cast<QConicalGradient *>(gradient);
         qreal radian = g->angle() * M_PI / 180.0;
         newGradient->m_start = g->center();
         newGradient->m_stop = QPointF(100.0 * cos(radian), 100.0 * sin(radian));
@@ -228,7 +225,7 @@ KoStopGradient * KoStopGradient::fromQGradient(QGradient * gradient)
         return 0;
     }
 
-    foreach(const QGradientStop & stop, gradient->stops()) {
+    foreach (const QGradientStop &stop, gradient->stops()) {
         KoColor color(newGradient->colorSpace());
         color.fromQColor(stop.second);
         newGradient->m_stops.append(KoGradientStop(stop.first, color));
@@ -237,11 +234,11 @@ KoStopGradient * KoStopGradient::fromQGradient(QGradient * gradient)
     return newGradient;
 }
 
-void KoStopGradient::setStops(QList< KoGradientStop > stops)
+void KoStopGradient::setStops(QList<KoGradientStop> stops)
 {
     m_stops.clear();
     KoColor color;
-    foreach(const KoGradientStop & stop, stops) {
+    foreach (const KoGradientStop &stop, stops) {
         color = stop.second;
         color.convertTo(colorSpace());
         m_stops.append(KoGradientStop(stop.first, color));
@@ -285,7 +282,8 @@ void KoStopGradient::loadSvgGradient(QIODevice *file)
         for (QDomNode n = doc.documentElement().firstChild(); !n.isNull(); n = n.nextSibling()) {
             QDomElement e = n.toElement();
 
-            if (e.isNull()) continue;
+            if (e.isNull())
+                continue;
 
             if (e.tagName() == "linearGradient" || e.tagName() == "radialGradient") {
                 parseSvgGradient(e);
@@ -296,7 +294,8 @@ void KoStopGradient::loadSvgGradient(QIODevice *file)
                 for (QDomNode defnode = e.firstChild(); !defnode.isNull(); defnode = defnode.nextSibling()) {
                     QDomElement defelement = defnode.toElement();
 
-                    if (defelement.isNull()) continue;
+                    if (defelement.isNull())
+                        continue;
 
                     if (defelement.tagName() == "linearGradient" || defelement.tagName() == "radialGradient") {
                         parseSvgGradient(defelement);
@@ -308,7 +307,7 @@ void KoStopGradient::loadSvgGradient(QIODevice *file)
     }
 }
 
-void KoStopGradient::parseKarbonGradient(const QDomElement& element)
+void KoStopGradient::parseKarbonGradient(const QDomElement &element)
 {
     m_start = QPointF(element.attribute("originX", "0.0").toDouble(), element.attribute("originY", "0.0").toDouble());
     m_focalPoint = QPointF(element.attribute("focalX", "0.0").toDouble(), element.attribute("focalY", "0.0").toDouble());
@@ -324,7 +323,6 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
     // load stops
     QDomNodeList list = element.childNodes();
     for (int i = 0; i < list.count(); ++i) {
-
         if (list.item(i).isElement()) {
             QDomElement colorstop = list.item(i).toElement();
 
@@ -334,15 +332,15 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
                 opacity = e.attribute("opacity", "1.0").toFloat();
 
                 QColor tmpColor;
-                const KoColorSpace* stopColorSpace;
+                const KoColorSpace *stopColorSpace;
                 switch (e.attribute("colorSpace").toUShort()) {
-                case 1:  // cmyk
+                case 1: // cmyk
                     color1 = e.attribute("v1", "0.0").toFloat();
                     color2 = e.attribute("v2", "0.0").toFloat();
                     color3 = e.attribute("v3", "0.0").toFloat();
                     color4 = e.attribute("v4", "0.0").toFloat();
 
-                    stopColorSpace = KoColorSpaceRegistry::instance()->colorSpace( CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), QString());
+                    stopColorSpace = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), QString());
                     if (stopColorSpace) {
                         quint8 data[5];
                         data[0] = static_cast<quint8>(color1 * 255 + 0.5);
@@ -371,7 +369,7 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
                     break;
                 case 3: // gray
                     color1 = e.attribute("v1", "0.0").toFloat();
-                    stopColorSpace = KoColorSpaceRegistry::instance()->colorSpace( GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), QString());
+                    stopColorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), QString());
                     if (stopColorSpace) {
                         quint8 data[2];
                         data[0] = static_cast<quint8>(color1 * 255 + 0.5);
@@ -401,7 +399,7 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
                 }
 
                 qreal offset = colorstop.attribute("ramppoint", "0.0").toFloat();
-//              midpoint = colorstop.attribute("midpoint", "0.5").toFloat();
+                //              midpoint = colorstop.attribute("midpoint", "0.5").toFloat();
 
                 m_stops.append(KoGradientStop(offset, color));
             }
@@ -409,7 +407,7 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
     }
 }
 
-void KoStopGradient::parseSvgGradient(const QDomElement& element)
+void KoStopGradient::parseSvgGradient(const QDomElement &element)
 {
     m_stops.clear();
     setSpread(QGradient::PadSpread);
@@ -420,12 +418,11 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
     }*/
     setName(element.attribute("id", i18n("SVG Gradient")));
 
-    const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 
     bool bbox = element.attribute("gradientUnits") != "userSpaceOnUse";
 
     if (element.tagName() == "linearGradient") {
-
         if (bbox) {
             QString s;
 
@@ -521,8 +518,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
             m_focalPoint = QPointF(xFocal, yFocal);
         } else {
             m_start = QPointF(element.attribute("cx").toDouble(), element.attribute("cy").toDouble());
-            m_stop = QPointF(element.attribute("cx").toDouble() + element.attribute("r").toDouble(),
-                             element.attribute("cy").toDouble());
+            m_stop = QPointF(element.attribute("cx").toDouble() + element.attribute("r").toDouble(), element.attribute("cy").toDouble());
             m_focalPoint = QPointF(element.attribute("fx").toDouble(), element.attribute("fy").toDouble());
         }
         setType(QGradient::RadialGradient);
@@ -555,7 +551,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
                 // try style attr
                 QString style = colorstop.attribute("style").simplified();
                 QStringList substyles = style.split(';', Qt::SkipEmptyParts);
-                foreach(const QString & s, substyles) {
+                foreach (const QString &s, substyles) {
                     QStringList substyle = s.split(':');
                     QString command = substyle[0].trimmed();
                     QString params = substyle[1].trimmed();
@@ -564,7 +560,6 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
                     if (command == "stop-opacity")
                         opacity = params.toDouble();
                 }
-
             }
             if (!colorstop.attribute("stop-opacity").isEmpty())
                 opacity = colorstop.attribute("stop-opacity").toDouble();
@@ -573,8 +568,8 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
             color.fromQColor(c);
             color.setOpacity(static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5));
 
-            //According to the SVG spec each gradient offset has to be equal to or greater than the previous one
-            //if not it needs to be adjusted to be equal
+            // According to the SVG spec each gradient offset has to be equal to or greater than the previous one
+            // if not it needs to be adjusted to be equal
             if (m_stops.count() > 0 && m_stops.last().first >= off) {
                 off = m_stops.last().first;
             }
@@ -629,11 +624,7 @@ bool KoStopGradient::saveToDevice(QIODevice *dev) const
 {
     QTextStream stream(dev);
 
-    const QString spreadMethod[3] = {
-        QString("spreadMethod=\"pad\" "),
-        QString("spreadMethod=\"reflect\" "),
-        QString("spreadMethod=\"repeat\" ")
-    };
+    const QString spreadMethod[3] = {QString("spreadMethod=\"pad\" "), QString("spreadMethod=\"reflect\" "), QString("spreadMethod=\"repeat\" ")};
 
     const QString indent = "    ";
 
@@ -648,13 +639,14 @@ bool KoStopGradient::saveToDevice(QIODevice *dev) const
     QColor color;
 
     // color stops
-    foreach(const KoGradientStop & stop, m_stops) {
+    foreach (const KoGradientStop &stop, m_stops) {
         stop.second.toQColor(&color);
         stream << indent << indent;
         stream << "<stop stop-color=\"";
         stream << color.name();
         stream << "\" offset=\"" << QString().setNum(stop.first);
-        stream << "\" stop-opacity=\"" << static_cast<float>(color.alpha()) / 255.0f << "\"" << " />" << Qt::endl;
+        stream << "\" stop-opacity=\"" << static_cast<float>(color.alpha()) / 255.0f << "\""
+               << " />" << Qt::endl;
     }
     stream << indent;
     stream << "</linearGradient>" << Qt::endl;

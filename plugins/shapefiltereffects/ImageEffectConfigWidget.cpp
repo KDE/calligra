@@ -12,19 +12,20 @@
 
 #include <KLocalizedString>
 
+#include <KConfigGroup>
 #include <QGridLayout>
+#include <QImageReader>
 #include <QLabel>
 #include <QPushButton>
-#include <QImageReader>
-#include <KConfigGroup>
 
 ImageEffectConfigWidget::ImageEffectConfigWidget(QWidget *parent)
-        : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
+    : KoFilterEffectConfigWidgetBase(parent)
+    , m_effect(0)
 {
-    QGridLayout * g = new QGridLayout(this);
+    QGridLayout *g = new QGridLayout(this);
 
     m_image = new QLabel(this);
-    QPushButton * button = new QPushButton(i18n("Select image..."), this);
+    QPushButton *button = new QPushButton(i18n("Select image..."), this);
 
     g->addWidget(m_image, 0, 0, Qt::AlignCenter);
     g->addWidget(button, 0, 1);
@@ -34,9 +35,9 @@ ImageEffectConfigWidget::ImageEffectConfigWidget(QWidget *parent)
     connect(button, &QAbstractButton::clicked, this, &ImageEffectConfigWidget::selectImage);
 }
 
-bool ImageEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
+bool ImageEffectConfigWidget::editFilterEffect(KoFilterEffect *filterEffect)
 {
-    m_effect = dynamic_cast<ImageEffect*>(filterEffect);
+    m_effect = dynamic_cast<ImageEffect *>(filterEffect);
     if (!m_effect)
         return false;
 
@@ -56,7 +57,8 @@ void ImageEffectConfigWidget::selectImage()
 
     QString fname = dialog.filename();
 
-    if (fname.isEmpty()) return;
+    if (fname.isEmpty())
+        return;
 
     QImage newImage;
     if (!newImage.load(fname))

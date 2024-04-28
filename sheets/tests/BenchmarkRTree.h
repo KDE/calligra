@@ -17,8 +17,8 @@
 #ifndef CALLIGRA_SHEETS_RTREE_BENCHMARK_H
 #define CALLIGRA_SHEETS_RTREE_BENCHMARK_H
 
-#include <QObject>
 #include "engine/RTree.h"
+#include <QObject>
 
 namespace Calligra
 {
@@ -38,6 +38,7 @@ private Q_SLOTS:
     void testRowDeletionPerformance();
     void testColumnDeletionPerformance();
     void testLookupPerformance();
+
 private:
     RTree<double> m_tree;
 };

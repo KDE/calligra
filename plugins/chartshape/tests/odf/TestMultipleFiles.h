@@ -12,9 +12,8 @@
 
 #include "TestLoadingBase.h"
 
-
-
-namespace KoChart {
+namespace KoChart
+{
 
 /**
  * Base class for testing of multiple files in one test

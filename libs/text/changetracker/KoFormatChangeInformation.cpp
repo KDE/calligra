@@ -16,8 +16,8 @@ KoFormatChangeInformation::FormatChangeType KoFormatChangeInformation::formatTyp
     return formatChangeType;
 }
 
-KoTextStyleChangeInformation::KoTextStyleChangeInformation(KoFormatChangeInformation::FormatChangeType formatChangeType):
-                              KoFormatChangeInformation(formatChangeType)
+KoTextStyleChangeInformation::KoTextStyleChangeInformation(KoFormatChangeInformation::FormatChangeType formatChangeType)
+    : KoFormatChangeInformation(formatChangeType)
 {
 }
 
@@ -26,13 +26,13 @@ void KoTextStyleChangeInformation::setPreviousCharFormat(QTextCharFormat &previo
     this->previousTextCharFormat = previousFormat;
 }
 
-QTextCharFormat& KoTextStyleChangeInformation::previousCharFormat()
+QTextCharFormat &KoTextStyleChangeInformation::previousCharFormat()
 {
     return this->previousTextCharFormat;
 }
 
-KoParagraphStyleChangeInformation::KoParagraphStyleChangeInformation():
-                                   KoTextStyleChangeInformation(KoFormatChangeInformation::eParagraphStyleChange)
+KoParagraphStyleChangeInformation::KoParagraphStyleChangeInformation()
+    : KoTextStyleChangeInformation(KoFormatChangeInformation::eParagraphStyleChange)
 {
 }
 
@@ -41,14 +41,14 @@ void KoParagraphStyleChangeInformation::setPreviousBlockFormat(QTextBlockFormat 
     this->previousTextBlockFormat = previousFormat;
 }
 
-QTextBlockFormat& KoParagraphStyleChangeInformation::previousBlockFormat()
+QTextBlockFormat &KoParagraphStyleChangeInformation::previousBlockFormat()
 {
     return this->previousTextBlockFormat;
 }
 
-KoListItemNumChangeInformation::KoListItemNumChangeInformation(KoListItemNumChangeInformation::ListItemNumChangeType type):
-                                                               KoFormatChangeInformation(KoFormatChangeInformation::eListItemNumberingChange),
-                                                               eSubType(type)
+KoListItemNumChangeInformation::KoListItemNumChangeInformation(KoListItemNumChangeInformation::ListItemNumChangeType type)
+    : KoFormatChangeInformation(KoFormatChangeInformation::eListItemNumberingChange)
+    , eSubType(type)
 {
 }
 
@@ -66,4 +66,3 @@ int KoListItemNumChangeInformation::previousStartNumber()
 {
     return oldStartNumber;
 }
-

@@ -21,7 +21,10 @@ public:
     KoPageNavigatorButton(const char *iconName, QWidget *parent);
 
     void setAction(QAction *action);
-    QAction *action() const { return m_action; }
+    QAction *action() const
+    {
+        return m_action;
+    }
 
 private Q_SLOTS:
     void onActionChanged();

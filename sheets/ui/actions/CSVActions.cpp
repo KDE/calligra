@@ -10,12 +10,12 @@
 
 #include "ui/actions/dialogs/CSVDialog.h"
 
+#include "core/CellStorage.h"
+#include "core/Sheet.h"
 #include "engine/CalculationSettings.h"
 #include "engine/Localization.h"
 #include "engine/MapBase.h"
 #include "engine/ValueConverter.h"
-#include "core/CellStorage.h"
-#include "core/Sheet.h"
 
 #include <KoFileDialog.h>
 
@@ -27,17 +27,17 @@
 #include <QFile>
 #include <QMimeData>
 
-
 // These three actions have a fairly similary structured execute() routinhjes, and could probably have a shared ancestor with that structure.
 // For now opting not to do that, as the common code isn't that long, butu it's something to consider if more functionality gets added here.
 
-
-
 using namespace Calligra::Sheets;
 
-
 InsertFromFile::InsertFromFile(Actions *actions)
-    : CellAction(actions, "insertFromTextfile", i18n("Insert From &Text File..."), koIcon("text-plain"), i18n("Insert data from a text file to the current cursor position/selection"))
+    : CellAction(actions,
+                 "insertFromTextfile",
+                 i18n("Insert From &Text File..."),
+                 koIcon("text-plain"),
+                 i18n("Insert data from a text file to the current cursor position/selection"))
     , m_dlg(nullptr)
 {
     m_closeEditor = true;
@@ -45,15 +45,16 @@ InsertFromFile::InsertFromFile(Actions *actions)
 
 InsertFromFile::~InsertFromFile()
 {
-    if (m_dlg) delete m_dlg;
+    if (m_dlg)
+        delete m_dlg;
 }
 
-QAction *InsertFromFile::createAction() {
+QAction *InsertFromFile::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Text File"));
     return res;
 }
-
 
 void InsertFromFile::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
@@ -61,7 +62,8 @@ void InsertFromFile::execute(Selection *selection, Sheet *sheet, QWidget *canvas
     dialog.setCaption(i18n("Import CSV Data File"));
     dialog.setNameFilter(i18n("CSV data files (*.csv)"));
     QString filename = dialog.filename();
-    if (filename.isEmpty()) return;
+    if (filename.isEmpty())
+        return;
     QFile in(filename);
     if (!in.open(QIODevice::ReadOnly)) {
         KMessageBox::error(canvasWidget, i18n("Cannot open input file."));
@@ -86,7 +88,7 @@ void InsertFromFile::execute(Selection *selection, Sheet *sheet, QWidget *canvas
         if ((numRows == 0) || (numCols == 0)) {
             delete m_dlg;
             m_dlg = nullptr;
-            return;  // nothing to do here
+            return; // nothing to do here
         }
 
         QRect range = selection->lastRange();
@@ -95,7 +97,7 @@ void InsertFromFile::execute(Selection *selection, Sheet *sheet, QWidget *canvas
         if (numRows < range.height())
             range.setBottom(range.top() + numRows - 1);
 
-        CSVDataCommand* command = new CSVDataCommand();
+        CSVDataCommand *command = new CSVDataCommand();
         command->setText(kundo2_i18n("Inserting Text File"));
         command->setSheet(sheet);
         command->setValue(m_dlg->value());
@@ -113,9 +115,12 @@ void InsertFromFile::execute(Selection *selection, Sheet *sheet, QWidget *canvas
     m_dlg = nullptr;
 }
 
-
 InsertFromClipboard::InsertFromClipboard(Actions *actions)
-    : CellAction(actions, "insertFromClipboard", i18n("Insert From &Clipboard..."), koIcon("edit-paste"), i18n("Insert CSV data from the clipboard to the current cursor position/selection"))
+    : CellAction(actions,
+                 "insertFromClipboard",
+                 i18n("Insert From &Clipboard..."),
+                 koIcon("edit-paste"),
+                 i18n("Insert CSV data from the clipboard to the current cursor position/selection"))
     , m_dlg(nullptr)
 {
     m_closeEditor = true;
@@ -123,10 +128,12 @@ InsertFromClipboard::InsertFromClipboard(Actions *actions)
 
 InsertFromClipboard::~InsertFromClipboard()
 {
-    if (m_dlg) delete m_dlg;
+    if (m_dlg)
+        delete m_dlg;
 }
 
-QAction *InsertFromClipboard::createAction() {
+QAction *InsertFromClipboard::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Clipboard"));
     return res;
@@ -134,7 +141,7 @@ QAction *InsertFromClipboard::createAction() {
 
 void InsertFromClipboard::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
-    const QMimeData* mime = QApplication::clipboard()->mimeData();
+    const QMimeData *mime = QApplication::clipboard()->mimeData();
     if (!mime) {
         KMessageBox::information(canvasWidget, i18n("There is no data in the clipboard."));
         return;
@@ -162,7 +169,7 @@ void InsertFromClipboard::execute(Selection *selection, Sheet *sheet, QWidget *c
         if ((numRows == 0) || (numCols == 0)) {
             delete m_dlg;
             m_dlg = nullptr;
-            return;  // nothing to do here
+            return; // nothing to do here
         }
 
         QRect range = selection->lastRange();
@@ -171,7 +178,7 @@ void InsertFromClipboard::execute(Selection *selection, Sheet *sheet, QWidget *c
         if (numRows != range.height())
             range.setBottom(range.top() + numRows - 1);
 
-        CSVDataCommand* command = new CSVDataCommand();
+        CSVDataCommand *command = new CSVDataCommand();
         command->setText(kundo2_i18n("Inserting From Clipboard"));
         command->setSheet(sheet);
         command->setValue(m_dlg->value());
@@ -185,7 +192,7 @@ void InsertFromClipboard::execute(Selection *selection, Sheet *sheet, QWidget *c
         selection->emitModified();
     }
 
-    m_dlg->setDelimiter(oldDelimiter);   // this is because the dialog saves its settings when destroyed, and we don't want to save the empty delim
+    m_dlg->setDelimiter(oldDelimiter); // this is because the dialog saves its settings when destroyed, and we don't want to save the empty delim
     delete m_dlg;
     m_dlg = nullptr;
 }
@@ -199,7 +206,8 @@ TextToColumns::TextToColumns(Actions *actions)
 
 TextToColumns::~TextToColumns()
 {
-    if (m_dlg) delete m_dlg;
+    if (m_dlg)
+        delete m_dlg;
 }
 
 void TextToColumns::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
@@ -246,7 +254,7 @@ void TextToColumns::execute(Selection *selection, Sheet *sheet, QWidget *canvasW
         if ((numRows == 0) || (numCols == 0)) {
             delete m_dlg;
             m_dlg = nullptr;
-            return;  // nothing to do here
+            return; // nothing to do here
         }
 
         QRect range = selection->lastRange();
@@ -255,7 +263,7 @@ void TextToColumns::execute(Selection *selection, Sheet *sheet, QWidget *canvasW
         if (numRows != range.height())
             range.setBottom(range.top() + numRows - 1);
 
-        CSVDataCommand* command = new CSVDataCommand();
+        CSVDataCommand *command = new CSVDataCommand();
         command->setText(kundo2_i18n("Text to Columns"));
         command->setSheet(sheet);
         command->setValue(m_dlg->value());
@@ -263,11 +271,9 @@ void TextToColumns::execute(Selection *selection, Sheet *sheet, QWidget *canvasW
         command->setDecimalSymbol(locale->decimalSymbol());
         command->setThousandsSeparator(locale->thousandsSeparator());
 
-        const QMimeData* mimedata = QApplication::clipboard()->mimeData();
-        if (!mimedata->hasFormat("application/x-calligra-sheets-snippet") &&
-            !mimedata->hasHtml() && mimedata->hasText() &&
-            mimedata->text().split('\n').count() >= 2 )
-        {
+        const QMimeData *mimedata = QApplication::clipboard()->mimeData();
+        if (!mimedata->hasFormat("application/x-calligra-sheets-snippet") && !mimedata->hasHtml() && mimedata->hasText()
+            && mimedata->text().split('\n').count() >= 2) {
             range.setSize(QSize(numCols, numRows));
         }
         command->add(range);
@@ -284,15 +290,13 @@ void TextToColumns::execute(Selection *selection, Sheet *sheet, QWidget *canvasW
 
 bool TextToColumns::enabledForSelection(Selection *selection, const Cell &)
 {
-    if (selection->isRowSelected()) return false;
+    if (selection->isRowSelected())
+        return false;
     return true;
 }
 
-
-
-
 CSVDataCommand::CSVDataCommand()
-        : AbstractDataManipulator()
+    : AbstractDataManipulator()
 {
 }
 
@@ -300,27 +304,27 @@ CSVDataCommand::~CSVDataCommand()
 {
 }
 
-void CSVDataCommand::setValue(const Value& value)
+void CSVDataCommand::setValue(const Value &value)
 {
     m_value = value;
 }
 
-void CSVDataCommand::setColumnDataTypes(const QList<KoCsvImportDialog::DataType>& dataTypes)
+void CSVDataCommand::setColumnDataTypes(const QList<KoCsvImportDialog::DataType> &dataTypes)
 {
     m_dataTypes = dataTypes;
 }
 
-void CSVDataCommand::setDecimalSymbol(const QString& symbol)
+void CSVDataCommand::setDecimalSymbol(const QString &symbol)
 {
     m_decimalSymbol = symbol;
 }
 
-void CSVDataCommand::setThousandsSeparator(const QString& separator)
+void CSVDataCommand::setThousandsSeparator(const QString &separator)
 {
     m_thousandsSeparator = separator;
 }
 
-Value CSVDataCommand::newValue(Element* element, int col, int row, bool* parse, Format::Type* fmtType)
+Value CSVDataCommand::newValue(Element *element, int col, int row, bool *parse, Format::Type *fmtType)
 {
     Q_UNUSED(fmtType)
     const int colidx = col - element->rect().left();
@@ -346,9 +350,8 @@ Value CSVDataCommand::newValue(Element* element, int col, int row, bool* parse, 
     return value;
 }
 
-bool CSVDataCommand::wantChange(Element* element, int col, int row)
+bool CSVDataCommand::wantChange(Element *element, int col, int row)
 {
     Q_UNUSED(row)
     return (m_dataTypes.value(col - element->rect().left()) != KoCsvImportDialog::None);
 }
-

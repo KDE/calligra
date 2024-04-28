@@ -7,8 +7,8 @@
 
 #include "KoGuidesData.h"
 #include "KoViewConverter.h"
-#include <KoUnit.h>
 #include <KoOasisSettings.h>
+#include <KoUnit.h>
 #include <KoXmlWriter.h>
 
 #include <QPainter>
@@ -16,15 +16,20 @@
 class Q_DECL_HIDDEN KoGuidesData::Private
 {
 public:
-    Private() : showGuideLines(true), guidesColor(Qt::lightGray) {}
+    Private()
+        : showGuideLines(true)
+        , guidesColor(Qt::lightGray)
+    {
+    }
 
-    void parseHelpLine(const QString &text) {
+    void parseHelpLine(const QString &text)
+    {
         //<config:config-item config:name="SnapLinesDrawing" config:type="string">V7939H1139</config:config-item>
         QString str;
-        int newPos = text.length() - 1; //start to element = 1
-        for (int pos = text.length() - 1; pos >= 0;--pos) {
+        int newPos = text.length() - 1; // start to element = 1
+        for (int pos = text.length() - 1; pos >= 0; --pos) {
             if (text[pos] == 'P') {
-                //point element
+                // point element
                 str = text.mid(pos + 1, (newPos - pos));
                 /*
                 QStringList listVal = QStringList::split(",", str);
@@ -35,15 +40,15 @@ public:
                 */
                 newPos = pos - 1;
             } else if (text[pos] == 'V') {
-                //vertical element
+                // vertical element
                 str = text.mid(pos + 1, (newPos - pos));
-                //debugFlake<<" vertical  :"<< str;
+                // debugFlake<<" vertical  :"<< str;
                 qreal posX = str.toDouble() / 100.0;
                 vertGuideLines.append(MM_TO_POINT(posX));
 
                 newPos = (pos - 1);
             } else if (text[pos] == 'H') {
-                //horizontal element
+                // horizontal element
                 str = text.mid(pos + 1, (newPos - pos));
                 qreal posY = str.toDouble() / 100.0;
                 horzGuideLines.append(MM_TO_POINT(posY));
@@ -62,7 +67,7 @@ public:
 };
 
 KoGuidesData::KoGuidesData()
-        : d(new Private())
+    : d(new Private())
 {
 }
 
@@ -112,21 +117,19 @@ QList<qreal> KoGuidesData::verticalGuideLines() const
 
 void KoGuidesData::paintGuides(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const
 {
-    if (! showGuideLines())
+    if (!showGuideLines())
         return;
 
     painter.setPen(QPen(d->guidesColor, 0));
-    foreach(qreal guide, d->horzGuideLines) {
+    foreach (qreal guide, d->horzGuideLines) {
         if (guide < area.top() || guide > area.bottom())
             continue;
-        painter.drawLine(converter.documentToView(QPointF(area.left(), guide)),
-                         converter.documentToView(QPointF(area.right(), guide)));
+        painter.drawLine(converter.documentToView(QPointF(area.left(), guide)), converter.documentToView(QPointF(area.right(), guide)));
     }
-    foreach(qreal guide, d->vertGuideLines) {
+    foreach (qreal guide, d->vertGuideLines) {
         if (guide < area.left() || guide > area.right())
             continue;
-        painter.drawLine(converter.documentToView(QPointF(guide, area.top())),
-                         converter.documentToView(QPointF(guide, area.bottom())));
+        painter.drawLine(converter.documentToView(QPointF(guide, area.top())), converter.documentToView(QPointF(guide, area.bottom())));
     }
 }
 
@@ -140,7 +143,7 @@ QColor KoGuidesData::guidesColor() const
     return d->guidesColor;
 }
 
-bool KoGuidesData::loadOdfSettings(const KoXmlDocument & settingsDoc)
+bool KoGuidesData::loadOdfSettings(const KoXmlDocument &settingsDoc)
 {
     d->vertGuideLines.clear();
     d->horzGuideLines.clear();
@@ -173,11 +176,11 @@ void KoGuidesData::saveOdfSettings(KoXmlWriter &settingsWriter)
 
     QString lineStr;
 
-    foreach(qreal h, d->horzGuideLines) {
+    foreach (qreal h, d->horzGuideLines) {
         int tmpY = static_cast<int>(POINT_TO_MM(h * 100.0));
         lineStr += 'H' + QString::number(tmpY);
     }
-    foreach(qreal v, d->vertGuideLines) {
+    foreach (qreal v, d->vertGuideLines) {
         int tmpX = static_cast<int>(POINT_TO_MM(v * 100.0));
         lineStr += 'V' + QString::number(tmpX);
     }

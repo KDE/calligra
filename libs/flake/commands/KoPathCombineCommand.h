@@ -8,10 +8,10 @@
 #ifndef KOPATHCOMBINECOMMAND_H
 #define KOPATHCOMBINECOMMAND_H
 
-#include <kundo2command.h>
-#include <QList>
 #include "KoPathShape.h"
 #include "flake_export.h"
+#include <QList>
+#include <kundo2command.h>
 
 class KoShapeBasedDocumentBase;
 
@@ -25,7 +25,7 @@ public:
      * @param paths the list of paths to combine
      * @param parent the parent command used for macro commands
      */
-    KoPathCombineCommand(KoShapeBasedDocumentBase *controller, const QList<KoPathShape*> &paths, KUndo2Command *parent = 0);
+    KoPathCombineCommand(KoShapeBasedDocumentBase *controller, const QList<KoPathShape *> &paths, KUndo2Command *parent = 0);
     ~KoPathCombineCommand() override;
     /// redo the command
     void redo() override;
@@ -34,7 +34,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOPATHCOMBINECOMMAND_H

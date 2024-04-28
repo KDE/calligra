@@ -8,13 +8,11 @@
 #ifndef CALLIGRA_SHEETS_ACTION_CSV
 #define CALLIGRA_SHEETS_ACTION_CSV
 
-
 #include "CellAction.h"
 
 #include "ui/commands/DataManipulators.h"
 
 #include <KoCsvImportDialog.h>
-
 
 namespace Calligra
 {
@@ -22,8 +20,9 @@ namespace Sheets
 {
 class CSVDialog;
 
-class InsertFromFile : public CellAction {
-Q_OBJECT
+class InsertFromFile : public CellAction
+{
+    Q_OBJECT
 public:
     InsertFromFile(Actions *actions);
     virtual ~InsertFromFile();
@@ -35,8 +34,9 @@ protected:
     CSVDialog *m_dlg;
 };
 
-class InsertFromClipboard : public CellAction {
-Q_OBJECT
+class InsertFromClipboard : public CellAction
+{
+    Q_OBJECT
 public:
     InsertFromClipboard(Actions *actions);
     virtual ~InsertFromClipboard();
@@ -48,8 +48,9 @@ protected:
     CSVDialog *m_dlg;
 };
 
-class TextToColumns : public CellAction {
-Q_OBJECT
+class TextToColumns : public CellAction
+{
+    Q_OBJECT
 public:
     TextToColumns(Actions *actions);
     virtual ~TextToColumns();
@@ -60,8 +61,6 @@ protected:
 
     CSVDialog *m_dlg;
 };
-
-
 
 /**
  * \ingroup Commands
@@ -80,14 +79,14 @@ public:
      */
     ~CSVDataCommand() override;
 
-    void setValue(const Value& value);
-    void setColumnDataTypes(const QList<KoCsvImportDialog::DataType>& dataTypes);
-    void setDecimalSymbol(const QString& symbol);
-    void setThousandsSeparator(const QString& separator);
+    void setValue(const Value &value);
+    void setColumnDataTypes(const QList<KoCsvImportDialog::DataType> &dataTypes);
+    void setDecimalSymbol(const QString &symbol);
+    void setThousandsSeparator(const QString &separator);
 
 protected:
-    Value newValue(Element* element, int col, int row, bool* parse, Format::Type* fmtType) override;
-    bool wantChange(Element* element, int col, int row) override;
+    Value newValue(Element *element, int col, int row, bool *parse, Format::Type *fmtType) override;
+    bool wantChange(Element *element, int col, int row) override;
 
 private:
     QList<KoCsvImportDialog::DataType> m_dataTypes;
@@ -98,9 +97,7 @@ private:
     QString m_documentThousandsSeparator;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_CSV
+#endif // CALLIGRA_SHEETS_ACTION_CSV

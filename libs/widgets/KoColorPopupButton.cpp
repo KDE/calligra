@@ -23,7 +23,7 @@ QSize KoColorPopupButton::sizeHint() const
     QStyleOptionToolButton opt;
     initStyleOption(&opt);
 
-    return style()->sizeFromContents(QStyle::CT_ToolButton, &opt, QSize(16,16), this);
+    return style()->sizeFromContents(QStyle::CT_ToolButton, &opt, QSize(16, 16), this);
 }
 
 void KoColorPopupButton::resizeEvent(QResizeEvent *e)

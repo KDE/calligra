@@ -5,11 +5,11 @@
 #ifndef CALLIGRA_SHEETS_FUNCTION_MODULE
 #define CALLIGRA_SHEETS_FUNCTION_MODULE
 
+#include <KPluginFactory>
 #include <QList>
 #include <QObject>
 #include <QSharedPointer>
 #include <QString>
-#include <KPluginFactory>
 
 #include "sheets_engine_export.h"
 
@@ -48,7 +48,7 @@ public:
     /**
      * Returns a list of the provided Function objects.
      */
-    QList<QSharedPointer<Function> > functions() const;
+    QList<QSharedPointer<Function>> functions() const;
 
     /**
      * Checks whether this module can be removed, because none of its
@@ -68,22 +68,21 @@ protected:
     /**
      * Adds \p function to the list of provided Function objects.
      */
-    void add(Function* function);
+    void add(Function *function);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets
 } // namespace Calligra
 
 /**
-* Register a function module when it is contained in a loadable plugin
-*/
+ * Register a function module when it is contained in a loadable plugin
+ */
 #ifndef SHEETS_NO_PLUGINMODULES
-#define CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE(jsonfile, classname) \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonfile, registerPlugin<classname>();)
+#define CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE(jsonfile, classname) K_PLUGIN_FACTORY_WITH_JSON(factory, jsonfile, registerPlugin<classname>();)
 #else
 #define CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE(libname, classname)
 #endif

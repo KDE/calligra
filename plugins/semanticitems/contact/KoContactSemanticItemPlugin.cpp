@@ -28,11 +28,10 @@
 // KF5
 #include <KPluginFactory>
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_semanticitem_contact.json",
-                           registerPlugin<KoContactSemanticItemPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_semanticitem_contact.json", registerPlugin<KoContactSemanticItemPlugin>();)
 
-KoContactSemanticItemPlugin::KoContactSemanticItemPlugin(QObject *parent, const QVariantList &/*args */)
-  : QObject(parent)
+KoContactSemanticItemPlugin::KoContactSemanticItemPlugin(QObject *parent, const QVariantList & /*args */)
+    : QObject(parent)
 {
     KoRdfSemanticItemRegistry::instance()->add(new KoContactSemanticItemFactory());
 }

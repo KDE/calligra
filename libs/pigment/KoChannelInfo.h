@@ -2,15 +2,15 @@
  *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ */
 #ifndef KOCHANNELINFO_H_
 #define KOCHANNELINFO_H_
 
 #include <limits>
 
 #include <QColor>
-#include <QString>
 #include <QList>
+#include <QString>
 
 /**
  * This class gives some basic information about a channel,
@@ -23,25 +23,38 @@ public:
     /**
      * Used to represent a min and max range.
      */
-    struct DoubleRange
-    {
-        public:
-            double minVal, maxVal;
-        public:
-            /// creates an invalid range of 0,0
-            DoubleRange(void) : minVal(0), maxVal(0) { }
-            /// creates
-            DoubleRange(qreal _minVal, qreal _maxVal) : minVal(_minVal), maxVal(_maxVal) { Q_ASSERT(minVal <= maxVal); }
-            /// true if this range is usable
-            bool isValid(void) const { return minVal < maxVal; }
+    struct DoubleRange {
+    public:
+        double minVal, maxVal;
+
+    public:
+        /// creates an invalid range of 0,0
+        DoubleRange(void)
+            : minVal(0)
+            , maxVal(0)
+        {
+        }
+        /// creates
+        DoubleRange(qreal _minVal, qreal _maxVal)
+            : minVal(_minVal)
+            , maxVal(_maxVal)
+        {
+            Q_ASSERT(minVal <= maxVal);
+        }
+        /// true if this range is usable
+        bool isValid(void) const
+        {
+            return minVal < maxVal;
+        }
     };
+
 public:
     /// enum to define the type of the channel
     enum enumChannelType {
         COLOR, ///< The channel represents a color
         ALPHA ///< The channel represents the opacity of a pixel
-        //SUBSTANCE, ///< The channel represents a real-world substance like pigments or medium
-        //SUBSTRATE ///< The channel represents a real-world painting substrate like a canvas
+        // SUBSTANCE, ///< The channel represents a real-world substance like pigments or medium
+        // SUBSTRATE ///< The channel represents a real-world painting substrate like a canvas
     };
     /// enum to define the value of the channel
     enum enumChannelValueType {
@@ -55,9 +68,11 @@ public:
         INT16, ///< use this for an integer 16bits channel
         OTHER ///< Use this if the channel is neither an integer or a float
     };
-    
+
 public:
-    KoChannelInfo() { }
+    KoChannelInfo()
+    {
+    }
     /**
      * @param name of the channel
      * @param npos position of the channel in the pixel (in bytes)
@@ -68,12 +83,12 @@ public:
      * @param color a color to represent that channel (for instance in an histogram)
      * @param uiMinMax the reange
      */
-    KoChannelInfo(const QString & name, 
+    KoChannelInfo(const QString &name,
                   qint32 npos,
-                  qint32 displayPosition, 
-                  enumChannelType channelType, 
+                  qint32 displayPosition,
+                  enumChannelType channelType,
                   enumChannelValueType channelValueType,
-                  qint32 size = -1, 
+                  qint32 size = -1,
                   const QColor &color = QColor(0, 0, 0),
                   const DoubleRange &uiMinMax = DoubleRange())
         : m_name(name)
@@ -85,8 +100,7 @@ public:
         , m_color(color)
         , m_uiMinMax(uiMinMax)
     {
-        switch(m_channelValueType)
-        {
+        switch (m_channelValueType) {
         case UINT8:
         case INT8:
             Q_ASSERT(m_size == -1 || m_size == 1);
@@ -118,41 +132,41 @@ public:
         }
         if (!uiMinMax.isValid()) {
             switch (m_channelValueType) {
-                case UINT8:
-                    m_uiMinMax.minVal = std::numeric_limits<quint8>::min();
-                    m_uiMinMax.maxVal = std::numeric_limits<quint8>::max();
-                    break;
-                case INT8:
-                    m_uiMinMax.minVal = std::numeric_limits<qint8>::min();
-                    m_uiMinMax.maxVal = std::numeric_limits<qint8>::max();
-                    break;
-                case UINT16:
-                    m_uiMinMax.minVal = std::numeric_limits<quint16>::min();
-                    m_uiMinMax.maxVal = std::numeric_limits<quint16>::max();
-                    break;
-                case INT16:
-                    m_uiMinMax.minVal = std::numeric_limits<qint16>::min();
-                    m_uiMinMax.maxVal = std::numeric_limits<qint16>::max();
-                    break;
-                case UINT32:
-                    m_uiMinMax.minVal = std::numeric_limits<quint32>::min();
-                    m_uiMinMax.maxVal = std::numeric_limits<quint32>::max();
-                    break;
-                default:
-                    // assume real otherwise, which is 0..1 by default
-                    m_uiMinMax.minVal = 0.0;
-                    m_uiMinMax.maxVal = 1.0;
-                    break;
+            case UINT8:
+                m_uiMinMax.minVal = std::numeric_limits<quint8>::min();
+                m_uiMinMax.maxVal = std::numeric_limits<quint8>::max();
+                break;
+            case INT8:
+                m_uiMinMax.minVal = std::numeric_limits<qint8>::min();
+                m_uiMinMax.maxVal = std::numeric_limits<qint8>::max();
+                break;
+            case UINT16:
+                m_uiMinMax.minVal = std::numeric_limits<quint16>::min();
+                m_uiMinMax.maxVal = std::numeric_limits<quint16>::max();
+                break;
+            case INT16:
+                m_uiMinMax.minVal = std::numeric_limits<qint16>::min();
+                m_uiMinMax.maxVal = std::numeric_limits<qint16>::max();
+                break;
+            case UINT32:
+                m_uiMinMax.minVal = std::numeric_limits<quint32>::min();
+                m_uiMinMax.maxVal = std::numeric_limits<quint32>::max();
+                break;
+            default:
+                // assume real otherwise, which is 0..1 by default
+                m_uiMinMax.minVal = 0.0;
+                m_uiMinMax.maxVal = 1.0;
+                break;
             }
         }
         Q_ASSERT(m_uiMinMax.isValid());
     }
+
 public:
-    
     /**
      * converts the display position to the pixel-order index in the channels vector.
      */
-    static int displayPositionToChannelIndex(int displayPosition, const QList<KoChannelInfo*> &channels)
+    static int displayPositionToChannelIndex(int displayPosition, const QList<KoChannelInfo *> &channels)
     {
         for (int i = 0; i < channels.size(); ++i) {
             if (channels.at(i)->displayPosition() == displayPosition) {
@@ -161,12 +175,12 @@ public:
         }
         return -1;
     }
-    
-    static QList<KoChannelInfo*> displayOrderSorted(const QList<KoChannelInfo*> &channels)
+
+    static QList<KoChannelInfo *> displayOrderSorted(const QList<KoChannelInfo *> &channels)
     {
-        QList <KoChannelInfo*> sortedChannels;
+        QList<KoChannelInfo *> sortedChannels;
         for (int i = 0; i < channels.size(); ++i) {
-            foreach(KoChannelInfo* channel, channels) {
+            foreach (KoChannelInfo *channel, channels) {
                 if (channel->displayPosition() == i) {
                     sortedChannels << channel;
                     break;
@@ -176,59 +190,67 @@ public:
         Q_ASSERT(channels.size() == sortedChannels.size());
         return sortedChannels;
     }
-    
+
     /**
      * User-friendly name for this channel for presentation purposes in the gui
      */
-    inline QString name() const {
+    inline QString name() const
+    {
         return m_name;
     }
-    
+
     /**
      * returns the position of the first byte of the channel in the pixel
      */
-    inline qint32 pos() const {
+    inline qint32 pos() const
+    {
         return m_pos;
     }
-    
+
     /**
      * @return the displayPosition of the channel in pixel
      */
-    inline qint32 displayPosition() const {
+    inline qint32 displayPosition() const
+    {
         return m_displayPosition;
     }
-    
+
     /**
      * returns the number of bytes this channel takes
      */
-    inline qint32 size() const {
+    inline qint32 size() const
+    {
         return m_size;
     }
-    
+
     /**
      * returns the type of the channel
      */
-    inline enumChannelType channelType() const {
+    inline enumChannelType channelType() const
+    {
         return m_channelType;
     }
     /**
      * return the type of the value of the channel (float, uint8 or uint16)
      */
-    inline enumChannelValueType channelValueType() const {
+    inline enumChannelValueType channelValueType() const
+    {
         return m_channelValueType;
     }
     /**
      * This is a color that can be used to represent this channel in histograms and so.
      * By default this is black, so keep in mind that many channels might look the same
      */
-    inline QColor color() const {
+    inline QColor color() const
+    {
         return m_color;
     }
-    
+
     /**
      * A channel is less than another channel if its pos is smaller.
      */
-    inline bool operator<(const KoChannelInfo & info) {
+    inline bool operator<(const KoChannelInfo &info)
+    {
         return m_pos < info.m_pos;
     }
 
@@ -236,7 +258,8 @@ public:
      * Gets the minimum value that this channel should have.
      * This is suitable for UI use.
      */
-    inline double getUIMin(void) const {
+    inline double getUIMin(void) const
+    {
         return m_uiMinMax.minVal;
     }
 
@@ -244,12 +267,12 @@ public:
      * Gets the minimum value that this channel should have.
      * This is suitable for UI use.
      */
-    inline double getUIMax(void) const {
+    inline double getUIMax(void) const
+    {
         return m_uiMinMax.maxVal;
     }
-    
+
 private:
-    
     QString m_name;
     qint32 m_pos;
     qint32 m_displayPosition;
@@ -258,7 +281,6 @@ private:
     qint32 m_size;
     QColor m_color;
     DoubleRange m_uiMinMax;
-    
 };
 
 #endif // KOCHANNELINFO_H_

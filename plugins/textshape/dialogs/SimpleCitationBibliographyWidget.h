@@ -6,12 +6,12 @@
 #ifndef SIMPLECITATIONINDEXWIDGET_H
 #define SIMPLECITATIONINDEXWIDGET_H
 
-#include <ui_SimpleCitationBibliographyWidget.h>
-#include <KoListStyle.h>
 #include "FormattingButton.h"
+#include <KoListStyle.h>
+#include <ui_SimpleCitationBibliographyWidget.h>
 
-#include <QWidget>
 #include <QTextBlock>
+#include <QWidget>
 
 class ReferencesTool;
 class KoStyleManager;
@@ -23,7 +23,7 @@ class SimpleCitationBibliographyWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleCitationBibliographyWidget(ReferencesTool *tool,QWidget *parent = 0);
+    explicit SimpleCitationBibliographyWidget(ReferencesTool *tool, QWidget *parent = 0);
     ~SimpleCitationBibliographyWidget() override;
 
 public Q_SLOTS:
@@ -37,7 +37,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void doneWithFocus();
-    
+
 private:
     Ui::SimpleCitationBibliographyWidget widget;
     KoStyleManager *m_styleManager;
@@ -45,7 +45,7 @@ private:
     QTextBlock m_currentBlock;
     ReferencesTool *m_referenceTool;
     QList<KoBibliographyInfo *> m_templateList;
-    //each template in the template list will have have a previewGenerator that will be deleted after preview is generated
+    // each template in the template list will have have a previewGenerator that will be deleted after preview is generated
     QList<BibliographyPreview *> m_previewGenerator;
     ItemChooserAction *m_chooser;
     BibliographyTemplate *m_templateGenerator;

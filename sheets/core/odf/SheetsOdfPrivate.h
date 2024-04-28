@@ -23,8 +23,8 @@
 
 // This should only be included by files inside the odf/ subdir
 
-#include <KoOdfLoadingContext.h>
 #include <KoOasisSettings.h>
+#include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 
@@ -32,8 +32,10 @@
 #include "OdfSavingContext.h"
 #include "engine/Value.h"
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
 class CalculationSettings;
 class NamedAreaManager;
@@ -49,73 +51,80 @@ class Filter;
 class Validity;
 class AbstractCondition;
 
-namespace Odf {
+namespace Odf
+{
 
-    // SheetsOdfDoc
-    void loadCalculationSettings(CalculationSettings *settings, const KoXmlElement& body);
-    bool saveCalculationSettings(const CalculationSettings *settings, KoXmlWriter &settingsWriter);
+// SheetsOdfDoc
+void loadCalculationSettings(CalculationSettings *settings, const KoXmlElement &body);
+bool saveCalculationSettings(const CalculationSettings *settings, KoXmlWriter &settingsWriter);
 
-    // SheetsOdfMap
-    bool loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfContext);
-    void loadMapSettings(Map *map, const KoOasisSettings &settingsDoc);
-    bool saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext);
-    void loadNamedAreas(NamedAreaManager *manager, const KoXmlElement& body);
-    void saveNamedAreas(const NamedAreaManager *manager, KoXmlWriter& xmlWriter);
-    bool loadDatabaseRanges(Map *map, const KoXmlElement& body);
-    void saveDatabaseRanges(Map *map, KoXmlWriter& xmlWriter);
-    Database loadDatabase(const KoXmlElement& element, const Map* map, bool *ok);
-    void saveDatabase(const Database &database, KoXmlWriter& xmlWriter);
-    void saveDatabaseFilter(const Filter &filter, KoXmlWriter& xmlWriter);
-    Filter loadDatabaseFilter(const KoXmlElement& element, const Map* map, bool *ok);
-    void saveDatabaseCondition(AbstractCondition *condition, KoXmlWriter& xmlWriter);
-    AbstractCondition *loadDatabaseCondition(const KoXmlElement& element);
+// SheetsOdfMap
+bool loadMap(Map *map, const KoXmlElement &body, KoOdfLoadingContext &odfContext);
+void loadMapSettings(Map *map, const KoOasisSettings &settingsDoc);
+bool saveMap(Map *map, KoXmlWriter &xmlWriter, KoShapeSavingContext &savingContext);
+void loadNamedAreas(NamedAreaManager *manager, const KoXmlElement &body);
+void saveNamedAreas(const NamedAreaManager *manager, KoXmlWriter &xmlWriter);
+bool loadDatabaseRanges(Map *map, const KoXmlElement &body);
+void saveDatabaseRanges(Map *map, KoXmlWriter &xmlWriter);
+Database loadDatabase(const KoXmlElement &element, const Map *map, bool *ok);
+void saveDatabase(const Database &database, KoXmlWriter &xmlWriter);
+void saveDatabaseFilter(const Filter &filter, KoXmlWriter &xmlWriter);
+Filter loadDatabaseFilter(const KoXmlElement &element, const Map *map, bool *ok);
+void saveDatabaseCondition(AbstractCondition *condition, KoXmlWriter &xmlWriter);
+AbstractCondition *loadDatabaseCondition(const KoXmlElement &element);
 
-    // SheetsOdfSheet
-    bool loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingContext& tableContext, const Styles& autoStyles, const QHash<QString, Conditions>& conditionalStyles);
-    void loadSheetSettings(Sheet *sheet, const KoOasisSettings::NamedMap &settings);
-    bool saveSheet(Sheet *sheet, OdfSavingContext& tableContext);
-    void saveSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);
+// SheetsOdfSheet
+bool loadSheet(Sheet *sheet,
+               const KoXmlElement &sheetElement,
+               OdfLoadingContext &tableContext,
+               const Styles &autoStyles,
+               const QHash<QString, Conditions> &conditionalStyles);
+void loadSheetSettings(Sheet *sheet, const KoOasisSettings::NamedMap &settings);
+bool saveSheet(Sheet *sheet, OdfSavingContext &tableContext);
+void saveSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);
 
-    // SheetsOdfCell
-    QString toSaveString(const Value &value, const Value::Format format, CalculationSettings *cs = nullptr);
-    bool loadCell(Cell *cell, const KoXmlElement& element, OdfLoadingContext& tableContext,
-            const Styles& autoStyles, const QString& cellStyleName,
-            QList<ShapeLoadingData>& shapeData);
-    bool saveCell(Cell *cell, int &repeated, OdfSavingContext& tableContext);
+// SheetsOdfCell
+QString toSaveString(const Value &value, const Value::Format format, CalculationSettings *cs = nullptr);
+bool loadCell(Cell *cell,
+              const KoXmlElement &element,
+              OdfLoadingContext &tableContext,
+              const Styles &autoStyles,
+              const QString &cellStyleName,
+              QList<ShapeLoadingData> &shapeData);
+bool saveCell(Cell *cell, int &repeated, OdfSavingContext &tableContext);
 
-    // SheetsOdfStyle
+// SheetsOdfStyle
 
-    /**
-     * Loads OpenDocument auto styles.
-     * The auto styles are preloaded, because an auto style could be shared
-     * among cells. So, preloading prevents a multiple loading of the same
-     * auto style.
-     * This method is called before the cell loading process.
-     * @param styles the styles
-     * @param stylesReader repository of styles
-     * @param conditionalStyles the conditional styles
-     * @param locale locale - needed for date formats
-     * @return a hash of styles with the OpenDocument internal name as key
-     */
-    Styles loadAutoStyles(StyleManager *styles, KoOdfStylesReader& stylesReader,
-                             QHash<QString, Conditions>& conditionalStyles,
-                             const Localization *locale);
-    void loadStyleTemplate(StyleManager *styles, KoOdfStylesReader& stylesReader, MapBase* map = 0);
-    void saveStyles(StyleManager *manager, KoGenStyles &mainStyles, Localization *locale);
-    QString saveStyle(const Style *style, KoGenStyle& xmlstyle, KoGenStyles& mainStyles,
-                       const StyleManager* manager, Localization *locale);
-    void loadDataStyle(Style *style, KoOdfStylesReader& stylesReader, const KoXmlElement& element,
-                             Conditions& conditions, const StyleManager* styleManager,
-                             const Localization *locale);
+/**
+ * Loads OpenDocument auto styles.
+ * The auto styles are preloaded, because an auto style could be shared
+ * among cells. So, preloading prevents a multiple loading of the same
+ * auto style.
+ * This method is called before the cell loading process.
+ * @param styles the styles
+ * @param stylesReader repository of styles
+ * @param conditionalStyles the conditional styles
+ * @param locale locale - needed for date formats
+ * @return a hash of styles with the OpenDocument internal name as key
+ */
+Styles loadAutoStyles(StyleManager *styles, KoOdfStylesReader &stylesReader, QHash<QString, Conditions> &conditionalStyles, const Localization *locale);
+void loadStyleTemplate(StyleManager *styles, KoOdfStylesReader &stylesReader, MapBase *map = 0);
+void saveStyles(StyleManager *manager, KoGenStyles &mainStyles, Localization *locale);
+QString saveStyle(const Style *style, KoGenStyle &xmlstyle, KoGenStyles &mainStyles, const StyleManager *manager, Localization *locale);
+void loadDataStyle(Style *style,
+                   KoOdfStylesReader &stylesReader,
+                   const KoXmlElement &element,
+                   Conditions &conditions,
+                   const StyleManager *styleManager,
+                   const Localization *locale);
 
-    // SheetsOdfCondition
-    Conditional loadCondition(Conditions *conditions, const QString &conditionValue, const QString &applyStyleName,
-                                 const QString &baseCellAddress);
-    void loadConditions(Conditions *conditions, const KoXmlElement &element, const StyleManager* styleManager);
-    void saveConditions(const Conditions *conditions, KoGenStyle &currentCellStyle, CalculationSettings *cs);
+// SheetsOdfCondition
+Conditional loadCondition(Conditions *conditions, const QString &conditionValue, const QString &applyStyleName, const QString &baseCellAddress);
+void loadConditions(Conditions *conditions, const KoXmlElement &element, const StyleManager *styleManager);
+void saveConditions(const Conditions *conditions, KoGenStyle &currentCellStyle, CalculationSettings *cs);
 
-    // SheetsOdfValidity
-    void loadValidation(Validity *validity, CellBase* const cell, const QString& validationName, OdfLoadingContext& tableContext);
+// SheetsOdfValidity
+void loadValidation(Validity *validity, CellBase *const cell, const QString &validationName, OdfLoadingContext &tableContext);
 
 }
 

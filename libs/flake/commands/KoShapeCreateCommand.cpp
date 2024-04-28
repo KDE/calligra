@@ -7,8 +7,8 @@
 
 #include "KoShapeCreateCommand.h"
 #include "KoShape.h"
-#include "KoShapeContainer.h"
 #include "KoShapeBasedDocumentBase.h"
+#include "KoShapeContainer.h"
 
 #include <KLocalizedString>
 
@@ -16,12 +16,14 @@ class Q_DECL_HIDDEN KoShapeCreateCommand::Private
 {
 public:
     Private(KoShapeBasedDocumentBase *c, KoShape *s)
-            : controller(c),
-            shape(s),
-            shapeParent(shape->parent()),
-            deleteShape(true) {
+        : controller(c)
+        , shape(s)
+        , shapeParent(shape->parent())
+        , deleteShape(true)
+    {
     }
-    ~Private() {
+    ~Private()
+    {
         if (shape && deleteShape)
             delete shape;
     }
@@ -33,8 +35,8 @@ public:
 };
 
 KoShapeCreateCommand::KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, KUndo2Command *parent)
-        : KUndo2Command(parent),
-        d(new Private(controller, shape))
+    : KUndo2Command(parent)
+    , d(new Private(controller, shape))
 {
     setText(kundo2_i18n("Create shape"));
 }

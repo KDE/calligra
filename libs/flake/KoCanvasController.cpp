@@ -8,8 +8,8 @@
 #include "KoCanvasController.h"
 #include "KoToolManager.h"
 
-#include <QSize>
 #include <QPoint>
+#include <QSize>
 
 class Q_DECL_HIDDEN KoCanvasController::Private
 {
@@ -29,10 +29,10 @@ public:
     QPoint documentOffset;
     qreal preferredCenterFractionX;
     qreal preferredCenterFractionY;
-    KActionCollection* actionCollection;
+    KActionCollection *actionCollection;
 };
 
-KoCanvasController::KoCanvasController(KActionCollection* actionCollection)
+KoCanvasController::KoCanvasController(KActionCollection *actionCollection)
     : d(new Private())
 {
     proxyObject = new KoCanvasControllerProxyObject(this);
@@ -76,13 +76,12 @@ int KoCanvasController::margin() const
     return d->margin;
 }
 
-
 KoCanvasController::CanvasMode KoCanvasController::canvasMode() const
 {
     return d->canvasMode;
 }
 
-KoCanvasBase* KoCanvasController::canvas() const
+KoCanvasBase *KoCanvasController::canvas() const
 {
     return 0;
 }
@@ -127,9 +126,6 @@ QPoint KoCanvasController::documentOffset() const
     return d->documentOffset;
 }
 
-
-
-
 KoCanvasControllerProxyObject::KoCanvasControllerProxyObject(KoCanvasController *controller, QObject *parent)
     : QObject(parent)
     , m_canvasController(controller)
@@ -141,7 +137,7 @@ void KoCanvasControllerProxyObject::updateDocumentSize(const QSize &newSize, boo
     m_canvasController->updateDocumentSize(newSize, recalculateCenter);
 }
 
-KActionCollection* KoCanvasController::actionCollection() const
+KActionCollection *KoCanvasController::actionCollection() const
 {
     return d->actionCollection;
 }

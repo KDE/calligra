@@ -6,14 +6,14 @@
 #include <KoXmlWriter.h>
 #include <writeodf/writeodf.h>
 #include <writeodf/writeodfoffice.h>
+#include <writeodf/writeodfofficestyle.h>
 #include <writeodf/writeodfstyle.h>
 #include <writeodf/writeodftext.h>
-#include <writeodf/writeodfofficestyle.h>
 
-#include <QString>
 #include <QBuffer>
-#include <QTest>
 #include <QLoggingCategory>
+#include <QString>
+#include <QTest>
 
 using namespace writeodf;
 
@@ -27,7 +27,8 @@ private Q_SLOTS:
 
 void TestWriteStyleXml::initTestCase()
 {
-    QLoggingCategory::setFilterRules("*.debug=false\n"
+    QLoggingCategory::setFilterRules(
+        "*.debug=false\n"
         "calligra.lib.odf=true\ncalligra.lib.store=true");
 }
 
@@ -50,8 +51,10 @@ void TestWriteStyleXml::testWriteRegionLeft()
         p.addTextNode("left");
     }
     const QString r = buffer.buffer();
-    const QString e = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        "<office:document-styles office:version=\"1.2\" xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\">\n"
+    const QString e =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        "<office:document-styles office:version=\"1.2\" xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" "
+        "xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\">\n"
         " <office:master-styles>\n"
         "  <style:master-page style:name=\"Standard\" style:page-layout-name=\"Layout\">\n"
         "   <style:header>\n"
@@ -67,4 +70,3 @@ void TestWriteStyleXml::testWriteRegionLeft()
 
 QTEST_GUILESS_MAIN(TestWriteStyleXml)
 #include <TestWriteStyleXml.moc>
-

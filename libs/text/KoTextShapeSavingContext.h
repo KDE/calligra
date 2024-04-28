@@ -19,7 +19,6 @@ class KoGenChanges;
 class KOTEXT_EXPORT KoTextShapeSavingContext : public KoShapeSavingContext
 {
 public:
-
     /**
      * @brief Constructor
      * @param xmlWriter used for writing the xml
@@ -27,8 +26,7 @@ public:
      * @param embeddedSaver for saving embedded documents
      * @param changes for saving the tracked changes
      */
-    KoTextShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
-                         KoEmbeddedDocumentSaver& embeddedSaver, KoGenChanges& changes);
+    KoTextShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles, KoEmbeddedDocumentSaver &embeddedSaver, KoGenChanges &changes);
     ~KoTextShapeSavingContext() override;
 
     /**
@@ -36,11 +34,10 @@ public:
      *
      * @return changes (tracked)
      */
-    KoGenChanges & changes();
-
+    KoGenChanges &changes();
 
 private:
-    KoGenChanges& m_changes;
+    KoGenChanges &m_changes;
 };
 
 #endif // KOTEXTSHAPESAVINGCONTEXT_H

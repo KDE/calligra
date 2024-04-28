@@ -37,16 +37,17 @@ public:
     explicit KPrPlaceholderShape(const QString &presentationClass);
     ~KPrPlaceholderShape() override;
 
-    void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
-    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) override;
-    void saveOdf( KoShapeSavingContext & context ) const override;
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
     KoShape *createShape(KoDocumentResourceManager *documentResources);
 
     virtual void initStrategy(KoDocumentResourceManager *documentResources);
-    KoShapeUserData * userData() const;
+    KoShapeUserData *userData() const;
+
 private:
-    KPrPlaceholderStrategy * m_strategy;
+    KPrPlaceholderStrategy *m_strategy;
 };
 
 #endif /* KPRPLACEHOLDERSHAPE_H */

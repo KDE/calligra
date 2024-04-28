@@ -39,19 +39,17 @@ Value func_sheet(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sheets(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_vlookup(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadreferencemodule.json", ReferenceModule)
 
-
-ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+ReferenceModule::ReferenceModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
-    f = new Function("ADDRESS",  func_address);
+    f = new Function("ADDRESS", func_address);
     f->setParamCount(2, 5);
     add(f);
-    f = new Function("AREAS",    func_areas);
+    f = new Function("AREAS", func_areas);
     f->setParamCount(1);
     f->setNeedsExtra(true);
     f->setAcceptArray();
@@ -61,23 +59,23 @@ ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
     f->setAcceptArray();
     f->setNeedsExtra(true);
     add(f);
-    f = new Function("CHOOSE",   func_choose);
+    f = new Function("CHOOSE", func_choose);
     f->setParamCount(2, -1);
     f->setAcceptArray();
     add(f);
-    f = new Function("COLUMN",   func_column);
+    f = new Function("COLUMN", func_column);
     f->setParamCount(0, 1);
     add(f);
-    f = new Function("COLUMNS",  func_columns);
+    f = new Function("COLUMNS", func_columns);
     f->setParamCount(1);
     f->setAcceptArray();
     f->setNeedsExtra(true);
     add(f);
-    f = new Function("HLOOKUP",  func_hlookup);
+    f = new Function("HLOOKUP", func_hlookup);
     f->setParamCount(3, 4);
     f->setAcceptArray();
     add(f);
-    f = new Function("INDEX",   func_index);
+    f = new Function("INDEX", func_index);
     f->setParamCount(3);
     f->setAcceptArray();
     add(f);
@@ -85,7 +83,7 @@ ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
     f->setParamCount(1, 2);
     f->setNeedsExtra(true);
     add(f);
-    f = new Function("LOOKUP",   func_lookup);
+    f = new Function("LOOKUP", func_lookup);
     f->setParamCount(3);
     f->setAcceptArray();
     add(f);
@@ -93,7 +91,7 @@ ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
     f->setParamCount(2, 3);
     f->setAcceptArray();
     f->setNeedsExtra(true);
-  add(f);
+    add(f);
     f = new Function("MULTIPLE.OPERATIONS", func_multiple_operations);
     f->setParamCount(3, 5);
     f->setNeedsExtra(true);
@@ -102,10 +100,10 @@ ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
     f->setParamCount(3, 5);
     f->setNeedsExtra(true);
     add(f);
-    f = new Function("ROW",      func_row);
+    f = new Function("ROW", func_row);
     f->setParamCount(0, 1);
     add(f);
-    f = new Function("ROWS",     func_rows);
+    f = new Function("ROWS", func_rows);
     f->setParamCount(1);
     f->setAcceptArray();
     f->setNeedsExtra(true);
@@ -119,7 +117,7 @@ ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
     f->setAcceptArray();
     f->setNeedsExtra(true);
     add(f);
-    f = new Function("VLOOKUP",  func_vlookup);
+    f = new Function("VLOOKUP", func_vlookup);
     f->setParamCount(3, 4);
     f->setAcceptArray();
     add(f);
@@ -129,7 +127,6 @@ QString ReferenceModule::descriptionFileName() const
 {
     return QString("reference.xml");
 }
-
 
 //
 // Function: ADDRESS
@@ -204,7 +201,6 @@ Value func_address(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(result);
 }
 
-
 //
 // Function: AREAS
 //
@@ -214,8 +210,7 @@ Value func_areas(valVector args, ValueCalc *calc, FuncExtra *e)
         if (e->regions[0].isValid())
             return Value(e->regions[0].rects().size());
 
-        if ((e->ranges[0].col1 != -1) && (e->ranges[0].row1 != -1) &&
-                (e->ranges[0].col2 != -1) && (e->ranges[0].row2 != -1))
+        if ((e->ranges[0].col1 != -1) && (e->ranges[0].row1 != -1) && (e->ranges[0].col2 != -1) && (e->ranges[0].row2 != -1))
             // we have a range reference - return 1
             return Value(1);
     }
@@ -230,7 +225,7 @@ Value func_areas(valVector args, ValueCalc *calc, FuncExtra *e)
     QString ref;
     for (int i = 1; i < l; ++i) {
         if (s[i] == ',' || s[i] == ')') {
-            Calligra::Sheets::Region region = e->sheet->map()->regionFromName (ref, e->sheet);
+            Calligra::Sheets::Region region = e->sheet->map()->regionFromName(ref, e->sheet);
             if (!region.isValid())
                 return Value::errorVALUE();
             else {
@@ -305,7 +300,6 @@ Value func_choose(valVector args, ValueCalc *calc, FuncExtra *)
     return args[num];
 }
 
-
 //
 // Function: COLUMN
 //
@@ -319,7 +313,6 @@ Value func_column(valVector args, ValueCalc *, FuncExtra *e)
     return Value::errorVALUE();
 }
 
-
 //
 // Function: COLUMNS
 //
@@ -331,7 +324,6 @@ Value func_columns(valVector, ValueCalc *, FuncExtra *e)
         return Value::errorVALUE();
     return Value(col2 - col1 + 1);
 }
-
 
 //
 // Function: HLOOKUP
@@ -365,7 +357,6 @@ Value func_hlookup(valVector args, ValueCalc *calc, FuncExtra *)
     return v;
 }
 
-
 //
 // Function: INDEX
 //
@@ -383,7 +374,6 @@ Value func_index(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorREF();
     return val.element(col, row);
 }
-
 
 //
 // Function: INDIRECT
@@ -403,7 +393,7 @@ Value func_indirect(valVector args, ValueCalc *calc, FuncExtra *e)
         ref = ref;
     }
 
-    const Calligra::Sheets::Region region = e->sheet->map()->regionFromName (ref, e->sheet);
+    const Calligra::Sheets::Region region = e->sheet->map()->regionFromName(ref, e->sheet);
     if (!region.isValid() || !region.isSingular())
         return Value::errorVALUE();
 
@@ -412,7 +402,6 @@ Value func_indirect(valVector args, ValueCalc *calc, FuncExtra *e)
         return cell.value();
     return Value::errorVALUE();
 }
-
 
 //
 // Function: LOOKUP
@@ -446,7 +435,7 @@ Value func_lookup(valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: MATCH
 //
-Value func_match(valVector args, ValueCalc *calc, FuncExtra* e)
+Value func_match(valVector args, ValueCalc *calc, FuncExtra *e)
 {
     int matchType = 1;
     if (args.count() == 3) {
@@ -456,14 +445,15 @@ Value func_match(valVector args, ValueCalc *calc, FuncExtra* e)
             return Value::errorVALUE(); // invalid matchtype
     }
 
-    const Value& searchValue = args[0];
-    const Value& searchArray = args[1];
+    const Value &searchValue = args[0];
+    const Value &searchArray = args[1];
 
     if (e->ranges[1].rows() != 1 && e->ranges[1].columns() != 1)
         return Value::errorNA();
     int dr = 1, dc = 0;
     if (searchArray.columns() != 1) {
-        dr = 0; dc = 1;
+        dr = 0;
+        dc = 1;
     }
     int n = qMax(searchArray.rows(), searchArray.columns());
 
@@ -479,30 +469,32 @@ Value func_match(valVector args, ValueCalc *calc, FuncExtra* e)
         // binary search
         int l = -1;
         int h = n;
-        while (l+1 < h) {
-            int m = (l+h)/2;
-            if (calc->naturalLequal(searchArray.element(m*dc, m*dr), searchValue, false)) {
+        while (l + 1 < h) {
+            int m = (l + h) / 2;
+            if (calc->naturalLequal(searchArray.element(m * dc, m * dr), searchValue, false)) {
                 l = m;
             } else {
                 h = m;
             }
         }
-        if (l == -1) return Value::errorNA();
-        return Value(l+1);
+        if (l == -1)
+            return Value::errorNA();
+        return Value(l + 1);
     } else /* matchType < 0 */ {
         // binary search
         int l = -1;
         int h = n;
-        while (l+1 < h) {
-            int m = (l+h)/2;
-            if (calc->naturalGequal(searchArray.element(m*dc, m*dr), searchValue, false)) {
+        while (l + 1 < h) {
+            int m = (l + h) / 2;
+            if (calc->naturalGequal(searchArray.element(m * dc, m * dr), searchValue, false)) {
                 l = m;
             } else {
                 h = m;
             }
         }
-        if (l == -1) return Value::errorNA();
-        return Value(l+1);
+        if (l == -1)
+            return Value::errorNA();
+        return Value(l + 1);
     }
 }
 
@@ -545,13 +537,13 @@ Value func_offset(valVector args, ValueCalc *calc, FuncExtra *e)
     const int rowPlus = calc->conv()->asInteger(args[1]).asInteger();
     const int colPlus = calc->conv()->asInteger(args[2]).asInteger();
 
-    //const int rowNew = args.count() >= 4 ? calc->conv()->asInteger(args[3]).asInteger() : -1;
-    //const int colNew = args.count() >= 5 ? calc->conv()->asInteger(args[4]).asInteger() : -1;
-    //if (colNew == 0 || rowNew == 0) return Value::errorVALUE();
+    // const int rowNew = args.count() >= 4 ? calc->conv()->asInteger(args[3]).asInteger() : -1;
+    // const int colNew = args.count() >= 5 ? calc->conv()->asInteger(args[4]).asInteger() : -1;
+    // if (colNew == 0 || rowNew == 0) return Value::errorVALUE();
 
     // Doesn't take references to other sheets into account
-    //const QRect rect(e->ranges[0].col1, e->ranges[0].row1, e->ranges[0].col2, e->ranges[0].row2);
-    //const Calligra::Sheets::Region region(rect, e->sheet);
+    // const QRect rect(e->ranges[0].col1, e->ranges[0].row1, e->ranges[0].col2, e->ranges[0].row2);
+    // const Calligra::Sheets::Region region(rect, e->sheet);
 
     if (e->regions.isEmpty())
         return Value::errorVALUE();
@@ -581,7 +573,6 @@ Value func_row(valVector args, ValueCalc *, FuncExtra *e)
         return Value(row);
     return Value::errorVALUE();
 }
-
 
 //
 // Function: ROWS
@@ -619,7 +610,7 @@ Value func_sheets(valVector /*args*/, ValueCalc *, FuncExtra *e)
         if (region.isValid()) {
             QList<Calligra::Sheets::SheetBase *> sheets;
             Calligra::Sheets::Region::ConstIterator it(region.constBegin()), end(region.constEnd());
-            for(; it != end; ++it)
+            for (; it != end; ++it)
                 if (!sheets.contains((*it)->sheet()))
                     sheets.append((*it)->sheet());
             return Value(sheets.count());

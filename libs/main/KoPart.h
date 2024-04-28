@@ -23,7 +23,6 @@ class KoComponentData;
 class KoOpenPane;
 class QGraphicsItem;
 
-
 /**
  * Override this class in your application. It's the main entry point that
  * should provide the document, the view and the component data to the calligra
@@ -96,7 +95,7 @@ public:
     /**
      * @return the list of main windows.
      */
-    const QList<KoMainWindow*>& mainWindows() const;
+    const QList<KoMainWindow *> &mainWindows() const;
 
     /**
      * @return the number of shells for the main window
@@ -127,9 +126,7 @@ private Q_SLOTS:
 
     void startCustomDocument();
 
-
 public:
-
     //------------------ view management ------------------
 
     /**
@@ -154,7 +151,7 @@ public:
     /**
      * @return a list of views this document is displayed in
      */
-    QList<KoView*> views() const;
+    QList<KoView *> views() const;
 
     /**
      * @return number of views this document is displayed in
@@ -178,7 +175,6 @@ public:
      */
     QString templatesResourcePath() const;
 
-
     /**
      * Creates and shows the start up widget.
      * @param parent the KoMainWindow used as parent for the widget.
@@ -192,7 +188,6 @@ public:
     void deleteOpenPane(bool closing = false);
 
 protected:
-
     /**
      * Set the templates resource path used. This is used by the start up widget to show
      * the correct templates.
@@ -229,8 +224,7 @@ protected:
      * @param parent the parent widget
      * @param templateType the template-type (group) that should be selected on creation.
      */
-    KoOpenPane *createOpenPane(QWidget *parent,
-                               const QString& templatesResourcePath = QString());
+    KoOpenPane *createOpenPane(QWidget *parent, const QString &templatesResourcePath = QString());
 
     virtual KoView *createViewInstance(KoDocument *document, QWidget *parent) = 0;
 
@@ -241,12 +235,10 @@ protected:
     virtual QGraphicsItem *createCanvasItem(KoDocument *document);
 
 private:
-
     Q_DISABLE_COPY(KoPart)
 
     class Private;
     Private *const d;
-
 };
 
 #endif

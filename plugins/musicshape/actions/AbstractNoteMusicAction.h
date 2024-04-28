@@ -9,27 +9,28 @@
 #include "AbstractMusicAction.h"
 
 class SimpleEntryTool;
-namespace MusicCore {
-    class Chord;
-    class Note;
-    class StaffElement;
+namespace MusicCore
+{
+class Chord;
+class Note;
+class StaffElement;
 }
 
 class AbstractNoteMusicAction : public AbstractMusicAction
 {
     Q_OBJECT
 public:
-    AbstractNoteMusicAction(const QIcon& icon, const QString& text, SimpleEntryTool* tool);
-    AbstractNoteMusicAction(const QString& text, SimpleEntryTool* tool);
-    
-    void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) override;
-    void mouseMove(MusicCore::Staff* staff, int bar, const QPointF& pos) override;
+    AbstractNoteMusicAction(const QIcon &icon, const QString &text, SimpleEntryTool *tool);
+    AbstractNoteMusicAction(const QString &text, SimpleEntryTool *tool);
 
-    virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, qreal distance, const QPointF& pos) = 0;
-    virtual void mouseMove(MusicCore::Chord* chord, MusicCore::Note* note, qreal distance, const QPointF& pos);
+    void mousePress(MusicCore::Staff *staff, int bar, const QPointF &pos) override;
+    void mouseMove(MusicCore::Staff *staff, int bar, const QPointF &pos) override;
 
-    virtual void mousePress(MusicCore::StaffElement* se, qreal distance, const QPointF& pos);
-    virtual void mouseMove(MusicCore::StaffElement* se, qreal distance, const QPointF& pos);
+    virtual void mousePress(MusicCore::Chord *chord, MusicCore::Note *note, qreal distance, const QPointF &pos) = 0;
+    virtual void mouseMove(MusicCore::Chord *chord, MusicCore::Note *note, qreal distance, const QPointF &pos);
+
+    virtual void mousePress(MusicCore::StaffElement *se, qreal distance, const QPointF &pos);
+    virtual void mouseMove(MusicCore::StaffElement *se, qreal distance, const QPointF &pos);
 };
 
 #endif // ABSTRACTMUSICACTION_H

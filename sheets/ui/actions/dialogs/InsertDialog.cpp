@@ -14,17 +14,16 @@
 // Local
 #include "InsertDialog.h"
 
-#include <QRadioButton>
 #include <QGroupBox>
+#include <QRadioButton>
 #include <QVBoxLayout>
 
 #include <KLocalizedString>
 
-
 using namespace Calligra::Sheets;
 
-InsertDialog::InsertDialog(QWidget* parent, Mode _mode)
-        : KoDialog(parent)
+InsertDialog::InsertDialog(QWidget *parent, Mode _mode)
+    : KoDialog(parent)
 {
     setCaption("");
     setButtons(Ok | Cancel);
@@ -57,7 +56,6 @@ InsertDialog::InsertDialog(QWidget* parent, Mode _mode)
 
     rb1->setChecked(true);
 
-
     connect(this, &KoDialog::okClicked, this, &InsertDialog::slotOk);
 }
 
@@ -66,19 +64,22 @@ void InsertDialog::slotOk()
     accept();
 }
 
-bool InsertDialog::moveRowsChecked() {
+bool InsertDialog::moveRowsChecked()
+{
     return rb1->isChecked();
 }
 
-bool InsertDialog::moveColumnsChecked() {
+bool InsertDialog::moveColumnsChecked()
+{
     return rb2->isChecked();
 }
 
-bool InsertDialog::insertRowsChecked() {
+bool InsertDialog::insertRowsChecked()
+{
     return rb3->isChecked();
 }
 
-bool InsertDialog::insertColumnsChecked() {
+bool InsertDialog::insertColumnsChecked()
+{
     return rb3->isChecked();
 }
-

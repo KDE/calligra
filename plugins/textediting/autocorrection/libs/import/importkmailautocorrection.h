@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "importabstractautocorrection.h"
 #include "autocorrection_private_export.h"
+#include "importabstractautocorrection.h"
 
 class AUTOCORRECTION_TESTS_EXPORT ImportKMailAutocorrection : public ImportAbstractAutocorrection
 {

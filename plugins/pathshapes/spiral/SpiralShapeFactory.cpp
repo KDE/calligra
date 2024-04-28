@@ -7,15 +7,14 @@
 #include "SpiralShapeFactory.h"
 #include "SpiralShape.h"
 #include "SpiralShapeConfigWidget.h"
-#include <KoShapeStroke.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeStroke.h>
 
-#include <KoIcon.h>
 #include <KLocalizedString>
-
+#include <KoIcon.h>
 
 SpiralShapeFactory::SpiralShapeFactory()
-: KoShapeFactoryBase(SpiralShapeId, i18n("Spiral"))
+    : KoShapeFactoryBase(SpiralShapeId, i18n("Spiral"))
 {
     setToolTip(i18n("A spiral shape"));
     setIconName(koIconName("spiral-shape"));
@@ -33,16 +32,16 @@ KoShape *SpiralShapeFactory::createDefaultShape(KoDocumentResourceManager *) con
     return spiral;
 }
 
-bool SpiralShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool SpiralShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(e);
     Q_UNUSED(context);
     return false;
 }
 
-QList<KoShapeConfigWidgetBase*> SpiralShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> SpiralShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> panels;
+    QList<KoShapeConfigWidgetBase *> panels;
     panels.append(new SpiralShapeConfigWidget());
     return panels;
 }

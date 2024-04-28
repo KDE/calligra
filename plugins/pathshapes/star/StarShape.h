@@ -118,16 +118,14 @@ private:
     /// the handle types
     enum Handles { tip = 0, base = 1 };
 
-    uint m_cornerCount;    ///< number of corners
-    qreal m_radius[2];    ///< the different radii
-    qreal m_angles[2];    ///< the offset angles
-    qreal m_zoomX;        ///< scaling in x
-    qreal m_zoomY;        ///< scaling in y
+    uint m_cornerCount; ///< number of corners
+    qreal m_radius[2]; ///< the different radii
+    qreal m_angles[2]; ///< the offset angles
+    qreal m_zoomX; ///< scaling in x
+    qreal m_zoomY; ///< scaling in y
     qreal m_roundness[2]; ///< the roundness at the handles
-    QPointF m_center;      ///< the star center point
-    bool m_convex;         ///< controls if the star is convex
+    QPointF m_center; ///< the star center point
+    bool m_convex; ///< controls if the star is convex
 };
 
 #endif /* KOSTARSHAPE_H */
-
-

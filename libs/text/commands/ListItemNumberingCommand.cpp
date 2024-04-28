@@ -13,10 +13,10 @@
 #include <QTextCursor>
 
 ListItemNumberingCommand::ListItemNumberingCommand(const QTextBlock &block, bool numbered, KUndo2Command *parent)
-    : KoTextCommandBase(parent),
-      m_block(block),
-      m_numbered(numbered),
-      m_first(true)
+    : KoTextCommandBase(parent)
+    , m_block(block)
+    , m_numbered(numbered)
+    , m_first(true)
 {
     m_wasNumbered = !block.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem);
     setText(kundo2_i18n("Change List Numbering"));

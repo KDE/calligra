@@ -13,30 +13,25 @@
 #define VeeWipeEffectId "VeeWipeEffect"
 
 VeeWipeEffectFactory::VeeWipeEffectFactory()
-: KPrPageEffectFactory( VeeWipeEffectId, i18n( "Vee" ) )
+    : KPrPageEffectFactory(VeeWipeEffectId, i18n("Vee"))
 {
-    addStrategy( new VeeWipeStrategy( FromTop, "down", false ) );
-    addStrategy( new VeeWipeStrategy( FromRight, "left", false ) );
-    addStrategy( new VeeWipeStrategy( FromBottom, "top", false ) );
-    addStrategy( new VeeWipeStrategy( FromLeft, "right", false ) );
+    addStrategy(new VeeWipeStrategy(FromTop, "down", false));
+    addStrategy(new VeeWipeStrategy(FromRight, "left", false));
+    addStrategy(new VeeWipeStrategy(FromBottom, "top", false));
+    addStrategy(new VeeWipeStrategy(FromLeft, "right", false));
 }
 
 VeeWipeEffectFactory::~VeeWipeEffectFactory()
 {
 }
 
-static const KLazyLocalizedString s_subTypes[] = {
-    kli18n( "From Top" ),
-    kli18n( "From Right" ),
-    kli18n( "From Bottom" ),
-    kli18n( "From Left" )
-};
+static const KLazyLocalizedString s_subTypes[] = {kli18n("From Top"), kli18n("From Right"), kli18n("From Bottom"), kli18n("From Left")};
 
 QString VeeWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return s_subTypes[subType].toString();
     } else {
-        return i18n( "Unknown subtype" );
+        return i18n("Unknown subtype");
     }
 }

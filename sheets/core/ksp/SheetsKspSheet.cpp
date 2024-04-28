@@ -26,23 +26,22 @@
 #include <KoUnit.h>
 #include <KoXmlReader.h>
 
+namespace Calligra
+{
+namespace Sheets
+{
 
-
-namespace Calligra {
-namespace Sheets {
-
-
-namespace Ksp {
-    // formats
-    QDomElement saveRowFormat(int row, QDomDocument&, Sheet *sheet);
-    bool loadRowFormat(const KoXmlElement& row, Sheet *sheet);
-    QDomElement saveColFormat(int col, QDomDocument&, Sheet *sheet);
-    bool loadColFormat(const KoXmlElement& row, Sheet *sheet);
+namespace Ksp
+{
+// formats
+QDomElement saveRowFormat(int row, QDomDocument &, Sheet *sheet);
+bool loadRowFormat(const KoXmlElement &row, Sheet *sheet);
+QDomElement saveColFormat(int col, QDomDocument &, Sheet *sheet);
+bool loadColFormat(const KoXmlElement &row, Sheet *sheet);
 
 };
 
-
-bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
+bool Ksp::loadSheet(Sheet *obj, const KoXmlElement &sheet)
 {
     bool ok = false;
     QString sname = obj->sheetName();
@@ -81,8 +80,7 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
         sname.remove(0, 1);
     }
     for (int i = 0; i < sname.length(); i++) {
-        if (!(sname[i].isLetterOrNumber() ||
-                sname[i] == ' ' || sname[i] == '.' || sname[i] == '_')) {
+        if (!(sname[i].isLetterOrNumber() || sname[i] == ' ' || sname[i] == '.' || sname[i] == '_')) {
             sname[i] = '_';
         }
     }
@@ -107,7 +105,7 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
         obj->setSheetName(sname);
     }
 
-//     (dynamic_cast<SheetIface*>(obj->dcopObject()))->sheetNameHasChanged();
+    //     (dynamic_cast<SheetIface*>(obj->dcopObject()))->sheetNameHasChanged();
 
     if (sheet.hasAttribute("grid")) {
         obj->setShowGrid((int)sheet.attribute("grid").toInt(&ok));
@@ -133,7 +131,7 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
         obj->setShowFormula((bool)sheet.attribute("showFormula").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
-    //Compatibility with KSpread 1.1.x
+    // Compatibility with KSpread 1.1.x
     if (sheet.hasAttribute("formular")) {
         obj->setShowFormula((bool)sheet.attribute("formular").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
@@ -176,15 +174,14 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
     if (!paper.isNull()) {
         KoPageLayout pageLayout;
         pageLayout.format = KoPageFormat::formatFromString(paper.attribute("format"));
-        pageLayout.orientation = (paper.attribute("orientation")  == "Portrait")
-                                 ? KoPageFormat::Portrait : KoPageFormat::Landscape;
+        pageLayout.orientation = (paper.attribute("orientation") == "Portrait") ? KoPageFormat::Portrait : KoPageFormat::Landscape;
 
         // <borders>
         KoXmlElement borders = paper.namedItem("borders").toElement();
         if (!borders.isNull()) {
-            pageLayout.leftMargin   = MM_TO_POINT(borders.attribute("left").toFloat());
-            pageLayout.rightMargin  = MM_TO_POINT(borders.attribute("right").toFloat());
-            pageLayout.topMargin    = MM_TO_POINT(borders.attribute("top").toFloat());
+            pageLayout.leftMargin = MM_TO_POINT(borders.attribute("left").toFloat());
+            pageLayout.rightMargin = MM_TO_POINT(borders.attribute("right").toFloat());
+            pageLayout.topMargin = MM_TO_POINT(borders.attribute("top").toFloat());
             pageLayout.bottomMargin = MM_TO_POINT(borders.attribute("bottom").toFloat());
         }
         obj->printSettings()->setPageLayout(pageLayout);
@@ -227,11 +224,11 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
         int right = printrange.attribute("right-rect").toInt();
         int bottom = printrange.attribute("bottom-rect").toInt();
         int top = printrange.attribute("top-rect").toInt();
-        if (left == 0) { //whole row(s) selected
+        if (left == 0) { // whole row(s) selected
             left = 1;
             right = KS_colMax;
         }
-        if (top == 0) { //whole column(s) selected
+        if (top == 0) { // whole column(s) selected
             top = 1;
             bottom = KS_rowMax;
         }
@@ -273,9 +270,9 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
             if (tagName == "cell")
                 loadCell(e, obj);
             else if (tagName == "row") {
-                loadRowFormat (e, obj);
+                loadRowFormat(e, obj);
             } else if (tagName == "column") {
-                loadColFormat (e, obj);
+                loadColFormat(e, obj);
             }
 #if 0 // CALLIGRA_SHEETS_KOPART_EMBEDDING
             else if (tagName == "object") {
@@ -321,8 +318,7 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
     return true;
 }
 
-
-QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
+QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument &dd)
 {
     QDomElement sheet = dd.createElement("table");
 
@@ -337,7 +333,7 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
     }
     sheet.setAttribute("name", sheetName);
 
-    //Laurent: for oasis format I think that we must use style:direction...
+    // Laurent: for oasis format I think that we must use style:direction...
     sheet.setAttribute("layoutDirection", (obj->layoutDirection() == Qt::RightToLeft) ? "rtl" : "ltr");
     sheet.setAttribute("columnnumber", QString::number((int)obj->getShowColumnNumber()));
     sheet.setAttribute("borders", QString::number((int)obj->isShowPageOutline()));
@@ -419,12 +415,12 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
     int right = _printRange.right();
     int top = _printRange.top();
     int bottom = _printRange.bottom();
-    //If whole rows are selected, then we store zeros, as KS_colMax may change in future
+    // If whole rows are selected, then we store zeros, as KS_colMax may change in future
     if (left == 1 && right == KS_colMax) {
         left = 0;
         right = 0;
     }
-    //If whole columns are selected, then we store zeros, as KS_rowMax may change in future
+    // If whole columns are selected, then we store zeros, as KS_rowMax may change in future
     if (top == 1 && bottom == KS_rowMax) {
         top = 0;
         bottom = 0;
@@ -447,10 +443,10 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
     printRepeatRows.setAttribute("bottom", QString::number(obj->printSettings()->repeatedRows().second));
     sheet.appendChild(printRepeatRows);
 
-    //Save print zoom
+    // Save print zoom
     sheet.setAttribute("printZoom", QString::number(obj->printSettings()->zoom()));
 
-    //Save page limits
+    // Save page limits
     const QSize pageLimits = obj->printSettings()->pageLimits();
     sheet.setAttribute("printPageLimitX", QString::number(pageLimits.width()));
     sheet.setAttribute("printPageLimitY", QString::number(pageLimits.height()));
@@ -460,7 +456,7 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
     for (int row = 1; row <= usedArea.height(); ++row) {
         Cell cell = obj->fullCellStorage()->firstInRow(row);
         while (!cell.isNull()) {
-            QDomElement e = saveCell (&cell, dd);
+            QDomElement e = saveCell(&cell, dd);
             if (!e.isNull())
                 sheet.appendChild(e);
             cell = obj->fullCellStorage()->nextInRow(cell.column(), row);
@@ -473,12 +469,12 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
         int lastRow;
         bool isDefault = obj->rowFormats()->isDefaultRow(rowFormatRow, &lastRow);
         if (isDefault) {
-            QDomElement e = saveRowFormat (rowFormatRow, dd, obj);
+            QDomElement e = saveRowFormat(rowFormatRow, dd, obj);
             if (e.isNull())
                 return QDomElement();
             sheet.appendChild(e);
         } else if (!isDefault) {
-            QDomElement e = saveRowFormat (rowFormatRow, dd, obj);
+            QDomElement e = saveRowFormat(rowFormatRow, dd, obj);
             if (e.isNull())
                 return QDomElement();
             sheet.appendChild(e);
@@ -492,12 +488,12 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
         int lastCol;
         bool isDefault = obj->columnFormats()->isDefaultCol(colFormatCol, &lastCol);
         if (isDefault) {
-            QDomElement e = saveColFormat (colFormatCol, dd, obj);
+            QDomElement e = saveColFormat(colFormatCol, dd, obj);
             if (e.isNull())
                 return QDomElement();
             sheet.appendChild(e);
         } else if (!isDefault) {
-            QDomElement e = saveColFormat (colFormatCol, dd, obj);
+            QDomElement e = saveColFormat(colFormatCol, dd, obj);
             if (e.isNull())
                 return QDomElement();
             sheet.appendChild(e);
@@ -508,9 +504,7 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
     return sheet;
 }
 
-
-
-QDomElement Ksp::saveRowFormat(int rowID, QDomDocument& doc, Sheet *sheet)
+QDomElement Ksp::saveRowFormat(int rowID, QDomDocument &doc, Sheet *sheet)
 {
     RowFormatStorage *rows = sheet->rowFormats();
 
@@ -524,14 +518,14 @@ QDomElement Ksp::saveRowFormat(int rowID, QDomDocument& doc, Sheet *sheet)
     if (!style.isEmpty()) {
         debugSheetsODF << "saving cell style of row" << rowID;
         QDomElement format(doc.createElement("format"));
-        saveStyle (style, doc, format, sheet->fullMap()->styleManager());
+        saveStyle(style, doc, format, sheet->fullMap()->styleManager());
         row.appendChild(format);
     }
 
     return row;
 }
 
-bool Ksp::loadRowFormat (const KoXmlElement & row, Sheet *sheet)
+bool Ksp::loadRowFormat(const KoXmlElement &row, Sheet *sheet)
 {
     bool ok;
 
@@ -545,28 +539,30 @@ bool Ksp::loadRowFormat (const KoXmlElement & row, Sheet *sheet)
 
     if (row.hasAttribute("height")) {
         double h = row.attribute("height").toDouble(&ok);
-        if (!ok) return false;
+        if (!ok)
+            return false;
         if (h < 0) {
             debugSheets << "Value height=" << h << " out of range";
             return false;
         }
 
-        if (sheet->fullMap()->syntaxVersion() < 1) //compatibility with old format - was in millimeter
+        if (sheet->fullMap()->syntaxVersion() < 1) // compatibility with old format - was in millimeter
             h = qRound(MM_TO_POINT(h));
-        rows->setRowHeight (rowID, rowID, h);
+        rows->setRowHeight(rowID, rowID, h);
     }
 
     if (row.hasAttribute("hide")) {
-        bool hide = (bool) row.attribute("hide").toInt(&ok);
-        if (!ok) return false;
-        rows->setHidden (rowID, rowID, hide);
+        bool hide = (bool)row.attribute("hide").toInt(&ok);
+        if (!ok)
+            return false;
+        rows->setHidden(rowID, rowID, hide);
     }
 
     KoXmlElement el(row.namedItem("format").toElement());
 
     if (!el.isNull()) {
         Style style;
-        if (!loadStyle (&style, el))
+        if (!loadStyle(&style, el))
             return false;
         sheet->fullCellStorage()->setStyle(Region(QRect(1, rowID, KS_colMax, 1)), style);
         return true;
@@ -575,7 +571,7 @@ bool Ksp::loadRowFormat (const KoXmlElement & row, Sheet *sheet)
     return true;
 }
 
-QDomElement Ksp::saveColFormat(int colID, QDomDocument& doc, Sheet *sheet)
+QDomElement Ksp::saveColFormat(int colID, QDomDocument &doc, Sheet *sheet)
 {
     ColFormatStorage *cols = sheet->columnFormats();
 
@@ -590,14 +586,14 @@ QDomElement Ksp::saveColFormat(int colID, QDomDocument& doc, Sheet *sheet)
     if (!style.isEmpty()) {
         debugSheetsODF << "saving cell style of column" << colID;
         QDomElement format(doc.createElement("format"));
-        saveStyle (style, doc, format, sheet->fullMap()->styleManager());
+        saveStyle(style, doc, format, sheet->fullMap()->styleManager());
         col.appendChild(format);
     }
 
     return col;
 }
 
-bool Ksp::loadColFormat(const KoXmlElement & col, Sheet *sheet)
+bool Ksp::loadColFormat(const KoXmlElement &col, Sheet *sheet)
 {
     bool ok;
 
@@ -611,28 +607,30 @@ bool Ksp::loadColFormat(const KoXmlElement & col, Sheet *sheet)
 
     if (col.hasAttribute("width")) {
         double w = col.attribute("width").toDouble(&ok);
-        if (!ok) return false;
+        if (!ok)
+            return false;
         if (w < 0) {
             debugSheets << "Value width=" << w << " out of range";
             return false;
         }
 
-        if (sheet->fullMap()->syntaxVersion() < 1) //compatibility with old format - was in millimeter
+        if (sheet->fullMap()->syntaxVersion() < 1) // compatibility with old format - was in millimeter
             w = qRound(MM_TO_POINT(w));
-        cols->setColWidth (colID, colID, w);
+        cols->setColWidth(colID, colID, w);
     }
 
     if (col.hasAttribute("hide")) {
-        bool hide = (bool) col.attribute("hide").toInt(&ok);
-        if (!ok) return false;
-        cols->setHidden (colID, colID, hide);
+        bool hide = (bool)col.attribute("hide").toInt(&ok);
+        if (!ok)
+            return false;
+        cols->setHidden(colID, colID, hide);
     }
 
     KoXmlElement el(col.namedItem("format").toElement());
 
     if (!el.isNull()) {
         Style style;
-        if (!loadStyle (&style, el))
+        if (!loadStyle(&style, el))
             return false;
         sheet->fullCellStorage()->setStyle(Region(QRect(colID, 1, 1, KS_rowMax)), style);
         return true;
@@ -641,7 +639,5 @@ bool Ksp::loadColFormat(const KoXmlElement & col, Sheet *sheet)
     return true;
 }
 
-
-
-}  // Sheets
-}  // Calligra
+} // Sheets
+} // Calligra

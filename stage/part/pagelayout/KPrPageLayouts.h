@@ -21,8 +21,8 @@
 #define KPRPAGELAYOUTS_H
 
 #include <QMap>
-#include <QString>
 #include <QObject>
+#include <QString>
 #include <QVariant>
 
 class QRectF;
@@ -33,23 +33,22 @@ class KoPASavingContext;
 
 class KPrPageLayouts : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
     explicit KPrPageLayouts(QObject *parent = 0);
     ~KPrPageLayouts() override;
 
-    bool saveOdf( KoPASavingContext & context ) const;
+    bool saveOdf(KoPASavingContext &context) const;
 
     /**
      * load all not yet loaded styles and add application styles
      */
-    bool loadOdf( KoPALoadingContext & context );
+    bool loadOdf(KoPALoadingContext &context);
 
     /**
      *
      */
-    KPrPageLayout * pageLayout( const QString & name, KoPALoadingContext & loadingContext, const QRectF & pageRect );
-
+    KPrPageLayout *pageLayout(const QString &name, KoPALoadingContext &loadingContext, const QRectF &pageRect);
 
     const QList<KPrPageLayout *> layouts() const;
 
@@ -58,5 +57,5 @@ private:
     QMap<KPrPageLayoutWrapper, KPrPageLayout *> m_pageLayouts;
 };
 
-Q_DECLARE_METATYPE(KPrPageLayouts*)
+Q_DECLARE_METATYPE(KPrPageLayouts *)
 #endif /* KPRPAGELAYOUTS_H */

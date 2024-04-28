@@ -12,19 +12,16 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
-#include "engine/CalculationSettings.h"
-#include "engine/CellBase.h"
-#include "engine/Localization.h"
-#include "engine/Formula.h"
 #include "core/Map.h"
 #include "core/Sheet.h"
+#include "engine/CalculationSettings.h"
+#include "engine/CellBase.h"
+#include "engine/Formula.h"
+#include "engine/Localization.h"
 #include "ui/Selection.h"
 #include "ui/commands/DataManipulators.h"
 
-
-
 using namespace Calligra::Sheets;
-
 
 GoalSeek::GoalSeek(Actions *actions)
     : CellAction(actions, "goalSeek", i18n("&Goal Seek..."), QIcon(), i18n("Repeating calculation to find a specific value"))
@@ -37,9 +34,9 @@ GoalSeek::GoalSeek(Actions *actions)
 
 GoalSeek::~GoalSeek()
 {
-    if (m_dlg) delete m_dlg;
+    if (m_dlg)
+        delete m_dlg;
 }
-
 
 void GoalSeek::execute(Selection *selection, Sheet *, QWidget *canvasWidget)
 {
@@ -55,7 +52,7 @@ void GoalSeek::execute(Selection *selection, Sheet *, QWidget *canvasWidget)
 
 void GoalSeek::calculate()
 {
-    Sheet * sheet = m_selection->activeSheet();
+    Sheet *sheet = m_selection->activeSheet();
 
     const Region source = sheet->map()->regionFromName(m_dlg->selectorValue(3), sheet);
     if (!source.isValid() || !source.isSingular()) {
@@ -125,24 +122,23 @@ void GoalSeek::calculate()
         sourceCell.setValue(Value(startA));
         const double targetValueA = numToDouble(formula.eval().asFloat());
         resultA = targetValueA - goal;
-//         debugSheets << "Target A:" << targetValueA << "," << targetCell.userInput() << "Calc:" << resultA;
+        //         debugSheets << "Target A:" << targetValueA << "," << targetCell.userInput() << "Calc:" << resultA;
 
         sourceCell.setValue(Value(startB));
         const double targetValueB = numToDouble(formula.eval().asFloat());
         resultB = targetValueB - goal;
-//         debugSheets << "Target B:" << targetValueB << "," << targetCell.userInput() << "Calc:" << resultB;
+        //         debugSheets << "Target B:" << targetValueB << "," << targetCell.userInput() << "Calc:" << resultB;
 
-//         debugSheets <<"Iteration:" << iterations <<", StartA:" << startA
-//                  << ", ResultA: " << resultA << " (eps: " << eps << "), StartB: "
-//                  << startB << ", ResultB: " << resultB << Qt::endl;
-
+        //         debugSheets <<"Iteration:" << iterations <<", StartA:" << startA
+        //                  << ", ResultA: " << resultA << " (eps: " << eps << "), StartB: "
+        //                  << startB << ", ResultB: " << resultB << Qt::endl;
 
         // find zero with secant method (rough implementation was provided by Franz-Xaver Meier):
         // if the function returns the same for two different
         // values we have something like a horizontal line
         // => can't get zero.
         if (resultB == resultA) {
-//         debugSheets <<" resultA == resultB";
+            //         debugSheets <<" resultA == resultB";
             if (fabs(resultA) < eps) {
                 ok = true;
                 break;
@@ -156,12 +152,13 @@ void GoalSeek::calculate()
         x = (startA * resultB - startB * resultA) / (resultB - resultA);
 
         if (fabs(x) > 100000000) {
-//             debugSheets <<"fabs(x) > 100000000:" << x;
+            //             debugSheets <<"fabs(x) > 100000000:" << x;
             ok = false;
             break;
         }
 
-//         debugSheets <<"X:" << x <<", fabs (resultA):" << fabs(resultA) <<", Real start:" << startA <<", Real result:" << resultA <<", Iteration:" << iterations;
+        //         debugSheets <<"X:" << x <<", fabs (resultA):" << fabs(resultA) <<", Real start:" << startA <<", Real result:" << resultA <<", Iteration:" <<
+        //         iterations;
 
         --iterations;
     }
@@ -169,8 +166,7 @@ void GoalSeek::calculate()
     // Put the original value back, so that undo works correctly.
     sourceCell.setValue(Value(oldSource));
     if (ok) {
-        m_dlg->setNotice(i18n("Goal seeking with cell %1 found a solution.",
-                                       m_dlg->selectorValue(3)));
+        m_dlg->setNotice(i18n("Goal seeking with cell %1 found a solution.", m_dlg->selectorValue(3)));
 
         // Reset the value for a proper undo value.
         Sheet *const sheet = dynamic_cast<Sheet *>(sourceCell.sheet());
@@ -180,10 +176,6 @@ void GoalSeek::calculate()
         command->setValue(Value(startA));
         command->execute(m_selection->canvas());
     } else {
-        m_dlg->setNotice(i18n("Goal seeking with cell %1 has found NO solution.",
-                                       m_dlg->selectorValue(3)));
+        m_dlg->setNotice(i18n("Goal seeking with cell %1 has found NO solution.", m_dlg->selectorValue(3)));
     }
 }
-
-
-

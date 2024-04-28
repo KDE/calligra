@@ -7,9 +7,9 @@
 #ifndef KWDOCUMENTCOLUMNS_H
 #define KWDOCUMENTCOLUMNS_H
 
-#include <ui_KWDocumentColumns.h>
-#include <KoPageLayout.h>
 #include <KoColumns.h>
+#include <KoPageLayout.h>
+#include <ui_KWDocumentColumns.h>
 
 #include <QWidget>
 
@@ -24,7 +24,10 @@ class KWDocumentColumns : public QWidget
 public:
     KWDocumentColumns(QWidget *parent, const KoColumns &columns);
 
-    KoColumns columns() const { return m_columns; }
+    KoColumns columns() const
+    {
+        return m_columns;
+    }
 
     void setShowPreview(bool on);
     void setUnit(const KoUnit &unit);

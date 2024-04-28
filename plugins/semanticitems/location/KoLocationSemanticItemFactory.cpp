@@ -11,12 +11,11 @@
 // lib
 #include "KoRdfLocation.h"
 // KF5
-#include <kdebug.h>
 #include <KLocalizedString>
-
+#include <kdebug.h>
 
 KoLocationSemanticItemFactory::KoLocationSemanticItemFactory()
-: KoRdfSemanticItemFactoryBase("Location")
+    : KoRdfSemanticItemFactoryBase("Location")
 {
 }
 
@@ -40,21 +39,25 @@ QString KoLocationSemanticItemFactory::classDisplayName() const
  * has to be applied in some cases to ensure DISTINCT semantics in the results.
  */
 struct SparqlDistinctPostprocess {
-    explicit SparqlDistinctPostprocess(const QString &bindingForID) {
+    explicit SparqlDistinctPostprocess(const QString &bindingForID)
+    {
         m_bindingsThatMakeID << bindingForID;
     }
-    bool shouldSkip(const Soprano::QueryResultIterator &it) {
+    bool shouldSkip(const Soprano::QueryResultIterator &it)
+    {
         const QString id = uniqueID(it);
         const bool ret = m_uniqfilter.contains(id);
         m_uniqfilter << id;
         return ret;
     }
-    void addBindingToKeySet(const QString &n) {
+    void addBindingToKeySet(const QString &n)
+    {
         m_bindingsThatMakeID << n;
     }
 
 protected:
-    QString uniqueID(const Soprano::QueryResultIterator &it) {
+    QString uniqueID(const Soprano::QueryResultIterator &it)
+    {
         QString ret;
 
         foreach (const QString &b, m_bindingsThatMakeID) {
@@ -63,23 +66,20 @@ protected:
 
         return ret;
     }
+
 private:
     QStringList m_bindingsThatMakeID;
     QSet<QString> m_uniqfilter;
 };
-
 
 /**
  * Because there are at least two different ways of associating digital longitude
  * and latitude with triples in Rdf, the locations() method farms off discovering
  * these values to this method using specific SPARQL query text.
  */
-static void addLocations(QList<hKoRdfSemanticItem> &ret, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m,
-                         bool isGeo84,
-                         const QString &sparqlQuery)
+static void addLocations(QList<hKoRdfSemanticItem> &ret, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m, bool isGeo84, const QString &sparqlQuery)
 {
-    Soprano::QueryResultIterator it = m->executeQuery(sparqlQuery,
-                        Soprano::Query::QueryLanguageSparql);
+    Soprano::QueryResultIterator it = m->executeQuery(sparqlQuery, Soprano::Query::QueryLanguageSparql);
     SparqlDistinctPostprocess uniqFilter(QLatin1String("lat"));
     uniqFilter.addBindingToKeySet(QLatin1String("long"));
     while (it.next()) {
@@ -92,35 +92,42 @@ static void addLocations(QList<hKoRdfSemanticItem> &ret, const KoDocumentRdf *rd
     }
 }
 
-
-void KoLocationSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
+void KoLocationSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems,
+                                                        const KoDocumentRdf *rdf,
+                                                        QSharedPointer<Soprano::Model> m)
 {
     QList<hKoRdfSemanticItem> currentKoRdfLocations;
-    addLocations(currentKoRdfLocations, rdf, m, false,
-        "prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-        "prefix cal:  <http://www.w3.org/2002/12/cal/icaltzd#> \n"
-        "select distinct ?graph ?geo ?long ?lat ?joiner \n"
-        "where {  \n"
-        " GRAPH ?graph { \n"
-        "              ?ev cal:geo ?geo . \n"
-        "              ?geo rdf:first ?lat . \n"
-        "              ?geo rdf:rest ?joiner . \n"
-        "              ?joiner rdf:first ?long \n"
-        "              } \n"
-        "} \n");
-    addLocations(currentKoRdfLocations, rdf, m, true,
-        "prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-        "prefix geo84: <http://www.w3.org/2003/01/geo/wgs84_pos#> \n"
-        "select ?graph ?geo ?long ?lat ?type \n"
-        "where {  \n"
-        " GRAPH ?graph { \n"
-        " \n"
-        "       ?geo geo84:lat  ?lat . \n"
-        "       ?geo geo84:long ?long \n"
-        "       OPTIONAL { ?geo rdf:type ?type } \n"
-        " \n"
-        " } \n"
-        "} \n");
+    addLocations(currentKoRdfLocations,
+                 rdf,
+                 m,
+                 false,
+                 "prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
+                 "prefix cal:  <http://www.w3.org/2002/12/cal/icaltzd#> \n"
+                 "select distinct ?graph ?geo ?long ?lat ?joiner \n"
+                 "where {  \n"
+                 " GRAPH ?graph { \n"
+                 "              ?ev cal:geo ?geo . \n"
+                 "              ?geo rdf:first ?lat . \n"
+                 "              ?geo rdf:rest ?joiner . \n"
+                 "              ?joiner rdf:first ?long \n"
+                 "              } \n"
+                 "} \n");
+    addLocations(currentKoRdfLocations,
+                 rdf,
+                 m,
+                 true,
+                 "prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
+                 "prefix geo84: <http://www.w3.org/2003/01/geo/wgs84_pos#> \n"
+                 "select ?graph ?geo ?long ?lat ?type \n"
+                 "where {  \n"
+                 " GRAPH ?graph { \n"
+                 " \n"
+                 "       ?geo geo84:lat  ?lat . \n"
+                 "       ?geo geo84:long ?long \n"
+                 "       OPTIONAL { ?geo rdf:type ?type } \n"
+                 " \n"
+                 " } \n"
+                 "} \n");
 
     // add the new, remove the no longer existing between locObjects and currentKoRdfLocations.
     // The semantic items have a lifetime of this KoDocumentRDF.
@@ -170,18 +177,19 @@ void KoLocationSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanti
     }
 }
 
-hKoRdfBasicSemanticItem KoLocationSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+hKoRdfBasicSemanticItem KoLocationSemanticItemFactory::createSemanticItem(const KoDocumentRdf *rdf, QObject *parent)
 {
     return hKoRdfBasicSemanticItem(new KoRdfLocation(parent, rdf));
 }
 
-bool KoLocationSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMimeData* mimeData) const
+bool KoLocationSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const
 {
     Q_UNUSED(mimeData);
     return false;
 }
 
-hKoRdfBasicSemanticItem KoLocationSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase* host, const KoDocumentRdf* rdf, QObject* parent) const
+hKoRdfBasicSemanticItem
+KoLocationSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *rdf, QObject *parent) const
 {
     Q_UNUSED(mimeData);
     Q_UNUSED(host);

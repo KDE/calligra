@@ -9,8 +9,8 @@
 
 #include "kotext_export.h"
 
-#include <QMetaType>
 #include <QExplicitlySharedDataPointer>
+#include <QMetaType>
 
 class KoTableColumnStyle;
 class KoTableRowStyle;
@@ -126,7 +126,7 @@ public:
      * @param row the row to get the style for.
      * @return the default cell style for \a row.
      */
-    KoTableCellStyle* defaultRowCellStyle(int row) const;
+    KoTableCellStyle *defaultRowCellStyle(int row) const;
 
     /**
      * Set the default cell style for the row \a row.
@@ -134,7 +134,7 @@ public:
      * @param row the row to set the style to.
      * @return the default cell style for \a row.
      */
-    void setDefaultRowCellStyle(int row, KoTableCellStyle* cellStyle);
+    void setDefaultRowCellStyle(int row, KoTableCellStyle *cellStyle);
 
     /**
      * Get the default cell style for the column \a column.
@@ -142,7 +142,7 @@ public:
      * @param column the column to get the style for.
      * @return the default cell style for \a column.
      */
-    KoTableCellStyle* defaultColumnCellStyle(int column) const;
+    KoTableCellStyle *defaultColumnCellStyle(int column) const;
 
     /**
      * Set the default cell style for the column \a column.
@@ -150,7 +150,7 @@ public:
      * @param column the column to set the style to.
      * @return the default cell style for \a column.
      */
-    void setDefaultColumnCellStyle(int column, KoTableCellStyle* cellStyle);
+    void setDefaultColumnCellStyle(int column, KoTableCellStyle *cellStyle);
 
 private:
     class Private;
@@ -160,4 +160,3 @@ private:
 Q_DECLARE_METATYPE(KoTableColumnAndRowStyleManager)
 
 #endif // KOTABLECOLUMNANDROWSTYLEMANAGER_H
-

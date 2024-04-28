@@ -35,7 +35,7 @@ public:
      * Sets the shapes to be painted.
      * @param shapes the shapes to paint
      */
-    void setShapes(const QList<KoShape*> &shapes);
+    void setShapes(const QList<KoShape *> &shapes);
 
     /**
      * Paints the shapes on the given painter and using the zoom handler.
@@ -66,7 +66,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOSHAPEPAINTER_H

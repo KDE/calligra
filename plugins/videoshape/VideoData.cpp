@@ -17,15 +17,15 @@
 #include <KoStoreDevice.h>
 
 #include <QApplication>
+#include <QAtomicInt>
 #include <QBuffer>
 #include <QCryptographicHash>
-#include <QFileInfo>
-#include <QTemporaryFile>
-#include <QPainter>
-#include <QAtomicInt>
 #include <QFile>
-#include <QUrl>
+#include <QFileInfo>
+#include <QPainter>
 #include <QRegularExpression>
+#include <QTemporaryFile>
+#include <QUrl>
 
 class VideoDataPrivate
 {
@@ -68,7 +68,6 @@ VideoDataPrivate::VideoDataPrivate()
     , dataStoreState(VideoData::StateEmpty)
     , saveVideoInZip(false)
 {
-
 }
 
 VideoDataPrivate::~VideoDataPrivate()
@@ -97,7 +96,7 @@ VideoData::VideoData(const VideoData &videoData)
 {
     Q_UNUSED(videoData);
 
-    if(d) {
+    if (d) {
         d->refCount.ref();
     }
 }
@@ -152,13 +151,16 @@ void VideoData::setVideo(const QString &url, KoStore *store, VideoCollection *co
     } else {
         if (store->open(url)) {
             struct Finalizer {
-                ~Finalizer() { store->close(); }
+                ~Finalizer()
+                {
+                    store->close();
+                }
                 KoStore *store;
             };
             Finalizer closer;
             closer.store = store;
             KoStoreDevice device(store);
-            //QByteArray data = device.readAll();
+            // QByteArray data = device.readAll();
             if (!device.open(QIODevice::ReadOnly)) {
                 warnVideo << "open file from store " << url << "failed";
                 d->errorCode = OpenFailed;
@@ -210,8 +212,7 @@ QString VideoData::tagForSaving(int &counter)
 
 bool VideoData::isValid() const
 {
-    return d->dataStoreState != VideoData::StateEmpty
-        && d->errorCode == Success;
+    return d->dataStoreState != VideoData::StateEmpty && d->errorCode == Success;
 }
 
 bool VideoData::operator==(const VideoData &other) const
@@ -295,7 +296,7 @@ void VideoData::copyToTemporary(QIODevice &device)
 {
     delete d;
     d = new VideoDataPrivate();
-    d->temporaryFile = new QTemporaryFile(QLatin1String("KoVideoData/") + qAppName() + QLatin1String("_XXXXXX") );
+    d->temporaryFile = new QTemporaryFile(QLatin1String("KoVideoData/") + qAppName() + QLatin1String("_XXXXXX"));
     d->refCount.ref();
     if (!d->temporaryFile->open()) {
         warnVideo << "open temporary file for writing failed";

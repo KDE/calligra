@@ -8,10 +8,10 @@
 #ifndef KCHART_AXIS_SCALING_DIALOG_H
 #define KCHART_AXIS_SCALING_DIALOG_H
 
-
 #include "ui_AxisScalingDialog.h"
 
-namespace KoChart {
+namespace KoChart
+{
 
 class AxisScalingDialog : public QDialog, public Ui::AxisScalingDialog
 {
@@ -22,6 +22,4 @@ public:
 
 } // Namespace KoChart
 
-
 #endif // KCHART_AXIS_SCALING_DIALOG_H
-

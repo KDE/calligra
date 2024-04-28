@@ -11,21 +11,20 @@
 #ifndef CQTEXTDOCUMENTMODEL_H
 #define CQTEXTDOCUMENTMODEL_H
 
-#include <QAbstractListModel>
 #include <KWDocument.h>
-
+#include <QAbstractListModel>
 
 class CQTextDocumentModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QSize thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
 public:
-    CQTextDocumentModel(QObject* parent, KWDocument* document, KoShapeManager *shapemanager);
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    Q_INVOKABLE virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    CQTextDocumentModel(QObject *parent, KWDocument *document, KoShapeManager *shapemanager);
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    Q_INVOKABLE virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
     QSize thumbnailSize() const;
-    void setThumbnailSize(const QSize& newSize);
+    void setThumbnailSize(const QSize &newSize);
 Q_SIGNALS:
     void documentControllerChanged();
     void thumbnailSizeChanged();

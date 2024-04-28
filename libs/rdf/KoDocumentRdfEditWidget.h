@@ -7,8 +7,8 @@
 #ifndef __koDocumentRdfEditWidget_h__
 #define __koDocumentRdfEditWidget_h__
 
-#include "kordf_export.h"
 #include "RdfForward.h"
+#include "kordf_export.h"
 // Calligra
 #include <KoPageWidgetItem.h>
 // Qt
@@ -37,7 +37,6 @@ class KORDF_EXPORT KoDocumentRdfEditWidget : public QWidget, public KoPageWidget
 {
     Q_OBJECT
 public:
-
     /**
      * The constructor
      * @param docRdf a pointer to the KoDocumentRdf to show/edit
@@ -116,14 +115,12 @@ private Q_SLOTS:
     void semanticObjectUpdated(hKoRdfBasicSemanticItem item);
 
 private:
-
     hKoSemanticStylesheet stylesheetFromComboBox(QComboBox *w) const;
     void applyStylesheetFromComboBox(QComboBox *comboBox) const;
 
 private:
     class KoDocumentRdfEditWidgetPrivate;
     KoDocumentRdfEditWidgetPrivate *const d;
-
 };
 
 #endif

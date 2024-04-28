@@ -21,27 +21,31 @@
 
 using namespace wvWare;
 
-Drawings::Drawings( OLEStreamReader* table, const Word97::FIB &fib ) :
-    m_plcfspaMom( 0 ), m_plcfspaHdr( 0 ), m_plcftxbxTxt( 0 ), m_plcfHdrtxbxTxt( 0 ),
-    m_plcftxbxBkd( 0 ), m_plcfHdrtxbxBkd( 0 )
+Drawings::Drawings(OLEStreamReader *table, const Word97::FIB &fib)
+    : m_plcfspaMom(0)
+    , m_plcfspaHdr(0)
+    , m_plcftxbxTxt(0)
+    , m_plcfHdrtxbxTxt(0)
+    , m_plcftxbxBkd(0)
+    , m_plcfHdrtxbxBkd(0)
 {
     table->push();
 
     // Don't try to read that. It will cause eye-cancer!
-    if ( fib.lcbPlcspaMom != 0 && table->seek( fib.fcPlcspaMom, WV2_SEEK_SET ) )
-        m_plcfspaMom = new PLCF<Word97::FSPA>( fib.lcbPlcspaMom, table, false );
-    if ( fib.lcbPlcspaHdr != 0 && table->seek( fib.fcPlcspaHdr, WV2_SEEK_SET ) )
-        m_plcfspaHdr = new PLCF<Word97::FSPA>( fib.lcbPlcspaHdr, table, false );
+    if (fib.lcbPlcspaMom != 0 && table->seek(fib.fcPlcspaMom, WV2_SEEK_SET))
+        m_plcfspaMom = new PLCF<Word97::FSPA>(fib.lcbPlcspaMom, table, false);
+    if (fib.lcbPlcspaHdr != 0 && table->seek(fib.fcPlcspaHdr, WV2_SEEK_SET))
+        m_plcfspaHdr = new PLCF<Word97::FSPA>(fib.lcbPlcspaHdr, table, false);
 
-    if ( fib.lcbPlcftxbxTxt != 0 && table->seek( fib.fcPlcftxbxTxt, WV2_SEEK_SET ) )
-        m_plcftxbxTxt = new PLCF<Word97::FTXBXS>( fib.lcbPlcftxbxTxt, table, false );
-    if ( fib.lcbPlcfHdrtxbxTxt != 0 && table->seek( fib.fcPlcfHdrtxbxTxt, WV2_SEEK_SET ) )
-        m_plcfHdrtxbxTxt = new PLCF<Word97::FTXBXS>( fib.lcbPlcfHdrtxbxTxt, table, false );
+    if (fib.lcbPlcftxbxTxt != 0 && table->seek(fib.fcPlcftxbxTxt, WV2_SEEK_SET))
+        m_plcftxbxTxt = new PLCF<Word97::FTXBXS>(fib.lcbPlcftxbxTxt, table, false);
+    if (fib.lcbPlcfHdrtxbxTxt != 0 && table->seek(fib.fcPlcfHdrtxbxTxt, WV2_SEEK_SET))
+        m_plcfHdrtxbxTxt = new PLCF<Word97::FTXBXS>(fib.lcbPlcfHdrtxbxTxt, table, false);
 
-    if ( fib.lcbPlcftxbxBkd != 0 && table->seek( fib.fcPlcftxbxBkd, WV2_SEEK_SET ) )
-        m_plcftxbxBkd = new PLCF<Word97::BKD>( fib.lcbPlcftxbxBkd, table, false );
-    if ( fib.lcbPlcftxbxHdrBkd != 0 && table->seek( fib.fcPlcftxbxHdrBkd, WV2_SEEK_SET ) )
-        m_plcfHdrtxbxBkd = new PLCF<Word97::BKD>( fib.lcbPlcftxbxHdrBkd, table, false );
+    if (fib.lcbPlcftxbxBkd != 0 && table->seek(fib.fcPlcftxbxBkd, WV2_SEEK_SET))
+        m_plcftxbxBkd = new PLCF<Word97::BKD>(fib.lcbPlcftxbxBkd, table, false);
+    if (fib.lcbPlcftxbxHdrBkd != 0 && table->seek(fib.fcPlcftxbxHdrBkd, WV2_SEEK_SET))
+        m_plcfHdrtxbxBkd = new PLCF<Word97::BKD>(fib.lcbPlcftxbxHdrBkd, table, false);
 
     table->pop();
 }
@@ -54,20 +58,19 @@ Drawings::~Drawings()
     delete m_plcftxbxTxt;
     delete m_plcfspaHdr;
     delete m_plcfspaMom;
-
 }
 
-EscherHeader::EscherHeader( OLEStreamReader* stream )
+EscherHeader::EscherHeader(OLEStreamReader *stream)
 {
-    //read first 32 bits
+    // read first 32 bits
     U32 shifterU32;
     shifterU32 = stream->readU32();
     recVer = shifterU32;
-    shifterU32>>=4;
+    shifterU32 >>= 4;
     recInstance = shifterU32;
-    shifterU32>>=12;
+    shifterU32 >>= 12;
     recType = shifterU32;
-    //read second 32 bits
+    // read second 32 bits
     recLen = stream->readU32();
 }
 
@@ -77,8 +80,8 @@ EscherHeader::~EscherHeader()
 
 bool EscherHeader::isAtom()
 {
-    //0xF in ver means it's a container
-    if( recVer == 0xF  )
+    // 0xF in ver means it's a container
+    if (recVer == 0xF)
         return false;
     else
         return true;
@@ -87,80 +90,80 @@ bool EscherHeader::isAtom()
 string EscherHeader::getRecordType()
 {
     string s;
-    switch( recType ) {
-        case 0xF000:
-            s = "msofbtDggContainer";
-            break;
-        case 0xF001:
-            s = "msofbtBstoreContainer";
-            break;
-        case 0xF002:
-            s = "msofbtDgContainer";
-            break;
-        case 0xF004:
-            s = "msofbtSpContainer";
-            break;
-        case 0xF006:
-            s = "msofbtDgg";
-            break;
-        case 0xF007:
-            s = "msofbtBSE";
-            break;
-        case 0xF008:
-            s = "msofbtDg";
-            break;
-        case 0xF00A:
-            s = "msofbtSp";
-            break;
-        case 0xF00B:
-            s = "msofbtOPT";            // OfficeArtFOPT - MS-ODRAW, page 44 of 621
-            break;
-        case 0xF010:
-            s = "msofbtClientAnchor";
-            break;
-        case 0xF016:
-            s = "msofbtCLSID";
-            break;
-        case 0xF01A:
-            s = "EMF";
-            break;
-        case 0xF01B:
-            s = "WMF";
-            break;
-        case 0xF01C:
-            s = "PICT";
-            break;
-        case 0xF01D:
-            s = "JPEG";
-            break;
-        case 0xF01E:
-            s = "PNG";
-            break;
-        case 0xF01F:
-            s = "DIB";
-            break;
-        case 0xF11A:
-            s = "msofbtColorMRU";
-            break;
-        case 0xF11E:
-            s = "msofbtSplitMenuColors";
-            break;
-        case 0xF118:
-            s = "msofbtRegroupItems";
-            break;
-        case 0xF122:
-            s = "msofbtTerOPT";         // OfficeArtTertiaryFOPT - MS-ODRAW, page 46 of 621
-            break;
-        default:
-            s = "unknown";
+    switch (recType) {
+    case 0xF000:
+        s = "msofbtDggContainer";
+        break;
+    case 0xF001:
+        s = "msofbtBstoreContainer";
+        break;
+    case 0xF002:
+        s = "msofbtDgContainer";
+        break;
+    case 0xF004:
+        s = "msofbtSpContainer";
+        break;
+    case 0xF006:
+        s = "msofbtDgg";
+        break;
+    case 0xF007:
+        s = "msofbtBSE";
+        break;
+    case 0xF008:
+        s = "msofbtDg";
+        break;
+    case 0xF00A:
+        s = "msofbtSp";
+        break;
+    case 0xF00B:
+        s = "msofbtOPT"; // OfficeArtFOPT - MS-ODRAW, page 44 of 621
+        break;
+    case 0xF010:
+        s = "msofbtClientAnchor";
+        break;
+    case 0xF016:
+        s = "msofbtCLSID";
+        break;
+    case 0xF01A:
+        s = "EMF";
+        break;
+    case 0xF01B:
+        s = "WMF";
+        break;
+    case 0xF01C:
+        s = "PICT";
+        break;
+    case 0xF01D:
+        s = "JPEG";
+        break;
+    case 0xF01E:
+        s = "PNG";
+        break;
+    case 0xF01F:
+        s = "DIB";
+        break;
+    case 0xF11A:
+        s = "msofbtColorMRU";
+        break;
+    case 0xF11E:
+        s = "msofbtSplitMenuColors";
+        break;
+    case 0xF118:
+        s = "msofbtRegroupItems";
+        break;
+    case 0xF122:
+        s = "msofbtTerOPT"; // OfficeArtTertiaryFOPT - MS-ODRAW, page 46 of 621
+        break;
+    default:
+        s = "unknown";
     }
     return s;
 }
 
-//returns size of the record NOT COUNTING the header
+// returns size of the record NOT COUNTING the header
 int EscherHeader::recordSize()
 {
-    return static_cast<int> (recLen);
+    return static_cast<int>(recLen);
 }
 
 // returns the record instance
@@ -179,16 +182,16 @@ void EscherHeader::dump()
     wvlog << "Finished dumping Escher header." << Qt::endl;
 }
 
-FBSE::FBSE( OLEStreamReader* stream )
+FBSE::FBSE(OLEStreamReader *stream)
 {
-    btWin32 = static_cast<MSOBLIPTYPE> (stream->readU8());
-    btMacOS = static_cast<MSOBLIPTYPE> (stream->readU8());
-    stream->read( rgbUid, 16 );
+    btWin32 = static_cast<MSOBLIPTYPE>(stream->readU8());
+    btMacOS = static_cast<MSOBLIPTYPE>(stream->readU8());
+    stream->read(rgbUid, 16);
     tag = stream->readU16();
     size = stream->readU32();
     cRef = stream->readU32();
     foDelay = stream->readU32();
-    usage = static_cast<MSOBLIPUSAGE> (stream->readU8());
+    usage = static_cast<MSOBLIPUSAGE>(stream->readU8());
     cbName = stream->readU8();
     unused2 = stream->readU8();
     unused3 = stream->readU8();
@@ -208,72 +211,67 @@ void FBSE::dump()
     wvlog << "\tsize = " << size << Qt::endl;
     wvlog << "\tcRef = " << cRef << Qt::endl;
     wvlog << "\tfoDelay = " << foDelay << Qt::endl;
-    wvlog << "\tusage = " << static_cast<int> (usage) << Qt::endl;
-    wvlog << "\tcbName = " << static_cast<unsigned int> (cbName) << Qt::endl;
-    wvlog << "\tunused2 = " << static_cast<unsigned int> (unused2) << Qt::endl;
-    wvlog << "\tunused3 = " << static_cast<unsigned int> (unused3) << Qt::endl;
+    wvlog << "\tusage = " << static_cast<int>(usage) << Qt::endl;
+    wvlog << "\tcbName = " << static_cast<unsigned int>(cbName) << Qt::endl;
+    wvlog << "\tunused2 = " << static_cast<unsigned int>(unused2) << Qt::endl;
+    wvlog << "\tunused3 = " << static_cast<unsigned int>(unused3) << Qt::endl;
     wvlog << "Finished dumping FBSE." << Qt::endl;
 }
 
 int FBSE::recordSize()
 {
-    //just add up the sizes of btWin32 + btMacOS + rgUid[16] + ...
+    // just add up the sizes of btWin32 + btMacOS + rgUid[16] + ...
     return 36;
 }
 
 int FBSE::getBlipType()
 {
-    //cast enum to int
-    return static_cast<int> (btWin32);
+    // cast enum to int
+    return static_cast<int>(btWin32);
 }
 
 int FBSE::getStreamOffset()
 {
-    //cast U32 to unsigned int
-    return static_cast<unsigned int> (foDelay);
+    // cast U32 to unsigned int
+    return static_cast<unsigned int>(foDelay);
 }
 
 int FBSE::getNameLength()
 {
-    //cast U8 to unsigned int
-    return static_cast<unsigned int> (cbName);
+    // cast U8 to unsigned int
+    return static_cast<unsigned int>(cbName);
 }
 
-U8* FBSE::getRgbUid()
+U8 *FBSE::getRgbUid()
 {
     return rgbUid;
 }
 
-Blip::Blip( OLEStreamReader* stream, string blipType )
+Blip::Blip(OLEStreamReader *stream, string blipType)
 {
-    m_size = 0; //just an initial value
+    m_size = 0; // just an initial value
     m_blipType = blipType;
     m_isMetafileBlip = false;
-    if( blipType.compare("JPEG") == 0 || blipType.compare("PNG") == 0
-            || blipType.compare("DIB") == 0 )
-    {
-        stream->read( m_rgbUid, 16 ); //data UID
+    if (blipType.compare("JPEG") == 0 || blipType.compare("PNG") == 0 || blipType.compare("DIB") == 0) {
+        stream->read(m_rgbUid, 16); // data UID
         m_bTag = stream->readU8();
         m_size = 17;
-        //initialize other variables just to 0
+        // initialize other variables just to 0
         m_cb = 0;
         m_rcBounds = 0;
         m_ptSize = 0;
         m_cbSave = 0;
-        m_fCompression = 255; //test value, so we'll just initialize to this
-        m_fFilter = 255; //test value, so we'll just initialize to this
-    }
-    else if( blipType.compare("EMF") == 0 || blipType.compare("WMF") == 0
-            || blipType.compare("PICT") == 0 )
-    {
-        stream->read( m_rgbUid, 16 ); //data UID
-        stream->read( m_rgbUidPrimary, 16 ); //primary Uid
-        m_cb = stream->readU32(); //cache of metafile size
-        m_rcBounds = stream->readU32(); //boundary of metafile drawing commands
-        m_ptSize = stream->readU32(); //size of metafile in EMU's
-        m_cbSave = stream->readU32(); //cache of saved size (size of m_pvBits)
-        m_fCompression = stream->readU8(); //compression
-        m_fFilter = stream->readU8(); //always msofilterNone = 254
+        m_fCompression = 255; // test value, so we'll just initialize to this
+        m_fFilter = 255; // test value, so we'll just initialize to this
+    } else if (blipType.compare("EMF") == 0 || blipType.compare("WMF") == 0 || blipType.compare("PICT") == 0) {
+        stream->read(m_rgbUid, 16); // data UID
+        stream->read(m_rgbUidPrimary, 16); // primary Uid
+        m_cb = stream->readU32(); // cache of metafile size
+        m_rcBounds = stream->readU32(); // boundary of metafile drawing commands
+        m_ptSize = stream->readU32(); // size of metafile in EMU's
+        m_cbSave = stream->readU32(); // cache of saved size (size of m_pvBits)
+        m_fCompression = stream->readU8(); // compression
+        m_fFilter = stream->readU8(); // always msofilterNone = 254
         m_isMetafileBlip = true;
         m_size = 46;
     }
@@ -290,9 +288,9 @@ bool Blip::isMetafileBlip()
 
 bool Blip::isCompressed()
 {
-    //only metafile blips can be compressed
-    //and the flag has to be set
-    if( isMetafileBlip() && m_fCompression == 0 )
+    // only metafile blips can be compressed
+    // and the flag has to be set
+    if (isMetafileBlip() && m_fCompression == 0)
         return true;
     else
         return false;
@@ -305,32 +303,28 @@ int Blip::recordSize()
 
 int Blip::imageSize()
 {
-    return static_cast<unsigned int> (m_cb);
+    return static_cast<unsigned int>(m_cb);
 }
 
 int Blip::compressedImageSize()
 {
-    return static_cast<unsigned int> (m_cbSave);
+    return static_cast<unsigned int>(m_cbSave);
 }
 
 void Blip::dump()
 {
-    if( !isCompressed() )
-    {
+    if (!isCompressed()) {
         wvlog << " bitmap blip:" << Qt::endl;
         wvlog << " m_rgbUid = " << m_rgbUid << Qt::endl;
-        wvlog << " m_bTag = " << static_cast<unsigned int> (m_bTag) << Qt::endl;
-    }
-    else
-    {
+        wvlog << " m_bTag = " << static_cast<unsigned int>(m_bTag) << Qt::endl;
+    } else {
         wvlog << " metafile blip:" << Qt::endl;
         wvlog << " m_rgbUid = " << m_rgbUid << Qt::endl;
         wvlog << " m_cb = " << m_cb << Qt::endl;
         wvlog << " m_rcBounds = " << m_rcBounds << Qt::endl;
         wvlog << " m_ptSize = " << m_ptSize << Qt::endl;
         wvlog << " m_cbSave = " << m_cbSave << Qt::endl;
-        wvlog << " m_fCompression = " << static_cast<unsigned int> (m_fCompression) << Qt::endl;
-        wvlog << " m_fFilter = " << static_cast<unsigned int> (m_fFilter) << Qt::endl;
+        wvlog << " m_fCompression = " << static_cast<unsigned int>(m_fCompression) << Qt::endl;
+        wvlog << " m_fFilter = " << static_cast<unsigned int>(m_fFilter) << Qt::endl;
     }
 }
-

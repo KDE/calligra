@@ -13,20 +13,20 @@ class EnhancedPathShape;
 
 /// the different possible identifiers, taken from the odf spec
 enum Identifier {
-    IdentifierUnknown,   ///< unknown identifier
-    IdentifierPi,        ///< value of pi.
-    IdentifierLeft,      ///< left of svg:viewBox or draw:coordinate-origin-x
-    IdentifierTop,       ///< top of svg:viewBox or draw:coordinate-origin-y
-    IdentifierRight,     ///< right of svg:viewBox or draw:coordinate-origin-x + draw:coordinate-width
-    IdentifierBottom,    ///< bottom of svg:viewBox or draw:coordinate-origin-y + draw:coordinate-height
-    IdentifierXstretch,  ///< The value of draw:path-stretchpoint-x is used.
-    IdentifierYstretch,  ///< The value of draw:path-stretchpoint-y is used.
+    IdentifierUnknown, ///< unknown identifier
+    IdentifierPi, ///< value of pi.
+    IdentifierLeft, ///< left of svg:viewBox or draw:coordinate-origin-x
+    IdentifierTop, ///< top of svg:viewBox or draw:coordinate-origin-y
+    IdentifierRight, ///< right of svg:viewBox or draw:coordinate-origin-x + draw:coordinate-width
+    IdentifierBottom, ///< bottom of svg:viewBox or draw:coordinate-origin-y + draw:coordinate-height
+    IdentifierXstretch, ///< The value of draw:path-stretchpoint-x is used.
+    IdentifierYstretch, ///< The value of draw:path-stretchpoint-y is used.
     IdentifierHasStroke, ///< If the shape has a line style, a value of 1 is used.
-    IdentifierHasFill,   ///< If the shape has a fill style, a value of 1 is used.
-    IdentifierWidth,     ///< The width of the svg:viewBox is used.
-    IdentifierHeight,    ///< The height of the svg:viewBox is used.
-    IdentifierLogwidth,  ///< The width of the svg:viewBox in 1/100th mm is used.
-    IdentifierLogheight  ///< The height of the svg:viewBox in 1/100th mm is used.
+    IdentifierHasFill, ///< If the shape has a fill style, a value of 1 is used.
+    IdentifierWidth, ///< The width of the svg:viewBox is used.
+    IdentifierHeight, ///< The height of the svg:viewBox is used.
+    IdentifierLogwidth, ///< The width of the svg:viewBox in 1/100th mm is used.
+    IdentifierLogheight ///< The height of the svg:viewBox in 1/100th mm is used.
 };
 
 /// The bstract parameter class
@@ -41,8 +41,10 @@ public:
     virtual void modify(qreal value);
     /// returns string representation of the parameter
     virtual QString toString() const = 0;
+
 protected:
     EnhancedPathShape *parent();
+
 private:
     EnhancedPathShape *m_parent;
 };
@@ -55,6 +57,7 @@ public:
     EnhancedPathConstantParameter(qreal value, EnhancedPathShape *parent);
     qreal evaluate() override;
     QString toString() const override;
+
 private:
     qreal m_value; ///< the constant value
 };
@@ -71,6 +74,7 @@ public:
     /// Returns identifier type from given string
     static Identifier identifierFromString(const QString &text);
     QString toString() const override;
+
 private:
     Identifier m_identifier; ///< the identifier type
 };
@@ -84,6 +88,7 @@ public:
     qreal evaluate() override;
     void modify(qreal value) override;
     QString toString() const override;
+
 private:
     QString m_reference; ///< the reference, formula or modifier
 };

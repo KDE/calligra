@@ -20,7 +20,6 @@ private Q_SLOTS:
     void testApi();
     void testViewToDocument();
     void testDocumentToView();
-
 };
 
 #endif

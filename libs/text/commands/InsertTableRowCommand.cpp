@@ -5,23 +5,23 @@
 
 #include "InsertTableRowCommand.h"
 
-#include <KoTextEditor.h>
 #include "KoTableColumnAndRowStyleManager.h"
+#include <KoTextEditor.h>
 
-#include <QTextTableCell>
 #include <QTextTable>
+#include <QTextTableCell>
 
-#include <KLocalizedString>
 #include "TextDebug.h"
+#include <KLocalizedString>
 
 InsertTableRowCommand::InsertTableRowCommand(KoTextEditor *te, QTextTable *t, bool below, KUndo2Command *parent)
     : KUndo2Command(parent)
-    ,m_first(true)
-    ,m_textEditor(te)
-    ,m_table(t)
-    ,m_below(below)
+    , m_first(true)
+    , m_textEditor(te)
+    , m_table(t)
+    , m_below(below)
 {
-    if(below) {
+    if (below) {
         setText(kundo2_i18n("Insert Row Below"));
     } else {
         setText(kundo2_i18n("Insert Row Above"));
@@ -51,7 +51,7 @@ void InsertTableRowCommand::redo()
         m_table->insertRows(m_row, 1);
         carsManager.insertRows(m_row, 1, m_style);
 
-        if (m_below && m_row == m_table->rows()-1) {
+        if (m_below && m_row == m_table->rows() - 1) {
             // Copy the cells styles. when Qt doesn't do it for us
             for (int col = 0; col < m_table->columns(); ++col) {
                 QTextTableCell cell = m_table->cellAt(m_row - 1, col);

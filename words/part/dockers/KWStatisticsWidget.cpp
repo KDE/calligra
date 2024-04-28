@@ -8,22 +8,22 @@
 
 #include "KWStatisticsWidget.h"
 
-#include "Words.h"
 #include "KWDocument.h"
 #include "KWDocumentStatistics.h"
+#include "Words.h"
 #include "dockers/StatisticsPreferencesPopup.h"
 #include "ui_StatisticsPreferencesPopup.h"
 #include <KoIcon.h>
 #include <KoTextDocumentLayout.h>
 
-#include <KSharedConfig>
 #include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <QLocale>
 
 KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
-        : QWidget(parent),
-          m_document(nullptr)
+    : QWidget(parent)
+    , m_document(nullptr)
 {
     this->shortVersion = shortVersion;
 
@@ -122,7 +122,6 @@ KWStatisticsWidget::~KWStatisticsWidget()
 {
 }
 
-
 void KWStatisticsWidget::initUi()
 {
     m_wordsLabel = new QLabel(i18n("Words:"));
@@ -216,7 +215,7 @@ void KWStatisticsWidget::setLayoutDirection(KWStatisticsWidget::LayoutDirection 
     }
 }
 
-void KWStatisticsWidget::setCanvas(KWCanvas* canvas)
+void KWStatisticsWidget::setCanvas(KWCanvas *canvas)
 {
     if (!canvas) {
         return;

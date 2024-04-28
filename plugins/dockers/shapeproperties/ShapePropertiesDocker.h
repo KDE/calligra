@@ -7,8 +7,8 @@
 #ifndef SHAPEPROPERTIESDOCKER_H
 #define SHAPEPROPERTIESDOCKER_H
 
-#include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
+#include <KoDockFactoryBase.h>
 #include <QDockWidget>
 
 class KoShape;
@@ -22,18 +22,22 @@ public:
     explicit ShapePropertiesDocker(QWidget *parent = 0);
     ~ShapePropertiesDocker() override;
     /// reimplemented
-    QString observerName() const override { return QStringLiteral("ShapePropertiesDocker"); }
-    void setCanvas( KoCanvasBase *canvas ) override;
+    QString observerName() const override
+    {
+        return QStringLiteral("ShapePropertiesDocker");
+    }
+    void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
-    
+
 private Q_SLOTS:
     void selectionChanged();
-    void addWidgetForShape( KoShape * shape );
+    void addWidgetForShape(KoShape *shape);
     void shapePropertyChanged();
-    virtual void canvasResourceChanged( int key, const QVariant & res );
+    virtual void canvasResourceChanged(int key, const QVariant &res);
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // SHAPEPROPERTIESDOCKER_H

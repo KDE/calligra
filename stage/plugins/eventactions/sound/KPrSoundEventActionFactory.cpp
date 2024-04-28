@@ -8,7 +8,7 @@
 #include "KPrSoundEventActionWidget.h"
 
 KPrSoundEventActionFactory::KPrSoundEventActionFactory()
-: KoEventActionFactoryBase( KPrSoundEventActionId, "sound" )
+    : KoEventActionFactoryBase(KPrSoundEventActionId, "sound")
 {
 }
 
@@ -16,7 +16,7 @@ KPrSoundEventActionFactory::~KPrSoundEventActionFactory()
 {
 }
 
-KoEventAction * KPrSoundEventActionFactory::createEventAction()
+KoEventAction *KPrSoundEventActionFactory::createEventAction()
 {
     return new KPrSoundEventAction();
 }

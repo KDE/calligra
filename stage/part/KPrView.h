@@ -9,8 +9,8 @@
 #define KPRVIEW_H
 
 #include "stage_export.h"
-#include <QObject>
 #include <KoPAView.h>
+#include <QObject>
 
 class KPrDocument;
 class KPrPart;
@@ -29,29 +29,30 @@ class STAGE_EXPORT KPrView : public KoPAView
 {
     Q_OBJECT
     friend class KPrConfigureSlideShowDialog;
+
 public:
     explicit KPrView(KPrPart *part, KPrDocument *document, QWidget *parent = 0);
     ~KPrView() override;
 
     using KoPAViewBase::viewConverter;
-    KoViewConverter * viewConverter( KoPACanvasBase * canvas) override;
+    KoViewConverter *viewConverter(KoPACanvasBase *canvas) override;
 
     /**
      * Get the document object the view was initialised with
      */
-    KPrDocument * kprDocument() const;
+    KPrDocument *kprDocument() const;
 
 #ifndef QT_NO_DBUS
     /**
      * Get the view's dbus adaptor
      */
-    virtual KPrViewAdaptor * dbusObject() const;
+    virtual KPrViewAdaptor *dbusObject() const;
 #endif
 
     /**
      * Get the presentation view mode
      */
-    Q_INVOKABLE KPrViewModePresentation * presentationMode() const;
+    Q_INVOKABLE KPrViewModePresentation *presentationMode() const;
 
     /**
      * Get the slides sorter view mode
@@ -64,18 +65,18 @@ public:
     bool isPresentationRunning() const;
 
     /**
-      * Load zoom configuration
-      */
+     * Load zoom configuration
+     */
     void initZoomConfig();
 
     /**
-      * Restore zoom configuration
-      */
+     * Restore zoom configuration
+     */
     void restoreZoomConfig();
 
     /**
-      * Save zoom value
-      */
+     * Save zoom value
+     */
     void saveZoomConfig(KoZoomMode::Mode zoomMode, int zoom);
 
     /**
@@ -129,7 +130,7 @@ public Q_SLOTS:
 protected:
     void initGUI();
     void initActions();
-    bool event(QEvent* event) override;
+    bool event(QEvent *event) override;
 
 protected Q_SLOTS:
     void createAnimation();

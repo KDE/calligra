@@ -12,8 +12,10 @@
 
 #include <QObject>
 
-namespace Calligra {
-namespace Components {
+namespace Calligra
+{
+namespace Components
+{
 
 class DocumentType : public QObject
 {

@@ -45,4 +45,3 @@ bool m_read_t_args;
 KoFilter::ConversionStatus read_AlternateContent();
 KoFilter::ConversionStatus read_Choice();
 KoFilter::ConversionStatus read_Fallback();
-

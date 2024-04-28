@@ -7,9 +7,9 @@
 #ifndef KORESOURCETAGGING_TEST_H
 #define KORESOURCETAGGING_TEST_H
 
-#include <QObject>
-#include <KoConfig.h>
 #include "KoResourceTagStore.h"
+#include <KoConfig.h>
+#include <QObject>
 
 class KoResourceTaggingTest : public QObject
 {

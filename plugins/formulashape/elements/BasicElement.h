@@ -11,14 +11,14 @@
 #ifndef BASICELEMENT_H
 #define BASICELEMENT_H
 
-#include "koformula_export.h"
 #include "ElementFactory.h"
+#include "koformula_export.h"
 
 #include <QHash>
-#include <QList>
-#include <QString>
-#include <QRectF>
 #include <QLineF>
+#include <QList>
+#include <QRectF>
+#include <QString>
 class QPainter;
 class QVariant;
 class KoXmlWriter;
@@ -51,7 +51,8 @@ class TableDataElement;
  * lastCursorPosition and positionOfChild as well as
  * moveCursor (keyboard navigation) and setCursorTo (cursor placement by clicking).
  */
-class KOFORMULA_EXPORT BasicElement {
+class KOFORMULA_EXPORT BasicElement
+{
 public:
     /*
      * The standard constructor
@@ -64,39 +65,38 @@ public:
 
     /**
      * Get the element of the formula at the given point
-     * @param p the point to look for 
+     * @param p the point to look for
      * @return a pointer to a BasicElement
      */
-    BasicElement* childElementAt( const QPointF& p );
+    BasicElement *childElementAt(const QPointF &p);
 
     /**
      * Obtain a list of all child elements of this element - sorted in saving order
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*> childElements() const;
+    virtual const QList<BasicElement *> childElements() const;
 
     /**
      * Replace a child element
      * @param oldelement the child to replace
      * @param newelement the child @p oldelement is replaced with
-     */ 
-    virtual bool replaceChild( BasicElement* oldelement, BasicElement* newelement );
+     */
+    virtual bool replaceChild(BasicElement *oldelement, BasicElement *newelement);
 
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    virtual void paint( QPainter& painter, AttributeManager* am );
+    virtual void paint(QPainter &painter, AttributeManager *am);
 
     /**
      * Render the editing hints of the element to the given QPainter
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    virtual void paintEditingHints( QPainter& painter, AttributeManager* am );
+    virtual void paintEditingHints(QPainter &painter, AttributeManager *am);
 
-    
     /**
      * Calculate the minimum size of the element and the positions of its children
      *
@@ -111,7 +111,7 @@ public:
      *
      * @param am The AttributeManager providing information about attributes values
      */
-    virtual void layout( const AttributeManager* am );
+    virtual void layout(const AttributeManager *am);
 
     /**
      * Calculate the stretched size of the element.  This is called after layouting.
@@ -123,8 +123,8 @@ public:
      * @param cursor the cursor we test
      * @return true, if the element accepts the cursor
      */
-    virtual bool acceptCursor( const FormulaCursor& cursor );
-    
+    virtual bool acceptCursor(const FormulaCursor &cursor);
+
     /**
      * Return the coordinates of the line, where the cursor should be drawn
      * in coordinates relative to the formula element (or the flake shape)
@@ -132,99 +132,99 @@ public:
      * @return the cursor line
      */
     virtual QLineF cursorLine(int position) const;
-    
+
     virtual QPainterPath selectionRegion(const int pos1, const int pos2) const;
-    
-    virtual QList<BasicElement*> elementsBetween(int pos1, int pos2) const;
-    
+
+    virtual QList<BasicElement *> elementsBetween(int pos1, int pos2) const;
+
     /**
      * Move the cursor in the direction specified in cursor
      * @param newcursor the cursor we move around
      * @param oldcursor the former cursor position
      * @return true, if we moved the cursor
      */
-    virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
-    
+    virtual bool moveCursor(FormulaCursor &newcursor, FormulaCursor &oldcursor);
+
     /// @return The element's ElementType
     virtual ElementType elementType() const;
 
     /// Set the element's width to @p width
-    void setWidth( qreal width );
+    void setWidth(qreal width);
 
     /// @return The width of the element
     qreal width() const;
 
     /// Set the element's height to @p height
-    void setHeight( qreal height );
+    void setHeight(qreal height);
 
     /// @return The height of the element
     qreal height() const;
 
     /// @return The bounding rectangle of the element
-    const QRectF& boundingRect() const;
+    const QRectF &boundingRect() const;
 
     /// @return The absolute bounding rectangle of the element
     const QRectF absoluteBoundingRect() const;
 
     /**
      * place the cursor at the given point
-     * the point should be placed a the position in the element 
+     * the point should be placed a the position in the element
      * (or it's child) that is closest to the point
-     * in particular the point doesn't have to be within 
+     * in particular the point doesn't have to be within
      * boundingBox()
      * @param cursor The FormulaCursor to modify
      * @param point The point in coordinates relative to the elements local coordinate system
      * @return true, iff the cursor could be placed
      **/
-    virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
+    virtual bool setCursorTo(FormulaCursor &cursor, QPointF point);
 
     /// @return The bounding rectangle of the children, relative to the element
-    const QRectF& childrenBoundingRect() const;
+    const QRectF &childrenBoundingRect() const;
 
     /// Set the bounding rectangle of the children, relative to the element
     void setChildrenBoundingRect(const QRectF &rect);
 
     /// Set the element's baseline to @p baseLine
-    void setBaseLine( qreal baseLine );
+    void setBaseLine(qreal baseLine);
 
     /// @return The baseline of the element
     qreal baseLine() const;
 
     /// Set the element's origin inside the m_parentElement to @p origin
-    void setOrigin( QPointF origin );
+    void setOrigin(QPointF origin);
 
-    /// @return The element's origin 
+    /// @return The element's origin
     QPointF origin() const;
 
     /// Set the element's m_parentElement to @p parent
-    void setParentElement( BasicElement* parent );
+    void setParentElement(BasicElement *parent);
 
     /// @return The parent element of this BasicElement
-    BasicElement* parentElement() const;
+    BasicElement *parentElement() const;
 
     /// @return The last cursor position (number of available cursor positions - 1)
     virtual int endPosition() const;
-    
-    /** 
+
+    /**
      * @return the cursor position before the child in this element and -1 if it isn't a child
      * @param child  the childelement we are looking for
      */
-    virtual int positionOfChild(BasicElement* child) const;
-        
+    virtual int positionOfChild(BasicElement *child) const;
+
     /// @return the element right before the cursor position @p position and 0 if there is none
-    virtual BasicElement* elementBefore(int position) const;
-    
+    virtual BasicElement *elementBefore(int position) const;
+
     /// @return the element right after the cursor position @p position and 0 if there is none
-    virtual BasicElement* elementAfter(int position) const;
-    
+    virtual BasicElement *elementAfter(int position) const;
+
     /// Set the element's m_scaleFactor to @p scaleFactor
-    void setScaleFactor( qreal scaleFactor );
+    void setScaleFactor(qreal scaleFactor);
 
     /// @return The elements scale factor
     qreal scaleFactor() const;
 
     /// Set the elements scale level and sets the scale factor
-    void setScaleLevel( int scaleLevel );
+    void setScaleLevel(int scaleLevel);
 
     /// @return The elements scale level
     int scaleLevel() const;
@@ -234,34 +234,34 @@ public:
      * @param name The name of the attribute to be set
      * @param value The value to set for the attribute
      */
-    void setAttribute( const QString& name, const QVariant& value );
+    void setAttribute(const QString &name, const QVariant &value);
 
     /// @return The value of the attribute if it is set for this element
-    QString attribute( const QString& attribute ) const;
+    QString attribute(const QString &attribute) const;
 
     /// @return The value of the attribute if it is inherited
-    virtual QString inheritsAttribute( const QString& attribute ) const;
+    virtual QString inheritsAttribute(const QString &attribute) const;
 
     /// @return The default value of the attribute for this element
-    virtual QString attributesDefaultValue( const QString& attribute ) const;
+    virtual QString attributesDefaultValue(const QString &attribute) const;
 
     /// Whether displaystyle is set
     bool displayStyle() const;
-    
+
     /// Whether displaystyle is set.  This is updated by FormulaRenderer
     void setDisplayStyle(bool displayStyle);
 
     /// Read the element from MathML
-    bool readMathML( const KoXmlElement& element );
+    bool readMathML(const KoXmlElement &element);
 
-    /// Save the element to MathML 
-    void writeMathML( KoXmlWriter* writer, const QString& ns = "math" ) const;
+    /// Save the element to MathML
+    void writeMathML(KoXmlWriter *writer, const QString &ns = "math") const;
 
     /// @return true, if @p other is a descendant of this element
-    bool hasDescendant(BasicElement* other) const;
+    bool hasDescendant(BasicElement *other) const;
 
     /// @return first empty element, that is a descendant of this element, if there is one
-    BasicElement* emptyDescendant();
+    BasicElement *emptyDescendant();
 
     /// @return true, when the element is empty
     virtual bool isEmpty() const;
@@ -270,46 +270,46 @@ public:
     virtual bool isInferredRow() const;
 
     /// @return the formula element that is a descendant of this element
-    BasicElement* formulaElement();
+    BasicElement *formulaElement();
 
     /** writes the child element tree to qDebug()
      *  only for debugging purpose
      *  @param wrong indicates, if the parent is set wrong
      *  @param indent indentation level
      */
-    virtual void writeElementTree(int indent=0, bool wrong=false) const;
+    virtual void writeElementTree(int indent = 0, bool wrong = false) const;
 
     /// return the content of the element to qDebug(), only for debugging
     virtual const QString writeElementContent() const;
-    
+
     /// @return the first TableDataElement among the elements ancestors or 0 if there is none
-    TableDataElement* parentTableData();
+    TableDataElement *parentTableData();
 
 protected:
-    /// Read all attributes loaded and add them to the m_attributes map 
-    virtual bool readMathMLAttributes( const KoXmlElement& element );
+    /// Read all attributes loaded and add them to the m_attributes map
+    virtual bool readMathMLAttributes(const KoXmlElement &element);
 
     /// Read all content from the node - reimplemented by child elements
-    virtual bool readMathMLContent( const KoXmlElement& element );
+    virtual bool readMathMLContent(const KoXmlElement &element);
 
     /// Write all attributes of m_attributes to @p writer
-    virtual void writeMathMLAttributes( KoXmlWriter* writer ) const;
+    virtual void writeMathMLAttributes(KoXmlWriter *writer) const;
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    virtual void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
+    virtual void writeMathMLContent(KoXmlWriter *writer, const QString &ns) const;
 
-    static void cleanElementTree(BasicElement* element);
-    
+    static void cleanElementTree(BasicElement *element);
+
 private:
     /// The element's parent element - might not be null except of FormulaElement
-    BasicElement* m_parentElement;
+    BasicElement *m_parentElement;
 
     /// A hash map of all attributes where attribute name is assigned to a value
-    QHash<QString,QString> m_attributes;
+    QHash<QString, QString> m_attributes;
 
     /// The boundingRect storing the element's width, height, x and y
     QRectF m_boundingRect;
-    
+
     /** The boundingRect storing the child element's width, height, x and y
      *  The bottomRight hand corner will always be small that then size of
      *  m_boundingRect

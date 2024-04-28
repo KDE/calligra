@@ -9,7 +9,8 @@
 #include <QObject>
 #include <QString>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Part;
 class VoiceBar;
@@ -28,7 +29,7 @@ public:
      *
      * @param part the part this voice belongs to
      */
-    explicit Voice(Part* part);
+    explicit Voice(Part *part);
 
     /**
      * Destructor.
@@ -38,26 +39,27 @@ public:
     /**
      * Returns the part this voice is part of.
      */
-    Part* part();
+    Part *part();
 
     /**
      * Sets the part this voice belongs to. Do not call this method when the voice already is added to a part.
      *
      * @param part the new part this voice belongs to
      */
-    void setPart(Part* part);
+    void setPart(Part *part);
 
     /**
      * Returns the bar in this voice that contains the elements in the given bar in this piece of music.
      *
      * @param bar the bar for which to return the VoiceBar instance.
      */
-    VoiceBar* bar(Bar* bar);
+    VoiceBar *bar(Bar *bar);
 
-    VoiceBar* bar(int barIdx);
+    VoiceBar *bar(int barIdx);
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

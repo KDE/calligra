@@ -9,8 +9,8 @@
 
 #include <QDebug>
 
-ParagraphDecorations::ParagraphDecorations(QWidget* parent)
-        : QWidget(parent)
+ParagraphDecorations::ParagraphDecorations(QWidget *parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
 
@@ -20,7 +20,8 @@ ParagraphDecorations::ParagraphDecorations(QWidget* parent)
 
 void ParagraphDecorations::slotBackgroundColorChanged()
 {
-    m_backgroundColorReset = false; m_backgroundColorChanged = true;
+    m_backgroundColorReset = false;
+    m_backgroundColorChanged = true;
     emit parStyleChanged();
 }
 

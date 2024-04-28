@@ -32,5 +32,4 @@ private:
     int m_newCursor;
 };
 
-
 #endif // SELECTTEXTSTRATEGY_H

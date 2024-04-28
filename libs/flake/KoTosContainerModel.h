@@ -22,7 +22,7 @@ public:
     bool inheritsTransform(const KoShape *shape) const override;
     bool isChildLocked(const KoShape *child) const override;
     int count() const override;
-    QList<KoShape*> shapes() const override;
+    QList<KoShape *> shapes() const override;
     void containerChanged(KoShapeContainer *container, KoShape::ChangeType type) override;
 
 private:

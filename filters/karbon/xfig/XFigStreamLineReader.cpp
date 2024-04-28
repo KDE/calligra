@@ -11,11 +11,10 @@
 // Qt
 #include <QIODevice>
 
-
-XFigStreamLineReader::XFigStreamLineReader(QIODevice* device)
-  : m_TextStream(device)
-  , m_ObjectCode(-1)
-  , m_HasError((device==0)||(! device->isReadable()))
+XFigStreamLineReader::XFigStreamLineReader(QIODevice *device)
+    : m_TextStream(device)
+    , m_ObjectCode(-1)
+    , m_HasError((device == 0) || (!device->isReadable()))
 {
 }
 
@@ -25,10 +24,8 @@ XFigStreamLineReader::~XFigStreamLineReader()
 
 bool XFigStreamLineReader::atEnd() const
 {
-    return m_HasError ||
-           m_TextStream.atEnd();
+    return m_HasError || m_TextStream.atEnd();
 }
-
 
 bool XFigStreamLineReader::readNextObjectLine()
 {
@@ -42,14 +39,13 @@ bool XFigStreamLineReader::readNextObjectLine()
         QTextStream textStream(&m_Line, QIODevice::ReadOnly);
         textStream >> m_ObjectCode;
         m_HasError = (textStream.status() != QTextStream::Ok);
-        if (! m_HasError) {
+        if (!m_HasError) {
             m_Line.remove(0, textStream.pos());
         }
     }
 
     return m_HasError;
 }
-
 
 bool XFigStreamLineReader::readNextLine(CommentReadModus commentModus)
 {
@@ -85,5 +81,5 @@ bool XFigStreamLineReader::readNextLine(CommentReadModus commentModus)
         break;
     }
 
-    return (! m_HasError);
+    return (!m_HasError);
 }

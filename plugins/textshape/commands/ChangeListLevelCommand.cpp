@@ -6,25 +6,24 @@
 
 #include "ChangeListLevelCommand.h"
 
+#include "TextTool.h"
+#include <KLocalizedString>
+#include <KoList.h>
+#include <KoListLevelProperties.h>
 #include <KoParagraphStyle.h>
 #include <KoTextBlockData.h>
 #include <KoTextDocument.h>
-#include <KoList.h>
-#include "TextTool.h"
-#include <KoListLevelProperties.h>
-#include <KLocalizedString>
 #include <QDebug>
 
-#include <QTextCursor>
 #include <QHash>
 #include <QList>
+#include <QTextCursor>
 
-ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, ChangeListLevelCommand::CommandType type,
-                                               int coef, KUndo2Command *parent)
-    : KoTextCommandBase(parent),
-      m_type(type),
-      m_coefficient(coef),
-      m_first(true)
+ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, ChangeListLevelCommand::CommandType type, int coef, KUndo2Command *parent)
+    : KoTextCommandBase(parent)
+    , m_type(type)
+    , m_coefficient(coef)
+    , m_first(true)
 {
     setText(kundo2_i18n("Change List Level"));
 
@@ -33,7 +32,7 @@ ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, Change
 
     QTextBlock block = cursor.block().document()->findBlock(selectionStart);
 
-    bool oneOf = (selectionStart == selectionEnd); //ensures the block containing the cursor is selected in that case
+    bool oneOf = (selectionStart == selectionEnd); // ensures the block containing the cursor is selected in that case
 
     while (block.isValid() && ((block.position() < selectionEnd) || oneOf)) {
         m_blocks.append(block);
@@ -76,15 +75,14 @@ void ChangeListLevelCommand::redo()
             KoTextBlockData userData(currentBlock);
             userData.setCounterWidth(-1.0);
         }
-    }
-    else {
+    } else {
         for (int i = 0; i < m_blocks.size() && m_lists.value(i); ++i) {
             if (!m_lists.value(i)->style()->hasLevelProperties(m_levels.value(i))) {
                 KoListLevelProperties llp = m_lists.value(i)->style()->levelProperties(m_levels.value(i));
-                KoListLevelProperties parentLlp = m_lists.value(i)->style()->levelProperties(m_levels.value(i)-1);
+                KoListLevelProperties parentLlp = m_lists.value(i)->style()->levelProperties(m_levels.value(i) - 1);
                 if (llp.alignmentMode() == false) {
-                    //old list mode, see KoListLevelProperties::alignmentMode() documentation
-                    llp.setIndent((m_levels.value(i)-1) * 20); //TODO make this configurable
+                    // old list mode, see KoListLevelProperties::alignmentMode() documentation
+                    llp.setIndent((m_levels.value(i) - 1) * 20); // TODO make this configurable
                 } else {
                     llp.setTabStopPosition(parentLlp.tabStopPosition() + parentLlp.marginIncrease());
                     llp.setMargin(parentLlp.margin() + parentLlp.marginIncrease());

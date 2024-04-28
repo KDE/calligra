@@ -18,16 +18,19 @@
 */
 
 #include "footnotes97.h"
-#include "word_helper.h"
-#include "word97_generated.h"
 #include "olestream.h"
+#include "word97_generated.h"
+#include "word_helper.h"
 
 #include "wvlog.h"
 
 using namespace wvWare;
 
-Footnotes97::Footnotes97( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
-    m_footnoteRef( 0 ), m_footnoteRefIt( 0 ), m_endnoteRef( 0 ), m_endnoteRefIt( 0 )
+Footnotes97::Footnotes97(OLEStreamReader *tableStream, const Word97::FIB &fib)
+    : m_footnoteRef(0)
+    , m_footnoteRefIt(0)
+    , m_endnoteRef(0)
+    , m_endnoteRefIt(0)
 {
 #ifdef WV2_DEBUG_FOOTNOTES
     wvlog << "Footnotes97::Footnotes97()" << Qt::endl
@@ -43,14 +46,20 @@ Footnotes97::Footnotes97( OLEStreamReader* tableStream, const Word97::FIB& fib )
     wvlog << "ccpEdn:" << fib.ccpEdn;
 #endif
 
-    //TODO: validation required!
+    // TODO: validation required!
 
     // Footnotes
-    init( fib.fcPlcffndRef, fib.lcbPlcffndRef, fib.fcPlcffndTxt, fib.lcbPlcffndTxt,
-          tableStream, &m_footnoteRef, &m_footnoteRefIt, m_footnoteTxt, m_footnoteTxtIt );
+    init(fib.fcPlcffndRef,
+         fib.lcbPlcffndRef,
+         fib.fcPlcffndTxt,
+         fib.lcbPlcffndTxt,
+         tableStream,
+         &m_footnoteRef,
+         &m_footnoteRefIt,
+         m_footnoteTxt,
+         m_footnoteTxtIt);
     // Endnotes
-    init( fib.fcPlcfendRef, fib.lcbPlcfendRef, fib.fcPlcfendTxt, fib.lcbPlcfendTxt,
-          tableStream, &m_endnoteRef, &m_endnoteRefIt, m_endnoteTxt, m_endnoteTxtIt );
+    init(fib.fcPlcfendRef, fib.lcbPlcfendRef, fib.fcPlcfendTxt, fib.lcbPlcfendTxt, tableStream, &m_endnoteRef, &m_endnoteRefIt, m_endnoteTxt, m_endnoteTxtIt);
     tableStream->pop();
 }
 
@@ -62,35 +71,33 @@ Footnotes97::~Footnotes97()
     delete m_footnoteRef;
 }
 
-FootnoteData Footnotes97::footnote( U32 globalCP, bool& ok )
+FootnoteData Footnotes97::footnote(U32 globalCP, bool &ok)
 {
 #ifdef WV2_DEBUG_FOOTNOTES
     wvlog << "Footnotes97::footnote(): globalCP=" << globalCP << Qt::endl;
 #endif
     ok = true; // let's assume we will find it
-    if ( m_footnoteRefIt && m_footnoteRefIt->currentStart() == globalCP &&
-         m_footnoteTxtIt != m_footnoteTxt.end() ) {
+    if (m_footnoteRefIt && m_footnoteRefIt->currentStart() == globalCP && m_footnoteTxtIt != m_footnoteTxt.end()) {
         bool fAuto = m_footnoteRefIt->current()->nAuto;
-        ++( *m_footnoteRefIt ); // yay, but it is hard to make that more elegant
+        ++(*m_footnoteRefIt); // yay, but it is hard to make that more elegant
 
         U32 start = *m_footnoteTxtIt;
         ++m_footnoteTxtIt;
-        return FootnoteData( FootnoteData::Footnote, fAuto, start, *m_footnoteTxtIt );
+        return FootnoteData(FootnoteData::Footnote, fAuto, start, *m_footnoteTxtIt);
     }
 
-    if ( m_endnoteRefIt && m_endnoteRefIt->currentStart() == globalCP &&
-         m_endnoteTxtIt != m_endnoteTxt.end() ) {
+    if (m_endnoteRefIt && m_endnoteRefIt->currentStart() == globalCP && m_endnoteTxtIt != m_endnoteTxt.end()) {
         bool fAuto = m_endnoteRefIt->current()->nAuto;
-        ++( *m_endnoteRefIt ); // yay, but it is hard to make that more elegant
+        ++(*m_endnoteRefIt); // yay, but it is hard to make that more elegant
 
         U32 start = *m_endnoteTxtIt;
         ++m_endnoteTxtIt;
-        return FootnoteData( FootnoteData::Endnote, fAuto, start, *m_endnoteTxtIt );
+        return FootnoteData(FootnoteData::Endnote, fAuto, start, *m_endnoteTxtIt);
     }
 
     wvlog << "Bug: There is no footnote or endnote with the CP " << globalCP << Qt::endl;
     ok = false;
-    return FootnoteData( FootnoteData::Footnote, false, 0, 0 );
+    return FootnoteData(FootnoteData::Footnote, false, 0, 0);
 }
 
 U32 Footnotes97::nextFootnote() const
@@ -103,31 +110,37 @@ U32 Footnotes97::nextEndnote() const
     return m_endnoteRefIt && m_endnoteRefIt->current() ? m_endnoteRefIt->currentStart() : 0xffffffff;
 }
 
-void Footnotes97::init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamReader* tableStream,
-                        PLCF<Word97::FRD>** ref, PLCFIterator<Word97::FRD>** refIt,
-                        std::vector<U32>& txt, std::vector<U32>::const_iterator& txtIt )
+void Footnotes97::init(U32 fcRef,
+                       U32 lcbRef,
+                       U32 fcTxt,
+                       U32 lcbTxt,
+                       OLEStreamReader *tableStream,
+                       PLCF<Word97::FRD> **ref,
+                       PLCFIterator<Word97::FRD> **refIt,
+                       std::vector<U32> &txt,
+                       std::vector<U32>::const_iterator &txtIt)
 {
-    if ( lcbRef == 0 )
+    if (lcbRef == 0)
         return;
 
-    tableStream->seek( fcRef, WV2_SEEK_SET );
-    *ref = new PLCF<Word97::FRD>( lcbRef, tableStream );
-    *refIt = new PLCFIterator<Word97::FRD>( **ref );
+    tableStream->seek(fcRef, WV2_SEEK_SET);
+    *ref = new PLCF<Word97::FRD>(lcbRef, tableStream);
+    *refIt = new PLCFIterator<Word97::FRD>(**ref);
 
 #ifdef WV2_DEBUG_FOOTNOTES
     wvlog << "Footnotes97::init()" << Qt::endl;
-    ( *ref )->dumpCPs();
+    (*ref)->dumpCPs();
 #endif
 
-    if ( lcbTxt == 0 )
+    if (lcbTxt == 0)
         wvlog << "Bug: lcbTxt == 0 but lcbRef != 0" << Qt::endl;
     else {
-        if ( static_cast<U32>( tableStream->tell() ) != fcTxt ) {
+        if (static_cast<U32>(tableStream->tell()) != fcTxt) {
             wvlog << "Warning: Found a hole in the table stream" << Qt::endl;
-            tableStream->seek( fcTxt, WV2_SEEK_SET );
+            tableStream->seek(fcTxt, WV2_SEEK_SET);
         }
-        for ( U32 i = 0; i < lcbTxt; i += sizeof( U32 ) ) {
-            txt.push_back( tableStream->readU32() );
+        for (U32 i = 0; i < lcbTxt; i += sizeof(U32)) {
+            txt.push_back(tableStream->readU32());
 #ifdef WV2_DEBUG_FOOTNOTES
             wvlog << "read: " << txt.back() << Qt::endl;
 #endif
@@ -139,10 +152,10 @@ void Footnotes97::init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamR
 #endif
 }
 
-void Footnotes97::check( U32 globalCP )
+void Footnotes97::check(U32 globalCP)
 {
     while (nextFootnote() < globalCP) {
-        ++( *m_footnoteRefIt );
+        ++(*m_footnoteRefIt);
         ++m_footnoteTxtIt;
 #ifdef WV2_DEBUG_FOOTNOTES
         wvlog << "Footnote skipped!";
@@ -150,7 +163,7 @@ void Footnotes97::check( U32 globalCP )
     }
 
     while (nextEndnote() < globalCP) {
-        ++( *m_endnoteRefIt );
+        ++(*m_endnoteRefIt);
         ++m_endnoteTxtIt;
 #ifdef WV2_DEBUG_FOOTNOTES
         wvlog << "Endnote skipped!";

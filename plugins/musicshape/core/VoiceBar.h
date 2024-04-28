@@ -9,7 +9,8 @@
 #include <QObject>
 #include <QRectF>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Voice;
 class Bar;
@@ -26,14 +27,14 @@ public:
     /**
      * Creates a new empty voice bar.
      */
-    explicit VoiceBar(Bar* bar);
+    explicit VoiceBar(Bar *bar);
 
     /**
      * Destructor.
      */
     ~VoiceBar() override;
 
-    Bar* bar();
+    Bar *bar();
 
     /**
      * Returns the number of elements in the bar.
@@ -45,9 +46,9 @@ public:
      *
      * @param index the index of the element to return
      */
-    VoiceElement* element(int index);
+    VoiceElement *element(int index);
 
-    int indexOfElement(VoiceElement* element);
+    int indexOfElement(VoiceElement *element);
 
     /**
      * Adds an element to this bar. You should not add an element to more than one bar, because when the bar is deleted
@@ -55,7 +56,7 @@ public:
      *
      * @param element the element to add to this bar
      */
-    void addElement(VoiceElement* element);
+    void addElement(VoiceElement *element);
 
     /**
      * Inserts an element into this bar. You should not add an element to more than one bar, because when the bar is deleted
@@ -64,7 +65,7 @@ public:
      * @param element the element to insert into the bar
      * @param before the index of the element before which to insert the element
      */
-    void insertElement(VoiceElement* element, int before);
+    void insertElement(VoiceElement *element, int before);
 
     /**
      * Inserts an element into the bar. You should not add an element to more than one bar, because when the bar is deleted
@@ -73,7 +74,7 @@ public:
      * @param element the element to insert into the bar
      * @param before the element before which to insert the element
      */
-    void insertElement(VoiceElement* element, VoiceElement* before);
+    void insertElement(VoiceElement *element, VoiceElement *before);
 
     /**
      * Removes an element from this bar. If deleteElement is true, the element is not only removed but also deleted.
@@ -89,12 +90,13 @@ public:
      * @param element the element to remove
      * @param deleteElement should the element not only be removed but also deleted
      */
-    void removeElement(VoiceElement* element, bool deleteElement = true);
-    
+    void removeElement(VoiceElement *element, bool deleteElement = true);
+
     void updateAccidentals();
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

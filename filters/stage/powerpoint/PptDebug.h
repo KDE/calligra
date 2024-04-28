@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &PPT_LOG();
 
 #define debugPpt qCDebug(PPT_LOG)

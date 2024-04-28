@@ -9,9 +9,9 @@
 
 #include "stage_export.h"
 
-#include <QWidget>
 #include <KoShape.h>
 #include <QTimeLine>
+#include <QWidget>
 
 class KPrPage;
 class KPrPageEffect;
@@ -34,7 +34,7 @@ public:
      * @param page The current page used in the preview. If 0 the preview will be x
      * @param prevpage The page coming before @p page
      */
-    void setPageEffect( KPrPageEffect* pageEffect, KPrPage* page, KPrPage* prevpage );
+    void setPageEffect(KPrPageEffect *pageEffect, KPrPage *page, KPrPage *prevpage);
 
     /**
      * Run the current page effect. Does nothing if no page effect was set.
@@ -42,9 +42,9 @@ public:
     void runPreview();
 
 protected:
-    void paintEvent( QPaintEvent* event ) override;
-    void resizeEvent( QResizeEvent* event ) override;
-    void mousePressEvent( QMouseEvent* event ) override;
+    void paintEvent(QPaintEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
 
 protected Q_SLOTS:
     void animate();
@@ -54,10 +54,10 @@ private:
 
     QTimeLine m_timeLine;
 
-    KPrPageEffect* m_pageEffect;
-    KPrPageEffectRunner* m_pageEffectRunner;
-    KPrPage* m_page;
-    KPrPage* m_prevpage;
+    KPrPageEffect *m_pageEffect;
+    KPrPageEffectRunner *m_pageEffectRunner;
+    KPrPage *m_page;
+    KPrPage *m_prevpage;
 
     QPixmap m_oldPage;
     QPixmap m_newPage;

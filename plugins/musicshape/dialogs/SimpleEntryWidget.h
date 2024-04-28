@@ -12,7 +12,8 @@
 
 class SimpleEntryTool;
 
-class SimpleEntryWidget : public QWidget {
+class SimpleEntryWidget : public QWidget
+{
     Q_OBJECT
 public:
     explicit SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent = 0);

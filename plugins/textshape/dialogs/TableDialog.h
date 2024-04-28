@@ -11,7 +11,6 @@
 
 #include <KoDialog.h>
 
-
 class TableDialog : public KoDialog
 {
     Q_OBJECT
@@ -22,7 +21,6 @@ public:
     int rows();
 
 Q_SIGNALS:
-
 
 private:
     Ui::TableForm widget;

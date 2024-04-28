@@ -6,26 +6,30 @@
 
 #include "KoFindStrategy.h"
 
+#include <KLocalizedString>
+#include <KMessageBox>
 #include <kfind.h>
 #include <kfinddialog.h>
-#include <KMessageBox>
-#include <KLocalizedString>
 
 #include "FindDirection_p.h"
 
 class NonClosingFindDialog : public KFindDialog
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     NonClosingFindDialog(QWidget *parent)
-            : KFindDialog(parent) {}
+        : KFindDialog(parent)
+    {
+    }
 
-    void accept() override {}
+    void accept() override
+    {
+    }
 };
 
 KoFindStrategy::KoFindStrategy(QWidget *parent)
-        : m_dialog(new NonClosingFindDialog(parent))
-        , m_matches(0)
+    : m_dialog(new NonClosingFindDialog(parent))
+    , m_matches(0)
 {
     m_dialog->setOptions(KFind::FromCursor);
 }

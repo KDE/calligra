@@ -1,7 +1,4 @@
 
 
-
 #ifndef asdfasdf
 #define asdfasdf
-
-

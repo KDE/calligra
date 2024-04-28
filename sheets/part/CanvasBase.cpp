@@ -25,7 +25,7 @@
    SPDX-FileCopyrightText: 1999 Michael Reiher <michael.reiher@gmx.de>
    SPDX-FileCopyrightText: 1999 Boris Wedl <boris.wedl@kfunigraz.ac.at>
    SPDX-FileCopyrightText: 1999 Reginald Stadlbauer <reggie@kde.org>
-   
+
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
@@ -42,11 +42,11 @@
 #include <QToolTip>
 
 // Calligra
+#include <KoPointerEvent.h>
 #include <KoShapeManager.h>
 #include <KoToolProxy.h>
-#include <KoZoomHandler.h>
-#include <KoPointerEvent.h>
 #include <KoUnit.h>
+#include <KoZoomHandler.h>
 
 // Sheets
 #include "core/Cell.h"
@@ -71,13 +71,13 @@ using namespace Calligra::Sheets;
  *
  ****************************************************************/
 
-CanvasBase::CanvasBase(Doc* doc)
-        : KoCanvasBase(0)
-        , d(new Private)
+CanvasBase::CanvasBase(Doc *doc)
+    : KoCanvasBase(0)
+    , d(new Private)
 {
     d->offset = QPointF(0.0, 0.0);
     d->doc = doc;
-    
+
     // flake
     d->shapeManager = new KoShapeManager(this);
     d->toolProxy = new KoToolProxy(this);
@@ -90,12 +90,12 @@ CanvasBase::~CanvasBase()
     delete d;
 }
 
-Doc* CanvasBase::doc() const
+Doc *CanvasBase::doc() const
 {
     return d->doc;
 }
 
-void CanvasBase::gridSize(qreal* horizontal, qreal* vertical) const
+void CanvasBase::gridSize(qreal *horizontal, qreal *vertical) const
 {
     *horizontal = doc()->map()->defaultColumnFormat().width;
     *vertical = doc()->map()->defaultRowFormat().height;
@@ -106,20 +106,20 @@ bool CanvasBase::snapToGrid() const
     return false; // FIXME
 }
 
-void CanvasBase::addCommand(KUndo2Command* command)
+void CanvasBase::addCommand(KUndo2Command *command)
 {
     doc()->addCommand(command);
 }
 
-KoShapeManager* CanvasBase::shapeManager() const
+KoShapeManager *CanvasBase::shapeManager() const
 {
     return d->shapeManager;
 }
 
-void CanvasBase::updateCanvas(const QRectF& rc)
+void CanvasBase::updateCanvas(const QRectF &rc)
 {
     QRectF clipRect(viewConverter()->documentToView(rc.translated(-offset())));
-    clipRect.adjust(-2, -2, 2, 2);   // Resize to fit anti-aliasing
+    clipRect.adjust(-2, -2, 2, 2); // Resize to fit anti-aliasing
     update(clipRect);
 }
 
@@ -128,7 +128,7 @@ KoUnit CanvasBase::unit() const
     return doc()->unit();
 }
 
-KoToolProxy* CanvasBase::toolProxy() const
+KoToolProxy *CanvasBase::toolProxy() const
 {
     return d->toolProxy;
 }
@@ -157,7 +157,7 @@ bool CanvasBase::eventFilter(QObject *o, QEvent *e)
         return true;
     switch (e->type()) {
     case QEvent::KeyPress: {
-        QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
+        QKeyEvent *keyev = static_cast<QKeyEvent *>(e);
         if ((keyev->key() == Qt::Key_Tab) || (keyev->key() == Qt::Key_Backtab)) {
             keyPressed(keyev);
             return true;
@@ -165,12 +165,12 @@ bool CanvasBase::eventFilter(QObject *o, QEvent *e)
         break;
     }
     case QEvent::InputMethod: {
-        //QIMEvent * imev = static_cast<QIMEvent *>(e);
-        //processIMEvent( imev );
+        // QIMEvent * imev = static_cast<QIMEvent *>(e);
+        // processIMEvent( imev );
         break;
     }
     case QEvent::ToolTip: {
-        QHelpEvent* helpEvent = static_cast<QHelpEvent*>(e);
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
         showToolTip(helpEvent->pos());
     }
     default:
@@ -179,24 +179,26 @@ bool CanvasBase::eventFilter(QObject *o, QEvent *e)
     return false;
 }
 
-void CanvasBase::setDocumentOffset(const QPoint& offset)
+void CanvasBase::setDocumentOffset(const QPoint &offset)
 {
     const QPoint delta = offset - viewConverter()->documentToView(d->offset).toPoint();
     d->offset = viewConverter()->viewToDocument(offset);
 
-    ColumnHeader* ch = columnHeader();
-    if (ch) ch->scroll(-delta.x(), 0);
-    RowHeader* rh = rowHeader();
-    if (rh) rh->scroll(0, -delta.y());
+    ColumnHeader *ch = columnHeader();
+    if (ch)
+        ch->scroll(-delta.x(), 0);
+    RowHeader *rh = rowHeader();
+    if (rh)
+        rh->scroll(0, -delta.y());
 }
 
-void CanvasBase::setDocumentSize(const QSizeF& size)
+void CanvasBase::setDocumentSize(const QSizeF &size)
 {
     const QSize s = viewConverter()->documentToView(size).toSize();
     documentSizeChanged(s);
 }
 
-void CanvasBase::mousePressed(KoPointerEvent* event)
+void CanvasBase::mousePressed(KoPointerEvent *event)
 {
     KoPointerEvent *const origEvent = event;
     QPointF documentPosition;
@@ -221,7 +223,7 @@ void CanvasBase::mousePressed(KoPointerEvent* event)
     event = new KoPointerEvent(event, documentPosition);
 
     // flake
-    if(d->toolProxy) {
+    if (d->toolProxy) {
         d->toolProxy->mousePressEvent(event);
         if (!event->isAccepted() && event->button() == Qt::RightButton) {
             showContextMenu(origEvent->globalPosition().toPoint());
@@ -229,12 +231,12 @@ void CanvasBase::mousePressed(KoPointerEvent* event)
         }
     }
     if (layoutDirection() == Qt::RightToLeft) {
-        //delete event;
+        // delete event;
     }
     delete event;
 }
 
-void CanvasBase::mouseReleased(KoPointerEvent* event)
+void CanvasBase::mouseReleased(KoPointerEvent *event)
 {
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
@@ -249,16 +251,16 @@ void CanvasBase::mouseReleased(KoPointerEvent* event)
     event = new KoPointerEvent(event, documentPosition);
 
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy)
         d->toolProxy->mouseReleaseEvent(event);
 
     if (layoutDirection() == Qt::RightToLeft) {
-       // delete event;
+        // delete event;
     }
     delete event;
 }
 
-void CanvasBase::mouseMoved(KoPointerEvent* event)
+void CanvasBase::mouseMoved(KoPointerEvent *event)
 {
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
@@ -273,16 +275,16 @@ void CanvasBase::mouseMoved(KoPointerEvent* event)
     event = new KoPointerEvent(event, documentPosition);
 
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy)
         d->toolProxy->mouseMoveEvent(event);
 
     if (layoutDirection() == Qt::RightToLeft) {
-       // delete event;
+        // delete event;
     }
     delete event;
 }
 
-void CanvasBase::mouseDoubleClicked(KoPointerEvent* event)
+void CanvasBase::mouseDoubleClicked(KoPointerEvent *event)
 {
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
@@ -291,32 +293,33 @@ void CanvasBase::mouseDoubleClicked(KoPointerEvent* event)
         const QPoint position(width() - event->x(), event->y());
         const QPointF offset(this->offset().x(), this->offset().y());
         documentPosition = viewConverter()->viewToDocument(position) + offset;
-        // XXX TODO event = new QMouseEvent(QEvent::MouseButtonDblClick, position, mapToGlobal(position), event->button(), event->buttons(), event->modifiers());
+        // XXX TODO event = new QMouseEvent(QEvent::MouseButtonDblClick, position, mapToGlobal(position), event->button(), event->buttons(),
+        // event->modifiers());
     }
 
     event = new KoPointerEvent(event, documentPosition);
 
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy)
         d->toolProxy->mouseDoubleClickEvent(event);
 
     if (layoutDirection() == Qt::RightToLeft) {
-       // delete event;
+        // delete event;
     }
     delete event;
 }
 
-void CanvasBase::keyPressed(QKeyEvent* event)
+void CanvasBase::keyPressed(QKeyEvent *event)
 {
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy)
         d->toolProxy->keyPressEvent(event);
 }
 
 void CanvasBase::tabletEvent(QTabletEvent *e)
 {
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy)
         d->toolProxy->tabletEvent(e, viewConverter()->viewToDocument(e->pos() + offset()));
 }
 
@@ -329,20 +332,20 @@ QVariant CanvasBase::inputMethodQuery(Qt::InputMethodQuery query) const
 void CanvasBase::inputMethodEvent(QInputMethodEvent *event)
 {
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy)
         d->toolProxy->inputMethodEvent(event);
 }
 
-void CanvasBase::paint(QPainter* painter, const QRectF& painterRect)
+void CanvasBase::paint(QPainter *painter, const QRectF &painterRect)
 {
     if (doc()->map()->isLoading() || isViewLoading())
         return;
 
-     Sheet * const sheet = activeSheet();
+    Sheet *const sheet = activeSheet();
     if (!sheet)
         return;
 
-//     ElapsedTime et("Painting cells", ElapsedTime::PrintOnlyTime);
+    //     ElapsedTime et("Painting cells", ElapsedTime::PrintOnlyTime);
 
     painter->setClipRect(painterRect);
     painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
@@ -370,14 +373,14 @@ void CanvasBase::paint(QPainter* painter, const QRectF& painterRect)
     // flake
     painter->restore();
     // d->offset is the negated CanvasController offset in document coordinates.
-//     painter.save();
+    //     painter.save();
     painter->translate(-viewConverter()->documentToView(offset));
     d->shapeManager->paint(*painter, *viewConverter(), false);
-//     painter.restore();
-//     const QPointF p = -viewConverter()->documentToView(this->offset());
-//     painter.translate(p.x() /*+ width()*/, p.y());
+    //     painter.restore();
+    //     const QPointF p = -viewConverter()->documentToView(this->offset());
+    //     painter.translate(p.x() /*+ width()*/, p.y());
     painter->setRenderHint(QPainter::Antialiasing, false);
-    if(d->toolProxy)
+    if (d->toolProxy)
         d->toolProxy->paint(*painter, *viewConverter());
 }
 
@@ -394,21 +397,20 @@ void CanvasBase::focusIn(QFocusEvent *event)
     // the last editor, because clicking the canvas is a user interaction.
     // This screws up <Tab> though (David)
     selection()->emitRequestFocusEditor();
-    //XXX TODO QWidget::focusInEvent(event);
+    // XXX TODO QWidget::focusInEvent(event);
 }
 
-bool CanvasBase::dragEnter(const QMimeData* mimeData)
+bool CanvasBase::dragEnter(const QMimeData *mimeData)
 {
-    if (mimeData->hasText() ||
-            mimeData->hasFormat("application/x-calligra-sheets-snippet")) {
+    if (mimeData->hasText() || mimeData->hasFormat("application/x-calligra-sheets-snippet")) {
         return true;
     }
     return false;
 }
 
-bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, const QObject *source)
+bool CanvasBase::dragMove(const QMimeData *mimeData, const QPointF &eventPos, const QObject *source)
 {
-     Sheet * const sheet = activeSheet();
+    Sheet *const sheet = activeSheet();
     if (!sheet) {
         return false;
     }
@@ -454,7 +456,7 @@ bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, co
     const QPoint dragAnchor = selection()->boundingRect().topLeft();
     double xpos = sheet->columnPosition(dragAnchor.x());
     double ypos = sheet->rowPosition(dragAnchor.y());
-    double width  = sheet->columnFormats()->colWidth(dragAnchor.x());
+    double width = sheet->columnFormats()->colWidth(dragAnchor.x());
     double height = sheet->rowFormats()->rowHeight(dragAnchor.y());
 
     // consider also the selection rectangle
@@ -489,9 +491,9 @@ void CanvasBase::dragLeave()
 {
 }
 
-bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos, const QObject *source)
+bool CanvasBase::drop(const QMimeData *mimeData, const QPointF &eventPos, const QObject *source)
 {
-     Sheet * const sheet = activeSheet();
+    Sheet *const sheet = activeSheet();
     // FIXME Sheet protection: Not all cells have to be protected.
     if (!sheet || sheet->isProtected()) {
         return false;
@@ -505,7 +507,7 @@ bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos, const 
     const QPoint topLeft(selection()->boundingRect().topLeft());
     const double xpos = sheet->columnPosition(topLeft.x());
     const double ypos = sheet->rowPosition(topLeft.y());
-    const double width  = sheet->columnFormats()->colWidth(topLeft.x());
+    const double width = sheet->columnFormats()->colWidth(topLeft.x());
     const double height = sheet->rowFormats()->rowHeight(topLeft.y());
 
     const QRectF noGoArea(xpos - 1, ypos - 1, width + 3, height + 3);
@@ -532,7 +534,8 @@ bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos, const 
     command->add(Region(col, row, 1, 1, sheet));
     command->setMimeData(mimeData, (source == canvasWidget()));
 
-    if (source == canvasWidget()) command->setCutMode(true);
+    if (source == canvasWidget())
+        command->setCutMode(true);
 
     command->execute();
 
@@ -544,9 +547,9 @@ bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos, const 
     return true;
 }
 
-QRect CanvasBase::viewToCellCoordinates(const QRectF& viewRect) const
+QRect CanvasBase::viewToCellCoordinates(const QRectF &viewRect) const
 {
-     Sheet * const sheet = activeSheet();
+    Sheet *const sheet = activeSheet();
     if (!sheet)
         return QRect();
 
@@ -572,9 +575,9 @@ QRect CanvasBase::visibleCells() const
 //
 //---------------------------------------------
 
-QRectF CanvasBase::cellCoordinatesToView(const QRect& cellRange) const
+QRectF CanvasBase::cellCoordinatesToView(const QRect &cellRange) const
 {
-     Sheet * const sheet = activeSheet();
+    Sheet *const sheet = activeSheet();
     if (!sheet)
         return QRectF();
 
@@ -593,36 +596,29 @@ QRectF CanvasBase::cellCoordinatesToView(const QRect& cellRange) const
     return rect;
 }
 
-void CanvasBase::showToolTip(const QPoint& p)
+void CanvasBase::showToolTip(const QPoint &p)
 {
-     Sheet * const sheet = activeSheet();
+    Sheet *const sheet = activeSheet();
     if (!sheet)
         return;
-    SheetView * const sheetView = this->sheetView(sheet);
+    SheetView *const sheetView = this->sheetView(sheet);
 
     // Over which cell is the mouse ?
     qreal ypos, xpos;
     qreal dwidth = viewConverter()->viewToDocumentX(width());
     int col;
     if (sheet->layoutDirection() == Qt::RightToLeft)
-        col = sheet->leftColumn((dwidth - viewConverter()->viewToDocumentX(p.x()) +
-                                 xOffset()), xpos);
+        col = sheet->leftColumn((dwidth - viewConverter()->viewToDocumentX(p.x()) + xOffset()), xpos);
     else
-        col = sheet->leftColumn((viewConverter()->viewToDocumentX(p.x()) +
-                                 xOffset()), xpos);
+        col = sheet->leftColumn((viewConverter()->viewToDocumentX(p.x()) + xOffset()), xpos);
 
-
-    int row = sheet->topRow((viewConverter()->viewToDocumentY(p.y()) +
-                             yOffset()), ypos);
+    int row = sheet->topRow((viewConverter()->viewToDocumentY(p.y()) + yOffset()), ypos);
 
     Cell cell = Cell(sheet, col, row).masterCell();
-    const CellView& baseCellView = sheetView->cellView(cell.column(), cell.row());
+    const CellView &baseCellView = sheetView->cellView(cell.column(), cell.row());
     const bool baseIsObscured = sheetView->isObscured(cell.cellPosition());
-    const QPoint cellPos = baseIsObscured ? sheetView->obscuringCell(cell.cellPosition())
-                                          : cell.cellPosition();
-    const CellView& cellView = baseIsObscured
-               ? sheetView->cellView(cellPos)
-               : baseCellView;
+    const QPoint cellPos = baseIsObscured ? sheetView->obscuringCell(cell.cellPosition()) : cell.cellPosition();
+    const CellView &cellView = baseIsObscured ? sheetView->cellView(cellPos) : baseCellView;
     if (sheetView->isObscured(cellPos)) {
         cell = Cell(sheet, sheetView->obscuringCell(cellPos));
     }
@@ -679,9 +675,8 @@ void CanvasBase::showToolTip(const QPoint& p)
         tipText += "</p><h4>" + i18n("Comment:") + "</h4><p>" + cell.comment().replace('<', "&lt;");
 
     // Now we show the tip
-    QToolTip::showText(mapToGlobal(cellRect.bottomRight()),
-                       "<p>" + tipText.replace('\n', "<br>") + "</p>");
-                       // TODO XXX this, cellRect.translated(-mapToGlobal(cellRect.topLeft())));
+    QToolTip::showText(mapToGlobal(cellRect.bottomRight()), "<p>" + tipText.replace('\n', "<br>") + "</p>");
+    // TODO XXX this, cellRect.translated(-mapToGlobal(cellRect.topLeft())));
 }
 
 void CanvasBase::updateInputMethodInfo()
@@ -689,8 +684,7 @@ void CanvasBase::updateInputMethodInfo()
     updateMicroFocus();
 }
 
-KoViewConverter* CanvasBase::viewConverter() const
+KoViewConverter *CanvasBase::viewConverter() const
 {
     return zoomHandler();
 }
-

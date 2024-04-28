@@ -21,11 +21,13 @@ using namespace Calligra::Sheets;
 class PublicValueFormatter : public ValueFormatter
 {
 public:
-    explicit PublicValueFormatter(const ValueConverter* converter)
-            : ValueFormatter(converter) {}
+    explicit PublicValueFormatter(const ValueConverter *converter)
+        : ValueFormatter(converter)
+    {
+    }
 
-    using ValueFormatter::fractionFormat;
     using ValueFormatter::createNumberFormat;
+    using ValueFormatter::fractionFormat;
 };
 
 void TestValueFormatter::initTestCase()
@@ -192,63 +194,84 @@ void TestValueFormatter::testCreateNumberFormat_data()
 
     Style::FloatFormat def = Style::DefaultFloatFormat;
 
-    QTest::newRow("negative sign in format string") <<
-            -5.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "(-.)" << false << "(-5)";
+    QTest::newRow("negative sign in format string") << -5.0 << 0 << Format::Number << Style::DefaultFloatFormat << ""
+                                                    << "(-.)" << false << "(-5)";
 
-    QTest::newRow("unspecified precision 1") <<
-            1.0 << -1 << Format::Number << Style::DefaultFloatFormat << "" << "0" << false << "1";
-    QTest::newRow("unspecified precision 0.5") <<
-            0.5 << -1 << Format::Number << Style::DefaultFloatFormat << "" << "0" << false << "0.5";
+    QTest::newRow("unspecified precision 1") << 1.0 << -1 << Format::Number << Style::DefaultFloatFormat << ""
+                                             << "0" << false << "1";
+    QTest::newRow("unspecified precision 0.5") << 0.5 << -1 << Format::Number << Style::DefaultFloatFormat << ""
+                                               << "0" << false << "0.5";
 
-    QTest::newRow("no thousands separators") <<
-            3000.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << false << "3000";
-    QTest::newRow("with thousands separator") <<
-            3000.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "3,000";
-    QTest::newRow("bigger number 0") <<
-            300000.456 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "300,000";
-    QTest::newRow("bigger number 1") <<
-            300000.456 << 1 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "300,000.5";
-    QTest::newRow("bigger number 2") <<
-            300000.456 << 2 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "300,000.46";
-    QTest::newRow("bigger number 3") <<
-            300000.456 << 3 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "300,000.456";
+    QTest::newRow("no thousands separators") << 3000.0 << 0 << Format::Number << Style::DefaultFloatFormat << ""
+                                             << "" << false << "3000";
+    QTest::newRow("with thousands separator") << 3000.0 << 0 << Format::Number << Style::DefaultFloatFormat << ""
+                                              << "" << true << "3,000";
+    QTest::newRow("bigger number 0") << 300000.456 << 0 << Format::Number << Style::DefaultFloatFormat << ""
+                                     << "" << true << "300,000";
+    QTest::newRow("bigger number 1") << 300000.456 << 1 << Format::Number << Style::DefaultFloatFormat << ""
+                                     << "" << true << "300,000.5";
+    QTest::newRow("bigger number 2") << 300000.456 << 2 << Format::Number << Style::DefaultFloatFormat << ""
+                                     << "" << true << "300,000.46";
+    QTest::newRow("bigger number 3") << 300000.456 << 3 << Format::Number << Style::DefaultFloatFormat << ""
+                                     << "" << true << "300,000.456";
 
     // scientific
     Format::Type scient = Format::Scientific;
-    QTest::newRow("scientific: precision=0") << 123.0 << 0 << scient << def << "" << "" << false << "1E+02";
-    QTest::newRow("scientific: precision=1") << 123.0 << 1 << scient << def << "" << "" << false << "1.2E+02";
-    QTest::newRow("scientific: precision=2") << 123.0 << 2 << scient << def << "" << "" << false << "1.23E+02";
-    QTest::newRow("scientific: precision=3") << 123.0 << 3 << scient << def << "" << "" << false << "1.230E+02";
-    QTest::newRow("scientific: precision=-1") << 123.0 << -1 << scient << def << "" << "" << false << "1.23E+02";
+    QTest::newRow("scientific: precision=0") << 123.0 << 0 << scient << def << ""
+                                             << "" << false << "1E+02";
+    QTest::newRow("scientific: precision=1") << 123.0 << 1 << scient << def << ""
+                                             << "" << false << "1.2E+02";
+    QTest::newRow("scientific: precision=2") << 123.0 << 2 << scient << def << ""
+                                             << "" << false << "1.23E+02";
+    QTest::newRow("scientific: precision=3") << 123.0 << 3 << scient << def << ""
+                                             << "" << false << "1.230E+02";
+    QTest::newRow("scientific: precision=-1") << 123.0 << -1 << scient << def << ""
+                                              << "" << false << "1.23E+02";
 
-    QTest::newRow("scientific: format=0.E+0")    << 123.0 << 0 << scient << def << "" << "0.E+0" << false << "1E+2";
-    QTest::newRow("scientific: format=0.0E+0")   << 123.0 << 0 << scient << def << "" << "0.0E+0" << false << "1.2E+2";
-    QTest::newRow("scientific: format=0.00E+0")  << 123.0 << 0 << scient << def << "" << "0.00E+0" << false << "1.23E+2";
-    QTest::newRow("scientific: format=0.000E+0") << 123.0 << 0 << scient << def << "" << "0.000E+0" << false << "1.230E+2";
+    QTest::newRow("scientific: format=0.E+0") << 123.0 << 0 << scient << def << ""
+                                              << "0.E+0" << false << "1E+2";
+    QTest::newRow("scientific: format=0.0E+0") << 123.0 << 0 << scient << def << ""
+                                               << "0.0E+0" << false << "1.2E+2";
+    QTest::newRow("scientific: format=0.00E+0") << 123.0 << 0 << scient << def << ""
+                                                << "0.00E+0" << false << "1.23E+2";
+    QTest::newRow("scientific: format=0.000E+0") << 123.0 << 0 << scient << def << ""
+                                                 << "0.000E+0" << false << "1.230E+2";
     // pre/post
-    QTest::newRow("scientific: format=aaa 0.E+0 bbb") << 123.0 << 0 << scient << def << "" << "aaa 0.E+0 bbb" << false << "aaa 1E+2 bbb";
+    QTest::newRow("scientific: format=aaa 0.E+0 bbb") << 123.0 << 0 << scient << def << ""
+                                                      << "aaa 0.E+0 bbb" << false << "aaa 1E+2 bbb";
 
     // min number of exponent digits
-    QTest::newRow("scientific: exponent=1") << 123.0 << 0 << scient << def << "" << "0.E+0" << false << "1E+2";
-    QTest::newRow("scientific: exponent=2") << 123.0 << 0 << scient << def << "" << "0.E+00" << false << "1E+02";
-    QTest::newRow("scientific: exponent=3") << 123.0 << 0 << scient << def << "" << "0.E+000" << false << "1E+002";
+    QTest::newRow("scientific: exponent=1") << 123.0 << 0 << scient << def << ""
+                                            << "0.E+0" << false << "1E+2";
+    QTest::newRow("scientific: exponent=2") << 123.0 << 0 << scient << def << ""
+                                            << "0.E+00" << false << "1E+02";
+    QTest::newRow("scientific: exponent=3") << 123.0 << 0 << scient << def << ""
+                                            << "0.E+000" << false << "1E+002";
 
     // big numbers
-    QTest::newRow("scientific: big, exponent=1") << 1234567890123456789012345678901.0 << 0 << scient << def << "" << "0.E+0" << false << "1E+30";
-    QTest::newRow("scientific: big, exponent=2") << 1234567890123456789012345678901.0 << 0 << scient << def << "" << "0.E+00" << false << "1E+30";
-    QTest::newRow("scientific: big, exponent=3") << 1234567890123456789012345678901.0 << 0 << scient << def << "" << "0.E+000" << false << "1E+030";
-    QTest::newRow("scientific: big, round up") << 1234567890123456789012345678901.0 << 0 << scient << def << "" << "0.000000E+000" << false << "1.234568E+030";
+    QTest::newRow("scientific: big, exponent=1") << 1234567890123456789012345678901.0 << 0 << scient << def << ""
+                                                 << "0.E+0" << false << "1E+30";
+    QTest::newRow("scientific: big, exponent=2") << 1234567890123456789012345678901.0 << 0 << scient << def << ""
+                                                 << "0.E+00" << false << "1E+30";
+    QTest::newRow("scientific: big, exponent=3") << 1234567890123456789012345678901.0 << 0 << scient << def << ""
+                                                 << "0.E+000" << false << "1E+030";
+    QTest::newRow("scientific: big, round up") << 1234567890123456789012345678901.0 << 0 << scient << def << ""
+                                               << "0.000000E+000" << false << "1.234568E+030";
 
-    QTest::newRow("scientific: 10, exponent=1") << 12345678901.0 << 0 << scient << def << "" << "0.0E+0" << false << "1.2E+10";
-    QTest::newRow("scientific: 10, exponent=2") << 12345678901.0 << 0 << scient << def << "" << "0.0E+00" << false << "1.2E+10";
-    QTest::newRow("scientific: 10, exponent=3") << 12345678901.0 << 0 << scient << def << "" << "0.0E+000" << false << "1.2E+010";
+    QTest::newRow("scientific: 10, exponent=1") << 12345678901.0 << 0 << scient << def << ""
+                                                << "0.0E+0" << false << "1.2E+10";
+    QTest::newRow("scientific: 10, exponent=2") << 12345678901.0 << 0 << scient << def << ""
+                                                << "0.0E+00" << false << "1.2E+10";
+    QTest::newRow("scientific: 10, exponent=3") << 12345678901.0 << 0 << scient << def << ""
+                                                << "0.0E+000" << false << "1.2E+010";
 
-    QTest::newRow("scientific: dec pnt + exp end in 0") << 12345678901.0 << 0 << scient << def << "" << "0.0E+000" << false << "1.2E+010";
-    QTest::newRow("scientific: dec pnt + value end in 0") << 12300000000.0 << 0 << scient << def << "" << "0.00000E+000" << false << "1.23000E+010";
+    QTest::newRow("scientific: dec pnt + exp end in 0") << 12345678901.0 << 0 << scient << def << ""
+                                                        << "0.0E+000" << false << "1.2E+010";
+    QTest::newRow("scientific: dec pnt + value end in 0") << 12300000000.0 << 0 << scient << def << ""
+                                                          << "0.00000E+000" << false << "1.23000E+010";
 
-    QTest::newRow("with thousands separators and decimal point") <<
-            3000123.456 << 3 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "3,000,123.456";
-
+    QTest::newRow("with thousands separators and decimal point") << 3000123.456 << 3 << Format::Number << Style::DefaultFloatFormat << ""
+                                                                 << "" << true << "3,000,123.456";
 }
 
 void TestValueFormatter::testCreateNumberFormat()
@@ -270,6 +293,5 @@ void TestValueFormatter::testCreateNumberFormat()
     auto actual = fmt.createNumberFormat(num, precision, formatType, floatFormat, currencySymbol, formatString, thousandsSep);
     QCOMPARE(actual, expected);
 }
-
 
 QTEST_MAIN(TestValueFormatter)

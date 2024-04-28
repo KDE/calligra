@@ -7,8 +7,8 @@
 #ifndef __rdf_KoRdfSemanticItemViewSite_h__
 #define __rdf_KoRdfSemanticItemViewSite_h__
 
-#include "kordf_export.h"
 #include "RdfForward.h"
+#include "kordf_export.h"
 // Soprano
 #include <Soprano/Soprano>
 
@@ -16,7 +16,6 @@ class KoCanvasBase;
 class KoCanvasResourceManager;
 
 class KoRdfSemanticItemViewSitePrivate;
-
 
 /**
  * @short Handling a specific reference to a semantic item in the document text.
@@ -37,7 +36,8 @@ class KoRdfSemanticItemViewSitePrivate;
  */
 class KORDF_EXPORT KoRdfSemanticItemViewSite
 {
-    KoRdfSemanticItemViewSitePrivate * const d;
+    KoRdfSemanticItemViewSitePrivate *const d;
+
 public:
     /**
      * Performing actions on a specific reference to a semantic item in the document.
@@ -93,7 +93,6 @@ public:
     void select(KoCanvasBase *canvas);
 
 private:
-
     /**
      * This is similar to the linkingSubject() used by KoRdfSemanticItem
      * in that you have:
@@ -129,8 +128,6 @@ private:
      * document
      */
     void selectRange(KoCanvasResourceManager *provider, int startpos, int endpos);
-
 };
 
 #endif
-

@@ -16,18 +16,17 @@
 #include <KLocalizedString>
 
 // Calligra
-#include <interfaces/KoChartModel.h>
 #include <KoIcon.h>
+#include <interfaces/KoChartModel.h>
 
 // KChart
 
 // KoChart
+#include "ChartDebug.h"
 #include "ChartProxyModel.h"
 #include "PlotArea.h"
-#include "ChartDebug.h"
 
 using namespace KoChart;
-
 
 StockConfigWidget::StockConfigWidget(QWidget *parent)
     : ConfigSubWidgetBase(parent)
@@ -55,7 +54,7 @@ void StockConfigWidget::init()
     connect(m_ui.lossMarker, &KColorButton::changed, this, &StockConfigWidget::lossClicked);
 }
 
-void StockConfigWidget::open(ChartShape* shape)
+void StockConfigWidget::open(ChartShape *shape)
 {
     ConfigSubWidgetBase::open(shape);
     m_plotArea = 0;
@@ -79,7 +78,7 @@ void StockConfigWidget::updateData(ChartType type, ChartSubtype subtype)
     m_ui.lossMarker->setColor(m_plotArea->stockLossBrush().color());
 }
 
-void StockConfigWidget::gainClicked(const QColor& color)
+void StockConfigWidget::gainClicked(const QColor &color)
 {
     QBrush brush = QBrush(color);
     brush.setStyle(Qt::SolidPattern);
@@ -87,7 +86,7 @@ void StockConfigWidget::gainClicked(const QColor& color)
     chart->updateAll();
 }
 
-void StockConfigWidget::lossClicked(const QColor& color)
+void StockConfigWidget::lossClicked(const QColor &color)
 {
     QBrush brush = QBrush(color);
     brush.setStyle(Qt::SolidPattern);

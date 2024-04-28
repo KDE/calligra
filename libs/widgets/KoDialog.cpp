@@ -11,24 +11,24 @@
 #include "KoDialog_p.h"
 
 #include <QApplication>
+#include <QDebug>
 #include <QDialogButtonBox>
 #include <QHBoxLayout>
 #include <QHideEvent>
 #include <QPointer>
+#include <QPushButton>
+#include <QScreen>
 #include <QStyle>
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWhatsThis>
-#include <QDebug>
-#include <QPushButton>
-#include <QScreen>
 
 #include <KConfig>
 #include <KLocalizedString>
 
+#include <khelpclient.h>
 #include <kseparator.h>
 #include <kstandardguiitem.h>
-#include <khelpclient.h>
 #include <kurllabel.h>
 #include <kwindowconfig.h>
 
@@ -56,7 +56,8 @@ void KoDialogPrivate::queuedLayoutUpdate()
     QPointer<QWidget> focusWidget = mMainWidget ? mMainWidget->focusWidget() : 0;
 
     if (q->layout() && q->layout() != mTopLayout) {
-        qWarning() << q->metaObject()->className() << "created with a layout; don't do that, KoDialog takes care of it, use mainWidget or setMainWidget instead";
+        qWarning() << q->metaObject()->className()
+                   << "created with a layout; don't do that, KoDialog takes care of it, use mainWidget or setMainWidget instead";
         delete q->layout();
     }
 
@@ -141,7 +142,9 @@ void KoDialogPrivate::appendButton(KoDialog::ButtonCode key, const KGuiItem &ite
 
     mButtonList.insert(key, button);
 
-    QObject::connect(button, &QPushButton::clicked, q_ptr, [this, key] (bool) { q_ptr->slotButtonClicked(key); });
+    QObject::connect(button, &QPushButton::clicked, q_ptr, [this, key](bool) {
+        q_ptr->slotButtonClicked(key);
+    });
 
     if (key == mDefaultButton) {
         // Now that it exists, set it as default
@@ -267,7 +270,7 @@ void KoDialog::setButtonsOrientation(Qt::Orientation orientation)
         }
 
         if (d->mButtonOrientation == Qt::Vertical) {
-            enableLinkedHelp(false);    // 2000-06-18 Espen: No support for this yet.
+            enableLinkedHelp(false); // 2000-06-18 Espen: No support for this yet.
         }
     }
 }
@@ -282,7 +285,7 @@ void KoDialog::setDefaultButton(ButtonCode newDefaultButton)
     Q_D(KoDialog);
 
     if (newDefaultButton == None) {
-        newDefaultButton = NoDefault;    // #148969
+        newDefaultButton = NoDefault; // #148969
     }
 
     const KoDialog::ButtonCode oldDefault = defaultButton();
@@ -401,14 +404,12 @@ void KoDialog::keyPressEvent(QKeyEvent *event)
                 event->accept();
                 return;
             }
-
         }
     } else if (event->key() == Qt::Key_F1 && event->modifiers() == Qt::ShiftModifier) {
         QWhatsThis::enterWhatsThisMode();
         event->accept();
         return;
-    } else if (event->modifiers() == Qt::ControlModifier &&
-               (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
+    } else if (event->modifiers() == Qt::ControlModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
         // accept the dialog when Ctrl-Return is pressed
         QPushButton *button = this->button(Ok);
 
@@ -437,9 +438,7 @@ int KoDialog::groupSpacingHint()
     return QApplication::fontMetrics().lineSpacing();
 }
 
-QString KoDialog::makeStandardCaption(const QString &userCaption,
-                                     QWidget *window,
-                                     CaptionFlags flags)
+QString KoDialog::makeStandardCaption(const QString &userCaption, QWidget *window, CaptionFlags flags)
 {
     Q_UNUSED(window);
     QString caption = qApp->applicationDisplayName();
@@ -453,9 +452,7 @@ QString KoDialog::makeStandardCaption(const QString &userCaption,
     if (!userCaption.isEmpty()) {
         // Add the application name if:
         // User asked for it, it's not a duplication  and the app name (caption()) is not empty
-        if (flags & AppNameCaption &&
-                !caption.isEmpty() &&
-                !userCaption.endsWith(caption)) {
+        if (flags & AppNameCaption && !caption.isEmpty() && !userCaption.endsWith(caption)) {
             // TODO: check to see if this is a transient/secondary window before trying to add the app name
             //       on platforms that need this
             captionString += i18nc("Document/application separator in titlebar", " – ") + caption;
@@ -490,7 +487,7 @@ void KoDialog::setPlainCaption(const QString &caption)
     }
 }
 
-void KoDialog::resizeLayout(QWidget *widget, int margin, int spacing)   //static
+void KoDialog::resizeLayout(QWidget *widget, int margin, int spacing) // static
 {
     if (widget->layout()) {
         resizeLayout(widget->layout(), margin, spacing);
@@ -506,7 +503,7 @@ void KoDialog::resizeLayout(QWidget *widget, int margin, int spacing)   //static
     }
 }
 
-void KoDialog::resizeLayout(QLayout *layout, int margin, int spacing)   //static
+void KoDialog::resizeLayout(QLayout *layout, int margin, int spacing) // static
 {
     QLayoutItem *child;
     int pos = 0;
@@ -527,7 +524,7 @@ void KoDialog::resizeLayout(QLayout *layout, int margin, int spacing)   //static
 
 static QRect screenRect(QWidget *widget, int)
 {
-    auto screen =  QGuiApplication::primaryScreen();
+    auto screen = QGuiApplication::primaryScreen();
     return screen->geometry();
 }
 
@@ -539,8 +536,7 @@ void KoDialog::centerOnScreen(QWidget *widget, int screen)
 
     QRect rect = screenRect(widget, screen);
 
-    widget->move(rect.center().x() - widget->width() / 2,
-                 rect.center().y() - widget->height() / 2);
+    widget->move(rect.center().x() - widget->width() / 2, rect.center().y() - widget->height() / 2);
 }
 
 bool KoDialog::avoidArea(QWidget *widget, const QRect &area, int screen)
@@ -551,11 +547,11 @@ bool KoDialog::avoidArea(QWidget *widget, const QRect &area, int screen)
 
     QRect fg = widget->frameGeometry();
     if (!fg.intersects(area)) {
-        return true;    // nothing to do.
+        return true; // nothing to do.
     }
 
     const QRect scr = screenRect(widget, screen);
-    QRect avoid(area);   // let's add some margin
+    QRect avoid(area); // let's add some margin
     avoid.translate(-5, -5);
     avoid.setRight(avoid.right() + 10);
     avoid.setBottom(avoid.bottom() + 10);
@@ -564,7 +560,7 @@ bool KoDialog::avoidArea(QWidget *widget, const QRect &area, int screen)
         // We need to move the widget up or down
         int spaceAbove = qMax(0, avoid.top() - scr.top());
         int spaceBelow = qMax(0, scr.bottom() - avoid.bottom());
-        if (spaceAbove > spaceBelow)   // where's the biggest side?
+        if (spaceAbove > spaceBelow) // where's the biggest side?
             if (fg.height() <= spaceAbove) { // big enough?
                 fg.setY(avoid.top() - fg.height());
             } else {
@@ -581,7 +577,7 @@ bool KoDialog::avoidArea(QWidget *widget, const QRect &area, int screen)
         // We need to move the widget left or right
         const int spaceLeft = qMax(0, avoid.left() - scr.left());
         const int spaceRight = qMax(0, scr.right() - avoid.right());
-        if (spaceLeft > spaceRight)   // where's the biggest side?
+        if (spaceLeft > spaceRight) // where's the biggest side?
             if (fg.width() <= spaceLeft) { // big enough?
                 fg.setX(avoid.left() - fg.width());
             } else {
@@ -843,7 +839,6 @@ void KoDialog::setDetailsWidgetVisible(bool visible)
         if (layout()) {
             layout()->activate();
         }
-
     }
 
     d->mSettingDetails = false;
@@ -931,7 +926,9 @@ void KoDialog::enableLinkedHelp(bool state)
         d->mUrlHelp->setFloatEnabled(true);
         d->mUrlHelp->setUnderline(true);
         d->mUrlHelp->setMinimumHeight(fontMetrics().height() + marginHint());
-        connect(d->mUrlHelp, QOverload<>::of(&KUrlLabel::leftClickedUrl), this, [this]() { d_func()->helpLinkClicked(); });
+        connect(d->mUrlHelp, QOverload<>::of(&KUrlLabel::leftClickedUrl), this, [this]() {
+            d_func()->helpLinkClicked();
+        });
 
         d->mUrlHelp->show();
     } else {
@@ -945,7 +942,7 @@ void KoDialog::enableLinkedHelp(bool state)
 void KoDialog::setHelp(const QString &anchor, const QString &appname)
 {
     Q_D(KoDialog);
-    d->mAnchor  = anchor;
+    d->mAnchor = anchor;
     d->mHelpApp = appname;
 }
 

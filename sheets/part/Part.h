@@ -51,12 +51,11 @@ public:
     KoMainWindow *createMainWindow() override; /// reimplemented
 
 protected:
-    KoView* createViewInstance(KoDocument *document, QWidget*) override; /// reimplemented
+    KoView *createViewInstance(KoDocument *document, QWidget *) override; /// reimplemented
 
-    void openTemplate(const QUrl& url) override; /// reimplemented
+    void openTemplate(const QUrl &url) override; /// reimplemented
 
     Doc *m_document;
-
 };
 
 } // namespace Sheets

@@ -6,21 +6,21 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 
 #include "KoFilterChain.h"
 
-#include "KoFilterManager.h"  // KoFilterManager::filterAvailable, private API
+#include "KoDocument.h"
 #include "KoDocumentEntry.h"
 #include "KoFilterEntry.h"
-#include "KoDocument.h"
+#include "KoFilterManager.h" // KoFilterManager::filterAvailable, private API
 #include "KoPart.h"
 
-#include "PriorityQueue_p.h"
-#include "KoFilterGraph.h"
-#include "KoFilterEdge.h"
 #include "KoFilterChainLink.h"
+#include "KoFilterEdge.h"
+#include "KoFilterGraph.h"
 #include "KoFilterVertex.h"
+#include "PriorityQueue_p.h"
 
 #include <QMetaMethod>
-#include <QTemporaryFile>
 #include <QMimeDatabase>
+#include <QTemporaryFile>
 
 #include <MainDebug.h>
 
@@ -30,15 +30,22 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 // Please always keep the strings and the length in sync!
 using namespace CalligraFilter;
 
-
-KoFilterChain::KoFilterChain(const KoFilterManager* manager) :
-        m_manager(manager), m_state(Beginning), m_inputStorage(0),
-        m_inputStorageDevice(0), m_outputStorage(0), m_outputStorageDevice(0),
-        m_inputDocument(0), m_outputDocument(0), m_inputTempFile(0),
-        m_outputTempFile(0), m_inputQueried(Nil), m_outputQueried(Nil), d(0)
+KoFilterChain::KoFilterChain(const KoFilterManager *manager)
+    : m_manager(manager)
+    , m_state(Beginning)
+    , m_inputStorage(0)
+    , m_inputStorageDevice(0)
+    , m_outputStorage(0)
+    , m_outputStorageDevice(0)
+    , m_inputDocument(0)
+    , m_outputDocument(0)
+    , m_inputTempFile(0)
+    , m_outputTempFile(0)
+    , m_inputQueried(Nil)
+    , m_outputQueried(Nil)
+    , d(0)
 {
 }
-
 
 KoFilterChain::~KoFilterChain()
 {
@@ -57,14 +64,13 @@ KoFilter::ConversionStatus KoFilterChain::invokeChain()
     int count = m_chainLinks.count();
 
     // This is needed due to nasty Microsoft design
-    const ChainLink* parentChainLink = 0;
+    const ChainLink *parentChainLink = 0;
     if (filterManagerParentChain())
         parentChainLink = filterManagerParentChain()->m_chainLinks.current();
 
     // No iterator here, as we need m_chainLinks.current() in outputDocument()
     m_chainLinks.first();
-    for (; count > 1 && m_chainLinks.current() && status == KoFilter::OK;
-            m_chainLinks.next(), --count) {
+    for (; count > 1 && m_chainLinks.current() && status == KoFilter::OK; m_chainLinks.next(), --count) {
         status = m_chainLinks.current()->invokeFilter(parentChainLink);
         m_state = Middle;
         manageIO();
@@ -108,14 +114,12 @@ QString KoFilterChain::inputFile()
     m_inputQueried = File;
 
     if (m_state & Beginning) {
-        if (static_cast<KoFilterManager::Direction>(filterManagerDirection()) ==
-                KoFilterManager::Import)
+        if (static_cast<KoFilterManager::Direction>(filterManagerDirection()) == KoFilterManager::Import)
             m_inputFile = filterManagerImportFile();
         else
             inputFileHelper(filterManagerKoDocument(), filterManagerImportFile());
-    } else
-        if (m_inputFile.isEmpty())
-            inputFileHelper(m_inputDocument, QString());
+    } else if (m_inputFile.isEmpty())
+        inputFileHelper(m_inputDocument, QString());
 
     return m_inputFile;
 }
@@ -136,9 +140,8 @@ QString KoFilterChain::outputFile()
     m_outputQueried = File;
 
     if (m_state & End) {
-        if (static_cast<KoFilterManager::Direction>(filterManagerDirection()) ==
-                KoFilterManager::Import)
-            outputFileHelper(false);    // This (last) one gets deleted by the caller
+        if (static_cast<KoFilterManager::Direction>(filterManagerDirection()) == KoFilterManager::Import)
+            outputFileHelper(false); // This (last) one gets deleted by the caller
         else
             m_outputFile = filterManagerExportFile();
     } else
@@ -147,29 +150,25 @@ QString KoFilterChain::outputFile()
     return m_outputFile;
 }
 
-KoStoreDevice* KoFilterChain::storageFile(const QString& name, KoStore::Mode mode)
+KoStoreDevice *KoFilterChain::storageFile(const QString &name, KoStore::Mode mode)
 {
     // Plain normal use case
-    if (m_inputQueried == Storage && mode == KoStore::Read &&
-            m_inputStorage && m_inputStorage->mode() == KoStore::Read)
+    if (m_inputQueried == Storage && mode == KoStore::Read && m_inputStorage && m_inputStorage->mode() == KoStore::Read)
         return storageNewStreamHelper(&m_inputStorage, &m_inputStorageDevice, name);
-    else if (m_outputQueried == Storage && mode == KoStore::Write &&
-             m_outputStorage && m_outputStorage->mode() == KoStore::Write)
+    else if (m_outputQueried == Storage && mode == KoStore::Write && m_outputStorage && m_outputStorage->mode() == KoStore::Write)
         return storageNewStreamHelper(&m_outputStorage, &m_outputStorageDevice, name);
     else if (m_inputQueried == Nil && mode == KoStore::Read)
-        return storageHelper(inputFile(), name, KoStore::Read,
-                             &m_inputStorage, &m_inputStorageDevice);
+        return storageHelper(inputFile(), name, KoStore::Read, &m_inputStorage, &m_inputStorageDevice);
     else if (m_outputQueried == Nil && mode == KoStore::Write)
-        return storageHelper(outputFile(), name, KoStore::Write,
-                             &m_outputStorage, &m_outputStorageDevice);
+        return storageHelper(outputFile(), name, KoStore::Write, &m_outputStorage, &m_outputStorageDevice);
     else {
         warnFilter << "Oooops, how did we get here? You already asked for a"
-        << " different source/destination?" << Qt::endl;
+                   << " different source/destination?" << Qt::endl;
         return 0;
     }
 }
 
-KoDocument* KoFilterChain::inputDocument()
+KoDocument *KoFilterChain::inputDocument()
 {
     if (m_inputQueried == Document)
         return m_inputDocument;
@@ -178,9 +177,7 @@ KoDocument* KoFilterChain::inputDocument()
         return 0;
     }
 
-    if ((m_state & Beginning) &&
-            static_cast<KoFilterManager::Direction>(filterManagerDirection()) == KoFilterManager::Export &&
-            filterManagerKoDocument())
+    if ((m_state & Beginning) && static_cast<KoFilterManager::Direction>(filterManagerDirection()) == KoFilterManager::Export && filterManagerKoDocument())
         m_inputDocument = filterManagerKoDocument();
     else if (!m_inputDocument)
         m_inputDocument = createDocument(inputFile());
@@ -189,7 +186,7 @@ KoDocument* KoFilterChain::inputDocument()
     return m_inputDocument;
 }
 
-KoDocument* KoFilterChain::outputDocument()
+KoDocument *KoFilterChain::outputDocument()
 {
     // sanity check: No embedded filter should ask for a document
     // ###### CHECK: This will break as soon as we support exporting embedding filters
@@ -205,9 +202,7 @@ KoDocument* KoFilterChain::outputDocument()
         return 0;
     }
 
-    if ((m_state & End) &&
-            static_cast<KoFilterManager::Direction>(filterManagerDirection()) == KoFilterManager::Import &&
-            filterManagerKoDocument())
+    if ((m_state & End) && static_cast<KoFilterManager::Direction>(filterManagerDirection()) == KoFilterManager::Import && filterManagerKoDocument())
         m_outputDocument = filterManagerKoDocument();
     else
         m_outputDocument = createDocument(m_chainLinks.current()->to());
@@ -219,7 +214,7 @@ KoDocument* KoFilterChain::outputDocument()
 void KoFilterChain::dump()
 {
     debugFilter << "########## KoFilterChain with" << m_chainLinks.count() << " members:";
-    ChainLink* link = m_chainLinks.first();
+    ChainLink *link = m_chainLinks.first();
     while (link) {
         link->dump();
         link = m_chainLinks.next();
@@ -227,12 +222,12 @@ void KoFilterChain::dump()
     debugFilter << "########## KoFilterChain (done) ##########";
 }
 
-void KoFilterChain::appendChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to)
+void KoFilterChain::appendChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray &from, const QByteArray &to)
 {
     m_chainLinks.append(new ChainLink(this, filterEntry, from, to));
 }
 
-void KoFilterChain::prependChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to)
+void KoFilterChain::prependChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray &from, const QByteArray &to)
 {
     m_chainLinks.prepend(new ChainLink(this, filterEntry, from, to));
 }
@@ -247,7 +242,7 @@ QString KoFilterChain::filterManagerExportFile() const
     return m_manager->exportFile();
 }
 
-KoDocument* KoFilterChain::filterManagerKoDocument() const
+KoDocument *KoFilterChain::filterManagerKoDocument() const
 {
     return m_manager->document();
 }
@@ -257,7 +252,7 @@ int KoFilterChain::filterManagerDirection() const
     return m_manager->direction();
 }
 
-KoFilterChain* KoFilterChain::filterManagerParentChain() const
+KoFilterChain *KoFilterChain::filterManagerParentChain() const
 {
     return m_manager->parentChain();
 }
@@ -274,7 +269,7 @@ void KoFilterChain::manageIO()
         delete m_inputStorage;
         m_inputStorage = 0;
     }
-    delete m_inputTempFile;  // autodelete
+    delete m_inputTempFile; // autodelete
     m_inputTempFile = 0;
     m_inputFile.clear();
 
@@ -308,8 +303,7 @@ void KoFilterChain::finalizeIO()
     // filter chose to output a KoDocument we have to save it.
     // Should be very rare, but well...
     // Note: m_*input*Document as we already called manageIO()
-    if (m_inputDocument &&
-            static_cast<KoFilterManager::Direction>(filterManagerDirection()) == KoFilterManager::Export) {
+    if (m_inputDocument && static_cast<KoFilterManager::Direction>(filterManagerDirection()) == KoFilterManager::Export) {
         debugFilter << "Saving the output document to the export file " << m_chainLinks.current()->to();
         m_inputDocument->setOutputMimeType(m_chainLinks.current()->to());
         m_inputDocument->saveNativeFormat(filterManagerExportFile());
@@ -317,7 +311,7 @@ void KoFilterChain::finalizeIO()
     }
 }
 
-bool KoFilterChain::createTempFile(QTemporaryFile** tempFile, bool autoDelete)
+bool KoFilterChain::createTempFile(QTemporaryFile **tempFile, bool autoDelete)
 {
     if (*tempFile) {
         errorFilter << "Ooops, why is there already a temp file???" << Qt::endl;
@@ -348,7 +342,7 @@ bool KoFilterChain::createTempFile(QTemporaryFile** tempFile, bool autoDelete)
     and is left for... you :)
 */
 
-void KoFilterChain::inputFileHelper(KoDocument* document, const QString& alternativeFile)
+void KoFilterChain::inputFileHelper(KoDocument *document, const QString &alternativeFile)
 {
     if (document) {
         if (!createTempFile(&m_inputTempFile)) {
@@ -395,8 +389,7 @@ void KoFilterChain::outputFileHelper(bool autoDelete)
     }
 }
 
-KoStoreDevice* KoFilterChain::storageNewStreamHelper(KoStore** storage, KoStoreDevice** device,
-        const QString& name)
+KoStoreDevice *KoFilterChain::storageNewStreamHelper(KoStore **storage, KoStoreDevice **device, const QString &name)
 {
     delete *device;
     *device = 0;
@@ -411,9 +404,7 @@ KoStoreDevice* KoFilterChain::storageNewStreamHelper(KoStore** storage, KoStoreD
     return *device;
 }
 
-KoStoreDevice* KoFilterChain::storageHelper(const QString& file, const QString& streamName,
-        KoStore::Mode mode, KoStore** storage,
-        KoStoreDevice** device)
+KoStoreDevice *KoFilterChain::storageHelper(const QString &file, const QString &streamName, KoStore::Mode mode, KoStore **storage, KoStoreDevice **device)
 {
     if (file.isEmpty())
         return 0;
@@ -438,7 +429,7 @@ KoStoreDevice* KoFilterChain::storageHelper(const QString& file, const QString& 
     return storageCreateFirstStream(streamName, storage, device);
 }
 
-void KoFilterChain::storageInit(const QString& file, KoStore::Mode mode, KoStore** storage)
+void KoFilterChain::storageInit(const QString &file, KoStore::Mode mode, KoStore **storage)
 {
     QByteArray appIdentification("");
     if (mode == KoStore::Write) {
@@ -453,8 +444,7 @@ void KoFilterChain::storageInit(const QString& file, KoStore::Mode mode, KoStore
     *storage = KoStore::createStore(file, mode, appIdentification);
 }
 
-KoStoreDevice* KoFilterChain::storageCreateFirstStream(const QString& streamName, KoStore** storage,
-        KoStoreDevice** device)
+KoStoreDevice *KoFilterChain::storageCreateFirstStream(const QString &streamName, KoStore **storage, KoStoreDevice **device)
 {
     if (!(*storage)->open(streamName))
         return 0;
@@ -468,17 +458,16 @@ KoStoreDevice* KoFilterChain::storageCreateFirstStream(const QString& streamName
     return *device;
 }
 
-KoStoreDevice* KoFilterChain::storageCleanupHelper(KoStore** storage)
+KoStoreDevice *KoFilterChain::storageCleanupHelper(KoStore **storage)
 {
     // Take care not to delete the storage of the parent chain
-    if (*storage != m_outputStorage || !filterManagerParentChain() ||
-            (*storage)->mode() != KoStore::Write)
+    if (*storage != m_outputStorage || !filterManagerParentChain() || (*storage)->mode() != KoStore::Write)
         delete *storage;
     *storage = 0;
     return 0;
 }
 
-KoDocument* KoFilterChain::createDocument(const QString& file)
+KoDocument *KoFilterChain::createDocument(const QString &file)
 {
     QUrl url;
     url.setPath(file);
@@ -498,7 +487,7 @@ KoDocument* KoFilterChain::createDocument(const QString& file)
     return doc;
 }
 
-KoDocument* KoFilterChain::createDocument(const QByteArray& mimeType)
+KoDocument *KoFilterChain::createDocument(const QByteArray &mimeType)
 {
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimeType);
 

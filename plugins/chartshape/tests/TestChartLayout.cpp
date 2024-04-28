@@ -6,19 +6,19 @@
  */
 
 #include "TestChartLayout.h"
-#include "ChartShape.h"
-#include "ChartLayout.h"
-#include "PlotArea.h"
 #include "Axis.h"
+#include "ChartLayout.h"
+#include "ChartShape.h"
 #include "Legend.h"
+#include "PlotArea.h"
 
 #include "KoDocumentResourceManager.h"
 #include "KoShape.h"
 
+#include <QDebug>
+#include <QMap>
 #include <QTest>
 #include <QTransform>
-#include <QMap>
-#include <QDebug>
 
 #define COMPARELAYOUT(text) QVERIFY2(compareLayout(text), text)
 
@@ -29,15 +29,15 @@ static void filterMessages(QtMsgType type, const QMessageLogContext &context, co
     QByteArray localMsg = msg.toLocal8Bit();
     QString cat(context.category);
     switch (type) {
-        case QtDebugMsg:
-//             fprintf(stderr, "%s\n%s\n%s\n%d\n%d\n", context.category, context.file, context.function, context.version, context.line);
-            if (cat.startsWith("calligra.plugin.chart")) {
-                fprintf(stderr, "%d: %s\n", context.line, localMsg.constData());
-            }
-            break;
-        default:
-            fprintf(stderr, "%s\n", localMsg.constData());
-            break;
+    case QtDebugMsg:
+        //             fprintf(stderr, "%s\n%s\n%s\n%d\n%d\n", context.category, context.file, context.function, context.version, context.line);
+        if (cat.startsWith("calligra.plugin.chart")) {
+            fprintf(stderr, "%d: %s\n", context.line, localMsg.constData());
+        }
+        break;
+    default:
+        fprintf(stderr, "%s\n", localMsg.constData());
+        break;
     }
 }
 
@@ -75,10 +75,10 @@ void TestChartLayout::initTestCase()
     QVERIFY(secondaryXAxisTitle == 0);
     QVERIFY(secondaryYAxisTitle == 0);
 
-    QCOMPARE(xAxisTitleRect.bottom(), area.bottom()-1);
-    QCOMPARE(yAxisTitleRect.left(), area.left()+1);
-    QCOMPARE(legendRect.right(), area.right()-1);
-    QCOMPARE(plotAreaRect.top(), area.top()+1);
+    QCOMPARE(xAxisTitleRect.bottom(), area.bottom() - 1);
+    QCOMPARE(yAxisTitleRect.left(), area.left() + 1);
+    QCOMPARE(legendRect.right(), area.right() - 1);
+    QCOMPARE(plotAreaRect.top(), area.top() + 1);
     QCOMPARE(plotAreaRect.left(), yAxisTitleRect.right() + spaceX);
     QCOMPARE(plotAreaRect.bottom(), xAxisTitleRect.top() - spaceY);
     QCOMPARE(plotAreaRect.right(), legendRect.left() - spaceX);
@@ -101,7 +101,7 @@ void TestChartLayout::init()
     yAxisTitle = plotArea->yAxis()->title();
     yAxisTitle->setVisible(true);
     // create a non-square legend
-//     chart->legend()->setTitle("Legend");
+    //     chart->legend()->setTitle("Legend");
 
     layout = chart->layout();
 
@@ -155,11 +155,13 @@ void dbg(const QString &test, const QString topic, const QRectF &expected, const
 {
     QString t = topic + ':';
     if (!test.isEmpty()) {
-        qInfo().noquote()<<"FAIL:"<<test;
+        qInfo().noquote() << "FAIL:" << test;
     }
-    qInfo().noquote()<<"\t"<<t
-    <<endl<<"\t  actual:"<<actual<<':'<<"left:"<<actual.left()<<"top:"<<actual.top()<<"right:"<<actual.right()<<"bottom"<<actual.bottom()<<"center:"<<actual.center()
-    <<endl<<"\texpected:"<<expected<<':'<<"left:"<<expected.left()<<"top:"<<expected.top()<<"right:"<<expected.right()<<"bottom"<<expected.bottom()<<"center:"<<expected.center();
+    qInfo().noquote() << "\t" << t << endl
+                      << "\t  actual:" << actual << ':' << "left:" << actual.left() << "top:" << actual.top() << "right:" << actual.right() << "bottom"
+                      << actual.bottom() << "center:" << actual.center() << endl
+                      << "\texpected:" << expected << ':' << "left:" << expected.left() << "top:" << expected.top() << "right:" << expected.right() << "bottom"
+                      << expected.bottom() << "center:" << expected.center();
 }
 bool TestChartLayout::compareLayout(const QString &test)
 {
@@ -255,7 +257,7 @@ void TestChartLayout::testDefaultDiagram()
     layout->scheduleRelayout();
     layout->layout();
     chartTitleRect = itemRect(chartTitle);
-    chartTitleRect.moveTop(area.top()+1);
+    chartTitleRect.moveTop(area.top() + 1);
     plotAreaRect.setTop(chartTitleRect.bottom() + spaceY);
     legendRect.moveTop(plotAreaRect.center().y() - legendRect.height() / 2);
     COMPARELAYOUT("Show title");
@@ -273,7 +275,7 @@ void TestChartLayout::testDefaultDiagram()
     layout->scheduleRelayout();
     layout->layout();
     chartFooterRect = itemRect(chartFooter);
-    chartFooterRect.moveBottom(area.bottom()-1);
+    chartFooterRect.moveBottom(area.bottom() - 1);
     plotAreaRect.setBottom(chartFooterRect.top() - spaceY);
     legendRect.moveTop(plotAreaRect.center().y() - legendRect.height() / 2);
     COMPARELAYOUT("Show footer");
@@ -281,26 +283,26 @@ void TestChartLayout::testDefaultDiagram()
     legend->setVisible(false);
     layout->scheduleRelayout();
     layout->layout();
-    plotAreaRect.setRight(area.right()-1);
+    plotAreaRect.setRight(area.right() - 1);
     COMPARELAYOUT("Hide legend");
 
     chartTitle->setVisible(false);
     layout->scheduleRelayout();
     layout->layout();
-    chartSubTitleRect.moveTop(area.top()+1);
+    chartSubTitleRect.moveTop(area.top() + 1);
     plotAreaRect.setTop(chartSubTitleRect.bottom() + spaceY);
     COMPARELAYOUT("Hide title");
 
     chartSubTitle->setVisible(false);
     layout->scheduleRelayout();
     layout->layout();
-    plotAreaRect.setTop(area.top()+1);
+    plotAreaRect.setTop(area.top() + 1);
     COMPARELAYOUT("Hide subtitle");
 
     chartFooter->setVisible(false);
     layout->scheduleRelayout();
     layout->layout();
-    plotAreaRect.setBottom(area.bottom()-1);
+    plotAreaRect.setBottom(area.bottom() - 1);
     COMPARELAYOUT("Hide footer");
 
     KoChart::Axis *a = new KoChart::Axis(plotArea, KoChart::XAxisDimension);
@@ -312,7 +314,7 @@ void TestChartLayout::testDefaultDiagram()
     layout->scheduleRelayout();
     layout->layout();
     secondaryXAxisTitleRect = itemRect(secondaryXAxisTitle);
-    secondaryXAxisTitleRect.moveTop(area.top()+1);
+    secondaryXAxisTitleRect.moveTop(area.top() + 1);
     plotAreaRect.setTop(secondaryXAxisTitleRect.bottom() + spaceY);
     COMPARELAYOUT("Show secondary x axis");
 
@@ -326,7 +328,7 @@ void TestChartLayout::testDefaultDiagram()
     layout->scheduleRelayout();
     layout->layout();
     secondaryYAxisTitleRect = itemRect(secondaryYAxisTitle);
-    secondaryYAxisTitleRect.moveRight(area.right()-1);
+    secondaryYAxisTitleRect.moveRight(area.right() - 1);
     plotAreaRect.setRight(secondaryYAxisTitleRect.left() - spaceX);
     secondaryXAxisTitleRect.moveLeft(plotAreaRect.center().x() - secondaryXAxisTitleRect.width() / 2);
     COMPARELAYOUT("Show secondary y axis");
@@ -334,14 +336,14 @@ void TestChartLayout::testDefaultDiagram()
     secondaryXAxisTitle->setVisible(false);
     layout->scheduleRelayout();
     layout->layout();
-    plotAreaRect.setTop(area.top()+1);
+    plotAreaRect.setTop(area.top() + 1);
     secondaryYAxisTitleRect.moveTop(plotAreaRect.center().y() - secondaryYAxisTitleRect.height() / 2);
     COMPARELAYOUT("Hide secondary x axis");
 
     secondaryYAxisTitle->setVisible(false);
     layout->scheduleRelayout();
     layout->layout();
-    plotAreaRect.setRight(area.right()-1);
+    plotAreaRect.setRight(area.right() - 1);
     COMPARELAYOUT("Hide secondary y axis");
 
     // show everything in one go
@@ -366,16 +368,16 @@ void TestChartLayout::testDefaultDiagram()
     secondaryXAxisTitleRect = itemRect(secondaryXAxisTitle);
     secondaryYAxisTitleRect = itemRect(secondaryYAxisTitle);
 
-    chartTitleRect.moveTop(area.top()+1);
+    chartTitleRect.moveTop(area.top() + 1);
 
     chartSubTitleRect.moveTop(chartTitleRect.bottom() + spaceY);
 
-    chartFooterRect.moveBottom(area.bottom()-1);
+    chartFooterRect.moveBottom(area.bottom() - 1);
 
     xAxisTitleRect.moveBottom(chartFooterRect.top() - spaceY);
     xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
 
-    yAxisTitleRect.moveBottom(area.left()+1);
+    yAxisTitleRect.moveBottom(area.left() + 1);
     yAxisTitleRect.moveTop(plotAreaRect.center().y() - yAxisTitleRect.height() / 2);
 
     secondaryXAxisTitleRect.moveTop(chartSubTitleRect.bottom() + spaceY);
@@ -399,7 +401,7 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveTop(area.top()+1);
+    legendRect.moveTop(area.top() + 1);
     legendRect.moveLeft(plotAreaRect.center().x() - legendRect.width() / 2);
     plotAreaRect.setTop(legendRect.bottom() + spaceY);
     xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
@@ -427,7 +429,7 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveBottom(area.bottom()-1);
+    legendRect.moveBottom(area.bottom() - 1);
     legendRect.moveLeft(plotAreaRect.center().x() - legendRect.width() / 2);
     xAxisTitleRect.setBottom(legendRect.top() - spaceY);
     plotAreaRect.setBottom(xAxisTitleRect.top() - spaceY);
@@ -456,7 +458,7 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveTop(area.top()+1);
+    legendRect.moveTop(area.top() + 1);
     legendRect.moveTop(plotAreaRect.center().y() - legendRect.height() / 2);
     plotAreaRect.setRight(legendRect.left() - spaceX);
     xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
@@ -484,7 +486,7 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveLeft(area.left()+1);
+    legendRect.moveLeft(area.left() + 1);
     legendRect.moveTop(plotAreaRect.center().y() - legendRect.height() / 2);
     yAxisTitleRect.moveLeft(legendRect.right() + spaceX);
     plotAreaRect.setLeft(yAxisTitleRect.right() + spaceX);
@@ -512,8 +514,8 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveLeft(area.left()+1);
-    legendRect.moveTop(area.top()+1);
+    legendRect.moveLeft(area.left() + 1);
+    legendRect.moveTop(area.top() + 1);
     yAxisTitleRect.moveRight(area.left() + spaceX); // preliminary
     plotAreaRect.setLeft(qMax(legendRect.right(), yAxisTitleRect.right()) + spaceX);
     yAxisTitleRect.moveRight(plotAreaRect.left() - spaceX);
@@ -528,9 +530,9 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveRight(area.right()-1);
-    legendRect.moveTop(area.top()+1);
-    yAxisTitleRect.moveLeft(area.left()+1);
+    legendRect.moveRight(area.right() - 1);
+    legendRect.moveTop(area.top() + 1);
+    yAxisTitleRect.moveLeft(area.left() + 1);
     plotAreaRect.setRight(legendRect.left() - spaceX);
     plotAreaRect.setTop(legendRect.bottom() + spaceY);
     xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
@@ -543,8 +545,8 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveLeft(area.left()+1);
-    legendRect.moveBottom(area.bottom()-1);
+    legendRect.moveLeft(area.left() + 1);
+    legendRect.moveBottom(area.bottom() - 1);
 
     yAxisTitleRect.moveLeft(area.left()); // preliminary
     plotAreaRect.setLeft(qMax(legendRect.right(), yAxisTitleRect.right()) + spaceX);
@@ -564,8 +566,8 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveRight(area.right()-1);
-    legendRect.moveBottom(area.bottom()-1);
+    legendRect.moveRight(area.right() - 1);
+    legendRect.moveBottom(area.bottom() - 1);
 
     plotAreaRect.setRight(legendRect.left() - spaceX);
 

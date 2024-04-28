@@ -7,8 +7,8 @@
 #ifndef FILTEREFFECTEDITWIDGET_H
 #define FILTEREFFECTEDITWIDGET_H
 
-#include "ui_FilterEffectEditWidget.h"
 #include "FilterEffectScene.h"
+#include "ui_FilterEffectEditWidget.h"
 #include <QWidget>
 
 class KoShape;
@@ -24,13 +24,13 @@ public:
     ~FilterEffectEditWidget() override;
 
     /// Edits effects of given shape
-    void editShape(KoShape *shape, KoCanvasBase * canvas);
+    void editShape(KoShape *shape, KoCanvasBase *canvas);
 
 protected:
     /// reimplemented from QWidget
-    void resizeEvent(QResizeEvent * event) override;
+    void resizeEvent(QResizeEvent *event) override;
     /// reimplemented from QWidget
-    void showEvent(QShowEvent * event) override;
+    void showEvent(QShowEvent *event) override;
 private Q_SLOTS:
     void addSelectedEffect();
     void removeSelectedItem();
@@ -41,16 +41,17 @@ private Q_SLOTS:
     void filterChanged();
     void sceneSelectionChanged();
     void defaultSourceChanged(int);
+
 private:
     void fitScene();
     void addWidgetForItem(ConnectionSource item);
 
-    FilterEffectScene * m_scene;
-    KoShape * m_shape;
-    KoCanvasBase * m_canvas;
-    KoFilterEffectStack * m_effects;
+    FilterEffectScene *m_scene;
+    KoShape *m_shape;
+    KoCanvasBase *m_canvas;
+    KoFilterEffectStack *m_effects;
     ConnectionSource m_currentItem;
-    KComboBox * m_defaultSourceSelector;
+    KComboBox *m_defaultSourceSelector;
 };
 
 #endif // FILTEREFFECTEDITWIDGET_H

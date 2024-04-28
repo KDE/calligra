@@ -8,16 +8,16 @@
 #define KOPATHSEGMENTCHANGESTRATEGY_H
 
 #include "KoInteractionStrategy.h"
-#include "KoPathSegment.h"
 #include "KoPathPointData.h"
+#include "KoPathSegment.h"
 #include <QPointF>
 
 class KoPathTool;
 class KoPathShape;
 
 /**
-* @brief Strategy for deforming a segment of a path shape.
-*/
+ * @brief Strategy for deforming a segment of a path shape.
+ */
 class KoPathSegmentChangeStrategy : public KoInteractionStrategy
 {
 public:

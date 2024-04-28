@@ -11,24 +11,24 @@
 #include "VideoShape.h"
 
 #include <KoViewConverter.h>
-#include <VideoEventAction.h>
 #include <VideoCollection.h>
 #include <VideoData.h>
+#include <VideoEventAction.h>
 #ifdef SHOULD_BUILD_THUMBNAIL
 #include <VideoThumbnailer.h>
 #endif
 #include "VideoDebug.h"
 
-#include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
-#include <KoShapeSavingContext.h>
-#include <KoXmlWriter.h>
-#include <KoXmlNS.h>
-#include <KoStore.h>
 #include <KoIcon.h>
+#include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoStore.h>
+#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
-#include <QUrl>
 #include <QPainter>
+#include <QUrl>
 
 VideoShape::VideoShape()
     : KoFrameShape(KoXmlNS::draw, "plugin")
@@ -53,22 +53,22 @@ VideoShape::~VideoShape()
 
 void VideoShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
-    QRectF pixelsF = converter.documentToView(QRectF(QPointF(0,0), size()));
+    QRectF pixelsF = converter.documentToView(QRectF(QPointF(0, 0), size()));
 
     VideoData *currentVideoData = videoData();
 #ifdef SHOULD_BUILD_THUMBNAIL
     if (currentVideoData && currentVideoData != m_oldVideoData) {
-        //generate thumbnails
+        // generate thumbnails
         m_oldVideoData = currentVideoData;
         m_thumbnailer->createThumbnail(currentVideoData, pixelsF.size().toSize());
     }
     QImage thumnailImage = m_thumbnailer->thumbnail();
     if (thumnailImage.isNull()) {
-            painter.fillRect(pixelsF, QColor(Qt::gray));
-            painter.setPen(QPen(Qt::black, 0));
-            painter.drawRect(pixelsF);
+        painter.fillRect(pixelsF, QColor(Qt::gray));
+        painter.setPen(QPen(Qt::black, 0));
+        painter.drawRect(pixelsF);
 
-            m_icon.paint(&painter, pixelsF.toRect());
+        m_icon.paint(&painter, pixelsF.toRect());
     } else {
         painter.drawImage(pixelsF, thumnailImage);
     }
@@ -84,7 +84,7 @@ void VideoShape::paint(QPainter &painter, const KoViewConverter &converter, KoSh
 void VideoShape::saveOdf(KoShapeSavingContext &context) const
 {
     // make sure we have a valid image data pointer before saving
-    VideoData *videoData = qobject_cast<VideoData*>(userData());
+    VideoData *videoData = qobject_cast<VideoData *>(userData());
     if (videoData == 0)
         return;
 
@@ -117,7 +117,7 @@ bool VideoShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoading
 {
     /* the loading of the attributes might set the event actions which removes the m_videoEventAction
      * when there are other eventactions for the shape. Therefore we need to add it again. It is no
-     * problem to add it again as internally a set is used and so it is not problematic when it is 
+     * problem to add it again as internally a set is used and so it is not problematic when it is
      * already set. */
     addEventAction(m_videoEventAction);
 
@@ -126,9 +126,9 @@ bool VideoShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoading
         // this can happen in case it is a presentation:placeholder
         if (!href.isEmpty()) {
             QUrl url = QUrl::fromUserInput(href);
-            VideoData *data=0;
+            VideoData *data = 0;
 
-            if(href.startsWith("../")) {
+            if (href.startsWith("../")) {
                 // file is outside store
                 QUrl url = context.odfLoadingContext().store()->urlOfStore();
                 QString path = url.path();
@@ -138,7 +138,7 @@ bool VideoShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoading
                 path.append(href.mid(3));
                 url.setPath(path);
                 data = m_videoCollection->createExternalVideoData(url, false);
-            } else if(!url.isRelative()) {
+            } else if (!url.isRelative()) {
                 // file is outside store and absolute
                 data = m_videoCollection->createExternalVideoData(QUrl::fromUserInput(href), false);
             } else {

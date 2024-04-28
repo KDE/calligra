@@ -7,29 +7,29 @@
  */
 
 #include "ParagraphGeneral.h"
-#include "ParagraphIndentSpacing.h"
-#include "ParagraphLayout.h"
 #include "ParagraphBulletsNumbers.h"
 #include "ParagraphDecorations.h"
 #include "ParagraphDropCaps.h"
+#include "ParagraphIndentSpacing.h"
+#include "ParagraphLayout.h"
 #include "StylesModel.h"
 
-#include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
+#include <KoStyleManager.h>
 #include <KoStyleThumbnailer.h>
 
 ParagraphGeneral::ParagraphGeneral(QWidget *parent)
-        : CharacterGeneral(parent)
-        , m_nameHidden(false)
-        , m_style(0)
-        , m_styleManager(0)
-        , m_thumbnail(new KoStyleThumbnailer())
-        , m_paragraphInheritedStyleModel(new StylesModel(0, StylesModel::ParagraphStyle))
+    : CharacterGeneral(parent)
+    , m_nameHidden(false)
+    , m_style(0)
+    , m_styleManager(0)
+    , m_thumbnail(new KoStyleThumbnailer())
+    , m_paragraphInheritedStyleModel(new StylesModel(0, StylesModel::ParagraphStyle))
 {
-//Disable for now
-    //include in TOC
+    // Disable for now
+    // include in TOC
     widget.inToc->setVisible(false);
-//
+    //
     widget.nextStyle->setVisible(true);
     widget.label_2->setVisible(true);
 
@@ -61,7 +61,8 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 
     connect(m_paragraphDropCaps, &ParagraphDropCaps::parStyleChanged, this, &CharacterGeneral::styleChanged);
 
-    widget.preview->setText(QString("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
+    widget.preview->setText(QString(
+        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
     connect(widget.name, &QLineEdit::textChanged, this, QOverload<const QString &>::of(&ParagraphGeneral::nameChanged));
     connect(widget.nextStyle, QOverload<int>::of(&StylesCombo::currentIndexChanged), this, &ParagraphGeneral::styleChanged);
@@ -95,23 +96,23 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level, bool directF
 
     blockSignals(true);
 
-/*    widget.inheritStyle->clear();
-    widget.inheritStyle->addItem(i18nc("Inherit style", "None"));
-    widget.inheritStyle->setCurrentIndex(0);
-    foreach(KoParagraphStyle *s, m_paragraphStyles) {
-        KoParagraphStyle *parent = s;
-        bool ok = true;
-        while (ok && parent) {
-            ok = parent->styleId() != style->styleId();
-            parent = parent->parentStyle();
-        }
-        if (! ok) continue; // can't inherit from myself, even indirectly.
+    /*    widget.inheritStyle->clear();
+        widget.inheritStyle->addItem(i18nc("Inherit style", "None"));
+        widget.inheritStyle->setCurrentIndex(0);
+        foreach(KoParagraphStyle *s, m_paragraphStyles) {
+            KoParagraphStyle *parent = s;
+            bool ok = true;
+            while (ok && parent) {
+                ok = parent->styleId() != style->styleId();
+                parent = parent->parentStyle();
+            }
+            if (! ok) continue; // can't inherit from myself, even indirectly.
 
-        widget.inheritStyle->addItem(s->name(), s->styleId());
-        if (s == style->parent())
-            widget.inheritStyle->setCurrentIndex(widget.inheritStyle->count() - 1);
-    }
-*/
+            widget.inheritStyle->addItem(s->name(), s->styleId());
+            if (s == style->parent())
+                widget.inheritStyle->setCurrentIndex(widget.inheritStyle->count() - 1);
+        }
+    */
     if (!m_nameHidden)
         widget.name->setText(style->name());
 
@@ -120,7 +121,7 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level, bool directF
         KoParagraphStyle *parentStyle = style->parentStyle();
         if (parentStyle) {
             widget.inheritStyle->setCurrentIndex(m_paragraphInheritedStyleModel->indexOf(parentStyle).row());
-            //m_paragraphInheritedStyleModel->setCurrentParagraphStyle(parentStyle->styleId());
+            // m_paragraphInheritedStyleModel->setCurrentParagraphStyle(parentStyle->styleId());
         }
     }
 
@@ -150,8 +151,7 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
             return;
         else
             savingStyle = m_style;
-    }
-    else
+    } else
         savingStyle = style;
 
     CharacterGeneral::save(style);

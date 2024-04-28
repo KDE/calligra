@@ -6,9 +6,8 @@
 
 #include "StyleManagerWelcome.h"
 
-StyleManagerWelcome::StyleManagerWelcome(QWidget* parent)
+StyleManagerWelcome::StyleManagerWelcome(QWidget *parent)
     : QWidget(parent)
 {
     widget.setupUi(this);
 }
-

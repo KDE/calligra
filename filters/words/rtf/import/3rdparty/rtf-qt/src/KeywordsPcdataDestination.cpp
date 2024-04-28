@@ -7,17 +7,17 @@
 
 namespace RtfReader
 {
-    KeywordsPcdataDestination::KeywordsPcdataDestination( Reader *reader, AbstractRtfOutput *output, const QString &name ) :
-      PcdataDestination( reader, output, name )
-    {
-    }
+KeywordsPcdataDestination::KeywordsPcdataDestination(Reader *reader, AbstractRtfOutput *output, const QString &name)
+    : PcdataDestination(reader, output, name)
+{
+}
 
-    KeywordsPcdataDestination::~KeywordsPcdataDestination()
-    {
-    }
+KeywordsPcdataDestination::~KeywordsPcdataDestination()
+{
+}
 
-    void KeywordsPcdataDestination::aboutToEndDestination()
-    {
-	m_output->setKeywords( m_pcdata );
-    }
+void KeywordsPcdataDestination::aboutToEndDestination()
+{
+    m_output->setKeywords(m_pcdata);
+}
 }

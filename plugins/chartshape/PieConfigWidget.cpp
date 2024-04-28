@@ -11,8 +11,8 @@
 
 // Qt
 #include <QAction>
-#include <QMenu>
 #include <QLatin1String>
+#include <QMenu>
 
 // KF5
 #include <KLocalizedString>
@@ -20,28 +20,27 @@
 #include <kfontchooser.h>
 
 // Calligra
-#include <interfaces/KoChartModel.h>
 #include <KoIcon.h>
+#include <interfaces/KoChartModel.h>
 
 // KChart
-#include <KChartChart>
-#include <KChartPosition>
-#include <KChartCartesianAxis>
-#include <KChartGridAttributes>
-#include <KChartPieAttributes>
 #include <KChartAbstractCartesianDiagram>
-#include <KChartLegend>
+#include <KChartCartesianAxis>
+#include <KChartChart>
 #include <KChartDataValueAttributes>
+#include <KChartGridAttributes>
+#include <KChartLegend>
 #include <KChartMeasure>
+#include <KChartPieAttributes>
+#include <KChartPosition>
 
 // KoChart
-#include "ChartProxyModel.h"
-#include "PlotArea.h"
-#include "DataSet.h"
 #include "ChartDebug.h"
+#include "ChartProxyModel.h"
+#include "DataSet.h"
+#include "PlotArea.h"
 
 using namespace KoChart;
-
 
 PieConfigWidget::PieConfigWidget(QWidget *parent)
     : ConfigSubWidgetBase(parent)
@@ -73,7 +72,7 @@ void PieConfigWidget::init()
     connect(m_ui.dataPointShowPercent, &QCheckBox::toggled, this, QOverload<bool>::of(&PieConfigWidget::showPercentChanged));
 }
 
-void PieConfigWidget::open(ChartShape* shape)
+void PieConfigWidget::open(ChartShape *shape)
 {
     ConfigSubWidgetBase::open(shape);
 }
@@ -110,13 +109,13 @@ void PieConfigWidget::updateData(ChartType type, ChartSubtype subtype)
 void PieConfigWidget::dataPointSelectionChanged(int index)
 {
     // Check for valid index
-    qInfo()<<Q_FUNC_INFO<<index;
+    qInfo() << Q_FUNC_INFO << index;
     if (index < 0) {
         return;
     }
     blockSignals(true);
 
-    m_ui.explodeFactor->setValue((int)(m_dataSet->pieAttributes(index).explodeFactor()*100));
+    m_ui.explodeFactor->setValue((int)(m_dataSet->pieAttributes(index).explodeFactor() * 100));
 
     m_ui.dataPointBrush->setColor(m_dataSet->brush(index).color());
 
@@ -131,10 +130,9 @@ void PieConfigWidget::dataPointSelectionChanged(int index)
     m_ui.dataPoints->setCurrentIndex(index);
 
     blockSignals(false);
-
 }
 
-void PieConfigWidget::brushChanged(const QColor& color)
+void PieConfigWidget::brushChanged(const QColor &color)
 {
     int index = m_ui.dataPoints->currentIndex();
     if (index < 0) {
@@ -143,7 +141,7 @@ void PieConfigWidget::brushChanged(const QColor& color)
     emit brushChanged(m_dataSet, color, index);
 }
 
-void PieConfigWidget::penChanged(const QColor& color)
+void PieConfigWidget::penChanged(const QColor &color)
 {
     int index = m_ui.dataPoints->currentIndex();
     if (index < 0) {
@@ -167,7 +165,7 @@ void PieConfigWidget::showCategoryChanged(bool b)
     if (index < 0) {
         return;
     }
-    emit showCategoryChanged(m_dataSet, b, index);    
+    emit showCategoryChanged(m_dataSet, b, index);
 }
 
 void PieConfigWidget::showNumberChanged(bool b)

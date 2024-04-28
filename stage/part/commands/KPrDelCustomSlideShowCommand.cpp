@@ -1,13 +1,13 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ * SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #include "KPrDelCustomSlideShowCommand.h"
-#include "KPrDocument.h"
-#include "KPrCustomSlideShowsModel.h"
 #include "KPrCustomSlideShows.h"
+#include "KPrCustomSlideShowsModel.h"
+#include "KPrDocument.h"
 #include "KoPAPageBase.h"
 
 KPrDelCustomSlideShowCommand::KPrDelCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &name, KUndo2Command *parent)
@@ -22,7 +22,6 @@ KPrDelCustomSlideShowCommand::KPrDelCustomSlideShowCommand(KPrDocument *doc, KPr
 
 KPrDelCustomSlideShowCommand::~KPrDelCustomSlideShowCommand()
 {
-
 }
 
 void KPrDelCustomSlideShowCommand::redo()

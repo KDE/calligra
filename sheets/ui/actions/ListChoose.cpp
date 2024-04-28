@@ -8,9 +8,9 @@
 #include "ListChoose.h"
 #include "Actions.h"
 
-#include "engine/ValueStorage.h"
 #include "core/CellStorage.h"
 #include "core/Sheet.h"
+#include "engine/ValueStorage.h"
 #include "ui/CellToolBase.h"
 #include "ui/CellView.h"
 #include "ui/SheetView.h"
@@ -20,12 +20,9 @@
 
 #include <QMenu>
 
-
 // This one copies the alt+down selector from LO, but isn't particularly useful right now. Improvements needed.
 
-
 using namespace Calligra::Sheets;
-
 
 ListChoose::ListChoose(Actions *actions)
     : CellAction(actions, "listChoose", i18n("Selection List..."), QIcon(), QString())
@@ -38,13 +35,13 @@ ListChoose::~ListChoose()
     delete popupListChoose;
 }
 
-
 void ListChoose::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
     m_selection = selection;
     const Cell cursorCell(sheet, selection->cursor());
     QStringList itemList = items(selection, cursorCell);
-    if (!itemList.length()) return;
+    if (!itemList.length())
+        return;
 
     delete popupListChoose;
     popupListChoose = new QMenu();
@@ -58,7 +55,7 @@ void ListChoose::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidg
     double h = cursorCell.height();
     CellToolBase *tool = m_actions->tool();
     if (tool->sheetView(sheet)->obscuresCells(cursor)) {
-        const CellView& cellView = tool->sheetView(sheet)->cellView(cursor.x(), cursor.y());
+        const CellView &cellView = tool->sheetView(sheet)->cellView(cursor.x(), cursor.y());
         h = cellView.cellHeight();
     }
     ty += h;
@@ -78,7 +75,8 @@ void ListChoose::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidg
     connect(popupListChoose, &QMenu::triggered, this, &ListChoose::itemSelected);
 }
 
-QStringList ListChoose::items(Selection *selection, const Cell &cursorCell, int limit) {
+QStringList ListChoose::items(Selection *selection, const Cell &cursorCell, int limit)
+{
     Sheet *sheet = selection->activeSheet();
     CellStorage *storage = sheet->fullCellStorage();
     ValueStorage *values = storage->valueStorage();
@@ -111,7 +109,6 @@ QStringList ListChoose::items(Selection *selection, const Cell &cursorCell, int 
                             return res;
                     }
                 }
-
             }
 
             // Value not suitable, let's continue.
@@ -121,14 +118,16 @@ QStringList ListChoose::items(Selection *selection, const Cell &cursorCell, int 
     return res;
 }
 
-bool ListChoose::enabledForSelection(Selection *selection, const Cell &cursorCell) {
+bool ListChoose::enabledForSelection(Selection *selection, const Cell &cursorCell)
+{
     // Check if the list would contain at least 1 item. If so, we're enabled.
     QStringList lst = items(selection, cursorCell, 1);
-    if (lst.length()) return true;
+    if (lst.length())
+        return true;
     return false;
 }
 
-void ListChoose::itemSelected(QAction* action)
+void ListChoose::itemSelected(QAction *action)
 {
     const Cell cell(m_selection->activeSheet(), m_selection->cursor());
 
@@ -139,5 +138,3 @@ void ListChoose::itemSelected(QAction* action)
     command->add(cell.cellPosition());
     command->execute(m_selection->canvas());
 }
-
-

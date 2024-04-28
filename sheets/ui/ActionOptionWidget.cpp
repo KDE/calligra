@@ -9,9 +9,9 @@
 // Qt
 #include <QDomElement>
 #include <QHBoxLayout>
+#include <QStyle>
 #include <QToolButton>
 #include <QWidgetAction>
-#include <QStyle>
 
 // KF5
 #include <KLocalizedString>
@@ -53,14 +53,14 @@ private:
     int m_vSpace;
 };
 
-ActionOptionWidget::ActionOptionWidget(CellToolBase* cellTool, const QDomElement& e, QWidget *parent) :
-    QWidget(parent)
+ActionOptionWidget::ActionOptionWidget(CellToolBase *cellTool, const QDomElement &e, QWidget *parent)
+    : QWidget(parent)
 {
     QString name = e.attribute("name");
     setObjectName(name);
     setWindowTitle(i18n(name.toLatin1()));
 
-    QLayout* layout = new GroupFlowLayout(this);//QBoxLayout(QBoxLayout::TopToBottom, this);
+    QLayout *layout = new GroupFlowLayout(this); // QBoxLayout(QBoxLayout::TopToBottom, this);
 
     for (QDomElement group = e.firstChildElement("group"); !group.isNull(); group = group.nextSiblingElement("group")) {
         QHBoxLayout *groupLayout = new QHBoxLayout();
@@ -69,18 +69,18 @@ ActionOptionWidget::ActionOptionWidget(CellToolBase* cellTool, const QDomElement
         // In each group there are a number of actions that will be layouted together.
         for (QDomElement action = group.firstChildElement("action"); !action.isNull(); action = action.nextSiblingElement("action")) {
             QString actionName = action.attribute("name");
-            QAction* a = cellTool->action(actionName);
+            QAction *a = cellTool->action(actionName);
             if (!a) {
                 warnSheets << "unknown action" << actionName << "in CellToolOptionWidgets.xml";
                 continue;
             }
-            QWidgetAction* wa = qobject_cast<QWidgetAction *>(a);
-            QWidget* w = wa ? wa->requestWidget(this) : 0;
-            if (w && qobject_cast<KoFontComboBox*>(w)) {
+            QWidgetAction *wa = qobject_cast<QWidgetAction *>(a);
+            QWidget *w = wa ? wa->requestWidget(this) : 0;
+            if (w && qobject_cast<KoFontComboBox *>(w)) {
                 w->setMinimumWidth(w->minimumWidth() / 2);
             }
             if (!w) {
-                QToolButton* b = new QToolButton(this);
+                QToolButton *b = new QToolButton(this);
                 b->setFocusPolicy(Qt::NoFocus);
                 b->setDefaultAction(a);
                 w = b;
@@ -101,13 +101,16 @@ ActionOptionWidget::ActionOptionWidget(CellToolBase* cellTool, const QDomElement
 }
 
 GroupFlowLayout::GroupFlowLayout(QWidget *parent, int margin, int hSpacing, int vSpacing)
-    : QLayout(parent), m_hSpace(hSpacing), m_vSpace(vSpacing)
+    : QLayout(parent)
+    , m_hSpace(hSpacing)
+    , m_vSpace(vSpacing)
 {
     setContentsMargins(margin, margin, margin, margin);
 }
 
 GroupFlowLayout::GroupFlowLayout(int margin, int hSpacing, int vSpacing)
-    : m_hSpace(hSpacing), m_vSpace(vSpacing)
+    : m_hSpace(hSpacing)
+    , m_vSpace(vSpacing)
 {
     setContentsMargins(margin, margin, margin, margin);
 }
@@ -212,14 +215,14 @@ int GroupFlowLayout::doLayout(const QRect &rect, bool testOnly) const
         QWidget *wid = item->widget();
         int spaceX = horizontalSpacing();
         if (wid && spaceX == -1)
-            spaceX = wid->style()->layoutSpacing(
-                        QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Horizontal);
-        if (spaceX == -1) spaceX = 5;
+            spaceX = wid->style()->layoutSpacing(QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Horizontal);
+        if (spaceX == -1)
+            spaceX = 5;
         int spaceY = verticalSpacing();
         if (wid && spaceY == -1)
-            spaceY = wid->style()->layoutSpacing(
-                        QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Vertical);
-        if (spaceY == -1) spaceX = 5;
+            spaceY = wid->style()->layoutSpacing(QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Vertical);
+        if (spaceY == -1)
+            spaceX = 5;
         int nextX = x + item->sizeHint().width() + spaceX;
         if (nextX - spaceX > effectiveRect.right() && lineHeight > 0) {
             x = effectiveRect.x();

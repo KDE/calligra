@@ -5,20 +5,19 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "VariablesPlugin.h"
-#include "DateVariableFactory.h"
-#include "PageVariableFactory.h"
-#include "InfoVariableFactory.h"
 #include "ChapterVariableFactory.h"
+#include "DateVariableFactory.h"
+#include "InfoVariableFactory.h"
+#include "PageVariableFactory.h"
 #include "UserVariableFactory.h"
 #include <KPluginFactory>
 
 #include <KoInlineObjectRegistry.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(VariablesPluginFactory, "calligra_textinlineobject_variables.json",
-                           registerPlugin<VariablesPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(VariablesPluginFactory, "calligra_textinlineobject_variables.json", registerPlugin<VariablesPlugin>();)
 
-VariablesPlugin::VariablesPlugin(QObject *parent, const QVariantList&)
-        : QObject(parent)
+VariablesPlugin::VariablesPlugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
 {
     KoInlineObjectRegistry::instance()->add(new PageVariableFactory());
     KoInlineObjectRegistry::instance()->add(new DateVariableFactory());
@@ -28,4 +27,3 @@ VariablesPlugin::VariablesPlugin(QObject *parent, const QVariantList&)
 }
 
 #include <VariablesPlugin.moc>
-

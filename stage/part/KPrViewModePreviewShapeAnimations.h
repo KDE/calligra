@@ -9,16 +9,16 @@
 
 #include "stage_export.h"
 
-#include <KoPAViewMode.h>
 #include "KPrAnimationDirector.h"
+#include <KoPAViewMode.h>
 #include <QTimeLine>
 
 class KPrShapeAnimation;
 
 /**
-  * This view mode play a specific shape animation preview
-  * and return to the previous view mode after finish.
-  */
+ * This view mode play a specific shape animation preview
+ * and return to the previous view mode after finish.
+ */
 class STAGE_EXPORT KPrViewModePreviewShapeAnimations : public KoPAViewMode
 {
     Q_OBJECT
@@ -61,7 +61,6 @@ protected Q_SLOTS:
     void animate();
 
 private:
-
     KoPAViewMode *m_savedViewMode;
     QTimeLine m_timeLine;
     KPrShapeAnimation *m_shapeAnimation;

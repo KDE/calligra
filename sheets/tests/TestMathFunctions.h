@@ -16,7 +16,7 @@ namespace Sheets
 {
 class MapBase;
 
-class TestMathFunctions: public QObject
+class TestMathFunctions : public QObject
 {
     Q_OBJECT
 
@@ -48,8 +48,8 @@ private Q_SLOTS:
     void testCOTH();
     void testDEGREES();
     void testDELTA();
-//   void testERF();  -> TestEngineering
-//   void testERFC(); -> TestEngineering
+    //   void testERF();  -> TestEngineering
+    //   void testERFC(); -> TestEngineering
     void testEVEN();
     void testEXP();
     void testFACT();
@@ -73,7 +73,7 @@ private Q_SLOTS:
     void testMULTINOMIAL();
     void testMUNIT();
     void testODD();
-//   void testPI(); -> TestEngineering
+    //   void testPI(); -> TestEngineering
     void testPOWER();
     void testPRODUCT();
     void testQUOTIENT();
@@ -97,10 +97,10 @@ private Q_SLOTS:
     void testTRUNC();
 
 private:
-    Value TestDouble(const QString& formula, const Value& v2, int accuracy);
-    Value evaluate(const QString&);
+    Value TestDouble(const QString &formula, const Value &v2, int accuracy);
+    Value evaluate(const QString &);
 
-    MapBase* m_map;
+    MapBase *m_map;
 };
 
 } // namespace Sheets

@@ -8,8 +8,8 @@
 #include "DefaultToolFactory.h"
 #include "DefaultTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 
 DefaultToolFactory::DefaultToolFactory()
     : KoToolFactoryBase(KoInteractionTool_ID)
@@ -21,9 +21,11 @@ DefaultToolFactory::DefaultToolFactory()
     setActivationShapeId("flake/always");
 }
 
-DefaultToolFactory::~DefaultToolFactory() {
+DefaultToolFactory::~DefaultToolFactory()
+{
 }
 
-KoToolBase* DefaultToolFactory::createTool(KoCanvasBase *canvas) {
+KoToolBase *DefaultToolFactory::createTool(KoCanvasBase *canvas)
+{
     return new DefaultTool(canvas);
 }

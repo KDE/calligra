@@ -9,51 +9,51 @@
 #include "KoGradientEditWidget.h"
 
 #include <KoAbstractGradient.h>
-#include <KoStopGradient.h>
+#include <KoColorPopupAction.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 #include <KoSliderCombo.h>
-#include <KoColorPopupAction.h>
+#include <KoStopGradient.h>
 
 #include <KLocalizedString>
 
-#include <QDoubleSpinBox>
 #include <QComboBox>
-#include <QFileInfo>
-#include <QPointF>
-#include <QLabel>
-#include <QPushButton>
-#include <QToolButton>
-#include <QGridLayout>
-#include <QRadialGradient>
-#include <QLinearGradient>
 #include <QConicalGradient>
+#include <QDoubleSpinBox>
+#include <QFileInfo>
+#include <QGridLayout>
+#include <QLabel>
+#include <QLinearGradient>
+#include <QPointF>
+#include <QPushButton>
+#include <QRadialGradient>
+#include <QToolButton>
 
 #include <math.h>
 
-void transferGradientPosition(const QGradient * srcGradient, QGradient * dstGradient)
+void transferGradientPosition(const QGradient *srcGradient, QGradient *dstGradient)
 {
     // first check if gradients have the same type
     if (srcGradient->type() == dstGradient->type()) {
         switch (srcGradient->type()) {
         case QGradient::LinearGradient: {
-            const QLinearGradient * src = static_cast<const QLinearGradient*>(srcGradient);
-            QLinearGradient * dst = static_cast<QLinearGradient*>(dstGradient);
+            const QLinearGradient *src = static_cast<const QLinearGradient *>(srcGradient);
+            QLinearGradient *dst = static_cast<QLinearGradient *>(dstGradient);
             dst->setStart(src->start());
             dst->setFinalStop(src->finalStop());
             break;
         }
         case QGradient::RadialGradient: {
-            const QRadialGradient * src = static_cast<const QRadialGradient*>(srcGradient);
-            QRadialGradient * dst = static_cast<QRadialGradient*>(dstGradient);
+            const QRadialGradient *src = static_cast<const QRadialGradient *>(srcGradient);
+            QRadialGradient *dst = static_cast<QRadialGradient *>(dstGradient);
             dst->setCenter(src->center());
             dst->setRadius(src->radius());
             dst->setFocalPoint(src->focalPoint());
             break;
         }
         case QGradient::ConicalGradient: {
-            const QConicalGradient * src = static_cast<const QConicalGradient*>(srcGradient);
-            QConicalGradient * dst = static_cast<QConicalGradient*>(dstGradient);
+            const QConicalGradient *src = static_cast<const QConicalGradient *>(srcGradient);
+            QConicalGradient *dst = static_cast<QConicalGradient *>(dstGradient);
             dst->setCenter(src->center());
             dst->setAngle(src->angle());
             break;
@@ -68,22 +68,22 @@ void transferGradientPosition(const QGradient * srcGradient, QGradient * dstGrad
     QPointF start, stop;
     switch (srcGradient->type()) {
     case QGradient::LinearGradient: {
-        const QLinearGradient * g = static_cast<const QLinearGradient*>(srcGradient);
+        const QLinearGradient *g = static_cast<const QLinearGradient *>(srcGradient);
         start = g->start();
         stop = g->finalStop();
         break;
     }
     case QGradient::RadialGradient: {
-        const QRadialGradient * g = static_cast<const QRadialGradient*>(srcGradient);
+        const QRadialGradient *g = static_cast<const QRadialGradient *>(srcGradient);
         start = g->center();
         stop = QPointF(g->radius(), 0.0);
         break;
     }
     case QGradient::ConicalGradient: {
-        const QConicalGradient * g = static_cast<const QConicalGradient*>(srcGradient);
+        const QConicalGradient *g = static_cast<const QConicalGradient *>(srcGradient);
         start = g->center();
         qreal radAngle = g->angle() * M_PI / 180.0;
-        stop = QPointF(50.0 * cos(radAngle), 50.*sin(radAngle));
+        stop = QPointF(50.0 * cos(radAngle), 50. * sin(radAngle));
         break;
     }
     default:
@@ -93,13 +93,13 @@ void transferGradientPosition(const QGradient * srcGradient, QGradient * dstGrad
 
     switch (dstGradient->type()) {
     case QGradient::LinearGradient: {
-        QLinearGradient * g = static_cast<QLinearGradient*>(dstGradient);
+        QLinearGradient *g = static_cast<QLinearGradient *>(dstGradient);
         g->setStart(start);
         g->setFinalStop(stop);
         break;
     }
     case QGradient::RadialGradient: {
-        QRadialGradient * g = static_cast<QRadialGradient*>(dstGradient);
+        QRadialGradient *g = static_cast<QRadialGradient *>(dstGradient);
         QPointF diff = stop - start;
         qreal radius = sqrt(diff.x() * diff.x() + diff.y() * diff.y());
         g->setCenter(start);
@@ -108,13 +108,13 @@ void transferGradientPosition(const QGradient * srcGradient, QGradient * dstGrad
         break;
     }
     case QGradient::ConicalGradient: {
-        QConicalGradient * g = static_cast<QConicalGradient*>(dstGradient);
+        QConicalGradient *g = static_cast<QConicalGradient *>(dstGradient);
         QPointF diff = stop - start;
         qreal angle = atan2(diff.y(), diff.x());
         if (angle < 0.0)
             angle += 2 * M_PI;
         g->setCenter(start);
-        g->setAngle(angle*180 / M_PI);
+        g->setAngle(angle * 180 / M_PI);
         break;
     }
     default:
@@ -122,10 +122,13 @@ void transferGradientPosition(const QGradient * srcGradient, QGradient * dstGrad
     }
 }
 
-KoGradientEditWidget::KoGradientEditWidget(QWidget* parent)
-        : QWidget(parent)
-        , m_gradOpacity(1.0), m_stopIndex(-1), m_checkerPainter(4)
-        , m_type(QGradient::LinearGradient), m_spread(QGradient::PadSpread)
+KoGradientEditWidget::KoGradientEditWidget(QWidget *parent)
+    : QWidget(parent)
+    , m_gradOpacity(1.0)
+    , m_stopIndex(-1)
+    , m_checkerPainter(4)
+    , m_type(QGradient::LinearGradient)
+    , m_spread(QGradient::PadSpread)
 {
     setObjectName("KoGradientEditWidget");
     // create a default gradient
@@ -139,7 +142,7 @@ KoGradientEditWidget::KoGradientEditWidget(QWidget* parent)
 
 void KoGradientEditWidget::setupUI()
 {
-    QGridLayout* editLayout = new QGridLayout(this);
+    QGridLayout *editLayout = new QGridLayout(this);
 
     int row = 0;
     editLayout->addWidget(new QLabel(i18n("Target:"), this), row, 0);
@@ -176,7 +179,7 @@ void KoGradientEditWidget::setupUI()
     m_stopPosition->setSingleStep(0.01);
     editLayout->addWidget(m_stopPosition, row, 2);
     m_actionStopColor = new KoColorPopupAction(this);
-    m_actionStopColor ->setToolTip(i18n("Stop color."));
+    m_actionStopColor->setToolTip(i18n("Stop color."));
     m_stopColor->setDefaultAction(m_actionStopColor);
 
     m_addToPredefs = new QPushButton(i18n("&Add to Predefined Gradients"), this);
@@ -231,8 +234,6 @@ void KoGradientEditWidget::updateUI()
         m_opacity->setValue(opacity * 100);
     }
 
-
-
     // now update the stop color and opacity
     const bool colorStopSelected = m_stopIndex >= 0 && m_stopIndex < m_stops.count();
     if (colorStopSelected) {
@@ -257,7 +258,7 @@ void KoGradientEditWidget::setOpacity(qreal opacity)
         return;
 
     m_gradOpacity = opacity;
-    m_opacity->setValue(int(opacity*100.0));
+    m_opacity->setValue(int(opacity * 100.0));
 }
 
 void KoGradientEditWidget::setStopIndex(int index)
@@ -266,7 +267,7 @@ void KoGradientEditWidget::setStopIndex(int index)
     updateUI();
 }
 
-void KoGradientEditWidget::setGradient(const QGradient & gradient)
+void KoGradientEditWidget::setGradient(const QGradient &gradient)
 {
     m_stops = gradient.stops();
     m_type = gradient.type();
@@ -341,7 +342,7 @@ void KoGradientEditWidget::opacityChanged(qreal value, bool final)
 
 void KoGradientEditWidget::addGradientToPredefs()
 {
-    KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
+    KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
 
     QString savePath = server->saveLocation();
 
@@ -352,7 +353,7 @@ void KoGradientEditWidget::addGradientToPredefs()
         fileInfo.setFile(savePath + QString("%1.svg").arg(i++, 4, 10, QChar('0')));
     } while (fileInfo.exists());
 
-    QGradient * gradient = 0;
+    QGradient *gradient = 0;
     switch (m_type) {
     case QGradient::LinearGradient:
         gradient = new QLinearGradient();
@@ -369,14 +370,14 @@ void KoGradientEditWidget::addGradientToPredefs()
     }
     gradient->setSpread(m_spread);
     gradient->setStops(m_stops);
-    KoStopGradient * g = KoStopGradient::fromQGradient(gradient);
+    KoStopGradient *g = KoStopGradient::fromQGradient(gradient);
     delete gradient;
-    if (! g)
+    if (!g)
         return;
     g->setFilename(fileInfo.filePath());
     g->setValid(true);
 
-    if (! server->addResource(g))
+    if (!server->addResource(g))
         delete g;
 }
 
@@ -388,5 +389,3 @@ void KoGradientEditWidget::stopChanged()
         emit changed();
     }
 }
-
-

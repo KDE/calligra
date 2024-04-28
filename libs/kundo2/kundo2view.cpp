@@ -43,17 +43,16 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-#include "kundo2stack.h"
 #include "kundo2view.h"
-#include "kundo2model.h"
 #include "kundo2group.h"
+#include "kundo2model.h"
+#include "kundo2stack.h"
 
 #ifndef QT_NO_UNDOVIEW
 
 #include <QAbstractItemModel>
-#include <QPointer>
 #include <QIcon>
-
+#include <QPointer>
 
 /*!
     \class KUndo2View
@@ -77,22 +76,26 @@
 class KUndo2ViewPrivate
 {
 public:
-    KUndo2ViewPrivate() :
+    KUndo2ViewPrivate()
+        :
 #ifndef QT_NO_UNDOGROUP
-        group(0),
+        group(0)
+        ,
 #endif
-        model(0) {}
+        model(0)
+    {
+    }
 
 #ifndef QT_NO_UNDOGROUP
     QPointer<KUndo2Group> group;
 #endif
     KUndo2Model *model;
-    KUndo2View* q;
+    KUndo2View *q;
 
-    void init(KUndo2View* view);
+    void init(KUndo2View *view);
 };
 
-void KUndo2ViewPrivate::init(KUndo2View* view)
+void KUndo2ViewPrivate::init(KUndo2View *view)
 {
     q = view;
     model = new KUndo2Model(q);
@@ -104,7 +107,9 @@ void KUndo2ViewPrivate::init(KUndo2View* view)
     Constructs a new view with parent \a parent.
 */
 
-KUndo2View::KUndo2View(QWidget *parent) : QListView(parent), d(new KUndo2ViewPrivate)
+KUndo2View::KUndo2View(QWidget *parent)
+    : QListView(parent)
+    , d(new KUndo2ViewPrivate)
 {
     d->init(this);
 }
@@ -113,7 +118,9 @@ KUndo2View::KUndo2View(QWidget *parent) : QListView(parent), d(new KUndo2ViewPri
     Constructs a new view with parent \a parent and sets the observed stack to \a stack.
 */
 
-KUndo2View::KUndo2View(KUndo2QStack *stack, QWidget *parent) : QListView(parent), d(new KUndo2ViewPrivate)
+KUndo2View::KUndo2View(KUndo2QStack *stack, QWidget *parent)
+    : QListView(parent)
+    , d(new KUndo2ViewPrivate)
 {
     d->init(this);
     setStack(stack);
@@ -127,7 +134,9 @@ KUndo2View::KUndo2View(KUndo2QStack *stack, QWidget *parent) : QListView(parent)
     The view will update itself autmiatically whenever the active stack of the group changes.
 */
 
-KUndo2View::KUndo2View(KUndo2Group *group, QWidget *parent) : QListView(parent), d(new KUndo2ViewPrivate)
+KUndo2View::KUndo2View(KUndo2Group *group, QWidget *parent)
+    : QListView(parent)
+    , d(new KUndo2ViewPrivate)
 {
     d->init(this);
     setGroup(group);
@@ -153,7 +162,6 @@ KUndo2View::~KUndo2View()
 
 KUndo2QStack *KUndo2View::stack() const
 {
-
     return d->model->stack();
 }
 
@@ -168,7 +176,6 @@ KUndo2QStack *KUndo2View::stack() const
 
 void KUndo2View::setStack(KUndo2QStack *stack)
 {
-
 #ifndef QT_NO_UNDOGROUP
     setGroup(0);
 #endif
@@ -188,21 +195,17 @@ void KUndo2View::setStack(KUndo2QStack *stack)
 
 void KUndo2View::setGroup(KUndo2Group *group)
 {
-
-
     if (d->group == group)
         return;
 
     if (d->group != 0) {
-        disconnect(d->group.data(), &KUndo2Group::activeStackChanged,
-                   d->model, &KUndo2Model::setStack);
+        disconnect(d->group.data(), &KUndo2Group::activeStackChanged, d->model, &KUndo2Model::setStack);
     }
 
     d->group = group;
 
     if (d->group != 0) {
-        connect(d->group.data(), &KUndo2Group::activeStackChanged,
-                d->model, &KUndo2Model::setStack);
+        connect(d->group.data(), &KUndo2Group::activeStackChanged, d->model, &KUndo2Model::setStack);
         d->model->setStack((KUndo2QStack *)d->group->activeStack());
     } else {
         d->model->setStack(0);
@@ -219,7 +222,6 @@ void KUndo2View::setGroup(KUndo2Group *group)
 
 KUndo2Group *KUndo2View::group() const
 {
-
     return d->group;
 }
 
@@ -236,13 +238,11 @@ KUndo2Group *KUndo2View::group() const
 
 void KUndo2View::setEmptyLabel(const QString &label)
 {
-
     d->model->setEmptyLabel(label);
 }
 
 QString KUndo2View::emptyLabel() const
 {
-
     return d->model->emptyLabel();
 }
 
@@ -258,14 +258,11 @@ QString KUndo2View::emptyLabel() const
 
 void KUndo2View::setCleanIcon(const QIcon &icon)
 {
-
     d->model->setCleanIcon(icon);
-
 }
 
 QIcon KUndo2View::cleanIcon() const
 {
-
     return d->model->cleanIcon();
 }
 

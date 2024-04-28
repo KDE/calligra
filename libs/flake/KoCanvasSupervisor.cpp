@@ -14,4 +14,3 @@ KoCanvasSupervisor::KoCanvasSupervisor()
 KoCanvasSupervisor::~KoCanvasSupervisor()
 {
 }
-

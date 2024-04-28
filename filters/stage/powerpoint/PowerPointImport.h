@@ -15,9 +15,14 @@ class PowerPointImport : public KoFilter
 {
     Q_OBJECT
 public:
-    PowerPointImport(QObject *parent, const QVariantList&) : KoFilter(parent) {}
-    ~PowerPointImport() override {}
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    PowerPointImport(QObject *parent, const QVariantList &)
+        : KoFilter(parent)
+    {
+    }
+    ~PowerPointImport() override
+    {
+    }
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 
     void setProgress(const int percent);
 };

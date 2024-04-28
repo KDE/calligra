@@ -16,14 +16,7 @@ class KarbonFilterEffectsTool : public KoInteractionTool
 {
     Q_OBJECT
 public:
-    enum EditMode {
-        None,
-        MoveAll,
-        MoveLeft,
-        MoveRight,
-        MoveTop,
-        MoveBottom
-    };
+    enum EditMode { None, MoveAll, MoveLeft, MoveRight, MoveTop, MoveBottom };
 
     explicit KarbonFilterEffectsTool(KoCanvasBase *canvas);
     ~KarbonFilterEffectsTool() override;
@@ -36,11 +29,11 @@ public:
     void mouseMoveEvent(KoPointerEvent *event) override;
 
     /// reimplemented from KoToolBase
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
 
 protected:
     /// reimplemented from KoToolBase
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
     /// reimplemented from KoToolBase
     KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
 private Q_SLOTS:
@@ -54,9 +47,10 @@ private Q_SLOTS:
     void regionYChanged(double y);
     void regionWidthChanged(double width);
     void regionHeightChanged(double height);
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KARBONFILTEREFFECTSTOOL_H

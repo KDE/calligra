@@ -5,38 +5,38 @@
  */
 
 #include "ConvolveMatrixEffect.h"
-#include "KoFilterEffectRenderContext.h"
 #include "KoFilterEffectLoadingContext.h"
+#include "KoFilterEffectRenderContext.h"
 #include "KoViewConverter.h"
-#include "KoXmlWriter.h"
 #include "KoXmlReader.h"
+#include "KoXmlWriter.h"
 #include <KLocalizedString>
+#include <QColor>
+#include <QImage>
 #include <QRect>
 #include <QVector>
-#include <QImage>
-#include <QColor>
 
 #include <cmath>
 
 ConvolveMatrixEffect::ConvolveMatrixEffect()
-        : KoFilterEffect(ConvolveMatrixEffectId, i18n("Convolve Matrix"))
+    : KoFilterEffect(ConvolveMatrixEffectId, i18n("Convolve Matrix"))
 {
     setDefaults();
 }
 
 void ConvolveMatrixEffect::setDefaults()
 {
-    m_order = QPoint(3,3);
+    m_order = QPoint(3, 3);
     m_divisor = 0.0;
     m_bias = 0.0;
-    m_target = QPoint(-1,-1);
+    m_target = QPoint(-1, -1);
     m_edgeMode = Duplicate;
     m_preserveAlpha = false;
-    m_kernel.resize(m_order.x()*m_order.y());
+    m_kernel.resize(m_order.x() * m_order.y());
     for (int i = 0; i < m_kernel.size(); ++i) {
         m_kernel[i] = 0.0;
     }
-    m_kernelUnitLength = QPointF(1,1);
+    m_kernelUnitLength = QPointF(1, 1);
 }
 
 QPoint ConvolveMatrixEffect::order() const
@@ -56,7 +56,7 @@ QVector<qreal> ConvolveMatrixEffect::kernel() const
 
 void ConvolveMatrixEffect::setKernel(const QVector<qreal> &kernel)
 {
-    if (m_order.x()*m_order.y() != kernel.count())
+    if (m_order.x() * m_order.y() != kernel.count())
         return;
     m_kernel = kernel;
 }
@@ -117,7 +117,7 @@ QImage ConvolveMatrixEffect::processImage(const QImage &image, const KoFilterEff
 
     const int rx = m_order.x();
     const int ry = m_order.y();
-    if( rx == 0 && ry == 0 )
+    if (rx == 0 && ry == 0)
         return result;
 
     const int tx = m_target.x() >= 0 && m_target.x() <= rx ? m_target.x() : rx >> 1;
@@ -127,12 +127,12 @@ QImage ConvolveMatrixEffect::processImage(const QImage &image, const KoFilterEff
     const int h = result.height();
 
     // setup mask
-    const int maskSize = rx*ry;
+    const int maskSize = rx * ry;
     QVector<QPoint> offset(maskSize);
     int index = 0;
     for (int y = 0; y < ry; ++y) {
         for (int x = 0; x < rx; ++x) {
-            offset[index] = QPoint(x-tx, y-ty);
+            offset[index] = QPoint(x - tx, y - ty);
             index++;
         }
     }
@@ -141,7 +141,7 @@ QImage ConvolveMatrixEffect::processImage(const QImage &image, const KoFilterEff
     // if no divisor given, it is the sum of all kernel values
     // if sum of kernel values is zero, divisor is set to 1
     if (divisor == 0.0) {
-        foreach(qreal k, m_kernel) {
+        foreach (qreal k, m_kernel) {
             divisor += k;
         }
         if (divisor == 0.0)
@@ -150,8 +150,8 @@ QImage ConvolveMatrixEffect::processImage(const QImage &image, const KoFilterEff
 
     int dstPixel, srcPixel;
     qreal sumA, sumR, sumG, sumB;
-    const QRgb * src = (const QRgb*)image.constBits();
-    QRgb * dst = (QRgb*)result.bits();
+    const QRgb *src = (const QRgb *)image.constBits();
+    QRgb *dst = (QRgb *)result.bits();
 
     const QRect roi = context.filterRegion().toRect();
     const int minX = roi.left();
@@ -168,33 +168,33 @@ QImage ConvolveMatrixEffect::processImage(const QImage &image, const KoFilterEff
                 srcRow = row + offset[i].y();
                 srcCol = col + offset[i].x();
                 // handle top and bottom edge
-                if (srcRow < 0 || srcRow >= h ) {
-                    switch(m_edgeMode) {
-                        case Duplicate:
-                            srcRow = srcRow >= h ? h-1 : 0;
-                            break;
-                        case Wrap:
-                            srcRow = (srcRow+h)%h;
-                            break;
-                        case None:
-                            // zero for all color channels
-                            continue;
-                            break;
+                if (srcRow < 0 || srcRow >= h) {
+                    switch (m_edgeMode) {
+                    case Duplicate:
+                        srcRow = srcRow >= h ? h - 1 : 0;
+                        break;
+                    case Wrap:
+                        srcRow = (srcRow + h) % h;
+                        break;
+                    case None:
+                        // zero for all color channels
+                        continue;
+                        break;
                     }
                 }
                 // handle left and right edge
                 if (srcCol < 0 || srcCol >= w) {
-                    switch(m_edgeMode) {
-                        case Duplicate:
-                            srcCol = srcCol >= w ? w-1 : 0;
-                            break;
-                        case Wrap:
-                            srcCol = (srcCol+w)%w;
-                            break;
-                        case None:
-                            // zero for all color channels
-                            continue;
-                            break;
+                    switch (m_edgeMode) {
+                    case Duplicate:
+                        srcCol = srcCol >= w ? w - 1 : 0;
+                        break;
+                    case Wrap:
+                        srcCol = (srcCol + w) % w;
+                        break;
+                    case None:
+                        // zero for all color channels
+                        continue;
+                        break;
                     }
                 }
                 srcPixel = srcRow * w + srcCol;
@@ -207,15 +207,15 @@ QImage ConvolveMatrixEffect::processImage(const QImage &image, const KoFilterEff
                 sumB += qBlue(s) * k;
             }
             if (m_preserveAlpha) {
-                dst[dstPixel] = qRgba( qBound(0, static_cast<int>(sumR / divisor + m_bias), 255),
-                                       qBound(0, static_cast<int>(sumG / divisor + m_bias), 255),
-                                       qBound(0, static_cast<int>(sumB / divisor + m_bias), 255),
-                                       qAlpha(dst[dstPixel]));
+                dst[dstPixel] = qRgba(qBound(0, static_cast<int>(sumR / divisor + m_bias), 255),
+                                      qBound(0, static_cast<int>(sumG / divisor + m_bias), 255),
+                                      qBound(0, static_cast<int>(sumB / divisor + m_bias), 255),
+                                      qAlpha(dst[dstPixel]));
             } else {
-                dst[dstPixel] = qRgba( qBound(0, static_cast<int>(sumR / divisor + m_bias), 255),
-                                       qBound(0, static_cast<int>(sumG / divisor + m_bias), 255),
-                                       qBound(0, static_cast<int>(sumB / divisor + m_bias), 255),
-                                       qBound(0, static_cast<int>(sumA / divisor + m_bias), 255));
+                dst[dstPixel] = qRgba(qBound(0, static_cast<int>(sumR / divisor + m_bias), 255),
+                                      qBound(0, static_cast<int>(sumG / divisor + m_bias), 255),
+                                      qBound(0, static_cast<int>(sumB / divisor + m_bias), 255),
+                                      qBound(0, static_cast<int>(sumA / divisor + m_bias), 255));
             }
         }
     }
@@ -223,7 +223,7 @@ QImage ConvolveMatrixEffect::processImage(const QImage &image, const KoFilterEff
     return result;
 }
 
-bool ConvolveMatrixEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &/*context*/)
+bool ConvolveMatrixEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext & /*context*/)
 {
     if (element.tagName() != id())
         return false;
@@ -234,27 +234,27 @@ bool ConvolveMatrixEffect::load(const KoXmlElement &element, const KoFilterEffec
         QString orderStr = element.attribute("order");
         QStringList params = orderStr.replace(',', ' ').simplified().split(' ');
         switch (params.count()) {
-            case 1:
-                m_order.rx() = qMax(1, params[0].toInt());
-                m_order.ry() = m_order.x();
-                break;
-            case 2:
-                m_order.rx() = qMax(1, params[0].toInt());
-                m_order.ry() = qMax(1, params[1].toInt());
-                break;
+        case 1:
+            m_order.rx() = qMax(1, params[0].toInt());
+            m_order.ry() = m_order.x();
+            break;
+        case 2:
+            m_order.rx() = qMax(1, params[0].toInt());
+            m_order.ry() = qMax(1, params[1].toInt());
+            break;
         }
     }
     if (element.hasAttribute("kernelMatrix")) {
         QString matrixStr = element.attribute("kernelMatrix");
         // values are separated by whitespace and/or comma
         QStringList values = matrixStr.replace(',', ' ').simplified().split(' ');
-        if (values.count() == m_order.x()*m_order.y()) {
+        if (values.count() == m_order.x() * m_order.y()) {
             m_kernel.resize(values.count());
             for (int i = 0; i < values.count(); ++i) {
                 m_kernel[i] = values[i].toDouble();
             }
         } else {
-            m_kernel.resize(m_order.x()*m_order.y());
+            m_kernel.resize(m_order.x() * m_order.y());
             for (int i = 0; i < m_kernel.size(); ++i) {
                 m_kernel[i] = 0.0;
             }
@@ -285,14 +285,14 @@ bool ConvolveMatrixEffect::load(const KoXmlElement &element, const KoFilterEffec
         QString kernelUnitLengthStr = element.attribute("kernelUnitLength");
         QStringList params = kernelUnitLengthStr.replace(',', ' ').simplified().split(' ');
         switch (params.count()) {
-            case 1:
-                m_kernelUnitLength.rx() = params[0].toDouble();
-                m_kernelUnitLength.ry() = m_kernelUnitLength.x();
-                break;
-            case 2:
-                m_kernelUnitLength.rx() = params[0].toDouble();
-                m_kernelUnitLength.ry() = params[1].toDouble();
-                break;
+        case 1:
+            m_kernelUnitLength.rx() = params[0].toDouble();
+            m_kernelUnitLength.ry() = m_kernelUnitLength.x();
+            break;
+        case 2:
+            m_kernelUnitLength.rx() = params[0].toDouble();
+            m_kernelUnitLength.ry() = params[1].toDouble();
+            break;
         }
     }
     if (element.hasAttribute("preserveAlpha")) {
@@ -323,16 +323,16 @@ void ConvolveMatrixEffect::save(KoXmlWriter &writer)
         writer.addAttribute("bias", QString("%1").arg(m_bias));
     writer.addAttribute("targetX", QString("%1").arg(m_target.x()));
     writer.addAttribute("targetY", QString("%1").arg(m_target.y()));
-    switch(m_edgeMode) {
-        case Wrap:
-            writer.addAttribute("edgeMode", "wrap");
-            break;
-        case None:
-            writer.addAttribute("edgeMode", "none");
-            break;
-        case Duplicate:
-            // fall through as it is the default
-            break;
+    switch (m_edgeMode) {
+    case Wrap:
+        writer.addAttribute("edgeMode", "wrap");
+        break;
+    case None:
+        writer.addAttribute("edgeMode", "none");
+        break;
+    case Duplicate:
+        // fall through as it is the default
+        break;
     }
     writer.addAttribute("kernelUnitLength", QString("%1 %2").arg(m_kernelUnitLength.x()).arg(m_kernelUnitLength.y()));
     if (m_preserveAlpha)

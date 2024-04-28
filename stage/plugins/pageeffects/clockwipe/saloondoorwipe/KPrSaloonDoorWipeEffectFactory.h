@@ -16,16 +16,7 @@ public:
     ~KPrSaloonDoorWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType {
-        FromTop,
-        FromLeft,
-        FromBottom,
-        FromRight,
-        ToTop,
-        ToLeft,
-        ToBottom,
-        ToRight
-    };
+    enum SubType { FromTop, FromLeft, FromBottom, FromRight, ToTop, ToLeft, ToBottom, ToRight };
 };
 
 #endif /* KPRSALOONDOORWIPEEFFECTFACTORY_H */

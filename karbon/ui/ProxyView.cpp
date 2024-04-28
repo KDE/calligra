@@ -10,7 +10,7 @@
 
 #include <QDebug>
 
-ProxyView::ProxyView(KoPart *karbonPart, KoDocument* doc, QWidget* parent)
+ProxyView::ProxyView(KoPart *karbonPart, KoDocument *doc, QWidget *parent)
     : KoView(karbonPart, doc, parent)
 {
     setObjectName("Karbon view helper");

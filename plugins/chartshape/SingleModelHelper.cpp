@@ -12,9 +12,9 @@
 #include <QAbstractItemModel>
 
 // KoChart
-#include "TableSource.h"
-#include "ChartProxyModel.h"
 #include "CellRegion.h"
+#include "ChartProxyModel.h"
+#include "TableSource.h"
 
 using namespace KoChart;
 
@@ -26,16 +26,11 @@ SingleModelHelper::SingleModelHelper(Table *table, ChartProxyModel *proxyModel)
     Q_ASSERT(proxyModel);
 
     QAbstractItemModel *model = table->model();
-    connect(model, &QAbstractItemModel::modelReset,
-            this,  &SingleModelHelper::slotModelStructureChanged);
-    connect(model, &QAbstractItemModel::rowsInserted,
-            this,  &SingleModelHelper::slotModelStructureChanged);
-    connect(model, &QAbstractItemModel::rowsRemoved,
-            this,  &SingleModelHelper::slotModelStructureChanged);
-    connect(model, &QAbstractItemModel::columnsInserted,
-            this,  &SingleModelHelper::slotModelStructureChanged);
-    connect(model, &QAbstractItemModel::columnsRemoved,
-            this,  &SingleModelHelper::slotModelStructureChanged);
+    connect(model, &QAbstractItemModel::modelReset, this, &SingleModelHelper::slotModelStructureChanged);
+    connect(model, &QAbstractItemModel::rowsInserted, this, &SingleModelHelper::slotModelStructureChanged);
+    connect(model, &QAbstractItemModel::rowsRemoved, this, &SingleModelHelper::slotModelStructureChanged);
+    connect(model, &QAbstractItemModel::columnsInserted, this, &SingleModelHelper::slotModelStructureChanged);
+    connect(model, &QAbstractItemModel::columnsRemoved, this, &SingleModelHelper::slotModelStructureChanged);
 
     // Initialize the proxy with this model
     slotModelStructureChanged();

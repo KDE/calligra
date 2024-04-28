@@ -7,16 +7,16 @@
 #include "rtreetestapp.h"
 
 #include <QApplication>
-#include <QMessageBox>
-#include <QMenuBar>
-#include <QStatusBar>
-#include <QMenu>
-#include <QPainterPath>
+#include <QDebug>
 #include <QLayout>
-#include <QTimer>
+#include <QMenu>
+#include <QMenuBar>
+#include <QMessageBox>
+#include <QPainterPath>
 #include <QPoint>
 #include <QPointF>
-#include <QDebug>
+#include <QStatusBar>
+#include <QTimer>
 
 #include "Tool.h"
 
@@ -30,17 +30,17 @@ int main(int argc, char *argv[])
 }
 
 Canvas::Canvas()
-        : QWidget()
-        , m_zoom(1)
-        , m_rtree(4, 2)
-//, m_rtree( 2, 1 )
-        , m_tool(0)
-        , m_createTool(this)
-        , m_selectTool(this)
-        , m_removeTool(this)
-        , m_file("data.trc")
-        , m_listId(0)
-        , m_paintTree(false)
+    : QWidget()
+    , m_zoom(1)
+    , m_rtree(4, 2)
+    //, m_rtree( 2, 1 )
+    , m_tool(0)
+    , m_createTool(this)
+    , m_selectTool(this)
+    , m_removeTool(this)
+    , m_file("data.trc")
+    , m_listId(0)
+    , m_paintTree(false)
 {
     m_tool = &m_createTool;
     setBackgroundRole(QPalette::Base);
@@ -53,16 +53,16 @@ void Canvas::updateCanvas()
     update();
 }
 
-void Canvas::insert(QRectF & rect)
+void Canvas::insert(QRectF &rect)
 {
     m_out << "i " << rect.left() << " " << rect.top() << " " << rect.width() << " " << rect.height() << Qt::endl;
-    Data * data = new Data(rect);
+    Data *data = new Data(rect);
     m_rects.insert(data);
     m_rtree.insert(rect, data);
     update();
 }
 
-void Canvas::select(QRectF & rect)
+void Canvas::select(QRectF &rect)
 {
     if (rect.isEmpty()) {
         m_found = m_rtree.contains(rect.topLeft());
@@ -72,12 +72,12 @@ void Canvas::select(QRectF & rect)
     update();
 }
 
-void Canvas::remove(QRectF & rect)
+void Canvas::remove(QRectF &rect)
 {
     m_out << "r " << rect.left() << " " << rect.top() << " " << rect.width() << " " << rect.height() << Qt::endl;
     m_found = QList<Data *>();
     QList<Data *> remove = m_rtree.intersects(rect);
-    foreach(Data * data, remove) {
+    foreach (Data *data, remove) {
         m_rtree.remove(data);
         m_rects.remove(data);
         delete data;
@@ -113,7 +113,6 @@ void Canvas::replay()
 
 void Canvas::replayStep()
 {
-
     QString line = m_list.at(m_listId++);
     qDebug() << "Line:" << line;
     QStringList values = line.split(' ');
@@ -153,7 +152,7 @@ void Canvas::paintTree(bool paintTree)
     update();
 }
 
-void Canvas::paintEvent(QPaintEvent * e)
+void Canvas::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
     QPainter p(this);
@@ -165,7 +164,7 @@ void Canvas::paintEvent(QPaintEvent * e)
 
     QPen pen(Qt::black);
     p.setPen(pen);
-    foreach(Data * data, m_rects) {
+    foreach (Data *data, m_rects) {
         data->paint(p);
     }
 
@@ -173,7 +172,7 @@ void Canvas::paintEvent(QPaintEvent * e)
         m_rtree.paint(p);
     }
 
-    foreach(Data * data, m_found) {
+    foreach (Data *data, m_found) {
         QColor c(Qt::yellow);
         c.setAlphaF(0.1);
         QBrush brush(c);
@@ -188,7 +187,6 @@ void Canvas::mouseMoveEvent(QMouseEvent *e)
         m_tool->mouseMoveEvent(e);
     }
 }
-
 
 void Canvas::mousePressEvent(QMouseEvent *e)
 {
@@ -239,8 +237,7 @@ MainWindow::MainWindow()
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, tr("About test"),
-                       tr("R-Tree Library Test Application"));
+    QMessageBox::about(this, tr("About test"), tr("R-Tree Library Test Application"));
 }
 
 void MainWindow::createActions()
@@ -306,7 +303,6 @@ void MainWindow::createMenus()
     m_editMenu->addAction(m_removeAct);
     m_editMenu->addAction(m_clearAct);
     menuBar()->addSeparator();
-
 
     m_helpMenu = menuBar()->addMenu(tr("&Help"));
     m_helpMenu->addAction(m_aboutAct);

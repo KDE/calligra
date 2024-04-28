@@ -11,33 +11,33 @@
 #include "OdfDebug.h"
 
 // Calligra
+#include "KoStyleStack.h"
+#include <KoOdfManifestEntry.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlNS.h>
-#include <KoOdfManifestEntry.h>
-#include "KoStyleStack.h"
 
 // Qt
-#include <QStandardPaths>
 #include <QMimeDatabase>
 #include <QMimeType>
-
+#include <QStandardPaths>
 
 class Q_DECL_HIDDEN KoOdfLoadingContext::Private
 {
 public:
     Private(KoOdfStylesReader &sr, KoStore *s)
-        : store(s),
-        stylesReader(sr),
-        generatorType(KoOdfLoadingContext::Unknown),
-        metaXmlParsed(false),
-        useStylesAutoStyles(false)
+        : store(s)
+        , stylesReader(sr)
+        , generatorType(KoOdfLoadingContext::Unknown)
+        , metaXmlParsed(false)
+        , useStylesAutoStyles(false)
     {
     }
 
-    ~Private() {
+    ~Private()
+    {
         qDeleteAll(manifestEntries);
     }
 
@@ -53,13 +53,12 @@ public:
     KoXmlDocument manifestDoc;
     QHash<QString, KoOdfManifestEntry *> manifestEntries;
 
-
     KoOdfStylesReader defaultStylesReader;
     KoXmlDocument doc; // the doc needs to be kept around so it is possible to access the styles
 };
 
-KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStore* store, const QString &defaultStylesResourcePath)
-        : d(new Private(stylesReader, store))
+KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStore *store, const QString &defaultStylesResourcePath)
+    : d(new Private(stylesReader, store))
 {
     // Ideally this should be done by KoDocument and passed as argument here...
     KoOdfReadStore oasisStore(store);
@@ -68,20 +67,16 @@ KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStor
 
     if (!defaultStylesResourcePath.isEmpty()) {
         Q_ASSERT(defaultStylesResourcePath.endsWith(QLatin1Char('/')));
-        const QString fileName =
-            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                   defaultStylesResourcePath + "defaultstyles.xml");
-        if ( ! fileName.isEmpty() ) {
-            QFile file( fileName );
+        const QString fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation, defaultStylesResourcePath + "defaultstyles.xml");
+        if (!fileName.isEmpty()) {
+            QFile file(fileName);
             QString errorMessage;
-            if ( KoOdfReadStore::loadAndParse( &file, d->doc, errorMessage, fileName ) ) {
-                d->defaultStylesReader.createStyleMap( d->doc, true );
-            }
-            else {
+            if (KoOdfReadStore::loadAndParse(&file, d->doc, errorMessage, fileName)) {
+                d->defaultStylesReader.createStyleMap(d->doc, true);
+            } else {
                 warnOdf << "reading of defaultstyles.xml failed:" << errorMessage;
             }
-        }
-        else {
+        } else {
             warnOdf << "defaultstyles.xml not found";
         }
     }
@@ -96,7 +91,8 @@ KoOdfLoadingContext::~KoOdfLoadingContext()
     delete d;
 }
 
-void KoOdfLoadingContext::setManifestFile(const QString& fileName) {
+void KoOdfLoadingContext::setManifestFile(const QString &fileName)
+{
     KoOdfReadStore oasisStore(d->store);
     QString dummy;
     (void)oasisStore.loadAndParse(fileName, d->manifestDoc, dummy);
@@ -105,12 +101,12 @@ void KoOdfLoadingContext::setManifestFile(const QString& fileName) {
     }
 }
 
-void KoOdfLoadingContext::fillStyleStack(const KoXmlElement& object, const QString &nsURI, const QString &attrName, const QString &family)
+void KoOdfLoadingContext::fillStyleStack(const KoXmlElement &object, const QString &nsURI, const QString &attrName, const QString &family)
 {
     // find all styles associated with an object and push them on the stack
     if (object.hasAttributeNS(nsURI, attrName)) {
         const QString styleName = object.attributeNS(nsURI, attrName, QString());
-        const KoXmlElement * style = d->stylesReader.findStyle(styleName, family, d->useStylesAutoStyles);
+        const KoXmlElement *style = d->stylesReader.findStyle(styleName, family, d->useStylesAutoStyles);
 
         if (style)
             addStyles(style, family, d->useStylesAutoStyles);
@@ -119,36 +115,37 @@ void KoOdfLoadingContext::fillStyleStack(const KoXmlElement& object, const QStri
     }
 }
 
-void KoOdfLoadingContext::addStyles(const KoXmlElement* style, const QString &family, bool usingStylesAutoStyles)
+void KoOdfLoadingContext::addStyles(const KoXmlElement *style, const QString &family, bool usingStylesAutoStyles)
 {
     Q_ASSERT(style);
-    if (!style) return;
+    if (!style)
+        return;
 
     // this recursive function is necessary as parent styles can have parents themselves
     if (style->hasAttributeNS(KoXmlNS::style, "parent-style-name")) {
         const QString parentStyleName = style->attributeNS(KoXmlNS::style, "parent-style-name", QString());
-        const KoXmlElement* parentStyle = d->stylesReader.findStyle(parentStyleName, family, usingStylesAutoStyles);
+        const KoXmlElement *parentStyle = d->stylesReader.findStyle(parentStyleName, family, usingStylesAutoStyles);
 
         if (parentStyle)
             addStyles(parentStyle, family, usingStylesAutoStyles);
         else {
             warnOdf << "Parent style not found: " << family << parentStyleName << usingStylesAutoStyles;
-            //we are handling a non compliant odf file. let's at the very least load the application default, and the eventual odf default
+            // we are handling a non compliant odf file. let's at the very least load the application default, and the eventual odf default
             if (!family.isEmpty()) {
-                const KoXmlElement* def = d->stylesReader.defaultStyle(family);
-                if (def) {   // then, the default style for this family
+                const KoXmlElement *def = d->stylesReader.defaultStyle(family);
+                if (def) { // then, the default style for this family
                     d->styleStack.push(*def);
                 }
             }
         }
     } else if (!family.isEmpty()) {
-        const KoXmlElement* def = d->stylesReader.defaultStyle(family);
-        if (def) {   // then, the default style for this family
+        const KoXmlElement *def = d->stylesReader.defaultStyle(family);
+        if (def) { // then, the default style for this family
             d->styleStack.push(*def);
         }
     }
 
-    //debugOdf <<"pushing style" << style->attributeNS( KoXmlNS::style,"name", QString() );
+    // debugOdf <<"pushing style" << style->attributeNS( KoXmlNS::style,"name", QString() );
     d->styleStack.push(*style);
 }
 
@@ -170,7 +167,7 @@ void KoOdfLoadingContext::parseGenerator() const
         KoOdfReadStore oasisStore(d->store);
         QString errorMsg;
         if (oasisStore.loadAndParse("meta.xml", metaDoc, errorMsg)) {
-            KoXmlNode meta   = KoXml::namedItemNS(metaDoc, KoXmlNS::office, "document-meta");
+            KoXmlNode meta = KoXml::namedItemNS(metaDoc, KoXmlNS::office, "document-meta");
             KoXmlNode office = KoXml::namedItemNS(meta, KoXmlNS::office, "meta");
             KoXmlElement generator = KoXml::namedItemNS(office, KoXmlNS::meta, "generator");
             if (!generator.isNull()) {
@@ -179,14 +176,11 @@ void KoOdfLoadingContext::parseGenerator() const
                     d->generatorType = Calligra;
                 }
                 // NeoOffice is a port of OpenOffice to Mac OS X
-                else if (d->generator.startsWith(QLatin1String("OpenOffice.org")) ||
-                         d->generator.startsWith(QLatin1String("NeoOffice")) ||
-                         d->generator.startsWith(QLatin1String("LibreOffice")) ||
-                         d->generator.startsWith(QLatin1String("StarOffice")) ||
-                         d->generator.startsWith(QLatin1String("Lotus Symphony"))) {
+                else if (d->generator.startsWith(QLatin1String("OpenOffice.org")) || d->generator.startsWith(QLatin1String("NeoOffice"))
+                         || d->generator.startsWith(QLatin1String("LibreOffice")) || d->generator.startsWith(QLatin1String("StarOffice"))
+                         || d->generator.startsWith(QLatin1String("Lotus Symphony"))) {
                     d->generatorType = OpenOffice;
-                }
-                else if (d->generator.startsWith(QLatin1String("MicrosoftOffice"))) {
+                } else if (d->generator.startsWith(QLatin1String("MicrosoftOffice"))) {
                     d->generatorType = MicrosoftOffice;
                 }
             }
@@ -224,8 +218,8 @@ KoOdfStylesReader &KoOdfLoadingContext::stylesReader()
 }
 
 /**
-* Get the application default styles styleReader
-*/
+ * Get the application default styles styleReader
+ */
 KoOdfStylesReader &KoOdfLoadingContext::defaultStylesReader()
 {
     return d->defaultStylesReader;
@@ -246,7 +240,7 @@ bool KoOdfLoadingContext::useStylesAutoStyles() const
     return d->useStylesAutoStyles;
 }
 
-QString KoOdfLoadingContext::mimeTypeForPath(const QString& path, bool guess) const
+QString KoOdfLoadingContext::mimeTypeForPath(const QString &path, bool guess) const
 {
     QHash<QString, KoOdfManifestEntry *>::ConstIterator it(d->manifestEntries.constFind(path));
     if (it == d->manifestEntries.constEnd()) {
@@ -274,13 +268,12 @@ QString KoOdfLoadingContext::mimeTypeForPath(const QString& path, bool guess) co
         }
 
         return mimeType;
-    }
-    else {
+    } else {
         return QString();
     }
 }
 
-QList<KoOdfManifestEntry*> KoOdfLoadingContext::manifestEntries() const
+QList<KoOdfManifestEntry *> KoOdfLoadingContext::manifestEntries() const
 {
     return d->manifestEntries.values();
 }
@@ -288,7 +281,7 @@ QList<KoOdfManifestEntry*> KoOdfLoadingContext::manifestEntries() const
 bool KoOdfLoadingContext::parseManifest(const KoXmlDocument &manifestDocument)
 {
     // First find the manifest:manifest node.
-    KoXmlNode  n = manifestDocument.firstChild();
+    KoXmlNode n = manifestDocument.firstChild();
     debugOdf << "Searching for manifest:manifest " << n.toElement().nodeName();
     for (; !n.isNull(); n = n.nextSibling()) {
         if (!n.isElement()) {
@@ -298,12 +291,9 @@ bool KoOdfLoadingContext::parseManifest(const KoXmlDocument &manifestDocument)
             debugOdf << "element";
         }
 
-        debugOdf << "name:" << n.toElement().localName()
-                      << "namespace:" << n.toElement().namespaceURI();
+        debugOdf << "name:" << n.toElement().localName() << "namespace:" << n.toElement().namespaceURI();
 
-        if (n.toElement().localName() == "manifest"
-            && n.toElement().namespaceURI() == KoXmlNS::manifest)
-        {
+        if (n.toElement().localName() == "manifest" && n.toElement().namespaceURI() == KoXmlNS::manifest) {
             debugOdf << "found manifest:manifest";
             break;
         }
@@ -315,9 +305,8 @@ bool KoOdfLoadingContext::parseManifest(const KoXmlDocument &manifestDocument)
 
     // Now loop through the children of the manifest:manifest and
     // store all the manifest:file-entry elements.
-    const KoXmlElement  manifestElement = n.toElement();
+    const KoXmlElement manifestElement = n.toElement();
     for (n = manifestElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
-
         if (!n.isElement())
             continue;
 
@@ -325,15 +314,14 @@ bool KoOdfLoadingContext::parseManifest(const KoXmlDocument &manifestDocument)
         if (!(el.localName() == "file-entry" && el.namespaceURI() == KoXmlNS::manifest))
             continue;
 
-        QString fullPath  = el.attributeNS(KoXmlNS::manifest, "full-path", QString());
+        QString fullPath = el.attributeNS(KoXmlNS::manifest, "full-path", QString());
         QString mediaType = el.attributeNS(KoXmlNS::manifest, "media-type", QString(""));
-        QString version   = el.attributeNS(KoXmlNS::manifest, "version", QString());
+        QString version = el.attributeNS(KoXmlNS::manifest, "version", QString());
 
         // Only if fullPath is valid, should we store this entry.
         // If not, we don't bother to find out exactly what is wrong, we just skip it.
         if (!fullPath.isNull()) {
-            d->manifestEntries.insert(fullPath,
-                                      new KoOdfManifestEntry(fullPath, mediaType, version));
+            d->manifestEntries.insert(fullPath, new KoOdfManifestEntry(fullPath, mediaType, version));
         }
     }
 

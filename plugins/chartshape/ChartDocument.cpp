@@ -9,30 +9,30 @@
 #include "ChartDocument.h"
 
 // Qt
-#include <QWidget>
 #include <QIODevice>
 #include <QPainter>
+#include <QWidget>
 
 // Calligra
 #include <KoDocument.h>
-#include <KoXmlWriter.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoGenStyles.h>
+#include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
-#include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoXmlNS.h>
-#include <KoGenStyles.h>
-#include <KoEmbeddedDocumentSaver.h>
 #include <KoView.h>
+#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 // KoChart
-#include "ChartShape.h"
-#include "ChartPart.h"
 #include "ChartDebug.h"
+#include "ChartPart.h"
+#include "ChartShape.h"
 
-
-namespace KoChart {
+namespace KoChart
+{
 
 class ChartDocument::Private
 {
@@ -53,7 +53,7 @@ ChartDocument::Private::~Private()
 
 ChartDocument::ChartDocument(ChartShape *parent)
     : KoDocument(new ChartPart(0))
-    , d (new Private)
+    , d(new Private)
 {
     d->parent = parent;
     // Needed by KoDocument::nativeOasisMimeType().
@@ -65,7 +65,6 @@ ChartDocument::~ChartDocument()
 {
     delete d;
 }
-
 
 bool ChartDocument::loadOdf(KoOdfReadStore &odfStore)
 {
@@ -104,7 +103,7 @@ bool ChartDocument::saveOdf(SavingContext &context)
     KoOdfWriteStore &odfStore = context.odfStore;
     KoStore *store = odfStore.store();
     KoXmlWriter *manifestWriter = odfStore.manifestWriter();
-    KoXmlWriter *contentWriter  = odfStore.contentWriter();
+    KoXmlWriter *contentWriter = odfStore.contentWriter();
     if (!contentWriter)
         return false;
 
@@ -113,7 +112,7 @@ bool ChartDocument::saveOdf(SavingContext &context)
     if (!bodyWriter)
         return false;
 
-    KoEmbeddedDocumentSaver& embeddedSaver = context.embeddedSaver;
+    KoEmbeddedDocumentSaver &embeddedSaver = context.embeddedSaver;
 
     KoShapeSavingContext savingContext(*bodyWriter, mainStyles, embeddedSaver);
 
@@ -143,7 +142,6 @@ bool ChartDocument::saveOdf(SavingContext &context)
     return true;
 }
 
-
 void ChartDocument::paintContent(QPainter &painter, const QRect &rect)
 {
     Q_UNUSED(painter);
@@ -151,4 +149,3 @@ void ChartDocument::paintContent(QPainter &painter, const QRect &rect)
 }
 
 } // namespace KoChart
-

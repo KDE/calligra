@@ -11,25 +11,30 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN Binding::Private : public QSharedData
 {
 public:
-    BindingModel* model;
-    Private(Binding *q) : model(new BindingModel(q)) {}
-    ~Private() { delete model; }
+    BindingModel *model;
+    Private(Binding *q)
+        : model(new BindingModel(q))
+    {
+    }
+    ~Private()
+    {
+        delete model;
+    }
 };
-
 
 Binding::Binding()
     : d(new Private(this))
 {
 }
 
-Binding::Binding(const Region& region)
+Binding::Binding(const Region &region)
     : d(new Private(this))
 {
     Q_ASSERT(region.isValid());
     d->model->setRegion(region);
 }
 
-Binding::Binding(const Binding& other)
+Binding::Binding(const Binding &other)
     : d(other.d)
 {
 }
@@ -43,28 +48,28 @@ bool Binding::isEmpty() const
     return d->model->region().isEmpty();
 }
 
-Calligra::Sheets::BindingModel* Binding::model() const
+Calligra::Sheets::BindingModel *Binding::model() const
 {
     return d->model;
 }
 
-const Calligra::Sheets::Region& Binding::region() const
+const Calligra::Sheets::Region &Binding::region() const
 {
     return d->model->region();
 }
 
-void Binding::setRegion(const Region& region)
+void Binding::setRegion(const Region &region)
 {
     d->model->setRegion(region);
 }
 
-void Binding::update(const Region& region)
+void Binding::update(const Region &region)
 {
     QRect rect;
     Region changedRegion;
     const QPoint offset = d->model->region().firstRange().topLeft();
     const QRect range = d->model->region().firstRange();
-    const SheetBase* sheet = d->model->region().firstSheet();
+    const SheetBase *sheet = d->model->region().firstSheet();
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
         if (sheet != (*it)->sheet())
@@ -79,19 +84,17 @@ void Binding::update(const Region& region)
     d->model->emitChanged(changedRegion);
 }
 
-void Binding::operator=(const Binding & other)
+void Binding::operator=(const Binding &other)
 {
     d = other.d;
 }
 
-bool Binding::operator==(const Binding& other) const
+bool Binding::operator==(const Binding &other) const
 {
     return d == other.d;
 }
 
-bool Binding::operator<(const Binding& other) const
+bool Binding::operator<(const Binding &other) const
 {
     return d < other.d;
 }
-
-

@@ -6,13 +6,15 @@
 
 #include "KoPathShapeLoader.h"
 #include "KoPathShape.h"
-#include <math.h>
 #include <FlakeDebug.h>
+#include <math.h>
 
 class KoPathShapeLoaderPrivate
 {
 public:
-    KoPathShapeLoaderPrivate(KoPathShape * p) : path(p) {
+    KoPathShapeLoaderPrivate(KoPathShape *p)
+        : path(p)
+    {
         Q_ASSERT(path);
         path->clear();
     }
@@ -33,7 +35,7 @@ public:
     const char *getCoord(const char *, qreal &);
     void calculateArc(bool relative, qreal &curx, qreal &cury, qreal angle, qreal x, qreal y, qreal r1, qreal r2, bool largeArcFlag, bool sweepFlag);
 
-    KoPathShape * path; ///< the path shape to work on
+    KoPathShape *path; ///< the path shape to work on
     QPointF lastPoint;
 };
 
@@ -179,8 +181,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
                 ptr = getCoord(ptr, y2);
                 ptr = getCoord(ptr, tox);
                 ptr = getCoord(ptr, toy);
-                if (!(lastCommand == 'c' || lastCommand == 'C' ||
-                        lastCommand == 's' || lastCommand == 'S')) {
+                if (!(lastCommand == 'c' || lastCommand == 'C' || lastCommand == 's' || lastCommand == 'S')) {
                     contrlx = curx;
                     contrly = cury;
                 }
@@ -236,8 +237,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             case 'T': {
                 ptr = getCoord(ptr, tox);
                 ptr = getCoord(ptr, toy);
-                if (!(lastCommand == 'q' || lastCommand == 'Q' ||
-                        lastCommand == 't' || lastCommand == 'T')) {
+                if (!(lastCommand == 'q' || lastCommand == 'Q' || lastCommand == 't' || lastCommand == 'T')) {
                     contrlx = curx;
                     contrly = cury;
                 }
@@ -308,10 +308,8 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             } else
                 command = *(ptr++);
 
-            if (lastCommand != 'C' && lastCommand != 'c' &&
-                    lastCommand != 'S' && lastCommand != 's' &&
-                    lastCommand != 'Q' && lastCommand != 'q' &&
-                    lastCommand != 'T' && lastCommand != 't') {
+            if (lastCommand != 'C' && lastCommand != 'c' && lastCommand != 'S' && lastCommand != 's' && lastCommand != 'Q' && lastCommand != 'q'
+                && lastCommand != 'T' && lastCommand != 't') {
                 contrlx = curx;
                 contrly = cury;
             }
@@ -320,7 +318,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
 }
 
 // parses the coord into number and forwards to the next token
-const char * KoPathShapeLoaderPrivate::getCoord(const char *ptr, qreal &number)
+const char *KoPathShapeLoaderPrivate::getCoord(const char *ptr, qreal &number)
 {
     int integer, exponent;
     qreal decimal, frac;
@@ -382,7 +380,16 @@ const char * KoPathShapeLoaderPrivate::getCoord(const char *ptr, qreal &number)
 // For each bezier found a svgToCurve call is done.
 // Adapted from Niko's code in kdelibs/kdecore/svgicons.
 // Maybe this can serve in some shared lib? (Rob)
-void KoPathShapeLoaderPrivate::calculateArc(bool relative, qreal &curx, qreal &cury, qreal angle, qreal x, qreal y, qreal r1, qreal r2, bool largeArcFlag, bool sweepFlag)
+void KoPathShapeLoaderPrivate::calculateArc(bool relative,
+                                            qreal &curx,
+                                            qreal &cury,
+                                            qreal angle,
+                                            qreal x,
+                                            qreal y,
+                                            qreal r1,
+                                            qreal r2,
+                                            bool largeArcFlag,
+                                            bool sweepFlag)
 {
     qreal sin_th, cos_th;
     qreal a00, a01, a10, a11;
@@ -408,7 +415,7 @@ void KoPathShapeLoaderPrivate::calculateArc(bool relative, qreal &curx, qreal &c
     else
         dy = -y / 2.0;
 
-    qreal _x1 =  cos_th * dx + sin_th * dy;
+    qreal _x1 = cos_th * dx + sin_th * dy;
     qreal _y1 = -sin_th * dx + cos_th * dy;
     qreal Pr1 = r1 * r1;
     qreal Pr2 = r2 * r2;
@@ -471,7 +478,7 @@ void KoPathShapeLoaderPrivate::calculateArc(bool relative, qreal &curx, qreal &c
     else if (th_arc > 0 && !sweepFlag)
         th_arc -= 2 * M_PI;
 
-    n_segs = (int)(int) ceil(fabs(th_arc / (M_PI * 0.5 + 0.001)));
+    n_segs = (int)(int)ceil(fabs(th_arc / (M_PI * 0.5 + 0.001)));
 
     for (i = 0; i < n_segs; ++i) {
         {

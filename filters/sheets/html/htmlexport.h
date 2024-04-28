@@ -31,10 +31,11 @@ class HTMLExport : public KoFilter
 {
     Q_OBJECT
 public:
-    HTMLExport(QObject* parent, const QVariantList&);
+    HTMLExport(QObject *parent, const QVariantList &);
     ~HTMLExport() override;
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
+
 private:
     /** Writes the top of the page in HTML to @par str */
     void openPage(Calligra::Sheets::Sheet *sheet, KoDocument *document, QString &str);
@@ -64,6 +65,7 @@ private:
       writes the number of them to @par row and @par column.
      */
     void detectFilledCells(Calligra::Sheets::Sheet *sheet, int &rows, int &columns);
+
 private:
     ExportDialog *m_dialog;
 
@@ -74,4 +76,3 @@ private:
 };
 
 #endif
-

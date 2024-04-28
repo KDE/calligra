@@ -46,9 +46,9 @@ void DeleteAnnotationsCommand::undo()
     if (rangeManager) {
         foreach (KoAnnotation *annotation, m_annotations) {
             rangeManager->insert(annotation);
-            //it's a textrange so we need to ask for a layout so we know where it is
+            // it's a textrange so we need to ask for a layout so we know where it is
             m_document->markContentsDirty(annotation->rangeStart(), 0);
-       }
+        }
     }
 
     m_deleteAnnotations = false;

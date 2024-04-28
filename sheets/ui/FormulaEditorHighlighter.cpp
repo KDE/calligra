@@ -7,10 +7,10 @@
 #include "FormulaEditorHighlighter.h"
 
 // Sheets
+#include "Selection.h"
+#include "core/Sheet.h"
 #include "engine/Formula.h"
 #include "engine/MapBase.h"
-#include "core/Sheet.h"
-#include "Selection.h"
 
 // Qt
 #include <QApplication>
@@ -21,7 +21,8 @@ using namespace Calligra::Sheets;
 class FormulaEditorHighlighter::Private
 {
 public:
-    Private() {
+    Private()
+    {
         selection = 0;
         tokens = Tokens();
         rangeCount = 0;
@@ -29,16 +30,15 @@ public:
     }
 
     // source for cell reference checking
-    Selection* selection;
+    Selection *selection;
     Tokens tokens;
     uint rangeCount;
     bool rangeChanged;
 };
 
-
-FormulaEditorHighlighter::FormulaEditorHighlighter(QTextEdit* textEdit, Selection* selection)
-        : QSyntaxHighlighter(textEdit)
-        , d(new Private)
+FormulaEditorHighlighter::FormulaEditorHighlighter(QTextEdit *textEdit, Selection *selection)
+    : QSyntaxHighlighter(textEdit)
+    , d(new Private)
 {
     d->selection = selection;
 }
@@ -48,12 +48,12 @@ FormulaEditorHighlighter::~FormulaEditorHighlighter()
     delete d;
 }
 
-const Tokens& FormulaEditorHighlighter::formulaTokens() const
+const Tokens &FormulaEditorHighlighter::formulaTokens() const
 {
     return d->tokens;
 }
 
-void FormulaEditorHighlighter::highlightBlock(const QString& text)
+void FormulaEditorHighlighter::highlightBlock(const QString &text)
 {
     // reset syntax highlighting
     setFormat(0, text.length(), QApplication::palette().text().color());
@@ -66,7 +66,7 @@ void FormulaEditorHighlighter::highlightBlock(const QString& text)
     Formula f;
     d->tokens = f.scan(text);
 
-    //QFont editorFont = document()->defaultFont();
+    // QFont editorFont = document()->defaultFont();
 
     uint oldRangeCount = d->rangeCount;
 
@@ -102,37 +102,35 @@ void FormulaEditorHighlighter::highlightBlock(const QString& text)
             const QColor color(colors[index % colors.size()]);
             setFormat(token.pos() + 1, token.text().length(), color);
             ++d->rangeCount;
-        }
-        break;
-        case Token::Boolean:     // True, False (also i18n-ized)
+        } break;
+        case Token::Boolean: // True, False (also i18n-ized)
             /*        font = QFont(editorFont);
                     font.setBold(true);
                     setFormat(token.pos() + 1, token.text().length(), font);*/
             break;
-        case Token::Identifier:   // function name or named area*/
+        case Token::Identifier: // function name or named area*/
             /*        font = QFont(editorFont);
                     font.setBold(true);
                     setFormat(token.pos() + 1, token.text().length(), font);*/
             break;
 
         case Token::Unknown:
-        case Token::Integer:     // 14, 3, 1977
-        case Token::Float:       // 3.141592, 1e10, 5.9e-7
-        case Token::String:      // "Calligra", "The quick brown fox..."
+        case Token::Integer: // 14, 3, 1977
+        case Token::Float: // 3.141592, 1e10, 5.9e-7
+        case Token::String: // "Calligra", "The quick brown fox..."
         case Token::Error:
             break;
-        case Token::Operator: {  // +, *, /, -
+        case Token::Operator: { // +, *, /, -
             switch (token.asOperator()) {
             case Token::LeftPar:
             case Token::RightPar:
-                //Check where this brace is in relation to the cursor and highlight it if necessary.
+                // Check where this brace is in relation to the cursor and highlight it if necessary.
                 handleBrace(i);
                 break;
             default:
                 break;
             }
-        }
-        break;
+        } break;
         }
     }
 
@@ -142,39 +140,39 @@ void FormulaEditorHighlighter::highlightBlock(const QString& text)
 
 void FormulaEditorHighlighter::handleBrace(uint index)
 {
-    const Token& token = d->tokens.at(index);
+    const Token &token = d->tokens.at(index);
 
-    QTextEdit* textEdit = qobject_cast<QTextEdit*>(parent());
+    QTextEdit *textEdit = qobject_cast<QTextEdit *>(parent());
     Q_ASSERT(textEdit);
     int cursorPos = textEdit->textCursor().position();
     int distance = cursorPos - token.pos();
     int opType = token.asOperator();
     bool highlightBrace = false;
 
-    //Check where the cursor is in relation to this left or right parenthesis token.
-    //Only one pair of braces should be highlighted at a time, and if the cursor
-    //is between two braces, the inner-most pair should be highlighted.
+    // Check where the cursor is in relation to this left or right parenthesis token.
+    // Only one pair of braces should be highlighted at a time, and if the cursor
+    // is between two braces, the inner-most pair should be highlighted.
 
     if (opType == Token::LeftPar) {
-        //If cursor is directly to the left of this left brace, highlight it
+        // If cursor is directly to the left of this left brace, highlight it
         if (distance == 1)
             highlightBrace = true;
         else
-            //Cursor is directly to the right of this left brace, highlight it unless
-            //there is another left brace to the right (in which case that should be highlighted instead as it
-            //is the inner-most brace)
+            // Cursor is directly to the right of this left brace, highlight it unless
+            // there is another left brace to the right (in which case that should be highlighted instead as it
+            // is the inner-most brace)
             if (distance == 2)
                 if ((index == (uint)d->tokens.count() - 1) || (d->tokens.at(index + 1).asOperator() != Token::LeftPar))
                     highlightBrace = true;
 
     } else {
-        //If cursor is directly to the right of this right brace, highlight it
+        // If cursor is directly to the right of this right brace, highlight it
         if (distance == 2)
             highlightBrace = true;
         else
-            //Cursor is directly to the left of this right brace, so highlight it unless
-            //there is another right brace to the left (in which case that should be highlighted instead as it
-            //is the inner-most brace)
+            // Cursor is directly to the left of this right brace, so highlight it unless
+            // there is another right brace to the left (in which case that should be highlighted instead as it
+            // is the inner-most brace)
             if (distance == 1)
                 if ((index == 0) || (d->tokens.at(index - 1).asOperator() != Token::RightPar))
                     highlightBrace = true;
@@ -189,7 +187,7 @@ void FormulaEditorHighlighter::handleBrace(uint index)
 
         if (matching != -1) {
             Token matchingBrace = d->tokens.at(matching);
-            setFormat(matchingBrace.pos() + 1 , matchingBrace.text().length() , font);
+            setFormat(matchingBrace.pos() + 1, matchingBrace.text().length(), font);
         }
     }
 }
@@ -201,15 +199,15 @@ int FormulaEditorHighlighter::findMatchingBrace(int pos)
 
     Tokens tokens = d->tokens;
 
-    //If this is a left brace we need to step forwards through the text to find the matching right brace,
-    //otherwise, it is a right brace so we need to step backwards through the text to find the matching left
-    //brace.
+    // If this is a left brace we need to step forwards through the text to find the matching right brace,
+    // otherwise, it is a right brace so we need to step backwards through the text to find the matching left
+    // brace.
     if (tokens.at(pos).asOperator() == Token::LeftPar)
         step = 1;
     else
         step = -1;
 
-    for (int index = pos ; (index >= 0) && (index < (int) tokens.count()) ; index += step) {
+    for (int index = pos; (index >= 0) && (index < (int)tokens.count()); index += step) {
         if (tokens.at(index).asOperator() == Token::LeftPar)
             depth++;
         if (tokens.at(index).asOperator() == Token::RightPar)

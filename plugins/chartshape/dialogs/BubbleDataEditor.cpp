@@ -7,29 +7,32 @@
 
 #include "BubbleDataEditor.h"
 
-#include <QSortFilterProxyModel>
 #include <QAbstractTableModel>
 #include <QAction>
+#include <QSortFilterProxyModel>
 
 #include <KoIcon.h>
 
-#include "ChartShape.h"
-#include "ChartProxyModel.h"
-#include "ChartTableView.h"
-#include "ChartTableModel.h"
-#include "DataSet.h"
 #include "ChartDebug.h"
+#include "ChartProxyModel.h"
+#include "ChartShape.h"
+#include "ChartTableModel.h"
+#include "ChartTableView.h"
+#include "DataSet.h"
 
+namespace KoChart
+{
 
-
-namespace KoChart {
-
-namespace Bubble {
+namespace Bubble
+{
 
 class DataProxy : public QSortFilterProxyModel
 {
 public:
-    DataProxy(QObject *parent = 0) : QSortFilterProxyModel(parent) {}
+    DataProxy(QObject *parent = 0)
+        : QSortFilterProxyModel(parent)
+    {
+    }
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override
     {
@@ -42,13 +45,13 @@ public:
         }
         return QSortFilterProxyModel::headerData(section, orientation, role);
     }
-    bool filterAcceptsColumn(int source_column, const QModelIndex &/*source_parent*/) const override
+    bool filterAcceptsColumn(int source_column, const QModelIndex & /*source_parent*/) const override
     {
         return source_column != 0; // skip categories
     }
     bool insertColumns(int column, int count, const QModelIndex &parent) override
     {
-        debugChartUiBubble<<column;
+        debugChartUiBubble << column;
         Q_UNUSED(count);
         Q_UNUSED(parent);
 
@@ -57,7 +60,7 @@ public:
         if (scolumn < 0) {
             scolumn = model->columnCount();
         }
-        debugChartUiBubble<<column<<':'<<scolumn;
+        debugChartUiBubble << column << ':' << scolumn;
         if (!model->insertColumns(scolumn, 1)) {
             return false;
         }
@@ -74,7 +77,7 @@ public:
     }
     bool insertRows(int row, int count, const QModelIndex &parent) override
     {
-        debugChartUiBubble<<row;
+        debugChartUiBubble << row;
         Q_UNUSED(count);
         Q_UNUSED(parent);
 
@@ -114,7 +117,6 @@ BubbleDataEditor::BubbleDataEditor(ChartShape *chart, QWidget *parent)
     m_insertRowBelowAction = new QAction(m_ui.insertRowBelow->icon(), i18n("Insert Row Below"), m_ui.tableView);
     m_deleteAction = new QAction(m_ui.deleteSelection->icon(), i18n("Delete"), m_ui.tableView);
 
-
     m_ui.tableView->addAction(m_insertColumnBeforeAction);
     m_ui.tableView->addAction(m_insertColumnAfterAction);
     m_ui.tableView->addAction(m_insertRowAboveAction);
@@ -126,14 +128,14 @@ BubbleDataEditor::BubbleDataEditor(ChartShape *chart, QWidget *parent)
     m_ui.deleteSelection->setEnabled(false);
     m_deleteAction->setEnabled(false);
 
-//     m_dataSetModel = new DataSetTableModel(m_ui.dataSetView);
+    //     m_dataSetModel = new DataSetTableModel(m_ui.dataSetView);
     m_dataSetModel.tableSource = m_chart->tableSource();
     connect(m_ui.addDataSetBefore, &QAbstractButton::clicked, this, &BubbleDataEditor::slotAddDataSetBefore);
     connect(m_ui.addDataSetAfter, &QAbstractButton::clicked, this, &BubbleDataEditor::slotAddDataSetAfter);
     connect(m_ui.removeDataSet, &QAbstractButton::clicked, this, &BubbleDataEditor::slotRemoveDataSet);
 
     m_dataSetModel.setModel(m_chart->proxyModel());
-//     connect(&m_dataSetModel, &DataSetTableModel::dataChanged, this, &BubbleDataEditor::slotDataChanged);
+    //     connect(&m_dataSetModel, &DataSetTableModel::dataChanged, this, &BubbleDataEditor::slotDataChanged);
 
     m_dataModel = new DataProxy(m_ui.tableView);
     m_dataModel->setSourceModel(m_chart->internalModel());
@@ -142,7 +144,7 @@ BubbleDataEditor::BubbleDataEditor(ChartShape *chart, QWidget *parent)
     connect(m_ui.insertColumnAfter, &QAbstractButton::clicked, this, &BubbleDataEditor::slotInsertColumnAfter);
     connect(m_ui.insertRowAbove, &QAbstractButton::clicked, this, &BubbleDataEditor::slotInsertRowAbove);
     connect(m_ui.insertRowBelow, &QAbstractButton::clicked, this, &BubbleDataEditor::slotInsertRowBelow);
-    connect(m_ui.deleteSelection,&QAbstractButton::clicked, this, &BubbleDataEditor::slotDeleteSelection);
+    connect(m_ui.deleteSelection, &QAbstractButton::clicked, this, &BubbleDataEditor::slotDeleteSelection);
 
     connect(m_insertColumnBeforeAction, &QAction::triggered, this, &BubbleDataEditor::slotInsertColumnBefore);
     connect(m_insertColumnAfterAction, &QAction::triggered, this, &BubbleDataEditor::slotInsertColumnAfter);
@@ -179,7 +181,6 @@ BubbleDataEditor::BubbleDataEditor(ChartShape *chart, QWidget *parent)
     connect(m_dataModel->sourceModel(), &QAbstractItemModel::rowsRemoved, this, &BubbleDataEditor::dataRowCountChanged);
 
     resize(sizeHint().expandedTo(QSize(600, 300)));
-
 }
 
 BubbleDataEditor::~BubbleDataEditor()
@@ -188,7 +189,7 @@ BubbleDataEditor::~BubbleDataEditor()
 
 void BubbleDataEditor::slotInsertColumnBefore()
 {
-    debugChartUiBubble<<m_ui.tableView->currentIndex();
+    debugChartUiBubble << m_ui.tableView->currentIndex();
     int pos = m_ui.tableView->currentIndex().column();
     if (pos < 0) {
         pos = 0;
@@ -198,7 +199,7 @@ void BubbleDataEditor::slotInsertColumnBefore()
 
 void BubbleDataEditor::slotInsertColumnAfter()
 {
-    debugChartUiBubble<<m_ui.tableView->currentIndex();
+    debugChartUiBubble << m_ui.tableView->currentIndex();
     int pos = m_ui.tableView->currentIndex().column() + 1;
     if (pos == 0) {
         pos = m_dataModel->columnCount();
@@ -208,7 +209,7 @@ void BubbleDataEditor::slotInsertColumnAfter()
 
 void BubbleDataEditor::slotInsertRowAbove()
 {
-    debugChartUiBubble<<m_ui.tableView->currentIndex();
+    debugChartUiBubble << m_ui.tableView->currentIndex();
     int pos = m_ui.tableView->currentIndex().row();
     if (pos < 0) {
         pos = 0;
@@ -218,7 +219,7 @@ void BubbleDataEditor::slotInsertRowAbove()
 
 void BubbleDataEditor::slotInsertRowBelow()
 {
-    debugChartUiBubble<<m_ui.tableView->currentIndex();
+    debugChartUiBubble << m_ui.tableView->currentIndex();
     int pos = m_ui.tableView->currentIndex().row() + 1;
     if (pos == 0) {
         pos = m_dataModel->rowCount();
@@ -244,7 +245,7 @@ void BubbleDataEditor::slotDeleteSelection()
 
 void BubbleDataEditor::slotAddDataSetBefore()
 {
-    debugChartUiBubble<<m_ui.tableView->currentIndex();
+    debugChartUiBubble << m_ui.tableView->currentIndex();
     int pos = m_ui.dataSetView->currentIndex().row();
     if (pos < 0) {
         pos = 0;
@@ -254,7 +255,7 @@ void BubbleDataEditor::slotAddDataSetBefore()
 
 void BubbleDataEditor::slotAddDataSetAfter()
 {
-    debugChartUiBubble<<m_ui.dataSetView->currentIndex();
+    debugChartUiBubble << m_ui.dataSetView->currentIndex();
     int pos = m_ui.dataSetView->currentIndex().row() + 1;
     if (pos == 0) {
         pos = m_dataSetModel.rowCount();
@@ -313,7 +314,7 @@ void BubbleDataEditor::enableActions()
 //     }
 // }
 
-void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int last)
+void BubbleDataEditor::dataColumnsInserted(const QModelIndex &, int first, int last)
 {
     Q_ASSERT(first == last);
     if (!m_ui.manualControl->isChecked() || first == m_dataModel->columnCount() - 1) {
@@ -325,7 +326,7 @@ void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int la
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
                 ds->setXDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
-                debugChartUiBubble<<"move X:"<<first<<':'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
+                debugChartUiBubble << "move X:" << first << ':' << r << region.toString() << ':' << ds->xDataRegion().toString();
                 break;
             }
         }
@@ -333,14 +334,14 @@ void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int la
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
                 ds->setYDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
-                debugChartUiBubble<<"move Y:"<<first<<':'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
+                debugChartUiBubble << "move Y:" << first << ':' << r << region.toString() << ':' << ds->xDataRegion().toString();
                 break;
             }
         }
         region = ds->customDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiBubble<<"move Cust:"<<first<<':'<<r;
+                debugChartUiBubble << "move Cust:" << first << ':' << r;
                 ds->setCustomDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
                 break;
             }
@@ -348,7 +349,7 @@ void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int la
         region = ds->categoryDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiBubble<<"move Cat:"<<first<<':'<<r;
+                debugChartUiBubble << "move Cat:" << first << ':' << r;
                 ds->setCategoryDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
                 break;
             }
@@ -356,7 +357,7 @@ void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int la
         region = ds->labelDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiBubble<<"move Lab:"<<first<<':'<<r;
+                debugChartUiBubble << "move Lab:" << first << ':' << r;
                 ds->setLabelDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
                 break;
             }
@@ -364,7 +365,7 @@ void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int la
     }
 }
 
-void BubbleDataEditor::dataColumnsRemoved(const QModelIndex&, int first, int last)
+void BubbleDataEditor::dataColumnsRemoved(const QModelIndex &, int first, int last)
 {
     if (!m_ui.manualControl->isChecked()) {
         return;
@@ -376,7 +377,7 @@ void BubbleDataEditor::dataColumnsRemoved(const QModelIndex&, int first, int las
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
                 ds->setXDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
-                debugChartUiBubble<<"move X:"<<first<<':'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
+                debugChartUiBubble << "move X:" << first << ':' << r << region.toString() << ':' << ds->xDataRegion().toString();
                 break;
             }
         }
@@ -384,14 +385,14 @@ void BubbleDataEditor::dataColumnsRemoved(const QModelIndex&, int first, int las
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
                 ds->setYDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
-                debugChartUiBubble<<"move Y:"<<first<<':'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
+                debugChartUiBubble << "move Y:" << first << ':' << r << region.toString() << ':' << ds->xDataRegion().toString();
                 break;
             }
         }
         region = ds->customDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiBubble<<"move Cust:"<<first<<':'<<r;
+                debugChartUiBubble << "move Cust:" << first << ':' << r;
                 ds->setCustomDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
                 break;
             }
@@ -399,7 +400,7 @@ void BubbleDataEditor::dataColumnsRemoved(const QModelIndex&, int first, int las
         region = ds->categoryDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiBubble<<"move Cat:"<<first<<':'<<r;
+                debugChartUiBubble << "move Cat:" << first << ':' << r;
                 ds->setCategoryDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
                 break;
             }
@@ -407,7 +408,7 @@ void BubbleDataEditor::dataColumnsRemoved(const QModelIndex&, int first, int las
         region = ds->labelDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiBubble<<"move Lab:"<<first<<':'<<r;
+                debugChartUiBubble << "move Lab:" << first << ':' << r;
                 ds->setLabelDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
                 break;
             }
@@ -418,10 +419,10 @@ void BubbleDataEditor::dataColumnsRemoved(const QModelIndex&, int first, int las
 void BubbleDataEditor::dataRowCountChanged()
 {
     if (!m_chart->proxyModel()->manualControl()) {
-        debugChartUiBubble<<"Not manual control";
+        debugChartUiBubble << "Not manual control";
         return;
     }
-    const QList<DataSet*> lst = m_chart->proxyModel()->dataSets();
+    const QList<DataSet *> lst = m_chart->proxyModel()->dataSets();
     for (int i = 0; i < lst.count(); ++i) {
         DataSet *ds = lst.at(i);
         CellRegion region = ds->xDataRegion();
@@ -448,7 +449,7 @@ void BubbleDataEditor::dataRowCountChanged()
             r.setHeight(m_dataModel->rowCount());
             ds->setCategoryDataRegion(CellRegion(region.table(), r));
         }
-        debugChartUiBubble<<ds;
+        debugChartUiBubble << ds;
     }
 }
 

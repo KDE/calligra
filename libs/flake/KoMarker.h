@@ -18,7 +18,7 @@ class KoShapeSavingContext;
 class QString;
 class QPainterPath;
 
-class  FLAKE_EXPORT KoMarker : public QSharedData
+class FLAKE_EXPORT KoMarker : public QSharedData
 {
 public:
     KoMarker();
@@ -60,9 +60,9 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
-Q_DECLARE_METATYPE(KoMarker*)
+Q_DECLARE_METATYPE(KoMarker *)
 
 #endif /* KOMARKER_H */

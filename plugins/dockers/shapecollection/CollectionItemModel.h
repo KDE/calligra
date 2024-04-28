@@ -9,17 +9,16 @@
 #include <KoShape.h>
 
 #include <QAbstractItemModel>
+#include <QIcon>
 #include <QList>
 #include <QString>
-#include <QIcon>
 
 class KoProperties;
 
 /**
  * Struct containing the information stored in CollectionItemModel item
  */
-struct KoCollectionItem
-{
+struct KoCollectionItem {
     KoCollectionItem()
     {
         properties = 0;
@@ -29,35 +28,38 @@ struct KoCollectionItem
     QString name;
     QString toolTip;
     QIcon icon;
-    const KoProperties* properties;
+    const KoProperties *properties;
 };
 
 class CollectionItemModel : public QAbstractListModel
 {
     Q_OBJECT
-    public:
-        explicit CollectionItemModel(QObject *parent = 0);
+public:
+    explicit CollectionItemModel(QObject *parent = 0);
 
-        Qt::DropActions supportedDragActions() const override;
-        QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-        int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-        QMimeData* mimeData(const QModelIndexList& indexes) const override;
-        QStringList mimeTypes() const override;
-        Qt::ItemFlags flags(const QModelIndex& index) const override;
+    Qt::DropActions supportedDragActions() const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+    QStringList mimeTypes() const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-        /**
-         * Set the list of KoCollectionItem to be stored in the model
-         */
-        void setShapeTemplateList(const QList<KoCollectionItem>& newlist);
-        QList<KoCollectionItem> shapeTemplateList () const { return m_shapeTemplateList; }
+    /**
+     * Set the list of KoCollectionItem to be stored in the model
+     */
+    void setShapeTemplateList(const QList<KoCollectionItem> &newlist);
+    QList<KoCollectionItem> shapeTemplateList() const
+    {
+        return m_shapeTemplateList;
+    }
 
-        const KoProperties* properties(const QModelIndex& index) const;
+    const KoProperties *properties(const QModelIndex &index) const;
 
-    private:
-        QList<KoCollectionItem> m_shapeTemplateList;
-        QString m_family;
+private:
+    QList<KoCollectionItem> m_shapeTemplateList;
+    QString m_family;
 };
 
 QDebug operator<<(QDebug dbg, const KoCollectionItem &i);
 
-#endif //KIVIOSHAPETEMPLATEMODEL_H
+#endif // KIVIOSHAPETEMPLATEMODEL_H

@@ -5,14 +5,14 @@
  */
 
 #include "KarbonDocumentMergeCommand.h"
-#include "KarbonPart.h"
 #include "KarbonDocument.h"
+#include "KarbonPart.h"
 
-#include <KoShape.h>
 #include "KoShapeLayer.h"
-#include <KoPAPageBase.h>
-#include <KoPAPage.h>
 #include <KoPAMasterPage.h>
+#include <KoPAPage.h>
+#include <KoPAPageBase.h>
+#include <KoShape.h>
 
 #include <KLocalizedString>
 
@@ -20,27 +20,30 @@ class MergePageCommand : public KUndo2Command
 {
 public:
     MergePageCommand(KoPADocument *doc, KoPAPageBase *targetPage, KoPAPageBase *sourcePage, KUndo2Command *parent)
-    : KUndo2Command(parent)
-    , mine(true)
-    , doc(doc)
-    , targetPage(targetPage)
+        : KUndo2Command(parent)
+        , mine(true)
+        , doc(doc)
+        , targetPage(targetPage)
     {
         layers = sourcePage->shapes();
         sourcePage->removeAllShapes();
     }
-    ~MergePageCommand() override {
+    ~MergePageCommand() override
+    {
         if (mine) {
             qDeleteAll(layers);
         }
     }
-    void redo() override {
+    void redo() override
+    {
         for (int i = 0; i < layers.count(); ++i) {
             targetPage->addShape(layers.at(i));
         }
         mine = false;
         doc->emitUpdate(targetPage);
     }
-    void undo() override {
+    void undo() override
+    {
         for (int i = 0; i < layers.count(); ++i) {
             targetPage->removeShape(layers.at(i));
         }
@@ -52,34 +55,37 @@ private:
     bool mine;
     KoPADocument *doc;
     KoPAPageBase *targetPage;
-    QList<KoShape*> layers;
+    QList<KoShape *> layers;
 };
 
 class AddPageCommand : public KUndo2Command
 {
 public:
     AddPageCommand(KarbonDocument *doc, KoPAPageBase *sourcePage, KUndo2Command *parent)
-    : KUndo2Command(parent)
-    , mine(true)
-    , doc(doc)
+        : KUndo2Command(parent)
+        , mine(true)
+        , doc(doc)
     {
-        newPage = doc->newPage(dynamic_cast<KoPAMasterPage*>(doc->pages(true).value(0)));
-        QList<KoShape*> layers = sourcePage->shapes();
+        newPage = doc->newPage(dynamic_cast<KoPAMasterPage *>(doc->pages(true).value(0)));
+        QList<KoShape *> layers = sourcePage->shapes();
         sourcePage->removeAllShapes();
         for (int i = 0; i < layers.count(); ++i) {
             newPage->addShape(layers.at(i));
         }
     }
-    ~AddPageCommand() override {
+    ~AddPageCommand() override
+    {
         if (mine) {
             delete newPage;
         }
     }
-    void redo() override {
+    void redo() override
+    {
         doc->insertPage(newPage, doc->pages().count());
         mine = false;
     }
-    void undo() override {
+    void undo() override
+    {
         doc->takePage(newPage);
         mine = true;
     }
@@ -93,8 +99,8 @@ private:
 KarbonDocumentMergeCommand::KarbonDocumentMergeCommand(KarbonDocument *targetPart, KarbonDocument &sourcePart, KUndo2Command *parent)
     : KUndo2Command(parent)
 {
-    QList<KoPAPageBase*> pages;
-    for(int i = 0; i < sourcePart.pages().count(); ++i) {
+    QList<KoPAPageBase *> pages;
+    for (int i = 0; i < sourcePart.pages().count(); ++i) {
         KoPAPageBase *sourcePage = sourcePart.pages().at(i);
         pages << sourcePage;
         if (i < targetPart->pages().count()) {

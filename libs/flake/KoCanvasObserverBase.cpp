@@ -8,18 +8,19 @@
 
 #include <QString>
 
-
 class KoCanvasObserverBasePrivate
 {
 public:
     KoCanvasObserverBasePrivate()
         : canvas(0)
-    {}
+    {
+    }
 
     ~KoCanvasObserverBasePrivate()
-    {}
+    {
+    }
 
-    KoCanvasBase* canvas;
+    KoCanvasBase *canvas;
 };
 
 KoCanvasObserverBase::KoCanvasObserverBase()
@@ -37,7 +38,7 @@ QString KoCanvasObserverBase::observerName() const
     return QString();
 }
 
-void KoCanvasObserverBase::setObservedCanvas(KoCanvasBase* canvas)
+void KoCanvasObserverBase::setObservedCanvas(KoCanvasBase *canvas)
 {
     d->canvas = canvas;
     setCanvas(canvas);
@@ -49,7 +50,7 @@ void KoCanvasObserverBase::unsetObservedCanvas()
     unsetCanvas();
 }
 
-KoCanvasBase* KoCanvasObserverBase::observedCanvas() const
+KoCanvasBase *KoCanvasObserverBase::observedCanvas() const
 {
     return d->canvas;
 }

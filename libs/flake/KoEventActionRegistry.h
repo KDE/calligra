@@ -10,8 +10,8 @@
 #include <QList>
 #include <QSet>
 
-#include "flake_export.h"
 #include "KoXmlReaderForward.h"
+#include "flake_export.h"
 class KoEventAction;
 class KoEventActionFactoryBase;
 class KoShapeLoadingContext;
@@ -36,7 +36,7 @@ public:
     /**
      * Create action events for the elements given
      */
-    QSet<KoEventAction*> createEventActionsFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    QSet<KoEventAction *> createEventActionsFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /**
      * Add presentation event action.
@@ -59,7 +59,6 @@ public:
     QList<KoEventActionFactoryBase *> scriptEventActions();
 
 private:
-
     KoEventActionRegistry(const KoEventActionRegistry &);
     KoEventActionRegistry operator=(const KoEventActionRegistry &);
 

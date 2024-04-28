@@ -4,20 +4,19 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "SimpleFootEndNotesWidget.h"
-#include "TextTool.h"
 #include "FormattingButton.h"
+#include "TextTool.h"
 
-#include <KoInlineNote.h>
 #include <KoIcon.h>
+#include <KoInlineNote.h>
 
 #include <QAction>
 #include <QDebug>
 
 #include <QWidget>
 
-
-SimpleFootEndNotesWidget::SimpleFootEndNotesWidget(TextTool *tool ,QWidget *parent)
-        : QWidget(parent)
+SimpleFootEndNotesWidget::SimpleFootEndNotesWidget(TextTool *tool, QWidget *parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
     widget.addFootnote->addAction(tool->action("insert_autofootnote"));

@@ -10,9 +10,9 @@
 
 #include <KLocalizedString>
 
-#include <QMenu>
 #include <QAction>
 #include <QLocale>
+#include <QMenu>
 
 static void createTimeAction(QMenu *parent, const QString &title, const QString &data)
 {
@@ -22,8 +22,8 @@ static void createTimeAction(QMenu *parent, const QString &title, const QString 
 }
 
 FixedDateFormat::FixedDateFormat(DateVariable *variable)
-        : m_variable(variable),
-        m_popup(0)
+    : m_variable(variable)
+    , m_popup(0)
 {
     widget.setupUi(this);
 
@@ -85,10 +85,18 @@ void FixedDateFormat::listClicked(QListWidgetItem *item)
     // TODO parse out the first two values...
     QString format;
     switch (widget.formatList->row(item)) {
-    case 0: format = QLocale().dateFormat(QLocale::LongFormat); break;
-    case 1: format = QLocale().dateFormat(QLocale::ShortFormat); break;
-    case 2: format = QLocale().dateTimeFormat(QLocale::LongFormat); break;
-    case 3: format = QLocale().dateTimeFormat(QLocale::ShortFormat); break;
+    case 0:
+        format = QLocale().dateFormat(QLocale::LongFormat);
+        break;
+    case 1:
+        format = QLocale().dateFormat(QLocale::ShortFormat);
+        break;
+    case 2:
+        format = QLocale().dateTimeFormat(QLocale::LongFormat);
+        break;
+    case 3:
+        format = QLocale().dateTimeFormat(QLocale::ShortFormat);
+        break;
     default:
         format = item->text();
     }
@@ -145,14 +153,14 @@ void FixedDateFormat::insertCustomButtonPressed()
         widget.customString->insert(qvariant_cast<QString>(action->data()));
 }
 
-void FixedDateFormat::customTextChanged(const QString& text)
+void FixedDateFormat::customTextChanged(const QString &text)
 {
     m_variable->setDefinition(text);
 
     if (widget.custom->isChecked()) {
         // altering the custom text will deselect the list item so the user can easily switch
         // back by selecting one.
-        QListWidgetItem * item = widget.formatList->currentItem();
+        QListWidgetItem *item = widget.formatList->currentItem();
         if (item) // deselect it.
             item->setSelected(false);
     }

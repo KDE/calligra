@@ -9,16 +9,15 @@
 #define ODFPARSER_H
 
 // Qt
-#include <QString>
 #include <QHash>
+#include <QString>
 
 // Calligra
-#include <KoFilter.h>           // For the return values.
-                                // If we ever move this out of filters/ we should move the
-                                // filterstatus return values to bools.
+#include <KoFilter.h> // For the return values.
+// If we ever move this out of filters/ we should move the
+// filterstatus return values to bools.
 
 class KoStore;
-
 
 /** @brief Provide a parser for some parts of an ODF file.
  *

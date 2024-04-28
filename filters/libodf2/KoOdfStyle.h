@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef KOODF_STYLE_H
 #define KOODF_STYLE_H
 
@@ -19,10 +18,9 @@ class KoXmlStreamReader;
 class KoOdfStyleProperties;
 class KoXmlWriter;
 
-
 class KOODF2_EXPORT KoOdfStyle : public KoOdfStyleBase
 {
- public:
+public:
     KoOdfStyle();
     ~KoOdfStyle() override;
 
@@ -34,7 +32,7 @@ class KOODF2_EXPORT KoOdfStyle : public KoOdfStyleBase
     /**
      * @brief Return all property sets in the style.
      */
-    QHash<QString, KoOdfStyleProperties*> properties() const;
+    QHash<QString, KoOdfStyleProperties *> properties() const;
 
     /**
      * @brief Return the list of properties in the selected property set.
@@ -43,16 +41,15 @@ class KOODF2_EXPORT KoOdfStyle : public KoOdfStyleBase
     KoOdfStyleProperties *properties(const QString &name) const;
 
     QString property(const QString &propertySet, const QString &property) const;
-    void    setProperty(const QString &propertySet, const QString &property, const QString &value);
+    void setProperty(const QString &propertySet, const QString &property, const QString &value);
 
     // Reimplemented from KoOdfStyleBase
     bool readOdf(KoXmlStreamReader &reader) override;
     bool saveOdf(KoXmlWriter *writer) override;
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif

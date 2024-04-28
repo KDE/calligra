@@ -8,8 +8,8 @@
 #ifndef VIDEOSHAPE_H
 #define VIDEOSHAPE_H
 
-#include <KoShape.h>
 #include <KoFrameShape.h>
+#include <KoShape.h>
 
 #include <QIcon>
 
@@ -23,7 +23,6 @@ class VideoData;
 #ifdef SHOULD_BUILD_THUMBNAIL
 class VideoThumbnailer;
 #endif
-
 
 class VideoShape : public KoShape, public KoFrameShape
 {

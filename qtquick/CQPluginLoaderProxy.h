@@ -15,7 +15,7 @@ class CQPluginLoaderProxy : public QObject
     Q_OBJECT
 
 public:
-    explicit CQPluginLoaderProxy(QObject* parent = 0);
+    explicit CQPluginLoaderProxy(QObject *parent = 0);
     ~CQPluginLoaderProxy();
 
     Q_INVOKABLE void loadPlugins();

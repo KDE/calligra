@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
-* SPDX-FileCopyrightText: 2009 Thomas Zander <zander@kde.org>
-* SPDX-FileCopyrightText: 2011 Boudewijn Rempt <boud@valdyas.org>
-* SPDX-FileCopyrightText: 2011-2012 C. Boemann <cbo@boemann.dk>
-* SPDX-FileCopyrightText: 2014 Denis Kuplyakov <dener.kup@gmail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ * SPDX-FileCopyrightText: 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * SPDX-FileCopyrightText: 2009 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2011 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2011-2012 C. Boemann <cbo@boemann.dk>
+ * SPDX-FileCopyrightText: 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 #ifndef KOTEXTEDITOR_H
 #define KOTEXTEDITOR_H
 
 #include "kotext_export.h"
 
-#include <kundo2magicstring.h>
-#include <KoGenChange.h>
 #include <KoBorder.h>
+#include <KoGenChange.h>
 #include <KoSection.h>
+#include <kundo2magicstring.h>
 
 #include <QMetaType>
 #include <QTextCursor>
@@ -47,12 +47,11 @@ class QTextDocumentFragment;
 class QString;
 class QMimeData;
 
-
 /**
  * KoTextEditor is a wrapper around QTextCursor. It handles undo/redo and change
  * tracking for all editing commands.
  */
-class KOTEXT_EXPORT KoTextEditor: public QObject
+class KOTEXT_EXPORT KoTextEditor : public QObject
 {
     Q_OBJECT
 public:
@@ -81,9 +80,7 @@ public:
      */
     static KoTextEditor *getTextEditorFromCanvas(KoCanvasBase *canvas);
 
-
 public: // KoToolSelection overloads
-
     /// returns true if the wrapped QTextCursor has a selection.
     bool hasSelection() const;
 
@@ -93,7 +90,6 @@ public: // KoToolSelection overloads
     bool isEditProtected(bool useCached = false) const;
 
 public:
-
     bool operator!=(const QTextCursor &other) const;
 
     bool operator<(const QTextCursor &other) const;
@@ -109,7 +105,6 @@ public:
     const QTextCursor constCursor() const;
 
 private:
-
     // for the call to KoTextLoader::loadBody, which has a QTextCursor
     friend class KoTextPaste;
 
@@ -142,7 +137,7 @@ private:
      * will be added to the textEditor with addCommand. For examples of proper implementation of
      * such undoCommands, see the TextShape commands.
      */
-    QTextCursor* cursor();
+    QTextCursor *cursor();
 
 public Q_SLOTS:
 
@@ -171,7 +166,12 @@ public Q_SLOTS:
     /// caller, or the caller can choose to quickly undo and then delete the \p command.
     void instantlyExecuteCommand(KUndo2Command *command);
 
-    void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const KUndo2MagicString &title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
+    void registerTrackedChange(QTextCursor &selection,
+                               KoGenChange::Type changeType,
+                               const KUndo2MagicString &title,
+                               QTextFormat &format,
+                               QTextFormat &prevFormat,
+                               bool applyToWholeBlock = false);
 
     void bold(bool bold);
 
@@ -241,10 +241,10 @@ public Q_SLOTS:
     void removeAnnotations(const QList<KoAnnotation *> &annotations, KUndo2Command *parent);
 
     /**
-    * At the current cursor position, insert a marker that marks the next word as being part of the index.
-    * @returns returns the index marker when successful, or 0 if failed.  Failure can be because there is no word
-    *  at the cursor position or there already is an index marker available.
-    */
+     * At the current cursor position, insert a marker that marks the next word as being part of the index.
+     * @returns returns the index marker when successful, or 0 if failed.  Failure can be because there is no word
+     *  at the cursor position or there already is an index marker available.
+     */
     KoInlineObject *insertIndexMarker();
 
     /// add a bookmark on current cursor location or current selection
@@ -264,7 +264,7 @@ public Q_SLOTS:
      * @param mimeData: the mimedata containing text, html or odf
      * @param pasteAsText: if true, paste without formatting
      */
-    void paste(KoCanvasBase *canvas, const QMimeData *mimeData, bool pasteAsText=false);
+    void paste(KoCanvasBase *canvas, const QMimeData *mimeData, bool pasteAsText = false);
 
     /**
      * @param numberingEnabled when true, we will enable numbering for the current paragraph (block).
@@ -275,8 +275,8 @@ public Q_SLOTS:
      * change the current block's list properties
      */
     void setListProperties(const KoListLevelProperties &llp,
-                           KoTextEditor::ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList), KUndo2Command *parent = 0);
-
+                           KoTextEditor::ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList),
+                           KUndo2Command *parent = 0);
 
 public:
     // -------------------------------------------------------------
@@ -324,7 +324,6 @@ public:
      * @p previous should be @c true if act like backspace
      */
     void deleteChar(bool previous, KUndo2Command *parent = 0);
-
 
     bool hasComplexSelection() const;
 
@@ -409,8 +408,7 @@ public:
      * @param cellSide the cell side.
      * @param data the border data.
      */
-    void setTableBorderData(QTextTable *table, int row, int column, KoBorder::BorderSide cellSide,
-                const KoBorder::BorderData &data);
+    void setTableBorderData(QTextTable *table, int row, int column, KoBorder::BorderSide cellSide, const KoBorder::BorderData &data);
 
     /**
      * Insert a footnote at the current cursor position
@@ -448,7 +446,7 @@ public:
      */
     void insertText(const QString &text, const QString &hRef = QString());
 
-    void mergeBlockFormat( const QTextBlockFormat &modifier);
+    void mergeBlockFormat(const QTextBlockFormat &modifier);
 
     bool movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int n = 1);
 
@@ -524,9 +522,9 @@ public:
 
     bool visualNavigation() const;
 
-    const QTextFrame *currentFrame () const;
-    const QTextList *currentList () const;
-    const QTextTable *currentTable () const;
+    const QTextFrame *currentFrame() const;
+    const QTextList *currentList() const;
+    const QTextTable *currentTable() const;
 
 Q_SIGNALS:
     void cursorPositionChanged();
@@ -542,10 +540,10 @@ private:
 
     class Private;
     friend class Private;
-    Private* const d;
+    Private *const d;
 };
 
-Q_DECLARE_METATYPE(KoTextEditor*)
+Q_DECLARE_METATYPE(KoTextEditor *)
 Q_DECLARE_METATYPE(bool *)
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoTextEditor::ChangeListFlags)
 

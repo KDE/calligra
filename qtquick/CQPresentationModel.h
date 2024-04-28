@@ -15,7 +15,7 @@ class QDeclarativeItem;
 class CQPresentationModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(QDeclarativeItem* canvas READ canvas WRITE setCanvas NOTIFY canvasChanged)
+    Q_PROPERTY(QDeclarativeItem *canvas READ canvas WRITE setCanvas NOTIFY canvasChanged)
     Q_PROPERTY(QSizeF thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
 
 public:
@@ -23,21 +23,21 @@ public:
         ThumbnailRole = Qt::UserRole,
     };
 
-    explicit CQPresentationModel(QObject* parent = 0);
+    explicit CQPresentationModel(QObject *parent = 0);
     ~CQPresentationModel();
 
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual int rowCount(const QModelIndex& parent) const;
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual int rowCount(const QModelIndex &parent) const;
 
     Q_INVOKABLE QPixmap thumbnail(int index) const;
 
-    QDeclarativeItem* canvas() const;
+    QDeclarativeItem *canvas() const;
 
     QSizeF thumbnailSize() const;
 
 public Q_SLOTS:
-    void setCanvas(QDeclarativeItem* canvas);
-    void setThumbnailSize(const QSizeF& size);
+    void setCanvas(QDeclarativeItem *canvas);
+    void setThumbnailSize(const QSizeF &size);
     void canvasSourceChanged();
 
 Q_SIGNALS:
@@ -46,7 +46,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // CQPRESENTATIONMODEL_H

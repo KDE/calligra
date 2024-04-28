@@ -8,11 +8,10 @@
 #ifndef KOSHAPEDISTRIBUTECOMMAND_H
 #define KOSHAPEDISTRIBUTECOMMAND_H
 
-
 #include "flake_export.h"
 
-#include <kundo2command.h>
 #include <QList>
+#include <kundo2command.h>
 
 class KoShape;
 
@@ -22,14 +21,14 @@ class FLAKE_EXPORT KoShapeDistributeCommand : public KUndo2Command
 public:
     /// The different options to distribute with this command
     enum Distribute {
-        HorizontalCenterDistribution,   ///< Horizontal centered
-        HorizontalGapsDistribution,     ///< Horizontal Gaps
-        HorizontalLeftDistribution,     ///< Horizontal Left
-        HorizontalRightDistribution,    ///< Horizontal Right
-        VerticalCenterDistribution,     ///< Vertical centered
-        VerticalGapsDistribution,       ///< Vertical Gaps
-        VerticalBottomDistribution,     ///< Vertical bottom
-        VerticalTopDistribution         ///< Vertical top
+        HorizontalCenterDistribution, ///< Horizontal centered
+        HorizontalGapsDistribution, ///< Horizontal Gaps
+        HorizontalLeftDistribution, ///< Horizontal Left
+        HorizontalRightDistribution, ///< Horizontal Right
+        VerticalCenterDistribution, ///< Vertical centered
+        VerticalGapsDistribution, ///< Vertical Gaps
+        VerticalBottomDistribution, ///< Vertical bottom
+        VerticalTopDistribution ///< Vertical top
     };
     /**
      * Command to align a set of shapes in a rect
@@ -38,17 +37,16 @@ public:
      * @param boundingRect the rect the shapes will be distributed in
      * @param parent the parent command used for macro commands
      */
-    KoShapeDistributeCommand(const QList<KoShape*> &shapes, Distribute distribute,
-            const QRectF &boundingRect, KUndo2Command *parent = 0);
+    KoShapeDistributeCommand(const QList<KoShape *> &shapes, Distribute distribute, const QRectF &boundingRect, KUndo2Command *parent = 0);
     ~KoShapeDistributeCommand() override;
     /// redo the command
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
-private:
 
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

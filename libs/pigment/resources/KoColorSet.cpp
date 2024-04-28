@@ -6,29 +6,28 @@
  */
 #include "KoColorSet.h"
 
-#include <sys/types.h>
 #include <QtEndian> // qFromLittleEndian
+#include <sys/types.h>
 
-#include <QImage>
-#include <QPoint>
-#include <QVector>
-#include <QFile>
-#include <QTextStream>
-#include <QFileInfo>
 #include <QBuffer>
 #include <QByteArray>
+#include <QFile>
+#include <QFileInfo>
+#include <QImage>
 #include <QPainter>
+#include <QPoint>
+#include <QTextStream>
+#include <QVector>
 
 #include <DebugPigment.h>
 #include <KLocalizedString>
 
 #include "KoColor.h"
-#include "KoColorSpaceRegistry.h"
 #include "KoColorModelStandardIds.h"
+#include "KoColorSpaceRegistry.h"
 
-
-KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &ba) {
-
+KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &ba)
+{
     QFileInfo fi(fileName);
 
     // .pal
@@ -42,18 +41,16 @@ KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &
     // .pal
     else if (ba.startsWith("JASC-PAL")) {
         return KoColorSet::PSP_PAL;
-    }
-    else if (fi.suffix().toLower() == "aco") {
+    } else if (fi.suffix().toLower() == "aco") {
         return KoColorSet::ACO;
-    }
-    else if (fi.suffix().toLower() == "act") {
+    } else if (fi.suffix().toLower() == "act") {
         return KoColorSet::ACT;
     }
 
     return KoColorSet::UNKNOWN;
 }
 
-KoColorSet::KoColorSet(const QString& filename)
+KoColorSet::KoColorSet(const QString &filename)
     : KoResource(filename)
 {
     // Implemented in KoResource class
@@ -67,7 +64,7 @@ KoColorSet::KoColorSet()
 }
 
 /// Create an copied palette
-KoColorSet::KoColorSet(const KoColorSet& rhs)
+KoColorSet::KoColorSet(const KoColorSet &rhs)
     : QObject(0)
     , KoResource("")
 {
@@ -87,19 +84,21 @@ KoColorSet::~KoColorSet()
 bool KoColorSet::load()
 {
     QFile file(filename());
-    if (file.size() == 0) return false;
+    if (file.size() == 0)
+        return false;
     if (!file.open(QIODevice::ReadOnly)) {
         warnPigment << "Can't open file " << filename();
         return false;
     }
-    bool res =  loadFromDevice(&file);
+    bool res = loadFromDevice(&file);
     file.close();
     return res;
 }
 
 bool KoColorSet::loadFromDevice(QIODevice *dev)
 {
-    if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
+    if (!dev->isOpen())
+        dev->open(QIODevice::ReadOnly);
 
     m_data = dev->readAll();
 
@@ -107,7 +106,6 @@ bool KoColorSet::loadFromDevice(QIODevice *dev)
 
     return init();
 }
-
 
 bool KoColorSet::save()
 {
@@ -131,7 +129,7 @@ bool KoColorSet::saveToDevice(QIODevice *dev) const
     stream << "GIMP Palette\nName: " << name() << "\nColumns: " << m_columns << "\n#\n";
 
     for (int i = 0; i < m_colors.size(); i++) {
-        const KoColorSetEntry& entry = m_colors.at(i);
+        const KoColorSetEntry &entry = m_colors.at(i);
         QColor c = entry.color.toQColor();
         stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
         if (entry.name.isEmpty())
@@ -166,7 +164,7 @@ bool KoColorSet::init()
 
     bool res = false;
     PaletteType paletteType = detectFormat(filename(), m_data);
-    switch(paletteType) {
+    switch (paletteType) {
     case GPL:
         res = loadGpl();
         break;
@@ -195,14 +193,13 @@ bool KoColorSet::init()
     QPainter gc(&img);
     gc.fillRect(img.rect(), Qt::darkGray);
     int counter = 0;
-    for(int i = 0; i < m_columns; ++i) {
+    for (int i = 0; i < m_columns; ++i) {
         for (int j = 0; j < (m_colors.size() / m_columns); ++j) {
             if (counter < m_colors.size()) {
                 QColor c = m_colors.at(counter).color.toQColor();
                 gc.fillRect(i * 4, j * 4, 4, 4, c);
                 counter++;
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -214,12 +211,12 @@ bool KoColorSet::init()
     return res;
 }
 
-void KoColorSet::add(const KoColorSetEntry & c)
+void KoColorSet::add(const KoColorSetEntry &c)
 {
     m_colors.push_back(c);
 }
 
-void KoColorSet::remove(const KoColorSetEntry & c)
+void KoColorSet::remove(const KoColorSetEntry &c)
 {
     for (auto it = m_colors.begin(); it != m_colors.end(); /*noop*/) {
         if ((*it) == c) {
@@ -254,7 +251,6 @@ QString KoColorSet::defaultFileExtension() const
 {
     return QString(".gpl");
 }
-
 
 bool KoColorSet::loadGpl()
 {
@@ -333,8 +329,8 @@ bool KoColorSet::loadAct()
     KoColorSetEntry e;
     for (int i = 0; i < m_data.size(); i += 3) {
         quint8 r = m_data[i];
-        quint8 g = m_data[i+1];
-        quint8 b = m_data[i+2];
+        quint8 g = m_data[i + 1];
+        quint8 b = m_data[i + 2];
         e.color = KoColor(KoColorSpaceRegistry::instance()->rgb8());
         e.color.fromQColor(QColor(r, g, b));
         add(e);
@@ -352,7 +348,6 @@ struct RiffHeader {
     quint16 colorcount;
 };
 
-
 bool KoColorSet::loadRiff()
 {
     // http://worms2d.info/Palette_file
@@ -364,19 +359,16 @@ bool KoColorSet::loadRiff()
     memcpy(&header, m_data.constData(), sizeof(RiffHeader));
     header.colorcount = qFromBigEndian(header.colorcount);
 
-    for (int i = sizeof(RiffHeader);
-         (i < (int)(sizeof(RiffHeader) + header.colorcount) && i < m_data.size());
-         i += 4) {
+    for (int i = sizeof(RiffHeader); (i < (int)(sizeof(RiffHeader) + header.colorcount) && i < m_data.size()); i += 4) {
         quint8 r = m_data[i];
-        quint8 g = m_data[i+1];
-        quint8 b = m_data[i+2];
+        quint8 g = m_data[i + 1];
+        quint8 b = m_data[i + 2];
         e.color = KoColor(KoColorSpaceRegistry::instance()->rgb8());
         e.color.fromQColor(QColor(r, g, b));
         add(e);
     }
     return true;
 }
-
 
 bool KoColorSet::loadPsp()
 {
@@ -387,14 +379,16 @@ bool KoColorSet::loadPsp()
 
     QString s = QString::fromUtf8(m_data.data(), m_data.count());
     QStringList l = s.split('\n', Qt::SkipEmptyParts);
-    if (l.size() < 4) return false;
-    if (l[0] != "JASC-PAL") return false;
-    if (l[1] != "0100") return false;
+    if (l.size() < 4)
+        return false;
+    if (l[0] != "JASC-PAL")
+        return false;
+    if (l[1] != "0100")
+        return false;
 
     int entries = l[2].toInt();
 
-    for (int i = 0; i < entries; ++i)  {
-
+    for (int i = 0; i < entries; ++i) {
         QStringList a = l[i + 3].replace('\t', ' ').split(' ', Qt::SkipEmptyParts);
 
         if (a.count() != 3) {
@@ -423,10 +417,12 @@ bool KoColorSet::loadPsp()
     return true;
 }
 
-quint16 readShort(QIODevice *io) {
+quint16 readShort(QIODevice *io)
+{
     quint16 val;
-    quint64 read = io->read((char*)&val, 2);
-    if (read != 2) return false;
+    quint64 read = io->read((char *)&val, 2);
+    if (read != 2)
+        return false;
     return qFromBigEndian(val);
 }
 
@@ -445,7 +441,6 @@ bool KoColorSet::loadAco()
     const quint16 quint16_MAX = 65535;
 
     for (int i = 0; i < numColors && !buf.atEnd(); ++i) {
-
         quint16 colorSpace = readShort(&buf);
         quint16 ch1 = readShort(&buf);
         quint16 ch2 = readShort(&buf);
@@ -455,39 +450,34 @@ bool KoColorSet::loadAco()
         bool skip = false;
         if (colorSpace == 0) { // RGB
             e.color = KoColor(KoColorSpaceRegistry::instance()->rgb16());
-            reinterpret_cast<quint16*>(e.color.data())[0] = ch3;
-            reinterpret_cast<quint16*>(e.color.data())[1] = ch2;
-            reinterpret_cast<quint16*>(e.color.data())[2] = ch1;
+            reinterpret_cast<quint16 *>(e.color.data())[0] = ch3;
+            reinterpret_cast<quint16 *>(e.color.data())[1] = ch2;
+            reinterpret_cast<quint16 *>(e.color.data())[2] = ch1;
             e.color.setOpacity(OPACITY_OPAQUE_U8);
-        }
-        else if (colorSpace == 1) { // HSB
+        } else if (colorSpace == 1) { // HSB
             e.color = KoColor(KoColorSpaceRegistry::instance()->rgb16());
             QColor c;
             c.setHsvF(ch1 / 65536.0, ch2 / 65536.0, ch3 / 65536.0);
             e.color.fromQColor(c);
             e.color.setOpacity(OPACITY_OPAQUE_U8);
-        }
-        else if (colorSpace == 2) { // CMYK
+        } else if (colorSpace == 2) { // CMYK
             e.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer16BitsColorDepthID.id(), ""));
-            reinterpret_cast<quint16*>(e.color.data())[0] = quint16_MAX - ch1;
-            reinterpret_cast<quint16*>(e.color.data())[1] = quint16_MAX - ch2;
-            reinterpret_cast<quint16*>(e.color.data())[2] = quint16_MAX - ch3;
-            reinterpret_cast<quint16*>(e.color.data())[3] = quint16_MAX - ch4;
+            reinterpret_cast<quint16 *>(e.color.data())[0] = quint16_MAX - ch1;
+            reinterpret_cast<quint16 *>(e.color.data())[1] = quint16_MAX - ch2;
+            reinterpret_cast<quint16 *>(e.color.data())[2] = quint16_MAX - ch3;
+            reinterpret_cast<quint16 *>(e.color.data())[3] = quint16_MAX - ch4;
             e.color.setOpacity(OPACITY_OPAQUE_U8);
-        }
-        else if (colorSpace == 7) { // LAB
+        } else if (colorSpace == 7) { // LAB
             e.color = KoColor(KoColorSpaceRegistry::instance()->lab16());
-            reinterpret_cast<quint16*>(e.color.data())[0] = ch3;
-            reinterpret_cast<quint16*>(e.color.data())[1] = ch2;
-            reinterpret_cast<quint16*>(e.color.data())[2] = ch1;
+            reinterpret_cast<quint16 *>(e.color.data())[0] = ch3;
+            reinterpret_cast<quint16 *>(e.color.data())[1] = ch2;
+            reinterpret_cast<quint16 *>(e.color.data())[2] = ch1;
             e.color.setOpacity(OPACITY_OPAQUE_U8);
-        }
-        else if (colorSpace == 8) { // GRAY
+        } else if (colorSpace == 8) { // GRAY
             e.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), ""));
-            reinterpret_cast<quint16*>(e.color.data())[0] = ch1 * (quint16_MAX / 10000);
+            reinterpret_cast<quint16 *>(e.color.data())[0] = ch1 * (quint16_MAX / 10000);
             e.color.setOpacity(OPACITY_OPAQUE_U8);
-        }
-        else {
+        } else {
             warnPigment << "Unsupported colorspace in palette" << filename() << "(" << colorSpace << ")";
             skip = true;
         }
@@ -511,4 +501,3 @@ bool KoColorSet::loadAco()
     }
     return true;
 }
-

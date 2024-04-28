@@ -6,17 +6,17 @@
 
 #include "KoPAPageLayoutDialog.h"
 
-#include "KoPageLayout.h"
 #include "KoPADocument.h"
+#include "KoPageLayout.h"
 
 #include <KoUnit.h>
 
-KoPAPageLayoutDialog::KoPAPageLayoutDialog( KoPADocument *document, const KoPageLayout &pageLayout, QWidget *parent )
-: KoPageLayoutDialog( parent, pageLayout )
-, m_document( document )
+KoPAPageLayoutDialog::KoPAPageLayoutDialog(KoPADocument *document, const KoPageLayout &pageLayout, QWidget *parent)
+    : KoPageLayoutDialog(parent, pageLayout)
+    , m_document(document)
 {
-    setPageSpread( false );
-    showPageSpread( false );
+    setPageSpread(false);
+    showPageSpread(false);
     setUnit(document->unit());
 }
 

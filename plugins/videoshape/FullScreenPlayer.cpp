@@ -4,25 +4,25 @@
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
- 
+
 #include "FullScreenPlayer.h"
 
 #include <KoIcon.h>
 
 #include <KLocalizedString>
 
-#include <phonon/videowidget.h>
+#include <phonon/SeekSlider>
+#include <phonon/VolumeSlider>
 #include <phonon/audiooutput.h>
 #include <phonon/mediaobject.h>
-#include <phonon/VolumeSlider>
-#include <phonon/SeekSlider>
+#include <phonon/videowidget.h>
 
-#include <QUrl>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QToolButton>
+#include <QUrl>
+#include <QVBoxLayout>
 
 FullScreenPlayer::FullScreenPlayer(const QUrl &url)
     : QWidget(0)
@@ -95,8 +95,7 @@ FullScreenPlayer::FullScreenPlayer(const QUrl &url)
 
     m_mediaObject->setCurrentSource(url);
     connect(m_mediaObject, &Phonon::MediaObject::finished, this, &FullScreenPlayer::stop);
-    connect(m_mediaObject, &Phonon::MediaObject::stateChanged,
-            this, &FullScreenPlayer::playStateChanged);
+    connect(m_mediaObject, &Phonon::MediaObject::stateChanged, this, &FullScreenPlayer::playStateChanged);
     connect(m_mediaObject, &Phonon::MediaObject::tick, this, &FullScreenPlayer::updatePlaybackTime);
 
     play();
@@ -111,7 +110,6 @@ FullScreenPlayer::~FullScreenPlayer()
 
 void FullScreenPlayer::play()
 {
-
     m_mediaObject->play();
 }
 
@@ -147,9 +145,9 @@ void FullScreenPlayer::mousePressEvent(QMouseEvent *event)
 
 void FullScreenPlayer::keyPressEvent(QKeyEvent *event)
 {
-    if(event->key()==Qt::Key_Escape) {
-       m_mediaObject->stop();
-       deleteLater();
+    if (event->key() == Qt::Key_Escape) {
+        m_mediaObject->stop();
+        deleteLater();
     }
 }
 
@@ -158,35 +156,33 @@ void FullScreenPlayer::playStateChanged(Phonon::State newState, Phonon::State ol
     Q_UNUSED(oldState);
 
     switch (newState) {
-        case Phonon::PlayingState:
-                m_play->setVisible(false);
-                m_pause->setVisible(true);
-                break;
-        case Phonon::PausedState:
-                m_play->setVisible(true);
-                m_pause->setVisible(false);
-                break;
-        default:
-            ;
+    case Phonon::PlayingState:
+        m_play->setVisible(false);
+        m_pause->setVisible(true);
+        break;
+    case Phonon::PausedState:
+        m_play->setVisible(true);
+        m_pause->setVisible(false);
+        break;
+    default:;
     }
 }
 
 void FullScreenPlayer::updatePlaybackTime(qint64 currentTime)
 {
     QString currentPlayTime = QString("%1:%2:%3")
-            .arg((currentTime / 3600000) % 60, 2, 10, QChar('0'))
-            .arg((currentTime / 60000) % 60, 2, 10, QChar('0'))
-            .arg((currentTime / 1000) % 60, 2, 10, QChar('0'));
+                                  .arg((currentTime / 3600000) % 60, 2, 10, QChar('0'))
+                                  .arg((currentTime / 60000) % 60, 2, 10, QChar('0'))
+                                  .arg((currentTime / 1000) % 60, 2, 10, QChar('0'));
 
     qint64 time = m_mediaObject->totalTime();
     QString totalTime = QString("%1:%2:%3")
-            .arg((time / 3600000) % 60, 2, 10, QChar('0'))
-            .arg((time / 60000) % 60, 2, 10, QChar('0'))
-            .arg((time / 1000) % 60, 2, 10, QChar('0'));
+                            .arg((time / 3600000) % 60, 2, 10, QChar('0'))
+                            .arg((time / 60000) % 60, 2, 10, QChar('0'))
+                            .arg((time / 1000) % 60, 2, 10, QChar('0'));
 
     m_playbackTime->setText(QString("%1/%2").arg(currentPlayTime, totalTime));
 }
-
 
 void FullScreenPlayer::muteStateChanged(bool muted)
 {

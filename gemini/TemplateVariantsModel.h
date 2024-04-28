@@ -14,29 +14,22 @@ class TemplateVariantsModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    enum TemplateVariantRoles
-    {
-        NameRole = Qt::UserRole + 1,
-        ColorRole,
-        ThumbnailRole,
-        SwatchRole,
-        UrlRole
-    };
-    explicit TemplateVariantsModel(QObject* parent = 0);
+    enum TemplateVariantRoles { NameRole = Qt::UserRole + 1, ColorRole, ThumbnailRole, SwatchRole, UrlRole };
+    explicit TemplateVariantsModel(QObject *parent = 0);
     ~TemplateVariantsModel() override;
 
     QHash<int, QByteArray> roleNames() const override;
-    QVariant data(const QModelIndex& index, int role) const override;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     void addVariant(QString name, QString color, QString swatch, QString picture, QString file);
     QModelIndex firstIndex();
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
-Q_DECLARE_METATYPE(TemplateVariantsModel*);
+Q_DECLARE_METATYPE(TemplateVariantsModel *);
 
 #endif // TEMPLATEVARIANTSMODEL_H

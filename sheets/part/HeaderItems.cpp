@@ -35,23 +35,22 @@
 
 // Qt
 #include <QApplication>
-#include <QLabel>
-#include <QToolTip>
-#include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneResizeEvent>
+#include <QLabel>
+#include <QStyleOptionGraphicsItem>
+#include <QToolTip>
 
 // KF5
 #include <KLocalizedString>
 
 // Calligra
-#include <KoToolProxy.h>
-#include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
+#include <KoToolProxy.h>
 #include <KoUnit.h>
+#include <KoZoomHandler.h>
 
 // Sheets
 #include "core/Sheet.h"
-
 
 using namespace Calligra::Sheets;
 
@@ -62,44 +61,42 @@ using namespace Calligra::Sheets;
  ****************************************************************/
 
 RowHeaderItem::RowHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas)
-        : QGraphicsWidget(_parent), RowHeader(_canvas)
+    : QGraphicsWidget(_parent)
+    , RowHeader(_canvas)
 {
-    //setMouseTracking(true);
+    // setMouseTracking(true);
     setAcceptHoverEvents(true);
 
-    //connect(m_pView, SIGNAL(autoScroll(QPoint)),
-            //this, SLOT(slotAutoScroll(QPoint)));
-    connect(m_pCanvas->toolProxy(), &KoToolProxy::toolChanged,
-            this, &RowHeaderItem::toolChanged);
+    // connect(m_pView, SIGNAL(autoScroll(QPoint)),
+    // this, SLOT(slotAutoScroll(QPoint)));
+    connect(m_pCanvas->toolProxy(), &KoToolProxy::toolChanged, this, &RowHeaderItem::toolChanged);
 
     setFlag(ItemClipsToShape, true);
 }
-
 
 RowHeaderItem::~RowHeaderItem()
 {
 }
 
-void RowHeaderItem::mousePressEvent(QGraphicsSceneMouseEvent * _ev)
+void RowHeaderItem::mousePressEvent(QGraphicsSceneMouseEvent *_ev)
 {
     KoPointerEvent pev(_ev, QPointF());
     mousePress(&pev);
 }
 
-void RowHeaderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent * _ev)
+void RowHeaderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *_ev)
 {
     KoPointerEvent pev(_ev, QPointF());
     mouseRelease(&pev);
 }
 
-void RowHeaderItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* _ev)
+void RowHeaderItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *_ev)
 {
     KoPointerEvent pev(_ev, QPointF());
     mouseDoubleClick(&pev);
 }
 
-
-void RowHeaderItem::mouseMoveEvent(QGraphicsSceneMouseEvent * _ev)
+void RowHeaderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *_ev)
 {
     KoPointerEvent pev(_ev, QPointF());
     mouseMove(&pev);
@@ -126,7 +123,7 @@ void RowHeaderItem::slotAutoScroll(const QPoint& scrollDistance)
     m_pCanvas->update();
 }
 */
-void RowHeaderItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
+void RowHeaderItem::wheelEvent(QGraphicsSceneWheelEvent *_ev)
 {
     Q_UNUSED(_ev);
     // TODO XXX
@@ -134,7 +131,7 @@ void RowHeaderItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
 
 void RowHeaderItem::paintSizeIndicator(int mouseY)
 {
-     Sheet * const sheet = m_pCanvas->activeSheet();
+    Sheet *const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
 
@@ -143,15 +140,15 @@ void RowHeaderItem::paintSizeIndicator(int mouseY)
     // Don't make the row have a height < 2 pixel.
     double y = m_pCanvas->zoomHandler()->zoomItY(sheet->rowPosition(m_iResizedRow) - m_pCanvas->yOffset());
     if (m_iResizePos < y + 2)
-        m_iResizePos = (int) y;
+        m_iResizePos = (int)y;
 
     // XXX: Port to QGraphicsView
-    //if (!m_rubberband) {
+    // if (!m_rubberband) {
     //    m_rubberband = new QRubberBand(QRubberBand::Line, m_pCanvas);
     //    m_rubberband->setGeometry(0, m_iResizePos, m_pCanvas->width(), 2);
     //    m_rubberband->show();
     //}
-    //m_rubberband->move(0, m_iResizePos);
+    // m_rubberband->move(0, m_iResizePos);
 
     QString tmpSize;
     double hh = m_pCanvas->zoomHandler()->unzoomItY(m_iResizePos - y);
@@ -161,25 +158,25 @@ void RowHeaderItem::paintSizeIndicator(int mouseY)
     else
         tmpSize = i18n("Hide Row");
 
-    //if (!m_lSize) {
-    //    int screenNo = 0; //QApplication::desktop()->screenNumber(topLevelWidget());
-    //    m_lSize = new QLabel(qApp->primaryScreen()-> , Qt::ToolTip);
-    //    m_lSize->setAlignment(Qt::AlignVCenter);
-    //    m_lSize->setAutoFillBackground(true);
-    //    m_lSize->setPalette(QToolTip::palette());
-    //    m_lSize->setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, m_lSize));
-    //    m_lSize->setFrameShape(QFrame::Box);
-    //    m_lSize->setIndent(1);
-    //}
+    // if (!m_lSize) {
+    //     int screenNo = 0; //QApplication::desktop()->screenNumber(topLevelWidget());
+    //     m_lSize = new QLabel(qApp->primaryScreen()-> , Qt::ToolTip);
+    //     m_lSize->setAlignment(Qt::AlignVCenter);
+    //     m_lSize->setAutoFillBackground(true);
+    //     m_lSize->setPalette(QToolTip::palette());
+    //     m_lSize->setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, m_lSize));
+    //     m_lSize->setFrameShape(QFrame::Box);
+    //     m_lSize->setIndent(1);
+    // }
 
-    //m_lSize->setText(tmpSize);
-    //m_lSize->adjustSize();
-    //QRectF rcf = static_cast<CanvasItem*>(m_pCanvas)->boundingRect();
-    //QPoint pos = (sheet->layoutDirection() == Qt::RightToLeft) ? QPoint(rcf.width() - m_lSize->width() - 3, (int)y + 3) : QPoint(3, (int)y + 3);
-    //pos -= QPoint(0, m_lSize->height());
+    // m_lSize->setText(tmpSize);
+    // m_lSize->adjustSize();
+    // QRectF rcf = static_cast<CanvasItem*>(m_pCanvas)->boundingRect();
+    // QPoint pos = (sheet->layoutDirection() == Qt::RightToLeft) ? QPoint(rcf.width() - m_lSize->width() - 3, (int)y + 3) : QPoint(3, (int)y + 3);
+    // pos -= QPoint(0, m_lSize->height());
     //// XXX: Port
     ////m_lSize->move(m_pCanvas->mapToGlobal(pos).x(), m_pCanvas->mapToGlobal(pos).y());
-    //m_lSize->show();
+    // m_lSize->show();
 }
 
 void RowHeaderItem::removeSizeIndicator()
@@ -189,28 +186,27 @@ void RowHeaderItem::removeSizeIndicator()
 
 void RowHeaderItem::updateRows(int from, int to)
 {
-     Sheet * const sheet = m_pCanvas->activeSheet();
+    Sheet *const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
 
     double y0 = m_pCanvas->zoomHandler()->zoomItY(sheet->rowPosition(from));
     double y1 = m_pCanvas->zoomHandler()->zoomItY(sheet->rowPosition(to + 1));
-    QGraphicsItem::update(0, (int) y0, boundingRect().width(), (int)(y1 - y0));
+    QGraphicsItem::update(0, (int)y0, boundingRect().width(), (int)(y1 - y0));
 }
 
-void RowHeaderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void RowHeaderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
     RowHeader::paint(painter, option->exposedRect);
 }
 
-
-void RowHeaderItem::focusOutEvent(QFocusEvent* _ev)
+void RowHeaderItem::focusOutEvent(QFocusEvent *_ev)
 {
     focusOut(_ev);
 }
 
-void RowHeaderItem::toolChanged(const QString& toolId)
+void RowHeaderItem::toolChanged(const QString &toolId)
 {
     doToolChanged(toolId);
 }
@@ -222,43 +218,42 @@ void RowHeaderItem::toolChanged(const QString& toolId)
  ****************************************************************/
 
 ColumnHeaderItem::ColumnHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas)
-        : QGraphicsWidget(_parent), ColumnHeader(_canvas)
+    : QGraphicsWidget(_parent)
+    , ColumnHeader(_canvas)
 {
-    //setMouseTracking(true);
+    // setMouseTracking(true);
     setAcceptHoverEvents(true);
 
-    //connect(_view, SIGNAL(autoScroll(QPoint)),
-            //this, SLOT(slotAutoScroll(QPoint)));
-    connect(_canvas->toolProxy(), &KoToolProxy::toolChanged,
-            this, &ColumnHeaderItem::toolChanged);
+    // connect(_view, SIGNAL(autoScroll(QPoint)),
+    // this, SLOT(slotAutoScroll(QPoint)));
+    connect(_canvas->toolProxy(), &KoToolProxy::toolChanged, this, &ColumnHeaderItem::toolChanged);
 
     setFlag(ItemClipsToShape, true);
 }
-
 
 ColumnHeaderItem::~ColumnHeaderItem()
 {
 }
 
-void ColumnHeaderItem::mousePressEvent(QGraphicsSceneMouseEvent * _ev)
+void ColumnHeaderItem::mousePressEvent(QGraphicsSceneMouseEvent *_ev)
 {
     KoPointerEvent pev(_ev, QPointF());
     mousePress(&pev);
 }
 
-void ColumnHeaderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent * _ev)
+void ColumnHeaderItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *_ev)
 {
     KoPointerEvent pev(_ev, QPointF());
     mouseRelease(&pev);
 }
 
-void ColumnHeaderItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* _ev)
+void ColumnHeaderItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *_ev)
 {
     KoPointerEvent pev(_ev, QPointF());
     mouseDoubleClick(&pev);
 }
 
-void ColumnHeaderItem::mouseMoveEvent(QGraphicsSceneMouseEvent * _ev)
+void ColumnHeaderItem::mouseMoveEvent(QGraphicsSceneMouseEvent *_ev)
 {
     KoPointerEvent pev(_ev, QPointF());
     mouseMove(&pev);
@@ -284,20 +279,20 @@ void ColumnHeaderItem::slotAutoScroll(const QPoint& scrollDistance)
     m_pCanvas->update();
 }
 */
-void ColumnHeaderItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
+void ColumnHeaderItem::wheelEvent(QGraphicsSceneWheelEvent *_ev)
 {
     Q_UNUSED(_ev);
     // TODO XXX
 }
 
-void ColumnHeaderItem::resizeEvent(QGraphicsSceneResizeEvent* _ev)
+void ColumnHeaderItem::resizeEvent(QGraphicsSceneResizeEvent *_ev)
 {
     ColumnHeader::resize(_ev->newSize(), _ev->oldSize());
 }
 
 void ColumnHeaderItem::paintSizeIndicator(int mouseX)
 {
-     Sheet * const sheet = m_pCanvas->activeSheet();
+    Sheet *const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
 
@@ -313,18 +308,18 @@ void ColumnHeaderItem::paintSizeIndicator(int mouseX)
         x = m_pCanvas->width() - x;
 
         if (m_iResizePos > x - 2)
-            m_iResizePos = (int) x;
+            m_iResizePos = (int)x;
     } else {
         if (m_iResizePos < x + 2)
-            m_iResizePos = (int) x;
+            m_iResizePos = (int)x;
     }
-// XXX: Port
-//    if (!m_rubberband) {
-//        m_rubberband = new QRubberBand(QRubberBand::Line, m_pCanvas);
-//        m_rubberband->setGeometry(m_iResizePos, 0, 2, m_pCanvas->height());
-//        m_rubberband->show();
-//    }
-//    m_rubberband->move(m_iResizePos, 0);
+    // XXX: Port
+    //    if (!m_rubberband) {
+    //        m_rubberband = new QRubberBand(QRubberBand::Line, m_pCanvas);
+    //        m_rubberband->setGeometry(m_iResizePos, 0, 2, m_pCanvas->height());
+    //        m_rubberband->show();
+    //    }
+    //    m_rubberband->move(m_iResizePos, 0);
 
     QString tmpSize;
     double ww = m_pCanvas->zoomHandler()->unzoomItX((sheet->layoutDirection() == Qt::RightToLeft) ? x - m_iResizePos : m_iResizePos - x);
@@ -334,25 +329,25 @@ void ColumnHeaderItem::paintSizeIndicator(int mouseX)
     else
         tmpSize = i18n("Hide Column");
 
-// XXX: Port
-//    if (!m_lSize) {
-//        int screenNo = 0; // QApplication::desktop()->screenNumber(this);
-//        m_lSize = new QLabel(QApplication::desktop()->screen(screenNo) , Qt::ToolTip);
-//        m_lSize->setAlignment(Qt::AlignVCenter);
-//        m_lSize->setAutoFillBackground(true);
-//        m_lSize->setPalette(QToolTip::palette());
-//        m_lSize->setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, m_lSize));
-//        m_lSize->setFrameShape(QFrame::Box);
-//        m_lSize->setIndent(1);
-//    }
-//
-//    m_lSize->setText(tmpSize);
-//    m_lSize->adjustSize();
-//    QPoint pos = (sheet->layoutDirection() == Qt::RightToLeft) ? QPoint((int) x - 3 - m_lSize->width(), 3) :
-//                 QPoint((int) x + 3, 3);
-//    pos -= QPoint(0, m_lSize->height());
-//    m_lSize->move(m_pCanvas->mapToGlobal(pos).x(), mapToGlobal(pos).y());
-//    m_lSize->show();
+    // XXX: Port
+    //    if (!m_lSize) {
+    //        int screenNo = 0; // QApplication::desktop()->screenNumber(this);
+    //        m_lSize = new QLabel(QApplication::desktop()->screen(screenNo) , Qt::ToolTip);
+    //        m_lSize->setAlignment(Qt::AlignVCenter);
+    //        m_lSize->setAutoFillBackground(true);
+    //        m_lSize->setPalette(QToolTip::palette());
+    //        m_lSize->setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, m_lSize));
+    //        m_lSize->setFrameShape(QFrame::Box);
+    //        m_lSize->setIndent(1);
+    //    }
+    //
+    //    m_lSize->setText(tmpSize);
+    //    m_lSize->adjustSize();
+    //    QPoint pos = (sheet->layoutDirection() == Qt::RightToLeft) ? QPoint((int) x - 3 - m_lSize->width(), 3) :
+    //                 QPoint((int) x + 3, 3);
+    //    pos -= QPoint(0, m_lSize->height());
+    //    m_lSize->move(m_pCanvas->mapToGlobal(pos).x(), mapToGlobal(pos).y());
+    //    m_lSize->show();
 }
 
 void ColumnHeaderItem::removeSizeIndicator()
@@ -362,28 +357,27 @@ void ColumnHeaderItem::removeSizeIndicator()
 
 void ColumnHeaderItem::updateColumns(int from, int to)
 {
-     Sheet * const sheet = m_pCanvas->activeSheet();
+    Sheet *const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
 
     double x0 = m_pCanvas->zoomHandler()->zoomItX(sheet->columnPosition(from));
     double x1 = m_pCanvas->zoomHandler()->zoomItX(sheet->columnPosition(to + 1));
-    QGraphicsItem::update((int) x0, 0, (int)(x1 - x0), boundingRect().height());
+    QGraphicsItem::update((int)x0, 0, (int)(x1 - x0), boundingRect().height());
 }
 
-void ColumnHeaderItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void ColumnHeaderItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
     ColumnHeader::paint(painter, option->exposedRect);
 }
 
-
-void ColumnHeaderItem::focusOutEvent(QFocusEvent* _ev)
+void ColumnHeaderItem::focusOutEvent(QFocusEvent *_ev)
 {
     focusOut(_ev);
 }
 
-void ColumnHeaderItem::toolChanged(const QString& toolId)
+void ColumnHeaderItem::toolChanged(const QString &toolId)
 {
     doToolChanged(toolId);
 }
@@ -403,43 +397,42 @@ void ColumnHeaderItem::scroll(qreal x, qreal y)
  *
  ****************************************************************/
 
-SelectAllButtonItem::SelectAllButtonItem(QGraphicsItem *_parent, CanvasBase* canvasBase)
-        : QGraphicsWidget(_parent)
-        , SelectAllButton(canvasBase)
+SelectAllButtonItem::SelectAllButtonItem(QGraphicsItem *_parent, CanvasBase *canvasBase)
+    : QGraphicsWidget(_parent)
+    , SelectAllButton(canvasBase)
 {
-    connect(canvasBase->toolProxy(), &KoToolProxy::toolChanged,
-            this, &SelectAllButtonItem::toolChanged);
+    connect(canvasBase->toolProxy(), &KoToolProxy::toolChanged, this, &SelectAllButtonItem::toolChanged);
 }
 
 SelectAllButtonItem::~SelectAllButtonItem()
 {
 }
 
-void SelectAllButtonItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void SelectAllButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
     SelectAllButton::paint(painter, option->exposedRect);
 }
 
-void SelectAllButtonItem::mousePressEvent(QGraphicsSceneMouseEvent* _ev)
+void SelectAllButtonItem::mousePressEvent(QGraphicsSceneMouseEvent *_ev)
 {
     KoPointerEvent pev(_ev, QPointF());
     mousePress(&pev);
 }
 
-void SelectAllButtonItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* _ev)
+void SelectAllButtonItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *_ev)
 {
     KoPointerEvent pev(_ev, QPointF());
     mouseRelease(&pev);
 }
 
-void SelectAllButtonItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
+void SelectAllButtonItem::wheelEvent(QGraphicsSceneWheelEvent *_ev)
 {
     Q_UNUSED(_ev);
     // TODO XXX
 }
 
-void SelectAllButtonItem::toolChanged(const QString& toolId)
+void SelectAllButtonItem::toolChanged(const QString &toolId)
 {
     doToolChanged(toolId);
 }

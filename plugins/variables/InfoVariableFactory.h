@@ -10,7 +10,6 @@
 
 #include <KoInlineObjectFactoryBase.h>
 
-
 class InfoVariableFactory : public KoInlineObjectFactoryBase
 {
 public:

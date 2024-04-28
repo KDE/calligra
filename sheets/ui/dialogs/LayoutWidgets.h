@@ -8,17 +8,15 @@
 #ifndef CALLIGRA_SHEETS_LAYOUT_WIDGETS
 #define CALLIGRA_SHEETS_LAYOUT_WIDGETS
 
-#include <QWidget>
 #include <QCheckBox>
+#include <QWidget>
 
 #include "Style.h"
-
 
 namespace Calligra
 {
 namespace Sheets
 {
-
 
 // If partial, we're setting if the value changed
 // If not partial, we're setting if the value is not the default one
@@ -29,8 +27,8 @@ inline bool shouldApplyLayoutChange(bool isDefault, bool changed, bool partial)
     return (!isDefault);
 }
 
-
-class LayoutCheckbox : public QCheckBox {
+class LayoutCheckbox : public QCheckBox
+{
 public:
     LayoutCheckbox(QWidget *parent = nullptr);
     virtual ~LayoutCheckbox();
@@ -38,15 +36,18 @@ public:
     void setStyleKey(const Style::Key &key, bool defaultValue = false);
     void loadFrom(const Style &style, bool partial);
     void saveTo(Style &style, bool partial);
-    void setReversed(bool rev) { m_reversed = rev; }
+    void setReversed(bool rev)
+    {
+        m_reversed = rev;
+    }
+
 protected:
     Style::Key m_styleKey;
     bool m_defaultValue;
     bool m_reversed;
 };
 
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_LAYOUT_WIDGETS
+#endif // CALLIGRA_SHEETS_LAYOUT_WIDGETS

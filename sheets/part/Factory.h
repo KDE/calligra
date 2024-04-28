@@ -26,15 +26,15 @@ public:
     explicit Factory();
     ~Factory() override;
 
-    QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args) override;
+    QObject *create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args) override;
 
     static const KoComponentData &global();
 
-    static KAboutData* aboutData();
+    static KAboutData *aboutData();
 
 private:
-    static KoComponentData* s_global;
-    static KAboutData* s_aboutData;
+    static KoComponentData *s_global;
+    static KAboutData *s_aboutData;
 };
 
 } // namespace Sheets

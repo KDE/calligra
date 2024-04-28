@@ -25,7 +25,7 @@ QStringList KoText::underlineTypeList()
 QStringList KoText::underlineStyleList()
 {
     QStringList lst;
-    lst << "_________";  // solid
+    lst << "_________"; // solid
     lst << "___ ___ __"; // dash
     lst << "_ _ _ _ _ _"; // dot
     lst << "___ _ ___ _"; // dash_dot
@@ -35,23 +35,19 @@ QStringList KoText::underlineStyleList()
 }
 
 KoText::Tab::Tab()
-        : position(0.),
-        type(QTextOption::LeftTab),
-        leaderType(KoCharacterStyle::NoLineType),
-        leaderStyle(KoCharacterStyle::NoLineStyle),
-        leaderWeight(KoCharacterStyle::AutoLineWeight),
-        leaderWidth(0)
+    : position(0.)
+    , type(QTextOption::LeftTab)
+    , leaderType(KoCharacterStyle::NoLineType)
+    , leaderStyle(KoCharacterStyle::NoLineStyle)
+    , leaderWeight(KoCharacterStyle::AutoLineWeight)
+    , leaderWidth(0)
 {
 }
 
 bool KoText::Tab::operator==(const Tab &other) const
 {
-    return other.position == position &&
-           other.type == type &&
-           other.delimiter == delimiter &&
-           other.leaderStyle == leaderStyle &&
-           other.leaderColor == leaderColor &&
-           other.leaderText == leaderText ;
+    return other.position == position && other.type == type && other.delimiter == delimiter && other.leaderStyle == leaderStyle
+        && other.leaderColor == leaderColor && other.leaderText == leaderText;
 }
 
 Qt::Alignment KoText::alignmentFromString(const QString &align)
@@ -153,7 +149,7 @@ QString KoText::directionToString(KoText::Direction direction)
     return "auto";
 }
 
-KoText::KoTextBreakProperty KoText::textBreakFromString(const QString& textBreak)
+KoText::KoTextBreakProperty KoText::textBreakFromString(const QString &textBreak)
 {
     if (textBreak == "page")
         return KoText::PageBreak;
@@ -173,8 +169,7 @@ QString KoText::textBreakToString(KoText::KoTextBreakProperty textBreak)
 
 QTextLength KoText::parseLength(const QString &length)
 {
-    if (length.contains('%'))
-    {
+    if (length.contains('%')) {
         QString lengthValue = length.left(length.indexOf('%'));
         bool ok = false;
         qreal realLength = lengthValue.toDouble(&ok);
@@ -182,10 +177,7 @@ QTextLength KoText::parseLength(const QString &length)
             return QTextLength(QTextLength::PercentageLength, realLength);
         else
             return QTextLength(QTextLength::PercentageLength, 0);
-    }
-    else
-    {
+    } else {
         return QTextLength(QTextLength::FixedLength, KoUnit::parseValue(length));
     }
 }
-

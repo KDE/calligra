@@ -9,8 +9,8 @@
 
 #include <KWView.h>
 
-#include <KoPrintingDialog.h>
 #include <KoImageData.h>
+#include <KoPrintingDialog.h>
 
 #include <QMap>
 #include <QRectF>
@@ -30,7 +30,7 @@ public:
 
 protected:
     QRectF preparePage(int pageNumber) override;
-    QList<KoShape*> shapesOnPage(int pageNumber) override;
+    QList<KoShape *> shapesOnPage(int pageNumber) override;
     void printingDone() override;
     int documentFirstPage() const override;
     int documentLastPage() const override;

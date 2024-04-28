@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef KOODF_STYLE_MANAGER_H
 #define KOODF_STYLE_MANAGER_H
 
@@ -22,7 +21,7 @@ class KoXmlWriter;
 
 class KOODF2_EXPORT KoOdfStyleManager
 {
- public:
+public:
     KoOdfStyleManager();
     ~KoOdfStyleManager();
 
@@ -40,17 +39,16 @@ class KOODF2_EXPORT KoOdfStyleManager
     bool loadStyles(KoStore *odfStore);
     bool saveNamedStyles(KoXmlWriter *writer);
 
-    QList<KoOdfStyle*> styles() const;
-    QList<KoOdfStyle*> defaultStyles() const;
+    QList<KoOdfStyle *> styles() const;
+    QList<KoOdfStyle *> defaultStyles() const;
 
- private:
+private:
     // FIXME: Move to private class.
     void collectStyleSet(KoXmlStreamReader &reader, bool fromStylesXml);
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif

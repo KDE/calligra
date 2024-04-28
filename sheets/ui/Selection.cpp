@@ -19,12 +19,10 @@
 #include "core/RowFormatStorage.h"
 #include "core/Sheet.h"
 
-
 using namespace Calligra::Sheets;
 
 // TODO
 // - Allow resizing of all ranges in a normal selection; not just the last one.
-
 
 /***************************************************************************
   class Selection::Private
@@ -33,7 +31,8 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN Selection::Private
 {
 public:
-    Private() {
+    Private()
+    {
         activeSheet = 0;
         originSheet = 0;
         anchor = QPoint(1, 1);
@@ -59,8 +58,8 @@ public:
         referenceMode = false;
     }
 
-    Sheet* activeSheet;
-    Sheet* originSheet;
+    Sheet *activeSheet;
+    Sheet *originSheet;
     QPoint anchor;
     QPoint cursor;
     QList<QColor> colors;
@@ -84,7 +83,7 @@ public:
     int activeSubRegionStart; // the start of a referenced sub-region
     int activeSubRegionLength; // the length of a referenced sub-region
 
-    KoCanvasBase* canvasBase;
+    KoCanvasBase *canvasBase;
     bool referenceMode : 1;
     Region formerSelection; // for reference selection mode
     Region oldSelection; // for select all
@@ -94,18 +93,18 @@ public:
   class Selection
 ****************************************************************************/
 
-Selection::Selection(KoCanvasBase* canvasBase)
-        : KoToolSelection(0)
-        , Region(1, 1)
-        , d(new Private())
+Selection::Selection(KoCanvasBase *canvasBase)
+    : KoToolSelection(0)
+    , Region(1, 1)
+    , d(new Private())
 {
     d->canvasBase = canvasBase;
 }
 
-Selection::Selection(const Selection& selection)
-        : KoToolSelection(selection.parent())
-        , Region()
-        , d(new Private())
+Selection::Selection(const Selection &selection)
+    : KoToolSelection(selection.parent())
+    , Region()
+    , d(new Private())
 {
     d->activeSheet = selection.d->activeSheet;
     d->originSheet = selection.d->originSheet;
@@ -120,12 +119,12 @@ Selection::~Selection()
     delete d;
 }
 
-KoCanvasBase* Selection::canvas() const
+KoCanvasBase *Selection::canvas() const
 {
     return d->canvasBase;
 }
 
-void Selection::initialize(const QPoint& point, Sheet* sheet)
+void Selection::initialize(const QPoint &point, Sheet *sheet)
 {
     if (!isValid(point))
         return;
@@ -165,14 +164,14 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
     } else {
         warnSheets << "Unable to insert" << topLeft << "in" << sheet->sheetName();
     }
-    Element* element = cells()[d->activeSubRegionStart];
+    Element *element = cells()[d->activeSubRegionStart];
     // we end up with one element in the subregion
     d->activeSubRegionLength = 1;
     if (element && element->type() == Element::Point) {
-        Point* point = static_cast<Point*>(element);
+        Point *point = static_cast<Point *>(element);
         point->setColor(d->colors[cells().size() % d->colors.size()]);
     } else if (element && element->type() == Element::Range) {
-        Range* range = static_cast<Range*>(element);
+        Range *range = static_cast<Range *>(element);
         range->setColor(d->colors[cells().size() % d->colors.size()]);
     }
 
@@ -185,7 +184,7 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
     emitChanged(changedRegion);
 }
 
-void Selection::initialize(const QRect& range, Sheet* sheet)
+void Selection::initialize(const QRect &range, Sheet *sheet)
 {
     if (!isValid(range) || (range == QRect(0, 0, 1, 1)))
         return;
@@ -239,14 +238,14 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
     } else {
         warnSheets << "Unable to insert" << topLeft << "in" << sheet->sheetName();
     }
-    Element* element = cells()[d->activeSubRegionStart];
+    Element *element = cells()[d->activeSubRegionStart];
     // we end up with one element in the subregion
     d->activeSubRegionLength = 1;
     if (element && element->type() == Element::Point) {
-        Point* point = static_cast<Point*>(element);
+        Point *point = static_cast<Point *>(element);
         point->setColor(d->colors[cells().size() % d->colors.size()]);
     } else if (element && element->type() == Element::Range) {
-        Range* range = static_cast<Range*>(element);
+        Range *range = static_cast<Range *>(element);
         range->setColor(d->colors[cells().size() % d->colors.size()]);
     }
 
@@ -258,7 +257,7 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
     emitChanged(changedRegion);
 }
 
-void Selection::initialize(const Region& region, Sheet* sheet)
+void Selection::initialize(const Region &region, Sheet *sheet)
 {
     if (!region.isValid())
         return;
@@ -282,12 +281,12 @@ void Selection::initialize(const Region& region, Sheet* sheet)
     // TODO Stefan: handle subregion insertion
     // TODO Stefan: handle obscured cells correctly
     Region::clear(); // all elements; no residuum
-    Element* element = add(region);
+    Element *element = add(region);
     if (element && element->type() == Element::Point) {
-        Point* point = static_cast<Point*>(element);
+        Point *point = static_cast<Point *>(element);
         point->setColor(d->colors[cells().size() % d->colors.size()]);
     } else if (element && element->type() == Element::Range) {
-        Range* range = static_cast<Range*>(element);
+        Range *range = static_cast<Range *>(element);
         range->setColor(d->colors[cells().size() % d->colors.size()]);
     }
 
@@ -328,7 +327,7 @@ void Selection::update()
     emitChanged(*this);
 }
 
-void Selection::update(const QPoint& point)
+void Selection::update(const QPoint &point)
 {
     if (d->selectionMode == SingleCell) {
         initialize(point);
@@ -360,7 +359,7 @@ void Selection::update(const QPoint& point)
         d->activeElement = subRegionEnd - 1;
     }
 
-    SheetBase* basesheet = cells()[d->activeElement]->sheet();
+    SheetBase *basesheet = cells()[d->activeElement]->sheet();
     Sheet *sheet = dynamic_cast<Sheet *>(basesheet);
     if (sheet != d->activeSheet) {
         extend(point);
@@ -397,12 +396,12 @@ void Selection::update(const QPoint& point)
         d->activeElement += delta;
     }
 
-    QRect area2 = newRange; 
+    QRect area2 = newRange;
     Region changedRegion;
 
-    bool newLeft   = area1.left() != area2.left();
-    bool newTop    = area1.top() != area2.top();
-    bool newRight  = area1.right() != area2.right();
+    bool newLeft = area1.left() != area2.left();
+    bool newTop = area1.top() != area2.top();
+    bool newRight = area1.right() != area2.right();
     bool newBottom = area1.bottom() != area2.bottom();
 
     /* first, calculate some numbers that we'll use a few times */
@@ -419,49 +418,42 @@ void Selection::update(const QPoint& point)
     int innerBottom = qMin(area1.bottom(), area2.bottom());
 
     if (newLeft) {
-        changedRegion.add(QRect(QPoint(farLeft, innerTop),
-                                QPoint(innerLeft - 1, innerBottom)));
+        changedRegion.add(QRect(QPoint(farLeft, innerTop), QPoint(innerLeft - 1, innerBottom)));
         if (newTop) {
-            changedRegion.add(QRect(QPoint(farLeft, farTop),
-                                    QPoint(innerLeft - 1, innerTop - 1)));
+            changedRegion.add(QRect(QPoint(farLeft, farTop), QPoint(innerLeft - 1, innerTop - 1)));
         }
         if (newBottom) {
-            changedRegion.add(QRect(QPoint(farLeft, innerBottom + 1),
-                                    QPoint(innerLeft - 1, farBottom)));
+            changedRegion.add(QRect(QPoint(farLeft, innerBottom + 1), QPoint(innerLeft - 1, farBottom)));
         }
     }
 
     if (newTop) {
-        changedRegion.add(QRect(QPoint(innerLeft, farTop),
-                                QPoint(innerRight, innerTop - 1)));
+        changedRegion.add(QRect(QPoint(innerLeft, farTop), QPoint(innerRight, innerTop - 1)));
     }
 
     if (newRight) {
-        changedRegion.add(QRect(QPoint(innerRight + 1, innerTop),
-                                QPoint(farRight, innerBottom)));
+        changedRegion.add(QRect(QPoint(innerRight + 1, innerTop), QPoint(farRight, innerBottom)));
         if (newTop) {
-            changedRegion.add(QRect(QPoint(innerRight + 1, farTop),
-                                    QPoint(farRight, innerTop - 1)));
+            changedRegion.add(QRect(QPoint(innerRight + 1, farTop), QPoint(farRight, innerTop - 1)));
         }
         if (newBottom) {
-            changedRegion.add(QRect(QPoint(innerRight + 1, innerBottom + 1),
-                                    QPoint(farRight, farBottom)));
+            changedRegion.add(QRect(QPoint(innerRight + 1, innerBottom + 1), QPoint(farRight, farBottom)));
         }
     }
 
     if (newBottom) {
-        changedRegion.add(QRect(QPoint(innerLeft, innerBottom + 1),
-                                QPoint(innerRight, farBottom)));
+        changedRegion.add(QRect(QPoint(innerLeft, innerBottom + 1), QPoint(innerRight, farBottom)));
     }
 
-    if (point != d->cursor) changedRegion.add(QRect(point, d->cursor));
+    if (point != d->cursor)
+        changedRegion.add(QRect(point, d->cursor));
 
     d->cursor = point;
 
     emitChanged(changedRegion);
 }
 
-void Selection::extend(const QPoint& point, Sheet* sheet)
+void Selection::extend(const QPoint &point, Sheet *sheet)
 {
     if (!isValid(point))
         return;
@@ -471,7 +463,7 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
         return;
     }
 
-    debugSheets ;
+    debugSheets;
 
     if (!sheet) {
         if (d->originSheet) {
@@ -519,7 +511,7 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
     emitChanged(changedRegion);
 }
 
-void Selection::extend(const QRect& range, Sheet* sheet)
+void Selection::extend(const QRect &range, Sheet *sheet)
 {
     if (!isValid(range) || (range == QRect(0, 0, 1, 1)))
         return;
@@ -539,7 +531,7 @@ void Selection::extend(const QRect& range, Sheet* sheet)
 
     const QRect newRange = extendToMergedAreas(range, sheet);
 
-    Element* element = 0;
+    Element *element = 0;
     if (d->multipleOccurences) {
         const int subRegionEnd = d->activeSubRegionStart + d->activeSubRegionLength;
         const bool prepend = d->activeSubRegionLength == 0;
@@ -561,17 +553,17 @@ void Selection::extend(const QRect& range, Sheet* sheet)
     }
 
     if (element && element->type() == Element::Point) {
-        Point* point = static_cast<Point*>(element);
+        Point *point = static_cast<Point *>(element);
         point->setColor(d->colors[cells().size() % d->colors.size()]);
     } else if (element && element->type() == Element::Range) {
-        Range* range = static_cast<Range*>(element);
+        Range *range = static_cast<Range *>(element);
         range->setColor(d->colors[cells().size() % d->colors.size()]);
     }
 
     emitChanged(*this);
 }
 
-void Selection::extend(const Region& region)
+void Selection::extend(const Region &region)
 {
     if (!region.isValid())
         return;
@@ -580,10 +572,11 @@ void Selection::extend(const Region& region)
     ConstIterator end(region.constEnd());
     for (ConstIterator it = region.constBegin(); it != end; ++it) {
         Element *element = *it;
-        if (!element) continue;
+        if (!element)
+            continue;
         Sheet *sheet = dynamic_cast<Sheet *>(element->sheet());
         if (element->type() == Element::Point) {
-            Point* point = static_cast<Point*>(element);
+            Point *point = static_cast<Point *>(element);
             extend(point->pos(), sheet);
         } else {
             extend(element->rect(), sheet);
@@ -595,7 +588,7 @@ void Selection::extend(const Region& region)
     emitChanged(*this);
 }
 
-Selection::Element* Selection::eor(const QPoint& point, SheetBase* sheet)
+Selection::Element *Selection::eor(const QPoint &point, SheetBase *sheet)
 {
     // The selection always has to contain one location/range at least.
     if (isSingular()) {
@@ -604,7 +597,7 @@ Selection::Element* Selection::eor(const QPoint& point, SheetBase* sheet)
     return Region::eor(point, sheet);
 }
 
-const QPoint& Selection::cursor() const
+const QPoint &Selection::cursor() const
 {
     return d->cursor;
 }
@@ -614,12 +607,12 @@ bool Selection::isSingular() const
     return Region::isSingular();
 }
 
-QString Selection::name(Sheet* sheet) const
+QString Selection::name(Sheet *sheet) const
 {
     return Region::name(sheet ? sheet : d->originSheet);
 }
 
-void Selection::setActiveSheet(Sheet* sheet)
+void Selection::setActiveSheet(Sheet *sheet)
 {
     if (d->activeSheet == sheet) {
         return;
@@ -628,17 +621,17 @@ void Selection::setActiveSheet(Sheet* sheet)
     emit activeSheetChanged(sheet);
 }
 
-Sheet* Selection::activeSheet() const
+Sheet *Selection::activeSheet() const
 {
     return d->activeSheet;
 }
 
-void Selection::setOriginSheet(Sheet* sheet)
+void Selection::setOriginSheet(Sheet *sheet)
 {
     d->originSheet = sheet;
 }
 
-Sheet* Selection::originSheet() const
+Sheet *Selection::originSheet() const
 {
     return d->originSheet;
 }
@@ -669,7 +662,7 @@ int Selection::setActiveElement(const Cell &cell)
     return -1;
 }
 
-Calligra::Sheets::Region::Element* Selection::activeElement() const
+Calligra::Sheets::Region::Element *Selection::activeElement() const
 {
     return (d->activeElement == cells().count()) ? 0 : cells()[d->activeElement];
 }
@@ -707,9 +700,8 @@ void Selection::fixSubRegionDimension()
         return;
     }
     if (d->activeSubRegionStart + d->activeSubRegionLength > cells().count()) {
-        debugSheets << "subregion (" << d->activeSubRegionStart << ".."
-        << d->activeSubRegionStart + d->activeSubRegionLength
-        << ") exceeds list" << cells().count();
+        debugSheets << "subregion (" << d->activeSubRegionStart << ".." << d->activeSubRegionStart + d->activeSubRegionLength << ") exceeds list"
+                    << cells().count();
         d->activeSubRegionLength = cells().count() - d->activeSubRegionStart;
         return;
     }
@@ -717,7 +709,8 @@ void Selection::fixSubRegionDimension()
 
 bool Selection::isProtected() const
 {
-    if (!d->activeSheet->isProtected()) return false;
+    if (!d->activeSheet->isProtected())
+        return false;
 
     // Unprotected singular cell in a protected sheet?
     // TODO - also allow multi-cell selections consisting solely of protected cells ...
@@ -726,7 +719,8 @@ bool Selection::isProtected() const
         const Cell cell = Cell(d->activeSheet, d->cursor);
         if (!cell.isNull()) {
             const Style style = cell.style();
-            if (style.notProtected()) return false;
+            if (style.notProtected())
+                return false;
         }
     }
 
@@ -770,7 +764,7 @@ void Selection::setSelectionMode(Mode mode)
     d->selectionMode = mode;
 }
 
-const QList<QColor>& Selection::colors() const
+const QList<QColor> &Selection::colors() const
 {
     return d->colors;
 }
@@ -865,7 +859,7 @@ void Selection::emitRefreshSheetViews()
     emit refreshSheetViews();
 }
 
-void Selection::emitVisibleSheetRequested(Sheet* sheet)
+void Selection::emitVisibleSheetRequested(Sheet *sheet)
 {
     emit visibleSheetRequested(sheet);
 }
@@ -880,7 +874,7 @@ void Selection::emitRequestFocusEditor()
     emit requestFocusEditor();
 }
 
-QRect Selection::extendToMergedAreas(const QRect& _area, Sheet *sheet) const
+QRect Selection::extendToMergedAreas(const QRect &_area, Sheet *sheet) const
 {
     if (!sheet)
         return _area;
@@ -890,9 +884,7 @@ QRect Selection::extendToMergedAreas(const QRect& _area, Sheet *sheet) const
 
     if (Region::Range(area).isColumn() || Region::Range(area).isRow()) {
         return area;
-    } else if (!(cell.isPartOfMerged()) &&
-               (cell.mergedXCells() + 1) >= area.width() &&
-               (cell.mergedYCells() + 1) >= area.height()) {
+    } else if (!(cell.isPartOfMerged()) && (cell.mergedXCells() + 1) >= area.width() && (cell.mergedYCells() + 1) >= area.height()) {
         /* if just a single cell is selected, we need to merge even when
         the obscuring isn't forced.  But only if this is the cell that
         is doing the obscuring -- we still want to be able to click on a cell
@@ -926,13 +918,14 @@ QRect Selection::extendToMergedAreas(const QRect& _area, Sheet *sheet) const
     return area;
 }
 
-Region Selection::extendRegionToMergedAreas(const Region& region) const
+Region Selection::extendRegionToMergedAreas(const Region &region) const
 {
     Region res;
     ConstIterator end(region.constEnd());
     for (ConstIterator it = region.constBegin(); it != end; ++it) {
         Element *element = *it;
-        if (!element) continue;
+        if (!element)
+            continue;
         Sheet *sheet = dynamic_cast<Sheet *>(element->sheet());
         const QRect rect = extendToMergedAreas(element->rect(), sheet);
         res.add(rect, element->sheet());
@@ -940,55 +933,55 @@ Region Selection::extendRegionToMergedAreas(const Region& region) const
     return res;
 }
 
-
-Calligra::Sheets::Region::Point* Selection::createPoint(const QPoint& point, bool /*fixedColumn*/, bool /*fixedRow*/) const
+Calligra::Sheets::Region::Point *Selection::createPoint(const QPoint &point, bool /*fixedColumn*/, bool /*fixedRow*/) const
 {
     return new Point(point);
 }
 
-Calligra::Sheets::Region::Point* Selection::createPoint(const QString& string) const
+Calligra::Sheets::Region::Point *Selection::createPoint(const QString &string) const
 {
     return new Point(string);
 }
 
-Calligra::Sheets::Region::Point* Selection::createPoint(const Region::Point& point) const
+Calligra::Sheets::Region::Point *Selection::createPoint(const Region::Point &point) const
 {
     return new Point(point);
 }
 
-Calligra::Sheets::Region::Range* Selection::createRange(const QRect& rect, bool /*fixedTop*/, bool /*fixedLeft*/, bool /*fixedBottom*/, bool /*fixedRight*/) const
+Calligra::Sheets::Region::Range *
+Selection::createRange(const QRect &rect, bool /*fixedTop*/, bool /*fixedLeft*/, bool /*fixedBottom*/, bool /*fixedRight*/) const
 {
     return new Range(rect);
 }
 
-Calligra::Sheets::Region::Range* Selection::createRange(const Calligra::Sheets::Region::Point& tl, const Calligra::Sheets::Region::Point& br) const
+Calligra::Sheets::Region::Range *Selection::createRange(const Calligra::Sheets::Region::Point &tl, const Calligra::Sheets::Region::Point &br) const
 {
     return new Range(tl, br);
 }
 
-Calligra::Sheets::Region::Range* Selection::createRange(const QString& string) const
+Calligra::Sheets::Region::Range *Selection::createRange(const QString &string) const
 {
     return new Range(string);
 }
 
-Calligra::Sheets::Region::Range* Selection::createRange(const Region::Range& range) const
+Calligra::Sheets::Region::Range *Selection::createRange(const Region::Range &range) const
 {
     return new Range(range);
 }
 
-void Selection::emitChanged(const Region& region)
+void Selection::emitChanged(const Region &region)
 {
-    Sheet * const sheet = d->activeSheet;
-    if(!sheet) // no sheet no update needed
+    Sheet *const sheet = d->activeSheet;
+    if (!sheet) // no sheet no update needed
         return;
     Region extendedRegion;
     ConstIterator end(region.constEnd());
     for (ConstIterator it = region.constBegin(); it != end; ++it) {
-        Element* element = *it;
+        Element *element = *it;
         QRect area = element->rect();
 
-        //look at if column is hiding.
-        //if it's hiding refreshing column+1 (or column -1 )
+        // look at if column is hiding.
+        // if it's hiding refreshing column+1 (or column -1 )
         int left = area.left();
         int right = area.right();
         int top = area.top();
@@ -1028,7 +1021,6 @@ void Selection::emitChanged(const Region& region)
                 }
             } while (left != 1);
         }
-
 
         if (bottom < KS_rowMax) {
             do {
@@ -1086,7 +1078,7 @@ void Selection::scrollToCursor()
     const double pixelWidth = canvas()->viewConverter()->viewToDocumentX(1);
     const double pixelHeight = canvas()->viewConverter()->viewToDocumentY(1);
     QRectF rect(xpos, ypos, cell.width(), cell.height());
-    rect.adjust(-2*pixelWidth, -2*pixelHeight, +2*pixelWidth, +2*pixelHeight);
+    rect.adjust(-2 * pixelWidth, -2 * pixelHeight, +2 * pixelWidth, +2 * pixelHeight);
     rect = rect & QRectF(QPointF(0.0, 0.0), sheet->documentSize());
 
     // Scroll to cell.
@@ -1105,21 +1097,21 @@ void Selection::dump() const
   class Point
 ****************************************************************************/
 
-Selection::Point::Point(const QPoint& point)
-        : Region::Point(point),
-        m_color(Qt::black)
+Selection::Point::Point(const QPoint &point)
+    : Region::Point(point)
+    , m_color(Qt::black)
 {
 }
 
-Selection::Point::Point(const QString& string)
-        : Region::Point(string),
-        m_color(Qt::black)
+Selection::Point::Point(const QString &string)
+    : Region::Point(string)
+    , m_color(Qt::black)
 {
 }
 
-Selection::Point::Point(const Region::Point& point)
-        : Region::Point(point),
-        m_color(Qt::black)
+Selection::Point::Point(const Region::Point &point)
+    : Region::Point(point)
+    , m_color(Qt::black)
 {
 }
 
@@ -1127,26 +1119,26 @@ Selection::Point::Point(const Region::Point& point)
   class Range
 ****************************************************************************/
 
-Selection::Range::Range(const QRect& range)
-        : Region::Range(range),
-        m_color(Qt::black)
+Selection::Range::Range(const QRect &range)
+    : Region::Range(range)
+    , m_color(Qt::black)
 {
 }
 
-Selection::Range::Range(const Calligra::Sheets::Region::Point& tl, const Calligra::Sheets::Region::Point& br)
-        : Region::Range(tl, br),
-        m_color(Qt::black)
+Selection::Range::Range(const Calligra::Sheets::Region::Point &tl, const Calligra::Sheets::Region::Point &br)
+    : Region::Range(tl, br)
+    , m_color(Qt::black)
 {
 }
 
-Selection::Range::Range(const QString& string)
-        : Region::Range(string),
-        m_color(Qt::black)
+Selection::Range::Range(const QString &string)
+    : Region::Range(string)
+    , m_color(Qt::black)
 {
 }
 
-Selection::Range::Range(const Region::Range& range)
-        : Region::Range(range),
-        m_color(Qt::black)
+Selection::Range::Range(const Region::Range &range)
+    : Region::Range(range)
+    , m_color(Qt::black)
 {
 }

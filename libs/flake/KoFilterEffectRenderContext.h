@@ -45,7 +45,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOFILTEREFFECTRENDERCONTEXT_H

@@ -7,8 +7,8 @@
 #ifndef CALLOUTSHAPE_H
 #define CALLOUTSHAPE_H
 
-#include <KoShapeContainer.h>
 #include <KoProperties.h>
+#include <KoShapeContainer.h>
 
 #include "EnhancedPathShape.h"
 
@@ -44,7 +44,10 @@ public:
 
     void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 
-    PathShape *pathShape() const { return m_path; }
+    PathShape *pathShape() const
+    {
+        return m_path;
+    }
 
 protected:
     void saveOdf(KoShapeSavingContext &context) const override;
@@ -59,31 +62,42 @@ class PathShape : public EnhancedPathShape
 {
 public:
     explicit PathShape(const QRect &viewBox = QRect());
-    
+
     //     void setSize(const QSizeF &size);
-    
-    //void setTextArea(const QRectF &rect);
-    
-    KoShape *text() const { return textShape(); }
+
+    // void setTextArea(const QRectF &rect);
+
+    KoShape *text() const
+    {
+        return textShape();
+    }
     KoTextShapeDataBase *textData() const;
-    
-    KoSubpathList subpaths() const { return m_subpaths; }
-    
+
+    KoSubpathList subpaths() const
+    {
+        return m_subpaths;
+    }
+
     void setModifiers(const QList<qreal> &modifiers);
-    QList<qreal> modifiers() { return m_modifiers; }
-    
-    QRectF viewBound() const { return m_viewBound; }
+    QList<qreal> modifiers()
+    {
+        return m_modifiers;
+    }
+
+    QRectF viewBound() const
+    {
+        return m_viewBound;
+    }
     /// Sets the viewbox of the enhanced path shape
     void setViewBox(const QRect &box);
     void prepare();
-    
+
     QList<qreal> parseModifiers(const QString &m) const;
     void setParameters(const KoProperties &params);
     KoProperties parameters() const;
 
 protected:
-//     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
-
+    //     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
 };
 
 #endif // CALLOUTSHAPE_H

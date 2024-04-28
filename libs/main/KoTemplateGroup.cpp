@@ -10,9 +10,10 @@
 
 #include <QFile>
 
-KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir,
-                                 int _sortingWeight, bool touched) :
-        m_name(name), m_touched(touched), m_sortingWeight(_sortingWeight)
+KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir, int _sortingWeight, bool touched)
+    : m_name(name)
+    , m_touched(touched)
+    , m_sortingWeight(_sortingWeight)
 {
     m_dirs.append(dir);
 }
@@ -24,8 +25,7 @@ KoTemplateGroup::~KoTemplateGroup()
 
 bool KoTemplateGroup::isHidden() const
 {
-
-    QList<KoTemplate*>::const_iterator it = m_templates.begin();
+    QList<KoTemplate *>::const_iterator it = m_templates.begin();
     bool hidden = true;
     while (it != m_templates.end() && hidden) {
         hidden = (*it)->isHidden();
@@ -36,7 +36,7 @@ bool KoTemplateGroup::isHidden() const
 
 void KoTemplateGroup::setHidden(bool hidden) const
 {
-    foreach (KoTemplate* t, m_templates)
+    foreach (KoTemplate *t, m_templates)
         t->setHidden(hidden);
 
     m_touched = true;
@@ -44,14 +44,13 @@ void KoTemplateGroup::setHidden(bool hidden) const
 
 bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch)
 {
-
     KoTemplate *myTemplate = find(t->name());
     if (myTemplate == 0) {
         m_templates.append(t);
         m_touched = touch;
         return true;
     } else if (myTemplate && force) {
-        //kDebug( 30003 ) <<"removing :" << myTemplate->fileName();
+        // kDebug( 30003 ) <<"removing :" << myTemplate->fileName();
         QFile::remove(myTemplate->fileName());
         QFile::remove(myTemplate->picture());
         QFile::remove(myTemplate->file());
@@ -69,8 +68,8 @@ bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch)
 
 KoTemplate *KoTemplateGroup::find(const QString &name) const
 {
-    QList<KoTemplate*>::const_iterator it = m_templates.begin();
-    KoTemplate* ret = nullptr;
+    QList<KoTemplate *>::const_iterator it = m_templates.begin();
+    KoTemplate *ret = nullptr;
 
     while (it != m_templates.end()) {
         if ((*it)->name() == name) {
@@ -83,4 +82,3 @@ KoTemplate *KoTemplateGroup::find(const QString &name) const
 
     return ret;
 }
-

@@ -1,26 +1,26 @@
 /*
-* This file is part of the KDE project
-*
-* SPDX-FileCopyrightText: 2009 Nokia Corporation and /or its subsidiary(-ies).
-*
-* Contact: Amit Aggarwal <amit.5.aggarwal@nokia.com>
-*
-* This library is free software; you can redistribute it and/or
-* modify it under the terms of the GNU Lesser General Public License
-* version 2.1 or (at your option) any later version as published by
-* the Free Software Foundation.
-*
-* This library is distributed in the hope that it will be useful, but
-* WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* Lesser General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public
-* License along with this library; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-* 02110-1301 USA
-*
-*/
+ * This file is part of the KDE project
+ *
+ * SPDX-FileCopyrightText: 2009 Nokia Corporation and /or its subsidiary(-ies).
+ *
+ * Contact: Amit Aggarwal <amit.5.aggarwal@nokia.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * version 2.1 or (at your option) any later version as published by
+ * the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA
+ *
+ */
 
 // Own
 #include "DateTimeFormat.h"
@@ -29,20 +29,19 @@
 #include <iostream>
 
 // Qt
-#include <QDateTime>
 #include <QBuffer>
+#include <QDateTime>
 #include <QString>
 
 // Calligra
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 
-
 DateTimeFormat::DateTimeFormat(int dateTimeFormatId)
-        : formatId(dateTimeFormatId)
+    : formatId(dateTimeFormatId)
 {
 #ifdef LIBDATE_DEBUG
-    std::cout << "\nDateTimeConstructor formatId :" << formatId ;
+    std::cout << "\nDateTimeConstructor formatId :" << formatId;
 #endif
 }
 
@@ -50,7 +49,7 @@ DateTimeFormat::~DateTimeFormat()
 {
 }
 
-void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool longmonth, bool textualmonth, bool longyear, const QString &separator)
+void DateTimeFormat::addDateStyle(KoGenStyles &styles, bool dayofweek, bool longmonth, bool textualmonth, bool longyear, const QString &separator)
 {
     QBuffer buffer;
 
@@ -62,17 +61,17 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
     if (dayofweek == true) {
         xmlWriter.startElement("number:day-of-week");
         xmlWriter.addAttribute("number:style", "long");
-        xmlWriter.endElement();  //number:day-of-week
+        xmlWriter.endElement(); // number:day-of-week
         xmlWriter.startElement("number:text");
         xmlWriter.addTextNode(",");
-        xmlWriter.endElement(); //number:text
+        xmlWriter.endElement(); // number:text
     }
 
     xmlWriter.startElement("number:day");
     xmlWriter.endElement(); // number:day
     xmlWriter.startElement("number:text");
     xmlWriter.addTextNode(separator);
-    xmlWriter.endElement(); //number:text
+    xmlWriter.endElement(); // number:text
 
     xmlWriter.startElement("number:month");
     if (longmonth == true) {
@@ -80,10 +79,10 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
         if (textualmonth == true)
             xmlWriter.addAttribute("number:textual", "true");
     }
-    xmlWriter.endElement();  //number:month
+    xmlWriter.endElement(); // number:month
     xmlWriter.startElement("number:text");
     xmlWriter.addTextNode(separator);
-    xmlWriter.endElement(); //number:text
+    xmlWriter.endElement(); // number:text
 
     xmlWriter.startElement("number:year");
     if (longyear == true) {
@@ -93,17 +92,14 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
 
     xmlWriter.startElement("number:text");
     xmlWriter.addTextNode(" ");
-    xmlWriter.endElement(); //number:text
+    xmlWriter.endElement(); // number:text
 
-    dt.addChildElement("number:date-style",
-                       QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
+    dt.addChildElement("number:date-style", QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
     styles.insert(dt, "DT");
     setDateStyleName(styles.insert(dt));
-
 }
 
-
-void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format, bool second, const QString &separator)
+void DateTimeFormat::addTimeStyle(KoGenStyles &styles, bool hr12Format, bool second, const QString &separator)
 {
     QBuffer buffer;
 
@@ -114,11 +110,11 @@ void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format, bool sec
     tm.setAutoStyleInStylesDotXml(true);
 
     xmlWriter.startElement("number:hours");
-    xmlWriter.endElement();  //number:hours
+    xmlWriter.endElement(); // number:hours
 
     xmlWriter.startElement("number:text");
     xmlWriter.addTextNode(separator);
-    xmlWriter.endElement(); //number:text
+    xmlWriter.endElement(); // number:text
 
     xmlWriter.startElement("number:minutes");
     xmlWriter.endElement(); // number:minutes
@@ -126,9 +122,9 @@ void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format, bool sec
     if (second) {
         xmlWriter.startElement("number:text");
         xmlWriter.addTextNode(separator);
-        xmlWriter.endElement(); //number:text
-        xmlWriter.startElement("number:second"); //TBD in spec
-        xmlWriter.endElement();  //number:second
+        xmlWriter.endElement(); // number:text
+        xmlWriter.startElement("number:second"); // TBD in spec
+        xmlWriter.endElement(); // number:second
     }
 
     if (hr12Format) {
@@ -141,15 +137,10 @@ void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format, bool sec
                        QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
     styles.insert(tm, "TM");
     setTimeStyleName(styles.insert(tm));
-
 }
 
-
-void DateTimeFormat::addDateTimeAutoStyles(KoGenStyles& styles,
-        bool hasTodayDate,
-        bool hasUserDate)
+void DateTimeFormat::addDateTimeAutoStyles(KoGenStyles &styles, bool hasTodayDate, bool hasUserDate)
 {
-
     if (hasTodayDate) {
         switch (formatId) {
         case ShortDate:
@@ -184,14 +175,14 @@ void DateTimeFormat::addDateTimeAutoStyles(KoGenStyles& styles,
             break;
         default:
             break;
-        } //switch
-    }//if
+        } // switch
+    } // if
     else if (hasUserDate) {
-        //Future - Fixed date
+        // Future - Fixed date
     }
 }
 
-void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter, const QString &tStyle)
+void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter &xmlWriter, const QString &tStyle)
 {
     QDateTime dt = QDateTime::currentDateTime();
     QString format, result;
@@ -248,7 +239,7 @@ void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter, const QStr
         format = "yyyy-MM-ddTHH:mm:ss.z";
         break;
     case FixedUserDateFormat:
-        //Future - Fixed Date
+        // Future - Fixed Date
     default:
         // XML Schema time format
         format = "yyyy-MM-ddTHH:mm:ss.z";
@@ -263,7 +254,7 @@ void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter, const QStr
         xmlWriter.addAttribute("style:data-style-name", getDateStyleName());
         xmlWriter.addAttribute("text:date-value", result);
         xmlWriter.addTextNode(result);
-        xmlWriter.endElement();//text:date
+        xmlWriter.endElement(); // text:date
         xmlWriter.endElement(); // text:span
     }
     if (hasTime == true) {
@@ -273,14 +264,13 @@ void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter, const QStr
         xmlWriter.addAttribute("style:data-style-name", getTimeStyleName());
         xmlWriter.addAttribute("text:time-value", result);
         xmlWriter.addTextNode(result);
-        xmlWriter.endElement();//text:time
+        xmlWriter.endElement(); // text:time
         xmlWriter.endElement(); // text:span
     }
 
 #ifdef LIBDATE_DEBUG
     std::cout << "****Date formatted here: " << result.toLatin1().data();
 #endif
-
 }
 
 void DateTimeFormat::setDateStyleName(const QString &name)
@@ -308,4 +298,3 @@ QString DateTimeFormat::getTimeStyleName() const
 {
     return timeStyleName;
 }
-

@@ -9,17 +9,15 @@
 #include <KPrPageEffectRegistry.h>
 
 #include "clockwipe/KPrClockWipeEffectFactory.h"
-#include "pinwheelwipe/KPrPinWheelWipeEffectFactory.h"
-#include "singlesweepwipe/KPrSingleSweepWipeEffectFactory.h"
-#include "fanwipe/KPrFanWipeEffectFactory.h"
 #include "doublefanwipe/KPrDoubleFanWipeEffectFactory.h"
 #include "doublesweepwipe/KPrDoubleSweepWipeEffectFactory.h"
+#include "fanwipe/KPrFanWipeEffectFactory.h"
+#include "pinwheelwipe/KPrPinWheelWipeEffectFactory.h"
 #include "saloondoorwipe/KPrSaloonDoorWipeEffectFactory.h"
+#include "singlesweepwipe/KPrSingleSweepWipeEffectFactory.h"
 #include "windshieldwipe/KPrWindShieldWipeEffectFactory.h"
 
-
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_pageeffect_clockwipe.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_pageeffect_clockwipe.json", registerPlugin<Plugin>();)
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
@@ -32,8 +30,6 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
     KPrPageEffectRegistry::instance()->add(new KPrDoubleSweepWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new KPrSaloonDoorWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new KPrWindShieldWipeEffectFactory());
-
 }
 
 #include "Plugin.moc"
-

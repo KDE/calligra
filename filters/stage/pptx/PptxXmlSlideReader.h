@@ -12,12 +12,12 @@
 #ifndef PPTXXMLSLIDEREADER_H
 #define PPTXXMLSLIDEREADER_H
 
-#include <MsooXmlThemesReader.h>
-#include <MsooXmlCommonReader.h>
-#include <MsooXmlDrawingTableStyle.h>
-#include <VmlDrawingReader.h>
 #include <KoGenStyle.h>
 #include <KoTable.h>
+#include <MsooXmlCommonReader.h>
+#include <MsooXmlDrawingTableStyle.h>
+#include <MsooXmlThemesReader.h>
+#include <VmlDrawingReader.h>
 
 class KoXmlWriter;
 class PptxXmlSlideReaderContext;
@@ -34,7 +34,7 @@ class PptxShapeProperties
 public:
     PptxShapeProperties();
     PptxShapeProperties(const PptxShapeProperties &other);
-    PptxShapeProperties& operator=(const PptxShapeProperties &other);
+    PptxShapeProperties &operator=(const PptxShapeProperties &other);
 
     //! p:spPr/a:xfrm/a:off@x value in EMU
     int x;
@@ -53,13 +53,13 @@ class PptxActualSlideProperties
 {
 public:
     //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
-    QMap<QString, QMap<int,KoGenStyle> > styles;
+    QMap<QString, QMap<int, KoGenStyle>> styles;
 
     //! Map of text-styles with the styleId as outer-key and the listlevel as inner-key.
-    QMap<QString, QMap<int,KoGenStyle> > textStyles;
+    QMap<QString, QMap<int, KoGenStyle>> textStyles;
 
     //! Map of list-styles with the styleId as outer-key and the listlevel as inner-key.
-    QMap<QString, QMap<int,MSOOXML::Utils::ParagraphBulletProperties> > listStyles;
+    QMap<QString, QMap<int, MSOOXML::Utils::ParagraphBulletProperties>> listStyles;
 };
 
 //! Properties of a single placeholder for shapes defined by layouts
@@ -95,13 +95,13 @@ public:
     //! The presentation:presentation-page-layout-name
     QString pageLayoutStyleName;
     //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
-    QMap<QString, QMap<int,KoGenStyle> > styles;
+    QMap<QString, QMap<int, KoGenStyle>> styles;
 
     //! Map of text-styles with the styleId as outer-key and the listlevel as inner-key.
-    QMap<QString, QMap<int,KoGenStyle> > textStyles;
+    QMap<QString, QMap<int, KoGenStyle>> textStyles;
 
     //! Map of list-styles with the styleId as outer-key and the listlevel as inner-key.
-    QMap<QString, QMap<int,MSOOXML::Utils::ParagraphBulletProperties> > listStyles;
+    QMap<QString, QMap<int, MSOOXML::Utils::ParagraphBulletProperties>> listStyles;
 
     //! Map of spPr based graphicStyles, these contain fillColor & outline
     QMap<QString, KoGenStyle> graphicStyles;
@@ -132,7 +132,7 @@ public:
     MSOOXML::DrawingMLTheme theme;
 
     //! Shapes map addressed by type
-    QMap<QString, PptxShapeProperties*> shapesMap;
+    QMap<QString, PptxShapeProperties *> shapesMap;
 
     QMap<QString, QString> colorMap;
 
@@ -148,23 +148,16 @@ class PptxXmlSlideReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
     //! Mode of operation.
-    enum Type {
-        Slide,
-        SlideLayout,
-        SlideMaster,
-        NotesMaster,
-        Notes
-    };
+    enum Type { Slide, SlideLayout, SlideMaster, NotesMaster, Notes };
 
     explicit PptxXmlSlideReader(KoOdfWriters *writers);
 
     ~PptxXmlSlideReader() override;
 
     //! Reads/parses the XML.
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
 
 protected:
-
     KoFilter::ConversionStatus read_titleStyle();
     KoFilter::ConversionStatus read_notesStyle();
     KoFilter::ConversionStatus read_bodyStyle();
@@ -197,14 +190,14 @@ protected:
     KoFilter::ConversionStatus read_clrMap();
     KoFilter::ConversionStatus read_clrMapOvr();
 
-    PptxXmlSlideReaderContext* m_context;
-    PptxShapeProperties* m_currentShapeProperties;
+    PptxXmlSlideReaderContext *m_context;
+    PptxShapeProperties *m_currentShapeProperties;
 
     KoGenStyle m_currentMasterPageStyle; //!< set by read_sp()
     KoGenStyle m_currentPresentationPageLayoutStyle; //!< set by read_sp() for placeholders (KoGenStyle::PresentationPageLayoutStyle)
     KoGenStyle m_currentPresentationStyle; //!< KoGenStyle::PresentationAutoStyle
 
-    KoXmlWriter* m_placeholderElWriter;
+    KoXmlWriter *m_placeholderElWriter;
 
     // Saves current text and paragraph styles to slide(layout/master) memory where they
     // can be used later for inheritance purposes
@@ -226,17 +219,17 @@ protected:
     void inheritDefaultListStyles();
 
     // inherits default text style to target
-    void inheritDefaultTextStyle(KoGenStyle& targetStyle);
+    void inheritDefaultTextStyle(KoGenStyle &targetStyle);
 
     // Inherits correct textstyle to m_currentTextStyle
     // First from default, then from master, layout, slide using those lvls which are needed
-    void inheritTextStyle(KoGenStyle& targetStyle);
+    void inheritTextStyle(KoGenStyle &targetStyle);
 
     // Inherits default paragraphStyle
-    void inheritDefaultParagraphStyle(KoGenStyle& targetStyle);
+    void inheritDefaultParagraphStyle(KoGenStyle &targetStyle);
 
     // Inherits correct paragraph styles to m_currentParagraphStyle
-    void inheritParagraphStyle(KoGenStyle& targetStyle);
+    void inheritParagraphStyle(KoGenStyle &targetStyle);
 
     // Inherit correct body properties from slideMaster/slideLayout if needed
     void inheritBodyProperties();
@@ -262,19 +255,18 @@ protected:
     qreal processParagraphSpacing(const qreal margin, const qreal fontSize);
 
 private:
-
-    void saveBodyPropertiesHelper(const QString &id, PptxSlideProperties* slideProperties);
-    void inheritBodyPropertiesHelper(const QString &id, PptxSlideProperties* slideProperties);
+    void saveBodyPropertiesHelper(const QString &id, PptxSlideProperties *slideProperties);
+    void inheritBodyPropertiesHelper(const QString &id, PptxSlideProperties *slideProperties);
 
     void init();
 
     class Private;
-    Private* const d;
+    Private *const d;
 
     bool m_showSlideLayoutShapes;
 
-#include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
+#include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlDrawingReaderTableMethods.h>
 };
 
@@ -284,31 +276,30 @@ class PptxXmlSlideReaderContext : public MSOOXML::MsooXmlReaderContext
 public:
     //! Creates the context object.
     /*! @param _slideProperties is written for SlideMaster type and read for Slide type. */
-    PptxXmlSlideReaderContext(
-        PptxImport& _import,
-        const QString& _path,
-        const QString& _file,
-        uint _slideNumber,
-        MSOOXML::DrawingMLTheme* _themes,
-        PptxXmlSlideReader::Type _type,
-        PptxSlideProperties* _slideLayoutProperties,
-        PptxSlideProperties* _slideMasterProperties,
-        PptxSlideProperties* _notesMasterProperties,
-        MSOOXML::MsooXmlRelationships& _relationships,
-        QMap<int, QString> _commentAuthors,
-        QMap<QString, QString> masterColorMap,
-        VmlDrawingReader& _vmlReader,
-        QString _tableStylesFilePath = QString());
+    PptxXmlSlideReaderContext(PptxImport &_import,
+                              const QString &_path,
+                              const QString &_file,
+                              uint _slideNumber,
+                              MSOOXML::DrawingMLTheme *_themes,
+                              PptxXmlSlideReader::Type _type,
+                              PptxSlideProperties *_slideLayoutProperties,
+                              PptxSlideProperties *_slideMasterProperties,
+                              PptxSlideProperties *_notesMasterProperties,
+                              MSOOXML::MsooXmlRelationships &_relationships,
+                              QMap<int, QString> _commentAuthors,
+                              QMap<QString, QString> masterColorMap,
+                              VmlDrawingReader &_vmlReader,
+                              QString _tableStylesFilePath = QString());
 
-    PptxImport* import;
+    PptxImport *import;
     const QString path;
     const QString file;
     const uint slideNumber;
-    MSOOXML::DrawingMLTheme* themes;
+    MSOOXML::DrawingMLTheme *themes;
     PptxXmlSlideReader::Type type;
-    PptxSlideProperties* slideLayoutProperties;
-    PptxSlideProperties* slideMasterProperties;
-    PptxSlideProperties* notesMasterProperties;
+    PptxSlideProperties *slideLayoutProperties;
+    PptxSlideProperties *slideMasterProperties;
+    PptxSlideProperties *notesMasterProperties;
     PptxActualSlideProperties currentSlideStyles;
     PptxActualSlideProperties currentNotesStyles;
 
@@ -317,7 +308,7 @@ public:
     QVector<QString> pageFrames; //! Frames which go to masterslide
     QMap<int, QString> commentAuthors;
 
-    VmlDrawingReader& vmlReader;
+    VmlDrawingReader &vmlReader;
 
     // Used to keep track, whether we should skip elements.  At the moment we
     // need to read some slides twice because some elements from the later part
@@ -328,9 +319,13 @@ public:
     // compared to the slideMaster.
     bool overrideClrMapping;
 
-    void initializeContext(const MSOOXML::DrawingMLTheme& theme, const QVector<KoGenStyle>& _defaultParagraphStyles,
-        const QVector<KoGenStyle>& _defaultTextStyles, const QVector<MSOOXML::Utils::ParagraphBulletProperties>& _defaultListStyles,
-        const QVector<QString>& _defaultBulletColors, const QVector<QString>& _defaultTextColors, const QVector<QString>& _defaultLatinFonts);
+    void initializeContext(const MSOOXML::DrawingMLTheme &theme,
+                           const QVector<KoGenStyle> &_defaultParagraphStyles,
+                           const QVector<KoGenStyle> &_defaultTextStyles,
+                           const QVector<MSOOXML::Utils::ParagraphBulletProperties> &_defaultListStyles,
+                           const QVector<QString> &_defaultBulletColors,
+                           const QVector<QString> &_defaultTextColors,
+                           const QVector<QString> &_defaultLatinFonts);
 
     // Must be in context, because each slide/layout/master may overwrite the
     // color mapping and the default text colors have to be re-interpreted.

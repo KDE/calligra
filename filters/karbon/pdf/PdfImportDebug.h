@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &PDFIMPORT_LOG();
 
 #define debugPdf qCDebug(PDFIMPORT_LOG)

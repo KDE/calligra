@@ -18,17 +18,15 @@
 
 static const struct {
     KoInlineObject::Property property;
-    const char * tag;
-    const char * saveTag;
-} propertyData[] = {
-    { KoInlineObject::AuthorName, "creator", "text:creator" },
-    { KoInlineObject::DocumentURL, "file-name", "text:file-name" },
-    { KoInlineObject::Title, "title", "text:title" },
-    { KoInlineObject::Subject, "subject", "text:subject" },
-    { KoInlineObject::Keywords, "keywords", "text:keywords" },
-    //{ KoInlineObject::Description, "description", "text:description" }
-    { KoInlineObject::Comments, "comments", "text:comments" }
-};
+    const char *tag;
+    const char *saveTag;
+} propertyData[] = {{KoInlineObject::AuthorName, "creator", "text:creator"},
+                    {KoInlineObject::DocumentURL, "file-name", "text:file-name"},
+                    {KoInlineObject::Title, "title", "text:title"},
+                    {KoInlineObject::Subject, "subject", "text:subject"},
+                    {KoInlineObject::Keywords, "keywords", "text:keywords"},
+                    //{ KoInlineObject::Description, "description", "text:description" }
+                    {KoInlineObject::Comments, "comments", "text:comments"}};
 
 static const unsigned int numPropertyData = sizeof(propertyData) / sizeof(*propertyData);
 
@@ -42,14 +40,14 @@ QStringList InfoVariable::tags()
 }
 
 InfoVariable::InfoVariable()
-        : KoVariable(true),
-        m_type(KoInlineObject::AuthorName)
+    : KoVariable(true)
+    , m_type(KoInlineObject::AuthorName)
 {
 }
 
 void InfoVariable::readProperties(const KoProperties *props)
 {
-    m_type = (Property) props->property("vartype").value<int>();
+    m_type = (Property)props->property("vartype").value<int>();
 }
 
 void InfoVariable::propertyChanged(Property property, const QVariant &value)
@@ -59,15 +57,15 @@ void InfoVariable::propertyChanged(Property property, const QVariant &value)
     }
 }
 
-typedef QMap<KoInlineObject::Property, const char*> SaveMap;
+typedef QMap<KoInlineObject::Property, const char *> SaveMap;
 
 Q_GLOBAL_STATIC(SaveMap, s_saveInfo)
 
-void InfoVariable::saveOdf(KoShapeSavingContext & context)
+void InfoVariable::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
 
-    if (!s_saveInfo.exists() ) {
+    if (!s_saveInfo.exists()) {
         for (unsigned int i = 0; i < numPropertyData; ++i) {
             s_saveInfo->insert(propertyData[i].property, propertyData[i].saveTag);
         }
@@ -84,9 +82,9 @@ typedef QMap<QString, KoInlineObject::Property> LoadMap;
 
 Q_GLOBAL_STATIC(LoadMap, s_loadInfo)
 
-bool InfoVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & /*context*/)
+bool InfoVariable::loadOdf(const KoXmlElement &element, KoShapeLoadingContext & /*context*/)
 {
-    if (!s_loadInfo.exists() ) {
+    if (!s_loadInfo.exists()) {
         for (unsigned int i = 0; i < numPropertyData; ++i) {
             s_loadInfo->insert(propertyData[i].tag, propertyData[i].property);
         }
@@ -95,7 +93,7 @@ bool InfoVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     const QString localName(element.localName());
     m_type = s_loadInfo->value(localName);
 
-    for(KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() ) {
+    for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isText()) {
             setValue(node.toText().data());
             break;

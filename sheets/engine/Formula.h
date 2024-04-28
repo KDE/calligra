@@ -10,8 +10,8 @@
 #include <QTextStream>
 #include <QVector>
 
-#include "sheets_engine_export.h"
 #include "CellBase.h"
+#include "sheets_engine_export.h"
 
 #define CALLIGRA_SHEETS_INLINE_ARRAYS
 
@@ -35,60 +35,61 @@ public:
      */
     enum Type {
         Unknown = 0, ///< unknown type
-        Boolean,     ///< True, False (also i18n-ized)
-        Integer,     ///< 14, 3, 1977
-        Float,       ///< 3.141592, 1e10, 5.9e-7
-        String,      ///< "Calligra", "The quick brown fox..."
-        Operator,    ///< +, *, /, -
-        Cell,        ///< $A$1, F4, Sheet2!B5, 'Sales Forecast'!Sum
-        Range,       ///< C1:C100
-        Identifier,  ///< function name or named area
-        Error        ///< error, like \#REF!, \#VALUE!, ...
+        Boolean, ///< True, False (also i18n-ized)
+        Integer, ///< 14, 3, 1977
+        Float, ///< 3.141592, 1e10, 5.9e-7
+        String, ///< "Calligra", "The quick brown fox..."
+        Operator, ///< +, *, /, -
+        Cell, ///< $A$1, F4, Sheet2!B5, 'Sales Forecast'!Sum
+        Range, ///< C1:C100
+        Identifier, ///< function name or named area
+        Error ///< error, like \#REF!, \#VALUE!, ...
     };
 
     /**
      * operator types
      */
     enum Op {
-        InvalidOp = 0,  ///< invalid operator
-        Plus,           ///<  + (addition)
-        Minus,          ///<  - (subtraction, negation)
-        Asterisk,       ///<  * (multiplication)
-        Slash,          ///<  / (division)
-        Caret,          ///<  ^ (power)
-        Intersect,      ///< " " (a space means intersection)
-        LeftPar,        ///<  (
-        RightPar,       ///<  )
-        Comma,          ///<  ,
-        Semicolon,      ///<  ; (argument separator)
-        Ampersand,      ///<  & (string concat)
-        Equal,          ///<  =
-        NotEqual,       ///<  <>
-        Less,           ///<  <
-        Greater,        ///<  >
-        LessEqual,      ///<  <=
-        GreaterEqual,   ///<  >=
-        Percent,        ///<  %
-        CurlyBra,       ///<  { (array start)
-        CurlyKet,       ///<  } (array end)
-        Pipe,           ///<  | (array row separator)
-        Union           ///<  ~ (union of ranges)
+        InvalidOp = 0, ///< invalid operator
+        Plus, ///<  + (addition)
+        Minus, ///<  - (subtraction, negation)
+        Asterisk, ///<  * (multiplication)
+        Slash, ///<  / (division)
+        Caret, ///<  ^ (power)
+        Intersect, ///< " " (a space means intersection)
+        LeftPar, ///<  (
+        RightPar, ///<  )
+        Comma, ///<  ,
+        Semicolon, ///<  ; (argument separator)
+        Ampersand, ///<  & (string concat)
+        Equal, ///<  =
+        NotEqual, ///<  <>
+        Less, ///<  <
+        Greater, ///<  >
+        LessEqual, ///<  <=
+        GreaterEqual, ///<  >=
+        Percent, ///<  %
+        CurlyBra, ///<  { (array start)
+        CurlyKet, ///<  } (array end)
+        Pipe, ///<  | (array row separator)
+        Union ///<  ~ (union of ranges)
     };
 
     /**
      * Creates a token.
      */
-    explicit Token(Type type = Unknown, const QString& text = QString(), int pos = -1);
+    explicit Token(Type type = Unknown, const QString &text = QString(), int pos = -1);
 
     static const Token null;
 
-    Token(const Token&);
-    Token& operator=(const Token&);
+    Token(const Token &);
+    Token &operator=(const Token &);
 
     /**
      * Returns type of the token.
      */
-    Type type() const {
+    Type type() const
+    {
         return m_type;
     }
 
@@ -99,81 +100,93 @@ public:
      * text(), you might use asInteger(), asFloat(), asString(), sheetName(),
      * etc.
      */
-    const QString& text() const {
+    const QString &text() const
+    {
         return m_text;
     }
 
-    int pos() const {
+    int pos() const
+    {
         return m_pos;
     }
 
     /**
      * Returns true if token is a boolean token.
      */
-    bool isBoolean() const {
+    bool isBoolean() const
+    {
         return m_type == Boolean;
     }
 
     /**
      * Returns true if token is a integer token.
      */
-    bool isInteger() const {
+    bool isInteger() const
+    {
         return m_type == Integer;
     }
 
     /**
      * Returns true if token is a floating-point token.
      */
-    bool isFloat() const {
+    bool isFloat() const
+    {
         return m_type == Float;
     }
 
     /**
      * Returns true if token is either integer or floating-point token.
      */
-    bool isNumber() const {
+    bool isNumber() const
+    {
         return (m_type == Integer) || (m_type == Float);
     }
 
     /**
      * Returns true if token is a string token.
      */
-    bool isString() const {
+    bool isString() const
+    {
         return m_type == String;
     }
 
     /**
      * Returns true if token is an operator token.
      */
-    bool isOperator() const {
+    bool isOperator() const
+    {
         return m_type == Operator;
     }
 
     /**
      * Returns true if token is a cell reference token.
      */
-    bool isCell() const {
+    bool isCell() const
+    {
         return m_type == Cell;
     }
 
     /**
      * Returns true if token is a range reference token.
      */
-    bool isRange() const {
+    bool isRange() const
+    {
         return m_type == Range;
     }
 
     /**
      * Returns true if token is an identifier.
      */
-    bool isIdentifier() const {
+    bool isIdentifier() const
+    {
         return m_type == Identifier;
     }
 
     /**
      * Returns true if token is a error token.
      */
-    bool isError() const {
+    bool isError() const
+    {
         return m_type == Error;
     }
 
@@ -239,11 +252,9 @@ public:
     QString description() const;
 
 protected:
-
     Type m_type;
     QString m_text;
     int m_pos;
-
 };
 
 /**
@@ -251,20 +262,26 @@ protected:
  * An array of formula tokens.
  *
  */
-class Tokens: public QVector<Token>
+class Tokens : public QVector<Token>
 {
 public:
-    Tokens(): QVector<Token>(), m_valid(true) {}
-    bool valid() const {
+    Tokens()
+        : QVector<Token>()
+        , m_valid(true)
+    {
+    }
+    bool valid() const
+    {
         return m_valid;
     }
-    void setValid(bool v) {
+    void setValid(bool v)
+    {
         m_valid = v;
     }
+
 protected:
     bool m_valid;
 };
-
 
 /**
  * \ingroup Value
@@ -281,7 +298,7 @@ public:
     /**
      * Creates a formula. It must be owned by a sheet.
      */
-    Formula(SheetBase *sheet, const CellBase& cell);
+    Formula(SheetBase *sheet, const CellBase &cell);
 
     /**
      * Creates a formula. It must be owned by a sheet.
@@ -302,7 +319,7 @@ public:
     /**
      * Copy constructor.
      */
-    Formula(const Formula&);
+    Formula(const Formula &);
 
     /**
      * Destroys the formula.
@@ -312,11 +329,11 @@ public:
     /**
      * Returns the cell which owns this formula.
      */
-    SheetBase* sheet() const;
+    SheetBase *sheet() const;
     /**
      * Returns the cell which owns this formula.
      */
-    const CellBase& cell() const;
+    const CellBase &cell() const;
 
     /**
      * Is the formula empty?
@@ -326,7 +343,7 @@ public:
     /**
      * Sets the expression for this formula.
      */
-    void setExpression(const QString& expr);
+    void setExpression(const QString &expr);
 
     /**
      * Gets the expression of this formula.
@@ -367,7 +384,7 @@ public:
      * If the expression contains error (e.g. unknown operator, string no terminated)
      * this function returns tokens which is not valid.
      */
-    Tokens scan(const QString& expr, const Localization* locale = 0) const;
+    Tokens scan(const QString &expr, const Localization *locale = 0) const;
 
     // Locale belonging to the current cell/sheet, if any.
     Localization *locale() const;
@@ -375,10 +392,11 @@ public:
     /**
      * Assignment operator.
      */
-    Formula& operator=(const Formula&);
+    Formula &operator=(const Formula &);
 
-    bool operator==(const Formula&) const;
-    inline bool operator!=(const Formula& o) const {
+    bool operator==(const Formula &) const;
+    inline bool operator!=(const Formula &o) const
+    {
         return !operator==(o);
     }
 
@@ -393,34 +411,33 @@ public:
      * helper function: return operator of given token text
      * e.g. "*" yields Operator::Asterisk, and so on
      */
-    static Token::Op matchOperator(const QString& text);
+    static Token::Op matchOperator(const QString &text);
 
     /**
      * helper function to parse operator
      *
      * If a operator is found the data and out pointer are advanced by the number
      * of chars the operators consist of.
-     * @param data pointer into the input string 
+     * @param data pointer into the input string
      * @param out pointer into the out string, The out string needs to be big enough
-     * 
+     *
      * @returns true if a operator was found, false otherwise.
      */
     static bool parseOperator(const QChar *&data, QChar *&out);
 
 protected:
-
-    void compile(const Tokens& tokens) const;
+    void compile(const Tokens &tokens) const;
 
     /**
      * helper function: return true for valid named area
      */
-    bool isNamedArea(const QString& expr) const;
+    bool isNamedArea(const QString &expr) const;
 
     /**
      * helper function for recursive evaluations; makes sure one cell
      * is not evaluated more than once resulting in infinite loops
      */
-    Value evalRecursive(CellIndirection cellIndirections, QHash<CellBase, Value>& values) const;
+    Value evalRecursive(CellIndirection cellIndirections, QHash<CellBase, Value> &values) const;
 
 private:
     class Private;
@@ -430,14 +447,13 @@ private:
 /**
  * Dumps the formula, should be used only to assist debugging.
  */
-QTextStream& operator<<(QTextStream& ts, Formula formula);
-
+QTextStream &operator<<(QTextStream &ts, Formula formula);
 
 /***************************************************************************
   QHash/QSet support
 ****************************************************************************/
 
-inline size_t qHash(const Formula& formula, size_t seed = 0)
+inline size_t qHash(const Formula &formula, size_t seed = 0)
 {
     return qHash(formula.expression(), seed);
 }

@@ -14,20 +14,18 @@
 
 // odf lib
 #include "KoStore.h"
-#include <KoXmlStreamReader.h>
 #include <KoXmlNS.h>
+#include <KoXmlStreamReader.h>
 
 // Filter libraries
 #include "KoOdfStyle.h"
 
 // This filter
-#include "OpcRelSet.h"
 #include "DocxExportDebug.h"
-
+#include "OpcRelSet.h"
 
 // ================================================================
 //                 class OpcRelSetManager
-
 
 class OpcRelSetManager::Private
 {
@@ -35,9 +33,9 @@ public:
     Private();
     ~Private();
 
-    QHash<QString, OpcRelSet*> relSets;         // path, relations
-    OpcRelSet                 *documentRelSet;  // The relations for the whole document
-                                                // Stored in _rels/.rels 
+    QHash<QString, OpcRelSet *> relSets; // path, relations
+    OpcRelSet *documentRelSet; // The relations for the whole document
+                               // Stored in _rels/.rels
 };
 
 OpcRelSetManager::Private::Private()
@@ -51,9 +49,7 @@ OpcRelSetManager::Private::~Private()
     delete documentRelSet;
 }
 
-
 // ----------------------------------------------------------------
-
 
 OpcRelSetManager::OpcRelSetManager()
     : d(new OpcRelSetManager::Private())
@@ -64,7 +60,6 @@ OpcRelSetManager::~OpcRelSetManager()
 {
     delete d;
 }
-
 
 OpcRelSet *OpcRelSetManager::relSet(const QString &path) const
 {
@@ -97,17 +92,15 @@ void OpcRelSetManager::clear()
     }
 }
 
-
 // ----------------------------------------------------------------
-
 
 bool OpcRelSetManager::loadRelSets(KoStore *odfStore)
 {
     Q_UNUSED(odfStore);
 
-    //QString errorMsg;
-    //int errorLine;
-    //int errorColumn;
+    // QString errorMsg;
+    // int errorLine;
+    // int errorColumn;
 
     KoXmlStreamReader reader;
     // FIXME: Add expected namespaces for rels here.
@@ -118,16 +111,15 @@ bool OpcRelSetManager::loadRelSets(KoStore *odfStore)
     return true;
 }
 
-
 bool OpcRelSetManager::saveRelSets(KoStore *odfStore)
 {
     Q_UNUSED(odfStore);
 
     // FIXME: save the document relset here
 
-//     foreach (const QString &path, d->relSets.keys()) {
-        // FIXME: save the .rels file for the file with path 'path' here.
-//     }
+    //     foreach (const QString &path, d->relSets.keys()) {
+    // FIXME: save the .rels file for the file with path 'path' here.
+    //     }
 
     // FIXME: Return actual return status.
     return true;

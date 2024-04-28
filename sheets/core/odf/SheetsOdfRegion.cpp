@@ -18,14 +18,16 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include "Region.h"
 #include "SheetsOdf.h"
 #include "SheetsOdfPrivate.h"
-#include "Region.h"
 
 // This file contains functionality to load/save regions
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
 static void append(const QChar *from, const QChar *to, QChar **dest)
 {
@@ -68,15 +70,15 @@ void Odf::loadRegion(const QChar *&data, const QChar *&end, QChar *&out)
                 append(pos, data, &out);
                 *out = *data; // append :
                 ++out;
-                const QChar * next = data + 1;
+                const QChar *next = data + 1;
                 if (!next->isNull()) {
-                    const QChar * nextnext = next + 1;
+                    const QChar *nextnext = next + 1;
                     if (!nextnext->isNull() && *next == QChar('$', 0) && *nextnext != QChar('.', 0)) {
                         ++data;
                     }
                 }
                 pos = data + 1;
-            }   break;
+            } break;
             case ' ': // range separator
                 append(pos, data, &out);
                 *out = QChar(';', 0);
@@ -91,11 +93,10 @@ void Odf::loadRegion(const QChar *&data, const QChar *&end, QChar *&out)
             if (data->unicode() == '\'') {
                 // an escaped apostrophe?
                 // As long as Calligra Sheets does not support fixed sheets eat the dollar sign.
-                const QChar * next = data + 1;
+                const QChar *next = data + 1;
                 if (!next->isNull() && *next == QChar('\'', 0)) {
                     ++data;
-                }
-                else { // the end
+                } else { // the end
                     state = Start;
                 }
             }
@@ -106,7 +107,7 @@ void Odf::loadRegion(const QChar *&data, const QChar *&end, QChar *&out)
     append(pos, data, &out);
 }
 
-QString Odf::loadRegion(const QString& expression)
+QString Odf::loadRegion(const QString &expression)
 {
     QString result;
     QString temp;
@@ -135,7 +136,7 @@ QString Odf::loadRegion(const QString& expression)
                 result.append(':');
                 temp.clear();
                 // NOTE Stefan: As long as Calligra Sheets does not support fixed sheets eat the dollar sign.
-                if (i + 2 < expression.count() && expression[i+1] == '$' && expression[i+2] != '.')
+                if (i + 2 < expression.count() && expression[i + 1] == '$' && expression[i + 2] != '.')
                     ++i;
             } else if (expression[i] == ' ') { // range separator
                 result.append(temp);
@@ -150,7 +151,7 @@ QString Odf::loadRegion(const QString& expression)
             temp.append(expression[i]);
             if (expression[i] == '\'') {
                 // an escaped apostrophe?
-                if (i + 1 < expression.count() && expression[i+1] == '\'')
+                if (i + 1 < expression.count() && expression[i + 1] == '\'')
                     ++i; // eat it
                 else // the end
                     state = Start;
@@ -163,7 +164,7 @@ QString Odf::loadRegion(const QString& expression)
     return result + temp;
 }
 
-QString Odf::saveRegion(const QString& expression)
+QString Odf::saveRegion(const QString &expression)
 {
     QString result;
     QString sheetName;
@@ -180,11 +181,9 @@ QString Odf::saveRegion(const QString& expression)
                 // There has to be a sheet name.
                 if (temp.isEmpty())
                     return expression; // error
-                if (temp.count() > 2 && (temp[0] != '\'' && temp[temp.count()-1] != '\'')) {
+                if (temp.count() > 2 && (temp[0] != '\'' && temp[temp.count() - 1] != '\'')) {
                     temp.replace('\'', "''");
-                    if (temp.contains(' ') || temp.contains('.') ||
-                            temp.contains(';') || temp.contains('!') ||
-                            temp.contains('$') || temp.contains(']'))
+                    if (temp.contains(' ') || temp.contains('.') || temp.contains(';') || temp.contains('!') || temp.contains('$') || temp.contains(']'))
                         temp = '\'' + temp + '\'';
                 }
                 sheetName = temp;
@@ -212,7 +211,7 @@ QString Odf::saveRegion(const QString& expression)
             temp.append(expression[i]);
             if (expression[i] == '\'') {
                 // an escaped apostrophe?
-                if (i + 1 < expression.count() && expression[i+1] == '\'')
+                if (i + 1 < expression.count() && expression[i + 1] == '\'')
                     ++i; // eat it
                 else // the end
                     state = Start;
@@ -232,7 +231,5 @@ QString Odf::saveRegion(Region *region)
     return saveRegion(region->name());
 }
 
-
-}  // Sheets
-}  // Calligra
-
+} // Sheets
+} // Calligra

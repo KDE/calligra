@@ -8,12 +8,9 @@
 #ifndef CALLIGRA_SHEETS_ACTION_LIST_CHOOSE
 #define CALLIGRA_SHEETS_ACTION_LIST_CHOOSE
 
-
 #include "CellAction.h"
 
-
 class QMenu;
-
 
 namespace Calligra
 {
@@ -22,8 +19,9 @@ namespace Sheets
 class Cell;
 class Selection;
 
-class ListChoose : public CellAction {
-Q_OBJECT
+class ListChoose : public CellAction
+{
+    Q_OBJECT
 public:
     ListChoose(Actions *actions);
     virtual ~ListChoose();
@@ -36,7 +34,7 @@ protected:
     QStringList items(Selection *selection, const Cell &cursorCell, int limit = 0);
 
 protected Q_SLOTS:
-    void itemSelected(QAction* action);
+    void itemSelected(QAction *action);
 
 private:
     QMenu *popupListChoose;
@@ -46,4 +44,4 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_LIST_CHOOSE
+#endif // CALLIGRA_SHEETS_ACTION_LIST_CHOOSE

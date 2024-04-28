@@ -20,13 +20,14 @@ public:
     explicit BlendEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
-    bool editFilterEffect(KoFilterEffect * filterEffect) override;
+    bool editFilterEffect(KoFilterEffect *filterEffect) override;
 
 private Q_SLOTS:
     void modeChanged(int index);
+
 private:
-    KComboBox * m_mode;
-    BlendEffect * m_effect;
+    KComboBox *m_mode;
+    BlendEffect *m_effect;
 };
 
 #endif // BLENDEFFECTCONFIGWIDGET_H

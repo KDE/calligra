@@ -38,7 +38,6 @@ class CALLIGRA_SHEETS_CORE_EXPORT DocBase : public KoDocument
 {
     Q_OBJECT
 public:
-
     /**
      * Creates a new document.
      * @param part The KoPart that owns the document. XXX: should be removed!
@@ -49,14 +48,20 @@ public:
     /**
      * @return list of all documents
      */
-    static QList<DocBase*> documents();
+    static QList<DocBase *> documents();
 
     void setReadWrite(bool readwrite = true) override;
 
     /// reimplemented from KoDocument
-    QByteArray nativeFormatMimeType() const override { return SHEETS_MIME_TYPE; }
+    QByteArray nativeFormatMimeType() const override
+    {
+        return SHEETS_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
-    QByteArray nativeOasisMimeType() const override {return SHEETS_MIME_TYPE;}
+    QByteArray nativeOasisMimeType() const override
+    {
+        return SHEETS_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
     QStringList extraNativeMimeTypes() const override
     {
@@ -83,7 +88,6 @@ public:
     QStringList spellListIgnoreAll() const;
     void setSpellListIgnoreAll(const QStringList &list);
 
-
     /**
      * \ingroup OpenDocument
      * Main saving method.
@@ -95,14 +99,15 @@ public:
      * Main loading method. Wrapper around Odf::loadDocument.
      * @see Map::loadOdf
      */
-    bool loadOdf(KoOdfReadStore & odfStore) override;
-    bool loadXML(const KoXmlDocument& doc, KoStore *store) override;
+    bool loadOdf(KoOdfReadStore &odfStore) override;
+    bool loadXML(const KoXmlDocument &doc, KoStore *store) override;
     QDomDocument saveXML() override;
+
 protected:
     class Private;
-    Private * const d;
+    Private *const d;
 
-    void paintContent(QPainter & painter, const QRect & rect) override;
+    void paintContent(QPainter &painter, const QRect &rect) override;
 
 private:
     Q_DISABLE_COPY(DocBase)

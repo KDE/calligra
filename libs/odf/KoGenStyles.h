@@ -10,9 +10,9 @@
 #ifndef KOGENSTYLES_H
 #define KOGENSTYLES_H
 
-#include <QVector>
 #include <QMultiMap>
 #include <QString>
+#include <QVector>
 
 #include "KoGenStyle.h"
 
@@ -52,7 +52,7 @@ class KOODF_EXPORT KoGenStyles
 public:
     /// Single style with assigned name
     struct NamedStyle {
-        const KoGenStyle* style; ///< @note owned by the collection
+        const KoGenStyle *style; ///< @note owned by the collection
         QString name;
     };
 
@@ -72,11 +72,7 @@ public:
      * already exists. In other words, the collection will now contain two equal KoGenStyle
      * and generate them with different style names.
      */
-    enum InsertionFlag {
-        NoFlag = 0,
-        DontAddNumberToName = 1,
-        AllowDuplicates = 2
-    };
+    enum InsertionFlag { NoFlag = 0, DontAddNumberToName = 1, AllowDuplicates = 2 };
     Q_DECLARE_FLAGS(InsertionFlags, InsertionFlag)
 
     /**
@@ -125,7 +121,7 @@ public:
      * Only do this if you know for sure no other 'user' of that style will
      * be affected.
      */
-    KoGenStyle* styleForModification(const QString &name, const QByteArray &family);
+    KoGenStyle *styleForModification(const QString &name, const QByteArray &family);
 
     /**
      * Mark a given automatic style as being needed in styles.xml.
@@ -231,16 +227,16 @@ public:
     void insertStyleRelation(const QString &source, const QString &target, const char *tagName);
 
 private:
-    friend KOODF_EXPORT QDebug operator<<(QDebug dbg, const KoGenStyles& styles);
+    friend KOODF_EXPORT QDebug operator<<(QDebug dbg, const KoGenStyles &styles);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoGenStyles::InsertionFlags)
 Q_DECLARE_TYPEINFO(KoGenStyles::NamedStyle, Q_MOVABLE_TYPE);
 
 //! Debug stream operator.
-KOODF_EXPORT QDebug operator<<(QDebug dbg, const KoGenStyles& styles);
+KOODF_EXPORT QDebug operator<<(QDebug dbg, const KoGenStyles &styles);
 
 #endif /* KOGENSTYLES_H */

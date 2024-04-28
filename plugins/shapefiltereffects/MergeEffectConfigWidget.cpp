@@ -5,21 +5,22 @@
  */
 
 #include "MergeEffectConfigWidget.h"
-#include "MergeEffect.h"
 #include "KoFilterEffect.h"
+#include "MergeEffect.h"
 #include <QGridLayout>
 
 MergeEffectConfigWidget::MergeEffectConfigWidget(QWidget *parent)
-        : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
+    : KoFilterEffectConfigWidgetBase(parent)
+    , m_effect(0)
 {
-    QGridLayout * g = new QGridLayout(this);
+    QGridLayout *g = new QGridLayout(this);
 
     setLayout(g);
 }
 
-bool MergeEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
+bool MergeEffectConfigWidget::editFilterEffect(KoFilterEffect *filterEffect)
 {
-    m_effect = dynamic_cast<MergeEffect*>(filterEffect);
+    m_effect = dynamic_cast<MergeEffect *>(filterEffect);
     if (!m_effect)
         return false;
 

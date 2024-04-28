@@ -5,20 +5,20 @@
  */
 
 #include "KWCopyShape.h"
-#include "KWPage.h"
-#include "KWPageManager.h"
 #include "KWFrame.h"
 #include "KWFrameSet.h"
-#include "KWTextFrameSet.h"
+#include "KWPage.h"
+#include "KWPageManager.h"
 #include "KWRootAreaProvider.h"
+#include "KWTextFrameSet.h"
 
-#include <KoShapeStrokeModel.h>
-#include <KoShapeLoadingContext.h>
-#include <KoViewConverter.h>
-#include <KoTextShapeData.h>
 #include <KoShapeContainer.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeStrokeModel.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoTextShapeData.h>
+#include <KoViewConverter.h>
 #include <KoXmlReader.h>
 
 #include <QPainter>
@@ -28,14 +28,14 @@
 #include <algorithm>
 
 KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
-        : KoShape()
-        ,m_original(original)
-        ,m_pageManager(pageManager)
+    : KoShape()
+    , m_original(original)
+    , m_pageManager(pageManager)
 {
     setSize(m_original->size());
     setSelectable(original->isSelectable());
     // allow selecting me to get the tool for the original to still work.
-    QSet<KoShape*> delegates;
+    QSet<KoShape *> delegates;
     delegates << m_original;
     setToolDelegates(delegates);
 
@@ -51,10 +51,10 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
 {
     Q_ASSERT(m_original);
 
-    //paint all child shapes
-    KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(m_original);
+    // paint all child shapes
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(m_original);
     if (container) {
-        QList<KoShape*> sortedObjects = container->shapes();
+        QList<KoShape *> sortedObjects = container->shapes();
         sortedObjects.append(m_original);
         std::sort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
 
@@ -66,16 +66,15 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
 
         KWPage copypage = m_pageManager->page(this);
         Q_ASSERT(copypage.isValid());
-        foreach(KoShape *shape, sortedObjects) {
+        foreach (KoShape *shape, sortedObjects) {
             painter.save();
             if (shape != m_original) {
                 painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
             }
-            KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
+            KoTextShapeData *data = qobject_cast<KoTextShapeData *>(shape->userData());
             if (data == 0) {
                 shape->paint(painter, converter, paintcontext);
-            }
-            else {
+            } else {
                 // Since the rootArea is shared between the copyShape and the originalShape we need to
                 // temporary switch the used KoTextPage to be sure the proper page-numbers are displayed.
                 KWPage originalpage = m_pageManager->page(shape);
@@ -105,7 +104,7 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
             }
         }
     } else {
-        //paint the original shape
+        // paint the original shape
         painter.save();
         m_original->paint(painter, converter, paintcontext);
         painter.restore();
@@ -135,7 +134,7 @@ QRectF KWCopyShape::boundingRect() const
     QRectF bb = KoShape::boundingRect();
     QPointF offset = bb.topLeft() - m_original->boundingRect().topLeft();
 
-    KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(m_original);
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(m_original);
     if (container) {
         foreach (KoShape *shape, container->shapes()) {
             bb |= shape->boundingRect().translated(offset);
@@ -148,7 +147,7 @@ QRectF KWCopyShape::boundingRect() const
 void KWCopyShape::saveOdf(KoShapeSavingContext &context) const
 {
     Q_ASSERT(m_original);
-    KWCopyShape *me = const_cast<KWCopyShape*>(this);
+    KWCopyShape *me = const_cast<KWCopyShape *>(this);
     me->setAdditionalAttribute("draw:copy-of", m_original->name());
     saveOdfAttributes(context, OdfAllAttributes);
     me->removeAdditionalAttribute("draw:copy-of");

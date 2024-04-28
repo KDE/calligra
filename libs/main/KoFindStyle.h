@@ -11,8 +11,8 @@
 #include "KoFindBase.h"
 
 #include <QMetaType>
-#include <QTextDocument>
 #include <QTextCursor>
+#include <QTextDocument>
 
 #include "komain_export.h"
 
@@ -42,7 +42,7 @@ public:
     /**
      * Constructor.
      */
-    explicit KoFindStyle(QObject* parent = 0);
+    explicit KoFindStyle(QObject *parent = 0);
     /**
      * Destructor.
      */
@@ -51,13 +51,13 @@ public:
     /**
      * Return the list of documents currently being used for searching.
      */
-    QList<QTextDocument*> documents() const;
+    QList<QTextDocument *> documents() const;
     /**
      * Set the list of documents to use for searching.
      *
      * \param list A list of document to search through.
      */
-    void setDocuments(const QList<QTextDocument*> &list);
+    void setDocuments(const QList<QTextDocument *> &list);
 
     /**
      * Reimplemented from KoFindBase::clearMatches()
@@ -70,15 +70,15 @@ protected:
      *
      * \note Replace is currently not supported in this class.
      */
-    void replaceImplementation(const KoFindMatch& match, const QVariant& value) override;
+    void replaceImplementation(const KoFindMatch &match, const QVariant &value) override;
     /**
      * Reimplemented from KoFindBase::findImplementation()
      */
-    void findImplementation(const QString& pattern, KoFindBase::KoFindMatchList& matchList) override;
+    void findImplementation(const QString &pattern, KoFindBase::KoFindMatchList &matchList) override;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOFINDSTYLE_H

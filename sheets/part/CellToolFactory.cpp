@@ -14,12 +14,12 @@
 
 using namespace Calligra::Sheets;
 
-CellToolFactory::CellToolFactory(const QString& id)
-        : KoToolFactoryBase(id)
+CellToolFactory::CellToolFactory(const QString &id)
+    : KoToolFactoryBase(id)
 {
     setToolTip(i18n("Cell formatting"));
     setIconName(koIconName("tool_cellformatting"));
-    setToolType(dynamicToolType()+",calligrasheets");
+    setToolType(dynamicToolType() + ",calligrasheets");
     setPriority(0);
     setActivationShapeId("flake/always");
 }
@@ -28,7 +28,7 @@ CellToolFactory::~CellToolFactory()
 {
 }
 
-KoToolBase* CellToolFactory::createTool(KoCanvasBase* canvas)
+KoToolBase *CellToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new CellTool(canvas);
 }
@@ -38,7 +38,7 @@ void CellToolFactory::setPriority(int priority)
     KoToolFactoryBase::setPriority(priority);
 }
 
-void CellToolFactory::setToolTip(const QString& toolTip)
+void CellToolFactory::setToolTip(const QString &toolTip)
 {
     KoToolFactoryBase::setToolTip(toolTip);
 }

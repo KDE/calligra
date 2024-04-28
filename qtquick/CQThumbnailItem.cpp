@@ -12,7 +12,11 @@
 class CQThumbnailItem::Private
 {
 public:
-    Private() : contentWidth(-1), contentHeight(-1) { }
+    Private()
+        : contentWidth(-1)
+        , contentHeight(-1)
+    {
+    }
 
     QPixmap content;
     QString source;
@@ -20,8 +24,9 @@ public:
     int contentHeight;
 };
 
-CQThumbnailItem::CQThumbnailItem(QDeclarativeItem* parent)
-    : QDeclarativeItem(parent), d(new Private)
+CQThumbnailItem::CQThumbnailItem(QDeclarativeItem *parent)
+    : QDeclarativeItem(parent)
+    , d(new Private)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
@@ -31,7 +36,7 @@ CQThumbnailItem::~CQThumbnailItem()
     delete d;
 }
 
-void CQThumbnailItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget* )
+void CQThumbnailItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     if (!d->content.isNull()) {
         QPixmap pixmap = d->content.scaled(width(), height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -46,7 +51,7 @@ QPixmap CQThumbnailItem::content() const
     return d->content;
 }
 
-void CQThumbnailItem::setContent(const QPixmap& content)
+void CQThumbnailItem::setContent(const QPixmap &content)
 {
     d->content = content;
     emit contentChanged();

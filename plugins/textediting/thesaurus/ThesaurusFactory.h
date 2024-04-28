@@ -11,10 +11,13 @@
 
 class KoTextEditingPlugin;
 
-class ThesaurusFactory : public KoTextEditingFactory {
+class ThesaurusFactory : public KoTextEditingFactory
+{
 public:
     explicit ThesaurusFactory();
-    ~ThesaurusFactory() override {}
+    ~ThesaurusFactory() override
+    {
+    }
 
     KoTextEditingPlugin *create() const override;
 };

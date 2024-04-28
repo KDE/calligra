@@ -8,20 +8,19 @@
 #ifndef KCHART_CELLREGION_H
 #define KCHART_CELLREGION_H
 
-
 // Qt
-#include <Qt>
-#include <QVector>
 #include <QRect>
+#include <QVector>
+#include <Qt>
 
 // KoChart
 #include "ChartShape.h"
 
-
 class QRect;
 class QPoint;
 
-namespace KoChart {
+namespace KoChart
+{
 
 /**
  * @brief A CellRegion represents a selection of cells in a table.
@@ -62,50 +61,50 @@ class CellRegion
 {
 public:
     CellRegion();
-    CellRegion(const CellRegion& region);
-    CellRegion(TableSource *source, const QString& regions);
+    CellRegion(const CellRegion &region);
+    CellRegion(TableSource *source, const QString &regions);
     CellRegion(Table *table, const QPoint &point);
     CellRegion(Table *table, const QRect &rect);
     CellRegion(Table *table, const QVector<QRect> &rects);
     explicit CellRegion(Table *table);
     ~CellRegion();
-    
-    CellRegion& operator = (const CellRegion& region);    
-    bool operator == (const CellRegion &other) const;
+
+    CellRegion &operator=(const CellRegion &region);
+    bool operator==(const CellRegion &other) const;
 
     Table *table() const;
-    
+
     QVector<QRect> rects() const;
-    
+
     QString sheetName() const;
 
     bool isValid() const;
 
     QString toString() const;
-    
+
     bool contains(const QPoint &point, bool proper = false) const;
     bool contains(const QRect &rect, bool proper = false) const;
-    
+
     bool intersects(const CellRegion &other) const;
 
     CellRegion intersected(const QRect &rect) const;
-    
+
     int cellCount() const;
     int rectCount() const;
-    
+
     Qt::Orientation orientation() const;
-    
+
     void add(const CellRegion &other);
     void add(const QPoint &point);
     void add(const QRect &rect);
     void add(const QVector<QRect> &rects);
-    
+
     QRect boundingRect() const;
-    
-    bool   hasPointAtIndex(int index) const;    
+
+    bool hasPointAtIndex(int index) const;
     QPoint pointAtIndex(int index) const;
-    int    indexAtPoint(const QPoint &point) const;
-    
+    int indexAtPoint(const QPoint &point) const;
+
     static int rangeCharToInt(char c);
     static int rangeStringToInt(const QString &string);
     static QString rangeIntToString(int i);

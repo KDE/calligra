@@ -19,19 +19,20 @@
 #ifndef OLESTREAM_H
 #define OLESTREAM_H
 
+#include "global.h" // U8,... typedefs
 #include "olestorage.h"
-#include "global.h"  // U8,... typedefs
 #include <stack>
 
 #include "wv2_export.h"
 
-
 // Forward declarations
-namespace POLE {
-    class Stream;
+namespace POLE
+{
+class Stream;
 }
 
-namespace wvWare {
+namespace wvWare
+{
 
 class WV2_EXPORT OLEStream
 {
@@ -39,7 +40,7 @@ public:
     /**
      * Create an OLE stream
      */
-    explicit OLEStream( OLEStorage* storage );
+    explicit OLEStream(OLEStorage *storage);
     virtual ~OLEStream();
 
     /**
@@ -50,7 +51,7 @@ public:
     /**
      * works like plain fseek
      */
-    virtual bool seek( int offset, WV2SeekType whence = WV2_SEEK_SET ) = 0;
+    virtual bool seek(int offset, WV2SeekType whence = WV2_SEEK_SET) = 0;
     /**
      * works like plain ftell
      */
@@ -73,11 +74,11 @@ private:
     /**
      * we don't want to allow copying and assigning streams
      */
-    OLEStream( const OLEStream& rhs );
+    OLEStream(const OLEStream &rhs);
     /**
      * we don't want to allow copying and assigning streams
      */
-    OLEStream& operator=( const OLEStream& rhs );
+    OLEStream &operator=(const OLEStream &rhs);
 
     std::stack<int> m_positions;
     /**
@@ -86,11 +87,10 @@ private:
     OLEStorage *m_storage;
 };
 
-
 class WV2_EXPORT OLEStreamReader : public OLEStream
 {
 public:
-    OLEStreamReader( POLE::Stream *stream, OLEStorage *storage );
+    OLEStreamReader(POLE::Stream *stream, OLEStorage *storage);
     ~OLEStreamReader() override;
 
     /**
@@ -101,7 +101,7 @@ public:
     /**
      * works like plain fseek
      */
-    bool seek( int offset, WV2SeekType whence = WV2_SEEK_SET ) override;
+    bool seek(int offset, WV2SeekType whence = WV2_SEEK_SET) override;
     /**
      * works like plain ftell
      */
@@ -144,22 +144,21 @@ public:
      * given buffer, at most length bytes.
      * Returns true on success
      */
-    bool read( U8 *buffer, size_t length );
+    bool read(U8 *buffer, size_t length);
 
 private:
     // we don't want to allow copying and assigning streams
-    OLEStreamReader( const OLEStreamReader& rhs );
-    OLEStreamReader& operator=( const OLEStreamReader& rhs );
+    OLEStreamReader(const OLEStreamReader &rhs);
+    OLEStreamReader &operator=(const OLEStreamReader &rhs);
 
     POLE::Stream *m_stream;
     unsigned long m_pos;
 };
 
-
 class WV2_EXPORT OLEStreamWriter : public OLEStream
 {
 public:
-    explicit OLEStreamWriter( OLEStorage* storage );
+    explicit OLEStreamWriter(OLEStorage *storage);
     ~OLEStreamWriter() override;
 
     /**
@@ -170,7 +169,7 @@ public:
     /**
      * works like plain fseek
      */
-    bool seek( int offset, WV2SeekType whence = WV2_SEEK_SET ) override;
+    bool seek(int offset, WV2SeekType whence = WV2_SEEK_SET) override;
     /**
      * works like plain ftell
      */
@@ -186,39 +185,39 @@ public:
      * These write methods are endian-aware
      * and convert the contents to be LE in the file
      */
-    void write( U8 data );
+    void write(U8 data);
     /**
      * @see write(U8 data)
      */
-    void write( S8 data );
+    void write(S8 data);
     /**
      * @see write(U8 data)
      */
-    void write( U16 data );
+    void write(U16 data);
     /**
      * @see write(U8 data)
      */
-    void write( S16 data );
+    void write(S16 data);
     /**
      * @see write(U8 data)
      */
-    void write( U32 data );
+    void write(U32 data);
     /**
      * @see write(U8 data)
      */
-    void write( S32 data );
+    void write(S32 data);
 
     /**
      * Attention: This write method just writes out the
      * contents of the memory directly (w/o converting
      * to little-endian first!)
      */
-    void write( U8* data, size_t length );
+    void write(U8 *data, size_t length);
 
 private:
     // we don't want to allow copying and assigning streams
-    OLEStreamWriter( const OLEStreamWriter& rhs );
-    OLEStreamWriter& operator=( const OLEStreamWriter& rhs );
+    OLEStreamWriter(const OLEStreamWriter &rhs);
+    OLEStreamWriter &operator=(const OLEStreamWriter &rhs);
 };
 
 } // namespace wvWare

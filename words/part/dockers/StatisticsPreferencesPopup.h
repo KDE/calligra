@@ -7,15 +7,15 @@
 #ifndef STATISTICSPREFERENCESPOPUP_H
 #define STATISTICSPREFERENCESPOPUP_H
 
+#include <QMenu>
+#include <QToolButton>
 #include <QWidget>
-#include<QToolButton>
-#include<QMenu>
 
 class QMenu;
 
-
-namespace Ui {
-    class StatisticsPreferencesPopup;
+namespace Ui
+{
+class StatisticsPreferencesPopup;
 }
 
 class StatisticsPreferencesPopup : public QMenu
@@ -38,4 +38,3 @@ Q_SIGNALS:
 };
 
 #endif // StatisticsPreferencesPopup_H
-

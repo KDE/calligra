@@ -9,10 +9,9 @@
 
 #include "engine/CalculationSettings.h"
 
-
 void TestValue::testEmpty()
 {
-    Value* v1;
+    Value *v1;
 
     // empty value
     v1 = new Value();
@@ -22,13 +21,13 @@ void TestValue::testEmpty()
 
 void TestValue::testBoolean()
 {
-    Value* v1;
+    Value *v1;
 
     // boolean value (true)
     v1 = new Value(true);
     QCOMPARE(v1->type(), Value::Boolean);
     QCOMPARE(v1->asBoolean(), true);
-    *v1 = Value(1);   // dummy
+    *v1 = Value(1); // dummy
     *v1 = Value(true);
     QCOMPARE(v1->type(), Value::Boolean);
     QCOMPARE(v1->asBoolean(), true);
@@ -38,7 +37,7 @@ void TestValue::testBoolean()
     v1 = new Value(false);
     QCOMPARE(v1->type(), Value::Boolean);
     QCOMPARE(v1->asBoolean(), false);
-    *v1 = Value(4);   // dummy
+    *v1 = Value(4); // dummy
     *v1 = Value(false);
     QCOMPARE(v1->type(), Value::Boolean);
     QCOMPARE(v1->asBoolean(), false);
@@ -47,13 +46,13 @@ void TestValue::testBoolean()
 
 void TestValue::testInteger()
 {
-    Value* v1;
+    Value *v1;
 
     // integer value
     v1 = new Value(1977);
     QCOMPARE(v1->type(), Value::Integer);
     QCOMPARE(v1->asInteger(), (int64_t)1977);
-    *v1 = Value(false);   // dummy
+    *v1 = Value(false); // dummy
     *v1 = Value(14);
     QCOMPARE(v1->type(), Value::Integer);
     QCOMPARE(v1->isInteger(), true);
@@ -66,13 +65,13 @@ void TestValue::testInteger()
 
 void TestValue::testFloat()
 {
-    Value* v1;
+    Value *v1;
 
     // floating-point value
     v1 = new Value(M_PI);
     QCOMPARE(v1->type(), Value::Float);
-    QCOMPARE(numToDouble(v1->asFloat()), (long double) M_PI);
-    *v1 = Value(false);   // dummy
+    QCOMPARE(numToDouble(v1->asFloat()), (long double)M_PI);
+    *v1 = Value(false); // dummy
     *v1 = Value(14.03l);
     QCOMPARE(v1->type(), Value::Float);
     QCOMPARE(v1->isInteger(), false);
@@ -85,14 +84,14 @@ void TestValue::testFloat()
 
 void TestValue::testString()
 {
-    Value* v1;
-    Value* v2;
+    Value *v1;
+    Value *v2;
 
     // string value
     v1 = new Value(QString("Ailinon"));
     QCOMPARE(v1->type(), Value::String);
     QCOMPARE(v1->asString(), QString("Ailinon"));
-    *v1 = Value(7);   // dummy
+    *v1 = Value(7); // dummy
     *v1 = Value(QString("spreadsheet"));
     QCOMPARE(v1->type(), Value::String);
     QCOMPARE(v1->isInteger(), false);
@@ -115,7 +114,7 @@ void TestValue::testString()
 
 void TestValue::testDate()
 {
-    Value* v1;
+    Value *v1;
 
     // check all (valid) dates from 1900 to 2050
     // note: bail on first error immediately
@@ -127,7 +126,8 @@ void TestValue::testDate()
         for (unsigned m = 1; !date_error && m <= 12; ++m)
             for (unsigned d = 1; !date_error && d <= 31; ++d) {
                 QDate dv1 = QDate(y, m, d);
-                if (!dv1.isValid()) continue;
+                if (!dv1.isValid())
+                    continue;
                 long double serialNo = -dv1.daysTo(refDate) + 1.0;
                 *v1 = Value(Value(dv1, &calculationSettings));
                 QCOMPARE(numToDouble(v1->asFloat()), serialNo);
@@ -139,7 +139,7 @@ void TestValue::testDate()
 void TestValue::testTime()
 {
     CalculationSettings calculationSettings;
-    Value* v1;
+    Value *v1;
 
     // time value
     v1 = new Value();
@@ -152,9 +152,9 @@ void TestValue::testTime()
                 *v1 = Value(Value(t1));
                 auto t2 = v1->asTime();
                 if (t1 != t2) {
-                    qInfo()<<t1<<t2;
-                    qInfo()<<QString("%1").arg(t1.duration(), 0, 'g', 20);
-                    qInfo()<<QString("%1").arg(t2.duration(), 0, 'g', 20);
+                    qInfo() << t1 << t2;
+                    qInfo() << QString("%1").arg(t1.duration(), 0, 'g', 20);
+                    qInfo() << QString("%1").arg(t2.duration(), 0, 'g', 20);
 #ifdef Q_OS_WIN
                     QEXPECT_FAIL("", "FIXME: Possibly cast or rounding error on msvc", Continue);
 #endif
@@ -162,16 +162,16 @@ void TestValue::testTime()
                 QCOMPARE(t1, t2);
                 QCOMPARE(t1.hour(), t2.hour());
                 if (t1.minute() != t2.minute()) {
-                    qInfo()<<t1<<t2;
-                    qInfo()<<t1.minutes()<<QString("%1").arg(t1.duration(), 0, 'g', 20);
-                    qInfo()<<t2.minutes()<<QString("%1").arg(t2.duration(), 0, 'g', 20);
+                    qInfo() << t1 << t2;
+                    qInfo() << t1.minutes() << QString("%1").arg(t1.duration(), 0, 'g', 20);
+                    qInfo() << t2.minutes() << QString("%1").arg(t2.duration(), 0, 'g', 20);
                 }
                 QCOMPARE(t1.minute(), t2.minute());
                 QCOMPARE(t1.second(), t2.second());
                 if (t1.msec() != t2.msec()) {
-                    qInfo()<<t1<<t2;
-                    qInfo()<<t1.msec()<<QString("%1").arg(t1.duration(), 0, 'g', 20)<<QString("%1").arg(t1.seconds(), 0, 'g', 20);
-                    qInfo()<<t2.msec()<<QString("%1").arg(t2.duration(), 0, 'g', 20)<<QString("%1").arg(t2.seconds(), 0, 'g', 20);
+                    qInfo() << t1 << t2;
+                    qInfo() << t1.msec() << QString("%1").arg(t1.duration(), 0, 'g', 20) << QString("%1").arg(t1.seconds(), 0, 'g', 20);
+                    qInfo() << t2.msec() << QString("%1").arg(t2.duration(), 0, 'g', 20) << QString("%1").arg(t2.seconds(), 0, 'g', 20);
                 }
                 QCOMPARE(t1.msec(), t2.msec());
             }
@@ -187,7 +187,7 @@ void TestValue::testTime()
         auto t1 = Time(1, 14, 2, ms);
         *v1 = Value(Value(t1));
         auto t2 = v1->asTime();
-        qInfo()<<t1<<t2;
+        qInfo() << t1 << t2;
         QCOMPARE(t1.hour(), t2.hour());
         QCOMPARE(t1.minute(), t2.minute());
         QCOMPARE(t1.second(), t2.second());
@@ -198,8 +198,8 @@ void TestValue::testTime()
 
 void TestValue::testError()
 {
-    Value* v1;
-    Value* v2;
+    Value *v1;
+    Value *v2;
 
     // TODO error values
 
@@ -220,8 +220,8 @@ void TestValue::testError()
 
 void TestValue::testArray()
 {
-    Value* v1;
-    Value* v2;
+    Value *v1;
+    Value *v2;
 
     // array
     v1 = new Value(Value::Array);
@@ -262,8 +262,10 @@ void TestValue::testArray()
         for (unsigned r = 0; !array_error && r < 1000; ++r) {
             int index = 1000 * r + c;
             v2 = new Value(v1->element(c, r));
-            if (v2->type() != Value::Integer) ++array_error;
-            if (v2->asInteger() != index) ++array_error;
+            if (v2->type() != Value::Integer)
+                ++array_error;
+            if (v2->asInteger() != index)
+                ++array_error;
             delete v2;
         }
     QCOMPARE(array_error, (int)0);
@@ -276,7 +278,7 @@ void TestValue::testArray()
     v1->setElement(0, 1, Value(34.3l));
     v1->setElement(1, 0, Value(24.3l));
     v1->setElement(0, 0, Value(14.3l));
-    v2 = new Value(*v1);   // v2 is now also an array
+    v2 = new Value(*v1); // v2 is now also an array
     delete v1;
     v1 = new Value(v2->element(0, 0));
     QCOMPARE(v1->type(), Value::Float);
@@ -299,8 +301,8 @@ void TestValue::testArray()
 
 void TestValue::testCopy()
 {
-    Value* v1;
-    Value* v2;
+    Value *v1;
+    Value *v2;
 
     // copy value
     v1 = new Value();
@@ -316,8 +318,8 @@ void TestValue::testCopy()
 
 void TestValue::testAssignment()
 {
-    Value* v1;
-    Value* v2;
+    Value *v1;
+    Value *v2;
 
     // value assignment
     v1 = new Value(14.3l);

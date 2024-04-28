@@ -1,54 +1,61 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2018 Dag Andersen <danders@get2net.dk>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "CalloutContainerModel.h"
 
+#include "CalloutDebug.h"
 #include "CalloutShape.h"
 #include "EnhancedPathShape.h"
-#include "CalloutDebug.h"
 
-#include <KoTextShapeDataBase.h>
-#include <KoShape.h>
 #include <KoPathPoint.h>
+#include <KoShape.h>
+#include <KoTextShapeDataBase.h>
 
-#include <QSizeF>
+#include <QDebug>
 #include <QRectF>
+#include <QSizeF>
 #include <QTransform>
 #include <QtMath>
-#include <QDebug>
 
 void decompose(const QTransform &m, qreal &scaleX, qreal &scaleY, qreal &rotation, qreal &skewX, qreal &skewY, qreal &transX, qreal &transY)
 {
-    scaleX=0; scaleY=1; rotation=0; skewX=0; skewY=0; transX=0; transY=0;
+    scaleX = 0;
+    scaleY = 1;
+    rotation = 0;
+    skewX = 0;
+    skewY = 0;
+    transX = 0;
+    transY = 0;
     qreal a = m.m11();
     qreal b = m.m12();
     qreal c = m.m21();
     qreal d = m.m22();
-    //qreal e = m.m31();
-    //qreal f = m.m32();
-    
+    // qreal e = m.m31();
+    // qreal f = m.m32();
+
     qreal Delta = a * d - b * c;
-    
+
     if (a != 0 || b != 0) {
-        qreal r = qSqrt(a*a+b*b);
-        rotation = b > 0 ? qAcos(a/r) : -qAcos(a/r);
+        qreal r = qSqrt(a * a + b * b);
+        rotation = b > 0 ? qAcos(a / r) : -qAcos(a / r);
         scaleX = r;
-        scaleY = Delta/r;
-        skewX = qAtan((a*c+b*d)/(r*r));
+        scaleY = Delta / r;
+        skewX = qAtan((a * c + b * d) / (r * r));
     } else if (c != 0 || d != 0) {
-        qreal s = qSqrt(c*c+d*d);
-        rotation = M_PI_2 - (d > 0 ? qAcos(-c/s) : -qAcos(c/s));
-        scaleX = Delta/s;
+        qreal s = qSqrt(c * c + d * d);
+        rotation = M_PI_2 - (d > 0 ? qAcos(-c / s) : -qAcos(c / s));
+        scaleX = Delta / s;
         scaleY = s;
-        skewY = qAtan((a*c+b*d)/(s*s));
+        skewY = qAtan((a * c + b * d) / (s * s));
     } else { // a = b = c = d = 0
         scaleX = 0.0;
         scaleY = 0.0;
     }
-    debugCallout<<"decomposed:"<<m<<Qt::endl<<'\t'<<scaleX<<scaleY<<qRadiansToDegrees(rotation)<<qRadiansToDegrees(skewX)<<qRadiansToDegrees(skewY)<<transX<<transY;
+    debugCallout << "decomposed:" << m << Qt::endl
+                 << '\t' << scaleX << scaleY << qRadiansToDegrees(rotation) << qRadiansToDegrees(skewX) << qRadiansToDegrees(skewY) << transX << transY;
 }
 
 QTransform normalize(const QTransform &m)
@@ -56,18 +63,18 @@ QTransform normalize(const QTransform &m)
     qreal scaleX, scaleY, rotation, skewX, skewY, transX, transY;
     decompose(m, scaleX, scaleY, rotation, skewX, skewY, transX, transY);
     QTransform n;
-    //n.scale(-scaleX, -scaleY); //TODO
+    // n.scale(-scaleX, -scaleY); //TODO
     n.rotateRadians(-rotation);
     n.shear(-skewX, -skewY);
     n = m * n;
-    debugCallout<<"normalized:"<<n;
+    debugCallout << "normalized:" << n;
     return n;
 }
 
 QPointF position(const KoShapeContainer *container)
 {
     QTransform m = normalize(container->transformation());
-    QPointF center(0.5*container->size().width(), 0.5*container->size().height());
+    QPointF center(0.5 * container->size().width(), 0.5 * container->size().height());
     return m.map(center) - center;
 }
 
@@ -90,49 +97,49 @@ bool CalloutContainerModel::ignore(KoShape *shape) const
 void CalloutContainerModel::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
 {
     switch (type) {
-        case KoShape::PositionChanged: {
-            QPointF center(0.5*container->size().width(), 0.5*container->size().height());
-            QPointF pos = container->position();
-            m_prevPosition = position(container);
-            debugCallout<<type<<"org:"<<pos<<"norm:"<<m_prevPosition;
-            break;
-        }
-        case KoShape::SizeChanged:
-            if (!m_resizing) {
-                CalloutShape *callout = dynamic_cast<CalloutShape*>(container);
-                Q_ASSERT(callout);
-                QPointF newPos = position(callout);
-                resizePath(callout->pathShape(), newPos, callout->size());
-                m_prevPosition = newPos;
-                m_prevSize = container->size();
-            }
-            break;
-        case KoShape::BeginResize: {
-            m_resizing = true;
-            m_prevPosition = position(container);
-            m_prevSize = container->size();
-            break;
-        }
-        case KoShape::EndResize: {
-            debugCalloutF<<type<<">>>";
-            CalloutShape *callout = dynamic_cast<CalloutShape*>(container);
+    case KoShape::PositionChanged: {
+        QPointF center(0.5 * container->size().width(), 0.5 * container->size().height());
+        QPointF pos = container->position();
+        m_prevPosition = position(container);
+        debugCallout << type << "org:" << pos << "norm:" << m_prevPosition;
+        break;
+    }
+    case KoShape::SizeChanged:
+        if (!m_resizing) {
+            CalloutShape *callout = dynamic_cast<CalloutShape *>(container);
+            Q_ASSERT(callout);
             QPointF newPos = position(callout);
             resizePath(callout->pathShape(), newPos, callout->size());
             m_prevPosition = newPos;
             m_prevSize = container->size();
-            m_resizing = false;
-            debugCalloutF<<type<<"<<<";
-            break;
         }
-        case KoShape::GenericMatrixChange:
-        case KoShape::RotationChanged: {
-            //debugCalloutF<<type<<container->position()<<container->size()<<'('<<m_prevPosition<<m_prevSize<<')'<<endl<<'\t'<<container->absoluteTransformation(0);
-            //debugCalloutF<<type<<container->absolutePosition();
-            break;
-        }
-        default:
-            //debugCalloutF<<type;
-            break;
+        break;
+    case KoShape::BeginResize: {
+        m_resizing = true;
+        m_prevPosition = position(container);
+        m_prevSize = container->size();
+        break;
+    }
+    case KoShape::EndResize: {
+        debugCalloutF << type << ">>>";
+        CalloutShape *callout = dynamic_cast<CalloutShape *>(container);
+        QPointF newPos = position(callout);
+        resizePath(callout->pathShape(), newPos, callout->size());
+        m_prevPosition = newPos;
+        m_prevSize = container->size();
+        m_resizing = false;
+        debugCalloutF << type << "<<<";
+        break;
+    }
+    case KoShape::GenericMatrixChange:
+    case KoShape::RotationChanged: {
+        // debugCalloutF<<type<<container->position()<<container->size()<<'('<<m_prevPosition<<m_prevSize<<')'<<endl<<'\t'<<container->absoluteTransformation(0);
+        // debugCalloutF<<type<<container->absolutePosition();
+        break;
+    }
+    default:
+        // debugCalloutF<<type;
+        break;
     }
 }
 
@@ -140,21 +147,20 @@ void CalloutContainerModel::childChanged(KoShape *shape, KoShape::ChangeType typ
 {
     Q_UNUSED(shape);
     Q_UNUSED(type);
-//     debugCalloutF<<type;
-//     if (type == KoShape::Deleted) {
-//         return;
-//     }
-//     if (type != KoShape::ParameterChanged) {
-// //         return;
-//     }
-//     PathShape *path = dynamic_cast<PathShape*>(shape);
-//     debugCalloutF<<type<<path->outlineRect();
-//     if (!path) {
-//         return;
-//     }
-    //KoProperties params = path->parameters();
-    //debugCalloutF<<params.property("modifiers");
-    
+    //     debugCalloutF<<type;
+    //     if (type == KoShape::Deleted) {
+    //         return;
+    //     }
+    //     if (type != KoShape::ParameterChanged) {
+    // //         return;
+    //     }
+    //     PathShape *path = dynamic_cast<PathShape*>(shape);
+    //     debugCalloutF<<type<<path->outlineRect();
+    //     if (!path) {
+    //         return;
+    //     }
+    // KoProperties params = path->parameters();
+    // debugCalloutF<<params.property("modifiers");
 }
 
 // void decompose(const QTransform &m, qreal &scaleX, qreal &scaleY, qreal &rotation, qreal &skewX, qreal &skewY. qreal &transX, qreal &transY)
@@ -173,7 +179,6 @@ void CalloutContainerModel::childChanged(KoShape *shape, KoShape::ChangeType typ
 //     phi=(a2+a1)/2;
 // }
 
-
 bool CalloutContainerModel::isChildLocked(const KoShape *child) const
 {
     Q_UNUSED(child)
@@ -183,65 +188,78 @@ bool CalloutContainerModel::isChildLocked(const KoShape *child) const
 // TODO: Shearing Y does not work
 void CalloutContainerModel::resizePath(PathShape *path, const QPointF &newPos, const QSizeF &newSize)
 {
-    debugCalloutF<<">>>>>";
+    debugCalloutF << ">>>>>";
 
     if (newSize == m_prevSize) {
-        debugCalloutF<<"No change"<<"<<<<<";
+        debugCalloutF << "No change"
+                      << "<<<<<";
         return;
     }
     KoProperties params = path->parameters();
     QSizeF prevPathSize = path->size();
     QSizeF newPathSize;
-    debugCallout<<'\t'<<"prev:"<<m_prevPosition<<m_prevSize<<"new:"<<newPos<<newSize<<"diff:"<<(newSize-m_prevSize);
+    debugCallout << '\t' << "prev:" << m_prevPosition << m_prevSize << "new:" << newPos << newSize << "diff:" << (newSize - m_prevSize);
     QList<qreal> modifiers = path->modifiers();
     Q_ASSERT(modifiers.count() >= 2);
-    
+
     QVariant viewboxData;
     params.property("viewBox", viewboxData);
     QRect viewBox = path->viewBox();
-    
+
     if (m_prevSize.isValid()) {
         bool pointerLeft = modifiers[0] < viewBox.left();
         bool pointerRight = modifiers[0] > viewBox.right();
         bool pointerTop = modifiers[1] < viewBox.top();
         bool pointerBottom = modifiers[1] > viewBox.bottom();
-        if (pointerTop) debugCallout<<'\t'<<"pointer above";
-        if (pointerRight) debugCallout<<'\t'<<"pointer right";
-        if (pointerLeft) debugCallout<<'\t'<<"pointer left";
-        if (pointerBottom) debugCallout<<'\t'<<"pointer below";
+        if (pointerTop)
+            debugCallout << '\t' << "pointer above";
+        if (pointerRight)
+            debugCallout << '\t' << "pointer right";
+        if (pointerLeft)
+            debugCallout << '\t' << "pointer left";
+        if (pointerBottom)
+            debugCallout << '\t' << "pointer below";
 
         bool movedX = qAbs(m_prevPosition.x() - newPos.x()) > 0.001;
         bool movedY = qAbs(m_prevPosition.y() - newPos.y()) > 0.001;
-        if (movedX) debugCallout<<'\t'<<"x moved"<<"prev:"<<m_prevPosition.x()<<"new:"<<newPos.x();
-        if (movedY) debugCallout<<'\t'<<"y moved"<<"prev:"<<m_prevPosition.y()<<"new:"<<newPos.y();
-        
+        if (movedX)
+            debugCallout << '\t' << "x moved"
+                         << "prev:" << m_prevPosition.x() << "new:" << newPos.x();
+        if (movedY)
+            debugCallout << '\t' << "y moved"
+                         << "prev:" << m_prevPosition.y() << "new:" << newPos.y();
+
         if ((pointerLeft && !movedX) || (pointerRight && movedX)) {
             // Width has been changed in a way that affects path size
             newPathSize.setWidth(prevPathSize.width() + (newSize.width() - m_prevSize.width()));
-            debugCallout<<'\t'<<"Width changed:"<<"new width:"<<newPathSize.width();
+            debugCallout << '\t' << "Width changed:"
+                         << "new width:" << newPathSize.width();
         } else {
             newPathSize.setWidth(prevPathSize.width());
-            debugCallout<<'\t'<<"Width not changed:"<<"Keep path width";
+            debugCallout << '\t' << "Width not changed:"
+                         << "Keep path width";
         }
-        
+
         if ((pointerTop && !movedY) || (pointerBottom && movedY)) {
             // Height has been changed in a way that affects path size
             newPathSize.setHeight(prevPathSize.height() + (newSize.height() - m_prevSize.height()));
-            debugCallout<<'\t'<<"Height changed:"<<"new height:"<<newPathSize.height();
+            debugCallout << '\t' << "Height changed:"
+                         << "new height:" << newPathSize.height();
         } else {
             newPathSize.setHeight(prevPathSize.height());
-            debugCallout<<'\t'<<"Height not changed:"<<"Keep path height";
+            debugCallout << '\t' << "Height not changed:"
+                         << "Keep path height";
         }
-        //debugCallout<<'\t'<<"Path size:"<<"prev:"<<prevPathSize<<"new:"<<newPathSize<<"diff:"<<(newPathSize-prevPathSize);
+        // debugCallout<<'\t'<<"Path size:"<<"prev:"<<prevPathSize<<"new:"<<newPathSize<<"diff:"<<(newPathSize-prevPathSize);
 
         // Calculate new modifiers (the callout pointer tip)
         // The pointer tip shall stay in the same *global* position
         // so since it is given in viewbox coordinates (which corresponds to the bubble part),
         // it needs to recalculated when the bubble part is moved/resized.
         // Note: the viewbox coordinates never changes.
-        //debugCallout<<'\t'<<"Current modifiers:"<<modifiers;
+        // debugCallout<<'\t'<<"Current modifiers:"<<modifiers;
         if (pointerLeft || pointerRight) {
-            debugCallout<<'\t'<<"modifier X is outside viewbox";
+            debugCallout << '\t' << "modifier X is outside viewbox";
             qreal ax = newSize.width();
             qreal bx = newPathSize.width();
             qreal vbx = viewBox.width();
@@ -249,7 +267,7 @@ void CalloutContainerModel::resizePath(PathShape *path, const QPointF &newPos, c
             qreal mx = pointerLeft ? -vbx * rx : vbx + (vbx * rx);
             modifiers[0] = mx;
         } else if (movedX) {
-            debugCallout<<'\t'<<"left side resize and modifier X is inside viewbox";
+            debugCallout << '\t' << "left side resize and modifier X is inside viewbox";
             qreal ax = newSize.width();
             qreal bx = m_prevSize.width();
             qreal vbx = viewBox.width();
@@ -258,20 +276,20 @@ void CalloutContainerModel::resizePath(PathShape *path, const QPointF &newPos, c
             qreal x = modifiers[0] + vbxDiff;
             qreal rx = x / (vbx + vbxDiff);
             qreal mx = vbx * rx;
-            modifiers[0] = mx;            
-            debugCallout<<'\t'<<"vbxDiff:"<<vbxDiff<<"x:"<<x<<"rx:"<<rx;
+            modifiers[0] = mx;
+            debugCallout << '\t' << "vbxDiff:" << vbxDiff << "x:" << x << "rx:" << rx;
         } else {
-            debugCallout<<'\t'<<"right side resize and modifier X is inside viewbox";
+            debugCallout << '\t' << "right side resize and modifier X is inside viewbox";
             qreal ax = newSize.width();
             qreal bx = m_prevSize.width();
             qreal rx = ax / bx;
             qreal x = modifiers[0] - viewBox.left();
             qreal mx = x / rx;
-            modifiers[0] = mx;            
-            debugCallout<<'\t'<<"rx:"<<rx;
+            modifiers[0] = mx;
+            debugCallout << '\t' << "rx:" << rx;
         }
         if (pointerTop || pointerBottom) {
-            debugCallout<<'\t'<<"modifier Y is outside viewbox";
+            debugCallout << '\t' << "modifier Y is outside viewbox";
             qreal ay = newSize.height();
             qreal by = newPathSize.height();
             qreal vby = viewBox.height();
@@ -279,7 +297,7 @@ void CalloutContainerModel::resizePath(PathShape *path, const QPointF &newPos, c
             qreal my = pointerTop ? -vby * ry : vby + (vby * ry);
             modifiers[1] = my;
         } else if (movedY) {
-            debugCallout<<'\t'<<"top side resize and modifier Y is inside viewbox";
+            debugCallout << '\t' << "top side resize and modifier Y is inside viewbox";
             qreal a = newSize.height();
             qreal b = m_prevSize.height();
             qreal vb = viewBox.height();
@@ -288,19 +306,19 @@ void CalloutContainerModel::resizePath(PathShape *path, const QPointF &newPos, c
             qreal y = modifiers[1] + vbDiff;
             qreal ry = y / (vb + vbDiff);
             qreal m = vb * ry;
-            modifiers[1] = m;        
-            debugCallout<<'\t'<<"vbDiff:"<<vbDiff<<"y:"<<y<<"ry:"<<ry;
+            modifiers[1] = m;
+            debugCallout << '\t' << "vbDiff:" << vbDiff << "y:" << y << "ry:" << ry;
         } else {
-            debugCallout<<'\t'<<"bottom side resize and modifier Y is inside viewbox";
+            debugCallout << '\t' << "bottom side resize and modifier Y is inside viewbox";
             qreal a = newSize.height();
             qreal b = m_prevSize.height();
             qreal ry = a / b;
             qreal y = modifiers[1] - viewBox.top();
             qreal m = y / ry;
-            modifiers[1] = m;            
-            debugCallout<<'\t'<<"ry:"<<ry;
+            modifiers[1] = m;
+            debugCallout << '\t' << "ry:" << ry;
         }
-        debugCallout<<'\t'<<"New modifiers:"<<modifiers;
+        debugCallout << '\t' << "New modifiers:" << modifiers;
 
         path->setModifiers(modifiers);
         params = path->parameters(); // get the new parameters
@@ -318,15 +336,15 @@ void CalloutContainerModel::resizePath(PathShape *path, const QPointF &newPos, c
     } else if (modifiers[1] > pathRect.bottom()) {
         pathRect.setBottom(modifiers[1]);
     }
-    //debugCallout<<'\t'<<"pathrect:"<<pathRect<<"viewbox:"<<viewBox;
-    qreal size_ratioX = pathRect.width() / viewBox.width(); 
-    qreal size_ratioY = pathRect.height() / viewBox.height(); 
+    // debugCallout<<'\t'<<"pathrect:"<<pathRect<<"viewbox:"<<viewBox;
+    qreal size_ratioX = pathRect.width() / viewBox.width();
+    qreal size_ratioY = pathRect.height() / viewBox.height();
     qreal pw = newSize.width() * size_ratioX;
     qreal ph = newSize.height() * size_ratioY;
     QSizeF pathSize = QSizeF(pw, ph);
-    //debugCallout<<'\t'<<newSize<<"size ratio:"<<size_ratioX<<size_ratioY<<"path size:"<<pathSize;
+    // debugCallout<<'\t'<<newSize<<"size ratio:"<<size_ratioX<<size_ratioY<<"path size:"<<pathSize;
     path->setSize(pathSize);
-    
+
     qreal x = 0.0;
     qreal y = 0.0;
     if (pathRect.left() < 0.0) {
@@ -341,6 +359,5 @@ void CalloutContainerModel::resizePath(PathShape *path, const QPointF &newPos, c
     if (textShape) {
         textShape->setSize(newSize);
     }
-    debugCalloutF<<"<<<<";
+    debugCalloutF << "<<<<";
 }
-

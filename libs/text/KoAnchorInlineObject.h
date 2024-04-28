@@ -48,7 +48,7 @@ public:
      * Constructor for an as-char anchor.
      * @param parent the shapeanchor.
      */
-    explicit  KoAnchorInlineObject(KoShapeAnchor *parent);
+    explicit KoAnchorInlineObject(KoShapeAnchor *parent);
     ~KoAnchorInlineObject() override;
 
     /// returns the parent anchor
@@ -61,14 +61,17 @@ public:
     const QTextDocument *document() const override;
 
     /// reimplemented from KoInlineObject
-    void updatePosition(const QTextDocument *document,
-                                int posInDocument, const QTextCharFormat &format) override;
+    void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format) override;
     /// reimplemented from KoInlineObject
-    void resize(const QTextDocument *document, QTextInlineObject &object,
-                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
+    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
     /// reimplemented from KoInlineObject
-    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) override;
+    void paint(QPainter &painter,
+               QPaintDevice *pd,
+               const QTextDocument *document,
+               const QRectF &rect,
+               const QTextInlineObject &object,
+               int posInDocument,
+               const QTextCharFormat &format) override;
 
     qreal inlineObjectAscent() const;
 
@@ -79,7 +82,6 @@ public:
 
     /// reimplemented from KoInlineObject
     void saveOdf(KoShapeSavingContext &context) override;
-
 
 private:
     Q_DECLARE_PRIVATE(KoAnchorInlineObject)

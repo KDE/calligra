@@ -62,7 +62,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOSHAPEMANAGERPAINTINGSTRATEGY_H */

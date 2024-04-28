@@ -15,10 +15,11 @@
  */
 class KoNamedVariable : public KoVariable
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     /// return the name of this named variable
-    QString name() const {
+    QString name() const
+    {
         return m_name;
     }
 

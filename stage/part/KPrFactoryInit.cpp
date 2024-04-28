@@ -7,4 +7,3 @@
 
 #include "KPrFactoryInit.h"
 #include "moc_KPrFactoryInit.cpp"
-

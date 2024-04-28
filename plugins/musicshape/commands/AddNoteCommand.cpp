@@ -5,21 +5,26 @@
  */
 #include "AddNoteCommand.h"
 
-#include "../core/Note.h"
-#include "../core/Chord.h"
-#include "../core/VoiceBar.h"
 #include "../MusicShape.h"
+#include "../core/Chord.h"
+#include "../core/Note.h"
+#include "../core/VoiceBar.h"
 
 #include <KLocalizedString>
 
 using namespace MusicCore;
 
-AddNoteCommand::AddNoteCommand(MusicShape* shape, Chord* chord, Staff* staff, Duration duration, int pitch, int accidentals)
-    : m_shape(shape), m_chord(chord), m_oldDuration(chord->duration()), m_newDuration(duration), m_oldDots(chord->dots()), m_note(0)
+AddNoteCommand::AddNoteCommand(MusicShape *shape, Chord *chord, Staff *staff, Duration duration, int pitch, int accidentals)
+    : m_shape(shape)
+    , m_chord(chord)
+    , m_oldDuration(chord->duration())
+    , m_newDuration(duration)
+    , m_oldDots(chord->dots())
+    , m_note(0)
 {
     bool exists = false;
     for (int i = 0; i < m_chord->noteCount(); i++) {
-        Note* n = m_chord->note(i);
+        Note *n = m_chord->note(i);
         if (n->staff() == staff && n->pitch() == pitch) {
             exists = true;
             break;
@@ -43,7 +48,6 @@ void AddNoteCommand::redo()
     m_chord->voiceBar()->updateAccidentals();
     m_shape->engrave();
     m_shape->update();
-
 }
 
 void AddNoteCommand::undo()

@@ -10,45 +10,48 @@
 #include "PresentationImpl.h"
 #include "PresentationKoPAView.h"
 
+#include <QDebug>
 #include <QGraphicsWidget>
 #include <QMimeDatabase>
+#include <QRegularExpression>
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextLayout>
-#include <QDebug>
-#include <QRegularExpression>
 
-#include <stage/part/KPrPart.h>
-#include <stage/part/KPrDocument.h>
-#include <libs/textlayout/KoTextShapeData.h>
 #include <KoFindText.h>
 #include <KoPACanvasItem.h>
 #include <KoPAPageBase.h>
 #include <KoShape.h>
 #include <KoZoomController.h>
+#include <libs/textlayout/KoTextShapeData.h>
+#include <stage/part/KPrDocument.h>
+#include <stage/part/KPrPart.h>
 
 using namespace Calligra::Components;
 
 class PresentationImpl::Private
 {
 public:
-    Private() : part{nullptr}, document{nullptr}
-    { }
-
-    KPrPart* part;
-    KPrDocument* document;
-
-    PresentationKoPAView* koPaView;
-
-    QList< QPair< QRectF, QUrl > > links;
-
-    QList<KoShape*> deepShapeFind(QList<KoShape*> shapes)
+    Private()
+        : part{nullptr}
+        , document{nullptr}
     {
-        QList<KoShape*> allShapes;
-        foreach(KoShape* shape, shapes) {
+    }
+
+    KPrPart *part;
+    KPrDocument *document;
+
+    PresentationKoPAView *koPaView;
+
+    QList<QPair<QRectF, QUrl>> links;
+
+    QList<KoShape *> deepShapeFind(QList<KoShape *> shapes)
+    {
+        QList<KoShape *> allShapes;
+        foreach (KoShape *shape, shapes) {
             allShapes.append(shape);
-            KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
-            if(container) {
+            KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(shape);
+            if (container) {
                 allShapes.append(deepShapeFind(container->shapes()));
             }
         }
@@ -59,24 +62,23 @@ public:
     {
         links.clear();
 
-        if(!koPaView || !koPaView->activePage())
+        if (!koPaView || !koPaView->activePage())
             return;
 
-        foreach(const KoShape* shape, koPaView->activePage()->shapes()) {
-            if(!shape->hyperLink().isEmpty()) {
+        foreach (const KoShape *shape, koPaView->activePage()->shapes()) {
+            if (!shape->hyperLink().isEmpty()) {
                 QRectF rect = shape->boundingRect();
-                for (KoShapeContainer* parent = shape->parent();
-                     parent; parent = parent->parent()) {
+                for (KoShapeContainer *parent = shape->parent(); parent; parent = parent->parent()) {
                     rect.translate(parent->position());
                 }
                 links.append(QPair<QRectF, QUrl>(rect, QUrl(shape->hyperLink())));
             }
         }
 
-        QList<QTextDocument*> texts;
+        QList<QTextDocument *> texts;
         KoFindText::findTextInShapes(koPaView->activePage()->shapes(), texts);
-        QList<KoShape*> allShapes = deepShapeFind(koPaView->activePage()->shapes());
-        foreach(QTextDocument* text, texts) {
+        QList<KoShape *> allShapes = deepShapeFind(koPaView->activePage()->shapes());
+        foreach (QTextDocument *text, texts) {
             QTextBlock block = text->rootFrame()->firstCursorPosition().block();
             for (; block.isValid(); block = block.next()) {
                 block.begin();
@@ -85,18 +87,16 @@ public:
                     QTextFragment fragment = it.fragment();
                     if (fragment.isValid()) {
                         QTextCharFormat format = fragment.charFormat();
-                        if(format.isAnchor()) {
+                        if (format.isAnchor()) {
                             // This is an anchor, store target and position...
                             QRectF rect = getFragmentPosition(block, fragment);
-                            foreach(KoShape* shape, allShapes) {
-                                KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+                            foreach (KoShape *shape, allShapes) {
+                                KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());
                                 if (!shapeData)
                                     continue;
-                                if(shapeData->document() == text)
-                                {
+                                if (shapeData->document() == text) {
                                     rect.translate(shape->position());
-                                    for (KoShapeContainer* parent = shape->parent();
-                                         parent; parent = parent->parent()) {
+                                    for (KoShapeContainer *parent = shape->parent(); parent; parent = parent->parent()) {
                                         rect.translate(parent->position());
                                     }
                                     break;
@@ -116,10 +116,9 @@ public:
         // TODO this only produces a position for the first part, if the link spans more than one line...
         // Need to sort that somehow, unfortunately probably by slapping this code into the above function.
         // For now leave it like this, more important things are needed.
-        QTextLayout* layout = block.layout();
+        QTextLayout *layout = block.layout();
         QTextLine line = layout->lineForTextPosition(fragment.position() - block.position());
-        if(!line.isValid())
-        {
+        if (!line.isValid()) {
             // fragment has no valid position and consequently no line...
             return QRectF();
         }
@@ -134,10 +133,11 @@ public:
     static const float wiggleFactor;
 };
 
-const float Calligra::Components::PresentationImpl::Private::wiggleFactor{ 4.f };
+const float Calligra::Components::PresentationImpl::Private::wiggleFactor{4.f};
 
-PresentationImpl::PresentationImpl(QObject* parent)
-    : DocumentImpl{parent}, d{new Private}
+PresentationImpl::PresentationImpl(QObject *parent)
+    : DocumentImpl{parent}
+    , d{new Private}
 {
     setDocumentType(DocumentType::Presentation);
 }
@@ -147,7 +147,7 @@ PresentationImpl::~PresentationImpl()
     delete d;
 }
 
-bool PresentationImpl::load(const QUrl& url)
+bool PresentationImpl::load(const QUrl &url)
 {
     delete d->part;
     delete d->document;
@@ -166,7 +166,7 @@ bool PresentationImpl::load(const QUrl& url)
         if (ok) {
             QString mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
             // in case this is a open document template remove the -template from the end
-            mimeType.remove( QRegularExpression( "-template$" ) );
+            mimeType.remove(QRegularExpression("-template$"));
             d->document->setMimeTypeAfterLoading(mimeType);
             d->document->resetURL();
             d->document->setEmpty();
@@ -181,7 +181,7 @@ bool PresentationImpl::load(const QUrl& url)
         retval = d->document->openUrl(url);
     }
 
-    auto canvas = static_cast<KoPACanvasItem*>(d->part->canvasItem(d->document));
+    auto canvas = static_cast<KoPACanvasItem *>(d->part->canvasItem(d->document));
 
     createAndSetCanvasController(canvas);
 
@@ -192,8 +192,8 @@ bool PresentationImpl::load(const QUrl& url)
     d->koPaView->setZoomController(zoomController());
     d->koPaView->connectToZoomController();
 
-    KoPAPageBase* page = d->document->pageByIndex(0, false);
-    if(page) {
+    KoPAPageBase *page = d->document->pageByIndex(0, false);
+    if (page) {
         d->koPaView->doUpdateActivePage(page);
     }
     d->updateLinkTargets();
@@ -214,7 +214,7 @@ int PresentationImpl::currentIndex()
 
 void PresentationImpl::setCurrentIndex(int newValue)
 {
-    if(newValue != currentIndex()) {
+    if (newValue != currentIndex()) {
         d->koPaView->doUpdateActivePage(d->document->pageByIndex(newValue, false));
         d->updateLinkTargets();
         emit requestViewUpdate();
@@ -229,24 +229,20 @@ int PresentationImpl::indexCount() const
 
 QUrl PresentationImpl::urlAtPoint(QPoint point)
 {
-    for( const QPair< QRectF, QUrl >& link : d->links )
-    {
-        QRectF hitTarget{
-            link.first.x() - Private::wiggleFactor,
-            link.first.y() - Private::wiggleFactor,
-            link.first.width() + Private::wiggleFactor * 2,
-            link.first.height() + Private::wiggleFactor * 2
-        };
+    for (const QPair<QRectF, QUrl> &link : d->links) {
+        QRectF hitTarget{link.first.x() - Private::wiggleFactor,
+                         link.first.y() - Private::wiggleFactor,
+                         link.first.width() + Private::wiggleFactor * 2,
+                         link.first.height() + Private::wiggleFactor * 2};
 
-        if( hitTarget.contains( point ) )
-        {
+        if (hitTarget.contains(point)) {
             return link.second;
         }
     }
     return QUrl();
 }
 
-QObject* PresentationImpl::part() const
+QObject *PresentationImpl::part() const
 {
     return d->part;
 }

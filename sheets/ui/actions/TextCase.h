@@ -8,11 +8,9 @@
 #ifndef CALLIGRA_SHEETS_ACTION_TEXTCASE
 #define CALLIGRA_SHEETS_ACTION_TEXTCASE
 
-
 #include "CellAction.h"
 
 #include "ui/commands/DataManipulators.h"
-
 
 namespace Calligra
 {
@@ -23,25 +21,22 @@ namespace Sheets
  * \ingroup Commands
  * \brief Converts string values to upper-/lowercase.
  */
-class CALLIGRA_SHEETS_UI_EXPORT CaseManipulator: public AbstractDataManipulator
+class CALLIGRA_SHEETS_UI_EXPORT CaseManipulator : public AbstractDataManipulator
 {
 public:
     CaseManipulator();
     ~CaseManipulator() override;
 
-    enum CaseMode {
-        Upper = 0,
-        Lower,
-        FirstUpper
-    };
-    void changeMode(CaseMode mode) {
+    enum CaseMode { Upper = 0, Lower, FirstUpper };
+    void changeMode(CaseMode mode)
+    {
         m_mode = mode;
     }
     void changeLowerCase();
     void changeFirstUpper();
+
 protected:
-    Value newValue(Element *element, int col, int row,
-                           bool *parse, Format::Type *fmtType) override;
+    Value newValue(Element *element, int col, int row, bool *parse, Format::Type *fmtType) override;
 
     /** do we want to change this cell ? */
     bool wantChange(Element *element, int col, int row) override;
@@ -49,11 +44,9 @@ protected:
     CaseMode m_mode;
 };
 
-
-
-
-class TextCase : public CellAction {
-Q_OBJECT
+class TextCase : public CellAction
+{
+    Q_OBJECT
 public:
     TextCase(Actions *actions, CaseManipulator::CaseMode mode);
     virtual ~TextCase();
@@ -69,12 +62,7 @@ protected:
     CaseManipulator::CaseMode m_mode;
 };
 
-
-
-
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_TEXTCASE
+#endif // CALLIGRA_SHEETS_ACTION_TEXTCASE

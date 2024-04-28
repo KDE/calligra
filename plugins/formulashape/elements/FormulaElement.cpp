@@ -9,11 +9,12 @@
 */
 
 #include "FormulaElement.h"
-#include "FormulaCursor.h"
 #include "ElementFactory.h"
+#include "FormulaCursor.h"
 #include <KoXmlWriter.h>
 
-FormulaElement::FormulaElement() : RowElement( 0 )
+FormulaElement::FormulaElement()
+    : RowElement(0)
 {
 }
 
@@ -22,7 +23,7 @@ ElementType FormulaElement::elementType() const
     return Formula;
 }
 
-void FormulaElement::writeMathMLAttributes(KoXmlWriter* writer) const
+void FormulaElement::writeMathMLAttributes(KoXmlWriter *writer) const
 {
-    writer->addAttribute("xmlns","http://www.w3.org/1998/Math/MathML");
+    writer->addAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
 }

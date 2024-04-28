@@ -15,7 +15,7 @@
 #include <QPainterPath>
 
 class TableRowElement;
-	
+
 /**
  * @short A matrix or table element in a formula
  *
@@ -24,11 +24,12 @@ class TableRowElement;
  * TableElement takes care that the different TableRowElements are informed how
  * to lay out their children correctly as they need to be synced.
  */
-class KOFORMULA_EXPORT TableElement : public BasicElement {
+class KOFORMULA_EXPORT TableElement : public BasicElement
+{
 public:
     /// The standard constructor
     explicit TableElement(BasicElement *parent = 0);
-    
+
     /// The standard destructor
     ~TableElement() override;
 
@@ -37,62 +38,62 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    void paint( QPainter& painter, AttributeManager* am ) override;
+    void paint(QPainter &painter, AttributeManager *am) override;
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am ) override;
+    void layout(const AttributeManager *am) override;
 
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements() const override;
+    const QList<BasicElement *> childElements() const override;
 
     /// inherited from BasicElement
-    bool acceptCursor( const FormulaCursor& cursor ) override;
-    
+    bool acceptCursor(const FormulaCursor &cursor) override;
+
     /// inherited from BasicElement
-    int positionOfChild(BasicElement* child) const override;
-    
+    int positionOfChild(BasicElement *child) const override;
+
     /// inherited from BasicElement
     int endPosition() const override;
-    
+
     /// inherited from BasicElement
-    bool setCursorTo(FormulaCursor& cursor, QPointF point) override;
-    
-    virtual bool insertChild ( int position, BasicElement* child );
-    bool removeChild (BasicElement* child); 
-    
+    bool setCursorTo(FormulaCursor &cursor, QPointF point) override;
+
+    virtual bool insertChild(int position, BasicElement *child);
+    bool removeChild(BasicElement *child);
+
     /// inherited from BasicElement
-    bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor) override;
-    
+    bool moveCursor(FormulaCursor &newcursor, FormulaCursor &oldcursor) override;
+
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const override;
+    QString attributesDefaultValue(const QString &attribute) const override;
 
     /// @return The width of the column with the index @p column
-    qreal columnWidth( int column );
+    qreal columnWidth(int column);
 
     /// @return The height of the @p TableRowElement
-    qreal rowHeight( TableRowElement* row );
-    
+    qreal rowHeight(TableRowElement *row);
+
     /// inherited from BasicElement
-    QLineF cursorLine ( int position ) const override;
-    
+    QLineF cursorLine(int position) const override;
+
     /// inherited from BasicElement
-    QPainterPath selectionRegion ( const int pos1, const int pos2 ) const override;
-    
+    QPainterPath selectionRegion(const int pos1, const int pos2) const override;
+
     /// @return The element's ElementType
     ElementType elementType() const override;
-    
+
 protected:
     /// Read all content from the node - reimplemented by child elements
-    bool readMathMLContent( const KoXmlElement& element ) override;
+    bool readMathMLContent(const KoXmlElement &element) override;
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const override;
+    void writeMathMLContent(KoXmlWriter *writer, const QString &ns) const override;
 
 private:
     /// @return The base line computed out of the align attribute
@@ -106,9 +107,9 @@ private:
 
     /// Storage for widths of each column calculated in determineDimensions()
     QList<qreal> m_colWidths;
-    
+
     /// The rows a matrix contains
-    QList<TableRowElement*> m_rows;
+    QList<TableRowElement *> m_rows;
 
     /// Buffer for the pen style used for the table's frame
     Qt::PenStyle m_framePenStyle;

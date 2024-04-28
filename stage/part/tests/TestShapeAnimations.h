@@ -49,4 +49,3 @@ private:
 };
 
 #endif // TESTSHAPEANIMATIONS_H
-

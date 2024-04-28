@@ -10,48 +10,49 @@
 #include "Legend.h"
 
 // Qt
-#include <QString>
-#include <QSizeF>
-#include <QPen>
-#include <QColor>
 #include <QBrush>
+#include <QColor>
 #include <QFont>
 #include <QImage>
 #include <QPainterPath>
+#include <QPen>
+#include <QSizeF>
+#include <QString>
 
 // Calligra
-#include <KoXmlReader.h>
-#include <KoXmlWriter.h>
+#include <KoColorBackground.h>
+#include <KoGenStyles.h>
+#include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoOdfLoadingContext.h>
-#include <KoXmlNS.h>
-#include <KoGenStyles.h>
+#include <KoShapeStroke.h>
 #include <KoStyleStack.h>
 #include <KoUnit.h>
-#include <KoColorBackground.h>
-#include <KoShapeStroke.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
 // KChart
-#include <KChartChart>
-#include <KChartBarDiagram>
-#include <KChartAbstractDiagram>
-#include <KChartFrameAttributes>
-#include <KChartBackgroundAttributes>
-#include <KChartLegend>
 #include "KChartConvertions.h"
 #include "kchart_version.h"
+#include <KChartAbstractDiagram>
+#include <KChartBackgroundAttributes>
+#include <KChartBarDiagram>
+#include <KChartChart>
+#include <KChartFrameAttributes>
+#include <KChartLegend>
 
 // KoChart
+#include "ChartLayout.h"
+#include "OdfHelper.h"
+#include "OdfLoadingHelper.h"
 #include "PlotArea.h"
 #include "ScreenConversions.h"
-#include "ChartLayout.h"
-#include "OdfLoadingHelper.h"
-#include "OdfHelper.h"
 
 using namespace KoChart;
 
-class Legend::Private {
+class Legend::Private
+{
 public:
     Private();
     ~Private();
@@ -78,7 +79,6 @@ public:
     QPointF lastZoomLevel;
 };
 
-
 Legend::Private::Private()
 {
     lineBorder = new KoShapeStroke(0.5, Qt::black);
@@ -92,7 +92,6 @@ Legend::Private::~Private()
 {
     delete lineBorder;
 }
-
 
 Legend::Legend(ChartShape *parent)
     : QObject(parent)
@@ -123,10 +122,8 @@ Legend::Legend(ChartShape *parent)
     setAllowedInteraction(KoShape::ResizeAllowed, false);
     setAllowedInteraction(KoShape::RotationAllowed, false);
 
-    connect (d->kdLegend, &KChart::Legend::propertiesChanged,
-             this,        &Legend::slotKdLegendChanged);
-    connect (parent, &ChartShape::chartTypeChanged,
-             this,   &Legend::slotChartTypeChanged);
+    connect(d->kdLegend, &KChart::Legend::propertiesChanged, this, &Legend::slotKdLegendChanged);
+    connect(parent, &ChartShape::chartTypeChanged, this, &Legend::slotChartTypeChanged);
 }
 
 Legend::~Legend()
@@ -134,7 +131,6 @@ Legend::~Legend()
     delete d->kdLegend;
     delete d;
 }
-
 
 QString Legend::title() const
 {
@@ -282,7 +278,6 @@ void Legend::setSize(const QSizeF &newSize)
     KoShape::setSize(newSize);
 }
 
-
 void Legend::paintPixmap(QPainter &painter, const KoViewConverter &converter)
 {
     // Adjust the size of the painting area to the current zoom level
@@ -300,14 +295,14 @@ void Legend::paintPixmap(QPainter &painter, const KoViewConverter &converter)
 
 void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
-    //painter.save();
+    // painter.save();
 
     // First of all, scale the painter's coordinate system to fit the current zoom level
     applyConversion(painter, converter);
 
     // Calculate the clipping rect
     QRectF paintRect = QRectF(QPointF(0, 0), size());
-    //clipRect.intersected(paintRect);
+    // clipRect.intersected(paintRect);
     painter.setClipRect(paintRect, Qt::IntersectClip);
 
     // Get the current zoom level
@@ -339,7 +334,7 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
         background()->paint(painter, converter, paintContext, p);
     }
 
-    disconnect (d->kdLegend, &KChart::Legend::propertiesChanged, this, &Legend::slotKdLegendChanged);
+    disconnect(d->kdLegend, &KChart::Legend::propertiesChanged, this, &Legend::slotKdLegendChanged);
 
     // KChart thinks in pixels, Calligra in pt
     ScreenConversions::scaleFromPtToPx(painter);
@@ -348,20 +343,17 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
     ScreenConversions::scaleToWidgetDpi(d->kdLegend, painter);
     d->kdLegend->paint(&painter, rect);
 
-    connect (d->kdLegend, &KChart::Legend::propertiesChanged, this, &Legend::slotKdLegendChanged);
+    connect(d->kdLegend, &KChart::Legend::propertiesChanged, this, &Legend::slotKdLegendChanged);
 }
-
 
 // ----------------------------------------------------------------
 //                     loading and saving
 
-
-bool Legend::loadOdf(const KoXmlElement &legendElement,
-                     KoShapeLoadingContext &context)
+bool Legend::loadOdf(const KoXmlElement &legendElement, KoShapeLoadingContext &context)
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.clear();
-    
+
     // FIXME: If the style isn't present we shouldn't care about it at all
     // and move everything related to the legend style in this if clause
     if (legendElement.hasAttributeNS(KoXmlNS::chart, "style-name")) {
@@ -390,36 +382,27 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
 
         if (lalign == "start") {
             setAlignment(Qt::AlignLeft);
-        }
-        else if (lalign == "end") {
+        } else if (lalign == "end") {
             setAlignment(Qt::AlignRight);
-        }
-        else {
+        } else {
             setAlignment(Qt::AlignCenter); // default
         }
 
         if (lp == "start") {
             setLegendPosition(StartPosition);
-        }
-        else if (lp == "top") {
+        } else if (lp == "top") {
             setLegendPosition(TopPosition);
-        }
-        else if (lp == "bottom") {
+        } else if (lp == "bottom") {
             setLegendPosition(BottomPosition);
-        }
-        else if (lp == "end") {
+        } else if (lp == "end") {
             setLegendPosition(EndPosition);
-        }
-        else if (lp == "top-start") {
+        } else if (lp == "top-start") {
             setLegendPosition(TopStartPosition);
-        }
-        else if (lp == "bottom-start") {
+        } else if (lp == "bottom-start") {
             setLegendPosition(BottomStartPosition);
-        }
-        else if (lp == "top-end") {
+        } else if (lp == "top-end") {
             setLegendPosition(TopEndPosition);
-        }
-        else if (lp == "bottom-end") {
+        } else if (lp == "bottom-end") {
             setLegendPosition(BottomEndPosition);
         } else {
             setLegendPosition(FloatingPosition);
@@ -447,8 +430,7 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
                 setFontColor(color);
             }
         }
-    }
-    else {
+    } else {
         // No legend element, use default legend.
         setLegendPosition(EndPosition);
         setAlignment(Qt::AlignCenter);
@@ -473,10 +455,17 @@ void Legend::saveOdf(KoShapeSavingContext &context) const
     }
     QString lalign;
     switch (d->alignment) {
-        case Qt::AlignLeft: lalign = "start"; break;
-        case Qt::AlignRight: lalign = "end"; break;
-        case Qt::AlignCenter: lalign = "center"; break;
-        default: break;
+    case Qt::AlignLeft:
+        lalign = "start";
+        break;
+    case Qt::AlignRight:
+        lalign = "end";
+        break;
+    case Qt::AlignCenter:
+        lalign = "center";
+        break;
+    default:
+        break;
     }
     if (!lalign.isEmpty()) {
         bodyWriter.addAttribute("chart:legend-align", lalign);
@@ -487,11 +476,17 @@ void Legend::saveOdf(KoShapeSavingContext &context) const
     OdfHelper::saveOdfFont(style, d->font, d->fontColor);
     bodyWriter.addAttribute("chart:style-name", saveStyle(style, context));
 
-    QString  lexpansion;
+    QString lexpansion;
     switch (expansion()) {
-    case WideLegendExpansion:      lexpansion = "wide";      break;
-    case HighLegendExpansion:      lexpansion = "high";      break;
-    case BalancedLegendExpansion:  lexpansion = "balanced";  break;
+    case WideLegendExpansion:
+        lexpansion = "wide";
+        break;
+    case HighLegendExpansion:
+        lexpansion = "high";
+        break;
+    case BalancedLegendExpansion:
+        lexpansion = "balanced";
+        break;
     };
     bodyWriter.addAttribute("style:legend-expansion", lexpansion);
 
@@ -524,7 +519,7 @@ void Legend::slotKdLegendChanged()
 {
     // FIXME: Update legend properly by implementing all *DataChanged() slots
     // in KChartModel. Right now, only yDataChanged() is implemented.
-    //d->kdLegend->forceRebuild();
+    // d->kdLegend->forceRebuild();
     QSizeF size = ScreenConversions::scaleFromPxToPt(d->kdLegend->sizeHint());
     setSize(ScreenConversions::fromWidgetDpi(d->kdLegend, size));
     update();

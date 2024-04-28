@@ -10,26 +10,32 @@
  */
 #include "KoTableRowStyle.h"
 
-#include <KoGenStyle.h>
 #include "Styles_p.h"
+#include <KoGenStyle.h>
 
-#include <KoUnit.h>
-#include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
+#include <KoStyleStack.h>
+#include <KoUnit.h>
 #include <KoXmlNS.h>
 
 #include "TextDebug.h"
 
-
 class Q_DECL_HIDDEN KoTableRowStyle::Private : public QSharedData
 {
 public:
-    Private() : QSharedData(), parentStyle(0), next(0) {}
-
-    ~Private() {
+    Private()
+        : QSharedData()
+        , parentStyle(0)
+        , next(0)
+    {
     }
 
-    void setProperty(int key, const QVariant &value) {
+    ~Private()
+    {
+    }
+
+    void setProperty(int key, const QVariant &value)
+    {
         stylesPrivate.add(key, value);
     }
 
@@ -40,12 +46,12 @@ public:
 };
 
 KoTableRowStyle::KoTableRowStyle()
-    :  d(new Private())
+    : d(new Private())
 {
 }
 
 KoTableRowStyle::KoTableRowStyle(const KoTableRowStyle &rhs)
-        : d(rhs.d)
+    : d(rhs.d)
 {
 }
 
@@ -168,7 +174,7 @@ void KoTableRowStyle::setBreakBefore(KoText::KoTextBreakProperty state)
 
 KoText::KoTextBreakProperty KoTableRowStyle::breakBefore() const
 {
-    return (KoText::KoTextBreakProperty) propertyInt(BreakBefore);
+    return (KoText::KoTextBreakProperty)propertyInt(BreakBefore);
 }
 
 void KoTableRowStyle::setBreakAfter(KoText::KoTextBreakProperty state)
@@ -178,7 +184,7 @@ void KoTableRowStyle::setBreakAfter(KoText::KoTextBreakProperty state)
 
 KoText::KoTextBreakProperty KoTableRowStyle::breakAfter() const
 {
-    return (KoText::KoTextBreakProperty) propertyInt(BreakAfter);
+    return (KoText::KoTextBreakProperty)propertyInt(BreakAfter);
 }
 
 void KoTableRowStyle::setUseOptimalHeight(bool on)
@@ -196,7 +202,6 @@ void KoTableRowStyle::setMinimumRowHeight(const qreal height)
     setProperty(MinimumRowHeight, height);
 }
 
-
 qreal KoTableRowStyle::minimumRowHeight() const
 {
     return propertyDouble(MinimumRowHeight);
@@ -204,7 +209,7 @@ qreal KoTableRowStyle::minimumRowHeight() const
 
 void KoTableRowStyle::setRowHeight(qreal height)
 {
-    if(height <= 0)
+    if (height <= 0)
         d->stylesPrivate.remove(RowHeight);
     else
         setProperty(RowHeight, height);
@@ -249,7 +254,9 @@ int KoTableRowStyle::styleId() const
 
 void KoTableRowStyle::setStyleId(int id)
 {
-    setProperty(StyleId, id); if (d->next == 0) d->next = id;
+    setProperty(StyleId, id);
+    if (d->next == 0)
+        d->next = id;
 }
 
 QString KoTableRowStyle::masterPageName() const
@@ -271,18 +278,17 @@ void KoTableRowStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &
         d->name = element->attributeNS(KoXmlNS::style, "name", QString());
 
     QString masterPage = element->attributeNS(KoXmlNS::style, "master-page-name", QString());
-    if (! masterPage.isEmpty()) {
+    if (!masterPage.isEmpty()) {
         setMasterPageName(masterPage);
     }
     context.styleStack().save();
     QString family = element->attributeNS(KoXmlNS::style, "family", "table-row");
-    context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
+    context.addStyles(element, family.toLocal8Bit().constData()); // Load all parents - only because we don't support inheritance.
 
-    context.styleStack().setTypeProperties("table-row");   // load all style attributes from "style:table-column-properties"
-    loadOdfProperties(context.styleStack());   // load the KoTableRowStyle from the stylestack
+    context.styleStack().setTypeProperties("table-row"); // load all style attributes from "style:table-column-properties"
+    loadOdfProperties(context.styleStack()); // load the KoTableRowStyle from the stylestack
     context.styleStack().restore();
 }
-
 
 void KoTableRowStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
@@ -291,7 +297,7 @@ void KoTableRowStyle::loadOdfProperties(KoStyleStack &styleStack)
         const QString bgcolor = styleStack.property(KoXmlNS::fo, "background-color");
         QBrush brush = background();
         if (bgcolor == "transparent")
-           setBackground(Qt::NoBrush);
+            setBackground(Qt::NoBrush);
         else {
             if (brush.style() == Qt::NoBrush)
                 brush.setStyle(Qt::SolidPattern);
@@ -347,7 +353,7 @@ bool KoTableRowStyle::isEmpty() const
 void KoTableRowStyle::saveOdf(KoGenStyle &style) const
 {
     QList<int> keys = d->stylesPrivate.keys();
-    foreach(int key, keys) {
+    foreach (int key, keys) {
         if (key == QTextFormat::BackgroundBrush) {
             QBrush backBrush = background();
             if (backBrush.style() != Qt::NoBrush)

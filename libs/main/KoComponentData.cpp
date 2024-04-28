@@ -22,7 +22,7 @@ KoComponentData::~KoComponentData()
 {
 }
 
-KoComponentData& KoComponentData::operator=(const KoComponentData &other)
+KoComponentData &KoComponentData::operator=(const KoComponentData &other)
 {
     d = other.d;
     return *this;
@@ -34,7 +34,7 @@ bool KoComponentData::operator==(const KoComponentData &other) const
     return equals;
 }
 
-const KAboutData& KoComponentData::aboutData() const
+const KAboutData &KoComponentData::aboutData() const
 {
     return d->aboutData;
 }
@@ -49,8 +49,7 @@ QString KoComponentData::componentDisplayName() const
     return d->aboutData.displayName();
 }
 
-
-const KSharedConfig::Ptr& KoComponentData::config() const
+const KSharedConfig::Ptr &KoComponentData::config() const
 {
     if (!d->sharedConfig) {
         d->sharedConfig = KSharedConfig::openConfig(d->aboutData.componentName() + QLatin1String("rc"));

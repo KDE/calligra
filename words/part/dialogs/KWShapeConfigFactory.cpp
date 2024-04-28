@@ -5,9 +5,9 @@
  */
 
 #include "KWShapeConfigFactory.h"
-#include "KWRunAroundProperties.h"
-#include "KWFrameConnectSelector.h"
 #include "KWAnchoringProperties.h"
+#include "KWFrameConnectSelector.h"
+#include "KWRunAroundProperties.h"
 #include <KWCanvas.h>
 #include <frames/KWFrame.h>
 #include <frames/KWFrameSet.h>
@@ -31,7 +31,6 @@ bool KWFrameConnectSelectorFactory::showForShapeId(const QString &id) const
     return id == TextShape_SHAPEID;
 }
 
-
 KoShapeConfigWidgetBase *KWAnchoringFactory::createConfigWidget(KoShape *shape)
 {
     KWAnchoringProperties *widget = new KWAnchoringProperties(m_state);
@@ -48,7 +47,6 @@ bool KWAnchoringFactory::showForShapeId(const QString &id) const
 {
     return id == TextShape_SHAPEID;
 }
-
 
 KoShapeConfigWidgetBase *KWRunAroundPropertiesFactory::createConfigWidget(KoShape *shape)
 {
@@ -68,10 +66,10 @@ bool KWRunAroundPropertiesFactory::showForShapeId(const QString &id) const
 }
 
 FrameConfigSharedState::FrameConfigSharedState(KWDocument *document)
-        : QObject(document),
-        m_refcount(0),
-        m_protectAspectRatio(false),
-        m_document(document)
+    : QObject(document)
+    , m_refcount(0)
+    , m_protectAspectRatio(false)
+    , m_document(document)
 {
 }
 

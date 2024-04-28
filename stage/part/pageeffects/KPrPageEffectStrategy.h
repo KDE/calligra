@@ -24,7 +24,7 @@ public:
      * @param reverse The flag for the smil:direction used for loading/saving true means reverse false means forward
      * @param graphicsView The flag for graphics view
      */
-    KPrPageEffectStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse, bool graphicsView = false);
+    KPrPageEffectStrategy(int subType, const char *smilType, const char *smilSubType, bool reverse, bool graphicsView = false);
     virtual ~KPrPageEffectStrategy();
 
     /**
@@ -37,7 +37,7 @@ public:
     /**
      * Setup the timeline used by this strategy
      */
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) = 0;
+    virtual void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine) = 0;
 
     /**
      * Paint the page effect
@@ -51,7 +51,7 @@ public:
      *
      * @see next()
      */
-    virtual void paintStep( QPainter &p, int curPos, const KPrPageEffect::Data &data ) = 0;
+    virtual void paintStep(QPainter &p, int curPos, const KPrPageEffect::Data &data) = 0;
 
     /**
      * Trigger the next paint paint event.
@@ -61,44 +61,44 @@ public:
      *
      * @param data The data used for the effect.
      */
-    virtual void next( const KPrPageEffect::Data &data ) = 0;
+    virtual void next(const KPrPageEffect::Data &data) = 0;
 
     /**
      * The default implementation triggers an update of the whole widget. If you only need to
      * update a smaller part of the widget reimplement this function.
      */
-    virtual void finish( const KPrPageEffect::Data &data );
+    virtual void finish(const KPrPageEffect::Data &data);
 
     /**
      * Save transitions in an xml writer
      */
-    virtual void saveOdfSmilAttributes( KoXmlWriter & xmlWriter ) const;
+    virtual void saveOdfSmilAttributes(KoXmlWriter &xmlWriter) const;
 
     /**
      * Save transition as part of the style
      */
-    virtual void saveOdfSmilAttributes( KoGenStyle & style ) const;
+    virtual void saveOdfSmilAttributes(KoGenStyle &style) const;
 
     /**
      * Load additional attributes needed by the strategy.
      *
      * The default implementation is empty
      */
-    virtual void loadOdfSmilAttributes( const KoXmlElement & element );
+    virtual void loadOdfSmilAttributes(const KoXmlElement &element);
 
     /**
      * Get the smil:type
      *
      * @return the type used for saving
      */
-    const QString & smilType() const;
+    const QString &smilType() const;
 
     /**
      * Get the smil:subtype
      *
      * @return the subtype used for saving
      */
-    const QString & smilSubType() const;
+    const QString &smilSubType() const;
 
     /**
      * Get the smil:direction
@@ -108,17 +108,18 @@ public:
     bool reverse() const;
 
     /**
-    * @return true if we use QGraphicsView, false otherwise
-    */
+     * @return true if we use QGraphicsView, false otherwise
+     */
     bool useGraphicsView() const;
+
 private:
-    struct SmilData
-    {
-        SmilData( const char * type, const char * subType, bool reverse )
-        : type( type )
-        , subType( subType )
-        , reverse( reverse )
-        {}
+    struct SmilData {
+        SmilData(const char *type, const char *subType, bool reverse)
+            : type(type)
+            , subType(subType)
+            , reverse(reverse)
+        {
+        }
 
         QString type;
         QString subType;

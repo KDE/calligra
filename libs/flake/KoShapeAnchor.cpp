@@ -8,19 +8,19 @@
  */
 
 #include "KoShapeAnchor.h"
-#include "KoStyleStack.h"
 #include "KoOdfLoadingContext.h"
+#include "KoStyleStack.h"
 
 #include <KoShapeContainer.h>
-#include <KoXmlWriter.h>
-#include <KoXmlReader.h>
-#include <KoXmlNS.h>
-#include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
+#include <FlakeDebug.h>
 #include <QRectF>
 #include <QTransform>
-#include <FlakeDebug.h>
 
 #include <KoGenChanges.h>
 
@@ -28,19 +28,18 @@ class Q_DECL_HIDDEN KoShapeAnchor::Private
 {
 public:
     Private(KoShape *s)
-            : shape(s)
-            , verticalPos(KoShapeAnchor::VTop)
-            , verticalRel(KoShapeAnchor::VLine)
-            , horizontalPos(KoShapeAnchor::HLeft)
-            , horizontalRel(KoShapeAnchor::HChar)
-            , flowWithText(true)
-            , anchorType(KoShapeAnchor::AnchorToCharacter)
-            , placementStrategy(0)
-            , pageNumber(-1)
-            , textLocation(0)
+        : shape(s)
+        , verticalPos(KoShapeAnchor::VTop)
+        , verticalRel(KoShapeAnchor::VLine)
+        , horizontalPos(KoShapeAnchor::HLeft)
+        , horizontalRel(KoShapeAnchor::HChar)
+        , flowWithText(true)
+        , anchorType(KoShapeAnchor::AnchorToCharacter)
+        , placementStrategy(0)
+        , pageNumber(-1)
+        , textLocation(0)
     {
     }
-
 
     QDebug printDebug(QDebug dbg) const
     {
@@ -52,7 +51,7 @@ public:
         return dbg.space();
     }
 
-    KoShape * const shape;
+    KoShape *const shape;
     QPointF offset;
     KoShapeAnchor::VerticalPos verticalPos;
     KoShapeAnchor::VerticalRel verticalRel;
@@ -312,17 +311,13 @@ void KoShapeAnchor::saveOdf(KoShapeSavingContext &context) const
         shape()->setAdditionalStyleAttribute("style:flow-with-text", "false");
     }
 
-    if (shape()->parent()) {// an anchor may not yet have been layout-ed
+    if (shape()->parent()) { // an anchor may not yet have been layout-ed
         QTransform parentMatrix = shape()->parent()->absoluteTransformation(0).inverted();
         QTransform shapeMatrix = shape()->absoluteTransformation(0);
 
-        qreal dx = d->offset.x() - shapeMatrix.dx()*parentMatrix.m11()
-                                   - shapeMatrix.dy()*parentMatrix.m21();
-        qreal dy = d->offset.y() - shapeMatrix.dx()*parentMatrix.m12()
-                                   - shapeMatrix.dy()*parentMatrix.m22();
-        context.addShapeOffset(shape(), QTransform(parentMatrix.m11(),parentMatrix.m12(),
-                                                parentMatrix.m21(),parentMatrix.m22(),
-                                                dx,dy));
+        qreal dx = d->offset.x() - shapeMatrix.dx() * parentMatrix.m11() - shapeMatrix.dy() * parentMatrix.m21();
+        qreal dy = d->offset.y() - shapeMatrix.dx() * parentMatrix.m12() - shapeMatrix.dy() * parentMatrix.m22();
+        context.addShapeOffset(shape(), QTransform(parentMatrix.m11(), parentMatrix.m12(), parentMatrix.m21(), parentMatrix.m22(), dx, dy));
     }
 
     shape()->saveOdf(context);
@@ -389,18 +384,18 @@ bool KoShapeAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &
     styleStack.restore();
 
     // vertical-pos
-    if (verticalPos == "below") {//svg:y attribute is ignored
+    if (verticalPos == "below") { // svg:y attribute is ignored
         d->verticalPos = VBelow;
         d->offset.setY(0);
-    } else if (verticalPos == "bottom") {//svg:y attribute is ignored
+    } else if (verticalPos == "bottom") { // svg:y attribute is ignored
         d->verticalPos = VBottom;
         d->offset.setY(-shape()->size().height());
     } else if (verticalPos == "from-top") {
         d->verticalPos = VFromTop;
-    } else if (verticalPos == "middle") {//svg:y attribute is ignored
+    } else if (verticalPos == "middle") { // svg:y attribute is ignored
         d->verticalPos = VMiddle;
-        d->offset.setY(-(shape()->size().height()/2));
-    } else if (verticalPos == "top") {//svg:y attribute is ignored
+        d->offset.setY(-(shape()->size().height() / 2));
+    } else if (verticalPos == "top") { // svg:y attribute is ignored
         d->verticalPos = VTop;
         d->offset.setY(0);
     }
@@ -428,23 +423,23 @@ bool KoShapeAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &
         d->verticalRel = VText;
 
     // horizontal-pos
-    if (horizontalPos == "center") {//svg:x attribute is ignored
+    if (horizontalPos == "center") { // svg:x attribute is ignored
         d->horizontalPos = HCenter;
-        d->offset.setX(-(shape()->size().width()/2));
+        d->offset.setX(-(shape()->size().width() / 2));
     } else if (horizontalPos == "from-inside") {
         d->horizontalPos = HFromInside;
     } else if (horizontalPos == "from-left") {
         d->horizontalPos = HFromLeft;
-    } else if (horizontalPos == "inside") {//svg:x attribute is ignored
+    } else if (horizontalPos == "inside") { // svg:x attribute is ignored
         d->horizontalPos = HInside;
         d->offset.setX(0);
-    } else if (horizontalPos == "left") {//svg:x attribute is ignored
+    } else if (horizontalPos == "left") { // svg:x attribute is ignored
         d->horizontalPos = HLeft;
         d->offset.setX(0);
-    }else if (horizontalPos == "outside") {//svg:x attribute is ignored
+    } else if (horizontalPos == "outside") { // svg:x attribute is ignored
         d->horizontalPos = HOutside;
         d->offset.setX(-shape()->size().width());
-    }else if (horizontalPos == "right") {//svg:x attribute is ignored
+    } else if (horizontalPos == "right") { // svg:x attribute is ignored
         d->horizontalPos = HRight;
         d->offset.setX(-shape()->size().width());
     }

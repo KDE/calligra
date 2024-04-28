@@ -13,16 +13,21 @@
 class KoShapeShearCommandPrivate
 {
 public:
-    QList<KoShape*> shapes;
+    QList<KoShape *> shapes;
     QList<qreal> previousShearXs;
     QList<qreal> previousShearYs;
     QList<qreal> newShearXs;
     QList<qreal> newShearYs;
 };
 
-KoShapeShearCommand::KoShapeShearCommand(const QList<KoShape*> &shapes, const QList<qreal> &previousShearXs, const QList<qreal> &previousShearYs, const QList<qreal> &newShearXs, const QList<qreal> &newShearYs, KUndo2Command *parent)
-    : KUndo2Command(parent),
-    d(new KoShapeShearCommandPrivate())
+KoShapeShearCommand::KoShapeShearCommand(const QList<KoShape *> &shapes,
+                                         const QList<qreal> &previousShearXs,
+                                         const QList<qreal> &previousShearYs,
+                                         const QList<qreal> &newShearXs,
+                                         const QList<qreal> &newShearYs,
+                                         KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , d(new KoShapeShearCommandPrivate())
 {
     d->shapes = shapes;
     d->previousShearXs = previousShearXs;

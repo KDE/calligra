@@ -54,19 +54,20 @@ QStringList KoOdfNumberDefinition::userFormatDescriptions()
 {
     QStringList list;
     list << "1, 2, 3, ..."
-    << "a, b, c, ..."
-    << "A, B, C, ..."
-    << "i, ii, iii, ..."
-    << "I, II, III, ..." << "أ, ب, ت, ..."
-    << "ก, ข, ค, ..."
-    << "౧, ౨, ౩, ..."
-    << "௧, ௨, ௪, ..."
-    << "୧, ୨, ୩, ..."
-    << "൧, ൨, ൩, ..."
-    << "೧, ೨, ೩, ..."
-    << "੧, ੨, ੩, ..."
-    << "૧, ૨, ૩, ..."
-    << "১, ২, ৩, ...";
+         << "a, b, c, ..."
+         << "A, B, C, ..."
+         << "i, ii, iii, ..."
+         << "I, II, III, ..."
+         << "أ, ب, ت, ..."
+         << "ก, ข, ค, ..."
+         << "౧, ౨, ౩, ..."
+         << "௧, ௨, ௪, ..."
+         << "୧, ୨, ୩, ..."
+         << "൧, ൨, ൩, ..."
+         << "೧, ೨, ೩, ..."
+         << "੧, ੨, ੩, ..."
+         << "૧, ૨, ૩, ..."
+         << "১, ২, ৩, ...";
 
     return list;
 }
@@ -75,64 +76,46 @@ void KoOdfNumberDefinition::loadOdf(const KoXmlElement &element)
 {
     const QString format = element.attributeNS(KoXmlNS::style, "num-format", QString());
     if (format.isEmpty()) {
-        //do nothing fall back to what we had.
-    }
-    else if (format[0] == '1') {
+        // do nothing fall back to what we had.
+    } else if (format[0] == '1') {
         d->formatSpecification = Numeric;
-    }
-    else if (format[0] == 'a') {
+    } else if (format[0] == 'a') {
         d->formatSpecification = AlphabeticLowerCase;
-    }
-    else if (format[0] == 'A') {
+    } else if (format[0] == 'A') {
         d->formatSpecification = AlphabeticUpperCase;
-    }
-    else if (format[0] == 'i') {
+    } else if (format[0] == 'i') {
         d->formatSpecification = RomanLowerCase;
-    }
-    else if (format[0] == 'I') {
+    } else if (format[0] == 'I') {
         d->formatSpecification = RomanUpperCase;
-    }
-    else if (format == QString::fromUtf8("أ, ب, ت, ...")){
+    } else if (format == QString::fromUtf8("أ, ب, ت, ...")) {
         d->formatSpecification = ArabicAlphabet;
-    }
-    else if (format == QString::fromUtf8("ก, ข, ค, ...")){
+    } else if (format == QString::fromUtf8("ก, ข, ค, ...")) {
         d->formatSpecification = Thai;
-    }
-    else if (format == QString::fromUtf8("أ, ب, ج, ...")) {
+    } else if (format == QString::fromUtf8("أ, ب, ج, ...")) {
         d->formatSpecification = Abjad;
-    }
-    else if (format == QString::fromUtf8("ﺃ,ﺏ, ﺝ, ... ")) {
+    } else if (format == QString::fromUtf8("ﺃ,ﺏ, ﺝ, ... ")) {
         d->formatSpecification = AbjadMinor;
-    }
-    else if (format == QString::fromUtf8("౧, ౨, ౩, ...")) {
+    } else if (format == QString::fromUtf8("౧, ౨, ౩, ...")) {
         d->formatSpecification = Telugu;
-    }
-    else if (format == QString::fromUtf8("௧, ௨, ௪, ...")) {
+    } else if (format == QString::fromUtf8("௧, ௨, ௪, ...")) {
         d->formatSpecification = Tamil;
-    }
-    else if (format == QString::fromUtf8("୧, ୨, ୩, ...")) {
+    } else if (format == QString::fromUtf8("୧, ୨, ୩, ...")) {
         d->formatSpecification = Oriya;
-    }
-    else if (format == QString::fromUtf8("൧, ൨, ൩, ...")) {
+    } else if (format == QString::fromUtf8("൧, ൨, ൩, ...")) {
         d->formatSpecification = Malayalam;
-    }
-    else if (format == QString::fromUtf8("೧, ೨, ೩, ...")) {
+    } else if (format == QString::fromUtf8("೧, ೨, ೩, ...")) {
         d->formatSpecification = Kannada;
-    }
-    else if (format == QString::fromUtf8("੧, ੨, ੩, ...")) {
+    } else if (format == QString::fromUtf8("੧, ੨, ੩, ...")) {
         d->formatSpecification = Gurumukhi;
-    }
-    else if (format == QString::fromUtf8("૧, ૨, ૩, ...")) {
+    } else if (format == QString::fromUtf8("૧, ૨, ૩, ...")) {
         d->formatSpecification = Gujarati;
-    }
-    else if (format == QString::fromUtf8("১, ২, ৩, ...")) {
+    } else if (format == QString::fromUtf8("১, ২, ৩, ...")) {
         d->formatSpecification = Bengali;
-    }
-    else {
+    } else {
         d->formatSpecification = Numeric;
     }
 
-    //The style:num-prefix and style:num-suffix attributes specify what to display before and after the number.
+    // The style:num-prefix and style:num-suffix attributes specify what to display before and after the number.
     d->prefix = element.attributeNS(KoXmlNS::style, "num-prefix", d->prefix);
     d->suffix = element.attributeNS(KoXmlNS::style, "num-suffix", d->suffix);
 
@@ -149,7 +132,7 @@ void KoOdfNumberDefinition::saveOdf(KoXmlWriter *writer) const
         writer->addAttribute("style:num-suffix", d->suffix);
     }
     QByteArray format;
-    switch(d->formatSpecification) {
+    switch (d->formatSpecification) {
     case Numeric:
         format = "1";
         break;
@@ -196,8 +179,7 @@ void KoOdfNumberDefinition::saveOdf(KoXmlWriter *writer) const
         format = "১, ২, ৩, ...";
         break;
     case Empty:
-    default:
-        ;
+    default:;
     };
     if (!format.isNull()) {
         writer->addAttribute("style:num-format", format);
@@ -219,10 +201,7 @@ static QString intToRoman(int n)
         return QString::number(n);
     }
 
-    return RNThousands[(n / 1000)] +
-           RNHundreds[(n / 100) % 10 ] +
-           RNTens[(n / 10) % 10 ] +
-           RNUnits[(n) % 10 ];
+    return RNThousands[(n / 1000)] + RNHundreds[(n / 100) % 10] + RNTens[(n / 10) % 10] + RNUnits[(n) % 10];
 }
 
 static QString intToAlpha(int n, bool letterSynchronization)
@@ -262,15 +241,12 @@ static QString intToScriptList(int n, KoOdfNumberDefinition::FormatSpecification
 {
     // 1 time Sequences
     // note; the leading X is to make these 1 based.
-    static const char* const Abjad[] = { "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",
-                                   "ن", "س", "ع", "ف", "ص", "ق", "ر", "ش", "ت", "ث", "خ", "ذ", "ض", "ظ", "غ"
-                                 };
-    static const char* const Abjad2[] = { "ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ",
-                                    "ﻥ", "ﺹ", "ﻉ", "ﻑ", "ﺽ", "ﻕ", "ﺭ", "ﺱ", "ﺕ", "ﺙ", "ﺥ", "ﺫ", "ﻅ", "ﻍ", "ﺵ"
-                                  };
-    static const char* const ArabicAlphabet[] = {"ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز",
-                                           "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي"
-                                          };
+    static const char *const Abjad[] = {"أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م", "ن",
+                                        "س", "ع", "ف", "ص", "ق", "ر", "ش", "ت", "ث", "خ", "ذ", "ض", "ظ", "غ"};
+    static const char *const Abjad2[] = {"ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ", "ﻥ",
+                                         "ﺹ", "ﻉ", "ﻑ", "ﺽ", "ﻕ", "ﺭ", "ﺱ", "ﺕ", "ﺙ", "ﺥ", "ﺫ", "ﻅ", "ﻍ", "ﺵ"};
+    static const char *const ArabicAlphabet[] = {"ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز", "س", "ش", "ص",
+                                                 "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي"};
 
     /*
     // see this page for the 10, 100, 1000 etc http://en.wikipedia.org/wiki/Chinese_numerals
@@ -290,14 +266,17 @@ static QString intToScriptList(int n, KoOdfNumberDefinition::FormatSpecification
 
     switch (formatSpecification) {
     case KoOdfNumberDefinition::Abjad:
-        if (n > 22) return "*";
-        return QString::fromUtf8(Abjad[n-1]);
+        if (n > 22)
+            return "*";
+        return QString::fromUtf8(Abjad[n - 1]);
     case KoOdfNumberDefinition::AbjadMinor:
-        if (n > 22) return "*";
-        return QString::fromUtf8(Abjad2[n-1]);
+        if (n > 22)
+            return "*";
+        return QString::fromUtf8(Abjad2[n - 1]);
     case KoOdfNumberDefinition::ArabicAlphabet:
-        if (n > 28) return "*";
-        return QString::fromUtf8(ArabicAlphabet[n-1]);
+        if (n > 28)
+            return "*";
+        return QString::fromUtf8(ArabicAlphabet[n - 1]);
     default:
         return QString::number(n);
     }
@@ -305,7 +284,7 @@ static QString intToScriptList(int n, KoOdfNumberDefinition::FormatSpecification
 
 QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition *defaultDefinition) const
 {
-   switch(d->formatSpecification) {
+    switch (d->formatSpecification) {
     case Numeric:
         return QString::number(number);
         break;
@@ -352,13 +331,11 @@ QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition
         }
 
         break;
-    default:
-        ;
+    default:;
     };
 
     return "";
 }
-
 
 QString KoOdfNumberDefinition::prefix() const
 {

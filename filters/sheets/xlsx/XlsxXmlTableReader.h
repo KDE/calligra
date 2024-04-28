@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for Calligra
  *
-* SPDX-FileCopyrightText: 2010 Nokia Corporation and /or its subsidiary(-ies).
+ * SPDX-FileCopyrightText: 2010 Nokia Corporation and /or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -32,13 +32,12 @@ class XlsxXmlTableReader : public MSOOXML::MsooXmlCommonReader
 public:
     explicit XlsxXmlTableReader(KoOdfWriters *writers);
     ~XlsxXmlTableReader() override;
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
 
 protected:
     KoFilter::ConversionStatus read_table();
 
 private:
-
     XlsxXmlTableReaderContext *m_context;
 };
 

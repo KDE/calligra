@@ -3,7 +3,6 @@
 // SPDX-FileCopyrightText: 2005 Tomas Mecir <mecirt@gmail.com>
 // SPDX-License-Identifier: LGPL-2.0-only
 
-
 // built-in text functions
 #include "TextModule.h"
 
@@ -51,7 +50,7 @@ Value func_right(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_search(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sleek(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_substitute(valVector args, ValueCalc *calc, FuncExtra *);
-Value func_t (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_t(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_text(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_toggle(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_trim(valVector args, ValueCalc *calc, FuncExtra *);
@@ -61,12 +60,10 @@ Value func_upper(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_value(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadtextmodule.json", TextModule)
 
-
-TextModule::TextModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+TextModule::TextModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
@@ -178,7 +175,6 @@ QString TextModule::descriptionFileName() const
     return QString("text.xml");
 }
 
-
 // Function: ASC
 Value func_asc(valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -201,9 +197,9 @@ Value func_clean(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString str(calc->conv()->asString(args[0]).asString());
     QString result;
-    QChar   c;
-    int     i;
-    int     l = str.length();
+    QChar c;
+    int i;
+    int l = str.length();
 
     for (i = 0; i < l; ++i) {
         c = str[i];
@@ -227,7 +223,7 @@ Value func_code(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: COMPARE
 Value func_compare(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    int  result = 0;
+    int result = 0;
     bool exact = calc->conv()->asBoolean(args[2]).asBoolean();
 
     QString s1 = calc->conv()->asString(args[0]).asString();
@@ -246,8 +242,7 @@ Value func_compare(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(result);
 }
 
-void func_concatenate_helper(Value val, ValueCalc *calc,
-                             QString& tmp)
+void func_concatenate_helper(Value val, ValueCalc *calc, QString &tmp)
 {
     if (val.isArray()) {
         for (unsigned int row = 0; row < val.rows(); ++row)
@@ -312,11 +307,14 @@ Value func_find(valVector args, ValueCalc *calc, FuncExtra *)
         start_num = calc->conv()->asInteger(args[2]).asInteger();
 
     // conforms to Excel behaviour
-    if (start_num <= 0) return Value::errorVALUE();
-    if (start_num > (int)within_text.length()) return Value::errorVALUE();
+    if (start_num <= 0)
+        return Value::errorVALUE();
+    if (start_num > (int)within_text.length())
+        return Value::errorVALUE();
 
     int pos = within_text.indexOf(find_text, start_num - 1);
-    if (pos < 0) return Value::errorVALUE();
+    if (pos < 0)
+        return Value::errorVALUE();
 
     return Value(pos + 1);
 }
@@ -358,11 +356,13 @@ Value func_fixed(valVector args, ValueCalc *calc, FuncExtra *)
         result += '.';
         pos = result.length() - 1;
     }
-    if (pos == -1) pos = result.length();
+    if (pos == -1)
+        pos = result.length();
     else {
         result.replace(pos, 1, locale->decimalSymbol());
         // add missing decimals
-        while (result.length() - pos < 1 + decimals) result += "0";
+        while (result.length() - pos < 1 + decimals)
+            result += "0";
     }
     if (!no_commas)
         while (0 < (pos -= 3))
@@ -419,7 +419,7 @@ Value func_mid(valVector args, ValueCalc *calc, FuncExtra *)
 
     int len = 0x7fffffff;
     if (args.count() == 3) {
-        len = (uint) calc->conv()->asInteger(args[2]).asInteger();
+        len = (uint)calc->conv()->asInteger(args[2]).asInteger();
         // the length cannot be less than zero
         if (len < 0)
             return Value::errorVALUE();
@@ -429,7 +429,8 @@ Value func_mid(valVector args, ValueCalc *calc, FuncExtra *)
     pos--;
 
     // workaround for Qt bug
-    if (len > 0x7fffffff - pos) len = 0x7fffffff - pos;
+    if (len > 0x7fffffff - pos)
+        len = 0x7fffffff - pos;
 
     return Value(str.mid(pos, len));
 }
@@ -451,7 +452,7 @@ Value func_proper(valVector args, ValueCalc *calc, FuncExtra *)
     QString str = calc->conv()->asString(args[0]).asString().toLower();
 
     QChar f;
-    bool  first = true;
+    bool first = true;
 
     for (int i = 0; i < str.length(); ++i) {
         if (first) {
@@ -489,7 +490,7 @@ Value func_regexp(valVector args, ValueCalc *calc, FuncExtra *)
     int bkref = 0;
     if (args.count() == 4)
         bkref = calc->conv()->asInteger(args[3]).asInteger();
-    if (bkref < 0)   // strange back-reference
+    if (bkref < 0) // strange back-reference
         return Value::errorVALUE();
 
     QString returnValue;
@@ -534,7 +535,8 @@ Value func_replace(valVector args, ValueCalc *calc, FuncExtra *)
     int len = calc->conv()->asInteger(args[2]).asInteger();
     QString new_text = calc->conv()->asString(args[3]).asString();
 
-    if (pos < 0) pos = 0;
+    if (pos < 0)
+        pos = 0;
 
     QString result = text.replace(pos - 1, len, new_text);
     return Value(result);
@@ -550,7 +552,8 @@ Value func_rept(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
 
     QString result;
-    for (int i = 0; i < nb; i++) result += s;
+    for (int i = 0; i < nb; i++)
+        result += s;
     return Value(result);
 }
 
@@ -594,14 +597,17 @@ Value func_search(valVector args, ValueCalc *calc, FuncExtra *)
         start_num = calc->conv()->asInteger(args[2]).asInteger();
 
     // conforms to Excel behaviour
-    if (start_num <= 0) return Value::errorVALUE();
-    if (start_num > (int)within_text.length()) return Value::errorVALUE();
+    if (start_num <= 0)
+        return Value::errorVALUE();
+    if (start_num > (int)within_text.length())
+        return Value::errorVALUE();
 
     // use globbing feature of QRegExp
     auto regex = QRegularExpression::fromWildcard(find_text);
     regex.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
     int pos = within_text.indexOf(regex, start_num - 1);
-    if (pos < 0) return Value::errorNA();
+    if (pos < 0)
+        return Value::errorNA();
 
     return Value(pos + 1);
 }
@@ -611,9 +617,9 @@ Value func_sleek(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString str = calc->conv()->asString(args[0]).asString();
     QString result;
-    QChar   c;
-    int     i;
-    int     l = str.length();
+    QChar c;
+    int i;
+    int l = str.length();
 
     for (i = 0; i < l; ++i) {
         c = str[i];
@@ -639,13 +645,15 @@ Value func_substitute(valVector args, ValueCalc *calc, FuncExtra *)
     QString old_text = calc->conv()->asString(args[1]).asString();
     QString new_text = calc->conv()->asString(args[2]).asString();
 
-    if (occurrence <= 0) return Value::errorVALUE();
-    if (old_text.length() == 0) return Value(text);
+    if (occurrence <= 0)
+        return Value::errorVALUE();
+    if (old_text.length() == 0)
+        return Value(text);
 
     QString result = text;
 
     if (all) {
-        result.replace(old_text, new_text);   // case-sensitive
+        result.replace(old_text, new_text); // case-sensitive
     } else {
         // We are only looking to modify a single value, by position.
         int position = -1;
@@ -659,7 +667,7 @@ Value func_substitute(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: T
-Value func_t (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_t(valVector args, ValueCalc *calc, FuncExtra *)
 {
     if (args[0].isString())
         return calc->conv()->asString(args[0]);
@@ -698,8 +706,7 @@ Value func_toggle(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: TRIM
 Value func_trim(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return Value(
-               calc->conv()->asString(args[0]).asString().simplified());
+    return Value(calc->conv()->asString(args[0]).asString().simplified());
 }
 
 // Function: UNICHAR
@@ -737,49 +744,71 @@ Value func_value(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->conv()->asFloat(args[0]);
 }
 
-#define UTF8_TH_0       "\340\270\250\340\270\271\340\270\231\340\270\242\340\271\214"
-#define UTF8_TH_1       "\340\270\253\340\270\231\340\270\266\340\271\210\340\270\207"
-#define UTF8_TH_2       "\340\270\252\340\270\255\340\270\207"
-#define UTF8_TH_3       "\340\270\252\340\270\262\340\270\241"
-#define UTF8_TH_4       "\340\270\252\340\270\265\340\271\210"
-#define UTF8_TH_5       "\340\270\253\340\271\211\340\270\262"
-#define UTF8_TH_6       "\340\270\253\340\270\201"
-#define UTF8_TH_7       "\340\271\200\340\270\210\340\271\207\340\270\224"
-#define UTF8_TH_8       "\340\271\201\340\270\233\340\270\224"
-#define UTF8_TH_9       "\340\271\200\340\270\201\340\271\211\340\270\262"
-#define UTF8_TH_10      "\340\270\252\340\270\264\340\270\232"
-#define UTF8_TH_11      "\340\271\200\340\270\255\340\271\207\340\270\224"
-#define UTF8_TH_20      "\340\270\242\340\270\265\340\271\210"
-#define UTF8_TH_1E2     "\340\270\243\340\271\211\340\270\255\340\270\242"
-#define UTF8_TH_1E3     "\340\270\236\340\270\261\340\270\231"
-#define UTF8_TH_1E4     "\340\270\253\340\270\241\340\270\267\340\271\210\340\270\231"
-#define UTF8_TH_1E5     "\340\271\201\340\270\252\340\270\231"
-#define UTF8_TH_1E6     "\340\270\245\340\271\211\340\270\262\340\270\231"
-#define UTF8_TH_DOT0    "\340\270\226\340\271\211\340\270\247\340\270\231"
-#define UTF8_TH_BAHT    "\340\270\232\340\270\262\340\270\227"
-#define UTF8_TH_SATANG  "\340\270\252\340\270\225\340\270\262\340\270\207\340\270\204\340\271\214"
-#define UTF8_TH_MINUS   "\340\270\245\340\270\232"
+#define UTF8_TH_0 "\340\270\250\340\270\271\340\270\231\340\270\242\340\271\214"
+#define UTF8_TH_1 "\340\270\253\340\270\231\340\270\266\340\271\210\340\270\207"
+#define UTF8_TH_2 "\340\270\252\340\270\255\340\270\207"
+#define UTF8_TH_3 "\340\270\252\340\270\262\340\270\241"
+#define UTF8_TH_4 "\340\270\252\340\270\265\340\271\210"
+#define UTF8_TH_5 "\340\270\253\340\271\211\340\270\262"
+#define UTF8_TH_6 "\340\270\253\340\270\201"
+#define UTF8_TH_7 "\340\271\200\340\270\210\340\271\207\340\270\224"
+#define UTF8_TH_8 "\340\271\201\340\270\233\340\270\224"
+#define UTF8_TH_9 "\340\271\200\340\270\201\340\271\211\340\270\262"
+#define UTF8_TH_10 "\340\270\252\340\270\264\340\270\232"
+#define UTF8_TH_11 "\340\271\200\340\270\255\340\271\207\340\270\224"
+#define UTF8_TH_20 "\340\270\242\340\270\265\340\271\210"
+#define UTF8_TH_1E2 "\340\270\243\340\271\211\340\270\255\340\270\242"
+#define UTF8_TH_1E3 "\340\270\236\340\270\261\340\270\231"
+#define UTF8_TH_1E4 "\340\270\253\340\270\241\340\270\267\340\271\210\340\270\231"
+#define UTF8_TH_1E5 "\340\271\201\340\270\252\340\270\231"
+#define UTF8_TH_1E6 "\340\270\245\340\271\211\340\270\262\340\270\231"
+#define UTF8_TH_DOT0 "\340\270\226\340\271\211\340\270\247\340\270\231"
+#define UTF8_TH_BAHT "\340\270\232\340\270\262\340\270\227"
+#define UTF8_TH_SATANG "\340\270\252\340\270\225\340\270\262\340\270\207\340\270\204\340\271\214"
+#define UTF8_TH_MINUS "\340\270\245\340\270\232"
 
-inline void lclSplitBlock(double& rfInt, qint32& rnBlock, double fValue, double fSize)
+inline void lclSplitBlock(double &rfInt, qint32 &rnBlock, double fValue, double fSize)
 {
-    rnBlock = static_cast< qint32 >(modf((fValue + 0.1) / fSize, &rfInt) * fSize + 0.1);
+    rnBlock = static_cast<qint32>(modf((fValue + 0.1) / fSize, &rfInt) * fSize + 0.1);
 }
 
 /** Appends a digit (0 to 9) to the passed string. */
-void lclAppendDigit(QString& rText, qint32 nDigit)
+void lclAppendDigit(QString &rText, qint32 nDigit)
 {
     switch (nDigit) {
-    case 0: rText += QString::fromUtf8(UTF8_TH_0); break;
-    case 1: rText += QString::fromUtf8(UTF8_TH_1); break;
-    case 2: rText += QString::fromUtf8(UTF8_TH_2); break;
-    case 3: rText += QString::fromUtf8(UTF8_TH_3); break;
-    case 4: rText += QString::fromUtf8(UTF8_TH_4); break;
-    case 5: rText += QString::fromUtf8(UTF8_TH_5); break;
-    case 6: rText += QString::fromUtf8(UTF8_TH_6); break;
-    case 7: rText += QString::fromUtf8(UTF8_TH_7); break;
-    case 8: rText += QString::fromUtf8(UTF8_TH_8); break;
-    case 9: rText += QString::fromUtf8(UTF8_TH_9); break;
-    default: debugSheets << "lclAppendDigit - illegal digit"; break;
+    case 0:
+        rText += QString::fromUtf8(UTF8_TH_0);
+        break;
+    case 1:
+        rText += QString::fromUtf8(UTF8_TH_1);
+        break;
+    case 2:
+        rText += QString::fromUtf8(UTF8_TH_2);
+        break;
+    case 3:
+        rText += QString::fromUtf8(UTF8_TH_3);
+        break;
+    case 4:
+        rText += QString::fromUtf8(UTF8_TH_4);
+        break;
+    case 5:
+        rText += QString::fromUtf8(UTF8_TH_5);
+        break;
+    case 6:
+        rText += QString::fromUtf8(UTF8_TH_6);
+        break;
+    case 7:
+        rText += QString::fromUtf8(UTF8_TH_7);
+        break;
+    case 8:
+        rText += QString::fromUtf8(UTF8_TH_8);
+        break;
+    case 9:
+        rText += QString::fromUtf8(UTF8_TH_9);
+        break;
+    default:
+        debugSheets << "lclAppendDigit - illegal digit";
+        break;
     }
 }
 
@@ -788,23 +817,33 @@ void lclAppendDigit(QString& rText, qint32 nDigit)
     @param nDigit  A digit in the range from 1 to 9.
     @param nPow10  A value in the range from 2 to 5.
  */
-void lclAppendPow10(QString& rText, qint32 nDigit, qint32 nPow10)
+void lclAppendPow10(QString &rText, qint32 nDigit, qint32 nPow10)
 {
-    Q_ASSERT((1 <= nDigit) && (nDigit <= 9));   // illegal digit?
+    Q_ASSERT((1 <= nDigit) && (nDigit <= 9)); // illegal digit?
     lclAppendDigit(rText, nDigit);
     switch (nPow10) {
-    case 2: rText += QString::fromUtf8(UTF8_TH_1E2); break;
-    case 3: rText += QString::fromUtf8(UTF8_TH_1E3); break;
-    case 4: rText += QString::fromUtf8(UTF8_TH_1E4); break;
-    case 5: rText += QString::fromUtf8(UTF8_TH_1E5); break;
-    default: debugSheets << "lclAppendPow10 - illegal power"; break;
+    case 2:
+        rText += QString::fromUtf8(UTF8_TH_1E2);
+        break;
+    case 3:
+        rText += QString::fromUtf8(UTF8_TH_1E3);
+        break;
+    case 4:
+        rText += QString::fromUtf8(UTF8_TH_1E4);
+        break;
+    case 5:
+        rText += QString::fromUtf8(UTF8_TH_1E5);
+        break;
+    default:
+        debugSheets << "lclAppendPow10 - illegal power";
+        break;
     }
 }
 
 /** Appends a block of 6 digits (value from 1 to 999,999) to the passed string. */
-void lclAppendBlock(QString& rText, qint32 nValue)
+void lclAppendBlock(QString &rText, qint32 nValue)
 {
-    Q_ASSERT((1 <= nValue) && (nValue <= 999999));   // illegal value?
+    Q_ASSERT((1 <= nValue) && (nValue <= 999999)); // illegal value?
     if (nValue >= 100000) {
         lclAppendPow10(rText, nValue / 100000, 5);
         nValue %= 100000;
@@ -861,7 +900,8 @@ Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *)
     if (fBaht == 0.0) {
         if (nSatang == 0)
             aText += QString::fromUtf8(UTF8_TH_0);
-    } else while (fBaht > 0.0) {
+    } else
+        while (fBaht > 0.0) {
             QString aBlock;
             qint32 nBlock = 0;
             lclSplitBlock(fBaht, nBlock, fBaht, 1.0e6);

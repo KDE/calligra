@@ -136,7 +136,7 @@ QModelIndex KUndo2Model::index(int row, int column, const QModelIndex &parent) c
     return createIndex(row, column);
 }
 
-QModelIndex KUndo2Model::parent(const QModelIndex&) const
+QModelIndex KUndo2Model::parent(const QModelIndex &) const
 {
     return QModelIndex();
 }
@@ -152,7 +152,7 @@ int KUndo2Model::rowCount(const QModelIndex &parent) const
     return m_stack->count() + 1;
 }
 
-int KUndo2Model::columnCount(const QModelIndex&) const
+int KUndo2Model::columnCount(const QModelIndex &) const
 {
     return 1;
 }
@@ -201,4 +201,3 @@ QIcon KUndo2Model::cleanIcon() const
 {
     return m_clean_icon;
 }
-

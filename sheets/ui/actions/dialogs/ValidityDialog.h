@@ -35,7 +35,7 @@ class ValidityDialog : public ActionDialog
     Q_OBJECT
 
 public:
-    ValidityDialog(QWidget* parent, CalculationSettings *settings, ValueParser *parser);
+    ValidityDialog(QWidget *parent, CalculationSettings *settings, ValueParser *parser);
     Validity getValidity();
     void setValidity(Validity validity);
 
@@ -63,7 +63,7 @@ protected:
     KComboBox *choose;
     KComboBox *chooseAction;
     KComboBox *chooseType;
-    KLineEdit * title;
+    KLineEdit *title;
     KTextEdit *message;
     QCheckBox *displayMessage;
     QCheckBox *allowEmptyCell;

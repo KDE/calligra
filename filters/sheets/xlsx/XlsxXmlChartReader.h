@@ -15,10 +15,11 @@
 
 #include <MsooXmlCommonReader.h>
 
-namespace KoChart {
-    class Series;
-    class Chart;
-    class ShapeProperties;
+namespace KoChart
+{
+class Series;
+class Chart;
+class ShapeProperties;
 }
 
 class XlsxChartOdfWriter;
@@ -26,10 +27,10 @@ class XlsxChartOdfWriter;
 class XlsxXmlChartReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    KoStore* m_storeout;
-    KoChart::Chart* m_chart;
-    XlsxChartOdfWriter* m_chartWriter;
-    explicit XlsxXmlChartReaderContext(KoStore* _storeout, XlsxChartOdfWriter* _chartWriter);
+    KoStore *m_storeout;
+    KoChart::Chart *m_chart;
+    XlsxChartOdfWriter *m_chartWriter;
+    explicit XlsxXmlChartReaderContext(KoStore *_storeout, XlsxChartOdfWriter *_chartWriter);
     ~XlsxXmlChartReaderContext() override;
 };
 
@@ -38,9 +39,10 @@ class XlsxXmlChartReader : public MSOOXML::MsooXmlCommonReader
 public:
     explicit XlsxXmlChartReader(KoOdfWriters *writers);
     ~XlsxXmlChartReader() override;
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
-    void WriteIntoInternalTable(QString &range, QVector< QString > &buffer, KoGenStyle::Type formatType, const QString& formatString = QString());
-    QString AlocateAndWriteIntoInternalTable(QVector< QString > &buffer, KoGenStyle::Type formatType);
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
+    void WriteIntoInternalTable(QString &range, QVector<QString> &buffer, KoGenStyle::Type formatType, const QString &formatString = QString());
+    QString AlocateAndWriteIntoInternalTable(QVector<QString> &buffer, KoGenStyle::Type formatType);
+
 protected:
     KoFilter::ConversionStatus read_txPr();
     KoFilter::ConversionStatus read_plotArea();
@@ -115,14 +117,13 @@ protected:
     KoFilter::ConversionStatus read_serMarker();
 
 private:
-
     void read_showDataLabel();
 
-    enum ReadTxContext{ Title, None };
-    enum ReadAreaContext{ PlotArea, ChartArea };
+    enum ReadTxContext { Title, None };
+    enum ReadAreaContext { PlotArea, ChartArea };
     XlsxXmlChartReaderContext *m_context;
     KoChart::Series *m_currentSeries;
-    KoChart::ShapeProperties* m_currentShapeProperties;
+    KoChart::ShapeProperties *m_currentShapeProperties;
     QString m_cellRangeAddress;
     ReadTxContext m_readTxContext;
     ReadAreaContext m_areaContext;
@@ -130,7 +131,7 @@ private:
     bool m_autoTitleDeleted;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

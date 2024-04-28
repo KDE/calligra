@@ -14,19 +14,13 @@ class CloudAccountsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    enum CloudAccountRoles {
-        TextRole = Qt::UserRole + 1,
-        SelectedRole,
-        AccountTypeRole,
-        StackComponentRole,
-        AccountDetailsRole
-    };
-    explicit CloudAccountsModel(QObject* parent = 0);
+    enum CloudAccountRoles { TextRole = Qt::UserRole + 1, SelectedRole, AccountTypeRole, StackComponentRole, AccountDetailsRole };
+    explicit CloudAccountsModel(QObject *parent = 0);
     ~CloudAccountsModel() override;
-    
+
     QHash<int, QByteArray> roleNames() const override;
-    QVariant data(const QModelIndex& index, int role) const override;
-    int rowCount(const QModelIndex& parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    int rowCount(const QModelIndex &parent) const override;
     Q_INVOKABLE void selectIndex(int newSelection);
 
     /**
@@ -43,16 +37,17 @@ public:
      *                       adding this one. Currently used by DropBox to ensure there is only one
      *                       account at a given moment
      */
-    Q_INVOKABLE void addAccount(QString text, QString accountType, QString stackComponent, QObject* accountDetails, bool removeExisting = false);
+    Q_INVOKABLE void addAccount(QString text, QString accountType, QString stackComponent, QObject *accountDetails, bool removeExisting = false);
     Q_INVOKABLE void renameAccount(int index, QString newText);
     Q_INVOKABLE void removeAccountByName(QString text);
     Q_INVOKABLE void removeAccount(int index);
 
-    Q_INVOKABLE QObject* accountDetails(int index);
-    Q_INVOKABLE void setAccountDetails(int index, QObject* newDetails);
+    Q_INVOKABLE QObject *accountDetails(int index);
+    Q_INVOKABLE void setAccountDetails(int index, QObject *newDetails);
+
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif // CLOUDACCOUNTSMODEL_H

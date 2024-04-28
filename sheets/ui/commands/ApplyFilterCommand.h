@@ -8,8 +8,8 @@
 #define CALLIGRA_SHEETS_APPLYFILTER_COMMAND
 
 #include "AbstractRegionCommand.h"
-#include "core/Database.h"
 #include "core/DataFilter.h"
+#include "core/Database.h"
 
 namespace Calligra
 {
@@ -36,8 +36,8 @@ public:
     void redo() override;
     void undo() override;
 
-    void setDatabase(const Database& database);
-    void setOldFilter(const Filter& filter);
+    void setDatabase(const Database &database);
+    void setOldFilter(const Filter &filter);
 
 private:
     Database m_database;

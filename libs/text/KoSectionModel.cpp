@@ -1,8 +1,8 @@
 #include "KoSectionModel.h"
 
-#include <climits>
-#include <KoTextDocument.h>
 #include <KLocalizedString>
+#include <KoTextDocument.h>
+#include <climits>
 
 KoSectionModel::KoSectionModel(QTextDocument *doc)
     : QAbstractItemModel()
@@ -13,7 +13,7 @@ KoSectionModel::KoSectionModel(QTextDocument *doc)
 
 KoSectionModel::~KoSectionModel()
 {
-    foreach(KoSection *sec, m_registeredSections) {
+    foreach (KoSection *sec, m_registeredSections) {
         delete sec; // This will delete associated KoSectionEnd in KoSection destructor
     }
 }
@@ -94,7 +94,7 @@ bool KoSectionModel::setName(KoSection *section, const QString &name)
 {
     if (section->name() == name || isValidNewName(name)) {
         section->setName(name);
-        //TODO: we don't have name in columns, but need something to notify views about change
+        // TODO: we don't have name in columns, but need something to notify views about change
         emit dataChanged(m_modelIndex[section], m_modelIndex[section]);
         return true;
     }
@@ -159,7 +159,7 @@ int KoSectionModel::rowCount(const QModelIndex &parent) const
     return static_cast<KoSection *>(parent.internalPointer())->children().size();
 }
 
-int KoSectionModel::columnCount(const QModelIndex &/*parent*/) const
+int KoSectionModel::columnCount(const QModelIndex & /*parent*/) const
 {
     return 1;
 }

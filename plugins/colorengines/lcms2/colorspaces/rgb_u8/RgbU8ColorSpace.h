@@ -6,17 +6,15 @@
 #ifndef KO_STRATEGY_COLORSPACE_RGB_H_
 #define KO_STRATEGY_COLORSPACE_RGB_H_
 
+#include "KoColorModelStandardIds.h"
 #include <KLocalizedString>
 #include <LcmsColorSpace.h>
-#include "KoColorModelStandardIds.h"
 
 struct KoBgrU8Traits;
 
 class RgbU8ColorSpace : public LcmsColorSpace<KoBgrU8Traits>
 {
-
 public:
-
     RgbU8ColorSpace(const QString &name, KoColorProfile *p);
 
     bool willDegrade(ColorSpaceIndependence) const override
@@ -42,12 +40,12 @@ public:
 
     void colorFromXML(quint8 *pixel, const QDomElement &elt) const override;
 
-    quint8 intensity8(const quint8 * src) const override;
-    
+    quint8 intensity8(const quint8 *src) const override;
+
     void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const override;
-    QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
+    QVector<double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
     void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const override;
-    QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
+    QVector<double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
 
     static QString colorSpaceId()
     {
@@ -57,10 +55,11 @@ public:
 
 class RgbU8ColorSpaceFactory : public LcmsColorSpaceFactory
 {
-
 public:
-
-    RgbU8ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_BGRA_8, cmsSigRgbData) {}
+    RgbU8ColorSpaceFactory()
+        : LcmsColorSpaceFactory(TYPE_BGRA_8, cmsSigRgbData)
+    {
+    }
 
     bool userVisible() const override
     {

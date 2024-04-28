@@ -21,13 +21,15 @@ class RefinePathPlugin : public QObject, public KXMLGUIClient
     Q_OBJECT
 public:
     RefinePathPlugin(QObject *parent, const QVariantList &);
-    ~RefinePathPlugin() override {}
+    ~RefinePathPlugin() override
+    {
+    }
 
 private Q_SLOTS:
     void slotRefinePath();
 
 private:
-    RefinePathDlg * m_RefinePathDlg;
+    RefinePathDlg *m_RefinePathDlg;
 };
 
 class QSpinBox;
@@ -37,14 +39,13 @@ class RefinePathDlg : public QDialog
     Q_OBJECT
 
 public:
-    explicit RefinePathDlg(QWidget* parent = 0L, const char* name = 0L);
+    explicit RefinePathDlg(QWidget *parent = 0L, const char *name = 0L);
 
     uint knots() const;
     void setKnots(uint value);
 
 private:
-    QSpinBox * m_knots;
+    QSpinBox *m_knots;
 };
 
 #endif // REFINEPATHPLUGIN_H
-

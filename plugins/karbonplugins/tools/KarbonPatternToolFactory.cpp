@@ -7,12 +7,12 @@
 #include "KarbonPatternToolFactory.h"
 #include "KarbonPatternTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 #include <QDebug>
 
 KarbonPatternToolFactory::KarbonPatternToolFactory()
-        : KoToolFactoryBase("KarbonPatternTool")
+    : KoToolFactoryBase("KarbonPatternTool")
 {
     setToolTip(i18n("Pattern editing"));
     setToolType("karbon");
@@ -24,7 +24,7 @@ KarbonPatternToolFactory::~KarbonPatternToolFactory()
 {
 }
 
-KoToolBase * KarbonPatternToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KarbonPatternToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KarbonPatternTool(canvas);
 }

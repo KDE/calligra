@@ -8,30 +8,31 @@
 #include "KoPathShape.h"
 #include "KoViewConverter.h"
 
-#include <QTransform>
-#include <QPainterPath>
-#include <QPainter>
 #include <QGraphicsItem>
+#include <QPainter>
+#include <QPainterPath>
+#include <QTransform>
 #include <QVarLengthArray>
 
 QTransform scaleToPercent(const QSizeF &size)
 {
     const qreal w = qMax(static_cast<qreal>(1e-5), size.width());
     const qreal h = qMax(static_cast<qreal>(1e-5), size.height());
-    return QTransform().scale(100/w, 100/h);
+    return QTransform().scale(100 / w, 100 / h);
 }
 
 QTransform scaleFromPercent(const QSizeF &size)
 {
     const qreal w = qMax(static_cast<qreal>(1e-5), size.width());
     const qreal h = qMax(static_cast<qreal>(1e-5), size.height());
-    return QTransform().scale(w/100, h/100);
+    return QTransform().scale(w / 100, h / 100);
 }
 
 class Q_DECL_HIDDEN KoClipData::Private
 {
 public:
-    Private() : deleteClipShapes(true)
+    Private()
+        : deleteClipShapes(true)
     {
     }
 
@@ -41,19 +42,19 @@ public:
             qDeleteAll(clipPathShapes);
     }
 
-    QList<KoPathShape*> clipPathShapes;
+    QList<KoPathShape *> clipPathShapes;
     bool deleteClipShapes;
 };
 
 KoClipData::KoClipData(KoPathShape *clipPathShape)
-        : d(new Private())
+    : d(new Private())
 {
     Q_ASSERT(clipPathShape);
     d->clipPathShapes.append(clipPathShape);
 }
 
-KoClipData::KoClipData(const QList<KoPathShape*> &clipPathShapes)
-        : d(new Private())
+KoClipData::KoClipData(const QList<KoPathShape *> &clipPathShapes)
+    : d(new Private())
 {
     Q_ASSERT(clipPathShapes.count());
     d->clipPathShapes = clipPathShapes;
@@ -64,7 +65,7 @@ KoClipData::~KoClipData()
     delete d;
 }
 
-QList<KoPathShape*> KoClipData::clipPathShapes() const
+QList<KoPathShape *> KoClipData::clipPathShapes() const
 {
     return d->clipPathShapes;
 }
@@ -78,8 +79,9 @@ class Q_DECL_HIDDEN KoClipPath::Private
 {
 public:
     Private(KoClipData *data)
-            : clipData(data)
-    {}
+        : clipData(data)
+    {
+    }
 
     ~Private()
     {
@@ -87,7 +89,7 @@ public:
 
     void compileClipPath(KoShape *clippedShape)
     {
-        QList<KoPathShape*> clipShapes = clipData->clipPathShapes();
+        QList<KoPathShape *> clipShapes = clipData->clipPathShapes();
         if (!clipShapes.count())
             return;
 
@@ -96,7 +98,7 @@ public:
 
         QTransform transformToShape = initialTransformToShape * scaleToPercent(initialShapeSize);
 
-        foreach(KoPathShape *path, clipShapes) {
+        foreach (KoPathShape *path, clipShapes) {
             if (!path)
                 continue;
             // map clip path to shape coordinates of clipped shape
@@ -115,7 +117,7 @@ public:
 };
 
 KoClipPath::KoClipPath(KoShape *clippedShape, KoClipData *clipData)
-        : d( new Private(clipData) )
+    : d(new Private(clipData))
 {
     d->compileClipPath(clippedShape);
 }
@@ -169,7 +171,7 @@ QPainterPath KoClipPath::pathForSize(const QSizeF &size) const
     return scaleFromPercent(size).map(d->clipPath);
 }
 
-QList<KoPathShape*> KoClipPath::clipPathShapes() const
+QList<KoPathShape *> KoClipPath::clipPathShapes() const
 {
     return d->clipData->clipPathShapes();
 }

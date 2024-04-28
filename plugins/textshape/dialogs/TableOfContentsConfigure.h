@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef TABLEOFCONTENTSCONFIGURE_H
 #define TABLEOFCONTENTSCONFIGURE_H
 
@@ -15,8 +14,9 @@
 #include <QDialog>
 #include <QTextBlock>
 
-namespace Ui {
-    class TableOfContentsConfigure;
+namespace Ui
+{
+class TableOfContentsConfigure;
 }
 
 class QTextBlock;
@@ -44,12 +44,11 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void showStyleConfiguration();
-    void titleTextChanged(const QString &text );
+    void titleTextChanged(const QString &text);
     void useOutline(int state);
     void useIndexSourceStyles(int state);
 
 private:
-
     Ui::TableOfContentsConfigure ui;
     KoTextEditor *m_textEditor;
     TableOfContentsStyleConfigure *m_tocStyleConfigure;

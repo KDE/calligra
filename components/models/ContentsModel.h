@@ -13,14 +13,16 @@
 #include <QAbstractListModel>
 #include <QImage>
 
-namespace Calligra {
-namespace Components {
+namespace Calligra
+{
+namespace Components
+{
 class Document;
 
 class ContentsModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(Calligra::Components::Document* document READ document WRITE setDocument NOTIFY documentChanged)
+    Q_PROPERTY(Calligra::Components::Document *document READ document WRITE setDocument NOTIFY documentChanged)
     /**
      * \property thumbnailSize
      * \brief The size of thumbnails this model creates.
@@ -40,15 +42,15 @@ public:
         ThumbnailRole,
         ContentIndexRole,
     };
-    
-    explicit ContentsModel(QObject* parent = 0);
+
+    explicit ContentsModel(QObject *parent = 0);
     ~ContentsModel() override;
 
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-    int rowCount(const QModelIndex& parent = QModelIndex{}) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex{}) const override;
 
-    Document* document() const;
-    void setDocument(Document* newDocument);
+    Document *document() const;
+    void setDocument(Document *newDocument);
 
     /**
      * Getter for property #thumbnailSize.
@@ -57,7 +59,7 @@ public:
     /**
      * Setter for property #thumbnailSize.
      */
-    void setThumbnailSize(const QSize& newValue);
+    void setThumbnailSize(const QSize &newValue);
 
     void setUseToC(bool newValue);
     bool useToC() const;
@@ -89,7 +91,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 } // Namespace Components

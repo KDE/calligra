@@ -9,29 +9,26 @@
  */
 
 #include "KWOdfSharedLoadingData.h"
-#include "KWOdfLoader.h"
 #include "KWDocument.h"
-#include "frames/KWTextFrameSet.h"
+#include "KWOdfLoader.h"
 #include "frames/KWCopyShape.h"
+#include "frames/KWTextFrameSet.h"
 
-#include <KoTextShapeData.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
-#include <KoXmlNS.h>
+#include <KoTextShapeData.h>
 #include <KoUnit.h>
+#include <KoXmlNS.h>
 
 #include <QTextCursor>
 
 KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader *loader)
-        : KoTextSharedLoadingData()
-        , m_loader(loader)
+    : KoTextSharedLoadingData()
+    , m_loader(loader)
 {
+    KoShapeLoadingContext::addAdditionalAttributeData(KoShapeLoadingContext::AdditionalAttributeData(KoXmlNS::text, "anchor-type", "text:anchor-type"));
     KoShapeLoadingContext::addAdditionalAttributeData(
-        KoShapeLoadingContext::AdditionalAttributeData(
-            KoXmlNS::text, "anchor-type", "text:anchor-type"));
-    KoShapeLoadingContext::addAdditionalAttributeData(
-        KoShapeLoadingContext::AdditionalAttributeData(
-            KoXmlNS::text, "anchor-page-number", "text:anchor-page-number"));
+        KoShapeLoadingContext::AdditionalAttributeData(KoXmlNS::text, "anchor-page-number", "text:anchor-page-number"));
 }
 
 void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -39,9 +36,9 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
     shape->removeAdditionalAttribute("text:anchor-type");
     const KoXmlElement *style = 0;
     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
-        style = context.odfLoadingContext().stylesReader().findStyle(
-                    element.attributeNS(KoXmlNS::draw, "style-name"), "graphic",
-                    context.odfLoadingContext().useStylesAutoStyles());
+        style = context.odfLoadingContext().stylesReader().findStyle(element.attributeNS(KoXmlNS::draw, "style-name"),
+                                                                     "graphic",
+                                                                     context.odfLoadingContext().useStylesAutoStyles());
     }
 
     if (shape->shapeId() == "TextShape_SHAPEID") {

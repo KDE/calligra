@@ -5,7 +5,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef KARBONSMALLSTYLEPREVIEW_H
 #define KARBONSMALLSTYLEPREVIEW_H
 
@@ -20,7 +19,7 @@ class KarbonSmallStylePreview : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KarbonSmallStylePreview(QWidget* parent = 0L);
+    explicit KarbonSmallStylePreview(QWidget *parent = 0L);
     ~KarbonSmallStylePreview() override;
 
 Q_SIGNALS:
@@ -32,8 +31,8 @@ public Q_SLOTS:
     void canvasChanged(const KoCanvasBase *canvas);
 
 private:
-    KarbonFillStyleWidget * m_fillFrame;
-    KarbonStrokeStyleWidget * m_strokeFrame;
+    KarbonFillStyleWidget *m_fillFrame;
+    KarbonStrokeStyleWidget *m_strokeFrame;
 };
 
 #endif // KARBONSMALLSTYLEPREVIEW_H

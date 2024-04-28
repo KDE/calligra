@@ -5,18 +5,18 @@
 
 #include "TextPasteCommand.h"
 
-#include <KoText.h>
-#include <KoTextEditor.h>
-#include <KoTextDocument.h>
-#include <KoTextPaste.h>
-#include <KoShapeController.h>
 #include <KoParagraphStyle.h>
+#include <KoShapeController.h>
+#include <KoText.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
+#include <KoTextPaste.h>
 
-#include <KLocalizedString>
 #include "TextDebug.h"
+#include <KLocalizedString>
 
-#include <QTextDocument>
 #include <QMimeData>
+#include <QTextDocument>
 
 #include "DeleteCommand.h"
 #include "KoDocumentRdfBase.h"
@@ -26,26 +26,28 @@
 #else
 namespace Soprano
 {
-    class Model
-    {
-    };
+class Model
+{
+};
 }
 #endif
 
 TextPasteCommand::TextPasteCommand(const QMimeData *mimeData,
                                    QTextDocument *document,
                                    KoShapeController *shapeController,
-                                   KoCanvasBase *canvas, KUndo2Command *parent, bool pasteAsText)
-    : KUndo2Command (parent),
-      m_mimeData(mimeData),
-      m_document(document),
-      m_rdf(0),
-      m_shapeController(shapeController),
-      m_canvas(canvas),
-      m_pasteAsText(pasteAsText),
-      m_first(true)
+                                   KoCanvasBase *canvas,
+                                   KUndo2Command *parent,
+                                   bool pasteAsText)
+    : KUndo2Command(parent)
+    , m_mimeData(mimeData)
+    , m_document(document)
+    , m_rdf(0)
+    , m_shapeController(shapeController)
+    , m_canvas(canvas)
+    , m_pasteAsText(pasteAsText)
+    , m_first(true)
 {
-    m_rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
+    m_rdf = qobject_cast<KoDocumentRdfBase *>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject *>());
 
     if (m_pasteAsText)
         setText(kundo2_i18n("Paste As Text"));
@@ -60,7 +62,8 @@ void TextPasteCommand::undo()
 
 void TextPasteCommand::redo()
 {
-    if (m_document.isNull()) return;
+    if (m_document.isNull())
+        return;
 
     KoTextDocument textDocument(m_document);
     KoTextEditor *editor = textDocument.textEditor();
@@ -68,15 +71,14 @@ void TextPasteCommand::redo()
     if (!m_first) {
         KUndo2Command::redo();
     } else {
-        editor->beginEditBlock(); //this is needed so Qt does not merge successive paste actions together
+        editor->beginEditBlock(); // this is needed so Qt does not merge successive paste actions together
         m_first = false;
-        if (editor->hasSelection()) { //TODO
+        if (editor->hasSelection()) { // TODO
             editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_document.data(), m_shapeController, this));
         }
 
         // check for mime type
-        if (m_mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text))
-                        || m_mimeData->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard)) ) {
+        if (m_mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)) || m_mimeData->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard))) {
             KoOdf::DocumentType odfType = KoOdf::Text;
             if (!m_mimeData->hasFormat(KoOdf::mimeType(odfType))) {
                 odfType = KoOdf::OpenOfficeClipboard;
@@ -89,10 +91,9 @@ void TextPasteCommand::redo()
             if (m_pasteAsText) {
                 editor->insertText(m_mimeData->text());
             } else {
-
                 QSharedPointer<Soprano::Model> rdfModel;
 #ifdef SHOULD_BUILD_RDF
-                if(!m_rdf) {
+                if (!m_rdf) {
                     rdfModel = QSharedPointer<Soprano::Model>(Soprano::createModel());
                 } else {
                     rdfModel = m_rdf->model();
@@ -111,6 +112,6 @@ void TextPasteCommand::redo()
         } else if (m_pasteAsText || m_mimeData->hasText()) {
             editor->insertText(m_mimeData->text());
         }
-        editor->endEditBlock(); //see above beginEditBlock
+        editor->endEditBlock(); // see above beginEditBlock
     }
 }

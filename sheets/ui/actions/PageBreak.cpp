@@ -8,17 +8,14 @@
 #include "PageBreak.h"
 #include "Actions.h"
 
-#include "core/Sheet.h"
 #include "core/ColFormatStorage.h"
 #include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
 #include "ui/commands/PageBreakCommand.h"
 
 #include <KLocalizedString>
 
-
-
 using namespace Calligra::Sheets;
-
 
 PageBreakRow::PageBreakRow(Actions *actions)
     : ToggleableCellAction(actions, "format_break_before_row", i18n("Break Before Row"), QIcon(), i18n("Set a manual page break before the row"))
@@ -29,12 +26,12 @@ PageBreakRow::~PageBreakRow()
 {
 }
 
-QAction *PageBreakRow::createAction() {
+QAction *PageBreakRow::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Row Break"));
     return res;
 }
-
 
 void PageBreakRow::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -51,10 +48,12 @@ bool PageBreakRow::checkedForSelection(Selection *selection, const Cell &)
     const Region::ConstIterator end(selection->constEnd());
     for (Region::ConstIterator it = selection->constBegin(); it != end; ++it) {
         const Sheet *const sheet = dynamic_cast<Sheet *>((*it)->sheet());
-        if (!sheet) continue;
+        if (!sheet)
+            continue;
         const QRect range = (*it)->rect();
         const int row = range.top();
-        if (sheet->rowFormats()->hasPageBreak(row)) return true;
+        if (sheet->rowFormats()->hasPageBreak(row))
+            return true;
     }
 
     return false;
@@ -66,7 +65,8 @@ bool PageBreakRow::enabledForSelection(Selection *selection, const Cell &)
     for (Region::ConstIterator it = selection->constBegin(); it != end; ++it) {
         const QRect range = (*it)->rect();
         const int row = range.top();
-        if (row != 1) return true;
+        if (row != 1)
+            return true;
     }
 
     return false;
@@ -81,7 +81,8 @@ PageBreakColumn::~PageBreakColumn()
 {
 }
 
-QAction *PageBreakColumn::createAction() {
+QAction *PageBreakColumn::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Column Break"));
     return res;
@@ -102,10 +103,12 @@ bool PageBreakColumn::checkedForSelection(Selection *selection, const Cell &)
     const Region::ConstIterator end(selection->constEnd());
     for (Region::ConstIterator it = selection->constBegin(); it != end; ++it) {
         const Sheet *const sheet = dynamic_cast<Sheet *>((*it)->sheet());
-        if (!sheet) continue;
+        if (!sheet)
+            continue;
         const QRect range = (*it)->rect();
         const int column = range.left();
-        if (sheet->columnFormats()->hasPageBreak(column)) return true;
+        if (sheet->columnFormats()->hasPageBreak(column))
+            return true;
     }
 
     return false;
@@ -117,11 +120,9 @@ bool PageBreakColumn::enabledForSelection(Selection *selection, const Cell &)
     for (Region::ConstIterator it = selection->constBegin(); it != end; ++it) {
         const QRect range = (*it)->rect();
         const int column = range.left();
-        if (column > 1) return true;
+        if (column > 1)
+            return true;
     }
 
     return false;
 }
-
-
-

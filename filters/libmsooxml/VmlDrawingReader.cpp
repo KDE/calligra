@@ -10,13 +10,13 @@
  */
 
 #include "VmlDrawingReader.h"
-#include <MsooXmlSchemas.h>
-#include <MsooXmlUtils.h>
-#include <MsooXmlRelationships.h>
-#include <MsooXmlUnits.h>
-#include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoOdfGraphicStyles.h>
+#include <KoXmlWriter.h>
+#include <MsooXmlRelationships.h>
+#include <MsooXmlSchemas.h>
+#include <MsooXmlUnits.h>
+#include <MsooXmlUtils.h>
 #include <limits.h>
 
 #define MSOOXML_CURRENT_NS empty // Without this, the vml methods won't have ns identifier in them
@@ -25,18 +25,25 @@
 
 #include <MsooXmlReader_p.h>
 
-VmlDrawingReaderContext::VmlDrawingReaderContext(MSOOXML::MsooXmlImport& _import, const QString& _path,
-    const QString& _file, MSOOXML::MsooXmlRelationships& _relationships) :
-    MSOOXML::MsooXmlReaderContext(&_relationships), import(&_import), path(_path), file(_file)
+VmlDrawingReaderContext::VmlDrawingReaderContext(MSOOXML::MsooXmlImport &_import,
+                                                 const QString &_path,
+                                                 const QString &_file,
+                                                 MSOOXML::MsooXmlRelationships &_relationships)
+    : MSOOXML::MsooXmlReaderContext(&_relationships)
+    , import(&_import)
+    , path(_path)
+    , file(_file)
 {
 }
 
 class Q_DECL_HIDDEN VmlDrawingReader::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
 };
 
@@ -68,9 +75,9 @@ QMap<QString, QString> VmlDrawingReader::frames()
     return m_frames;
 }
 
-KoFilter::ConversionStatus VmlDrawingReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus VmlDrawingReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = static_cast<VmlDrawingReaderContext*>(context);
+    m_context = static_cast<VmlDrawingReaderContext *>(context);
 
     readNext();
     if (!isStartDocument()) {
@@ -108,13 +115,12 @@ KoFilter::ConversionStatus VmlDrawingReader::read_xml()
         if (isStartElement()) {
             if (name() == QLatin1StringView("shapetype")) {
                 TRY_READ(shapetype)
-            }
-            else if (name() == QLatin1StringView("shape")) {
+            } else if (name() == QLatin1StringView("shape")) {
                 oldBody = body; // Body protection starts
                 QBuffer frameBuf;
                 KoXmlWriter frameWriter(&frameBuf);
                 body = &frameWriter;
-                TRY_READ(shape) //from vml
+                TRY_READ(shape) // from vml
                 m_content[m_currentVMLProperties.currentShapeId] = m_currentVMLProperties.imagedataPath;
                 pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
                 createFrameStart();

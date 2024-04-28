@@ -7,9 +7,9 @@
 #ifndef CALLIGRA_SHEETS_CALENDAR_TOOL_FACTORY
 #define CALLIGRA_SHEETS_CALENDAR_TOOL_FACTORY
 
-#include <part/CellToolFactory.h>
 #include <QObject>
 #include <QVariantList>
+#include <part/CellToolFactory.h>
 
 #define CALLIGRA_SHEETS_CALENDAR_TOOL_ID "KSpreadCalendarToolId"
 
@@ -22,10 +22,10 @@ class CalendarToolFactory : public QObject, public CellToolFactory
 {
     Q_OBJECT
 public:
-    explicit CalendarToolFactory(QObject *parent, const QVariantList& args);
+    explicit CalendarToolFactory(QObject *parent, const QVariantList &args);
     ~CalendarToolFactory() override;
 
-    KoToolBase* createTool(KoCanvasBase* canvas) override;
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 } // namespace Sheets

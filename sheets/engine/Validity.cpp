@@ -35,7 +35,7 @@ public:
 };
 
 Validity::Validity()
-        : d(new Private)
+    : d(new Private)
 {
     d->cond = Validity::None;
     d->action = Stop;
@@ -45,8 +45,8 @@ Validity::Validity()
     d->displayValidationInformation = false;
 }
 
-Validity::Validity(const Validity& other)
-        : d(other.d)
+Validity::Validity(const Validity &other)
+    : d(other.d)
 {
 }
 
@@ -84,7 +84,7 @@ bool Validity::displayValidationInformation() const
     return d->displayValidationInformation;
 }
 
-const QString& Validity::messageInfo() const
+const QString &Validity::messageInfo() const
 {
     return d->messageInfo;
 }
@@ -94,7 +94,7 @@ const Value &Validity::maximumValue() const
     return d->maxValue;
 }
 
-const QString& Validity::message() const
+const QString &Validity::message() const
 {
     return d->message;
 }
@@ -109,17 +109,17 @@ Validity::Restriction Validity::restriction() const
     return d->restriction;
 }
 
-const QString& Validity::title() const
+const QString &Validity::title() const
 {
     return d->title;
 }
 
-const QString& Validity::titleInfo() const
+const QString &Validity::titleInfo() const
 {
     return d->titleInfo;
 }
 
-const QStringList& Validity::validityList() const
+const QStringList &Validity::validityList() const
 {
     return d->listValidity;
 }
@@ -154,12 +154,12 @@ void Validity::setMaximumValue(const Value &value)
     d->maxValue = value;
 }
 
-void Validity::setMessage(const QString& msg)
+void Validity::setMessage(const QString &msg)
 {
     d->message = msg;
 }
 
-void Validity::setMessageInfo(const QString& info)
+void Validity::setMessageInfo(const QString &info)
 {
     d->messageInfo = info;
 }
@@ -174,28 +174,29 @@ void Validity::setRestriction(Restriction restriction)
     d->restriction = restriction;
 }
 
-void Validity::setTitle(const QString& t)
+void Validity::setTitle(const QString &t)
 {
     d->title = t;
 }
 
-void Validity::setTitleInfo(const QString& info)
+void Validity::setTitleInfo(const QString &info)
 {
     d->titleInfo = info;
 }
 
-void Validity::setValidityList(const QStringList& list)
+void Validity::setValidityList(const QStringList &list)
 {
     d->listValidity = list;
 }
 
-bool Validity::testValidity(const CellBase* cell) const
+bool Validity::testValidity(const CellBase *cell) const
 {
-    if (d->restriction == NoRestriction) return true;
+    if (d->restriction == NoRestriction)
+        return true;
 
     bool valid = false;
 
-    //fixme
+    // fixme
     if (d->allowEmptyCell && cell->userInput().isEmpty())
         return true;
 
@@ -203,12 +204,8 @@ bool Validity::testValidity(const CellBase* cell) const
     const Qt::CaseSensitivity cs = calc->settings()->caseSensitiveComparisons();
     Value val = cell->value();
 
-    if ((val.isNumber() &&
-            (d->restriction == Number ||
-             (d->restriction == Integer &&
-              numToDouble(val.asFloat()) == ceil(numToDouble(val.asFloat())))))
-        || (d->restriction == Time && (val.format() == Value::fmt_Time))
-        || (d->restriction == Date && (val.format() == Value::fmt_Date))) {
+    if ((val.isNumber() && (d->restriction == Number || (d->restriction == Integer && numToDouble(val.asFloat()) == ceil(numToDouble(val.asFloat())))))
+        || (d->restriction == Time && (val.format() == Value::fmt_Time)) || (d->restriction == Date && (val.format() == Value::fmt_Date))) {
         switch (d->cond) {
         case Validity::Equal:
             valid = calc->naturalEqual(val, d->minValue, cs);
@@ -234,13 +231,13 @@ bool Validity::testValidity(const CellBase* cell) const
         case Validity::Different:
             valid = (calc->naturalLower(val, d->minValue, cs) || calc->naturalGreater(val, d->maxValue, cs));
             break;
-        default :
+        default:
             break;
         }
     } else if (d->restriction == Text) {
         valid = val.isString();
     } else if (d->restriction == List) {
-        //test int value
+        // test int value
         if (val.isString() && d->listValidity.contains(val.asString()))
             valid = true;
     } else if (d->restriction == TextLength) {
@@ -281,44 +278,34 @@ bool Validity::testValidity(const CellBase* cell) const
                 if (len < min || len > max)
                     valid = true;
                 break;
-            default :
+            default:
                 break;
             }
         }
     }
 
-    if (valid) return true;
+    if (valid)
+        return true;
 
     if (d->displayMessage) {
-        valid = cell->sheet()->onValidationFailed (d->action, cell, d->message, d->title);
+        valid = cell->sheet()->onValidationFailed(d->action, cell, d->message, d->title);
     }
 
     return false;
 }
 
-void Validity::operator=(const Validity & other)
+void Validity::operator=(const Validity &other)
 {
     d = other.d;
 }
 
-bool Validity::operator==(const Validity& other) const
+bool Validity::operator==(const Validity &other) const
 {
-    if (d->message == other.d->message &&
-            d->title == other.d->title &&
-            d->titleInfo == other.d->titleInfo &&
-            d->messageInfo == other.d->messageInfo &&
-            d->minValue == other.d->minValue &&
-            d->maxValue == other.d->maxValue &&
-            d->cond == other.d->cond &&
-            d->action == other.d->action &&
-            d->restriction == other.d->restriction &&
-            d->displayMessage == other.d->displayMessage &&
-            d->allowEmptyCell == other.d->allowEmptyCell &&
-            d->displayValidationInformation == other.d->displayValidationInformation &&
-            d->listValidity == other.d->listValidity) {
+    if (d->message == other.d->message && d->title == other.d->title && d->titleInfo == other.d->titleInfo && d->messageInfo == other.d->messageInfo
+        && d->minValue == other.d->minValue && d->maxValue == other.d->maxValue && d->cond == other.d->cond && d->action == other.d->action
+        && d->restriction == other.d->restriction && d->displayMessage == other.d->displayMessage && d->allowEmptyCell == other.d->allowEmptyCell
+        && d->displayValidationInformation == other.d->displayValidationInformation && d->listValidity == other.d->listValidity) {
         return true;
     }
     return false;
 }
-
-

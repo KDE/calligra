@@ -8,24 +8,25 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 
-namespace {
-    QString prefix = "cell";
-    const char familyName[] = "table-cell";
+namespace
+{
+QString prefix = "cell";
+const char familyName[] = "table-cell";
 }
 
 KOSTYLE_DECLARE_SHARED_POINTER_IMPL(KoCellStyle)
 
 KoCellStyle::KoCellStyle()
-: KoStyle()
-, m_borders(new KoBorder)
-, m_backgroundColor()
-, m_backgroundOpacity(0.0)
-, m_leftPadding(0.0)
-, m_topPadding(0.0)
-, m_rightPadding(0.0)
-, m_bottomPadding(0.0)
-, m_verticalAlign("")
-, m_glyphOrientation(true)
+    : KoStyle()
+    , m_borders(new KoBorder)
+    , m_backgroundColor()
+    , m_backgroundOpacity(0.0)
+    , m_leftPadding(0.0)
+    , m_topPadding(0.0)
+    , m_rightPadding(0.0)
+    , m_bottomPadding(0.0)
+    , m_verticalAlign("")
+    , m_glyphOrientation(true)
 {
 }
 
@@ -34,7 +35,7 @@ KoCellStyle::~KoCellStyle()
     delete m_borders;
 }
 
-KoBorder* KoCellStyle::borders()
+KoBorder *KoCellStyle::borders()
 {
     return m_borders;
 }
@@ -54,7 +55,7 @@ KoGenStyle::Type KoCellStyle::automaticstyleType() const
     return KoGenStyle::TableCellAutoStyle;
 }
 
-const char* KoCellStyle::styleFamilyName() const
+const char *KoCellStyle::styleFamilyName() const
 {
     return familyName;
 }
@@ -64,7 +65,7 @@ QColor KoCellStyle::backgroundColor() const
     return m_backgroundColor;
 }
 
-void KoCellStyle::setBackgroundColor(const QColor& color)
+void KoCellStyle::setBackgroundColor(const QColor &color)
 {
     m_backgroundColor = color;
 }
@@ -124,7 +125,7 @@ QString KoCellStyle::verticalAlign() const
     return m_verticalAlign;
 }
 
-void KoCellStyle::setVerticalAlign(const QString& align)
+void KoCellStyle::setVerticalAlign(const QString &align)
 {
     m_verticalAlign = align;
 }
@@ -144,17 +145,17 @@ KoGenStyle KoCellStyle::styleProperties() const
     return m_styleProperties;
 }
 
-void KoCellStyle::setTextStyle(const KoGenStyle& style)
+void KoCellStyle::setTextStyle(const KoGenStyle &style)
 {
     KoGenStyle::copyPropertiesFromStyle(style, m_styleProperties, KoGenStyle::TextType);
 }
 
-void KoCellStyle::setParagraphStyle(const KoGenStyle& style)
+void KoCellStyle::setParagraphStyle(const KoGenStyle &style)
 {
     KoGenStyle::copyPropertiesFromStyle(style, m_styleProperties, KoGenStyle::ParagraphType);
 }
 
-void KoCellStyle::prepareStyle( KoGenStyle& style ) const
+void KoCellStyle::prepareStyle(KoGenStyle &style) const
 {
     m_borders->saveOdf(style);
     if (m_backgroundColor.isValid()) {
@@ -163,16 +164,16 @@ void KoCellStyle::prepareStyle( KoGenStyle& style ) const
     if (m_backgroundOpacity != 0.0) {
         style.addProperty("draw:opacity", QString("%1%").arg(m_backgroundOpacity), KoGenStyle::GraphicType);
     }
-    if(m_leftPadding != 0) {
+    if (m_leftPadding != 0) {
         style.addPropertyPt("fo:padding-left", m_leftPadding);
     }
-    if(m_topPadding != 0) {
+    if (m_topPadding != 0) {
         style.addPropertyPt("fo:padding-top", m_topPadding);
     }
-    if(m_rightPadding != 0) {
+    if (m_rightPadding != 0) {
         style.addPropertyPt("fo:padding-right", m_rightPadding);
     }
-    if(m_bottomPadding != 0) {
+    if (m_bottomPadding != 0) {
         style.addPropertyPt("fo:padding-bottom", m_bottomPadding);
     }
     if (!m_verticalAlign.isEmpty()) {

@@ -13,10 +13,12 @@
 
 #include "CQCanvasBase.h"
 
-namespace Calligra {
-    namespace Sheets {
-        class Map;
-    }
+namespace Calligra
+{
+namespace Sheets
+{
+class Map;
+}
 }
 
 class KoCanvasBase;
@@ -28,35 +30,35 @@ class CQSpreadsheetCanvas : public CQCanvasBase
     Q_PROPERTY(QObjectList linkTargets READ linkTargets NOTIFY linkTargetsChanged)
 
 public:
-    explicit CQSpreadsheetCanvas(QDeclarativeItem* parent = 0);
+    explicit CQSpreadsheetCanvas(QDeclarativeItem *parent = 0);
     virtual ~CQSpreadsheetCanvas();
 
     int currentSheet() const;
-    Calligra::Sheets::Map* documentMap() const;
+    Calligra::Sheets::Map *documentMap() const;
 
     QObjectList linkTargets() const;
 
     void setCurrentSheet(int sheet);
 
-    virtual void render(QPainter* painter, const QRectF& target);
+    virtual void render(QPainter *painter, const QRectF &target);
 
 Q_SIGNALS:
     void currentSheetChanged();
     void linkTargetsChanged();
 
 protected:
-    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
-    virtual void openFile(const QString& file);
+    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+    virtual void openFile(const QString &file);
 
 private Q_SLOTS:
-    void updateDocumentSize(const QSize& size);
+    void updateDocumentSize(const QSize &size);
 
 private:
-    void createAndSetCanvasControllerOn(KoCanvasBase* canvas);
-    void createAndSetZoomController(KoCanvasBase* canvas);
+    void createAndSetCanvasControllerOn(KoCanvasBase *canvas);
+    void createAndSetZoomController(KoCanvasBase *canvas);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // CQSPREADSHEETCANVAS_H

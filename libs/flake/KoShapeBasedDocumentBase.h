@@ -55,7 +55,7 @@ public:
      * @param shapes The list of shapes that got removed.
      * @param command The command that was used to remove the shapes from the document.
      */
-    virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
+    virtual void shapesRemoved(const QList<KoShape *> &shapes, KUndo2Command *command);
 
     /**
      * Return a pointer to the resource manager associated with the
@@ -66,7 +66,7 @@ public:
     virtual KoDocumentResourceManager *resourceManager() const;
 
 private:
-    KoShapeBasedDocumentBasePrivate * const d;
+    KoShapeBasedDocumentBasePrivate *const d;
 };
 
 #endif

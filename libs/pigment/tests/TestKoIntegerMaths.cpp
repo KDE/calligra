@@ -27,13 +27,13 @@ void TestKoIntegerMaths::UINT8Tests()
     QCOMPARE((int)UINT8_DIVIDE(0, 1), 0);
 
     for (int i = 0; i < 256; i++) {
-        QCOMPARE((int)UINT8_BLEND(255, 0, i), i );
+        QCOMPARE((int)UINT8_BLEND(255, 0, i), i);
     }
     for (int i = 0; i < 256; i++) {
-        QCOMPARE((int)UINT8_BLEND(0, 255, i), int( 255 - i) );
+        QCOMPARE((int)UINT8_BLEND(0, 255, i), int(255 - i));
     }
     for (int i = 0; i < 256; i++) {
-        QVERIFY( qAbs(int(UINT8_BLEND(0, i, 128)) - int(i*(255 - 128) / 255.0 + 0.5)) <= 1 );
+        QVERIFY(qAbs(int(UINT8_BLEND(0, i, 128)) - int(i * (255 - 128) / 255.0 + 0.5)) <= 1);
     }
     QCOMPARE((int)UINT8_BLEND(255, 128, 128), 192);
     QCOMPARE((int)UINT8_BLEND(128, 64, 255), 128);

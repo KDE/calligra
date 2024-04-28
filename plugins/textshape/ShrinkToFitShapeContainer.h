@@ -8,20 +8,20 @@
 #ifndef SHRINKTOFITSHAPECONTAINER_H
 #define SHRINKTOFITSHAPECONTAINER_H
 
+#include <KoOdfLoadingContext.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
-#include <SimpleShapeContainerModel.h>
+#include <KoTextShapeData.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
-#include <KoOdfLoadingContext.h>
-#include <KoTextShapeData.h>
 #include <QObject>
 #include <QPainter>
+#include <SimpleShapeContainerModel.h>
 
-#include <KoShapeContainer_p.h>
-#include <KoTextDocumentLayout.h>
-#include <KoShapeLoadingContext.h>
 #include <KoDocumentResourceManager.h>
+#include <KoShapeContainer_p.h>
+#include <KoShapeLoadingContext.h>
+#include <KoTextDocumentLayout.h>
 
 /**
  * \internal d-pointer class for the \a ShrinkToFitShapeContainer class.
@@ -29,8 +29,14 @@
 class ShrinkToFitShapeContainerPrivate : public KoShapeContainerPrivate
 {
 public:
-    explicit ShrinkToFitShapeContainerPrivate(KoShapeContainer *q, KoShape *childShape) : KoShapeContainerPrivate(q), childShape(childShape) {}
-    ~ShrinkToFitShapeContainerPrivate() override {}
+    explicit ShrinkToFitShapeContainerPrivate(KoShapeContainer *q, KoShape *childShape)
+        : KoShapeContainerPrivate(q)
+        , childShape(childShape)
+    {
+    }
+    ~ShrinkToFitShapeContainerPrivate() override
+    {
+    }
     KoShape *childShape; // the original shape not owned by us
 };
 
@@ -53,7 +59,7 @@ public:
     /**
      * Factory function to create and return a ShrinkToFitShapeContainer instance that wraps the \a shape with it.
      */
-    static ShrinkToFitShapeContainer* wrapShape(KoShape *shape, KoDocumentResourceManager *documentResourceManager = 0);
+    static ShrinkToFitShapeContainer *wrapShape(KoShape *shape, KoDocumentResourceManager *documentResourceManager = 0);
 
     /**
      * Try to load text-on-shape from \a element and wrap \a shape with it.
@@ -77,6 +83,7 @@ class ShrinkToFitShapeContainerModel : public QObject, public SimpleShapeContain
 {
     Q_OBJECT
     friend class ShrinkToFitShapeContainer;
+
 public:
     ShrinkToFitShapeContainerModel(ShrinkToFitShapeContainer *q, ShrinkToFitShapeContainerPrivate *d);
 

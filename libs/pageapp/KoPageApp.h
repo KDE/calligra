@@ -12,29 +12,20 @@
 /// add docs please
 namespace KoPageApp
 {
-    /// add docs please
-    enum PageNavigation
-    {
-        PageFirst,
-        PagePrevious,
-        PageNext,
-        PageLast
-    };
+/// add docs please
+enum PageNavigation { PageFirst, PagePrevious, PageNext, PageLast };
 
-    /**
-     * This enum holds identifiers to the resources that can be stored in the KoCanvasResourceManager.
-     */
-    enum CanvasResource {
-        CurrentPage = KoCanvasResourceManager::KoPageAppStart+1 ///< The current page as a KoShape
-    };
+/**
+ * This enum holds identifiers to the resources that can be stored in the KoCanvasResourceManager.
+ */
+enum CanvasResource {
+    CurrentPage = KoCanvasResourceManager::KoPageAppStart + 1 ///< The current page as a KoShape
+};
 
-    /**
-     * This enum defines if we should talk about pages or slides in the document
-     */
-    enum PageType {
-        Page,
-        Slide
-    };
+/**
+ * This enum defines if we should talk about pages or slides in the document
+ */
+enum PageType { Page, Slide };
 }
 
 #endif // KOPAGEAPP_H

@@ -8,9 +8,9 @@
 
 #include "ui_KoSemanticStylesheetsEditor.h"
 
+#include "KoDocumentRdf.h"
 #include "KoRdfSemanticItem.h"
 #include "KoRdfSemanticItemRegistry.h"
-#include "KoDocumentRdf.h"
 
 #include <kdebug.h>
 
@@ -21,22 +21,20 @@ public:
     KoDocumentRdf *m_rdf;
     QTreeWidgetItem *m_systemSheetsParentItem;
     QTreeWidgetItem *m_userSheetsParentItem;
-    QMap<QString, QTreeWidgetItem*> m_systemSheetsItems;
-    QMap<QString, QTreeWidgetItem*> m_userSheetsItems;
+    QMap<QString, QTreeWidgetItem *> m_systemSheetsItems;
+    QMap<QString, QTreeWidgetItem *> m_userSheetsItems;
     Private()
-            : m_systemSheetsParentItem(0)
-            , m_userSheetsParentItem(0) {}
-    ~Private() {
-	    delete m_ui;
+        : m_systemSheetsParentItem(0)
+        , m_userSheetsParentItem(0)
+    {
+    }
+    ~Private()
+    {
+        delete m_ui;
     }
 };
 
-enum {
-    ColName = 0,
-    ColSemobj = 1,
-    ColVar = 0,
-    ColDesc = 1
-};
+enum { ColName = 0, ColSemobj = 1, ColVar = 0, ColDesc = 1 };
 
 class KoSemanticStylesheetWidgetItem : public QTreeWidgetItem
 {
@@ -44,21 +42,14 @@ public:
     KoDocumentRdf *m_rdf;
     hKoSemanticStylesheet m_ss;
     hKoRdfSemanticItem m_si;
-    KoSemanticStylesheetWidgetItem(KoDocumentRdf *rdf,
-                                   hKoSemanticStylesheet ss,
-                                   hKoRdfSemanticItem si,
-                                   QTreeWidgetItem *parent,
-                                   int type = Type)
-            : QTreeWidgetItem(parent, type)
-            , m_rdf(rdf)
-            , m_ss(ss)
-            , m_si(si)
+    KoSemanticStylesheetWidgetItem(KoDocumentRdf *rdf, hKoSemanticStylesheet ss, hKoRdfSemanticItem si, QTreeWidgetItem *parent, int type = Type)
+        : QTreeWidgetItem(parent, type)
+        , m_rdf(rdf)
+        , m_ss(ss)
+        , m_si(si)
     {
     }
-    KoSemanticStylesheetWidgetItem(KoDocumentRdf *rdf,
-                                   hKoRdfSemanticItem si,
-                                   QTreeWidgetItem *parent,
-                                   int type = Type)
+    KoSemanticStylesheetWidgetItem(KoDocumentRdf *rdf, hKoRdfSemanticItem si, QTreeWidgetItem *parent, int type = Type)
         : QTreeWidgetItem(parent, type)
         , m_rdf(rdf)
         , m_ss(0)
@@ -80,10 +71,9 @@ public:
     }
 };
 
-
 KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocumentRdf *rdf)
-        : KoDialog(parent),
-        d(new Private())
+    : KoDialog(parent)
+    , d(new Private())
 {
     d->m_rdf = rdf;
     QWidget *widget = new QWidget(this);
@@ -92,16 +82,15 @@ KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocu
     d->m_ui->setupUi(widget);
     d->m_ui->newStylesheet->setEnabled(false);
     d->m_ui->deleteStylesheet->setEnabled(false);
-    connect(d->m_ui->newStylesheet, SIGNAL(clicked()),
-            this, SLOT(newStylesheet()));
-    connect(d->m_ui->deleteStylesheet, SIGNAL(clicked()),
-            this, SLOT(deleteStylesheet()));
-    connect(d->m_ui->stylesheets, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-            this, SLOT(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)));
+    connect(d->m_ui->newStylesheet, SIGNAL(clicked()), this, SLOT(newStylesheet()));
+    connect(d->m_ui->deleteStylesheet, SIGNAL(clicked()), this, SLOT(deleteStylesheet()));
+    connect(d->m_ui->stylesheets,
+            SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
+            this,
+            SLOT(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)));
     d->m_ui->stylesheets->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->m_ui->stylesheets->sortItems(ColName, Qt::DescendingOrder);
-    connect(d->m_ui->definition, SIGNAL(textChanged()),
-            this, SLOT(definitionChanged()));
+    connect(d->m_ui->definition, SIGNAL(textChanged()), this, SLOT(definitionChanged()));
     // setup system/user parent treewidgets
     d->m_systemSheetsParentItem = new QTreeWidgetItem(d->m_ui->stylesheets);
     d->m_systemSheetsParentItem->setText(ColName, i18n("System"));
@@ -112,8 +101,7 @@ KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocu
     treewidget = d->m_systemSheetsParentItem;
     const QStringList classNames = KoRdfSemanticItemRegistry::instance()->classNames();
     foreach (const QString &semanticClass, classNames) {
-	hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(
-	    rdf->createSemanticItem(semanticClass, this).data()));
+        hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(rdf->createSemanticItem(semanticClass, this).data()));
         KoSemanticStylesheetWidgetItem *item = new KoSemanticStylesheetWidgetItem(rdf, si, treewidget);
         item->setText(ColName, semanticClass);
         d->m_systemSheetsItems[semanticClass] = item;
@@ -126,9 +114,8 @@ KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocu
 
     treewidget = d->m_userSheetsParentItem;
     foreach (const QString &semanticClass, classNames) {
-	hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(
-	    rdf->createSemanticItem(semanticClass, this).data()));
-        KoSemanticStylesheetWidgetItem* item = new KoSemanticStylesheetWidgetItem(rdf, si, treewidget);
+        hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(rdf->createSemanticItem(semanticClass, this).data()));
+        KoSemanticStylesheetWidgetItem *item = new KoSemanticStylesheetWidgetItem(rdf, si, treewidget);
         item->setText(ColName, semanticClass);
         d->m_userSheetsItems[semanticClass] = item;
         d->m_ui->stylesheets->expandItem(item);
@@ -137,13 +124,11 @@ KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocu
     // initialize stylesheets tree
     foreach (const QString &semanticClass, classNames) {
         kDebug(30015) << "semanticClass:" << semanticClass;
-	hKoRdfSemanticItem p(static_cast<KoRdfSemanticItem *>(
-	    rdf->createSemanticItem(semanticClass, this).data()));
+        hKoRdfSemanticItem p(static_cast<KoRdfSemanticItem *>(rdf->createSemanticItem(semanticClass, this).data()));
         setupStylesheetsItems(semanticClass, p, p->stylesheets(), d->m_systemSheetsItems);
         setupStylesheetsItems(semanticClass, p, p->userStylesheets(), d->m_userSheetsItems, true);
     }
-    connect(d->m_ui->variables, SIGNAL(itemActivated(QTableWidgetItem*)),
-            this, SLOT(onVariableActivated(QTableWidgetItem*)));
+    connect(d->m_ui->variables, SIGNAL(itemActivated(QTableWidgetItem *)), this, SLOT(onVariableActivated(QTableWidgetItem *)));
     d->m_ui->variables->horizontalHeader()->setResizeMode(ColVar, QHeaderView::ResizeToContents);
     d->m_ui->variables->horizontalHeader()->setResizeMode(ColDesc, QHeaderView::ResizeToContents);
 }
@@ -152,10 +137,10 @@ KoSemanticStylesheetsEditor::~KoSemanticStylesheetsEditor()
 {
 }
 
-void KoSemanticStylesheetsEditor::setupStylesheetsItems(const QString& semanticClass,
+void KoSemanticStylesheetsEditor::setupStylesheetsItems(const QString &semanticClass,
                                                         hKoRdfSemanticItem si,
                                                         const QList<hKoSemanticStylesheet> &ssl,
-                                                        const QMap<QString, QTreeWidgetItem*> &m,
+                                                        const QMap<QString, QTreeWidgetItem *> &m,
                                                         bool editable)
 {
     foreach (hKoSemanticStylesheet ss, ssl) {
@@ -178,8 +163,7 @@ void KoSemanticStylesheetsEditor::maskButtonsDependingOnCurrentItem(QTreeWidgetI
 {
     bool newEnabled = true;
     bool delEnabled = true;
-    for (QMap< QString, QTreeWidgetItem* >::iterator iter = d->m_userSheetsItems.begin();
-            iter != d->m_userSheetsItems.end(); ++iter) {
+    for (QMap<QString, QTreeWidgetItem *>::iterator iter = d->m_userSheetsItems.begin(); iter != d->m_userSheetsItems.end(); ++iter) {
         if (iter.value() == current) {
             delEnabled = false;
         }
@@ -204,8 +188,7 @@ void KoSemanticStylesheetsEditor::maskButtonsDependingOnCurrentItem(QTreeWidgetI
 
 void KoSemanticStylesheetsEditor::definitionChanged()
 {
-    if (KoSemanticStylesheetWidgetItem *ssitem
-            = dynamic_cast<KoSemanticStylesheetWidgetItem*>(d->m_ui->stylesheets->currentItem())) {
+    if (KoSemanticStylesheetWidgetItem *ssitem = dynamic_cast<KoSemanticStylesheetWidgetItem *>(d->m_ui->stylesheets->currentItem())) {
         if (!ssitem->m_ss) {
             return;
         }
@@ -219,14 +202,15 @@ struct SignalBlockerRAII {
     QObject *obj;
     bool oldval;
     SignalBlockerRAII(QObject *o)
-            : obj(o) {
+        : obj(o)
+    {
         oldval = obj->blockSignals(true);
     }
-    ~SignalBlockerRAII() {
+    ~SignalBlockerRAII()
+    {
         obj->blockSignals(oldval);
     }
 };
-
 
 void KoSemanticStylesheetsEditor::currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
@@ -237,8 +221,7 @@ void KoSemanticStylesheetsEditor::currentItemChanged(QTreeWidgetItem *current, Q
     if (previous) {
         QString desc = d->m_ui->definition->toPlainText();
         kDebug(30015) << "desc:" << desc;
-        if (KoSemanticStylesheetWidgetItem *ssitem
-                = dynamic_cast<KoSemanticStylesheetWidgetItem*>(previous)) {
+        if (KoSemanticStylesheetWidgetItem *ssitem = dynamic_cast<KoSemanticStylesheetWidgetItem *>(previous)) {
             kDebug(30015) << "ssitem, ss?:" << ssitem->m_ss;
 
             if (ssitem->m_ss) {
@@ -246,8 +229,7 @@ void KoSemanticStylesheetsEditor::currentItemChanged(QTreeWidgetItem *current, Q
             }
         }
     }
-    if (KoSemanticStylesheetWidgetItem *ssitem
-            = dynamic_cast<KoSemanticStylesheetWidgetItem*>(current)) {
+    if (KoSemanticStylesheetWidgetItem *ssitem = dynamic_cast<KoSemanticStylesheetWidgetItem *>(current)) {
         d->m_ui->definition->setPlainText(QString());
         d->m_ui->variables->clear();
         if (!ssitem->m_ss) {
@@ -260,8 +242,8 @@ void KoSemanticStylesheetsEditor::currentItemChanged(QTreeWidgetItem *current, Q
         int row = 0;
         QMap<QString, QString> m;
         ssitem->m_si->setupStylesheetReplacementMapping(m);
-        QMap< QString, QString >::const_iterator mi = m.constBegin();
-        QMap< QString, QString >::const_iterator me = m.constEnd();
+        QMap<QString, QString>::const_iterator mi = m.constBegin();
+        QMap<QString, QString>::const_iterator me = m.constEnd();
         for (; mi != me; ++mi) {
             QTableWidgetItem *item = 0;
             QString varName = mi.key();
@@ -279,21 +261,18 @@ void KoSemanticStylesheetsEditor::currentItemChanged(QTreeWidgetItem *current, Q
 void KoSemanticStylesheetsEditor::newStylesheet()
 {
     kDebug(30015);
-    if (KoSemanticStylesheetWidgetItem *ssitem
-            = dynamic_cast<KoSemanticStylesheetWidgetItem*>(d->m_ui->stylesheets->currentItem())) {
+    if (KoSemanticStylesheetWidgetItem *ssitem = dynamic_cast<KoSemanticStylesheetWidgetItem *>(d->m_ui->stylesheets->currentItem())) {
         if (ssitem->m_ss) {
-            ssitem = dynamic_cast<KoSemanticStylesheetWidgetItem*>(ssitem->parent());
+            ssitem = dynamic_cast<KoSemanticStylesheetWidgetItem *>(ssitem->parent());
             if (!ssitem) {
                 return;
             }
         }
         kDebug(30015) << ssitem;
         hKoRdfSemanticItem si = ssitem->m_si;
-        hKoSemanticStylesheet ss = si->createUserStylesheet(
-                                     QString("new stylesheet %1").arg(QDateTime::currentDateTime().toSecsSinceEpoch()), "");
+        hKoSemanticStylesheet ss = si->createUserStylesheet(QString("new stylesheet %1").arg(QDateTime::currentDateTime().toSecsSinceEpoch()), "");
         QTreeWidgetItem *parent = ssitem;
-        KoSemanticStylesheetWidgetItem* item =
-            new KoSemanticStylesheetWidgetItem(d->m_rdf, ss, si, parent);
+        KoSemanticStylesheetWidgetItem *item = new KoSemanticStylesheetWidgetItem(d->m_rdf, ss, si, parent);
         item->setText(ColName, ss->name());
         item->setFlags(item->flags() | Qt::ItemIsEditable);
 
@@ -305,8 +284,7 @@ void KoSemanticStylesheetsEditor::newStylesheet()
 void KoSemanticStylesheetsEditor::deleteStylesheet()
 {
     kDebug(30015);
-    if (KoSemanticStylesheetWidgetItem *ssitem
-            = dynamic_cast<KoSemanticStylesheetWidgetItem*>(d->m_ui->stylesheets->currentItem())) {
+    if (KoSemanticStylesheetWidgetItem *ssitem = dynamic_cast<KoSemanticStylesheetWidgetItem *>(d->m_ui->stylesheets->currentItem())) {
         if (!ssitem->m_ss) {
             return;
         }
@@ -317,7 +295,7 @@ void KoSemanticStylesheetsEditor::deleteStylesheet()
     }
 }
 
-void KoSemanticStylesheetsEditor::onVariableActivated(QTableWidgetItem* item)
+void KoSemanticStylesheetsEditor::onVariableActivated(QTableWidgetItem *item)
 {
     QTableWidgetItem *vitem = d->m_ui->variables->item(item->row(), ColVar);
     QString vtext = vitem->text();

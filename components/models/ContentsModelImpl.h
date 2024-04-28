@@ -14,8 +14,10 @@
 
 class QImage;
 class QVariant;
-namespace Calligra {
-namespace Components {
+namespace Calligra
+{
+namespace Components
+{
 
 /**
  * \brief Defines an interface for handling specific document types in ThumbnailModel.
@@ -25,16 +27,23 @@ namespace Components {
 class ContentsModelImpl
 {
 public:
-    ContentsModelImpl() { }
-    virtual ~ContentsModelImpl() { }
+    ContentsModelImpl()
+    {
+    }
+    virtual ~ContentsModelImpl()
+    {
+    }
 
     virtual int rowCount() const = 0;
     virtual QVariant data(int index, ContentsModel::Role role) const = 0;
-    virtual void setThumbnailSize(const QSize& size) = 0;
+    virtual void setThumbnailSize(const QSize &size) = 0;
 
     virtual QImage thumbnail(int index, int width) const = 0;
 
-    virtual void setUseToC(bool newValue) { Q_UNUSED(newValue); }
+    virtual void setUseToC(bool newValue)
+    {
+        Q_UNUSED(newValue);
+    }
 };
 
 } // Namespace Components

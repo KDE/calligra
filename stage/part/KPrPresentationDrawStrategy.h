@@ -17,9 +17,7 @@ public:
     explicit KPrPresentationDrawStrategy(KPrPresentationTool *tool);
     ~KPrPresentationDrawStrategy() override;
 
-    bool keyPressEvent( QKeyEvent * event ) override;
+    bool keyPressEvent(QKeyEvent *event) override;
 };
 
-
 #endif /* KPRPRESENTATIONDRAWSTRATEGY_H */
-

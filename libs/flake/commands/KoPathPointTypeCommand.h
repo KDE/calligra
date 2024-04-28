@@ -8,10 +8,10 @@
 #ifndef KOPATHPOINTTYPECOMMAND_H
 #define KOPATHPOINTTYPECOMMAND_H
 
-#include <kundo2command.h>
-#include <QList>
 #include "KoPathBaseCommand.h"
-//#include "KoPathShape.h"
+#include <QList>
+#include <kundo2command.h>
+// #include "KoPathShape.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 #include "flake_export.h"
@@ -21,13 +21,7 @@ class FLAKE_EXPORT KoPathPointTypeCommand : public KoPathBaseCommand
 {
 public:
     /// The type of the point
-    enum PointType {
-        Corner,
-        Smooth,
-        Symmetric,
-        Line,
-        Curve
-    };
+    enum PointType { Corner, Smooth, Symmetric, Line, Curve };
     /**
      * Command to change the type of the given points
      * @param pointDataList List of point for changing the points
@@ -46,7 +40,9 @@ private:
     // used for storing the data for undo
     struct PointData {
         PointData(const KoPathPointData pointData)
-                : m_pointData(pointData) {}
+            : m_pointData(pointData)
+        {
+        }
         KoPathPointData m_pointData;
         // old control points in document coordinates
         QPointF m_oldControlPoint1;

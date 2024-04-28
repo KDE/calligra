@@ -14,7 +14,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class TestTrigFunctions: public QObject
+class TestTrigFunctions : public QObject
 {
     Q_OBJECT
 
@@ -32,7 +32,7 @@ private Q_SLOTS:
     void testSECH();
 
 private:
-    Value evaluate(const QString&);
+    Value evaluate(const QString &);
 };
 
 } // namespace Sheets

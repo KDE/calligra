@@ -9,44 +9,45 @@
 #ifndef KoShapeManager_p_h
 #define KoShapeManager_p_h
 
-#include "KoShapeManager.h"
-#include "KoSelection.h"
-#include "KoPointerEvent.h"
-#include "KoShape.h"
-#include "KoShape_p.h"
 #include "KoCanvasBase.h"
-#include "KoShapeContainer.h"
-#include "KoShapeStrokeModel.h"
-#include "KoShapeGroup.h"
-#include "KoToolProxy.h"
-#include "KoShapeManagerPaintingStrategy.h"
-#include "KoShapeShadow.h"
-#include "KoShapeLayer.h"
-#include "KoFilterEffect.h"
-#include "KoFilterEffectStack.h"
-#include "KoFilterEffectRenderContext.h"
-#include "KoShapeBackground.h"
-#include <KoRTree.h>
 #include "KoClipPath.h"
+#include "KoFilterEffect.h"
+#include "KoFilterEffectRenderContext.h"
+#include "KoFilterEffectStack.h"
+#include "KoPointerEvent.h"
+#include "KoSelection.h"
+#include "KoShape.h"
+#include "KoShapeBackground.h"
+#include "KoShapeContainer.h"
+#include "KoShapeGroup.h"
+#include "KoShapeLayer.h"
+#include "KoShapeManager.h"
+#include "KoShapeManagerPaintingStrategy.h"
 #include "KoShapePaintingContext.h"
+#include "KoShapeShadow.h"
+#include "KoShapeStrokeModel.h"
+#include "KoShape_p.h"
+#include "KoToolProxy.h"
+#include <KoRTree.h>
 
+#include <FlakeDebug.h>
 #include <QPainter>
 #include <QTimer>
-#include <FlakeDebug.h>
 
 class Q_DECL_HIDDEN KoShapeManager::Private
 {
 public:
     Private(KoShapeManager *shapeManager, KoCanvasBase *c)
-        : selection(new KoSelection()),
-          canvas(c),
-          tree(4, 2),
-          strategy(new KoShapeManagerPaintingStrategy(shapeManager)),
-          q(shapeManager)
+        : selection(new KoSelection())
+        , canvas(c)
+        , tree(4, 2)
+        , strategy(new KoShapeManagerPaintingStrategy(shapeManager))
+        , q(shapeManager)
     {
     }
 
-    ~Private() {
+    ~Private()
+    {
         delete selection;
         delete strategy;
     }
@@ -67,9 +68,12 @@ public:
     class DetectCollision
     {
     public:
-        DetectCollision() {}
-        void detect(KoRTree<KoShape *> &tree, KoShape *s, int prevZIndex) {
-            foreach(KoShape *shape, tree.intersects(s->boundingRect())) {
+        DetectCollision()
+        {
+        }
+        void detect(KoRTree<KoShape *> &tree, KoShape *s, int prevZIndex)
+        {
+            foreach (KoShape *shape, tree.intersects(s->boundingRect())) {
                 bool isChild = false;
                 KoShapeContainer *parent = s->parent();
                 while (parent && !isChild) {
@@ -87,13 +91,14 @@ public:
             }
         }
 
-        void fireSignals() {
-            foreach(KoShape *shape, shapesWithCollisionDetection)
+        void fireSignals()
+        {
+            foreach (KoShape *shape, shapesWithCollisionDetection)
                 shape->priv()->shapeChanged(KoShape::CollisionDetected);
         }
 
     private:
-        QList<KoShape*> shapesWithCollisionDetection;
+        QList<KoShape *> shapesWithCollisionDetection;
     };
 
     QList<KoShape *> shapes;
@@ -102,7 +107,7 @@ public:
     KoCanvasBase *canvas;
     KoRTree<KoShape *> tree;
     QSet<KoShape *> aggregate4update;
-    QHash<KoShape*, int> shapeIndexesBeforeUpdate;
+    QHash<KoShape *, int> shapeIndexesBeforeUpdate;
     KoShapeManagerPaintingStrategy *strategy;
     KoShapeManager *q;
 };

@@ -4,17 +4,19 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "RemoveNoteCommand.h"
+#include "../MusicShape.h"
 #include "../core/Chord.h"
 #include "../core/Note.h"
 #include "../core/VoiceBar.h"
-#include "../MusicShape.h"
 
 #include <KLocalizedString>
 
 using namespace MusicCore;
 
-RemoveNoteCommand::RemoveNoteCommand(MusicShape* shape, Chord* chord, Note* note)
-    : m_chord(chord), m_note(note), m_shape(shape)
+RemoveNoteCommand::RemoveNoteCommand(MusicShape *shape, Chord *chord, Note *note)
+    : m_chord(chord)
+    , m_note(note)
+    , m_shape(shape)
 {
     setText(kundo2_i18n("Remove note"));
 }

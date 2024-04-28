@@ -6,8 +6,8 @@
 
 #include "KoPropertiesTest.h"
 
-#include <QTest>
 #include <KoProperties.h>
+#include <QTest>
 
 void KoPropertiesTest::testDeserialization()
 {
@@ -28,7 +28,6 @@ void KoPropertiesTest::testDeserialization()
     QVERIFY(!props.load(test));
     QVERIFY(!props.isEmpty());
     QVERIFY(props.stringProperty(QStringLiteral("bla")) == QStringLiteral("bla"));
-
 }
 
 void KoPropertiesTest::testRoundTrip()
@@ -39,8 +38,8 @@ void KoPropertiesTest::testRoundTrip()
     props.setProperty(QStringLiteral("xmlstring2"), "<xml>&adsa</xml>");
     props.setProperty(QStringLiteral("cdata"), "<![CDATA[blabla]]>");
     props.setProperty(QStringLiteral("int"), 10);
-    props.setProperty(QStringLiteral("bool"),  false);
-    props.setProperty(QStringLiteral("qreal"),  1.38);
+    props.setProperty(QStringLiteral("bool"), false);
+    props.setProperty(QStringLiteral("qreal"), 1.38);
 
     QString stored = props.store(QStringLiteral("KoPropertiesTest"));
     KoProperties restored;
@@ -53,7 +52,6 @@ void KoPropertiesTest::testRoundTrip()
     QVERIFY(restored.intProperty(QStringLiteral("int")) == 10);
     QVERIFY(restored.boolProperty(QStringLiteral("bool")) == false);
     QVERIFY(restored.doubleProperty(QStringLiteral("qreal")) == 1.38);
-
 }
 
 void KoPropertiesTest::testProperties()
@@ -68,19 +66,19 @@ void KoPropertiesTest::testProperties()
     QVERIFY(props.value(QStringLiteral("visible")) == QStringLiteral("bla"));
     QVERIFY(props.stringProperty(QStringLiteral("visible"), QStringLiteral("blabla")) == QStringLiteral("bla"));
 
-    props.setProperty(QStringLiteral("bool"),  true);
+    props.setProperty(QStringLiteral("bool"), true);
     QVERIFY(props.boolProperty(QStringLiteral("bool"), false) == true);
-    props.setProperty(QStringLiteral("bool"),  false);
+    props.setProperty(QStringLiteral("bool"), false);
     QVERIFY(props.boolProperty(QStringLiteral("bool"), true) == false);
 
-    props.setProperty(QStringLiteral("qreal"),  1.0);
+    props.setProperty(QStringLiteral("qreal"), 1.0);
     QVERIFY(props.doubleProperty(QStringLiteral("qreal"), 2.0) == 1.0);
-    props.setProperty(QStringLiteral("qreal"),  2.0);
+    props.setProperty(QStringLiteral("qreal"), 2.0);
     QVERIFY(props.doubleProperty(QStringLiteral("qreal"), 1.0) == 2.0);
 
-    props.setProperty(QStringLiteral("int"),  1);
+    props.setProperty(QStringLiteral("int"), 1);
     QVERIFY(props.intProperty(QStringLiteral("int"), 2) == 1);
-    props.setProperty(QStringLiteral("int"),  2);
+    props.setProperty(QStringLiteral("int"), 2);
     QVERIFY(props.intProperty(QStringLiteral("int"), 1) == 2);
 
     QVariant v;
@@ -102,10 +100,9 @@ void KoPropertiesTest::testProperties()
         count++;
     }
     QVERIFY(count == 4);
-
 }
 
-bool checkProps(const KoProperties & props)
+bool checkProps(const KoProperties &props)
 {
     return (props.value(QStringLiteral("bla")) == 1);
 }
@@ -126,7 +123,6 @@ void KoPropertiesTest::testPassAround()
 
     QVERIFY(checkProps(props));
     QVERIFY(checkProps(props2));
-
 }
 
 QTEST_GUILESS_MAIN(KoPropertiesTest)

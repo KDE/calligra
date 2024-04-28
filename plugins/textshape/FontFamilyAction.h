@@ -8,7 +8,7 @@
               SPDX-FileCopyrightText: 2002 Ellis Whitehead <ellis@kde.org>
               SPDX-FileCopyrightText: 2003 Andras Mantia <amantia@kde.org>
               SPDX-FileCopyrightText: 2005-2006 Hamish Rodda <rodda@kde.org>
-			  SPDX-FileCopyrightText: 2014 Dan Leinir Turthra Jensen
+              SPDX-FileCopyrightText: 2014 Dan Leinir Turthra Jensen
 
     SPDX-License-Identifier: LGPL-2.0-only
 */
@@ -30,26 +30,26 @@ class QIcon;
 class KoFontFamilyAction : public KSelectAction
 {
     Q_OBJECT
-    Q_PROPERTY( QString font READ font WRITE setFont )
+    Q_PROPERTY(QString font READ font WRITE setFont)
 
 public:
     KoFontFamilyAction(uint fontListCriteria, QObject *parent);
     explicit KoFontFamilyAction(QObject *parent);
-    KoFontFamilyAction(const QString& text, QObject *parent);
+    KoFontFamilyAction(const QString &text, QObject *parent);
     KoFontFamilyAction(const QIcon &icon, const QString &text, QObject *parent);
     ~KoFontFamilyAction() override;
 
     QString font() const;
 
-    void setFont( const QString &family );
+    void setFont(const QString &family);
 
-    QWidget* createWidget(QWidget* parent) override;
+    QWidget *createWidget(QWidget *parent) override;
 
 private:
     class KoFontFamilyActionPrivate;
-    KoFontFamilyActionPrivate * const d;
+    KoFontFamilyActionPrivate *const d;
 
-    Q_PRIVATE_SLOT( d, void _ko_slotFontChanged(const QFont&) )
+    Q_PRIVATE_SLOT(d, void _ko_slotFontChanged(const QFont &))
 };
 
 #endif

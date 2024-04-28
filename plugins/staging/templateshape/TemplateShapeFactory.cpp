@@ -16,17 +16,16 @@
 #include <kdebug.h>
 
 // Calligra
-#include <KoXmlNS.h>
-#include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
 #include <KoDocumentResourceManager.h>
-#include <KoProperties.h>
 #include <KoIcon.h>
+#include <KoOdfLoadingContext.h>
+#include <KoProperties.h>
+#include <KoShapeLoadingContext.h>
+#include <KoXmlNS.h>
 
 // This shape
 #include "TemplateShape.h"
-//#include "TemplateShapeConfigWidget.h"
-
+// #include "TemplateShapeConfigWidget.h"
 
 TemplateShapeFactory::TemplateShapeFactory()
     : KoShapeFactoryBase(TEMPLATESHAPEID, i18n("Template shape")) // Template: Change to your own description
@@ -37,7 +36,7 @@ TemplateShapeFactory::TemplateShapeFactory()
 
     // Tell the shape loader which tag we can store
     // Template: You must change this.
-    QList<QPair<QString, QStringList> > elementNamesList;
+    QList<QPair<QString, QStringList>> elementNamesList;
     elementNamesList.append(qMakePair(QString(KoXmlNS::calligra), QStringList("template")));
     setXmlElements(elementNamesList);
 }
@@ -62,17 +61,16 @@ KoShape *TemplateShapeFactory::createDefaultShape(KoDocumentResourceManager *doc
     return defaultShape;
 }
 
-KoShape *TemplateShapeFactory::createShape(const KoProperties *params,
-                                           KoDocumentResourceManager *documentResources) const
+KoShape *TemplateShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
 {
-    TemplateShape *shape = static_cast<TemplateShape*>(createDefaultShape(documentResources));
+    TemplateShape *shape = static_cast<TemplateShape *>(createDefaultShape(documentResources));
 
     return shape;
 }
 
-QList<KoShapeConfigWidgetBase*> TemplateShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> TemplateShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> result;
+    QList<KoShapeConfigWidgetBase *> result;
 
     return result;
 }

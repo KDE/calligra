@@ -12,22 +12,21 @@
 
 #include <QFontMetricsF>
 
+IdentifierElement::IdentifierElement(BasicElement *parent)
+    : TokenElement(parent)
+{
+}
 
-IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent )
-{}
-
-QRectF IdentifierElement::renderToPath( const QString& raw, QPainterPath& path ) const
+QRectF IdentifierElement::renderToPath(const QString &raw, QPainterPath &path) const
 {
     AttributeManager manager;
     QFont font = manager.font(this);
-    path.addText( path.currentPosition(), font, raw );
+    path.addText(path.currentPosition(), font, raw);
     QFontMetricsF fm(font);
     return fm.boundingRect(raw);
-
 }
 
 ElementType IdentifierElement::elementType() const
-{ 
+{
     return Identifier;
 }
-

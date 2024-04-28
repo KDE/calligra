@@ -11,14 +11,14 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
-#include "tools/KoCreateShapesToolFactory.h"
+#include "KoToolManager.h"
 #include "tools/KoCreateShapesTool.h"
+#include "tools/KoCreateShapesToolFactory.h"
+#include "tools/KoPanTool.h"
+#include "tools/KoPanToolFactory.h"
 #include "tools/KoPathToolFactory.h"
 #include "tools/KoZoomTool.h"
 #include "tools/KoZoomToolFactory.h"
-#include "tools/KoPanTool.h"
-#include "tools/KoPanToolFactory.h"
-#include "KoToolManager.h"
 #include <KoPluginLoader.h>
 
 #include <QGlobalStatic>
@@ -26,7 +26,7 @@
 Q_GLOBAL_STATIC(KoToolRegistry, s_instance)
 
 KoToolRegistry::KoToolRegistry()
-  : d(0)
+    : d(0)
 {
 }
 
@@ -44,9 +44,9 @@ void KoToolRegistry::init()
     add(new KoZoomToolFactory());
     add(new KoPanToolFactory());
 
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("calligra");
     QStringList toolsBlacklist = cfg.readEntry("ToolsBlacklist", QStringList());
-    foreach (const QString& toolID, toolsBlacklist) {
+    foreach (const QString &toolID, toolsBlacklist) {
         delete value(toolID);
         remove(toolID);
     }
@@ -58,7 +58,7 @@ KoToolRegistry::~KoToolRegistry()
     qDeleteAll(values());
 }
 
-KoToolRegistry* KoToolRegistry::instance()
+KoToolRegistry *KoToolRegistry::instance()
 {
     if (!s_instance.exists()) {
         s_instance->init();

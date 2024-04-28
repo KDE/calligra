@@ -8,9 +8,9 @@
 
 #include "KWPage.h"
 #include "KWPageManager_p.h"
+#include <KoShape.h>
 #include <KoShapeManager.h>
 #include <KoZoomHandler.h>
-#include <KoShape.h>
 #include <QPainter>
 
 #include <WordsDebug.h>
@@ -28,14 +28,14 @@ bool KWPage::isValid() const
 
 int KWPage::pageNumber() const
 {
-    if (! isValid())
+    if (!isValid())
         return -1; // invalid
     return priv->pages[n].pageNumber;
 }
 
 KWPageStyle KWPage::pageStyle() const
 {
-    if (! isValid())
+    if (!isValid())
         return KWPageStyle(); // invalid
 
     return priv->pages[n].style;
@@ -43,13 +43,13 @@ KWPageStyle KWPage::pageStyle() const
 
 void KWPage::setPageStyle(const KWPageStyle &style)
 {
-    if (! isValid())
+    if (!isValid())
         return;
-    if (! style.isValid()) {
+    if (!style.isValid()) {
         warnWords << "Passing invalid style to KWPage::setPageStyle()";
         return;
     }
-    if (! priv->pageStyles.contains(style.name()))
+    if (!priv->pageStyles.contains(style.name()))
         priv->pageStyles.insert(style.name(), style);
 
     KWPageManagerPrivate::Page page = priv->pages[n];
@@ -59,7 +59,7 @@ void KWPage::setPageStyle(const KWPageStyle &style)
 
 void KWPage::setPageSide(PageSide ps)
 {
-    if (! isValid())
+    if (!isValid())
         return;
     KWPageManagerPrivate::Page page = priv->pages[n];
 
@@ -72,7 +72,7 @@ void KWPage::setPageSide(PageSide ps)
 
 KWPage::PageSide KWPage::pageSide() const
 {
-    if (! isValid())
+    if (!isValid())
         return KWPage::Left; // invalid
 
     return priv->pages[n].pageSide;
@@ -90,7 +90,7 @@ uint KWPage::hash() const
 
 qreal KWPage::width() const
 {
-    if (! isValid())
+    if (!isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
     return page.style.pageLayout().width;
@@ -98,7 +98,7 @@ qreal KWPage::width() const
 
 qreal KWPage::height() const
 {
-    if (! isValid())
+    if (!isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
     return page.style.pageLayout().height;
@@ -106,7 +106,7 @@ qreal KWPage::height() const
 
 qreal KWPage::topMargin() const
 {
-    if (! isValid())
+    if (!isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
     return page.style.pageLayout().topMargin;
@@ -114,7 +114,7 @@ qreal KWPage::topMargin() const
 
 qreal KWPage::bottomMargin() const
 {
-    if (! isValid())
+    if (!isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
     return page.style.pageLayout().bottomMargin;
@@ -122,7 +122,7 @@ qreal KWPage::bottomMargin() const
 
 qreal KWPage::leftMargin() const
 {
-    if (! isValid())
+    if (!isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
     qreal answer = page.pageSide == Left ? pageEdgeMargin() : marginClosestBinding();
@@ -133,7 +133,7 @@ qreal KWPage::leftMargin() const
 
 qreal KWPage::rightMargin() const
 {
-    if (! isValid())
+    if (!isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
     qreal answer = page.pageSide == Right ? pageEdgeMargin() : marginClosestBinding();
@@ -144,7 +144,7 @@ qreal KWPage::rightMargin() const
 
 qreal KWPage::topPadding() const
 {
-    if (! isValid())
+    if (!isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
     return page.style.pageLayout().topPadding;
@@ -152,7 +152,7 @@ qreal KWPage::topPadding() const
 
 qreal KWPage::bottomPadding() const
 {
-    if (! isValid())
+    if (!isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
     return page.style.pageLayout().bottomPadding;
@@ -160,7 +160,7 @@ qreal KWPage::bottomPadding() const
 
 qreal KWPage::leftPadding() const
 {
-    if (! isValid())
+    if (!isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
     return page.style.pageLayout().leftPadding;
@@ -168,7 +168,7 @@ qreal KWPage::leftPadding() const
 
 qreal KWPage::rightPadding() const
 {
-    if (! isValid())
+    if (!isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
     return page.style.pageLayout().rightPadding;
@@ -176,7 +176,7 @@ qreal KWPage::rightPadding() const
 
 qreal KWPage::pageEdgeMargin() const
 {
-    if (! isValid())
+    if (!isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
     return page.style.pageLayout().pageEdge;
@@ -184,7 +184,7 @@ qreal KWPage::pageEdgeMargin() const
 
 qreal KWPage::marginClosestBinding() const
 {
-    if (! isValid())
+    if (!isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
     return page.style.pageLayout().bindingSide;
@@ -203,14 +203,14 @@ void KWPage::setOffsetInDocument(qreal offset)
 
 QRectF KWPage::rect() const
 {
-    if (! isValid())
+    if (!isValid())
         return QRectF();
     return QRectF(0, offsetInDocument(), width(), height());
 }
 
 QRectF KWPage::contentRect() const
 {
-    if (! isValid())
+    if (!isValid())
         return QRectF();
     return priv->pages[n].contentRect;
 }
@@ -224,7 +224,7 @@ void KWPage::setContentRect(const QRectF &rect)
 
 KoPageFormat::Orientation KWPage::orientationHint() const
 {
-    if (! isValid())
+    if (!isValid())
         return KoPageFormat::Landscape;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
     return page.orientation;
@@ -232,7 +232,7 @@ KoPageFormat::Orientation KWPage::orientationHint() const
 
 void KWPage::setOrientationHint(KoPageFormat::Orientation orientation)
 {
-    if (! isValid())
+    if (!isValid())
         return;
     KWPageManagerPrivate::Page page = priv->pages[n];
     page.orientation = orientation;
@@ -241,9 +241,9 @@ void KWPage::setOrientationHint(KoPageFormat::Orientation orientation)
 
 const KWPage KWPage::previous() const
 {
-    if (! isValid())
+    if (!isValid())
         return KWPage();
-    QMap<int,int>::const_iterator iter = priv->pageNumbers.constFind(pageNumber());
+    QMap<int, int>::const_iterator iter = priv->pageNumbers.constFind(pageNumber());
     if (iter == priv->pageNumbers.constBegin())
         return KWPage();
     --iter;
@@ -252,9 +252,9 @@ const KWPage KWPage::previous() const
 
 const KWPage KWPage::next() const
 {
-    if (! isValid())
+    if (!isValid())
         return KWPage();
-    QMap<int,int>::const_iterator iter = priv->pageNumbers.constFind(pageNumber());
+    QMap<int, int>::const_iterator iter = priv->pageNumbers.constFind(pageNumber());
     Q_ASSERT(iter != priv->pageNumbers.constEnd());
     ++iter;
     if (iter == priv->pageNumbers.constEnd())
@@ -273,7 +273,7 @@ void KWPage::setDirectionHint(KoText::Direction direction)
 
 KoText::Direction KWPage::directionHint() const
 {
-    if (! isValid())
+    if (!isValid())
         return KoText::AutoDirection;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
     KoText::Direction dir = page.textDirection;
@@ -299,7 +299,6 @@ bool KWPage::isAutoGenerated() const
     return page.autoGenerated;
 }
 
-
 QImage KWPage::thumbnail(const QSize &size, KoShapeManager *shapeManager, bool asPrint) const
 {
     KoZoomHandler zoomHandler;
@@ -313,16 +312,16 @@ QImage KWPage::thumbnail(const QSize &size, KoShapeManager *shapeManager, bool a
     // adapt thumbnailSize to match the rendered page
     QSize thumbnailSize(size);
     if (widthScale > heightScale) {
-        const int thumbnailWidth = qMin(thumbnailSize.width(), qRound(realWidth*heightScale));
+        const int thumbnailWidth = qMin(thumbnailSize.width(), qRound(realWidth * heightScale));
         thumbnailSize.setWidth(thumbnailWidth);
     } else {
-        const int thumbnailHeight = qMin(thumbnailSize.height(), qRound(realHeight*widthScale));
+        const int thumbnailHeight = qMin(thumbnailSize.height(), qRound(realHeight * widthScale));
         thumbnailSize.setHeight(thumbnailHeight);
     }
 
     zoomHandler.setZoom(zoom);
 
-    foreach(KoShape* shape, shapeManager->shapes()) {
+    foreach (KoShape *shape, shapeManager->shapes()) {
         shape->waitUntilReady(zoomHandler, false);
     }
 
@@ -341,9 +340,10 @@ QImage KWPage::thumbnail(const QSize &size, KoShapeManager *shapeManager, bool a
 
 int KWPage::visiblePageNumber(PageSelection select, int adjustment) const
 {
-    KWPage page = *(const_cast<KWPage*>(this));
+    KWPage page = *(const_cast<KWPage *>(this));
     switch (select) {
-    case KoTextPage::CurrentPage: break;
+    case KoTextPage::CurrentPage:
+        break;
     case KoTextPage::PreviousPage:
         page = page.previous();
         break;
@@ -352,7 +352,7 @@ int KWPage::visiblePageNumber(PageSelection select, int adjustment) const
         break;
     }
 
-    if (! page.isValid())
+    if (!page.isValid())
         return -1;
 
     int pageNumber = 0;

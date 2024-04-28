@@ -10,11 +10,11 @@
 #ifndef FORMULACOMMAND_H
 #define FORMULACOMMAND_H
 
-#include <kundo2command.h>
-#include <QList>
-#include <QHash>
-#include <QMetaType>
 #include "FormulaCursor.h"
+#include <QHash>
+#include <QList>
+#include <QMetaType>
+#include <kundo2command.h>
 class BasicElement;
 class TokenElement;
 class FormulaData;
@@ -31,14 +31,15 @@ class TableRowElement;
  *
  **/
 
-class FormulaCommand :  public KUndo2Command {
+class FormulaCommand : public KUndo2Command
+{
 public:
-    explicit FormulaCommand(KUndo2Command *parent=0);
-    
-    virtual void changeCursor(FormulaCursor& cursor, bool undo) const;
+    explicit FormulaCommand(KUndo2Command *parent = 0);
 
-    void setUndoCursorPosition(const FormulaCursor& position);
-    void setRedoCursorPosition(const FormulaCursor& position);
+    virtual void changeCursor(FormulaCursor &cursor, bool undo) const;
+
+    void setUndoCursorPosition(const FormulaCursor &position);
+    void setRedoCursorPosition(const FormulaCursor &position);
 
 protected:
     bool m_done;
@@ -48,12 +49,12 @@ private:
     FormulaCursor m_redoCursorPosition;
 };
 
-Q_DECLARE_METATYPE(FormulaCommand*)
+Q_DECLARE_METATYPE(FormulaCommand *)
 
-
-class FormulaCommandReplaceText : public FormulaCommand {
+class FormulaCommandReplaceText : public FormulaCommand
+{
 public:
-    FormulaCommandReplaceText( TokenElement* owner, int position,int length, const QString& added , KUndo2Command *parent=0);
+    FormulaCommandReplaceText(TokenElement *owner, int position, int length, const QString &added, KUndo2Command *parent = 0);
 
     ~FormulaCommandReplaceText() override;
 
@@ -65,7 +66,7 @@ public:
 
 private:
     /// The BasicElement that owns the newly added Text
-    TokenElement* m_ownerElement;
+    TokenElement *m_ownerElement;
 
     /// The position inside m_ownerElement
     int m_position;
@@ -73,18 +74,19 @@ private:
     int m_length;
 
     int m_glyphpos;
-    
+
     /// The list of added elements
     QString m_added;
 
     QString m_removed;
 
-    QList<GlyphElement*> m_removedGlyphs;
+    QList<GlyphElement *> m_removedGlyphs;
 };
 
-class FormulaCommandReplaceElements : public FormulaCommand {
+class FormulaCommandReplaceElements : public FormulaCommand
+{
 public:
-    FormulaCommandReplaceElements( RowElement* owner, int position, int length, QList<BasicElement*> elements , bool wrap=false, KUndo2Command *parent=0);
+    FormulaCommandReplaceElements(RowElement *owner, int position, int length, QList<BasicElement *> elements, bool wrap = false, KUndo2Command *parent = 0);
 
     ~FormulaCommandReplaceElements() override;
 
@@ -96,51 +98,34 @@ public:
 
 private:
     /// The BasicElement that owns the newly added Text
-    RowElement* m_ownerElement;
+    RowElement *m_ownerElement;
 
     /// The position inside m_ownerElement
     int m_position;
 
     int m_placeholderPosition;
-    
+
     int m_length;
 
     bool m_wrap;
 
-    RowElement* m_placeholderParent;
+    RowElement *m_placeholderParent;
 
-//     BasicElement* m_placeholder;
+    //     BasicElement* m_placeholder;
 
     /// The list of added elements
-    QList<BasicElement*> m_added;
+    QList<BasicElement *> m_added;
 
     /// The list of removed elements
-    QList<BasicElement*> m_removed;
+    QList<BasicElement *> m_removed;
 };
 
-class FormulaCommandLoad : public FormulaCommand {
+class FormulaCommandLoad : public FormulaCommand
+{
 public:
-    FormulaCommandLoad( FormulaData* data, FormulaElement* newelement, KUndo2Command *parent=0);
+    FormulaCommandLoad(FormulaData *data, FormulaElement *newelement, KUndo2Command *parent = 0);
 
-    ~FormulaCommandLoad () override;
-    
-    /// Execute the command
-    void redo() override;
-
-    /// Revert the actions done in redo()
-    void undo() override;
-
-private:
-    FormulaData* m_data;
-    FormulaElement* m_oldel;
-    FormulaElement* m_newel;
-};
-
-class FormulaCommandReplaceRow : public FormulaCommand {
-public:
-    FormulaCommandReplaceRow ( FormulaData* data, FormulaCursor oldPosition, TableElement* table, int number, int oldlength, int newlength );
-
-    ~FormulaCommandReplaceRow () override;
+    ~FormulaCommandLoad() override;
 
     /// Execute the command
     void redo() override;
@@ -149,19 +134,39 @@ public:
     void undo() override;
 
 private:
-    FormulaData* m_data;
-    TableElement* m_table;
-    TableRowElement* m_empty;
+    FormulaData *m_data;
+    FormulaElement *m_oldel;
+    FormulaElement *m_newel;
+};
+
+class FormulaCommandReplaceRow : public FormulaCommand
+{
+public:
+    FormulaCommandReplaceRow(FormulaData *data, FormulaCursor oldPosition, TableElement *table, int number, int oldlength, int newlength);
+
+    ~FormulaCommandReplaceRow() override;
+
+    /// Execute the command
+    void redo() override;
+
+    /// Revert the actions done in redo()
+    void undo() override;
+
+private:
+    FormulaData *m_data;
+    TableElement *m_table;
+    TableRowElement *m_empty;
     int m_number;
-    QList<BasicElement*> m_newRows;
-    QList<BasicElement*> m_oldRows;
+    QList<BasicElement *> m_newRows;
+    QList<BasicElement *> m_oldRows;
 };
 
-class FormulaCommandReplaceColumn : public FormulaCommand {
+class FormulaCommandReplaceColumn : public FormulaCommand
+{
 public:
-    FormulaCommandReplaceColumn ( FormulaData* data, FormulaCursor oldPosition, TableElement* table, int number, int oldlength, int newlength );
+    FormulaCommandReplaceColumn(FormulaData *data, FormulaCursor oldPosition, TableElement *table, int number, int oldlength, int newlength);
 
-    ~FormulaCommandReplaceColumn () override;
+    ~FormulaCommandReplaceColumn() override;
 
     /// Execute the command
     void redo() override;
@@ -170,32 +175,30 @@ public:
     void undo() override;
 
 private:
-    FormulaData* m_data;
+    FormulaData *m_data;
 
-    ///the table we are manipulating
-    TableElement* m_table;
+    /// the table we are manipulating
+    TableElement *m_table;
 
-    ///used to hold the new empty row, if we remove the whole table
-    TableRowElement* m_empty;
+    /// used to hold the new empty row, if we remove the whole table
+    TableRowElement *m_empty;
 
-    ///used to store the old rows, if we remove the whole table
-    QList<BasicElement*> m_oldRows;
+    /// used to store the old rows, if we remove the whole table
+    QList<BasicElement *> m_oldRows;
 
-    ///the position where we start to insert / remove rows
+    /// the position where we start to insert / remove rows
     int m_position;
 
-    ///used to store the old columns
-    QList< QList<BasicElement*> > m_newColumns;
+    /// used to store the old columns
+    QList<QList<BasicElement *>> m_newColumns;
 
-    ///used to store the new columns
-    QList< QList<BasicElement*> > m_oldColumns;
+    /// used to store the new columns
+    QList<QList<BasicElement *>> m_oldColumns;
 };
-
-
 
 // /**
 //  * @short The command for changes of an element's attributes
-//  * 
+//  *
 //  * Whenever the user changes the attributes assigned to an element an instance of this
 //  * class is created to make it possible to revert the changes. The former attributes
 //  * are stored in m_oldAttributes.
@@ -204,24 +207,24 @@ private:
 // public:
 //     /**
 //      * The constructor
-//      * @param cursor The FormulaCursor where the elements will be replaced 
+//      * @param cursor The FormulaCursor where the elements will be replaced
 //      * @param attributes The list of the old attributes
 //      */
 //     FormulaCommandAttribute( FormulaCursor* cursor, QHash<QString,QString> attributes );
-// 
+//
 //     /// Execute the command
 //     void redo();
-// 
+//
 //     /// Revert the actions done in redo()
 //     void undo();
-//     
+//
 // private:
 //     /// The BasicElement whose attributes have been changed
 //     BasicElement* m_ownerElement;
-//     
+//
 //     /// All attributes that are set newly
 //     QHash<QString,QString> m_attributes;
-//     
+//
 //     /// All attributes the element had before
 //     QHash<QString,QString> m_oldAttributes;
 // };

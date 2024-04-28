@@ -7,18 +7,22 @@
 #define SLIDELOADER_H
 
 #include <QObject>
-#include <QSize>
 #include <QPixmap>
+#include <QSize>
 
-class SlideLoader : public QObject {
+class SlideLoader : public QObject
+{
 private:
-Q_OBJECT
+    Q_OBJECT
 public:
-    explicit SlideLoader(QObject* parent = 0) :QObject(parent) {}
+    explicit SlideLoader(QObject *parent = 0)
+        : QObject(parent)
+    {
+    }
     virtual int numberOfSlides() = 0;
     virtual QSize slideSize() = 0;
     virtual int slideVersion(int position) = 0;
-    virtual QPixmap loadSlide(int number, const QSize& maxsize) = 0;
+    virtual QPixmap loadSlide(int number, const QSize &maxsize) = 0;
 Q_SIGNALS:
     void slidesChanged();
 };

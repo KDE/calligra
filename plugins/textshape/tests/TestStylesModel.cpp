@@ -2,10 +2,10 @@
 
 #include <QDebug>
 
-#include <KoStyleManager.h>
-#include <KoParagraphStyle.h>
-#include <KoCharacterStyle.h>
 #include "../dialogs/StylesModel.h"
+#include <KoCharacterStyle.h>
+#include <KoParagraphStyle.h>
+#include <KoStyleManager.h>
 
 class TestStylesModel : public QObject
 {
@@ -27,9 +27,12 @@ class MockModel : public StylesModel
 {
 public:
     MockModel(KoStyleManager *manager, QObject *parent = 0)
-            : StylesModel(manager, parent) { }
+        : StylesModel(manager, parent)
+    {
+    }
 
-    QList<int> rootStyleIds() {
+    QList<int> rootStyleIds()
+    {
         return m_styleList;
     }
 };
@@ -52,7 +55,7 @@ void TestStylesModel::testPrecalcCache()
 
     KoParagraphStyle *s = manager->paragraphStyle(model.rootStyleIds().at(0));
     QVERIFY(s);
-    //QCOMPARE(s->name(), QString("Default"));
+    // QCOMPARE(s->name(), QString("Default"));
     KoParagraphStyle *code = manager->paragraphStyle(model.rootStyleIds().at(0));
     QVERIFY(code);
     QCOMPARE(code->name(), QString("code"));
@@ -66,7 +69,6 @@ void TestStylesModel::testPrecalcCache()
     KoCharacterStyle *red = manager->characterStyle(model.rootStyleIds().at(6));
     QVERIFY(red);
     QCOMPARE(red->name(), QString("red"));
-
 }
 
 void TestStylesModel::testSetManager()

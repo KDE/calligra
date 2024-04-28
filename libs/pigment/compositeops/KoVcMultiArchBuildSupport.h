@@ -18,30 +18,32 @@
 
 #if defined _MSC_VER
 // Lets shut up the "possible loss of data" and "forcing value to bool 'true' or 'false'
-#pragma warning ( push )
-#pragma warning ( disable : 4244 )
-#pragma warning ( disable : 4800 )
+#pragma warning(push)
+#pragma warning(disable : 4244)
+#pragma warning(disable : 4800)
 #endif
-#include <Vc/global.h>
 #include <Vc/Vc>
+#include <Vc/global.h>
 #include <Vc/support.h>
 #if defined _MSC_VER
-#pragma warning ( pop )
+#pragma warning(pop)
 #endif
 
 #else /* HAVE_VC */
 
-namespace Vc {
-    enum Implementation /*: std::uint_least32_t*/ {
-            ScalarImpl,
-    };
-    class CurrentImplementation {
-        public:
-            static constexpr Implementation current()
-            {
-                return static_cast<Implementation>(ScalarImpl);
-            }
-    };
+namespace Vc
+{
+enum Implementation /*: std::uint_least32_t*/ {
+    ScalarImpl,
+};
+class CurrentImplementation
+{
+public:
+    static constexpr Implementation current()
+    {
+        return static_cast<Implementation>(ScalarImpl);
+    }
+};
 }
 
 #ifdef DO_PACKAGERS_BUILD
@@ -53,12 +55,10 @@ namespace Vc {
 
 #endif /* HAVE_VC */
 
-
 #ifdef DO_PACKAGERS_BUILD
 
 template<class FactoryType>
-typename FactoryType::ReturnType
-createOptimizedClass(typename FactoryType::ParamType param)
+typename FactoryType::ReturnType createOptimizedClass(typename FactoryType::ParamType param)
 {
     /**
      * We use SSE2, SSSE3, SSE4.1, AVX and AVX2.
@@ -89,8 +89,7 @@ createOptimizedClass(typename FactoryType::ParamType param)
  */
 
 template<class FactoryType>
-typename FactoryType::ReturnType
-createOptimizedClass(typename FactoryType::ParamType param)
+typename FactoryType::ReturnType createOptimizedClass(typename FactoryType::ParamType param)
 {
     return FactoryType::template create<Vc::CurrentImplementation::current()>(param);
 }

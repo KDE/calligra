@@ -6,28 +6,29 @@
 
 #include "KoPACanvasBase.h"
 
-#include <KoShapeManager.h>
-#include <KoToolProxy.h>
 #include <KoGridData.h>
-#include <KoUnit.h>
+#include <KoShapeManager.h>
 #include <KoText.h>
+#include <KoToolProxy.h>
+#include <KoUnit.h>
 
 #include "KoPADocument.h"
-#include "KoPAViewBase.h"
 #include "KoPAPageBase.h"
 #include "KoPAPageProvider.h"
+#include "KoPAViewBase.h"
 
 class Q_DECL_HIDDEN KoPACanvasBase::Private
 {
 public:
-    Private(KoPADocument * doc)
-    : view(0)
-    , doc(doc)
-    , shapeManager(0)
-    , masterShapeManager(0)
-    , toolProxy(0)
-    , showPageMargins(false)
-    {}
+    Private(KoPADocument *doc)
+        : view(0)
+        , doc(doc)
+        , shapeManager(0)
+        , masterShapeManager(0)
+        , toolProxy(0)
+        , showPageMargins(false)
+    {
+    }
 
     ~Private()
     {
@@ -42,22 +43,22 @@ public:
         return view->viewMode()->origin();
     }
 
-    KoPAViewBase * view;
-    KoPADocument * doc;
-    KoShapeManager * shapeManager;
-    KoShapeManager * masterShapeManager;
-    KoToolProxy * toolProxy;
+    KoPAViewBase *view;
+    KoPADocument *doc;
+    KoShapeManager *shapeManager;
+    KoShapeManager *masterShapeManager;
+    KoToolProxy *toolProxy;
     QPoint documentOffset;
     bool showPageMargins;
 };
 
-KoPACanvasBase::KoPACanvasBase( KoPADocument * doc )
-    : KoCanvasBase( doc )
+KoPACanvasBase::KoPACanvasBase(KoPADocument *doc)
+    : KoCanvasBase(doc)
     , d(new Private(doc))
 {
-    d->shapeManager = new KoShapeManager( this );
-    d->masterShapeManager = new KoShapeManager( this );
-    d->toolProxy = new KoToolProxy( this );
+    d->shapeManager = new KoShapeManager(this);
+    d->masterShapeManager = new KoShapeManager(this);
+    d->toolProxy = new KoToolProxy(this);
 }
 
 KoPACanvasBase::~KoPACanvasBase()
@@ -70,17 +71,17 @@ void KoPACanvasBase::setView(KoPAViewBase *view)
     d->view = view;
 }
 
-KoPADocument* KoPACanvasBase::document() const
+KoPADocument *KoPACanvasBase::document() const
 {
     return d->doc;
 }
 
-KoToolProxy* KoPACanvasBase::toolProxy() const
+KoToolProxy *KoPACanvasBase::toolProxy() const
 {
     return d->toolProxy;
 }
 
-KoPAViewBase* KoPACanvasBase::koPAView() const
+KoPAViewBase *KoPACanvasBase::koPAView() const
 {
     return d->view;
 }
@@ -90,12 +91,12 @@ QPoint KoPACanvasBase::documentOrigin() const
     return viewConverter()->documentToView(d->origin()).toPoint();
 }
 
-void KoPACanvasBase::setDocumentOrigin(const QPointF & o)
+void KoPACanvasBase::setDocumentOrigin(const QPointF &o)
 {
     d->view->viewMode()->setOrigin(o);
 }
 
-void KoPACanvasBase::gridSize( qreal *horizontal, qreal *vertical ) const
+void KoPACanvasBase::gridSize(qreal *horizontal, qreal *vertical) const
 {
     *horizontal = d->doc->gridData().gridX();
     *vertical = d->doc->gridData().gridY();
@@ -106,24 +107,24 @@ bool KoPACanvasBase::snapToGrid() const
     return d->doc->gridData().snapToGrid();
 }
 
-void KoPACanvasBase::addCommand( KUndo2Command *command )
+void KoPACanvasBase::addCommand(KUndo2Command *command)
 {
-    d->doc->addCommand( command );
+    d->doc->addCommand(command);
 }
 
-KoShapeManager * KoPACanvasBase::shapeManager() const
+KoShapeManager *KoPACanvasBase::shapeManager() const
 {
     return d->shapeManager;
 }
 
-KoShapeManager * KoPACanvasBase::masterShapeManager() const
+KoShapeManager *KoPACanvasBase::masterShapeManager() const
 {
     return d->masterShapeManager;
 }
 
-KoViewConverter * KoPACanvasBase::viewConverter() const
+KoViewConverter *KoPACanvasBase::viewConverter() const
 {
-    return d->view->viewMode()->viewConverter( const_cast<KoPACanvasBase *>( this ) );
+    return d->view->viewMode()->viewConverter(const_cast<KoPACanvasBase *>(this));
 }
 
 KoUnit KoPACanvasBase::unit() const
@@ -131,47 +132,48 @@ KoUnit KoPACanvasBase::unit() const
     return d->doc->unit();
 }
 
-const QPoint & KoPACanvasBase::documentOffset() const
+const QPoint &KoPACanvasBase::documentOffset() const
 {
     return d->documentOffset;
 }
 
-void KoPACanvasBase::setDocumentOffset(const QPoint &offset) {
+void KoPACanvasBase::setDocumentOffset(const QPoint &offset)
+{
     d->documentOffset = offset;
 }
 
-QPoint KoPACanvasBase::widgetToView(const QPoint& p) const
+QPoint KoPACanvasBase::widgetToView(const QPoint &p) const
 {
     return p - viewConverter()->documentToView(d->origin()).toPoint();
 }
 
-QRect KoPACanvasBase::widgetToView(const QRect& r) const
+QRect KoPACanvasBase::widgetToView(const QRect &r) const
 {
     return r.translated(viewConverter()->documentToView(-d->origin()).toPoint());
 }
 
-QPoint KoPACanvasBase::viewToWidget(const QPoint& p) const
+QPoint KoPACanvasBase::viewToWidget(const QPoint &p) const
 {
     return p + viewConverter()->documentToView(d->origin()).toPoint();
 }
 
-QRect KoPACanvasBase::viewToWidget(const QRect& r) const
+QRect KoPACanvasBase::viewToWidget(const QRect &r) const
 {
     return r.translated(viewConverter()->documentToView(d->origin()).toPoint());
 }
 
-KoGuidesData * KoPACanvasBase::guidesData()
+KoGuidesData *KoPACanvasBase::guidesData()
 {
     return &d->doc->guidesData();
 }
 
-void KoPACanvasBase::paint(QPainter &painter, const QRectF &paintRect) {
-
+void KoPACanvasBase::paint(QPainter &painter, const QRectF &paintRect)
+{
     KoPAPageBase *activePage(d->view->activePage());
     if (d->view->activePage()) {
-        int pageNumber = d->doc->pageIndex( d->view->activePage() ) + 1;
+        int pageNumber = d->doc->pageIndex(d->view->activePage()) + 1;
         QVariant var = d->doc->resourceManager()->resource(KoText::PageProvider);
-        static_cast<KoPAPageProvider*>(var.value<void*>())->setPageData(pageNumber, activePage);
+        static_cast<KoPAPageProvider *>(var.value<void *>())->setPageData(pageNumber, activePage);
         d->view->viewMode()->paint(this, painter, paintRect);
     }
 }

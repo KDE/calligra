@@ -15,7 +15,7 @@ public:
     VideoToolFactory();
     ~VideoToolFactory();
 
-    KoToolBase* createTool(KoCanvasBase* canvas) override;
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
-#endif //VIDEOTOOLFACTORY_H
+#endif // VIDEOTOOLFACTORY_H

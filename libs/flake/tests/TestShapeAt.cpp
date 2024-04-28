@@ -9,10 +9,10 @@
 #include <MockShapes.h>
 
 #include <FlakeDebug.h>
-#include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoShapeStroke.h>
+#include <KoShapeManager.h>
 #include <KoShapeShadow.h>
+#include <KoShapeStroke.h>
 
 #include <QTest>
 

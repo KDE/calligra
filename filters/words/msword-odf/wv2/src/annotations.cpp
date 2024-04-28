@@ -18,19 +18,21 @@
 */
 
 #include "annotations.h"
-#include "word_helper.h"
-#include "word97_generated.h"
 #include "olestream.h"
+#include "word97_generated.h"
+#include "word_helper.h"
 
 #include "wvlog.h"
 
 using namespace wvWare;
 
-Annotations::Annotations( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
-        m_annotationRef( 0 ), m_annotationRefIt( 0 )
+Annotations::Annotations(OLEStreamReader *tableStream, const Word97::FIB &fib)
+    : m_annotationRef(0)
+    , m_annotationRefIt(0)
 {
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << Qt::endl << "footnotes" << Qt::endl
+    wvlog << Qt::endl
+          << "footnotes" << Qt::endl
           << "   fcPlcffndRef=" << fib.fcPlcffndRef << " lcbPlcffndRef=" << fib.lcbPlcffndRef << Qt::endl
           << "   fcPlcffndTxt=" << fib.fcPlcffndTxt << " lcbPlcffndTxt=" << fib.lcbPlcffndTxt << Qt::endl
           << "annotations" << Qt::endl
@@ -39,8 +41,15 @@ Annotations::Annotations( OLEStreamReader* tableStream, const Word97::FIB& fib )
 #endif
     tableStream->push();
     // Annotations
-    init( fib.fcPlcfandRef, fib.lcbPlcfandRef, fib.fcPlcfandTxt, fib.lcbPlcfandTxt,
-          tableStream, &m_annotationRef, &m_annotationRefIt, m_annotationTxt, m_annotationTxtIt );
+    init(fib.fcPlcfandRef,
+         fib.lcbPlcfandRef,
+         fib.fcPlcfandTxt,
+         fib.lcbPlcfandTxt,
+         tableStream,
+         &m_annotationRef,
+         &m_annotationRefIt,
+         m_annotationTxt,
+         m_annotationTxtIt);
     tableStream->pop();
 }
 
@@ -50,20 +59,17 @@ Annotations::~Annotations()
     delete m_annotationRef;
 }
 
-AnnotationData Annotations::annotation( U32 globalCP, bool& ok )
+AnnotationData Annotations::annotation(U32 globalCP, bool &ok)
 {
 #ifdef WV2_DEBUG_ANNOTATIONS
     wvlog << " globalCP=" << globalCP << Qt::endl;
 #endif
 
-    if ( m_annotationRefIt &&
-         m_annotationRefIt->currentStart() == globalCP &&
-         m_annotationTxtIt != m_annotationTxt.end() )
-    {
+    if (m_annotationRefIt && m_annotationRefIt->currentStart() == globalCP && m_annotationTxtIt != m_annotationTxt.end()) {
         ok = true;
 
         // yay, but it is hard to make that more elegant
-        ++( *m_annotationRefIt );
+        ++(*m_annotationRefIt);
 
         U32 start = *m_annotationTxtIt;
         ++m_annotationTxtIt;
@@ -73,11 +79,11 @@ AnnotationData Annotations::annotation( U32 globalCP, bool& ok )
         wvlog << "start:" << start << Qt::endl;
         wvlog << "lim:" << lim << Qt::endl;
 #endif
-        return AnnotationData( start, lim );
+        return AnnotationData(start, lim);
     } else {
         ok = false;
         wvlog << "Bug: There is no annotation with the CP " << globalCP << Qt::endl;
-        return AnnotationData( 0, 0 );
+        return AnnotationData(0, 0);
     }
 }
 
@@ -87,35 +93,41 @@ U32 Annotations::nextAnnotation() const
     return m_annotationRefIt && m_annotationRefIt->current() ? m_annotationRefIt->currentStart() : 0xffffffff;
 }
 
-void Annotations::init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamReader* tableStream,
-                        PLCF<Word97::FRD>** ref, PLCFIterator<Word97::FRD>** refIt,
-                        std::vector<U32>& txt, std::vector<U32>::const_iterator& txtIt )
+void Annotations::init(U32 fcRef,
+                       U32 lcbRef,
+                       U32 fcTxt,
+                       U32 lcbTxt,
+                       OLEStreamReader *tableStream,
+                       PLCF<Word97::FRD> **ref,
+                       PLCFIterator<Word97::FRD> **refIt,
+                       std::vector<U32> &txt,
+                       std::vector<U32>::const_iterator &txtIt)
 {
-    if ( lcbRef == 0 ) {
+    if (lcbRef == 0) {
         return;
     }
 
-    tableStream->seek( fcRef, WV2_SEEK_SET );
-    *ref = new PLCF<Word97::FRD>( lcbRef, tableStream );
-    *refIt = new PLCFIterator<Word97::FRD>( **ref );
+    tableStream->seek(fcRef, WV2_SEEK_SET);
+    *ref = new PLCF<Word97::FRD>(lcbRef, tableStream);
+    *refIt = new PLCFIterator<Word97::FRD>(**ref);
 
 #ifdef WV2_DEBUG_ANNOTATIONS
     wvlog << "[ PlcfandRef ]" << Qt::endl;
-    ( *ref )->dumpCPs();
+    (*ref)->dumpCPs();
 #endif
 
-    if ( lcbTxt == 0 ) {
+    if (lcbTxt == 0) {
         wvlog << "Bug: lcbTxt == 0 but lcbRef != 0" << Qt::endl;
     } else {
-        if ( static_cast<U32>( tableStream->tell() ) != fcTxt ) {
+        if (static_cast<U32>(tableStream->tell()) != fcTxt) {
             wvlog << "Warning: Found a hole in the table stream" << Qt::endl;
-            tableStream->seek( fcTxt, WV2_SEEK_SET );
+            tableStream->seek(fcTxt, WV2_SEEK_SET);
         }
 #ifdef WV2_DEBUG_ANNOTATIONS
         wvlog << "[ PlcfandTxt ]" << Qt::endl;
 #endif
-        for ( U32 i = 0; i < lcbTxt; i += sizeof( U32 ) ) {
-            txt.push_back( tableStream->readU32() );
+        for (U32 i = 0; i < lcbTxt; i += sizeof(U32)) {
+            txt.push_back(tableStream->readU32());
 #ifdef WV2_DEBUG_ANNOTATIONS
             wvlog << "CP: " << txt.back() << Qt::endl;
 #endif
@@ -123,7 +135,7 @@ void Annotations::init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamR
         txtIt = txt.begin();
     }
 
-    //TODO: ATRDPost10, ATRDPre10, XSTs at position fcGrpXstAtnOwners
+    // TODO: ATRDPost10, ATRDPre10, XSTs at position fcGrpXstAtnOwners
 
 #ifdef WV2_DEBUG_ANNOTATIONS
     wvlog << "Annotation init done" << Qt::endl;

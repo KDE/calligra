@@ -20,8 +20,8 @@
 #ifndef KPRANIMATIONREMOVECOMMAND_H
 #define KPRANIMATIONREMOVECOMMAND_H
 
-#include <kundo2command.h>
 #include "stage_export.h"
+#include <kundo2command.h>
 
 class KPrDocument;
 class KPrShapeAnimation;

@@ -10,8 +10,8 @@
 
 #include "flake_export.h"
 
-#include <QObject>
 #include <QHash>
+#include <QObject>
 
 class QAction;
 class QAction;
@@ -96,7 +96,7 @@ public:
     void keyReleaseEvent(QKeyEvent *event);
 
     /// Forwarded to the current KoToolBase
-    void wheelEvent(QWheelEvent * event, const QPointF &point);
+    void wheelEvent(QWheelEvent *event, const QPointF &point);
     void wheelEvent(KoPointerEvent *event);
 
     /// Forwarded to the current KoToolBase
@@ -106,7 +106,7 @@ public:
     void inputMethodEvent(QInputMethodEvent *event);
 
     /// Forwarded to the current KoToolBase
-    QList<QAction*> popupActionList() const;
+    QList<QAction *> popupActionList() const;
 
     /// Forwarded to the current KoToolBase
     void deleteSelection();
@@ -144,7 +144,7 @@ public:
 
     /// Forwarded to the current KoToolBase
     void dropEvent(QDropEvent *event, const QPointF &point);
- 
+
     /// Set the new active tool.
     virtual void setActiveTool(KoToolBase *tool);
 
@@ -167,14 +167,14 @@ Q_SIGNALS:
 
 protected:
     virtual QPointF widgetToDocument(const QPointF &widgetPoint) const;
-    KoCanvasBase* canvas() const;
+    KoCanvasBase *canvas() const;
 
 private:
     Q_PRIVATE_SLOT(d, void timeout())
     Q_PRIVATE_SLOT(d, void selectionChanged(bool))
 
     friend class KoToolProxyPrivate;
-    KoToolProxyPrivate * const d;
+    KoToolProxyPrivate *const d;
 };
 
 #endif // _KO_TOOL_PROXY_H_

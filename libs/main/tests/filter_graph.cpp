@@ -4,8 +4,8 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <QFile>
 #include <QByteArray>
+#include <QFile>
 #include <QList>
 #include <QPluginLoader>
 
@@ -31,7 +31,7 @@ int main(int /*argc*/, char ** /*argv*/)
     QList<KoDocumentEntry>::ConstIterator partEnd(parts.end());
 
     while (partIt != partEnd) {
-        //kDebug() << ( *partIt ).service()->desktopEntryName();
+        // kDebug() << ( *partIt ).service()->desktopEntryName();
         QJsonObject metaData = (*partIt).metaData();
         QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
         nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
@@ -39,19 +39,19 @@ int main(int /*argc*/, char ** /*argv*/)
         QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it) {
             QString key = *it;
-            //kDebug() <<"" << key;
+            // kDebug() <<"" << key;
             if (!key.isEmpty()) {
                 output += "    \"";
                 output += key.toLatin1();
                 output += "\" [shape=box, style=filled, fillcolor=lightblue];\n";
-                if (! vertices.contains(key))
+                if (!vertices.contains(key))
                     vertices.append(key);
             }
         }
         ++partIt;
     }
 
-    const QList<KoFilterEntry::Ptr> filters(KoFilterEntry::query());   // no constraint here - we want *all* :)
+    const QList<KoFilterEntry::Ptr> filters(KoFilterEntry::query()); // no constraint here - we want *all* :)
     QList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
     QList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
 
@@ -62,7 +62,7 @@ int main(int /*argc*/, char ** /*argv*/)
         QStringList::ConstIterator importEnd = (*it)->import.constEnd();
         for (; importIt != importEnd; ++importIt) {
             // already there?
-            if (! vertices.contains(*importIt)) {
+            if (!vertices.contains(*importIt)) {
                 vertices.append(*importIt);
                 output += "    \"";
                 output += (*importIt).toLatin1();
@@ -75,7 +75,7 @@ int main(int /*argc*/, char ** /*argv*/)
 
         for (; exportIt != exportEnd; ++exportIt) {
             // First make sure the export vertex is in place
-            if (! vertices.contains(*exportIt)) {
+            if (!vertices.contains(*exportIt)) {
                 output += "    \"";
                 output += (*exportIt).toLatin1();
                 output += "\";\n";

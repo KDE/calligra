@@ -24,8 +24,8 @@ void RectangleShapeConfigWidget::setUnit(const KoUnit &unit)
 
 void RectangleShapeConfigWidget::open(KoShape *shape)
 {
-    m_rectangle = dynamic_cast<RectangleShape*>(shape);
-    if (! m_rectangle)
+    m_rectangle = dynamic_cast<RectangleShape *>(shape);
+    if (!m_rectangle)
         return;
 
     widget.cornerRadiusX->blockSignals(true);
@@ -44,7 +44,7 @@ void RectangleShapeConfigWidget::open(KoShape *shape)
 
 void RectangleShapeConfigWidget::save()
 {
-    if (! m_rectangle)
+    if (!m_rectangle)
         return;
 
     QSizeF size = m_rectangle->size();
@@ -53,9 +53,9 @@ void RectangleShapeConfigWidget::save()
     m_rectangle->setCornerRadiusY(100.0 * widget.cornerRadiusY->value() / (0.5 * size.height()));
 }
 
-KUndo2Command * RectangleShapeConfigWidget::createCommand()
+KUndo2Command *RectangleShapeConfigWidget::createCommand()
 {
-    if (! m_rectangle)
+    if (!m_rectangle)
         return 0;
     QSizeF size = m_rectangle->size();
 

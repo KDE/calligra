@@ -2,7 +2,7 @@
  *  SPDX-FileCopyrightText: 2007-2008 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef _KO_COLOR_CONVERSION_SYSTEM_H_
 #define _KO_COLOR_CONVERSION_SYSTEM_H_
@@ -47,15 +47,18 @@ public:
      * This function is called by the KoColorSpaceRegistry to add a new color space
      * to the graph of transformation.
      */
-    void insertColorSpace(const KoColorSpaceFactory*);
+    void insertColorSpace(const KoColorSpaceFactory *);
 
-    void insertColorProfile(const KoColorProfile*);
+    void insertColorProfile(const KoColorProfile *);
     /**
      * This function is called by the color space to create a color conversion
      * between two color space. This function search in the graph of transformations
      * the best possible path between the two color space.
      */
-    KoColorConversionTransformation* createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const;
+    KoColorConversionTransformation *createColorConverter(const KoColorSpace *srcColorSpace,
+                                                          const KoColorSpace *dstColorSpace,
+                                                          KoColorConversionTransformation::Intent renderingIntent,
+                                                          KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
     /**
      * This function creates two transformations, one from the color space and one to the
@@ -74,7 +77,11 @@ public:
      * @param toCS the revert conversion to the source color space will be affected to this
      *             variable
      */
-    void createColorConverters(const KoColorSpace* colorSpace, const QList< QPair<KoID, KoID> >& possibilities, KoColorConversionTransformation*& fromCS, KoColorConversionTransformation*& toCS) const;
+    void createColorConverters(const KoColorSpace *colorSpace,
+                               const QList<QPair<KoID, KoID>> &possibilities,
+                               KoColorConversionTransformation *&fromCS,
+                               KoColorConversionTransformation *&toCS) const;
+
 public:
     /**
      * This function return a text that can be compiled using dot to display
@@ -86,82 +93,99 @@ public:
      * the graph of color conversion connection, with a red link to show the
      * path of the best color conversion.
      */
-    QString bestPathToDot(const QString& srcKey, const QString& dstKey) const;
+    QString bestPathToDot(const QString &srcKey, const QString &dstKey) const;
+
 public:
     /**
      * @return true if there is a path between two color spaces
      */
-    bool existsPath(const QString& srcModelId, const QString& srcDepthId, const QString& srcProfileName, const QString& dstModelId, const QString& dstDepthId, const QString& dstProfileName) const;
+    bool existsPath(const QString &srcModelId,
+                    const QString &srcDepthId,
+                    const QString &srcProfileName,
+                    const QString &dstModelId,
+                    const QString &dstDepthId,
+                    const QString &dstProfileName) const;
     /**
      * @return true if there is a good path between two color spaces
      */
-    bool existsGoodPath(const QString& srcModelId, const QString& srcDepthId, const QString& srcProfileName, const QString& dstModelId, const QString& dstDepthId, const QString& dstProfileName) const;
+    bool existsGoodPath(const QString &srcModelId,
+                        const QString &srcDepthId,
+                        const QString &srcProfileName,
+                        const QString &dstModelId,
+                        const QString &dstDepthId,
+                        const QString &dstProfileName) const;
+
 private:
-    QString vertexToDot(Vertex* v, const QString &options) const;
+    QString vertexToDot(Vertex *v, const QString &options) const;
+
 private:
     /**
      * Insert an engine.
      */
-    Node* insertEngine(const KoColorSpaceEngine* engine);
-    KoColorConversionTransformation* createTransformationFromPath(const KoColorConversionSystem::Path& path, const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const;
+    Node *insertEngine(const KoColorSpaceEngine *engine);
+    KoColorConversionTransformation *createTransformationFromPath(const KoColorConversionSystem::Path &path,
+                                                                  const KoColorSpace *srcColorSpace,
+                                                                  const KoColorSpace *dstColorSpace,
+                                                                  KoColorConversionTransformation::Intent renderingIntent,
+                                                                  KoColorConversionTransformation::ConversionFlags conversionFlags) const;
     /**
      * Query the registry to get the color space associated with this
      * node. (default profile)
      */
-    const KoColorSpace* defaultColorSpaceForNode(const Node* node) const;
+    const KoColorSpace *defaultColorSpaceForNode(const Node *node) const;
     /**
      * Create a new node
      */
-    Node* createNode(const QString& _modelId, const QString& _depthId, const QString& _profileName);
+    Node *createNode(const QString &_modelId, const QString &_depthId, const QString &_profileName);
     /**
      * Initialise a node for ICC color spaces
      */
-    void connectToEngine(Node* _node, Node* _engine);
-    const Node* nodeFor(const KoColorSpace*) const;
+    void connectToEngine(Node *_node, Node *_engine);
+    const Node *nodeFor(const KoColorSpace *) const;
     /**
      * @return the node corresponding to that key, or create it if needed
      */
-    Node* nodeFor(const NodeKey& key);
-    const Node* nodeFor(const NodeKey& key) const;
+    Node *nodeFor(const NodeKey &key);
+    const Node *nodeFor(const NodeKey &key) const;
     /**
      * @return the list of nodes that correspond to a given model and depth.
      */
-    QList<Node*> nodesFor(const QString& _modelId, const QString& _depthId);
+    QList<Node *> nodesFor(const QString &_modelId, const QString &_depthId);
     /**
      * @return the node associated with that key, and create it if needed
      */
-    Node* nodeFor(const QString& colorModelId, const QString& colorDepthId, const QString& _profileName);
-    const Node* nodeFor(const QString& colorModelId, const QString& colorDepthId, const QString& _profileName) const;
+    Node *nodeFor(const QString &colorModelId, const QString &colorDepthId, const QString &_profileName);
+    const Node *nodeFor(const QString &colorModelId, const QString &colorDepthId, const QString &_profileName) const;
     /**
      * @return the vertex between two nodes, or null if the vertex doesn't exist
      */
-    Vertex* vertexBetween(Node* srcNode, Node* dstNode);
+    Vertex *vertexBetween(Node *srcNode, Node *dstNode);
     /**
      * create a vertex between two nodes and return it.
      */
-    Vertex* createVertex(Node* srcNode, Node* dstNode);
+    Vertex *createVertex(Node *srcNode, Node *dstNode);
     /**
      * looks for the best path between two nodes
      */
-    Path findBestPath(const Node* srcNode, const Node* dstNode) const;
+    Path findBestPath(const Node *srcNode, const Node *dstNode) const;
     /**
      * Delete all the paths of the list given in argument.
      */
-    void deletePaths(QList<KoColorConversionSystem::Path*> paths) const;
+    void deletePaths(QList<KoColorConversionSystem::Path *> paths) const;
     /**
      * Don't call that function, but raher findBestPath
      * @internal
      */
-    inline Path findBestPathImpl2(const Node* srcNode, const Node* dstNode, bool ignoreHdr, bool ignoreColorCorrectness) const;
+    inline Path findBestPathImpl2(const Node *srcNode, const Node *dstNode, bool ignoreHdr, bool ignoreColorCorrectness) const;
     /**
      * Don't call that function, but raher findBestPath
      * @internal
      */
-    inline Path findBestPathImpl(const Node* srcNode, const Node* dstNode, bool ignoreHdr) const;
+    inline Path findBestPathImpl(const Node *srcNode, const Node *dstNode, bool ignoreHdr) const;
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

@@ -13,11 +13,15 @@
 
 using namespace Soprano;
 
-bool KoTextRdfCore::saveRdf( QSharedPointer<Soprano::Model> model, Soprano::StatementIterator triples, KoStore *store, KoXmlWriter *manifestWriter, const QString &fileName)
+bool KoTextRdfCore::saveRdf(QSharedPointer<Soprano::Model> model,
+                            Soprano::StatementIterator triples,
+                            KoStore *store,
+                            KoXmlWriter *manifestWriter,
+                            const QString &fileName)
 {
     bool ok = false;
 
-    if (! store->open(fileName)) {
+    if (!store->open(fileName)) {
         return false;
     }
 
@@ -25,9 +29,7 @@ bool KoTextRdfCore::saveRdf( QSharedPointer<Soprano::Model> model, Soprano::Stat
     QTextStream oss(&dev);
 
     QString serialization = "application/rdf+xml";
-    const Soprano::Serializer* serializer
-            = Soprano::PluginManager::instance()->discoverSerializerForSerialization(
-                    Soprano::SerializationRdfXml);
+    const Soprano::Serializer *serializer = Soprano::PluginManager::instance()->discoverSerializerForSerialization(Soprano::SerializationRdfXml);
 
     if (serializer) {
         QString data;
@@ -48,7 +50,10 @@ bool KoTextRdfCore::saveRdf( QSharedPointer<Soprano::Model> model, Soprano::Stat
     return ok;
 }
 
-bool KoTextRdfCore::createAndSaveManifest(QSharedPointer<Soprano::Model> docmodel, const QMap<QString, QString> &idmap, KoStore *store, KoXmlWriter *manifestWriter)
+bool KoTextRdfCore::createAndSaveManifest(QSharedPointer<Soprano::Model> docmodel,
+                                          const QMap<QString, QString> &idmap,
+                                          KoStore *store,
+                                          KoXmlWriter *manifestWriter)
 {
     QSharedPointer<Soprano::Model> tmpmodel(Soprano::createModel());
     QMap<QString, QString>::const_iterator iditer = idmap.constBegin();
@@ -60,21 +65,19 @@ bool KoTextRdfCore::createAndSaveManifest(QSharedPointer<Soprano::Model> docmode
         QString sparqlQuery;
         QTextStream queryss(&sparqlQuery);
         queryss << ""
-            << "prefix pkg:  <http://docs.oasis-open.org/ns/office/1.2/meta/pkg#> \n"
-            << ""
-            << "select ?s ?p ?o \n"
-            << "where { \n"
-            << " ?s pkg:idref ?xmlid . \n"
-            << " ?s ?p ?o . \n"
-            << " filter( str(?xmlid) = \"" << oldID << "\" ) \n"
-            << "}\n";
+                << "prefix pkg:  <http://docs.oasis-open.org/ns/office/1.2/meta/pkg#> \n"
+                << ""
+                << "select ?s ?p ?o \n"
+                << "where { \n"
+                << " ?s pkg:idref ?xmlid . \n"
+                << " ?s ?p ?o . \n"
+                << " filter( str(?xmlid) = \"" << oldID << "\" ) \n"
+                << "}\n";
 
-        Soprano::QueryResultIterator it =
-            docmodel->executeQuery(sparqlQuery,
-                                   Soprano::Query::QueryLanguageSparql);
+        Soprano::QueryResultIterator it = docmodel->executeQuery(sparqlQuery, Soprano::Query::QueryLanguageSparql);
         while (it.next()) {
             Soprano::Node pred = it.binding("p");
-            Soprano::Node obj  = it.binding("o");
+            Soprano::Node obj = it.binding("o");
             if (pred.toString() == "http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref") {
                 debugText << "changing idref, oldID:" << oldID << " newID:" << newID;
                 obj = Node::createLiteralNode(newID);
@@ -103,21 +106,14 @@ bool KoTextRdfCore::loadManifest(KoStore *store, QSharedPointer<Soprano::Model> 
     debugText << "Loading external Rdf/XML from:" << fileName;
 
     QString rdfxmlData(store->device()->readAll());
-    const Soprano::Parser *parser =
-        Soprano::PluginManager::instance()->discoverParserForSerialization(
-            Soprano::SerializationRdfXml);
-    Soprano::StatementIterator it = parser->parseString(rdfxmlData,
-                                    BaseURI,
-                                    Soprano::SerializationRdfXml);
+    const Soprano::Parser *parser = Soprano::PluginManager::instance()->discoverParserForSerialization(Soprano::SerializationRdfXml);
+    Soprano::StatementIterator it = parser->parseString(rdfxmlData, BaseURI, Soprano::SerializationRdfXml);
     QList<Statement> allStatements = it.allElements();
     debugText << "Found " << allStatements.size() << " triples...";
     foreach (const Soprano::Statement &s, allStatements) {
-        Error::ErrorCode err = model->addStatement(s.subject(), s.predicate(),
-                s.object(), context);
+        Error::ErrorCode err = model->addStatement(s.subject(), s.predicate(), s.object(), context);
         if (err != Error::ErrorNone) {
-            debugText << "Error adding triple! s:" << s.subject()
-                << " p:" << s.predicate()
-                << " o:" << s.object();
+            debugText << "Error adding triple! s:" << s.subject() << " p:" << s.predicate() << " o:" << s.object();
             ok = false;
             break;
         }
@@ -217,12 +213,12 @@ void KoTextRdfCore::saveList(QSharedPointer<Soprano::Model> model, Soprano::Node
     model->addStatement(listBNode, rdfRest, rdfNil, context);
 }
 
-void KoTextRdfCore::removeStatementsIfTheyExist( QSharedPointer<Soprano::Model> m, const QList<Soprano::Statement> &removeList)
+void KoTextRdfCore::removeStatementsIfTheyExist(QSharedPointer<Soprano::Model> m, const QList<Soprano::Statement> &removeList)
 {
     foreach (const Soprano::Statement &s, removeList) {
         StatementIterator it = m->listStatements(s.subject(), s.predicate(), s.object(), s.context());
         QList<Statement> allStatements = it.allElements();
-        foreach(const Soprano::Statement &z, allStatements) {
+        foreach (const Soprano::Statement &z, allStatements) {
             debugText << "found:" << z;
             m->removeStatement(z);
         }

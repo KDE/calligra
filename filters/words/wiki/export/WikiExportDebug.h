@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &WIKIEXPORT_LOG();
 
 #define debugWiki qCDebug(WIKIEXPORT_LOG)

@@ -7,19 +7,19 @@
 
 #include "VectorShapeConfigWidget.h"
 
-#include "VectorShape.h"
 #include "VectorDebug.h"
+#include "VectorShape.h"
 // KF5
-#include <kfilewidget.h>
 #include <KIO/StoredTransferJob>
+#include <kfilewidget.h>
 // Qt
-#include <QVBoxLayout>
 #include <QUrl>
+#include <QVBoxLayout>
 
 void LoadWaiter::setImageData(KJob *job)
 {
     if (m_vectorShape) {
-        KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
+        KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob *>(job);
         Q_ASSERT(transferJob);
 
         const QByteArray contents = transferJob->data();
@@ -34,8 +34,8 @@ void LoadWaiter::setImageData(KJob *job)
 // ---------------------------------------------------- //
 
 VectorShapeConfigWidget::VectorShapeConfigWidget()
-    : m_shape(0),
-    m_fileWidget(0)
+    : m_shape(0)
+    , m_fileWidget(0)
 {
 }
 
@@ -46,13 +46,13 @@ VectorShapeConfigWidget::~VectorShapeConfigWidget()
 
 void VectorShapeConfigWidget::open(KoShape *shape)
 {
-    m_shape = dynamic_cast<VectorShape*>(shape);
+    m_shape = dynamic_cast<VectorShape *>(shape);
     Q_ASSERT(m_shape);
     delete m_fileWidget;
     QVBoxLayout *layout = new QVBoxLayout(this);
     m_fileWidget = new KFileWidget(QUrl(/*QT5TODO:"kfiledialog:///OpenDialog"*/), this);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
-    const QList<KFileFilter> mimetypes {
+    const QList<KFileFilter> mimetypes{
         KFileFilter::fromMimeType(QLatin1String("image/x-wmf")),
         KFileFilter::fromMimeType(QLatin1String("image/x-emf")),
         KFileFilter::fromMimeType(QLatin1String("image/x-svm")),

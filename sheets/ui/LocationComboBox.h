@@ -5,12 +5,11 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef CALLIGRA_SHEETS_LOCATION_COMBOBOX
 #define CALLIGRA_SHEETS_LOCATION_COMBOBOX
 
-#include <KComboBox>
 #include "sheets_ui_export.h"
+#include <KComboBox>
 
 class QKeyEvent;
 
@@ -35,7 +34,7 @@ class CALLIGRA_SHEETS_UI_EXPORT LocationComboBox : public KComboBox
 public:
     explicit LocationComboBox(QWidget *parent = 0);
 
-    void setSelection(Selection* selection);
+    void setSelection(Selection *selection);
 
     void addCompletionItem(const QString &_item);
     void removeCompletionItem(const QString &_item);
@@ -54,12 +53,12 @@ protected: // reimplementations
     void keyPressEvent(QKeyEvent *event) override;
 
 Q_SIGNALS:
-    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
+    void updateAccessedCellRange(Sheet *sheet, const QPoint &location);
 
 private Q_SLOTS:
     void slotActivateItem();
     void slotSelectionChanged();
-    void slotActiveSheetChanged(Sheet* sheet);
+    void slotActiveSheetChanged(Sheet *sheet);
 
 private:
     bool activateItem();

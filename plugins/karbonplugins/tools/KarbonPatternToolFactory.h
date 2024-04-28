@@ -15,7 +15,7 @@ public:
     KarbonPatternToolFactory();
     ~KarbonPatternToolFactory() override;
 
-    KoToolBase * createTool(KoCanvasBase *canvas) override;
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif // _KARBONPATTERNTOOLFACTORY_H_

@@ -6,12 +6,11 @@
 
 #include "BenchmarkPointStorage.h"
 
-#include "engine/calligra_sheets_limits.h"
 #include "engine/PointStorage.h"
+#include "engine/calligra_sheets_limits.h"
 
 #include <QTest>
 #include <QUuid>
-
 
 using namespace Calligra::Sheets;
 
@@ -75,7 +74,7 @@ void PointStorageBenchmark::testLookupPerformance()
             storage.m_data << c;
             storage.m_cols << (c + 1);
         }
-        storage.m_rows << r*maxcol;
+        storage.m_rows << r * maxcol;
     }
 
     //     qDebug() << endl << qPrintable( storage.dump() );
@@ -96,7 +95,7 @@ void PointStorageBenchmark::testLookupPerformance()
             }
         }
     }
-    Q_UNUSED(v); //not fully unused but GCC thinks so, so let us just tell it so
+    Q_UNUSED(v); // not fully unused but GCC thinks so, so let us just tell it so
 }
 
 void PointStorageBenchmark::testInsertColumnsPerformance()
@@ -236,7 +235,7 @@ void PointStorageBenchmark::testIterationPerformance()
             storage.m_data << c;
             storage.m_cols << (c + 1);
         }
-        storage.m_rows << r*maxcol;
+        storage.m_rows << r * maxcol;
     }
 
     //     qDebug() << endl << qPrintable( storage.dump() );
@@ -247,7 +246,7 @@ void PointStorageBenchmark::testIterationPerformance()
             v = storage.data(i);
         }
     }
-    Q_UNUSED(v); //Not fully unused, but GCC thinks so
+    Q_UNUSED(v); // Not fully unused, but GCC thinks so
 }
 
 QTEST_MAIN(PointStorageBenchmark)

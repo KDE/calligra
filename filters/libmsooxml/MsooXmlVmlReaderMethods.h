@@ -22,8 +22,7 @@
 */
 
 protected:
-
-    enum FrameStartElement {FrameStart, EllipseStart, RectStart, LineStart, CustomStart, GroupStart};
+    enum FrameStartElement { FrameStart, EllipseStart, RectStart, LineStart, CustomStart, GroupStart };
 
     // v namespace:
     KoFilter::ConversionStatus genericReader(FrameStartElement startType);
@@ -44,8 +43,8 @@ protected:
     KoFilter::ConversionStatus read_stroke();
     KoFilter::ConversionStatus read_shadow();
 
-    void handlePathValues(const QXmlStreamAttributes& attrs);
-    void handleStrokeAndFill(const QXmlStreamAttributes& attrs);
+    void handlePathValues(const QXmlStreamAttributes &attrs);
+    void handleStrokeAndFill(const QXmlStreamAttributes &attrs);
     void takeDefaultValues();
 
     QString rgbColor(QString color);
@@ -56,13 +55,12 @@ protected:
     void createFrameStart(FrameStartElement startType = FrameStart);
 
     // utils:
-    KoFilter::ConversionStatus parseCSS(const QString& style);
+    KoFilter::ConversionStatus parseCSS(const QString &style);
 
-    //writer where style:background-image is stored for style:page-layout-properties
-    KoXmlWriter* m_pDocBkgImageWriter;
+    // writer where style:background-image is stored for style:page-layout-properties
+    KoXmlWriter *m_pDocBkgImageWriter;
 
 public:
-
     struct VMLShapeProperties {
         QString currentEl;
 
@@ -127,7 +125,6 @@ public:
     QMap<QString, VMLShapeProperties> m_definedShapeTypes;
 
 protected:
-
     VMLShapeProperties m_currentVMLProperties;
 
     // Using stack to make sure correct properties are handled in a case when

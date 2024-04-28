@@ -6,24 +6,23 @@
 
 #include "KPrViewModePreviewShapeAnimations.h"
 
-//Stage Headers
-#include "KPrShapeManagerAnimationStrategy.h"
+// Stage Headers
 #include "KPrPageSelectStrategyActive.h"
-#include "animations/KPrAnimationCache.h"
+#include "KPrShapeManagerAnimationStrategy.h"
 #include "KPrView.h"
-//Calligra Headers
-#include <KoPACanvasBase.h>
-#include <KoShapeManager.h>
-#include <KoPAViewBase.h>
-#include <KoPAPageBase.h>
-#include <KoPageLayout.h>
-#include <KoCanvasController.h>
-#include <KoZoomController.h>
-#include <KoShapePaintingContext.h>
+#include "animations/KPrAnimationCache.h"
+// Calligra Headers
 #include <KPrViewModePresentation.h>
-//Qt Headers
+#include <KoCanvasController.h>
+#include <KoPACanvasBase.h>
+#include <KoPAPageBase.h>
+#include <KoPAViewBase.h>
+#include <KoPageLayout.h>
+#include <KoShapeManager.h>
+#include <KoShapePaintingContext.h>
+#include <KoZoomController.h>
+// Qt Headers
 #include <QPainter>
-
 
 KPrViewModePreviewShapeAnimations::KPrViewModePreviewShapeAnimations(KoPAViewBase *view, KoPACanvasBase *canvas)
     : KoPAViewMode(view, canvas)
@@ -46,7 +45,6 @@ void KPrViewModePreviewShapeAnimations::paint(KoPACanvasBase *canvas, QPainter &
 #else
     Q_ASSERT(m_canvas == canvas);
 #endif
-
 
     painter.translate(-m_canvas->documentOffset());
     painter.setRenderHint(QPainter::Antialiasing);
@@ -112,11 +110,10 @@ void KPrViewModePreviewShapeAnimations::wheelEvent(QWheelEvent *event, const QPo
 
 void KPrViewModePreviewShapeAnimations::activate(KoPAViewMode *previousViewMode)
 {
-    m_savedViewMode = previousViewMode;               // store the previous view mode
+    m_savedViewMode = previousViewMode; // store the previous view mode
     m_animationCache = new KPrAnimationCache();
-    m_canvas->shapeManager()->setPaintingStrategy(new KPrShapeManagerAnimationStrategy(m_canvas->shapeManager(),
-                                                                                       m_animationCache,
-                                                       new KPrPageSelectStrategyActive(m_canvas)));
+    m_canvas->shapeManager()->setPaintingStrategy(
+        new KPrShapeManagerAnimationStrategy(m_canvas->shapeManager(), m_animationCache, new KPrPageSelectStrategyActive(m_canvas)));
 
     // the update of the canvas is needed so that the old page gets drawn fully before the effect starts
 
@@ -124,13 +121,11 @@ void KPrViewModePreviewShapeAnimations::activate(KoPAViewMode *previousViewMode)
 
     QSizeF pageSize(layout.width, layout.height);
 
-    //calculate size of union page + viewport
+    // calculate size of union page + viewport
     QSizeF documentMinSize(view()->zoomController()->documentSize());
 
     // create a rect out of it with origin in tp left of page
-    QRectF documentRect(QPointF((documentMinSize.width() - layout.width) * -0.5,
-                               (documentMinSize.height() - layout.height) * -0.5),
-                       documentMinSize);
+    QRectF documentRect(QPointF((documentMinSize.width() - layout.width) * -0.5, (documentMinSize.height() - layout.height) * -0.5), documentMinSize);
 
     QPointF offset = -documentRect.topLeft();
     m_canvas->setDocumentOrigin(offset);
@@ -138,7 +133,6 @@ void KPrViewModePreviewShapeAnimations::activate(KoPAViewMode *previousViewMode)
 
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::PageSize, pageSize);
     m_canvas->repaint();
-
 
     m_timeLine.setDuration(m_shapeAnimation->duration());
     m_timeLine.setCurrentTime(0);
@@ -155,8 +149,8 @@ void KPrViewModePreviewShapeAnimations::activate(KoPAViewMode *previousViewMode)
 
 void KPrViewModePreviewShapeAnimations::deactivate()
 {
-    if ( m_timeLine.state() == QTimeLine::Running ) { // there are still shape animations running
-            m_timeLine.stop();
+    if (m_timeLine.state() == QTimeLine::Running) { // there are still shape animations running
+        m_timeLine.stop();
     }
     m_savedViewMode = 0;
     m_shapeAnimation->deactivate();
@@ -174,7 +168,7 @@ void KPrViewModePreviewShapeAnimations::updateActivePage(KoPAPageBase *page)
 void KPrViewModePreviewShapeAnimations::setShapeAnimation(KPrShapeAnimation *shapeAnimation)
 {
     m_shapeAnimation = shapeAnimation;
-    if (m_savedViewMode) {           //stop the previous playing
+    if (m_savedViewMode) { // stop the previous playing
         activateSavedViewMode();
     }
 }

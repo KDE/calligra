@@ -10,14 +10,14 @@
 #include "FormulaCursor.h"
 
 #include "BasicElement.h"
-#include "RowElement.h"
-#include "FixedElement.h"
-#include "NumberElement.h"
 #include "ElementFactory.h"
-#include "OperatorElement.h"
-#include "IdentifierElement.h"
+#include "FixedElement.h"
 #include "FormulaCommand.h"
 #include "FormulaDebug.h"
+#include "IdentifierElement.h"
+#include "NumberElement.h"
+#include "OperatorElement.h"
+#include "RowElement.h"
 
 #include <KoOdfLoadingContext.h>
 
@@ -25,68 +25,66 @@
 #include <QPen>
 #include <algorithm>
 
-
-FormulaCursor::FormulaCursor(BasicElement* element, bool selecting, int position, int mark) {
-    m_currentElement=element;
-    m_selecting=selecting;
-    m_position=position;
-    m_mark=mark;
-}
-
-FormulaCursor::FormulaCursor ( BasicElement* element, int position )
+FormulaCursor::FormulaCursor(BasicElement *element, bool selecting, int position, int mark)
 {
-    m_currentElement=element;
-    m_position=position;
-    m_mark=0;
-    m_selecting=false;
+    m_currentElement = element;
+    m_selecting = selecting;
+    m_position = position;
+    m_mark = mark;
 }
 
+FormulaCursor::FormulaCursor(BasicElement *element, int position)
+{
+    m_currentElement = element;
+    m_position = position;
+    m_mark = 0;
+    m_selecting = false;
+}
 
 FormulaCursor::FormulaCursor()
 {
-    FormulaCursor(0,0);
+    FormulaCursor(0, 0);
 }
 
-FormulaCursor::FormulaCursor (const FormulaCursor& other )
+FormulaCursor::FormulaCursor(const FormulaCursor &other)
 {
-    m_currentElement=other.currentElement();
-    m_position=other.position();
-    m_mark=other.mark();
-    m_selecting=other.isSelecting();
+    m_currentElement = other.currentElement();
+    m_position = other.position();
+    m_mark = other.mark();
+    m_selecting = other.isSelecting();
 }
 
-FormulaCursor& FormulaCursor::operator=(const FormulaCursor& other)
+FormulaCursor &FormulaCursor::operator=(const FormulaCursor &other)
 {
-    m_currentElement=other.currentElement();
-    m_position=other.position();
-    m_mark=other.mark();
-    m_selecting=other.isSelecting();
+    m_currentElement = other.currentElement();
+    m_position = other.position();
+    m_mark = other.mark();
+    m_selecting = other.isSelecting();
     return *this;
 }
 
-
-void FormulaCursor::paint( QPainter& painter ) const
+void FormulaCursor::paint(QPainter &painter) const
 {
-    debugFormula << "Drawing cursor with selecting: "<< isSelecting() << " from "
-    << mark()<<" to " << position() << " in "<<ElementFactory::elementName(m_currentElement->elementType());
-    if( !m_currentElement )
+    debugFormula << "Drawing cursor with selecting: " << isSelecting() << " from " << mark() << " to " << position() << " in "
+                 << ElementFactory::elementName(m_currentElement->elementType());
+    if (!m_currentElement)
         return;
     painter.save();
-    QPointF origin=m_currentElement->absoluteBoundingRect().topLeft();
-    qreal baseline=m_currentElement->baseLine();
+    QPointF origin = m_currentElement->absoluteBoundingRect().topLeft();
+    qreal baseline = m_currentElement->baseLine();
     QPen pen;
-    pen.setWidthF( 0.5 );
+    pen.setWidthF(0.5);
     pen.setColor(Qt::black);
-    painter.setPen( pen );
-    painter.drawLine(m_currentElement->cursorLine( m_position ));
-    pen.setWidthF( 0.1);
+    painter.setPen(pen);
+    painter.drawLine(m_currentElement->cursorLine(m_position));
+    pen.setWidthF(0.1);
     pen.setColor(Qt::blue);
     pen.setStyle(Qt::DashLine);
-    painter.setPen( pen );
-    painter.drawLine( origin+QPointF(0.0,baseline),origin+QPointF(m_currentElement->width(), baseline) );
+    painter.setPen(pen);
+    painter.drawLine(origin + QPointF(0.0, baseline), origin + QPointF(m_currentElement->width(), baseline));
     pen.setStyle(Qt::DotLine);
-    //Only here for debug purpose for now
-    switch(m_currentElement->elementType()) {
+    // Only here for debug purpose for now
+    switch (m_currentElement->elementType()) {
     case Number:
         pen.setColor(Qt::red);
         break;
@@ -110,9 +108,9 @@ void FormulaCursor::paint( QPainter& painter ) const
         break;
     }
     painter.setPen(pen);
-    painter.drawRect( m_currentElement->absoluteBoundingRect() );
-    //draw the selection rectangle
-    if ( m_selecting ) {
+    painter.drawRect(m_currentElement->absoluteBoundingRect());
+    // draw the selection rectangle
+    if (m_selecting) {
         QBrush brush;
         QColor color(Qt::blue);
         color.setAlpha(128);
@@ -120,112 +118,108 @@ void FormulaCursor::paint( QPainter& painter ) const
         brush.setStyle(Qt::SolidPattern);
         painter.setBrush(brush);
         painter.setPen(Qt::NoPen);
-        int p1=position()<mark()? position() : mark();
-        int p2=position()<mark()? mark() : position() ;
-        painter.drawPath(m_currentElement->selectionRegion(p1,p2));
+        int p1 = position() < mark() ? position() : mark();
+        int p2 = position() < mark() ? mark() : position();
+        painter.drawPath(m_currentElement->selectionRegion(p1, p2));
     }
     painter.restore();
 }
 
-void FormulaCursor::selectElement(BasicElement* element)
+void FormulaCursor::selectElement(BasicElement *element)
 {
-    m_selecting=true;
-    m_currentElement=element;
-    m_mark=0;
-    m_position=m_currentElement->endPosition();
+    m_selecting = true;
+    m_currentElement = element;
+    m_mark = 0;
+    m_position = m_currentElement->endPosition();
 }
 
-void FormulaCursor::move( CursorDirection direction )
+void FormulaCursor::move(CursorDirection direction)
 {
     FormulaCursor oldcursor(*this);
     m_direction = direction;
-    if (performMovement(oldcursor)==false) {
-        (*this)=oldcursor;
+    if (performMovement(oldcursor) == false) {
+        (*this) = oldcursor;
     }
-    m_direction=NoDirection;
+    m_direction = NoDirection;
 }
 
-bool FormulaCursor::moveCloseTo(BasicElement* element, FormulaCursor& cursor)
+bool FormulaCursor::moveCloseTo(BasicElement *element, FormulaCursor &cursor)
 {
-    if (element->setCursorTo(*this,cursor.getCursorPosition()-element->absoluteBoundingRect().topLeft())) {
+    if (element->setCursorTo(*this, cursor.getCursorPosition() - element->absoluteBoundingRect().topLeft())) {
         return true;
     } else {
         return false;
     }
 }
 
-QPointF FormulaCursor::getCursorPosition() 
+QPointF FormulaCursor::getCursorPosition()
 {
-    return ( m_currentElement->cursorLine(m_position).p1()
-           + m_currentElement->cursorLine(m_position).p2())/2.;
+    return (m_currentElement->cursorLine(m_position).p1() + m_currentElement->cursorLine(m_position).p2()) / 2.;
 }
 
-void FormulaCursor::moveTo ( const FormulaCursor& pos )
+void FormulaCursor::moveTo(const FormulaCursor &pos)
 {
-    m_currentElement=pos.currentElement();
-    m_position=pos.position();
-    m_selecting=pos.isSelecting();
-    m_mark=pos.mark();
+    m_currentElement = pos.currentElement();
+    m_position = pos.position();
+    m_selecting = pos.isSelecting();
+    m_mark = pos.mark();
 }
 
-
-void FormulaCursor::moveTo ( BasicElement* element )
+void FormulaCursor::moveTo(BasicElement *element)
 {
-    moveTo(element,0);
-    if (direction()==MoveLeft) {
+    moveTo(element, 0);
+    if (direction() == MoveLeft) {
         moveEnd();
     }
 }
 
-
-void FormulaCursor::moveTo ( BasicElement* element, int position )
+void FormulaCursor::moveTo(BasicElement *element, int position)
 {
-    moveTo(FormulaCursor(element,position));
+    moveTo(FormulaCursor(element, position));
 }
 
-
-void FormulaCursor::setCursorTo( const QPointF& point )
+void FormulaCursor::setCursorTo(const QPointF &point)
 {
     if (m_selecting) {
         while (!m_currentElement->absoluteBoundingRect().contains(point)) {
-            if ( m_currentElement->parentElement() ) {
-                m_position=0;
-                if (point.x()<m_currentElement->cursorLine(m_mark).p1().x()) {
-                    //the point is left of the old selection start, so we move the selection 
-                    //start after the old current element
-                    m_mark=m_currentElement->parentElement()->positionOfChild(m_currentElement)+1;
+            if (m_currentElement->parentElement()) {
+                m_position = 0;
+                if (point.x() < m_currentElement->cursorLine(m_mark).p1().x()) {
+                    // the point is left of the old selection start, so we move the selection
+                    // start after the old current element
+                    m_mark = m_currentElement->parentElement()->positionOfChild(m_currentElement) + 1;
                 } else {
-                    m_mark=m_currentElement->parentElement()->positionOfChild(m_currentElement);
+                    m_mark = m_currentElement->parentElement()->positionOfChild(m_currentElement);
                 }
-                m_currentElement=m_currentElement->parentElement();
+                m_currentElement = m_currentElement->parentElement();
             } else {
                 return;
             }
         }
-        while (!m_currentElement->setCursorTo(*this,point-m_currentElement->absoluteBoundingRect().topLeft())) {
-            if ( m_currentElement->parentElement() ) {
-                m_mark=m_currentElement->parentElement()->positionOfChild(m_currentElement);
-                m_position=0;
-                if (point.x()<m_currentElement->cursorLine(m_mark).p1().x()) {
-                    //the point is left of the old selection start, so we move the selection 
-                    //start after the old current element
+        while (!m_currentElement->setCursorTo(*this, point - m_currentElement->absoluteBoundingRect().topLeft())) {
+            if (m_currentElement->parentElement()) {
+                m_mark = m_currentElement->parentElement()->positionOfChild(m_currentElement);
+                m_position = 0;
+                if (point.x() < m_currentElement->cursorLine(m_mark).p1().x()) {
+                    // the point is left of the old selection start, so we move the selection
+                    // start after the old current element
                     m_mark++;
                 }
-                m_currentElement=m_currentElement->parentElement();
+                m_currentElement = m_currentElement->parentElement();
             } else {
-                    return;
+                return;
             }
         }
     } else {
-        BasicElement* formulaElement = m_currentElement;
-        while( formulaElement->parentElement() != 0 ) {
+        BasicElement *formulaElement = m_currentElement;
+        while (formulaElement->parentElement() != 0) {
             formulaElement = formulaElement->parentElement();
         }
-        formulaElement->setCursorTo(*this,point);
+        formulaElement->setCursorTo(*this, point);
     }
 }
 
-int FormulaCursor::mark() const 
+int FormulaCursor::mark() const
 {
     return m_mark;
 }
@@ -237,7 +231,7 @@ void FormulaCursor::moveHome()
 
 void FormulaCursor::moveEnd()
 {
-    m_position=m_currentElement->endPosition();
+    m_position = m_currentElement->endPosition();
 }
 
 bool FormulaCursor::isHome() const
@@ -252,9 +246,7 @@ bool FormulaCursor::isEnd() const
 
 bool FormulaCursor::insideToken() const
 {
-    if( m_currentElement->elementType() == Number ||
-        m_currentElement->elementType() == Operator ||
-        m_currentElement->elementType() == Identifier ) {
+    if (m_currentElement->elementType() == Number || m_currentElement->elementType() == Operator || m_currentElement->elementType() == Identifier) {
         return true;
     }
     return false;
@@ -267,20 +259,14 @@ bool FormulaCursor::insideInferredRow() const
 
 bool FormulaCursor::insideFixedElement() const
 {
-    if (m_currentElement->elementType() == Fraction ||
-        m_currentElement->elementType() == Root ||
-        m_currentElement->elementType() == SubScript ||
-        m_currentElement->elementType() == SupScript ||
-        m_currentElement->elementType() == SubScript ||
-        m_currentElement->elementType() == SubSupScript ) {
+    if (m_currentElement->elementType() == Fraction || m_currentElement->elementType() == Root || m_currentElement->elementType() == SubScript
+        || m_currentElement->elementType() == SupScript || m_currentElement->elementType() == SubScript || m_currentElement->elementType() == SubSupScript) {
         return true;
     }
     return false;
 }
- 
 
-
-BasicElement* FormulaCursor::currentElement() const
+BasicElement *FormulaCursor::currentElement() const
 {
     return m_currentElement;
 }
@@ -290,12 +276,14 @@ int FormulaCursor::position() const
     return m_position;
 }
 
-void FormulaCursor::setCurrentElement(BasicElement* element) {
-    m_currentElement=element;
+void FormulaCursor::setCurrentElement(BasicElement *element)
+{
+    m_currentElement = element;
 }
 
-void FormulaCursor::setPosition(int position) {
-    m_position=position;
+void FormulaCursor::setPosition(int position)
+{
+    m_position = position;
 }
 
 CursorDirection FormulaCursor::direction() const
@@ -308,101 +296,99 @@ bool FormulaCursor::isSelecting() const
     return m_selecting;
 }
 
-void FormulaCursor::setSelecting( bool selecting )
+void FormulaCursor::setSelecting(bool selecting)
 {
     if (selecting) {
         if (!m_selecting) {
-            //we start a new selection
+            // we start a new selection
             m_selecting = selecting;
-            m_mark=m_position;
+            m_mark = m_position;
         }
     } else {
         m_selecting = selecting;
-        m_mark=0;
+        m_mark = 0;
     }
 }
 
-void FormulaCursor::setMark(int position) {
-    m_mark=position;
-}
-
-QPair< int,int > FormulaCursor::selection() const
+void FormulaCursor::setMark(int position)
 {
-    if (m_mark<m_position) {
-        return QPair<int,int>(m_mark,m_position);
-    } else {
-        return QPair<int,int>(m_position,m_mark);
-    }
+    m_mark = position;
 }
 
+QPair<int, int> FormulaCursor::selection() const
+{
+    if (m_mark < m_position) {
+        return QPair<int, int>(m_mark, m_position);
+    } else {
+        return QPair<int, int>(m_position, m_mark);
+    }
+}
 
 bool FormulaCursor::hasSelection() const
 {
-    return (m_selecting && m_mark!=m_position);
+    return (m_selecting && m_mark != m_position);
 }
-
 
 bool FormulaCursor::isAccepted() const
 {
-    if (mark()<0 || mark()>m_currentElement->endPosition() ||
-        position()<0 || position()>m_currentElement->endPosition()) {
+    if (mark() < 0 || mark() > m_currentElement->endPosition() || position() < 0 || position() > m_currentElement->endPosition()) {
         return false;
     }
     return m_currentElement->acceptCursor(*this);
 }
 
-bool FormulaCursor::performMovement ( FormulaCursor& oldcursor )
+bool FormulaCursor::performMovement(FormulaCursor &oldcursor)
 {
-    //handle selecting and not selecting case separately, which makes more clear
+    // handle selecting and not selecting case separately, which makes more clear
     if (isSelecting()) {
-        while ( m_currentElement ) {
-            if ( m_currentElement->moveCursor( *this, oldcursor ) ) {
+        while (m_currentElement) {
+            if (m_currentElement->moveCursor(*this, oldcursor)) {
                 if (isAccepted()) {
                     return true;
                 }
             } else {
-                if ( m_currentElement->parentElement() ) {
-                    bool ltr=m_mark<=m_position;
-                    //update the starting point of the selection
-                    m_mark=m_currentElement->parentElement()->positionOfChild(m_currentElement);
-                    //move the cursor to the parent and place it before the old element
-                    m_position=m_currentElement->parentElement()->positionOfChild(m_currentElement);
-                    m_currentElement=m_currentElement->parentElement();
+                if (m_currentElement->parentElement()) {
+                    bool ltr = m_mark <= m_position;
+                    // update the starting point of the selection
+                    m_mark = m_currentElement->parentElement()->positionOfChild(m_currentElement);
+                    // move the cursor to the parent and place it before the old element
+                    m_position = m_currentElement->parentElement()->positionOfChild(m_currentElement);
+                    m_currentElement = m_currentElement->parentElement();
                     if (ltr) {
-                        m_position++; //place the cursor behind
+                        m_position++; // place the cursor behind
                     } else {
-                        m_mark++; //place the selection beginning behind 
+                        m_mark++; // place the selection beginning behind
                     }
                     if (isAccepted()) {
                         return true;
                     }
                 } else {
-                    //we arrived at the toplevel element
+                    // we arrived at the toplevel element
                     return false;
                 }
             }
         }
     } else {
-        while ( m_currentElement ) {
-            if ( m_currentElement->moveCursor( *this, oldcursor ) ) {
+        while (m_currentElement) {
+            if (m_currentElement->moveCursor(*this, oldcursor)) {
                 if (isAccepted()) {
                     return true;
                 }
             } else {
-                if ( m_currentElement->parentElement() ) {
-                    //move the cursor to the parent and place it before the old element
-                    m_position=m_currentElement->parentElement()->positionOfChild(m_currentElement);
-                    m_currentElement=m_currentElement->parentElement();
-                    if (m_direction==MoveRight || m_direction==MoveDown) {
-                        m_position++; //place the cursor behind
+                if (m_currentElement->parentElement()) {
+                    // move the cursor to the parent and place it before the old element
+                    m_position = m_currentElement->parentElement()->positionOfChild(m_currentElement);
+                    m_currentElement = m_currentElement->parentElement();
+                    if (m_direction == MoveRight || m_direction == MoveDown) {
+                        m_position++; // place the cursor behind
                     }
-                    if (m_direction==MoveRight || m_direction==MoveLeft) {
+                    if (m_direction == MoveRight || m_direction == MoveLeft) {
                         if (isAccepted()) {
                             return true;
                         }
-                    }   
+                    }
                 } else {
-                    //We arrived at the top level element
+                    // We arrived at the top level element
                     return false;
                 }
             }
@@ -411,19 +397,18 @@ bool FormulaCursor::performMovement ( FormulaCursor& oldcursor )
     return false;
 }
 
-FormulaCursor& FormulaCursor::operator+= ( int step )
+FormulaCursor &FormulaCursor::operator+=(int step)
 {
-    m_position+=step;
+    m_position += step;
     return *this;
 }
 
-int FormulaCursor::offset ( )
+int FormulaCursor::offset()
 {
-    if (m_direction==MoveDown || m_direction==MoveRight) {
+    if (m_direction == MoveDown || m_direction == MoveRight) {
         return -1;
-    } else if (m_direction==MoveUp || m_direction==MoveLeft) {
+    } else if (m_direction == MoveUp || m_direction == MoveLeft) {
         return 1;
     }
     return 0;
 }
-

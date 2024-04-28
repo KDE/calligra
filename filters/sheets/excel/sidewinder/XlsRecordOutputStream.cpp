@@ -14,8 +14,10 @@ using namespace Swinder;
 
 static const unsigned NORECORD = 0xFFFFFFFF;
 
-XlsRecordOutputStream::XlsRecordOutputStream(QIODevice* device)
-    : m_dataStream(device), m_currentRecord(NORECORD), m_buffer(0)
+XlsRecordOutputStream::XlsRecordOutputStream(QIODevice *device)
+    : m_dataStream(device)
+    , m_currentRecord(NORECORD)
+    , m_buffer(0)
 {
     Q_ASSERT(device->isOpen());
     Q_ASSERT(device->isWritable());
@@ -39,20 +41,20 @@ qint64 XlsRecordOutputStream::recordPos() const
     return m_buffer->size();
 }
 
-void XlsRecordOutputStream::writeRecord(const Record& record)
+void XlsRecordOutputStream::writeRecord(const Record &record)
 {
     startRecord(record.rtti());
     record.writeData(*this);
     endRecord();
 }
 
-void XlsRecordOutputStream::writeRecord(Record& record)
+void XlsRecordOutputStream::writeRecord(Record &record)
 {
     record.setPosition(pos());
-    writeRecord(const_cast<const Record&>(record));
+    writeRecord(const_cast<const Record &>(record));
 }
 
-void XlsRecordOutputStream::rewriteRecord(const Record& record)
+void XlsRecordOutputStream::rewriteRecord(const Record &record)
 {
     qint64 oldPos = pos();
     m_dataStream.device()->seek(record.position());
@@ -94,22 +96,22 @@ void XlsRecordOutputStream::writeUnsigned(unsigned bits, unsigned value)
     unsigned mask = bits == 32 ? 0xFFFFFFFF : (unsigned(1) << bits) - 1;
     value &= mask;
     if (m_curBitOffset) {
-        if (bits < 8-m_curBitOffset) {
+        if (bits < 8 - m_curBitOffset) {
             m_curByte |= value << m_curBitOffset;
             m_curBitOffset += bits;
             return;
-        } else if (bits == 8-m_curBitOffset) {
+        } else if (bits == 8 - m_curBitOffset) {
             m_curByte |= value << m_curBitOffset;
             m_curBitOffset += bits;
-            m_buffer->write(reinterpret_cast<char*>(&m_curByte), 1);
+            m_buffer->write(reinterpret_cast<char *>(&m_curByte), 1);
             m_curByte = 0;
             m_curBitOffset = 0;
             return;
         } else {
-            unsigned bitsLeft = 8-m_curBitOffset;
+            unsigned bitsLeft = 8 - m_curBitOffset;
             unsigned maskVal = value & ((1 << bitsLeft) - 1);
             m_curByte |= maskVal << m_curBitOffset;
-            m_buffer->write(reinterpret_cast<char*>(&m_curByte), 1);
+            m_buffer->write(reinterpret_cast<char *>(&m_curByte), 1);
             m_curByte = 0;
             m_curBitOffset = 0;
 
@@ -119,7 +121,7 @@ void XlsRecordOutputStream::writeUnsigned(unsigned bits, unsigned value)
         }
     }
     while (bits >= 8) {
-        m_buffer->write(reinterpret_cast<char*>(&value), 1);
+        m_buffer->write(reinterpret_cast<char *>(&value), 1);
         bits -= 8;
         value >>= 8;
         mask >>= 8;
@@ -146,13 +148,13 @@ void XlsRecordOutputStream::writeFloat(unsigned bits, double value)
     writeBlob(b.data());
 }
 
-void XlsRecordOutputStream::writeUnicodeString(const QString& value)
+void XlsRecordOutputStream::writeUnicodeString(const QString &value)
 {
     QBuffer b;
     b.open(QIODevice::WriteOnly);
     QDataStream ds(&b);
     ds.setByteOrder(QDataStream::LittleEndian);
-    const ushort* d = value.utf16();
+    const ushort *d = value.utf16();
     while (*d) {
         ds << quint16(*d);
         d++;
@@ -160,14 +162,14 @@ void XlsRecordOutputStream::writeUnicodeString(const QString& value)
     writeBlob(b.data());
 }
 
-void XlsRecordOutputStream::writeUnicodeStringWithFlags(const QString& value)
+void XlsRecordOutputStream::writeUnicodeStringWithFlags(const QString &value)
 {
     char flags = 1; // just unicode, nothing else
     m_buffer->write(&flags, 1);
     writeUnicodeString(value);
 }
 
-void XlsRecordOutputStream::writeUnicodeStringWithFlagsAndLength(const QString& value)
+void XlsRecordOutputStream::writeUnicodeStringWithFlagsAndLength(const QString &value)
 {
     if (m_buffer->size() + 7 > 8224) {
         // header doesn't fit in record, add continue record
@@ -189,12 +191,12 @@ void XlsRecordOutputStream::writeUnicodeStringWithFlagsAndLength(const QString& 
     }
 }
 
-void XlsRecordOutputStream::writeByteString(const QString& value)
+void XlsRecordOutputStream::writeByteString(const QString &value)
 {
     writeBlob(value.toLatin1());
 }
 
-void XlsRecordOutputStream::writeBlob(const QByteArray& value)
+void XlsRecordOutputStream::writeBlob(const QByteArray &value)
 {
     Q_ASSERT(m_currentRecord != NORECORD);
     Q_ASSERT(m_curBitOffset == 0);

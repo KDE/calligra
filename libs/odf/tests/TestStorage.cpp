@@ -5,8 +5,8 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <QFile>
 #include <QDir>
+#include <QFile>
 
 #include <KoStore.h>
 #include <OdfDebug.h>
@@ -27,11 +27,10 @@ private Q_SLOTS:
     void storage2();
 
 private:
-    char getch(QIODevice * dev);
+    char getch(QIODevice *dev);
 };
 
-
-char TestStorage::getch(QIODevice * dev)
+char TestStorage::getch(QIODevice *dev)
 {
     char c = 0;
     dev->getChar(&c);
@@ -40,8 +39,9 @@ char TestStorage::getch(QIODevice * dev)
 
 void TestStorage::initTestCase()
 {
-    QLoggingCategory::setFilterRules("*.debug=false\n"
-            "calligra.lib.store=true");
+    QLoggingCategory::setFilterRules(
+        "*.debug=false\n"
+        "calligra.lib.store=true");
 }
 
 void TestStorage::storage_data()
@@ -49,10 +49,10 @@ void TestStorage::storage_data()
     QTest::addColumn<int>("type");
     QTest::addColumn<QString>("testFile");
 
-    QTest::newRow("tar") << (int) KoStore::Tar << "test.tgz";
-    QTest::newRow("directory") << (int) KoStore::Directory << "testdir";
-    QTest::newRow("zip") << (int) KoStore::Zip <<"test.zip";
-    QTest::newRow("Encrypted") << (int) KoStore::Encrypted << "testEncrypted.zip";
+    QTest::newRow("tar") << (int)KoStore::Tar << "test.tgz";
+    QTest::newRow("directory") << (int)KoStore::Directory << "testdir";
+    QTest::newRow("zip") << (int)KoStore::Zip << "test.zip";
+    QTest::newRow("Encrypted") << (int)KoStore::Encrypted << "testEncrypted.zip";
 }
 
 void TestStorage::storage()
@@ -77,13 +77,13 @@ void TestStorage::storage()
     if (dirTest.exists()) {
 #ifdef Q_OS_UNIX
         QByteArray ba = QByteArray("rm -rf ") + QFile::encodeName(testFile);
-        system(ba.constData());       // QDir::rmdir isn't recursive!
+        system(ba.constData()); // QDir::rmdir isn't recursive!
 #else
         QFAIL("build dir not empty");
 #endif
     }
 
-    KoStore* store = KoStore::createStore(testFile, KoStore::Write, "", backend);
+    KoStore *store = KoStore::createStore(testFile, KoStore::Write, "", backend);
     QVERIFY(store);
     QVERIFY(store->bad() == false);
 
@@ -124,9 +124,9 @@ void TestStorage::storage()
     if (store->isEncrypted())
         store->setPassword("password");
 
-    QVERIFY (store->open("test1/with/a/relative/dir.txt"));
-    QIODevice* dev = store->device();
-    int i = 0,  lim = strlen(test1),  count = 0;
+    QVERIFY(store->open("test1/with/a/relative/dir.txt"));
+    QIODevice *dev = store->device();
+    int i = 0, lim = strlen(test1), count = 0;
     while (static_cast<char>(getch(dev)) == test1[i++]) {
         if (i == lim) {
             i = 0;
@@ -137,9 +137,9 @@ void TestStorage::storage()
     QCOMPARE(count, 100);
 
     store->enterDirectory(testDir);
-    QCOMPARE (store->currentPath(), QString(testDirResult));
+    QCOMPARE(store->currentPath(), QString(testDirResult));
 
-    QVERIFY (store->open("test2/with/a/relative/dir.txt"));
+    QVERIFY(store->open("test2/with/a/relative/dir.txt"));
     dev = store->device();
     i = 0;
     lim = strlen(test2);
@@ -160,21 +160,21 @@ void TestStorage::storage()
         ;
     }
     store->enterDirectory(testDir);
-    QCOMPARE (store->currentPath(), QString(testDirResult));
+    QCOMPARE(store->currentPath(), QString(testDirResult));
 
-    QVERIFY (store->open("root"));
-    QCOMPARE (store->size(), (qint64) 22);
+    QVERIFY(store->open("root"));
+    QCOMPARE(store->size(), (qint64)22);
     dev = store->device();
     QByteArray dataReadBack = dev->read(strlen(test3));
     store->close();
-    QCOMPARE (dataReadBack, QByteArray(test3));
+    QCOMPARE(dataReadBack, QByteArray(test3));
 
     store->popDirectory();
     QCOMPARE(store->currentPath(), QString(testDir2Result));
 
-    QVERIFY (store->hasFile("relative/dir.txt"));
-    
-    QVERIFY (store->open("root"));
+    QVERIFY(store->hasFile("relative/dir.txt"));
+
+    QVERIFY(store->open("root"));
     char buf[29];
     store->read(buf, 28);
     buf[28] = '\0';
@@ -193,9 +193,9 @@ void TestStorage::storage2_data()
     QTest::addColumn<int>("type");
     QTest::addColumn<QString>("testFile");
 
-    QTest::newRow("tar") << (int) KoStore::Tar << "test.tgz";
-    QTest::newRow("directory") << (int) KoStore::Directory << "testdir";
-    QTest::newRow("zip") << (int) KoStore::Zip <<"test.zip";
+    QTest::newRow("tar") << (int)KoStore::Tar << "test.tgz";
+    QTest::newRow("directory") << (int)KoStore::Directory << "testdir";
+    QTest::newRow("zip") << (int)KoStore::Zip << "test.zip";
 }
 
 void TestStorage::storage2()
@@ -212,11 +212,11 @@ void TestStorage::storage2()
         dirTest.removeRecursively();
     }
 
-    KoStore* store = KoStore::createStore(testFile, KoStore::Write, "", backend);
+    KoStore *store = KoStore::createStore(testFile, KoStore::Write, "", backend);
     QVERIFY(store->bad() == false);
 
     // Write
-    QVERIFY (store->open("layer"));
+    QVERIFY(store->open("layer"));
     char str[DATALEN];
 
     sprintf(str, "1,2,3,4\n");
@@ -230,13 +230,13 @@ void TestStorage::storage2()
     store = KoStore::createStore(testFile, KoStore::Read, "", backend);
     QVERIFY(store->bad() == false);
     // Read back
-    QVERIFY (store->open("layer"));
+    QVERIFY(store->open("layer"));
     char str2[DATALEN];
     QIODevice *stream = store->device(); // << Possible suspect!
 
-    stream->readLine(str2, DATALEN);      // << as is this
+    stream->readLine(str2, DATALEN); // << as is this
     qint64 len = store->read(str2, DATALEN);
-    QCOMPARE(len, (qint64) DATALEN);
+    QCOMPARE(len, (qint64)DATALEN);
     store->close();
     delete store;
 
@@ -245,4 +245,3 @@ void TestStorage::storage2()
 
 QTEST_GUILESS_MAIN(TestStorage)
 #include <TestStorage.moc>
-

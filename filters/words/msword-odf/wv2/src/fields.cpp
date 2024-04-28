@@ -18,73 +18,83 @@
 
 #include "fields.h"
 #include "olestream.h"
-#include "word_helper.h"
 #include "word97_generated.h"
+#include "word_helper.h"
 
 #include "wvlog.h"
 
 namespace wvWare
 {
-    FLD::FLD() : ch( 0 ), flt( 0 )
-    {
-    }
+FLD::FLD()
+    : ch(0)
+    , flt(0)
+{
+}
 
-    FLD::FLD( OLEStreamReader* stream, bool preservePos ) : ch( 0 ), flt( 0 )
-    {
-        read( stream, preservePos );
-    }
+FLD::FLD(OLEStreamReader *stream, bool preservePos)
+    : ch(0)
+    , flt(0)
+{
+    read(stream, preservePos);
+}
 
-    FLD::FLD( const U8* ptr ) : ch( 0 ), flt( 0 )
-    {
-        readPtr( ptr );
-    }
+FLD::FLD(const U8 *ptr)
+    : ch(0)
+    , flt(0)
+{
+    readPtr(ptr);
+}
 
-    bool FLD::read( OLEStreamReader* stream, bool preservePos )
-    {
-        if ( preservePos )
-            stream->push();
+bool FLD::read(OLEStreamReader *stream, bool preservePos)
+{
+    if (preservePos)
+        stream->push();
 
-        ch = stream->readU8();
-        flt = stream->readU8();
+    ch = stream->readU8();
+    flt = stream->readU8();
 
-        if ( preservePos )
-            stream->pop();
-        return true;
-    }
+    if (preservePos)
+        stream->pop();
+    return true;
+}
 
-    bool FLD::readPtr( const U8* ptr )
-    {
-        ch = *ptr++;
-        flt = *ptr;
-        return true;
-    }
+bool FLD::readPtr(const U8 *ptr)
+{
+    ch = *ptr++;
+    flt = *ptr;
+    return true;
+}
 
-    void FLD::clear()
-    {
-        ch = 0;
-        flt = 0;
-    }
+void FLD::clear()
+{
+    ch = 0;
+    flt = 0;
+}
 
-    const unsigned int FLD::sizeOf = 2;
+const unsigned int FLD::sizeOf = 2;
 
-    bool operator==( const FLD &lhs, const FLD &rhs )
-    {
-        return lhs.ch == rhs.ch &&
-              lhs.flt == rhs.flt;
-    }
+bool operator==(const FLD &lhs, const FLD &rhs)
+{
+    return lhs.ch == rhs.ch && lhs.flt == rhs.flt;
+}
 
-    bool operator!=( const FLD &lhs, const FLD &rhs )
-    {
-        return !( lhs == rhs );
-    }
+bool operator!=(const FLD &lhs, const FLD &rhs)
+{
+    return !(lhs == rhs);
+}
 } // namespace wvWare
 
 using namespace wvWare;
 
-
-Fields::Fields( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
-    m_main( 0 ), m_header( 0 ), m_footnote( 0 ), m_annotation( 0 ),
-    m_endnote( 0 ), m_textbox( 0 ), m_headerTextbox( 0 ), m_bookmark( 0 )
+Fields::Fields(OLEStreamReader *tableStream, const Word97::FIB &fib)
+    : m_main(0)
+    , m_header(0)
+    , m_footnote(0)
+    , m_annotation(0)
+    , m_endnote(0)
+    , m_textbox(0)
+    , m_headerTextbox(0)
+    , m_bookmark(0)
 {
     tableStream->push();
 
@@ -99,29 +109,29 @@ Fields::Fields( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
           << "  bookmark: fc=" << fib.fcSttbfbkmk << " lcb=" << fib.lcbSttbfbkmk << Qt::endl
           << "  headertextbox: fc=" << fib.fcPlcffldHdrTxbx << " lcb=" << fib.lcbPlcffldHdrTxbx << Qt::endl;
 #endif
-    tableStream->seek( fib.fcPlcffldMom, WV2_SEEK_SET ); // to make the sanity check work
-    read( fib.fcPlcffldMom, fib.lcbPlcffldMom, tableStream, &m_main );
+    tableStream->seek(fib.fcPlcffldMom, WV2_SEEK_SET); // to make the sanity check work
+    read(fib.fcPlcffldMom, fib.lcbPlcffldMom, tableStream, &m_main);
 
-    sanityCheck( tableStream, fib.fcPlcffldHdr, fib.lcbPlcffldHdr );
-    read( fib.fcPlcffldHdr, fib.lcbPlcffldHdr, tableStream, &m_header );
+    sanityCheck(tableStream, fib.fcPlcffldHdr, fib.lcbPlcffldHdr);
+    read(fib.fcPlcffldHdr, fib.lcbPlcffldHdr, tableStream, &m_header);
 
-    sanityCheck( tableStream, fib.fcPlcffldFtn, fib.lcbPlcffldFtn );
-    read( fib.fcPlcffldFtn, fib.lcbPlcffldFtn, tableStream, &m_footnote );
+    sanityCheck(tableStream, fib.fcPlcffldFtn, fib.lcbPlcffldFtn);
+    read(fib.fcPlcffldFtn, fib.lcbPlcffldFtn, tableStream, &m_footnote);
 
-    sanityCheck( tableStream, fib.fcPlcffldAtn, fib.lcbPlcffldAtn );
-    read( fib.fcPlcffldAtn, fib.lcbPlcffldAtn, tableStream, &m_annotation );
+    sanityCheck(tableStream, fib.fcPlcffldAtn, fib.lcbPlcffldAtn);
+    read(fib.fcPlcffldAtn, fib.lcbPlcffldAtn, tableStream, &m_annotation);
 
-    sanityCheck( tableStream, fib.fcPlcffldEdn, fib.lcbPlcffldEdn );
-    read( fib.fcPlcffldEdn, fib.lcbPlcffldEdn, tableStream, &m_endnote );
+    sanityCheck(tableStream, fib.fcPlcffldEdn, fib.lcbPlcffldEdn);
+    read(fib.fcPlcffldEdn, fib.lcbPlcffldEdn, tableStream, &m_endnote);
 
-    sanityCheck( tableStream, fib.fcPlcffldTxbx, fib.lcbPlcffldTxbx );
-    read( fib.fcPlcffldTxbx, fib.lcbPlcffldTxbx, tableStream, &m_textbox );
+    sanityCheck(tableStream, fib.fcPlcffldTxbx, fib.lcbPlcffldTxbx);
+    read(fib.fcPlcffldTxbx, fib.lcbPlcffldTxbx, tableStream, &m_textbox);
 
-    sanityCheck( tableStream, fib.fcSttbfbkmk, fib.lcbSttbfbkmk );
-    read( fib.fcSttbfbkmk, fib.lcbSttbfbkmk, tableStream, &m_bookmark );
+    sanityCheck(tableStream, fib.fcSttbfbkmk, fib.lcbSttbfbkmk);
+    read(fib.fcSttbfbkmk, fib.lcbSttbfbkmk, tableStream, &m_bookmark);
 
     // No sanity check here, plcOcx might be in between
-    read( fib.fcPlcffldHdrTxbx, fib.lcbPlcffldHdrTxbx, tableStream, &m_headerTextbox );
+    read(fib.fcPlcffldHdrTxbx, fib.lcbPlcffldHdrTxbx, tableStream, &m_headerTextbox);
 
     tableStream->pop();
 }
@@ -138,63 +148,63 @@ Fields::~Fields()
     delete m_main;
 }
 
-const FLD* Fields::fldForCP( Parser::SubDocument subDocument, U32 cp ) const
+const FLD *Fields::fldForCP(Parser::SubDocument subDocument, U32 cp) const
 {
-    switch( subDocument ) {
-        case Parser::None:
-            wvlog << "Error: The state of the parser is invalid!" << Qt::endl;
-            return 0;
-            break;
-        case Parser::Main:
-            return fldForCP( m_main, cp );
-            break;
-        case Parser::Footnote:
-            return fldForCP( m_footnote, cp );
-            break;
-        case Parser::Header:
-            return fldForCP( m_header, cp );
-            break;
-        case Parser::Macro:
-            wvlog << "Warning: There shouldn't be any fields in macro text" << Qt::endl;
-            return 0;
-            break;
-        case Parser::Annotation:
-            return fldForCP( m_annotation, cp );
-            break;
-        case Parser::Endnote:
-            return fldForCP( m_endnote, cp );
-            break;
-        case Parser::TextBox:
-            return fldForCP( m_textbox, cp );
-            break;
-        case Parser::HeaderTextBox:
-            return fldForCP( m_headerTextbox, cp );
-            break;
-        case Parser::Bookmark:
-            return fldForCP( m_bookmark, cp );
-            break;
+    switch (subDocument) {
+    case Parser::None:
+        wvlog << "Error: The state of the parser is invalid!" << Qt::endl;
+        return 0;
+        break;
+    case Parser::Main:
+        return fldForCP(m_main, cp);
+        break;
+    case Parser::Footnote:
+        return fldForCP(m_footnote, cp);
+        break;
+    case Parser::Header:
+        return fldForCP(m_header, cp);
+        break;
+    case Parser::Macro:
+        wvlog << "Warning: There shouldn't be any fields in macro text" << Qt::endl;
+        return 0;
+        break;
+    case Parser::Annotation:
+        return fldForCP(m_annotation, cp);
+        break;
+    case Parser::Endnote:
+        return fldForCP(m_endnote, cp);
+        break;
+    case Parser::TextBox:
+        return fldForCP(m_textbox, cp);
+        break;
+    case Parser::HeaderTextBox:
+        return fldForCP(m_headerTextbox, cp);
+        break;
+    case Parser::Bookmark:
+        return fldForCP(m_bookmark, cp);
+        break;
     }
     return 0; // make the compiler happy, never reached
 }
 
-void Fields::read( U32 fc, U32 lcb, OLEStreamReader* tableStream, PLCFMap<FLD>** plcf )
+void Fields::read(U32 fc, U32 lcb, OLEStreamReader *tableStream, PLCFMap<FLD> **plcf)
 {
-    if ( lcb == 0 )
+    if (lcb == 0)
         return;
-    tableStream->seek( fc, WV2_SEEK_SET );
-    *plcf = new PLCFMap<FLD>( lcb, tableStream );
+    tableStream->seek(fc, WV2_SEEK_SET);
+    *plcf = new PLCFMap<FLD>(lcb, tableStream);
 }
 
-void Fields::sanityCheck( const OLEStreamReader* tableStream, U32 nextFC, U32 lcb ) const
+void Fields::sanityCheck(const OLEStreamReader *tableStream, U32 nextFC, U32 lcb) const
 {
-    if ( lcb != 0 && static_cast<U32>( tableStream->tell() ) != nextFC )
+    if (lcb != 0 && static_cast<U32>(tableStream->tell()) != nextFC)
         wvlog << "Warning: Detected a hole within the table stream (next fc=" << nextFC << ")" << Qt::endl;
 }
 
-const FLD* Fields::fldForCP( const PLCFMap<FLD>* plcf, U32 cp ) const
+const FLD *Fields::fldForCP(const PLCFMap<FLD> *plcf, U32 cp) const
 {
-    if ( !plcf )
+    if (!plcf)
         return 0;
 
-    return plcf->item( cp );
+    return plcf->item(cp);
 }

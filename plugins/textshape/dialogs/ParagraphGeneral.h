@@ -65,7 +65,7 @@ private:
     ParagraphDropCaps *m_paragraphDropCaps;
 
     KoParagraphStyle *m_style;
-    QList<KoParagraphStyle*> m_paragraphStyles;
+    QList<KoParagraphStyle *> m_paragraphStyles;
     KoStyleManager *m_styleManager;
 
     KoStyleThumbnailer *m_thumbnail;

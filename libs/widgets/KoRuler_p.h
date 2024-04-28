@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ */
 #ifndef KORULER_P_H
 #define KORULER_P_H
 
@@ -10,29 +10,49 @@
 
 class RulerTabChooser : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    RulerTabChooser(QWidget *parent) : QWidget(parent), m_type(QTextOption::LeftTab), m_showTabs(false) {}
-    ~RulerTabChooser() override {}
+    RulerTabChooser(QWidget *parent)
+        : QWidget(parent)
+        , m_type(QTextOption::LeftTab)
+        , m_showTabs(false)
+    {
+    }
+    ~RulerTabChooser() override
+    {
+    }
 
-    inline QTextOption::TabType type() {return m_type;}
-    void setShowTabs(bool showTabs) { if (m_showTabs == showTabs) return; m_showTabs = showTabs; update(); }
+    inline QTextOption::TabType type()
+    {
+        return m_type;
+    }
+    void setShowTabs(bool showTabs)
+    {
+        if (m_showTabs == showTabs)
+            return;
+        m_showTabs = showTabs;
+        update();
+    }
     void mousePressEvent(QMouseEvent *) override;
 
     void paintEvent(QPaintEvent *) override;
 
 private:
     QTextOption::TabType m_type;
-    bool m_showTabs :1;
+    bool m_showTabs : 1;
 };
 
 class PaintingStrategy
 {
 public:
     /// constructor
-    PaintingStrategy() {}
+    PaintingStrategy()
+    {
+    }
     /// destructor
-    virtual ~PaintingStrategy() {}
+    virtual ~PaintingStrategy()
+    {
+    }
 
     /**
      * Draw the background of the ruler.
@@ -72,7 +92,10 @@ public:
 class HorizontalPaintingStrategy : public PaintingStrategy
 {
 public:
-    HorizontalPaintingStrategy() : lengthInPixel(1) {}
+    HorizontalPaintingStrategy()
+        : lengthInPixel(1)
+    {
+    }
 
     QRectF drawBackground(const KoRulerPrivate *ruler, QPainter &painter) override;
     void drawTabs(const KoRulerPrivate *ruler, QPainter &painter) override;
@@ -87,12 +110,19 @@ private:
 class VerticalPaintingStrategy : public PaintingStrategy
 {
 public:
-    VerticalPaintingStrategy() : lengthInPixel(1) {}
+    VerticalPaintingStrategy()
+        : lengthInPixel(1)
+    {
+    }
 
     QRectF drawBackground(const KoRulerPrivate *ruler, QPainter &painter) override;
-    void drawTabs(const KoRulerPrivate *, QPainter &) override {}
+    void drawTabs(const KoRulerPrivate *, QPainter &) override
+    {
+    }
     void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle) override;
-    void drawIndents(const KoRulerPrivate *, QPainter &) override { }
+    void drawIndents(const KoRulerPrivate *, QPainter &) override
+    {
+    }
     QSize sizeHint() override;
 
 private:
@@ -102,7 +132,9 @@ private:
 class HorizontalDistancesPaintingStrategy : public HorizontalPaintingStrategy
 {
 public:
-    HorizontalDistancesPaintingStrategy() {}
+    HorizontalDistancesPaintingStrategy()
+    {
+    }
 
     void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle) override;
 
@@ -120,7 +152,7 @@ public:
 
     KoUnit unit;
     const Qt::Orientation orientation;
-    const KoViewConverter * const viewConverter;
+    const KoViewConverter *const viewConverter;
 
     int offset;
     qreal rulerLength;
@@ -145,8 +177,8 @@ public:
     bool relativeTabs;
     bool tabMoved; // set to true on first move of a selected tab
     QList<KoRuler::Tab> tabs;
-    int originalIndex; //index of selected tab before we started dragging it.
-    int currentIndex; //index of selected tab or selected HotSpot - only valid when selected indicates tab or hotspot
+    int originalIndex; // index of selected tab before we started dragging it.
+    int currentIndex; // index of selected tab or selected HotSpot - only valid when selected indicates tab or hotspot
     KoRuler::Tab deletedTab;
     qreal tabDistance;
 
@@ -157,35 +189,28 @@ public:
     QList<HotSpotData> hotspots;
 
     bool rightToLeft;
-    enum Selection {
-        None,
-        Tab,
-        FirstLineIndent,
-        ParagraphIndent,
-        EndIndent,
-        HotSpot
-    };
+    enum Selection { None, Tab, FirstLineIndent, ParagraphIndent, EndIndent, HotSpot };
     Selection selected;
     int selectOffset;
 
-    QList<QAction*> popupActions;
+    QList<QAction *> popupActions;
 
     RulerTabChooser *tabChooser;
 
     // Cached painting strategies
-    PaintingStrategy * normalPaintingStrategy;
-    PaintingStrategy * distancesPaintingStrategy;
+    PaintingStrategy *normalPaintingStrategy;
+    PaintingStrategy *distancesPaintingStrategy;
 
     // Current painting strategy
-    PaintingStrategy * paintingStrategy;
+    PaintingStrategy *paintingStrategy;
 
     KoRuler *ruler;
 
     qreal numberStepForUnit() const;
     /// @return The rounding of value to the nearest multiple of stepValue
     qreal doSnapping(const qreal value) const;
-    Selection selectionAtPosition(const QPoint & pos, int *selectOffset = 0);
-    int hotSpotIndex(const QPoint & pos);
+    Selection selectionAtPosition(const QPoint &pos, int *selectOffset = 0);
+    int hotSpotIndex(const QPoint &pos);
     qreal effectiveActiveRangeStart() const;
     qreal effectiveActiveRangeEnd() const;
 

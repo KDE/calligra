@@ -7,16 +7,16 @@
 #include "calligracreator.h"
 
 // Calligra
-#include <KoPart.h>
-#include <KoStore.h>
 #include <KoDocument.h>
 #include <KoDocumentEntry.h>
+#include <KoPart.h>
+#include <KoStore.h>
 
 // Qt
-#include <QPainter>
-#include <QTimer>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QPainter>
+#include <QTimer>
 
 static const int minThumbnailSize = 400;
 static const int timeoutTime = 5000; // in msec
@@ -43,7 +43,7 @@ KIO::ThumbnailResult CalligraCreator::create(const KIO::ThumbnailRequest &reques
         return KIO::ThumbnailResult::fail();
     }
     if (store &&
-         // ODF thumbnail?
+        // ODF thumbnail?
         (store->open(QLatin1String("Thumbnails/thumbnail.png")) ||
          // old KOffice/Calligra thumbnail?
          store->open(QLatin1String("preview.png")) ||
@@ -53,8 +53,7 @@ KIO::ThumbnailResult CalligraCreator::create(const KIO::ThumbnailRequest &reques
         const QByteArray thumbnailData = store->read(store->size());
 
         QImage thumbnail;
-        if (thumbnail.loadFromData(thumbnailData) &&
-            thumbnail.width() >= request.targetSize().width() && thumbnail.height() >= request.targetSize().height()) {
+        if (thumbnail.loadFromData(thumbnailData) && thumbnail.width() >= request.targetSize().width() && thumbnail.height() >= request.targetSize().height()) {
             // put a white background behind the thumbnail
             // as lots of old(?) OOo files have thumbnails with transparent background
             image = QImage(thumbnail.size(), QImage::Format_RGB32);
@@ -71,8 +70,8 @@ KIO::ThumbnailResult CalligraCreator::create(const KIO::ThumbnailRequest &reques
     KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
     m_part = documentEntry.createKoPart(&error);
 
-
-    if (!m_part) return KIO::ThumbnailResult::fail();
+    if (!m_part)
+        return KIO::ThumbnailResult::fail();
 
     m_doc = m_part->document();
 
@@ -89,7 +88,7 @@ KIO::ThumbnailResult CalligraCreator::create(const KIO::ThumbnailRequest &reques
         return KIO::ThumbnailResult::fail();
     }
 
-    if (! m_loadingCompleted) {
+    if (!m_loadingCompleted) {
         // loading is done async, so wait here for a while
         // Using a QEventLoop here seems fine, thumbnailers are only used inside the
         // thumbnail protocol slave, it seems

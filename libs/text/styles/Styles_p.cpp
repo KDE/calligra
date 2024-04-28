@@ -14,23 +14,22 @@ StylePrivate::StylePrivate()
 }
 
 StylePrivate::StylePrivate(const StylePrivate &other)
-        : m_properties(other.m_properties)
+    : m_properties(other.m_properties)
 {
 }
 
-StylePrivate & StylePrivate::operator=(const StylePrivate& other)
+StylePrivate &StylePrivate::operator=(const StylePrivate &other)
 {
     m_properties = other.m_properties;
     return *this;
 }
-
 
 StylePrivate::~StylePrivate()
 {
 }
 
 StylePrivate::StylePrivate(const QMap<int, QVariant> &other)
-        : m_properties(other)
+    : m_properties(other)
 {
 }
 
@@ -66,7 +65,7 @@ void StylePrivate::copyMissing(const StylePrivate &other)
 
 void StylePrivate::copyMissing(const QMap<int, QVariant> &other)
 {
-    for (QMap<int,QVariant>::const_iterator it(other.constBegin()); it != other.constEnd(); ++it) {
+    for (QMap<int, QVariant>::const_iterator it(other.constBegin()); it != other.constEnd(); ++it) {
         if (!m_properties.contains(it.key()))
             m_properties.insert(it.key(), it.value());
     }
@@ -74,7 +73,7 @@ void StylePrivate::copyMissing(const QMap<int, QVariant> &other)
 
 void StylePrivate::removeDuplicates(const StylePrivate &other)
 {
-    foreach(int key, other.m_properties.keys()) {
+    foreach (int key, other.m_properties.keys()) {
         if (m_properties.value(key) == other.value(key)) {
             m_properties.remove(key);
         }
@@ -83,7 +82,7 @@ void StylePrivate::removeDuplicates(const StylePrivate &other)
 
 void StylePrivate::removeDuplicates(const QMap<int, QVariant> &other)
 {
-    foreach(int key, other.keys()) {
+    foreach (int key, other.keys()) {
         if (m_properties.value(key) == other.value(key))
             m_properties.remove(key);
     }
@@ -98,7 +97,7 @@ bool StylePrivate::operator==(const StylePrivate &other) const
 {
     if (other.m_properties.size() != m_properties.size())
         return false;
-    foreach(int key, m_properties.keys()) {
+    foreach (int key, m_properties.keys()) {
         if (m_properties.value(key) != other.value(key))
             return false;
     }

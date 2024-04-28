@@ -9,24 +9,19 @@
 
 #include "CharacterHighlighting.h"
 
-#include <KoText.h>
 #include <KoCharacterStyle.h>
 #include <KoIcon.h>
+#include <KoText.h>
 
 #include <QFontDatabase>
-#include <QStringList>
-#include <QVBoxLayout>
 #include <QMessageBox>
+#include <QStringList>
 #include <QTextCharFormat>
+#include <QVBoxLayout>
 
-enum Position {
-    Normal,
-    Superscript,
-    Subscript,
-    Custom
-};
+enum Position { Normal, Superscript, Subscript, Custom };
 
-CharacterHighlighting::CharacterHighlighting(QWidget* parent)
+CharacterHighlighting::CharacterHighlighting(QWidget *parent)
     : QWidget(parent)
 {
     widget.setupUi(this);
@@ -43,8 +38,9 @@ CharacterHighlighting::CharacterHighlighting(QWidget* parent)
 
     widget.positionList->addItems(fontLayoutPositionList());
 
-    widget.strikethroughType->addItems(KoText::underlineTypeList()); //TODO make KoText consistent: either add strikethroughTypeList, or change from underlineTypeList to lineTypeList
-    widget.strikethroughLineStyle->addItems(KoText::underlineStyleList()); //TODO idem
+    widget.strikethroughType->addItems(
+        KoText::underlineTypeList()); // TODO make KoText consistent: either add strikethroughTypeList, or change from underlineTypeList to lineTypeList
+    widget.strikethroughLineStyle->addItems(KoText::underlineStyleList()); // TODO idem
 
     connect(widget.underlineStyle, &QComboBox::activated, this, &CharacterHighlighting::underlineTypeChanged);
     connect(widget.underlineLineStyle, &QComboBox::activated, this, &CharacterHighlighting::underlineStyleChanged);
@@ -76,11 +72,16 @@ KoCharacterStyle::LineType CharacterHighlighting::indexToLineType(int index)
 {
     KoCharacterStyle::LineType lineType;
     switch (index) {
-    case 1: lineType = KoCharacterStyle::SingleLine; break;
-    case 2: lineType = KoCharacterStyle::DoubleLine; break;
+    case 1:
+        lineType = KoCharacterStyle::SingleLine;
+        break;
+    case 2:
+        lineType = KoCharacterStyle::DoubleLine;
+        break;
     case 0:
     default:
-        lineType = KoCharacterStyle::NoLineType; break;
+        lineType = KoCharacterStyle::NoLineType;
+        break;
     }
     return lineType;
 }
@@ -89,14 +90,25 @@ KoCharacterStyle::LineStyle CharacterHighlighting::indexToLineStyle(int index)
 {
     KoCharacterStyle::LineStyle lineStyle;
     switch (index) {
-    case 1: lineStyle = KoCharacterStyle::DashLine; break;
-    case 2: lineStyle = KoCharacterStyle::DottedLine; break;
-    case 3: lineStyle = KoCharacterStyle::DotDashLine; break;
-    case 4: lineStyle = KoCharacterStyle::DotDotDashLine; break;
-    case 5: lineStyle = KoCharacterStyle::WaveLine; break;
+    case 1:
+        lineStyle = KoCharacterStyle::DashLine;
+        break;
+    case 2:
+        lineStyle = KoCharacterStyle::DottedLine;
+        break;
+    case 3:
+        lineStyle = KoCharacterStyle::DotDashLine;
+        break;
+    case 4:
+        lineStyle = KoCharacterStyle::DotDotDashLine;
+        break;
+    case 5:
+        lineStyle = KoCharacterStyle::WaveLine;
+        break;
     case 0:
     default:
-        lineStyle = KoCharacterStyle::SolidLine; break;
+        lineStyle = KoCharacterStyle::SolidLine;
+        break;
     }
     return lineStyle;
 }
@@ -105,10 +117,18 @@ int CharacterHighlighting::lineTypeToIndex(KoCharacterStyle::LineType type)
 {
     int index;
     switch (type) {
-    case KoCharacterStyle::NoLineType: index = 0; break;
-    case KoCharacterStyle::SingleLine: index = 1; break;
-    case KoCharacterStyle::DoubleLine: index = 2; break;
-    default: index = 0; break;
+    case KoCharacterStyle::NoLineType:
+        index = 0;
+        break;
+    case KoCharacterStyle::SingleLine:
+        index = 1;
+        break;
+    case KoCharacterStyle::DoubleLine:
+        index = 2;
+        break;
+    default:
+        index = 0;
+        break;
     }
     return index;
 }
@@ -117,13 +137,27 @@ int CharacterHighlighting::lineStyleToIndex(KoCharacterStyle::LineStyle type)
 {
     int index;
     switch (type) {
-    case KoCharacterStyle::SolidLine: index = 0; break;
-    case KoCharacterStyle::DashLine: index = 1; break;
-    case KoCharacterStyle::DottedLine: index = 2; break;
-    case KoCharacterStyle::DotDashLine: index = 3; break;
-    case KoCharacterStyle::DotDotDashLine: index = 4; break;
-    case KoCharacterStyle::WaveLine: index = 5; break;
-    default: index = 0; break;
+    case KoCharacterStyle::SolidLine:
+        index = 0;
+        break;
+    case KoCharacterStyle::DashLine:
+        index = 1;
+        break;
+    case KoCharacterStyle::DottedLine:
+        index = 2;
+        break;
+    case KoCharacterStyle::DotDashLine:
+        index = 3;
+        break;
+    case KoCharacterStyle::DotDotDashLine:
+        index = 4;
+        break;
+    case KoCharacterStyle::WaveLine:
+        index = 5;
+        break;
+    default:
+        index = 0;
+        break;
     }
     return index;
 }
@@ -203,14 +237,17 @@ void CharacterHighlighting::strikethroughStyleChanged(int item)
 void CharacterHighlighting::strikethroughColorChanged(QColor color)
 {
     if (widget.strikethroughType->currentIndex())
-        emit strikethroughChanged(indexToLineType(widget.strikethroughType->currentIndex()), indexToLineStyle(widget.strikethroughLineStyle->currentIndex()), color);
+        emit strikethroughChanged(indexToLineType(widget.strikethroughType->currentIndex()),
+                                  indexToLineStyle(widget.strikethroughLineStyle->currentIndex()),
+                                  color);
     m_strikeoutInherited = false;
     emit charStyleChanged();
 }
 
 void CharacterHighlighting::backgroundColorChanged()
 {
-    m_backgroundColorReset = false; m_backgroundColorChanged = true;
+    m_backgroundColorReset = false;
+    m_backgroundColorChanged = true;
     if (widget.enableBackground->isChecked() && widget.backgroundColor->color().isValid())
         emit backgroundColorChanged(widget.backgroundColor->color());
     emit charStyleChanged();
@@ -218,7 +255,8 @@ void CharacterHighlighting::backgroundColorChanged()
 
 void CharacterHighlighting::textColorChanged()
 {
-    m_textColorReset = false; m_textColorChanged = true;
+    m_textColorReset = false;
+    m_textColorChanged = true;
     if (widget.enableText->isChecked() && widget.textColor->color().isValid())
         emit textColorChanged(widget.textColor->color());
     emit charStyleChanged();
@@ -257,20 +295,20 @@ void CharacterHighlighting::clearBackgroundColor()
 QStringList CharacterHighlighting::capitalizationList()
 {
     QStringList lst;
-    lst <<i18n("Normal");
-    lst <<i18n("Small Caps");
-    lst <<i18n("Uppercase");
-    lst <<i18n("Lowercase");
-    lst <<i18n("Capitalize");
+    lst << i18n("Normal");
+    lst << i18n("Small Caps");
+    lst << i18n("Uppercase");
+    lst << i18n("Lowercase");
+    lst << i18n("Capitalize");
     return lst;
 }
 
 QStringList CharacterHighlighting::fontLayoutPositionList()
 {
     QStringList lst;
-    lst <<i18n("Normal");
-    lst <<i18n("Superscript");
-    lst <<i18n("Subscript");
+    lst << i18n("Normal");
+    lst << i18n("Superscript");
+    lst << i18n("Subscript");
     return lst;
 }
 void CharacterHighlighting::setDisplay(KoCharacterStyle *style, bool directFormattingMode)
@@ -285,7 +323,7 @@ void CharacterHighlighting::setDisplay(KoCharacterStyle *style, bool directForma
         font.setStyle(QFont::StyleOblique);
     m_fontChooser->setFont(font);
 
-    m_positionInherited  = !style->hasProperty(QTextFormat::TextVerticalAlignment);
+    m_positionInherited = !style->hasProperty(QTextFormat::TextVerticalAlignment);
     switch (style->verticalAlignment()) {
     case QTextCharFormat::AlignSuperScript:
         widget.positionList->setCurrentIndex(1);
@@ -298,27 +336,27 @@ void CharacterHighlighting::setDisplay(KoCharacterStyle *style, bool directForma
         widget.positionList->setCurrentIndex(0);
     }
 
-    m_underlineInherited = directFormattingMode || (!style->hasProperty(KoCharacterStyle::UnderlineStyle)
-                            && !style->hasProperty(KoCharacterStyle::UnderlineType)
-                            && !style->hasProperty(QTextFormat::TextUnderlineColor));
-    m_strikeoutInherited = directFormattingMode || (!style->hasProperty(KoCharacterStyle::StrikeOutStyle)
-                            && !style->hasProperty(KoCharacterStyle::StrikeOutType)
-                            && !style->hasProperty(KoCharacterStyle::StrikeOutColor));
+    m_underlineInherited = directFormattingMode
+        || (!style->hasProperty(KoCharacterStyle::UnderlineStyle) && !style->hasProperty(KoCharacterStyle::UnderlineType)
+            && !style->hasProperty(QTextFormat::TextUnderlineColor));
+    m_strikeoutInherited = directFormattingMode
+        || (!style->hasProperty(KoCharacterStyle::StrikeOutStyle) && !style->hasProperty(KoCharacterStyle::StrikeOutType)
+            && !style->hasProperty(KoCharacterStyle::StrikeOutColor));
     m_capitalizationInherited = directFormattingMode || !style->hasProperty(QTextFormat::FontCapitalization);
 
-    //set the underline up
+    // set the underline up
     widget.underlineStyle->setCurrentIndex(1);
     widget.underlineLineStyle->setCurrentIndex(lineStyleToIndex(style->underlineStyle()));
     widget.underlineStyle->setCurrentIndex(lineTypeToIndex(style->underlineType()));
     widget.underlineColor->setColor(style->underlineColor());
 
-    //set the strikethrough up
+    // set the strikethrough up
     widget.strikethroughType->setCurrentIndex(1);
     widget.strikethroughLineStyle->setCurrentIndex(lineStyleToIndex(style->strikeOutStyle()));
     widget.strikethroughType->setCurrentIndex(lineTypeToIndex(style->strikeOutType()));
     widget.strikethroughColor->setColor(style->strikeOutColor());
 
-    //Now set the capitalisation
+    // Now set the capitalisation
     switch (style->fontCapitalization()) {
     case QFont::MixedCase:
         widget.capitalizationList->setCurrentIndex(0);
@@ -340,9 +378,9 @@ void CharacterHighlighting::setDisplay(KoCharacterStyle *style, bool directForma
         break;
     }
 
-    //Set font decoration display
+    // Set font decoration display
     m_textColorChanged = false;
-    m_textColorReset = ! style->hasProperty(QTextFormat::ForegroundBrush);
+    m_textColorReset = !style->hasProperty(QTextFormat::ForegroundBrush);
     widget.enableText->setChecked(m_textColorReset);
     if (style->foreground().style() == Qt::NoBrush) {
         widget.textColor->setColor(widget.textColor->defaultColor());
@@ -351,7 +389,7 @@ void CharacterHighlighting::setDisplay(KoCharacterStyle *style, bool directForma
     }
 
     m_backgroundColorChanged = false;
-    m_backgroundColorReset = ! style->hasProperty(QTextFormat::BackgroundBrush);
+    m_backgroundColorReset = !style->hasProperty(QTextFormat::BackgroundBrush);
     widget.enableBackground->setChecked(m_backgroundColorReset);
     if (style->background().style() == Qt::NoBrush) {
         widget.backgroundColor->setColor(widget.backgroundColor->defaultColor());
@@ -365,17 +403,16 @@ void CharacterHighlighting::save(KoCharacterStyle *style)
     if (style == 0)
         return;
 
-
     KFontChooser::FontDiffFlags fontDiff = m_fontChooser->fontDiffFlags();
-    if (fontDiff & KFontChooser::FontDiffFamily){
+    if (fontDiff & KFontChooser::FontDiffFamily) {
         style->setFontFamily(m_fontChooser->font().family());
     }
-    if (fontDiff & KFontChooser::FontDiffSize){
+    if (fontDiff & KFontChooser::FontDiffSize) {
         style->setFontPointSize(m_fontChooser->font().pointSize());
     }
     if (fontDiff & KFontChooser::FontDiffStyle) {
         style->setFontWeight(m_fontChooser->font().weight());
-        style->setFontItalic(m_fontChooser->font().italic()); //TODO should set style instead of italic
+        style->setFontItalic(m_fontChooser->font().italic()); // TODO should set style instead of italic
     }
 
     if (!m_underlineInherited) {
@@ -409,7 +446,7 @@ void CharacterHighlighting::save(KoCharacterStyle *style)
             style->setFontCapitalization(QFont::Capitalize);
     }
 
-    if (!m_positionInherited ) {
+    if (!m_positionInherited) {
         QTextCharFormat::VerticalAlignment va;
         if (widget.positionList->currentIndex() == 0)
             va = QTextCharFormat::AlignNormal;

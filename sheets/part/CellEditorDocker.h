@@ -33,7 +33,7 @@ protected: // reimplementations
     void resizeEvent(QResizeEvent *event) override;
 
 private Q_SLOTS:
-    void toolChanged(const QString& toolId);
+    void toolChanged(const QString &toolId);
 
 private:
     class Private;
@@ -46,8 +46,9 @@ public:
     CellEditorDockerFactory();
 
     QString id() const override;
-    QDockWidget* createDockWidget() override;
-    DockPosition defaultDockPosition() const override {
+    QDockWidget *createDockWidget() override;
+    DockPosition defaultDockPosition() const override
+    {
         return DockTop;
     }
 };

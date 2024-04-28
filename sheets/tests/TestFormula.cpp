@@ -6,25 +6,42 @@
 
 #include "TestKspreadCommon.h"
 
-#include "engine/MapBase.h"
 #include "engine/CalculationSettings.h"
 #include "engine/Localization.h"
+#include "engine/MapBase.h"
 
 using namespace Calligra::Sheets;
 
-static char encodeTokenType(const Token& token)
+static char encodeTokenType(const Token &token)
 {
     char result = '?';
     switch (token.type()) {
-    case Token::Boolean:    result = 'b'; break;
-    case Token::Integer:    result = 'i'; break;
-    case Token::Float:      result = 'f'; break;
-    case Token::Operator:   result = 'o'; break;
-    case Token::Cell:       result = 'c'; break;
-    case Token::Range:      result = 'r'; break;
-    case Token::Identifier: result = 'x'; break;
-    case Token::String:     result = 's'; break;
-    default: break;
+    case Token::Boolean:
+        result = 'b';
+        break;
+    case Token::Integer:
+        result = 'i';
+        break;
+    case Token::Float:
+        result = 'f';
+        break;
+    case Token::Operator:
+        result = 'o';
+        break;
+    case Token::Cell:
+        result = 'c';
+        break;
+    case Token::Range:
+        result = 'r';
+        break;
+    case Token::Identifier:
+        result = 'x';
+        break;
+    case Token::String:
+        result = 's';
+        break;
+    default:
+        break;
     }
     return result;
 }
@@ -55,9 +72,9 @@ static QString describeTokenCodes(const QString& tokenCodes)
 }
 #endif
 
-#define CHECK_TOKENIZE(x,y) QCOMPARE(tokenizeFormula(x), QString(y))
+#define CHECK_TOKENIZE(x, y) QCOMPARE(tokenizeFormula(x), QString(y))
 
-static QString tokenizeFormula(const QString& formula)
+static QString tokenizeFormula(const QString &formula)
 {
     Formula f;
     QString expr = formula;
@@ -73,11 +90,14 @@ static QString tokenizeFormula(const QString& formula)
     return resultCodes;
 }
 
-
 // because we may need to promote expected value from integer to float
-#define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
+#define CHECK_EVAL(x, y)                                                                                                                                       \
+    {                                                                                                                                                          \
+        Value z(y);                                                                                                                                            \
+        QCOMPARE(evaluate(x, z), (z));                                                                                                                         \
+    }
 
-Value TestFormula::evaluate(const QString& formula, Value& ex)
+Value TestFormula::evaluate(const QString &formula, Value &ex)
 {
     Formula f(m_sheet);
     QString expr = formula;
@@ -195,8 +215,8 @@ void TestFormula::testConstant()
     CHECK_EVAL("-1", Value(-1));
     CHECK_EVAL("3.14e7", Value(3.14e7));
     CHECK_EVAL("3.14e-7", Value(3.14e-7));
-    CHECK_EVAL("10000000000000000", Value(1e16));  // number too big to be represented as int32
-    CHECK_EVAL("100000000000000000000", Value(1e20));  // number too big to be represented as int64
+    CHECK_EVAL("10000000000000000", Value(1e16)); // number too big to be represented as int32
+    CHECK_EVAL("100000000000000000000", Value(1e20)); // number too big to be represented as int64
 
     // String constants (from Odf 1.2 spec)
     CHECK_EVAL("\"Hi\"", Value("Hi"));
@@ -211,7 +231,6 @@ void TestFormula::testConstant()
     CHECK_EVAL("#NUM!", Value::errorNUM());
     CHECK_EVAL("#REF!", Value::errorREF());
     CHECK_EVAL("#VALUE!", Value::errorVALUE());
-
 }
 
 void TestFormula::testWhitespace()
@@ -275,7 +294,6 @@ void TestFormula::testBinary()
     CHECK_EVAL("(2*3)/(6-2*3)", Value::errorDIV0());
     CHECK_EVAL("1e3+7/0", Value::errorDIV0());
     CHECK_EVAL("2^(99/0)", Value::errorDIV0());
-
 }
 
 void TestFormula::testOperators()
@@ -292,7 +310,7 @@ void TestFormula::testOperators()
     CHECK_EVAL("10000/10000", Value(1));
     CHECK_EVAL("10000000000000000/10000000000000000", Value(1));
     CHECK_EVAL("100000000000000000000.0/100000000000000000000.0", Value(1));
-    CHECK_EVAL("100000000000000000000/100000000000000000000", Value(1));  // number too big to be represented as int64
+    CHECK_EVAL("100000000000000000000/100000000000000000000", Value(1)); // number too big to be represented as int64
 }
 
 void TestFormula::testComparison()
@@ -335,7 +353,7 @@ void TestFormula::testString()
     CHECK_EVAL("2+\"5\"", Value(7));
     CHECK_EVAL("\"2\"+\"5\"", Value(7));
 }
-    
+
 void TestFormula::testReferences()
 {
     CHECK_EVAL("A1", Value(6));
@@ -355,7 +373,7 @@ void TestFormula::testFunction()
     // function with no arguments
     CHECK_EVAL("TRUE()", Value(true));
 
-    //the built-in sine function
+    // the built-in sine function
     CHECK_EVAL("SIN(0)", Value(0));
     CHECK_EVAL("2+sin(\"2\"-\"2\")", Value(2));
     CHECK_EVAL("\"1\"+sin(\"0\")", Value(1));
@@ -382,7 +400,7 @@ void TestFormula::testInlineArrays()
     CHECK_EVAL("={1;2|3;4}", array);
 
     array.setElement(1, 0, Value(0.0));
-    CHECK_EVAL("={1;SIN(0)|3;4}", array);   // "dynamic"
+    CHECK_EVAL("={1;SIN(0)|3;4}", array); // "dynamic"
     CHECK_EVAL("=SUM({1;2|3;4})", Value(10));
 #endif
 }

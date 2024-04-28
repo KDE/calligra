@@ -23,14 +23,14 @@ class RoundCornersPlugin : public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 public:
-    RoundCornersPlugin(QObject * parent, const QVariantList &);
+    RoundCornersPlugin(QObject *parent, const QVariantList &);
     ~RoundCornersPlugin() override;
 
 private Q_SLOTS:
     void slotRoundCorners();
 
 private:
-    RoundCornersDlg * m_roundCornersDlg;
+    RoundCornersDlg *m_roundCornersDlg;
 };
 
 class KoUnitDoubleSpinBox;
@@ -41,15 +41,14 @@ class RoundCornersDlg : public QDialog
     Q_OBJECT
 
 public:
-    explicit RoundCornersDlg(QWidget* parent = 0L, const char* name = 0L);
+    explicit RoundCornersDlg(QWidget *parent = 0L, const char *name = 0L);
 
     qreal radius() const;
     void setRadius(qreal value);
     void setUnit(const KoUnit &unit);
 
 private:
-    KoUnitDoubleSpinBox * m_radius;
+    KoUnitDoubleSpinBox *m_radius;
 };
 
 #endif // ROUNDCORNERSPLUGIN_H
-

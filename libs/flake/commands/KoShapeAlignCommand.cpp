@@ -16,16 +16,20 @@
 class Q_DECL_HIDDEN KoShapeAlignCommand::Private
 {
 public:
-    Private() : command(0) {}
-    ~Private() {
+    Private()
+        : command(0)
+    {
+    }
+    ~Private()
+    {
         delete command;
     }
     KoShapeMoveCommand *command;
 };
 
-KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align align, const QRectF &boundingRect, KUndo2Command *parent)
-        : KUndo2Command(parent),
-        d(new Private())
+KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape *> &shapes, Align align, const QRectF &boundingRect, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , d(new Private())
 {
     QVector<QPointF> previousPositions;
     QVector<QPointF> newPositions;
@@ -35,15 +39,15 @@ KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align al
     const int shapesCount = shapes.count();
     previousPositions.reserve(shapesCount);
     newPositions.reserve(shapesCount);
-    foreach(KoShape *shape, shapes) {
-//   if (dynamic_cast<KoShapeGroup*> (shape))
-//       debugFlake <<"Found Group";
-//   else if (dynamic_cast<KoShapeContainer*> (shape))
-//       debugFlake <<"Found Container";
-//   else
-//       debugFlake <<"Found shape";
+    foreach (KoShape *shape, shapes) {
+        //   if (dynamic_cast<KoShapeGroup*> (shape))
+        //       debugFlake <<"Found Group";
+        //   else if (dynamic_cast<KoShapeContainer*> (shape))
+        //       debugFlake <<"Found Container";
+        //   else
+        //       debugFlake <<"Found shape";
         position = shape->position();
-        previousPositions  << position;
+        previousPositions << position;
         bRect = shape->boundingRect();
         switch (align) {
         case HorizontalLeftAlignment:
@@ -65,9 +69,9 @@ KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align al
             delta = QPointF(bRect.x(), boundingRect.bottom() - bRect.height()) - bRect.topLeft();
             break;
         };
-        newPositions  << position + delta;
-//debugFlake <<"-> moving" <<  position.x() <<"," << position.y() <<" to" <<
-//        (position + delta).x() << ", " << (position+delta).y() << Qt::endl;
+        newPositions << position + delta;
+        // debugFlake <<"-> moving" <<  position.x() <<"," << position.y() <<" to" <<
+        //         (position + delta).x() << ", " << (position+delta).y() << Qt::endl;
     }
     d->command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
 

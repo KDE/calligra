@@ -6,16 +6,15 @@
   SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
-
 // Own
 #include "SvmParser.h"
 
 // Qt
-#include <QByteArray>
 #include <QBuffer>
+#include <QByteArray>
 #include <QDataStream>
-#include <QString>
 #include <QPolygon>
+#include <QString>
 
 // Libsvm
 #include "SvmEnums.h"
@@ -32,15 +31,13 @@
 namespace Libsvm
 {
 
-
-static void soakBytes( QDataStream &stream, int numBytes )
+static void soakBytes(QDataStream &stream, int numBytes)
 {
     quint8 scratch;
-    for ( int i = 0; i < numBytes; ++i ) {
+    for (int i = 0; i < numBytes; ++i) {
         stream >> scratch;
     }
 }
-
 
 SvmParser::SvmParser()
     : mContext()
@@ -48,74 +45,69 @@ SvmParser::SvmParser()
 {
 }
 
-
 static const struct ActionNames {
-    int     actionNumber;
+    int actionNumber;
     QString actionName;
-} actionNames[] = {
-    { META_NULL_ACTION,                  "META_NULL_ACTION" },
-    { META_PIXEL_ACTION,                 "META_PIXEL_ACTION" },
-    { META_POINT_ACTION,                 "META_POINT_ACTION" },
-    { META_LINE_ACTION,                  "META_LINE_ACTION" },
-    { META_RECT_ACTION,                  "META_RECT_ACTION" },
-    { META_ROUNDRECT_ACTION,             "META_ROUNDRECT_ACTION" },
-    { META_ELLIPSE_ACTION,               "META_ELLIPSE_ACTION" },
-    { META_ARC_ACTION,                   "META_ARC_ACTION" },
-    { META_PIE_ACTION,                   "META_PIE_ACTION" },
-    { META_CHORD_ACTION,                 "META_CHORD_ACTION" },
-    { META_POLYLINE_ACTION,              "META_POLYLINE_ACTION" },
-    { META_POLYGON_ACTION,               "META_POLYGON_ACTION" },
-    { META_POLYPOLYGON_ACTION,           "META_POLYPOLYGON_ACTION" },
-    { META_TEXT_ACTION,                  "META_TEXT_ACTION" },
-    { META_TEXTARRAY_ACTION,             "META_TEXTARRAY_ACTION" },
-    { META_STRETCHTEXT_ACTION,           "META_STRETCHTEXT_ACTION" },
-    { META_TEXTRECT_ACTION,              "META_TEXTRECT_ACTION" },
-    { META_BMP_ACTION,                   "META_BMP_ACTION" },
-    { META_BMPSCALE_ACTION,              "META_BMPSCALE_ACTION" },
-    { META_BMPSCALEPART_ACTION,          "META_BMPSCALEPART_ACTION" },
-    { META_BMPEX_ACTION,                 "META_BMPEX_ACTION" },
-    { META_BMPEXSCALE_ACTION,            "META_BMPEXSCALE_ACTION" },
-    { META_BMPEXSCALEPART_ACTION,        "META_BMPEXSCALEPART_ACTION" },
-    { META_MASK_ACTION,                  "META_MASK_ACTION" },
-    { META_MASKSCALE_ACTION,             "META_MASKSCALE_ACTION" },
-    { META_MASKSCALEPART_ACTION,         "META_MASKSCALEPART_ACTION" },
-    { META_GRADIENT_ACTION,              "META_GRADIENT_ACTION" },
-    { META_HATCH_ACTION,                 "META_HATCH_ACTION" },
-    { META_WALLPAPER_ACTION,             "META_WALLPAPER_ACTION" },
-    { META_CLIPREGION_ACTION,            "META_CLIPREGION_ACTION" },
-    { META_ISECTRECTCLIPREGION_ACTION,   "META_ISECTRECTCLIPREGION_ACTION" },
-    { META_ISECTREGIONCLIPREGION_ACTION, "META_ISECTREGIONCLIPREGION_ACTION" },
-    { META_MOVECLIPREGION_ACTION,        "META_MOVECLIPREGION_ACTION" },
-    { META_LINECOLOR_ACTION,             "META_LINECOLOR_ACTION" },
-    { META_FILLCOLOR_ACTION,             "META_FILLCOLOR_ACTION" },
-    { META_TEXTCOLOR_ACTION,             "META_TEXTCOLOR_ACTION" },
-    { META_TEXTFILLCOLOR_ACTION,         "META_TEXTFILLCOLOR_ACTION" },
-    { META_TEXTALIGN_ACTION,             "META_TEXTALIGN_ACTION" },
-    { META_MAPMODE_ACTION,               "META_MAPMODE_ACTION" },
-    { META_FONT_ACTION,                  "META_FONT_ACTION" },
-    { META_PUSH_ACTION,                  "META_PUSH_ACTION" },
-    { META_POP_ACTION,                   "META_POP_ACTION" },
-    { META_RASTEROP_ACTION,              "META_RASTEROP_ACTION" },
-    { META_TRANSPARENT_ACTION,           "META_TRANSPARENT_ACTION" },
-    { META_EPS_ACTION,                   "META_EPS_ACTION" },
-    { META_REFPOINT_ACTION,              "META_REFPOINT_ACTION" },
-    { META_TEXTLINECOLOR_ACTION,         "META_TEXTLINECOLOR_ACTION" },
-    { META_TEXTLINE_ACTION,              "META_TEXTLINE_ACTION" },
-    { META_FLOATTRANSPARENT_ACTION,      "META_FLOATTRANSPARENT_ACTION" },
-    { META_GRADIENTEX_ACTION,            "META_GRADIENTEX_ACTION" },
-    { META_LAYOUTMODE_ACTION,            "META_LAYOUTMODE_ACTION" },
-    { META_TEXTLANGUAGE_ACTION,          "META_TEXTLANGUAGE_ACTION" },
-    { META_OVERLINECOLOR_ACTION,         "META_OVERLINECOLOR_ACTION" },
-    { META_RENDERGRAPHIC_ACTION,         "META_RENDERGRAPHIC_ACTION" },
-    { META_COMMENT_ACTION,               "META_COMMENT_ACTION" }
-};
-
+} actionNames[] = {{META_NULL_ACTION, "META_NULL_ACTION"},
+                   {META_PIXEL_ACTION, "META_PIXEL_ACTION"},
+                   {META_POINT_ACTION, "META_POINT_ACTION"},
+                   {META_LINE_ACTION, "META_LINE_ACTION"},
+                   {META_RECT_ACTION, "META_RECT_ACTION"},
+                   {META_ROUNDRECT_ACTION, "META_ROUNDRECT_ACTION"},
+                   {META_ELLIPSE_ACTION, "META_ELLIPSE_ACTION"},
+                   {META_ARC_ACTION, "META_ARC_ACTION"},
+                   {META_PIE_ACTION, "META_PIE_ACTION"},
+                   {META_CHORD_ACTION, "META_CHORD_ACTION"},
+                   {META_POLYLINE_ACTION, "META_POLYLINE_ACTION"},
+                   {META_POLYGON_ACTION, "META_POLYGON_ACTION"},
+                   {META_POLYPOLYGON_ACTION, "META_POLYPOLYGON_ACTION"},
+                   {META_TEXT_ACTION, "META_TEXT_ACTION"},
+                   {META_TEXTARRAY_ACTION, "META_TEXTARRAY_ACTION"},
+                   {META_STRETCHTEXT_ACTION, "META_STRETCHTEXT_ACTION"},
+                   {META_TEXTRECT_ACTION, "META_TEXTRECT_ACTION"},
+                   {META_BMP_ACTION, "META_BMP_ACTION"},
+                   {META_BMPSCALE_ACTION, "META_BMPSCALE_ACTION"},
+                   {META_BMPSCALEPART_ACTION, "META_BMPSCALEPART_ACTION"},
+                   {META_BMPEX_ACTION, "META_BMPEX_ACTION"},
+                   {META_BMPEXSCALE_ACTION, "META_BMPEXSCALE_ACTION"},
+                   {META_BMPEXSCALEPART_ACTION, "META_BMPEXSCALEPART_ACTION"},
+                   {META_MASK_ACTION, "META_MASK_ACTION"},
+                   {META_MASKSCALE_ACTION, "META_MASKSCALE_ACTION"},
+                   {META_MASKSCALEPART_ACTION, "META_MASKSCALEPART_ACTION"},
+                   {META_GRADIENT_ACTION, "META_GRADIENT_ACTION"},
+                   {META_HATCH_ACTION, "META_HATCH_ACTION"},
+                   {META_WALLPAPER_ACTION, "META_WALLPAPER_ACTION"},
+                   {META_CLIPREGION_ACTION, "META_CLIPREGION_ACTION"},
+                   {META_ISECTRECTCLIPREGION_ACTION, "META_ISECTRECTCLIPREGION_ACTION"},
+                   {META_ISECTREGIONCLIPREGION_ACTION, "META_ISECTREGIONCLIPREGION_ACTION"},
+                   {META_MOVECLIPREGION_ACTION, "META_MOVECLIPREGION_ACTION"},
+                   {META_LINECOLOR_ACTION, "META_LINECOLOR_ACTION"},
+                   {META_FILLCOLOR_ACTION, "META_FILLCOLOR_ACTION"},
+                   {META_TEXTCOLOR_ACTION, "META_TEXTCOLOR_ACTION"},
+                   {META_TEXTFILLCOLOR_ACTION, "META_TEXTFILLCOLOR_ACTION"},
+                   {META_TEXTALIGN_ACTION, "META_TEXTALIGN_ACTION"},
+                   {META_MAPMODE_ACTION, "META_MAPMODE_ACTION"},
+                   {META_FONT_ACTION, "META_FONT_ACTION"},
+                   {META_PUSH_ACTION, "META_PUSH_ACTION"},
+                   {META_POP_ACTION, "META_POP_ACTION"},
+                   {META_RASTEROP_ACTION, "META_RASTEROP_ACTION"},
+                   {META_TRANSPARENT_ACTION, "META_TRANSPARENT_ACTION"},
+                   {META_EPS_ACTION, "META_EPS_ACTION"},
+                   {META_REFPOINT_ACTION, "META_REFPOINT_ACTION"},
+                   {META_TEXTLINECOLOR_ACTION, "META_TEXTLINECOLOR_ACTION"},
+                   {META_TEXTLINE_ACTION, "META_TEXTLINE_ACTION"},
+                   {META_FLOATTRANSPARENT_ACTION, "META_FLOATTRANSPARENT_ACTION"},
+                   {META_GRADIENTEX_ACTION, "META_GRADIENTEX_ACTION"},
+                   {META_LAYOUTMODE_ACTION, "META_LAYOUTMODE_ACTION"},
+                   {META_TEXTLANGUAGE_ACTION, "META_TEXTLANGUAGE_ACTION"},
+                   {META_OVERLINECOLOR_ACTION, "META_OVERLINECOLOR_ACTION"},
+                   {META_RENDERGRAPHIC_ACTION, "META_RENDERGRAPHIC_ACTION"},
+                   {META_COMMENT_ACTION, "META_COMMENT_ACTION"}};
 
 void SvmParser::setBackend(SvmAbstractBackend *backend)
 {
     mBackend = backend;
 }
-
 
 bool SvmParser::parse(const QByteArray &data)
 {
@@ -123,7 +115,7 @@ bool SvmParser::parse(const QByteArray &data)
     if (!data.startsWith("VCLMTF"))
         return false;
 
-    QBuffer buffer((QByteArray *) &data);
+    QBuffer buffer((QByteArray *)&data);
     buffer.open(QIODevice::ReadOnly);
 
     QDataStream mainStream(&buffer);
@@ -136,17 +128,14 @@ bool SvmParser::parse(const QByteArray &data)
     debugVectorImage << "================ SVM HEADER ================";
     debugVectorImage << "version, length:" << header.versionCompat.version << header.versionCompat.length;
     debugVectorImage << "compressionMode:" << header.compressionMode;
-    debugVectorImage << "mapMode:" << "Origin" << header.mapMode.origin
-                  << "scaleX"
-                  << header.mapMode.scaleX.numerator << header.mapMode.scaleX.denominator
-                  << (qreal(header.mapMode.scaleX.numerator) / header.mapMode.scaleX.denominator)
-                  << "scaleY"
-                  << header.mapMode.scaleY.numerator << header.mapMode.scaleY.denominator
-                  << (qreal(header.mapMode.scaleY.numerator) / header.mapMode.scaleY.denominator);
+    debugVectorImage << "mapMode:"
+                     << "Origin" << header.mapMode.origin << "scaleX" << header.mapMode.scaleX.numerator << header.mapMode.scaleX.denominator
+                     << (qreal(header.mapMode.scaleX.numerator) / header.mapMode.scaleX.denominator) << "scaleY" << header.mapMode.scaleY.numerator
+                     << header.mapMode.scaleY.denominator << (qreal(header.mapMode.scaleY.numerator) / header.mapMode.scaleY.denominator);
     debugVectorImage << "size:" << header.width << header.height;
     debugVectorImage << "actionCount:" << header.actionCount;
     debugVectorImage << "================ SVM HEADER ================";
-#endif    
+#endif
 
     mBackend->init(header);
 
@@ -163,17 +152,17 @@ bool SvmParser::parse(const QByteArray &data)
     // the graphics drawing actions.  The context actions will
     // manipulate the graphics context, which is maintained here.
     for (uint action = 0; action < header.actionCount; ++action) {
-        quint16  actionType;
-        quint16  version;
-        quint32  totalSize;
+        quint16 actionType;
+        quint16 version;
+        quint32 totalSize;
 
-        // Here starts the Action itself. The first two bytes is the action type. 
+        // Here starts the Action itself. The first two bytes is the action type.
         mainStream >> actionType;
 
         // The VersionCompat object
         mainStream >> version;
         mainStream >> totalSize;
-        
+
         char *rawData = new char[totalSize];
         mainStream.readRawData(rawData, totalSize);
         QByteArray dataArray(rawData, totalSize);
@@ -193,8 +182,8 @@ bool SvmParser::parse(const QByteArray &data)
             else
                 name = "(out of bounds)";
 
-            debugVectorImage << name << "(" << actionType << ")" << "version" << version
-                          << "totalSize" << totalSize;
+            debugVectorImage << name << "(" << actionType << ")"
+                             << "version" << version << "totalSize" << totalSize;
         }
 #endif
 
@@ -208,15 +197,13 @@ bool SvmParser::parse(const QByteArray &data)
             break;
         case META_LINE_ACTION:
             break;
-        case META_RECT_ACTION:
-            {
-                QRect  rect;
+        case META_RECT_ACTION: {
+            QRect rect;
 
-                parseRect(stream, rect);
-                debugVectorImage << "Rect:"  << rect;
-                mBackend->rect(mContext, rect);
-            }
-            break;
+            parseRect(stream, rect);
+            debugVectorImage << "Rect:" << rect;
+            mBackend->rect(mContext, rect);
+        } break;
         case META_ROUNDRECT_ACTION:
             break;
         case META_ELLIPSE_ACTION:
@@ -227,109 +214,102 @@ bool SvmParser::parse(const QByteArray &data)
             break;
         case META_CHORD_ACTION:
             break;
-        case META_POLYLINE_ACTION:
-            {
-                QPolygon  polygon;
+        case META_POLYLINE_ACTION: {
+            QPolygon polygon;
 
+            parsePolygon(stream, polygon);
+            debugVectorImage << "Polyline:" << polygon;
+            mBackend->polyLine(mContext, polygon);
+
+            // FIXME: Version 2: Lineinfo, Version 3: polyflags
+            if (version > 1)
+                soakBytes(stream, totalSize - 2 - 4 * 2 * polygon.size());
+        } break;
+        case META_POLYGON_ACTION: {
+            QPolygon polygon;
+
+            parsePolygon(stream, polygon);
+            debugVectorImage << "Polygon:" << polygon;
+            mBackend->polygon(mContext, polygon);
+
+            // FIXME: Version 2: Lineinfo, Version 3: polyflags
+            if (version > 1)
+                soakBytes(stream, totalSize - 2 - 4 * 2 * polygon.size());
+        } break;
+        case META_POLYPOLYGON_ACTION: {
+            quint16 polygonCount;
+            stream >> polygonCount;
+            // debugVectorImage << "Number of polygons:"  << polygonCount;
+
+            QList<QPolygon> polygons;
+            for (quint16 i = 0; i < polygonCount; i++) {
+                QPolygon polygon;
                 parsePolygon(stream, polygon);
-                debugVectorImage << "Polyline:"  << polygon;
-                mBackend->polyLine(mContext, polygon);
-
-                // FIXME: Version 2: Lineinfo, Version 3: polyflags
-                if (version > 1)
-                    soakBytes(stream, totalSize - 2 - 4 * 2 * polygon.size());
+                polygons << polygon;
+                // debugVectorImage << "Polygon:"  << polygon;
             }
-            break;
-        case META_POLYGON_ACTION:
-            {
-                QPolygon  polygon;
 
-                parsePolygon(stream, polygon);
-                debugVectorImage << "Polygon:"  << polygon;
-                mBackend->polygon(mContext, polygon);
+            if (version > 1) {
+                quint16 complexPolygonCount;
+                stream >> complexPolygonCount;
+                // debugVectorImage << "Number of complex polygons:"  << complexPolygonCount;
 
-                // FIXME: Version 2: Lineinfo, Version 3: polyflags
-                if (version > 1)
-                    soakBytes(stream, totalSize - 2 - 4 * 2 * polygon.size());
-            }
-            break;
-        case META_POLYPOLYGON_ACTION:
-            {
-                quint16 polygonCount;
-                stream >> polygonCount;
-                //debugVectorImage << "Number of polygons:"  << polygonCount;
+                // Parse the so called "complex polygons". For
+                // each one, there is an index and a polygon.  The
+                // index tells which of the original polygons to
+                // replace.
+                for (quint16 i = 0; i < complexPolygonCount; i++) {
+                    quint16 complexPolygonIndex;
+                    stream >> complexPolygonIndex;
 
-                QList<QPolygon> polygons;
-                for (quint16 i = 0 ; i < polygonCount ; i++) {
                     QPolygon polygon;
                     parsePolygon(stream, polygon);
-                    polygons << polygon;
-                    //debugVectorImage << "Polygon:"  << polygon;
+                    // debugVectorImage << "polygon index:"  << complexPolygonIndex << polygon;
+
+                    // FIXME: The so called complex polygons have something to do
+                    //        with modifying the polygons, but I have not yet been
+                    //        able to understand how.  So until I do, we'll disable
+                    //        this.
+                    // polygons[complexPolygonIndex] = polygon;
                 }
-                
-                if (version > 1) {
-                    quint16 complexPolygonCount;
-                    stream >> complexPolygonCount;
-                    //debugVectorImage << "Number of complex polygons:"  << complexPolygonCount;
-
-                    // Parse the so called "complex polygons". For
-                    // each one, there is an index and a polygon.  The
-                    // index tells which of the original polygons to
-                    // replace.
-                    for (quint16 i = 0; i < complexPolygonCount; i++) {
-                        quint16 complexPolygonIndex;
-                        stream >> complexPolygonIndex;
-
-                        QPolygon polygon;
-                        parsePolygon(stream, polygon);
-                        //debugVectorImage << "polygon index:"  << complexPolygonIndex << polygon;
-
-                        // FIXME: The so called complex polygons have something to do
-                        //        with modifying the polygons, but I have not yet been
-                        //        able to understand how.  So until I do, we'll disable
-                        //        this.
-                        //polygons[complexPolygonIndex] = polygon;
-                    }
-                }
-                
-                mBackend->polyPolygon(mContext, polygons);
             }
-            break;
+
+            mBackend->polyPolygon(mContext, polygons);
+        } break;
         case META_TEXT_ACTION:
             break;
-        case META_TEXTARRAY_ACTION:
-            {
-                QPoint   startPoint;
-                QString  string;
-                quint16  startIndex;
-                quint16  len;
-                quint32  dxArrayLen;
-                qint32  *dxArray = 0;
+        case META_TEXTARRAY_ACTION: {
+            QPoint startPoint;
+            QString string;
+            quint16 startIndex;
+            quint16 len;
+            quint32 dxArrayLen;
+            qint32 *dxArray = 0;
 
-                stream >> startPoint;
-                parseString(stream, string);
-                stream >> startIndex;
-                stream >> len;
-                stream >> dxArrayLen;
-                if (dxArrayLen > 0) {
-                    quint32 maxDxArrayLen = totalSize - stream.device()->pos();
-                    if (dxArrayLen > maxDxArrayLen) {
-                        debugVectorImage << "Defined dxArrayLen= " << dxArrayLen << "exceeds available size" << maxDxArrayLen;
-                        dxArrayLen = maxDxArrayLen;
-                    }
-
-                    dxArray = new qint32[dxArrayLen];
-
-                    for (uint i = 0; i < dxArrayLen; ++i)
-                        stream >> dxArray[i];
+            stream >> startPoint;
+            parseString(stream, string);
+            stream >> startIndex;
+            stream >> len;
+            stream >> dxArrayLen;
+            if (dxArrayLen > 0) {
+                quint32 maxDxArrayLen = totalSize - stream.device()->pos();
+                if (dxArrayLen > maxDxArrayLen) {
+                    debugVectorImage << "Defined dxArrayLen= " << dxArrayLen << "exceeds available size" << maxDxArrayLen;
+                    dxArrayLen = maxDxArrayLen;
                 }
 
-                if (version > 1) {
-                    quint16  len2;
+                dxArray = new qint32[dxArrayLen];
 
-                    stream >> len2;
-                    // FIXME: More here
-                }
+                for (uint i = 0; i < dxArrayLen; ++i)
+                    stream >> dxArray[i];
+            }
+
+            if (version > 1) {
+                quint16 len2;
+
+                stream >> len2;
+                // FIXME: More here
+            }
 
 #if 0
                 debugVectorImage << "Text: " << startPoint << string
@@ -342,13 +322,11 @@ bool SvmParser::parse(const QByteArray &data)
                 else
                     debugVectorImage << "dxArrayLen = 0";
 #endif
-                mBackend->textArray(mContext, startPoint, string, startIndex, len,
-                                    dxArrayLen, dxArray);
+            mBackend->textArray(mContext, startPoint, string, startIndex, len, dxArrayLen, dxArray);
 
-                if (dxArrayLen)
-                    delete[] dxArray;
-            }
-            break;
+            if (dxArrayLen)
+                delete[] dxArray;
+        } break;
         case META_STRETCHTEXT_ACTION:
             break;
         case META_TEXTRECT_ACTION:
@@ -385,106 +363,82 @@ bool SvmParser::parse(const QByteArray &data)
             break;
         case META_MOVECLIPREGION_ACTION:
             break;
-        case META_LINECOLOR_ACTION:
-            {
-                quint32  colorData;
+        case META_LINECOLOR_ACTION: {
+            quint32 colorData;
 
-                stream >> colorData;
-                stream >> mContext.lineColorSet;
+            stream >> colorData;
+            stream >> mContext.lineColorSet;
 
-                mContext.lineColor = QColor::fromRgb(colorData);
-                debugVectorImage << "Color:"  << mContext.lineColor 
-                              << '(' << mContext.lineColorSet << ')';
-                mContext.changedItems |= GCLineColor;
-            }
-            break;
-        case META_FILLCOLOR_ACTION:
-            {
-                quint32  colorData;
+            mContext.lineColor = QColor::fromRgb(colorData);
+            debugVectorImage << "Color:" << mContext.lineColor << '(' << mContext.lineColorSet << ')';
+            mContext.changedItems |= GCLineColor;
+        } break;
+        case META_FILLCOLOR_ACTION: {
+            quint32 colorData;
 
-                stream >> colorData;
-                stream >> mContext.fillColorSet;
-                //mContext.fillColorSet = false;
-                
-                debugVectorImage << "Fill color :" << Qt::hex << colorData << Qt::dec
-                              << '(' << mContext.fillColorSet << ')';
+            stream >> colorData;
+            stream >> mContext.fillColorSet;
+            // mContext.fillColorSet = false;
 
-                mContext.fillColor = QColor::fromRgb(colorData);
-                mContext.changedItems |= GCFillColor;
-            }
-            break;
-        case META_TEXTCOLOR_ACTION:
-            {
-                quint32  colorData;
-                stream >> colorData;
+            debugVectorImage << "Fill color :" << Qt::hex << colorData << Qt::dec << '(' << mContext.fillColorSet << ')';
 
-                mContext.textColor = QColor::fromRgb(colorData);
-                debugVectorImage << "Color:"  << mContext.textColor;
-                mContext.changedItems |= GCTextColor;
-            }
-            break;
-        case META_TEXTFILLCOLOR_ACTION:
-            {
-                quint32  colorData;
+            mContext.fillColor = QColor::fromRgb(colorData);
+            mContext.changedItems |= GCFillColor;
+        } break;
+        case META_TEXTCOLOR_ACTION: {
+            quint32 colorData;
+            stream >> colorData;
 
-                stream >> colorData;
-                stream >> mContext.textFillColorSet;
-                
-                debugVectorImage << "Text fill color :" << Qt::hex << colorData << Qt::dec
-                              << '(' << mContext.textFillColorSet << ')';
+            mContext.textColor = QColor::fromRgb(colorData);
+            debugVectorImage << "Color:" << mContext.textColor;
+            mContext.changedItems |= GCTextColor;
+        } break;
+        case META_TEXTFILLCOLOR_ACTION: {
+            quint32 colorData;
 
-                mContext.textFillColor = QColor::fromRgb(colorData);
-                debugVectorImage << "Color:"  << mContext.textFillColor
-                              << '(' << mContext.textFillColorSet << ')';
-                mContext.changedItems |= GCTextFillColor;
-            }
-            break;
-        case META_TEXTALIGN_ACTION:
-            {
-                quint16  textAlign;
-                stream >> textAlign;
+            stream >> colorData;
+            stream >> mContext.textFillColorSet;
 
-                mContext.textAlign = (TextAlign)textAlign;
-                debugVectorImage << "TextAlign:"  << mContext.textAlign;
-                mContext.changedItems |= GCTextAlign;
-            }
-            break;
-        case META_MAPMODE_ACTION:
-            {
-                stream >> mContext.mapMode;
-                debugVectorImage << "mapMode:" << "Origin" << mContext.mapMode.origin
-                              << "scaleX"
-                              << mContext.mapMode.scaleX.numerator << mContext.mapMode.scaleX.denominator
-                              << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.denominator)
-                              << "scaleY"
-                              << mContext.mapMode.scaleY.numerator << mContext.mapMode.scaleY.denominator
-                              << (qreal(mContext.mapMode.scaleY.numerator) / mContext.mapMode.scaleY.denominator);
-                mContext.changedItems |= GCMapMode;
-            }
-            break;
-        case META_FONT_ACTION:
-            {
-                parseFont(stream, mContext.font);
-                debugVectorImage << "Font:"  << mContext.font;
-                mContext.changedItems |= GCFont;
-            }
-            break;
-        case META_PUSH_ACTION:
-            {
-                debugVectorImage << "Push action : " << totalSize;
-                quint16 pushValue;
-                stream >> pushValue;
-                debugVectorImage << "Push value : " << pushValue;
-            }
-            break;
-        case META_POP_ACTION:
-            {
-                debugVectorImage << "Pop action : " << totalSize;
-                /*quint16 pushValue;
-                stream >> pushValue;
-                debugVectorImage << "Push value : " << pushValue;*/
-            }
-            break;
+            debugVectorImage << "Text fill color :" << Qt::hex << colorData << Qt::dec << '(' << mContext.textFillColorSet << ')';
+
+            mContext.textFillColor = QColor::fromRgb(colorData);
+            debugVectorImage << "Color:" << mContext.textFillColor << '(' << mContext.textFillColorSet << ')';
+            mContext.changedItems |= GCTextFillColor;
+        } break;
+        case META_TEXTALIGN_ACTION: {
+            quint16 textAlign;
+            stream >> textAlign;
+
+            mContext.textAlign = (TextAlign)textAlign;
+            debugVectorImage << "TextAlign:" << mContext.textAlign;
+            mContext.changedItems |= GCTextAlign;
+        } break;
+        case META_MAPMODE_ACTION: {
+            stream >> mContext.mapMode;
+            debugVectorImage << "mapMode:"
+                             << "Origin" << mContext.mapMode.origin << "scaleX" << mContext.mapMode.scaleX.numerator << mContext.mapMode.scaleX.denominator
+                             << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.denominator) << "scaleY"
+                             << mContext.mapMode.scaleY.numerator << mContext.mapMode.scaleY.denominator
+                             << (qreal(mContext.mapMode.scaleY.numerator) / mContext.mapMode.scaleY.denominator);
+            mContext.changedItems |= GCMapMode;
+        } break;
+        case META_FONT_ACTION: {
+            parseFont(stream, mContext.font);
+            debugVectorImage << "Font:" << mContext.font;
+            mContext.changedItems |= GCFont;
+        } break;
+        case META_PUSH_ACTION: {
+            debugVectorImage << "Push action : " << totalSize;
+            quint16 pushValue;
+            stream >> pushValue;
+            debugVectorImage << "Push value : " << pushValue;
+        } break;
+        case META_POP_ACTION: {
+            debugVectorImage << "Pop action : " << totalSize;
+            /*quint16 pushValue;
+            stream >> pushValue;
+            debugVectorImage << "Push value : " << pushValue;*/
+        } break;
         case META_RASTEROP_ACTION:
             break;
         case META_TRANSPARENT_ACTION:
@@ -501,30 +455,25 @@ bool SvmParser::parse(const QByteArray &data)
             break;
         case META_GRADIENTEX_ACTION:
             break;
-        case META_LAYOUTMODE_ACTION:
-            {
-                stream >> mContext.layoutMode;
-                debugVectorImage << "New layout mode:" << Qt::hex << mContext.layoutMode << Qt::dec << "hex";
-            }
-            break;
+        case META_LAYOUTMODE_ACTION: {
+            stream >> mContext.layoutMode;
+            debugVectorImage << "New layout mode:" << Qt::hex << mContext.layoutMode << Qt::dec << "hex";
+        } break;
         case META_TEXTLANGUAGE_ACTION:
             break;
-        case META_OVERLINECOLOR_ACTION:
-            {
-                quint32  colorData;
+        case META_OVERLINECOLOR_ACTION: {
+            quint32 colorData;
 
-                stream >> colorData;
-                stream >> mContext.overlineColorSet;
-                
-                debugVectorImage << "Overline color :" << colorData
-                              << '(' << mContext.overlineColorSet << ')';
+            stream >> colorData;
+            stream >> mContext.overlineColorSet;
 
-                mContext.overlineColor = QColor::fromRgb(colorData);
-                mContext.changedItems |= GCOverlineColor;
-            }
-            break;
+            debugVectorImage << "Overline color :" << colorData << '(' << mContext.overlineColorSet << ')';
+
+            mContext.overlineColor = QColor::fromRgb(colorData);
+            mContext.changedItems |= GCOverlineColor;
+        } break;
         case META_RENDERGRAPHIC_ACTION:
-            //dumpAction(stream, version, totalSize);
+            // dumpAction(stream, version, totalSize);
             break;
         case META_COMMENT_ACTION:
             break;
@@ -536,8 +485,8 @@ bool SvmParser::parse(const QByteArray &data)
             break;
         }
 
-        delete [] rawData;
-        
+        delete[] rawData;
+
         // Security measure
         if (mainStream.atEnd())
             break;
@@ -548,10 +497,8 @@ bool SvmParser::parse(const QByteArray &data)
     return true;
 }
 
-
 // ----------------------------------------------------------------
 //                         Private methods
-
 
 void SvmParser::parseRect(QDataStream &stream, QRect &rect)
 {
@@ -573,8 +520,8 @@ void SvmParser::parseRect(QDataStream &stream, QRect &rect)
 
 void SvmParser::parsePolygon(QDataStream &stream, QPolygon &polygon)
 {
-    quint16   numPoints;
-    QPoint    point;
+    quint16 numPoints;
+    QPoint point;
 
     stream >> numPoints;
     for (uint i = 0; i < numPoints; ++i) {
@@ -585,11 +532,11 @@ void SvmParser::parsePolygon(QDataStream &stream, QPolygon &polygon)
 
 void SvmParser::parseString(QDataStream &stream, QString &string)
 {
-    quint16  length;
+    quint16 length;
 
     stream >> length;
     for (uint i = 0; i < length; ++i) {
-        quint8  ch;
+        quint8 ch;
         stream >> ch;
         string += char(ch);
     }
@@ -597,70 +544,69 @@ void SvmParser::parseString(QDataStream &stream, QString &string)
 
 void SvmParser::parseFont(QDataStream &stream, QFont &font)
 {
-    quint16  version;
-    quint32  totalSize;
+    quint16 version;
+    quint32 totalSize;
 
     // the VersionCompat struct
     stream >> version;
     stream >> totalSize;
 
     // Name and style
-    QString  family;
-    QString  style;
+    QString family;
+    QString style;
     parseString(stream, family);
     parseString(stream, style);
     font.setFamily(family);
 
     // Font size
-    quint32  width;
-    quint32  height;
+    quint32 width;
+    quint32 height;
     stream >> width;
     stream >> height;
     // Multiply by 0.7 since it seems that, just like WMF, the height
     // in the font struct is actually the height of the character cell.
     font.setPointSize(height * 7 / 10);
 
-    qint8   temp8;
-    bool    tempbool;
+    qint8 temp8;
+    bool tempbool;
     quint16 tempu16;
-    stream >> tempu16;          // charset
-    stream >> tempu16;          // family
-    stream >> tempu16;          // pitch
-    stream >> tempu16;          // weight
-    stream >> tempu16;          // underline
+    stream >> tempu16; // charset
+    stream >> tempu16; // family
+    stream >> tempu16; // pitch
+    stream >> tempu16; // weight
+    stream >> tempu16; // underline
     font.setUnderline(tempu16);
-    stream >> tempu16;          // strikeout
-    stream >> tempu16;          // italic
+    stream >> tempu16; // strikeout
+    stream >> tempu16; // italic
     font.setItalic(tempu16);
-    stream >> tempu16;          // language
-    stream >> tempu16;          // width
-    stream >> tempu16;          // orientation
+    stream >> tempu16; // language
+    stream >> tempu16; // width
+    stream >> tempu16; // orientation
 
-    stream >> tempbool;         // wordline
-    stream >> tempbool;         // outline
-    stream >> tempbool;         // shadow
-    stream >> temp8;            // kerning
+    stream >> tempbool; // wordline
+    stream >> tempbool; // outline
+    stream >> tempbool; // shadow
+    stream >> temp8; // kerning
 
     if (version > 1) {
-        stream >> temp8;        // relief
-        stream >> tempu16;      // language
-        stream >> tempbool;     // vertical
-        stream >> tempu16;      // emphasis
+        stream >> temp8; // relief
+        stream >> tempu16; // language
+        stream >> tempbool; // vertical
+        stream >> tempu16; // emphasis
     }
 
     if (version > 2) {
-        stream >> tempu16;      // overline
+        stream >> tempu16; // overline
     }
 
     // FIXME: Read away the rest of font here to allow for higher versions than 3.
 }
 
-
 void SvmParser::dumpAction(QDataStream &stream, quint16 version, quint32 totalSize)
 {
     debugVectorImage << "Version: " << version;
     for (uint i = 0; i < totalSize; ++i) {
-        quint8  temp;
+        quint8 temp;
         stream >> temp;
         debugVectorImage << Qt::hex << i << temp << Qt::dec;
     }

@@ -7,9 +7,9 @@
 #ifndef KWCHANGEPAGESTYLECOMMAND_H
 #define KWCHANGEPAGESTYLECOMMAND_H
 
-#include "../words_export.h"
-#include "../KWPageStyle.h"
 #include "../KWPage.h"
+#include "../KWPageStyle.h"
+#include "../words_export.h"
 
 #include <kundo2command.h>
 

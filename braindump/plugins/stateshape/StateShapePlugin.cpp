@@ -29,13 +29,11 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(StateShapePluginFactory, "braindump_shape_state.json", registerPlugin<StateShapePlugin>();)
 
-
 StateShapePlugin::StateShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     // register the shape's factory
-    KoShapeRegistry::instance()->add(
-        new StateShapeFactory());
+    KoShapeRegistry::instance()->add(new StateShapeFactory());
     // we could register more things here in this same plugin.
     KoToolRegistry::instance()->add(new StateToolFactory());
 }

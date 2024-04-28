@@ -16,9 +16,7 @@ public:
     ~KPrSwapEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType {
-        Horizontal
-    };
+    enum SubType { Horizontal };
 };
 
 #endif /* KPRSWAPEFFECTFACTORY_H */

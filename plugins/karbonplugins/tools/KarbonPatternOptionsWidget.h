@@ -11,7 +11,8 @@
 
 #include <QWidget>
 
-class KarbonPatternOptionsWidget : public QWidget {
+class KarbonPatternOptionsWidget : public QWidget
+{
     Q_OBJECT
 public:
     explicit KarbonPatternOptionsWidget(QWidget *parent = 0);
@@ -52,10 +53,10 @@ Q_SIGNALS:
     void patternChanged();
 private Q_SLOTS:
     void updateControls();
+
 private:
     class Private;
-    Private * const d;
-
+    Private *const d;
 };
 
 #endif // KARBONPATTERNOPTIONSWIDGET_H

@@ -12,11 +12,11 @@
 #include <QTextDocument>
 
 #include "engine/CellBaseStorage.h"
-#include "engine/calligra_sheets_limits.h"
 #include "engine/Region.h"
+#include "engine/calligra_sheets_limits.h"
 
-#include "sheets_core_export.h"
 #include "Cell.h"
+#include "sheets_core_export.h"
 
 class KUndo2Command;
 
@@ -54,15 +54,15 @@ class CALLIGRA_SHEETS_CORE_EXPORT CellStorage : public QObject, public CellBaseS
     Q_OBJECT
 public:
     enum Visiting {
-        Values          = 0x01,
-        Formulas        = 0x02,
-        Comments        = 0x04,
-        Links           = 0x08,
-        Styles          = 0x10,
+        Values = 0x01,
+        Formulas = 0x02,
+        Comments = 0x04,
+        Links = 0x08,
+        Styles = 0x10,
         ConditionStyles = 0x20,
-        Validities      = 0x40,
-        VisitContent    = 0x03, ///< just visit the cell contents: values, formulas
-        VisitAll        = 0xFF  ///< visit all: cell contents, styles, comments, ...
+        Validities = 0x40,
+        VisitContent = 0x03, ///< just visit the cell contents: values, formulas
+        VisitAll = 0xFF ///< visit all: cell contents, styles, comments, ...
     };
 
     /**
@@ -75,13 +75,13 @@ public:
      * Copy constructor.
      * \note Take care: does not perform a deep copy!
      */
-    CellStorage(const CellStorage& other);
+    CellStorage(const CellStorage &other);
 
     /**
      * Copy constructor.
      * Creates a CellStorage for \p sheet and copies the data from \p other.
      */
-    CellStorage(const CellStorage& other, Sheet* sheet);
+    CellStorage(const CellStorage &other, Sheet *sheet);
 
     /**
      * Destructor.
@@ -91,7 +91,7 @@ public:
     /**
      * \return the full sheet this CellStorage is for.
      */
-    Sheet* fullSheet() const;
+    Sheet *fullSheet() const;
 
     /**
      * Removes all data at \p col , \p row .
@@ -102,27 +102,27 @@ public:
      * \return the binding associated with the Cell at \p column , \p row .
      */
     Binding binding(int column, int row) const;
-    void setBinding(const Region& region, const Binding& binding);
-    void removeBinding(const Region& region, const Binding& binding);
+    void setBinding(const Region &region, const Binding &binding);
+    void removeBinding(const Region &region, const Binding &binding);
 
     /**
      * \return the conditional formattings associated with the Cell at \p column , \p row .
      */
     Conditions conditions(int column, int row) const;
-    void setConditions(const Region& region, Conditions conditions);
+    void setConditions(const Region &region, Conditions conditions);
 
     /**
      * \return the database associated with the Cell at \p column , \p row .
      */
     Database database(int column, int row) const;
-    QVector< QPair<QRectF, Database> > databases(const Region& region) const;
-    void setDatabase(const Region& region, const Database& database);
+    QVector<QPair<QRectF, Database>> databases(const Region &region) const;
+    void setDatabase(const Region &region, const Database &database);
 
     /**
      * \return the hyperlink associated with the Cell at \p column , \p row .
      */
     QString link(int column, int row) const;
-    void setLink(int column, int row, const QString& link);
+    void setLink(int column, int row, const QString &link);
 
     void emitInsertNamedArea(const Region &region, const QString &namedArea);
 
@@ -134,9 +134,9 @@ public:
     /**
      * \return the Style associated with \p rect.
      */
-    Style style(const QRect& rect) const;
-    void setStyle(const Region& region, const Style& style);
-    void insertSubStyle(const QRect& rect, const SharedSubStyle& subStyle);
+    Style style(const QRect &rect) const;
+    void setStyle(const Region &region, const Style &style);
+    void insertSubStyle(const QRect &rect, const SharedSubStyle &subStyle);
 
     QSharedPointer<QTextDocument> richText(int column, int row) const;
     void setRichText(int column, int row, QSharedPointer<QTextDocument> text);
@@ -162,7 +162,7 @@ public:
     Cell masterCell(int column, int row) const;
     int mergedXCells(int column, int row) const;
     int mergedYCells(int column, int row) const;
-    QList<Cell> masterCells(const Region& region) const;
+    QList<Cell> masterCells(const Region &region) const;
 
     /**
      * Retrieve the first used data in \p col .
@@ -236,16 +236,16 @@ public:
      * Creates a substorage consisting of the values in \p region.
      * \return a subset of the storage stripped down to the values in \p region
      */
-    CellStorage subStorage(const Region& region) const;
+    CellStorage subStorage(const Region &region) const;
 
-    BindingStorage* bindingStorage() const;
-    ConditionsStorage* conditionsStorage() const;
-    FusionStorage* fusionStorage() const;
-    LinkStorage* linkStorage() const;
-    StyleStorage* styleStorage() const;
+    BindingStorage *bindingStorage() const;
+    ConditionsStorage *conditionsStorage() const;
+    FusionStorage *fusionStorage() const;
+    LinkStorage *linkStorage() const;
+    StyleStorage *styleStorage() const;
 
-    void loadConditions(const QList<QPair<Region, Conditions> >& conditions);
-    void loadStyles(const QList<QPair<Region, Style> >& styles);
+    void loadConditions(const QList<QPair<Region, Conditions>> &conditions);
+    void loadStyles(const QList<QPair<Region, Style>> &styles);
 
     void invalidateStyleCache();
 
@@ -266,15 +266,16 @@ public:
     void stopUndoRecording(KUndo2Command *parent);
 
 Q_SIGNALS:
-    void insertNamedArea(const Region&, const QString&);
-    void namedAreaRemoved(const QString&);
+    void insertNamedArea(const Region &, const QString &);
+    void namedAreaRemoved(const QString &);
 
 protected:
     /** Addition to the inherited fillStorages. We call this in constructors, so cannot override. */
     void fillExtraStorages();
+
 private:
     // do not allow assignment
-    CellStorage& operator=(const CellStorage&);
+    CellStorage &operator=(const CellStorage &);
 
     void createCommand(KUndo2Command *parent) const;
 
@@ -284,23 +285,25 @@ private:
     int undoCounter;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 class LinkStorage : public PointStorage<QString>
 {
 public:
-    LinkStorage& operator=(const PointStorage<QString>& o) {
+    LinkStorage &operator=(const PointStorage<QString> &o)
+    {
         PointStorage<QString>::operator=(o);
         return *this;
     }
 };
 
-class RichTextStorage : public PointStorage<QSharedPointer<QTextDocument> >
+class RichTextStorage : public PointStorage<QSharedPointer<QTextDocument>>
 {
 public:
-    RichTextStorage& operator=(const PointStorage<QSharedPointer<QTextDocument> >& o) {
-        PointStorage<QSharedPointer<QTextDocument> >::operator=(o);
+    RichTextStorage &operator=(const PointStorage<QSharedPointer<QTextDocument>> &o)
+    {
+        PointStorage<QSharedPointer<QTextDocument>>::operator=(o);
         return *this;
     }
 };

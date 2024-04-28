@@ -7,42 +7,49 @@
 #include "KoPencilTool.h"
 #include "KoCurveFit.h"
 
-#include <KoPathShape.h>
-#include <KoParameterShape.h>
-#include <KoShapeStroke.h>
-#include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
-#include <KoShapeController.h>
-#include <KoShapeManager.h>
-#include <KoSelection.h>
 #include <KoCanvasResourceManager.h>
 #include <KoColor.h>
+#include <KoParameterShape.h>
 #include <KoPathPoint.h>
 #include <KoPathPointData.h>
 #include <KoPathPointMergeCommand.h>
+#include <KoPathShape.h>
+#include <KoPointerEvent.h>
+#include <KoSelection.h>
+#include <KoShapeController.h>
+#include <KoShapeManager.h>
 #include <KoShapePaintingContext.h>
+#include <KoShapeStroke.h>
 #include <KoStrokeConfigWidget.h>
 
 #include <KLocalizedString>
 
-#include <QDoubleSpinBox>
-#include <QComboBox>
-#include <QStackedWidget>
-#include <QGroupBox>
 #include <QCheckBox>
-#include <QVBoxLayout>
-#include <QPainter>
+#include <QComboBox>
+#include <QDoubleSpinBox>
+#include <QGroupBox>
 #include <QLabel>
+#include <QPainter>
+#include <QStackedWidget>
+#include <QVBoxLayout>
 
 #include <math.h>
 
 #include "KoCreatePathTool_p.h"
 
 KoPencilTool::KoPencilTool(KoCanvasBase *canvas)
-        : KoToolBase(canvas),  m_mode(ModeCurve), m_optimizeRaw(false)
-        , m_optimizeCurve(false), m_combineAngle(15.0), m_fittingError(5.0)
-        , m_close(false), m_shape(0)
-        , m_existingStartPoint(0), m_existingEndPoint(0), m_hoveredPoint(0)
+    : KoToolBase(canvas)
+    , m_mode(ModeCurve)
+    , m_optimizeRaw(false)
+    , m_optimizeCurve(false)
+    , m_combineAngle(15.0)
+    , m_fittingError(5.0)
+    , m_close(false)
+    , m_shape(0)
+    , m_existingStartPoint(0)
+    , m_existingEndPoint(0)
+    , m_hoveredPoint(0)
 {
 }
 
@@ -58,7 +65,7 @@ void KoPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
         painter.setTransform(m_shape->absoluteTransformation(&converter) * painter.transform());
 
         painter.save();
-        KoShapePaintingContext paintContext; //FIXME
+        KoShapePaintingContext paintContext; // FIXME
         m_shape->paint(painter, converter, paintContext);
         painter.restore();
 
@@ -76,8 +83,8 @@ void KoPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
         painter.setTransform(m_hoveredPoint->parent()->absoluteTransformation(&converter), true);
         KoShape::applyConversion(painter, converter);
 
-        painter.setPen(QPen(Qt::blue, 0));      //TODO make configurable
-        painter.setBrush(Qt::white);   //TODO make configurable
+        painter.setPen(QPen(Qt::blue, 0)); // TODO make configurable
+        painter.setBrush(Qt::white); // TODO make configurable
         m_hoveredPoint->paint(painter, handleRadius(), KoPathPoint::Node);
 
         painter.restore();
@@ -90,7 +97,7 @@ void KoPencilTool::repaintDecorations()
 
 void KoPencilTool::mousePressEvent(KoPointerEvent *event)
 {
-    if (! m_shape) {
+    if (!m_shape) {
         m_shape = new KoPathShape();
         m_shape->setShapeId(KoPathShapeId);
         m_shape->setStroke(createStroke());
@@ -110,7 +117,7 @@ void KoPencilTool::mouseMoveEvent(KoPointerEvent *event)
     if (event->buttons() & Qt::LeftButton)
         addPoint(event->point);
 
-    KoPathPoint * endPoint = endPointAtPosition(event->point);
+    KoPathPoint *endPoint = endPointAtPosition(event->point);
     if (m_hoveredPoint != endPoint) {
         if (m_hoveredPoint) {
             QPointF nodePos = m_hoveredPoint->parent()->shapeToDocument(m_hoveredPoint->point());
@@ -126,7 +133,7 @@ void KoPencilTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KoPencilTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (! m_shape)
+    if (!m_shape)
         return;
 
     QPointF point = event->point;
@@ -157,7 +164,7 @@ void KoPencilTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void KoPencilTool::activate(ToolActivation, const QSet<KoShape*> &)
+void KoPencilTool::activate(ToolActivation, const QSet<KoShape *> &)
 {
     m_points.clear();
     m_close = false;
@@ -174,9 +181,9 @@ void KoPencilTool::deactivate()
     m_hoveredPoint = 0;
 }
 
-void KoPencilTool::addPoint(const QPointF & point)
+void KoPencilTool::addPoint(const QPointF &point)
 {
-    if (! m_shape)
+    if (!m_shape)
         return;
 
     // do a moveTo for the first point added
@@ -206,7 +213,7 @@ void KoPencilTool::finish(bool closePath)
     if (m_points.count() < 2)
         return;
 
-    KoPathShape * path = 0;
+    KoPathShape *path = 0;
     QVector<QPointF> complete;
     QVector<QPointF> *points = &m_points;
 
@@ -218,11 +225,11 @@ void KoPencilTool::finish(bool closePath)
         else
             combineAngle = 0.50f;
 
-        //Add the first two points
+        // Add the first two points
         complete.append(m_points[0]);
         complete.append(m_points[1]);
 
-        //Now we need to get the angle of the first line
+        // Now we need to get the angle of the first line
         float lastAngle = lineAngle(complete[0], complete[1]);
 
         uint pointCount = m_points.count();
@@ -241,8 +248,7 @@ void KoPencilTool::finish(bool closePath)
     switch (m_mode) {
     case ModeCurve: {
         path = bezierFit(*points, m_fittingError);
-    }
-    break;
+    } break;
     case ModeStraight:
     case ModeRaw: {
         path = new KoPathShape();
@@ -250,11 +256,10 @@ void KoPencilTool::finish(bool closePath)
         path->moveTo(points->at(0));
         for (uint i = 1; i < pointCount; ++i)
             path->lineTo(points->at(i));
-    }
-    break;
+    } break;
     }
 
-    if (! path)
+    if (!path)
         return;
 
     path->setShapeId(KoPathShapeId);
@@ -262,16 +267,16 @@ void KoPencilTool::finish(bool closePath)
     addPathShape(path, closePath);
 }
 
-QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
+QList<QPointer<QWidget>> KoPencilTool::createOptionWidgets()
 {
-    QList<QPointer<QWidget> > widgets;
+    QList<QPointer<QWidget>> widgets;
     QWidget *optionWidget = new QWidget();
-    QVBoxLayout * layout = new QVBoxLayout(optionWidget);
+    QVBoxLayout *layout = new QVBoxLayout(optionWidget);
 
     QHBoxLayout *modeLayout = new QHBoxLayout;
     modeLayout->setSpacing(3);
     QLabel *modeLabel = new QLabel(i18n("Precision:"), optionWidget);
-    QComboBox * modeBox = new QComboBox(optionWidget);
+    QComboBox *modeBox = new QComboBox(optionWidget);
     modeBox->addItem(i18nc("The raw line data", "Raw"));
     modeBox->addItem(i18n("Curve"));
     modeBox->addItem(i18n("Straight"));
@@ -279,18 +284,18 @@ QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
     modeLayout->addWidget(modeBox, 1);
     layout->addLayout(modeLayout);
 
-    QStackedWidget * stackedWidget = new QStackedWidget(optionWidget);
+    QStackedWidget *stackedWidget = new QStackedWidget(optionWidget);
 
-    QWidget * rawBox = new QWidget(stackedWidget);
-    QVBoxLayout * rawLayout = new QVBoxLayout(rawBox);
-    QCheckBox * optimizeRaw = new QCheckBox(i18n("Optimize"), rawBox);
+    QWidget *rawBox = new QWidget(stackedWidget);
+    QVBoxLayout *rawLayout = new QVBoxLayout(rawBox);
+    QCheckBox *optimizeRaw = new QCheckBox(i18n("Optimize"), rawBox);
     rawLayout->addWidget(optimizeRaw);
     rawLayout->setContentsMargins(0, 0, 0, 0);
 
-    QWidget * curveBox = new QWidget(stackedWidget);
-    QHBoxLayout * curveLayout = new QHBoxLayout(curveBox);
-    QCheckBox * optimizeCurve = new QCheckBox(i18n("Optimize"), curveBox);
-    QDoubleSpinBox * fittingError = new QDoubleSpinBox(curveBox);
+    QWidget *curveBox = new QWidget(stackedWidget);
+    QHBoxLayout *curveLayout = new QHBoxLayout(curveBox);
+    QCheckBox *optimizeCurve = new QCheckBox(i18n("Optimize"), curveBox);
+    QDoubleSpinBox *fittingError = new QDoubleSpinBox(curveBox);
     fittingError->setValue(0.50);
     fittingError->setMaximum(400.0);
     fittingError->setMinimum(0.0);
@@ -309,7 +314,7 @@ QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
     combineAngle->setSingleStep(m_combineAngle);
     combineAngle->setSuffix(" deg");
     // QT5TODO
-    //combineAngle->setLabel(i18n("Combine angle:"), Qt::AlignLeft | Qt::AlignVCenter);
+    // combineAngle->setLabel(i18n("Combine angle:"), Qt::AlignLeft | Qt::AlignVCenter);
     straightLayout->addWidget(combineAngle);
     straightLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -339,10 +344,10 @@ QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
     return widgets;
 }
 
-void KoPencilTool::addPathShape(KoPathShape* path, bool closePath)
+void KoPencilTool::addPathShape(KoPathShape *path, bool closePath)
 {
-    KoShape * startShape = 0;
-    KoShape * endShape = 0;
+    KoShape *startShape = 0;
+    KoShape *endShape = 0;
 
     if (closePath) {
         path->close();
@@ -357,7 +362,7 @@ void KoPencilTool::addPathShape(KoPathShape* path, bool closePath)
         }
     }
 
-    KUndo2Command * cmd = canvas()->shapeController()->addShape(path);
+    KUndo2Command *cmd = canvas()->shapeController()->addShape(path);
     if (cmd) {
         KoSelection *selection = canvas()->shapeManager()->selection();
         selection->deselectAll();
@@ -396,7 +401,7 @@ void KoPencilTool::setDelta(double delta)
         m_combineAngle = delta;
 }
 
-KoShapeStroke* KoPencilTool::createStroke()
+KoShapeStroke *KoPencilTool::createStroke()
 {
     KoShapeStroke *stroke = 0;
     if (m_strokeWidget) {
@@ -405,24 +410,24 @@ KoShapeStroke* KoPencilTool::createStroke()
     return stroke;
 }
 
-KoPathPoint* KoPencilTool::endPointAtPosition(const QPointF &position)
+KoPathPoint *KoPencilTool::endPointAtPosition(const QPointF &position)
 {
     QRectF roi = handleGrabRect(position);
     QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(roi);
 
-    KoPathPoint * nearestPoint = 0;
+    KoPathPoint *nearestPoint = 0;
     qreal minDistance = HUGE_VAL;
     qreal maxDistance = canvas()->viewConverter()->viewToDocumentX(grabSensitivity());
 
-    foreach(KoShape *shape, shapes) {
-        KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
+    foreach (KoShape *shape, shapes) {
+        KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
         if (!path)
             continue;
-        KoParameterShape *paramShape = dynamic_cast<KoParameterShape*>(shape);
+        KoParameterShape *paramShape = dynamic_cast<KoParameterShape *>(shape);
         if (paramShape && paramShape->isParametricShape())
             continue;
 
-        KoPathPoint * p = 0;
+        KoPathPoint *p = 0;
         uint subpathCount = path->subpathCount();
         for (uint i = 0; i < subpathCount; ++i) {
             if (path->isClosedSubpath(i))
@@ -464,11 +469,11 @@ bool KoPencilTool::connectPaths(KoPathShape *pathShape, KoPathPoint *pointAtStar
     uint newPointCount = pathShape->subpathPointCount(0);
     KoPathPointIndex newStartPointIndex(0, 0);
     KoPathPointIndex newEndPointIndex(0, newPointCount - 1);
-    KoPathPoint * newStartPoint = pathShape->pointByIndex(newStartPointIndex);
-    KoPathPoint * newEndPoint = pathShape->pointByIndex(newEndPointIndex);
+    KoPathPoint *newStartPoint = pathShape->pointByIndex(newStartPointIndex);
+    KoPathPoint *newEndPoint = pathShape->pointByIndex(newEndPointIndex);
 
-    KoPathShape * startShape = pointAtStart ? pointAtStart->parent() : 0;
-    KoPathShape * endShape = pointAtEnd ? pointAtEnd->parent() : 0;
+    KoPathShape *startShape = pointAtStart ? pointAtStart->parent() : 0;
+    KoPathShape *endShape = pointAtEnd ? pointAtEnd->parent() : 0;
 
     // combine with the path we hit on start
     KoPathPointIndex startIndex(-1, -1);
@@ -506,8 +511,8 @@ bool KoPencilTool::connectPaths(KoPathShape *pathShape, KoPathPoint *pointAtStar
 
     // get the path points we want to merge, as these are not going to
     // change while merging
-    KoPathPoint * existingStartPoint = pathShape->pointByIndex(startIndex);
-    KoPathPoint * existingEndPoint = pathShape->pointByIndex(endIndex);
+    KoPathPoint *existingStartPoint = pathShape->pointByIndex(startIndex);
+    KoPathPoint *existingEndPoint = pathShape->pointByIndex(endIndex);
 
     // merge first two points
     if (existingStartPoint) {
@@ -527,10 +532,12 @@ bool KoPencilTool::connectPaths(KoPathShape *pathShape, KoPathPoint *pointAtStar
     return true;
 }
 
-qreal KoPencilTool::getFittingError(){
+qreal KoPencilTool::getFittingError()
+{
     return this->m_fittingError;
 }
 
-void KoPencilTool::setFittingError(qreal fittingError){
+void KoPencilTool::setFittingError(qreal fittingError)
+{
     this->m_fittingError = fittingError;
 }

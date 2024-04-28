@@ -9,12 +9,12 @@
 #define ARTISTICTEXTSHAPE_H
 
 #include "ArtisticTextRange.h"
-#include <KoShape.h>
 #include <KoPostscriptPaintDevice.h>
-#include <SvgShape.h>
+#include <KoShape.h>
 #include <QFont>
 #include <QPainterPath>
 #include <QVector>
+#include <SvgShape.h>
 
 class QPainter;
 class KoPathShape;
@@ -32,9 +32,9 @@ public:
     enum TextAnchor { AnchorStart, AnchorMiddle, AnchorEnd };
 
     enum LayoutMode {
-        Straight,    ///< baseline is a straight line
-        OnPath,      ///< baseline is a QPainterPath
-        OnPathShape  ///< baseline is the outline of a path shape
+        Straight, ///< baseline is a straight line
+        OnPath, ///< baseline is a QPainterPath
+        OnPathShape ///< baseline is the outline of a path shape
     };
 
     ArtisticTextShape();
@@ -43,13 +43,13 @@ public:
     /// reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
     /// reimplemented
-    void saveOdf(KoShapeSavingContext & context) const override;
+    void saveOdf(KoShapeSavingContext &context) const override;
     /// reimplemented
-    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     /// reimplemented
     QSizeF size() const override;
     /// reimplemented
-    void setSize( const QSizeF &size ) override;
+    void setSize(const QSizeF &size) override;
     /// reimplemented
     QPainterPath outline() const override;
     /// reimplemented from SvgShape
@@ -137,7 +137,7 @@ public:
     QPainterPath baseline() const;
 
     /// Returns a pointer to the shape used as baseline
-    KoPathShape * baselineShape() const;
+    KoPathShape *baselineShape() const;
 
     /// Removes a range of text starting from the given character
     QList<ArtisticTextRange> removeText(int charIndex, int charCount);
@@ -179,10 +179,10 @@ public:
     CharIndex indexOfChar(int charIndex) const;
 
     /// reimplemented from KoShape
-    void shapeChanged(ChangeType type, KoShape * shape) override;
+    void shapeChanged(ChangeType type, KoShape *shape) override;
 
 private:
-    void updateSizeAndPosition( bool global = false );
+    void updateSizeAndPosition(bool global = false);
     bool pathHasChanged() const;
     void createOutline();
 
@@ -206,7 +206,7 @@ private:
 
     QList<ArtisticTextRange> m_ranges;
     KoPostscriptPaintDevice m_paintDevice;
-    KoPathShape * m_path; ///< the path shape we are attached to
+    KoPathShape *m_path; ///< the path shape we are attached to
     qreal m_startOffset; ///< the offset from the attached path start point
     QPointF m_outlineOrigin; ///< the top-left corner of the non-normalized text outline
     QPainterPath m_outline; ///< the actual text outline

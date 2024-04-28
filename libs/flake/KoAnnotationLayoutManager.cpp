@@ -1,4 +1,4 @@
- /* This file is part of the KDE project
+/* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2013 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
@@ -7,23 +7,23 @@
 
 #include "KoAnnotationLayoutManager.h"
 
-#include <KoViewConverter.h>
-#include <KoShapeManager.h>
 #include <KoCanvasBase.h>
 #include <KoShape.h>
-#include <QWidget>
-#include <QList>
+#include <KoShapeManager.h>
+#include <KoViewConverter.h>
 #include <QHash>
-#include <QMap>
-#include <QtAlgorithms>
-#include <QPainter>
-#include <QPen>
 #include <QLine>
 #include <QLineF>
+#include <QList>
+#include <QMap>
+#include <QPainter>
+#include <QPen>
+#include <QWidget>
+#include <QtAlgorithms>
 
 #include <FlakeDebug.h>
 
-int compare(const QPair < QPointF, KoShape * > &a, const QPair < QPointF, KoShape * > &b)
+int compare(const QPair<QPointF, KoShape *> &a, const QPair<QPointF, KoShape *> &b)
 {
     if (a.first.y() == b.first.y()) {
         return a.first.x() < b.first.x();
@@ -35,12 +35,13 @@ class Q_DECL_HIDDEN KoAnnotationLayoutManager::Private
 {
 public:
     Private()
-        : shapeManager(0),
-          canvas(0)
-    {}
+        : shapeManager(0)
+        , canvas(0)
+    {
+    }
 
     qreal x; // The x point of annotation shapes position.
-    QList< QPair < QPointF, KoShape * > > annotationShapePositions;
+    QList<QPair<QPointF, KoShape *>> annotationShapePositions;
     KoShapeManager *shapeManager;
     KoCanvasBase *canvas;
 };
@@ -65,7 +66,6 @@ void KoAnnotationLayoutManager::setShapeManager(KoShapeManager *shapeManager)
     connect(d->shapeManager, &KoShapeManager::shapeChanged, this, &KoAnnotationLayoutManager::updateLayout);
 }
 
-
 void KoAnnotationLayoutManager::setCanvasBase(KoCanvasBase *canvas)
 {
     d->canvas = canvas;
@@ -88,7 +88,7 @@ void KoAnnotationLayoutManager::paintConnections(QPainter &painter)
 
     painter.setPen(pen);
 
-    QList< QPair < QPointF, KoShape * > >::const_iterator it = d->annotationShapePositions.constBegin();
+    QList<QPair<QPointF, KoShape *>>::const_iterator it = d->annotationShapePositions.constBegin();
     while (it != d->annotationShapePositions.constEnd() && !d->annotationShapePositions.isEmpty()) {
         KoShape *shape = it->second;
 
@@ -98,8 +98,7 @@ void KoAnnotationLayoutManager::paintConnections(QPainter &painter)
         QPointF connectionPoint(d->canvas->viewConverter()->documentToView(QPointF((shape->position().x() - connectionPointLines), (it->first.y()))));
         QPointF pointLine(d->canvas->viewConverter()->documentToView(QPointF(it->first.x(), (it->first.y() + 5))));
 
-
-        //Draw first line, from shape to connection Point.
+        // Draw first line, from shape to connection Point.
         painter.drawLine(shapePosition, connectionPoint);
         // Draw second line, from connection point to reftext position.
         painter.drawLine(connectionPoint, refTextPosition);
@@ -113,7 +112,7 @@ void KoAnnotationLayoutManager::paintConnections(QPainter &painter)
 
 bool KoAnnotationLayoutManager::isAnnotationShape(KoShape *shape) const
 {
-    QList< QPair < QPointF, KoShape * > >::ConstIterator it = d->annotationShapePositions.constBegin();
+    QList<QPair<QPointF, KoShape *>>::ConstIterator it = d->annotationShapePositions.constBegin();
     while (it != d->annotationShapePositions.constEnd()) {
         if (shape == it->second) {
             return true;
@@ -125,7 +124,7 @@ bool KoAnnotationLayoutManager::isAnnotationShape(KoShape *shape) const
 
 void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotationShape, const QPointF &pos)
 {
-    QList< QPair < QPointF, KoShape * > >::iterator it = d->annotationShapePositions.begin();
+    QList<QPair<QPointF, KoShape *>>::iterator it = d->annotationShapePositions.begin();
     bool yPositionChanged = false;
     while (it != d->annotationShapePositions.end()) {
         KoShape *shape = it->second;
@@ -141,7 +140,7 @@ void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotatio
     if (d->annotationShapePositions.isEmpty()) {
         emit hasAnnotationsChanged(true);
     }
-    d->annotationShapePositions.append(QPair< QPointF, KoShape * >(pos, annotationShape));
+    d->annotationShapePositions.append(QPair<QPointF, KoShape *>(pos, annotationShape));
     layoutAnnotationShapes();
     if (d->canvas && yPositionChanged) {
         d->canvas->canvasWidget()->update();
@@ -150,7 +149,7 @@ void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotatio
 
 void KoAnnotationLayoutManager::removeAnnotationShape(KoShape *annotationShape)
 {
-    QList< QPair < QPointF, KoShape * > >::iterator it = d->annotationShapePositions.begin();
+    QList<QPair<QPointF, KoShape *>>::iterator it = d->annotationShapePositions.begin();
     while (it != d->annotationShapePositions.end()) {
         if (it->second == annotationShape) {
             d->annotationShapePositions.erase(it);
@@ -162,13 +161,13 @@ void KoAnnotationLayoutManager::removeAnnotationShape(KoShape *annotationShape)
     if (d->annotationShapePositions.isEmpty()) {
         emit hasAnnotationsChanged(false);
     }
-    //Should update canvas.
+    // Should update canvas.
     d->canvas->canvasWidget()->update();
 }
 
 void KoAnnotationLayoutManager::updateLayout(KoShape *shape)
 {
-    QList< QPair < QPointF, KoShape * > >::const_iterator it = d->annotationShapePositions.constBegin();
+    QList<QPair<QPointF, KoShape *>>::const_iterator it = d->annotationShapePositions.constBegin();
     while (it != d->annotationShapePositions.constEnd() && !d->annotationShapePositions.isEmpty()) {
         if (it->second == shape) {
             layoutAnnotationShapes();
@@ -183,7 +182,7 @@ void KoAnnotationLayoutManager::layoutAnnotationShapes()
     qreal currentY = 0.0;
     std::stable_sort(d->annotationShapePositions.begin(), d->annotationShapePositions.end(), compare);
 
-    QList< QPair < QPointF, KoShape * > >::const_iterator it = d->annotationShapePositions.constBegin();
+    QList<QPair<QPointF, KoShape *>>::const_iterator it = d->annotationShapePositions.constBegin();
     while (it != d->annotationShapePositions.constEnd()) {
         KoShape *shape = it->second;
         qreal refPosition = it->first.y();
@@ -206,4 +205,5 @@ void KoAnnotationLayoutManager::layoutAnnotationShapes()
 // only static const integral data members can be initialized within a class
 const qreal KoAnnotationLayoutManager::shapeSpace = 10.0; // Distance between annotation shapes.
 const qreal KoAnnotationLayoutManager::shapeWidth = 200.0; // Annotation shapes width.
-const qreal KoAnnotationLayoutManager::connectionPointLines = 50.0; //Connection point of lines from shape to this point and from this point to refText position.
+const qreal KoAnnotationLayoutManager::connectionPointLines =
+    50.0; // Connection point of lines from shape to this point and from this point to refText position.

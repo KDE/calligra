@@ -11,8 +11,8 @@
 
 // Qt
 #include <QAction>
-#include <QMenu>
 #include <QLatin1String>
+#include <QMenu>
 
 // KF5
 #include <KLocalizedString>
@@ -20,28 +20,27 @@
 #include <kfontchooser.h>
 
 // Calligra
-#include <interfaces/KoChartModel.h>
 #include <KoIcon.h>
+#include <interfaces/KoChartModel.h>
 
 // KChart
-#include <KChartChart>
-#include <KChartPosition>
-#include <KChartCartesianAxis>
-#include <KChartGridAttributes>
-#include <KChartPieAttributes>
 #include <KChartAbstractCartesianDiagram>
-#include <KChartLegend>
+#include <KChartCartesianAxis>
+#include <KChartChart>
 #include <KChartDataValueAttributes>
+#include <KChartGridAttributes>
+#include <KChartLegend>
 #include <KChartMeasure>
+#include <KChartPieAttributes>
+#include <KChartPosition>
 
 // KoChart
-#include "ChartProxyModel.h"
-#include "PlotArea.h"
-#include "DataSet.h"
 #include "ChartDebug.h"
+#include "ChartProxyModel.h"
+#include "DataSet.h"
+#include "PlotArea.h"
 
 using namespace KoChart;
-
 
 RingConfigWidget::RingConfigWidget(QWidget *parent)
     : ConfigSubWidgetBase(parent)
@@ -64,16 +63,16 @@ void RingConfigWidget::init()
     setObjectName("RingConfigWidget");
     m_ui.setupUi(this);
 
-    connect(m_ui.categories,    &QComboBox::currentIndexChanged, this, &RingConfigWidget::categorySelectionChanged);
-    connect(m_ui.dataSets,      &QComboBox::currentIndexChanged, this, &RingConfigWidget::dataSetSelectionChanged);
-    connect(m_ui.dataSetPen,    &KColorButton::changed, this, QOverload<const QColor &>::of(&RingConfigWidget::penChanged));
-    connect(m_ui.dataSetBrush,  &KColorButton::changed, this, QOverload<const QColor &>::of(&RingConfigWidget::brushChanged));
+    connect(m_ui.categories, &QComboBox::currentIndexChanged, this, &RingConfigWidget::categorySelectionChanged);
+    connect(m_ui.dataSets, &QComboBox::currentIndexChanged, this, &RingConfigWidget::dataSetSelectionChanged);
+    connect(m_ui.dataSetPen, &KColorButton::changed, this, QOverload<const QColor &>::of(&RingConfigWidget::penChanged));
+    connect(m_ui.dataSetBrush, &KColorButton::changed, this, QOverload<const QColor &>::of(&RingConfigWidget::brushChanged));
     connect(m_ui.explodeFactor, &QSpinBox::valueChanged, this, QOverload<int>::of(&RingConfigWidget::explodeFactorChanged));
-    connect(m_ui.dataSetShowCategory,   &QCheckBox::toggled, this, QOverload<bool>::of(&RingConfigWidget::showCategoryChanged));
-    connect(m_ui.dataSetShowNumber,     &QCheckBox::toggled, this, QOverload<bool>::of(&RingConfigWidget::showNumberChanged));
-    connect(m_ui.dataSetShowPercent,    &QCheckBox::toggled, this, QOverload<bool>::of(&RingConfigWidget::showPercentChanged));
+    connect(m_ui.dataSetShowCategory, &QCheckBox::toggled, this, QOverload<bool>::of(&RingConfigWidget::showCategoryChanged));
+    connect(m_ui.dataSetShowNumber, &QCheckBox::toggled, this, QOverload<bool>::of(&RingConfigWidget::showNumberChanged));
+    connect(m_ui.dataSetShowPercent, &QCheckBox::toggled, this, QOverload<bool>::of(&RingConfigWidget::showPercentChanged));
 }
-void RingConfigWidget::open(ChartShape* shape)
+void RingConfigWidget::open(ChartShape *shape)
 {
     ConfigSubWidgetBase::open(shape);
 }
@@ -143,7 +142,6 @@ void RingConfigWidget::categorySelectionChanged(int index)
     m_ui.categories->setCurrentIndex(index);
 
     blockSignals(false);
-
 }
 void RingConfigWidget::dataSetSelectionChanged(int index)
 {
@@ -152,13 +150,13 @@ void RingConfigWidget::dataSetSelectionChanged(int index)
         return;
     }
     blockSignals(true);
-    m_ui.explodeFactor->setValue((int)(ds->pieAttributes().explodeFactor()*100));
+    m_ui.explodeFactor->setValue((int)(ds->pieAttributes().explodeFactor() * 100));
 
     m_ui.dataSets->setCurrentIndex(index);
     blockSignals(false);
 }
 
-void RingConfigWidget::brushChanged(const QColor& color)
+void RingConfigWidget::brushChanged(const QColor &color)
 {
     int section = m_ui.categories->currentIndex();
     if (section >= 0) {
@@ -166,7 +164,7 @@ void RingConfigWidget::brushChanged(const QColor& color)
     }
 }
 
-void RingConfigWidget::penChanged(const QColor& color)
+void RingConfigWidget::penChanged(const QColor &color)
 {
     DataSet *ds = m_dataSets.value(0);
     int section = m_ui.categories->currentIndex();

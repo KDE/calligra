@@ -18,7 +18,9 @@ class TestSections : public QObject
     Q_OBJECT
 
 public:
-    TestSections() {}
+    TestSections()
+    {
+    }
 
 private:
     /**

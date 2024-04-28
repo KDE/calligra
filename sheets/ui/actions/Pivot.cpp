@@ -6,14 +6,14 @@
 */
 
 #include "Pivot.h"
-#include "Actions.h"
 #include "./dialogs/pivot.h"
+#include "Actions.h"
 
 #include <KLocalizedString>
 #include <KMessageBox>
 
 using namespace Calligra::Sheets;
- 
+
 Pivot::Pivot(Actions *actions)
     : CellAction(actions, "pivot", i18n("&Pivot Tables..."), QIcon(), i18n("Create Pivot Tables"))
 {
@@ -34,4 +34,3 @@ void Pivot::execute(Selection *selection, Sheet *, QWidget *canvasWidget)
     dialog->exec();
     delete dialog;
 }
-

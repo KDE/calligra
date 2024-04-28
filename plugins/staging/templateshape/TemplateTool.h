@@ -17,21 +17,27 @@ class TemplateTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    explicit TemplateTool(KoCanvasBase* canvas);
+    explicit TemplateTool(KoCanvasBase *canvas);
 
     /// reimplemented from KoToolBase
-    virtual void paint(QPainter&, const KoViewConverter&) {}
+    virtual void paint(QPainter &, const KoViewConverter &)
+    {
+    }
     /// reimplemented from KoToolBase
-    virtual void mousePressEvent(KoPointerEvent*);
+    virtual void mousePressEvent(KoPointerEvent *);
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented from KoToolBase
-    virtual void mouseMoveEvent(KoPointerEvent*) {}
+    virtual void mouseMoveEvent(KoPointerEvent *)
+    {
+    }
     /// reimplemented from KoToolBase
-    virtual void mouseReleaseEvent(KoPointerEvent*) {}
+    virtual void mouseReleaseEvent(KoPointerEvent *)
+    {
+    }
 
     /// reimplemented from KoToolBase
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     /// reimplemented from KoToolBase
     virtual void deactivate();
 
@@ -39,8 +45,8 @@ protected:
     /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget();
 
-private Q_SLOTS: 
-    void openPressed();         // Template: example code
+private Q_SLOTS:
+    void openPressed(); // Template: example code
 
 private:
     // Pointer to the shape that we manipulate.

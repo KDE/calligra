@@ -11,12 +11,14 @@
 */
 
 #include "KarbonLayerReorderCommand.h"
+#include <KLocalizedString>
 #include <KarbonDocument.h>
 #include <KoShapeLayer.h>
-#include <KLocalizedString>
 
-KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument* document, KoShapeLayer* layer, ReorderType commandType, KUndo2Command* parent)
-        : KUndo2Command(parent), m_document(document), m_cmdType(commandType)
+KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument *document, KoShapeLayer *layer, ReorderType commandType, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_document(document)
+    , m_cmdType(commandType)
 {
     m_layers.append(layer);
 
@@ -26,8 +28,11 @@ KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument* document, K
         setText(kundo2_i18n("Lower Layer"));
 }
 
-KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, KUndo2Command* parent)
-        : KUndo2Command(parent), m_document(document), m_layers(layers), m_cmdType(commandType)
+KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument *document, QList<KoShapeLayer *> layers, ReorderType commandType, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_document(document)
+    , m_layers(layers)
+    , m_cmdType(commandType)
 {
     if (m_cmdType == RaiseLayer)
         setText(kundo2_i18n("Raise Layer"));
@@ -41,7 +46,7 @@ KarbonLayerReorderCommand::~KarbonLayerReorderCommand()
 
 void KarbonLayerReorderCommand::redo()
 {
-    foreach(KoShapeLayer* layer, m_layers) {
+    foreach (KoShapeLayer *layer, m_layers) {
         if (m_cmdType == RaiseLayer)
             m_document->raiseLayer(layer);
         else
@@ -51,7 +56,7 @@ void KarbonLayerReorderCommand::redo()
 
 void KarbonLayerReorderCommand::undo()
 {
-    foreach(KoShapeLayer* layer, m_layers) {
+    foreach (KoShapeLayer *layer, m_layers) {
         if (m_cmdType == RaiseLayer)
             m_document->lowerLayer(layer);
         else

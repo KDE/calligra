@@ -8,37 +8,37 @@
 
 #include "KPrEditAnimationsWidget.h"
 
-//Stage Headers
-#include "KPrShapeAnimationDocker.h"
-#include "KPrView.h"
-#include "animations/KPrShapeAnimation.h"
+// Stage Headers
 #include "KPrAnimationGroupProxyModel.h"
-#include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationSelectorWidget.h"
+#include "KPrAnimationsTimeLineView.h"
+#include "KPrShapeAnimationDocker.h"
 #include "KPrShapeAnimations.h"
+#include "KPrView.h"
 #include "StageDebug.h"
+#include "animations/KPrShapeAnimation.h"
 
-//Qt Headers
-#include <QToolButton>
-#include <QVBoxLayout>
+// Qt Headers
+#include <QActionGroup>
+#include <QComboBox>
 #include <QLabel>
-#include <QTreeView>
 #include <QMenu>
 #include <QModelIndex>
-#include <QComboBox>
-#include <QTimeEdit>
 #include <QTime>
+#include <QTimeEdit>
 #include <QTimer>
-#include <QActionGroup>
+#include <QToolButton>
+#include <QTreeView>
+#include <QVBoxLayout>
 
-//KF5 Headers
+// KF5 Headers
 #include <KLocalizedString>
 
-//Calligra Headers
-#include <KoIcon.h>
-#include <KoSelection.h>
+// Calligra Headers
 #include <KoCanvasController.h>
+#include <KoIcon.h>
 #include <KoPAViewBase.h>
+#include <KoSelection.h>
 
 KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker, QWidget *parent)
     : QWidget(parent)
@@ -58,12 +58,12 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
 
     QLabel *delayLabel = new QLabel(i18n("Delay: "));
     m_delayEdit = new QTimeEdit;
-    m_delayEdit->setTimeRange(QTime(0,0,0), QTime(0,30,0));
+    m_delayEdit->setTimeRange(QTime(0, 0, 0), QTime(0, 30, 0));
     m_delayEdit->setDisplayFormat("mm:ss.zzz");
 
     QLabel *durationLabel = new QLabel(i18n("Duration: "));
     m_durationEdit = new QTimeEdit;
-    m_durationEdit->setTimeRange(QTime(0,0,0), QTime(1,0,0));
+    m_durationEdit->setTimeRange(QTime(0, 0, 0), QTime(1, 0, 0));
     m_durationEdit->setDisplayFormat("H:mm:ss.zzz");
 
     QToolButton *m_buttonPreviewAnimation = new QToolButton();
@@ -92,7 +92,7 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
     layout->addLayout(hlayout);
     setLayout(layout);
 
-    //Connect Signals.
+    // Connect Signals.
     connect(m_buttonPreviewAnimation, &QAbstractButton::clicked, this, &KPrEditAnimationsWidget::requestAnimationPreview);
     connect(m_timeLineView, &KPrAnimationsTimeLineView::clicked, this, &KPrEditAnimationsWidget::itemClicked);
     connect(m_timeLineView, &KPrAnimationsTimeLineView::clicked, this, &KPrEditAnimationsWidget::updateIndex);
@@ -101,12 +101,9 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
     connect(m_delayEdit, &QAbstractSpinBox::editingFinished, this, &KPrEditAnimationsWidget::setBeginTime);
     connect(m_durationEdit, &QAbstractSpinBox::editingFinished, this, &KPrEditAnimationsWidget::setDuration);
     connect(m_triggerEventList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, QOverload<int>::of(&KPrEditAnimationsWidget::setTriggerEvent));
-    connect(m_animationSelector, &KPrAnimationSelectorWidget::requestPreviewAnimation,
-            docker, &KPrShapeAnimationDocker::previewAnimation);
-    connect(m_animationSelector, &KPrAnimationSelectorWidget::requestAcceptAnimation,
-            this, &KPrEditAnimationsWidget::changeCurrentAnimation);
-    connect(m_timeLineView, &KPrAnimationsTimeLineView::customContextMenuRequested,
-            this, &KPrEditAnimationsWidget::showTimeLineCustomContextMenu);
+    connect(m_animationSelector, &KPrAnimationSelectorWidget::requestPreviewAnimation, docker, &KPrShapeAnimationDocker::previewAnimation);
+    connect(m_animationSelector, &KPrAnimationSelectorWidget::requestAcceptAnimation, this, &KPrEditAnimationsWidget::changeCurrentAnimation);
+    connect(m_timeLineView, &KPrAnimationsTimeLineView::customContextMenuRequested, this, &KPrEditAnimationsWidget::showTimeLineCustomContextMenu);
     connect(m_animationSelector, &KPrAnimationSelectorWidget::previousStateChanged, this, &KPrEditAnimationsWidget::previousStateChanged);
     QTimer::singleShot(700, this, &KPrEditAnimationsWidget::initializeView);
 }
@@ -180,9 +177,12 @@ void KPrEditAnimationsWidget::setTriggerEvent(int row)
         QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::NodeType);
         if (row != m_timeLineModel->data(triggerIndex).toInt()) {
             KPrShapeAnimation::NodeType newType;
-            if (row == 0) newType = KPrShapeAnimation::OnClick;
-            else if (row == 1) newType = KPrShapeAnimation::AfterPrevious;
-            else newType = KPrShapeAnimation::WithPrevious;
+            if (row == 0)
+                newType = KPrShapeAnimation::OnClick;
+            else if (row == 1)
+                newType = KPrShapeAnimation::AfterPrevious;
+            else
+                newType = KPrShapeAnimation::WithPrevious;
             m_docker->mainModel()->setTriggerEvent(m_timeLineModel->mapToSource(m_timeLineView->currentIndex()), newType);
         }
     }
@@ -209,7 +209,7 @@ void KPrEditAnimationsWidget::showTimeLineCustomContextMenu(const QPoint &pos)
         QModelIndex index = m_timeLineView->currentIndex();
         // get animation data
         QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::NodeType);
-        KPrShapeAnimation::NodeType currentType = static_cast <KPrShapeAnimation::NodeType>(m_timeLineModel->data(triggerIndex).toInt());
+        KPrShapeAnimation::NodeType currentType = static_cast<KPrShapeAnimation::NodeType>(m_timeLineModel->data(triggerIndex).toInt());
 
         // Populate context menu
         QActionGroup *actionGroup = new QActionGroup(m_timeLineView);
@@ -232,18 +232,16 @@ void KPrEditAnimationsWidget::showTimeLineCustomContextMenu(const QPoint &pos)
         // Select current nodetype
         if (currentType == KPrShapeAnimation::OnClick) {
             onClickAction->setChecked(true);
-        }
-        else if (currentType == KPrShapeAnimation::AfterPrevious) {
+        } else if (currentType == KPrShapeAnimation::AfterPrevious) {
             afterAction->setChecked(true);
-        }
-        else {
+        } else {
             withAction->setChecked(true);
         }
 
         menu.addAction(onClickAction);
         menu.addAction(afterAction);
         menu.addAction(withAction);
-        connect(actionGroup, &QActionGroup::triggered, this, QOverload<QAction*>::of(&KPrEditAnimationsWidget::setTriggerEvent));
+        connect(actionGroup, &QActionGroup::triggered, this, QOverload<QAction *>::of(&KPrEditAnimationsWidget::setTriggerEvent));
         menu.exec(m_timeLineView->mapToGlobal(pos));
     }
 }
@@ -255,7 +253,7 @@ void KPrEditAnimationsWidget::changeCurrentAnimation(KPrShapeAnimation *animatio
     if (!itemIndex.isValid() || !animation || (animation->shape() != currentAnimation->shape())) {
         return;
     }
-    //if it's the same animation do anything
+    // if it's the same animation do anything
     if ((currentAnimation->id() == animation->id()) && (currentAnimation->presetSubType() == animation->presetSubType())) {
         return;
     }

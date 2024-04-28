@@ -7,8 +7,8 @@
 #ifndef INSERTDELETECHANGESCOMMAND_H
 #define INSERTDELETECHANGESCOMMAND_H
 
-#include <kundo2command.h>
 #include <QPointer>
+#include <kundo2command.h>
 
 class QTextDocument;
 
@@ -22,6 +22,5 @@ private:
     QPointer<QTextDocument> m_document;
     void insertDeleteChanges();
 };
-
 
 #endif // INSERTDELETECHANGESCOMMAND_H

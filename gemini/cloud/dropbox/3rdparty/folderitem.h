@@ -9,20 +9,20 @@
 #ifndef FOLDERITEM_H
 #define FOLDERITEM_H
 
-#include <QObject>
 #include "listmodel.h"
+#include <QObject>
 
 /*
-    * "revision":6226,
-    * "thumb_exists":false,
-    * "bytes":916480,
-    * "modified":"Fri, 25 Feb 2011 08:25:31 +0000",
-    * "path":"/2011-Craftly.ppt",
-    * "is_dir":false,
-    * "icon":"page_white_powerpoint",
-    * "mime_type":"application/vnd.ms-powerpoint",
-    * "size":"895KB"
-  */
+ * "revision":6226,
+ * "thumb_exists":false,
+ * "bytes":916480,
+ * "modified":"Fri, 25 Feb 2011 08:25:31 +0000",
+ * "path":"/2011-Craftly.ppt",
+ * "is_dir":false,
+ * "icon":"page_white_powerpoint",
+ * "mime_type":"application/vnd.ms-powerpoint",
+ * "size":"895KB"
+ */
 
 class FolderItem : public ListItem
 {
@@ -42,22 +42,21 @@ class FolderItem : public ListItem
 
 public:
     enum Roles {
-      RevisionRole = Qt::UserRole+1,
-      Thumb_existsRole,
-      BytesRole,
-      ModifiedRole,
-      PathRole,
-      Is_dirRole,
-      IconRole,
-      Mime_typeRole,
-      SizeRole,
-      CheckedRole,
-      NameRole,
-      SectionRole
+        RevisionRole = Qt::UserRole + 1,
+        Thumb_existsRole,
+        BytesRole,
+        ModifiedRole,
+        PathRole,
+        Is_dirRole,
+        IconRole,
+        Mime_typeRole,
+        SizeRole,
+        CheckedRole,
+        NameRole,
+        SectionRole
     };
 
-    explicit FolderItem(
-                        const qreal &revision,
+    explicit FolderItem(const qreal &revision,
                         const bool &thumb_exists,
                         const qreal &bytes,
                         const QString &modified,
@@ -66,36 +65,73 @@ public:
                         const QString &icon,
                         const QString &mime_type,
                         const QString &size,
-                        QObject *parent = 0
-                        ):ListItem(parent),
-        m_revision(revision),
-        m_thumb_exists(thumb_exists),
-        m_bytes(bytes),
-        m_modified(modified),
-        m_path(path),
-        m_is_dir(is_dir),
-        m_icon(icon),
-        m_mime_type(mime_type),
-        m_size(size),
-        m_checked(false)
-        {}
+                        QObject *parent = 0)
+        : ListItem(parent)
+        , m_revision(revision)
+        , m_thumb_exists(thumb_exists)
+        , m_bytes(bytes)
+        , m_modified(modified)
+        , m_path(path)
+        , m_is_dir(is_dir)
+        , m_icon(icon)
+        , m_mime_type(mime_type)
+        , m_size(size)
+        , m_checked(false)
+    {
+    }
 
-    FolderItem(QObject *parent = 0): ListItem(parent) {}
+    FolderItem(QObject *parent = 0)
+        : ListItem(parent)
+    {
+    }
 
     QVariant data(int role) const override;
     QHash<int, QByteArray> roleNames() const;
 
-    inline QString id() const override { return m_path; }
-    inline qreal revision() const { return m_revision;}
-    inline bool thumb_exists() const { return m_thumb_exists;}
-    inline qreal bytes() const { return m_bytes;}
-    inline QString modified() const { return m_modified;}
-    inline QString path() const { return m_path;}
-    inline bool is_dir() const { return m_is_dir;}
-    inline QString icon() const { return m_icon;}
-    inline QString mime_type() const { return m_mime_type;}
-    inline QString size() const { return m_size;}
-    inline bool checked() const { return m_checked;}
+    inline QString id() const override
+    {
+        return m_path;
+    }
+    inline qreal revision() const
+    {
+        return m_revision;
+    }
+    inline bool thumb_exists() const
+    {
+        return m_thumb_exists;
+    }
+    inline qreal bytes() const
+    {
+        return m_bytes;
+    }
+    inline QString modified() const
+    {
+        return m_modified;
+    }
+    inline QString path() const
+    {
+        return m_path;
+    }
+    inline bool is_dir() const
+    {
+        return m_is_dir;
+    }
+    inline QString icon() const
+    {
+        return m_icon;
+    }
+    inline QString mime_type() const
+    {
+        return m_mime_type;
+    }
+    inline QString size() const
+    {
+        return m_size;
+    }
+    inline bool checked() const
+    {
+        return m_checked;
+    }
     QString name() const;
     QString section() const;
     QString xsection();
@@ -134,7 +170,6 @@ private:
     QString m_mime_type;
     QString m_size;
     bool m_checked;
-
 };
 
 #endif // FOLDERITEM_H

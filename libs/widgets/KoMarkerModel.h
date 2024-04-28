@@ -14,9 +14,9 @@ class KoMarker;
 
 class KoMarkerModel : public QAbstractListModel
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    KoMarkerModel(const QList<KoMarker*> markers, KoMarkerData::MarkerPosition position, QObject *parent = nullptr);
+    KoMarkerModel(const QList<KoMarker *> markers, KoMarkerData::MarkerPosition position, QObject *parent = nullptr);
     ~KoMarkerModel() override = default;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -27,7 +27,7 @@ public:
     KoMarkerData::MarkerPosition position() const;
 
 private:
-    QList<KoMarker*> m_markers;
+    QList<KoMarker *> m_markers;
     KoMarkerData::MarkerPosition m_markerPosition;
 };
 

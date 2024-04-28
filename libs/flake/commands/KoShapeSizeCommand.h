@@ -10,8 +10,8 @@
 
 #include "flake_export.h"
 
-#include <kundo2command.h>
 #include <QList>
+#include <kundo2command.h>
 
 class KoShape;
 
@@ -26,8 +26,7 @@ public:
      * @param newSizes the new sizes; in a list with a member for each shape
      * @param parent the parent command used for macro commands
      */
-    KoShapeSizeCommand(const QList<KoShape*> &shapes, const QVector<QSizeF> &previousSizes,
-            const QVector<QSizeF> &newSizes, KUndo2Command *parent = 0);
+    KoShapeSizeCommand(const QList<KoShape *> &shapes, const QVector<QSizeF> &previousSizes, const QVector<QSizeF> &newSizes, KUndo2Command *parent = 0);
     ~KoShapeSizeCommand() override;
 
     /// redo the command
@@ -37,7 +36,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

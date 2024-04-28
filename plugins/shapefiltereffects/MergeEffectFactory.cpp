@@ -11,16 +11,16 @@
 #include <KLocalizedString>
 
 MergeEffectFactory::MergeEffectFactory()
-        : KoFilterEffectFactoryBase(MergeEffectId, i18n("Merge"))
+    : KoFilterEffectFactoryBase(MergeEffectId, i18n("Merge"))
 {
 }
 
-KoFilterEffect * MergeEffectFactory::createFilterEffect() const
+KoFilterEffect *MergeEffectFactory::createFilterEffect() const
 {
     return new MergeEffect();
 }
 
-KoFilterEffectConfigWidgetBase * MergeEffectFactory::createConfigWidget() const
+KoFilterEffectConfigWidgetBase *MergeEffectFactory::createConfigWidget() const
 {
     return new MergeEffectConfigWidget();
 }

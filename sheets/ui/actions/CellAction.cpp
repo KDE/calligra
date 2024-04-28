@@ -29,13 +29,15 @@ CellAction::CellAction(Actions *actions, const QString &actionName, const QStrin
 {
 }
 
-QAction *CellAction::createAction() {
+QAction *CellAction::createAction()
+{
     QAction *res;
     if (!m_icon.isNull())
         res = new QAction(m_icon, m_caption, m_actions->tool());
     else
         res = new QAction(m_caption, m_actions->tool());
-    if (m_tooltip.length()) res->setToolTip(m_tooltip);
+    if (m_tooltip.length())
+        res->setToolTip(m_tooltip);
     connect(res, &QAction::triggered, this, &CellAction::triggered);
     return res;
 }
@@ -48,8 +50,10 @@ CellAction::~CellAction()
 }
 
 // This cannot be in the constructor as it uses virtual functions.
-QAction *CellAction::action() {
-    if (!m_action) m_action = createAction();
+QAction *CellAction::action()
+{
+    if (!m_action)
+        m_action = createAction();
     return m_action;
 }
 
@@ -62,16 +66,19 @@ void CellAction::trigger()
 void CellAction::triggered()
 {
     Selection *sel = m_actions->tool()->selection();
-    if (m_closeEditor) sel->emitCloseEditor(true);
+    if (m_closeEditor)
+        sel->emitCloseEditor(true);
     execute(sel, sel->activeSheet(), m_actions->tool()->canvas()->canvasWidget());
 }
 
 bool CellAction::shouldBeEnabled(bool readWrite, Selection *selection, const Cell &activeCell)
 {
-    if ((!readWrite) && (!enabledIfReadOnly())) return false;
+    if ((!readWrite) && (!enabledIfReadOnly()))
+        return false;
 
     bool prot = selection->isProtected();
-    if (prot && (!enabledIfProtected())) return false;
+    if (prot && (!enabledIfProtected()))
+        return false;
 
     return enabledForSelection(selection, activeCell);
 }
@@ -84,15 +91,20 @@ bool CellAction::enabledForSelection(Selection *, const Cell &)
 QRect CellAction::shrinkToUsedArea(QRect rect, Sheet *sheet)
 {
     // If it's a single cell, keep it as it is.
-    if ((rect.height() == 1) && (rect.width() == 1)) return rect;
+    if ((rect.height() == 1) && (rect.width() == 1))
+        return rect;
 
     QRect used = sheet->usedArea();
     int usex = used.right();
     int usey = used.bottom();
-    if (rect.top() > usey) rect.setBottom(rect.top());
-    else if (rect.bottom() > usey) rect.setBottom(usey);
-    if (rect.left() > usex) rect.setRight(rect.left());
-    else if (rect.right() > usex) rect.setRight(usex);
+    if (rect.top() > usey)
+        rect.setBottom(rect.top());
+    else if (rect.bottom() > usey)
+        rect.setBottom(usey);
+    if (rect.left() > usex)
+        rect.setRight(rect.left());
+    else if (rect.right() > usex)
+        rect.setRight(usex);
 
     // Remove empty rows/columns
     while (rect.bottom() > rect.top()) {
@@ -100,9 +112,11 @@ QRect CellAction::shrinkToUsedArea(QRect rect, Sheet *sheet)
         bool used = false;
         for (int x = rect.left(); x <= rect.right(); ++x) {
             Value v = CellBase(sheet, x, y).value();
-            if (!v.isNull()) used = true;
+            if (!v.isNull())
+                used = true;
         }
-        if (used) break;
+        if (used)
+            break;
         rect.setBottom(y - 1);
     }
     while (rect.right() > rect.left()) {
@@ -110,9 +124,11 @@ QRect CellAction::shrinkToUsedArea(QRect rect, Sheet *sheet)
         bool used = false;
         for (int y = rect.top(); y <= rect.bottom(); ++y) {
             Value v = CellBase(sheet, x, y).value();
-            if (!v.isNull()) used = true;
+            if (!v.isNull())
+                used = true;
         }
-        if (used) break;
+        if (used)
+            break;
         rect.setRight(x - 1);
     }
 
@@ -133,9 +149,11 @@ QRect CellAction::extendSelectionToColumn(const CellBase &cell, bool numeric)
         yy--;
         Value v = CellBase(sheet, x, yy).value();
         if (numeric) {
-            if (v.isNumber()) continue;
+            if (v.isNumber())
+                continue;
         } else {
-            if (!v.isEmpty()) continue;
+            if (!v.isEmpty())
+                continue;
         }
         res.setTop(yy + 1);
         break;
@@ -148,9 +166,11 @@ QRect CellAction::extendSelectionToColumn(const CellBase &cell, bool numeric)
             yy++;
             Value v = CellBase(sheet, x, yy).value();
             if (numeric) {
-                if (v.isNumber()) continue;
+                if (v.isNumber())
+                    continue;
             } else {
-                if (!v.isEmpty()) continue;
+                if (!v.isEmpty())
+                    continue;
             }
             res.setBottom(yy - 1);
             break;
@@ -175,9 +195,11 @@ QRect CellAction::extendSelectionToRow(const CellBase &cell, bool numeric)
         xx--;
         Value v = CellBase(sheet, xx, y).value();
         if (numeric) {
-            if (v.isNumber()) continue;
+            if (v.isNumber())
+                continue;
         } else {
-            if (!v.isEmpty()) continue;
+            if (!v.isEmpty())
+                continue;
         }
         res.setLeft(xx + 1);
         break;
@@ -190,9 +212,11 @@ QRect CellAction::extendSelectionToRow(const CellBase &cell, bool numeric)
             xx++;
             Value v = CellBase(sheet, xx, y).value();
             if (numeric) {
-                if (v.isNumber()) continue;
+                if (v.isNumber())
+                    continue;
             } else {
-                if (!v.isEmpty()) continue;
+                if (!v.isEmpty())
+                    continue;
             }
             res.setRight(xx - 1);
             break;
@@ -211,18 +235,15 @@ QRect CellAction::extendSelectionToRange(const CellBase &cell, bool numeric)
     return res;
 }
 
-
-
 // *********** ToggleableCellAction ***********
 
-
 ToggleableCellAction::ToggleableCellAction(Actions *actions, const QString &actionName, const QString &caption, const QIcon &icon, const QString &tooltip)
-    :
-        CellAction(actions, actionName, caption, icon, tooltip)
+    : CellAction(actions, actionName, caption, icon, tooltip)
 {
 }
 
-ToggleableCellAction::~ToggleableCellAction() {
+ToggleableCellAction::~ToggleableCellAction()
+{
     // nothing here
 }
 
@@ -232,22 +253,25 @@ QAction *ToggleableCellAction::createAction()
         m_toggleAction = new KToggleAction(m_icon, m_caption, m_actions->tool());
     else
         m_toggleAction = new KToggleAction(m_caption, m_actions->tool());
-    if (m_tooltip.length()) m_toggleAction->setToolTip(m_tooltip);
+    if (m_tooltip.length())
+        m_toggleAction->setToolTip(m_tooltip);
     connect(m_toggleAction, &KToggleAction::triggered, this, &ToggleableCellAction::triggered);
 
     return m_toggleAction;
 }
 
-void ToggleableCellAction::trigger() {
+void ToggleableCellAction::trigger()
+{
     triggered(!m_toggleAction->isChecked());
 }
 
-void ToggleableCellAction::triggered(bool enabled) {
+void ToggleableCellAction::triggered(bool enabled)
+{
     Selection *sel = m_actions->tool()->selection();
-    if (m_closeEditor) sel->emitCloseEditor(true);
+    if (m_closeEditor)
+        sel->emitCloseEditor(true);
     executeToggled(enabled, sel, sel->activeSheet(), m_actions->tool()->canvas()->canvasWidget());
 }
-
 
 bool ToggleableCellAction::shouldBeChecked(Selection *selection, const Cell &activeCell)
 {
@@ -258,6 +282,3 @@ bool ToggleableCellAction::checkedForSelection(Selection *, const Cell &)
 {
     return false;
 }
-
-
-

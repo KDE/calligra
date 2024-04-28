@@ -10,8 +10,8 @@
 #include <KoTextEditor.h>
 #include <ui_ManageBookmark.h>
 
-#include <QWidget>
 #include <KoDialog.h>
+#include <QWidget>
 
 class ManageBookmark : public QWidget
 {
@@ -56,8 +56,6 @@ private Q_SLOTS:
 
 private:
     ManageBookmark *ui;
-
 };
 
 #endif
-

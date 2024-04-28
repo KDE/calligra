@@ -10,7 +10,6 @@
 
 #include "CQImageProvider.h"
 
-
 const char CQImageProvider::identificationString[] = "cqimage";
 CQImageProvider *CQImageProvider::s_imageProvider = 0;
 
@@ -21,10 +20,9 @@ CQImageProvider::CQImageProvider()
 
 CQImageProvider::~CQImageProvider()
 {
-
 }
 
-QImage CQImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
+QImage CQImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 {
     if (m_images.contains(id)) {
         QImage image = m_images.value(id);
@@ -35,12 +33,12 @@ QImage CQImageProvider::requestImage(const QString& id, QSize* size, const QSize
     return QImage();
 }
 
-void CQImageProvider::addImage(const QString& id, const QImage& image)
+void CQImageProvider::addImage(const QString &id, const QImage &image)
 {
     m_images.insert(id, image);
 }
 
-bool CQImageProvider::containsId(const QString& id)
+bool CQImageProvider::containsId(const QString &id)
 {
     return m_images.contains(id);
 }

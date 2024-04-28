@@ -14,10 +14,10 @@ class WPGImport : public KoFilter
 {
     Q_OBJECT
 public:
-    explicit WPGImport(QObject *parent, const QVariantList&);
+    explicit WPGImport(QObject *parent, const QVariantList &);
     ~WPGImport() override;
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };
 
 #endif // WPGIMPORT_H

@@ -10,13 +10,13 @@
  */
 
 #include "XlsxXmlCommentsReader.h"
-#include "XlsxXmlWorksheetReader.h"
 #include "XlsxImport.h"
+#include "XlsxXmlWorksheetReader.h"
 #include <MsooXmlSchemas.h>
 
 #include <KoXmlWriter.h>
 
-//#define MSOOXML_CURRENT_NS
+// #define MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_CLASS XlsxXmlCommentsReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
@@ -34,8 +34,7 @@ XlsxComments::XlsxComments()
 {
 }
 
-XlsxXmlCommentsReaderContext::XlsxXmlCommentsReaderContext(XlsxComments& _comments, MSOOXML::DrawingMLTheme* _themes,
-    QVector<QString>& _colorIndices)
+XlsxXmlCommentsReaderContext::XlsxXmlCommentsReaderContext(XlsxComments &_comments, MSOOXML::DrawingMLTheme *_themes, QVector<QString> &_colorIndices)
     : comments(&_comments)
     , themes(_themes)
     , colorIndices(_colorIndices)
@@ -55,9 +54,9 @@ XlsxXmlCommentsReader::~XlsxXmlCommentsReader()
 {
 }
 
-KoFilter::ConversionStatus XlsxXmlCommentsReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus XlsxXmlCommentsReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<XlsxXmlCommentsReaderContext*>(context);
+    m_context = dynamic_cast<XlsxXmlCommentsReaderContext *>(context);
     Q_ASSERT(m_context);
     m_colorIndices = m_context->colorIndices;
     m_themes = m_context->themes;
@@ -92,13 +91,13 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::readInternal()
     for (int i = 0; i < namespaces.count(); i++) {
         qCDebug(lcXlsxImport) << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
-//! @todo find out whether the namespace returned by namespaceUri()
-//!       is exactly the same ref as the element of namespaceDeclarations()
+    //! @todo find out whether the namespace returned by namespaceUri()
+    //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration(QString(), MSOOXML::Schemas::spreadsheetml))) {
         raiseError(i18n("Namespace \"%1\" not found", QLatin1String(MSOOXML::Schemas::spreadsheetml)));
         return KoFilter::WrongFormat;
     }
-//! @todo expect other namespaces too...
+    //! @todo expect other namespaces too...
 
     TRY_READ(comments)
 
@@ -127,7 +126,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_comments()
         if (isStartElement()) {
             TRY_READ_IF(authors)
             ELSE_TRY_READ_IF(commentList)
-//            ELSE_TRY_READ_IF(extLst)
+            //            ELSE_TRY_READ_IF(extLst)
         }
     }
     READ_EPILOGUE
@@ -197,8 +196,8 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_commentPr()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            //TRY_READ_IF(anchor)
-            //ELSE_WRONG_FORMAT
+            // TRY_READ_IF(anchor)
+            // ELSE_WRONG_FORMAT
         }
     }
     READ_EPILOGUE
@@ -285,7 +284,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_text()
     QByteArray commentData;
     QBuffer commentBuffer(&commentData);
     commentBuffer.open(QIODevice::WriteOnly);
-    KoXmlWriter commentWriter(&commentBuffer, 0/*indentation*/);
+    KoXmlWriter commentWriter(&commentBuffer, 0 /*indentation*/);
     MSOOXML::Utils::XmlWriteBuffer buf;
     body = buf.setWriter(&commentWriter);
 

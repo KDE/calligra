@@ -24,11 +24,11 @@ public:
 
     void propertyChanged(Property property, const QVariant &value) override;
 
-    ///reimplemented
-    void saveOdf(KoShapeSavingContext & context) override;
+    /// reimplemented
+    void saveOdf(KoShapeSavingContext &context) override;
 
-    ///reimplemented
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context) override;
+    /// reimplemented
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /// get the list of tags supported by this variable
     static QStringList tags();

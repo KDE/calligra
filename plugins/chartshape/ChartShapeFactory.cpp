@@ -13,36 +13,35 @@
 
 // KF5
 #include <KIconLoader>
-#include <KPluginFactory>
 #include <KLocalizedString>
+#include <KPluginFactory>
 
 // Calligra
-#include <KoIcon.h>
-#include <KoToolRegistry.h>
-#include <KoShapeRegistry.h>
-#include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
 #include <KoDocumentResourceManager.h>
-#include <KoStyleStack.h>
+#include <KoIcon.h>
+#include <KoOdfLoadingContext.h>
 #include <KoProperties.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeRegistry.h>
+#include <KoStyleStack.h>
+#include <KoToolRegistry.h>
 
 // Chart shape
-#include "ChartShape.h"
-#include "ChartToolFactory.h"
-#include "ChartProxyModel.h"
-#include "ChartTableModel.h"
-#include "PlotArea.h"
 #include "Axis.h"
-#include "Legend.h"
-#include "TableSource.h"
 #include "ChartLayout.h"
+#include "ChartProxyModel.h"
+#include "ChartShape.h"
+#include "ChartTableModel.h"
+#include "ChartToolFactory.h"
+#include "Legend.h"
+#include "PlotArea.h"
+#include "TableSource.h"
 
 using namespace KoChart;
 
-K_PLUGIN_FACTORY_WITH_JSON(ChartShapePluginFactory, "calligra_shape_chart.json",
-                           registerPlugin<ChartShapePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(ChartShapePluginFactory, "calligra_shape_chart.json", registerPlugin<ChartShapePlugin>();)
 
-ChartShapePlugin::ChartShapePlugin(QObject * parent, const QVariantList&)
+ChartShapePlugin::ChartShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     // Register the chart shape factory.
@@ -51,7 +50,6 @@ ChartShapePlugin::ChartShapePlugin(QObject * parent, const QVariantList&)
     // Register all tools for the chart shape.
     KoToolRegistry::instance()->add(new ChartToolFactory());
 }
-
 
 ChartShapeFactory::ChartShapeFactory()
     : KoShapeFactoryBase(ChartShapeId, i18n("Chart"))
@@ -64,7 +62,7 @@ ChartShapeFactory::ChartShapeFactory()
 
     // Default 'app specific' config pages i.e. unless an app defines
     // other config pages, these are used.
-    QList<KoShapeConfigFactoryBase*> panelFactories;
+    QList<KoShapeConfigFactoryBase *> panelFactories;
     // panelFactories.append(new ChartDataConfigFactory());
     setOptionPanels(panelFactories);
 
@@ -274,12 +272,9 @@ ChartShapeFactory::ChartShapeFactory()
     addTemplate(params);
 }
 
-
 bool ChartShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContext &context) const
 {
-    if (element.namespaceURI() == "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
-        && element.tagName() == "object") {
-
+    if (element.namespaceURI() == "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" && element.tagName() == "object") {
         QString href = element.attribute("href");
         if (!href.isEmpty()) {
             // check the mimetype
@@ -293,41 +288,40 @@ bool ChartShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingCont
     return false;
 }
 
-KoShape *ChartShapeFactory::createShape(const KoProperties* properties, KoDocumentResourceManager *documentResources) const
+KoShape *ChartShapeFactory::createShape(const KoProperties *properties, KoDocumentResourceManager *documentResources) const
 {
-    qInfo()<<Q_FUNC_INFO<<properties->property("chart-type")<<properties->property("chart-sub-type");
+    qInfo() << Q_FUNC_INFO << properties->property("chart-type") << properties->property("chart-sub-type");
     switch (properties->intProperty("chart-type")) {
-        case BarChartType:
-            return createBarChart(documentResources, properties->intProperty("chart-sub-type"));
-        case LineChartType:
-            return createLineChart(documentResources, properties->intProperty("chart-sub-type"));
-        case AreaChartType:
-            return createAreaChart(documentResources, properties->intProperty("chart-sub-type"));
-        case StockChartType:
-            return createStockChart(documentResources, properties->intProperty("chart-sub-type"));
-        case CircleChartType:
-            return createPieChart(documentResources);
-        case RingChartType:
-            return createRingChart(documentResources);
-        case BubbleChartType:
-            return createBubbleChart(documentResources);
-        case ScatterChartType:
-            return createScatterChart(documentResources);
-        case RadarChartType:
-            return createRadarChart(documentResources);
-        case FilledRadarChartType:
-            return createFilledRadarChart(documentResources);
-        default:
-            return createDefaultShape(documentResources);
+    case BarChartType:
+        return createBarChart(documentResources, properties->intProperty("chart-sub-type"));
+    case LineChartType:
+        return createLineChart(documentResources, properties->intProperty("chart-sub-type"));
+    case AreaChartType:
+        return createAreaChart(documentResources, properties->intProperty("chart-sub-type"));
+    case StockChartType:
+        return createStockChart(documentResources, properties->intProperty("chart-sub-type"));
+    case CircleChartType:
+        return createPieChart(documentResources);
+    case RingChartType:
+        return createRingChart(documentResources);
+    case BubbleChartType:
+        return createBubbleChart(documentResources);
+    case ScatterChartType:
+        return createScatterChart(documentResources);
+    case RadarChartType:
+        return createRadarChart(documentResources);
+    case FilledRadarChartType:
+        return createFilledRadarChart(documentResources);
+    default:
+        return createDefaultShape(documentResources);
     }
     Q_ASSERT(false);
     return 0;
 }
 
-KoShape *ChartShapeFactory::createShapeFromOdf(const KoXmlElement &element,
-                                               KoShapeLoadingContext &context)
+KoShape *ChartShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    ChartShape* shape = new ChartShape(context.documentResourceManager());
+    ChartShape *shape = new ChartShape(context.documentResourceManager());
 
     if (shape->shapeId().isEmpty())
         shape->setShapeId(id());
@@ -346,7 +340,7 @@ KoShape *ChartShapeFactory::createShapeFromOdf(const KoXmlElement &element,
 
 KoShape *ChartShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    ChartShape* shape = new ChartShape(documentResources);
+    ChartShape *shape = new ChartShape(documentResources);
     ChartProxyModel *proxyModel = shape->proxyModel();
 
     // Fill cells with data.
@@ -404,9 +398,9 @@ KoShape *ChartShapeFactory::createDefaultShape(KoDocumentResourceManager *docume
     return shape;
 }
 
-QList<KoShapeConfigWidgetBase*> ChartShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> ChartShapeFactory::createShapeOptionPanels()
 {
-    return QList<KoShapeConfigWidgetBase*>();
+    return QList<KoShapeConfigWidgetBase *>();
 }
 
 void ChartShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
@@ -416,7 +410,7 @@ void ChartShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *ma
 
 ChartShape *ChartShapeFactory::createBarChart(KoDocumentResourceManager *documentResources, int subtype) const
 {
-    ChartShape* shape = static_cast<ChartShape*>(createDefaultShape(documentResources));
+    ChartShape *shape = static_cast<ChartShape *>(createDefaultShape(documentResources));
     shape->setChartType(BarChartType);
     shape->setChartSubType(static_cast<ChartSubtype>(subtype));
     return shape;
@@ -424,7 +418,7 @@ ChartShape *ChartShapeFactory::createBarChart(KoDocumentResourceManager *documen
 
 ChartShape *ChartShapeFactory::createLineChart(KoDocumentResourceManager *documentResources, int subtype) const
 {
-    ChartShape* shape = static_cast<ChartShape*>(createDefaultShape(documentResources));
+    ChartShape *shape = static_cast<ChartShape *>(createDefaultShape(documentResources));
     shape->setChartType(LineChartType);
     shape->setChartSubType(static_cast<ChartSubtype>(subtype));
     return shape;
@@ -432,7 +426,7 @@ ChartShape *ChartShapeFactory::createLineChart(KoDocumentResourceManager *docume
 
 ChartShape *ChartShapeFactory::createAreaChart(KoDocumentResourceManager *documentResources, int subtype) const
 {
-    ChartShape* shape = static_cast<ChartShape*>(createDefaultShape(documentResources));
+    ChartShape *shape = static_cast<ChartShape *>(createDefaultShape(documentResources));
     shape->setChartType(AreaChartType);
     shape->setChartSubType(static_cast<ChartSubtype>(subtype));
     return shape;
@@ -440,13 +434,13 @@ ChartShape *ChartShapeFactory::createAreaChart(KoDocumentResourceManager *docume
 
 ChartShape *ChartShapeFactory::createStockChart(KoDocumentResourceManager *documentResources, int subtype) const
 {
-    ChartShape* shape = new ChartShape(documentResources);
+    ChartShape *shape = new ChartShape(documentResources);
     shape->setChartType(StockChartType);
     shape->setChartSubType(CandlestickChartSubtype); // we create data for this by default, and switch below if needed
     ChartProxyModel *proxyModel = shape->proxyModel();
 
     // Fill cells with data.
-    ChartTableModel  *chartData = new ChartTableModel();
+    ChartTableModel *chartData = new ChartTableModel();
     Table *internalTable = shape->tableSource()->add("local-data", chartData);
     Q_ASSERT(!shape->internalModel());
     // setInternalModel() assumes that chartData has already been added to shape->tableSource().
@@ -467,10 +461,14 @@ ChartShape *ChartShapeFactory::createStockChart(KoDocumentResourceManager *docum
     chartData->setData(chartData->index(0, 3), i18n("Low"));
     chartData->setData(chartData->index(0, 4), i18n("Close"));
 
-    QList<qreal> openValues; openValues << 10 << 15 << 20;
-    QList<qreal> highValues; highValues << 12 << 15 << 30;
-    QList<qreal> lowValues; lowValues << 6 << 13 << 20;
-    QList<qreal> closeValues; closeValues << 7 << 13 << 30;
+    QList<qreal> openValues;
+    openValues << 10 << 15 << 20;
+    QList<qreal> highValues;
+    highValues << 12 << 15 << 30;
+    QList<qreal> lowValues;
+    lowValues << 6 << 13 << 20;
+    QList<qreal> closeValues;
+    closeValues << 7 << 13 << 30;
     int col = 1;
 
     // Open
@@ -514,7 +512,7 @@ ChartShape *ChartShapeFactory::createStockChart(KoDocumentResourceManager *docum
 
 ChartShape *ChartShapeFactory::createPieChart(KoDocumentResourceManager *documentResources) const
 {
-    ChartShape* shape = static_cast<ChartShape*>(createDefaultShape(documentResources));
+    ChartShape *shape = static_cast<ChartShape *>(createDefaultShape(documentResources));
     shape->setChartType(CircleChartType);
     shape->setChartSubType(NoChartSubtype);
     return shape;
@@ -522,7 +520,7 @@ ChartShape *ChartShapeFactory::createPieChart(KoDocumentResourceManager *documen
 
 ChartShape *ChartShapeFactory::createRingChart(KoDocumentResourceManager *documentResources) const
 {
-    ChartShape* shape = static_cast<ChartShape*>(createDefaultShape(documentResources));
+    ChartShape *shape = static_cast<ChartShape *>(createDefaultShape(documentResources));
     shape->setChartType(RingChartType);
     shape->setChartSubType(NoChartSubtype);
     return shape;
@@ -530,13 +528,13 @@ ChartShape *ChartShapeFactory::createRingChart(KoDocumentResourceManager *docume
 
 ChartShape *ChartShapeFactory::createBubbleChart(KoDocumentResourceManager *documentResources) const
 {
-    ChartShape* shape = new ChartShape(documentResources);
+    ChartShape *shape = new ChartShape(documentResources);
     shape->setChartType(BubbleChartType);
     shape->setChartSubType(NoChartSubtype);
     ChartProxyModel *proxyModel = shape->proxyModel();
 
     // Fill cells with data.
-    ChartTableModel  *chartData = new ChartTableModel();
+    ChartTableModel *chartData = new ChartTableModel();
     Table *internalTable = shape->tableSource()->add("local-data", chartData);
     Q_ASSERT(!shape->internalModel());
     // setInternalModel() assumes that chartData has already been added to shape->tableSource().
@@ -590,7 +588,7 @@ ChartShape *ChartShapeFactory::createBubbleChart(KoDocumentResourceManager *docu
 
 ChartShape *ChartShapeFactory::createScatterChart(KoDocumentResourceManager *documentResources) const
 {
-    ChartShape* shape = static_cast<ChartShape*>(createDefaultShape(documentResources));
+    ChartShape *shape = static_cast<ChartShape *>(createDefaultShape(documentResources));
     shape->setChartType(ScatterChartType);
     shape->setChartSubType(NoChartSubtype);
     return shape;
@@ -598,7 +596,7 @@ ChartShape *ChartShapeFactory::createScatterChart(KoDocumentResourceManager *doc
 
 ChartShape *ChartShapeFactory::createRadarChart(KoDocumentResourceManager *documentResources) const
 {
-    ChartShape* shape = new ChartShape(documentResources);
+    ChartShape *shape = new ChartShape(documentResources);
     shape->setChartType(RadarChartType);
     shape->setChartSubType(NoChartSubtype);
     radarData(shape);
@@ -607,7 +605,7 @@ ChartShape *ChartShapeFactory::createRadarChart(KoDocumentResourceManager *docum
 
 ChartShape *ChartShapeFactory::createFilledRadarChart(KoDocumentResourceManager *documentResources) const
 {
-    ChartShape* shape = new ChartShape(documentResources);
+    ChartShape *shape = new ChartShape(documentResources);
     shape->setChartType(FilledRadarChartType);
     shape->setChartSubType(NoChartSubtype);
     radarData(shape);
@@ -619,7 +617,7 @@ void ChartShapeFactory::radarData(ChartShape *shape) const
     ChartProxyModel *proxyModel = shape->proxyModel();
 
     // Fill cells with data.
-    ChartTableModel  *chartData = new ChartTableModel();
+    ChartTableModel *chartData = new ChartTableModel();
     Table *internalTable = shape->tableSource()->add("local-data", chartData);
     Q_ASSERT(!shape->internalModel());
     // setInternalModel() assumes that chartData has already been added to shape->tableSource().

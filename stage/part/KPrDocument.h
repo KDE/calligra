@@ -9,8 +9,8 @@
 
 #include <QObject>
 
-#include <KoPADocument.h>
 #include "KPrCustomSlideShows.h"
+#include <KoPADocument.h>
 
 class KPrDeclarations;
 class KPrShapeAnimation;
@@ -22,21 +22,27 @@ class STAGE_EXPORT KPrDocument : public KoPADocument
 {
     Q_OBJECT
 public:
-    explicit KPrDocument(KoPart *part=0);
+    explicit KPrDocument(KoPart *part = 0);
     ~KPrDocument() override;
 
     /// reimplemented
     KoPAPage *newPage(KoPAMasterPage *masterPage) override;
     /// reimplemented
-    KoPAMasterPage * newMasterPage() override;
+    KoPAMasterPage *newMasterPage() override;
 
     /// reimplemented
     KoOdf::DocumentType documentType() const override;
 
     /// reimplemented from KoDocument
-    QByteArray nativeFormatMimeType() const override { return STAGE_MIME_TYPE; }
+    QByteArray nativeFormatMimeType() const override
+    {
+        return STAGE_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
-    QByteArray nativeOasisMimeType() const override {return STAGE_MIME_TYPE;}
+    QByteArray nativeOasisMimeType() const override
+    {
+        return STAGE_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
     QStringList extraNativeMimeTypes() const override
     {
@@ -48,7 +54,7 @@ public:
      *
      * @param animation animation to add to shape
      */
-    void addAnimation( KPrShapeAnimation * animation );
+    void addAnimation(KPrShapeAnimation *animation);
 
     /**
      * @brief Remove animation from shape
@@ -57,15 +63,15 @@ public:
      * @param removeFromApplicationData if true the animation will also be removed from the
      *        application data
      */
-    void removeAnimation( KPrShapeAnimation * animation, bool removeFromApplicationData = true );
+    void removeAnimation(KPrShapeAnimation *animation, bool removeFromApplicationData = true);
 
     void replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation);
 
     /**
      * @brief get the slideShows defined for this document
      */
-    KPrCustomSlideShows* customSlideShows();
-    void setCustomSlideShows( KPrCustomSlideShows* replacement );
+    KPrCustomSlideShows *customSlideShows();
+    void setCustomSlideShows(KPrCustomSlideShows *replacement);
 
     /**
      * Get the presentation monitor (screen) used for presentation
@@ -79,7 +85,7 @@ public:
      *
      * @param monitor the new screen number used for presentation
      */
-    Q_INVOKABLE void setPresentationMonitor( int monitor );
+    Q_INVOKABLE void setPresentationMonitor(int monitor);
 
     /**
      * Check whether the presenter view feature is enabled for presentation
@@ -93,7 +99,7 @@ public:
      *
      * @param enabled whether the presenter view should be enabled or disabled
      */
-    Q_INVOKABLE void setPresenterViewEnabled( bool enabled );
+    Q_INVOKABLE void setPresenterViewEnabled(bool enabled);
 
     /**
      * Get the list of pages for slide show. It is possible that the pages for
@@ -101,7 +107,7 @@ public:
      *
      * @return the list of pages for slide show
      */
-    QList<KoPAPageBase*> slideShow() const;
+    QList<KoPAPageBase *> slideShow() const;
 
     /**
      * Get the name of currently active custom slide show, or an empty string
@@ -117,16 +123,16 @@ public:
      *
      * @param customSlideShow the new active custom slide show
      */
-    void setActiveCustomSlideShow( const QString &customSlideShow );
+    void setActiveCustomSlideShow(const QString &customSlideShow);
 
     /// reimplemented
-    void saveOdfDocumentStyles( KoPASavingContext & context ) override;
+    void saveOdfDocumentStyles(KoPASavingContext &context) override;
 
     /// reimplemented
-    bool loadOdfDocumentStyles( KoPALoadingContext & context ) override;
+    bool loadOdfDocumentStyles(KoPALoadingContext &context) override;
 
     /// reimplemented
-    bool loadOdfProlog( const KoXmlElement & body, KoPALoadingContext & context ) override;
+    bool loadOdfProlog(const KoXmlElement &body, KoPALoadingContext &context) override;
 
     /**
      * Get the page type used in the document
@@ -138,7 +144,7 @@ public:
     /**
      * Get the KPrDeclarations pointer
      */
-    KPrDeclarations * declarations() const;
+    KPrDeclarations *declarations() const;
 
 public Q_SLOTS:
     void initEmpty() override;
@@ -150,7 +156,7 @@ Q_SIGNALS:
      *
      * @param customSlideShow the new active custom slide show
      */
-    void activeCustomSlideShowChanged( const QString &customSlideShow );
+    void activeCustomSlideShowChanged(const QString &customSlideShow);
 
     /**
      * Emitted when the custom slide shows have been modified.
@@ -160,24 +166,24 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented
-    const char *odfTagName( bool withNamespace ) override;
+    const char *odfTagName(bool withNamespace) override;
 
     /// reimplemented
-    bool loadOdfEpilogue( const KoXmlElement & body, KoPALoadingContext & context ) override;
+    bool loadOdfEpilogue(const KoXmlElement &body, KoPALoadingContext &context) override;
 
     /// reimplemented
-    bool saveOdfProlog( KoPASavingContext & paContext ) override;
+    bool saveOdfProlog(KoPASavingContext &paContext) override;
 
     /// reimplemented
-    bool saveOdfEpilogue( KoPASavingContext & context ) override;
+    bool saveOdfEpilogue(KoPASavingContext &context) override;
 
     /// reimplemented
-    void postAddShape( KoPAPageBase * page, KoShape * shape ) override;
+    void postAddShape(KoPAPageBase *page, KoShape *shape) override;
     /// reimplemented
-    void postRemoveShape( KoPAPageBase * page, KoShape * shape ) override;
+    void postRemoveShape(KoPAPageBase *page, KoShape *shape) override;
 
     /// reimplemented
-    void removePages(QList<KoPAPageBase*> &pages) override;
+    void removePages(QList<KoPAPageBase *> &pages) override;
 
     /// load configuration specific to Stage
     void loadKPrConfig();
@@ -188,7 +194,7 @@ protected:
     /**
      * @brief get the animations of the page
      */
-    KPrShapeAnimations & animationsByPage( KoPAPageBase * page );
+    KPrShapeAnimations &animationsByPage(KoPAPageBase *page);
 
     KPrCustomSlideShows *m_customSlideShows;
 

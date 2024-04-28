@@ -9,14 +9,14 @@
 
 #include <KLocalizedString>
 
-#include <KoChartInterface.h>
 #include "ChartDatabaseSelector.h"
+#include <KoChartInterface.h>
 
 using namespace Calligra::Sheets;
 
-KoShapeConfigWidgetBase* ChartDatabaseSelectorFactory::createConfigWidget(KoShape* shape)
+KoShapeConfigWidgetBase *ChartDatabaseSelectorFactory::createConfigWidget(KoShape *shape)
 {
-    ChartDatabaseSelector* widget = new ChartDatabaseSelector(m_map);
+    ChartDatabaseSelector *widget = new ChartDatabaseSelector(m_map);
     widget->open(shape);
     return widget;
 }

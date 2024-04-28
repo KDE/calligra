@@ -13,8 +13,8 @@
 
 #include <QObject>
 
-#include "KoShape.h"
 #include "KoFlake.h"
+#include "KoShape.h"
 
 #include "flake_export.h"
 
@@ -40,7 +40,6 @@ class FLAKE_EXPORT KoSelection : public QObject, public KoShape
     Q_OBJECT
 
 public:
-
     KoSelection();
     ~KoSelection() override;
 
@@ -87,7 +86,7 @@ public:
      * @param strip if StrippedSelection, the returned list will not include any children
      *    of a container shape if the container-parent is itself also in the set.
      */
-    const QList<KoShape*> selectedShapes(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
+    const QList<KoShape *> selectedShapes(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
 
     /**
      * Return the first selected shape, or 0 if there is nothing selected.

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -31,7 +31,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
     Q_DISABLE_COPY(KoEmbeddedDocumentLoader)
 };
 

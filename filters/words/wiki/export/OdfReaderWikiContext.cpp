@@ -6,20 +6,17 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "OdfReaderWikiContext.h"
 
 // Calligra
-#include <KoXmlReader.h>
+#include <KoOdfStyle.h>
 #include <KoOdfStyleManager.h>
 #include <KoOdfStyleProperties.h>
-#include <KoOdfStyle.h>
-
+#include <KoXmlReader.h>
 
 // ----------------------------------------------------------------
 //                     class OdfReaderWikiContext
-
 
 OdfReaderWikiContext::OdfReaderWikiContext(KoStore *store, QFile &file)
     : OdfReaderContext(store)
@@ -31,7 +28,6 @@ OdfReaderWikiContext::OdfReaderWikiContext(KoStore *store, QFile &file)
 OdfReaderWikiContext::~OdfReaderWikiContext()
 {
 }
-
 
 void OdfReaderWikiContext::pushStyle(KoOdfStyle *style)
 {

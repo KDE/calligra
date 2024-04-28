@@ -22,12 +22,12 @@
 
 #include <KoIcon.h>
 
-#include "engine/MapBase.h"
 #include "core/Sheet.h"
+#include "engine/MapBase.h"
 #include "ui/Selection.h"
 
-#include "ui_ConsolidateWidget.h"
 #include "ui_ConsolidateDetailsWidget.h"
+#include "ui_ConsolidateWidget.h"
 
 using namespace Calligra::Sheets;
 
@@ -39,10 +39,9 @@ public:
     Ui::ConsolidateDetailsWidget detailsWidget;
 };
 
-
-ConsolidateDialog::ConsolidateDialog(QWidget* parent, Selection* selection)
-        : KoDialog(parent)
-        , d(new Private)
+ConsolidateDialog::ConsolidateDialog(QWidget *parent, Selection *selection)
+    : KoDialog(parent)
+    , d(new Private)
 {
     d->selection = selection;
 
@@ -72,15 +71,11 @@ ConsolidateDialog::ConsolidateDialog(QWidget* parent, Selection* selection)
     d->mainWidget.m_function->addItem(i18n("Standard Deviation"), "STDEV");
     d->mainWidget.m_function->addItem(i18n("Variance"), "VAR");
 
-    connect(d->mainWidget.m_addButton, &QAbstractButton::clicked,
-            this, &ConsolidateDialog::slotAdd);
-    connect(d->mainWidget.m_removeButton, &QAbstractButton::clicked,
-            this, &ConsolidateDialog::slotRemove);
-    connect(d->mainWidget.m_sourceRange, &KLineEdit::returnPressed,
-            this, &ConsolidateDialog::slotReturnPressed);
+    connect(d->mainWidget.m_addButton, &QAbstractButton::clicked, this, &ConsolidateDialog::slotAdd);
+    connect(d->mainWidget.m_removeButton, &QAbstractButton::clicked, this, &ConsolidateDialog::slotRemove);
+    connect(d->mainWidget.m_sourceRange, &KLineEdit::returnPressed, this, &ConsolidateDialog::slotReturnPressed);
 
-    connect(d->selection, &Selection::changed,
-            this, &ConsolidateDialog::slotSelectionChanged);
+    connect(d->selection, &Selection::changed, this, &ConsolidateDialog::slotSelectionChanged);
 }
 
 ConsolidateDialog::~ConsolidateDialog()
@@ -88,7 +83,8 @@ ConsolidateDialog::~ConsolidateDialog()
     delete d;
 }
 
-QList<Region> ConsolidateDialog::sourceRegions() const {
+QList<Region> ConsolidateDialog::sourceRegions() const
+{
     Sheet *const destinationSheet = d->selection->activeSheet();
     QList<Region> ranges;
     MapBase *map = d->selection->activeSheet()->map();
@@ -131,8 +127,10 @@ void ConsolidateDialog::accept()
         return;
     }
     int mincols = 1, minrows = 1;
-    if (colHeaders()) mincols = 2;
-    if (rowHeaders()) minrows = 2;
+    if (colHeaders())
+        mincols = 2;
+    if (rowHeaders())
+        minrows = 2;
     MapBase *map = d->selection->activeSheet()->map();
     Region tg = targetRegion();
 
@@ -140,7 +138,7 @@ void ConsolidateDialog::accept()
         const QString address = d->mainWidget.m_sourceRanges->item(i)->text();
         const Region region = map->regionFromName(address, tg.firstSheet());
         if (!region.isValid()) {
-            KMessageBox::error(this, i18n("%1 is not a valid cell range." , address));
+            KMessageBox::error(this, i18n("%1 is not a valid cell range.", address));
             return;
         }
         const QRect firstRange = region.firstRange();
@@ -149,7 +147,7 @@ void ConsolidateDialog::accept()
             return;
         }
         if (region.isAllSelected() || region.isColumnOrRowSelected()) {
-            KMessageBox::error(this, i18n("The range\n%1\nis too large" , region.name()));
+            KMessageBox::error(this, i18n("The range\n%1\nis too large", region.name()));
             return;
         }
 
@@ -158,7 +156,6 @@ void ConsolidateDialog::accept()
             return;
         }
     }
-
 
     emit applyChange();
     KoDialog::accept();
@@ -208,4 +205,3 @@ void ConsolidateDialog::slotReturnPressed()
         enableButton(Ok, true);
     }
 }
-

@@ -9,19 +9,19 @@
 #include "PdfImportDebug.h"
 #include "SvgOutputDev.h"
 
-#include <QString>
 #include <QFile>
+#include <QString>
 
-#include <SvgParser.h>
-#include <KoShape.h>
-#include <KoShapeLayer.h>
-#include <KoShapeGroup.h>
 #include <KoFilterChain.h>
-#include <commands/KoShapeUngroupCommand.h>
-#include <KoXmlReader.h>
-#include <KoPAPage.h>
 #include <KoPAMasterPage.h>
+#include <KoPAPage.h>
 #include <KoPageLayout.h>
+#include <KoShape.h>
+#include <KoShapeGroup.h>
+#include <KoShapeLayer.h>
+#include <KoXmlReader.h>
+#include <SvgParser.h>
+#include <commands/KoShapeUngroupCommand.h>
 
 #include <KarbonDocument.h>
 
@@ -35,16 +35,15 @@
 #endif
 
 // poppler includes
-#include <PDFDoc.h>
 #include <GlobalParams.h>
+#include <PDFDoc.h>
 
 #define POPPLER_VERSION_MACRO ((POPPLER_VERSION_MAJOR << 16) | (POPPLER_VERSION_MINOR << 8) | (POPPLER_VERSION_MICRO))
 
-K_PLUGIN_FACTORY_WITH_JSON(Pdf2OdgImportFactory, "calligra_filter_pdf2odg.json",
-                           registerPlugin<Pdf2OdgImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(Pdf2OdgImportFactory, "calligra_filter_pdf2odg.json", registerPlugin<Pdf2OdgImport>();)
 
-Pdf2OdgImport::Pdf2OdgImport(QObject*parent, const QVariantList&)
-        : KoFilter(parent)
+Pdf2OdgImport::Pdf2OdgImport(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
     debugPdf << "PDF Import Filter";
 }
@@ -53,39 +52,39 @@ Pdf2OdgImport::~Pdf2OdgImport()
 {
 }
 
-KoFilter::ConversionStatus Pdf2OdgImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus Pdf2OdgImport::convert(const QByteArray &from, const QByteArray &to)
 {
     debugPdf << "to:" << to << " from:" << from;
 
     if (from != "application/pdf" || to != "application/vnd.oasis.opendocument.graphics") {
         return KoFilter::NotImplemented;
     }
-    debugPdf<<m_chain->inputFile();
-    m_document = dynamic_cast<KarbonDocument*>(m_chain->outputDocument());
+    debugPdf << m_chain->inputFile();
+    m_document = dynamic_cast<KarbonDocument *>(m_chain->outputDocument());
     if (!m_document) {
-        errorPdf<<"No KarbonDocument"<<m_chain->outputDocument();
+        errorPdf << "No KarbonDocument" << m_chain->outputDocument();
         return KoFilter::CreationError;
     }
     Q_ASSERT(m_document->pages().isEmpty());
 
     // read config file
     globalParams = std::unique_ptr<GlobalParams>(new GlobalParams);
-    if (! globalParams)
+    if (!globalParams)
         return KoFilter::NotImplemented;
 
 #if POPPLER_VERSION_MACRO < QT_VERSION_CHECK(22, 03, 0)
-    GooString * fname = new GooString(QFile::encodeName(m_chain->inputFile()).data());
-    PDFDoc * pdfDoc = new PDFDoc(fname, 0, 0, 0);
+    GooString *fname = new GooString(QFile::encodeName(m_chain->inputFile()).data());
+    PDFDoc *pdfDoc = new PDFDoc(fname, 0, 0, 0);
 #else
     std::unique_ptr<GooString> fname = std::make_unique<GooString>(QFile::encodeName(m_chain->inputFile()).data());
-    PDFDoc * pdfDoc = new PDFDoc(std::move(fname));
+    PDFDoc *pdfDoc = new PDFDoc(std::move(fname));
 #endif
-    if (! pdfDoc) {
+    if (!pdfDoc) {
         globalParams.reset();
         return KoFilter::StupidError;
     }
 
-    if (! pdfDoc->isOk()) {
+    if (!pdfDoc->isOk()) {
         globalParams.reset();
         delete pdfDoc;
         return KoFilter::StupidError;
@@ -107,8 +106,8 @@ KoFilter::ConversionStatus Pdf2OdgImport::convert(const QByteArray& from, const 
             break;
         }
         tmpFile.close();
-        debugPdf<<"tmpFile:"<<tmpFile.fileName();
-        SvgOutputDev * dev = new SvgOutputDev(tmpFile.fileName());
+        debugPdf << "tmpFile:" << tmpFile.fileName();
+        SvgOutputDev *dev = new SvgOutputDev(tmpFile.fileName());
         if (dev->isOk()) {
             int rotate = 0;
             bool useMediaBox = true;
@@ -127,43 +126,42 @@ KoFilter::ConversionStatus Pdf2OdgImport::convert(const QByteArray& from, const 
 
 KoFilter::ConversionStatus Pdf2OdgImport::convert(int pageNumber, QFile &in)
 {
-    debugPdf<<"converting page:"<<pageNumber<<in.fileName();
+    debugPdf << "converting page:" << pageNumber << in.fileName();
     int line, col;
     QString errormessage;
- 
+
     KoXmlDocument inputDoc;
-    
+
     const bool parsed = inputDoc.setContent(&in, &errormessage, &line, &col);
-    
+
     in.close();
-    
-    if (! parsed) {
+
+    if (!parsed) {
         errorPdf << "Error while parsing file: "
-        << "at line " << line << " column: " << col
-        << " message: " << errormessage << Qt::endl;
+                 << "at line " << line << " column: " << col << " message: " << errormessage << Qt::endl;
         // ### TODO: feedback to the user
         return KoFilter::ParsingError;
     }
-    
+
     if (m_document->pages().count() < pageNumber) {
-        debugPdf<<"add page"<<pageNumber;
-        KoPAMasterPage *mp = dynamic_cast<KoPAMasterPage*>(m_document->pages(true).value(pageNumber-1));
+        debugPdf << "add page" << pageNumber;
+        KoPAMasterPage *mp = dynamic_cast<KoPAMasterPage *>(m_document->pages(true).value(pageNumber - 1));
         if (!mp) {
             mp = new KoPAMasterPage();
-            m_document->insertPage(mp, pageNumber-1);
+            m_document->insertPage(mp, pageNumber - 1);
         }
-        m_document->insertPage(new KoPAPage(mp), pageNumber-1);
+        m_document->insertPage(new KoPAPage(mp), pageNumber - 1);
     }
     // Do the conversion!
     convert(inputDoc.documentElement(), pageNumber);
-    
+
     return KoFilter::OK;
 }
 
 void Pdf2OdgImport::convert(const KoXmlElement &rootElement, int pageNumber)
 {
-    debugPdf<<rootElement.tagName();
-    if (! m_document) {
+    debugPdf << rootElement.tagName();
+    if (!m_document) {
         return;
     }
     // set default page size to A4
@@ -171,47 +169,47 @@ void Pdf2OdgImport::convert(const KoXmlElement &rootElement, int pageNumber)
 
     SvgParser parser(m_document->resourceManager());
     parser.setXmlBaseDir(QFileInfo(m_chain->inputFile()).filePath());
-    
-    QList<KoShape*> toplevelShapes = parser.parseSvg(rootElement, &pageSize);
+
+    QList<KoShape *> toplevelShapes = parser.parseSvg(rootElement, &pageSize);
     // parse the root svg element
     buildDocument(toplevelShapes, parser.shapes(), pageNumber);
-    
+
     // set the page size
-    KoPageLayout & layout = m_document->pages().at(pageNumber-1)->pageLayout();
+    KoPageLayout &layout = m_document->pages().at(pageNumber - 1)->pageLayout();
     layout.width = pageSize.width();
     layout.height = pageSize.height();
 }
 
-void Pdf2OdgImport::buildDocument(const QList<KoShape*> &toplevelShapes, const QList<KoShape*> &shapes, int pageNumber)
+void Pdf2OdgImport::buildDocument(const QList<KoShape *> &toplevelShapes, const QList<KoShape *> &shapes, int pageNumber)
 {
     Q_UNUSED(shapes);
-    KoPAPageBase *page = m_document->pages().at(pageNumber-1);
+    KoPAPageBase *page = m_document->pages().at(pageNumber - 1);
     // if we have only top level groups, make them layers
     bool onlyTopLevelGroups = true;
-    foreach(KoShape * shape, toplevelShapes) {
-        if (! dynamic_cast<KoShapeGroup*>(shape) || shape->filterEffectStack()) {
+    foreach (KoShape *shape, toplevelShapes) {
+        if (!dynamic_cast<KoShapeGroup *>(shape) || shape->filterEffectStack()) {
             onlyTopLevelGroups = false;
             break;
         }
     }
     KoShapeLayer *oldLayer = 0;
     if (page->shapeCount()) {
-        oldLayer = dynamic_cast<KoShapeLayer*>(page->shapes().first());
+        oldLayer = dynamic_cast<KoShapeLayer *>(page->shapes().first());
     }
     if (onlyTopLevelGroups) {
-        foreach(KoShape * shape, toplevelShapes) {
+        foreach (KoShape *shape, toplevelShapes) {
             // ungroup toplevel groups
-            KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
+            KoShapeGroup *group = dynamic_cast<KoShapeGroup *>(shape);
             // NOTE:
             // Only groups on first page has visible == true
             // Maybe an issue with poppler?
             group->setVisible(true);
-            QList<KoShape*> children = group->shapes();
-            KoShapeUngroupCommand cmd(group, children, QList<KoShape*>() << group);
+            QList<KoShape *> children = group->shapes();
+            KoShapeUngroupCommand cmd(group, children, QList<KoShape *>() << group);
             cmd.redo();
-            
+
             KoShapeLayer *layer = new KoShapeLayer();
-            foreach(KoShape * child, children) {
+            foreach (KoShape *child, children) {
                 layer->addShape(child);
             }
             if (!group->name().isEmpty()) {
@@ -224,7 +222,7 @@ void Pdf2OdgImport::buildDocument(const QList<KoShape*> &toplevelShapes, const Q
         }
     } else {
         KoShapeLayer *layer = new KoShapeLayer();
-        foreach(KoShape * shape, toplevelShapes) {
+        foreach (KoShape *shape, toplevelShapes) {
             shape->setVisible(true);
             layer->addShape(shape);
         }

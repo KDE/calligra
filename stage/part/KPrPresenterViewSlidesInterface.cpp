@@ -9,42 +9,40 @@
 #include <KoPAPageBase.h>
 #include <KoPAPageThumbnailModel.h>
 
-#include <QVBoxLayout>
 #include <QListView>
+#include <QVBoxLayout>
 
-KPrPresenterViewSlidesInterface::KPrPresenterViewSlidesInterface( const QList<KoPAPageBase *> &pages, QWidget *parent )
-    : KPrPresenterViewBaseInterface( pages, parent )
+KPrPresenterViewSlidesInterface::KPrPresenterViewSlidesInterface(const QList<KoPAPageBase *> &pages, QWidget *parent)
+    : KPrPresenterViewBaseInterface(pages, parent)
 {
     QVBoxLayout *vLayout = new QVBoxLayout;
 
     m_listView = new QListView;
-    m_thumbnailModel = new KoPAPageThumbnailModel( m_pages, this );
-    m_listView->setModel( m_thumbnailModel );
-    m_listView->setDragDropMode( QListView::NoDragDrop );
-    m_listView->setIconSize( QSize( 128, 128 ) );
-    m_listView->setViewMode( QListView::IconMode );
-    m_listView->setFlow( QListView::LeftToRight );
-    m_listView->setWrapping( true );
-    m_listView->setResizeMode( QListView::Adjust );
-    m_listView->setSelectionMode( QAbstractItemView::SingleSelection );
-    m_listView->setMovement( QListView::Static );
+    m_thumbnailModel = new KoPAPageThumbnailModel(m_pages, this);
+    m_listView->setModel(m_thumbnailModel);
+    m_listView->setDragDropMode(QListView::NoDragDrop);
+    m_listView->setIconSize(QSize(128, 128));
+    m_listView->setViewMode(QListView::IconMode);
+    m_listView->setFlow(QListView::LeftToRight);
+    m_listView->setWrapping(true);
+    m_listView->setResizeMode(QListView::Adjust);
+    m_listView->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_listView->setMovement(QListView::Static);
 
-    connect( m_listView, &QAbstractItemView::clicked, this,
-            &KPrPresenterViewSlidesInterface::itemClicked );
-    connect( m_listView, &QAbstractItemView::doubleClicked, this,
-            &KPrPresenterViewSlidesInterface::itemDoubleClicked );
+    connect(m_listView, &QAbstractItemView::clicked, this, &KPrPresenterViewSlidesInterface::itemClicked);
+    connect(m_listView, &QAbstractItemView::doubleClicked, this, &KPrPresenterViewSlidesInterface::itemDoubleClicked);
 
-    vLayout->addWidget( m_listView );
+    vLayout->addWidget(m_listView);
 
-    setLayout( vLayout );
+    setLayout(vLayout);
 }
 
-void KPrPresenterViewSlidesInterface::itemClicked( const QModelIndex &index )
+void KPrPresenterViewSlidesInterface::itemClicked(const QModelIndex &index)
 {
-    emit selectedPageChanged( index.row(), false );
+    emit selectedPageChanged(index.row(), false);
 }
 
-void KPrPresenterViewSlidesInterface::itemDoubleClicked( const QModelIndex &index )
+void KPrPresenterViewSlidesInterface::itemDoubleClicked(const QModelIndex &index)
 {
-    emit selectedPageChanged( index.row(), true );
+    emit selectedPageChanged(index.row(), true);
 }

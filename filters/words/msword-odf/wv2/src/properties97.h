@@ -20,78 +20,79 @@
 #define PROPERTIES97_H
 
 #include "sharedptr.h"
-#include "word_helper.h"
 #include "word97_generated.h"
+#include "word_helper.h"
 #include "wv2_export.h"
 
 namespace wvWare
 {
-    class ParagraphProperties;
-    namespace Word95
-    {
-        struct PHE;
-    }
+class ParagraphProperties;
+namespace Word95
+{
+struct PHE;
+}
 
-    class Properties97
-    {
-    public:
-        Properties97( OLEStreamReader* wordDocument, OLEStreamReader* table, const Word97::FIB &fib );
-        ~Properties97();
+class Properties97
+{
+public:
+    Properties97(OLEStreamReader *wordDocument, OLEStreamReader *table, const Word97::FIB &fib);
+    ~Properties97();
 
-        // StyleSheet ---------
-        const Style* styleByIndex( U16 istd ) const;
-        StyleSheet& styleSheet() const;
+    // StyleSheet ---------
+    const Style *styleByIndex(U16 istd) const;
+    StyleSheet &styleSheet() const;
 
-        // Document properties ---------
-        const Word97::DOP& dop() const;
+    // Document properties ---------
+    const Word97::DOP &dop() const;
 
-        // Section properties ---------
-        SharedPtr<const Word97::SEP> sepForCP( U32 cp ) const;
+    // Section properties ---------
+    SharedPtr<const Word97::SEP> sepForCP(U32 cp) const;
 
-        // Paragraph properties ---------
-        // Determines the PAP state from the last full-save (ownership is transferred)
-        ParagraphProperties* fullSavedPap( U32 fc, OLEStreamReader* dataStream );
-        // Apply the latest changes recorded in the clxGrppl section of the piece table
-        void applyClxGrpprl( const Word97::PCD* pcd, U32 fcClx, ParagraphProperties* properties );
+    // Paragraph properties ---------
+    // Determines the PAP state from the last full-save (ownership is transferred)
+    ParagraphProperties *fullSavedPap(U32 fc, OLEStreamReader *dataStream);
+    // Apply the latest changes recorded in the clxGrppl section of the piece table
+    void applyClxGrpprl(const Word97::PCD *pcd, U32 fcClx, ParagraphProperties *properties);
 
-        // Table properties ---------
-        // Determines the TAP state from the last full-save (ownership is transferred)
-        Word97::TAP* fullSavedTap( U32 fc, OLEStreamReader* dataStream );
-        void applyClxGrpprl( const Word97::PCD* pcd, U32 fcClx, Word97::TAP* tap, const Style* style );
+    // Table properties ---------
+    // Determines the TAP state from the last full-save (ownership is transferred)
+    Word97::TAP *fullSavedTap(U32 fc, OLEStreamReader *dataStream);
+    void applyClxGrpprl(const Word97::PCD *pcd, U32 fcClx, Word97::TAP *tap, const Style *style);
 
-        // Character properties ---------
-        // Determines the CHP state from the last full-save (ownership is transferred)
-        U32 fullSavedChp( const U32 fc, Word97::CHP* chp, const Style* paragraphStyle );
-        // Apply the latest changes recorded in the clxGrppl section of the piece table
-        void applyClxGrpprl( const Word97::PCD* pcd, U32 fcClx, Word97::CHP* chp, const Style* style );
+    // Character properties ---------
+    // Determines the CHP state from the last full-save (ownership is transferred)
+    U32 fullSavedChp(const U32 fc, Word97::CHP *chp, const Style *paragraphStyle);
+    // Apply the latest changes recorded in the clxGrppl section of the piece table
+    void applyClxGrpprl(const Word97::PCD *pcd, U32 fcClx, Word97::CHP *chp, const Style *style);
 
-    private:
-        Properties97( const Properties97& rhs );
-        Properties97& operator=( const Properties97& rhs );
+private:
+    Properties97(const Properties97 &rhs);
+    Properties97 &operator=(const Properties97 &rhs);
 
-        // This should have been called "applyClxGrpprl" too, but VC7 doesn't like that
-        template<class P> void applyClxGrpprlImpl( const Word97::PCD* pcd, U32 fcClx, P* properties, const Style* style );
+    // This should have been called "applyClxGrpprl" too, but VC7 doesn't like that
+    template<class P>
+    void applyClxGrpprlImpl(const Word97::PCD *pcd, U32 fcClx, P *properties, const Style *style);
 
-        void fillBinTable( PLCF<Word97::BTE>* bte, U16 cpnBte );
+    void fillBinTable(PLCF<Word97::BTE> *bte, U16 cpnBte);
 
-        const WordVersion m_version;
-        OLEStreamReader* m_wordDocument; // doesn't belong to us, be careful
-        OLEStreamReader* m_table; // doesn't belong to us, be careful
+    const WordVersion m_version;
+    OLEStreamReader *m_wordDocument; // doesn't belong to us, be careful
+    OLEStreamReader *m_table; // doesn't belong to us, be careful
 
-        StyleSheet* m_stylesheet;
-        Word97::DOP m_dop;
-        PLCF<Word97::SED>* m_plcfsed;     // section descr. table
-        PLCF<Word97::BTE>* m_plcfbtePapx; // PAPX FKP page numbers
-        PLCF<Word97::BTE>* m_plcfbteChpx; // CHPX FKP page numbers
+    StyleSheet *m_stylesheet;
+    Word97::DOP m_dop;
+    PLCF<Word97::SED> *m_plcfsed; // section descr. table
+    PLCF<Word97::BTE> *m_plcfbtePapx; // PAPX FKP page numbers
+    PLCF<Word97::BTE> *m_plcfbteChpx; // CHPX FKP page numbers
 
-        typedef FKP< BX<Word97::PHE> > PAPXFKP_t;
-        typedef FKP< BX<Word95::PHE> > PAPXFKP95_t;
-        typedef FKPIterator< BX<Word97::PHE> > PAPXFKPIterator;
-        PAPXFKP_t* m_papxFkp;  // Currently cached PAPX FKP
+    typedef FKP<BX<Word97::PHE>> PAPXFKP_t;
+    typedef FKP<BX<Word95::PHE>> PAPXFKP95_t;
+    typedef FKPIterator<BX<Word97::PHE>> PAPXFKPIterator;
+    PAPXFKP_t *m_papxFkp; // Currently cached PAPX FKP
 
-        typedef FKP<CHPFKP_BX> CHPXFKP_t;
-        typedef FKPIterator<CHPFKP_BX> CHPXFKPIterator;
-        CHPXFKP_t* m_chpxFkp;  // Currently cached CHPX FKP
+    typedef FKP<CHPFKP_BX> CHPXFKP_t;
+    typedef FKPIterator<CHPFKP_BX> CHPXFKPIterator;
+    CHPXFKP_t *m_chpxFkp; // Currently cached CHPX FKP
 };
 
 } // namespace wvWare

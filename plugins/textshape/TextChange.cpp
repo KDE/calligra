@@ -5,9 +5,11 @@
  */
 #include "TextChange.h"
 
-
 TextChange::TextChange()
-        : m_formerPosition(0), m_position(0), m_previous(0), m_next(0)
+    : m_formerPosition(0)
+    , m_position(0)
+    , m_previous(0)
+    , m_next(0)
 {
 }
 
@@ -92,4 +94,3 @@ void TextChange::merge(TextChange *other)
     /// this only does very simple merging for now.
     m_after.insert(other->position() - m_position, other->after());
 }
-

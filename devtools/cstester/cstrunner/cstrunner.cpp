@@ -11,8 +11,8 @@
 
 #include "CSTProcessRunner.h"
 
-#include <QTimer>
 #include <QDebug>
+#include <QTimer>
 
 int main(int argc, char *argv[])
 {

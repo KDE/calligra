@@ -17,9 +17,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // TODO - this needs to be done better, it sort of works, but is barely usable, if at all. Multicell borders are also mostly wrong.
-
 
 #include "LayoutPage_Border.h"
 #include "LayoutWidgets.h"
@@ -40,9 +38,8 @@
 
 using namespace Calligra::Sheets;
 
-
-
-BorderButton::BorderButton(QWidget *parent, const char * /*_name*/) : QPushButton(parent)
+BorderButton::BorderButton(QWidget *parent, const char * /*_name*/)
+    : QPushButton(parent)
 {
     penStyle = Qt::NoPen;
     penWidth = 1;
@@ -53,7 +50,6 @@ BorderButton::BorderButton(QWidget *parent, const char * /*_name*/) : QPushButto
 }
 void BorderButton::mousePressEvent(QMouseEvent *)
 {
-
     this->setChecked(!isChecked());
     emit clicked(this);
 }
@@ -65,7 +61,6 @@ void BorderButton::setUndefined()
     setColor(palette().midlight().color());
 }
 
-
 void BorderButton::unselect()
 {
     setChecked(false);
@@ -75,16 +70,14 @@ void BorderButton::unselect()
     setChanged(true);
 }
 
-
 Border::Border(QWidget *parent, const char * /*_name*/, bool _oneCol, bool _oneRow)
-        : QFrame(parent)
+    : QFrame(parent)
 {
     setAutoFillBackground(true);
 
     oneCol = _oneCol;
     oneRow = _oneRow;
 }
-
 
 #define OFFSETX 5
 #define OFFSETY 5
@@ -97,40 +90,39 @@ void Border::paintEvent(QPaintEvent *_ev)
     pen = QPen(palette().midlight(), 2, Qt::SolidLine).color();
     painter.setPen(pen);
 
-    painter.drawLine(OFFSETX - 5, OFFSETY, OFFSETX , OFFSETY);
-    painter.drawLine(OFFSETX, OFFSETY - 5, OFFSETX , OFFSETY);
-    painter.drawLine(width() - OFFSETX, OFFSETY, width() , OFFSETY);
-    painter.drawLine(width() - OFFSETX, OFFSETY - 5, width() - OFFSETX , OFFSETY);
+    painter.drawLine(OFFSETX - 5, OFFSETY, OFFSETX, OFFSETY);
+    painter.drawLine(OFFSETX, OFFSETY - 5, OFFSETX, OFFSETY);
+    painter.drawLine(width() - OFFSETX, OFFSETY, width(), OFFSETY);
+    painter.drawLine(width() - OFFSETX, OFFSETY - 5, width() - OFFSETX, OFFSETY);
 
-    painter.drawLine(OFFSETX, height() - OFFSETY, OFFSETX , height());
-    painter.drawLine(OFFSETX - 5, height() - OFFSETY, OFFSETX , height() - OFFSETY);
+    painter.drawLine(OFFSETX, height() - OFFSETY, OFFSETX, height());
+    painter.drawLine(OFFSETX - 5, height() - OFFSETY, OFFSETX, height() - OFFSETY);
 
-    painter.drawLine(width() - OFFSETX, height() - OFFSETY, width() , height() - OFFSETY);
-    painter.drawLine(width() - OFFSETX, height() - OFFSETY, width() - OFFSETX , height());
+    painter.drawLine(width() - OFFSETX, height() - OFFSETY, width(), height() - OFFSETY);
+    painter.drawLine(width() - OFFSETX, height() - OFFSETY, width() - OFFSETX, height());
     if (oneCol == false) {
-        painter.drawLine(width() / 2, OFFSETY - 5, width() / 2 , OFFSETY);
-        painter.drawLine(width() / 2 - 5, OFFSETY, width() / 2 + 5 , OFFSETY);
-        painter.drawLine(width() / 2, height() - OFFSETY, width() / 2 , height());
-        painter.drawLine(width() / 2 - 5, height() - OFFSETY, width() / 2 + 5 , height() - OFFSETY);
+        painter.drawLine(width() / 2, OFFSETY - 5, width() / 2, OFFSETY);
+        painter.drawLine(width() / 2 - 5, OFFSETY, width() / 2 + 5, OFFSETY);
+        painter.drawLine(width() / 2, height() - OFFSETY, width() / 2, height());
+        painter.drawLine(width() / 2 - 5, height() - OFFSETY, width() / 2 + 5, height() - OFFSETY);
     }
     if (oneRow == false) {
-        painter.drawLine(OFFSETX - 5, height() / 2, OFFSETX , height() / 2);
-        painter.drawLine(OFFSETX, height() / 2 - 5, OFFSETX , height() / 2 + 5);
+        painter.drawLine(OFFSETX - 5, height() / 2, OFFSETX, height() / 2);
+        painter.drawLine(OFFSETX, height() / 2 - 5, OFFSETX, height() / 2 + 5);
         painter.drawLine(width() - OFFSETX, height() / 2, width(), height() / 2);
-        painter.drawLine(width() - OFFSETX, height() / 2 - 5, width() - OFFSETX , height() / 2 + 5);
+        painter.drawLine(width() - OFFSETX, height() / 2 - 5, width() - OFFSETX, height() / 2 + 5);
     }
     painter.end();
     emit redraw();
 }
 
-void Border::mousePressEvent(QMouseEvent* _ev)
+void Border::mousePressEvent(QMouseEvent *_ev)
 {
     emit choosearea(_ev);
 }
 
-
 PatternSelect::PatternSelect(QWidget *parent, const char *)
-        : QFrame(parent)
+    : QFrame(parent)
 {
     penStyle = Qt::NoPen;
     penWidth = 1;
@@ -192,13 +184,9 @@ void PatternSelect::slotSelect()
     repaint();
 }
 
-
-
-
-
-LayoutPageBorder::LayoutPageBorder(QWidget* parent)
-        : QWidget(parent)
-        , m_multicell(false)
+LayoutPageBorder::LayoutPageBorder(QWidget *parent)
+    : QWidget(parent)
+    , m_multicell(false)
 {
     InitializeGrids();
     InitializePatterns();
@@ -209,7 +197,7 @@ LayoutPageBorder::LayoutPageBorder(QWidget* parent)
 
     style->setEnabled(false);
     size->setEnabled(false);
-    preview->setPattern(Qt::black , 1, Qt::SolidLine);
+    preview->setPattern(Qt::black, 1, Qt::SolidLine);
     this->resize(400, 400);
 }
 
@@ -217,7 +205,7 @@ void LayoutPageBorder::InitializeGrids()
 {
     QGridLayout *grid = new QGridLayout(this);
     QGridLayout *grid2 = 0;
-    QGroupBox* tmpQGroupBox = 0;
+    QGroupBox *tmpQGroupBox = 0;
 
     /***********************/
     /* here is the data to initialize all the border buttons with */
@@ -225,20 +213,20 @@ void LayoutPageBorder::InitializeGrids()
 
     const char shortcutButtonNames[BorderShortcutType_END][20] = {"remove", "all", "outline"};
 
-    QString borderButtonIconNames[BorderType_END] = {
-        koIconName("format-border-set-top"), koIconName("format-border-set-bottom"),
-        koIconName("format-border-set-left"), koIconName("format-border-set-right"),
-        koIconName("format-border-set-internal-vertical"), koIconName("format-border-set-internal-horizontal"),
-        koIconName("format-border-set-diagonal-tl-br"), koIconName("format-border-set-diagonal-bl-tr")
-    };
+    QString borderButtonIconNames[BorderType_END] = {koIconName("format-border-set-top"),
+                                                     koIconName("format-border-set-bottom"),
+                                                     koIconName("format-border-set-left"),
+                                                     koIconName("format-border-set-right"),
+                                                     koIconName("format-border-set-internal-vertical"),
+                                                     koIconName("format-border-set-internal-horizontal"),
+                                                     koIconName("format-border-set-diagonal-tl-br"),
+                                                     koIconName("format-border-set-diagonal-bl-tr")};
 
-    QString shortcutButtonIconNames[BorderShortcutType_END] = {
-        koIconName("format-border-set-none"), QString(), koIconName("format-border-set-external")
-    };
+    QString shortcutButtonIconNames[BorderShortcutType_END] = {koIconName("format-border-set-none"), QString(), koIconName("format-border-set-external")};
 
     int borderButtonPositions[BorderType_END][2] = {{0, 2}, {4, 2}, {2, 0}, {2, 4}, {4, 4}, {4, 0}, {0, 0}, {0, 4}};
 
-    int shortcutButtonPositions[BorderShortcutType_END][2] = { {0, 0}, {0, 1}, {0, 2} };
+    int shortcutButtonPositions[BorderShortcutType_END][2] = {{0, 0}, {0, 1}, {0, 2}};
     /***********************/
 
     /* set up a layout box for most of the border setting buttons */
@@ -247,7 +235,7 @@ void LayoutPageBorder::InitializeGrids()
     tmpQGroupBox->setAlignment(Qt::AlignLeft);
     grid2 = new QGridLayout(tmpQGroupBox);
     int fHeight = tmpQGroupBox->fontMetrics().height();
-    grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0);  // groupbox title
+    grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0); // groupbox title
 
     area = new Border(tmpQGroupBox, "area", !m_multicell, !m_multicell);
     grid2->addWidget(area, 2, 1, 3, 3);
@@ -257,11 +245,9 @@ void LayoutPageBorder::InitializeGrids()
 
     /* initialize the buttons that are in this box */
     for (int i = BorderType_Top; i < BorderType_END; i++) {
-        borderButtons[i] = new BorderButton(tmpQGroupBox,
-                                            borderButtonNames[i]);
+        borderButtons[i] = new BorderButton(tmpQGroupBox, borderButtonNames[i]);
         loadIcon(borderButtonIconNames[i], borderButtons[i]);
-        grid2->addWidget(borderButtons[i], borderButtonPositions[i][0] + 1,
-                         borderButtonPositions[i][1]);
+        grid2->addWidget(borderButtons[i], borderButtonPositions[i][0] + 1, borderButtonPositions[i][1]);
     }
 
     grid->addWidget(tmpQGroupBox, 0, 0, 3, 1);
@@ -278,11 +264,9 @@ void LayoutPageBorder::InitializeGrids()
     shortcutButtonIconNames[BorderShortcutType_All] = koIconName("format-border-set-internal");
 
     for (int i = BorderShortcutType_Remove; i < BorderShortcutType_END; i++) {
-        shortcutButtons[i] = new BorderButton(tmpQGroupBox,
-                                              shortcutButtonNames[i]);
+        shortcutButtons[i] = new BorderButton(tmpQGroupBox, shortcutButtonNames[i]);
         loadIcon(shortcutButtonIconNames[i], shortcutButtons[i]);
-        grid2->addWidget(shortcutButtons[i], shortcutButtonPositions[i][0],
-                         shortcutButtonPositions[i][1]);
+        grid2->addWidget(shortcutButtons[i], shortcutButtonPositions[i][0], shortcutButtonPositions[i][1]);
     }
 
     if (!m_multicell)
@@ -297,7 +281,7 @@ void LayoutPageBorder::InitializeGrids()
 
     grid2 = new QGridLayout(tmpQGroupBox);
     fHeight = tmpQGroupBox->fontMetrics().height();
-    grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0);  // groupbox title
+    grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0); // groupbox title
 
     char name[] = "PatternXX";
     Q_ASSERT(NUM_BORDER_PATTERNS < 100);
@@ -325,7 +309,7 @@ void LayoutPageBorder::InitializeGrids()
     grid2->addWidget(tmpQLabel, 8, 0);
 
     /* tack on the 'customize' border pattern selector */
-    customize  = new QCheckBox(i18n("Customize"), tmpQGroupBox);
+    customize = new QCheckBox(i18n("Customize"), tmpQGroupBox);
     grid2->addWidget(customize, 6, 0);
     connect(customize, &QAbstractButton::clicked, this, &LayoutPageBorder::cutomize_chosen_slot);
 
@@ -361,7 +345,7 @@ void LayoutPageBorder::InitializeGrids()
 
     grid2 = new QGridLayout(tmpQGroupBox);
     fHeight = tmpQGroupBox->fontMetrics().height();
-    grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0);  // groupbox title
+    grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0); // groupbox title
 
     preview = new PatternSelect(tmpQGroupBox, "Pattern_preview");
     preview->setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -405,32 +389,26 @@ void LayoutPageBorder::InitializePatterns()
 
 void LayoutPageBorder::SetConnections()
 {
-    connect(color, &KColorButton::changed,
-            this, &LayoutPageBorder::slotSetColorButton);
+    connect(color, &KColorButton::changed, this, &LayoutPageBorder::slotSetColorButton);
 
     for (int i = 0; i < NUM_BORDER_PATTERNS; i++) {
-        connect(pattern[i], &PatternSelect::clicked,
-                this, &LayoutPageBorder::slotUnselect2);
+        connect(pattern[i], &PatternSelect::clicked, this, &LayoutPageBorder::slotUnselect2);
     }
 
     for (int i = BorderType_Top; i < BorderType_END; i++) {
-        connect(borderButtons[i], QOverload<BorderButton*>::of(&BorderButton::clicked),
-                this, &LayoutPageBorder::changeState);
+        connect(borderButtons[i], QOverload<BorderButton *>::of(&BorderButton::clicked), this, &LayoutPageBorder::changeState);
     }
 
     for (int i = BorderShortcutType_Remove; i < BorderShortcutType_END; i++) {
-        connect(shortcutButtons[i], QOverload<BorderButton*>::of(&BorderButton::clicked),
-                this, &LayoutPageBorder::preselect);
+        connect(shortcutButtons[i], QOverload<BorderButton *>::of(&BorderButton::clicked), this, &LayoutPageBorder::preselect);
     }
 
-    connect(area , &Border::redraw, this, &LayoutPageBorder::draw);
-    connect(area , &Border::choosearea,
-            this, &LayoutPageBorder::slotPressEvent);
+    connect(area, &Border::redraw, this, &LayoutPageBorder::draw);
+    connect(area, &Border::choosearea, this, &LayoutPageBorder::slotPressEvent);
 
     connect(style, QOverload<int>::of(&KComboBox::activated), this, QOverload<int>::of(&LayoutPageBorder::slotChangeStyle));
-    connect(size, &KComboBox::editTextChanged,
-            this, QOverload<const QString &>::of(&LayoutPageBorder::slotChangeStyle));
-    connect(size , QOverload<int>::of(&KComboBox::activated), this, QOverload<int>::of(&LayoutPageBorder::slotChangeStyle));
+    connect(size, &KComboBox::editTextChanged, this, QOverload<const QString &>::of(&LayoutPageBorder::slotChangeStyle));
+    connect(size, QOverload<int>::of(&KComboBox::activated), this, QOverload<int>::of(&LayoutPageBorder::slotChangeStyle));
 }
 
 void LayoutPageBorder::cutomize_chosen_slot()
@@ -443,7 +421,7 @@ void LayoutPageBorder::cutomize_chosen_slot()
         style->setEnabled(false);
         size->setEnabled(false);
         pattern[2]->slotSelect();
-        preview->setPattern(Qt::black , 1, Qt::SolidLine);
+        preview->setPattern(Qt::black, 1, Qt::SolidLine);
     }
 }
 
@@ -517,50 +495,58 @@ void LayoutPageBorder::loadFrom(const Style &style, bool partial)
     borders[BorderType_Left].style = pen.style();
     borders[BorderType_Left].width = pen.width();
     borders[BorderType_Left].color = pen.color();
-    if (!style.hasAttribute(Style::LeftPen)) borders[BorderType_Left].bStyle = false;
+    if (!style.hasAttribute(Style::LeftPen))
+        borders[BorderType_Left].bStyle = false;
     borders[BorderType_Vertical].style = pen.style();
     borders[BorderType_Vertical].width = pen.width();
     borders[BorderType_Vertical].color = pen.color();
-    if (!style.hasAttribute(Style::LeftPen)) borders[BorderType_Vertical].bStyle = false;
+    if (!style.hasAttribute(Style::LeftPen))
+        borders[BorderType_Vertical].bStyle = false;
 
     pen = style.topBorderPen();
-    borders[BorderType_Top].style  = pen.style();
-    borders[BorderType_Top].width  = pen.width();
-    borders[BorderType_Top].color  = pen.color();
-    if (!style.hasAttribute(Style::TopPen)) borders[BorderType_Top].bStyle = false;
+    borders[BorderType_Top].style = pen.style();
+    borders[BorderType_Top].width = pen.width();
+    borders[BorderType_Top].color = pen.color();
+    if (!style.hasAttribute(Style::TopPen))
+        borders[BorderType_Top].bStyle = false;
     borders[BorderType_Horizontal].style = pen.style();
     borders[BorderType_Horizontal].width = pen.width();
     borders[BorderType_Horizontal].color = pen.color();
-    if (!style.hasAttribute(Style::TopPen)) borders[BorderType_Horizontal].bStyle = false;
+    if (!style.hasAttribute(Style::TopPen))
+        borders[BorderType_Horizontal].bStyle = false;
 
     pen = style.rightBorderPen();
     borders[BorderType_Right].style = pen.style();
     borders[BorderType_Right].width = pen.width();
     borders[BorderType_Right].color = pen.color();
-    if (!style.hasAttribute(Style::RightPen)) borders[BorderType_Right].bStyle = false;
+    if (!style.hasAttribute(Style::RightPen))
+        borders[BorderType_Right].bStyle = false;
 
     pen = style.bottomBorderPen();
     borders[BorderType_Bottom].style = pen.style();
     borders[BorderType_Bottom].width = pen.width();
     borders[BorderType_Bottom].color = pen.color();
-    if (!style.hasAttribute(Style::BottomPen)) borders[BorderType_Bottom].bStyle = false;
+    if (!style.hasAttribute(Style::BottomPen))
+        borders[BorderType_Bottom].bStyle = false;
 
     pen = style.fallDiagonalPen();
     borders[BorderType_FallingDiagonal].style = pen.style();
     borders[BorderType_FallingDiagonal].width = pen.width();
     borders[BorderType_FallingDiagonal].color = pen.color();
-    if (!style.hasAttribute(Style::FallDiagonalPen)) borders[BorderType_FallingDiagonal].bStyle = false;
+    if (!style.hasAttribute(Style::FallDiagonalPen))
+        borders[BorderType_FallingDiagonal].bStyle = false;
 
     pen = style.goUpDiagonalPen();
-    borders[BorderType_RisingDiagonal].style  = pen.style();
-    borders[BorderType_RisingDiagonal].width  = pen.width();
-    borders[BorderType_RisingDiagonal].color  = pen.color();
-    if (!style.hasAttribute(Style::GoUpDiagonalPen)) borders[BorderType_RisingDiagonal].bStyle = false;
+    borders[BorderType_RisingDiagonal].style = pen.style();
+    borders[BorderType_RisingDiagonal].width = pen.width();
+    borders[BorderType_RisingDiagonal].color = pen.color();
+    if (!style.hasAttribute(Style::GoUpDiagonalPen))
+        borders[BorderType_RisingDiagonal].bStyle = false;
 
     InitializeBorderButtons();
 }
 
-void LayoutPageBorder::apply(Style * style, bool partial)
+void LayoutPageBorder::apply(Style *style, bool partial)
 {
     BorderButton *btn;
     QPen curPen;
@@ -598,7 +584,6 @@ void LayoutPageBorder::apply(Style * style, bool partial)
         style->setGoUpDiagonalPen(curPen);
 }
 
-
 void LayoutPageBorder::slotSetColorButton(const QColor &_color)
 {
     currentColor = _color;
@@ -621,15 +606,15 @@ void LayoutPageBorder::slotUnselect2(PatternSelect *_p)
 
 void LayoutPageBorder::preselect(BorderButton *_p)
 {
-    BorderButton* top = borderButtons[BorderType_Top];
-    BorderButton* bottom = borderButtons[BorderType_Bottom];
-    BorderButton* left = borderButtons[BorderType_Left];
-    BorderButton* right = borderButtons[BorderType_Right];
-    BorderButton* vertical = borderButtons[BorderType_Vertical];
-    BorderButton* horizontal = borderButtons[BorderType_Horizontal];
-    BorderButton* remove = shortcutButtons[BorderShortcutType_Remove];
-    BorderButton* outline = shortcutButtons[BorderShortcutType_Outline];
-    BorderButton* all = shortcutButtons[BorderShortcutType_All];
+    BorderButton *top = borderButtons[BorderType_Top];
+    BorderButton *bottom = borderButtons[BorderType_Bottom];
+    BorderButton *left = borderButtons[BorderType_Left];
+    BorderButton *right = borderButtons[BorderType_Right];
+    BorderButton *vertical = borderButtons[BorderType_Vertical];
+    BorderButton *horizontal = borderButtons[BorderType_Horizontal];
+    BorderButton *remove = shortcutButtons[BorderShortcutType_Remove];
+    BorderButton *outline = shortcutButtons[BorderShortcutType_Outline];
+    BorderButton *all = shortcutButtons[BorderShortcutType_All];
 
     _p->setChecked(false);
     if (_p == remove) {
@@ -698,14 +683,14 @@ void LayoutPageBorder::changeState(BorderButton *_p)
 
 void LayoutPageBorder::draw()
 {
-    BorderButton* top = borderButtons[BorderType_Top];
-    BorderButton* bottom = borderButtons[BorderType_Bottom];
-    BorderButton* left = borderButtons[BorderType_Left];
-    BorderButton* right = borderButtons[BorderType_Right];
-    BorderButton* risingDiagonal = borderButtons[BorderType_RisingDiagonal];
-    BorderButton* fallingDiagonal = borderButtons[BorderType_FallingDiagonal];
-    BorderButton* vertical = borderButtons[BorderType_Vertical];
-    BorderButton* horizontal = borderButtons[BorderType_Horizontal];
+    BorderButton *top = borderButtons[BorderType_Top];
+    BorderButton *bottom = borderButtons[BorderType_Bottom];
+    BorderButton *left = borderButtons[BorderType_Left];
+    BorderButton *right = borderButtons[BorderType_Right];
+    BorderButton *risingDiagonal = borderButtons[BorderType_RisingDiagonal];
+    BorderButton *fallingDiagonal = borderButtons[BorderType_FallingDiagonal];
+    BorderButton *vertical = borderButtons[BorderType_Vertical];
+    BorderButton *horizontal = borderButtons[BorderType_Horizontal];
     QPen pen;
     QPainter painter;
     painter.begin(area);
@@ -713,7 +698,7 @@ void LayoutPageBorder::draw()
     if ((bottom->getPenStyle()) != Qt::NoPen) {
         pen = QPen(bottom->getColor(), bottom->getPenWidth(), bottom->getPenStyle());
         painter.setPen(pen);
-        painter.drawLine(OFFSETX, area->height() - OFFSETY, area->width() - OFFSETX , area->height() - OFFSETY);
+        painter.drawLine(OFFSETX, area->height() - OFFSETY, area->width() - OFFSETX, area->height() - OFFSETY);
     }
     if ((top->getPenStyle()) != Qt::NoPen) {
         pen = QPen(top->getColor(), top->getPenWidth(), top->getPenStyle());
@@ -723,53 +708,40 @@ void LayoutPageBorder::draw()
     if ((left->getPenStyle()) != Qt::NoPen) {
         pen = QPen(left->getColor(), left->getPenWidth(), left->getPenStyle());
         painter.setPen(pen);
-        painter.drawLine(OFFSETX, OFFSETY, OFFSETX , area->height() - OFFSETY);
+        painter.drawLine(OFFSETX, OFFSETY, OFFSETX, area->height() - OFFSETY);
     }
     if ((right->getPenStyle()) != Qt::NoPen) {
         pen = QPen(right->getColor(), right->getPenWidth(), right->getPenStyle());
         painter.setPen(pen);
-        painter.drawLine(area->width() - OFFSETX, OFFSETY, area->width() - OFFSETX,
-                         area->height() - OFFSETY);
-
+        painter.drawLine(area->width() - OFFSETX, OFFSETY, area->width() - OFFSETX, area->height() - OFFSETY);
     }
     if ((fallingDiagonal->getPenStyle()) != Qt::NoPen) {
-        pen = QPen(fallingDiagonal->getColor(), fallingDiagonal->getPenWidth(),
-                   fallingDiagonal->getPenStyle());
+        pen = QPen(fallingDiagonal->getColor(), fallingDiagonal->getPenWidth(), fallingDiagonal->getPenStyle());
         painter.setPen(pen);
-        painter.drawLine(OFFSETX, OFFSETY, area->width() - OFFSETX,
-                         area->height() - OFFSETY);
+        painter.drawLine(OFFSETX, OFFSETY, area->width() - OFFSETX, area->height() - OFFSETY);
         if (m_multicell) {
-            painter.drawLine(area->width() / 2, OFFSETY, area->width() - OFFSETX,
-                             area->height() / 2);
-            painter.drawLine(OFFSETX, area->height() / 2 , area->width() / 2,
-                             area->height() - OFFSETY);
+            painter.drawLine(area->width() / 2, OFFSETY, area->width() - OFFSETX, area->height() / 2);
+            painter.drawLine(OFFSETX, area->height() / 2, area->width() / 2, area->height() - OFFSETY);
         }
     }
     if ((risingDiagonal->getPenStyle()) != Qt::NoPen) {
-        pen = QPen(risingDiagonal->getColor(), risingDiagonal->getPenWidth(),
-                   risingDiagonal->getPenStyle());
+        pen = QPen(risingDiagonal->getColor(), risingDiagonal->getPenWidth(), risingDiagonal->getPenStyle());
         painter.setPen(pen);
-        painter.drawLine(OFFSETX, area->height() - OFFSETY , area->width() - OFFSETX ,
-                         OFFSETY);
+        painter.drawLine(OFFSETX, area->height() - OFFSETY, area->width() - OFFSETX, OFFSETY);
         if (m_multicell) {
             painter.drawLine(area->width() / 2, OFFSETY, OFFSETX, area->height() / 2);
-            painter.drawLine(area->width() / 2, area->height() - OFFSETY ,
-                             area->width() - OFFSETX, area->height() / 2);
+            painter.drawLine(area->width() / 2, area->height() - OFFSETY, area->width() - OFFSETX, area->height() / 2);
         }
-
     }
     if ((vertical->getPenStyle()) != Qt::NoPen) {
-        pen = QPen(vertical->getColor(), vertical->getPenWidth(),
-                   vertical->getPenStyle());
+        pen = QPen(vertical->getColor(), vertical->getPenWidth(), vertical->getPenStyle());
         painter.setPen(pen);
-        painter.drawLine(area->width() / 2, 5 , area->width() / 2 , area->height() - 5);
+        painter.drawLine(area->width() / 2, 5, area->width() / 2, area->height() - 5);
     }
     if ((horizontal->getPenStyle()) != Qt::NoPen) {
-        pen = QPen(horizontal->getColor(), horizontal->getPenWidth(),
-                   horizontal->getPenStyle());
+        pen = QPen(horizontal->getColor(), horizontal->getPenWidth(), horizontal->getPenStyle());
         painter.setPen(pen);
-        painter.drawLine(OFFSETX, area->height() / 2, area->width() - OFFSETX,
-                         area->height() / 2);
+        painter.drawLine(OFFSETX, area->height() / 2, area->width() - OFFSETX, area->height() / 2);
     }
     painter.end();
 }
@@ -789,20 +761,17 @@ void LayoutPageBorder::invertState(BorderButton *_p)
 
 void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
 {
-    BorderButton* top = borderButtons[BorderType_Top];
-    BorderButton* bottom = borderButtons[BorderType_Bottom];
-    BorderButton* left = borderButtons[BorderType_Left];
-    BorderButton* right = borderButtons[BorderType_Right];
-    BorderButton* vertical = borderButtons[BorderType_Vertical];
-    BorderButton* horizontal = borderButtons[BorderType_Horizontal];
-
+    BorderButton *top = borderButtons[BorderType_Top];
+    BorderButton *bottom = borderButtons[BorderType_Bottom];
+    BorderButton *left = borderButtons[BorderType_Left];
+    BorderButton *right = borderButtons[BorderType_Right];
+    BorderButton *vertical = borderButtons[BorderType_Vertical];
+    BorderButton *horizontal = borderButtons[BorderType_Horizontal];
 
     QRect rect(OFFSETX, OFFSETY - 8, area->width() - OFFSETX, OFFSETY + 8);
     if (rect.contains(QPoint(_ev->x(), _ev->y()))) {
-        if (((top->getPenWidth() != preview->getPenWidth()) ||
-                (top->getColor() != currentColor) ||
-                (top->getPenStyle() != preview->getPenStyle()))
-                && top->isChecked()) {
+        if (((top->getPenWidth() != preview->getPenWidth()) || (top->getColor() != currentColor) || (top->getPenStyle() != preview->getPenStyle()))
+            && top->isChecked()) {
             top->setPenWidth(preview->getPenWidth());
             top->setPenStyle(preview->getPenStyle());
             top->setColor(currentColor);
@@ -810,13 +779,10 @@ void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
         } else
             invertState(top);
     }
-    rect.setCoords(OFFSETX, area->height() - OFFSETY - 8, area->width() - OFFSETX,
-                   area->height() - OFFSETY + 8);
+    rect.setCoords(OFFSETX, area->height() - OFFSETY - 8, area->width() - OFFSETX, area->height() - OFFSETY + 8);
     if (rect.contains(QPoint(_ev->x(), _ev->y()))) {
-        if (((bottom->getPenWidth() != preview->getPenWidth()) ||
-                (bottom->getColor() != currentColor) ||
-                (bottom->getPenStyle() != preview->getPenStyle()))
-                && bottom->isChecked()) {
+        if (((bottom->getPenWidth() != preview->getPenWidth()) || (bottom->getColor() != currentColor) || (bottom->getPenStyle() != preview->getPenStyle()))
+            && bottom->isChecked()) {
             bottom->setPenWidth(preview->getPenWidth());
             bottom->setPenStyle(preview->getPenStyle());
             bottom->setColor(currentColor);
@@ -827,10 +793,8 @@ void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
 
     rect.setCoords(OFFSETX - 8, OFFSETY, OFFSETX + 8, area->height() - OFFSETY);
     if (rect.contains(QPoint(_ev->x(), _ev->y()))) {
-        if (((left->getPenWidth() != preview->getPenWidth()) ||
-                (left->getColor() != currentColor) ||
-                (left->getPenStyle() != preview->getPenStyle()))
-                && left->isChecked()) {
+        if (((left->getPenWidth() != preview->getPenWidth()) || (left->getColor() != currentColor) || (left->getPenStyle() != preview->getPenStyle()))
+            && left->isChecked()) {
             left->setPenWidth(preview->getPenWidth());
             left->setPenStyle(preview->getPenStyle());
             left->setColor(currentColor);
@@ -838,13 +802,10 @@ void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
         } else
             invertState(left);
     }
-    rect.setCoords(area->width() - OFFSETX - 8, OFFSETY, area->width() - OFFSETX + 8,
-                   area->height() - OFFSETY);
+    rect.setCoords(area->width() - OFFSETX - 8, OFFSETY, area->width() - OFFSETX + 8, area->height() - OFFSETY);
     if (rect.contains(QPoint(_ev->x(), _ev->y()))) {
-        if (((right->getPenWidth() != preview->getPenWidth()) ||
-                (right->getColor() != currentColor) ||
-                (right->getPenStyle() != preview->getPenStyle()))
-                && right->isChecked()) {
+        if (((right->getPenWidth() != preview->getPenWidth()) || (right->getColor() != currentColor) || (right->getPenStyle() != preview->getPenStyle()))
+            && right->isChecked()) {
             right->setPenWidth(preview->getPenWidth());
             right->setPenStyle(preview->getPenStyle());
             right->setColor(currentColor);
@@ -853,8 +814,8 @@ void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
             invertState(right);
     }
 
-//don't work because I don't know how create a rectangle
-//for diagonal
+    // don't work because I don't know how create a rectangle
+    // for diagonal
     /*rect.setCoords(OFFSETX,OFFSETY,XLEN-OFFSETX,YHEI-OFFSETY);
     if (rect.contains(QPoint(_ev->x(),_ev->y())))
             {
@@ -867,14 +828,12 @@ void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
             } */
 
     if (m_multicell) {
-        rect.setCoords(area->width() / 2 - 8, OFFSETY, area->width() / 2 + 8,
-                       area->height() - OFFSETY);
+        rect.setCoords(area->width() / 2 - 8, OFFSETY, area->width() / 2 + 8, area->height() - OFFSETY);
 
         if (rect.contains(QPoint(_ev->x(), _ev->y()))) {
-            if (((vertical->getPenWidth() != preview->getPenWidth()) ||
-                    (vertical->getColor() != currentColor) ||
-                    (vertical->getPenStyle() != preview->getPenStyle()))
-                    && vertical->isChecked()) {
+            if (((vertical->getPenWidth() != preview->getPenWidth()) || (vertical->getColor() != currentColor)
+                 || (vertical->getPenStyle() != preview->getPenStyle()))
+                && vertical->isChecked()) {
                 vertical->setPenWidth(preview->getPenWidth());
                 vertical->setPenStyle(preview->getPenStyle());
                 vertical->setColor(currentColor);
@@ -883,13 +842,11 @@ void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
                 invertState(vertical);
         }
 
-        rect.setCoords(OFFSETX, area->height() / 2 - 8, area->width() - OFFSETX,
-                       area->height() / 2 + 8);
+        rect.setCoords(OFFSETX, area->height() / 2 - 8, area->width() - OFFSETX, area->height() / 2 + 8);
         if (rect.contains(QPoint(_ev->x(), _ev->y()))) {
-            if (((horizontal->getPenWidth() != preview->getPenWidth()) ||
-                    (horizontal->getColor() != currentColor) ||
-                    (horizontal->getPenStyle() != preview->getPenStyle()))
-                    && horizontal->isChecked()) {
+            if (((horizontal->getPenWidth() != preview->getPenWidth()) || (horizontal->getColor() != currentColor)
+                 || (horizontal->getPenStyle() != preview->getPenStyle()))
+                && horizontal->isChecked()) {
                 horizontal->setPenWidth(preview->getPenWidth());
                 horizontal->setPenStyle(preview->getPenStyle());
                 horizontal->setColor(currentColor);
@@ -901,6 +858,3 @@ void LayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
 
     area->repaint();
 }
-
-
-

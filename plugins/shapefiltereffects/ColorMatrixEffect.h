@@ -16,12 +16,7 @@
 class ColorMatrixEffect : public KoFilterEffect
 {
 public:
-    enum Type {
-        Matrix,
-        Saturate,
-        HueRotate,
-        LuminanceAlpha
-    };
+    enum Type { Matrix, Saturate, HueRotate, LuminanceAlpha };
 
     ColorMatrixEffect();
 
@@ -68,9 +63,9 @@ private:
     /// sets color matrix to identity matrix
     void setIdentity();
 
-    Type m_type;        ///< the color matrix type
+    Type m_type; ///< the color matrix type
     QVector<qreal> m_matrix; ///< the color matrix to apply
-    qreal m_value;      ///< the value (saturate or hueRotate)
+    qreal m_value; ///< the value (saturate or hueRotate)
 };
 
 #endif // COLORMATRIXEFFECT_H

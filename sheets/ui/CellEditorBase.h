@@ -24,10 +24,10 @@ class CALLIGRA_SHEETS_UI_EXPORT CellEditorBase
 public:
     CellEditorBase();
     virtual ~CellEditorBase();
-    virtual QWidget* widget() = 0;
+    virtual QWidget *widget() = 0;
     virtual void selectionChanged() = 0;
-    virtual void setEditorFont(QFont const & font, bool updateSize, const KoViewConverter *viewConverter) = 0;
-    virtual void setText(const QString& text, int cursorPos = -1) = 0;
+    virtual void setEditorFont(QFont const &font, bool updateSize, const KoViewConverter *viewConverter) = 0;
+    virtual void setText(const QString &text, int cursorPos = -1) = 0;
     virtual QString toPlainText() const = 0;
     virtual void setCursorPosition(int pos) = 0;
     virtual int cursorPosition() const = 0;

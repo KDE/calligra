@@ -24,8 +24,9 @@
 
 #include <QObject>
 
-namespace Phonon {
-    class MediaObject;
+namespace Phonon
+{
+class MediaObject;
 }
 
 class KPrSoundData;
@@ -39,20 +40,20 @@ public:
     KPrSoundEventAction();
     virtual ~KPrSoundEventAction();
 
-    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) override;
-    void saveOdf( KoShapeSavingContext & context ) const override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
     void start() override;
     void finish() override;
 
-    void setSoundData( KPrSoundData * soundData );
-    KPrSoundData * soundData() const;
+    void setSoundData(KPrSoundData *soundData);
+    KPrSoundData *soundData() const;
 
 public Q_SLOTS:
     void finished();
 
 private:
-    Phonon::MediaObject * m_media;
+    Phonon::MediaObject *m_media;
     KPrSoundData *m_soundData;
 };
 

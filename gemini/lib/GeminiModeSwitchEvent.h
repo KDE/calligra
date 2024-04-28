@@ -12,7 +12,10 @@
 #include <QEvent>
 
 struct GeminiModeSynchronisationObject {
-    GeminiModeSynchronisationObject() : initialized(false) { }
+    GeminiModeSynchronisationObject()
+        : initialized(false)
+    {
+    }
     bool initialized;
 };
 
@@ -29,30 +32,32 @@ public:
         SwitchedToThisModeEvent ///< Read information out of the event
     };
 
-    inline GeminiModeSwitchEvent(GeminiModeEventType type, QObject* fromView, QObject* toView, GeminiModeSynchronisationObject* syncObject)
-            : QEvent(static_cast<QEvent::Type>(type))
-            , m_fromView(fromView)
-            , m_toView(toView)
-            , m_syncObject(syncObject) {
-
+    inline GeminiModeSwitchEvent(GeminiModeEventType type, QObject *fromView, QObject *toView, GeminiModeSynchronisationObject *syncObject)
+        : QEvent(static_cast<QEvent::Type>(type))
+        , m_fromView(fromView)
+        , m_toView(toView)
+        , m_syncObject(syncObject)
+    {
     }
 
-    inline QObject* fromView() const {
+    inline QObject *fromView() const
+    {
         return m_fromView;
     }
-    inline QObject* toView() const {
+    inline QObject *toView() const
+    {
         return m_toView;
     }
 
-    inline GeminiModeSynchronisationObject* synchronisationObject() const {
+    inline GeminiModeSynchronisationObject *synchronisationObject() const
+    {
         return m_syncObject;
     }
 
 private:
-    QObject* m_fromView;
-    QObject* m_toView;
-    GeminiModeSynchronisationObject* m_syncObject;
+    QObject *m_fromView;
+    QObject *m_toView;
+    GeminiModeSynchronisationObject *m_syncObject;
 };
 
 #endif // GEMINIMODESWITCHEVENT_H
-

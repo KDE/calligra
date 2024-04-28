@@ -4,8 +4,8 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "part/AboutData.h"
 #include "core/DocBase.h"
+#include "part/AboutData.h"
 
 #include <KoApplication.h>
 
@@ -24,11 +24,12 @@ int main(int argc, char **argv)
      *
      * See: http://doc.qt.io/qt-5/qloggingcategory.html
      */
-    QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
-                                     "calligra.*.warning=true");
+    QLoggingCategory::setFilterRules(
+        "calligra.*.debug=false\n"
+        "calligra.*.warning=true");
 
     // QT5TODO: support custom options
-//     options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
+    //     options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
 
     KoApplication app(SHEETS_MIME_TYPE, QStringLiteral("calligrasheets"), newAboutData, argc, argv);
     KLocalizedString::setApplicationDomain("calligrasheets");

@@ -16,21 +16,10 @@ class ComponentTransferEffect : public KoFilterEffect
 {
 public:
     /// the different transfer functions
-    enum Function {
-        Identity,
-        Table,
-        Discrete,
-        Linear,
-        Gamma
-    };
+    enum Function { Identity, Table, Discrete, Linear, Gamma };
 
     /// the different color channels
-    enum Channel {
-        ChannelR,
-        ChannelG,
-        ChannelB,
-        ChannelA
-    };
+    enum Channel { ChannelR, ChannelG, ChannelB, ChannelA };
 
     ComponentTransferEffect();
 
@@ -95,17 +84,22 @@ private:
 
     struct Data {
         Data()
-                : function(Identity), slope(1.0), intercept(0.0)
-                , amplitude(1.0), exponent(1.0), offset(0.0) {
+            : function(Identity)
+            , slope(1.0)
+            , intercept(0.0)
+            , amplitude(1.0)
+            , exponent(1.0)
+            , offset(0.0)
+        {
         }
 
-        Function function;   ///< the component transfer function
+        Function function; ///< the component transfer function
         QList<qreal> tableValues; ///< lookup table for table or discrete function
-        qreal slope;     ///< slope for linear function
+        qreal slope; ///< slope for linear function
         qreal intercept; ///< intercept for linear function
         qreal amplitude; ///< amplitude for gamma function
-        qreal exponent;  ///< exponent for gamma function
-        qreal offset;    ///< offset for gamma function
+        qreal exponent; ///< exponent for gamma function
+        qreal offset; ///< offset for gamma function
     };
 
     Data m_data[4];

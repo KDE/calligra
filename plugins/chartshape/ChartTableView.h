@@ -10,7 +10,8 @@
 
 #include <QTableView>
 
-namespace KoChart {
+namespace KoChart
+{
 
 class ChartTableView : public QTableView
 {

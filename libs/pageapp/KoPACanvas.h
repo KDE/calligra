@@ -7,9 +7,9 @@
 #ifndef KOPACANVAS_H
 #define KOPACANVAS_H
 
-#include <QWidget>
-#include <QList>
 #include <KoPACanvasBase.h>
+#include <QList>
+#include <QWidget>
 
 #include "kopageapp_export.h"
 
@@ -18,15 +18,15 @@ class KOPAGEAPP_EXPORT KoPACanvas : public QWidget, public KoPACanvasBase
 {
     Q_OBJECT
 public:
-    explicit KoPACanvas( KoPAViewBase * view, KoPADocument * doc, QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit KoPACanvas(KoPAViewBase *view, KoPADocument *doc, QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
     void repaint() override;
 
-    QWidget* canvasWidget() override;
-    const QWidget* canvasWidget() const override;
+    QWidget *canvasWidget() override;
+    const QWidget *canvasWidget() const override;
 
     /// reimplemented method
-    void updateCanvas( const QRectF& rc ) override;
+    void updateCanvas(const QRectF &rc) override;
 
     /// reimplemented method
     void updateInputMethodInfo() override;
@@ -38,7 +38,10 @@ public:
 
 public Q_SLOTS:
 
-    void slotSetDocumentOffset(const QPoint &offset) { setDocumentOffset(offset); }
+    void slotSetDocumentOffset(const QPoint &offset)
+    {
+        setDocumentOffset(offset);
+    }
 
 Q_SIGNALS:
     void documentSize(const QSize &size);
@@ -47,7 +50,7 @@ Q_SIGNALS:
      * Emitted when the entire controller size changes
      * @param size the size in widget pixels.
      */
-    void sizeChanged( const QSize & size );
+    void sizeChanged(const QSize &size);
 
     /// Emitted when updateCanvas has been called.
     void canvasUpdated();
@@ -56,39 +59,39 @@ protected:
     /// reimplemented method from superclass
     bool event(QEvent *) override;
     /// reimplemented method from superclass
-    void paintEvent( QPaintEvent* event ) override;
+    void paintEvent(QPaintEvent *event) override;
     /// reimplemented method from superclass
-    void tabletEvent( QTabletEvent *event ) override;
+    void tabletEvent(QTabletEvent *event) override;
     /// reimplemented method from superclass
-    void mousePressEvent( QMouseEvent *event ) override;
+    void mousePressEvent(QMouseEvent *event) override;
     /// reimplemented method from superclass
-    void mouseDoubleClickEvent( QMouseEvent *event ) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
     /// reimplemented method from superclass
-    void mouseMoveEvent( QMouseEvent *event ) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
     /// reimplemented method from superclass
-    void mouseReleaseEvent( QMouseEvent *event ) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
     /// reimplemented method from superclass
-    void keyPressEvent( QKeyEvent *event ) override;
+    void keyPressEvent(QKeyEvent *event) override;
     /// reimplemented method from superclass
-    void keyReleaseEvent( QKeyEvent *event ) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
     /// reimplemented method from superclass
-    void wheelEvent ( QWheelEvent * event ) override;
+    void wheelEvent(QWheelEvent *event) override;
     /// reimplemented method from superclass
-    void closeEvent( QCloseEvent * event ) override;
+    void closeEvent(QCloseEvent *event) override;
     /// reimplemented method from superclass
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
     /// reimplemented method from superclass
     void inputMethodEvent(QInputMethodEvent *event) override;
 
     /// reimplemented method from superclass
-    void resizeEvent( QResizeEvent * event ) override;
+    void resizeEvent(QResizeEvent *event) override;
 
     /**
      * Shows the default context menu
      * @param globalPos global position to show the menu at.
      * @param actionList action list to be inserted into the menu
      */
-    void showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList );
+    void showContextMenu(const QPoint &globalPos, const QList<QAction *> &actionList);
 };
 
 #endif /* KOPACANVAS_H */

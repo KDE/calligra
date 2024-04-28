@@ -28,9 +28,8 @@
  * be automatically constructed by the generating application.
  * [MS-ODRAW] — v20101219
  */
-enum MSOSPT
-{
-    msosptMin = 0x0, //libmso specific
+enum MSOSPT {
+    msosptMin = 0x0, // libmso specific
     msosptNotPrimitive = 0x0,
     msosptRectangle = 0x1,
     msosptRoundRectangle = 0x2,
@@ -246,28 +245,26 @@ enum MSOSPT
     msosptActionButtonMovie = 0xc8,
     msosptHostControl = 0xc9,
     msosptTextBox = 0xca,
-    msosptNil = 0x0FFF //libmso specific
+    msosptNil = 0x0FFF // libmso specific
 };
 
 /**
  * The MSOLINESTYLE enumeration specifies the type of line style that will be
  * used.  [MS-ODRAW] — v20101219
  */
-enum MSOLINESTYLE
-{
-    msolineSimple,      //0x00  A simple line.
-    msolineDouble,      //0x01  A double line.
-    msolineThickThin,   //0x02  A thick line and a thin line.
-    msolineThinThick,   //0x03  A thin line and a thick line.
-    msolineTripl        //0x04  A triple line.
+enum MSOLINESTYLE {
+    msolineSimple, // 0x00  A simple line.
+    msolineDouble, // 0x01  A double line.
+    msolineThickThin, // 0x02  A thick line and a thin line.
+    msolineThinThick, // 0x03  A thin line and a thick line.
+    msolineTripl // 0x04  A triple line.
 };
 
 /**
  * The MSOLINEEND enumeration specifies the line end decorations that
  * appear at the ends of lines.
  */
-enum MSOLINEEND
-{
+enum MSOLINEEND {
     msolineNoEnd,
     msolineArrowEnd,
     msolineArrowStealthEnd,
@@ -282,23 +279,13 @@ enum MSOLINEEND
  * The MSOLINECAP enumeration specifies ways to cap the ends of lines
  * in the document.
  */
-enum MSOLINECAP
-{
-    msolineEndCapRound,
-    msolineEndCapSquare,
-    msolineEndCapFlat
-};
+enum MSOLINECAP { msolineEndCapRound, msolineEndCapSquare, msolineEndCapFlat };
 
 /**
  * The MSOLINEJOIN enumeration specifies the types of join styles that
  * can be applied to lines in the document.
  */
-enum MSOLINEJOIN
-{
-    msolineJoinBevel,
-    msolineJoinMiter,
-    msolineJoinRound
-};
+enum MSOLINEJOIN { msolineJoinBevel, msolineJoinMiter, msolineJoinRound };
 
 /**
  * The MSOLINEDASHING enumeration, as shown in the following table, specifies
@@ -306,27 +293,25 @@ enum MSOLINEJOIN
  * representation of the repeating dash style. Each 1 corresponds to a line
  * segment, and each 0 corresponds to a space.  [MS-ODRAW] — v20101219
  */
-enum MSOLINEDASHING
-{
-    msolineSolid,             //0x00  1
-    msolineDashSys,           //0x01  1110
-    msolineDotSys,            //0x02  10
-    msolineDashDotSys,        //0x03  111010
-    msolineDashDotDotSys,     //0x04  11101010
-    msolineDotGEL,            //0x05  1000
-    msolineDashGEL,           //0x06  1111000
-    msolineLongDashGEL,       //0x07  11111111000
-    msolineDashDotGEL,        //0x08  11110001000
-    msolineLongDashDotGEL,    //0x09  111111110001000
-    msolineLongDashDotDotGEL  //0x0A  1111111100010001000
+enum MSOLINEDASHING {
+    msolineSolid, // 0x00  1
+    msolineDashSys, // 0x01  1110
+    msolineDotSys, // 0x02  10
+    msolineDashDotSys, // 0x03  111010
+    msolineDashDotDotSys, // 0x04  11101010
+    msolineDotGEL, // 0x05  1000
+    msolineDashGEL, // 0x06  1111000
+    msolineLongDashGEL, // 0x07  11111111000
+    msolineDashDotGEL, // 0x08  11110001000
+    msolineLongDashDotGEL, // 0x09  111111110001000
+    msolineLongDashDotDotGEL // 0x0A  1111111100010001000
 };
 
 /**
  * The MSOFILLTYPE enumeration specifies the fill types.
  * [MS-ODRAW] — v20101219
  */
-enum MSOFILLTYPE
-{
+enum MSOFILLTYPE {
     msofillSolid = 0x0,
     msofillPattern = 0x1,
     msofillTexture = 0x2,
@@ -343,27 +328,13 @@ enum MSOFILLTYPE
  * The MSOPATHTYPE enumeration specifies how the individual pieces of a path
  * SHOULD be interpreted.  [MS-ODRAW] — v20101219
  */
-enum MSOPATHTYPE
-{
-    msopathLineTo = 0,
-    msopathCurveTo,
-    msopathMoveTo,
-    msopathClose,
-    msopathEnd,
-    msopathEscape,
-    msopathClientEscape
-};
+enum MSOPATHTYPE { msopathLineTo = 0, msopathCurveTo, msopathMoveTo, msopathClose, msopathEnd, msopathEscape, msopathClientEscape };
 
 /**
- * The MSOWRAPMODE enumeration specifies how text wraps 
+ * The MSOWRAPMODE enumeration specifies how text wraps
  * SHOULD be interpreted.  [MS-ODRAW] — v20101219
  */
-enum MSOWRAPMODE
-{
-    msowrapSquare = 0,
-    msowrapByPoints,
-    msowrapNone
-};
+enum MSOWRAPMODE { msowrapSquare = 0, msowrapByPoints, msowrapNone };
 
 /**
  * The MSOANCHOR enumeration specifies the suggested placement rule for a body
@@ -373,8 +344,7 @@ enum MSOWRAPMODE
  * text properties.  These enumeration values MAY be used.
  * [MS-ODRAW] — v20101219
  */
-enum MSOANCHOR
-{
+enum MSOANCHOR {
     msoanchorTop = 0x0,
     msoanchorMiddle = 0x1,
     msoanchorBottom = 0x2,
@@ -391,23 +361,14 @@ enum MSOANCHOR
  * The POSH enumeration specifies the type of horizontal positioning to use for
  * a shape.  [MS-ODRAW] — v20101219
  */
-enum POSH
-{
-    msophAbs = 0x0,
-    msophLeft = 0x1,
-    msophCenter = 0x2,
-    msophRight = 0x3,
-    msophInside = 0x4,
-    msophOutside = 0x5
-};
+enum POSH { msophAbs = 0x0, msophLeft = 0x1, msophCenter = 0x2, msophRight = 0x3, msophInside = 0x4, msophOutside = 0x5 };
 
 /**
  * The POSRELH enumeration specifies a page element relative to which a shape
  * is horizontally positioned.  [MS-ODRAW] — v20101219
  */
-enum POSRELH
-{
-// NOTE: Based on our tests the enumeration should start from ZERO.
+enum POSRELH {
+    // NOTE: Based on our tests the enumeration should start from ZERO.
     msoprhMargin = 0x1,
     msoprhPage = 0x2,
     msoprhText = 0x3,
@@ -418,24 +379,15 @@ enum POSRELH
  * The POSV enumeration specifies the type of vertical positioning to use for a
  * shape.  [MS-ODRAW] — v20101219
  */
-enum POSV
-{
-    msopvAbs = 0x0,
-    msopvTop = 0x1,
-    msopvCenter = 0x2,
-    msopvBottom = 0x3,
-    msopvInside = 0x4,
-    msopvOutside = 0x5
-};
+enum POSV { msopvAbs = 0x0, msopvTop = 0x1, msopvCenter = 0x2, msopvBottom = 0x3, msopvInside = 0x4, msopvOutside = 0x5 };
 
 /**
  * The POSRELV enumeration specifies a page element relative to which a shape
  * is vertically positioned.  [MS-ODRAW] — v20101219
  */
 
-enum POSRELV
-{
-// NOTE: Based on our tests the enumeration should start from ZERO.
+enum POSRELV {
+    // NOTE: Based on our tests the enumeration should start from ZERO.
     msoprvMargin = 0x1,
     msoprvPage = 0x2,
     msoprvText = 0x3,

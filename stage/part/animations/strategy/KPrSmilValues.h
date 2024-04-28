@@ -27,7 +27,6 @@ class KPrFormulaParser;
 
 class KPrShapeAnimation;
 
-
 class KPrSmilValues : public KPrAnimationValue
 {
 public:
@@ -40,6 +39,7 @@ public:
     bool loadValues(const QString &values, const QString &keyTimes, const QString &keySplines, SmilCalcMode calcMode);
     bool loadFormula(const QString &values, const QString &keyTimes, const QString &keySplines, SmilCalcMode calcMode, const QString &formula);
     bool saveOdf(KoPASavingContext &paContext) const override;
+
 protected:
     QList<KPrFormulaParser> m_values;
     QList<qreal> m_times;

@@ -12,7 +12,6 @@
 #include <QString>
 #include <QStringList>
 
-
 QVector3D odfToVector3D(QString &string)
 {
     // The string comes into this function in the form "(0 3.5 0.3)".

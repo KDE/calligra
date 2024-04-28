@@ -18,9 +18,9 @@ class STAGE_EXPORT KPrPageEffectRegistry : public KoGenericRegistry<KPrPageEffec
 {
 public:
     class Singleton;
-    static KPrPageEffectRegistry * instance();
+    static KPrPageEffectRegistry *instance();
 
-    KPrPageEffect * createPageEffect( const KoXmlElement & element );
+    KPrPageEffect *createPageEffect(const KoXmlElement &element);
 
 private:
     void init();
@@ -31,7 +31,7 @@ private:
     friend class Singleton;
 
     struct Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KPRPAGEEFFECTREGISTRY_H */

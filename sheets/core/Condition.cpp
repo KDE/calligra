@@ -11,16 +11,14 @@
 #include "engine/Formula.h"
 #include "engine/NamedAreaManager.h"
 #include "engine/Region.h"
-#include "engine/ValueConverter.h"
 #include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
 
 #include "Cell.h"
 #include "Map.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
-
-
 
 using namespace Calligra::Sheets;
 
@@ -62,12 +60,12 @@ public:
 };
 
 Conditions::Conditions()
-        : d(new Private)
+    : d(new Private)
 {
 }
 
-Conditions::Conditions(const Conditions& other)
-        : d(other.d)
+Conditions::Conditions(const Conditions &other)
+    : d(other.d)
 {
 }
 
@@ -80,7 +78,7 @@ bool Conditions::isEmpty() const
     return d->conditionList.isEmpty();
 }
 
-Style Conditions::testConditions( const Cell& cell ) const
+Style Conditions::testConditions(const Cell &cell) const
 {
     Conditional condition;
     if (currentCondition(cell, condition)) {
@@ -92,7 +90,7 @@ Style Conditions::testConditions( const Cell& cell ) const
     return d->defaultStyle;
 }
 
-bool Conditions::currentCondition(const CellBase& cell, Conditional & condition) const
+bool Conditions::currentCondition(const CellBase &cell, Conditional &condition) const
 {
     /* for now, the first condition that is true is the one that will be used */
 
@@ -102,7 +100,7 @@ bool Conditions::currentCondition(const CellBase& cell, Conditional & condition)
     QList<Conditional>::const_iterator it;
     for (it = d->conditionList.begin(); it != d->conditionList.end(); ++it) {
         condition = *it;
-//         debugSheets << "Checking condition resulting in applying" << it->styleName;
+        //         debugSheets << "Checking condition resulting in applying" << it->styleName;
 
         // The first value of the condition is always used and has to be
         // comparable to the cell's value.
@@ -141,8 +139,7 @@ bool Conditions::currentCondition(const CellBase& cell, Conditional & condition)
             const QVector<Value> values(QVector<Value>() << condition.value1 << condition.value2);
             const Value min = calc->min(values);
             const Value max = calc->max(values);
-            if (value.compare(min, cs) >= 0
-                    && value.compare(max, cs) <= 0) {
+            if (value.compare(min, cs) >= 0 && value.compare(max, cs) <= 0) {
                 return true;
             }
             break;
@@ -151,8 +148,7 @@ bool Conditions::currentCondition(const CellBase& cell, Conditional & condition)
             const QVector<Value> values(QVector<Value>() << condition.value1 << condition.value2);
             const Value min = calc->min(values);
             const Value max = calc->max(values);
-            if (value.greater(max, cs)
-                    || value.less(min, cs)) {
+            if (value.greater(max, cs) || value.less(min, cs)) {
                 return true;
             }
             break;
@@ -177,13 +173,13 @@ bool Conditions::currentCondition(const CellBase& cell, Conditional & condition)
 
 bool Conditions::isTrueFormula(const CellBase &cell, const QString &formula, const QString &baseCellAddress) const
 {
-    MapBase* const map = cell.sheet()->map();
+    MapBase *const map = cell.sheet()->map();
     ValueCalc *const calc = map->calc();
     Formula f(cell.sheet(), cell);
     f.setExpression('=' + formula);
     Region r = map->regionFromName(baseCellAddress, cell.sheet());
     if (r.isValid() && r.isSingular()) {
-        QPoint basePoint = static_cast<Region::Point*>(*r.constBegin())->pos();
+        QPoint basePoint = static_cast<Region::Point *>(*r.constBegin())->pos();
         QString newFormula('=');
         const Tokens tokens = f.tokens();
         for (int t = 0; t < tokens.count(); ++t) {
@@ -202,9 +198,9 @@ bool Conditions::isTrueFormula(const CellBase &cell, const QString &formula, con
                     newFormula.append(token.text());
                     continue;
                 }
-                Region::Element* element = *region.constBegin();
+                Region::Element *element = *region.constBegin();
                 if (element->type() == Region::Element::Point) {
-                    Region::Point* point = static_cast<Region::Point*>(element);
+                    Region::Point *point = static_cast<Region::Point *>(element);
                     QPoint pos = point->pos();
                     if (!point->isRowFixed()) {
                         int delta = pos.y() - basePoint.y();
@@ -216,7 +212,7 @@ bool Conditions::isTrueFormula(const CellBase &cell, const QString &formula, con
                     }
                     newFormula.append(Region(pos, cell.sheet()).name());
                 } else {
-                    Region::Range* range = static_cast<Region::Range*>(element);
+                    Region::Range *range = static_cast<Region::Range *>(element);
                     QRect r = range->rect();
                     if (!range->isTopFixed()) {
                         int delta = r.top() - basePoint.y();
@@ -251,7 +247,7 @@ QList<Conditional> Conditions::conditionList() const
     return d->conditionList;
 }
 
-void Conditions::setConditionList(const QList<Conditional> & list)
+void Conditions::setConditionList(const QList<Conditional> &list)
 {
     d->conditionList = list;
 }
@@ -271,13 +267,12 @@ void Conditions::addCondition(Conditional cond)
     d->conditionList.append(cond);
 }
 
-
-void Conditions::operator=(const Conditions & other)
+void Conditions::operator=(const Conditions &other)
 {
     d = other.d;
 }
 
-bool Conditions::operator==(const Conditions& other) const
+bool Conditions::operator==(const Conditions &other) const
 {
     if (d->defaultStyle != other.d->defaultStyle)
         return false;
@@ -299,13 +294,10 @@ bool Conditions::operator==(const Conditions& other) const
 
 size_t Calligra::Sheets::qHash(const Conditions &c, size_t seed)
 {
-    return qHashMulti(
-        qHash(c.defaultStyle(), seed),
-        qHashRange(c.conditionList().cbegin(), c.conditionList().cend(), seed)
-    );
+    return qHashMulti(qHash(c.defaultStyle(), seed), qHashRange(c.conditionList().cbegin(), c.conditionList().cend(), seed));
 }
 
-size_t Calligra::Sheets::qHash(const Conditional& c, size_t seed)
+size_t Calligra::Sheets::qHash(const Conditional &c, size_t seed)
 {
     return qHash(c.value1, seed);
 }

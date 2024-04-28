@@ -36,7 +36,7 @@ class QKeySequence;
  * };
  * K_PLUGIN_FACTORY_WITH_JSON((MyToolFactoryFactory, "mytool.json", registerPlugin<MyToolFactory>();)
  * </pre>
- * 
+ *
  */
 class FLAKE_EXPORT KoToolFactoryBase
 {
@@ -116,9 +116,8 @@ public:
      <tr>
         <td>"comma separated list of application names"</td>
         <td>see main type</td>
-        <td>Similar to the 'main' item if the application name matches with the current application. Otherwise it's similar to 'dynamic', but segmented in its own section. If the list includes 'dynamic' it's even added to the dynamic section, when not matching the application name</td></tr>
-     <tr>
-        <td>'other'</td>
+        <td>Similar to the 'main' item if the application name matches with the current application. Otherwise it's similar to 'dynamic', but segmented in its
+     own section. If the list includes 'dynamic' it's even added to the dynamic section, when not matching the application name</td></tr> <tr> <td>'other'</td>
         <td>any</td>
         <td>similar to the 'dynamic' items, but segmented in its own section.</td></tr>
      <tr>
@@ -149,7 +148,8 @@ public:
      * @see toolType()
      * @see setToolType()
      */
-    static QString mainToolType() {
+    static QString mainToolType()
+    {
         return "main";
     }
     /**
@@ -161,7 +161,8 @@ public:
      * @see toolType()
      * @see setToolType()
      */
-    static QString navigationToolType() {
+    static QString navigationToolType()
+    {
         return "navigation";
     }
     /**
@@ -173,14 +174,15 @@ public:
      * @see toolType()
      * @see setToolType()
      */
-    static QString dynamicToolType() {
+    static QString dynamicToolType()
+    {
         return "dynamic";
     }
 
     /**
      * Set the default shortcut for activation of this tool.
      */
-    void setShortcut(const QKeySequence & shortcut);
+    void setShortcut(const QKeySequence &shortcut);
 
 protected:
     /**
@@ -214,10 +216,9 @@ protected:
      */
     void setActivationShapeId(const QString &activationShapeId);
 
-
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

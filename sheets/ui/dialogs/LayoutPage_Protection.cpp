@@ -21,9 +21,8 @@
 
 using namespace Calligra::Sheets;
 
-
-LayoutPageProtection::LayoutPageProtection(QWidget* parent)
-        : QWidget(parent)
+LayoutPageProtection::LayoutPageProtection(QWidget *parent)
+    : QWidget(parent)
 {
     setupUi(this);
     connect(m_bHideAll, &QAbstractButton::toggled, m_bIsProtected, &QWidget::setDisabled);
@@ -40,7 +39,7 @@ LayoutPageProtection::~LayoutPageProtection()
 {
 }
 
-void LayoutPageProtection::apply(Style * style, bool partial)
+void LayoutPageProtection::apply(Style *style, bool partial)
 {
     m_bDontPrint->saveTo(*style, partial);
     m_bHideAll->saveTo(*style, partial);
@@ -55,7 +54,3 @@ void LayoutPageProtection::loadFrom(const Style &style, bool partial)
     m_bIsProtected->loadFrom(style, partial);
     m_bHideFormula->loadFrom(style, partial);
 }
-
-
-
-

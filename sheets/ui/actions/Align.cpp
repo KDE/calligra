@@ -13,10 +13,7 @@
 
 #include <KLocalizedString>
 
-
-
 using namespace Calligra::Sheets;
-
 
 AlignLeft::AlignLeft(Actions *actions)
     : ToggleableCellAction(actions, "alignLeft", i18n("Align Left"), koIcon("format-justify-left"), i18n("Left justify the cell contents"))
@@ -27,7 +24,8 @@ AlignLeft::~AlignLeft()
 {
 }
 
-QAction *AlignLeft::createAction() {
+QAction *AlignLeft::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Left"));
     return res;
@@ -35,7 +33,7 @@ QAction *AlignLeft::createAction() {
 
 void AlignLeft::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Horizontal Alignment"));
     Style s;
@@ -60,7 +58,8 @@ AlignRight::~AlignRight()
 {
 }
 
-QAction *AlignRight::createAction() {
+QAction *AlignRight::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Right"));
     return res;
@@ -68,7 +67,7 @@ QAction *AlignRight::createAction() {
 
 void AlignRight::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Horizontal Alignment"));
     Style s;
@@ -84,7 +83,6 @@ bool AlignRight::checkedForSelection(Selection *, const Cell &activeCell)
     return (style.halign() == Style::Right);
 }
 
-
 AlignCenter::AlignCenter(Actions *actions)
     : ToggleableCellAction(actions, "alignCenter", i18n("Align Center"), koIcon("format-justify-center"), i18n("Center the cell contents"))
 {
@@ -94,7 +92,8 @@ AlignCenter::~AlignCenter()
 {
 }
 
-QAction *AlignCenter::createAction() {
+QAction *AlignCenter::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Center"));
     return res;
@@ -102,7 +101,7 @@ QAction *AlignCenter::createAction() {
 
 void AlignCenter::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Horizontal Alignment"));
     Style s;
@@ -127,7 +126,8 @@ AlignTop::~AlignTop()
 {
 }
 
-QAction *AlignTop::createAction() {
+QAction *AlignTop::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Top"));
     return res;
@@ -135,7 +135,7 @@ QAction *AlignTop::createAction() {
 
 void AlignTop::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Vertical Alignment"));
     Style s;
@@ -152,7 +152,11 @@ bool AlignTop::checkedForSelection(Selection *, const Cell &activeCell)
 }
 
 AlignBottom::AlignBottom(Actions *actions)
-    : ToggleableCellAction(actions, "alignBottom", i18n("Align Bottom"), koIcon("format-align-vertical-bottom"), i18n("Align cell contents along the bottom of the cell"))
+    : ToggleableCellAction(actions,
+                           "alignBottom",
+                           i18n("Align Bottom"),
+                           koIcon("format-align-vertical-bottom"),
+                           i18n("Align cell contents along the bottom of the cell"))
 {
 }
 
@@ -160,7 +164,8 @@ AlignBottom::~AlignBottom()
 {
 }
 
-QAction *AlignBottom::createAction() {
+QAction *AlignBottom::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Bottom"));
     return res;
@@ -168,7 +173,7 @@ QAction *AlignBottom::createAction() {
 
 void AlignBottom::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Vertical Alignment"));
     Style s;
@@ -185,7 +190,11 @@ bool AlignBottom::checkedForSelection(Selection *, const Cell &activeCell)
 }
 
 AlignMiddle::AlignMiddle(Actions *actions)
-    : ToggleableCellAction(actions, "alignMiddle", i18n("Align Middle"), koIcon("format-align-vertical-center"), i18n("Align cell contents centered in the cell"))
+    : ToggleableCellAction(actions,
+                           "alignMiddle",
+                           i18n("Align Middle"),
+                           koIcon("format-align-vertical-center"),
+                           i18n("Align cell contents centered in the cell"))
 {
 }
 
@@ -193,7 +202,8 @@ AlignMiddle::~AlignMiddle()
 {
 }
 
-QAction *AlignMiddle::createAction() {
+QAction *AlignMiddle::createAction()
+{
     QAction *res = ToggleableCellAction::createAction();
     res->setIconText(i18n("Middle"));
     return res;
@@ -201,7 +211,7 @@ QAction *AlignMiddle::createAction() {
 
 void AlignMiddle::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Change Vertical Alignment"));
     Style s;
@@ -216,5 +226,3 @@ bool AlignMiddle::checkedForSelection(Selection *, const Cell &activeCell)
     const Style style = activeCell.style();
     return (style.valign() == Style::Middle);
 }
-
-

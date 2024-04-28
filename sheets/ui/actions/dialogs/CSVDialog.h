@@ -25,13 +25,13 @@ class Value;
  * Provides dialog for managing CSV (comma separated value) data.
  *
  * This class currently only provides some convenience routines on top of KoCsvImportDialog.
-*/
+ */
 class CSVDialog : public KoCsvImportDialog
 {
     Q_OBJECT
 
 public:
-    CSVDialog(QWidget* parent);
+    CSVDialog(QWidget *parent);
     ~CSVDialog() override;
 
     QList<KoCsvImportDialog::DataType> dataTypes();

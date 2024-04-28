@@ -6,13 +6,13 @@
 
 #include "InlineAnchorStrategy.h"
 
+#include <KoAnchorInlineObject.h>
 #include <KoShapeContainer.h>
 #include <KoTextShapeData.h>
-#include <KoAnchorInlineObject.h>
 
-#include <QTextLayout>
 #include <QTextBlock>
 #include <QTextDocument>
+#include <QTextLayout>
 #include <TextLayoutDebug.h>
 
 InlineAnchorStrategy::InlineAnchorStrategy(KoAnchorInlineObject *anchorObject, KoTextLayoutRootArea *rootArea)
@@ -31,7 +31,7 @@ bool InlineAnchorStrategy::moveSubject()
         return false; // let's fake we moved to force another relayout
     }
 
-    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
+    KoTextShapeData *data = qobject_cast<KoTextShapeData *>(m_anchor->shape()->parent()->userData());
     if (!data) {
         return false; // let's fake we moved to force another relayout
     }

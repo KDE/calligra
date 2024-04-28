@@ -7,12 +7,12 @@
 #ifndef KOPADOCUMENTSTRUCTUREDOCKER_H
 #define KOPADOCUMENTSTRUCTUREDOCKER_H
 
-#include <QDockWidget>
-#include <QHash>
-#include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
+#include <KoDockFactoryBase.h>
 #include <KoDocumentSectionView.h>
 #include <KoPageApp.h>
+#include <QDockWidget>
+#include <QHash>
 
 class KoShape;
 class KoShapeLayer;
@@ -29,7 +29,7 @@ public:
     explicit KoPADocumentStructureDockerFactory(KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType = KoPageApp::Page);
 
     QString id() const override;
-    QDockWidget* createDockWidget() override;
+    QDockWidget *createDockWidget() override;
 
     DockPosition defaultDockPosition() const override
     {
@@ -43,20 +43,20 @@ private:
 
 class KoPADocumentStructureDocker : public QDockWidget, public KoCanvasObserverBase
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    explicit KoPADocumentStructureDocker(KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType, QWidget* parent = 0);
+    explicit KoPADocumentStructureDocker(KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType, QWidget *parent = 0);
     ~KoPADocumentStructureDocker() override;
 
-    void setCanvas(KoCanvasBase* canvas) override;
+    void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
     void setActivePage(KoPAPageBase *page);
     void setMasterMode(bool master);
 
 protected:
     /// This is the context menu for the slide show in the KoPADocumentStructure docker
-    void contextMenuEvent(QContextMenuEvent* event) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 Q_SIGNALS:
     void pageChanged(KoPAPageBase *page);
@@ -81,26 +81,26 @@ private Q_SLOTS:
     void detailedView();
     void thumbnailView();
 
-    void itemSelected(const QItemSelection& selected, const QItemSelection& deselected);
+    void itemSelected(const QItemSelection &selected, const QItemSelection &deselected);
     void editCut();
     void editCopy();
     void editPaste();
 
 private:
-    void extractSelectedLayersAndShapes(QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes);
+    void extractSelectedLayersAndShapes(QList<KoPAPageBase *> &pages, QList<KoShapeLayer *> &layers, QList<KoShape *> &shapes);
     void setViewMode(KoDocumentSectionView::DisplayMode mode);
     QModelIndex getRootIndex(const QModelIndex &index) const;
 
-    KoDocumentSectionView::DisplayMode viewModeFromString(const QString& mode);
+    KoDocumentSectionView::DisplayMode viewModeFromString(const QString &mode);
     QString viewModeToString(KoDocumentSectionView::DisplayMode mode);
 
-    KoPADocument * m_doc;
+    KoPADocument *m_doc;
     KoDocumentSectionView *m_sectionView;
     KoPADocumentModel *m_model;
-    QHash<KoDocumentSectionView::DisplayMode, QAction*> m_viewModeActions;
+    QHash<KoDocumentSectionView::DisplayMode, QAction *> m_viewModeActions;
     QList<KoShape *> m_selectedShapes;
     QButtonGroup *m_buttonGroup;
-    QAction* m_addLayerAction;
+    QAction *m_addLayerAction;
     KoViewItemContextBar *m_itemsContextBar;
 };
 

@@ -14,10 +14,11 @@
 /**
  * @short Implementation of the msub, msup, msubsup elements
  */
-class KOFORMULA_EXPORT SubSupElement : public FixedElement {
+class KOFORMULA_EXPORT SubSupElement : public FixedElement
+{
 public:
     /// The standard constructor
-    explicit SubSupElement( BasicElement* parent = 0, ElementType elementType = SubSupScript);
+    explicit SubSupElement(BasicElement *parent = 0, ElementType elementType = SubSupScript);
 
     /// The destructor
     ~SubSupElement() override;
@@ -26,51 +27,52 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements() const override;
+    const QList<BasicElement *> childElements() const override;
 
     /// inherited from BasicElement
-    bool replaceChild ( BasicElement* oldElement, BasicElement* newElement ) override;
+    bool replaceChild(BasicElement *oldElement, BasicElement *newElement) override;
 
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    void paint( QPainter& painter, AttributeManager* am ) override;
+    void paint(QPainter &painter, AttributeManager *am) override;
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am ) override;
+    void layout(const AttributeManager *am) override;
 
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const override; 
+    QString attributesDefaultValue(const QString &attribute) const override;
 
     /// @return The element's ElementType
     ElementType elementType() const override;
 
     int endPosition() const override;
 
-    bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor ) override;
+    bool moveCursor(FormulaCursor &newcursor, FormulaCursor &oldcursor) override;
 
-    bool setCursorTo ( FormulaCursor& cursor, QPointF point ) override;
+    bool setCursorTo(FormulaCursor &cursor, QPointF point) override;
+
 protected:
     /// Read all content from the node
-    bool readMathMLContent( const KoXmlElement& element ) override;
+    bool readMathMLContent(const KoXmlElement &element) override;
 
     /// Write all content to the KoXmlWriter
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const override;
+    void writeMathMLContent(KoXmlWriter *writer, const QString &ns) const override;
 
 private:
-    /// The base element 
-    RowElement* m_baseElement;
+    /// The base element
+    RowElement *m_baseElement;
 
     /// The subscript right to the m_baseElement
-    RowElement* m_subScript;
+    RowElement *m_subScript;
 
     /// The superscript right to the m_baseElement
-    RowElement* m_superScript;
+    RowElement *m_superScript;
 
     /// Whether this is a SubScript, SupScript or SubSupScript
     ElementType m_elementType;

@@ -6,30 +6,26 @@
 
 #include "exportmobi.h"
 
-#include <KoFilterChain.h>
 #include <KPluginFactory>
-#include <KoXmlReader.h>
+#include <KoFilterChain.h>
 #include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
-#include "MobiExportDebug.h"
-#include "OdtMobiHtmlConverter.h"
 #include "FileCollector.h"
+#include "MobiExportDebug.h"
 #include "MobiFile.h"
-#include "OdfParser.h"
-#include "PalmDocCompression.h"
 #include "MobiHeaderGenerator.h"
+#include "OdfParser.h"
+#include "OdtMobiHtmlConverter.h"
+#include "PalmDocCompression.h"
 
-
-
-K_PLUGIN_FACTORY_WITH_JSON(ExportMobiFactory, "calligra_filter_odt2mobi.json",
-			   registerPlugin<ExportMobi>();)
+K_PLUGIN_FACTORY_WITH_JSON(ExportMobiFactory, "calligra_filter_odt2mobi.json", registerPlugin<ExportMobi>();)
 
 // Needed to instantiate the plugin factory.
 #include "exportmobi.moc"
 
-
-ExportMobi::ExportMobi(QObject *parent, const QVariantList &) :
-    KoFilter(parent)
+ExportMobi::ExportMobi(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
 }
 
@@ -45,8 +41,7 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
     }
 
     // Open the infile and return an error if it fails.
-    KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
-                                             "", KoStore::Auto);
+    KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read, "", KoStore::Auto);
     if (!odfStore->open("mimetype")) {
         errorMobi << "Unable to open input file!" << Qt::endl;
         delete odfStore;
@@ -55,10 +50,10 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
     odfStore->close();
 
     //************ Start the conversion *************
-    KoFilter::ConversionStatus  status;
+    KoFilter::ConversionStatus status;
 
     // Parse input files.
-    OdfParser  odfParser;
+    OdfParser odfParser;
     status = odfParser.parseMetadata(odfStore, m_metaData);
     if (status != KoFilter::OK) {
         delete odfStore;
@@ -72,18 +67,16 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
         return status;
     }
 
-
     // Create content files.
     MobiFile mobi;
 
     OdtMobiHtmlConverter converter;
     OdtMobiHtmlConverter::ConversionOptions options = {
-        false,                   // don't put styles in css file
-        false,                    // don't break into chapters
-        true                     // It is mobi.
+        false, // don't put styles in css file
+        false, // don't break into chapters
+        true // It is mobi.
     };
-    status = converter.convertContent(odfStore, m_metaData, &options, &mobi,
-                                      m_imagesSrcList);
+    status = converter.convertContent(odfStore, m_metaData, &options, &mobi, m_imagesSrcList);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
@@ -95,7 +88,6 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
         delete odfStore;
         return status;
     }
-
 
     // I need the text content in FileCollector
     QByteArray textContent;
@@ -115,9 +107,7 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
 
     // Generate mobi headers.
     MobiHeaderGenerator headerGenerator;
-    headerGenerator.generateMobiHeaders(m_metaData, (compressContent.size()/* - recordOffset.size()*/),
-                                        textContent.size(), m_imagesSize, recordOffset);
-
+    headerGenerator.generateMobiHeaders(m_metaData, (compressContent.size() /* - recordOffset.size()*/), textContent.size(), m_imagesSize, recordOffset);
 
     // After each text block i should insert a zero byte, i use record offset to
     // set them after each insert record offset move one byte to forward.
@@ -128,7 +118,6 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
     }
 
     mobi.addContentRawText(compressContent);
-
 
     // Write Mobi file
     status = mobi.writeMobiFile(m_chain->outputFile(), headerGenerator);
@@ -143,13 +132,12 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
 
 KoFilter::ConversionStatus ExportMobi::extractImages(KoStore *odfStore, MobiFile *mobi)
 {
-
     // Extract images and add them to epubFile one by one
     QByteArray imgContent;
     int imgId = 1;
     foreach (const QString &imgSrc, m_imagesSrcList.keys()) {
         if (!odfStore->hasFile(imgSrc)) {
-            warnMobi << "Can not to extract this image, image "<< imgSrc<< "is an external image";
+            warnMobi << "Can not to extract this image, image " << imgSrc << "is an external image";
             // Ignore the external image.
             continue;
         }

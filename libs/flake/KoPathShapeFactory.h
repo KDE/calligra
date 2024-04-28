@@ -17,11 +17,13 @@ class KoShape;
 /// Factory for path shapes.
 class FLAKE_EXPORT KoPathShapeFactory : public KoShapeFactoryBase
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     /// constructor
-    explicit KoPathShapeFactory(const QStringList&);
-    ~KoPathShapeFactory() override {}
+    explicit KoPathShapeFactory(const QStringList &);
+    ~KoPathShapeFactory() override
+    {
+    }
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
     bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const override;
     /// reimplemented

@@ -6,23 +6,24 @@
 
 #include "KoEventActionRegistry.h"
 
-#include <QHash>
 #include <QGlobalStatic>
+#include <QHash>
 
 #include <FlakeDebug.h>
 
-#include <KoXmlReader.h>
-#include <KoXmlNS.h>
-#include "KoEventActionFactoryBase.h"
 #include "KoEventAction.h"
+#include "KoEventActionFactoryBase.h"
 #include <KoPluginLoader.h>
-
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
 class KoEventActionRegistry::Singleton
 {
 public:
     Singleton()
-            : initDone(false) {}
+        : initDone(false)
+    {
+    }
 
     KoEventActionRegistry q;
     bool initDone;
@@ -33,15 +34,15 @@ Q_GLOBAL_STATIC(KoEventActionRegistry::Singleton, singleton)
 class Q_DECL_HIDDEN KoEventActionRegistry::Private
 {
 public:
-    QHash<QString, KoEventActionFactoryBase*> presentationEventActionFactories;
-    QHash<QString, KoEventActionFactoryBase*> presentationEventActions;
-    QHash<QString, KoEventActionFactoryBase*> scriptEventActionFactories;
+    QHash<QString, KoEventActionFactoryBase *> presentationEventActionFactories;
+    QHash<QString, KoEventActionFactoryBase *> presentationEventActions;
+    QHash<QString, KoEventActionFactoryBase *> scriptEventActionFactories;
 };
 
-KoEventActionRegistry * KoEventActionRegistry::instance()
+KoEventActionRegistry *KoEventActionRegistry::instance()
 {
-    KoEventActionRegistry * registry = &(singleton->q);
-    if (! singleton->initDone) {
+    KoEventActionRegistry *registry = &(singleton->q);
+    if (!singleton->initDone) {
         singleton->initDone = true;
         registry->init();
     }
@@ -49,7 +50,7 @@ KoEventActionRegistry * KoEventActionRegistry::instance()
 }
 
 KoEventActionRegistry::KoEventActionRegistry()
-        : d(new Private())
+    : d(new Private())
 {
 }
 
@@ -58,16 +59,16 @@ KoEventActionRegistry::~KoEventActionRegistry()
     delete d;
 }
 
-void KoEventActionRegistry::addPresentationEventAction(KoEventActionFactoryBase * factory)
+void KoEventActionRegistry::addPresentationEventAction(KoEventActionFactoryBase *factory)
 {
-    const QString & action = factory->action();
-    if (! action.isEmpty()) {
+    const QString &action = factory->action();
+    if (!action.isEmpty()) {
         d->presentationEventActionFactories.insert(factory->id(), factory);
         d->presentationEventActions.insert(action, factory);
     }
 }
 
-void KoEventActionRegistry::addScriptEventAction(KoEventActionFactoryBase * factory)
+void KoEventActionRegistry::addScriptEventAction(KoEventActionFactoryBase *factory)
 {
     d->scriptEventActionFactories.insert(factory->id(), factory);
 }
@@ -95,20 +96,21 @@ void KoEventActionRegistry::init()
     KoPluginLoader::load(QStringLiteral("calligra/scripteventactions"), config);
 }
 
-QSet<KoEventAction*> KoEventActionRegistry::createEventActionsFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const
+QSet<KoEventAction *> KoEventActionRegistry::createEventActionsFromOdf(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     QSet<KoEventAction *> eventActions;
 
     if (e.namespaceURI() == KoXmlNS::office && e.tagName() == "event-listeners") {
         KoXmlElement element;
-        forEachElement(element, e) {
+        forEachElement(element, e)
+        {
             if (element.tagName() == "event-listener") {
                 if (element.namespaceURI() == KoXmlNS::presentation) {
                     QString action(element.attributeNS(KoXmlNS::presentation, "action", QString()));
                     QHash<QString, KoEventActionFactoryBase *>::const_iterator it(d->presentationEventActions.find(action));
 
                     if (it != d->presentationEventActions.constEnd()) {
-                        KoEventAction * eventAction = it.value()->createEventAction();
+                        KoEventAction *eventAction = it.value()->createEventAction();
                         if (eventAction) {
                             if (eventAction->loadOdf(element, context)) {
                                 eventActions.insert(eventAction);
@@ -134,4 +136,3 @@ QSet<KoEventAction*> KoEventActionRegistry::createEventActionsFromOdf(const KoXm
 
     return eventActions;
 }
-

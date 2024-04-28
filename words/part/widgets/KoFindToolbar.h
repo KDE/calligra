@@ -5,8 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
-
 #ifndef KOFINDTOOLBAR_H
 #define KOFINDTOOLBAR_H
 
@@ -46,10 +44,10 @@ public Q_SLOTS:
      * Set focus to this widget, show it including replace related features.
      */
     void activateReplace();
-    
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
     Q_PRIVATE_SLOT(d, void matchFound())
     Q_PRIVATE_SLOT(d, void noMatchFound())

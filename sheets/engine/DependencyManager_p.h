@@ -38,7 +38,7 @@ public:
      * \see removeDependencies
      * \see computeDependencies
      */
-    void generateDependencies(const CellBase& cell, const Formula& formula);
+    void generateDependencies(const CellBase &cell, const Formula &formula);
 
     /**
      * Computes the reference depth.
@@ -64,32 +64,32 @@ public:
      * \see computeDepth
      * \see generateDepths(CellBase cell)
      */
-    void generateDepths(const Region& region);
+    void generateDepths(const Region &region);
 
     /**
      * Generates the depth of cell and all of its consumers.
      * Calls itself recursively for the cell's consuming cells.
      */
-    void generateDepths(CellBase cell, QSet<CellBase>& computedDepths);
+    void generateDepths(CellBase cell, QSet<CellBase> &computedDepths);
 
     /**
      * Returns the region, that consumes the value of \p cell.
      * \see DependencyManager::consumingRegion(const CellBase&)
      * \return region consuming \p cell 's value
      */
-    Region consumingRegion(const CellBase& cell) const;
+    Region consumingRegion(const CellBase &cell) const;
 
-    void namedAreaModified(const QString& name);
+    void namedAreaModified(const QString &name);
 
     /**
      * Removes all dependencies of \p cell .
      */
-    void removeDependencies(const CellBase& cell);
+    void removeDependencies(const CellBase &cell);
 
     /**
      * Removes the depths of \p cell and all its consumers.
      */
-    void removeDepths(const CellBase& cell);
+    void removeDepths(const CellBase &cell);
 
     /**
      * Computes and stores the dependencies.
@@ -105,28 +105,28 @@ public:
      * for performance reasons.
      * Do not call this method for a \p cell not containing a \p formula.
      */
-    void computeDependencies(const CellBase& cell, const Formula& formula);
+    void computeDependencies(const CellBase &cell, const Formula &formula);
 
     enum Direction { Forward, Backward };
     /**
      * Removes the circular dependency flag from \p region and all their dependencies.
      */
-    void removeCircularDependencyFlags(const Region& region, Direction direction);
+    void removeCircularDependencyFlags(const Region &region, Direction direction);
 
     /**
      * For debugging/testing purposes.
      */
     void dump() const;
 
-    const MapBase* map;
+    const MapBase *map;
     // stores providing regions ordered by their consuming cell locations
     // use QMap rather then QHash cause it's faster for our use-case
     QMap<CellBase, Region> providers;
     // stores consuming cell locations ordered by their providing regions
-    QHash<SheetBase*, RTree<CellBase>*> consumers;
+    QHash<SheetBase *, RTree<CellBase> *> consumers;
     // stores consuming cell locations ordered by their providing named area
     // (in addition to the general storage of the consuming cell locations)
-    QHash<QString, QList<CellBase> > namedAreaConsumers;
+    QHash<QString, QList<CellBase>> namedAreaConsumers;
     /*
      * Stores cells with its reference depth.
      * Depth means the maximum depth of all cells this cell depends on plus one,

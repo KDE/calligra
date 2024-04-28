@@ -6,8 +6,8 @@
 
 #include "KoDetailsPane.h"
 
-#include <QStandardItemModel>
 #include <QKeyEvent>
+#include <QStandardItemModel>
 
 ////////////////////////////////////
 // class KoDetailsPane
@@ -16,20 +16,22 @@
 class KoDetailsPanePrivate
 {
 public:
-    KoDetailsPanePrivate() {
+    KoDetailsPanePrivate()
+    {
         m_model = new QStandardItemModel;
     }
-    ~KoDetailsPanePrivate() {
+    ~KoDetailsPanePrivate()
+    {
         delete m_model;
     }
 
-    QStandardItemModel* m_model;
+    QStandardItemModel *m_model;
 };
 
-KoDetailsPane::KoDetailsPane(QWidget* parent, const QString& header)
-        : QWidget(parent),
-        Ui_KoDetailsPaneBase(),
-        d(new KoDetailsPanePrivate)
+KoDetailsPane::KoDetailsPane(QWidget *parent, const QString &header)
+    : QWidget(parent)
+    , Ui_KoDetailsPaneBase()
+    , d(new KoDetailsPanePrivate)
 {
     d->m_model->setHorizontalHeaderItem(0, new QStandardItem(header));
 
@@ -43,10 +45,8 @@ KoDetailsPane::KoDetailsPane(QWidget* parent, const QString& header)
 
     changePalette();
 
-    connect(m_documentList->selectionModel(), &QItemSelectionModel::currentChanged,
-            this, &KoDetailsPane::selectionChanged);
-    connect(m_documentList, &QTreeView::doubleClicked,
-            this, QOverload<const QModelIndex &>::of(&KoDetailsPane::openFile));
+    connect(m_documentList->selectionModel(), &QItemSelectionModel::currentChanged, this, &KoDetailsPane::selectionChanged);
+    connect(m_documentList, &QTreeView::doubleClicked, this, QOverload<const QModelIndex &>::of(&KoDetailsPane::openFile));
     connect(m_openButton, &QPushButton::clicked, this, QOverload<>::of(&KoDetailsPane::openFile));
 }
 
@@ -55,7 +55,7 @@ KoDetailsPane::~KoDetailsPane()
     delete d;
 }
 
-bool KoDetailsPane::eventFilter(QObject* watched, QEvent* e)
+bool KoDetailsPane::eventFilter(QObject *watched, QEvent *e)
 {
     if (watched == m_previewLabel) {
         if (e->type() == QEvent::MouseButtonDblClick) {
@@ -69,7 +69,7 @@ bool KoDetailsPane::eventFilter(QObject* watched, QEvent* e)
         }
 
         if ((e->type() == QEvent::KeyPress)) {
-            QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(e);
 
             if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
                 openFile();
@@ -80,7 +80,7 @@ bool KoDetailsPane::eventFilter(QObject* watched, QEvent* e)
     return false;
 }
 
-void KoDetailsPane::resizeSplitter(KoDetailsPane* sender, const QList<int>& sizes)
+void KoDetailsPane::resizeSplitter(KoDetailsPane *sender, const QList<int> &sizes)
 {
     if (sender == this)
         return;
@@ -102,7 +102,7 @@ void KoDetailsPane::changePalette()
     m_detailsLabel->setPalette(p);
 }
 
-QStandardItemModel* KoDetailsPane::model() const
+QStandardItemModel *KoDetailsPane::model() const
 {
     return d->m_model;
 }

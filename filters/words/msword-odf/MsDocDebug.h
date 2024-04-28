@@ -24,7 +24,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &MSDOC_LOG();
 
 #define debugMsDoc qCDebug(MSDOC_LOG)

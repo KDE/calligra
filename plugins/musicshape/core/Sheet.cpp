@@ -4,26 +4,29 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "Sheet.h"
+#include "Bar.h"
 #include "Part.h"
 #include "PartGroup.h"
-#include "Bar.h"
-#include "StaffSystem.h"
 #include "Staff.h"
+#include "StaffSystem.h"
 
 #include <QList>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Sheet::Private
 {
 public:
-    QList<Part*> parts;
-    QList<PartGroup*> partGroups;
-    QList<Bar*> bars;
-    QList<StaffSystem*> staffSystems;
+    QList<Part *> parts;
+    QList<PartGroup *> partGroups;
+    QList<Bar *> bars;
+    QList<StaffSystem *> staffSystems;
 };
 
-Sheet::Sheet(QObject* parent) : QObject(parent), d(new Private)
+Sheet::Sheet(QObject *parent)
+    : QObject(parent)
+    , d(new Private)
 {
 }
 
@@ -37,46 +40,46 @@ int Sheet::partCount() const
     return d->parts.size();
 }
 
-Part* Sheet::part(int index)
+Part *Sheet::part(int index)
 {
-    Q_ASSERT( index >= 0 && index < partCount() );
+    Q_ASSERT(index >= 0 && index < partCount());
     return d->parts[index];
 }
 
-int Sheet::partIndex(Part* part)
+int Sheet::partIndex(Part *part)
 {
     return d->parts.indexOf(part);
 }
 
-Part* Sheet::addPart(const QString& name)
+Part *Sheet::addPart(const QString &name)
 {
-    Part* part = new Part(this, name);
+    Part *part = new Part(this, name);
     d->parts.append(part);
     emit partAdded(d->parts.size(), part);
     return part;
 }
 
-void Sheet::addPart(Part* part)
+void Sheet::addPart(Part *part)
 {
-    Q_ASSERT( part );
+    Q_ASSERT(part);
     part->setParent(this);
     d->parts.append(part);
     emit partAdded(d->parts.size(), part);
 }
 
-Part* Sheet::insertPart(int before, const QString& name)
+Part *Sheet::insertPart(int before, const QString &name)
 {
-    Q_ASSERT( before >= 0 && before <= partCount() );
-    Part* part = new Part(this, name);
+    Q_ASSERT(before >= 0 && before <= partCount());
+    Part *part = new Part(this, name);
     d->parts.insert(before, part);
     emit partAdded(before, part);
     return part;
 }
 
-void Sheet::insertPart(int before, Part* part)
+void Sheet::insertPart(int before, Part *part)
 {
-    Q_ASSERT( before >= 0 && before <= partCount() );
-    Q_ASSERT( part );
+    Q_ASSERT(before >= 0 && before <= partCount());
+    Q_ASSERT(part);
     part->setParent(this);
     d->parts.insert(before, part);
     emit partAdded(before, part);
@@ -84,19 +87,19 @@ void Sheet::insertPart(int before, Part* part)
 
 void Sheet::removePart(int index, bool deletePart)
 {
-    Q_ASSERT( index >= 0 && index < partCount() );
-    Part* part = d->parts.takeAt(index);
+    Q_ASSERT(index >= 0 && index < partCount());
+    Part *part = d->parts.takeAt(index);
     emit partRemoved(index, part);
     if (deletePart) {
         delete part;
     }
 }
 
-void Sheet::removePart(Part* part, bool deletePart)
+void Sheet::removePart(Part *part, bool deletePart)
 {
-    Q_ASSERT( part && part->sheet() == this);
+    Q_ASSERT(part && part->sheet() == this);
     int index = d->parts.indexOf(part);
-    Q_ASSERT( index != -1 );
+    Q_ASSERT(index != -1);
     removePart(index, deletePart);
 }
 
@@ -105,26 +108,26 @@ int Sheet::partGroupCount() const
     return d->partGroups.size();
 }
 
-PartGroup* Sheet::partGroup(int index)
+PartGroup *Sheet::partGroup(int index)
 {
-    Q_ASSERT( index >= 0 && index < partGroupCount() );
+    Q_ASSERT(index >= 0 && index < partGroupCount());
     return d->partGroups[index];
 }
 
-PartGroup* Sheet::addPartGroup(int firstPart, int lastPart)
+PartGroup *Sheet::addPartGroup(int firstPart, int lastPart)
 {
-    Q_ASSERT( firstPart >= 0 && firstPart < partCount() );
-    Q_ASSERT( lastPart >= 0 && lastPart < partCount() );
+    Q_ASSERT(firstPart >= 0 && firstPart < partCount());
+    Q_ASSERT(lastPart >= 0 && lastPart < partCount());
     PartGroup *group = new PartGroup(this, firstPart, lastPart);
     d->partGroups.append(group);
     return group;
 }
 
-void Sheet::removePartGroup(PartGroup* group, bool deleteGroup)
+void Sheet::removePartGroup(PartGroup *group, bool deleteGroup)
 {
-    Q_ASSERT( group && group->sheet() == this );
+    Q_ASSERT(group && group->sheet() == this);
     int index = d->partGroups.indexOf(group);
-    Q_ASSERT( index != -1 );
+    Q_ASSERT(index != -1);
     d->partGroups.removeAt(index);
     if (deleteGroup) {
         delete group;
@@ -136,50 +139,50 @@ int Sheet::barCount() const
     return d->bars.size();
 }
 
-Bar* Sheet::bar(int index)
+Bar *Sheet::bar(int index)
 {
-    Q_ASSERT( index >= 0 && index < barCount() );
+    Q_ASSERT(index >= 0 && index < barCount());
     return d->bars[index];
 }
 
-int Sheet::indexOfBar(Bar* bar)
+int Sheet::indexOfBar(Bar *bar)
 {
-    Q_ASSERT( bar );
+    Q_ASSERT(bar);
     return d->bars.indexOf(bar);
 }
 
 void Sheet::addBars(int count)
 {
     for (int i = 0; i < count; i++) {
-	d->bars.append(new Bar(this));
+        d->bars.append(new Bar(this));
     }
 }
 
-Bar* Sheet::addBar()
+Bar *Sheet::addBar()
 {
-    Bar* bar = new Bar(this);
+    Bar *bar = new Bar(this);
     d->bars.append(bar);
     return bar;
 }
 
-Bar* Sheet::insertBar(int before)
+Bar *Sheet::insertBar(int before)
 {
-    Q_ASSERT( before >= 0 && before <= barCount() );
-    Bar* bar = new Bar(this);
+    Q_ASSERT(before >= 0 && before <= barCount());
+    Bar *bar = new Bar(this);
     d->bars.insert(before, bar);
     return bar;
 }
 
-void Sheet::insertBar(int before, Bar* bar)
+void Sheet::insertBar(int before, Bar *bar)
 {
-    Q_ASSERT( before >= 0 && before <= barCount() );
+    Q_ASSERT(before >= 0 && before <= barCount());
     d->bars.insert(before, bar);
 }
 
 void Sheet::removeBar(int index, bool deleteBar)
 {
-    Q_ASSERT( index >= 0 && index < barCount() );
-    Bar* bar = d->bars.takeAt(index);
+    Q_ASSERT(index >= 0 && index < barCount());
+    Bar *bar = d->bars.takeAt(index);
     if (deleteBar) {
         delete bar;
     }
@@ -187,30 +190,30 @@ void Sheet::removeBar(int index, bool deleteBar)
 
 void Sheet::removeBars(int index, int count, bool deleteBar)
 {
-    Q_ASSERT( index >= 0 && count > 0 && index + count <= barCount() );
+    Q_ASSERT(index >= 0 && count > 0 && index + count <= barCount());
     for (int i = 0; i < count; i++) {
-        Bar* b = d->bars.takeAt(index);
+        Bar *b = d->bars.takeAt(index);
         if (deleteBar) {
             delete b;
         }
     }
 }
 
-StaffSystem* Sheet::staffSystem(int index)
+StaffSystem *Sheet::staffSystem(int index)
 {
-    Q_ASSERT( index >= 0 );
+    Q_ASSERT(index >= 0);
     int idx = d->staffSystems.size();
     qreal ssHeight = 0;
     if (partCount() > 0) {
-        Part* prt = part(partCount() - 1);
+        Part *prt = part(partCount() - 1);
         ssHeight = prt->staff(prt->staffCount() - 1)->bottom() + 30;
     }
     while (index >= d->staffSystems.size()) {
         StaffSystem *ss = new StaffSystem(this);
         ss->setHeight(ssHeight);
         if (idx > 0 && partCount() > 0) {
-            Part* prt = part(partCount() - 1);
-            ss->setTop(d->staffSystems[idx-1]->top() + prt->staff(prt->staffCount() - 1)->bottom() + 30);
+            Part *prt = part(partCount() - 1);
+            ss->setTop(d->staffSystems[idx - 1]->top() + prt->staff(prt->staffCount() - 1)->bottom() + 30);
         }
         d->staffSystems.append(ss);
         idx++;
@@ -220,7 +223,7 @@ StaffSystem* Sheet::staffSystem(int index)
 
 void Sheet::setStaffSystemCount(int count)
 {
-    Q_ASSERT( count >= 0 );
+    Q_ASSERT(count >= 0);
     while (count < d->staffSystems.size()) {
         d->staffSystems.removeLast();
     }
@@ -233,7 +236,7 @@ int Sheet::staffSystemCount()
 
 void Sheet::updateAccidentals()
 {
-    foreach (Part* part, d->parts) {
+    foreach (Part *part, d->parts) {
         for (int i = 0; i < part->staffCount(); i++) {
             part->staff(i)->updateAccidentals();
         }

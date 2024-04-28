@@ -18,8 +18,7 @@ class TemplateShape;
 class ChangeSomethingCommand : public KUndo2Command
 {
 public:
-    ChangeSomethingCommand(TemplateShape *shape, KoSomethingData *newSomethingData,
-                           KUndo2Command *parent = 0);
+    ChangeSomethingCommand(TemplateShape *shape, KoSomethingData *newSomethingData, KUndo2Command *parent = 0);
     virtual ~ChangeSomethingCommand();
 
     /// redo the command

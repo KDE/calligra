@@ -5,19 +5,19 @@
  */
 
 #include "KoCell.h"
-#include "KoDummyCellValue.h"
 #include "KoCellChild.h"
 #include "KoCellStyle.h"
+#include "KoDummyCellValue.h"
 
 #include <KoXmlWriter.h>
 
 KoCell::KoCell()
-: m_value(new KoDummyCellValue)
-, m_style(0)
-, m_rowSpan(1)
-, m_columnSpan(1)
-, m_protected(false)
-, m_covered(false)
+    : m_value(new KoDummyCellValue)
+    , m_style(0)
+    , m_rowSpan(1)
+    , m_columnSpan(1)
+    , m_protected(false)
+    , m_covered(false)
 {
 }
 
@@ -27,40 +27,39 @@ KoCell::~KoCell()
     qDeleteAll(m_children);
 }
 
-void KoCell::saveOdf(KoXmlWriter& writer, KoGenStyles& styles)
+void KoCell::saveOdf(KoXmlWriter &writer, KoGenStyles &styles)
 {
     if (m_covered) {
         writer.startElement("table:covered-table-cell");
         writer.endElement(); // table:covered-table-cell
-    }
-    else {
+    } else {
         writer.startElement("table:table-cell");
         m_value->saveOdf(writer);
-        if(m_style) {
+        if (m_style) {
             writer.addAttribute("table:style-name", m_style->saveOdf(styles));
         }
-        if(m_columnSpan > 1) {
+        if (m_columnSpan > 1) {
             writer.addAttribute("table:number-columns-spanned", m_columnSpan);
         }
-        if(m_rowSpan > 1) {
+        if (m_rowSpan > 1) {
             writer.addAttribute("table:number-rows-spanned", m_rowSpan);
         }
-        writer.addAttribute("table:protected", m_protected? "true" : "false" );
+        writer.addAttribute("table:protected", m_protected ? "true" : "false");
 
-        foreach(KoCellChild* child, m_children){
+        foreach (KoCellChild *child, m_children) {
             child->saveOdf(writer, styles);
         }
 
-        writer.endElement();//table:table-cell
+        writer.endElement(); // table:table-cell
     }
 }
 
-KoCellValue* KoCell::value() const
+KoCellValue *KoCell::value() const
 {
     return m_value;
 }
 
-void KoCell::setValue(KoCellValue* value)
+void KoCell::setValue(KoCellValue *value)
 {
     delete m_value;
     m_value = value;
@@ -76,18 +75,18 @@ void KoCell::setStyle(KoCellStyle::Ptr style)
     m_style = style;
 }
 
-QList< KoCellChild* > KoCell::children() const
+QList<KoCellChild *> KoCell::children() const
 {
     return m_children;
 }
 
-void KoCell::setChildren(QList< KoCellChild* > children)
+void KoCell::setChildren(QList<KoCellChild *> children)
 {
     qDeleteAll(m_children);
     m_children = children;
 }
 
-void KoCell::appendChild(KoCellChild* child)
+void KoCell::appendChild(KoCellChild *child)
 {
     m_children.append(child);
 }

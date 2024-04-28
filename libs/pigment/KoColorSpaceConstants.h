@@ -2,13 +2,13 @@
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.bet
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef _KO_COLOR_SPACE_CONSTANTS_H_
 #define _KO_COLOR_SPACE_CONSTANTS_H_
 
-#include <climits>
 #include <QtGlobal>
+#include <climits>
 
 // TODO: find a better place or way to define those stuff
 const quint8 OPACITY_TRANSPARENT_U8 = 0;

@@ -20,12 +20,11 @@
 #ifndef _XML_H_
 #define _XML_H_
 
-
 #include <KoXmlWriter.h>
 
 namespace Xml
 {
-inline void writeBraindumpNS(KoXmlWriter& bodyWriter)
+inline void writeBraindumpNS(KoXmlWriter &bodyWriter)
 {
     bodyWriter.addAttribute("xmlns:braindump", "http://kde.org/braindump");
 }

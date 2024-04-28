@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2010 Jan Hambrecht <jaham@gmx.net>
-*
-* SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ * SPDX-FileCopyrightText: 2010 Jan Hambrecht <jaham@gmx.net>
+ *
+ * SPDX-License-Identifier: LGPL-2.1-or-later
+ */
 
 #ifndef KOFILTEREFFECTLOADINGCONTEXT_H
 #define KOFILTEREFFECTLOADINGCONTEXT_H
@@ -20,9 +20,9 @@ class FLAKE_EXPORT KoFilterEffectLoadingContext
 {
 public:
     /**
-    * Constructs a new filter effect loading context
-    * @param basePath the xml document base path
-    */
+     * Constructs a new filter effect loading context
+     * @param basePath the xml document base path
+     */
     explicit KoFilterEffectLoadingContext(const QString &basePath);
 
     /// Destructor
@@ -64,8 +64,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOFILTEREFFECTLOADINGCONTEXT_H
-

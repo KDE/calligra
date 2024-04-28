@@ -17,8 +17,8 @@
 #include "DocxXmlDocumentReader.h"
 #include <MsooXmlDrawingTableStyle.h>
 
-#include <KoGenStyle.h>
 #include <KoCharacterStyle.h>
+#include <KoGenStyle.h>
 
 //! A class reading MSOOXML DOCX markup - styles.xml part.
 /*! @todo generalize for other MSOOXML subformats.
@@ -31,7 +31,7 @@ public:
     ~DocxXmlStylesReader() override;
 
     //! Reads/parses the file. The output goes mainly to KoGenStyles* KoOdfWriters::mainStyles
-    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0) override;
 
 protected:
     KoFilter::ConversionStatus read_docDefaults();
@@ -41,16 +41,16 @@ protected:
     KoFilter::ConversionStatus read_name();
     KoFilter::ConversionStatus read_tblStylePr();
 
-    QMap<QByteArray, KoGenStyle*> m_defaultStyles;
-    void createDefaultStyle(KoGenStyle::Type type, const char* family);
+    QMap<QByteArray, KoGenStyle *> m_defaultStyles;
+    void createDefaultStyle(KoGenStyle::Type type, const char *family);
 
     QString m_name; //!< set by read_name()
 
-    MSOOXML::DrawingTableStyle* m_currentStyle;
+    MSOOXML::DrawingTableStyle *m_currentStyle;
 
 private:
     void init();
-//#include <MsooXmlCommonReaderMethods.h>
+    // #include <MsooXmlCommonReaderMethods.h>
 };
 
 #endif

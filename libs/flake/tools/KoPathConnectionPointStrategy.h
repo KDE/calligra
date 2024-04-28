@@ -9,8 +9,8 @@
 #ifndef KO_PATH_CONNECTION_POINT_STRATEGY
 #define KO_PATH_CONNECTION_POINT_STRATEGY
 
-#include "flake_export.h"
 #include "KoParameterChangeStrategy.h"
+#include "flake_export.h"
 
 class KoConnectionShape;
 class QPointF;
@@ -26,11 +26,10 @@ public:
     ~KoPathConnectionPointStrategy() override;
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
-    KUndo2Command* createCommand() override;
+    KUndo2Command *createCommand() override;
 
 private:
     Q_DECLARE_PRIVATE(KoPathConnectionPointStrategy)
 };
-
 
 #endif

@@ -10,8 +10,8 @@
 #include "CellBase.h"
 #include "SheetsDebug.h"
 
-#include <cmath>
 #include <QRegularExpression>
+#include <cmath>
 
 using namespace Qt::StringLiterals;
 
@@ -22,7 +22,7 @@ int Calligra::Sheets::Util::decodeColumnLabelText(const QString &labelText)
     int counterColumn = 0;
     const uint totalLength = labelText.length();
     uint labelTextLength = 0;
-    for ( ; labelTextLength < totalLength; labelTextLength++) {
+    for (; labelTextLength < totalLength; labelTextLength++) {
         const char c = labelText[labelTextLength].toLatin1();
         if (labelTextLength == 0 && c == '$')
             continue; // eat an absolute reference char that could be at the beginning only
@@ -35,9 +35,9 @@ int Calligra::Sheets::Util::decodeColumnLabelText(const QString &labelText)
     }
     for (uint i = 0; i < labelTextLength; i++) {
         const char c = labelText[i].toLatin1();
-        counterColumn = (int) ::pow(26.0 , static_cast<int>(labelTextLength - i - 1));
+        counterColumn = (int)::pow(26.0, static_cast<int>(labelTextLength - i - 1));
         if (c >= 'A' && c <= 'Z')
-            col += counterColumn * (c - 'A' + 1);  // okay here (Werner)
+            col += counterColumn * (c - 'A' + 1); // okay here (Werner)
         else if (c >= 'a' && c <= 'z')
             col += counterColumn * (c - 'A' - offset + 1);
     }
@@ -48,7 +48,7 @@ int Calligra::Sheets::Util::decodeRowLabelText(const QString &labelText)
 {
     static QRegularExpression rx(u"^(|\\$)([A-Za-z]+)(|\\$)([0-9]+)$"_s);
     auto match = rx.match(labelText);
-    if(match.hasMatch())
+    if (match.hasMatch())
         return match.captured(4).toInt();
     return 0;
 }
@@ -103,18 +103,13 @@ bool Calligra::Sheets::Util::isCellReference(const QString &text, int startPos)
     return numberFound && data->isNull(); // we found the number and reached end
 }
 
-
-//Return true when it's a reference to cell from sheet.
+// Return true when it's a reference to cell from sheet.
 bool Calligra::Sheets::Util::localReferenceAnchor(const QString &_ref)
 {
-    bool isLocalRef = (_ref.indexOf("http://") != 0 &&
-                       _ref.indexOf("https://") != 0 &&
-                       _ref.indexOf("mailto:") != 0 &&
-                       _ref.indexOf("ftp://") != 0  &&
-                       _ref.indexOf("file:") != 0);
+    bool isLocalRef = (_ref.indexOf("http://") != 0 && _ref.indexOf("https://") != 0 && _ref.indexOf("mailto:") != 0 && _ref.indexOf("ftp://") != 0
+                       && _ref.indexOf("file:") != 0);
     return isLocalRef;
 }
-
 
 bool Calligra::Sheets::Util::isCellnameCharacter(const QChar &c)
 {
@@ -122,7 +117,8 @@ bool Calligra::Sheets::Util::isCellnameCharacter(const QChar &c)
 }
 
 // used by adjustFormulaReference
-static void replaceFormulaReference(int referencedRow, int referencedColumn, int thisRow, int thisColumn, QString &result, int cellReferenceStart, int cellReferenceLength)
+static void
+replaceFormulaReference(int referencedRow, int referencedColumn, int thisRow, int thisColumn, QString &result, int cellReferenceStart, int cellReferenceLength)
 {
     const QString ref = result.mid(cellReferenceStart, cellReferenceLength);
     QRegularExpression rx(u"^(|\\$)[A-Za-z]+(|\\$)[0-9]+$"_s);
@@ -136,12 +132,11 @@ static void replaceFormulaReference(int referencedRow, int referencedColumn, int
             r += thisRow - referencedRow;
         result.replace(cellReferenceStart,
                        cellReferenceLength,
-                       match.captured(1) + Calligra::Sheets::CellBase::columnName(c) +
-                       match.captured(2) + QString::number(r) );
+                       match.captured(1) + Calligra::Sheets::CellBase::columnName(c) + match.captured(2) + QString::number(r));
     }
 }
 
-QString Calligra::Sheets::Util::adjustFormulaReference(const QString& formula, int referencedRow, int referencedColumn, int thisRow, int thisColumn)
+QString Calligra::Sheets::Util::adjustFormulaReference(const QString &formula, int referencedRow, int referencedColumn, int thisRow, int thisColumn)
 {
     QString result = formula;
     if (result.isEmpty())
@@ -149,7 +144,7 @@ QString Calligra::Sheets::Util::adjustFormulaReference(const QString& formula, i
     enum { InStart, InCellReference, InString, InSheetOrAreaName } state;
     state = InStart;
     int cellReferenceStart = 0;
-    for(int i = 1; i < result.length(); ++i) {
+    for (int i = 1; i < result.length(); ++i) {
         QChar ch = result[i];
         switch (state) {
         case InStart:
@@ -184,10 +179,8 @@ QString Calligra::Sheets::Util::adjustFormulaReference(const QString& formula, i
             break;
         };
     }
-    if(state == InCellReference) {
+    if (state == InCellReference) {
         replaceFormulaReference(referencedRow, referencedColumn, thisRow, thisColumn, result, cellReferenceStart, result.length() - cellReferenceStart);
     }
     return result;
 }
-
-

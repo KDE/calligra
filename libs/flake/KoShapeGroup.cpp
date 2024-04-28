@@ -6,18 +6,18 @@
  */
 
 #include "KoShapeGroup.h"
+#include "KoInsets.h"
 #include "KoShapeContainerModel.h"
 #include "KoShapeContainer_p.h"
 #include "KoShapeLayer.h"
-#include "SimpleShapeContainerModel.h"
-#include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
-#include "KoXmlWriter.h"
-#include "KoXmlReader.h"
 #include "KoShapeRegistry.h"
-#include "KoShapeStrokeModel.h"
+#include "KoShapeSavingContext.h"
 #include "KoShapeShadow.h"
-#include "KoInsets.h"
+#include "KoShapeStrokeModel.h"
+#include "KoXmlReader.h"
+#include "KoXmlWriter.h"
+#include "SimpleShapeContainerModel.h"
 
 #include <FlakeDebug.h>
 
@@ -28,8 +28,13 @@
 class ShapeGroupContainerModel : public SimpleShapeContainerModel
 {
 public:
-    ShapeGroupContainerModel(KoShapeGroup *group) : m_group(group) {}
-    ~ShapeGroupContainerModel() override {}
+    ShapeGroupContainerModel(KoShapeGroup *group)
+        : m_group(group)
+    {
+    }
+    ~ShapeGroupContainerModel() override
+    {
+    }
 
     void add(KoShape *child) override
     {
@@ -46,7 +51,7 @@ public:
     void childChanged(KoShape *shape, KoShape::ChangeType type) override
     {
         SimpleShapeContainerModel::childChanged(shape, type);
-        //debugFlake << type;
+        // debugFlake << type;
         switch (type) {
         case KoShape::PositionChanged:
         case KoShape::RotationChanged:
@@ -55,7 +60,7 @@ public:
         case KoShape::SizeChanged:
         case KoShape::GenericMatrixChange:
         case KoShape::ParameterChanged:
-        case KoShape::ClipPathChanged :
+        case KoShape::ClipPathChanged:
             m_group->invalidateSizeCache();
             break;
         default:
@@ -64,15 +69,15 @@ public:
     }
 
 private: // members
-    KoShapeGroup * m_group;
+    KoShapeGroup *m_group;
 };
 
 class KoShapeGroupPrivate : public KoShapeContainerPrivate
 {
 public:
     KoShapeGroupPrivate(KoShapeGroup *q)
-    : KoShapeContainerPrivate(q)
-    , sizeCached(false)
+        : KoShapeContainerPrivate(q)
+        , sizeCached(false)
     {
         model = new ShapeGroupContainerModel(q);
     }
@@ -85,7 +90,7 @@ public:
 };
 
 KoShapeGroup::KoShapeGroup()
-        : KoShapeContainer(*(new KoShapeGroupPrivate(this)))
+    : KoShapeContainer(*(new KoShapeGroupPrivate(this)))
 {
     setSize(QSizeF(0, 0));
 }
@@ -109,10 +114,10 @@ bool KoShapeGroup::hitTest(const QPointF &position) const
 QSizeF KoShapeGroup::size() const
 {
     Q_D(const KoShapeGroup);
-    //debugFlake << "size" << d->size;
+    // debugFlake << "size" << d->size;
     if (!d->sizeCached) {
         QRectF bound;
-        foreach(KoShape *shape, shapes()) {
+        foreach (KoShape *shape, shapes()) {
             if (bound.isEmpty())
                 bound = shape->transformation().mapRect(shape->outlineRect());
             else
@@ -130,7 +135,7 @@ QRectF KoShapeGroup::boundingRect() const
 {
     bool first = true;
     QRectF groupBound;
-    foreach(KoShape* shape, shapes()) {
+    foreach (KoShape *shape, shapes()) {
         if (first) {
             groupBound = shape->boundingRect();
             first = false;
@@ -147,16 +152,16 @@ QRectF KoShapeGroup::boundingRect() const
     return groupBound;
 }
 
-void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
+void KoShapeGroup::saveOdf(KoShapeSavingContext &context) const
 {
     context.xmlWriter().startElement("draw:g");
     saveOdfAttributes(context, (OdfMandatories ^ (OdfLayer | OdfZIndex)) | OdfAdditionalAttributes);
     context.xmlWriter().addAttributePt("svg:y", position().y());
 
-    QList<KoShape*> shapes = this->shapes();
+    QList<KoShape *> shapes = this->shapes();
     std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
-    foreach(KoShape* shape, shapes) {
+    foreach (KoShape *shape, shapes) {
         shape->saveOdf(context);
     }
 
@@ -164,17 +169,18 @@ void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().endElement();
 }
 
-bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool KoShapeGroup::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_D(KoShapeGroup);
     loadOdfAttributes(element, context, OdfMandatories | OdfStyle | OdfAdditionalAttributes | OdfCommonChildElements);
 
     KoXmlElement child;
-    QHash<KoShapeLayer*, int> usedLayers;
-    forEachElement(child, element) {
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
+    QHash<KoShapeLayer *, int> usedLayers;
+    forEachElement(child, element)
+    {
+        KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
         if (shape) {
-            KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape->parent());
+            KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(shape->parent());
             if (layer) {
                 usedLayers[layer]++;
             }
@@ -184,7 +190,7 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     KoShapeLayer *parent = 0;
     int maxUseCount = 0;
     // find most used layer and use this as parent for the group
-    for (QHash<KoShapeLayer*, int>::const_iterator it(usedLayers.constBegin()); it != usedLayers.constEnd(); ++it) {
+    for (QHash<KoShapeLayer *, int>::const_iterator it(usedLayers.constBegin()); it != usedLayers.constEnd(); ++it) {
         if (it.value() > maxUseCount) {
             maxUseCount = it.value();
             parent = it.key();
@@ -194,8 +200,8 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
 
     QRectF bound;
     bool boundInitialized = false;
-    foreach(KoShape * shape, shapes()) {
-        if (! boundInitialized) {
+    foreach (KoShape *shape, shapes()) {
+        if (!boundInitialized) {
             bound = shape->boundingRect();
             boundInitialized = true;
         } else
@@ -206,7 +212,7 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     d->sizeCached = true;
     setPosition(bound.topLeft());
 
-    foreach(KoShape * shape, shapes())
+    foreach (KoShape *shape, shapes())
         shape->setAbsolutePosition(shape->absolutePosition() - bound.topLeft());
 
     return true;
@@ -217,8 +223,7 @@ void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
     Q_UNUSED(shape);
     KoShapeContainer::shapeChanged(type, shape);
     switch (type) {
-    case KoShape::StrokeChanged:
-    {
+    case KoShape::StrokeChanged: {
         KoShapeStrokeModel *str = stroke();
         if (str) {
             if (str->deref())
@@ -237,4 +242,3 @@ void KoShapeGroup::invalidateSizeCache()
     Q_D(KoShapeGroup);
     d->sizeCached = false;
 }
-

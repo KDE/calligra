@@ -6,8 +6,8 @@
 */
 
 #include "KoGenChanges.h"
-#include <KoXmlWriter.h>
 #include <KoElementReference.h>
+#include <KoXmlWriter.h>
 
 #include <QList>
 #include <QMap>
@@ -19,22 +19,22 @@ class Q_DECL_HIDDEN KoGenChanges::Private
 {
 public:
     Private(KoGenChanges *q)
-       : q(q)
-    { }
-
+        : q(q)
+    {
+    }
 
     struct NamedChange {
-        const KoGenChange* change; ///< @note owned by the collection
+        const KoGenChange *change; ///< @note owned by the collection
         QString name;
     };
 
     /// style definition -> name
-    QMap<KoGenChange, QString>  changeMap;
+    QMap<KoGenChange, QString> changeMap;
 
     /// List of styles (used to preserve ordering)
     QList<NamedChange> changeArray;
 
-    QMap<KoGenChange, QString> ::iterator insertChange(const KoGenChange &change);
+    QMap<KoGenChange, QString>::iterator insertChange(const KoGenChange &change);
 
     KoGenChanges *q;
 };
@@ -49,9 +49,9 @@ KoGenChanges::~KoGenChanges()
     delete d;
 }
 
-QString KoGenChanges::insert(const KoGenChange& change)
+QString KoGenChanges::insert(const KoGenChange &change)
 {
-    QMap<KoGenChange, QString> ::iterator it = d->changeMap.find(change);
+    QMap<KoGenChange, QString>::iterator it = d->changeMap.find(change);
     if (it == d->changeMap.end()) {
         it = d->insertChange(change);
     }
@@ -62,9 +62,15 @@ QMap<KoGenChange, QString>::iterator KoGenChanges::Private::insertChange(const K
 {
     QString changeName;
     switch (change.type()) {
-    case KoGenChange::InsertChange: changeName = 'I'; break;
-    case KoGenChange::FormatChange: changeName = 'F'; break;
-    case KoGenChange::DeleteChange: changeName = 'D'; break;
+    case KoGenChange::InsertChange:
+        changeName = 'I';
+        break;
+    case KoGenChange::FormatChange:
+        changeName = 'F';
+        break;
+    case KoGenChange::DeleteChange:
+        changeName = 'D';
+        break;
     default:
         changeName = 'C';
     }
@@ -80,7 +86,7 @@ QMap<KoGenChange, QString>::iterator KoGenChanges::Private::insertChange(const K
     return it;
 }
 
-void KoGenChanges::saveOdfChanges(KoXmlWriter* xmlWriter, bool trackChanges) const
+void KoGenChanges::saveOdfChanges(KoXmlWriter *xmlWriter, bool trackChanges) const
 {
     QMap<KoGenChange, QString>::const_iterator it = d->changeMap.constBegin();
 
@@ -89,9 +95,9 @@ void KoGenChanges::saveOdfChanges(KoXmlWriter* xmlWriter, bool trackChanges) con
     } else {
         xmlWriter->startElement("text:tracked-changes");
         xmlWriter->addAttribute("text:track-changes", trackChanges);
-   }
+    }
 
-    for (; it != d->changeMap.constEnd() ; ++it) {
+    for (; it != d->changeMap.constEnd(); ++it) {
         KoGenChange change = it.key();
         change.writeChange(xmlWriter, it.value());
     }

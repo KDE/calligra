@@ -15,45 +15,27 @@
 // the stack.
 
 protected:
-
 #include "MsooXmlDrawingMLShared.h"
 
 //! When dealing with colors there's no way to know what type of
 //! attribute we are setting. While MSOOXML doesn't need to know the
 //! context in which a color is used, ODF does need to know this.
-enum ColorType {
-    BackgroundColor,
-    OutlineColor,
-    TextColor,
-    GradientColor
-};
+enum ColorType { BackgroundColor, OutlineColor, TextColor, GradientColor };
 
 enum blipFillCaller {
     blipFill_lockedCanvas = 'a',
     blipFill_spPr = 'a',
-    blipFill_pic = 'p', //dml in pptx; for dml in docx use 'pic'
-    blipFill_rPr = 'p', //dml
+    blipFill_pic = 'p', // dml in pptx; for dml in docx use 'pic'
+    blipFill_rPr = 'p', // dml
     blipFill_bgPr = 'a', // pptx
     blipFill_grpSpPr = 'a'
 };
 
-enum cNvPrCaller {
-    cNvPr_nvSpPr,
-    cNvPr_nvPicPr,
-    cNvPr_nvCxnSpPr
-};
+enum cNvPrCaller { cNvPr_nvSpPr, cNvPr_nvPicPr, cNvPr_nvCxnSpPr };
 
-enum txBodyCaller {
-    DrawingML_txBody_tc,
-    DrawingML_txBody_txSp,
-    DrawingML_txBody_sp
-};
+enum txBodyCaller { DrawingML_txBody_tc, DrawingML_txBody_txSp, DrawingML_txBody_sp };
 
-enum spacingType {
-    spacingMarginTop,
-    spacingLines,
-    spacingMarginBottom
-};
+enum spacingType { spacingMarginTop, spacingLines, spacingMarginBottom };
 
 struct GroupProp {
     qint64 svgXOld;
@@ -115,19 +97,19 @@ KoFilter::ConversionStatus read_lockedCanvas();
 // MSOOXML_CURRENT_NS == DRAWINGML_PIC_NS
 // ----------------------------------------
 // The following elements can have a namespace in {a,pic,p,xdr}.
-KoFilter::ConversionStatus read_cNvPicPr(); //done
-KoFilter::ConversionStatus read_cNvPr(cNvPrCaller caller); //done
-KoFilter::ConversionStatus read_nvPicPr(); //done
-KoFilter::ConversionStatus read_pic(); //done
-KoFilter::ConversionStatus read_nvSpPr(); //done
-KoFilter::ConversionStatus read_grpSp(); //done
-KoFilter::ConversionStatus read_grpSpPr(); //done
-KoFilter::ConversionStatus read_nvCxnSpPr(); //done
-KoFilter::ConversionStatus read_cNvSpPr(); //done
-KoFilter::ConversionStatus read_cxnSp(); //done
-KoFilter::ConversionStatus read_sp(); //done
-KoFilter::ConversionStatus read_spPr(); //done
-KoFilter::ConversionStatus read_style(); //done
+KoFilter::ConversionStatus read_cNvPicPr(); // done
+KoFilter::ConversionStatus read_cNvPr(cNvPrCaller caller); // done
+KoFilter::ConversionStatus read_nvPicPr(); // done
+KoFilter::ConversionStatus read_pic(); // done
+KoFilter::ConversionStatus read_nvSpPr(); // done
+KoFilter::ConversionStatus read_grpSp(); // done
+KoFilter::ConversionStatus read_grpSpPr(); // done
+KoFilter::ConversionStatus read_nvCxnSpPr(); // done
+KoFilter::ConversionStatus read_cNvSpPr(); // done
+KoFilter::ConversionStatus read_cxnSp(); // done
+KoFilter::ConversionStatus read_sp(); // done
+KoFilter::ConversionStatus read_spPr(); // done
+KoFilter::ConversionStatus read_style(); // done
 
 // ----------------------------------------
 // MSOOXML_CURRENT_NS "a"
@@ -163,7 +145,7 @@ KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 KoFilter::ConversionStatus read_txSp();
 
 //! Convert attributes of Text Run Properties to ODF equivalents.
-void handleRprAttributes(const QXmlStreamAttributes& attrs);
+void handleRprAttributes(const QXmlStreamAttributes &attrs);
 
 // ----------------------------------------
 // MSOOXML_CURRENT_NS == DRAWINGML_NS
@@ -183,7 +165,7 @@ KoFilter::ConversionStatus read_avLst();
 KoFilter::ConversionStatus read_gd();
 KoFilter::ConversionStatus read_effectLst();
 KoFilter::ConversionStatus read_outerShdw();
-KoFilter::ConversionStatus lvlHelper(const QString& level);
+KoFilter::ConversionStatus lvlHelper(const QString &level);
 KoFilter::ConversionStatus read_lvl1pPr();
 KoFilter::ConversionStatus read_lvl2pPr();
 KoFilter::ConversionStatus read_lvl3pPr();
@@ -216,10 +198,10 @@ KoFilter::ConversionStatus read_spAutoFit();
 //! Inherit default body properties
 void inheritDefaultBodyProperties();
 
-void algnToODF(const char *odfEl, const QString& emuValue);
+void algnToODF(const char *odfEl, const QString &emuValue);
 
 //! Sets the fo:margin-* attribute of graphic-properties for read_anchor().
-void distToODF(const char *odfEl, const QString& emuValue);
+void distToODF(const char *odfEl, const QString &emuValue);
 
 // ----------------------------------------
 // MSOOXML_CURRENT_NS == (DRAWINGML_NS || DRAWINGML_TXBODY_NS)
@@ -291,7 +273,7 @@ int m_svgChY; //!< set by read_chOff()
 int m_svgChWidth; //! set by read_chExt()
 int m_svgChHeight; //! set by read_chExt()
 
-bool m_inGrpSpPr; //Whether we are in group shape, affects transformations
+bool m_inGrpSpPr; // Whether we are in group shape, affects transformations
 bool m_flipH; //! set by read_xfrm()
 bool m_flipV; //! set by read_xfrm()
 
@@ -309,4 +291,3 @@ bool m_hyperLink;
 QString m_hyperLinkTarget;
 
 QString m_recentDestName; // recent image
-

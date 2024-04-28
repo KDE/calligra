@@ -14,8 +14,8 @@
 
 // Local
 #include "ViewAdaptor.h"
-#include "View.h"
 #include "Doc.h"
+#include "View.h"
 
 #include "core/Map.h"
 #include "core/Sheet.h"
@@ -31,8 +31,8 @@ using namespace Calligra::Sheets;
  *
  ************************************************/
 
-ViewAdaptor::ViewAdaptor(View* t)
-        : QDBusAbstractAdaptor(t)
+ViewAdaptor::ViewAdaptor(View *t)
+    : QDBusAbstractAdaptor(t)
 {
     setAutoRelaySignals(true);
     m_view = t;
@@ -67,7 +67,6 @@ void ViewAdaptor::changeNbOfRecentFiles(int _nb)
     m_view->changeNbOfRecentFiles(_nb);
 }
 
-
 void ViewAdaptor::hide()
 {
     m_view->hide();
@@ -88,7 +87,7 @@ void ViewAdaptor::nextSheet()
     m_view->nextSheet();
 }
 
-bool ViewAdaptor::showSheet(const QString& sheetName)
+bool ViewAdaptor::showSheet(const QString &sheetName)
 {
     SheetBase *const bsheet = m_view->doc()->map()->findSheet(sheetName);
     if (!bsheet) {
@@ -111,7 +110,7 @@ void ViewAdaptor::copyAsText()
     m_view->copyAsText();
 }
 
-void ViewAdaptor::setSelection(const QRect& selection)
+void ViewAdaptor::setSelection(const QRect &selection)
 {
     m_view->selection()->initialize(selection);
 }
@@ -121,9 +120,9 @@ QRect ViewAdaptor::selection()
     return m_view->selection()->lastRange();
 }
 
-void ViewAdaptor::setSelectionTextColor(const QColor& txtColor)
+void ViewAdaptor::setSelectionTextColor(const QColor &txtColor)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Text Color"));
     Style s;
@@ -133,9 +132,9 @@ void ViewAdaptor::setSelectionTextColor(const QColor& txtColor)
     command->execute();
 }
 
-void ViewAdaptor::setSelectionBgColor(const QColor& bgColor)
+void ViewAdaptor::setSelectionBgColor(const QColor &bgColor)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Background Color"));
     Style s;
@@ -145,9 +144,9 @@ void ViewAdaptor::setSelectionBgColor(const QColor& bgColor)
     command->execute();
 }
 
-void ViewAdaptor::setSelectionBorderColor(const QColor& bgColor)
+void ViewAdaptor::setSelectionBorderColor(const QColor &bgColor)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Background Color"));
     Style s;
@@ -157,9 +156,9 @@ void ViewAdaptor::setSelectionBorderColor(const QColor& bgColor)
     command->execute();
 }
 
-void ViewAdaptor::setLeftBorderColor(const QColor& color)
+void ViewAdaptor::setLeftBorderColor(const QColor &color)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
     Style s;
@@ -172,9 +171,9 @@ void ViewAdaptor::setLeftBorderColor(const QColor& color)
     command->execute();
 }
 
-void ViewAdaptor::setTopBorderColor(const QColor& color)
+void ViewAdaptor::setTopBorderColor(const QColor &color)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
     Style s;
@@ -184,9 +183,9 @@ void ViewAdaptor::setTopBorderColor(const QColor& color)
     command->execute();
 }
 
-void ViewAdaptor::setRightBorderColor(const QColor& color)
+void ViewAdaptor::setRightBorderColor(const QColor &color)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
     Style s;
@@ -199,9 +198,9 @@ void ViewAdaptor::setRightBorderColor(const QColor& color)
     command->execute();
 }
 
-void ViewAdaptor::setBottomBorderColor(const QColor& color)
+void ViewAdaptor::setBottomBorderColor(const QColor &color)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
     Style s;
@@ -211,9 +210,9 @@ void ViewAdaptor::setBottomBorderColor(const QColor& color)
     command->execute();
 }
 
-void ViewAdaptor::setAllBorderColor(const QColor& color)
+void ViewAdaptor::setAllBorderColor(const QColor &color)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
     Style s;
@@ -228,9 +227,9 @@ void ViewAdaptor::setAllBorderColor(const QColor& color)
     command->execute();
 }
 
-void ViewAdaptor::setOutlineBorderColor(const QColor& color)
+void ViewAdaptor::setOutlineBorderColor(const QColor &color)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(m_view->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
     Style s;
@@ -242,4 +241,3 @@ void ViewAdaptor::setOutlineBorderColor(const QColor& color)
     command->add(*m_view->selection());
     command->execute();
 }
-

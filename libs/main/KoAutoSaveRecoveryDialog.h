@@ -7,8 +7,8 @@
 #define KOAUTOSAVERECOVERYDIALOG_H
 
 #include <KoDialog.h>
-#include <QStringList>
 #include <QModelIndex>
+#include <QStringList>
 
 class QListView;
 
@@ -18,7 +18,6 @@ class KoAutoSaveRecoveryDialog : public KoDialog
 {
     Q_OBJECT
 public:
-
     explicit KoAutoSaveRecoveryDialog(const QStringList &filenames, QWidget *parent = 0);
     QStringList recoverableFiles();
 
@@ -27,12 +26,10 @@ public Q_SLOTS:
     void toggleFileItem(bool toggle);
 
 private:
-
     QListView *m_listView;
 
     class FileItemModel;
     FileItemModel *m_model;
 };
-
 
 #endif // KOAUTOSAVERECOVERYDIALOG_H

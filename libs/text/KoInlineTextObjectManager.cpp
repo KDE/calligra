@@ -1,4 +1,4 @@
- /* This file is part of the KDE project
+/* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2006-2009 Thomas Zander <zander@kde.org>
  * SPDX-FileCopyrightText: 2008 Thorsten Zachmann <zachmann@kde.org>
  * SPDX-FileCopyrightText: 2011 Boudewijn Rempt <boud@kogmbh.com>
@@ -8,19 +8,19 @@
 #include "KoInlineTextObjectManager.h"
 
 #include "InsertNamedVariableAction_p.h"
-#include "InsertTextReferenceAction_p.h"
 #include "InsertTextLocator_p.h"
+#include "InsertTextReferenceAction_p.h"
+#include "KoInlineCite.h"
+#include "KoInlineNote.h"
 #include "KoInlineObjectRegistry.h"
 #include "KoTextLocator.h"
-#include "KoInlineNote.h"
-#include "KoInlineCite.h"
 
 #include <QTextCursor>
 
 KoInlineTextObjectManager::KoInlineTextObjectManager(QObject *parent)
-        : QObject(parent),
-        m_lastObjectId(0),
-        m_variableManager(this)
+    : QObject(parent)
+    , m_lastObjectId(0)
+    , m_variableManager(this)
 {
 }
 
@@ -46,7 +46,7 @@ KoInlineObject *KoInlineTextObjectManager::inlineTextObject(int id) const
     return m_objects.value(id);
 }
 
-void KoInlineTextObjectManager::insertInlineObject(QTextCursor& cursor, KoInlineObject *object)
+void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInlineObject *object)
 {
     QTextCharFormat oldCf = cursor.charFormat();
     // create a new format out of the old so that the current formatting is
@@ -78,7 +78,7 @@ void KoInlineTextObjectManager::insertObject(KoInlineObject *object)
     // reset to use old format so that the InlineInstanceId is no longer set.
 }
 
-void KoInlineTextObjectManager::addInlineObject(KoInlineObject* object)
+void KoInlineTextObjectManager::addInlineObject(KoInlineObject *object)
 {
     if (!object) {
         return;
@@ -89,8 +89,7 @@ void KoInlineTextObjectManager::addInlineObject(KoInlineObject* object)
         object->setId(++m_lastObjectId);
         object->setManager(this);
         object->setup();
-    }
-    else {
+    } else {
         m_deletedObjects.remove(id);
     }
     insertObject(object);
@@ -161,11 +160,11 @@ void KoInlineTextObjectManager::removeProperty(KoInlineObject::Property key)
     m_properties.remove(key);
 }
 
-QList<QAction*> KoInlineTextObjectManager::createInsertVariableActions(KoCanvasBase *host) const
+QList<QAction *> KoInlineTextObjectManager::createInsertVariableActions(KoCanvasBase *host) const
 {
     QList<QAction *> answer = KoInlineObjectRegistry::instance()->createInsertVariableActions(host);
     int i = 0;
-    foreach(const QString & name, m_variableManager.variables()) {
+    foreach (const QString &name, m_variableManager.variables()) {
         answer.insert(i++, new InsertNamedVariableAction(host, this, name));
     }
 
@@ -174,22 +173,22 @@ QList<QAction*> KoInlineTextObjectManager::createInsertVariableActions(KoCanvasB
     return answer;
 }
 
-QList<KoTextLocator*> KoInlineTextObjectManager::textLocators() const
+QList<KoTextLocator *> KoInlineTextObjectManager::textLocators() const
 {
-    QList<KoTextLocator*> answers;
-    foreach(KoInlineObject *object, m_objects) {
-        KoTextLocator *tl = qobject_cast<KoTextLocator*>(object);
+    QList<KoTextLocator *> answers;
+    foreach (KoInlineObject *object, m_objects) {
+        KoTextLocator *tl = qobject_cast<KoTextLocator *>(object);
         if (tl)
             answers.append(tl);
     }
     return answers;
 }
 
-QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
+QList<KoInlineNote *> KoInlineTextObjectManager::endNotes() const
 {
-    QList<KoInlineNote*> answers;
-    foreach(KoInlineObject* object, m_objects) {
-        KoInlineNote* note = qobject_cast<KoInlineNote*>(object);
+    QList<KoInlineNote *> answers;
+    foreach (KoInlineObject *object, m_objects) {
+        KoInlineNote *note = qobject_cast<KoInlineNote *>(object);
         if (note && note->type() == KoInlineNote::Endnote) {
             answers.append(note);
         }
@@ -197,36 +196,34 @@ QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
     return answers;
 }
 
-QMap<QString, KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicatesEnabled) const
+QMap<QString, KoInlineCite *> KoInlineTextObjectManager::citations(bool duplicatesEnabled) const
 {
-    QMap<QString, KoInlineCite*> answers;
-    foreach(KoInlineObject* object, m_objects) {
-        KoInlineCite* cite = qobject_cast<KoInlineCite*>(object);
-        if (cite && (cite->type() == KoInlineCite::Citation ||
-                     (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
+    QMap<QString, KoInlineCite *> answers;
+    foreach (KoInlineObject *object, m_objects) {
+        KoInlineCite *cite = qobject_cast<KoInlineCite *>(object);
+        if (cite && (cite->type() == KoInlineCite::Citation || (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
             answers.insert(cite->identifier(), cite);
         }
     }
     return answers;
 }
 
-QList<KoInlineCite*> KoInlineTextObjectManager::citationsSortedByPosition(bool duplicatesEnabled, QTextBlock block) const
+QList<KoInlineCite *> KoInlineTextObjectManager::citationsSortedByPosition(bool duplicatesEnabled, QTextBlock block) const
 {
-    QList<KoInlineCite*> answers;
+    QList<KoInlineCite *> answers;
 
     while (block.isValid()) {
         QString text = block.text();
         int pos = text.indexOf(QChar::ObjectReplacementCharacter);
 
-        while (pos >= 0 && pos <= block.length() ) {
+        while (pos >= 0 && pos <= block.length()) {
             QTextCursor cursor(block);
             cursor.setPosition(block.position() + pos);
             cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
 
-            KoInlineCite *cite = qobject_cast<KoInlineCite*>(this->inlineTextObject(cursor));
+            KoInlineCite *cite = qobject_cast<KoInlineCite *>(this->inlineTextObject(cursor));
 
-            if (cite && (cite->type() == KoInlineCite::Citation ||
-                         (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
+            if (cite && (cite->type() == KoInlineCite::Citation || (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
                 answers.append(cite);
             }
             pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
@@ -277,7 +274,7 @@ void KoInlineTextObjectManager::documentInformationUpdated(const QString &info, 
         setProperty(KoInlineObject::SenderCompany, data);
 }
 
-QList<KoInlineObject*> KoInlineTextObjectManager::inlineTextObjects() const
+QList<KoInlineObject *> KoInlineTextObjectManager::inlineTextObjects() const
 {
     return m_objects.values();
 }

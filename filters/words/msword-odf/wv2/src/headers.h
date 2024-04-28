@@ -23,50 +23,49 @@
 
 #include "global.h"
 #include "wv2_export.h"
-#include <utility>
 #include <QList>
+#include <utility>
 
 namespace wvWare
 {
 
-    class OLEStreamReader;
+class OLEStreamReader;
+
+/**
+ * @internal
+ * A tiny helper class to move some header/footer code out of the parser.
+ * Might not be ultra-elegant, but I don't like it if the parser code
+ * grows too much.
+ * Abstract base class for the Word 6/7 and Word 8 variants.
+ */
+class Headers
+{
+public:
+    Headers(U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 lcbPlcfsed, OLEStreamReader *tableStream, WordVersion version);
+    virtual ~Headers();
 
     /**
-     * @internal
-     * A tiny helper class to move some header/footer code out of the parser.
-     * Might not be ultra-elegant, but I don't like it if the parser code
-     * grows too much.
-     * Abstract base class for the Word 6/7 and Word 8 variants.
+     * Returns the header if there is any for the given mask. If we didn't find
+     * any header the pair's values are 0, 0.
      */
-    class Headers
-    {
-    public:
-        Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 lcbPlcfsed,
-                 OLEStreamReader* tableStream, WordVersion version );
-        virtual ~Headers();
+    virtual std::pair<U32, U32> findHeader(int sectionNumber, unsigned char mask) const = 0;
 
-        /**
-         * Returns the header if there is any for the given mask. If we didn't find
-         * any header the pair's values are 0, 0.
-         */
-        virtual std::pair<U32, U32> findHeader( int sectionNumber, unsigned char mask ) const = 0;
+    /**
+     * A helper method to implement Word 6 support.
+     */
+    virtual void set_headerMask(U8 sep_grpfIhdt);
 
-        /**
-         * A helper method to implement Word 6 support.
-         */
-        virtual void set_headerMask( U8 sep_grpfIhdt );
+    /**
+     * Returns a binary mask providing the information of empty/nonempty
+     * header and footer stories for each section.  Size of the list equals
+     * the number of sections present in the document.
+     */
+    QList<bool> headersMask(void);
 
-        /**
-         * Returns a binary mask providing the information of empty/nonempty
-         * header and footer stories for each section.  Size of the list equals
-         * the number of sections present in the document.
-         */
-        QList<bool> headersMask( void );
-
-    protected:
-        QList<U32> m_headers;
-        static const uint headerTypes;
-    };
+protected:
+    QList<U32> m_headers;
+    static const uint headerTypes;
+};
 
 } // namespace wvWare
 

@@ -7,18 +7,17 @@
 
 #include "InfoVariableFactory.h"
 
-#include "VariablesDebug.h"
 #include "InfoVariable.h"
+#include "VariablesDebug.h"
 
+#include <KLocalizedString>
 #include <KoProperties.h>
 #include <KoXmlNS.h>
-#include <KLocalizedString>
 
 #include <QStringList>
 
-
 InfoVariableFactory::InfoVariableFactory()
-        : KoInlineObjectFactoryBase("info", TextVariable)
+    : KoInlineObjectFactoryBase("info", TextVariable)
 {
     KoInlineObjectTemplate var1;
     var1.id = "author";

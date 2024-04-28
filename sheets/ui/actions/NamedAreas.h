@@ -8,17 +8,16 @@
 #ifndef CALLIGRA_SHEETS_ACTION_NAMED_AREAS
 #define CALLIGRA_SHEETS_ACTION_NAMED_AREAS
 
-
 #include "DialogCellAction.h"
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class AddNamedArea : public DialogCellAction {
-Q_OBJECT
+class AddNamedArea : public DialogCellAction
+{
+    Q_OBJECT
 public:
     AddNamedArea(Actions *actions);
     virtual ~AddNamedArea();
@@ -30,8 +29,9 @@ protected:
     virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
 };
 
-class ManageNamedAreas : public DialogCellAction {
-Q_OBJECT
+class ManageNamedAreas : public DialogCellAction
+{
+    Q_OBJECT
 public:
     ManageNamedAreas(Actions *actions);
     virtual ~ManageNamedAreas();
@@ -44,9 +44,7 @@ protected:
     virtual QAction *createAction() override;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_NAMED_AREAS
+#endif // CALLIGRA_SHEETS_ACTION_NAMED_AREAS

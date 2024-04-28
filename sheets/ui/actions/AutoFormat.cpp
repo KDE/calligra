@@ -9,8 +9,8 @@
 #include "Actions.h"
 #include "dialogs/AutoFormatDialog.h"
 
-#include <KLocalizedString>
 #include <KConfig>
+#include <KLocalizedString>
 #include <KMessageBox>
 
 #include <KoResourcePaths.h>
@@ -23,10 +23,7 @@
 #include "core/Style.h"
 #include "core/ksp/SheetsKsp.h"
 
-
-
 using namespace Calligra::Sheets;
-
 
 AutoFormat::AutoFormat(Actions *actions)
     : DialogCellAction(actions, "autoFormat", i18n("Auto-Format..."), QIcon(), i18n("Apply pre-defined formatting to a range of cells."))
@@ -56,9 +53,11 @@ ActionDialog *AutoFormat::createDialog(QWidget *canvasWidget)
         QString image = sheetStyleGroup.readEntry("Image");
 
         QString imageName = KoResourcePaths::findResource("sheet-styles", image);
-        if (imageName.isEmpty()) continue;
+        if (imageName.isEmpty())
+            continue;
         QPixmap pixmap(imageName);
-        if (pixmap.isNull()) continue;
+        if (pixmap.isNull())
+            continue;
 
         m_xmls[name] = xml;
         pixmaps[name] = pixmap;
@@ -70,7 +69,8 @@ ActionDialog *AutoFormat::createDialog(QWidget *canvasWidget)
 
 void AutoFormat::applyFormat(const QString &name)
 {
-    if (!m_xmls.contains(name)) return;
+    if (!m_xmls.contains(name))
+        return;
 
     QString xml = m_xmls[name];
     QString xmlname = KoResourcePaths::findResource("sheet-styles", xml);
@@ -92,14 +92,14 @@ void AutoFormat::applyFormat(const QString &name)
         return;
     }
 
-    AutoFormatCommand* command = new AutoFormatCommand();
+    AutoFormatCommand *command = new AutoFormatCommand();
     command->setSheet(m_selection->activeSheet());
     command->setStyles(styles);
     command->add(*m_selection);
     command->execute(m_selection->canvas());
 }
 
-QList<Style> AutoFormat::parseXML(const KoXmlDocument& doc, bool *ok)
+QList<Style> AutoFormat::parseXML(const KoXmlDocument &doc, bool *ok)
 {
     *ok = false;
     QList<Style> styles;
@@ -112,7 +112,7 @@ QList<Style> AutoFormat::parseXML(const KoXmlDocument& doc, bool *ok)
         if (e.tagName() == "cell") {
             Style style;
             KoXmlElement tmpElement(e.namedItem("format").toElement());
-            if (!Ksp::loadStyle (&style, tmpElement))
+            if (!Ksp::loadStyle(&style, tmpElement))
                 return styles;
 
             int row = e.attribute("row").toInt();
@@ -128,7 +128,6 @@ QList<Style> AutoFormat::parseXML(const KoXmlDocument& doc, bool *ok)
     return styles;
 }
 
-
 AutoFormatCommand::AutoFormatCommand()
 {
     setText(kundo2_i18n("Auto-Format"));
@@ -138,12 +137,12 @@ AutoFormatCommand::~AutoFormatCommand()
 {
 }
 
-void AutoFormatCommand::setStyles(const QList<Style>& styles)
+void AutoFormatCommand::setStyles(const QList<Style> &styles)
 {
     m_styles = styles;
 }
 
-bool AutoFormatCommand::process(Element* element)
+bool AutoFormatCommand::process(Element *element)
 {
     const QRect rect = element->rect();
     CellStorage *cs = m_sheet->fullCellStorage();
@@ -203,9 +202,9 @@ bool AutoFormatCommand::process(Element* element)
 
                 Style style;
                 if (col == rect.left() + 1)
-                    style = m_styles[ 5 + ((row - rect.top() - 1) % 2) * 4 ];
+                    style = m_styles[5 + ((row - rect.top() - 1) % 2) * 4];
                 else
-                    style = m_styles[ 6 + ((row - rect.top() - 1) % 2) * 4 ];
+                    style = m_styles[6 + ((row - rect.top() - 1) % 2) * 4];
 
                 if (!style.isDefault()) {
                     Style tmpStyle;
@@ -214,9 +213,9 @@ bool AutoFormatCommand::process(Element* element)
                 }
 
                 if (row == rect.top() + 1)
-                    style = m_styles[ 5 + ((col - rect.left() - 1) % 2)];
+                    style = m_styles[5 + ((col - rect.left() - 1) % 2)];
                 else
-                    style = m_styles[ 9 + ((col - rect.left() - 1) % 2)];
+                    style = m_styles[9 + ((col - rect.left() - 1) % 2)];
 
                 if (!style.isDefault()) {
                     Style tmpStyle;
@@ -281,14 +280,17 @@ bool AutoFormatCommand::process(Element* element)
     return true;
 }
 
-bool AutoFormat::enabledForSelection(Selection *selection, const Cell &) {
-    if (!selection->isContiguous()) return false;
+bool AutoFormat::enabledForSelection(Selection *selection, const Cell &)
+{
+    if (!selection->isContiguous())
+        return false;
     // don't allow full rows/columns
-    if (selection->isRowSelected()) return false;
-    if (selection->isColumnSelected()) return false;
+    if (selection->isRowSelected())
+        return false;
+    if (selection->isColumnSelected())
+        return false;
     QRect range = selection->lastRange();
-    if ((range.width() < 2) && (range.height() < 2)) return false;
+    if ((range.width() < 2) && (range.height() < 2))
+        return false;
     return true;
 }
-
-

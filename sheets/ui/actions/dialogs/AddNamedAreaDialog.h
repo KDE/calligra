@@ -29,7 +29,7 @@ class AddNamedAreaDialog : public ActionDialog
     Q_OBJECT
 
 public:
-    AddNamedAreaDialog(QWidget* parent);
+    AddNamedAreaDialog(QWidget *parent);
 
     QString areaName() const;
 
@@ -37,12 +37,12 @@ Q_SIGNALS:
     void addArea(const QString &);
 
 public Q_SLOTS:
-    void slotAreaNameChanged(const QString& name);
+    void slotAreaNameChanged(const QString &name);
 
 protected:
     virtual void onApply() override;
 
-    QLineEdit*  m_areaName;
+    QLineEdit *m_areaName;
 };
 
 } // namespace Sheets

@@ -6,25 +6,26 @@
 
 #include "TestKoOdfLoadingContext.h"
 
-#include <QByteArray>
-#include <QBuffer>
-#include <KoStore.h>
-#include <KoStoreDevice.h>
-#include <KoXmlReader.h>
-#include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
-#include <KoStyleStack.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
+#include <KoStyleStack.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
+#include <QBuffer>
+#include <QByteArray>
 
-#include <QTest>
 #include <QLoggingCategory>
+#include <QTest>
 
 void TestKoOdfLoadingContext::initTestCase()
 {
-    QLoggingCategory::setFilterRules("*.debug=false\n"
-    "calligra.lib.odf=true");
+    QLoggingCategory::setFilterRules(
+        "*.debug=false\n"
+        "calligra.lib.odf=true");
 }
 
 void TestKoOdfLoadingContext::testFillStyleStack()
@@ -33,15 +34,15 @@ void TestKoOdfLoadingContext::testFillStyleStack()
     QByteArray byteArray;
     QBuffer buffer(&byteArray);
 #endif
-    const char * mimeType = "application/vnd.oasis.opendocument.text";
-    KoStore * store(KoStore::createStore("test.odt", KoStore::Write, mimeType));
+    const char *mimeType = "application/vnd.oasis.opendocument.text";
+    KoStore *store(KoStore::createStore("test.odt", KoStore::Write, mimeType));
     KoOdfWriteStore odfStore(store);
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
+    KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
 
-    KoXmlWriter* contentWriter = odfStore.contentWriter();
+    KoXmlWriter *contentWriter = odfStore.contentWriter();
     QVERIFY(contentWriter != 0);
 
-    KoXmlWriter * bodyWriter = odfStore.bodyWriter();
+    KoXmlWriter *bodyWriter = odfStore.bodyWriter();
 
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
@@ -64,13 +65,13 @@ void TestKoOdfLoadingContext::testFillStyleStack()
 
     odfStore.closeContentWriter();
 
-    //add manifest line for content.xml
+    // add manifest line for content.xml
     manifestWriter->addManifestEntry("content.xml", "text/xml");
 
     QVERIFY(store->open("styles.xml") == true);
 
     KoStoreDevice stylesDev(store);
-    KoXmlWriter* stylesWriter = KoOdfWriteStore::createOasisXmlWriter(&stylesDev, "office:document-styles");
+    KoXmlWriter *stylesWriter = KoOdfWriteStore::createOasisXmlWriter(&stylesDev, "office:document-styles");
 
     stylesWriter->startElement("office:styles");
     stylesWriter->startElement("style:style");
@@ -101,7 +102,7 @@ void TestKoOdfLoadingContext::testFillStyleStack()
 
     manifestWriter->addManifestEntry("styles.xml", "text/xml");
 
-    QVERIFY(store->close() == true);   // done with styles.xml
+    QVERIFY(store->close() == true); // done with styles.xml
 
     QVERIFY(odfStore.closeManifestWriter() == true);
 
@@ -122,10 +123,11 @@ void TestKoOdfLoadingContext::testFillStyleStack()
     QVERIFY(body.isNull() == false);
 
     KoXmlElement tag;
-    forEachElement(tag, body) {
-        //tz: So now that I have a test the fails I can go on implementing the solution
+    forEachElement(tag, body)
+    {
+        // tz: So now that I have a test the fails I can go on implementing the solution
         QCOMPARE(tag.localName(), QString("rect"));
-        KoStyleStack & styleStack = context.styleStack();
+        KoStyleStack &styleStack = context.styleStack();
         styleStack.save();
         context.fillStyleStack(tag, KoXmlNS::draw, "style-name", "graphic");
         styleStack.setTypeProperties("graphic");

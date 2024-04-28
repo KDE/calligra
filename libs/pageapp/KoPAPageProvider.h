@@ -7,8 +7,8 @@
 #ifndef KOPAPAGEPROVIDER_H
 #define KOPAPAGEPROVIDER_H
 
-#include <KoPageProvider.h>
 #include "kopageapp_export.h"
+#include <KoPageProvider.h>
 
 class KoPAPageBase;
 
@@ -18,7 +18,7 @@ public:
     KoPAPageProvider();
     ~KoPAPageProvider() override;
 
-    KoTextPage * page(KoShape * shape) override;
+    KoTextPage *page(KoShape *shape) override;
 
     void setPageData(int pageNumber, KoPAPageBase *page);
 

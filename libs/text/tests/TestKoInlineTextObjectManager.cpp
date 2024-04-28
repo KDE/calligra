@@ -14,11 +14,7 @@ const QString lorem(
     "exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n"
     "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla"
     "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia"
-    "deserunt mollit anim id est laborum.\n"
-    );
-
-
-
+    "deserunt mollit anim id est laborum.\n");
 
 void TestKoInlineTextObjectManager::testCreation()
 {
@@ -103,7 +99,6 @@ void TestKoInlineTextObjectManager::testRetrieveInlineObject()
     QTextCharFormat fmt = cursor.charFormat();
     obj2 = manager.inlineTextObject(fmt);
     Q_ASSERT(obj2 == obj);
-
 }
 
 void TestKoInlineTextObjectManager::testRemoveInlineObject()
@@ -121,7 +116,8 @@ void TestKoInlineTextObjectManager::testRemoveInlineObject()
     manager.removeInlineObject(obj);
 
     KoInlineObject *obj2 = manager.inlineTextObject(id);
-    Q_ASSERT(obj2 == 0); Q_UNUSED(obj2);
+    Q_ASSERT(obj2 == 0);
+    Q_UNUSED(obj2);
 
     // this should not crash, even though we were a listener
     manager.setProperty(KoInlineObject::UserGet, "bla");
@@ -145,6 +141,5 @@ void TestKoInlineTextObjectManager::testListenToProperties()
     manager.setProperty(KoInlineObject::UserInput, "bla2");
     Q_ASSERT(obj2->m_property.toString() == "bla2");
 }
-
 
 QTEST_MAIN(TestKoInlineTextObjectManager)

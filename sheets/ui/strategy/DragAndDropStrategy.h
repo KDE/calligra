@@ -34,14 +34,14 @@ public:
      */
     ~DragAndDropStrategy() override;
 
-    void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers) override;
-    KUndo2Command* createCommand() override;
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command *createCommand() override;
 
     bool dragStarted() const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

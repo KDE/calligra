@@ -5,17 +5,17 @@
  */
 
 #include "OffsetEffect.h"
-#include "KoFilterEffectRenderContext.h"
 #include "KoFilterEffectLoadingContext.h"
+#include "KoFilterEffectRenderContext.h"
 #include "KoViewConverter.h"
-#include "KoXmlWriter.h"
 #include "KoXmlReader.h"
+#include "KoXmlWriter.h"
 #include <KLocalizedString>
 #include <QPainter>
 
 OffsetEffect::OffsetEffect()
-        : KoFilterEffect(OffsetEffectId, i18n("Offset"))
-        , m_offset(0, 0)
+    : KoFilterEffect(OffsetEffectId, i18n("Offset"))
+    , m_offset(0, 0)
 {
 }
 

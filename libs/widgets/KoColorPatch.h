@@ -2,30 +2,30 @@
  * SPDX-FileCopyrightText: 2006 C. Boemann (cbo@boemann.dk)
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ */
 #ifndef KOCOLORPATCH_H
 #define KOCOLORPATCH_H
 
 #include <QFrame>
 
-#include <KoColor.h>
 #include "kowidgets_export.h"
+#include <KoColor.h>
 
 /**
  *  The small widget showing the selected color
  */
 class KOWIDGETS_EXPORT KoColorPatch : public QFrame
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-    explicit KoColorPatch( QWidget *parent );
+    explicit KoColorPatch(QWidget *parent);
     ~KoColorPatch() override;
 
     /**
      * Set the color of this color patch
      * @param c the new color
      */
-    void setColor( const KoColor &c );
+    void setColor(const KoColor &c);
 
     /**
      * @return current color shown by this patch
@@ -46,7 +46,7 @@ Q_SIGNALS:
     void triggered(KoColorPatch *widget);
 
 private:
-  KoColor m_color;
+    KoColor m_color;
 };
 
 #endif

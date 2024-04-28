@@ -7,8 +7,8 @@
 #ifndef PARAGRAPHBULLETSNUMBERS_H
 #define PARAGRAPHBULLETSNUMBERS_H
 
-#include <ui_ParagraphBulletsNumbers.h>
 #include <ListItemsHelper.h>
+#include <ui_ParagraphBulletsNumbers.h>
 
 #include <KoListStyle.h>
 

@@ -7,29 +7,41 @@
 #include "KPrParallelSnakesWipeHorizontalStrategy.h"
 #include "KPrParallelSnakesWipeEffectFactory.h"
 
-static int getSubType(bool reverseTop, bool reverseBottom, bool reverse) {
+static int getSubType(bool reverseTop, bool reverseBottom, bool reverse)
+{
     if (reverseTop) {
-        if (reverseBottom) return reverse ? KPrParallelSnakesWipeEffectFactory::HorizontalRightSameOut : KPrParallelSnakesWipeEffectFactory::HorizontalRightSameIn;
-        else return reverse ? KPrParallelSnakesWipeEffectFactory::HorizontalTopRightOppositeOut : KPrParallelSnakesWipeEffectFactory::HorizontalTopRightOppositeIn;
+        if (reverseBottom)
+            return reverse ? KPrParallelSnakesWipeEffectFactory::HorizontalRightSameOut : KPrParallelSnakesWipeEffectFactory::HorizontalRightSameIn;
+        else
+            return reverse ? KPrParallelSnakesWipeEffectFactory::HorizontalTopRightOppositeOut
+                           : KPrParallelSnakesWipeEffectFactory::HorizontalTopRightOppositeIn;
     } else {
-        if (reverseBottom) return reverse ? KPrParallelSnakesWipeEffectFactory::HorizontalTopLeftOppositeOut : KPrParallelSnakesWipeEffectFactory::HorizontalTopLeftOppositeIn;
-        else return reverse ? KPrParallelSnakesWipeEffectFactory::HorizontalLeftSameOut : KPrParallelSnakesWipeEffectFactory::HorizontalLeftSameIn;
+        if (reverseBottom)
+            return reverse ? KPrParallelSnakesWipeEffectFactory::HorizontalTopLeftOppositeOut : KPrParallelSnakesWipeEffectFactory::HorizontalTopLeftOppositeIn;
+        else
+            return reverse ? KPrParallelSnakesWipeEffectFactory::HorizontalLeftSameOut : KPrParallelSnakesWipeEffectFactory::HorizontalLeftSameIn;
     }
 }
 
-static const char* getSmilSubType(bool reverseTop, bool reverseBottom) {
+static const char *getSmilSubType(bool reverseTop, bool reverseBottom)
+{
     if (reverseTop) {
-        if (reverseBottom) return "horizontalRightSame";
-        else return "horizontalTopRightOpposite";
+        if (reverseBottom)
+            return "horizontalRightSame";
+        else
+            return "horizontalTopRightOpposite";
     } else {
-        if (reverseBottom) return "horizontalTopLeftOpposite";
-        else return "horizontalLeftSame";
+        if (reverseBottom)
+            return "horizontalTopLeftOpposite";
+        else
+            return "horizontalLeftSame";
     }
 }
 
 KPrParallelSnakesWipeHorizontalStrategy::KPrParallelSnakesWipeHorizontalStrategy(bool reverseTop, bool reverseBottom, bool reverse)
-    : KPrMatrixWipeStrategy( getSubType(reverseTop, reverseBottom, reverse), "parallelSnakesWipe", getSmilSubType(reverseTop, reverseBottom), reverse, true ),
-    m_reverseTop(reverseTop), m_reverseBottom(reverseBottom)
+    : KPrMatrixWipeStrategy(getSubType(reverseTop, reverseBottom, reverse), "parallelSnakesWipe", getSmilSubType(reverseTop, reverseBottom), reverse, true)
+    , m_reverseTop(reverseTop)
+    , m_reverseBottom(reverseBottom)
 {
     setNeedEvenSquares();
 }
@@ -43,12 +55,16 @@ int KPrParallelSnakesWipeHorizontalStrategy::squareIndex(int x, int y, int colum
     int X = x;
     int idx;
     if (y < rows / 2) {
-        if (m_reverseTop) X = columns - X - 1;
-        if (y & 1) X = columns - X - 1;
-     idx = X + y * columns;
+        if (m_reverseTop)
+            X = columns - X - 1;
+        if (y & 1)
+            X = columns - X - 1;
+        idx = X + y * columns;
     } else {
-        if (m_reverseBottom) X = columns - X - 1;
-        if (!(y & 1)) X = columns - X - 1;
+        if (m_reverseBottom)
+            X = columns - X - 1;
+        if (!(y & 1))
+            X = columns - X - 1;
         idx = X + (rows - y - 1) * columns;
     }
     if (reverse()) {
@@ -63,13 +79,18 @@ KPrMatrixWipeStrategy::Direction KPrParallelSnakesWipeHorizontalStrategy::square
     Q_UNUSED(x);
     Q_UNUSED(columns);
     bool reverse = false;
-    if (y >= rows / 2) reverse = !reverse;
-    if (y & 1) reverse = !reverse;
-    if (this->reverse()) reverse = !reverse;
+    if (y >= rows / 2)
+        reverse = !reverse;
+    if (y & 1)
+        reverse = !reverse;
+    if (this->reverse())
+        reverse = !reverse;
     if (y < rows / 2) {
-        if (m_reverseTop) reverse = !reverse;
+        if (m_reverseTop)
+            reverse = !reverse;
     } else {
-        if (m_reverseBottom) reverse = !reverse;
+        if (m_reverseBottom)
+            reverse = !reverse;
     }
     return reverse ? RightToLeft : LeftToRight;
 }
@@ -78,4 +99,3 @@ int KPrParallelSnakesWipeHorizontalStrategy::maxIndex(int columns, int rows)
 {
     return columns * rows / 2;
 }
-

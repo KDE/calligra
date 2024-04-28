@@ -8,31 +8,35 @@
 #include "ScatterDataEditor.h"
 // #include "DataSetTableModel.h"
 
-#include <QSortFilterProxyModel>
 #include <QAbstractTableModel>
 #include <QAction>
+#include <QSortFilterProxyModel>
 
 #include <KoIcon.h>
 
-#include "ChartShape.h"
-#include "ChartProxyModel.h"
-#include "ChartTableView.h"
-#include "ChartTableModel.h"
-#include "DataSet.h"
 #include "ChartDebug.h"
+#include "ChartProxyModel.h"
+#include "ChartShape.h"
+#include "ChartTableModel.h"
+#include "ChartTableView.h"
+#include "DataSet.h"
 
+namespace KoChart
+{
 
-
-namespace KoChart {
-
-namespace Scatter {
+namespace Scatter
+{
 
 class DataProxy : public QSortFilterProxyModel
 {
 public:
     DataSetTableModel *dataSetModel;
 
-    DataProxy(QObject *parent = 0) : QSortFilterProxyModel(parent), dataSetModel(0) {}
+    DataProxy(QObject *parent = 0)
+        : QSortFilterProxyModel(parent)
+        , dataSetModel(0)
+    {
+    }
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override
     {
@@ -45,13 +49,13 @@ public:
         }
         return QSortFilterProxyModel::headerData(section, orientation, role);
     }
-    bool filterAcceptsColumn(int source_column, const QModelIndex &/*source_parent*/) const override
+    bool filterAcceptsColumn(int source_column, const QModelIndex & /*source_parent*/) const override
     {
         return source_column != 0; // skip categories
     }
     bool insertColumns(int column, int count, const QModelIndex &parent) override
     {
-        debugChartUiScatter<<column;
+        debugChartUiScatter << column;
         Q_UNUSED(count);
         Q_UNUSED(parent);
 
@@ -60,7 +64,7 @@ public:
         if (scolumn < 0) {
             scolumn = model->columnCount();
         }
-        debugChartUiScatter<<column<<':'<<scolumn;
+        debugChartUiScatter << column << ':' << scolumn;
         if (!model->insertColumns(scolumn, 1)) {
             return false;
         }
@@ -78,7 +82,7 @@ public:
     }
     bool insertRows(int row, int count, const QModelIndex &parent) override
     {
-        debugChartUiScatter<<row;
+        debugChartUiScatter << row;
         Q_UNUSED(count);
         Q_UNUSED(parent);
 
@@ -91,7 +95,7 @@ public:
             return false;
         }
         QModelIndex idx = model->index(srow, 0);
-        model->setData(idx, i18n("Row %1", srow+1));
+        model->setData(idx, i18n("Row %1", srow + 1));
         for (int c = 1; c < model->columnCount(); ++c) {
             QModelIndex idx = model->index(srow, c);
             model->setData(idx, (double)c);
@@ -120,7 +124,6 @@ ScatterDataEditor::ScatterDataEditor(ChartShape *chart, QWidget *parent)
     m_insertRowBelowAction = new QAction(m_ui.insertRowBelow->icon(), i18n("Insert Row Below"), m_ui.tableView);
     m_deleteAction = new QAction(m_ui.deleteSelection->icon(), i18n("Delete"), m_ui.tableView);
 
-
     m_ui.tableView->addAction(m_insertColumnBeforeAction);
     m_ui.tableView->addAction(m_insertColumnAfterAction);
     m_ui.tableView->addAction(m_insertRowAboveAction);
@@ -138,7 +141,7 @@ ScatterDataEditor::ScatterDataEditor(ChartShape *chart, QWidget *parent)
     connect(m_ui.removeDataSet, &QAbstractButton::clicked, this, &ScatterDataEditor::slotRemoveDataSet);
 
     m_dataSetModel.setModel(m_chart->proxyModel());
-//     connect(&m_dataSetModel, &Scatter::DataSetTableModel::dataChanged, this, &ScatterDataEditor::slotDataChanged);
+    //     connect(&m_dataSetModel, &Scatter::DataSetTableModel::dataChanged, this, &ScatterDataEditor::slotDataChanged);
 
     m_dataModel = new DataProxy(m_ui.tableView);
     m_dataModel->setSourceModel(m_chart->internalModel());
@@ -148,7 +151,7 @@ ScatterDataEditor::ScatterDataEditor(ChartShape *chart, QWidget *parent)
     connect(m_ui.insertColumnAfter, &QAbstractButton::clicked, this, &ScatterDataEditor::slotInsertColumnAfter);
     connect(m_ui.insertRowAbove, &QAbstractButton::clicked, this, &ScatterDataEditor::slotInsertRowAbove);
     connect(m_ui.insertRowBelow, &QAbstractButton::clicked, this, &ScatterDataEditor::slotInsertRowBelow);
-    connect(m_ui.deleteSelection,&QAbstractButton::clicked, this, &ScatterDataEditor::slotDeleteSelection);
+    connect(m_ui.deleteSelection, &QAbstractButton::clicked, this, &ScatterDataEditor::slotDeleteSelection);
 
     connect(m_insertColumnBeforeAction, &QAction::triggered, this, &ScatterDataEditor::slotInsertColumnBefore);
     connect(m_insertColumnAfterAction, &QAction::triggered, this, &ScatterDataEditor::slotInsertColumnAfter);
@@ -185,7 +188,6 @@ ScatterDataEditor::ScatterDataEditor(ChartShape *chart, QWidget *parent)
     connect(m_dataModel->sourceModel(), &QAbstractItemModel::rowsRemoved, this, &ScatterDataEditor::dataRowCountChanged);
 
     resize(sizeHint().expandedTo(QSize(600, 300)));
-
 }
 
 ScatterDataEditor::~ScatterDataEditor()
@@ -194,7 +196,7 @@ ScatterDataEditor::~ScatterDataEditor()
 
 void ScatterDataEditor::slotInsertColumnBefore()
 {
-    debugChartUiScatter<<m_ui.tableView->currentIndex();
+    debugChartUiScatter << m_ui.tableView->currentIndex();
     int pos = m_ui.tableView->currentIndex().column();
     if (pos < 0) {
         pos = 0;
@@ -204,7 +206,7 @@ void ScatterDataEditor::slotInsertColumnBefore()
 
 void ScatterDataEditor::slotInsertColumnAfter()
 {
-    debugChartUiScatter<<m_ui.tableView->currentIndex();
+    debugChartUiScatter << m_ui.tableView->currentIndex();
     int pos = m_ui.tableView->currentIndex().column() + 1;
     if (pos == 0) {
         pos = m_dataModel->columnCount();
@@ -214,7 +216,7 @@ void ScatterDataEditor::slotInsertColumnAfter()
 
 void ScatterDataEditor::slotInsertRowAbove()
 {
-    debugChartUiScatter<<m_ui.tableView->currentIndex();
+    debugChartUiScatter << m_ui.tableView->currentIndex();
     int pos = m_ui.tableView->currentIndex().row();
     if (pos < 0) {
         pos = 0;
@@ -224,7 +226,7 @@ void ScatterDataEditor::slotInsertRowAbove()
 
 void ScatterDataEditor::slotInsertRowBelow()
 {
-    debugChartUiScatter<<m_ui.tableView->currentIndex();
+    debugChartUiScatter << m_ui.tableView->currentIndex();
     int pos = m_ui.tableView->currentIndex().row() + 1;
     if (pos == 0) {
         pos = m_dataModel->rowCount();
@@ -250,7 +252,7 @@ void ScatterDataEditor::slotDeleteSelection()
 
 void ScatterDataEditor::slotAddDataSetBefore()
 {
-    debugChartUiScatter<<m_ui.tableView->currentIndex();
+    debugChartUiScatter << m_ui.tableView->currentIndex();
     int pos = m_ui.dataSetView->currentIndex().row();
     if (pos < 0) {
         pos = 0;
@@ -260,7 +262,7 @@ void ScatterDataEditor::slotAddDataSetBefore()
 
 void ScatterDataEditor::slotAddDataSetAfter()
 {
-    debugChartUiScatter<<m_ui.dataSetView->currentIndex();
+    debugChartUiScatter << m_ui.dataSetView->currentIndex();
     int pos = m_ui.dataSetView->currentIndex().row() + 1;
     if (pos == 0) {
         pos = m_dataSetModel.rowCount();
@@ -272,7 +274,7 @@ void ScatterDataEditor::slotRemoveDataSet()
 {
     int row = m_ui.dataSetView->selectionModel()->currentIndex().row();
     if (row > 0) {
-        debugChartUiScatter<<row<<m_ui.dataSetView->model();
+        debugChartUiScatter << row << m_ui.dataSetView->model();
         m_ui.dataSetView->model()->removeRow(row);
     }
 }
@@ -290,7 +292,7 @@ void ScatterDataEditor::enableActions()
     m_ui.removeDataSet->setEnabled(m_ui.manualControl->isChecked() && smodel && smodel->currentIndex().isValid());
 }
 
-void ScatterDataEditor::dataColumnsInserted(const QModelIndex&, int first, int last)
+void ScatterDataEditor::dataColumnsInserted(const QModelIndex &, int first, int last)
 {
     Q_ASSERT(first == last);
     if (!m_ui.manualControl->isChecked() || first == m_dataModel->columnCount() - 1) {
@@ -302,7 +304,7 @@ void ScatterDataEditor::dataColumnsInserted(const QModelIndex&, int first, int l
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
                 ds->setXDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
-                debugChartUiScatter<<"move X:"<<first<<':'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
+                debugChartUiScatter << "move X:" << first << ':' << r << region.toString() << ':' << ds->xDataRegion().toString();
                 break;
             }
         }
@@ -310,14 +312,14 @@ void ScatterDataEditor::dataColumnsInserted(const QModelIndex&, int first, int l
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
                 ds->setYDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
-                debugChartUiScatter<<"move Y:"<<first<<':'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
+                debugChartUiScatter << "move Y:" << first << ':' << r << region.toString() << ':' << ds->xDataRegion().toString();
                 break;
             }
         }
         region = ds->customDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiScatter<<"move Cust:"<<first<<':'<<r;
+                debugChartUiScatter << "move Cust:" << first << ':' << r;
                 ds->setCustomDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
                 break;
             }
@@ -325,7 +327,7 @@ void ScatterDataEditor::dataColumnsInserted(const QModelIndex&, int first, int l
         region = ds->categoryDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiScatter<<"move Cat:"<<first<<':'<<r;
+                debugChartUiScatter << "move Cat:" << first << ':' << r;
                 ds->setCategoryDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
                 break;
             }
@@ -333,7 +335,7 @@ void ScatterDataEditor::dataColumnsInserted(const QModelIndex&, int first, int l
         region = ds->labelDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiScatter<<"move Lab:"<<first<<':'<<r;
+                debugChartUiScatter << "move Lab:" << first << ':' << r;
                 ds->setLabelDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
                 break;
             }
@@ -341,7 +343,7 @@ void ScatterDataEditor::dataColumnsInserted(const QModelIndex&, int first, int l
     }
 }
 
-void ScatterDataEditor::dataColumnsRemoved(const QModelIndex&, int first, int last)
+void ScatterDataEditor::dataColumnsRemoved(const QModelIndex &, int first, int last)
 {
     if (!m_ui.manualControl->isChecked()) {
         return;
@@ -353,7 +355,7 @@ void ScatterDataEditor::dataColumnsRemoved(const QModelIndex&, int first, int la
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
                 ds->setXDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
-                debugChartUiScatter<<"move X:"<<first<<':'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
+                debugChartUiScatter << "move X:" << first << ':' << r << region.toString() << ':' << ds->xDataRegion().toString();
                 break;
             }
         }
@@ -361,14 +363,14 @@ void ScatterDataEditor::dataColumnsRemoved(const QModelIndex&, int first, int la
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
                 ds->setYDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
-                debugChartUiScatter<<"move Y:"<<first<<':'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
+                debugChartUiScatter << "move Y:" << first << ':' << r << region.toString() << ':' << ds->xDataRegion().toString();
                 break;
             }
         }
         region = ds->customDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiScatter<<"move Cust:"<<first<<':'<<r;
+                debugChartUiScatter << "move Cust:" << first << ':' << r;
                 ds->setCustomDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
                 break;
             }
@@ -376,7 +378,7 @@ void ScatterDataEditor::dataColumnsRemoved(const QModelIndex&, int first, int la
         region = ds->categoryDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiScatter<<"move Cat:"<<first<<':'<<r;
+                debugChartUiScatter << "move Cat:" << first << ':' << r;
                 ds->setCategoryDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
                 break;
             }
@@ -384,7 +386,7 @@ void ScatterDataEditor::dataColumnsRemoved(const QModelIndex&, int first, int la
         region = ds->labelDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiScatter<<"move Lab:"<<first<<':'<<r;
+                debugChartUiScatter << "move Lab:" << first << ':' << r;
                 ds->setLabelDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
                 break;
             }
@@ -395,10 +397,10 @@ void ScatterDataEditor::dataColumnsRemoved(const QModelIndex&, int first, int la
 void ScatterDataEditor::dataRowCountChanged()
 {
     if (!m_chart->proxyModel()->manualControl()) {
-        debugChartUiScatter<<"Not manual control";
+        debugChartUiScatter << "Not manual control";
         return;
     }
-    const QList<DataSet*> lst = m_chart->proxyModel()->dataSets();
+    const QList<DataSet *> lst = m_chart->proxyModel()->dataSets();
     for (int i = 0; i < lst.count(); ++i) {
         DataSet *ds = lst.at(i);
         CellRegion region = ds->xDataRegion();
@@ -425,7 +427,7 @@ void ScatterDataEditor::dataRowCountChanged()
             r.setHeight(m_dataModel->rowCount());
             ds->setCategoryDataRegion(CellRegion(region.table(), r));
         }
-        debugChartUiScatter<<ds;
+        debugChartUiScatter << ds;
     }
 }
 

@@ -8,7 +8,9 @@ class TestChangesDatabase : public QObject
 {
     Q_OBJECT
 public:
-    TestChangesDatabase() {}
+    TestChangesDatabase()
+    {
+    }
 
 private Q_SLOTS:
     void testInsert();

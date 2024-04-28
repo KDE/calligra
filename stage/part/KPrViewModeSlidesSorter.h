@@ -1,16 +1,16 @@
 /* This file is part of the KDE project
-*
-* SPDX-FileCopyrightText: 2010 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ *
+ * SPDX-FileCopyrightText: 2010 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #ifndef KPRVIEWMODESLIDESSORTER_H
 #define KPRVIEWMODESLIDESSORTER_H
 
-#include <QListView>
 #include <KoPAViewMode.h>
 #include <KoZoomMode.h>
+#include <QListView>
 
 class KoPAView;
 class KoPACanvas;
@@ -24,12 +24,12 @@ class QToolButton;
 class QComboBox;
 
 /**
-  * This view mode holds Slides Sorter view widget and
-  * holds view and toolbar to manage custom slide shows
-  * This class also manages all interaction between
-  * the standard GUI and the slides sorter view and between
-  * slides sorter view - custom slide shows view
-  */
+ * This view mode holds Slides Sorter view widget and
+ * holds view and toolbar to manage custom slide shows
+ * This class also manages all interaction between
+ * the standard GUI and the slides sorter view and between
+ * slides sorter view - custom slide shows view
+ */
 class KPrViewModeSlidesSorter : public KoPAViewMode
 {
     Q_OBJECT
@@ -62,11 +62,11 @@ public:
     void removeShape(KoShape *shape) override;
 
     /**
-      * Return a list with the pointer to the selected slides
-      *
-      * @return a list of KoPAPageBase pointers to the slides sorter selected slides.
-      */
-    QList<KoPAPageBase*> extractSelectedSlides();
+     * Return a list with the pointer to the selected slides
+     *
+     * @return a list of KoPAPageBase pointers to the slides sorter selected slides.
+     */
+    QList<KoPAPageBase *> extractSelectedSlides();
 
     /**
      * The icon size
@@ -85,7 +85,6 @@ public:
     void setActiveCustomSlideShow(int index);
 
 protected:
-
     /**
      * Setter of the icon size
      *
@@ -113,8 +112,8 @@ protected:
     int zoom();
 
     /**
-      * save zoom value
-      */
+     * save zoom value
+     */
     void saveZoomConfig(int zoom);
 
 private:

@@ -9,11 +9,11 @@ SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
 #include "KoContextBarButton.h"
 
 // Qt
+#include <QApplication>
 #include <QIcon>
+#include <QPainterPath>
 #include <QStyleOptionToolButton>
 #include <QStylePainter>
-#include <QPainterPath>
-#include <QApplication>
 
 /** How lighter is the border of context bar buttons */
 const int CONTEXTBAR_BORDER_LIGHTNESS = 140;
@@ -27,11 +27,11 @@ const int CONTEXTBAR_MOUSEOVER_LIGHTNESS = 120;
 /** Radius of ContextBarButtons */
 const int CONTEXTBAR_RADIUS = 50;
 
-KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget* parent)
-: QToolButton(parent)
-, m_isHovered(false)
-, m_fadingValue(0)
-, m_fadingTimeLine(nullptr)
+KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget *parent)
+    : QToolButton(parent)
+    , m_isHovered(false)
+    , m_fadingValue(0)
+    , m_fadingTimeLine(nullptr)
 {
     const int size = QApplication::style()->pixelMetric(QStyle::PM_ButtonIconSize);
     setIconSize(QSize(size, size));
@@ -39,7 +39,7 @@ KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget* parent)
     setIcon(QIcon::fromTheme(iconName));
 }
 
-void KoContextBarButton::paintEvent(QPaintEvent*)
+void KoContextBarButton::paintEvent(QPaintEvent *)
 {
     QStylePainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -51,8 +51,8 @@ void KoContextBarButton::paintEvent(QPaintEvent*)
     QColor borderColor = bgColor.lighter(CONTEXTBAR_BORDER_LIGHTNESS);
 
     if (opt.state & QStyle::State_MouseOver && opt.state & QStyle::State_Enabled) {
-            color = color.lighter(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
-            borderColor = borderColor.lighter(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
+        color = color.lighter(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
+        borderColor = borderColor.lighter(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
     }
 
     const QRectF rectF = QRectF(opt.rect).adjusted(0.5, 0.5, -0.5, -0.5);
@@ -76,8 +76,7 @@ void KoContextBarButton::paintEvent(QPaintEvent*)
         // Left shadow
         gradient.setFinalStop(rectF.bottomLeft() + QPoint(3, 0));
         painter.fillPath(path, gradient);
-    }
-    else {
+    } else {
         // Top shadow
         QLinearGradient gradient(rectF.topLeft(), rectF.topLeft() + QPoint(0, 5));
         gradient.setColorAt(0, QColor::fromHsvF(0, 0, 0, .3));
@@ -104,8 +103,7 @@ void KoContextBarButton::startFading()
     const int duration = 300;
 
     m_fadingTimeLine = new QTimeLine(duration, this);
-    connect(m_fadingTimeLine, &QTimeLine::frameChanged,
-            this, &KoContextBarButton::setFadingValue);
+    connect(m_fadingTimeLine, &QTimeLine::frameChanged, this, &KoContextBarButton::setFadingValue);
     m_fadingTimeLine->setFrameRange(0, 255);
     m_fadingTimeLine->start();
     m_fadingValue = 0;

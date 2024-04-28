@@ -10,14 +10,13 @@
 #include <QList>
 
 #include "KoDocument.h"
-#include "KoPart.h"
 #include "KoDocumentInfo.h"
+#include "KoPart.h"
 #include "KoView.h"
 #include <MainDebug.h>
 
-
 KoPartAdaptor::KoPartAdaptor(KoPart *doc)
-        : QDBusAbstractAdaptor(doc)
+    : QDBusAbstractAdaptor(doc)
 {
     setAutoRelaySignals(true);
     m_pDoc = doc;
@@ -27,7 +26,7 @@ KoPartAdaptor::~KoPartAdaptor()
 {
 }
 
-void KoPartAdaptor::openUrl(const QString & url)
+void KoPartAdaptor::openUrl(const QString &url)
 {
     m_pDoc->document()->openUrl(QUrl(url));
 }
@@ -54,7 +53,7 @@ int KoPartAdaptor::viewCount()
 
 QString KoPartAdaptor::view(int idx)
 {
-    QList<KoView*> views = m_pDoc->views();
+    QList<KoView *> views = m_pDoc->views();
     KoView *v = views.at(idx);
     if (!v)
         return QString();
@@ -67,13 +66,13 @@ void KoPartAdaptor::save()
     m_pDoc->document()->save();
 }
 
-void KoPartAdaptor::saveAs(const QString & url)
+void KoPartAdaptor::saveAs(const QString &url)
 {
     m_pDoc->document()->saveAs(QUrl(url));
     m_pDoc->document()->waitSaveComplete(); // see ReadWritePart
 }
 
-void KoPartAdaptor::setOutputMimeType(const QByteArray& mimetype)
+void KoPartAdaptor::setOutputMimeType(const QByteArray &mimetype)
 {
     m_pDoc->document()->setOutputMimeType(mimetype);
 }
@@ -109,21 +108,17 @@ QString KoPartAdaptor::documentInfoTelephoneHome() const
     return m_pDoc->document()->documentInfo()->authorInfo("telephone-home");
 }
 
-
 QString KoPartAdaptor::documentInfoFax() const
 {
     return m_pDoc->document()->documentInfo()->authorInfo("fax");
-
 }
 QString KoPartAdaptor::documentInfoCountry() const
 {
     return m_pDoc->document()->documentInfo()->authorInfo("country");
-
 }
 QString KoPartAdaptor::documentInfoPostalCode() const
 {
     return m_pDoc->document()->documentInfo()->authorInfo("postal-code");
-
 }
 QString KoPartAdaptor::documentInfoCity() const
 {
@@ -164,17 +159,17 @@ QString KoPartAdaptor::documentInfoSubject() const
 {
     return m_pDoc->document()->documentInfo()->aboutInfo("subject");
 }
-void KoPartAdaptor::setDocumentInfoKeywords(const QString & text)
+void KoPartAdaptor::setDocumentInfoKeywords(const QString &text)
 {
     m_pDoc->document()->documentInfo()->setAboutInfo("keywords", text);
 }
 
-void KoPartAdaptor::setDocumentInfoSubject(const QString & text)
+void KoPartAdaptor::setDocumentInfoSubject(const QString &text)
 {
     m_pDoc->document()->documentInfo()->setAboutInfo("subject", text);
 }
 
-void KoPartAdaptor::setDocumentInfoAuthorName(const QString & text)
+void KoPartAdaptor::setDocumentInfoAuthorName(const QString &text)
 {
     m_pDoc->document()->documentInfo()->setAuthorInfo("creator", text);
 }
@@ -193,7 +188,6 @@ void KoPartAdaptor::setDocumentInfoAuthorPosition(const QString &text)
 {
     m_pDoc->document()->documentInfo()->setAuthorInfo("position", text);
 }
-
 
 void KoPartAdaptor::setDocumentInfoTelephone(const QString &text)
 {
@@ -221,7 +215,7 @@ void KoPartAdaptor::setDocumentInfoCountry(const QString &text)
     m_pDoc->document()->documentInfo()->setAuthorInfo("country", text);
 }
 
-void KoPartAdaptor::setDocumentInfoTitle(const QString & text)
+void KoPartAdaptor::setDocumentInfoTitle(const QString &text)
 {
     m_pDoc->document()->documentInfo()->setAboutInfo("title", text);
 }
@@ -231,12 +225,12 @@ void KoPartAdaptor::setDocumentInfoPostalCode(const QString &text)
     m_pDoc->document()->documentInfo()->setAuthorInfo("postal-code", text);
 }
 
-void KoPartAdaptor::setDocumentInfoCity(const QString & text)
+void KoPartAdaptor::setDocumentInfoCity(const QString &text)
 {
     m_pDoc->document()->documentInfo()->setAuthorInfo("city", text);
 }
 
-void KoPartAdaptor::setDocumentInfoInitial(const QString & text)
+void KoPartAdaptor::setDocumentInfoInitial(const QString &text)
 {
     m_pDoc->document()->documentInfo()->setAuthorInfo("initial", text);
 }

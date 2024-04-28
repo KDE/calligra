@@ -11,20 +11,19 @@
 #include <KLocalizedString>
 
 // KoChart
-#include "Legend.h"
-#include "ChartShape.h"
-#include "ChartLayout.h"
 #include "ChartDebug.h"
+#include "ChartLayout.h"
+#include "ChartShape.h"
+#include "Legend.h"
 
 using namespace KoChart;
 using namespace KChart;
 
-
-LegendCommand::LegendCommand(KoChart::Legend* legend)
+LegendCommand::LegendCommand(KoChart::Legend *legend)
     : m_legend(legend)
 {
-    QObject *l = qobject_cast<QObject*>(legend); // legend is both KoShape and QObject, both with parent() method
-    m_chart = dynamic_cast<ChartShape*>(l->parent());
+    QObject *l = qobject_cast<QObject *>(legend); // legend is both KoShape and QObject, both with parent() method
+    m_chart = dynamic_cast<ChartShape *>(l->parent());
     Q_ASSERT(m_chart);
 
     m_newFont = legend->font();
@@ -44,8 +43,7 @@ void LegendCommand::redo()
     m_oldFont = m_legend->font();
     m_oldFontSize = m_legend->fontSize();
     m_oldExpansion = m_legend->expansion();
-    if (m_oldTitle == m_newTitle && m_oldFont == m_newFont && m_oldFontSize == m_newFontSize
-            && m_oldExpansion == m_newExpansion)
+    if (m_oldTitle == m_newTitle && m_oldFont == m_newFont && m_oldFontSize == m_newFontSize && m_oldExpansion == m_newExpansion)
         return;
 
     // Actually do the work
@@ -59,8 +57,7 @@ void LegendCommand::redo()
 
 void LegendCommand::undo()
 {
-    if (m_oldTitle == m_newTitle && m_oldFont == m_newFont && m_oldFontSize == m_newFontSize
-            && m_oldExpansion == m_newExpansion)
+    if (m_oldTitle == m_newTitle && m_oldFont == m_newFont && m_oldFontSize == m_newFontSize && m_oldExpansion == m_newExpansion)
         return;
 
     m_legend->setTitle(m_oldTitle);

@@ -2,16 +2,16 @@
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef _KO_COLOR_TRANSFORMATION_FACTORY_H_
 #define _KO_COLOR_TRANSFORMATION_FACTORY_H_
 
 #include <QHash>
-#include <QVariant>
 #include <QList>
 #include <QPair>
 #include <QString>
+#include <QVariant>
 
 class KoColorTransformation;
 class KoColorSpace;
@@ -28,17 +28,20 @@ class PIGMENTCMS_EXPORT KoColorTransformationFactory
 public:
     explicit KoColorTransformationFactory(const QString &id);
     virtual ~KoColorTransformationFactory();
+
 public:
     QString id() const;
+
 public:
     /**
      * @return an empty list if the factory support all type of colorspaces models.
      */
-    virtual QList< QPair< KoID, KoID > > supportedModels() const = 0;
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const = 0;
+    virtual QList<QPair<KoID, KoID>> supportedModels() const = 0;
+    virtual KoColorTransformation *createTransformation(const KoColorSpace *colorSpace, QHash<QString, QVariant> parameters) const = 0;
+
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

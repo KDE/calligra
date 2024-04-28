@@ -8,20 +8,18 @@
 #include <KPluginFactory>
 #include <KPrPageEffectRegistry.h>
 
-#include "irisWipe/KPrIrisWipeEffectFactory.h"
-#include "triangleWipe/KPrTriangleWipeEffectFactory.h"
 #include "arrowHeadWipe/KPrArrowHeadWipeEffectFactory.h"
 #include "ellipseWipe/KPrEllipseWipeEffectFactory.h"
-#include "roundRectWipe/KPrRoundRectWipeEffectFactory.h"
-#include "pentagonWipe/KPrPentagonWipeEffectFactory.h"
-#include "hexagonWipe/KPrHexagonWipeEffectFactory.h"
-#include "starWipe/KPrStarWipeEffectFactory.h"
 #include "eyeWipe/KPrEyeWipeEffectFactory.h"
+#include "hexagonWipe/KPrHexagonWipeEffectFactory.h"
+#include "irisWipe/KPrIrisWipeEffectFactory.h"
 #include "miscShapeWipe/KPrMiscShapeWipeEffectFactory.h"
+#include "pentagonWipe/KPrPentagonWipeEffectFactory.h"
+#include "roundRectWipe/KPrRoundRectWipeEffectFactory.h"
+#include "starWipe/KPrStarWipeEffectFactory.h"
+#include "triangleWipe/KPrTriangleWipeEffectFactory.h"
 
-
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_pageeffect_iriswipe.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_pageeffect_iriswipe.json", registerPlugin<Plugin>();)
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)

@@ -6,22 +6,22 @@
 
 #include "KoPAPageBase.h"
 
-#include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
-#include "KoPAPixmapCache.h"
 #include "KoPAPageContainerModel.h"
+#include "KoPAPixmapCache.h"
+#include "KoPASavingContext.h"
 #include "KoPAUtil.h"
 
-#include <KoXmlNS.h>
-#include <KoPageLayout.h>
-#include <KoStyleStack.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoOdfLoadingContext.h>
-#include <KoViewConverter.h>
+#include <KoPageLayout.h>
+#include <KoShapeBackground.h>
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
-#include <KoShapeBackground.h>
+#include <KoStyleStack.h>
+#include <KoViewConverter.h>
+#include <KoXmlNS.h>
 #include <KoZoomHandler.h>
 
 #include <PageAppDebug.h>
@@ -32,10 +32,10 @@
 #include <algorithm>
 
 KoPAPageBase::KoPAPageBase()
-: KoShapeContainer( new KoPAPageContainerModel() )
+    : KoShapeContainer(new KoPAPageContainerModel())
 {
     // Add a default layer
-    KoShapeLayer* layer = new KoShapeLayer;
+    KoShapeLayer *layer = new KoShapeLayer;
     addShape(layer);
 }
 
@@ -43,25 +43,24 @@ KoPAPageBase::~KoPAPageBase()
 {
 }
 
-void KoPAPageBase::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
+void KoPAPageBase::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
 }
 
-void KoPAPageBase::paintBackground( QPainter & painter, const KoViewConverter & converter, KoShapePaintingContext &paintContext )
+void KoPAPageBase::paintBackground(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     painter.save();
-    applyConversion( painter, converter );
+    applyConversion(painter, converter);
     KoPageLayout layout = pageLayout();
     painter.setPen(QPen(Qt::black, 0));
 
     if (background()) {
         QPainterPath p;
-        p.addRect( QRectF( 0.0, 0.0, layout.width, layout.height ) );
-        background()->paint( painter, converter, paintContext, p );
-    }
-    else {
+        p.addRect(QRectF(0.0, 0.0, layout.width, layout.height));
+        background()->paint(painter, converter, paintContext, p);
+    } else {
         painter.setBrush(Qt::white);
         painter.drawRect(QRectF(0.0, 0.0, layout.width, layout.height));
     }
@@ -69,24 +68,23 @@ void KoPAPageBase::paintBackground( QPainter & painter, const KoViewConverter & 
     painter.restore();
 }
 
-void KoPAPageBase::saveOdfPageContent( KoPASavingContext & paContext ) const
+void KoPAPageBase::saveOdfPageContent(KoPASavingContext &paContext) const
 {
     saveOdfLayers(paContext);
-    saveOdfShapes( paContext );
-    saveOdfAnimations( paContext );
-    saveOdfPresentationNotes( paContext );
+    saveOdfShapes(paContext);
+    saveOdfAnimations(paContext);
+    saveOdfPresentationNotes(paContext);
 }
 
 void KoPAPageBase::saveOdfLayers(KoPASavingContext &paContext) const
 {
-    QList<KoShape*> shapes(this->shapes());
+    QList<KoShape *> shapes(this->shapes());
     std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-    foreach(KoShape* shape, shapes) {
-        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
+    foreach (KoShape *shape, shapes) {
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(shape);
         if (layer) {
             paContext.addLayerForSaving(layer);
-        }
-        else {
+        } else {
             Q_ASSERT(layer);
             warnPageApp << "Page contains non layer where a layer is expected";
         }
@@ -95,99 +93,98 @@ void KoPAPageBase::saveOdfLayers(KoPASavingContext &paContext) const
     paContext.clearLayers();
 }
 
-void KoPAPageBase::saveOdfShapes( KoShapeSavingContext &context ) const
+void KoPAPageBase::saveOdfShapes(KoShapeSavingContext &context) const
 {
-    QList<KoShape*> shapes(this->shapes());
-    QList<KoShape*> tlshapes( shapes );
+    QList<KoShape *> shapes(this->shapes());
+    QList<KoShape *> tlshapes(shapes);
 
-    std::sort( tlshapes.begin(), tlshapes.end(), KoShape::compareShapeZIndex );
+    std::sort(tlshapes.begin(), tlshapes.end(), KoShape::compareShapeZIndex);
 
-    foreach( KoShape *shape, tlshapes ) {
-        shape->saveOdf( context );
+    foreach (KoShape *shape, tlshapes) {
+        shape->saveOdf(context);
     }
 }
 
-QString KoPAPageBase::saveOdfPageStyle( KoPASavingContext &paContext ) const
+QString KoPAPageBase::saveOdfPageStyle(KoPASavingContext &paContext) const
 {
-    KoGenStyle style( KoGenStyle::DrawingPageAutoStyle, "drawing-page" );
+    KoGenStyle style(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
 
-    if ( paContext.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
-        style.setAutoStyleInStylesDotXml( true );
+    if (paContext.isSet(KoShapeSavingContext::AutoStyleInStyleXml)) {
+        style.setAutoStyleInStylesDotXml(true);
     }
 
-    saveOdfPageStyleData( style, paContext );
+    saveOdfPageStyleData(style, paContext);
 
-    return paContext.mainStyles().insert( style, "dp" );
+    return paContext.mainStyles().insert(style, "dp");
 }
 
-void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
+void KoPAPageBase::saveOdfPageStyleData(KoGenStyle &style, KoPASavingContext &paContext) const
 {
-    QSharedPointer<KoShapeBackground>  bg = background();
-    if( bg )
-        bg->fillStyle( style, paContext );
+    QSharedPointer<KoShapeBackground> bg = background();
+    if (bg)
+        bg->fillStyle(style, paContext);
 }
 
-bool KoPAPageBase::saveOdfAnimations( KoPASavingContext & paContext ) const
+bool KoPAPageBase::saveOdfAnimations(KoPASavingContext &paContext) const
 {
-    Q_UNUSED( paContext );
+    Q_UNUSED(paContext);
     return true;
 }
 
 bool KoPAPageBase::saveOdfPresentationNotes(KoPASavingContext &paContext) const
 {
-    Q_UNUSED( paContext );
+    Q_UNUSED(paContext);
     return true;
 }
 
-bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext & loadingContext )
+bool KoPAPageBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &loadingContext)
 {
-    KoPALoadingContext &paContext = static_cast<KoPALoadingContext&>( loadingContext );
+    KoPALoadingContext &paContext = static_cast<KoPALoadingContext &>(loadingContext);
 
-    KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
+    KoStyleStack &styleStack = loadingContext.odfLoadingContext().styleStack();
     styleStack.save();
-    loadingContext.odfLoadingContext().fillStyleStack( element, KoXmlNS::draw, "style-name", "drawing-page" );
-    styleStack.setTypeProperties( "drawing-page" );
+    loadingContext.odfLoadingContext().fillStyleStack(element, KoXmlNS::draw, "style-name", "drawing-page");
+    styleStack.setTypeProperties("drawing-page");
 
     loadOdfPageTag(element, paContext);
     styleStack.restore();
 
     // load layers and shapes
-    const KoXmlElement & pageLayerSet = KoXml::namedItemNS( element, KoXmlNS::draw, "layer-set" );
+    const KoXmlElement &pageLayerSet = KoXml::namedItemNS(element, KoXmlNS::draw, "layer-set");
 
-    const KoXmlElement & usedPageLayerSet = pageLayerSet.isNull() ? loadingContext.odfLoadingContext().stylesReader().layerSet(): pageLayerSet;
+    const KoXmlElement &usedPageLayerSet = pageLayerSet.isNull() ? loadingContext.odfLoadingContext().stylesReader().layerSet() : pageLayerSet;
 
     int layerZIndex = 0;
     bool first = true;
     KoXmlElement layerElement;
-    forEachElement( layerElement, usedPageLayerSet ) {
-        KoShapeLayer * layer = 0;
-        if ( first ) {
+    forEachElement(layerElement, usedPageLayerSet)
+    {
+        KoShapeLayer *layer = 0;
+        if (first) {
             first = false;
-            layer = dynamic_cast<KoShapeLayer *>( shapes().first() );
-            Q_ASSERT( layer );
-        }
-        else {
+            layer = dynamic_cast<KoShapeLayer *>(shapes().first());
+            Q_ASSERT(layer);
+        } else {
             layer = new KoShapeLayer();
-            addShape( layer );
+            addShape(layer);
         }
-        if ( layer ) {
-            layer->setZIndex( layerZIndex++ );
-            layer->loadOdf( layerElement, loadingContext );
+        if (layer) {
+            layer->setZIndex(layerZIndex++);
+            layer->loadOdf(layerElement, loadingContext);
         }
     }
 
-    KoShapeLayer * layer = dynamic_cast<KoShapeLayer *>( shapes().first() );
-    if ( layer )
-    {
+    KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(shapes().first());
+    if (layer) {
         KoXmlElement child;
-        forEachElement( child, element )
+        forEachElement(child, element)
         {
-            debugPageApp <<"loading shape" << child.localName();
+            debugPageApp << "loading shape" << child.localName();
 
-            KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, loadingContext );
-            if ( shape ) {
-                if( ! shape->parent() ) {
-                    layer->addShape( shape );
+            KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(child, loadingContext);
+            if (shape) {
+                if (!shape->parent()) {
+                    layer->addShape(shape);
                 }
             }
         }
@@ -198,43 +195,41 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
     return true;
 }
 
-void KoPAPageBase::loadOdfPageTag( const KoXmlElement &element,
-                                   KoPALoadingContext &loadingContext )
+void KoPAPageBase::loadOdfPageTag(const KoXmlElement &element, KoPALoadingContext &loadingContext)
 {
     Q_UNUSED(element);
-    KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
+    KoStyleStack &styleStack = loadingContext.odfLoadingContext().styleStack();
 
-    if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
+    if (styleStack.hasProperty(KoXmlNS::draw, "fill")) {
         setBackground(loadOdfFill(loadingContext));
     }
 }
 
-void KoPAPageBase::loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext )
+void KoPAPageBase::loadOdfPageExtra(const KoXmlElement &element, KoPALoadingContext &loadingContext)
 {
-    Q_UNUSED( element );
-    Q_UNUSED( loadingContext );
+    Q_UNUSED(element);
+    Q_UNUSED(loadingContext);
 }
 
 QSizeF KoPAPageBase::size() const
 {
     const KoPageLayout layout = pageLayout();
-    return QSize( layout.width, layout.height );
+    return QSize(layout.width, layout.height);
 }
 
 QRectF KoPAPageBase::boundingRect() const
 {
-    //return KoShapeContainer::boundingRect();
-    return contentRect().united(QRectF(QPointF(0, 0), size() ));
+    // return KoShapeContainer::boundingRect();
+    return contentRect().united(QRectF(QPointF(0, 0), size()));
 }
 
 QRectF KoPAPageBase::contentRect() const
 {
     QRectF bb;
-    foreach (KoShape* layer, shapes()) {
+    foreach (KoShape *layer, shapes()) {
         if (bb.isNull()) {
             bb = layer->boundingRect();
-        }
-        else {
+        } else {
             bb = bb.united(layer->boundingRect());
         }
     }
@@ -242,14 +237,14 @@ QRectF KoPAPageBase::contentRect() const
     return bb;
 }
 
-void KoPAPageBase::shapeAdded( KoShape * shape )
+void KoPAPageBase::shapeAdded(KoShape *shape)
 {
-    Q_UNUSED( shape );
+    Q_UNUSED(shape);
 }
 
-void KoPAPageBase::shapeRemoved( KoShape * shape )
+void KoPAPageBase::shapeRemoved(KoShape *shape)
 {
-    Q_UNUSED( shape );
+    Q_UNUSED(shape);
 }
 
 KoPageApp::PageType KoPAPageBase::pageType() const
@@ -257,29 +252,28 @@ KoPageApp::PageType KoPAPageBase::pageType() const
     return KoPageApp::Page;
 }
 
-QPixmap KoPAPageBase::thumbnail( const QSize& size )
+QPixmap KoPAPageBase::thumbnail(const QSize &size)
 {
 #ifdef CACHE_PAGE_THUMBNAILS
     QString key = thumbnailKey();
     QPixmap pm;
-    if ( !KoPAPixmapCache::instance()->find( key, size, &pm ) ) {
-        pm = generateThumbnail( size );
-        KoPAPixmapCache::instance()->insert( key, pm, size );
+    if (!KoPAPixmapCache::instance()->find(key, size, &pm)) {
+        pm = generateThumbnail(size);
+        KoPAPixmapCache::instance()->insert(key, pm, size);
         debugPageApp << "create thumbnail" << this << key << size;
-    }
-    else {
-        //debugPageApp << "thumbnail in cache " << this;
+    } else {
+        // debugPageApp << "thumbnail in cache " << this;
     }
     return pm;
 #else
-    return generateThumbnail( size );
+    return generateThumbnail(size);
 #endif
 }
 
 QPixmap KoPAPageBase::generateThumbnail(const QSize &size)
 {
     // don't paint null pixmap
-    if ( size.isEmpty() ) // either width or height is <= 0
+    if (size.isEmpty()) // either width or height is <= 0
         return QPixmap();
 
     KoZoomHandler zoomHandler;
@@ -324,15 +318,15 @@ QImage KoPAPageBase::thumbImage(const QSize &size)
 
 void KoPAPageBase::pageUpdated()
 {
-    KoPAPixmapCache::instance()->remove( thumbnailKey() );
+    KoPAPixmapCache::instance()->remove(thumbnailKey());
 }
 
 QString KoPAPageBase::thumbnailKey() const
 {
-     return QString::asprintf( "%p", static_cast<const void *>( this ) );
+    return QString::asprintf("%p", static_cast<const void *>(this));
 }
 
-KoShapeManagerPaintingStrategy * KoPAPageBase::getPaintingStrategy() const
+KoShapeManagerPaintingStrategy *KoPAPageBase::getPaintingStrategy() const
 {
     return 0;
 }

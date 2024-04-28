@@ -8,8 +8,8 @@
 #ifndef KO_TABLE_OF_CONTENTS_GENERATOR_INFO
 #define KO_TABLE_OF_CONTENTS_GENERATOR_INFO
 
-#define ppVar( var ) #var << "=" << var
-//#define DEBUG_TOC_STRUCTURE
+#define ppVar(var) #var << "=" << var
+// #define DEBUG_TOC_STRUCTURE
 
 #include <QList>
 #include <QString>

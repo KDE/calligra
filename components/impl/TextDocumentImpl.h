@@ -12,26 +12,28 @@
 
 #include "DocumentImpl.h"
 
-namespace Calligra {
-namespace Components {
+namespace Calligra
+{
+namespace Components
+{
 
 class TextDocumentImpl : public DocumentImpl
 {
     Q_OBJECT
 public:
-    explicit TextDocumentImpl(QObject* parent = 0);
+    explicit TextDocumentImpl(QObject *parent = 0);
     ~TextDocumentImpl() override;
 
-    bool load(const QUrl& url) override;
+    bool load(const QUrl &url) override;
     int currentIndex() override;
     void setCurrentIndex(int newValue) override;
     int indexCount() const override;
     QUrl urlAtPoint(QPoint point) override;
-    QObject* part() const override;
+    QObject *part() const override;
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 } // Namespace Components

@@ -10,11 +10,11 @@
 
 #include <QObject>
 
-#include <QVariantList>
 #include <KoFilter.h>
 #include <KoStore.h>
 #include <QHash>
 #include <QList>
+#include <QVariantList>
 
 class MobiFile;
 
@@ -24,9 +24,9 @@ class ExportMobi : public KoFilter
 public:
     ExportMobi(QObject *parent, const QVariantList &);
     ~ExportMobi() override;
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
-    
-private:   
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
+
+private:
     KoFilter::ConversionStatus extractImages(KoStore *odfStore, MobiFile *mobi);
 
 private:
@@ -36,8 +36,6 @@ private:
     QHash<QString, QSizeF> m_imagesSrcList;
     QHash<int, QByteArray> m_imagesList;
     QList<int> m_imagesSize;
-
-    
 };
 
 #endif // EXPORTMOBI_H

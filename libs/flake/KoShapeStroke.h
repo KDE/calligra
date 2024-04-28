@@ -16,9 +16,8 @@
 
 #include "flake_export.h"
 
-#include <QMetaType>
 #include <QColor>
-
+#include <QMetaType>
 
 class KoShape;
 class QPainter;
@@ -46,7 +45,7 @@ public:
     ~KoShapeStroke() override;
 
     /// Assignment operator
-    KoShapeStroke& operator = (const KoShapeStroke &rhs);
+    KoShapeStroke &operator=(const KoShapeStroke &rhs);
 
     /// Sets the lines cap style
     void setCapStyle(Qt::PenCapStyle style);
@@ -81,7 +80,7 @@ public:
     void setColor(const QColor &color);
 
     /// Sets the strokes brush used to fill strokes of this border
-    void setLineBrush(const QBrush & brush);
+    void setLineBrush(const QBrush &brush);
     /// Returns the strokes brush
     QBrush lineBrush() const;
 
@@ -94,9 +93,9 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
-Q_DECLARE_METATYPE( KoShapeStroke )
+Q_DECLARE_METATYPE(KoShapeStroke)
 
 #endif // KOSHAPESTROKE_H

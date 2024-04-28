@@ -14,7 +14,6 @@
 
 class QByteArray;
 
-
 class DocxExport : public KoFilter
 {
     Q_OBJECT
@@ -22,7 +21,7 @@ class DocxExport : public KoFilter
 public:
     DocxExport(QObject *parent, const QVariantList &);
     ~DocxExport() override;
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 
 private:
 };

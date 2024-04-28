@@ -13,17 +13,17 @@
 
 using namespace Calligra::Sheets;
 
-ValueConverter::ValueConverter(const ValueParser* parser)
-        : m_parser(parser)
+ValueConverter::ValueConverter(const ValueParser *parser)
+    : m_parser(parser)
 {
 }
 
-const CalculationSettings* ValueConverter::settings() const
+const CalculationSettings *ValueConverter::settings() const
 {
     return m_parser->settings();
 }
 
-Value ValueConverter::asBoolean(const Value &value, bool* ok) const
+Value ValueConverter::asBoolean(const Value &value, bool *ok) const
 {
     Value val;
 
@@ -68,7 +68,7 @@ Value ValueConverter::asBoolean(const Value &value, bool* ok) const
     return val;
 }
 
-Value ValueConverter::asInteger(const Value &value, bool* ok) const
+Value ValueConverter::asInteger(const Value &value, bool *ok) const
 {
     Value val;
 
@@ -114,7 +114,7 @@ Value ValueConverter::asInteger(const Value &value, bool* ok) const
     return val;
 }
 
-Value ValueConverter::asFloat(const Value &value, bool* ok) const
+Value ValueConverter::asFloat(const Value &value, bool *ok) const
 {
     Value val;
 
@@ -160,7 +160,7 @@ Value ValueConverter::asFloat(const Value &value, bool* ok) const
     return val;
 }
 
-Value ValueConverter::asComplex(const Value &value, bool* ok) const
+Value ValueConverter::asComplex(const Value &value, bool *ok) const
 {
     Value val;
 
@@ -204,7 +204,7 @@ Value ValueConverter::asComplex(const Value &value, bool* ok) const
     return val;
 }
 
-Value ValueConverter::asNumeric(const Value &value, bool* ok) const
+Value ValueConverter::asNumeric(const Value &value, bool *ok) const
 {
     Value val;
 
@@ -260,8 +260,7 @@ Value ValueConverter::asString(const Value &value) const
         val = Value(str);
         break;
     }
-    case Value::Integer:
-    {
+    case Value::Integer: {
         if (fmt == Value::fmt_Percent)
             val = Value(QString::number(value.asInteger() * 100) + " %");
         else if (fmt == Value::fmt_DateTime)
@@ -270,12 +269,10 @@ Value ValueConverter::asString(const Value &value) const
             val = Value(locale->formatDate(value.asDate(settings()), true));
         else if (fmt == Value::fmt_Time)
             val = Value(locale->formatTime(value.asTime()));
-        else
-        {
+        else {
             val = Value(QString::number(value.asInteger()));
         }
-    }
-    break;
+    } break;
     case Value::Float:
         if (fmt == Value::fmt_DateTime)
             val = Value(locale->formatDateTime(value.asDateTime(settings()), true));
@@ -284,7 +281,7 @@ Value ValueConverter::asString(const Value &value) const
         else if (fmt == Value::fmt_Time)
             val = Value(locale->formatTime(value.asTime(), true));
         else {
-            //convert the number, change decimal point from English to local
+            // convert the number, change decimal point from English to local
             s = locale->formatDoubleNoSep(numToDouble(value.asFloat()));
             if (fmt == Value::fmt_Percent)
                 s += " %";
@@ -299,7 +296,7 @@ Value ValueConverter::asString(const Value &value) const
         else if (fmt == Value::fmt_Time)
             val = Value(locale->formatTime(value.asTime(), true));
         else {
-            //convert the number, change decimal point from English to local
+            // convert the number, change decimal point from English to local
             QString real = locale->formatDoubleNoSep(numToDouble(value.asComplex().real()));
             QString imag = locale->formatDoubleNoSep(numToDouble(value.asComplex().imag()));
             s = real;
@@ -308,8 +305,8 @@ Value ValueConverter::asString(const Value &value) const
             // TODO Stefan: Some prefer 'j'. Configure option? Spec?
             s += imag + 'i';
             // NOTE Stefan: Never recognized a complex percentage anywhere. ;-)
-//         if (fmt == Value::fmt_Percent)
-//           s += " %";
+            //         if (fmt == Value::fmt_Percent)
+            //           s += " %";
             val = Value(s);
         }
         break;
@@ -330,7 +327,7 @@ Value ValueConverter::asString(const Value &value) const
     return val;
 }
 
-Value ValueConverter::asDateTime(const Value &value, bool* ok) const
+Value ValueConverter::asDateTime(const Value &value, bool *ok) const
 {
     Value val;
 
@@ -343,7 +340,7 @@ Value ValueConverter::asDateTime(const Value &value, bool* ok) const
         val = Value(QDateTime::currentDateTime(), settings());
         break;
     case Value::Boolean:
-        //ignore the bool value... any better idea? ;)
+        // ignore the bool value... any better idea? ;)
         val = Value(QDateTime::currentDateTime(), settings());
         break;
     case Value::Integer:
@@ -373,7 +370,7 @@ Value ValueConverter::asDateTime(const Value &value, bool* ok) const
     return val;
 }
 
-Value ValueConverter::asDate(const Value &value, bool* ok) const
+Value ValueConverter::asDate(const Value &value, bool *ok) const
 {
     Value val;
 
@@ -386,7 +383,7 @@ Value ValueConverter::asDate(const Value &value, bool* ok) const
         val = Value(QDate::currentDate(), settings());
         break;
     case Value::Boolean:
-        //ignore the bool value... any better idea? ;)
+        // ignore the bool value... any better idea? ;)
         val = Value(QDate::currentDate(), settings());
         break;
     case Value::Integer:
@@ -415,7 +412,7 @@ Value ValueConverter::asDate(const Value &value, bool* ok) const
     return val;
 }
 
-Value ValueConverter::asTime(const Value &value, bool* ok) const
+Value ValueConverter::asTime(const Value &value, bool *ok) const
 {
     Value val;
 
@@ -428,7 +425,7 @@ Value ValueConverter::asTime(const Value &value, bool* ok) const
         val = Value(Time::currentTime());
         break;
     case Value::Boolean:
-        //ignore the bool value... any better idea? ;)
+        // ignore the bool value... any better idea? ;)
         val = Value(Time::currentTime());
         break;
     case Value::Integer:
@@ -456,42 +453,42 @@ Value ValueConverter::asTime(const Value &value, bool* ok) const
     return val;
 }
 
-bool ValueConverter::toBoolean(const Value& value) const
+bool ValueConverter::toBoolean(const Value &value) const
 {
     return asBoolean(value).asBoolean();
 }
 
-int ValueConverter::toInteger(const Value& value) const
+int ValueConverter::toInteger(const Value &value) const
 {
     return asInteger(value).asInteger();
 }
 
-Number ValueConverter::toFloat(const Value& value) const
+Number ValueConverter::toFloat(const Value &value) const
 {
     return asFloat(value).asFloat();
 }
 
-complex<Number> ValueConverter::toComplex(const Value& value) const
+complex<Number> ValueConverter::toComplex(const Value &value) const
 {
     return asComplex(value).asComplex();
 }
 
-QString ValueConverter::toString(const Value& value) const
+QString ValueConverter::toString(const Value &value) const
 {
     return asString(value).asString();
 }
 
-QDateTime ValueConverter::toDateTime(const Value& value) const
+QDateTime ValueConverter::toDateTime(const Value &value) const
 {
     return asDateTime(value).asDateTime(settings());
 }
 
-QDate ValueConverter::toDate(const Value& value) const
+QDate ValueConverter::toDate(const Value &value) const
 {
     return asDate(value).asDate(settings());
 }
 
-Time ValueConverter::toTime(const Value& value) const
+Time ValueConverter::toTime(const Value &value) const
 {
     return asTime(value).asTime();
 }

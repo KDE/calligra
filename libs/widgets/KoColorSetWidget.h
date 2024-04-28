@@ -8,8 +8,8 @@
 #ifndef KOCOLORSETWIDGET_H_
 #define KOCOLORSETWIDGET_H_
 
-#include <QWidgetAction>
 #include <QFrame>
+#include <QWidgetAction>
 
 #include "kowidgets_export.h"
 
@@ -24,11 +24,9 @@ class KoColorSet;
  */
 class KOWIDGETS_EXPORT KoColorSetWidget : public QFrame
 {
-
     Q_OBJECT
 
 public:
-
     /**
      * Constructor for the widget, where color is initially blackpoint of sRGB
      *
@@ -46,12 +44,12 @@ public:
      * @param colorSet pointer to the color set
      */
     void setColorSet(KoColorSet *colorSet);
-    
+
     /**
      * Gets the current color set
      * @returns current color set,, 0 if none set
      */
-    KoColorSet* colorSet();
+    KoColorSet *colorSet();
 
 protected:
     void resizeEvent(QResizeEvent *event) override; ///< reimplemented from QFrame
@@ -79,7 +77,7 @@ private:
     Q_PRIVATE_SLOT(d, void addRemoveColors())
 
     class KoColorSetWidgetPrivate;
-    KoColorSetWidgetPrivate * const d;
+    KoColorSetWidgetPrivate *const d;
 };
 
 #endif

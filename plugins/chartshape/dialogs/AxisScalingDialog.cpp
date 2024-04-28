@@ -5,7 +5,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #include "AxisScalingDialog.h"
 
 using namespace KoChart;
@@ -19,4 +18,3 @@ AxisScalingDialog::AxisScalingDialog(QWidget *parent)
 AxisScalingDialog::~AxisScalingDialog()
 {
 }
-

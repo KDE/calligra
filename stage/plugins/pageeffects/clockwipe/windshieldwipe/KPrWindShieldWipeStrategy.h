@@ -7,17 +7,17 @@
 #ifndef KPRWINDSHIELDWIPESTRATEGY_H
 #define KPRWINDSHIELDWIPESTRATEGY_H
 
-#include <KPrPageEffectStrategy.h>
 #include "KPrSweepWipeStrategy.h"
+#include <KPrPageEffectStrategy.h>
 
 class KPrWindShieldWipeStrategy : public KPrSweepWipeStrategy
 {
 public:
-    KPrWindShieldWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse );
+    KPrWindShieldWipeStrategy(int subType, const char *smilType, const char *smilSubType, bool reverse);
     ~KPrWindShieldWipeStrategy() override;
 
-    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
-    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
+    void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine) override;
+    void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data) override;
 };
 
 #endif // KPRWINDSHIELDWIPESTRATEGY_H

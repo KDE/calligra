@@ -7,8 +7,8 @@
 #include "KoSopranoTableModelDelegate.h"
 
 // lib
-#include "KoSopranoTableModel.h"
 #include "KoDocumentRdf.h"
+#include "KoSopranoTableModel.h"
 // main
 #include <KoDocument.h>
 // KF5
@@ -17,13 +17,11 @@
 #include <QComboBox>
 
 KoSopranoTableModelDelegate::KoSopranoTableModelDelegate(QObject *parent)
-        : QStyledItemDelegate(parent)
+    : QStyledItemDelegate(parent)
 {
 }
 
-QWidget *KoSopranoTableModelDelegate::createEditor(QWidget *parent,
-        const QStyleOptionViewItem &option,
-        const QModelIndex &index) const
+QWidget *KoSopranoTableModelDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QComboBox *comboBox = new QComboBox(parent);
     if (index.column() == KoSopranoTableModel::ColObjType) {
@@ -37,20 +35,17 @@ QWidget *KoSopranoTableModelDelegate::createEditor(QWidget *parent,
     return comboBox;
 }
 
-void KoSopranoTableModelDelegate::setEditorData(QWidget *editor,
-        const QModelIndex &index) const
+void KoSopranoTableModelDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
     QComboBox *comboBox = qobject_cast<QComboBox *>(editor);
     if (!comboBox) {
         return QStyledItemDelegate::setEditorData(editor, index);
     }
-    int pos = comboBox->findText(index.model()->data(index).toString(),
-                                 Qt::MatchExactly);
+    int pos = comboBox->findText(index.model()->data(index).toString(), Qt::MatchExactly);
     comboBox->setCurrentIndex(pos);
 }
 
-void KoSopranoTableModelDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
-        const QModelIndex &index) const
+void KoSopranoTableModelDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     QComboBox *comboBox = qobject_cast<QComboBox *>(editor);
     if (!comboBox) {

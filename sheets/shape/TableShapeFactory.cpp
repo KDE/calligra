@@ -9,29 +9,27 @@
 #include "TableToolFactory.h"
 #include <TableShape.h>
 
-#include <KPluginFactory>
 #include <KLocalizedString>
+#include <KPluginFactory>
 
-#include <KoIcon.h>
 #include <KoDocumentResourceManager.h>
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
-#include <KoShapeLoadingContext.h>
+#include <KoIcon.h>
 #include <KoOdfLoadingContext.h>
-#include <KoXmlNS.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeRegistry.h>
 #include <KoStyleStack.h>
+#include <KoToolRegistry.h>
+#include <KoXmlNS.h>
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY_WITH_JSON(TableShapePluginFactory, "calligra_shape_spreadsheet.json",
-                           registerPlugin<TableShapePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(TableShapePluginFactory, "calligra_shape_spreadsheet.json", registerPlugin<TableShapePlugin>();)
 
-TableShapePlugin::TableShapePlugin(QObject * parent, const QVariantList&)
+TableShapePlugin::TableShapePlugin(QObject *parent, const QVariantList &)
 {
     Q_UNUSED(parent);
     KoShapeRegistry::instance()->add(new TableShapeFactory());
 }
-
 
 TableShapeFactory::TableShapeFactory()
     : KoShapeFactoryBase(TableShapeId, i18n("Spreadsheet"))

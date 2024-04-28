@@ -13,8 +13,10 @@ class FilterEffectsPlugin : public QObject
 {
     Q_OBJECT
 public:
-    FilterEffectsPlugin(QObject * parent, const QList<QVariant>&);
-    ~FilterEffectsPlugin() override {}
+    FilterEffectsPlugin(QObject *parent, const QList<QVariant> &);
+    ~FilterEffectsPlugin() override
+    {
+    }
 };
 
 #endif // FILTEREFFECTSPLUGIN_H

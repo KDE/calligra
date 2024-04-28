@@ -6,45 +6,43 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "ChartProxyModel.h"
 #include "PlotArea.h"
 
 // Qt
-#include <QRegion>
 #include <QPoint>
+#include <QRegion>
 
 // Calligra
-#include <KoXmlReader.h>
+#include <KoOdfGraphicStyles.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfStylesReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfStylesReader.h>
-#include <KoOdfGraphicStyles.h>
+#include <KoXmlReader.h>
 #include <interfaces/KoChartModel.h>
 
 // KoChart
 #include "Axis.h"
-#include "DataSet.h"
-#include "TableSource.h"
-#include "OdfLoadingHelper.h"
-#include "ChartTableModel.h"
 #include "ChartDebug.h"
+#include "ChartTableModel.h"
+#include "DataSet.h"
+#include "OdfLoadingHelper.h"
+#include "TableSource.h"
 
 // Other
 #include <algorithm>
 
 using namespace KoChart;
 
-
 // ================================================================
 //                     Class ChartProxyModel::Private
 
-
-class ChartProxyModel::Private {
+class ChartProxyModel::Private
+{
 public:
     Private(ChartProxyModel *parent, ChartShape *shape, TableSource *source);
     ~Private();
@@ -59,19 +57,19 @@ public:
 
     bool manualControl;
 
-    bool             firstRowIsLabel;
-    bool             firstColumnIsLabel;
-    Qt::Orientation  dataDirection;
-    int              dataDimensions;
+    bool firstRowIsLabel;
+    bool firstColumnIsLabel;
+    Qt::Orientation dataDirection;
+    int dataDimensions;
 
     CellRegion categoryDataRegion;
 
-    QVector< CellRegion > dataSetRegions;
+    QVector<CellRegion> dataSetRegions;
 
-    QList<DataSet*>  dataSets;
-    QList<DataSet*>  removedDataSets;
+    QList<DataSet *> dataSets;
+    QList<DataSet *> removedDataSets;
 
-    CellRegion       selection;
+    CellRegion selection;
 
     /**
      * Discards old and creates new data sets from the current region selection.
@@ -88,8 +86,7 @@ public:
      * As a side effect, this method sets d->categoryDataRegion if
      * overrideCategories is true.
      */
-    QList<DataSet*> createDataSetsFromRegion(QList<DataSet*> *dataSetsToRecycle,
-                                              bool overrideCategories = true);
+    QList<DataSet *> createDataSetsFromRegion(QList<DataSet *> *dataSetsToRecycle, bool overrideCategories = true);
 };
 
 ChartProxyModel::Private::Private(ChartProxyModel *parent, ChartShape *shape, TableSource *source)
@@ -99,16 +96,16 @@ ChartProxyModel::Private::Private(ChartProxyModel *parent, ChartShape *shape, Ta
     , isLoading(false)
     , manualControl(false)
 {
-    firstRowIsLabel    = false;
+    firstRowIsLabel = false;
     firstColumnIsLabel = false;
-    dataDimensions     = 1;
+    dataDimensions = 1;
 
     // Determines what orientation the data points in a data series
     // have when multiple data sets are created from one source
     // region. For example, vertical means that each column in the source
     // region is assigned to one data series.
     // Default to Qt::Vertical, as that's what OOo does also.
-    dataDirection      = Qt::Vertical;
+    dataDirection = Qt::Vertical;
 }
 
 ChartProxyModel::Private::~Private()
@@ -117,19 +114,15 @@ ChartProxyModel::Private::~Private()
     qDeleteAll(removedDataSets);
 }
 
-
 // ================================================================
 //                          Class ChartProxyModel
 
-
 ChartProxyModel::ChartProxyModel(ChartShape *shape, TableSource *source)
-    : QAbstractTableModel(),
-      d(new Private(this, shape, source))
+    : QAbstractTableModel()
+    , d(new Private(this, shape, source))
 {
-    connect(source, &TableSource::tableAdded,
-            this,   &ChartProxyModel::addTable);
-    connect(source, &TableSource::tableRemoved,
-            this,   &ChartProxyModel::removeTable);
+    connect(source, &TableSource::tableAdded, this, &ChartProxyModel::addTable);
+    connect(source, &TableSource::tableRemoved, this, &ChartProxyModel::removeTable);
 }
 
 ChartProxyModel::~ChartProxyModel()
@@ -137,7 +130,7 @@ ChartProxyModel::~ChartProxyModel()
     delete d;
 }
 
-void ChartProxyModel::reset(const CellRegion& region)
+void ChartProxyModel::reset(const CellRegion &region)
 {
     d->selection = region;
     d->rebuildDataMap();
@@ -168,9 +161,8 @@ void ChartProxyModel::Private::rebuildDataMap()
 void ChartProxyModel::addTable(Table *table)
 {
     QAbstractItemModel *model = table->model();
-    
-    connect(model, &QAbstractItemModel::dataChanged,
-            this,  QOverload<const QModelIndex &, const QModelIndex &>::of(&ChartProxyModel::dataChanged));
+
+    connect(model, &QAbstractItemModel::dataChanged, this, QOverload<const QModelIndex &, const QModelIndex &>::of(&ChartProxyModel::dataChanged));
 }
 
 void ChartProxyModel::removeTable(Table *table)
@@ -198,13 +190,12 @@ static QVector<QRect> extractRow(const QVector<QRect> &rects, int colOffset, boo
     if (colOffset == 0)
         return extractLabel ? QVector<QRect>() : rects;
     QVector<QRect> result;
-    foreach(const QRect &rect, rects) {
+    foreach (const QRect &rect, rects) {
         if (extractLabel) {
             QRect r(rect.topLeft(), QSize(colOffset, rect.height()));
             result.append(r);
-        }
-        else {
-//Q_ASSERT(rect.width() > colOffset);
+        } else {
+            // Q_ASSERT(rect.width() > colOffset);
             if (rect.width() > colOffset) {
                 QPoint topLeft = rect.topLeft() + QPoint(colOffset, 0);
                 QRect r(topLeft, QSize(rect.width() - colOffset, rect.height()));
@@ -233,13 +224,12 @@ static QVector<QRect> extractColumn(const QVector<QRect> &rects, int rowOffset, 
     if (rowOffset == 0)
         return extractLabel ? QVector<QRect>() : rects;
     QVector<QRect> result;
-    foreach(const QRect &rect, rects) {
+    foreach (const QRect &rect, rects) {
         if (extractLabel) {
             QRect r(rect.topLeft(), QSize(rect.width(), rowOffset));
             result.append(r);
-        }
-        else {
-//Q_ASSERT(rect.height() > rowOffset);
+        } else {
+            // Q_ASSERT(rect.height() > rowOffset);
             if (rect.height() > rowOffset) {
                 QPoint topLeft = rect.topLeft() + QPoint(0, rowOffset);
                 QRect r(topLeft, QSize(rect.width(), rect.height() - rowOffset));
@@ -275,12 +265,12 @@ static QVector<QRect> extractColumn(const QVector<QRect> &rects, int rowOffset, 
  *   row/column. This is needed so for example the labelRegion and
  *   all other things operate on exactly one row/column.
  */
-QMap<int, QVector<QRect> > sortDataRegions(Qt::Orientation dataDirection, QVector<QRect> dataRegions)
+QMap<int, QVector<QRect>> sortDataRegions(Qt::Orientation dataDirection, QVector<QRect> dataRegions)
 {
-    QMap<int, QVector<QRect> >  sortedDataRegions;
+    QMap<int, QVector<QRect>> sortedDataRegions;
     if (dataDirection == Qt::Horizontal) {
         // Split up region in horizontal rectangles that are sorted from top to bottom
-        QMap<int, QVector<QRect> >  rows;
+        QMap<int, QVector<QRect>> rows;
         foreach (const QRect &rect, dataRegions) {
             int x = rect.topLeft().x();
             for (int y = rect.topLeft().y(); y <= rect.bottomLeft().y(); y++) {
@@ -292,12 +282,12 @@ QMap<int, QVector<QRect> > sortDataRegions(Qt::Orientation dataDirection, QVecto
         }
 
         // Sort rectangles in each row from left to right.
-        QMapIterator<int, QVector<QRect> >  i(rows);
+        QMapIterator<int, QVector<QRect>> i(rows);
         while (i.hasNext()) {
             i.next();
-            int             row = i.key();
-            QVector<QRect>  unsortedRects = i.value();
-            QVector<QRect>  sortedRects;
+            int row = i.key();
+            QVector<QRect> unsortedRects = i.value();
+            QVector<QRect> sortedRects;
             foreach (const QRect &rect, unsortedRects) {
                 int index;
                 for (index = 0; index < sortedRects.size(); index++)
@@ -309,7 +299,7 @@ QMap<int, QVector<QRect> > sortDataRegions(Qt::Orientation dataDirection, QVecto
         }
     } else {
         // Split up region in horizontal rectangles that are sorted from top to bottom
-        QMap<int, QVector<QRect> >  columns;
+        QMap<int, QVector<QRect>> columns;
         foreach (const QRect &rect, dataRegions) {
             int y = rect.topLeft().y();
             for (int x = rect.topLeft().x(); x <= rect.topRight().x(); ++x) {
@@ -321,12 +311,12 @@ QMap<int, QVector<QRect> > sortDataRegions(Qt::Orientation dataDirection, QVecto
         }
 
         // Sort rectangles in each column from top to bottom
-        QMapIterator<int, QVector<QRect> >  i(columns);
+        QMapIterator<int, QVector<QRect>> i(columns);
         while (i.hasNext()) {
             i.next();
-            int             col = i.key();
-            QVector<QRect>  unsortedRects = i.value();
-            QVector<QRect>  sortedRects;
+            int col = i.key();
+            QVector<QRect> unsortedRects = i.value();
+            QVector<QRect> sortedRects;
             foreach (const QRect &rect, unsortedRects) {
                 int index;
                 for (index = 0; index < sortedRects.size(); ++index)
@@ -340,14 +330,13 @@ QMap<int, QVector<QRect> > sortDataRegions(Qt::Orientation dataDirection, QVecto
     return sortedDataRegions;
 }
 
-QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion(QList<DataSet*> *dataSetsToRecycle,
-                                                                    bool overrideCategories)
+QList<DataSet *> ChartProxyModel::Private::createDataSetsFromRegion(QList<DataSet *> *dataSetsToRecycle, bool overrideCategories)
 {
     if (manualControl) {
         return dataSets;
     }
     if (!selection.isValid())
-        return QList<DataSet*>();
+        return QList<DataSet *>();
 
     // First prepare the dataRegions to have them
     // 1) proper sorted either from left-to-right if the dataDirection is
@@ -358,7 +347,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion(QList<DataSet
     // The resulting map is build up depending on the dataDirection;
     // - Qt::Horizontal: key is the row and values are the columns in the row.
     // - Qt::Vertical: key is the column and values are the rows in the column.
-    QMap<int, QVector<QRect> > sortedDataRegions = sortDataRegions(dataDirection, selection.rects());
+    QMap<int, QVector<QRect>> sortedDataRegions = sortDataRegions(dataDirection, selection.rects());
 
     // In the end, the contents of this list will look something like this:
     // (Category-Data, X-Data, Y-Data, Y-Data, Y-Data)
@@ -387,19 +376,18 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion(QList<DataSet
     //       there x-values then this foreach-logic here is very likely the reason.
     int rows = 0;
     int cols = 0;
-    foreach(const QRect &rect, selection.rects()) {
+    foreach (const QRect &rect, selection.rects()) {
         rows += rect.height();
         cols = qMax(cols, rect.width());
     }
 
     bool extractXData = dataDimensions > 1 &&
-                        // Checks if the remaining data regions would fit exactly to the
-                        // remaining data sets. If not, skip x data. This is only the case
-                        // for bubble charts, (the only case of regionsPerDataSet == 2), so
-                        // skipping x data will allow the last data set to also be assigned
-                        // a bubble width region. This is exactly what OOo does.
-                        (dataDirection == Qt::Horizontal ? rows - 1 - rowOffset
-                                                         : cols - 1 -colOffset) % regionsPerDataSet == 0;
+        // Checks if the remaining data regions would fit exactly to the
+        // remaining data sets. If not, skip x data. This is only the case
+        // for bubble charts, (the only case of regionsPerDataSet == 2), so
+        // skipping x data will allow the last data set to also be assigned
+        // a bubble width region. This is exactly what OOo does.
+        (dataDirection == Qt::Horizontal ? rows - 1 - rowOffset : cols - 1 - colOffset) % regionsPerDataSet == 0;
 
     // When x data is present, it occupies the first non-header row/column
     if (extractXData && dataDirection == Qt::Horizontal)
@@ -412,7 +400,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion(QList<DataSet
     Table *internalTable = shape ? shape->tableSource()->get(shape->internalModel()) : 0;
     QList<int> sortedDataKeys = sortedDataRegions.keys();
     std::sort(sortedDataKeys.begin(), sortedDataKeys.end());
-    foreach(int key, sortedDataKeys) {
+    foreach (int key, sortedDataKeys) {
         QVector<QRect> rects = sortedDataRegions[key];
         QVector<QRect> dataRects;
         CellRegion labelRegion;
@@ -420,18 +408,15 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion(QList<DataSet
             if (firstColumnIsLabel) {
                 QVector<QRect> labelRects = extractRow(rects, colOffset, true);
                 labelRegion = labelRects.isEmpty() ? CellRegion() : CellRegion(selection.table(), labelRects);
-            }
-            else {
+            } else {
                 labelRegion = internalTable ? CellRegion(internalTable, QPoint(1, key)) : CellRegion();
             }
             dataRects = extractRow(rects, colOffset, false);
-        }
-        else {
+        } else {
             if (firstRowIsLabel) {
                 QVector<QRect> labelRects = extractColumn(rects, rowOffset, true);
                 labelRegion = labelRects.isEmpty() ? CellRegion() : CellRegion(selection.table(), labelRects);
-            }
-            else {
+            } else {
                 labelRegion = internalTable ? CellRegion(internalTable, QPoint(key, 1)) : CellRegion();
             }
             dataRects = extractColumn(rects, rowOffset, false);
@@ -441,9 +426,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion(QList<DataSet
         dataRegions.append(dataRects.isEmpty() ? CellRegion() : CellRegion(selection.table(), dataRects));
     }
 
-    bool useCategories =
-            (dataDirection == Qt::Horizontal && firstRowIsLabel) ||
-            (dataDirection == Qt::Vertical && firstColumnIsLabel);
+    bool useCategories = (dataDirection == Qt::Horizontal && firstRowIsLabel) || (dataDirection == Qt::Vertical && firstColumnIsLabel);
 
     /*
     debugChart << "selection=" << selection.toString();
@@ -457,13 +440,14 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion(QList<DataSet
 
     // Regions shared by all data sets: categories and x-data
 
-    //FIXME don't use overrideCategories for the categoryDataRegion's but for
-    //the categoryLabelRegion (which we need to introduce and use).
-if(overrideCategories) categoryDataRegion = CellRegion();
+    // FIXME don't use overrideCategories for the categoryDataRegion's but for
+    // the categoryLabelRegion (which we need to introduce and use).
+    if (overrideCategories)
+        categoryDataRegion = CellRegion();
 
     if (!dataRegions.isEmpty()) {
-// Q_ASSERT(label.isValid());
-// Q_ASSERT(data.isValid());
+        // Q_ASSERT(label.isValid());
+        // Q_ASSERT(data.isValid());
         if (useCategories) {
             labelRegions.takeFirst();
             categoryDataRegion = dataRegions.takeFirst();
@@ -476,7 +460,7 @@ if(overrideCategories) categoryDataRegion = CellRegion();
         xData = dataRegions.takeFirst();
     }
 
-    QList<DataSet*> createdDataSets;
+    QList<DataSet *> createdDataSets;
     int dataSetNumber = 0;
     // Now assign all dataRegions to a number of data sets.
     // Here they're semantically separated into x data, y data, etc.
@@ -539,11 +523,11 @@ bool ChartProxyModel::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
 {
     Q_ASSERT(d->isLoading);
 
-//     PlotArea* plotArea = dynamic_cast< PlotArea* >(QObject::parent());
+    //     PlotArea* plotArea = dynamic_cast< PlotArea* >(QObject::parent());
 
-//     const bool stockChart = element.attributeNS(KoXmlNS::chart, "class", QString()) == "chart:stock";
+    //     const bool stockChart = element.attributeNS(KoXmlNS::chart, "class", QString()) == "chart:stock";
 
-    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData(OdfLoadingHelperId);
+    OdfLoadingHelper *helper = (OdfLoadingHelper *)context.sharedData(OdfLoadingHelperId);
     bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
 // Some OOo documents save incorrect cell ranges. For those this fix was intended.
 // Find out which documents exactly and only use fix for as few cases as possible.
@@ -583,8 +567,7 @@ bool ChartProxyModel::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
     // contains the chart:categories element, the category data region
     // will automatically be set on every data set attached to that
     // axis. See Axis::attachDataSet().
-    const QString dataSourceHasLabels
-        = element.attributeNS(KoXmlNS::chart, "data-source-has-labels");
+    const QString dataSourceHasLabels = element.attributeNS(KoXmlNS::chart, "data-source-has-labels");
     if (dataSourceHasLabels == "both") {
         d->firstRowIsLabel = true;
         d->firstColumnIsLabel = true;
@@ -608,14 +591,12 @@ bool ChartProxyModel::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
     // A cell range for all data is optional.
     // If cell ranges are in addition specified for one or more of these
     // data series, they'll be overwritten by the data loaded from the series
-    if (!ignoreCellRanges
-        && element.hasAttributeNS(KoXmlNS::table, "cell-range-address"))
-    {
+    if (!ignoreCellRanges && element.hasAttributeNS(KoXmlNS::table, "cell-range-address")) {
         QString cellRangeAddress = element.attributeNS(KoXmlNS::table, "cell-range-address");
         d->selection = CellRegion(d->tableSource, cellRangeAddress);
-    // Otherwise use all data from internal table
+        // Otherwise use all data from internal table
     } else if (helper->chartUsesInternalModelOnly) {
-        QList<Table*> tables = helper->tableSource->tableMap().values();
+        QList<Table *> tables = helper->tableSource->tableMap().values();
         Q_ASSERT(tables.count() == 1);
         Table *internalTable = tables.first();
         Q_ASSERT(internalTable->model());
@@ -628,8 +609,7 @@ bool ChartProxyModel::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
     // This might be data sets that were "instantiated" from the internal
     // table or from an arbitrary selection of other tables as specified
     // in the PlotArea's table:cell-range-address attribute (parsed above).
-    QList<DataSet*> createdDataSets = d->createDataSetsFromRegion(&d->removedDataSets,
-                                                                   !helper->categoryRegionSpecifiedInXAxis);
+    QList<DataSet *> createdDataSets = d->createDataSetsFromRegion(&d->removedDataSets, !helper->categoryRegionSpecifiedInXAxis);
 
     bool isBubble = d->shape->plotArea()->chartType() == BubbleChartType;
     bool isScatter = d->shape->plotArea()->chartType() == ScatterChartType;
@@ -637,7 +617,8 @@ bool ChartProxyModel::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
 
     int loadedDataSetCount = 0;
     KoXmlElement n;
-    forEachElement (n, element) {
+    forEachElement(n, element)
+    {
         if (n.namespaceURI() != KoXmlNS::chart) {
             continue;
         }
@@ -664,15 +645,13 @@ bool ChartProxyModel::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
                 // NOTE: This is not quite what odf specifies, but imho better (danders)
                 if (dataSet->xDataRegion().isValid()) {
                     prevXData = dataSet->xDataRegion();
-                }
-                else {
+                } else {
                     dataSet->setXDataRegion(prevXData);
                 }
                 if (isBubble) {
                     if (dataSet->yDataRegion().isValid()) {
                         prevYData = dataSet->yDataRegion();
-                    }
-                    else {
+                    } else {
                         dataSet->setYDataRegion(prevYData);
                     }
                 }
@@ -681,15 +660,13 @@ bool ChartProxyModel::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
         }
     }
 
-    //rebuildDataMap();
+    // rebuildDataMap();
     endResetModel();
 
     return true;
 }
 
-
-QVariant ChartProxyModel::data(const QModelIndex &index,
-                                int role) const
+QVariant ChartProxyModel::data(const QModelIndex &index, int role) const
 {
     Q_UNUSED(index);
     Q_UNUSED(role);
@@ -697,7 +674,7 @@ QVariant ChartProxyModel::data(const QModelIndex &index,
     return QVariant();
 }
 
-void ChartProxyModel::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void ChartProxyModel::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
     QPoint topLeftPoint(topLeft.column() + 1, topLeft.row() + 1);
 
@@ -706,9 +683,7 @@ void ChartProxyModel::dataChanged(const QModelIndex& topLeft, const QModelIndex&
     // reasons this function returns
     //   QPoint(left() + width() -1, top() + height() - 1).
     QPoint bottomRightPoint(bottomRight.column() + 1, bottomRight.row() + 1);
-    QRect dataChangedRect = QRect(topLeftPoint,
-                                   QSize(bottomRightPoint.x() - topLeftPoint.x() + 1,
-                                          bottomRightPoint.y() - topLeftPoint.y() + 1));
+    QRect dataChangedRect = QRect(topLeftPoint, QSize(bottomRightPoint.x() - topLeftPoint.x() + 1, bottomRightPoint.y() - topLeftPoint.y() + 1));
     // Precisely determine what data in what table changed so that we don't
     // do unnecessary, expensive updates.
     Table *table = d->tableSource->get(topLeft.model());
@@ -734,10 +709,7 @@ void ChartProxyModel::dataChanged(const QModelIndex& topLeft, const QModelIndex&
     emit dataChanged();
 }
 
-
-QVariant ChartProxyModel::headerData(int section,
-                                     Qt::Orientation orientation,
-                                     int role /* = Qt::DisplayRole */) const
+QVariant ChartProxyModel::headerData(int section, Qt::Orientation orientation, int role /* = Qt::DisplayRole */) const
 {
     Q_UNUSED(section);
     Q_UNUSED(orientation);
@@ -746,7 +718,6 @@ QVariant ChartProxyModel::headerData(int section,
     return QVariant();
 }
 
-
 QModelIndex ChartProxyModel::parent(const QModelIndex &index) const
 {
     Q_UNUSED(index);
@@ -754,13 +725,12 @@ QModelIndex ChartProxyModel::parent(const QModelIndex &index) const
     return QModelIndex();
 }
 
-int ChartProxyModel::rowCount(const QModelIndex &/*parent  = QModelIndex() */) const
+int ChartProxyModel::rowCount(const QModelIndex & /*parent  = QModelIndex() */) const
 {
     return d->dataSets.count();
 }
 
-
-int ChartProxyModel::columnCount(const QModelIndex &/*parent = QModelIndex() */) const
+int ChartProxyModel::columnCount(const QModelIndex & /*parent = QModelIndex() */) const
 {
     // FIXME: Replace this by the actual column count once the proxy is properly being used.
     int cols = 0;
@@ -778,7 +748,6 @@ void ChartProxyModel::setFirstRowIsLabel(bool b)
     d->firstRowIsLabel = b;
     d->rebuildDataMap();
 }
-
 
 void ChartProxyModel::setFirstColumnIsLabel(bool b)
 {
@@ -868,7 +837,7 @@ void ChartProxyModel::setCategoryDataRegion(const CellRegion &region)
     d->categoryDataRegion = region;
 }
 
-QList<DataSet*> ChartProxyModel::dataSets() const
+QList<DataSet *> ChartProxyModel::dataSets() const
 {
     return d->dataSets;
 }
@@ -882,7 +851,7 @@ void ChartProxyModel::addDataSet(int pos)
     }
     if (numbers.contains(pos)) {
         // find first free one
-        for (int i = 1; i < numbers.count(); ++ i) {
+        for (int i = 1; i < numbers.count(); ++i) {
             if (!numbers.contains(i)) {
                 dataSetNr = i;
                 break;
@@ -900,7 +869,7 @@ void ChartProxyModel::addDataSet(int pos)
     d->dataSets.insert(pos, ds);
 }
 
-bool ChartProxyModel::insertRows(int row, int count, const QModelIndex &/*parent*/)
+bool ChartProxyModel::insertRows(int row, int count, const QModelIndex & /*parent*/)
 {
     if (count < 1 || row < 0 || row > d->dataSets.count()) {
         return false;
@@ -914,15 +883,15 @@ bool ChartProxyModel::insertRows(int row, int count, const QModelIndex &/*parent
     return true;
 }
 
-bool ChartProxyModel::removeRows(int row, int count, const QModelIndex &/*parent*/)
+bool ChartProxyModel::removeRows(int row, int count, const QModelIndex & /*parent*/)
 {
     if (count < 1 || row < 0 || row >= d->dataSets.count()) {
         return false;
     }
     beginResetModel();
-    QList<DataSet*> remove;
-    for (int i = 0;  i < count; ++i) {
-        remove <<  d->dataSets.at(row + i);
+    QList<DataSet *> remove;
+    for (int i = 0; i < count; ++i) {
+        remove << d->dataSets.at(row + i);
     }
     for (DataSet *ds : remove) {
         d->dataSets.removeAll(ds);

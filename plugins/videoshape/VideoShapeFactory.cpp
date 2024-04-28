@@ -7,16 +7,16 @@
 
 #include "VideoShapeFactory.h"
 
-#include "VideoShape.h"
-#include "VideoShapeConfigWidget.h"
 #include "VideoCollection.h"
 #include "VideoDebug.h"
+#include "VideoShape.h"
+#include "VideoShapeConfigWidget.h"
 
-#include <KoDocumentResourceManager.h>
-#include <KoXmlNS.h>
 #include "KoShapeBasedDocumentBase.h"
-#include <KoShapeLoadingContext.h>
+#include <KoDocumentResourceManager.h>
 #include <KoIcon.h>
+#include <KoShapeLoadingContext.h>
+#include <KoXmlNS.h>
 
 #include <KLocalizedString>
 
@@ -31,12 +31,12 @@ VideoShapeFactory::VideoShapeFactory()
 
 KoShape *VideoShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    VideoShape * defaultShape = new VideoShape();
+    VideoShape *defaultShape = new VideoShape();
     defaultShape->setShapeId(VIDEOSHAPEID);
     if (documentResources) {
-          Q_ASSERT(documentResources->hasResource(VideoCollection::ResourceId));
-          QVariant vc = documentResources->resource(VideoCollection::ResourceId);
-          defaultShape->setVideoCollection(static_cast<VideoCollection*>(vc.value<void*>()));
+        Q_ASSERT(documentResources->hasResource(VideoCollection::ResourceId));
+        QVariant vc = documentResources->resource(VideoCollection::ResourceId);
+        defaultShape->setVideoCollection(static_cast<VideoCollection *>(vc.value<void *>()));
     }
     return defaultShape;
 }
@@ -53,13 +53,13 @@ bool VideoShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &c
 void VideoShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
     QVariant variant;
-    variant.setValue<void*>(new VideoCollection(manager));
+    variant.setValue<void *>(new VideoCollection(manager));
     manager->setResource(VideoCollection::ResourceId, variant);
 }
 
-QList<KoShapeConfigWidgetBase*> VideoShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> VideoShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> panels;
+    QList<KoShapeConfigWidgetBase *> panels;
     panels.append(new VideoShapeConfigWidget());
     return panels;
 }

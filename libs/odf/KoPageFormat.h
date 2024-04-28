@@ -59,10 +59,7 @@ enum Format : int {
 /**
  *  Represents the orientation of a printed document.
  */
-enum Orientation {
-    Portrait,
-    Landscape
-};
+enum Orientation { Portrait, Landscape };
 
 /**
  * @brief Convert a Format into a KPrinter::PageSize.
@@ -84,7 +81,7 @@ KOODF_EXPORT qreal width(Format format, Orientation orientation = Landscape);
  * Returns the height (in mm) for a given page format and orientation
  * 'Custom' isn't supported by this function, obviously.
  */
-KOODF_EXPORT qreal height(Format format, Orientation orientation  = Landscape);
+KOODF_EXPORT qreal height(Format format, Orientation orientation = Landscape);
 
 /**
  * Returns the internal name of the given page format.
@@ -127,4 +124,3 @@ KOODF_EXPORT Format guessFormat(qreal width, qreal height);
 }
 
 #endif
-

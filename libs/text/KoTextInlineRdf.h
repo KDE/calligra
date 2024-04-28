@@ -9,12 +9,12 @@
 
 #include "kotext_export.h"
 // komain
-#include <KoXmlReaderForward.h>
 #include <KoElementReference.h>
+#include <KoXmlReaderForward.h>
 // Qt
-#include <QPair>
 #include <QMetaType>
 #include <QObject>
+#include <QPair>
 
 class KoXmlWriter;
 class KoShapeSavingContext;
@@ -128,7 +128,6 @@ public:
      */
     QPair<int, int> findExtent() const;
 
-
     /**
      * Update the xml:id, using during cut and paste as well as document save.
      */
@@ -140,13 +139,12 @@ public:
     static QString createXmlId();
 
 private:
-
     friend class KoRdfSemanticItem;
     friend class KoDocumentRdf;
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
-Q_DECLARE_METATYPE(KoTextInlineRdf*)
+Q_DECLARE_METATYPE(KoTextInlineRdf *)
 #endif

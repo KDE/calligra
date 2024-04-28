@@ -12,30 +12,25 @@
 #define ZigZagWipeEffectId "ZigZagWipeEffect"
 
 ZigZagWipeEffectFactory::ZigZagWipeEffectFactory()
-: KPrPageEffectFactory( ZigZagWipeEffectId, i18n( "Zig Zag" ) )
+    : KPrPageEffectFactory(ZigZagWipeEffectId, i18n("Zig Zag"))
 {
-    addStrategy( new ZigZagWipeStrategy( FromLeft, "leftToRight", false ) );
-    addStrategy( new ZigZagWipeStrategy( FromTop, "topToBottom", false ) );
-    addStrategy( new ZigZagWipeStrategy( FromRight, "leftToRight", true ) );
-    addStrategy( new ZigZagWipeStrategy( FromBottom, "topToBottom", true ) );
+    addStrategy(new ZigZagWipeStrategy(FromLeft, "leftToRight", false));
+    addStrategy(new ZigZagWipeStrategy(FromTop, "topToBottom", false));
+    addStrategy(new ZigZagWipeStrategy(FromRight, "leftToRight", true));
+    addStrategy(new ZigZagWipeStrategy(FromBottom, "topToBottom", true));
 }
 
 ZigZagWipeEffectFactory::~ZigZagWipeEffectFactory()
 {
 }
 
-static const KLazyLocalizedString s_subTypes[] = {
-    kli18n( "From Left" ),
-    kli18n( "From Top" ),
-    kli18n( "From Right" ),
-    kli18n( "From Bottom" )
-};
+static const KLazyLocalizedString s_subTypes[] = {kli18n("From Left"), kli18n("From Top"), kli18n("From Right"), kli18n("From Bottom")};
 
 QString ZigZagWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return s_subTypes[subType].toString();
     } else {
-        return i18n( "Unknown subtype" );
+        return i18n("Unknown subtype");
     }
 }

@@ -22,8 +22,8 @@
 
 #include <KoPAPage.h>
 
-#include "KPrPageData.h"
 #include "KPrDeclarations.h"
+#include "KPrPageData.h"
 
 #include "stage_export.h"
 
@@ -37,7 +37,7 @@ class KPrDeclarations;
 class STAGE_EXPORT KPrPage : public KoPAPage, public KPrPageData
 {
 public:
-    KPrPage( KoPAMasterPage * masterPage, KPrDocument * document );
+    KPrPage(KoPAMasterPage *masterPage, KPrDocument *document);
     ~KPrPage() override;
 
     /**
@@ -47,7 +47,7 @@ public:
      * As every KPrPage needs to have a KPrPageApplicationData this call fails with a
      * assertion when it is not possible to retrieve.
      */
-    static KPrPageApplicationData * pageData( KoPAPageBase * page );
+    static KPrPageApplicationData *pageData(KoPAPageBase *page);
 
     /**
      * Get the presentation notes for this page
@@ -57,25 +57,25 @@ public:
     KPrNotes *pageNotes();
 
     /// reimplemented
-    void shapeAdded( KoShape * shape ) override;
+    void shapeAdded(KoShape *shape) override;
 
     /// reimplemented
-    void shapeRemoved( KoShape * shape ) override;
+    void shapeRemoved(KoShape *shape) override;
 
     /**
      * Set the layout to use on the page
      *
-     * @param layout the layout that should be used from now. 
+     * @param layout the layout that should be used from now.
      *        If 0 no layout will be used.
      */
-    void setLayout( KPrPageLayout * layout, KoPADocument * document  );
+    void setLayout(KPrPageLayout *layout, KoPADocument *document);
 
     /**
      * Get the layout used on the page
      *
      * @return layout that is used or 0 if no layout is used
      */
-    KPrPageLayout * layout() const;
+    KPrPageLayout *layout() const;
 
     /**
      * Get the page type used in the document
@@ -94,29 +94,29 @@ public:
 
 protected:
     /// reimplemented
-    void saveOdfPageContent( KoPASavingContext & paContext ) const override;
+    void saveOdfPageContent(KoPASavingContext &paContext) const override;
 
     /// reimplemented
-    void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const override;
+    void saveOdfPageStyleData(KoGenStyle &style, KoPASavingContext &paContext) const override;
 
     /// reimplemented
-    void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext ) override;
+    void loadOdfPageTag(const KoXmlElement &element, KoPALoadingContext &loadingContext) override;
 
     /// reimplemented
-    void loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext ) override;
+    void loadOdfPageExtra(const KoXmlElement &element, KoPALoadingContext &loadingContext) override;
 
     /// reimplemented
-    bool saveOdfAnimations(KoPASavingContext & paContext) const override;
+    bool saveOdfAnimations(KoPASavingContext &paContext) const override;
 
     /// reimplemented
     bool saveOdfPresentationNotes(KoPASavingContext &paContext) const override;
 
     /// reimplemented
-    KoShapeManagerPaintingStrategy * getPaintingStrategy() const override;
+    KoShapeManagerPaintingStrategy *getPaintingStrategy() const override;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KPRPAGE_H */

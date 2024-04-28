@@ -6,10 +6,8 @@
 
 #include "TextLayoutDebug.h"
 
-const QLoggingCategory &TEXT_LAYOUT_LOG() \
+const QLoggingCategory &TEXT_LAYOUT_LOG()
 {
     static const QLoggingCategory category("calligra.lib.textlayout");
     return category;
 }
-
-

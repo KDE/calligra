@@ -12,13 +12,11 @@
 #include <QObject>
 #include <QVariantList>
 
-
 class TemplateShapePlugin : public QObject
 {
     Q_OBJECT
 public:
-    TemplateShapePlugin(QObject *parent, const QVariantList&);
+    TemplateShapePlugin(QObject *parent, const QVariantList &);
 };
-
 
 #endif

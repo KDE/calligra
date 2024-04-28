@@ -18,12 +18,10 @@ Value func_bitxor(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bitlshift(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bitrshift(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadbitopsmodule.json", BitOpsModule)
 
-
-BitOpsModule::BitOpsModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+BitOpsModule::BitOpsModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
@@ -48,7 +46,6 @@ QString BitOpsModule::descriptionFileName() const
 {
     return QString("bitops.xml");
 }
-
 
 // Function: BITAND
 Value func_bitand(valVector args, ValueCalc *, FuncExtra *)
@@ -84,7 +81,7 @@ Value func_bitlshift(valVector args, ValueCalc *, FuncExtra *)
     else if (numshift > 0)
         return Value(static_cast<int64_t>(x << numshift));
     else // negative left shift, becomes right shift
-        return Value(static_cast<int64_t>(x >>(-1 * numshift)));
+        return Value(static_cast<int64_t>(x >> (-1 * numshift)));
 }
 
 // Function: BITRSHIFT

@@ -10,8 +10,8 @@
 
 #include "kotext_export.h"
 
-#include <QObject>
 #include <QList>
+#include <QObject>
 #include <QString>
 
 class KoBookmark;
@@ -63,7 +63,7 @@ public Q_SLOTS:
     void rename(const QString &oldName, const QString &newName);
 
 private:
-    KoBookmarkManagerPrivate * const d;
+    KoBookmarkManagerPrivate *const d;
 };
 
 #endif

@@ -44,12 +44,12 @@ public:
      * @param parent a pointer to the parent widget
      * @param docInfo a pointer to the shown KoDocumentInfo
      */
-    KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo* docInfo);
+    KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo *docInfo);
 
     /** The destructor */
     ~KoDocumentInfoDlg() override;
 
-    QList<KPageWidgetItem*> pages() const;
+    QList<KPageWidgetItem *> pages() const;
 
     /** Returns true if the document was saved when the dialog was closed */
     bool isDocumentSaved();
@@ -59,11 +59,11 @@ public:
 
     void addPageItem(KoPageWidgetItem *item);
 
-public Q_SLOTS:  // QDialog API
+public Q_SLOTS: // QDialog API
     void accept() override;
 
-protected:  // QWidget API
-    void hideEvent(QHideEvent * event) override;
+protected: // QWidget API
+    void hideEvent(QHideEvent *event) override;
 
 private Q_SLOTS:
     /** Connected with clicked() from pbReset - Reset parts of the metadata */
@@ -85,7 +85,7 @@ private:
     void saveEncryption();
 
     class KoDocumentInfoDlgPrivate;
-    KoDocumentInfoDlgPrivate * const d;
+    KoDocumentInfoDlgPrivate *const d;
 };
 
 #endif

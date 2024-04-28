@@ -8,15 +8,17 @@
 
 class KoXmlWriter;
 
-namespace MusicCore {
-    class Sheet;
+namespace MusicCore
+{
+class Sheet;
 
-class MusicXmlWriter {
-    public:
-        MusicXmlWriter();
-        ~MusicXmlWriter();
+class MusicXmlWriter
+{
+public:
+    MusicXmlWriter();
+    ~MusicXmlWriter();
 
-        void writeSheet(KoXmlWriter& writer, MusicCore::Sheet* sheet, bool writeNamespaceDef = true);
+    void writeSheet(KoXmlWriter &writer, MusicCore::Sheet *sheet, bool writeNamespaceDef = true);
 };
 
 } // namespace MusicCore

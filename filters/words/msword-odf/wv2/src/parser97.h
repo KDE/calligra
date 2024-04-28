@@ -31,13 +31,13 @@ namespace wvWare
 class Parser97 : public Parser9x
 {
 public:
-    Parser97( OLEStorage* storage, OLEStreamReader* wordDocument );
+    Parser97(OLEStorage *storage, OLEStreamReader *wordDocument);
     ~Parser97() override;
 
 private:
     // Don't copy or assign us
-    Parser97( const Parser97& rhs );
-    Parser97& operator=( const Parser97& rhs );
+    Parser97(const Parser97 &rhs);
+    Parser97 &operator=(const Parser97 &rhs);
 
     void init();
 };

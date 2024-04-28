@@ -25,14 +25,14 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN CalculationSettings::Private
 {
 public:
-    Localization* locale;
+    Localization *locale;
     bool caseSensitiveComparisons : 1;
-    bool precisionAsShown         : 1;
-    bool wholeCellSearchCriteria  : 1;
-    bool automaticFindLabels      : 1;
-    bool useRegularExpressions    : 1;
-    bool useWildcards             : 1;
-    bool automaticCalculation     : 1;
+    bool precisionAsShown : 1;
+    bool wholeCellSearchCriteria : 1;
+    bool automaticFindLabels : 1;
+    bool useRegularExpressions : 1;
+    bool useWildcards : 1;
+    bool automaticCalculation : 1;
     int refYear; // the reference year two-digit years are relative to
     QDate refDate; // the reference date all dates are relative to
     // The precision used for decimal numbers, if the default cell style's
@@ -48,16 +48,16 @@ public:
  *****************************************************************************/
 
 CalculationSettings::CalculationSettings()
-        : d(new Private)
+    : d(new Private)
 {
     d->locale = new Localization();
     d->caseSensitiveComparisons = true;
-    d->precisionAsShown         = false;
-    d->wholeCellSearchCriteria  = true;
-    d->automaticFindLabels      = true;
-    d->useRegularExpressions    = true;
-    d->useWildcards             = false;
-    d->automaticCalculation     = true;
+    d->precisionAsShown = false;
+    d->wholeCellSearchCriteria = true;
+    d->automaticFindLabels = true;
+    d->useRegularExpressions = true;
+    d->useWildcards = false;
+    d->automaticCalculation = true;
     d->refYear = 1940;
     d->refDate = QDate(1899, 12, 30);
     d->precision = -1;
@@ -69,7 +69,7 @@ CalculationSettings::~CalculationSettings()
     delete d;
 }
 
-Localization* CalculationSettings::locale() const
+Localization *CalculationSettings::locale() const
 {
     return d->locale;
 }
@@ -84,9 +84,10 @@ int CalculationSettings::referenceYear() const
     return d->refYear;
 }
 
-void CalculationSettings::setReferenceDate(const QDate& date)
+void CalculationSettings::setReferenceDate(const QDate &date)
 {
-    if (!date.isValid()) return;
+    if (!date.isValid())
+        return;
     d->refDate.setDate(date.year(), date.month(), date.day());
 }
 
@@ -115,12 +116,12 @@ int CalculationSettings::defaultDecimalPrecision() const
     return d->precision;
 }
 
-void CalculationSettings::setFileName(const QString& fileName)
+void CalculationSettings::setFileName(const QString &fileName)
 {
     d->fileName = fileName;
 }
 
-const QString& CalculationSettings::fileName() const
+const QString &CalculationSettings::fileName() const
 {
     return d->fileName;
 }

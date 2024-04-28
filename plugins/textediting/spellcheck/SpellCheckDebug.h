@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &SPELLCHECK_LOG();
 
 #define debugSpellCheck qCDebug(SPELLCHECK_LOG)

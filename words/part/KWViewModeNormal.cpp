@@ -5,8 +5,8 @@
  */
 
 #include "KWViewModeNormal.h"
-#include "KWPageManager.h"
 #include "KWPage.h"
+#include "KWPageManager.h"
 #include "KWView.h"
 #include <KoViewConverter.h>
 
@@ -22,12 +22,13 @@ KWViewModeNormal::KWViewModeNormal()
 QVector<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &viewRect, KoViewConverter *viewConverter) const
 {
     QVector<ViewMap> answer;
-    if (!viewConverter) return answer;
+    if (!viewConverter)
+        return answer;
 
 #if 1
     if (m_pageTops.isEmpty())
         return answer;
-    KWPage page  = m_pageManager->begin();
+    KWPage page = m_pageManager->begin();
     const int pageOffset = page.pageNumber();
 
     // Perform a binary search for page-index using our m_pageTops cache.
@@ -56,7 +57,7 @@ QVector<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &vie
     //
     // We use 1 since we might hit a pagespread in the binary search,
     // so start one page early.
-    while (index > 1) { 
+    while (index > 1) {
         page = page.next();
         --index;
     }
@@ -66,12 +67,17 @@ QVector<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &vie
     // have two pages in row that don't intersect we break the loop.
     qreal offsetX = 0.0;
     int emptyPages = 0;
-    for(; page.isValid(); page = page.next()) {
-        Q_ASSERT_X(page.pageNumber()-pageOffset < m_pageTops.count(), __FUNCTION__,
-                   QString("Pagemanager has more pages than viewmode (%1>%2 with pageOffset=%3 and pageNumber=%4 and pageCount=%5). Make sure you add pages via the document!")
-                   .arg(page.pageNumber()-pageOffset).arg(m_pageTops.count())
-                   .arg(pageOffset).arg(page.pageNumber()).arg(m_pageManager->pageCount()).toLocal8Bit());
-
+    for (; page.isValid(); page = page.next()) {
+        Q_ASSERT_X(page.pageNumber() - pageOffset < m_pageTops.count(),
+                   __FUNCTION__,
+                   QString("Pagemanager has more pages than viewmode (%1>%2 with pageOffset=%3 and pageNumber=%4 and pageCount=%5). Make sure you add pages "
+                           "via the document!")
+                       .arg(page.pageNumber() - pageOffset)
+                       .arg(m_pageTops.count())
+                       .arg(pageOffset)
+                       .arg(page.pageNumber())
+                       .arg(m_pageManager->pageCount())
+                       .toLocal8Bit());
 
         // Some invariants
         const QRectF pageRect = page.rect();
@@ -83,13 +89,12 @@ QVector<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &vie
         const QRectF zoomedPage = viewConverter->documentToView(pageRect);
         ViewMap vm;
         vm.page = page;
-        //kDebug(32003) <<"page" << page.pageNumber();
+        // kDebug(32003) <<"page" << page.pageNumber();
         vm.distance = viewConverter->documentToView(QPointF(offsetX, offsetY));
 
-        const QRectF targetPage(zoomedPage.x() + vm.distance.x(), zoomedPage.y() + vm.distance.y(),
-                                zoomedPage.width(), zoomedPage.height());
+        const QRectF targetPage(zoomedPage.x() + vm.distance.x(), zoomedPage.y() + vm.distance.y(), zoomedPage.width(), zoomedPage.height());
         QRectF intersection = targetPage.intersected(viewRect);
-        if (! intersection.isEmpty()) {
+        if (!intersection.isEmpty()) {
             intersection.moveTopLeft(intersection.topLeft() - vm.distance);
             vm.clipRect = intersection.toRect();
             answer.append(vm);
@@ -108,8 +113,7 @@ QVector<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &vie
         //        actually shown. How can we inside the KWViewMode
         //        know if annotations are active?
         if (1 /* annotations are shown */) {
-            const QRectF annotationRect = pageRect.adjusted(page.width(), 0,
-                                                            KWCanvasBase::AnnotationAreaWidth, GAP);
+            const QRectF annotationRect = pageRect.adjusted(page.width(), 0, KWCanvasBase::AnnotationAreaWidth, GAP);
             const QRectF zoomedAnnotation = viewConverter->documentToView(annotationRect);
             ViewMap vm2;
             vm2.page = page;
@@ -117,9 +121,10 @@ QVector<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &vie
 
             const QRectF targetAnnotation(zoomedAnnotation.x() + vm2.distance.x(),
                                           zoomedAnnotation.y() + vm2.distance.y(),
-                                          zoomedAnnotation.width(), zoomedAnnotation.height());
+                                          zoomedAnnotation.width(),
+                                          zoomedAnnotation.height());
             intersection = targetAnnotation.intersected(viewRect);
-            if (! intersection.isEmpty()) {
+            if (!intersection.isEmpty()) {
                 intersection.moveTopLeft(intersection.topLeft() - vm2.distance);
                 vm2.clipRect = intersection.toRect();
                 answer.append(vm2);
@@ -144,11 +149,11 @@ QVector<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &vie
         }
     }
 #else
-    KWPage page  = m_pageManager->begin();
+    KWPage page = m_pageManager->begin();
     Q_ASSERT(page.isValid());
     qreal offsetX = 0.0;
     const int pageOffset = page.pageNumber();
-    for(; page.isValid(); page = page.next()) {
+    for (; page.isValid(); page = page.next()) {
         const QRectF pageRect = page.rect();
         const QRectF zoomedPage = viewConverter->documentToView(pageRect);
         ViewMap vm;
@@ -165,7 +170,7 @@ QVector<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &vie
             answer.append(vm);
         }
 #else
-        const QRectF targetPage(zoomedPage.x() + vm.distance.x(), zoomedPage.y() + vm.distance.y(), zoomedPage.width() , zoomedPage.height());
+        const QRectF targetPage(zoomedPage.x() + vm.distance.x(), zoomedPage.y() + vm.distance.y(), zoomedPage.width(), zoomedPage.height());
         vm.clipRect = targetPage.toRect();
         answer.append(vm);
 #endif
@@ -226,14 +231,14 @@ void KWViewModeNormal::updatePageCache()
     m_contents = QSizeF(width, bottom);
 }
 
-QPointF KWViewModeNormal::documentToView(const QPointF & point, KoViewConverter *viewConverter) const
+QPointF KWViewModeNormal::documentToView(const QPointF &point, KoViewConverter *viewConverter) const
 {
     Q_ASSERT(viewConverter);
 
     KWPage page = m_pageManager->page(point);
-    if (! page.isValid())
+    if (!page.isValid())
         page = m_pageManager->last();
-    if (! page.isValid())
+    if (!page.isValid())
         return QPointF();
     int pageIndex = page.pageNumber() - m_pageManager->begin().pageNumber();
     qreal x = 0;
@@ -243,14 +248,14 @@ QPointF KWViewModeNormal::documentToView(const QPointF & point, KoViewConverter 
             x = prevPage.width();
     }
 
-    QPointF offsetInPage(point.x(),  + point.y() - page.offsetInDocument());
+    QPointF offsetInPage(point.x(), +point.y() - page.offsetInDocument());
     Q_ASSERT(pageIndex >= 0);
     Q_ASSERT(pageIndex < m_pageTops.count());
     QPointF translated(x, m_pageTops[pageIndex]);
     return viewConverter->documentToView(translated + offsetInPage);
 }
 
-QPointF KWViewModeNormal::viewToDocument(const QPointF & point, KoViewConverter *viewConverter) const
+QPointF KWViewModeNormal::viewToDocument(const QPointF &point, KoViewConverter *viewConverter) const
 {
     Q_ASSERT(viewConverter);
 
@@ -275,12 +280,12 @@ QPointF KWViewModeNormal::viewToDocument(const QPointF & point, KoViewConverter 
             xOffset -= prevPage.width();
     }
 
-    if (! page.isValid()) // below doc or right of last page
+    if (!page.isValid()) // below doc or right of last page
         return QPointF(m_contents.width(), m_contents.height());
 
     qreal yOffset = translated.y();
     if (pageNumber >= 0)
-        yOffset -= m_pageTops[pageNumber -1];
+        yOffset -= m_pageTops[pageNumber - 1];
 
     return QPointF(xOffset, page.offsetInDocument() + yOffset);
 }

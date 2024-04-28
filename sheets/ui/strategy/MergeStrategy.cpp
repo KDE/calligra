@@ -6,8 +6,8 @@
 
 #include "MergeStrategy.h"
 
-#include "../commands/MergeCommand.h"
 #include "../Selection.h"
+#include "../commands/MergeCommand.h"
 
 using namespace Calligra::Sheets;
 
@@ -17,10 +17,9 @@ public:
     QRect initialSelection;
 };
 
-MergeStrategy::MergeStrategy(CellToolBase *cellTool,
-                             const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
-        : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
-        , d(new Private)
+MergeStrategy::MergeStrategy(CellToolBase *cellTool, const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
+    : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
+    , d(new Private)
 {
     d->initialSelection = selection()->lastRange();
 }
@@ -30,12 +29,12 @@ MergeStrategy::~MergeStrategy()
     delete d;
 }
 
-KUndo2Command* MergeStrategy::createCommand()
+KUndo2Command *MergeStrategy::createCommand()
 {
     if (d->initialSelection == selection()->lastRange()) {
         return 0;
     }
-    MergeCommand* command = new MergeCommand();
+    MergeCommand *command = new MergeCommand();
     command->setSheet(selection()->activeSheet());
     command->setSelection(selection());
     command->add(*selection());

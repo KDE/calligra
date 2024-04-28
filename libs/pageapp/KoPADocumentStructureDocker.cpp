@@ -8,57 +8,52 @@
 
 #include "KoPADocumentStructureDocker.h"
 
-#include "KoPADocumentModel.h"
-#include "KoPADocument.h"
-#include "KoPAPageBase.h"
 #include "KoPACanvas.h"
+#include "KoPADocument.h"
+#include "KoPADocumentModel.h"
+#include "KoPAPageBase.h"
 #include "KoPAViewBase.h"
 
-#include <KoShapeManager.h>
-#include <KoToolManager.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoSelection.h>
-#include <KoShapeOdfSaveHelper.h>
-#include <KoPAOdfPageSaveHelper.h>
 #include <KoDrag.h>
+#include <KoPAOdfPageSaveHelper.h>
+#include <KoSelection.h>
 #include <KoShapeCreateCommand.h>
 #include <KoShapeDeleteCommand.h>
-#include <KoShapeReorderCommand.h>
 #include <KoShapeLayer.h>
+#include <KoShapeManager.h>
+#include <KoShapeOdfSaveHelper.h>
 #include <KoShapePaste.h>
+#include <KoShapeReorderCommand.h>
+#include <KoToolManager.h>
 #include <KoViewItemContextBar.h>
 
 #include <KoIcon.h>
 
-#include <KSharedConfig>
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KConfigGroup>
+#include <KSharedConfig>
 
-#include <QMimeData>
-#include <QMenu>
-#include <QInputDialog>
-#include <QGridLayout>
-#include <QToolButton>
-#include <QButtonGroup>
-#include <QItemSelection>
-#include <QApplication>
-#include <QClipboard>
 #include <QActionGroup>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QClipboard>
+#include <QGridLayout>
+#include <QInputDialog>
+#include <QItemSelection>
+#include <QMenu>
+#include <QMimeData>
+#include <QToolButton>
 
 #include <algorithm>
 
-enum ButtonIds
-{
-    Button_Raise,
-    Button_Lower,
-    Button_Delete
-};
+enum ButtonIds { Button_Raise, Button_Lower, Button_Delete };
 
 KoPADocumentStructureDockerFactory::KoPADocumentStructureDockerFactory(KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType)
-: m_mode(mode)
-, m_pageType(pageType)
+    : m_mode(mode)
+    , m_pageType(pageType)
 {
 }
 
@@ -67,29 +62,28 @@ QString KoPADocumentStructureDockerFactory::id() const
     return QString("document section view");
 }
 
-QDockWidget* KoPADocumentStructureDockerFactory::createDockWidget()
+QDockWidget *KoPADocumentStructureDockerFactory::createDockWidget()
 {
     return new KoPADocumentStructureDocker(m_mode, m_pageType);
 }
 
-KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType, QWidget* parent)
-: QDockWidget(parent)
-, KoCanvasObserverBase()
-, m_doc(0)
-, m_model(0)
+KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType, QWidget *parent)
+    : QDockWidget(parent)
+    , KoCanvasObserverBase()
+    , m_doc(0)
+    , m_model(0)
 {
     setWindowTitle(i18n("Document"));
 
     QWidget *mainWidget = new QWidget(this);
-    QGridLayout* layout = new QGridLayout(mainWidget);
+    QGridLayout *layout = new QGridLayout(mainWidget);
     layout->addWidget(m_sectionView = new KoDocumentSectionView(mainWidget), 0, 0, 1, -1);
 
     QToolButton *button = new QToolButton(mainWidget);
     button->setIcon(koIcon("list-add"));
     if (pageType == KoPageApp::Slide) {
         button->setToolTip(i18n("Add a new slide or layer"));
-    }
-    else {
+    } else {
         button->setToolTip(i18n("Add a new page or layer"));
     }
     layout->addWidget(button, 1, 0);
@@ -97,9 +91,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     QMenu *menu = new QMenu(button);
     button->setMenu(menu);
     button->setPopupMode(QToolButton::InstantPopup);
-    menu->addAction(koIcon("document-new"),
-                    (pageType == KoPageApp::Slide) ? i18n("Slide") : i18n("Page"),
-                    this, &KoPADocumentStructureDocker::addPage);
+    menu->addAction(koIcon("document-new"), (pageType == KoPageApp::Slide) ? i18n("Slide") : i18n("Page"), this, &KoPADocumentStructureDocker::addPage);
     m_addLayerAction = menu->addAction(koIcon("layer-new"), i18n("Layer"), this, &KoPADocumentStructureDocker::addLayer);
 
     m_buttonGroup = new QButtonGroup(mainWidget);
@@ -128,13 +120,13 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     QActionGroup *group = new QActionGroup(this);
 
     m_viewModeActions.insert(KoDocumentSectionView::MinimalMode,
-                              menu->addAction(koIcon("view-list-text"), i18n("Minimal View"), this, &KoPADocumentStructureDocker::minimalView));
+                             menu->addAction(koIcon("view-list-text"), i18n("Minimal View"), this, &KoPADocumentStructureDocker::minimalView));
     m_viewModeActions.insert(KoDocumentSectionView::DetailedMode,
-                              menu->addAction(koIcon("view-list-details"), i18n("Detailed View"), this, &KoPADocumentStructureDocker::detailedView));
+                             menu->addAction(koIcon("view-list-details"), i18n("Detailed View"), this, &KoPADocumentStructureDocker::detailedView));
     m_viewModeActions.insert(KoDocumentSectionView::ThumbnailMode,
-                              menu->addAction(koIcon("view-preview"), i18n("Thumbnail View"), this, &KoPADocumentStructureDocker::thumbnailView));
+                             menu->addAction(koIcon("view-preview"), i18n("Thumbnail View"), this, &KoPADocumentStructureDocker::thumbnailView));
 
-    foreach (QAction* action, m_viewModeActions) {
+    foreach (QAction *action, m_viewModeActions) {
         action->setCheckable(true);
         action->setActionGroup(group);
     }
@@ -160,13 +152,12 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     m_sectionView->setDragDropMode(QAbstractItemView::InternalMove);
 
     connect(m_sectionView, &QAbstractItemView::pressed, this, &KoPADocumentStructureDocker::itemClicked);
-    connect(m_sectionView->selectionModel(), &QItemSelectionModel::selectionChanged,
-             this, &KoPADocumentStructureDocker::itemSelected);
+    connect(m_sectionView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &KoPADocumentStructureDocker::itemSelected);
 
     connect(m_model, &KoPADocumentModel::requestPageSelection, this, &KoPADocumentStructureDocker::selectPages);
     connect(m_model, &QAbstractItemModel::modelReset, this, &KoPADocumentStructureDocker::dockerReset);
 
-    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KoPageApp/DocumentStructureDocker");
+    KConfigGroup configGroup = KSharedConfig::openConfig()->group("KoPageApp/DocumentStructureDocker");
     QString viewModeString = configGroup.readEntry("ViewMode", "");
 
     if (viewModeString.isEmpty())
@@ -179,7 +170,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
 
 KoPADocumentStructureDocker::~KoPADocumentStructureDocker()
 {
-    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KoPageApp/DocumentStructureDocker");
+    KConfigGroup configGroup = KSharedConfig::openConfig()->group("KoPageApp/DocumentStructureDocker");
     configGroup.writeEntry("ViewMode", viewModeToString(m_sectionView->displayMode()));
 }
 
@@ -190,17 +181,16 @@ void KoPADocumentStructureDocker::updateView()
 
 void KoPADocumentStructureDocker::slotButtonClicked(int buttonId)
 {
-    switch (buttonId)
-    {
-        case Button_Raise:
-            raiseItem();
-            break;
-        case Button_Lower:
-            lowerItem();
-            break;
-        case Button_Delete:
-            deleteItem();
-            break;
+    switch (buttonId) {
+    case Button_Raise:
+        raiseItem();
+        break;
+    case Button_Lower:
+        lowerItem();
+        break;
+    case Button_Delete:
+        deleteItem();
+        break;
     }
 }
 
@@ -211,12 +201,12 @@ void KoPADocumentStructureDocker::itemClicked(const QModelIndex &index)
     if (!index.isValid())
         return;
 
-    KoShape *shape = static_cast<KoShape*>(index.internalPointer());
+    KoShape *shape = static_cast<KoShape *>(index.internalPointer());
     if (!shape)
         return;
     // check whether the newly selected shape is a page or shape/layer
     bool isPage = (dynamic_cast<KoPAPageBase *>(shape) != 0);
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
     if (isPage) {
@@ -227,15 +217,13 @@ void KoPADocumentStructureDocker::itemClicked(const QModelIndex &index)
             m_sectionView->setCurrentIndex(index);
             m_selectedShapes.clear();
             emit pageChanged(dynamic_cast<KoPAPageBase *>(shape));
-        }
-        else {
+        } else {
             // There are more than one page selected
             if (m_sectionView->selectionModel()->selectedIndexes().size() == 1) {
                 emit pageChanged(dynamic_cast<KoPAPageBase *>(shape));
             }
         }
-    }
-    else {
+    } else {
         KoPAPageBase *newPageByShape = m_doc->pageByShape(shape);
         // there is already shape(s) selected
         if (!m_selectedShapes.isEmpty()) {
@@ -251,27 +239,25 @@ void KoPADocumentStructureDocker::itemClicked(const QModelIndex &index)
                 emit pageChanged(newPageByShape);
                 if (layer) {
                     selection->setActiveLayer(layer);
-                }
-                else {
+                } else {
                     selection->select(shape);
                     shape->update();
                 }
-            }
-            else {
-                QList<KoPAPageBase*> selectedPages;
-                QList<KoShapeLayer*> selectedLayers;
-                QList<KoShape*> selectedShapes;
+            } else {
+                QList<KoPAPageBase *> selectedPages;
+                QList<KoShapeLayer *> selectedLayers;
+                QList<KoShape *> selectedShapes;
 
                 // separate selected layers and selected shapes
                 extractSelectedLayersAndShapes(selectedPages, selectedLayers, selectedShapes);
 
                 // XXX: Do stuff with the selected pages!
 
-                foreach (KoShape* shape, selection->selectedShapes()) {
+                foreach (KoShape *shape, selection->selectedShapes()) {
                     shape->update();
                 }
                 selection->deselectAll();
-                foreach (KoShape* shape, selectedShapes) {
+                foreach (KoShape *shape, selectedShapes) {
                     if (shape) {
                         selection->select(shape);
                         shape->update();
@@ -299,15 +285,14 @@ void KoPADocumentStructureDocker::itemClicked(const QModelIndex &index)
 void KoPADocumentStructureDocker::addLayer()
 {
     bool ok = true;
-    QString name = QInputDialog::getText(this, i18n("New Layer"), i18n("Enter the name of the new layer:"),
-                                         QLineEdit::Normal, i18n("New layer"), &ok);
+    QString name = QInputDialog::getText(this, i18n("New Layer"), i18n("Enter the name of the new layer:"), QLineEdit::Normal, i18n("New layer"), &ok);
     if (ok) {
-        KoShapeLayer* layer = new KoShapeLayer();
-        KoPACanvas * canvas = dynamic_cast<KoPACanvas *>(KoToolManager::instance()->activeCanvasController()->canvas());
+        KoShapeLayer *layer = new KoShapeLayer();
+        KoPACanvas *canvas = dynamic_cast<KoPACanvas *>(KoToolManager::instance()->activeCanvasController()->canvas());
         if (canvas) {
             layer->setParent(canvas->koPAView()->activePage());
             layer->setName(name);
-            QList<KoShape*> layers(canvas->koPAView()->activePage()->shapes());
+            QList<KoShape *> layers(canvas->koPAView()->activePage()->shapes());
             if (!layers.isEmpty()) {
                 std::sort(layers.begin(), layers.end(), KoShape::compareShapeZIndex);
                 layer->setZIndex(layers.last()->zIndex() + 1);
@@ -322,9 +307,9 @@ void KoPADocumentStructureDocker::addLayer()
 
 void KoPADocumentStructureDocker::deleteItem()
 {
-    QList<KoPAPageBase*> selectedPages;
-    QList<KoShapeLayer*> selectedLayers;
-    QList<KoShape*> selectedShapes;
+    QList<KoPAPageBase *> selectedPages;
+    QList<KoShapeLayer *> selectedLayers;
+    QList<KoShape *> selectedShapes;
 
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes(selectedPages, selectedLayers, selectedShapes);
@@ -333,22 +318,19 @@ void KoPADocumentStructureDocker::deleteItem()
 
     if (selectedLayers.count()) {
         if (m_doc->pages().count() > selectedPages.count()) {
-            QList<KoShape*> deleteShapes;
-            foreach(KoPAPageBase* page, selectedPages) {
+            QList<KoShape *> deleteShapes;
+            foreach (KoPAPageBase *page, selectedPages) {
                 deleteShapes += page->shapes();
                 deleteShapes.append(page);
             }
             cmd = new KoShapeDeleteCommand(m_doc, deleteShapes);
             cmd->setText(kundo2_i18n("Delete Layer"));
-        }
-        else {
+        } else {
             KMessageBox::error(0, i18n("Could not delete all layers. At least one layer is required."), i18n("Error deleting layers"));
         }
-    }
-    else if (selectedShapes.count()) {
+    } else if (selectedShapes.count()) {
         cmd = new KoShapeDeleteCommand(m_doc, selectedShapes);
-    }
-    else if (!selectedPages.isEmpty() && selectedPages.count() < m_doc->pages().count()) {
+    } else if (!selectedPages.isEmpty() && selectedPages.count() < m_doc->pages().count()) {
         m_doc->removePages(selectedPages);
     }
 
@@ -360,9 +342,9 @@ void KoPADocumentStructureDocker::deleteItem()
 
 void KoPADocumentStructureDocker::raiseItem()
 {
-    QList<KoPAPageBase*> selectedPages;
-    QList<KoShapeLayer*> selectedLayers;
-    QList<KoShape*> selectedShapes;
+    QList<KoPAPageBase *> selectedPages;
+    QList<KoShapeLayer *> selectedLayers;
+    QList<KoShape *> selectedShapes;
 
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes(selectedPages, selectedLayers, selectedShapes);
@@ -370,17 +352,16 @@ void KoPADocumentStructureDocker::raiseItem()
     KUndo2Command *cmd = 0;
 
     if (selectedLayers.count()) {
-//         // check if all layers could be raised
-//         foreach(KoShapeLayer* layer, selectedLayers)
-//             if (! m_document->canRaiseLayer(layer))
-//                 return;
+        //         // check if all layers could be raised
+        //         foreach(KoShapeLayer* layer, selectedLayers)
+        //             if (! m_document->canRaiseLayer(layer))
+        //                 return;
 
-//        cmd = new KoPALayerReorderCommand(m_document, selectedLayers, KoPALayerReorderCommand::RaiseLayer);
-    }
-    else if (selectedShapes.count()) {
+        //        cmd = new KoPALayerReorderCommand(m_document, selectedLayers, KoPALayerReorderCommand::RaiseLayer);
+    } else if (selectedShapes.count()) {
         cmd = KoShapeReorderCommand::createCommand(selectedShapes,
-                KoToolManager::instance()->activeCanvasController()->canvas()->shapeManager(),
-                KoShapeReorderCommand::RaiseShape);
+                                                   KoToolManager::instance()->activeCanvasController()->canvas()->shapeManager(),
+                                                   KoShapeReorderCommand::RaiseShape);
     }
 
     if (cmd) {
@@ -391,9 +372,9 @@ void KoPADocumentStructureDocker::raiseItem()
 
 void KoPADocumentStructureDocker::lowerItem()
 {
-    QList<KoPAPageBase*> selectedPages;
-    QList<KoShapeLayer*> selectedLayers;
-    QList<KoShape*> selectedShapes;
+    QList<KoPAPageBase *> selectedPages;
+    QList<KoShapeLayer *> selectedLayers;
+    QList<KoShape *> selectedShapes;
 
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes(selectedPages, selectedLayers, selectedShapes);
@@ -401,17 +382,16 @@ void KoPADocumentStructureDocker::lowerItem()
     KUndo2Command *cmd = 0;
 
     if (selectedLayers.count()) {
-//         // check if all layers could be raised
-//         foreach(KoShapeLayer* layer, selectedLayers)
-//             if (! m_document->canLowerLayer(layer))
-//                 return;
+        //         // check if all layers could be raised
+        //         foreach(KoShapeLayer* layer, selectedLayers)
+        //             if (! m_document->canLowerLayer(layer))
+        //                 return;
 
-//        cmd = new KoPALayerReorderCommand(m_document, selectedLayers, KoPALayerReorderCommand::LowerLayer);
-    }
-    else if (selectedShapes.count()) {
+        //        cmd = new KoPALayerReorderCommand(m_document, selectedLayers, KoPALayerReorderCommand::LowerLayer);
+    } else if (selectedShapes.count()) {
         cmd = KoShapeReorderCommand::createCommand(selectedShapes,
-                KoToolManager::instance()->activeCanvasController()->canvas()->shapeManager(),
-                KoShapeReorderCommand::LowerShape);
+                                                   KoToolManager::instance()->activeCanvasController()->canvas()->shapeManager(),
+                                                   KoShapeReorderCommand::LowerShape);
     }
 
     if (cmd) {
@@ -420,7 +400,7 @@ void KoPADocumentStructureDocker::lowerItem()
     }
 }
 
-void KoPADocumentStructureDocker::extractSelectedLayersAndShapes(QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes)
+void KoPADocumentStructureDocker::extractSelectedLayersAndShapes(QList<KoPAPageBase *> &pages, QList<KoShapeLayer *> &layers, QList<KoShape *> &shapes)
 {
     pages.clear();
     layers.clear();
@@ -434,25 +414,24 @@ void KoPADocumentStructureDocker::extractSelectedLayersAndShapes(QList<KoPAPageB
     // 1. only make it possible to select one type of object page, layer, shape
     // 2. don't add shapes when we already have the page/layer/group in the selection
     // separate selected layers and selected shapes
-    foreach(const QModelIndex & index, selectedItems) {
-        KoShape *shape = static_cast<KoShape*>(index.internalPointer());
-        KoPAPageBase * page = dynamic_cast<KoPAPageBase*>(shape);
+    foreach (const QModelIndex &index, selectedItems) {
+        KoShape *shape = static_cast<KoShape *>(index.internalPointer());
+        KoPAPageBase *page = dynamic_cast<KoPAPageBase *>(shape);
         if (page) {
             pages.append(page);
-        }
-        else {
-            KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
+        } else {
+            KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(shape);
             if (layer)
                 layers.append(layer);
-            else if (! selectedItems.contains(index.parent()))
+            else if (!selectedItems.contains(index.parent()))
                 shapes.append(shape);
         }
     }
 }
 
-void KoPADocumentStructureDocker::setCanvas(KoCanvasBase* canvas)
+void KoPADocumentStructureDocker::setCanvas(KoCanvasBase *canvas)
 {
-    KoPACanvas * c = dynamic_cast<KoPACanvas*> (canvas);
+    KoPACanvas *c = dynamic_cast<KoPACanvas *>(canvas);
     if (c) {
         m_doc = c->document();
         m_model->setDocument(m_doc);
@@ -472,8 +451,7 @@ void KoPADocumentStructureDocker::setActivePage(KoPAPageBase *page)
     if (m_doc) {
         int row = m_doc->pageIndex(page);
         QModelIndex index = m_model->index(row, 0);
-        if (index != m_sectionView->currentIndex()
-                && index != getRootIndex(m_sectionView->currentIndex())) {
+        if (index != m_sectionView->currentIndex() && index != getRootIndex(m_sectionView->currentIndex())) {
             m_sectionView->setCurrentIndex(index);
         }
     }
@@ -523,7 +501,7 @@ void KoPADocumentStructureDocker::setViewMode(KoDocumentSectionView::DisplayMode
     m_sectionView->setRootIsDecorated(expandable);
     // m_sectionView->setSelectionMode(expandable ? QAbstractItemView::ExtendedSelection : QAbstractItemView::SingleSelection);
 
-    m_viewModeActions[mode]->setChecked (true);
+    m_viewModeActions[mode]->setChecked(true);
 }
 
 QModelIndex KoPADocumentStructureDocker::getRootIndex(const QModelIndex &index) const
@@ -541,7 +519,7 @@ QModelIndex KoPADocumentStructureDocker::getRootIndex(const QModelIndex &index) 
     return currentIndex;
 }
 
-KoDocumentSectionView::DisplayMode KoPADocumentStructureDocker::viewModeFromString(const QString& mode)
+KoDocumentSectionView::DisplayMode KoPADocumentStructureDocker::viewModeFromString(const QString &mode)
 {
     if (mode == "Minimal")
         return KoDocumentSectionView::MinimalMode;
@@ -555,23 +533,22 @@ KoDocumentSectionView::DisplayMode KoPADocumentStructureDocker::viewModeFromStri
 
 QString KoPADocumentStructureDocker::viewModeToString(KoDocumentSectionView::DisplayMode mode)
 {
-    switch (mode)
-    {
-        case KoDocumentSectionView::MinimalMode:
-            return QString("Minimal");
-            break;
-        case KoDocumentSectionView::DetailedMode:
-            return QString("Detailed");
-            break;
-        case KoDocumentSectionView::ThumbnailMode:
-            return QString("Thumbnail");
-            break;
+    switch (mode) {
+    case KoDocumentSectionView::MinimalMode:
+        return QString("Minimal");
+        break;
+    case KoDocumentSectionView::DetailedMode:
+        return QString("Detailed");
+        break;
+    case KoDocumentSectionView::ThumbnailMode:
+        return QString("Thumbnail");
+        break;
     }
 
     return QString();
 }
 
-void KoPADocumentStructureDocker::itemSelected(const QItemSelection& selected, const QItemSelection& deselected)
+void KoPADocumentStructureDocker::itemSelected(const QItemSelection &selected, const QItemSelection &deselected)
 {
     Q_UNUSED(deselected);
 
@@ -579,39 +556,35 @@ void KoPADocumentStructureDocker::itemSelected(const QItemSelection& selected, c
         m_buttonGroup->button(Button_Raise)->setEnabled(false);
         m_buttonGroup->button(Button_Lower)->setEnabled(false);
         m_addLayerAction->setEnabled(false);
-    }
-    else {
+    } else {
         m_buttonGroup->button(Button_Raise)->setEnabled(true);
         m_buttonGroup->button(Button_Lower)->setEnabled(true);
         m_addLayerAction->setEnabled(true);
     }
 
-    if (!m_sectionView->selectionModel()->selectedIndexes().empty() &&
-            m_sectionView->selectionModel()->selectedIndexes().count() < m_doc->pages().count()) {
+    if (!m_sectionView->selectionModel()->selectedIndexes().empty() && m_sectionView->selectionModel()->selectedIndexes().count() < m_doc->pages().count()) {
         m_buttonGroup->button(Button_Delete)->setEnabled(true);
-    }
-    else {
+    } else {
         m_buttonGroup->button(Button_Delete)->setEnabled(false);
     }
 }
 
 void KoPADocumentStructureDocker::addPage()
 {
-    KoPACanvas * canvas = dynamic_cast<KoPACanvas *>(KoToolManager::instance()->activeCanvasController()->canvas());
+    KoPACanvas *canvas = dynamic_cast<KoPACanvas *>(KoToolManager::instance()->activeCanvasController()->canvas());
     if (canvas) {
         canvas->koPAView()->insertPage();
     }
 }
 
-void KoPADocumentStructureDocker::contextMenuEvent(QContextMenuEvent* event)
+void KoPADocumentStructureDocker::contextMenuEvent(QContextMenuEvent *event)
 {
     QMenu menu(this);
 
     // Not connected yet
     if (m_doc->pageType() == KoPageApp::Slide) {
         menu.addAction(koIcon("document-new"), i18n("Add a new slide"), this, &KoPADocumentStructureDocker::addPage);
-    }
-    else {
+    } else {
         menu.addAction(koIcon("document-new"), i18n("Add a new page"), this, &KoPADocumentStructureDocker::addPage);
     }
     menu.addAction(koIcon("edit-delete"), i18n("Delete selected objects"), this, &KoPADocumentStructureDocker::deleteItem);
@@ -631,14 +604,14 @@ void KoPADocumentStructureDocker::editCut()
 
 void KoPADocumentStructureDocker::editCopy()
 {
-    QList<KoPAPageBase*> pages;
-    QList<KoShapeLayer*> layers;
-    QList<KoShape*> shapes;
+    QList<KoPAPageBase *> pages;
+    QList<KoShapeLayer *> layers;
+    QList<KoShape *> shapes;
 
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes(pages, layers, shapes);
 
-    foreach (KoShape* shape, layers) {
+    foreach (KoShape *shape, layers) {
         // Add layers to shapes
         shapes.append(shape);
     }
@@ -663,19 +636,18 @@ void KoPADocumentStructureDocker::editCopy()
 
 void KoPADocumentStructureDocker::editPaste()
 {
-    const QMimeData * data = QApplication::clipboard()->mimeData();
+    const QMimeData *data = QApplication::clipboard()->mimeData();
 
     if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))) {
         // Paste Shapes or Layers
-        KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
-        KoShapeManager * shapeManager = canvas->shapeManager();
+        KoCanvasBase *canvas = KoToolManager::instance()->activeCanvasController()->canvas();
+        KoShapeManager *shapeManager = canvas->shapeManager();
         KoShapePaste paste(canvas, shapeManager->selection()->activeLayer());
         paste.paste(KoOdf::Text, data);
 
-    }
-    else {
+    } else {
         // Paste Pages
-        KoPACanvas * canvas = static_cast<KoPACanvas *>(KoToolManager::instance()->activeCanvasController()->canvas());
+        KoPACanvas *canvas = static_cast<KoPACanvas *>(KoToolManager::instance()->activeCanvasController()->canvas());
         canvas->koPAView()->pagePaste();
     }
 }

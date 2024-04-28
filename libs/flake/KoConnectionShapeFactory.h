@@ -15,14 +15,16 @@ class KoShape;
 
 class KoConnectionShapeFactory : public KoShapeFactoryBase
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     KoConnectionShapeFactory();
-    ~KoConnectionShapeFactory() override {}
+    ~KoConnectionShapeFactory() override
+    {
+    }
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels() override;
+    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels() override;
 };
 
 #endif

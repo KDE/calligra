@@ -7,7 +7,11 @@
 #include "EllipseShapeConfigCommand.h"
 #include <KLocalizedString>
 
-EllipseShapeConfigCommand::EllipseShapeConfigCommand(EllipseShape *ellipse, EllipseShape::EllipseType type, qreal startAngle, qreal endAngle, KUndo2Command *parent)
+EllipseShapeConfigCommand::EllipseShapeConfigCommand(EllipseShape *ellipse,
+                                                     EllipseShape::EllipseType type,
+                                                     qreal startAngle,
+                                                     qreal endAngle,
+                                                     KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_ellipse(ellipse)
     , m_newType(type)

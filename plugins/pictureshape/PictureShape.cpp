@@ -11,49 +11,49 @@
 
 #include "PictureShape.h"
 
+#include "PictureDebug.h"
+#include "filters/ColoringFilterEffect.h"
+#include "filters/GammaFilterEffect.h"
 #include "filters/GreyscaleFilterEffect.h"
 #include "filters/MonoFilterEffect.h"
 #include "filters/WatermarkFilterEffect.h"
-#include "filters/ColoringFilterEffect.h"
-#include "filters/GammaFilterEffect.h"
-#include "PictureDebug.h"
 
-#include <KoOdfWorkaround.h>
-#include <KoViewConverter.h>
+#include <KoClipPath.h>
+#include <KoFilterEffectStack.h>
+#include <KoGenStyle.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfWorkaround.h>
+#include <KoPathShape.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapePaintingContext.h>
-#include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoXmlWriter.h>
-#include <KoXmlNS.h>
-#include <KoUnit.h>
-#include <KoGenStyle.h>
 #include <KoStyleStack.h>
-#include <KoFilterEffectStack.h>
-#include <KoClipPath.h>
-#include <SvgSavingContext.h>
+#include <KoUnit.h>
+#include <KoViewConverter.h>
+#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 #include <SvgLoadingContext.h>
+#include <SvgSavingContext.h>
 #include <SvgUtil.h>
-#include <KoPathShape.h>
 
+#include <QColor>
+#include <QImage>
 #include <QPainter>
-#include <QTimer>
 #include <QPixmapCache>
 #include <QThreadPool>
-#include <QImage>
-#include <QColor>
+#include <QTimer>
 
-QString generate_key(qint64 key, const QSize & size)
+QString generate_key(qint64 key, const QSize &size)
 {
     return QString("%1-%2-%3").arg(key).arg(size.width()).arg(size.height());
 }
 
 // ----------------------------------------------------------------- //
 
-_Private::PixmapScaler::PixmapScaler(PictureShape *pictureShape, const QSize &pixmapSize):
-    m_size(pixmapSize)
+_Private::PixmapScaler::PixmapScaler(PictureShape *pictureShape, const QSize &pixmapSize)
+    : m_size(pixmapSize)
 {
     m_image = pictureShape->imageData()->image();
     m_imageKey = pictureShape->imageData()->key();
@@ -64,12 +64,7 @@ void _Private::PixmapScaler::run()
 {
     QString key = generate_key(m_imageKey, m_size);
 
-    m_image = m_image.scaled(
-        m_size.width(),
-        m_size.height(),
-        Qt::IgnoreAspectRatio,
-        Qt::SmoothTransformation
-    );
+    m_image = m_image.scaled(m_size.width(), m_size.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
     emit finished(key, m_image);
 }
@@ -96,7 +91,7 @@ QPainterPath _Private::generateOutline(const QImage &imageIn, int threshold)
     for (int y = 0; y < 100; y++) {
         leftArray[y] = -1;
         for (int x = 0; x < 100; x++) {
-            int a = qAlpha(image.pixel(x,y));
+            int a = qAlpha(image.pixel(x, y));
             if (a > threshold) {
                 leftArray[y] = x;
                 break;
@@ -106,8 +101,8 @@ QPainterPath _Private::generateOutline(const QImage &imageIn, int threshold)
     for (int y = 0; y < 100; y++) {
         rightArray[y] = -1;
         if (leftArray[y] != -1) {
-            for (int x = 100-1; x >= 0; x--) {
-                int a = qAlpha(image.pixel(x,y));
+            for (int x = 100 - 1; x >= 0; x--) {
+                int a = qAlpha(image.pixel(x, y));
                 if (a > threshold) {
                     rightArray[y] = x;
                     break;
@@ -133,7 +128,7 @@ QPainterPath _Private::generateOutline(const QImage &imageIn, int threshold)
         return path;
     }
 
-    for (int y = 100-1; y >= 0; --y) {
+    for (int y = 100 - 1; y >= 0; --y) {
         if (leftArray[y] != -1) {
             path.lineTo(leftArray[y] / 99.0, y / 99.0);
         }
@@ -151,7 +146,7 @@ PictureShape::PictureShape()
     , m_proxy(this)
 {
     setKeepAspectRatio(true);
-    KoFilterEffectStack * effectStack = new KoFilterEffectStack();
+    KoFilterEffectStack *effectStack = new KoFilterEffectStack();
     effectStack->setClipRect(QRectF(0, 0, 1, 1));
     setFilterEffectStack(effectStack);
     filterEffectStack()->insertFilterEffect(0, new KoFilterEffect("NoOpFilterEffect", "NoOpFilterEffect")); // let's just set 3
@@ -159,9 +154,9 @@ PictureShape::PictureShape()
     filterEffectStack()->insertFilterEffect(2, new KoFilterEffect("NoOpFilterEffect", "NoOpFilterEffect"));
 }
 
-KoImageData* PictureShape::imageData() const
+KoImageData *PictureShape::imageData() const
 {
-    return qobject_cast<KoImageData*>(userData());
+    return qobject_cast<KoImageData *>(userData());
 }
 
 QRectF PictureShape::cropRect() const
@@ -171,10 +166,7 @@ QRectF PictureShape::cropRect() const
 
 bool PictureShape::isPictureInProportion() const
 {
-    QSizeF clippingRectSize(
-        imageData()->imageSize().width() * m_clippingRect.width(),
-        imageData()->imageSize().height() * m_clippingRect.height()
-    );
+    QSizeF clippingRectSize(imageData()->imageSize().width() * m_clippingRect.width(), imageData()->imageSize().height() * m_clippingRect.height());
 
     qreal shapeAspect = size().width() / size().height();
     qreal rectAspect = clippingRectSize.width() / clippingRectSize.height();
@@ -182,22 +174,21 @@ bool PictureShape::isPictureInProportion() const
     return qAbs(shapeAspect - rectAspect) <= 0.025;
 }
 
-void PictureShape::setCropRect(const QRectF& rect)
+void PictureShape::setCropRect(const QRectF &rect)
 {
     m_clippingRect.setRect(rect, true);
     update();
 }
 
-QSize PictureShape::calcOptimalPixmapSize(const QSizeF& shapeSize, const QSizeF& imageSize) const
+QSize PictureShape::calcOptimalPixmapSize(const QSizeF &shapeSize, const QSizeF &imageSize) const
 {
     qreal imageAspect = imageSize.width() / imageSize.height();
     qreal shapeAspect = shapeSize.width() / shapeSize.height();
     qreal scale = 1.0;
 
     if (shapeAspect > imageAspect) {
-        scale = shapeSize.width()  / imageSize.width()  / m_clippingRect.width();
-    }
-    else {
+        scale = shapeSize.width() / imageSize.width() / m_clippingRect.width();
+    } else {
         scale = shapeSize.height() / imageSize.height() / m_clippingRect.height();
     }
 
@@ -210,10 +201,9 @@ ClippingRect PictureShape::parseClippingRectString(const QString &originalString
     ClippingRect rect;
     QString string = originalString.trimmed();
 
-    if (string.startsWith(QLatin1String("rect(")) &&
-        string.endsWith(QLatin1Char(')'))) {
+    if (string.startsWith(QLatin1String("rect(")) && string.endsWith(QLatin1Char(')'))) {
         // remove "rect(" & ")"
-        string.remove(0,5).chop(1);
+        string.remove(0, 5).chop(1);
 
 #ifndef NWORKAROUND_ODF_BUGS
         KoOdfWorkaround::fixClipRectOffsetValuesString(string);
@@ -228,10 +218,10 @@ ClippingRect PictureShape::parseClippingRectString(const QString &originalString
         }
 
         // default is 0.0 for all offsets
-        qreal values[4] = { 0, 0, 0, 0 };
+        qreal values[4] = {0, 0, 0, 0};
         const QLatin1String autoValueString("auto");
 
-        for (int i=0; i<4; ++i) {
+        for (int i = 0; i < 4; ++i) {
             const QString valueString = valueStrings.at(i).trimmed();
             // "auto" means: keep default 0.0
             if (valueString != autoValueString) {
@@ -256,12 +246,11 @@ QPainterPath PictureShape::shadowOutline() const
     return outline();
 }
 
-void PictureShape::paint(QPainter &painter, const KoViewConverter &converter,
-                         KoShapePaintingContext &paintContext)
+void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     Q_UNUSED(paintContext);
 
-    QRectF viewRect = converter.documentToView(QRectF(QPointF(0,0), size()));
+    QRectF viewRect = converter.documentToView(QRectF(QPointF(0, 0), size()));
     if (imageData() == 0) {
         painter.fillRect(viewRect, QColor(Qt::gray));
         return;
@@ -278,18 +267,18 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter,
     m_clippingRect.normalize(imageData()->imageSize());
 
     // Handle style:mirror, i.e. mirroring horizontally and/or vertically.
-    // 
+    //
     // NOTE: At this time we don't handle HorizontalOnEven
     //       and HorizontalOnOdd, which have to know which
     //       page they are on.  In those cases we treat it as
     //       no horizontal mirroring at all.
-    bool   doFlip = false;
+    bool doFlip = false;
     QSizeF shapeSize = size();
     QSizeF viewSize = converter.documentToView(shapeSize);
-    qreal  midpointX = 0.0;
-    qreal  midpointY = 0.0;
-    qreal  scaleX = 1.0;
-    qreal  scaleY = 1.0;
+    qreal midpointX = 0.0;
+    qreal midpointY = 0.0;
+    qreal scaleX = 1.0;
+    qreal scaleY = 1.0;
     if (m_mirrorMode & MirrorHorizontal) {
         midpointX = viewSize.width() / qreal(2.0);
         scaleX = -1.0;
@@ -302,13 +291,13 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter,
     }
     if (doFlip) {
         QTransform outputTransform = painter.transform();
-        QTransform worldTransform  = QTransform();
+        QTransform worldTransform = QTransform();
 
-        //debugPicture << "Flipping" << midpointX << midpointY << scaleX << scaleY;
+        // debugPicture << "Flipping" << midpointX << midpointY << scaleX << scaleY;
         worldTransform.translate(midpointX, midpointY);
         worldTransform.scale(scaleX, scaleY);
         worldTransform.translate(-midpointX, -midpointY);
-        //debugPicture << "After flipping for window" << worldTransform;
+        // debugPicture << "After flipping for window" << worldTransform;
 
         QTransform newTransform = worldTransform * outputTransform;
         painter.setWorldTransform(newTransform);
@@ -317,17 +306,14 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter,
     // Paint the image as prepared in waitUntilReady()
     if (!m_printQualityImage.isNull() && pixmapSize != m_printQualityRequestedSize) {
         QSizeF imageSize = m_printQualityImage.size();
-        QRectF cropRect(
-            imageSize.width()  * m_clippingRect.left,
-            imageSize.height() * m_clippingRect.top,
-            imageSize.width()  * m_clippingRect.width(),
-            imageSize.height() * m_clippingRect.height()
-        );
+        QRectF cropRect(imageSize.width() * m_clippingRect.left,
+                        imageSize.height() * m_clippingRect.top,
+                        imageSize.width() * m_clippingRect.width(),
+                        imageSize.height() * m_clippingRect.height());
 
         painter.drawImage(viewRect, m_printQualityImage, cropRect);
         m_printQualityImage = QImage(); // free memory
-    }
-    else {
+    } else {
         QPixmap pixmap;
         QString key(generate_key(imageData()->key(), pixmapSize));
 
@@ -337,14 +323,11 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter,
         if (!QPixmapCache::find(key, &pixmap)) {
             QThreadPool::globalInstance()->start(new _Private::PixmapScaler(this, pixmapSize));
             painter.fillRect(viewRect, QColor(Qt::gray)); // just paint a gray rect as long as we don't have the required pixmap
-        }
-        else {
-            QRectF cropRect(
-                pixmapSize.width()  * m_clippingRect.left,
-                pixmapSize.height() * m_clippingRect.top,
-                pixmapSize.width()  * m_clippingRect.width(),
-                pixmapSize.height() * m_clippingRect.height()
-            );
+        } else {
+            QRectF cropRect(pixmapSize.width() * m_clippingRect.left,
+                            pixmapSize.height() * m_clippingRect.top,
+                            pixmapSize.width() * m_clippingRect.width(),
+                            pixmapSize.height() * m_clippingRect.height());
 
             painter.drawPixmap(viewRect, pixmap, cropRect);
         }
@@ -353,14 +336,14 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter,
 
 void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
 {
-    KoImageData *imageData = qobject_cast<KoImageData*>(userData());
+    KoImageData *imageData = qobject_cast<KoImageData *>(userData());
     if (imageData == 0) {
         return;
     }
 
     if (asynchronous) {
         // get pixmap and schedule it if not
-        QSize pixels = converter.documentToView(QRectF(QPointF(0,0), size())).size().toSize();
+        QSize pixels = converter.documentToView(QRectF(QPointF(0, 0), size())).size().toSize();
         QImage image = imageData->image();
         if (image.isNull()) {
             return;
@@ -370,9 +353,8 @@ void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchr
             pixels = image.size();
         }
         m_printQualityImage = image.scaled(pixels, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    }
-    else {
-        QSize pixmapSize = calcOptimalPixmapSize(converter.documentToView(QRectF(QPointF(0,0), size())).size(), imageData->image().size());
+    } else {
+        QSize pixmapSize = calcOptimalPixmapSize(converter.documentToView(QRectF(QPointF(0, 0), size())).size(), imageData->image().size());
         QString key(generate_key(imageData->key(), pixmapSize));
         if (QPixmapCache::find(key, nullptr) == 0) {
             QPixmap pixmap = imageData->pixmap(pixmapSize);
@@ -384,7 +366,7 @@ void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchr
 void PictureShape::saveOdf(KoShapeSavingContext &context) const
 {
     // make sure we have a valid image data pointer before saving
-    KoImageData *imageData = qobject_cast<KoImageData*>(userData());
+    KoImageData *imageData = qobject_cast<KoImageData *>(userData());
     if (imageData == 0) {
         return;
     }
@@ -402,8 +384,7 @@ void PictureShape::saveOdf(KoShapeSavingContext &context) const
     writer.addAttribute("xlink:href", name);
     saveText(context);
     writer.endElement(); // draw:image
-    QSizeF scaleFactor(imageData->imageSize().width() / size().width(),
-                  imageData->imageSize().height() / size().height());
+    QSizeF scaleFactor(imageData->imageSize().width() / size().width(), imageData->imageSize().height() / size().height());
     saveOdfClipContour(context, scaleFactor);
     writer.endElement(); // draw:frame
 
@@ -416,11 +397,10 @@ bool PictureShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 
     if (loadOdfFrame(element, context)) {
         // load contour (clip)
-        KoImageData *imageData = qobject_cast<KoImageData*>(userData());
+        KoImageData *imageData = qobject_cast<KoImageData *>(userData());
         Q_ASSERT(imageData);
 
-        QSizeF scaleFactor(size().width() / imageData->imageSize().width(),
-                 size().height() / imageData->imageSize().height());
+        QSizeF scaleFactor(size().width() / imageData->imageSize().width(), size().height() / imageData->imageSize().height());
 
         loadOdfClipContour(element, context, scaleFactor);
         // this is needed so that the image is already normalized when calling waitUntilReady e.g. by cstester
@@ -454,13 +434,12 @@ static const char *s_emptyImageXpm[] = {
     "baaaaaaaaaaaaaab",
     "baaaaaaaaaaaaaab",
     "baaaaaaaaaaaaaab",
-    "bbbbbbbbbbbbbbbb"
-};
+    "bbbbbbbbbbbbbbbb"};
 
 // image formats (possibly) supported by Qt
 // According to docs, only jpg and png are checked for by default
 const int s_numImageFormats = 10;
-const char *s_imageFormat[s_numImageFormats] = { "jpg", "jpeg", "png", "bmp", "gif", "pbm", "pgm", "ppm", "xbm", "xpm" };
+const char *s_imageFormat[s_numImageFormats] = {"jpg", "jpeg", "png", "bmp", "gif", "pbm", "pgm", "ppm", "xbm", "xpm"};
 
 bool PictureShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
@@ -480,17 +459,17 @@ bool PictureShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadi
                     if (image.loadFromData(QByteArray::fromBase64(binaryData.text().toLatin1()), s_imageFormat[i])) {
                         KoImageData *data = m_imageCollection->createImageData(image);
                         setUserData(data);
-                        debugPicture<<"Found image format:"<<s_imageFormat[i];
+                        debugPicture << "Found image format:" << s_imageFormat[i];
                         break;
                     }
                 }
             } else {
-                debugPicture<<"No image binary data";
+                debugPicture << "No image binary data";
             }
         }
         if (!userData()) {
             // We must create an image or else things crashes later on
-            warnPicture<<"Could not find an image, creating an empty one";
+            warnPicture << "Could not find an image, creating an empty one";
             KoImageData *data = m_imageCollection->createImageData(QImage(s_emptyImageXpm));
             setUserData(data);
         }
@@ -506,9 +485,9 @@ KoImageCollection *PictureShape::imageCollection() const
     return m_imageCollection;
 }
 
-QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const
+QString PictureShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {
-    if(transparency() > 0.0) {
+    if (transparency() > 0.0) {
         style.addProperty("draw:image-opacity", QString("%1%").arg((1.0 - transparency()) * 100.0));
     }
 
@@ -536,8 +515,7 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
         style.addProperty("style:mirror", mode);
     }
 
-    switch(m_colorMode)
-    {
+    switch (m_colorMode) {
     case Standard:
         style.addProperty("draw:color-mode", "standard");
         break;
@@ -553,18 +531,18 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
     }
 
     if (ColoringFilterEffect *cEffect = dynamic_cast<ColoringFilterEffect *>(filterEffectStack()->filterEffects()[1])) {
-        style.addProperty("draw:red", QString("%1%").arg(100*cEffect->red()));
-        style.addProperty("draw:green", QString("%1%").arg(100*cEffect->green()));
-        style.addProperty("draw:blue", QString("%1%").arg(100*cEffect->blue()));
-        style.addProperty("draw:luminance", QString("%1%").arg(100*cEffect->luminance()));
-        style.addProperty("draw:contrast", QString("%1%").arg(100*cEffect->contrast()));
+        style.addProperty("draw:red", QString("%1%").arg(100 * cEffect->red()));
+        style.addProperty("draw:green", QString("%1%").arg(100 * cEffect->green()));
+        style.addProperty("draw:blue", QString("%1%").arg(100 * cEffect->blue()));
+        style.addProperty("draw:luminance", QString("%1%").arg(100 * cEffect->luminance()));
+        style.addProperty("draw:contrast", QString("%1%").arg(100 * cEffect->contrast()));
     }
 
     if (GammaFilterEffect *gEffect = dynamic_cast<GammaFilterEffect *>(filterEffectStack()->filterEffects()[2])) {
-        style.addProperty("draw:gamma", QString("%1%").arg(100*gEffect->gamma()));
+        style.addProperty("draw:gamma", QString("%1%").arg(100 * gEffect->gamma()));
     }
 
-    KoImageData *imageData = qobject_cast<KoImageData*>(userData());
+    KoImageData *imageData = qobject_cast<KoImageData *>(userData());
 
     if (imageData != 0) {
         QSizeF imageSize = imageData->imageSize();
@@ -575,19 +553,19 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
         rect.right = 1.0 - rect.right;
 
         if (!qFuzzyCompare(rect.left + rect.right + rect.top + rect.bottom, qreal(0))) {
-            style.addProperty("fo:clip", QString("rect(%1pt, %2pt, %3pt, %4pt)")
-                .arg(rect.top * imageSize.height())
-                .arg(rect.right * imageSize.width())
-                .arg(rect.bottom * imageSize.height())
-                .arg(rect.left * imageSize.width())
-            );
+            style.addProperty("fo:clip",
+                              QString("rect(%1pt, %2pt, %3pt, %4pt)")
+                                  .arg(rect.top * imageSize.height())
+                                  .arg(rect.right * imageSize.width())
+                                  .arg(rect.bottom * imageSize.height())
+                                  .arg(rect.left * imageSize.width()));
         }
     }
 
     return KoTosContainer::saveStyle(style, context);
 }
 
-void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context)
+void PictureShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     // Load the common parts of the style.
     KoTosContainer::loadStyle(element, context);
@@ -604,11 +582,9 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
         // Only one of the horizontal modes
         if (mirrorMode.contains("horizontal-on-even")) {
             mode |= MirrorHorizontalOnEven;
-        }
-        else if (mirrorMode.contains("horizontal-on-odd")) {
+        } else if (mirrorMode.contains("horizontal-on-odd")) {
             mode |= MirrorHorizontalOnOdd;
-        }
-        else if (mirrorMode.contains("horizontal")) {
+        } else if (mirrorMode.contains("horizontal")) {
             mode |= MirrorHorizontal;
         }
 
@@ -624,11 +600,9 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
         QString colorMode = styleStack.property(KoXmlNS::draw, "color-mode");
         if (colorMode == "greyscale") {
             setColorMode(Greyscale);
-        }
-        else if (colorMode == "mono") {
+        } else if (colorMode == "mono") {
             setColorMode(Mono);
-        }
-        else if (colorMode == "watermark") {
+        } else if (colorMode == "watermark") {
             setColorMode(Watermark);
         }
     }
@@ -638,18 +612,18 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
     QString blue = styleStack.property(KoXmlNS::draw, "blue");
     QString luminance = styleStack.property(KoXmlNS::draw, "luminance");
     QString contrast = styleStack.property(KoXmlNS::draw, "contrast");
-    setColoring(red.right(1) == "%" ? (QStringView{red}.left(red.length() - 1).toDouble() / 100.0) : 0.0
-              , green.right(1) == "%" ? (QStringView{green}.left(green.length() - 1).toDouble() / 100.0) : 0.0
-              , blue.right(1) == "%" ? (QStringView{blue}.left(blue.length() - 1).toDouble() / 100.0) : 0.0
-              , luminance.right(1) == "%" ? (QStringView{luminance}.left(luminance.length() - 1).toDouble() / 100.0) : 0.0
-              , contrast.right(1) == "%" ? (QStringView{contrast}.left(contrast.length() - 1).toDouble() / 100.0) : 0.0);
+    setColoring(red.right(1) == "%" ? (QStringView{red}.left(red.length() - 1).toDouble() / 100.0) : 0.0,
+                green.right(1) == "%" ? (QStringView{green}.left(green.length() - 1).toDouble() / 100.0) : 0.0,
+                blue.right(1) == "%" ? (QStringView{blue}.left(blue.length() - 1).toDouble() / 100.0) : 0.0,
+                luminance.right(1) == "%" ? (QStringView{luminance}.left(luminance.length() - 1).toDouble() / 100.0) : 0.0,
+                contrast.right(1) == "%" ? (QStringView{contrast}.left(contrast.length() - 1).toDouble() / 100.0) : 0.0);
 
     QString gamma = styleStack.property(KoXmlNS::draw, "gamma");
     setGamma(gamma.right(1) == "%" ? (QStringView{gamma}.left(gamma.length() - 1).toDouble() / 100.0) : 0.0);
 
     // image opacity
     QString opacity(styleStack.property(KoXmlNS::draw, "image-opacity"));
-    if (! opacity.isEmpty() && opacity.right(1) == "%") {
+    if (!opacity.isEmpty() && opacity.right(1) == "%") {
         setTransparency(1.0 - (QStringView{opacity}.left(opacity.length() - 1).toFloat() / 100.0));
     }
 
@@ -690,8 +664,7 @@ void PictureShape::setColorMode(PictureShape::ColorMode mode)
     if (mode != m_colorMode) {
         filterEffectStack()->removeFilterEffect(0);
 
-        switch(mode)
-        {
+        switch (mode) {
         case Greyscale:
             filterEffectStack()->insertFilterEffect(0, new GreyscaleFilterEffect());
             break;
@@ -743,8 +716,8 @@ KoClipPath *PictureShape::generateClipPath()
 
     KoPathShape *pathShape = KoPathShape::createShapeFromPainterPath(path);
 
-    //createShapeFromPainterPath converts the path topleft into a shape topleft
-    //and the pathShape needs to be on top of us. So to preserve both we do:
+    // createShapeFromPainterPath converts the path topleft into a shape topleft
+    // and the pathShape needs to be on top of us. So to preserve both we do:
     pathShape->setTransformation(pathShape->transformation() * transformation());
 
     return new KoClipPath(this, new KoClipData(pathShape));
@@ -752,7 +725,7 @@ KoClipPath *PictureShape::generateClipPath()
 
 bool PictureShape::saveSvg(SvgSavingContext &context)
 {
-    KoImageData *imageData = qobject_cast<KoImageData*>(userData());
+    KoImageData *imageData = qobject_cast<KoImageData *>(userData());
     if (!imageData) {
         warnPicture << "Picture has no image data. Omitting.";
         return false;
@@ -798,7 +771,7 @@ bool PictureShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &conte
         int start = href.indexOf("base64,");
         if (start <= 0)
             return false;
-        if(!image.loadFromData(QByteArray::fromBase64(href.mid(start + 7).toLatin1())))
+        if (!image.loadFromData(QByteArray::fromBase64(href.mid(start + 7).toLatin1())))
             return false;
     } else if (!image.load(context.absoluteFilePath(href))) {
         return false;

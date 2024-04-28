@@ -9,27 +9,27 @@
 #include "ToolDocker.h"
 #include "ToolDocker_p.h"
 
-#include <QPointer>
+#include <QAction>
 #include <QGridLayout>
+#include <QLabel>
+#include <QPointer>
 #include <QScrollArea>
 #include <QScrollBar>
-#include <QLabel>
 #include <QSet>
-#include <QAction>
 #include <QStyleOptionFrame>
-#include <QToolButton>
 #include <QTabWidget>
+#include <QToolButton>
 
 #include <KConfigGroup>
-#include <KSharedConfig>
 #include <KLocalizedString>
+#include <KSharedConfig>
 
 #include <KoDockWidgetTitleBar.h>
 #include <KoIcon.h>
 
 ToolDocker::ToolDocker(QWidget *parent)
-    : QDockWidget(i18n("Tool Options"), parent),
-      d(new Private(this))
+    : QDockWidget(i18n("Tool Options"), parent)
+    , d(new Private(this))
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
 
@@ -37,9 +37,9 @@ ToolDocker::ToolDocker(QWidget *parent)
     d->tabbed = cfg.readEntry("TabbedMode", false);
     d->hasTitle = cfg.readEntry("Locked", true);
 
-    toggleViewAction()->setVisible(false); //should always be visible, so hide option in menu
+    toggleViewAction()->setVisible(false); // should always be visible, so hide option in menu
     setFeatures(DockWidgetMovable | DockWidgetFloatable);
-    if(d->hasTitle) {
+    if (d->hasTitle) {
         setTitleBarWidget(new KoDockWidgetTitleBar(this));
     } else {
         setTitleBarWidget(new QWidget());
@@ -62,7 +62,7 @@ ToolDocker::ToolDocker(QWidget *parent)
     setWidget(d->scrollArea);
 
     d->lockButton = new QToolButton(this);
-    if(d->hasTitle) {
+    if (d->hasTitle) {
         d->lockButton->setIcon(d->unlockIcon);
     } else {
         d->lockButton->setIcon(d->lockIcon);
@@ -97,12 +97,12 @@ bool ToolDocker::hasOptionWidget()
     return !d->currentWidgetList.isEmpty();
 }
 
-void ToolDocker::setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
+void ToolDocker::setOptionWidgets(const QList<QPointer<QWidget>> &optionWidgetList)
 {
     d->recreateLayout(optionWidgetList);
 }
 
-void ToolDocker::resizeEvent(QResizeEvent*)
+void ToolDocker::resizeEvent(QResizeEvent *)
 {
     int fw = isFloating() ? style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, this) : 0;
     d->lockButton->move(width() - d->lockButton->width() - d->scrollArea->verticalScrollBar()->sizeHint().width(), fw);

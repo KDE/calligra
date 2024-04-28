@@ -15,8 +15,7 @@ class SpellCheckPlugin : public QObject
     Q_OBJECT
 
 public:
-    SpellCheckPlugin(QObject *parent,  const QVariantList &);
+    SpellCheckPlugin(QObject *parent, const QVariantList &);
 };
 
 #endif
-

@@ -8,29 +8,27 @@
 #ifndef CALLIGRA_SHEETS_ACTION_INSERT_FROM_DATABASE
 #define CALLIGRA_SHEETS_ACTION_INSERT_FROM_DATABASE
 
-
 #include "DialogCellAction.h"
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class InsertFromDatabase : public DialogCellAction {
-Q_OBJECT
+class InsertFromDatabase : public DialogCellAction
+{
+    Q_OBJECT
 public:
     InsertFromDatabase(Actions *actions);
     virtual ~InsertFromDatabase();
+
 protected:
     virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
     virtual QAction *createAction() override;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_INSERT_FROM_DATABASE
+#endif // CALLIGRA_SHEETS_ACTION_INSERT_FROM_DATABASE

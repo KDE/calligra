@@ -30,8 +30,10 @@ static const char CURRENT_DTD_VERSION[] = "1.2";
 
 class KoXmlElement;
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
 class Cell;
 class Conditions;
@@ -47,45 +49,46 @@ class Validity;
 class ValueConverter;
 class ValueParser;
 
-namespace Ksp {
-    bool loadValidity(Validity *validity, ValueParser *parser, const KoXmlElement& validityElement);
-    QDomElement saveValidity(QDomDocument& doc, Validity *validity, const ValueConverter *converter);
-    void loadConditions(Conditions *conditions, const KoXmlElement &element, const ValueParser *parser);
-    QDomElement saveConditions(Conditions *conditions, QDomDocument &doc, ValueConverter *converter);
+namespace Ksp
+{
+bool loadValidity(Validity *validity, ValueParser *parser, const KoXmlElement &validityElement);
+QDomElement saveValidity(QDomDocument &doc, Validity *validity, const ValueConverter *converter);
+void loadConditions(Conditions *conditions, const KoXmlElement &element, const ValueParser *parser);
+QDomElement saveConditions(Conditions *conditions, QDomDocument &doc, ValueConverter *converter);
 
-    // styles
-    QDomElement saveStyles(StyleManager *manager, QDomDocument & doc);
-    bool loadStyles(StyleManager *manager, KoXmlElement const & styles);
-    void saveStyle(const Style &style, QDomDocument& doc, QDomElement& format, const StyleManager* styleManager);
-    void saveCustomStyle(CustomStyle *s, QDomDocument& doc, QDomElement& styles, const StyleManager* styleManager);
-    bool loadCustomStyle(CustomStyle *s, KoXmlElement const & style, QString const & name);
+// styles
+QDomElement saveStyles(StyleManager *manager, QDomDocument &doc);
+bool loadStyles(StyleManager *manager, KoXmlElement const &styles);
+void saveStyle(const Style &style, QDomDocument &doc, QDomElement &format, const StyleManager *styleManager);
+void saveCustomStyle(CustomStyle *s, QDomDocument &doc, QDomElement &styles, const StyleManager *styleManager);
+bool loadCustomStyle(CustomStyle *s, KoXmlElement const &style, QString const &name);
 
-    // doc
-    void loadProtection(ProtectableObject *prot, const KoXmlElement& element);
-    void loadNamedAreas(NamedAreaManager *manager, Map *map, const KoXmlElement& parent);
-    QDomElement saveNamedAreas(NamedAreaManager *manager, QDomDocument& doc);
+// doc
+void loadProtection(ProtectableObject *prot, const KoXmlElement &element);
+void loadNamedAreas(NamedAreaManager *manager, Map *map, const KoXmlElement &parent);
+QDomElement saveNamedAreas(NamedAreaManager *manager, QDomDocument &doc);
 
-    // map
-    QDomElement saveMap(Map *map, QDomDocument& doc);
-    bool loadMap(Map *map, const KoXmlElement& mymap);
+// map
+QDomElement saveMap(Map *map, QDomDocument &doc);
+bool loadMap(Map *map, const KoXmlElement &mymap);
 
-    // sheet
-    bool loadSheet(Sheet *obj, const KoXmlElement& sheet);
-    QDomElement saveSheet(Sheet *sheet, QDomDocument& dd);
+// sheet
+bool loadSheet(Sheet *obj, const KoXmlElement &sheet);
+QDomElement saveSheet(Sheet *sheet, QDomDocument &dd);
 
-    // cell
-    Cell loadCell(const KoXmlElement& cell, Sheet *sheet);
+// cell
+Cell loadCell(const KoXmlElement &cell, Sheet *sheet);
 
-    /**
-     * Save a cell.
-     * @param doc document to save cell in
-     * @param xOffset x offset
-     * @param yOffset y offset
-     * @param era set this to true if you want to encode relative references as absolutely (they will be switched
-     *            back to relative references during decoding) - is used for cutting to clipboard
-     *            Usually this is false, to only store the properties explicitly set.
-     */
-    QDomElement saveCell(Cell *cell, QDomDocument& doc, int xOffset = 0, int yOffset = 0, bool era = false);
+/**
+ * Save a cell.
+ * @param doc document to save cell in
+ * @param xOffset x offset
+ * @param yOffset y offset
+ * @param era set this to true if you want to encode relative references as absolutely (they will be switched
+ *            back to relative references during decoding) - is used for cutting to clipboard
+ *            Usually this is false, to only store the properties explicitly set.
+ */
+QDomElement saveCell(Cell *cell, QDomDocument &doc, int xOffset = 0, int yOffset = 0, bool era = false);
 
 }
 

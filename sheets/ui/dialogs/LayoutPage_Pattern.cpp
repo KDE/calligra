@@ -29,11 +29,10 @@
 #include <KColorButton>
 #include <KLocalizedString>
 
-
 using namespace Calligra::Sheets;
 
-
-BrushSelect::BrushSelect(QWidget *parent, const char *) : QFrame(parent)
+BrushSelect::BrushSelect(QWidget *parent, const char *)
+    : QFrame(parent)
 {
     brushStyle = Qt::NoBrush;
     brushColor = Qt::red;
@@ -46,7 +45,6 @@ void BrushSelect::setPattern(const QColor &_color, Qt::BrushStyle _style)
     brushColor = _color;
     repaint();
 }
-
 
 void BrushSelect::paintEvent(QPaintEvent *_ev)
 {
@@ -86,20 +84,19 @@ void BrushSelect::slotSelect()
     repaint();
 }
 
-
-
-LayoutPagePattern::LayoutPagePattern(QWidget* parent) : QWidget(parent)
+LayoutPagePattern::LayoutPagePattern(QWidget *parent)
+    : QWidget(parent)
 {
     QGridLayout *grid = new QGridLayout(this);
 
-    QGroupBox* tmpQGroupBox;
+    QGroupBox *tmpQGroupBox;
     tmpQGroupBox = new QGroupBox(this);
     tmpQGroupBox->setTitle(i18n("Pattern"));
     tmpQGroupBox->setAlignment(Qt::AlignLeft);
 
     QGridLayout *grid2 = new QGridLayout(tmpQGroupBox);
     int fHeight = tmpQGroupBox->fontMetrics().height();
-    grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0);  // groupbox title
+    grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0); // groupbox title
 
     int brushRows = 0;
     for (int idx = 0; idx < BRUSH_COUNT; ++idx) {
@@ -130,13 +127,11 @@ LayoutPagePattern::LayoutPagePattern(QWidget* parent) : QWidget(parent)
     bgColorButton = new KColorButton(tmpQGroupBox);
     grid3->addWidget(bgColorButton, 0, 1);
 
-    connect(bgColorButton, &KColorButton::changed,
-            this, &LayoutPagePattern::slotSetBackgroundColor);
+    connect(bgColorButton, &KColorButton::changed, this, &LayoutPagePattern::slotSetBackgroundColor);
 
     notAnyColor = new QPushButton(i18n("No Color"), tmpQGroupBox);
     grid3->addWidget(notAnyColor, 0, 2);
-    connect(notAnyColor, &QAbstractButton::clicked,
-            this, &LayoutPagePattern::slotNotAnyColor);
+    connect(notAnyColor, &QAbstractButton::clicked, this, &LayoutPagePattern::slotNotAnyColor);
     m_notAnyColor = true;
 
     grid2->addItem(grid3, brushRows + 2, 0, 1, 3);
@@ -149,7 +144,7 @@ LayoutPagePattern::LayoutPagePattern(QWidget* parent) : QWidget(parent)
 
     grid2 = new QGridLayout(tmpQGroupBox);
     fHeight = tmpQGroupBox->fontMetrics().height();
-    grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0);  // groupbox title
+    grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0); // groupbox title
 
     preview = new BrushSelect(tmpQGroupBox, "Current");
     preview->setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -158,29 +153,45 @@ LayoutPagePattern::LayoutPagePattern(QWidget* parent) : QWidget(parent)
 
     selectedBrush = nullptr;
 
-    connect(color, &KColorButton::changed,
-            this, &LayoutPagePattern::slotSetColorButton);
+    connect(color, &KColorButton::changed, this, &LayoutPagePattern::slotSetColorButton);
     this->resize(400, 400);
 }
 
-Qt::BrushStyle LayoutPagePattern::getBrushStyle(int idx) {
+Qt::BrushStyle LayoutPagePattern::getBrushStyle(int idx)
+{
     switch (idx) {
-        case 0: return Qt::VerPattern;
-        case 1: return Qt::HorPattern;
-        case 2: return Qt::Dense1Pattern;
-        case 3: return Qt::Dense2Pattern;
-        case 4: return Qt::Dense3Pattern;
-        case 5: return Qt::Dense4Pattern;
-        case 6: return Qt::Dense5Pattern;
-        case 7: return Qt::Dense6Pattern;
-        case 8: return Qt::Dense7Pattern;
-        case 9: return Qt::CrossPattern;
-        case 10: return Qt::BDiagPattern;
-        case 11: return Qt::FDiagPattern;
-        case 12: return Qt::DiagCrossPattern;
-        case 13: return Qt::SolidPattern;
-        case 14: return Qt::NoBrush;
-        default: return Qt::NoBrush;
+    case 0:
+        return Qt::VerPattern;
+    case 1:
+        return Qt::HorPattern;
+    case 2:
+        return Qt::Dense1Pattern;
+    case 3:
+        return Qt::Dense2Pattern;
+    case 4:
+        return Qt::Dense3Pattern;
+    case 5:
+        return Qt::Dense4Pattern;
+    case 6:
+        return Qt::Dense5Pattern;
+    case 7:
+        return Qt::Dense6Pattern;
+    case 8:
+        return Qt::Dense7Pattern;
+    case 9:
+        return Qt::CrossPattern;
+    case 10:
+        return Qt::BDiagPattern;
+    case 11:
+        return Qt::FDiagPattern;
+    case 12:
+        return Qt::DiagCrossPattern;
+    case 13:
+        return Qt::SolidPattern;
+    case 14:
+        return Qt::NoBrush;
+    default:
+        return Qt::NoBrush;
     }
 }
 
@@ -222,7 +233,7 @@ void LayoutPagePattern::slotUnselectOthers(BrushSelect *_p)
     preview->setBrushStyle(selectedBrush->getBrushStyle());
 }
 
-void LayoutPagePattern::apply(Style * style, bool partial)
+void LayoutPagePattern::apply(Style *style, bool partial)
 {
     Style defaultStyle;
 
@@ -257,6 +268,3 @@ void LayoutPagePattern::loadFrom(const Style &style, bool /*partial*/)
     color->setColor(m_brush.color());
     slotSetColorButton(m_brush.color());
 }
-
-
-

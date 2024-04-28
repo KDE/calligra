@@ -18,10 +18,14 @@
  */
 
 #include "RemoveSectionCommand.h"
-#include <Section.h>
 #include <DocumentModel.h>
+#include <Section.h>
 
-RemoveSectionCommand::RemoveSectionCommand(Section* _section, DocumentModel* _model) : m_section(_section), m_parent(_section->sectionParent()), m_model(_model), m_index(m_section->sectionParent()->indexOf(m_section))
+RemoveSectionCommand::RemoveSectionCommand(Section *_section, DocumentModel *_model)
+    : m_section(_section)
+    , m_parent(_section->sectionParent())
+    , m_model(_model)
+    , m_index(m_section->sectionParent()->indexOf(m_section))
 {
 }
 

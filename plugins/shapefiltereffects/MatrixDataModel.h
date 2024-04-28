@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2010 Jan Hambrecht <jaham@gmx.net>
-*
-* SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ * SPDX-FileCopyrightText: 2010 Jan Hambrecht <jaham@gmx.net>
+ *
+ * SPDX-License-Identifier: LGPL-2.1-or-later
+ */
 
 #ifndef MATRIXDATAMODEL_H
 #define MATRIXDATAMODEL_H
@@ -23,15 +23,15 @@ public:
     QVector<qreal> matrix() const;
 
     // reimplemented
-    int rowCount(const QModelIndex &/*parent*/) const override;
+    int rowCount(const QModelIndex & /*parent*/) const override;
     // reimplemented
-    int columnCount(const QModelIndex &/*parent*/) const override;
+    int columnCount(const QModelIndex & /*parent*/) const override;
     // reimplemented
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     // reimplemented
     bool setData(const QModelIndex &index, const QVariant &value, int /*role*/) override;
     // reimplemented
-    Qt::ItemFlags flags(const QModelIndex &/*index*/) const override;
+    Qt::ItemFlags flags(const QModelIndex & /*index*/) const override;
 
 private:
     QVector<qreal> m_matrix; ///< the matrix data to handle

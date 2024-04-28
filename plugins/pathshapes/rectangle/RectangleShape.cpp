@@ -10,18 +10,18 @@
 
 #include <KoPathPoint.h>
 #include <KoShapeSavingContext.h>
+#include <KoUnit.h>
+#include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
-#include <KoXmlNS.h>
-#include <KoUnit.h>
-#include <SvgSavingContext.h>
 #include <SvgLoadingContext.h>
-#include <SvgUtil.h>
+#include <SvgSavingContext.h>
 #include <SvgStyleWriter.h>
+#include <SvgUtil.h>
 
 RectangleShape::RectangleShape()
-: m_cornerRadiusX(0)
-, m_cornerRadiusY(0)
+    : m_cornerRadiusX(0)
+    , m_cornerRadiusY(0)
 {
     QVector<QPointF> handles;
     handles.reserve(2);
@@ -47,7 +47,7 @@ bool RectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext 
         m_cornerRadiusY = ry / (0.5 * size().height()) * 100;
     } else {
         QString cornerRadius = element.attributeNS(KoXmlNS::draw, "corner-radius", "");
-        if (! cornerRadius.isEmpty()) {
+        if (!cornerRadius.isEmpty()) {
             qreal radius = KoUnit::parseValue(cornerRadius);
             m_cornerRadiusX = qMin<qreal>(radius / (0.5 * size().width()) * 100, qreal(100));
             m_cornerRadiusY = qMin<qreal>(radius / (0.5 * size().height()) * 100, qreal(100));
@@ -63,14 +63,14 @@ bool RectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext 
     return true;
 }
 
-void RectangleShape::saveOdf(KoShapeSavingContext & context) const
+void RectangleShape::saveOdf(KoShapeSavingContext &context) const
 {
     if (isParametricShape()) {
         context.xmlWriter().startElement("draw:rect");
         saveOdfAttributes(context, OdfAllAttributes);
         if (m_cornerRadiusX > 0 && m_cornerRadiusY > 0) {
-            context.xmlWriter().addAttributePt("svg:rx", m_cornerRadiusX * (0.5*size().width()) / 100.0);
-            context.xmlWriter().addAttributePt("svg:ry", m_cornerRadiusY * (0.5*size().height()) / 100.0);
+            context.xmlWriter().addAttributePt("svg:rx", m_cornerRadiusX * (0.5 * size().width()) / 100.0);
+            context.xmlWriter().addAttributePt("svg:ry", m_cornerRadiusY * (0.5 * size().height()) / 100.0);
         }
         saveOdfCommonChildElements(context);
         saveText(context);
@@ -80,7 +80,7 @@ void RectangleShape::saveOdf(KoShapeSavingContext & context) const
     }
 }
 
-void RectangleShape::moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
+void RectangleShape::moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
     QPointF p(point);
@@ -96,7 +96,7 @@ void RectangleShape::moveHandleAction(int handleId, const QPointF & point, Qt::K
         }
         p.setY(0);
         m_cornerRadiusX = (size().width() - p.x()) / width2 * 100.0;
-        if (! (modifiers & Qt::ControlModifier))
+        if (!(modifiers & Qt::ControlModifier))
             m_cornerRadiusY = (size().width() - p.x()) / height2 * 100.0;
         break;
     case 1:
@@ -124,8 +124,8 @@ void RectangleShape::updateHandles()
 {
     QVector<QPointF> handles;
     handles.reserve(2);
-    handles.append(QPointF(size().width() - m_cornerRadiusX/100.0 * 0.5 * size().width(), 0.0));
-    handles.append(QPointF(size().width(), m_cornerRadiusY/100.0 * 0.5 * size().height()));
+    handles.append(QPointF(size().width() - m_cornerRadiusX / 100.0 * 0.5 * size().width(), 0.0));
+    handles.append(QPointF(size().width(), m_cornerRadiusY / 100.0 * 0.5 * size().height()));
     setHandles(handles);
 }
 
@@ -244,12 +244,12 @@ void RectangleShape::createPoints(int requiredPointCount)
     }
     int currentPointCount = m_subpaths[0]->count();
     if (currentPointCount > requiredPointCount) {
-        for (int i = 0; i < currentPointCount-requiredPointCount; ++i) {
+        for (int i = 0; i < currentPointCount - requiredPointCount; ++i) {
             delete m_subpaths[0]->front();
             m_subpaths[0]->pop_front();
         }
     } else if (requiredPointCount > currentPointCount) {
-        for (int i = 0; i < requiredPointCount-currentPointCount; ++i) {
+        for (int i = 0; i < requiredPointCount - currentPointCount; ++i) {
             m_subpaths[0]->append(new KoPathPoint(this, QPointF()));
         }
     }

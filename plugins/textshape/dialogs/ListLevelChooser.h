@@ -7,8 +7,8 @@
 #ifndef LISTLEVELCHOOSER_H
 #define LISTLEVELCHOOSER_H
 
-#include <QWidget>
 #include <QPushButton>
+#include <QWidget>
 
 class ListLevelChooser : public QPushButton
 {

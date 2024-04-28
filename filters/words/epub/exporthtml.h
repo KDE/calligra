@@ -8,17 +8,16 @@
 #ifndef EXPORTHTML_H
 #define EXPORTHTML_H
 
-#include <QObject>
-#include <QString>
-#include <QVariantList>
 #include <QFile>
-#include <QTextStream>
 #include <QHash>
 #include <QList>
+#include <QObject>
+#include <QString>
+#include <QTextStream>
+#include <QVariantList>
 
 #include <KoFilter.h>
 #include <KoStore.h>
-
 
 class HtmlFile;
 
@@ -27,16 +26,16 @@ class ExportHtml : public KoFilter
     Q_OBJECT
 public:
     enum VectorType {
-        VectorTypeOther,        // Uninitialized
-        VectorTypeWmf,          // Windows MetaFile
-        VectorTypeEmf,          // Extended MetaFile
-        VectorTypeSvm           // StarView Metafile
+        VectorTypeOther, // Uninitialized
+        VectorTypeWmf, // Windows MetaFile
+        VectorTypeEmf, // Extended MetaFile
+        VectorTypeSvm // StarView Metafile
         // ... more here later
     };
 
     ExportHtml(QObject *parent, const QVariantList &);
     ~ExportHtml() override;
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 
 private:
     KoFilter::ConversionStatus extractImages(KoStore *odfStore, HtmlFile *epubFile);
@@ -53,11 +52,10 @@ private:
 #endif
 public Q_SLOTS:
 
-
 private:
     QHash<QString, QString> m_metadata;
     QHash<QString, QString> m_manifest;
-    QHash<QString, QSizeF>  m_imagesSrcList;
+    QHash<QString, QSizeF> m_imagesSrcList;
 };
 
 #endif // EXPORTHTML_H

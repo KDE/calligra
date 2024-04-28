@@ -28,16 +28,18 @@ class Section;
 class ChangeLayoutCommand : public KUndo2Command
 {
 public:
-    ChangeLayoutCommand(Section* _section, const QString& _newLayout);
+    ChangeLayoutCommand(Section *_section, const QString &_newLayout);
     virtual ~ChangeLayoutCommand();
+
 public:
     virtual void undo();
     virtual void redo();
+
 private:
-    Section* m_section;
+    Section *m_section;
     QString m_oldLayout;
     QString m_newLayout;
-    RememberPositionCommand* m_command;
+    RememberPositionCommand *m_command;
 };
 
 #endif

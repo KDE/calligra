@@ -12,10 +12,10 @@
 #include "kowidgets_export.h"
 
 /**
- * @short A widget for 
+ * @short A widget for
  *
  */
-class KOWIDGETS_EXPORT KoColorPopupButton: public QToolButton
+class KOWIDGETS_EXPORT KoColorPopupButton : public QToolButton
 {
     Q_OBJECT
 

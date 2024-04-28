@@ -20,8 +20,8 @@ class KoGenStyles;
  */
 struct KOMSOOXML_EXPORT KoOdfWriters {
     /**
-    * Creates structure encapsulating XML writers. All members are set initially to 0.
-    */
+     * Creates structure encapsulating XML writers. All members are set initially to 0.
+     */
     KoOdfWriters();
     KoXmlWriter *content;
     KoXmlWriter *body;
@@ -43,7 +43,7 @@ class KOMSOOXML_EXPORT KoOdfExporter : public KoFilter
 public:
     ~KoOdfExporter() override;
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 
 protected:
     /**
@@ -54,35 +54,34 @@ protected:
      *                           office:text element will be created within office:body, etc.
      * @param parent parent object.
      */
-    KoOdfExporter(const QString& bodyContentElement, QObject* parent = 0);
+    KoOdfExporter(const QString &bodyContentElement, QObject *parent = 0);
 
     /**
      * @return true if @a mime is accepted source mime type.
      * Implement it for your filter.
      */
-    virtual bool acceptsSourceMimeType(const QByteArray& mime) const = 0;
+    virtual bool acceptsSourceMimeType(const QByteArray &mime) const = 0;
 
     /**
      * @return true if @a mime is accepted destination mime type.
      * Implement it for your filter.
      */
-    virtual bool acceptsDestinationMimeType(const QByteArray& mime) const = 0;
+    virtual bool acceptsDestinationMimeType(const QByteArray &mime) const = 0;
 
     /**
      * This method is called in convert() after creating @a outputStore, @a writers and @a mainStyles.
      * Implement it for your filter with code that fills the ODF structures with converted data.
      */
-    virtual KoFilter::ConversionStatus createDocument(KoStore *outputStore,
-            KoOdfWriters *writers) = 0;
+    virtual KoFilter::ConversionStatus createDocument(KoStore *outputStore, KoOdfWriters *writers) = 0;
 
     /**
      * This method is called when writing the xml-settings to the ODF document.
      */
-    virtual void writeConfigurationSettings(KoXmlWriter* settings) const = 0;
+    virtual void writeConfigurationSettings(KoXmlWriter *settings) const = 0;
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif /* KOODFEXPORTER_H */

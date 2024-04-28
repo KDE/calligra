@@ -5,41 +5,39 @@
  */
 #include "KPrPresentationBlackStrategy.h"
 
-#include <QKeyEvent>
 #include <QApplication>
-
+#include <QKeyEvent>
 
 #include <KoPACanvasBase.h>
 
-#include "KPrPresentationTool.h"
 #include "KPrPresentationBlackWidget.h"
+#include "KPrPresentationTool.h"
 
-KPrPresentationBlackStrategy::KPrPresentationBlackStrategy( KPrPresentationTool * tool )
-: KPrPresentationStrategyBase( tool )
+KPrPresentationBlackStrategy::KPrPresentationBlackStrategy(KPrPresentationTool *tool)
+    : KPrPresentationStrategyBase(tool)
 {
-    m_widget = new KPrPresentationBlackWidget( canvas() );
+    m_widget = new KPrPresentationBlackWidget(canvas());
     // TODO
-    setToolWidgetParent( m_widget );
+    setToolWidgetParent(m_widget);
     m_widget->show();
-    m_widget->installEventFilter( m_tool );
+    m_widget->installEventFilter(m_tool);
 }
 
 KPrPresentationBlackStrategy::~KPrPresentationBlackStrategy()
 {
-    setToolWidgetParent( canvas()->canvasWidget() );
+    setToolWidgetParent(canvas()->canvasWidget());
 }
 
-bool KPrPresentationBlackStrategy::keyPressEvent( QKeyEvent * event )
+bool KPrPresentationBlackStrategy::keyPressEvent(QKeyEvent *event)
 {
     bool handled = true;
-    switch ( event->key() )
-    {
-        case Qt::Key_Escape:
-            activateDefaultStrategy();
-            break;
-        case Qt::Key_H:
-            handled = false;
-            break;
+    switch (event->key()) {
+    case Qt::Key_Escape:
+        activateDefaultStrategy();
+        break;
+    case Qt::Key_H:
+        handled = false;
+        break;
     }
     return handled;
 }

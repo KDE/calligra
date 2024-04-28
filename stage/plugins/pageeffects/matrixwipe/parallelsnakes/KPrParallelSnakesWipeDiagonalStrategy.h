@@ -15,6 +15,7 @@ class KPrParallelSnakesWipeDiagonalStrategy : public KPrMatrixWipeStrategy
 public:
     KPrParallelSnakesWipeDiagonalStrategy(bool reverseAngle, bool reverse);
     ~KPrParallelSnakesWipeDiagonalStrategy() override;
+
 protected:
     int maxIndex(int columns, int rows) override;
     int squareIndex(int x, int y, int columns, int rows) override;

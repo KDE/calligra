@@ -8,18 +8,18 @@
 
 #include "KoAnnotation.h"
 
+#include <KoShape.h>
 #include <KoShapeSavingContext.h>
-#include <KoXmlWriter.h>
-#include <KoXmlReader.h>
 #include <KoTextInlineRdf.h>
 #include <KoTextRangeManager.h>
 #include <KoXmlNS.h>
-#include <KoShape.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
-#include <QTextDocument>
+#include "TextDebug.h"
 #include <QTextBlock>
 #include <QTextCursor>
-#include "TextDebug.h"
+#include <QTextDocument>
 
 // Include Q_UNSUSED classes, for building on Windows
 #include <KoShapeLoadingContext.h>
@@ -27,9 +27,11 @@
 class Q_DECL_HIDDEN KoAnnotation::Private
 {
 public:
-    Private(const QTextDocument *doc):
-        document(doc),
-        posInDocument(0) { }
+    Private(const QTextDocument *doc)
+        : document(doc)
+        , posInDocument(0)
+    {
+    }
     const QTextDocument *document;
     int posInDocument;
 
@@ -40,14 +42,14 @@ public:
 };
 
 KoAnnotation::KoAnnotation(const QTextCursor &cursor)
-    : KoTextRange(cursor),
-      d(new Private(cursor.block().document()))
+    : KoTextRange(cursor)
+    , d(new Private(cursor.block().document()))
 {
 }
 
 KoAnnotation::KoAnnotation(QTextDocument *document, int position)
-    : KoTextRange(document, position),
-      d(new Private(document))
+    : KoTextRange(document, position)
+    , d(new Private(document))
 {
 }
 
@@ -55,7 +57,6 @@ KoAnnotation::~KoAnnotation()
 {
     delete d;
 }
-
 
 void KoAnnotation::setName(const QString &name)
 {
@@ -85,7 +86,7 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
         return false;
     }
 
-    //debugText << "****** Start Load odf ******";
+    // debugText << "****** Start Load odf ******";
     QString annotationName = element.attribute("name");
 
     if (manager()) {
@@ -98,16 +99,15 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 
         // Add inline Rdf to the annotation.
         if (element.hasAttributeNS(KoXmlNS::xhtml, "property") || element.hasAttribute("id")) {
-            KoTextInlineRdf* inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument*>(d->document), this);
+            KoTextInlineRdf *inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument *>(d->document), this);
             if (inlineRdf->loadOdf(element)) {
                 setInlineRdf(inlineRdf);
-            }
-            else {
+            } else {
                 delete inlineRdf;
                 inlineRdf = 0;
             }
         }
-        //debugText << "****** End Load ******";
+        // debugText << "****** End Load ******";
 
         return true;
     }
@@ -120,7 +120,6 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType 
     KoXmlWriter *writer = &context.xmlWriter();
 
     if (!hasRange()) {
-
         if (tagType == StartTag) {
             writer->startElement("office:annotation", false);
             writer->addAttribute("text:name", d->name.toUtf8());
@@ -130,7 +129,7 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType 
 
             d->shape->saveOdf(context);
 
-            writer->endElement(); //office:annotation
+            writer->endElement(); // office:annotation
         }
 
     } else if ((tagType == StartTag) && (position == rangeStart())) {
@@ -142,18 +141,16 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType 
 
         d->shape->saveOdf(context);
 
-        writer->endElement(); //office:annotation
+        writer->endElement(); // office:annotation
     } else if ((tagType == EndTag) && (position == rangeEnd())) {
         writer->startElement("office:annotation-end", false);
         writer->addAttribute("text:name", d->name.toUtf8());
         writer->endElement();
     }
-        // else nothing
-
+    // else nothing
 }
 
-QString KoAnnotation::createUniqueAnnotationName(const KoAnnotationManager* kam,
-                                                 const QString &annotationName, bool isEndMarker)
+QString KoAnnotation::createUniqueAnnotationName(const KoAnnotationManager *kam, const QString &annotationName, bool isEndMarker)
 {
     QString ret = annotationName;
     int uniqID = 0;

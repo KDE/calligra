@@ -26,23 +26,23 @@
 #include "KoShape.h"
 #include "KoTextShapeData.h"
 
-#include <QTextDocument>
 #include <QTextBlock>
+#include <QTextDocument>
 #include <QTextLayout>
 
-
-KPrAttributeHeight::KPrAttributeHeight() : KPrAnimationAttribute("height")
+KPrAttributeHeight::KPrAttributeHeight()
+    : KPrAnimationAttribute("height")
 {
 }
 
 void KPrAttributeHeight::updateCache(KPrAnimationCache *cache, KPrShapeAnimation *shapeAnimation, qreal value)
 {
     qreal tx = 0.0, ty = 0.0;
-    KoShape * shape = shapeAnimation->shape();
+    KoShape *shape = shapeAnimation->shape();
     QTextBlockUserData *textBlockData = shapeAnimation->textBlockUserData();
     QTransform transform;
     if (textBlockData) {
-        if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData())) {
+        if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData *>(shape->userData())) {
             QTextDocument *textDocument = textShapeData->document();
             for (int i = 0; i < textDocument->blockCount(); i++) {
                 QTextBlock textBlock = textDocument->findBlockByNumber(i);
@@ -54,23 +54,23 @@ void KPrAttributeHeight::updateCache(KPrAnimationCache *cache, KPrShapeAnimation
                 }
             }
         }
-    }
-    else {
+    } else {
         value = value * cache->pageSize().height() / shape->size().height();
         tx = shape->size().width() * cache->zoom() / 2;
         ty = shape->size().height() * cache->zoom() / 2;
-    }    transform.translate(tx, ty).scale(1, value).translate(-tx, -ty);
+    }
+    transform.translate(tx, ty).scale(1, value).translate(-tx, -ty);
     cache->update(shape, textBlockData, "transform", transform);
 }
 
-void KPrAttributeHeight::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue)
+void KPrAttributeHeight::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation *shapeAnimation, qreal startValue, qreal endValue)
 {
     qreal v1 = 0.0, v2 = 0.0, tx = 0.0, ty = 0.0;
-    KoShape * shape = shapeAnimation->shape();
+    KoShape *shape = shapeAnimation->shape();
     QTextBlockUserData *textBlockData = shapeAnimation->textBlockUserData();
 
     if (textBlockData) {
-        if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData())) {
+        if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData *>(shape->userData())) {
             QTextDocument *textDocument = textShapeData->document();
             for (int i = 0; i < textDocument->blockCount(); i++) {
                 QTextBlock textBlock = textDocument->findBlockByNumber(i);
@@ -83,8 +83,7 @@ void KPrAttributeHeight::initCache(KPrAnimationCache *animationCache, int step, 
                 }
             }
         }
-    }
-    else {
+    } else {
         v1 = startValue * animationCache->pageSize().height() / shape->size().height();
         v2 = endValue * animationCache->pageSize().height() / shape->size().height();
         tx = shape->size().width() * animationCache->zoom() / 2;

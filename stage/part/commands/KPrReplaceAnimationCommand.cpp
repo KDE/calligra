@@ -17,26 +17,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #include "KPrReplaceAnimationCommand.h"
 #include "KPrDocument.h"
 
-KPrReplaceAnimationCommand::KPrReplaceAnimationCommand(KPrDocument *doc, KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation,  KUndo2Command *parent)
+KPrReplaceAnimationCommand::KPrReplaceAnimationCommand(KPrDocument *doc,
+                                                       KPrShapeAnimation *oldAnimation,
+                                                       KPrShapeAnimation *newAnimation,
+                                                       KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_oldAnimation(oldAnimation)
     , m_newAnimation(newAnimation)
     , m_document(doc)
     , m_deleteAnimation(DeleteOld)
 {
-
 }
 
 KPrReplaceAnimationCommand::~KPrReplaceAnimationCommand()
 {
     if (m_deleteAnimation == DeleteOld) {
         delete m_oldAnimation;
-    }
-    else {
+    } else {
         delete m_newAnimation;
     }
 }

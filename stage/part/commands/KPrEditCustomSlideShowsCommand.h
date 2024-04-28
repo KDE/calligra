@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ * SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #ifndef KPREDITCUSTOMSLIDESHOWSCOMMAND_H
 #define KPREDITCUSTOMSLIDESHOWSCOMMAND_H
@@ -13,7 +13,7 @@ class KoPAPageBase;
 
 #include <stage_export.h>
 
-class STAGE_TEST_EXPORT KPrEditCustomSlideShowsCommand: public KUndo2Command
+class STAGE_TEST_EXPORT KPrEditCustomSlideShowsCommand : public KUndo2Command
 {
 public:
     KPrEditCustomSlideShowsCommand(KPrDocument *doc, const QString &name, QList<KoPAPageBase *> newCustomShow, KUndo2Command *parent = 0);

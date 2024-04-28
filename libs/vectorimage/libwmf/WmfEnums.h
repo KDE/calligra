@@ -5,17 +5,14 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef WMFENUMS_H
 #define WMFENUMS_H
-
 
 /**
    Namespace for Windows Metafile (WMF) classes
 */
 namespace Libwmf
 {
-
 
 // ----------------------------------------------------------------
 //                             Enums
@@ -99,7 +96,7 @@ enum RecordType {
     META_DELETEOBJECT = 0x01f0,
     // No f1-f6
     META_CREATEPALETTE = 0x00f7,
-    META_CREATEBRUSH = 0x00f8,  // Can't find this in [MS-WMF].pdf, but is unimplemented here.
+    META_CREATEBRUSH = 0x00f8, // Can't find this in [MS-WMF].pdf, but is unimplemented here.
     META_CREATEPATTERNBRUSH = 0x01F9,
     META_CREATEPENINDIRECT = 0x02FA,
     META_CREATEFONTINDIRECT = 0x02FB,
@@ -110,24 +107,23 @@ enum RecordType {
 // MS-WMF 2.1.1.2 Binary RasterOperation Enumeration
 
 enum WmfBinaryRasterOperation {
-    R2_BLACK       = 0x0001,
+    R2_BLACK = 0x0001,
     R2_NOTMERGEPEN = 0x0002,
-    R2_MASKNOTPEN  = 0x0003,
-    R2_NOTCOPYPEN  = 0x0004,
-    R2_MASKPENNOT  = 0x0005,
-    R2_NOT         = 0x0006,
-    R2_XORPEN      = 0x0007,
-    R2_NOTMASKPEN  = 0x0008,
-    R2_MASKPEN     = 0x0009,
-    R2_NOTXORPEN   = 0x000A,
-    R2_NOP         = 0x000B,
+    R2_MASKNOTPEN = 0x0003,
+    R2_NOTCOPYPEN = 0x0004,
+    R2_MASKPENNOT = 0x0005,
+    R2_NOT = 0x0006,
+    R2_XORPEN = 0x0007,
+    R2_NOTMASKPEN = 0x0008,
+    R2_MASKPEN = 0x0009,
+    R2_NOTXORPEN = 0x000A,
+    R2_NOP = 0x000B,
     R2_MERGENOTPEN = 0x000C,
-    R2_COPYPEN     = 0x000D,
+    R2_COPYPEN = 0x000D,
     R2_MERGEPENNOT = 0x000E,
-    R2_MERGEPEN    = 0x000F,
-    R2_WHITE       = 0x0010
+    R2_MERGEPEN = 0x000F,
+    R2_WHITE = 0x0010
 };
-
 
 /**
    WMF 2.1.1.3 BitCount Enumeration
@@ -146,7 +142,6 @@ enum WmfBitCount {
     BI_BITCOUNT_6 = 0x0020
 };
 
-
 /**
    MS-WMF 2.1.1.4 BrushStyle Enumeration
 
@@ -156,18 +151,17 @@ enum WmfBitCount {
 */
 
 enum WmfBrushStyle {
-    BS_SOLID         = 0x0000,
-    BS_NULL          = 0x0001,
-    BS_HATCHED       = 0x0002,
-    BS_PATTERN       = 0x0003,
-    BS_INDEXED       = 0x0004,
-    BS_DIBPATTERN    = 0x0005,
-    BS_DIBPATTERNPT  = 0x0006,
-    BS_PATTERN8X8    = 0x0007,
+    BS_SOLID = 0x0000,
+    BS_NULL = 0x0001,
+    BS_HATCHED = 0x0002,
+    BS_PATTERN = 0x0003,
+    BS_INDEXED = 0x0004,
+    BS_DIBPATTERN = 0x0005,
+    BS_DIBPATTERNPT = 0x0006,
+    BS_PATTERN8X8 = 0x0007,
     BS_DIBPATTERN8X8 = 0x0008,
-    BS_MONOPATTERN   = 0x0009
+    BS_MONOPATTERN = 0x0009
 };
-
 
 /**
    MS-WMF 2.1.1.5 CharacterSet Enumeration
@@ -177,27 +171,26 @@ enum WmfBrushStyle {
 */
 
 enum WmfCharacterSet {
-    ANSI_CHARSET        = 0x00000000,
-    DEFAULT_CHARSET     = 0x00000001,
-    SYMBOL_CHARSET      = 0x00000002,
-    MAC_CHARSET         = 0x0000004D,
-    SHIFTJIS_CHARSET    = 0x00000080,
-    HANGUL_CHARSET      = 0x00000081,
-    JOHAB_CHARSET       = 0x00000082,
-    GB2312_CHARSET      = 0x00000086,
+    ANSI_CHARSET = 0x00000000,
+    DEFAULT_CHARSET = 0x00000001,
+    SYMBOL_CHARSET = 0x00000002,
+    MAC_CHARSET = 0x0000004D,
+    SHIFTJIS_CHARSET = 0x00000080,
+    HANGUL_CHARSET = 0x00000081,
+    JOHAB_CHARSET = 0x00000082,
+    GB2312_CHARSET = 0x00000086,
     CHINESEBIG5_CHARSET = 0x00000088,
-    GREEK_CHARSET       = 0x000000A1,
-    TURKISH_CHARSET     = 0x000000A2,
-    VIETNAMESE_CHARSET  = 0x000000A3,
-    HEBREW_CHARSET      = 0x000000B1,
-    ARABIC_CHARSET      = 0x000000B2,
-    BALTIC_CHARSET      = 0x000000BA,
-    RUSSIAN_CHARSET     = 0x000000CC,
-    THAI_CHARSET        = 0x000000DE,
-    EASTEUROPE_CHARSET  = 0x000000EE,
-    OEM_CHARSET         = 0x000000FF
+    GREEK_CHARSET = 0x000000A1,
+    TURKISH_CHARSET = 0x000000A2,
+    VIETNAMESE_CHARSET = 0x000000A3,
+    HEBREW_CHARSET = 0x000000B1,
+    ARABIC_CHARSET = 0x000000B2,
+    BALTIC_CHARSET = 0x000000BA,
+    RUSSIAN_CHARSET = 0x000000CC,
+    THAI_CHARSET = 0x000000DE,
+    EASTEUROPE_CHARSET = 0x000000EE,
+    OEM_CHARSET = 0x000000FF
 };
-
 
 /**
    MS-WMF 2.1.1.6 ColorUsage Enumeration
@@ -206,12 +199,7 @@ enum WmfCharacterSet {
    in a device -independent bitmap (DIB) and how to interpret its values.
 */
 
-enum WmfColorUsage {
-    DIB_RGB_COLORS  = 0x0000,
-    DIB_PAL_COLORS  = 0x0001,
-    DIB_PAL_INDICES = 0x0002
-};
-
+enum WmfColorUsage { DIB_RGB_COLORS = 0x0000, DIB_PAL_COLORS = 0x0001, DIB_PAL_INDICES = 0x0002 };
 
 /**
    MS-WMF 2.1.1.7 Compression Enumeration
@@ -221,17 +209,16 @@ enum WmfColorUsage {
 */
 
 enum WmfCompression {
-    BI_RGB       = 0x0000,
-    BI_RLE8      = 0x0001,
-    BI_RLE4      = 0x0002,
+    BI_RGB = 0x0000,
+    BI_RLE8 = 0x0001,
+    BI_RLE4 = 0x0002,
     BI_BITFIELDS = 0x0003,
-    BI_JPEG      = 0x0004,
-    BI_PNG       = 0x0005,
-    BI_CMYK      = 0x000B,
-    BI_CMYKRLE8  = 0x000C,
-    BI_CMYKRLE4  = 0x000D
+    BI_JPEG = 0x0004,
+    BI_PNG = 0x0005,
+    BI_CMYK = 0x000B,
+    BI_CMYKRLE8 = 0x000C,
+    BI_CMYKRLE4 = 0x000D
 };
-
 
 /**
    MS-WMF 2.1.1.8 FamilyFont Enumeration
@@ -241,15 +228,7 @@ enum WmfCompression {
    specifying fonts when the exact typeface desired is not available.
 */
 
-typedef enum {
-    FF_DONTCARE   = 0x00,
-    FF_ROMAN      = 0x01,
-    FF_SWISS      = 0x02,
-    FF_MODERN     = 0x03,
-    FF_SCRIPT     = 0x04,
-    FF_DECORATIVE = 0x05
-} WmfFamilyFont;
-
+typedef enum { FF_DONTCARE = 0x00, FF_ROMAN = 0x01, FF_SWISS = 0x02, FF_MODERN = 0x03, FF_SCRIPT = 0x04, FF_DECORATIVE = 0x05 } WmfFamilyFont;
 
 /**
    MS-WMF 2.1.1.9 FloodFill Enumeration
@@ -258,11 +237,7 @@ typedef enum {
    be performed.
 */
 
-enum WmfFloodFill {
-    FLOODFILLBORDER  = 0x0000,
-    FLOODFILLSURFACE = 0x0001
-};
-
+enum WmfFloodFill { FLOODFILLBORDER = 0x0000, FLOODFILLSURFACE = 0x0001 };
 
 /**
    MS-WMF 2.1.1.10 FontQuality Enumeration
@@ -273,14 +248,13 @@ enum WmfFloodFill {
 */
 
 enum WmfFontQuality {
-    DEFAULT_QUALITY        = 0x00,
-    DRAFT_QUALITY          = 0x01,
-    PROOF_QUALITY          = 0x02,
+    DEFAULT_QUALITY = 0x00,
+    DRAFT_QUALITY = 0x01,
+    PROOF_QUALITY = 0x02,
     NONANTIALIASED_QUALITY = 0x03,
-    ANTIALIASED_QUALITY    = 0x04,
-    CLEARTYPE_QUALITY      = 0x05
+    ANTIALIASED_QUALITY = 0x04,
+    CLEARTYPE_QUALITY = 0x05
 };
-
 
 /*
   MS-WMF 2.1.1.11 GamutMappingIntent Enumeration
@@ -289,13 +263,7 @@ enum WmfFontQuality {
   between logical and physical colors.
 */
 
-enum WmfGamutMappingIntent {
-    LCS_GM_ABS_COLORIMETRIC = 0x00000008,
-    LCS_GM_BUSINESS         = 0x00000001,
-    LCS_GM_GRAPHICS         = 0x00000002,
-    LCS_GM_IMAGES           = 0x00000004
-};
-
+enum WmfGamutMappingIntent { LCS_GM_ABS_COLORIMETRIC = 0x00000008, LCS_GM_BUSINESS = 0x00000001, LCS_GM_GRAPHICS = 0x00000002, LCS_GM_IMAGES = 0x00000004 };
 
 /**
    MS-WMF 2.1.1.12 HatchStyle Enumeration
@@ -303,15 +271,7 @@ enum WmfGamutMappingIntent {
    The HatchStyle Enumeration specifies the hatch pattern.
 */
 
-enum WmfHatchStyle {
-    HS_HORIZONTAL = 0x0000,
-    HS_VERTICAL   = 0x0001,
-    HS_FDIAGONAL  = 0x0002,
-    HS_BDIAGONAL  = 0x0003,
-    HS_CROSS      = 0x0004,
-    HS_DIAGCROSS  = 0x0005
-};
-
+enum WmfHatchStyle { HS_HORIZONTAL = 0x0000, HS_VERTICAL = 0x0001, HS_FDIAGONAL = 0x0002, HS_BDIAGONAL = 0x0003, HS_CROSS = 0x0004, HS_DIAGCROSS = 0x0005 };
 
 /**
    MS-WMF 2.1.1.13 Layout Enumeration
@@ -320,14 +280,7 @@ enum WmfHatchStyle {
    direction in which text and graphics are drawn.
 */
 
-enum WmfLayout {
-    LAYOUT_LTR = 0x0000,
-    LAYOUT_RTL = 0x0001,
-    LAYOUT_BTT = 0x0002,
-    LAYOUT_VBH = 0x0004,
-    LAYOUT_BITMAPORIENTATIONPRESERVED = 0x0008
-};
-
+enum WmfLayout { LAYOUT_LTR = 0x0000, LAYOUT_RTL = 0x0001, LAYOUT_BTT = 0x0002, LAYOUT_VBH = 0x0004, LAYOUT_BITMAPORIENTATIONPRESERVED = 0x0008 };
 
 /**
    MS-WMF 2.1.1.14 LogicalColorSpace Enumeration
@@ -335,12 +288,7 @@ enum WmfLayout {
    The LogicalColorSpace Enumeration specifies the type of color space.
 */
 
-enum WmfLogicalColorSpace {
-    LCS_CALIBRATED_RGB      = 0x00000000,
-    LCS_sRGB                = 0x73524742,
-    LCS_WINDOWS_COLOR_SPACE = 0x57696E20
-};
-
+enum WmfLogicalColorSpace { LCS_CALIBRATED_RGB = 0x00000000, LCS_sRGB = 0x73524742, LCS_WINDOWS_COLOR_SPACE = 0x57696E20 };
 
 /**
    MS-WMF 2.1.1.15 LogicalColorSpaceV5 Enumeration
@@ -351,11 +299,7 @@ enum WmfLogicalColorSpace {
    Object (section 2.2.2.5).
 */
 
-enum WmfLogicalColorSpaceV5 {
-    LCS_PROFILE_LINKED   = 0x4C494E4B,
-    LCS_PROFILE_EMBEDDED = 0x4D424544
-};
-
+enum WmfLogicalColorSpaceV5 { LCS_PROFILE_LINKED = 0x4C494E4B, LCS_PROFILE_EMBEDDED = 0x4D424544 };
 
 /**
    MS-WMF 2.1.1.16 MapMode Enumeration
@@ -368,16 +312,15 @@ enum WmfLogicalColorSpaceV5 {
 */
 
 enum WmfMapMode {
-    MM_TEXT        = 0x0001,
-    MM_LOMETRIC    = 0x0002,
-    MM_HIMETRIC    = 0x0003,
-    MM_LOENGLISH   = 0x0004,
-    MM_HIENGLISH   = 0x0005,
-    MM_TWIPS       = 0x0006,
-    MM_ISOTROPIC   = 0x0007,
+    MM_TEXT = 0x0001,
+    MM_LOMETRIC = 0x0002,
+    MM_HIMETRIC = 0x0003,
+    MM_LOENGLISH = 0x0004,
+    MM_HIENGLISH = 0x0005,
+    MM_TWIPS = 0x0006,
+    MM_ISOTROPIC = 0x0007,
     MM_ANISOTROPIC = 0x0008
 };
-
 
 /**
    MS-WMF 2.1.1.18 Metafile Type Enumeration
@@ -385,41 +328,29 @@ enum WmfMapMode {
    The MetafileType Enumeration specifies where the metafile is stored.
 */
 
-enum WmfMetafileType {
-    MEMORYMETAFILE = 0x0001,
-    DISKMETAFILE   = 0x0002
-};
-
+enum WmfMetafileType { MEMORYMETAFILE = 0x0001, DISKMETAFILE = 0x0002 };
 
 /**
    MS-WMF 2.1.1.19 MetafileVersion Enumeration
-  
+
    The MetafileVersion Enumeration defines values that specify support
    for device-independent bitmaps (DIBs) in metafiles.
 */
 
-enum WmfMetafileVersion {
-    METAVERSION100 = 0x0100,
-    METAVERSION300 = 0x0300
-};
-
+enum WmfMetafileVersion { METAVERSION100 = 0x0100, METAVERSION300 = 0x0300 };
 
 /**
    MS-WMF 2.1.1.20 MixMode Enumeration
-  
+
    The MixMode Enumeration specifies the background mix mode for text,
    hatched brushes, and other nonsolid pen styles.
 */
 
-enum WmfMixMode {
-    TRANSPARENT = 0x0001,
-    OPAQUE      = 0x0002
-};
-
+enum WmfMixMode { TRANSPARENT = 0x0001, OPAQUE = 0x0002 };
 
 /**
    MS-WMF 2.1.1.21 OutPrecision Enumeration
-  
+
    The OutPrecision enumeration defines values for output precision,
    which is the requirement for the font mapper to match specific font
    parameters, including height, width, character orientation,
@@ -427,110 +358,88 @@ enum WmfMixMode {
 */
 
 enum WmfOutPrecision {
-    OUT_DEFAULT_PRECIS        = 0x00000000,
-    OUT_STRING_PRECIS         = 0x00000001,
-    OUT_STROKE_PRECIS         = 0x00000003,
-    OUT_TT_PRECIS             = 0x00000004,
-    OUT_DEVICE_PRECIS         = 0x00000005,
-    OUT_RASTER_PRECIS         = 0x00000006,
-    OUT_TT_ONLY_PRECIS        = 0x00000007,
-    OUT_OUTLINE_PRECIS        = 0x00000008,
+    OUT_DEFAULT_PRECIS = 0x00000000,
+    OUT_STRING_PRECIS = 0x00000001,
+    OUT_STROKE_PRECIS = 0x00000003,
+    OUT_TT_PRECIS = 0x00000004,
+    OUT_DEVICE_PRECIS = 0x00000005,
+    OUT_RASTER_PRECIS = 0x00000006,
+    OUT_TT_ONLY_PRECIS = 0x00000007,
+    OUT_OUTLINE_PRECIS = 0x00000008,
     OUT_SCREEN_OUTLINE_PRECIS = 0x00000009,
-    OUT_PS_ONLY_PRECIS        = 0x0000000A
+    OUT_PS_ONLY_PRECIS = 0x0000000A
 };
-
 
 /**
    MS-WMF 2.1.1.22 PaletteEntryFlag Enumeration
-  
+
    The PaletteEntryFlag Enumeration specifies how the palette entry should be used.
 */
 
-enum WmfPaletteEntryFlag {
-    PC_RESERVED   = 0x01,
-    PC_EXPLICIT   = 0x02,
-    PC_NOCOLLAPSE = 0x04
-};
-
+enum WmfPaletteEntryFlag { PC_RESERVED = 0x01, PC_EXPLICIT = 0x02, PC_NOCOLLAPSE = 0x04 };
 
 /**
    MS-WMF 2.1.1.23 Pe nStyle Enumeration
-  
+
    The 16-bit PenStyle Enumeration is used to specify different types
    of pens that can be used in graphics operations.
-  
+
    Various styles can be combined by using a logical OR statement, one
    from each subsection of Style, EndCap, Join, and Type (Cosmetic).
 */
 
 enum WmfPenStyle {
-    PS_COSMETIC      = 0x0000,
-    PS_ENDCAP_ROUND  = 0x0000,
-    PS_JOIN_ROUND    = 0x0000,
-    PS_SOLID         = 0x0000,
-    PS_DASH          = 0x0001,
-    PS_DOT           = 0x0002,
-    PS_DASHDOT       = 0x0003,
-    PS_DASHDOTDOT    = 0x0004,
-    PS_NULL          = 0x0005,
-    PS_INSIDEFRAME   = 0x0006,
-    PS_USERSTYLE     = 0x0007,
-    PS_ALTERNATE     = 0x0008,
+    PS_COSMETIC = 0x0000,
+    PS_ENDCAP_ROUND = 0x0000,
+    PS_JOIN_ROUND = 0x0000,
+    PS_SOLID = 0x0000,
+    PS_DASH = 0x0001,
+    PS_DOT = 0x0002,
+    PS_DASHDOT = 0x0003,
+    PS_DASHDOTDOT = 0x0004,
+    PS_NULL = 0x0005,
+    PS_INSIDEFRAME = 0x0006,
+    PS_USERSTYLE = 0x0007,
+    PS_ALTERNATE = 0x0008,
     PS_ENDCAP_SQUARE = 0x0100,
-    PS_ENDCAP_FLAT   = 0x0200,
-    PS_JOIN_BEVEL    = 0x1000,
-    PS_JOIN_MITER    = 0x2000
+    PS_ENDCAP_FLAT = 0x0200,
+    PS_JOIN_BEVEL = 0x1000,
+    PS_JOIN_MITER = 0x2000
 };
-
 
 /**
    MS-WMF 2.1.1.24 PitchFont Enumeration
-  
+
    The PitchFont enumeration defines values that are used for
    specifying characteristics of a font. The values are used to
    indicate whether the characters in a font have a fixed or variable
    width, or pitch.
 */
 
-enum WmfPitchFont {
-    DEFAULT_PITCH  = 0,
-    FIXED_PITCH    = 1,
-    VARIABLE_PITCH = 2
-};
-
+enum WmfPitchFont { DEFAULT_PITCH = 0, FIXED_PITCH = 1, VARIABLE_PITCH = 2 };
 
 /*
    MS-WMF 2.1.1.25 PolyFillMode Enumeration
-  
+
    The PolyFillMode Enumeration specifies the method used for filling
    a polygon.
 */
 
-enum WmfPolyFillMode {
-    ALTERNATE = 0x0001,
-    WINDING   = 0x0002
-};
-
+enum WmfPolyFillMode { ALTERNATE = 0x0001, WINDING = 0x0002 };
 
 /**
    MS-WMF 2.1.1.29 StretchMode Enumeration
-  
+
    The StretchMode Enumeration specifies the bitmap stretching mode,
    which defines how the system combines rows or columns of a bitmap
    with existing pixels.
 */
 
-enum WmfStretchMode {
-    BLACKONWHITE = 0x0001,
-    WHITEONBLACK = 0x0002,
-    COLORONCOLOR = 0x0003,
-    HALFTONE     = 0x0004
-};
-
+enum WmfStretchMode { BLACKONWHITE = 0x0001, WHITEONBLACK = 0x0002, COLORONCOLOR = 0x0003, HALFTONE = 0x0004 };
 
 /**
    MS-WMF 2.1.1.30 Ternary RasterOperation Enumeration
-  
+
    The TernaryRasterOperation Enumeration specifies ternary raster
    operation codes, which define how to combine the bits in a source
    bitmap with the bits in a destination bitmap.
@@ -796,72 +705,66 @@ enum WmfTernaryRasterOperation {
     WHITENESS = 0xFF
 };
 
-
 // ----------------------------------------------------------------
 //                             Flags
 
-
 /**
    MS-WMF 2.1.2.1 ClipPrecision Flags
-  
+
    ClipPrecision Flags specify clipping precision, which defines how
    to clip characters that are partially outside a clipping
    region. These flags can be combined to specify multiple options.
 */
 
-#define CLIP_DEFAULT_PRECIS   0x00000000
+#define CLIP_DEFAULT_PRECIS 0x00000000
 #define CLIP_CHARACTER_PRECIS 0x00000001
-#define CLIP_STROKE_PRECIS    0x00000002
-#define CLIP_LH_ANGLES        0x00000010
-#define CLIP_TT_ALWAYS        0x00000020
-#define CLIP_DFA_DISABLE      0x00000040
-#define CLIP_EMBEDDED         0x00000080
-
+#define CLIP_STROKE_PRECIS 0x00000002
+#define CLIP_LH_ANGLES 0x00000010
+#define CLIP_TT_ALWAYS 0x00000020
+#define CLIP_DFA_DISABLE 0x00000040
+#define CLIP_EMBEDDED 0x00000080
 
 /**
    MS-WMF 2.1.2.2 ExtTextOutOptions Flags
-  
+
    ExtTextOutOptions Flags specify various characteristics of the
    output of text. These flags can be combined to specify multiple options.
 */
 
-#define ETO_OPAQUE        0x0002
-#define ETO_CLIPPED       0x0004
-#define ETO_GLYPH_INDEX   0x0010
-#define ETO_RTLREADING    0x0080
+#define ETO_OPAQUE 0x0002
+#define ETO_CLIPPED 0x0004
+#define ETO_GLYPH_INDEX 0x0010
+#define ETO_RTLREADING 0x0080
 #define ETO_NUMERICSLOCAL 0x0400
 #define ETO_NUMERICSLATIN 0x0800
-#define ETO_PDY           0x2000
-
+#define ETO_PDY 0x2000
 
 /**
    MS-WMF 2.1.2.3 TextAlignmentMode Flags
-  
+
    TextAlignmentMode Flags specify the relationship between a
    reference point and a bounding rectangle, for text alignment. These
    flags can be combined to specify multiple options, with the
    restriction that only one flag can be chosen that alters the
    drawing position in the playback device context.
-  
+
    Horizontal text alignment is performed when the font has a
    horizontal default baseline.
 */
 
-#define TA_NOUPDATECP 0x0000  /// Do not update Current Point (default)
-#define TA_LEFT       0x0000  /// The reference point is on the left edge of the bounding rectangle
-#define TA_TOP        0x0000  /// The reference point is on the top edge of the bounding rectangle 
-#define TA_UPDATECP   0x0001  /// Use Current Point. The Current Point must be updated
-#define TA_RIGHT      0x0002  /// The reference point is on the right edge of the bounding rectangle
-#define TA_CENTER     0x0006  /// The reference point is at the center of the bounding rectangle
-#define TA_BOTTOM     0x0008  /// The reference point is on the bottom edge of the bounding rectangle 
-#define TA_BASELINE   0x0018  /// The reference point is on the baseline
-#define TA_RTLREADING 0x0100  /// The text is laid out in Right-to-Left direction. 
+#define TA_NOUPDATECP 0x0000 /// Do not update Current Point (default)
+#define TA_LEFT 0x0000 /// The reference point is on the left edge of the bounding rectangle
+#define TA_TOP 0x0000 /// The reference point is on the top edge of the bounding rectangle
+#define TA_UPDATECP 0x0001 /// Use Current Point. The Current Point must be updated
+#define TA_RIGHT 0x0002 /// The reference point is on the right edge of the bounding rectangle
+#define TA_CENTER 0x0006 /// The reference point is at the center of the bounding rectangle
+#define TA_BOTTOM 0x0008 /// The reference point is on the bottom edge of the bounding rectangle
+#define TA_BASELINE 0x0018 /// The reference point is on the baseline
+#define TA_RTLREADING 0x0100 /// The text is laid out in Right-to-Left direction.
 
 // Some useful masks, not part of the specification:
 #define TA_HORZMASK 0x0006
 #define TA_VERTMASK 0x0018
-
-
 
 // MS-WMF 2.1.2.4 VerticalTextAlignmentMode Flags
 //
@@ -874,14 +777,12 @@ enum WmfTernaryRasterOperation {
 // Vertical text alignment is performed when the font has a vertical
 // default baseline, such as Kanji.
 
-#define VTA_TOP      0x0000
-#define VTA_RIGHT    0x0000
-#define VTA_BOTTOM   0x0002
-#define VTA_CENTER   0x0006
-#define VTA_LEFT     0x0008
+#define VTA_TOP 0x0000
+#define VTA_RIGHT 0x0000
+#define VTA_BOTTOM 0x0002
+#define VTA_CENTER 0x0006
+#define VTA_LEFT 0x0008
 #define VTA_BASELINE 0x0018
-
-
 }
 
-#endif  // KOWMFENUMS_H
+#endif // KOWMFENUMS_H

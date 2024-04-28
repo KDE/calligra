@@ -10,66 +10,63 @@
 
 // Qt
 #include <QAction>
-#include <QGridLayout>
-#include <QToolButton>
-#include <QCheckBox>
-#include <QTabWidget>
-#include <QPen>
 #include <QBrush>
+#include <QCheckBox>
+#include <QGridLayout>
 #include <QPainter>
+#include <QPen>
+#include <QTabWidget>
+#include <QToolButton>
 
 // KF5
 #include <KLocalizedString>
 
 // Calligra
 #include <KoCanvasBase.h>
+#include <KoInteractionTool.h>
+#include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
-#include <KoPointerEvent.h>
 #include <KoTextShapeData.h>
 #include <KoViewConverter.h>
-#include <KoInteractionTool.h>
 
 // KChart
-#include <KChartChart>
-#include <KChartCartesianAxis>
-#include <KChartGridAttributes>
 #include <KChartAbstractCartesianDiagram>
+#include <KChartCartesianAxis>
 #include <KChartCartesianCoordinatePlane>
-#include <KChartPosition>
+#include <KChartChart>
+#include <KChartGridAttributes>
 #include <KChartPieAttributes>
+#include <KChartPosition>
 
 // KoChart
-#include "Surface.h"
-#include "PlotArea.h"
-#include "ChartLayout.h"
-#include "Axis.h"
-#include "DataSet.h"
-#include "Legend.h"
-#include "ChartProxyModel.h"
-#include "TitlesConfigWidget.h"
-#include "LegendConfigWidget.h"
-#include "PlotAreaConfigWidget.h"
 #include "AxesConfigWidget.h"
-#include "DataSetConfigWidget.h"
-#include "PieConfigWidget.h"
-#include "RingConfigWidget.h"
-#include "RadarDataSetConfigWidget.h"
-#include "KChartConvertions.h"
-#include "commands/ChartTypeCommand.h"
-#include "commands/LegendCommand.h"
-#include "commands/AxisCommand.h"
-#include "commands/DatasetCommand.h"
-#include "commands/ChartTextShapeCommand.h"
-#include "commands/AddRemoveAxisCommand.h"
-#include "commands/GapCommand.h"
-#include "commands/PlotAreaCommand.h"
-#include "commands/DatasetCommand.h"
+#include "Axis.h"
 #include "ChartDebug.h"
-
+#include "ChartLayout.h"
+#include "ChartProxyModel.h"
+#include "DataSet.h"
+#include "DataSetConfigWidget.h"
+#include "KChartConvertions.h"
+#include "Legend.h"
+#include "LegendConfigWidget.h"
+#include "PieConfigWidget.h"
+#include "PlotArea.h"
+#include "PlotAreaConfigWidget.h"
+#include "RadarDataSetConfigWidget.h"
+#include "RingConfigWidget.h"
+#include "Surface.h"
+#include "TitlesConfigWidget.h"
+#include "commands/AddRemoveAxisCommand.h"
+#include "commands/AxisCommand.h"
+#include "commands/ChartTextShapeCommand.h"
+#include "commands/ChartTypeCommand.h"
+#include "commands/DatasetCommand.h"
+#include "commands/GapCommand.h"
+#include "commands/LegendCommand.h"
+#include "commands/PlotAreaCommand.h"
 
 using namespace KoChart;
-
 
 class ChartTool::Private
 {
@@ -77,11 +74,10 @@ public:
     Private();
     ~Private();
 
-    ChartShape  *shape;
-    QModelIndex  datasetSelection;
-    QPen         datasetSelectionPen;
-    QBrush       datasetSelectionBrush;
-
+    ChartShape *shape;
+    QModelIndex datasetSelection;
+    QPen datasetSelectionPen;
+    QBrush datasetSelectionBrush;
 };
 
 ChartTool::Private::Private()
@@ -94,8 +90,8 @@ ChartTool::Private::~Private()
 }
 
 ChartTool::ChartTool(KoCanvasBase *canvas)
-    : KoToolBase(canvas),
-      d(new Private())
+    : KoToolBase(canvas)
+    , d(new Private())
 {
     // Create QActions here.
 #if 0
@@ -130,12 +126,12 @@ void ChartTool::shapeSelectionChanged()
     if (!d->shape) {
         return;
     }
-    QList<KoShape*> lst = canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
+    QList<KoShape *> lst = canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     if (lst.contains(d->shape)) {
         return;
     }
     for (KoShape *s : lst) {
-        ChartShape *chart = dynamic_cast<ChartShape*>(s);
+        ChartShape *chart = dynamic_cast<ChartShape *>(s);
         if (chart && chart != d->shape) {
             activateTool(KoInteractionTool_ID);
         }
@@ -146,7 +142,7 @@ void ChartTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (d->shape) {
         QPen pen;
-        //Use the #00adf5 color with 50% opacity
+        // Use the #00adf5 color with 50% opacity
         pen.setColor(QColor(0, 173, 245, 127));
         pen.setWidth(qMax((uint)1, handleRadius() / 2));
         pen.setJoinStyle(Qt::RoundJoin);
@@ -161,13 +157,12 @@ void ChartTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 void ChartTool::mousePressEvent(KoPointerEvent *event)
 {
-#if 1  // disabled
+#if 1 // disabled
     Q_UNUSED(event);
     return;
 #else
     // Select dataset
-    if (!d->shape || !d->shape->kdChart() || ! d->shape->kdChart()->coordinatePlane()
-        || !d->shape->kdChart()->coordinatePlane()->diagram())
+    if (!d->shape || !d->shape->kdChart() || !d->shape->kdChart()->coordinatePlane() || !d->shape->kdChart()->coordinatePlane()->diagram())
         return;
     QPointF point = event->point - d->shape->position();
     QModelIndex selection = d->shape->kdChart()->coordinatePlane()->diagram()->indexAt(point.toPoint());
@@ -177,7 +172,7 @@ void ChartTool::mousePressEvent(KoPointerEvent *event)
 
     if (d->datasetSelection.isValid()) {
         d->shape->kdChart()->coordinatePlane()->diagram()->setPen(d->datasetSelection.column(), d->datasetSelectionPen);
-        //d->shape->kdChart()->coordinatePlane()->diagram()->setBrush(d->datasetSelection, d->datasetSelectionBrush);
+        // d->shape->kdChart()->coordinatePlane()->diagram()->setBrush(d->datasetSelection, d->datasetSelectionBrush);
     }
     if (selection.isValid()) {
         d->datasetSelection = selection;
@@ -187,12 +182,12 @@ void ChartTool::mousePressEvent(KoPointerEvent *event)
         pen.setWidth(1);
 
         d->datasetSelectionBrush = d->shape->kdChart()->coordinatePlane()->diagram()->brush(selection);
-        d->datasetSelectionPen   = d->shape->kdChart()->coordinatePlane()->diagram()->pen(dataset);
+        d->datasetSelectionPen = d->shape->kdChart()->coordinatePlane()->diagram()->pen(dataset);
 
         d->shape->kdChart()->coordinatePlane()->diagram()->setPen(dataset, pen);
-        //d->shape->kdChart()->coordinatePlane()->diagram()->setBrush(selection, QBrush(Qt::lightGray));
+        // d->shape->kdChart()->coordinatePlane()->diagram()->setBrush(selection, QBrush(Qt::lightGray));
     }
-    ((ChartConfigWidget*)optionWidget())->selectDataset(dataset);
+    ((ChartConfigWidget *)optionWidget())->selectDataset(dataset);
 
     d->shape->update();
 #endif
@@ -208,16 +203,15 @@ void ChartTool::mouseReleaseEvent(KoPointerEvent *event)
     event->ignore();
 }
 
-
-void ChartTool::activate(ToolActivation, const QSet<KoShape*> &shapes)
+void ChartTool::activate(ToolActivation, const QSet<KoShape *> &shapes)
 {
-    debugChartTool<<shapes;
+    debugChartTool << shapes;
     d->shape = 0;
     for (KoShape *s : shapes) {
-        d->shape = dynamic_cast<ChartShape*>(s);
+        d->shape = dynamic_cast<ChartShape *>(s);
         if (!d->shape) {
             for (KoShape *parent = s->parent(); parent; parent = parent->parent()) {
-                d->shape = dynamic_cast<ChartShape*>(parent);
+                d->shape = dynamic_cast<ChartShape *>(parent);
                 if (d->shape) {
                     break;
                 }
@@ -227,7 +221,7 @@ void ChartTool::activate(ToolActivation, const QSet<KoShape*> &shapes)
             break;
         }
     }
-    debugChartTool<<shapes<<d->shape;
+    debugChartTool << shapes << d->shape;
     if (!d->shape) {
         emit done();
         return;
@@ -235,14 +229,14 @@ void ChartTool::activate(ToolActivation, const QSet<KoShape*> &shapes)
     useCursor(Qt::ArrowCursor);
 
     foreach (QWidget *w, optionWidgets()) {
-        ConfigWidgetBase *widget = dynamic_cast<ConfigWidgetBase*>(w);
+        ConfigWidgetBase *widget = dynamic_cast<ConfigWidgetBase *>(w);
         Q_ASSERT(widget);
         if (widget) {
             widget->open(d->shape);
         }
     }
     foreach (QWidget *w, optionWidgets()) {
-        ConfigWidgetBase *widget = dynamic_cast<ConfigWidgetBase*>(w);
+        ConfigWidgetBase *widget = dynamic_cast<ConfigWidgetBase *>(w);
         Q_ASSERT(widget);
         if (widget) {
             widget->updateData();
@@ -253,13 +247,13 @@ void ChartTool::activate(ToolActivation, const QSet<KoShape*> &shapes)
 
 void ChartTool::deactivate()
 {
-    debugChartTool<<d->shape;
+    debugChartTool << d->shape;
     if (!d->shape) {
         // activated without shape
         return;
     }
     foreach (QWidget *w, optionWidgets()) {
-        ConfigWidgetBase *configWidget = dynamic_cast<ConfigWidgetBase*>(w);
+        ConfigWidgetBase *configWidget = dynamic_cast<ConfigWidgetBase *>(w);
         if (configWidget)
             configWidget->deactivate();
     }
@@ -269,9 +263,9 @@ void ChartTool::deactivate()
     d->shape = 0;
 }
 
-QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
+QList<QPointer<QWidget>> ChartTool::createOptionWidgets()
 {
-    QList<QPointer<QWidget> > widgets;
+    QList<QPointer<QWidget>> widgets;
 
     TitlesConfigWidget *titles = new TitlesConfigWidget();
     titles->setWindowTitle(i18n("Titles"));
@@ -291,185 +285,117 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     LegendConfigWidget *legend = new LegendConfigWidget();
     legend->setWindowTitle(i18n("Legend"));
     widgets.append(legend);
-    connect(legend, &LegendConfigWidget::showLegendChanged,
-            this,   &ChartTool::setShowLegend);
-    connect(legend, &LegendConfigWidget::legendTitleChanged,
-            this,   &ChartTool::setLegendTitle);
-    connect(legend, &LegendConfigWidget::legendFontChanged,
-            this,   &ChartTool::setLegendFont);
-    connect(legend, &LegendConfigWidget::legendFontSizeChanged,
-            this,   &ChartTool::setLegendFontSize);
-    connect(legend, &LegendConfigWidget::legendOrientationChanged,
-            this,   &ChartTool::setLegendOrientation);
-    connect(legend, &LegendConfigWidget::legendPositionChanged,
-            this,   &ChartTool::setLegendPosition);
-    connect(legend, &LegendConfigWidget::legendAlignmentChanged,
-            this,   &ChartTool::setLegendAlignment);
+    connect(legend, &LegendConfigWidget::showLegendChanged, this, &ChartTool::setShowLegend);
+    connect(legend, &LegendConfigWidget::legendTitleChanged, this, &ChartTool::setLegendTitle);
+    connect(legend, &LegendConfigWidget::legendFontChanged, this, &ChartTool::setLegendFont);
+    connect(legend, &LegendConfigWidget::legendFontSizeChanged, this, &ChartTool::setLegendFontSize);
+    connect(legend, &LegendConfigWidget::legendOrientationChanged, this, &ChartTool::setLegendOrientation);
+    connect(legend, &LegendConfigWidget::legendPositionChanged, this, &ChartTool::setLegendPosition);
+    connect(legend, &LegendConfigWidget::legendAlignmentChanged, this, &ChartTool::setLegendAlignment);
 
     connect(d->shape->legend(), &KoChart::Legend::updateConfigWidget, legend, QOverload<>::of(&LegendConfigWidget::updateData));
 
-    PlotAreaConfigWidget  *plotarea = new PlotAreaConfigWidget();
+    PlotAreaConfigWidget *plotarea = new PlotAreaConfigWidget();
     plotarea->setWindowTitle(i18n("Plot Area"));
     widgets.append(plotarea);
 
-    connect(plotarea, &PlotAreaConfigWidget::chartTypeChanged,
-            this,   &ChartTool::setChartType);
-    connect(plotarea, &PlotAreaConfigWidget::chartSubTypeChanged,
-            this,   &ChartTool::setChartSubType);
-    connect(plotarea, &PlotAreaConfigWidget::threeDModeToggled,
-            this,   &ChartTool::setThreeDMode);
-    connect(plotarea, &PlotAreaConfigWidget::chartOrientationChanged,
-            this,   &ChartTool::setChartOrientation);
+    connect(plotarea, &PlotAreaConfigWidget::chartTypeChanged, this, &ChartTool::setChartType);
+    connect(plotarea, &PlotAreaConfigWidget::chartSubTypeChanged, this, &ChartTool::setChartSubType);
+    connect(plotarea, &PlotAreaConfigWidget::threeDModeToggled, this, &ChartTool::setThreeDMode);
+    connect(plotarea, &PlotAreaConfigWidget::chartOrientationChanged, this, &ChartTool::setChartOrientation);
 
     // data set edit dialog
-    connect(plotarea, &PlotAreaConfigWidget::dataSetXDataRegionChanged,
-            this,   &ChartTool::setDataSetXDataRegion);
-    connect(plotarea, &PlotAreaConfigWidget::dataSetYDataRegionChanged,
-            this,   &ChartTool::setDataSetYDataRegion);
-    connect(plotarea, &PlotAreaConfigWidget::dataSetCustomDataRegionChanged,
-            this,   &ChartTool::setDataSetCustomDataRegion);
-    connect(plotarea, &PlotAreaConfigWidget::dataSetLabelDataRegionChanged,
-            this,   &ChartTool::setDataSetLabelDataRegion);
-    connect(plotarea, &PlotAreaConfigWidget::dataSetCategoryDataRegionChanged,
-            this,   &ChartTool::setDataSetCategoryDataRegion);
+    connect(plotarea, &PlotAreaConfigWidget::dataSetXDataRegionChanged, this, &ChartTool::setDataSetXDataRegion);
+    connect(plotarea, &PlotAreaConfigWidget::dataSetYDataRegionChanged, this, &ChartTool::setDataSetYDataRegion);
+    connect(plotarea, &PlotAreaConfigWidget::dataSetCustomDataRegionChanged, this, &ChartTool::setDataSetCustomDataRegion);
+    connect(plotarea, &PlotAreaConfigWidget::dataSetLabelDataRegionChanged, this, &ChartTool::setDataSetLabelDataRegion);
+    connect(plotarea, &PlotAreaConfigWidget::dataSetCategoryDataRegionChanged, this, &ChartTool::setDataSetCategoryDataRegion);
 
     AxesConfigWidget *axes = plotarea->cartesianAxesConfigWidget();
-    connect(axes, &AxesConfigWidget::axisAdded,
-            this,   &ChartTool::addAxis);
-    connect(axes, &AxesConfigWidget::axisRemoved,
-            this,   &ChartTool::removeAxis);
-    connect(axes, &AxesConfigWidget::axisShowTitleChanged,
-            this,   &ChartTool::setAxisShowTitle);
-    connect(axes, &AxesConfigWidget::axisShowChanged,
-            this,   &ChartTool::setShowAxis);
-    connect(axes, &AxesConfigWidget::axisPositionChanged,
-            this,   &ChartTool::setAxisPosition);
-    connect(axes, &AxesConfigWidget::axisLabelsPositionChanged,
-            this,   &ChartTool::setAxisLabelsPosition);
-    connect(axes, &AxesConfigWidget::axisShowLabelsChanged,
-            this,   &ChartTool::setAxisShowLabels);
+    connect(axes, &AxesConfigWidget::axisAdded, this, &ChartTool::addAxis);
+    connect(axes, &AxesConfigWidget::axisRemoved, this, &ChartTool::removeAxis);
+    connect(axes, &AxesConfigWidget::axisShowTitleChanged, this, &ChartTool::setAxisShowTitle);
+    connect(axes, &AxesConfigWidget::axisShowChanged, this, &ChartTool::setShowAxis);
+    connect(axes, &AxesConfigWidget::axisPositionChanged, this, &ChartTool::setAxisPosition);
+    connect(axes, &AxesConfigWidget::axisLabelsPositionChanged, this, &ChartTool::setAxisLabelsPosition);
+    connect(axes, &AxesConfigWidget::axisShowLabelsChanged, this, &ChartTool::setAxisShowLabels);
 
-    connect(axes, &AxesConfigWidget::axisShowMajorGridLinesChanged,
-            this,   &ChartTool::setAxisShowMajorGridLines);
-    connect(axes, &AxesConfigWidget::axisShowMinorGridLinesChanged,
-            this,   &ChartTool::setAxisShowMinorGridLines);
+    connect(axes, &AxesConfigWidget::axisShowMajorGridLinesChanged, this, &ChartTool::setAxisShowMajorGridLines);
+    connect(axes, &AxesConfigWidget::axisShowMinorGridLinesChanged, this, &ChartTool::setAxisShowMinorGridLines);
     // scaling dialog
-    connect(axes, &AxesConfigWidget::axisUseLogarithmicScalingChanged,
-            this,   &ChartTool::setAxisUseLogarithmicScaling);
-    connect(axes, &AxesConfigWidget::axisStepWidthChanged,
-            this,   &ChartTool::setAxisStepWidth);
-    connect(axes, &AxesConfigWidget::axisSubStepWidthChanged,
-            this,   &ChartTool::setAxisSubStepWidth);
-    connect(axes, &AxesConfigWidget::axisUseAutomaticStepWidthChanged,
-            this,   &ChartTool::setAxisUseAutomaticStepWidth);
-    connect(axes, &AxesConfigWidget::axisUseAutomaticSubStepWidthChanged,
-            this,   &ChartTool::setAxisUseAutomaticSubStepWidth);
+    connect(axes, &AxesConfigWidget::axisUseLogarithmicScalingChanged, this, &ChartTool::setAxisUseLogarithmicScaling);
+    connect(axes, &AxesConfigWidget::axisStepWidthChanged, this, &ChartTool::setAxisStepWidth);
+    connect(axes, &AxesConfigWidget::axisSubStepWidthChanged, this, &ChartTool::setAxisSubStepWidth);
+    connect(axes, &AxesConfigWidget::axisUseAutomaticStepWidthChanged, this, &ChartTool::setAxisUseAutomaticStepWidth);
+    connect(axes, &AxesConfigWidget::axisUseAutomaticSubStepWidthChanged, this, &ChartTool::setAxisUseAutomaticSubStepWidth);
     // font dialog
-    connect(axes, &AxesConfigWidget::axisLabelsFontChanged,
-            this,   &ChartTool::setAxisLabelsFont);
+    connect(axes, &AxesConfigWidget::axisLabelsFontChanged, this, &ChartTool::setAxisLabelsFont);
 
-    connect(axes, &AxesConfigWidget::gapBetweenBarsChanged,
-            this,   &ChartTool::setGapBetweenBars);
-    connect(axes, &AxesConfigWidget::gapBetweenSetsChanged,
-            this,   &ChartTool::setGapBetweenSets);
-
+    connect(axes, &AxesConfigWidget::gapBetweenBarsChanged, this, &ChartTool::setGapBetweenBars);
+    connect(axes, &AxesConfigWidget::gapBetweenSetsChanged, this, &ChartTool::setGapBetweenSets);
 
     DataSetConfigWidget *dataset = plotarea->cartesianDataSetConfigWidget();
-    connect(dataset, &DataSetConfigWidget::dataSetChartTypeChanged,
-            this,   &ChartTool::setDataSetChartType);
-    connect(dataset, &DataSetConfigWidget::datasetBrushChanged,
-            this, &ChartTool::setDataSetBrush);
-    connect(dataset, &DataSetConfigWidget::dataSetMarkerChanged,
-            this, &ChartTool::setDataSetMarker);
-    connect(dataset, &DataSetConfigWidget::datasetPenChanged,
-            this, &ChartTool::setDataSetPen);
-    connect(dataset, &DataSetConfigWidget::datasetShowCategoryChanged,
-            this, &ChartTool::setDataSetShowCategory);
-    connect(dataset, &DataSetConfigWidget::dataSetShowNumberChanged,
-            this, &ChartTool::setDataSetShowNumber);
-    connect(dataset, &DataSetConfigWidget::datasetShowPercentChanged,
-            this, &ChartTool::setDataSetShowPercent);
-    connect(dataset, &DataSetConfigWidget::datasetShowSymbolChanged,
-            this, &ChartTool::setDataSetShowSymbol);
-    connect(dataset, &DataSetConfigWidget::dataSetAxisChanged,
-            this, &ChartTool::setDataSetAxis);
-    connect(dataset, &DataSetConfigWidget::axisAdded,
-            this,   &ChartTool::addAxis);
-
+    connect(dataset, &DataSetConfigWidget::dataSetChartTypeChanged, this, &ChartTool::setDataSetChartType);
+    connect(dataset, &DataSetConfigWidget::datasetBrushChanged, this, &ChartTool::setDataSetBrush);
+    connect(dataset, &DataSetConfigWidget::dataSetMarkerChanged, this, &ChartTool::setDataSetMarker);
+    connect(dataset, &DataSetConfigWidget::datasetPenChanged, this, &ChartTool::setDataSetPen);
+    connect(dataset, &DataSetConfigWidget::datasetShowCategoryChanged, this, &ChartTool::setDataSetShowCategory);
+    connect(dataset, &DataSetConfigWidget::dataSetShowNumberChanged, this, &ChartTool::setDataSetShowNumber);
+    connect(dataset, &DataSetConfigWidget::datasetShowPercentChanged, this, &ChartTool::setDataSetShowPercent);
+    connect(dataset, &DataSetConfigWidget::datasetShowSymbolChanged, this, &ChartTool::setDataSetShowSymbol);
+    connect(dataset, &DataSetConfigWidget::dataSetAxisChanged, this, &ChartTool::setDataSetAxis);
+    connect(dataset, &DataSetConfigWidget::axisAdded, this, &ChartTool::addAxis);
 
     PieConfigWidget *pie = plotarea->pieConfigWidget();
-    connect(pie, QOverload<DataSet*,int, int>::of(&PieConfigWidget::explodeFactorChanged), this, &ChartTool::setPieExplodeFactor);
-    connect(pie, QOverload<DataSet*,const QColor &,int>::of(&PieConfigWidget::brushChanged), this, &ChartTool::setDataSetBrush);
-    connect(pie, QOverload<DataSet*,const QColor &,int>::of(&PieConfigWidget::penChanged), this, &ChartTool::setDataSetPen);
-    connect(pie, QOverload<DataSet*,bool,int>::of(&PieConfigWidget::showCategoryChanged), this, &ChartTool::setDataSetShowCategory);
-    connect(pie, QOverload<DataSet*,bool,int>::of(&PieConfigWidget::showNumberChanged), this, &ChartTool::setDataSetShowNumber);
-    connect(pie, QOverload<DataSet*,bool,int>::of(&PieConfigWidget::showPercentChanged), this, &ChartTool::setDataSetShowPercent);
+    connect(pie, QOverload<DataSet *, int, int>::of(&PieConfigWidget::explodeFactorChanged), this, &ChartTool::setPieExplodeFactor);
+    connect(pie, QOverload<DataSet *, const QColor &, int>::of(&PieConfigWidget::brushChanged), this, &ChartTool::setDataSetBrush);
+    connect(pie, QOverload<DataSet *, const QColor &, int>::of(&PieConfigWidget::penChanged), this, &ChartTool::setDataSetPen);
+    connect(pie, QOverload<DataSet *, bool, int>::of(&PieConfigWidget::showCategoryChanged), this, &ChartTool::setDataSetShowCategory);
+    connect(pie, QOverload<DataSet *, bool, int>::of(&PieConfigWidget::showNumberChanged), this, &ChartTool::setDataSetShowNumber);
+    connect(pie, QOverload<DataSet *, bool, int>::of(&PieConfigWidget::showPercentChanged), this, &ChartTool::setDataSetShowPercent);
 
     RingConfigWidget *ring = plotarea->ringConfigWidget();
-    connect(ring, QOverload<DataSet*,int, int>::of(&RingConfigWidget::explodeFactorChanged), this, &ChartTool::setPieExplodeFactor);
-    connect(ring, QOverload<DataSet*,const QColor &,int>::of(&RingConfigWidget::brushChanged), this, &ChartTool::setDataSetBrush);
-    connect(ring, QOverload<DataSet*,const QColor &,int>::of(&RingConfigWidget::penChanged), this, &ChartTool::setDataSetPen);
-    connect(ring, QOverload<DataSet*,bool,int>::of(&RingConfigWidget::showCategoryChanged), this, &ChartTool::setDataSetShowCategory);
-    connect(ring, QOverload<DataSet*,bool,int>::of(&RingConfigWidget::showNumberChanged), this, &ChartTool::setDataSetShowNumber);
-    connect(ring, QOverload<DataSet*,bool,int>::of(&RingConfigWidget::showPercentChanged), this, &ChartTool::setDataSetShowPercent);
+    connect(ring, QOverload<DataSet *, int, int>::of(&RingConfigWidget::explodeFactorChanged), this, &ChartTool::setPieExplodeFactor);
+    connect(ring, QOverload<DataSet *, const QColor &, int>::of(&RingConfigWidget::brushChanged), this, &ChartTool::setDataSetBrush);
+    connect(ring, QOverload<DataSet *, const QColor &, int>::of(&RingConfigWidget::penChanged), this, &ChartTool::setDataSetPen);
+    connect(ring, QOverload<DataSet *, bool, int>::of(&RingConfigWidget::showCategoryChanged), this, &ChartTool::setDataSetShowCategory);
+    connect(ring, QOverload<DataSet *, bool, int>::of(&RingConfigWidget::showNumberChanged), this, &ChartTool::setDataSetShowNumber);
+    connect(ring, QOverload<DataSet *, bool, int>::of(&RingConfigWidget::showPercentChanged), this, &ChartTool::setDataSetShowPercent);
 
     axes = plotarea->stockAxesConfigWidget();
-    connect(axes, &AxesConfigWidget::axisAdded,
-            this,   &ChartTool::addAxis);
-    connect(axes, &AxesConfigWidget::axisRemoved,
-            this,   &ChartTool::removeAxis);
-    connect(axes, &AxesConfigWidget::axisShowTitleChanged,
-            this,   &ChartTool::setAxisShowTitle);
-    connect(axes, &AxesConfigWidget::axisShowChanged,
-            this,   &ChartTool::setShowAxis);
-    connect(axes, &AxesConfigWidget::axisPositionChanged,
-            this,   &ChartTool::setAxisPosition);
-    connect(axes, &AxesConfigWidget::axisLabelsPositionChanged,
-            this,   &ChartTool::setAxisLabelsPosition);
-    connect(axes, &AxesConfigWidget::axisShowLabelsChanged,
-            this,   &ChartTool::setAxisShowLabels);
+    connect(axes, &AxesConfigWidget::axisAdded, this, &ChartTool::addAxis);
+    connect(axes, &AxesConfigWidget::axisRemoved, this, &ChartTool::removeAxis);
+    connect(axes, &AxesConfigWidget::axisShowTitleChanged, this, &ChartTool::setAxisShowTitle);
+    connect(axes, &AxesConfigWidget::axisShowChanged, this, &ChartTool::setShowAxis);
+    connect(axes, &AxesConfigWidget::axisPositionChanged, this, &ChartTool::setAxisPosition);
+    connect(axes, &AxesConfigWidget::axisLabelsPositionChanged, this, &ChartTool::setAxisLabelsPosition);
+    connect(axes, &AxesConfigWidget::axisShowLabelsChanged, this, &ChartTool::setAxisShowLabels);
 
-    connect(axes, &AxesConfigWidget::axisShowMajorGridLinesChanged,
-            this,   &ChartTool::setAxisShowMajorGridLines);
-    connect(axes, &AxesConfigWidget::axisShowMinorGridLinesChanged,
-            this,   &ChartTool::setAxisShowMinorGridLines);
+    connect(axes, &AxesConfigWidget::axisShowMajorGridLinesChanged, this, &ChartTool::setAxisShowMajorGridLines);
+    connect(axes, &AxesConfigWidget::axisShowMinorGridLinesChanged, this, &ChartTool::setAxisShowMinorGridLines);
     // scaling dialog
-    connect(axes, &AxesConfigWidget::axisUseLogarithmicScalingChanged,
-            this,   &ChartTool::setAxisUseLogarithmicScaling);
-    connect(axes, &AxesConfigWidget::axisStepWidthChanged,
-            this,   &ChartTool::setAxisStepWidth);
-    connect(axes, &AxesConfigWidget::axisSubStepWidthChanged,
-            this,   &ChartTool::setAxisSubStepWidth);
-    connect(axes, &AxesConfigWidget::axisUseAutomaticStepWidthChanged,
-            this,   &ChartTool::setAxisUseAutomaticStepWidth);
-    connect(axes, &AxesConfigWidget::axisUseAutomaticSubStepWidthChanged,
-            this,   &ChartTool::setAxisUseAutomaticSubStepWidth);
+    connect(axes, &AxesConfigWidget::axisUseLogarithmicScalingChanged, this, &ChartTool::setAxisUseLogarithmicScaling);
+    connect(axes, &AxesConfigWidget::axisStepWidthChanged, this, &ChartTool::setAxisStepWidth);
+    connect(axes, &AxesConfigWidget::axisSubStepWidthChanged, this, &ChartTool::setAxisSubStepWidth);
+    connect(axes, &AxesConfigWidget::axisUseAutomaticStepWidthChanged, this, &ChartTool::setAxisUseAutomaticStepWidth);
+    connect(axes, &AxesConfigWidget::axisUseAutomaticSubStepWidthChanged, this, &ChartTool::setAxisUseAutomaticSubStepWidth);
     // font dialog
-    connect(axes, &AxesConfigWidget::axisLabelsFontChanged,
-            this,   &ChartTool::setAxisLabelsFont);
+    connect(axes, &AxesConfigWidget::axisLabelsFontChanged, this, &ChartTool::setAxisLabelsFont);
 
     // Radar
     RadarDataSetConfigWidget *rdataset = plotarea->radarDataSetConfigWidget();
-    connect(rdataset, &RadarDataSetConfigWidget::datasetBrushChanged,
-            this, &ChartTool::setDataSetBrush);
-    connect(rdataset, &RadarDataSetConfigWidget::dataSetMarkerChanged,
-            this, &ChartTool::setDataSetMarker);
-    connect(rdataset, &RadarDataSetConfigWidget::datasetPenChanged,
-            this, &ChartTool::setDataSetPen);
-    connect(rdataset, &RadarDataSetConfigWidget::datasetShowCategoryChanged,
-            this, &ChartTool::setDataSetShowCategory);
-    connect(rdataset, &RadarDataSetConfigWidget::dataSetShowNumberChanged,
-            this, &ChartTool::setDataSetShowNumber);
-    connect(rdataset, &RadarDataSetConfigWidget::datasetShowPercentChanged,
-            this, &ChartTool::setDataSetShowPercent);
-    connect(rdataset, &RadarDataSetConfigWidget::datasetShowSymbolChanged,
-            this, &ChartTool::setDataSetShowSymbol);
+    connect(rdataset, &RadarDataSetConfigWidget::datasetBrushChanged, this, &ChartTool::setDataSetBrush);
+    connect(rdataset, &RadarDataSetConfigWidget::dataSetMarkerChanged, this, &ChartTool::setDataSetMarker);
+    connect(rdataset, &RadarDataSetConfigWidget::datasetPenChanged, this, &ChartTool::setDataSetPen);
+    connect(rdataset, &RadarDataSetConfigWidget::datasetShowCategoryChanged, this, &ChartTool::setDataSetShowCategory);
+    connect(rdataset, &RadarDataSetConfigWidget::dataSetShowNumberChanged, this, &ChartTool::setDataSetShowNumber);
+    connect(rdataset, &RadarDataSetConfigWidget::datasetShowPercentChanged, this, &ChartTool::setDataSetShowPercent);
+    connect(rdataset, &RadarDataSetConfigWidget::datasetShowSymbolChanged, this, &ChartTool::setDataSetShowSymbol);
 
     connect(d->shape, &ChartShape::updateConfigWidget, plotarea, QOverload<>::of(&PlotAreaConfigWidget::updateData));
 
     return widgets;
 }
-
 
 void ChartTool::setChartType(ChartType type, ChartSubtype subtype)
 {
@@ -478,18 +404,17 @@ void ChartTool::setChartType(ChartType type, ChartSubtype subtype)
         return;
     }
     ChartTypeCommand *command = new ChartTypeCommand(d->shape);
-    if (command!=0) {
+    if (command != 0) {
         command->setChartType(type, subtype);
         canvas()->addCommand(command);
     }
     foreach (QWidget *w, optionWidgets()) {
-        ConfigWidgetBase *cw = dynamic_cast<ConfigWidgetBase*>(w);
+        ConfigWidgetBase *cw = dynamic_cast<ConfigWidgetBase *>(w);
         if (cw) {
             cw->updateData();
         }
     }
 }
-
 
 void ChartTool::setChartSubType(ChartSubtype subtype)
 {
@@ -501,10 +426,9 @@ void ChartTool::setChartSubType(ChartSubtype subtype)
     d->shape->update();
 }
 
-
 void ChartTool::setDataSetXDataRegion(DataSet *dataSet, const CellRegion &region)
 {
-    debugChartTool<<dataSet<<region.toString();
+    debugChartTool << dataSet << region.toString();
     if (!dataSet)
         return;
 
@@ -557,7 +481,6 @@ void ChartTool::setDataSetCategoryDataRegion(DataSet *dataSet, const CellRegion 
     d->shape->legend()->update();
 }
 
-
 void ChartTool::setDataSetChartType(DataSet *dataSet, ChartType type, ChartSubtype subType)
 {
     Q_ASSERT(d->shape);
@@ -571,14 +494,13 @@ void ChartTool::setDataSetChartType(DataSet *dataSet, ChartType type, ChartSubty
     d->shape->legend()->update();
 }
 
-
-void ChartTool::setDataSetBrush(DataSet *dataSet, const QColor& color, int section)
+void ChartTool::setDataSetBrush(DataSet *dataSet, const QColor &color, int section)
 {
     Q_ASSERT(d->shape);
     Q_ASSERT(dataSet || section >= 0);
-    debugChartTool<<dataSet<<color<<section;
+    debugChartTool << dataSet << color << section;
     if (!dataSet) {
-        QList<DataSet*> lst = d->shape->proxyModel()->dataSets();
+        QList<DataSet *> lst = d->shape->proxyModel()->dataSets();
         if (lst.isEmpty()) {
             return;
         }
@@ -597,13 +519,13 @@ void ChartTool::setDataSetBrush(DataSet *dataSet, const QColor& color, int secti
     }
 }
 
-void ChartTool::setDataSetPen(DataSet *dataSet, const QColor& color, int section)
+void ChartTool::setDataSetPen(DataSet *dataSet, const QColor &color, int section)
 {
     Q_ASSERT(d->shape);
     Q_ASSERT(dataSet || section >= 0);
-    debugChartTool<<color<<section;
+    debugChartTool << color << section;
     if (!dataSet) {
-        QList<DataSet*> lst = d->shape->proxyModel()->dataSets();
+        QList<DataSet *> lst = d->shape->proxyModel()->dataSets();
         if (lst.isEmpty()) {
             return;
         }
@@ -648,7 +570,7 @@ void ChartTool::setDataSetShowCategory(DataSet *dataSet, bool b, int section)
     Q_ASSERT(d->shape);
     Q_ASSERT(dataSet || section >= 0);
     if (!dataSet) {
-        QList<DataSet*> lst = d->shape->proxyModel()->dataSets();
+        QList<DataSet *> lst = d->shape->proxyModel()->dataSets();
         if (lst.isEmpty()) {
             return;
         }
@@ -666,16 +588,16 @@ void ChartTool::setDataSetShowCategory(DataSet *dataSet, bool b, int section)
         canvas()->addCommand(command);
     }
 
-    debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).category;
+    debugChartTool << section << b << ':' << dataSet->valueLabelType(section).category;
 }
 
 void ChartTool::setDataSetShowNumber(DataSet *dataSet, bool b, int section)
 {
-    debugChartTool<<b<<section<<dataSet;
+    debugChartTool << b << section << dataSet;
     Q_ASSERT(d->shape);
     Q_ASSERT(dataSet || section >= 0);
     if (!dataSet) {
-        QList<DataSet*> lst = d->shape->proxyModel()->dataSets();
+        QList<DataSet *> lst = d->shape->proxyModel()->dataSets();
         if (lst.isEmpty()) {
             return;
         }
@@ -692,7 +614,7 @@ void ChartTool::setDataSetShowNumber(DataSet *dataSet, bool b, int section)
         command->setDataSetShowNumber(b);
         canvas()->addCommand(command);
     }
-    debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).number;
+    debugChartTool << section << b << ':' << dataSet->valueLabelType(section).number;
 }
 
 void ChartTool::setDataSetShowPercent(DataSet *dataSet, bool b, int section)
@@ -700,7 +622,7 @@ void ChartTool::setDataSetShowPercent(DataSet *dataSet, bool b, int section)
     Q_ASSERT(d->shape);
     Q_ASSERT(dataSet || section >= 0);
     if (!dataSet) {
-        QList<DataSet*> lst = d->shape->proxyModel()->dataSets();
+        QList<DataSet *> lst = d->shape->proxyModel()->dataSets();
         if (lst.isEmpty()) {
             return;
         }
@@ -718,7 +640,7 @@ void ChartTool::setDataSetShowPercent(DataSet *dataSet, bool b, int section)
         canvas()->addCommand(command);
     }
 
-    debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).percentage;
+    debugChartTool << section << b << ':' << dataSet->valueLabelType(section).percentage;
 }
 
 void ChartTool::setDataSetShowSymbol(DataSet *dataSet, bool b, int section)
@@ -726,7 +648,7 @@ void ChartTool::setDataSetShowSymbol(DataSet *dataSet, bool b, int section)
     Q_ASSERT(d->shape);
     Q_ASSERT(dataSet || section >= 0);
     if (!dataSet) {
-        QList<DataSet*> lst = d->shape->proxyModel()->dataSets();
+        QList<DataSet *> lst = d->shape->proxyModel()->dataSets();
         if (lst.isEmpty()) {
             return;
         }
@@ -743,7 +665,7 @@ void ChartTool::setDataSetShowSymbol(DataSet *dataSet, bool b, int section)
         command->setDataSetShowSymbol(b);
         canvas()->addCommand(command);
     }
-    debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).symbol;
+    debugChartTool << section << b << ':' << dataSet->valueLabelType(section).symbol;
 }
 
 void ChartTool::setThreeDMode(bool threeD)
@@ -786,7 +708,7 @@ void ChartTool::setTitleResize(int index)
         return;
     }
     // TODD: undo command
-    TextLabelData *labelData = dynamic_cast<TextLabelData*>(d->shape->title()->userData());
+    TextLabelData *labelData = dynamic_cast<TextLabelData *>(d->shape->title()->userData());
     if (labelData == 0) {
         return;
     }
@@ -826,7 +748,7 @@ void ChartTool::setSubTitleResize(int index)
         return;
     }
     // TODD: undo command
-    TextLabelData *labelData = dynamic_cast<TextLabelData*>(d->shape->subTitle()->userData());
+    TextLabelData *labelData = dynamic_cast<TextLabelData *>(d->shape->subTitle()->userData());
     if (labelData == 0) {
         return;
     }
@@ -866,7 +788,7 @@ void ChartTool::setFooterResize(int index)
         return;
     }
     // TODD: undo command
-    TextLabelData *labelData = dynamic_cast<TextLabelData*>(d->shape->footer()->userData());
+    TextLabelData *labelData = dynamic_cast<TextLabelData *>(d->shape->footer()->userData());
     if (labelData == 0) {
         return;
     }
@@ -962,7 +884,7 @@ void ChartTool::setLegendAlignment(Qt::Alignment alignment)
     d->shape->layout()->layout();
 }
 
-void ChartTool::addAxis(AxisDimension dimension, const QString& title)
+void ChartTool::addAxis(AxisDimension dimension, const QString &title)
 {
     Q_ASSERT(d->shape);
 
@@ -1001,7 +923,7 @@ void ChartTool::setAxisShowTitle(Axis *axis, bool show)
 void ChartTool::setShowAxis(Axis *axis, bool show)
 {
     Q_ASSERT(d->shape);
-    debugChartTool<<axis<<show;
+    debugChartTool << axis << show;
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setShowAxis(show);
     canvas()->addCommand(command);
@@ -1010,7 +932,7 @@ void ChartTool::setShowAxis(Axis *axis, bool show)
 void ChartTool::setAxisPosition(Axis *axis, const QString &pos)
 {
     Q_ASSERT(d->shape);
-    debugChartTool<<axis<<pos;
+    debugChartTool << axis << pos;
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setAxisPosition(pos);
     canvas()->addCommand(command);
@@ -1019,7 +941,7 @@ void ChartTool::setAxisPosition(Axis *axis, const QString &pos)
 void ChartTool::setAxisLabelsPosition(Axis *axis, const QString &pos)
 {
     Q_ASSERT(d->shape);
-    debugChartTool<<axis<<pos;
+    debugChartTool << axis << pos;
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setAxisLabelsPosition(pos);
     canvas()->addCommand(command);
@@ -1106,11 +1028,10 @@ void ChartTool::setAxisLabelsFont(Axis *axis, const QFont &font)
     canvas()->addCommand(command);
 }
 
-
 void ChartTool::setGapBetweenBars(Axis *axis, int percent)
 {
     Q_ASSERT(d->shape);
-    debugChartTool<<axis<<percent;
+    debugChartTool << axis << percent;
     GapCommand *command = new GapCommand(axis, d->shape);
     command->setGapBetweenBars(percent);
     canvas()->addCommand(command);
@@ -1119,7 +1040,7 @@ void ChartTool::setGapBetweenBars(Axis *axis, int percent)
 void ChartTool::setGapBetweenSets(Axis *axis, int percent)
 {
     Q_ASSERT(d->shape);
-    debugChartTool<<axis<<percent;
+    debugChartTool << axis << percent;
     GapCommand *command = new GapCommand(axis, d->shape);
     command->setGapBetweenSets(percent);
     canvas()->addCommand(command);

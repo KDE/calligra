@@ -46,7 +46,7 @@ void KoRdfSemanticItemRegistry::Private::init()
     KoPluginLoader::load(QStringLiteral("calligra/semanticitems"), config);
 }
 
-KoRdfSemanticItemRegistry* KoRdfSemanticItemRegistry::instance()
+KoRdfSemanticItemRegistry *KoRdfSemanticItemRegistry::instance()
 {
     K_GLOBAL_STATIC(KoRdfSemanticItemRegistry, s_instance)
     if (!s_instance.exists()) {
@@ -60,12 +60,11 @@ QStringList KoRdfSemanticItemRegistry::classNames() const
     return keys();
 }
 
-QString KoRdfSemanticItemRegistry::classDisplayName(const QString& className) const
+QString KoRdfSemanticItemRegistry::classDisplayName(const QString &className) const
 {
     const KoRdfSemanticItemFactoryBase *factory = value(className);
     return factory ? factory->classDisplayName() : QString();
 }
-
 
 hKoRdfBasicSemanticItem KoRdfSemanticItemRegistry::createSemanticItem(const QString &semanticClass, const KoDocumentRdf *docRdf, QObject *parent) const
 {
@@ -76,7 +75,8 @@ hKoRdfBasicSemanticItem KoRdfSemanticItemRegistry::createSemanticItem(const QStr
     return hKoRdfBasicSemanticItem(0);
 }
 
-hKoRdfBasicSemanticItem KoRdfSemanticItemRegistry::createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent) const
+hKoRdfBasicSemanticItem
+KoRdfSemanticItemRegistry::createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent) const
 {
     foreach (const QString &key, keys()) {
         KoRdfSemanticItemFactoryBase *factory = value(key);
@@ -98,7 +98,10 @@ bool KoRdfSemanticItemRegistry::canCreateSemanticItemFromMimeData(const QMimeDat
     return false;
 }
 
-void KoRdfSemanticItemRegistry::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *docRdf, const QString &className, QSharedPointer<Soprano::Model> m) const
+void KoRdfSemanticItemRegistry::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems,
+                                                    const KoDocumentRdf *docRdf,
+                                                    const QString &className,
+                                                    QSharedPointer<Soprano::Model> m) const
 {
     KoRdfSemanticItemFactoryBase *factory = value(className);
     if (factory) {
@@ -112,7 +115,7 @@ KoRdfSemanticItemRegistry::~KoRdfSemanticItemRegistry()
 }
 
 KoRdfSemanticItemRegistry::KoRdfSemanticItemRegistry()
-  : d(new Private())
+    : d(new Private())
 {
 }
 

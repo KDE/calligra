@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "NotesConfigurationDialog.h"
-#include "KoTextDocument.h"
 #include "KoStyleManager.h"
+#include "KoTextDocument.h"
 
 #include <KoOdfNumberDefinition.h>
 
 #include <KLocalizedString>
 
-#include <QWidget>
-#include <QDebug>
 #include <QAbstractButton>
+#include <QDebug>
+#include <QWidget>
 
 NotesConfigurationDialog::NotesConfigurationDialog(QTextDocument *doc, bool footnoteMode, QWidget *parent)
     : QDialog(parent)
@@ -27,9 +27,8 @@ NotesConfigurationDialog::NotesConfigurationDialog(QTextDocument *doc, bool foot
         setWindowTitle(i18n("Endnote Settings"));
         endnoteSetup();
     }
-    connect(widget.buttonBox,&QDialogButtonBox::clicked,this,&NotesConfigurationDialog::apply);
+    connect(widget.buttonBox, &QDialogButtonBox::clicked, this, &NotesConfigurationDialog::apply);
 }
-
 
 void NotesConfigurationDialog::setStyleManager(KoStyleManager *sm)
 {
@@ -38,8 +37,7 @@ void NotesConfigurationDialog::setStyleManager(KoStyleManager *sm)
 
 void NotesConfigurationDialog::footnoteSetup()
 {
-    m_notesConfig = KoTextDocument(m_document).styleManager()
-                                ->notesConfiguration(KoOdfNotesConfiguration::Footnote);
+    m_notesConfig = KoTextDocument(m_document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
     if (!m_notesConfig) {
         // TODO: object will be leaked, also will it never be stored on the stylemanager, so any editing is lost
         m_notesConfig = new KoOdfNotesConfiguration(KoOdfNotesConfiguration::Footnote);
@@ -94,8 +92,7 @@ void NotesConfigurationDialog::endnoteSetup()
 {
     widget.continuationBox->hide();
     widget.beginAtCombo->hide();
-    m_notesConfig = KoTextDocument(m_document).styleManager()
-                                    ->notesConfiguration(KoOdfNotesConfiguration::Endnote);
+    m_notesConfig = KoTextDocument(m_document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
     if (!m_notesConfig) {
         // TODO: object will be leaked, also will it never be stored on the stylemanager, so any editing is lost
         m_notesConfig = new KoOdfNotesConfiguration(KoOdfNotesConfiguration::Endnote);
@@ -104,7 +101,7 @@ void NotesConfigurationDialog::endnoteSetup()
     widget.suffixLineEdit->setText(m_notesConfig->numberFormat().suffix());
     widget.startAtSpinBox->setValue(m_notesConfig->startValue());
 
-    switch(m_notesConfig->numberFormat().formatSpecification()) {
+    switch (m_notesConfig->numberFormat().formatSpecification()) {
     case KoOdfNumberDefinition::Numeric:
         widget.numStyleCombo->setCurrentIndex(0);
         break;
@@ -135,14 +132,14 @@ void NotesConfigurationDialog::endnoteSetup()
 void NotesConfigurationDialog::apply(QAbstractButton *button)
 {
     if (widget.buttonBox->standardButton(button) == widget.buttonBox->Apply) {
-        //set Number Format
+        // set Number Format
         KoOdfNumberDefinition *numFormat = new KoOdfNumberDefinition();
-        //set prefix
+        // set prefix
         numFormat->setPrefix(widget.prefixLineEdit->text());
-        //set suffix
+        // set suffix
         numFormat->setSuffix(widget.suffixLineEdit->text());
 
-        switch(widget.numStyleCombo->currentIndex()) {
+        switch (widget.numStyleCombo->currentIndex()) {
         case 0:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::Numeric);
             m_notesConfig->setNumberFormat(*numFormat);
@@ -176,7 +173,7 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
             m_notesConfig->setNumberFormat(*numFormat);
             break;
         };
-        //set Foot notes Position
+        // set Foot notes Position
         /*if(m_notesConfig->noteClass() == KoOdfNotesConfiguration::Footnote) {
             switch(widget.location_footnote->currentIndex()) {
             case 0:
@@ -190,9 +187,9 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
 
             }
         }*/
-        //set start value
+        // set start value
         m_notesConfig->setStartValue(widget.startAtSpinBox->value());
-        //set Numbering Scheme
+        // set Numbering Scheme
         switch (widget.beginAtCombo->currentIndex()) {
         case 0:
             m_notesConfig->setNumberingScheme(KoOdfNotesConfiguration::BeginAtPage);
@@ -205,23 +202,22 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
             break;
         }
 
-        //set footnote continuation forward
+        // set footnote continuation forward
         m_notesConfig->setFootnoteContinuationForward(widget.endlineEdit->text());
-        //set footnote continuation backward
+        // set footnote continuation backward
         m_notesConfig->setFootnoteContinuationBackward(widget.startlineEdit->text());
 
-        //TODO
-        //set citation text style
+        // TODO
+        // set citation text style
 
-        //set citation body text style
+        // set citation body text style
 
-        //set master page
+        // set master page
 
-        //set note paragraph style
+        // set note paragraph style
 
         this->close();
-    }
-    else if (widget.buttonBox->standardButton(button) == widget.buttonBox->Discard) {
+    } else if (widget.buttonBox->standardButton(button) == widget.buttonBox->Discard) {
         this->close();
     }
 }

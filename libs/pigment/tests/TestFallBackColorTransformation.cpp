@@ -1,16 +1,15 @@
 #include "TestFallBackColorTransformation.h"
 
 #include "KoColorTransformation.h"
-#include <KoFallBackColorTransformation.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoFallBackColorTransformation.h>
 
 #include <QTest>
 
-struct KoDummyColorTransformation : public KoColorTransformation
-{
+struct KoDummyColorTransformation : public KoColorTransformation {
     KoDummyColorTransformation()
     {
-      m_parameters << 1 << 2;
+        m_parameters << 1 << 2;
     }
     QList<QVariant> m_parameters;
     void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override
@@ -21,40 +20,38 @@ struct KoDummyColorTransformation : public KoColorTransformation
     }
     QList<QString> parameters() const override
     {
-      QList<QString> s;
-      s << "test";
-      return s;
+        QList<QString> s;
+        s << "test";
+        return s;
     }
-    int parameterId(const QString& name) const override
+    int parameterId(const QString &name) const override
     {
-      if(name == "test")
-      {
-        return 1;
-      } else {
-        return 0;
-      }
+        if (name == "test") {
+            return 1;
+        } else {
+            return 0;
+        }
     }
-    void setParameter(int id, const QVariant& parameter) override
+    void setParameter(int id, const QVariant &parameter) override
     {
-      m_parameters[id] = parameter;          
+        m_parameters[id] = parameter;
     }
 };
 
 void TestFallBackColorTransformation::parametersForward()
 {
-  KoDummyColorTransformation* dummy = new KoDummyColorTransformation;
-  KoFallBackColorTransformation* fallback = new KoFallBackColorTransformation(KoColorSpaceRegistry::instance()->rgb8(),
-                                                                              KoColorSpaceRegistry::instance()->rgb16(),
-                                                                              dummy);
-  QCOMPARE(fallback->parameters().size(), 1);
-  QCOMPARE(fallback->parameters().at(0), QString("test"));
-  QCOMPARE(fallback->parameterId("test"), 1);
-  QCOMPARE(fallback->parameterId("other"), 0);
-  fallback->setParameter(0, -1);
-  fallback->setParameter(1, "value");
-  QCOMPARE(dummy->m_parameters[0], QVariant(-1));
-  QCOMPARE(dummy->m_parameters[1], QVariant("value"));
-  delete fallback;
+    KoDummyColorTransformation *dummy = new KoDummyColorTransformation;
+    KoFallBackColorTransformation *fallback =
+        new KoFallBackColorTransformation(KoColorSpaceRegistry::instance()->rgb8(), KoColorSpaceRegistry::instance()->rgb16(), dummy);
+    QCOMPARE(fallback->parameters().size(), 1);
+    QCOMPARE(fallback->parameters().at(0), QString("test"));
+    QCOMPARE(fallback->parameterId("test"), 1);
+    QCOMPARE(fallback->parameterId("other"), 0);
+    fallback->setParameter(0, -1);
+    fallback->setParameter(1, "value");
+    QCOMPARE(dummy->m_parameters[0], QVariant(-1));
+    QCOMPARE(dummy->m_parameters[1], QVariant("value"));
+    delete fallback;
 }
 
 QTEST_GUILESS_MAIN(TestFallBackColorTransformation)

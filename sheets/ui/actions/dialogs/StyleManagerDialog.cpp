@@ -8,9 +8,9 @@
 
 #include "StyleManagerDialog.h"
 
+#include <QHBoxLayout>
 #include <QPushButton>
 #include <QTreeWidget>
-#include <QHBoxLayout>
 #include <QVBoxLayout>
 
 #include <KComboBox>
@@ -19,25 +19,25 @@
 #include "core/Style.h"
 #include "core/StyleManager.h"
 
-#include "ui/dialogs/LayoutDialog.h"
 #include "ui/Selection.h"
+#include "ui/dialogs/LayoutDialog.h"
 
 using namespace Calligra::Sheets;
 
-StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, StyleManager* manager)
-        : ActionDialog(parent)
-        , m_selection(selection)
-        , m_styleManager(manager)
+StyleManagerDialog::StyleManagerDialog(QWidget *parent, Selection *selection, StyleManager *manager)
+    : ActionDialog(parent)
+    , m_selection(selection)
+    , m_styleManager(manager)
 {
     setCaption(i18n("Style Manager"));
 
-    QWidget* widget = new QWidget(this);
+    QWidget *widget = new QWidget(this);
     setMainWidget(widget);
 
     QHBoxLayout *hboxLayout = new QHBoxLayout(widget);
     hboxLayout->setContentsMargins({});
 
-    QVBoxLayout* layout = new QVBoxLayout();
+    QVBoxLayout *layout = new QVBoxLayout();
 
     m_styleList = new QTreeWidget(this);
     m_styleList->setHeaderLabel(i18n("Style"));
@@ -69,18 +69,12 @@ StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, St
     m_modifyButton->setEnabled(true);
     m_deleteButton->setEnabled(false);
 
-    connect(m_displayBox, QOverload<int>::of(&KComboBox::activated),
-            this, &StyleManagerDialog::slotDisplayMode);
-    connect(m_newButton, &QAbstractButton::clicked,
-            this, &StyleManagerDialog::slotNew);
-    connect(m_modifyButton, &QAbstractButton::clicked,
-            this, &StyleManagerDialog::slotEdit);
-    connect(m_deleteButton, &QAbstractButton::clicked,
-            this, &StyleManagerDialog::slotRemove);
-    connect(m_styleList, &QTreeWidget::itemDoubleClicked,
-            this, &StyleManagerDialog::slotEdit);
-    connect(m_styleList, &QTreeWidget::currentItemChanged,
-            this, &StyleManagerDialog::selectionChanged);
+    connect(m_displayBox, QOverload<int>::of(&KComboBox::activated), this, &StyleManagerDialog::slotDisplayMode);
+    connect(m_newButton, &QAbstractButton::clicked, this, &StyleManagerDialog::slotNew);
+    connect(m_modifyButton, &QAbstractButton::clicked, this, &StyleManagerDialog::slotEdit);
+    connect(m_deleteButton, &QAbstractButton::clicked, this, &StyleManagerDialog::slotRemove);
+    connect(m_styleList, &QTreeWidget::itemDoubleClicked, this, &StyleManagerDialog::slotEdit);
+    connect(m_styleList, &QTreeWidget::currentItemChanged, this, &StyleManagerDialog::selectionChanged);
 }
 
 StyleManagerDialog::~StyleManagerDialog()
@@ -90,7 +84,7 @@ StyleManagerDialog::~StyleManagerDialog()
 void StyleManagerDialog::fillComboBox()
 {
     // This monstrosity fills in the tree widget with the style hierarchy. We cannot just do it linearly as the styles are in an arbitrary order
-    QMap<QString, QTreeWidgetItem*> entries;
+    QMap<QString, QTreeWidgetItem *> entries;
     // The default style goes first.
     QTreeWidgetItem *def = new QTreeWidgetItem(m_styleList, QStringList(i18n("Default")));
     entries[QString()] = def;
@@ -101,7 +95,8 @@ void StyleManagerDialog::fillComboBox()
         processed = true;
         for (const QString &name : names) {
             // Check if this entry has been processed already.
-            if (entries.contains(name)) continue;
+            if (entries.contains(name))
+                continue;
             CustomStyle *style = m_styleManager->style(name);
             // Check if we have the parent already
             QString parent = style->parentName();
@@ -139,10 +134,10 @@ void StyleManagerDialog::slotDisplayMode(int mode)
 
     QStringList names = m_styleManager->styleNames(false);
     for (const QString &name : names) {
-
         if (mode == 1) { // "Custom Styles"
             CustomStyle *style = m_styleManager->style(name);
-            if (style->type() != Style::CUSTOM) continue;
+            if (style->type() != Style::CUSTOM)
+                continue;
         }
         new QTreeWidgetItem(m_styleList, QStringList(name));
     }
@@ -150,8 +145,9 @@ void StyleManagerDialog::slotDisplayMode(int mode)
 
 void StyleManagerDialog::onApply()
 {
-    QTreeWidgetItem* item = m_styleList->currentItem();
-    if (!item) return;
+    QTreeWidgetItem *item = m_styleList->currentItem();
+    if (!item)
+        return;
 
     QString name(item->text(0));
     emit setStyle(name);
@@ -159,8 +155,8 @@ void StyleManagerDialog::onApply()
 
 void StyleManagerDialog::slotNew()
 {
-    CustomStyle* parentStyle = 0;
-    QTreeWidgetItem* item = m_styleList->currentItem();
+    CustomStyle *parentStyle = 0;
+    QTreeWidgetItem *item = m_styleList->currentItem();
     if (item) {
         const QString name = item->text(0);
         if (name == i18n("Default"))
@@ -171,10 +167,10 @@ void StyleManagerDialog::slotNew()
         parentStyle = m_styleManager->defaultStyle();
 
     int i = 1;
-    QString newName(i18n("style%1" , m_styleManager->count() + i));
+    QString newName(i18n("style%1", m_styleManager->count() + i));
     while (m_styleManager->style(newName) != 0) {
         ++i;
-        newName = i18n("style%1" , m_styleManager->count() + i);
+        newName = i18n("style%1", m_styleManager->count() + i);
     }
 
     CustomStyle style(newName, parentStyle);
@@ -193,12 +189,12 @@ void StyleManagerDialog::slotNew()
 
 void StyleManagerDialog::slotEdit()
 {
-    QTreeWidgetItem* item = m_styleList->currentItem();
+    QTreeWidgetItem *item = m_styleList->currentItem();
 
     if (!item)
         return;
 
-    CustomStyle* style = 0;
+    CustomStyle *style = 0;
 
     QString name(item->text(0));
     if (name == i18n("Default"))
@@ -223,12 +219,12 @@ void StyleManagerDialog::slotEdit()
 
 void StyleManagerDialog::slotRemove()
 {
-    QTreeWidgetItem* item = m_styleList->currentItem();
+    QTreeWidgetItem *item = m_styleList->currentItem();
     if (!item)
         return;
 
     const QString name = item->text(0);
-    CustomStyle* style = 0;
+    CustomStyle *style = 0;
     if (name == i18n("Default"))
         style = m_styleManager->defaultStyle();
     else
@@ -244,12 +240,12 @@ void StyleManagerDialog::slotRemove()
     slotDisplayMode(m_displayBox->currentIndex());
 }
 
-void StyleManagerDialog::selectionChanged(QTreeWidgetItem* item)
+void StyleManagerDialog::selectionChanged(QTreeWidgetItem *item)
 {
     if (!item)
         return;
     const QString name = item->text(0);
-    CustomStyle* style = 0;
+    CustomStyle *style = 0;
     if (name == i18n("Default"))
         style = m_styleManager->defaultStyle();
     else

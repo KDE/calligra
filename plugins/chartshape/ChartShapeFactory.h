@@ -8,7 +8,6 @@
 #ifndef KCHART_CHART_SHAPE_FACTORY
 #define KCHART_CHART_SHAPE_FACTORY
 
-
 // Qt
 #include <QStringList>
 
@@ -16,40 +15,42 @@
 #include <KoShapeFactoryBase.h>
 #include <QVariantList>
 
-
 class KoShape;
 class KoShapeConfigWidgetBase;
 
-namespace KoChart {
-    class ChartShape;
+namespace KoChart
+{
+class ChartShape;
 }
 
 class ChartShapePlugin : public QObject
 {
     Q_OBJECT
 public:
-
-    ChartShapePlugin(QObject *parent, const QVariantList&);
-    ~ChartShapePlugin() {}
+    ChartShapePlugin(QObject *parent, const QVariantList &);
+    ~ChartShapePlugin()
+    {
+    }
 };
-
 
 class ChartShapeFactory : public KoShapeFactoryBase
 {
 public:
     ChartShapeFactory();
-    ~ChartShapeFactory() {}
+    ~ChartShapeFactory()
+    {
+    }
 
     bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const override;
 
-    KoShape *createShape(const KoProperties* properties, KoDocumentResourceManager *documentResources) const override;
+    KoShape *createShape(const KoProperties *properties, KoDocumentResourceManager *documentResources) const override;
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
     // reimplemented to not create a default shape to just overwrite it afterwards
     KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     void newDocumentResourceManager(KoDocumentResourceManager *manager) const override;
 
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels() override;
+    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels() override;
 
 private:
     KoChart::ChartShape *createBarChart(KoDocumentResourceManager *documentResources, int subtype) const;
@@ -64,8 +65,6 @@ private:
     KoChart::ChartShape *createFilledRadarChart(KoDocumentResourceManager *documentResources) const;
 
     void radarData(KoChart::ChartShape *shape) const;
-
 };
-
 
 #endif // KCHART_CHART_SHAPE_FACTORY

@@ -7,8 +7,8 @@
 #ifndef KO_ITEM_TOOLTIP_H
 #define KO_ITEM_TOOLTIP_H
 
-#include <QFrame>
 #include "kowidgets_export.h"
+#include <QFrame>
 
 class QStyleOptionViewItem;
 class QModelIndex;
@@ -31,7 +31,6 @@ public:
     void showTip(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index);
 
 protected:
-
     /**
      * Re-implement this to provide the actual tooltip contents.
      * For instance:
@@ -57,7 +56,7 @@ protected:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 
     void updatePosition(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option);
 

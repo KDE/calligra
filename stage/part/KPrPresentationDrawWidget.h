@@ -17,8 +17,7 @@
 
 class QAction;
 
-struct KPrPresentationDrawPath
-{
+struct KPrPresentationDrawPath {
     QVector<QPointF> points;
     QColor color;
     int size;
@@ -26,37 +25,36 @@ struct KPrPresentationDrawPath
 
 Q_DECLARE_TYPEINFO(KPrPresentationDrawPath, Q_MOVABLE_TYPE);
 
-
 class KPrPresentationDrawWidget : public KPrPresentationToolEventForwarder
 {
     Q_OBJECT
 
-public :
+public:
     explicit KPrPresentationDrawWidget(KoPACanvasBase *canvas);
     ~KPrPresentationDrawWidget() override;
 
     /** Draw on the Presentation */
-    void paintEvent( QPaintEvent * event ) override;
+    void paintEvent(QPaintEvent *event) override;
 
     /** Get all the mouse event needed to paint */
-    void mouseMoveEvent( QMouseEvent * e ) override;
-    void mousePressEvent( QMouseEvent * e ) override;
-    void mouseReleaseEvent( QMouseEvent * e ) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
 
     /** Popup menu for colors and sizes */
-    void contextMenuEvent( QContextMenuEvent * event ) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 public Q_SLOTS:
-    void updateColor( QAction * );
-    void updateColor( const QString &color );
-    void updateSize( QAction * );
-    void updateSize( int size );
+    void updateColor(QAction *);
+    void updateColor(const QString &color);
+    void updateSize(QAction *);
+    void updateSize(int size);
 
-private :
-    QIcon buildIconColor( const QColor& );
-    QIcon buildIconSize( int );
-    QAction* buildActionColor( const QColor&, const QString& );
-    QAction* buildActionSize( int );
+private:
+    QIcon buildIconColor(const QColor &);
+    QIcon buildIconSize(int);
+    QAction *buildActionColor(const QColor &, const QString &);
+    QAction *buildActionSize(int);
 
     bool m_draw;
     int m_penSize;

@@ -15,11 +15,11 @@
 
 #include <sheets/engine/Util.h>
 
-QString MSOOXML::convertFormulaReference(Cell* referencedCell, Cell* thisCell)
+QString MSOOXML::convertFormulaReference(Cell *referencedCell, Cell *thisCell)
 {
     if (!referencedCell->formula)
         return QString();
     Q_ASSERT(!referencedCell->formula->isShared());
-    QString formula = static_cast<FormulaImpl*>(referencedCell->formula)->m_formula;
+    QString formula = static_cast<FormulaImpl *>(referencedCell->formula)->m_formula;
     return Calligra::Sheets::Util::adjustFormulaReference(formula, referencedCell->row, referencedCell->column, thisCell->row, thisCell->column);
 }

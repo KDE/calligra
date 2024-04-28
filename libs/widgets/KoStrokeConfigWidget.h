@@ -19,8 +19,8 @@
 
 #include "kowidgets_export.h"
 
-#include <QWidget>
 #include <KoMarkerData.h>
+#include <QWidget>
 
 class KoUnit;
 class KoShapeStrokeModel;
@@ -52,7 +52,7 @@ public:
      * configured by the widget. The caller is in charge of
      * deletion of the returned object
      */
-    KoShapeStroke* createShapeStroke() const;
+    KoShapeStroke *createShapeStroke() const;
 
     void setCanvas(KoCanvasBase *canvas);
     void setActive(bool active);
@@ -60,7 +60,7 @@ public:
 private Q_SLOTS:
     void updateControls(KoShapeStrokeModel *stroke, KoMarker *startMarker, KoMarker *endMarker);
 
-    void updateMarkers(const QList<KoMarker*> &markers);
+    void updateMarkers(const QList<KoMarker *> &markers);
 
     /// start marker has changed
     void startMarkerChanged();
@@ -85,7 +85,7 @@ private:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // SHADOWCONFIGWIDGET_H

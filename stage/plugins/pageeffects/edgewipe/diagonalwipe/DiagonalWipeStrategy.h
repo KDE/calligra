@@ -7,25 +7,25 @@
 #ifndef DIAGONALWIPESTRATEGY_H
 #define DIAGONALWIPESTRATEGY_H
 
-#include <KPrPageEffectStrategy.h>
 #include <KPrPageEffect.h>
+#include <KPrPageEffectStrategy.h>
 
 class DiagonalWipeStrategy : public KPrPageEffectStrategy
 {
 public:
-    DiagonalWipeStrategy( int subtype, const char *smilSubType, bool reverse );
+    DiagonalWipeStrategy(int subtype, const char *smilSubType, bool reverse);
     ~DiagonalWipeStrategy() override;
 
     /// reimplemented from KPrPageEffectStrategy
-    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
+    void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine) override;
     /// reimplemented from KPrPageEffectStrategy
-    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
+    void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data) override;
     /// reimplemented from KPrPageEffectStrategy
-    void next( const KPrPageEffect::Data &data ) override;
+    void next(const KPrPageEffect::Data &data) override;
 
 private:
     /// calculates clip path for given step
-    QPainterPath clipPath( int step, const QRect &area );
+    QPainterPath clipPath(int step, const QRect &area);
 };
 
 #endif // DIAGONALWIPESTRATEGY_H

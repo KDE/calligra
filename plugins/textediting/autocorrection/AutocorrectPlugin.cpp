@@ -11,14 +11,12 @@
 
 #include <KoTextEditingRegistry.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(AutocorrectPluginFactory, "calligra_textediting_autocorrect.json",
-                           registerPlugin<AutocorrectPlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(AutocorrectPluginFactory, "calligra_textediting_autocorrect.json", registerPlugin<AutocorrectPlugin>();)
 
-AutocorrectPlugin::AutocorrectPlugin( QObject *parent, const QVariantList& )
+AutocorrectPlugin::AutocorrectPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoTextEditingRegistry::instance()->add( new AutocorrectFactory());
+    KoTextEditingRegistry::instance()->add(new AutocorrectFactory());
 }
 
 #include <AutocorrectPlugin.moc>
-

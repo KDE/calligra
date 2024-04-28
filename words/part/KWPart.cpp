@@ -6,21 +6,21 @@
 
 #include "KWPart.h"
 
-#include "KWView.h"
-#include "KWDocument.h"
 #include "KWCanvasItem.h"
+#include "KWDocument.h"
 #include "KWFactory.h"
+#include "KWView.h"
+#include "dialogs/KWStartupWidget.h"
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
-#include "dialogs/KWStartupWidget.h"
 
 #include <KoCanvasBase.h>
-#include <KoSelection.h>
-#include <KoToolManager.h>
-#include <KoInteractionTool.h>
-#include <KoShapeRegistry.h>
-#include <KoShapeManager.h>
 #include <KoComponentData.h>
+#include <KoInteractionTool.h>
+#include <KoSelection.h>
+#include <KoShapeManager.h>
+#include <KoShapeRegistry.h>
+#include <KoToolManager.h>
 
 #include <KMessageBox>
 
@@ -55,7 +55,7 @@ KWDocument *KWPart::document() const
 
 KoView *KWPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
-    auto kwdocument = qobject_cast<KWDocument*>(document);
+    auto kwdocument = qobject_cast<KWDocument *>(document);
     KWView *view = new KWView(this, kwdocument, parent);
     setupViewInstance(kwdocument, view);
     return view;
@@ -63,28 +63,27 @@ KoView *KWPart::createViewInstance(KoDocument *document, QWidget *parent)
 
 void KWPart::setupViewInstance(KWDocument *document, KWView *view)
 {
-    connect(document, &KWDocument::shapeAdded,
-            view->canvasBase()->shapeManager(), &KoShapeManager::addShape);
-    connect(document, &KWDocument::shapeRemoved,
-            view->canvasBase()->shapeManager(), &KoShapeManager::remove);
-    connect(document, &KWDocument::resourceChanged,
-            view->canvasBase()->resourceManager(), QOverload<int, const QVariant&>::of(&KoCanvasResourceManager::setResource));
+    connect(document, &KWDocument::shapeAdded, view->canvasBase()->shapeManager(), &KoShapeManager::addShape);
+    connect(document, &KWDocument::shapeRemoved, view->canvasBase()->shapeManager(), &KoShapeManager::remove);
+    connect(document,
+            &KWDocument::resourceChanged,
+            view->canvasBase()->resourceManager(),
+            QOverload<int, const QVariant &>::of(&KoCanvasResourceManager::setResource));
 
     bool switchToolCalled = false;
-    foreach (KWFrameSet *fs, qobject_cast<KWDocument*>(document)->frameSets()) {
+    foreach (KWFrameSet *fs, qobject_cast<KWDocument *>(document)->frameSets()) {
         if (fs->shapeCount() == 0)
             continue;
         foreach (KoShape *shape, fs->shapes())
             view->canvasBase()->shapeManager()->addShape(shape, KoShapeManager::AddWithoutRepaint);
         if (switchToolCalled)
             continue;
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet *>(fs);
         if (tfs && tfs->textFrameSetType() == Words::MainTextFrameSet) {
             KoSelection *selection = view->canvasBase()->shapeManager()->selection();
             selection->select(fs->shapes().first());
 
-            KoToolManager::instance()->switchToolRequested(
-                KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
+            KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
             switchToolCalled = true;
         }
     }
@@ -95,8 +94,8 @@ void KWPart::setupViewInstance(KWDocument *document, KWView *view)
 QGraphicsItem *KWPart::createCanvasItem(KoDocument *document)
 {
     // caller owns the canvas item
-    KWCanvasItem *item = new KWCanvasItem(QString(), qobject_cast<KWDocument*>(document));
-    foreach (KWFrameSet *fs, qobject_cast<KWDocument*>(document)->frameSets()) {
+    KWCanvasItem *item = new KWCanvasItem(QString(), qobject_cast<KWDocument *>(document));
+    foreach (KWFrameSet *fs, qobject_cast<KWDocument *>(document)->frameSets()) {
         if (fs->shapeCount() == 0) {
             continue;
         }
@@ -137,8 +136,6 @@ void KWPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 
 void KWPart::showErrorAndDie()
 {
-    KMessageBox::error(0,
-                       i18n("Can not find needed text component, Words will quit now"),
-                       i18n("Installation Error"));
+    KMessageBox::error(0, i18n("Can not find needed text component, Words will quit now"), i18n("Installation Error"));
     QCoreApplication::exit(10);
 }

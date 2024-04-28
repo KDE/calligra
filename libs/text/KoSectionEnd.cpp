@@ -7,9 +7,9 @@
 
 #include "KoSectionEnd.h"
 
+#include <KoSection.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
-#include <KoSection.h>
 
 class KoSectionEndPrivate
 {
@@ -23,7 +23,7 @@ public:
     KoSection *section; //< pointer to the corresponding section
 };
 
-KoSectionEnd::KoSectionEnd(KoSection* section)
+KoSectionEnd::KoSectionEnd(KoSection *section)
     : d_ptr(new KoSectionEndPrivate(section))
 {
     Q_D(KoSectionEnd);

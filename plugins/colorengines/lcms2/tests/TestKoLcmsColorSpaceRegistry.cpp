@@ -3,11 +3,11 @@
 
 #include <QTest>
 
-#include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
-#include "RgbU8ColorSpace.h"
-#include "RgbU16ColorSpace.h"
+#include "KoColorSpaceRegistry.h"
 #include "LabColorSpace.h"
+#include "RgbU16ColorSpace.h"
+#include "RgbU8ColorSpace.h"
 
 void TestKoColorSpaceRegistry::testConstruction()
 {
@@ -17,8 +17,7 @@ void TestKoColorSpaceRegistry::testConstruction()
 
 void TestKoColorSpaceRegistry::testRgbU8()
 {
-    QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID,
-                           Integer8BitsColorDepthID);
+    QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Integer8BitsColorDepthID);
     const KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->colorSpaceFactory(colorSpaceId);
     QVERIFY(colorSpaceFactory != 0);
 
@@ -36,13 +35,11 @@ void TestKoColorSpaceRegistry::testRgbU8()
     cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, "");
-
 }
 
 void TestKoColorSpaceRegistry::testRgbU16()
 {
-    QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID,
-                           Integer16BitsColorDepthID);
+    QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Integer16BitsColorDepthID);
     const KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->colorSpaceFactory(colorSpaceId);
     QVERIFY(colorSpaceFactory != 0);
 
@@ -60,13 +57,11 @@ void TestKoColorSpaceRegistry::testRgbU16()
     cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, "");
-
 }
 
 void TestKoColorSpaceRegistry::testLab()
 {
-    QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(LABAColorModelID,
-                           Integer16BitsColorDepthID);
+    QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(LABAColorModelID, Integer16BitsColorDepthID);
     const KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->colorSpaceFactory(colorSpaceId);
     QVERIFY(colorSpaceFactory != 0);
 
@@ -89,7 +84,6 @@ void TestKoColorSpaceRegistry::testLab()
     cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, "");
-
 }
 
 QTEST_GUILESS_MAIN(TestKoColorSpaceRegistry)

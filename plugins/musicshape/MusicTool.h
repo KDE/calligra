@@ -12,33 +12,35 @@ class KUndo2Command;
 
 class MusicTool : public KoToolBase
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  explicit MusicTool( KoCanvasBase* canvas );
-  ~MusicTool() override;
+    explicit MusicTool(KoCanvasBase *canvas);
+    ~MusicTool() override;
 
-  void paint( QPainter& painter, const KoViewConverter& converter ) override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-  void mousePressEvent( KoPointerEvent* event ) override ;
-  void mouseMoveEvent( KoPointerEvent* event ) override;
-  void mouseReleaseEvent( KoPointerEvent* event ) override;
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
 
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
-  void deactivate() override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
+    void deactivate() override;
 
-  void addCommand(KUndo2Command* command);
-    MusicShape* shape();
+    void addCommand(KUndo2Command *command);
+    MusicShape *shape();
+
 protected:
-  /*
-   * Create default option widget
-   */
-    QWidget * createOptionWidget() override;
+    /*
+     * Create default option widget
+     */
+    QWidget *createOptionWidget() override;
 
 protected Q_SLOTS:
 Q_SIGNALS:
-    void shapeChanged(MusicShape* shape);
+    void shapeChanged(MusicShape *shape);
+
 private:
-   MusicShape *m_musicshape;
+    MusicShape *m_musicshape;
 };
 
 #endif

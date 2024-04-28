@@ -18,11 +18,11 @@
  */
 
 #include "KPrAnimTransitionFilter.h"
-#include "KoShapeSavingContext.h"
 #include "KoPASavingContext.h"
+#include "KoShapeSavingContext.h"
 
 KPrAnimTransitionFilter::KPrAnimTransitionFilter(KPrShapeAnimation *shapeAnimation)
-: KPrAnimationBase(shapeAnimation)
+    : KPrAnimationBase(shapeAnimation)
 {
 }
 
@@ -36,7 +36,7 @@ bool KPrAnimTransitionFilter::loadOdf(const KoXmlElement &element, KoShapeLoadin
     return true;
 }
 
-bool KPrAnimTransitionFilter::saveOdf(KoPASavingContext & paContext) const
+bool KPrAnimTransitionFilter::saveOdf(KoPASavingContext &paContext) const
 {
     Q_UNUSED(paContext);
     return true;

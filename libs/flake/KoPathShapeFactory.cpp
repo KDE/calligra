@@ -5,33 +5,36 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "KoPathShapeFactory.h"
-#include "KoPathShape.h"
-#include "KoShapeStroke.h"
+#include "KoDocumentResourceManager.h"
 #include "KoImageCollection.h"
 #include "KoMarkerCollection.h"
-#include "KoDocumentResourceManager.h"
+#include "KoPathShape.h"
 #include "KoShapeLoadingContext.h"
+#include "KoShapeStroke.h"
 #include <KoIcon.h>
 
 #include <KLocalizedString>
 
-#include <KoXmlReader.h>
 #include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
-KoPathShapeFactory::KoPathShapeFactory(const QStringList&)
-        : KoShapeFactoryBase(KoPathShapeId, i18n("Simple path shape"))
+KoPathShapeFactory::KoPathShapeFactory(const QStringList &)
+    : KoShapeFactoryBase(KoPathShapeId, i18n("Simple path shape"))
 {
     setToolTip(i18n("A simple path shape"));
     setIconName(koIconName("pathshape"));
     QStringList elementNames;
-    elementNames << "path" << "line" << "polyline" << "polygon";
+    elementNames << "path"
+                 << "line"
+                 << "polyline"
+                 << "polygon";
     setXmlElementNames(KoXmlNS::draw, elementNames);
     setLoadingPriority(0);
 }
 
 KoShape *KoPathShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
-    KoPathShape* path = new KoPathShape();
+    KoPathShape *path = new KoPathShape();
     path->moveTo(QPointF(0, 50));
     path->curveTo(QPointF(0, 120), QPointF(50, 120), QPointF(50, 50));
     path->curveTo(QPointF(50, -20), QPointF(100, -20), QPointF(100, 50));
@@ -40,7 +43,7 @@ KoShape *KoPathShapeFactory::createDefaultShape(KoDocumentResourceManager *) con
     return path;
 }
 
-bool KoPathShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool KoPathShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
     if (e.namespaceURI() == KoXmlNS::draw) {

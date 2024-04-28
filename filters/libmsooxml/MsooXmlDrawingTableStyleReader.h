@@ -9,17 +9,16 @@
 
 #include "komsooxml_export.h"
 
-#include "MsooXmlDrawingTableStyle.h"
 #include "MsooXmlCommonReader.h"
-
+#include "MsooXmlDrawingTableStyle.h"
 
 #include <QMap>
 
 /**
-*   The following classes deal with the creation of the table styles part,
-*   specifically, we deal with the elements that start at the a:tblStyleLst §20.1.4.2.27,
-*   you can find its part definition at Table Styles Part §14.2.9
-*/
+ *   The following classes deal with the creation of the table styles part,
+ *   specifically, we deal with the elements that start at the a:tblStyleLst §20.1.4.2.27,
+ *   you can find its part definition at Table Styles Part §14.2.9
+ */
 namespace MSOOXML
 {
 
@@ -29,19 +28,21 @@ class MsooXmlImport;
 class KOMSOOXML_EXPORT MsooXmlDrawingTableStyleContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    MsooXmlDrawingTableStyleContext(MSOOXML::MsooXmlImport* _import, const QString& _path,
-				    const QString& _file, MSOOXML::DrawingMLTheme* _themes,
-				    QMap< QString, MSOOXML::DrawingTableStyle* >* _styleList,
-				    QMap< QString, QString > _colorMap);
+    MsooXmlDrawingTableStyleContext(MSOOXML::MsooXmlImport *_import,
+                                    const QString &_path,
+                                    const QString &_file,
+                                    MSOOXML::DrawingMLTheme *_themes,
+                                    QMap<QString, MSOOXML::DrawingTableStyle *> *_styleList,
+                                    QMap<QString, QString> _colorMap);
     ~MsooXmlDrawingTableStyleContext() override;
 
-    QMap<QString, MSOOXML::DrawingTableStyle*>* styleList;
+    QMap<QString, MSOOXML::DrawingTableStyle *> *styleList;
 
-    //Those members are used by some methods included
-    MsooXmlImport* import;
+    // Those members are used by some methods included
+    MsooXmlImport *import;
     QString path;
     QString file;
-    MSOOXML::DrawingMLTheme* themes;
+    MSOOXML::DrawingMLTheme *themes;
     QMap<QString, QString> colorMap;
 };
 
@@ -51,7 +52,7 @@ public:
     explicit MsooXmlDrawingTableStyleReader(KoOdfWriters *writers);
     ~MsooXmlDrawingTableStyleReader() override;
 
-    KoFilter::ConversionStatus read(MsooXmlReaderContext* context = 0) override;
+    KoFilter::ConversionStatus read(MsooXmlReaderContext *context = 0) override;
 
 protected:
     KoFilter::ConversionStatus read_tblStyleLst();
@@ -86,10 +87,10 @@ protected:
 #include "MsooXmlDrawingMLShared.h"
 
 private:
-    MsooXmlDrawingTableStyleContext* m_context;
+    MsooXmlDrawingTableStyleContext *m_context;
 
-    DrawingTableStyle* m_currentStyle;
-    TableStyleProperties* m_currentTableStyleProperties;
+    DrawingTableStyle *m_currentStyle;
+    TableStyleProperties *m_currentTableStyleProperties;
 };
 
 }

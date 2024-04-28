@@ -16,7 +16,7 @@ class CalculationSettings;
 class ValueParser;
 class ValueConverter;
 
-class TestValueFormatter: public QObject
+class TestValueFormatter : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
@@ -27,10 +27,11 @@ private Q_SLOTS:
     void testFractionFormat();
     void testCreateNumberFormat_data();
     void testCreateNumberFormat();
+
 private:
-    CalculationSettings* m_calcsettings;
-    ValueParser* m_parser;
-    ValueConverter* m_converter;
+    CalculationSettings *m_calcsettings;
+    ValueParser *m_parser;
+    ValueConverter *m_converter;
 };
 
 } // namespace Sheets

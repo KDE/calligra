@@ -11,9 +11,10 @@
 class TimeSignatureAction : public AbstractMusicAction
 {
 public:
-    TimeSignatureAction(SimpleEntryTool* tool, int beats, int beat);
-    
-    void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) override;
+    TimeSignatureAction(SimpleEntryTool *tool, int beats, int beat);
+
+    void mousePress(MusicCore::Staff *staff, int bar, const QPointF &pos) override;
+
 private:
     int m_beats, m_beat;
 };

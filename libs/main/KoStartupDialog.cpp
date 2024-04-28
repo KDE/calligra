@@ -6,7 +6,7 @@
 
 #include "KoStartupDialog.h"
 
-KoStartupDialog::KoStartupDialog(QWidget *parent) :
-    QDialog(parent)
+KoStartupDialog::KoStartupDialog(QWidget *parent)
+    : QDialog(parent)
 {
 }

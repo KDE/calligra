@@ -8,11 +8,9 @@
 #ifndef CALLIGRA_SHEETS_ACTION_FILL
 #define CALLIGRA_SHEETS_ACTION_FILL
 
-
 #include "CellAction.h"
 
 #include "ui/commands/DataManipulators.h"
-
 
 namespace Calligra
 {
@@ -31,21 +29,20 @@ public:
 
     enum Direction { Up = 0, Down, Left, Right };
 
-    void setDirection(Direction d) {
+    void setDirection(Direction d)
+    {
         m_dir = d;
     }
+
 protected:
-    Value newValue(Element *element, int col, int row,
-                           bool *parse, Format::Type *fmtType) override;
+    Value newValue(Element *element, int col, int row, bool *parse, Format::Type *fmtType) override;
     Style newFormat(Element *element, int col, int row) override;
     Direction m_dir;
 };
 
-
-
-
-class Fill : public CellAction {
-Q_OBJECT
+class Fill : public CellAction
+{
+    Q_OBJECT
 public:
     Fill(Actions *actions, FillManipulator::Direction dir);
     virtual ~Fill();
@@ -59,12 +56,7 @@ protected:
     FillManipulator::Direction m_dir;
 };
 
-
-
-
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_FILL
+#endif // CALLIGRA_SHEETS_ACTION_FILL

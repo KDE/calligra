@@ -8,8 +8,8 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 #ifndef __KO_FILTER_H__
 #define __KO_FILTER_H__
 
-#include <QObject>
 #include <QMap>
+#include <QObject>
 #include <QPointer>
 
 #include "komain_export.h"
@@ -42,7 +42,7 @@ class KOMAIN_EXPORT KoFilter : public QObject
 {
     Q_OBJECT
 
-    friend class KoFilterEntry;  // needed for the filter chain pointer :(
+    friend class KoFilterEntry; // needed for the filter chain pointer :(
     friend class KoFilterChain;
 
 public:
@@ -52,15 +52,32 @@ public:
      * Feel free to add some more error conditions @em before the last item
      * if it's needed.
      */
-    enum ConversionStatus { OK, StupidError, UsageError, CreationError, FileNotFound,
-                            StorageCreationError, BadMimeType, BadConversionGraph,
-                            EmbeddedDocError, WrongFormat, NotImplemented,
-                            ParsingError, InternalError, UnexpectedEOF,
-                            UnexpectedOpcode, UserCancelled, OutOfMemory,
-                            PasswordProtected, InvalidFormat, FilterEntryNull,
-                            NoDocumentCreated, DownloadFailed, FilterCreationError,
-                            JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
-                          };
+    enum ConversionStatus {
+        OK,
+        StupidError,
+        UsageError,
+        CreationError,
+        FileNotFound,
+        StorageCreationError,
+        BadMimeType,
+        BadConversionGraph,
+        EmbeddedDocError,
+        WrongFormat,
+        NotImplemented,
+        ParsingError,
+        InternalError,
+        UnexpectedEOF,
+        UnexpectedOpcode,
+        UserCancelled,
+        OutOfMemory,
+        PasswordProtected,
+        InvalidFormat,
+        FilterEntryNull,
+        NoDocumentCreated,
+        DownloadFailed,
+        FilterCreationError,
+        JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
+    };
 
     ~KoFilter() override;
 
@@ -75,13 +92,13 @@ public:
      * @return The error status, see the @ref #ConversionStatus enum.
      *         KoFilter::OK means that everything is alright.
      */
-    virtual ConversionStatus convert(const QByteArray& from, const QByteArray& to) = 0;
+    virtual ConversionStatus convert(const QByteArray &from, const QByteArray &to) = 0;
 
     /**
      * Set the updater to which the filter will report progress.
      * Every emit of the sigProgress signal is reported to the updater.
      */
-    void setUpdater(const QPointer<KoUpdater>& updater);
+    void setUpdater(const QPointer<KoUpdater> &updater);
 
 Q_SIGNALS:
     /**
@@ -107,8 +124,8 @@ protected:
     KoFilterChain *m_chain;
 
 private:
-    KoFilter(const KoFilter& rhs);
-    KoFilter& operator=(const KoFilter& rhs);
+    KoFilter(const KoFilter &rhs);
+    KoFilter &operator=(const KoFilter &rhs);
 
     class Private;
     Private *const d;

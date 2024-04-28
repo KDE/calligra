@@ -6,15 +6,15 @@
 */
 
 #include "InsertSeries.h"
-#include "Actions.h"
 #include "./dialogs/SeriesDialog.h"
+#include "Actions.h"
 
-#include "engine/ValueCalc.h"
 #include "core/CellStorage.h"
 #include "core/Sheet.h"
+#include "engine/ValueCalc.h"
 #include "ui/Selection.h"
 
-#include <float.h>   // for DBL_EPSILON
+#include <float.h> // for DBL_EPSILON
 
 #include <QApplication>
 #include <QKeyEvent>
@@ -40,19 +40,20 @@ ActionDialog *InsertSeries::createDialog(QWidget *canvasWidget)
     return dlg;
 }
 
-
 void InsertSeries::insertSeries(double start, double end, double step, bool isColumn, bool isLinear)
 {
     SeriesManipulator *manipulator = new SeriesManipulator;
     manipulator->setSheet(m_selection->activeSheet());
-    manipulator->setupSeries(m_selection->cursor(), start, end, step,
+    manipulator->setupSeries(m_selection->cursor(),
+                             start,
+                             end,
+                             step,
                              isColumn ? SeriesManipulator::Column : SeriesManipulator::Row,
                              isLinear ? SeriesManipulator::Linear : SeriesManipulator::Geometric);
 
     // setupSeries also called add(), so we can call execute directly
     manipulator->execute(m_selection->canvas());
 }
-
 
 // The actual command.
 
@@ -68,8 +69,7 @@ SeriesManipulator::~SeriesManipulator()
 {
 }
 
-void SeriesManipulator::setupSeries(const QPoint &_marker, double start,
-                                    double end, double step, Series mode, Series type)
+void SeriesManipulator::setupSeries(const QPoint &_marker, double start, double end, double step, Series mode, Series type)
 {
     m_type = type;
     m_start = Value(start);
@@ -80,22 +80,20 @@ void SeriesManipulator::setupSeries(const QPoint &_marker, double start,
         numberOfCells = (int)((end - start) / step + 1);
     if (type == Geometric)
         /* basically, A(n) = start * step ^ n
-        * so when is end >= start * step ^ n ??
-        * when n = ln(end/start) / ln(step)
-        */
+         * so when is end >= start * step ^ n ??
+         * when n = ln(end/start) / ln(step)
+         */
         // DBL_EPSILON is added to prevent rounding errors
         numberOfCells = (int)(::log(end / start) / ::log(step) + DBL_EPSILON) + 1;
 
     // with this, generate range information
-    Region range(_marker.x(), _marker.y(), (mode == Column) ? 1 : numberOfCells,
-                 (mode == Row) ? 1 : numberOfCells);
+    Region range(_marker.x(), _marker.y(), (mode == Column) ? 1 : numberOfCells, (mode == Row) ? 1 : numberOfCells);
 
     // and add the range to the manipulator
     add(range);
 }
 
-Value SeriesManipulator::newValue(Element *element, int col, int row,
-                                  bool *parse, Format::Type *)
+Value SeriesManipulator::newValue(Element *element, int col, int row, bool *parse, Format::Type *)
 {
     *parse = false;
     ValueCalc *calc = m_sheet->map()->calc();
@@ -130,6 +128,3 @@ Value SeriesManipulator::newValue(Element *element, int col, int row,
     // return the computed value
     return val;
 }
-
-
-

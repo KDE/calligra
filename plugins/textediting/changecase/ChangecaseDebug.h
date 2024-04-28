@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &CHANGECASE_LOG();
 
 #define debugChangecase qCDebug(CHANGECASE_LOG)

@@ -9,7 +9,8 @@
 #include <QObject>
 #include <QPointF>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Sheet;
 class Voice;
@@ -31,7 +32,7 @@ public:
      *
      * @param sheet the sheet to create a bar for
      */
-    explicit Bar(Sheet* sheet);
+    explicit Bar(Sheet *sheet);
 
     /**
      * Destructor.
@@ -41,21 +42,21 @@ public:
     /**
      * Returns the sheet this bar is part of.
      */
-    Sheet* sheet();
+    Sheet *sheet();
 
     /**
      * Changes the sheet this bar is part of. This method should not be called after the bar has been added to a sheet.
      *
      * @param sheet the sheet this bar is part of
      */
-    void setSheet(Sheet* sheet);
+    void setSheet(Sheet *sheet);
 
     /**
      * Returns a VoiceBar instance for a specific voice.
      *
      * @param voice the voice for which to return the VoiceBar
      */
-    VoiceBar* voice(Voice* voice);
+    VoiceBar *voice(Voice *voice);
 
     /**
      * Returns the top-left corner of the bounding box of the bar.
@@ -66,7 +67,7 @@ public:
      * Returns the (horizontal) size of the bar.
      */
     qreal size() const;
-    
+
     /**
      * The prefix of a bar contains any staff elements at time 0 such as clefs and key signatures.
      * When this bar is the first bar of a staff system the prefix will be drawn at the end of the previous
@@ -78,68 +79,68 @@ public:
      * to position(). This means that elements in the prefix have negative x coordinates.
      */
     qreal prefix() const;
-    
+
     /**
      * Set the size of the prefix of this bar. The prefix contains all staff elements at time 0.
      *
      * @param prefix the new size of the prefix of this bar
      */
     void setPrefix(qreal prefix);
-    
+
     /**
      * Returns the position at which the prefix is drawn. This position is relative to the top-left corner of the sheet
      * the bar is in. Most often this is position() - (prefix(), 0).
      */
     QPointF prefixPosition() const;
-    
+
     /**
      * Sets the position of the prefix of this bar.
      *
      * @param pos the new position of the prefix of this bar
      */
-    void setPrefixPosition(const QPointF& pos);
-    
+    void setPrefixPosition(const QPointF &pos);
+
     /**
      * Returns the desired size of this bar. The desired size is the space all the elements in this bar would ideally use.
      */
     qreal naturalSize() const;
 
-     // number of noteheads of space to associate with shortest note in a measure
+    // number of noteheads of space to associate with shortest note in a measure
     qreal sizeFactor() const;
 
     /**
      * Returns the number of staff elements in the given staff in this bar.
      */
-    int staffElementCount(Staff* staff) const;
-    
+    int staffElementCount(Staff *staff) const;
+
     /**
      * Returns the staff element with the given index in the given staff in this bar.
      */
-    StaffElement* staffElement(Staff* staff, int index);
-    
+    StaffElement *staffElement(Staff *staff, int index);
+
     /**
      * Returns the index of the provided staff element in this bar (this index is not the same as the index that is used in calls to
      * staffElement, as this index is global for the bar, and that index is relative to the elements in a specific staff).
      */
-    int indexOfStaffElement(StaffElement* element);
-    
+    int indexOfStaffElement(StaffElement *element);
+
     /**
      * Adds a staff element to this bar. The indexHint parameter can be used to provide a hint as to what index the element should be
      * inserted. If inserting at that index does not result in a correct sort order for the staff elements, the indexHint is ignored.
      */
-    void addStaffElement(StaffElement* element, int indexHint = -1);
-    
+    void addStaffElement(StaffElement *element, int indexHint = -1);
+
     /**
      * Remove a staff element from this bar. If deleteElement is true, the element is not only removed but also deleted.
      */
-    void removeStaffElement(StaffElement* element, bool deleteElement = true);
+    void removeStaffElement(StaffElement *element, bool deleteElement = true);
 public Q_SLOTS:
     /**
      * Sets the top-left corner of the bounding box of this bar. If setPrefix is true, the position of the prefix is also set relative
      * to the position of the bar.
      */
-    void setPosition(const QPointF& position, bool setPrefix=true);
-    
+    void setPosition(const QPointF &position, bool setPrefix = true);
+
     /**
      * Sets the size of the bar.
      *
@@ -150,15 +151,16 @@ Q_SIGNALS:
     /**
      * This signal is emitted when the position of the bar is changed.
      */
-    void positionChanged(const QPointF& position);
-    
+    void positionChanged(const QPointF &position);
+
     /**
      * This signal is emitted when the size of the bar is changed.
      */
     void sizeChanged(qreal size);
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

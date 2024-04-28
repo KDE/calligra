@@ -7,18 +7,14 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef KOCHART_RADARDATACONFIGWIDGET_H
 #define KOCHART_RADARDATACONFIGWIDGET_H
 
-
-#include "ConfigSubWidgetBase.h"
 #include "ChartShape.h"
-
+#include "ConfigSubWidgetBase.h"
 
 class KoShape;
 class QAction;
-
 
 namespace KoChart
 {
@@ -36,11 +32,14 @@ public:
     RadarDataSetConfigWidget(QList<KoChart::ChartType> types, QWidget *parent = 0);
     ~RadarDataSetConfigWidget();
 
-    void open(ChartShape* shape) override;
-    QAction * createAction();
+    void open(ChartShape *shape) override;
+    QAction *createAction();
 
     /// reimplemented
-    virtual bool showOnShapeCreate() { return true; }
+    virtual bool showOnShapeCreate()
+    {
+        return true;
+    }
 
     /// Delete all open dialogs.
     /// This is called when e.g. the tool is deactivated.
@@ -52,8 +51,8 @@ public Q_SLOTS:
     void updateData(KoChart::ChartType type, KoChart::ChartSubtype subtype) override;
 
     void datasetMarkerSelected(QAction *action);
-    void datasetBrushSelected(const QColor& color);
-    void datasetPenSelected(const QColor& color);
+    void datasetBrushSelected(const QColor &color);
+    void datasetPenSelected(const QColor &color);
     void ui_datasetShowCategoryChanged(bool b);
     void ui_dataSetShowNumberChanged(bool b);
     void ui_datasetShowPercentChanged(bool b);
@@ -61,8 +60,8 @@ public Q_SLOTS:
     void ui_dataSetSelectionChanged(int index);
 
 Q_SIGNALS:
-    void datasetPenChanged(KoChart::DataSet *dataSet, const QColor& color, int section);
-    void datasetBrushChanged(KoChart::DataSet *dataSet, const QColor& color, int section);
+    void datasetPenChanged(KoChart::DataSet *dataSet, const QColor &color, int section);
+    void datasetBrushChanged(KoChart::DataSet *dataSet, const QColor &color, int section);
     void dataSetMarkerChanged(KoChart::DataSet *dataSet, KoChart::OdfSymbolType type, KoChart::OdfMarkerStyle style);
     void datasetShowCategoryChanged(KoChart::DataSet *dataSet, bool b, int section);
     void dataSetShowNumberChanged(KoChart::DataSet *dataSet, bool b, int section);
@@ -70,12 +69,10 @@ Q_SIGNALS:
     void datasetShowSymbolChanged(KoChart::DataSet *dataSet, bool b, int section);
 
 private:
-
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
-}  // namespace KoChart
-
+} // namespace KoChart
 
 #endif // KOCHART_RADARDATACONFIGWIDGET_H

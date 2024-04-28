@@ -48,13 +48,12 @@
 #ifndef KUNDO2STACK_H
 #define KUNDO2STACK_H
 
+#include <QAction>
+#include <QList>
 #include <QObject>
 #include <QString>
-#include <QList>
-#include <QAction>
 #include <QTime>
 #include <QVector>
-
 
 #include "kundo2_export.h"
 
@@ -65,9 +64,8 @@ class KActionCollection;
 
 #ifndef QT_NO_UNDOCOMMAND
 
-#include "kundo2magicstring.h"
 #include "kundo2commandextradata.h"
-
+#include "kundo2magicstring.h"
 
 class KUNDO2_EXPORT KUndo2Command
 {
@@ -101,7 +99,7 @@ public:
     virtual void setEndTime();
     virtual QTime endTime();
 
-    virtual QVector<KUndo2Command*> mergeCommandsVector();
+    virtual QVector<KUndo2Command *> mergeCommandsVector();
     virtual bool isMerged();
     virtual void undoMergedCommands();
     virtual void redoMergedCommands();
@@ -111,7 +109,7 @@ public:
      *
      * \see setExtraData()
      */
-    KUndo2CommandExtraData* extraData() const;
+    KUndo2CommandExtraData *extraData() const;
 
     /**
      * The user can assign an arbitrary object associated with the
@@ -129,13 +127,12 @@ private:
     Q_DISABLE_COPY(KUndo2Command)
     friend class KUndo2QStack;
 
-
     bool m_hasParent;
     int m_timedID;
 
     QTime m_timeOfCreation;
     QTime m_endOfCommand;
-    QVector<KUndo2Command*> m_mergeCommandsVector;
+    QVector<KUndo2Command *> m_mergeCommandsVector;
 };
 
 #endif // QT_NO_UNDOCOMMAND
@@ -145,7 +142,7 @@ private:
 class KUNDO2_EXPORT KUndo2QStack : public QObject
 {
     Q_OBJECT
-//    Q_DECLARE_PRIVATE(KUndo2QStack)
+    //    Q_DECLARE_PRIVATE(KUndo2QStack)
     Q_PROPERTY(bool active READ isActive WRITE setActive)
     Q_PROPERTY(int undoLimit READ undoLimit WRITE setUndoLimit)
 
@@ -192,7 +189,6 @@ public:
     int strokesN();
     void setStrokesN(int value);
 
-
 public Q_SLOTS:
     void setClean();
     virtual void setIndex(int idx);
@@ -215,8 +211,8 @@ protected:
 
 private:
     // from QUndoStackPrivate
-    QList<KUndo2Command*> m_command_list;
-    QList<KUndo2Command*> m_macro_stack;
+    QList<KUndo2Command *> m_command_list;
+    QList<KUndo2Command *> m_macro_stack;
     int m_index;
     int m_clean_index;
     KUndo2Group *m_group;
@@ -238,13 +234,13 @@ private:
 
 class KUNDO2_EXPORT KUndo2Stack : public KUndo2QStack
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit KUndo2Stack(QObject *parent = 0);
 
     // functions from KUndoStack
-    QAction* createRedoAction(KActionCollection* actionCollection, const QString& actionName = QString());
-    QAction* createUndoAction(KActionCollection* actionCollection, const QString& actionName = QString());
+    QAction *createRedoAction(KActionCollection *actionCollection, const QString &actionName = QString());
+    QAction *createUndoAction(KActionCollection *actionCollection, const QString &actionName = QString());
 };
 
 #endif // QT_NO_UNDOSTACK

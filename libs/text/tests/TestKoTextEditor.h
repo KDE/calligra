@@ -21,8 +21,8 @@ class TestKoTextEditor : public QObject
 
 private Q_SLOTS:
 
-    //FIXME: see cpp file: why it is commented out
-//     void testInsertInlineObject();
+    // FIXME: see cpp file: why it is commented out
+    //     void testInsertInlineObject();
     void testRemoveSelectedText();
 
     // Section tests
@@ -36,8 +36,7 @@ private Q_SLOTS:
 
 private:
     // Sections stuff
-    struct SectionHandle
-    {
+    struct SectionHandle {
         explicit SectionHandle(KoSection *_sec)
             : sec(_sec)
             , parent(0)
@@ -51,11 +50,10 @@ private:
 
     bool checkEndings(const QVector<QString> &needEndings, KoTextEditor *editor);
     bool checkStartings(const QVector<QString> &needStartings, KoTextEditor *editor);
-    void checkSectionFormattingLevel(
-        TestDocument *doc,
-        int neededBlockCount,
-        const QVector< QVector<QString> > &needStartings,
-        const QVector< QVector<QString> > &needEndings);
+    void checkSectionFormattingLevel(TestDocument *doc,
+                                     int neededBlockCount,
+                                     const QVector<QVector<QString>> &needStartings,
+                                     const QVector<QVector<QString>> &needEndings);
     void checkSectionModelLevel(TestDocument *doc);
     void checkSectionModelLevelRecursive(QModelIndex index, SectionHandle *handle);
 

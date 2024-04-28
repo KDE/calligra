@@ -12,8 +12,9 @@ class Q_DECL_HIDDEN KoTextEditingFactory::Private
 {
 public:
     Private(const QString &identifier)
-            : id(identifier),
-            showInMenu(false) {
+        : id(identifier)
+        , showInMenu(false)
+    {
     }
 
     const QString id;
@@ -55,4 +56,3 @@ void KoTextEditingFactory::setTitle(const QString &title)
 {
     d->title = title;
 }
-

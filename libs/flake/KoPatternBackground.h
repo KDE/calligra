@@ -25,23 +25,9 @@ class FLAKE_EXPORT KoPatternBackground : public KoShapeBackground
 {
 public:
     /// Pattern rendering style
-    enum PatternRepeat {
-        Original,
-        Tiled,
-        Stretched
-    };
+    enum PatternRepeat { Original, Tiled, Stretched };
     /// Pattern reference point
-    enum ReferencePoint {
-        TopLeft,
-        Top,
-        TopRight,
-        Left,
-        Center,
-        Right,
-        BottomLeft,
-        Bottom,
-        BottomRight
-    };
+    enum ReferencePoint { TopLeft, Top, TopRight, Left, Center, Right, BottomLeft, Bottom, BottomRight };
 
     /// Constructs a new pattern background utilizing the given image collection
     explicit KoPatternBackground(KoImageCollection *collection);
@@ -105,6 +91,7 @@ public:
 
     /// Returns the bounding rect of the pattern image based on the given fill size
     QRectF patternRectFromFillSize(const QSizeF &size);
+
 private:
     Q_DECLARE_PRIVATE(KoPatternBackground)
     Q_DISABLE_COPY(KoPatternBackground)

@@ -8,19 +8,22 @@
 
 #include <kundo2command.h>
 
-namespace MusicCore {
-    class Note;
+namespace MusicCore
+{
+class Note;
 }
 class MusicShape;
 
-class ToggleTiedNoteCommand : public KUndo2Command {
+class ToggleTiedNoteCommand : public KUndo2Command
+{
 public:
-    ToggleTiedNoteCommand(MusicShape* shape, MusicCore::Note* note);
+    ToggleTiedNoteCommand(MusicShape *shape, MusicCore::Note *note);
     void redo() override;
     void undo() override;
+
 private:
-    MusicShape* m_shape;
-    MusicCore::Note* m_note;
+    MusicShape *m_shape;
+    MusicCore::Note *m_note;
 };
 
 #endif // TOGGLETIEDNOTECOMMAND_H

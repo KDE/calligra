@@ -9,14 +9,15 @@ SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
 #define KOCONTEXTBARBUTTON_H
 
 // Qt
-#include <QToolButton>
 #include <QTimeLine>
+#include <QToolButton>
 
 class QTimeLine;
 /**
  * A button with a special look, appears when hovering over thumbnails
  */
-class KoContextBarButton : public QToolButton {
+class KoContextBarButton : public QToolButton
+{
     Q_OBJECT
 public:
     explicit KoContextBarButton(const QString &iconName, QWidget *parent = nullptr);
@@ -26,7 +27,7 @@ public Q_SLOTS:
     void setFadingValue(int value);
 
 protected:
-    void paintEvent(QPaintEvent*) override;
+    void paintEvent(QPaintEvent *) override;
     void enterEvent(QEnterEvent *event) override;
     void leaveEvent(QEvent *event) override;
     void showEvent(QShowEvent *event) override;

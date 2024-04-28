@@ -11,27 +11,27 @@
 
 #include "PptxXmlDocumentReader.h"
 
-#include "PptxXmlCommentAuthorsReader.h"
-#include "PptxImport.h"
 #include "PptxDebug.h"
+#include "PptxImport.h"
+#include "PptxXmlCommentAuthorsReader.h"
 
-#include <VmlDrawingReader.h>
+#include <MsooXmlDrawingTableStyleReader.h>
 #include <MsooXmlRelationships.h>
 #include <MsooXmlSchemas.h>
-#include <MsooXmlUtils.h>
 #include <MsooXmlUnits.h>
-#include <MsooXmlDrawingTableStyleReader.h>
+#include <MsooXmlUtils.h>
+#include <VmlDrawingReader.h>
 
-#include <KoXmlWriter.h>
 #include <KoGenStyles.h>
-#include <KoPageLayout.h>
 #include <KoOdfGraphicStyles.h>
+#include <KoPageLayout.h>
+#include <KoXmlWriter.h>
 
-#include <KoTable.h>
-#include <KoRow.h>
-#include <KoColumn.h>
 #include <KoCell.h>
 #include <KoCellStyle.h>
+#include <KoColumn.h>
+#include <KoRow.h>
+#include <KoTable.h>
 
 #include <memory>
 
@@ -42,12 +42,14 @@
 
 #include <MsooXmlReader_p.h>
 
-
-PptxXmlDocumentReaderContext::PptxXmlDocumentReaderContext(
-    PptxImport& _import, const QString& _path, const QString& _file,
-    MSOOXML::MsooXmlRelationships& _relationships)
-        : import(&_import),
-          path(_path), file(_file), relationships(&_relationships)
+PptxXmlDocumentReaderContext::PptxXmlDocumentReaderContext(PptxImport &_import,
+                                                           const QString &_path,
+                                                           const QString &_file,
+                                                           MSOOXML::MsooXmlRelationships &_relationships)
+    : import(&_import)
+    , path(_path)
+    , file(_file)
+    , relationships(&_relationships)
 {
     firstReadRound = true;
     numberOfItems = 0;
@@ -59,10 +61,11 @@ public:
     Private()
     {
     }
-    ~Private() {
+    ~Private()
+    {
         qDeleteAll(slideLayoutPropertiesMap);
     }
-    QMap<QString, PptxSlideProperties*> slideLayoutPropertiesMap;
+    QMap<QString, PptxSlideProperties *> slideLayoutPropertiesMap;
     uint slideNumber; //!< temp., see todo in PptxXmlDocumentReader::read_sldId()
     bool sldSzRead, noteSzRead;
     KoPageLayout pageLayout, notePageLayout;
@@ -76,14 +79,15 @@ public:
     QMap<QString, PptxSlideProperties> notesMasterPageProperties;
 
     QMap<int, QString> commentAuthors;
+
 private:
 };
 
 PptxXmlDocumentReader::PptxXmlDocumentReader(KoOdfWriters *writers)
-        : MSOOXML::MsooXmlCommonReader(writers)
-        , m_writers(writers)
-        , m_context(0)
-        , d(new Private)
+    : MSOOXML::MsooXmlCommonReader(writers)
+    , m_writers(writers)
+    , m_context(0)
+    , d(new Private)
 {
     init();
 }
@@ -98,9 +102,9 @@ void PptxXmlDocumentReader::init()
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
 }
 
-KoFilter::ConversionStatus PptxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus PptxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<PptxXmlDocumentReaderContext*>(context);
+    m_context = dynamic_cast<PptxXmlDocumentReaderContext *>(context);
     Q_ASSERT(m_context);
     d->slideNumber = 0;
     d->sldSzRead = false;
@@ -132,21 +136,21 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     if (!expectNS(MSOOXML::Schemas::presentationml)) {
         return KoFilter::WrongFormat;
     }
-//     const QXmlStreamAttributes attrs( attributes() );
-//     for (int i=0; i<attrs.count(); i++) {
-//         debugPptx << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+    //     const QXmlStreamAttributes attrs( attributes() );
+    //     for (int i=0; i<attrs.count(); i++) {
+    //         debugPptx << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
         debugPptx << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
-//! @todo find out whether the namespace returned by namespaceUri()
-//!       is exactly the same ref as the element of namespaceDeclarations()
+    //! @todo find out whether the namespace returned by namespaceUri()
+    //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration("p", MSOOXML::Schemas::presentationml))) {
         raiseError(i18n("Namespace \"%1\" not found", QLatin1String(MSOOXML::Schemas::presentationml)));
         return KoFilter::WrongFormat;
     }
-//! @todo expect other namespaces too...
+    //! @todo expect other namespaces too...
 
     {
         PptxXmlCommentAuthorsReader autorsReader(this);
@@ -161,11 +165,10 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     return KoFilter::OK;
 }
 
-PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(const QString& slidePath, const QString& slideFile)
+PptxSlideProperties *PptxXmlDocumentReader::slideLayoutProperties(const QString &slidePath, const QString &slideFile)
 {
-    const QString slideLayoutPathAndFile(m_context->relationships->targetForType(
-        slidePath, slideFile,
-        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"));
+    const QString slideLayoutPathAndFile(
+        m_context->relationships->targetForType(slidePath, slideFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"));
     debugPptx << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout";
     debugPptx << "slideLayoutPathAndFile:" << slideLayoutPathAndFile;
     if (slideLayoutPathAndFile.isEmpty())
@@ -180,17 +183,22 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(const QString&
         return resultInCache;
 
     QString slideMasterPath, slideMasterFile;
-    MSOOXML::Utils::splitPathAndFile(m_context->relationships->targetForType(slidePath, slideFile,
-        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"), &slideMasterPath, &slideMasterFile);
-    const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile,
-         QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
+    MSOOXML::Utils::splitPathAndFile(
+        m_context->relationships->targetForType(slidePath, slideFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"),
+        &slideMasterPath,
+        &slideMasterFile);
+    const QString slideMasterPathAndFile =
+        m_context->relationships->targetForType(slideMasterPath,
+                                                slideMasterFile,
+                                                QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
 
     auto result = std::unique_ptr<PptxSlideProperties>(new PptxSlideProperties());
     result->m_slideMasterName = slideMasterPathAndFile;
 
     VmlDrawingReader vmlreader(this);
-    QString vmlTarget = m_context->relationships->targetForType(slideLayoutPath, slideLayoutFile,
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
+    QString vmlTarget = m_context->relationships->targetForType(slideLayoutPath,
+                                                                slideLayoutFile,
+                                                                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
 
     if (!vmlTarget.isEmpty()) {
         QString errorMessage, vmlPath, vmlFile;
@@ -199,46 +207,47 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(const QString&
         fileName.remove(0, m_context->path.length());
         MSOOXML::Utils::splitPathAndFile(vmlTarget, &vmlPath, &vmlFile);
 
-        VmlDrawingReaderContext vmlContext(*m_context->import,
-            vmlPath, vmlFile, *m_context->relationships);
+        VmlDrawingReaderContext vmlContext(*m_context->import, vmlPath, vmlFile, *m_context->relationships);
 
-        const KoFilter::ConversionStatus status =
-            m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
+        const KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
         if (status != KoFilter::OK) {
             vmlreader.raiseError(errorMessage);
         }
     }
 
-    PptxXmlSlideReaderContext context(
-        *m_context->import,
-        slideLayoutPath, slideLayoutFile,
-        0/*unused*/, &d->slideMasterPageProperties[slideMasterPathAndFile].theme,
-        PptxXmlSlideReader::SlideLayout,
-        result.get(),
-        &d->slideMasterPageProperties[slideMasterPathAndFile], //PptxSlideMasterPageProperties
-        0,
-        *m_context->relationships,
-        d->commentAuthors,
-        d->slideMasterPageProperties[slideMasterPathAndFile].colorMap,
-        vmlreader
-    );
+    PptxXmlSlideReaderContext context(*m_context->import,
+                                      slideLayoutPath,
+                                      slideLayoutFile,
+                                      0 /*unused*/,
+                                      &d->slideMasterPageProperties[slideMasterPathAndFile].theme,
+                                      PptxXmlSlideReader::SlideLayout,
+                                      result.get(),
+                                      &d->slideMasterPageProperties[slideMasterPathAndFile], // PptxSlideMasterPageProperties
+                                      0,
+                                      *m_context->relationships,
+                                      d->commentAuthors,
+                                      d->slideMasterPageProperties[slideMasterPathAndFile].colorMap,
+                                      vmlreader);
 
     PptxXmlSlideReader slideLayoutReader(this);
     context.firstReadingRound = true;
 
-    KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
-        &slideLayoutReader, slideLayoutPath + '/' + slideLayoutFile, &context);
+    KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(&slideLayoutReader, slideLayoutPath + '/' + slideLayoutFile, &context);
     if (status != KoFilter::OK) {
         debugPptx << slideLayoutReader.errorString();
         return 0;
     }
 
-    context.initializeContext(d->slideMasterPageProperties[slideMasterPathAndFile].theme, defaultParagraphStyles,
-        defaultTextStyles, defaultListStyles, defaultBulletColors, defaultTextColors, defaultLatinFonts);
+    context.initializeContext(d->slideMasterPageProperties[slideMasterPathAndFile].theme,
+                              defaultParagraphStyles,
+                              defaultTextStyles,
+                              defaultListStyles,
+                              defaultBulletColors,
+                              defaultTextColors,
+                              defaultLatinFonts);
 
     context.firstReadingRound = false;
-    status = m_context->import->loadAndParseDocument(
-        &slideLayoutReader, slideLayoutPath + '/' + slideLayoutFile, &context);
+    status = m_context->import->loadAndParseDocument(&slideLayoutReader, slideLayoutPath + '/' + slideLayoutFile, &context);
     if (status != KoFilter::OK) {
         debugPptx << slideLayoutReader.errorString();
         return 0;
@@ -284,8 +293,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
     }
 
     VmlDrawingReader vmlreader(this);
-    QString vmlTarget = m_context->relationships->targetForType(slidePath, slideFile,
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
+    QString vmlTarget =
+        m_context->relationships->targetForType(slidePath, slideFile, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
 
     if (!vmlTarget.isEmpty()) {
         QString errorMessage, vmlPath, vmlFile;
@@ -294,60 +303,66 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         fileName.remove(0, m_context->path.length());
         MSOOXML::Utils::splitPathAndFile(vmlTarget, &vmlPath, &vmlFile);
 
-        VmlDrawingReaderContext vmlContext(*m_context->import,
-            vmlPath, vmlFile, *m_context->relationships);
+        VmlDrawingReaderContext vmlContext(*m_context->import, vmlPath, vmlFile, *m_context->relationships);
 
-        const KoFilter::ConversionStatus status =
-            m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
+        const KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
         if (status != KoFilter::OK) {
             vmlreader.raiseError(errorMessage);
         }
     }
 
     QString slideMasterPath, slideMasterFile;
-    MSOOXML::Utils::splitPathAndFile(m_context->relationships->targetForType(slidePath, slideFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"), &slideMasterPath, &slideMasterFile);
-    // const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
+    MSOOXML::Utils::splitPathAndFile(
+        m_context->relationships->targetForType(slidePath, slideFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"),
+        &slideMasterPath,
+        &slideMasterFile);
+    // const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile,
+    // QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
 
     // Delay the reading of a tableStyle until we find a table as we need the
     // clrMap from the master slide
     const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::tableStyles);
 
     PptxSlideProperties *notes = 0;
-    const QString notesTarget(m_context->relationships->targetForType(m_context->path, m_context->file,
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesMaster"));
+    const QString notesTarget(m_context->relationships->targetForType(m_context->path,
+                                                                      m_context->file,
+                                                                      "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesMaster"));
     if (!notesTarget.isEmpty()) {
         notes = &d->notesMasterPageProperties[notesTarget];
     }
 
-    PptxXmlSlideReaderContext context(
-        *m_context->import,
-        slidePath, slideFile,
-        d->slideNumber,
-        &d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].theme,
-        PptxXmlSlideReader::Slide,
-        slideLayoutProperties,
-        &d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName],
-        notes,
-        *m_context->relationships,
-        d->commentAuthors,
-        d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].colorMap,
-        vmlreader,
-        tableStylesFilePath
-    );
+    PptxXmlSlideReaderContext context(*m_context->import,
+                                      slidePath,
+                                      slideFile,
+                                      d->slideNumber,
+                                      &d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].theme,
+                                      PptxXmlSlideReader::Slide,
+                                      slideLayoutProperties,
+                                      &d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName],
+                                      notes,
+                                      *m_context->relationships,
+                                      d->commentAuthors,
+                                      d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].colorMap,
+                                      vmlreader,
+                                      tableStylesFilePath);
 
     // 1st reading round - read possible colorMap override
     PptxXmlSlideReader slideReader(this);
     context.firstReadingRound = true;
 
-    KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
-        &slideReader, slidePath + '/' + slideFile, &context);
+    KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(&slideReader, slidePath + '/' + slideFile, &context);
     if (status != KoFilter::OK) {
         debugPptx << slideReader.errorString();
         return status;
     }
 
-    context.initializeContext(d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].theme, defaultParagraphStyles,
-        defaultTextStyles, defaultListStyles, defaultBulletColors, defaultTextColors, defaultLatinFonts);
+    context.initializeContext(d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].theme,
+                              defaultParagraphStyles,
+                              defaultTextStyles,
+                              defaultListStyles,
+                              defaultBulletColors,
+                              defaultTextColors,
+                              defaultLatinFonts);
 
     // 2nd reading round
     context.firstReadingRound = false;
@@ -388,9 +403,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
     // Reading the notesmaster theme
     PptxSlideProperties notesPageProperties;
 
-    const QString notesThemePathAndFile(m_context->relationships->targetForType(
-        notesMasterPath, notesMasterFile,
-        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
+    const QString notesThemePathAndFile(
+        m_context->relationships->targetForType(notesMasterPath, notesMasterFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
     debugPptx << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
     debugPptx << "notesThemePathAndFile:" << notesThemePathAndFile;
 
@@ -398,20 +412,19 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
     MSOOXML::Utils::splitPathAndFile(notesThemePathAndFile, &notesThemePath, &notesThemeFile);
 
     MSOOXML::MsooXmlThemesReader themesReader(m_writers);
-    MSOOXML::MsooXmlThemesReaderContext themecontext(notesPageProperties.theme, m_context->relationships, m_context->import,
-        notesThemePath, notesThemeFile);
+    MSOOXML::MsooXmlThemesReaderContext themecontext(notesPageProperties.theme, m_context->relationships, m_context->import, notesThemePath, notesThemeFile);
 
     QString errorMessage;
 
-    KoFilter::ConversionStatus status
-        = m_context->import->loadAndParseDocument(&themesReader, notesThemePathAndFile, errorMessage, &themecontext);
+    KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(&themesReader, notesThemePathAndFile, errorMessage, &themecontext);
 
-    //empty map used here as slideMaster is the place where the map is created
+    // empty map used here as slideMaster is the place where the map is created
     QMap<QString, QString> dummyMap;
 
     VmlDrawingReader vmlreader(this);
-    QString vmlTarget = m_context->relationships->targetForType(notesMasterPath, notesMasterFile,
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
+    QString vmlTarget = m_context->relationships->targetForType(notesMasterPath,
+                                                                notesMasterFile,
+                                                                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
 
     if (!vmlTarget.isEmpty()) {
         QString errorMessage, vmlPath, vmlFile;
@@ -420,48 +433,49 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
         fileName.remove(0, m_context->path.length());
         MSOOXML::Utils::splitPathAndFile(vmlTarget, &vmlPath, &vmlFile);
 
-        VmlDrawingReaderContext vmlContext(*m_context->import,
-            vmlPath, vmlFile, *m_context->relationships);
+        VmlDrawingReaderContext vmlContext(*m_context->import, vmlPath, vmlFile, *m_context->relationships);
 
-        const KoFilter::ConversionStatus status =
-            m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
+        const KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
         if (status != KoFilter::OK) {
             vmlreader.raiseError(errorMessage);
         }
     }
 
-    PptxXmlSlideReaderContext context(
-        *m_context->import,
-        notesMasterPath, notesMasterFile,
-        0, &notesPageProperties.theme,
-        PptxXmlSlideReader::NotesMaster,
-        0,
-        0,
-        &notesPageProperties,
-        *m_context->relationships,
-        d->commentAuthors,
-        dummyMap,
-        vmlreader,
-        QString()
-    );
+    PptxXmlSlideReaderContext context(*m_context->import,
+                                      notesMasterPath,
+                                      notesMasterFile,
+                                      0,
+                                      &notesPageProperties.theme,
+                                      PptxXmlSlideReader::NotesMaster,
+                                      0,
+                                      0,
+                                      &notesPageProperties,
+                                      *m_context->relationships,
+                                      d->commentAuthors,
+                                      dummyMap,
+                                      vmlreader,
+                                      QString());
 
     PptxXmlSlideReader notesMasterReader(this);
     context.firstReadingRound = true;
-    status = m_context->import->loadAndParseDocument(
-        &notesMasterReader, notesMasterPath + '/' + notesMasterFile, &context);
+    status = m_context->import->loadAndParseDocument(&notesMasterReader, notesMasterPath + '/' + notesMasterFile, &context);
     if (status != KoFilter::OK) {
         debugPptx << notesMasterReader.errorString();
         return status;
     }
 
-    context.initializeContext(notesPageProperties.theme, defaultParagraphStyles,
-        defaultTextStyles, defaultListStyles, defaultBulletColors, defaultTextColors, defaultLatinFonts);
+    context.initializeContext(notesPageProperties.theme,
+                              defaultParagraphStyles,
+                              defaultTextStyles,
+                              defaultListStyles,
+                              defaultBulletColors,
+                              defaultTextColors,
+                              defaultLatinFonts);
 
     // In this context we already have the real colorMap
     context.firstReadingRound = false;
 
-    status = m_context->import->loadAndParseDocument(
-        &notesMasterReader, notesMasterPath + '/' + notesMasterFile, &context);
+    status = m_context->import->loadAndParseDocument(&notesMasterReader, notesMasterPath + '/' + notesMasterFile, &context);
     if (status != KoFilter::OK) {
         debugPptx << notesMasterReader.errorString();
         return status;
@@ -503,9 +517,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
 
     PptxSlideProperties masterPageProperties;
 
-    const QString slideThemePathAndFile(m_context->relationships->targetForType(
-        slideMasterPath, slideMasterFile,
-        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
+    const QString slideThemePathAndFile(
+        m_context->relationships->targetForType(slideMasterPath, slideMasterFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
     debugPptx << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
     debugPptx << "slideThemePathAndFile:" << slideThemePathAndFile;
 
@@ -513,20 +526,19 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     MSOOXML::Utils::splitPathAndFile(slideThemePathAndFile, &slideThemePath, &slideThemeFile);
 
     MSOOXML::MsooXmlThemesReader themesReader(m_writers);
-    MSOOXML::MsooXmlThemesReaderContext themecontext(masterPageProperties.theme, m_context->relationships, m_context->import,
-        slideThemePath, slideThemeFile);
+    MSOOXML::MsooXmlThemesReaderContext themecontext(masterPageProperties.theme, m_context->relationships, m_context->import, slideThemePath, slideThemeFile);
 
     QString errorMessage;
 
-    KoFilter::ConversionStatus status
-        = m_context->import->loadAndParseDocument(&themesReader, slideThemePathAndFile, errorMessage, &themecontext);
+    KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(&themesReader, slideThemePathAndFile, errorMessage, &themecontext);
 
-    //empty map used here as slideMaster is the place where the map is created
+    // empty map used here as slideMaster is the place where the map is created
     QMap<QString, QString> dummyMap;
 
     VmlDrawingReader vmlreader(this);
-    QString vmlTarget = m_context->relationships->targetForType(slideMasterPath, slideMasterFile,
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
+    QString vmlTarget = m_context->relationships->targetForType(slideMasterPath,
+                                                                slideMasterFile,
+                                                                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
 
     if (!vmlTarget.isEmpty()) {
         QString errorMessage, vmlPath, vmlFile;
@@ -535,48 +547,49 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         fileName.remove(0, m_context->path.length());
         MSOOXML::Utils::splitPathAndFile(vmlTarget, &vmlPath, &vmlFile);
 
-        VmlDrawingReaderContext vmlContext(*m_context->import,
-            vmlPath, vmlFile, *m_context->relationships);
+        VmlDrawingReaderContext vmlContext(*m_context->import, vmlPath, vmlFile, *m_context->relationships);
 
-        const KoFilter::ConversionStatus status =
-            m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
+        const KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
         if (status != KoFilter::OK) {
             vmlreader.raiseError(errorMessage);
         }
     }
 
-    PptxXmlSlideReaderContext context(
-        *m_context->import,
-        slideMasterPath, slideMasterFile,
-        0/*unused*/, &masterPageProperties.theme,
-        PptxXmlSlideReader::SlideMaster,
-        0,
-        &masterPageProperties,
-        0,
-        *m_context->relationships,
-        d->commentAuthors,
-        dummyMap,
-        vmlreader,
-        QString()
-    );
+    PptxXmlSlideReaderContext context(*m_context->import,
+                                      slideMasterPath,
+                                      slideMasterFile,
+                                      0 /*unused*/,
+                                      &masterPageProperties.theme,
+                                      PptxXmlSlideReader::SlideMaster,
+                                      0,
+                                      &masterPageProperties,
+                                      0,
+                                      *m_context->relationships,
+                                      d->commentAuthors,
+                                      dummyMap,
+                                      vmlreader,
+                                      QString());
 
     PptxXmlSlideReader slideMasterReader(this);
     context.firstReadingRound = true;
-    status = m_context->import->loadAndParseDocument(
-        &slideMasterReader, slideMasterPath + '/' + slideMasterFile, &context);
+    status = m_context->import->loadAndParseDocument(&slideMasterReader, slideMasterPath + '/' + slideMasterFile, &context);
     if (status != KoFilter::OK) {
         debugPptx << slideMasterReader.errorString();
         return status;
     }
 
-    context.initializeContext(masterPageProperties.theme, defaultParagraphStyles,
-        defaultTextStyles, defaultListStyles, defaultBulletColors, defaultTextColors, defaultLatinFonts);
+    context.initializeContext(masterPageProperties.theme,
+                              defaultParagraphStyles,
+                              defaultTextStyles,
+                              defaultListStyles,
+                              defaultBulletColors,
+                              defaultTextColors,
+                              defaultLatinFonts);
 
     // In this context we already have the real colorMap
     context.firstReadingRound = false;
 
-    status = m_context->import->loadAndParseDocument(
-        &slideMasterReader, slideMasterPath + '/' + slideMasterFile, &context);
+    status = m_context->import->loadAndParseDocument(&slideMasterReader, slideMasterPath + '/' + slideMasterFile, &context);
     if (status != KoFilter::OK) {
         debugPptx << slideMasterReader.errorString();
         return status;
@@ -715,8 +728,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesSz()
     d->notePageLayout.topMargin = 0.0;
     d->notePageLayout.bottomMargin = 0.0;
 
-    d->notePageLayout.orientation = d->notePageLayout.width > d->notePageLayout.height
-        ? KoPageFormat::Landscape : KoPageFormat::Portrait;
+    d->notePageLayout.orientation = d->notePageLayout.width > d->notePageLayout.height ? KoPageFormat::Landscape : KoPageFormat::Portrait;
 
     readNext();
 
@@ -754,8 +766,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldSz()
     d->pageLayout.topMargin = 0.0;
     d->pageLayout.bottomMargin = 0.0;
     //! @todo orientation heuristics - OK?
-    d->pageLayout.orientation = d->pageLayout.width > d->pageLayout.height
-        ? KoPageFormat::Landscape : KoPageFormat::Portrait;
+    d->pageLayout.orientation = d->pageLayout.width > d->pageLayout.height ? KoPageFormat::Landscape : KoPageFormat::Portrait;
 
     readNext();
 
@@ -818,7 +829,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_defaultTextStyle()
             ELSE_TRY_READ_IF_NS(a, lvl7pPr)
             ELSE_TRY_READ_IF_NS(a, lvl8pPr)
             ELSE_TRY_READ_IF_NS(a, lvl9pPr)
-//! @todo add ELSE_WRONG_FORMAT
+            //! @todo add ELSE_WRONG_FORMAT
         }
         if (isEndElement()) {
             if (qualifiedName().toString().startsWith(QLatin1String("a:lvl"))) {
@@ -877,11 +888,10 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
                 ELSE_TRY_READ_IF(notesMasterIdLst)
                 ELSE_TRY_READ_IF(notesSz)
                 SKIP_UNKNOWN
-//! @todo add ELSE_WRONG_FORMAT
+                //! @todo add ELSE_WRONG_FORMAT
             }
         }
-    }
-    else {
+    } else {
         while (!atEnd()) {
             readNext();
             BREAK_IF_END_OF(CURRENT_EL)
@@ -929,16 +939,15 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
                 d->masterPageStyles[index].addAttribute("style:page-layout-name", pageLayoutStyleName);
             }
             if (!d->masterPageDrawStyleNames.at(index).isEmpty()) {
-               d->masterPageStyles[index].addAttribute("draw:style-name", d->masterPageDrawStyleNames.at(index));
+                d->masterPageStyles[index].addAttribute("draw:style-name", d->masterPageDrawStyleNames.at(index));
             }
-            d->masterPageStyles[index].addChildElement(QString("frame-2-%1").arg(index), d->masterPageFrames.at((1+index)*2-1));
+            d->masterPageStyles[index].addChildElement(QString("frame-2-%1").arg(index), d->masterPageFrames.at((1 + index) * 2 - 1));
             const QString masterPageStyleName(mainStyles->insert(d->masterPageStyles.at(index), "slideMaster"));
             ++index;
         }
     } else {
-        m_context->numberOfItems = m_context->relationships->targetCountWithWord("slideMasters") +
-                                   m_context->relationships->targetCountWithWord("notesMasters") +
-                                   m_context->relationships->targetCountWithWord("slides");
+        m_context->numberOfItems = m_context->relationships->targetCountWithWord("slideMasters") + m_context->relationships->targetCountWithWord("notesMasters")
+            + m_context->relationships->targetCountWithWord("slides");
     }
 
     READ_EPILOGUE

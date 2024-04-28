@@ -12,8 +12,8 @@
 #ifndef CALLIGRA_SHEETS_SHOW_DIALOG
 #define CALLIGRA_SHEETS_SHOW_DIALOG
 
-#include <KoDialog.h>
 #include "../sheets_ui_export.h"
+#include <KoDialog.h>
 
 class QListWidget;
 
@@ -28,7 +28,7 @@ class Selection;
  * Dialog to show a hidden sheet.
  * \todo Rename to ShowSheetDialog.
  */
-class CALLIGRA_SHEETS_UI_EXPORT ShowDialog: public KoDialog
+class CALLIGRA_SHEETS_UI_EXPORT ShowDialog : public KoDialog
 {
     Q_OBJECT
 public:
@@ -38,7 +38,7 @@ public Q_SLOTS:
     void accept() override;
 
 private:
-    Selection* m_selection;
+    Selection *m_selection;
     QListWidget *m_listWidget;
 };
 

@@ -9,22 +9,22 @@
 #include "OdfDebug.h"
 
 #include <QList>
-#include <QUrl>
 #include <QString>
+#include <QUrl>
 
 #include <KoStore.h>
-#include <KoXmlReader.h>
 #include <KoXmlNS.h>
-
+#include <KoXmlReader.h>
 
 #define INTERNAL_PROTOCOL "intern"
 #define STORE_PROTOCOL "tar"
 
-
 class Q_DECL_HIDDEN KoEmbeddedDocumentLoader::Private
 {
 public:
-    Private() {}
+    Private()
+    {
+    }
 
     KoDocumentBase *doc;
 };
@@ -84,9 +84,9 @@ bool KoEmbeddedDocumentLoader::loadEmbeddedDocument(const KoXmlElement &element,
         path += '/';
     }
     const QString mimeType = context.mimeTypeForPath(path);
-    //debugOdf << "path for manifest file=" << path << "mimeType=" << mimeType;
+    // debugOdf << "path for manifest file=" << path << "mimeType=" << mimeType;
     if (mimeType.isEmpty()) {
-        //debugOdf << "Manifest doesn't have media-type for" << path;
+        // debugOdf << "Manifest doesn't have media-type for" << path;
         return false;
     }
     bool res = true;
@@ -99,30 +99,30 @@ bool KoEmbeddedDocumentLoader::loadEmbeddedDocument(const KoXmlElement &element,
         store->popDirectory();
         d->doc->setStoreInternal(true);
     } else {
-        //TODO
-        //         // Reference to an external document.
-        //         dpc->setStoreInternal(false);
-        //         QUrl url = QUrl::fromUserInput(tmpURL);
-        //         if (!url.isLocalFile()) {
-        //             //QApplication::restoreOverrideCursor();
+        // TODO
+        //          // Reference to an external document.
+        //          dpc->setStoreInternal(false);
+        //          QUrl url = QUrl::fromUserInput(tmpURL);
+        //          if (!url.isLocalFile()) {
+        //              //QApplication::restoreOverrideCursor();
         //
-        //             // For security reasons we need to ask confirmation if the
-        //             // url is remote.
-        //             int result = KMessageBox::warningTwoActionsCancel(
-        //                 0, i18n("This document contains an external link to a remote document\n%1", tmpURL),
-        //                                                          i18n("Confirmation Required"), KGuiItem(i18n("Download")), KGuiItem(i18n("Skip")));
+        //              // For security reasons we need to ask confirmation if the
+        //              // url is remote.
+        //              int result = KMessageBox::warningTwoActionsCancel(
+        //                  0, i18n("This document contains an external link to a remote document\n%1", tmpURL),
+        //                                                           i18n("Confirmation Required"), KGuiItem(i18n("Download")), KGuiItem(i18n("Skip")));
         //
-        //             if (result == KMessageBox::Cancel) {
-        //                 //d->m_parent->setErrorMessage("USER_CANCELED");
-        //                 return false;
-        //             }
-        //             if (result == KMessageBox::PrimaryAction) {
-        //                 res = openUrl(url);
-        //             }
-        //             // and if == No, res will still be false so we'll use a kounavail below
-        //         } else {
-        //             res = openUrl(url);
-        //         }
+        //              if (result == KMessageBox::Cancel) {
+        //                  //d->m_parent->setErrorMessage("USER_CANCELED");
+        //                  return false;
+        //              }
+        //              if (result == KMessageBox::PrimaryAction) {
+        //                  res = openUrl(url);
+        //              }
+        //              // and if == No, res will still be false so we'll use a kounavail below
+        //          } else {
+        //              res = openUrl(url);
+        //          }
     }
     return res;
 }

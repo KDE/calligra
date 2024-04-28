@@ -7,7 +7,9 @@ class TestSpellCheck : public QObject
 {
     Q_OBJECT
 public:
-    TestSpellCheck() {}
+    TestSpellCheck()
+    {
+    }
 
 private Q_SLOTS:
     void testFetchMoreText();

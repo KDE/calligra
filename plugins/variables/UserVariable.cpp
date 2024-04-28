@@ -9,16 +9,16 @@
 #include "UserVariableOptionsWidget.h"
 #include "VariablesDebug.h"
 
+#include <KoInlineTextObjectManager.h>
+#include <KoOdfLoadingContext.h>
+#include <KoProperties.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoTextDocument.h>
+#include <KoVariableManager.h>
+#include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
-#include <KoProperties.h>
-#include <KoOdfLoadingContext.h>
-#include <KoShapeSavingContext.h>
-#include <KoShapeLoadingContext.h>
-#include <KoXmlNS.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoVariableManager.h>
-#include <KoTextDocument.h>
 
 #include <KLocalizedString>
 
@@ -53,7 +53,7 @@ int UserVariable::property() const
     return m_property;
 }
 
-const QString& UserVariable::name() const
+const QString &UserVariable::name() const
 {
     return m_name;
 }
@@ -75,7 +75,7 @@ void UserVariable::setNumberStyle(KoOdfNumberStyles::NumericStyleFormat numberst
     valueChanged();
 }
 
-QWidget* UserVariable::createOptionsWidget()
+QWidget *UserVariable::createOptionsWidget()
 {
     UserVariableOptionsWidget *configWidget = new UserVariableOptionsWidget(this);
     return configWidget;
@@ -83,8 +83,8 @@ QWidget* UserVariable::createOptionsWidget()
 
 void UserVariable::valueChanged()
 {
-    //TODO apply following also to plugins/variables/DateVariable.cpp:96
-    //TODO handle formula
+    // TODO apply following also to plugins/variables/DateVariable.cpp:96
+    // TODO handle formula
     QString value = variableManager()->value(m_name);
     value = KoOdfNumberStyles::format(value, m_numberstyle);
     setValue(value);
@@ -93,16 +93,16 @@ void UserVariable::valueChanged()
 void UserVariable::readProperties(const KoProperties *props)
 {
     m_property = props->intProperty("varproperty");
-    //m_name = props->stringProperty("varname");
-    //debugVariables << m_property << m_name;
-    //valueChanged();
+    // m_name = props->stringProperty("varname");
+    // debugVariables << m_property << m_name;
+    // valueChanged();
 }
 
 void UserVariable::propertyChanged(Property property, const QVariant &value)
 {
     Q_UNUSED(property);
     Q_UNUSED(value);
-    //setValue(value.toString());
+    // setValue(value.toString());
 }
 
 void UserVariable::saveOdf(KoShapeSavingContext &context)

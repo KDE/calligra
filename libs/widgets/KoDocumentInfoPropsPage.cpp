@@ -9,10 +9,10 @@
 
 #include <QIcon>
 
-#include "KoOdfReadStore.h"
-#include "KoStore.h"
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
+#include "KoOdfReadStore.h"
+#include "KoStore.h"
 #include <QUrl>
 #include <WidgetsDebug.h>
 
@@ -26,10 +26,9 @@ public:
     KoStore *m_dst;
 };
 
-KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props,
-        const QVariantList &)
-        : KPropertiesDialogPlugin(props)
-        , d(new KoDocumentInfoPropsPagePrivate)
+KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props, const QVariantList &)
+    : KPropertiesDialogPlugin(props)
+    , d(new KoDocumentInfoPropsPagePrivate)
 {
     d->m_info = new KoDocumentInfo(this);
     d->m_url = props->item().url();
@@ -67,8 +66,8 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props,
     d->m_dlg = new KoDocumentInfoDlg(props, d->m_info);
     d->m_dlg->setReadOnly(true);
     // "Steal" the pages from the document info dialog
-    Q_FOREACH(KPageWidgetItem* page, d->m_dlg->pages()) {
-        KPageWidgetItem* myPage = new KPageWidgetItem(page->widget(), page->header());
+    Q_FOREACH (KPageWidgetItem *page, d->m_dlg->pages()) {
+        KPageWidgetItem *myPage = new KPageWidgetItem(page->widget(), page->header());
         myPage->setIcon(page->icon());
         props->addPage(myPage);
     }

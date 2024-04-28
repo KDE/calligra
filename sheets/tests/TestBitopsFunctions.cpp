@@ -15,9 +15,13 @@ void TestBitopsFunctions::initTestCase()
 }
 
 // because we may need to promote expected value from integer to float
-#define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
+#define CHECK_EVAL(x, y)                                                                                                                                       \
+    {                                                                                                                                                          \
+        Value z(y);                                                                                                                                            \
+        QCOMPARE(evaluate(x, z), (z));                                                                                                                         \
+    }
 
-Value TestBitopsFunctions::evaluate(const QString& formula, Value& ex)
+Value TestBitopsFunctions::evaluate(const QString &formula, Value &ex)
 {
     Formula f;
     QString expr = formula;
@@ -51,13 +55,12 @@ void TestBitopsFunctions::testBITAND()
     // test of 32-bit value
     CHECK_EVAL("BITAND(4294967289; 4294967285)", Value(static_cast<int64_t>(4294967281)));
     // test of 48 bit value
-    CHECK_EVAL("BITAND(281474976710649 ; 281474976710645)",  Value(static_cast<int64_t>(281474976710641)));
+    CHECK_EVAL("BITAND(281474976710649 ; 281474976710645)", Value(static_cast<int64_t>(281474976710641)));
     // test of 48 bit value
-    CHECK_EVAL("BITAND(281474976710655; 281474976710655)",  Value(static_cast<int64_t>(281474976710655)));
+    CHECK_EVAL("BITAND(281474976710655; 281474976710655)", Value(static_cast<int64_t>(281474976710655)));
     // test of 48 bit value
     CHECK_EVAL("BITAND(281474976710655; 281474976710655)<>281474976710656", Value(true));
 }
-
 
 void TestBitopsFunctions::testBITOR()
 {
@@ -76,9 +79,9 @@ void TestBitopsFunctions::testBITOR()
     // test of 32-bit value
     CHECK_EVAL("BITOR(4294967289; 4294967285)", Value(static_cast<int64_t>(4294967293)));
     // test of 48 bit value
-    CHECK_EVAL("BITOR(281474976710649; 281474976710645)",  Value(static_cast<int64_t>(281474976710653)));
+    CHECK_EVAL("BITOR(281474976710649; 281474976710645)", Value(static_cast<int64_t>(281474976710653)));
     // test of 48 bit value
-    CHECK_EVAL("BITOR(281474976710655; 281474976710655)",  Value(static_cast<int64_t>(281474976710655)));
+    CHECK_EVAL("BITOR(281474976710655; 281474976710655)", Value(static_cast<int64_t>(281474976710655)));
     // test of 48 bit value
     CHECK_EVAL("BITOR(281474976710655; 281474976710655)<>281474976710656", Value(true));
 }
@@ -100,9 +103,9 @@ void TestBitopsFunctions::testBITXOR()
     // test of 32-bit value
     CHECK_EVAL("BITXOR(4294967289; 2)", Value(static_cast<int64_t>(4294967291)));
     // test of 48 bit value
-    CHECK_EVAL("BITXOR(281474976710649 ; 2)",  Value(static_cast<int64_t>(281474976710651)));
+    CHECK_EVAL("BITXOR(281474976710649 ; 2)", Value(static_cast<int64_t>(281474976710651)));
     // test of 48 bit value
-    CHECK_EVAL("BITXOR(281474976710655; 0)",  Value(static_cast<int64_t>(281474976710655)));
+    CHECK_EVAL("BITXOR(281474976710655; 0)", Value(static_cast<int64_t>(281474976710655)));
     // test of 48 bit value
     CHECK_EVAL("BITXOR(281474976710655; 0)<>281474976710656", Value(true));
 }

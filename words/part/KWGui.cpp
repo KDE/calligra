@@ -7,33 +7,33 @@
  */
 
 #include "KWGui.h"
-#include "KWView.h"
-#include "KWDocument.h"
 #include "KWCanvas.h"
+#include "KWDocument.h"
 #include "KWPage.h"
+#include "KWView.h"
 
-#include <KoCanvasControllerWidget.h>
-#include <KoToolManager.h>
-#include <KoShapeManager.h>
-#include <KoShape.h>
-#include <KoFlake.h>
-#include <KoSelection.h>
-#include <KoDockerManager.h>
-#include <KoRuler.h>
-#include <KoUnit.h>
-#include <KoModeBoxFactory.h>
-#include <KoRulerController.h>
 #include <KActionCollection>
+#include <KoCanvasControllerWidget.h>
+#include <KoDockerManager.h>
+#include <KoFlake.h>
+#include <KoModeBoxFactory.h>
+#include <KoRuler.h>
+#include <KoRulerController.h>
+#include <KoSelection.h>
+#include <KoShape.h>
+#include <KoShapeManager.h>
+#include <KoToolManager.h>
+#include <KoUnit.h>
 
-#include <QGridLayout>
-#include <QTimer>
-#include <QAction>
-#include <QScrollBar>
 #include <KoMainWindow.h>
+#include <QAction>
+#include <QGridLayout>
+#include <QScrollBar>
+#include <QTimer>
 
 KWGui::KWGui(const QString &viewMode, KWView *parent)
-        : QWidget(parent),
-        m_view(parent)
+    : QWidget(parent)
+    , m_view(parent)
 {
     QGridLayout *gridLayout = new QGridLayout(this);
     gridLayout->setContentsMargins({});
@@ -49,13 +49,13 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     m_verticalRuler->setUnit(m_view->kwdocument()->unit());
     m_verticalRuler->setShowMousePosition(true);
 
-    m_canvas = new KWCanvas(viewMode, static_cast<KWDocument*>(m_view->koDocument()), m_view, this);
+    m_canvas = new KWCanvas(viewMode, static_cast<KWDocument *>(m_view->koDocument()), m_view, this);
     KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(m_view->actionCollection(), this);
     m_canvasController = canvasController;
     // We need to set this as QDeclarativeView sets them a bit different from QAbstractScrollArea
     canvasController->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     canvasController->setFocusPolicy(Qt::NoFocus);
-        //setScene(0);
+    // setScene(0);
 
     canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     m_canvasController->setMargin(10);
@@ -64,12 +64,11 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     KoToolManager::instance()->addController(m_canvasController);
     KoToolManager::instance()->registerTools(m_view->actionCollection(), m_canvasController);
 
-    if (m_view->mainWindow())
-    {
+    if (m_view->mainWindow()) {
         KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
-        QDockWidget* modeBox = m_view->mainWindow()->createDockWidget(&modeBoxFactory);
+        QDockWidget *modeBox = m_view->mainWindow()->createDockWidget(&modeBoxFactory);
         m_view->mainWindow()->dockerManager()->removeToolOptionsDocker();
-        dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(m_canvas);
+        dynamic_cast<KoCanvasObserverBase *>(modeBox)->setObservedCanvas(m_canvas);
     }
 
     gridLayout->addWidget(m_horizontalRuler->tabChooser(), 0, 0);
@@ -118,11 +117,10 @@ QSize KWGui::viewportSize() const
     return m_canvasController->viewportSize();
 }
 
-
 bool KWGui::horizontalScrollBarVisible()
 {
-    return static_cast<KoCanvasControllerWidget*>(m_canvasController)->horizontalScrollBar() &&
-           static_cast<KoCanvasControllerWidget*>(m_canvasController)->horizontalScrollBar()->isVisible();
+    return static_cast<KoCanvasControllerWidget *>(m_canvasController)->horizontalScrollBar()
+        && static_cast<KoCanvasControllerWidget *>(m_canvasController)->horizontalScrollBar()->isVisible();
 }
 
 void KWGui::pageSetupChanged()
@@ -167,14 +165,13 @@ void KWGui::shapeSelectionChanged()
 
 void KWGui::setupUnitActions()
 {
-    QList<QAction*> unitActions = m_view->createChangeUnitActions();
+    QList<QAction *> unitActions = m_view->createChangeUnitActions();
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
     unitActions.append(separator);
     unitActions.append(m_view->actionCollection()->action("format_page"));
     m_horizontalRuler->setPopupActionList(unitActions);
 }
-
 
 void KWGui::mouseMoveEvent(QMouseEvent *e)
 {

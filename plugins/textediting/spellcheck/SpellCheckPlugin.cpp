@@ -11,14 +11,12 @@
 
 #include <KoTextEditingRegistry.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(SpellCheckPluginFactory, "calligra_textediting_spellcheck.json",
-                           registerPlugin<SpellCheckPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(SpellCheckPluginFactory, "calligra_textediting_spellcheck.json", registerPlugin<SpellCheckPlugin>();)
 
-SpellCheckPlugin::SpellCheckPlugin(QObject *parent, const QVariantList&)
+SpellCheckPlugin::SpellCheckPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoTextEditingRegistry::instance()->add(new SpellCheckFactory());
 }
 
 #include <SpellCheckPlugin.moc>
-

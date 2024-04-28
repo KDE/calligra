@@ -12,9 +12,9 @@
 
 #include <QPainter>
 
-#include "KoShapeManager.h"
-#include "KoSelection.h"
 #include "KoCanvasBase.h"
+#include "KoSelection.h"
+#include "KoShapeManager.h"
 
 KoShapeRubberSelectStrategy::KoShapeRubberSelectStrategy(KoToolBase *tool, const QPointF &clicked, bool useSnapToGrid)
     : KoInteractionStrategy(*(new KoShapeRubberSelectStrategyPrivate(tool)))
@@ -31,7 +31,7 @@ void KoShapeRubberSelectStrategy::paint(QPainter &painter, const KoViewConverter
     Q_D(KoShapeRubberSelectStrategy);
     painter.setRenderHint(QPainter::Antialiasing, false);
 
-    QColor selectColor(Qt::blue);   // TODO make configurable
+    QColor selectColor(Qt::blue); // TODO make configurable
     selectColor.setAlphaF(0.5);
     QBrush sb(selectColor, Qt::SolidPattern);
     painter.setPen(QPen(sb, 0));
@@ -89,9 +89,9 @@ void KoShapeRubberSelectStrategy::finishInteraction(Qt::KeyboardModifiers modifi
 {
     Q_D(KoShapeRubberSelectStrategy);
     Q_UNUSED(modifiers);
-    KoSelection * selection = d->tool->canvas()->shapeManager()->selection();
+    KoSelection *selection = d->tool->canvas()->shapeManager()->selection();
     QList<KoShape *> shapes(d->tool->canvas()->shapeManager()->shapesAt(d->selectRect));
-    foreach(KoShape * shape, shapes) {
+    foreach (KoShape *shape, shapes) {
         if (!(shape->isSelectable() && shape->isVisible()))
             continue;
         selection->select(shape);

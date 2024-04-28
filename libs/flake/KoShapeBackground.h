@@ -51,10 +51,9 @@ public:
 protected:
     KoShapeBackground(KoShapeBackgroundPrivate &);
     KoShapeBackgroundPrivate *d_ptr;
+
 private:
     Q_DECLARE_PRIVATE(KoShapeBackground)
-
-
 };
 
 #endif // KOSHAPEBACKGROUND_H

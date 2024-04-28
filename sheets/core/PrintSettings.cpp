@@ -11,8 +11,8 @@
 #include "PrintSettings.h"
 
 // Sheets
-#include "engine/calligra_sheets_limits.h"
 #include "engine/Region.h"
+#include "engine/calligra_sheets_limits.h"
 
 // Calligra
 #include <KoPageLayout.h>
@@ -27,16 +27,16 @@ class Q_DECL_HIDDEN PrintSettings::Private
 {
 public:
     KoPageLayout pageLayout;
-    bool printGrid              : 1;
-    bool printCharts            : 1;
-    bool printObjects           : 1;
-    bool printGraphics          : 1;
-    bool printCommentIndicator  : 1;
-    bool printFormulaIndicator  : 1;
-    bool printHeaders           : 1;
-    bool printZeroValues        : 1;
-    bool centerHorizontally     : 1;
-    bool centerVertically       : 1;
+    bool printGrid : 1;
+    bool printCharts : 1;
+    bool printObjects : 1;
+    bool printGraphics : 1;
+    bool printCommentIndicator : 1;
+    bool printFormulaIndicator : 1;
+    bool printHeaders : 1;
+    bool printZeroValues : 1;
+    bool centerHorizontally : 1;
+    bool centerVertically : 1;
     PageOrder pageOrder;
     Region printRegion;
     double zoom;
@@ -51,13 +51,13 @@ public:
 void PrintSettings::Private::calculatePageDimensions()
 {
     if (pageLayout.format != KoPageFormat::CustomSize) {
-        pageLayout.width =  MM_TO_POINT(KoPageFormat::width(pageLayout.format, pageLayout.orientation));
+        pageLayout.width = MM_TO_POINT(KoPageFormat::width(pageLayout.format, pageLayout.orientation));
         pageLayout.height = MM_TO_POINT(KoPageFormat::height(pageLayout.format, pageLayout.orientation));
     }
 }
 
 PrintSettings::PrintSettings()
-        : d(new Private)
+    : d(new Private)
 {
     d->printGrid = false;
     d->printCharts = true;
@@ -74,8 +74,8 @@ PrintSettings::PrintSettings()
     d->zoom = 1.0;
 }
 
-PrintSettings::PrintSettings(const PrintSettings& other)
-        : d(new Private)
+PrintSettings::PrintSettings(const PrintSettings &other)
+    : d(new Private)
 {
     d->pageLayout = other.d->pageLayout;
     d->printGrid = other.d->printGrid;
@@ -101,12 +101,12 @@ PrintSettings::~PrintSettings()
     delete d;
 }
 
-const KoPageLayout& PrintSettings::pageLayout() const
+const KoPageLayout &PrintSettings::pageLayout() const
 {
     return d->pageLayout;
 }
 
-void PrintSettings::setPageLayout(const KoPageLayout& pageLayout)
+void PrintSettings::setPageLayout(const KoPageLayout &pageLayout)
 {
     d->pageLayout = pageLayout;
 }
@@ -262,17 +262,17 @@ void PrintSettings::setCenterVertically(bool center)
     d->centerVertically = center;
 }
 
-const Calligra::Sheets::Region& PrintSettings::printRegion() const
+const Calligra::Sheets::Region &PrintSettings::printRegion() const
 {
     return d->printRegion;
 }
 
-void PrintSettings::setPrintRegion(const Region& region)
+void PrintSettings::setPrintRegion(const Region &region)
 {
     d->printRegion = region;
 }
 
-void PrintSettings::addPrintRange(const QRect& range)
+void PrintSettings::addPrintRange(const QRect &range)
 {
     d->printRegion.add(range);
 }
@@ -287,38 +287,38 @@ void PrintSettings::setZoom(double zoom)
     d->zoom = zoom;
 }
 
-const QSize& PrintSettings::pageLimits() const
+const QSize &PrintSettings::pageLimits() const
 {
     return d->pageLimits;
 }
 
-void PrintSettings::setPageLimits(const QSize& pageLimits)
+void PrintSettings::setPageLimits(const QSize &pageLimits)
 {
     d->pageLimits = pageLimits;
 }
 
-const QPair<int, int>& PrintSettings::repeatedColumns() const
+const QPair<int, int> &PrintSettings::repeatedColumns() const
 {
     return d->repeatedColumns;
 }
 
-void PrintSettings::setRepeatedColumns(const QPair<int, int>& repeatedColumns)
+void PrintSettings::setRepeatedColumns(const QPair<int, int> &repeatedColumns)
 {
     d->repeatedColumns = repeatedColumns;
     debugSheets << repeatedColumns;
 }
 
-const QPair<int, int>& PrintSettings::repeatedRows() const
+const QPair<int, int> &PrintSettings::repeatedRows() const
 {
     return d->repeatedRows;
 }
 
-void PrintSettings::setRepeatedRows(const QPair<int, int>& repeatedRows)
+void PrintSettings::setRepeatedRows(const QPair<int, int> &repeatedRows)
 {
     d->repeatedRows = repeatedRows;
 }
 
-void PrintSettings::operator=(const PrintSettings & other)
+void PrintSettings::operator=(const PrintSettings &other)
 {
     d->pageLayout = other.d->pageLayout;
     d->printGrid = other.d->printGrid;
@@ -339,7 +339,7 @@ void PrintSettings::operator=(const PrintSettings & other)
     d->repeatedRows = other.d->repeatedRows;
 }
 
-bool PrintSettings::operator==(const PrintSettings& other) const
+bool PrintSettings::operator==(const PrintSettings &other) const
 {
     if (d->pageLayout != other.d->pageLayout)
         return false;

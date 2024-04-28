@@ -17,11 +17,10 @@ class EpsImport : public KoFilter
     Q_OBJECT
 
 public:
-    EpsImport(QObject* parent, const QVariantList&);
+    EpsImport(QObject *parent, const QVariantList &);
     ~EpsImport() override;
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };
 
 #endif
-

@@ -11,12 +11,11 @@
 #ifndef PLUGINSHAPE_H
 #define PLUGINSHAPE_H
 
-#include <QMap>
-#include <KoShape.h>
 #include <KoFrameShape.h>
+#include <KoShape.h>
+#include <QMap>
 
 #define PLUGINSHAPEID "PluginShape"
-
 
 class PluginShape : public KoShape, public KoFrameShape
 {
@@ -35,8 +34,8 @@ protected:
     bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
 private:
-    //Note:- We assume that all the name of draw:param are unique.
-    QMap<QString,QString> m_drawParams;
+    // Note:- We assume that all the name of draw:param are unique.
+    QMap<QString, QString> m_drawParams;
     QString m_mimetype;
     QString m_xlinkactuate;
     QString m_xlinkhref;

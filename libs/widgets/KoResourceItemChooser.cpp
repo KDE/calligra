@@ -12,34 +12,34 @@
 
 #include <math.h>
 
-#include <QGridLayout>
-#include <QButtonGroup>
-#include <QPushButton>
-#include <QHeaderView>
 #include <QAbstractProxyModel>
-#include <QLabel>
-#include <QScrollArea>
+#include <QButtonGroup>
+#include <QGridLayout>
+#include <QHeaderView>
 #include <QImage>
-#include <QPixmap>
+#include <QLabel>
 #include <QPainter>
+#include <QPixmap>
+#include <QPushButton>
+#include <QScrollArea>
 #include <QSplitter>
 #include <QToolButton>
 #include <QWheelEvent>
 
 #include <KLocalizedString>
 
-#include <KoIcon.h>
 #include <KoFileDialog.h>
+#include <KoIcon.h>
 
-#include "KoResourceServerAdapter.h"
-#include "KoResourceItemView.h"
-#include "KoResourceItemDelegate.h"
-#include "KoResourceModel.h"
 #include "KoResource.h"
-#include "KoResourceTaggingManager.h"
-#include "KoTagFilterWidget.h"
-#include "KoTagChooserWidget.h"
 #include "KoResourceItemChooserSync.h"
+#include "KoResourceItemDelegate.h"
+#include "KoResourceItemView.h"
+#include "KoResourceModel.h"
+#include "KoResourceServerAdapter.h"
+#include "KoResourceTaggingManager.h"
+#include "KoTagChooserWidget.h"
+#include "KoTagFilterWidget.h"
 
 class Q_DECL_HIDDEN KoResourceItemChooser::Private
 {
@@ -58,12 +58,13 @@ public:
         , synced(false)
         , updatesBlocked(false)
         , savedResourceWhileReset(0)
-    {}
+    {
+    }
     KoResourceModel *model;
     KoResourceTaggingManager *tagManager;
     KoResourceItemView *view;
     QButtonGroup *buttonGroup;
-    QToolButton  *viewModeButton;
+    QToolButton *viewModeButton;
 
     bool usePreview;
     QScrollArea *previewScroller;
@@ -77,7 +78,7 @@ public:
 
     KoResource *savedResourceWhileReset;
 
-    QList<QAbstractButton*> customButtons;
+    QList<QAbstractButton *> customButtons;
 };
 
 KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent, bool usePreview)
@@ -183,9 +184,7 @@ void KoResourceItemChooser::slotButtonClicked(int button)
 {
     if (button == Button_Import) {
         QString extensions = d->model->extensions();
-        QString filter = QString("%1")
-                         .arg(extensions.replace(QString(":"), QString(" ")));
-
+        QString filter = QString("%1").arg(extensions.replace(QString(":"), QString(" ")));
 
         KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
         dialog.setNameFilter(filter);
@@ -198,7 +197,6 @@ void KoResourceItemChooser::slotButtonClicked(int button)
         int row = index.row();
         int column = index.column();
         if (index.isValid()) {
-
             KoResource *resource = resourceFromModelIndex(index);
             if (resource) {
                 d->model->removeResource(resource);
@@ -218,11 +216,11 @@ void KoResourceItemChooser::slotButtonClicked(int button)
 
 void KoResourceItemChooser::showButtons(bool show)
 {
-    foreach (QAbstractButton * button, d->buttonGroup->buttons()) {
+    foreach (QAbstractButton *button, d->buttonGroup->buttons()) {
         show ? button->show() : button->hide();
     }
 
-    foreach(QAbstractButton *button, d->customButtons) {
+    foreach (QAbstractButton *button, d->customButtons) {
         show ? button->show() : button->hide();
     }
 }
@@ -237,14 +235,13 @@ void KoResourceItemChooser::addCustomButton(QAbstractButton *button, int cell)
 void KoResourceItemChooser::showTaggingBar(bool show)
 {
     d->tagManager->showTaggingBar(show);
-
 }
 
 void KoResourceItemChooser::setRowCount(int rowCount)
 {
     int resourceCount = d->model->resourcesCount();
     d->model->setColumnCount(static_cast<qreal>(resourceCount) / rowCount);
-    //Force an update to get the right row height (in theory)
+    // Force an update to get the right row height (in theory)
     QRect geometry = d->view->geometry();
     d->view->setViewMode(KoResourceItemView::FIXED_ROWS);
     d->view->setGeometry(geometry.adjusted(0, 0, 0, 1));
@@ -342,7 +339,7 @@ void KoResourceItemChooser::setProxyModel(QAbstractProxyModel *proxyModel)
     d->view->setModel(proxyModel);
 }
 
-void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
+void KoResourceItemChooser::activated(const QModelIndex & /*index*/)
 {
     KoResource *resource = currentResource();
     if (resource) {
@@ -358,7 +355,7 @@ void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
 void KoResourceItemChooser::updateButtonState()
 {
     QAbstractButton *removeButton = d->buttonGroup->button(Button_Remove);
-    if (! removeButton)
+    if (!removeButton)
         return;
 
     KoResource *resource = currentResource();
@@ -372,14 +369,12 @@ void KoResourceItemChooser::updateButtonState()
 
 void KoResourceItemChooser::updatePreview(KoResource *resource)
 {
-    if (!d->usePreview || !resource) return;
+    if (!d->usePreview || !resource)
+        return;
 
     QImage image = resource->image();
 
-    if (image.format() != QImage::Format_RGB32 ||
-        image.format() != QImage::Format_ARGB32 ||
-        image.format() != QImage::Format_ARGB32_Premultiplied) {
-
+    if (image.format() != QImage::Format_RGB32 || image.format() != QImage::Format_ARGB32 || image.format() != QImage::Format_ARGB32_Premultiplied) {
         image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
     }
 
@@ -397,7 +392,6 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
 
     // Only convert to grayscale if it is rgb. Otherwise, it's gray already.
     if (d->grayscalePreview && !image.isGrayscale()) {
-
         QRgb *pixel = reinterpret_cast<QRgb *>(image.bits());
         for (int row = 0; row < image.height(); ++row) {
             for (int col = 0; col < image.width(); ++col) {
@@ -411,7 +405,6 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
         }
     }
     d->previewLabel->setPixmap(QPixmap::fromImage(image));
-
 }
 
 KoResource *KoResourceItemChooser::resourceFromModelIndex(const QModelIndex &index) const
@@ -421,7 +414,7 @@ KoResource *KoResourceItemChooser::resourceFromModelIndex(const QModelIndex &ind
 
     const QAbstractProxyModel *proxyModel = dynamic_cast<const QAbstractProxyModel *>(index.model());
     if (proxyModel) {
-        //Get original model index, because proxy models destroy the internalPointer
+        // Get original model index, because proxy models destroy the internalPointer
         QModelIndex originalIndex = proxyModel->mapToSource(index);
         return static_cast<KoResource *>(originalIndex.internalPointer());
     }
@@ -495,7 +488,6 @@ bool KoResourceItemChooser::eventFilter(QObject *object, QEvent *event)
         KoResourceItemChooserSync *chooserSync = KoResourceItemChooserSync::instance();
         QWheelEvent *qwheel = static_cast<QWheelEvent *>(event);
         if (qwheel->modifiers() & Qt::ControlModifier) {
-
             int degrees = qwheel->angleDelta().y() / 8;
             int newBaseLength = chooserSync->baseLength() + degrees / 15 * 10;
             chooserSync->setBaseLength(newBaseLength);

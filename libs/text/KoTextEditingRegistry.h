@@ -20,19 +20,20 @@
  * @see KoTextEditingFactory
  * @see KoTextEditingPlugin
  */
-class KOTEXT_EXPORT KoTextEditingRegistry : public KoGenericRegistry<KoTextEditingFactory*>
+class KOTEXT_EXPORT KoTextEditingRegistry : public KoGenericRegistry<KoTextEditingFactory *>
 {
 public:
     /**
      * Return an instance of the KoTextEditingRegistry
      * Creates an instance if that has never happened before and returns the singleton instance.
      */
-    KoTextEditingRegistry() {}
+    KoTextEditingRegistry()
+    {
+    }
     ~KoTextEditingRegistry() override;
     static KoTextEditingRegistry *instance();
 
 private:
-
     void init();
 };
 

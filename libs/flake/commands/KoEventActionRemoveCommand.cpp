@@ -7,14 +7,16 @@
 #include "KoEventActionRemoveCommand.h"
 #include <KLocalizedString>
 
-#include "KoShape.h"
 #include "KoEventAction.h"
+#include "KoShape.h"
 
 class KoEventActionRemoveCommandPrivate
 {
 public:
     KoEventActionRemoveCommandPrivate(KoShape *s, KoEventAction *e)
-        : shape(s), eventAction(e), deleteEventAction(false)
+        : shape(s)
+        , eventAction(e)
+        , deleteEventAction(false)
     {
     }
 
@@ -30,8 +32,8 @@ public:
 };
 
 KoEventActionRemoveCommand::KoEventActionRemoveCommand(KoShape *shape, KoEventAction *eventAction, KUndo2Command *parent)
-    : KUndo2Command(parent),
-    d(new KoEventActionRemoveCommandPrivate(shape, eventAction))
+    : KUndo2Command(parent)
+    , d(new KoEventActionRemoveCommandPrivate(shape, eventAction))
 {
 }
 

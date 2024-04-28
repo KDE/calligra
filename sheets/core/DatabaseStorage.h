@@ -24,14 +24,24 @@ class CALLIGRA_SHEETS_CORE_EXPORT DatabaseStorage : public QObject, public RectS
 {
     Q_OBJECT
 public:
-    explicit DatabaseStorage(MapBase* map) : QObject(map), RectStorage<Database>(map) {}
-    DatabaseStorage(const DatabaseStorage& other) : QObject(other.parent()), RectStorage<Database>(other) {}
+    explicit DatabaseStorage(MapBase *map)
+        : QObject(map)
+        , RectStorage<Database>(map)
+    {
+    }
+    DatabaseStorage(const DatabaseStorage &other)
+        : QObject(other.parent())
+        , RectStorage<Database>(other)
+    {
+    }
 
 protected Q_SLOTS:
-    void triggerGarbageCollection() override {
+    void triggerGarbageCollection() override
+    {
         QTimer::singleShot(g_garbageCollectionTimeOut, this, &DatabaseStorage::garbageCollection);
     }
-    void garbageCollection() override {
+    void garbageCollection() override
+    {
         RectStorage<Database>::garbageCollection();
     }
 };

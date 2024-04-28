@@ -10,7 +10,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef CALLIGRA_SHEETS_AUTOFILL_COMMAND
 #define CALLIGRA_SHEETS_AUTOFILL_COMMAND
 
@@ -40,8 +39,8 @@ public:
      */
     ~AutoFillCommand() override;
 
-    void setSourceRange(const QRect& range);
-    void setTargetRange(const QRect& range);
+    void setSourceRange(const QRect &range);
+    void setTargetRange(const QRect &range);
 
     /**
      * Executes the actual operation.
@@ -56,10 +55,7 @@ public:
     static QStringList *shortDay;
 
 private:
-    void fillSequence(const QList<Cell>& _srcList,
-                      const QList<Cell>& _destList,
-                      const AutoFillSequence& _seqList,
-                      bool down = true);
+    void fillSequence(const QList<Cell> &_srcList, const QList<Cell> &_destList, const AutoFillSequence &_seqList, bool down = true);
 
 private:
     QRect m_sourceRange;

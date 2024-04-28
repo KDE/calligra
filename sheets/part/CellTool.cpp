@@ -42,22 +42,21 @@
 
 #include "engine/calligra_sheets_limits.h"
 
-
 using namespace Calligra::Sheets;
 
 class Q_DECL_HIDDEN CellTool::Private
 {
 public:
-    CanvasBase* canvas;
+    CanvasBase *canvas;
 };
 
-CellTool::CellTool(KoCanvasBase* canvas)
-        : CellToolBase(canvas)
-        , d(new Private)
+CellTool::CellTool(KoCanvasBase *canvas)
+    : CellToolBase(canvas)
+    , d(new Private)
 {
-    d->canvas = static_cast<CanvasBase*>(canvas);
+    d->canvas = static_cast<CanvasBase *>(canvas);
 
-    QAction* action = 0;
+    QAction *action = 0;
 
     // -- misc actions --
 
@@ -85,13 +84,13 @@ void CellTool::paint(QPainter &painter, const KoViewConverter &viewConverter)
     paintSelection(painter, paintRect);
 }
 
-void CellTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void CellTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     canvas()->shapeManager()->selection()->deselectAll();
     CellToolBase::activate(toolActivation, shapes);
 }
 
-Calligra::Sheets::Selection* CellTool::selection()
+Calligra::Sheets::Selection *CellTool::selection()
 {
     return d->canvas->selection();
 }
@@ -121,14 +120,14 @@ int CellTool::maxRow() const
     return KS_rowMax;
 }
 
-SheetView* CellTool::sheetView(Sheet* sheet) const
+SheetView *CellTool::sheetView(Sheet *sheet) const
 {
     return d->canvas->sheetView(sheet);
 }
 
 void CellTool::definePrintRange()
 {
-    DefinePrintRangeCommand* command = new DefinePrintRangeCommand();
+    DefinePrintRangeCommand *command = new DefinePrintRangeCommand();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
     d->canvas->doc()->addCommand(command);

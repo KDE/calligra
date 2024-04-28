@@ -45,7 +45,6 @@ private:
     int m_newDuration;
     int m_oldBegin;
     int m_oldDuration;
-
 };
 
 #endif // KPREDITANIMATIONTIMELINECOMMAND_H

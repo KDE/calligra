@@ -15,8 +15,8 @@ class OffsetEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     OffsetEffectFactory();
-    KoFilterEffect * createFilterEffect() const override;
-    KoFilterEffectConfigWidgetBase * createConfigWidget() const override;
+    KoFilterEffect *createFilterEffect() const override;
+    KoFilterEffectConfigWidgetBase *createConfigWidget() const override;
 };
 
 #endif // OFFSETEFFECTFACTORY_H

@@ -13,28 +13,26 @@
 #include <QString>
 
 // Calligra
-#include <KoXmlReader.h>
-#include <KoXmlNS.h>
-#include <KoXmlWriter.h>
 #include <KoGenStyle.h>
-#include <KoStyleStack.h>
-#include <KoShapeSavingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapePaintingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoStyleStack.h>
 #include <KoViewConverter.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
 // Shape
-#include "utils.h"
 #include "ThreedDebug.h"
+#include "utils.h"
 
-
-//#define OdfObjectAttributes (OdfAllAttributes & ~(OdfGeometry | OdfTransformation))
+// #define OdfObjectAttributes (OdfAllAttributes & ~(OdfGeometry | OdfTransformation))
 #define OdfObjectAttributes (OdfAdditionalAttributes | OdfMandatories)
 
 // ================================================================
 //                             Sphere
-
 
 Sphere::Sphere(Object3D *parent)
     : Object3D(parent)
@@ -46,9 +44,7 @@ Sphere::~Sphere()
 {
 }
 
-
-void Sphere::paint(QPainter &painter, const KoViewConverter &converter,
-                   KoShapePaintingContext &context)
+void Sphere::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
@@ -87,18 +83,14 @@ void Sphere::saveObjectOdf(KoShapeSavingContext &context) const
     saveOdfAttributes(context, OdfObjectAttributes);
     Object3D::saveObjectOdf(context);
 
-    writer.addAttribute("dr3d:center", QString("(%1 %2 %3)").arg(m_center.x())
-                        .arg(m_center.y()).arg(m_center.z()));
-    writer.addAttribute("dr3d:size", QString("(%1 %2 %3)").arg(m_size.x())
-                        .arg(m_size.y()).arg(m_size.z()));
+    writer.addAttribute("dr3d:center", QString("(%1 %2 %3)").arg(m_center.x()).arg(m_center.y()).arg(m_center.z()));
+    writer.addAttribute("dr3d:size", QString("(%1 %2 %3)").arg(m_size.x()).arg(m_size.y()).arg(m_size.z()));
 
     writer.endElement(); // dr3d:sphere
 }
 
-
 // ================================================================
 //                             Cube
-
 
 Cube::Cube(Object3D *parent)
     : Object3D(parent)
@@ -110,9 +102,7 @@ Cube::~Cube()
 {
 }
 
-
-void Cube::paint(QPainter &painter, const KoViewConverter &converter,
-                 KoShapePaintingContext &context)
+void Cube::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
@@ -151,18 +141,14 @@ void Cube::saveObjectOdf(KoShapeSavingContext &context) const
     saveOdfAttributes(context, OdfObjectAttributes);
     Object3D::saveObjectOdf(context);
 
-    writer.addAttribute("dr3d:min-edge", QString("(%1 %2 %3)").arg(m_minEdge.x())
-                        .arg(m_minEdge.y()).arg(m_minEdge.z()));
-    writer.addAttribute("dr3d:max-edge", QString("(%1 %2 %3)").arg(m_maxEdge.x())
-                        .arg(m_maxEdge.y()).arg(m_maxEdge.z()));
+    writer.addAttribute("dr3d:min-edge", QString("(%1 %2 %3)").arg(m_minEdge.x()).arg(m_minEdge.y()).arg(m_minEdge.z()));
+    writer.addAttribute("dr3d:max-edge", QString("(%1 %2 %3)").arg(m_maxEdge.x()).arg(m_maxEdge.y()).arg(m_maxEdge.z()));
 
     writer.endElement(); // dr3d:cube
 }
 
-
 // ================================================================
 //                             Extrude
-
 
 Extrude::Extrude(Object3D *parent)
     : Object3D(parent)
@@ -179,9 +165,7 @@ Extrude::~Extrude()
 {
 }
 
-
-void Extrude::paint(QPainter &painter, const KoViewConverter &converter,
-                    KoShapePaintingContext &context)
+void Extrude::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
@@ -222,7 +206,7 @@ void Extrude::saveObjectOdf(KoShapeSavingContext &context) const
     writer.endElement(); // dr3d:extrude
 }
 
-void Extrude::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context)
+void Extrude::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     // Load the common parts of the style.
     KoShape::loadStyle(element, context);
@@ -260,12 +244,12 @@ void Extrude::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& cont
     }
 }
 
-QString Extrude::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const
+QString Extrude::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {
     style.addProperty("dr3d:depth", QString("%1").arg(m_depth));
 
     style.addProperty("dr3d:close-front", m_closeFront);
-    style.addProperty("dr3d:close-back",  m_closeBack);
+    style.addProperty("dr3d:close-back", m_closeBack);
 
     if (m_backScale != 1.0) {
         style.addProperty("dr3d:back-scale", QString("%1").arg(m_backScale));
@@ -274,10 +258,8 @@ QString Extrude::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) con
     return KoShape::saveStyle(style, context);
 }
 
-
 // ================================================================
 //                             Rotate
-
 
 Rotate::Rotate(Object3D *parent)
     : Object3D(parent)
@@ -296,9 +278,7 @@ Rotate::~Rotate()
 {
 }
 
-
-void Rotate::paint(QPainter &painter, const KoViewConverter &converter,
-                   KoShapePaintingContext &context)
+void Rotate::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
@@ -339,7 +319,7 @@ void Rotate::saveObjectOdf(KoShapeSavingContext &context) const
     writer.endElement(); // dr3d:rotate
 }
 
-void Rotate::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context)
+void Rotate::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     // Load the common parts of the style.
     KoShape::loadStyle(element, context);
@@ -395,7 +375,7 @@ void Rotate::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& conte
     }
 }
 
-QString Rotate::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const
+QString Rotate::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {
     if (m_horizontalSegments != -1) {
         style.addProperty("dr3d:horizontal-segments", QString("%1").arg(m_horizontalSegments));
@@ -409,7 +389,7 @@ QString Rotate::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) cons
     }
 
     style.addProperty("dr3d:close-front", m_closeFront);
-    style.addProperty("dr3d:close-back",  m_closeBack);
+    style.addProperty("dr3d:close-back", m_closeBack);
 
     if (m_backScale != 1.0) {
         style.addProperty("dr3d:back-scale", QString("%1").arg(m_backScale));

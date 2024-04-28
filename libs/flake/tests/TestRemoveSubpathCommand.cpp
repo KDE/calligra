@@ -5,9 +5,9 @@
 */
 #include "TestRemoveSubpathCommand.h"
 
-#include <QPainterPath>
 #include "KoPathShape.h"
 #include "KoSubpathRemoveCommand.h"
+#include <QPainterPath>
 #include <QTest>
 
 void TestRemoveSubpathCommand::redoUndo()

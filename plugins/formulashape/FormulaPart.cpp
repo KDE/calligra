@@ -14,8 +14,7 @@
 #include <KAboutData>
 
 FormulaPart::FormulaPart(QObject *parent)
-    : KoPart(KoComponentData(KAboutData(QStringLiteral("koformula"), QStringLiteral("KoFormula"),
-                                        QStringLiteral(CALLIGRA_VERSION_STRING))), parent)
+    : KoPart(KoComponentData(KAboutData(QStringLiteral("koformula"), QStringLiteral("KoFormula"), QStringLiteral(CALLIGRA_VERSION_STRING))), parent)
 {
 }
 
@@ -23,7 +22,7 @@ FormulaPart::~FormulaPart()
 {
 }
 
-KoView * FormulaPart::createViewInstance(KoDocument *document, QWidget *parent)
+KoView *FormulaPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
     Q_UNUSED(document);
     Q_UNUSED(parent);

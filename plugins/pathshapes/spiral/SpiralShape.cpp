@@ -8,9 +8,9 @@
 
 #include <KoPathPoint.h>
 #include <KoShapeSavingContext.h>
+#include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
-#include <KoXmlNS.h>
 
 #include <math.h>
 
@@ -21,9 +21,9 @@ SpiralShape::SpiralShape()
     , m_type(Curve)
     , m_clockwise(true)
 {
-    //m_handles.push_back(QPointF(50, 0));
-    //m_handles.push_back(QPointF(50, 50));
-    //m_handles.push_back(QPointF(0, 50));
+    // m_handles.push_back(QPointF(50, 0));
+    // m_handles.push_back(QPointF(50, 50));
+    // m_handles.push_back(QPointF(0, 50));
     createPath(QSizeF(m_radii.x(), m_radii.y()));
 }
 
@@ -37,7 +37,7 @@ void SpiralShape::saveOdf(KoShapeSavingContext &context) const
     KoPathShape::saveOdf(context);
 }
 
-bool SpiralShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &/*context*/)
+bool SpiralShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext & /*context*/)
 {
     Q_UNUSED(element);
 
@@ -181,7 +181,7 @@ void SpiralShape::createPath(const QSizeF &size)
     Q_UNUSED(size);
     clear();
     QPointF center = QPointF(m_radii.x() / 2.0, m_radii.y() / 2.0);
-    //moveTo(QPointF(size.width(), m_radii.y()));
+    // moveTo(QPointF(size.width(), m_radii.y()));
     qreal adv_ang = (m_clockwise ? -1.0 : 1.0) * M_PI_2;
     // radius of first segment is non-faded radius:
     qreal m_radius = m_radii.x() / 2.0;
@@ -192,7 +192,7 @@ void SpiralShape::createPath(const QSizeF &size)
     QPointF newCenter(center);
     moveTo(oldP);
     uint m_segments = 10;
-    //m_handles[0] = oldP;
+    // m_handles[0] = oldP;
 
     for (uint i = 0; i < m_segments; ++i) {
         newP.setX(r * cos(adv_ang * (i + 2)) + newCenter.x());
@@ -214,36 +214,36 @@ void SpiralShape::createPath(const QSizeF &size)
         oldP = newP;
         r *= m_fade;
     }
-    //m_handles[1] = QPointF(center.x(), (m_clockwise ? -1.0 : 1.0) * m_radius + center.y());
+    // m_handles[1] = QPointF(center.x(), (m_clockwise ? -1.0 : 1.0) * m_radius + center.y());
     m_points = *m_subpaths[0];
 }
 
 void SpiralShape::updateKindHandle()
 {
-/*
-   m_kindAngle = (m_startAngle + m_endAngle) * M_PI / 360.0;
-   if (m_startAngle > m_endAngle)
-   {
-       m_kindAngle += M_PI;
-   }
-   switch (m_type)
-   {
-       case Curve:
-           m_handles[2] = m_center + QPointF(cos(m_kindAngle) * m_radii.x(), -sin(m_kindAngle) * m_radii.y());
-           break;
-       case Line:
-           m_handles[2] = m_center;
-           break;
-   }
-   */
+    /*
+       m_kindAngle = (m_startAngle + m_endAngle) * M_PI / 360.0;
+       if (m_startAngle > m_endAngle)
+       {
+           m_kindAngle += M_PI;
+       }
+       switch (m_type)
+       {
+           case Curve:
+               m_handles[2] = m_center + QPointF(cos(m_kindAngle) * m_radii.x(), -sin(m_kindAngle) * m_radii.y());
+               break;
+           case Line:
+               m_handles[2] = m_center;
+               break;
+       }
+       */
 }
 
 void SpiralShape::updateAngleHandles()
 {
-//    qreal startRadian = m_startAngle * M_PI / 180.0;
-//    qreal endRadian = m_endAngle * M_PI / 180.0;
-//    m_handles[0] = m_center + QPointF(cos(startRadian) * m_radii.x(), -sin(startRadian) * m_radii.y());
-//    m_handles[1] = m_center + QPointF(cos(endRadian) * m_radii.x(), -sin(endRadian) * m_radii.y());
+    //    qreal startRadian = m_startAngle * M_PI / 180.0;
+    //    qreal endRadian = m_endAngle * M_PI / 180.0;
+    //    m_handles[0] = m_center + QPointF(cos(startRadian) * m_radii.x(), -sin(startRadian) * m_radii.y());
+    //    m_handles[1] = m_center + QPointF(cos(endRadian) * m_radii.x(), -sin(endRadian) * m_radii.y());
 }
 
 void SpiralShape::setType(SpiralType type)
@@ -262,7 +262,7 @@ void SpiralShape::setFade(qreal fade)
 {
     m_fade = fade;
     updateKindHandle();
-    //updateAngleHandles();
+    // updateAngleHandles();
     updatePath(size());
 }
 
@@ -280,7 +280,7 @@ void SpiralShape::setClockWise(bool clockWise)
 {
     m_clockwise = clockWise;
     updateKindHandle();
-    //updateAngleHandles();
+    // updateAngleHandles();
     updatePath(size());
 }
 

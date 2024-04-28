@@ -11,10 +11,9 @@
 
 #include <KoTextEditingRegistry.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(ThesaurusPluginFactory, "calligra_textediting_thesaurus.json",
-                           registerPlugin<ThesaurusPlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(ThesaurusPluginFactory, "calligra_textediting_thesaurus.json", registerPlugin<ThesaurusPlugin>();)
 
-ThesaurusPlugin::ThesaurusPlugin(QObject *parent, const QVariantList&)
+ThesaurusPlugin::ThesaurusPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoTextEditingRegistry::instance()->add(new ThesaurusFactory());

@@ -9,8 +9,8 @@
 
 #include <KoDragOdfSaveHelper.h>
 #ifdef SHOULD_BUILD_RDF
-#include <Soprano/Soprano>
 #include <QSharedPointer>
+#include <Soprano/Soprano>
 #endif
 #include "kotext_export.h"
 
@@ -39,9 +39,10 @@ public:
 #endif
 
     KoStyleManager *styleManager() const;
+
 private:
     struct Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOTEXTODFSAVEHELPER_H */

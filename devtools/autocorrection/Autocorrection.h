@@ -8,9 +8,9 @@
 
 #include "Importabstractautocorrection.h"
 
-#include <QString>
-#include <QSet>
 #include <QHash>
+#include <QSet>
+#include <QString>
 
 /**
  * @brief The AutoCorrection class
@@ -20,10 +20,15 @@
 class ImportAbstractAutocorrection;
 class QFileInfo;
 
-class AutoCorrection {
+class AutoCorrection
+{
 public:
-    AutoCorrection() {}
-    ~AutoCorrection() {}
+    AutoCorrection()
+    {
+    }
+    ~AutoCorrection()
+    {
+    }
 
     enum ImportFileType {
         LibreOffice,
@@ -38,7 +43,8 @@ private:
     void writeAutoCorrectionXmlFile(const QString &filename);
     void createCMake(const QFileInfo &fileInfo, const QString &xmlFile);
 
-    void clear() {
+    void clear()
+    {
         mUpperCaseExceptions.clear();
         mTwoUpperLetterExceptions.clear();
         mAutocorrectEntries.clear();
@@ -57,6 +63,7 @@ private:
     void reportchanges(bool change, int type);
     QString language;
     ImportFileType m_type;
+
 public:
     QStringList newLanguages;
     QStringList modifiedLanguages;

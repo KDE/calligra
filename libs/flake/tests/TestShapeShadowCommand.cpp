@@ -1,23 +1,23 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2008 Jan Hambrecht <jaham@gmx.net>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ * SPDX-FileCopyrightText: 2008 Jan Hambrecht <jaham@gmx.net>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 #include "TestShapeShadowCommand.h"
 
-#include <MockShapes.h>
+#include "KoInsets.h"
 #include "KoShapeShadow.h"
 #include "KoShapeShadowCommand.h"
-#include "KoInsets.h"
+#include <MockShapes.h>
 
 #include <QTest>
 
 void TestShapeShadowCommand::refCounting()
 {
-    MockShape * shape1 = new MockShape();
-    KoShapeShadow * shadow1 = new KoShapeShadow();
-    KoShapeShadow * shadow2 = new KoShapeShadow();
-    KoShapeShadow * shadow3 = new KoShapeShadow();
+    MockShape *shape1 = new MockShape();
+    KoShapeShadow *shadow1 = new KoShapeShadow();
+    KoShapeShadow *shadow2 = new KoShapeShadow();
+    KoShapeShadow *shadow3 = new KoShapeShadow();
 
     shape1->setShadow(shadow1);
     QVERIFY(shape1->shadow() == shadow1);

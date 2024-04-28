@@ -1,13 +1,13 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ * SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #include "KPrAddCustomSlideShowCommand.h"
-#include "KPrDocument.h"
-#include "KPrCustomSlideShowsModel.h"
 #include "KPrCustomSlideShows.h"
+#include "KPrCustomSlideShowsModel.h"
+#include "KPrDocument.h"
 #include "KoPAPageBase.h"
 
 KPrAddCustomSlideShowCommand::KPrAddCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &name, KUndo2Command *parent)
@@ -25,7 +25,7 @@ KPrAddCustomSlideShowCommand::~KPrAddCustomSlideShowCommand()
 
 void KPrAddCustomSlideShowCommand::redo()
 {
-    m_doc->customSlideShows()->insert(m_name, QList<KoPAPageBase*>());
+    m_doc->customSlideShows()->insert(m_name, QList<KoPAPageBase *>());
     m_model->updateCustomSlideShowsList(m_name);
 }
 

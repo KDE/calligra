@@ -6,20 +6,19 @@
 
 #include "ImageEffect.h"
 
-#include "KoFilterEffectRenderContext.h"
 #include "KoFilterEffectLoadingContext.h"
+#include "KoFilterEffectRenderContext.h"
 #include "KoViewConverter.h"
-#include "KoXmlWriter.h"
 #include "KoXmlReader.h"
+#include "KoXmlWriter.h"
 
+#include <QBuffer>
+#include <QDebug>
 #include <QMimeDatabase>
 #include <QMimeType>
-#include <QBuffer>
 #include <QPainter>
-#include <QDebug>
 
 #include <KLocalizedString>
-
 
 ImageEffect::ImageEffect()
     : KoFilterEffect(ImageEffectId, i18n("Image"))

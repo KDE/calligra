@@ -5,43 +5,43 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 */
 #include "KoFilterGraph.h"
 
-#include "KoFilterManager.h"  // KoFilterManager::filterAvailable, private API
+#include "KoDocument.h"
 #include "KoDocumentEntry.h"
 #include "KoFilterEntry.h"
-#include "KoDocument.h"
+#include "KoFilterManager.h" // KoFilterManager::filterAvailable, private API
 
-#include "PriorityQueue_p.h"
-#include "KoFilterEdge.h"
 #include "KoFilterChainLink.h"
+#include "KoFilterEdge.h"
 #include "KoFilterVertex.h"
+#include "PriorityQueue_p.h"
 
-#include <QPluginLoader>
-#include <QMetaMethod>
 #include <MainDebug.h>
+#include <QMetaMethod>
+#include <QPluginLoader>
 
 #include <limits.h> // UINT_MAX
 
+namespace CalligraFilter
+{
 
-namespace CalligraFilter {
-
-Graph::Graph(const QByteArray& from)
-        : m_from(from)
-        , m_graphValid(false)
-        , d(0)
+Graph::Graph(const QByteArray &from)
+    : m_from(from)
+    , m_graphValid(false)
+    , d(0)
 {
     buildGraph();
-    shortestPaths();  // Will return after a single lookup if "from" is invalid (->no check here)
+    shortestPaths(); // Will return after a single lookup if "from" is invalid (->no check here)
 }
 
 Graph::~Graph()
 {
-    foreach(Vertex* vertex, m_vertices) {
+    foreach (Vertex *vertex, m_vertices) {
         delete vertex;
     }
     m_vertices.clear();
 }
 
-void Graph::setSourceMimeType(const QByteArray& from)
+void Graph::setSourceMimeType(const QByteArray &from)
 {
     if (from == m_from)
         return;
@@ -49,34 +49,34 @@ void Graph::setSourceMimeType(const QByteArray& from)
     m_graphValid = false;
 
     // Initialize with "infinity" ...
-    foreach(Vertex* vertex, m_vertices) {
+    foreach (Vertex *vertex, m_vertices) {
         vertex->reset();
     }
     // ...and re-run the shortest path search for the new source mime
     shortestPaths();
 }
 
-KoFilterChain::Ptr Graph::chain(const KoFilterManager* manager, QByteArray& to) const
+KoFilterChain::Ptr Graph::chain(const KoFilterManager *manager, QByteArray &to) const
 {
     if (!isValid() || !manager)
         return KoFilterChain::Ptr();
 
-    if (to.isEmpty()) {    // if the destination is empty we search the closest Calligra part
+    if (to.isEmpty()) { // if the destination is empty we search the closest Calligra part
         to = findCalligraPart();
-        if (to.isEmpty())    // still empty? strange stuff...
+        if (to.isEmpty()) // still empty? strange stuff...
             return KoFilterChain::Ptr();
     }
 
-    const Vertex* vertex = m_vertices.value(to);
+    const Vertex *vertex = m_vertices.value(to);
     if (!vertex || vertex->key() == UINT_MAX)
         return KoFilterChain::Ptr();
 
     KoFilterChain::Ptr ret(new KoFilterChain(manager));
 
     // Fill the filter chain with all filters on the path
-    const Vertex* tmp = vertex->predecessor();
+    const Vertex *tmp = vertex->predecessor();
     while (tmp) {
-        const Edge* const edge = tmp->findEdge(vertex);
+        const Edge *const edge = tmp->findEdge(vertex);
         Q_ASSERT(edge);
         ret->prependChainLink(edge->filterEntry(), tmp->mimeType(), vertex->mimeType());
         vertex = tmp;
@@ -90,7 +90,7 @@ void Graph::dump() const
 #ifndef NDEBUG
     debugFilter << "+++++++++ Graph::dump +++++++++";
     debugFilter << "From:" << m_from;
-    foreach(Vertex *vertex, m_vertices) {
+    foreach (Vertex *vertex, m_vertices) {
         vertex->dump("   ");
     }
     debugFilter << "+++++++++ Graph::dump (done) +++++++++";
@@ -104,13 +104,12 @@ void Graph::buildGraph()
     // Make sure that all available parts are added to the graph
     const QList<KoDocumentEntry> parts(KoDocumentEntry::query());
 
-    foreach(const KoDocumentEntry& part, parts) {
-
+    foreach (const KoDocumentEntry &part, parts) {
         QJsonObject metaData = part.metaData();
         QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
         nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
 
-        foreach(const QString& nativeMimeType, nativeMimeTypes) {
+        foreach (const QString &nativeMimeType, nativeMimeTypes) {
             const QByteArray key = nativeMimeType.toLatin1();
             if (!m_vertices.contains(key))
                 m_vertices[key] = new Vertex(key);
@@ -120,11 +119,10 @@ void Graph::buildGraph()
     // no constraint here - we want *all* :)
     const QList<KoFilterEntry::Ptr> filters(KoFilterEntry::query());
 
-    foreach(KoFilterEntry::Ptr filter, filters) {
-
+    foreach (KoFilterEntry::Ptr filter, filters) {
         // First add the "starting points" to the dict
-        foreach (const QString& import, filter->import) {
-            const QByteArray key = import.toLatin1();    // latin1 is okay here (werner)
+        foreach (const QString &import, filter->import) {
+            const QByteArray key = import.toLatin1(); // latin1 is okay here (werner)
             // already there?
             if (!m_vertices.contains(key))
                 m_vertices.insert(key, new Vertex(key));
@@ -132,18 +130,16 @@ void Graph::buildGraph()
 
         // Are we allowed to use this filter at all?
         if (KoFilterManager::filterAvailable(filter)) {
-
-            foreach(const QString& exportIt, filter->export_) {
-
+            foreach (const QString &exportIt, filter->export_) {
                 // First make sure the export vertex is in place
-                const QByteArray key = exportIt.toLatin1();    // latin1 is okay here
-                Vertex* exp = m_vertices.value(key);
+                const QByteArray key = exportIt.toLatin1(); // latin1 is okay here
+                Vertex *exp = m_vertices.value(key);
                 if (!exp) {
                     exp = new Vertex(key);
                     m_vertices.insert(key, exp);
                 }
                 // Then create the appropriate edges
-                foreach(const QString& import, filter->import) {
+                foreach (const QString &import, filter->import) {
                     m_vertices[import.toLatin1()]->addEdge(new Edge(exp, filter));
                 }
             }
@@ -163,7 +159,7 @@ void Graph::buildGraph()
 void Graph::shortestPaths()
 {
     // Is the requested start mime type valid?
-    Vertex* from = m_vertices.value(m_from);
+    Vertex *from = m_vertices.value(m_from);
     if (!from)
         return;
 
@@ -217,7 +213,7 @@ QByteArray Graph::findCalligraPart() const
         for (; !v && it != end; ++it) {
             QString key = *it;
             if (!key.isEmpty()) {
-                Vertex* tmp = m_vertices.value(key.toLatin1());
+                Vertex *tmp = m_vertices.value(key.toLatin1());
                 if (!v || (tmp && tmp->key() < v->key()))
                     v = tmp;
             }

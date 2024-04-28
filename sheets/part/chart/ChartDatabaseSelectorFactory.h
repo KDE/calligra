@@ -8,8 +8,8 @@
 #ifndef CHART_DATABASE_SELECTOR_FACTORY
 #define CHART_DATABASE_SELECTOR_FACTORY
 
-#include <QObject>
 #include <KoShapeConfigFactoryBase.h>
+#include <QObject>
 
 #include "core/Map.h"
 
@@ -26,23 +26,30 @@ class ChartDatabaseSelectorFactory : public QObject, public KoShapeConfigFactory
     Q_OBJECT
 public:
     /// constructor
-    ChartDatabaseSelectorFactory(Map *map) : QObject(map), m_map(map) {}
-    ~ChartDatabaseSelectorFactory() override {}
+    ChartDatabaseSelectorFactory(Map *map)
+        : QObject(map)
+        , m_map(map)
+    {
+    }
+    ~ChartDatabaseSelectorFactory() override
+    {
+    }
 
     /// reimplemented method from superclass
-    KoShapeConfigWidgetBase* createConfigWidget(KoShape* shape) override;
+    KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape) override;
     /// reimplemented method from superclass
     QString name() const override;
 
     /// reimplemented method from superclass
     bool showForShapeId(const QString &id) const override;
     /// reimplemented method from superclass
-    int sortingOrder() const override {
+    int sortingOrder() const override
+    {
         return 1;
     }
 
 private:
-    Map* m_map;
+    Map *m_map;
 };
 
 } // namespace Sheets

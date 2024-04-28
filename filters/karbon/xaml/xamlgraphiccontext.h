@@ -8,25 +8,26 @@
 #define __XAMLGRAPHICSCONTEXT_H__
 
 #include <core/vfill.h>
-#include <core/vstroke.h>
 #include <core/vfillrule.h>
+#include <core/vstroke.h>
 
 class XAMLGraphicsContext
 {
 public:
-    XAMLGraphicsContext() {
-        stroke.setType(VStroke::none);   // default is no stroke
+    XAMLGraphicsContext()
+    {
+        stroke.setType(VStroke::none); // default is no stroke
         stroke.setLineWidth(1.0);
         stroke.setLineCap(VStroke::capButt);
         stroke.setLineJoin(VStroke::joinMiter);
         fill.setColor(VColor(Qt::black));
         fillRule = winding;
     }
-    VFill  fill;
+    VFill fill;
     VFillRule fillRule;
-    VStroke  stroke;
+    VStroke stroke;
     QTransform matrix;
-    QFont  font;
+    QFont font;
 };
 
 #endif

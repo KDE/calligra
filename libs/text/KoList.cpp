@@ -18,7 +18,8 @@
 #include <QTextCursor>
 
 KoList::KoList(const QTextDocument *document, KoListStyle *style, KoList::Type type)
-    : QObject(const_cast<QTextDocument *>(document)), d(new KoListPrivate(this, document))
+    : QObject(const_cast<QTextDocument *>(document))
+    , d(new KoListPrivate(this, document))
 {
     Q_ASSERT(document);
     d->type = type;
@@ -32,7 +33,7 @@ KoList::~KoList()
     delete d;
 }
 
-QVector<QPointer<QTextList> > KoList::textLists() const
+QVector<QPointer<QTextList>> KoList::textLists() const
 {
     return d->textLists;
 }
@@ -52,7 +53,7 @@ KoList *KoList::applyStyle(const QTextBlock &block, KoListStyle *style, int leve
         return list;
     }
 
-    //the block was already another list but with a different style - remove block from list
+    // the block was already another list but with a different style - remove block from list
     if (list)
         list->remove(block);
 
@@ -60,7 +61,7 @@ KoList *KoList::applyStyle(const QTextBlock &block, KoListStyle *style, int leve
     // For headers we always want to continue from any previous header
     // For normal lists we either want to continue an adjacent list or create a new one
     if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) {
-        for (QTextBlock b = block.previous();b.isValid(); b = b.previous()) {
+        for (QTextBlock b = block.previous(); b.isValid(); b = b.previous()) {
             list = document.list(b);
             if (list && *list->style() == *style) {
                 break;
@@ -99,15 +100,15 @@ void KoList::add(const QTextBlock &block, int level)
     }
     remove(block);
 
-    QTextList *textList = d->textLists.value(level-1).data();
+    QTextList *textList = d->textLists.value(level - 1).data();
     if (!textList) {
         QTextCursor cursor(block);
         QTextListFormat format = d->style->listFormat(level);
         textList = cursor.createList(format);
         format.setProperty(KoListStyle::ListId, (KoListStyle::ListIdType)(textList));
         textList->setFormat(format);
-        d->textLists[level-1] = textList;
-        d->textListIds[level-1] = (KoListStyle::ListIdType)textList;
+        d->textLists[level - 1] = textList;
+        d->textListIds[level - 1] = (KoListStyle::ListIdType)textList;
     } else {
         textList->add(block);
     }
@@ -131,8 +132,8 @@ void KoList::add(const QTextBlock &block, int level)
 
 void KoList::remove(const QTextBlock &block)
 {
-    //QTextLists are created with a blockIndent of 1. When a block is removed from a QTextList, it's blockIndent is set to (block.indent + list.indent).
-    //Since we do not use Qt's indentation for lists, we need to clear the block's blockIndent, otherwise the block's style will appear as modified.
+    // QTextLists are created with a blockIndent of 1. When a block is removed from a QTextList, it's blockIndent is set to (block.indent + list.indent).
+    // Since we do not use Qt's indentation for lists, we need to clear the block's blockIndent, otherwise the block's style will appear as modified.
     bool clearIndent = !block.blockFormat().hasProperty(4160);
 
     if (QTextList *textList = block.textList()) {
@@ -163,14 +164,16 @@ void KoList::setStyle(KoListStyle *style)
         if (d->style)
             disconnect(d->style, 0, this, 0);
         d->style = style->clone(this);
-        connect(d->style, &KoListStyle::styleChanged, this, [this](int level) { d->styleChanged(level); });
+        connect(d->style, &KoListStyle::styleChanged, this, [this](int level) {
+            d->styleChanged(level);
+        });
     }
 
     for (int i = 0; i < d->textLists.count(); i++) {
         QTextList *textList = d->textLists.value(i).data();
         if (!textList)
             continue;
-        KoListLevelProperties properties = d->style->levelProperties(i+1);
+        KoListLevelProperties properties = d->style->levelProperties(i + 1);
         if (properties.listId())
             d->textListIds[i] = properties.listId();
         QTextListFormat format;
@@ -179,7 +182,7 @@ void KoList::setStyle(KoListStyle *style)
         d->invalidate(textList->item(0));
     }
 
-    //if this list is a heading list then update the style manager with the list properties
+    // if this list is a heading list then update the style manager with the list properties
     if (KoTextDocument(d->document).headingList() == this) {
         if (KoStyleManager *styleManager = KoTextDocument(d->document).styleManager()) {
             if (styleManager->outlineStyle()) {
@@ -202,8 +205,8 @@ void KoList::updateStoredList(const QTextBlock &block)
         auto listFormat = textList->format();
         listFormat.setProperty(KoListStyle::ListId, (KoListStyle::ListIdType)(textList));
         textList->setFormat(listFormat);
-        d->textLists[level-1] = textList;
-        d->textListIds[level-1] = (KoListStyle::ListIdType)textList;
+        d->textLists[level - 1] = textList;
+        d->textListIds[level - 1] = (KoListStyle::ListIdType)textList;
     }
 }
 
@@ -234,5 +237,5 @@ void KoList::setListContinuedFrom(KoList *list)
     d->listToBeContinuedFrom = list;
 }
 
-//have to include this because of Q_PRIVATE_SLOT
+// have to include this because of Q_PRIVATE_SLOT
 #include "moc_KoList.cpp"

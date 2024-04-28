@@ -5,8 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
-
 #ifndef KOFINDBASE_H
 #define KOFINDBASE_H
 
@@ -187,7 +185,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOFINDBASE_H

@@ -23,8 +23,8 @@ public: // KoRdfSemanticItemFactoryBase API
     virtual void updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m);
     virtual hKoRdfBasicSemanticItem createSemanticItem(const KoDocumentRdf *rdf, QObject *parent);
     virtual bool canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const;
-    virtual hKoRdfBasicSemanticItem createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase* host,
-                                                              const KoDocumentRdf *rdf, QObject *parent = 0) const;
+    virtual hKoRdfBasicSemanticItem
+    createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *rdf, QObject *parent = 0) const;
 
     virtual bool isBasic() const;
 };

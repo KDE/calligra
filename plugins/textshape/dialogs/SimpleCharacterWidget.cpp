@@ -7,38 +7,38 @@
  */
 
 #include "SimpleCharacterWidget.h"
-#include "TextTool.h"
 #include "../commands/ChangeListCommand.h"
-#include "StylesModel.h"
 #include "DockerStylesComboModel.h"
 #include "StylesDelegate.h"
+#include "StylesModel.h"
+#include "TextTool.h"
 #include <KoStyleThumbnailer.h>
 
-#include <QAction>
-#include <kselectaction.h>
-#include <KoTextBlockData.h>
 #include <KoCharacterStyle.h>
-#include <KoParagraphStyle.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoParagraphStyle.h>
+#include <KoStyleManager.h>
+#include <KoTextBlockData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoZoomHandler.h>
-#include <KoStyleManager.h>
+#include <QAction>
+#include <kselectaction.h>
 
 #include <QDebug>
 
-#include <QTextLayout>
 #include <QComboBox>
+#include <QTextLayout>
 
 SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
-    : QWidget(parent),
-    m_styleManager(0),
-    m_blockSignals(false),
-    m_comboboxHasBidiItems(false),
-    m_tool(tool),
-    m_thumbnailer(new KoStyleThumbnailer()),
-    m_stylesModel(new StylesModel(0, StylesModel::CharacterStyle)),
-    m_sortedStylesModel(new DockerStylesComboModel()),
-    m_stylesDelegate(0)
+    : QWidget(parent)
+    , m_styleManager(0)
+    , m_blockSignals(false)
+    , m_comboboxHasBidiItems(false)
+    , m_tool(tool)
+    , m_thumbnailer(new KoStyleThumbnailer())
+    , m_stylesModel(new StylesModel(0, StylesModel::CharacterStyle))
+    , m_sortedStylesModel(new DockerStylesComboModel())
+    , m_stylesDelegate(0)
 {
     widget.setupUi(this);
     widget.bold->setDefaultAction(tool->action("format_bold"));
@@ -63,28 +63,30 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     connect(widget.subscript, &QAbstractButton::clicked, this, &SimpleCharacterWidget::doneWithFocus);
 
     QWidgetAction *fontFamilyAction = qobject_cast<QWidgetAction *>(tool->action("format_fontfamily"));
-    QComboBox *family = fontFamilyAction ? qobject_cast<QComboBox*> (fontFamilyAction->requestWidget(this)) : 0;
+    QComboBox *family = fontFamilyAction ? qobject_cast<QComboBox *>(fontFamilyAction->requestWidget(this)) : 0;
     if (family) { // kdelibs 4.1 didn't return anything here.
-        widget.fontsFrame->addWidget(family,0,0);
+        widget.fontsFrame->addWidget(family, 0, 0);
         connect(family, &QComboBox::activated, this, &SimpleCharacterWidget::doneWithFocus);
         connect(family, &QComboBox::activated, this, &SimpleCharacterWidget::fontFamilyActivated);
     }
     QWidgetAction *fontSizeAction = qobject_cast<QWidgetAction *>(tool->action("format_fontsize"));
-    QComboBox *size = fontSizeAction ? qobject_cast<QComboBox*> (fontSizeAction->requestWidget(this)) : 0;
+    QComboBox *size = fontSizeAction ? qobject_cast<QComboBox *>(fontSizeAction->requestWidget(this)) : 0;
     if (size) { // kdelibs 4.1 didn't return anything here.
-        widget.fontsFrame->addWidget(size,0,1);
+        widget.fontsFrame->addWidget(size, 0, 1);
         connect(size, &QComboBox::activated, this, &SimpleCharacterWidget::doneWithFocus);
         connect(size, &QComboBox::activated, this, &SimpleCharacterWidget::fontSizeActivated);
-        QDoubleValidator* validator = new QDoubleValidator(2, 999, 1, size);
+        QDoubleValidator *validator = new QDoubleValidator(2, 999, 1, size);
         size->setValidator(validator);
     }
 
-    widget.fontsFrame->setColumnStretch(0,1);
+    widget.fontsFrame->setColumnStretch(0, 1);
 
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.characterStyleCombo->setStylesModel(m_sortedStylesModel);
-    connect(widget.characterStyleCombo, QOverload<const QModelIndex&>::of(&StylesCombo::selected),
-            this, QOverload<const QModelIndex&>::of(&SimpleCharacterWidget::styleSelected));
+    connect(widget.characterStyleCombo,
+            QOverload<const QModelIndex &>::of(&StylesCombo::selected),
+            this,
+            QOverload<const QModelIndex &>::of(&SimpleCharacterWidget::styleSelected));
     connect(widget.characterStyleCombo, &StylesCombo::newStyleRequested, this, &SimpleCharacterWidget::newStyleRequested);
     connect(widget.characterStyleCombo, &StylesCombo::newStyleRequested, this, &SimpleCharacterWidget::doneWithFocus);
     connect(widget.characterStyleCombo, &StylesCombo::showStyleManager, this, &SimpleCharacterWidget::slotShowStyleManager);
@@ -94,7 +96,7 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 
 SimpleCharacterWidget::~SimpleCharacterWidget()
 {
-    //the model is set on the comboBox which takes ownership
+    // the model is set on the comboBox which takes ownership
     delete m_thumbnailer;
 }
 
@@ -108,13 +110,19 @@ void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
         disconnect(m_styleManager, &KoStyleManager::characterStyleApplied, this, &SimpleCharacterWidget::slotCharacterStyleApplied);
     }
     m_styleManager = sm;
-    //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
-    disconnect(widget.characterStyleCombo, QOverload<const QModelIndex&>::of(&StylesCombo::selected),
-               this, QOverload<const QModelIndex&>::of(&SimpleCharacterWidget::styleSelected));
+    // we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to
+    // actually set a new style.
+    disconnect(widget.characterStyleCombo,
+               QOverload<const QModelIndex &>::of(&StylesCombo::selected),
+               this,
+               QOverload<const QModelIndex &>::of(&SimpleCharacterWidget::styleSelected));
     m_stylesModel->setStyleManager(sm);
     m_sortedStylesModel->setStyleManager(sm);
-    connect(widget.characterStyleCombo, QOverload<const QModelIndex&>::of(&StylesCombo::selected),
-            this, QOverload<const QModelIndex&>::of(&SimpleCharacterWidget::styleSelected)); connect(m_styleManager, &KoStyleManager::characterStyleApplied, this, &SimpleCharacterWidget::slotCharacterStyleApplied);
+    connect(widget.characterStyleCombo,
+            QOverload<const QModelIndex &>::of(&StylesCombo::selected),
+            this,
+            QOverload<const QModelIndex &>::of(&SimpleCharacterWidget::styleSelected));
+    connect(m_styleManager, &KoStyleManager::characterStyleApplied, this, &SimpleCharacterWidget::slotCharacterStyleApplied);
 }
 
 void SimpleCharacterWidget::setInitialUsedStyles(QVector<int> list)
@@ -122,7 +130,7 @@ void SimpleCharacterWidget::setInitialUsedStyles(QVector<int> list)
     m_sortedStylesModel->setInitialUsedStyles(list);
 }
 
-void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, const QTextCharFormat& refBlockCharFormat)
+void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat &format, const QTextCharFormat &refBlockCharFormat)
 {
     if (!m_styleManager || format == m_currentCharFormat) {
         return;
@@ -132,51 +140,57 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, cons
     KoCharacterStyle *style(m_styleManager->characterStyle(m_currentCharFormat.intProperty(KoCharacterStyle::StyleId)));
     bool useParagraphStyle = false;
     if (!style) {
-        style = static_cast<KoCharacterStyle*>(m_styleManager->paragraphStyle(m_currentCharFormat.intProperty(KoParagraphStyle::StyleId)));
+        style = static_cast<KoCharacterStyle *>(m_styleManager->paragraphStyle(m_currentCharFormat.intProperty(KoParagraphStyle::StyleId)));
         useParagraphStyle = true;
     }
     if (style) {
         bool unchanged = true;
         QTextCharFormat comparisonFormat = refBlockCharFormat;
         style->applyStyle(comparisonFormat);
-        //Here we are making quite a few assumptions:
-        //i. we can set the "ensured" properties on a blank charFormat. These corresponds to Qt default. We are not creating false positive (ie. different styles showing as identical).
-        //ii. a property whose toBool returns as false is identical to an unset property (this is done through the clearUnsetProperties method)
+        // Here we are making quite a few assumptions:
+        // i. we can set the "ensured" properties on a blank charFormat. These corresponds to Qt default. We are not creating false positive (ie. different
+        // styles showing as identical). ii. a property whose toBool returns as false is identical to an unset property (this is done through the
+        // clearUnsetProperties method)
         style->ensureMinimalProperties(comparisonFormat);
         style->ensureMinimalProperties(m_currentCharFormat);
         clearUnsetProperties(comparisonFormat);
         clearUnsetProperties(m_currentCharFormat);
         if (m_currentCharFormat.properties().count() != comparisonFormat.properties().count()) {
             unchanged = false;
-        }
-        else {
-            foreach(int property, m_currentCharFormat.properties().keys()) {
+        } else {
+            foreach (int property, m_currentCharFormat.properties().keys()) {
                 if (m_currentCharFormat.property(property) != comparisonFormat.property(property)) {
                     unchanged = false;
                 }
             }
         }
-        disconnect(widget.characterStyleCombo, QOverload<const QModelIndex&>::of(&StylesCombo::selected),
-                   this, QOverload<const QModelIndex&>::of(&SimpleCharacterWidget::styleSelected));
-         //TODO, this is very brittle index 1 is because index 0 is the title. The proper solution to that would be for the "None" style to have a styleId which does not get applied on the text, but can be used in the ui
+        disconnect(widget.characterStyleCombo,
+                   QOverload<const QModelIndex &>::of(&StylesCombo::selected),
+                   this,
+                   QOverload<const QModelIndex &>::of(&SimpleCharacterWidget::styleSelected));
+        // TODO, this is very brittle index 1 is because index 0 is the title. The proper solution to that would be for the "None" style to have a styleId which
+        // does not get applied on the text, but can be used in the ui
         widget.characterStyleCombo->setCurrentIndex((useParagraphStyle) ? 1 : m_sortedStylesModel->indexOf(style).row());
         widget.characterStyleCombo->setStyleIsOriginal(unchanged);
         widget.characterStyleCombo->slotUpdatePreview();
-        connect(widget.characterStyleCombo, QOverload<const QModelIndex&>::of(&StylesCombo::selected),
-                this, QOverload<const QModelIndex&>::of(&SimpleCharacterWidget::styleSelected));
+        connect(widget.characterStyleCombo,
+                QOverload<const QModelIndex &>::of(&StylesCombo::selected),
+                this,
+                QOverload<const QModelIndex &>::of(&SimpleCharacterWidget::styleSelected));
     }
 }
 
 void SimpleCharacterWidget::clearUnsetProperties(QTextFormat &format)
 {
-    foreach(int property, format.properties().keys()) {
+    foreach (int property, format.properties().keys()) {
         if (!format.property(property).toBool()) {
             format.clearProperty(property);
         }
     }
 }
 
-void SimpleCharacterWidget::fontFamilyActivated(int index) {
+void SimpleCharacterWidget::fontFamilyActivated(int index)
+{
     /**
      * Hack:
      *
@@ -185,14 +199,15 @@ void SimpleCharacterWidget::fontFamilyActivated(int index) {
      * manually triggering it here if that happens.
      */
     if (index == m_lastFontFamilyIndex) {
-        KSelectAction *action = qobject_cast<KSelectAction*>(m_tool->action("format_fontfamily"));
-        if(action->currentAction())
+        KSelectAction *action = qobject_cast<KSelectAction *>(m_tool->action("format_fontfamily"));
+        if (action->currentAction())
             action->currentAction()->trigger();
     }
     m_lastFontFamilyIndex = index;
 }
 
-void SimpleCharacterWidget::fontSizeActivated(int index) {
+void SimpleCharacterWidget::fontSizeActivated(int index)
+{
     /**
      * Hack:
      *
@@ -201,7 +216,7 @@ void SimpleCharacterWidget::fontSizeActivated(int index) {
      * the way by manually triggering it here if that happens.
      */
     if (index == m_lastFontSizeIndex) {
-        KSelectAction *action = qobject_cast<KSelectAction*>(m_tool->action("format_fontsize"));
+        KSelectAction *action = qobject_cast<KSelectAction *>(m_tool->action("format_fontsize"));
         action->currentAction()->trigger();
     }
     m_lastFontSizeIndex = index;
@@ -214,18 +229,22 @@ void SimpleCharacterWidget::setCurrentBlockFormat(const QTextBlockFormat &format
     m_currentBlockFormat = format;
 
     m_stylesModel->setCurrentParagraphStyle(format.intProperty(KoParagraphStyle::StyleId));
-    disconnect(widget.characterStyleCombo, QOverload<const QModelIndex &>::of(&StylesCombo::selected),
-               this, QOverload<const QModelIndex &>::of(&SimpleCharacterWidget::styleSelected));
+    disconnect(widget.characterStyleCombo,
+               QOverload<const QModelIndex &>::of(&StylesCombo::selected),
+               this,
+               QOverload<const QModelIndex &>::of(&SimpleCharacterWidget::styleSelected));
     widget.characterStyleCombo->slotUpdatePreview();
-    connect(widget.characterStyleCombo, QOverload<const QModelIndex &>::of(&StylesCombo::selected),
-            this, QOverload<const QModelIndex &>::of(&SimpleCharacterWidget::styleSelected));
+    connect(widget.characterStyleCombo,
+            QOverload<const QModelIndex &>::of(&StylesCombo::selected),
+            this,
+            QOverload<const QModelIndex &>::of(&SimpleCharacterWidget::styleSelected));
 }
 
 void SimpleCharacterWidget::styleSelected(int index)
 {
     KoCharacterStyle *charStyle = m_styleManager->characterStyle(m_sortedStylesModel->index(index, 0, QModelIndex()).internalId());
 
-    //if the selected item correspond to a null characterStyle, send the null pointer. the tool should set the characterStyle as per paragraph
+    // if the selected item correspond to a null characterStyle, send the null pointer. the tool should set the characterStyle as per paragraph
     emit characterStyleSelected(charStyle);
     emit doneWithFocus();
 }
@@ -238,7 +257,7 @@ void SimpleCharacterWidget::styleSelected(const QModelIndex &index)
     }
     KoCharacterStyle *charStyle = m_styleManager->characterStyle(index.internalId());
 
-    //if the selected item correspond to a null characterStyle, send the null pointer. the tool should set the characterStyle as per paragraph
+    // if the selected item correspond to a null characterStyle, send the null pointer. the tool should set the characterStyle as per paragraph
     emit characterStyleSelected(charStyle);
     emit doneWithFocus();
 }

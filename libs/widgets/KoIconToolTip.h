@@ -10,18 +10,18 @@
 
 #include "KoItemToolTip.h"
 
-class KoIconToolTip: public KoItemToolTip
+class KoIconToolTip : public KoItemToolTip
 {
-Q_OBJECT
-    public:
-        KoIconToolTip() = default;
-        ~KoIconToolTip() override = default;
+    Q_OBJECT
+public:
+    KoIconToolTip() = default;
+    ~KoIconToolTip() override = default;
 
-    protected:
-        QTextDocument *createDocument( const QModelIndex &index ) override;
+protected:
+    QTextDocument *createDocument(const QModelIndex &index) override;
 
-    private:
-        typedef KoItemToolTip super;
+private:
+    typedef KoItemToolTip super;
 };
 
 #endif // KOICONTOOLTIP_H

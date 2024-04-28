@@ -11,9 +11,9 @@
 
 /* Now the same for CALLIGRA_SHEETS_CORE_TEST_EXPORT, if compiling with unit tests enabled */
 #ifdef COMPILING_TESTS
-#   define CALLIGRA_SHEETS_CORE_TEST_EXPORT CALLIGRA_SHEETS_CORE_EXPORT
+#define CALLIGRA_SHEETS_CORE_TEST_EXPORT CALLIGRA_SHEETS_CORE_EXPORT
 #else /* not compiling tests */
-#   define CALLIGRA_SHEETS_CORE_TEST_EXPORT
+#define CALLIGRA_SHEETS_CORE_TEST_EXPORT
 #endif
 
 #endif

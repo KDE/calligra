@@ -18,13 +18,13 @@ class QPointF;
 
 class KoShape;
 
-class FLAKE_EXPORT KoAnnotationLayoutManager: public QObject
+class FLAKE_EXPORT KoAnnotationLayoutManager : public QObject
 {
     Q_OBJECT
 public:
     static const qreal shapeSpace; // Distance between annotation shapes.
     static const qreal shapeWidth; // Annotation shapes width.
-    //Connection point of lines from shape to this point and from this point to refText position.
+    // Connection point of lines from shape to this point and from this point to refText position.
     static const qreal connectionPointLines;
 
     explicit KoAnnotationLayoutManager(QObject *parent = 0);
@@ -42,7 +42,7 @@ public:
 
 public Q_SLOTS:
     /// register the position of an annotation shape.
-    void registerAnnotationRefPosition(KoShape *annotationShape, const QPointF& refPosition);
+    void registerAnnotationRefPosition(KoShape *annotationShape, const QPointF &refPosition);
 
     /// Remove annotation shape.
     void removeAnnotationShape(KoShape *annotationShape);
@@ -57,11 +57,9 @@ private:
     /// layout annotation shapes
     void layoutAnnotationShapes();
 
-
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOANNOTATIONLAYOUTMANAGER_H
-

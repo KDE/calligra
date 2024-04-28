@@ -7,8 +7,8 @@
 #include "KoStandardAction.h"
 
 #include <KActionCollection>
-#include <ktoggleaction.h>
 #include <KLocalizedString>
+#include <ktoggleaction.h>
 
 QAction *KoStandardAction::create(StandardAction id, const QObject *recvr, const char *slot, QObject *parent)
 {
@@ -38,7 +38,7 @@ QAction *KoStandardAction::create(StandardAction id, const QObject *recvr, const
     return newAction;
 }
 
-const char* KoStandardAction::name(StandardAction id)
+const char *KoStandardAction::name(StandardAction id)
 {
     switch (id) {
     case ShowGuides:
@@ -50,5 +50,5 @@ const char* KoStandardAction::name(StandardAction id)
 
 KToggleAction *KoStandardAction::showGuides(const QObject *receiver, const char *slot, QObject *parent)
 {
-    return static_cast<KToggleAction*>(create(ShowGuides, receiver, slot, parent));
+    return static_cast<KToggleAction *>(create(ShowGuides, receiver, slot, parent));
 }

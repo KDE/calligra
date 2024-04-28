@@ -8,8 +8,8 @@
 #ifndef KCHART_TESTKDCHARTMODEL_H
 #define KCHART_TESTKDCHARTMODEL_H
 
-#include <QTest>
 #include <QStandardItemModel>
+#include <QTest>
 
 #include "KChartModel.h"
 #include "ModelObserver.h"

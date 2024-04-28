@@ -8,22 +8,21 @@
 
 #include "KoGenStyles.h"
 
-Writer::Writer(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
-               bool stylesxml_)
-        : xOffset(0),
-        yOffset(0),
-        scaleX(1),
-        scaleY(1),
-        g_rotation(0),
-        g_flipH(0),
-        g_flipV(0),
-        xml(xmlWriter),
-        styles(kostyles),
-        stylesxml(stylesxml_)
+Writer::Writer(KoXmlWriter &xmlWriter, KoGenStyles &kostyles, bool stylesxml_)
+    : xOffset(0)
+    , yOffset(0)
+    , scaleX(1)
+    , scaleY(1)
+    , g_rotation(0)
+    , g_flipH(0)
+    , g_flipV(0)
+    , xml(xmlWriter)
+    , styles(kostyles)
+    , stylesxml(stylesxml_)
 {
 }
 
-Writer Writer::transform(const QRectF& oldCoords, const QRectF &newCoords) const
+Writer Writer::transform(const QRectF &oldCoords, const QRectF &newCoords) const
 {
     Writer w(xml, styles, stylesxml);
     w.xOffset = xOffset + oldCoords.x() * scaleX;
@@ -40,20 +39,20 @@ Writer Writer::transform(const QRectF& oldCoords, const QRectF &newCoords) const
 
 qreal Writer::vLength(qreal length) const
 {
-    return length*scaleY;
+    return length * scaleY;
 }
 
 qreal Writer::hLength(qreal length) const
 {
-    return length*scaleX;
+    return length * scaleX;
 }
 
 qreal Writer::vOffset(qreal offset) const
 {
-    return yOffset + offset*scaleY;
+    return yOffset + offset * scaleY;
 }
 
 qreal Writer::hOffset(qreal offset) const
 {
-    return xOffset + offset*scaleX;
+    return xOffset + offset * scaleX;
 }

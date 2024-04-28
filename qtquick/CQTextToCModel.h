@@ -15,21 +15,17 @@
 class CQTextToCModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* canvas READ canvas WRITE setCanvas NOTIFY canvasChanged);
+    Q_PROPERTY(QObject *canvas READ canvas WRITE setCanvas NOTIFY canvasChanged);
+
 public:
-    enum TextToCModelRoleNames {
-        Title = Qt::UserRole + 1,
-        Level,
-        PageNumber
-    };
-    explicit CQTextToCModel(QObject* parent = 0);
+    enum TextToCModelRoleNames { Title = Qt::UserRole + 1, Level, PageNumber };
+    explicit CQTextToCModel(QObject *parent = 0);
     virtual ~CQTextToCModel();
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual int rowCount(const QModelIndex& parent) const;
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual int rowCount(const QModelIndex &parent) const;
 
-
-    QObject* canvas() const;
-    void setCanvas(QObject* newCanvas);
+    QObject *canvas() const;
+    void setCanvas(QObject *newCanvas);
 Q_SIGNALS:
     void canvasChanged();
 
@@ -41,7 +37,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // CQTEXTTOCMODEL_H

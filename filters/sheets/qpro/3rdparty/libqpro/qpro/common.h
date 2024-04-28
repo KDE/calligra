@@ -14,4 +14,3 @@
 #endif
 
 #endif // QPRO_COMMON_H
-

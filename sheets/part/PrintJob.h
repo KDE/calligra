@@ -34,12 +34,12 @@ public Q_SLOTS:
 protected:
     QRectF preparePage(int pageNumber) override;
     void printPage(int pageNumber, QPainter &painter) override;
-    QList<KoShape*> shapesOnPage(int pageNumber) override;
-    QList<QWidget*> createOptionWidgets() const override;
+    QList<KoShape *> shapesOnPage(int pageNumber) override;
+    QList<QWidget *> createOptionWidgets() const override;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

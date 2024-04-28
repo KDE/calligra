@@ -4,26 +4,24 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-// These are used by the row/col actions in ui/actions, by ui/dialogs/LayoutDialog and ui/commands/PasteCommand, as well as by the interface routines in part/ and shape/. Hence keeping them here, not in ui/actions
-
-
-
+// These are used by the row/col actions in ui/actions, by ui/dialogs/LayoutDialog and ui/commands/PasteCommand, as well as by the interface routines in part/
+// and shape/. Hence keeping them here, not in ui/actions
 
 // Local
 #include "RowColumnManipulators.h"
 
-#include <float.h>
-#include <QWidget>
 #include <QFontMetricsF>
+#include <QWidget>
+#include <float.h>
 
-#include "engine/Damages.h"
-#include "engine/MapBase.h"
 #include "core/Cell.h"
 #include "core/CellStorage.h"
 #include "core/ColFormatStorage.h"
 #include "core/RowFormatStorage.h"
 #include "core/Sheet.h"
 #include "core/Style.h"
+#include "engine/Damages.h"
+#include "engine/MapBase.h"
 
 using namespace Calligra::Sheets;
 
@@ -31,8 +29,8 @@ using namespace Calligra::Sheets;
   class ResizeColumnManipulator
 ****************************************************************************/
 
-ResizeColumnManipulator::ResizeColumnManipulator(KUndo2Command* parent)
-        : AbstractRegionCommand(parent)
+ResizeColumnManipulator::ResizeColumnManipulator(KUndo2Command *parent)
+    : AbstractRegionCommand(parent)
 {
     setText(kundo2_i18n("Resize Column"));
 }
@@ -41,7 +39,8 @@ ResizeColumnManipulator::~ResizeColumnManipulator()
 {
 }
 
-bool ResizeColumnManipulator::performNonCommandActions() {
+bool ResizeColumnManipulator::performNonCommandActions()
+{
     const QList<Element *> elements = cells();
     for (int i = 0; i < elements.count(); ++i) {
         Element *element = elements[i];
@@ -56,7 +55,7 @@ bool ResizeColumnManipulator::performNonCommandActions() {
         // TODO: more efficiently update positions of cell-anchored shapes
         for (int col = range.left(); col <= range.right(); ++col) {
             qreal delta = m_newSize - m_oldSizes[col];
-            m_sheet->adjustCellAnchoredShapesX(delta, col+1);
+            m_sheet->adjustCellAnchoredShapesX(delta, col + 1);
         }
     }
 
@@ -64,7 +63,8 @@ bool ResizeColumnManipulator::performNonCommandActions() {
     return true;
 }
 
-bool ResizeColumnManipulator::undoNonCommandActions() {
+bool ResizeColumnManipulator::undoNonCommandActions()
+{
     const QList<Element *> elements = cells();
     for (int i = 0; i < elements.count(); ++i) {
         Element *element = elements[i];
@@ -75,7 +75,7 @@ bool ResizeColumnManipulator::undoNonCommandActions() {
         // TODO: more efficiently update positions of cell-anchored shapes
         for (int col = range.left(); col <= range.right(); ++col) {
             qreal delta = -1 * (m_newSize - m_oldSizes[col]);
-            m_sheet->adjustCellAnchoredShapesX(delta, col+1);
+            m_sheet->adjustCellAnchoredShapesX(delta, col + 1);
         }
     }
 
@@ -83,14 +83,12 @@ bool ResizeColumnManipulator::undoNonCommandActions() {
     return true;
 }
 
-
-
 /***************************************************************************
   class ResizeRowManipulator
 ****************************************************************************/
 
-ResizeRowManipulator::ResizeRowManipulator(KUndo2Command* parent)
-        : AbstractRegionCommand(parent)
+ResizeRowManipulator::ResizeRowManipulator(KUndo2Command *parent)
+    : AbstractRegionCommand(parent)
 {
     setText(kundo2_i18n("Resize Row"));
 }
@@ -99,7 +97,8 @@ ResizeRowManipulator::~ResizeRowManipulator()
 {
 }
 
-bool ResizeRowManipulator::performNonCommandActions() {
+bool ResizeRowManipulator::performNonCommandActions()
+{
     const QList<Element *> elements = cells();
     for (int i = 0; i < elements.count(); ++i) {
         Element *element = elements[i];
@@ -113,7 +112,7 @@ bool ResizeRowManipulator::performNonCommandActions() {
         // TODO: more efficiently update positions of cell-anchored shapes
         for (int row = range.top(); row <= range.bottom(); ++row) {
             qreal delta = m_newSize - m_oldSizes[row];
-            m_sheet->adjustCellAnchoredShapesY(delta, row+1);
+            m_sheet->adjustCellAnchoredShapesY(delta, row + 1);
         }
     }
 
@@ -121,7 +120,8 @@ bool ResizeRowManipulator::performNonCommandActions() {
     return true;
 }
 
-bool ResizeRowManipulator::undoNonCommandActions() {
+bool ResizeRowManipulator::undoNonCommandActions()
+{
     const QList<Element *> elements = cells();
     for (int i = 0; i < elements.count(); ++i) {
         Element *element = elements[i];
@@ -138,7 +138,7 @@ bool ResizeRowManipulator::undoNonCommandActions() {
         // TODO: more efficiently update positions of cell-anchored shapes
         for (int row = range.top(); row <= range.bottom(); ++row) {
             qreal delta = -1 * (m_newSize - m_oldSizes[row]);
-            m_sheet->adjustCellAnchoredShapesY(delta, row+1);
+            m_sheet->adjustCellAnchoredShapesY(delta, row + 1);
         }
     }
 
@@ -146,16 +146,15 @@ bool ResizeRowManipulator::undoNonCommandActions() {
     return true;
 }
 
-
 /***************************************************************************
   class HideShowManipulator
 ****************************************************************************/
 
-HideShowManipulator::HideShowManipulator(KUndo2Command* parent)
-        : AbstractRegionCommand(parent),
-        m_manipulateColumns(false),
-        m_manipulateRows(false),
-        m_hide(false)
+HideShowManipulator::HideShowManipulator(KUndo2Command *parent)
+    : AbstractRegionCommand(parent)
+    , m_manipulateColumns(false)
+    , m_manipulateRows(false)
+    , m_hide(false)
 {
 }
 
@@ -171,7 +170,8 @@ void HideShowManipulator::setHide(bool hide)
 
 void HideShowManipulator::performActions(bool hide)
 {
-    if (m_firstrun) oldHidden.clear();
+    if (m_firstrun)
+        oldHidden.clear();
 
     const QList<Element *> elements = cells();
     for (int i = 0; i < elements.count(); ++i) {
@@ -184,7 +184,8 @@ void HideShowManipulator::performActions(bool hide)
                     oldHidden[i] = cf->isHidden(i);
             cf->setHidden(range.left(), range.right(), hide);
             qreal delta = cf->totalColWidth(range.left(), range.right());
-            if (hide) delta = -delta;
+            if (hide)
+                delta = -delta;
             m_sheet->adjustCellAnchoredShapesX(delta, range.left());
         }
         if (m_manipulateRows) {
@@ -194,10 +195,10 @@ void HideShowManipulator::performActions(bool hide)
                     oldHidden[i] = rf->isHidden(i);
             rf->setHidden(range.top(), range.bottom(), hide);
             qreal delta = rf->totalRowHeight(range.top(), range.bottom());
-            if (hide) delta = -delta;
+            if (hide)
+                delta = -delta;
             m_sheet->adjustCellAnchoredShapesY(delta, range.top());
         }
-
     }
 
     // Just repaint everything visible; no need to invalidate the visual cache.
@@ -244,13 +245,14 @@ void HideShowManipulator::undoActions()
     m_sheet->map()->addDamage(new SheetDamage(m_sheet, changes));
 }
 
-
-bool HideShowManipulator::performNonCommandActions() {
+bool HideShowManipulator::performNonCommandActions()
+{
     performActions(m_hide);
     return true;
 }
 
-bool HideShowManipulator::undoNonCommandActions() {
+bool HideShowManipulator::undoNonCommandActions()
+{
     undoActions();
     return true;
 }
@@ -263,9 +265,11 @@ bool HideShowManipulator::preProcess()
         QRect range = (*it)->rect();
         // too big if we want to hide everything
         if (m_manipulateColumns) {
-            if (range.right() >= KS_colMax) return false;
+            if (range.right() >= KS_colMax)
+                return false;
         } else {
-            if (range.bottom() >= KS_rowMax) return false;
+            if (range.bottom() >= KS_rowMax)
+                return false;
         }
     }
 
@@ -297,10 +301,10 @@ KUndo2MagicString HideShowManipulator::name(bool hide) const
   class AdjustColumnRowManipulator
 ****************************************************************************/
 
-AdjustColumnRowManipulator::AdjustColumnRowManipulator(KUndo2Command* parent)
-        : AbstractRegionCommand(parent),
-        m_adjustColumn(false),
-        m_adjustRow(false)
+AdjustColumnRowManipulator::AdjustColumnRowManipulator(KUndo2Command *parent)
+    : AbstractRegionCommand(parent)
+    , m_adjustColumn(false)
+    , m_adjustRow(false)
 {
 }
 
@@ -308,12 +312,14 @@ AdjustColumnRowManipulator::~AdjustColumnRowManipulator()
 {
 }
 
-bool AdjustColumnRowManipulator::performNonCommandActions() {
+bool AdjustColumnRowManipulator::performNonCommandActions()
+{
     QRect used = m_sheet->usedArea();
     const QList<Element *> elements = cells();
     for (int i = 0; i < elements.count(); ++i) {
         QRect range = elements[i]->rect();
-        if (elements[i]->sheet() != m_sheet) continue;
+        if (elements[i]->sheet() != m_sheet)
+            continue;
 
         if (m_adjustColumn) {
             int min = qMin(range.left(), used.right());
@@ -343,12 +349,14 @@ bool AdjustColumnRowManipulator::performNonCommandActions() {
     return true;
 }
 
-bool AdjustColumnRowManipulator::undoNonCommandActions() {
+bool AdjustColumnRowManipulator::undoNonCommandActions()
+{
     QRect used = m_sheet->usedArea();
     const QList<Element *> elements = cells();
     for (int i = 0; i < elements.count(); ++i) {
         QRect range = elements[i]->rect();
-        if (elements[i]->sheet() != m_sheet) continue;
+        if (elements[i]->sheet() != m_sheet)
+            continue;
 
         if (m_adjustColumn) {
             int min = qMin(range.left(), used.right());
@@ -392,11 +400,10 @@ void AdjustColumnRowManipulator::setWidths(int from, int to, QMap<int, double> &
     m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged | SheetDamage::ColumnsChanged));
 }
 
-
-
 class DummyWidget : public QWidget
 {
-    int metric(PaintDeviceMetric metric) const override {
+    int metric(PaintDeviceMetric metric) const override
+    {
         switch (metric) {
         case QPaintDevice::PdmDpiX:
         case QPaintDevice::PdmDpiY:
@@ -410,7 +417,7 @@ class DummyWidget : public QWidget
     }
 };
 
-QSizeF AdjustColumnRowManipulator::textSize(const QString& text, const Style& style) const
+QSizeF AdjustColumnRowManipulator::textSize(const QString &text, const Style &style) const
 {
     QSizeF size;
     DummyWidget dummyWiget;
@@ -423,8 +430,7 @@ QSizeF AdjustColumnRowManipulator::textSize(const QString& text, const Style& st
             width = qMax(width, fontMetrics.boundingRect(text.at(i)).width());
 
         size.setWidth(width);
-        size.setHeight((fontMetrics.ascent() + fontMetrics.descent())
-                       * text.length());
+        size.setHeight((fontMetrics.ascent() + fontMetrics.descent()) * text.length());
 
         return size;
     }
@@ -439,10 +445,8 @@ QSizeF AdjustColumnRowManipulator::textSize(const QString& text, const Style& st
     if (style.angle()) {
         double angle_rad = style.angle() * M_PI / 180;
         // Rotated text.
-        size.setHeight(size.height() * ::cos(angle_rad)
-                       + qAbs(size.width() * ::sin(angle_rad)));
-        size.setWidth(qAbs(size.height() * ::sin(angle_rad))
-                      + size.width() * ::cos(angle_rad));
+        size.setHeight(size.height() * ::cos(angle_rad) + qAbs(size.width() * ::sin(angle_rad)));
+        size.setWidth(qAbs(size.height() * ::sin(angle_rad)) + size.width() * ::cos(angle_rad));
     }
 
     return size;
@@ -481,8 +485,7 @@ double AdjustColumnRowManipulator::idealRowHeight(int row)
     return height;
 }
 
-
-double AdjustColumnRowManipulator::adjustColumnHelper(const Cell& cell)
+double AdjustColumnRowManipulator::adjustColumnHelper(const Cell &cell)
 {
     double long_max = 0.0;
     const Style style = cell.effectiveStyle();
@@ -498,8 +501,7 @@ double AdjustColumnRowManipulator::adjustColumnHelper(const Cell& cell)
         }
         if (alignment == Style::Left)
             indent = cell.style().indentation();
-        long_max = indent + size.width()
-                   + style.leftBorderPen().width() + style.rightBorderPen().width();
+        long_max = indent + size.width() + style.leftBorderPen().width() + style.rightBorderPen().width();
         // if this cell has others merged into it, we'll subtract the width of those columns
         // this is not perfect, but at least should work in 90% of the cases
         const int mergedXCount = cell.mergedXCells();
@@ -516,7 +518,7 @@ double AdjustColumnRowManipulator::adjustColumnHelper(const Cell& cell)
         return long_max + 4.0;
 }
 
-double AdjustColumnRowManipulator::adjustRowHelper(const Cell& cell)
+double AdjustColumnRowManipulator::adjustRowHelper(const Cell &cell)
 {
     double long_max = 0.0;
     const Style style = cell.effectiveStyle();
@@ -547,9 +549,9 @@ KUndo2MagicString AdjustColumnRowManipulator::name() const
 ****************************************************************************/
 
 InsertDeleteColumnManipulator::InsertDeleteColumnManipulator(KUndo2Command *parent)
-        : AbstractRegionCommand(parent)
-        , m_mode(Insert)
-        , m_template(0)
+    : AbstractRegionCommand(parent)
+    , m_mode(Insert)
+    , m_template(0)
 {
     setText(kundo2_i18n("Insert Columns"));
 }
@@ -574,7 +576,7 @@ void InsertDeleteColumnManipulator::setDelete(bool deletion)
         setText(kundo2_i18n("Remove Columns"));
 }
 
-bool InsertDeleteColumnManipulator::process(Element* element)
+bool InsertDeleteColumnManipulator::process(Element *element)
 {
     const QRect range = element->rect();
     const int pos = range.left();
@@ -583,7 +585,7 @@ bool InsertDeleteColumnManipulator::process(Element* element)
         m_sheet->insertColumns(pos, num);
         if (m_template) {
             const int end = pos + num - 1;
-            m_sheet->columnFormats()->setColFormat (pos, end, *m_template);
+            m_sheet->columnFormats()->setColFormat(pos, end, *m_template);
         }
         m_sheet->cellStorage()->insertColumns(pos, num);
     } else {
@@ -604,7 +606,6 @@ bool InsertDeleteColumnManipulator::undoNonCommandActions()
     return true;
 }
 
-
 bool elementLeftColumnLessThan(const Calligra::Sheets::Region::Element *e1, const Calligra::Sheets::Region::Element *e2)
 {
     return e1->rect().left() < e2->rect().left();
@@ -618,15 +619,14 @@ bool InsertDeleteColumnManipulator::preProcess()
     return true;
 }
 
-
 /***************************************************************************
   class InsertDeleteRowManipulator
 ****************************************************************************/
 
 InsertDeleteRowManipulator::InsertDeleteRowManipulator(KUndo2Command *parent)
-        : AbstractRegionCommand(parent)
-        , m_mode(Insert)
-        , m_template(0)
+    : AbstractRegionCommand(parent)
+    , m_mode(Insert)
+    , m_template(0)
 {
     setText(kundo2_i18n("Insert Rows"));
 }
@@ -651,7 +651,7 @@ void InsertDeleteRowManipulator::setDelete(bool deletion)
         setText(kundo2_i18n("Remove Rows"));
 }
 
-bool InsertDeleteRowManipulator::process(Element* element)
+bool InsertDeleteRowManipulator::process(Element *element)
 {
     const QRect range = element->rect();
     const int pos = range.top();
@@ -660,7 +660,7 @@ bool InsertDeleteRowManipulator::process(Element* element)
         m_sheet->insertRows(pos, num);
         if (m_template) {
             const int end = pos + num - 1;
-            m_sheet->rowFormats()->setRowFormat (pos, end, *m_template);
+            m_sheet->rowFormats()->setRowFormat(pos, end, *m_template);
         }
         m_sheet->cellStorage()->insertRows(pos, num);
     } else {
@@ -682,7 +682,6 @@ bool InsertDeleteRowManipulator::undoNonCommandActions()
     return true;
 }
 
-
 bool elementTopRowLessThan(const Calligra::Sheets::Region::Element *e1, const Calligra::Sheets::Region::Element *e2)
 {
     return e1->rect().top() < e2->rect().top();
@@ -695,5 +694,3 @@ bool InsertDeleteRowManipulator::preProcess()
         std::stable_sort(cells().begin(), cells().end(), elementTopRowLessThan);
     return true;
 }
-
-

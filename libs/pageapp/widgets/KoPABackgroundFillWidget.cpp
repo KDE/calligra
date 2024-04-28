@@ -7,16 +7,16 @@
 
 #include "KoPABackgroundFillWidget.h"
 
-#include <KoPageApp.h>
-#include <KoPAViewBase.h>
 #include <KoCanvasBase.h>
-#include <KoShape.h>
 #include <KoDocumentResourceManager.h>
+#include <KoPAViewBase.h>
+#include <KoPageApp.h>
+#include <KoShape.h>
 
 #include <KLocalizedString>
 
 KoPABackgroundFillWidget::KoPABackgroundFillWidget(QWidget *parent)
-: KoFillConfigWidget(parent)
+    : KoFillConfigWidget(parent)
 {
     setWindowTitle(i18n("Background"));
 }
@@ -24,20 +24,19 @@ KoPABackgroundFillWidget::KoPABackgroundFillWidget(QWidget *parent)
 void KoPABackgroundFillWidget::setView(KoPAViewBase *view)
 {
     Q_ASSERT(view);
-    connect(view->proxyObject, &KoPAViewProxyObject::activePageChanged,
-            this, &KoPABackgroundFillWidget::shapeChanged);
+    connect(view->proxyObject, &KoPAViewProxyObject::activePageChanged, this, &KoPABackgroundFillWidget::shapeChanged);
 }
 
-KoShape* KoPABackgroundFillWidget::currentShape()
+KoShape *KoPABackgroundFillWidget::currentShape()
 {
     KoShape *slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
     return slide;
 }
 
-QList<KoShape*> KoPABackgroundFillWidget::currentShapes()
+QList<KoShape *> KoPABackgroundFillWidget::currentShapes()
 {
     KoShape *slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
-    QList<KoShape*> list;
+    QList<KoShape *> list;
     list.append(slide);
     return list;
 }

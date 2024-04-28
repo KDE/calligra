@@ -56,25 +56,22 @@ public:
      */
     ~Doc() override;
 
-
-
-    bool completeSaving(KoStore* _store) override;
-
+    bool completeSaving(KoStore *_store) override;
 
     QDomDocument saveXML() override;
 
     int supportedSpecialFormats() const override;
 
     // reimplemented; paints the thumbnail
-    void paintContent(QPainter & painter, const QRect & rect) override;
-    virtual void paintContent(QPainter & painter, const QRect & rect, Sheet* sheet);
+    void paintContent(QPainter &painter, const QRect &rect) override;
+    virtual void paintContent(QPainter &painter, const QRect &rect, Sheet *sheet);
 
     void initConfig() override;
     void saveConfig();
 
-    void addIgnoreWordAll(const QString & word);
+    void addIgnoreWordAll(const QString &word);
     void clearIgnoreWordAll();
-    void addIgnoreWordAllList(const QStringList & _lst);
+    void addIgnoreWordAllList(const QStringList &_lst);
 
     /* Function specific when we load config from file */
     void loadConfigFromFile();
@@ -86,7 +83,6 @@ public:
      * Requests an update of all attached user interfaces (views).
      */
     void updateAllViews();
-
 
 public Q_SLOTS:
     void initEmpty() override;
@@ -103,25 +99,24 @@ Q_SIGNALS:
     void closeEditor(bool);
 
 protected Q_SLOTS:
-    void sheetAdded(SheetBase* sheet);
+    void sheetAdded(SheetBase *sheet);
 
 protected:
-
     /**
      * @reimp Overloaded function of KoDocument.
      */
-    bool completeLoading(KoStore*) override;
+    bool completeLoading(KoStore *) override;
 
 private:
     Q_DISABLE_COPY(Doc)
 
     class Private;
-    Private * const dd;
+    Private *const dd;
 
     /**
      * \ingroup NativeFormat
      */
-    void loadPaper(KoXmlElement const & paper);
+    void loadPaper(KoXmlElement const &paper);
 };
 
 } // namespace Sheets

@@ -15,17 +15,17 @@
 #endif
 
 // Sheets - storages
-#include "engine/ValueStorage.h"
-#include "engine/FormulaStorage.h"
 #include "BindingStorage.h"
 #include "ConditionsStorage.h"
+#include "DatabaseStorage.h"
 #include "StyleStorage.h"
 #include "ValidityStorage.h"
-#include "DatabaseStorage.h"
+#include "engine/FormulaStorage.h"
+#include "engine/ValueStorage.h"
 
 // Sheets - rest
-#include "engine/Damages.h"
 #include "Sheet.h"
+#include "engine/Damages.h"
 
 // commands
 #include "PointStorageUndoCommand.h"
@@ -39,31 +39,32 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN CellStorage::Private
 {
 public:
-    Private(Sheet* sheet)
-            : sheet(sheet)
-            , bindingStorage(new BindingStorage(sheet->map()))
-            , conditionsStorage(new ConditionsStorage(sheet->map()))
-            , databaseStorage(new DatabaseStorage(sheet->map()))
-            , fusionStorage(new FusionStorage(sheet->map()))
-            , linkStorage(new LinkStorage())
-            , styleStorage(new StyleStorage(sheet->fullMap()))
-            , richTextStorage(new RichTextStorage())
+    Private(Sheet *sheet)
+        : sheet(sheet)
+        , bindingStorage(new BindingStorage(sheet->map()))
+        , conditionsStorage(new ConditionsStorage(sheet->map()))
+        , databaseStorage(new DatabaseStorage(sheet->map()))
+        , fusionStorage(new FusionStorage(sheet->map()))
+        , linkStorage(new LinkStorage())
+        , styleStorage(new StyleStorage(sheet->fullMap()))
+        , richTextStorage(new RichTextStorage())
     {
     }
 
-    Private(const Private& other, Sheet* sheet)
-            : sheet(sheet)
-            , bindingStorage(new BindingStorage(*other.bindingStorage))
-            , conditionsStorage(new ConditionsStorage(*other.conditionsStorage))
-            , databaseStorage(new DatabaseStorage(*other.databaseStorage))
-            , fusionStorage(new FusionStorage(*other.fusionStorage))
-            , linkStorage(new LinkStorage(*other.linkStorage))
-            , styleStorage(new StyleStorage(*other.styleStorage))
-            , richTextStorage(new RichTextStorage(*other.richTextStorage))
+    Private(const Private &other, Sheet *sheet)
+        : sheet(sheet)
+        , bindingStorage(new BindingStorage(*other.bindingStorage))
+        , conditionsStorage(new ConditionsStorage(*other.conditionsStorage))
+        , databaseStorage(new DatabaseStorage(*other.databaseStorage))
+        , fusionStorage(new FusionStorage(*other.fusionStorage))
+        , linkStorage(new LinkStorage(*other.linkStorage))
+        , styleStorage(new StyleStorage(*other.styleStorage))
+        , richTextStorage(new RichTextStorage(*other.richTextStorage))
     {
     }
 
-    ~Private() {
+    ~Private()
+    {
         delete bindingStorage;
         delete conditionsStorage;
         delete databaseStorage;
@@ -73,47 +74,47 @@ public:
         delete richTextStorage;
     }
 
-    Sheet*                  sheet;
-    BindingStorage*         bindingStorage;
-    ConditionsStorage*      conditionsStorage;
-    DatabaseStorage*        databaseStorage;
-    FusionStorage*          fusionStorage;
-    LinkStorage*            linkStorage;
-    StyleStorage*           styleStorage;
-    RichTextStorage*        richTextStorage;
+    Sheet *sheet;
+    BindingStorage *bindingStorage;
+    ConditionsStorage *conditionsStorage;
+    DatabaseStorage *databaseStorage;
+    FusionStorage *fusionStorage;
+    LinkStorage *linkStorage;
+    StyleStorage *styleStorage;
+    RichTextStorage *richTextStorage;
 };
 
-CellStorage::CellStorage(Sheet* sheet)
-        : QObject(sheet)
-        , CellBaseStorage(sheet)
-        , undoCounter(0)
-        , d(new Private(sheet))
+CellStorage::CellStorage(Sheet *sheet)
+    : QObject(sheet)
+    , CellBaseStorage(sheet)
+    , undoCounter(0)
+    , d(new Private(sheet))
 #ifdef CALLIGRA_SHEETS_MT
-        , bigUglyLock(QReadWriteLock::Recursive)
+    , bigUglyLock(QReadWriteLock::Recursive)
 #endif
 {
     fillExtraStorages();
 }
 
-CellStorage::CellStorage(const CellStorage& other)
-        : QObject(other.d->sheet)
-        , CellBaseStorage(other)
-        , undoCounter(0)
-        , d(new Private(*other.d, other.d->sheet))
+CellStorage::CellStorage(const CellStorage &other)
+    : QObject(other.d->sheet)
+    , CellBaseStorage(other)
+    , undoCounter(0)
+    , d(new Private(*other.d, other.d->sheet))
 #ifdef CALLIGRA_SHEETS_MT
-        , bigUglyLock(QReadWriteLock::Recursive)
+    , bigUglyLock(QReadWriteLock::Recursive)
 #endif
 {
     fillExtraStorages();
 }
 
-CellStorage::CellStorage(const CellStorage& other, Sheet* sheet)
-        : QObject(sheet)
-        , CellBaseStorage(other, sheet)
-        , undoCounter(0)
-        , d(new Private(*other.d, sheet))
+CellStorage::CellStorage(const CellStorage &other, Sheet *sheet)
+    : QObject(sheet)
+    , CellBaseStorage(other, sheet)
+    , undoCounter(0)
+    , d(new Private(*other.d, sheet))
 #ifdef CALLIGRA_SHEETS_MT
-        , bigUglyLock(QReadWriteLock::Recursive)
+    , bigUglyLock(QReadWriteLock::Recursive)
 #endif
 {
     fillExtraStorages();
@@ -125,17 +126,18 @@ CellStorage::~CellStorage()
     delete d;
 }
 
-void CellStorage::fillExtraStorages() {
-    storages.push_back (d->bindingStorage);
-    storages.push_back (d->conditionsStorage);
-    storages.push_back (d->databaseStorage);
-    storages.push_back (d->fusionStorage);
-    storages.push_back (d->linkStorage);
-    storages.push_back (d->styleStorage);
-    storages.push_back (d->richTextStorage);
+void CellStorage::fillExtraStorages()
+{
+    storages.push_back(d->bindingStorage);
+    storages.push_back(d->conditionsStorage);
+    storages.push_back(d->databaseStorage);
+    storages.push_back(d->fusionStorage);
+    storages.push_back(d->linkStorage);
+    storages.push_back(d->styleStorage);
+    storages.push_back(d->richTextStorage);
 }
 
-Sheet* CellStorage::fullSheet() const
+Sheet *CellStorage::fullSheet() const
 {
     return d->sheet;
 }
@@ -155,7 +157,7 @@ void CellStorage::take(int col, int row)
 
     if (!d->sheet->map()->isLoading()) {
         // Trigger a recalculation of the consuming cells.
-        CellDamage::Changes changes = CellDamage:: Binding | CellDamage::Formula | CellDamage::Value;
+        CellDamage::Changes changes = CellDamage::Binding | CellDamage::Formula | CellDamage::Value;
         d->sheet->map()->addDamage(new CellDamage(Cell(d->sheet, col, row), changes));
     }
     // also trigger a relayout of the first non-empty cell to the left of this cell
@@ -163,7 +165,6 @@ void CellStorage::take(int col, int row)
     Value v = valueStorage()->prevInRow(col, row, &prevCol);
     if (!v.isEmpty())
         d->sheet->map()->addDamage(new CellDamage(Cell(d->sheet, prevCol, row), CellDamage::Appearance));
-
 }
 
 Binding CellStorage::binding(int column, int row) const
@@ -174,7 +175,7 @@ Binding CellStorage::binding(int column, int row) const
     return d->bindingStorage->contains(QPoint(column, row));
 }
 
-void CellStorage::setBinding(const Region& region, const Binding& binding)
+void CellStorage::setBinding(const Region &region, const Binding &binding)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -182,7 +183,7 @@ void CellStorage::setBinding(const Region& region, const Binding& binding)
     d->bindingStorage->insert(region, binding);
 }
 
-void CellStorage::removeBinding(const Region& region, const Binding& binding)
+void CellStorage::removeBinding(const Region &region, const Binding &binding)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -198,7 +199,7 @@ Conditions CellStorage::conditions(int column, int row) const
     return d->conditionsStorage->contains(QPoint(column, row));
 }
 
-void CellStorage::setConditions(const Region& region, Conditions conditions)
+void CellStorage::setConditions(const Region &region, Conditions conditions)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -222,7 +223,7 @@ Database CellStorage::database(int column, int row) const
     return database;
 }
 
-QVector< QPair<QRectF, Database> > CellStorage::databases(const Region& region) const
+QVector<QPair<QRectF, Database>> CellStorage::databases(const Region &region) const
 {
 #ifdef CALLIGRA_SHEETS_MT
     QReadLocker rl(&bigUglyLock);
@@ -230,7 +231,7 @@ QVector< QPair<QRectF, Database> > CellStorage::databases(const Region& region) 
     return d->databaseStorage->intersectingPairs(region);
 }
 
-void CellStorage::setDatabase(const Region& region, const Database& database)
+void CellStorage::setDatabase(const Region &region, const Database &database)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -246,7 +247,7 @@ QString CellStorage::link(int column, int row) const
     return d->linkStorage->lookup(column, row);
 }
 
-void CellStorage::setLink(int column, int row, const QString& link)
+void CellStorage::setLink(int column, int row, const QString &link)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -256,7 +257,6 @@ void CellStorage::setLink(int column, int row, const QString& link)
     else
         d->linkStorage->insert(column, row, link);
 }
-
 
 void CellStorage::emitInsertNamedArea(const Region &region, const QString &namedArea)
 {
@@ -271,7 +271,7 @@ Style CellStorage::style(int column, int row) const
     return d->styleStorage->contains(QPoint(column, row));
 }
 
-Style CellStorage::style(const QRect& rect) const
+Style CellStorage::style(const QRect &rect) const
 {
 #ifdef CALLIGRA_SHEETS_MT
     QReadLocker rl(&bigUglyLock);
@@ -279,7 +279,7 @@ Style CellStorage::style(const QRect& rect) const
     return d->styleStorage->contains(rect);
 }
 
-void CellStorage::setStyle(const Region& region, const Style& style)
+void CellStorage::setStyle(const Region &region, const Style &style)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -407,12 +407,12 @@ int CellStorage::mergedYCells(int column, int row) const
     return pair.first.toRect().height() - 1;
 }
 
-QList<Cell> CellStorage::masterCells(const Region& region) const
+QList<Cell> CellStorage::masterCells(const Region &region) const
 {
 #ifdef CALLIGRA_SHEETS_MT
     QReadLocker rl(&bigUglyLock);
 #endif
-    const QVector<QPair<QRectF, bool> > pairs = d->fusionStorage->intersectingPairs(region);
+    const QVector<QPair<QRectF, bool>> pairs = d->fusionStorage->intersectingPairs(region);
     if (pairs.isEmpty())
         return QList<Cell>();
     QList<Cell> masterCells;
@@ -583,11 +583,12 @@ int CellStorage::columns(bool includeStyles) const
     int max = CellBaseStorage::columns(includeStyles);
     max = qMax(max, d->conditionsStorage->usedArea().right());
     max = qMax(max, d->fusionStorage->usedArea().right());
-    if (includeStyles) max = qMax(max, d->styleStorage->usedArea().right());
+    if (includeStyles)
+        max = qMax(max, d->styleStorage->usedArea().right());
     max = qMax(max, d->linkStorage->columns());
 
     // don't include bindings cause the bindingStorage does only listen to all cells in the sheet.
-    //max = qMax(max, d->bindingStorage->usedArea().right());
+    // max = qMax(max, d->bindingStorage->usedArea().right());
 
     return max;
 }
@@ -600,16 +601,17 @@ int CellStorage::rows(bool includeStyles) const
     int max = CellBaseStorage::rows(includeStyles);
     max = qMax(max, d->conditionsStorage->usedArea().bottom());
     max = qMax(max, d->fusionStorage->usedArea().bottom());
-    if (includeStyles) max = qMax(max, d->styleStorage->usedArea().bottom());
+    if (includeStyles)
+        max = qMax(max, d->styleStorage->usedArea().bottom());
     max = qMax(max, d->linkStorage->rows());
 
     // don't include bindings cause the bindingStorage does only listen to all cells in the sheet.
-    //max = qMax(max, d->bindingStorage->usedArea().bottom());
+    // max = qMax(max, d->bindingStorage->usedArea().bottom());
 
     return max;
 }
 
-CellStorage CellStorage::subStorage(const Region& region) const
+CellStorage CellStorage::subStorage(const Region &region) const
 {
 #ifdef CALLIGRA_SHEETS_MT
     QReadLocker rl(&bigUglyLock);
@@ -622,27 +624,27 @@ CellStorage CellStorage::subStorage(const Region& region) const
     return subStorage;
 }
 
-BindingStorage* CellStorage::bindingStorage() const
+BindingStorage *CellStorage::bindingStorage() const
 {
     return d->bindingStorage;
 }
 
-ConditionsStorage* CellStorage::conditionsStorage() const
+ConditionsStorage *CellStorage::conditionsStorage() const
 {
     return d->conditionsStorage;
 }
 
-FusionStorage* CellStorage::fusionStorage() const
+FusionStorage *CellStorage::fusionStorage() const
 {
     return d->fusionStorage;
 }
 
-LinkStorage* CellStorage::linkStorage() const
+LinkStorage *CellStorage::linkStorage() const
 {
     return d->linkStorage;
 }
 
-StyleStorage* CellStorage::styleStorage() const
+StyleStorage *CellStorage::styleStorage() const
 {
     return d->styleStorage;
 }
@@ -671,7 +673,8 @@ void CellStorage::stopUndoRecording(KUndo2Command *parent)
 
     undoCounter--;
     // Are we in a resursive call?
-    if (undoCounter) return;
+    if (undoCounter)
+        return;
 
     // append sub-commands to the parent command
     createCommand(parent);
@@ -685,80 +688,67 @@ void CellStorage::createCommand(KUndo2Command *parent) const
     SheetModel *model = d->sheet->model();
     // inherited
     if (!commentStorage()->undoData().isEmpty()) {
-        PointStorageUndoCommand<QString> *const command
-        = new PointStorageUndoCommand<QString>(model, CommentRole, parent);
+        PointStorageUndoCommand<QString> *const command = new PointStorageUndoCommand<QString>(model, CommentRole, parent);
         command->add(commentStorage()->undoData());
     }
     if (!formulaStorage()->undoData().isEmpty()) {
-        PointStorageUndoCommand<Formula> *const command
-        = new PointStorageUndoCommand<Formula>(model, FormulaRole, parent);
+        PointStorageUndoCommand<Formula> *const command = new PointStorageUndoCommand<Formula>(model, FormulaRole, parent);
         command->add(formulaStorage()->undoData());
     }
     if (!matrixStorage()->undoData().isEmpty()) {
-        RectStorageUndoCommand<bool> *const command
-        = new RectStorageUndoCommand<bool>(model, LockedRangeRole, parent);
+        RectStorageUndoCommand<bool> *const command = new RectStorageUndoCommand<bool>(model, LockedRangeRole, parent);
         command->add(matrixStorage()->undoData());
     }
     if (!namedAreaStorage()->undoData().isEmpty()) {
-        RectStorageUndoCommand<QString> *const command
-        = new RectStorageUndoCommand<QString>(model, NamedAreaRole, parent);
+        RectStorageUndoCommand<QString> *const command = new RectStorageUndoCommand<QString>(model, NamedAreaRole, parent);
         command->add(namedAreaStorage()->undoData());
     }
     if (!userInputStorage()->undoData().isEmpty()) {
-        PointStorageUndoCommand<QString> *const command
-        = new PointStorageUndoCommand<QString>(model, UserInputRole, parent);
+        PointStorageUndoCommand<QString> *const command = new PointStorageUndoCommand<QString>(model, UserInputRole, parent);
         command->add(userInputStorage()->undoData());
     }
     if (!validityStorage()->undoData().isEmpty()) {
-        RectStorageUndoCommand<Validity> *const command
-        = new RectStorageUndoCommand<Validity>(model, ValidityRole, parent);
+        RectStorageUndoCommand<Validity> *const command = new RectStorageUndoCommand<Validity>(model, ValidityRole, parent);
         command->add(validityStorage()->undoData());
     }
     if (!valueStorage()->undoData().isEmpty()) {
-        PointStorageUndoCommand<Value> *const command
-        = new PointStorageUndoCommand<Value>(model, ValueRole, parent);
+        PointStorageUndoCommand<Value> *const command = new PointStorageUndoCommand<Value>(model, ValueRole, parent);
         command->add(valueStorage()->undoData());
     }
 
     // ours
     if (!d->bindingStorage->undoData().isEmpty()) {
-        RectStorageUndoCommand<Binding> *const command
-        = new RectStorageUndoCommand<Binding>(model, SourceRangeRole, parent);
+        RectStorageUndoCommand<Binding> *const command = new RectStorageUndoCommand<Binding>(model, SourceRangeRole, parent);
         command->add(d->bindingStorage->undoData());
     }
     if (!d->conditionsStorage->undoData().isEmpty()) {
-        RectStorageUndoCommand<Conditions> *const command
-        = new RectStorageUndoCommand<Conditions>(model, ConditionRole, parent);
+        RectStorageUndoCommand<Conditions> *const command = new RectStorageUndoCommand<Conditions>(model, ConditionRole, parent);
         command->add(d->conditionsStorage->undoData());
     }
     if (!d->databaseStorage->undoData().isEmpty()) {
-        RectStorageUndoCommand<Database> *const command
-        = new RectStorageUndoCommand<Database>(model, TargetRangeRole, parent);
+        RectStorageUndoCommand<Database> *const command = new RectStorageUndoCommand<Database>(model, TargetRangeRole, parent);
         command->add(d->databaseStorage->undoData());
     }
     if (!d->fusionStorage->undoData().isEmpty()) {
-        RectStorageUndoCommand<bool> *const command
-        = new RectStorageUndoCommand<bool>(model, FusionedRangeRole, parent);
+        RectStorageUndoCommand<bool> *const command = new RectStorageUndoCommand<bool>(model, FusionedRangeRole, parent);
         command->add(d->fusionStorage->undoData());
     }
     if (!d->linkStorage->undoData().isEmpty()) {
-        PointStorageUndoCommand<QString> *const command
-        = new PointStorageUndoCommand<QString>(model, LinkRole, parent);
+        PointStorageUndoCommand<QString> *const command = new PointStorageUndoCommand<QString>(model, LinkRole, parent);
         command->add(d->linkStorage->undoData());
     }
     if (!d->richTextStorage->undoData().isEmpty()) {
-        PointStorageUndoCommand<QSharedPointer<QTextDocument> > *const command
-        = new PointStorageUndoCommand<QSharedPointer<QTextDocument> >(model, RichTextRole, parent);
+        PointStorageUndoCommand<QSharedPointer<QTextDocument>> *const command =
+            new PointStorageUndoCommand<QSharedPointer<QTextDocument>>(model, RichTextRole, parent);
         command->add(d->richTextStorage->undoData());
     }
     if (!d->styleStorage->undoData().isEmpty()) {
-        StyleStorageUndoCommand *const command
-        = new StyleStorageUndoCommand(d->styleStorage, parent);
+        StyleStorageUndoCommand *const command = new StyleStorageUndoCommand(d->styleStorage, parent);
         command->add(d->styleStorage->undoData());
     }
 }
 
-void CellStorage::loadConditions(const QList<QPair<Region, Conditions> >& conditions)
+void CellStorage::loadConditions(const QList<QPair<Region, Conditions>> &conditions)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -766,7 +756,7 @@ void CellStorage::loadConditions(const QList<QPair<Region, Conditions> >& condit
     d->conditionsStorage->load(conditions);
 }
 
-void CellStorage::loadStyles(const QList<QPair<Region, Style> > &styles)
+void CellStorage::loadStyles(const QList<QPair<Region, Style>> &styles)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -778,5 +768,3 @@ void CellStorage::invalidateStyleCache()
 {
     // nothing here
 }
-
-

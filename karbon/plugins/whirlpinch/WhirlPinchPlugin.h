@@ -11,8 +11,8 @@
 #ifndef WHIRLPINCHPLUGIN_H
 #define WHIRLPINCHPLUGIN_H
 
-#include <QDialog>
 #include <KXMLGUIClient>
+#include <QDialog>
 
 #include <QVariantList>
 
@@ -23,7 +23,9 @@ class WhirlPinchPlugin : public QObject, public KXMLGUIClient
     Q_OBJECT
 public:
     WhirlPinchPlugin(QObject *parent, const QVariantList &);
-    ~WhirlPinchPlugin() override {}
+    ~WhirlPinchPlugin() override
+    {
+    }
 
 private Q_SLOTS:
     void slotWhirlPinch();
@@ -41,7 +43,7 @@ class WhirlPinchDlg : public QDialog
     Q_OBJECT
 
 public:
-    explicit WhirlPinchDlg(QWidget* parent = 0L, const char* name = 0L);
+    explicit WhirlPinchDlg(QWidget *parent = 0L, const char *name = 0L);
 
     qreal angle() const;
     qreal pinch() const;
@@ -52,10 +54,9 @@ public:
     void setUnit(const KoUnit &unit);
 
 private:
-    QDoubleSpinBox* m_angle;
-    QDoubleSpinBox* m_pinch;
-    KoUnitDoubleSpinBox* m_radius;
+    QDoubleSpinBox *m_angle;
+    QDoubleSpinBox *m_pinch;
+    KoUnitDoubleSpinBox *m_radius;
 };
 
 #endif // WHIRLPINCHPLUGIN_H
-

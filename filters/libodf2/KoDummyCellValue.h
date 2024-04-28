@@ -16,9 +16,8 @@ public:
     ~KoDummyCellValue() override;
 
 protected:
-
     QString type() const override;
-    QList< QPair<QString, QString> > attributes()  const override;
+    QList<QPair<QString, QString>> attributes() const override;
 };
 
 #endif

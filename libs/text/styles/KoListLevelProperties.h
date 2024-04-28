@@ -10,8 +10,8 @@
 
 #include "KoListStyle.h"
 
-#include <KoXmlReader.h>
 #include <KoOdfNumberDefinition.h>
+#include <KoXmlReader.h>
 
 class KoCharacterStyle;
 class KoShapeLoadingContext;
@@ -170,7 +170,7 @@ public:
 
     bool operator==(const KoListLevelProperties &other) const;
     bool operator!=(const KoListLevelProperties &other) const;
-    KoListLevelProperties & operator=(const KoListLevelProperties &other);
+    KoListLevelProperties &operator=(const KoListLevelProperties &other);
 
     /**
      * Create a KoListLevelProperties object from a QTextList instance.
@@ -186,7 +186,7 @@ public:
     /**
      * Load the properties from the \p style using the OpenDocument format.
      */
-    void loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& style);
+    void loadOdf(KoShapeLoadingContext &scontext, const KoXmlElement &style);
 
     /**
      * Save the properties of the style using the OpenDocument format
@@ -211,7 +211,7 @@ private:
     QVariant property(int key) const;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

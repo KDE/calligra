@@ -10,20 +10,20 @@
 
 #include "CompareView.h"
 
-#include <QLabel>
 #include <QDebug>
 #include <QGridLayout>
 #include <QKeyEvent>
+#include <QLabel>
 
 #include <algorithm>
 
 CSTCompareView::CSTCompareView(QWidget *parent)
-: QWidget(parent)
+    : QWidget(parent)
 #ifdef HAS_POPPLER
-, m_showPdf(false)
-, m_pdfDelta(0)
+    , m_showPdf(false)
+    , m_pdfDelta(0)
 #endif
-, m_currentIndex(0)
+    , m_currentIndex(0)
 {
     QGridLayout *layout = new QGridLayout(this);
     m_current = new QLabel(this);
@@ -70,8 +70,7 @@ bool CSTCompareView::open(const QString &inDir1, const QString &inDir2, const QS
     }
 
     qint64 lineLength = -1;
-    do
-    {
+    do {
         char buf[10000];
         lineLength = file.readLine(buf, sizeof(buf));
         if (lineLength != -1) {
@@ -94,7 +93,7 @@ bool CSTCompareView::open(const QString &inDir1, const QString &inDir2, const QS
     return true;
 }
 
-void CSTCompareView::keyPressEvent(QKeyEvent * event)
+void CSTCompareView::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {
     case Qt::Key_PageUp:
@@ -162,14 +161,14 @@ int CSTCompareView::updateResult(int index)
     QStringList list = result.split(' ');
     QStringList filename;
     QList<int> pageNumbers;
-    for(int i = list.count() - 1 ; i >= 0; --i) {
+    for (int i = list.count() - 1; i >= 0; --i) {
         bool ok;
         int n = list[i].toInt(&ok);
         if (i >= 1 && ok) {
             if (!pageNumbers.contains(n))
                 pageNumbers.append(n);
         } else {
-            for(int j = 0; j <= i; ++j)
+            for (int j = 0; j <= i; ++j)
                 filename.append(list[j]);
             break;
         }
@@ -178,7 +177,7 @@ int CSTCompareView::updateResult(int index)
     m_data.clear();
     m_data.append(filename.join(" "));
     std::sort(pageNumbers.begin(), pageNumbers.end());
-    foreach(int n, pageNumbers)
+    foreach (int n, pageNumbers)
         m_data.append(QString::number(n));
 
     if (m_data.size()) {
@@ -245,7 +244,7 @@ void CSTCompareView::updateImage(int index)
     }
 #endif
 
-    m_changesAndDocument->setText(QString("Document: %1/%2").arg(m_currentIndex+1).arg(m_result.size()));
+    m_changesAndDocument->setText(QString("Document: %1/%2").arg(m_currentIndex + 1).arg(m_result.size()));
 
     m_currentPage->setText(currentPageText);
 

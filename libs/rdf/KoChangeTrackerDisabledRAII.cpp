@@ -8,8 +8,8 @@
 #include <changetracker/KoChangeTracker.h>
 
 KoChangeTrackerDisabledRAII::KoChangeTrackerDisabledRAII(KoChangeTracker *changeTracker)
-        : m_changeTracker(changeTracker),
-        m_oldval(true)
+    : m_changeTracker(changeTracker)
+    , m_oldval(true)
 {
     if (changeTracker) {
         m_oldval = changeTracker->recordChanges();

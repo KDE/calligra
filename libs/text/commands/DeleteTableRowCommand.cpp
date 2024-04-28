@@ -5,20 +5,20 @@
 
 #include "DeleteTableRowCommand.h"
 
-#include <KoTextEditor.h>
 #include "KoTableColumnAndRowStyleManager.h"
+#include <KoTextEditor.h>
 
-#include <QTextTableCell>
 #include <QTextTable>
+#include <QTextTableCell>
 
-#include <KLocalizedString>
 #include "TextDebug.h"
+#include <KLocalizedString>
 
-DeleteTableRowCommand::DeleteTableRowCommand(KoTextEditor *te, QTextTable *t, KUndo2Command *parent) :
-    KUndo2Command (parent)
-    ,m_first(true)
-    ,m_textEditor(te)
-    ,m_table(t)
+DeleteTableRowCommand::DeleteTableRowCommand(KoTextEditor *te, QTextTable *t, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_first(true)
+    , m_textEditor(te)
+    , m_table(t)
 {
     setText(kundo2_i18n("Delete Row"));
 }
@@ -35,13 +35,14 @@ void DeleteTableRowCommand::undo()
 void DeleteTableRowCommand::redo()
 {
     KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
-    if (!m_first) {         carsManager.removeRows(m_selectionRow, m_selectionRowSpan);
+    if (!m_first) {
+        carsManager.removeRows(m_selectionRow, m_selectionRowSpan);
         KUndo2Command::redo();
     } else {
         m_first = false;
         int selectionColumn;
         int selectionColumnSpan;
-        if(m_textEditor->hasComplexSelection()) {
+        if (m_textEditor->hasComplexSelection()) {
             m_textEditor->cursor()->selectedTableCells(&m_selectionRow, &m_selectionRowSpan, &selectionColumn, &selectionColumnSpan);
         } else {
             QTextTableCell cell = m_table->cellAt(*m_textEditor->cursor());

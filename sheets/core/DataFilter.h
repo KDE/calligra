@@ -39,20 +39,27 @@ public:
         BottomPercent
     };
 
-    virtual ~AbstractCondition() {}
+    virtual ~AbstractCondition()
+    {
+    }
     enum Type { And, Or, Condition };
     virtual Type type() const = 0;
-    virtual bool evaluate(const Database& database, int index) const = 0;
+    virtual bool evaluate(const Database &database, int index) const = 0;
     virtual bool isEmpty() const = 0;
     virtual QMap<QString, Comparison> conditions(int fieldNumber) const = 0;
     virtual void removeConditions(int fieldNumber) = 0;
     virtual QString dump() const = 0;
-    virtual bool allowsChildren() { return false; }
-    virtual QList<AbstractCondition*> children() { return QList<AbstractCondition*>(); }
+    virtual bool allowsChildren()
+    {
+        return false;
+    }
+    virtual QList<AbstractCondition *> children()
+    {
+        return QList<AbstractCondition *>();
+    }
 
-    static bool listsAreEqual(const QList<AbstractCondition*>& a, const QList<AbstractCondition*>& b);
+    static bool listsAreEqual(const QList<AbstractCondition *> &a, const QList<AbstractCondition *> &b);
 };
-
 
 /**
  * OpenDocument, 8.7.1 Table Filter
@@ -60,16 +67,9 @@ public:
 class CALLIGRA_SHEETS_CORE_EXPORT Filter
 {
 public:
+    enum Composition { AndComposition, OrComposition };
 
-    enum Composition {
-        AndComposition,
-        OrComposition
-    };
-
-    enum Mode {
-        Text,
-        Number
-    };
+    enum Mode { Text, Number };
 
     /**
      * Constructor.
@@ -79,7 +79,7 @@ public:
     /**
      * Constructor.
      */
-    Filter(const Filter& other);
+    Filter(const Filter &other);
 
     /**
      * Destructor.
@@ -87,12 +87,15 @@ public:
     virtual ~Filter();
 
     /** Assignment operator. */
-    void operator=(const Filter&);
+    void operator=(const Filter &);
 
     void addCondition(Composition composition,
-                      int fieldNumber, AbstractCondition::Comparison comparison, const QString& value,
-                      Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive, Mode mode = Text);
-    void addSubFilter(Composition composition, const Filter& filter);
+                      int fieldNumber,
+                      AbstractCondition::Comparison comparison,
+                      const QString &value,
+                      Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive,
+                      Mode mode = Text);
+    void addSubFilter(Composition composition, const Filter &filter);
 
     QMap<QString, AbstractCondition::Comparison> conditions(int fieldNumber) const;
     void removeConditions(int fieldNumber = -1);
@@ -112,20 +115,19 @@ public:
     bool conditionSourceIsRange() const;
     void setConditionSourceIsRange(bool val);
 
-
     /**
      * \return \c true if the column/row with \p index fulfills all conditions, i.e. it should not
      * be filtered.
      */
-    bool evaluate(const Database& database, int index) const;
+    bool evaluate(const Database &database, int index) const;
 
-    bool operator==(const Filter& other) const;
-    inline bool operator!=(const Filter& other) const {
+    bool operator==(const Filter &other) const;
+    inline bool operator!=(const Filter &other) const
+    {
         return !operator==(other);
     }
 
     void dump() const;
-
 
     /**
      * OpenDocument, 8.7.2 Filter And
@@ -133,24 +135,32 @@ public:
     class And : public AbstractCondition
     {
     public:
-        And() {}
-        And(const And& other);
-        And& operator=(const And& other);
+        And()
+        {
+        }
+        And(const And &other);
+        And &operator=(const And &other);
         ~And() override;
         Type type() const override;
-        bool evaluate(const Database& database, int index) const override;
+        bool evaluate(const Database &database, int index) const override;
         bool isEmpty() const override;
         QMap<QString, AbstractCondition::Comparison> conditions(int fieldNumber) const override;
         void removeConditions(int fieldNumber) override;
-        bool operator!=(const And& other) const;
+        bool operator!=(const And &other) const;
         QString dump() const override;
 
-        bool allowsChildren() override { return true; }
-        QList<AbstractCondition*> children() override { return list; }
-    public:
-        QList<AbstractCondition*> list; // allowed: Or or Condition
-    };
+        bool allowsChildren() override
+        {
+            return true;
+        }
+        QList<AbstractCondition *> children() override
+        {
+            return list;
+        }
 
+    public:
+        QList<AbstractCondition *> list; // allowed: Or or Condition
+    };
 
     /**
      * OpenDocument, 8.7.3 Filter Or
@@ -158,24 +168,32 @@ public:
     class Or : public AbstractCondition
     {
     public:
-        Or() {}
-        Or(const Or& other);
-        Or& operator=(const Or& other);
+        Or()
+        {
+        }
+        Or(const Or &other);
+        Or &operator=(const Or &other);
         ~Or();
         Type type() const override;
-        bool evaluate(const Database& database, int index) const override;
+        bool evaluate(const Database &database, int index) const override;
         bool isEmpty() const override;
         QMap<QString, AbstractCondition::Comparison> conditions(int fieldNumber) const override;
         void removeConditions(int fieldNumber) override;
-        bool operator!=(const Or& other) const;
+        bool operator!=(const Or &other) const;
         QString dump() const override;
 
-        bool allowsChildren() override { return true; }
-        QList<AbstractCondition*> children() override { return list; }
-    public:
-        QList<AbstractCondition*> list; // allowed: And or Condition
-    };
+        bool allowsChildren() override
+        {
+            return true;
+        }
+        QList<AbstractCondition *> children() override
+        {
+            return list;
+        }
 
+    public:
+        QList<AbstractCondition *> list; // allowed: And or Condition
+    };
 
     /**
      * OpenDocument, 8.7.4 Filter Condition
@@ -184,17 +202,16 @@ public:
     {
     public:
         Condition();
-        Condition(int _fieldNumber, Comparison _comparison, const QString& _value,
-                  Qt::CaseSensitivity _caseSensitivity, Mode _mode);
-        Condition(const Condition& other);
-        Condition& operator=(const Condition& other);
+        Condition(int _fieldNumber, Comparison _comparison, const QString &_value, Qt::CaseSensitivity _caseSensitivity, Mode _mode);
+        Condition(const Condition &other);
+        Condition &operator=(const Condition &other);
         Type type() const override;
-        bool evaluate(const Database& database, int index) const override;
+        bool evaluate(const Database &database, int index) const override;
         bool isEmpty() const override;
         QMap<QString, Comparison> conditions(int fieldNumber) const override;
         void removeConditions(int fieldNumber) override;
-        bool operator==(const Condition& other) const;
-        bool operator!=(const Condition& other) const;
+        bool operator==(const Condition &other) const;
+        bool operator!=(const Condition &other) const;
         QString dump() const override;
 
     public:
@@ -208,13 +225,13 @@ public:
 private:
     friend class AbstractCondition;
 
-    static QList<AbstractCondition*> copyList(const QList<AbstractCondition*>& list);
-    static bool conditionsEquals(AbstractCondition* a, AbstractCondition* b);
+    static QList<AbstractCondition *> copyList(const QList<AbstractCondition *> &list);
+    static bool conditionsEquals(AbstractCondition *a, AbstractCondition *b);
 
-    void copyFrom (const Filter &other);
+    void copyFrom(const Filter &other);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

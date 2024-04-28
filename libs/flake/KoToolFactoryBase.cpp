@@ -14,8 +14,8 @@ class Q_DECL_HIDDEN KoToolFactoryBase::Private
 {
 public:
     Private(const QString &i)
-            : priority(100),
-            id(i)
+        : priority(100)
+        , id(i)
     {
     }
     int priority;
@@ -27,9 +27,8 @@ public:
     QKeySequence shortcut;
 };
 
-
 KoToolFactoryBase::KoToolFactoryBase(const QString &id)
-        : d(new Private(id))
+    : d(new Private(id))
 {
 }
 
@@ -78,12 +77,12 @@ void KoToolFactoryBase::setActivationShapeId(const QString &activationShapeId)
     d->activationId = activationShapeId;
 }
 
-void KoToolFactoryBase::setToolTip(const QString & tooltip)
+void KoToolFactoryBase::setToolTip(const QString &tooltip)
 {
     d->tooltip = tooltip;
 }
 
-void KoToolFactoryBase::setToolType(const QString & toolType)
+void KoToolFactoryBase::setToolType(const QString &toolType)
 {
     d->toolType = toolType;
 }

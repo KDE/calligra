@@ -6,9 +6,9 @@
  */
 
 #include "ArtisticTextShapeConfigWidget.h"
+#include "ArtisticTextShape.h"
 #include "ArtisticTextTool.h"
 #include "ArtisticTextToolSelection.h"
-#include "ArtisticTextShape.h"
 
 #include <QAction>
 
@@ -17,7 +17,7 @@ ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *t
 {
     Q_ASSERT(m_textTool);
 
-    widget.setupUi( this );
+    widget.setupUi(this);
 
     widget.bold->setDefaultAction(textTool->action("artistictext_font_bold"));
     widget.italic->setDefaultAction(textTool->action("artistictext_font_italic"));
@@ -26,21 +26,21 @@ ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *t
     widget.anchorStart->setDefaultAction(textTool->action("artistictext_anchor_start"));
     widget.anchorMiddle->setDefaultAction(textTool->action("artistictext_anchor_middle"));
     widget.anchorEnd->setDefaultAction(textTool->action("artistictext_anchor_end"));
-    widget.fontSize->setRange( 2, 1000 );
+    widget.fontSize->setRange(2, 1000);
 
     connect(widget.fontFamily, &QFontComboBox::currentFontChanged, this, &ArtisticTextShapeConfigWidget::fontFamilyChanged);
     connect(widget.fontSize, &QSpinBox::valueChanged, this, &ArtisticTextShapeConfigWidget::fontSizeChanged);
 }
 
-void ArtisticTextShapeConfigWidget::blockChildSignals( bool block )
+void ArtisticTextShapeConfigWidget::blockChildSignals(bool block)
 {
-    widget.fontFamily->blockSignals( block );
-    widget.fontSize->blockSignals( block );
+    widget.fontFamily->blockSignals(block);
+    widget.fontSize->blockSignals(block);
 }
 
 void ArtisticTextShapeConfigWidget::updateWidget()
 {
-    ArtisticTextToolSelection *selection = dynamic_cast<ArtisticTextToolSelection*>(m_textTool->selection());
+    ArtisticTextToolSelection *selection = dynamic_cast<ArtisticTextToolSelection *>(m_textTool->selection());
     if (!selection)
         return;
 
@@ -48,13 +48,13 @@ void ArtisticTextShapeConfigWidget::updateWidget()
     if (!currentText)
         return;
 
-    blockChildSignals( true );
+    blockChildSignals(true);
 
     QFont font = currentText->fontAt(m_textTool->textCursor());
 
-    widget.fontSize->setValue( font.pointSize() );
-    font.setPointSize( 8 );
-    widget.fontFamily->setCurrentFont( font );
+    widget.fontSize->setValue(font.pointSize());
+    font.setPointSize(8);
+    widget.fontFamily->setCurrentFont(font);
 
-    blockChildSignals( false );
+    blockChildSignals(false);
 }

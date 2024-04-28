@@ -7,14 +7,14 @@
 #include "cell.h"
 #include "excel.h"
 #include "format.h"
-#include "value.h"
 #include "objects.h"
+#include "value.h"
 
 #include <iostream>
 
 using namespace Swinder;
 
-Cell::Cell(Sheet* sheet, unsigned column, unsigned row)
+Cell::Cell(Sheet *sheet, unsigned column, unsigned row)
     : m_sheet(sheet)
     , m_value(0)
     , m_formula(0)
@@ -34,10 +34,10 @@ Cell::~Cell()
     delete m_value;
     delete m_formula;
     delete m_note;
-    //m_format is owned and destroyed by the Workbook
+    // m_format is owned and destroyed by the Workbook
 }
 
-Sheet* Cell::sheet()
+Sheet *Cell::sheet()
 {
     return m_sheet;
 }
@@ -85,7 +85,7 @@ QString Cell::columnLabel(unsigned column)
 // provide safety for overflows if an integer is explicit casted to an unsigned
 QString Cell::columnLabel(int column)
 {
-    //Q_ASSERT(column >= 0);
+    // Q_ASSERT(column >= 0);
     return columnLabel(unsigned(qMax(0, column)));
 }
 
@@ -94,7 +94,7 @@ Value Cell::value() const
     return m_value ? *m_value : Value::empty();
 }
 
-void Cell::setValue(const Value& value)
+void Cell::setValue(const Value &value)
 {
     if (value.isEmpty()) {
         delete m_value;
@@ -112,7 +112,7 @@ QString Cell::formula() const
     return m_formula ? *(m_formula) : QString();
 }
 
-void Cell::setFormula(const QString& formula)
+void Cell::setFormula(const QString &formula)
 {
     if (formula.isNull()) {
         delete m_formula;
@@ -125,14 +125,15 @@ void Cell::setFormula(const QString& formula)
     }
 }
 
-const Format& Cell::format() const
+const Format &Cell::format() const
 {
     static const Format null;
-    if (!m_format) return null;
+    if (!m_format)
+        return null;
     return *(m_format);
 }
 
-void Cell::setFormat(const Format* format)
+void Cell::setFormat(const Format *format)
 {
     m_format = format;
 }
@@ -144,11 +145,12 @@ unsigned Cell::columnSpan() const
 
 void Cell::setColumnSpan(unsigned span)
 {
-    if (span < 1) return;
+    if (span < 1)
+        return;
     m_columnSpan = span;
     // correctly set right border
     if (span > 1) {
-        Cell* lastCell = m_sheet->cell(m_column + span - 1, m_row, false);
+        Cell *lastCell = m_sheet->cell(m_column + span - 1, m_row, false);
         if (lastCell) {
             Format curFormat = format();
             curFormat.borders().setRightBorder(lastCell->format().borders().rightBorder());
@@ -164,11 +166,12 @@ unsigned Cell::rowSpan() const
 
 void Cell::setRowSpan(unsigned span)
 {
-    if (span < 1) return;
+    if (span < 1)
+        return;
     m_rowSpan = span;
     // correctly set bottom border
     if (span > 1) {
-        Cell* lastCell = m_sheet->cell(m_column, m_row + span - 1, false);
+        Cell *lastCell = m_sheet->cell(m_column, m_row + span - 1, false);
         if (lastCell) {
             Format curFormat = format();
             curFormat.borders().setBottomBorder(lastCell->format().borders().bottomBorder());
@@ -207,7 +210,7 @@ Hyperlink Cell::hyperlink() const
     return m_sheet->hyperlink(m_column, m_row);
 }
 
-void Cell::setHyperlink(const Hyperlink& link)
+void Cell::setHyperlink(const Hyperlink &link)
 {
     m_sheet->setHyperlink(m_column, m_row, link);
 }
@@ -230,53 +233,67 @@ void Cell::setNote(const QString &n)
     }
 }
 
-QList<ChartObject*> Cell::charts() const
+QList<ChartObject *> Cell::charts() const
 {
     return m_sheet->charts(m_column, m_row);
 }
 
-void Cell::addChart(ChartObject* chart)
+void Cell::addChart(ChartObject *chart)
 {
     m_sheet->addChart(m_column, m_row, chart);
 }
 
-QList<OfficeArtObject*> Cell::drawObjects() const
+QList<OfficeArtObject *> Cell::drawObjects() const
 {
     return m_sheet->drawObjects(m_column, m_row);
 }
 
-void Cell::addDrawObject(OfficeArtObject* of)
+void Cell::addDrawObject(OfficeArtObject *of)
 {
     m_sheet->addDrawObject(m_column, m_row, of);
 }
 
 bool Cell::operator==(const Cell &other) const
 {
-    if (value() != other.value()) return false;
-    if (formula() != other.formula()) return false;
-    if (format() != other.format()) return false;
-    if (columnSpan() != other.columnSpan()) return false;
-    if (rowSpan() != other.rowSpan()) return false;
-    if (isCovered() != other.isCovered()) return false;
-    if (columnRepeat() != other.columnRepeat()) return false;
+    if (value() != other.value())
+        return false;
+    if (formula() != other.formula())
+        return false;
+    if (format() != other.format())
+        return false;
+    if (columnSpan() != other.columnSpan())
+        return false;
+    if (rowSpan() != other.rowSpan())
+        return false;
+    if (isCovered() != other.isCovered())
+        return false;
+    if (columnRepeat() != other.columnRepeat())
+        return false;
 
-    if (hasHyperlink() != other.hasHyperlink()) return false;
-    if (hasHyperlink() && hyperlink() != other.hyperlink()) return false;
+    if (hasHyperlink() != other.hasHyperlink())
+        return false;
+    if (hasHyperlink() && hyperlink() != other.hyperlink())
+        return false;
 
-    if (note() != other.note()) return false;
+    if (note() != other.note())
+        return false;
 
-    if (charts().size() != other.charts().size()) return false;
-    for(int i = charts().size() - 1; i >= 0; --i) {
-        ChartObject* c1 = charts()[i];
-        ChartObject* c2 = other.charts()[i];
-        if(*c1 != *c2) return false;
+    if (charts().size() != other.charts().size())
+        return false;
+    for (int i = charts().size() - 1; i >= 0; --i) {
+        ChartObject *c1 = charts()[i];
+        ChartObject *c2 = other.charts()[i];
+        if (*c1 != *c2)
+            return false;
     }
 
-    if (drawObjects().size() != other.drawObjects().size()) return false;
-    for(int i = drawObjects().size() - 1; i >= 0; --i) {
-        OfficeArtObject* o1 = drawObjects()[i];
-        OfficeArtObject* o2 = other.drawObjects()[i];
-        if(*o1 != *o2) return false;
+    if (drawObjects().size() != other.drawObjects().size())
+        return false;
+    for (int i = drawObjects().size() - 1; i >= 0; --i) {
+        OfficeArtObject *o1 = drawObjects()[i];
+        OfficeArtObject *o2 = other.drawObjects()[i];
+        if (*o1 != *o2)
+            return false;
     }
 
     return true;
@@ -284,5 +301,5 @@ bool Cell::operator==(const Cell &other) const
 
 bool Cell::operator!=(const Cell &other) const
 {
-    return ! (*this == other);
+    return !(*this == other);
 }

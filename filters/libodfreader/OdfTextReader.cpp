@@ -5,13 +5,12 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "OdfTextReader.h"
 
 // Qt
-#include <QStringList>
 #include <QBuffer>
+#include <QStringList>
 
 // KF5
 #include <KLocalizedString>
@@ -22,34 +21,28 @@
 #include <KoXmlUtils.h>
 
 // Reader library
-#include "OdfReader.h"
-#include "OdfTextReaderBackend.h"
-#include "OdfReaderContext.h"
 #include "OdfDrawReader.h"
+#include "OdfReader.h"
+#include "OdfReaderContext.h"
 #include "OdfReaderDebug.h"
-
+#include "OdfTextReaderBackend.h"
 
 #if 1
 static int debugIndent = 0;
-#define DEBUGSTART() \
-    ++debugIndent; \
+#define DEBUGSTART()                                                                                                                                           \
+    ++debugIndent;                                                                                                                                             \
     DEBUG_READING("entering")
-#define DEBUGEND() \
-    DEBUG_READING("exiting"); \
+#define DEBUGEND()                                                                                                                                             \
+    DEBUG_READING("exiting");                                                                                                                                  \
     --debugIndent
-#define DEBUG_READING(param) \
-    debugOdfReader << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
-    << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
-    << reader.qualifiedName().toString()
+#define DEBUG_READING(param)                                                                                                                                   \
+    debugOdfReader << QString("%1").arg(" ", debugIndent * 2) << param << ": "                                                                                 \
+                   << (reader.isStartElement() ? "start" : (reader.isEndElement() ? "end" : "other")) << reader.qualifiedName().toString()
 #else
-#define DEBUGSTART() \
-    // NOTHING
-#define DEBUGEND() \
-    // NOTHING
-#define DEBUG_READING(param) \
-    // NOTHING
+#define DEBUGSTART() // NOTHING
+#define DEBUGEND() // NOTHING
+#define DEBUG_READING(param) // NOTHING
 #endif
-
 
 OdfTextReader::OdfTextReader()
     : m_parent(0)
@@ -62,9 +55,7 @@ OdfTextReader::~OdfTextReader()
 {
 }
 
-
 // ----------------------------------------------------------------
-
 
 void OdfTextReader::setParent(OdfReader *parent)
 {
@@ -81,9 +72,7 @@ void OdfTextReader::setContext(OdfReaderContext *context)
     m_context = context;
 }
 
-
 // ----------------------------------------------------------------
-
 
 #if 0
 // This is a template function for the reader library.
@@ -120,12 +109,8 @@ void OdfTextReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
 }
 #endif
 
-
-
-
 // ----------------------------------------------------------------
 //                         Text level functions
-
 
 // This function is a bit special since it doesn't handle a specific
 // element.  Instead it handles the common child elements between a
@@ -186,38 +171,31 @@ void OdfTextReader::readTextLevelElement(KoXmlStreamReader &reader)
     //          <text:user-index> 8.7
 
     QString tagName = reader.qualifiedName().toString();
-        
+
     if (reader.prefix() == QLatin1StringView("draw") || reader.prefix() == QLatin1StringView("dr3d")) {
-	OdfDrawReader *drawReader = m_parent->drawReader();
-	if (drawReader) {
-	    drawReader->readCommonGraphicsElements(reader);
-	}
-	else {
-	    reader.skipCurrentElement();
-	}
+        OdfDrawReader *drawReader = m_parent->drawReader();
+        if (drawReader) {
+            drawReader->readCommonGraphicsElements(reader);
+        } else {
+            reader.skipCurrentElement();
+        }
     } // draw | dr3d namespace
     else if (tagName == "text:h") {
         readElementTextH(reader);
-    }
-    else if (tagName == "text:p") {
+    } else if (tagName == "text:p") {
         readElementTextP(reader);
-    }
-    else if (tagName == "text:list") {
+    } else if (tagName == "text:list") {
         readElementTextList(reader);
-    }
-    else if (tagName == "table:table") {
+    } else if (tagName == "table:table") {
         readElementTableTable(reader);
-    }
-    else if (tagName == "text:soft-page-break") {
+    } else if (tagName == "text:soft-page-break") {
         readElementTextSoftPageBreak(reader);
-    }
-    else {
+    } else {
         readUnknownElement(reader);
     }
 
     DEBUGEND();
 }
-
 
 void OdfTextReader::readElementTextH(KoXmlStreamReader &reader)
 {
@@ -267,14 +245,12 @@ void OdfTextReader::readElementTextList(KoXmlStreamReader &reader)
         DEBUG_READING("loop-start");
 
         QString tagName = reader.qualifiedName().toString();
-        //debugOdfReader << "list child:" << tagName;
+        // debugOdfReader << "list child:" << tagName;
         if (tagName == "text:list-item") {
             readElementTextListItem(reader);
-        }
-        else if (tagName == "text:list-header") {
+        } else if (tagName == "text:list-header") {
             readElementTextListHeader(reader);
-        }
-        else {
+        } else {
             readUnknownElement(reader);
         }
         DEBUG_READING("loop-end");
@@ -287,7 +263,6 @@ void OdfTextReader::readElementTextList(KoXmlStreamReader &reader)
 
 // ----------------------------------------------------------------
 //                             Tables
-
 
 void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
 {
@@ -314,45 +289,34 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
     //   [done] <text:soft-page-break> 5.6
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "table:table-column") {
             readElementTableTableColumn(reader);
-        }
-        else if (tagName == "table:table-column-group") {
+        } else if (tagName == "table:table-column-group") {
             readElementTableTableColumnGroup(reader);
-        }
-        else if (tagName == "table:table-columns") {
+        } else if (tagName == "table:table-columns") {
             readElementTableTableColumns(reader);
-        }
-        else if (tagName == "table:table-header-columns") {
+        } else if (tagName == "table:table-header-columns") {
             readElementTableTableHeaderColumns(reader);
-        }
-        else if (tagName == "table:table-header-rows") {
+        } else if (tagName == "table:table-header-rows") {
             readElementTableTableHeaderRows(reader);
-        }
-        else if (tagName == "table:table-row") {
+        } else if (tagName == "table:table-row") {
             readElementTableTableRow(reader);
-        }
-        else if (tagName == "table:table-row-group") {
+        } else if (tagName == "table:table-row-group") {
             readElementTableTableRowGroup(reader);
-        }
-        else if (tagName == "table:table-rows") {
+        } else if (tagName == "table:table-rows") {
             readElementTableTableRows(reader);
-        }
-        else if (tagName == "table:title") {
-	    QString value;
-	    readCharacterData(reader, value);
-	    m_backend->textVariable(tagName, value);
-        }
-        else if (tagName == "table:desc") {
-	    QString value;
-	    readCharacterData(reader, value);
-	    m_backend->textVariable(tagName, value);
-        }
-        else if (tagName == "text:soft-page-break") {
+        } else if (tagName == "table:title") {
+            QString value;
+            readCharacterData(reader, value);
+            m_backend->textVariable(tagName, value);
+        } else if (tagName == "table:desc") {
+            QString value;
+            readCharacterData(reader, value);
+            m_backend->textVariable(tagName, value);
+        } else if (tagName == "text:soft-page-break") {
             readElementTextSoftPageBreak(reader);
-        }
-        else {
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -363,7 +327,7 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
 
 void OdfTextReader::readElementTableTableColumnGroup(KoXmlStreamReader &reader)
 {
-   DEBUGSTART();
+    DEBUGSTART();
     m_backend->elementTableTableColumnGroup(reader, m_context);
 
     // <table:table-column-group> has the following children in ODF 1.2:
@@ -374,20 +338,16 @@ void OdfTextReader::readElementTableTableColumnGroup(KoXmlStreamReader &reader)
     //
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
-	if (tagName == "table:table-header-columns") {
+
+        if (tagName == "table:table-header-columns") {
             readElementTableTableHeaderColumns(reader);
-        }
-        else if (tagName == "table:table-column") {
+        } else if (tagName == "table:table-column") {
             readElementTableTableColumn(reader);
-        }
-        else if (tagName == "table:table-column-group") {
+        } else if (tagName == "table:table-column-group") {
             readElementTableTableColumnGroup(reader);
-        }
-        else if (tagName == "table:table-columns") {
+        } else if (tagName == "table:table-columns") {
             readElementTableTableColumns(reader);
-        }
-        else {
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -405,11 +365,10 @@ void OdfTextReader::readElementTableTableColumns(KoXmlStreamReader &reader)
     //   [done] <table:table-column> 9.1.6
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "table:table-column") {
             readElementTableTableColumn(reader);
-        }
-        else {
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -427,11 +386,10 @@ void OdfTextReader::readElementTableTableHeaderColumns(KoXmlStreamReader &reader
     //   [done] <table:table-column> 9.1.6
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "table:table-column") {
             readElementTableTableColumn(reader);
-        }
-        else {
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -450,14 +408,12 @@ void OdfTextReader::readElementTableTableHeaderRows(KoXmlStreamReader &reader)
     //   [done] <text:soft-page-break> 5.6.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "table:table-row") {
             readElementTableTableRow(reader);
-        }
-        else if (tagName == "text:soft-page-break") {
+        } else if (tagName == "text:soft-page-break") {
             readElementTextSoftPageBreak(reader);
-        }
-        else {
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -480,7 +436,7 @@ void OdfTextReader::readElementTableTableColumn(KoXmlStreamReader &reader)
 
 void OdfTextReader::readElementTableTableRowGroup(KoXmlStreamReader &reader)
 {
-   DEBUGSTART();
+    DEBUGSTART();
     m_backend->elementTableTableRowGroup(reader, m_context);
 
     // <table:table-row-group> has the following children in ODF 1.2:
@@ -489,26 +445,21 @@ void OdfTextReader::readElementTableTableRowGroup(KoXmlStreamReader &reader)
     //          <table:table-row-group> 9.1.9
     //          <table:table-rows> 9.1.8
     //          <text:soft-page-break> 5.6
-   //
+    //
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
-	if (tagName == "table:table-header-rows") {
+
+        if (tagName == "table:table-header-rows") {
             readElementTableTableHeaderRows(reader);
-        }
-        else if (tagName == "table:table-row") {
+        } else if (tagName == "table:table-row") {
             readElementTableTableRow(reader);
-        }
-        else if (tagName == "table:table-row-group") {
+        } else if (tagName == "table:table-row-group") {
             readElementTableTableRowGroup(reader);
-        }
-        else if (tagName == "table:table-rows") {
+        } else if (tagName == "table:table-rows") {
             readElementTableTableRows(reader);
-        }
-        else if (tagName == "text:soft-page-break") {
+        } else if (tagName == "text:soft-page-break") {
             readElementTextSoftPageBreak(reader);
-        }
-        else {
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -527,14 +478,12 @@ void OdfTextReader::readElementTableTableRow(KoXmlStreamReader &reader)
     //   [done] <table:table-cell> 9.1.4.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "table:covered-table-cell") {
             readElementTableCoveredTableCell(reader);
-        }
-        else if (tagName == "table:table-cell") {
+        } else if (tagName == "table:table-cell") {
             readElementTableTableCell(reader);
-        }
-        else {
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -553,14 +502,12 @@ void OdfTextReader::readElementTableTableRows(KoXmlStreamReader &reader)
     //   [done] <text:soft-page-break> 5.6.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "table:table-row") {
             readElementTableTableRow(reader);
-        }
-        else if (tagName == "text:soft-page-break") {
+        } else if (tagName == "text:soft-page-break") {
             readElementTextSoftPageBreak(reader);
-        }
-        else {
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -586,20 +533,17 @@ void OdfTextReader::readElementTableTableCell(KoXmlStreamReader &reader)
 
     while (reader.readNextStartElement()) {
         DEBUG_READING("loop-start");
-        
+
         QString tagName = reader.qualifiedName().toString();
         if (tagName == "office:annotation") {
-	    readElementOfficeAnnotation(reader);
-        }
-        else if (tagName == "table:cell-range-source") {
+            readElementOfficeAnnotation(reader);
+        } else if (tagName == "table:cell-range-source") {
             // FIXME: NYI
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:detective") {
+        } else if (tagName == "table:detective") {
             // FIXME: NYI
             reader.skipCurrentElement();
-        }
-        else {
+        } else {
             readTextLevelElement(reader);
         }
         DEBUG_READING("loop-end");
@@ -626,20 +570,17 @@ void OdfTextReader::readElementTableCoveredTableCell(KoXmlStreamReader &reader)
 
     while (reader.readNextStartElement()) {
         DEBUG_READING("loop-start");
-        
+
         QString tagName = reader.qualifiedName().toString();
         if (tagName == "office:annotation") {
-	    readElementOfficeAnnotation(reader);
-	}
-        else if (tagName == "table:cell-range-source") {
+            readElementOfficeAnnotation(reader);
+        } else if (tagName == "table:cell-range-source") {
             // FIXME: NYI
             reader.skipCurrentElement();
-        }
-        else if (tagName == "table:detective") {
+        } else if (tagName == "table:detective") {
             // FIXME: NYI
             reader.skipCurrentElement();
-        }
-        else {
+        } else {
             readTextLevelElement(reader);
         }
         DEBUG_READING("loop-end");
@@ -649,10 +590,8 @@ void OdfTextReader::readElementTableCoveredTableCell(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
-
 // ----------------------------------------------------------------
 //                     Paragraph level functions
-
 
 // This function is a bit special since it doesn't handle a specific
 // element.  Instead it handles the common child elements between a
@@ -672,7 +611,7 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         DEBUG_READING("loop-start");
 
         if (reader.isCharacters()) {
-            //debugOdfReader << "Found character data";
+            // debugOdfReader << "Found character data";
             m_backend->characterData(reader, m_context);
             reader.readNext();
             continue;
@@ -705,8 +644,8 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         //          <draw:polyline> 10.3.4
         //          <draw:rect> 10.3.2
         //          <draw:regular-polygon> 10.3.6
-	// All of the above are sent to the draw reader.
-	//
+        // All of the above are sent to the draw reader.
+        //
         //   [done] <office:annotation> 14.1
         //   [done] <office:annotation-end> 14.2
         //          <presentation:date-time> 10.9.3.5
@@ -817,50 +756,41 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         //          <text:variable-input> 7.4.6
         //          <text:variable-set> 7.4.4
         //          <text:word-count> 7.5.18.4.
-        //        
+        //
         // FIXME: Only very few tags are handled right now.
 
         QString tagName = reader.qualifiedName().toString();
 
-	if (reader.prefix() == QLatin1StringView("draw") || reader.prefix() == QLatin1StringView("dr3d")) {
-	    OdfDrawReader *drawReader = m_parent->drawReader();
-	    if (drawReader) {
-		drawReader->readCommonGraphicsElements(reader);
-	    }
-	    else {
-		reader.skipCurrentElement();
-	    }
+        if (reader.prefix() == QLatin1StringView("draw") || reader.prefix() == QLatin1StringView("dr3d")) {
+            OdfDrawReader *drawReader = m_parent->drawReader();
+            if (drawReader) {
+                drawReader->readCommonGraphicsElements(reader);
+            } else {
+                reader.skipCurrentElement();
+            }
         } // draw | dr3d namespace
         else if (reader.prefix() == QLatin1StringView("office")) {
             if (tagName == "office:annotation") {
                 readElementOfficeAnnotation(reader);
-            }
-            else if (tagName == "office:annotation-end") {
+            } else if (tagName == "office:annotation-end") {
                 readElementOfficeAnnotationEnd(reader);
-            }
-            else {
+            } else {
                 // Unknown office: element
                 readUnknownElement(reader);
             }
         } // office namespace
         else if (reader.prefix() == QLatin1StringView("text")) {
-
             if (tagName == "text:a") {
                 readElementTextA(reader);
-            }
-            else if (tagName == "text:line-break") {
+            } else if (tagName == "text:line-break") {
                 readElementTextLineBreak(reader);
-            }
-            else if (tagName == "text:span") {
+            } else if (tagName == "text:span") {
                 readElementTextSpan(reader);
-            }
-            else if (tagName == "text:s") {
+            } else if (tagName == "text:s") {
                 readElementTextS(reader);
-            }
-            else if (tagName == "text:soft-page-break") {
+            } else if (tagName == "text:soft-page-break") {
                 readElementTextSoftPageBreak(reader);
-            }
-            else {
+            } else {
                 // Unknown text: element
                 readUnknownElement(reader);
             }
@@ -894,22 +824,17 @@ void OdfTextReader::readElementOfficeAnnotation(KoXmlStreamReader &reader)
 
         if (tagName == "dc:creator") {
             readElementDcCreator(reader);
-        }
-        else if (tagName == "dc:date") {
+        } else if (tagName == "dc:date") {
             readElementDcDate(reader);
-        }
-        else if (tagName == "meta:date-string") {
-	    QString value;
-	    readCharacterData(reader, value);
-	    m_backend->textVariable(tagName, value);
-        }
-        else if (tagName == "text:list") {
+        } else if (tagName == "meta:date-string") {
+            QString value;
+            readCharacterData(reader, value);
+            m_backend->textVariable(tagName, value);
+        } else if (tagName == "text:list") {
             readElementTextList(reader);
-        }
-        else if (tagName == "text:p") {
+        } else if (tagName == "text:p") {
             readElementTextP(reader);
-        }
-        else {
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -1006,10 +931,8 @@ void OdfTextReader::readElementTextSpan(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
-
 // ----------------------------------------------------------------
 //                        List level functions
-
 
 void OdfTextReader::readElementTextListHeader(KoXmlStreamReader &reader)
 {
@@ -1022,31 +945,26 @@ void OdfTextReader::readElementTextListHeader(KoXmlStreamReader &reader)
     //   [done] <text:list> 5.3.1
     //   [done] <text:soft-page-break> 5.6
     //          <text:number> 6.1.10
-    while(reader.readNextStartElement()) {
-	DEBUG_READING("loop-start");
+    while (reader.readNextStartElement()) {
+        DEBUG_READING("loop-start");
 
-	QString tagName = reader.qualifiedName().toString();
-	if (tagName == "text:h") {
-	    readElementTextH(reader);
-	}
-	else if (tagName == "text:p") {
-	    readElementTextP(reader);
-	}
-	else if (tagName == "text:list") {
-	    readElementTextList(reader);
-	}
-        else if (tagName == "text:soft-page-break") {
-	    readElementTextSoftPageBreak(reader);
-        }
-        else if (tagName == "text:number") {
+        QString tagName = reader.qualifiedName().toString();
+        if (tagName == "text:h") {
+            readElementTextH(reader);
+        } else if (tagName == "text:p") {
+            readElementTextP(reader);
+        } else if (tagName == "text:list") {
+            readElementTextList(reader);
+        } else if (tagName == "text:soft-page-break") {
+            readElementTextSoftPageBreak(reader);
+        } else if (tagName == "text:number") {
             // FIXME: NYI
             reader.skipCurrentElement();
+        } else {
+            readUnknownElement(reader);
         }
-	else {
-	    readUnknownElement(reader);
-	}
 
-	DEBUG_READING("loop-end");
+        DEBUG_READING("loop-end");
     }
 
     m_backend->elementTextListHeader(reader, m_context);
@@ -1064,32 +982,27 @@ void OdfTextReader::readElementTextListItem(KoXmlStreamReader &reader)
     //   [done] <text:list> 5.3.1
     //   [done] <text:soft-page-break> 5.6
     //          <text:number> 6.1.10
-    while(reader.readNextStartElement()) {
+    while (reader.readNextStartElement()) {
         DEBUG_READING("loop-start");
 
         QString tagName = reader.qualifiedName().toString();
-        debugOdfReader <<tagName;
-	if (tagName == "text:h") {
-	    readElementTextH(reader);
-	}
-	else if (tagName == "text:p") {
-	    readElementTextP(reader);
-	}
-        else if (tagName == "text:list") {
+        debugOdfReader << tagName;
+        if (tagName == "text:h") {
+            readElementTextH(reader);
+        } else if (tagName == "text:p") {
+            readElementTextP(reader);
+        } else if (tagName == "text:list") {
             readElementTextList(reader);
-        }
-        else if (tagName == "text:soft-page-break") {
-	    readElementTextSoftPageBreak(reader);
-        }
-        else if (tagName == "text:number") {
-            //FIXME
+        } else if (tagName == "text:soft-page-break") {
+            readElementTextSoftPageBreak(reader);
+        } else if (tagName == "text:number") {
+            // FIXME
             reader.skipCurrentElement();
-        }
-        else {
+        } else {
             readUnknownElement(reader);
         }
 
-	DEBUG_READING("loop-end");
+        DEBUG_READING("loop-end");
     }
 
     m_backend->elementTextListItem(reader, m_context);
@@ -1098,7 +1011,6 @@ void OdfTextReader::readElementTextListItem(KoXmlStreamReader &reader)
 
 // ----------------------------------------------------------------
 //                             Other functions
-
 
 void OdfTextReader::readElementTextSoftPageBreak(KoXmlStreamReader &reader)
 {
@@ -1112,7 +1024,6 @@ void OdfTextReader::readElementTextSoftPageBreak(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
-
 void OdfTextReader::readUnknownElement(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
@@ -1123,8 +1034,7 @@ void OdfTextReader::readUnknownElement(KoXmlStreamReader &reader)
         // start tag here.
         reader.readNext();
         readParagraphContents(reader);
-    }
-    else {
+    } else {
         while (reader.readNextStartElement()) {
             readTextLevelElement(reader);
         }
@@ -1132,4 +1042,3 @@ void OdfTextReader::readUnknownElement(KoXmlStreamReader &reader)
 
     DEBUGEND();
 }
-

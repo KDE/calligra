@@ -31,11 +31,11 @@ public:
     KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QPointF &offset, KUndo2Command *parent = 0);
 
     /**
-    * Command to move path points.
-    * @param pointData the path points to move
-    * @param offsets the offsets by which the points are moved in document coordinates
-    * @param parent the parent command used for macro commands
-    */
+     * Command to move path points.
+     * @param pointData the path points to move
+     * @param offsets the offsets by which the points are moved in document coordinates
+     * @param parent the parent command used for macro commands
+     */
     KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QVector<QPointF> &offsets, KUndo2Command *parent = 0);
 
     ~KoPathPointMoveCommand() override;
@@ -46,7 +46,7 @@ public:
     void undo() override;
 
 private:
-    KoPathPointMoveCommandPrivate * const d;
+    KoPathPointMoveCommandPrivate *const d;
 };
 
 #endif // KOPATHPOINTMOVECOMMAND_H

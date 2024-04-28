@@ -6,11 +6,11 @@
 #ifndef SIMPLEINSERTWIDGET_H
 #define SIMPLEINSERTWIDGET_H
 
-#include <ui_SimpleInsertWidget.h>
 #include <KoListStyle.h>
+#include <ui_SimpleInsertWidget.h>
 
-#include <QWidget>
 #include <QTextBlock>
+#include <QWidget>
 
 class TextTool;
 class KoStyleManager;

@@ -36,8 +36,9 @@ bool Format::isMoney(Type fmt)
 
 bool Format::isNumber(Type fmt)
 {
-    if (isFraction(fmt)) return true;
-    if ((fmt == Number) || (fmt == Percentage) || (fmt == Scientific)) return true;
+    if (isFraction(fmt))
+        return true;
+    if ((fmt == Number) || (fmt == Percentage) || (fmt == Scientific))
+        return true;
     return false;
 }
-

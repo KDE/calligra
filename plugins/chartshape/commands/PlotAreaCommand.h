@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2018 Dag Andersen <danders@get2net.dk>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -29,7 +29,7 @@ public:
 private:
     PlotArea *m_plotArea;
     ChartShape *m_chart;
-    
+
     Qt::Orientation m_oldOrientation;
     Qt::Orientation m_newOrientation;
 };

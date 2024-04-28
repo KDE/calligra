@@ -45,7 +45,6 @@ void KoTableView::setViewMode(KoTableView::ViewMode mode)
         setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         break;
     }
-
 }
 
 void KoTableView::updateView()
@@ -66,7 +65,8 @@ void KoTableView::updateView()
             }
         }
     } else if (m_viewMode == FIXED_ROWS) {
-        if (rowCount == 0) return;  // Don't divide by zero
+        if (rowCount == 0)
+            return; // Don't divide by zero
         rowHeight = viewport()->size().height() / rowCount;
 
         for (int i = 0; i < rowCount; ++i) {

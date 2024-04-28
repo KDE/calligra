@@ -25,9 +25,9 @@ public:
     void undo() override;
 
 private:
-    KoFilterEffectStack * m_newFilterStack;
-    KoFilterEffectStack * m_oldFilterStack;
-    KoShape * m_shape;
+    KoFilterEffectStack *m_newFilterStack;
+    KoFilterEffectStack *m_oldFilterStack;
+    KoShape *m_shape;
 };
 
 #endif // FILTERSTACKSETCOMMAND_H

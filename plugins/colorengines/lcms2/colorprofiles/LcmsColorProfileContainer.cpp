@@ -7,14 +7,14 @@
  *  SPDX-FileCopyrightText: 2007 Adrian Page <adrian@pagenet.plus.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ */
 
 #include "LcmsColorProfileContainer.h"
 
+#include <QGenericMatrix>
+#include <QTransform>
 #include <cfloat>
 #include <cmath>
-#include <QTransform>
-#include <QGenericMatrix>
 
 #include <QDebug>
 
@@ -23,7 +23,9 @@ class LcmsColorProfileContainer::Private
 public:
     Private()
         : valid(false)
-        , suitableForOutput(false) { }
+        , suitableForOutput(false)
+    {
+    }
 
     cmsHPROFILE profile;
     cmsColorSpaceSignature colorSpaceSignature;
@@ -50,7 +52,7 @@ public:
     cmsToneCurve *greenTRCReverse;
     cmsToneCurve *blueTRCReverse;
     cmsToneCurve *grayTRCReverse;
-    
+
     cmsUInt32Number defaultIntent;
     bool isPerceptualCLUT;
     bool isRelativeCLUT;
@@ -75,7 +77,7 @@ LcmsColorProfileContainer::LcmsColorProfileContainer(IccColorProfile::Data *data
 
 QByteArray LcmsColorProfileContainer::lcmsProfileToByteArray(const cmsHPROFILE profile)
 {
-    cmsUInt32Number  bytesNeeded = 0;
+    cmsUInt32Number bytesNeeded = 0;
     // Make a raw data image ready for saving
     cmsSaveProfileToMem(profile, 0, &bytesNeeded); // calc size
     QByteArray rawData;
@@ -125,7 +127,7 @@ bool LcmsColorProfileContainer::init()
         cmsGetProfileInfo(d->profile, cmsInfoDescription, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->name = QString::fromWCharArray(buffer);
 
-        //apparently this should give us a localised string??? Not sure about this.
+        // apparently this should give us a localised string??? Not sure about this.
         cmsGetProfileInfo(d->profile, cmsInfoModel, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->productDescription = QString::fromWCharArray(buffer);
 
@@ -139,35 +141,40 @@ bool LcmsColorProfileContainer::init()
         profile_class = cmsGetDeviceClass(d->profile);
         d->valid = (profile_class != cmsSigNamedColorClass);
 
-        //This is where obtain the whitepoint, and convert it to the actual white point of the profile in the case a Chromatic adaption tag is
-        //present. This is necessary for profiles following the v4 spec.
-        cmsCIEXYZ baseMediaWhitePoint;//dummy to hold copy of mediawhitepoint if this is modified by chromatic adaption.
+        // This is where obtain the whitepoint, and convert it to the actual white point of the profile in the case a Chromatic adaption tag is
+        // present. This is necessary for profiles following the v4 spec.
+        cmsCIEXYZ baseMediaWhitePoint; // dummy to hold copy of mediawhitepoint if this is modified by chromatic adaption.
         if (cmsIsTag(d->profile, cmsSigMediaWhitePointTag)) {
             d->mediaWhitePoint = *((cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigMediaWhitePointTag));
             baseMediaWhitePoint = d->mediaWhitePoint;
             cmsXYZ2xyY(&d->whitePoint, &d->mediaWhitePoint);
 
             if (cmsIsTag(d->profile, cmsSigChromaticAdaptationTag)) {
-                //the chromatic adaption tag represent a matrix from the actual white point of the profile to D50.
+                // the chromatic adaption tag represent a matrix from the actual white point of the profile to D50.
                 cmsCIEXYZ *CAM1 = (cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigChromaticAdaptationTag);
-                //We first put all our data into structures we can manipulate.
-                double d3dummy [3] = {d->mediaWhitePoint.X, d->mediaWhitePoint.Y, d->mediaWhitePoint.Z};
+                // We first put all our data into structures we can manipulate.
+                double d3dummy[3] = {d->mediaWhitePoint.X, d->mediaWhitePoint.Y, d->mediaWhitePoint.Z};
                 QGenericMatrix<1, 3, double> whitePointMatrix(d3dummy);
                 QTransform invertDummy(CAM1[0].X, CAM1[0].Y, CAM1[0].Z, CAM1[1].X, CAM1[1].Y, CAM1[1].Z, CAM1[2].X, CAM1[2].Y, CAM1[2].Z);
-                //we then abuse QTransform's invert function because it probably does matrix inversion 20 times better than I can program.
-                //if the matrix is uninvertable, invertedDummy will be an identity matrix, which for us means that it won't give any noticeable
-                //effect when we start multiplying.
+                // we then abuse QTransform's invert function because it probably does matrix inversion 20 times better than I can program.
+                // if the matrix is uninvertable, invertedDummy will be an identity matrix, which for us means that it won't give any noticeable
+                // effect when we start multiplying.
                 QTransform invertedDummy = invertDummy.inverted();
-                //we then put the QTransform into a generic 3x3 matrix.
-                double d9dummy [9] = {invertedDummy.m11(), invertedDummy.m12(), invertedDummy.m13(),
-                                      invertedDummy.m21(), invertedDummy.m22(), invertedDummy.m23(),
-                                      invertedDummy.m31(), invertedDummy.m32(), invertedDummy.m33()
-                                     };
+                // we then put the QTransform into a generic 3x3 matrix.
+                double d9dummy[9] = {invertedDummy.m11(),
+                                     invertedDummy.m12(),
+                                     invertedDummy.m13(),
+                                     invertedDummy.m21(),
+                                     invertedDummy.m22(),
+                                     invertedDummy.m23(),
+                                     invertedDummy.m31(),
+                                     invertedDummy.m32(),
+                                     invertedDummy.m33()};
                 QGenericMatrix<3, 3, double> chromaticAdaptionMatrix(d9dummy);
-                //multiplying our inverted adaption matrix with the whitepoint gives us the right whitepoint.
+                // multiplying our inverted adaption matrix with the whitepoint gives us the right whitepoint.
                 QGenericMatrix<1, 3, double> result = chromaticAdaptionMatrix * whitePointMatrix;
-                //and then we pour the matrix into the whitepoint variable. Generic matrix does row/column for indices even though it
-                //uses column/row for initialising.
+                // and then we pour the matrix into the whitepoint variable. Generic matrix does row/column for indices even though it
+                // uses column/row for initialising.
                 d->mediaWhitePoint.X = result(0, 0);
                 d->mediaWhitePoint.Y = result(1, 0);
                 d->mediaWhitePoint.Z = result(2, 0);
@@ -175,35 +182,34 @@ bool LcmsColorProfileContainer::init()
             }
         }
 
-        //This is for RGB profiles, but it only works for matrix profiles. Need to design it to work with non-matrix profiles.
+        // This is for RGB profiles, but it only works for matrix profiles. Need to design it to work with non-matrix profiles.
         if (cmsIsTag(d->profile, cmsSigRedColorantTag)) {
             cmsCIEXYZTRIPLE tempColorants;
             tempColorants.Red = *((cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigRedColorantTag));
             tempColorants.Green = *((cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigGreenColorantTag));
             tempColorants.Blue = *((cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigBlueColorantTag));
-            //convert to d65, this is useless.
+            // convert to d65, this is useless.
             cmsAdaptToIlluminant(&d->colorants.Red, &baseMediaWhitePoint, &d->mediaWhitePoint, &tempColorants.Red);
             cmsAdaptToIlluminant(&d->colorants.Green, &baseMediaWhitePoint, &d->mediaWhitePoint, &tempColorants.Green);
             cmsAdaptToIlluminant(&d->colorants.Blue, &baseMediaWhitePoint, &d->mediaWhitePoint, &tempColorants.Blue);
-            //d->colorants = tempColorants;
+            // d->colorants = tempColorants;
             d->hasColorants = true;
         } else {
-            //qDebug()<<d->name<<": has no colorants";
+            // qDebug()<<d->name<<": has no colorants";
             d->hasColorants = false;
         }
-        //retrieve TRC.
+        // retrieve TRC.
         if (cmsIsTag(d->profile, cmsSigRedTRCTag) && cmsIsTag(d->profile, cmsSigBlueTRCTag) && cmsIsTag(d->profile, cmsSigGreenTRCTag)) {
-        
-            d->redTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigRedTRCTag));
-            d->greenTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGreenTRCTag));
-            d->blueTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigBlueTRCTag));
+            d->redTRC = ((cmsToneCurve *)cmsReadTag(d->profile, cmsSigRedTRCTag));
+            d->greenTRC = ((cmsToneCurve *)cmsReadTag(d->profile, cmsSigGreenTRCTag));
+            d->blueTRC = ((cmsToneCurve *)cmsReadTag(d->profile, cmsSigBlueTRCTag));
             d->redTRCReverse = cmsReverseToneCurve(d->redTRC);
             d->greenTRCReverse = cmsReverseToneCurve(d->greenTRC);
             d->blueTRCReverse = cmsReverseToneCurve(d->blueTRC);
             d->hasTRC = true;
-        
+
         } else if (cmsIsTag(d->profile, cmsSigGrayTRCTag)) {
-            d->grayTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGrayTRCTag));
+            d->grayTRC = ((cmsToneCurve *)cmsReadTag(d->profile, cmsSigGrayTRCTag));
             d->grayTRCReverse = cmsReverseToneCurve(d->grayTRC);
             d->hasTRC = true;
         } else {
@@ -212,8 +218,7 @@ bool LcmsColorProfileContainer::init()
 
         // Check if the profile can convert (something->this)
         d->suitableForOutput = cmsIsMatrixShaper(d->profile)
-                               || (cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) &&
-                                   cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_OUTPUT));
+            || (cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) && cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_OUTPUT));
 
         d->version = cmsGetProfileVersion(d->profile);
         d->defaultIntent = cmsGetHeaderRenderingIntent(d->profile);
@@ -289,11 +294,11 @@ bool LcmsColorProfileContainer::supportsSaturation() const
 }
 bool LcmsColorProfileContainer::supportsAbsolute() const
 {
-    return d->isAbsoluteCLUT;//LCMS2 doesn't convert matrix shapers via absolute intent, because of V4 workflow.
+    return d->isAbsoluteCLUT; // LCMS2 doesn't convert matrix shapers via absolute intent, because of V4 workflow.
 }
 bool LcmsColorProfileContainer::supportsRelative() const
 {
-    if (d->isRelativeCLUT || d->isMatrixShaper){
+    if (d->isRelativeCLUT || d->isMatrixShaper) {
         return true;
     }
     return false;
@@ -306,9 +311,9 @@ bool LcmsColorProfileContainer::hasTRC() const
 {
     return d->hasTRC;
 }
-QVector <double> LcmsColorProfileContainer::getColorantsXYZ() const
+QVector<double> LcmsColorProfileContainer::getColorantsXYZ() const
 {
-    QVector <double> colorants(9);
+    QVector<double> colorants(9);
     colorants[0] = d->colorants.Red.X;
     colorants[1] = d->colorants.Red.Y;
     colorants[2] = d->colorants.Red.Z;
@@ -321,11 +326,11 @@ QVector <double> LcmsColorProfileContainer::getColorantsXYZ() const
     return colorants;
 }
 
-QVector <double> LcmsColorProfileContainer::getColorantsxyY() const
+QVector<double> LcmsColorProfileContainer::getColorantsxyY() const
 {
     cmsCIEXYZ temp1;
     cmsCIExyY temp2;
-    QVector <double> colorants(9);
+    QVector<double> colorants(9);
 
     temp1.X = d->colorants.Red.X;
     temp1.Y = d->colorants.Red.Y;
@@ -354,9 +359,9 @@ QVector <double> LcmsColorProfileContainer::getColorantsxyY() const
     return colorants;
 }
 
-QVector <double> LcmsColorProfileContainer::getWhitePointXYZ() const
+QVector<double> LcmsColorProfileContainer::getWhitePointXYZ() const
 {
-    QVector <double> tempWhitePoint(3);
+    QVector<double> tempWhitePoint(3);
 
     tempWhitePoint[0] = d->mediaWhitePoint.X;
     tempWhitePoint[1] = d->mediaWhitePoint.Y;
@@ -365,18 +370,18 @@ QVector <double> LcmsColorProfileContainer::getWhitePointXYZ() const
     return tempWhitePoint;
 }
 
-QVector <double> LcmsColorProfileContainer::getWhitePointxyY() const
+QVector<double> LcmsColorProfileContainer::getWhitePointxyY() const
 {
-    QVector <double> tempWhitePoint(3);
+    QVector<double> tempWhitePoint(3);
     tempWhitePoint[0] = d->whitePoint.x;
     tempWhitePoint[1] = d->whitePoint.y;
     tempWhitePoint[2] = d->whitePoint.Y;
     return tempWhitePoint;
 }
 
-QVector <double> LcmsColorProfileContainer::getEstimatedTRC() const
+QVector<double> LcmsColorProfileContainer::getEstimatedTRC() const
 {
-    QVector <double> TRCtriplet(3);
+    QVector<double> TRCtriplet(3);
     if (d->hasColorants) {
         if (cmsIsToneCurveLinear(d->redTRC)) {
             TRCtriplet[0] = 1.0;
@@ -399,7 +404,7 @@ QVector <double> LcmsColorProfileContainer::getEstimatedTRC() const
             if (cmsIsToneCurveLinear(d->grayTRC)) {
                 TRCtriplet.fill(1.0);
             } else {
-                TRCtriplet.fill(cmsEstimateGamma(d->grayTRC,  0.01));
+                TRCtriplet.fill(cmsEstimateGamma(d->grayTRC, 0.01));
             }
         } else {
             TRCtriplet.fill(1.0);
@@ -408,13 +413,12 @@ QVector <double> LcmsColorProfileContainer::getEstimatedTRC() const
     return TRCtriplet;
 }
 
-void LcmsColorProfileContainer::LinearizeFloatValue(QVector <double> & Value) const
+void LcmsColorProfileContainer::LinearizeFloatValue(QVector<double> &Value) const
 {
-    QVector <double> TRCtriplet(3);
+    QVector<double> TRCtriplet(3);
     TRCtriplet[0] = Value[0];
     TRCtriplet[1] = Value[1];
     TRCtriplet[2] = Value[2];
-    
 
     if (d->hasColorants) {
         if (cmsIsToneCurveLinear(d->redTRC)) {
@@ -432,7 +436,7 @@ void LcmsColorProfileContainer::LinearizeFloatValue(QVector <double> & Value) co
         } else {
             TRCtriplet[2] = cmsEvalToneCurveFloat(d->blueTRC, Value[2]);
         }
-            
+
     } else {
         if (cmsIsTag(d->profile, cmsSigGrayTRCTag)) {
             TRCtriplet.fill(cmsEvalToneCurveFloat(d->grayTRC, Value[0]));
@@ -444,9 +448,9 @@ void LcmsColorProfileContainer::LinearizeFloatValue(QVector <double> & Value) co
     Value[2] = TRCtriplet[2];
 }
 
-void LcmsColorProfileContainer::DelinearizeFloatValue(QVector <double> & Value) const
+void LcmsColorProfileContainer::DelinearizeFloatValue(QVector<double> &Value) const
 {
-    QVector <double> TRCtriplet(3);
+    QVector<double> TRCtriplet(3);
     TRCtriplet[0] = Value[0];
     TRCtriplet[1] = Value[1];
     TRCtriplet[2] = Value[2];
@@ -466,7 +470,7 @@ void LcmsColorProfileContainer::DelinearizeFloatValue(QVector <double> & Value) 
         } else {
             TRCtriplet[2] = cmsEvalToneCurveFloat(d->blueTRCReverse, Value[2]);
         }
-            
+
     } else {
         if (cmsIsTag(d->profile, cmsSigGrayTRCTag)) {
             TRCtriplet.fill(cmsEvalToneCurveFloat(d->grayTRCReverse, Value[0]));
@@ -478,63 +482,61 @@ void LcmsColorProfileContainer::DelinearizeFloatValue(QVector <double> & Value) 
     Value[2] = TRCtriplet[2];
 }
 
-void LcmsColorProfileContainer::LinearizeFloatValueFast(QVector <double> & Value) const
+void LcmsColorProfileContainer::LinearizeFloatValueFast(QVector<double> &Value) const
 {
-    //we can only reliably delinearise in the 0-1.0 range, outside of that leave the value alone.
-    QVector <quint16> TRCtriplet(3);
-    TRCtriplet[0] = Value[0]*65535;
-    TRCtriplet[1] = Value[1]*65535;
-    TRCtriplet[2] = Value[2]*65535;
-    
+    // we can only reliably delinearise in the 0-1.0 range, outside of that leave the value alone.
+    QVector<quint16> TRCtriplet(3);
+    TRCtriplet[0] = Value[0] * 65535;
+    TRCtriplet[1] = Value[1] * 65535;
+    TRCtriplet[2] = Value[2] * 65535;
 
     if (d->hasColorants) {
-        if (!cmsIsToneCurveLinear(d->redTRC) && Value[0]<1.0) {
+        if (!cmsIsToneCurveLinear(d->redTRC) && Value[0] < 1.0) {
             TRCtriplet[0] = cmsEvalToneCurve16(d->redTRC, TRCtriplet[0]);
-            Value[0] = TRCtriplet[0]/65535.0;
+            Value[0] = TRCtriplet[0] / 65535.0;
         }
-        if (!cmsIsToneCurveLinear(d->greenTRC) && Value[1]<1.0) {
+        if (!cmsIsToneCurveLinear(d->greenTRC) && Value[1] < 1.0) {
             TRCtriplet[1] = cmsEvalToneCurve16(d->greenTRC, TRCtriplet[1]);
-            Value[1] = TRCtriplet[1]/65535.0;
+            Value[1] = TRCtriplet[1] / 65535.0;
         }
-        if (!cmsIsToneCurveLinear(d->blueTRC) && Value[2]<1.0) {
+        if (!cmsIsToneCurveLinear(d->blueTRC) && Value[2] < 1.0) {
             TRCtriplet[2] = cmsEvalToneCurve16(d->blueTRC, TRCtriplet[2]);
-            Value[2] = TRCtriplet[2]/65535.0;
+            Value[2] = TRCtriplet[2] / 65535.0;
         }
-            
+
     } else {
-        if (cmsIsTag(d->profile, cmsSigGrayTRCTag) && Value[0]<1.0) {
-            TRCtriplet[0] = (cmsEvalToneCurve16(d->grayTRC, Value[0]*65535));
-            Value.fill(TRCtriplet[0]/65535.0);
+        if (cmsIsTag(d->profile, cmsSigGrayTRCTag) && Value[0] < 1.0) {
+            TRCtriplet[0] = (cmsEvalToneCurve16(d->grayTRC, Value[0] * 65535));
+            Value.fill(TRCtriplet[0] / 65535.0);
         }
     }
 }
-void LcmsColorProfileContainer::DelinearizeFloatValueFast(QVector <double> & Value) const
+void LcmsColorProfileContainer::DelinearizeFloatValueFast(QVector<double> &Value) const
 {
-    //we can only reliably delinearise in the 0-1.0 range, outside of that leave the value alone.
-    QVector <quint16> TRCtriplet(3);
-    TRCtriplet[0] = Value[0]*65535;
-    TRCtriplet[1] = Value[1]*65535;
-    TRCtriplet[2] = Value[2]*65535;
-    
+    // we can only reliably delinearise in the 0-1.0 range, outside of that leave the value alone.
+    QVector<quint16> TRCtriplet(3);
+    TRCtriplet[0] = Value[0] * 65535;
+    TRCtriplet[1] = Value[1] * 65535;
+    TRCtriplet[2] = Value[2] * 65535;
 
     if (d->hasColorants) {
-        if (!cmsIsToneCurveLinear(d->redTRC) && Value[0]<1.0) {
+        if (!cmsIsToneCurveLinear(d->redTRC) && Value[0] < 1.0) {
             TRCtriplet[0] = cmsEvalToneCurve16(d->redTRCReverse, TRCtriplet[0]);
-            Value[0] = TRCtriplet[0]/65535.0;
+            Value[0] = TRCtriplet[0] / 65535.0;
         }
-        if (!cmsIsToneCurveLinear(d->greenTRC) && Value[1]<1.0) {
+        if (!cmsIsToneCurveLinear(d->greenTRC) && Value[1] < 1.0) {
             TRCtriplet[1] = cmsEvalToneCurve16(d->greenTRCReverse, TRCtriplet[1]);
-            Value[1] = TRCtriplet[1]/65535.0;
+            Value[1] = TRCtriplet[1] / 65535.0;
         }
-        if (!cmsIsToneCurveLinear(d->blueTRC) && Value[2]<1.0) {
+        if (!cmsIsToneCurveLinear(d->blueTRC) && Value[2] < 1.0) {
             TRCtriplet[2] = cmsEvalToneCurve16(d->blueTRCReverse, TRCtriplet[2]);
-            Value[2] = TRCtriplet[2]/65535.0;
+            Value[2] = TRCtriplet[2] / 65535.0;
         }
-            
+
     } else {
-        if (cmsIsTag(d->profile, cmsSigGrayTRCTag) && Value[0]<1.0) {
-            TRCtriplet[0] = (cmsEvalToneCurve16(d->grayTRCReverse, Value[0]*65535));
-            Value.fill(TRCtriplet[0]/65535.0);
+        if (cmsIsTag(d->profile, cmsSigGrayTRCTag) && Value[0] < 1.0) {
+            TRCtriplet[0] = (cmsEvalToneCurve16(d->grayTRCReverse, Value[0] * 65535));
+            Value.fill(TRCtriplet[0] / 65535.0);
         }
     }
 }

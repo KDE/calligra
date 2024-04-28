@@ -7,21 +7,20 @@
 #include "TableOfContentsPreview.h"
 
 #include "KoTableOfContentsGeneratorInfo.h"
-#include "KoZoomHandler.h"
 #include "KoTextDocumentLayout.h"
+#include "KoZoomHandler.h"
 #include "TextTool.h"
 
 #include <KoInlineTextObjectManager.h>
 #include <KoParagraphStyle.h>
 #include <KoShapePaintingContext.h>
 
-
-TableOfContentsPreview::TableOfContentsPreview(QWidget *parent) :
-    QFrame(parent),
-    m_textShape(0),
-    m_pm(0),
-    m_styleManager(0),
-    m_previewPixSize(QSize(0,0))
+TableOfContentsPreview::TableOfContentsPreview(QWidget *parent)
+    : QFrame(parent)
+    , m_textShape(0)
+    , m_pm(0)
+    , m_styleManager(0)
+    , m_previewPixSize(QSize(0, 0))
 {
 }
 
@@ -49,7 +48,7 @@ void TableOfContentsPreview::paintEvent(QPaintEvent *event)
     p->translate(5.5, 1.5);
     p->setRenderHint(QPainter::Antialiasing);
     QRect rectang = rect();
-    rectang.adjust(-4,-4,-4,-4);
+    rectang.adjust(-4, -4, -4, -4);
 
     if (m_pm) {
         p->drawPixmap(rectang, *m_pm, m_pm->rect());
@@ -68,11 +67,11 @@ void TableOfContentsPreview::updatePreview(KoTableOfContentsGeneratorInfo *newTo
     QTextDocument *tocDocument = new QTextDocument(this);
     KoTextDocument(tocDocument).setStyleManager(m_styleManager);
     KoTableOfContentsGeneratorInfo *info = newToCInfo->clone();
-   // info->m_indexTitleTemplate.text = newToCInfo->m_indexTitleTemplate.text;
-   // info->m_useOutlineLevel = newToCInfo->m_useOutlineLevel;
+    // info->m_indexTitleTemplate.text = newToCInfo->m_indexTitleTemplate.text;
+    // info->m_useOutlineLevel = newToCInfo->m_useOutlineLevel;
 
-    tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
-    tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
+    tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo *>(info));
+    tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument *>(tocDocument));
 
     deleteTextShape();
 
@@ -88,37 +87,37 @@ void TableOfContentsPreview::updatePreview(KoTableOfContentsGeneratorInfo *newTo
     textCharFormat.setFontPointSize(11);
     textCharFormat.setFontWeight(QFont::Normal);
 
-    //the brush is set to the background colour so that the actual text block(Heading 1,Heading 1.1 etc.) does not appear in the preview
+    // the brush is set to the background colour so that the actual text block(Heading 1,Heading 1.1 etc.) does not appear in the preview
     textCharFormat.setProperty(QTextCharFormat::ForegroundBrush, QBrush(Qt::white));
     cursor.setCharFormat(textCharFormat);
 
     cursor.insertBlock(tocFormat);
-    cursor.movePosition(QTextCursor::End,QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
 
-    //insert text for different heading styles
+    // insert text for different heading styles
     QTextBlockFormat blockFormat;
     blockFormat.setProperty(KoParagraphStyle::OutlineLevel, 1);
-    cursor.insertBlock(blockFormat,textCharFormat);
+    cursor.insertBlock(blockFormat, textCharFormat);
     cursor.insertText("Header 1");
 
     QTextBlockFormat blockFormat1;
     blockFormat1.setProperty(KoParagraphStyle::OutlineLevel, 2);
-    cursor.insertBlock(blockFormat1,textCharFormat);
+    cursor.insertBlock(blockFormat1, textCharFormat);
     cursor.insertText("Header 1.1");
 
     QTextBlockFormat blockFormat2;
     blockFormat2.setProperty(KoParagraphStyle::OutlineLevel, 2);
-    cursor.insertBlock(blockFormat2,textCharFormat);
+    cursor.insertBlock(blockFormat2, textCharFormat);
     cursor.insertText("Header 1.2");
 
     QTextBlockFormat blockFormat3;
     blockFormat3.setProperty(KoParagraphStyle::OutlineLevel, 1);
-    cursor.insertBlock(blockFormat3,textCharFormat);
+    cursor.insertBlock(blockFormat3, textCharFormat);
     cursor.insertText("Header 2");
 
     KoTextDocument(m_textShape->textShapeData()->document()).setStyleManager(m_styleManager);
 
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShape->textShapeData()->document()->documentLayout());
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout *>(m_textShape->textShapeData()->document()->documentLayout());
     connect(lay, &KoTextDocumentLayout::finishedLayout, this, &TableOfContentsPreview::finishedPreviewLayout);
     if (lay) {
         lay->layout();
@@ -148,7 +147,7 @@ void TableOfContentsPreview::finishedPreviewLayout()
         } else {
             m_textShape->setSize(m_previewPixSize);
         }
-        KoShapePaintingContext paintContext; //FIXME
+        KoShapePaintingContext paintContext; // FIXME
         m_textShape->paintComponent(p, m_zoomHandler, paintContext);
     }
     emit pixmapGenerated();

@@ -13,24 +13,24 @@
 
 #include <KoPart.h>
 
+#include <KWCanvasItem.h>
 #include <KWDocument.h>
 #include <KWPage.h>
-#include <KWCanvasItem.h>
 
 #include <frames/KWFrame.h>
 #include <frames/KWFrameSet.h>
 #include <frames/KWTextFrameSet.h>
 
-#include <KoShapeManager.h>
-#include <KoZoomHandler.h>
-#include <KoShapePainter.h>
 #include <KoPAUtil.h>
+#include <KoShapeManager.h>
+#include <KoShapePainter.h>
+#include <KoZoomHandler.h>
 
-#include <QPainter>
 #include <QApplication>
+#include <QPainter>
 
 CSThumbProviderWords::CSThumbProviderWords(KWDocument *doc)
-: m_doc(doc)
+    : m_doc(doc)
 {
 }
 
@@ -40,7 +40,7 @@ CSThumbProviderWords::~CSThumbProviderWords()
 
 QVector<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 {
-    KWCanvasItem *canvasItem = static_cast<KWCanvasItem*>(m_doc->documentPart()->canvasItem(m_doc));
+    KWCanvasItem *canvasItem = static_cast<KWCanvasItem *>(m_doc->documentPart()->canvasItem(m_doc));
     KoZoomHandler zoomHandler;
 
     KWPageManager *pageManager = m_doc->pageManager();
@@ -48,8 +48,7 @@ QVector<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 
     QVector<QImage> thumbnails;
 
-    foreach(const KWPage &page, pageManager->pages()) {
-
+    foreach (const KWPage &page, pageManager->pages()) {
         QRectF pRect(page.rect());
         KoPageLayout layout;
         layout.width = pRect.width();
@@ -73,5 +72,3 @@ QVector<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 
     return thumbnails;
 }
-
-

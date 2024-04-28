@@ -8,37 +8,44 @@
 
 #include "KoSliderCombo.h"
 
-#include <QTimer>
 #include <QApplication>
+#include <QDoubleSpinBox>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QLineEdit>
+#include <QMenu>
+#include <QMouseEvent>
 #include <QSize>
 #include <QSlider>
 #include <QStyle>
-#include <QStylePainter>
 #include <QStyleOptionSlider>
-#include <QLineEdit>
+#include <QStylePainter>
+#include <QTimer>
 #include <QValidator>
-#include <QHBoxLayout>
-#include <QFrame>
-#include <QMenu>
-#include <QMouseEvent>
-#include <QDoubleSpinBox>
 
 #include <KLocalizedString>
 #include <WidgetsDebug.h>
 
 class KoSliderComboContainer : public QMenu
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    KoSliderComboContainer(KoSliderCombo *parent) : QMenu(parent ), m_parent(parent) {}
+    KoSliderComboContainer(KoSliderCombo *parent)
+        : QMenu(parent)
+        , m_parent(parent)
+    {
+    }
     ~KoSliderComboContainer() override = default;
+
 protected:
     void mousePressEvent(QMouseEvent *e) override;
+
 private:
     KoSliderCombo *m_parent;
 };
 
-class Q_DECL_HIDDEN KoSliderCombo::KoSliderComboPrivate {
+class Q_DECL_HIDDEN KoSliderCombo::KoSliderComboPrivate
+{
 public:
     KoSliderCombo *thePublic;
     QValidator *m_validator;

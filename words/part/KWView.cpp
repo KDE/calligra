@@ -7,72 +7,72 @@
  */
 
 // words includes
-#define  SHOW_ANNOTATIONS 1
+#define SHOW_ANNOTATIONS 1
 #include "KWView.h"
 
-#include "KWGui.h"
-#include "KWDocument.h"
 #include "KWCanvas.h"
+#include "KWDocument.h"
 #include "KWFactory.h"
-#include "KWStatusBar.h"
+#include "KWGui.h"
 #include "KWPageManager.h"
-#include "frames/KWFrame.h"
-#include "frames/KWCopyShape.h"
-#include "frames/KWTextFrameSet.h"
+#include "KWStatusBar.h"
+#include "WordsDebug.h"
+#include "commands/KWShapeCreateCommand.h"
+#include "dialogs/KWConfigureDialog.h"
+#include "dialogs/KWCreateBookmarkDialog.h"
 #include "dialogs/KWFrameDialog.h"
 #include "dialogs/KWPageSettingsDialog.h"
 #include "dialogs/KWPrintingDialog.h"
-#include "dialogs/KWCreateBookmarkDialog.h"
 #include "dialogs/KWSelectBookmarkDialog.h"
-#include "dialogs/KWConfigureDialog.h"
-#include "commands/KWShapeCreateCommand.h"
-#include "widgets/KoFindToolbar.h"
-#include "ui_KWInsertImage.h"
+#include "frames/KWCopyShape.h"
+#include "frames/KWFrame.h"
+#include "frames/KWTextFrameSet.h"
 #include "gemini/ViewModeSwitchEvent.h"
-#include "WordsDebug.h"
+#include "ui_KWInsertImage.h"
+#include "widgets/KoFindToolbar.h"
 
 // calligra libs includes
-#include <KoShapeCreateCommand.h>
 #include <CalligraVersionWrapper.h>
-#include <KoShapeRegistry.h>
-#include <KoShapeFactoryBase.h>
-#include <KoProperties.h>
-#include <KoCopyController.h>
-#include <KoTextDocument.h>
-#include <KoTextShapeData.h>
+#include <KoAnnotation.h>
+#include <KoAnnotationLayoutManager.h>
+#include <KoAnnotationManager.h>
+#include <KoBookmark.h>
+#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 #include <KoCanvasResourceManager.h>
+#include <KoCopyController.h>
 #include <KoCutController.h>
+#include <KoDocumentInfo.h>
+#include <KoDocumentRdfBase.h>
+#include <KoFind.h>
+#include <KoGridData.h>
+#include <KoGuidesData.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoMainWindow.h>
+#include <KoPart.h>
+#include <KoPasteController.h>
+#include <KoPathShape.h> // for KoPathShapeId
+#include <KoPointedAt.h>
+#include <KoProperties.h>
+#include <KoSelection.h>
+#include <KoShape.h>
+#include <KoShapeAnchor.h>
+#include <KoShapeContainer.h>
+#include <KoShapeCreateCommand.h>
+#include <KoShapeFactoryBase.h>
+#include <KoShapeGroupCommand.h>
+#include <KoShapeManager.h>
+#include <KoShapeRegistry.h>
 #include <KoStandardAction.h>
 #include <KoTemplateCreateDia.h>
-#include <KoPasteController.h>
-#include <KoShape.h>
 #include <KoText.h>
-#include <KoFind.h>
-#include <KoShapeContainer.h>
-#include <KoShapeManager.h>
-#include <KoSelection.h>
-#include <KoPointedAt.h>
-#include <KoTextRangeManager.h>
-#include <KoAnnotationManager.h>
-#include <KoAnnotation.h>
+#include <KoTextDocument.h>
 #include <KoTextEditor.h>
+#include <KoTextRangeManager.h>
+#include <KoTextShapeData.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
-#include <KoGuidesData.h>
-#include <KoGridData.h>
-#include <KoShapeAnchor.h>
-#include <KoShapeGroupCommand.h>
 #include <KoZoomController.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoBookmark.h>
-#include <KoPathShape.h> // for KoPathShapeId
-#include <KoCanvasController.h>
-#include <KoDocumentRdfBase.h>
-#include <KoDocumentInfo.h>
-#include <KoAnnotationLayoutManager.h>
-#include <KoMainWindow.h>
-#include <KoCanvasControllerWidget.h>
-#include <KoPart.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
@@ -81,35 +81,35 @@
 
 #include <KoComponentData.h>
 #include <KoFindText.h>
-#include <KoTextLayoutRootArea.h>
 #include <KoIcon.h>
+#include <KoTextLayoutRootArea.h>
 
 // KF5
-#include <KLocalizedString>
-#include <ktoggleaction.h>
 #include <KActionCollection>
 #include <KActionMenu>
-#include <kxmlguifactory.h>
+#include <KLocalizedString>
 #include <KToolBar>
+#include <ktoggleaction.h>
+#include <kxmlguifactory.h>
 
 // Qt
-#include <QTimer>
-#include <QScrollBar>
-#include <QStatusBar>
-#include <QPushButton>
 #include <QClipboard>
 #include <QMenuBar>
+#include <QPushButton>
+#include <QScrollBar>
+#include <QStatusBar>
+#include <QTimer>
 
 #include <limits>
 
 KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
-        : KoView(part, document, parent)
-        , m_canvas(0)
-        , m_textMinX(1)
-        , m_textMaxX(600)
-        , m_minPageNum(1)
-        , m_maxPageNum(1)
-        , m_isFullscreenMode(false)
+    : KoView(part, document, parent)
+    , m_canvas(0)
+    , m_textMinX(1)
+    , m_textMaxX(600)
+    , m_minPageNum(1)
+    , m_maxPageNum(1)
+    , m_isFullscreenMode(false)
 {
     setAcceptDrops(true);
 
@@ -132,9 +132,9 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_document->annotationLayoutManager()->setCanvasBase(m_canvas);
     m_document->annotationLayoutManager()->setViewContentWidth(m_canvas->viewMode()->contentsSize().width());
     connect(m_document->annotationLayoutManager(), &KoAnnotationLayoutManager::hasAnnotationsChanged, this, &KWView::hasNotes);
-    //We need to create associate widget before connect them in actions
-    //Perhaps there is a better place for the WordCount widget creates here
-    //If you know where to move it in a better place, just do it
+    // We need to create associate widget before connect them in actions
+    // Perhaps there is a better place for the WordCount widget creates here
+    // If you know where to move it in a better place, just do it
     buildAssociatedWidget();
 
     setupActions();
@@ -149,7 +149,6 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     // The text documents to search in will potentially change when we add/remove shapes and after load
     connect(m_document, &KWDocument::shapeAdded, this, &KWView::refreshFindTexts);
     connect(m_document, &KWDocument::shapeRemoved, this, &KWView::refreshFindTexts);
-
 
     refreshFindTexts();
 
@@ -171,12 +170,14 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     if (m_canvas->viewMode()->hasPages())
         modes |= KoZoomMode::ZOOM_PAGE;
     m_zoomController->zoomAction()->setZoomModes(modes);
-    connect(m_canvas, &KWCanvas::documentSize, m_zoomController, [this](const QSizeF &sz) { m_zoomController->setDocumentSize(sz); });
+    connect(m_canvas, &KWCanvas::documentSize, m_zoomController, [this](const QSizeF &sz) {
+        m_zoomController->setDocumentSize(sz);
+    });
     m_canvas->updateSize(); // to emit the doc size at least once
     m_zoomController->setZoom(m_document->config().zoomMode(), m_document->config().zoom() / 100.);
     connect(m_zoomController, &KoZoomController::zoomChanged, this, &KWView::zoomChanged);
 
-    //Timer start in Fullscreen mode view.
+    // Timer start in Fullscreen mode view.
     m_hideCursorTimer = new QTimer(this);
     connect(m_hideCursorTimer, &QTimer::timeout, this, &KWView::hideCursor);
 
@@ -186,9 +187,11 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     connect(m_dfmExitButton, &QAbstractButton::clicked, this, &KWView::exitFullscreenMode);
 
 #ifdef SHOULD_BUILD_RDF
-    if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
-        connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem,QString)),
-                this, SLOT(semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem,QString)));
+    if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf *>(m_document->documentRdf())) {
+        connect(rdf,
+                SIGNAL(semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem, QString)),
+                this,
+                SLOT(semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem, QString)));
     }
 #endif
 }
@@ -222,64 +225,78 @@ void KWView::updateReadWrite(bool readWrite)
     m_actionViewFooter->setEnabled(readWrite);
     m_actionViewSnapToGrid->setEnabled(readWrite);
     QAction *action = actionCollection()->action("insert_framebreak");
-    if (action) action->setEnabled(readWrite);
+    if (action)
+        action->setEnabled(readWrite);
     action = actionCollection()->action("insert_variable");
-    if (action) action->setEnabled(readWrite);
+    if (action)
+        action->setEnabled(readWrite);
     action = actionCollection()->action("format_page");
-    if (action) action->setEnabled(readWrite);
+    if (action)
+        action->setEnabled(readWrite);
     action = actionCollection()->action("anchor");
-    if (action) action->setEnabled(readWrite);
+    if (action)
+        action->setEnabled(readWrite);
     action = actionCollection()->action("edit_cut");
-    if (action) action->setEnabled(readWrite);
+    if (action)
+        action->setEnabled(readWrite);
     action = actionCollection()->action("edit_copy");
-    if (action) action->setEnabled(readWrite);
+    if (action)
+        action->setEnabled(readWrite);
     action = actionCollection()->action("edit_paste");
-    if (action) action->setEnabled(readWrite);
+    if (action)
+        action->setEnabled(readWrite);
     action = actionCollection()->action("edit_paste_text");
-    if (action) action->setEnabled(readWrite);
+    if (action)
+        action->setEnabled(readWrite);
     action = actionCollection()->action("delete_page");
-    if (action) action->setEnabled(readWrite);
+    if (action)
+        action->setEnabled(readWrite);
     action = actionCollection()->action("edit_delete");
-    if (action) action->setEnabled(readWrite);
+    if (action)
+        action->setEnabled(readWrite);
     action = actionCollection()->action("create_linked_frame");
-    if (action) action->setEnabled(readWrite);
+    if (action)
+        action->setEnabled(readWrite);
     action = actionCollection()->action("create_custom_outline");
-    if (action) action->setEnabled(readWrite);
+    if (action)
+        action->setEnabled(readWrite);
 }
 
-void KWView::buildAssociatedWidget() {
-    wordCount = new KWStatisticsWidget(this,true);
+void KWView::buildAssociatedWidget()
+{
+    wordCount = new KWStatisticsWidget(this, true);
     wordCount->setLayoutDirection(KWStatisticsWidget::LayoutHorizontal);
-    wordCount->setCanvas(dynamic_cast<KWCanvas*>(this->canvas()));
+    wordCount->setCanvas(dynamic_cast<KWCanvas *>(this->canvas()));
     if (statusBar())
-        statusBar()->insertWidget(0,wordCount);
+        statusBar()->insertWidget(0, wordCount);
 }
 
 void KWView::setupActions()
 {
-    m_actionFormatFrameSet  = new QAction(i18n("Shape Properties..."), this);
+    m_actionFormatFrameSet = new QAction(i18n("Shape Properties..."), this);
     actionCollection()->addAction("format_frameset", m_actionFormatFrameSet);
     m_actionFormatFrameSet->setToolTip(i18n("Change how the shape behave"));
     m_actionFormatFrameSet->setEnabled(false);
     connect(m_actionFormatFrameSet, &QAction::triggered, this, &KWView::editFrameProperties);
 
-    QAction *action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
+    QAction *action = actionCollection()->addAction(KStandardAction::Prior, "page_previous", this, SLOT(goToPreviousPage()));
 
-    action = actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
+    action = actionCollection()->addAction(KStandardAction::Next, "page_next", this, SLOT(goToNextPage()));
 
     // -------------- File menu
     m_actionCreateTemplate = new QAction(i18n("Create Template From Document..."), this);
     m_actionCreateTemplate->setToolTip(i18n("Save this document and use it later as a template"));
-    m_actionCreateTemplate->setWhatsThis(i18n("You can save this document as a template.<br><br>You can use this new template as a starting point for another document."));
+    m_actionCreateTemplate->setWhatsThis(
+        i18n("You can save this document as a template.<br><br>You can use this new template as a starting point for another document."));
     actionCollection()->addAction("extra_template", m_actionCreateTemplate);
     connect(m_actionCreateTemplate, &QAction::triggered, this, &KWView::createTemplate);
 
     // -------------- Edit actions
-    action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
+    action = actionCollection()->addAction(KStandardAction::Cut, "edit_cut", 0, 0);
     new KoCutController(canvasBase(), action);
-    action = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
+    action = actionCollection()->addAction(KStandardAction::Copy, "edit_copy", 0, 0);
     new KoCopyController(canvasBase(), action);
-    action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
+    action = actionCollection()->addAction(KStandardAction::Paste, "edit_paste", 0, 0);
     new KoPasteController(canvasBase(), action);
 
     action = new QAction(koIcon("edit-delete"), i18n("Delete"), this);
@@ -296,7 +313,9 @@ void KWView::setupActions()
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowFormattingCharacters, QVariant(false));
     action->setChecked(m_document->config().showFormattingChars()); // will change resource if true
     action->setToolTip(i18n("Toggle the display of non-printing characters"));
-    action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
+    action->setWhatsThis(
+        i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other "
+             "non-printing characters."));
 
     action = new QAction(i18n("Show Field Shadings"), this);
     action->setCheckable(true);
@@ -314,7 +333,9 @@ void KWView::setupActions()
     connect(action, &QAction::toggled, this, &KWView::toggleViewFrameBorders);
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, QVariant(false));
     action->setChecked(m_document->config().viewFrameBorders()); // will change resource if true
-    action->setWhatsThis(i18n("Turns the border display on and off.<br/><br/>The borders are never printed. This option is useful to see how the document will appear on the printed page."));
+    action->setWhatsThis(
+        i18n("Turns the border display on and off.<br/><br/>The borders are never printed. This option is useful to see how the document will appear on the "
+             "printed page."));
 
     action = new QAction(i18n("Show Table Borders"), this);
     action->setCheckable(true);
@@ -323,7 +344,8 @@ void KWView::setupActions()
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTableBorders, QVariant(false));
     action->setChecked(m_document->config().showTableBorders()); // will change resource if true
     action->setToolTip(i18n("Toggle the display of table borders"));
-    action->setWhatsThis(i18n("Toggle the display of table borders.<br/><br/>When this is enabled, Words shows you any invisible table borders with a thin gray line."));
+    action->setWhatsThis(
+        i18n("Toggle the display of table borders.<br/><br/>When this is enabled, Words shows you any invisible table borders with a thin gray line."));
 
     action = new QAction(i18n("Show Section Bounds"), this);
     action->setCheckable(true);
@@ -332,15 +354,17 @@ void KWView::setupActions()
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowSectionBounds, QVariant(false));
     action->setChecked(m_document->config().showSectionBounds()); // will change resource if true
     action->setToolTip(i18n("Toggle the display of section bounds"));
-    action->setWhatsThis(i18n("Toggle the display of section bounds.<br/><br/>When this is enabled, any section bounds will be indicated with a thin gray horizontal brackets."));
+    action->setWhatsThis(i18n(
+        "Toggle the display of section bounds.<br/><br/>When this is enabled, any section bounds will be indicated with a thin gray horizontal brackets."));
 
     action = new QAction(i18n("Show Rulers"), this);
     action->setCheckable(true);
     action->setToolTip(i18n("Shows or hides rulers"));
-    action->setWhatsThis(i18n("The rulers are the white measuring spaces top and left of the "
-                              "document. The rulers show the position and width of pages and of frames and can "
-                              "be used to position tabulators among others.<p>Uncheck this to disable "
-                              "the rulers from being displayed.</p>"));
+    action->setWhatsThis(
+        i18n("The rulers are the white measuring spaces top and left of the "
+             "document. The rulers show the position and width of pages and of frames and can "
+             "be used to position tabulators among others.<p>Uncheck this to disable "
+             "the rulers from being displayed.</p>"));
     action->setChecked(m_document->config().viewRulers());
     actionCollection()->addAction("show_ruler", action);
     connect(action, &QAction::toggled, this, &KWView::showRulers);
@@ -377,12 +401,12 @@ void KWView::setupActions()
     action->setWhatsThis(i18n("Stylesheets are used to format the display of information which is stored in RDF."));
     connect(action, SIGNAL(triggered()), this, SLOT(editSemanticStylesheets()));
 
-    if (KoDocumentRdf* rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
-        QAction* createRef = rdf->createInsertSemanticObjectReferenceAction(canvasBase());
+    if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf *>(m_document->documentRdf())) {
+        QAction *createRef = rdf->createInsertSemanticObjectReferenceAction(canvasBase());
         actionCollection()->addAction("insert_semanticobject_ref", createRef);
         KActionMenu *subMenu = new KActionMenu(i18n("Create"), this);
         actionCollection()->addAction("insert_semanticobject_new", subMenu);
-        foreach(QAction *action, rdf->createInsertSemanticObjectNewActions(canvasBase())) {
+        foreach (QAction *action, rdf->createInsertSemanticObjectNewActions(canvasBase())) {
             subMenu->addAction(action);
         }
     }
@@ -401,7 +425,8 @@ void KWView::setupActions()
     action = new QAction(i18n("Page Layout..."), this);
     actionCollection()->addAction("format_page", action);
     action->setToolTip(i18n("Change properties of entire page"));
-    action->setWhatsThis(i18n("Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings.</p>"));
+    action->setWhatsThis(i18n(
+        "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings.</p>"));
     connect(action, &QAction::triggered, this, &KWView::formatPage);
 
     m_actionViewHeader = new QAction(i18n("Create Header"), this);
@@ -462,7 +487,7 @@ QList<KoShape *> KWView::selectedShapes() const
     return canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
 }
 
-KoShape* KWView::selectedShape() const
+KoShape *KWView::selectedShape() const
 {
     KoSelection *selection = canvasBase()->shapeManager()->selection();
 
@@ -499,7 +524,7 @@ void KWView::hasNotes(bool has)
     m_canvas->setShowAnnotations(has);
     m_canvas->updateSize();
 
-    KToggleAction *action = (KToggleAction*) actionCollection()->action("view_notes");
+    KToggleAction *action = (KToggleAction *)actionCollection()->action("view_notes");
     action->setEnabled(has);
     action->setChecked(has);
 }
@@ -531,8 +556,7 @@ KoPrintJob *KWView::createPrintJob()
 
 void KWView::createTemplate()
 {
-    KoTemplateCreateDia::createTemplate(koDocument()->documentPart()->templatesResourcePath(), ".ott",
-                                        m_document, this);
+    KoTemplateCreateDia::createTemplate(koDocument()->documentPart()->templatesResourcePath(), ".ott", m_document, this);
 }
 
 void KWView::enableHeader()
@@ -560,7 +584,6 @@ void KWView::toggleSnapToGrid()
     m_snapToGrid = !m_snapToGrid;
     m_document->gridData().setSnapToGrid(m_snapToGrid); // for persistency
 }
-
 
 void KWView::toggleViewFrameBorders(bool on)
 {
@@ -594,12 +617,12 @@ void KWView::setShowSectionBounds(bool on)
 {
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowSectionBounds, QVariant(on));
     m_canvas->update();
-//     m_document->config().setShowSectionBounds(on);
+    //     m_document->config().setShowSectionBounds(on);
 }
 
 void KWView::formatPage()
 {
-    if (! m_currentPage.isValid())
+    if (!m_currentPage.isValid())
         return;
     KWPageSettingsDialog *dia = new KWPageSettingsDialog(this, m_document, m_currentPage);
     if (!m_lastPageSettingsTab.isEmpty()) {
@@ -613,14 +636,14 @@ void KWView::formatPage()
 
 void KWView::pageSettingsDialogFinished()
 {
-    KWPageSettingsDialog *dia = qobject_cast<KWPageSettingsDialog*>(QObject::sender());
+    KWPageSettingsDialog *dia = qobject_cast<KWPageSettingsDialog *>(QObject::sender());
     m_lastPageSettingsTab = dia && dia->currentPage() ? dia->currentPage()->name() : QString();
 }
 
 void KWView::editSemanticStylesheets()
 {
 #ifdef SHOULD_BUILD_RDF
-    if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
+    if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf *>(m_document->documentRdf())) {
         KoSemanticStylesheetsEditor *dia = new KoSemanticStylesheetsEditor(this, rdf);
         dia->show();
         // TODO this leaks memory
@@ -636,7 +659,8 @@ void KWView::showRulers(bool visible)
 
 void KWView::showStatusBar(bool toggled)
 {
-    if (statusBar()) statusBar()->setVisible(toggled);
+    if (statusBar())
+        statusBar()->setVisible(toggled);
 }
 
 void KWView::setFullscreenMode(bool status)
@@ -647,27 +671,26 @@ void KWView::setFullscreenMode(bool status)
     mainWindow()->menuBar()->setVisible(!status);
 
     mainWindow()->viewFullscreen(status);
-    foreach(KToolBar* toolbar, mainWindow()->toolBars()) {
+    foreach (KToolBar *toolbar, mainWindow()->toolBars()) {
         if (toolbar->isVisible() == status) {
             toolbar->setVisible(!status);
         }
     }
 
     if (status) {
-         QTimer::singleShot(2000, this, &KWView::hideUI);
+        QTimer::singleShot(2000, this, &KWView::hideUI);
     } else {
-         mainWindow()->statusBar()->setVisible(true);
-         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        mainWindow()->statusBar()->setVisible(true);
+        static_cast<KoCanvasControllerWidget *>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        static_cast<KoCanvasControllerWidget *>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     }
     // Exit Fullscreen mode button.
     m_dfmExitButton->setVisible(status);
 
-    //Hide cursor.
+    // Hide cursor.
     if (status) {
         m_hideCursorTimer->start(4000);
-    }
-    else {
+    } else {
         // FIXME: Return back cursor to canvas if cursor is blank cursor.
         m_hideCursorTimer->stop();
     }
@@ -677,7 +700,7 @@ void KWView::setFullscreenMode(bool status)
     // it also makes sense to just make sure the text tool is active anyway when
     // switching to/from fullscreen (since that's explicitly for typing things
     // out, not layouting)
-    const QList<KoShape*> selection = m_canvas->shapeManager()->selection()->selectedShapes();
+    const QList<KoShape *> selection = m_canvas->shapeManager()->selection()->selectedShapes();
     m_canvas->shapeManager()->selection()->deselectAll();
     if (selection.count() > 0)
         m_canvas->shapeManager()->selection()->select(selection.at(0));
@@ -689,12 +712,13 @@ void KWView::hideUI()
     if (m_isFullscreenMode) {
         mainWindow()->statusBar()->setVisible(false);
         // Hide vertical  and horizontal scroll bar.
-        static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        static_cast<KoCanvasControllerWidget *>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        static_cast<KoCanvasControllerWidget *>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
 }
 
-void KWView::hideCursor(){
+void KWView::hideCursor()
+{
     m_canvas->setCursor(Qt::BlankCursor);
     m_gui->setCursor(Qt::BlankCursor);
 }
@@ -719,20 +743,18 @@ void KWView::viewMouseMoveEvent(QMouseEvent *e)
     // Handle status bar and horizontal scroll bar.
     if (e->y() >= (m_gui->size().height() - statusBar()->size().height())) {
         mainWindow()->statusBar()->setVisible(true);
-        static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    }
-    else {
-       mainWindow()->statusBar()->setVisible(false);
-       static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        static_cast<KoCanvasControllerWidget *>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    } else {
+        mainWindow()->statusBar()->setVisible(false);
+        static_cast<KoCanvasControllerWidget *>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
 
     // Handle vertical scroll bar.
-    QScrollBar *vsb = static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->verticalScrollBar();
+    QScrollBar *vsb = static_cast<KoCanvasControllerWidget *>(m_gui->canvasController())->verticalScrollBar();
     if (e->x() >= (m_gui->size().width() - vsb->size().width() - 10)) {
-         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    }
-    else {
-         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        static_cast<KoCanvasControllerWidget *>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    } else {
+        static_cast<KoCanvasControllerWidget *>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
 }
 
@@ -747,7 +769,6 @@ void KWView::setGuideVisibility(bool on)
     m_canvas->update();
 }
 
-
 void KWView::configure()
 {
     QPointer<KWConfigureDialog> dialog(new KWConfigureDialog(this));
@@ -758,13 +779,13 @@ void KWView::configure()
 
 // end of actions
 
-void KWView::popupContextMenu(const QPoint &globalPosition, const QList<QAction*> &actions)
+void KWView::popupContextMenu(const QPoint &globalPosition, const QList<QAction *> &actions)
 {
     unplugActionList("frameset_type_action");
     plugActionList("frameset_type_action", actions);
     if (factory() == 0) // we are a kpart, the factory is only set on the active component.
         return;
-    QMenu *menu = dynamic_cast<QMenu*>(factory()->container("frame_popup", this));
+    QMenu *menu = dynamic_cast<QMenu *>(factory()->container("frame_popup", this));
     if (menu)
         menu->exec(globalPosition);
 }
@@ -778,7 +799,7 @@ void KWView::zoomChanged(KoZoomMode::Mode mode, qreal zoom)
 
 void KWView::selectionChanged()
 {
-    KoShape *shape = canvasBase()->shapeManager()->selection()-> firstSelectedShape();
+    KoShape *shape = canvasBase()->shapeManager()->selection()->firstSelectedShape();
 
     if (shape) {
         // Disallow shape properties action for auto-generated frames.
@@ -822,11 +843,11 @@ void KWView::goToPreviousPage(Qt::KeyboardModifiers modifiers)
     pos += m_canvas->viewMode()->viewToDocument(m_canvas->documentOffset(), viewConverter());
 
     // Find textshape under that position and from current frameset
-    QList<KoShape*> possibleTextShapes = m_canvas->shapeManager()->shapesAt(QRectF(pos.x() - 20, pos.y() -20, 40, 40));
+    QList<KoShape *> possibleTextShapes = m_canvas->shapeManager()->shapesAt(QRectF(pos.x() - 20, pos.y() - 20, 40, 40));
     KoTextShapeData *textShapeData = 0;
-    foreach (KoShape* shape, possibleTextShapes) {
+    foreach (KoShape *shape, possibleTextShapes) {
         KoShapeUserData *userData = shape->userData();
-        if ((textShapeData = dynamic_cast<KoTextShapeData*>(userData))) {
+        if ((textShapeData = dynamic_cast<KoTextShapeData *>(userData))) {
             foreach (KoShape *s, currentFrameSet->shapes()) {
                 if (s == shape) {
                     pos = shape->absoluteTransformation(0).inverted().map(pos);
@@ -835,7 +856,9 @@ void KWView::goToPreviousPage(Qt::KeyboardModifiers modifiers)
                     KoTextLayoutArea *area = textShapeData->rootArea();
                     if (area) {
                         int cursorPos = area->hitTest(pos, Qt::FuzzyHit).position;
-                        KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+                        KoTextDocument(textShapeData->document())
+                            .textEditor()
+                            ->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
                     }
                     return;
                 }
@@ -862,11 +885,11 @@ void KWView::goToNextPage(Qt::KeyboardModifiers modifiers)
     pos += m_canvas->viewMode()->viewToDocument(m_canvas->documentOffset() + QPointF(0, m_canvas->canvasController()->visibleHeight()), viewConverter());
 
     // Find textshape under that position and from current frameset
-    QList<KoShape*> possibleTextShapes = m_canvas->shapeManager()->shapesAt(QRectF(pos.x() - 20, pos.y() -20, 40, 40));
+    QList<KoShape *> possibleTextShapes = m_canvas->shapeManager()->shapesAt(QRectF(pos.x() - 20, pos.y() - 20, 40, 40));
     KoTextShapeData *textShapeData = 0;
-    foreach (KoShape* shape, possibleTextShapes) {
+    foreach (KoShape *shape, possibleTextShapes) {
         KoShapeUserData *userData = shape->userData();
-        if ((textShapeData = dynamic_cast<KoTextShapeData*>(userData))) {
+        if ((textShapeData = dynamic_cast<KoTextShapeData *>(userData))) {
             foreach (KoShape *s, currentFrameSet->shapes()) {
                 if (s == shape) {
                     pos = shape->absoluteTransformation(0).inverted().map(pos);
@@ -875,7 +898,9 @@ void KWView::goToNextPage(Qt::KeyboardModifiers modifiers)
                     KoTextLayoutArea *area = textShapeData->rootArea();
                     if (area) {
                         int cursorPos = area->hitTest(pos, Qt::FuzzyHit).position;
-                        KoTextDocument(textShapeData->document()).textEditor()->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+                        KoTextDocument(textShapeData->document())
+                            .textEditor()
+                            ->setPosition(cursorPos, (modifiers & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
                     }
                     return;
                 }
@@ -888,8 +913,7 @@ void KWView::goToPage(const KWPage &page)
 {
     KoCanvasController *controller = m_gui->canvasController();
     QPoint origPos = controller->scrollBarValue();
-    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0,
-                            page.offsetInDocument()), m_canvas->viewConverter());
+    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0, page.offsetInDocument()), m_canvas->viewConverter());
     origPos.setY((int)pos.y());
     controller->setScrollBarValue(origPos);
 }
@@ -900,85 +924,85 @@ void KWView::showEvent(QShowEvent *e)
     QTimer::singleShot(0, this, &KWView::updateStatusBarAction);
 }
 
-bool KWView::event(QEvent* event)
+bool KWView::event(QEvent *event)
 {
-    switch(static_cast<int>(event->type())) {
-        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
-            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
-            if (m_canvas) {
-                syncObject->scrollBarValue = m_canvas->canvasController()->scrollBarValue();
-                syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
-                syncObject->activeToolId = KoToolManager::instance()->activeToolId();
-                syncObject->shapes = m_canvas->shapeManager()->shapes();
-                syncObject->initialized = true;
-            }
-
-            return true;
+    switch (static_cast<int>(event->type())) {
+    case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+        ViewModeSynchronisationObject *syncObject = static_cast<ViewModeSwitchEvent *>(event)->synchronisationObject();
+        if (m_canvas) {
+            syncObject->scrollBarValue = m_canvas->canvasController()->scrollBarValue();
+            syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
+            syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+            syncObject->shapes = m_canvas->shapeManager()->shapes();
+            syncObject->initialized = true;
         }
-        case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
-            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
-            if (m_canvas && syncObject->initialized) {
-                m_canvas->canvasWidget()->setFocus();
-                qApp->processEvents();
 
-                m_canvas->shapeManager()->setShapes(syncObject->shapes);
+        return true;
+    }
+    case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
+        ViewModeSynchronisationObject *syncObject = static_cast<ViewModeSwitchEvent *>(event)->synchronisationObject();
+        if (m_canvas && syncObject->initialized) {
+            m_canvas->canvasWidget()->setFocus();
+            qApp->processEvents();
 
-                zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
+            m_canvas->shapeManager()->setShapes(syncObject->shapes);
 
-                qApp->processEvents();
-                m_canvas->canvasController()->setScrollBarValue(syncObject->scrollBarValue);
+            zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
 
-                qApp->processEvents();
-                foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(currentPage().rect())) {
-                    if (qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
-                        m_canvas->shapeManager()->selection()->select(shape);
-                        break;
-                    }
+            qApp->processEvents();
+            m_canvas->canvasController()->setScrollBarValue(syncObject->scrollBarValue);
+
+            qApp->processEvents();
+            foreach (KoShape *shape, m_canvas->shapeManager()->shapesAt(currentPage().rect())) {
+                if (qobject_cast<KoTextShapeDataBase *>(shape->userData())) {
+                    m_canvas->shapeManager()->selection()->select(shape);
+                    break;
                 }
-                KoToolManager::instance()->switchToolRequested("TextToolFactory_ID");
             }
-
-            return true;
+            KoToolManager::instance()->switchToolRequested("TextToolFactory_ID");
         }
+
+        return true;
+    }
     }
     return QWidget::event(event);
 }
 
 void KWView::updateStatusBarAction()
 {
-    KToggleAction *action = (KToggleAction*) actionCollection()->action("showStatusBar");
+    KToggleAction *action = (KToggleAction *)actionCollection()->action("showStatusBar");
     if (action && statusBar())
-        action->setChecked(! statusBar()->isHidden());
+        action->setChecked(!statusBar()->isHidden());
 }
 
 void KWView::offsetInDocumentMoved(int yOffset)
 {
     const qreal offset = -m_zoomHandler.viewToDocumentY(yOffset);
     const qreal height = m_zoomHandler.viewToDocumentY(m_gui->viewportSize().height());
-/*    if (m_currentPage.isValid()) { // most of the time the current will not change.
-        const qreal pageTop = m_currentPage.offsetInDocument();
-        const qreal pageBottom = pageTop + m_currentPage.height();
-        const qreal visibleArea = qMin(offset + height, pageBottom) - qMax(pageTop, offset);
-        if (visibleArea / height >= 0.45) // current page is just fine if > 45% is shown
-            return;
+    /*    if (m_currentPage.isValid()) { // most of the time the current will not change.
+            const qreal pageTop = m_currentPage.offsetInDocument();
+            const qreal pageBottom = pageTop + m_currentPage.height();
+            const qreal visibleArea = qMin(offset + height, pageBottom) - qMax(pageTop, offset);
+            if (visibleArea / height >= 0.45) // current page is just fine if > 45% is shown
+                return;
 
-        // using 'next'/'prev' is much cheaper than using a documentOffset, so try that first.
-        if (pageTop > offset && pageTop < offset + height) { // check if the page above is a candidate.
-            KWPage page = m_currentPage.previous();
-            if (page.isValid() && pageTop - offset > visibleArea) {
-                firstDrawnPage = page;
-                return;
+            // using 'next'/'prev' is much cheaper than using a documentOffset, so try that first.
+            if (pageTop > offset && pageTop < offset + height) { // check if the page above is a candidate.
+                KWPage page = m_currentPage.previous();
+                if (page.isValid() && pageTop - offset > visibleArea) {
+                    firstDrawnPage = page;
+                    return;
+                }
+            }
+            if (pageBottom > offset && pageBottom < offset + height) { // check if the page above is a candidate.
+                KWPage page = m_currentPage.next();
+                if (page.isValid() && m_currentPage.height() - height > visibleArea) {
+                    firstDrawnPage = page;
+                    return;
+                }
             }
         }
-        if (pageBottom > offset && pageBottom < offset + height) { // check if the page above is a candidate.
-            KWPage page = m_currentPage.next();
-            if (page.isValid() && m_currentPage.height() - height > visibleArea) {
-                firstDrawnPage = page;
-                return;
-            }
-        }
-    }
-*/
+    */
     KWPage page = m_document->pageManager()->page(qreal(offset));
     qreal pageTop = page.offsetInDocument();
     QSizeF maxPageSize;
@@ -989,8 +1013,7 @@ void KWView::offsetInDocumentMoved(int yOffset)
     while (page.isValid() && pageTop < qreal(offset + height)) {
         pageTop += page.height();
         QSizeF pageSize = page.rect().size();
-        maxPageSize = QSize(qMax(maxPageSize.width(), pageSize.width()),
-                                     qMax(maxPageSize.height(), pageSize.height()));
+        maxPageSize = QSize(qMax(maxPageSize.width(), pageSize.width()), qMax(maxPageSize.height(), pageSize.height()));
         minTextX = qMin(minTextX, page.contentRect().left());
         maxTextX = qMax(maxTextX, page.contentRect().right());
         maxPageNum = page.pageNumber();
@@ -1035,7 +1058,7 @@ void KWView::semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem basicitem, co
 
 void KWView::findMatchFound(const KoFindMatch &match)
 {
-    if(!match.isValid() || !match.location().canConvert<QTextCursor>() || !match.container().canConvert<QTextDocument*>()) {
+    if (!match.isValid() || !match.location().canConvert<QTextCursor>() || !match.container().canConvert<QTextDocument *>()) {
         return;
     }
 
@@ -1047,11 +1070,11 @@ void KWView::findMatchFound(const KoFindMatch &match)
 
 void KWView::refreshFindTexts()
 {
-    QList<QTextDocument*> texts;
+    QList<QTextDocument *> texts;
     foreach (KWFrameSet *fSet, m_document->frameSets()) {
         KWTextFrameSet *tFSet = dynamic_cast<KWTextFrameSet *>(fSet);
         if (tFSet) {
-           texts.append(tFSet->document());
+            texts.append(tFSet->document());
         }
     }
     m_find->setDocuments(texts);
@@ -1076,7 +1099,7 @@ void KWView::addImages(const QVector<QImage> &imageList, const QPoint &insertAt)
         return;
     }
 
-    foreach(const QImage &image, imageList) {
+    foreach (const QImage &image, imageList) {
         KoProperties params;
         params.setProperty("qimage", image);
 
@@ -1089,7 +1112,7 @@ void KWView::addImages(const QVector<QImage> &imageList, const QPoint &insertAt)
 
         if (shape->size().width() > (pageWidth * 0.8) || shape->size().height() > pageHeight) {
             QSizeF sz = shape->size();
-            sz.scale(QSizeF(pageWidth * 0.6, pageHeight *.6), Qt::KeepAspectRatio);
+            sz.scale(QSizeF(pageWidth * 0.6, pageHeight * .6), Qt::KeepAspectRatio);
             shape->setSize(sz);
         }
 
@@ -1109,8 +1132,8 @@ void KWView::addImages(const QVector<QImage> &imageList, const QPoint &insertAt)
         shape->setAnchor(anchor);
         shape->setPosition(pos);
 
-        pos += QPointF(25,25); // increase the position for each shape we insert so the
-                               // user can see them all.
+        pos += QPointF(25, 25); // increase the position for each shape we insert so the
+                                // user can see them all.
 
         // create the undo step.
         KWShapeCreateCommand *cmd = new KWShapeCreateCommand(kwdocument(), shape);

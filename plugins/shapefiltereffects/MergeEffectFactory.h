@@ -15,8 +15,8 @@ class MergeEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     MergeEffectFactory();
-    KoFilterEffect * createFilterEffect() const override;
-    KoFilterEffectConfigWidgetBase * createConfigWidget() const override;
+    KoFilterEffect *createFilterEffect() const override;
+    KoFilterEffectConfigWidgetBase *createConfigWidget() const override;
 };
 
 #endif // MERGEEFFECTFACTORY_H

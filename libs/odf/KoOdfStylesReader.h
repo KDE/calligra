@@ -14,9 +14,9 @@
 
 #include <KoXmlReader.h>
 
-#include "koodf_export.h"
-#include "KoOdfNumberStyles.h"
 #include "KoOdfNotesConfiguration.h"
+#include "KoOdfNumberStyles.h"
+#include "koodf_export.h"
 
 class KoOdfLineNumberingConfiguration;
 class KoOdfBibliographyConfiguration;
@@ -46,7 +46,7 @@ public:
      * @param name the style name
      * @return the dom element representing the style, or an empty QString if it wasn't found.
      */
-    const KoXmlElement* findStyle(const QString &name) const;
+    const KoXmlElement *findStyle(const QString &name) const;
 
     /**
      * Looks up a style:style by name.
@@ -55,7 +55,7 @@ public:
      * @param family the style family (for a style:style, use 0 otherwise)
      * @return the dom element representing the style, or an empty QString if it wasn't found.
      */
-    const KoXmlElement* findStyle(const QString &name, const QString &family) const;
+    const KoXmlElement *findStyle(const QString &name, const QString &family) const;
 
     /**
      * Looks up a style:style by name.
@@ -68,7 +68,7 @@ public:
      *
      * @return the dom element representing the style, or an empty QString if it wasn't found.
      */
-    const KoXmlElement* findStyle(const QString &name, const QString &family, bool stylesDotXml) const;
+    const KoXmlElement *findStyle(const QString &name, const QString &family, bool stylesDotXml) const;
 
     /// Similar to findStyle but for custom styles only.
     const KoXmlElement *findStyleCustomStyle(const QString &name, const QString &family) const;
@@ -98,35 +98,35 @@ public:
     KoXmlElement layerSet() const;
 
     /// @return master pages ("style:master-page" elements), hashed by name
-    QHash<QString, KoXmlElement*> masterPages() const;
+    QHash<QString, KoXmlElement *> masterPages() const;
 
     /// @return all presentation page layouts ("presentation-page-layout" elements), hashed by name
-    QHash<QString, KoXmlElement*> presentationPageLayouts() const;
+    QHash<QString, KoXmlElement *> presentationPageLayouts() const;
 
     /// @return all table templates("table-template" elements), template names may be duplicated
     QList<KoXmlElement *> tableTemplates() const;
 
     /**
-     * Get the draw styles for a specified type. 
+     * Get the draw styles for a specified type.
      *
      * @param drawType The type of the wanted drawStyles
      *                 Available types: gradient(returns gradient, linearGradient, radialGradient and conicalGradient styles),
      *                 hatch, fill-image, marker, stroke-dash, opacity
      * @return draw styles of the specified type, hashed by name
      */
-    QHash<QString, KoXmlElement*> drawStyles(const QString &drawType) const;
+    QHash<QString, KoXmlElement *> drawStyles(const QString &drawType) const;
 
     /// @return all custom styles ("style:style" elements) for a given family, hashed by name
-    QHash<QString, KoXmlElement*> customStyles(const QString& family) const;
+    QHash<QString, KoXmlElement *> customStyles(const QString &family) const;
 
     /**
      * Returns all auto-styles defined in styles.xml, if \p stylesDotXml is \c true ,
      * or all in content.xml, if \p stylesDotXml is \c false .
      * \return all auto-styles ("style:style" elements) for a given family, hashed by name
      */
-    QHash<QString, KoXmlElement*> autoStyles(const QString& family, bool stylesDotXml = false) const;
+    QHash<QString, KoXmlElement *> autoStyles(const QString &family, bool stylesDotXml = false) const;
 
-    typedef QHash<QString, QPair<KoOdfNumberStyles::NumericStyleFormat, KoXmlElement*> > DataFormatsMap;
+    typedef QHash<QString, QPair<KoOdfNumberStyles::NumericStyleFormat, KoXmlElement *>> DataFormatsMap;
     /// Value (date/time/number...) formats found while parsing styles. Used e.g. for fields.
     /// Key: format name. Value:
     DataFormatsMap dataFormats() const;
@@ -151,9 +151,9 @@ public:
 
 private:
     enum TypeAndLocation {
-        CustomInStyles,     ///< custom style located in styles.xml
+        CustomInStyles, ///< custom style located in styles.xml
         AutomaticInContent, ///< auto-style located in content.xml
-        AutomaticInStyles   ///< auto-style located in styles.xml
+        AutomaticInStyles ///< auto-style located in styles.xml
     };
     /// Add styles to styles map
     void insertStyles(const KoXmlElement &styles, TypeAndLocation typeAndLocation = CustomInStyles);
@@ -161,11 +161,11 @@ private:
     void insertOfficeStyles(const KoXmlElement &styles);
     void insertStyle(const KoXmlElement &style, TypeAndLocation typeAndLocation);
 
-    KoOdfStylesReader(const KoOdfStylesReader &);   // forbidden
-    KoOdfStylesReader& operator=(const KoOdfStylesReader &);   // forbidden
+    KoOdfStylesReader(const KoOdfStylesReader &); // forbidden
+    KoOdfStylesReader &operator=(const KoOdfStylesReader &); // forbidden
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOODFSTYLESREADER_H */

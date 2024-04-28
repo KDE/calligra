@@ -12,8 +12,8 @@
 #include <QDebug>
 
 ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
-        : QWidget(parent),
-        m_fontMetricsChecked(false)
+    : QWidget(parent)
+    , m_fontMetricsChecked(false)
 {
     widget.setupUi(this);
 
@@ -25,8 +25,8 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
     widget.lineSpacing->addItem(i18nc("Line spacing value", "Single"));
     widget.lineSpacing->addItem(i18nc("Line spacing value", "1.5 Lines"));
     widget.lineSpacing->addItem(i18nc("Line spacing value", "Double"));
-    widget.lineSpacing->addItem(i18nc("Line spacing type", "Proportional"));    // called Proportional like in OO
-    widget.lineSpacing->addItem(i18nc("Line spacing type", "Additional"));    // normal distance + absolute value
+    widget.lineSpacing->addItem(i18nc("Line spacing type", "Proportional")); // called Proportional like in OO
+    widget.lineSpacing->addItem(i18nc("Line spacing type", "Additional")); // normal distance + absolute value
     widget.lineSpacing->addItem(i18nc("Line spacing type", "Fixed"));
     widget.lineSpacing->addItem(i18nc("Line spacing type", "At least"));
 
@@ -93,12 +93,13 @@ void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style, bool directForm
     m_leftMarginInherited = directFormattingMode || !style->hasProperty(QTextFormat::BlockLeftMargin);
     m_topMarginInherited = directFormattingMode || !style->hasProperty(QTextFormat::BlockTopMargin);
     m_bottomMarginInherited = directFormattingMode || !style->hasProperty(QTextFormat::BlockBottomMargin);
-    m_autoTextIndentInherited = directFormattingMode  || !style->hasProperty(KoParagraphStyle::AutoTextIndent);
+    m_autoTextIndentInherited = directFormattingMode || !style->hasProperty(KoParagraphStyle::AutoTextIndent);
     m_textIndentInherited = directFormattingMode || !style->hasProperty(QTextFormat::TextIndent);
 
     widget.autoTextIndent->setChecked(style->autoTextIndent());
 
-    m_spacingInherited = !(style->hasProperty(KoParagraphStyle::FixedLineHeight) || style->hasProperty(KoParagraphStyle::LineSpacing) || style->hasProperty(KoParagraphStyle::PercentLineHeight) ||style->hasProperty(KoParagraphStyle::MinimumLineHeight));
+    m_spacingInherited = !(style->hasProperty(KoParagraphStyle::FixedLineHeight) || style->hasProperty(KoParagraphStyle::LineSpacing)
+                           || style->hasProperty(KoParagraphStyle::PercentLineHeight) || style->hasProperty(KoParagraphStyle::MinimumLineHeight));
 
     int index;
     if (style->hasProperty(KoParagraphStyle::FixedLineHeight) && style->lineHeightAbsolute() != 0) {
@@ -123,7 +124,7 @@ void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style, bool directForm
         index = 0; // nothing set, default is 'single' just like for geeks.
     }
     widget.lineSpacing->setCurrentIndex(index);
-    //widget.minimumLineSpacing->changeValue(style->minimumLineHeight());
+    // widget.minimumLineSpacing->changeValue(style->minimumLineHeight());
     widget.useFont->setChecked(style->lineSpacingFromFont());
     m_fontMetricsChecked = style->lineSpacingFromFont();
 }
@@ -133,30 +134,30 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row)
     bool percent = false, custom = false;
     qreal customValue = 0.0;
     switch (row) {
-        case 0:
-        case 1:
-        case 2:
-            break;
-        case 3: // proportional
-            percent = true;
-            widget.proportional->setValue(m_style->lineHeightPercent());
-            break;
-        case 4: // additional
-            custom = true;
-            customValue = qMax(qreal(0.1), m_style->lineSpacing());
-            break;
-        case 5: // fixed
-            custom = true;
-            if (m_style->lineHeightAbsolute() == 0) // unset
-                customValue = 12.0; // nice default value...
-            else
-                customValue = m_style->lineHeightAbsolute();
-            break;
-        case 6: // minimum
-            custom = true;
-            customValue = m_style->minimumLineHeight();
-            break;
-        default:; // other cases don't need the spinboxes
+    case 0:
+    case 1:
+    case 2:
+        break;
+    case 3: // proportional
+        percent = true;
+        widget.proportional->setValue(m_style->lineHeightPercent());
+        break;
+    case 4: // additional
+        custom = true;
+        customValue = qMax(qreal(0.1), m_style->lineSpacing());
+        break;
+    case 5: // fixed
+        custom = true;
+        if (m_style->lineHeightAbsolute() == 0) // unset
+            customValue = 12.0; // nice default value...
+        else
+            customValue = m_style->lineHeightAbsolute();
+        break;
+    case 6: // minimum
+        custom = true;
+        customValue = m_style->minimumLineHeight();
+        break;
+    default:; // other cases don't need the spinboxes
     }
 
     m_spacingInherited = false;
@@ -168,7 +169,7 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row)
     } else {
         widget.spacingStack->setCurrentWidget(widget.percentPage);
         widget.proportional->setEnabled(percent);
-        if (! percent)
+        if (!percent)
             widget.proportional->setValue(100);
     }
 
@@ -194,22 +195,22 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
     // general note; we have to unset values by setting it to zero instead of removing the item
     // since this dialog may be used on a copy style, which will be applied later. And removing
     // items doesn't work for that.
-    if (!m_textIndentInherited){
+    if (!m_textIndentInherited) {
         style->setTextIndent(QTextLength(QTextLength::FixedLength, widget.first->value()));
     }
-    if (!m_leftMarginInherited){
+    if (!m_leftMarginInherited) {
         style->setLeftMargin(QTextLength(QTextLength::FixedLength, widget.left->value()));
     }
-    if (!m_rightMarginIngerited){
+    if (!m_rightMarginIngerited) {
         style->setRightMargin(QTextLength(QTextLength::FixedLength, widget.right->value()));
     }
-    if (!m_topMarginInherited){
+    if (!m_topMarginInherited) {
         style->setTopMargin(QTextLength(QTextLength::FixedLength, widget.before->value()));
     }
-    if (!m_bottomMarginInherited){
+    if (!m_bottomMarginInherited) {
         style->setBottomMargin(QTextLength(QTextLength::FixedLength, widget.after->value()));
     }
-    if (!m_autoTextIndentInherited){
+    if (!m_autoTextIndentInherited) {
         style->setAutoTextIndent(widget.autoTextIndent->isChecked());
     }
     if (!m_spacingInherited) {
@@ -217,10 +218,18 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
         style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0));
         style->setLineSpacing(0);
         switch (widget.lineSpacing->currentIndex()) {
-        case 0: style->setLineHeightPercent(100); break;
-        case 1: style->setLineHeightPercent(150); break;
-        case 2: style->setLineHeightPercent(200); break;
-        case 3: style->setLineHeightPercent(widget.proportional->value()); break;
+        case 0:
+            style->setLineHeightPercent(100);
+            break;
+        case 1:
+            style->setLineHeightPercent(150);
+            break;
+        case 2:
+            style->setLineHeightPercent(200);
+            break;
+        case 3:
+            style->setLineHeightPercent(widget.proportional->value());
+            break;
         case 4:
             if (widget.custom->value() == 0.0) { // then we need to save it differently.
                 style->setLineHeightPercent(100);

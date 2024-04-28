@@ -12,13 +12,10 @@
 
 #include "core/Cell.h"
 #include "core/CellStorage.h"
-#include "core/Sheet.h"
 #include "core/Database.h"
-
-
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
-
 
 AutoFilter::AutoFilter(Actions *actions)
     : CellAction(actions, "autoFilter", i18n("&Auto-Filter"), koIcon("view-filter"), i18n("Add an automatic filter to a cell range"))
@@ -34,7 +31,7 @@ void AutoFilter::execute(Selection *selection, Sheet *sheet, QWidget *)
     QRect range = selection->lastRange();
     if ((range.width() == 1) && (range.height() == 1)) {
         CellStorage *cs = sheet->fullCellStorage();
-        QVector< QPair<QRectF, Database> > databases = cs->databases(*selection);
+        QVector<QPair<QRectF, Database>> databases = cs->databases(*selection);
         if (databases.length()) {
             range = databases[0].first.toRect();
         } else {
@@ -45,15 +42,14 @@ void AutoFilter::execute(Selection *selection, Sheet *sheet, QWidget *)
         selection->emitModified();
     }
 
-    AutoFilterCommand* command = new AutoFilterCommand();
+    AutoFilterCommand *command = new AutoFilterCommand();
     command->setSheet(sheet);
     command->add(*selection);
     command->execute(selection->canvas());
 }
 
-
 AutoFilterCommand::AutoFilterCommand()
-        : AbstractRegionCommand()
+    : AbstractRegionCommand()
 {
     setText(kundo2_i18n("Auto-Filter"));
 }
@@ -65,7 +61,7 @@ AutoFilterCommand::~AutoFilterCommand()
 bool AutoFilterCommand::performCommands()
 {
     CellStorage *cs = m_sheet->fullCellStorage();
-    QVector< QPair<QRectF, Database> > databases = cs->databases(*this);
+    QVector<QPair<QRectF, Database>> databases = cs->databases(*this);
     // If there is a database that matches exactly, we use that one
     // The execute() method above has already tried to find one if no range is provided.
     QRect mine = lastRange();
@@ -86,4 +82,3 @@ bool AutoFilterCommand::performCommands()
     cs->setDatabase(*this, database);
     return true;
 }
-

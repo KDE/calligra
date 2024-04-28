@@ -9,15 +9,15 @@
 #ifndef DEFAULTTOOL_H
 #define DEFAULTTOOL_H
 
-#include <KoInteractionTool.h>
 #include <KoFlake.h>
+#include <KoInteractionTool.h>
 #include <KoShape.h>
 #include <commands/KoShapeAlignCommand.h>
 #include <commands/KoShapeReorderCommand.h>
 
+#include <QCursor>
 #include <QPolygonF>
 #include <QTime>
-#include <QCursor>
 
 class KoInteractionStrategy;
 class KoShapeMoveCommand;
@@ -40,32 +40,29 @@ public:
      * and handled by interaction strategies of type KoInteractionStrategy.
      * @param canvas the canvas this tool will be working for.
      */
-    explicit DefaultTool( KoCanvasBase *canvas );
+    explicit DefaultTool(KoCanvasBase *canvas);
     ~DefaultTool() override;
 
-    enum CanvasResource {
-        HotPosition = 1410100299
-    };
+    enum CanvasResource { HotPosition = 1410100299 };
 
 public:
-
     bool wantsAutoScroll() const override;
-    void paint( QPainter &painter, const KoViewConverter &converter ) override;
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
     void repaintDecorations() override;
 
-    ///reimplemented
+    /// reimplemented
     void copy() const override;
 
-    ///reimplemented
+    /// reimplemented
     void deleteSelection() override;
 
-    ///reimplemented
+    /// reimplemented
     bool paste() override;
-    ///reimplemented
+    /// reimplemented
     QStringList supportedPasteMimeTypes() const override;
-    ///reimplemented
-    KoToolSelection* selection() override;
+    /// reimplemented
+    KoToolSelection *selection() override;
 
     /**
      * Returns which selection handle is at params point (or NoHandle if none).
@@ -79,7 +76,7 @@ public:
 
 public Q_SLOTS:
     /// Activate the tool and paint selection handles
-    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     /// Deactivate the tool and remove selection handles
     void deactivate() override;
 
@@ -103,18 +100,17 @@ private Q_SLOTS:
     void updateActions();
 
 public: // Events
-
-    void mousePressEvent( KoPointerEvent *event ) override;
-    void mouseMoveEvent( KoPointerEvent *event ) override;
-    void mouseReleaseEvent( KoPointerEvent *event ) override;
-    void mouseDoubleClickEvent( KoPointerEvent *event ) override;
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
 
     void keyPressEvent(QKeyEvent *event) override;
 
-    void customMoveEvent( KoPointerEvent * event ) override;
+    void customMoveEvent(KoPointerEvent *event) override;
 
 protected:
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
     KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
 
@@ -123,28 +119,28 @@ private:
     void recalcSelectionBox();
     void updateCursor();
     /// Returns rotation angle of given handle of the current selection
-    qreal rotationOfHandle( KoFlake::SelectionHandle handle, bool useEdgeRotation );
+    qreal rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdgeRotation);
 
     void selectionAlign(KoShapeAlignCommand::Align align);
-    void selectionReorder(KoShapeReorderCommand::MoveShapeType order );
-    bool moveSelection( int direction, Qt::KeyboardModifiers modifiers );
+    void selectionReorder(KoShapeReorderCommand::MoveShapeType order);
+    bool moveSelection(int direction, Qt::KeyboardModifiers modifiers);
 
     /// Returns selection rectangle adjusted by handle proximity threshold
     QRectF handlesSize();
 
     // convenience method;
-    KoSelection * koSelection();
+    KoSelection *koSelection();
 
-    void canvasResourceChanged( int key, const QVariant & res ) override;
+    void canvasResourceChanged(int key, const QVariant &res) override;
 
     /// selects guide line at given position
-    void selectGuideAtPosition( const QPointF &position );
+    void selectGuideAtPosition(const QPointF &position);
 
     /// Returns list of editable shapes from the given list of shapes
-    QList<KoShape*> filterEditableShapes( const QList<KoShape*> &shapes ) const;
+    QList<KoShape *> filterEditableShapes(const QList<KoShape *> &shapes) const;
 
     /// Returns the number of editable shapes from the given list of shapes
-    uint editableShapesCount( const QList<KoShape*> &shapes ) const;
+    uint editableShapesCount(const QList<KoShape *> &shapes) const;
 
     /// Return true if @p shape is editable.
     /// For now, this is just reimplemented using AllowedInteraction flags
@@ -152,7 +148,7 @@ private:
     bool isEditable(const KoShape *shape) const;
 
     /// Returns the interactions allowed on any of the @p shapes
-    KoShape::AllowedInteractions allowedInteractions(const QList<KoShape*> &shapes) const;
+    KoShape::AllowedInteractions allowedInteractions(const QList<KoShape *> &shapes) const;
 
     KoFlake::SelectionHandle m_lastHandle;
     KoFlake::Position m_hotPosition;
@@ -162,7 +158,7 @@ private:
     QPointF m_lastPoint;
     KoShapeMoveCommand *m_moveCommand;
     QTime m_lastUsedMoveCommand;
-    QList<KoShape*> m_lastUsedShapes;
+    QList<KoShape *> m_lastUsedShapes;
 
     // TODO alter these 3 arrays to be static const instead
     QCursor m_sizeCursors[8];
@@ -171,10 +167,10 @@ private:
     qreal m_angle;
     KoToolSelection *m_selectionHandler;
     friend class SelectionHandler;
-    KoInteractionStrategy * m_customEventStrategy;
+    KoInteractionStrategy *m_customEventStrategy;
 
     class GuideLine;
-    GuideLine * m_guideLine;
+    GuideLine *m_guideLine;
 };
 
 #endif

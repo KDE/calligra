@@ -8,18 +8,19 @@
 // Local
 #include "SheetCommands.h"
 
+#include "core/Sheet.h"
 #include "engine/Damages.h"
 #include "engine/MapBase.h"
-#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
 // ----- RenameSheetCommand -----
 
-RenameSheetCommand::RenameSheetCommand(Sheet* s, const QString &name)
+RenameSheetCommand::RenameSheetCommand(Sheet *s, const QString &name)
 {
     sheet = s;
-    if (s) oldName = s->sheetName();
+    if (s)
+        oldName = s->sheetName();
     newName = name;
     setText(kundo2_i18n("Rename Sheet"));
 }
@@ -38,66 +39,71 @@ void RenameSheetCommand::undo()
 
 // ----- HideSheetCommand -----
 
-HideSheetCommand::HideSheetCommand(Sheet* sheet)
+HideSheetCommand::HideSheetCommand(Sheet *sheet)
 {
     map = sheet->map();
     sheetName = sheet->sheetName();
-    KUndo2MagicString n =  kundo2_i18n("Hide Sheet %1", sheetName);
-    if (n.toString().length() > 64) n = kundo2_i18n("Hide Sheet");
+    KUndo2MagicString n = kundo2_i18n("Hide Sheet %1", sheetName);
+    if (n.toString().length() > 64)
+        n = kundo2_i18n("Hide Sheet");
     setText(n);
 }
 
 void HideSheetCommand::redo()
 {
-    SheetBase* sheet = map->findSheet(sheetName);
-    if (!sheet) return;
+    SheetBase *sheet = map->findSheet(sheetName);
+    if (!sheet)
+        return;
 
     sheet->hideSheet(true);
 }
 
 void HideSheetCommand::undo()
 {
-    SheetBase* sheet = map->findSheet(sheetName);
-    if (!sheet) return;
+    SheetBase *sheet = map->findSheet(sheetName);
+    if (!sheet)
+        return;
 
     sheet->hideSheet(false);
 }
 
 // ----- ShowSheetCommand -----
 
-ShowSheetCommand::ShowSheetCommand(Sheet* sheet, KUndo2Command* parent)
-        : KUndo2Command(parent)
+ShowSheetCommand::ShowSheetCommand(Sheet *sheet, KUndo2Command *parent)
+    : KUndo2Command(parent)
 {
     map = sheet->map();
     sheetName = sheet->sheetName();
-    KUndo2MagicString n =  kundo2_i18n("Show Sheet %1", sheetName);
-    if (n.toString().length() > 64) n = kundo2_i18n("Show Sheet");
+    KUndo2MagicString n = kundo2_i18n("Show Sheet %1", sheetName);
+    if (n.toString().length() > 64)
+        n = kundo2_i18n("Show Sheet");
     setText(n);
 }
 
 void ShowSheetCommand::redo()
 {
-    SheetBase* sheet = map->findSheet(sheetName);
-    if (!sheet) return;
+    SheetBase *sheet = map->findSheet(sheetName);
+    if (!sheet)
+        return;
 
     sheet->hideSheet(false);
 }
 
 void ShowSheetCommand::undo()
 {
-    SheetBase* sheet = map->findSheet(sheetName);
-    if (!sheet) return;
+    SheetBase *sheet = map->findSheet(sheetName);
+    if (!sheet)
+        return;
 
     sheet->hideSheet(true);
 }
 
-
 // ----- AddSheetCommand -----
 
-AddSheetCommand::AddSheetCommand(Sheet* sheet)
-        : KUndo2Command(kundo2_i18n("Add Sheet"))
-        , m_sheet(sheet)
-        , m_firstrun(true)
+AddSheetCommand::AddSheetCommand(Sheet *sheet)
+    : KUndo2Command(kundo2_i18n("Add Sheet"))
+    , m_sheet(sheet)
+    , m_firstrun(true)
 {
 }
 
@@ -118,18 +124,17 @@ void AddSheetCommand::undo()
     m_sheet->map()->removeSheet(m_sheet);
 }
 
-
 // ----- DuplicateSheetCommand -----
 
 DuplicateSheetCommand::DuplicateSheetCommand()
-        : KUndo2Command(kundo2_i18n("Duplicate Sheet"))
-        , m_oldSheet(0)
-        , m_newSheet(0)
-        , m_firstrun(true)
+    : KUndo2Command(kundo2_i18n("Duplicate Sheet"))
+    , m_oldSheet(0)
+    , m_newSheet(0)
+    , m_firstrun(true)
 {
 }
 
-void DuplicateSheetCommand::setSheet(Sheet* sheet)
+void DuplicateSheetCommand::setSheet(Sheet *sheet)
 {
     m_oldSheet = sheet;
 }
@@ -153,10 +158,9 @@ void DuplicateSheetCommand::undo()
     m_newSheet->map()->removeSheet(m_newSheet);
 }
 
-
 // ----- RemoveSheetCommand -----
 
-RemoveSheetCommand::RemoveSheetCommand(Sheet* s)
+RemoveSheetCommand::RemoveSheetCommand(Sheet *s)
 {
     sheet = s;
     map = sheet->map();
@@ -175,7 +179,7 @@ void RemoveSheetCommand::undo()
 
 // ----- SheetPropertiesCommand -----
 
-SheetPropertiesCommand::SheetPropertiesCommand(Sheet* s)
+SheetPropertiesCommand::SheetPropertiesCommand(Sheet *s)
 {
     sheet = s;
     map = s->map();

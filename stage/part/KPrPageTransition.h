@@ -9,8 +9,8 @@
 
 #include "stage_export.h"
 
-#include <QMap>
 #include <QDebug>
+#include <QMap>
 
 class KoShapeLoadingContext;
 class KoXmlElement;
@@ -24,9 +24,9 @@ public:
     /// Odf 20.233 presentation:transition-type
     /// The presentation:transition-type attribute specifies the mode of a transition.
     enum Type {
-        Manual,         /// Slide transition and shape effects are started separately by the user
-        Automatic,      /// Slide transition and shape effects start automatically
-        SemiAutomatic   /// Slide transition starts automatically, shape effects are started by the user.
+        Manual, /// Slide transition and shape effects are started separately by the user
+        Automatic, /// Slide transition and shape effects start automatically
+        SemiAutomatic /// Slide transition starts automatically, shape effects are started by the user.
     }; // NOTE: If this is changed, also update KPrPageEffectDocker
 
     /// Return the transition type

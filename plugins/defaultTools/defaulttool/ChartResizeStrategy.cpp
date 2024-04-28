@@ -1,24 +1,23 @@
 /* This file is part of the KDE project
- * 
+ *
  *   SPDX-FileCopyrightText: 2017 Dag Andersen <danders@get2net.dk>
- * 
+ *
  *   SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "ChartResizeStrategy.h"
 
+#include <KLocalizedString>
+#include <KoCanvasBase.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
-#include <KoCanvasBase.h>
-#include <KoShapeManager.h>
 #include <KoShapeContainerModel.h>
+#include <KoShapeManager.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeSizeCommand.h>
-#include <KLocalizedString>
-
 
 ChartResizeStrategy::ChartResizeStrategy(KoShape *shape)
-    : m_chart(dynamic_cast<KoShapeContainer*>(shape))
+    : m_chart(dynamic_cast<KoShapeContainer *>(shape))
     , m_plotArea(0)
 {
     if (m_chart) {
@@ -110,7 +109,7 @@ void ChartResizeStrategy::createCommand(KUndo2Command *cmd)
     // get the shapes that has actually been moved
     QVector<QPointF> oldPositions;
     QVector<QPointF> newPositions;
-    QList<KoShape*> movedShapes;
+    QList<KoShape *> movedShapes;
     for (int i = 0; i < m_shapes.count(); ++i) {
         KoShape *shape = m_shapes.at(i);
         QPointF pos = shape->position();
@@ -124,6 +123,6 @@ void ChartResizeStrategy::createCommand(KUndo2Command *cmd)
         new KoShapeMoveCommand(movedShapes, oldPositions, newPositions, cmd);
     }
     if (m_plotArea) {
-        new KoShapeSizeCommand(QList<KoShape*>()<<m_plotArea, QVector<QSizeF>()<<m_plotAreaStartSize, QVector<QSizeF>()<<m_plotArea->size(), cmd );
+        new KoShapeSizeCommand(QList<KoShape *>() << m_plotArea, QVector<QSizeF>() << m_plotAreaStartSize, QVector<QSizeF>() << m_plotArea->size(), cmd);
     }
 }

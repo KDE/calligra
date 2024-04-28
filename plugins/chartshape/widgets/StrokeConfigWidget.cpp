@@ -23,41 +23,41 @@
 #include "PlotArea.h"
 
 // Qt
-#include <QMenu>
-#include <QLabel>
-#include <QToolButton>
 #include <QButtonGroup>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QSizePolicy>
 #include <QColorDialog>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QMenu>
+#include <QSizePolicy>
+#include <QToolButton>
+#include <QVBoxLayout>
 
 // KF5
-#include <KLocalizedString>
 #include <KColorButton>
+#include <KLocalizedString>
 
 // Calligra
-#include <KoIcon.h>
-#include <KoUnit.h>
-#include <KoLineStyleSelector.h>
-#include <KoUnitDoubleSpinBox.h>
-#include <KoMarkerSelector.h>
-#include <KoColorPopupAction.h>
-#include <KoMarker.h>
-#include <KoShapeStroke.h>
-#include <KoPathShape.h>
-#include <KoMarkerCollection.h>
-#include <KoPathShapeMarkerCommand.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoCanvasResourceManager.h>
+#include <KoColorPopupAction.h>
 #include <KoDocumentResourceManager.h>
-#include <KoToolManager.h>
+#include <KoIcon.h>
+#include <KoLineStyleSelector.h>
+#include <KoMarker.h>
+#include <KoMarkerCollection.h>
+#include <KoMarkerSelector.h>
+#include <KoPathShape.h>
+#include <KoPathShapeMarkerCommand.h>
 #include <KoSelection.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
+#include <KoShapeStroke.h>
 #include <KoShapeStrokeCommand.h>
 #include <KoShapeStrokeModel.h>
+#include <KoToolManager.h>
+#include <KoUnit.h>
+#include <KoUnitDoubleSpinBox.h>
 
 using namespace KoChart;
 
@@ -67,14 +67,14 @@ class CapNJoinMenu : public QMenu
 public:
     CapNJoinMenu(QWidget *parent = 0);
     QSize sizeHint() const override;
-    
+
     KoUnitDoubleSpinBox *miterLimit;
-    QButtonGroup        *capGroup;
-    QButtonGroup        *joinGroup;
+    QButtonGroup *capGroup;
+    QButtonGroup *joinGroup;
 };
 
 CapNJoinMenu::CapNJoinMenu(QWidget *parent)
-: QMenu(parent)
+    : QMenu(parent)
 {
     QGridLayout *mainLayout = new QGridLayout();
     mainLayout->setMargin(2);
@@ -149,7 +149,6 @@ QSize CapNJoinMenu::sizeHint() const
     return layout()->sizeHint();
 }
 
-
 class Q_DECL_HIDDEN StrokeConfigWidget::Private
 {
 public:
@@ -173,7 +172,7 @@ public:
     QWidget *spacer;
 };
 
-StrokeConfigWidget::StrokeConfigWidget(QWidget * parent)
+StrokeConfigWidget::StrokeConfigWidget(QWidget *parent)
     : QWidget(parent)
     , d(new Private())
 {
@@ -239,9 +238,7 @@ StrokeConfigWidget::~StrokeConfigWidget()
 
 void StrokeConfigWidget::open(ChartShape *chart)
 {
-    if (d->chart) {
-        
-    }
+    if (d->chart) { }
     if (chart) {
         d->chart = chart;
         d->plotArea = chart->plotArea();
@@ -251,7 +248,7 @@ void StrokeConfigWidget::open(ChartShape *chart)
 void StrokeConfigWidget::updateData()
 {
     blockChildSignals(true);
-    
+
     QPen stroke = d->plotArea->stockRangeLinePen();
     d->lineWidth->changeValue(stroke.widthF());
     QAbstractButton *button = d->capNJoinMenu->capGroup->button(stroke.capStyle());
@@ -268,10 +265,9 @@ void StrokeConfigWidget::updateData()
     d->color = stroke.color();
     QString style = QString("QToolButton#colorButton { background-color: %1 }").arg(d->color.name());
     d->colorButton->setStyleSheet(style);
-    
+
     blockChildSignals(false);
 }
-
 
 Qt::PenStyle StrokeConfigWidget::lineStyle() const
 {

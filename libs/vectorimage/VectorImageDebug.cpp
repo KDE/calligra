@@ -5,10 +5,8 @@
  */
 
 #include "VectorImageDebug.h"
-const QLoggingCategory &VECTOR_IMAGE_LOG() \
+const QLoggingCategory &VECTOR_IMAGE_LOG()
 {
     static const QLoggingCategory category("calligra.lib.vectorimage");
     return category;
 }
-
-

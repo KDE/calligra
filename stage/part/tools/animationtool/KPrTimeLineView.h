@@ -28,9 +28,9 @@ class QModelIndex;
 /**
   This widget is part of Animations Time Line Widget
   */
-class KPrTimeLineView: public QWidget
+class KPrTimeLineView : public QWidget
 {
-     Q_OBJECT
+    Q_OBJECT
 public:
     explicit KPrTimeLineView(QWidget *parent = 0);
     QSize sizeHint() const override;
@@ -39,10 +39,10 @@ public:
 
 Q_SIGNALS:
     /// emitted if an item is clicked (returns the index of the item clicked
-    void clicked(const QModelIndex&);
+    void clicked(const QModelIndex &);
 
     /// emitted if an item time range has changed (return the index of the item changed)
-    void timeValuesChanged(const QModelIndex&);
+    void timeValuesChanged(const QModelIndex &);
 
 private:
     void keyPressEvent(QKeyEvent *event) override;
@@ -60,9 +60,9 @@ private:
     QRectF getRowRect(const int row, const int column);
 
     /// Helper method to paint view items
-    void paintEvent(QPaintEvent * event) override;
+    void paintEvent(QPaintEvent *event) override;
     /// main paint method
-    void paintRow(QPainter *painter, int  row, int y, const int RowHeight);
+    void paintRow(QPainter *painter, int row, int y, const int RowHeight);
     /// paint background of items
     void paintItemBackground(QPainter *painter, const QRect &rect, bool selected);
     /// Paint cells of time bars

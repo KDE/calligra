@@ -7,8 +7,8 @@
 #ifndef KO_DOCUMENT_SECTION_VIEW_H
 #define KO_DOCUMENT_SECTION_VIEW_H
 
-#include <QTreeView>
 #include "komain_export.h"
+#include <QTreeView>
 
 class QStyleOptionViewItem;
 class KoDocumentSectionModel;
@@ -27,7 +27,7 @@ class KoDocumentSectionModel;
  * Usage: simply use this widget in your designer .ui file. Karbon's
  * layerboxes are KoDocumentSectionView based.
  */
-class KOMAIN_EXPORT KoDocumentSectionView: public QTreeView
+class KOMAIN_EXPORT KoDocumentSectionView : public QTreeView
 {
     Q_OBJECT
 Q_SIGNALS:
@@ -38,8 +38,8 @@ Q_SIGNALS:
      */
     void contextMenuRequested(const QPoint &globalPos, const QModelIndex &index);
     void selectionChanged(const QModelIndexList &);
-public:
 
+public:
     /**
      * Create a new KoDocumentSectionView.
      */
@@ -58,7 +58,7 @@ public:
         MinimalMode
     };
 
-    void paintEvent (QPaintEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
     void dropEvent(QDropEvent *ev) override;
 
@@ -109,12 +109,11 @@ public:
      */
     void addPropertyActions(QMenu *menu, const QModelIndex &index);
 
-
 protected:
     bool viewportEvent(QEvent *event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
     virtual void showContextMenu(const QPoint &globalPos, const QModelIndex &index);
-    void startDrag (Qt::DropActions supportedActions) override;
+    void startDrag(Qt::DropActions supportedActions) override;
     QPixmap createDragPixmap() const;
 
     /**
@@ -131,7 +130,6 @@ private Q_SLOTS:
     void slotActionToggled(bool on, const QPersistentModelIndex &index, int property);
 
 private:
-
     /**
      * Permit to know if a slide is dragging
      *
@@ -152,7 +150,7 @@ private:
     typedef KoDocumentSectionModel Model;
     class PropertyAction;
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

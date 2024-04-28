@@ -37,7 +37,7 @@ public:
 
     int count() const override;
 
-    QList<KoShape*> shapes() const override;
+    QList<KoShape *> shapes() const override;
 
     bool isChildLocked(const KoShape *child) const override;
 
@@ -46,7 +46,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

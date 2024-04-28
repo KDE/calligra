@@ -19,13 +19,11 @@
 #ifndef CALLIGRA_SHEETS_LAYOUT_PAGE_POSITION
 #define CALLIGRA_SHEETS_LAYOUT_PAGE_POSITION
 
-#include <QWidget>
-#include <KoUnit.h>
 #include "ui_PositionWidget.h"
-
+#include <KoUnit.h>
+#include <QWidget>
 
 class KoUnitDoubleSpinBox;
-
 
 namespace Calligra
 {
@@ -33,7 +31,6 @@ namespace Sheets
 {
 
 class Style;
-
 
 /**
  * \ingroup UI
@@ -45,7 +42,7 @@ class LayoutPagePosition : public QWidget, public Ui::PositionWidget
 public:
     LayoutPagePosition(QWidget *parent, KoUnit unit);
 
-    void apply(Style * style, bool partial);
+    void apply(Style *style, bool partial);
     void loadFrom(const Style &style, bool partial);
 
 public Q_SLOTS:
@@ -60,8 +57,6 @@ protected:
     int m_angle;
     double m_indentation;
 };
-
-
 
 } // namespace Sheets
 } // namespace Calligra

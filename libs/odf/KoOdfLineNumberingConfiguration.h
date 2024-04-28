@@ -45,12 +45,10 @@ class KOODF_EXPORT KoOdfLineNumberingConfiguration : public QObject
 {
     Q_OBJECT
 public:
-
     KoOdfLineNumberingConfiguration();
     ~KoOdfLineNumberingConfiguration() override;
     KoOdfLineNumberingConfiguration(const KoOdfLineNumberingConfiguration &other);
     KoOdfLineNumberingConfiguration &operator=(const KoOdfLineNumberingConfiguration &other);
-
 
     /**
      * load the line numbering configuration element
@@ -60,7 +58,7 @@ public:
     /**
      * save the line number configuration element
      */
-    void saveOdf(KoXmlWriter * writer) const;
+    void saveOdf(KoXmlWriter *writer) const;
 
     /**
      * The text:number-lines attribute controls whether or not lines are numbered.
@@ -95,12 +93,7 @@ public:
      * The text:position attribute determines whether the line numbers are printed on the left, right,
      * inner, or outer margins.
      */
-    enum Position {
-        Left,
-        Right,
-        Inner,
-        Outer
-    };
+    enum Position { Left, Right, Inner, Outer };
 
     Position position() const;
     void setPosition(Position position);
@@ -156,12 +149,10 @@ public:
     void setSeparatorIncrement(int separatorIncrement);
 
 private:
-
     class Private;
-    Private * const d;
-
+    Private *const d;
 };
 
-Q_DECLARE_METATYPE(KoOdfLineNumberingConfiguration*)
+Q_DECLARE_METATYPE(KoOdfLineNumberingConfiguration *)
 
 #endif // KOODFLINENUMBERINGCONFIGURATION_H

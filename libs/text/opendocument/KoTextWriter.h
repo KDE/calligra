@@ -19,7 +19,6 @@ class QString;
 
 class KoDocumentRdfBase;
 
-
 /**
  * KoTextWriter saves the text ODF of a shape
  */
@@ -27,16 +26,16 @@ class KOTEXT_EXPORT KoTextWriter
 {
 public:
     /**
-    * Constructor.
-    *
-    * @param context The context the KoTextWriter is called in
-    * @param rdfData The RDF data of the document
-    */
+     * Constructor.
+     *
+     * @param context The context the KoTextWriter is called in
+     * @param rdfData The RDF data of the document
+     */
     explicit KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData = 0);
 
     /**
-    * Destructor.
-    */
+     * Destructor.
+     */
     ~KoTextWriter();
 
     /// XXX: APIDOX!
@@ -54,7 +53,8 @@ public:
      */
     static QString saveParagraphStyle(const QTextBlock &block, KoStyleManager *styleManager, KoShapeSavingContext &context);
 
-    static QString saveParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat, KoStyleManager *styleManager, KoShapeSavingContext &context);
+    static QString
+    saveParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat, KoStyleManager *styleManager, KoShapeSavingContext &context);
 
     /**
      * Writes the portion of document contained within 'from' and 'to'
@@ -68,7 +68,7 @@ public:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

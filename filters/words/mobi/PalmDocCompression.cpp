@@ -11,11 +11,10 @@
 #include <QDataStream>
 #include <string.h>
 
-
-PalmDocCompression::PalmDocCompression():
-    m_winSize(2046),
-    m_buffSize(10),
-    m_maxBlockSize(4096)
+PalmDocCompression::PalmDocCompression()
+    : m_winSize(2046)
+    , m_buffSize(10)
+    , m_maxBlockSize(4096)
 {
 }
 
@@ -23,10 +22,8 @@ PalmDocCompression::~PalmDocCompression()
 {
 }
 
-void PalmDocCompression::compressContent(QByteArray input, QByteArray &output,
-                                         QList<qint32> &recordOffset)
+void PalmDocCompression::compressContent(QByteArray input, QByteArray &output, QList<qint32> &recordOffset)
 {
-
     /// PalmDOC uses LZ77 compression techniques.
     /**
         LZ77 algorithms achieve compression by replacing portions
@@ -80,8 +77,7 @@ void PalmDocCompression::compressContent(QByteArray input, QByteArray &output,
     outBuf->close();
     delete outBuf;
 }
-void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
-                                          QList<qint32> &recordOffset)
+void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out, QList<qint32> &recordOffset)
 {
     int winIndex = -1;
     int lookahead = 0;
@@ -95,7 +91,6 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
         int length = 0;
         int pos = 0;
         qint16 base = m_maxBlockSize;
-
 
         // check for out put size for reach to max block size
         if (lookahead == m_maxBlockSize) {
@@ -111,12 +106,11 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
             // check for next letter
             int index = lookahead;
             index++;
-            if ((index != m_maxBlockSize)  || index < input.size()) {
+            if ((index != m_maxBlockSize) || index < input.size()) {
                 // input.at(index) is between [-127..127] so i am sure that
                 // it (^) is less that 0X7f
                 // literals ascii is between 0X09 - 0X7f
-                if (QChar(input.at(index)).isLetter() && (input.at(index) >= 0X09)){
-
+                if (QChar(input.at(index)).isLetter() && (input.at(index) >= 0X09)) {
                     winIndex += 2;
                     lookahead += 2;
                     out << (qint8)(input.at(index) ^ (qint8)0X80);
@@ -127,7 +121,6 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
 
         // literals ascii is between 0X09 - 0X7f
         if (input.at(lookahead) < 0X09) {
-
             // Check the length of unknown characters.
             int len = 1;
             int index = lookahead + 1;
@@ -145,23 +138,21 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
                     if (len == 8) {
                         break;
                     }
-                }
-                else {
+                } else {
                     break;
                 }
             }
 
-               out << (qint8)len;
-               for (int i = 0; i < len; i++) {
-                   out << (qint8)input.at(lookahead);
-                   lookahead++;
-               }
-               winIndex += len;
-               continue;
+            out << (qint8)len;
+            for (int i = 0; i < len; i++) {
+                out << (qint8)input.at(lookahead);
+                lookahead++;
+            }
+            winIndex += len;
+            continue;
         }
 
-        for (int i = start; i <= winIndex; i++)
-        {
+        for (int i = start; i <= winIndex; i++) {
             if ((lookahead == m_maxBlockSize) || (lookahead >= input.size())) {
                 break;
             }
@@ -172,7 +163,7 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
                 lookahead++;
 
                 // Go to find more matches.
-                for (int j = i + 1, k = 1; (j <=  winIndex) && (k < m_buffSize); ++j, ++k) {
+                for (int j = i + 1, k = 1; (j <= winIndex) && (k < m_buffSize); ++j, ++k) {
                     if ((lookahead == m_maxBlockSize) || (lookahead >= input.size())) {
                         break;
                     }
@@ -190,20 +181,17 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
             }
         }
         if (length == 0) {
-            out << (qint8) input.at(lookahead);
+            out << (qint8)input.at(lookahead);
             winIndex++;
             lookahead++;
-        }
-        else {
+        } else {
             // I do not encode the match over 3 bits
-            if (length == 1 ) {
-                out << (qint8) input.at((winIndex + 1));
-            }
-            else if (length == 2) {
-                out << (qint8) input.at((winIndex + 1));
-                out << (qint8) input.at((winIndex + 2));
-            }
-            else {
+            if (length == 1) {
+                out << (qint8)input.at((winIndex + 1));
+            } else if (length == 2) {
+                out << (qint8)input.at((winIndex + 1));
+                out << (qint8)input.at((winIndex + 2));
+            } else {
                 qint16 distance = (qint16)(winIndex - pos + 1);
                 base = distance + base;
                 base = base << 3;

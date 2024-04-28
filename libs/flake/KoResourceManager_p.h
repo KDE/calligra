@@ -8,10 +8,10 @@
 #ifndef KO_RESOURCEMANAGER_P_H
 #define KO_RESOURCEMANAGER_P_H
 
-#include <QList>
-#include <QVariant>
-#include <QSizeF>
 #include <QHash>
+#include <QList>
+#include <QSizeF>
+#include <QVariant>
 
 #include <KoColor.h>
 #include <KoUnit.h>
@@ -21,8 +21,9 @@ class KoShape;
 class KoResourceManager
 {
 public:
-
-    KoResourceManager() {}
+    KoResourceManager()
+    {
+    }
 
     /**
      * Set a resource of any type.
@@ -128,11 +129,10 @@ public:
     void clearResource(int key);
 
 private:
-    KoResourceManager(const KoResourceManager&);
-    KoResourceManager& operator=(const KoResourceManager&);
+    KoResourceManager(const KoResourceManager &);
+    KoResourceManager &operator=(const KoResourceManager &);
 
     QHash<int, QVariant> m_resources;
 };
 
 #endif
-

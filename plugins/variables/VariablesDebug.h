@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-
 extern const QLoggingCategory &VARIABLES_LOG();
 
 #define debugVariables qCDebug(VARIABLES_LOG)

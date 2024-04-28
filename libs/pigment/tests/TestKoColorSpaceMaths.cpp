@@ -1,7 +1,7 @@
 
 #include "TestKoColorSpaceMaths.h"
-#include "KoIntegerMaths.h"
 #include "KoColorSpaceMaths.h"
+#include "KoIntegerMaths.h"
 
 #include <QTest>
 
@@ -20,7 +20,7 @@ void TestKoColorSpaceMaths::testColorSpaceMathsTraits()
 void TestKoColorSpaceMaths::testScaleToA()
 {
     for (int i = 0; i < 256; ++i) {
-        quint16 opacity = KoColorSpaceMaths<quint8, quint16 >::scaleToA(i);
+        quint16 opacity = KoColorSpaceMaths<quint8, quint16>::scaleToA(i);
         quint8 opacity8 = UINT16_TO_UINT8(opacity);
         QVERIFY(opacity8 == i);
     }

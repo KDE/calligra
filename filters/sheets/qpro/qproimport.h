@@ -11,8 +11,8 @@
 #include <qpro/tablenames.h>
 
 #include <QByteArray>
-#include <QVariantList>
 #include <QLoggingCategory>
+#include <QVariantList>
 
 Q_DECLARE_LOGGING_CATEGORY(lcQPro)
 
@@ -26,18 +26,19 @@ class SheetBase;
 
 class QpImport : public KoFilter
 {
-
     Q_OBJECT
 
 public:
-    QpImport(QObject* parent, const QVariantList&);
-    ~QpImport() override {}
+    QpImport(QObject *parent, const QVariantList &);
+    ~QpImport() override
+    {
+    }
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
-    void InitTableName(int pIdx, QString& pResult);
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
+    void InitTableName(int pIdx, QString &pResult);
 
 protected:
-    void setText(Calligra::Sheets::SheetBase* sheet, int row, int column, const QString& text, bool asString = false);
+    void setText(Calligra::Sheets::SheetBase *sheet, int row, int column, const QString &text, bool asString = false);
 };
 
 class QpTableList : public QpTableNames
@@ -46,10 +47,11 @@ public:
     QpTableList();
     ~QpTableList();
 
-    void          table(unsigned pIdx, Calligra::Sheets::SheetBase* pTable);
-    Calligra::Sheets::SheetBase* table(unsigned pIdx);
+    void table(unsigned pIdx, Calligra::Sheets::SheetBase *pTable);
+    Calligra::Sheets::SheetBase *table(unsigned pIdx);
+
 protected:
-    Calligra::Sheets::SheetBase* cTable[cNameCnt];
+    Calligra::Sheets::SheetBase *cTable[cNameCnt];
 };
 
 #endif // QPROIMPORT_H

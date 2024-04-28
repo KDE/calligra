@@ -6,15 +6,15 @@
  */
 
 #include "KoCreateShapeStrategy.h"
-#include "KoShapeRubberSelectStrategy_p.h"
-#include "KoCreateShapesTool.h"
-#include "KoShape.h"
-#include "KoShapeRegistry.h"
-#include "KoShapeManager.h"
 #include "KoCanvasBase.h"
+#include "KoCreateShapesTool.h"
 #include "KoSelection.h"
-#include "KoShapeFactoryBase.h"
+#include "KoShape.h"
 #include "KoShapeController.h"
+#include "KoShapeFactoryBase.h"
+#include "KoShapeManager.h"
+#include "KoShapeRegistry.h"
+#include "KoShapeRubberSelectStrategy_p.h"
 #include "KoViewConverter.h"
 
 #include <QPainter>
@@ -22,9 +22,9 @@
 #include <FlakeDebug.h>
 
 KoCreateShapeStrategy::KoCreateShapeStrategy(KoCreateShapesTool *tool, const QPointF &clicked)
-        : KoShapeRubberSelectStrategy(tool, clicked, tool->canvas()->snapToGrid())
+    : KoShapeRubberSelectStrategy(tool, clicked, tool->canvas()->snapToGrid())
 {
-    KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(d_ptr->tool);
+    KoCreateShapesTool *parent = static_cast<KoCreateShapesTool *>(d_ptr->tool);
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(parent->shapeId());
     if (factory) {
         const KoProperties *props = parent->shapeProperties();
@@ -41,12 +41,12 @@ KoCreateShapeStrategy::KoCreateShapeStrategy(KoCreateShapesTool *tool, const QPo
     }
 }
 
-KUndo2Command* KoCreateShapeStrategy::createCommand()
+KUndo2Command *KoCreateShapeStrategy::createCommand()
 {
     Q_D(KoShapeRubberSelectStrategy);
-    KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(d_ptr->tool);
+    KoCreateShapesTool *parent = static_cast<KoCreateShapesTool *>(d_ptr->tool);
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(parent->shapeId());
-    if (! factory) {
+    if (!factory) {
         warnFlake << "Application requested a shape that is not registered" << parent->shapeId();
         return 0;
     }
@@ -67,7 +67,7 @@ KUndo2Command* KoCreateShapeStrategy::createCommand()
     if (newSize.width() > 1.0 && newSize.height() > 1.0)
         shape->setSize(newSize);
 
-    KUndo2Command * cmd = parent->canvas()->shapeController()->addShape(shape);
+    KUndo2Command *cmd = parent->canvas()->shapeController()->addShape(shape);
     if (cmd) {
         KoSelection *selection = parent->canvas()->shapeManager()->selection();
         selection->deselectAll();
@@ -92,7 +92,7 @@ void KoCreateShapeStrategy::paint(QPainter &painter, const KoViewConverter &conv
         painter.save();
         painter.setRenderHint(QPainter::Antialiasing, false);
 
-        QColor selectColor(Qt::blue);   // TODO make configurable
+        QColor selectColor(Qt::blue); // TODO make configurable
         selectColor.setAlphaF(0.5);
         QBrush sb(selectColor, Qt::SolidPattern);
         painter.setPen(QPen(sb, 0));
@@ -119,6 +119,6 @@ void KoCreateShapeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
 {
     Q_D(KoShapeRubberSelectStrategy);
     KoShapeRubberSelectStrategy::handleMouseMove(point, modifiers);
-    if (! m_outline.isEmpty())
+    if (!m_outline.isEmpty())
         d->tool->canvas()->updateCanvas(d->selectedRect());
 }

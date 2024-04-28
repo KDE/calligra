@@ -2,43 +2,41 @@
  * SPDX-FileCopyrightText: 2010 Inge Wallin <inge@lysator.liu.se>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include "BitmapHeader.h"
 
 #include <QDataStream>
-//#include <QColor>
-//#include <QImage>
-//#include <QRect> // also provides QSize
-//#include <QString>
+// #include <QColor>
+// #include <QImage>
+// #include <QRect> // also provides QSize
+// #include <QString>
 
 #include <VectorImageDebug.h>
-
 
 namespace Libemf
 {
 
-static void soakBytes( QDataStream &stream, int numBytes )
+static void soakBytes(QDataStream &stream, int numBytes)
 {
     quint8 scratch;
-    for ( int i = 0; i < numBytes; ++i ) {
+    for (int i = 0; i < numBytes; ++i) {
         stream >> scratch;
     }
 }
 
-
-BitmapHeader::BitmapHeader( QDataStream &stream, int size )
+BitmapHeader::BitmapHeader(QDataStream &stream, int size)
 {
-    m_headerType = BitmapInfoHeader;  // The default
+    m_headerType = BitmapInfoHeader; // The default
 
-    int  read = 40;             // Keep track of how many bytes we have read;
+    int read = 40; // Keep track of how many bytes we have read;
 
     // Read the data that is present in a BitmapInfoHeader (size 40)
     stream >> m_headerSize;
     stream >> m_width;
     stream >> m_height;
-    stream >> m_planes;         // 16 bits
-    stream >> m_bitCount;       // 16 bits
+    stream >> m_planes; // 16 bits
+    stream >> m_bitCount; // 16 bits
     stream >> m_compression;
     stream >> m_imageSize;
 
@@ -100,7 +98,5 @@ BitmapHeader::BitmapHeader( QDataStream &stream, int size )
 BitmapHeader::~BitmapHeader()
 {
 }
-
-
 
 } // namespace Libemf

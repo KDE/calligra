@@ -8,19 +8,12 @@
 
 #include <QAbstractListModel>
 
-
 class RecentFilesModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* recentFileManager READ recentFileManager WRITE setRecentFileManager NOTIFY recentFileManagerChanged)
+    Q_PROPERTY(QObject *recentFileManager READ recentFileManager WRITE setRecentFileManager NOTIFY recentFileManagerChanged)
 public:
-    enum PresetRoles {
-        ImageRole = Qt::UserRole + 1,
-        TextRole,
-        UrlRole,
-        NameRole,
-        DateRole
-    };
+    enum PresetRoles { ImageRole = Qt::UserRole + 1, TextRole, UrlRole, NameRole, DateRole };
 
     explicit RecentFilesModel(QObject *parent = 0);
     ~RecentFilesModel() override;
@@ -30,8 +23,8 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
-    QObject* recentFileManager() const;
-    void setRecentFileManager(QObject* recentFileManager);
+    QObject *recentFileManager() const;
+    void setRecentFileManager(QObject *recentFileManager);
 
 Q_SIGNALS:
     void recentFileManagerChanged();
@@ -42,7 +35,7 @@ public Q_SLOTS:
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 
 private Q_SLOTS:
     void recentFilesListChanged();

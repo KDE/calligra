@@ -7,11 +7,10 @@
 #ifndef KOMARKERSELECTOR_H
 #define KOMARKERSELECTOR_H
 
-#include <QComboBox>
 #include <KoMarkerData.h>
+#include <QComboBox>
 
 class KoMarker;
-
 
 class KoMarkerSelector : public QComboBox
 {
@@ -31,14 +30,14 @@ public:
     /**
      * Set the available markers in the document.
      */
-    void updateMarkers(const QList<KoMarker*> markers);
+    void updateMarkers(const QList<KoMarker *> markers);
 
 protected:
     void paintEvent(QPaintEvent *pe) override;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOMARKERSELECTOR_H */

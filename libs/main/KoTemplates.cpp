@@ -6,14 +6,13 @@
 
 #include "KoTemplates.h"
 
-#include <QString>
 #include <QChar>
+#include <QString>
 
 namespace KoTemplates
 {
 QString trimmed(const QString &string)
 {
-
     QString ret;
     for (int i = 0; i < string.length(); ++i) {
         QChar tmp(string[i]);

@@ -15,11 +15,13 @@ class ArtisticTextShapeFactory : public KoShapeFactoryBase
 {
 public:
     ArtisticTextShapeFactory();
-    ~ArtisticTextShapeFactory() override {}
+    ~ArtisticTextShapeFactory() override
+    {
+    }
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
     // reimplemented from KoShapeFactoryBase
-    bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const override;
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
 };
 
 #endif // ARTISTICTEXTSHAPEFACTORY_H

@@ -11,52 +11,53 @@
 
 #include "koodf_export.h"
 
-namespace writeodf {
+namespace writeodf
+{
 
-template <class T>
-void addConfigItem(T& config, const QString & configName, const QString& value)
+template<class T>
+void addConfigItem(T &config, const QString &configName, const QString &value)
 {
     config_config_item item(config.add_config_config_item(configName, "string"));
     item.addTextNode(value);
 }
 
-template <class T>
-void addConfigItem(T& config, const QString & configName, bool value)
+template<class T>
+void addConfigItem(T &config, const QString &configName, bool value)
 {
     config_config_item item(config.add_config_config_item(configName, "boolean"));
     item.addTextNode(value ? "true" : "false");
 }
 
-template <class T>
-void addConfigItem(T& config, const QString & configName, int value)
+template<class T>
+void addConfigItem(T &config, const QString &configName, int value)
 {
     config_config_item item(config.add_config_config_item(configName, "int"));
     item.addTextNode(QString::number(value));
 }
 
-template <class T>
-void addConfigItem(T& config, const QString & configName, double value)
+template<class T>
+void addConfigItem(T &config, const QString &configName, double value)
 {
     config_config_item item(config.add_config_config_item(configName, "double"));
     item.addTextNode(QString::number(value));
 }
 
-template <class T>
-void addConfigItem(T& config, const QString & configName, float value)
+template<class T>
+void addConfigItem(T &config, const QString &configName, float value)
 {
     config_config_item item(config.add_config_config_item(configName, "double"));
     item.addTextNode(QString::number(value));
 }
 
-template <class T>
-void addConfigItem(T& config, const QString & configName, long value)
+template<class T>
+void addConfigItem(T &config, const QString &configName, long value)
 {
     config_config_item item(config.add_config_config_item(configName, "long"));
     item.addTextNode(QString::number(value));
 }
 
-template <class T>
-void addConfigItem(T& config, const QString & configName, short value)
+template<class T>
+void addConfigItem(T &config, const QString &configName, short value)
 {
     config_config_item item(config.add_config_config_item(configName, "short"));
     item.addTextNode(QString::number(value));
@@ -68,9 +69,7 @@ void addConfigItem(T& config, const QString & configName, short value)
  * @param text the text to write
  * @param tabCache optional map allowing to find a tab for a given character index
  */
-void KOODF_EXPORT addTextSpan(group_paragraph_content& content,
-                              const QString& text,
-                              const QMap<int, int>& tabCache);
+void KOODF_EXPORT addTextSpan(group_paragraph_content &content, const QString &text, const QMap<int, int> &tabCache);
 
 /**
  * @brief Adds a text span as nodes of the current odf paragraph.
@@ -81,7 +80,7 @@ void KOODF_EXPORT addTextSpan(group_paragraph_content& content,
  * @param e the content of the paragraph group
  * @param text the text to write
  */
-inline void addTextSpan(group_paragraph_content& e, const QString& text)
+inline void addTextSpan(group_paragraph_content &e, const QString &text)
 {
     QMap<int, int> tabCache;
     addTextSpan(e, text, tabCache);

@@ -24,17 +24,17 @@ class CALLIGRA_SHEETS_PART_EXPORT CellTool : public CellToolBase
     Q_OBJECT
 
 public:
-    explicit CellTool(KoCanvasBase* canvas);
+    explicit CellTool(KoCanvasBase *canvas);
     ~CellTool() override;
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
-    SheetView* sheetView(Sheet* sheet) const override;
+    SheetView *sheetView(Sheet *sheet) const override;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
 
 protected:
-    Selection* selection() override;
+    Selection *selection() override;
     QPointF offset() const override;
     QSizeF size() const override;
     QPointF canvasOffset() const override;
@@ -49,7 +49,7 @@ private:
     Q_DISABLE_COPY(CellTool)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

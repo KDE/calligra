@@ -12,16 +12,13 @@
 
 #include <KPluginFactory>
 
-
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_shape_video.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_shape_video.json", registerPlugin<Plugin>();)
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new VideoShapeFactory() );
+    KoShapeRegistry::instance()->add(new VideoShapeFactory());
     KoToolRegistry::instance()->add(new VideoToolFactory());
 }
 
 #include <Plugin.moc>
-

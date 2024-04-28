@@ -15,8 +15,8 @@ class BlurEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     BlurEffectFactory();
-    KoFilterEffect * createFilterEffect() const override;
-    KoFilterEffectConfigWidgetBase * createConfigWidget() const override;
+    KoFilterEffect *createFilterEffect() const override;
+    KoFilterEffectConfigWidgetBase *createConfigWidget() const override;
 };
 
 #endif // BLUREFFECTFACTORY_H

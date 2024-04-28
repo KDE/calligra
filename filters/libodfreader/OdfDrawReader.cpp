@@ -5,52 +5,45 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "OdfTextReader.h"
 
 // Qt
-#include <QStringList>
 #include <QBuffer>
+#include <QStringList>
 
 // KF5
 #include <KLocalizedString>
 
 // Calligra
-#include <KoStore.h>
-#include <KoXmlStreamReader.h>
-#include <KoXmlNS.h>
-#include <KoXmlWriter.h>  // For copyXmlElement
 #include <KoOdfReadStore.h>
+#include <KoStore.h>
+#include <KoXmlNS.h>
+#include <KoXmlStreamReader.h>
+#include <KoXmlWriter.h> // For copyXmlElement
 
 // Reader library
-#include "OdfReader.h"
 #include "OdfDrawReaderBackend.h"
+#include "OdfReader.h"
 #include "OdfReaderContext.h"
 #include "OdfReaderDebug.h"
 
-
 #if 1
 static int debugIndent = 0;
-#define DEBUGSTART() \
-    ++debugIndent; \
+#define DEBUGSTART()                                                                                                                                           \
+    ++debugIndent;                                                                                                                                             \
     DEBUG_READING("entering")
-#define DEBUGEND() \
-    DEBUG_READING("exiting"); \
+#define DEBUGEND()                                                                                                                                             \
+    DEBUG_READING("exiting");                                                                                                                                  \
     --debugIndent
-#define DEBUG_READING(param) \
-    debugOdfReader << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
-    << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
-    << reader.qualifiedName().toString()
+#define DEBUG_READING(param)                                                                                                                                   \
+    debugOdfReader << QString("%1").arg(" ", debugIndent * 2) << param << ": "                                                                                 \
+                   << (reader.isStartElement() ? "start" : (reader.isEndElement() ? "end" : "other")) << reader.qualifiedName().toString()
 #else
-#define DEBUGSTART() \
-    // NOTHING
-#define DEBUGEND() \
-    // NOTHING
-#define DEBUG_READING(param) \
-    // NOTHING
+#define DEBUGSTART() // NOTHING
+#define DEBUGEND() // NOTHING
+#define DEBUG_READING(param) // NOTHING
 #endif
-
 
 OdfDrawReader::OdfDrawReader()
     : m_parent(0)
@@ -63,10 +56,8 @@ OdfDrawReader::~OdfDrawReader()
 {
 }
 
-
 // ----------------------------------------------------------------
 //                             setters
-
 
 void OdfDrawReader::setParent(OdfReader *parent)
 {
@@ -83,14 +74,12 @@ void OdfDrawReader::setContext(OdfReaderContext *context)
     m_context = context;
 }
 
-
 // ----------------------------------------------------------------
 //                         namespace dr3d
 
-
 void OdfDrawReader::readElementDr3dScene(KoXmlStreamReader &reader)
 {
-   DEBUGSTART();
+    DEBUGSTART();
     m_backend->elementDr3dScene(reader, m_context);
 
     // <dr3d:scene> has the following children in ODF 1.2:
@@ -107,24 +96,19 @@ void OdfDrawReader::readElementDr3dScene(KoXmlStreamReader &reader)
     //
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "dr3d:cube") {
-	    readElementDr3dCube(reader);
-        }
-        else if (tagName == "dr3d:extrude") {
-	    readElementDr3dExtrude(reader);
-        }
-        else if (tagName == "dr3d:light") {
-	    readElementDr3dLight(reader);
-        }
-        else if (tagName == "dr3d:rotate") {
-	    readElementDr3dRotate(reader);
-        }
-        else if (tagName == "dr3d:scene") {
-	    readElementDr3dScene(reader);
-        }
-        else if (tagName == "dr3d:sphere") {
-	    readElementDr3dSphere(reader);
+            readElementDr3dCube(reader);
+        } else if (tagName == "dr3d:extrude") {
+            readElementDr3dExtrude(reader);
+        } else if (tagName == "dr3d:light") {
+            readElementDr3dLight(reader);
+        } else if (tagName == "dr3d:rotate") {
+            readElementDr3dRotate(reader);
+        } else if (tagName == "dr3d:scene") {
+            readElementDr3dScene(reader);
+        } else if (tagName == "dr3d:sphere") {
+            readElementDr3dSphere(reader);
         }
         //...  MORE else if () HERE
         else {
@@ -136,19 +120,16 @@ void OdfDrawReader::readElementDr3dScene(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
-IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfDrawReader, Dr3dLight)   // ODF 1.2  10.5.3
-IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfDrawReader, Dr3dCube)    // ODF 1.2  10.5.4
-IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfDrawReader, Dr3dSphere)  // ODF 1.2  10.5.5
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfDrawReader, Dr3dLight) // ODF 1.2  10.5.3
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfDrawReader, Dr3dCube) // ODF 1.2  10.5.4
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfDrawReader, Dr3dSphere) // ODF 1.2  10.5.5
 IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfDrawReader, Dr3dExtrude) // ODF 1.2  10.5.6
-IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfDrawReader, Dr3dRotate)  // ODF 1.2  10.5.7
-
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfDrawReader, Dr3dRotate) // ODF 1.2  10.5.7
 
 // ================================================================
 //                         namespace draw
 
-
 // ----------------------------------------------------------------
-
 
 #if 0
 // This is a template function for the reader library.
@@ -185,7 +166,6 @@ void OdfDrawReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
 }
 #endif
 
-
 void OdfDrawReader::readCommonGraphicsElements(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
@@ -214,52 +194,38 @@ void OdfDrawReader::readCommonGraphicsElements(KoXmlStreamReader &reader)
     //   [done] <draw:regular-polygon> 10.3.6
 
     QString tagName = reader.qualifiedName().toString();
-    //debugOdfReader << "list child:" << tagName;
+    // debugOdfReader << "list child:" << tagName;
     if (tagName == "dr3d:scene") {
-	readElementDr3dScene(reader);
-    }
-    else if (tagName == "draw:a") {
-	readElementDrawA(reader);
-    }
-    else if (tagName == "draw:caption") {
-	readElementDrawCaption(reader);
-    }
-    else if (tagName == "draw:circle") {
-	readElementDrawCircle(reader);
-    }
-    else if (tagName == "draw:connector") {
-	readElementDrawConnector(reader);
-    }
-    else if (tagName == "draw:ellipse") {
-	readElementDrawEllipse(reader);
-    }
-    else if (tagName == "draw:frame") {
-	readElementDrawFrame(reader);
-    }
-    else if (tagName == "draw:line") {
-	readElementDrawLine(reader);
-    }
-    else if (tagName == "draw:measure") {
-	readElementDrawMeasure(reader);
-    }
-    else if (tagName == "draw:path") {
-	readElementDrawPath(reader);
-    }
-    else if (tagName == "draw:polygon") {
-	readElementDrawPolygon(reader);
-    }
-    else if (tagName == "draw:polyline") {
-	readElementDrawPolyline(reader);
-    }
-    else if (tagName == "draw:rect") {
-	readElementDrawRect(reader);
-    }
-    else if (tagName == "draw:regular-polygon") {
-	readElementDrawRegularPolygon(reader);
-    }
-    else {
-	// FIXME: Should this perhaps be skipCurrentElement()?
-	readUnknownElement(reader);
+        readElementDr3dScene(reader);
+    } else if (tagName == "draw:a") {
+        readElementDrawA(reader);
+    } else if (tagName == "draw:caption") {
+        readElementDrawCaption(reader);
+    } else if (tagName == "draw:circle") {
+        readElementDrawCircle(reader);
+    } else if (tagName == "draw:connector") {
+        readElementDrawConnector(reader);
+    } else if (tagName == "draw:ellipse") {
+        readElementDrawEllipse(reader);
+    } else if (tagName == "draw:frame") {
+        readElementDrawFrame(reader);
+    } else if (tagName == "draw:line") {
+        readElementDrawLine(reader);
+    } else if (tagName == "draw:measure") {
+        readElementDrawMeasure(reader);
+    } else if (tagName == "draw:path") {
+        readElementDrawPath(reader);
+    } else if (tagName == "draw:polygon") {
+        readElementDrawPolygon(reader);
+    } else if (tagName == "draw:polyline") {
+        readElementDrawPolyline(reader);
+    } else if (tagName == "draw:rect") {
+        readElementDrawRect(reader);
+    } else if (tagName == "draw:regular-polygon") {
+        readElementDrawRegularPolygon(reader);
+    } else {
+        // FIXME: Should this perhaps be skipCurrentElement()?
+        readUnknownElement(reader);
     }
 
     DEBUGEND();
@@ -277,31 +243,29 @@ void OdfDrawReader::readElementDrawA(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
+#define IMPLEMENT_GRAPHIC_OBJECT(object)                                                                                                                       \
+    void OdfDrawReader::readElementDraw##object(KoXmlStreamReader &reader)                                                                                     \
+    {                                                                                                                                                          \
+        DEBUGSTART();                                                                                                                                          \
+        m_backend->elementDraw##object(reader, m_context);                                                                                                     \
+                                                                                                                                                               \
+        readGraphicsObjectChildren(reader);                                                                                                                    \
+                                                                                                                                                               \
+        m_backend->elementDraw##object(reader, m_context);                                                                                                     \
+        DEBUGEND();                                                                                                                                            \
+    }
 
-#define IMPLEMENT_GRAPHIC_OBJECT(object)                                \
-void OdfDrawReader::readElementDraw##object(KoXmlStreamReader &reader)  \
-{                                                                       \
-    DEBUGSTART();                                                       \
-    m_backend->elementDraw##object(reader, m_context);                  \
-                                                                        \
-    readGraphicsObjectChildren(reader);                                 \
-                                                                        \
-    m_backend->elementDraw##object(reader, m_context);                  \
-    DEBUGEND();                                                         \
-}
-
-IMPLEMENT_GRAPHIC_OBJECT(Rect)            // ODF 1.2  10.3.2
-IMPLEMENT_GRAPHIC_OBJECT(Line)		  // ODF 1.2  10.3.3
-IMPLEMENT_GRAPHIC_OBJECT(Polyline)	  // ODF 1.2  10.3.4
-IMPLEMENT_GRAPHIC_OBJECT(Polygon)	  // ODF 1.2  10.3.5
-IMPLEMENT_GRAPHIC_OBJECT(RegularPolygon)  // ODF 1.2  10.3.6
-IMPLEMENT_GRAPHIC_OBJECT(Path)		  // ODF 1.2  10.3.7
-IMPLEMENT_GRAPHIC_OBJECT(Circle)	  // ODF 1.2  10.3.8
-IMPLEMENT_GRAPHIC_OBJECT(Ellipse)	  // ODF 1.2  10.3.9
-IMPLEMENT_GRAPHIC_OBJECT(Connector)	  // ODF 1.2  10.3.10
-IMPLEMENT_GRAPHIC_OBJECT(Caption)	  // ODF 1.2  10.3.11
-IMPLEMENT_GRAPHIC_OBJECT(Measure)	  // ODF 1.2  10.3.12
-
+IMPLEMENT_GRAPHIC_OBJECT(Rect) // ODF 1.2  10.3.2
+IMPLEMENT_GRAPHIC_OBJECT(Line) // ODF 1.2  10.3.3
+IMPLEMENT_GRAPHIC_OBJECT(Polyline) // ODF 1.2  10.3.4
+IMPLEMENT_GRAPHIC_OBJECT(Polygon) // ODF 1.2  10.3.5
+IMPLEMENT_GRAPHIC_OBJECT(RegularPolygon) // ODF 1.2  10.3.6
+IMPLEMENT_GRAPHIC_OBJECT(Path) // ODF 1.2  10.3.7
+IMPLEMENT_GRAPHIC_OBJECT(Circle) // ODF 1.2  10.3.8
+IMPLEMENT_GRAPHIC_OBJECT(Ellipse) // ODF 1.2  10.3.9
+IMPLEMENT_GRAPHIC_OBJECT(Connector) // ODF 1.2  10.3.10
+IMPLEMENT_GRAPHIC_OBJECT(Caption) // ODF 1.2  10.3.11
+IMPLEMENT_GRAPHIC_OBJECT(Measure) // ODF 1.2  10.3.12
 
 void OdfDrawReader::readGraphicsObjectChildren(KoXmlStreamReader &reader)
 {
@@ -316,46 +280,39 @@ void OdfDrawReader::readGraphicsObjectChildren(KoXmlStreamReader &reader)
     //   [done] <text:p> 5.1.3.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "draw:glue-point") {
             // FIXME: NYI
             reader.skipCurrentElement();
-            //readElementOfficeDrawGluePoint(reader);
-        }
-        else if (tagName == "office:event-listeners") {
+            // readElementOfficeDrawGluePoint(reader);
+        } else if (tagName == "office:event-listeners") {
             // FIXME: NYI
             reader.skipCurrentElement();
-            //readElementOfficeEventListeners(reader);
-        }
-        else if (reader.prefix() == QLatin1StringView("svg")) {
-	    if (tagName == "svg:desc") {
-		// FIXME: NYI
-		reader.skipCurrentElement();
-		//readElementSvgDesc(reader);
-	    }
-	    else if (tagName == "svg:title") {
-		// FIXME: NYI
-		reader.skipCurrentElement();
-		//readElementSvgTitle(reader);
-	    }
-	    else {
-		reader.skipCurrentElement();
-	    }
+            // readElementOfficeEventListeners(reader);
+        } else if (reader.prefix() == QLatin1StringView("svg")) {
+            if (tagName == "svg:desc") {
+                // FIXME: NYI
+                reader.skipCurrentElement();
+                // readElementSvgDesc(reader);
+            } else if (tagName == "svg:title") {
+                // FIXME: NYI
+                reader.skipCurrentElement();
+                // readElementSvgTitle(reader);
+            } else {
+                reader.skipCurrentElement();
+            }
         } // namespace svg
         else if (reader.prefix() == QLatin1StringView("text")) {
-	    OdfTextReader *textReader = m_parent->textReader();
-	    if (!textReader) {
-		reader.skipCurrentElement();
-	    }
-	    else if (tagName == "text:list") {
-		textReader->readElementTextList(reader);
-	    }
-	    else if (tagName == "text:p") {
-		textReader->readElementTextP(reader);
-	    }
-	    else {
-		reader.skipCurrentElement();
-	    }
+            OdfTextReader *textReader = m_parent->textReader();
+            if (!textReader) {
+                reader.skipCurrentElement();
+            } else if (tagName == "text:list") {
+                textReader->readElementTextList(reader);
+            } else if (tagName == "text:p") {
+                textReader->readElementTextP(reader);
+            } else {
+                reader.skipCurrentElement();
+            }
         } // namespace text
         else {
             reader.skipCurrentElement();
@@ -363,10 +320,8 @@ void OdfDrawReader::readGraphicsObjectChildren(KoXmlStreamReader &reader)
     }
 }
 
-
 // ----------------------------------------------------------------
 //                                 Frames
-
 
 void OdfDrawReader::readElementDrawFrame(KoXmlStreamReader &reader)
 {
@@ -392,28 +347,24 @@ void OdfDrawReader::readElementDrawFrame(KoXmlStreamReader &reader)
     //
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "draw:image") {
             // FIXME: NYI
             reader.skipCurrentElement();
-        }
-        else if (tagName == "draw:object") {
-	    readElementDrawObject(reader);
-        }
-        else if (tagName == "draw:object-ole") {
-	    readElementDrawObjectOle(reader);
+        } else if (tagName == "draw:object") {
+            readElementDrawObject(reader);
+        } else if (tagName == "draw:object-ole") {
+            readElementDrawObjectOle(reader);
         }
         //...  MORE else if () HERE
         else if (tagName == "table:table") {
-	    OdfTextReader *textReader = m_parent->textReader();
-	    if (textReader) {
-		textReader->readElementTableTable(reader);
-	    }
-	    else {
-		reader.skipCurrentElement();
-	    }
-        }
-        else {
+            OdfTextReader *textReader = m_parent->textReader();
+            if (textReader) {
+                textReader->readElementTableTable(reader);
+            } else {
+                reader.skipCurrentElement();
+            }
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -424,7 +375,7 @@ void OdfDrawReader::readElementDrawFrame(KoXmlStreamReader &reader)
 
 void OdfDrawReader::readElementDrawObject(KoXmlStreamReader &reader)
 {
-   DEBUGSTART();
+    DEBUGSTART();
     m_backend->elementDrawObject(reader, m_context);
 
     // <draw:object> has the following children in ODF 1.2:
@@ -432,17 +383,15 @@ void OdfDrawReader::readElementDrawObject(KoXmlStreamReader &reader)
     //          <office:document> 3.1.2
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "math:math") {
             // FIXME: NYI
             reader.skipCurrentElement();
-        }
-        else if (tagName == "office:document") {
+        } else if (tagName == "office:document") {
             // FIXME: NYI
             reader.skipCurrentElement();
-        }
-        else {
-	    // Shouldn't happen.
+        } else {
+            // Shouldn't happen.
             reader.skipCurrentElement();
         }
     }
@@ -453,20 +402,19 @@ void OdfDrawReader::readElementDrawObject(KoXmlStreamReader &reader)
 
 void OdfDrawReader::readElementDrawObjectOle(KoXmlStreamReader &reader)
 {
-   DEBUGSTART();
+    DEBUGSTART();
     m_backend->elementDrawObjectOle(reader, m_context);
 
     // <draw:object-ole> has the following children in ODF 1.2:
     //          <office:binary-data> 10.4.5
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
-	if (tagName == "office:binary-data") {
+
+        if (tagName == "office:binary-data") {
             // FIXME: NYI
             reader.skipCurrentElement();
-        }
-        else {
-	    // Shouldn't happen.
+        } else {
+            // Shouldn't happen.
             reader.skipCurrentElement();
         }
     }
@@ -475,16 +423,14 @@ void OdfDrawReader::readElementDrawObjectOle(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
-
 // ----------------------------------------------------------------
 //                             Other functions
-
 
 void OdfDrawReader::readUnknownElement(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
 
-#if 0  // FIXME: Fix this
+#if 0 // FIXME: Fix this
     if (m_context->isInsideParagraph()) {
         // readParagraphContents expect to have the reader point to the
         // contents of the paragraph so we have to read past the draw:p

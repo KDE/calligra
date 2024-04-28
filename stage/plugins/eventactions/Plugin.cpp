@@ -6,17 +6,16 @@
 
 #include "Plugin.h"
 
+#include "sound/KPrSoundEventActionFactory.h"
 #include <KPluginFactory>
 #include <KoEventActionRegistry.h>
-#include "sound/KPrSoundEventActionFactory.h"
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligrastageeventactions.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligrastageeventactions.json", registerPlugin<Plugin>();)
 
-Plugin::Plugin( QObject * parent,  const QVariantList & )
-: QObject( parent )
+Plugin::Plugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
 {
-    KoEventActionRegistry::instance()->addPresentationEventAction( new KPrSoundEventActionFactory() );
+    KoEventActionRegistry::instance()->addPresentationEventAction(new KPrSoundEventActionFactory());
 }
 
 #include "Plugin.moc"

@@ -22,25 +22,24 @@ class DocxImport : public MSOOXML::MsooXmlImport
 {
     Q_OBJECT
 public:
-    DocxImport(QObject * parent, const QVariantList &);
+    DocxImport(QObject *parent, const QVariantList &);
     ~DocxImport() override;
 
     /// Access the content defined within the words/settings.xml configuration-file.
     QMap<QString, QVariant> documentSettings() const;
-    QVariant documentSetting(const QString& name) const;
+    QVariant documentSetting(const QString &name) const;
 
 protected:
-    bool acceptsSourceMimeType(const QByteArray& mime) const override;
+    bool acceptsSourceMimeType(const QByteArray &mime) const override;
 
-    bool acceptsDestinationMimeType(const QByteArray& mime) const override;
+    bool acceptsDestinationMimeType(const QByteArray &mime) const override;
 
-    KoFilter::ConversionStatus parseParts(KoOdfWriters *writers, MSOOXML::MsooXmlRelationships *relationships,
-            QString& errorMessage) override;
+    KoFilter::ConversionStatus parseParts(KoOdfWriters *writers, MSOOXML::MsooXmlRelationships *relationships, QString &errorMessage) override;
 
-    void writeConfigurationSettings(KoXmlWriter* settings) const override;
+    void writeConfigurationSettings(KoXmlWriter *settings) const override;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

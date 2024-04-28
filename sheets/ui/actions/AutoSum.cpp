@@ -10,17 +10,13 @@
 
 #include <KLocalizedString>
 
+#include "core/Sheet.h"
 #include "engine/CellBase.h"
 #include "engine/Value.h"
-#include "core/Sheet.h"
 #include "ui/CellEditorBase.h"
 #include "ui/CellToolBase.h"
 
-
-
 using namespace Calligra::Sheets;
-
-
 
 AutoSum::AutoSum(Actions *actions)
     : CellAction(actions, "autoSum", i18n("Autosum"), koIcon("black_sum"), i18n("Insert the 'sum' function"))
@@ -47,7 +43,7 @@ void AutoSum::execute(Selection *selection, Sheet *sheet, QWidget *)
         sel = extendSelectionToColumn(cur, true);
 
     if ((sel.height() > 1) || (sel.width() > 1)) {
-        AutoSumCommand* command = new AutoSumCommand();
+        AutoSumCommand *command = new AutoSumCommand();
         command->setSheet(sheet);
         command->add(sel, sheet);
         command->setSelection(selection);
@@ -62,17 +58,13 @@ void AutoSum::execute(Selection *selection, Sheet *sheet, QWidget *)
     tool->editor()->setCursorPosition(5);
 }
 
-
-
-
-
 AutoSumCommand::AutoSumCommand()
     : m_selection(nullptr)
 {
     setText(kundo2_i18n("Auto Sum"));
 }
 
-bool AutoSumCommand::process(Element* element)
+bool AutoSumCommand::process(Element *element)
 {
     QRect sel = element->rect();
     SheetBase *sheet = element->sheet();
@@ -86,8 +78,10 @@ bool AutoSumCommand::process(Element* element)
             int sumy = y2;
             // We can place the sum at the bottom-most selected cell, or one below if said cell still contains a value.
             Value v = CellBase(sheet, x, sumy).value();
-            if (v.isNumber()) sumy++;
-            if (maxy < sumy) maxy = sumy;
+            if (v.isNumber())
+                sumy++;
+            if (maxy < sumy)
+                maxy = sumy;
             CellBase sumCell = CellBase(sheet, x, sumy);
 
             const Region region(QRect(QPoint(x, y1), QPoint(x, sumy - 1)), sheet);
@@ -106,7 +100,8 @@ bool AutoSumCommand::process(Element* element)
         int y = sel.top();
         int sumx = x2;
         Value v = CellBase(sheet, sumx, y).value();
-        if (v.isNumber()) sumx++;
+        if (v.isNumber())
+            sumx++;
         CellBase sumCell = CellBase(sheet, sumx, y);
 
         const Region region(QRect(QPoint(x1, y), QPoint(sumx - 1, y)), sheet);
@@ -119,5 +114,3 @@ bool AutoSumCommand::process(Element* element)
     }
     return false;
 }
-
-

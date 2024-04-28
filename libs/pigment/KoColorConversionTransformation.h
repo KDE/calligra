@@ -2,7 +2,7 @@
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef _KO_COLOR_CONVERSION_TRANSFORMATION_H_
 #define _KO_COLOR_CONVERSION_TRANSFORMATION_H_
@@ -21,31 +21,26 @@ class PIGMENTCMS_EXPORT KoColorConversionTransformation : public KoColorTransfor
 {
     friend class KoColorConversionCache;
     struct Private;
-public:
 
+public:
     /**
      * Possible value for the intent of a color conversion (useful only for ICC
      * transformations)
      */
-    enum Intent {
-        IntentPerceptual = 0,
-        IntentRelativeColorimetric = 1,
-        IntentSaturation = 2,
-        IntentAbsoluteColorimetric = 3
-    };
+    enum Intent { IntentPerceptual = 0, IntentRelativeColorimetric = 1, IntentSaturation = 2, IntentAbsoluteColorimetric = 3 };
 
     /**
      * Flags for the color conversion, see lcms2 documentation for more information
      */
     enum ConversionFlag {
-        Empty                   = 0x0,
-        NoOptimization          = 0x0100,
-        GamutCheck              = 0x1000,    // Out of Gamut alarm
-        SoftProofing            = 0x4000,    // Do softproofing
-        BlackpointCompensation  = 0x2000,
-        NoWhiteOnWhiteFixup     = 0x0004,    // Don't fix scum dot
-        HighQuality             = 0x0400,    // Use more memory to give better accuracy
-        LowQuality              = 0x0800    // Use less memory to minimize resources
+        Empty = 0x0,
+        NoOptimization = 0x0100,
+        GamutCheck = 0x1000, // Out of Gamut alarm
+        SoftProofing = 0x4000, // Do softproofing
+        BlackpointCompensation = 0x2000,
+        NoWhiteOnWhiteFixup = 0x0004, // Don't fix scum dot
+        HighQuality = 0x0400, // Use more memory to give better accuracy
+        LowQuality = 0x0800 // Use less memory to minimize resources
     };
     Q_DECLARE_FLAGS(ConversionFlags, ConversionFlag)
 
@@ -67,29 +62,38 @@ public:
      * following default values should be used.
      */
 
-    static Intent internalRenderingIntent() { return IntentPerceptual; }
-    static ConversionFlags internalConversionFlags() { return BlackpointCompensation; }
+    static Intent internalRenderingIntent()
+    {
+        return IntentPerceptual;
+    }
+    static ConversionFlags internalConversionFlags()
+    {
+        return BlackpointCompensation;
+    }
 
-    static Intent adjustmentRenderingIntent() { return IntentPerceptual; }
-    static ConversionFlags adjustmentConversionFlags() { return ConversionFlags(BlackpointCompensation | NoWhiteOnWhiteFixup); }
+    static Intent adjustmentRenderingIntent()
+    {
+        return IntentPerceptual;
+    }
+    static ConversionFlags adjustmentConversionFlags()
+    {
+        return ConversionFlags(BlackpointCompensation | NoWhiteOnWhiteFixup);
+    }
 
 public:
-    KoColorConversionTransformation(const KoColorSpace* srcCs,
-                                    const KoColorSpace* dstCs,
-                                    Intent renderingIntent,
-                                    ConversionFlags conversionFlags);
+    KoColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs, Intent renderingIntent, ConversionFlags conversionFlags);
     ~KoColorConversionTransformation() override;
-public:
 
+public:
     /**
      * @return the source color space for this transformation.
      */
-    const KoColorSpace* srcColorSpace() const;
+    const KoColorSpace *srcColorSpace() const;
 
     /**
      * @return the destination color space for this transformation.
      */
-    const KoColorSpace* dstColorSpace() const;
+    const KoColorSpace *dstColorSpace() const;
 
     /**
      * @return the rendering intent of this transformation (this is only useful
@@ -111,14 +115,16 @@ public:
     /**
      * @return false if the  transformation is not valid
      */
-    bool isValid() const override { return true; }
+    bool isValid() const override
+    {
+        return true;
+    }
 
 private:
+    void setSrcColorSpace(const KoColorSpace *) const;
+    void setDstColorSpace(const KoColorSpace *) const;
 
-    void setSrcColorSpace(const KoColorSpace*) const;
-    void setDstColorSpace(const KoColorSpace*) const;
-
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoColorConversionTransformation::ConversionFlags)

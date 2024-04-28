@@ -58,7 +58,7 @@ public:
      */
     KoInlineObject *inlineTextObject(int id) const;
 
-    QList<KoInlineObject*> inlineTextObjects() const;
+    QList<KoInlineObject *> inlineTextObjects() const;
 
     /**
      * Insert a new inline object into the manager as well as the document.
@@ -80,7 +80,7 @@ public:
      *
      * @param object the inline object to insert.
      */
-    void addInlineObject(KoInlineObject* object);
+    void addInlineObject(KoInlineObject *object);
 
     /**
      * Remove an inline object from this manager. The object will also be removed from
@@ -134,19 +134,18 @@ public:
      *  actions as a parent (for memory management purposes) as well.
      * @see KoVariableManager
      */
-    QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
+    QList<QAction *> createInsertVariableActions(KoCanvasBase *host) const;
 
-    QList<KoTextLocator*> textLocators() const;
+    QList<KoTextLocator *> textLocators() const;
 
     /**
-      * It returns a list of all end notes in the document
-      */
-    QList<KoInlineNote*> endNotes() const;
+     * It returns a list of all end notes in the document
+     */
+    QList<KoInlineNote *> endNotes() const;
 
-    QMap<QString, KoInlineCite*> citations(bool duplicatesEnabled = true) const;
+    QMap<QString, KoInlineCite *> citations(bool duplicatesEnabled = true) const;
 
-    QList<KoInlineCite*> citationsSortedByPosition(bool duplicatesEnabled = true,
-                                                           QTextBlock block = QTextBlock()) const;
+    QList<KoInlineCite *> citationsSortedByPosition(bool duplicatesEnabled = true, QTextBlock block = QTextBlock()) const;
 
 public Q_SLOTS:
     void documentInformationUpdated(const QString &info, const QString &data);
@@ -160,14 +159,14 @@ Q_SIGNALS:
 private:
     void insertObject(KoInlineObject *object);
 
-    QHash<int, KoInlineObject*> m_objects;
-    QHash<int, KoInlineObject*> m_deletedObjects;
-    QList<KoInlineObject*> m_listeners; // holds objects also in m_objects, but which want propertyChanges
+    QHash<int, KoInlineObject *> m_objects;
+    QHash<int, KoInlineObject *> m_deletedObjects;
+    QList<KoInlineObject *> m_listeners; // holds objects also in m_objects, but which want propertyChanges
     int m_lastObjectId;
     QHash<int, QVariant> m_properties;
 
     KoVariableManager m_variableManager;
 };
 
-Q_DECLARE_METATYPE(KoInlineTextObjectManager*)
+Q_DECLARE_METATYPE(KoInlineTextObjectManager *)
 #endif

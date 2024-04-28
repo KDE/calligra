@@ -19,10 +19,9 @@ class Q_DECL_HIDDEN PasteStrategy::Private
 public:
 };
 
-PasteStrategy::PasteStrategy(CellToolBase *cellTool,
-                             const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
-        : SelectionStrategy(cellTool, documentPos, modifiers)
-        , d(new Private)
+PasteStrategy::PasteStrategy(CellToolBase *cellTool, const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
+    : SelectionStrategy(cellTool, documentPos, modifiers)
+    , d(new Private)
 {
 }
 
@@ -31,7 +30,7 @@ PasteStrategy::~PasteStrategy()
     delete d;
 }
 
-KUndo2Command* PasteStrategy::createCommand()
+KUndo2Command *PasteStrategy::createCommand()
 {
     PasteCommand *const command = new PasteCommand();
     command->setSheet(selection()->activeSheet());

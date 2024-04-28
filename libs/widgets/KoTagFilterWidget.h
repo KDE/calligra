@@ -20,7 +20,7 @@ class KoTagFilterWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit KoTagFilterWidget(QWidget* parent);
+    explicit KoTagFilterWidget(QWidget *parent);
     ~KoTagFilterWidget() override;
     void allowSave(bool allow);
     void clear();
@@ -30,9 +30,10 @@ Q_SIGNALS:
 private Q_SLOTS:
     void onTextChanged(const QString &lineEditText);
     void onSaveButtonClicked();
+
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // KOTAGFILTERWIDGET_H

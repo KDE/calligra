@@ -10,13 +10,14 @@
 #include <KarbonDocument.h>
 #include <KoPAPageBase.h>
 
-#include <KoUnit.h> // for POINT_TO_INCH
 #include <KoDpi.h>
 #include <KoShapePainter.h>
+#include <KoUnit.h> // for POINT_TO_INCH
 #include <KoZoomHandler.h>
 
-ImageExportOptionsWidget::ImageExportOptionsWidget(KarbonDocument *doc, QWidget * parent)
-    : QWidget(parent), m_doc(doc)
+ImageExportOptionsWidget::ImageExportOptionsWidget(KarbonDocument *doc, QWidget *parent)
+    : QWidget(parent)
+    , m_doc(doc)
 {
     KoUnit unit;
 
@@ -44,7 +45,7 @@ ImageExportOptionsWidget::ImageExportOptionsWidget(KarbonDocument *doc, QWidget 
     widget.opacity->setValue(0.0);
 
     for (int i = 0; i < doc->pageCount(); ++i) {
-        widget.pageCombo->addItem(i18n("Page %1", i+1));
+        widget.pageCombo->addItem(i18n("Page %1", i + 1));
     }
     setPage(0);
 

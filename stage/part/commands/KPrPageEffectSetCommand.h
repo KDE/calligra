@@ -30,7 +30,7 @@ class KPrPageEffect;
 class STAGE_EXPORT KPrPageEffectSetCommand : public KUndo2Command
 {
 public:
-    KPrPageEffectSetCommand(KoPAPageBase * page, KPrPageEffect * pageEffect, KUndo2Command *parent = 0);
+    KPrPageEffectSetCommand(KoPAPageBase *page, KPrPageEffect *pageEffect, KUndo2Command *parent = 0);
     ~KPrPageEffectSetCommand() override;
 
     /// redo the command
@@ -39,9 +39,9 @@ public:
     void undo() override;
 
 private:
-    KoPAPageBase * m_page;
-    KPrPageEffect * m_newPageEffect;
-    KPrPageEffect * m_oldPageEffect;
+    KoPAPageBase *m_page;
+    KPrPageEffect *m_newPageEffect;
+    KPrPageEffect *m_oldPageEffect;
     bool m_deleteNewPageEffect;
 };
 

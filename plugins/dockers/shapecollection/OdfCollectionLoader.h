@@ -8,8 +8,8 @@
 
 #include <KoXmlReader.h>
 
-#include <QObject>
 #include <QList>
+#include <QObject>
 #include <QStringList>
 
 class KoOdfReadStore;
@@ -21,42 +21,48 @@ class KoShape;
 class OdfCollectionLoader : public QObject
 {
     Q_OBJECT
-    public:
-        explicit OdfCollectionLoader(const QString& path, QObject* parent = 0);
-        ~OdfCollectionLoader() override;
+public:
+    explicit OdfCollectionLoader(const QString &path, QObject *parent = 0);
+    ~OdfCollectionLoader() override;
 
-        void load();
+    void load();
 
-        QList<KoShape*> shapeList() const { return m_shapeList; }
-        QString collectionPath() const { return m_path; }
+    QList<KoShape *> shapeList() const
+    {
+        return m_shapeList;
+    }
+    QString collectionPath() const
+    {
+        return m_path;
+    }
 
-    protected:
-        void nextFile();
-        void loadNativeFile(const QString& path);
+protected:
+    void nextFile();
+    void loadNativeFile(const QString &path);
 
-    protected Q_SLOTS:
-        void loadShape();
+protected Q_SLOTS:
+    void loadShape();
 
-    private:
-        KoOdfReadStore* m_odfStore;
-        QTimer* m_loadingTimer;
-        KoOdfLoadingContext* m_loadingContext;
-        KoShapeLoadingContext* m_shapeLoadingContext;
-        KoXmlElement m_body;
-        KoXmlElement m_page;
-        KoXmlElement m_shape;
-        QList<KoShape*> m_shapeList;
-        QString m_path;
-        QStringList m_fileList;
+private:
+    KoOdfReadStore *m_odfStore;
+    QTimer *m_loadingTimer;
+    KoOdfLoadingContext *m_loadingContext;
+    KoShapeLoadingContext *m_shapeLoadingContext;
+    KoXmlElement m_body;
+    KoXmlElement m_page;
+    KoXmlElement m_shape;
+    QList<KoShape *> m_shapeList;
+    QString m_path;
+    QStringList m_fileList;
 
-    Q_SIGNALS:
-        /**
-         * Emitted when the loading failed
-         * @param reason Reason the loading failed.
-         */
-        void loadingFailed(const QString& reason);
+Q_SIGNALS:
+    /**
+     * Emitted when the loading failed
+     * @param reason Reason the loading failed.
+     */
+    void loadingFailed(const QString &reason);
 
-        void loadingFinished();
+    void loadingFinished();
 };
 
-#endif //KOODFCOLLECTIONLOADER_H
+#endif // KOODFCOLLECTIONLOADER_H

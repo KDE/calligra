@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * 
+ *
  * SPDX-FileCopyrightText: 2018 Dag Andersen <danders@get2net.dk>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -10,20 +10,21 @@
 
 #include <QAbstractTableModel>
 
-#include "ChartShape.h"
+#include "ChartDebug.h"
 #include "ChartProxyModel.h"
+#include "ChartShape.h"
 #include "ChartTableView.h"
 #include "DataSet.h"
-#include "ChartDebug.h"
 
-
-#include <QObject>
 #include <QModelIndex>
+#include <QObject>
 #include <QStyledItemDelegate>
 
-namespace KoChart {
+namespace KoChart
+{
 
-namespace Bubble {
+namespace Bubble
+{
 
 class DataColumnDelegate : public QStyledItemDelegate
 {
@@ -41,7 +42,6 @@ public:
 public:
     QAbstractItemModel *dataModel;
 };
-
 
 class DataSetTableModel : public QAbstractTableModel
 {
@@ -75,4 +75,4 @@ public:
 
 } // namespace KoChart
 
-#endif //KOCHART_DATASETTABLEMODEL_H
+#endif // KOCHART_DATASETTABLEMODEL_H

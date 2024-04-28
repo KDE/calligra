@@ -31,7 +31,8 @@ public:
     explicit ResizeColumnManipulator(KUndo2Command *parent = 0);
     ~ResizeColumnManipulator() override;
 
-    void setSize(double size) {
+    void setSize(double size)
+    {
         m_newSize = size;
     }
 
@@ -43,7 +44,6 @@ private:
     double m_newSize;
     QHash<int, double> m_oldSizes;
 };
-
 
 /**
  * \class ResizeRowManipulator
@@ -56,7 +56,8 @@ public:
     explicit ResizeRowManipulator(KUndo2Command *parent = 0);
     ~ResizeRowManipulator() override;
 
-    void setSize(double size) {
+    void setSize(double size)
+    {
         m_newSize = size;
     }
 
@@ -69,7 +70,6 @@ private:
     QHash<int, double> m_oldSizes;
 };
 
-
 /**
  * \class AdjustColumnRowManipulator
  * \ingroup Commands
@@ -81,10 +81,12 @@ public:
     explicit AdjustColumnRowManipulator(KUndo2Command *parent = 0);
     ~AdjustColumnRowManipulator() override;
 
-    void setAdjustColumn(bool state) {
+    void setAdjustColumn(bool state)
+    {
         m_adjustColumn = state;
     }
-    void setAdjustRow(bool state) {
+    void setAdjustRow(bool state)
+    {
         m_adjustRow = state;
     }
 
@@ -97,22 +99,20 @@ protected:
 
     KUndo2MagicString name() const;
 
-    QSizeF textSize(const QString& text, const Style& style) const;
+    QSizeF textSize(const QString &text, const Style &style) const;
     double idealColumnWidth(int col);
     double idealRowHeight(int row);
-    double adjustColumnHelper(const Cell& cell);
-    double adjustRowHelper(const Cell& cell);
+    double adjustColumnHelper(const Cell &cell);
+    double adjustRowHelper(const Cell &cell);
 
 private:
     bool m_adjustColumn : 1;
-    bool m_adjustRow    : 1;
+    bool m_adjustRow : 1;
     QMap<int, double> m_newWidths;
     QMap<int, double> m_oldWidths;
     QMap<int, double> m_newHeights;
     QMap<int, double> m_oldHeights;
 };
-
-
 
 /**
  * \class HideShowManipulator
@@ -129,10 +129,12 @@ public:
 
     bool preProcess() override;
 
-    void setManipulateColumns(bool state) {
+    void setManipulateColumns(bool state)
+    {
         m_manipulateColumns = state;
     }
-    void setManipulateRows(bool state) {
+    void setManipulateRows(bool state)
+    {
         m_manipulateRows = state;
     }
 
@@ -147,12 +149,10 @@ protected:
 
 private:
     bool m_manipulateColumns : 1;
-    bool m_manipulateRows    : 1;
-    bool m_hide              : 1;
-    QMap<int, bool>          oldHidden;
+    bool m_manipulateRows : 1;
+    bool m_hide : 1;
+    QMap<int, bool> oldHidden;
 };
-
-
 
 /**
  * \class InsertDeleteColumnManipulator
@@ -169,7 +169,7 @@ public:
     void setDelete(bool deletion);
 
 protected:
-    bool process(Element*) override;
+    bool process(Element *) override;
     bool preProcess() override;
     bool undoNonCommandActions() override;
 
@@ -178,8 +178,6 @@ private:
     Mode m_mode;
     ColFormat *m_template;
 };
-
-
 
 /**
  * \class InsertDeleteRowManipulator
@@ -196,7 +194,7 @@ public:
     void setDelete(bool deletion);
 
 protected:
-    bool process(Element*) override;
+    bool process(Element *) override;
     bool preProcess() override;
     bool undoNonCommandActions() override;
 

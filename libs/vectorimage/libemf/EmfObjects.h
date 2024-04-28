@@ -12,7 +12,6 @@
 #include <QRect> // also provides QSize
 #include <QString>
 
-
 /**
    Namespace for Enhanced Metafile (EMF) classes
 */
@@ -28,12 +27,10 @@ namespace Libemf
 //
 // Note: Not all objects in section 2.2 are implemented yet.
 
-
 // ================================================================
 //                         class EmrTextObject
 
-
-/** 
+/**
  * Simple representation of an EmrText object
  *
  *  See MS-EMF Section 2.2.5 for details
@@ -45,7 +42,7 @@ public:
       The type of text to read
       */
     enum TextType { EightBitChars, SixteenBitChars };
-    
+
     /**
        Constructor for EmrText object
 
@@ -54,39 +51,38 @@ public:
        \param textType whether the text is normal (EightBitChars) or wide
        characters (SixteenBitChars)
     */
-    EmrTextObject( QDataStream &stream, quint32 size, TextType textType );
+    EmrTextObject(QDataStream &stream, quint32 size, TextType textType);
     ~EmrTextObject();
-    
+
     /// The reference point for the text output
     QPoint referencePoint() const;
-    
+
     /// Options for rectangle
     quint32 options() const;
 
-    // Clipping and/or opaquing rectangle 
+    // Clipping and/or opaquing rectangle
     QRect rectangle() const;
 
     /// The text to be output
     QString textString() const;
 
 private:
-
-    QPoint  m_referencePoint;   // reference point used to position the string
-    quint32 m_charCount;        // number of characters (internal use only)
-    quint32 m_offString;        // offset to output string (internal use only)
-    quint32 m_options;          // specifies how to use the rectangle
-    QRect   m_rectangle;        // clipping and/or opaquing rectangle
-    quint32 m_offDx;            // offset to intercharacter spacing array (internal use only)
-    QString m_textString;       // the text string to output
+    QPoint m_referencePoint; // reference point used to position the string
+    quint32 m_charCount; // number of characters (internal use only)
+    quint32 m_offString; // offset to output string (internal use only)
+    quint32 m_options; // specifies how to use the rectangle
+    QRect m_rectangle; // clipping and/or opaquing rectangle
+    quint32 m_offDx; // offset to intercharacter spacing array (internal use only)
+    QString m_textString; // the text string to output
 
     // Convenience function to handle a 2-byte wide char stream
-    QString recordWChars( QDataStream &stream, int numChars );
+    QString recordWChars(QDataStream &stream, int numChars);
 
     // Convenience function to handle a 1-byte wide char stream
-    QString recordChars( QDataStream &stream, int numChars );
+    QString recordChars(QDataStream &stream, int numChars);
 
     // Routine to throw away a specific number of bytes
-    void soakBytes( QDataStream &stream, int numBytes );
+    void soakBytes(QDataStream &stream, int numBytes);
 };
 
 }

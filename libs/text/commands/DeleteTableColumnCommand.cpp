@@ -5,20 +5,20 @@
 
 #include "DeleteTableColumnCommand.h"
 
-#include <KoTextEditor.h>
 #include "KoTableColumnAndRowStyleManager.h"
+#include <KoTextEditor.h>
 
-#include <QTextTableCell>
 #include <QTextTable>
+#include <QTextTableCell>
 
-#include <KLocalizedString>
 #include "TextDebug.h"
+#include <KLocalizedString>
 
 DeleteTableColumnCommand::DeleteTableColumnCommand(KoTextEditor *te, QTextTable *t, KUndo2Command *parent)
-    : KUndo2Command (parent)
-    ,m_first(true)
-    ,m_textEditor(te)
-    ,m_table(t)
+    : KUndo2Command(parent)
+    , m_first(true)
+    , m_textEditor(te)
+    , m_table(t)
 {
     setText(kundo2_i18n("Delete Column"));
 }
@@ -43,7 +43,7 @@ void DeleteTableColumnCommand::redo()
         m_first = false;
         int selectionRow;
         int selectionRowSpan;
-        if(m_textEditor->hasComplexSelection()) {
+        if (m_textEditor->hasComplexSelection()) {
             m_textEditor->cursor()->selectedTableCells(&selectionRow, &selectionRowSpan, &m_selectionColumn, &m_selectionColumnSpan);
         } else {
             QTextTableCell cell = m_table->cellAt(*m_textEditor->cursor());

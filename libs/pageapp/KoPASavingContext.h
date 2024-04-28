@@ -32,7 +32,7 @@ public:
      * @param embeddedSaver for saving embedded documents
      * @param page the starting page number
      */
-    KoPASavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, KoEmbeddedDocumentSaver &embeddedSaver, int page); //TODO default
+    KoPASavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles, KoEmbeddedDocumentSaver &embeddedSaver, int page); // TODO default
 
     /**
      * @brief Destructor
@@ -45,7 +45,7 @@ public:
      * @param masterPage the master page
      * @param name the style name of the master page
      */
-    void addMasterPage( const KoPAMasterPage * masterPage, const QString &name );
+    void addMasterPage(const KoPAMasterPage *masterPage, const QString &name);
 
     /**
      * @brief Get the name of the masterpage
@@ -54,7 +54,7 @@ public:
      *
      * @return the style name of the masterPage
      */
-    QString masterPageName( const KoPAMasterPage * masterPage ) const;
+    QString masterPageName(const KoPAMasterPage *masterPage) const;
 
     /**
      * @brief Get the element name use in saving
@@ -87,7 +87,7 @@ public:
      *
      * @see KoPAPastePage::process
      */
-    void setClearDrawIds( bool clear );
+    void setClearDrawIds(bool clear);
 
     /**
      * @brief Get the clearDrawIds flag
@@ -99,7 +99,7 @@ public:
     /**
      * @brief get the draw:name of the page to use
      */
-    QString pageName( const KoPAPage * page );
+    QString pageName(const KoPAPage *page);
 
 private:
     QMap<const KoPAMasterPage *, QString> m_masterPageNames;

@@ -1,25 +1,25 @@
 /* This file is part of the KDE project
-* SPDX-FileCopyrightText: 2008 Jan Hambrecht <jaham@gmx.net>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ * SPDX-FileCopyrightText: 2008 Jan Hambrecht <jaham@gmx.net>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 #include "TestShapeBackgroundCommand.h"
 
-#include <MockShapes.h>
-#include "KoShapeBackgroundCommand.h"
 #include "KoColorBackground.h"
+#include "KoShapeBackgroundCommand.h"
 #include "KoShapePaintingContext.h"
 #include "KoViewConverter.h"
+#include <MockShapes.h>
 
 #include <QPainterPath>
 #include <QTest>
 
 void TestShapeBackgroundCommand::refCounting()
 {
-    MockShape * shape1 = new MockShape();
+    MockShape *shape1 = new MockShape();
     QSharedPointer<KoShapeBackground> whiteFill(new KoColorBackground(QColor(Qt::white)));
     QSharedPointer<KoShapeBackground> blackFill(new KoColorBackground(QColor(Qt::black)));
-    QSharedPointer<KoShapeBackground> redFill  (new KoColorBackground(QColor(Qt::red)));
+    QSharedPointer<KoShapeBackground> redFill(new KoColorBackground(QColor(Qt::red)));
 
     shape1->setBackground(whiteFill);
     QVERIFY(shape1->background() == whiteFill);
@@ -48,10 +48,10 @@ void TestShapeBackgroundCommand::refCounting()
     // if white is deleted when deleting cmd1 this will crash
     QPainter p;
     QPainterPath path;
-    path.addRect( QRectF(0,0,100,100) );
+    path.addRect(QRectF(0, 0, 100, 100));
     KoViewConverter converter;
     KoShapePaintingContext context;
-    whiteFill->paint( p, converter, context, path );
+    whiteFill->paint(p, converter, context, path);
 
     delete cmd2;
     delete shape1;

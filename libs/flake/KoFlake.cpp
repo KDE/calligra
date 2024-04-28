@@ -15,27 +15,24 @@
 
 QGradient *KoFlake::cloneGradient(const QGradient *gradient)
 {
-    if (! gradient)
+    if (!gradient)
         return 0;
 
     QGradient *clone = 0;
 
     switch (gradient->type()) {
-    case QGradient::LinearGradient:
-    {
-        const QLinearGradient *lg = static_cast<const QLinearGradient*>(gradient);
+    case QGradient::LinearGradient: {
+        const QLinearGradient *lg = static_cast<const QLinearGradient *>(gradient);
         clone = new QLinearGradient(lg->start(), lg->finalStop());
         break;
     }
-    case QGradient::RadialGradient:
-    {
-        const QRadialGradient *rg = static_cast<const QRadialGradient*>(gradient);
+    case QGradient::RadialGradient: {
+        const QRadialGradient *rg = static_cast<const QRadialGradient *>(gradient);
         clone = new QRadialGradient(rg->center(), rg->radius(), rg->focalPoint());
         break;
     }
-    case QGradient::ConicalGradient:
-    {
-        const QConicalGradient *cg = static_cast<const QConicalGradient*>(gradient);
+    case QGradient::ConicalGradient: {
+        const QConicalGradient *cg = static_cast<const QConicalGradient *>(gradient);
         clone = new QConicalGradient(cg->center(), cg->angle());
         break;
     }
@@ -52,8 +49,7 @@ QGradient *KoFlake::cloneGradient(const QGradient *gradient)
 
 QPointF KoFlake::toRelative(const QPointF &absolute, const QSizeF &size)
 {
-    return QPointF(size.width() == 0 ? 0: absolute.x() / size.width(),
-                   size.height() == 0 ? 0: absolute.y() / size.height());
+    return QPointF(size.width() == 0 ? 0 : absolute.x() / size.width(), size.height() == 0 ? 0 : absolute.y() / size.height());
 }
 
 QPointF KoFlake::toAbsolute(const QPointF &relative, const QSizeF &size)

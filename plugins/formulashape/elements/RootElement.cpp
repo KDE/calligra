@@ -13,18 +13,19 @@
 
 #include "AttributeManager.h"
 #include "FormulaCursor.h"
-#include "RowElement.h"
 #include "FormulaDebug.h"
+#include "RowElement.h"
 
 #include <KoXmlReader.h>
 
 #include <QPainter>
 #include <QPen>
 
-RootElement::RootElement( BasicElement* parent ) : FixedElement( parent )
+RootElement::RootElement(BasicElement *parent)
+    : FixedElement(parent)
 {
-    m_radicand = new RowElement( this );
-    m_exponent = new RowElement( this );
+    m_radicand = new RowElement(this);
+    m_exponent = new RowElement(this);
 }
 
 RootElement::~RootElement()
@@ -33,61 +34,61 @@ RootElement::~RootElement()
     delete m_exponent;
 }
 
-void RootElement::paint( QPainter& painter, AttributeManager* am )
+void RootElement::paint(QPainter &painter, AttributeManager *am)
 {
-    Q_UNUSED( am )
+    Q_UNUSED(am)
     QPen pen;
-    pen.setWidth( m_lineThickness );
-    painter.setPen( pen );
-    painter.drawPath( m_rootSymbol );
+    pen.setWidth(m_lineThickness);
+    painter.setPen(pen);
+    painter.drawPath(m_rootSymbol);
 }
 
-void RootElement::layout( const AttributeManager* am )
+void RootElement::layout(const AttributeManager *am)
 {
     // Calculate values to layout the root symbol
-    qreal thinSpace = am->layoutSpacing( this );
-    qreal symbolHeight  = m_radicand->baseLine();
-    if( m_radicand->height() > symbolHeight*1.3 ) symbolHeight = m_radicand->height();
+    qreal thinSpace = am->layoutSpacing(this);
+    qreal symbolHeight = m_radicand->baseLine();
+    if (m_radicand->height() > symbolHeight * 1.3)
+        symbolHeight = m_radicand->height();
     symbolHeight += thinSpace;
-    qreal tickWidth = symbolHeight / 3.0;  // The width of the root symbol's tick part
+    qreal tickWidth = symbolHeight / 3.0; // The width of the root symbol's tick part
 
     m_lineThickness = am->lineThickness(this);
 
     // The root symbol an xOffset and yOffset due to the exponent.
-    qreal xOffset = m_exponent->width() - tickWidth/2;
+    qreal xOffset = m_exponent->width() - tickWidth / 2;
     xOffset = xOffset < 0 ? 0 : xOffset; // no negative offset for the root symbol
-    qreal yOffset =  m_exponent->height() - 2.0*symbolHeight/5.0;
+    qreal yOffset = m_exponent->height() - 2.0 * symbolHeight / 5.0;
     yOffset = yOffset < 0 ? 0 : yOffset;
 
     // Set the roots dimensions
-    setBaseLine( yOffset + thinSpace + m_radicand->baseLine() );
-    setHeight( yOffset + thinSpace + m_radicand->height() );
-    setWidth( xOffset + tickWidth + m_radicand->width() + thinSpace );
+    setBaseLine(yOffset + thinSpace + m_radicand->baseLine());
+    setHeight(yOffset + thinSpace + m_radicand->height());
+    setWidth(xOffset + tickWidth + m_radicand->width() + thinSpace);
 
     // Place the children in the correct place
-    m_radicand->setOrigin( QPointF( xOffset+tickWidth+thinSpace, yOffset+thinSpace ) );
-    m_exponent->setOrigin( QPointF( 0.0, 0.0 ) );
+    m_radicand->setOrigin(QPointF(xOffset + tickWidth + thinSpace, yOffset + thinSpace));
+    m_exponent->setOrigin(QPointF(0.0, 0.0));
 
     // Draw the actual root symbol to a path as buffer
     m_rootSymbol = QPainterPath();
-    m_rootSymbol.moveTo( xOffset+m_lineThickness, yOffset +  2.0 * symbolHeight / 3.0 );
-    m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, yOffset + symbolHeight - m_lineThickness/2 );
-    m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, yOffset + m_lineThickness/2 );
-    m_rootSymbol.lineTo( width()-m_lineThickness/2, yOffset + m_lineThickness/2);
+    m_rootSymbol.moveTo(xOffset + m_lineThickness, yOffset + 2.0 * symbolHeight / 3.0);
+    m_rootSymbol.lineTo(m_rootSymbol.currentPosition().x() + tickWidth * 0.5, yOffset + symbolHeight - m_lineThickness / 2);
+    m_rootSymbol.lineTo(m_rootSymbol.currentPosition().x() + tickWidth * 0.5, yOffset + m_lineThickness / 2);
+    m_rootSymbol.lineTo(width() - m_lineThickness / 2, yOffset + m_lineThickness / 2);
 }
 
-const QList<BasicElement*> RootElement::childElements() const
+const QList<BasicElement *> RootElement::childElements() const
 {
-    QList<BasicElement*> tmp;
+    QList<BasicElement *> tmp;
     tmp << m_exponent << m_radicand;
     return tmp;
 }
 
-
 // QList< BasicElement* > RootElement::elementsBetween(int pos1, int pos2) const
-// { 
+// {
 //     QList<BasicElement*> tmp;
-//     if (pos1==0 && pos2 >0) { 
+//     if (pos1==0 && pos2 >0) {
 //         tmp.append(m_exponent);
 //     }
 //     if (pos1<3 && pos2==3) {
@@ -96,7 +97,7 @@ const QList<BasicElement*> RootElement::childElements() const
 //     return tmp;
 // }
 
-// int RootElement::positionOfChild(BasicElement* child) const 
+// int RootElement::positionOfChild(BasicElement* child) const
 // {
 //     if (child==m_exponent) {
 //         return 0;
@@ -106,38 +107,36 @@ const QList<BasicElement*> RootElement::childElements() const
 //     return -1;
 // }
 
-bool RootElement::setCursorTo(FormulaCursor& cursor, QPointF point)
+bool RootElement::setCursorTo(FormulaCursor &cursor, QPointF point)
 {
     if (cursor.isSelecting()) {
         return false;
     }
     if (m_exponent->boundingRect().contains(point)) {
-        return m_exponent->setCursorTo(cursor, point-m_exponent->origin());
+        return m_exponent->setCursorTo(cursor, point - m_exponent->origin());
     } else {
-        return m_radicand->setCursorTo(cursor, point-m_radicand->origin());
+        return m_radicand->setCursorTo(cursor, point - m_radicand->origin());
     }
 }
 
-bool RootElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor)
+bool RootElement::moveCursor(FormulaCursor &newcursor, FormulaCursor &oldcursor)
 {
     if (newcursor.isSelecting()) {
         return false;
     } else {
-        return moveHorSituation(newcursor,oldcursor,0,1);
+        return moveHorSituation(newcursor, oldcursor, 0, 1);
     }
 }
-
 
 int RootElement::endPosition() const
 {
     return 3;
 }
 
-
-bool RootElement::replaceChild ( BasicElement* oldelement, BasicElement* newelement )
+bool RootElement::replaceChild(BasicElement *oldelement, BasicElement *newelement)
 {
-    if (newelement->elementType()==Row) {
-        RowElement* newrow = static_cast<RowElement*>(newelement);
+    if (newelement->elementType() == Row) {
+        RowElement *newrow = static_cast<RowElement *>(newelement);
         if (oldelement == m_exponent) {
             m_exponent = newrow;
             return true;
@@ -154,14 +153,15 @@ ElementType RootElement::elementType() const
     return Root;
 }
 
-bool RootElement::readMathMLContent( const KoXmlElement& element )
+bool RootElement::readMathMLContent(const KoXmlElement &element)
 {
     KoXmlElement tmp;
     int counter = 0;
-    forEachElement(tmp, element) {
-        if (counter==0) {
+    forEachElement(tmp, element)
+    {
+        if (counter == 0) {
             loadElement(tmp, &m_radicand);
-        } else if (counter==1) {
+        } else if (counter == 1) {
             loadElement(tmp, &m_exponent);
         } else {
             debugFormula << "Too many arguments to mroot";
@@ -175,11 +175,10 @@ bool RootElement::readMathMLContent( const KoXmlElement& element )
     return true;
 }
 
-void RootElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
+void RootElement::writeMathMLContent(KoXmlWriter *writer, const QString &ns) const
 {
-    Q_ASSERT( m_radicand );
-    Q_ASSERT( m_exponent );
-    m_radicand->writeMathML( writer, ns );
-    m_exponent->writeMathML( writer, ns );
+    Q_ASSERT(m_radicand);
+    Q_ASSERT(m_exponent);
+    m_radicand->writeMathML(writer, ns);
+    m_exponent->writeMathML(writer, ns);
 }
-

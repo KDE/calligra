@@ -20,40 +20,39 @@
 
 #include "KPrAnimate.h"
 
-#include <KoXmlNS.h>
-#include <KoXmlReader.h>
-#include <KoXmlWriter.h>
+#include "KoShape.h"
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextBlockData.h>
-#include "KoShape.h"
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
 #include "KPrAnimationCache.h"
 #include "KPrShapeAnimation.h"
 #include "StageDebug.h"
 
-#include "strategy/KPrSmilValues.h"
-#include "strategy/KPrAnimationValue.h"
 #include "strategy/KPrAnimationAttribute.h"
-#include "strategy/KPrAttributeX.h"
-#include "strategy/KPrAttributeY.h"
-#include "strategy/KPrAttributeWidth.h"
+#include "strategy/KPrAnimationValue.h"
 #include "strategy/KPrAttributeHeight.h"
 #include "strategy/KPrAttributeRotate.h"
-
+#include "strategy/KPrAttributeWidth.h"
+#include "strategy/KPrAttributeX.h"
+#include "strategy/KPrAttributeY.h"
+#include "strategy/KPrSmilValues.h"
 
 KPrAnimate::KPrAnimate(KPrShapeAnimation *shapeAnimation)
-: KPrAnimationBase(shapeAnimation)
-,m_attribute(0)
-,m_values(0)
+    : KPrAnimationBase(shapeAnimation)
+    , m_attribute(0)
+    , m_values(0)
 {
 }
 
 KPrAnimate::~KPrAnimate()
 {
-    if(m_attribute)
+    if (m_attribute)
         delete m_attribute;
-    if(m_values)
+    if (m_values)
         delete m_values;
 }
 
@@ -65,32 +64,27 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     QString attributeName(element.attributeNS(KoXmlNS::smil, "attributeName", QString()));
     if (attributeName == "x") {
         m_attribute = new KPrAttributeX();
-    }
-    else if (attributeName == "y") {
+    } else if (attributeName == "y") {
         m_attribute = new KPrAttributeY();
-    }
-    else if (attributeName == "width") {
+    } else if (attributeName == "width") {
         m_attribute = new KPrAttributeWidth();
-    }
-    else if (attributeName == "height") {
+    } else if (attributeName == "height") {
         m_attribute = new KPrAttributeHeight();
-    }
-    else if (attributeName == "rotate") {
+    } else if (attributeName == "rotate") {
         m_attribute = new KPrAttributeRotate();
-    }
-    else {
+    } else {
         warnStageAnimation << "attributeName" << attributeName << "not yet supported";
         retval = false;
     }
 
-    if (!retval){
+    if (!retval) {
         return false;
     }
 
     // calcMode
     KPrAnimationValue::SmilCalcMode smilCalcMode = KPrAnimationValue::linear;
     QString calcMode = element.attributeNS(KoXmlNS::smil, "calcMode", "linear");
-    if(calcMode == "linear"){
+    if (calcMode == "linear") {
         smilCalcMode = KPrAnimationValue::linear;
     } else if (calcMode == "discrete") {
         smilCalcMode = KPrAnimationValue::discrete;
@@ -106,30 +100,27 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
         retval = false;
     }
 
-
     // value
     QString formula = element.attributeNS(KoXmlNS::anim, "formula", QString());
     if (!formula.isEmpty()) {
         QString keyTimes = element.attributeNS(KoXmlNS::smil, "keyTimes", QString());
         QString values = element.attributeNS(KoXmlNS::smil, "values", QString());
         QString keySplines = element.attributeNS(KoXmlNS::smil, "keySplines", QString());
-        KPrSmilValues * smilValue = new KPrSmilValues(m_shapeAnimation);
+        KPrSmilValues *smilValue = new KPrSmilValues(m_shapeAnimation);
         retval = retval && smilValue->loadFormula(values, keyTimes, keySplines, smilCalcMode, formula);
         m_values = smilValue;
-    }
-    else {
+    } else {
         QString values = element.attributeNS(KoXmlNS::smil, "values", QString());
         if (!values.isEmpty()) {
             QString keyTimes = element.attributeNS(KoXmlNS::smil, "keyTimes", QString());
             QString keySplines = element.attributeNS(KoXmlNS::smil, "keySplines", QString());
-            KPrSmilValues * smilValue = new KPrSmilValues(m_shapeAnimation);
+            KPrSmilValues *smilValue = new KPrSmilValues(m_shapeAnimation);
             retval = retval && smilValue->loadValues(values, keyTimes, keySplines, smilCalcMode);
             m_values = smilValue;
-        }
-        else {
-            //QString from = element.attributeNS(KoXmlNS::smil, "from", "0");
-            //QString to = element.attributeNS(KoXmlNS::smil, "to", "0");
-            //QString by = element.attributeNS(KoXmlNS::smil, "by", "0");
+        } else {
+            // QString from = element.attributeNS(KoXmlNS::smil, "from", "0");
+            // QString to = element.attributeNS(KoXmlNS::smil, "to", "0");
+            // QString by = element.attributeNS(KoXmlNS::smil, "by", "0");
             warnStageAnimation << "from to by not yes supported";
             retval = false;
         }
@@ -137,7 +128,7 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     return retval;
 }
 
-bool KPrAnimate::saveOdf(KoPASavingContext & paContext) const
+bool KPrAnimate::saveOdf(KoPASavingContext &paContext) const
 {
     KoXmlWriter &writer = paContext.xmlWriter();
     writer.startElement("anim:animate");
@@ -155,7 +146,7 @@ void KPrAnimate::init(KPrAnimationCache *animationCache, int step)
 
 void KPrAnimate::next(int currentTime)
 {
-    qreal value = m_values->value(qreal(currentTime)/qreal(animationDuration()));
+    qreal value = m_values->value(qreal(currentTime) / qreal(animationDuration()));
     m_attribute->updateCache(m_animationCache, m_shapeAnimation, value);
 }
 

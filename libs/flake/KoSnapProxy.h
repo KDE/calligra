@@ -6,14 +6,13 @@
 #ifndef KOSNAPPROXY_H
 #define KOSNAPPROXY_H
 
-
 class KoSnapGuide;
 class KoShape;
 class KoPathSegment;
 class KoCanvasBase;
+#include "flake_export.h"
 #include <QList>
 #include <QVector>
-#include "flake_export.h"
 
 class QPointF;
 class QRectF;
@@ -29,7 +28,7 @@ public:
     QVector<QPointF> pointsInRect(const QRectF &rect) const;
 
     /// returns list of shape in given rectangle in document coordinates
-    QList<KoShape*> shapesInRect(const QRectF &rect, bool omitEditedShape = false) const;
+    QList<KoShape *> shapesInRect(const QRectF &rect, bool omitEditedShape = false) const;
 
     /// returns list of points from given shape
     QVector<QPointF> pointsFromShape(KoShape *shape) const;
@@ -38,7 +37,7 @@ public:
     QList<KoPathSegment> segmentsInRect(const QRectF &rect) const;
 
     /// returns list of all shapes
-    QList<KoShape*> shapes(bool omitEditedShape = false) const;
+    QList<KoShape *> shapes(bool omitEditedShape = false) const;
 
     /// returns canvas we are working on
     KoCanvasBase *canvas() const;

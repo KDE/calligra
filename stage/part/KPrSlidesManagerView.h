@@ -1,9 +1,9 @@
 /* This file is part of the KDE project
-*
-* SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
-*
-* SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ *
+ * SPDX-FileCopyrightText: 2011 Paul Mendez <paulestebanms@gmail.com>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #ifndef KPRSLIDESMANAGERVIEW_H
 #define KPRSLIDESMANAGERVIEW_H
@@ -24,15 +24,15 @@ public:
 
     ~KPrSlidesManagerView() override;
 
-    void paintEvent (QPaintEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
-    //It emits a slideDblClick signal and then calls the parent
-    //implementation
+    // It emits a slideDblClick signal and then calls the parent
+    // implementation
     void mouseDoubleClickEvent(QMouseEvent *event) override;
 
     void contextMenuEvent(QContextMenuEvent *event) override;
 
-    void startDrag (Qt::DropActions supportedActions) override;
+    void startDrag(Qt::DropActions supportedActions) override;
 
     void dropEvent(QDropEvent *ev) override;
 
@@ -42,11 +42,11 @@ public:
 
     void dragLeaveEvent(QDragLeaveEvent *e) override;
 
-    //Reimplemented to provide suitable signals for selection and deselection of items
+    // Reimplemented to provide suitable signals for selection and deselection of items
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
 
-    //Manage click events outside of items, to provide
-    //a suitable active item for the context menu.
+    // Manage click events outside of items, to provide
+    // a suitable active item for the context menu.
     bool eventFilter(QObject *watched, QEvent *event) override;
 
     void focusOutEvent(QFocusEvent *event) override;
@@ -81,8 +81,8 @@ Q_SIGNALS:
     /** Is emitted if the user has double click an item */
     void slideDblClick();
 
-    //lets update the active page when changing the current index
-    //without a item selected event.
+    // lets update the active page when changing the current index
+    // without a item selected event.
     /** Is emitted if the selection has been changed within a procedure code */
     void indexChanged(QModelIndex index);
 
@@ -129,7 +129,6 @@ private:
     QRect m_itemSize;
     bool m_draggingFlag;
     int margin;
-
 };
 
 #endif // KPRSLIDESMANAGERVIEW_H

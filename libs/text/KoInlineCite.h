@@ -19,7 +19,7 @@ class KOTEXT_EXPORT KoInlineCite : public KoInlineObject
 public:
     enum Type {
         Citation,
-        ClonedCitation                  //cloned from other citation in document
+        ClonedCitation // cloned from other citation in document
     };
     /**
      * Construct a new cite to be inserted in the text using KoTextSelectionHandler::insertInlineObject() for example.
@@ -28,15 +28,15 @@ public:
 
     ~KoInlineCite() override;
 
-    bool operator!= (const KoInlineCite &cite) const;
+    bool operator!=(const KoInlineCite &cite) const;
 
-    KoInlineCite &operator= (const KoInlineCite &cite);
+    KoInlineCite &operator=(const KoInlineCite &cite);
 
-    Type type() const;        //return type of cite
+    Type type() const; // return type of cite
 
     void setType(Type t);
 
-    QString dataField(const QString &fieldName) const;     //returns bibliography-data-field with name fieldName
+    QString dataField(const QString &fieldName) const; // returns bibliography-data-field with name fieldName
 
     bool hasSameData(KoInlineCite *cite) const;
 
@@ -46,67 +46,67 @@ public:
 
     void setBibliographyType(const QString &bibliographyType);
 
-    void setAddress (const QString &addr);
+    void setAddress(const QString &addr);
 
-    void setAnnotation (const QString &annotation);
+    void setAnnotation(const QString &annotation);
 
-    void setAuthor (const QString &author);
+    void setAuthor(const QString &author);
 
-    void setBookTitle (const QString &booktitle);
+    void setBookTitle(const QString &booktitle);
 
-    void setChapter (const QString &chapter);
+    void setChapter(const QString &chapter);
 
-    void setEdition (const QString &edition);
+    void setEdition(const QString &edition);
 
-    void setEditor (const QString &editor);
+    void setEditor(const QString &editor);
 
-    void setPublicationType (const QString &publicationType);
+    void setPublicationType(const QString &publicationType);
 
-    void setInstitution (const QString &institution);
+    void setInstitution(const QString &institution);
 
-    void setJournal (const QString &journal);
+    void setJournal(const QString &journal);
 
     void setLabel(const QString &label);
 
-    void setMonth (const QString &month);
+    void setMonth(const QString &month);
 
-    void setNote (const QString &note);
+    void setNote(const QString &note);
 
-    void setNumber (const QString &number);
+    void setNumber(const QString &number);
 
-    void setOrganisation (const QString &organisation);
+    void setOrganisation(const QString &organisation);
 
-    void setPages (const QString &pages);
+    void setPages(const QString &pages);
 
-    void setPublisher (const QString &publisher);
+    void setPublisher(const QString &publisher);
 
-    void setSchool (const QString &school);
+    void setSchool(const QString &school);
 
-    void setSeries (const QString &series);
+    void setSeries(const QString &series);
 
-    void setTitle (const QString &title);
+    void setTitle(const QString &title);
 
-    void setReportType (const QString &reportType);
+    void setReportType(const QString &reportType);
 
-    void setVolume (const QString &volume);
+    void setVolume(const QString &volume);
 
-    void setYear (const QString &year);
+    void setYear(const QString &year);
 
-    void setURL (const QString &url);
+    void setURL(const QString &url);
 
-    void setISBN (const QString &isbn);
+    void setISBN(const QString &isbn);
 
-    void setISSN (const QString &issn);
+    void setISSN(const QString &issn);
 
-    void setCustom1 (const QString &custom1);
+    void setCustom1(const QString &custom1);
 
-    void setCustom2 (const QString &custom2);
+    void setCustom2(const QString &custom2);
 
-    void setCustom3 (const QString &custom3);
+    void setCustom3(const QString &custom3);
 
-    void setCustom4 (const QString &custom4);
+    void setCustom4(const QString &custom4);
 
-    void setCustom5 (const QString &custom5);
+    void setCustom5(const QString &custom5);
 
     QString identifier() const;
 
@@ -176,23 +176,26 @@ public:
 
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
-    ///reimplemented
+    /// reimplemented
     void saveOdf(KoShapeSavingContext &context) override;
 
 protected:
     /// reimplemented
     void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format) override;
     /// reimplemented
-    void resize(const QTextDocument *document, QTextInlineObject &object,
-                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
+    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
     /// reimplemented
-    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) override;
+    void paint(QPainter &painter,
+               QPaintDevice *pd,
+               const QTextDocument *document,
+               const QRectF &rect,
+               const QTextInlineObject &object,
+               int posInDocument,
+               const QTextCharFormat &format) override;
 
 private:
     class Private;
-    Private * const d;
-
+    Private *const d;
 };
 
 #endif // KOINLINECITE_H

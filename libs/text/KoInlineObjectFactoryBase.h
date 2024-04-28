@@ -18,8 +18,8 @@ class KoProperties;
 
 /// A template used in the KoInlineObjectFactoryBase
 struct KOTEXT_EXPORT KoInlineObjectTemplate {
-    QString id;         ///< The id of the inlineObject
-    QString name;       ///< The name to be shown for this template
+    QString id; ///< The id of the inlineObject
+    QString name; ///< The name to be shown for this template
     /**
      * The properties which, when passed to the KoInlineObjectFactoryBase::createInlineObject() method
      * result in the object this template represents.
@@ -41,8 +41,8 @@ class KOTEXT_EXPORT KoInlineObjectFactoryBase
 public:
     /// The type of inlineObject this factory creates.
     enum ObjectType {
-        TextVariable,   ///< The factory creates KoVariable inheriting objects.
-        Other = 0x100  ///< The factory creates objects that should not be shown in any menu
+        TextVariable, ///< The factory creates KoVariable inheriting objects.
+        Other = 0x100 ///< The factory creates objects that should not be shown in any menu
     };
 
     /**
@@ -91,7 +91,7 @@ protected:
     void addTemplate(const KoInlineObjectTemplate &params);
 
 private:
-    InlineObjectFactoryPrivate * const d;
+    InlineObjectFactoryPrivate *const d;
 };
 
 #endif

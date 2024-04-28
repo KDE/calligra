@@ -1,19 +1,19 @@
 #ifndef TESTTABLELAYOUT_H
 #define TESTTABLELAYOUT_H
 
+#include <KoTableColumnAndRowStyleManager.h>
 #include <KoTableColumnStyle.h>
 #include <KoTableRowStyle.h>
-#include <KoTableColumnAndRowStyleManager.h>
 
-#include <QObject>
 #include <QHash>
 #include <QList>
+#include <QObject>
 #include <QPoint>
 #include <QString>
 #include <qtest_kde.h>
 
-#include "../TextShapeLayout.h"
 #include "../TextShape.h"
+#include "../TextShapeLayout.h"
 
 class MockTextShape;
 class KoTextDocumentLayout;
@@ -31,7 +31,9 @@ class TestTableLayout : public QObject
     Q_OBJECT
 
 public:
-    TestTableLayout() {}
+    TestTableLayout()
+    {
+    }
 
 private:
     /**
@@ -45,11 +47,13 @@ private:
      * @param cellStyles a map of cell styles to use, key is QPair<row, col>.
      * @param cellTexts a map of strings to put in the cells, key is QPair<row, col>.
      */
-    void initTest(int rows, int columns, KoTableStyle *tableStyle,
-            const QList<KoTableColumnStyle *> &columnStyles,
-            const QList<KoTableRowStyle *> &rowStyles,
-            const QMap<QPair<int, int>, KoTableCellStyle *> &cellStyles,
-            const QMap<QPair<int, int>, QString> &cellTexts);
+    void initTest(int rows,
+                  int columns,
+                  KoTableStyle *tableStyle,
+                  const QList<KoTableColumnStyle *> &columnStyles,
+                  const QList<KoTableRowStyle *> &rowStyles,
+                  const QMap<QPair<int, int>, KoTableCellStyle *> &cellStyles,
+                  const QMap<QPair<int, int>, QString> &cellTexts);
 
     /**
      * Initialize for a new test. Simplified version.
@@ -119,17 +123,21 @@ private:
 class MockTextShape : public TextShape
 {
 public:
-    MockTextShape() : TextShape(0)
+    MockTextShape()
+        : TextShape(0)
     {
-        layout = qobject_cast<KoTextDocumentLayout*>(textShapeData()->document()->documentLayout());
+        layout = qobject_cast<KoTextDocumentLayout *>(textShapeData()->document()->documentLayout());
     }
     void paint(QPainter &painter, const KoViewConverter &converter)
     {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
     }
-    virtual void saveOdf(KoShapeSavingContext &) const {}
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
+    virtual void saveOdf(KoShapeSavingContext &) const
+    {
+    }
+    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
+    {
         return true;
     }
     KoTextDocumentLayout *layout;

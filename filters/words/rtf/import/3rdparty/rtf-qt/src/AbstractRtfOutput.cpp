@@ -8,252 +8,254 @@
 */
 namespace RtfReader
 {
-	AbstractRtfOutput::AbstractRtfOutput()
-	{}
+AbstractRtfOutput::AbstractRtfOutput()
+{
+}
 
-	AbstractRtfOutput::~AbstractRtfOutput()
-	{}
+AbstractRtfOutput::~AbstractRtfOutput()
+{
+}
 
-	QString AbstractRtfOutput::author() const
-	{
-	    return m_author;
-	}
-	
-	void AbstractRtfOutput::setAuthor( const QString &author )
-	{
-	    m_author = author;
-	}
+QString AbstractRtfOutput::author() const
+{
+    return m_author;
+}
 
-	QString AbstractRtfOutput::companyName() const
-	{
-	    return m_companyName;
-	}
+void AbstractRtfOutput::setAuthor(const QString &author)
+{
+    m_author = author;
+}
 
-	void AbstractRtfOutput::setCompanyName( const QString &companyName )
-	{
-	    m_companyName = companyName;
-	}
+QString AbstractRtfOutput::companyName() const
+{
+    return m_companyName;
+}
 
-	QString AbstractRtfOutput::operatorName() const
-	{
-	    return m_operatorName;
-	}
+void AbstractRtfOutput::setCompanyName(const QString &companyName)
+{
+    m_companyName = companyName;
+}
 
-	void AbstractRtfOutput::setOperatorName( const QString &operatorName )
-	{
-	    m_operatorName = operatorName;
-	}
+QString AbstractRtfOutput::operatorName() const
+{
+    return m_operatorName;
+}
 
-	QString AbstractRtfOutput::title() const
-	{
-	    return m_title;
-	}
+void AbstractRtfOutput::setOperatorName(const QString &operatorName)
+{
+    m_operatorName = operatorName;
+}
 
-	void AbstractRtfOutput::setTitle( const QString &title )
-	{
-	    m_title = title;
-	}
+QString AbstractRtfOutput::title() const
+{
+    return m_title;
+}
 
-	QString AbstractRtfOutput::subject() const
-	{
-	    return m_subject;
-	}
+void AbstractRtfOutput::setTitle(const QString &title)
+{
+    m_title = title;
+}
 
-	void AbstractRtfOutput::setSubject( const QString &subject )
-	{
-	    m_subject = subject;
-	}
+QString AbstractRtfOutput::subject() const
+{
+    return m_subject;
+}
 
-	QString AbstractRtfOutput::comment() const
-	{
-	    return m_comment;
-	}
+void AbstractRtfOutput::setSubject(const QString &subject)
+{
+    m_subject = subject;
+}
 
-	void AbstractRtfOutput::setComment( const QString &comment )
-	{
-	    m_comment = comment;
-	}
+QString AbstractRtfOutput::comment() const
+{
+    return m_comment;
+}
 
-	QString AbstractRtfOutput::documentComment() const
-	{
-	    return m_documentComment;
-	}
+void AbstractRtfOutput::setComment(const QString &comment)
+{
+    m_comment = comment;
+}
 
-	void AbstractRtfOutput::setDocumentComment( const QString &documentComment )
-	{
-	    m_documentComment = documentComment;
-	}
+QString AbstractRtfOutput::documentComment() const
+{
+    return m_documentComment;
+}
 
-	QString AbstractRtfOutput::managerName() const
-	{
-	    return m_managerName;
-	}
+void AbstractRtfOutput::setDocumentComment(const QString &documentComment)
+{
+    m_documentComment = documentComment;
+}
 
-	void AbstractRtfOutput::setManagerName( const QString &managerName )
-	{
-	    m_managerName = managerName;
-	}
+QString AbstractRtfOutput::managerName() const
+{
+    return m_managerName;
+}
 
-	QString AbstractRtfOutput::category() const
-	{
-	    return m_category;
-	}
+void AbstractRtfOutput::setManagerName(const QString &managerName)
+{
+    m_managerName = managerName;
+}
 
-	void AbstractRtfOutput::setCategory( const QString &category )
-	{
-	    m_category = category;
-	}
+QString AbstractRtfOutput::category() const
+{
+    return m_category;
+}
 
-	QString AbstractRtfOutput::keywords() const
-	{
-	    return m_keywords;
-	}
+void AbstractRtfOutput::setCategory(const QString &category)
+{
+    m_category = category;
+}
 
-	void AbstractRtfOutput::setKeywords( const QString &keywords )
-	{
-	    m_keywords = keywords;
-	}
+QString AbstractRtfOutput::keywords() const
+{
+    return m_keywords;
+}
 
-	QString AbstractRtfOutput::hLinkBase() const
-	{
-	    return m_hlinkbase;
-	}
+void AbstractRtfOutput::setKeywords(const QString &keywords)
+{
+    m_keywords = keywords;
+}
 
-	void AbstractRtfOutput::setHLinkBase( const QString &hLinkBase )
-	{
-	    m_hlinkbase = hLinkBase;
-	}
+QString AbstractRtfOutput::hLinkBase() const
+{
+    return m_hlinkbase;
+}
 
-	QString AbstractRtfOutput::generatorInformation() const
-	{
-	    return m_generatorInformation;
-	}
+void AbstractRtfOutput::setHLinkBase(const QString &hLinkBase)
+{
+    m_hlinkbase = hLinkBase;
+}
 
-	void AbstractRtfOutput::setGeneratorInformation( const QString &generatorInformation )
-	{
-	    m_generatorInformation = generatorInformation;
-	}
+QString AbstractRtfOutput::generatorInformation() const
+{
+    return m_generatorInformation;
+}
 
-	QDateTime AbstractRtfOutput::created() const
-	{
-	    return m_created;
-	}
-	
-	void AbstractRtfOutput::setCreatedDateTime( const QDateTime &dateTime )
-	{
-	    m_created = dateTime;
-	}
+void AbstractRtfOutput::setGeneratorInformation(const QString &generatorInformation)
+{
+    m_generatorInformation = generatorInformation;
+}
 
-	QDateTime AbstractRtfOutput::revised() const
-	{
-	    return m_revised;
-	}
+QDateTime AbstractRtfOutput::created() const
+{
+    return m_created;
+}
 
-	void AbstractRtfOutput::setRevisedDateTime( const QDateTime &dateTime )
-	{
-	    m_revised = dateTime;
-	}
+void AbstractRtfOutput::setCreatedDateTime(const QDateTime &dateTime)
+{
+    m_created = dateTime;
+}
 
-	QDateTime AbstractRtfOutput::printed() const
-	{
-	    return m_printed;
-	}
+QDateTime AbstractRtfOutput::revised() const
+{
+    return m_revised;
+}
 
-	void AbstractRtfOutput::setPrintedDateTime( const QDateTime &dateTime )
-	{
-	    m_printed = dateTime;
-	}
+void AbstractRtfOutput::setRevisedDateTime(const QDateTime &dateTime)
+{
+    m_revised = dateTime;
+}
 
-	int AbstractRtfOutput::totalEditingTime() const
-	{
-	    return m_totalEditingTime;
-	}
+QDateTime AbstractRtfOutput::printed() const
+{
+    return m_printed;
+}
 
-	void AbstractRtfOutput::setTotalEditingTime( const int totalEditingTime )
-	{
-	    m_totalEditingTime = totalEditingTime;
-	}
+void AbstractRtfOutput::setPrintedDateTime(const QDateTime &dateTime)
+{
+    m_printed = dateTime;
+}
 
-	int AbstractRtfOutput::numberOfPages() const
-	{
-	    return m_numberOfPages;
-	}
+int AbstractRtfOutput::totalEditingTime() const
+{
+    return m_totalEditingTime;
+}
 
-	void AbstractRtfOutput::setNumberOfPages( const int numberOfPages )
-	{
-	    m_numberOfPages = numberOfPages;
-	}
+void AbstractRtfOutput::setTotalEditingTime(const int totalEditingTime)
+{
+    m_totalEditingTime = totalEditingTime;
+}
 
-	int AbstractRtfOutput::numberOfWords() const
-	{
-	    return m_numberOfWords;
-	}
+int AbstractRtfOutput::numberOfPages() const
+{
+    return m_numberOfPages;
+}
 
-	void AbstractRtfOutput::setNumberOfWords( const int numberOfWords )
-	{
-	    m_numberOfWords = numberOfWords;
-	}
+void AbstractRtfOutput::setNumberOfPages(const int numberOfPages)
+{
+    m_numberOfPages = numberOfPages;
+}
 
-	int AbstractRtfOutput::numberOfCharacters() const
-	{
-	    return m_numberOfCharacters;
-	}
+int AbstractRtfOutput::numberOfWords() const
+{
+    return m_numberOfWords;
+}
 
-	void AbstractRtfOutput::setNumberOfCharacters( const int numberOfCharacters )
-	{
-	    m_numberOfCharacters = numberOfCharacters;
-	}
+void AbstractRtfOutput::setNumberOfWords(const int numberOfWords)
+{
+    m_numberOfWords = numberOfWords;
+}
 
-	int AbstractRtfOutput::numberOfCharactersWithoutSpaces() const
-	{
-	    return m_numberOfCharactersWithoutSpaces;
-	}
+int AbstractRtfOutput::numberOfCharacters() const
+{
+    return m_numberOfCharacters;
+}
 
-	void AbstractRtfOutput::setNumberOfCharactersWithoutSpaces( const int numberOfCharactersWithoutSpaces )
-	{
-	    m_numberOfCharactersWithoutSpaces = numberOfCharactersWithoutSpaces;
-	}
+void AbstractRtfOutput::setNumberOfCharacters(const int numberOfCharacters)
+{
+    m_numberOfCharacters = numberOfCharacters;
+}
 
-	int AbstractRtfOutput::versionNumber() const
-	{
-	    return m_versionNumber;
-	}
+int AbstractRtfOutput::numberOfCharactersWithoutSpaces() const
+{
+    return m_numberOfCharactersWithoutSpaces;
+}
 
-	void AbstractRtfOutput::setVersionNumber( const int versionNumber )
-	{
-	    m_versionNumber = versionNumber;
-	}
+void AbstractRtfOutput::setNumberOfCharactersWithoutSpaces(const int numberOfCharactersWithoutSpaces)
+{
+    m_numberOfCharactersWithoutSpaces = numberOfCharactersWithoutSpaces;
+}
 
-	int AbstractRtfOutput::internalVersionNumber() const
-	{
-	    return m_internalVersionNumber;
-	}
+int AbstractRtfOutput::versionNumber() const
+{
+    return m_versionNumber;
+}
 
-	void AbstractRtfOutput::setInternalVersionNumber( const int internalVersionNumber )
-	{
-	    m_internalVersionNumber = internalVersionNumber;
-	}
+void AbstractRtfOutput::setVersionNumber(const int versionNumber)
+{
+    m_versionNumber = versionNumber;
+}
 
-	QVariant AbstractRtfOutput::userProp( const QString &propertyName ) const
-	{
-	    return m_userProps.value( propertyName );
-	}
+int AbstractRtfOutput::internalVersionNumber() const
+{
+    return m_internalVersionNumber;
+}
 
-	QList<QString> AbstractRtfOutput::userPropNames() const
-	{
-	    return m_userProps.keys();
-	}
+void AbstractRtfOutput::setInternalVersionNumber(const int internalVersionNumber)
+{
+    m_internalVersionNumber = internalVersionNumber;
+}
 
-	void AbstractRtfOutput::addUserProp( const QString &propertyName, const QVariant &propertyValue )
-	{
-	    m_userProps.insert( propertyName, propertyValue );
-	}
-	
-	void AbstractRtfOutput::startGroup()
-	{
-	}
-	
-	void AbstractRtfOutput::endGroup()
-	{
-	}
+QVariant AbstractRtfOutput::userProp(const QString &propertyName) const
+{
+    return m_userProps.value(propertyName);
+}
+
+QList<QString> AbstractRtfOutput::userPropNames() const
+{
+    return m_userProps.keys();
+}
+
+void AbstractRtfOutput::addUserProp(const QString &propertyName, const QVariant &propertyValue)
+{
+    m_userProps.insert(propertyName, propertyValue);
+}
+
+void AbstractRtfOutput::startGroup()
+{
+}
+
+void AbstractRtfOutput::endGroup()
+{
+}
 }

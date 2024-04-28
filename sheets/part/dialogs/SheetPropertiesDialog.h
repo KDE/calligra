@@ -19,7 +19,9 @@ namespace Sheets
 class SheetPropertiesWidget : public QWidget, public ::Ui::SheetPropertiesWidget
 {
 public:
-    explicit SheetPropertiesWidget(QWidget* parent) : QWidget(parent) {
+    explicit SheetPropertiesWidget(QWidget *parent)
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -33,11 +35,9 @@ class SheetPropertiesDialog : public KoDialog
     Q_OBJECT
 
 public:
-
     explicit SheetPropertiesDialog(QWidget *parent = 0);
 
     ~SheetPropertiesDialog() override;
-
 
     Qt::LayoutDirection layoutDirection() const;
 
@@ -84,8 +84,9 @@ public:
     void setCapitalizeFirstLetter(bool b);
 public Q_SLOTS:
     virtual void slotDefault();
+
 private:
-    SheetPropertiesWidget* m_widget;
+    SheetPropertiesWidget *m_widget;
 };
 
 } // namespace Sheets

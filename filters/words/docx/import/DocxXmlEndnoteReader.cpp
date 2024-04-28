@@ -25,13 +25,15 @@
 
 #include <MsooXmlReader_p.h>
 
-
 class DocxXmlEndnoteReader::Private
 {
 public:
-    Private() : counter(0) {
+    Private()
+        : counter(0)
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
     QString pathAndFile;
     int counter;
@@ -42,7 +44,7 @@ DocxXmlEndnoteReader::DocxXmlEndnoteReader(KoOdfWriters *writers)
     , d(new Private)
 {
     init();
-    //MSWord: Footnotes in header/footer not supported
+    // MSWord: Footnotes in header/footer not supported
     DocxXmlDocumentReader::m_moveToStylesXml = false;
 }
 
@@ -56,9 +58,9 @@ void DocxXmlEndnoteReader::init()
     d->counter = 0;
 }
 
-KoFilter::ConversionStatus DocxXmlEndnoteReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus DocxXmlEndnoteReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = static_cast<DocxXmlDocumentReaderContext*>(context);
+    m_context = static_cast<DocxXmlDocumentReaderContext *>(context);
 
     debugDocx << "=============================";
     readNext();

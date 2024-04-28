@@ -12,15 +12,13 @@
 
 class WPSImport : public KoFilter
 {
-
     Q_OBJECT
 
 public:
-
-    WPSImport(QObject *parent, const QVariantList&);
+    WPSImport(QObject *parent, const QVariantList &);
     ~WPSImport() override;
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };
 
 #endif // WPSIMPORT_H

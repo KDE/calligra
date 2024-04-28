@@ -5,10 +5,8 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef KOCHART_CONFIGWIDGETBASE
 #define KOCHART_CONFIGWIDGETBASE
-
 
 #include <KoShapeConfigWidgetBase.h>
 
@@ -25,19 +23,24 @@ namespace KoChart
 class ConfigWidgetBase : public KoShapeConfigWidgetBase
 {
 public:
-    ConfigWidgetBase() {}
-    ~ConfigWidgetBase() {}
+    ConfigWidgetBase()
+    {
+    }
+    ~ConfigWidgetBase()
+    {
+    }
 
     /// Calling open() with @p shape will call deactivate()
     /// reimplemented from KoShapeConfigWidgetBase
-    void open(KoShape *shape) override {
+    void open(KoShape *shape) override
+    {
         if (!shape) {
             deactivate();
             return;
         }
-        chart = dynamic_cast<ChartShape*>(shape);
+        chart = dynamic_cast<ChartShape *>(shape);
         if (!chart) {
-            chart = dynamic_cast<ChartShape*>(shape->parent());
+            chart = dynamic_cast<ChartShape *>(shape->parent());
             if (!chart) {
                 deactivate();
                 return;
@@ -47,8 +50,9 @@ public:
             connect(chart, &ChartShape::chartTypeChanged, this, &ConfigWidgetBase::removeSubDialogs);
         }
     }
-    virtual void deactivate() {
-        for (ConfigSubWidgetBase *w : findChildren<ConfigSubWidgetBase*>()) {
+    virtual void deactivate()
+    {
+        for (ConfigSubWidgetBase *w : findChildren<ConfigSubWidgetBase *>()) {
             w->deactivate();
         }
         if (chart) {
@@ -59,20 +63,30 @@ public:
     }
 
     /// reimplemented from KoShapeConfigWidgetBase
-    void save() override { Q_ASSERT(false); }
+    void save() override
+    {
+        Q_ASSERT(false);
+    }
 
     /// Reimplement to update the ui
-    virtual void updateData() {}
+    virtual void updateData()
+    {
+    }
 
     /// Reimplement if you open any dialogs
     /// This is called from close()
-    virtual void deleteSubDialogs(KoChart::ChartType type = LastChartType) {Q_UNUSED(type)}
+    virtual void deleteSubDialogs(KoChart::ChartType type = LastChartType)
+    {
+        Q_UNUSED(type)
+    }
 
-    void blockSignals(bool block) {
+    void blockSignals(bool block)
+    {
         blockSignals(this, block);
     }
-    void blockSignals(QWidget *w, bool block) {
-        QList<QWidget*> lst = w->findChildren<QWidget*>();
+    void blockSignals(QWidget *w, bool block)
+    {
+        QList<QWidget *> lst = w->findChildren<QWidget *>();
         for (int i = 0; i < lst.count(); ++i) {
             lst.at(i)->blockSignals(block);
         }
@@ -82,14 +96,14 @@ public:
     ChartShape *chart;
 
 private Q_SLOTS:
-    void removeSubDialogs(KoChart::ChartType type, KoChart::ChartType prev = LastChartType) {
+    void removeSubDialogs(KoChart::ChartType type, KoChart::ChartType prev = LastChartType)
+    {
         if (type != prev) {
             deleteSubDialogs();
         }
     }
 };
 
-}  // namespace KoChart
-
+} // namespace KoChart
 
 #endif // KOCHART_CONFIGWIDGETBASE

@@ -5,39 +5,41 @@
  */
 #include <KoStore.h>
 
-#include <QStringList>
+#include <QApplication>
 #include <QBuffer>
-#include <QMimeData>
 #include <QClipboard>
-#include <QTextBrowser>
+#include <QCommandLineParser>
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
-#include <QKeyEvent>
 #include <QDropEvent>
-#include <QApplication>
-#include <QCommandLineParser>
+#include <QKeyEvent>
+#include <QMimeData>
+#include <QStringList>
+#include <QTextBrowser>
 
 class StoreDropTest : public QTextBrowser
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    StoreDropTest(QWidget* parent);
+    StoreDropTest(QWidget *parent);
+
 protected:
-    virtual void contentsDragEnterEvent(QDragEnterEvent * e);
-    virtual void contentsDragMoveEvent(QDragMoveEvent * e);
-    virtual void contentsDropEvent(QDropEvent * e);
-    void keyPressEvent(QKeyEvent * e) override;
+    virtual void contentsDragEnterEvent(QDragEnterEvent *e);
+    virtual void contentsDragMoveEvent(QDragMoveEvent *e);
+    virtual void contentsDropEvent(QDropEvent *e);
+    void keyPressEvent(QKeyEvent *e) override;
     virtual void paste();
+
 private:
-    bool processMimeData(const QMimeData* mimeData);
+    bool processMimeData(const QMimeData *mimeData);
     void showZipContents(QByteArray data, const QString &mimeType, bool oasis);
-    QString loadTextFile(KoStore* store, const QString& fileName);
+    QString loadTextFile(KoStore *store, const QString &fileName);
 };
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
-    StoreDropTest* window = new StoreDropTest(0);
+    StoreDropTest *window = new StoreDropTest(0);
     window->resize(500, 500);
     window->show();
 
@@ -45,42 +47,41 @@ int main(int argc, char** argv)
     return app.exec();
 }
 
-StoreDropTest::StoreDropTest(QWidget* parent)
-        : QTextBrowser(parent)
+StoreDropTest::StoreDropTest(QWidget *parent)
+    : QTextBrowser(parent)
 {
     setText("KoStore drop/paste test\nDrop or paste a selection from a Calligra application into this widget to see the ZIP contents");
     setAcceptDrops(true);
 }
 
-void StoreDropTest::contentsDragEnterEvent(QDragEnterEvent * ev)
+void StoreDropTest::contentsDragEnterEvent(QDragEnterEvent *ev)
 {
     ev->acceptProposedAction();
 }
 
-void StoreDropTest::contentsDragMoveEvent(QDragMoveEvent * ev)
+void StoreDropTest::contentsDragMoveEvent(QDragMoveEvent *ev)
 {
     ev->acceptProposedAction();
 }
 
-void StoreDropTest::keyPressEvent(QKeyEvent * e)
+void StoreDropTest::keyPressEvent(QKeyEvent *e)
 {
-    if (((e->modifiers() & Qt::ShiftModifier) && e->key() == Qt::Key_Insert) ||
-            ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_V))
+    if (((e->modifiers() & Qt::ShiftModifier) && e->key() == Qt::Key_Insert) || ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_V))
         paste();
-    //else
-    //    QTextBrowser::keyPressEvent( e );
+    // else
+    //     QTextBrowser::keyPressEvent( e );
 }
 
 void StoreDropTest::paste()
 {
     qDebug("paste");
-    const QMimeData* m = QApplication::clipboard()->mimeData();
+    const QMimeData *m = QApplication::clipboard()->mimeData();
     if (!m)
         return;
 
     const QString acceptMimeType("application/vnd.oasis.opendocument.");
     QStringList formats = m->formats();
-    foreach(QString fmt, formats) {
+    foreach (QString fmt, formats) {
         bool oasis = fmt.startsWith(acceptMimeType);
         if (oasis || fmt == "application/x-kpresenter") {
             QByteArray data = m->data(fmt);
@@ -89,7 +90,6 @@ void StoreDropTest::paste()
         }
     }
     setText("No acceptable format found. All I got was:\n" + formats.join("\n"));
-
 }
 
 void StoreDropTest::contentsDropEvent(QDropEvent *ev)
@@ -100,7 +100,7 @@ void StoreDropTest::contentsDropEvent(QDropEvent *ev)
         ev->ignore();
 }
 
-bool StoreDropTest::processMimeData(const QMimeData* mimeData)
+bool StoreDropTest::processMimeData(const QMimeData *mimeData)
 {
     const QString acceptMimeType("application/vnd.oasis.opendocument.");
     foreach (const QString &format, mimeData->formats()) {
@@ -122,13 +122,12 @@ void StoreDropTest::showZipContents(QByteArray data, const QString &mimeType, bo
         return;
     }
     QBuffer buffer(&data);
-    KoStore * store = KoStore::createStore(&buffer, KoStore::Read);
+    KoStore *store = KoStore::createStore(&buffer, KoStore::Read);
     if (store->bad()) {
         setText("Invalid ZIP!");
-	delete store;
+        delete store;
         return;
     }
-    
 
     QString txt = QString("Valid ZIP file found for format ") + mimeType + "\n";
 
@@ -144,7 +143,7 @@ void StoreDropTest::showZipContents(QByteArray data, const QString &mimeType, bo
     delete store;
 }
 
-QString StoreDropTest::loadTextFile(KoStore* store, const QString& fileName)
+QString StoreDropTest::loadTextFile(KoStore *store, const QString &fileName)
 {
     if (!store->open(fileName))
         return QString("%1 not found\n").arg(fileName);

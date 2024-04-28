@@ -8,10 +8,7 @@
 #ifndef CALLIGRA_SHEETS_ACTION_CELLS
 #define CALLIGRA_SHEETS_ACTION_CELLS
 
-
 #include "CellAction.h"
-
-
 
 namespace Calligra
 {
@@ -19,8 +16,9 @@ namespace Sheets
 {
 class InsertDialog;
 
-class CellsInsert : public CellAction {
-Q_OBJECT
+class CellsInsert : public CellAction
+{
+    Q_OBJECT
 public:
     CellsInsert(Actions *actions);
     virtual ~CellsInsert();
@@ -32,8 +30,9 @@ protected:
     InsertDialog *m_dlg;
 };
 
-class CellsRemove : public CellAction {
-Q_OBJECT
+class CellsRemove : public CellAction
+{
+    Q_OBJECT
 public:
     CellsRemove(Actions *actions);
     virtual ~CellsRemove();
@@ -45,9 +44,7 @@ protected:
     InsertDialog *m_dlg;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_CELLS
+#endif // CALLIGRA_SHEETS_ACTION_CELLS

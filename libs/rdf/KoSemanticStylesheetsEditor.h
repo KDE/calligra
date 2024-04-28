@@ -7,8 +7,8 @@
 #ifndef __rdf_KoSemanticStylesheetsEditor_h__
 #define __rdf_KoSemanticStylesheetsEditor_h__
 
-#include "kordf_export.h"
 #include "RdfForward.h"
+#include "kordf_export.h"
 // Calligra
 #include <KoDialog.h>
 // Qt
@@ -40,11 +40,10 @@ protected Q_SLOTS:
     void definitionChanged();
 
 private:
-
     void setupStylesheetsItems(const QString &semanticClass,
                                hKoRdfSemanticItem si,
                                const QList<hKoSemanticStylesheet> &ssl,
-                               const QMap<QString, QTreeWidgetItem*> &m,
+                               const QMap<QString, QTreeWidgetItem *> &m,
                                bool editable = false);
     void maskButtonsDependingOnCurrentItem(QTreeWidgetItem *current);
 

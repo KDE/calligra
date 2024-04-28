@@ -7,11 +7,11 @@
 #ifndef KOTOOLBASE_H
 #define KOTOOLBASE_H
 
+#include <QHash>
+#include <QList>
 #include <QObject>
 #include <QPointer>
 #include <QSet>
-#include <QList>
-#include <QHash>
 
 #include "flake_export.h"
 
@@ -54,7 +54,7 @@ public:
     /// Option for activate()
     enum ToolActivation {
         TemporaryActivation, ///< The tool is activated temporarily and works 'in-place' of another one.
-        DefaultActivation   ///< The tool is activated normally and emitting 'done' goes to the defaultTool
+        DefaultActivation ///< The tool is activated normally and emitting 'done' goes to the defaultTool
     };
 
     /**
@@ -100,7 +100,7 @@ public:
      *
      * @see m_optionWidgets
      */
-    QList<QPointer<QWidget> > optionWidgets();
+    QList<QPointer<QWidget>> optionWidgets();
 
     /**
      * Retrieves the entire collection of actions for the tool.
@@ -320,16 +320,16 @@ public:
     /**
      * @return A list of actions to be used for a popup.
      */
-    QList<QAction*> popupActionList() const;
+    QList<QAction *> popupActionList() const;
 
     /// Returns the canvas the tool is working on
     KoCanvasBase *canvas() const;
 
     /**
-      * This method can be reimplemented in a subclass.
-      * @return returns true, if the tool is in text mode. that means, that there is
-      *   any kind of textual input and all single key shortcuts should be eaten.
-      */
+     * This method can be reimplemented in a subclass.
+     * @return returns true, if the tool is in text mode. that means, that there is
+     *   any kind of textual input and all single key shortcuts should be eaten.
+     */
     bool isInTextMode() const;
 
 public Q_SLOTS:
@@ -354,7 +354,7 @@ public Q_SLOTS:
      *                  and should emit done when it is done.
      * @see deactivate()
      */
-    virtual void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape*> &shapes) = 0;
+    virtual void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes) = 0;
 
     /**
      * This method is called whenever this tool is no longer the
@@ -440,7 +440,7 @@ protected:
      * Sets the option widget to 0 by default.
      */
     virtual QWidget *createOptionWidget();
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    virtual QList<QPointer<QWidget>> createOptionWidgets();
 
     /**
      * Add an action under the given name to the collection.
@@ -458,7 +458,7 @@ protected:
      * @param list the list of actions.
      * @see popupActionList
      */
-    void setPopupActionList(const QList<QAction*> &list);
+    void setPopupActionList(const QList<QAction *> &list);
 
     /// Convenience function to get the current handle radius
     uint handleRadius() const;
@@ -467,29 +467,29 @@ protected:
     uint grabSensitivity() const;
 
     /**
-    * Returns a handle grab rect at the given position.
-    *
-    * The position is expected to be in document coordinates. The grab sensitivity
-    * canvas resource is used for the dimension of the rectangle.
-    *
-    * @return the handle rectangle in document coordinates
-    */
+     * Returns a handle grab rect at the given position.
+     *
+     * The position is expected to be in document coordinates. The grab sensitivity
+     * canvas resource is used for the dimension of the rectangle.
+     *
+     * @return the handle rectangle in document coordinates
+     */
     QRectF handleGrabRect(const QPointF &position) const;
 
     /**
-    * Returns a handle paint rect at the given position.
-    *
-    * The position is expected to be in document coordinates. The handle radius
-    * canvas resource is used for the dimension of the rectangle.
-    *
-    * @return the handle rectangle in document coordinates
-    */
+     * Returns a handle paint rect at the given position.
+     *
+     * The position is expected to be in document coordinates. The handle radius
+     * canvas resource is used for the dimension of the rectangle.
+     *
+     * @return the handle rectangle in document coordinates
+     */
     QRectF handlePaintRect(const QPointF &position) const;
 
     /**
-      * You should set the text mode to true in subclasses, if this tool is in text input mode, eg if the users
-      * are able to type. If you don't set it, then single key shortcuts will get the key event and not this tool.
-      */
+     * You should set the text mode to true in subclasses, if this tool is in text input mode, eg if the users
+     * are able to type. If you don't set it, then single key shortcuts will get the key event and not this tool.
+     */
     void setTextMode(bool value);
 
 protected:
@@ -497,11 +497,10 @@ protected:
 
     KoToolBasePrivate *d_ptr;
 
-
 private:
     KoToolBase();
-    KoToolBase(const KoToolBase&);
-    KoToolBase& operator=(const KoToolBase&);
+    KoToolBase(const KoToolBase &);
+    KoToolBase &operator=(const KoToolBase &);
 
     Q_DECLARE_PRIVATE(KoToolBase)
 };

@@ -15,13 +15,7 @@
 class BlendEffect : public KoFilterEffect
 {
 public:
-    enum BlendMode {
-        Normal,
-        Multiply,
-        Screen,
-        Darken,
-        Lighten
-    };
+    enum BlendMode { Normal, Multiply, Screen, Darken, Lighten };
 
     BlendEffect();
 
@@ -41,7 +35,6 @@ public:
     void save(KoXmlWriter &writer) override;
 
 private:
-
     BlendMode m_blendMode; ///< the blend mode
 };
 

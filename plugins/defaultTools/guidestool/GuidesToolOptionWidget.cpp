@@ -5,13 +5,13 @@
  */
 
 #include "GuidesToolOptionWidget.h"
-#include <KoSnapGuide.h>
 #include <KoIcon.h>
+#include <KoSnapGuide.h>
 
 #include <KLocalizedString>
 
 GuidesToolOptionWidget::GuidesToolOptionWidget(QWidget *parent)
-    :QWidget(parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
 
@@ -23,16 +23,11 @@ GuidesToolOptionWidget::GuidesToolOptionWidget(QWidget *parent)
 
     widget.position->setUnit(m_unit);
 
-    connect(widget.orientation, &QComboBox::currentIndexChanged,
-             this, &GuidesToolOptionWidget::updateList);
-    connect(widget.positionList, &QListWidget::currentRowChanged,
-             this, &GuidesToolOptionWidget::updatePosition);
-    connect(widget.position, &KoUnitDoubleSpinBox::valueChangedPt,
-             this, &GuidesToolOptionWidget::positionChanged);
-    connect(widget.removeButton, &QAbstractButton::clicked,
-             this, &GuidesToolOptionWidget::removeLine);
-    connect(widget.addButton, &QAbstractButton::clicked,
-             this, &GuidesToolOptionWidget::addLine);
+    connect(widget.orientation, &QComboBox::currentIndexChanged, this, &GuidesToolOptionWidget::updateList);
+    connect(widget.positionList, &QListWidget::currentRowChanged, this, &GuidesToolOptionWidget::updatePosition);
+    connect(widget.position, &KoUnitDoubleSpinBox::valueChangedPt, this, &GuidesToolOptionWidget::positionChanged);
+    connect(widget.removeButton, &QAbstractButton::clicked, this, &GuidesToolOptionWidget::removeLine);
+    connect(widget.addButton, &QAbstractButton::clicked, this, &GuidesToolOptionWidget::addLine);
 }
 
 GuidesToolOptionWidget::~GuidesToolOptionWidget()
@@ -90,11 +85,11 @@ void GuidesToolOptionWidget::selectGuideLine(Qt::Orientation orientation, int in
 void GuidesToolOptionWidget::updateList(int orientation)
 {
     widget.positionList->clear();
-    if (orientation == (int)Qt::Horizontal-1) {
-        foreach(qreal p, m_hGuides)
+    if (orientation == (int)Qt::Horizontal - 1) {
+        foreach (qreal p, m_hGuides)
             widget.positionList->addItem(m_unit.toUserStringValue(p));
     } else {
-        foreach(qreal p, m_vGuides)
+        foreach (qreal p, m_vGuides)
             widget.positionList->addItem(m_unit.toUserStringValue(p));
     }
 
@@ -131,7 +126,7 @@ void GuidesToolOptionWidget::positionChanged(qreal position)
         m_vGuides[index] = position;
 
     // update the current item text int the list
-    QListWidgetItem * item = widget.positionList->currentItem();
+    QListWidgetItem *item = widget.positionList->currentItem();
     if (item)
         item->setText(m_unit.toUserStringValue(position));
 
@@ -169,7 +164,7 @@ void GuidesToolOptionWidget::addLine()
 
     widget.positionList->blockSignals(true);
     updateList(widget.orientation->currentIndex());
-    widget.positionList->setCurrentRow(widget.positionList->count()-1);
+    widget.positionList->setCurrentRow(widget.positionList->count() - 1);
     widget.positionList->blockSignals(false);
 
     emit guideLinesChanged(o);

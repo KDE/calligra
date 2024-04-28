@@ -8,13 +8,13 @@
  */
 #include "KoDocumentResourceManager.h"
 
+#include <FlakeDebug.h>
 #include <QVariant>
 #include <kundo2stack.h>
-#include <FlakeDebug.h>
 
+#include "KoResourceManager_p.h"
 #include "KoShape.h"
 #include "KoShapeController.h"
-#include "KoResourceManager_p.h"
 
 class Q_DECL_HIDDEN KoDocumentResourceManager::Private
 {
@@ -23,8 +23,8 @@ public:
 };
 
 KoDocumentResourceManager::KoDocumentResourceManager(QObject *parent)
-        : QObject(parent),
-        d(new Private())
+    : QObject(parent)
+    , d(new Private())
 {
 }
 
@@ -70,7 +70,6 @@ KoColor KoDocumentResourceManager::koColorResource(int key) const
     return d->manager.koColorResource(key);
 }
 
-
 bool KoDocumentResourceManager::boolResource(int key) const
 {
     return d->manager.boolResource(key);
@@ -107,7 +106,7 @@ KUndo2Stack *KoDocumentResourceManager::undoStack() const
 {
     if (!hasResource(UndoStack))
         return 0;
-    return static_cast<KUndo2Stack*>(resource(UndoStack).value<void*>());
+    return static_cast<KUndo2Stack *>(resource(UndoStack).value<void *>());
 }
 
 void KoDocumentResourceManager::setHandleRadius(int handleRadius)
@@ -159,11 +158,10 @@ bool KoDocumentResourceManager::pasteAtCursor() const
     return resource(PasteAtCursor).toBool();
 }
 
-
 void KoDocumentResourceManager::setUndoStack(KUndo2Stack *undoStack)
 {
     QVariant variant;
-    variant.setValue<void*>(undoStack);
+    variant.setValue<void *>(undoStack);
     setResource(UndoStack, variant);
 }
 
@@ -171,13 +169,13 @@ KoImageCollection *KoDocumentResourceManager::imageCollection() const
 {
     if (!hasResource(ImageCollection))
         return 0;
-    return static_cast<KoImageCollection*>(resource(ImageCollection).value<void*>());
+    return static_cast<KoImageCollection *>(resource(ImageCollection).value<void *>());
 }
 
 void KoDocumentResourceManager::setImageCollection(KoImageCollection *ic)
 {
     QVariant variant;
-    variant.setValue<void*>(ic);
+    variant.setValue<void *>(ic);
     setResource(ImageCollection, variant);
 }
 
@@ -185,13 +183,13 @@ KoDocumentBase *KoDocumentResourceManager::odfDocument() const
 {
     if (!hasResource(OdfDocument))
         return 0;
-    return static_cast<KoDocumentBase*>(resource(OdfDocument).value<void*>());
+    return static_cast<KoDocumentBase *>(resource(OdfDocument).value<void *>());
 }
 
 void KoDocumentResourceManager::setOdfDocument(KoDocumentBase *currentDocument)
 {
     QVariant variant;
-    variant.setValue<void*>(currentDocument);
+    variant.setValue<void *>(currentDocument);
     setResource(OdfDocument, variant);
 }
 

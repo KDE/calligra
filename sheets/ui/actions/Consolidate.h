@@ -8,11 +8,9 @@
 #ifndef CALLIGRA_SHEETS_ACTION_CONSOLIDATE
 #define CALLIGRA_SHEETS_ACTION_CONSOLIDATE
 
-
 #include "CellAction.h"
 
 #include "ui/commands/DataManipulators.h"
-
 
 namespace Calligra
 {
@@ -22,9 +20,9 @@ namespace Sheets
 class ConsolidateDialog;
 class Selection;
 
-
-class Consolidate : public CellAction {
-Q_OBJECT
+class Consolidate : public CellAction
+{
+    Q_OBJECT
 public:
     Consolidate(Actions *actions);
     virtual ~Consolidate();
@@ -40,7 +38,6 @@ protected:
     ConsolidateDialog *m_dlg;
 };
 
-
 class ConsolidateManipulator : public AbstractDataManipulator
 {
 public:
@@ -48,15 +45,23 @@ public:
     virtual ~ConsolidateManipulator() override;
 
     void setRanges(const QList<Region> &ranges);
-    void setRowHeaders(bool headers) { m_rowHeaders = headers; }
-    void setColHeaders(bool headers) { m_colHeaders = headers; }
-    void setFunction(const QString &fun) { m_function = fun; }
+    void setRowHeaders(bool headers)
+    {
+        m_rowHeaders = headers;
+    }
+    void setColHeaders(bool headers)
+    {
+        m_colHeaders = headers;
+    }
+    void setFunction(const QString &fun)
+    {
+        m_function = fun;
+    }
 
 protected:
     bool preProcess() override;
     bool postProcess() override;
-    Value newValue(Element *element, int col, int row,
-                           bool *parse, Format::Type *fmtType) override;
+    Value newValue(Element *element, int col, int row, bool *parse, Format::Type *fmtType) override;
 
     bool matchingRow(const QRect &source, SheetBase *sourceSheet, int sourceRow, int targetRowIndex, const QString &targetHeader);
     bool matchingCol(const QRect &source, SheetBase *sourceSheet, int sourceCol, int targetColIndex, const QString &targetHeader);
@@ -70,9 +75,7 @@ protected:
     QString m_function;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_CONSOLIDATE
+#endif // CALLIGRA_SHEETS_ACTION_CONSOLIDATE

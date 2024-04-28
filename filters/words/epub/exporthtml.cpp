@@ -6,45 +6,41 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "exporthtml.h"
 
 // Qt
-#include <QSvgGenerator>
 #include <QBuffer>
 #include <QPainter>
+#include <QSvgGenerator>
 
 // KF5
 #include <KPluginFactory>
 
 // Calligra
 #include <KoFilterChain.h>
-#include <KoXmlReader.h>
 #include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
 // This plugin
+#include "HtmlExportDebug.h"
+#include "HtmlFile.h"
 #include "OdfParser.h"
 #include "OdtHtmlConverter.h"
-#include "HtmlFile.h"
-#include "HtmlExportDebug.h"
 
 #include "WmfPainterBackend.h"
 
-#include "EmfParser.h"
 #include "EmfOutputPainterStrategy.h"
-#include "SvmParser.h"
+#include "EmfParser.h"
 #include "SvmPainterBackend.h"
+#include "SvmParser.h"
 
-
-K_PLUGIN_FACTORY_WITH_JSON(ExportHtmlFactory, "calligra_filter_odt2html.json",
-			   registerPlugin<ExportHtml>();)
+K_PLUGIN_FACTORY_WITH_JSON(ExportHtmlFactory, "calligra_filter_odt2html.json", registerPlugin<ExportHtml>();)
 
 // Needed to instantiate the plugin factory.
 #include "exporthtml.moc"
 
-
-ExportHtml::ExportHtml(QObject *parent, const QVariantList&)
+ExportHtml::ExportHtml(QObject *parent, const QVariantList &)
     : KoFilter(parent)
 {
 }
@@ -52,7 +48,6 @@ ExportHtml::ExportHtml(QObject *parent, const QVariantList&)
 ExportHtml::~ExportHtml()
 {
 }
-
 
 KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QByteArray &to)
 {
@@ -62,8 +57,7 @@ KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QBy
     }
 
     // Open the infile and return an error if it fails.
-    KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
-                                             "", KoStore::Auto);
+    KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read, "", KoStore::Auto);
     if (!odfStore->open("mimetype")) {
         errorHtml << "Unable to open input file!" << Qt::endl;
         delete odfStore;
@@ -72,12 +66,12 @@ KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QBy
     odfStore->close();
 
     // Start the conversion
-    KoFilter::ConversionStatus  status;
+    KoFilter::ConversionStatus status;
 
     // ----------------------------------------------------------------
     // Parse input files
 
-    OdfParser        odfParser;
+    OdfParser odfParser;
 
     // Parse meta.xml into m_metadata
     status = odfParser.parseMetadata(odfStore, m_metadata);
@@ -106,13 +100,12 @@ KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QBy
     html.setFileSuffix(dotPosition != -1 ? outputFileName.mid(dotPosition) : QString());
     OdtHtmlConverter converter;
     OdtHtmlConverter::ConversionOptions options = {
-        false,                   // don't put styles in css file
-        false,                    // don't break into chapters
-        false                     // It is not mobi.
+        false, // don't put styles in css file
+        false, // don't break into chapters
+        false // It is not mobi.
     };
     QHash<QString, QString> mediaFilesList;
-    status = converter.convertContent(odfStore, m_metadata, &m_manifest, &options, &html,
-                                      m_imagesSrcList, mediaFilesList);
+    status = converter.convertContent(odfStore, m_metadata, &m_manifest, &options, &html, m_imagesSrcList, mediaFilesList);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
@@ -135,7 +128,6 @@ KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QBy
     return KoFilter::OK;
 }
 
-
 KoFilter::ConversionStatus ExportHtml::extractImages(KoStore *odfStore, HtmlFile *htmlFile)
 {
     // Extract images and add them to htmlFile one by one
@@ -151,70 +143,61 @@ KoFilter::ConversionStatus ExportHtml::extractImages(KoStore *odfStore, HtmlFile
 #if 1
         htmlFile->addContentFile(("image" + QString::number(imgId)), // id
                                  (htmlFile->filePrefix() + imgSrc.section('/', -1)), // filename
-                                 m_manifest.value(imgSrc).toUtf8(), imgContent);
+                                 m_manifest.value(imgSrc).toUtf8(),
+                                 imgContent);
 #else
 
         VectorType type = vectorType(imgContent);
         QSizeF qSize = m_imagesSrcList.value(imgSrc);
         switch (type) {
-
-        case ExportHtml::VectorTypeSvm:
-            {
-                debugHtml << "Svm file";
-                QSize size(qSize.width(), qSize.height());
-                QByteArray output;
-                if (!convertSvm(imgContent, output, size)) {
-                    debugHtml << "Svm Parse error";
-                    return KoFilter::ParsingError;
-                }
-
-                epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
-                                         "image/svg+xml", output);
-                break;
+        case ExportHtml::VectorTypeSvm: {
+            debugHtml << "Svm file";
+            QSize size(qSize.width(), qSize.height());
+            QByteArray output;
+            if (!convertSvm(imgContent, output, size)) {
+                debugHtml << "Svm Parse error";
+                return KoFilter::ParsingError;
             }
-        case ExportHtml::VectorTypeEmf:
-            {
-                debugHtml << "EMF file";
-                QSize size(qSize.width(), qSize.height());
-                QByteArray output;
-                if (!convertEmf(imgContent, output, size)) {
-                    debugHtml << "EMF Parse error";
-                    return KoFilter::ParsingError;
-                }
 
-                epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
-                                         "image/svg+xml", output);
-                break;
+            epubFile->addContentFile(("image" + QString::number(imgId)), (epubFile->pathPrefix() + imgSrc.section('/', -1)), "image/svg+xml", output);
+            break;
+        }
+        case ExportHtml::VectorTypeEmf: {
+            debugHtml << "EMF file";
+            QSize size(qSize.width(), qSize.height());
+            QByteArray output;
+            if (!convertEmf(imgContent, output, size)) {
+                debugHtml << "EMF Parse error";
+                return KoFilter::ParsingError;
             }
-        case ExportHtml::VectorTypeWmf:
-            {
-                debugHtml << "WMF file";
-                 QByteArray output;
-                if (!convertWmf(imgContent, output, qSize)) {
-                    debugHtml << "WMF Parse error";
-                    return KoFilter::ParsingError;
-                }
 
-                epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
-                                         "image/svg+xml", output);
-                break;
+            epubFile->addContentFile(("image" + QString::number(imgId)), (epubFile->pathPrefix() + imgSrc.section('/', -1)), "image/svg+xml", output);
+            break;
+        }
+        case ExportHtml::VectorTypeWmf: {
+            debugHtml << "WMF file";
+            QByteArray output;
+            if (!convertWmf(imgContent, output, qSize)) {
+                debugHtml << "WMF Parse error";
+                return KoFilter::ParsingError;
             }
+
+            epubFile->addContentFile(("image" + QString::number(imgId)), (epubFile->pathPrefix() + imgSrc.section('/', -1)), "image/svg+xml", output);
+            break;
+        }
 
             // If it's not one of the types we can convert, let's just
             // assume that the image can be used as it is. The user
             // will find out soon anyway when s/he tries to look at
             // the image.
-        case ExportHtml::VectorTypeOther:
-            {
-                debugHtml << "Other file";
-                epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
-                                         m_manifest.value(imgSrc).toUtf8(), imgContent);
-                break;
-            }
+        case ExportHtml::VectorTypeOther: {
+            debugHtml << "Other file";
+            epubFile->addContentFile(("image" + QString::number(imgId)),
+                                     (epubFile->pathPrefix() + imgSrc.section('/', -1)),
+                                     m_manifest.value(imgSrc).toUtf8(),
+                                     imgContent);
+            break;
+        }
 
         default:
             debugHtml << "";

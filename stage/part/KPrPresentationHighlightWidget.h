@@ -19,8 +19,8 @@ public:
     ~KPrPresentationHighlightWidget() override;
 
 protected:
-    void mouseMoveEvent( QMouseEvent * event ) override;
-    void paintEvent( QPaintEvent * event ) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     QSize m_size;
@@ -29,4 +29,3 @@ private:
 };
 
 #endif /* KPRPRESENTATIONHIGHLIGHTWIDGET_H */
-

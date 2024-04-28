@@ -16,10 +16,10 @@
 #include "DocumentSettingsDialog.h"
 
 #include <QCheckBox>
+#include <QComboBox>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
-#include <QComboBox>
 #include <QSpinBox>
 
 #include <KPageWidget>
@@ -29,11 +29,11 @@
 
 // #include <sonnet/configwidget.h>
 
+#include "core/Sheet.h"
+#include "engine/CS_Time.h"
 #include "engine/CalculationSettings.h"
 #include "engine/Localization.h"
 #include "engine/MapBase.h"
-#include "core/Sheet.h"
-#include "engine/CS_Time.h"
 
 using namespace Calligra::Sheets;
 
@@ -43,15 +43,14 @@ public:
     KPageWidget *pages;
     KPageWidgetItem *page1, *page2;
     // Calculation Settings
-    calcSettings* calcPage;
+    calcSettings *calcPage;
     // Locale Options
-    parameterLocale* localePage;
+    parameterLocale *localePage;
 };
 
-
-DocumentSettingsDialog::DocumentSettingsDialog(MapBase *map, QWidget* parent)
-        : ActionDialog(parent)
-        , d(new Private)
+DocumentSettingsDialog::DocumentSettingsDialog(MapBase *map, QWidget *parent)
+    : ActionDialog(parent)
+    , d(new Private)
 {
     setObjectName(QLatin1String("DocumentSettingsDialog"));
     setWindowTitle(i18n("Document Settings"));
@@ -84,9 +83,8 @@ void DocumentSettingsDialog::onApply()
     d->localePage->apply();
 }
 
-
 calcSettings::calcSettings(MapBase *map, KoVBox *box)
-        : QObject(box->parent())
+    : QObject(box->parent())
 {
     m_cs = map->calculationSettings();
 
@@ -112,7 +110,7 @@ calcSettings::calcSettings(MapBase *map, KoVBox *box)
     matchModeLabel->setBuddy(m_matchModeCombobox);
     m_matchModeCombobox->setEditable(false);
     m_matchModeCombobox->addItems(QStringList() << i18n("None") << i18n("Wildcards") << i18n("Regular Expressions"));
-    m_matchModeCombobox->setCurrentIndex(m_cs->useWildcards() ? 1 : m_cs->useRegularExpressions() ? 2 : 0 );
+    m_matchModeCombobox->setCurrentIndex(m_cs->useWildcards() ? 1 : m_cs->useRegularExpressions() ? 2 : 0);
 
     QHBoxLayout *m_nullYearLayout = new QHBoxLayout();
     m_nullYearLayout->setContentsMargins({});
@@ -140,12 +138,12 @@ void calcSettings::apply()
 }
 
 parameterLocale::parameterLocale(MapBase *map, KoVBox *box)
-        : QObject(box->parent())
+    : QObject(box->parent())
 {
     m_map = map;
     m_bUpdateLocale = false;
 
-    Localization* locale = map->calculationSettings()->locale();
+    Localization *locale = map->calculationSettings()->locale();
 
     m_language = new QLabel(box);
     m_number = new QLabel(box);
@@ -165,10 +163,11 @@ parameterLocale::parameterLocale(MapBase *map, KoVBox *box)
 void parameterLocale::apply()
 {
     if (m_bUpdateLocale) {
-        const QList<SheetBase*> sheets = m_map->sheetList();
-        for(SheetBase* sheet : sheets) {
+        const QList<SheetBase *> sheets = m_map->sheetList();
+        for (SheetBase *sheet : sheets) {
             Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
-            if (fullSheet) fullSheet->updateLocale();
+            if (fullSheet)
+                fullSheet->updateLocale();
         }
     }
 }
@@ -176,15 +175,15 @@ void parameterLocale::apply()
 void parameterLocale::updateDefaultSystemConfig()
 {
     m_bUpdateLocale = true;
-    Localization* const locale = m_map->calculationSettings()->locale();
-    static_cast<Localization*>(locale)->setDefaultLocale();
+    Localization *const locale = m_map->calculationSettings()->locale();
+    static_cast<Localization *>(locale)->setDefaultLocale();
     updateToMatchLocale(locale);
 }
 
-void parameterLocale::updateToMatchLocale(Localization* locale)
+void parameterLocale::updateToMatchLocale(Localization *locale)
 {
     m_language->setText(i18n("Language: %1 (%2)", locale->languageName(true), locale->languageName(false)));
-    m_number->setText(i18n("Default number format: %1", locale->formatNumber(12.55)));   // krazy:exclude=i18ncheckarg
+    m_number->setText(i18n("Default number format: %1", locale->formatNumber(12.55))); // krazy:exclude=i18ncheckarg
     m_date->setText(i18n("Long date format: %1", locale->formatDate(QDate::currentDate())));
     m_shortDate->setText(i18n("Short date format: %1", locale->formatDate(QDate::currentDate(), false)));
     m_time->setText(i18n("Time format: %1", locale->formatTime(Time::currentTime())));

@@ -3,26 +3,30 @@
  *  SPDX-FileCopyrightText: 2007 Emanuele Tamponi <emanuele@valinor.it>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #ifndef KO_CONVOLUTION_OP_IMPL_H
 #define KO_CONVOLUTION_OP_IMPL_H
 
 #include "DebugPigment.h"
 #include "KoColorSpaceMaths.h"
-#include "KoConvolutionOp.h"
 #include "KoColorSpaceTraits.h"
+#include "KoConvolutionOp.h"
 
 template<class _CSTrait>
 class KoConvolutionOpImpl : public KoConvolutionOp
 {
     typedef typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype compositetype;
     typedef typename _CSTrait::channels_type channels_type;
+
 public:
+    KoConvolutionOpImpl()
+    {
+    }
 
-    KoConvolutionOpImpl() { }
-
-    ~KoConvolutionOpImpl() override { }
+    ~KoConvolutionOpImpl() override
+    {
+    }
 
     /**
      * Calculates a weighted average of the pixels, mentioned in @p colors
@@ -60,8 +64,14 @@ public:
      *      @p factor and incremented by @p offset.
      */
 
-    void convolveColors(const quint8* const* colors, const qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nPixels, const QBitArray & channelFlags) const override {
-
+    void convolveColors(const quint8 *const *colors,
+                        const qreal *kernelValues,
+                        quint8 *dst,
+                        qreal factor,
+                        qreal offset,
+                        qint32 nPixels,
+                        const QBitArray &channelFlags) const override
+    {
         // Create and initialize to 0 the array of totals
         qreal totals[_CSTrait::channels_nb];
 
@@ -72,7 +82,7 @@ public:
 
         for (; nPixels--; colors++, kernelValues++) {
             qreal weight = *kernelValues;
-            const channels_type* color = _CSTrait::nativeArray(*colors);
+            const channels_type *color = _CSTrait::nativeArray(*colors);
             if (weight != 0) {
                 if (_CSTrait::opacityU8(*colors) == 0) {
                     totalWeightTransparent += weight;
@@ -85,7 +95,7 @@ public:
             }
         }
 
-        typename _CSTrait::channels_type* dstColor = _CSTrait::nativeArray(dst);
+        typename _CSTrait::channels_type *dstColor = _CSTrait::nativeArray(dst);
 
         bool allChannels = channelFlags.isEmpty();
         Q_ASSERT(allChannels || channelFlags.size() == (int)_CSTrait::channels_nb);
@@ -94,8 +104,7 @@ public:
             for (uint i = 0; i < _CSTrait::channels_nb; i++) {
                 if (allChannels || channelFlags.testBit(i)) {
                     compositetype v = totals[i] / factor + offset;
-                    dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
-                                          KoColorSpaceMathsTraits<channels_type>::max);
+                    dstColor[i] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min, KoColorSpaceMathsTraits<channels_type>::max);
                 }
             }
         } else if (totalWeightTransparent != totalWeight) {
@@ -106,34 +115,29 @@ public:
                     if (allChannels || channelFlags.testBit(i)) {
                         if (i == (uint)_CSTrait::alpha_pos) {
                             compositetype v = totals[i] / totalWeight + offset;
-                            dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
-                                                  KoColorSpaceMathsTraits<channels_type>::max);
+                            dstColor[i] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min, KoColorSpaceMathsTraits<channels_type>::max);
                         } else {
                             compositetype v = totals[i] / a + offset;
-                            dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
-                                                  KoColorSpaceMathsTraits<channels_type>::max);
+                            dstColor[i] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min, KoColorSpaceMathsTraits<channels_type>::max);
                         }
                     }
                 }
             } else {
                 // Case C)
-                qreal a = qreal(totalWeight) / (factor * (totalWeight - totalWeightTransparent));     // use qreal as it easily saturate
+                qreal a = qreal(totalWeight) / (factor * (totalWeight - totalWeightTransparent)); // use qreal as it easily saturate
                 for (uint i = 0; i < _CSTrait::channels_nb; i++) {
                     if (allChannels || channelFlags.testBit(i)) {
                         if (i == (uint)_CSTrait::alpha_pos) {
                             compositetype v = totals[i] / factor + offset;
-                            dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
-                                                  KoColorSpaceMathsTraits<channels_type>::max);
+                            dstColor[i] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min, KoColorSpaceMathsTraits<channels_type>::max);
                         } else {
                             compositetype v = (compositetype)(totals[i] * a + offset);
-                            dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
-                                                  KoColorSpaceMathsTraits<channels_type>::max);
+                            dstColor[i] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min, KoColorSpaceMathsTraits<channels_type>::max);
                         }
                     }
                 }
             }
         }
-
     }
 };
 

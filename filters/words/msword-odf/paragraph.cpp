@@ -25,38 +25,36 @@
 
 #include <math.h>
 
+#include "MsDocDebug.h"
 #include "conversion.h"
 #include "msdoc.h"
-#include "MsDocDebug.h"
 
-//define the static attribute
+// define the static attribute
 QStack<QString> Paragraph::m_bgColors;
 
-//definition of local functions
-const char* getStrokeValue(const uint brcType);
-const char* getTextUnderlineMode(const uint kul);
-const char* getTextUnderlineStyle(const uint kul);
-const char* getTextUnderlineType(const uint kul);
-const char* getTextUnderlineWidth(const uint kul);
+// definition of local functions
+const char *getStrokeValue(const uint brcType);
+const char *getTextUnderlineMode(const uint kul);
+const char *getTextUnderlineStyle(const uint kul);
+const char *getTextUnderlineType(const uint kul);
+const char *getTextUnderlineWidth(const uint kul);
 
-
-Paragraph::Paragraph(KoGenStyles* mainStyles, const QString& bgColor, bool inStylesDotXml, bool isHeading,
-                     bool inHeaderFooter, int outlineLevel)
-        : m_paragraphProperties(0),
-        m_paragraphProperties2(0),
-        m_characterProperties(0),
-        m_odfParagraphStyle(0),
-        m_odfParagraphStyle2(0),
-        m_mainStyles(0),
-        m_paragraphStyle(0),
-        m_paragraphStyle2(0),
-        m_inStylesDotXml(inStylesDotXml),
-        m_isHeading(isHeading),
-        m_inHeaderFooter(inHeaderFooter),
-        m_outlineLevel(0),
-        m_dropCapStatus(NoDropCap),
-        m_containsPageNumberField(false),
-        m_combinedCharacters(false)
+Paragraph::Paragraph(KoGenStyles *mainStyles, const QString &bgColor, bool inStylesDotXml, bool isHeading, bool inHeaderFooter, int outlineLevel)
+    : m_paragraphProperties(0)
+    , m_paragraphProperties2(0)
+    , m_characterProperties(0)
+    , m_odfParagraphStyle(0)
+    , m_odfParagraphStyle2(0)
+    , m_mainStyles(0)
+    , m_paragraphStyle(0)
+    , m_paragraphStyle2(0)
+    , m_inStylesDotXml(inStylesDotXml)
+    , m_isHeading(isHeading)
+    , m_inHeaderFooter(inHeaderFooter)
+    , m_outlineLevel(0)
+    , m_dropCapStatus(NoDropCap)
+    , m_containsPageNumberField(false)
+    , m_combinedCharacters(false)
 {
     debugMsDoc;
     m_mainStyles = mainStyles;
@@ -68,14 +66,14 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, const QString& bgColor, bool inSty
         m_inStylesDotXml = true;
     }
 
-    if (isHeading)     {
+    if (isHeading) {
         debugMsDoc << "this paragraph is a heading";
         m_outlineLevel = (outlineLevel > 0 ? outlineLevel : 1);
     } else {
         m_outlineLevel = -1;
     }
 
-    //init the background-color stack to page background-color
+    // init the background-color stack to page background-color
     if (m_bgColors.size() > 0) {
         warnMsDoc << "BUG: m_bgColors stack NOT empty, clearing!";
         m_bgColors.clear();
@@ -96,37 +94,34 @@ Paragraph::~Paragraph()
     m_bgColors.clear();
 }
 
-void Paragraph::setParagraphStyle(const wvWare::Style* paragraphStyle)
+void Paragraph::setParagraphStyle(const wvWare::Style *paragraphStyle)
 {
     m_paragraphStyle = paragraphStyle;
-    m_odfParagraphStyle->addAttribute("style:parent-style-name",
-                                      Conversion::styleName2QString(m_paragraphStyle->name()));
+    m_odfParagraphStyle->addAttribute("style:parent-style-name", Conversion::styleName2QString(m_paragraphStyle->name()));
 }
 
 void Paragraph::setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> props)
 {
     m_paragraphProperties = props;
 
-    const wvWare::Word97::PAP* refPap = 0;
+    const wvWare::Word97::PAP *refPap = 0;
     if (m_paragraphStyle) {
         refPap = &m_paragraphStyle->paragraphProperties().pap();
     }
-    const wvWare::Word97::PAP& pap = props->pap();
+    const wvWare::Word97::PAP &pap = props->pap();
 
     QString color;
 
-    //process the background-color information in order to calculate a
-    //proper fo:color for the text in case of cvAuto.
-    if (!refPap ||
-        (refPap->shd.cvBack != pap.shd.cvBack) ||
-        (refPap->shd.isShdAuto() != pap.shd.isShdAuto()) ||
-        (refPap->shd.isShdNil() != pap.shd.isShdNil()))
-    {
+    // process the background-color information in order to calculate a
+    // proper fo:color for the text in case of cvAuto.
+    if (!refPap || (refPap->shd.cvBack != pap.shd.cvBack) || (refPap->shd.isShdAuto() != pap.shd.isShdAuto())
+        || (refPap->shd.isShdNil() != pap.shd.isShdNil())) {
         color = Conversion::shdToColorStr(pap.shd, currentBgColor(), QString());
     }
-    //Check the background-color of the named paragraph style.
+    // Check the background-color of the named paragraph style.
     else {
-        const KoGenStyle *pStyle = m_mainStyles->style(Conversion::styleName2QString(m_paragraphStyle->name()), m_paragraphStyle->type() == sgcPara ? "paragraph" : "text");
+        const KoGenStyle *pStyle =
+            m_mainStyles->style(Conversion::styleName2QString(m_paragraphStyle->name()), m_paragraphStyle->type() == sgcPara ? "paragraph" : "text");
         if (pStyle) {
             color = pStyle->property("fo:background-color", KoGenStyle::ParagraphType);
             if (color.isEmpty() || color == "transparent") {
@@ -152,7 +147,7 @@ void Paragraph::popBgColor(void)
     }
 }
 
-void Paragraph::updateBgColor(const QString& val)
+void Paragraph::updateBgColor(const QString &val)
 {
     if (!m_bgColors.isEmpty()) {
         m_bgColors.pop();
@@ -160,14 +155,16 @@ void Paragraph::updateBgColor(const QString& val)
     m_bgColors.push(val);
 }
 
-void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
-                             const QString &fontName, const wvWare::StyleSheet& styles,
+void Paragraph::addRunOfText(QString text,
+                             wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+                             const QString &fontName,
+                             const wvWare::StyleSheet &styles,
                              bool addCompleteElement)
 {
     // Check for column break in this text string
     int colBreak = text.indexOf(QChar(0xE));
 
-    //I think this break always comes at the beginning of the text string
+    // I think this break always comes at the beginning of the text string
     if (colBreak == 0) {
         // Add needed attribute to paragraph style.
         //
@@ -185,19 +182,19 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
     m_addCompleteElement.push_back(addCompleteElement);
 
     // Add text string to list.
-    //m_textStrings.push_back(QString(text));
+    // m_textStrings.push_back(QString(text));
     m_textStrings.append(QString(text));
 
     // Now find out what style to associate with the string.
 
     if (chp == 0) {
         // if inner paragraph - just add a null style & return from function
-        KoGenStyle* style = 0;
+        KoGenStyle *style = 0;
         m_textStyles.push_back(style);
         return;
     }
 
-    const wvWare::Style* msTextStyle = styles.styleByIndex(chp->istd);
+    const wvWare::Style *msTextStyle = styles.styleByIndex(chp->istd);
     if (!msTextStyle && styles.size()) {
         msTextStyle = styles.styleByID(stiNormalChar);
         debugMsDoc << "Invalid reference to text style, reusing NormalChar";
@@ -224,9 +221,9 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
             textStyle->setAutoStyleInStylesDotXml(true);
         }
         textStyle->setParentName(msTextStyleName);
-        const wvWare::Word97::CHP* refChp = &msTextStyle->chp();
+        const wvWare::Word97::CHP *refChp = &msTextStyle->chp();
 
-        //if we have a new font, process that
+        // if we have a new font, process that
         if (!refChp || refChp->ftcAscii != chp->ftcAscii) {
             if (!fontName.isEmpty()) {
                 textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
@@ -240,8 +237,8 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
         if (m_inStylesDotXml) {
             textStyle->setAutoStyleInStylesDotXml(true);
         }
-        //if we have a new font, process that
-        const wvWare::Word97::CHP* refChp = &m_paragraphStyle->chp();
+        // if we have a new font, process that
+        const wvWare::Word97::CHP *refChp = &m_paragraphStyle->chp();
         if (!refChp || refChp->ftcAscii != chp->ftcAscii) {
             if (!fontName.isEmpty()) {
                 textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
@@ -250,20 +247,19 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
         applyCharacterProperties(chp, textStyle, m_paragraphStyle, suppresFontSize, m_combinedCharacters);
     }
 
-    //add text style to list
+    // add text style to list
     m_textStyles.push_back(textStyle);
 }
 
-QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tabLeader)
+QString Paragraph::writeToFile(KoXmlWriter *writer, bool openTextBox, QChar *tabLeader)
 {
     debugMsDoc;
 
-    //TODO: The paragraph-properties might have to be set before
-    //text-properties to have proper automatic colors.
+    // TODO: The paragraph-properties might have to be set before
+    // text-properties to have proper automatic colors.
 
     //[MS-DOC] PAP -> [ODF] paragraph-properties
-    applyParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle,
-                             m_inHeaderFooter && m_containsPageNumberField, this, tabLeader);
+    applyParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle, m_inHeaderFooter && m_containsPageNumberField, this, tabLeader);
 
     // text-properties are required for empty paragraphs or paragraphs
     // containing only floating/inline objects.  If there is any text chunk,
@@ -297,7 +293,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
         debugMsDoc << "returning with drop cap paragraph";
         if (m_textStrings.size()) {
             if (m_textStyles[0] != 0) {
-                m_dropCapStyleName= m_textStyles[0]->parentName();
+                m_dropCapStyleName = m_textStyles[0]->parentName();
             }
         }
         return QString();
@@ -319,7 +315,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
         if (!m_dropCapStyleName.isEmpty()) {
             tmpWriter.addAttribute("style:style-name", m_dropCapStyleName.toUtf8());
         }
-        tmpWriter.endElement(); //style:drop-cap
+        tmpWriter.endElement(); // style:drop-cap
         buf.close();
 
         QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
@@ -329,13 +325,13 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
     }
 
     QString textStyleName;
-    //add paragraph style to the collection and its name to the content
+    // add paragraph style to the collection and its name to the content
     debugMsDoc << "adding paragraphStyle";
-    //add the attribute for our style in <text:p>
+    // add the attribute for our style in <text:p>
     textStyleName = "P";
     textStyleName = m_mainStyles->insert(*m_odfParagraphStyle, textStyleName);
 
-    //check if the paragraph is inside of an absolutely positioned frame
+    // check if the paragraph is inside of an absolutely positioned frame
     if (openTextBox) {
         KoGenStyle gs(KoGenStyle::GraphicAutoStyle, "graphic");
         const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
@@ -344,7 +340,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
         writer->startElement("text:p", false);
         writer->addAttribute("text:style-name", textStyleName.toUtf8());
 
-        const wvWare::Word97::PAP& pap = m_paragraphProperties->pap();
+        const wvWare::Word97::PAP &pap = m_paragraphProperties->pap();
         int dxaAbs = 0;
         int dyaAbs = 0;
 
@@ -386,10 +382,8 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
             gs.setAutoStyleInStylesDotXml(true);
         }
 
-        //TODO: improve frame borders support
-        if ( pap.brcLeft.brcType || pap.brcTop.brcType ||
-             pap.brcRight.brcType || pap.brcBottom.brcType )
-        {
+        // TODO: improve frame borders support
+        if (pap.brcLeft.brcType || pap.brcTop.brcType || pap.brcRight.brcType || pap.brcBottom.brcType) {
             debugMsDoc << "Frame bordes not fully supported!";
         }
         gs.addProperty("draw:stroke", getStrokeValue(pap.brcLeft.brcType), gt);
@@ -421,37 +415,36 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
 
     writer->addAttribute("text:style-name", textStyleName.toUtf8());
 
-    //TODO: insert <text:tab> elements at specified locations
+    // TODO: insert <text:tab> elements at specified locations
 
-    //if there's any paragraph content
+    // if there's any paragraph content
     if (!m_textStrings.isEmpty()) {
-        //Loop through each text strings and styles (equal # of both) and write
-        //them to the file.
+        // Loop through each text strings and styles (equal # of both) and write
+        // them to the file.
         debugMsDoc << "writing text spans now";
         QString oldStyleName;
         bool startedSpan = false;
         for (int i = 0; i < m_textStrings.size(); i++) {
             if (m_textStyles[i] == 0) {
                 if (startedSpan) {
-                    writer->endElement(); //text:span
+                    writer->endElement(); // text:span
                     startedSpan = false;
                     oldStyleName = " ";
                 }
-                //if style is null, we have an inner paragraph and add the
-                //complete paragraph element to writer need to get const char*
-                //from the QString
-                debugMsDoc << "complete element: " <<
-                                 m_textStrings[i].toLocal8Bit().constData();
+                // if style is null, we have an inner paragraph and add the
+                // complete paragraph element to writer need to get const char*
+                // from the QString
+                debugMsDoc << "complete element: " << m_textStrings[i].toLocal8Bit().constData();
                 writer->addCompleteElement(m_textStrings[i].toUtf8().constData());
             } else {
-                //put style into m_mainStyles & get its name
+                // put style into m_mainStyles & get its name
                 textStyleName = 'T';
                 textStyleName = m_mainStyles->insert(*m_textStyles[i], textStyleName);
-                //debugMsDoc << m_textStyles[i]->type();
+                // debugMsDoc << m_textStyles[i]->type();
 
                 if (oldStyleName != textStyleName) {
                     if (startedSpan) {
-                        writer->endElement(); //text:span
+                        writer->endElement(); // text:span
                         startedSpan = false;
                     }
                     if (textStyleName != "DefaultParagraphFont") {
@@ -461,29 +454,29 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tab
                     }
                     oldStyleName = textStyleName;
                 }
-                //Write text string to writer.  Now I just need to write the
-                //text:span to the header tag.
+                // Write text string to writer.  Now I just need to write the
+                // text:span to the header tag.
                 debugMsDoc << "Writing \"" << m_textStrings[i] << "\"";
                 if (m_addCompleteElement[i] == false) {
                     writer->addTextSpan(m_textStrings[i]);
                 }
-                //special case we need style applied and complete element added
+                // special case we need style applied and complete element added
                 else {
                     writer->addCompleteElement(m_textStrings[i].toUtf8().constData());
                 }
-                //cleanup
+                // cleanup
                 delete m_textStyles[i];
                 m_textStyles[i] = 0;
             }
         }
         // If we have an unfinished text:span, finish it now.
         if (startedSpan) {
-            writer->endElement(); //text:span
+            writer->endElement(); // text:span
             startedSpan = false;
         }
-    } //if (!m_textStrings.isEmpty())
+    } // if (!m_textStrings.isEmpty())
 
-    //close the <text:p> or <text:h> tag we opened
+    // close the <text:p> or <text:h> tag we opened
     writer->endElement();
 
     return textStyleName;
@@ -499,15 +492,15 @@ void Paragraph::openInnerParagraph()
 {
     debugMsDoc;
 
-    //copy parent and paragraph styles
+    // copy parent and paragraph styles
     m_odfParagraphStyle2 = m_odfParagraphStyle;
     m_odfParagraphStyle = new KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     m_paragraphStyle2 = m_paragraphStyle;
     m_paragraphProperties2 = m_paragraphProperties;
     m_paragraphProperties = 0;
 
-    //move m_textStyles and m_textStrings content to
-    //m_textStyles2 and m_textStrings2
+    // move m_textStyles and m_textStrings content to
+    // m_textStyles2 and m_textStrings2
     m_textStyles2 = m_textStyles;
     m_textStrings2 = m_textStrings;
     m_addCompleteElement2 = m_addCompleteElement;
@@ -520,7 +513,7 @@ void Paragraph::closeInnerParagraph()
 {
     debugMsDoc;
 
-    //clear temp variables and restore originals
+    // clear temp variables and restore originals
     delete m_odfParagraphStyle;
     m_odfParagraphStyle = m_odfParagraphStyle2;
     m_odfParagraphStyle2 = 0;
@@ -539,14 +532,17 @@ void Paragraph::closeInnerParagraph()
     m_addCompleteElement2.clear();
 }
 
-void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& properties,
-                                         KoGenStyle* style, const wvWare::Style* parentStyle,
-                                         bool setDefaultAlign, Paragraph *paragraph,
-                                         QChar* tabLeader, const QString& bgColor)
+void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties &properties,
+                                         KoGenStyle *style,
+                                         const wvWare::Style *parentStyle,
+                                         bool setDefaultAlign,
+                                         Paragraph *paragraph,
+                                         QChar *tabLeader,
+                                         const QString &bgColor)
 {
     debugMsDoc;
 
-    const wvWare::Word97::PAP* refPap;
+    const wvWare::Word97::PAP *refPap;
     if (parentStyle) {
         refPap = &parentStyle->paragraphProperties().pap();
     } else {
@@ -557,23 +553,23 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         updateBgColor(bgColor);
     }
 
-    //pap is our paragraph properties object
-    const wvWare::Word97::PAP& pap = properties.pap();
+    // pap is our paragraph properties object
+    const wvWare::Word97::PAP &pap = properties.pap();
 
     const KoGenStyle::PropertyType pt = KoGenStyle::ParagraphType;
 
-    //paragraph alignment
-    //jc = justification code
+    // paragraph alignment
+    // jc = justification code
     if (!refPap || refPap->jc != pap.jc) {
-        if (pap.jc == 1)   //1 = center justify
+        if (pap.jc == 1) // 1 = center justify
             style->addProperty("fo:text-align", "center", pt);
-        else if (pap.jc == 2)  //2 = right justify
+        else if (pap.jc == 2) // 2 = right justify
             style->addProperty("fo:text-align", "end", pt);
-        else if (pap.jc == 3)  //3 = left & right justify
+        else if (pap.jc == 3) // 3 = left & right justify
             style->addProperty("fo:text-align", "justify", pt);
-        else if (pap.jc == 4)  //4 = distributed .. fake it as justify
+        else if (pap.jc == 4) // 4 = distributed .. fake it as justify
             style->addProperty("fo:text-align", "justify", pt);
-        else //0 = left justify
+        else // 0 = left justify
             style->addProperty("fo:text-align", "start", pt);
     } else if (setDefaultAlign) {
         // Set default align for page number field in header or footer
@@ -582,19 +578,16 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
     }
 
     if (!refPap || refPap->fBiDi != pap.fBiDi) {
-        if (pap.fBiDi == 1)   //1 = right to left
+        if (pap.fBiDi == 1) // 1 = right to left
             style->addProperty("style:writing-mode", "rl-tb", pt);
-        else //0 = normal
+        else // 0 = normal
             style->addProperty("style:writing-mode", "lr-tb", pt);
     }
 
     // If there is no parent style OR the parent and child background
     // color don't match.
-    if ( !refPap ||
-         (refPap->shd.cvBack != pap.shd.cvBack) ||
-         (refPap->shd.isShdAuto() != pap.shd.isShdAuto()) ||
-         (refPap->shd.isShdNil() != pap.shd.isShdNil()) )
-    {
+    if (!refPap || (refPap->shd.cvBack != pap.shd.cvBack) || (refPap->shd.isShdAuto() != pap.shd.isShdAuto())
+        || (refPap->shd.isShdNil() != pap.shd.isShdNil())) {
         QString color = Conversion::shdToColorStr(pap.shd, currentBgColor(), QString());
         if (!color.isNull()) {
             updateBgColor(color);
@@ -604,9 +597,9 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         style->addProperty("fo:background-color", color, pt);
     }
 
-    //dxaLeft1 = first-line indent from left margin (signed, relative to dxaLeft)
-    //dxaLeft = indent from left margin (signed)
-    //dxaRight = indent from right margin (signed)
+    // dxaLeft1 = first-line indent from left margin (signed, relative to dxaLeft)
+    // dxaLeft = indent from left margin (signed)
+    // dxaRight = indent from right margin (signed)
     if (!refPap || refPap->dxaLeft != pap.dxaLeft) {
         // apply twip -> pt conversion, only if not in a list
         if (pap.ilfo == 0) {
@@ -624,12 +617,12 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         }
     }
 
-    //dyaBefore = vertical spacing before paragraph (unsigned)
-    //dyaAfter = vertical spacing after paragraph (unsigned)
+    // dyaBefore = vertical spacing before paragraph (unsigned)
+    // dyaAfter = vertical spacing after paragraph (unsigned)
     if (!refPap || refPap->dyaBefore != pap.dyaBefore) {
         double marginTop = (double)pap.dyaBefore / 20.0;
         if (pap.dyaBeforeAuto) {
-           //TODO: Figure out the proper logic for automatic margins.
+            // TODO: Figure out the proper logic for automatic margins.
             marginTop = 14;
         }
         style->addPropertyPt("fo:margin-top", marginTop, pt);
@@ -637,19 +630,17 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
     if (!refPap || refPap->dyaAfter != pap.dyaAfter) {
         double marginBottom = (double)pap.dyaAfter / 20.0;
         if (pap.dyaAfterAuto) {
-           //TODO: Figure out the proper logic for automatic margins.
+            // TODO: Figure out the proper logic for automatic margins.
             marginBottom = 14;
         }
         style->addPropertyPt("fo:margin-bottom", marginBottom, pt);
     }
 
     // Linespacing
-    //lspd = line spacing descriptor
-    //Conversion::lineSpacing() returns "0" (default), "oneandhalf," or "double"
-    //QString lineSpacingAttribute = Conversion::lineSpacing( pap.lspd );
-    if (!refPap || refPap->lspd.fMultLinespace != pap.lspd.fMultLinespace
-            || refPap->lspd.dyaLine != pap.lspd.dyaLine) {
-
+    // lspd = line spacing descriptor
+    // Conversion::lineSpacing() returns "0" (default), "oneandhalf," or "double"
+    // QString lineSpacingAttribute = Conversion::lineSpacing( pap.lspd );
+    if (!refPap || refPap->lspd.fMultLinespace != pap.lspd.fMultLinespace || refPap->lspd.dyaLine != pap.lspd.dyaLine) {
         if (pap.lspd.fMultLinespace == 1) {
             // Word will reserve for each line the (maximal height of
             // the line*lspd.dyaLine)/240
@@ -667,16 +658,15 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             // lspd.dyaLine > 0 means "at least", < 0 means "exactly"
             if (pap.lspd.dyaLine > 0)
                 style->addPropertyPt("style:line-height-at-least", value, pt);
-            else if (pap.lspd.dyaLine < 0 && pap.dcs.fdct==0)
+            else if (pap.lspd.dyaLine < 0 && pap.dcs.fdct == 0)
                 style->addPropertyPt("fo:line-height", value, pt);
         } else
-            warnMsDoc << "Unhandled LSPD::fMultLinespace value: "
-            << pap.lspd.fMultLinespace;
+            warnMsDoc << "Unhandled LSPD::fMultLinespace value: " << pap.lspd.fMultLinespace;
     }
 
-    //fKeep = keep entire paragraph on one page if possible
-    //fKeepFollow = keep paragraph on same page with next paragraph if possible
-    //fPageBreakBefore = start this paragraph on new page
+    // fKeep = keep entire paragraph on one page if possible
+    // fKeepFollow = keep paragraph on same page with next paragraph if possible
+    // fPageBreakBefore = start this paragraph on new page
     if (!refPap || refPap->fKeep != pap.fKeep) {
         if (pap.fKeep)
             style->addProperty("fo:keep-together", "always", pt);
@@ -697,11 +687,11 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
     }
 
     // Borders
-    //brcTop = specification for border above paragraph
-    //brcBottom = specification for border below paragraph
-    //brcLeft = specification for border to the left of paragraph
-    //brcRight = specification for border to the right of paragraph
-    //brcType: 0=none, 1=single, 2=thick, 3=double, 5=hairline, 6=dot,
+    // brcTop = specification for border above paragraph
+    // brcBottom = specification for border below paragraph
+    // brcLeft = specification for border to the left of paragraph
+    // brcRight = specification for border to the right of paragraph
+    // brcType: 0=none, 1=single, 2=thick, 3=double, 5=hairline, 6=dot,
     //  7=dash large gap, 8=dot dash, 9=dot dot dash, 10=triple,
     //  11=thin-thick small gap, ...
     //
@@ -740,12 +730,16 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         if (paragraph) {
             debugMsDoc << "Processing drop cap";
             if (paragraph->m_textStrings.size() > 0)
-                debugMsDoc << "String = """ << paragraph->m_textStrings[0] << """";
+                debugMsDoc << "String = "
+                              ""
+                           << paragraph->m_textStrings[0]
+                           << ""
+                              "";
             else
                 debugMsDoc << "No drop cap string";
 
             paragraph->m_dropCapStatus = IsDropCapPara;
-            paragraph->m_dcs_fdct  = pap.dcs.fdct;
+            paragraph->m_dcs_fdct = pap.dcs.fdct;
             paragraph->m_dcs_lines = pap.dcs.lines;
             paragraph->m_dropCapDistance = (qreal)pap.dxaFromText / (qreal)20.0;
         }
@@ -764,27 +758,26 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         style->addChildElement("style:drop-cap", contents);
 #endif
     }
-    //TODO: Compare with the parent style to avoid duplicity.
+    // TODO: Compare with the parent style to avoid duplicity.
 
     // Tabulators, only if not in a list.  itbdMac = number of tabs stops
     // defined for paragraph.  Must be in <0,64>.
     if (pap.itbdMac) {
-
         QBuffer buf;
         buf.open(QIODevice::WriteOnly);
-        KoXmlWriter tmpWriter(&buf, 3);//root, office:automatic-styles, style:style
+        KoXmlWriter tmpWriter(&buf, 3); // root, office:automatic-styles, style:style
         tmpWriter.startElement("style:tab-stops");
-        for (int i = 0 ; i < pap.itbdMac ; ++i) {
+        for (int i = 0; i < pap.itbdMac; ++i) {
             tmpWriter.startElement("style:tab-stop");
 
-            //rgdxaTab = array of { positions of itbdMac tab stops ; itbdMac
-            //tab descriptors } itbdMax == 64.
+            // rgdxaTab = array of { positions of itbdMac tab stops ; itbdMac
+            // tab descriptors } itbdMax == 64.
             const wvWare::Word97::TabDescriptor &td = pap.rgdxaTab[i];
-            //td.dxaTab = position in twips
-            //QString pos( QString::number( (double)td.dxaTab / 20.0 ) );
+            // td.dxaTab = position in twips
+            // QString pos( QString::number( (double)td.dxaTab / 20.0 ) );
             tmpWriter.addAttributePt("style:position", (double)td.dxaTab / 20.0);
 
-            //td.tbd.jc = justification code
+            // td.tbd.jc = justification code
             switch (td.tbd.jc) {
             case jcCenter:
                 tmpWriter.addAttribute("style:type", "center");
@@ -797,14 +790,14 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
                 tmpWriter.addAttribute("style:char", ".");
                 break;
             case jcBar:
-                //bar -> just creates a vertical bar at that point that's always visible
+                // bar -> just creates a vertical bar at that point that's always visible
                 warnMsDoc << "Unhandled tab justification code: " << td.tbd.jc;
                 break;
             default:
-                //ODF: The default value for this attribute is left.
+                // ODF: The default value for this attribute is left.
                 break;
             }
-            //td.tbd.tlc = tab leader code, default no leader (can be ignored)
+            // td.tbd.tlc = tab leader code, default no leader (can be ignored)
             QChar leader;
             switch (td.tbd.tlc) {
             case tlcDot:
@@ -820,55 +813,57 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
                 break;
             case tlcNone:
             default:
-                //ODF: The default value for this attribute is “ “ (U+0020, SPACE).
+                // ODF: The default value for this attribute is “ “ (U+0020, SPACE).
                 break;
             }
-            //The value MUST be ignored if jc is equal jcBar.
+            // The value MUST be ignored if jc is equal jcBar.
             if (td.tbd.jc != jcBar && leader.unicode() > 0) {
                 tmpWriter.addAttribute("style:leader-text", leader);
             }
-            tmpWriter.endElement();//style:tab-stop
+            tmpWriter.endElement(); // style:tab-stop
 
             if (tabLeader) {
                 *tabLeader = leader;
             }
         }
-        tmpWriter.endElement();//style:tab-stops
+        tmpWriter.endElement(); // style:tab-stops
         buf.close();
         QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-        //now write the tab info to the paragraph style
+        // now write the tab info to the paragraph style
         style->addChildElement("style:tab-stops", contents);
     }
-} //end applyParagraphProperties
+} // end applyParagraphProperties
 
-void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize, bool combineCharacters, const QString& bgColor)
+void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP *chp,
+                                         KoGenStyle *style,
+                                         const wvWare::Style *parentStyle,
+                                         bool suppressFontSize,
+                                         bool combineCharacters,
+                                         const QString &bgColor)
 {
-    //TODO: Also compare against the CHPs of the paragraph style.  At the
-    //moment comparing against CHPs of the referred built-in character style.
+    // TODO: Also compare against the CHPs of the paragraph style.  At the
+    // moment comparing against CHPs of the referred built-in character style.
 
     const KoGenStyle::PropertyType tt = KoGenStyle::TextType;
 
-    //if we have a named style, set its CHP as the refChp
-    const wvWare::Word97::CHP* refChp;
+    // if we have a named style, set its CHP as the refChp
+    const wvWare::Word97::CHP *refChp;
     if (parentStyle) {
         refChp = &parentStyle->chp();
     } else {
         refChp = 0;
     }
 
-    //initialize the colors
+    // initialize the colors
     if (!bgColor.isNull()) {
         updateBgColor(bgColor);
     }
 
     const quint8 bgColorsSize_bkp = m_bgColors.size();
 
-    //fHighlight = when 1, characters are highlighted with color specified by
-    //chp.icoHighlight icoHighlight = highlight color (see chp.ico)
-    if (!refChp ||
-        (refChp->fHighlight != chp->fHighlight) ||
-        (refChp->icoHighlight != chp->icoHighlight))
-    {
+    // fHighlight = when 1, characters are highlighted with color specified by
+    // chp.icoHighlight icoHighlight = highlight color (see chp.ico)
+    if (!refChp || (refChp->fHighlight != chp->fHighlight) || (refChp->icoHighlight != chp->icoHighlight)) {
         QString color("transparent");
         if (chp->fHighlight) {
             color = Conversion::color(chp->icoHighlight, -1);
@@ -877,11 +872,8 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         style->addProperty("fo:background-color", color, tt);
     }
 
-    if (!refChp ||
-        (refChp->shd.cvBack != chp->shd.cvBack) ||
-        (refChp->shd.isShdAuto() != chp->shd.isShdAuto()) ||
-        (refChp->shd.isShdNil() != chp->shd.isShdNil()))
-    {
+    if (!refChp || (refChp->shd.cvBack != chp->shd.cvBack) || (refChp->shd.isShdAuto() != chp->shd.isShdAuto())
+        || (refChp->shd.isShdNil() != chp->shd.isShdNil())) {
         QString color = Conversion::shdToColorStr(chp->shd, currentBgColor(), QString());
         if (!color.isNull()) {
             pushBgColor(color);
@@ -891,16 +883,13 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         style->addProperty("fo:background-color", color, tt);
     }
 
-    //TODO: Check fo:background-color of the named character style
+    // TODO: Check fo:background-color of the named character style
 
-    //ico = color of text, but this has been replaced by cv
-    if (!refChp ||
-        (refChp->cv != chp->cv) ||
-        (chp->cv == wvWare::Word97::cvAuto))
-    {
+    // ico = color of text, but this has been replaced by cv
+    if (!refChp || (refChp->cv != chp->cv) || (chp->cv == wvWare::Word97::cvAuto)) {
         QString color;
         if (chp->cv == wvWare::Word97::cvAuto) {
-            //use the color context to set the proper font color
+            // use the color context to set the proper font color
             color = Conversion::computeAutoColor(chp->shd, currentBgColor(), QString());
 
             // NOTE: Have to specify fo:color explicitly because only
@@ -916,17 +905,17 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         // m_fontColor = color;
     }
 
-    //hps = font size in half points
+    // hps = font size in half points
     if (!suppressFontSize && (!refChp || refChp->hps != chp->hps)) {
-        style->addPropertyPt(QString("fo:font-size"), ((qreal) chp->hps / 2), tt);
+        style->addPropertyPt(QString("fo:font-size"), ((qreal)chp->hps / 2), tt);
     }
 
-    //fBold = bold text if 1
+    // fBold = bold text if 1
     if (!refChp || (refChp->fBold != chp->fBold)) {
         style->addProperty(QString("fo:font-weight"), chp->fBold ? QString("bold") : QString("normal"), tt);
     }
 
-    //fItalic = italic text if 1
+    // fItalic = italic text if 1
     if (!refChp || refChp->fItalic != chp->fItalic)
         style->addProperty(QString("fo:font-style"), chp->fItalic ? QString("italic") : QString("normal"), tt);
 
@@ -952,8 +941,8 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         // style:text-underline-width
         style->addProperty("style:text-underline-width", getTextUnderlineWidth(chp->kul), tt);
     }
-    //fstrike = use strikethrough if 1
-    //fDStrike = use double strikethrough if 1
+    // fstrike = use strikethrough if 1
+    // fDStrike = use double strikethrough if 1
     if (!refChp || refChp->fStrike != chp->fStrike || refChp->fDStrike != chp->fDStrike) {
         if (chp->fStrike)
             style->addProperty("style:text-line-through-type", "single", tt);
@@ -963,9 +952,9 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
             style->addProperty("style:text-line-through-type", "none", tt);
     }
 
-    //font attribute (uppercase, lowercase (not in MSWord), small caps)
-    //fCaps = displayed with all caps when 1, no caps when 0
-    //fSmallCaps = displayed with small caps when 1, no small caps when 0
+    // font attribute (uppercase, lowercase (not in MSWord), small caps)
+    // fCaps = displayed with all caps when 1, no caps when 0
+    // fSmallCaps = displayed with small caps when 1, no small caps when 0
     if (!refChp || refChp->fCaps != chp->fCaps || refChp->fSmallCaps != chp->fSmallCaps) {
         if (chp->fCaps)
             style->addProperty("fo:text-transform", "uppercase", tt);
@@ -973,18 +962,18 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
             style->addProperty("fo:font-variant", "small-caps", tt);
     }
 
-    //iss = superscript/subscript indices
+    // iss = superscript/subscript indices
     if (!refChp || refChp->iss != chp->iss) {
-        if (chp->iss == 1)   //superscript
+        if (chp->iss == 1) // superscript
             style->addProperty("style:text-position", "super", tt);
-        else if (chp->iss == 2)   //subscript
+        else if (chp->iss == 2) // subscript
             style->addProperty("style:text-position", "sub", tt);
-        else   //no superscript or subscript
+        else // no superscript or subscript
             style->addProperty("style:text-position", "0% 100%", tt);
     }
 
-    //fShadow = text has shadow if 1
-    //fImprint = text engraved if 1
+    // fShadow = text has shadow if 1
+    // fImprint = text engraved if 1
     if (!refChp || refChp->fShadow != chp->fShadow || refChp->fImprint != chp->fImprint) {
         if (chp->fShadow)
             style->addProperty("fo:text-shadow", "1pt", tt);
@@ -992,7 +981,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
             style->addProperty("style:font-relief", "engraved", tt);
     }
 
-    //fOutline = text is outline if 1
+    // fOutline = text is outline if 1
     if (!refChp || refChp->fOutline != chp->fOutline) {
         if (chp->fOutline)
             style->addProperty("style:text-outline", "true", tt);
@@ -1005,14 +994,14 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         style->addProperty("style:text-combine", "letters", tt);
     }
 
-    //dxaSpace = letterspacing in twips
+    // dxaSpace = letterspacing in twips
     if (!refChp || refChp->dxaSpace != chp->dxaSpace) {
-        double value =  chp->dxaSpace / 20.0; // twips -> pt
+        double value = chp->dxaSpace / 20.0; // twips -> pt
         style->addPropertyPt("fo:letter-spacing", value, tt);
     }
-    //pctCharwidth = pct stretch doesn't seem to have an ODF ccounterpart but Qt could support it
+    // pctCharwidth = pct stretch doesn't seem to have an ODF ccounterpart but Qt could support it
 
-    //fTNY = 1 when text is vertical
+    // fTNY = 1 when text is vertical
     if (!refChp || refChp->fTNY != chp->fTNY) {
         if (chp->fTNY) {
             style->addProperty("style:text-rotation-angle", 90, tt);
@@ -1024,14 +1013,14 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         }
     }
 
-    //wCharScale - MUST be greater than or equal to 1 and less than or equal to 600
+    // wCharScale - MUST be greater than or equal to 1 and less than or equal to 600
     if (!refChp || refChp->wCharScale != chp->wCharScale) {
         if (chp->wCharScale) {
             style->addProperty("style:text-scale", QString::number(chp->wCharScale) + "%", tt);
         }
     }
 
-    //remove the background-colors collected for this text chunk
+    // remove the background-colors collected for this text chunk
     while (m_bgColors.size() > bgColorsSize_bkp) {
         popBgColor();
     }
@@ -1052,7 +1041,6 @@ void Paragraph::getDropCapData(QString *string, int *type, int *lines, qreal *di
     *style = m_dropCapStyleName;
 }
 
-
 void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance, const QString &style)
 {
     debugMsDoc << "combining drop cap paragraph: " << string;
@@ -1062,8 +1050,8 @@ void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance,
     m_dropCapStatus = HasDropCapIntegrated;
 
     // Get the drop cap data.
-    m_dcs_fdct        = type;
-    m_dcs_lines       = lines;
+    m_dcs_fdct = type;
+    m_dcs_lines = lines;
     m_dropCapDistance = distance;
     m_dropCapStyleName = style;
 
@@ -1075,22 +1063,22 @@ void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance,
     debugMsDoc << "size: " << m_textStrings.size();
     if (m_textStrings.isEmpty()) {
         m_textStrings.append(string);
-        KoGenStyle* style = 0;
+        KoGenStyle *style = 0;
         m_textStyles.insert(m_textStyles.begin(), style);
     } else {
         m_textStrings[0].prepend(string);
     }
 #else
     m_textStrings.prepend(string);
-    KoGenStyle* style = 0;
+    KoGenStyle *style = 0;
     m_textStyles.insert(m_textStyles.begin(), style);
 #endif
 
 #else
-    std::vector<QString>            tempStrings;
-    std::vector<const KoGenStyle*>  tempStyles;
+    std::vector<QString> tempStrings;
+    std::vector<const KoGenStyle *> tempStyles;
     tempStrings.push_back(dropCapParagraph->m_textStrings[0]);
-    KoGenStyle* style = 0;
+    KoGenStyle *style = 0;
     tempStyles.push_back(style);
 
     if (dropCapParagraph->m_textStrings.size() > 0) {
@@ -1101,10 +1089,9 @@ void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance,
     }
 
     m_textStrings = tempStrings;
-    m_textStyles  = tempStyles;
+    m_textStyles = tempStyles;
 #endif
 }
-
 
 int Paragraph::strings() const
 {
@@ -1116,12 +1103,12 @@ QString Paragraph::string(int index) const
     return m_textStrings[index];
 }
 
-QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::StyleSheet& styles)
+QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::StyleSheet &styles)
 {
     if (!chp) {
         return QString();
     }
-    const wvWare::Style* msTextStyle = styles.styleByIndex(chp->istd);
+    const wvWare::Style *msTextStyle = styles.styleByIndex(chp->istd);
     if (!msTextStyle && styles.size()) {
         msTextStyle = styles.styleByID(stiNormalChar);
         debugMsDoc << "Invalid reference to text style, reusing NormalChar";
@@ -1147,26 +1134,26 @@ QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> 
     return textStyleName;
 }
 
-const char* getStrokeValue(const uint brcType)
+const char *getStrokeValue(const uint brcType)
 {
-    //TODO: create corresponding dash styles
+    // TODO: create corresponding dash styles
     switch (brcType) {
-    case 0x01: //A single line.
-    case 0x03: //A double line.
-    case 0x05: //A thin single solid line.
-    case 0x14: //A single wavy line.
-    case 0x15: //A double wavy line.
-    case 0x18: //threeDEmboss
-    case 0x19: //threeDEngrave
-    case 0x1A: //outset
-    case 0x1B: //inset
-    return "solid";
+    case 0x01: // A single line.
+    case 0x03: // A double line.
+    case 0x05: // A thin single solid line.
+    case 0x14: // A single wavy line.
+    case 0x15: // A double wavy line.
+    case 0x18: // threeDEmboss
+    case 0x19: // threeDEngrave
+    case 0x1A: // outset
+    case 0x1B: // inset
+        return "solid";
     default:
         return "none";
     }
 }
 
-const char* getTextUnderlineMode(const uint kul)
+const char *getTextUnderlineMode(const uint kul)
 {
     switch (kul) {
     case kulWords:
@@ -1176,7 +1163,7 @@ const char* getTextUnderlineMode(const uint kul)
     }
 }
 
-const char* getTextUnderlineStyle(const uint kul)
+const char *getTextUnderlineStyle(const uint kul)
 {
     // The values are none, solid, dotted, dash, long-dash, dot-dash,
     // dot-dot-dash or wave.  The defined value for the
@@ -1190,7 +1177,7 @@ const char* getTextUnderlineStyle(const uint kul)
     case kulDottedHeavy:
         return "dotted";
     case kulThick:
-    return "solid";
+        return "solid";
     case kulDash:
     case kulDashHeavy:
         return "dash";
@@ -1209,7 +1196,7 @@ const char* getTextUnderlineStyle(const uint kul)
         return "wave";
     case 5: // hidden - This makes no sense as an underline property!
     case 8:
-        //NOTE: Styles of underline not specified in [MS-DOC] - v20101219
+        // NOTE: Styles of underline not specified in [MS-DOC] - v20101219
         debugMsDoc << "Unknown style of underline detected!";
         return "";
     case kulNone:
@@ -1218,9 +1205,9 @@ const char* getTextUnderlineStyle(const uint kul)
     };
 }
 
-const char* getTextUnderlineType(const uint kul)
+const char *getTextUnderlineType(const uint kul)
 {
-    //The values are none, single or double.
+    // The values are none, single or double.
     switch (kul) {
     case kulNone:
         return "none";
@@ -1232,7 +1219,7 @@ const char* getTextUnderlineType(const uint kul)
     }
 }
 
-const char* getTextUnderlineWidth(const uint kul)
+const char *getTextUnderlineWidth(const uint kul)
 {
     // The values are auto, normal, bold, thin, medium, thick, a value of type
     // positiveInteger, a value of type percent or a value of type

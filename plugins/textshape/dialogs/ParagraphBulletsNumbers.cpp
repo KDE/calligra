@@ -8,26 +8,26 @@
 
 #include "ParagraphBulletsNumbers.h"
 
-#include <KoParagraphStyle.h>
-#include <KoListLevelProperties.h>
-#include <KoImageData.h>
-#include <KoImageCollection.h>
-#include <KoUnit.h>
-#include <KoFileDialog.h>
 #include <KoDialog.h>
+#include <KoFileDialog.h>
+#include <KoImageCollection.h>
+#include <KoImageData.h>
+#include <KoListLevelProperties.h>
+#include <KoParagraphStyle.h>
+#include <KoUnit.h>
 
 #include <QDebug>
 #include <QUrl>
 
-#include <kcharselect.h>
 #include <KIO/StoredTransferJob>
+#include <kcharselect.h>
 
 ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
-        : QWidget(parent),
-        m_alignmentMode(false),
-        m_imageCollection(0),
-        m_data(0),
-        m_fontSize(0)
+    : QWidget(parent)
+    , m_alignmentMode(false)
+    , m_imageCollection(0)
+    , m_data(0)
+    , m_fontSize(0)
 {
     widget.setupUi(this);
 
@@ -83,7 +83,7 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level, boo
     widget.suffix->setText(llp.listItemSuffix());
     widget.letterSynchronization->setChecked(llp.letterSynchronization());
     KoListStyle::LabelType labelType = llp.labelType();
-    foreach(int row, m_mapping.keys()) {
+    foreach (int row, m_mapping.keys()) {
         if (m_mapping[row] == labelType) {
             widget.listTypes->setCurrentRow(row);
             break;
@@ -116,7 +116,7 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level, boo
         widget.imageWidth->setValue(0);
     }
 
-    if(llp.alignmentMode()==false) {//for list-level-position-and-space-mode=label-width-and-position disable the following options
+    if (llp.alignmentMode() == false) { // for list-level-position-and-space-mode=label-width-and-position disable the following options
         widget.label_8->setEnabled(false);
         widget.label_9->setEnabled(false);
         widget.label_10->setEnabled(false);
@@ -127,8 +127,8 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level, boo
         widget.doubleSpinBox_2->setEnabled(false);
         widget.doubleSpinBox_3->setEnabled(false);
     } else {
-        m_alignmentMode=true;
-        switch(llp.labelFollowedBy()) {
+        m_alignmentMode = true;
+        switch (llp.labelFollowedBy()) {
         case KoListStyle::ListTab:
             widget.doubleSpinBox->setEnabled(true);
             widget.labelFollowedBy->setCurrentIndex(0);
@@ -147,7 +147,7 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level, boo
         }
 
         widget.doubleSpinBox_2->setValue(KoUnit::toCentimeter(llp.margin()));
-        widget.doubleSpinBox_3->setValue(KoUnit::toCentimeter(llp.margin())+KoUnit::toCentimeter(llp.textIndent()));
+        widget.doubleSpinBox_3->setValue(KoUnit::toCentimeter(llp.margin()) + KoUnit::toCentimeter(llp.textIndent()));
     }
 
     // *** features not in GUI;
@@ -183,22 +183,25 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     llp.setListItemSuffix(widget.suffix->text());
     llp.setLetterSynchronization(widget.letterSynchronization->isVisible() && widget.letterSynchronization->isChecked());
 
-    if(m_alignmentMode==true) {
+    if (m_alignmentMode == true) {
         llp.setAlignmentMode(true);
-        switch(widget.labelFollowedBy->currentIndex()) {
-        case 0: llp.setLabelFollowedBy(KoListStyle::ListTab);
+        switch (widget.labelFollowedBy->currentIndex()) {
+        case 0:
+            llp.setLabelFollowedBy(KoListStyle::ListTab);
             llp.setTabStopPosition(unit.fromUserValue(widget.doubleSpinBox->value()));
             break;
-        case 1: llp.setLabelFollowedBy(KoListStyle::Space);
+        case 1:
+            llp.setLabelFollowedBy(KoListStyle::Space);
             break;
-        case 2: llp.setLabelFollowedBy(KoListStyle::Nothing);
+        case 2:
+            llp.setLabelFollowedBy(KoListStyle::Nothing);
             break;
         default:
             Q_ASSERT(false);
         }
 
         llp.setMargin(unit.fromUserValue(widget.doubleSpinBox_2->value()));
-        llp.setTextIndent(unit.fromUserValue(widget.doubleSpinBox_3->value())-unit.fromUserValue(widget.doubleSpinBox_2->value()));
+        llp.setTextIndent(unit.fromUserValue(widget.doubleSpinBox_3->value()) - unit.fromUserValue(widget.doubleSpinBox_2->value()));
     }
 
     if (labelType == KoListStyle::ImageLabelType) {
@@ -212,15 +215,23 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     }
     // it is important to not use 45 for BulletCharLabelType as it is also char based
     else if (!KoListStyle::isNumberingStyle(labelType)) {
-        llp.setRelativeBulletSize(45); //for non-numbering bullets the default relative bullet size is 45%(The spec does not say it; we take it)
+        llp.setRelativeBulletSize(45); // for non-numbering bullets the default relative bullet size is 45%(The spec does not say it; we take it)
     }
 
     Qt::Alignment align;
     switch (widget.alignment->currentIndex()) {
-    case 0: align = Qt::AlignLeft; break;
-    case 1: align = Qt::AlignLeft | Qt::AlignAbsolute; break;
-    case 2: align = Qt::AlignRight | Qt::AlignAbsolute; break;
-    case 3: align = Qt::AlignCenter; break;
+    case 0:
+        align = Qt::AlignLeft;
+        break;
+    case 1:
+        align = Qt::AlignLeft | Qt::AlignAbsolute;
+        break;
+    case 2:
+        align = Qt::AlignRight | Qt::AlignAbsolute;
+        break;
+    case 3:
+        align = Qt::AlignCenter;
+        break;
     default:
         Q_ASSERT(false);
     }
@@ -250,7 +261,7 @@ void ParagraphBulletsNumbers::styleChanged(int index)
             widget.imageWidth->setValue(m_fontSize);
         }
     } else if (!KoListStyle::isNumberingStyle(labelType)) {
-        //widget.startValue->setNumberFormat();
+        // widget.startValue->setNumberFormat();
         widget.startValue->setValue(1);
         widget.startValue->setEnabled(false);
         widget.levels->setValue(1);
@@ -263,7 +274,7 @@ void ParagraphBulletsNumbers::styleChanged(int index)
     } else {
         widget.levels->setEnabled(true);
         widget.startValue->setEnabled(true);
-        //widget.startValue->setNumberFormat();
+        // widget.startValue->setNumberFormat();
         int value = widget.startValue->value();
         widget.startValue->setValue(value + 1);
         widget.startValue->setValue(value); // surely to trigger a change event.
@@ -287,9 +298,10 @@ void ParagraphBulletsNumbers::customCharButtonPressed()
     dialog->setButtons(KoDialog::Ok | KoDialog::Cancel);
     dialog->setDefaultButton(KoDialog::Ok);
 
-    KCharSelect *kcs = new KCharSelect(dialog, 0,
-            KCharSelect::SearchLine | KCharSelect::FontCombo | KCharSelect::BlockCombos
-            | KCharSelect::CharacterTable | KCharSelect::DetailBrowser);
+    KCharSelect *kcs =
+        new KCharSelect(dialog,
+                        0,
+                        KCharSelect::SearchLine | KCharSelect::FontCombo | KCharSelect::BlockCombos | KCharSelect::CharacterTable | KCharSelect::DetailBrowser);
 
     dialog->setMainWidget(kcs);
     if (dialog->exec() == KoDialog::Accepted) {
@@ -297,7 +309,7 @@ void ParagraphBulletsNumbers::customCharButtonPressed()
         widget.customCharacter->setText(character);
 
         // also switch to the custom list style.
-        foreach(int row, m_mapping.keys()) {
+        foreach (int row, m_mapping.keys()) {
             if (m_mapping[row] == KoListStyle::BulletCharLabelType) {
                 widget.listTypes->setCurrentRow(row);
                 break;
@@ -315,7 +327,7 @@ void ParagraphBulletsNumbers::recalcPreview()
 
 void ParagraphBulletsNumbers::labelFollowedByIndexChanged(int index)
 {
-    if(index==1 || index==2) {
+    if (index == 1 || index == 2) {
         widget.doubleSpinBox->setEnabled(false);
     } else {
         widget.doubleSpinBox->setEnabled(true);
@@ -342,7 +354,7 @@ void ParagraphBulletsNumbers::selectListImage()
 
 void ParagraphBulletsNumbers::setImageData(KJob *job)
 {
-    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
+    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob *>(job);
     Q_ASSERT(transferJob);
 
     if (m_imageCollection) {

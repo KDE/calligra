@@ -7,17 +7,17 @@
 
 namespace RtfReader
 {
-    DocumentCommentPcdataDestination::DocumentCommentPcdataDestination( Reader *reader, AbstractRtfOutput *output, const QString &name ) :
-      PcdataDestination( reader, output, name )
-    {
-    }
+DocumentCommentPcdataDestination::DocumentCommentPcdataDestination(Reader *reader, AbstractRtfOutput *output, const QString &name)
+    : PcdataDestination(reader, output, name)
+{
+}
 
-    DocumentCommentPcdataDestination::~DocumentCommentPcdataDestination()
-    {
-    }
+DocumentCommentPcdataDestination::~DocumentCommentPcdataDestination()
+{
+}
 
-    void DocumentCommentPcdataDestination::aboutToEndDestination()
-    {
-	m_output->setDocumentComment( m_pcdata );
-    }
+void DocumentCommentPcdataDestination::aboutToEndDestination()
+{
+    m_output->setDocumentComment(m_pcdata);
+}
 }

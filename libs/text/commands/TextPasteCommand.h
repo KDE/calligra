@@ -18,11 +18,11 @@ class KoCanvasBase;
 class TextPasteCommand : public KUndo2Command
 {
 public:
-
     TextPasteCommand(const QMimeData *mimeData,
                      QTextDocument *document,
                      KoShapeController *shapeController,
-                     KoCanvasBase *canvas, KUndo2Command *parent = 0,
+                     KoCanvasBase *canvas,
+                     KUndo2Command *parent = 0,
                      bool pasteAsText = false);
 
     void undo() override;

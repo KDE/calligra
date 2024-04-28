@@ -21,7 +21,7 @@ class KOMAIN_EXPORT KoConfigGridPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit KoConfigGridPage(KoDocument* doc, char* name = 0L);
+    explicit KoConfigGridPage(KoDocument *doc, char *name = 0L);
     ~KoConfigGridPage() override;
 
     void apply();
@@ -36,7 +36,7 @@ private:
     void setValuesFromGrid(const KoGridData &grid);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOCONFIGGRIDPAGE_H

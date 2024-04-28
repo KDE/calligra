@@ -19,30 +19,30 @@
 #include <QLabel>
 #include <QLayout>
 #include <QStyle>
-#include <QStylePainter>
 #include <QStyleOptionFrame>
+#include <QStylePainter>
 
 class Q_DECL_HIDDEN KoDockWidgetTitleBar::Private
 {
 public:
-    Private(KoDockWidgetTitleBar* thePublic)
-        : thePublic(thePublic),
-            collapsable(true),
-            collapsableSet(true),
-            lockable(true),
-            textVisibilityMode(KoDockWidgetTitleBar::FullTextAlwaysVisible),
-            preCollapsedWidth(-1),
-            locked(false)
+    Private(KoDockWidgetTitleBar *thePublic)
+        : thePublic(thePublic)
+        , collapsable(true)
+        , collapsableSet(true)
+        , lockable(true)
+        , textVisibilityMode(KoDockWidgetTitleBar::FullTextAlwaysVisible)
+        , preCollapsedWidth(-1)
+        , locked(false)
     {
     }
 
-    KoDockWidgetTitleBar* thePublic;
-    QAbstractButton* closeButton;
-    QAbstractButton* floatButton;
-    QAbstractButton* collapseButton;
+    KoDockWidgetTitleBar *thePublic;
+    QAbstractButton *closeButton;
+    QAbstractButton *floatButton;
+    QAbstractButton *collapseButton;
     bool collapsable;
     bool collapsableSet;
-    QAbstractButton* lockButton;
+    QAbstractButton *lockButton;
     bool lockable;
     KoDockWidgetTitleBar::TextVisibilityMode textVisibilityMode;
     int preCollapsedWidth;

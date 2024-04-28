@@ -10,13 +10,13 @@
 #ifndef KOTEXTSHAPE_H
 #define KOTEXTSHAPE_H
 
-#include <KoShapeContainer.h>
 #include <KoFrameShape.h>
-#include <KoTextShapeData.h>
+#include <KoShapeContainer.h>
 #include <KoTextDocument.h>
+#include <KoTextShapeData.h>
 
-#include <QTextDocument>
 #include <QPainter>
+#include <QTextDocument>
 
 #define TextShape_SHAPEID "TextShapeID"
 
@@ -54,11 +54,17 @@ public:
     /// reimplemented
     QRectF outlineRect() const override;
 
-    ///reimplemented
-    ChildZOrderPolicy childZOrderPolicy() override {return KoShape::ChildZPassThrough;}
+    /// reimplemented
+    ChildZOrderPolicy childZOrderPolicy() override
+    {
+        return KoShape::ChildZPassThrough;
+    }
 
     /// set the image collection which is needed to draw bullet from images
-    void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
+    void setImageCollection(KoImageCollection *collection)
+    {
+        m_imageCollection = collection;
+    }
 
     KoImageCollection *imageCollection();
 
@@ -82,7 +88,8 @@ public:
      */
     void saveOdf(KoShapeSavingContext &context) const override;
 
-    KoTextShapeData *textShapeData() {
+    KoTextShapeData *textShapeData()
+    {
         return m_textShapeData;
     }
 
@@ -92,7 +99,10 @@ public:
     void update(const QRectF &shape) const override;
 
     // required for Stage hack
-    void setPageProvider(KoPageProvider *provider) { m_pageProvider = provider; }
+    void setPageProvider(KoPageProvider *provider)
+    {
+        m_pageProvider = provider;
+    }
 
     /// reimplemented
     bool loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context) override;

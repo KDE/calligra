@@ -7,13 +7,13 @@
 #ifndef SVGSHAPEFACTORY_H
 #define SVGSHAPEFACTORY_H
 
-#include "flake_export.h"
 #include "KoShapeFactoryBase.h"
+#include "flake_export.h"
 
 /// Use this shape factory to load embedded svg files from odf
 class FLAKE_EXPORT SvgShapeFactory : public KoShapeFactoryBase
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     SvgShapeFactory();
     ~SvgShapeFactory() override;

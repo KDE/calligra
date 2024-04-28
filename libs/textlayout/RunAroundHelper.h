@@ -8,8 +8,8 @@
 #define RUNAROUNDHELPER_H
 
 #include <QList>
-#include <QTextLine>
 #include <QRectF>
+#include <QTextLine>
 
 class KoTextLayoutArea;
 class KoTextLayoutObstruction;
@@ -24,10 +24,11 @@ public:
     void updateObstruction(KoTextLayoutObstruction *obstruction);
     bool fit(bool resetHorizontalPosition, bool isRightToLeft, const QPointF &position);
     QTextLine line;
+
 private:
     KoTextLayoutArea *m_area;
-    QList<KoTextLayoutObstruction*> m_obstructions;
-    QList<KoTextLayoutObstruction*> m_validObstructions;
+    QList<KoTextLayoutObstruction *> m_obstructions;
+    QList<KoTextLayoutObstruction *> m_validObstructions;
     QVector<QRectF> m_lineParts;
     QRectF m_lineRect;
     qreal m_horizontalPosition;

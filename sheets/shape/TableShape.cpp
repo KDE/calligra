@@ -10,31 +10,31 @@
 
 #include <QPainter>
 
-#include <KMessageBox>
 #include <KAboutData>
+#include <KMessageBox>
 
-#include <KoShapeContainer.h>
-#include <KoXmlNS.h>
-#include <KoStore.h>
-#include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
-#include <KoShapeSavingContext.h>
-#include <KoXmlWriter.h>
-#include <KoXmlReader.h>
-#include <KoEmbeddedDocumentSaver.h>
-#include <calligraversion.h>
 #include <KoComponentData.h>
-#include <KoDocumentResourceManager.h>
-#include <KoPart.h>
 #include <KoDocumentEntry.h>
+#include <KoDocumentResourceManager.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoOdfLoadingContext.h>
+#include <KoPart.h>
+#include <KoShapeContainer.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoStore.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
+#include <calligraversion.h>
 
+#include <core/DocBase.h>
+#include <core/Map.h>
+#include <core/Sheet.h>
 #include <engine/Damages.h>
 #include <engine/FunctionModuleRegistry.h>
 #include <engine/Region.h>
 #include <engine/SheetsDebug.h>
-#include <core/DocBase.h>
-#include <core/Map.h>
-#include <core/Sheet.h>
 #include <ui/SheetView.h>
 
 // Define the protocol used here for embedded documents' URL
@@ -43,21 +43,27 @@
 #define STORE_PROTOCOL "tar"
 #define INTERNAL_PROTOCOL "intern"
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
 class TableShapePart : public KoPart
 {
 public:
-    TableShapePart() : KoPart(KoComponentData(KAboutData(QStringLiteral("spreadsheet"), QStringLiteral("Spreadsheet"),
-                               QStringLiteral(CALLIGRA_VERSION_STRING))), nullptr)
-    {}
-
-    KoMainWindow *createMainWindow() override {
-        return nullptr;//new KoMainWindow("application/vnd.oasis.opendocument.spreadsheet", componentData());
+    TableShapePart()
+        : KoPart(KoComponentData(KAboutData(QStringLiteral("spreadsheet"), QStringLiteral("Spreadsheet"), QStringLiteral(CALLIGRA_VERSION_STRING))), nullptr)
+    {
     }
+
+    KoMainWindow *createMainWindow() override
+    {
+        return nullptr; // new KoMainWindow("application/vnd.oasis.opendocument.spreadsheet", componentData());
+    }
+
 protected:
-    KoView *createViewInstance(KoDocument *document, QWidget *parent) override {
+    KoView *createViewInstance(KoDocument *document, QWidget *parent) override
+    {
         Q_UNUSED(document)
         Q_UNUSED(parent)
         return nullptr;
@@ -67,11 +73,14 @@ protected:
 class TableShapeDoc : public DocBase
 {
 public:
-    TableShapeDoc() : DocBase(new TableShapePart()) {
+    TableShapeDoc()
+        : DocBase(new TableShapePart())
+    {
         FunctionModuleRegistry::instance()->loadFunctionModules();
     }
-    void initConfig() override {}
-
+    void initConfig() override
+    {
+    }
 };
 }
 }
@@ -81,16 +90,20 @@ using namespace Calligra::Sheets;
 class TableShape::Private
 {
 public:
-    Private(TableShape *parent) : q(parent), paintingDisabled(false) {}
+    Private(TableShape *parent)
+        : q(parent)
+        , paintingDisabled(false)
+    {
+    }
     TableShape *q;
     KoPart *part;
     KoDocumentResourceManager *resourceManager;
     KoDocumentBase *parentDoc;
     QPointF topLeftOffset;
-    SheetView*  sheetView;
-    bool        isMaster;
-    TablePageManager* pageManager;
-    Sheet* currentSheet;
+    SheetView *sheetView;
+    bool isMaster;
+    TablePageManager *pageManager;
+    Sheet *currentSheet;
     QUrl url; // the docs url
     bool paintingDisabled;
 
@@ -105,9 +118,9 @@ QRect TableShape::Private::visibleCells() const
     qreal tmp;
     QRect visibleCells;
     visibleCells.setLeft(sheet->leftColumn(rect.left(), tmp));
-    visibleCells.setRight(sheet->rightColumn(rect.right())+1);
+    visibleCells.setRight(sheet->rightColumn(rect.right()) + 1);
     visibleCells.setTop(sheet->topRow(rect.top(), tmp));
-    visibleCells.setBottom(sheet->bottomRow(rect.bottom())+1);
+    visibleCells.setBottom(sheet->bottomRow(rect.bottom()) + 1);
     return visibleCells;
 }
 
@@ -120,7 +133,7 @@ TableShape::TableShape(KoDocumentResourceManager *resourceManager, KoDocumentBas
     Q_UNUSED(columns)
     Q_UNUSED(rows)
     setObjectName(QLatin1String("TableShape"));
-    debugSheetsTableShape<<this;
+    debugSheetsTableShape << this;
     d->resourceManager = resourceManager;
     d->parentDoc = parentDoc;
     d->sheetView = nullptr;
@@ -163,17 +176,17 @@ KoDocumentResourceManager *TableShape::resourceManager() const
 
 DocBase *TableShape::document() const
 {
-    return dynamic_cast<DocBase*>(d->part->document());
+    return dynamic_cast<DocBase *>(d->part->document());
 }
 
-void TableShape::paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
+void TableShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     if (d->paintingDisabled) {
         return;
     }
 #ifndef NDEBUG
     if (KoShape::parent()) {
-        debugSheetsTableShape << KoShape::parent()->name() <<  KoShape::parent()->shapeId() << KoShape::parent()->boundingRect();
+        debugSheetsTableShape << KoShape::parent()->name() << KoShape::parent()->shapeId() << KoShape::parent()->boundingRect();
     }
 #endif
 
@@ -186,7 +199,7 @@ void TableShape::paint(QPainter& painter, const KoViewConverter& converter, KoSh
     paintCells(painter);
 }
 
-void TableShape::paintCells(QPainter& painter)
+void TableShape::paintCells(QPainter &painter)
 {
     const Sheet *sheet = d->sheetView->sheet();
     const QRectF paintRect = QRectF(QPointF(), size());
@@ -198,7 +211,7 @@ void TableShape::paintCells(QPainter& painter)
 
 bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    debugSheetsTableShape << "loadOdf:"<<element.localName();
+    debugSheetsTableShape << "loadOdf:" << element.localName();
     loadOdfAttributes(element, context, OdfAllAttributes);
     bool r = loadOdfFrame(element, context);
     setMap();
@@ -207,11 +220,9 @@ bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
 
 bool TableShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    debugSheetsTableShape << "loadOdfFrameElement:"<<element.tagName();
+    debugSheetsTableShape << "loadOdfFrameElement:" << element.tagName();
     if (element.tagName() == "object") {
-        return loadEmbeddedDocument(context.odfLoadingContext().store(),
-                                    element,
-                                    context);
+        return loadEmbeddedDocument(context.odfLoadingContext().store(), element, context);
     }
     warnSheetsTableShape << "Unknown frame element <" << element.tagName() << ">";
     return false;
@@ -219,13 +230,14 @@ bool TableShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoading
 
 bool TableShape::loadEmbeddedDocument(KoStore *store, const KoXmlElement &objectElement, KoShapeLoadingContext &context)
 {
-    debugSheetsTableShape<<"loadEmbeddedDocument:"<<objectElement.localName();
+    debugSheetsTableShape << "loadEmbeddedDocument:" << objectElement.localName();
     if (!objectElement.hasAttributeNS(KoXmlNS::xlink, "href")) {
         errorSheetsTableShape << "Object element has no valid xlink:href attribute";
         return false;
     }
     QString href = objectElement.attributeNS(KoXmlNS::xlink, "href");
-    debugSheetsTableShape<<"loadEmbeddedDocument:"<<"href="<<href;
+    debugSheetsTableShape << "loadEmbeddedDocument:"
+                          << "href=" << href;
     // It can happen that the url is empty e.g. when it is a
     // presentation:placeholder.
     if (href.isEmpty()) {
@@ -271,25 +283,27 @@ bool TableShape::loadEmbeddedDocument(KoStore *store, const KoXmlElement &object
         document()->setStoreInternal(true);
         store->pushDirectory();
         store->enterDirectory(d->url.path());
-        debugSheetsTableShape<<"loadEmbeddedDocument: load from store"<<store->currentPath();
+        debugSheetsTableShape << "loadEmbeddedDocument: load from store" << store->currentPath();
         res = document()->loadOasisFromStore(store);
-        debugSheetsTableShape<<"loadEmbeddedDocument: loaded"<<document()->map();
+        debugSheetsTableShape << "loadEmbeddedDocument: loaded" << document()->map();
         store->popDirectory();
     } else {
         // Reference to an external document.
         document()->setStoreInternal(false);
         if (d->url.isLocalFile()) {
-            debugSheetsTableShape<<"loadEmbeddedDocument: load local file"<<d->url;
+            debugSheetsTableShape << "loadEmbeddedDocument: load local file" << d->url;
             res = document()->importDocument(d->url);
         } else {
             res = false;
             // For security reasons we need to ask confirmation if the url is remote.
-            int result = KMessageBox::warningTwoActionsCancel(
-                0, i18n("This document contains an external link to a remote document\n%1", d->url.url()),
-                i18n("Confirmation Required"), KGuiItem(i18n("Download")), KGuiItem(i18n("Skip")));
+            int result = KMessageBox::warningTwoActionsCancel(0,
+                                                              i18n("This document contains an external link to a remote document\n%1", d->url.url()),
+                                                              i18n("Confirmation Required"),
+                                                              KGuiItem(i18n("Download")),
+                                                              KGuiItem(i18n("Skip")));
 
             if (result == KMessageBox::Cancel) {
-                //d->m_parent->setErrorMessage("USER_CANCELED");
+                // d->m_parent->setErrorMessage("USER_CANCELED");
                 return false;
             }
             if (result == KMessageBox::PrimaryAction) {
@@ -300,21 +314,21 @@ bool TableShape::loadEmbeddedDocument(KoStore *store, const KoXmlElement &object
     }
     if (!res) {
         QString errorMessage = document()->errorMessage();
-        warnSheetsTableShape<<"loadEmbeddedDocument: failed"<<errorMessage;
+        warnSheetsTableShape << "loadEmbeddedDocument: failed" << errorMessage;
         return false;
     }
-    debugSheetsTableShape<<"loadEmbeddedDocument: loaded:"<<document()->url()<<document()->isStoredExtern();
+    debugSheetsTableShape << "loadEmbeddedDocument: loaded:" << document()->url() << document()->isStoredExtern();
     return res;
 }
 
-void TableShape::saveOdf(KoShapeSavingContext & context) const
+void TableShape::saveOdf(KoShapeSavingContext &context) const
 {
     if (!sheet()) {
-        warnSheetsTableShape<<"No sheet";
+        warnSheetsTableShape << "No sheet";
         return;
     }
 
-    KoXmlWriter&  bodyWriter = context.xmlWriter();
+    KoXmlWriter &bodyWriter = context.xmlWriter();
 
     // Check if we're saving to a spreadsheet document. If not, embed a
     // spreadsheet document.
@@ -329,7 +343,7 @@ void TableShape::saveOdf(KoShapeSavingContext & context) const
     //        Also, I have to check with the other apps, e.g. Calligra Sheets,
     //        if it works there too.
     //
-    QList<const char*>  tagHierarchy = bodyWriter.tagHierarchy();
+    QList<const char *> tagHierarchy = bodyWriter.tagHierarchy();
     if (tagHierarchy.isEmpty() || QString(tagHierarchy.last()) != "office:spreadsheet") {
         bodyWriter.startElement("draw:frame");
         // See also loadOdf() in loadOdfAttributes.
@@ -343,7 +357,7 @@ void TableShape::saveOdf(KoShapeSavingContext & context) const
         bodyWriter.endElement(); // draw:frame
 
         // TODO This should go into embeddedSaver
-        debugSheetsTableShape<<"saving document: external:"<<document()->isStoredExtern()<<document()->url()<<document()->isModified();
+        debugSheetsTableShape << "saving document: external:" << document()->isStoredExtern() << document()->url() << document()->isModified();
         // Note that internal docs are save by embeddedSaver()
         if (document()->isStoredExtern() && document()->isModified()) {
             document()->save();
@@ -368,7 +382,7 @@ void TableShape::setMap()
     connect(map, &Map::damagesFlushed, this, &TableShape::handleDamages);
 }
 
-void TableShape::setSize(const QSizeF& newSize)
+void TableShape::setSize(const QSizeF &newSize)
 {
     KoShape::setSize(newSize);
     if (sheet()) {
@@ -376,7 +390,7 @@ void TableShape::setSize(const QSizeF& newSize)
     }
 }
 
-Map* TableShape::map() const
+Map *TableShape::map() const
 {
     return document()->map();
 }
@@ -394,21 +408,21 @@ void TableShape::clear()
     }
 }
 
-Sheet* TableShape::sheet() const
+Sheet *TableShape::sheet() const
 {
     return d->currentSheet;
 }
 
-SheetView* TableShape::sheetView() const
+SheetView *TableShape::sheetView() const
 {
     return d->sheetView;
 }
 
-void TableShape::setSheet(const QString& sheetName)
+void TableShape::setSheet(const QString &sheetName)
 {
-    SheetBase* const bsheet = map()->findSheet(sheetName);
+    SheetBase *const bsheet = map()->findSheet(sheetName);
     Sheet *sheet = bsheet ? dynamic_cast<Sheet *>(bsheet) : nullptr;
-    if (! sheet) {
+    if (!sheet) {
         return;
     }
     d->currentSheet = sheet;
@@ -466,15 +480,16 @@ void TableShape::shapeChanged(ChangeType type, KoShape *shape)
     d->pageManager->layoutPages();
 }
 
-void TableShape::handleDamages(const QList<Damage*>& damages)
+void TableShape::handleDamages(const QList<Damage *> &damages)
 {
-    QList<Damage*>::ConstIterator end(damages.end());
-    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
-        Damage* damage = *it;
-        if (!damage) continue;
+    QList<Damage *>::ConstIterator end(damages.end());
+    for (QList<Damage *>::ConstIterator it = damages.begin(); it != end; ++it) {
+        Damage *damage = *it;
+        if (!damage)
+            continue;
 
         if (damage->type() == Damage::Cell) {
-            CellDamage* cellDamage = static_cast<CellDamage*>(damage);
+            CellDamage *cellDamage = static_cast<CellDamage *>(damage);
             const Region region = cellDamage->region();
 
             if (cellDamage->changes() & CellDamage::Appearance)
@@ -483,7 +498,7 @@ void TableShape::handleDamages(const QList<Damage*>& damages)
         }
 
         if (damage->type() == Damage::Sheet) {
-            SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
+            SheetDamage *sheetDamage = static_cast<SheetDamage *>(damage);
 
             if (sheetDamage->changes() & SheetDamage::PropertiesChanged)
                 d->sheetView->invalidate();

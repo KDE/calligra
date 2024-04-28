@@ -7,14 +7,14 @@
 
 #include "AdjustRowCol.h"
 #include "Actions.h"
-#include "ui/commands/RowColumnManipulators.h"
-#include "ui/actions/dialogs/ShowColRowDialog.h"
-#include "ui/actions/dialogs/Resize2Dialog.h"
-#include "ui/Selection.h"
 #include "core/ColFormatStorage.h"
 #include "core/Map.h"
 #include "core/RowFormatStorage.h"
 #include "core/Sheet.h"
+#include "ui/Selection.h"
+#include "ui/actions/dialogs/Resize2Dialog.h"
+#include "ui/actions/dialogs/ShowColRowDialog.h"
+#include "ui/commands/RowColumnManipulators.h"
 
 #include <KoCanvasBase.h>
 #include <KoUnit.h>
@@ -23,17 +23,15 @@
 
 #include <float.h>
 
-
 using namespace Calligra::Sheets;
-
-
 
 InsertRemoveRowCol::InsertRemoveRowCol(Actions *actions, bool insert, bool row)
     : CellAction(actions,
-            row ? ( insert ? "insertRow" : "deleteRow" ) : ( insert ? "insertColumn" : "deleteColumn" ),
-            row ? ( insert ? i18n("Insert Rows") : i18n("Remove Rows") ) : ( insert ? i18n("Insert Columns") : i18n("Remove Columns") ),
-            row ? ( insert ? koIcon("edit-table-insert-row-above") : koIcon("edit-table-delete-row") ) : ( insert ? koIcon("edit-table-insert-column-left") : koIcon("edit-table-delete-column") ),
-            QString())
+                 row ? (insert ? "insertRow" : "deleteRow") : (insert ? "insertColumn" : "deleteColumn"),
+                 row ? (insert ? i18n("Insert Rows") : i18n("Remove Rows")) : (insert ? i18n("Insert Columns") : i18n("Remove Columns")),
+                 row ? (insert ? koIcon("edit-table-insert-row-above") : koIcon("edit-table-delete-row"))
+                     : (insert ? koIcon("edit-table-insert-column-left") : koIcon("edit-table-delete-column")),
+                 QString())
     , m_insert(insert)
     , m_row(row)
 {
@@ -43,16 +41,20 @@ InsertRemoveRowCol::~InsertRemoveRowCol()
 {
 }
 
-
-QAction *InsertRemoveRowCol::createAction() {
+QAction *InsertRemoveRowCol::createAction()
+{
     QAction *res = CellAction::createAction();
     QString tooltip;
     if (m_row) {
-        if (m_insert) tooltip = i18n("Inserts a new row into the spreadsheet");
-        else tooltip = i18n("Removes a row from the spreadsheet");
+        if (m_insert)
+            tooltip = i18n("Inserts a new row into the spreadsheet");
+        else
+            tooltip = i18n("Removes a row from the spreadsheet");
     } else {
-        if (m_insert) tooltip = i18n("Inserts a new column into the spreadsheet");
-        else tooltip = i18n("Removes the selected columns from the spreadsheet");
+        if (m_insert)
+            tooltip = i18n("Inserts a new column into the spreadsheet");
+        else
+            tooltip = i18n("Removes the selected columns from the spreadsheet");
     }
     res->setToolTip(tooltip);
     return res;
@@ -62,12 +64,14 @@ void InsertRemoveRowCol::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
     AbstractRegionCommand *command = nullptr;
     if (m_row) {
-        InsertDeleteRowManipulator* cmd = new InsertDeleteRowManipulator();
-        if (!m_insert) cmd->setDelete(true);
+        InsertDeleteRowManipulator *cmd = new InsertDeleteRowManipulator();
+        if (!m_insert)
+            cmd->setDelete(true);
         command = cmd;
     } else {
-        InsertDeleteColumnManipulator* cmd = new InsertDeleteColumnManipulator();
-        if (!m_insert) cmd->setDelete(true);
+        InsertDeleteColumnManipulator *cmd = new InsertDeleteColumnManipulator();
+        if (!m_insert)
+            cmd->setDelete(true);
         command = cmd;
     }
 
@@ -78,19 +82,19 @@ void InsertRemoveRowCol::execute(Selection *selection, Sheet *sheet, QWidget *)
 
 bool InsertRemoveRowCol::enabledForSelection(Selection *selection, const Cell &)
 {
-    if (m_row && selection->isColumnSelected()) return false;
-    if ((!m_row) && selection->isRowSelected()) return false;
+    if (m_row && selection->isColumnSelected())
+        return false;
+    if ((!m_row) && selection->isRowSelected())
+        return false;
     return true;
 }
 
-
-
 ShowHideRowCol::ShowHideRowCol(Actions *actions, bool show, bool row)
     : CellAction(actions,
-            row ? ( show ? "showSelRows" : "hideRow" ) : ( show ? "showSelColumns" : "hideColumn" ),
-            row ? ( show ? i18n("Show Rows") : i18n("Hide Rows") ) : ( show ? i18n("Show Columns") : i18n("Hide Columns") ),
-            row ? ( show ? koIcon("show_table_row") : koIcon("hide_table_row") ) : ( show ? koIcon("show_table_column") : koIcon("hide_table_column") ),
-            QString())
+                 row ? (show ? "showSelRows" : "hideRow") : (show ? "showSelColumns" : "hideColumn"),
+                 row ? (show ? i18n("Show Rows") : i18n("Hide Rows")) : (show ? i18n("Show Columns") : i18n("Hide Columns")),
+                 row ? (show ? koIcon("show_table_row") : koIcon("hide_table_row")) : (show ? koIcon("show_table_column") : koIcon("hide_table_column")),
+                 QString())
     , m_show(show)
     , m_row(row)
 {
@@ -100,27 +104,33 @@ ShowHideRowCol::~ShowHideRowCol()
 {
 }
 
-QAction *ShowHideRowCol::createAction() {
+QAction *ShowHideRowCol::createAction()
+{
     QAction *res = CellAction::createAction();
     QString tooltip;
     if (m_row) {
-        if (m_show) tooltip = i18n("Show hidden rows in the selection");
-        else tooltip = i18n("Hide the selected rows");
+        if (m_show)
+            tooltip = i18n("Show hidden rows in the selection");
+        else
+            tooltip = i18n("Hide the selected rows");
     } else {
-        if (m_show) tooltip = i18n("Show hidden columns in the selection");
-        else tooltip = i18n("Hide the selected columns");
+        if (m_show)
+            tooltip = i18n("Show hidden columns in the selection");
+        else
+            tooltip = i18n("Hide the selected columns");
     }
     res->setToolTip(tooltip);
     return res;
 }
 
-
 void ShowHideRowCol::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    HideShowManipulator* command = new HideShowManipulator();
+    HideShowManipulator *command = new HideShowManipulator();
     command->setSheet(sheet);
-    if (m_row) command->setManipulateRows(true);
-    else command->setManipulateColumns(true);
+    if (m_row)
+        command->setManipulateRows(true);
+    else
+        command->setManipulateColumns(true);
     command->setHide(!m_show);
     command->add(*selection);
     command->execute(selection->canvas());
@@ -139,9 +149,11 @@ bool ShowHideRowCol::enabledForSelection(Selection *selection, const Cell &)
                 int from = range.top();
                 int to = range.bottom();
                 int max = rowFormats->lastNonDefaultRow();
-                if (to > max) to = max;
+                if (to > max)
+                    to = max;
                 for (int row = from; row <= to; ++row) {
-                    if (rowFormats->isHidden(row, &last)) return true;
+                    if (rowFormats->isHidden(row, &last))
+                        return true;
                     row = last;
                 }
             } else {
@@ -149,9 +161,11 @@ bool ShowHideRowCol::enabledForSelection(Selection *selection, const Cell &)
                 int from = range.left();
                 int to = range.right();
                 int max = columnFormats->lastNonDefaultCol();
-                if (to > max) to = max;
+                if (to > max)
+                    to = max;
                 for (int col = from; col <= to; ++col) {
-                    if (columnFormats->isHidden(col, &last)) return true;
+                    if (columnFormats->isHidden(col, &last))
+                        return true;
                     col = last;
                 }
             }
@@ -159,15 +173,19 @@ bool ShowHideRowCol::enabledForSelection(Selection *selection, const Cell &)
         return false;
     }
 
-    if (m_row && selection->isColumnSelected()) return false;
-    if ((!m_row) && selection->isRowSelected()) return false;
+    if (m_row && selection->isColumnSelected())
+        return false;
+    if ((!m_row) && selection->isRowSelected())
+        return false;
     return true;
 }
 
-
-
 EqualizeRowCol::EqualizeRowCol(Actions *actions, bool row)
-    : CellAction(actions, row ? "equalizeRow" : "equalizeCol", row ? i18n("Equalize Row") : i18n("Equalize Column"), row ? koIcon("adjustrow") : koIcon("adjustcol"), QString())
+    : CellAction(actions,
+                 row ? "equalizeRow" : "equalizeCol",
+                 row ? i18n("Equalize Row") : i18n("Equalize Column"),
+                 row ? koIcon("adjustrow") : koIcon("adjustcol"),
+                 QString())
     , m_row(row)
 {
 }
@@ -176,7 +194,8 @@ EqualizeRowCol::~EqualizeRowCol()
 {
 }
 
-QAction *EqualizeRowCol::createAction() {
+QAction *EqualizeRowCol::createAction()
+{
     QAction *res = CellAction::createAction();
     QString tooltip;
     if (m_row)
@@ -186,7 +205,6 @@ QAction *EqualizeRowCol::createAction() {
     res->setToolTip(tooltip);
     return res;
 }
-
 
 void EqualizeRowCol::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
@@ -203,7 +221,7 @@ void EqualizeRowCol::execute(Selection *selection, Sheet *sheet, QWidget *)
             row = last;
         }
 
-        ResizeRowManipulator* command = new ResizeRowManipulator();
+        ResizeRowManipulator *command = new ResizeRowManipulator();
         command->setSize(qMax(2.0, size));
         command->setSheet(sheet);
         command->add(*selection);
@@ -217,7 +235,7 @@ void EqualizeRowCol::execute(Selection *selection, Sheet *sheet, QWidget *)
             col = last;
         }
 
-        ResizeColumnManipulator* command = new ResizeColumnManipulator();
+        ResizeColumnManipulator *command = new ResizeColumnManipulator();
         command->setSize(qMax(2.0, size));
         command->setSheet(sheet);
         command->add(*selection);
@@ -227,19 +245,19 @@ void EqualizeRowCol::execute(Selection *selection, Sheet *sheet, QWidget *)
 
 bool EqualizeRowCol::enabledForSelection(Selection *selection, const Cell &)
 {
-    if (m_row && selection->isColumnSelected()) return false;
-    if ((!m_row) && selection->isRowSelected()) return false;
+    if (m_row && selection->isColumnSelected())
+        return false;
+    if ((!m_row) && selection->isRowSelected())
+        return false;
     return true;
 }
 
-
-
 AdjustRowCol::AdjustRowCol(Actions *actions, bool row, bool col)
     : CellAction(actions,
-            row ? ( col ? "adjust" : "adjustRow" ) : "adjustColumn",
-            row ? ( col ? i18n("Adjust Row && Column") : i18n("Adjust Row") ) : i18n("Adjust Column"),
-            row ? ( col ? QIcon() : koIcon("adjustrow") ) : koIcon("adjustcol"),
-            QString())
+                 row ? (col ? "adjust" : "adjustRow") : "adjustColumn",
+                 row ? (col ? i18n("Adjust Row && Column") : i18n("Adjust Row")) : i18n("Adjust Column"),
+                 row ? (col ? QIcon() : koIcon("adjustrow")) : koIcon("adjustcol"),
+                 QString())
     , m_row(row)
     , m_col(col)
 {
@@ -249,7 +267,8 @@ AdjustRowCol::~AdjustRowCol()
 {
 }
 
-QAction *AdjustRowCol::createAction() {
+QAction *AdjustRowCol::createAction()
+{
     QAction *res = CellAction::createAction();
     QString tooltip;
     if (m_row) {
@@ -263,21 +282,24 @@ QAction *AdjustRowCol::createAction() {
     return res;
 }
 
-
 void AdjustRowCol::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    AdjustColumnRowManipulator* command = new AdjustColumnRowManipulator();
+    AdjustColumnRowManipulator *command = new AdjustColumnRowManipulator();
     command->setSheet(sheet);
-    if (m_col) command->setAdjustColumn(true);
-    if (m_row) command->setAdjustRow(true);
+    if (m_col)
+        command->setAdjustColumn(true);
+    if (m_row)
+        command->setAdjustRow(true);
     command->add(*selection);
     command->execute(selection->canvas());
 }
 
-
-
 ShowRowColQuery::ShowRowColQuery(Actions *actions, bool row)
-    : CellAction(actions, row ? "showRow" : "showColumn", row ? i18n("Show Rows...") : i18n("Show Columns..."), row ? koIcon("show_table_row") : koIcon("show_table_column"), row ? i18n("Show hidden rows") : i18n("Show hidden columns"))
+    : CellAction(actions,
+                 row ? "showRow" : "showColumn",
+                 row ? i18n("Show Rows...") : i18n("Show Columns..."),
+                 row ? koIcon("show_table_row") : koIcon("show_table_column"),
+                 row ? i18n("Show hidden rows") : i18n("Show hidden columns"))
     , m_row(row)
     , m_dlg(nullptr)
 {
@@ -285,7 +307,8 @@ ShowRowColQuery::ShowRowColQuery(Actions *actions, bool row)
 
 ShowRowColQuery::~ShowRowColQuery()
 {
-    if (m_dlg) delete m_dlg;
+    if (m_dlg)
+        delete m_dlg;
 }
 
 void ShowRowColQuery::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
@@ -304,14 +327,14 @@ void ShowRowColQuery::execute(Selection *selection, Sheet *sheet, QWidget *canva
                 for (int i = col; i <= lastCol; ++i)
                     indexes.append(i);
             }
-            col = lastCol+1;
+            col = lastCol + 1;
         }
 
         for (int idx : indexes) {
             if (!showColNumber)
-                captions.append (i18n("Column: %1", CellBase::columnName(idx)));
+                captions.append(i18n("Column: %1", CellBase::columnName(idx)));
             else
-                captions.append (i18n("Column: %1", text.setNum(idx)));
+                captions.append(i18n("Column: %1", text.setNum(idx)));
         }
     } else {
         int lastRow, row = 1;
@@ -320,10 +343,10 @@ void ShowRowColQuery::execute(Selection *selection, Sheet *sheet, QWidget *canva
                 for (int i = row; i <= lastRow; ++i)
                     indexes.append(i);
             }
-            row = lastRow+1;
+            row = lastRow + 1;
         }
         for (int idx : indexes)
-            captions.append (i18n("Row: %1", text.setNum(idx)));
+            captions.append(i18n("Row: %1", text.setNum(idx)));
     }
 
     m_dlg->setList(captions);
@@ -339,10 +362,12 @@ void ShowRowColQuery::execute(Selection *selection, Sheet *sheet, QWidget *canva
                 region.add(QRect(rowcol, 1, 1, KS_rowMax));
         }
 
-        HideShowManipulator* manipulator = new HideShowManipulator();
+        HideShowManipulator *manipulator = new HideShowManipulator();
         manipulator->setSheet(sheet);
-        if (m_row) manipulator->setManipulateRows(true);
-        else manipulator->setManipulateColumns(true);
+        if (m_row)
+            manipulator->setManipulateRows(true);
+        else
+            manipulator->setManipulateColumns(true);
         manipulator->setHide(false);
         manipulator->add(region);
         manipulator->execute(selection->canvas());
@@ -351,10 +376,12 @@ void ShowRowColQuery::execute(Selection *selection, Sheet *sheet, QWidget *canva
     m_dlg = nullptr;
 }
 
-
-
 ResizeRowCol::ResizeRowCol(Actions *actions, bool row)
-    : CellAction(actions, row ? "resizeRow" : "resizeCol", row ? i18n("Resize Row...") : i18n("Resize Column..."), row ? koIcon("resizerow") : koIcon("resizecol"), row ? i18n("Change the height of a row") : i18n("Change the width of a column"))
+    : CellAction(actions,
+                 row ? "resizeRow" : "resizeCol",
+                 row ? i18n("Resize Row...") : i18n("Resize Column..."),
+                 row ? koIcon("resizerow") : koIcon("resizecol"),
+                 row ? i18n("Change the height of a row") : i18n("Change the width of a column"))
     , m_row(row)
     , m_dlgCol(nullptr)
     , m_dlgRow(nullptr)
@@ -363,8 +390,10 @@ ResizeRowCol::ResizeRowCol(Actions *actions, bool row)
 
 ResizeRowCol::~ResizeRowCol()
 {
-    if (m_dlgCol) delete m_dlgCol;
-    if (m_dlgRow) delete m_dlgRow;
+    if (m_dlgCol)
+        delete m_dlgCol;
+    if (m_dlgRow)
+        delete m_dlgRow;
 }
 
 void ResizeRowCol::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
@@ -383,9 +412,9 @@ void ResizeRowCol::execute(Selection *selection, Sheet *sheet, QWidget *canvasWi
 
         if (m_dlgRow->exec()) {
             double newHeight = m_dlgRow->rowHeight();
-            //Don't generate a resize, when there isn't a change or the change is only a rounding issue
+            // Don't generate a resize, when there isn't a change or the change is only a rounding issue
             if (fabs(newHeight - rowHeight) > DBL_EPSILON) {
-                ResizeRowManipulator* manipulator = new ResizeRowManipulator();
+                ResizeRowManipulator *manipulator = new ResizeRowManipulator();
                 manipulator->setSheet(sheet);
                 manipulator->setSize(newHeight);
                 manipulator->add(*selection);
@@ -406,9 +435,9 @@ void ResizeRowCol::execute(Selection *selection, Sheet *sheet, QWidget *canvasWi
 
         if (m_dlgCol->exec()) {
             double newWidth = m_dlgCol->colWidth();
-            //Don't generate a resize, when there isn't a change or the change is only a rounding issue
+            // Don't generate a resize, when there isn't a change or the change is only a rounding issue
             if (fabs(newWidth - colWidth) > DBL_EPSILON) {
-                ResizeColumnManipulator* manipulator = new ResizeColumnManipulator();
+                ResizeColumnManipulator *manipulator = new ResizeColumnManipulator();
                 manipulator->setSheet(sheet);
                 manipulator->setSize(newWidth);
                 manipulator->add(*selection);
@@ -422,8 +451,9 @@ void ResizeRowCol::execute(Selection *selection, Sheet *sheet, QWidget *canvasWi
 
 bool ResizeRowCol::enabledForSelection(Selection *selection, const Cell &)
 {
-    if (m_row && selection->isColumnSelected()) return false;
-    if ((!m_row) && selection->isRowSelected()) return false;
+    if (m_row && selection->isColumnSelected())
+        return false;
+    if ((!m_row) && selection->isRowSelected())
+        return false;
     return true;
 }
-

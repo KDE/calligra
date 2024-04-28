@@ -8,15 +8,13 @@
 #ifndef CALLIGRA_SHEETS_CELL_BASE_STORAGE
 #define CALLIGRA_SHEETS_CELL_BASE_STORAGE
 
-#include "sheets_engine_export.h"
 #include "PointStorage.h"
 #include "RectStorage.h"
-
+#include "sheets_engine_export.h"
 
 #ifdef CALLIGRA_SHEETS_MT
 #include <QReadWriteLock>
 #endif
-
 
 namespace Calligra
 {
@@ -49,7 +47,8 @@ typedef RectStorage<QString> NamedAreaStorage;
  *
  * \note If you fill the storage, do it row-wise. That's more performant.
  */
-class CALLIGRA_SHEETS_ENGINE_EXPORT CellBaseStorage {
+class CALLIGRA_SHEETS_ENGINE_EXPORT CellBaseStorage
+{
 public:
     /**
      * Constructor.
@@ -61,13 +60,13 @@ public:
      * Copy constructor.
      * \note Take care: does not perform a deep copy!
      */
-    CellBaseStorage(const CellBaseStorage& other);
+    CellBaseStorage(const CellBaseStorage &other);
 
     /**
      * Copy constructor.
      * Creates a CellBaseStorage for \p sheet and copies the data from \p other.
      */
-    CellBaseStorage(const CellBaseStorage& other, SheetBase* sheet);
+    CellBaseStorage(const CellBaseStorage &other, SheetBase *sheet);
 
     /**
      * Destructor.
@@ -77,25 +76,24 @@ public:
     /**
      * \return the sheet this CellBaseStorage is for.
      */
-    SheetBase* sheet() const;
+    SheetBase *sheet() const;
 
     /**
      * Removes all data at \p col , \p row .
      */
-//    virtual void take(int col, int row);
-
+    //    virtual void take(int col, int row);
 
     /**
      * \return the formula associated with the Cell at \p column , \p row .
      */
     Formula formula(int column, int row) const;
-    void setFormula(int column, int row, const Formula& formula);
+    void setFormula(int column, int row, const Formula &formula);
 
     /**
      * \return the user input associated with the Cell at \p column , \p row .
      */
     QString userInput(int column, int row) const;
-    void setUserInput(int column, int row, const QString& input);
+    void setUserInput(int column, int row, const QString &input);
 
     /**
      * \return the value associated with the Cell at \p column , \p row .
@@ -105,38 +103,38 @@ public:
     /**
      * Creates a value array containing the values in \p region.
      */
-    Value valueRegion(const Region& region) const;
-    void setValue(int column, int row, const Value& value);
+    Value valueRegion(const Region &region) const;
+    void setValue(int column, int row, const Value &value);
 
     /**
      * \return the comment associated with the Cell at \p column , \p row .
      */
     QString comment(int column, int row) const;
-    void setComment(int column, int row, const QString& comment);
+    void setComment(int column, int row, const QString &comment);
 
     /**
      * \return the validity checks associated with the Cell at \p column , \p row .
      */
     Validity validity(int column, int row) const;
-    void setValidity(const Region& region, Validity validity);
+    void setValidity(const Region &region, Validity validity);
 
     /**
      * \return the named area's name associated with the Cell at \p column , \p row .
      */
     QString namedArea(int column, int row) const;
-    QVector< QPair<QRectF, QString> > namedAreas(const Region& region) const;
-    void setNamedArea(const Region& region, const QString& namedArea);
-    void removeNamedArea(const Region& region, const QString& namedArea);
+    QVector<QPair<QRectF, QString>> namedAreas(const Region &region) const;
+    void setNamedArea(const Region &region, const QString &namedArea);
+    void removeNamedArea(const Region &region, const QString &namedArea);
 
     /**
      * \return \c true, if the cell's value is a matrix and obscures other cells
      */
     bool locksCells(int column, int row) const;
     bool isLocked(int column, int row) const;
-    bool hasLockedCells(const Region& region) const;
-    void lockCells(const QRect& rect);
+    bool hasLockedCells(const Region &region) const;
+    void lockCells(const QRect &rect);
     void unlockCells(int column, int row);
-    void unlockCells(const QRect& rect);
+    void unlockCells(const QRect &rect);
     QRect lockedCells(int column, int row) const;
 
     /**
@@ -155,7 +153,6 @@ public:
      * Check if the provided rectangle spans an unused area. If so, cut off those parts.
      */
     QRect trimToUsedArea(const QRect &r) const;
-
 
     /**
      * Insert \p number columns at \p position .
@@ -185,55 +182,56 @@ public:
      * Shifts the data right of \p rect to the left by the width of \p rect .
      * The data formerly contained in \p rect becomes overridden.
      */
-    void removeShiftLeft(const QRect& rect);
+    void removeShiftLeft(const QRect &rect);
 
     /**
      * Shifts the data in and right of \p rect to the right by the width of \p rect .
      */
-    void insertShiftRight(const QRect& rect);
+    void insertShiftRight(const QRect &rect);
 
     /**
      * Shifts the data below \p rect to the top by the height of \p rect .
      * The data formerly contained in \p rect becomes overridden.
      */
-    void removeShiftUp(const QRect& rect);
+    void removeShiftUp(const QRect &rect);
 
     /**
      * Shifts the data in and below \p rect to the bottom by the height of \p rect .
      */
-    void insertShiftDown(const QRect& rect);
+    void insertShiftDown(const QRect &rect);
 
+    CommentStorage *commentStorage() const;
+    FormulaStorage *formulaStorage() const;
+    MatrixStorage *matrixStorage() const;
+    NamedAreaStorage *namedAreaStorage() const;
+    UserInputStorage *userInputStorage() const;
+    ValidityStorage *validityStorage() const;
+    ValueStorage *valueStorage() const;
 
-    CommentStorage* commentStorage() const;
-    FormulaStorage* formulaStorage() const;
-    MatrixStorage* matrixStorage() const;
-    NamedAreaStorage* namedAreaStorage() const;
-    UserInputStorage* userInputStorage() const;
-    ValidityStorage* validityStorage() const;
-    ValueStorage* valueStorage() const;
 protected:
     void fillStorages();
 
     QList<StorageBase *> storages;
+
 private:
     // do not allow assignment
-    CellBaseStorage& operator=(const CellBaseStorage&);
+    CellBaseStorage &operator=(const CellBaseStorage &);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 class CALLIGRA_SHEETS_ENGINE_EXPORT UserInputStorage : public PointStorage<QString>
 {
 public:
-    UserInputStorage& operator=(const PointStorage<QString>& o) {
+    UserInputStorage &operator=(const PointStorage<QString> &o)
+    {
         PointStorage<QString>::operator=(o);
         return *this;
     }
 };
 
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_CELL_BASE_STORAGE
+#endif // CALLIGRA_SHEETS_CELL_BASE_STORAGE

@@ -5,7 +5,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef CALLIGRA_SHEETS_FORMULA_EDITOR_HIGHLIGHTER
 #define CALLIGRA_SHEETS_FORMULA_EDITOR_HIGHLIGHTER
 
@@ -33,18 +32,17 @@ public:
      * @param textEdit The QTextEdit widget which the highlighter should operate on
      * @param selection The Selection object
      */
-    FormulaEditorHighlighter(QTextEdit* textEdit, Selection* selection);
+    FormulaEditorHighlighter(QTextEdit *textEdit, Selection *selection);
     ~FormulaEditorHighlighter() override;
-
 
     /**
      * Called automatically by KTextEditor to highlight text when modified.
      */
-    void highlightBlock(const QString& text) override;
+    void highlightBlock(const QString &text) override;
     /**
      *
      */
-    const Tokens& formulaTokens() const;
+    const Tokens &formulaTokens() const;
     /**
      *
      */
@@ -60,24 +58,22 @@ public:
      */
     void resetRangeChanged();
 
-
-
 protected:
     /**
-    * Returns the position of the brace matching the one found at position pos
-    */
+     * Returns the position of the brace matching the one found at position pos
+     */
     int findMatchingBrace(int pos);
     /**
-    * Examines the brace (Token::LeftPar or Token::RightPar) operator token at the given index in the token vector
-    * ( as returned by formulaTokens() ) and if the cursor is next to it, the token plus any matching brace will be highlighted
-    */
+     * Examines the brace (Token::LeftPar or Token::RightPar) operator token at the given index in the token vector
+     * ( as returned by formulaTokens() ) and if the cursor is next to it, the token plus any matching brace will be highlighted
+     */
     void handleBrace(uint index);
 
 private:
     Q_DISABLE_COPY(FormulaEditorHighlighter)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

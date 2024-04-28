@@ -15,31 +15,30 @@
 #include "KPrPresentationHighlightWidget.h"
 #include "KPrPresentationTool.h"
 
-KPrPresentationHighlightStrategy::KPrPresentationHighlightStrategy( KPrPresentationTool * tool )
-: KPrPresentationStrategyBase( tool )
+KPrPresentationHighlightStrategy::KPrPresentationHighlightStrategy(KPrPresentationTool *tool)
+    : KPrPresentationStrategyBase(tool)
 {
-    m_widget = new KPrPresentationHighlightWidget( canvas() ) ;
-    setToolWidgetParent( m_widget );
+    m_widget = new KPrPresentationHighlightWidget(canvas());
+    setToolWidgetParent(m_widget);
     m_widget->show();
-    m_widget->installEventFilter( m_tool );
+    m_widget->installEventFilter(m_tool);
 }
 
 KPrPresentationHighlightStrategy::~KPrPresentationHighlightStrategy()
 {
-    setToolWidgetParent( canvas()->canvasWidget() );
+    setToolWidgetParent(canvas()->canvasWidget());
 }
 
-bool KPrPresentationHighlightStrategy::keyPressEvent( QKeyEvent * event )
+bool KPrPresentationHighlightStrategy::keyPressEvent(QKeyEvent *event)
 {
     bool handled = true;
-    switch ( event->key() )
-    {
-        case Qt::Key_Escape:
-            activateDefaultStrategy();
-            break;
-        case Qt::Key_P:
-            handled = false;
-            break;
+    switch (event->key()) {
+    case Qt::Key_Escape:
+        activateDefaultStrategy();
+        break;
+    case Qt::Key_P:
+        handled = false;
+        break;
     }
     return handled;
 }

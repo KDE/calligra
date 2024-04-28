@@ -12,7 +12,11 @@
 class Q_DECL_HIDDEN KoFindBase::Private
 {
 public:
-    Private() : currentMatch(0), options(0) { }
+    Private()
+        : currentMatch(0)
+        , options(0)
+    {
+    }
 
     KoFindMatchList matches;
     int currentMatch;
@@ -20,7 +24,8 @@ public:
 };
 
 KoFindBase::KoFindBase(QObject *parent)
-    : QObject(parent), d(new Private)
+    : QObject(parent)
+    , d(new Private)
 {
 }
 
@@ -128,7 +133,7 @@ void KoFindBase::finished()
 
 void KoFindBase::replaceCurrent(const QVariant &value)
 {
-    if(d->matches.count() == 0) {
+    if (d->matches.count() == 0) {
         return;
     }
 
@@ -138,7 +143,7 @@ void KoFindBase::replaceCurrent(const QVariant &value)
         replaceImplementation(match, value);
     }
 
-    if(d->matches.count() > 0) {
+    if (d->matches.count() > 0) {
         emit matchFound(d->matches.at(0));
     } else {
         emit noMatchFound();
@@ -148,12 +153,12 @@ void KoFindBase::replaceCurrent(const QVariant &value)
 
 void KoFindBase::replaceAll(const QVariant &value)
 {
-    foreach(const KoFindMatch &match, d->matches) {
+    foreach (const KoFindMatch &match, d->matches) {
         replaceImplementation(match, value);
     }
 
-    //Intentionally not using clearMatches since we should not clear
-    //highlighting here.
+    // Intentionally not using clearMatches since we should not clear
+    // highlighting here.
     d->matches.clear();
     emit noMatchFound();
     emit updateCanvas();
@@ -161,8 +166,8 @@ void KoFindBase::replaceAll(const QVariant &value)
 
 void KoFindBase::clearMatches()
 {
-    //Intentionally does nothing, only needs to be reimplemented when
-    //something needs to be done before clearing the list of matches.
+    // Intentionally does nothing, only needs to be reimplemented when
+    // something needs to be done before clearing the list of matches.
 }
 
 void KoFindBase::setOptions(KoFindOptionSet *newOptions)

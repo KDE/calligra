@@ -21,29 +21,27 @@
 #include <KarbonDocument.h>
 #include <KoDocument.h>
 
-#include <KoShapePainter.h>
+#include <KoDialog.h>
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
-#include <KoZoomHandler.h>
-#include <KoUnit.h>
-#include <KoDialog.h>
 #include <KoPAPageBase.h>
+#include <KoShapePainter.h>
+#include <KoUnit.h>
+#include <KoZoomHandler.h>
 
 #include <KPluginFactory>
 
 #include <QImage>
 
-K_PLUGIN_FACTORY_WITH_JSON(PngExportFactory, "calligra_filter_karbon2image.json",
-                           registerPlugin<ImageExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(PngExportFactory, "calligra_filter_karbon2image.json", registerPlugin<ImageExport>();)
 
-
-ImageExport::ImageExport(QObject*parent, const QVariantList&)
+ImageExport::ImageExport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus ImageExport::convert(const QByteArray &from, const QByteArray &to)
 {
     if (from != KoOdf::mimeType(KoOdf::Graphics)) {
         return KoFilter::BadMimeType;
@@ -59,7 +57,7 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
         return KoFilter::BadMimeType;
     }
 
-    KarbonDocument *doc = dynamic_cast<KarbonDocument*>(m_chain->inputDocument());
+    KarbonDocument *doc = dynamic_cast<KarbonDocument *>(m_chain->inputDocument());
     if (!doc) {
         return KoFilter::InternalError;
     }
@@ -76,12 +74,12 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
     // get the size in pixel (100% zoom)
     KoZoomHandler zoomHandler;
     QSize pixelSize = zoomHandler.documentToView(pointSize).toSize();
-    //transparent white by default
+    // transparent white by default
     QColor backgroundColor(QColor(255, 255, 255, 0));
 
-    if (! m_chain->manager()->getBatchMode()) {
+    if (!m_chain->manager()->getBatchMode()) {
         QApplication::restoreOverrideCursor();
-        ImageExportOptionsWidget * widget = new ImageExportOptionsWidget(doc);
+        ImageExportOptionsWidget *widget = new ImageExportOptionsWidget(doc);
         widget->setUnit(doc->unit());
         widget->setBackgroundColor(backgroundColor);
         widget->enableBackgroundOpacity(format == "PNG");
@@ -113,7 +111,7 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
     // paint the shapes
     painter.paint(image);
 
-    if(!image.save(m_chain->outputFile(), format.toLatin1())) {
+    if (!image.save(m_chain->outputFile(), format.toLatin1())) {
         return KoFilter::CreationError;
     }
 
@@ -121,4 +119,3 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
 }
 
 #include "ImageExport.moc"
-

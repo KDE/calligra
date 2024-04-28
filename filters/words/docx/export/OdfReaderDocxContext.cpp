@@ -5,26 +5,23 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "OdfReaderDocxContext.h"
 
 // Qt
-#include <QByteArray>
 #include <QBuffer>
+#include <QByteArray>
 
 // Calligra
 #include <KoXmlWriter.h>
-//#include <KoXmlReader.h>
-//#include <KoOdfStyleManager.h>
+// #include <KoXmlReader.h>
+// #include <KoOdfStyleManager.h>
 
 // This filter
 #include "DocxFile.h"
 
-
 // ----------------------------------------------------------------
 //                     class OdfReaderDocxContext
-
 
 OdfReaderDocxContext::OdfReaderDocxContext(KoStore *store, DocxFile *dxf)
     : OdfReaderContext(store) // Collect metadata, manifest and styles

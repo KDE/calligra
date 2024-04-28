@@ -5,20 +5,16 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef KOUNAVAILSHAPE_H
 #define KOUNAVAILSHAPE_H
-
 
 // Calligra
 #include <KoFrameShape.h>
 #include <KoShapeContainer.h>
 
-
 class QPainter;
 
 #define KoUnavailShape_SHAPEID "UnavailShapeID"
-
 
 /**
  * The KoUnavailShape is a frame shape that takes care of all frame
@@ -36,7 +32,8 @@ class QPainter;
  * The KoUnavailShape always has to be present, and is the only shape
  * that is not implemented as a plugin.
  */
-class KoUnavailShape : public KoFrameShape, public KoShapeContainer {
+class KoUnavailShape : public KoFrameShape, public KoShapeContainer
+{
 public:
     KoUnavailShape();
     ~KoUnavailShape() override;
@@ -48,16 +45,15 @@ public:
     /// reimplemented from KoShapeContainer
     void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
     /// reimplemented
-    void saveOdf(KoShapeSavingContext & context) const override;
+    void saveOdf(KoShapeSavingContext &context) const override;
     /// reimplemented
-    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     /// Load the real contents of the frame shape.
-    bool loadOdfFrameElement(const KoXmlElement& frameElement,
-                                     KoShapeLoadingContext& context) override;
+    bool loadOdfFrameElement(const KoXmlElement &frameElement, KoShapeLoadingContext &context) override;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

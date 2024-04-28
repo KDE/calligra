@@ -24,9 +24,9 @@ class FLAKE_EXPORT KoSnapStrategy
 {
 public:
     explicit KoSnapStrategy(KoSnapGuide::Strategy type);
-    virtual ~KoSnapStrategy() {};
+    virtual ~KoSnapStrategy(){};
 
-    virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) = 0;
+    virtual bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance) = 0;
 
     /// returns the strategies type
     KoSnapGuide::Strategy type() const;
@@ -54,8 +54,9 @@ class FLAKE_EXPORT OrthogonalSnapStrategy : public KoSnapStrategy
 {
 public:
     OrthogonalSnapStrategy();
-    bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) override;
+    bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance) override;
     QPainterPath decoration(const KoViewConverter &converter) const override;
+
 private:
     QLineF m_hLine;
     QLineF m_vLine;
@@ -66,7 +67,7 @@ class FLAKE_EXPORT NodeSnapStrategy : public KoSnapStrategy
 {
 public:
     NodeSnapStrategy();
-    bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) override;
+    bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance) override;
     QPainterPath decoration(const KoViewConverter &converter) const override;
 };
 
@@ -74,14 +75,16 @@ public:
 class FLAKE_EXPORT ExtensionSnapStrategy : public KoSnapStrategy
 {
     friend class TestSnapStrategy;
+
 public:
     ExtensionSnapStrategy();
-    bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) override;
+    bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance) override;
     QPainterPath decoration(const KoViewConverter &converter) const override;
+
 private:
-    qreal project(const QPointF &lineStart , const QPointF &lineEnd, const QPointF &point);
-    QPointF extensionDirection(KoPathPoint * point, const QTransform &matrix);
-    bool snapToExtension(QPointF &position, KoPathPoint * point, const QTransform &matrix);
+    qreal project(const QPointF &lineStart, const QPointF &lineEnd, const QPointF &point);
+    QPointF extensionDirection(KoPathPoint *point, const QTransform &matrix);
+    bool snapToExtension(QPointF &position, KoPathPoint *point, const QTransform &matrix);
     QVector<QLineF> m_lines;
 };
 
@@ -90,7 +93,7 @@ class FLAKE_EXPORT IntersectionSnapStrategy : public KoSnapStrategy
 {
 public:
     IntersectionSnapStrategy();
-    bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) override;
+    bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance) override;
     QPainterPath decoration(const KoViewConverter &converter) const override;
 };
 
@@ -99,7 +102,7 @@ class FLAKE_EXPORT GridSnapStrategy : public KoSnapStrategy
 {
 public:
     GridSnapStrategy();
-    bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) override;
+    bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance) override;
     QPainterPath decoration(const KoViewConverter &converter) const override;
 };
 
@@ -107,10 +110,12 @@ public:
 class FLAKE_EXPORT BoundingBoxSnapStrategy : public KoSnapStrategy
 {
     friend class TestSnapStrategy;
+
 public:
     BoundingBoxSnapStrategy();
-    bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) override;
+    bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance) override;
     QPainterPath decoration(const KoViewConverter &converter) const override;
+
 private:
     qreal squareDistanceToLine(const QPointF &lineA, const QPointF &lineB, const QPointF &point, QPointF &pointOnLine);
     QPointF m_boxPoints[5];
@@ -121,8 +126,9 @@ class FLAKE_EXPORT LineGuideSnapStrategy : public KoSnapStrategy
 {
 public:
     LineGuideSnapStrategy();
-    bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) override;
+    bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance) override;
     QPainterPath decoration(const KoViewConverter &converter) const override;
+
 private:
     int m_orientation;
 };

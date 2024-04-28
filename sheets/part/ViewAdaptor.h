@@ -14,11 +14,11 @@
 #define CALLIGRA_SHEETS_VIEW_ADAPTOR
 
 #ifndef QT_NO_DBUS
+#include "sheets_part_export.h"
 #include <QColor>
+#include <QDBusAbstractAdaptor>
 #include <QRect>
 #include <QString>
-#include <QDBusAbstractAdaptor>
-#include "sheets_part_export.h"
 
 namespace Calligra
 {
@@ -28,14 +28,14 @@ class View;
 class CellProxy;
 
 /**
-* The ViewAdaptor class provides access to a view on a Calligra Sheets document.
-*/
+ * The ViewAdaptor class provides access to a view on a Calligra Sheets document.
+ */
 class CALLIGRA_SHEETS_PART_EXPORT ViewAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.spreadsheet.view")
 public:
-    explicit ViewAdaptor(View*);
+    explicit ViewAdaptor(View *);
     ~ViewAdaptor() override;
 
 public Q_SLOTS: // METHODS
@@ -56,7 +56,7 @@ public Q_SLOTS: // METHODS
     virtual void show();
 
     /** Set the range of cells that should be selected. */
-    virtual void setSelection(const QRect& selection);
+    virtual void setSelection(const QRect &selection);
     /** Return the range of cells that is selected. */
     virtual QRect selection();
 
@@ -66,29 +66,29 @@ public Q_SLOTS: // METHODS
     /** Select the previous sheet as active sheet. */
     virtual void previousSheet();
     /** Select the sheet with name \p sheetName as active sheet. */
-    virtual bool showSheet(const QString& sheetName);
+    virtual bool showSheet(const QString &sheetName);
     /** Copy the content of the range of cells that is selected. */
     virtual void copyAsText();
 
     /** Set the text color of all selected cells to the defined color value. */
-    virtual void setSelectionTextColor(const QColor& txtColor);
+    virtual void setSelectionTextColor(const QColor &txtColor);
     /** Set the background color of all selected cells to the defined color value. */
-    virtual void setSelectionBgColor(const QColor& bgColor);
+    virtual void setSelectionBgColor(const QColor &bgColor);
     /** Set the border color of all selected cells to the defined color value. */
-    virtual void setSelectionBorderColor(const QColor& bdColor);
+    virtual void setSelectionBorderColor(const QColor &bdColor);
 
     /** Set the color of the left border. */
-    virtual void setLeftBorderColor(const QColor& color);
+    virtual void setLeftBorderColor(const QColor &color);
     /** Set the color of the top border. */
-    virtual void setTopBorderColor(const QColor& color);
+    virtual void setTopBorderColor(const QColor &color);
     /** Set the color of the right border. */
-    virtual void setRightBorderColor(const QColor& color);
+    virtual void setRightBorderColor(const QColor &color);
     /** Set the color of the bottom border. */
-    virtual void setBottomBorderColor(const QColor& color);
+    virtual void setBottomBorderColor(const QColor &color);
     /** Set the color of the all borders. */
-    virtual void setAllBorderColor(const QColor& color);
+    virtual void setAllBorderColor(const QColor &color);
     /** Set the color of the outline border. */
-    virtual void setOutlineBorderColor(const QColor& color);
+    virtual void setOutlineBorderColor(const QColor &color);
 
 Q_SIGNALS:
 
@@ -102,8 +102,8 @@ Q_SIGNALS:
     void selectionChanged();
 
 private:
-    View* m_view;
-    CellProxy* m_proxy;
+    View *m_view;
+    CellProxy *m_proxy;
 };
 
 } // namespace Sheets

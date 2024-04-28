@@ -13,7 +13,7 @@
 /// The line style model managing the style data
 class KoLineStyleModel : public QAbstractListModel
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit KoLineStyleModel(QObject *parent = nullptr);
     ~KoLineStyleModel() override = default;
@@ -24,10 +24,11 @@ public:
     bool addCustomStyle(const QVector<qreal> &style);
     /// selects the given style
     int setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes);
+
 private:
-    QList<QVector<qreal> > m_styles; ///< the added styles
+    QList<QVector<qreal>> m_styles; ///< the added styles
     QVector<qreal> m_tempStyle; ///< a temporary added style
-    bool m_hasTempStyle;        ///< state of the temporary style
+    bool m_hasTempStyle; ///< state of the temporary style
 };
 
 #endif

@@ -18,42 +18,23 @@ class KeyboardModel : public QAbstractListModel, public QQmlParserStatus
     Q_PROPERTY(bool useBuiltIn READ useBuiltIn NOTIFY useBuiltInChanged)
 
 public:
-    enum Roles {
-        TextRole = Qt::UserRole + 1,
-        TypeRole,
-        WidthRole
-    };
+    enum Roles { TextRole = Qt::UserRole + 1, TypeRole, WidthRole };
 
-    enum KeyboardMode {
-        NormalMode,
-        CapitalMode,
-        NumericMode
-    };
+    enum KeyboardMode { NormalMode, CapitalMode, NumericMode };
     Q_ENUM(KeyboardMode)
 
-    enum KeyType {
-        NormalKey,
-        SpacerKey,
-        ShiftKey,
-        EnterKey,
-        BackspaceKey,
-        NumericModeKey,
-        CloseKey,
-        LeftArrowKey,
-        RightArrowKey
-    };
+    enum KeyType { NormalKey, SpacerKey, ShiftKey, EnterKey, BackspaceKey, NumericModeKey, CloseKey, LeftArrowKey, RightArrowKey };
     Q_ENUM(KeyType)
 
-    explicit KeyboardModel(QObject* parent = 0);
+    explicit KeyboardModel(QObject *parent = 0);
     ~KeyboardModel() override;
 
     void classBegin() override;
     void componentComplete() override;
-    
-    
+
     QHash<int, QByteArray> roleNames() const override;
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     KeyboardMode keyboardMode() const;
     void setKeyboardMode(KeyboardModel::KeyboardMode mode);
@@ -66,7 +47,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KEYBOARDMODEL_H

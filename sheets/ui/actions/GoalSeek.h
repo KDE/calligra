@@ -8,10 +8,7 @@
 #ifndef CALLIGRA_SHEETS_ACTION_GOAL_SEEK
 #define CALLIGRA_SHEETS_ACTION_GOAL_SEEK
 
-
 #include "CellAction.h"
-
-
 
 namespace Calligra
 {
@@ -19,8 +16,9 @@ namespace Sheets
 {
 class GoalSeekDialog;
 
-class GoalSeek : public CellAction {
-Q_OBJECT
+class GoalSeek : public CellAction
+{
+    Q_OBJECT
 public:
     GoalSeek(Actions *actions);
     virtual ~GoalSeek();
@@ -36,8 +34,7 @@ protected:
     QWidget *m_canvasWidget;
 };
 
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_GOAL_SEEK
+#endif // CALLIGRA_SHEETS_ACTION_GOAL_SEEK

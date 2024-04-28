@@ -16,7 +16,7 @@ class KoInlineTextObjectManager;
  */
 class InsertNamedVariableAction : public InsertInlineObjectActionBase
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     InsertNamedVariableAction(KoCanvasBase *canvas, const KoInlineTextObjectManager *manager, const QString &name);
 

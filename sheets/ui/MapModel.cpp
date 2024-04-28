@@ -22,20 +22,23 @@ using namespace Calligra::Sheets;
 class MapModel::Private
 {
 public:
-    Map* map;
+    Map *map;
 
     Sheet *getSheet(int idx) const;
+
 public:
-    bool isSheetIndex(const QModelIndex& index, const MapModel* mapModel) const;
+    bool isSheetIndex(const QModelIndex &index, const MapModel *mapModel) const;
 };
 
-Sheet *MapModel::Private::getSheet(int idx) const {
+Sheet *MapModel::Private::getSheet(int idx) const
+{
     SheetBase *sb = map->sheet(idx);
-    if (!sb) return nullptr;
+    if (!sb)
+        return nullptr;
     return dynamic_cast<Sheet *>(sb);
 }
 
-bool MapModel::Private::isSheetIndex(const QModelIndex& index, const MapModel* mapModel) const
+bool MapModel::Private::isSheetIndex(const QModelIndex &index, const MapModel *mapModel) const
 {
     if (!index.parent().isValid()) {
         return false;
@@ -54,7 +57,8 @@ bool MapModel::Private::isSheetIndex(const QModelIndex& index, const MapModel* m
     }
 
     Sheet *sheet = getSheet(index.parent().row());
-    if (!sheet) return false;
+    if (!sheet)
+        return false;
     // The index' (the cell's) model has to match the sheet model.
     if (index.model() != sheet->model()) {
         return false;
@@ -62,16 +66,13 @@ bool MapModel::Private::isSheetIndex(const QModelIndex& index, const MapModel* m
     return true;
 }
 
-
-MapModel::MapModel(Map* map)
-        : QAbstractListModel(map)
-        , d(new Private)
+MapModel::MapModel(Map *map)
+    : QAbstractListModel(map)
+    , d(new Private)
 {
     d->map = map;
-    connect(d->map, &MapBase::sheetAdded,
-            this, &MapModel::addSheet);
-    connect(d->map, &MapBase::sheetRemoved,
-            this, &MapModel::removeSheet);
+    connect(d->map, &MapBase::sheetAdded, this, &MapModel::addSheet);
+    connect(d->map, &MapBase::sheetRemoved, this, &MapModel::removeSheet);
 }
 
 MapModel::~MapModel()
@@ -87,7 +88,8 @@ QVariant MapModel::data(const QModelIndex &index, int role) const
     // Propagation to sheet model
     if (d->isSheetIndex(index, this)) {
         Sheet *sheet = d->getSheet(index.parent().row());
-        if (!sheet) return QVariant();
+        if (!sheet)
+            return QVariant();
         return sheet->model()->data(index, role);
     }
     if (index.row() >= d->map->count()) {
@@ -181,7 +183,8 @@ bool MapModel::setData(const QModelIndex &index, const QVariant &value, int role
     // Propagation to sheet model
     if (d->isSheetIndex(index, this)) {
         Sheet *sheet = d->getSheet(index.parent().row());
-        if (!sheet) return false;
+        if (!sheet)
+            return false;
         return sheet->model()->setData(index, value, role);
     }
 
@@ -191,7 +194,7 @@ bool MapModel::setData(const QModelIndex &index, const QVariant &value, int role
         case Qt::EditRole: {
             const QString name(value.toString());
             if (!name.isEmpty()) {
-                KUndo2Command* const command = new RenameSheetCommand(sheet, name);
+                KUndo2Command *const command = new RenameSheetCommand(sheet, name);
                 emit addCommandRequested(command);
                 emit dataChanged(index, index);
                 return true;
@@ -210,9 +213,9 @@ bool MapModel::setData(const QModelIndex &index, const QVariant &value, int role
     return false;
 }
 
-bool MapModel::setHidden(Sheet* sheet, bool hidden)
+bool MapModel::setHidden(Sheet *sheet, bool hidden)
 {
-    KUndo2Command* command;
+    KUndo2Command *command;
     if (hidden && !sheet->isHidden()) {
         command = new HideSheetCommand(sheet);
     } else if (!hidden && sheet->isHidden()) {
@@ -224,7 +227,7 @@ bool MapModel::setHidden(Sheet* sheet, bool hidden)
     return true;
 }
 
-Map* MapModel::map() const
+Map *MapModel::map() const
 {
     return d->map;
 }

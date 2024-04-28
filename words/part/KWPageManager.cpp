@@ -6,10 +6,10 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "KWPageManager.h"
+#include "KWDocument.h"
+#include "KWPage.h"
 #include "KWPageManager_p.h"
 #include "KWPageStyle_p.h"
-#include "KWPage.h"
-#include "KWDocument.h"
 
 #include <KoShape.h>
 
@@ -19,13 +19,13 @@
 #define DEBUG_PAGES
 
 KWPageManagerPrivate::KWPageManagerPrivate()
-        : lastId(0),
-        defaultPageStyle(QLatin1String("Standard"),     // don't translate, used as identifier!
-                         i18nc("Default page style display name", "Standard"))
+    : lastId(0)
+    , defaultPageStyle(QLatin1String("Standard"), // don't translate, used as identifier!
+                       i18nc("Default page style display name", "Standard"))
 {
 }
 
-qreal KWPageManagerPrivate::pageOffset(int pageNum/*, bool bottom*/) const
+qreal KWPageManagerPrivate::pageOffset(int pageNum /*, bool bottom*/) const
 {
 #if 0
     Q_ASSERT(pageNum >= 0);
@@ -46,9 +46,9 @@ qreal KWPageManagerPrivate::pageOffset(int pageNum/*, bool bottom*/) const
     }
     return offset;
 #else
-    //Q_ASSERT(pageOffsets.contains(pageNum));
+    // Q_ASSERT(pageOffsets.contains(pageNum));
     qreal offset = pageOffsets.value(pageNum);
-    //debugWords << "pageNum=" << pageNum << "offset=" << offset;
+    // debugWords << "pageNum=" << pageNum << "offset=" << offset;
     return offset;
 #endif
 }
@@ -137,14 +137,14 @@ void KWPageManagerPrivate::insertPage(const Page &newPage)
     }
 
     pages.insert(++lastId, newPage);
-    Q_ASSERT(! pageNumbers.contains(newPage.pageNumber));
+    Q_ASSERT(!pageNumbers.contains(newPage.pageNumber));
     pageNumbers.insert(newPage.pageNumber, lastId);
 }
 
 ///////////
 
 KWPageManager::KWPageManager()
-    : d (new KWPageManagerPrivate())
+    : d(new KWPageManagerPrivate())
 {
     addPageStyle(d->defaultPageStyle);
 }
@@ -169,7 +169,7 @@ int KWPageManager::pageNumber(const QPointF &point) const
     }
 #else
     int answer = -1;
-    auto targetPoint = std::lower_bound(d->pageNumbers.keyBegin(), d->pageNumbers.keyEnd(), point.y(), [this] (int id, qreal pt) {
+    auto targetPoint = std::lower_bound(d->pageNumbers.keyBegin(), d->pageNumbers.keyEnd(), point.y(), [this](int id, qreal pt) {
         // id is the key in d->pageNumbers
         return d->pageOffsets[d->pageNumbers[id]] <= pt;
     });
@@ -193,7 +193,7 @@ int KWPageManager::pageNumber(const qreal y) const
 int KWPageManager::pageCount() const
 {
     int count = 0;
-    QHash<int,KWPageManagerPrivate::Page>::const_iterator iter = d->pages.constBegin();
+    QHash<int, KWPageManagerPrivate::Page>::const_iterator iter = d->pages.constBegin();
     while (iter != d->pages.constEnd()) {
         ++count;
         ++iter;
@@ -241,11 +241,11 @@ KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
 
     KWPage prevPage = page(pageNumber - 1);
     if (prevPage.isValid()) {
-        if (! newPage.style.isValid())
+        if (!newPage.style.isValid())
             newPage.style = prevPage.pageStyle();
     }
 
-    if (! newPage.style.isValid())
+    if (!newPage.style.isValid())
         newPage.style = defaultPageStyle();
     newPage.pageNumber = pageNumber;
     if (newPage.pageNumber % 2 == 0) {
@@ -263,7 +263,7 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
 {
     KWPageManagerPrivate::Page page;
 
-    if (! d->pages.isEmpty()) {
+    if (!d->pages.isEmpty()) {
         QMap<int, int>::ConstIterator end = d->pageNumbers.constEnd();
         --end; // last one is one before the imaginary 'end'
         KWPageManagerPrivate::Page lastPage = d->pages[end.value()];
@@ -359,7 +359,7 @@ QVector<KWPage> KWPageManager::pages(const QString &pageStyle) const
     const bool checkForStyle = !pageStyle.isEmpty();
     QHash<int, KWPageManagerPrivate::Page>::ConstIterator it = d->pages.constBegin();
     QHash<int, KWPageManagerPrivate::Page>::ConstIterator end = d->pages.constEnd();
-    for(; it != end; ++it) {
+    for (; it != end; ++it) {
         if (checkForStyle && it.value().style.name() != pageStyle)
             continue;
         answer << KWPage(d, it.key());
@@ -409,7 +409,7 @@ void KWPageManager::clearPageStyles()
 {
     d->pageStyles.clear();
     d->pageStyleNames.clear();
-    d->defaultPageStyle = KWPageStyle(QLatin1String("Standard"),        // don't translate, used as identifier!
+    d->defaultPageStyle = KWPageStyle(QLatin1String("Standard"), // don't translate, used as identifier!
                                       i18nc("Default page style display name", "Standard"));
     addPageStyle(d->defaultPageStyle);
 }

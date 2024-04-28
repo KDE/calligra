@@ -13,11 +13,12 @@
 /**
  * @short Implementation of the MathML maction element
  *
- * Support for action elements in MathML. According to MathML spec 
- * (Section 3.6.1.1), a MathML conformant application is not required to 
+ * Support for action elements in MathML. According to MathML spec
+ * (Section 3.6.1.1), a MathML conformant application is not required to
  * recognize any single actiontype.
  */
-class KOFORMULA_EXPORT ActionElement : public RowElement {
+class KOFORMULA_EXPORT ActionElement : public RowElement
+{
 public:
     /// The standard constructor
     explicit ActionElement(BasicElement *parent = 0);

@@ -57,12 +57,11 @@ public:
      * This is called to allow Cut and Paste of bookmarks. This
      * method gives a correct, unique, name
      */
-    static QString createUniqueBookmarkName(const KoBookmarkManager* bmm, const QString &bookmarkName, bool isEndMarker);
-private:
+    static QString createUniqueBookmarkName(const KoBookmarkManager *bmm, const QString &bookmarkName, bool isEndMarker);
 
+private:
     class Private;
     Private *const d;
 };
 
 #endif
-

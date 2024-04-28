@@ -5,14 +5,12 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #include "FontEditorDialog.h"
 
 #include <KLocalizedString>
 #include <kfontchooser.h>
 
 using namespace KoChart;
-
 
 FontEditorDialog::FontEditorDialog(QWidget *parent)
     : KoDialog(parent)

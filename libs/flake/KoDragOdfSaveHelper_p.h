@@ -12,7 +12,10 @@
 class KoDragOdfSaveHelperPrivate
 {
 public:
-    KoDragOdfSaveHelperPrivate() : context(0) { }
+    KoDragOdfSaveHelperPrivate()
+        : context(0)
+    {
+    }
     ~KoDragOdfSaveHelperPrivate()
     {
         delete context;

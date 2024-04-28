@@ -22,39 +22,33 @@
 
 #include <KoOdfChartWriter.h>
 
-
 class KoGenStyles;
 class KoGenStyle;
 
 namespace MSOOXML
 {
-    class DrawingMLTheme;
+class DrawingMLTheme;
 }
-
 
 class XlsxChartOdfWriter : public KoOdfChartWriter
 {
 public:
-    explicit XlsxChartOdfWriter(KoChart::Chart* chart,
-				const MSOOXML::DrawingMLTheme* const contextWithThemeInfo = nullptr);
+    explicit XlsxChartOdfWriter(KoChart::Chart *chart, const MSOOXML::DrawingMLTheme *const contextWithThemeInfo = nullptr);
     ~XlsxChartOdfWriter() override;
 
-
 private:
-
     // All of these are virtual functions called from other functions (mainly
     // saveContent()) in the parent class.
 
-    QString genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles) override;
-    QString genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles) override;
-    void addDataThemeToStyle(KoGenStyle& style,
-			     int dataNumber, int maxNumData = 1, bool strokes = true) override;
+    QString genChartAreaStyle(KoGenStyle &style, KoGenStyles &styles, KoGenStyles &mainStyles) override;
+    QString genPlotAreaStyle(KoGenStyle &style, KoGenStyles &styles, KoGenStyles &mainStyles) override;
+    void addDataThemeToStyle(KoGenStyle &style, int dataNumber, int maxNumData = 1, bool strokes = true) override;
 
-    QColor calculateColorFromGradientStop(const KoChart::Gradient::GradientStop& grad) override;
+    QColor calculateColorFromGradientStop(const KoChart::Gradient::GradientStop &grad) override;
     QColor labelFontColor() const override;
 
 private:
-    const MSOOXML::DrawingMLTheme* m_theme;
+    const MSOOXML::DrawingMLTheme *m_theme;
 };
 
-#endif  // XLSXCHARTODFWRITER_H
+#endif // XLSXCHARTODFWRITER_H

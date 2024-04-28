@@ -13,9 +13,9 @@
 
 /* Now the same for KOMAIN_TEST_EXPORT, if compiling with unit tests enabled */
 #ifdef COMPILING_TESTS
-#   define KOMAIN_TEST_EXPORT KOMAIN_EXPORT
+#define KOMAIN_TEST_EXPORT KOMAIN_EXPORT
 #else /* not compiling tests */
-#   define KOMAIN_TEST_EXPORT
+#define KOMAIN_TEST_EXPORT
 #endif
 
 #endif

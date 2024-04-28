@@ -6,12 +6,12 @@
 
 #include "FilterEffectScene.h"
 #include "FilterEffectSceneItems.h"
-#include "KoShape.h"
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
+#include "KoShape.h"
 
-#include <QDebug>
 #include <KComboBox>
+#include <QDebug>
 
 #include <QGraphicsProxyWidget>
 #include <QPushButton>
@@ -22,12 +22,14 @@ const qreal ItemSpacing = 10.0;
 const qreal ConnectionDistance = 10.0;
 
 ConnectionSource::ConnectionSource()
-        : m_type(Effect), m_effect(0)
+    : m_type(Effect)
+    , m_effect(0)
 {
 }
 
 ConnectionSource::ConnectionSource(KoFilterEffect *effect, SourceType type)
-        : m_type(type), m_effect(effect)
+    : m_type(type)
+    , m_effect(effect)
 {
 }
 
@@ -36,7 +38,7 @@ ConnectionSource::SourceType ConnectionSource::type() const
     return m_type;
 }
 
-KoFilterEffect * ConnectionSource::effect() const
+KoFilterEffect *ConnectionSource::effect() const
 {
     return m_effect;
 }
@@ -78,12 +80,14 @@ QString ConnectionSource::typeToString(SourceType type)
 }
 
 ConnectionTarget::ConnectionTarget()
-        : m_inputIndex(0), m_effect(0)
+    : m_inputIndex(0)
+    , m_effect(0)
 {
 }
 
 ConnectionTarget::ConnectionTarget(KoFilterEffect *effect, int inputIndex)
-        : m_inputIndex(inputIndex), m_effect(effect)
+    : m_inputIndex(inputIndex)
+    , m_effect(effect)
 {
 }
 
@@ -92,18 +96,21 @@ int ConnectionTarget::inputIndex() const
     return m_inputIndex;
 }
 
-KoFilterEffect * ConnectionTarget::effect() const
+KoFilterEffect *ConnectionTarget::effect() const
 {
     return m_effect;
 }
 
-
 FilterEffectScene::FilterEffectScene(QObject *parent)
-        : QGraphicsScene(parent), m_effectStack(0)
+    : QGraphicsScene(parent)
+    , m_effectStack(0)
 {
-    m_defaultInputs << "SourceGraphic" << "SourceAlpha";
-    m_defaultInputs << "FillPaint" << "StrokePaint";
-    m_defaultInputs << "BackgroundImage" << "BackgroundAlpha";
+    m_defaultInputs << "SourceGraphic"
+                    << "SourceAlpha";
+    m_defaultInputs << "FillPaint"
+                    << "StrokePaint";
+    m_defaultInputs << "BackgroundImage"
+                    << "BackgroundAlpha";
 
     connect(this, &FilterEffectScene::selectionChanged, this, &FilterEffectScene::slotSelectionChanged);
 }
@@ -124,11 +131,11 @@ void FilterEffectScene::initialize(KoFilterEffectStack *effectStack)
     if (!m_effectStack)
         return;
 
-    QList<KoFilterEffect*> filterEffects = m_effectStack->filterEffects();
-    if (! filterEffects.count())
+    QList<KoFilterEffect *> filterEffects = m_effectStack->filterEffects();
+    if (!filterEffects.count())
         return;
 
-    foreach(KoFilterEffect *effect, filterEffects) {
+    foreach (KoFilterEffect *effect, filterEffects) {
         createEffectItems(effect);
     }
 
@@ -147,25 +154,25 @@ void FilterEffectScene::createEffectItems(KoFilterEffect *effect)
     }
 
     QSet<QString> defaultItems;
-    foreach(const QString &currentInput, inputs) {
+    foreach (const QString &currentInput, inputs) {
         const QString &input = currentInput.isEmpty() ? defaultInput : currentInput;
-        if (m_defaultInputs.contains(input) && ! defaultItems.contains(input)) {
-            DefaultInputItem * item = new DefaultInputItem(input, effect);
+        if (m_defaultInputs.contains(input) && !defaultItems.contains(input)) {
+            DefaultInputItem *item = new DefaultInputItem(input, effect);
             addSceneItem(item);
             m_outputs.insert(item->outputName(), item);
             defaultItems.insert(input);
         }
     }
 
-    EffectItem * effectItem = new EffectItem(effect);
+    EffectItem *effectItem = new EffectItem(effect);
 
     // create connections
     int index = 0;
-    foreach(const QString &currentInput, inputs) {
+    foreach (const QString &currentInput, inputs) {
         const QString &input = currentInput.isEmpty() ? defaultInput : currentInput;
-        EffectItemBase * outputItem = m_outputs.value(input, 0);
+        EffectItemBase *outputItem = m_outputs.value(input, 0);
         if (outputItem) {
-            ConnectionItem * connectionItem = new ConnectionItem(outputItem, effectItem, index);
+            ConnectionItem *connectionItem = new ConnectionItem(outputItem, effectItem, index);
             addSceneItem(connectionItem);
         }
         index++;
@@ -179,11 +186,11 @@ void FilterEffectScene::createEffectItems(KoFilterEffect *effect)
 void FilterEffectScene::addSceneItem(QGraphicsItem *item)
 {
     addItem(item);
-    EffectItemBase * effectItem = dynamic_cast<EffectItemBase*>(item);
+    EffectItemBase *effectItem = dynamic_cast<EffectItemBase *>(item);
     if (effectItem) {
         m_items.append(effectItem);
     } else {
-        ConnectionItem * connectionItem = dynamic_cast<ConnectionItem*>(item);
+        ConnectionItem *connectionItem = dynamic_cast<ConnectionItem *>(item);
         if (connectionItem)
             m_connectionItems.append(connectionItem);
     }
@@ -192,7 +199,7 @@ void FilterEffectScene::addSceneItem(QGraphicsItem *item)
 void FilterEffectScene::layoutEffects()
 {
     QPointF position(25, 25);
-    foreach(EffectItemBase * item, m_items) {
+    foreach (EffectItemBase *item, m_items) {
         item->setPos(position);
         position.ry() += item->rect().height() + ItemSpacing;
     }
@@ -200,11 +207,11 @@ void FilterEffectScene::layoutEffects()
 
 void FilterEffectScene::layoutConnections()
 {
-    QList<QPair<int, int> > sortedConnections;
+    QList<QPair<int, int>> sortedConnections;
 
     // calculate connection sizes from item distances
     int connectionIndex = 0;
-    foreach(ConnectionItem *item, m_connectionItems) {
+    foreach (ConnectionItem *item, m_connectionItems) {
         int sourceIndex = m_items.indexOf(item->sourceItem());
         int targetIndex = m_items.indexOf(item->targetItem());
         sortedConnections.append(QPair<int, int>(targetIndex - sourceIndex, connectionIndex));
@@ -224,22 +231,22 @@ void FilterEffectScene::layoutConnections()
             distance += ConnectionDistance;
         }
 
-        ConnectionItem * connectionItem = m_connectionItems[connection.second];
+        ConnectionItem *connectionItem = m_connectionItems[connection.second];
         if (!connectionItem)
             continue;
-        EffectItemBase * sourceItem = connectionItem->sourceItem();
-        EffectItemBase * targetItem = connectionItem->targetItem();
-        if (!sourceItem || ! targetItem)
+        EffectItemBase *sourceItem = connectionItem->sourceItem();
+        EffectItemBase *targetItem = connectionItem->targetItem();
+        if (!sourceItem || !targetItem)
             continue;
 
         int targetInput = connectionItem->targetInput();
         QPointF sourcePos = sourceItem->mapToScene(sourceItem->outputPosition());
         QPointF targetPos = targetItem->mapToScene(targetItem->inputPosition(targetInput));
         QPainterPath path;
-        path.moveTo(sourcePos + QPointF(0.5*sourceItem->connectorSize().width(), 0));
+        path.moveTo(sourcePos + QPointF(0.5 * sourceItem->connectorSize().width(), 0));
         path.lineTo(sourcePos + QPointF(distance, 0));
         path.lineTo(targetPos + QPointF(distance, 0));
-        path.lineTo(targetPos + QPointF(0.5*targetItem->connectorSize().width(), 0));
+        path.lineTo(targetPos + QPointF(0.5 * targetItem->connectorSize().width(), 0));
         connectionItem->setPath(path);
     }
 }
@@ -247,7 +254,7 @@ void FilterEffectScene::layoutConnections()
 void FilterEffectScene::slotSelectionChanged()
 {
     if (selectedItems().count()) {
-        foreach(EffectItemBase* item, m_items) {
+        foreach (EffectItemBase *item, m_items) {
             if (item->isSelected()) {
                 item->setOpacity(1.0);
             } else {
@@ -255,7 +262,7 @@ void FilterEffectScene::slotSelectionChanged()
             }
         }
     } else {
-        foreach(EffectItemBase* item, m_items) {
+        foreach (EffectItemBase *item, m_items) {
             item->setOpacity(1);
         }
     }
@@ -265,21 +272,21 @@ QList<ConnectionSource> FilterEffectScene::selectedEffectItems() const
 {
     QList<ConnectionSource> effectItems;
 
-    QList<QGraphicsItem*> selectedGraphicsItems = selectedItems();
+    QList<QGraphicsItem *> selectedGraphicsItems = selectedItems();
     if (!selectedGraphicsItems.count())
         return effectItems;
     if (!m_items.count())
         return effectItems;
 
-    foreach(QGraphicsItem * item, selectedGraphicsItems) {
-        EffectItemBase * effectItem = dynamic_cast<EffectItemBase*>(item);
+    foreach (QGraphicsItem *item, selectedGraphicsItems) {
+        EffectItemBase *effectItem = dynamic_cast<EffectItemBase *>(item);
         if (!item)
             continue;
 
         ConnectionSource::SourceType type = ConnectionSource::Effect;
 
-        KoFilterEffect * effect = effectItem->effect();
-        if (dynamic_cast<DefaultInputItem*>(item)) {
+        KoFilterEffect *effect = effectItem->effect();
+        if (dynamic_cast<DefaultInputItem *>(item)) {
             type = ConnectionSource::typeFromString(effectItem->outputName());
         }
 
@@ -289,40 +296,40 @@ QList<ConnectionSource> FilterEffectScene::selectedEffectItems() const
     return effectItems;
 }
 
-void FilterEffectScene::dropEvent(QGraphicsSceneDragDropEvent * event)
+void FilterEffectScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    ConnectorItem * dropTargetItem = 0;
-    QList<QGraphicsItem*> itemsAtPositon = items(event->scenePos());
-    foreach(QGraphicsItem* item, itemsAtPositon) {
-        dropTargetItem = dynamic_cast<ConnectorItem*>(item);
+    ConnectorItem *dropTargetItem = 0;
+    QList<QGraphicsItem *> itemsAtPositon = items(event->scenePos());
+    foreach (QGraphicsItem *item, itemsAtPositon) {
+        dropTargetItem = dynamic_cast<ConnectorItem *>(item);
         if (dropTargetItem)
             break;
     }
     if (!dropTargetItem)
         return;
 
-    const ConnectorMimeData * data = dynamic_cast<const ConnectorMimeData*>(event->mimeData());
+    const ConnectorMimeData *data = dynamic_cast<const ConnectorMimeData *>(event->mimeData());
     if (!data)
         return;
 
-    ConnectorItem * dropSourceItem = data->connector();
+    ConnectorItem *dropSourceItem = data->connector();
     if (!dropSourceItem)
         return;
 
-    EffectItemBase * outputParentItem = 0;
-    KoFilterEffect * inputEffect = 0;
-    KoFilterEffect * outputEffect = 0;
+    EffectItemBase *outputParentItem = 0;
+    KoFilterEffect *inputEffect = 0;
+    KoFilterEffect *outputEffect = 0;
     int inputIndex = 0;
 
     if (dropTargetItem->connectorType() == ConnectorItem::Input) {
         // dropped output onto an input
-        outputParentItem = dynamic_cast<EffectItemBase*>(dropSourceItem->parentItem());
+        outputParentItem = dynamic_cast<EffectItemBase *>(dropSourceItem->parentItem());
         outputEffect = dropSourceItem->effect();
         inputEffect = dropTargetItem->effect();
         inputIndex = dropTargetItem->connectorIndex();
     } else {
         // dropped input onto an output
-        outputParentItem = dynamic_cast<EffectItemBase*>(dropTargetItem->parentItem());
+        outputParentItem = dynamic_cast<EffectItemBase *>(dropTargetItem->parentItem());
         outputEffect = dropTargetItem->effect();
         inputEffect = dropSourceItem->effect();
         inputIndex = dropSourceItem->connectorIndex();

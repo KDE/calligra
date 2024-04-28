@@ -8,8 +8,8 @@
 #ifndef KOSHAPEPASTE_H
 #define KOSHAPEPASTE_H
 
-#include <KoOdfPaste.h>
 #include "flake_export.h"
+#include <KoOdfPaste.h>
 
 #include <QList>
 
@@ -32,14 +32,14 @@ public:
     KoShapePaste(KoCanvasBase *canvas, KoShapeLayer *parentLayer);
     ~KoShapePaste() override;
 
-    QList<KoShape*> pastedShapes() const;
+    QList<KoShape *> pastedShapes() const;
 
 protected:
     /// reimplemented
-    bool process(const KoXmlElement & body, KoOdfReadStore &odfStore) override;
+    bool process(const KoXmlElement &body, KoOdfReadStore &odfStore) override;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOSHAPEPASTE_H */

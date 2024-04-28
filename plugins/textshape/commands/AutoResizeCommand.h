@@ -5,10 +5,10 @@
 #ifndef AUTORESIZECOMMAND_H
 #define AUTORESIZECOMMAND_H
 
-#include <kundo2command.h>
+#include <KoTextDocumentLayout.h>
 #include <QPointer>
 #include <TextTool.h>
-#include <KoTextDocumentLayout.h>
+#include <kundo2command.h>
 
 class TextShape;
 

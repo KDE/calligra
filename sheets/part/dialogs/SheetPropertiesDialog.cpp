@@ -11,18 +11,18 @@
 
 using namespace Calligra::Sheets;
 
-SheetPropertiesDialog::SheetPropertiesDialog(QWidget* parent):
-        KoDialog(parent)
+SheetPropertiesDialog::SheetPropertiesDialog(QWidget *parent)
+    : KoDialog(parent)
 {
     setCaption(i18n("Sheet Properties"));
     setObjectName(QLatin1String("sheetPropertiesDialog"));
     setModal(true);
     setButtons(Ok | Cancel | Default);
 
-    KoVBox* mainWidget = new KoVBox();//makeVBoxMainWidget();
+    KoVBox *mainWidget = new KoVBox(); // makeVBoxMainWidget();
     setMainWidget(mainWidget);
     m_widget = new SheetPropertiesWidget(mainWidget);
-    QWidget* spacer = new QWidget(mainWidget);
+    QWidget *spacer = new QWidget(mainWidget);
     spacer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     showButtonSeparator(true);
     connect(this, &KoDialog::defaultClicked, this, &SheetPropertiesDialog::slotDefault);
@@ -69,7 +69,8 @@ void SheetPropertiesDialog::setLayoutDirection(Qt::LayoutDirection dir)
     case Qt::RightToLeft:
         m_widget->directionComboBox->setCurrentIndex(1);
         break;
-    default: break;
+    default:
+        break;
     };
 }
 

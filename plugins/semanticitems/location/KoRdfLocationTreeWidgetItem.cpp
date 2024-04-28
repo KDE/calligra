@@ -9,14 +9,12 @@
 #include "KoDocumentRdf.h"
 #include "RdfSemanticTreeWidgetSelectAction.h"
 // KF5
-#include <kdebug.h>
 #include <KLocalizedString>
+#include <kdebug.h>
 
-
-KoRdfLocationTreeWidgetItem::KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent,
-                                                         hKoRdfLocation semObj)
-        : KoRdfSemanticTreeWidgetItem(parent)
-        , m_semanticObject(semObj)
+KoRdfLocationTreeWidgetItem::KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfLocation semObj)
+    : KoRdfSemanticTreeWidgetItem(parent)
+    , m_semanticObject(semObj)
 {
     setText(ColName, m_semanticObject->name());
 }
@@ -24,13 +22,12 @@ KoRdfLocationTreeWidgetItem::KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent
 KoRdfLocationTreeWidgetItem::~KoRdfLocationTreeWidgetItem()
 {
     kDebug(30015) << "DTOR()";
-    if( m_semanticObject )
+    if (m_semanticObject)
         kDebug(30015) << "semobj:" << m_semanticObject->name();
     else
         kDebug(30015) << "NO SEMOBJ";
     kDebug(30015) << "DTOR(END)";
 }
-
 
 hKoRdfSemanticItem KoRdfLocationTreeWidgetItem::semanticItem() const
 {
@@ -87,4 +84,3 @@ void KoRdfLocationTreeWidgetItem::exportToFile()
 {
     semanticObject()->exportToFile();
 }
-

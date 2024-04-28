@@ -9,8 +9,8 @@
 
 #include "kotext_export.h"
 
-#include <QRectF>
 #include <QMetaType>
+#include <QRectF>
 
 class QString;
 
@@ -29,11 +29,7 @@ public:
     /// Destructor.
     virtual ~KoTextPage();
 
-    enum PageSelection {
-        PreviousPage = -1,
-        CurrentPage = 0,
-        NextPage = 1
-    };
+    enum PageSelection { PreviousPage = -1, CurrentPage = 0, NextPage = 1 };
 
     /**
      * Returns the unique number of this page for internal purposes. All pages
@@ -83,10 +79,12 @@ public:
     /**
      * Returns the (text) content rect of the page in document coords
      */
-    virtual QRectF contentRect() const {return rect();}
-
+    virtual QRectF contentRect() const
+    {
+        return rect();
+    }
 };
 
-Q_DECLARE_METATYPE(KoTextPage*)
+Q_DECLARE_METATYPE(KoTextPage *)
 
 #endif

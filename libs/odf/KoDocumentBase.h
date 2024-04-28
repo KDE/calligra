@@ -31,12 +31,13 @@ class QString;
 class KOODF_EXPORT KoDocumentBase
 {
 public:
-
     // context passed on saving to saveOdf
     struct SavingContext {
         SavingContext(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embeddedSaver)
-                : odfStore(odfStore)
-                , embeddedSaver(embeddedSaver) {}
+            : odfStore(odfStore)
+            , embeddedSaver(embeddedSaver)
+        {
+        }
 
         KoOdfWriteStore &odfStore;
         KoEmbeddedDocumentSaver &embeddedSaver;
@@ -128,7 +129,7 @@ public:
      * When choosing "save as" this is also the mime type
      * selected by default.
      */
-    virtual void setMimeType(const QByteArray & mimeType) = 0;
+    virtual void setMimeType(const QByteArray &mimeType) = 0;
 
     virtual QString localFilePath() const = 0;
 
@@ -140,10 +141,10 @@ public:
 
     /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
     enum { /*SaveAsCalligra1dot1 = 1,*/ // old and removed
-        SaveAsDirectoryStore = 2,
-        SaveAsFlatXML = 4,
-        SaveEncrypted = 8
-                        // bitfield! next value is 16
+           SaveAsDirectoryStore = 2,
+           SaveAsFlatXML = 4,
+           SaveEncrypted = 8
+           // bitfield! next value is 16
     };
     virtual int specialOutputFlag() const = 0;
 
@@ -156,7 +157,7 @@ public:
      * @param mimeType the mime type (format) to use.
      * @param specialOutputFlag is for "save as older version" etc.
      */
-    virtual void setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag = 0) = 0;
+    virtual void setOutputMimeType(const QByteArray &mimeType, int specialOutputFlag = 0) = 0;
 
     virtual QByteArray outputMimeType() const = 0;
 
@@ -175,6 +176,5 @@ private:
     class Private;
     Private *const d;
 };
-
 
 #endif

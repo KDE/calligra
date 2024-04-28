@@ -29,7 +29,7 @@ class SpecialPasteDialog : public ActionDialog, public Ui::SpecialPasteWidget
 {
     Q_OBJECT
 public:
-    explicit SpecialPasteDialog(QWidget* parent);
+    explicit SpecialPasteDialog(QWidget *parent);
 
     bool wantEverything() const;
     bool wantText() const;

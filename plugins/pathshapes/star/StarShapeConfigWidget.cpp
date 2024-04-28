@@ -27,8 +27,8 @@ void StarShapeConfigWidget::setUnit(const KoUnit &unit)
 
 void StarShapeConfigWidget::open(KoShape *shape)
 {
-    m_star = dynamic_cast<StarShape*>(shape);
-    if (! m_star)
+    m_star = dynamic_cast<StarShape *>(shape);
+    if (!m_star)
         return;
 
     widget.corners->blockSignals(true);
@@ -50,7 +50,7 @@ void StarShapeConfigWidget::open(KoShape *shape)
 
 void StarShapeConfigWidget::save()
 {
-    if (! m_star)
+    if (!m_star)
         return;
 
     m_star->setCornerCount(widget.corners->value());
@@ -59,13 +59,16 @@ void StarShapeConfigWidget::save()
     m_star->setConvex(widget.convex->checkState() == Qt::Checked);
 }
 
-KUndo2Command * StarShapeConfigWidget::createCommand()
+KUndo2Command *StarShapeConfigWidget::createCommand()
 {
-    if (! m_star)
+    if (!m_star)
         return 0;
     else
-        return new StarShapeConfigCommand(m_star, widget.corners->value(), widget.innerRadius->value(),
-                widget.outerRadius->value(), widget.convex->checkState() == Qt::Checked);
+        return new StarShapeConfigCommand(m_star,
+                                          widget.corners->value(),
+                                          widget.innerRadius->value(),
+                                          widget.outerRadius->value(),
+                                          widget.convex->checkState() == Qt::Checked);
 }
 
 void StarShapeConfigWidget::typeChanged()

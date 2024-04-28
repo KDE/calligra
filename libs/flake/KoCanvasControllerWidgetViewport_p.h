@@ -19,12 +19,14 @@ class Viewport : public QWidget
     Q_OBJECT
 
 public:
-
     explicit Viewport(KoCanvasControllerWidget *parent);
-    ~Viewport() override {}
+    ~Viewport() override
+    {
+    }
 
     void setCanvas(QWidget *canvas);
-    QWidget *canvas() const {
+    QWidget *canvas() const
+    {
         return m_canvas;
     }
     void setDocumentSize(const QSize &size);
@@ -41,16 +43,18 @@ Q_SIGNALS:
     void sizeChanged();
 
 public:
-
     void handleDragEnterEvent(QDragEnterEvent *event);
     void handleDropEvent(QDropEvent *event);
     void handleDragMoveEvent(QDragMoveEvent *event);
     void handleDragLeaveEvent(QDragLeaveEvent *event);
     void handlePaintEvent(QPainter &gc, QPaintEvent *event);
-    void setMargin(int margin) { m_margin = margin; resetLayout(); }
+    void setMargin(int margin)
+    {
+        m_margin = margin;
+        resetLayout();
+    }
 
 private:
-
     QPointF correctPosition(const QPoint &point) const;
     void repaint(KoShape *shape);
 
@@ -63,7 +67,6 @@ private:
     void resetLayout();
 
 private:
-
     KoCanvasControllerWidget *m_parent;
     KoShape *m_draggedShape;
 

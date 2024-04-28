@@ -1,27 +1,28 @@
 #include "TestFrameLayout.h"
 #include "TestDocumentLayout.h"
 
-#include "../KWPageManager.h"
-#include "../KWPage.h"
-#include "../KWPageStyle.h"
-#include "../frames/KWFrameLayout.h"
-#include "../frames/KWCopyShape.h"
-#include "../frames/KWTextFrameSet.h"
-#include "../frames/KWTextFrame.h"
 #include "../KWDocument.h"
+#include "../KWPage.h"
+#include "../KWPageManager.h"
+#include "../KWPageStyle.h"
 #include "../Words.h"
+#include "../frames/KWCopyShape.h"
+#include "../frames/KWFrameLayout.h"
+#include "../frames/KWTextFrame.h"
+#include "../frames/KWTextFrameSet.h"
 
 #include <MockShapes.h>
 #include <MockTextShape.h>
 
-#include <KoTextDocumentLayout.h>
 #include <KoColorBackground.h>
+#include <KoTextDocumentLayout.h>
 #include <QTextCursor>
 
 class Helper
 {
 public:
-    Helper() {
+    Helper()
+    {
         pageManager = new KWPageManager();
         KWPage page = pageManager->appendPage();
         KoPageLayout pageLayout = page.pageStyle().pageLayout();
@@ -30,7 +31,8 @@ public:
         page.pageStyle().setPageLayout(pageLayout);
         pageStyle = page.pageStyle();
     }
-    ~Helper() {
+    ~Helper()
+    {
         delete pageManager;
     }
 
@@ -48,7 +50,7 @@ void TestFrameLayout::testGetOrCreateFrameSet()
     m_frames.clear();
     KWPage page = helper.pageManager->page(1);
     KWFrameLayout bfl(helper.pageManager, m_frames);
-    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet *)), this, SLOT(addFS(KWFrameSet *)));
 
     KWTextFrameSet *fs = bfl.getOrCreate(Words::OddPagesHeaderTextFrameSet, page);
     QVERIFY(fs);
@@ -74,7 +76,7 @@ void TestFrameLayout::testCopyShapes()
     m_frames.clear();
     KWPage page = helper.pageManager->page(1);
     KWFrameLayout bfl(helper.pageManager, m_frames);
-    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet *)), this, SLOT(addFS(KWFrameSet *)));
 
     KWTextFrameSet *fs = bfl.getOrCreate(Words::OddPagesHeaderTextFrameSet, page);
     m_frames.append(fs);
@@ -82,18 +84,18 @@ void TestFrameLayout::testCopyShapes()
 
     helper.pageStyle.setHeaderPolicy(Words::HFTypeEvenOdd);
 
-    KWTextFrame *tf = createFrame(QPointF(0,0), *fs);
-    KWFrame *cf = createCopyFrame(QPointF(0,300), tf->shape(), *fs);
-    QVERIFY(fs->frameCount()==2);
-    //FIXME QVERIFY(bfl.hasFrameOn(fs, 1));
+    KWTextFrame *tf = createFrame(QPointF(0, 0), *fs);
+    KWFrame *cf = createCopyFrame(QPointF(0, 300), tf->shape(), *fs);
+    QVERIFY(fs->frameCount() == 2);
+    // FIXME QVERIFY(bfl.hasFrameOn(fs, 1));
     delete tf->shape();
 
-    QVERIFY(fs->frameCount()==1);
-    //FIXME QVERIFY(!bfl.hasFrameOn(fs, 1));
+    QVERIFY(fs->frameCount() == 1);
+    // FIXME QVERIFY(!bfl.hasFrameOn(fs, 1));
 
-    //now try and add a copyframe without crashing
-    //sebsauer; it's not crashing but asserting at KWFrameLayout.cpp:750 now
-    //bfl.createNewFramesForPage(1);
+    // now try and add a copyframe without crashing
+    // sebsauer; it's not crashing but asserting at KWFrameLayout.cpp:750 now
+    // bfl.createNewFramesForPage(1);
 }
 
 void TestFrameLayout::testCreateNewFramesForPage()
@@ -103,7 +105,7 @@ void TestFrameLayout::testCreateNewFramesForPage()
     QVERIFY(m_frames.count() == 0);
     KWFrameLayout bfl(helper.pageManager, m_frames);
     KWPage page = helper.pageManager->page(1);
-    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet *)), this, SLOT(addFS(KWFrameSet *)));
 
     KWTextFrameSet *main = bfl.getOrCreate(Words::MainTextFrameSet, page);
     QVERIFY(main);
@@ -124,13 +126,13 @@ void TestFrameLayout::testShouldHaveHeaderOrFooter()
     Helper helper;
     m_frames.clear();
     KWFrameLayout bfl(helper.pageManager, m_frames);
-    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet *)), this, SLOT(addFS(KWFrameSet *)));
 
     // test the first page
     helper.pageStyle.setHeaderPolicy(Words::HFTypeNone);
     helper.pageStyle.setFooterPolicy(Words::HFTypeNone);
     Words::TextFrameSetType origin;
-    QCOMPARE(bfl.shouldHaveHeaderOrFooter(1, true, &origin), false);  // header
+    QCOMPARE(bfl.shouldHaveHeaderOrFooter(1, true, &origin), false); // header
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(1, false, &origin), false); // footer
 
     helper.pageStyle.setHeaderPolicy(Words::HFTypeEvenOdd);
@@ -194,7 +196,7 @@ void TestFrameLayout::headerPerPage()
     m_frames.clear();
     KWPage page = helper.pageManager->begin();
     KWFrameLayout bfl(helper.pageManager, m_frames);
-    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet *)), this, SLOT(addFS(KWFrameSet *)));
 
     KWPageStyle myStyle("myStyle");
     myStyle.setHeaderPolicy(Words::HFTypeUniform);
@@ -211,9 +213,9 @@ void TestFrameLayout::headerPerPage()
     QVERIFY(bfl.m_pageStyles.contains(page.pageStyle()));
     KWFrameLayout::FrameSets fsets = bfl.m_pageStyles[page.pageStyle()];
     QCOMPARE(fsets.oddHeaders, fs);
-    QCOMPARE(fsets.evenHeaders, (void*) 0);
-    QCOMPARE(fsets.oddFooters, (void*) 0);
-    QCOMPARE(fsets.evenFooters, (void*) 0);
+    QCOMPARE(fsets.evenHeaders, (void *)0);
+    QCOMPARE(fsets.oddFooters, (void *)0);
+    QCOMPARE(fsets.evenFooters, (void *)0);
 
     KWTextFrameSet *fs2 = bfl.getOrCreate(Words::OddPagesHeaderTextFrameSet, page2);
     QVERIFY(fs2);
@@ -228,14 +230,14 @@ void TestFrameLayout::headerPerPage()
     QVERIFY(bfl.m_pageStyles.contains(page2.pageStyle()));
     fsets = bfl.m_pageStyles[page.pageStyle()];
     QCOMPARE(fsets.oddHeaders, fs);
-    QCOMPARE(fsets.evenHeaders, (void*) 0);
-    QCOMPARE(fsets.oddFooters, (void*) 0);
-    QCOMPARE(fsets.evenFooters, (void*) 0);
+    QCOMPARE(fsets.evenHeaders, (void *)0);
+    QCOMPARE(fsets.oddFooters, (void *)0);
+    QCOMPARE(fsets.evenFooters, (void *)0);
     KWFrameLayout::FrameSets fsets2 = bfl.m_pageStyles[page2.pageStyle()];
     QCOMPARE(fsets2.oddHeaders, fs2);
-    QCOMPARE(fsets2.evenHeaders, (void*) 0);
-    QCOMPARE(fsets2.oddFooters, (void*) 0);
-    QCOMPARE(fsets2.evenFooters, (void*) 0);
+    QCOMPARE(fsets2.evenHeaders, (void *)0);
+    QCOMPARE(fsets2.oddFooters, (void *)0);
+    QCOMPARE(fsets2.evenFooters, (void *)0);
 }
 
 void TestFrameLayout::testFrameCreation()
@@ -243,7 +245,7 @@ void TestFrameLayout::testFrameCreation()
     Helper helper;
     m_frames.clear();
     KWFrameLayout bfl(helper.pageManager, m_frames);
-    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet *)), this, SLOT(addFS(KWFrameSet *)));
 
     KWPageStyle style = helper.pageManager->defaultPageStyle();
     style.setHeaderPolicy(Words::HFTypeUniform);
@@ -284,51 +286,37 @@ void TestFrameLayout::testCreateNewFrameForPage_data()
     QTest::addColumn<int>("pageNumber");
     QTest::addColumn<int>("expectedFrameCount");
 
-    QTest::newRow("noFooter1") << (QStringList() << QString("style1") << QString("style2")) <<
-        (int) Words::OddPagesFooterTextFrameSet << 1 << 0;
-    QTest::newRow("noFooter2") << (QStringList() << QString("style1") << QString("style2")) <<
-        (int) Words::EvenPagesFooterTextFrameSet << 1 << 0;
-    QTest::newRow("noFooter3") << (QStringList() << QString("style1") << QString("style2")) <<
-        (int) Words::EvenPagesFooterTextFrameSet << 2 << 0;
+    QTest::newRow("noFooter1") << (QStringList() << QString("style1") << QString("style2")) << (int)Words::OddPagesFooterTextFrameSet << 1 << 0;
+    QTest::newRow("noFooter2") << (QStringList() << QString("style1") << QString("style2")) << (int)Words::EvenPagesFooterTextFrameSet << 1 << 0;
+    QTest::newRow("noFooter3") << (QStringList() << QString("style1") << QString("style2")) << (int)Words::EvenPagesFooterTextFrameSet << 2 << 0;
 
-    QTest::newRow("noHeader1") << (QStringList() << QString("style1") << QString("style2")) <<
-        (int) Words::OddPagesHeaderTextFrameSet << 1 << 0;
-    QTest::newRow("noHeader2") << (QStringList() << QString("style1") << QString("style2")) <<
-        (int) Words::OddPagesHeaderTextFrameSet << 2 << 0;
-    QTest::newRow("noHeader3") << (QStringList() << QString("style1") << QString("style2")) <<
-        (int) Words::EvenPagesHeaderTextFrameSet << 1 << 0;
+    QTest::newRow("noHeader1") << (QStringList() << QString("style1") << QString("style2")) << (int)Words::OddPagesHeaderTextFrameSet << 1 << 0;
+    QTest::newRow("noHeader2") << (QStringList() << QString("style1") << QString("style2")) << (int)Words::OddPagesHeaderTextFrameSet << 2 << 0;
+    QTest::newRow("noHeader3") << (QStringList() << QString("style1") << QString("style2")) << (int)Words::EvenPagesHeaderTextFrameSet << 1 << 0;
 
-    QTest::newRow("oddHeader1") << (QStringList() << QString("style2") << QString("style2")) <<
-        (int) Words::OddPagesHeaderTextFrameSet << 1 << 1;
-    QTest::newRow("oddHeader2") << (QStringList() << QString("style2") << QString("style2")) <<
-        (int) Words::OddPagesHeaderTextFrameSet << 2 << 0;
-    QTest::newRow("evenHeader1") << (QStringList() << QString("style2") << QString("style2")) <<
-        (int) Words::EvenPagesHeaderTextFrameSet << 1 << 0;
-    QTest::newRow("evenHeader2") << (QStringList() << QString("style2") << QString("style2")) <<
-        (int) Words::EvenPagesHeaderTextFrameSet << 2 << 1;
+    QTest::newRow("oddHeader1") << (QStringList() << QString("style2") << QString("style2")) << (int)Words::OddPagesHeaderTextFrameSet << 1 << 1;
+    QTest::newRow("oddHeader2") << (QStringList() << QString("style2") << QString("style2")) << (int)Words::OddPagesHeaderTextFrameSet << 2 << 0;
+    QTest::newRow("evenHeader1") << (QStringList() << QString("style2") << QString("style2")) << (int)Words::EvenPagesHeaderTextFrameSet << 1 << 0;
+    QTest::newRow("evenHeader2") << (QStringList() << QString("style2") << QString("style2")) << (int)Words::EvenPagesHeaderTextFrameSet << 2 << 1;
 
-    QTest::newRow("main1") << (QStringList() << QString("style1") << QString("style3") << QString("style4")) <<
-        (int) Words::MainTextFrameSet << 1 << 1;
-    QTest::newRow("main2") << (QStringList() << QString("style1") << QString("style3") << QString("style4")) <<
-        (int) Words::MainTextFrameSet << 2 << 0;
-    QTest::newRow("main3") << (QStringList() << QString("style1") << QString("style3") << QString("style4")) <<
-        (int) Words::MainTextFrameSet << 3 << 2;
-    QTest::newRow("main4") << (QStringList() << QString("style5")) <<
-        (int) Words::MainTextFrameSet << 1 << 0;
+    QTest::newRow("main1") << (QStringList() << QString("style1") << QString("style3") << QString("style4")) << (int)Words::MainTextFrameSet << 1 << 1;
+    QTest::newRow("main2") << (QStringList() << QString("style1") << QString("style3") << QString("style4")) << (int)Words::MainTextFrameSet << 2 << 0;
+    QTest::newRow("main3") << (QStringList() << QString("style1") << QString("style3") << QString("style4")) << (int)Words::MainTextFrameSet << 3 << 2;
+    QTest::newRow("main4") << (QStringList() << QString("style5")) << (int)Words::MainTextFrameSet << 1 << 0;
 
-    QTest::newRow("footer1") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) <<
-        (int) Words::EvenPagesFooterTextFrameSet << 1 << 0; // uniform goes to the odd
-    QTest::newRow("footer2") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) <<
-        (int) Words::EvenPagesFooterTextFrameSet << 2 << 0;
-    QTest::newRow("footer3") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) <<
-        (int) Words::EvenPagesFooterTextFrameSet << 3 << 0; // uniform goes to the odd
+    QTest::newRow("footer1") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) << (int)Words::EvenPagesFooterTextFrameSet << 1
+                             << 0; // uniform goes to the odd
+    QTest::newRow("footer2") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) << (int)Words::EvenPagesFooterTextFrameSet << 2
+                             << 0;
+    QTest::newRow("footer3") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) << (int)Words::EvenPagesFooterTextFrameSet << 3
+                             << 0; // uniform goes to the odd
 
-    QTest::newRow("footer4") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) <<
-        (int) Words::OddPagesFooterTextFrameSet << 1 << 1;
-    QTest::newRow("footer5") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) <<
-        (int) Words::OddPagesFooterTextFrameSet << 2 << 0;
-    QTest::newRow("footer6") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) <<
-        (int) Words::OddPagesFooterTextFrameSet << 3 << 1;
+    QTest::newRow("footer4") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) << (int)Words::OddPagesFooterTextFrameSet << 1
+                             << 1;
+    QTest::newRow("footer5") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) << (int)Words::OddPagesFooterTextFrameSet << 2
+                             << 0;
+    QTest::newRow("footer6") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) << (int)Words::OddPagesFooterTextFrameSet << 3
+                             << 1;
 }
 
 void TestFrameLayout::testCreateNewFrameForPage()
@@ -381,10 +369,10 @@ void TestFrameLayout::testCreateNewFrameForPage()
     }
 
     m_frames.clear();
-    KWTextFrameSet tfs(0, (Words::TextFrameSetType) frameSetType);
+    KWTextFrameSet tfs(0, (Words::TextFrameSetType)frameSetType);
     m_frames << &tfs;
     KWFrameLayout frameLayout(&manager, m_frames);
-    connect(&frameLayout, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+    connect(&frameLayout, SIGNAL(newFrameSet(KWFrameSet *)), this, SLOT(addFS(KWFrameSet *)));
 
     KWPage page = manager.page(pageNumber);
     QVERIFY(page.isValid());
@@ -392,8 +380,8 @@ void TestFrameLayout::testCreateNewFrameForPage()
 
     frameLayout.createNewFramesForPage(pageNumber);
     QCOMPARE(tfs.frameCount(), expectedFrameCount);
-    foreach(KoShape *shape, tfs.shapes()) {
-        QVERIFY (page.rect().contains(shape->position()));
+    foreach (KoShape *shape, tfs.shapes()) {
+        QVERIFY(page.rect().contains(shape->position()));
     }
 }
 
@@ -466,13 +454,13 @@ void TestFrameLayout::testCopyFramesForPage()
 
     // layouter
     KWFrameLayout bfl(helper.pageManager, m_frames);
-    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet *)), this, SLOT(addFS(KWFrameSet *)));
     // new page
     KWPage page2 = helper.pageManager->appendPage();
     bfl.createNewFramesForPage(page2.pageNumber());
 
     QCOMPARE(copyShapeFrameSet->frameCount(), 2);
-    KWCopyShape *copy = dynamic_cast<KWCopyShape*>(copyShapeFrameSet->shapes()[1]);
+    KWCopyShape *copy = dynamic_cast<KWCopyShape *>(copyShapeFrameSet->shapes()[1]);
     QVERIFY(copy);
     QCOMPARE(copy->position().x(), 9.);
     QCOMPARE(copy->position().y(), 13. + page2.offsetInDocument());
@@ -534,7 +522,7 @@ void TestFrameLayout::testLargeHeaders()
     helper.pageStyle.setHeaderPolicy(Words::HFTypeUniform);
 
     KWFrameLayout bfl(helper.pageManager, m_frames);
-    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet *)), this, SLOT(addFS(KWFrameSet *)));
 
     KWTextFrameSet *fs = bfl.getOrCreate(Words::OddPagesHeaderTextFrameSet, page);
     QVERIFY(fs);
@@ -560,7 +548,7 @@ void TestFrameLayout::testLayoutPageSpread()
     Helper helper;
     m_frames.clear();
 
-    //set up as a page spread;
+    // set up as a page spread;
     KoPageLayout pageLayout = helper.pageStyle.pageLayout();
     pageLayout.leftMargin = -1;
     pageLayout.rightMargin = -1;
@@ -575,7 +563,7 @@ void TestFrameLayout::testLayoutPageSpread()
     QCOMPARE(spread.pageNumber(), 2);
 
     KWFrameLayout bfl(helper.pageManager, m_frames);
-    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet *)), this, SLOT(addFS(KWFrameSet *)));
 
     bfl.createNewFramesForPage(spread.pageNumber());
     KWTextFrameSet *fs = bfl.getOrCreate(Words::MainTextFrameSet, spread);
@@ -597,7 +585,7 @@ void TestFrameLayout::testPageStyle()
     Helper helper;
     m_frames.clear();
     KWFrameLayout bfl(helper.pageManager, m_frames);
-    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet *)), this, SLOT(addFS(KWFrameSet *)));
 
     KWPage page1 = helper.pageManager->page(1);
     page1.pageStyle().setHeaderPolicy(Words::HFTypeUniform);
@@ -688,7 +676,7 @@ void TestFrameLayout::testPageBackground()
     Helper helper;
     m_frames.clear();
     KWFrameLayout bfl(helper.pageManager, m_frames);
-    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet *)), this, SLOT(addFS(KWFrameSet *)));
 
     KWPage page1 = helper.pageManager->page(1);
     page1.pageStyle().setBackground(new KoColorBackground(Qt::red));
@@ -716,15 +704,14 @@ void TestFrameLayout::testPageBackground()
         QCOMPARE(shape->background(), page1.pageStyle().background());
     }
 
-    QCOMPARE(bfl.frameOn(bfl.m_backgroundFrameSet,1)->shape()->position(), QPointF(0, 0)); //page 1 background position and size
-    QCOMPARE(bfl.frameOn(bfl.m_backgroundFrameSet,1)->shape()->size(), QSizeF(200, 200));
-    QCOMPARE(bfl.frameOn(bfl.m_backgroundFrameSet,2)->shape()->position(), QPointF(0, 200)); //page 2 background position and size
-    QCOMPARE(bfl.frameOn(bfl.m_backgroundFrameSet,2)->shape()->size(), QSizeF(200, 200));
+    QCOMPARE(bfl.frameOn(bfl.m_backgroundFrameSet, 1)->shape()->position(), QPointF(0, 0)); // page 1 background position and size
+    QCOMPARE(bfl.frameOn(bfl.m_backgroundFrameSet, 1)->shape()->size(), QSizeF(200, 200));
+    QCOMPARE(bfl.frameOn(bfl.m_backgroundFrameSet, 2)->shape()->position(), QPointF(0, 200)); // page 2 background position and size
+    QCOMPARE(bfl.frameOn(bfl.m_backgroundFrameSet, 2)->shape()->size(), QSizeF(200, 200));
 }
 
-
 // helper method (slot)
-void TestFrameLayout::addFS(KWFrameSet*fs)
+void TestFrameLayout::addFS(KWFrameSet *fs)
 {
     m_frames.append(fs);
 }

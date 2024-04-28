@@ -5,8 +5,8 @@
  */
 #include "TestPageManager.h"
 
-#include <KWPageManager.h>
 #include <KWPage.h>
+#include <KWPageManager.h>
 #include <KoColorBackground.h>
 
 #include <kdebug.h>
@@ -20,10 +20,10 @@ void TestPageManager::getAddPages()
     KWPageManager *pageManager = new KWPageManager();
 
     QCOMPARE(pageManager->pageCount(), 0);
-    QVERIFY(! pageManager->page(0).isValid());
-    QVERIFY(! pageManager->page(1).isValid());
-    QVERIFY(! pageManager->page(-10).isValid());
-    QVERIFY(! pageManager->page(10).isValid());
+    QVERIFY(!pageManager->page(0).isValid());
+    QVERIFY(!pageManager->page(1).isValid());
+    QVERIFY(!pageManager->page(-10).isValid());
+    QVERIFY(!pageManager->page(10).isValid());
 
     KWPage page1 = pageManager->appendPage();
     QCOMPARE(page1.pageNumber(), 1);
@@ -62,7 +62,7 @@ void TestPageManager::getAddPages()
     QCOMPARE(page.width(), 134.2);
     QCOMPARE(page.height(), 521.4);
 
-#if 0       // TODO, missing feature :(
+#if 0 // TODO, missing feature :(
     // test setStartPage
     pageManager->setStartPage(4);
     page = pageManager->page(0);
@@ -276,7 +276,7 @@ void TestPageManager::pageInfo()
     layout.rightMargin = 12;
     pageStylePage2.setPageLayout(layout);
 
-    layout = page1l.pageStyle().pageLayout(); //layout is valid for page1l and page1r
+    layout = page1l.pageStyle().pageLayout(); // layout is valid for page1l and page1r
     layout.rightMargin = 14.0;
     page1l.pageStyle().setPageLayout(layout);
     QCOMPARE(page1l.rightMargin(), 14.0);
@@ -535,7 +535,6 @@ void TestPageManager::testPageSpreadLayout()
     QCOMPARE(manager.pageNumber(QPointF(10, 200)), 4);
     QCOMPARE(manager.pageNumber(QPointF(10, 151)), 4);
 
-
     KWPage four = page.next();
     QCOMPARE(four.pageNumber(), 4);
     KWPage invalid = four.next();
@@ -619,7 +618,7 @@ void TestPageManager::testPadding()
 void TestPageManager::testPageOffset()
 {
     KWPageManager *pageManager = new KWPageManager();
-    for (int i=0; i < 500; ++i) {
+    for (int i = 0; i < 500; ++i) {
         KWPage page = pageManager->appendPage();
     }
 
@@ -637,7 +636,7 @@ void TestPageManager::testPageOffset()
     KoPageLayout layout = page.pageStyle().pageLayout();
     layout.height = 400;
     page.pageStyle().setPageLayout(layout);
-    QCOMPARE(page.offsetInDocument(), (qreal) 400 * 49);
+    QCOMPARE(page.offsetInDocument(), (qreal)400 * 49);
 }
 
 void TestPageManager::testBackgroundRefCount()
@@ -743,7 +742,6 @@ void TestPageManager::testRemovePageSpread()
     QCOMPARE(pageSpread1.pageSide(), KWPage::PageSpread);
     QCOMPARE(pageSpread2.pageSide(), KWPage::PageSpread);
     QCOMPARE(manager.pageCount(), 5);
-
 
     manager.removePage(pageSpread1); // remove pages 2&3
     QVERIFY(!pageSpread1.isValid());

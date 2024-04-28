@@ -8,44 +8,45 @@
 #include "SheetsOdf.h"
 #include "SheetsOdfPrivate.h"
 
-#include "engine/Validity.h"
+#include "engine/CS_Time.h"
 #include "engine/CellBase.h"
 #include "engine/MapBase.h"
 #include "engine/SheetBase.h"
-#include "engine/CS_Time.h"
+#include "engine/Validity.h"
 
 #include <KoXmlNS.h>
 
+namespace Calligra
+{
+namespace Sheets
+{
 
-namespace Calligra {
-namespace Sheets {
-
-namespace Odf {
-    void loadValidationCondition(Validity *validity, QString &valExpression, CalculationSettings *cs);
-    void loadValidationValue(Validity *validity, const QStringList &listVal, CalculationSettings *cs);
+namespace Odf
+{
+void loadValidationCondition(Validity *validity, QString &valExpression, CalculationSettings *cs);
+void loadValidationValue(Validity *validity, const QStringList &listVal, CalculationSettings *cs);
 }
 
-void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString& validationName,
-                                 OdfLoadingContext& tableContext)
+void Odf::loadValidation(Validity *validity, CellBase *const cell, const QString &validationName, OdfLoadingContext &tableContext)
 {
     KoXmlElement element = tableContext.validities.value(validationName);
     CalculationSettings *cs = cell->sheet()->map()->calculationSettings();
     if (element.hasAttributeNS(KoXmlNS::table, "condition")) {
         QString valExpression = element.attributeNS(KoXmlNS::table, "condition", QString());
         debugSheetsODF << " element.attribute( table:condition )" << valExpression;
-        //Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
-        //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
-        //ExtendedTrueCondition ::= ExtendedGetFunction | cell-content-text-length() Operator Value
-        //TrueCondition ::= GetFunction | cell-content() Operator Value
-        //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
-        //ExtendedGetFunction ::= cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
-        //Operator ::= '<' | '>' | '<=' | '>=' | '=' | '!='
-        //Value ::= NumberValue | String | Formula
-        //A Formula is a formula without an equals (=) sign at the beginning. See section 8.1.3 for more information.
-        //A String comprises one or more characters surrounded by quotation marks.
-        //A NumberValue is a whole or decimal number. It must not contain comma separators for numbers of 1000 or greater.
+        // Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
+        // TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
+        // ExtendedTrueCondition ::= ExtendedGetFunction | cell-content-text-length() Operator Value
+        // TrueCondition ::= GetFunction | cell-content() Operator Value
+        // GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
+        // ExtendedGetFunction ::= cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
+        // Operator ::= '<' | '>' | '<=' | '>=' | '=' | '!='
+        // Value ::= NumberValue | String | Formula
+        // A Formula is a formula without an equals (=) sign at the beginning. See section 8.1.3 for more information.
+        // A String comprises one or more characters surrounded by quotation marks.
+        // A NumberValue is a whole or decimal number. It must not contain comma separators for numbers of 1000 or greater.
 
-        //ExtendedTrueCondition
+        // ExtendedTrueCondition
         if (valExpression.contains("cell-content-text-length()")) {
             //"cell-content-text-length()>45"
             valExpression = valExpression.remove("oooc:cell-content-text-length()");
@@ -56,7 +57,7 @@ void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString
         } else if (valExpression.contains("cell-content-is-text()")) {
             validity->setRestriction(Validity::Text);
         }
-        //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value) | cell-content-is-in-list( StringList )
+        // cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value) | cell-content-is-in-list( StringList )
         else if (valExpression.contains("cell-content-text-length-is-between")) {
             validity->setRestriction(Validity::TextLength);
             validity->setCondition(Validity::Between);
@@ -79,9 +80,9 @@ void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString
             valExpression.remove("oooc:cell-content-is-in-list(");
             debugSheetsODF << " valExpression :" << valExpression;
             valExpression.remove(')');
-            validity->setValidityList(valExpression.split(';',  Qt::SkipEmptyParts));
+            validity->setValidityList(valExpression.split(';', Qt::SkipEmptyParts));
         }
-        //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
+        // TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
         else {
             if (valExpression.contains("cell-content-is-whole-number()")) {
                 validity->setRestriction(Validity::Number);
@@ -102,8 +103,8 @@ void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString
                 valExpression.remove("cell-content()");
                 loadValidationCondition(validity, valExpression, cs);
             }
-            //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
-            //for the moment we support just int/double value, not text/date/time :(
+            // GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
+            // for the moment we support just int/double value, not text/date/time :(
             if (valExpression.contains("cell-content-is-between(")) {
                 valExpression.remove("cell-content-is-between(");
                 valExpression.remove(')');
@@ -125,7 +126,7 @@ void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString
         validity->setAllowEmptyCell(((element.attributeNS(KoXmlNS::table, "allow-empty-cell", QString()) == "true") ? true : false));
     }
     if (element.hasAttributeNS(KoXmlNS::table, "base-cell-address")) {
-        //todo what is it ?
+        // todo what is it ?
     }
 
     KoXmlElement help = KoXml::namedItemNS(element, KoXmlNS::table, "help-message");
@@ -211,7 +212,8 @@ void Odf::loadValidationValue(Validity *validity, const QStringList &listVal, Ca
 
 void Odf::loadValidationCondition(Validity *validity, QString &valExpression, CalculationSettings *cs)
 {
-    if (validity->isEmpty()) return;
+    if (validity->isEmpty())
+        return;
     QString value;
     if (valExpression.indexOf("<=") == 0) {
         value = valExpression.remove(0, 2);
@@ -220,7 +222,7 @@ void Odf::loadValidationCondition(Validity *validity, QString &valExpression, Ca
         value = valExpression.remove(0, 2);
         validity->setCondition(Validity::SuperiorEqual);
     } else if (valExpression.indexOf("!=") == 0) {
-        //add Differentto attribute
+        // add Differentto attribute
         value = valExpression.remove(0, 2);
         validity->setCondition(Validity::DifferentTo);
     } else if (valExpression.indexOf('<') == 0) {
@@ -254,7 +256,5 @@ void Odf::loadValidationCondition(Validity *validity, QString &valExpression, Ca
     }
 }
 
-
-
-}  // Sheets
-}  // Calligra
+} // Sheets
+} // Calligra

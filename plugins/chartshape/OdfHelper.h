@@ -8,18 +8,16 @@
 #ifndef KOCHART_ODFHELPER_H
 #define KOCHART_ODFHELPER_H
 
-
 // Qt
 #include <QSharedPointer>
 
 // Calligra
-#include <KoShapeContainer.h>
 #include <KoFrameShape.h>
+#include <KoShapeContainer.h>
 
 // KoChart
-#include "kochart_global.h"
 #include "KoChartInterface.h"
-
+#include "kochart_global.h"
 
 class QAbstractItemModel;
 
@@ -41,11 +39,13 @@ class KoXmlWriter;
 class KoGenStyles;
 class KoOdfLoadingContext;
 
-namespace KoChart {
-namespace OdfHelper {
+namespace KoChart
+{
+namespace OdfHelper
+{
 
-void saveOdfFont(KoGenStyle &style, const QFont& font, const QColor& color);
-QString saveOdfFont(KoGenStyles& mainStyles, const QFont& font, const QColor& color);
+void saveOdfFont(KoGenStyle &style, const QFont &font, const QColor &color);
+QString saveOdfFont(KoGenStyles &mainStyles, const QFont &font, const QColor &color);
 
 void saveOdfTitleStyle(KoShape *title, KoGenStyle &style, KoShapeSavingContext &context);
 

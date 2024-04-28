@@ -8,9 +8,9 @@
 #ifndef COMPAREVIEW_H
 #define COMPAREVIEW_H
 
-#include <QWidget>
-#include <QImage>
 #include <QGridLayout>
+#include <QImage>
+#include <QWidget>
 
 class QLabel;
 class QTabBar;
@@ -30,7 +30,7 @@ public:
     static QImage difference(const QImage &image1, const QImage &image2);
 
 protected:
-    void keyPressEvent(QKeyEvent * event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
     void resizeEvent(QResizeEvent *event) override;
 
@@ -55,4 +55,3 @@ private:
 };
 
 #endif /* COMPAREVIEW_H */
-

@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef KCHART_CHARTTOOL_H
 #define KCHART_CHARTTOOL_H
 
@@ -17,10 +16,8 @@
 
 class QAction;
 
-
 namespace KoChart
 {
-
 
 /**
  * This is the tool for the chart shape, which is a flake-based plugin.
@@ -43,11 +40,11 @@ public:
     /// reimplemented from superclass
     void mouseReleaseEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) override;
     /// reimplemented from superclass
     void deactivate() override;
     /// reimplemented from superclass
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
 
 private Q_SLOTS:
     void setChartType(KoChart::ChartType type, KoChart::ChartSubtype subtype);
@@ -79,8 +76,8 @@ private Q_SLOTS:
     void setDataSetShowPercent(KoChart::DataSet *dataSet, bool b, int section = -1);
     void setDataSetShowSymbol(KoChart::DataSet *dataSet, bool b, int section = -1);
 
-    void setDataSetPen(KoChart::DataSet *dataSet, const QColor& color, int section = -1);
-    void setDataSetBrush(KoChart::DataSet *dataSet, const QColor& color, int section = -1);
+    void setDataSetPen(KoChart::DataSet *dataSet, const QColor &color, int section = -1);
+    void setDataSetBrush(KoChart::DataSet *dataSet, const QColor &color, int section = -1);
     void setDataSetMarker(KoChart::DataSet *dataSet, KoChart::OdfSymbolType type, KoChart::OdfMarkerStyle style);
     void setDataSetAxis(KoChart::DataSet *dataSet, KoChart::Axis *axis);
 
@@ -90,7 +87,7 @@ private Q_SLOTS:
     void setPieExplodeFactor(KoChart::DataSet *dataSet, int section, int percent);
 
     // Axes
-    void addAxis(KoChart::AxisDimension, const QString& title = QString());
+    void addAxis(KoChart::AxisDimension, const QString &title = QString());
     void removeAxis(KoChart::Axis *axis);
     void setShowAxis(KoChart::Axis *axis, bool show);
     void setAxisPosition(KoChart::Axis *axis, const QString &pos);
@@ -104,12 +101,12 @@ private Q_SLOTS:
     void setAxisSubStepWidth(KoChart::Axis *axis, qreal width);
     void setAxisUseAutomaticStepWidth(KoChart::Axis *axis, bool automatic);
     void setAxisUseAutomaticSubStepWidth(KoChart::Axis *axis, bool automatic);
-    void setAxisLabelsFont(KoChart::Axis *axis, const QFont& font);
+    void setAxisLabelsFont(KoChart::Axis *axis, const QFont &font);
 
     // Legend
     void setShowLegend(bool show);
-    void setLegendTitle(const QString& title);
-    void setLegendFont(const QFont& font);
+    void setLegendTitle(const QString &title);
+    void setLegendFont(const QFont &font);
     void setLegendFontSize(int size);
     void setLegendOrientation(Qt::Orientation);
     void setLegendPosition(KoChart::Position);
@@ -119,10 +116,9 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace KoChart
-
 
 #endif // KCHART_CHARTTOOL_H

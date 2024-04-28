@@ -16,16 +16,7 @@ public:
     ~BoxWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType {
-        FromTopLeft,
-        FromTopRight,
-        FromBottomRight,
-        FromBottomLeft,
-        CenterTop,
-        CenterRight,
-        CenterBottom,
-        CenterLeft
-    };
+    enum SubType { FromTopLeft, FromTopRight, FromBottomRight, FromBottomLeft, CenterTop, CenterRight, CenterBottom, CenterLeft };
 };
 
 #endif // BOXWIPEEFFECTFACTORY_H

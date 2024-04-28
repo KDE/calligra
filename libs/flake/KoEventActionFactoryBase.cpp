@@ -9,16 +9,18 @@
 class Q_DECL_HIDDEN KoEventActionFactoryBase::Private
 {
 public:
-    Private(const QString & id, const QString & action)
-            : id(id)
-            , action(action) {}
+    Private(const QString &id, const QString &action)
+        : id(id)
+        , action(action)
+    {
+    }
 
     const QString id;
     const QString action;
 };
 
-KoEventActionFactoryBase::KoEventActionFactoryBase(const QString &id, const QString & action)
-        : d(new Private(id, action))
+KoEventActionFactoryBase::KoEventActionFactoryBase(const QString &id, const QString &action)
+    : d(new Private(id, action))
 {
 }
 

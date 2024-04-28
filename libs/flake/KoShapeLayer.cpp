@@ -5,23 +5,23 @@
 */
 
 #include "KoShapeLayer.h"
-#include "SimpleShapeContainerModel.h"
-#include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
+#include "KoShapeSavingContext.h"
+#include "SimpleShapeContainerModel.h"
+#include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
-#include <KoXmlNS.h>
 
 #include <algorithm>
 
 KoShapeLayer::KoShapeLayer()
-        : KoShapeContainer(new SimpleShapeContainerModel())
+    : KoShapeContainer(new SimpleShapeContainerModel())
 {
     setSelectable(false);
 }
 
 KoShapeLayer::KoShapeLayer(KoShapeContainerModel *model)
-        : KoShapeContainer(model)
+    : KoShapeContainer(model)
 {
     setSelectable(false);
 }
@@ -36,7 +36,7 @@ QRectF KoShapeLayer::boundingRect() const
 {
     QRectF bb;
 
-    foreach(KoShape* shape, shapes()) {
+    foreach (KoShape *shape, shapes()) {
         if (bb.isEmpty())
             bb = shape->boundingRect();
         else
@@ -46,17 +46,17 @@ QRectF KoShapeLayer::boundingRect() const
     return bb;
 }
 
-void KoShapeLayer::saveOdf(KoShapeSavingContext & context) const
+void KoShapeLayer::saveOdf(KoShapeSavingContext &context) const
 {
-    QList<KoShape*> shapes = this->shapes();
+    QList<KoShape *> shapes = this->shapes();
     std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
-    foreach(KoShape* shape, shapes) {
+    foreach (KoShape *shape, shapes) {
         shape->saveOdf(context);
     }
 }
 
-bool KoShapeLayer::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool KoShapeLayer::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     // set layer name
     setName(element.attributeNS(KoXmlNS::draw, "name"));

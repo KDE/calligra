@@ -9,23 +9,23 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 
 #include "KoFilterManager_p.h"
 
-#include <QVBoxLayout>
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QMimeDatabase>
+#include <QVBoxLayout>
 
 #include <KLocalizedString>
 #include <ksqueezedtextlabel.h>
 
 #include <unistd.h>
 
-KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, const QString &/*nativeFormat*/, const QUrl &url)
-        : KoDialog(parent),
-        m_mimeTypes(mimeTypes)
+KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, const QString & /*nativeFormat*/, const QUrl &url)
+    : KoDialog(parent)
+    , m_mimeTypes(mimeTypes)
 {
     setObjectName("kofilterchooser");
     setInitialSize(QSize(300, 350));
-    setButtons(KoDialog::Ok|KoDialog::Cancel);
+    setButtons(KoDialog::Ok | KoDialog::Cancel);
     setDefaultButton(KoDialog::Ok);
     setCaption(i18n("Choose Filter"));
     setModal(true);
@@ -44,13 +44,10 @@ KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, 
 
     Q_ASSERT(!m_mimeTypes.isEmpty());
     QMimeDatabase db;
-    for (QStringList::ConstIterator it = m_mimeTypes.constBegin();
-            it != m_mimeTypes.constEnd();
-            ++it) {
-
+    for (QStringList::ConstIterator it = m_mimeTypes.constBegin(); it != m_mimeTypes.constEnd(); ++it) {
         QMimeType mime = db.mimeTypeForName(*it);
         const QString name = mime.isValid() ? mime.comment() : *it;
-        if (! name.isEmpty()) {
+        if (!name.isEmpty()) {
             QListWidgetItem *item = new QListWidgetItem(name, m_filterList);
             item->setData(32, *it);
         }
@@ -64,7 +61,7 @@ KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, 
     m_filterList->setFocus();
 
     connect(m_filterList, &QListWidget::itemDoubleClicked, this, &QDialog::accept);
-    resize(QSize(520, 400));//.expandedTo(minimumSizeHint()));
+    resize(QSize(520, 400)); //.expandedTo(minimumSizeHint()));
 }
 
 KoFilterChooser::~KoFilterChooser()

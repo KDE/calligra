@@ -19,9 +19,9 @@
 #ifndef PARSERFACTORY_H
 #define PARSERFACTORY_H
 
-#include <string>
 #include "sharedptr.h"
 #include "wv2_export.h"
+#include <string>
 
 namespace wvWare
 {
@@ -39,7 +39,7 @@ public:
      * This method will return 0 if it wasn't successful (e.g unknown
      * version, corrupted file,...).
      */
-    static SharedPtr<Parser> createParser( const std::string& fileName );
+    static SharedPtr<Parser> createParser(const std::string &fileName);
 };
 
 } // namespace wvWare

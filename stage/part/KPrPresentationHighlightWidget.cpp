@@ -10,20 +10,20 @@
 
 #include <KoPACanvasBase.h>
 
-#include <QMouseEvent>
 #include <QColor>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
 
-KPrPresentationHighlightWidget::KPrPresentationHighlightWidget( KoPACanvasBase * canvas )
-: KPrPresentationToolEventForwarder(canvas)
-, m_size( canvas->canvasWidget()->size() )
+KPrPresentationHighlightWidget::KPrPresentationHighlightWidget(KoPACanvasBase *canvas)
+    : KPrPresentationToolEventForwarder(canvas)
+    , m_size(canvas->canvasWidget()->size())
 {
     // The focus and the track for have the mouse position every time
-    setFocusPolicy( Qt::StrongFocus );
-    setMouseTracking( true );
+    setFocusPolicy(Qt::StrongFocus);
+    setMouseTracking(true);
     // Size of the canvas is saved because it's used in the paintEvent
-    resize( m_size );
+    resize(m_size);
 
     m_center = QCursor::pos();
     update();
@@ -34,28 +34,28 @@ KPrPresentationHighlightWidget::~KPrPresentationHighlightWidget()
 }
 
 /** paintEvent call with the update in the mouseMoveEvent */
-void KPrPresentationHighlightWidget::paintEvent( QPaintEvent * event )
+void KPrPresentationHighlightWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
-    QPainter painter( this );
+    QPainter painter(this);
     QPen myPen(Qt::black, 0);
-    QColor c( Qt::black );
+    QColor c(Qt::black);
     // TODO make alpha configurable
-    c.setAlphaF( 0.5 );
+    c.setAlphaF(0.5);
     // The circle we want
     QPainterPath ellipse;
     // TODO make radius configurable
-    ellipse.addEllipse( m_center.x() - 75, m_center.y() - 75, 150, 150 );
+    ellipse.addEllipse(m_center.x() - 75, m_center.y() - 75, 150, 150);
     // All the 'background'
     QPainterPath myPath;
-    myPath.addRect( 0, 0, m_size.rwidth(), m_size.rheight() );
+    myPath.addRect(0, 0, m_size.rwidth(), m_size.rheight());
     // We draw the difference
-    painter.setPen( myPen );
-    painter.fillPath( myPath.subtracted( ellipse ), c );
+    painter.setPen(myPen);
+    painter.fillPath(myPath.subtracted(ellipse), c);
 }
 
 /** Take the mouse position every time the mouse is moving */
-void KPrPresentationHighlightWidget::mouseMoveEvent( QMouseEvent* e )
+void KPrPresentationHighlightWidget::mouseMoveEvent(QMouseEvent *e)
 {
     // Save the position of the mouse
     m_center = e->pos();

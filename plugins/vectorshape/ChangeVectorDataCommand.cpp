@@ -6,19 +6,20 @@
 */
 #include "ChangeVectorDataCommand.h"
 
-#include <math.h>
 #include <KLocalizedString>
 #include <KoImageData.h>
+#include <math.h>
 
 #include "VectorShape.h"
 
 ChangeVectorDataCommand::ChangeVectorDataCommand(VectorShape *shape,
-                                                 const QByteArray &newImageData, VectorShape::VectorType newVectorType,
+                                                 const QByteArray &newImageData,
+                                                 VectorShape::VectorType newVectorType,
                                                  KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shape(shape)
 {
-    Q_ASSERT( shape );
+    Q_ASSERT(shape);
     m_oldImageData = m_shape->compressedContents();
     m_oldVectorType = m_shape->vectorType();
     m_newImageData = newImageData;

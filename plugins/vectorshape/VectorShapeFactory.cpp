@@ -9,19 +9,18 @@
 #include "VectorShapeFactory.h"
 
 // VectorShape
+#include "VectorDebug.h"
 #include "VectorShape.h"
 #include "VectorShapeConfigWidget.h"
-#include "VectorDebug.h"
 
 // Calligra
-#include <KoXmlNS.h>
-#include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
 #include <KoIcon.h>
+#include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
+#include <KoXmlNS.h>
 
 // KF5
 #include <KLocalizedString>
-
 
 VectorShapeFactory::VectorShapeFactory()
     : KoShapeFactoryBase(VectorShape_SHAPEID, i18n("Vector image"))
@@ -41,7 +40,7 @@ KoShape *VectorShapeFactory::createDefaultShape(KoDocumentResourceManager *docum
     return shape;
 }
 
-bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool VectorShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     if (e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw) {
         QString href = e.attribute("href");
@@ -53,16 +52,12 @@ bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext 
             // LO 3.5 does not write a mimetype for embedded wmf files, so guess also from content
             const QString mimetype = context.odfLoadingContext().mimeTypeForPath(href, true);
 
-            return
-                mimetype == QLatin1String("image/x-svm") ||
-                mimetype == QLatin1String("image/x-emf") ||
-                mimetype == QLatin1String("image/x-wmf") ||
+            return mimetype == QLatin1String("image/x-svm") || mimetype == QLatin1String("image/x-emf") || mimetype == QLatin1String("image/x-wmf") ||
                 // Note: the Vector Shape supports SVG, but _NOT_ in this method, otherwise it will stomp all over loading the artistic text shape's svg
-                //mimetype == QLatin1String("image/svg+xml") ||
+                // mimetype == QLatin1String("image/svg+xml") ||
                 // next three for backward compatibility with Calligra
-                mimetype == QLatin1String("application/x-svm") ||
-                mimetype == QLatin1String("application/x-emf") ||
-                mimetype == QLatin1String("application/x-wmf") ||
+                mimetype == QLatin1String("application/x-svm") || mimetype == QLatin1String("application/x-emf")
+                || mimetype == QLatin1String("application/x-wmf") ||
                 // seems like MSO does not always write a mimetype
                 // see jeffcoweb.jeffco.k12.co.us%2Fhigh%2Fchatfield%2Fdepartments%2Fbusiness%2Fbanking_finance%2Funit_Plan_Budget.odp
                 mimetype.isEmpty() ||
@@ -76,9 +71,9 @@ bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext 
     return false;
 }
 
-QList<KoShapeConfigWidgetBase*> VectorShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> VectorShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> result;
+    QList<KoShapeConfigWidgetBase *> result;
     result.append(new VectorShapeConfigWidget());
     return result;
 }

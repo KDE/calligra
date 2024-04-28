@@ -26,15 +26,12 @@ class KComboBox;
 class QCheckBox;
 class KColorButton;
 
-
 namespace Calligra
 {
 namespace Sheets
 {
 
 class Style;
-
-
 
 class Border : public QFrame
 {
@@ -43,58 +40,64 @@ public:
     Border(QWidget *parent, const char *_name, bool _oneCol, bool _oneRow);
 Q_SIGNALS:
     void redraw();
-    void choosearea(QMouseEvent * _ev);
+    void choosearea(QMouseEvent *_ev);
+
 protected:
     void paintEvent(QPaintEvent *_ev) override;
-    void mousePressEvent(QMouseEvent* _ev) override;
+    void mousePressEvent(QMouseEvent *_ev) override;
     bool oneCol;
     bool oneRow;
 };
-
 
 class BorderButton : public QPushButton
 {
     Q_OBJECT
 public:
     BorderButton(QWidget *parent, const char *_name);
-    void setPenStyle(Qt::PenStyle _pat) {
+    void setPenStyle(Qt::PenStyle _pat)
+    {
         penStyle = _pat;
     }
-    Qt::PenStyle getPenStyle() {
+    Qt::PenStyle getPenStyle()
+    {
         return penStyle;
     }
-    void setColor(const QColor &_col) {
+    void setColor(const QColor &_col)
+    {
         penColor = _col;
     }
-    const QColor& getColor() {
+    const QColor &getColor()
+    {
         return penColor;
     }
-    void setPenWidth(int _w) {
+    void setPenWidth(int _w)
+    {
         penWidth = _w;
     }
-    int getPenWidth() {
+    int getPenWidth()
+    {
         return penWidth;
     }
-    bool isChanged() {
+    bool isChanged()
+    {
         return changed;
     }
-    void setChanged(bool _changed) {
+    void setChanged(bool _changed)
+    {
         changed = _changed;
     }
     void setUndefined();
     void unselect();
 Q_SIGNALS:
     void clicked(BorderButton *);
+
 protected:
     void mousePressEvent(QMouseEvent *_ev) override;
     Qt::PenStyle penStyle;
     QColor penColor;
     int penWidth;
     bool changed;
-
 };
-
-
 
 /**
  * \ingroup UI
@@ -106,32 +109,44 @@ class PatternSelect : public QFrame
 public:
     PatternSelect(QWidget *parent, const char *_name);
 
-    void setPenStyle(Qt::PenStyle _pat) {
-        penStyle = _pat; repaint();
+    void setPenStyle(Qt::PenStyle _pat)
+    {
+        penStyle = _pat;
+        repaint();
     }
-    Qt::PenStyle getPenStyle() {
+    Qt::PenStyle getPenStyle()
+    {
         return penStyle;
     }
-    void setColor(const QColor &_col) {
-        penColor = _col; repaint();
+    void setColor(const QColor &_col)
+    {
+        penColor = _col;
+        repaint();
     }
-    const QColor& getColor() {
+    const QColor &getColor()
+    {
         return penColor;
     }
-    void setPenWidth(int _w) {
-        penWidth = _w; repaint();
+    void setPenWidth(int _w)
+    {
+        penWidth = _w;
+        repaint();
     }
-    int getPenWidth() {
+    int getPenWidth()
+    {
         return penWidth;
     }
 
     void setPattern(const QColor &_color, int _width, Qt::PenStyle _style);
     void setUndefined();
-    void setDefined() {
-        undefined = false; repaint();
+    void setDefined()
+    {
+        undefined = false;
+        repaint();
     }
 
-    bool isDefined() {
+    bool isDefined()
+    {
         return !undefined;
     }
 
@@ -154,8 +169,6 @@ protected:
     bool undefined;
 };
 
-
-
 enum BorderType {
     BorderType_Top = 0,
     BorderType_Bottom,
@@ -168,13 +181,7 @@ enum BorderType {
     BorderType_END
 };
 
-enum BorderShortcutType {
-    BorderShortcutType_Remove = 0,
-    BorderShortcutType_All,
-    BorderShortcutType_Outline,
-    BorderShortcutType_END
-};
-
+enum BorderShortcutType { BorderShortcutType_Remove = 0, BorderShortcutType_All, BorderShortcutType_Outline, BorderShortcutType_END };
 
 /**
  * \ingroup UI
@@ -186,7 +193,7 @@ class LayoutPageBorder : public QWidget
 public:
     LayoutPageBorder(QWidget *parent);
 
-    void apply(Style * style, bool partial);
+    void apply(Style *style, bool partial);
     void loadFrom(const Style &style, bool partial);
     void invertState(BorderButton *_button);
     QPixmap paintFormatPixmap(Qt::PenStyle _style);
@@ -204,7 +211,6 @@ public Q_SLOTS:
     void cutomize_chosen_slot();
 
 protected:
-
     struct CellBorderFormat {
         int width;
         bool bStyle;
@@ -216,31 +222,30 @@ protected:
     // The format of the selected area
     CellBorderFormat borders[BorderType_END];
 
-    BorderButton* borderButtons[BorderType_END];
-    BorderButton* shortcutButtons[BorderShortcutType_END];
+    BorderButton *borderButtons[BorderType_END];
+    BorderButton *shortcutButtons[BorderShortcutType_END];
 #define NUM_BORDER_PATTERNS 10
 
     /* the patterns to choose from */
-    PatternSelect* pattern[NUM_BORDER_PATTERNS];
+    PatternSelect *pattern[NUM_BORDER_PATTERNS];
 
     /* the pattern box that is the 'preview' of what is selected above. */
-    PatternSelect* preview;
-    KComboBox* size;
-    KComboBox* style;
-    KColorButton* color;
-    QCheckBox* customize;
+    PatternSelect *preview;
+    KComboBox *size;
+    KComboBox *style;
+    KColorButton *color;
+    QCheckBox *customize;
     QColor currentColor;
     Border *area;
     bool m_multicell;
-private:
 
+private:
     /*some helper functions to space some tasks apart */
     void InitializeGrids();
     void InitializeBorderButtons();
     void InitializePatterns();
     void SetConnections();
 };
-
 
 } // namespace Sheets
 } // namespace Calligra

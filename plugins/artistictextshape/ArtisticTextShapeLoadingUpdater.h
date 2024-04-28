@@ -15,10 +15,10 @@ class ArtisticTextShapeLoadingUpdater : public KoLoadingShapeUpdater
 public:
     explicit ArtisticTextShapeLoadingUpdater(ArtisticTextShape *artisticTextShape);
     ~ArtisticTextShapeLoadingUpdater() override;
-    void update(KoShape * shape) override;
+    void update(KoShape *shape) override;
 
 private:
-    ArtisticTextShape * m_artisticTextShape;
+    ArtisticTextShape *m_artisticTextShape;
 };
 
 #endif // ARTISTICTEXTSHAPELOADINGUPDATER_H

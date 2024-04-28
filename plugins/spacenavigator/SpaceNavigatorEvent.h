@@ -17,10 +17,10 @@ public:
     explicit SpaceNavigatorEvent(KoInputDeviceHandlerEvent::Type type);
     virtual ~SpaceNavigatorEvent();
 
-    void setPosition( int x, int y, int z );
-    void setRotation( int rx, int ry, int rz );
+    void setPosition(int x, int y, int z);
+    void setRotation(int rx, int ry, int rz);
 
-    virtual KoPointerEvent * pointerEvent() override;
+    virtual KoPointerEvent *pointerEvent() override;
 
 private:
     int m_x, m_y, m_z;

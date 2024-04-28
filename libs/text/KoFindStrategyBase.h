@@ -18,13 +18,17 @@ class FindDirection;
 class KoFindStrategyBase
 {
 public:
-    KoFindStrategyBase() {}
-    virtual ~KoFindStrategyBase() {}
+    KoFindStrategyBase()
+    {
+    }
+    virtual ~KoFindStrategyBase()
+    {
+    }
 
     /**
      * Get the find dialog
      */
-    virtual KFindDialog * dialog() const = 0;
+    virtual KFindDialog *dialog() const = 0;
 
     /**
      * Reset internal status
@@ -44,7 +48,7 @@ public:
      * @param cursor The cursor
      * @param findDirection The find direction helper that can be used for highlighting
      */
-    virtual bool foundMatch(QTextCursor & cursor, FindDirection * findDirection) = 0;
+    virtual bool foundMatch(QTextCursor &cursor, FindDirection *findDirection) = 0;
 };
 
 #endif /* KOFINDSTRATEGYBASE_H */

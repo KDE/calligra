@@ -11,8 +11,8 @@
 #include "KoInputDevice.h"
 #include "flake_export.h"
 
-#include <QObject>
 #include <QList>
+#include <QObject>
 
 class KoCanvasController;
 class KoShapeBasedDocumentBase;
@@ -47,29 +47,28 @@ public:
     ~KoToolAction() override;
 
 public:
-    QString id() const;             ///< The id of the tool
-    QString iconText() const;       ///< The icontext of the tool
-    QString toolTip() const;        ///< The tooltip of the tool
-    QString iconName() const;       ///< The icon name of the tool
-    QKeySequence shortcut() const;     ///< The shortcut to activate the tool
+    QString id() const; ///< The id of the tool
+    QString iconText() const; ///< The icontext of the tool
+    QString toolTip() const; ///< The tooltip of the tool
+    QString iconName() const; ///< The icon name of the tool
+    QKeySequence shortcut() const; ///< The shortcut to activate the tool
 
-    QString section() const;        ///< The section the tool wants to be in.
-    int priority() const;           ///< Lower number (higher priority) means coming first in the section.
-    int buttonGroupId() const;      ///< A unique ID for this tool as passed by changedTool(), >= 0
+    QString section() const; ///< The section the tool wants to be in.
+    int priority() const; ///< Lower number (higher priority) means coming first in the section.
+    int buttonGroupId() const; ///< A unique ID for this tool as passed by changedTool(), >= 0
     QString visibilityCode() const; ///< This tool should become visible when we emit this string in toolCodesSelected()
 
 public Q_SLOTS:
-    void trigger();                 ///< Request the activation of the tool
+    void trigger(); ///< Request the activation of the tool
 
 Q_SIGNALS:
-    void changed();                 ///< Emitted when a property changes (shortcut ATM)
+    void changed(); ///< Emitted when a property changes (shortcut ATM)
 
 private:
     friend class ToolHelper;
     class Private;
     Private *const d;
 };
-
 
 /**
  * This class manages the activation and deactivation of tools for
@@ -132,7 +131,7 @@ class FLAKE_EXPORT KoToolManager : public QObject
 public:
     KoToolManager();
     /// Return the toolmanager singleton
-    static KoToolManager* instance();
+    static KoToolManager *instance();
     ~KoToolManager() override;
 
     /**
@@ -204,13 +203,13 @@ public:
      * @returns the toolId for the shapes.
      * @param shapes a list of shapes, a selection for example, that is used to look for the tool.
      */
-    QString preferredToolForSelection(const QList<KoShape*> &shapes);
+    QString preferredToolForSelection(const QList<KoShape *> &shapes);
 
     /**
      * Returns the list of toolActions for the current tools.
      * @returns lists of toolActions for the current tools.
      */
-    QList<KoToolAction*> toolActionList() const;
+    QList<KoToolAction *> toolActionList() const;
 
     /// Request tool activation for the given canvas controller
     void requestToolActivation(KoCanvasController *controller);
@@ -307,18 +306,18 @@ Q_SIGNALS:
     void addedTool(KoToolAction *toolAction, KoCanvasController *canvas);
 
 private:
-    KoToolManager(const KoToolManager&);
-    KoToolManager operator=(const KoToolManager&);
+    KoToolManager(const KoToolManager &);
+    KoToolManager operator=(const KoToolManager &);
 
     Q_PRIVATE_SLOT(d, void toolActivated(ToolHelper *tool))
     Q_PRIVATE_SLOT(d, void detachCanvas(KoCanvasController *controller))
     Q_PRIVATE_SLOT(d, void attachCanvas(KoCanvasController *controller))
     Q_PRIVATE_SLOT(d, void movedFocus(QWidget *from, QWidget *to))
     Q_PRIVATE_SLOT(d, void updateCursor(const QCursor &cursor))
-    Q_PRIVATE_SLOT(d, void selectionChanged(const QList<KoShape*> &shapes))
+    Q_PRIVATE_SLOT(d, void selectionChanged(const QList<KoShape *> &shapes))
     Q_PRIVATE_SLOT(d, void currentLayerChanged(const KoShapeLayer *layer))
 
-    QPair<QString, KoToolBase*> createTools(KoCanvasController *controller, ToolHelper *tool);
+    QPair<QString, KoToolBase *> createTools(KoCanvasController *controller, ToolHelper *tool);
 
     Private *const d;
 };

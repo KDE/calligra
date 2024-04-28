@@ -7,9 +7,9 @@
 #ifndef DELETETABLEROWCOMMAND_H
 #define DELETETABLEROWCOMMAND_H
 
-#include <kundo2command.h>
-#include <QVector>
 #include <KoTableRowStyle.h>
+#include <QVector>
+#include <kundo2command.h>
 
 class KoTextEditor;
 class QTextTable;
@@ -17,7 +17,6 @@ class QTextTable;
 class DeleteTableRowCommand : public KUndo2Command
 {
 public:
-
     DeleteTableRowCommand(KoTextEditor *te, QTextTable *t, KUndo2Command *parent = 0);
 
     void undo() override;

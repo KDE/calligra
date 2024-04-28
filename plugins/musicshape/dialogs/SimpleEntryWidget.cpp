@@ -9,8 +9,8 @@
 #include <QAction>
 
 SimpleEntryWidget::SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent)
-    : QWidget(parent),
-    m_tool(tool)
+    : QWidget(parent)
+    , m_tool(tool)
 {
     widget.setupUi(this);
 
@@ -18,8 +18,8 @@ SimpleEntryWidget::SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent)
     widget.eraserButton->setDefaultAction(tool->action("eraser"));
     widget.dotButton->setDefaultAction(tool->action("dots"));
     widget.tiedNoteButton->setDefaultAction(tool->action("tiednote"));
-//    widget.selectButton->setDefaultAction(tool->action("select"));
-    
+    //    widget.selectButton->setDefaultAction(tool->action("select"));
+
     widget.breveNoteButton->setDefaultAction(tool->action("note_breve"));
     widget.wholeNoteButton->setDefaultAction(tool->action("note_whole"));
     widget.halfNoteButton->setDefaultAction(tool->action("note_half"));
@@ -45,7 +45,7 @@ SimpleEntryWidget::SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent)
     widget.naturalButton->setDefaultAction(tool->action("accidental_natural"));
     widget.sharpButton->setDefaultAction(tool->action("accidental_sharp"));
     widget.doubleSharpButton->setDefaultAction(tool->action("accidental_doublesharp"));
-    
+
     widget.importButton->setDefaultAction(tool->action("import"));
     widget.exportButton->setDefaultAction(tool->action("export"));
 

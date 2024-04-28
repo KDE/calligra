@@ -5,15 +5,19 @@
  */
 
 #include "FilterRemoveCommand.h"
-#include "KoShape.h"
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
+#include "KoShape.h"
 
 #include <KLocalizedString>
 
-FilterRemoveCommand::FilterRemoveCommand(int filterEffectIndex, KoFilterEffectStack * filterStack, KoShape * shape, KUndo2Command *parent)
-        : KUndo2Command(parent), m_filterEffect(0), m_filterStack(filterStack), m_shape(shape)
-        , m_isRemoved(false), m_filterEffectIndex(filterEffectIndex)
+FilterRemoveCommand::FilterRemoveCommand(int filterEffectIndex, KoFilterEffectStack *filterStack, KoShape *shape, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_filterEffect(0)
+    , m_filterStack(filterStack)
+    , m_shape(shape)
+    , m_isRemoved(false)
+    , m_filterEffectIndex(filterEffectIndex)
 {
     Q_ASSERT(filterStack);
     setText(kundo2_i18n("Remove filter effect"));

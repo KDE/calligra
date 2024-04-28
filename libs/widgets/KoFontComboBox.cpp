@@ -12,7 +12,6 @@ KoFontComboBox::KoFontComboBox(QWidget *parent)
 {
 }
 
-
 void KoFontComboBox::setCurrentFont(const QFont &font)
 {
     if (font.family().toLower() == currentFont().family().toLower()) {
@@ -20,10 +19,10 @@ void KoFontComboBox::setCurrentFont(const QFont &font)
     }
     for (int i = 0; i < count(); ++i) {
         if (itemText(i).toLower() == font.family().toLower()) {
-            debugWidgets<<Q_FUNC_INFO<<"found:"<<i<<':'<<itemText(i);
+            debugWidgets << Q_FUNC_INFO << "found:" << i << ':' << itemText(i);
             setCurrentIndex(i);
             return;
         }
     }
-    warnWidgets<<Q_FUNC_INFO<<"Failed to find:"<<font.family();
+    warnWidgets << Q_FUNC_INFO << "Failed to find:" << font.family();
 }

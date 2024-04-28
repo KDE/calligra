@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "KoOdfGraphicProperties.h"
 
@@ -18,25 +17,21 @@
 
 #include "Odf2Debug.h"
 
-
 // ----------------------------------------------------------------
 //                         private class
-
 
 class Q_DECL_HIDDEN KoOdfGraphicProperties::Private
 {
 public:
-    Private() {};
-    ~Private() {};
+    Private(){};
+    ~Private(){};
 
     // NYI: Background Image
     // NYI: Columns
     // NYI: List Style
 };
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfGraphicProperties::KoOdfGraphicProperties()
     : KoOdfStyleProperties()
@@ -49,12 +44,10 @@ KoOdfGraphicProperties::~KoOdfGraphicProperties()
     delete d;
 }
 
-
 void KoOdfGraphicProperties::clear()
 {
     KoOdfStyleProperties::clear();
 }
-
 
 bool KoOdfGraphicProperties::readOdf(KoXmlStreamReader &reader)
 {
@@ -72,11 +65,9 @@ bool KoOdfGraphicProperties::readOdf(KoXmlStreamReader &reader)
 
         if (child == "style:background-image") {
             // FIXME: NYI
-        }
-        else if (child == "style:columns") {
+        } else if (child == "style:columns") {
             // FIXME: NYI
-        }
-        else if (child == "text:list-style") {
+        } else if (child == "text:list-style") {
             // FIXME: NYI
         }
 

@@ -8,8 +8,8 @@
 #ifndef KPRDELETESLIDESCOMMAND_H
 #define KPRDELETESLIDESCOMMAND_H
 
-#include <kundo2command.h>
 #include <QMap>
+#include <kundo2command.h>
 
 class KPrDocument;
 class KoPAPageBase;
@@ -29,7 +29,7 @@ public:
      * @param page the page to delete
      * @param parent the parent command used for macro commands
      */
-    KPrDeleteSlidesCommand(KPrDocument *document, KoPAPageBase *page, KUndo2Command *parent = 0 );
+    KPrDeleteSlidesCommand(KPrDocument *document, KoPAPageBase *page, KUndo2Command *parent = 0);
 
     /**
      * Command to delete multiple pages.
@@ -37,7 +37,7 @@ public:
      * @param pages a list of pages to delete
      * @param parent the parent command used for macro commands
      */
-    KPrDeleteSlidesCommand(KPrDocument *document, const QList<KoPAPageBase*> &pages, KUndo2Command *parent = 0);
+    KPrDeleteSlidesCommand(KPrDocument *document, const QList<KoPAPageBase *> &pages, KUndo2Command *parent = 0);
 
     ~KPrDeleteSlidesCommand() override;
 
@@ -48,8 +48,8 @@ public:
 
 private:
     KPrDocument *m_document; //< the document to delete the pages from
-    QMap<int, KoPAPageBase*> m_pages; //< a map of pages to delete, with document index as key
-    QMap<QString, QList<KoPAPageBase*> > m_customSlideShows;
+    QMap<int, KoPAPageBase *> m_pages; //< a map of pages to delete, with document index as key
+    QMap<QString, QList<KoPAPageBase *>> m_customSlideShows;
     bool m_deletePages; //< shows if pages should be deleted when deleting the command
 };
 

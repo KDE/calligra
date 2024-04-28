@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2017 Dag Andersen <danders@get2net.dk>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -13,10 +13,8 @@
 // KoChart
 #include "kochart_global.h"
 
-
 class KoShape;
 class KoShapeManager;
-
 
 namespace KoChart
 {

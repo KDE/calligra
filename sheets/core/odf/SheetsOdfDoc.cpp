@@ -24,10 +24,10 @@
 #include "engine/CalculationSettings.h"
 
 #include "BindingModel.h"
-#include "SheetAccessModel.h"
 #include "DocBase.h"
 #include "Map.h"
 #include "Sheet.h"
+#include "SheetAccessModel.h"
 
 #include <KoGenStyles.h>
 #include <KoOdfReadStore.h>
@@ -37,8 +37,8 @@
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
 #include <KoUpdater.h>
-#include <KoXmlWriter.h>
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 // This file contains functionality to load/save a DocBase
 
@@ -48,15 +48,17 @@
 #define STORE_PROTOCOL "tar"
 #define INTERNAL_PROTOCOL "intern"
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
-namespace Odf {
-    void loadDocSettings(DocBase *doc, const KoXmlDocument &settingsDoc);
-    void loadDocIgnoreList(DocBase *doc, const KoOasisSettings& settings);
-    void saveSettings(DocBase *doc, KoXmlWriter &settingsWriter);
+namespace Odf
+{
+void loadDocSettings(DocBase *doc, const KoXmlDocument &settingsDoc);
+void loadDocIgnoreList(DocBase *doc, const KoOasisSettings &settings);
+void saveSettings(DocBase *doc, KoXmlWriter &settingsWriter);
 };
-
 
 bool Odf::loadDocument(DocBase *doc, KoOdfReadStore &odfStore)
 {
@@ -81,13 +83,15 @@ bool Odf::loadDocument(DocBase *doc, KoOdfReadStore &odfStore)
         errorSheetsODF << "No office:spreadsheet found!" << Qt::endl;
         KoXmlElement childElem;
         QString localName;
-        forEachElement(childElem, realBody) {
+        forEachElement(childElem, realBody)
+        {
             localName = childElem.localName();
         }
         if (localName.isEmpty())
             doc->setErrorMessage(i18n("Invalid OASIS OpenDocument file. No tag found inside office:body."));
         else
-            doc->setErrorMessage(i18n("This document is not a spreadsheet, but %1. Please try opening it with the appropriate application." , KoDocument::tagNameToDocumentType(localName)));
+            doc->setErrorMessage(i18n("This document is not a spreadsheet, but %1. Please try opening it with the appropriate application.",
+                                      KoDocument::tagNameToDocumentType(localName)));
         doc->map()->deleteLoadingInfo();
         return false;
     }
@@ -110,21 +114,22 @@ bool Odf::loadDocument(DocBase *doc, KoOdfReadStore &odfStore)
     }
     doc->initConfig();
 
-    //update plugins that rely on bindings, as loading order can mess up the data of the plugins
-    SheetAccessModel* sheetModel = doc->map()->sheetAccessModel();
-    QList< SheetBase* > sheets = doc->map()->sheetList();
-    Q_FOREACH( SheetBase* sheet, sheets ){
+    // update plugins that rely on bindings, as loading order can mess up the data of the plugins
+    SheetAccessModel *sheetModel = doc->map()->sheetAccessModel();
+    QList<SheetBase *> sheets = doc->map()->sheetList();
+    Q_FOREACH (SheetBase *sheet, sheets) {
         // This region contains the entire sheet
-        const QRect region (0, 0, KS_colMax - 1, KS_rowMax - 1);
-        QModelIndex index = sheetModel->index( 0, doc->map()->indexOf( sheet ) );
-          QVariant bindingModelValue = sheetModel->data( index , Qt::DisplayRole );
-          BindingModel *curBindingModel = dynamic_cast< BindingModel* >( qvariant_cast< QPointer< QAbstractItemModel > >( bindingModelValue ).data() );
-          if ( curBindingModel ){
-              curBindingModel->emitDataChanged( region );
-          }
+        const QRect region(0, 0, KS_colMax - 1, KS_rowMax - 1);
+        QModelIndex index = sheetModel->index(0, doc->map()->indexOf(sheet));
+        QVariant bindingModelValue = sheetModel->data(index, Qt::DisplayRole);
+        BindingModel *curBindingModel = dynamic_cast<BindingModel *>(qvariant_cast<QPointer<QAbstractItemModel>>(bindingModelValue).data());
+        if (curBindingModel) {
+            curBindingModel->emitDataChanged(region);
+        }
     }
 
-    if (updater) updater->setProgress(100);
+    if (updater)
+        updater->setProgress(100);
 
     return true;
 }
@@ -140,34 +145,35 @@ void Odf::loadDocSettings(DocBase *doc, const KoXmlDocument &settingsDoc)
     loadDocIgnoreList(doc, settings);
 }
 
-void Odf::loadDocIgnoreList(DocBase *doc, const KoOasisSettings& settings)
+void Odf::loadDocIgnoreList(DocBase *doc, const KoOasisSettings &settings)
 {
     KoOasisSettings::Items configurationSettings = settings.itemSet("configuration-settings");
     if (!configurationSettings.isNull()) {
         const QString ignorelist = configurationSettings.parseConfigItemString("SpellCheckerIgnoreList");
-        //debugSheets<<" ignorelist :"<<ignorelist;
-        doc->setSpellListIgnoreAll (ignorelist.split(',', Qt::SkipEmptyParts));
+        // debugSheets<<" ignorelist :"<<ignorelist;
+        doc->setSpellListIgnoreAll(ignorelist.split(',', Qt::SkipEmptyParts));
     }
 }
 
 bool Odf::saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext)
 {
-    KoStore * store = documentContext.odfStore.store();
-    KoXmlWriter * manifestWriter = documentContext.odfStore.manifestWriter();
+    KoStore *store = documentContext.odfStore.store();
+    KoXmlWriter *manifestWriter = documentContext.odfStore.manifestWriter();
 
     KoStoreDevice dev(store);
-    KoGenStyles mainStyles;//for compile
+    KoGenStyles mainStyles; // for compile
 
-    KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
-    if (!contentWriter) return false;
+    KoXmlWriter *contentWriter = documentContext.odfStore.contentWriter();
+    if (!contentWriter)
+        return false;
 
     // Document Url for FILENAME function and page header/footer.
     doc->map()->calculationSettings()->setFileName(doc->url().toDisplayString());
 
-    KoXmlWriter* bodyWriter = documentContext.odfStore.bodyWriter();
+    KoXmlWriter *bodyWriter = documentContext.odfStore.bodyWriter();
     KoShapeSavingContext savingContext(*bodyWriter, mainStyles, documentContext.embeddedSaver);
 
-    //todo fixme just add a element for testing saving content.xml
+    // todo fixme just add a element for testing saving content.xml
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:spreadsheet");
 
@@ -182,14 +188,14 @@ bool Odf::saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext)
 
     documentContext.odfStore.closeContentWriter();
 
-    //add manifest line for content.xml
-    manifestWriter->addManifestEntry(store->currentPath() + "content.xml",  "text/xml");
+    // add manifest line for content.xml
+    manifestWriter->addManifestEntry(store->currentPath() + "content.xml", "text/xml");
 
     mainStyles.saveOdfStylesDotXml(store, manifestWriter);
     if (!store->open("settings.xml"))
         return false;
 
-    KoXmlWriter* settingsWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-settings");
+    KoXmlWriter *settingsWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-settings");
     settingsWriter->startElement("office:settings");
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
@@ -244,20 +250,22 @@ void Odf::saveSettings(DocBase *doc, KoXmlWriter &settingsWriter)
     settingsWriter.endElement();
 }
 
-void Odf::loadProtection(ProtectableObject *prot, const KoXmlElement& element)
+void Odf::loadProtection(ProtectableObject *prot, const KoXmlElement &element)
 {
-    if (!element.hasAttributeNS(KoXmlNS::table, "protection-key")) return;
+    if (!element.hasAttributeNS(KoXmlNS::table, "protection-key"))
+        return;
     QString p = element.attributeNS(KoXmlNS::table, "protection-key", QString());
-    if (p.isNull()) return;
+    if (p.isNull())
+        return;
 
     QByteArray str(p.toUtf8());
-    debugSheetsODF <<"Decoding password:" << str;
+    debugSheetsODF << "Decoding password:" << str;
     prot->setProtected(QByteArray::fromBase64(str));
 }
 
 bool Odf::paste(QBuffer &buffer, Map *map)
 {
-    KoStore * store = KoStore::createStore(&buffer, KoStore::Read);
+    KoStore *store = KoStore::createStore(&buffer, KoStore::Read);
 
     KoOdfReadStore odfStore(store); // does not delete the store on destruction
     KoXmlDocument doc;
@@ -265,7 +273,7 @@ bool Odf::paste(QBuffer &buffer, Map *map)
     bool ok = odfStore.loadAndParse("content.xml", doc, errorMessage);
     if (!ok) {
         errorSheetsODF << "Error parsing content.xml: " << errorMessage << Qt::endl;
-    delete store;
+        delete store;
         return false;
     }
 
@@ -304,13 +312,13 @@ bool Odf::paste(QBuffer &buffer, Map *map)
     return result;
 }
 
-void Odf::loadCalculationSettings(CalculationSettings *settings, const KoXmlElement& body)
+void Odf::loadCalculationSettings(CalculationSettings *settings, const KoXmlElement &body)
 {
     KoXmlNode xmlsettings = KoXml::namedItemNS(body, KoXmlNS::table, "calculation-settings");
     debugSheets << "Calculation settings found?" << !xmlsettings.isNull();
     if (!xmlsettings.isNull()) {
         KoXmlElement element = xmlsettings.toElement();
-        if (element.hasAttributeNS(KoXmlNS::table,  "case-sensitive")) {
+        if (element.hasAttributeNS(KoXmlNS::table, "case-sensitive")) {
             settings->setCaseSensitiveComparisons(Qt::CaseSensitive);
             QString value = element.attributeNS(KoXmlNS::table, "case-sensitive", "true");
             if (value == "false")
@@ -351,10 +359,11 @@ void Odf::loadCalculationSettings(CalculationSettings *settings, const KoXmlElem
             }
         }
 
-        forEachElement(element, xmlsettings) {
+        forEachElement(element, xmlsettings)
+        {
             if (element.namespaceURI() != KoXmlNS::table)
                 continue;
-            else if (element.tagName() ==  "null-date") {
+            else if (element.tagName() == "null-date") {
                 settings->setReferenceDate(QDate(1899, 12, 30));
                 QString valueType = element.attributeNS(KoXmlNS::table, "value-type", "date");
                 if (valueType == "date") {
@@ -364,14 +373,18 @@ void Odf::loadCalculationSettings(CalculationSettings *settings, const KoXmlElem
                         settings->setReferenceDate(date);
                 } else {
                     debugSheets << "CalculationSettings: Error on loading null date."
-                    << "Value type """ << valueType << """ not handled"
-                    << ", falling back to default." << Qt::endl;
+                                << "Value type "
+                                   ""
+                                << valueType
+                                << ""
+                                   " not handled"
+                                << ", falling back to default." << Qt::endl;
                     // NOTE Stefan: I don't know why different types are possible here!
                     // sebsauer: because according to ODF-specs a zero null date can
                     // mean QDate::currentDate(). Still unclear what a numeric value !=0
                     // means through :-/
                 }
-            } else if (element.tagName() ==  "iteration") {
+            } else if (element.tagName() == "iteration") {
                 // TODO
             }
         }
@@ -399,8 +412,5 @@ bool Odf::saveCalculationSettings(const CalculationSettings *settings, KoXmlWrit
     return true;
 }
 
-
-
-
-}  // Sheets
-}  // Calligra
+} // Sheets
+} // Calligra

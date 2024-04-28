@@ -1,7 +1,7 @@
 #include "TestChangesDatabase.h"
 
-#include <TextChanges.h>
 #include <TextChange.h>
+#include <TextChanges.h>
 
 void TestChangesDatabase::testInsert()
 {

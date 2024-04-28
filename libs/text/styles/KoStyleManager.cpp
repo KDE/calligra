@@ -10,33 +10,33 @@
 
 #include "KoStyleManager.h"
 
-#include "KoParagraphStyle.h"
 #include "KoCharacterStyle.h"
-#include "KoListStyle.h"
 #include "KoListLevelProperties.h"
-#include "KoTableStyle.h"
+#include "KoListStyle.h"
+#include "KoParagraphStyle.h"
+#include "KoSectionStyle.h"
+#include "KoTableCellStyle.h"
 #include "KoTableColumnStyle.h"
 #include "KoTableRowStyle.h"
-#include "KoTableCellStyle.h"
-#include "KoSectionStyle.h"
-#include "commands/ChangeStylesMacroCommand.h"
+#include "KoTableStyle.h"
 #include "KoTextDocument.h"
 #include "KoTextTableTemplate.h"
+#include "commands/ChangeStylesMacroCommand.h"
 
-#include <KoOdfBibliographyConfiguration.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
+#include <KoOdfBibliographyConfiguration.h>
+#include <KoOdfNumberDefinition.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextSharedSavingData.h>
 #include <KoXmlWriter.h>
-#include <KoOdfNumberDefinition.h>
 
 #include <kundo2stack.h>
 
-#include <QUrl>
-#include <QBuffer>
 #include "TextDebug.h"
 #include <KLocalizedString>
+#include <QBuffer>
+#include <QUrl>
 
 class Q_DECL_HIDDEN KoStyleManager::Private
 {
@@ -50,15 +50,16 @@ public:
     {
     }
 
-    ~Private() {
+    ~Private()
+    {
         qDeleteAll(automaticListStyles);
     }
 
     static int s_stylesNumber; // For giving out unique numbers to the styles for referencing
 
-    QHash<int, KoCharacterStyle*> charStyles;
-    QHash<int, KoParagraphStyle*> paragStyles;
-    QHash<int, KoListStyle*> listStyles;
+    QHash<int, KoCharacterStyle *> charStyles;
+    QHash<int, KoParagraphStyle *> paragStyles;
+    QHash<int, KoListStyle *> listStyles;
     QHash<int, KoListStyle *> automaticListStyles;
     QHash<int, KoTableStyle *> tableStyles;
     QHash<int, KoTableColumnStyle *> tableColumnStyles;
@@ -87,7 +88,8 @@ public:
 int KoStyleManager::Private::s_stylesNumber = 100;
 
 KoStyleManager::KoStyleManager(QObject *parent)
-        : QObject(parent), d(new Private())
+    : QObject(parent)
+    , d(new Private())
 {
     d->defaultCharacterStyle = new KoCharacterStyle(this);
     d->defaultCharacterStyle->setName(i18n("Default"));
@@ -99,7 +101,7 @@ KoStyleManager::KoStyleManager(QObject *parent)
 
     add(d->defaultParagraphStyle);
 
-    //TODO: also use the defaultstyles.xml mechanism. see KoOdfLoadingContext and KoTextSharedLoadingData
+    // TODO: also use the defaultstyles.xml mechanism. see KoOdfLoadingContext and KoTextSharedLoadingData
     d->defaultListStyle = new KoListStyle(this);
     const int margin = 10; // we specify the margin for the default list style(Note: Even ChangeListCommand has this value)
     const int maxListLevel = 10;
@@ -112,14 +114,14 @@ KoStyleManager::KoStyleManager(QObject *parent)
         llp.setListItemSuffix(".");
         llp.setAlignmentMode(true);
         llp.setLabelFollowedBy(KoListStyle::ListTab);
-        llp.setTabStopPosition(margin*(level+2));
-        llp.setMargin(margin*(level+1));
+        llp.setTabStopPosition(margin * (level + 2));
+        llp.setMargin(margin * (level + 1));
         llp.setTextIndent(margin);
 
         d->defaultListStyle->setLevelProperties(llp);
     }
 
-    //default styles for ToCs
+    // default styles for ToCs
     int maxOutLineLevel = 10;
     for (int outlineLevel = 1; outlineLevel <= maxOutLineLevel; outlineLevel++) {
         KoParagraphStyle *style = new KoParagraphStyle();
@@ -193,7 +195,6 @@ void KoStyleManager::saveOdfDefaultStyles(KoShapeSavingContext &context)
     if (!tstyle.isEmpty()) {
         context.mainStyles().insert(tstyle);
     }
-
 }
 
 void KoStyleManager::saveReferredStylesToOdf(KoShapeSavingContext &context)
@@ -206,12 +207,12 @@ void KoStyleManager::saveReferredStylesToOdf(KoShapeSavingContext &context)
     }
 
     QSet<KoParagraphStyle *> savedParaStyles;
-    QVector<KoGenStyles::NamedStyle>  namedStyles = context.mainStyles().styles(KoGenStyle::ParagraphAutoStyle);
+    QVector<KoGenStyles::NamedStyle> namedStyles = context.mainStyles().styles(KoGenStyle::ParagraphAutoStyle);
     namedStyles += context.mainStyles().styles(KoGenStyle::ParagraphStyle);
-    foreach(const KoGenStyles::NamedStyle &namedStyle, namedStyles) {
+    foreach (const KoGenStyles::NamedStyle &namedStyle, namedStyles) {
         KoParagraphStyle *paraStyle = 0;
         // first find the parent style
-        foreach(KoParagraphStyle *p, d->paragStyles) {
+        foreach (KoParagraphStyle *p, d->paragStyles) {
             QString name(QString(QUrl::toPercentEncoding(p->name(), "", " ")).replace('%', '_'));
 
             if (name == namedStyle.style->parentName()) {
@@ -236,10 +237,10 @@ void KoStyleManager::saveReferredStylesToOdf(KoShapeSavingContext &context)
     namedStyles = context.mainStyles().styles(KoGenStyle::TextAutoStyle);
     namedStyles += context.mainStyles().styles(KoGenStyle::TextStyle);
 
-    foreach(const KoGenStyles::NamedStyle &namedStyle, namedStyles) {
+    foreach (const KoGenStyles::NamedStyle &namedStyle, namedStyles) {
         KoCharacterStyle *charStyle = 0;
         // first find the parent style
-        foreach(KoCharacterStyle *c, d->charStyles) {
+        foreach (KoCharacterStyle *c, d->charStyles) {
             QString name(QString(QUrl::toPercentEncoding(c->name(), "", " ")).replace('%', '_'));
 
             if (name == namedStyle.style->parentName()) {
@@ -249,7 +250,7 @@ void KoStyleManager::saveReferredStylesToOdf(KoShapeSavingContext &context)
         }
         // next save it and also parents to the parent
         while (charStyle && !savedCharStyles.contains(charStyle)) {
-           QString name(QString(QUrl::toPercentEncoding(charStyle->name(), "", " ")).replace('%', '_'));
+            QString name(QString(QUrl::toPercentEncoding(charStyle->name(), "", " ")).replace('%', '_'));
             KoGenStyle style(KoGenStyle::TextStyle, "text");
             charStyle->saveOdf(style);
             QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
@@ -272,8 +273,8 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
     saveOdfDefaultStyles(context);
 
     // don't save character styles that are already saved as part of a paragraph style
-    QHash<KoParagraphStyle*, QString> savedNames;
-    foreach(KoParagraphStyle *paragraphStyle, d->paragStyles) {
+    QHash<KoParagraphStyle *, QString> savedNames;
+    foreach (KoParagraphStyle *paragraphStyle, d->paragStyles) {
         if (paragraphStyle == d->defaultParagraphStyle)
             continue;
 
@@ -289,7 +290,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         savedNames.insert(paragraphStyle, newName);
     }
 
-    foreach(KoParagraphStyle *p, d->paragStyles) {
+    foreach (KoParagraphStyle *p, d->paragStyles) {
         if (p->nextStyle() > 0 && savedNames.contains(p) && paragraphStyle(p->nextStyle())) {
             KoParagraphStyle *next = paragraphStyle(p->nextStyle());
             if (next == p) // this is the default
@@ -298,7 +299,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         }
     }
 
-    foreach(KoCharacterStyle *characterStyle, d->charStyles) {
+    foreach (KoCharacterStyle *characterStyle, d->charStyles) {
         if (characterStyle == d->defaultCharacterStyle)
             continue;
 
@@ -313,7 +314,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         textSharedSavingData->setStyleName(characterStyle->styleId(), newName);
     }
 
-    foreach(KoListStyle *listStyle, d->listStyles) {
+    foreach (KoListStyle *listStyle, d->listStyles) {
         if (listStyle == d->defaultListStyle)
             continue;
         QString name(QString(QUrl::toPercentEncoding(listStyle->name(), "", " ")).replace('%', '_'));
@@ -327,40 +328,40 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         textSharedSavingData->setStyleName(listStyle->styleId(), newName);
     }
 
-    foreach(KoTableStyle *tableStyle, d->tableStyles) {
+    foreach (KoTableStyle *tableStyle, d->tableStyles) {
         QString name(QString(QUrl::toPercentEncoding(tableStyle->name(), "", " ")).replace('%', '_'));
         if (name.isEmpty())
-            name = 'T'; //TODO is this correct?
+            name = 'T'; // TODO is this correct?
 
         KoGenStyle style(KoGenStyle::TableStyle, "table");
         tableStyle->saveOdf(style);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
-    foreach(KoTableColumnStyle *tableColumnStyle, d->tableColumnStyles) {
+    foreach (KoTableColumnStyle *tableColumnStyle, d->tableColumnStyles) {
         QString name(QString(QUrl::toPercentEncoding(tableColumnStyle->name(), "", " ")).replace('%', '_'));
         if (name.isEmpty())
-            name = 'T'; //TODO is this correct?
+            name = 'T'; // TODO is this correct?
 
         KoGenStyle style(KoGenStyle::TableColumnStyle, "table-column");
         tableColumnStyle->saveOdf(style);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
-    foreach(KoTableRowStyle *tableRowStyle, d->tableRowStyles) {
+    foreach (KoTableRowStyle *tableRowStyle, d->tableRowStyles) {
         QString name(QString(QUrl::toPercentEncoding(tableRowStyle->name(), "", " ")).replace('%', '_'));
         if (name.isEmpty())
-            name = 'T'; //TODO is this correct?
+            name = 'T'; // TODO is this correct?
 
         KoGenStyle style(KoGenStyle::TableRowStyle, "table-row");
         tableRowStyle->saveOdf(style);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
-    foreach(KoTableCellStyle *tableCellStyle, d->tableCellStyles) {
+    foreach (KoTableCellStyle *tableCellStyle, d->tableCellStyles) {
         QString name(QString(QUrl::toPercentEncoding(tableCellStyle->name(), "", " ")).replace('%', '_'));
         if (name.isEmpty())
-            name = "T."; //TODO is this correct?
+            name = "T."; // TODO is this correct?
 
         KoGenStyle style(KoGenStyle::TableCellStyle, "table-cell");
         tableCellStyle->saveOdf(style, context);
@@ -368,17 +369,17 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         textSharedSavingData->setStyleName(tableCellStyle->styleId(), newName);
     }
 
-    foreach(KoSectionStyle *sectionStyle, d->sectionStyles) {
+    foreach (KoSectionStyle *sectionStyle, d->sectionStyles) {
         QString name(QString(QUrl::toPercentEncoding(sectionStyle->name(), "", " ")).replace('%', '_'));
         if (name.isEmpty())
-            name = "T."; //TODO is this correct?
+            name = "T."; // TODO is this correct?
 
         KoGenStyle style(KoGenStyle::SectionStyle, "section");
         sectionStyle->saveOdf(style);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
-    //save note configuration in styles.xml
+    // save note configuration in styles.xml
     if (d->footNotesConfiguration) {
         QBuffer xmlBufferFootNote;
         KoXmlWriter xmlWriter(&xmlBufferFootNote);
@@ -410,7 +411,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
-    foreach(KoTextTableTemplate *textTableTemplate, d->tableTemplates) {
+    foreach (KoTextTableTemplate *textTableTemplate, d->tableTemplates) {
         QBuffer xmlBufferTableTemplate;
         KoXmlWriter xmlWriter(&xmlBufferTableTemplate);
         textTableTemplate->saveOdf(&xmlWriter, textSharedSavingData);
@@ -430,7 +431,7 @@ void KoStyleManager::add(KoCharacterStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->charStyles.insert(d->s_stylesNumber, style);
 
-    if (style != defaultCharacterStyle()) { //defaultStyle should not be user visible
+    if (style != defaultCharacterStyle()) { // defaultStyle should not be user visible
         if (style->isApplied() && !d->m_usedCharacterStyles.contains(d->s_stylesNumber)) {
             d->m_usedCharacterStyles.append(d->s_stylesNumber);
         }
@@ -462,7 +463,7 @@ void KoStyleManager::add(KoParagraphStyle *style)
             add(root);
     }
 
-    if (style != defaultParagraphStyle()) { //defaultStyle should not be user visible
+    if (style != defaultParagraphStyle()) { // defaultStyle should not be user visible
         if (style->isApplied() && !d->m_usedParagraphStyles.contains(d->s_stylesNumber)) {
             d->m_usedParagraphStyles.append(d->s_stylesNumber);
         }
@@ -692,9 +693,9 @@ void KoStyleManager::alteredStyle(const KoParagraphStyle *newStyle)
     emit paragraphStyleHasChanged(id, style, newStyle);
 
     // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
-    foreach(const KoParagraphStyle *ps, d->paragStyles) {
+    foreach (const KoParagraphStyle *ps, d->paragStyles) {
         if (ps->parentStyle() == style)
-            alteredStyle(ps); //since it's our own copy it will only be flagged
+            alteredStyle(ps); // since it's our own copy it will only be flagged
     }
 }
 
@@ -714,9 +715,9 @@ void KoStyleManager::alteredStyle(const KoCharacterStyle *newStyle)
     emit characterStyleHasChanged(id, style, newStyle);
 
     // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
-    foreach(const KoCharacterStyle *cs, d->charStyles) {
+    foreach (const KoCharacterStyle *cs, d->charStyles) {
         if (cs->parentStyle() == style)
-            alteredStyle(cs); //since it's our own copy it will only be flagged
+            alteredStyle(cs); // since it's our own copy it will only be flagged
     }
 }
 
@@ -806,7 +807,6 @@ void KoStyleManager::alteredStyle(const KoSectionStyle *style)
     emit styleHasChanged(id);
 }
 
-
 void KoStyleManager::beginEdit()
 {
     emit editHasBegun();
@@ -843,8 +843,7 @@ KoListStyle *KoStyleManager::listStyle(int id, bool *automatic) const
 
     if (style) {
         *automatic = true;
-    }
-    else {
+    } else {
         // *automatic is unchanged
     }
     return style;
@@ -877,7 +876,7 @@ KoSectionStyle *KoStyleManager::sectionStyle(int id) const
 
 KoCharacterStyle *KoStyleManager::characterStyle(const QString &name) const
 {
-    foreach(KoCharacterStyle *style, d->charStyles) {
+    foreach (KoCharacterStyle *style, d->charStyles) {
         if (style->name() == name)
             return style;
     }
@@ -886,7 +885,7 @@ KoCharacterStyle *KoStyleManager::characterStyle(const QString &name) const
 
 KoParagraphStyle *KoStyleManager::paragraphStyle(const QString &name) const
 {
-    foreach(KoParagraphStyle *style, d->paragStyles) {
+    foreach (KoParagraphStyle *style, d->paragStyles) {
         if (style->name() == name)
             return style;
     }
@@ -895,7 +894,7 @@ KoParagraphStyle *KoStyleManager::paragraphStyle(const QString &name) const
 
 KoListStyle *KoStyleManager::listStyle(const QString &name) const
 {
-    foreach(KoListStyle *style, d->listStyles) {
+    foreach (KoListStyle *style, d->listStyles) {
         if (style->name() == name)
             return style;
     }
@@ -904,7 +903,7 @@ KoListStyle *KoStyleManager::listStyle(const QString &name) const
 
 KoTableStyle *KoStyleManager::tableStyle(const QString &name) const
 {
-    foreach(KoTableStyle *style, d->tableStyles) {
+    foreach (KoTableStyle *style, d->tableStyles) {
         if (style->name() == name)
             return style;
     }
@@ -913,7 +912,7 @@ KoTableStyle *KoStyleManager::tableStyle(const QString &name) const
 
 KoTableColumnStyle *KoStyleManager::tableColumnStyle(const QString &name) const
 {
-    foreach(KoTableColumnStyle *style, d->tableColumnStyles) {
+    foreach (KoTableColumnStyle *style, d->tableColumnStyles) {
         if (style->name() == name)
             return style;
     }
@@ -922,7 +921,7 @@ KoTableColumnStyle *KoStyleManager::tableColumnStyle(const QString &name) const
 
 KoTableRowStyle *KoStyleManager::tableRowStyle(const QString &name) const
 {
-    foreach(KoTableRowStyle *style, d->tableRowStyles) {
+    foreach (KoTableRowStyle *style, d->tableRowStyles) {
         if (style->name() == name)
             return style;
     }
@@ -931,7 +930,7 @@ KoTableRowStyle *KoStyleManager::tableRowStyle(const QString &name) const
 
 KoTableCellStyle *KoStyleManager::tableCellStyle(const QString &name) const
 {
-    foreach(KoTableCellStyle *style, d->tableCellStyles) {
+    foreach (KoTableCellStyle *style, d->tableCellStyles) {
         if (style->name() == name)
             return style;
     }
@@ -940,7 +939,7 @@ KoTableCellStyle *KoStyleManager::tableCellStyle(const QString &name) const
 
 KoSectionStyle *KoStyleManager::sectionStyle(const QString &name) const
 {
-    foreach(KoSectionStyle *style, d->sectionStyles) {
+    foreach (KoSectionStyle *style, d->sectionStyles) {
         if (style->name() == name)
             return style;
     }
@@ -1000,7 +999,7 @@ KoListStyle *KoStyleManager::defaultOutlineStyle() const
     return d->defaultOutlineStyle;
 }
 
-void KoStyleManager::setOutlineStyle(KoListStyle* listStyle)
+void KoStyleManager::setOutlineStyle(KoListStyle *listStyle)
 {
     if (d->outlineStyle && d->outlineStyle->parent() == this)
         delete d->outlineStyle;
@@ -1013,42 +1012,42 @@ KoListStyle *KoStyleManager::outlineStyle() const
     return d->outlineStyle;
 }
 
-QList<KoCharacterStyle*> KoStyleManager::characterStyles() const
+QList<KoCharacterStyle *> KoStyleManager::characterStyles() const
 {
     return d->charStyles.values();
 }
 
-QList<KoParagraphStyle*> KoStyleManager::paragraphStyles() const
+QList<KoParagraphStyle *> KoStyleManager::paragraphStyles() const
 {
     return d->paragStyles.values();
 }
 
-QList<KoListStyle*> KoStyleManager::listStyles() const
+QList<KoListStyle *> KoStyleManager::listStyles() const
 {
     return d->listStyles.values();
 }
 
-QList<KoTableStyle*> KoStyleManager::tableStyles() const
+QList<KoTableStyle *> KoStyleManager::tableStyles() const
 {
     return d->tableStyles.values();
 }
 
-QList<KoTableColumnStyle*> KoStyleManager::tableColumnStyles() const
+QList<KoTableColumnStyle *> KoStyleManager::tableColumnStyles() const
 {
     return d->tableColumnStyles.values();
 }
 
-QList<KoTableRowStyle*> KoStyleManager::tableRowStyles() const
+QList<KoTableRowStyle *> KoStyleManager::tableRowStyles() const
 {
     return d->tableRowStyles.values();
 }
 
-QList<KoTableCellStyle*> KoStyleManager::tableCellStyles() const
+QList<KoTableCellStyle *> KoStyleManager::tableCellStyles() const
 {
     return d->tableCellStyles.values();
 }
 
-QList<KoSectionStyle*> KoStyleManager::sectionStyles() const
+QList<KoSectionStyle *> KoStyleManager::sectionStyles() const
 {
     return d->sectionStyles.values();
 }
@@ -1066,8 +1065,7 @@ KoParagraphStyle *KoStyleManager::defaultTableOfcontentsTitleStyle() const
 
 KoParagraphStyle *KoStyleManager::defaultBibliographyEntryStyle(const QString &bibType)
 {
-    KoParagraphStyle *style = paragraphStyle(d->defaultBibEntriesStyleId
-                                             .at(KoOdfBibliographyConfiguration::bibTypes.indexOf(bibType)));
+    KoParagraphStyle *style = paragraphStyle(d->defaultBibEntriesStyleId.at(KoOdfBibliographyConfiguration::bibTypes.indexOf(bibType)));
     return style;
 }
 
@@ -1140,7 +1138,7 @@ QVector<int> KoStyleManager::usedParagraphStyles() const
 
 KoTextTableTemplate *KoStyleManager::tableTemplate(const QString &name) const
 {
-    foreach(KoTextTableTemplate *tableTemplate, d->tableTemplates) {
+    foreach (KoTextTableTemplate *tableTemplate, d->tableTemplates) {
         if (tableTemplate->name() == name)
             return tableTemplate;
     }

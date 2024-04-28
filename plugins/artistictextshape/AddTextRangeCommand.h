@@ -5,13 +5,13 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#ifndef ADDTEXTRANGECOMMAND_H 
+#ifndef ADDTEXTRANGECOMMAND_H
 #define ADDTEXTRANGECOMMAND_H
 
-#include <kundo2command.h>
-#include "ArtisticTextTool.h"
 #include "ArtisticTextRange.h"
+#include "ArtisticTextTool.h"
 #include <QPointer>
+#include <kundo2command.h>
 
 class ArtisticTextShape;
 

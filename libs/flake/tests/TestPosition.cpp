@@ -12,12 +12,12 @@
 #include <QTest>
 
 TestPosition::TestPosition()
-        : shape1(0),
-        shape2(0),
-        childShape1(0),
-        childShape2(0),
-        container(0),
-        container2(0)
+    : shape1(0)
+    , shape2(0)
+    , childShape1(0)
+    , childShape2(0)
+    , container(0)
+    , container2(0)
 {
 }
 
@@ -105,7 +105,7 @@ void TestPosition::testSetAbsolutePosition()
     QCOMPARE(childShape1->position(), QPointF(-125, -125));
     QCOMPARE(childShape1->absolutePosition(), QPointF(0, 0));
 
-    QCOMPARE(container2->position(), QPointF(100, 200));  // make sure nobody changed it
+    QCOMPARE(container2->position(), QPointF(100, 200)); // make sure nobody changed it
     container2->setInheritsTransform(childShape2, false);
     childShape2->setAbsolutePosition(QPointF(0, 0));
     QCOMPARE(childShape2->position(), QPointF(-100 - 5, -200 - 7.5));

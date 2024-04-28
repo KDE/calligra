@@ -70,7 +70,6 @@ public:
     void setDlong(double dlong);
 
 private:
-
     Soprano::Node m_linkSubject;
     QString m_name;
     double m_dlat;

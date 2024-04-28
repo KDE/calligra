@@ -6,22 +6,20 @@
 */
 
 #include "Validity.h"
-#include "Actions.h"
 #include "./dialogs/ValidityDialog.h"
+#include "Actions.h"
 
-#include "engine/MapBase.h"
 #include "core/CellStorage.h"
 #include "core/Sheet.h"
+#include "engine/MapBase.h"
 
 #include <KLocalizedString>
-
 
 using namespace Calligra::Sheets;
 
 SetValidity::SetValidity(Actions *actions)
     : DialogCellAction(actions, "validity", i18n("Validity..."), QIcon(), i18n("Set tests to confirm cell data is valid"))
 {
-
 }
 
 SetValidity::~SetValidity()
@@ -38,7 +36,8 @@ ActionDialog *SetValidity::createDialog(QWidget *canvasWidget)
     return dlg;
 }
 
-void SetValidity::onSelectionChanged() {
+void SetValidity::onSelectionChanged()
+{
     ValidityDialog *dlg = dynamic_cast<ValidityDialog *>(m_dlg);
     Cell cell = activeCell();
     dlg->setValidity(cell.validity());
@@ -46,14 +45,12 @@ void SetValidity::onSelectionChanged() {
 
 void SetValidity::applyValidity(const Validity &validity)
 {
-    ValidityCommand* manipulator = new ValidityCommand();
+    ValidityCommand *manipulator = new ValidityCommand();
     manipulator->setSheet(m_selection->activeSheet());
     manipulator->setValidity(validity);
     manipulator->add(*m_selection);
     manipulator->execute(m_selection->canvas());
 }
-
-
 
 // This is in the 'Clear' submenu, hence the Validity name and not 'Clear Validity'
 ClearValidity::ClearValidity(Actions *actions)
@@ -65,8 +62,8 @@ ClearValidity::~ClearValidity()
 {
 }
 
-
-QAction *ClearValidity::createAction() {
+QAction *ClearValidity::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Remove Validity"));
     return res;
@@ -77,7 +74,7 @@ void ClearValidity::execute(Selection *selection, Sheet *sheet, QWidget *)
     if (sheet->areaIsEmpty(*selection, Sheet::Validity))
         return;
 
-    ValidityCommand* command = new ValidityCommand();
+    ValidityCommand *command = new ValidityCommand();
     command->setSheet(sheet);
     command->setValidity(Validity()); // empty object removes validity
     command->add(*selection);
@@ -87,16 +84,17 @@ void ClearValidity::execute(Selection *selection, Sheet *sheet, QWidget *)
 bool ClearValidity::enabledForSelection(Selection *selection, const Cell &)
 {
     Sheet *sheet = selection->activeSheet();
-    if (sheet->areaIsEmpty(*selection, Sheet::Validity)) return false;
+    if (sheet->areaIsEmpty(*selection, Sheet::Validity))
+        return false;
     return true;
 }
 
 ValidityCommand::ValidityCommand()
-        : AbstractRegionCommand()
+    : AbstractRegionCommand()
 {
 }
 
-bool ValidityCommand::process(Element* element)
+bool ValidityCommand::process(Element *element)
 {
     m_sheet->cellStorage()->setValidity(Region(element->rect()), m_validity);
     return true;
@@ -110,4 +108,3 @@ void ValidityCommand::setValidity(Validity validity)
     else
         setText(kundo2_i18n("Add Validity Check"));
 }
-

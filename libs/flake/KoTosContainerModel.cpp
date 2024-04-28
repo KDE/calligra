@@ -13,7 +13,7 @@
 #include <QSizeF>
 
 KoTosContainerModel::KoTosContainerModel()
-: m_textShape(0)
+    : m_textShape(0)
 {
 }
 
@@ -24,7 +24,7 @@ KoTosContainerModel::~KoTosContainerModel()
 void KoTosContainerModel::add(KoShape *shape)
 {
     // make sure shape is a text shape
-    KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(shape->userData());
+    KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase *>(shape->userData());
     Q_ASSERT(shapeData != 0);
     if (shapeData) {
         m_textShape = shape;
@@ -76,9 +76,9 @@ int KoTosContainerModel::count() const
     return m_textShape != 0 ? 1 : 0;
 }
 
-QList<KoShape*> KoTosContainerModel::shapes() const
+QList<KoShape *> KoTosContainerModel::shapes() const
 {
-    QList<KoShape*> shapes;
+    QList<KoShape *> shapes;
     if (m_textShape) {
         shapes << m_textShape;
     }
@@ -91,12 +91,12 @@ void KoTosContainerModel::containerChanged(KoShapeContainer *container, KoShape:
     if (type != KoShape::SizeChanged && type != KoShape::ContentChanged) {
         return;
     }
-    KoTosContainer *tosContainer = dynamic_cast<KoTosContainer*>(container);
+    KoTosContainer *tosContainer = dynamic_cast<KoTosContainer *>(container);
     debugFlake << "tosContainer" << tosContainer;
     if (tosContainer) {
         debugFlake << "behaviour" << tosContainer->resizeBehavior() << KoTosContainer::TextFollowsPreferredTextRect;
     }
-    if ( m_textShape && tosContainer && tosContainer->resizeBehavior() != KoTosContainer::TextFollowsPreferredTextRect ) {
+    if (m_textShape && tosContainer && tosContainer->resizeBehavior() != KoTosContainer::TextFollowsPreferredTextRect) {
         debugFlake << "change type setSize";
         m_textShape->setSize(tosContainer->size());
     }

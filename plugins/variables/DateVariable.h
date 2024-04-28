@@ -9,8 +9,8 @@
 
 #include <KoVariable.h>
 
-#include <QString>
 #include <QDateTime>
+#include <QString>
 
 /**
  * Base class for in-text variables.
@@ -21,20 +21,11 @@
 class DateVariable : public KoVariable
 {
 public:
-    enum DateType {
-        Fixed,
-        AutoUpdate
-    };
+    enum DateType { Fixed, AutoUpdate };
 
-    enum DisplayType {
-        Date,
-        Time
-    };
+    enum DisplayType { Date, Time };
 
-    enum ValueType {
-        DateOrTime,
-        DateTime
-    };
+    enum ValueType { DateOrTime, DateTime };
 
     /**
      * Constructor.
@@ -42,44 +33,49 @@ public:
     explicit DateVariable(DateType type);
     ~DateVariable() override;
 
-    ///reimplemented
-    void saveOdf(KoShapeSavingContext & context) override;
+    /// reimplemented
+    void saveOdf(KoShapeSavingContext &context) override;
 
-    ///reimplemented
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context) override;
+    /// reimplemented
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     void readProperties(const KoProperties *props);
 
     QWidget *createOptionsWidget() override;
 
-    const QString & definition() const {
+    const QString &definition() const
+    {
         return m_definition;
     }
     void setDefinition(const QString &definition);
 
-    int daysOffset() const {
+    int daysOffset() const
+    {
         return m_daysOffset;
     }
     void setDaysOffset(int daysOffset);
 
-    int monthsOffset() const {
+    int monthsOffset() const
+    {
         return m_monthsOffset;
     }
     void setMonthsOffset(int monthsOffset);
 
-    int yearsOffset() const {
+    int yearsOffset() const
+    {
         return m_yearsOffset;
     }
     void setYearsOffset(int yearsOffset);
 
-    int secsOffset() const {
+    int secsOffset() const
+    {
         return m_secsOffset;
     }
     void setSecsOffset(int secsOffset);
 
 private:
     void update();
-    void adjustTime(const QString & adjustTime);
+    void adjustTime(const QString &adjustTime);
 
     DateType m_type;
     DisplayType m_displayType;

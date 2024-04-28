@@ -5,12 +5,12 @@
 */
 #include "TestPathTool.h"
 
-#include <QPainterPath>
+#include "../KoPathPointData.h"
 #include "../KoPathShape.h"
 #include "../tools/KoPathTool.h"
 #include "../tools/KoPathToolSelection.h"
-#include "../KoPathPointData.h"
 #include <MockShapes.h>
+#include <QPainterPath>
 #include <QTest>
 
 #include <algorithm>
@@ -75,6 +75,5 @@ void TestPathTool::koPathPointSelection_selectedSegmentsData()
     QList<KoPathPointData> pd1(pps.selectedSegmentsData());
     QVERIFY(pd1 == pd2);
 }
-
 
 QTEST_MAIN(TestPathTool)

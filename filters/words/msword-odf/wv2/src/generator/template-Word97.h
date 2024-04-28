@@ -53,7 +53,7 @@ struct FFN {
     /**
      * Simply calls read(...)
      */
-    FFN(OLEStreamReader *stream, Version version, bool preservePos=false);
+    FFN(OLEStreamReader *stream, Version version, bool preservePos = false);
 
     /**
      * This method reads the FFN structure from the stream.
@@ -61,12 +61,12 @@ struct FFN {
      * the stream to save the state. If it's false the state
      * of stream will be changed!
      */
-    bool read(OLEStreamReader *stream, Version version, bool preservePos=false);
+    bool read(OLEStreamReader *stream, Version version, bool preservePos = false);
 
     /**
      * Same as reading, not implemented yet
      */
-    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+    bool write(OLEStreamWriter *stream, bool preservePos = false) const;
 
     /**
      * Set all the fields to the initial value (default is 0)
@@ -82,27 +82,27 @@ struct FFN {
     /**
      * pitch request
      */
-    U8 prq:2;
+    U8 prq : 2;
 
     /**
      * when 1, font is a TrueType font
      */
-    U8 fTrueType:1;
+    U8 fTrueType : 1;
 
     /**
      * reserved
      */
-    U8 unused1_3:1;
+    U8 unused1_3 : 1;
 
     /**
      * font family id
      */
-    U8 ff:3;
+    U8 ff : 3;
 
     /**
      * reserved
      */
-    U8 unused1_7:1;
+    U8 unused1_7 : 1;
 
     /**
      * base weight of font
@@ -135,7 +135,7 @@ struct FFN {
      * first named font does not exist on this system. Maximal size of xszFfn
      * is 65 characters.
      */
-    //U8 *xszFfn;   //    U8 xszFfn[];
+    // U8 *xszFfn;   //    U8 xszFfn[];
     /**
      * We are using two UStrings here, the alternative string (xszFfnAlt) will
      * contain the alternative font name in case ixchSzAlt is != 0
@@ -153,10 +153,14 @@ private:
 /**
  * Tab Descriptor (TBD)
  */
-struct TBD
-{
-    TBD() : jc( 0 ), tlc( 0 ), unused0_6( 0 ) {}
-    TBD( U8 tbd )
+struct TBD {
+    TBD()
+        : jc(0)
+        , tlc(0)
+        , unused0_6(0)
+    {
+    }
+    TBD(U8 tbd)
     {
         jc = tbd;
         tbd >>= 3;
@@ -173,7 +177,7 @@ struct TBD
      * 3 decimal tab
      * 4 bar
      */
-    U8 jc:3;
+    U8 jc : 3;
 
     /**
      * tab leader code
@@ -183,12 +187,12 @@ struct TBD
      * 3 single line leader
      * 4 heavy line leader
      */
-    U8 tlc:3;
+    U8 tlc : 3;
 
     /**
      * reserved
      */
-    U8 unused0_6:2;
+    U8 unused0_6 : 2;
 };
 
 /**
@@ -197,8 +201,7 @@ struct TBD
  * we combine all the data for one tab into this struct, and the PAP has
  * a vector<TabDescriptor>
  */
-struct TabDescriptor
-{
+struct TabDescriptor {
     /**
      * Position of the tab
      */
@@ -211,10 +214,10 @@ struct TabDescriptor
 }; // TabDescriptor
 
 // There can be only one tab at a given position, no matter what the other options are
-bool operator==( const TabDescriptor& lhs, const TabDescriptor& rhs );
-bool operator!=( const TabDescriptor& lhs, const TabDescriptor& rhs );
-bool operator<( const TabDescriptor& lhs, const TabDescriptor& rhs );
-bool operator>( const TabDescriptor& lhs, const TabDescriptor& rhs );
+bool operator==(const TabDescriptor &lhs, const TabDescriptor &rhs);
+bool operator!=(const TabDescriptor &lhs, const TabDescriptor &rhs);
+bool operator<(const TabDescriptor &lhs, const TabDescriptor &rhs);
+bool operator>(const TabDescriptor &lhs, const TabDescriptor &rhs);
 
 ### This tag "expands" to all the structs :)
 @@generated-code@@

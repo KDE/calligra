@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 // Own
 #include "KoOdfTextProperties.h"
 
@@ -21,19 +20,16 @@
 // ----------------------------------------------------------------
 //                         private class
 
-
 class Q_DECL_HIDDEN KoOdfTextProperties::Private
 {
 public:
-    Private() {};
-    ~Private() {};
+    Private(){};
+    ~Private(){};
 
-    int dummy;                          // This class is currently empty
+    int dummy; // This class is currently empty
 };
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfTextProperties::KoOdfTextProperties()
     : KoOdfStyleProperties()
@@ -46,12 +42,10 @@ KoOdfTextProperties::~KoOdfTextProperties()
     delete d;
 }
 
-
 void KoOdfTextProperties::clear()
 {
     KoOdfStyleProperties::clear();
 }
-
 
 bool KoOdfTextProperties::readOdf(KoXmlStreamReader &reader)
 {

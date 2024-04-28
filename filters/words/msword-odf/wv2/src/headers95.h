@@ -24,34 +24,33 @@
 
 namespace wvWare
 {
+/**
+ * @internal
+ * A tiny helper class to move some header/footer code out of the parser.
+ * Might not be ultra-elegant, but I don't like it if the parser code
+ * grows too much.
+ */
+class Headers95 : public Headers
+{
+public:
+    Headers95(U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 lcbPlcfsed, OLEStreamReader *tableStream, U8 dop_grpfIhdt);
+
     /**
-     * @internal
-     * A tiny helper class to move some header/footer code out of the parser.
-     * Might not be ultra-elegant, but I don't like it if the parser code
-     * grows too much.
+     * Returns the header if there is any for the given mask. If we didn't find
+     * any header the pair's values are 0, 0.
      */
-    class Headers95 : public Headers
-    {
-    public:
-        Headers95( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 lcbPlcfsed,
-                   OLEStreamReader* tableStream, U8 dop_grpfIhdt );
+    std::pair<U32, U32> findHeader(int sectionNumber, unsigned char mask) const override;
 
-        /**
-         * Returns the header if there is any for the given mask. If we didn't find
-         * any header the pair's values are 0, 0.
-         */
-        std::pair<U32, U32> findHeader( int sectionNumber, unsigned char mask ) const override;
+    void set_headerMask(U8 sep_grpfIhdt) override;
 
-        void set_headerMask( U8 sep_grpfIhdt ) override;
+private:
+    // Counts the '1' bits in <mask> from the lsb up to <limit> (exclusively)
+    int countOnes(U8 mask, U8 limit) const;
 
-    private:
-        // Counts the '1' bits in <mask> from the lsb up to <limit> (exclusively)
-        int countOnes( U8 mask, U8 limit ) const;
-
-        const int ihddOffset;
-        QList<U32> m_headerCount;
-        QList<U8> m_grpfIhdt;
-    };
+    const int ihddOffset;
+    QList<U32> m_headerCount;
+    QList<U8> m_grpfIhdt;
+};
 
 } // namespace wvWare
 

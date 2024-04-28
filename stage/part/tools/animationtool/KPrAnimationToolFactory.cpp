@@ -29,7 +29,7 @@ KPrAnimationToolFactory::~KPrAnimationToolFactory()
 {
 }
 
-KoToolBase* KPrAnimationToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KPrAnimationToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KPrAnimationTool(canvas);
 }

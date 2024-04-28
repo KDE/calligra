@@ -9,8 +9,8 @@
 
 #include <KoDialog.h>
 
-#include "ui_SolverMainWidget.h"
 #include "ui_SolverDetailsWidget.h"
+#include "ui_SolverMainWidget.h"
 
 class QWidget;
 
@@ -37,7 +37,7 @@ public:
      * \p view The view pointer. Used to access the cells.
      * \p parent the parent widget
      */
-    SolverDialog(Selection* selection, QWidget* parent);
+    SolverDialog(Selection *selection, QWidget *parent);
 
 protected Q_SLOTS:
     /**

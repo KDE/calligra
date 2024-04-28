@@ -15,14 +15,11 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
+#include "core/Sheet.h"
 #include "engine/MapBase.h"
 #include "engine/NamedAreaManager.h"
-#include "core/Sheet.h"
-
-
 
 using namespace Calligra::Sheets;
-
 
 Goto::Goto(Actions *actions)
     : DialogCellAction(actions, "gotoCell", i18n("Goto Cell..."), koIcon("go-jump"), i18n("Move to a particular cell"))
@@ -33,7 +30,8 @@ Goto::~Goto()
 {
 }
 
-QAction *Goto::createAction() {
+QAction *Goto::createAction()
+{
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Goto"));
     res->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_G));
@@ -64,6 +62,3 @@ ActionDialog *Goto::createDialog(QWidget *canvasWidget)
     connect(dlg, &GotoDialog::gotoCell, this, &Goto::gotoCell);
     return dlg;
 }
-
-
-

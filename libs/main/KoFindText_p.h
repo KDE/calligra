@@ -10,30 +10,35 @@
 
 #include "KoFindText.h"
 
-#include <QTextDocument>
-#include <QTextCursor>
-#include <QTextBlock>
-#include <QTextLayout>
+#include <QAbstractTextDocumentLayout>
 #include <QPalette>
 #include <QStyle>
-#include <QAbstractTextDocumentLayout>
+#include <QTextBlock>
+#include <QTextCursor>
+#include <QTextDocument>
+#include <QTextLayout>
 
-#include <MainDebug.h>
 #include <KLocalizedString>
+#include <MainDebug.h>
 
-#include <KoText.h>
-#include <KoTextDocument.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
+#include <KoText.h>
+#include <KoTextDocument.h>
 
-#include "KoFindOptionSet.h"
-#include "KoFindOption.h"
 #include "KoDocument.h"
+#include "KoFindOption.h"
+#include "KoFindOptionSet.h"
 
 class Q_DECL_HIDDEN KoFindText::Private
 {
 public:
-    Private(KoFindText* qq) : q(qq), selectionStart(-1), selectionEnd(-1) { }
+    Private(KoFindText *qq)
+        : q(qq)
+        , selectionStart(-1)
+        , selectionEnd(-1)
+    {
+    }
 
     void updateSelections();
     void updateDocumentList();
@@ -43,11 +48,11 @@ public:
 
     KoFindText *q;
 
-    QList<QTextDocument*> documents;
+    QList<QTextDocument *> documents;
 
     QTextCursor currentCursor;
     QTextCursor selection;
-    QHash<QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> > selections;
+    QHash<QTextDocument *, QVector<QAbstractTextDocumentLayout::Selection>> selections;
 
     int selectionStart;
     int selectionEnd;
@@ -58,7 +63,7 @@ public:
     static QTextCharFormat replacedFormat;
     static bool formatsInitialized;
 
-    QPair<QTextDocument*, int> currentMatch;
+    QPair<QTextDocument *, int> currentMatch;
 };
 
 #endif

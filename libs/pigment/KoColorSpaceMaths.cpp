@@ -2,7 +2,7 @@
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.bet
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include <KoColorSpaceMaths.h>
 
@@ -41,5 +41,5 @@ const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<quint16>::chan
 const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<qint16>::channelValueType = KoChannelInfo::INT16;
 const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<quint32>::channelValueType = KoChannelInfo::UINT32;
 
-const Ko::FullLut< KoIntegerToFloat<quint16>, float, quint16> KoLuts::Uint16ToFloat;
-const Ko::FullLut< KoIntegerToFloat<quint8>, float, quint8> KoLuts::Uint8ToFloat;
+const Ko::FullLut<KoIntegerToFloat<quint16>, float, quint16> KoLuts::Uint16ToFloat;
+const Ko::FullLut<KoIntegerToFloat<quint8>, float, quint8> KoLuts::Uint8ToFloat;

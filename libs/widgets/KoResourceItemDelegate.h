@@ -7,20 +7,21 @@
 #ifndef KORESOURCEITEMDELEGATE_H
 #define KORESOURCEITEMDELEGATE_H
 
-#include <QAbstractItemDelegate>
 #include "KoCheckerBoardPainter.h"
+#include <QAbstractItemDelegate>
 
 /// The resource item delegate for rendering the resource preview
 class KoResourceItemDelegate : public QAbstractItemDelegate
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit KoResourceItemDelegate(QObject *parent = nullptr);
     ~KoResourceItemDelegate() override = default;
     /// reimplemented
-    void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const override;
+    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
     /// reimplemented
-    QSize sizeHint ( const QStyleOptionViewItem &, const QModelIndex & ) const override;
+    QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const override;
+
 private:
     KoCheckerBoardPainter m_checkerPainter;
 };

@@ -6,8 +6,8 @@
 #ifndef CALLIGRAGEMINI_PROGRESSPROXY_H
 #define CALLIGRAGEMINI_PROGRESSPROXY_H
 
-#include <QObject>
 #include <KoProgressProxy.h>
+#include <QObject>
 
 class ProgressProxy : public QObject, public KoProgressProxy
 {
@@ -15,12 +15,12 @@ class ProgressProxy : public QObject, public KoProgressProxy
     Q_PROPERTY(QString taskName READ taskName NOTIFY taskNameChanged)
 
 public:
-    explicit ProgressProxy(QObject* parent = 0);
+    explicit ProgressProxy(QObject *parent = 0);
     ~ProgressProxy() override;
 
     QString taskName() const;
 
-    void setFormat(const QString& format) override;
+    void setFormat(const QString &format) override;
     void setRange(int minimum, int maximum) override;
     void setValue(int value) override;
     int maximum() const override;

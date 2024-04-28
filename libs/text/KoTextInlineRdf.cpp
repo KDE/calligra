@@ -7,18 +7,18 @@
 
 #include "KoTextInlineRdf.h"
 // lib
+#include <KoAnnotation.h>
+#include <KoBookmark.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
+#include <KoTextMeta.h>
 #include <opendocument/KoTextSharedSavingData.h>
 #include <styles/KoCharacterStyle.h>
-#include <KoBookmark.h>
-#include <KoAnnotation.h>
-#include <KoTextMeta.h>
-#include <KoTextEditor.h>
-#include <KoTextDocument.h>
 // komain
-#include <KoShapeSavingContext.h>
-#include <KoXmlWriter.h>
-#include <KoXmlNS.h>
 #include <KoElementReference.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 // TODO: the "errorText" define in TextDebug.h results in a build error, if used as second include here
 // find out why and perhaps change the rather generic "errorText" & Co defines to something less conflict-prone
 #include "TextDebug.h"
@@ -26,7 +26,6 @@
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QTextTableCell>
-
 
 #ifdef SHOULD_BUILD_RDF
 #include <Soprano/Soprano>
@@ -37,12 +36,7 @@ enum Type {
     BlankNode = Soprano::Node::BlankNode
 };
 #else
-enum Type {
-    EmptyNode,
-    ResourceNode,
-    LiteralNode,
-    BlankNode
-};
+enum Type { EmptyNode, ResourceNode, LiteralNode, BlankNode };
 #endif
 
 class Q_DECL_HIDDEN KoTextInlineRdf::Private
@@ -96,12 +90,11 @@ public:
         sopranoObjectType = LiteralNode;
     }
 
-
     QString id; // original xml:id
 
-    //FIXME: design like this seems inapropriate, maybe
-    // making Interface from KoTextInlineRdf will be better.
-    // Just my thoughts.
+    // FIXME: design like this seems inapropriate, maybe
+    //  making Interface from KoTextInlineRdf will be better.
+    //  Just my thoughts.
 
     // where we might get the object value from
     QTextBlock block;
@@ -126,44 +119,44 @@ public:
 };
 
 KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, const QTextBlock &b)
-    : QObject(const_cast<QTextDocument*>(doc))
+    : QObject(const_cast<QTextDocument *>(doc))
     , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, KoBookmark *b)
-    : QObject(const_cast<QTextDocument*>(doc))
+    : QObject(const_cast<QTextDocument *>(doc))
     , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, KoAnnotation *b)
-    : QObject(const_cast<QTextDocument*>(doc))
+    : QObject(const_cast<QTextDocument *>(doc))
     , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, KoTextMeta *b)
-    : QObject(const_cast<QTextDocument*>(doc))
+    : QObject(const_cast<QTextDocument *>(doc))
     , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, const QTextTableCell &b)
-    : QObject(const_cast<QTextDocument*>(doc))
+    : QObject(const_cast<QTextDocument *>(doc))
     , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, KoSection *s)
-    : QObject(const_cast<QTextDocument*>(doc))
+    : QObject(const_cast<QTextDocument *>(doc))
     , d(new Private(doc, s))
 {
 }
 
 KoTextInlineRdf::~KoTextInlineRdf()
 {
-    debugText << " this:" << (void*)this;
+    debugText << " this:" << (void *)this;
     delete d;
 }
 
@@ -186,7 +179,7 @@ bool KoTextInlineRdf::loadOdf(const KoXmlElement &e)
 
 bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer, KoElementReference id) const
 {
-    debugText << " this:" << (void*)this << " xmlid:" << d->id << "passed id" << id.toString();
+    debugText << " this:" << (void *)this << " xmlid:" << d->id << "passed id" << id.toString();
     QString oldID = d->id;
 
     if (!id.isValid()) {
@@ -194,8 +187,7 @@ bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer
     }
 
     QString newID = id.toString();
-    if (KoTextSharedSavingData *sharedData =
-            dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID))) {
+    if (KoTextSharedSavingData *sharedData = dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID))) {
         sharedData->addRdfIdMapping(oldID, newID);
     }
     debugText << "oldID:" << oldID << " newID:" << newID;
@@ -232,7 +224,7 @@ QString KoTextInlineRdf::predicate() const
     return d->predicate;
 }
 
-QPair<int, int>  KoTextInlineRdf::findExtent() const
+QPair<int, int> KoTextInlineRdf::findExtent() const
 {
     if (d->bookmark && d->document) {
         return QPair<int, int>(d->bookmark.data()->rangeStart(), d->bookmark.data()->rangeEnd());
@@ -272,10 +264,9 @@ QString KoTextInlineRdf::object() const
     KoTextDocument textDocument(d->document.data());
 
     if (d->bookmark && d->document) {
-        QString ret  = d->bookmark.data()->text();
+        QString ret = d->bookmark.data()->text();
         return ret.remove(QChar::ObjectReplacementCharacter);
-    }
-    else if (d->kotextmeta && d->document) {
+    } else if (d->kotextmeta && d->document) {
         // FIXME: Need to do something with endAnnotation?
         KoTextMeta *e = d->kotextmeta.data()->endBookmark();
         if (!e) {
@@ -288,8 +279,7 @@ QString KoTextInlineRdf::object() const
             QString ret = editor->selectedText();
             return ret.remove(QChar::ObjectReplacementCharacter);
         }
-    }
-    else if (d->cell.isValid() && d->document) {
+    } else if (d->cell.isValid() && d->document) {
         QTextCursor b = d->cell.firstCursorPosition();
         b.setPosition(d->cell.lastCursorPosition().position(), QTextCursor::KeepAnchor);
         QString ret = b.selectedText();

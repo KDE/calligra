@@ -6,13 +6,13 @@
 
 #include "KoToolBoxButton_p.h"
 
-#include <KoToolManager.h>
 #include <KoIcon.h>
+#include <KoToolManager.h>
 
-#include <QIcon>
-#include <QPalette>
 #include <QApplication>
+#include <QIcon>
 #include <QKeySequence>
+#include <QPalette>
 
 #include <KLocalizedString>
 
@@ -40,8 +40,7 @@ void KoToolBoxButton::setHighlightColor()
         const QColor &c = p.color(QPalette::Highlight);
         palette_highlight.setColor(QPalette::Button, c);
         setPalette(palette_highlight);
-    }
-    else {
+    } else {
         setPalette(p);
     }
 }
@@ -51,10 +50,7 @@ void KoToolBoxButton::setDataFromToolAction()
     const QString plainToolTip = m_toolAction->toolTip();
     const QKeySequence shortcut = m_toolAction->shortcut();
     const QString toolTip =
-        shortcut.isEmpty() ?
-            i18nc("@info:tooltip", "%1", plainToolTip) :
-            i18nc("@info:tooltip %2 is shortcut", "%1 (%2)", plainToolTip,
-                shortcut.toString());
+        shortcut.isEmpty() ? i18nc("@info:tooltip", "%1", plainToolTip) : i18nc("@info:tooltip %2 is shortcut", "%1 (%2)", plainToolTip, shortcut.toString());
 
     setToolTip(toolTip);
 }

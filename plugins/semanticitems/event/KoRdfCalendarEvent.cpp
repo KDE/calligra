@@ -6,24 +6,24 @@
 
 #include "KoRdfCalendarEvent.h"
 #include "KoDocumentRdf.h"
-#include "KoTextRdfCore.h"
 #include "KoRdfCalendarEventTreeWidgetItem.h"
-#include <QUuid>
-#include <QTemporaryFile>
+#include "KoTextRdfCore.h"
+#include "ksystemtimezone.h"
+#include <KMessageBox>
 #include <QRegularExpression>
+#include <QTemporaryFile>
+#include <QUuid>
 #include <kdebug.h>
 #include <kfiledialog.h>
-#include <KMessageBox>
-#include "ksystemtimezone.h"
 #include <kglobal.h>
 
 #ifdef KDEPIMLIBS_FOUND
-#include <akonadi/collectiondialog.h>
-#include <akonadi/itemcreatejob.h>
 #include <akonadi/collection.h>
+#include <akonadi/collectiondialog.h>
 #include <akonadi/item.h>
-#include <kcalcore/memorycalendar.h>
+#include <akonadi/itemcreatejob.h>
 #include <kcalcore/icalformat.h>
+#include <kcalcore/memorycalendar.h>
 #include <kcalcore/vcalformat.h>
 #endif
 
@@ -66,10 +66,9 @@ static QDateTime VEventDateTimeToKDateTime(const QString &s, QDateTime::Spec &tz
     ret = ret.toLocalZone();
     tz = KSystemTimeZones::local();
     kDebug(30015) << "date string:" << s << "\n"
-        << " is valid:" << ret.isValid() << "\n"
-        << " parsed:" << ret.toString() << "\n"
-        << " time.tz.offset:" << ret.timeZone().currentOffset()
-        << " tz.offset:" << tz.timeZone().currentOffset();
+                  << " is valid:" << ret.isValid() << "\n"
+                  << " parsed:" << ret.toString() << "\n"
+                  << " time.tz.offset:" << ret.timeZone().currentOffset() << " tz.offset:" << tz.timeZone().currentOffset();
     return ret;
 }
 
@@ -85,14 +84,11 @@ static KTimeZone toKTimeZone(Soprano::Node n)
         dt.remove(0, idx + 1);
     }
     KTimeZone kt = KSystemTimeZones::zone(dt);
-    kDebug(30015) << "input:" << n.dataType().toString()
-        << " output tz.valid:" << kt.isValid()
-        << " timezone:" << dt;
+    kDebug(30015) << "input:" << n.dataType().toString() << " output tz.valid:" << kt.isValid() << " timezone:" << dt;
     if (!kt.isValid()) {
         // UTC "Zulu" Time
         if (dt == "2001/XMLSchema#dateTime" && n.toString().endsWith('Z')) {
-            kDebug(30015) << "input:" << n.dataType().toString()
-            << " is UTC...";
+            kDebug(30015) << "input:" << n.dataType().toString() << " is UTC...";
             kt = KSystemTimeZones::zone("UTC");
         }
     }
@@ -116,14 +112,11 @@ KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *rdf
     // check for timezones in the type of each date-time binding.
     m_startTimespec = toKTimeZone(it.binding("dtstart"));
     m_endTimespec = toKTimeZone(it.binding("dtend"));
-    m_dtstart = VEventDateTimeToKDateTime(it.binding("dtstart").toString(),
-                   m_startTimespec);
-    m_dtend = VEventDateTimeToKDateTime(it.binding("dtend").toString(),
-                                           m_endTimespec);
-    kDebug(30015) << "KoRdfCalendarEvent() start:" << m_dtstart.toString()
-        << " end:" << m_dtend.toString();
+    m_dtstart = VEventDateTimeToKDateTime(it.binding("dtstart").toString(), m_startTimespec);
+    m_dtend = VEventDateTimeToKDateTime(it.binding("dtend").toString(), m_endTimespec);
+    kDebug(30015) << "KoRdfCalendarEvent() start:" << m_dtstart.toString() << " end:" << m_dtend.toString();
     kDebug(30015) << "KoRdfCalendarEvent() long:" << KoTextRdfCore::optionalBindingAsString(it, "long")
-        << " lat:" << KoTextRdfCore::optionalBindingAsString(it, "lat");
+                  << " lat:" << KoTextRdfCore::optionalBindingAsString(it, "lat");
     kDebug(30015) << "KoRdfCalendarEvent() context-direct:" << it.binding("graph").toString();
     kDebug(30015) << "KoRdfCalendarEvent() context():" << context().toString();
     kDebug(30015) << "m_startTimespec.offset:" << m_startTimespec.timeZone().currentOffset();
@@ -137,7 +130,7 @@ KoRdfCalendarEvent::~KoRdfCalendarEvent()
 {
 }
 
-QWidget* KoRdfCalendarEvent::createEditor(QWidget *parent)
+QWidget *KoRdfCalendarEvent::createEditor(QWidget *parent)
 {
     QWidget *ret = new QWidget(parent);
 
@@ -147,16 +140,11 @@ QWidget* KoRdfCalendarEvent::createEditor(QWidget *parent)
     editWidget.setupUi(ret);
     editWidget.summary->setText(m_summary);
     editWidget.location->setText(m_location);
-    enum {
-        ColArea = 0,
-        ColRegion,
-        ColComment,
-        ColCount
-    };
+    enum { ColArea = 0, ColRegion, ColComment, ColCount };
     editWidget.tz->sortItems(ColRegion, Qt::AscendingOrder);
     editWidget.tz->setColumnHidden(ColComment, true);
     editWidget.tz->header()->resizeSections(QHeaderView::ResizeToContents);
-    editWidget.tz->headerItem()->setText(ColArea,   i18n("Area"));
+    editWidget.tz->headerItem()->setText(ColArea, i18n("Area"));
     editWidget.tz->headerItem()->setText(ColRegion, i18n("Region"));
     editWidget.startDate->setDate(m_dtstart.date());
     editWidget.endDate->setDate(m_dtend.date());
@@ -186,9 +174,9 @@ void KoRdfCalendarEvent::updateFromEditorData()
     kDebug(30015) << "Old summary:" << m_summary;
     kDebug(30015) << "New summary:" << editWidget.summary->text();
     setRdfType(predBase + "Vevent");
-    updateTriple(m_summary,   editWidget.summary->text(),   predBase + "summary");
-    updateTriple(m_location,  editWidget.location->text(),  predBase + "location");
-    updateTriple(m_uid,       m_uid,                        predBase + "uid");
+    updateTriple(m_summary, editWidget.summary->text(), predBase + "summary");
+    updateTriple(m_location, editWidget.location->text(), predBase + "location");
+    updateTriple(m_uid, m_uid, predBase + "uid");
     KDateTime::Spec startTimespec = KSystemTimeZones::local();
     QStringList selection = editWidget.tz->selection();
     if (selection.size() > 0) {
@@ -200,9 +188,9 @@ void KoRdfCalendarEvent::updateFromEditorData()
     }
     KDateTime::Spec endTimespec = startTimespec;
     m_startTimespec = startTimespec;
-    m_endTimespec   = endTimespec;
+    m_endTimespec = endTimespec;
     KDateTime dtstart(editWidget.startDate->date(), editWidget.startTime->time(), m_startTimespec);
-    KDateTime dtend(editWidget.endDate->date(),   editWidget.endTime->time(),   m_endTimespec);
+    KDateTime dtend(editWidget.endDate->date(), editWidget.endTime->time(), m_endTimespec);
     kDebug(30015) << "m_startTimespec.offset:" << m_startTimespec.timeZone().currentOffset();
     kDebug(30015) << "date:" << editWidget.startDate->date();
     kDebug(30015) << "time:" << editWidget.startTime->time().toString();
@@ -211,17 +199,16 @@ void KoRdfCalendarEvent::updateFromEditorData()
     LiteralValue lv(dtstart.dateTime());
     Node n = Node::createLiteralNode(lv);
     kDebug(30015) << "soprano::node:" << n.toString();
-    updateTriple(m_dtstart,   dtstart,  predBase + "dtstart");
-    updateTriple(m_dtend,     dtend,    predBase + "dtend");
+    updateTriple(m_dtstart, dtstart, predBase + "dtstart");
+    updateTriple(m_dtend, dtend, predBase + "dtend");
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
+        const_cast<KoDocumentRdf *>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 }
 
-KoRdfSemanticTreeWidgetItem *KoRdfCalendarEvent::createQTreeWidgetItem(QTreeWidgetItem* parent)
+KoRdfSemanticTreeWidgetItem *KoRdfCalendarEvent::createQTreeWidgetItem(QTreeWidgetItem *parent)
 {
-    KoRdfCalendarEventTreeWidgetItem *item  =
-        new KoRdfCalendarEventTreeWidgetItem(parent, hKoRdfCalendarEvent(this));
+    KoRdfCalendarEventTreeWidgetItem *item = new KoRdfCalendarEventTreeWidgetItem(parent, hKoRdfCalendarEvent(this));
     return item;
 }
 
@@ -238,10 +225,10 @@ void KoRdfCalendarEvent::setupStylesheetReplacementMapping(QMap<QString, QString
     m["%END%"] = KGlobal::locale()->formatDateTime(m_dtend.dateTime());
     m["%SUMMARY%"] = m_summary;
     m["%LOCATION%"] = m_location;
-    QMap< QString, KDateTime > times;
+    QMap<QString, KDateTime> times;
     times["START"] = m_dtstart;
     times["END"] = m_dtend;
-    for (QMap< QString, KDateTime >::iterator ti = times.begin(); ti != times.end(); ++ti) {
+    for (QMap<QString, KDateTime>::iterator ti = times.begin(); ti != times.end(); ++ti) {
         QString key = QString("%") + ti.key();
         KDateTime dt = ti.value();
         QDate qd = dt.date();
@@ -281,21 +268,11 @@ QList<hKoSemanticStylesheet> KoRdfCalendarEvent::stylesheets() const
 {
     // TODO we probably want a namespace for these (like KoXmlNS).
     QList<hKoSemanticStylesheet> stylesheets;
-    stylesheets.append(
-        createSystemStylesheet("92f5d6c5-2c3a-4988-9646-2f29f3731f89",
-                               "name", "%NAME%"));
-    stylesheets.append(
-        createSystemStylesheet("b4817ce4-d2c3-4ed3-bc5a-601010b33363",
-                               "summary", "%SUMMARY%"));
-    stylesheets.append(
-        createSystemStylesheet("853242eb-031c-4a36-abb2-7ef1881c777e",
-                               "summary, location", "%SUMMARY%, %LOCATION%"));
-    stylesheets.append(
-        createSystemStylesheet("2d6b87a8-23be-4b61-a881-876177812ad4",
-                               "summary, location, start date/time", "%SUMMARY%, %LOCATION%, %START%"));
-    stylesheets.append(
-        createSystemStylesheet("115e3ceb-6bc8-445c-a932-baee09686895",
-                               "summary, start date/time", "%SUMMARY%, %START%"));
+    stylesheets.append(createSystemStylesheet("92f5d6c5-2c3a-4988-9646-2f29f3731f89", "name", "%NAME%"));
+    stylesheets.append(createSystemStylesheet("b4817ce4-d2c3-4ed3-bc5a-601010b33363", "summary", "%SUMMARY%"));
+    stylesheets.append(createSystemStylesheet("853242eb-031c-4a36-abb2-7ef1881c777e", "summary, location", "%SUMMARY%, %LOCATION%"));
+    stylesheets.append(createSystemStylesheet("2d6b87a8-23be-4b61-a881-876177812ad4", "summary, location, start date/time", "%SUMMARY%, %LOCATION%, %START%"));
+    stylesheets.append(createSystemStylesheet("115e3ceb-6bc8-445c-a932-baee09686895", "summary, start date/time", "%SUMMARY%, %START%"));
     return stylesheets;
 }
 
@@ -349,7 +326,7 @@ KCalCore::Event::Ptr KoRdfCalendarEvent::toKEvent() const
 void KoRdfCalendarEvent::fromKEvent(KCalCore::Event::Ptr event)
 {
     m_dtstart = event->dtStart();
-    m_dtend   = event->dtEnd();
+    m_dtend = event->dtEnd();
     m_summary = event->summary();
     m_location = event->location();
     m_uid = event->uid();
@@ -380,7 +357,7 @@ void KoRdfCalendarEvent::saveToKCal()
     collectionDialog.setMimeTypeFilter(QStringList() << event->mimeType());
     collectionDialog.setAccessRightsFilter(Akonadi::Collection::CanCreateItem);
     collectionDialog.setDescription(i18n("Select a calendar for saving:"));
-    if (! collectionDialog.exec()) {
+    if (!collectionDialog.exec()) {
         return;
     }
 
@@ -391,12 +368,12 @@ void KoRdfCalendarEvent::saveToKCal()
     item.setMimeType(event->mimeType());
 
     Akonadi::ItemCreateJob *itemCreateJob = new Akonadi::ItemCreateJob(item, collection);
-    connect(itemCreateJob, SIGNAL(result(KJob*)), SLOT(onCreateJobFinished(KJob*)));
+    connect(itemCreateJob, SIGNAL(result(KJob *)), SLOT(onCreateJobFinished(KJob *)));
 #endif
 }
 
 #ifdef KDEPIMLIBS_FOUND
-void KoRdfCalendarEvent::onCreateJobFinished( KJob *job )
+void KoRdfCalendarEvent::onCreateJobFinished(KJob *job)
 {
     if (job->error()) {
         KMessageBox::error(0, i18n("Could not add entry\n%1", name()));
@@ -411,11 +388,7 @@ void KoRdfCalendarEvent::exportToFile(const QString &fileNameConst) const
     QString fileName = fileNameConst;
 #ifdef KDEPIMLIBS_FOUND
     if (fileName.isEmpty()) {
-        fileName = KFileDialog::getSaveFileName(
-                       KUrl("kfiledialog:///ExportDialog"),
-                       "*.ics|ICalendar files",
-                       0,
-                       "Export to selected iCal file");
+        fileName = KFileDialog::getSaveFileName(KUrl("kfiledialog:///ExportDialog"), "*.ics|ICalendar files", 0, "Export to selected iCal file");
 
         if (fileName.isEmpty()) {
             kDebug(30015) << "no filename given, cancel export..";
@@ -425,7 +398,7 @@ void KoRdfCalendarEvent::exportToFile(const QString &fileNameConst) const
     KCalCore::Calendar::Ptr cal(new KCalCore::MemoryCalendar(KSystemTimeZones::local()));
     cal->addEvent(toKEvent());
     KCalCore::ICalFormat format;
-    if (! format.save(cal, fileName)) {
+    if (!format.save(cal, fileName)) {
         KMessageBox::error(0, i18n("Could not save iCal file\n%1", fileName));
     }
     kDebug(30015) << "wrote to export file:" << fileName;

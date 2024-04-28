@@ -5,9 +5,9 @@
 */
 #include "TestPointTypeCommand.h"
 
-#include <QPainterPath>
-#include "KoPathShape.h"
 #include "KoPathPointTypeCommand.h"
+#include "KoPathShape.h"
+#include <QPainterPath>
 
 #include <QTest>
 

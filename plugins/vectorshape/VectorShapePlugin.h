@@ -5,21 +5,22 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-
 #ifndef VECTORSHAPE_PLUGIN_H
 #define VECTORSHAPE_PLUGIN_H
-
 
 // Qt
 #include <QObject>
 #include <QVariantList>
 
-class VectorShapePlugin : public QObject {
+class VectorShapePlugin : public QObject
+{
     Q_OBJECT
 
 public:
-    VectorShapePlugin(QObject * parent, const QVariantList &);
-    ~VectorShapePlugin() override {}
+    VectorShapePlugin(QObject *parent, const QVariantList &);
+    ~VectorShapePlugin() override
+    {
+    }
 };
 
 #endif

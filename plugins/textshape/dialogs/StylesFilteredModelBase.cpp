@@ -11,9 +11,9 @@
 
 #include <QDebug>
 
-StylesFilteredModelBase::StylesFilteredModelBase(QObject *parent) :
-    AbstractStylesModel(parent),
-    m_sourceModel(0)
+StylesFilteredModelBase::StylesFilteredModelBase(QObject *parent)
+    : AbstractStylesModel(parent)
+    , m_sourceModel(0)
 {
 }
 
@@ -56,7 +56,7 @@ QVariant StylesFilteredModelBase::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    switch (role){
+    switch (role) {
     case Qt::DisplayRole: {
         return QVariant();
     }
@@ -67,7 +67,8 @@ QVariant StylesFilteredModelBase::data(const QModelIndex &index, int role) const
     case Qt::SizeHintRole: {
         return QVariant(QSize(250, 48));
     }
-    default: break;
+    default:
+        break;
     };
     return QVariant();
 }
@@ -100,7 +101,6 @@ QImage StylesFilteredModelBase::stylePreview(int row, const QSize &size)
         return QImage();
     }
     return m_sourceModel->stylePreview(m_proxyToSource.at(row), size);
-
 }
 /*
 QImage StylesFilteredModelBase::stylePreview(QModelIndex &index, const QSize &size)
@@ -108,7 +108,8 @@ QImage StylesFilteredModelBase::stylePreview(QModelIndex &index, const QSize &si
     if (!index.isValid()) {
         return QImage();
     }
-    return m_sourceModel->stylePreview(index, size); //TODO be careful there. this is assuming the sourceModel is only using the internalId, and the index's internalId matches the model's
+    return m_sourceModel->stylePreview(index, size); //TODO be careful there. this is assuming the sourceModel is only using the internalId, and the index's
+internalId matches the model's
 
 }
 */
@@ -165,7 +166,7 @@ void StylesFilteredModelBase::slotRowsAboutToBeInserted(const QModelIndex &paren
     Q_UNUSED(parent);
     Q_UNUSED(start);
     Q_UNUSED(end);
-    beginResetModel(); //TODO instead of resetting the whole thing, implement proper logic. this will do for a start, there shouldn't be too many styles anyway
+    beginResetModel(); // TODO instead of resetting the whole thing, implement proper logic. this will do for a start, there shouldn't be too many styles anyway
 }
 
 void StylesFilteredModelBase::slotRowsInserted(const QModelIndex &parent, int start, int end)
@@ -177,17 +178,25 @@ void StylesFilteredModelBase::slotRowsInserted(const QModelIndex &parent, int st
     endResetModel();
 }
 
-void StylesFilteredModelBase::slotRowsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destinationParent, int destinationRow)
+void StylesFilteredModelBase::slotRowsAboutToBeMoved(const QModelIndex &sourceParent,
+                                                     int sourceStart,
+                                                     int sourceEnd,
+                                                     const QModelIndex &destinationParent,
+                                                     int destinationRow)
 {
     Q_UNUSED(sourceParent);
     Q_UNUSED(sourceStart);
     Q_UNUSED(sourceEnd);
     Q_UNUSED(destinationParent);
     Q_UNUSED(destinationRow);
-    beginResetModel(); //TODO instead of resetting the whole thing, implement proper logic. this will do for a start, there shouldn't be too many styles anyway
+    beginResetModel(); // TODO instead of resetting the whole thing, implement proper logic. this will do for a start, there shouldn't be too many styles anyway
 }
 
-void StylesFilteredModelBase::slotRowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destinationParent, int destinationRow)
+void StylesFilteredModelBase::slotRowsMoved(const QModelIndex &sourceParent,
+                                            int sourceStart,
+                                            int sourceEnd,
+                                            const QModelIndex &destinationParent,
+                                            int destinationRow)
 {
     Q_UNUSED(sourceParent);
     Q_UNUSED(sourceStart);
@@ -203,7 +212,7 @@ void StylesFilteredModelBase::slotRowsAboutToBeRemoved(const QModelIndex &parent
     Q_UNUSED(parent);
     Q_UNUSED(start);
     Q_UNUSED(end);
-    beginResetModel(); //TODO instead of resetting the whole thing, implement proper logic. this will do for a start, there shouldn't be too many styles anyway
+    beginResetModel(); // TODO instead of resetting the whole thing, implement proper logic. this will do for a start, there shouldn't be too many styles anyway
 }
 
 void StylesFilteredModelBase::slotRowsRemoved(const QModelIndex &parent, int start, int end)
@@ -224,12 +233,12 @@ void StylesFilteredModelBase::createMapping()
     m_sourceToProxy.clear();
     m_proxyToSource.clear();
 
-    for(int i = 0; i < m_sourceModel->rowCount(QModelIndex()); ++i) {
+    for (int i = 0; i < m_sourceModel->rowCount(QModelIndex()); ++i) {
         m_proxyToSource.append(i);
     }
 
     m_sourceToProxy.fill(-1, m_sourceModel->rowCount(QModelIndex()));
-    for(int i = 0; i < m_proxyToSource.count(); ++i) {
+    for (int i = 0; i < m_proxyToSource.count(); ++i) {
         m_sourceToProxy[m_proxyToSource.at(i)] = i;
     }
 }

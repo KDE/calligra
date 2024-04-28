@@ -29,6 +29,7 @@ public:
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
     StarShape *m_star;
     uint m_oldCornerCount;
@@ -42,4 +43,3 @@ private:
 };
 
 #endif // STARSHAPECONFIGCOMMAND_H
-

@@ -7,14 +7,14 @@
 #ifndef __PROXYVIEW_H__
 #define __PROXYVIEW_H__
 
-#include <KoView.h>
 #include <KoPageLayout.h>
+#include <KoView.h>
 
 class ProxyView : public KoView
 {
     Q_OBJECT
 public:
-    ProxyView(KoPart *part, KoDocument* doc, QWidget* parent = 0);
+    ProxyView(KoPart *part, KoDocument *doc, QWidget *parent = 0);
     ~ProxyView() override;
 
     void updateReadWrite(bool readwrite) override;
@@ -32,4 +32,3 @@ private:
 };
 
 #endif
-

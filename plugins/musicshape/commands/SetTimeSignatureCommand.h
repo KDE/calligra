@@ -6,27 +6,29 @@
 #ifndef SETTIMESIGNATURECOMMAND_H
 #define SETTIMESIGNATURECOMMAND_H
 
-#include <kundo2command.h>
 #include <QList>
+#include <kundo2command.h>
 
 #include "../core/TimeSignature.h"
 
 class MusicShape;
-namespace MusicCore {
-    class Bar;
-    class TimeSignature;
+namespace MusicCore
+{
+class Bar;
+class TimeSignature;
 }
 
 class SetTimeSignatureCommand : public KUndo2Command
 {
 public:
-    SetTimeSignatureCommand(MusicShape* shape, MusicCore::Bar* bar, int beats, int beat);
+    SetTimeSignatureCommand(MusicShape *shape, MusicCore::Bar *bar, int beats, int beat);
     void redo() override;
     void undo() override;
+
 private:
-    MusicShape* m_shape;
-    MusicCore::Bar* m_bar;
-    QList<MusicCore::TimeSignature*> m_oldSigs, m_newSigs;
+    MusicShape *m_shape;
+    MusicCore::Bar *m_bar;
+    QList<MusicCore::TimeSignature *> m_oldSigs, m_newSigs;
 };
 
 #endif // SETTIMESIGNATURECOMMAND_H

@@ -30,7 +30,7 @@ SpiralShapeConfigWidget::SpiralShapeConfigWidget()
 
 void SpiralShapeConfigWidget::open(KoShape *shape)
 {
-    m_spiral = dynamic_cast<SpiralShape*>(shape);
+    m_spiral = dynamic_cast<SpiralShape *>(shape);
     if (!m_spiral)
         return;
 
@@ -57,7 +57,7 @@ void SpiralShapeConfigWidget::save()
     m_spiral->setFade(widget.fade->value());
 }
 
-KUndo2Command * SpiralShapeConfigWidget::createCommand()
+KUndo2Command *SpiralShapeConfigWidget::createCommand()
 {
     if (!m_spiral)
         return 0;

@@ -8,7 +8,6 @@
 
 #include <QKeyEvent>
 
-
 AutoCorrectionListWidget::AutoCorrectionListWidget(QWidget *parent)
     : QListWidget(parent)
 {

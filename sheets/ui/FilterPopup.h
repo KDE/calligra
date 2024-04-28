@@ -7,8 +7,8 @@
 #ifndef CALLIGRA_SHEETS_FILTER_POPUP
 #define CALLIGRA_SHEETS_FILTER_POPUP
 
-#include <QFrame>
 #include "sheets_ui_export.h"
+#include <QFrame>
 
 class QAbstractButton;
 
@@ -27,26 +27,26 @@ public:
     /**
      * Constructor.
      */
-    FilterPopup(QWidget* parent, const CellBase& cell, Database* database);
+    FilterPopup(QWidget *parent, const CellBase &cell, Database *database);
 
-    static void showPopup(QWidget* parent, const CellBase& cell, const QRect& cellRect, Database* database);
+    static void showPopup(QWidget *parent, const CellBase &cell, const QRect &cellRect, Database *database);
 
     /**
      * Destructor.
      */
     ~FilterPopup() override;
 
-    void updateFilter(Filter* filter) const;
+    void updateFilter(Filter *filter) const;
 
 protected:
-    void closeEvent(QCloseEvent*) override;
+    void closeEvent(QCloseEvent *) override;
 
 private Q_SLOTS:
-    void buttonClicked(QAbstractButton* button);
+    void buttonClicked(QAbstractButton *button);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

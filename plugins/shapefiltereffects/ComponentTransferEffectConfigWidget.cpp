@@ -7,31 +7,32 @@
 #include "ComponentTransferEffectConfigWidget.h"
 #include "KoFilterEffect.h"
 
-#include <QSpinBox>
 #include <KComboBox>
-#include <klineedit.h>
 #include <KLocalizedString>
+#include <QSpinBox>
+#include <klineedit.h>
 
+#include <QButtonGroup>
 #include <QGridLayout>
 #include <QLabel>
-#include <QStackedWidget>
 #include <QRadioButton>
-#include <QButtonGroup>
+#include <QStackedWidget>
 
 const qreal ValueStep = 0.1;
 
 ComponentTransferEffectConfigWidget::ComponentTransferEffectConfigWidget(QWidget *parent)
-        : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
-        , m_currentChannel(ComponentTransferEffect::ChannelR)
+    : KoFilterEffectConfigWidgetBase(parent)
+    , m_effect(0)
+    , m_currentChannel(ComponentTransferEffect::ChannelR)
 {
-    QGridLayout * g = new QGridLayout(this);
+    QGridLayout *g = new QGridLayout(this);
 
-    QButtonGroup * group = new QButtonGroup(this);
+    QButtonGroup *group = new QButtonGroup(this);
 
-    QRadioButton * butR = new QRadioButton("R", this);
-    QRadioButton * butG = new QRadioButton("G", this);
-    QRadioButton * butB = new QRadioButton("B", this);
-    QRadioButton * butA = new QRadioButton("A", this);
+    QRadioButton *butR = new QRadioButton("R", this);
+    QRadioButton *butG = new QRadioButton("G", this);
+    QRadioButton *butB = new QRadioButton("B", this);
+    QRadioButton *butA = new QRadioButton("A", this);
     g->addWidget(butR, 0, 0);
     g->addWidget(butG, 0, 1);
     g->addWidget(butB, 0, 2);
@@ -59,8 +60,8 @@ ComponentTransferEffectConfigWidget::ComponentTransferEffectConfigWidget(QWidget
     m_stack->addWidget(new QWidget(this));
 
     // Table widget
-    QWidget * tableWidget = new QWidget(m_stack);
-    QGridLayout * tableLayout = new QGridLayout(tableWidget);
+    QWidget *tableWidget = new QWidget(m_stack);
+    QGridLayout *tableLayout = new QGridLayout(tableWidget);
     tableLayout->addWidget(new QLabel(i18n("Values"), tableWidget), 0, 0);
     m_tableValues = new KLineEdit(tableWidget);
     tableLayout->addWidget(m_tableValues, 0, 1);
@@ -69,8 +70,8 @@ ComponentTransferEffectConfigWidget::ComponentTransferEffectConfigWidget(QWidget
     m_stack->addWidget(tableWidget);
 
     // Discrete widget
-    QWidget * discreteWidget = new QWidget(m_stack);
-    QGridLayout * discreteLayout = new QGridLayout(discreteWidget);
+    QWidget *discreteWidget = new QWidget(m_stack);
+    QGridLayout *discreteLayout = new QGridLayout(discreteWidget);
     discreteLayout->addWidget(new QLabel(i18n("Values"), discreteWidget), 0, 0);
     m_discreteValues = new KLineEdit(discreteWidget);
     discreteLayout->addWidget(m_discreteValues, 0, 1);
@@ -79,8 +80,8 @@ ComponentTransferEffectConfigWidget::ComponentTransferEffectConfigWidget(QWidget
     m_stack->addWidget(discreteWidget);
 
     // Linear widget
-    QWidget * linearWidget = new QWidget(m_stack);
-    QGridLayout * linearLayout = new QGridLayout(linearWidget);
+    QWidget *linearWidget = new QWidget(m_stack);
+    QGridLayout *linearLayout = new QGridLayout(linearWidget);
     linearLayout->addWidget(new QLabel(i18n("Slope"), linearWidget), 0, 0);
     m_slope = new QDoubleSpinBox(linearWidget);
     m_slope->setRange(m_slope->minimum(), m_slope->maximum());
@@ -96,8 +97,8 @@ ComponentTransferEffectConfigWidget::ComponentTransferEffectConfigWidget(QWidget
     linearWidget->setLayout(linearLayout);
     m_stack->addWidget(linearWidget);
 
-    QWidget * gammaWidget = new QWidget(m_stack);
-    QGridLayout * gammaLayout = new QGridLayout(gammaWidget);
+    QWidget *gammaWidget = new QWidget(m_stack);
+    QGridLayout *gammaLayout = new QGridLayout(gammaWidget);
     gammaLayout->addWidget(new QLabel(i18n("Amplitude"), gammaWidget), 0, 0);
     m_amplitude = new QDoubleSpinBox(gammaWidget);
     m_amplitude->setRange(m_amplitude->minimum(), m_amplitude->maximum());
@@ -145,7 +146,7 @@ void ComponentTransferEffectConfigWidget::updateControls()
     case ComponentTransferEffect::Table:
         m_function->setCurrentIndex(1);
         m_tableValues->blockSignals(true);
-        foreach(qreal v, m_effect->tableValues(m_currentChannel)) {
+        foreach (qreal v, m_effect->tableValues(m_currentChannel)) {
             values += QString("%1;").arg(v);
         }
         m_tableValues->setText(values);
@@ -154,7 +155,7 @@ void ComponentTransferEffectConfigWidget::updateControls()
     case ComponentTransferEffect::Discrete:
         m_function->setCurrentIndex(2);
         m_discreteValues->blockSignals(true);
-        foreach(qreal v, m_effect->tableValues(m_currentChannel)) {
+        foreach (qreal v, m_effect->tableValues(m_currentChannel)) {
             values += QString("%1;").arg(v);
         }
         m_discreteValues->setText(values);
@@ -187,9 +188,9 @@ void ComponentTransferEffectConfigWidget::updateControls()
     m_stack->setCurrentIndex(m_function->currentIndex());
 }
 
-bool ComponentTransferEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
+bool ComponentTransferEffectConfigWidget::editFilterEffect(KoFilterEffect *filterEffect)
 {
-    m_effect = dynamic_cast<ComponentTransferEffect*>(filterEffect);
+    m_effect = dynamic_cast<ComponentTransferEffect *>(filterEffect);
     if (!m_effect)
         return false;
 
@@ -247,7 +248,7 @@ void ComponentTransferEffectConfigWidget::tableValuesChanged()
 {
     QStringList values = m_tableValues->text().split(';', Qt::SkipEmptyParts);
     QList<qreal> tableValues;
-    foreach(const QString &v, values) {
+    foreach (const QString &v, values) {
         tableValues.append(v.toDouble());
     }
     m_effect->setTableValues(m_currentChannel, tableValues);
@@ -258,7 +259,7 @@ void ComponentTransferEffectConfigWidget::discreteValuesChanged()
 {
     QStringList values = m_discreteValues->text().split(';', Qt::SkipEmptyParts);
     QList<qreal> tableValues;
-    foreach(const QString &v, values) {
+    foreach (const QString &v, values) {
         tableValues.append(v.toDouble());
     }
     m_effect->setTableValues(m_currentChannel, tableValues);

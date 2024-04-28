@@ -7,29 +7,28 @@
 
 #include "UnderOverElement.h"
 
-#include "FormulaCursor.h"
 #include "AttributeManager.h"
+#include "FormulaCursor.h"
 #include "FormulaDebug.h"
 
 #include <KoXmlReader.h>
 
 #include <QPainter>
 
-
-UnderOverElement::UnderOverElement( BasicElement* parent, ElementType elementType )
-    : FixedElement( parent )
+UnderOverElement::UnderOverElement(BasicElement *parent, ElementType elementType)
+    : FixedElement(parent)
 {
-    if (elementType!=Under) {
-        m_overElement = new RowElement( this );
+    if (elementType != Under) {
+        m_overElement = new RowElement(this);
     } else {
         m_overElement = 0;
     }
-    if (elementType!=Over) {
-        m_underElement = new RowElement( this );
+    if (elementType != Over) {
+        m_underElement = new RowElement(this);
     } else {
         m_underElement = 0;
     }
-    m_baseElement=new RowElement( this );
+    m_baseElement = new RowElement(this);
     m_elementType = elementType;
 }
 
@@ -44,121 +43,120 @@ UnderOverElement::~UnderOverElement()
     }
 }
 
-const QList<BasicElement*> UnderOverElement::childElements() const
+const QList<BasicElement *> UnderOverElement::childElements() const
 {
-    QList<BasicElement*> tmp;
+    QList<BasicElement *> tmp;
     tmp << m_baseElement;
-    if(m_overElement) {
+    if (m_overElement) {
         tmp << m_overElement;
     }
-    if(m_underElement) {
+    if (m_underElement) {
         tmp << m_underElement;
     }
     return tmp;
 }
 
-void UnderOverElement::paint( QPainter& painter, AttributeManager* am)
+void UnderOverElement::paint(QPainter &painter, AttributeManager *am)
 {
     /*do nothing as UnderOverElement has no visual representation*/
     Q_UNUSED(painter)
     Q_UNUSED(am)
 }
 
-void UnderOverElement::layout( const AttributeManager* am )
+void UnderOverElement::layout(const AttributeManager *am)
 {
-//     qreal thinSpace   = am->layoutSpacing( this );
-//     qreal accent      = m_elementType != Under && am->boolOf( "accent", this );     //Whether to add a space above
-//     qreal accentUnder = m_elementType != Over && am->boolOf( "accentunder", this );//Whether to add a space below
+    //     qreal thinSpace   = am->layoutSpacing( this );
+    //     qreal accent      = m_elementType != Under && am->boolOf( "accent", this );     //Whether to add a space above
+    //     qreal accentUnder = m_elementType != Over && am->boolOf( "accentunder", this );//Whether to add a space below
 
     // Set whether to stretch the element.  Set it to true if it doesn't exist to make it easy to check if any are non-stretchy
-    bool underStretchy = m_elementType == Over || am->boolOf( "stretchy", m_underElement );
-    bool overStretchy  = m_elementType == Under || am->boolOf( "stretchy", m_overElement );
-    bool baseStretchy  = (underStretchy && overStretchy) || am->boolOf( "stretchy", m_baseElement );  //For sanity, make sure at least one is not stretchy
+    bool underStretchy = m_elementType == Over || am->boolOf("stretchy", m_underElement);
+    bool overStretchy = m_elementType == Under || am->boolOf("stretchy", m_overElement);
+    bool baseStretchy = (underStretchy && overStretchy) || am->boolOf("stretchy", m_baseElement); // For sanity, make sure at least one is not stretchy
 
     qreal largestWidth = 0;
-    if(!baseStretchy)
+    if (!baseStretchy)
         largestWidth = m_baseElement->width();
 
-    if(m_elementType != Over && !underStretchy)
-        largestWidth = qMax( m_underElement->width(), largestWidth );
-    if(m_elementType != Under && !overStretchy)
-        largestWidth = qMax( m_overElement->width(), largestWidth );
+    if (m_elementType != Over && !underStretchy)
+        largestWidth = qMax(m_underElement->width(), largestWidth);
+    if (m_elementType != Under && !overStretchy)
+        largestWidth = qMax(m_overElement->width(), largestWidth);
 
-    QPointF origin(0.0,0.0);
-    if(m_elementType != Under) {
-        origin.setX(( largestWidth - m_overElement->width() ) / 2.0 ) ;
-        m_overElement->setOrigin( origin );
-        origin.setY( m_overElement->height() );
+    QPointF origin(0.0, 0.0);
+    if (m_elementType != Under) {
+        origin.setX((largestWidth - m_overElement->width()) / 2.0);
+        m_overElement->setOrigin(origin);
+        origin.setY(m_overElement->height());
     }
 
-    origin.setX( ( largestWidth - m_baseElement->width() ) / 2.0 );
-    m_baseElement->setOrigin( origin );
-    setBaseLine( origin.y() + m_baseElement->baseLine() );
+    origin.setX((largestWidth - m_baseElement->width()) / 2.0);
+    m_baseElement->setOrigin(origin);
+    setBaseLine(origin.y() + m_baseElement->baseLine());
 
-    if(m_elementType != Over) {
-        origin.setX( ( largestWidth - m_underElement->width())/2.0 );
-	/* Try to be smart about where to place the under */
-//	if(m_baseElement->baseLine() + 1.5*thinSpace > m_baseElement->height())
-//          origin.setY( origin.y() + m_baseElement->baseLine() );
-//	else 
-          origin.setY( origin.y() + m_baseElement->height()); 
-        m_underElement->setOrigin( origin );
-        setHeight( origin.y() + m_underElement->height() );
+    if (m_elementType != Over) {
+        origin.setX((largestWidth - m_underElement->width()) / 2.0);
+        /* Try to be smart about where to place the under */
+        //	if(m_baseElement->baseLine() + 1.5*thinSpace > m_baseElement->height())
+        //          origin.setY( origin.y() + m_baseElement->baseLine() );
+        //	else
+        origin.setY(origin.y() + m_baseElement->height());
+        m_underElement->setOrigin(origin);
+        setHeight(origin.y() + m_underElement->height());
     } else {
-        setHeight( origin.y() + m_baseElement->height() );
+        setHeight(origin.y() + m_baseElement->height());
     }
 
-    setWidth( largestWidth );
+    setWidth(largestWidth);
 }
 
-QString UnderOverElement::attributesDefaultValue( const QString& attribute ) const
+QString UnderOverElement::attributesDefaultValue(const QString &attribute) const
 {
-    Q_UNUSED( attribute )
-/*    if( m_overElement->elementType() == Operator )
-    else if( m_underElement->elementType() == Operator )*/
-    return "false";  // the default for accent and
+    Q_UNUSED(attribute)
+    /*    if( m_overElement->elementType() == Operator )
+        else if( m_underElement->elementType() == Operator )*/
+    return "false"; // the default for accent and
 }
 
-bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
+bool UnderOverElement::readMathMLContent(const KoXmlElement &parent)
 {
     KoXmlElement tmp;
-    int counter=0;
-    forEachElement( tmp, parent ) {
-        if (counter==0) {
-            loadElement(tmp,&m_baseElement);
-        } else if (counter==1 && m_elementType != Over) {
-            loadElement(tmp,&m_underElement);
-        } else if ((counter==2 && m_elementType==UnderOver) || (counter==1 && m_elementType==Over)) {
-            loadElement(tmp,&m_overElement);
-        } else if ((counter==3 && m_elementType==UnderOver) || (counter==2)) {
-            debugFormula  << "Too many arguments to "
-                          << ElementFactory::elementName(m_elementType)
-                          << "counter =" << counter;
+    int counter = 0;
+    forEachElement(tmp, parent)
+    {
+        if (counter == 0) {
+            loadElement(tmp, &m_baseElement);
+        } else if (counter == 1 && m_elementType != Over) {
+            loadElement(tmp, &m_underElement);
+        } else if ((counter == 2 && m_elementType == UnderOver) || (counter == 1 && m_elementType == Over)) {
+            loadElement(tmp, &m_overElement);
+        } else if ((counter == 3 && m_elementType == UnderOver) || (counter == 2)) {
+            debugFormula << "Too many arguments to " << ElementFactory::elementName(m_elementType) << "counter =" << counter;
             return false;
         }
         counter++;
     }
-    
-    if ((counter<3 && m_elementType==UnderOver) || (counter<2)) {
-        debugFormula  << "Not enough arguments to "
 
-                      << ElementFactory::elementName(m_elementType)
-                      << "counter =" << counter
-                      << "type = " << (m_elementType == Under ? "Under"
-                                       : m_elementType == Over ? "Over" : "UnderOver");
+    if ((counter < 3 && m_elementType == UnderOver) || (counter < 2)) {
+        debugFormula << "Not enough arguments to "
+
+                     << ElementFactory::elementName(m_elementType) << "counter =" << counter << "type = "
+                     << (m_elementType == Under      ? "Under"
+                             : m_elementType == Over ? "Over"
+                                                     : "UnderOver");
         return false;
     }
     return true;
-} 
+}
 
-void UnderOverElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
+void UnderOverElement::writeMathMLContent(KoXmlWriter *writer, const QString &ns) const
 {
-    m_baseElement->writeMathML( writer, ns );   // Just save the children in
-    if(m_elementType != Over) {
-        m_underElement->writeMathML( writer, ns );  // the right order
+    m_baseElement->writeMathML(writer, ns); // Just save the children in
+    if (m_elementType != Over) {
+        m_underElement->writeMathML(writer, ns); // the right order
     }
-    if(m_elementType != Under) {
-        m_overElement->writeMathML( writer, ns );
+    if (m_elementType != Under) {
+        m_overElement->writeMathML(writer, ns);
     }
 }
 
@@ -167,30 +165,30 @@ ElementType UnderOverElement::elementType() const
     return m_elementType;
 }
 
-bool UnderOverElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor )
+bool UnderOverElement::moveCursor(FormulaCursor &newcursor, FormulaCursor &oldcursor)
 {
-    int childpos=newcursor.position()/2;
-    if (m_elementType==Over) {
-        return moveVertSituation(newcursor,oldcursor,1,0);
-    } else if (m_elementType==Under) {
-        return moveVertSituation(newcursor,oldcursor,0,1);
+    int childpos = newcursor.position() / 2;
+    if (m_elementType == Over) {
+        return moveVertSituation(newcursor, oldcursor, 1, 0);
+    } else if (m_elementType == Under) {
+        return moveVertSituation(newcursor, oldcursor, 0, 1);
     } else {
         switch (childpos) {
-            case 1:
-                return moveVertSituation(newcursor,oldcursor,1,0);
-            case 0:
-                if (newcursor.direction()==MoveDown) {
-                    return moveVertSituation(newcursor,oldcursor,0,2);
-                } else if (newcursor.direction()==MoveUp) {
-                    return moveVertSituation(newcursor,oldcursor,1,0);
-                } else {
-                    return moveVertSituation(newcursor,oldcursor,0,1);
-                }
-                break;
-            case 2:
-                return moveVertSituation(newcursor,oldcursor,0,2);
-            default:
-                return false;
+        case 1:
+            return moveVertSituation(newcursor, oldcursor, 1, 0);
+        case 0:
+            if (newcursor.direction() == MoveDown) {
+                return moveVertSituation(newcursor, oldcursor, 0, 2);
+            } else if (newcursor.direction() == MoveUp) {
+                return moveVertSituation(newcursor, oldcursor, 1, 0);
+            } else {
+                return moveVertSituation(newcursor, oldcursor, 0, 1);
+            }
+            break;
+        case 2:
+            return moveVertSituation(newcursor, oldcursor, 0, 2);
+        default:
+            return false;
         }
     }
     return false;
@@ -198,19 +196,19 @@ bool UnderOverElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& old
 
 int UnderOverElement::endPosition() const
 {
-    return m_elementType==UnderOver ? 5 : 3;
+    return m_elementType == UnderOver ? 5 : 3;
 }
 
-bool UnderOverElement::setCursorTo ( FormulaCursor& cursor, QPointF point )
+bool UnderOverElement::setCursorTo(FormulaCursor &cursor, QPointF point)
 {
     if (cursor.isSelecting()) {
         return false;
     }
     if (m_underElement && m_underElement->boundingRect().contains(point)) {
-        return m_underElement->setCursorTo(cursor, point-m_underElement->origin());
+        return m_underElement->setCursorTo(cursor, point - m_underElement->origin());
     } else if (m_overElement && m_overElement->boundingRect().contains(point)) {
-        return m_overElement->setCursorTo(cursor, point-m_overElement->origin());
+        return m_overElement->setCursorTo(cursor, point - m_overElement->origin());
     } else {
-        return m_baseElement->setCursorTo(cursor, point-m_baseElement->origin());
+        return m_baseElement->setCursorTo(cursor, point - m_baseElement->origin());
     }
 }

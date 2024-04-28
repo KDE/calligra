@@ -16,22 +16,22 @@ class CQThumbnailItem : public QDeclarativeItem
     Q_PROPERTY(QPixmap content READ content WRITE setContent NOTIFY contentChanged)
 
 public:
-    explicit CQThumbnailItem(QDeclarativeItem* parent = 0);
+    explicit CQThumbnailItem(QDeclarativeItem *parent = 0);
     ~CQThumbnailItem();
 
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* );
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *);
 
     QPixmap content() const;
 
 public Q_SLOTS:
-    void setContent(const QPixmap& content);
+    void setContent(const QPixmap &content);
 
 Q_SIGNALS:
     void contentChanged();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // CQTHUMBNAILITEM_H

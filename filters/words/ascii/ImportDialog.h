@@ -8,8 +8,8 @@
 #ifndef _IMPORT_DIALOG_H
 #define _IMPORT_DIALOG_H
 
-#include <QWidget>
 #include <QButtonGroup>
+#include <QWidget>
 
 #include <KoDialog.h>
 #include <ui_ImportDialogUI.h>

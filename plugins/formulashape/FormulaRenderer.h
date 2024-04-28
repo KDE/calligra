@@ -7,8 +7,8 @@
 #ifndef FORMULARENDERER_H
 #define FORMULARENDERER_H
 
-#include <QPainter>
 #include "koformula_export.h"
+#include <QPainter>
 
 class AttributeManager;
 class BasicElement;
@@ -27,13 +27,14 @@ class BasicElement;
  * Using a central class for painting parts or the whole tree structure that makes
  * up a formula has several advantages. First it reduces a lot of code duplication.
  * Second it takes care of painting and layouting in the right order so that there
- * no need anymore for the single element classes to do so. Third we can control 
+ * no need anymore for the single element classes to do so. Third we can control
  * instance AttributeManager and destroying and constructing it often is not needed
  * anymore.
  *
  * @author Martin Pfeiffer <hubipete@gmx.net>
  */
-class KOFORMULA_EXPORT FormulaRenderer {
+class KOFORMULA_EXPORT FormulaRenderer
+{
 public:
     /// The constructor
     FormulaRenderer();
@@ -47,32 +48,32 @@ public:
      * @param element The element to be painted
      * @param hints Whether to show the hints
      */
-    void paintElement( QPainter& p, BasicElement* element, bool hints=false );
+    void paintElement(QPainter &p, BasicElement *element, bool hints = false);
 
     /**
      * Layout an element and all its children
      * @param element The element to be layouted
      */
-    void layoutElement( BasicElement* element );
+    void layoutElement(BasicElement *element);
 
     /**
      * Update an element after it has changed
      * @param p The QPainter that should be used to paint the element
      * @param element The element that has changed
      */
-    void update( QPainter& p, BasicElement* element );
+    void update(QPainter &p, BasicElement *element);
 
     /// Just for updating one elements layout after a change
-    void updateElementLayout( BasicElement* element );
+    void updateElementLayout(BasicElement *element);
 
 private:
-    qreal elementScaleFactor( BasicElement* element ) const;
+    qreal elementScaleFactor(BasicElement *element) const;
 
     /// The attribute manager used for rendering and layouting
-    AttributeManager* m_attributeManager;
+    AttributeManager *m_attributeManager;
 
     /// Used by update() to store the highest element in the tree that needs repaint
-    BasicElement* m_dirtyElement;
+    BasicElement *m_dirtyElement;
 };
 
 #endif // FORMULARENDERER_H

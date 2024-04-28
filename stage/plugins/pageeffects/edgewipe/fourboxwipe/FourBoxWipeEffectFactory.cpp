@@ -14,30 +14,25 @@
 #define FourBoxWipeEffectId "FourBoxWipeEffect"
 
 FourBoxWipeEffectFactory::FourBoxWipeEffectFactory()
-: KPrPageEffectFactory( FourBoxWipeEffectId, i18n( "Four Box" ) )
+    : KPrPageEffectFactory(FourBoxWipeEffectId, i18n("Four Box"))
 {
-    addStrategy( new CornersInWipeStrategy(false) );
-    addStrategy( new CornersInWipeStrategy(true) );
-    addStrategy( new CornersOutWipeStrategy(false) );
-    addStrategy( new CornersOutWipeStrategy(true) );
+    addStrategy(new CornersInWipeStrategy(false));
+    addStrategy(new CornersInWipeStrategy(true));
+    addStrategy(new CornersOutWipeStrategy(false));
+    addStrategy(new CornersOutWipeStrategy(true));
 }
 
 FourBoxWipeEffectFactory::~FourBoxWipeEffectFactory()
 {
 }
 
-static const KLazyLocalizedString s_subTypes[] = {
-    kli18n( "Corners In" ),
-    kli18n( "Corners In Reverse" ),
-    kli18n( "Corners Out" ),
-    kli18n( "Corners Out Reverse" )
-};
+static const KLazyLocalizedString s_subTypes[] = {kli18n("Corners In"), kli18n("Corners In Reverse"), kli18n("Corners Out"), kli18n("Corners Out Reverse")};
 
 QString FourBoxWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return s_subTypes[subType].toString();
     } else {
-        return i18n( "Unknown subtype" );
+        return i18n("Unknown subtype");
     }
 }

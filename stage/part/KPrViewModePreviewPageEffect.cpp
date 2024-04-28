@@ -26,140 +26,127 @@
 #include <QPainter>
 #include <QWidget>
 
-#include <KoPointerEvent.h>
-#include <KoPageApp.h>
 #include <KoPACanvasBase.h>
 #include <KoPAViewBase.h>
+#include <KoPageApp.h>
+#include <KoPointerEvent.h>
 #include <KoZoomHandler.h>
 
-#include "StageDebug.h"
 #include "KPrDocument.h"
 #include "KPrEndOfSlideShowPage.h"
 #include "KPrPage.h"
+#include "StageDebug.h"
 #include "pageeffects/KPrPageEffect.h"
 #include "pageeffects/KPrPageEffectRunner.h"
 
-KPrViewModePreviewPageEffect::KPrViewModePreviewPageEffect( KoPAViewBase * view, KoPACanvasBase * canvas )
-: KoPAViewMode( view, canvas )
-, m_savedViewMode(0)
-, m_pageEffect(0)
-, m_pageEffectRunner(0)
-, m_page(0)
-, m_prevpage(0)
+KPrViewModePreviewPageEffect::KPrViewModePreviewPageEffect(KoPAViewBase *view, KoPACanvasBase *canvas)
+    : KoPAViewMode(view, canvas)
+    , m_savedViewMode(0)
+    , m_pageEffect(0)
+    , m_pageEffectRunner(0)
+    , m_page(0)
+    , m_prevpage(0)
 {
-    connect( &m_timeLine, &QTimeLine::valueChanged, this, &KPrViewModePreviewPageEffect::animate );
-    connect( &m_timeLine, &QTimeLine::finished, this, &KPrViewModePreviewPageEffect::activateSavedViewMode );
+    connect(&m_timeLine, &QTimeLine::valueChanged, this, &KPrViewModePreviewPageEffect::animate);
+    connect(&m_timeLine, &QTimeLine::finished, this, &KPrViewModePreviewPageEffect::activateSavedViewMode);
 }
 
 KPrViewModePreviewPageEffect::~KPrViewModePreviewPageEffect()
 {
 }
 
-
-void KPrViewModePreviewPageEffect::paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect)
+void KPrViewModePreviewPageEffect::paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect)
 {
     Q_UNUSED(canvas);
     Q_UNUSED(paintRect);
-    //QRect framerect = canvas->rect();
+    // QRect framerect = canvas->rect();
 
     if (m_pageEffectRunner && m_timeLine.state() == QTimeLine::Running) {
         m_pageEffectRunner->paint(painter);
     }
 }
 
-
-void KPrViewModePreviewPageEffect::tabletEvent( QTabletEvent *event, const QPointF &point )
+void KPrViewModePreviewPageEffect::tabletEvent(QTabletEvent *event, const QPointF &point)
 {
     Q_UNUSED(event);
     Q_UNUSED(point);
 }
 
-
-void KPrViewModePreviewPageEffect::mousePressEvent( QMouseEvent *event, const QPointF &point )
+void KPrViewModePreviewPageEffect::mousePressEvent(QMouseEvent *event, const QPointF &point)
 {
     Q_UNUSED(event);
     Q_UNUSED(point);
 }
 
-
-void KPrViewModePreviewPageEffect::mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point )
+void KPrViewModePreviewPageEffect::mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point)
 {
     Q_UNUSED(event);
     Q_UNUSED(point);
 }
 
-
-void KPrViewModePreviewPageEffect::mouseMoveEvent( QMouseEvent *event, const QPointF &point )
+void KPrViewModePreviewPageEffect::mouseMoveEvent(QMouseEvent *event, const QPointF &point)
 {
     Q_UNUSED(event);
     Q_UNUSED(point);
 }
 
-
-void KPrViewModePreviewPageEffect::mouseReleaseEvent( QMouseEvent *event, const QPointF &point )
+void KPrViewModePreviewPageEffect::mouseReleaseEvent(QMouseEvent *event, const QPointF &point)
 {
     Q_UNUSED(event);
     Q_UNUSED(point);
 }
 
-void KPrViewModePreviewPageEffect::shortcutOverrideEvent( QKeyEvent *event )
+void KPrViewModePreviewPageEffect::shortcutOverrideEvent(QKeyEvent *event)
 {
     Q_UNUSED(event);
 }
 
-void KPrViewModePreviewPageEffect::keyPressEvent( QKeyEvent *event )
+void KPrViewModePreviewPageEffect::keyPressEvent(QKeyEvent *event)
 {
     Q_UNUSED(event);
 }
 
-
-void KPrViewModePreviewPageEffect::keyReleaseEvent( QKeyEvent *event )
+void KPrViewModePreviewPageEffect::keyReleaseEvent(QKeyEvent *event)
 {
     Q_UNUSED(event);
 }
 
-
-void KPrViewModePreviewPageEffect::wheelEvent( QWheelEvent * event, const QPointF &point )
+void KPrViewModePreviewPageEffect::wheelEvent(QWheelEvent *event, const QPointF &point)
 {
     Q_UNUSED(event);
     Q_UNUSED(point);
 }
 
-
-void KPrViewModePreviewPageEffect::activate( KoPAViewMode * previousViewMode )
+void KPrViewModePreviewPageEffect::activate(KoPAViewMode *previousViewMode)
 {
-    m_savedViewMode = previousViewMode;               // store the previous view mode
+    m_savedViewMode = previousViewMode; // store the previous view mode
 
     // the update of the canvas is needed so that the old page gets drawn fully before the effect starts
     canvas()->repaint();
-    m_timeLine.setDuration( m_pageEffect->duration() );
-    m_timeLine.setCurrentTime( 0 );
+    m_timeLine.setDuration(m_pageEffect->duration());
+    m_timeLine.setCurrentTime(0);
     m_timeLine.start();
 }
 
-
 void KPrViewModePreviewPageEffect::deactivate()
 {
-    m_savedViewMode = 0;               // store the previous view mode
+    m_savedViewMode = 0; // store the previous view mode
 }
 
-
-void KPrViewModePreviewPageEffect::updateActivePage( KoPAPageBase *page )
+void KPrViewModePreviewPageEffect::updateActivePage(KoPAPageBase *page)
 {
-    m_view->setActivePage( page );
+    m_view->setActivePage(page);
 }
-
 
 void KPrViewModePreviewPageEffect::activateSavedViewMode()
 {
-    m_view->setViewMode( m_savedViewMode );
-    //canvas()->update();
+    m_view->setViewMode(m_savedViewMode);
+    // canvas()->update();
 }
 
-
-void KPrViewModePreviewPageEffect::setPageEffect( KPrPageEffect* pageEffect, KPrPage* page, KPrPage* prevpage )
+void KPrViewModePreviewPageEffect::setPageEffect(KPrPageEffect *pageEffect, KPrPage *page, KPrPage *prevpage)
 {
-    if(m_savedViewMode) {//stop the previous playing
+    if (m_savedViewMode) { // stop the previous playing
         activateSavedViewMode();
     }
 
@@ -171,42 +158,39 @@ void KPrViewModePreviewPageEffect::setPageEffect( KPrPageEffect* pageEffect, KPr
     m_page = page;
     m_prevpage = prevpage;
 
-    if(m_page) {
+    if (m_page) {
         updatePixmaps();
 
-        if(m_pageEffect) {
-            m_pageEffectRunner = new KPrPageEffectRunner( m_oldPage, m_newPage, canvas()->canvasWidget(), m_pageEffect );
+        if (m_pageEffect) {
+            m_pageEffectRunner = new KPrPageEffectRunner(m_oldPage, m_newPage, canvas()->canvasWidget(), m_pageEffect);
         }
     }
 }
 
 void KPrViewModePreviewPageEffect::animate()
 {
-    if ( m_pageEffectRunner ) {
-        m_pageEffectRunner->next( m_timeLine.currentTime() );
+    if (m_pageEffectRunner) {
+        m_pageEffectRunner->next(m_timeLine.currentTime());
     }
 }
 
 void KPrViewModePreviewPageEffect::updatePixmaps()
 {
-    if(!m_page)
+    if (!m_page)
         return;
 
     QSize size = canvas()->canvasWidget()->size(); // TODO wrong this should be page/document size
 
     m_newPage = m_page->thumbnail(size);
 
-    if(m_newPage.isNull())
+    if (m_newPage.isNull())
         return;
 
-    if(m_prevpage && m_prevpage != m_page)
-    {
+    if (m_prevpage && m_prevpage != m_page) {
         m_oldPage = m_prevpage->thumbnail(size);
-    }
-    else
-    {
+    } else {
         QPixmap oldPage(size);
-        oldPage.fill( QColor(Qt::black) );
+        oldPage.fill(QColor(Qt::black));
         m_oldPage = oldPage;
     }
 }

@@ -25,17 +25,17 @@
 
 #include "stage_export.h"
 
-
 class STAGE_EXPORT KPrPageData
 {
 public:
     explicit KPrPageData(KPrDocument *document);
     ~KPrPageData();
 
-    KPrShapeAnimations & animations();
-    KPrPlaceholders & placeholders();
-    const KPrPlaceholders & placeholders() const;
+    KPrShapeAnimations &animations();
+    KPrPlaceholders &placeholders();
+    const KPrPlaceholders &placeholders() const;
     QList<KPrAnimationStep *> animationSteps() const;
+
 private:
     KPrShapeAnimations m_animations;
     KPrPlaceholders m_placeholders;

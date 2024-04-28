@@ -7,50 +7,51 @@
 #include "TokenElement.h"
 
 #include "AttributeManager.h"
-#include "FormulaCursor.h"
 #include "Dictionary.h"
-#include "GlyphElement.h"
+#include "FormulaCursor.h"
 #include "FormulaDebug.h"
+#include "GlyphElement.h"
 
-#include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
 #include <QPainter>
 
-TokenElement::TokenElement( BasicElement* parent ) : BasicElement( parent )
+TokenElement::TokenElement(BasicElement *parent)
+    : BasicElement(parent)
 {
     m_stretchHorizontally = false;
     m_stretchVertically = false;
 }
 
-const QList<BasicElement*> TokenElement::childElements() const
+const QList<BasicElement *> TokenElement::childElements() const
 {
     // only return the mglyph elements
-    QList<BasicElement*> tmpList;
-    foreach( GlyphElement* tmp, m_glyphs )
+    QList<BasicElement *> tmpList;
+    foreach (GlyphElement *tmp, m_glyphs)
         tmpList << tmp;
 
     return tmpList;
 }
-void TokenElement::paint( QPainter& painter, AttributeManager* am )
+void TokenElement::paint(QPainter &painter, AttributeManager *am)
 {
     // set the painter to background color and paint it
-    painter.setPen( am->colorOf( "mathbackground", this ) );
-    painter.setBrush( QBrush( painter.pen().color() ) );
-    painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
+    painter.setPen(am->colorOf("mathbackground", this));
+    painter.setBrush(QBrush(painter.pen().color()));
+    painter.drawRect(QRectF(0.0, 0.0, width(), height()));
 
     // set the painter to foreground color and paint the text in the content path
-    QColor color = am->colorOf( "mathcolor", this );
+    QColor color = am->colorOf("mathcolor", this);
     if (!color.isValid())
-        color = am->colorOf( "color", this );
+        color = am->colorOf("color", this);
 
-    painter.translate( m_xoffset, baseLine() );
-    if(m_stretchHorizontally || m_stretchVertically)
+    painter.translate(m_xoffset, baseLine());
+    if (m_stretchHorizontally || m_stretchVertically)
         painter.scale(width() / m_originalSize.width(), height() / m_originalSize.height());
 
-    painter.setPen( Qt::NoPen );
-    painter.setBrush( QBrush( color ) );
-    painter.drawPath( m_contentPath );
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(QBrush(color));
+    painter.drawPath(m_contentPath);
 }
 
 int TokenElement::endPosition() const
@@ -58,12 +59,12 @@ int TokenElement::endPosition() const
     return m_rawString.length();
 }
 
-void TokenElement::layout( const AttributeManager* am )
+void TokenElement::layout(const AttributeManager *am)
 {
-    m_offsets.erase(m_offsets.begin(),m_offsets.end());
+    m_offsets.erase(m_offsets.begin(), m_offsets.end());
     m_offsets << 0.0;
     // Query the font to use
-    m_font = am->font( this );
+    m_font = am->font(this);
     QFontMetricsF fm(m_font);
 
     // save the token in an empty path
@@ -71,199 +72,194 @@ void TokenElement::layout( const AttributeManager* am )
 
     /* Current bounding box.  Note that the left can be negative, for italics etc */
     QRectF boundingrect;
-    if(m_glyphs.isEmpty()) {//optimize for the common case
+    if (m_glyphs.isEmpty()) { // optimize for the common case
         boundingrect = renderToPath(m_rawString, m_contentPath);
         for (int j = 0; j < m_rawString.length(); ++j) {
-                m_offsets.append(fm.boundingRect(m_rawString.left(j+1)).width());
+            m_offsets.append(fm.boundingRect(m_rawString.left(j + 1)).width());
         }
-     } else {
+    } else {
         // replace all the object replacement characters with glyphs
         // We have to keep track of the bounding box at all times
         QString chunk;
         int counter = 0;
-        for( int i = 0; i < m_rawString.length(); i++ ) {
-            if( m_rawString[ i ] != QChar::ObjectReplacementCharacter )
-                chunk.append( m_rawString[ i ] );
+        for (int i = 0; i < m_rawString.length(); i++) {
+            if (m_rawString[i] != QChar::ObjectReplacementCharacter)
+                chunk.append(m_rawString[i]);
             else {
                 m_contentPath.moveTo(boundingrect.right(), 0);
-                QRectF newbox = renderToPath( chunk, m_contentPath );
-                boundingrect.setRight( boundingrect.right() + newbox.right());
-                boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
-                boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
+                QRectF newbox = renderToPath(chunk, m_contentPath);
+                boundingrect.setRight(boundingrect.right() + newbox.right());
+                boundingrect.setTop(qMax(boundingrect.top(), newbox.top()));
+                boundingrect.setBottom(qMax(boundingrect.bottom(), newbox.bottom()));
                 qreal glyphoffset = m_offsets.last();
                 for (int j = 0; j < chunk.length(); ++j) {
-                    m_offsets << fm.boundingRect(chunk.left(j+1)).width() + glyphoffset;
+                    m_offsets << fm.boundingRect(chunk.left(j + 1)).width() + glyphoffset;
                 }
                 m_contentPath.moveTo(boundingrect.right(), 0);
-                newbox = m_glyphs[ counter ]->renderToPath( QString(), m_contentPath );
-                boundingrect.setRight( boundingrect.right() + newbox.right());
-                boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
-                boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
+                newbox = m_glyphs[counter]->renderToPath(QString(), m_contentPath);
+                boundingrect.setRight(boundingrect.right() + newbox.right());
+                boundingrect.setTop(qMax(boundingrect.top(), newbox.top()));
+                boundingrect.setBottom(qMax(boundingrect.bottom(), newbox.bottom()));
                 m_offsets.append(newbox.width() + m_offsets.last());
                 counter++;
                 chunk.clear();
             }
         }
-        if( !chunk.isEmpty() ) {
+        if (!chunk.isEmpty()) {
             m_contentPath.moveTo(boundingrect.right(), 0);
-            QRectF newbox = renderToPath( chunk, m_contentPath );
-            boundingrect.setRight( boundingrect.right() + newbox.right());
-            boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
-            boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
-//             qreal glyphoffset = m_offsets.last();
+            QRectF newbox = renderToPath(chunk, m_contentPath);
+            boundingrect.setRight(boundingrect.right() + newbox.right());
+            boundingrect.setTop(qMax(boundingrect.top(), newbox.top()));
+            boundingrect.setBottom(qMax(boundingrect.bottom(), newbox.bottom()));
+            //             qreal glyphoffset = m_offsets.last();
             for (int j = 0; j < chunk.length(); ++j) {
-                m_offsets << fm.boundingRect(chunk.left(j+1)).width() + m_offsets.last();
+                m_offsets << fm.boundingRect(chunk.left(j + 1)).width() + m_offsets.last();
             }
         }
     }
-    //FIXME: This is only a temporary solution
-    boundingrect=m_contentPath.boundingRect();
+    // FIXME: This is only a temporary solution
+    boundingrect = m_contentPath.boundingRect();
     m_offsets.removeLast();
     m_offsets.append(m_contentPath.boundingRect().right());
-    //The left side may be negative, because of italised letters etc. we need to adjust for this when painting
-    //The qMax is just incase.  The bounding box left should never be >0
+    // The left side may be negative, because of italised letters etc. we need to adjust for this when painting
+    // The qMax is just incase.  The bounding box left should never be >0
     m_xoffset = qMax(-boundingrect.left(), (qreal)0.0);
     // As the text is added to (0,0) the baseline equals the top edge of the
     // elements bounding rect, while translating it down the text's baseline moves too
-    setBaseLine( -boundingrect.y() ); // set baseline accordingly
-    setWidth( boundingrect.right() + m_xoffset );
-    setHeight( boundingrect.height() );
+    setBaseLine(-boundingrect.y()); // set baseline accordingly
+    setWidth(boundingrect.right() + m_xoffset);
+    setHeight(boundingrect.height());
     m_originalSize = QSizeF(width(), height());
 }
 
-bool TokenElement::insertChild( int position, BasicElement* child )
+bool TokenElement::insertChild(int position, BasicElement *child)
 {
-    Q_UNUSED( position)
-    Q_UNUSED( child )
-    //if( child && child->elementType() == Glyph ) {
-    //m_rawString.insert( QChar( QChar::ObjectReplacementCharacter ) );
-    //    m_glyphs.insert();
-    //    return false;
-    //} else {
+    Q_UNUSED(position)
+    Q_UNUSED(child)
+    // if( child && child->elementType() == Glyph ) {
+    // m_rawString.insert( QChar( QChar::ObjectReplacementCharacter ) );
+    //     m_glyphs.insert();
+    //     return false;
+    // } else {
     return false;
     //}
 }
 
-
-void TokenElement::insertGlyphs ( int position, QList< GlyphElement* > glyphs )
+void TokenElement::insertGlyphs(int position, QList<GlyphElement *> glyphs)
 {
-    for (int i=0; i < glyphs.length(); ++i) {
-        m_glyphs.insert(position+i,glyphs[i]);
+    for (int i = 0; i < glyphs.length(); ++i) {
+        m_glyphs.insert(position + i, glyphs[i]);
     }
 }
 
-
-bool TokenElement::insertText ( int position, const QString& text )
+bool TokenElement::insertText(int position, const QString &text)
 {
-    m_rawString.insert (position,text);
+    m_rawString.insert(position, text);
     return true;
 }
 
-
-QList< GlyphElement* > TokenElement::glyphList ( int position, int length )
+QList<GlyphElement *> TokenElement::glyphList(int position, int length)
 {
-    QList<GlyphElement*> tmp;
-    //find out, how many glyphs we have
-    int counter=0;
-    for (int i=position; i<position+length; ++i) {
-        if (m_rawString[ position ] == QChar::ObjectReplacementCharacter) {
+    QList<GlyphElement *> tmp;
+    // find out, how many glyphs we have
+    int counter = 0;
+    for (int i = position; i < position + length; ++i) {
+        if (m_rawString[position] == QChar::ObjectReplacementCharacter) {
             counter++;
         }
     }
-    int start=0;
-    //find out where we should start removing glyphs
-    if (counter>0) {
-        for (int i=0; i<position; ++i) {
+    int start = 0;
+    // find out where we should start removing glyphs
+    if (counter > 0) {
+        for (int i = 0; i < position; ++i) {
             if (m_rawString[position] == QChar::ObjectReplacementCharacter) {
                 start++;
             }
         }
     }
-    for (int i=start; i<start+counter; ++i) {
+    for (int i = start; i < start + counter; ++i) {
         tmp.append(m_glyphs.at(i));
     }
     return tmp;
 }
 
-
-int TokenElement::removeText ( int position, int length )
+int TokenElement::removeText(int position, int length)
 {
-    //find out, how many glyphs we have
-    int counter=0;
-    for (int i=position; i<position+length; ++i) {
-        if (m_rawString[ position ] == QChar::ObjectReplacementCharacter) {
+    // find out, how many glyphs we have
+    int counter = 0;
+    for (int i = position; i < position + length; ++i) {
+        if (m_rawString[position] == QChar::ObjectReplacementCharacter) {
             counter++;
         }
     }
-    
-    int start=0;
-    //find out where we should start removing glyphs
-    if (counter>0) {
-        for (int i=0; i<position; ++i) {
+
+    int start = 0;
+    // find out where we should start removing glyphs
+    if (counter > 0) {
+        for (int i = 0; i < position; ++i) {
             if (m_rawString[position] == QChar::ObjectReplacementCharacter) {
                 start++;
             }
         }
-    } 
-    for (int i=start; i<start+counter; ++i) {
+    }
+    for (int i = start; i < start + counter; ++i) {
         m_glyphs.removeAt(i);
     }
-    m_rawString.remove(position,length);
+    m_rawString.remove(position, length);
     return start;
 }
 
-bool TokenElement::setCursorTo(FormulaCursor& cursor, QPointF point) {
+bool TokenElement::setCursorTo(FormulaCursor &cursor, QPointF point)
+{
     int i = 0;
     cursor.setCurrentElement(this);
-    if (cursorOffset(endPosition())<point.x()) {
+    if (cursorOffset(endPosition()) < point.x()) {
         cursor.setPosition(endPosition());
         return true;
     }
-    //Find the letter we clicked on
-    for( i = 1; i < endPosition(); ++i ) {
+    // Find the letter we clicked on
+    for (i = 1; i < endPosition(); ++i) {
         if (point.x() < cursorOffset(i)) {
             break;
         }
     }
-    
-    //Find out, if we should place the cursor before or after the character
-    if ((point.x()-cursorOffset(i-1))<(cursorOffset(i)-point.x())) {	
+
+    // Find out, if we should place the cursor before or after the character
+    if ((point.x() - cursorOffset(i - 1)) < (cursorOffset(i) - point.x())) {
         --i;
     }
     cursor.setPosition(i);
     return true;
 }
 
-
 QLineF TokenElement::cursorLine(int position) const
 {
     // inside tokens let the token calculate the cursor x offset
-    qreal tmp = cursorOffset( position );
-    QPointF top = absoluteBoundingRect().topLeft() + QPointF( tmp, 0 );
-    QPointF bottom = top + QPointF( 0.0,height() );
-    return QLineF(top,bottom);
+    qreal tmp = cursorOffset(position);
+    QPointF top = absoluteBoundingRect().topLeft() + QPointF(tmp, 0);
+    QPointF bottom = top + QPointF(0.0, height());
+    return QLineF(top, bottom);
 }
 
-bool TokenElement::acceptCursor( const FormulaCursor& cursor )
+bool TokenElement::acceptCursor(const FormulaCursor &cursor)
 {
-    Q_UNUSED( cursor )
+    Q_UNUSED(cursor)
     return true;
 }
 
-bool TokenElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor) {
-    Q_UNUSED( oldcursor )
-    if ((newcursor.direction()==MoveUp) ||
-        (newcursor.direction()==MoveDown) ||
-        (newcursor.isHome() && newcursor.direction()==MoveLeft) ||
-        (newcursor.isEnd() && newcursor.direction()==MoveRight) ) {
+bool TokenElement::moveCursor(FormulaCursor &newcursor, FormulaCursor &oldcursor)
+{
+    Q_UNUSED(oldcursor)
+    if ((newcursor.direction() == MoveUp) || (newcursor.direction() == MoveDown) || (newcursor.isHome() && newcursor.direction() == MoveLeft)
+        || (newcursor.isEnd() && newcursor.direction() == MoveRight)) {
         return false;
     }
-    switch( newcursor.direction() ) {
+    switch (newcursor.direction()) {
     case MoveLeft:
-        newcursor+=-1;
+        newcursor += -1;
         break;
     case MoveRight:
-        newcursor+=1;
+        newcursor += 1;
         break;
     default:
         break;
@@ -271,10 +267,9 @@ bool TokenElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor
     return true;
 }
 
-
-qreal TokenElement::cursorOffset( const int position) const
+qreal TokenElement::cursorOffset(const int position) const
 {
-    return m_offsets[position]+m_xoffset;
+    return m_offsets[position] + m_xoffset;
 }
 
 QFont TokenElement::font() const
@@ -282,34 +277,31 @@ QFont TokenElement::font() const
     return m_font;
 }
 
-
-void TokenElement::setText ( const QString& text )
+void TokenElement::setText(const QString &text)
 {
-    removeText(0,m_rawString.length());
-    insertText(0,text);
+    removeText(0, m_rawString.length());
+    insertText(0, text);
 }
 
-const QString& TokenElement::text()
+const QString &TokenElement::text()
 {
     return m_rawString;
 }
 
-
-bool TokenElement::readMathMLContent( const KoXmlElement& element )
+bool TokenElement::readMathMLContent(const KoXmlElement &element)
 {
     // iterate over all child elements ( possible embedded glyphs ) and put the text
     // content in the m_rawString and mark glyph positions with
     // QChar::ObjectReplacementCharacter
-    GlyphElement* tmpGlyph;
+    GlyphElement *tmpGlyph;
     KoXmlNode node = element.firstChild();
-    while( !node.isNull() ) {
-        if( node.isElement() && node.toElement().tagName() == "mglyph" ) {
-            tmpGlyph = new GlyphElement( this );
-            m_rawString.append( QChar( QChar::ObjectReplacementCharacter ) );
-            tmpGlyph->readMathML( node.toElement() );
+    while (!node.isNull()) {
+        if (node.isElement() && node.toElement().tagName() == "mglyph") {
+            tmpGlyph = new GlyphElement(this);
+            m_rawString.append(QChar(QChar::ObjectReplacementCharacter));
+            tmpGlyph->readMathML(node.toElement());
             m_glyphs.append(tmpGlyph);
-        }
-        else if( node.isElement() )
+        } else if (node.isElement())
             return false;
         /*
         else if (node.isEntityReference()) {
@@ -318,7 +310,7 @@ bool TokenElement::readMathMLContent( const KoXmlElement& element )
         }
         */
         else {
-            m_rawString.append( node.toText().data() );
+            m_rawString.append(node.toText().data());
         }
 
         node = node.nextSibling();
@@ -327,22 +319,21 @@ bool TokenElement::readMathMLContent( const KoXmlElement& element )
     return true;
 }
 
-void TokenElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
+void TokenElement::writeMathMLContent(KoXmlWriter *writer, const QString &ns) const
 {
-    // split the m_rawString into text content chunks that are divided by glyphs 
+    // split the m_rawString into text content chunks that are divided by glyphs
     // which are represented as ObjectReplacementCharacter and write each chunk
-    QStringList tmp = m_rawString.split( QChar( QChar::ObjectReplacementCharacter ) );
-    for ( int i = 0; i < tmp.count(); i++ ) {
-        if( m_rawString.startsWith( QChar( QChar::ObjectReplacementCharacter ) ) ) {
-            m_glyphs[ i ]->writeMathML( writer, ns );
+    QStringList tmp = m_rawString.split(QChar(QChar::ObjectReplacementCharacter));
+    for (int i = 0; i < tmp.count(); i++) {
+        if (m_rawString.startsWith(QChar(QChar::ObjectReplacementCharacter))) {
+            m_glyphs[i]->writeMathML(writer, ns);
             if (i + 1 < tmp.count()) {
-                writer->addTextNode( tmp[ i ] );
+                writer->addTextNode(tmp[i]);
             }
-        }
-        else {
-            writer->addTextNode( tmp[ i ] );
+        } else {
+            writer->addTextNode(tmp[i]);
             if (i + 1 < tmp.count()) {
-                m_glyphs[ i ]->writeMathML( writer, ns );
+                m_glyphs[i]->writeMathML(writer, ns);
             }
         }
     }

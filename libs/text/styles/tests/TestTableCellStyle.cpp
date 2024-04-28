@@ -1,11 +1,11 @@
 #include "TestTableCellStyle.h"
 
-#include "styles/KoTableStyle.h"
 #include "styles/KoTableCellStyle.h"
+#include "styles/KoTableStyle.h"
 
-#include <QTextTableCellFormat>
 #include <QRectF>
 #include <QTest>
+#include <QTextTableCellFormat>
 
 void TestTableCellStyle::testPen()
 {

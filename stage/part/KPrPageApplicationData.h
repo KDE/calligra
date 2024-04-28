@@ -24,31 +24,31 @@ class KPrPageEffect;
 class STAGE_EXPORT KPrPageApplicationData : public KoShapeApplicationData
 {
 public:
-   KPrPageApplicationData();
-   ~KPrPageApplicationData() override;
+    KPrPageApplicationData();
+    ~KPrPageApplicationData() override;
 
-   /**
-    * Get the page effect used to go to this page
-    */
-   KPrPageEffect * pageEffect();
+    /**
+     * Get the page effect used to go to this page
+     */
+    KPrPageEffect *pageEffect();
 
-   /**
-    * Set the page effect used for this page
-    */
-   void setPageEffect( KPrPageEffect * effect );
+    /**
+     * Set the page effect used for this page
+     */
+    void setPageEffect(KPrPageEffect *effect);
 
-   /**
-    * Get the page transition
-    */
-   KPrPageTransition &pageTransition();
-   /**
-    * Set the page transition
-    */
-   void setPageTransition(const KPrPageTransition &transition);
+    /**
+     * Get the page transition
+     */
+    KPrPageTransition &pageTransition();
+    /**
+     * Set the page transition
+     */
+    void setPageTransition(const KPrPageTransition &transition);
 
 private:
-   KPrPageEffect * m_pageEffect;
-   KPrPageTransition m_pageTransition;
+    KPrPageEffect *m_pageEffect;
+    KPrPageTransition m_pageTransition;
 };
 
 #endif // KPRPAGEAPPLICATIONDATA_H

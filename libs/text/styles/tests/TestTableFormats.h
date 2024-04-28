@@ -7,7 +7,9 @@ class TestTableFormats : public QObject
 {
     Q_OBJECT
 public:
-    TestTableFormats() {}
+    TestTableFormats()
+    {
+    }
 
 private Q_SLOTS:
     void testTableColumnFormat();

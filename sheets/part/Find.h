@@ -38,7 +38,7 @@ public:
     /**
      * Constructor.
      */
-    explicit Find(QObject* parent = 0);
+    explicit Find(QObject *parent = 0);
 
 public Q_SLOTS:
     /**
@@ -65,13 +65,13 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
 private Q_SLOTS:
     void setActiveMatch(const KoFindMatch &match);
 };
 
-} //namespace Sheets
-} //namespace Calligra
+} // namespace Sheets
+} // namespace Calligra
 
 #endif // CALLIGRA_SHEETS_FIND_H

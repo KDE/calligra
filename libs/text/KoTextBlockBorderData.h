@@ -27,9 +27,9 @@ public:
     /// Enum used to differentiate between the 4 types of borders this class maintains
     enum Side {
         Top = 0, ///< References the border at the top of the paragraph
-        Left,   ///< References the border at the left side of the paragraph
+        Left, ///< References the border at the left side of the paragraph
         Bottom, ///< References the border at the bottom of the paragraph
-        Right   ///< References the border at the right side of the paragraph
+        Right ///< References the border at the right side of the paragraph
     };
     /**
      * Constructor for the border data.
@@ -71,9 +71,13 @@ public:
      * @param space the amount of spacing between the outer border and the inner border in case of style being double
      * @param innerWidth the thickness of the inner border-line in case of style being double
      */
-    void setEdge(Side side, const QTextBlockFormat &bf, KoParagraphStyle::Property style,
-                 KoParagraphStyle::Property width, KoParagraphStyle::Property color,
-                 KoParagraphStyle::Property space, KoParagraphStyle::Property innerWidth);
+    void setEdge(Side side,
+                 const QTextBlockFormat &bf,
+                 KoParagraphStyle::Property style,
+                 KoParagraphStyle::Property width,
+                 KoParagraphStyle::Property color,
+                 KoParagraphStyle::Property space,
+                 KoParagraphStyle::Property innerWidth);
 
     /**
      * Set if this border should possibly be merged with the next.
@@ -102,7 +106,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

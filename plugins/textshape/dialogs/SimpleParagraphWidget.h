@@ -11,9 +11,9 @@
 
 #include <ui_SimpleParagraphWidget.h>
 
-#include <QWidget>
-#include <QTextBlock>
 #include <QPixmap>
+#include <QTextBlock>
+#include <QWidget>
 
 #include <KoListLevelProperties.h>
 
@@ -26,7 +26,10 @@ class StylesModel;
 class DockerStylesComboModel;
 class StylesDelegate;
 
-namespace Lists {struct ListStyleItem;};
+namespace Lists
+{
+struct ListStyleItem;
+};
 
 class SimpleParagraphWidget : public QWidget
 {
@@ -39,7 +42,7 @@ public:
 
 public Q_SLOTS:
     void setCurrentBlock(const QTextBlock &block);
-    void setCurrentFormat(const QTextBlockFormat& format);
+    void setCurrentFormat(const QTextBlockFormat &format);
     void setStyleManager(KoStyleManager *sm);
     void slotShowStyleManager(int index);
     void slotParagraphStyleApplied(const KoParagraphStyle *style);
@@ -59,14 +62,9 @@ private Q_SLOTS:
     void styleSelected(const QModelIndex &index);
 
 private:
-    enum DirectionButtonState {
-        LTR,
-        RTL,
-        Auto
-    };
+    enum DirectionButtonState { LTR, RTL, Auto };
 
     void updateDirection(DirectionButtonState state);
-
 
     QPixmap generateListLevelPixmap(const KoListLevelProperties &llp);
     void fillListButtons();

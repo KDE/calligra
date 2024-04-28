@@ -24,19 +24,13 @@ class FLAKE_EXPORT KoConnectionShape : public KoParameterShape
 public:
     enum Type {
         Standard, ///< escapes connected shapes with straight lines, connects with perpendicular lines
-        Lines,    ///< escapes connected shapes with straight lines, connects with straight line
+        Lines, ///< escapes connected shapes with straight lines, connects with straight line
         Straight, ///< one straight line between connected shapes
-        Curve     ///< a single curved line between connected shapes
+        Curve ///< a single curved line between connected shapes
     };
 
     // IDs of the connecting handles
-    enum HandleId {
-        StartHandle,
-        EndHandle,
-        ControlHandle_1,
-        ControlHandle_2,
-        ControlHandle_3
-    };
+    enum HandleId { StartHandle, EndHandle, ControlHandle_1, ControlHandle_2, ControlHandle_3 };
 
     KoConnectionShape();
     ~KoConnectionShape() override;
@@ -62,14 +56,14 @@ public:
     bool connectFirst(KoShape *shape, int connectionPointId);
 
     /**
-    * Sets the second shape the connector is connected to
-    *
-    * Passing a null pointer as the first parameter will sever the connection.
-    *
-    * @param shape the shape to connect to or null to reset the connection
-    * @param connectionPointId the id of the connection point to connect to
-    * @return true if connection could be established, otherwise false
-    */
+     * Sets the second shape the connector is connected to
+     *
+     * Passing a null pointer as the first parameter will sever the connection.
+     *
+     * @param shape the shape to connect to or null to reset the connection
+     * @param connectionPointId the id of the connection point to connect to
+     * @return true if connection could be established, otherwise false
+     */
     bool connectSecond(KoShape *shape, int connectionPointId);
 
     /**

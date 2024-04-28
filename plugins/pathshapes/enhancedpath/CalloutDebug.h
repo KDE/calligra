@@ -22,7 +22,7 @@ QDebug operator<<(QDebug dbg, KoProperties &p);
 
 extern const QLoggingCategory &CALLOUT_LOG();
 #define debugCallout qCDebug(CALLOUT_LOG)
-#define debugCalloutF qCDebug(CALLOUT_LOG)<<Q_FUNC_INFO
+#define debugCalloutF qCDebug(CALLOUT_LOG) << Q_FUNC_INFO
 #define warnCallout qCWarning(CALLOUT_LOG)
 #define errorCallout qCCritical(CALLOUT_LOG)
 

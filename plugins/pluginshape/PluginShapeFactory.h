@@ -17,7 +17,9 @@ class PluginShapeFactory : public KoShapeFactoryBase
 {
 public:
     PluginShapeFactory();
-    ~PluginShapeFactory() override {}
+    ~PluginShapeFactory() override
+    {
+    }
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;

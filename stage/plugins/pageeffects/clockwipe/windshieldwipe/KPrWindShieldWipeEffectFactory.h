@@ -16,17 +16,7 @@ public:
     ~KPrWindShieldWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType {
-        Right,
-        Up,
-        Vertical,
-        Horizontal,
-        RightReverse,
-        UpReverse,
-        VerticalReverse,
-        HorizontalReverse
-    };
+    enum SubType { Right, Up, Vertical, Horizontal, RightReverse, UpReverse, VerticalReverse, HorizontalReverse };
 };
 
 #endif /* KPRWINDSHIELDWIPEEFFECTFACTORY_H */
-

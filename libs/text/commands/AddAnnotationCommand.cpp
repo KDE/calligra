@@ -9,8 +9,8 @@
 #include "AddAnnotationCommand.h"
 
 #include <KoAnnotation.h>
-#include <KoShapeController.h>
 #include <KoShapeBasedDocumentBase.h>
+#include <KoShapeController.h>
 #include <KoTextDocument.h>
 
 AddAnnotationCommand::AddAnnotationCommand(KoAnnotation *annotation, KUndo2Command *parent)
@@ -35,16 +35,15 @@ void AddAnnotationCommand::redo()
 
     KoShapeController *shapeController = KoTextDocument(m_annotation->document()).shapeController();
     shapeController->documentBase()->addShape(m_annotation->annotationShape());
- 
+
     m_shape = 0;
 
-    //it's a textrange so we need to ask for a layout so we know where it is
+    // it's a textrange so we need to ask for a layout so we know where it is
     m_annotation->document()->markContentsDirty(m_annotation->rangeStart(), 0);
 }
-
 
 AddAnnotationCommand::~AddAnnotationCommand()
 {
     // We delete shape at KoShapeDeleteCommand.
-    //delete m_annotation->annotationShape();
+    // delete m_annotation->annotationShape();
 }

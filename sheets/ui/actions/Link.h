@@ -8,11 +8,9 @@
 #ifndef CALLIGRA_SHEETS_ACTION_LINK
 #define CALLIGRA_SHEETS_ACTION_LINK
 
-
 #include "DialogCellAction.h"
 
 #include "ui/commands/AbstractRegionCommand.h"
-
 
 namespace Calligra
 {
@@ -20,8 +18,9 @@ namespace Sheets
 {
 class LinkDialog;
 
-class Link : public DialogCellAction {
-Q_OBJECT
+class Link : public DialogCellAction
+{
+    Q_OBJECT
 public:
     Link(Actions *actions);
     virtual ~Link();
@@ -34,8 +33,9 @@ protected:
     virtual void onSelectionChanged() override;
 };
 
-class ClearLink : public CellAction {
-Q_OBJECT
+class ClearLink : public CellAction
+{
+    Q_OBJECT
 public:
     ClearLink(Actions *actions);
     virtual ~ClearLink();
@@ -45,7 +45,6 @@ protected:
     virtual QAction *createAction() override;
 };
 
-
 /**
  * \ingroup Commands
  * \brief Adds/Removes a hyperlink.
@@ -53,17 +52,16 @@ protected:
 class LinkCommand : public AbstractRegionCommand
 {
 public:
-    LinkCommand(const QString& text, const QString& link);
+    LinkCommand(const QString &text, const QString &link);
+
 protected:
-    bool process(Element* element) override;
+    bool process(Element *element) override;
 
     QString newText;
     QString newLink;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_LINK
+#endif // CALLIGRA_SHEETS_ACTION_LINK

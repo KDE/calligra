@@ -21,28 +21,31 @@ ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoDocu
     setZIndex(childShape->zIndex());
     setRunThrough(childShape->runThrough());
     rotate(childShape->rotation());
-    //setTransformation(childShape->transformation());
+    // setTransformation(childShape->transformation());
 
     if (childShape->parent()) {
         childShape->parent()->addShape(this);
         childShape->setParent(0);
     }
 
-    childShape->setPosition(QPointF(0.0,0.0)); // since its relative to my position, this won't move it
+    childShape->setPosition(QPointF(0.0, 0.0)); // since its relative to my position, this won't move it
     childShape->setSelectable(false); // our ShrinkToFitShapeContainer will handle that from now on
 
     d->model = new ShrinkToFitShapeContainerModel(this, d);
     addShape(childShape);
 
-    QSet<KoShape*> delegates;
+    QSet<KoShape *> delegates;
     delegates << childShape;
     setToolDelegates(delegates);
 
-    KoTextShapeData* data = dynamic_cast<KoTextShapeData*>(childShape->userData());
+    KoTextShapeData *data = dynamic_cast<KoTextShapeData *>(childShape->userData());
     Q_ASSERT(data);
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(data->document()->documentLayout());
     Q_ASSERT(lay);
-    QObject::connect(lay, &KoTextDocumentLayout::finishedLayout, static_cast<ShrinkToFitShapeContainerModel*>(d->model), &ShrinkToFitShapeContainerModel::finishedLayout);
+    QObject::connect(lay,
+                     &KoTextDocumentLayout::finishedLayout,
+                     static_cast<ShrinkToFitShapeContainerModel *>(d->model),
+                     &ShrinkToFitShapeContainerModel::finishedLayout);
 }
 
 ShrinkToFitShapeContainer::~ShrinkToFitShapeContainer()
@@ -53,7 +56,7 @@ void ShrinkToFitShapeContainer::paintComponent(QPainter &painter, const KoViewCo
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
-    //painter.fillRect(converter.documentToView(QRectF(QPointF(0,0),size())), QBrush(QColor("#ffcccc"))); // for testing
+    // painter.fillRect(converter.documentToView(QRectF(QPointF(0,0),size())), QBrush(QColor("#ffcccc"))); // for testing
 }
 
 bool ShrinkToFitShapeContainer::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -69,17 +72,17 @@ void ShrinkToFitShapeContainer::saveOdf(KoShapeSavingContext &context) const
     d->childShape->saveOdf(context);
 }
 
-ShrinkToFitShapeContainer* ShrinkToFitShapeContainer::wrapShape(KoShape *shape, KoDocumentResourceManager *documentResourceManager)
+ShrinkToFitShapeContainer *ShrinkToFitShapeContainer::wrapShape(KoShape *shape, KoDocumentResourceManager *documentResourceManager)
 {
-    Q_ASSERT(dynamic_cast<KoTextShapeData*>(shape->userData()));
-    Q_ASSERT(qobject_cast<KoTextDocumentLayout*>(dynamic_cast<KoTextShapeData*>(shape->userData())->document()->documentLayout()));
+    Q_ASSERT(dynamic_cast<KoTextShapeData *>(shape->userData()));
+    Q_ASSERT(qobject_cast<KoTextDocumentLayout *>(dynamic_cast<KoTextShapeData *>(shape->userData())->document()->documentLayout()));
 
     return new ShrinkToFitShapeContainer(shape, documentResourceManager);
 }
 
 void ShrinkToFitShapeContainer::tryWrapShape(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    KoTextShapeData* data = dynamic_cast<KoTextShapeData*>(shape->userData());
+    KoTextShapeData *data = dynamic_cast<KoTextShapeData *>(shape->userData());
     if (!data || data->resizeMethod() != KoTextShapeData::ShrinkToFitResize)
         return;
 
@@ -98,7 +101,7 @@ void ShrinkToFitShapeContainer::unwrapShape(KoShape *shape)
     removeShape(shape);
     shape->setParent(parent());
 
-    QSet<KoShape*> delegates = toolDelegates();
+    QSet<KoShape *> delegates = toolDelegates();
     delegates.remove(shape);
     setToolDelegates(delegates);
 
@@ -126,16 +129,17 @@ void ShrinkToFitShapeContainerModel::finishedLayout()
 
 void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
 {
-    Q_ASSERT(container == q); Q_UNUSED(container);
+    Q_ASSERT(container == q);
+    Q_UNUSED(container);
     if (type == KoShape::SizeChanged) {
-        KoTextShapeData* data = dynamic_cast<KoTextShapeData*>(d->childShape->userData());
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData *>(d->childShape->userData());
         Q_ASSERT(data);
         KoTextLayoutRootArea *rootArea = data->rootArea();
         Q_ASSERT(rootArea);
 
         QSizeF shapeSize = q->size();
         QSizeF documentSize = rootArea->boundingRect().size();
-        if (m_maybeUpdate &&shapeSize == m_shapeSize && documentSize == m_documentSize) {
+        if (m_maybeUpdate && shapeSize == m_shapeSize && documentSize == m_documentSize) {
             m_dirty = 0;
             return; // nothing to update
         }
@@ -143,11 +147,11 @@ void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *containe
         m_shapeSize = shapeSize;
         m_documentSize = documentSize;
 
-        if ( documentSize.width() > 0.0 && documentSize.height() > 0.0 ) {
+        if (documentSize.width() > 0.0 && documentSize.height() > 0.0) {
             if (m_dirty || !m_maybeUpdate) {
                 qreal scaleX = qMin<qreal>(1.0, shapeSize.width() / documentSize.width());
                 qreal scaleY = qMin<qreal>(1.0, shapeSize.height() / documentSize.height());
-                m_scale = (scaleX+scaleY)/2.0 * 0.95;
+                m_scale = (scaleX + scaleY) / 2.0 * 0.95;
                 if (m_maybeUpdate && m_dirty)
                     --m_dirty;
             }
@@ -167,18 +171,21 @@ void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *containe
 
 bool ShrinkToFitShapeContainerModel::inheritsTransform(const KoShape *child) const
 {
-    Q_ASSERT(child == d->childShape); Q_UNUSED(child);
+    Q_ASSERT(child == d->childShape);
+    Q_UNUSED(child);
     return true;
 }
 
 bool ShrinkToFitShapeContainerModel::isChildLocked(const KoShape *child) const
 {
-    Q_ASSERT(child == d->childShape); Q_UNUSED(child);
+    Q_ASSERT(child == d->childShape);
+    Q_UNUSED(child);
     return true;
 }
 
 bool ShrinkToFitShapeContainerModel::isClipped(const KoShape *child) const
 {
-    Q_ASSERT(child == d->childShape); Q_UNUSED(child);
+    Q_ASSERT(child == d->childShape);
+    Q_UNUSED(child);
     return false;
 }

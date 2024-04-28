@@ -7,9 +7,9 @@
 #ifndef KOPROGRESSBAR_H
 #define KOPROGRESSBAR_H
 
-#include <QProgressBar>
-#include <KoProgressProxy.h>
 #include "kowidgetutils_export.h"
+#include <KoProgressProxy.h>
+#include <QProgressBar>
 
 /**
  * KoProgressBar is a thin wrapper around QProgressBar that also implements
@@ -20,7 +20,6 @@ class KOWIDGETUTILS_EXPORT KoProgressBar : public QProgressBar, public KoProgres
 {
     Q_OBJECT
 public:
-
     explicit KoProgressBar(QWidget *parent = 0);
 
     ~KoProgressBar() override;

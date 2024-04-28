@@ -6,12 +6,12 @@
 
 #include "ColorMatrixEffect.h"
 #include "ColorChannelConversion.h"
-#include <KoFilterEffectRenderContext.h>
-#include <KoXmlWriter.h>
-#include <KoXmlReader.h>
 #include <KLocalizedString>
-#include <QRect>
+#include <KoFilterEffectRenderContext.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 #include <QImage>
+#include <QRect>
 #include <math.h>
 
 const int MatrixSize = 20;
@@ -19,8 +19,8 @@ const int MatrixRows = 4;
 const int MatrixCols = 5;
 
 ColorMatrixEffect::ColorMatrixEffect()
-        : KoFilterEffect(ColorMatrixEffectId, i18n("Color Matrix"))
-        , m_type(Matrix)
+    : KoFilterEffect(ColorMatrixEffectId, i18n("Color Matrix"))
+    , m_type(Matrix)
 {
     setIdentity();
 }
@@ -31,7 +31,7 @@ void ColorMatrixEffect::setIdentity()
     m_matrix.resize(MatrixSize);
     for (int r = 0; r < MatrixRows; ++r) {
         for (int c = 0; c < MatrixCols; ++c) {
-            m_matrix[r*MatrixCols+c] = r == c ? 1.0 : 0.0;
+            m_matrix[r * MatrixCols + c] = r == c ? 1.0 : 0.0;
         }
     }
 }
@@ -132,7 +132,7 @@ void ColorMatrixEffect::setLuminanceAlpha()
 {
     m_type = LuminanceAlpha;
 
-    memset(m_matrix.data(), 0, MatrixSize*sizeof(qreal));
+    memset(m_matrix.data(), 0, MatrixSize * sizeof(qreal));
 
     m_matrix[15] = 0.2125;
     m_matrix[16] = 0.7154;
@@ -144,18 +144,18 @@ QImage ColorMatrixEffect::processImage(const QImage &image, const KoFilterEffect
 {
     QImage result = image;
 
-    const QRgb *src = (const QRgb*)image.constBits();
-    QRgb *dst = (QRgb*)result.bits();
+    const QRgb *src = (const QRgb *)image.constBits();
+    QRgb *dst = (QRgb *)result.bits();
     int w = result.width();
 
-    const qreal * m = m_matrix.data();
+    const qreal *m = m_matrix.data();
     qreal sa, sr, sg, sb;
     qreal da, dr, dg, db;
 
     QRect roi = context.filterRegion().toRect();
     for (int row = roi.top(); row < roi.bottom(); ++row) {
         for (int col = roi.left(); col < roi.right(); ++col) {
-            const QRgb &s = src[row*w+col];
+            const QRgb &s = src[row * w + col];
             sa = fromIntColor[qAlpha(s)];
             sr = fromIntColor[qRed(s)];
             sg = fromIntColor[qGreen(s)];
@@ -169,8 +169,8 @@ QImage ColorMatrixEffect::processImage(const QImage &image, const KoFilterEffect
             }
 
             // apply matrix to color values
-            dr = m[ 0] * sr + m[ 1] * sg + m[ 2] * sb + m[ 3] * sa + m[ 4];
-            dg = m[ 5] * sr + m[ 6] * sg + m[ 7] * sb + m[ 8] * sa + m[ 9];
+            dr = m[0] * sr + m[1] * sg + m[2] * sb + m[3] * sa + m[4];
+            dg = m[5] * sr + m[6] * sg + m[7] * sb + m[8] * sa + m[9];
             db = m[10] * sr + m[11] * sg + m[12] * sb + m[13] * sa + m[14];
             da = m[15] * sr + m[16] * sg + m[17] * sb + m[18] * sa + m[19];
 
@@ -178,10 +178,10 @@ QImage ColorMatrixEffect::processImage(const QImage &image, const KoFilterEffect
             da *= 255.0;
 
             // set pre-multiplied color values on destination image
-            dst[row*w+col] = qRgba(static_cast<quint8>(qBound(qreal(0.0), dr * da, qreal(255.0))),
-                                   static_cast<quint8>(qBound(qreal(0.0), dg * da, qreal(255.0))),
-                                   static_cast<quint8>(qBound(qreal(0.0), db * da, qreal(255.0))),
-                                   static_cast<quint8>(qBound(qreal(0.0), da, qreal(255.0))));
+            dst[row * w + col] = qRgba(static_cast<quint8>(qBound(qreal(0.0), dr * da, qreal(255.0))),
+                                       static_cast<quint8>(qBound(qreal(0.0), dg * da, qreal(255.0))),
+                                       static_cast<quint8>(qBound(qreal(0.0), db * da, qreal(255.0))),
+                                       static_cast<quint8>(qBound(qreal(0.0), da, qreal(255.0))));
         }
     }
 
@@ -239,12 +239,11 @@ void ColorMatrixEffect::save(KoXmlWriter &writer)
         QString matrix;
         for (int r = 0; r < MatrixRows; ++r) {
             for (int c = 0; c < MatrixCols; ++c) {
-                matrix += QString("%1 ").arg(m_matrix[r*MatrixCols+c]);
+                matrix += QString("%1 ").arg(m_matrix[r * MatrixCols + c]);
             }
         }
         writer.addAttribute("values", matrix);
-    }
-    break;
+    } break;
     case Saturate:
         writer.addAttribute("type", "saturate");
         writer.addAttribute("values", QString("%1").arg(m_value));

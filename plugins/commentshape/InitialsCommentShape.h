@@ -15,9 +15,9 @@ public:
     InitialsCommentShape();
     virtual ~InitialsCommentShape();
 
-    virtual void saveOdf(KoShapeSavingContext& context) const;
-    virtual bool loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context);
-    virtual void paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
+    virtual void saveOdf(KoShapeSavingContext &context) const;
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     void setInitials(const QString &initials);
     QString initials();
@@ -25,6 +25,7 @@ public:
     bool isActive() const;
     void setActive(bool activate);
     void toogleActive();
+
 private:
     bool m_active;
     QString m_initials;

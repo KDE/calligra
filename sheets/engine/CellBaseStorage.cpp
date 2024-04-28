@@ -15,12 +15,12 @@
 #include <QWriteLocker>
 #endif
 
+#include "CellBase.h"
 #include "Formula.h"
 #include "SheetBase.h"
-#include "CellBase.h"
 
-#include "RectStorage.h"
 #include "FormulaStorage.h"
+#include "RectStorage.h"
 #include "ValidityStorage.h"
 #include "ValueStorage.h"
 
@@ -33,31 +33,32 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN CellBaseStorage::Private : public QSharedData
 {
 public:
-    Private(SheetBase* sheet)
-            : sheet(sheet)
-            , commentStorage(new CommentStorage())
-            , formulaStorage(new FormulaStorage())
-            , matrixStorage(new MatrixStorage(sheet->map()))
-            , namedAreaStorage(new NamedAreaStorage(sheet->map()))
-            , userInputStorage(new UserInputStorage())
-            , validityStorage(new ValidityStorage(sheet->map()))
-            , valueStorage(new ValueStorage())
+    Private(SheetBase *sheet)
+        : sheet(sheet)
+        , commentStorage(new CommentStorage())
+        , formulaStorage(new FormulaStorage())
+        , matrixStorage(new MatrixStorage(sheet->map()))
+        , namedAreaStorage(new NamedAreaStorage(sheet->map()))
+        , userInputStorage(new UserInputStorage())
+        , validityStorage(new ValidityStorage(sheet->map()))
+        , valueStorage(new ValueStorage())
     {
     }
 
-    Private(const Private& other, SheetBase* sheet)
-            : sheet(sheet)
-            , commentStorage(new CommentStorage(*other.commentStorage))
-            , formulaStorage(new FormulaStorage(*other.formulaStorage))
-            , matrixStorage(new MatrixStorage(*other.matrixStorage))
-            , namedAreaStorage(new NamedAreaStorage(*other.namedAreaStorage))
-            , userInputStorage(new UserInputStorage(*other.userInputStorage))
-            , validityStorage(new ValidityStorage(*other.validityStorage))
-            , valueStorage(new ValueStorage(*other.valueStorage))
+    Private(const Private &other, SheetBase *sheet)
+        : sheet(sheet)
+        , commentStorage(new CommentStorage(*other.commentStorage))
+        , formulaStorage(new FormulaStorage(*other.formulaStorage))
+        , matrixStorage(new MatrixStorage(*other.matrixStorage))
+        , namedAreaStorage(new NamedAreaStorage(*other.namedAreaStorage))
+        , userInputStorage(new UserInputStorage(*other.userInputStorage))
+        , validityStorage(new ValidityStorage(*other.validityStorage))
+        , valueStorage(new ValueStorage(*other.valueStorage))
     {
     }
 
-    ~Private() {
+    ~Private()
+    {
         delete commentStorage;
         delete formulaStorage;
         delete matrixStorage;
@@ -70,15 +71,15 @@ public:
     void recalcFormulas(const Region &r);
     void updateBindings(const Region &r);
 
-    SheetBase*              sheet;
+    SheetBase *sheet;
 
-    CommentStorage*         commentStorage;
-    FormulaStorage*         formulaStorage;
-    MatrixStorage*          matrixStorage;
-    NamedAreaStorage*       namedAreaStorage;
-    UserInputStorage*       userInputStorage;
-    ValidityStorage*        validityStorage;
-    ValueStorage*           valueStorage;
+    CommentStorage *commentStorage;
+    FormulaStorage *formulaStorage;
+    MatrixStorage *matrixStorage;
+    NamedAreaStorage *namedAreaStorage;
+    UserInputStorage *userInputStorage;
+    ValidityStorage *validityStorage;
+    ValueStorage *valueStorage;
 };
 
 void CellBaseStorage::Private::recalcFormulas(const Region &r)
@@ -95,34 +96,33 @@ void CellBaseStorage::Private::recalcFormulas(const Region &r)
     sheet->map()->addDamage(new CellDamage(sheet, providers, CellDamage::Value));
 }
 
-void CellBaseStorage::Private::updateBindings(const Region &r) {
+void CellBaseStorage::Private::updateBindings(const Region &r)
+{
     sheet->map()->addDamage(new CellDamage(sheet, r, CellDamage::Binding | CellDamage::NamedArea));
 }
 
-
-
-CellBaseStorage::CellBaseStorage(SheetBase* sheet)
-        : d(new Private(sheet))
+CellBaseStorage::CellBaseStorage(SheetBase *sheet)
+    : d(new Private(sheet))
 #ifdef CALLIGRA_SHEETS_MT
-        , bigUglyLock(QReadWriteLock::Recursive)
+    , bigUglyLock(QReadWriteLock::Recursive)
 #endif
 {
     fillStorages();
 }
 
-CellBaseStorage::CellBaseStorage(const CellBaseStorage& other)
-        : d(new Private(*other.d, other.d->sheet))
+CellBaseStorage::CellBaseStorage(const CellBaseStorage &other)
+    : d(new Private(*other.d, other.d->sheet))
 #ifdef CALLIGRA_SHEETS_MT
-        , bigUglyLock(QReadWriteLock::Recursive)
+    , bigUglyLock(QReadWriteLock::Recursive)
 #endif
 {
     fillStorages();
 }
 
-CellBaseStorage::CellBaseStorage(const CellBaseStorage& other, SheetBase* sheet)
-        : d(new Private(*other.d, sheet))
+CellBaseStorage::CellBaseStorage(const CellBaseStorage &other, SheetBase *sheet)
+    : d(new Private(*other.d, sheet))
 #ifdef CALLIGRA_SHEETS_MT
-        , bigUglyLock(QReadWriteLock::Recursive)
+    , bigUglyLock(QReadWriteLock::Recursive)
 #endif
 {
     fillStorages();
@@ -134,60 +134,57 @@ CellBaseStorage::~CellBaseStorage()
     delete d;
 }
 
-void CellBaseStorage::fillStorages() {
+void CellBaseStorage::fillStorages()
+{
     storages.clear();
-    storages.push_back (d->commentStorage);
-    storages.push_back (d->formulaStorage);
-    storages.push_back (d->matrixStorage);
-    storages.push_back (d->namedAreaStorage);
-    storages.push_back (d->userInputStorage);
-    storages.push_back (d->validityStorage);
-    storages.push_back (d->valueStorage);
+    storages.push_back(d->commentStorage);
+    storages.push_back(d->formulaStorage);
+    storages.push_back(d->matrixStorage);
+    storages.push_back(d->namedAreaStorage);
+    storages.push_back(d->userInputStorage);
+    storages.push_back(d->validityStorage);
+    storages.push_back(d->valueStorage);
 }
 
-
-SheetBase* CellBaseStorage::sheet() const
+SheetBase *CellBaseStorage::sheet() const
 {
     return d->sheet;
 }
 
-
-CommentStorage* CellBaseStorage::commentStorage() const
+CommentStorage *CellBaseStorage::commentStorage() const
 {
     return d->commentStorage;
 }
 
-FormulaStorage* CellBaseStorage::formulaStorage() const
+FormulaStorage *CellBaseStorage::formulaStorage() const
 {
     return d->formulaStorage;
 }
 
-MatrixStorage* CellBaseStorage::matrixStorage() const
+MatrixStorage *CellBaseStorage::matrixStorage() const
 {
     return d->matrixStorage;
 }
 
-NamedAreaStorage* CellBaseStorage::namedAreaStorage() const
+NamedAreaStorage *CellBaseStorage::namedAreaStorage() const
 {
     return d->namedAreaStorage;
 }
 
-UserInputStorage* CellBaseStorage::userInputStorage() const
+UserInputStorage *CellBaseStorage::userInputStorage() const
 {
     return d->userInputStorage;
 }
 
-ValidityStorage* CellBaseStorage::validityStorage() const
+ValidityStorage *CellBaseStorage::validityStorage() const
 {
     return d->validityStorage;
 }
 
-ValueStorage* CellBaseStorage::valueStorage() const
+ValueStorage *CellBaseStorage::valueStorage() const
 {
     return d->valueStorage;
 }
-
-
 
 Formula CellBaseStorage::formula(int column, int row) const
 {
@@ -197,7 +194,7 @@ Formula CellBaseStorage::formula(int column, int row) const
     return d->formulaStorage->lookup(column, row, Formula::empty());
 }
 
-void CellBaseStorage::setFormula(int column, int row, const Formula& formula)
+void CellBaseStorage::setFormula(int column, int row, const Formula &formula)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -226,7 +223,7 @@ QString CellBaseStorage::userInput(int column, int row) const
     return d->userInputStorage->lookup(column, row);
 }
 
-void CellBaseStorage::setUserInput(int column, int row, const QString& userInput)
+void CellBaseStorage::setUserInput(int column, int row, const QString &userInput)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -245,7 +242,7 @@ Value CellBaseStorage::value(int column, int row) const
     return d->valueStorage->lookup(column, row);
 }
 
-Value CellBaseStorage::valueRegion(const Region& region) const
+Value CellBaseStorage::valueRegion(const Region &region) const
 {
 #ifdef CALLIGRA_SHEETS_MT
     QReadLocker rl(&bigUglyLock);
@@ -254,7 +251,7 @@ Value CellBaseStorage::valueRegion(const Region& region) const
     return Value(d->valueStorage->subStorage(region, false), region.boundingRect().size());
 }
 
-void CellBaseStorage::setValue(int column, int row, const Value& value)
+void CellBaseStorage::setValue(int column, int row, const Value &value)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -295,7 +292,7 @@ QString CellBaseStorage::comment(int column, int row) const
     return d->commentStorage->lookup(column, row);
 }
 
-void CellBaseStorage::setComment(int column, int row, const QString& comment)
+void CellBaseStorage::setComment(int column, int row, const QString &comment)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -315,7 +312,7 @@ Validity CellBaseStorage::validity(int column, int row) const
     return d->validityStorage->contains(QPoint(column, row));
 }
 
-void CellBaseStorage::setValidity(const Region& region, Validity validity)
+void CellBaseStorage::setValidity(const Region &region, Validity validity)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -336,7 +333,7 @@ QString CellBaseStorage::namedArea(int column, int row) const
     return pair.second;
 }
 
-QVector< QPair<QRectF, QString> > CellBaseStorage::namedAreas(const Region& region) const
+QVector<QPair<QRectF, QString>> CellBaseStorage::namedAreas(const Region &region) const
 {
 #ifdef CALLIGRA_SHEETS_MT
     QReadLocker rl(&bigUglyLock);
@@ -344,7 +341,7 @@ QVector< QPair<QRectF, QString> > CellBaseStorage::namedAreas(const Region& regi
     return d->namedAreaStorage->intersectingPairs(region);
 }
 
-void CellBaseStorage::setNamedArea(const Region& region, const QString& namedArea)
+void CellBaseStorage::setNamedArea(const Region &region, const QString &namedArea)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -352,15 +349,13 @@ void CellBaseStorage::setNamedArea(const Region& region, const QString& namedAre
     d->namedAreaStorage->insert(region, namedArea);
 }
 
-void CellBaseStorage::removeNamedArea(const Region& region, const QString& namedArea)
+void CellBaseStorage::removeNamedArea(const Region &region, const QString &namedArea)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
 #endif
     d->namedAreaStorage->remove(region, namedArea);
 }
-
-
 
 bool CellBaseStorage::locksCells(int column, int row) const
 {
@@ -394,14 +389,14 @@ bool CellBaseStorage::isLocked(int column, int row) const
     return true;
 }
 
-bool CellBaseStorage::hasLockedCells(const Region& region) const
+bool CellBaseStorage::hasLockedCells(const Region &region) const
 {
 #ifdef CALLIGRA_SHEETS_MT
     QReadLocker rl(&bigUglyLock);
 #endif
     typedef QPair<QRectF, bool> RectBoolPair;
-    QVector<QPair<QRectF, bool> > pairs = d->matrixStorage->intersectingPairs(region);
-    for (const RectBoolPair& pair : pairs) {
+    QVector<QPair<QRectF, bool>> pairs = d->matrixStorage->intersectingPairs(region);
+    for (const RectBoolPair &pair : pairs) {
         if (pair.first.isNull())
             continue;
         if (pair.second == false)
@@ -420,7 +415,7 @@ bool CellBaseStorage::hasLockedCells(const Region& region) const
     return false;
 }
 
-void CellBaseStorage::lockCells(const QRect& rect)
+void CellBaseStorage::lockCells(const QRect &rect)
 {
     // Start by unlocking the cells that we lock right now
     unlockCells(rect);
@@ -428,7 +423,7 @@ void CellBaseStorage::lockCells(const QRect& rect)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
 #endif
-    const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(rect.topLeft());  // FIXME
+    const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(rect.topLeft()); // FIXME
     if (!pair.first.isNull())
         d->matrixStorage->insert(Region(pair.first.toRect()), false);
     // Lock the cells
@@ -450,13 +445,14 @@ void CellBaseStorage::unlockCells(int column, int row)
     d->matrixStorage->insert(Region(rect, d->sheet), false);
 }
 
-void CellBaseStorage::unlockCells(const QRect& rect)
+void CellBaseStorage::unlockCells(const QRect &rect)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
 #endif
     QRect validRect = rect.intersected(d->matrixStorage->usedArea());
-    if (validRect.isEmpty()) return;
+    if (validRect.isEmpty())
+        return;
     d->matrixStorage->insert(Region(validRect, d->sheet), false);
 }
 
@@ -474,9 +470,6 @@ QRect CellBaseStorage::lockedCells(int column, int row) const
         return QRect(column, row, 1, 1);
     return pair.first.toRect();
 }
-
-
-
 
 void CellBaseStorage::insertColumns(int position, int number)
 {
@@ -546,7 +539,7 @@ void CellBaseStorage::removeRows(int position, int number)
     d->recalcFormulas(invalidRegion);
 }
 
-void CellBaseStorage::removeShiftLeft(const QRect& rect)
+void CellBaseStorage::removeShiftLeft(const QRect &rect)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -562,7 +555,7 @@ void CellBaseStorage::removeShiftLeft(const QRect& rect)
     d->recalcFormulas(invalidRegion);
 }
 
-void CellBaseStorage::insertShiftRight(const QRect& rect)
+void CellBaseStorage::insertShiftRight(const QRect &rect)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -577,7 +570,7 @@ void CellBaseStorage::insertShiftRight(const QRect& rect)
     d->recalcFormulas(invalidRegion);
 }
 
-void CellBaseStorage::removeShiftUp(const QRect& rect)
+void CellBaseStorage::removeShiftUp(const QRect &rect)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -593,7 +586,7 @@ void CellBaseStorage::removeShiftUp(const QRect& rect)
     d->recalcFormulas(invalidRegion);
 }
 
-void CellBaseStorage::insertShiftDown(const QRect& rect)
+void CellBaseStorage::insertShiftDown(const QRect &rect)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
@@ -640,9 +633,7 @@ QRect CellBaseStorage::trimToUsedArea(const QRect &rect) const
 {
     int c = columns();
     int r = rows();
-    if ((rect.right() <= c) && (rect.bottom() <= r)) return rect;   // all good
+    if ((rect.right() <= c) && (rect.bottom() <= r))
+        return rect; // all good
     return rect.intersected(QRect(1, 1, c, r));
-    
 }
-
-

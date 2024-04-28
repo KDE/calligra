@@ -16,7 +16,7 @@
 using namespace Calligra::Sheets;
 
 StyleManager::StyleManager()
-        : m_defaultStyle(new CustomStyle())
+    : m_defaultStyle(new CustomStyle())
 {
 }
 
@@ -35,23 +35,23 @@ void StyleManager::resetDefaultStyle()
 
 void StyleManager::createBuiltinStyles()
 {
-    CustomStyle * header1 = new CustomStyle(i18n("Header"), m_defaultStyle);
+    CustomStyle *header1 = new CustomStyle(i18n("Header"), m_defaultStyle);
     QFont f(header1->font());
     f.setItalic(true);
     f.setPointSize(f.pointSize() + 2);
     f.setBold(true);
     header1->setFont(f);
     header1->setType(Style::BUILTIN);
-    m_styles[ header1->name()] = header1;
+    m_styles[header1->name()] = header1;
 
-    CustomStyle * header2 = new CustomStyle(i18n("Header1"), header1);
+    CustomStyle *header2 = new CustomStyle(i18n("Header1"), header1);
     QColor color(0xF0, 0xF0, 0xFF);
     header2->setBackgroundColor(color);
     QPen pen(Qt::black, 1, Qt::SolidLine);
     header2->setBottomBorderPen(pen);
     header2->setType(Style::BUILTIN);
 
-    m_styles[ header2->name()] = header2;
+    m_styles[header2->name()] = header2;
 
     emit styleListChanged();
 }
@@ -62,16 +62,16 @@ void StyleManager::defineOasisStyle(const QString &oasisName, const QString &sty
     m_oasisStyles[oasisName] = styleName;
 }
 
-CustomStyle * StyleManager::style(QString const & name) const
+CustomStyle *StyleManager::style(QString const &name) const
 {
     if (name.isEmpty())
         return 0;
     // on OpenDocument loading
-//     if ( !m_oasisStyles.isEmpty() )
+    //     if ( !m_oasisStyles.isEmpty() )
     {
         if (m_oasisStyles.contains(name) && m_styles.contains(m_oasisStyles[name]))
             return m_styles.value(m_oasisStyles[name]);
-//         return 0;
+        //         return 0;
     }
     if (m_styles.contains(name))
         return m_styles[name];
@@ -80,12 +80,12 @@ CustomStyle * StyleManager::style(QString const & name) const
     return 0;
 }
 
-void StyleManager::takeStyle(CustomStyle * style)
+void StyleManager::takeStyle(CustomStyle *style)
 {
     const QString parentName = style->parentName();
 
     CustomStyles::ConstIterator iter = m_styles.constBegin();
-    CustomStyles::ConstIterator end  = m_styles.constEnd();
+    CustomStyles::ConstIterator end = m_styles.constEnd();
 
     while (iter != end) {
         if (iter.value()->parentName() == style->name())
@@ -103,9 +103,9 @@ void StyleManager::takeStyle(CustomStyle * style)
     }
 }
 
-bool StyleManager::checkCircle(QString const & name, QString const & parent)
+bool StyleManager::checkCircle(QString const &name, QString const &parent)
 {
-    CustomStyle* style = this->style(parent);
+    CustomStyle *style = this->style(parent);
     if (!style || style->parentName().isNull())
         return true;
     if (style->parentName() == name)
@@ -114,13 +114,13 @@ bool StyleManager::checkCircle(QString const & name, QString const & parent)
         return checkCircle(name, style->parentName());
 }
 
-bool StyleManager::validateStyleName(QString const & name)
+bool StyleManager::validateStyleName(QString const &name)
 {
     if (m_defaultStyle->name() == name || name == "Default")
         return false;
 
     CustomStyles::const_iterator iter = m_styles.constBegin();
-    CustomStyles::const_iterator end  = m_styles.constEnd();
+    CustomStyles::const_iterator end = m_styles.constEnd();
 
     while (iter != end) {
         if (iter.key() == name)
@@ -132,10 +132,10 @@ bool StyleManager::validateStyleName(QString const & name)
     return true;
 }
 
-void StyleManager::changeName(QString const & oldName, QString const & newName)
+void StyleManager::changeName(QString const &oldName, QString const &newName)
 {
     CustomStyles::iterator iter = m_styles.begin();
-    CustomStyles::iterator end  = m_styles.end();
+    CustomStyles::iterator end = m_styles.end();
 
     while (iter != end) {
         if (iter.value()->parentName() == oldName)
@@ -146,7 +146,7 @@ void StyleManager::changeName(QString const & oldName, QString const & newName)
 
     iter = m_styles.find(oldName);
     if (iter != end) {
-        CustomStyle * s = iter.value();
+        CustomStyle *s = iter.value();
         m_styles.erase(iter);
         m_styles[newName] = s;
         emit styleListChanged();
@@ -175,10 +175,11 @@ QStringList StyleManager::styleNames(bool includeDefault) const
 {
     QStringList list;
 
-    if (includeDefault) list.push_back(i18n("Default"));
+    if (includeDefault)
+        list.push_back(i18n("Default"));
 
     CustomStyles::const_iterator iter = m_styles.begin();
-    CustomStyles::const_iterator end  = m_styles.end();
+    CustomStyles::const_iterator end = m_styles.end();
 
     while (iter != end) {
         list.push_back(iter.key());
@@ -195,7 +196,7 @@ void StyleManager::clearOasisStyles()
     m_oasisStyles.clear();
 }
 
-QString StyleManager::openDocumentName(const QString& name) const
+QString StyleManager::openDocumentName(const QString &name) const
 {
     return m_oasisStyles.value(name);
 }

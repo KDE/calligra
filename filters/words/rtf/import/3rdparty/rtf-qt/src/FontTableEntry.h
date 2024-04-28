@@ -8,46 +8,65 @@
 
 namespace RtfReader
 {
-    enum FontFamily { Nil, Roman, Swiss, Modern, Script, Decor, Tech, Bidi };
+enum FontFamily { Nil, Roman, Swiss, Modern, Script, Decor, Tech, Bidi };
 
-    enum FontPitch { Default = 0, Fixed = 1, Variable = 2 };
+enum FontPitch { Default = 0, Fixed = 1, Variable = 2 };
 
-    class RTFREADER_EXPORT FontTableEntry
+class RTFREADER_EXPORT FontTableEntry
+{
+public:
+    FontTableEntry()
+        : m_fontFamily(Nil)
+        , m_fontPitch(Default)
     {
-    public:
-        FontTableEntry() : m_fontFamily( Nil ), m_fontPitch( Default )
-        {}
+    }
 
-        enum FontFamily fontFamily() const
-        { return m_fontFamily; }
+    enum FontFamily fontFamily() const
+    {
+        return m_fontFamily;
+    }
 
-        void setFontFamily( enum FontFamily fontFamily )
-        { m_fontFamily = fontFamily; }
+    void setFontFamily(enum FontFamily fontFamily)
+    {
+        m_fontFamily = fontFamily;
+    }
 
-        enum FontPitch fontPitch() const
-        { return m_fontPitch; }
+    enum FontPitch fontPitch() const
+    {
+        return m_fontPitch;
+    }
 
-        void setFontPitch( enum FontPitch fontPitch )
-        { m_fontPitch = fontPitch; }
+    void setFontPitch(enum FontPitch fontPitch)
+    {
+        m_fontPitch = fontPitch;
+    }
 
-        QString fontName() const
-        { return m_fontName; }
+    QString fontName() const
+    {
+        return m_fontName;
+    }
 
-        void setFontName( const QString &fontName )
-        { m_fontName = fontName; }
+    void setFontName(const QString &fontName)
+    {
+        m_fontName = fontName;
+    }
 
-        QStringConverter::Encoding encoding() const
-        { return m_encoding; }
+    QStringConverter::Encoding encoding() const
+    {
+        return m_encoding;
+    }
 
-        void setEncoding(QStringConverter::Encoding encoding)
-        { m_encoding = encoding; }
+    void setEncoding(QStringConverter::Encoding encoding)
+    {
+        m_encoding = encoding;
+    }
 
-    protected:
-        enum FontFamily m_fontFamily;
-        enum FontPitch m_fontPitch;
-        QString m_fontName;
-        QStringConverter::Encoding m_encoding;
-    };
+protected:
+    enum FontFamily m_fontFamily;
+    enum FontPitch m_fontPitch;
+    QString m_fontName;
+    QStringConverter::Encoding m_encoding;
+};
 }
 
 #endif

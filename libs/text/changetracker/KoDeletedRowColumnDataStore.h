@@ -7,43 +7,39 @@
 #ifndef __KODELETEDROWCOLUMNDATASTORE_H__
 #define __KODELETEDROWCOLUMNDATASTORE_H__
 
-#include <QVector>
 #include <QMap>
+#include <QVector>
 
 class KoDeletedRowData;
 class KoDeletedColumnData;
 class QTextTable;
 
-class KoDeletedRowColumnDataStore {
-    public:
-        typedef enum {
-            eDeletedRow,
-            eDeletedColumn,
-            eUnknownDeleteType
-        } DeleteType;
+class KoDeletedRowColumnDataStore
+{
+public:
+    typedef enum { eDeletedRow, eDeletedColumn, eUnknownDeleteType } DeleteType;
 
-        KoDeletedRowColumnDataStore();
+    KoDeletedRowColumnDataStore();
 
-        ~KoDeletedRowColumnDataStore();
+    ~KoDeletedRowColumnDataStore();
 
-        KoDeletedRowData *addDeletedRow(QTextTable *table, int rowNumber, int changeId);
+    KoDeletedRowData *addDeletedRow(QTextTable *table, int rowNumber, int changeId);
 
-        KoDeletedColumnData *addDeletedColumn(QTextTable *table, int columnNumber, int changeId);
+    KoDeletedColumnData *addDeletedColumn(QTextTable *table, int columnNumber, int changeId);
 
-        const QVector<int> *deletedRowColumnChangeIds(QTextTable *table);
+    const QVector<int> *deletedRowColumnChangeIds(QTextTable *table);
 
-        DeleteType deleteType(int changeId);
+    DeleteType deleteType(int changeId);
 
-        KoDeletedRowData *deletedRowData(int changeId);
+    KoDeletedRowData *deletedRowData(int changeId);
 
-        KoDeletedColumnData *deletedColumnData(int changeId);
+    KoDeletedColumnData *deletedColumnData(int changeId);
 
-    private:
+private:
+    QMap<QTextTable *, QVector<int> *> tableChangeIdsMap;
 
-        QMap<QTextTable *, QVector<int> *> tableChangeIdsMap;
+    QMap<int, KoDeletedRowData *> deletedRowDataMap;
 
-        QMap<int, KoDeletedRowData *> deletedRowDataMap;
-
-        QMap<int, KoDeletedColumnData *> deletedColumnDataMap;
+    QMap<int, KoDeletedColumnData *> deletedColumnDataMap;
 };
 #endif

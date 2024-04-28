@@ -7,14 +7,13 @@
 #ifndef CHANGEANCHORPROPERTIESCOMMAND_H
 #define CHANGEANCHORPROPERTIESCOMMAND_H
 
-#include <kundo2command.h>
-#include "kotext_export.h"
 #include "KoShapeAnchor.h"
+#include "kotext_export.h"
+#include <kundo2command.h>
 
 #include <QPointF>
 
 class KoShapeContainer;
-
 
 class KOTEXT_EXPORT ChangeAnchorPropertiesCommand : public KUndo2Command
 {
@@ -26,6 +25,7 @@ public:
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
 private:
     void copyLayoutProperties(const KoShapeAnchor *from, KoShapeAnchor *to);
 

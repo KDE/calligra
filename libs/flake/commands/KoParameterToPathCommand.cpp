@@ -6,34 +6,35 @@
  */
 
 #include "KoParameterToPathCommand.h"
-#include "KoPathPoint.h"
 #include "KoParameterShape.h"
+#include "KoPathPoint.h"
 #include <KLocalizedString>
 
 class KoParameterToPathCommandPrivate
 {
 public:
-    ~KoParameterToPathCommandPrivate() {
+    ~KoParameterToPathCommandPrivate()
+    {
         qDeleteAll(copies);
     }
     void initialize();
     void copyPath(KoPathShape *destination, KoPathShape *source);
-    QList<KoParameterShape*> shapes;
-    QList<KoPathShape*> copies;
+    QList<KoParameterShape *> shapes;
+    QList<KoPathShape *> copies;
 };
 
 KoParameterToPathCommand::KoParameterToPathCommand(KoParameterShape *shape, KUndo2Command *parent)
-    : KUndo2Command(parent),
-    d(new KoParameterToPathCommandPrivate())
+    : KUndo2Command(parent)
+    , d(new KoParameterToPathCommandPrivate())
 {
     d->shapes.append(shape);
     d->initialize();
     setText(kundo2_i18n("Convert to Path"));
 }
 
-KoParameterToPathCommand::KoParameterToPathCommand(const QList<KoParameterShape*> &shapes, KUndo2Command *parent)
-    : KUndo2Command(parent),
-    d(new KoParameterToPathCommandPrivate())
+KoParameterToPathCommand::KoParameterToPathCommand(const QList<KoParameterShape *> &shapes, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , d(new KoParameterToPathCommandPrivate())
 {
     d->shapes = shapes;
     d->initialize();
@@ -60,7 +61,7 @@ void KoParameterToPathCommand::undo()
 {
     KUndo2Command::undo();
     for (int i = 0; i < d->shapes.size(); ++i) {
-        KoParameterShape * parameterShape = d->shapes.at(i);
+        KoParameterShape *parameterShape = d->shapes.at(i);
         parameterShape->update();
         parameterShape->setParametricShape(true);
         d->copyPath(parameterShape, d->copies[i]);
@@ -70,7 +71,7 @@ void KoParameterToPathCommand::undo()
 
 void KoParameterToPathCommandPrivate::initialize()
 {
-    foreach(KoParameterShape *shape, shapes) {
+    foreach (KoParameterShape *shape, shapes) {
         KoPathShape *p = new KoPathShape();
         copyPath(p, shape);
         copies.append(p);
@@ -84,13 +85,13 @@ void KoParameterToPathCommandPrivate::copyPath(KoPathShape *destination, KoPathS
     int subpathCount = source->subpathCount();
     for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {
         int pointCount = source->subpathPointCount(subpathIndex);
-        if (! pointCount)
+        if (!pointCount)
             continue;
 
-        KoSubpath * subpath = new KoSubpath;
+        KoSubpath *subpath = new KoSubpath;
         for (int pointIndex = 0; pointIndex < pointCount; ++pointIndex) {
-            KoPathPoint * p = source->pointByIndex(KoPathPointIndex(subpathIndex, pointIndex));
-            KoPathPoint * c = new KoPathPoint(*p);
+            KoPathPoint *p = source->pointByIndex(KoPathPointIndex(subpathIndex, pointIndex));
+            KoPathPoint *c = new KoPathPoint(*p);
             c->setParent(destination);
             subpath->append(c);
         }

@@ -37,7 +37,8 @@ UserVariableFactory::UserVariableFactory()
     */
 
     QStringList elementNames;
-    elementNames << "user-field-get" << "user-field-input";
+    elementNames << "user-field-get"
+                 << "user-field-input";
     setOdfElementNames(KoXmlNS::text, elementNames);
 }
 

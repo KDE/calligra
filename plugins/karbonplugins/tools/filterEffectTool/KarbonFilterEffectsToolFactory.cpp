@@ -7,11 +7,11 @@
 #include "KarbonFilterEffectsToolFactory.h"
 #include "KarbonFilterEffectsTool.h"
 
-#include <KoIcon.h>
 #include <KLocalizedString>
+#include <KoIcon.h>
 
 KarbonFilterEffectsToolFactory::KarbonFilterEffectsToolFactory()
-        : KoToolFactoryBase("KarbonFilterEffectsTool")
+    : KoToolFactoryBase("KarbonFilterEffectsTool")
 {
     setToolTip(i18n("Filter effects editing"));
     setToolType("karbon");
@@ -23,7 +23,7 @@ KarbonFilterEffectsToolFactory::~KarbonFilterEffectsToolFactory()
 {
 }
 
-KoToolBase * KarbonFilterEffectsToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KarbonFilterEffectsToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KarbonFilterEffectsTool(canvas);
 }

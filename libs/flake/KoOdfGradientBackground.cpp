@@ -10,27 +10,33 @@
 #include "KoShapeBackground_p.h"
 #include "KoShapeSavingContext.h"
 
-#include <KoUnit.h>
-#include <KoXmlNS.h>
-#include <KoXmlReader.h>
 #include <KoGenStyles.h>
 #include <KoOdfLoadingContext.h>
 #include <KoStyleStack.h>
+#include <KoUnit.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
-#include <QPainter>
-#include <QPainterPath>
 #include <QColor>
 #include <QImage>
+#include <QPainter>
+#include <QPainterPath>
 #include <qmath.h>
-
 
 class KoOdfGradientBackgroundPrivate : public KoShapeBackgroundPrivate
 {
 public:
     KoOdfGradientBackgroundPrivate()
-        : style(), cx(0), cy(0), startColor(), endColor(), angle(0), border(0), opacity(1.0) {};
+        : style()
+        , cx(0)
+        , cy(0)
+        , startColor()
+        , endColor()
+        , angle(0)
+        , border(0)
+        , opacity(1.0){};
     ~KoOdfGradientBackgroundPrivate() override{};
-    //data
+    // data
     QString style;
     int cx;
     int cy;
@@ -43,24 +49,20 @@ public:
     mutable QImage buffer;
 };
 
-
 KoOdfGradientBackground::KoOdfGradientBackground()
     : KoShapeBackground(*(new KoOdfGradientBackgroundPrivate()))
 {
-
 }
 
 KoOdfGradientBackground::~KoOdfGradientBackground()
 {
-
 }
 
-
-bool KoOdfGradientBackground::loadOdf(const KoXmlElement& e)
+bool KoOdfGradientBackground::loadOdf(const KoXmlElement &e)
 {
     Q_D(KoOdfGradientBackground);
     d->style = e.attributeNS(KoXmlNS::draw, "style", QString());
-    //TODO: support ellipsoid here too
+    // TODO: support ellipsoid here too
     if ((d->style != "rectangular") && (d->style != "square")) {
         return false;
     }
@@ -68,7 +70,7 @@ bool KoOdfGradientBackground::loadOdf(const KoXmlElement& e)
     d->cx = KoUnit::parseValue(e.attributeNS(KoXmlNS::draw, "cx", QString()).remove('%'));
     d->cy = KoUnit::parseValue(e.attributeNS(KoXmlNS::draw, "cy", QString()).remove('%'));
 
-    d->border = qBound(0.0,0.01 * e.attributeNS(KoXmlNS::draw, "border", "0").remove('%').toDouble(),1.0);
+    d->border = qBound(0.0, 0.01 * e.attributeNS(KoXmlNS::draw, "border", "0").remove('%').toDouble(), 1.0);
 
     d->startColor = QColor(e.attributeNS(KoXmlNS::draw, "start-color", QString()));
     d->startColor.setAlphaF((0.01 * e.attributeNS(KoXmlNS::draw, "start-intensity", "100").remove('%').toDouble()));
@@ -80,15 +82,15 @@ bool KoOdfGradientBackground::loadOdf(const KoXmlElement& e)
     return true;
 }
 
-
-void KoOdfGradientBackground::saveOdf(KoGenStyle& styleFill, KoGenStyles& mainStyles) const
+void KoOdfGradientBackground::saveOdf(KoGenStyle &styleFill, KoGenStyles &mainStyles) const
 {
     Q_D(const KoOdfGradientBackground);
 
     KoGenStyle::Type type = styleFill.type();
-    KoGenStyle::PropertyType propertyType = (type == KoGenStyle::GraphicStyle || type == KoGenStyle::GraphicAutoStyle ||
-                                             type == KoGenStyle::DrawingPageStyle || type == KoGenStyle::DrawingPageAutoStyle )
-                                            ? KoGenStyle::DefaultType : KoGenStyle::GraphicType;
+    KoGenStyle::PropertyType propertyType = (type == KoGenStyle::GraphicStyle || type == KoGenStyle::GraphicAutoStyle || type == KoGenStyle::DrawingPageStyle
+                                             || type == KoGenStyle::DrawingPageAutoStyle)
+        ? KoGenStyle::DefaultType
+        : KoGenStyle::GraphicType;
 
     KoGenStyle gradientStyle(KoGenStyle::GradientStyle);
 
@@ -97,8 +99,8 @@ void KoOdfGradientBackground::saveOdf(KoGenStyle& styleFill, KoGenStyles& mainSt
     gradientStyle.addAttribute("draw:cy", QString("%1%").arg(d->cy));
     gradientStyle.addAttribute("draw:start-color", d->startColor.name());
     gradientStyle.addAttribute("draw:end-color", d->endColor.name());
-    gradientStyle.addAttribute("draw:start-intensity", QString("%1%").arg(qRound(d->startColor.alphaF() * 100)) );
-    gradientStyle.addAttribute("draw:end-intensity", QString("%1%").arg(qRound(d->endColor.alphaF() * 100)) );
+    gradientStyle.addAttribute("draw:start-intensity", QString("%1%").arg(qRound(d->startColor.alphaF() * 100)));
+    gradientStyle.addAttribute("draw:end-intensity", QString("%1%").arg(qRound(d->endColor.alphaF() * 100)));
     gradientStyle.addAttribute("draw:angle", QString("%1").arg(d->angle * 10));
     gradientStyle.addAttribute("draw:border", QString("%1%").arg(qRound(d->border * 100.0)));
 
@@ -111,13 +113,16 @@ void KoOdfGradientBackground::saveOdf(KoGenStyle& styleFill, KoGenStyles& mainSt
     }
 }
 
-void KoOdfGradientBackground::paint(QPainter& painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath& fillPath) const
+void KoOdfGradientBackground::paint(QPainter &painter,
+                                    const KoViewConverter & /*converter*/,
+                                    KoShapePaintingContext & /*context*/,
+                                    const QPainterPath &fillPath) const
 {
     Q_D(const KoOdfGradientBackground);
     QRectF targetRect = fillPath.boundingRect();
-    QRectF pixels = painter.transform().mapRect(QRectF(0,0,targetRect.width(), targetRect.height()));
-    QSize currentSize( qCeil(pixels.size().width()), qCeil(pixels.size().height()) );
-    if (d->buffer.isNull() || d->buffer.size() != currentSize){
+    QRectF pixels = painter.transform().mapRect(QRectF(0, 0, targetRect.width(), targetRect.height()));
+    QSize currentSize(qCeil(pixels.size().width()), qCeil(pixels.size().height()));
+    if (d->buffer.isNull() || d->buffer.size() != currentSize) {
         d->buffer = QImage(currentSize, QImage::Format_ARGB32_Premultiplied);
         if (d->style == "square") {
             renderSquareGradient(d->buffer);
@@ -129,15 +134,15 @@ void KoOdfGradientBackground::paint(QPainter& painter, const KoViewConverter &/*
     painter.setClipPath(fillPath);
 
     painter.setOpacity(d->opacity);
-    painter.drawImage(targetRect, d->buffer, QRectF(QPointF(0,0), d->buffer.size()));
+    painter.drawImage(targetRect, d->buffer, QRectF(QPointF(0, 0), d->buffer.size()));
 }
 
-void KoOdfGradientBackground::fillStyle(KoGenStyle& style, KoShapeSavingContext& context)
+void KoOdfGradientBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
     saveOdf(style, context.mainStyles());
 }
 
-bool KoOdfGradientBackground::loadStyle(KoOdfLoadingContext& context, const QSizeF& shapeSize)
+bool KoOdfGradientBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize)
 {
     Q_UNUSED(shapeSize);
     Q_D(KoOdfGradientBackground);
@@ -149,10 +154,9 @@ bool KoOdfGradientBackground::loadStyle(KoOdfLoadingContext& context, const QSiz
 
     QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
     if (fillStyle == "gradient") {
-
         if (styleStack.hasProperty(KoXmlNS::draw, "opacity")) {
             QString opacity = styleStack.property(KoXmlNS::draw, "opacity");
-            if (! opacity.isEmpty() && opacity.right(1) == "%") {
+            if (!opacity.isEmpty() && opacity.right(1) == "%") {
                 d->opacity = qMin(QStringView{opacity}.left(opacity.length() - 1).toDouble(), 100.0) / 100;
             }
         }
@@ -168,8 +172,7 @@ bool KoOdfGradientBackground::loadStyle(KoOdfLoadingContext& context, const QSiz
     return false;
 }
 
-
-void KoOdfGradientBackground::renderSquareGradient(QImage& buffer) const
+void KoOdfGradientBackground::renderSquareGradient(QImage &buffer) const
 {
     Q_D(const KoOdfGradientBackground);
     buffer.fill(d->startColor.rgba());
@@ -194,7 +197,7 @@ void KoOdfGradientBackground::renderSquareGradient(QImage& buffer) const
     m.rotate(-d->angle);
     m.scale(1.0 - d->border, 1.0 - d->border);
     m.translate(-gradientCenterX, -gradientCenterY);
-    m.translate(gradientCenterX - areaCenterX,gradientCenterY - areaCenterY);
+    m.translate(gradientCenterX - areaCenterX, gradientCenterY - areaCenterY);
     painter.setTransform(m);
 
     QLinearGradient linearGradient;
@@ -227,13 +230,12 @@ void KoOdfGradientBackground::renderSquareGradient(QImage& buffer) const
     painter.drawRect(centerX, 0, width, height);
 
     // from center going West
-    linearGradient.setFinalStop( 0, centerY);
+    linearGradient.setFinalStop(0, centerY);
     painter.setBrush(linearGradient);
     painter.drawRect(0, 0, centerX, height);
 }
 
-
-void KoOdfGradientBackground::renderRectangleGradient(QImage& buffer) const
+void KoOdfGradientBackground::renderRectangleGradient(QImage &buffer) const
 {
     Q_D(const KoOdfGradientBackground);
     buffer.fill(d->startColor.rgba());
@@ -258,7 +260,7 @@ void KoOdfGradientBackground::renderRectangleGradient(QImage& buffer) const
     // m.rotate(-d->angle); // OOo rotates the gradient differently
     m.scale(1.0 - d->border, 1.0 - d->border);
     m.translate(-gradientCenterX, -gradientCenterY);
-    m.translate(gradientCenterX - areaCenterX,gradientCenterY - areaCenterY);
+    m.translate(gradientCenterX - areaCenterX, gradientCenterY - areaCenterY);
     painter.setTransform(m);
 
     QLinearGradient linearGradient;
@@ -268,7 +270,7 @@ void KoOdfGradientBackground::renderRectangleGradient(QImage& buffer) const
     // render background
     QPainterPath clipPath;
     if (width < height) {
-        QRectF west(0,0,centerX, height);
+        QRectF west(0, 0, centerX, height);
         QRectF east(centerX, 0, centerX, height);
 
         linearGradient.setStart(centerX, centerY);
@@ -280,10 +282,10 @@ void KoOdfGradientBackground::renderRectangleGradient(QImage& buffer) const
         painter.setBrush(linearGradient);
         painter.drawRect(east);
 
-        QRectF north(0,0,width, centerX);
-        QRectF south(0,height - centerX, width, centerX);
+        QRectF north(0, 0, width, centerX);
+        QRectF south(0, height - centerX, width, centerX);
 
-        clipPath.moveTo(0,0);
+        clipPath.moveTo(0, 0);
         clipPath.lineTo(width, 0);
         clipPath.lineTo(centerX, centerX);
         clipPath.closeSubpath();
@@ -306,7 +308,7 @@ void KoOdfGradientBackground::renderRectangleGradient(QImage& buffer) const
         painter.setBrush(linearGradient);
         painter.drawRect(south);
     } else {
-        QRectF north(0,0,width, centerY);
+        QRectF north(0, 0, width, centerY);
         QRectF south(0, centerY, width, centerY);
 
         linearGradient.setStart(centerX, centerY);
@@ -319,18 +321,17 @@ void KoOdfGradientBackground::renderRectangleGradient(QImage& buffer) const
         painter.setBrush(linearGradient);
         painter.drawRect(south);
 
-
-        QRectF west(0,0,centerY, height);
+        QRectF west(0, 0, centerY, height);
         QRectF east(width - centerY, 0, centerY, height);
 
-        clipPath.moveTo(0,0);
+        clipPath.moveTo(0, 0);
         clipPath.lineTo(centerY, centerY);
-        clipPath.lineTo(0,height);
+        clipPath.lineTo(0, height);
         clipPath.closeSubpath();
 
         clipPath.moveTo(width, height);
         clipPath.lineTo(east.x(), centerY);
-        clipPath.lineTo(width,0);
+        clipPath.lineTo(width, 0);
         clipPath.closeSubpath();
 
         linearGradient.setStart(centerY, centerY);
@@ -348,11 +349,10 @@ void KoOdfGradientBackground::renderRectangleGradient(QImage& buffer) const
     }
 }
 
-
 void KoOdfGradientBackground::debug() const
 {
     Q_D(const KoOdfGradientBackground);
-    qDebug() << "cx,cy: "<< d->cx << d->cy;
+    qDebug() << "cx,cy: " << d->cx << d->cy;
     qDebug() << "style" << d->style;
     qDebug() << "colors" << d->startColor << d->endColor;
     qDebug() << "angle:" << d->angle;

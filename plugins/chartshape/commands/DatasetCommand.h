@@ -13,7 +13,6 @@
 // KoChart
 #include "kochart_global.h"
 
-
 #if 0
 namespace KChart
 {
@@ -22,7 +21,6 @@ class AbstractDiagram;
 class Chart;
 }
 #endif
-
 
 namespace KoChart
 {
@@ -37,7 +35,7 @@ public:
     /**
      * Constructor.
      */
-    DatasetCommand(DataSet* dataSet, ChartShape* chart, int section = -1, KUndo2Command *parent = 0);
+    DatasetCommand(DataSet *dataSet, ChartShape *chart, int section = -1, KUndo2Command *parent = 0);
 
     /**
      * Destructor.
@@ -61,8 +59,8 @@ public:
     void setDataSetShowPercent(bool show);
     void setDataSetShowSymbol(bool show);
 
-    void setDataSetPen(const QColor& color);
-    void setDataSetBrush(const QColor& color);
+    void setDataSetPen(const QColor &color);
+    void setDataSetBrush(const QColor &color);
     void setDataSetMarker(OdfSymbolType type, OdfMarkerStyle style);
     void setDataSetAxis(Axis *axis);
 

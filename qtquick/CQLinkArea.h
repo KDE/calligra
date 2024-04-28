@@ -20,18 +20,18 @@ class CQLinkArea : public QDeclarativeItem
     Q_PROPERTY(QColor linkColor READ linkColor WRITE setLinkColor NOTIFY linkColorChanged)
 
 public:
-    explicit CQLinkArea(QDeclarativeItem* parent = 0);
+    explicit CQLinkArea(QDeclarativeItem *parent = 0);
     virtual ~CQLinkArea();
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget* );
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
 
     QVariantList links() const;
-    void setLinks(const QVariantList& newLinks);
+    void setLinks(const QVariantList &newLinks);
 
     QSizeF sourceSize() const;
-    void setSourceSize( const QSizeF& size );
+    void setSourceSize(const QSizeF &size);
 
     QColor linkColor() const;
-    void setLinkColor( const QColor& color );
+    void setLinkColor(const QColor &color);
 
 Q_SIGNALS:
     void linksChanged();
@@ -42,13 +42,13 @@ Q_SIGNALS:
     void linkColorChanged();
 
 protected:
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // CQLINKAREA_H

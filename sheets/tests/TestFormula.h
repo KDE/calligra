@@ -14,7 +14,7 @@ namespace Sheets
 {
 class SheetBase;
 
-class TestFormula: public QObject
+class TestFormula : public QObject
 {
     Q_OBJECT
 
@@ -34,7 +34,7 @@ private Q_SLOTS:
     void testInlineArrays();
 
 private:
-    Value evaluate(const QString&, Value&);
+    Value evaluate(const QString &, Value &);
     SheetBase *m_sheet;
 };
 

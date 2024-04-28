@@ -7,9 +7,9 @@
 #ifndef KOTOOLPROXYPRIVATE_P
 #define KOTOOLPROXYPRIVATE_P
 
-#include <QTimer>
 #include <QElapsedTimer>
 #include <QPointF>
+#include <QTimer>
 
 class KoPointerEvent;
 class KoToolBase;

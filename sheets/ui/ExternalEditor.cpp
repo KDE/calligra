@@ -28,16 +28,16 @@ using namespace Calligra::Sheets;
 class ExternalEditor::Private
 {
 public:
-    CellToolBase* cellTool;
-    FormulaEditorHighlighter* highlighter;
+    CellToolBase *cellTool;
+    FormulaEditorHighlighter *highlighter;
     bool isArray;
-    QAction* applyAction;
-    QAction* cancelAction;
+    QAction *applyAction;
+    QAction *cancelAction;
 };
 
 ExternalEditor::ExternalEditor(QWidget *parent)
-        : KTextEdit(parent)
-        , d(new Private)
+    : KTextEdit(parent)
+    , d(new Private)
 {
     d->cellTool = 0;
     d->highlighter = 0;
@@ -50,8 +50,7 @@ ExternalEditor::ExternalEditor(QWidget *parent)
     setMinimumHeight(fontMetrics().height() + 2 * frameWidth() + 1);
 
     connect(this, &QTextEdit::textChanged, this, &ExternalEditor::slotTextChanged);
-    connect(this, &QTextEdit::cursorPositionChanged,
-            this, &ExternalEditor::slotCursorPositionChanged);
+    connect(this, &QTextEdit::cursorPositionChanged, this, &ExternalEditor::slotCursorPositionChanged);
 
     d->applyAction = new QAction(koIcon("dialog-ok"), i18n("Apply"), this);
     d->applyAction->setToolTip(i18n("Apply changes"));
@@ -74,12 +73,13 @@ ExternalEditor::~ExternalEditor()
 QSize ExternalEditor::sizeHint() const
 {
     return minimumSize();
-    //return KTextEdit::sizeHint(); // document()->size().toSize();
+    // return KTextEdit::sizeHint(); // document()->size().toSize();
 }
 
-void ExternalEditor::setCellTool(CellToolBase* cellTool)
+void ExternalEditor::setCellTool(CellToolBase *cellTool)
 {
-    if (d->highlighter) delete d->highlighter;
+    if (d->highlighter)
+        delete d->highlighter;
     d->cellTool = cellTool;
     d->highlighter = new FormulaEditorHighlighter(this, cellTool->selection());
 }
@@ -139,8 +139,7 @@ void ExternalEditor::keyPressEvent(QKeyEvent *event)
     }
 
     // the Enter and Esc key are handled by the embedded editor
-    if ((event->key() == Qt::Key_Return) || (event->key() == Qt::Key_Enter) ||
-            (event->key() == Qt::Key_Escape)) {
+    if ((event->key() == Qt::Key_Return) || (event->key() == Qt::Key_Enter) || (event->key() == Qt::Key_Escape)) {
         d->cellTool->editor()->widget()->setFocus();
         QApplication::sendEvent(d->cellTool->editor()->widget(), event);
         event->accept();
@@ -150,7 +149,7 @@ void ExternalEditor::keyPressEvent(QKeyEvent *event)
     KTextEdit::keyPressEvent(event);
 }
 
-void ExternalEditor::focusInEvent(QFocusEvent* event)
+void ExternalEditor::focusInEvent(QFocusEvent *event)
 {
     Q_ASSERT(d->cellTool);
     // If the focussing is user induced.
@@ -165,7 +164,7 @@ void ExternalEditor::focusInEvent(QFocusEvent* event)
     KTextEdit::focusInEvent(event);
 }
 
-void ExternalEditor::focusOutEvent(QFocusEvent* event)
+void ExternalEditor::focusOutEvent(QFocusEvent *event)
 {
     Q_ASSERT(d->cellTool);
     KTextEdit::focusOutEvent(event);
@@ -173,7 +172,8 @@ void ExternalEditor::focusOutEvent(QFocusEvent* event)
 
 void ExternalEditor::slotTextChanged()
 {
-    if (!hasFocus()) return;  // only report change if we have focus
+    if (!hasFocus())
+        return; // only report change if we have focus
     emit textModified(toPlainText());
     // Update the cursor position again, because this slot is invoked after
     // slotCursorPositionChanged().
@@ -194,12 +194,12 @@ void ExternalEditor::slotCursorPositionChanged()
     }
 }
 
-QAction* ExternalEditor::applyAction() const
+QAction *ExternalEditor::applyAction() const
 {
     return d->applyAction;
 }
 
-QAction* ExternalEditor::cancelAction() const
+QAction *ExternalEditor::cancelAction() const
 {
     return d->cancelAction;
 }

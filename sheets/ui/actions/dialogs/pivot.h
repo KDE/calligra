@@ -6,41 +6,38 @@
 
 // Local
 
-
 #ifndef PIVOT_H
 #define PIVOT_H
 
 #include <KoDialog.h>
 
-namespace Calligra{
-    namespace Sheets{
+namespace Calligra
+{
+namespace Sheets
+{
 /**
  * \ingroup UI
  * Dialog to create Pivot.
  */
 
+class Selection;
 
-    class Selection;
-  
+class PivotDialog : public KoDialog
+{
+    Q_OBJECT
 
-    class PivotDialog : public KoDialog
-    {
-      Q_OBJECT
+public:
+    PivotDialog(QWidget *parent, Selection *selection);
+    ~PivotDialog() override;
 
-    public:
-      PivotDialog(QWidget* parent,Selection* selection);
-      ~PivotDialog() override;
+private Q_SLOTS:
+    void slotUser2Clicked();
 
-    private Q_SLOTS:
-      void slotUser2Clicked();
-
-    private:
-     
-      class Private;
-      Private *const d;
-    };
-  }//Sheets
-}//Calligra
-
+private:
+    class Private;
+    Private *const d;
+};
+} // Sheets
+} // Calligra
 
 #endif // PIVOT_H

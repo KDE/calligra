@@ -7,10 +7,10 @@
 #ifndef KOTEXTWRITER_P_H
 #define KOTEXTWRITER_P_H
 
-#include <QMap>
 #include <QHash>
-#include <QStack>
+#include <QMap>
 #include <QPair>
+#include <QStack>
 #include <QString>
 
 #include <KoTextWriter.h>
@@ -37,47 +37,48 @@ class QTextStream;
  */
 class TagInformation
 {
-    public:
-        TagInformation():tagName(0), attributeList()
-        {
-        }
+public:
+    TagInformation()
+        : tagName(0)
+        , attributeList()
+    {
+    }
 
-        void setTagName(const char *tagName)
-        {
-            this->tagName = tagName;
-        }
+    void setTagName(const char *tagName)
+    {
+        this->tagName = tagName;
+    }
 
-        void addAttribute(const QString& attributeName, const QString& attributeValue)
-        {
-            attributeList.push_back(QPair<QString,QString>(attributeName, attributeValue));
-        }
+    void addAttribute(const QString &attributeName, const QString &attributeValue)
+    {
+        attributeList.push_back(QPair<QString, QString>(attributeName, attributeValue));
+    }
 
-        void addAttribute(const QString& attributeName, int value)
-        {
-            addAttribute(attributeName, QString::number(value));
-        }
+    void addAttribute(const QString &attributeName, int value)
+    {
+        addAttribute(attributeName, QString::number(value));
+    }
 
-        void clear()
-        {
-            tagName = nullptr;
-            attributeList.clear();
-        }
+    void clear()
+    {
+        tagName = nullptr;
+        attributeList.clear();
+    }
 
-        const char *name() const
-        {
-            return tagName;
-        }
+    const char *name() const
+    {
+        return tagName;
+    }
 
-        const QVector<QPair<QString, QString> >& attributes() const
-        {
-            return attributeList;
-        }
+    const QVector<QPair<QString, QString>> &attributes() const
+    {
+        return attributeList;
+    }
 
-    private:
-        const char *tagName;
-        QVector<QPair<QString, QString> > attributeList;
+private:
+    const char *tagName;
+    QVector<QPair<QString, QString>> attributeList;
 };
-
 
 /**
  * XXX: Apidox!
@@ -85,30 +86,18 @@ class TagInformation
 class Q_DECL_HIDDEN KoTextWriter::Private
 {
 public:
-
     explicit Private(KoShapeSavingContext &context);
 
-    ~Private() {}
+    ~Private()
+    {
+    }
 
-    void writeBlocks(QTextDocument *document, int from, int to,
-                     QHash<QTextList *, QString> &listStyles,
-                     QTextTable *currentTable = 0,
-                     QTextList *currentList = 0);
+    void
+    writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextList *currentList = 0);
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
 
 private:
-
-    enum ElementType {
-        Span,
-        ParagraphOrHeader,
-        ListItem,
-        List,
-        NumberedParagraph,
-        Table,
-        TableRow,
-        TableColumn,
-        TableCell
-    };
+    enum ElementType { Span, ParagraphOrHeader, ListItem, List, NumberedParagraph, Table, TableRow, TableColumn, TableCell };
 
     void openTagRegion(KoTextWriter::Private::ElementType elementType, TagInformation &tagInformation);
     void closeTagRegion();
@@ -123,7 +112,7 @@ private:
 
     void saveParagraph(const QTextBlock &block, int from, int to);
     void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles, int from, int to);
-    QTextBlock& saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level, QTextTable *currentTable);
+    QTextBlock &saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level, QTextTable *currentTable);
     void saveTableOfContents(QTextDocument *document, QHash<QTextList *, QString> &listStyles, QTextBlock toc);
     void saveBibliography(QTextDocument *document, QHash<QTextList *, QString> &listStyles, QTextBlock bib);
     void saveInlineRdf(KoTextInlineRdf *rdf, TagInformation *tagInfos);
@@ -137,7 +126,6 @@ private:
     QString createXmlId();
 
 public:
-
     KoDocumentRdfBase *rdfData;
     KoTextSharedSavingData *sharedData;
     KoStyleManager *styleManager;
@@ -146,7 +134,6 @@ public:
     int globalTo;
 
 private:
-
     KoXmlWriter *writer;
 
     QStack<const char *> openedTagStack;
@@ -156,8 +143,8 @@ private:
     // Things like bookmarks need to be properly turn down during a cut and paste operation
     // when their end markeris not included in the selection. However, when recursing into
     // e.g. the QTextDocument of a table, we need have a clean slate. Hence, a stack of stacks.
-    QStack< QStack<KoInlineObject*> *> pairedInlineObjectsStackStack;
-    QStack<KoInlineObject*> *currentPairedInlineObjectsStack;
+    QStack<QStack<KoInlineObject *> *> pairedInlineObjectsStackStack;
+    QStack<KoInlineObject *> *currentPairedInlineObjectsStack;
 
     QMap<KoList *, QString> listXmlIds;
 

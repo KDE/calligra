@@ -7,15 +7,14 @@
 
 #include "CQPluginLoaderProxy.h"
 
-#include <KoToolRegistry.h>
-#include <KoShapeRegistry.h>
-#include <KoInlineObjectRegistry.h>
 #include <KoFilterEffectRegistry.h>
+#include <KoInlineObjectRegistry.h>
+#include <KoShapeRegistry.h>
+#include <KoToolRegistry.h>
 
-CQPluginLoaderProxy::CQPluginLoaderProxy(QObject* parent)
+CQPluginLoaderProxy::CQPluginLoaderProxy(QObject *parent)
     : QObject(parent)
 {
-
 }
 
 CQPluginLoaderProxy::~CQPluginLoaderProxy()

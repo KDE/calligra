@@ -8,19 +8,18 @@
 #ifndef CALLIGRA_SHEETS_ACTION_MERGE
 #define CALLIGRA_SHEETS_ACTION_MERGE
 
-
 #include "CellAction.h"
 
 #include "ui/commands/AbstractRegionCommand.h"
-
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class Merge : public CellAction {
-Q_OBJECT
+class Merge : public CellAction
+{
+    Q_OBJECT
 public:
     Merge(Actions *actions, bool horizontal, bool vertical);
     virtual ~Merge();
@@ -33,8 +32,9 @@ protected:
     bool m_horizontal, m_vertical;
 };
 
-class RemoveMerge : public CellAction {
-Q_OBJECT
+class RemoveMerge : public CellAction
+{
+    Q_OBJECT
 public:
     RemoveMerge(Actions *actions);
     virtual ~RemoveMerge();
@@ -43,9 +43,7 @@ protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
 
-
-
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_MERGE
+#endif // CALLIGRA_SHEETS_ACTION_MERGE

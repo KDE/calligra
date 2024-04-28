@@ -7,157 +7,93 @@
 
 #include "KoFillConfigWidget.h"
 
-#include <QToolButton>
-#include <QHBoxLayout>
-#include <QButtonGroup>
-#include <QLabel>
-#include <QSizePolicy>
-#include <QBitmap>
 #include <QAction>
+#include <QBitmap>
+#include <QButtonGroup>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QSharedPointer>
+#include <QSizePolicy>
+#include <QToolButton>
 
 #include <KLocalizedString>
 
-#include <KoGroupButton.h>
-#include <KoIcon.h>
-#include <KoColor.h>
-#include <KoColorPopupAction.h>
-#include "KoResourceServerProvider.h"
-#include "KoResourceServerAdapter.h"
+#include "KoColorPopupButton.h"
 #include "KoResourceSelector.h"
-#include <KoSelection.h>
-#include <KoToolManager.h>
+#include "KoResourceServerAdapter.h"
+#include "KoResourceServerProvider.h"
+#include "KoZoomHandler.h"
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoCanvasResourceManager.h>
+#include <KoColor.h>
+#include <KoColorBackground.h>
+#include <KoColorPopupAction.h>
 #include <KoDocumentResourceManager.h>
+#include <KoGradientBackground.h>
+#include <KoGroupButton.h>
+#include <KoIcon.h>
+#include <KoImageCollection.h>
+#include <KoPatternBackground.h>
+#include <KoResourcePopupAction.h>
+#include <KoSelection.h>
 #include <KoShape.h>
-#include <KoShapeManager.h>
-#include <KoShapeController.h>
 #include <KoShapeBackground.h>
 #include <KoShapeBackgroundCommand.h>
-#include <KoColorBackground.h>
-#include <KoGradientBackground.h>
-#include <KoPatternBackground.h>
-#include <KoImageCollection.h>
-#include <KoResourcePopupAction.h>
-#include "KoZoomHandler.h"
-#include "KoColorPopupButton.h"
+#include <KoShapeController.h>
+#include <KoShapeManager.h>
+#include <KoToolManager.h>
 
-static const char* const buttonnone[]={
-    "16 16 3 1",
-    "# c #000000",
-    "e c #ff0000",
-    "- c #ffffff",
-    "################",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "################"};
+static const char *const buttonnone[] = {"16 16 3 1",        "# c #000000",      "e c #ff0000",      "- c #ffffff",      "################",
+                                         "#--------------#", "#--------------#", "#--------------#", "#--------------#", "#--------------#",
+                                         "#--------------#", "#--------------#", "#--------------#", "#--------------#", "#--------------#",
+                                         "#--------------#", "#--------------#", "#--------------#", "#--------------#", "################"};
 
-static const char* const buttonsolid[]={
-    "16 16 2 1",
-    "# c #000000",
-    ". c #969696",
-    "################",
-    "#..............#",
-    "#..............#",
-    "#..............#",
-    "#..............#",
-    "#..............#",
-    "#..............#",
-    "#..............#",
-    "#..............#",
-    "#..............#",
-    "#..............#",
-    "#..............#",
-    "#..............#",
-    "#..............#",
-    "#..............#",
-    "################"};
-
+static const char *const buttonsolid[] = {"16 16 2 1",
+                                          "# c #000000",
+                                          ". c #969696",
+                                          "################",
+                                          "#..............#",
+                                          "#..............#",
+                                          "#..............#",
+                                          "#..............#",
+                                          "#..............#",
+                                          "#..............#",
+                                          "#..............#",
+                                          "#..............#",
+                                          "#..............#",
+                                          "#..............#",
+                                          "#..............#",
+                                          "#..............#",
+                                          "#..............#",
+                                          "#..............#",
+                                          "################"};
 
 // FIXME: Smoother gradient button.
 
-static const char* const buttongradient[]={
-    "16 16 15 1",
-    "# c #000000",
-    "n c #101010",
-    "m c #202020",
-    "l c #303030",
-    "k c #404040",
-    "j c #505050",
-    "i c #606060",
-    "h c #707070",
-    "g c #808080",
-    "f c #909090",
-    "e c #a0a0a0",
-    "d c #b0b0b0",
-    "c c #c0c0c0",
-    "b c #d0d0d0",
-    "a c #e0e0e0",
-    "################",
-    "#abcdefghijklmn#",
-    "#abcdefghijklmn#",
-    "#abcdefghijklmn#",
-    "#abcdefghijklmn#",
-    "#abcdefghijklmn#",
-    "#abcdefghijklmn#",
-    "#abcdefghijklmn#",
-    "#abcdefghijklmn#",
-    "#abcdefghijklmn#",
-    "#abcdefghijklmn#",
-    "#abcdefghijklmn#",
-    "#abcdefghijklmn#",
-    "#abcdefghijklmn#",
-    "#abcdefghijklmn#",
-    "################"};
+static const char *const buttongradient[] = {
+    "16 16 15 1",       "# c #000000",      "n c #101010",      "m c #202020",      "l c #303030",      "k c #404040",      "j c #505050",
+    "i c #606060",      "h c #707070",      "g c #808080",      "f c #909090",      "e c #a0a0a0",      "d c #b0b0b0",      "c c #c0c0c0",
+    "b c #d0d0d0",      "a c #e0e0e0",      "################", "#abcdefghijklmn#", "#abcdefghijklmn#", "#abcdefghijklmn#", "#abcdefghijklmn#",
+    "#abcdefghijklmn#", "#abcdefghijklmn#", "#abcdefghijklmn#", "#abcdefghijklmn#", "#abcdefghijklmn#", "#abcdefghijklmn#", "#abcdefghijklmn#",
+    "#abcdefghijklmn#", "#abcdefghijklmn#", "#abcdefghijklmn#", "################"};
 
-static const char* const buttonpattern[]={
-    "16 16 4 1",
-    ". c #0a0a0a",
-    "# c #333333",
-    "a c #a0a0a0",
-    "b c #ffffffff",
-    "################",
-    "#aaaaabbbbaaaaa#",
-    "#aaaaabbbbaaaaa#",
-    "#aaaaabbbbaaaaa#",
-    "#aaaaabbbbaaaaa#",
-    "#aaaaabbbbaaaaa#",
-    "#bbbbbaaaabbbbb#",
-    "#bbbbbaaaabbbbb#",
-    "#bbbbbaaaabbbbb#",
-    "#bbbbbaaaabbbbb#",
-    "#aaaaabbbbaaaaa#",
-    "#aaaaabbbbaaaaa#",
-    "#aaaaabbbbaaaaa#",
-    "#aaaaabbbbaaaaa#",
-    "#aaaaabbbbaaaaa#",
-    "################"};
+static const char *const buttonpattern[] = {
+    "16 16 4 1",        ". c #0a0a0a",      "# c #333333",      "a c #a0a0a0",      "b c #ffffffff",    "################", "#aaaaabbbbaaaaa#",
+    "#aaaaabbbbaaaaa#", "#aaaaabbbbaaaaa#", "#aaaaabbbbaaaaa#", "#aaaaabbbbaaaaa#", "#bbbbbaaaabbbbb#", "#bbbbbaaaabbbbb#", "#bbbbbaaaabbbbb#",
+    "#bbbbbaaaabbbbb#", "#aaaaabbbbaaaaa#", "#aaaaabbbbaaaaa#", "#aaaaabbbbaaaaa#", "#aaaaabbbbaaaaa#", "#aaaaabbbbaaaaa#", "################"};
 
 class Q_DECL_HIDDEN KoFillConfigWidget::Private
 {
 public:
     Private()
-    : canvas(nullptr)
+        : canvas(nullptr)
     {
     }
     /// Apply the gradient stops using the shape background
     QSharedPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
     {
-        if (! shape || ! stops.count()) {
+        if (!shape || !stops.count()) {
             return QSharedPointer<KoShapeBackground>();
         }
 
@@ -169,8 +105,7 @@ public:
             g->setStops(stops);
             newGradient = new KoGradientBackground(g);
             newGradient->setTransform(oldGradient->transform());
-        }
-        else {
+        } else {
             // No gradient yet, so create a new one.
             QLinearGradient *g = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
             g->setCoordinateMode(QGradient::ObjectBoundingMode);
@@ -192,8 +127,8 @@ public:
 };
 
 KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
-:  QWidget(parent)
-, d(new Private())
+    : QWidget(parent)
+    , d(new Private())
 {
     setObjectName("Fill widget");
     QHBoxLayout *layout = new QHBoxLayout(this);
@@ -205,7 +140,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
 
     // The button for no fill
     KoGroupButton *button = new KoGroupButton(KoGroupButton::GroupLeft, this);
-    QPixmap noFillButtonIcon((const char **) buttonnone);
+    QPixmap noFillButtonIcon((const char **)buttonnone);
     noFillButtonIcon.setMask(QBitmap(noFillButtonIcon));
     button->setIcon(noFillButtonIcon);
     button->setToolTip(i18nc("No stroke or fill", "None"));
@@ -215,7 +150,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
 
     // The button for solid fill
     button = new KoGroupButton(KoGroupButton::GroupCenter, this);
-    button->setIcon(QPixmap((const char **) buttonsolid));
+    button->setIcon(QPixmap((const char **)buttonsolid));
     button->setToolTip(i18nc("Solid color stroke or fill", "Solid"));
     button->setCheckable(true);
     d->group->addButton(button, Solid);
@@ -223,7 +158,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
 
     // The button for gradient fill
     button = new KoGroupButton(KoGroupButton::GroupCenter, this);
-    button->setIcon(QPixmap((const char **) buttongradient));
+    button->setIcon(QPixmap((const char **)buttongradient));
     button->setToolTip(i18n("Gradient"));
     button->setCheckable(true);
     d->group->addButton(button, Gradient);
@@ -231,7 +166,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
 
     // The button for pattern fill
     button = new KoGroupButton(KoGroupButton::GroupRight, this);
-    button->setIcon(QPixmap((const char **) buttonpattern));
+    button->setIcon(QPixmap((const char **)buttonpattern));
     button->setToolTip(i18n("Pattern"));
     button->setCheckable(true);
     d->group->addButton(button, Pattern);
@@ -262,7 +197,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     connect(d->colorButton, &KoColorPopupButton::iconSizeChanged, d->gradientAction, &KoResourcePopupAction::updateIcon);
 
     // Pattern selector
-    QSharedPointer<KoAbstractResourceServerAdapter>patternResourceAdapter(new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer()));
+    QSharedPointer<KoAbstractResourceServerAdapter> patternResourceAdapter(new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer()));
     d->patternAction = new KoResourcePopupAction(patternResourceAdapter, d->colorButton);
     d->patternAction->setToolTip(i18n("Change the filling pattern"));
     connect(d->patternAction, &KoResourcePopupAction::resourceSelected, this, &KoFillConfigWidget::patternChanged);
@@ -287,7 +222,7 @@ KoFillConfigWidget::~KoFillConfigWidget()
     delete d;
 }
 
-void KoFillConfigWidget::setCanvas( KoCanvasBase *canvas )
+void KoFillConfigWidget::setCanvas(KoCanvasBase *canvas)
 {
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -297,12 +232,12 @@ void KoFillConfigWidget::setCanvas( KoCanvasBase *canvas )
     d->canvas = canvas;
 }
 
-KoCanvasBase* KoFillConfigWidget::canvas()
+KoCanvasBase *KoFillConfigWidget::canvas()
 {
     return d->canvas;
 }
 
-QList<KoShape*> KoFillConfigWidget::currentShapes()
+QList<KoShape *> KoFillConfigWidget::currentShapes()
 {
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -316,38 +251,37 @@ KoShape *KoFillConfigWidget::currentShape()
     return selection->firstSelectedShape();
 }
 
-
 void KoFillConfigWidget::styleButtonPressed(int buttonId)
 {
     d->colorButton->setEnabled(true);
     switch (buttonId) {
-        case KoFillConfigWidget::None:
-            // Direct manipulation
-            d->colorButton->setDefaultAction(d->noFillAction);
-             d->colorButton->setDisabled(true);
-            noColorSelected();
-            break;
-        case KoFillConfigWidget::Solid:
-            d->colorButton->setDefaultAction(d->colorAction);
-            colorChanged();
-            break;
-        case KoFillConfigWidget::Gradient:
-            // Only select mode in the widget, don't set actual gradient :/
-            d->colorButton->setDefaultAction(d->gradientAction);
-            gradientChanged(d->gradientAction->currentBackground());
-            break;
-        case KoFillConfigWidget::Pattern:
-            // Only select mode in the widget, don't set actual pattern :/
-            d->colorButton->setDefaultAction(d->patternAction);
-            patternChanged(d->patternAction->currentBackground());
-            break;
+    case KoFillConfigWidget::None:
+        // Direct manipulation
+        d->colorButton->setDefaultAction(d->noFillAction);
+        d->colorButton->setDisabled(true);
+        noColorSelected();
+        break;
+    case KoFillConfigWidget::Solid:
+        d->colorButton->setDefaultAction(d->colorAction);
+        colorChanged();
+        break;
+    case KoFillConfigWidget::Gradient:
+        // Only select mode in the widget, don't set actual gradient :/
+        d->colorButton->setDefaultAction(d->gradientAction);
+        gradientChanged(d->gradientAction->currentBackground());
+        break;
+    case KoFillConfigWidget::Pattern:
+        // Only select mode in the widget, don't set actual pattern :/
+        d->colorButton->setDefaultAction(d->patternAction);
+        patternChanged(d->patternAction->currentBackground());
+        break;
     }
     d->colorButton->setPopupMode(QToolButton::InstantPopup);
 }
 
 void KoFillConfigWidget::noColorSelected()
 {
-    QList<KoShape*> selectedShapes = currentShapes();
+    QList<KoShape *> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
         return;
     }
@@ -357,7 +291,7 @@ void KoFillConfigWidget::noColorSelected()
 
 void KoFillConfigWidget::colorChanged()
 {
-    QList<KoShape*> selectedShapes = currentShapes();
+    QList<KoShape *> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
         return;
     }
@@ -365,7 +299,7 @@ void KoFillConfigWidget::colorChanged()
     QSharedPointer<KoShapeBackground> fill(new KoColorBackground(d->colorAction->currentColor()));
     KUndo2Command *firstCommand = nullptr;
     foreach (KoShape *shape, selectedShapes) {
-        if (! firstCommand) {
+        if (!firstCommand) {
             firstCommand = new KoShapeBackgroundCommand(shape, fill);
         } else {
             new KoShapeBackgroundCommand(shape, fill, firstCommand);
@@ -376,9 +310,9 @@ void KoFillConfigWidget::colorChanged()
     canvasController->canvas()->addCommand(firstCommand);
 }
 
-void KoFillConfigWidget::gradientChanged(QSharedPointer<KoShapeBackground>  background)
+void KoFillConfigWidget::gradientChanged(QSharedPointer<KoShapeBackground> background)
 {
-    QList<KoShape*> selectedShapes = currentShapes();
+    QList<KoShape *> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
         return;
     }
@@ -394,10 +328,10 @@ void KoFillConfigWidget::gradientChanged(QSharedPointer<KoShapeBackground>  back
     KUndo2Command *firstCommand = nullptr;
     foreach (KoShape *shape, selectedShapes) {
         QSharedPointer<KoShapeBackground> fill = d->applyFillGradientStops(shape, newStops);
-        if (! fill) {
+        if (!fill) {
             continue;
         }
-        if (! firstCommand) {
+        if (!firstCommand) {
             firstCommand = new KoShapeBackgroundCommand(shape, fill);
         } else {
             new KoShapeBackgroundCommand(shape, fill, firstCommand);
@@ -407,14 +341,14 @@ void KoFillConfigWidget::gradientChanged(QSharedPointer<KoShapeBackground>  back
     canvasController->canvas()->addCommand(firstCommand);
 }
 
-void KoFillConfigWidget::patternChanged(QSharedPointer<KoShapeBackground>  background)
+void KoFillConfigWidget::patternChanged(QSharedPointer<KoShapeBackground> background)
 {
     QSharedPointer<KoPatternBackground> patternBackground = qSharedPointerDynamicCast<KoPatternBackground>(background);
-    if (! patternBackground) {
+    if (!patternBackground) {
         return;
     }
 
-    QList<KoShape*> selectedShapes = currentShapes();
+    QList<KoShape *> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
         return;
     }
@@ -431,7 +365,7 @@ void KoFillConfigWidget::patternChanged(QSharedPointer<KoShapeBackground>  backg
 void KoFillConfigWidget::shapeChanged()
 {
     KoShape *shape = currentShape();
-    if (! shape) {
+    if (!shape) {
         d->group->button(KoFillConfigWidget::None)->setChecked(false);
         d->group->button(KoFillConfigWidget::Solid)->setChecked(false);
         d->group->button(KoFillConfigWidget::Gradient)->setChecked(false);
@@ -445,10 +379,9 @@ void KoFillConfigWidget::shapeChanged()
     d->colorAction->blockSignals(false);
 }
 
-
 void KoFillConfigWidget::updateWidget(KoShape *shape)
 {
-    if (! shape) {
+    if (!shape) {
         return;
     }
 
@@ -463,7 +396,7 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
 
     d->colorButton->setEnabled(true);
     QSharedPointer<KoShapeBackground> background = shape->background();
-    if (! background) {
+    if (!background) {
         // No Fill
         d->group->button(KoFillConfigWidget::None)->setChecked(true);
         d->colorButton->setDefaultAction(d->noFillAction);

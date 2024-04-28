@@ -10,42 +10,40 @@
 
 #include "KPrWindShieldWipeStrategy.h"
 
-#define WindShieldWipeEffectId  "WindShieldWipeEffect"
+#define WindShieldWipeEffectId "WindShieldWipeEffect"
 
 KPrWindShieldWipeEffectFactory::KPrWindShieldWipeEffectFactory()
-: KPrPageEffectFactory( WindShieldWipeEffectId, i18n( "Windshield" ) )
+    : KPrPageEffectFactory(WindShieldWipeEffectId, i18n("Windshield"))
 {
-    addStrategy( new KPrWindShieldWipeStrategy( Right, "windshieldWipe", "right", false ) );
-    addStrategy( new KPrWindShieldWipeStrategy( Up, "windshieldWipe", "up", false ) );
-    addStrategy( new KPrWindShieldWipeStrategy( Vertical, "windshieldWipe", "vertical", false ) );
-    addStrategy( new KPrWindShieldWipeStrategy( Horizontal, "windshieldWipe", "horizontal", false ) );
+    addStrategy(new KPrWindShieldWipeStrategy(Right, "windshieldWipe", "right", false));
+    addStrategy(new KPrWindShieldWipeStrategy(Up, "windshieldWipe", "up", false));
+    addStrategy(new KPrWindShieldWipeStrategy(Vertical, "windshieldWipe", "vertical", false));
+    addStrategy(new KPrWindShieldWipeStrategy(Horizontal, "windshieldWipe", "horizontal", false));
 
-    addStrategy( new KPrWindShieldWipeStrategy( RightReverse, "windshieldWipe", "right", true ) );
-    addStrategy( new KPrWindShieldWipeStrategy( UpReverse, "windshieldWipe", "up", true ) );
-    addStrategy( new KPrWindShieldWipeStrategy( VerticalReverse, "windshieldWipe", "vertical", true ) );
-    addStrategy( new KPrWindShieldWipeStrategy( HorizontalReverse, "windshieldWipe", "horizontal", true ) );
+    addStrategy(new KPrWindShieldWipeStrategy(RightReverse, "windshieldWipe", "right", true));
+    addStrategy(new KPrWindShieldWipeStrategy(UpReverse, "windshieldWipe", "up", true));
+    addStrategy(new KPrWindShieldWipeStrategy(VerticalReverse, "windshieldWipe", "vertical", true));
+    addStrategy(new KPrWindShieldWipeStrategy(HorizontalReverse, "windshieldWipe", "horizontal", true));
 }
 
 KPrWindShieldWipeEffectFactory::~KPrWindShieldWipeEffectFactory()
 {
 }
 
-static const KLazyLocalizedString s_subTypes[] = {
-    kli18n( "Right" ),
-    kli18n( "Up" ),
-    kli18n( "Vertical" ),
-    kli18n( "Horizontal" ),
-    kli18n( "Right Reverse" ),
-    kli18n( "Up Reverse" ),
-    kli18n( "Vertical Reverse" ),
-    kli18n( "Horizontal Reverse" )
-};
+static const KLazyLocalizedString s_subTypes[] = {kli18n("Right"),
+                                                  kli18n("Up"),
+                                                  kli18n("Vertical"),
+                                                  kli18n("Horizontal"),
+                                                  kli18n("Right Reverse"),
+                                                  kli18n("Up Reverse"),
+                                                  kli18n("Vertical Reverse"),
+                                                  kli18n("Horizontal Reverse")};
 
 QString KPrWindShieldWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return s_subTypes[subType].toString();
     } else {
-        return i18n( "Unknown subtype" );
+        return i18n("Unknown subtype");
     }
 }

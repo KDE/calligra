@@ -23,22 +23,22 @@ class TestStatisticalFunctions : public QObject
 private Q_SLOTS:
     void initTestCase();
 
-//     void testARRANG(); // alias PERMUT
+    //     void testARRANG(); // alias PERMUT
     void testAVEDEV();
     void testAVERAGE();
     void testAVERAGEA();
     void testBETADIST();
     void testBETAINV();
-//     void testBINO(); // Calligra Sheets version of BINOMDIST with 3 Parameters
+    //     void testBINO(); // Calligra Sheets version of BINOMDIST with 3 Parameters
     void testBINOMDIST();
     void testCHIDIST();
-//     void testCOMBIN();  // in -> TestMathFunctions
-//     void testCOMBINA(); // in -> TestMathFunctions
+    //     void testCOMBIN();  // in -> TestMathFunctions
+    //     void testCOMBINA(); // in -> TestMathFunctions
     void testCONFIDENCE();
     void testCORREL();
     void testCOVAR();
     void testDEVSQ();
-//     void testDEVSQA(); // no ODF-test available
+    //     void testDEVSQA(); // no ODF-test available
     void testEXPONDIST();
     void testFDIST();
     void testFINV();
@@ -48,28 +48,26 @@ private Q_SLOTS:
     void testFTEST();
     void testGAMMADIST();
     void testGAMMAINV();
-//     void testGAMMALN(); in -> TestMathFunctions
+    //     void testGAMMALN(); in -> TestMathFunctions
     void testGAUSS();
     void testGROWTH(); // to be implemented
     void testGEOMEAN();
     void testHARMEAN();
     void testHYPGEOMDIST();
     void testINTERCEPT();
-//     void testINVBINO();
+    //     void testINVBINO();
     void testKURT();
-//     void testKURTP(); // ???
+    //     void testKURTP(); // ???
     void testLARGE();
-
 
     void testLEGACYCHIDIST();
     void testLEGACYCHIINV();
     void testLEGACYFDIST();
     void testLEGACYFINV();
-//     void testLEGACYNORMSDIST(); // same as NORMDIST required for OpenFormula compliance
+    //     void testLEGACYNORMSDIST(); // same as NORMDIST required for OpenFormula compliance
 
-
-//     void testLINEST(); // ???
-//     void testLOGEST(); // ???
+    //     void testLINEST(); // ???
+    //     void testLOGEST(); // ???
     void testLOGINV();
     void testLOGNORMDIST();
     void testMAX();
@@ -81,8 +79,8 @@ private Q_SLOTS:
     void testNEGBINOMDIST();
     void testNORMDIST();
     void testNORMINV();
-//     void testNORMSDIST();
-//     void testNORMSINV();
+    //     void testNORMSDIST();
+    //     void testNORMSINV();
 
     void testPEARSON();
     void testPERCENTILE();
@@ -90,7 +88,7 @@ private Q_SLOTS:
     void testPERMUTATIONA();
     void testPHI();
     void testPOISSON();
-//     void testPROB();     // ???
+    //     void testPROB();     // ???
     void testQUARTILE();
     void testRANK();
     void testRSQ();
@@ -104,10 +102,10 @@ private Q_SLOTS:
     void testSTDEVP();
     void testSTDEVPA();
     void testSTEYX();
-//     void testSUMXMY2(); // deprecated
+    //     void testSUMXMY2(); // deprecated
     void testSUMPRODUCT();
-//     void testSUMX2PY2();
-//     void testSUMX2MY2();
+    //     void testSUMX2PY2();
+    //     void testSUMX2MY2();
     void testTDIST();
     void testTINV();
     void testTREND();
@@ -124,11 +122,11 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
-    bool  TestArray(const QString& formula, const QString& Array, int accuracy, bool checkSize);
-    Value evaluate(const QString&);
-    Value TestDouble(const QString& formula, const Value& v2, int accuracy);
+    bool TestArray(const QString &formula, const QString &Array, int accuracy, bool checkSize);
+    Value evaluate(const QString &);
+    Value TestDouble(const QString &formula, const Value &v2, int accuracy);
 
-    MapBase* m_map;
+    MapBase *m_map;
 };
 
 } // namespace Sheets

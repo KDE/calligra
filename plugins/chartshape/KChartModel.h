@@ -11,15 +11,14 @@
 #ifndef KCHART_KDCHARTMODEL_H
 #define KCHART_KDCHARTMODEL_H
 
-
 // Qt
 #include <QAbstractItemModel>
 
 // KoChart
 #include "ChartShape.h"
 
-
-namespace KoChart {
+namespace KoChart
+{
 
 class DataSet;
 
@@ -44,22 +43,22 @@ class DataSet;
  *
  */
 
- /**
-  * Note on data directions in KChart's models:
-  *
-  * For circular (polar) charts, items shown in the legend should not be the
-  * data set labels, but the category labels instead. For example, a pie chart
-  * contains exactly one data set (if there's more series in the table, they are
-  * ignored). Obviously showing the title of the data set wouldn't be very useful
-  * in the legend. So the categories are shown instead.
-  *
-  * Since KChart extracts the legend items from horizontal header data (the headers
-  * in each column) data sets have to be inserted row-wise instead of column-wise for
-  * these charts. To do so, KChartModel::setDataDirection(Qt::Horizontal) is used.
-  *
-  * In all other cases, we show the data set labels in the legend. Therefore we insert
-  * data sets column-wise, which is done by calling setDataDirection(Qt::Vertical).
-  */
+/**
+ * Note on data directions in KChart's models:
+ *
+ * For circular (polar) charts, items shown in the legend should not be the
+ * data set labels, but the category labels instead. For example, a pie chart
+ * contains exactly one data set (if there's more series in the table, they are
+ * ignored). Obviously showing the title of the data set wouldn't be very useful
+ * in the legend. So the categories are shown instead.
+ *
+ * Since KChart extracts the legend items from horizontal header data (the headers
+ * in each column) data sets have to be inserted row-wise instead of column-wise for
+ * these charts. To do so, KChartModel::setDataDirection(Qt::Horizontal) is used.
+ *
+ * In all other cases, we show the data set labels in the legend. Therefore we insert
+ * data sets column-wise, which is done by calling setDataDirection(Qt::Vertical).
+ */
 
 class KChartModel : public QAbstractItemModel
 {
@@ -103,7 +102,7 @@ public Q_SLOTS:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-    void slotColumnsInserted(const QModelIndex& parent, int start, int end);
+    void slotColumnsInserted(const QModelIndex &parent, int start, int end);
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     QModelIndex parent(const QModelIndex &index) const override;
@@ -116,7 +115,7 @@ public Q_SLOTS:
 
     void addDataSet(KoChart::DataSet *dataSet);
     void removeDataSet(KoChart::DataSet *dataSet, bool silent = false);
-    QList<KoChart::DataSet*> dataSets() const;
+    QList<KoChart::DataSet *> dataSets() const;
 
     /**
      * Called by DataSet whenever a property that is global to all its data

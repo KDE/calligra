@@ -10,9 +10,9 @@
 
 #include <KoListStyle.h>
 
-#include <QToolButton>
-#include <QPixmap>
 #include <QMap>
+#include <QPixmap>
+#include <QToolButton>
 
 class QMenu;
 class QAction;
@@ -47,10 +47,10 @@ private Q_SLOTS:
     void recalcMenuSize();
 
 private:
-    int m_lastId ;
+    int m_lastId;
     QMenu *m_menu;
     QMap<int, QObject *> m_styleMap;
     bool m_menuShownFirstTime;
 };
 
-#endif  //FORMATTINGBUTTON_H
+#endif // FORMATTINGBUTTON_H

@@ -28,8 +28,8 @@ class Section;
 class TreeSortFilter;
 class View;
 
-#include <QDockWidget>
 #include <KoDockFactoryBase.h>
+#include <QDockWidget>
 
 class SectionsBoxDock : public QDockWidget
 {
@@ -37,11 +37,11 @@ class SectionsBoxDock : public QDockWidget
 public:
     SectionsBoxDock();
     virtual ~SectionsBoxDock();
-    void setup(RootSection* document, View* m_view);
+    void setup(RootSection *document, View *m_view);
     void updateGUI();
 private Q_SLOTS:
     void slotSectionActivated(const QModelIndex &);
-    void slotSectionActivated(Section*);
+    void slotSectionActivated(Section *);
 
     void slotMinimalView();
     void slotDetailedView();
@@ -57,37 +57,42 @@ private Q_SLOTS:
     void slotNewSectionBellowCurrent();
 
     void removedSection();
-    void insertedSection(const QModelIndex& parent, int idx);
+    void insertedSection(const QModelIndex &parent, int idx);
+
 private:
-    void selectSection(Section*);
+    void selectSection(Section *);
+
 private:
     Ui::WdgSectionsBox m_wdgSectionsBox;
-    View* m_view;
-    DocumentModel* m_model;
-    TreeSortFilter* m_proxy;
-    QAction* m_newSectionAsChild;
+    View *m_view;
+    DocumentModel *m_model;
+    TreeSortFilter *m_proxy;
+    QAction *m_newSectionAsChild;
 };
-
 
 class SectionsBoxDockFactory : public KoDockFactoryBase
 {
-
 public:
-    SectionsBoxDockFactory() { }
+    SectionsBoxDockFactory()
+    {
+    }
 
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return QString("SectionsBox");
     }
 
-    virtual QDockWidget* createDockWidget() {
-        SectionsBoxDock * dockWidget = new SectionsBoxDock();
+    virtual QDockWidget *createDockWidget()
+    {
+        SectionsBoxDock *dockWidget = new SectionsBoxDock();
 
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const
+    {
         return DockRight;
     }
 };

@@ -16,12 +16,7 @@ public:
     ~FourBoxWipeEffectFactory() override;
     QString subTypeName(int subType) const override;
 
-    enum SubType {
-        CornersIn,
-        CornersInReverse,
-        CornersOut,
-        CornersOutReverse
-    };
+    enum SubType { CornersIn, CornersInReverse, CornersOut, CornersOutReverse };
 };
 
 #endif // FOURBOXWIPEEFFECTFACTORY_H

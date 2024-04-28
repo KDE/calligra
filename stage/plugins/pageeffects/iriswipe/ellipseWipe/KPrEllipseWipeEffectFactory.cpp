@@ -11,52 +11,46 @@
 #define EllipseWipeEffectFactoryId "EllipseWipeEffectFactory"
 
 KPrEllipseWipeEffectFactory::KPrEllipseWipeEffectFactory()
-: KPrPageEffectFactory( EllipseWipeEffectFactoryId, i18n("Ellipse") )
+    : KPrPageEffectFactory(EllipseWipeEffectFactoryId, i18n("Ellipse"))
 {
     QPainterPath shape;
 
-    //circle
-    shape.addEllipse( -25, -25, 50, 50 );
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Circle, "ellipseWipe", "circle", false ) );
+    // circle
+    shape.addEllipse(-25, -25, 50, 50);
+    addStrategy(new KPrIrisWipeEffectStrategyBase(shape, Circle, "ellipseWipe", "circle", false));
 
-    //circle reverse
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, CircleReverse, "ellipseWipe", "circle", true ) );
+    // circle reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase(shape, CircleReverse, "ellipseWipe", "circle", true));
 
-    //horizontal
+    // horizontal
     shape = QPainterPath();
-    shape.addEllipse( -25, -12, 50, 24 );
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Horizontal, "ellipseWipe", "horizontal", false ) );
+    shape.addEllipse(-25, -12, 50, 24);
+    addStrategy(new KPrIrisWipeEffectStrategyBase(shape, Horizontal, "ellipseWipe", "horizontal", false));
 
-    //horizontal reverse
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, HorizontalReverse, "ellipseWipe", "horizontal", true ) );
+    // horizontal reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase(shape, HorizontalReverse, "ellipseWipe", "horizontal", true));
 
-    //vertical
+    // vertical
     shape = QPainterPath();
-    shape.addEllipse( -12, -25, 24, 50 );
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Vertical, "ellipseWipe", "vertical", false ) );
+    shape.addEllipse(-12, -25, 24, 50);
+    addStrategy(new KPrIrisWipeEffectStrategyBase(shape, Vertical, "ellipseWipe", "vertical", false));
 
-    //vertical reverse
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, VerticalReverse, "ellipseWipe", "vertical", true ) );
+    // vertical reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase(shape, VerticalReverse, "ellipseWipe", "vertical", true));
 }
 
 KPrEllipseWipeEffectFactory::~KPrEllipseWipeEffectFactory()
 {
 }
 
-static const KLazyLocalizedString s_subTypes[] = {
-    kli18n( "Circle" ),
-    kli18n( "Circle Reverse" ),
-    kli18n( "Horizontal" ),
-    kli18n( "Horizontal Reverse" ),
-    kli18n( "Vertical" ),
-    kli18n( "Vertical Reverse" )
-};
+static const KLazyLocalizedString s_subTypes[] =
+    {kli18n("Circle"), kli18n("Circle Reverse"), kli18n("Horizontal"), kli18n("Horizontal Reverse"), kli18n("Vertical"), kli18n("Vertical Reverse")};
 
 QString KPrEllipseWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return s_subTypes[subType].toString();
     } else {
-        return i18n( "Unknown subtype" );
+        return i18n("Unknown subtype");
     }
 }

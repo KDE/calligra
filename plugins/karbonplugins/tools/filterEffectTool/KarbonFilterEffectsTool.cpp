@@ -6,24 +6,24 @@
 
 #include "KarbonFilterEffectsTool.h"
 
-#include "KoFilterEffect.h"
-#include "KoFilterEffectStack.h"
-#include "KoFilterEffectFactoryBase.h"
-#include "KoFilterEffectRegistry.h"
-#include "KoFilterEffectConfigWidgetBase.h"
-#include "KoCanvasBase.h"
-#include "KoDocumentResourceManager.h"
-#include "KoShapeManager.h"
-#include "KoViewConverter.h"
-#include "KoSelection.h"
 #include "FilterEffectEditWidget.h"
 #include "FilterEffectResource.h"
-#include "FilterResourceServerProvider.h"
-#include "FilterStackSetCommand.h"
 #include "FilterRegionChangeCommand.h"
 #include "FilterRegionEditStrategy.h"
-#include "KoResourceServerAdapter.h"
+#include "FilterResourceServerProvider.h"
+#include "FilterStackSetCommand.h"
+#include "KoCanvasBase.h"
+#include "KoDocumentResourceManager.h"
+#include "KoFilterEffect.h"
+#include "KoFilterEffectConfigWidgetBase.h"
+#include "KoFilterEffectFactoryBase.h"
+#include "KoFilterEffectRegistry.h"
+#include "KoFilterEffectStack.h"
 #include "KoResourceSelector.h"
+#include "KoResourceServerAdapter.h"
+#include "KoSelection.h"
+#include "KoShapeManager.h"
+#include "KoViewConverter.h"
 #include <KoPointerEvent.h>
 
 #include <KoIcon.h>
@@ -33,27 +33,34 @@
 #include <QDialog>
 #include <QSpinBox>
 
-#include <QWidget>
-#include <QGridLayout>
-#include <QToolButton>
-#include <QStackedWidget>
-#include <QLabel>
 #include <QDialogButtonBox>
+#include <QGridLayout>
+#include <QLabel>
 #include <QPushButton>
+#include <QStackedWidget>
+#include <QToolButton>
 #include <QVBoxLayout>
+#include <QWidget>
 
 class KarbonFilterEffectsTool::Private
 {
 public:
     Private()
-            : filterSelector(0), configSelector(0)
-            , configStack(0), posX(0), posY(0), posW(0), posH(0)
-            , clearButton(0)
-            , currentEffect(0), currentPanel(0), currentShape(0)
+        : filterSelector(0)
+        , configSelector(0)
+        , configStack(0)
+        , posX(0)
+        , posY(0)
+        , posW(0)
+        , posH(0)
+        , clearButton(0)
+        , currentEffect(0)
+        , currentPanel(0)
+        , currentShape(0)
     {
     }
 
-    void fillConfigSelector(KoShape *shape, KarbonFilterEffectsTool * tool)
+    void fillConfigSelector(KoShape *shape, KarbonFilterEffectsTool *tool)
     {
         if (!configSelector)
             return;
@@ -69,20 +76,20 @@ public:
         configSelector->blockSignals(true);
 
         int index = 0;
-        foreach(KoFilterEffect *effect, shape->filterEffectStack()->filterEffects()) {
+        foreach (KoFilterEffect *effect, shape->filterEffectStack()->filterEffects()) {
             configSelector->addItem(QString("%1 - ").arg(index) + effect->name());
             index++;
         }
 
         configSelector->blockSignals(false);
 
-        KoFilterEffect * effect = index > 0 ? shape->filterEffectStack()->filterEffects().first() : 0;
+        KoFilterEffect *effect = index > 0 ? shape->filterEffectStack()->filterEffects().first() : 0;
 
         addWidgetForEffect(effect, tool);
         clearButton->setEnabled(shape->filterEffectStack() != 0);
     }
 
-    void addWidgetForEffect(KoFilterEffect * filterEffect, KarbonFilterEffectsTool * tool)
+    void addWidgetForEffect(KoFilterEffect *filterEffect, KarbonFilterEffectsTool *tool)
     {
         // remove current widget if new effect is zero or effect type has changed
         if (!filterEffect || (currentEffect && filterEffect->id() != currentEffect->id())) {
@@ -90,7 +97,7 @@ public:
                 configStack->removeWidget(configStack->widget(0));
         }
 
-        if (! filterEffect) {
+        if (!filterEffect) {
             currentEffect = 0;
             currentPanel = 0;
         } else if (!currentEffect || currentEffect->id() != filterEffect->id()) {
@@ -98,13 +105,13 @@ public:
             // get the config widget and insert it into the option widget
             currentEffect = filterEffect;
 
-            KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
-            KoFilterEffectFactoryBase * factory = registry->value(currentEffect->id());
+            KoFilterEffectRegistry *registry = KoFilterEffectRegistry::instance();
+            KoFilterEffectFactoryBase *factory = registry->value(currentEffect->id());
             if (!factory)
                 return;
 
             currentPanel = factory->createConfigWidget();
-            if (! currentPanel)
+            if (!currentPanel)
                 return;
 
             currentPanel->layout()->setContentsMargins(0, 0, 0, 0);
@@ -124,24 +131,24 @@ public:
         QRectF region = currentEffect ? currentEffect->filterRect() : QRectF(0, 0, 0, 0);
 
         posX->blockSignals(true);
-        posX->setValue(100.0*region.x());
+        posX->setValue(100.0 * region.x());
         posX->blockSignals(false);
         posX->setEnabled(currentEffect != 0);
         posY->blockSignals(true);
-        posY->setValue(100.0*region.y());
+        posY->setValue(100.0 * region.y());
         posY->blockSignals(false);
         posY->setEnabled(currentEffect != 0);
         posW->blockSignals(true);
-        posW->setValue(100.0*region.width());
+        posW->setValue(100.0 * region.width());
         posW->blockSignals(false);
         posW->setEnabled(currentEffect != 0);
         posH->blockSignals(true);
-        posH->setValue(100.0*region.height());
+        posH->setValue(100.0 * region.height());
         posH->blockSignals(false);
         posH->setEnabled(currentEffect != 0);
     }
 
-    EditMode editModeFromMousePosition(const QPointF &mousePosition, KarbonFilterEffectsTool * tool)
+    EditMode editModeFromMousePosition(const QPointF &mousePosition, KarbonFilterEffectsTool *tool)
     {
         if (currentShape && currentShape->filterEffectStack() && currentEffect) {
             // get the size rect of the shape
@@ -163,7 +170,7 @@ public:
                 } else if (qAbs(shapePoint.x() - filterRect.right()) <= border.x()) {
                     return MoveRight;
                 } else if (qAbs(shapePoint.y() - filterRect.top()) <= border.y()) {
-                   return MoveTop;
+                    return MoveTop;
                 } else if (qAbs(shapePoint.y() - filterRect.bottom()) <= border.y()) {
                     return MoveBottom;
                 } else {
@@ -176,26 +183,25 @@ public:
         return None;
     }
 
-    KoResourceSelector * filterSelector;
-    KComboBox * configSelector;
-    QStackedWidget * configStack;
-    QDoubleSpinBox * posX;
-    QDoubleSpinBox * posY;
-    QDoubleSpinBox * posW;
-    QDoubleSpinBox * posH;
+    KoResourceSelector *filterSelector;
+    KComboBox *configSelector;
+    QStackedWidget *configStack;
+    QDoubleSpinBox *posX;
+    QDoubleSpinBox *posY;
+    QDoubleSpinBox *posW;
+    QDoubleSpinBox *posH;
     QToolButton *clearButton;
-    KoFilterEffect * currentEffect;
-    KoFilterEffectConfigWidgetBase * currentPanel;
-    KoShape * currentShape;
+    KoFilterEffect *currentEffect;
+    KoFilterEffectConfigWidgetBase *currentPanel;
+    KoShape *currentShape;
 };
 
 KarbonFilterEffectsTool::KarbonFilterEffectsTool(KoCanvasBase *canvas)
-        : KoInteractionTool(canvas), d(new Private())
+    : KoInteractionTool(canvas)
+    , d(new Private())
 {
-    connect(canvas->shapeManager(), &KoShapeManager::selectionChanged,
-            this, &KarbonFilterEffectsTool::slotSelectionChanged);
-    connect(canvas->shapeManager(), &KoShapeManager::selectionContentChanged,
-            this, &KarbonFilterEffectsTool::slotSelectionChanged);
+    connect(canvas->shapeManager(), &KoShapeManager::selectionChanged, this, &KarbonFilterEffectsTool::slotSelectionChanged);
+    connect(canvas->shapeManager(), &KoShapeManager::selectionContentChanged, this, &KarbonFilterEffectsTool::slotSelectionChanged);
 }
 
 KarbonFilterEffectsTool::~KarbonFilterEffectsTool()
@@ -215,7 +221,7 @@ void KarbonFilterEffectsTool::paint(QPainter &painter, const KoViewConverter &co
         // get the size rect of the shape
         QRectF sizeRect(QPointF(), d->currentShape->size());
         // get the clipping rect of the filter stack
-        KoFilterEffectStack * filterStack = d->currentShape->filterEffectStack();
+        KoFilterEffectStack *filterStack = d->currentShape->filterEffectStack();
         QRectF clipRect = filterStack->clipRectForBoundingRect(sizeRect);
         // finally paint the clipping rect
         painter.setBrush(Qt::NoBrush);
@@ -245,7 +251,7 @@ void KarbonFilterEffectsTool::repaintDecorations()
     }
 }
 
-void KarbonFilterEffectsTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KarbonFilterEffectsTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     Q_UNUSED(toolActivation);
     if (shapes.isEmpty()) {
@@ -263,21 +269,21 @@ void KarbonFilterEffectsTool::mouseMoveEvent(KoPointerEvent *event)
         KoInteractionTool::mouseMoveEvent(event);
     } else {
         EditMode mode = d->editModeFromMousePosition(event->point, this);
-        switch(mode) {
-            case MoveAll:
-                useCursor(Qt::SizeAllCursor);
-                break;
-            case MoveLeft:
-            case MoveRight:
-                useCursor(Qt::SizeHorCursor);
-                break;
-            case MoveTop:
-            case MoveBottom:
-                useCursor(Qt::SizeVerCursor);
-                break;
-            case None:
-                useCursor(Qt::ArrowCursor);
-                break;
+        switch (mode) {
+        case MoveAll:
+            useCursor(Qt::SizeAllCursor);
+            break;
+        case MoveLeft:
+        case MoveRight:
+            useCursor(Qt::SizeHorCursor);
+            break;
+        case MoveTop:
+        case MoveBottom:
+            useCursor(Qt::SizeVerCursor);
+            break;
+        case None:
+            useCursor(Qt::ArrowCursor);
+            break;
         }
     }
 }
@@ -296,11 +302,11 @@ void KarbonFilterEffectsTool::presetSelected(KoResource *resource)
     if (!d->currentShape)
         return;
 
-    FilterEffectResource * effectResource = dynamic_cast<FilterEffectResource*>(resource);
+    FilterEffectResource *effectResource = dynamic_cast<FilterEffectResource *>(resource);
     if (!effectResource)
         return;
 
-    KoFilterEffectStack * filterStack = effectResource->toFilterStack();
+    KoFilterEffectStack *filterStack = effectResource->toFilterStack();
     if (!filterStack)
         return;
 
@@ -319,7 +325,7 @@ void KarbonFilterEffectsTool::editFilter()
     mainLayout->addWidget(mainWidget);
     connect(buttonBox->button(QDialogButtonBox::Close), &QPushButton::clicked, dlg.data(), &QDialog::close);
 
-    FilterEffectEditWidget * editor = new FilterEffectEditWidget(dlg);
+    FilterEffectEditWidget *editor = new FilterEffectEditWidget(dlg);
     editor->editShape(d->currentShape, canvas());
 
     mainLayout->addWidget(editor);
@@ -344,7 +350,7 @@ void KarbonFilterEffectsTool::clearFilter()
 
 void KarbonFilterEffectsTool::filterChanged()
 {
-    if (! d->currentShape)
+    if (!d->currentShape)
         return;
 
     d->currentShape->update();
@@ -352,11 +358,11 @@ void KarbonFilterEffectsTool::filterChanged()
 
 void KarbonFilterEffectsTool::filterSelected(int index)
 {
-    if (! d->currentShape || ! d->currentShape->filterEffectStack())
+    if (!d->currentShape || !d->currentShape->filterEffectStack())
         return;
 
-    KoFilterEffect * effect = 0;
-    QList<KoFilterEffect*> filterEffects = d->currentShape->filterEffectStack()->filterEffects();
+    KoFilterEffect *effect = 0;
+    QList<KoFilterEffect *> filterEffects = d->currentShape->filterEffectStack()->filterEffects();
     if (index >= 0 && index < filterEffects.count()) {
         effect = filterEffects[index];
     }
@@ -412,19 +418,19 @@ void KarbonFilterEffectsTool::regionHeightChanged(double height)
     canvas()->addCommand(new FilterRegionChangeCommand(d->currentEffect, region, d->currentShape));
 }
 
-QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
+QList<QPointer<QWidget>> KarbonFilterEffectsTool::createOptionWidgets()
 {
-    QList<QPointer<QWidget> > widgets;
+    QList<QPointer<QWidget>> widgets;
 
-    FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
-    KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();
+    FilterResourceServerProvider *serverProvider = FilterResourceServerProvider::instance();
+    KoResourceServer<FilterEffectResource> *server = serverProvider->filterEffectServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<FilterEffectResource>(server));
 
     //---------------------------------------------------------------------
 
-    QWidget * addFilterWidget = new QWidget();
+    QWidget *addFilterWidget = new QWidget();
     addFilterWidget->setObjectName("AddEffect");
-    QGridLayout * addFilterLayout = new QGridLayout(addFilterWidget);
+    QGridLayout *addFilterLayout = new QGridLayout(addFilterWidget);
 
     d->filterSelector = new KoResourceSelector(addFilterWidget);
     d->filterSelector->setResourceAdapter(adapter);
@@ -432,13 +438,11 @@ QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
     d->filterSelector->setColumnCount(1);
     addFilterLayout->addWidget(new QLabel(i18n("Effects"), addFilterWidget), 0, 0);
     addFilterLayout->addWidget(d->filterSelector, 0, 1);
-    connect(d->filterSelector, &KoResourceSelector::resourceSelected,
-            this, &KarbonFilterEffectsTool::presetSelected);
+    connect(d->filterSelector, &KoResourceSelector::resourceSelected, this, &KarbonFilterEffectsTool::presetSelected);
 
-    connect(d->filterSelector, &KoResourceSelector::resourceApplied,
-            this, &KarbonFilterEffectsTool::presetSelected);
+    connect(d->filterSelector, &KoResourceSelector::resourceApplied, this, &KarbonFilterEffectsTool::presetSelected);
 
-    QToolButton * editButton = new QToolButton(addFilterWidget);
+    QToolButton *editButton = new QToolButton(addFilterWidget);
     editButton->setIcon(koIcon("view-filter"));
     editButton->setToolTip(i18n("View and edit filter"));
     addFilterLayout->addWidget(editButton, 0, 2);
@@ -455,9 +459,9 @@ QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
 
     //---------------------------------------------------------------------
 
-    QWidget * configFilterWidget = new QWidget();
+    QWidget *configFilterWidget = new QWidget();
     configFilterWidget->setObjectName("ConfigEffect");
-    QGridLayout * configFilterLayout = new QGridLayout(configFilterWidget);
+    QGridLayout *configFilterLayout = new QGridLayout(configFilterWidget);
 
     d->configSelector = new KComboBox(configFilterWidget);
     configFilterLayout->addWidget(d->configSelector, 0, 0);
@@ -472,9 +476,9 @@ QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
 
     //---------------------------------------------------------------------
 
-    QWidget * filterRegionWidget = new QWidget();
+    QWidget *filterRegionWidget = new QWidget();
     filterRegionWidget->setObjectName("EffectRegion");
-    QGridLayout * filterRegionLayout = new QGridLayout(filterRegionWidget);
+    QGridLayout *filterRegionLayout = new QGridLayout(filterRegionWidget);
 
     d->posX = new QDoubleSpinBox(filterRegionWidget);
     d->posX->setSuffix("%");
@@ -511,4 +515,3 @@ QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
 
     return widgets;
 }
-

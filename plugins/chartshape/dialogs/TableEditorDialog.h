@@ -18,8 +18,8 @@ class QAbstractItemModel;
 class QModelIndex;
 class QAction;
 
-
-namespace KoChart {
+namespace KoChart
+{
 
 class ChartTableView;
 class ChartProxyModel;
@@ -63,4 +63,3 @@ private:
 } // Namespace KoChart
 
 #endif // KCHART_TABLE_EDITOR_DIALOG_H
-

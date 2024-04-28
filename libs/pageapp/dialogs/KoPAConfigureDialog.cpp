@@ -7,10 +7,10 @@
 #include "KoPAConfigureDialog.h"
 
 #include "KoPAView.h"
+#include <KoConfigAuthorPage.h>
 #include <KoConfigDocumentPage.h>
 #include <KoConfigGridPage.h>
 #include <KoConfigMiscPage.h>
-#include <KoConfigAuthorPage.h>
 #include <KoPACanvasBase.h>
 #include <KoShapeController.h>
 
@@ -20,18 +20,17 @@
 
 #include <QPushButton>
 
-
-KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
-: KPageDialog(parent)
+KoPAConfigureDialog::KoPAConfigureDialog(KoPAView *parent)
+    : KPageDialog(parent)
 {
     setFaceType(List);
     setWindowTitle(i18n("Configure"));
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
     button(QDialogButtonBox::Ok)->setDefault(true);
 
-    m_miscPage = new KoConfigMiscPage( parent->koDocument(), parent->kopaCanvas()->shapeController()->resourceManager() );
-    KPageWidgetItem *item = addPage( m_miscPage, i18n( "Misc" ) );
-    item->setHeader( i18n( "Misc" ) );
+    m_miscPage = new KoConfigMiscPage(parent->koDocument(), parent->kopaCanvas()->shapeController()->resourceManager());
+    KPageWidgetItem *item = addPage(m_miscPage, i18n("Misc"));
+    item->setHeader(i18n("Misc"));
     item->setIcon(koIcon("preferences-other"));
 
     m_gridPage = new KoConfigGridPage(parent->koDocument());
@@ -41,9 +40,9 @@ KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
 
     connect(m_miscPage, &KoConfigMiscPage::unitChanged, m_gridPage, &KoConfigGridPage::slotUnitChanged);
 
-    m_docPage = new KoConfigDocumentPage( parent->koDocument() );
-    item = addPage( m_docPage, i18nc( "@title:tab Document settings page", "Document" ) );
-    item->setHeader( i18n( "Document Settings" ) );
+    m_docPage = new KoConfigDocumentPage(parent->koDocument());
+    item = addPage(m_docPage, i18nc("@title:tab Document settings page", "Document"));
+    item->setHeader(i18n("Document Settings"));
     item->setIcon(koIcon("document-properties"));
 
     m_authorPage = new KoConfigAuthorPage();
@@ -51,9 +50,9 @@ KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
     item->setHeader(i18n("Author"));
     item->setIcon(koIcon("user-identity"));
 
-    connect( this, &QDialog::accepted, this, &KoPAConfigureDialog::slotApply );
-    connect( button(QDialogButtonBox::RestoreDefaults), &QAbstractButton::clicked, this, &KoPAConfigureDialog::slotDefault);
-    connect( button(QDialogButtonBox::Apply), &QAbstractButton::clicked, this, &KoPAConfigureDialog::slotApply );
+    connect(this, &QDialog::accepted, this, &KoPAConfigureDialog::slotApply);
+    connect(button(QDialogButtonBox::RestoreDefaults), &QAbstractButton::clicked, this, &KoPAConfigureDialog::slotDefault);
+    connect(button(QDialogButtonBox::Apply), &QAbstractButton::clicked, this, &KoPAConfigureDialog::slotApply);
     connect(this, &KoPAConfigureDialog::changed, parent, &KoView::slotUpdateAuthorProfileActions);
 }
 
@@ -69,12 +68,11 @@ void KoPAConfigureDialog::slotApply()
 
 void KoPAConfigureDialog::slotDefault()
 {
-    QWidget* curr = currentPage()->widget();
+    QWidget *curr = currentPage()->widget();
 
     if (curr == m_gridPage) {
         m_gridPage->slotDefault();
-    }
-    else if (curr == m_docPage) {
+    } else if (curr == m_docPage) {
         m_docPage->slotDefault();
     }
 }

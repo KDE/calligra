@@ -7,13 +7,13 @@
 #include "KoTextMeta.h"
 
 #include <KoShapeSavingContext.h>
+#include <KoTextInlineRdf.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
-#include <KoTextInlineRdf.h>
 
+#include <QPointer>
 #include <QTextDocument>
 #include <QTextInlineObject>
-#include <QPointer>
 
 #include "TextDebug.h"
 
@@ -24,8 +24,10 @@ class Q_DECL_HIDDEN KoTextMeta::Private
 {
 public:
     Private(const QTextDocument *doc)
-            : document(doc),
-            posInDocument(0) { }
+        : document(doc)
+        , posInDocument(0)
+    {
+    }
     const QTextDocument *document;
     int posInDocument;
     QPointer<KoTextMeta> endBookmark;
@@ -33,8 +35,8 @@ public:
 };
 
 KoTextMeta::KoTextMeta(const QTextDocument *document)
-        : KoInlineObject(false),
-        d(new Private(document))
+    : KoInlineObject(false)
+    , d(new Private(document))
 {
     d->endBookmark.clear();
 }
@@ -48,7 +50,7 @@ void KoTextMeta::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter &writer = context.xmlWriter();
 
-    debugText << "kom.save() this:" << (void*)this << " d->type:" << d->type;
+    debugText << "kom.save() this:" << (void *)this << " d->type:" << d->type;
     if (inlineRdf()) {
         debugText << "kom.save() have inline Rdf";
     }
@@ -64,7 +66,7 @@ void KoTextMeta::saveOdf(KoShapeSavingContext &context)
         debugText << "adding endelement.";
         writer.endElement();
     }
-    debugText << "kom.save() done this:" << (void*)this << " d->type:" << d->type;
+    debugText << "kom.save() done this:" << (void *)this << " d->type:" << d->type;
 }
 
 bool KoTextMeta::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -93,7 +95,7 @@ void KoTextMeta::resize(const QTextDocument *document, QTextInlineObject &object
     object.setDescent(0);
 }
 
-void KoTextMeta::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, const QTextInlineObject &, int , const QTextCharFormat &)
+void KoTextMeta::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, const QTextInlineObject &, int, const QTextCharFormat &)
 {
     // nothing to paint.
 }

@@ -9,7 +9,7 @@
 
 #include <QtTest>
 
-class VisioTests: public QObject
+class VisioTests : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:

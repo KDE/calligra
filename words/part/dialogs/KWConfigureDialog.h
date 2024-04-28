@@ -20,7 +20,7 @@ class KWConfigureDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    explicit KWConfigureDialog(KWView* parent);
+    explicit KWConfigureDialog(KWView *parent);
 
 Q_SIGNALS:
     /// Emitted when the configuration may have changed.
@@ -31,14 +31,13 @@ public Q_SLOTS:
     void slotDefault();
 
 protected Q_SLOTS:
-    void handleButtonClicked(QAbstractButton* button);
+    void handleButtonClicked(QAbstractButton *button);
 
 private:
-    KoConfigGridPage* m_gridPage;
-    KoConfigDocumentPage* m_docPage;
-    KoConfigMiscPage* m_miscPage;
+    KoConfigGridPage *m_gridPage;
+    KoConfigDocumentPage *m_docPage;
+    KoConfigMiscPage *m_miscPage;
     KoConfigAuthorPage *m_authorPage;
-
 };
 
 #endif // KWCONFIGUREDIALOG_H

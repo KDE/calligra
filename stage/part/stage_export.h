@@ -12,9 +12,9 @@
 
 /* Now the same for STAGE_TEST_EXPORT, if compiling with unit tests enabled */
 #ifdef COMPILING_TESTS
-#   define STAGE_TEST_EXPORT STAGE_EXPORT
+#define STAGE_TEST_EXPORT STAGE_EXPORT
 #else /* not compiling tests */
-#   define STAGE_TEST_EXPORT
+#define STAGE_TEST_EXPORT
 #endif
 
 #endif

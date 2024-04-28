@@ -8,8 +8,8 @@
 #define FILTEREFFECTSCENE_H
 
 #include <QGraphicsScene>
-#include <QString>
 #include <QMap>
+#include <QString>
 
 class KoFilterEffect;
 class KoFilterEffectStack;
@@ -22,27 +22,27 @@ class ConnectionSource
 {
 public:
     enum SourceType {
-        Effect,          ///< a complete effect item
-        SourceGraphic,   ///< SourceGraphic predefined input image
-        SourceAlpha,     ///< SourceAlpha predefined input image
+        Effect, ///< a complete effect item
+        SourceGraphic, ///< SourceGraphic predefined input image
+        SourceAlpha, ///< SourceAlpha predefined input image
         BackgroundImage, ///< BackgroundImage predefined input image
         BackgroundAlpha, ///< BackgroundAlpha predefined input image
-        FillPaint,       ///< FillPaint predefined input image
-        StrokePaint      ///< StrokePaint predefined input image
+        FillPaint, ///< FillPaint predefined input image
+        StrokePaint ///< StrokePaint predefined input image
     };
     ConnectionSource();
     ConnectionSource(KoFilterEffect *effect, SourceType type);
     /// Returns the source type
     SourceType type() const;
     /// Returns the corresponding filter effect, or 0 if type == Effect
-    KoFilterEffect * effect() const;
+    KoFilterEffect *effect() const;
 
     static SourceType typeFromString(const QString &str);
     static QString typeToString(SourceType type);
 
 private:
-    SourceType m_type;         ///< the source type
-    KoFilterEffect * m_effect; ///< the corresponding effect if type == Effect, 0 otherwise
+    SourceType m_type; ///< the source type
+    KoFilterEffect *m_effect; ///< the corresponding effect if type == Effect, 0 otherwise
 };
 
 class ConnectionTarget
@@ -54,11 +54,11 @@ public:
     /// Returns the target input index
     int inputIndex() const;
     /// Returns the corresponding filter effect
-    KoFilterEffect * effect() const;
+    KoFilterEffect *effect() const;
 
 private:
-    int m_inputIndex;          ///< the index of the input of the target effect
-    KoFilterEffect * m_effect; ///< the target effect
+    int m_inputIndex; ///< the index of the input of the target effect
+    KoFilterEffect *m_effect; ///< the target effect
 };
 
 class FilterEffectScene : public QGraphicsScene
@@ -79,10 +79,11 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented from QGraphicsScene
-    void dropEvent(QGraphicsSceneDragDropEvent * event) override;
+    void dropEvent(QGraphicsSceneDragDropEvent *event) override;
 
 private Q_SLOTS:
     void slotSelectionChanged();
+
 private:
     void createEffectItems(KoFilterEffect *effect);
     void addSceneItem(QGraphicsItem *item);
@@ -90,10 +91,10 @@ private:
     void layoutEffects();
 
     QList<QString> m_defaultInputs;
-    KoFilterEffectStack * m_effectStack;
-    QList<EffectItemBase*> m_items;
-    QList<ConnectionItem*> m_connectionItems;
-    QMap<QString, EffectItemBase*> m_outputs;
+    KoFilterEffectStack *m_effectStack;
+    QList<EffectItemBase *> m_items;
+    QList<ConnectionItem *> m_connectionItems;
+    QMap<QString, EffectItemBase *> m_outputs;
     QGraphicsProxyWidget *m_defaultInputProxy;
 };
 

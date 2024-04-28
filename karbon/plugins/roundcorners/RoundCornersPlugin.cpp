@@ -16,45 +16,44 @@
 #include "RoundCornersPlugin.h"
 #include "RoundCornersCommand.h"
 
-#include <KoToolManager.h>
-#include <KoCanvasController.h>
 #include <KoCanvasBase.h>
-#include <KoSelection.h>
-#include <KoShapeManager.h>
-#include <KoPathShape.h>
+#include <KoCanvasController.h>
+#include <KoIcon.h>
 #include <KoParameterShape.h>
 #include <KoParameterToPathCommand.h>
-#include <KoUnitDoubleSpinBox.h>
+#include <KoPathShape.h>
+#include <KoSelection.h>
+#include <KoShapeManager.h>
+#include <KoToolManager.h>
 #include <KoUnit.h>
-#include <KoIcon.h>
+#include <KoUnitDoubleSpinBox.h>
 #include <kundo2command.h>
 
-#include <KPluginFactory>
-#include <KLocalizedString>
 #include <KActionCollection>
+#include <KLocalizedString>
+#include <KPluginFactory>
 
-#include <QStandardPaths>
-#include <QAction>
-#include <QGroupBox>
-#include <QLabel>
-#include <QHBoxLayout>
 #include <KConfigGroup>
+#include <QAction>
 #include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QPushButton>
+#include <QStandardPaths>
 #include <QVBoxLayout>
 
-K_PLUGIN_FACTORY_WITH_JSON(RoundCornersPluginFactory, "karbon_roundcorners.json",
-                           registerPlugin<RoundCornersPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(RoundCornersPluginFactory, "karbon_roundcorners.json", registerPlugin<RoundCornersPlugin>();)
 
-RoundCornersPlugin::RoundCornersPlugin(QObject * parent, const QVariantList &)
+RoundCornersPlugin::RoundCornersPlugin(QObject *parent, const QVariantList &)
 {
     setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "karbon/plugins/RoundCornersPlugin.rc"));
 
-    QAction *actionRoundCorners  = new QAction(koIcon("effect_roundcorners"), i18n("&Round Corners..."), this);
+    QAction *actionRoundCorners = new QAction(koIcon("effect_roundcorners"), i18n("&Round Corners..."), this);
     actionCollection()->addAction("path_round_corners", actionRoundCorners);
     connect(actionRoundCorners, &QAction::triggered, this, &RoundCornersPlugin::slotRoundCorners);
 
-    m_roundCornersDlg = new RoundCornersDlg(qobject_cast<QWidget*>(parent));
+    m_roundCornersDlg = new RoundCornersDlg(qobject_cast<QWidget *>(parent));
     m_roundCornersDlg->setRadius(10.0);
 }
 
@@ -64,25 +63,25 @@ RoundCornersPlugin::~RoundCornersPlugin()
 
 void RoundCornersPlugin::slotRoundCorners()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape();
-    if (! shape)
+    KoShape *shape = selection->firstSelectedShape();
+    if (!shape)
         return;
 
     // check if we have a path based shape
-    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
-    if (! path)
+    KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
+    if (!path)
         return;
 
     m_roundCornersDlg->setUnit(canvasController->canvas()->unit());
     if (QDialog::Rejected == m_roundCornersDlg->exec())
         return;
 
-    KUndo2Command * cmd = new KUndo2Command(kundo2_i18n("Round Corners"));
+    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Round Corners"));
 
     // convert to path before if we have a parametric shape
-    KoParameterShape * ps = dynamic_cast<KoParameterShape*>(shape);
+    KoParameterShape *ps = dynamic_cast<KoParameterShape *>(shape);
     if (ps && ps->isParametricShape())
         new KoParameterToPathCommand(ps, cmd);
 
@@ -90,14 +89,13 @@ void RoundCornersPlugin::slotRoundCorners()
     canvasController->canvas()->addCommand(cmd);
 }
 
-
-RoundCornersDlg::RoundCornersDlg(QWidget* parent, const char* name)
-        : QDialog(parent)
+RoundCornersDlg::RoundCornersDlg(QWidget *parent, const char *name)
+    : QDialog(parent)
 {
     setObjectName(name);
     setModal(true);
     setWindowTitle(i18n("Round Corners"));
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     QWidget *mainWidget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
@@ -108,9 +106,9 @@ RoundCornersDlg::RoundCornersDlg(QWidget* parent, const char* name)
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
 
     // add input:
-    QGroupBox* group = new QGroupBox(i18n("Properties"), this);
+    QGroupBox *group = new QGroupBox(i18n("Properties"), this);
 
-    QHBoxLayout* layout = new QHBoxLayout;
+    QHBoxLayout *layout = new QHBoxLayout;
 
     layout->addWidget(new QLabel(i18n("Radius:")));
     m_radius = new KoUnitDoubleSpinBox(group);
@@ -128,7 +126,7 @@ RoundCornersDlg::RoundCornersDlg(QWidget* parent, const char* name)
 
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    //PORTING SCRIPT: WARNING mainLayout->addWidget(buttonBox) must be last item in layout. Please move it.
+    // PORTING SCRIPT: WARNING mainLayout->addWidget(buttonBox) must be last item in layout. Please move it.
     mainLayout->addWidget(buttonBox);
 }
 

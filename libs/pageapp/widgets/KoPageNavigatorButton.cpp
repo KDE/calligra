@@ -10,13 +10,12 @@
 // KF5
 #include <PageAppDebug.h>
 // Qt
-#include <QIcon>
 #include <QAction>
-
+#include <QIcon>
 
 KoPageNavigatorButton::KoPageNavigatorButton(const char *iconName, QWidget *parent)
-  : QToolButton(parent)
-  , m_action(0)
+    : QToolButton(parent)
+    , m_action(0)
 {
     setIcon(QIcon::fromTheme(QLatin1String(iconName)));
     setFocusPolicy(Qt::NoFocus);
@@ -25,7 +24,7 @@ KoPageNavigatorButton::KoPageNavigatorButton(const char *iconName, QWidget *pare
 
 void KoPageNavigatorButton::setAction(QAction *action)
 {
-    if (! action) {
+    if (!action) {
         warnPageApp << "Attempt to set a null action";
         return;
     }
@@ -41,7 +40,6 @@ void KoPageNavigatorButton::setAction(QAction *action)
 
     onActionChanged();
 }
-
 
 void KoPageNavigatorButton::onActionChanged()
 {

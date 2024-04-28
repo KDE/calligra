@@ -15,20 +15,19 @@
 #include <math.h>
 
 // Qt
-#include <QPainterPath>
 #include <QPainter>
+#include <QPainterPath>
 
 // Calligra
 #include <KoGenStyles.h>
 #include <KoOdfGraphicStyles.h>
 
 // Flake
-#include "KoViewConverter.h"
+#include "KoMarkerData.h"
+#include "KoPathShape.h"
 #include "KoShape.h"
 #include "KoShapeSavingContext.h"
-#include "KoPathShape.h"
-#include "KoMarkerData.h"
-
+#include "KoViewConverter.h"
 
 class Q_DECL_HIDDEN KoShapeStroke::Private
 {
@@ -52,9 +51,8 @@ void KoShapeStroke::Private::paintBorder(KoShape *shape, QPainter &painter, cons
     }
 }
 
-
 KoShapeStroke::KoShapeStroke()
-        : d(new Private())
+    : d(new Private())
 {
     d->color = QColor(Qt::black);
     // we are not rendering stroke with zero width anymore
@@ -63,7 +61,8 @@ KoShapeStroke::KoShapeStroke()
 }
 
 KoShapeStroke::KoShapeStroke(const KoShapeStroke &other)
-        : KoShapeStrokeModel(), d(new Private())
+    : KoShapeStrokeModel()
+    , d(new Private())
 {
     d->color = other.d->color;
     d->pen = other.d->pen;
@@ -71,7 +70,7 @@ KoShapeStroke::KoShapeStroke(const KoShapeStroke &other)
 }
 
 KoShapeStroke::KoShapeStroke(qreal lineWidth, const QColor &color)
-        : d(new Private())
+    : d(new Private())
 {
     d->pen.setWidthF(qMax(qreal(0.0), lineWidth));
     d->pen.setJoinStyle(Qt::MiterJoin);
@@ -83,7 +82,7 @@ KoShapeStroke::~KoShapeStroke()
     delete d;
 }
 
-KoShapeStroke &KoShapeStroke::operator = (const KoShapeStroke &rhs)
+KoShapeStroke &KoShapeStroke::operator=(const KoShapeStroke &rhs)
 {
     if (this == &rhs)
         return *this;

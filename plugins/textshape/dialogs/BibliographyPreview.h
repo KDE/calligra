@@ -6,9 +6,9 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#include <KoZoomHandler.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
+#include <KoZoomHandler.h>
 
 #include <QFrame>
 #include <QPixmap>
@@ -49,7 +49,6 @@ private:
     QSize m_previewPixSize;
 
     void deleteTextShape();
-
 };
 
 #endif // BIBLIOGRAPHYPREVIEW_H

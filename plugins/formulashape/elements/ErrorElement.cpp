@@ -7,17 +7,18 @@
 #include "ErrorElement.h"
 #include <QPainter>
 
-ErrorElement::ErrorElement( BasicElement* parent ) : RowElement( parent )
+ErrorElement::ErrorElement(BasicElement *parent)
+    : RowElement(parent)
 {
 }
 
-void ErrorElement::paint( QPainter& painter, AttributeManager* am )
+void ErrorElement::paint(QPainter &painter, AttributeManager *am)
 {
-    Q_UNUSED( am )
+    Q_UNUSED(am)
     // just paint a red rectangle
     painter.save();
-    QRectF tmp( 0.0, 0.0, width(), height() );
-    painter.fillRect( tmp, QColor( "red" ) );
+    QRectF tmp(0.0, 0.0, width(), height());
+    painter.fillRect(tmp, QColor("red"));
     painter.restore();
 }
 
@@ -25,4 +26,3 @@ ElementType ErrorElement::elementType() const
 {
     return Error;
 }
-

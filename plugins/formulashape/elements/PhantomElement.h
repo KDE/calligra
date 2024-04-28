@@ -13,7 +13,8 @@
 /**
  * @short Implementation of the MathML mphantom element
  */
-class KOFORMULA_EXPORT PhantomElement : public RowElement {
+class KOFORMULA_EXPORT PhantomElement : public RowElement
+{
 public:
     /// The standard constructor
     explicit PhantomElement(BasicElement *parent = 0);

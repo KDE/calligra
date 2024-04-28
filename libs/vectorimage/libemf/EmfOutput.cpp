@@ -14,6 +14,4 @@
 namespace Libemf
 {
 
-
-
 } // xnamespace...

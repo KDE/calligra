@@ -12,34 +12,36 @@
 
 #include "CQImageProvider.h"
 
-#include <KWPage.h>
 #include <KWDocument.h>
+#include <KWPage.h>
 
-CQTextDocumentModel::CQTextDocumentModel(QObject* parent, KWDocument* document, KoShapeManager *shapemanager)
-    : QAbstractListModel(parent), kw_document(document), kw_shapemanager(shapemanager), m_thumbnailSize(QSize(512, 512))
+CQTextDocumentModel::CQTextDocumentModel(QObject *parent, KWDocument *document, KoShapeManager *shapemanager)
+    : QAbstractListModel(parent)
+    , kw_document(document)
+    , kw_shapemanager(shapemanager)
+    , m_thumbnailSize(QSize(512, 512))
 {
 }
 
-int CQTextDocumentModel::rowCount(const QModelIndex& parent) const
+int CQTextDocumentModel::rowCount(const QModelIndex &parent) const
 {
-    if(parent.isValid()) {
+    if (parent.isValid()) {
         return 0;
     }
     return kw_document->pageManager()->pageCount();
 }
 
-QVariant CQTextDocumentModel::data(const QModelIndex& index, int role) const
+QVariant CQTextDocumentModel::data(const QModelIndex &index, int role) const
 {
-
     if (!kw_document || !index.isValid()) {
-       return QVariant();
+        return QVariant();
     }
 
     if (CQImageProvider::s_imageProvider) {
         if (role == Qt::DecorationRole) {
             const QString id = kw_document->caption() + "textData" + QString::number(index.row());
             if (!CQImageProvider::s_imageProvider->containsId(id)) {
-                KWPage pagePreview = kw_document->pageManager()->page(index.row()+1);
+                KWPage pagePreview = kw_document->pageManager()->page(index.row() + 1);
                 QImage image = pagePreview.thumbnail(m_thumbnailSize, kw_shapemanager);
                 if (image.isNull() == true) {
                     return QVariant();
@@ -57,7 +59,7 @@ QSize CQTextDocumentModel::thumbnailSize() const
     return m_thumbnailSize;
 }
 
-void CQTextDocumentModel::setThumbnailSize(const QSize& newSize)
+void CQTextDocumentModel::setThumbnailSize(const QSize &newSize)
 {
     m_thumbnailSize = newSize;
     if (newSize.height() == 0) {

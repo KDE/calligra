@@ -17,9 +17,8 @@ public:
     SnapGuideDockerFactory();
 
     QString id() const override;
-    QDockWidget* createDockWidget() override;
+    QDockWidget *createDockWidget() override;
     KoDockFactoryBase::DockPosition defaultDockPosition() const override;
-
 };
 
 #endif // SNAPGUIDEDOCKERFACTORY_H

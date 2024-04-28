@@ -17,8 +17,7 @@
 using namespace KoChart;
 using namespace KChart;
 
-
-AxisCommand::AxisCommand(Axis* axis, ChartShape* chart)
+AxisCommand::AxisCommand(Axis *axis, ChartShape *chart)
     : m_chart(chart)
     , m_axis(axis)
 {
@@ -55,14 +54,11 @@ void AxisCommand::redo()
 
     KUndo2Command::redo();
 
-    if (m_oldShowLabels == m_newShowLabels
-        && m_oldShowMajorGridLines == m_newShowMajorGridLines && m_oldShowMinorGridLines == m_newShowMinorGridLines
-        && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont
-        && m_oldShowAxis == m_newShowAxis
-        && m_oldPosition == m_newPosition)
-        {
-            return;
-        }
+    if (m_oldShowLabels == m_newShowLabels && m_oldShowMajorGridLines == m_newShowMajorGridLines && m_oldShowMinorGridLines == m_newShowMinorGridLines
+        && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont && m_oldShowAxis == m_newShowAxis
+        && m_oldPosition == m_newPosition) {
+        return;
+    }
 
     // Actually do the work
     m_axis->setShowLabels(m_newShowLabels);
@@ -87,12 +83,9 @@ void AxisCommand::redo()
 void AxisCommand::undo()
 {
     KUndo2Command::undo();
-    if (m_oldShowLabels == m_newShowLabels
-        && m_oldShowMajorGridLines == m_newShowMajorGridLines && m_oldShowMinorGridLines == m_newShowMinorGridLines
-        && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont
-        && m_oldShowAxis == m_newShowAxis
-        && m_oldPosition == m_newPosition)
-    {
+    if (m_oldShowLabels == m_newShowLabels && m_oldShowMajorGridLines == m_newShowMajorGridLines && m_oldShowMinorGridLines == m_newShowMinorGridLines
+        && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont && m_oldShowAxis == m_newShowAxis
+        && m_oldPosition == m_newPosition) {
         return;
     }
     m_axis->setShowLabels(m_oldShowLabels);
@@ -123,18 +116,18 @@ void AxisCommand::setAxisShowTitle(bool show)
     }
     ChartTextShapeCommand *cmd = new ChartTextShapeCommand(m_axis->title(), m_chart, show, this);
     if (show && m_chart->chartType() == BarChartType) {
-        debugChartUiAxes<<m_axis<<m_axis->actualAxisPosition();
+        debugChartUiAxes << m_axis << m_axis->actualAxisPosition();
         switch (m_axis->actualAxisPosition()) {
-            case KChart::CartesianAxis::Bottom:
-            case KChart::CartesianAxis::Top:
-                cmd->setRotation(0);
+        case KChart::CartesianAxis::Bottom:
+        case KChart::CartesianAxis::Top:
+            cmd->setRotation(0);
             break;
-            case KChart::CartesianAxis::Left:
-                cmd->setRotation(-90);
-                break;
-            case KChart::CartesianAxis::Right:
-                cmd->setRotation(90);
-                break;
+        case KChart::CartesianAxis::Left:
+            cmd->setRotation(-90);
+            break;
+        case KChart::CartesianAxis::Right:
+            cmd->setRotation(90);
+            break;
         }
     }
 }
@@ -244,15 +237,15 @@ void AxisCommand::setAxisPosition(const QString &pos)
     if (m_axis->title()->isVisible()) {
         ChartTextShapeCommand *cmd = new ChartTextShapeCommand(m_axis->title(), m_chart, true, this);
         if (m_chart->chartType() == BarChartType) {
-            debugChartUiAxes<<m_axis->actualAxisPosition();
+            debugChartUiAxes << m_axis->actualAxisPosition();
             switch (m_axis->actualAxisPosition()) {
-                case KChart::CartesianAxis::Bottom:
-                case KChart::CartesianAxis::Top:
-                    break;
-                case KChart::CartesianAxis::Left:
-                case KChart::CartesianAxis::Right:
-                    cmd->setRotation(m_axis->title()->rotation() - 180);
-                    break;
+            case KChart::CartesianAxis::Bottom:
+            case KChart::CartesianAxis::Top:
+                break;
+            case KChart::CartesianAxis::Left:
+            case KChart::CartesianAxis::Right:
+                cmd->setRotation(m_axis->title()->rotation() - 180);
+                break;
             }
         }
     }

@@ -5,13 +5,12 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #ifndef CALLIGRA_SHEETS_CELL_EDITOR
 #define CALLIGRA_SHEETS_CELL_EDITOR
 
+#include "CellEditorBase.h"
 #include <KCompletion>
 #include <ktextedit.h>
-#include "CellEditorBase.h"
 
 #include <QHash>
 
@@ -35,17 +34,17 @@ class CellEditor : public KTextEdit, public CellEditorBase
     Q_OBJECT
 public:
     /**
-    * Creates a new CellEditor.
-    * \param cellTool the cell tool
-    * \param wordList the word list
-    * \param parent the parent widget
-    */
+     * Creates a new CellEditor.
+     * \param cellTool the cell tool
+     * \param wordList the word list
+     * \param parent the parent widget
+     */
     explicit CellEditor(CellToolBase *cellTool, QMultiHash<int, QString> &wordList, QWidget *parent = 0);
     ~CellEditor() override;
 
-    Selection* selection() const;
+    Selection *selection() const;
 
-    void setEditorFont(QFont const & font, bool updateSize, const KoViewConverter *viewConverter) override;
+    void setEditorFont(QFont const &font, bool updateSize, const KoViewConverter *viewConverter) override;
 
     int cursorPosition() const override;
     void setCursorPosition(int pos) override;
@@ -69,16 +68,31 @@ public:
     void setActiveSubRegion(int index) override;
 
     // CellEditorBase interface
-    QWidget* widget() override { return this; }
-    void cut() override { KTextEdit::cut(); }
-    void copy() override { KTextEdit::copy(); }
-    void paste() override { KTextEdit::paste(); }
-    QString toPlainText() const override { return KTextEdit::toPlainText(); }
+    QWidget *widget() override
+    {
+        return this;
+    }
+    void cut() override
+    {
+        KTextEdit::cut();
+    }
+    void copy() override
+    {
+        KTextEdit::copy();
+    }
+    void paste() override
+    {
+        KTextEdit::paste();
+    }
+    QString toPlainText() const override
+    {
+        return KTextEdit::toPlainText();
+    }
 Q_SIGNALS:
     void textModified(const QString &text);
 
 public Q_SLOTS:
-    void setText(const QString& text, int cursorPos = -1) override;
+    void setText(const QString &text, int cursorPos = -1) override;
 
     /**
      * Permutes the fixation of the reference, at which the editor's cursor
@@ -89,8 +103,8 @@ public Q_SLOTS:
     QCompleter *completer() const;
 
 private Q_SLOTS:
-    void  slotTextChanged();
-    void  slotCursorPositionChanged();
+    void slotTextChanged();
+    void slotCursorPositionChanged();
     void insertCompletion(const QString &completion);
 
 protected: // reimplementations
@@ -104,7 +118,7 @@ private:
     QString textUnderCursor() const;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

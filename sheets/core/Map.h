@@ -51,7 +51,7 @@ public:
     /**
      * Created an empty map.
      */
-    explicit Map(DocBase* doc = 0, int syntaxVersion = 1);
+    explicit Map(DocBase *doc = 0, int syntaxVersion = 1);
 
     /**
      * This deletes all sheets contained in this map.
@@ -61,7 +61,7 @@ public:
     /**
      * \return the document this map belongs to
      */
-    DocBase* doc() const;
+    DocBase *doc() const;
 
     /**
      * \brief Sets whether the document can be edited or is read only.
@@ -75,32 +75,32 @@ public:
 
     // KoDataCenterBase interface
     bool completeLoading(KoStore *store) override;
-    bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext * context) override;
+    bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context) override;
 
     /**
      * \return a pointer to the application settings
      */
-    ApplicationSettings* applicationSettings() const;
+    ApplicationSettings *applicationSettings() const;
 
     /**
      * \return a pointer to the binding manager
      */
-    BindingManager* bindingManager() const;
+    BindingManager *bindingManager() const;
 
     /**
      * @return the StyleManager of this Document
      */
-    StyleManager* styleManager() const;
+    StyleManager *styleManager() const;
 
     /**
      * @return the KoStyleManager of this Document
      */
-    KoStyleManager* textStyleManager() const;
+    KoStyleManager *textStyleManager() const;
 
     /**
      * @return the value formatter of this Document
      */
-    ValueFormatter* formatter() const;
+    ValueFormatter *formatter() const;
 
     /**
      * \return the default row format
@@ -122,13 +122,12 @@ public:
      */
     void setDefaultRowHeight(double height);
 
-
     /**
      * Creates a new sheet.
      * The sheet is not added to the map nor added to the GUI.
      * @return a pointer to a new Sheet
      */
-    virtual SheetBase* createSheet(const QString& name = QString()) override;
+    virtual SheetBase *createSheet(const QString &name = QString()) override;
 
     void setOverallRowsCounter(int number);
     int increaseLoadedRowsCounter(int i = 1);
@@ -153,7 +152,7 @@ public:
      * Creates the loading info, if it does not exist yet.
      * \return the loading info
      */
-    LoadingInfo* loadingInfo() const;
+    LoadingInfo *loadingInfo() const;
 
     /**
      * Deletes the loading info. Called after loading is complete.
@@ -174,7 +173,7 @@ public Q_SLOTS:
     /**
      * \ingroup Damages
      */
-    virtual void handleDamages(const QList<Damage*>& damages) override;
+    virtual void handleDamages(const QList<Damage *> &damages) override;
 
     /**
      * Emits the signal commandAdded(KUndo2Command *).
@@ -200,7 +199,7 @@ private:
     Q_DISABLE_COPY(Map)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

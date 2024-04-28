@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@kde.org>
  * SPDX-FileCopyrightText: 2007 Thorsten Zachmann <zachmann@kde.org>
  * SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
@@ -10,17 +10,19 @@
 #ifndef KOPATHCONNECTIONPOINTSTRATEGYPRIVATE_H
 #define KOPATHCONNECTIONPOINTSTRATEGYPRIVATE_H
 
-#include "KoParameterChangeStrategy_p.h"
 #include "KoConnectionShape.h"
+#include "KoParameterChangeStrategy_p.h"
 
 class KoPathConnectionPointStrategyPrivate : public KoParameterChangeStrategyPrivate
 {
 public:
-    KoPathConnectionPointStrategyPrivate(KoToolBase* owner, KoConnectionShape* connectionShape, int handle)
+    KoPathConnectionPointStrategyPrivate(KoToolBase *owner, KoConnectionShape *connectionShape, int handle)
         : KoParameterChangeStrategyPrivate(owner, connectionShape, handle)
         , connectionShape(connectionShape)
-        , oldConnectionShape(0), oldConnectionId(-1)
-        , newConnectionShape(0), newConnectionId(-1)
+        , oldConnectionShape(0)
+        , oldConnectionId(-1)
+        , newConnectionShape(0)
+        , newConnectionId(-1)
     {
         if (handleId == 0) {
             oldConnectionShape = connectionShape->firstShape();

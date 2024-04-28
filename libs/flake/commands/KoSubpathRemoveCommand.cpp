@@ -11,10 +11,10 @@
 #include <KLocalizedString>
 
 KoSubpathRemoveCommand::KoSubpathRemoveCommand(KoPathShape *pathShape, int subpathIndex, KUndo2Command *parent)
-        : KUndo2Command(parent)
-        , m_pathShape(pathShape)
-        , m_subpathIndex(subpathIndex)
-        , m_subpath(0)
+    : KUndo2Command(parent)
+    , m_pathShape(pathShape)
+    , m_subpathIndex(subpathIndex)
+    , m_subpath(0)
 {
     setText(kundo2_i18n("Remove subpath"));
 }
@@ -37,7 +37,7 @@ void KoSubpathRemoveCommand::redo()
 
         QTransform matrix;
         matrix.translate(-offset.x(), -offset.y());
-        foreach(KoPathPoint *point, *m_subpath) {
+        foreach (KoPathPoint *point, *m_subpath) {
             point->map(matrix);
         }
         m_pathShape->update();
@@ -54,4 +54,3 @@ void KoSubpathRemoveCommand::undo()
         m_subpath = 0;
     }
 }
-

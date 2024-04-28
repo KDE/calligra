@@ -15,7 +15,7 @@ namespace Sheets
 class CalculationSettings;
 class ValueParser;
 
-class TestValueParser: public QObject
+class TestValueParser : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
@@ -36,8 +36,8 @@ private Q_SLOTS:
     void testParse();
 
 private:
-    CalculationSettings* m_calcsettings;
-    ValueParser* m_parser;
+    CalculationSettings *m_calcsettings;
+    ValueParser *m_parser;
     QString m_translationsFile;
 };
 

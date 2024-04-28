@@ -10,11 +10,10 @@
 #include "KoAnchorTextRange.h"
 #include "KoShapeAnchor.h"
 
-#include <KoShapeSavingContext.h>
 #include <KoShape.h>
+#include <KoShapeSavingContext.h>
 
 #include "TextDebug.h"
-
 
 class KoAnchorTextRangePrivate
 {

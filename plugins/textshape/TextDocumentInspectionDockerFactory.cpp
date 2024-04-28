@@ -8,7 +8,6 @@
 #include "TextDocumentInspectionDockerFactory.h"
 #include "TextDocumentInspectionDocker.h"
 
-
 TextDocumentInspectionDockerFactory::TextDocumentInspectionDockerFactory()
 {
 }
@@ -23,9 +22,9 @@ KoDockFactoryBase::DockPosition TextDocumentInspectionDockerFactory::defaultDock
     return DockRight;
 }
 
-QDockWidget* TextDocumentInspectionDockerFactory::createDockWidget()
+QDockWidget *TextDocumentInspectionDockerFactory::createDockWidget()
 {
-    TextDocumentInspectionDocker * widget = new TextDocumentInspectionDocker();
+    TextDocumentInspectionDocker *widget = new TextDocumentInspectionDocker();
     widget->setObjectName(id());
 
     return widget;

@@ -18,22 +18,22 @@ public:
 
     KoShape *createShape(KoDocumentResourceManager *documentResources) override;
 
-    void paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect, KoShapePaintingContext &paintcontext) override;
+    void paint(QPainter &painter, const KoViewConverter &converter, const QRectF &rect, KoShapePaintingContext &paintcontext) override;
 
-    void saveOdf( KoShapeSavingContext & context ) override;
+    void saveOdf(KoShapeSavingContext &context) override;
 
-    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context ) override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     void init(KoDocumentResourceManager *documentResources) override;
 
-    KoShapeUserData * userData() const override;
+    KoShapeUserData *userData() const override;
 
 protected:
-    KPrPlaceholderTextStrategy( const QString & presentationClass );
+    KPrPlaceholderTextStrategy(const QString &presentationClass);
 
     friend class KPrPlaceholderStrategy;
 
-    KoShape * m_textShape;
+    KoShape *m_textShape;
 };
 
 #endif /* KPRPLACEHOLDERTEXTSTRATEGY_H */

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * SPDX-FileCopyrightText: 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
@@ -8,8 +8,8 @@
 #ifndef CONNECTIONPOINTWIDGET_H
 #define CONNECTIONPOINTWIDGET_H
 
-#include <ui_ConnectionPointWidget.h>
 #include <QWidget>
+#include <ui_ConnectionPointWidget.h>
 
 class ConnectionTool;
 
@@ -24,8 +24,8 @@ private Q_SLOTS:
 
 private:
     Ui::ConnectionPointWidget widget;
-    QButtonGroup * m_horzGroup;
-    QButtonGroup * m_vertGroup;
+    QButtonGroup *m_horzGroup;
+    QButtonGroup *m_vertGroup;
 };
 
 #endif // CONNECTIONPOINTWIDGET_H

@@ -271,12 +271,12 @@ public:
 
 private:
     KoTextDebug();
-    KoTextDebug(const KoTextDebug&);
-    KoTextDebug operator=(const KoTextDebug&);
+    KoTextDebug(const KoTextDebug &);
+    KoTextDebug operator=(const KoTextDebug &);
 
     static const QTextDocument *document; /**< Pointer to the debugged document. */
-    static int depth;                     /**< Current indentation depth. */
-    static const int INDENT;              /**< Indentation value. */
+    static int depth; /**< Current indentation depth. */
+    static const int INDENT; /**< Indentation value. */
 };
 
 #endif /* KOTEXTDEBUG_H */

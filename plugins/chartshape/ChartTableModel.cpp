@@ -6,7 +6,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 // Own
 #include "ChartTableModel.h"
 
@@ -14,24 +13,24 @@
 #include <cmath>
 
 // Qt
-#include <QDomNode>
 #include <QDomDocument>
+#include <QDomNode>
 
 // Calligra
-#include <KoXmlReader.h>
-#include <KoXmlWriter.h>
 #include <KoGenStyles.h>
-#include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
 // KoChart
 #include "CellRegion.h"
-#include "OdfLoadingHelper.h"
 #include "ChartDebug.h"
+#include "OdfLoadingHelper.h"
 
-
-namespace KoChart {
+namespace KoChart
+{
 
 ChartTableModel::ChartTableModel(QObject *parent /* = 0 */)
     : QStandardItemModel(parent)
@@ -46,19 +45,19 @@ QVariant ChartTableModel::headerData(int section, Qt::Orientation orientation, i
 {
     if (orientation == Qt::Horizontal) {
         if (role == Qt::DisplayRole) {
-            return CellRegion::columnName(section+1);
+            return CellRegion::columnName(section + 1);
         }
     }
     return QStandardItemModel::headerData(section, orientation, role);
 }
 
-QHash<QString, QVector<QRect> > ChartTableModel::cellRegion() const
+QHash<QString, QVector<QRect>> ChartTableModel::cellRegion() const
 {
     // FIXME: Unimplemented?
-    return QHash<QString, QVector<QRect> >();
+    return QHash<QString, QVector<QRect>>();
 }
 
-bool ChartTableModel::setCellRegion(const QString& /*regionName*/)
+bool ChartTableModel::setCellRegion(const QString & /*regionName*/)
 {
 #if 0 // FIXME: What does this code do?
     int result = 0;
@@ -74,45 +73,45 @@ bool ChartTableModel::setCellRegion(const QString& /*regionName*/)
     return true;
 }
 
-bool ChartTableModel::isCellRegionValid(const QString& regionName) const
+bool ChartTableModel::isCellRegionValid(const QString &regionName) const
 {
     Q_UNUSED(regionName);
 
     return true;
 }
 
-bool ChartTableModel::loadOdf(const KoXmlElement &tableElement,
-                              KoShapeLoadingContext &context)
+bool ChartTableModel::loadOdf(const KoXmlElement &tableElement, KoShapeLoadingContext &context)
 {
     Q_UNUSED(context);
 
-    debugChartOdf<<"Load table";
+    debugChartOdf << "Load table";
     setRowCount(0);
     setColumnCount(0);
 
-    //QDomDocument doc;
-    //KoXml::asQDomElement(doc, tableElement);
-    //QTextStream stream(stdout);
-    //stream << doc.documentElement();
+    // QDomDocument doc;
+    // KoXml::asQDomElement(doc, tableElement);
+    // QTextStream stream(stdout);
+    // stream << doc.documentElement();
 
     int row = 0;
-    KoXmlElement  n;
-    forEachElement (n, tableElement) {
+    KoXmlElement n;
+    forEachElement(n, tableElement)
+    {
         if (n.namespaceURI() != KoXmlNS::table)
             continue;
 
         if (n.localName() == "table-columns" || n.localName() == "table-header-columns") {
             int column = 0;
-            KoXmlElement  _n;
-            forEachElement (_n, n) {
+            KoXmlElement _n;
+            forEachElement(_n, n)
+            {
                 if (_n.namespaceURI() != KoXmlNS::table || _n.localName() != "table-column")
                     continue;
                 column += qMax(1, _n.attributeNS(KoXmlNS::table, "number-columns-repeated").toInt());
                 if (column > columnCount())
                     setColumnCount(column);
             }
-        }
-        else if (n.localName() == "table-rows" || n.localName() == "table-header-rows") {
+        } else if (n.localName() == "table-rows" || n.localName() == "table-header-rows") {
             if (n.localName() == "table-header-rows") {
                 if (row >= 1) {
                     // There can only be one header-row and only at the very beginning.
@@ -122,8 +121,9 @@ bool ChartTableModel::loadOdf(const KoXmlElement &tableElement,
                 }
             }
 
-            KoXmlElement  _n;
-            forEachElement (_n, n) {
+            KoXmlElement _n;
+            forEachElement(_n, n)
+            {
                 if (_n.namespaceURI() != KoXmlNS::table || _n.localName() != "table-row")
                     continue;
 
@@ -131,9 +131,10 @@ bool ChartTableModel::loadOdf(const KoXmlElement &tableElement,
                 setRowCount(row + 1);
 
                 // Loop through all cells in a table row.
-                int  column = 0;
-                KoXmlElement  __n;
-                forEachElement (__n, _n) {
+                int column = 0;
+                KoXmlElement __n;
+                forEachElement(__n, _n)
+                {
                     if (__n.namespaceURI() != KoXmlNS::table || __n.localName() != "table-cell")
                         continue;
 
@@ -170,11 +171,11 @@ bool ChartTableModel::loadOdf(const KoXmlElement &tableElement,
             } // foreach table:table-row
         }
     }
-    debugChartOdf<<"Loaded table:"<<rowCount()<<','<<columnCount();
+    debugChartOdf << "Loaded table:" << rowCount() << ',' << columnCount();
     return true;
 }
 
-bool ChartTableModel::saveOdf(KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
+bool ChartTableModel::saveOdf(KoXmlWriter &bodyWriter, KoGenStyles &mainStyles) const
 {
     Q_UNUSED(bodyWriter);
     Q_UNUSED(mainStyles);

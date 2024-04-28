@@ -14,10 +14,10 @@
 #include "KoLZF.h"
 #endif
 
-#include <QVector>
+#include <QBuffer>
 #include <QByteArray>
 #include <QDataStream>
-#include <QBuffer>
+#include <QVector>
 
 /**
  * KoXmlVector
@@ -37,7 +37,7 @@
  *      cost of speed bigger value will be better in term of speed, but use
  *      more memory
  */
-template <typename T, int uncompressedItemCount = 256, int reservedBufferSize = 1024*1024>
+template<typename T, int uncompressedItemCount = 256, int reservedBufferSize = 1024 * 1024>
 class KoXmlVector
 {
 private:
@@ -54,7 +54,8 @@ protected:
      * fetch given item index to the buffer
      * will INVALIDATE all references to the buffer
      */
-    void fetchItem(unsigned index) const {
+    void fetchItem(unsigned index) const
+    {
         // already in the buffer ?
         if (index >= m_bufferStartIndex)
             if (index - m_bufferStartIndex < (unsigned)m_bufferItems.count())
@@ -65,7 +66,7 @@ protected:
         int loc = m_startIndex.count() - 1;
         for (int c = 0; c < m_startIndex.count() - 1; ++c)
             if (index >= m_startIndex[c])
-                if (index < m_startIndex[c+1]) {
+                if (index < m_startIndex[c + 1]) {
                     loc = c;
                     break;
                 }
@@ -86,7 +87,8 @@ protected:
     /**
      * store data in the buffer to main m_blocks
      */
-    void storeBuffer() {
+    void storeBuffer()
+    {
         QBuffer buffer;
         buffer.open(QIODevice::WriteOnly);
         QDataStream out(&buffer);
@@ -104,9 +106,12 @@ protected:
     }
 
 public:
-    inline KoXmlVector(): m_totalItems(0), m_bufferStartIndex(0) {};
+    inline KoXmlVector()
+        : m_totalItems(0)
+        , m_bufferStartIndex(0){};
 
-    void clear() {
+    void clear()
+    {
         m_totalItems = 0;
         m_startIndex.clear();
         m_blocks.clear();
@@ -116,13 +121,16 @@ public:
         m_bufferData.reserve(reservedBufferSize);
     }
 
-    inline int count() const {
+    inline int count() const
+    {
         return (int)m_totalItems;
     }
-    inline int size() const {
+    inline int size() const
+    {
         return (int)m_totalItems;
     }
-    inline bool isEmpty() const {
+    inline bool isEmpty() const
+    {
         return m_totalItems == 0;
     }
 
@@ -131,21 +139,23 @@ public:
      * WARNING: use the return value as soon as possible
      * it may be invalid if another function is invoked
      */
-    T& newItem() {
+    T &newItem()
+    {
         // buffer full?
         if (m_bufferItems.count() >= uncompressedItemCount - 1)
             storeBuffer();
 
         ++m_totalItems;
         m_bufferItems.resize(m_bufferItems.count() + 1);
-        return m_bufferItems[m_bufferItems.count()-1];
+        return m_bufferItems[m_bufferItems.count() - 1];
     }
 
     /**
      * WARNING: use the return value as soon as possible
      * it may be invalid if another function is invoked
      */
-    const T &operator[](int i) const {
+    const T &operator[](int i) const
+    {
         fetchItem((unsigned)i);
         return m_bufferItems[i - m_bufferStartIndex];
     }
@@ -154,10 +164,10 @@ public:
      * optimize memory usage
      * will INVALIDATE all references to the buffer
      */
-    void squeeze() {
+    void squeeze()
+    {
         storeBuffer();
     }
-
 };
 
 #endif

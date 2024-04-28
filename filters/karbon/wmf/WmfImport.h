@@ -17,10 +17,10 @@ class WMFImport : public KoFilter
     Q_OBJECT
 
 public:
-    WMFImport(QObject* parent, const QVariantList&);
+    WMFImport(QObject *parent, const QVariantList &);
     ~WMFImport() override;
 
-    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to) override;
 };
 
 #endif // WMFIMPORT_H

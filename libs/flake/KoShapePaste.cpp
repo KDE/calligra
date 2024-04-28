@@ -8,8 +8,8 @@
 
 #include "KoShapePaste.h"
 
-#include <QWidget>
 #include <QCursor>
+#include <QWidget>
 
 #include <FlakeDebug.h>
 #include <KLocalizedString>
@@ -18,29 +18,33 @@
 #include <KoOdfReadStore.h>
 
 #include "KoCanvasBase.h"
-#include "KoShapeController.h"
+#include "KoCanvasController.h"
+#include "KoDocumentResourceManager.h"
 #include "KoShape.h"
+#include "KoShapeBasedDocumentBase.h"
+#include "KoShapeController.h"
 #include "KoShapeLayer.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeManager.h"
-#include "KoShapeBasedDocumentBase.h"
 #include "KoShapeRegistry.h"
-#include "KoCanvasController.h"
-#include "KoDocumentResourceManager.h"
 #include "commands/KoShapeCreateCommand.h"
 
 class Q_DECL_HIDDEN KoShapePaste::Private
 {
 public:
-    Private(KoCanvasBase *cb, KoShapeLayer *l) : canvas(cb), layer(l) {}
+    Private(KoCanvasBase *cb, KoShapeLayer *l)
+        : canvas(cb)
+        , layer(l)
+    {
+    }
 
     KoCanvasBase *canvas;
     KoShapeLayer *layer;
-    QList<KoShape*> pastedShapes;
+    QList<KoShape *> pastedShapes;
 };
 
 KoShapePaste::KoShapePaste(KoCanvasBase *canvas, KoShapeLayer *layer)
-        : d(new Private(canvas, layer))
+    : d(new Private(canvas, layer))
 {
 }
 
@@ -49,18 +53,18 @@ KoShapePaste::~KoShapePaste()
     delete d;
 }
 
-bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
+bool KoShapePaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
 {
     d->pastedShapes.clear();
     KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
     KoShapeLoadingContext context(loadingContext, d->canvas->shapeController()->resourceManager());
 
-    QList<KoShape*> shapes(d->layer ? d->layer->shapes(): d->canvas->shapeManager()->topLevelShapes());
+    QList<KoShape *> shapes(d->layer ? d->layer->shapes() : d->canvas->shapeManager()->topLevelShapes());
 
     int zIndex = 0;
     if (!shapes.isEmpty()) {
         zIndex = shapes.first()->zIndex();
-        foreach (KoShape * shape, shapes) {
+        foreach (KoShape *shape, shapes) {
             zIndex = qMax(zIndex, shape->zIndex());
         }
         ++zIndex;
@@ -80,10 +84,11 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
     // TODO if this is a text create a text shape and load the text inside the new shape.
     // create the shape from the clipboard
     KoXmlElement element;
-    forEachElement(element, body) {
+    forEachElement(element, body)
+    {
         debugFlake << "loading shape" << element.localName();
 
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(element, context);
+        KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(element, context);
         if (shape) {
             d->pastedShapes << shape;
         }
@@ -175,7 +180,7 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
     return true;
 }
 
-QList<KoShape*> KoShapePaste::pastedShapes() const
+QList<KoShape *> KoShapePaste::pastedShapes() const
 {
     return d->pastedShapes;
 }

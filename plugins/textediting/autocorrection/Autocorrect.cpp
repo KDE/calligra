@@ -9,15 +9,15 @@
 
 #include <autocorrectiondialog.h>
 
-#include <QTextDocument>
-#include <QTextBlock>
-#include <QFile>
-#include <QTextCursor>
 #include <QAction>
+#include <QFile>
+#include <QTextBlock>
+#include <QTextCursor>
+#include <QTextDocument>
 
 #include <KConfig>
-#include <KLocalizedString>
 #include <KConfigGroup>
+#include <KLocalizedString>
 
 Autocorrect::Autocorrect()
     : AutoCorrection()
@@ -49,8 +49,9 @@ void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition)
     auto mCursor = QTextCursor(document);
     mCursor.setPosition(cursorPosition);
     selectPreviousWord(mCursor, cursorPosition);
-    debugAutocorrect<<cursorPosition<<mCursor.selectedText()<<':'<<document->toPlainText();
-    if (!isEnabledAutoCorrection()) return;
+    debugAutocorrect << cursorPosition << mCursor.selectedText() << ':' << document->toPlainText();
+    if (!isEnabledAutoCorrection())
+        return;
 
     auto cursor = QTextCursor(document);
     // If you enter a word (no space after) and delete characters,
@@ -59,7 +60,7 @@ void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition)
     // we check for a valid cursorPosiotion here,
     cursor.setPosition(cursorPosition);
     if (cursor.position() == 0) {
-        warnAutocorrect<<"Invalid cursor position"<<cursorPosition;
+        warnAutocorrect << "Invalid cursor position" << cursorPosition;
         return;
     }
     selectWord(cursor, cursorPosition);
@@ -99,7 +100,7 @@ int Autocorrect::characterInserted(QTextDocument *document, int cursorPosition)
     mCursor.setPosition(cursorPosition);
     selectPreviousWord(mCursor, cursorPosition);
     int pos = replaceEmoji(*document, cursorPosition);
-    debugAutocorrect<<pos;
+    debugAutocorrect << pos;
     return pos;
 }
 
@@ -159,7 +160,7 @@ void Autocorrect::readConfigurationInternal()
     setEnabledAutoCorrection(interface.readEntry("enabled", isEnabledAutoCorrection()));
     setUppercaseFirstCharOfSentence(interface.readEntry("UppercaseFirstCharOfSentence", isUppercaseFirstCharOfSentence()));
     setAutoBoldUnderline(interface.readEntry("AutoBoldUnderline", isAutoBoldUnderline()));
-    setAutoFormatUrl(interface.readEntry("AutoFormatURLs", false/*isAutoFormatURL()*/));
+    setAutoFormatUrl(interface.readEntry("AutoFormatURLs", false /*isAutoFormatURL()*/));
     setUppercaseFirstCharOfSentence(interface.readEntry("UppercaseFirstCharOfSentence", isUppercaseFirstCharOfSentence()));
     setFixTwoUppercaseChars(interface.readEntry("FixTwoUppercaseChars", isFixTwoUppercaseChars()));
     setSingleSpaces(interface.readEntry("SingleSpaces", isSingleSpaces()));
@@ -170,7 +171,7 @@ void Autocorrect::readConfigurationInternal()
     setReplaceSingleQuotes(interface.readEntry("ReplaceSingleQuotes", isReplaceSingleQuotes()));
     setSuperScript(interface.readEntry("SuperscriptAppendix", isSuperScript()));
 
-    //mAddNonBreakingSpace = PimCommon::PimCommonSettings::self()->addNonBreakingSpaceInFrench();
+    // mAddNonBreakingSpace = PimCommon::PimCommonSettings::self()->addNonBreakingSpaceInFrench();
 
     m_autoFormatBulletList = interface.readEntry("AutoFormatBulletList", m_autoFormatBulletList);
     m_autoNumbering = interface.readEntry("AutoNumbering", m_autoNumbering);

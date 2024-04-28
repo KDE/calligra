@@ -17,7 +17,8 @@
  * @short Implementation of the MathML
  * An element that represents one char.
  */
-class KOFORMULA_EXPORT TextElement : public TokenElement {
+class KOFORMULA_EXPORT TextElement : public TokenElement
+{
 public:
     /// The standard constructor
     explicit TextElement(BasicElement *parent = 0);
@@ -25,7 +26,7 @@ public:
     /// @return The element's ElementType
     ElementType elementType() const override;
 
-    QRectF renderToPath( const QString& raw, QPainterPath& path ) const override;
+    QRectF renderToPath(const QString &raw, QPainterPath &path) const override;
 };
 
 #endif // TEXTELEMENT_H

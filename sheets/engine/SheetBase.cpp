@@ -9,16 +9,15 @@
 // Local
 #include "SheetBase.h"
 #include "CellBase.h"
-#include "MapBase.h"
 #include "CellBaseStorage.h"
 #include "Damages.h"
-#include "FormulaStorage.h"
 #include "DependencyManager.h"
+#include "FormulaStorage.h"
+#include "MapBase.h"
 #include "NamedAreaManager.h"
 #include "RecalcManager.h"
 
 #include <KLocalizedString>
-
 
 using namespace Calligra::Sheets;
 
@@ -26,7 +25,9 @@ class Q_DECL_HIDDEN SheetBase::Private
 {
 public:
     Private(SheetBase *sheet);
-    ~Private() {}
+    ~Private()
+    {
+    }
 
     MapBase *workbook;
     QString name;
@@ -41,15 +42,14 @@ public:
     CellBaseStorage *cellStorage;
 };
 
-SheetBase::Private::Private (SheetBase *sheet)
+SheetBase::Private::Private(SheetBase *sheet)
     : m_sheet(sheet)
 {
     cellStorage = nullptr;
 }
 
-
-SheetBase::SheetBase(MapBase* map, const QString &sheetName) :
-    d(new Private(this))
+SheetBase::SheetBase(MapBase *map, const QString &sheetName)
+    : d(new Private(this))
 {
     d->workbook = map;
     d->name = sheetName;
@@ -61,7 +61,7 @@ SheetBase::SheetBase(MapBase* map, const QString &sheetName) :
 }
 
 SheetBase::SheetBase(const SheetBase &other)
-        : d(new Private(this))
+    : d(new Private(this))
 {
     d->workbook = other.d->workbook;
     d->cellStorage = new CellBaseStorage(*other.d->cellStorage, this);
@@ -89,27 +89,27 @@ void SheetBase::setCellStorage(CellBaseStorage *storage)
     d->cellStorage = storage;
 }
 
-CellBaseStorage* SheetBase::cellStorage() const {
+CellBaseStorage *SheetBase::cellStorage() const
+{
     return d->cellStorage;
 }
 
-
-const FormulaStorage* SheetBase::formulaStorage() const
+const FormulaStorage *SheetBase::formulaStorage() const
 {
     return d->cellStorage->formulaStorage();
 }
 
-const ValidityStorage* SheetBase::validityStorage() const
+const ValidityStorage *SheetBase::validityStorage() const
 {
     return d->cellStorage->validityStorage();
 }
 
-const ValueStorage* SheetBase::valueStorage() const
+const ValueStorage *SheetBase::valueStorage() const
 {
     return d->cellStorage->valueStorage();
 }
 
-MapBase* SheetBase::map() const
+MapBase *SheetBase::map() const
 {
     return d->workbook;
 }
@@ -119,7 +119,7 @@ QString SheetBase::sheetName() const
     return d->name;
 }
 
-bool SheetBase::setSheetName(const QString& name)
+bool SheetBase::setSheetName(const QString &name)
 {
     if (map()->findSheet(name))
         return false;
@@ -159,7 +159,7 @@ void SheetBase::hideSheet(bool _hide)
     setHidden(_hide);
 }
 
-void SheetBase::changeCellTabName(QString const & old_name, QString const & new_name)
+void SheetBase::changeCellTabName(QString const &old_name, QString const &new_name)
 {
     const FormulaStorage *fs = formulaStorage();
     for (int c = 0; c < fs->count(); ++c) {
@@ -188,13 +188,13 @@ bool SheetBase::isAutoCalculationEnabled() const
 
 void SheetBase::setAutoCalculationEnabled(bool enable)
 {
-    //Avoid possible recalculation of dependencies if the auto calc setting hasn't changed
+    // Avoid possible recalculation of dependencies if the auto calc setting hasn't changed
     if (d->autoCalc == enable)
         return;
 
     d->autoCalc = enable;
 
-    //If enabling automatic calculation, make sure that the dependencies are up-to-date
+    // If enabling automatic calculation, make sure that the dependencies are up-to-date
     if (enable) {
         map()->dependencyManager()->addSheet(this);
         map()->recalcManager()->recalcSheet(this);
@@ -213,63 +213,68 @@ void SheetBase::setFirstLetterUpper(bool _firstUpper)
     d->firstLetterUpper = _firstUpper;
 }
 
-
-void SheetBase::showStatusMessage(const QString & /*message*/, int /*timeout*/) const {
+void SheetBase::showStatusMessage(const QString & /*message*/, int /*timeout*/) const
+{
     // TODO
 #ifndef Q_CC_MSVC
 #warning Implement this.
 #endif
 }
 
-bool SheetBase::onValidationFailed(Validity::Action action, const CellBase *cell, const QString &/*message*/, const QString &/*title*/) const
+bool SheetBase::onValidationFailed(Validity::Action action, const CellBase *cell, const QString & /*message*/, const QString & /*title*/) const
 {
     QString msg = QString("Validation for cell ") + cell->fullName() + " failed.";
     showStatusMessage(msg);
-    if (action == Validity::Information) return true;
+    if (action == Validity::Information)
+        return true;
     return false;
 }
 
-
-
 // Adjusts the coordinate 'pos' if the 'rect' area is being adjusted using operation 'ref'
 // This assumes that the coordinates are all on the same sheet.
-QPoint SheetBase::changeNameCellRefHelper(const QPoint& pos, const QRect& rect, ChangeRef ref, bool *changed, bool *valid, bool isStart)
+QPoint SheetBase::changeNameCellRefHelper(const QPoint &pos, const QRect &rect, ChangeRef ref, bool *changed, bool *valid, bool isStart)
 {
     *changed = false;
     *valid = true;
     int col = pos.x();
     int row = pos.y();
     // Not affected if we're to the left/up of the modified area
-    if (col < rect.left()) return pos;
-    if (row < rect.top()) return pos;
+    if (col < rect.left())
+        return pos;
+    if (row < rect.top())
+        return pos;
 
     if (ref == ColumnInsert) {
         // The X-coordinate is shifting to the right.
         *changed = true;
         col += rect.width();
-        if (col > KS_colMax) *valid = false;
+        if (col > KS_colMax)
+            *valid = false;
     }
     if (ref == RowInsert) {
         // The Y-coordinate is shifting to the right.
         *changed = true;
         row += rect.height();
-        if (row > KS_rowMax) *valid = false;
+        if (row > KS_rowMax)
+            *valid = false;
     }
     if (ref == ColumnRemove) {
         *changed = true;
         if (col <= rect.right()) {
-            *valid = false;   // inside the removed zone
+            *valid = false; // inside the removed zone
             col = rect.left();
-            if (!isStart) col--;
+            if (!isStart)
+                col--;
         } else
             col -= rect.width();
     }
     if (ref == RowRemove) {
         *changed = true;
         if (row <= rect.bottom()) {
-            *valid = false;   // inside the removed zone
+            *valid = false; // inside the removed zone
             row = rect.top();
-            if (!isStart) row--;
+            if (!isStart)
+                row--;
         } else
             row -= rect.height();
     }
@@ -277,7 +282,7 @@ QPoint SheetBase::changeNameCellRefHelper(const QPoint& pos, const QRect& rect, 
     return QPoint(col, row);
 }
 
-void SheetBase::changeNameCellRef(const QRect& rect, ChangeRef ref, SheetBase *changedSheet)
+void SheetBase::changeNameCellRef(const QRect &rect, ChangeRef ref, SheetBase *changedSheet)
 {
     const FormulaStorage *formulas = formulaStorage();
 
@@ -294,7 +299,7 @@ void SheetBase::changeNameCellRef(const QRect& rect, ChangeRef ref, SheetBase *c
                 continue;
             }
             if (map()->namedAreaManager()->contains(txt)) {
-                newText.append(txt);   //keep the area name
+                newText.append(txt); // keep the area name
                 continue;
             }
             const Region region = map()->regionFromName(token.text(), this);
@@ -308,22 +313,26 @@ void SheetBase::changeNameCellRef(const QRect& rect, ChangeRef ref, SheetBase *c
             Region newRegion;
             Region::ConstIterator end(region.constEnd());
             for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
-                Region::Element* element = (*it);
+                Region::Element *element = (*it);
                 SheetBase *tgsheet = element->sheet();
-                if (tgsheet != changedSheet) continue;   // not the correct sheet
+                if (tgsheet != changedSheet)
+                    continue; // not the correct sheet
 
                 bool aff = false;
                 bool valid1 = true;
                 QRect r = element->rect();
                 QPoint topleft = SheetBase::changeNameCellRefHelper(r.topLeft(), rect, ref, &aff, &valid1, true);
-                if (aff) affected = true;
+                if (aff)
+                    affected = true;
 
                 bool valid2 = true;
                 QPoint bottomright = SheetBase::changeNameCellRefHelper(r.bottomRight(), rect, ref, &aff, &valid2, false);
-                if (aff) affected = true;
+                if (aff)
+                    affected = true;
 
                 valid = true;
-                if ((!valid1) && (!valid2)) valid = false;
+                if ((!valid1) && (!valid2))
+                    valid = false;
                 // If one point is valid and the other one is not, we just use the calculated coordinates anyway.
 
                 if (!valid) {
@@ -334,7 +343,12 @@ void SheetBase::changeNameCellRef(const QRect& rect, ChangeRef ref, SheetBase *c
                 if (topleft == bottomright)
                     newRegion.add(topleft, tgsheet, element->isColumnFixed(), element->isRowFixed());
                 else
-                    newRegion.add(QRect(topleft, bottomright), tgsheet, element->isTopFixed(), element->isLeftFixed(), element->isBottomFixed(), element->isRightFixed());
+                    newRegion.add(QRect(topleft, bottomright),
+                                  tgsheet,
+                                  element->isTopFixed(),
+                                  element->isLeftFixed(),
+                                  element->isBottomFixed(),
+                                  element->isRightFixed());
             }
             if (!affected) {
                 newText.append(txt);
@@ -348,7 +362,8 @@ void SheetBase::changeNameCellRef(const QRect& rect, ChangeRef ref, SheetBase *c
             newText.append(newRegion.name(this));
         }
 
-        if (!changed) continue;  // no change - nothing to do
+        if (!changed)
+            continue; // no change - nothing to do
 
         CellBase cell(this, formulas->col(c), formulas->row(c));
         Formula formula(this, cell);
@@ -361,11 +376,8 @@ void SheetBase::changeNameCellRef(const QRect& rect, ChangeRef ref, SheetBase *c
 }
 
 // 'rect' is the area being added/removed
-void SheetBase::changeNameCellRefs(const QRect& rect, ChangeRef ref)
+void SheetBase::changeNameCellRefs(const QRect &rect, ChangeRef ref)
 {
-    for (SheetBase* sheet : map()->sheetList())
+    for (SheetBase *sheet : map()->sheetList())
         sheet->changeNameCellRef(rect, ref, this);
-
 }
-
-

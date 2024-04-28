@@ -5,7 +5,7 @@
  *  SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ */
 
 #ifndef _KO_LCMS_COLORPROFILE_H
 #define _KO_LCMS_COLORPROFILE_H
@@ -23,8 +23,10 @@
 class LcmsColorProfileContainer : public IccColorProfile::Container
 {
     friend class IccColorProfile;
+
 protected:
     LcmsColorProfileContainer(IccColorProfile::Data *);
+
 private:
     /**
      * Create a byte array from a lcms profile.
@@ -38,8 +40,8 @@ public:
      * @return an ICC profile created from an LCMS profile
      */
     static IccColorProfile *createFromLcmsProfile(const cmsHPROFILE profile);
-public:
 
+public:
     ~LcmsColorProfileContainer() override;
 
     /**
@@ -79,15 +81,15 @@ public:
 
     bool hasColorants() const override;
     virtual bool hasTRC() const;
-    QVector <double> getColorantsXYZ() const override;
-    QVector <double> getColorantsxyY() const override;
-    QVector <double> getWhitePointXYZ() const override;
-    QVector <double> getWhitePointxyY() const override;
-    QVector <double> getEstimatedTRC() const override;
-    virtual void LinearizeFloatValue(QVector <double> & Value) const;
-    virtual void DelinearizeFloatValue(QVector <double> & Value) const;
-    virtual void LinearizeFloatValueFast(QVector <double> & Value) const;
-    virtual void DelinearizeFloatValueFast(QVector <double> & Value) const;
+    QVector<double> getColorantsXYZ() const override;
+    QVector<double> getColorantsxyY() const override;
+    QVector<double> getWhitePointXYZ() const override;
+    QVector<double> getWhitePointxyY() const override;
+    QVector<double> getEstimatedTRC() const override;
+    virtual void LinearizeFloatValue(QVector<double> &Value) const;
+    virtual void DelinearizeFloatValue(QVector<double> &Value) const;
+    virtual void LinearizeFloatValueFast(QVector<double> &Value) const;
+    virtual void DelinearizeFloatValueFast(QVector<double> &Value) const;
     QString name() const override;
     QString info() const override;
 
@@ -102,4 +104,3 @@ private:
 };
 
 #endif // KOCOLORPROFILE_H
-

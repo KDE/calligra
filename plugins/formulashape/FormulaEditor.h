@@ -10,11 +10,11 @@
 #ifndef FORMULAEDITOR_H
 #define FORMULAEDITOR_H
 
-#include "koformula_export.h"
-#include <QString>
-#include <QPair>
-#include "FormulaData.h"
 #include "FormulaCursor.h"
+#include "FormulaData.h"
+#include "koformula_export.h"
+#include <QPair>
+#include <QString>
 
 class BasicElement;
 class QString;
@@ -30,74 +30,74 @@ class QPainter;
  *
  */
 
-class KOFORMULA_EXPORT FormulaEditor {
+class KOFORMULA_EXPORT FormulaEditor
+{
 public:
     /// The constructor - set the FormulaCursor at the position specified in @p cursor
-    explicit FormulaEditor( FormulaCursor cursor, FormulaData* data );
+    explicit FormulaEditor(FormulaCursor cursor, FormulaData *data);
 
     /// The constructor - set the FormulaCursor to the left of the main element of @p data
-    explicit FormulaEditor( FormulaData* data );
+    explicit FormulaEditor(FormulaData *data);
 
     /**
      * Draw the cursor to the given QPainter
      * only for convenience
      * @param painter The QPainter the cursor draws itself to
      */
-    void paint( QPainter &painter ) const;
+    void paint(QPainter &painter) const;
 
     /**
      * Insert text content at the current cursor position
      * @param text The text to insert
      */
-    FormulaCommand* insertText( const QString& text );
+    FormulaCommand *insertText(const QString &text);
 
     /**
      * Insert an element at the current cursor position
      * @param element The element to be inserted
      */
-    FormulaCommand* insertElement( BasicElement* element );
+    FormulaCommand *insertElement(BasicElement *element);
 
     /// Insert the elements encoded in MathML in data
-    FormulaCommand* insertMathML( const QString& data );
+    FormulaCommand *insertMathML(const QString &data);
 
     /// Manipulate the rows/columns of a table
-    FormulaCommand* changeTable(bool insert, bool rows);
-    
+    FormulaCommand *changeTable(bool insert, bool rows);
+
     /**
      * Remove an element from the formula
      * @param elementBeforePosition Indicates removal of element before or after cursor
      */
-    FormulaCommand* remove( bool elementBeforePosition );
-    
+    FormulaCommand *remove(bool elementBeforePosition);
+
     /// @return The FormulaData which is navigated by this cursor
-    FormulaData* formulaData() const;
+    FormulaData *formulaData() const;
 
     /// set the FormulaData which is navigated by this cursor
-    void setData(FormulaData* data);
+    void setData(FormulaData *data);
 
     /// @return the buffer with the last user input
     QString inputBuffer() const;
 
     /// set the cursor that holds the current position and selection
-    void setCursor(FormulaCursor& cursor);
+    void setCursor(FormulaCursor &cursor);
 
-    /// @return the cursor that contains the current selection and position 
-    FormulaCursor& cursor();
+    /// @return the cursor that contains the current selection and position
+    FormulaCursor &cursor();
 
 private:
     /// @return the mathml token element, that should be used for this character
-    QString tokenType(const QChar& character) const;
+    QString tokenType(const QChar &character) const;
 
 private:
-    /// the cursor that contains the current selection and position 
+    /// the cursor that contains the current selection and position
     FormulaCursor m_cursor;
 
-    /// The formulaData 
-    FormulaData* m_data;
+    /// The formulaData
+    FormulaData *m_data;
 
     /// Buffer for the user input
     QString m_inputBuffer;
-
 };
 
 #endif // FORMULAEDITOR_H

@@ -9,22 +9,22 @@
 #include "KoToolBase_p.h"
 
 #include "KoCanvasBase.h"
-#include "KoPointerEvent.h"
-#include "KoDocumentResourceManager.h"
 #include "KoCanvasResourceManager.h"
-#include "KoViewConverter.h"
-#include "KoShapeController.h"
+#include "KoDocumentResourceManager.h"
+#include "KoPointerEvent.h"
 #include "KoShapeBasedDocumentBase.h"
+#include "KoShapeController.h"
 #include "KoToolSelection.h"
+#include "KoViewConverter.h"
 
-#include <KLocalizedString>
 #include <KActionCollection>
+#include <KLocalizedString>
 
 #include <QAction>
-#include <QWidget>
-#include <QFile>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QFile>
+#include <QWidget>
 
 KoToolBase::KoToolBase(KoCanvasBase *canvas)
     : d_ptr(new KoToolBasePrivate(this, canvas))
@@ -42,48 +42,47 @@ KoToolBase::KoToolBase(KoToolBasePrivate &dd)
 
 KoToolBase::~KoToolBase()
 {
+    // Q_D(const KoToolBase);
 
-    //Q_D(const KoToolBase);
+    // Enable this to easily generate action files for tools
+    //    if (d->actionCollection.size() > 0) {
 
-// Enable this to easily generate action files for tools
-//    if (d->actionCollection.size() > 0) {
+    //        QDomDocument doc;
+    //        QDomElement e = doc.createElement("Actions");
+    //        e.setAttribute("name", toolId());
+    //        e.setAttribute("version", "1");
+    //        doc.appendChild(e);
 
-//        QDomDocument doc;
-//        QDomElement e = doc.createElement("Actions");
-//        e.setAttribute("name", toolId());
-//        e.setAttribute("version", "1");
-//        doc.appendChild(e);
+    //        foreach(QAction *ac, d->actionCollection.values()) {
+    //            QAction *action = qobject_cast<QAction*>(ac);
+    //            if (action) {
+    //                QDomElement a = doc.createElement("Action");
+    //                a.setAttribute("name", action->objectName());
+    //                a.setAttribute("icon", action->icon().name());
+    //                a.setAttribute("text" , action->text());
+    //                a.setAttribute("whatsThis" , action->whatsThis());
+    //                a.setAttribute("toolTip" , action->toolTip());
+    //                a.setAttribute("iconText" , action->iconText());
+    //                a.setAttribute("shortcut" , action->shortcut(QAction::ActiveShortcut).toString());
+    //                a.setAttribute("defaultShortcut" , action->shortcut(QAction::DefaultShortcut).toString());
+    //                a.setAttribute("isCheckable" , QString((action->isChecked() ? "true" : "false")));
+    //                a.setAttribute("statusTip", action->statusTip());
+    //                e.appendChild(a);
+    //            }
+    //            else {
+    //                qDebug() << "Got a QAction:" << ac->objectName();
+    //            }
 
-//        foreach(QAction *ac, d->actionCollection.values()) {
-//            QAction *action = qobject_cast<QAction*>(ac);
-//            if (action) {
-//                QDomElement a = doc.createElement("Action");
-//                a.setAttribute("name", action->objectName());
-//                a.setAttribute("icon", action->icon().name());
-//                a.setAttribute("text" , action->text());
-//                a.setAttribute("whatsThis" , action->whatsThis());
-//                a.setAttribute("toolTip" , action->toolTip());
-//                a.setAttribute("iconText" , action->iconText());
-//                a.setAttribute("shortcut" , action->shortcut(QAction::ActiveShortcut).toString());
-//                a.setAttribute("defaultShortcut" , action->shortcut(QAction::DefaultShortcut).toString());
-//                a.setAttribute("isCheckable" , QString((action->isChecked() ? "true" : "false")));
-//                a.setAttribute("statusTip", action->statusTip());
-//                e.appendChild(a);
-//            }
-//            else {
-//                qDebug() << "Got a QAction:" << ac->objectName();
-//            }
+    //        }
+    //        QFile f(toolId() + ".action");
+    //        f.open(QFile::WriteOnly);
+    //        f.write(doc.toString().toUtf8());
+    //        f.close();
 
-//        }
-//        QFile f(toolId() + ".action");
-//        f.open(QFile::WriteOnly);
-//        f.write(doc.toString().toUtf8());
-//        f.close();
-
-//    }
-//    else {
-//        qDebug() << "Tool" << toolId() << "has no actions";
-//    }
+    //    }
+    //    else {
+    //        qDebug() << "Tool" << toolId() << "has no actions";
+    //    }
     qDeleteAll(d_ptr->optionWidgets);
     delete d_ptr;
 }
@@ -94,8 +93,7 @@ void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController
     if (shapeController) {
         KoDocumentResourceManager *scrm = shapeController->resourceManager();
         if (scrm) {
-            connect(scrm, &KoDocumentResourceManager::resourceChanged,
-                    this, &KoToolBase::documentResourceChanged);
+            connect(scrm, &KoDocumentResourceManager::resourceChanged, this, &KoToolBase::documentResourceChanged);
         }
     }
 }
@@ -104,7 +102,7 @@ void KoToolBase::deactivate()
 {
 }
 
-void KoToolBase::canvasResourceChanged(int key, const QVariant & res)
+void KoToolBase::canvasResourceChanged(int key, const QVariant &res)
 {
     Q_UNUSED(key);
     Q_UNUSED(res);
@@ -146,7 +144,7 @@ void KoToolBase::keyReleaseEvent(QKeyEvent *e)
     e->ignore();
 }
 
-void KoToolBase::wheelEvent(KoPointerEvent * e)
+void KoToolBase::wheelEvent(KoPointerEvent *e)
 {
     e->ignore();
 }
@@ -172,26 +170,26 @@ QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewCo
     }
 }
 
-void KoToolBase::inputMethodEvent(QInputMethodEvent * event)
+void KoToolBase::inputMethodEvent(QInputMethodEvent *event)
 {
-    if (! event->commitString().isEmpty()) {
+    if (!event->commitString().isEmpty()) {
         QKeyEvent ke(QEvent::KeyPress, -1, Qt::KeyboardModifiers(), event->commitString());
         keyPressEvent(&ke);
     }
     event->accept();
 }
 
-void KoToolBase::customPressEvent(KoPointerEvent * event)
+void KoToolBase::customPressEvent(KoPointerEvent *event)
 {
     event->ignore();
 }
 
-void KoToolBase::customReleaseEvent(KoPointerEvent * event)
+void KoToolBase::customReleaseEvent(KoPointerEvent *event)
 {
     event->ignore();
 }
 
-void KoToolBase::customMoveEvent(KoPointerEvent * event)
+void KoToolBase::customMoveEvent(KoPointerEvent *event)
 {
     event->ignore();
 }
@@ -208,7 +206,7 @@ void KoToolBase::useCursor(const QCursor &cursor)
     emit cursorChanged(d->currentCursor);
 }
 
-QList<QPointer<QWidget> > KoToolBase::optionWidgets()
+QList<QPointer<QWidget>> KoToolBase::optionWidgets()
 {
     Q_D(KoToolBase);
     if (d->optionWidgets.empty()) {
@@ -238,14 +236,14 @@ QAction *KoToolBase::action(const QString &name) const
     return d->actionCollection.value(name);
 }
 
-QWidget * KoToolBase::createOptionWidget()
+QWidget *KoToolBase::createOptionWidget()
 {
     return 0;
 }
 
-QList<QPointer<QWidget> >  KoToolBase::createOptionWidgets()
+QList<QPointer<QWidget>> KoToolBase::createOptionWidgets()
 {
-    QList<QPointer<QWidget> > ow;
+    QList<QPointer<QWidget>> ow;
     if (QWidget *widget = createOptionWidget()) {
         if (widget->objectName().isEmpty()) {
             widget->setObjectName(toolId());
@@ -283,19 +281,19 @@ void KoToolBase::cut()
     deleteSelection();
 }
 
-QList<QAction*> KoToolBase::popupActionList() const
+QList<QAction *> KoToolBase::popupActionList() const
 {
     Q_D(const KoToolBase);
     return d->popupActionList;
 }
 
-void KoToolBase::setPopupActionList(const QList<QAction*> &list)
+void KoToolBase::setPopupActionList(const QList<QAction *> &list)
 {
     Q_D(KoToolBase);
     d->popupActionList = list;
 }
 
-KoCanvasBase * KoToolBase::canvas() const
+KoCanvasBase *KoToolBase::canvas() const
 {
     Q_D(const KoToolBase);
     return d->canvas;
@@ -309,8 +307,7 @@ void KoToolBase::setStatusText(const QString &statusText)
 uint KoToolBase::handleRadius() const
 {
     Q_D(const KoToolBase);
-    if(d->canvas->shapeController()->resourceManager())
-    {
+    if (d->canvas->shapeController()->resourceManager()) {
         return d->canvas->shapeController()->resourceManager()->handleRadius();
     } else {
         return 3;
@@ -320,8 +317,7 @@ uint KoToolBase::handleRadius() const
 uint KoToolBase::grabSensitivity() const
 {
     Q_D(const KoToolBase);
-    if(d->canvas->shapeController()->resourceManager())
-    {
+    if (d->canvas->shapeController()->resourceManager()) {
         return d->canvas->shapeController()->resourceManager()->grabSensitivity();
     } else {
         return 3;
@@ -331,8 +327,8 @@ uint KoToolBase::grabSensitivity() const
 QRectF KoToolBase::handleGrabRect(const QPointF &position) const
 {
     Q_D(const KoToolBase);
-    const KoViewConverter * converter = d->canvas->viewConverter();
-    uint handleSize = 2*grabSensitivity();
+    const KoViewConverter *converter = d->canvas->viewConverter();
+    uint handleSize = 2 * grabSensitivity();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;
@@ -341,8 +337,8 @@ QRectF KoToolBase::handleGrabRect(const QPointF &position) const
 QRectF KoToolBase::handlePaintRect(const QPointF &position) const
 {
     Q_D(const KoToolBase);
-    const KoViewConverter * converter = d->canvas->viewConverter();
-    uint handleSize = 2*handleRadius();
+    const KoViewConverter *converter = d->canvas->viewConverter();
+    uint handleSize = 2 * handleRadius();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;
@@ -351,7 +347,7 @@ QRectF KoToolBase::handlePaintRect(const QPointF &position) const
 void KoToolBase::setTextMode(bool value)
 {
     Q_D(KoToolBase);
-    d->isInTextMode=value;
+    d->isInTextMode = value;
 }
 
 QStringList KoToolBase::supportedPasteMimeTypes() const

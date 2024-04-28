@@ -17,12 +17,12 @@ public:
     QString subTypeName(int subTypeId) const override;
 
     enum SubType {
-        FromLeft,       // the new page is coming from the left
-        FromRight,      // the new page is coming from the right
-        FromTop,        // the new page is coming from the top
-        FromBottom,     // the new page is coming from the bottom
-        FromTopLeft,    // the new page is coming from the top-left
-        FromTopRight,   // the new page is coming from the top-right
+        FromLeft, // the new page is coming from the left
+        FromRight, // the new page is coming from the right
+        FromTop, // the new page is coming from the top
+        FromBottom, // the new page is coming from the bottom
+        FromTopLeft, // the new page is coming from the top-left
+        FromTopRight, // the new page is coming from the top-right
         FromBottomLeft, // the new page is coming from the bottom-left
         FromBottomRight // the new page is coming from the bottom-right
     };

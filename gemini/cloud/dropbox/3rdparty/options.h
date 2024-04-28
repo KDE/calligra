@@ -24,9 +24,9 @@ public Q_SLOTS:
     int screen_orientation() const;
     bool is_push_notification() const;
 
-    void set_transfers_auto(const bool&);
-    void set_screen_orientation(const int&);
-    void set_push_notification(const bool&);
+    void set_transfers_auto(const bool &);
+    void set_screen_orientation(const int &);
+    void set_push_notification(const bool &);
 
 private:
     void get_transfers_auto();

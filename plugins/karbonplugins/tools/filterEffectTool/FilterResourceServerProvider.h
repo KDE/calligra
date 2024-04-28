@@ -23,18 +23,17 @@ class FilterResourceServerProvider : public QObject
 public:
     ~FilterResourceServerProvider() override;
 
-    static FilterResourceServerProvider* instance();
+    static FilterResourceServerProvider *instance();
 
-    KoResourceServer<FilterEffectResource>* filterEffectServer();
+    KoResourceServer<FilterEffectResource> *filterEffectServer();
 
 private:
-
     FilterResourceServerProvider();
-    FilterResourceServerProvider(const FilterResourceServerProvider&);
-    FilterResourceServerProvider operator=(const FilterResourceServerProvider&);
+    FilterResourceServerProvider(const FilterResourceServerProvider &);
+    FilterResourceServerProvider operator=(const FilterResourceServerProvider &);
 
     static FilterResourceServerProvider *m_singleton;
-    KoResourceServer<FilterEffectResource>* m_filterEffectServer;
+    KoResourceServer<FilterEffectResource> *m_filterEffectServer;
     KoResourceLoaderThread *m_filterEffectThread;
 };
 

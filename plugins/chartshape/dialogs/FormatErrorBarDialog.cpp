@@ -5,11 +5,9 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-
 #include "FormatErrorBarDialog.h"
 
 using namespace KoChart;
-
 
 FormatErrorBarDialog::FormatErrorBarDialog(QWidget *parent)
     : QDialog(parent)
@@ -20,12 +18,9 @@ FormatErrorBarDialog::FormatErrorBarDialog(QWidget *parent)
     connect(widget.posIndicator, &QAbstractButton::toggled, this, &FormatErrorBarDialog::errorIndicatorChanged);
     connect(widget.negIndicator, &QAbstractButton::toggled, this, &FormatErrorBarDialog::errorIndicatorChanged);
     connect(widget.posAndNegIndicator, &QAbstractButton::toggled, this, &FormatErrorBarDialog::errorIndicatorChanged);
-    connect(widget.sameValueForBoth, &QCheckBox::toggled,
-            this, QOverload<bool>::of(&FormatErrorBarDialog::setSameErrorValueForBoth));
-    connect(widget.positiveValue, &QDoubleSpinBox::valueChanged,
-            this, QOverload<double>::of(&FormatErrorBarDialog::setSameErrorValueForBoth));
-    connect(widget.errorType, &QComboBox::currentIndexChanged,
-            this, &FormatErrorBarDialog::errorTypeChanged);
+    connect(widget.sameValueForBoth, &QCheckBox::toggled, this, QOverload<bool>::of(&FormatErrorBarDialog::setSameErrorValueForBoth));
+    connect(widget.positiveValue, &QDoubleSpinBox::valueChanged, this, QOverload<double>::of(&FormatErrorBarDialog::setSameErrorValueForBoth));
+    connect(widget.errorType, &QComboBox::currentIndexChanged, this, &FormatErrorBarDialog::errorTypeChanged);
 }
 
 FormatErrorBarDialog::~FormatErrorBarDialog()
