@@ -22,7 +22,7 @@
 #include <QCommandLineParser>
 #include <QLoggingCategory>
 
-#include <kiconloader.h>
+#include <KIconLoader>
 
 #include "AboutData.h"
 #include "MainWindow.h"

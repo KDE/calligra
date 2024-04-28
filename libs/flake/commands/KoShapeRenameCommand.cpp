@@ -7,7 +7,7 @@
 #include "KoShapeRenameCommand.h"
 
 #include <QString>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include "KoShape.h"
 
 class Q_DECL_HIDDEN KoShapeRenameCommand::Private

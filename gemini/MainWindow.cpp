@@ -26,9 +26,9 @@
 #include <QUrl>
 #include <QStandardPaths>
 
-#include <kactioncollection.h>
-#include <ktoolbar.h>
-#include <kmessagebox.h>
+#include <KActionCollection>
+#include <KToolBar>
+#include <KMessageBox>
 #include <KConfigGroup>
 #include <KSharedConfig>
 

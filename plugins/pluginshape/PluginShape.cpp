@@ -15,7 +15,7 @@
 #include <KoXmlNS.h>
 
 #include <QPainter>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 
 PluginShape::PluginShape()

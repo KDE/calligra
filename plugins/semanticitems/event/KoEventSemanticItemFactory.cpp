@@ -12,7 +12,7 @@
 #include "KoRdfCalendarEvent.h"
 // KF5
 #include <kdebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 // Qt
 #include <QMimeData>
 

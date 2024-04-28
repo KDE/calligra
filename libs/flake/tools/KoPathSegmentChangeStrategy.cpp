@@ -12,7 +12,7 @@
 #include "commands/KoPathControlPointMoveCommand.h"
 #include "commands/KoPathSegmentTypeCommand.h"
 #include <KoCanvasBase.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <limits>
 #include <math.h>
 

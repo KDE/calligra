@@ -33,7 +33,7 @@
 #include <QColorDialog>
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KColorButton>
 
 // Calligra

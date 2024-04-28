@@ -9,7 +9,7 @@
 
 #include "CalendarTool.h"
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <KLocalizedString>
 
 using namespace Calligra::Sheets;

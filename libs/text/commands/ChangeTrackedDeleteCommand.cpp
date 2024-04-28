@@ -27,7 +27,7 @@
 
 #include <QTextDocumentFragment>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "TextDebug.h"
 

@@ -12,7 +12,7 @@
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #define CACHE_SIZE 40960 //5 images of 2048x1024 at 32bpp
 

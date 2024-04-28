@@ -8,7 +8,7 @@
 #include "KarbonGradientTool.h"
 
 #include <KoIcon.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QDebug>
 
 KarbonGradientToolFactory::KarbonGradientToolFactory()

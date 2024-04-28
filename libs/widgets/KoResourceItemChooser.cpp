@@ -26,7 +26,7 @@
 #include <QToolButton>
 #include <QWheelEvent>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoIcon.h>
 #include <KoFileDialog.h>

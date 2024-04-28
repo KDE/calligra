@@ -13,7 +13,7 @@
 #include <QList>
 #include <QTextStream>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 #include <KoStore.h>

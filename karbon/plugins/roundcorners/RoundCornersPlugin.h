@@ -13,7 +13,7 @@
 #ifndef ROUNDCORNERSPLUGIN_H
 #define ROUNDCORNERSPLUGIN_H
 
-#include <kxmlguiclient.h>
+#include <KXMLGUIClient>
 #include <QDialog>
 #include <QVariantList>
 

@@ -14,7 +14,7 @@
 #include <QSvgGenerator>
 
 #include "MusicDebug.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoViewConverter.h>
 #include <KoShapeSavingContext.h>

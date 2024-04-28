@@ -43,7 +43,7 @@
 #include <KoGenStyles.h>
 #include <KoUnit.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kzip.h>
 
 #include <QGlobalStatic>

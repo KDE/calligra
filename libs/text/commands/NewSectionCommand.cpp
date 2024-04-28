@@ -11,7 +11,7 @@
 #include <KoSectionUtils.h>
 #include <KoSectionModel.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kundo2command.h>
 
 NewSectionCommand::NewSectionCommand(QTextDocument *document)

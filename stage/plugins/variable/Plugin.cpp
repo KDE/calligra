@@ -9,7 +9,7 @@ SPDX-License-Identifier: LGPL-2.1-or-later
 *
 */
 #include "Plugin.h"
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <KoInlineObjectRegistry.h>
 #include "PresentationVariableFactory.h"
 

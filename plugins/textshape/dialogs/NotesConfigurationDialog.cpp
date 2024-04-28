@@ -9,7 +9,7 @@
 
 #include <KoOdfNumberDefinition.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QWidget>
 #include <QDebug>

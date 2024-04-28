@@ -9,7 +9,7 @@
 
 #include "../core/Chord.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 AddDotCommand::AddDotCommand(MusicShape* shape, MusicCore::Chord* chord)
     : m_shape(shape), m_chord(chord)

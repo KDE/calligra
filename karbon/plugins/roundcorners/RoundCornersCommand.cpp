@@ -10,7 +10,7 @@
 #include <KoPathSegment.h>
 #include <KoPathPoint.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <math.h>
 

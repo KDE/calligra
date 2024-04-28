@@ -13,7 +13,7 @@
 #include <QLatin1String>
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 // Calligra
 #include <interfaces/KoChartModel.h>

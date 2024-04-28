@@ -7,7 +7,7 @@
 #include "ThesaurusPlugin.h"
 #include "ThesaurusFactory.h"
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <KoTextEditingRegistry.h>
 

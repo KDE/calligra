@@ -18,7 +18,7 @@
 #include <QPainter>
 #include <QTimer>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>

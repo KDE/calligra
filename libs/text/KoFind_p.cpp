@@ -13,7 +13,7 @@
 #include <kwindowsystem.h>
 #include <kfinddialog.h>
 #include <kfind.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QTextDocument>
 #include <QTextCursor>

@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KoIcon.h>
 
 #include "MusicShape.h"

@@ -12,7 +12,7 @@
 // main
 #include <KoDocument.h>
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 // Qt
 #include <QComboBox>
 

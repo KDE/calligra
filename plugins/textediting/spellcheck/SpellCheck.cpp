@@ -18,8 +18,8 @@
 #include <KoTextLayoutRootAreaProvider.h>
 
 #include <KSharedConfig>
-#include <klocalizedstring.h>
-#include <kconfiggroup.h>
+#include <KLocalizedString>
+#include <KConfigGroup>
 #include <ktoggleaction.h>
 #include <sonnet/configdialog.h>
 

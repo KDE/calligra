@@ -7,7 +7,7 @@
 #include "AutocorrectFactory.h"
 #include "Autocorrect.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 AutocorrectFactory::AutocorrectFactory()
     : KoTextEditingFactory("autocorrection")

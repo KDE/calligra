@@ -14,7 +14,7 @@
 #include <QDebug>
 
 #include <KCompressionDevice>
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <KoFilterChain.h>
 #include <KoPageFormat.h>

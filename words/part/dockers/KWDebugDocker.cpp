@@ -10,7 +10,7 @@
 
 #include <dockers/KWDebugWidget.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KWDebugDocker::KWDebugDocker()
     : m_debugWidget(new KWDebugWidget(this))

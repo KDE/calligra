@@ -57,7 +57,7 @@
 #include <KoViewConverter.h>
 
 // KF5
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 // Qt
 #include <QAction>

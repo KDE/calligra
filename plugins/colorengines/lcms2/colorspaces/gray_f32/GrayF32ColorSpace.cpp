@@ -9,7 +9,7 @@
 #include <QDomElement>
 
 #include <QDebug>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>

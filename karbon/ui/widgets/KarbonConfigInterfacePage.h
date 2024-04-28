@@ -9,7 +9,7 @@
 #define KARBONCONFIGINTERFACEPAGE_H
 
 #include <KoVBox.h>
-#include <ksharedconfig.h>
+#include <KSharedConfig>
 
 class KarbonView;
 class KColorButton;

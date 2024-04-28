@@ -30,7 +30,7 @@
 #include <KoZoomHandler.h>
 #include <KoUnit.h>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <QPainter>
 #include <QPrintPreviewDialog>

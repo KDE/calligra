@@ -20,7 +20,7 @@
 #include <KoFileDialog.h>
 
 #include <KLocalizedString>
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <QApplication>
 #include <QClipboard>

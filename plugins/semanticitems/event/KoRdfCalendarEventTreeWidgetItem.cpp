@@ -10,7 +10,7 @@
 #include "RdfSemanticTreeWidgetSelectAction.h"
 
 #include <kdebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoRdfCalendarEventTreeWidgetItem::KoRdfCalendarEventTreeWidgetItem(QTreeWidgetItem* parent,
                                                                    hKoRdfCalendarEvent ev)

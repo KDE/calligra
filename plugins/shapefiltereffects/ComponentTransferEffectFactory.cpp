@@ -8,7 +8,7 @@
 #include "ComponentTransferEffect.h"
 #include "ComponentTransferEffectConfigWidget.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 ComponentTransferEffectFactory::ComponentTransferEffectFactory()
         : KoFilterEffectFactoryBase(ComponentTransferEffectId, i18n("Component transfer"))

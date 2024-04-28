@@ -11,7 +11,7 @@
 #include <changetracker/KoChangeTrackerElement.h>
 #include <styles/KoCharacterStyle.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QPair>
 #include <QStack>

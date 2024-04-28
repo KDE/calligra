@@ -23,7 +23,7 @@
 #include <QMimeData>
 #include <QUrl>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <MainDebug.h>
 
 #include <KoFileDialog.h>

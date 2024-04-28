@@ -5,7 +5,7 @@
 #include "AutoResizeCommand.h"
 #include "TextShape.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 AutoResizeCommand::AutoResizeCommand(KoTextShapeData *shapeData, KoTextShapeData::ResizeMethod resizeMethod, bool enabled)
     : KUndo2Command()

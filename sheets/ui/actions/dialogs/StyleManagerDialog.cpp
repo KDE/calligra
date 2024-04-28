@@ -13,7 +13,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include <kcombobox.h>
+#include <KComboBox>
 #include <KLocalizedString>
 
 #include "core/Style.h"

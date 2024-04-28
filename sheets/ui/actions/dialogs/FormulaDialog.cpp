@@ -27,7 +27,7 @@
 
 #include <KoIcon.h>
 
-#include <kcombobox.h>
+#include <KComboBox>
 #include <klineedit.h>
 #include <KLocalizedString>
 

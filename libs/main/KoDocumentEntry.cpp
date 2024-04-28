@@ -14,7 +14,7 @@
 
 #include <KoPluginLoader.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <QCoreApplication>
 

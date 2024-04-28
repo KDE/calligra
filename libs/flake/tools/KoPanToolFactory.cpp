@@ -9,7 +9,7 @@
 #include "KoPanTool.h"
 
 #include <KoIcon.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoPanToolFactory::KoPanToolFactory()
         : KoToolFactoryBase(KoPanTool_ID)

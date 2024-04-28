@@ -13,9 +13,9 @@
 */
 #include "rtfimport.h"
 
-#include <kpluginfactory.h>
-#include <kmessagebox.h>
-#include <klocalizedstring.h>
+#include <KPluginFactory>
+#include <KMessageBox>
+#include <KLocalizedString>
 
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>

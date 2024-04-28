@@ -11,7 +11,7 @@
 #include "../core/Chord.h"
 #include "../core/VoiceBar.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 ToggleTiedNoteCommand::ToggleTiedNoteCommand(MusicShape* shape, MusicCore::Note* note)
     : m_shape(shape), m_note(note)

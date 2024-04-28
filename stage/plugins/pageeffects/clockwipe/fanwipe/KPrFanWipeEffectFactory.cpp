@@ -6,7 +6,7 @@
 
 #include "KPrFanWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <klazylocalizedstring.h>
 
 #include "KPrCenterFanWipeStrategy.h"

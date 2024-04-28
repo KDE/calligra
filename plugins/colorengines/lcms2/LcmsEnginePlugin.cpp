@@ -12,9 +12,9 @@
 #include <QStringList>
 #include <QDir>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <KoResourcePaths.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QDebug>
 
 #include <KoBasicHistogramProducers.h>

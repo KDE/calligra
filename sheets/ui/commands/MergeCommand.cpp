@@ -12,7 +12,7 @@
 #include "MergeCommand.h"
 
 #include <KLocalizedString>
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include "engine/Damages.h"
 #include "core/Cell.h"

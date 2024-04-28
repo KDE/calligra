@@ -8,7 +8,7 @@
 #include "KoPathBreakAtPointCommand.h"
 
 #include "KoPathPoint.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <algorithm>
 

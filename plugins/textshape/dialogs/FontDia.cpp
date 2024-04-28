@@ -17,7 +17,7 @@
 
 #include <KoTextEditor.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QTextBlock>
 #include <QTextFragment>

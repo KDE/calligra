@@ -26,9 +26,9 @@
 #include <KoParameterShape.h>
 #include <KoIcon.h>
 
-#include <kpluginfactory.h>
-#include <kactioncollection.h>
-#include <klocalizedstring.h>
+#include <KPluginFactory>
+#include <KActionCollection>
+#include <KLocalizedString>
 
 #include <QSpinBox>
 #include <QStandardPaths>

@@ -8,8 +8,8 @@
 
 #include <kfind.h>
 #include <kfinddialog.h>
-#include <kmessagebox.h>
-#include <klocalizedstring.h>
+#include <KMessageBox>
+#include <KLocalizedString>
 
 #include "FindDirection_p.h"
 

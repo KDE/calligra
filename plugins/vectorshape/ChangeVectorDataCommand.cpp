@@ -7,7 +7,7 @@
 #include "ChangeVectorDataCommand.h"
 
 #include <math.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KoImageData.h>
 
 #include "VectorShape.h"

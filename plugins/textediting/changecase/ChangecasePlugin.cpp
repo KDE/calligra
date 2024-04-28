@@ -6,7 +6,7 @@
 #include "ChangecasePlugin.h"
 #include "ChangecaseFactory.h"
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <KoTextEditingRegistry.h>
 

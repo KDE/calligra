@@ -30,7 +30,7 @@
 #include <QAction>
 
 #include <ksqueezedtextlabel.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 const KLocalizedString i18nModified = ki18n("Modified");
 const KLocalizedString i18nSaved = ki18n("Saved");

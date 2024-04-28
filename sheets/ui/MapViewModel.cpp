@@ -17,7 +17,7 @@
 #include <KoShape.h>
 #include <KoIcon.h>
 
-#include <kxmlguiclient.h>
+#include <KXMLGUIClient>
 
 #include <QActionGroup>
 

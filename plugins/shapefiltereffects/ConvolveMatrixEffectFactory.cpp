@@ -8,7 +8,7 @@
 #include "ConvolveMatrixEffect.h"
 #include "ConvolveMatrixEffectConfigWidget.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 ConvolveMatrixEffectFactory::ConvolveMatrixEffectFactory()
         : KoFilterEffectFactoryBase(ConvolveMatrixEffectId, i18n("Convolve Matrix"))

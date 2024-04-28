@@ -35,7 +35,7 @@
 #include <QString>
 #include <QMap>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 //#define CONVERSION_DEBUG_SHD
 

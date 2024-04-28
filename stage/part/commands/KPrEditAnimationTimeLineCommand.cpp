@@ -22,7 +22,7 @@
 
 #include "animations/KPrShapeAnimation.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KPrEditAnimationTimeLineCommand::KPrEditAnimationTimeLineCommand(KPrShapeAnimation *animation,
                                                                  const int begin, const int duration, KUndo2Command *parent)

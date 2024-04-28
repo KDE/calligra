@@ -20,7 +20,7 @@
 #include <KoVariableManager.h>
 #include <KoTextDocument.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QTextInlineObject>
 

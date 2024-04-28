@@ -36,14 +36,14 @@
 #include <KoTemplate.h>
 #include <KoResourcePaths.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KIconDialog>
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <MainDebug.h>
 #include <KoNetAccess.h>
-#include <kiconloader.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
+#include <KIconLoader>
+#include <KConfigGroup>
+#include <KSharedConfig>
 #include <KIO/FileCopyJob>
 #include <kstandardguiitem.h>
 

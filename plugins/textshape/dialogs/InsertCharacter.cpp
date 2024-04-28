@@ -5,7 +5,7 @@
  */
 #include "InsertCharacter.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kcharselect.h>
 
 #include <QMainWindow>

@@ -9,7 +9,7 @@
 
 #include <KoUnit.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 using namespace KoText;
 

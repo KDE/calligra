@@ -26,7 +26,7 @@
 #include <QComboBox>
 
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <WidgetsDebug.h>
 
 #include <math.h>

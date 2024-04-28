@@ -23,7 +23,7 @@
 #include <QSize>
 #include <QGridLayout>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoPADocument.h>
 

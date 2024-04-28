@@ -6,7 +6,7 @@
 
 #include "ListItemNumberingCommand.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoParagraphStyle.h>
 #include <KoTextBlockData.h>

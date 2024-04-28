@@ -18,7 +18,7 @@
 
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 StarShapeFactory::StarShapeFactory()
     : KoShapeFactoryBase(StarShapeId, i18n("A star shape"))

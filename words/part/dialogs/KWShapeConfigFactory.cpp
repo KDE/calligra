@@ -12,7 +12,7 @@
 #include <frames/KWFrame.h>
 #include <frames/KWFrameSet.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoShapeConfigWidgetBase *KWFrameConnectSelectorFactory::createConfigWidget(KoShape *shape)
 {

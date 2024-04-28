@@ -10,7 +10,7 @@
 #include "KoFind_p.h"
 
 #include <KoCanvasResourceManager.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <QAction>
 
 

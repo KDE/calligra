@@ -6,8 +6,8 @@
 #include <QStringList>
 #include <QFontDatabase>
 
-#include <kpluginfactory.h>
-#include <klocalizedstring.h>
+#include <KPluginFactory>
+#include <KLocalizedString>
 #include "MusicDebug.h"
 #include <KoResourcePaths.h>
 #include <KoIcon.h>

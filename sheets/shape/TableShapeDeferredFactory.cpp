@@ -9,7 +9,7 @@
 
 // #include <QStringList>
 
-// #include <kpluginfactory.h>
+// #include <KPluginFactory>
 
 // #include <KoDocumentResourceManager.h>
 // #include <KoToolRegistry.h>

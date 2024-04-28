@@ -18,7 +18,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 VideoShapeFactory::VideoShapeFactory()
     : KoShapeFactoryBase(VIDEOSHAPEID, i18n("Video"))

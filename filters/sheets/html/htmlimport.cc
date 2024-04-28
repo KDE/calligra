@@ -16,7 +16,7 @@
 #include <QTextStream>
 #include <QByteArray>
 #include <QEventLoop>
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <KoFilterChain.h>
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>

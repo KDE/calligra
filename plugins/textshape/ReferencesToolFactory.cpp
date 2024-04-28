@@ -11,7 +11,7 @@
 #include <KoCanvasBase.h>
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 ReferencesToolFactory::ReferencesToolFactory()
         : KoToolFactoryBase("ReferencesToolFactory_ID")

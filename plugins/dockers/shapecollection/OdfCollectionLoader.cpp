@@ -15,7 +15,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdf.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QDebug>
 
 #include <QTimer>

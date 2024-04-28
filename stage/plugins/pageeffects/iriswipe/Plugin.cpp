@@ -5,7 +5,7 @@
  */
 
 #include "Plugin.h"
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <KPrPageEffectRegistry.h>
 
 #include "irisWipe/KPrIrisWipeEffectFactory.h"

@@ -8,7 +8,7 @@
 #include <QDomElement>
 
 #include <QDebug>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "compositeops/KoCompositeOps.h"
 #include <KoColorConversions.h>

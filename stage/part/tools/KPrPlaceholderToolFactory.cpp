@@ -7,7 +7,7 @@
 #include "KPrPlaceholderTool.h"
 #include "KPrPlaceholderShape.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KPrPlaceholderToolFactory::KPrPlaceholderToolFactory()
     : KoToolFactoryBase("Layout Tool")

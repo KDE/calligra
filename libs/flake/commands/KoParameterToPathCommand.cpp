@@ -8,7 +8,7 @@
 #include "KoParameterToPathCommand.h"
 #include "KoPathPoint.h"
 #include "KoParameterShape.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 class KoParameterToPathCommandPrivate
 {

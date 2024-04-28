@@ -15,7 +15,7 @@
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <poppler-version.h>
 

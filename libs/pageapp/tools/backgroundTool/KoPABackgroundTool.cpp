@@ -11,7 +11,7 @@
 #include <QList>
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 //Calligra includes
 #include <KoPACanvasBase.h>

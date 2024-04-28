@@ -8,7 +8,7 @@
 
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QMenu>
 #include <QAction>

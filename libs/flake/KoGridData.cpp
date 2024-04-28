@@ -15,7 +15,7 @@
 #include <KoIcon.h>
 
 #include <ktoggleaction.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QPainter>
 #include <QRectF>
 #include <FlakeDebug.h>

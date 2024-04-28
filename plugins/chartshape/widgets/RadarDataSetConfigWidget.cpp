@@ -17,7 +17,7 @@
 #include <QMenu>
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 // Calligra
 

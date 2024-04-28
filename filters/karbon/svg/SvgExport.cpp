@@ -31,7 +31,7 @@
 #include <KoPAPageBase.h>
 #include <KoPageLayout.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <QString>
 

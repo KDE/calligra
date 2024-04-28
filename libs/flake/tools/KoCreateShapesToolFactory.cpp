@@ -8,7 +8,7 @@
 #include "KoCreateShapesToolFactory.h"
 #include "KoCreateShapesTool.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoCreateShapesToolFactory::KoCreateShapesToolFactory()
         : KoToolFactoryBase(KoCreateShapesTool_ID)

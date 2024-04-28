@@ -10,7 +10,7 @@
 #include <KoParagraphStyle.h>
 #include <KoStyleManager.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QDebug>
 

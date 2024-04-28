@@ -7,7 +7,7 @@
 #include "ChangeTextOffsetCommand.h"
 #include "ArtisticTextShape.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 ChangeTextOffsetCommand::ChangeTextOffsetCommand( ArtisticTextShape * textShape, qreal oldOffset, qreal newOffset, KUndo2Command * parent )
     : KUndo2Command(parent), m_textShape(textShape), m_oldOffset(oldOffset), m_newOffset(newOffset)

@@ -24,7 +24,7 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QPainter>
 #include <QWidget>

@@ -10,8 +10,8 @@
 #include <KoZoomController.h>
 #include <KoZoomController_p.h>
 
-#include <kactioncollection.h>
-#include <klocalizedstring.h>
+#include <KActionCollection>
+#include <KLocalizedString>
 #include <WidgetsDebug.h>
 
 #include <KoZoomHandler.h>

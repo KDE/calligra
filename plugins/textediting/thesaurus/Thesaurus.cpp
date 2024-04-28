@@ -54,10 +54,10 @@ NOT TODO:
 
 #include <KSharedConfig>
 #include <kprocess.h>
-#include <kmessagebox.h>
-#include <klocalizedstring.h>
+#include <KMessageBox>
+#include <KLocalizedString>
 #include <khistorycombobox.h>
-#include <kcombobox.h>
+#include <KComboBox>
 #include <kstandardguiitem.h>
 
 Thesaurus::Thesaurus()

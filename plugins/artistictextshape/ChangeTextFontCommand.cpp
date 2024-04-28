@@ -7,7 +7,7 @@
 
 #include "ChangeTextFontCommand.h"
 #include "ArtisticTextShape.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 ChangeTextFontCommand::ChangeTextFontCommand(ArtisticTextShape * shape, const QFont &font, KUndo2Command *parent)
     : KUndo2Command(parent), m_shape(shape), m_newFont( font ), m_rangeStart(-1), m_rangeCount(-1)

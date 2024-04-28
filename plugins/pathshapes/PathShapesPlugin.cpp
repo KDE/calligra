@@ -15,7 +15,7 @@
 #include "enhancedpath/EnhancedPathShapeFactory.h"
 #include "enhancedpath/CalloutShapeFactory.h"
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 K_PLUGIN_FACTORY_WITH_JSON(PathShapesPluginFactory, "calligra_shape_paths.json",
                            registerPlugin<PathShapesPlugin>();)

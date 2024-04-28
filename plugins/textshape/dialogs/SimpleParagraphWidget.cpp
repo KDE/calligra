@@ -40,8 +40,8 @@
 #include <KoOdfReadStore.h>
 #include <KoXmlReader.h>
 
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 #include <QAction>
 #include <QBuffer>

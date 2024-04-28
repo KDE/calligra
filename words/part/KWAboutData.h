@@ -8,7 +8,7 @@
 #define KWABOUTDATA_H
 
 #include <KAboutData>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kcoreaddons_version.h>
 
 #include <calligraversion.h>

@@ -12,7 +12,7 @@
 #ifndef MSOOXMLREADER_P_H
 #define MSOOXMLREADER_P_H
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #ifndef MSOOXML_CURRENT_CLASS
 #error Please include MsooXmlReader_p.h after defining MSOOXML_CURRENT_CLASS and MSOOXML_CURRENT_NS!

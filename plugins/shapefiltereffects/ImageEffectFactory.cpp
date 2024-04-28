@@ -7,7 +7,7 @@
 #include "ImageEffectFactory.h"
 #include "ImageEffect.h"
 #include "ImageEffectConfigWidget.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 ImageEffectFactory::ImageEffectFactory()
         : KoFilterEffectFactoryBase(ImageEffectId, i18n("Image"))

@@ -16,7 +16,7 @@
 #include "styles/KoStyleManager.h"
 #include "changetracker/KoChangeTracker.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kundo2magicstring.h>
 
 #include <QStack>

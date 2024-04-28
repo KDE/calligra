@@ -10,7 +10,7 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #ifndef _MSC_VER
 #include "KoM2MMLForumulaTool.h"

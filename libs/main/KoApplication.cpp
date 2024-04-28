@@ -29,13 +29,13 @@
 #include <KoResourcePaths.h>
 #include <KoComponentData.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kdesktopfile.h>
-#include <kmessagebox.h>
-#include <kiconloader.h>
+#include <KMessageBox>
+#include <KIconLoader>
 #include <MainDebug.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <KConfig>
+#include <KConfigGroup>
 #include <krecentdirs.h>
 #include <KAboutData>
 #include <KSharedConfig>

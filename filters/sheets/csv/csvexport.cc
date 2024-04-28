@@ -9,7 +9,7 @@
 
 #include <QFile>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoPart.h>

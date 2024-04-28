@@ -7,7 +7,7 @@
 
 #include "KPrDeleteSlidesCommand.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "KPrDocument.h"
 #include "KoPAPageBase.h"

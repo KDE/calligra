@@ -13,7 +13,7 @@
 #include <KoShape.h>
 #include <KoDocumentResourceManager.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoPABackgroundFillWidget::KoPABackgroundFillWidget(QWidget *parent)
 : KoFillConfigWidget(parent)

@@ -32,9 +32,9 @@
 #include <KoIcon.h>
 
 #include <KSharedConfig>
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
-#include <kconfiggroup.h>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KConfigGroup>
 
 #include <QMimeData>
 #include <QMenu>

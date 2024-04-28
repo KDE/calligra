@@ -10,8 +10,8 @@
 #include "dialogs/AutoFormatDialog.h"
 
 #include <KLocalizedString>
-#include <kconfig.h>
-#include <kmessagebox.h>
+#include <KConfig>
+#include <KMessageBox>
 
 #include <KoResourcePaths.h>
 #include <KoXmlReader.h>

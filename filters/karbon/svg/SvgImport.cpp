@@ -26,7 +26,7 @@
 #include <KoPAMasterPage.h>
 #include <KoPageLayout.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <KCompressionDevice>
 
 #include <QFileInfo>

@@ -18,7 +18,7 @@
 #include <KoIcon.h>
 
 #include "MusicDebug.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 using namespace MusicCore;
 

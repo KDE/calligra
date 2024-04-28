@@ -7,10 +7,10 @@
 
 #include "checkoutcreator.h"
 
-#include <kpassworddialog.h>
-#include <kmessagebox.h>
-#include <kuser.h>
-#include <kemailsettings.h>
+#include <KPasswordDialog>
+#include <KMessageBox>
+#include <KUser>
+#include <KEMailSettings>
 #include <KLocalizedString>
 
 #include <QInputDialog>

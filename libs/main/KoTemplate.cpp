@@ -11,7 +11,7 @@
 
 #include <MainDebug.h>
 
-#include <kiconloader.h>
+#include <KIconLoader>
 
 
 KoTemplate::KoTemplate(const QString &name, const QString &description, const QString &file,

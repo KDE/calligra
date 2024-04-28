@@ -15,7 +15,7 @@
 #ifndef __KARBON_FACTORY_H__
 #define __KARBON_FACTORY_H__
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <KSharedConfig>
 
 #include <karbonui_export.h>

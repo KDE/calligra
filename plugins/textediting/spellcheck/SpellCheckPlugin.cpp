@@ -7,7 +7,7 @@
 #include "SpellCheckPlugin.h"
 #include "SpellCheckFactory.h"
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <KoTextEditingRegistry.h>
 

@@ -12,7 +12,7 @@
 #include "ui_LegendConfigWidget.h"
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KFontChooser>
 
 // KoChart

@@ -10,8 +10,8 @@
 #include <QFile>
 #include <QGuiApplication>
 
-#include <kmessagebox.h>
-#include <kpluginfactory.h>
+#include <KMessageBox>
+#include <KPluginFactory>
 
 #include <KoCsvImportDialog.h>
 #include <KoFilterChain.h>

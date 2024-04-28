@@ -9,7 +9,7 @@
 #include "../core/Chord.h"
 #include "../MusicShape.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 using namespace MusicCore;
 

@@ -8,7 +8,7 @@
 #include "MergeEffect.h"
 #include "MergeEffectConfigWidget.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 MergeEffectFactory::MergeEffectFactory()
         : KoFilterEffectFactoryBase(MergeEffectId, i18n("Merge"))

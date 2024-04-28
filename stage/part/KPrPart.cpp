@@ -19,7 +19,7 @@
 #include "KPrPageSelectStrategyActive.h"
 #include <KoPAPageBase.h>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 KPrPart::KPrPart(QObject *parent)
     : KoPart(KPrFactory::componentData(), parent)

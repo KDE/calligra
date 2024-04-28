@@ -22,8 +22,8 @@
 #include <QTreeWidget>
 
 #include <MainDebug.h>
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
+#include <KLocalizedString>
+#include <KMessageBox>
 #include <QTemporaryFile>
 
 #include <QTextEdit>

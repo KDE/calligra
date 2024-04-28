@@ -27,7 +27,7 @@
 #include <algorithm>
 #include <QObject>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kundo2command.h>
 #include <KoOdfLoadingContext.h>
 

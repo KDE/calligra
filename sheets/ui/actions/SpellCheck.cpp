@@ -20,8 +20,8 @@
 
 #include <KoCanvasBase.h>
 
-#include <kmessagebox.h>
-#include <kstandardaction.h>
+#include <KMessageBox>
+#include <KStandardAction>
 #include <sonnet/dialog.h>
 #include <sonnet/speller.h>
 

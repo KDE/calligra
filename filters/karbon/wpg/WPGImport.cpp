@@ -8,7 +8,7 @@
 
 #include <KoFilterChain.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <QString>
 #include <QFile>

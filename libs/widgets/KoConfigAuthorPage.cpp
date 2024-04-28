@@ -13,11 +13,11 @@
 #include <KoGlobal.h>
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
-#include <kuser.h>
-#include <kemailsettings.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
+#include <KLocalizedString>
+#include <KUser>
+#include <KEMailSettings>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <QLineEdit>
 #include <QStackedWidget>

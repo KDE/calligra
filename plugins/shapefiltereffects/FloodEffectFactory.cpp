@@ -8,7 +8,7 @@
 #include "FloodEffect.h"
 #include "FloodEffectConfigWidget.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 FloodEffectFactory::FloodEffectFactory()
         : KoFilterEffectFactoryBase(FloodEffectId, i18n("Flood fill"))

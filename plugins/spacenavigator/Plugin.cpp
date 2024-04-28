@@ -8,7 +8,7 @@
 
 #include <KoInputDeviceHandlerRegistry.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_device_spacenavigator.json",
                            registerPlugin<Plugin>();)

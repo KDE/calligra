@@ -12,7 +12,7 @@
 #include <QGridLayout>
 
 #include <KoIcon.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <klineedit.h>
 
 #include "KoResource.h"

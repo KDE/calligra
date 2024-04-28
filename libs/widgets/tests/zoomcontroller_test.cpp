@@ -9,7 +9,7 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <WidgetsDebug.h>
 
 #include "KoCanvasControllerWidget.h"

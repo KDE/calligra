@@ -9,7 +9,7 @@
 #define __koView_h__
 
 #include <QWidget>
-#include <kxmlguiclient.h>
+#include <KXMLGUIClient>
 #include "komain_export.h"
 
 class KoPart;

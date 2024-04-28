@@ -17,8 +17,8 @@
 #include "KoShapeBasedDocumentBase.h"
 #include "KoToolSelection.h"
 
-#include <klocalizedstring.h>
-#include <kactioncollection.h>
+#include <KLocalizedString>
+#include <KActionCollection>
 
 #include <QAction>
 #include <QWidget>

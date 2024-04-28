@@ -10,7 +10,7 @@
 #include <KoTextEditor.h>
 #include <KoSectionUtils.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kundo2command.h>
 
 SplitSectionsCommand::SplitSectionsCommand(QTextDocument *document, SplitType type, int splitPosition)

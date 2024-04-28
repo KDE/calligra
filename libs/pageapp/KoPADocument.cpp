@@ -40,8 +40,8 @@
 #include <KoUnit.h>
 
 #include <PageAppDebug.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <KConfig>
+#include <KConfigGroup>
 #include <KSharedConfig>
 
 #include <QPainter>

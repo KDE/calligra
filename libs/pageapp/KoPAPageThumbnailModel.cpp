@@ -8,7 +8,7 @@
 
 #include <QIcon>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "KoPAPageBase.h"
 

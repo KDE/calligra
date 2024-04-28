@@ -9,8 +9,8 @@
 #include <QTextCursor>
 #include <kfind.h>
 #include <kreplacedialog.h>
-#include <kmessagebox.h>
-#include <klocalizedstring.h>
+#include <KMessageBox>
+#include <KLocalizedString>
 
 #include "FindDirection_p.h"
 

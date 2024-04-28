@@ -22,8 +22,8 @@
 #include <KoGradientBackground.h>
 #include <KoApplication.h>
 
-#include <kmessagebox.h>
-#include <klocalizedstring.h>
+#include <KMessageBox>
+#include <KLocalizedString>
 
 #include <QPainter>
 #include <QGradient>

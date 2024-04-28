@@ -25,10 +25,10 @@
 
 #include <kiconeffect.h>
 #include <kcolorscheme.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kdesktopfile.h>
-#include <kconfiggroup.h>
-#include <kmessagebox.h>
+#include <KConfigGroup>
+#include <KMessageBox>
 #include <klineedit.h>
 #include <KStatefulBrush>
 

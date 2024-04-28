@@ -27,7 +27,7 @@
 #include <KoTextMeta.h>
 
 #include <kdebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QAction>
 
 #include <QWeakPointer>

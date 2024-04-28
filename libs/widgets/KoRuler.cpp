@@ -14,7 +14,7 @@
 #include <KoToolBase.h>
 #include <KoToolManager.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <WidgetsDebug.h>
 
 #include <QPainter>

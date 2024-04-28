@@ -9,7 +9,7 @@
 #include "KoZoomTool.h"
 
 #include <KoIcon.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoZoomToolFactory::KoZoomToolFactory()
         : KoToolFactoryBase("KoZoomToolId")

@@ -19,7 +19,7 @@
 
 #include "KPrEndOfSlideShowPage.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoShapeLayer.h>
 #include <KoShapeFactoryBase.h>

@@ -9,8 +9,8 @@
 #include "KoFilterEffect.h"
 
 #include <QSpinBox>
-#include <kcombobox.h>
-#include <klocalizedstring.h>
+#include <KComboBox>
+#include <KLocalizedString>
 
 #include <QGridLayout>
 #include <QLabel>

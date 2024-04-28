@@ -9,7 +9,7 @@
 
 #include "KoColorModelStandardIds.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "LcmsColorSpace.h"
 

@@ -18,7 +18,7 @@
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QTextDocument>
 #include <QtAlgorithms>

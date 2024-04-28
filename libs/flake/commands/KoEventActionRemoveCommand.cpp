@@ -5,7 +5,7 @@
  */
 
 #include "KoEventActionRemoveCommand.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "KoShape.h"
 #include "KoEventAction.h"

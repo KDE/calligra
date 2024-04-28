@@ -16,7 +16,7 @@
 
 #include <kio/copyjob.h>
 #include <KIO/JobUiDelegateFactory>
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <kzip.h>
 
 #include "KPrView.h"

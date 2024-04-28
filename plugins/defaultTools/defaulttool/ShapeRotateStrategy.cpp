@@ -18,7 +18,7 @@
 
 #include <QPointF>
 #include <math.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 ShapeRotateStrategy::ShapeRotateStrategy(KoToolBase *tool, const QPointF &clicked, Qt::MouseButtons buttons)
 : KoInteractionStrategy(tool)

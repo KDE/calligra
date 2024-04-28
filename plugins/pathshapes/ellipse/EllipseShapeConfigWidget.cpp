@@ -6,7 +6,7 @@
 
 #include "EllipseShapeConfigWidget.h"
 #include "EllipseShapeConfigCommand.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 EllipseShapeConfigWidget::EllipseShapeConfigWidget()
 {

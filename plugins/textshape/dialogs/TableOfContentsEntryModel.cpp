@@ -8,7 +8,7 @@
 #include <KoTableOfContentsGeneratorInfo.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 TableOfContentsEntryModel::TableOfContentsEntryModel(KoStyleManager *manager, KoTableOfContentsGeneratorInfo *info)
     :m_styleManager(manager),

@@ -8,7 +8,7 @@
 #include "BlendEffect.h"
 #include "BlendEffectConfigWidget.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 BlendEffectFactory::BlendEffectFactory()
         : KoFilterEffectFactoryBase(BlendEffectId, i18n("Blend"))

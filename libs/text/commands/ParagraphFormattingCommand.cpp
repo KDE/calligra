@@ -10,7 +10,7 @@
 #include <KoTextEditor.h>
 #include "KoTextEditor_p.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 class MergeAutoParagraphStyleVisitor : public KoTextVisitor
 {

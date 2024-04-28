@@ -33,7 +33,7 @@
 #include <QPushButton>
 #include <QString>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QDebug>
 

@@ -7,7 +7,7 @@
 #include "exportmobi.h"
 
 #include <KoFilterChain.h>
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 

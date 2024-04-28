@@ -10,7 +10,7 @@
 
 #include "PptToOdp.h"
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 K_PLUGIN_FACTORY_WITH_JSON(PowerPointImportFactory, "calligra_filter_ppt2odp.json", registerPlugin<PowerPointImport>();)
 

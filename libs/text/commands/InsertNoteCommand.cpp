@@ -4,7 +4,7 @@
 
 #include "InsertNoteCommand.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoTextEditor.h>
 #include <KoTextDocument.h>

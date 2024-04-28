@@ -46,9 +46,9 @@
 ****************************************************************************/
 
 #include <QDebug>
-#include <klocalizedstring.h>
-#include <kstandardaction.h>
-#include <kactioncollection.h>
+#include <KLocalizedString>
+#include <KStandardAction>
+#include <KActionCollection>
 #include "kundo2stack.h"
 #include "kundo2stack_p.h"
 #include "kundo2group.h"

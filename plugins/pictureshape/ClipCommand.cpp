@@ -7,7 +7,7 @@
 
 #include "PictureDebug.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 ClipCommand::ClipCommand(PictureShape *shape, bool clip)
     : KUndo2Command(0)

@@ -9,7 +9,7 @@
 #include "KoFormulaShape.h"
 
 #include <KoIcon.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoFormulaToolFactory::KoFormulaToolFactory()
            : KoToolFactoryBase("KoFormulaToolFactoryId")

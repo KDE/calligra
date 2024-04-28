@@ -28,7 +28,7 @@
 #include <QPen>
 #include <QImage>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoDocumentInfo.h>

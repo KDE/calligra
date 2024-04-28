@@ -9,7 +9,7 @@
 #include "KoSubpathRemoveCommand.h"
 #include "KoShapeController.h"
 #include "KoPathPoint.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 class KoPathPointRemoveCommandPrivate
 {

@@ -14,7 +14,7 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 #include <QListWidgetItem>
 #include <QMimeDatabase>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <ksqueezedtextlabel.h>
 
 #include <unistd.h>

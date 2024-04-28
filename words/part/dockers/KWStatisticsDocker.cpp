@@ -12,7 +12,7 @@
 #include <KoCanvasResourceManager.h>
 #include "KWCanvas.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KWStatisticsDocker::KWStatisticsDocker()
 {

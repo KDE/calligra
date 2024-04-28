@@ -11,7 +11,7 @@
 #include "KoPathShape.h"
 #include "KoShapeBasedDocumentBase.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 class Q_DECL_HIDDEN KoShapeClipCommand::Private
 {

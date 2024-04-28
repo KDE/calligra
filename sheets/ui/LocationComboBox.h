@@ -9,7 +9,7 @@
 #ifndef CALLIGRA_SHEETS_LOCATION_COMBOBOX
 #define CALLIGRA_SHEETS_LOCATION_COMBOBOX
 
-#include <kcombobox.h>
+#include <KComboBox>
 #include "sheets_ui_export.h"
 
 class QKeyEvent;

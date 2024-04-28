@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "Plugin.h"
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <KPrPageEffectRegistry.h>
 
 #include "clockwipe/KPrClockWipeEffectFactory.h"

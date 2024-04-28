@@ -15,7 +15,7 @@
 #include <QDomDocument>
 #include <QBuffer>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <DebugPigment.h>
 
 #include "KoColorSpaceRegistry.h"

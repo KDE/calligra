@@ -10,7 +10,7 @@
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <QRect>
 #include <QPainter>

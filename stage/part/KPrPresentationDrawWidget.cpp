@@ -16,7 +16,7 @@
 #include <QMenu>
 #include <QIcon>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoPACanvasBase.h>
 #include <KoPointerEvent.h>

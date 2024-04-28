@@ -39,7 +39,7 @@
 #include <KoCanvasBase.h>
 #include <KoComponentData.h>
 #include <KoPAPageBase.h>
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 #include <QVBoxLayout>
 

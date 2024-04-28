@@ -17,7 +17,7 @@
 #include <QFileDialog>
 #include <QUrl>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>

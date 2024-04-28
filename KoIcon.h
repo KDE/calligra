@@ -33,7 +33,7 @@
 /// Use these definitions in files where needed:
 // #define koSmallIcon(name) (SmallIcon(QStringLiteral(name)))
 // #define koDesktopIcon(name) (DesktopIcon(QStringLiteral(name)))
-// Also #include <kiconloader.h>
+// Also #include <KIconLoader>
 
 /// Use these macros if there is a proper icon missing
 #define koIconNeeded(comment, neededName) (QIcon::fromTheme(QStringLiteral(neededName)))

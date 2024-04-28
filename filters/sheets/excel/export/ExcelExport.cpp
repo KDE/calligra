@@ -12,7 +12,7 @@
 #include <QStack>
 #include <QDebug>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <KoFilterChain.h>
 #include <KoPostscriptPaintDevice.h>

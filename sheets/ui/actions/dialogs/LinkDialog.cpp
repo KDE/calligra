@@ -18,10 +18,10 @@
 
 #include <KoIcon.h>
 
-#include <kcombobox.h>
+#include <KComboBox>
 #include <kdesktopfile.h>
 #include <klineedit.h>
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <KLocalizedString>
 #include <KPageWidget>
 #include <krecentdocument.h>

@@ -21,7 +21,7 @@
 #include <QFileDialog>
 #include <QVBoxLayout>
 
-#include <kcombobox.h>
+#include <KComboBox>
 #include <KLocalizedString>
 #include <kpagedialog.h>
 

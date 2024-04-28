@@ -27,7 +27,7 @@
 #include <KoIcon.h>
 
 #include "MusicDebug.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QKeyEvent>
 

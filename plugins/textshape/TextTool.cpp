@@ -64,10 +64,10 @@
 #include <KoIcon.h>
 
 #include <kstandardshortcut.h>
-#include <kactionmenu.h>
-#include <kstandardaction.h>
-#include <ksharedconfig.h>
-#include <kmessagebox.h>
+#include <KActionMenu>
+#include <KStandardAction>
+#include <KSharedConfig>
+#include <KMessageBox>
 
 #include <QMenu>
 #include <QMenuBar>
@@ -92,7 +92,7 @@
 #include "KoShapeBasedDocumentBase.h"
 #include <KoAnnotation.h>
 #include <KoShapeRegistry.h>
-#include <kuser.h>
+#include <KUser>
 
 #include <KoDocumentRdfBase.h>
 

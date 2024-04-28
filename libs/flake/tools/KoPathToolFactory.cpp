@@ -9,7 +9,7 @@
 #include "KoPathShape.h"
 
 #include <KoIcon.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoPathToolFactory::KoPathToolFactory()
         : KoToolFactoryBase("PathToolFactoryId")

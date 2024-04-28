@@ -7,7 +7,7 @@
 #include "BibliographyGenerator.h"
 #include "KoInlineCite.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KoOdfBibliographyConfiguration.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoParagraphStyle.h>

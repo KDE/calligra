@@ -11,7 +11,7 @@
 
 #include <QGraphicsWidget>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 
 #include <KWPart.h>
 #include <KWDocument.h>

@@ -9,8 +9,8 @@
 #include "SpellCheck.h"
 #include "SpellCheckDebug.h"
 
-#include <kactionmenu.h>
-#include <klocalizedstring.h>
+#include <KActionMenu>
+#include <KLocalizedString>
 
 #include <QMenu>
 #include <QAction>

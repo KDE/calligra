@@ -20,7 +20,7 @@
 #ifndef _BRAINDUMP_QUICK_STATES_PLUGIN_H_
 #define _BRAINDUMP_QUICK_STATES_PLUGIN_H_
 
-#include <kxmlguiclient.h>
+#include <KXMLGUIClient>
 
 class BraindumpQuickStatesPlugin : public QObject, public KXMLGUIClient
 {

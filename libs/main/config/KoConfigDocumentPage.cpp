@@ -11,9 +11,9 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 #include <KoPart.h>
 #include <KoComponentData.h>
 
-#include <klocalizedstring.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <KLocalizedString>
+#include <KConfig>
+#include <KConfigGroup>
 
 #include <QFormLayout>
 #include <QCheckBox>

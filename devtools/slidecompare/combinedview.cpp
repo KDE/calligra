@@ -12,7 +12,7 @@
 #include <QGridLayout>
 #include <QDragEnterEvent>
 #include <QCoreApplication>
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <kmimetype.h>
 
 CombinedView::CombinedView(QWidget* parent) :QWidget(parent),

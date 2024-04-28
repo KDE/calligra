@@ -18,7 +18,7 @@
 #include <KSharedConfig>
 #include <KConfigGroup>
 
-#include <kfileitem.h>
+#include <KFileItem>
 
 QDebug operator<<(QDebug dbg, const DocumentListModel::DocumentInfo& d) { 
     dbg.nospace() << d.filePath << "," << d.fileName << "," << d.docType << "," << d.fileSize << "," << d.authorName << "," << d.accessedTime << "," << d.modifiedTime << "," << d.uuid;

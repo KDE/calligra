@@ -16,7 +16,7 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 #include <KoUnit.h>
 
 #include <kcolorbutton.h>
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 #include <QCheckBox>
 #include <QGroupBox>

@@ -9,7 +9,7 @@
 #include "KoFilterEffect.h"
 
 #include <QSpinBox>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QGridLayout>
 #include <QLabel>

@@ -25,7 +25,7 @@
 #include <QToolBar>
 
 #include <QIcon>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kfontchooser.h>
 #include <KoFontComboBox.h>
 

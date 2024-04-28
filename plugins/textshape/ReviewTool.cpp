@@ -24,9 +24,9 @@
 #include <dialogs/SimpleAnnotationWidget.h>
 
 #include <QDebug>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QAction>
-#include <kuser.h>
+#include <KUser>
 
 #include <QDate>
 

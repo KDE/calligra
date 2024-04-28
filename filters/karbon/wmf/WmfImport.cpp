@@ -13,7 +13,7 @@ DESCRIPTION
 #include <KoFilterChain.h>
 #include <KoXmlWriter.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <QFile>
 

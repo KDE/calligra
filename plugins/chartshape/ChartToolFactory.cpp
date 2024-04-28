@@ -16,7 +16,7 @@
 #include <KoIcon.h>
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 
 

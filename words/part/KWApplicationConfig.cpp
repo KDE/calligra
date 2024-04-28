@@ -10,7 +10,7 @@
 #include <KoUnit.h>
 #include <KoGlobal.h>
 
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 #include <KSharedConfig>
 
 KWApplicationConfig::KWApplicationConfig()

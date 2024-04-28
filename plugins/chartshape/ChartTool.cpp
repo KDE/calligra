@@ -19,7 +19,7 @@
 #include <QPainter>
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 // Calligra
 #include <KoCanvasBase.h>

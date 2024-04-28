@@ -19,7 +19,7 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 #include <KoConfigMiscPage.h>
 #include <KoConfigAuthorPage.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KConfigGroup>
 #include <QDialogButtonBox>
 #include <QPushButton>

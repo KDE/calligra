@@ -6,7 +6,7 @@
 
 #include "TableDialog.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 TableDialog::TableDialog(QWidget *parent)
         : KoDialog(parent)

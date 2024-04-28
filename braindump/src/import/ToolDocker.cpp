@@ -20,9 +20,9 @@
 #include <QToolButton>
 #include <QTabWidget>
 
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
-#include <klocalizedstring.h>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KLocalizedString>
 
 #include <KoDockWidgetTitleBar.h>
 #include <KoIcon.h>

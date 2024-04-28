@@ -8,7 +8,7 @@
 
 #include "FontEditorDialog.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kfontchooser.h>
 
 using namespace KoChart;

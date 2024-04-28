@@ -29,8 +29,8 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <KConfig>
+#include <KConfigGroup>
 #include <KSharedConfig>
 
 #include <QTimer>

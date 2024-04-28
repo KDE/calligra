@@ -21,7 +21,7 @@
 #include <KoShapeStroke.h>
 #include <KoViewConverter.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QFontDatabase>
 #include <QPushButton>

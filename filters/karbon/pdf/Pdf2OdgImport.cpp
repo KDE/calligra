@@ -25,7 +25,7 @@
 
 #include <KarbonDocument.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <poppler-version.h>
 

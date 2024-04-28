@@ -25,7 +25,7 @@
 #include <KoImageData.h>
 #include <KoProperties.h>
 #include <KoIcon.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 PictureShapeFactory::PictureShapeFactory()
     : KoShapeFactoryBase(PICTURESHAPEID, i18n("Image"))

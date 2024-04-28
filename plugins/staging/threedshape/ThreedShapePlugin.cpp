@@ -10,7 +10,7 @@
 #include "ThreedShapePlugin.h"
 
 // KF5
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 // Calligra libs
 #include <KoToolRegistry.h>

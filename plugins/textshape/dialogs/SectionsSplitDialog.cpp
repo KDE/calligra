@@ -11,7 +11,7 @@
 #include <KoTextEditor.h>
 #include <KoSectionUtils.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 SectionsSplitDialog::SectionsSplitDialog(QWidget *parent, KoTextEditor *editor)
     : KoDialog(parent)

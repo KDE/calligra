@@ -6,7 +6,7 @@
 
 #include "KoPathReverseCommand.h"
 #include "KoPathShape.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 class Q_DECL_HIDDEN KoPathReverseCommand::Private
 {

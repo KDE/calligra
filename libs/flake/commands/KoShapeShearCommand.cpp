@@ -8,7 +8,7 @@
 #include "KoShapeShearCommand.h"
 #include "KoShape.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 class KoShapeShearCommandPrivate
 {

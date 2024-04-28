@@ -17,8 +17,8 @@
 #include <QLatin1String>
 
 // KF5
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
+#include <KLocalizedString>
+#include <KMessageBox>
 #include <kfontchooser.h>
 
 // Calligra

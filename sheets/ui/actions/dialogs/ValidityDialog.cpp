@@ -17,9 +17,9 @@
 #include <QGridLayout>
 #include <QPushButton>
 
-#include <kcombobox.h>
+#include <KComboBox>
 #include <klineedit.h>
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <KPageWidget>
 #include <ktextedit.h>
 

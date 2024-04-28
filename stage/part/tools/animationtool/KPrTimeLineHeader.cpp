@@ -22,7 +22,7 @@
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrShapeAnimations.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 //Qt Headers
 #include <QPainter>

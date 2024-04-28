@@ -9,8 +9,8 @@
 #include "ooutils.h"
 
 #include <KoDocumentInfo.h>
-#include <kpluginfactory.h>
-#include <kmessagebox.h>
+#include <KPluginFactory>
+#include <KMessageBox>
 #include <KoFilterChain.h>
 #include <KoUnit.h>
 #include <KoStyleStack.h>

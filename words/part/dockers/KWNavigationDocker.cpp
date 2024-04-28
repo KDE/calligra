@@ -11,7 +11,7 @@
 
 #include <dockers/KWNavigationWidget.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KWNavigationDocker::KWNavigationDocker()
     : m_canvasReset(false)

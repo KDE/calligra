@@ -14,7 +14,7 @@
 #include <KoPAPage.h>
 #include <KoPAMasterPage.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 class MergePageCommand : public KUndo2Command
 {

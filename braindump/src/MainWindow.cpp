@@ -26,12 +26,12 @@
 #include <QDebug>
 #include <QFontDatabase>
 
-#include <kactioncollection.h>
-#include <kactionmenu.h>
-#include <kconfiggroup.h>
-#include <kstandardaction.h>
-#include <ksharedconfig.h>
-#include <klocalizedstring.h>
+#include <KActionCollection>
+#include <KActionMenu>
+#include <KConfigGroup>
+#include <KStandardAction>
+#include <KSharedConfig>
+#include <KLocalizedString>
 
 #include <KoDockRegistry.h>
 #include <KoDockFactoryBase.h>

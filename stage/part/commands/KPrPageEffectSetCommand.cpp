@@ -19,7 +19,7 @@
 
 #include "KPrPageEffectSetCommand.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "KPrPage.h"
 #include "KPrPageApplicationData.h"

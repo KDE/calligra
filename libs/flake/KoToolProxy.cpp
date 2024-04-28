@@ -27,8 +27,8 @@
 #include <KoProperties.h>
 #include <KoNetAccess.h>
 
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
+#include <KLocalizedString>
+#include <KMessageBox>
 
 #include <QUrl>
 #include <QTimer>

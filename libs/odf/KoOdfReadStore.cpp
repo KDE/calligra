@@ -8,7 +8,7 @@
 #include "KoOdfReadStore.h"
 
 #include <OdfDebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoStore.h>
 #include <KoXmlReader.h>

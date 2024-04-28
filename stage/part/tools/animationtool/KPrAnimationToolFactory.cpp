@@ -13,7 +13,7 @@
 
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KPrAnimationToolFactory::KPrAnimationToolFactory()
     : KoToolFactoryBase("Animation Tool")

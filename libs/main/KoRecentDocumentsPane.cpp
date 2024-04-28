@@ -13,7 +13,7 @@
 
 #include <KSharedConfig>
 #include <KConfigGroup>
-#include <kfileitem.h>
+#include <KFileItem>
 #include <kio/previewjob.h>
 
 #include <KoIcon.h>

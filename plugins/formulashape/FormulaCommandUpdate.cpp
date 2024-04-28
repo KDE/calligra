@@ -7,7 +7,7 @@
 #include "FormulaCommand.h"
 #include "FormulaCommandUpdate.h"
 #include "FormulaCursor.h"
-#include <klocalizedstring.h> 
+#include <KLocalizedString> 
 #include "FormulaData.h"
 
 

@@ -19,7 +19,7 @@
 
 #include "KPrPageTransitionSetCommand.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "KPrPage.h"
 

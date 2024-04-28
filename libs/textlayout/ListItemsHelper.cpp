@@ -14,7 +14,7 @@
 #include <KoOdfNumberDefinition.h>
 
 #include <TextLayoutDebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QTextList>
 
 

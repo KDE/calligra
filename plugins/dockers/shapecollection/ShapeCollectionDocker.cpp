@@ -22,12 +22,12 @@
 
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KoResourcePaths.h>
 #include <kdesktopfile.h>
-#include <kconfiggroup.h>
-#include <kmessagebox.h>
-#include <ksharedconfig.h>
+#include <KConfigGroup>
+#include <KMessageBox>
+#include <KSharedConfig>
 
 #include <QGridLayout>
 #include <QListView>

@@ -9,7 +9,7 @@
 
 #include "KoCompositeOpAlphaBase.h"
 #include <KoCompositeOpRegistry.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 template<class _CSTraits, int channel>
 struct KoCompositeOpOverCompositor {

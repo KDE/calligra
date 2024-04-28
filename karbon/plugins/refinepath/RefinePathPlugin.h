@@ -10,7 +10,7 @@
 #ifndef REFINEPATHPLUGIN_H
 #define REFINEPATHPLUGIN_H
 
-#include <kxmlguiclient.h>
+#include <KXMLGUIClient>
 #include <QDialog>
 #include <QVariantList>
 

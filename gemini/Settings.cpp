@@ -12,7 +12,7 @@
 #include <QMimeType>
 
 #include <KSharedConfig>
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 #include "Theme.h"
 #include "PropertyContainer.h"

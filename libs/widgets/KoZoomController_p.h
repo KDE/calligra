@@ -12,7 +12,7 @@
 
 #include <KoZoomController.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <WidgetsDebug.h>
 
 #include <KoZoomHandler.h>

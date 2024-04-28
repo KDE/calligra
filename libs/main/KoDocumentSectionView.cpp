@@ -8,10 +8,10 @@
 #include "KoDocumentSectionDelegate.h"
 #include "KoDocumentSectionModel.h"
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kiconloader.h>
-#include <ksharedconfig.h>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KIconLoader>
+#include <KSharedConfig>
 
 #include <QContextMenuEvent>
 #include <QHeaderView>

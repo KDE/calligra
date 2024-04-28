@@ -9,9 +9,9 @@
 
 #include <QStandardPaths>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <ktextedit.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
 
 #include "KoCanvasBase.h"
 

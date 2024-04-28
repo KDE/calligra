@@ -16,7 +16,7 @@
 #include <QAction>
 #include <QSharedPointer>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoGroupButton.h>
 #include <KoIcon.h>

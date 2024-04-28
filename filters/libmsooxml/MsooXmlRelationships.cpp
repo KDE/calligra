@@ -15,7 +15,7 @@
 
 #include <KoOdfExporter.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QSet>
 #include "MsooXmlDebug.h"

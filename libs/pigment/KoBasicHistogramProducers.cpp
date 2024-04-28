@@ -7,7 +7,7 @@
 #include "KoBasicHistogramProducers.h"
 
 #include <QString>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoConfig.h>
 #ifdef HAVE_OPENEXR

@@ -9,7 +9,7 @@
 #define KOCOLORSPACEABSTRACT_H
 
 #include <QBitArray>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>

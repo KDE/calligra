@@ -6,7 +6,7 @@
 
 #include "KoShapeKeepAspectRatioCommand.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoShape.h>
 

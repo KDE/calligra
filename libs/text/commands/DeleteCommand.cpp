@@ -9,7 +9,7 @@
 
 #include "DeleteCommand.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoList.h>
 #include <KoTextEditor.h>

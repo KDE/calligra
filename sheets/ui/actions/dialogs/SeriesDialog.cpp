@@ -13,7 +13,7 @@
 
 #include "SeriesDialog.h"
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <KLocalizedString>
 
 #include <QGroupBox>

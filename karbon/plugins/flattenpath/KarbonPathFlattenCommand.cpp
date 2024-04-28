@@ -7,7 +7,7 @@
 #include "KarbonPathFlattenCommand.h"
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <math.h>
 
 #ifndef log2

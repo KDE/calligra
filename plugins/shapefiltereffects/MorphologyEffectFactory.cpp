@@ -8,7 +8,7 @@
 #include "MorphologyEffect.h"
 #include "MorphologyEffectConfigWidget.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 MorphologyEffectFactory::MorphologyEffectFactory()
         : KoFilterEffectFactoryBase(MorphologyEffectId, i18n("Morphology"))

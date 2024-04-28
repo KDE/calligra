@@ -8,7 +8,7 @@
 #include "BlurEffect.h"
 #include "BlurEffectConfigWidget.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 BlurEffectFactory::BlurEffectFactory()
         : KoFilterEffectFactoryBase(BlurEffectId, i18n("Gaussian blur"))

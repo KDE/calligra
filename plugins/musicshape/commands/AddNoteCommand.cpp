@@ -10,7 +10,7 @@
 #include "../core/VoiceBar.h"
 #include "../MusicShape.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 using namespace MusicCore;
 

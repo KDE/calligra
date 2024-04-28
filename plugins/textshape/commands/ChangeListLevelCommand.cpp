@@ -12,7 +12,7 @@
 #include <KoList.h>
 #include "TextTool.h"
 #include <KoListLevelProperties.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QDebug>
 
 #include <QTextCursor>

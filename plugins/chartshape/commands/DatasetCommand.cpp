@@ -7,7 +7,7 @@
 #include "DatasetCommand.h"
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 // KoChart
 #include "DataSet.h"

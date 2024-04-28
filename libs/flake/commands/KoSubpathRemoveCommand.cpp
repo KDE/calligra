@@ -8,7 +8,7 @@
 #include "KoSubpathRemoveCommand.h"
 
 #include "KoPathPoint.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoSubpathRemoveCommand::KoSubpathRemoveCommand(KoPathShape *pathShape, int subpathIndex, KUndo2Command *parent)
         : KUndo2Command(parent)

@@ -12,7 +12,7 @@
 #include <KoOdfBibliographyConfiguration.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 BibliographyTemplate::BibliographyTemplate(KoStyleManager *manager):
     m_manager(manager)

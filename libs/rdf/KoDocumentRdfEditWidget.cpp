@@ -20,8 +20,8 @@
 // KF5
 #include <kdebug.h>
 #include <kmenu.h>
-#include <kmessagebox.h>
-#include <klocalizedstring.h>
+#include <KMessageBox>
+#include <KLocalizedString>
 // Qt
 #include <QComboBox>
 #include <QPointer>

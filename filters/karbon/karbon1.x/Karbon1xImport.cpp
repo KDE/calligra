@@ -14,7 +14,7 @@
 #include <KoUnit.h>
 #include <SvgUtil.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <QBuffer>
 #include <QImage>

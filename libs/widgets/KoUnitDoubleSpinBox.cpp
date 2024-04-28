@@ -12,7 +12,7 @@
 
 #include <WidgetsDebug.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 // #define DEBUG_VALIDATOR
 // #define DEBUG_VALUEFROMTEXT

@@ -6,7 +6,7 @@
 
 #include "KWSelectBookmarkDialog.h"
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <QInputDialog>
 

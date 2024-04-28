@@ -20,7 +20,7 @@
 #include <KoCanvasBase.h>
 #include <kundo2command.h>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 using namespace Calligra::Sheets;
 

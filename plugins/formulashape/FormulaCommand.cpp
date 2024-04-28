@@ -17,7 +17,7 @@
 #include "TableDataElement.h"
 #include "FormulaDebug.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 FormulaCommand::FormulaCommand(KUndo2Command* parent)
               : KUndo2Command(parent)

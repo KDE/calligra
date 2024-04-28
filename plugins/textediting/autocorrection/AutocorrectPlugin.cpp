@@ -7,7 +7,7 @@
 #include "AutocorrectPlugin.h"
 #include "AutocorrectFactory.h"
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <KoTextEditingRegistry.h>
 

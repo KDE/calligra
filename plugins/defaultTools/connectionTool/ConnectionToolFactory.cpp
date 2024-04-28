@@ -9,7 +9,7 @@
 #include "ConnectionTool.h"
 
 #include <KoIcon.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QDebug>
 
 ConnectionToolFactory::ConnectionToolFactory()

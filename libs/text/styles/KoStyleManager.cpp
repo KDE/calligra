@@ -36,7 +36,7 @@
 #include <QUrl>
 #include <QBuffer>
 #include "TextDebug.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 class Q_DECL_HIDDEN KoStyleManager::Private
 {

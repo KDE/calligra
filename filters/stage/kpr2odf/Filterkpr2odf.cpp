@@ -38,7 +38,7 @@
 #include <QLoggingCategory>
 
 //KF5 includes
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 //Calligra includes
 #include <KoStore.h>

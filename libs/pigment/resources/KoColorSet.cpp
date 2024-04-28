@@ -20,7 +20,7 @@
 #include <QPainter>
 
 #include <DebugPigment.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "KoColor.h"
 #include "KoColorSpaceRegistry.h"

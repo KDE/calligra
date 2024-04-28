@@ -11,7 +11,7 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 K_PLUGIN_FACTORY_WITH_JSON(ArtisticTextShapePluginFactory, "calligra_shape_artistictext.json",
                  registerPlugin<ArtisticTextShapePlugin>();)

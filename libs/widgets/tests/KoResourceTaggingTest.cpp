@@ -10,7 +10,7 @@
 #include <QCoreApplication>
 #include <QFileInfo>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <WidgetsDebug.h>
 
 #include "KoResource.h"

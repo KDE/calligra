@@ -9,7 +9,7 @@
 #include "TableToolFactory.h"
 #include <TableShape.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <KLocalizedString>
 
 #include <KoIcon.h>

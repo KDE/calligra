@@ -17,7 +17,7 @@
 #include <kmimetypetrader.h>
 #include <KServiceTypeTrader>
 #include <krun.h>
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <kguiitem.h>
 #include <KIO/ApplicationLauncherJob>
 

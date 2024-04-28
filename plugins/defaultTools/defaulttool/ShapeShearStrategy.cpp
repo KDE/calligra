@@ -23,7 +23,7 @@
 
 #include <math.h>
 #include <QDebug>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 ShapeShearStrategy::ShapeShearStrategy( KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction )
 : KoInteractionStrategy(tool)

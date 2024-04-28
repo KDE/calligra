@@ -9,7 +9,7 @@
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 #include "KoPathShape.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QPointF>
 
 class Q_DECL_HIDDEN KoPathPointMergeCommand::Private

@@ -6,7 +6,7 @@
 
 #include "Plugin.h"
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <KoEventActionRegistry.h>
 #include "sound/KPrSoundEventActionFactory.h"
 

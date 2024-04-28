@@ -12,7 +12,7 @@
 #define WHIRLPINCHPLUGIN_H
 
 #include <QDialog>
-#include <kxmlguiclient.h>
+#include <KXMLGUIClient>
 
 #include <QVariantList>
 

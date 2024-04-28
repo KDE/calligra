@@ -6,7 +6,7 @@
 
 #include "KoPAChangeMasterPageCommand.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "KoPAPage.h"
 #include "KoPADocument.h"

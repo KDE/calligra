@@ -31,8 +31,8 @@
 #include <KoInteractionStrategy.h>
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
-#include <kstandardaction.h>
+#include <KLocalizedString>
+#include <KStandardAction>
 #include <QAction>
 #include <QDebug>
 

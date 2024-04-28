@@ -11,7 +11,7 @@
 #include <KoShapeLoadingContext.h>
 
 #include <KoIcon.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 
 SpiralShapeFactory::SpiralShapeFactory()

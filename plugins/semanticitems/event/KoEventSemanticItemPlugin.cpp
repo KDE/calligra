@@ -26,7 +26,7 @@
 // rdf
 #include <KoRdfSemanticItemRegistry.h>
 // KF5
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_semanticitem_event.json",
                            registerPlugin<KoEventSemanticItemPlugin>();)

@@ -20,7 +20,7 @@
 
 #include <stdint.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QCache>
 #include <QFont>

@@ -24,7 +24,7 @@
 #include <KoIcon.h>
 
 #include <kmenu.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <WordsDebug.h>
 
 #include <QTextDocument>

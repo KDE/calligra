@@ -7,7 +7,7 @@
 #ifndef KWFACTORY_H
 #define KWFACTORY_H
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include "words_export.h"
 
 class KoComponentData;

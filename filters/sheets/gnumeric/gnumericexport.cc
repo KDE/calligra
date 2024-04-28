@@ -11,7 +11,7 @@
 #include <gnumericexport.h>
 
 #include <KCompressionDevice>
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 // Calligra
 #include <KoDocumentInfo.h>

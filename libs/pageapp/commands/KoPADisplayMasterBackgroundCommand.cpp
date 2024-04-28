@@ -6,7 +6,7 @@
 
 #include "KoPADisplayMasterBackgroundCommand.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "KoPAPage.h"
 

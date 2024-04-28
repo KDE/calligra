@@ -14,7 +14,7 @@
 #include <QDebug>
 
 #include <KAboutData>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KoNetAccess.h>
 #include <KIO/FileCopyJob>
 

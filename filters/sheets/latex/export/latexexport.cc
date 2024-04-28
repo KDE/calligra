@@ -10,7 +10,7 @@
 #include "LatexDebug.h"
 // KF5
 #include <KoFilterChain.h>
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 // Qt
 #include <QByteArray>
 

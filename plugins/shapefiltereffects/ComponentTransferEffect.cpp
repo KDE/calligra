@@ -9,7 +9,7 @@
 #include <KoFilterEffectRenderContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QRect>
 #include <QImage>
 #include <math.h>

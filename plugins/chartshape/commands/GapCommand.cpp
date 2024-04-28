@@ -7,7 +7,7 @@
 #include "GapCommand.h"
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 // KoChart
 #include "Axis.h"

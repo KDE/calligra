@@ -9,7 +9,7 @@
 #include <KoTableOfContentsGeneratorInfo.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 TableOfContentsTemplate::TableOfContentsTemplate(KoStyleManager *manager):
     m_manager(manager)

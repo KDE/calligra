@@ -17,10 +17,10 @@
 #include <QGlobalStatic>
 
 #include <WidgetsDebug.h>
-#include <kconfiggroup.h>
-#include <klocalizedstring.h>
-#include <ksharedconfig.h>
-#include <kconfig.h>
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KSharedConfig>
+#include <KConfig>
 
 Q_GLOBAL_STATIC(KoGlobal, s_instance)
 

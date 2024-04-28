@@ -29,9 +29,9 @@
 #include <KoIcon.h>
 #include <kundo2command.h>
 
-#include <kpluginfactory.h>
-#include <klocalizedstring.h>
-#include <kactioncollection.h>
+#include <KPluginFactory>
+#include <KLocalizedString>
+#include <KActionCollection>
 
 #include <QStandardPaths>
 #include <QAction>

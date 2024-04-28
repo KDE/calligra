@@ -19,7 +19,7 @@
 #include <QAbstractTextDocumentLayout>
 
 #include <MainDebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoText.h>
 #include <KoTextDocument.h>

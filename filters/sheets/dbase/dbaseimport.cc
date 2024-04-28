@@ -16,8 +16,8 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
-#include <kpluginfactory.h>
-#include <kmessagebox.h>
+#include <KPluginFactory>
+#include <KMessageBox>
 #include <KLocalizedString>
 
 

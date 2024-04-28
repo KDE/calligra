@@ -5,7 +5,7 @@
  */
 
 #include "KoConnectionShapeTypeCommand.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoConnectionShapeTypeCommand::KoConnectionShapeTypeCommand(
     KoConnectionShape * connection, KoConnectionShape::Type type, KUndo2Command *parent)

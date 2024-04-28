@@ -13,7 +13,7 @@
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 PageVariableFactory::PageVariableFactory()
     : KoInlineObjectFactoryBase("page", TextVariable)

@@ -17,7 +17,7 @@
 #include <QSharedPointer>
 #include <QCollator>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QDebug>
 
 #include <algorithm>

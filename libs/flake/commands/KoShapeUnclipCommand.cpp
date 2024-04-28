@@ -18,7 +18,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 class KoShapeUnclipCommand::Private : public KoOdfPaste
 {

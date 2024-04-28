@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "RemoveBarCommand.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include "../core/Bar.h"
 #include "../core/Sheet.h"
 

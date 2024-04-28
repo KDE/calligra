@@ -13,7 +13,7 @@
 #include <QRegularExpression>
 #include <kdebug.h>
 #include <kfiledialog.h>
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include "ksystemtimezone.h"
 #include <kglobal.h>
 

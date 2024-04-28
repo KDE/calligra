@@ -47,8 +47,8 @@
 #include <KoIcon.h>
 
 //KF5 Headers
-#include <kiconloader.h>
-#include <klocalizedstring.h>
+#include <KIconLoader>
+#include <KLocalizedString>
 
 const int COLUMN_COUNT = 10;
 const int INVALID = -1;

@@ -16,7 +16,7 @@
 #include "styles/KoStyleManager.h"
 #include "commands/ParagraphFormattingCommand.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QFontDatabase>
 #include <QTextBlock>

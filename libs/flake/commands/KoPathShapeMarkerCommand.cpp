@@ -9,7 +9,7 @@
 #include "KoMarker.h"
 #include "KoPathShape.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoPathShapeMarkerCommand::KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoMarkerData::MarkerPosition position, KUndo2Command *parent)
 : KUndo2Command(parent)

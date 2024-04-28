@@ -6,7 +6,7 @@
  */
 
 #include "KoModeBoxFactory.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include "KoModeBox_p.h"
 #include "KoModeBoxDocker_p.h"
 

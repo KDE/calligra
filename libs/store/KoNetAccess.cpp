@@ -21,7 +21,7 @@
 #include <QtCore/QDataStream>
 #include <qtemporaryfile.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kjobwidgets.h>
 
 #include <KIO/Job>

@@ -13,7 +13,7 @@
 #include <QImage>
 #include <QBitArray>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "KoChannelInfo.h"
 #include "KoID.h"

@@ -6,7 +6,7 @@
  */
 
 #include "KoPathControlPointMoveCommand.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <math.h>
 
 KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(

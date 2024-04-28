@@ -14,10 +14,10 @@
 #include <QActionGroup>
 
 #include <KSharedConfig>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <ktoggleaction.h>
-#include <kactioncollection.h>
-#include <kactionmenu.h>
+#include <KActionCollection>
+#include <KActionMenu>
 
 #include <KoIcon.h>
 

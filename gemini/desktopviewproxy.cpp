@@ -13,9 +13,9 @@
 #include <QApplication>
 #include <QUrl>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <krecentfilesaction.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <KConfigGroup>
 #include <KSharedConfig>
 

@@ -25,7 +25,7 @@
 
 #include <QAction>
 #include <QDebug>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QPainter>
 
 #include <cmath>

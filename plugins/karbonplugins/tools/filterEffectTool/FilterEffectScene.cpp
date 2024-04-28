@@ -11,7 +11,7 @@
 #include "KoFilterEffectStack.h"
 
 #include <QDebug>
-#include <kcombobox.h>
+#include <KComboBox>
 
 #include <QGraphicsProxyWidget>
 #include <QPushButton>

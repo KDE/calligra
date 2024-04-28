@@ -11,7 +11,7 @@
 #include "sheets/engine/SheetBase.h"
 #include "sheets/core/Map.h"
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <KSharedConfig>
 #include <KLocalizedString>
 

@@ -7,7 +7,7 @@
 #include "ChangecaseFactory.h"
 #include "Changecase.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 ChangecaseFactory::ChangecaseFactory()
     : KoTextEditingFactory("changecase")

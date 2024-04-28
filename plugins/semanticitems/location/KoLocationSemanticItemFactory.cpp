@@ -12,7 +12,7 @@
 #include "KoRdfLocation.h"
 // KF5
 #include <kdebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 
 KoLocationSemanticItemFactory::KoLocationSemanticItemFactory()

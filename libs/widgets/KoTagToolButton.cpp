@@ -15,7 +15,7 @@
 #include <QToolButton>
 #include <QGridLayout>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoIcon.h>
 

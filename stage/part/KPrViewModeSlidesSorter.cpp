@@ -44,10 +44,10 @@
 #include <KoIcon.h>
 
 // KF5 Headers
-#include <klocalizedstring.h>
-#include <kconfiggroup.h>
-#include <kmessagebox.h>
-#include <kactioncollection.h>
+#include <KLocalizedString>
+#include <KConfigGroup>
+#include <KMessageBox>
+#include <KActionCollection>
 
 const int DEFAULT_ICON_SIZE = 200;
 

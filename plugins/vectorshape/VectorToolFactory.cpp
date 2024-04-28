@@ -11,7 +11,7 @@
 #include "VectorTool.h"
 
 #include <KoIcon.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 
 VectorToolFactory::VectorToolFactory()

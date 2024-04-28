@@ -6,7 +6,7 @@
 #ifndef KO_STRATEGY_COLORSPACE_RGB_H_
 #define KO_STRATEGY_COLORSPACE_RGB_H_
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <LcmsColorSpace.h>
 #include "KoColorModelStandardIds.h"
 

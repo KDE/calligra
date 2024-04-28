@@ -10,7 +10,7 @@
 #include "KoShapeManager.h"
 #include "KoShapeContainer.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <FlakeDebug.h>
 #include <limits.h>
 #include <algorithm>

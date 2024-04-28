@@ -13,10 +13,10 @@
 #include <KoDocumentResourceManager.h>
 #include <KoTextEditor.h>
 // KF5
-#include <kactionmenu.h>
+#include <KActionMenu>
 #include <kpagedialog.h>
 #include <kdebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 // Qt
 #include <QVBoxLayout>
 

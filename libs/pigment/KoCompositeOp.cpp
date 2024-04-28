@@ -6,7 +6,7 @@
 
 #include "KoCompositeOp.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KoID.h>
 #include <QList>
 

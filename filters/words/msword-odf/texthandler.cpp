@@ -42,7 +42,7 @@
 #include <QRegularExpression>
 #include <QRandomGenerator>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoGenStyle.h>
 #include <KoFontFace.h>

@@ -6,7 +6,7 @@
 
 #include "KWCreateBookmarkDialog.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KWCreateBookmark::KWCreateBookmark(const QStringList &nameList, const QString &suggestedName, QWidget *parent)
         : QWidget(parent)

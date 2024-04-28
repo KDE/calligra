@@ -14,7 +14,7 @@
 #include <QImage>
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 // Calligra
 #include <KoXmlNS.h>

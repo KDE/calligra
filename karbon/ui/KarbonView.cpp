@@ -110,10 +110,10 @@
 
 // KF5 header
 #include <kcolormimedata.h>
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
-#include <kactioncollection.h>
-#include <kstandardaction.h>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KActionCollection>
+#include <KStandardAction>
 #include <ktoggleaction.h>
 #include <KPluginFactory>
 #include <KXMLGUIFactory>

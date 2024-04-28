@@ -9,7 +9,7 @@
 #include <QFileDialog>
 #include <QUrl>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoEventActionAddCommand.h>
 #include <KoEventActionRemoveCommand.h>

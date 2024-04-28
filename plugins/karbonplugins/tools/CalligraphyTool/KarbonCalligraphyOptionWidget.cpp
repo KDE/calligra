@@ -8,13 +8,13 @@
 
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
-#include <kcombobox.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
-#include <kconfig.h>
+#include <KLocalizedString>
+#include <KComboBox>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KConfig>
 #include <QDebug>
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <QInputDialog>
 #include <QSpinBox>

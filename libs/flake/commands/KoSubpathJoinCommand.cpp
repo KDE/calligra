@@ -6,7 +6,7 @@
  */
 
 #include "KoSubpathJoinCommand.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoSubpathJoinCommand::KoSubpathJoinCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KUndo2Command *parent)
         : KUndo2Command(parent)

@@ -12,7 +12,7 @@
 #include <QCursor>
 
 #include <FlakeDebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>

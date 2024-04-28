@@ -23,10 +23,10 @@
 
 #include <KoCanvasBase.h>
 
-#include <kcombobox.h>
+#include <KComboBox>
 #include <klineedit.h>
 #include <KLocalizedString>
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <KPageWidget>
 #include <ktextedit.h>
 

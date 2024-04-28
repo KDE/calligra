@@ -21,7 +21,7 @@
 
 #include <QPainter>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <kundo2command.h>
 

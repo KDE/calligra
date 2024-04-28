@@ -37,17 +37,17 @@
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
 #include <ktoggleaction.h>
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <KoNetAccess.h>
 #include <kedittoolbar.h>
 #include <QTemporaryFile>
 #include <krecentdocument.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kxmlguifactory.h>
-#include <kfileitem.h>
-#include <ktoolbar.h>
-#include <kactionmenu.h>
-#include <kactioncollection.h>
+#include <KFileItem>
+#include <KToolBar>
+#include <KActionMenu>
+#include <KActionCollection>
 #include <KWindowConfig>
 
 #include <kio_version.h>

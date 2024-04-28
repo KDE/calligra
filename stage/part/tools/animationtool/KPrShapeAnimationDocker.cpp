@@ -27,8 +27,8 @@
 #include <QTimer>
 
 //KF5 Headers
-#include <klocalizedstring.h>
-#include <kiconloader.h>
+#include <KLocalizedString>
+#include <KIconLoader>
 
 //Calligra Headers
 #include <KoIcon.h>

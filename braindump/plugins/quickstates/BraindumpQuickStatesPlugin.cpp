@@ -23,8 +23,8 @@
 #include <QSvgRenderer>
 #include <QStandardPaths>
 
-#include <kactioncollection.h>
-#include <kactionmenu.h>
+#include <KActionCollection>
+#include <KActionMenu>
 #include <kgenericfactory.h>
 
 #include "State.h"

@@ -26,7 +26,7 @@
 #include "KoMixColorsOp.h"
 
 #include <DebugPigment.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 
 KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::m_instance = 0;

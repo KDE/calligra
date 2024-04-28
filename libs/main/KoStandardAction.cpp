@@ -6,9 +6,9 @@
 
 #include "KoStandardAction.h"
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <ktoggleaction.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 QAction *KoStandardAction::create(StandardAction id, const QObject *recvr, const char *slot, QObject *parent)
 {

@@ -10,8 +10,8 @@
 #include <QFontDatabase>
 #include <QDebug>
 
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 #include "KoPluginLoader.h"
 

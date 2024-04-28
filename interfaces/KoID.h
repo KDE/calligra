@@ -13,7 +13,7 @@
 #include <QMetaType>
 #include <QDebug>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 /**
  * A KoID is a combination of a user-visible string and a string that uniquely

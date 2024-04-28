@@ -15,7 +15,7 @@
 #include <QDateTime>
 #include <QTime>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <OdfDebug.h>
 
 #include <KoXmlReader.h>

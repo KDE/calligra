@@ -16,7 +16,7 @@
 #include <KoStore.h>
 #include <KoFilterChain.h>
 // KF5
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 // Qt
 #include <QFile>
 

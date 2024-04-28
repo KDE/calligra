@@ -10,7 +10,7 @@
 #include "RdfSemanticTreeWidgetSelectAction.h"
 // KF5
 #include <kdebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 
 KoRdfLocationTreeWidgetItem::KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent,

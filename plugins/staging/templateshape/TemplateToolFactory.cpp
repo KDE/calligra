@@ -10,7 +10,7 @@
 #include "TemplateToolFactory.h"
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 // Calligra
 #include <KoIcon.h>

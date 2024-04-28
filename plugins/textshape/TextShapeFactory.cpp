@@ -23,7 +23,7 @@
 
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kundo2stack.h>
 #include <QTextCursor>
 

@@ -14,7 +14,7 @@
 
 #include <QPair>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 TableOfContentsStyleModel::TableOfContentsStyleModel(const KoStyleManager *manager, KoTableOfContentsGeneratorInfo *info)
     :QAbstractTableModel(),

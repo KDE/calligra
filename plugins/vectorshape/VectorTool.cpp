@@ -14,7 +14,7 @@
 #include <QUrl>
 #include <QFileDialog>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KIO/StoredTransferJob>
 
 #include <KoIcon.h>

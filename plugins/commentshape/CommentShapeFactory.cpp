@@ -7,7 +7,7 @@
 #include "CommentShapeFactory.h"
 #include "CommentShape.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KoXmlNS.h>
 #include <KoDocumentResourceManager.h>
 #include <KoDocumentBase.h>

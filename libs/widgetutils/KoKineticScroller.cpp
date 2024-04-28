@@ -7,8 +7,8 @@
 
 #include <KoKineticScroller.h>
 #include <QAbstractItemView>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 QScroller* KoKineticScroller::createPreconfiguredScroller(QAbstractScrollArea *scrollArea)
 {

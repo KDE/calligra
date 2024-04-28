@@ -20,8 +20,8 @@
 #include <QValidator>
 #include <QInputDialog>
 
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
+#include <KLocalizedString>
+#include <KMessageBox>
 
 UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable, QWidget *parent)
     : QWidget(parent)

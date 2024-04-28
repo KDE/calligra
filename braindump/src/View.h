@@ -23,7 +23,7 @@
 #include <QWidget>
 #include <QAction>
 
-#include <kxmlguiclient.h>
+#include <KXMLGUIClient>
 
 #include <KoZoomHandler.h>
 

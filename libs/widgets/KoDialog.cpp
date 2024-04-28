@@ -23,8 +23,8 @@
 #include <QPushButton>
 #include <QScreen>
 
-#include <kconfig.h>
-#include <klocalizedstring.h>
+#include <KConfig>
+#include <KLocalizedString>
 
 #include <kseparator.h>
 #include <kstandardguiitem.h>

@@ -6,7 +6,7 @@
 
 #include "KoColorModelStandardIds.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 
 const KoID AlphaColorModelID("A", ki18n("Alpha mask"));

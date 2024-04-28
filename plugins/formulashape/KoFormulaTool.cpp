@@ -19,7 +19,7 @@
 #include <KoShapeController.h>
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QKeyEvent>
 #include <QAction>

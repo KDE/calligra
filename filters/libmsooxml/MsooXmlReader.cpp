@@ -16,7 +16,7 @@
 #include <KoXmlWriter.h>
 #include <KoCharacterStyle.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 QDebug operator<<(QDebug dbg, const QXmlStreamReader& reader)
 {

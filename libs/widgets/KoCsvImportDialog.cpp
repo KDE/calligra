@@ -15,11 +15,11 @@
 #include <QTableWidgetSelectionRange>
 
 // KF5
-#include <kconfig.h>
+#include <KConfig>
 #include <WidgetsDebug.h>
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
-#include <ksharedconfig.h>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KSharedConfig>
 
 #include "ui_KoCsvImportDialog.h"
 

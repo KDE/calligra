@@ -9,7 +9,7 @@
 
 #include "DocumentImpl.h"
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>

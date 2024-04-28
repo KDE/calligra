@@ -9,7 +9,7 @@
 #include "RdfSemanticTreeWidgetSelectAction.h"
 
 #include <kdebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 
 KoRdfFoaFTreeWidgetItem::KoRdfFoaFTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfFoaF foaf)

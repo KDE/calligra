@@ -10,7 +10,7 @@
 #include "KoShapeGroup.h"
 #include "commands/KoShapeMoveCommand.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 // #include <FlakeDebug.h>
 
 class Q_DECL_HIDDEN KoShapeAlignCommand::Private

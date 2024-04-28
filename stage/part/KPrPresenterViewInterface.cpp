@@ -14,7 +14,7 @@
 #include <QTextEdit>
 #include <QToolButton>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoPACanvas.h>
 #include <KoPAPageBase.h>

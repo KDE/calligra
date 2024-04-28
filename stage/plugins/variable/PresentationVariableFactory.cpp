@@ -15,7 +15,7 @@ SPDX-License-Identifier: LGPL-2.1-or-later
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 PresentationVariableFactory::PresentationVariableFactory()
     : KoInlineObjectFactoryBase("PresentationVariable", Other)

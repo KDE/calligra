@@ -15,7 +15,7 @@
 #include <QTextCursor>
 #include <QApplication>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <CalligraVersionWrapper.h>
 #include <KoFilterChain.h>

@@ -6,7 +6,7 @@
 
 #include "StarShapeConfigCommand.h"
 #include "StarShape.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 StarShapeConfigCommand::StarShapeConfigCommand(StarShape * star, uint cornerCount, qreal innerRadius, qreal outerRadius, bool convex, KUndo2Command *parent)
     : KUndo2Command(parent)

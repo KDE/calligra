@@ -17,7 +17,7 @@
 #include <QMimeDatabase>
 
 // KF5
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 // Calligra
 #include <KoFilterChain.h>

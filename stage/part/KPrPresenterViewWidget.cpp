@@ -10,7 +10,7 @@
 #include <QKeyEvent>
 #include <QStackedLayout>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoPACanvas.h>
 #include <KoPAPageBase.h>

@@ -22,8 +22,8 @@
 #include <QPointer>
 #include <QScrollArea>
 
-#include <klocalizedstring.h>
-#include <ksharedconfig.h>
+#include <KLocalizedString>
+#include <KSharedConfig>
 
 #include <KoColorSet.h>
 #include <KoColorPatch.h>

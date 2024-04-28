@@ -12,8 +12,8 @@
 #include <QDebug>
 
 #include <KSharedConfig>
-#include <kconfiggroup.h>
-#include <kconfig.h>
+#include <KConfigGroup>
+#include <KConfig>
 
 
 // Much of this is a gui-less clone of KRecentFilesAction, so the format of

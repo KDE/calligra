@@ -8,7 +8,7 @@
 
 #include "TrackedChangeModel.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QModelIndex>
 #include <QTreeView>

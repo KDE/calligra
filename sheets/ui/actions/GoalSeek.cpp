@@ -10,7 +10,7 @@
 #include "ui/actions/dialogs/GoalSeekDialog.h"
 
 #include <KLocalizedString>
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include "engine/CalculationSettings.h"
 #include "engine/CellBase.h"

@@ -21,7 +21,7 @@
 #include <KSharedConfig>
 #include <KConfigGroup>
 #endif
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 K_PLUGIN_FACTORY_WITH_JSON(TextPluginFactory, "calligra_shape_text.json",
                  registerPlugin<TextPlugin>();

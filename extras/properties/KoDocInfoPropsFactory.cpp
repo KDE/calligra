@@ -8,7 +8,7 @@
 
 #include <KoDocumentInfoPropsPage.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 static QObject* createDocInfoPropsPage(QWidget* w, QObject* parent, const KPluginMetaData &data, const QVariantList& args)
 {

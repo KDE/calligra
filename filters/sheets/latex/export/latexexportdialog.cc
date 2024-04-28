@@ -12,7 +12,7 @@
 #include <QDBusConnection>
 
 #include <KLocalizedString>
-#include <kconfig.h>
+#include <KConfig>
 #include <KoFilterManager.h>
 
 #include "LatexDebug.h"

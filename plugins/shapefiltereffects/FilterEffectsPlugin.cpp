@@ -19,7 +19,7 @@
 
 #include "KoFilterEffectRegistry.h"
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 K_PLUGIN_FACTORY_WITH_JSON(FilterEffectsPluginFacory, "calligra_filtereffects.json",
                            registerPlugin<FilterEffectsPlugin>();)

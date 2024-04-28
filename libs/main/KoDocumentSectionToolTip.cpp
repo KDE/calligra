@@ -10,7 +10,7 @@
 #include <QModelIndex>
 #include <QTextDocument>
 #include <QUrl>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoDocumentSectionToolTip::KoDocumentSectionToolTip()
 {

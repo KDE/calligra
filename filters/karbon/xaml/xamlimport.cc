@@ -10,7 +10,7 @@
 #include <KoFilterChain.h>
 
 #include <KCompressionDevice>
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <kdebug.h>
 
 #include <shapes/vellipse.h>

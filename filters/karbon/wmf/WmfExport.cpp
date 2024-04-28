@@ -11,7 +11,7 @@
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <KoFilterChain.h>
 #include <KoShapeStroke.h>

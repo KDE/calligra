@@ -9,7 +9,7 @@
 
 #include "KoPathPoint.h"
 #include <KoPathSegment.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 class KoPathPointInsertCommandPrivate
 {

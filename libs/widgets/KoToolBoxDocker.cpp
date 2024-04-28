@@ -11,7 +11,7 @@
 #include "KoToolBoxScrollArea_p.h"
 #include "KoDockWidgetTitleBar.h"
 #include "KoDockRegistry.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QLabel>
 #include <QFontMetrics>
 #include <QFrame>

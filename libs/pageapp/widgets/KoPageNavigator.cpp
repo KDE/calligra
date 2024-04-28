@@ -14,8 +14,8 @@
 #include <KoPAPage.h>
 #include <KoIcon.h>
 // KF5
-#include <klocalizedstring.h>
-#include <kactioncollection.h>
+#include <KLocalizedString>
+#include <KActionCollection>
 // Qt
 #include <QLabel>
 #include <QHBoxLayout>

@@ -15,7 +15,7 @@
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QTextDocument>
 

@@ -7,7 +7,7 @@
 
 #include "KPrBarWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <klazylocalizedstring.h>
 
 #include "KPrBarWipeFromTopStrategy.h"

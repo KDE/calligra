@@ -10,7 +10,7 @@
 
 #include <QDomDocument>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <KoDocumentInfo.h>
 #include <KoPart.h>

@@ -9,7 +9,7 @@
 #include "KWAboutData.h"
 #include "KWDocument.h"
 
-#include <kiconloader.h>
+#include <KIconLoader>
 
 #include <KWPart.h>
 #include <KoDockRegistry.h>

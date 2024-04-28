@@ -12,7 +12,7 @@
 #include <KoShapeController.h>
 #include <KoParagraphStyle.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include "TextDebug.h"
 
 #include <QTextDocument>

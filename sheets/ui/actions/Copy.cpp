@@ -13,7 +13,7 @@
 #include "ui/commands/CopyCommand.h"
 
 #include <KLocalizedString>
-#include <kstandardaction.h>
+#include <KStandardAction>
 
 #include <QApplication>
 #include <QClipboard>

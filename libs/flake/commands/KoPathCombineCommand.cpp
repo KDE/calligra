@@ -8,7 +8,7 @@
 #include "KoPathCombineCommand.h"
 #include "KoShapeBasedDocumentBase.h"
 #include "KoShapeContainer.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 class Q_DECL_HIDDEN KoPathCombineCommand::Private
 {

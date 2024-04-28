@@ -10,7 +10,7 @@
 #include "InfoVariableFactory.h"
 #include "ChapterVariableFactory.h"
 #include "UserVariableFactory.h"
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <KoInlineObjectRegistry.h>
 

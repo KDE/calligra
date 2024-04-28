@@ -10,7 +10,7 @@
 #include "VideoShape.h"
 #include "VideoCollection.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 ChangeVideoCommand::ChangeVideoCommand(VideoShape *videoShape, VideoData *newVideoData, KUndo2Command *parent)
     : KUndo2Command(parent),

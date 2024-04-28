@@ -12,10 +12,10 @@
 #include <KoIcon.h>
 #include <KLocalizedString>
 
-#include <kpassworddialog.h>
-#include <kmessagebox.h>
-#include <kuser.h>
-#include <kemailsettings.h>
+#include <KPasswordDialog>
+#include <KMessageBox>
+#include <KUser>
+#include <KEMailSettings>
 
 #include <QInputDialog>
 #include <QDebug>

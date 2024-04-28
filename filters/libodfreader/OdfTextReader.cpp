@@ -14,7 +14,7 @@
 #include <QBuffer>
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 // Calligra, libodf{,2}
 #include <KoXmlNS.h>

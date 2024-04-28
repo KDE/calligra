@@ -9,7 +9,7 @@
 #include <QGlobalStatic>
 #include <QList>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoID.h>
 #include "KoCompositeOp.h"

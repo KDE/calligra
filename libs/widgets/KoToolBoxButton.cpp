@@ -14,7 +14,7 @@
 #include <QApplication>
 #include <QKeySequence>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
     : QToolButton(parent)

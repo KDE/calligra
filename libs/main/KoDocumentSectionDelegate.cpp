@@ -20,7 +20,7 @@
 #include <QStyle>
 #include <QStyleOptionViewItem>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 class KoDocumentSectionDelegate::Private
 {

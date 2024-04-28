@@ -23,7 +23,7 @@
 #include <KoShapePaintingContext.h>
 #include <KoStrokeConfigWidget.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QDoubleSpinBox>
 #include <QComboBox>

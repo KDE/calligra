@@ -12,7 +12,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include <kcombobox.h>
+#include <KComboBox>
 #include <KLocalizedString>
 
 using namespace Calligra::Sheets;

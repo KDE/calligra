@@ -13,7 +13,7 @@
 #include <QVBoxLayout>
 
 #include <KoDialog.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 Changecase::Changecase()
 {

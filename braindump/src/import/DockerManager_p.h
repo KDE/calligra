@@ -11,7 +11,7 @@
 #include <QList>
 #include <QGridLayout>
 
-#include <ktoolbar.h>
+#include <KToolBar>
 #include <KLocalizedString>
 
 #include "DockerManager.h"

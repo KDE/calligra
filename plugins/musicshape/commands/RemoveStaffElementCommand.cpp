@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "RemoveStaffElementCommand.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include "../core/StaffElement.h"
 #include "../core/Clef.h"
 #include "../core/Bar.h"

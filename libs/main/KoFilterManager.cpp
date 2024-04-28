@@ -22,8 +22,8 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 #include <QMimeDatabase>
 #include <QPluginLoader>
 
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
+#include <KLocalizedString>
+#include <KMessageBox>
 #include <MainDebug.h>
 
 #include <queue>

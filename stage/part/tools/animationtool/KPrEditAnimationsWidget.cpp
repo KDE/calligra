@@ -32,7 +32,7 @@
 #include <QActionGroup>
 
 //KF5 Headers
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 //Calligra Headers
 #include <KoIcon.h>

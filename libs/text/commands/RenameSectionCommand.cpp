@@ -7,7 +7,7 @@
 #include <KoTextDocument.h>
 #include <KoSectionModel.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kundo2command.h>
 
 RenameSectionCommand::RenameSectionCommand(KoSection *section, const QString &newName, QTextDocument *document)

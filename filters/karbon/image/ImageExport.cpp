@@ -30,7 +30,7 @@
 #include <KoDialog.h>
 #include <KoPAPageBase.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <QImage>
 

@@ -18,8 +18,8 @@
 
 #include <WidgetsDebug.h>
 
-#include <klocalizedstring.h>
-#include <ksharedconfig.h>
+#include <KLocalizedString>
+#include <KSharedConfig>
 
 #include "KoTagFilterWidget.h"
 #include "KoTagChooserWidget.h"
@@ -27,7 +27,7 @@
 #include "KoResource.h"
 #include "KoResourceItemChooserContextMenu.h"
 
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 class TaggedResourceSet
 {

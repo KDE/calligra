@@ -17,7 +17,7 @@
 #include "KoShapeStroke.h"
 #include <KoColor.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QSpinBox>
 #include <QPainter>

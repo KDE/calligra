@@ -28,8 +28,8 @@
 
 #include <KoIcon.h>
 
-#include <kcombobox.h>
-#include <klocalizedstring.h>
+#include <KComboBox>
+#include <KLocalizedString>
 #include <QDialog>
 #include <QSpinBox>
 

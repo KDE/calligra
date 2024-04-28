@@ -8,8 +8,8 @@
 #include "KoApplicationAdaptor.h"
 
 #include <MainDebug.h>
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
+#include <KLocalizedString>
+#include <KMessageBox>
 
 #include "KoApplication.h"
 #include "KoPart.h"

@@ -9,7 +9,7 @@
 
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <phonon/videowidget.h>
 #include <phonon/audiooutput.h>

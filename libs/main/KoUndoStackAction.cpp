@@ -10,7 +10,7 @@
 #include <KoIcon.h>
 
 #include <kundo2stack.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kstandardshortcut.h>
 
 KoUndoStackAction::KoUndoStackAction(KUndo2Stack* stack, Type type)

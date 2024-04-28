@@ -13,7 +13,7 @@
 #include "ui_SubtotalsDetailsWidget.h"
 
 // KF5
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 // Sheets
 #include "core/Cell.h"

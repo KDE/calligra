@@ -18,7 +18,7 @@
 #include <KoShapeShadowCommand.h>
 #include <KoShapeManager.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QCheckBox>
 

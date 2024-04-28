@@ -11,7 +11,7 @@
 #include "KoShapeGroup.h"
 #include "KoShapeContainer.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <algorithm>
 

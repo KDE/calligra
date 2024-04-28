@@ -19,7 +19,7 @@
 #include <KoPointerEvent.h>
 #include <KoToolBase.h>
 #include <KoSelection.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     : KoInteractionStrategy(tool)

@@ -24,7 +24,7 @@
 #include <QUrl>
 
 // KF5
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 // KChart
 #include <KChartChart>

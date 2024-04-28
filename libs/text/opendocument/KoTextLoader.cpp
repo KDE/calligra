@@ -72,7 +72,7 @@
 #include <KoSectionUtils.h>
 #include <KoSectionModel.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include "TextDebug.h"
 
 #include <QList>

@@ -22,7 +22,7 @@
 #include <KoShapeManager.h>
 #include <KoComponentData.h>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 KWPart::KWPart(QObject *parent)
     : KoPart(KWFactory::componentData(), parent)

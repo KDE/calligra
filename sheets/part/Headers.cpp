@@ -37,7 +37,7 @@
 #include <QPainter>
 
 // KF5
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 // Calligra
 #include <KoZoomHandler.h>

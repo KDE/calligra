@@ -57,7 +57,7 @@
 #include "commands/NewSectionCommand.h"
 #include "commands/SplitSectionsCommand.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QTextList>
 #include <QTextBlock>

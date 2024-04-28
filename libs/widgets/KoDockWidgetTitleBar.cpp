@@ -12,7 +12,7 @@
 #include <KoIcon.h>
 
 #include <WidgetsDebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QAbstractButton>
 #include <QAction>

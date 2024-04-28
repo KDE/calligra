@@ -7,7 +7,7 @@
 #include <QTabWidget>
 
 #include "MusicDebug.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>

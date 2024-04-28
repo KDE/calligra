@@ -7,7 +7,7 @@
 #include "Words.h"
 #include "frames/KWTextFrameSet.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 namespace Words
 {

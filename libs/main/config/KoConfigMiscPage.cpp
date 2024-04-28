@@ -15,10 +15,10 @@
 #include <KoPart.h>
 #include <KoComponentData.h>
 
-#include <kcombobox.h>
+#include <KComboBox>
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <KConfig>
+#include <KConfigGroup>
 
 #include <QFormLayout>
 #include <QGroupBox>

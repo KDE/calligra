@@ -6,7 +6,7 @@
 #include "KoZoomInput.h"
 
 #include <WidgetsDebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QComboBox>
 #include <QLabel>

@@ -11,7 +11,7 @@
 #include <QString>
 #include <QDebug>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "kundo2_export.h"
 

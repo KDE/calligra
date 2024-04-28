@@ -15,7 +15,7 @@
 #include <QTimer>
 #include <QApplication>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <khistorycombobox.h>
 
 #include <KoIcon.h>

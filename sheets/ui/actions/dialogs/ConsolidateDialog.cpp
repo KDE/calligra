@@ -18,7 +18,7 @@
 #include "ConsolidateDialog.h"
 
 // KF5
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <KoIcon.h>
 

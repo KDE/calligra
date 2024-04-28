@@ -7,7 +7,7 @@
 #include "ChartTypeCommand.h"
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 // KChart
 #include "KChartAbstractCoordinatePlane"

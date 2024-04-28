@@ -17,7 +17,7 @@
 #include <QGridLayout>
 
 #include <klineedit.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoIcon.h>
 

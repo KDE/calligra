@@ -8,7 +8,7 @@
 
 #include "KoParameterHandleMoveCommand.h"
 #include "KoParameterShape.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoParameterHandleMoveCommand::KoParameterHandleMoveCommand(KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, Qt::KeyboardModifiers keyModifiers, KUndo2Command *parent)
         : KUndo2Command(parent)

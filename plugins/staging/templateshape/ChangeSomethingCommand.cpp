@@ -10,7 +10,7 @@
 #include "ChangeSomethingCommand.h"
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 
 // Calligra

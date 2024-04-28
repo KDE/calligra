@@ -12,9 +12,9 @@
 #include <QStringList>
 
 // KF5
-#include <kiconloader.h>
-#include <kpluginfactory.h>
-#include <klocalizedstring.h>
+#include <KIconLoader>
+#include <KPluginFactory>
+#include <KLocalizedString>
 
 // Calligra
 #include <KoIcon.h>

@@ -38,7 +38,7 @@
 #include <KoIcon.h>
 #include <kundo2command.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QAction>
 #include <QDebug>

@@ -8,7 +8,7 @@
 #include <KoSnapGuide.h>
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 GuidesToolOptionWidget::GuidesToolOptionWidget(QWidget *parent)
     :QWidget(parent)

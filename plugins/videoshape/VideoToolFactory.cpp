@@ -10,7 +10,7 @@
 #include "VideoTool.h"
 
 #include <KoIcon.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 VideoToolFactory::VideoToolFactory()
     :KoToolFactoryBase("VideoToolFactoryId")

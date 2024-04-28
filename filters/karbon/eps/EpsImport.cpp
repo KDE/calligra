@@ -15,7 +15,7 @@
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <kshell.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(EpsImportFactory, "calligra_filter_eps2svgai.json",

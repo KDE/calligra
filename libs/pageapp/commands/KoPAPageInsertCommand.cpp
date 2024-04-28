@@ -6,7 +6,7 @@
 
 #include "KoPAPageInsertCommand.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "KoPADocument.h"
 #include "KoPAPageBase.h"

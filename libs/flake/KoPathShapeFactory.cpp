@@ -13,7 +13,7 @@
 #include "KoShapeLoadingContext.h"
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>

@@ -13,10 +13,10 @@
 #include <QMenu>
 #include <QTimer>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <ksqueezedtextlabel.h>
 #include <khistorycombobox.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <kcolorscheme.h>
 
 #include <KoIcon.h>

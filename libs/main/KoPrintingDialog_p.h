@@ -17,7 +17,7 @@
 
 #include <QCoreApplication>
 #include <MainDebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QPainter>
 #include <QPrinter>
 #include <QGridLayout>

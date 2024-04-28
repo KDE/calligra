@@ -7,7 +7,7 @@
 #ifndef CALLIGRA_SHEETS_FACTORY_H
 #define CALLIGRA_SHEETS_FACTORY_H
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include "sheets_part_export.h"
 

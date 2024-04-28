@@ -6,7 +6,7 @@
 
 #include "TableOfContentsEntryDelegate.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 #include <KoStyleThumbnailer.h>

@@ -15,7 +15,7 @@
 #include <QFileDialog>
 #include <QImageReader>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KIO/StoredTransferJob>
 
 #include <KoIcon.h>

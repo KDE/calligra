@@ -15,7 +15,7 @@
 #include <QPushButton>
 
 #include <KLocalizedString>
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <ktextedit.h>
 
 #include "engine/Localization.h"

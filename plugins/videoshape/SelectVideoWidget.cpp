@@ -7,7 +7,7 @@
 
 #include "SelectVideoWidget.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kfilewidget.h>
 #include <phonon/BackendCapabilities>
 

@@ -14,7 +14,7 @@
 #include <QPen>
 #include <QTextOption>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KLazyLocalizedString>
 
 #include <KoShape.h>

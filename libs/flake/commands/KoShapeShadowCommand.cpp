@@ -8,7 +8,7 @@
 #include "KoShape.h"
 #include "KoShapeShadow.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 class Q_DECL_HIDDEN KoShapeShadowCommand::Private
 {

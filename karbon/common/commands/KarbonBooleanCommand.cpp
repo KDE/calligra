@@ -11,7 +11,7 @@
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QPainterPath>
 

@@ -25,7 +25,7 @@
 #include <SvgWriter.h>
 #include <SvgStyleWriter.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QDebug>
 #include <QBuffer>

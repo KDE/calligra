@@ -6,7 +6,7 @@
 */
 
 #include "KoZoomMode.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 const std::vector<std::optional<KLazyLocalizedString>> KoZoomMode::modes = {
     kli18n("%1%"),

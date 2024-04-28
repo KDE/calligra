@@ -9,7 +9,7 @@
 
 #include <KoToolRegistry.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kopabackgroundtool.json",
                            registerPlugin<Plugin>();)

@@ -6,7 +6,7 @@
 
 #include "DetachTextFromPathCommand.h"
 #include "ArtisticTextShape.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 DetachTextFromPathCommand::DetachTextFromPathCommand( ArtisticTextShape * textShape, KUndo2Command * parent )
 : KUndo2Command(parent), m_textShape(textShape), m_pathShape(0)

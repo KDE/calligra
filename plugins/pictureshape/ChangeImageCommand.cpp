@@ -7,7 +7,7 @@
 
 #include <cmath>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoImageData.h>
 

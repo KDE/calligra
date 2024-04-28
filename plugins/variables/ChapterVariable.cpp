@@ -20,7 +20,7 @@
 #include <KoParagraphStyle.h>
 #include <KoTextBlockData.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QFontMetricsF>
 #include <QTextDocument>

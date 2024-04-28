@@ -16,7 +16,7 @@
 #include <KoShapeLoadingContext.h>
 #include "KoShapeBasedDocumentBase.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 PluginShapeFactory::PluginShapeFactory()
     : KoShapeFactoryBase(PLUGINSHAPEID, i18n("Plugin Placeholder"))

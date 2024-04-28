@@ -25,9 +25,9 @@
 #include <QFontDatabase>
 
 //KF5 Headers
-#include <klocalizedstring.h>
-#include <kiconloader.h>
-#include <kconfiggroup.h>
+#include <KLocalizedString>
+#include <KIconLoader>
+#include <KConfigGroup>
 
 //Calligra Headers
 #include <KoXmlReader.h>

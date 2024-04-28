@@ -6,7 +6,7 @@
  */
 
 #include "ChangeTextAnchorCommand.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 ChangeTextAnchorCommand::ChangeTextAnchorCommand( ArtisticTextShape * shape, ArtisticTextShape::TextAnchor anchor )
     : m_shape(shape), m_anchor( anchor )

@@ -16,7 +16,7 @@
 #include "commands/KPrRenameCustomSlideShowCommand.h"
 
 //KF5 headers
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 //Qt headers
 #include <QIcon>

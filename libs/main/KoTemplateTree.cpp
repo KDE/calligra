@@ -11,10 +11,10 @@
 #include <QUrl>
 
 #include <kdesktopfile.h>
-#include <kconfig.h>
+#include <KConfig>
 #include <MainDebug.h>
-#include <klocalizedstring.h>
-#include <kconfiggroup.h>
+#include <KLocalizedString>
+#include <KConfigGroup>
 
 #include <KoNetAccess.h>
 #include <KoResourcePaths.h>

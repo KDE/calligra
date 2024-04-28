@@ -8,7 +8,7 @@
 #include "KoPathPointTypeCommand.h"
 
 #include <KoPathSegment.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <math.h>
 
 KoPathPointTypeCommand::KoPathPointTypeCommand(

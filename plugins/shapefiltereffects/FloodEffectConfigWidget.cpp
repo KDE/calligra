@@ -10,7 +10,7 @@
 
 #include <KoColorPopupAction.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QGridLayout>
 #include <QLabel>

@@ -8,7 +8,7 @@
 #include "CompositeEffect.h"
 #include "CompositeEffectConfigWidget.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 CompositeEffectFactory::CompositeEffectFactory()
         : KoFilterEffectFactoryBase(CompositeEffectId, i18n("Composite"))

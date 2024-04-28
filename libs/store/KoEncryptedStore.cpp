@@ -17,8 +17,8 @@
 #include <KPasswordDialog>
 #include <knewpassworddialog.h>
 #include <qt6keychain/keychain.h>
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
+#include <KLocalizedString>
+#include <KMessageBox>
 #include <kzip.h>
 #include <KoNetAccess.h>
 #include <QTemporaryFile>

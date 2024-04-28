@@ -16,7 +16,7 @@
 #include <KoToolBase.h>
 
 #include <KLocalizedString>
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <QMimeDatabase>
 

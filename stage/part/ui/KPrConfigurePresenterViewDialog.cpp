@@ -9,7 +9,7 @@
 #include <QGuiApplication>
 #include <QScreen>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "StageDebug.h"
 #include "KPrDocument.h"

@@ -11,7 +11,7 @@
 #include "KoDocument.h"
 
 #include "KoMainWindow.h" // XXX: remove
-#include <kmessagebox.h> // XXX: remove
+#include <KMessageBox> // XXX: remove
 #include <KNotification> // XXX: remove
 
 #include "KoComponentData.h"
@@ -38,11 +38,11 @@
 #include <KoGridData.h>
 #include <KoGuidesData.h>
 
-#include <kfileitem.h>
+#include <KFileItem>
 #include <KoNetAccess.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <MainDebug.h>
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 #include <KIO/FileCopyJob>
 #include <KIO/StatJob>
 #include <kdirnotify.h>
@@ -71,7 +71,7 @@
 #define INTERNAL_PROTOCOL "intern"
 #define INTERNAL_PREFIX "intern:/"
 // Warning, keep it sync in koStore.cc
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include "KoUndoStackAction.h"
 
 #include <unistd.h>

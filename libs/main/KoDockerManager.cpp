@@ -10,9 +10,9 @@
 #include "KoDockerManager_p.h"
 #include "KoDockFactoryBase.h"
 
-#include <klocalizedstring.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <KLocalizedString>
+#include <KConfig>
+#include <KConfigGroup>
 #include <MainDebug.h>
 
 #include "KoToolDocker.h"

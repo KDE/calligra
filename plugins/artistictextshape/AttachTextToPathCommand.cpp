@@ -7,7 +7,7 @@
 #include "AttachTextToPathCommand.h"
 #include "ArtisticTextShape.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 AttachTextToPathCommand::AttachTextToPathCommand( ArtisticTextShape * textShape, KoPathShape * pathShape, KUndo2Command * parent )
     : KUndo2Command(parent), m_textShape(textShape), m_pathShape(pathShape)

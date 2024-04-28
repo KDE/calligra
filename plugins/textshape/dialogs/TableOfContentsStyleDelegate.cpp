@@ -6,7 +6,7 @@
 
 #include "TableOfContentsStyleDelegate.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QSpinBox>
 

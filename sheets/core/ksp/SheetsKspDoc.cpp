@@ -19,7 +19,7 @@
 #include <KoUpdater.h>
 #include <KoXmlReader.h>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 namespace Calligra {
 namespace Sheets {

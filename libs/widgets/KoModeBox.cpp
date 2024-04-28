@@ -16,10 +16,10 @@
 #include <KoToolManager.h>
 #include <KoShapeLayer.h>
 
-#include <kconfiggroup.h>
-#include <klocalizedstring.h>
+#include <KConfigGroup>
+#include <KLocalizedString>
 #include <kselectaction.h>
-#include <ksharedconfig.h>
+#include <KSharedConfig>
 
 #include <QIcon>
 

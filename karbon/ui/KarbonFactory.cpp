@@ -25,7 +25,7 @@
 #include <KoComponentData.h>
 #include <KoPluginLoader.h>
 
-#include <kiconloader.h>
+#include <KIconLoader>
 
 
 KoComponentData* KarbonFactory::s_global = 0;

@@ -16,8 +16,8 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 
-#include <kactioncollection.h>
-#include <klocalizedstring.h>
+#include <KActionCollection>
+#include <KLocalizedString>
 
 #include <math.h>
 

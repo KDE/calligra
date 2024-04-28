@@ -28,7 +28,7 @@
 #include <QBuffer>
 #include <QByteArray>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <KoFilterChain.h>
 #include <KoOdfWriteStore.h>

@@ -14,7 +14,7 @@
 #include <QFile>
 
 // KF5
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 // Calligra
 #include <KoStore.h>

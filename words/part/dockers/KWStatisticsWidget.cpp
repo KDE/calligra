@@ -17,7 +17,7 @@
 #include <KoTextDocumentLayout.h>
 
 #include <KSharedConfig>
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 #include <QLocale>
 

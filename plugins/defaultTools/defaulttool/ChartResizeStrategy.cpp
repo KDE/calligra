@@ -14,7 +14,7 @@
 #include <KoShapeContainerModel.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeSizeCommand.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 
 ChartResizeStrategy::ChartResizeStrategy(KoShape *shape)

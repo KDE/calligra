@@ -23,7 +23,7 @@
 #include <KoUnit.h>
 #include <KoModeBoxFactory.h>
 #include <KoRulerController.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
 
 #include <QGridLayout>
 #include <QTimer>

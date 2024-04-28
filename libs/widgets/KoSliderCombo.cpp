@@ -22,7 +22,7 @@
 #include <QDoubleSpinBox>
 
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <WidgetsDebug.h>
 
 KoSliderCombo::KoSliderCombo(QWidget *parent)

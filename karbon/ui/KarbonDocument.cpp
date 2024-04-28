@@ -67,9 +67,9 @@
 #include <KoShapePainter.h>
 #include <SvgShapeFactory.h>
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <klocalizedstring.h>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
 #include <kundo2stack.h>
 
 #include <QLocale>

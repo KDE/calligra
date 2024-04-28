@@ -22,7 +22,7 @@
 #include <KoShapeContainer.h>
 #include <KoShapeContainerModel.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <limits>
 #include <math.h>
 

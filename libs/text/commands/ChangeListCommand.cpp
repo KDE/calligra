@@ -13,7 +13,7 @@
 #include <KoParagraphStyle.h>
 #include <KoList.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include "TextDebug.h"
 
 #define MARGIN_DEFAULT 18 // we consider it the default value

@@ -13,7 +13,7 @@
 #include <KoCanvasBase.h>
 #include <KoSnapGuide.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QAction>
 

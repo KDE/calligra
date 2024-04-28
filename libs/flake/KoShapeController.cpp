@@ -28,7 +28,7 @@
 #include <QObject>
 
 #include <kpagedialog.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <algorithm>
 

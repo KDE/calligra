@@ -9,7 +9,7 @@
 
 #include <gsl/gsl_multimin.h>
 
-#include <kxmlguiclient.h>
+#include <KXMLGUIClient>
 
 #include <Cell.h>
 

@@ -21,7 +21,7 @@
 #include "ui/commands/RowColumnManipulators.h"
 
 #include <KLocalizedString>
-#include <kstandardaction.h>
+#include <KStandardAction>
 
 #include <QApplication>
 #include <QBuffer>

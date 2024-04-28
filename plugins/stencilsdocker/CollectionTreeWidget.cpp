@@ -10,9 +10,9 @@
 #include "CollectionItemModel.h"
 #include "StencilBoxDebug.h"
 
-#include <klocalizedstring.h>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
+#include <KLocalizedString>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 #include <QTreeWidgetItem>
 #include <QApplication>

@@ -8,7 +8,7 @@
 
 #include "KoPathPointMoveCommand.h"
 #include "KoPathPoint.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 class KoPathPointMoveCommandPrivate
 {

@@ -10,7 +10,7 @@
 #include "KoFilterEffect.h"
 #include <KoFileDialog.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QGridLayout>
 #include <QLabel>

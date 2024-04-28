@@ -14,7 +14,7 @@
 #include <QPainter>
 
 //KF5 Headers
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 //Calligra Headers
 #include <KoPointerEvent.h>

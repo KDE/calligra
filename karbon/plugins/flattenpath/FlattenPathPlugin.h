@@ -10,7 +10,7 @@
 #ifndef FLATTENPATHPLUGIN_H
 #define FLATTENPATHPLUGIN_H
 
-#include <kxmlguiclient.h>
+#include <KXMLGUIClient>
 #include <QDialog>
 
 class FlattenDlg;

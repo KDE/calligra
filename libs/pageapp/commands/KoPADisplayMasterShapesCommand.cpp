@@ -6,7 +6,7 @@
 
 #include "KoPADisplayMasterShapesCommand.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "KoPAPage.h"
 

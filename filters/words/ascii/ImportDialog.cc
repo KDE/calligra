@@ -10,9 +10,9 @@
 #include <QRadioButton>
 #include <QApplication>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KComboBox>
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include "AsciiImportDebug.h"
 #include <ui_ImportDialogUI.h>

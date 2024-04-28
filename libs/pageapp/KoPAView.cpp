@@ -67,11 +67,11 @@
 #include "widgets/KoPageNavigator.h"
 
 #include <PageAppDebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <ktoggleaction.h>
-#include <kactionmenu.h>
-#include <kactioncollection.h>
-#include <kmessagebox.h>
+#include <KActionMenu>
+#include <KActionCollection>
+#include <KMessageBox>
 #include <KoNetAccess.h>
 
 #include <QFileDialog>

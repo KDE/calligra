@@ -17,10 +17,10 @@
 #include <KoDocumentRdfBase.h>
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
-#include <kiconloader.h>
+#include <KLocalizedString>
+#include <KIconLoader>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <kmainwindow.h>
 #include <KoDialog.h>
 

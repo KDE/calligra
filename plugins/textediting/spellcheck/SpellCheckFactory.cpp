@@ -7,7 +7,7 @@
 #include "SpellCheckFactory.h"
 #include "SpellCheck.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 SpellCheckFactory::SpellCheckFactory()
     : KoTextEditingFactory("spellcheck")

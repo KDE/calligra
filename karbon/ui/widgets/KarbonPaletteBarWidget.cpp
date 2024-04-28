@@ -19,8 +19,8 @@
 #include <KoShapeStroke.h>
 
 #include <KSharedConfig>
-#include <kconfiggroup.h>
-#include <klocalizedstring.h>
+#include <KConfigGroup>
+#include <KLocalizedString>
 #include <QToolButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>

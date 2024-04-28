@@ -11,8 +11,8 @@
 
 #include <KoCanvasBase.h>
 
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
+#include <KLocalizedString>
+#include <KMessageBox>
 #include <kpagedialog.h>
 #include <QVBoxLayout>
 #include <QListWidget>

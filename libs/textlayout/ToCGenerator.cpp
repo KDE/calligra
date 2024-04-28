@@ -10,7 +10,7 @@
 
 #include "ToCGenerator.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "KoTextDocumentLayout.h"
 #include "KoTextLayoutRootArea.h"

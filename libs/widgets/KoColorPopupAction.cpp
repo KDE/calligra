@@ -17,7 +17,7 @@
 #include <KoColor.h>
 
 #include <WidgetsDebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QPainter>
 #include <QWidgetAction>

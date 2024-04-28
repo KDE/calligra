@@ -14,7 +14,7 @@
 
 #include <kundo2command.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QTextDocument>
 #include <QPointer>

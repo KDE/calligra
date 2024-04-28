@@ -6,7 +6,7 @@
 
 #include "GuidesToolFactory.h"
 #include "GuidesTool.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 GuidesToolFactory::GuidesToolFactory()
     : KoToolFactoryBase(GuidesToolId)

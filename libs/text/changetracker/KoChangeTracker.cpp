@@ -23,7 +23,7 @@
 #include "TextDebug.h"
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 //Qt includes
 #include <QColor>

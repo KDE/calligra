@@ -17,7 +17,7 @@
 #include <QFontMetricsF>
 #include <QPair>
 #include <KoFilterChain.h>
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>

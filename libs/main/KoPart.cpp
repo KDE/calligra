@@ -25,8 +25,8 @@
 #include <MainDebug.h>
 #include <kxmlguifactory.h>
 #include <kdesktopfile.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <QFileInfo>
 #include <QGraphicsScene>

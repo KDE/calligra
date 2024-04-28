@@ -41,7 +41,7 @@
 
 #include <QAction>
 #include <FlakeDebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QPainter>
 #include <QPainterPath>
 #include <QBitmap>

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "ChangePartDetailsCommand.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include "../core/Part.h"
 #include "../core/Staff.h"
 #include "../core/Clef.h"

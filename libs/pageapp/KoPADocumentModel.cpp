@@ -28,7 +28,7 @@
 #include <KoPAPastePage.h>
 #include <KoIcon.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <PageAppDebug.h>
 
 #include <QMimeData>

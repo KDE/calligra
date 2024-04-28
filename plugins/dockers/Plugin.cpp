@@ -10,7 +10,7 @@
 
 #include <KoDockRegistry.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_docker_defaults.json",
                            registerPlugin<Plugin>();)

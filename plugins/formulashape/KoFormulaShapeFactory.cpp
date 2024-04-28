@@ -5,7 +5,7 @@
  */
 #include "KoFormulaShapeFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoIcon.h>
 #include <KoShapeFactoryBase.h>

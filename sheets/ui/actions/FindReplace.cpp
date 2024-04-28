@@ -18,7 +18,7 @@
 #include "KoDialog.h"
 
 #include <KLocalizedString>
-#include <kstandardaction.h>
+#include <KStandardAction>
 #include <kfind.h>
 #include <kreplace.h>
 

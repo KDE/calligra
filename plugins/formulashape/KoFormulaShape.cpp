@@ -9,7 +9,7 @@
 
 #include <QUrl>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <kguiitem.h>
 
 #include <KoStore.h>

@@ -14,7 +14,7 @@
 
 #include <KoXmlNS.h>
 #include <KoIcon.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <KoShapeStroke.h>
 #include <KoShapeLoadingContext.h>
 

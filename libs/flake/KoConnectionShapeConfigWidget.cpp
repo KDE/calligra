@@ -7,7 +7,7 @@
 #include "KoConnectionShapeConfigWidget.h"
 #include "commands/KoConnectionShapeTypeCommand.h"
 #include <KoIcon.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 KoConnectionShapeConfigWidget::KoConnectionShapeConfigWidget()
 {

@@ -8,8 +8,8 @@
 #include "KoToolRegistry.h"
 
 #include <FlakeDebug.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 #include "tools/KoCreateShapesToolFactory.h"
 #include "tools/KoCreateShapesTool.h"

@@ -10,7 +10,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "KoPADocument.h"
 #include "KoPAMasterPage.h"

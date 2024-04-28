@@ -12,7 +12,7 @@
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 UserVariableFactory::UserVariableFactory()
     : KoInlineObjectFactoryBase("user", TextVariable)

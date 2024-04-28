@@ -10,7 +10,7 @@
 #include <QDomElement>
 #include <QImage>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>

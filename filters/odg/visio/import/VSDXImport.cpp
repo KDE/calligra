@@ -26,7 +26,7 @@
 #include <KoFilterChain.h>
 #include <KoOdf.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <QString>
 #include <QByteArray>

@@ -6,7 +6,7 @@
 #include "kpresenterslideloader.h"
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 #include <QDebug>
 
 KPresenterSlideLoader::KPresenterSlideLoader(QObject* parent) :SlideLoader(parent) {

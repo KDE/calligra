@@ -16,7 +16,7 @@
 
 #include <kpagedialog.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QLayout>
 
 InsertVariableAction::InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactoryBase *factory, const KoInlineObjectTemplate &templ)

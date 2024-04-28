@@ -7,9 +7,9 @@
 
 #include "KoResourceModel.h"
 
-#include <klocalizedstring.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
+#include <KLocalizedString>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <KoResourceServerAdapter.h>
 #include <math.h>

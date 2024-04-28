@@ -8,8 +8,8 @@
 #include "BlendEffect.h"
 #include "KoFilterEffect.h"
 
-#include <kcombobox.h>
-#include <klocalizedstring.h>
+#include <KComboBox>
+#include <KLocalizedString>
 
 #include <QGridLayout>
 #include <QLabel>

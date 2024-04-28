@@ -23,10 +23,10 @@
 #include <QAction>
 #include <QScreen>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <WidgetsDebug.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <KoCanvasController.h>
 #include <KoShapeLayer.h>

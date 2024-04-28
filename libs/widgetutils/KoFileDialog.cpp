@@ -11,9 +11,9 @@
 #include <QImageReader>
 #include <QClipboard>
 
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
-#include <klocalizedstring.h>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KLocalizedString>
 
 #include <QUrl>
 #include <QMimeDatabase>

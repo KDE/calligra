@@ -19,7 +19,7 @@
 
 #include <QDebug>
 #include <QRegularExpression>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QIcon>
 
 #include "FontSizeAction.h"

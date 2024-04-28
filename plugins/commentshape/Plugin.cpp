@@ -11,7 +11,7 @@
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_shape_comment.json",
                            registerPlugin<Plugin>();)

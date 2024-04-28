@@ -17,7 +17,7 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <KoFilterChain.h>
 #include <KoOdfWriteStore.h>

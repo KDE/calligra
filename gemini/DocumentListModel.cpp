@@ -19,7 +19,7 @@
 /*#include <QSparqlConnection>
 #include <QSparqlResult>
 #include <QSparqlError>*/
-#include <kfileitem.h>
+#include <KFileItem>
 
 
 QDebug operator<<(QDebug dbg, const DocumentListModel::DocumentInfo& d) { 

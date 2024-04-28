@@ -21,8 +21,8 @@
 #include <QUrl>
 #include <StoreDebug.h>
 
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
+#include <KLocalizedString>
+#include <KMessageBox>
 #include <KoNetAccess.h>
 
 #define DefaultFormat KoStore::Zip

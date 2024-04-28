@@ -10,7 +10,7 @@
 #include "VectorShapePlugin.h"
 
 // KF5
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 // Calligra libs
 #include <KoShapeRegistry.h>

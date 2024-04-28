@@ -33,7 +33,7 @@
 #include <QDebug>
 #include <QAction>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <KPluginFactory>
 
 #include <KoCanvasControllerWidget.h>

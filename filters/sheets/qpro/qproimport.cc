@@ -11,8 +11,8 @@
 #include <qpro/record_factory.h>
 
 #include <KLocalizedString>
-#include <kmessagebox.h>
-#include <kpluginfactory.h>
+#include <KMessageBox>
+#include <KPluginFactory>
 
 #include <KoFilterChain.h>
 

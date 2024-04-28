@@ -10,7 +10,7 @@
 #include "KoRdfPrefixMapping.h"
 // KF5
 #include <kdebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <algorithm>
 

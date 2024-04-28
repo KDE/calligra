@@ -6,7 +6,7 @@
 
 #include "SpiralShapeConfigWidget.h"
 #include "SpiralShapeConfigCommand.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 SpiralShapeConfigWidget::SpiralShapeConfigWidget()
 {

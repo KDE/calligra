@@ -25,9 +25,9 @@
 #include <QSplitter>
 
 // KF5
-#include <kcombobox.h>
+#include <KComboBox>
 #include <klineedit.h>
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <kstandardguiitem.h>
 
 #include <KoCanvasBase.h>

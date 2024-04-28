@@ -8,7 +8,7 @@
 #include "LegendCommand.h"
 
 // KF5
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 // KoChart
 #include "Legend.h"

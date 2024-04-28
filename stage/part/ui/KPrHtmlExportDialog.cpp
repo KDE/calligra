@@ -16,7 +16,7 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kzip.h>
 
 #include <KPrView.h>

@@ -13,7 +13,7 @@
 #include <QToolButton>
 #include <QBoxLayout>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "KoZoomInput.h"
 #include "KoIcon.h"

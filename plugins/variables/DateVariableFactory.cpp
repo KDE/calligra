@@ -11,7 +11,7 @@
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 DateVariableFactory::DateVariableFactory()
         : KoInlineObjectFactoryBase("date", TextVariable)

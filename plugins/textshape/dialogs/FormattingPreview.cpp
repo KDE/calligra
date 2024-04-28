@@ -30,7 +30,7 @@
 
 #include <math.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <QDebug>
 
 FormattingPreview::FormattingPreview(QWidget* parent)

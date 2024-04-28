@@ -18,7 +18,7 @@
 #include <QPainter>
 #include <QDebug>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 
 ImageEffect::ImageEffect()

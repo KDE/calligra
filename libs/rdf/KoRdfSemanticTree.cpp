@@ -12,7 +12,7 @@
 #include "KoRdfSemanticTreeWidgetItem.h"
 // KF5
 #include <kdebug.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 // Qt
 #include <QSet>
 

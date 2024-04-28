@@ -25,7 +25,7 @@
 #include <QTextStream>
 
 #include <DebugPigment.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 namespace
 {

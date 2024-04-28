@@ -30,9 +30,9 @@
 #include <KoIcon.h>
 #include <KoUnit.h>
 
-#include <kpluginfactory.h>
-#include <kactioncollection.h>
-#include <klocalizedstring.h>
+#include <KPluginFactory>
+#include <KActionCollection>
+#include <KLocalizedString>
 
 #include <QDoubleSpinBox>
 #include <QStandardPaths>

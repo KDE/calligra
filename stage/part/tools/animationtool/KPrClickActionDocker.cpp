@@ -13,7 +13,7 @@
 #include <QLabel>
 #include <QEvent>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <KoPACanvas.h>
 #include <KPrDocument.h>

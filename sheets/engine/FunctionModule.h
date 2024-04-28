@@ -9,7 +9,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QString>
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include "sheets_engine_export.h"
 

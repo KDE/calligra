@@ -72,8 +72,8 @@
 #include <KoUpdater.h>
 
 // KF5
-#include <klocalizedstring.h>
-#include <kconfiggroup.h>
+#include <KLocalizedString>
+#include <KConfigGroup>
 #include <KSharedConfig>
 
 // Qt
